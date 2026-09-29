@@ -56,7 +56,7 @@ const c1 = doc('dbd301-1-1-advanced-sql', '1.1 — Advanced SQL: joins, subqueri
 <p>A subquery is a query nested inside another. A <strong>correlated subquery</strong> references a column from the outer query and re-runs once per outer row; an <strong>uncorrelated</strong> one runs once, independently, and is usually cheaper.</p>
 <h3>Window functions</h3>
 <p>Unlike <code>GROUP BY</code>, a window function (<code>OVER (...)</code>) keeps every row while computing an aggregate or ranking "over a window" of related rows — e.g. rank each employee's salary within their department without collapsing rows into one per group.</p>
-<pre><code>-- rank employees by salary within each department
+<pre><code class="language-sql">-- rank employees by salary within each department
 SELECT name, department_id, salary,
   RANK() OVER (PARTITION BY department_id ORDER BY salary DESC) AS rnk
 FROM employees;
@@ -83,7 +83,7 @@ WHERE e.salary &gt; (
 <p>Subquery là truy vấn lồng trong truy vấn khác. <strong>Correlated subquery</strong> tham chiếu cột của truy vấn ngoài và chạy lại cho mỗi dòng ngoài; <strong>uncorrelated subquery</strong> chạy đúng một lần, độc lập, và thường rẻ hơn.</p>
 <h3>Window function</h3>
 <p>Khác với <code>GROUP BY</code>, window function (<code>OVER (...)</code>) giữ nguyên mọi dòng trong khi tính tổng hợp/xếp hạng theo một "cửa sổ" các dòng liên quan — vd xếp hạng lương nhân viên trong từng phòng ban mà không gộp dòng lại.</p>
-<pre><code>-- xếp hạng lương nhân viên trong từng phòng ban
+<pre><code class="language-sql">-- xếp hạng lương nhân viên trong từng phòng ban
 SELECT name, department_id, salary,
   RANK() OVER (PARTITION BY department_id ORDER BY salary DESC) AS rnk
 FROM employees;
@@ -120,7 +120,7 @@ const c2 = doc('dbd301-2-1-normalization', '2.1 — Advanced normalization & sch
 </ul>
 <h3>When to denormalize</h3>
 <p>Read-heavy reporting sometimes trades some redundancy for fewer joins — deliberate denormalization is a design decision, not a mistake, as long as it's documented and updates are controlled.</p>
-<pre><code>-- Un-normalized: order_id, product_name, product_price repeated per line
+<pre><code class="language-sql">-- Un-normalized: order_id, product_name, product_price repeated per line
 -- 3NF: split into orders, order_items, products
 CREATE TABLE products (product_id INT PRIMARY KEY, name VARCHAR(100), price NUMERIC);
 CREATE TABLE orders (order_id INT PRIMARY KEY, customer_id INT, order_date DATE);
@@ -145,7 +145,7 @@ CREATE TABLE order_items (
 </ul>
 <h3>Khi nào nên phi chuẩn hoá</h3>
 <p>Hệ thống đọc nhiều cho báo cáo đôi khi đánh đổi bớt chuẩn hoá để giảm số join — phi chuẩn hoá có chủ đích là quyết định thiết kế, không phải lỗi, miễn được ghi nhận rõ và kiểm soát cập nhật.</p>
-<pre><code>-- Chưa chuẩn hoá: order_id, product_name, product_price lặp lại theo dòng
+<pre><code class="language-sql">-- Chưa chuẩn hoá: order_id, product_name, product_price lặp lại theo dòng
 -- 3NF: tách thành orders, order_items, products
 CREATE TABLE products (product_id INT PRIMARY KEY, name VARCHAR(100), price NUMERIC);
 CREATE TABLE orders (order_id INT PRIMARY KEY, customer_id INT, order_date DATE);
@@ -180,7 +180,7 @@ const c3 = doc('dbd301-3-1-indexing-optimization', '3.1 — Indexes & query opti
 </ul>
 <h3>Reading a query plan</h3>
 <p><code>EXPLAIN</code> (and <code>EXPLAIN ANALYZE</code>) shows how the optimizer will execute a query — look for <strong>Seq Scan</strong> (bad on a large table you filter often) vs <strong>Index Scan</strong>, and compare estimated vs actual row counts.</p>
-<pre><code>EXPLAIN ANALYZE
+<pre><code class="language-sql">EXPLAIN ANALYZE
 SELECT * FROM orders WHERE customer_id = 42;
 -- Seq Scan on orders (cost=0.00..1834.00 rows=5) -- no index, scans everything
 -- add an index:
@@ -200,7 +200,7 @@ CREATE INDEX idx_orders_customer_id ON orders(customer_id);
 </ul>
 <h3>Đọc kế hoạch truy vấn</h3>
 <p><code>EXPLAIN</code> (và <code>EXPLAIN ANALYZE</code>) cho thấy optimizer sẽ thực thi truy vấn thế nào — chú ý <strong>Seq Scan</strong> (xấu trên bảng lớn hay bị lọc) so với <strong>Index Scan</strong>, và so sánh số dòng ước lượng với thực tế.</p>
-<pre><code>EXPLAIN ANALYZE
+<pre><code class="language-sql">EXPLAIN ANALYZE
 SELECT * FROM orders WHERE customer_id = 42;
 -- Seq Scan on orders (cost=0.00..1834.00 rows=5) -- chưa có index, quét hết
 -- thêm chỉ mục:
@@ -232,7 +232,7 @@ const c4 = doc('dbd301-4-1-transactions-acid', '4.1 — Transactions, ACID & con
 <p>Stricter isolation prevents more anomalies but costs concurrency: <strong>dirty read</strong> (seeing uncommitted data), <strong>non-repeatable read</strong> (same query, different results within one transaction), <strong>phantom read</strong> (new rows appear matching a repeated condition). SQL defines READ UNCOMMITTED &lt; READ COMMITTED &lt; REPEATABLE READ &lt; SERIALIZABLE.</p>
 <h3>Locking &amp; deadlock</h3>
 <p>Databases use locks (shared/exclusive) to enforce isolation. A <strong>deadlock</strong> happens when two transactions each hold a lock the other needs — the database detects the cycle and aborts one transaction.</p>
-<pre><code>BEGIN;
+<pre><code class="language-sql">BEGIN;
 UPDATE accounts SET balance = balance - 100 WHERE id = 1;
 UPDATE accounts SET balance = balance + 100 WHERE id = 2;
 COMMIT; -- both updates happen, or neither (atomicity)
@@ -251,7 +251,7 @@ COMMIT; -- both updates happen, or neither (atomicity)
 <p>Cô lập chặt hơn ngăn nhiều bất thường hơn nhưng tốn độ đồng thời: <strong>dirty read</strong> (đọc dữ liệu chưa commit), <strong>non-repeatable read</strong> (cùng truy vấn, kết quả khác trong một giao dịch), <strong>phantom read</strong> (dòng mới xuất hiện khớp điều kiện lặp lại). SQL định nghĩa READ UNCOMMITTED &lt; READ COMMITTED &lt; REPEATABLE READ &lt; SERIALIZABLE.</p>
 <h3>Khoá &amp; deadlock</h3>
 <p>CSDL dùng khoá (shared/exclusive) để đảm bảo cô lập. <strong>Deadlock</strong> xảy ra khi hai giao dịch mỗi bên giữ một khoá mà bên kia cần — CSDL phát hiện vòng chờ và tự hủy một giao dịch.</p>
-<pre><code>BEGIN;
+<pre><code class="language-sql">BEGIN;
 UPDATE accounts SET balance = balance - 100 WHERE id = 1;
 UPDATE accounts SET balance = balance + 100 WHERE id = 2;
 COMMIT; -- cả hai cập nhật xảy ra, hoặc không cái nào (atomicity)
@@ -276,7 +276,7 @@ const c5 = doc('dbd301-5-1-procedures-triggers-views', '5.1 — Stored procedure
 <p>Logic that lives inside the database — reusable, runs close to the data (less network round-trip), but harder to version-control and test than application code. Use for logic that must be atomic and data-local (e.g. multi-table validation).</p>
 <h3>Triggers</h3>
 <p>Code that fires automatically <strong>BEFORE</strong> or <strong>AFTER</strong> an <code>INSERT/UPDATE/DELETE</code>. Useful for audit logs and enforcing invariants a CHECK constraint can't express — but overusing triggers makes behavior invisible from application code ("magic" side effects).</p>
-<pre><code>CREATE VIEW active_customers AS
+<pre><code class="language-sql">CREATE VIEW active_customers AS
   SELECT * FROM customers WHERE status = 'ACTIVE';
 
 CREATE OR REPLACE FUNCTION log_salary_change() RETURNS TRIGGER AS $$
@@ -300,7 +300,7 @@ FOR EACH ROW EXECUTE FUNCTION log_salary_change();
 <p>Logic sống bên trong CSDL — dùng lại được, chạy gần dữ liệu (ít round-trip qua mạng), nhưng khó version-control và test hơn code ứng dụng. Dùng cho logic cần tính nguyên tử và gắn chặt với dữ liệu (vd kiểm tra nhiều bảng).</p>
 <h3>Trigger</h3>
 <p>Code tự động chạy <strong>BEFORE</strong> hoặc <strong>AFTER</strong> một <code>INSERT/UPDATE/DELETE</code>. Hữu ích cho log kiểm toán và ép ràng buộc mà CHECK constraint không diễn tả được — nhưng lạm dụng trigger làm hành vi trở nên vô hình với code ứng dụng (hiệu ứng phụ "ma thuật").</p>
-<pre><code>CREATE VIEW active_customers AS
+<pre><code class="language-sql">CREATE VIEW active_customers AS
   SELECT * FROM customers WHERE status = 'ACTIVE';
 
 CREATE OR REPLACE FUNCTION log_salary_change() RETURNS TRIGGER AS $$
@@ -339,7 +339,7 @@ const c6 = doc('dbd301-6-1-warehouse-olap', '6.1 — Data warehousing & OLAP|||6
 <p>A <strong>star schema</strong> puts one fact table at the center with dimensions radiating out — simple joins, fast aggregate queries. A <strong>snowflake schema</strong> further normalizes the dimensions (more joins, less redundancy).</p>
 <h3>ETL</h3>
 <p><strong>ETL (Extract, Transform, Load)</strong> moves data from OLTP source systems into the warehouse on a schedule — cleaning, reshaping and aggregating along the way.</p>
-<pre><code>SELECT d.year, p.category, SUM(f.revenue) AS total_revenue
+<pre><code class="language-sql">SELECT d.year, p.category, SUM(f.revenue) AS total_revenue
 FROM sales_fact f
 JOIN dim_date d ON f.date_id = d.date_id
 JOIN dim_product p ON f.product_id = p.product_id
@@ -358,7 +358,7 @@ GROUP BY d.year, p.category;
 <p><strong>Star schema</strong> đặt một fact table ở trung tâm với các dimension toả ra — join đơn giản, truy vấn tổng hợp nhanh. <strong>Snowflake schema</strong> chuẩn hoá tiếp các dimension (nhiều join hơn, ít dư hơn).</p>
 <h3>ETL</h3>
 <p><strong>ETL (Extract, Transform, Load)</strong> chuyển dữ liệu từ hệ OLTP nguồn vào kho dữ liệu theo lịch — làm sạch, biến đổi và tổng hợp dọc đường.</p>
-<pre><code>SELECT d.year, p.category, SUM(f.revenue) AS total_revenue
+<pre><code class="language-sql">SELECT d.year, p.category, SUM(f.revenue) AS total_revenue
 FROM sales_fact f
 JOIN dim_date d ON f.date_id = d.date_id
 JOIN dim_product p ON f.product_id = p.product_id

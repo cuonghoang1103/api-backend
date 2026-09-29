@@ -77,7 +77,7 @@ ${slide('dk-05', 4, 'RUN nhìn chuỗi lệnh, COPY nhìn nội dung file')}
 
 <h3>Watch it happen</h3>
 ${slide('dk-05', 5, 'Đổi package.json: một MISS kéo cả phần trên')}
-<pre><code>mkdir -p cachedemo &amp;&amp; cd cachedemo
+<pre><code class="language-javascript">mkdir -p cachedemo &amp;&amp; cd cachedemo
 printf 'node_modules\\n.git\\n' &gt; .dockerignore
 cat &gt; package.json &lt;&lt;'EOF'
 { "name": "c", "version": "1.0.0", "dependencies": { "express": "^4.21.1" } }
@@ -102,7 +102,7 @@ time docker build -q -t c:2 . &gt;/dev/null      <span class="tok-comment"># onl
 real	0m0.318s
 real	0m0.641s</div>
 <p>Five point nine seconds, then a third of a second, then two thirds of a second. The source change re-ran only <code>COPY app.js</code> and the metadata step after it — <code>npm ci</code> was untouched because the files it depends on did not change. That is the whole point of the ordering.</p>
-<pre><code><span class="tok-comment"># Now break the chain: change the dependency manifest instead</span>
+<pre><code class="language-bash"><span class="tok-comment"># Now break the chain: change the dependency manifest instead</span>
 npm install --package-lock-only --silent helmet@^8.0.0   <span class="tok-comment"># writes package.json AND the lockfile</span>
 docker build --progress=plain -t c:3 . 2&gt;&amp;1 | grep -E '^#[0-9]+ (\\[|CACHED|DONE)' | grep -v internal</code></pre>
 <div class="out">…
@@ -157,7 +157,7 @@ ${slide('dk-05', 8, 'Sáu thứ âm thầm phá cache')}
   <div class="kv"><span class="k">A different builder</span><span class="v">Each buildx builder has its own cache. Switching between the <code>default</code> driver and a <code>docker-container</code> one, or running in CI on a fresh runner, means starting cold — which Lesson 5.4 solves.</span></div>
   <div class="kv"><span class="k">A pulled base image</span><span class="v"><code>--pull</code> or a moved tag gives a new digest, which invalidates everything. Correct and necessary; just do not be surprised when a scheduled rebuild takes four minutes.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Prove BuildKit ignores mtime — this does NOT invalidate</span>
+<pre><code class="language-bash"><span class="tok-comment"># Prove BuildKit ignores mtime — this does NOT invalidate</span>
 touch app.js
 docker build --progress=plain -t c:4 . 2&gt;&amp;1 | grep -cE 'CACHED'
 <span class="tok-comment"># But changing content by one byte does</span>
@@ -205,7 +205,7 @@ RUN apt-get update \\
 <div class="callout warn"><strong>This is the classic, and it produces a genuinely confusing failure.</strong> With two separate <code>RUN</code>s, adding a package to the second line changes only that line's key — so <code>apt-get update</code> stays cached with a package index from weeks ago, and the install fails with <code>404 Not Found</code> on a version that has since been superseded. It looks like a network problem and is a cache problem. Keeping <code>update</code> and <code>install</code> in one <code>RUN</code> means changing the package list re-runs both. The same shape applies to <code>apk update</code>, <code>dnf makecache</code> and any "refresh the index, then use it" pair.</div>
 
 <h3>Reading cache state precisely</h3>
-<pre><code>docker build --progress=plain --no-cache -t c:6 . 2&gt;&amp;1 | grep -E 'DONE' | tail -6
+<pre><code class="language-bash">docker build --progress=plain --no-cache -t c:6 . 2&gt;&amp;1 | grep -E 'DONE' | tail -6
 docker builder du | tail -3
 docker system df --format 'table {{.Type}}\\t{{.Size}}\\t{{.Reclaimable}}' | grep -i cache</code></pre>
 <div class="out">#9 DONE 0.0s
@@ -223,7 +223,7 @@ Build Cache     41.06GB   21.27GB</div>
   <div class="kv"><span class="k">--no-cache</span><span class="v">Forces everything to rebuild. Use it to measure the true cold-build time and to prove a Dockerfile is reproducible — a build that only works with a warm cache is a build that will fail in CI.</span></div>
   <div class="kv"><span class="k">--no-cache-filter=stage</span><span class="v">Rebuild one named stage while caching the rest. Useful when you suspect one stage has a stale cached result but do not want to pay for a full rebuild.</span></div>
 </div>
-<pre><code>cd ..; rm -rf cachedemo; docker rmi c:1 c:2 c:3 c:4 c:5 c:6 &gt;/dev/null 2&gt;&amp;1</code></pre>
+<pre><code class="language-bash">cd ..; rm -rf cachedemo; docker rmi c:1 c:2 c:3 c:4 c:5 c:6 &gt;/dev/null 2&gt;&amp;1</code></pre>
 
 <h3>🧪 Practice (15–20 min)</h3>
 <div class="callout ok"><p><strong>Situation:</strong> a teammate on your SWP391 project complains that "Docker is random — sometimes the build takes two seconds, sometimes a minute". Prove it is not random: predict each result before you see it.</p><ol>
@@ -292,7 +292,7 @@ ${slide('dk-05', 4, 'RUN nhìn chuỗi lệnh, COPY nhìn nội dung file')}
 
 <h3>Nhìn tận mắt</h3>
 ${slide('dk-05', 5, 'Đổi package.json: một MISS kéo cả phần trên')}
-<pre><code>mkdir -p cachedemo &amp;&amp; cd cachedemo
+<pre><code class="language-javascript">mkdir -p cachedemo &amp;&amp; cd cachedemo
 printf 'node_modules\\n.git\\n' &gt; .dockerignore
 cat &gt; package.json &lt;&lt;'EOF'
 { "name": "c", "version": "1.0.0", "dependencies": { "express": "^4.21.1" } }
@@ -317,7 +317,7 @@ time docker build -q -t c:2 . &gt;/dev/null      <span class="tok-comment"># ch�
 real	0m0.318s
 real	0m0.641s</div>
 <p>Năm phẩy chín giây, rồi một phần ba giây, rồi hai phần ba giây. Việc đổi mã nguồn chỉ chạy lại <code>COPY app.js</code> và bước siêu dữ liệu sau nó — <code>npm ci</code> không bị đụng tới vì những file nó phụ thuộc vào không đổi. Đó chính là toàn bộ điểm mấu chốt của thứ tự.</p>
-<pre><code><span class="tok-comment"># Giờ phá cái chuỗi: đổi file khai báo thư viện thay vì mã nguồn</span>
+<pre><code class="language-bash"><span class="tok-comment"># Giờ phá cái chuỗi: đổi file khai báo thư viện thay vì mã nguồn</span>
 npm install --package-lock-only --silent helmet@^8.0.0   <span class="tok-comment"># ghi CẢ package.json lẫn lockfile</span>
 docker build --progress=plain -t c:3 . 2&gt;&amp;1 | grep -E '^#[0-9]+ (\\[|CACHED|DONE)' | grep -v internal</code></pre>
 <div class="out">…
@@ -372,7 +372,7 @@ ${slide('dk-05', 8, 'Sáu thứ âm thầm phá cache')}
   <div class="kv"><span class="k">Một bộ dựng khác</span><span class="v">Mỗi bộ dựng buildx có cache riêng của nó. Chuyển qua lại giữa trình <code>default</code> và một trình <code>docker-container</code>, hoặc chạy trong CI trên một máy mới tinh, nghĩa là bắt đầu từ trạng thái nguội — và Bài 5.4 giải quyết chuyện đó.</span></div>
   <div class="kv"><span class="k">Một ảnh nền vừa kéo về</span><span class="v"><code>--pull</code> hoặc một cái tag vừa dịch đi cho ra một digest mới, và nó vô hiệu hoá tất cả. Đúng đắn và cần thiết; chỉ là đừng ngạc nhiên khi một lượt dựng lại theo lịch mất bốn phút.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Chứng minh BuildKit bỏ qua mtime — cái này KHÔNG vô hiệu hoá gì</span>
+<pre><code class="language-bash"><span class="tok-comment"># Chứng minh BuildKit bỏ qua mtime — cái này KHÔNG vô hiệu hoá gì</span>
 touch app.js
 docker build --progress=plain -t c:4 . 2&gt;&amp;1 | grep -cE 'CACHED'
 <span class="tok-comment"># Nhưng đổi nội dung một byte thì có</span>
@@ -420,7 +420,7 @@ RUN apt-get update \\
 <div class="callout warn"><strong>Đây là cái kinh điển, và nó tạo ra một cú hỏng thật sự khó hiểu.</strong> Với hai lệnh <code>RUN</code> riêng, thêm một gói vào dòng thứ hai chỉ đổi khoá của DÒNG ĐÓ — nên <code>apt-get update</code> vẫn nằm trong cache với một danh mục gói từ mấy tuần trước, và lượt cài hỏng với <code>404 Not Found</code> trên một phiên bản từ đó tới nay đã bị thay. Nó TRÔNG như một vấn đề mạng và là một vấn đề CACHE. Giữ <code>update</code> với <code>install</code> trong CÙNG một <code>RUN</code> nghĩa là đổi danh sách gói sẽ chạy lại cả hai. Hình hài tương tự áp cho <code>apk update</code>, <code>dnf makecache</code> và mọi cặp "làm mới danh mục, rồi dùng nó".</div>
 
 <h3>Đọc trạng thái cache cho chính xác</h3>
-<pre><code>docker build --progress=plain --no-cache -t c:6 . 2&gt;&amp;1 | grep -E 'DONE' | tail -6
+<pre><code class="language-bash">docker build --progress=plain --no-cache -t c:6 . 2&gt;&amp;1 | grep -E 'DONE' | tail -6
 docker builder du | tail -3
 docker system df --format 'table {{.Type}}\\t{{.Size}}\\t{{.Reclaimable}}' | grep -i cache</code></pre>
 <div class="out">#9 DONE 0.0s
@@ -438,7 +438,7 @@ Build Cache     41.06GB   21.27GB</div>
   <div class="kv"><span class="k">--no-cache</span><span class="v">Ép mọi thứ dựng lại. Hãy dùng nó để ĐO thời gian dựng nguội thật và để chứng minh một Dockerfile là tái lập được — một lượt dựng chỉ chạy được khi cache còn ấm là một lượt dựng sẽ hỏng trong CI.</span></div>
   <div class="kv"><span class="k">--no-cache-filter=stage</span><span class="v">Dựng lại MỘT stage có tên trong khi vẫn dùng cache cho phần còn lại. Hữu ích khi bạn nghi một stage có kết quả lưu đệm đã cũ mà không muốn trả giá cho một lượt dựng lại toàn bộ.</span></div>
 </div>
-<pre><code>cd ..; rm -rf cachedemo; docker rmi c:1 c:2 c:3 c:4 c:5 c:6 &gt;/dev/null 2&gt;&amp;1</code></pre>
+<pre><code class="language-bash">cd ..; rm -rf cachedemo; docker rmi c:1 c:2 c:3 c:4 c:5 c:6 &gt;/dev/null 2&gt;&amp;1</code></pre>
 
 <h3>🧪 Thực hành (15–20 phút)</h3>
 <div class="callout ok"><p><strong>Tình huống:</strong> một bạn trong nhóm SWP391 than "Docker dựng hên xui lắm — lúc 2 giây, lúc cả phút". Chứng minh là nó KHÔNG hên xui: đoán trước từng kết quả rồi mới nhìn.</p><ol>
@@ -506,7 +506,7 @@ Build Cache     41.06GB   21.27GB</div>
 
 <h3>The measurement</h3>
 ${slide('dk-05', 9, 'Chồng tầng HIT/MISS trước và sau khi đổi thứ tự COPY')}
-<pre><code>mkdir -p ord/src &amp;&amp; cd ord
+<pre><code class="language-javascript">mkdir -p ord/src &amp;&amp; cd ord
 printf 'node_modules\\n.git\\n' &gt; .dockerignore
 cat &gt; package.json &lt;&lt;'EOF'
 { "name": "o", "version": "1.0.0",
@@ -656,7 +656,7 @@ RUN apk del .build</code></pre>
 <div class="callout"><strong>The rule is not "fewer layers"; it is "group by change frequency".</strong> Version A produces a smaller image because the tools are removed within the same layer (Lesson 1.2) — but adding one dependency reinstalls the compilers too. Version B keeps the compiler layer cached across dependency changes, at the cost of the tools remaining in the image. In a <em>multi-stage</em> build the trade-off disappears: use B in the build stage, where size does not matter, and copy only the result into a clean final stage (Chapter 6). That is the honest answer, and it is why multi-stage and cache optimisation are usually done together.</div>
 
 <h3>Measuring your own Dockerfile</h3>
-<pre><code><span class="tok-comment"># Where does the time actually go? Sorted, cold build.</span>
+<pre><code class="language-javascript"><span class="tok-comment"># Where does the time actually go? Sorted, cold build.</span>
 docker build --no-cache --progress=plain -f Dockerfile.fast -t o:m . 2&gt;&amp;1 \\
   | grep -oE '^#[0-9]+ DONE [0-9.]+s' | sort -k3 -hr | head -5
 
@@ -672,7 +672,7 @@ docker build --progress=plain -f Dockerfile.fast -t o:m . 2&gt;&amp;1 \\
 3</div>
 <p>One step is 5.4 seconds and everything else is noise. That is the step to protect, and protecting it means making sure nothing above it changes when your source does. Every optimisation in this chapter is a variation on that sentence.</p>
 <p class="note-ct">On Docker Engine 29 the same count prints <strong>4</strong>, not 3: the <code># syntax=docker/dockerfile:1</code> line adds one <code>CACHED</code> for the frontend image (Lesson 5.1). Count only lines of your own steps with <code>grep -cE '^#[0-9]+ CACHED' </code> after filtering <code>[internal]</code>, or simply read the list. And on a Mac, <code>sort -h</code> works: macOS <code>sort</code> understands human-readable numbers like <code>29.2s</code>.</p>
-<pre><code>cd ..; rm -rf ord; docker rmi o:slow o:fast o:m &gt;/dev/null 2&gt;&amp;1</code></pre>
+<pre><code class="language-bash">cd ..; rm -rf ord; docker rmi o:slow o:fast o:m &gt;/dev/null 2&gt;&amp;1</code></pre>
 
 <h3>🧪 Practice (15–20 min)</h3>
 <div class="callout ok"><p><strong>Situation:</strong> your group's Express + Prisma backend has the "BEFORE" Dockerfile above, and every teammate loses a couple of minutes per edit. Fix it and bring numbers to the next meeting.</p><ol>
@@ -725,7 +725,7 @@ docker build --progress=plain -f Dockerfile.fast -t o:m . 2&gt;&amp;1 \\
 
 <h3>Phép đo</h3>
 ${slide('dk-05', 9, 'Chồng tầng HIT/MISS trước và sau khi đổi thứ tự COPY')}
-<pre><code>mkdir -p ord/src &amp;&amp; cd ord
+<pre><code class="language-javascript">mkdir -p ord/src &amp;&amp; cd ord
 printf 'node_modules\\n.git\\n' &gt; .dockerignore
 cat &gt; package.json &lt;&lt;'EOF'
 { "name": "o", "version": "1.0.0",
@@ -875,7 +875,7 @@ RUN apk del .build</code></pre>
 <div class="callout"><strong>Cái luật KHÔNG phải là "ít tầng hơn"; nó là "gộp theo tần suất thay đổi".</strong> Bản A cho ảnh nhỏ hơn vì công cụ bị gỡ NGAY TRONG cùng cái tầng đó (Bài 1.2) — nhưng thêm một thư viện là cài lại luôn cả đám trình biên dịch. Bản B giữ tầng trình biên dịch nằm trong cache xuyên qua các thay đổi thư viện, đổi lại là công cụ nằm lại trong ảnh. Trong một lượt dựng <em>NHIỀU TẦNG</em> thì cuộc đánh đổi đó BIẾN MẤT: hãy dùng B trong stage dựng, nơi kích thước không quan trọng, rồi chỉ chép kết quả sang một stage cuối sạch sẽ (Chương 6). Đó là câu trả lời trung thực, và là lý do dựng nhiều tầng với tối ưu cache thường được làm cùng nhau.</div>
 
 <h3>Đo chính cái Dockerfile của bạn</h3>
-<pre><code><span class="tok-comment"># Thời gian thật ra đi đâu? Sắp xếp lại, dựng nguội.</span>
+<pre><code class="language-javascript"><span class="tok-comment"># Thời gian thật ra đi đâu? Sắp xếp lại, dựng nguội.</span>
 docker build --no-cache --progress=plain -f Dockerfile.fast -t o:m . 2&gt;&amp;1 \\
   | grep -oE '^#[0-9]+ DONE [0-9.]+s' | sort -k3 -hr | head -5
 
@@ -891,7 +891,7 @@ docker build --progress=plain -f Dockerfile.fast -t o:m . 2&gt;&amp;1 \\
 3</div>
 <p>MỘT bước tốn 5,4 giây còn mọi thứ khác là nhiễu. Đó là cái bước cần bảo vệ, và bảo vệ nó nghĩa là đảm bảo không có gì NẰM TRÊN nó thay đổi khi mã nguồn của bạn thay đổi. Mọi tối ưu trong chương này đều là một biến thể của câu đó.</p>
 <p class="note-ct">Trên Docker Engine 29, cùng phép đếm đó in <strong>4</strong> chứ không phải 3: dòng <code># syntax=docker/dockerfile:1</code> thêm một <code>CACHED</code> cho ảnh frontend (Bài 5.1). Muốn chỉ đếm bước của bạn thì lọc bỏ dòng <code>[internal]</code> và frontend trước, hoặc đơn giản là đọc cả danh sách. Và trên Mac, <code>sort -h</code> chạy được: <code>sort</code> của macOS hiểu số dạng dễ đọc như <code>29.2s</code>.</p>
-<pre><code>cd ..; rm -rf ord; docker rmi o:slow o:fast o:m &gt;/dev/null 2&gt;&amp;1</code></pre>
+<pre><code class="language-bash">cd ..; rm -rf ord; docker rmi o:slow o:fast o:m &gt;/dev/null 2&gt;&amp;1</code></pre>
 
 <h3>🧪 Thực hành (15–20 phút)</h3>
 <div class="callout ok"><p><strong>Tình huống:</strong> backend Express + Prisma của nhóm bạn đang dùng Dockerfile "TRƯỚC" ở trên, và mỗi người mất vài phút cho mỗi lần sửa. Sửa nó và mang SỐ ĐO tới buổi họp nhóm sau.</p><ol>
@@ -952,7 +952,7 @@ docker build --progress=plain -f Dockerfile.fast -t o:m . 2&gt;&amp;1 \\
 <p class="lead">Ordering protects a cached layer from being invalidated. But when it <em>is</em> invalidated — you added one dependency — <code>npm ci</code> starts from nothing and re-downloads all nine hundred packages. A cache mount fixes exactly that: a directory that survives across builds, lives outside any layer, and makes the miss cheap.</p>
 
 <h3>The measurement</h3>
-<pre><code>mkdir -p cm &amp;&amp; cd cm
+<pre><code class="language-bash">mkdir -p cm &amp;&amp; cd cm
 printf 'node_modules\\n.git\\n' &gt; .dockerignore
 cat &gt; package.json &lt;&lt;'EOF'
 { "name": "cm", "version": "1.0.0",
@@ -1053,7 +1053,7 @@ RUN --mount=type=cache,target=/root/.gradle ./gradlew build --no-daemon</code></
 
 <h3>apt needs one extra line</h3>
 ${slide('dk-05', 16, 'apt: gỡ docker-clean, khoá sharing=locked')}
-<pre><code># syntax=docker/dockerfile:1
+<pre><code class="language-bash"># syntax=docker/dockerfile:1
 FROM debian:bookworm-slim
 RUN rm -f /etc/apt/apt.conf.d/docker-clean \\
  &amp;&amp; echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' \\
@@ -1118,7 +1118,7 @@ ERROR: failed to build: failed to solve: process "/bin/sh -c sh -c 'touch /home/
 
 <h3>Managing the cache itself</h3>
 ${slide('dk-05', 18, 'Cache mount phình mãi: xem bằng buildx du')}
-<pre><code>docker buildx du --filter type=exec.cachemount                <span class="tok-comment"># list only cache mounts</span>
+<pre><code class="language-bash">docker buildx du --filter type=exec.cachemount                <span class="tok-comment"># list only cache mounts</span>
 docker buildx du --verbose --filter type=exec.cachemount | grep -E 'Description|Size'
 docker builder prune --filter type=exec.cachemount -f         <span class="tok-comment"># ⚠ ALL projects' mounts on this builder</span>
 docker builder prune -f --reserved-space 5GB                   <span class="tok-comment"># was --keep-storage (deprecated)</span></code></pre>
@@ -1129,7 +1129,7 @@ Size:         165.5MB
 Description:  cached mount /root/.npm from exec /bin/sh -c npm ci --omit=dev --ignore-scripts with id "//root/.npm"</div>
 <p>Real output of the first two lines on the course's own builder (<code>--builder dk05-builder</code> added). Two corrections to an earlier version of this lesson: BuildKit describes the entry as <code>cached mount …</code>, so the old <code>grep 'cache mount'</code> matched nothing — filter by <code>type=exec.cachemount</code> instead; and <code>--keep-storage</code> now prints <code>Flag --keep-storage has been deprecated, keep-storage flag has been changed to reserved-space</code>. The two <code>prune</code> lines were deliberately <strong>not</strong> run on the course Mac: on a machine that builds several projects they delete everyone's cache. To experiment safely, create your own builder, fill it, and remove the whole builder with <code>docker buildx rm</code> when you are done.</p>
 <div class="callout ok"><strong>Cache mounts grow forever unless you bound them.</strong> They are not part of any image, so <code>docker image prune</code> never touches them, and a machine that builds several projects can quietly accumulate several gigabytes of npm and Go caches. Either prune periodically (Lesson 3.5's timer is the right place) or set a ceiling in <code>/etc/docker/daemon.json</code> with BuildKit's garbage-collection policy, so the builder keeps the cache under a size you chose.</div>
-<pre><code>cd ..; rm -rf cm; docker rmi cm:p cm:c &gt;/dev/null 2&gt;&amp;1</code></pre>
+<pre><code class="language-bash">cd ..; rm -rf cm; docker rmi cm:p cm:c &gt;/dev/null 2&gt;&amp;1</code></pre>
 
 <h3>🧪 Practice (15–20 min)</h3>
 <div class="callout ok"><p><strong>Situation:</strong> your team adds a library almost every day during SWP391 sprints, and each time the Docker build downloads everything again. Measure what a cache mount saves — on a builder of your own, so you never have to prune a shared cache.</p><ol>
@@ -1186,7 +1186,7 @@ Description:  cached mount /root/.npm from exec /bin/sh -c npm ci --omit=dev --i
 <p class="lead">Thứ tự bảo vệ một tầng đã lưu đệm khỏi bị vô hiệu hoá. Nhưng khi nó <em>BỊ</em> vô hiệu hoá — bạn vừa thêm một thư viện — thì <code>npm ci</code> bắt đầu từ con số không và tải lại cả chín trăm gói. Một cache mount chữa đúng chuyện đó: một thư mục sống sót xuyên các lượt dựng, nằm NGOÀI mọi tầng, và làm cho cú trượt cache trở nên rẻ.</p>
 
 <h3>Phép đo</h3>
-<pre><code>mkdir -p cm &amp;&amp; cd cm
+<pre><code class="language-bash">mkdir -p cm &amp;&amp; cd cm
 printf 'node_modules\\n.git\\n' &gt; .dockerignore
 cat &gt; package.json &lt;&lt;'EOF'
 { "name": "cm", "version": "1.0.0",
@@ -1287,7 +1287,7 @@ RUN --mount=type=cache,target=/root/.gradle ./gradlew build --no-daemon</code></
 
 <h3>apt cần thêm một dòng</h3>
 ${slide('dk-05', 16, 'apt: gỡ docker-clean, khoá sharing=locked')}
-<pre><code># syntax=docker/dockerfile:1
+<pre><code class="language-bash"># syntax=docker/dockerfile:1
 FROM debian:bookworm-slim
 RUN rm -f /etc/apt/apt.conf.d/docker-clean \\
  &amp;&amp; echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' \\
@@ -1352,7 +1352,7 @@ ERROR: failed to build: failed to solve: process "/bin/sh -c sh -c 'touch /home/
 
 <h3>Quản lý chính cái cache đó</h3>
 ${slide('dk-05', 18, 'Cache mount phình mãi: xem bằng buildx du')}
-<pre><code>docker buildx du --filter type=exec.cachemount                <span class="tok-comment"># chỉ liệt kê cache mount</span>
+<pre><code class="language-bash">docker buildx du --filter type=exec.cachemount                <span class="tok-comment"># chỉ liệt kê cache mount</span>
 docker buildx du --verbose --filter type=exec.cachemount | grep -E 'Description|Size'
 docker builder prune --filter type=exec.cachemount -f         <span class="tok-comment"># ⚠ mount của MỌI dự án trên builder này</span>
 docker builder prune -f --reserved-space 5GB                   <span class="tok-comment"># tên cũ --keep-storage (đã bỏ)</span></code></pre>
@@ -1363,7 +1363,7 @@ Size:         165.5MB
 Description:  cached mount /root/.npm from exec /bin/sh -c npm ci --omit=dev --ignore-scripts with id "//root/.npm"</div>
 <p>Output thật của hai dòng đầu trên builder riêng của khoá (thêm <code>--builder dk05-builder</code>). Hai chỗ sửa so với bản cũ của bài: BuildKit mô tả mục đó là <code>cached mount …</code>, nên lệnh cũ <code>grep 'cache mount'</code> không khớp dòng nào — hãy lọc bằng <code>type=exec.cachemount</code>; và <code>--keep-storage</code> giờ in <code>Flag --keep-storage has been deprecated, keep-storage flag has been changed to reserved-space</code>. Hai dòng <code>prune</code> được cố ý KHÔNG chạy trên máy Mac của khoá: trên một máy dựng nhiều dự án, chúng xoá cache của tất cả mọi người. Muốn thử cho an toàn: tạo builder riêng, đổ đầy nó, rồi xoá nguyên builder bằng <code>docker buildx rm</code> khi xong.</p>
 <div class="callout ok"><strong>Cache mount phình lên MÃI MÃI nếu bạn không chặn trần cho chúng.</strong> Chúng không thuộc bất kỳ ảnh nào, nên <code>docker image prune</code> chẳng bao giờ đụng tới, và một cái máy dựng nhiều dự án có thể lặng lẽ tích lại vài gigabyte cache npm với Go. Hoặc là tỉa định kỳ (cái timer ở Bài 3.5 là chỗ đúng cho việc đó), hoặc đặt một cái trần trong <code>/etc/docker/daemon.json</code> bằng chính sách thu gom rác của BuildKit, để bộ dựng giữ cache dưới một mức bạn chọn.</div>
-<pre><code>cd ..; rm -rf cm; docker rmi cm:p cm:c &gt;/dev/null 2&gt;&amp;1</code></pre>
+<pre><code class="language-bash">cd ..; rm -rf cm; docker rmi cm:p cm:c &gt;/dev/null 2&gt;&amp;1</code></pre>
 
 <h3>🧪 Thực hành (15–20 phút)</h3>
 <div class="callout ok"><p><strong>Tình huống:</strong> trong các sprint SWP391, gần như ngày nào nhóm bạn cũng thêm một thư viện, và lần nào Docker cũng tải lại tất cả. Hãy ĐO xem cache mount tiết kiệm được bao nhiêu — trên builder của riêng bạn, để không bao giờ phải tỉa cache dùng chung.</p><ol>
@@ -1430,7 +1430,7 @@ Description:  cached mount /root/.npm from exec /bin/sh -c npm ci --omit=dev --i
 
 <h3>The two flags</h3>
 ${slide('dk-05', 19, 'Máy CI mới tinh có cache rỗng — cất cache ra ngoài máy')}
-<pre><code>docker buildx build \\
+<pre><code class="language-bash">docker buildx build \\
   --cache-from type=registry,ref=ghcr.io/me/app:buildcache \\
   --cache-to   type=registry,ref=ghcr.io/me/app:buildcache,mode=max \\
   -t ghcr.io/me/app:1.4.2 --push .</code></pre>
@@ -1450,7 +1450,7 @@ ${slide('dk-05', 21, 'Bốn kho cache và builder mặc định của Docker 29'
   <div class="lz-layer"><span class="lz-lname">type=local</span><span class="lz-lnote">A directory on disk. Right for self-hosted runners with persistent storage, and for combining with an <code>actions/cache</code> step. Needs manual management or it grows without limit.</span></div>
   <div class="lz-layer"><span class="lz-lname">type=inline</span><span class="lz-lnote">Cache metadata embedded in the image itself, so <code>--cache-from</code> against your normal tag works with no extra storage. Simple and limited: it is <code>mode=min</code> only, so it cannot cache a build stage. Fine for single-stage images.</span></div>
 </div>
-<pre><code><span class="tok-comment"># inline — the simplest possible version, no extra tag</span>
+<pre><code class="language-bash"><span class="tok-comment"># inline — the simplest possible version, no extra tag</span>
 docker buildx build --cache-to type=inline \\
   --cache-from ghcr.io/me/app:latest -t ghcr.io/me/app:latest --push .
 
@@ -1462,7 +1462,7 @@ docker buildx build \\
 
 <h3>A complete GitHub Actions workflow</h3>
 ${slide('dk-05', 22, 'Workflow GitHub Actions, phiên bản action tính đến 09/2026')}
-<pre><code>name: build
+<pre><code class="language-bash">name: build
 on:
   push: { branches: [main] }
   pull_request:
@@ -1511,7 +1511,7 @@ jobs:
 
 <h3>Prove the cache is working</h3>
 ${slide('dk-05', 23, 'Phép thử trung thực: xoá builder, tạo cái mới')}
-<pre><code><span class="tok-comment"># In the workflow log, cached steps look like this</span>
+<pre><code class="language-bash"><span class="tok-comment"># In the workflow log, cached steps look like this</span>
 #12 [build 4/6] RUN --mount=type=cache,target=/root/.npm npm ci
 #12 CACHED
 #13 [build 5/6] COPY . .
@@ -1639,7 +1639,7 @@ docker buildx rm ci3</code></pre>
 
 <h3>Hai cái cờ</h3>
 ${slide('dk-05', 19, 'Máy CI mới tinh có cache rỗng — cất cache ra ngoài máy')}
-<pre><code>docker buildx build \\
+<pre><code class="language-bash">docker buildx build \\
   --cache-from type=registry,ref=ghcr.io/me/app:buildcache \\
   --cache-to   type=registry,ref=ghcr.io/me/app:buildcache,mode=max \\
   -t ghcr.io/me/app:1.4.2 --push .</code></pre>
@@ -1659,7 +1659,7 @@ ${slide('dk-05', 21, 'Bốn kho cache và builder mặc định của Docker 29'
   <div class="lz-layer"><span class="lz-lname">type=local</span><span class="lz-lnote">Một thư mục trên đĩa. Đúng cho máy chạy CI tự dựng có ổ đĩa bền vững, và để ghép với một bước <code>actions/cache</code>. Cần quản lý bằng tay không thì nó phình vô hạn.</span></div>
   <div class="lz-layer"><span class="lz-lname">type=inline</span><span class="lz-lnote">Siêu dữ liệu cache nhúng ngay trong chính cái ảnh, nên <code>--cache-from</code> lên tag bình thường của bạn là chạy được, không cần kho lưu nào thêm. Đơn giản và hạn chế: nó CHỈ có <code>mode=min</code>, nên không lưu đệm được stage dựng. Ổn cho ảnh một tầng.</span></div>
 </div>
-<pre><code><span class="tok-comment"># inline — bản đơn giản nhất có thể, không cần tag phụ</span>
+<pre><code class="language-bash"><span class="tok-comment"># inline — bản đơn giản nhất có thể, không cần tag phụ</span>
 docker buildx build --cache-to type=inline \\
   --cache-from ghcr.io/me/app:latest -t ghcr.io/me/app:latest --push .
 
@@ -1671,7 +1671,7 @@ docker buildx build \\
 
 <h3>Một workflow GitHub Actions hoàn chỉnh</h3>
 ${slide('dk-05', 22, 'Workflow GitHub Actions, phiên bản action tính đến 09/2026')}
-<pre><code>name: build
+<pre><code class="language-bash">name: build
 on:
   push: { branches: [main] }
   pull_request:
@@ -1720,7 +1720,7 @@ jobs:
 
 <h3>Chứng minh cache đang hoạt động</h3>
 ${slide('dk-05', 23, 'Phép thử trung thực: xoá builder, tạo cái mới')}
-<pre><code><span class="tok-comment"># Trong log workflow, những bước có cache trông như thế này</span>
+<pre><code class="language-bash"><span class="tok-comment"># Trong log workflow, những bước có cache trông như thế này</span>
 #12 [build 4/6] RUN --mount=type=cache,target=/root/.npm npm ci
 #12 CACHED
 #13 [build 5/6] COPY . .
@@ -1879,7 +1879,7 @@ docker build -q -t app:m . &gt; /dev/null  0.10s user 0.08s system 8% cpu 2.177 
 
 <h3>Find the expensive step</h3>
 ${slide('dk-05', 25, 'Sắp dòng DONE theo giây: thường một bước là cả vấn đề')}
-<pre><code>docker build --no-cache --progress=plain -t app:m . 2&gt;&amp;1 \\
+<pre><code class="language-bash">docker build --no-cache --progress=plain -t app:m . 2&gt;&amp;1 \\
   | grep -E '^#[0-9]+ (DONE|CACHED)' \\
   | sort -t' ' -k3 -hr | head -8</code></pre>
 <div class="out">#10 DONE 29.6s
@@ -1890,7 +1890,7 @@ ${slide('dk-05', 25, 'Sắp dòng DONE theo giây: thường một bước là c
 #9 DONE 0.0s
 #8 CACHED
 #7 DONE 0.0s</div>
-<pre><code><span class="tok-comment"># Which jobs are #10 and #12?</span>
+<pre><code class="language-bash"><span class="tok-comment"># Which jobs are #10 and #12?</span>
 docker build --no-cache --progress=plain -t app:m . 2&gt;&amp;1 | grep -E '^#(10|12) (\\[|exporting to image$)'</code></pre>
 <div class="out">#10 [4/5] RUN npm ci --omit=dev --ignore-scripts
 #12 exporting to image</div>
@@ -1921,7 +1921,7 @@ docker build --platform linux/amd64 …   #5 DONE 3.8s</div>
 
 <h3>docker build --check</h3>
 ${slide('dk-05', 28, 'build --check bắt lỗi không cần dựng; stage độc lập chạy song song')}
-<pre><code>docker build --check -t app:m . 2&gt;&amp;1 | head -20</code></pre>
+<pre><code class="language-bash">docker build --check -t app:m . 2&gt;&amp;1 | head -20</code></pre>
 <div class="out">Check complete, 4 warnings have been found!
 
 WARNING: FromAsCasing - https://docs.docker.com/go/dockerfile/rule/from-as-casing/
@@ -1963,7 +1963,7 @@ COPY --from=tools /go/bin/b /usr/local/bin/</code></pre>
 <p>Measured on the course Mac: two stages that each run <code>sleep 3</code>, and a final stage that copies from both, built with <code>--no-cache</code> in <strong>3.61 s</strong> wall-clock — not six. In the <code>--progress=plain</code> log, <code>#5 [b 2/2]</code> and <code>#6 [a 2/2]</code> both end with <code>DONE 3.1s</code>, started together.</p>
 
 <h3>The checklist</h3>
-<pre><code><span class="tok-comment"># Run this on any slow build before changing anything</span>
+<pre><code class="language-bash"><span class="tok-comment"># Run this on any slow build before changing anything</span>
 echo "== context size ==";     docker build --progress=plain -t x . 2&gt;&amp;1 | grep 'transferring context'
 echo "== builder driver ==";   docker buildx inspect | grep -E 'Driver|Platforms'
 echo "== arch match ==";       docker version --format '{{.Server.Arch}}'
@@ -2070,7 +2070,7 @@ docker build -q -t app:m . &gt; /dev/null  0.10s user 0.08s system 8% cpu 2.177 
 
 <h3>Tìm ra cái bước đắt tiền</h3>
 ${slide('dk-05', 25, 'Sắp dòng DONE theo giây: thường một bước là cả vấn đề')}
-<pre><code>docker build --no-cache --progress=plain -t app:m . 2&gt;&amp;1 \\
+<pre><code class="language-bash">docker build --no-cache --progress=plain -t app:m . 2&gt;&amp;1 \\
   | grep -E '^#[0-9]+ (DONE|CACHED)' \\
   | sort -t' ' -k3 -hr | head -8</code></pre>
 <div class="out">#10 DONE 29.6s
@@ -2081,7 +2081,7 @@ ${slide('dk-05', 25, 'Sắp dòng DONE theo giây: thường một bước là c
 #9 DONE 0.0s
 #8 CACHED
 #7 DONE 0.0s</div>
-<pre><code><span class="tok-comment"># #10 và #12 là việc gì?</span>
+<pre><code class="language-bash"><span class="tok-comment"># #10 và #12 là việc gì?</span>
 docker build --no-cache --progress=plain -t app:m . 2&gt;&amp;1 | grep -E '^#(10|12) (\\[|exporting to image$)'</code></pre>
 <div class="out">#10 [4/5] RUN npm ci --omit=dev --ignore-scripts
 #12 exporting to image</div>
@@ -2112,7 +2112,7 @@ docker build --platform linux/amd64 …   #5 DONE 3.8s</div>
 
 <h3>docker build --check</h3>
 ${slide('dk-05', 28, 'build --check bắt lỗi không cần dựng; stage độc lập chạy song song')}
-<pre><code>docker build --check -t app:m . 2&gt;&amp;1 | head -20</code></pre>
+<pre><code class="language-bash">docker build --check -t app:m . 2&gt;&amp;1 | head -20</code></pre>
 <div class="out">Check complete, 4 warnings have been found!
 
 WARNING: FromAsCasing - https://docs.docker.com/go/dockerfile/rule/from-as-casing/
@@ -2154,7 +2154,7 @@ COPY --from=tools /go/bin/b /usr/local/bin/</code></pre>
 <p>Đo trên máy Mac của khoá: hai stage mỗi cái chạy <code>sleep 3</code>, và một stage cuối chép từ cả hai, dựng với <code>--no-cache</code> hết <strong>3,61 s</strong> thời gian thực — không phải sáu. Trong log <code>--progress=plain</code>, <code>#5 [b 2/2]</code> và <code>#6 [a 2/2]</code> cùng kết thúc bằng <code>DONE 3.1s</code>, bắt đầu cùng lúc.</p>
 
 <h3>Danh sách kiểm</h3>
-<pre><code><span class="tok-comment"># Chạy cái này trên bất kỳ lượt dựng chậm nào TRƯỚC KHI đổi gì</span>
+<pre><code class="language-bash"><span class="tok-comment"># Chạy cái này trên bất kỳ lượt dựng chậm nào TRƯỚC KHI đổi gì</span>
 echo "== kích thước ngữ cảnh ==";  docker build --progress=plain -t x . 2&gt;&amp;1 | grep 'transferring context'
 echo "== trình dựng ==";           docker buildx inspect | grep -E 'Driver|Platforms'
 echo "== khớp kiến trúc ==";       docker version --format '{{.Server.Arch}}'

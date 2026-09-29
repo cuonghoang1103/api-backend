@@ -109,7 +109,7 @@ const c1 = doc('nlp301c-1-1-preprocessing', '1.1 — NLP overview & text preproc
 <li><strong>Stemming</strong> — chop words to a crude root ("studies" → "studi"); fast, rule-based.</li>
 <li><strong>Lemmatization</strong> — reduce to the dictionary form ("studies" → "study"); slower, uses vocabulary &amp; grammar.</li>
 </ul>
-<pre><code>import nltk
+<pre><code class="language-python">import nltk
 from nltk.stem import PorterStemmer, WordNetLemmatizer
 from nltk.tokenize import word_tokenize
 
@@ -136,7 +136,7 @@ print(lem.lemmatize("studies"))   # 'study'
 <li><strong>Stemming</strong> — cắt từ về gốc thô ("studies" → "studi"); nhanh, theo luật.</li>
 <li><strong>Lemmatization</strong> — đưa về dạng từ điển ("studies" → "study"); chậm hơn, dùng từ vựng &amp; ngữ pháp.</li>
 </ul>
-<pre><code>import nltk
+<pre><code class="language-python">import nltk
 from nltk.stem import PorterStemmer, WordNetLemmatizer
 from nltk.tokenize import word_tokenize
 
@@ -170,7 +170,7 @@ const c2 = doc('nlp301c-2-1-representation', '2.1 — Text representation: BoW, 
 <p>Count how many times each vocabulary word appears — ignoring order. Simple, but the vector is huge and loses word order.</p>
 <h3>TF-IDF</h3>
 <p><strong>Term Frequency × Inverse Document Frequency</strong> weights each word by how often it appears in a document (TF) and how <em>rare</em> it is across all documents (IDF). Rare, informative words get high weight; "the" gets almost none.</p>
-<pre><code>from sklearn.feature_extraction.text import TfidfVectorizer
+<pre><code class="language-python">from sklearn.feature_extraction.text import TfidfVectorizer
 
 corpus = ["the cat sat", "the dog ran", "cat and dog play"]
 vec = TfidfVectorizer()
@@ -189,7 +189,7 @@ print(X.shape)   # (3, 7)  -> 3 docs, 7 vocab words
 <p>Đếm mỗi từ trong từ vựng xuất hiện bao nhiêu lần — bỏ qua thứ tự. Đơn giản, nhưng vector rất lớn và mất thứ tự từ.</p>
 <h3>TF-IDF</h3>
 <p><strong>Tần suất từ × Nghịch đảo tần suất tài liệu</strong> gán trọng số cho mỗi từ theo mức xuất hiện trong một văn bản (TF) và mức <em>hiếm</em> của nó trên toàn bộ tập (IDF). Từ hiếm, giàu thông tin được trọng số cao; "the" gần như bằng 0.</p>
-<pre><code>from sklearn.feature_extraction.text import TfidfVectorizer
+<pre><code class="language-python">from sklearn.feature_extraction.text import TfidfVectorizer
 
 corpus = ["the cat sat", "the dog ran", "cat and dog play"]
 vec = TfidfVectorizer()
@@ -275,7 +275,7 @@ const c4 = doc('nlp301c-4-1-lm-rnn', '4.1 — Language models & RNN/LSTM|||4.1 �
 <p>Classic n-gram LMs count word sequences but can only look back a few words. <strong>Recurrent Neural Networks (RNNs)</strong> process a sequence one token at a time, carrying a <em>hidden state</em> (memory) forward.</p>
 <h3>The vanishing gradient problem</h3>
 <p>Plain RNNs forget long-range context — gradients shrink over many steps. <strong>LSTM</strong> (Long Short-Term Memory) and <strong>GRU</strong> add <em>gates</em> that decide what to keep, forget and output, so they remember much longer.</p>
-<pre><code>from tensorflow.keras.models import Sequential
+<pre><code class="language-python">from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Embedding, LSTM, Dense
 
 model = Sequential([
@@ -294,7 +294,7 @@ model.compile(loss="categorical_crossentropy", optimizer="adam")
 <p>LM n-gram cổ điển đếm chuỗi từ nhưng chỉ nhìn lại được vài từ. <strong>Mạng nơ-ron hồi tiếp (RNN)</strong> xử lý chuỗi từng token một, mang theo một <em>trạng thái ẩn</em> (bộ nhớ) về phía trước.</p>
 <h3>Vấn đề vanishing gradient</h3>
 <p>RNN thường quên ngữ cảnh xa — gradient teo dần qua nhiều bước. <strong>LSTM</strong> (Bộ nhớ dài-ngắn hạn) và <strong>GRU</strong> thêm các <em>cổng</em> quyết định giữ, quên và xuất gì, nên nhớ được lâu hơn nhiều.</p>
-<pre><code>from tensorflow.keras.models import Sequential
+<pre><code class="language-python">from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Embedding, LSTM, Dense
 
 model = Sequential([
@@ -324,7 +324,7 @@ const c5 = doc('nlp301c-5-1-attention-transformer', '5.1 — Attention & the Tra
 <p><strong>Self-attention</strong> relates every token in a sentence to every other — resolving "it" to the right noun, for instance. <strong>Multi-head</strong> attention runs several attention layers in parallel to capture different relationships.</p>
 <h3>The Transformer (2017)</h3>
 <p>The paper <em>"Attention Is All You Need"</em> dropped recurrence entirely. A Transformer stacks self-attention + feed-forward layers, processes all tokens <strong>in parallel</strong> (fast on GPUs), and adds <strong>positional encoding</strong> so order is not lost.</p>
-<pre><code># Scaled dot-product attention (conceptual)
+<pre><code class="language-python"># Scaled dot-product attention (conceptual)
 # scores = softmax( (Q . K^T) / sqrt(d_k) )
 # output = scores . V
 import torch, torch.nn.functional as F
@@ -343,7 +343,7 @@ def attention(Q, K, V):
 <p><strong>Self-attention</strong> liên hệ mọi token trong câu với mọi token khác — vd giải quyết "it" trỏ về đúng danh từ. <strong>Multi-head</strong> chạy nhiều lớp attention song song để nắm nhiều mối quan hệ khác nhau.</p>
 <h3>Transformer (2017)</h3>
 <p>Bài báo <em>"Attention Is All You Need"</em> loại bỏ hoàn toàn hồi tiếp. Transformer xếp chồng lớp self-attention + feed-forward, xử lý mọi token <strong>song song</strong> (nhanh trên GPU), và thêm <strong>positional encoding</strong> để không mất thứ tự.</p>
-<pre><code># Scaled dot-product attention (khái niệm)
+<pre><code class="language-python"># Scaled dot-product attention (khái niệm)
 # scores = softmax( (Q . K^T) / sqrt(d_k) )
 # output = scores . V
 import torch, torch.nn.functional as F
@@ -374,7 +374,7 @@ const c6 = doc('nlp301c-6-1-pretrained', '6.1 — Pretrained models (BERT, GPT) 
 <li><strong>BERT</strong> — an <em>encoder</em>, trained with <strong>masked language modeling</strong> (predict hidden words). It sees context in <em>both</em> directions, great for understanding tasks (classification, NER, QA).</li>
 <li><strong>GPT</strong> — a <em>decoder</em>, trained to predict the next token left-to-right. Great for <em>generation</em> (writing, chat, code).</li>
 </ul>
-<pre><code>from transformers import pipeline
+<pre><code class="language-python">from transformers import pipeline
 
 # Zero-code use of a pretrained model:
 fill = pipeline("fill-mask", model="bert-base-uncased")
@@ -393,7 +393,7 @@ fill("Natural language [MASK] is fun.")
 <li><strong>BERT</strong> — một <em>encoder</em>, huấn luyện bằng <strong>masked language modeling</strong> (dự đoán từ bị che). Nó nhìn ngữ cảnh <em>cả hai</em> chiều, hợp với tác vụ hiểu (phân loại, NER, hỏi đáp).</li>
 <li><strong>GPT</strong> — một <em>decoder</em>, huấn luyện dự đoán token kế tiếp từ trái sang phải. Hợp với <em>sinh</em> văn bản (viết, chat, code).</li>
 </ul>
-<pre><code>from transformers import pipeline
+<pre><code class="language-python">from transformers import pipeline
 
 # Dùng mô hình tiền huấn luyện không cần viết code huấn luyện:
 fill = pipeline("fill-mask", model="bert-base-uncased")
@@ -423,7 +423,7 @@ const c7 = doc('nlp301c-7-1-tasks', '7.1 — NLP tasks: classification, NER, sen
 <li><strong>Machine Translation (MT)</strong> — translate between languages (usually encoder-decoder).</li>
 <li><strong>Question Answering (QA)</strong> — return an answer, either extracted from a passage or generated.</li>
 </ul>
-<pre><code>from transformers import pipeline
+<pre><code class="language-python">from transformers import pipeline
 
 clf = pipeline("sentiment-analysis")
 clf("I love this course!")
@@ -434,7 +434,7 @@ ner("Alan Turing worked in London.")
 # -> Alan Turing (PER), London (LOC)
 </code></pre>
 <h3>With spaCy</h3>
-<pre><code>import spacy
+<pre><code class="language-python">import spacy
 nlp = spacy.load("en_core_web_sm")
 doc = nlp("Apple was founded in California in 1976.")
 for ent in doc.ents:
@@ -451,7 +451,7 @@ for ent in doc.ents:
 <li><strong>Dịch máy (MT)</strong> — dịch giữa các ngôn ngữ (thường dùng encoder-decoder).</li>
 <li><strong>Hỏi đáp (QA)</strong> — trả về câu trả lời, hoặc trích từ đoạn văn hoặc sinh ra.</li>
 </ul>
-<pre><code>from transformers import pipeline
+<pre><code class="language-python">from transformers import pipeline
 
 clf = pipeline("sentiment-analysis")
 clf("I love this course!")
@@ -462,7 +462,7 @@ ner("Alan Turing worked in London.")
 # -> Alan Turing (PER), London (LOC)
 </code></pre>
 <h3>Với spaCy</h3>
-<pre><code>import spacy
+<pre><code class="language-python">import spacy
 nlp = spacy.load("en_core_web_sm")
 doc = nlp("Apple was founded in California in 1976.")
 for ent in doc.ents:

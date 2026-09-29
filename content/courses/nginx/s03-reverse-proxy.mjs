@@ -18,7 +18,7 @@ export default {
 <p class="lead">A reverse proxy has one core job: take the request you received and reissue it to something else. <code>proxy_pass</code> does that, and the single most consequential thing about it is a rule that hangs on whether the URL you wrote has a path component. Getting it wrong produces a <code>404</code> from your own application, which is a confusing place for the blame to land.</p>
 
 <h3>Four spellings, one upstream that prints what it received</h3>
-<pre><code>location /a/ { proxy_pass http://127.0.0.1:9101; }        <span class="tok-comment"># NO path</span>
+<pre><code class="language-bash">location /a/ { proxy_pass http://127.0.0.1:9101; }        <span class="tok-comment"># NO path</span>
 location /b/ { proxy_pass http://127.0.0.1:9101/; }       <span class="tok-comment"># path = /</span>
 location /c/ { proxy_pass http://127.0.0.1:9101/khac/; }  <span class="tok-comment"># path = /other/</span>
 location /d  { proxy_pass http://127.0.0.1:9101/xxx; }    <span class="tok-comment"># no trailing / on either side</span></code></pre>
@@ -39,7 +39,7 @@ location /d  { proxy_pass http://127.0.0.1:9101/xxx; }    <span class="tok-comme
 </div>
 
 <h3>The rule that quietly stops applying</h3>
-<pre><code><span class="tok-comment"># In a REGEX location, proxy_pass may NOT carry a path.</span>
+<pre><code class="language-bash"><span class="tok-comment"># In a REGEX location, proxy_pass may NOT carry a path.</span>
 location ~ ^/anh/(.+)\$ {
   proxy_pass http://127.0.0.1:9101/media/\$1;   <span class="tok-comment"># rebuilt BY HAND from the capture group</span>
 }
@@ -81,7 +81,7 @@ location /cu/ {
 <p class="lead">Một con reverse proxy có đúng một việc cốt lõi: nhận cái request bạn vừa nhận rồi phát lại nó cho một thứ khác. <code>proxy_pass</code> làm việc đó, và điều hệ trọng nhất về nó là một cái luật treo vào chuyện cái URL bạn viết CÓ phần đường dẫn hay không. Làm sai thì ứng dụng CỦA CHÍNH BẠN trả về <code>404</code>, một chỗ rất khó hiểu để cái tội rơi vào.</p>
 
 <h3>Bốn cách viết, một upstream biết in ra chính xác cái nó nhận</h3>
-<pre><code>location /a/ { proxy_pass http://127.0.0.1:9101; }        <span class="tok-comment"># KHÔNG có đường dẫn</span>
+<pre><code class="language-bash">location /a/ { proxy_pass http://127.0.0.1:9101; }        <span class="tok-comment"># KHÔNG có đường dẫn</span>
 location /b/ { proxy_pass http://127.0.0.1:9101/; }       <span class="tok-comment"># đường dẫn = /</span>
 location /c/ { proxy_pass http://127.0.0.1:9101/khac/; }  <span class="tok-comment"># đường dẫn = /khac/</span>
 location /d  { proxy_pass http://127.0.0.1:9101/xxx; }    <span class="tok-comment"># không dấu / ở cả hai bên</span></code></pre>
@@ -102,7 +102,7 @@ location /d  { proxy_pass http://127.0.0.1:9101/xxx; }    <span class="tok-comme
 </div>
 
 <h3>Cái luật lặng lẽ thôi có hiệu lực</h3>
-<pre><code><span class="tok-comment"># Trong location REGEX, proxy_pass KHÔNG được phép mang đường dẫn.</span>
+<pre><code class="language-bash"><span class="tok-comment"># Trong location REGEX, proxy_pass KHÔNG được phép mang đường dẫn.</span>
 location ~ ^/anh/(.+)\$ {
   proxy_pass http://127.0.0.1:9101/media/\$1;   <span class="tok-comment"># dựng lại BẰNG TAY qua nhóm bắt</span>
 }
@@ -175,7 +175,7 @@ x-tu-client: gia-tri             x-tu-client: gia-tri
 </div>
 
 <h3>The block that fixes all four</h3>
-<pre><code>location /api/ {
+<pre><code class="language-bash">location /api/ {
   proxy_http_version 1.1;                       <span class="tok-comment"># fixes #1, #3 and opens the way for WebSocket</span>
   proxy_set_header Host              \$host;     <span class="tok-comment"># fixes #2</span>
   proxy_set_header Connection        "";        <span class="tok-comment"># fixes #3 — allows the connection to be held</span>
@@ -262,7 +262,7 @@ x-tu-client: gia-tri             x-tu-client: gia-tri
 </div>
 
 <h3>Khối vá sạch cả bốn</h3>
-<pre><code>location /api/ {
+<pre><code class="language-bash">location /api/ {
   proxy_http_version 1.1;                       <span class="tok-comment"># sửa #1, #3 và mở đường cho WebSocket</span>
   proxy_set_header Host              \$host;     <span class="tok-comment"># sửa #2</span>
   proxy_set_header Connection        "";        <span class="tok-comment"># sửa #3 — cho phép giữ kết nối</span>
@@ -516,7 +516,7 @@ Do that, gzip VAN dang bat o Nginx, KHONG doi mot dong cau hinh nao:
   <div class="kv"><span class="k">Keep connect short and read long</span><span class="v">A healthy backend on a LAN connects in single-digit milliseconds, so <code>proxy_connect_timeout 2s;</code> is generous and fails fast when a host is gone. Reading is where real work happens and deserves room. The common mistake is one number copied into all three.</span></div>
   <div class="kv"><span class="k">504 means your backend; 502 means the connection</span><span class="v">Worth memorising because it halves the search. <code>504</code> = Nginx reached the upstream and waited too long, so look at the application. <code>502</code> = Nginx could not get a usable connection or response at all, so look at the process, the port, and whether it crashed.</span></div>
 </div>
-<pre><code>http {
+<pre><code class="language-bash">http {
   proxy_connect_timeout 2s;      <span class="tok-comment"># default 60s — far too long for a server that is already dead</span>
   proxy_send_timeout    30s;
   proxy_read_timeout    30s;     <span class="tok-comment"># the maximum QUIET gap, not the total time</span>
@@ -589,7 +589,7 @@ location /su-kien/ {             <span class="tok-comment"># a streaming endpoin
   <div class="kv"><span class="k">Giữ connect NGẮN và read DÀI</span><span class="v">Một backend khoẻ mạnh trong mạng LAN nối được trong vài mili giây, nên <code>proxy_connect_timeout 2s;</code> đã là rộng rãi và nó hỏng nhanh khi một máy biến mất. Việc đọc mới là chỗ công việc thật diễn ra và nó xứng đáng có chỗ. Lỗi thường gặp là chép MỘT con số vào cả ba.</span></div>
   <div class="kv"><span class="k">504 nghĩa là backend của bạn; 502 nghĩa là cái kết nối</span><span class="v">Đáng học thuộc vì nó giảm một nửa vùng tìm kiếm. <code>504</code> = Nginx đã chạm được upstream và chờ quá lâu, hãy đi nhìn ứng dụng. <code>502</code> = Nginx không lấy nổi một kết nối hay một phản hồi dùng được nào, hãy đi nhìn tiến trình, cái cổng, và xem nó có sập không.</span></div>
 </div>
-<pre><code>http {
+<pre><code class="language-bash">http {
   proxy_connect_timeout 2s;      <span class="tok-comment"># mặc định 60s — quá dài cho một máy chủ đã chết</span>
   proxy_send_timeout    30s;
   proxy_read_timeout    30s;     <span class="tok-comment"># khoảng LẶNG tối đa, không phải tổng thời gian</span>
@@ -658,7 +658,7 @@ location /ws-thuong/ { proxy_pass http://127.0.0.1:9102/; }
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">You re-inject them for the next hop</span><span class="lz-d">Not by copying, but by declaring them for the connection Nginx itself is making. That is what <code>proxy_set_header Upgrade \$http_upgrade;</code> means: take what the client asked for and ask for it again on my own connection.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">HTTP/1.1 is required as well</span><span class="lz-d">Row B shows the version alone is not enough, but without it nothing works either — <code>Upgrade</code> does not exist in HTTP/1.0. Both directives are necessary; neither is sufficient.</span></div>
 </div>
-<pre><code><span class="tok-comment"># At the http level — map runs ONCE per request, far cheaper than if</span>
+<pre><code class="language-bash"><span class="tok-comment"># At the http level — map runs ONCE per request, far cheaper than if</span>
 map \$http_upgrade \$connection_upgrade {
   default upgrade;
   ''      close;      <span class="tok-comment"># an ordinary request: says "close", NOT "upgrade"</span>
@@ -735,7 +735,7 @@ location /ws-thuong/ { proxy_pass http://127.0.0.1:9102/; }
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Bạn TIÊM LẠI chúng cho chặng tiếp theo</span><span class="lz-d">Không phải bằng cách chép, mà bằng cách KHAI chúng cho cái kết nối mà chính Nginx đang tạo ra. Đó là ý nghĩa của <code>proxy_set_header Upgrade \$http_upgrade;</code>: lấy cái client vừa xin rồi xin lại nó trên kết nối của TÔI.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">HTTP/1.1 cũng là điều kiện BẮT BUỘC</span><span class="lz-d">Dòng B cho thấy chỉ mỗi phiên bản thì chưa đủ, nhưng thiếu nó thì cũng chẳng có gì chạy — <code>Upgrade</code> không tồn tại trong HTTP/1.0. Cả hai chỉ thị đều CẦN; không cái nào ĐỦ một mình.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Ở tầng http — map chạy MỘT lần cho mỗi request, rẻ hơn if rất nhiều</span>
+<pre><code class="language-bash"><span class="tok-comment"># Ở tầng http — map chạy MỘT lần cho mỗi request, rẻ hơn if rất nhiều</span>
 map \$http_upgrade \$connection_upgrade {
   default upgrade;
   ''      close;      <span class="tok-comment"># request thường: nói "close", KHÔNG nói "upgrade"</span>

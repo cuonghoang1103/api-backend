@@ -115,7 +115,7 @@ export default {
 <li><strong>Data is the carrier</strong> — "Data: Values are used to describe information. So, information can be called as the mean of data." Data are raw values; information is what those values mean once you know how to read them.</li>
 <li><strong>Worked example</strong> — the byte 0100 0001 is <em>data</em>. Read as an integer it is 65; read as an ASCII character it is the letter A; read as part of a bitmap it may be a shade of grey. Same data, three different pieces of information — the difference is the <em>interpretation</em>, which in C is called the <strong>type</strong>.</li>
 <li><strong>Why this matters in C</strong> — this is the whole reason C makes you declare types. The compiler cannot guess whether your 8 bits mean a number or a letter:
-<pre><code>char  c = 65;   /* prints as A */
+<pre><code class="language-c">char  c = 65;   /* prints as A */
 int   n = 65;   /* prints as 65 */
 printf("%c %d\\n", c, n);   /* output:  A 65 */</code></pre></li>
 <li><strong>Encoding is the bridge</strong> — turning information into data requires an agreed code: ASCII for characters, two's complement for signed integers, IEEE-754 for real numbers, RGB for pixels. Lose the code and the data become meaningless noise.</li>
@@ -128,7 +128,7 @@ printf("%c %d\\n", c, n);   /* output:  A 65 */</code></pre></li>
 <li><strong>Dữ liệu là cái chở</strong> — "Data: Values are used to describe information. So, information can be called as the mean of data." Dữ liệu là giá trị thô; thông tin là ý nghĩa của các giá trị đó khi bạn biết cách đọc.</li>
 <li><strong>Ví dụ đã giải</strong> — byte 0100 0001 là <em>dữ liệu</em>. Đọc như số nguyên thì nó là 65; đọc như ký tự ASCII thì nó là chữ A; đọc như một phần của ảnh bitmap thì nó có thể là một mức xám. Cùng một dữ liệu, ba thông tin khác nhau — khác nhau ở chỗ <em>cách diễn giải</em>, mà trong C người ta gọi là <strong>kiểu dữ liệu (type)</strong>.</li>
 <li><strong>Vì sao điều này quan trọng trong C</strong> — đây chính là lý do C bắt bạn khai báo kiểu. Trình biên dịch không thể đoán 8 bit của bạn mang nghĩa một con số hay một chữ cái:
-<pre><code>char  c = 65;   /* in ra chữ A */
+<pre><code class="language-c">char  c = 65;   /* in ra chữ A */
 int   n = 65;   /* in ra số 65 */
 printf("%c %d\\n", c, n);   /* kết quả:  A 65 */</code></pre></li>
 <li><strong>Mã hoá là cây cầu</strong> — biến thông tin thành dữ liệu cần một bộ mã đã thống nhất: ASCII cho ký tự, bù hai cho số nguyên có dấu, IEEE-754 cho số thực, RGB cho điểm ảnh. Mất bộ mã thì dữ liệu chỉ còn là nhiễu vô nghĩa.</li>
@@ -169,7 +169,7 @@ printf("%c %d\\n", c, n);   /* kết quả:  A 65 */</code></pre></li>
 <li><strong>Worked example — same idea, three forms.</strong> Problem: read three marks, print their average.<br />
 Algorithm (plain words): 1) read a, b, c · 2) compute s = a + b + c · 3) compute avg = s / 3 · 4) print avg.<br />
 Computer program in C:
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     float a, b, c, avg;
@@ -191,7 +191,7 @@ int main(void) {
 <li><strong>Ví dụ đã giải — cùng một ý, ba dạng.</strong> Bài toán: đọc ba điểm, in ra điểm trung bình.<br />
 Giải thuật (lời thường): 1) đọc a, b, c · 2) tính s = a + b + c · 3) tính avg = s / 3 · 4) in avg.<br />
 Chương trình máy tính bằng C:
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     float a, b, c, avg;
@@ -215,7 +215,7 @@ int main(void) {
 <li><strong>"Increase the performance of standard workflow"</strong> — the business justification. A program is worth writing when the task is repetitive, high-volume, or error-prone by hand — exactly the three marks of a "standard workflow".</li>
 <li><strong>"Computer software: A set of related programs"</strong> — one program is not software. Microsoft Word ships as many executables, libraries, resource files and configuration data that cooperate.</li>
 <li><strong>See the formula in real C</strong> — in this snippet, <code>total</code> and <code>n</code> are the <em>data</em>; the loop and the assignment are the <em>instructions</em>:
-<pre><code>int total = 0, n;              /* data      */
+<pre><code class="language-c">int total = 0, n;              /* data      */
 for (n = 1; n &lt;= 100; n++)     /* instruction */
     total += n;                /* instruction acting on data */
 printf("%d\\n", total);         /* prints 5050 */</code></pre></li>
@@ -230,7 +230,7 @@ printf("%d\\n", total);         /* prints 5050 */</code></pre></li>
 <li><strong>"Increase the performance of standard workflow"</strong> — đây là lý do kinh tế. Viết một chương trình là đáng khi công việc lặp đi lặp lại, khối lượng lớn, hoặc làm tay thì hay sai — đúng ba dấu hiệu của một "quy trình chuẩn".</li>
 <li><strong>"Computer software: A set of related programs"</strong> — một chương trình chưa phải phần mềm. Microsoft Word được giao đi kèm rất nhiều tệp thực thi, thư viện, tệp tài nguyên và dữ liệu cấu hình phối hợp với nhau.</li>
 <li><strong>Nhìn thấy công thức trong C thật</strong> — trong đoạn dưới, <code>total</code> và <code>n</code> là <em>dữ liệu</em>; vòng lặp và phép gán là <em>lệnh</em>:
-<pre><code>int total = 0, n;              /* dữ liệu  */
+<pre><code class="language-c">int total = 0, n;              /* dữ liệu  */
 for (n = 1; n &lt;= 100; n++)     /* lệnh */
     total += n;                /* lệnh tác động lên dữ liệu */
 printf("%d\\n", total);         /* in ra 5050 */</code></pre></li>
@@ -266,7 +266,7 @@ printf("%d\\n", total);         /* in ra 5050 */</code></pre></li>
 <li><strong>Maintainability = understandability + modifiability</strong> — the slide splits it explicitly. <em>Understandability</em> comes from structured programming plus documenting the code and the overall design "to help others (and yourself)". <em>Modifiability</em> comes from standards compliance.</li>
 <li><strong>Portability</strong> — "The program can run on different platforms with minimal modification", where the slide defines <strong>platform = CPU + operating system running on it</strong>. Standards compliance means the needed modifications are minimum.</li>
 <li><strong>Portability in real C</strong> — the portable way to print the size of an int is to ask, never to assume:
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 int main(void) {
     printf("int = %d bytes\\n", (int) sizeof(int));
     return 0;     /* 4 on most desktops, 2 on some embedded targets */
@@ -283,7 +283,7 @@ Hard-coding "an int is 4 bytes" is exactly the kind of assumption that destroys 
 <li><strong>Maintainability = understandability + modifiability</strong> — slide tách rõ ra hai nửa. <em>Dễ hiểu</em> đến từ lập trình có cấu trúc cộng với việc viết tài liệu cho mã và cho thiết kế tổng thể "để giúp người khác (và chính bạn)". <em>Dễ sửa</em> đến từ việc tuân thủ chuẩn.</li>
 <li><strong>Portability (khả chuyển)</strong> — "The program can run on different platforms with minimal modification", trong đó slide định nghĩa <strong>nền tảng = CPU + hệ điều hành chạy trên CPU đó</strong>. Tuân thủ chuẩn nghĩa là phần phải sửa đổi là tối thiểu.</li>
 <li><strong>Khả chuyển trong C thật</strong> — cách viết khả chuyển để biết kích thước một int là đi hỏi, tuyệt đối không giả định:
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 int main(void) {
     printf("int = %d byte\\n", (int) sizeof(int));
     return 0;     /* 4 trên hầu hết máy bàn, 2 trên một số hệ nhúng */
@@ -303,7 +303,7 @@ Viết cứng "int luôn là 4 byte" đúng là kiểu giả định giết ch�
 <li><strong>Scalability made concrete</strong> — searching a sorted array of n items: linear search does about n comparisons, binary search does about log2(n). For n = 1,000,000 that is 1,000,000 versus 20. No amount of clever C makes linear search catch up.</li>
 <li><strong>Robustness</strong> — "Write software that handles errors and unexpected inputs gracefully" with "error handling, logging, and validation mechanisms". The user <em>will</em> type a letter where you asked for a number.</li>
 <li><strong>Modularity + robustness in one snippet</strong> — one small function with a specific task, and a caller that validates instead of trusting:
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 /* one module, one specific task */
 float average3(float a, float b, float c) {
@@ -331,7 +331,7 @@ int main(void) {
 <li><strong>Cụ thể hoá khả năng mở rộng</strong> — tìm kiếm trong mảng đã sắp xếp có n phần tử: tìm tuần tự mất khoảng n phép so sánh, tìm nhị phân mất khoảng log2(n). Với n = 1.000.000 thì là 1.000.000 so với 20. Không có mẹo C tài giỏi nào giúp tìm tuần tự đuổi kịp.</li>
 <li><strong>Robustness (bền vững)</strong> — "Write software that handles errors and unexpected inputs gracefully" với "error handling, logging, and validation mechanisms". Người dùng <em>chắc chắn</em> sẽ gõ chữ vào chỗ bạn hỏi số.</li>
 <li><strong>Module + bền vững trong một đoạn</strong> — một hàm nhỏ làm đúng một việc, và nơi gọi thì kiểm tra chứ không tin tưởng:
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 /* một module, một việc cụ thể */
 float average3(float a, float b, float c) {
@@ -431,7 +431,7 @@ int main(void) {
 <li><strong>Why "Random Access"</strong> — any cell can be reached in the same time, regardless of its address. Contrast with magnetic tape, where reaching the end means winding through everything before it.</li>
 <li><strong>The consequence you already feel</strong> — power loss loses unsaved work, because your document is in volatile RAM until you write it to non-volatile storage. Every "save" is a copy from RAM to disk.</li>
 <li><strong>Where your C variables live</strong> — in RAM, not in ROM, and not in the CPU. They are copied into registers when the ALU needs them and copied back afterwards:
-<pre><code>int a = 5, b = 7, s;   /* a, b, s occupy RAM cells */
+<pre><code class="language-c">int a = 5, b = 7, s;   /* a, b, s occupy RAM cells */
 s = a + b;             /* load a, load b, ALU adds, store s */
 printf("%d\\n", s);     /* prints 12 */</code></pre></li>
 </ul>
@@ -445,7 +445,7 @@ printf("%d\\n", s);     /* prints 12 */</code></pre></li>
 <li><strong>Vì sao gọi là "truy cập ngẫu nhiên"</strong> — ô nào cũng tới được trong cùng một khoảng thời gian, bất kể địa chỉ. Ngược lại với băng từ, muốn tới cuối băng thì phải quay qua toàn bộ phần trước.</li>
 <li><strong>Hệ quả bạn đã từng nếm</strong> — mất điện là mất phần chưa lưu, vì tài liệu của bạn nằm trong RAM khả biến cho tới khi được ghi xuống bộ nhớ không khả biến. Mỗi lần "lưu" là một lần chép từ RAM xuống đĩa.</li>
 <li><strong>Biến C của bạn sống ở đâu</strong> — trong RAM, không phải trong ROM, cũng không phải trong CPU. Chúng được chép vào thanh ghi khi ALU cần rồi chép trả về:
-<pre><code>int a = 5, b = 7, s;   /* a, b, s chiếm các ô RAM */
+<pre><code class="language-c">int a = 5, b = 7, s;   /* a, b, s chiếm các ô RAM */
 s = a + b;             /* nạp a, nạp b, ALU cộng, lưu s */
 printf("%d\\n", s);     /* in ra 12 */</code></pre></li>
 </ul>
@@ -460,7 +460,7 @@ printf("%d\\n", s);     /* in ra 12 */</code></pre></li>
 <li><strong>The central controller</strong> — devices do not hang directly off the CPU; their interfaces join the system buses through a controller. That is why adding a new device does not require a new CPU: the controller speaks the bus protocol on the device's behalf.</li>
 <li><strong>Why this matters to a C programmer</strong> — device access is slow, so the standard library <em>buffers</em> it. Your <code>printf</code> writes into a memory buffer, and the buffer is flushed to the screen later, in one go. That is a device-speed decision leaking into language behaviour.</li>
 <li><strong>The buffering you can observe</strong> — text sitting in a buffer has not reached the device yet:
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 int main(void) {
     printf("Working");
     fflush(stdout);   /* force the buffer out to the device NOW */
@@ -479,7 +479,7 @@ int main(void) {
 <li><strong>Bộ điều khiển trung tâm</strong> — thiết bị không treo thẳng vào CPU; giao diện của chúng nối vào hệ bus thông qua một bộ điều khiển. Nhờ vậy thêm một thiết bị mới không đòi phải thay CPU mới: bộ điều khiển nói giao thức bus thay cho thiết bị.</li>
 <li><strong>Vì sao người viết C cần biết</strong> — truy cập thiết bị thì chậm, nên thư viện chuẩn <em>đệm</em> nó lại. Lệnh <code>printf</code> của bạn ghi vào một vùng đệm trong bộ nhớ, rồi vùng đệm mới được xả ra màn hình sau, một lượt. Đó là một quyết định vì tốc độ thiết bị rò rỉ vào hành vi của ngôn ngữ.</li>
 <li><strong>Cái đệm mà bạn quan sát được</strong> — chữ còn nằm trong đệm thì chưa tới thiết bị:
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 int main(void) {
     printf("Dang chay");
     fflush(stdout);   /* ép xả đệm ra thiết bị NGAY */
@@ -544,7 +544,7 @@ int main(void) {
 <li><strong>The historical ladder</strong> — 8 bits (Intel 8080 era) ⟶ 16 bits (8086, the original PC) ⟶ 32 bits (80386 through the Pentium era) ⟶ 64 bits (today). Each step doubled both the arithmetic width and the addressing reach.</li>
 <li><strong>Word length versus byte</strong> — the byte is the unit you <em>address</em>; the word is the unit the CPU <em>computes</em> with. Memory is byte-addressed even on a 64-bit machine; the CPU just fetches 8 bytes at a time.</li>
 <li><strong>How C exposes it</strong> — this is why C does not promise a fixed size for <code>int</code>. The standard says only "at least 16 bits" and "the natural size suggested by the architecture":
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 int main(void) {
     printf("char=%d int=%d long=%d ptr=%d\\n",
            (int) sizeof(char), (int) sizeof(int),
@@ -562,7 +562,7 @@ int main(void) {
 <li><strong>Bậc thang lịch sử</strong> — 8 bit (thời Intel 8080) ⟶ 16 bit (8086, chiếc PC đầu tiên) ⟶ 32 bit (80386 tới thời Pentium) ⟶ 64 bit (ngày nay). Mỗi bậc nhân đôi cả độ rộng tính toán lẫn tầm đánh địa chỉ.</li>
 <li><strong>Từ máy so với byte</strong> — byte là đơn vị để <em>đánh địa chỉ</em>; từ máy là đơn vị để CPU <em>tính toán</em>. Bộ nhớ vẫn đánh địa chỉ theo byte kể cả trên máy 64 bit; CPU chỉ đơn giản là nạp 8 byte một lượt.</li>
 <li><strong>C phơi bày điều đó ra sao</strong> — đây là lý do C không hứa hẹn kích thước cố định cho <code>int</code>. Chuẩn chỉ nói "ít nhất 16 bit" và "kích thước tự nhiên mà kiến trúc gợi ý":
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 int main(void) {
     printf("char=%d int=%d long=%d ptr=%d\\n",
            (int) sizeof(char), (int) sizeof(int),
@@ -603,7 +603,7 @@ int main(void) {
 <li><strong>Addressable memory, worked</strong> — with an address register of n bits there are 2^n distinct addresses, one byte each. n = 16 ⟹ 2^16 = 65,536 bytes = <strong>64 KB</strong>. n = 20 ⟹ 2^20 = <strong>1 MB</strong> (the original PC). n = 32 ⟹ 2^32 = 4,294,967,296 bytes = <strong>4 GB</strong>. n = 64 ⟹ 2^64 = <strong>16 EB</strong>.</li>
 <li><strong>Why old 32-bit Windows could not use 8 GB of RAM</strong> — not a licensing limit but arithmetic: 32-bit addresses simply cannot name a byte beyond the 4 GB mark, and part of that range is reserved for devices.</li>
 <li><strong>Seeing addresses from C</strong> — <code>&amp;</code> yields the address, <code>%p</code> prints it:
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 int main(void) {
     int a = 65;
     printf("value = %d, address = %p\\n", a, (void *) &amp;a);
@@ -620,7 +620,7 @@ int main(void) {
 <li><strong>Bộ nhớ đánh địa chỉ được, tính ra</strong> — với thanh ghi địa chỉ n bit thì có 2^n địa chỉ khác nhau, mỗi địa chỉ một byte. n = 16 ⟹ 2^16 = 65.536 byte = <strong>64 KB</strong>. n = 20 ⟹ 2^20 = <strong>1 MB</strong> (chiếc PC đầu tiên). n = 32 ⟹ 2^32 = 4.294.967.296 byte = <strong>4 GB</strong>. n = 64 ⟹ 2^64 = <strong>16 EB</strong>.</li>
 <li><strong>Vì sao Windows 32 bit ngày xưa không dùng nổi 8 GB RAM</strong> — không phải giới hạn bản quyền mà là số học: địa chỉ 32 bit đơn giản là không gọi tên nổi một byte nằm quá mốc 4 GB, mà một phần dải đó còn bị dành cho thiết bị.</li>
 <li><strong>Nhìn thấy địa chỉ từ C</strong> — <code>&amp;</code> cho ra địa chỉ, <code>%p</code> in nó ra:
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 int main(void) {
     int a = 65;
     printf("gia tri = %d, dia chi = %p\\n", a, (void *) &amp;a);

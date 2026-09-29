@@ -104,8 +104,8 @@ const EX5 = {
   <li>Install: <code>npm install bootstrap</code> (Bootstrap 5 no longer needs jQuery; the bundle includes Popper).</li>
   <li>In a plain project, add to <code>&lt;head&gt;</code>: the charset and <strong>viewport</strong> meta, then the Bootstrap CSS link. Add the JS bundle before <code>&lt;/body&gt;</code>.</li>
   <li>In a <strong>React</strong> app, instead add one line to <code>src/index.js</code>:
-<pre><span class="hljs-keyword">import</span> <span class="hljs-string">&#x27;bootstrap/dist/css/bootstrap.min.css&#x27;</span>;
-<span class="hljs-keyword">import</span> <span class="hljs-string">&#x27;bootstrap/dist/js/bootstrap.bundle.min.js&#x27;</span>;</pre></li>
+<pre><code class="language-javascript"><span class="hljs-keyword">import</span> <span class="hljs-string">&#x27;bootstrap/dist/css/bootstrap.min.css&#x27;</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-string">&#x27;bootstrap/dist/js/bootstrap.bundle.min.js&#x27;</span>;</code></pre></li>
   <li>Verify: add <code>&lt;button className="btn btn-primary"&gt;Test&lt;/button&gt;</code> — a blue Bootstrap button means it works.</li>
 </ol>
 <div class="pitfall"><b>Trap:</b> in JSX use <code>className</code>, not <code>class</code>. And put the viewport meta in — without it the grid will not respond on mobile even though the classes are present.</div>
@@ -118,8 +118,8 @@ const EX5 = {
   <li>Cài: <code>npm install bootstrap</code> (Bootstrap 5 không cần jQuery nữa; bundle đã kèm Popper).</li>
   <li>Dự án thuần: thêm vào <code>&lt;head&gt;</code> meta charset và <strong>viewport</strong>, rồi link CSS Bootstrap. Thêm bundle JS trước <code>&lt;/body&gt;</code>.</li>
   <li>App <strong>React</strong>: chỉ thêm một dòng vào <code>src/index.js</code>:
-<pre><span class="hljs-keyword">import</span> <span class="hljs-string">&#x27;bootstrap/dist/css/bootstrap.min.css&#x27;</span>;
-<span class="hljs-keyword">import</span> <span class="hljs-string">&#x27;bootstrap/dist/js/bootstrap.bundle.min.js&#x27;</span>;</pre></li>
+<pre><code class="language-javascript"><span class="hljs-keyword">import</span> <span class="hljs-string">&#x27;bootstrap/dist/css/bootstrap.min.css&#x27;</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-string">&#x27;bootstrap/dist/js/bootstrap.bundle.min.js&#x27;</span>;</code></pre></li>
   <li>Kiểm: thêm <code>&lt;button className="btn btn-primary"&gt;Test&lt;/button&gt;</code> — nút xanh Bootstrap nghĩa là đã chạy.</li>
 </ol>
 <div class="pitfall"><b>Bẫy:</b> trong JSX dùng <code>className</code>, không phải <code>class</code>. Và nhớ thêm meta viewport — thiếu nó lưới không responsive trên di động dù có class.</div>
@@ -137,7 +137,7 @@ const EX6 = {
 <h2>Build a responsive layout with the grid</h2>
 <p class="lead"><b>Goal:</b> reproduce a page layout using only <code>.container</code>, <code>.row</code>, <code>.col-*</code> and responsive infixes.</p>
 <h3>A worked skeleton</h3>
-<pre>&lt;div className=<span class="hljs-string">&quot;container&quot;</span>&gt;
+<pre><code class="language-html">&lt;div className=<span class="hljs-string">&quot;container&quot;</span>&gt;
   <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;row&quot;</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-name">header</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;col-12&quot;</span>&gt;</span>Header<span class="hljs-tag">&lt;/<span class="hljs-name">header</span>&gt;</span>
   <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
@@ -151,14 +151,14 @@ const EX6 = {
     <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;col&quot;</span>&gt;</span>Card 3<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
   <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
   <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;row&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">footer</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;col-12&quot;</span>&gt;</span>Footer<span class="hljs-tag">&lt;/<span class="hljs-name">footer</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
-&lt;/div&gt;</pre>
+&lt;/div&gt;</code></pre>
 <div class="out"><b>Result:</b> on a phone everything stacks to one column; from md up the main/sidebar split 8/4 and the cards become three across.</div>
 <div class="callout"><span class="badge">★ Tip</span> Start mobile-first: write <code>.col-12</code> first, then add the <code>.col-md-*</code> overrides. Test by narrowing the browser — the layout should reflow at each breakpoint.</div>`,
     `<span class="eyebrow">Chương 4 · Exercise 6 · Slot 4–5 slide 31</span>
 <h2>Dựng layout responsive bằng lưới</h2>
 <p class="lead"><b>Mục tiêu:</b> tái tạo một layout trang chỉ với <code>.container</code>, <code>.row</code>, <code>.col-*</code> và breakpoint.</p>
 <h3>Bộ khung mẫu</h3>
-<pre>&lt;div className=<span class="hljs-string">&quot;container&quot;</span>&gt;
+<pre><code class="language-html">&lt;div className=<span class="hljs-string">&quot;container&quot;</span>&gt;
   <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;row&quot;</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-name">header</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;col-12&quot;</span>&gt;</span>Header<span class="hljs-tag">&lt;/<span class="hljs-name">header</span>&gt;</span>
   <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
@@ -172,7 +172,7 @@ const EX6 = {
     <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;col&quot;</span>&gt;</span>Card 3<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
   <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
   <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;row&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">footer</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;col-12&quot;</span>&gt;</span>Footer<span class="hljs-tag">&lt;/<span class="hljs-name">footer</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
-&lt;/div&gt;</pre>
+&lt;/div&gt;</code></pre>
 <div class="out"><b>Kết quả:</b> trên điện thoại mọi thứ xếp một cột; từ md trở lên main/sidebar chia 8/4 và các card thành ba cột.</div>
 <div class="callout"><span class="badge">★ Mẹo</span> Bắt đầu mobile-first: viết <code>.col-12</code> trước, rồi thêm ghi đè <code>.col-md-*</code>. Kiểm bằng cách thu hẹp trình duyệt — layout phải reflow ở mỗi breakpoint.</div>`,
   ),
@@ -187,7 +187,7 @@ const EX7 = {
     `<span class="eyebrow">Chapter 4 · Exercise 7 · Slot 4–5 slide 48</span>
 <h2>A responsive column of cards</h2>
 <p class="lead"><b>Goal:</b> display a list of items as Bootstrap cards laid out in a responsive grid — the anatomy of a card and how to make equal-height columns of them.</p>
-<pre>&lt;div className=<span class="hljs-string">&quot;row row-cols-1 row-cols-md-3 g-4&quot;</span>&gt;
+<pre><code class="language-html">&lt;div className=<span class="hljs-string">&quot;row row-cols-1 row-cols-md-3 g-4&quot;</span>&gt;
   {items.<span class="hljs-title function_">map</span>(<span class="hljs-function"><span class="hljs-params">it</span> =&gt;</span> (
     <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;col&quot;</span> <span class="hljs-attr">key</span>=<span class="hljs-string">{it.id}</span>&gt;</span>
       <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;card h-100&quot;</span>&gt;</span>
@@ -200,13 +200,13 @@ const EX7 = {
       <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
     <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
   ))}
-&lt;/div&gt;</pre>
+&lt;/div&gt;</code></pre>
 <div class="out"><b>Result:</b> cards flow one per row on phones, three per row from md up.</div>
 <div class="pitfall"><b>Trap:</b> add <code>h-100</code> to the <code>.card</code> so cards in the same row share height even when text lengths differ. And every mapped <code>.col</code> needs a <code>key</code>.</div>`,
     `<span class="eyebrow">Chương 4 · Exercise 7 · Slot 4–5 slide 48</span>
 <h2>Một cột thẻ responsive</h2>
 <p class="lead"><b>Mục tiêu:</b> hiển thị danh sách item dưới dạng card Bootstrap dàn lưới responsive — cấu trúc một card và cách làm các cột cao bằng nhau.</p>
-<pre>&lt;div className=<span class="hljs-string">&quot;row row-cols-1 row-cols-md-3 g-4&quot;</span>&gt;
+<pre><code class="language-html">&lt;div className=<span class="hljs-string">&quot;row row-cols-1 row-cols-md-3 g-4&quot;</span>&gt;
   {items.<span class="hljs-title function_">map</span>(<span class="hljs-function"><span class="hljs-params">it</span> =&gt;</span> (
     <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;col&quot;</span> <span class="hljs-attr">key</span>=<span class="hljs-string">{it.id}</span>&gt;</span>
       <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;card h-100&quot;</span>&gt;</span>
@@ -219,7 +219,7 @@ const EX7 = {
       <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
     <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
   ))}
-&lt;/div&gt;</pre>
+&lt;/div&gt;</code></pre>
 <div class="out"><b>Kết quả:</b> card một cột trên điện thoại, ba cột từ md trở lên.</div>
 <div class="pitfall"><b>Bẫy:</b> thêm <code>h-100</code> vào <code>.card</code> để các card cùng hàng cao bằng nhau dù độ dài text khác nhau. Và mỗi <code>.col</code> map ra cần một <code>key</code>.</div>`,
   ),
@@ -234,7 +234,7 @@ const EX8 = {
     `<span class="eyebrow">Chapter 4 · Exercise 8 · Slot 4–5 slide 51</span>
 <h2>Build a form with controls</h2>
 <p class="lead"><b>Goal:</b> style a form with Bootstrap classes and, in React, make it a <strong>controlled</strong> form (input value driven by state).</p>
-<pre><span class="hljs-keyword">function</span> <span class="hljs-title function_">ContactForm</span>(<span class="hljs-params"></span>) {
+<pre><code class="language-javascript"><span class="hljs-keyword">function</span> <span class="hljs-title function_">ContactForm</span>(<span class="hljs-params"></span>) {
   <span class="hljs-keyword">const</span> [email, setEmail] = <span class="hljs-title class_">React</span>.<span class="hljs-title function_">useState</span>(<span class="hljs-string">&#x27;&#x27;</span>);
   <span class="hljs-keyword">return</span> (
     <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">form</span>&gt;</span>
@@ -250,13 +250,13 @@ const EX8 = {
       <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;btn btn-primary&quot;</span>&gt;</span>Send<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
     <span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span></span>
   );
-}</pre>
+}</code></pre>
 <div class="out"><b>Result:</b> a styled form whose email lives in state — you can validate, disable the button, or submit it via fetch (Chapter 11).</div>
 <div class="callout"><span class="badge">★ Controlled vs uncontrolled</span> A <strong>controlled</strong> input has its <code>value</code> from state and an <code>onChange</code> that updates state — React is the single source of truth. This is the standard React form pattern; Chapter 6 goes deeper, and Slot 7 slide 13 revisits it.</div>`,
     `<span class="eyebrow">Chương 4 · Exercise 8 · Slot 4–5 slide 51</span>
 <h2>Dựng form với các control</h2>
 <p class="lead"><b>Mục tiêu:</b> tạo kiểu form bằng class Bootstrap và, trong React, biến nó thành form <strong>controlled</strong> (giá trị input do state điều khiển).</p>
-<pre><span class="hljs-keyword">function</span> <span class="hljs-title function_">ContactForm</span>(<span class="hljs-params"></span>) {
+<pre><code class="language-javascript"><span class="hljs-keyword">function</span> <span class="hljs-title function_">ContactForm</span>(<span class="hljs-params"></span>) {
   <span class="hljs-keyword">const</span> [email, setEmail] = <span class="hljs-title class_">React</span>.<span class="hljs-title function_">useState</span>(<span class="hljs-string">&#x27;&#x27;</span>);
   <span class="hljs-keyword">return</span> (
     <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">form</span>&gt;</span>
@@ -272,7 +272,7 @@ const EX8 = {
       <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;btn btn-primary&quot;</span>&gt;</span>Gửi<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
     <span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span></span>
   );
-}</pre>
+}</code></pre>
 <div class="out"><b>Kết quả:</b> một form có kiểu, email nằm trong state — bạn có thể validate, khoá nút, hoặc gửi qua fetch (Chương 11).</div>
 <div class="callout"><span class="badge">★ Controlled vs uncontrolled</span> Input <strong>controlled</strong> lấy <code>value</code> từ state và có <code>onChange</code> cập nhật state — React là nguồn sự thật duy nhất. Đây là mẫu form chuẩn của React; Chương 6 đi sâu, và Slot 7 slide 13 nhắc lại.</div>`,
   ),
@@ -335,7 +335,7 @@ const EX10 = {
     `<span class="eyebrow">Chapter 4 · Exercise 10 · Slot 7 slide 23</span>
 <h2>A small app with React-Bootstrap</h2>
 <p class="lead"><b>Goal:</b> use React-Bootstrap components together — a navbar, a responsive row of cards, and a modal opened from a button.</p>
-<pre><span class="hljs-keyword">import</span> { <span class="hljs-title class_">Navbar</span>, <span class="hljs-title class_">Container</span>, <span class="hljs-title class_">Row</span>, <span class="hljs-title class_">Col</span>, <span class="hljs-title class_">Card</span>, <span class="hljs-title class_">Button</span>, <span class="hljs-title class_">Modal</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react-bootstrap&#x27;</span>;
+<pre><code class="language-javascript"><span class="hljs-keyword">import</span> { <span class="hljs-title class_">Navbar</span>, <span class="hljs-title class_">Container</span>, <span class="hljs-title class_">Row</span>, <span class="hljs-title class_">Col</span>, <span class="hljs-title class_">Card</span>, <span class="hljs-title class_">Button</span>, <span class="hljs-title class_">Modal</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react-bootstrap&#x27;</span>;
 
 <span class="hljs-keyword">function</span> <span class="hljs-title function_">App</span>(<span class="hljs-params"></span>) {
   <span class="hljs-keyword">const</span> [show, setShow] = <span class="hljs-title class_">React</span>.<span class="hljs-title function_">useState</span>(<span class="hljs-literal">false</span>);
@@ -362,13 +362,13 @@ const EX10 = {
       <span class="hljs-tag">&lt;/<span class="hljs-name">Modal</span>&gt;</span>
     <span class="hljs-tag">&lt;/&gt;</span></span>
   );
-}</pre>
+}</code></pre>
 <div class="out"><b>Result:</b> the modal's visibility is pure React state (<code>show</code>) — the whole point of React-Bootstrap over plain Bootstrap.</div>
 <div class="di-toi"><a class="link-card codelab" href="${CODELAB}" target="_blank" rel="noopener"><span class="lc-ico">⌨️</span><span class="lc-body"><span class="lc-title">Build it in the browser</span><span class="lc-sub">Navbar + cards + modal — Code Lab.</span></span><span class="lc-cta">PRACTICE →</span></a></div>`,
     `<span class="eyebrow">Chương 4 · Exercise 10 · Slot 7 slide 23</span>
 <h2>Một app nhỏ với React-Bootstrap</h2>
 <p class="lead"><b>Mục tiêu:</b> dùng các component React-Bootstrap cùng nhau — navbar, một hàng card responsive, và một modal mở từ nút.</p>
-<pre><span class="hljs-keyword">import</span> { <span class="hljs-title class_">Navbar</span>, <span class="hljs-title class_">Container</span>, <span class="hljs-title class_">Row</span>, <span class="hljs-title class_">Col</span>, <span class="hljs-title class_">Card</span>, <span class="hljs-title class_">Button</span>, <span class="hljs-title class_">Modal</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react-bootstrap&#x27;</span>;
+<pre><code class="language-javascript"><span class="hljs-keyword">import</span> { <span class="hljs-title class_">Navbar</span>, <span class="hljs-title class_">Container</span>, <span class="hljs-title class_">Row</span>, <span class="hljs-title class_">Col</span>, <span class="hljs-title class_">Card</span>, <span class="hljs-title class_">Button</span>, <span class="hljs-title class_">Modal</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react-bootstrap&#x27;</span>;
 
 <span class="hljs-keyword">function</span> <span class="hljs-title function_">App</span>(<span class="hljs-params"></span>) {
   <span class="hljs-keyword">const</span> [show, setShow] = <span class="hljs-title class_">React</span>.<span class="hljs-title function_">useState</span>(<span class="hljs-literal">false</span>);
@@ -395,7 +395,7 @@ const EX10 = {
       <span class="hljs-tag">&lt;/<span class="hljs-name">Modal</span>&gt;</span>
     <span class="hljs-tag">&lt;/&gt;</span></span>
   );
-}</pre>
+}</code></pre>
 <div class="out"><b>Kết quả:</b> việc hiện modal hoàn toàn là state React (<code>show</code>) — chính là điểm hơn của React-Bootstrap so với Bootstrap thuần.</div>
 <div class="di-toi"><a class="link-card codelab" href="${CODELAB}" target="_blank" rel="noopener"><span class="lc-ico">⌨️</span><span class="lc-body"><span class="lc-title">Dựng ngay trên trình duyệt</span><span class="lc-sub">Navbar + card + modal — Code Lab.</span></span><span class="lc-cta">LUYỆN TẬP →</span></a></div>`,
   ),

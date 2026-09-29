@@ -151,7 +151,7 @@ ${slide('dk-10', 7, 'Cây thư mục và bốn quyết định')}
 
 <h3>The skeleton, before we fill it in</h3>
 ${slide('dk-10', 5, 'compose.yaml đọc như một bản vẽ: mạng trước, dịch vụ sau')}
-<pre><code>name: blog
+<pre><code class="language-bash">name: blog
 
 services:
   nginx:   { depends_on: [web, api], networks: [public] }
@@ -399,7 +399,7 @@ ${slide('dk-10', 7, 'Cây thư mục và bốn quyết định')}
 
 <h3>Bộ khung, trước khi chúng ta điền vào</h3>
 ${slide('dk-10', 5, 'compose.yaml đọc như một bản vẽ: mạng trước, dịch vụ sau')}
-<pre><code>name: blog
+<pre><code class="language-bash">name: blog
 
 services:
   nginx:   { depends_on: [web, api], networks: [public] }
@@ -574,7 +574,7 @@ api: ra được Internet</div>
 
 <h3>PostgreSQL, completely</h3>
 ${slide('dk-10', 8, 'Dịch vụ db: mỗi dòng trả lời một câu hỏi')}
-<pre><code>  db:
+<pre><code class="language-bash">  db:
     image: postgres:16.4-alpine
     environment:
       POSTGRES_USER: &#36;{POSTGRES_USER:-blog}
@@ -611,11 +611,11 @@ ${slide('dk-10', 8, 'Dịch vụ db: mỗi dòng trả lời một câu hỏi')}
 
 <h3>The initialisation directory runs exactly once</h3>
 ${slide('dk-10', 9, 'initdb.d chạy đúng một lần — lúc thư mục dữ liệu còn rỗng')}
-<pre><code><span class="tok-comment"># ops/postgres-init/01-extensions.sql</span>
+<pre><code class="language-bash"><span class="tok-comment"># ops/postgres-init/01-extensions.sql</span>
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE EXTENSION IF NOT EXISTS pg_trgm;          <span class="tok-comment"># trigram search</span>
 CREATE EXTENSION IF NOT EXISTS unaccent;         <span class="tok-comment"># Vietnamese search without diacritics</span></code></pre>
-<pre><code>docker compose up -d db &amp;&amp; docker compose logs db --no-log-prefix | grep -E 'initdb.d|EXTENSION|init process|ready to accept'</code></pre>
+<pre><code class="language-bash">docker compose up -d db &amp;&amp; docker compose logs db --no-log-prefix | grep -E 'initdb.d|EXTENSION|init process|ready to accept'</code></pre>
 <div class="out">2026-09-24 02:16:32.157 +07 [42] LOG:  database system is ready to accept connections
 /usr/local/bin/docker-entrypoint.sh: running /docker-entrypoint-initdb.d/01-extensions.sql
 CREATE EXTENSION
@@ -711,7 +711,7 @@ ${slide('dk-10', 11, 'Redis: lưu lâu dài + maxmemory')}
   <div class="lz-step"><span class="lz-k">Persistence: AOF</span><span class="lz-t">--appendonly yes</span><span class="lz-d">Every write appended to a log. Slightly slower, much less data lost. The right choice when sessions or queues live in Redis.</span></div>
   <div class="lz-step"><span class="lz-k">maxmemory + a policy</span><span class="lz-t">--maxmemory 256mb --maxmemory-policy allkeys-lru</span><span class="lz-d">Without both, Redis grows until the container hits its memory limit and the OOM killer takes it. With them it evicts the least-recently-used keys and keeps serving — a degraded cache instead of a dead one.</span></div>
 </div>
-<pre><code>docker compose exec cache redis-cli info memory | grep -E 'used_memory_human|maxmemory_policy'
+<pre><code class="language-bash">docker compose exec cache redis-cli info memory | grep -E 'used_memory_human|maxmemory_policy'
 docker compose exec cache redis-cli config get appendonly</code></pre>
 <div class="out">used_memory_human:1.42M
 maxmemory_policy:allkeys-lru
@@ -740,7 +740,7 @@ REDIS_URL=redis://cache:6379</code></pre>
 
 <h3>Upgrading a major version</h3>
 ${slide('dk-10', 12, 'Nâng 16 → 17: đổ ra, đổ lại')}
-<pre><code><span class="tok-comment"># Postgres does NOT migrate a data directory across major versions. Dump, upgrade, restore.</span>
+<pre><code class="language-bash"><span class="tok-comment"># Postgres does NOT migrate a data directory across major versions. Dump, upgrade, restore.</span>
 docker compose exec -T db pg_dumpall -U blog &gt; dump-before-17.sql
 docker compose down
 docker volume rm blog_pgdata                    <span class="tok-comment"># after the dump, and after checking it</span>
@@ -841,7 +841,7 @@ ket noi OK</div>
 
 <h3>PostgreSQL, viết đủ</h3>
 ${slide('dk-10', 8, 'Dịch vụ db: mỗi dòng trả lời một câu hỏi')}
-<pre><code>  db:
+<pre><code class="language-bash">  db:
     image: postgres:16.4-alpine
     environment:
       POSTGRES_USER: &#36;{POSTGRES_USER:-blog}
@@ -878,11 +878,11 @@ ${slide('dk-10', 8, 'Dịch vụ db: mỗi dòng trả lời một câu hỏi')}
 
 <h3>Thư mục khởi tạo chạy đúng MỘT lần</h3>
 ${slide('dk-10', 9, 'initdb.d chạy đúng một lần — lúc thư mục dữ liệu còn rỗng')}
-<pre><code><span class="tok-comment"># ops/postgres-init/01-extensions.sql</span>
+<pre><code class="language-bash"><span class="tok-comment"># ops/postgres-init/01-extensions.sql</span>
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE EXTENSION IF NOT EXISTS pg_trgm;          <span class="tok-comment"># tìm kiếm theo trigram</span>
 CREATE EXTENSION IF NOT EXISTS unaccent;         <span class="tok-comment"># tìm tiếng Việt không dấu</span></code></pre>
-<pre><code>docker compose up -d db &amp;&amp; docker compose logs db --no-log-prefix | grep -E 'initdb.d|EXTENSION|init process|ready to accept'</code></pre>
+<pre><code class="language-bash">docker compose up -d db &amp;&amp; docker compose logs db --no-log-prefix | grep -E 'initdb.d|EXTENSION|init process|ready to accept'</code></pre>
 <div class="out">2026-09-24 02:16:32.157 +07 [42] LOG:  database system is ready to accept connections
 /usr/local/bin/docker-entrypoint.sh: running /docker-entrypoint-initdb.d/01-extensions.sql
 CREATE EXTENSION
@@ -978,7 +978,7 @@ ${slide('dk-10', 11, 'Redis: lưu lâu dài + maxmemory')}
   <div class="lz-step"><span class="lz-k">Lưu lâu dài: AOF</span><span class="lz-t">--appendonly yes</span><span class="lz-d">Mọi lệnh ghi được nối vào một cuốn nhật ký. Chậm hơn chút, mất ít dữ liệu hơn nhiều. Lựa chọn đúng khi phiên đăng nhập hay hàng đợi nằm trong Redis.</span></div>
   <div class="lz-step"><span class="lz-k">maxmemory kèm một chính sách</span><span class="lz-t">--maxmemory 256mb --maxmemory-policy allkeys-lru</span><span class="lz-d">Không có đủ cả hai thì Redis phình tới khi container chạm hạn mức bộ nhớ và bộ giết OOM lấy nó đi. Có cả hai thì nó đẩy bớt những khoá lâu không dùng và tiếp tục phục vụ — một cái cache suy giảm thay vì một cái cache đã chết.</span></div>
 </div>
-<pre><code>docker compose exec cache redis-cli info memory | grep -E 'used_memory_human|maxmemory_policy'
+<pre><code class="language-bash">docker compose exec cache redis-cli info memory | grep -E 'used_memory_human|maxmemory_policy'
 docker compose exec cache redis-cli config get appendonly</code></pre>
 <div class="out">used_memory_human:1.42M
 maxmemory_policy:allkeys-lru
@@ -1007,7 +1007,7 @@ REDIS_URL=redis://cache:6379</code></pre>
 
 <h3>Nâng một phiên bản chính</h3>
 ${slide('dk-10', 12, 'Nâng 16 → 17: đổ ra, đổ lại')}
-<pre><code><span class="tok-comment"># Postgres KHÔNG tự chuyển thư mục dữ liệu qua các phiên bản chính. Đổ ra, nâng, đổ lại.</span>
+<pre><code class="language-bash"><span class="tok-comment"># Postgres KHÔNG tự chuyển thư mục dữ liệu qua các phiên bản chính. Đổ ra, nâng, đổ lại.</span>
 docker compose exec -T db pg_dumpall -U blog &gt; dump-before-17.sql
 docker compose down
 docker volume rm blog_pgdata                    <span class="tok-comment"># sau khi đã đổ ra, và sau khi đã KIỂM bản đổ đó</span>
@@ -1117,7 +1117,7 @@ ket noi OK</div>
 
 <h3>Dockerfile.backend</h3>
 ${slide('dk-10', 13, 'Dockerfile.backend: ba tầng, chỉ tầng cuối được ship')}
-<pre><code><span class="tok-comment"># syntax=docker/dockerfile:1</span>
+<pre><code class="language-bash"><span class="tok-comment"># syntax=docker/dockerfile:1</span>
 FROM node:22.11-alpine AS deps
 WORKDIR /app
 COPY package.json package-lock.json ./
@@ -1144,7 +1144,7 @@ USER node
 EXPOSE 3000
 ENTRYPOINT ["/sbin/tini", "--"]
 CMD ["node", "dist/index.js"]</code></pre>
-<pre><code>docker compose build api &amp;&amp; docker images ghcr.io/me/api --format '{{.Tag}}\\t{{.Size}}'</code></pre>
+<pre><code class="language-bash">docker compose build api &amp;&amp; docker images ghcr.io/me/api --format '{{.Tag}}\\t{{.Size}}'</code></pre>
 <div class="out">1.4.2	214MB</div>
 <div class="kv-grid">
   <div class="kv"><span class="k"><code>COPY prisma</code> before <code>npm ci</code></span><span class="v">Prisma's postinstall reads <code>schema.prisma</code> to generate the client. Without the schema present, <code>npm ci</code> succeeds and the client is missing at runtime — an error that only appears when the first query runs.</span></div>
@@ -1154,12 +1154,12 @@ CMD ["node", "dist/index.js"]</code></pre>
   <div class="kv"><span class="k"><code>USER node</code> last</span><span class="v">After every <code>COPY --chown=node:node</code>, so the files are owned correctly and the process still cannot write outside them (Lesson 6.4).</span></div>
 </div>
 <div class="callout warn"><strong>The Prisma engine has to match the base image's libc.</strong> Alpine is musl, Debian-based images are glibc, and a prebuilt engine for one does not load on the other. This is the exact failure this project shipped: a build that used the default <code>Dockerfile</code> instead of <code>Dockerfile.backend</code> put a <code>debian-openssl-3.0.x</code> engine into an Alpine image, the build was green, the push was green, and the API returned 502 for seven minutes while the container restarted in a loop. Declare it explicitly and verify it starts:
-<pre><code><span class="tok-comment"># prisma/schema.prisma</span>
+<pre><code class="language-bash"><span class="tok-comment"># prisma/schema.prisma</span>
 generator client {
   provider      = "prisma-client-js"
   binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }</code></pre>
-<pre><code>docker run --rm ghcr.io/me/api:1.4.2 sh -c 'ls node_modules/.prisma/client/*.node; node -e "require(\\"@prisma/client\\"); console.log(\\"client loads\\")"'</code></pre>
+<pre><code class="language-javascript">docker run --rm ghcr.io/me/api:1.4.2 sh -c 'ls node_modules/.prisma/client/*.node; node -e "require(\\"@prisma/client\\"); console.log(\\"client loads\\")"'</code></pre>
 <div class="out">node_modules/.prisma/client/libquery_engine-linux-musl-openssl-3.0.x.so.node
 client loads</div></div>
 
@@ -1206,7 +1206,7 @@ Add "linux-musl-arm64-openssl-3.0.x" to &#96;binaryTargets&#96; in the "schema.p
 </div>
 <h3>Three services from one image</h3>
 ${slide('dk-10', 14, 'Một ảnh, bốn vai — khác nhau đúng một dòng command')}
-<pre><code>  api:
+<pre><code class="language-bash">  api:
     image: ghcr.io/me/api:&#36;{TAG:-latest}
     build: { context: ., dockerfile: Dockerfile.backend, target: production }
     env_file: [.env]
@@ -1243,7 +1243,7 @@ ${slide('dk-10', 14, 'Một ảnh, bốn vai — khác nhau đúng một dòng c
       db: { condition: service_healthy }
     networks: [private]
     restart: "no"</code></pre>
-<pre><code>docker compose up -d 2&gt;&amp;1 | grep -E 'Started|Healthy|Exited'</code></pre>
+<pre><code class="language-bash">docker compose up -d 2&gt;&amp;1 | grep -E 'Started|Healthy|Exited'</code></pre>
 <div class="out"> Container dk10-blog-cache-1 Started
  Container dk10-blog-db-1 Started
  Container dk10-blog-db-1 Healthy
@@ -1322,7 +1322,7 @@ The &#96;20260924100000_add_slug&#96; migration started at 2026-09-23 19:22:04.1
 </div>
 
 <h3>The healthcheck that works in a slim image</h3>
-<pre><code><span class="tok-comment"># The endpoint it calls — cheap, and it actually checks the dependencies</span>
+<pre><code class="language-bash"><span class="tok-comment"># The endpoint it calls — cheap, and it actually checks the dependencies</span>
 app.get('/health', async (_req, res) =&gt; {
   try {
     await prisma.\$queryRaw&#96;SELECT 1&#96;;
@@ -1332,13 +1332,13 @@ app.get('/health', async (_req, res) =&gt; {
     res.status(503).json({ ok: false, error: String(err) });
   }
 });</code></pre>
-<pre><code>docker compose exec api node -e "fetch('http://127.0.0.1:3000/health').then(r=&gt;r.json()).then(console.log)"</code></pre>
+<pre><code class="language-bash">docker compose exec api node -e "fetch('http://127.0.0.1:3000/health').then(r=&gt;r.json()).then(console.log)"</code></pre>
 <div class="out">{ ok: true, version: '1.4.2' }</div>
 <p>Two design points. The image has no <code>curl</code> and does not need one — <code>node -e</code> is already there. And the endpoint touches Postgres and Redis, so an <code>(unhealthy)</code> status means "this instance cannot serve requests", not merely "the process is alive". A health endpoint that returns 200 unconditionally tells you nothing you did not already know from the container being up.</p>
 
 <h3>Seeds, behind a profile</h3>
 ${slide('dk-10', 18, 'Seed sau profile — và cái bẫy tsx đã bị prune')}
-<pre><code>  seed:
+<pre><code class="language-bash">  seed:
     image: ghcr.io/me/api:&#36;{TAG:-latest}
     command: ["npx", "prisma", "db", "seed"]
     env_file: [.env]
@@ -1347,7 +1347,7 @@ ${slide('dk-10', 18, 'Seed sau profile — và cái bẫy tsx đã bị prune')}
     profiles: [seed]
     networks: [private]
     restart: "no"</code></pre>
-<pre><code>docker compose run --rm seed</code></pre>
+<pre><code class="language-bash">docker compose run --rm seed</code></pre>
 <div class="out">Running seed command &#96;tsx prisma/seed.ts&#96; ...
 
 An error occurred while running the seed command:
@@ -1458,7 +1458,7 @@ api: 200</div>
 
 <h3>Dockerfile.backend</h3>
 ${slide('dk-10', 13, 'Dockerfile.backend: ba tầng, chỉ tầng cuối được ship')}
-<pre><code><span class="tok-comment"># syntax=docker/dockerfile:1</span>
+<pre><code class="language-bash"><span class="tok-comment"># syntax=docker/dockerfile:1</span>
 FROM node:22.11-alpine AS deps
 WORKDIR /app
 COPY package.json package-lock.json ./
@@ -1485,7 +1485,7 @@ USER node
 EXPOSE 3000
 ENTRYPOINT ["/sbin/tini", "--"]
 CMD ["node", "dist/index.js"]</code></pre>
-<pre><code>docker compose build api &amp;&amp; docker images ghcr.io/me/api --format '{{.Tag}}\\t{{.Size}}'</code></pre>
+<pre><code class="language-bash">docker compose build api &amp;&amp; docker images ghcr.io/me/api --format '{{.Tag}}\\t{{.Size}}'</code></pre>
 <div class="out">1.4.2	214MB</div>
 <div class="kv-grid">
   <div class="kv"><span class="k"><code>COPY prisma</code> TRƯỚC <code>npm ci</code></span><span class="v">Postinstall của Prisma đọc <code>schema.prisma</code> để sinh ra client. Không có schema thì <code>npm ci</code> vẫn thành công còn client thì thiếu lúc chạy — một lỗi chỉ lộ ra khi truy vấn đầu tiên chạy.</span></div>
@@ -1495,12 +1495,12 @@ CMD ["node", "dist/index.js"]</code></pre>
   <div class="kv"><span class="k"><code>USER node</code> đặt cuối</span><span class="v">Sau mọi lệnh <code>COPY --chown=node:node</code>, để file thuộc quyền sở hữu đúng mà tiến trình vẫn không ghi được ra ngoài chúng (Bài 6.4).</span></div>
 </div>
 <div class="callout warn"><strong>Engine của Prisma phải KHỚP với libc của ảnh nền.</strong> Alpine là musl, ảnh nền Debian là glibc, và một engine dựng sẵn cho bên này không nạp được ở bên kia. Đây đúng là sự cố mà dự án này từng đẩy lên: một lượt dựng dùng <code>Dockerfile</code> mặc định thay vì <code>Dockerfile.backend</code> đã nhét một engine <code>debian-openssl-3.0.x</code> vào một cái ảnh Alpine, dựng xanh, đẩy xanh, rồi API trả 502 suốt bảy phút trong khi container restart thành vòng lặp. Hãy khai báo nó tường minh và kiểm nó khởi động được:
-<pre><code><span class="tok-comment"># prisma/schema.prisma</span>
+<pre><code class="language-bash"><span class="tok-comment"># prisma/schema.prisma</span>
 generator client {
   provider      = "prisma-client-js"
   binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }</code></pre>
-<pre><code>docker run --rm ghcr.io/me/api:1.4.2 sh -c 'ls node_modules/.prisma/client/*.node; node -e "require(\\"@prisma/client\\"); console.log(\\"client loads\\")"'</code></pre>
+<pre><code class="language-javascript">docker run --rm ghcr.io/me/api:1.4.2 sh -c 'ls node_modules/.prisma/client/*.node; node -e "require(\\"@prisma/client\\"); console.log(\\"client loads\\")"'</code></pre>
 <div class="out">node_modules/.prisma/client/libquery_engine-linux-musl-openssl-3.0.x.so.node
 client loads</div></div>
 
@@ -1547,7 +1547,7 @@ Add "linux-musl-arm64-openssl-3.0.x" to &#96;binaryTargets&#96; in the "schema.p
 </div>
 <h3>Ba dịch vụ từ một cái ảnh</h3>
 ${slide('dk-10', 14, 'Một ảnh, bốn vai — khác nhau đúng một dòng command')}
-<pre><code>  api:
+<pre><code class="language-bash">  api:
     image: ghcr.io/me/api:&#36;{TAG:-latest}
     build: { context: ., dockerfile: Dockerfile.backend, target: production }
     env_file: [.env]
@@ -1584,7 +1584,7 @@ ${slide('dk-10', 14, 'Một ảnh, bốn vai — khác nhau đúng một dòng c
       db: { condition: service_healthy }
     networks: [private]
     restart: "no"</code></pre>
-<pre><code>docker compose up -d 2&gt;&amp;1 | grep -E 'Started|Healthy|Exited'</code></pre>
+<pre><code class="language-bash">docker compose up -d 2&gt;&amp;1 | grep -E 'Started|Healthy|Exited'</code></pre>
 <div class="out"> Container dk10-blog-cache-1 Started
  Container dk10-blog-db-1 Started
  Container dk10-blog-db-1 Healthy
@@ -1663,7 +1663,7 @@ The &#96;20260924100000_add_slug&#96; migration started at 2026-09-23 19:22:04.1
 </div>
 
 <h3>Healthcheck chạy được trong một cái ảnh gọn</h3>
-<pre><code><span class="tok-comment"># Điểm cuối mà nó gọi — rẻ, và nó kiểm thật các phụ thuộc</span>
+<pre><code class="language-bash"><span class="tok-comment"># Điểm cuối mà nó gọi — rẻ, và nó kiểm thật các phụ thuộc</span>
 app.get('/health', async (_req, res) =&gt; {
   try {
     await prisma.\$queryRaw&#96;SELECT 1&#96;;
@@ -1673,13 +1673,13 @@ app.get('/health', async (_req, res) =&gt; {
     res.status(503).json({ ok: false, error: String(err) });
   }
 });</code></pre>
-<pre><code>docker compose exec api node -e "fetch('http://127.0.0.1:3000/health').then(r=&gt;r.json()).then(console.log)"</code></pre>
+<pre><code class="language-bash">docker compose exec api node -e "fetch('http://127.0.0.1:3000/health').then(r=&gt;r.json()).then(console.log)"</code></pre>
 <div class="out">{ ok: true, version: '1.4.2' }</div>
 <p>Hai điểm thiết kế. Cái ảnh không có <code>curl</code> và cũng không cần — <code>node -e</code> vốn đã sẵn ở đó. Và điểm cuối này chạm tới cả Postgres lẫn Redis, nên trạng thái <code>(unhealthy)</code> có nghĩa là "instance này không phục vụ được yêu cầu", chứ không chỉ là "tiến trình còn sống". Một điểm cuối sức khoẻ trả 200 vô điều kiện chẳng nói cho bạn thêm điều gì so với việc nhìn thấy container đang chạy.</p>
 
 <h3>Seed, nằm sau một profile</h3>
 ${slide('dk-10', 18, 'Seed sau profile — và cái bẫy tsx đã bị prune')}
-<pre><code>  seed:
+<pre><code class="language-bash">  seed:
     image: ghcr.io/me/api:&#36;{TAG:-latest}
     command: ["npx", "prisma", "db", "seed"]
     env_file: [.env]
@@ -1688,7 +1688,7 @@ ${slide('dk-10', 18, 'Seed sau profile — và cái bẫy tsx đã bị prune')}
     profiles: [seed]
     networks: [private]
     restart: "no"</code></pre>
-<pre><code>docker compose run --rm seed</code></pre>
+<pre><code class="language-bash">docker compose run --rm seed</code></pre>
 <div class="out">Running seed command &#96;tsx prisma/seed.ts&#96; ...
 
 An error occurred while running the seed command:
@@ -1808,13 +1808,13 @@ api: 200</div>
 
 <h3>The standalone build</h3>
 ${slide('dk-10', 19, 'frontend/Dockerfile: standalone chỉ cần chép ba thứ')}
-<pre><code><span class="tok-comment">// next.config.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// next.config.js</span>
 module.exports = {
   output: 'standalone',              <span class="tok-comment">// trace exactly the files needed to run</span>
   compress: false,                   <span class="tok-comment">// nginx does gzip/brotli better</span>
   poweredByHeader: false,
 };</code></pre>
-<pre><code><span class="tok-comment"># frontend/Dockerfile</span>
+<pre><code class="language-bash"><span class="tok-comment"># frontend/Dockerfile</span>
 FROM node:22.11-alpine AS deps
 WORKDIR /app
 COPY package.json package-lock.json ./
@@ -1839,7 +1839,7 @@ COPY --from=build --chown=node:node /app/.next/static ./.next/static
 USER node
 EXPOSE 3000
 CMD ["node", "server.js"]</code></pre>
-<pre><code>docker build -t web:1.4.2 ./frontend
+<pre><code class="language-bash">docker build -t web:1.4.2 ./frontend
 docker images --format '{{.Repository}}:{{.Tag}}\\t{{.Size}}' | grep -E '^web|^web-full'</code></pre>
 <div class="out">web:1.4.2	187MB
 web-full:1.4.2	1.31GB</div>
@@ -1877,7 +1877,7 @@ ${slide('dk-10', 21, 'NEXT_PUBLIC_* nướng vào JS lúc build — env lúc ch�
   <div class="lz-step"><span class="lz-k">So they must be build args</span><span class="lz-t">ARG + ENV in the build stage, args: in compose</span><span class="lz-d">Which also means one image per environment: the staging build and the production build are genuinely different artifacts if their public URLs differ.</span></div>
   <div class="lz-step"><span class="lz-k">The better answer: relative URLs</span><span class="lz-t">fetch('/api/posts')</span><span class="lz-d">If the browser talks to the same origin, there is no URL to bake in — nginx routes <code>/api</code> to the backend, and the same image runs in every environment.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Prove it: the value is IN the bundle</span>
+<pre><code class="language-bash"><span class="tok-comment"># Prove it: the value is IN the bundle</span>
 docker run --rm web:1.4.2 sh -c 'grep -ro "https://api\\.cuongthai\\.com" .next/static/chunks | head -2'
 <span class="tok-comment"># And an environment variable at run time changes nothing</span>
 docker run --rm -e NEXT_PUBLIC_API_URL=https://other.example web:1.4.2 \\
@@ -1895,7 +1895,7 @@ docker run --rm -e NEXT_PUBLIC_SITE_URL=https://khac.example dk10-web:1.0.2 \\
 
 <h3>Two URLs for the same API</h3>
 ${slide('dk-10', 22, 'SSR gọi api:3000, trình duyệt gọi /api — hai URL, một API')}
-<pre><code><span class="tok-comment">// lib/api.ts — the same file runs in both places</span>
+<pre><code class="language-javascript"><span class="tok-comment">// lib/api.ts — the same file runs in both places</span>
 const BASE = typeof window === 'undefined'
   ? process.env.INTERNAL_API_URL       <span class="tok-comment">// http://api:3000  — container network</span>
   : '';                                <span class="tok-comment">// same-origin, nginx routes /api</span>
@@ -1905,7 +1905,7 @@ export async function getPosts() {
   if (!res.ok) throw new Error(&#96;posts: &#36;{res.status}&#96;);
   return res.json();
 }</code></pre>
-<pre><code>  web:
+<pre><code class="language-bash">  web:
     image: ghcr.io/me/web:&#36;{TAG:-latest}
     build:
       context: ./frontend
@@ -1925,7 +1925,7 @@ export async function getPosts() {
 FROM node:22.11-alpine AS production
 RUN apk add --no-cache vips-dev fontconfig ttf-dejavu
 ENV NEXT_SHARP_PATH=/app/node_modules/sharp</code></pre>
-<pre><code>docker compose exec web node -e "console.log(require('sharp').format.jpeg.output ? 'sharp ok' : 'broken')"
+<pre><code class="language-javascript">docker compose exec web node -e "console.log(require('sharp').format.jpeg.output ? 'sharp ok' : 'broken')"
 docker compose exec web sh -c 'ls .next/static/media | head -3'</code></pre>
 <div class="out">sharp ok
 inter-latin-400-normal-c8a1f2.woff2
@@ -2034,13 +2034,13 @@ export default function Home() { return &lt;p&gt;site: {process.env.NEXT_PUBLIC_
 
 <h3>Bản dựng standalone</h3>
 ${slide('dk-10', 19, 'frontend/Dockerfile: standalone chỉ cần chép ba thứ')}
-<pre><code><span class="tok-comment">// next.config.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// next.config.js</span>
 module.exports = {
   output: 'standalone',              <span class="tok-comment">// truy vết đúng những file cần để chạy</span>
   compress: false,                   <span class="tok-comment">// nginx nén gzip/brotli tốt hơn</span>
   poweredByHeader: false,
 };</code></pre>
-<pre><code><span class="tok-comment"># frontend/Dockerfile</span>
+<pre><code class="language-bash"><span class="tok-comment"># frontend/Dockerfile</span>
 FROM node:22.11-alpine AS deps
 WORKDIR /app
 COPY package.json package-lock.json ./
@@ -2065,7 +2065,7 @@ COPY --from=build --chown=node:node /app/.next/static ./.next/static
 USER node
 EXPOSE 3000
 CMD ["node", "server.js"]</code></pre>
-<pre><code>docker build -t web:1.4.2 ./frontend
+<pre><code class="language-bash">docker build -t web:1.4.2 ./frontend
 docker images --format '{{.Repository}}:{{.Tag}}\\t{{.Size}}' | grep -E '^web|^web-full'</code></pre>
 <div class="out">web:1.4.2	187MB
 web-full:1.4.2	1.31GB</div>
@@ -2103,7 +2103,7 @@ ${slide('dk-10', 21, 'NEXT_PUBLIC_* nướng vào JS lúc build — env lúc ch�
   <div class="lz-step"><span class="lz-k">Nên chúng phải là build arg</span><span class="lz-t">ARG + ENV trong tầng dựng, args: trong compose</span><span class="lz-d">Điều đó cũng nghĩa là mỗi môi trường một cái ảnh: bản dựng staging và bản dựng production đúng là hai hiện vật khác nhau nếu URL công khai của chúng khác nhau.</span></div>
   <div class="lz-step"><span class="lz-k">Câu trả lời tốt hơn: URL tương đối</span><span class="lz-t">fetch('/api/posts')</span><span class="lz-d">Nếu trình duyệt nói chuyện với cùng một gốc thì chẳng có URL nào để nướng vào cả — nginx định tuyến <code>/api</code> về backend, và cùng một cái ảnh chạy ở mọi môi trường.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Chứng minh: cái giá trị đó nằm TRONG gói JS</span>
+<pre><code class="language-bash"><span class="tok-comment"># Chứng minh: cái giá trị đó nằm TRONG gói JS</span>
 docker run --rm web:1.4.2 sh -c 'grep -ro "https://api\\.cuongthai\\.com" .next/static/chunks | head -2'
 <span class="tok-comment"># Và một biến môi trường lúc chạy chẳng đổi được gì</span>
 docker run --rm -e NEXT_PUBLIC_API_URL=https://other.example web:1.4.2 \\
@@ -2121,7 +2121,7 @@ docker run --rm -e NEXT_PUBLIC_SITE_URL=https://khac.example dk10-web:1.0.2 \\
 
 <h3>Hai URL cho cùng một API</h3>
 ${slide('dk-10', 22, 'SSR gọi api:3000, trình duyệt gọi /api — hai URL, một API')}
-<pre><code><span class="tok-comment">// lib/api.ts — cùng một file chạy ở cả hai nơi</span>
+<pre><code class="language-javascript"><span class="tok-comment">// lib/api.ts — cùng một file chạy ở cả hai nơi</span>
 const BASE = typeof window === 'undefined'
   ? process.env.INTERNAL_API_URL       <span class="tok-comment">// http://api:3000  — mạng container</span>
   : '';                                <span class="tok-comment">// cùng gốc, nginx định tuyến /api</span>
@@ -2131,7 +2131,7 @@ export async function getPosts() {
   if (!res.ok) throw new Error(&#96;posts: &#36;{res.status}&#96;);
   return res.json();
 }</code></pre>
-<pre><code>  web:
+<pre><code class="language-bash">  web:
     image: ghcr.io/me/web:&#36;{TAG:-latest}
     build:
       context: ./frontend
@@ -2151,7 +2151,7 @@ export async function getPosts() {
 FROM node:22.11-alpine AS production
 RUN apk add --no-cache vips-dev fontconfig ttf-dejavu
 ENV NEXT_SHARP_PATH=/app/node_modules/sharp</code></pre>
-<pre><code>docker compose exec web node -e "console.log(require('sharp').format.jpeg.output ? 'sharp ok' : 'broken')"
+<pre><code class="language-javascript">docker compose exec web node -e "console.log(require('sharp').format.jpeg.output ? 'sharp ok' : 'broken')"
 docker compose exec web sh -c 'ls .next/static/media | head -3'</code></pre>
 <div class="out">sharp ok
 inter-latin-400-normal-c8a1f2.woff2
@@ -2269,7 +2269,7 @@ export default function Home() { return &lt;p&gt;site: {process.env.NEXT_PUBLIC_
 
 <h3>The proxy configuration</h3>
 ${slide('dk-10', 24, 'ops/nginx.conf: từng dòng làm một việc')}
-<pre><code><span class="tok-comment"># ops/nginx.conf</span>
+<pre><code class="language-bash"><span class="tok-comment"># ops/nginx.conf</span>
 upstream web { server web:3000; keepalive 32; }
 upstream api { server api:3000; keepalive 32; }
 
@@ -2378,7 +2378,7 @@ nginx: configuration file /etc/nginx/nginx.conf test failed
 <p>Three safe ways, in order of preference: mount the whole <em>directory</em> (<code>./ops/nginx:/etc/nginx/conf.d:ro</code>), which follows renames; or overwrite in place with <code>cat new.conf &gt; ops/nginx.conf</code>, which keeps the inode; or recreate the container after editing (<code>docker compose up -d --force-recreate nginx</code>). Whichever you choose, verify from inside: compare <code>sha256sum ops/nginx.conf</code> with <code>docker compose exec nginx sha256sum /etc/nginx/conf.d/default.conf</code> before you reload.</p>
 
 <h3>TLS without a manual step</h3>
-<pre><code>  nginx:
+<pre><code class="language-bash">  nginx:
     image: nginx:1.27-alpine
     ports:
       - "80:80"
@@ -2404,7 +2404,7 @@ nginx: configuration file /etc/nginx/nginx.conf test failed
     entrypoint: ["sh", "-c", "trap exit TERM; while :; do certbot renew --webroot -w /var/www/certbot --quiet; sleep 12h; done"]
     profiles: [tls]
     restart: unless-stopped</code></pre>
-<pre><code>docker compose --profile tls up -d certbot
+<pre><code class="language-bash">docker compose --profile tls up -d certbot
 docker compose exec nginx nginx -t
 docker compose exec nginx nginx -s reload      <span class="tok-comment"># zero-downtime config reload</span></code></pre>
 <div class="out">nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
@@ -2437,7 +2437,7 @@ Cache-Control: public, max-age=31536000, immutable</div>
 </table>
 
 <h3>The complete compose.yaml</h3>
-<pre><code>name: blog
+<pre><code class="language-css">name: blog
 
 services:
   nginx:   { image: nginx:1.27-alpine, ports: ["80:80","443:443"], networks: [public],
@@ -2482,7 +2482,7 @@ volumes:
 
 <h3>A deploy, end to end</h3>
 ${slide('dk-10', 28, 'Deploy: build → migrate riêng → up → smoke test')}
-<pre><code><span class="tok-comment"># On the build machine — tag by commit, never :latest on a server</span>
+<pre><code class="language-bash"><span class="tok-comment"># On the build machine — tag by commit, never :latest on a server</span>
 export TAG=$(git rev-parse --short HEAD)
 docker compose -f compose.yaml -f compose.prod.yaml build
 docker compose -f compose.yaml -f compose.prod.yaml push
@@ -2607,7 +2607,7 @@ ban-moi-2</div>
 
 <h3>Cấu hình proxy</h3>
 ${slide('dk-10', 24, 'ops/nginx.conf: từng dòng làm một việc')}
-<pre><code><span class="tok-comment"># ops/nginx.conf</span>
+<pre><code class="language-bash"><span class="tok-comment"># ops/nginx.conf</span>
 upstream web { server web:3000; keepalive 32; }
 upstream api { server api:3000; keepalive 32; }
 
@@ -2716,7 +2716,7 @@ nginx: configuration file /etc/nginx/nginx.conf test failed
 <p>Ba cách an toàn, theo thứ tự nên chọn: gắn cả THƯ MỤC (<code>./ops/nginx:/etc/nginx/conf.d:ro</code>), thứ đi theo được việc đổi tên; hoặc ghi đè tại chỗ bằng <code>cat new.conf &gt; ops/nginx.conf</code>, giữ nguyên inode; hoặc tạo lại container sau khi sửa (<code>docker compose up -d --force-recreate nginx</code>). Chọn cách nào cũng phải kiểm TỪ BÊN TRONG: so <code>sha256sum ops/nginx.conf</code> với <code>docker compose exec nginx sha256sum /etc/nginx/conf.d/default.conf</code> trước khi reload.</p>
 
 <h3>TLS mà không cần bước làm tay</h3>
-<pre><code>  nginx:
+<pre><code class="language-bash">  nginx:
     image: nginx:1.27-alpine
     ports:
       - "80:80"
@@ -2742,7 +2742,7 @@ nginx: configuration file /etc/nginx/nginx.conf test failed
     entrypoint: ["sh", "-c", "trap exit TERM; while :; do certbot renew --webroot -w /var/www/certbot --quiet; sleep 12h; done"]
     profiles: [tls]
     restart: unless-stopped</code></pre>
-<pre><code>docker compose --profile tls up -d certbot
+<pre><code class="language-bash">docker compose --profile tls up -d certbot
 docker compose exec nginx nginx -t
 docker compose exec nginx nginx -s reload      <span class="tok-comment"># nạp lại cấu hình không gián đoạn</span></code></pre>
 <div class="out">nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
@@ -2775,7 +2775,7 @@ Cache-Control: public, max-age=31536000, immutable</div>
 </table>
 
 <h3>File compose.yaml hoàn chỉnh</h3>
-<pre><code>name: blog
+<pre><code class="language-css">name: blog
 
 services:
   nginx:   { image: nginx:1.27-alpine, ports: ["80:80","443:443"], networks: [public],
@@ -2820,7 +2820,7 @@ volumes:
 
 <h3>Một lượt deploy, từ đầu tới cuối</h3>
 ${slide('dk-10', 28, 'Deploy: build → migrate riêng → up → smoke test')}
-<pre><code><span class="tok-comment"># Trên máy dựng — gắn nhãn theo commit, đừng bao giờ dùng :latest trên máy chủ</span>
+<pre><code class="language-bash"><span class="tok-comment"># Trên máy dựng — gắn nhãn theo commit, đừng bao giờ dùng :latest trên máy chủ</span>
 export TAG=$(git rev-parse --short HEAD)
 docker compose -f compose.yaml -f compose.prod.yaml build
 docker compose -f compose.yaml -f compose.prod.yaml push

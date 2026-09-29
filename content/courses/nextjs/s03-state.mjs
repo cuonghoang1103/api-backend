@@ -25,14 +25,14 @@ export default {
 
 <h3>Why a plain variable doesn't work</h3>
 <p>Your first instinct is a normal variable. It fails, and the reason teaches you what React is doing:</p>
-<pre><code>function Counter() {
+<pre><code class="language-typescript">function Counter() {
   let count = 0;                       <span class="tok-comment">// reset to 0 on every render</span>
   return &lt;button onClick={() =&gt; { count++; }}&gt;{count}&lt;/button&gt;;
 }</code></pre>
 <p>Two things go wrong. First, clicking changes <code>count</code> but nothing tells React to re-render, so the screen never updates. Second, even if it did re-render, React would call <code>Counter()</code> again from the top and <code>let count = 0</code> would reset it. A local variable can't be memory, because the function runs fresh every render.</p>
 
 <h3><code>useState</code>: declare a value React remembers for you</h3>
-<pre><code>import { useState } from 'react';
+<pre><code class="language-typescript">import { useState } from 'react';
 
 function Counter() {
   const [count, setCount] = useState(0);
@@ -80,14 +80,14 @@ function Counter() {
 
 <h3>Vì sao một biến thường không dùng được</h3>
 <p>Phản xạ đầu tiên là một biến bình thường. Nó hỏng, và lý do dạy bạn điều React đang làm:</p>
-<pre><code>function Counter() {
+<pre><code class="language-typescript">function Counter() {
   let count = 0;                       <span class="tok-comment">// đặt lại 0 ở mỗi lần render</span>
   return &lt;button onClick={() =&gt; { count++; }}&gt;{count}&lt;/button&gt;;
 }</code></pre>
 <p>Hai thứ sai. Thứ nhất, click làm đổi <code>count</code> nhưng chẳng có gì báo React render lại, nên màn hình không bao giờ cập nhật. Thứ hai, kể cả nếu có render lại, React sẽ gọi lại <code>Counter()</code> từ đầu và <code>let count = 0</code> sẽ đặt lại nó. Một biến cục bộ không thể làm trí nhớ, vì hàm chạy mới tinh ở mỗi lần render.</p>
 
 <h3><code>useState</code>: khai một giá trị React nhớ hộ bạn</h3>
-<pre><code>import { useState } from 'react';
+<pre><code class="language-typescript">import { useState } from 'react';
 
 function Counter() {
   const [count, setCount] = useState(0);
@@ -144,7 +144,7 @@ function Counter() {
 
 <h3>The puzzle</h3>
 <p>What does this button do, starting from <code>count = 0</code>?</p>
-<pre><code>function Counter() {
+<pre><code class="language-typescript">function Counter() {
   const [count, setCount] = useState(0);
   return (
     &lt;button onClick={() =&gt; {
@@ -155,7 +155,7 @@ function Counter() {
   );
 }</code></pre>
 <p>Almost everyone answers "3". The real answer is <strong>1</strong>. Here is a faithful simulation of React's semantics, run in plain JavaScript — during this render <code>count</code> is captured as <code>0</code>, so all three calls compute <code>0 + 1</code>:</p>
-<pre><code>count = 0;
+<pre><code class="language-typescript">count = 0;
 setCount(count + 1);   <span class="tok-comment">// schedules 1</span>
 setCount(count + 1);   <span class="tok-comment">// schedules 1 (count is still 0 here)</span>
 setCount(count + 1);   <span class="tok-comment">// schedules 1</span></code></pre>
@@ -167,7 +167,7 @@ setCount(count + 1);   <span class="tok-comment">// schedules 1</span></code></p
 
 <h3>When you need the latest value: the updater function</h3>
 <p>When the next state depends on the previous state, don't read the snapshot — pass a <em>function</em> to the setter. React calls it with the latest pending value and uses the return as the next state:</p>
-<pre><code>setCount(c =&gt; c + 1);
+<pre><code class="language-typescript">setCount(c =&gt; c + 1);
 setCount(c =&gt; c + 1);
 setCount(c =&gt; c + 1);</code></pre>
 <p>Now each call receives the result of the one before it. Same simulation, updater form:</p>
@@ -204,7 +204,7 @@ setCount(c =&gt; c + 1);</code></pre>
 
 <h3>Câu đố</h3>
 <p>Nút này làm gì, bắt đầu từ <code>count = 0</code>?</p>
-<pre><code>function Counter() {
+<pre><code class="language-typescript">function Counter() {
   const [count, setCount] = useState(0);
   return (
     &lt;button onClick={() =&gt; {
@@ -215,7 +215,7 @@ setCount(c =&gt; c + 1);</code></pre>
   );
 }</code></pre>
 <p>Gần như ai cũng trả lời "3". Đáp án thật là <strong>1</strong>. Đây là mô phỏng trung thực ngữ nghĩa của React, chạy bằng JavaScript thuần — trong lần render này <code>count</code> được bắt là <code>0</code>, nên cả ba lời gọi đều tính <code>0 + 1</code>:</p>
-<pre><code>count = 0;
+<pre><code class="language-typescript">count = 0;
 setCount(count + 1);   <span class="tok-comment">// lên lịch 1</span>
 setCount(count + 1);   <span class="tok-comment">// lên lịch 1 (count ở đây vẫn là 0)</span>
 setCount(count + 1);   <span class="tok-comment">// lên lịch 1</span></code></pre>
@@ -227,7 +227,7 @@ setCount(count + 1);   <span class="tok-comment">// lên lịch 1</span></code><
 
 <h3>Khi bạn cần giá trị mới nhất: hàm updater</h3>
 <p>Khi state kế phụ thuộc state trước, đừng đọc ảnh chụp — hãy truyền một <em>hàm</em> vào setter. React gọi nó với giá trị đang chờ mới nhất và dùng kết quả trả về làm state kế:</p>
-<pre><code>setCount(c =&gt; c + 1);
+<pre><code class="language-typescript">setCount(c =&gt; c + 1);
 setCount(c =&gt; c + 1);
 setCount(c =&gt; c + 1);</code></pre>
 <p>Giờ mỗi lời gọi nhận kết quả của lời gọi trước nó. Cùng mô phỏng, dạng updater:</p>
@@ -273,7 +273,7 @@ setCount(c =&gt; c + 1);</code></pre>
 <p class="lead">When state is a number or string, the setter is obvious. When it's an object or an array, there is a trap that catches everyone once: changing the object in place does not re-render, because React decides "did this change?" by comparing the <em>reference</em>, not the contents.</p>
 
 <h3>Why mutation fails silently</h3>
-<pre><code>const [user, setUser] = useState({ name: 'An', age: 20 });
+<pre><code class="language-javascript">const [user, setUser] = useState({ name: 'An', age: 20 });
 
 <span class="tok-comment">// ❌ mutating the existing object</span>
 function birthday() {
@@ -284,11 +284,11 @@ function birthday() {
 
 <h3>The fix: build a new object</h3>
 <p>Copy the old one and override what changed, with the spread operator:</p>
-<pre><code>function birthday() {
+<pre><code class="language-javascript">function birthday() {
   setUser({ ...user, age: 21 });   <span class="tok-comment">// ✅ a brand-new object → new reference → re-render</span>
 }</code></pre>
 <p><code>{ ...user, age: 21 }</code> creates a fresh object with all of <code>user</code>'s fields, then overrides <code>age</code>. New reference, React sees the change, re-renders. Same principle for nested updates — copy each level you touch:</p>
-<pre><code>setUser({ ...user, address: { ...user.address, city: 'Hanoi' } });</code></pre>
+<pre><code class="language-typescript">setUser({ ...user, address: { ...user.address, city: 'Hanoi' } });</code></pre>
 
 <h3>Arrays: the non-mutating methods, not the mutating ones</h3>
 <p>JavaScript's array methods split into two camps. State updates must use the ones that <em>return a new array</em> and avoid the ones that change in place:</p>
@@ -298,7 +298,7 @@ function birthday() {
   <div class="kv"><span class="k">Update one</span><span class="v"><code>list.map(x =&gt; x.id === id ? { ...x, done: true } : x)</code></span></div>
   <div class="kv"><span class="k">Sort / reverse</span><span class="v"><code>[...list].sort(...)</code> — copy first; <code>sort</code> mutates!</span></div>
 </div>
-<pre><code>setTodos([...todos, newTodo]);                           <span class="tok-comment">// add</span>
+<pre><code class="language-typescript">setTodos([...todos, newTodo]);                           <span class="tok-comment">// add</span>
 setTodos(todos.filter(t =&gt; t.id !== id));                <span class="tok-comment">// remove</span>
 setTodos(todos.map(t =&gt; t.id === id ? { ...t, done: true } : t));  <span class="tok-comment">// toggle</span></code></pre>
 <p>Notice <code>map</code> returns a new array <em>and</em> new objects only where they changed — the unchanged items keep their identity, which lets React skip re-rendering them (Chapter 7). <code>push</code>, <code>pop</code>, <code>splice</code>, <code>sort</code>, <code>reverse</code> all mutate; treat them as banned inside a setter unless you copied first.</p>
@@ -331,7 +331,7 @@ setTodos(todos.map(t =&gt; t.id === id ? { ...t, done: true } : t));  <span clas
 <p class="lead">Khi state là số hay chuỗi, setter rõ ràng. Khi nó là object hay mảng, có một cái bẫy bắt được ai cũng một lần: đổi object tại chỗ không render lại, vì React quyết "cái này có đổi không?" bằng cách so <em>tham chiếu</em>, không phải nội dung.</p>
 
 <h3>Vì sao mutate hỏng một cách âm thầm</h3>
-<pre><code>const [user, setUser] = useState({ name: 'An', age: 20 });
+<pre><code class="language-javascript">const [user, setUser] = useState({ name: 'An', age: 20 });
 
 <span class="tok-comment">// ❌ mutate object đang có</span>
 function birthday() {
@@ -342,11 +342,11 @@ function birthday() {
 
 <h3>Cách sửa: dựng một object mới</h3>
 <p>Sao chép cái cũ rồi ghi đè phần đã đổi, bằng toán tử spread:</p>
-<pre><code>function birthday() {
+<pre><code class="language-javascript">function birthday() {
   setUser({ ...user, age: 21 });   <span class="tok-comment">// ✅ object hoàn toàn mới → tham chiếu mới → render lại</span>
 }</code></pre>
 <p><code>{ ...user, age: 21 }</code> tạo một object mới tinh với tất cả các trường của <code>user</code>, rồi ghi đè <code>age</code>. Tham chiếu mới, React thấy thay đổi, render lại. Cùng nguyên tắc cho cập nhật lồng — sao chép từng tầng bạn chạm tới:</p>
-<pre><code>setUser({ ...user, address: { ...user.address, city: 'Hanoi' } });</code></pre>
+<pre><code class="language-typescript">setUser({ ...user, address: { ...user.address, city: 'Hanoi' } });</code></pre>
 
 <h3>Mảng: dùng phương thức không-mutate, không dùng loại mutate</h3>
 <p>Các phương thức mảng của JavaScript chia hai phe. Cập nhật state phải dùng loại <em>trả về một mảng mới</em> và tránh loại đổi tại chỗ:</p>
@@ -356,7 +356,7 @@ function birthday() {
   <div class="kv"><span class="k">Sửa một cái</span><span class="v"><code>list.map(x =&gt; x.id === id ? { ...x, done: true } : x)</code></span></div>
   <div class="kv"><span class="k">Sắp / đảo</span><span class="v"><code>[...list].sort(...)</code> — sao chép trước; <code>sort</code> mutate!</span></div>
 </div>
-<pre><code>setTodos([...todos, newTodo]);                           <span class="tok-comment">// thêm</span>
+<pre><code class="language-typescript">setTodos([...todos, newTodo]);                           <span class="tok-comment">// thêm</span>
 setTodos(todos.filter(t =&gt; t.id !== id));                <span class="tok-comment">// xoá</span>
 setTodos(todos.map(t =&gt; t.id === id ? { ...t, done: true } : t));  <span class="tok-comment">// bật/tắt</span></code></pre>
 <p>Để ý <code>map</code> trả về một mảng mới <em>và</em> object mới chỉ ở chỗ đã đổi — các phần tử không đổi giữ nguyên danh tính, việc này cho React bỏ qua render lại chúng (Chương 7). <code>push</code>, <code>pop</code>, <code>splice</code>, <code>sort</code>, <code>reverse</code> đều mutate; hãy coi chúng bị cấm trong một setter trừ khi bạn đã sao chép trước.</p>
@@ -400,7 +400,7 @@ setTodos(todos.map(t =&gt; t.id === id ? { ...t, done: true } : t));  <span clas
 
 <h3>1 · Don't put in state what you can derive</h3>
 <p>The biggest beginner mistake is storing values that can be <em>computed</em> from existing state or props. If you have <code>items</code> in state, the count is <code>items.length</code> — not a second state variable:</p>
-<pre><code><span class="tok-comment">// ❌ redundant state that can drift out of sync</span>
+<pre><code class="language-javascript"><span class="tok-comment">// ❌ redundant state that can drift out of sync</span>
 const [items, setItems] = useState([]);
 const [count, setCount] = useState(0);   <span class="tok-comment">// now you must remember to update BOTH</span>
 
@@ -414,7 +414,7 @@ const count = items.length;              <span class="tok-comment">// always cor
 
 <h3>3 · Lift state up when siblings must share it</h3>
 <p>When two components need the same state — a filter input and the list it filters — you can't keep it in either one, because siblings can't see each other's state. Move it to their nearest common parent, and pass it down: the value as a prop, and a setter (wrapped in a callback) as another prop. This is <strong>lifting state up</strong>:</p>
-<pre><code>function FilterablePage() {
+<pre><code class="language-javascript">function FilterablePage() {
   const [query, setQuery] = useState('');           <span class="tok-comment">// the shared state lives here</span>
   return (
     &lt;&gt;
@@ -458,7 +458,7 @@ const count = items.length;              <span class="tok-comment">// always cor
 
 <h3>1 · Đừng đưa vào state cái bạn có thể suy ra</h3>
 <p>Lỗi người mới lớn nhất là lưu những giá trị có thể <em>tính</em> từ state hoặc props đang có. Nếu bạn có <code>items</code> trong state, số lượng là <code>items.length</code> — không phải một biến state thứ hai:</p>
-<pre><code><span class="tok-comment">// ❌ state thừa, có thể lệch nhau</span>
+<pre><code class="language-javascript"><span class="tok-comment">// ❌ state thừa, có thể lệch nhau</span>
 const [items, setItems] = useState([]);
 const [count, setCount] = useState(0);   <span class="tok-comment">// giờ phải nhớ cập nhật CẢ HAI</span>
 
@@ -472,7 +472,7 @@ const count = items.length;              <span class="tok-comment">// luôn đú
 
 <h3>3 · Nâng state lên khi anh em phải chia sẻ</h3>
 <p>Khi hai component cần cùng state — một ô lọc và danh sách nó lọc — bạn không thể giữ nó ở một trong hai, vì anh em không thấy state của nhau. Hãy chuyển nó lên cha chung gần nhất, và truyền xuống: giá trị làm một prop, và một setter (bọc trong một callback) làm một prop khác. Đây là <strong>nâng state lên</strong>:</p>
-<pre><code>function FilterablePage() {
+<pre><code class="language-javascript">function FilterablePage() {
   const [query, setQuery] = useState('');           <span class="tok-comment">// state chung nằm ở đây</span>
   return (
     &lt;&gt;

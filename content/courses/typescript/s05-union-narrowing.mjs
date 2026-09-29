@@ -24,9 +24,9 @@ export default {
 
 <h3>A value that could be one of several types</h3>
 <p>You write a union with the <code>|</code> ("or") operator. It's the tool for "an id might be a string or a number", "a result is data or an error":</p>
-<pre><code><span class="tok-keyword">type</span> Id = <span class="tok-keyword">string</span> | <span class="tok-keyword">number</span>;</code></pre>
+<pre><code class="language-typescript"><span class="tok-keyword">type</span> Id = <span class="tok-keyword">string</span> | <span class="tok-keyword">number</span>;</code></pre>
 <p>Here's the rule that surprises people first: before you narrow, you can only use members that exist on <em>every</em> type in the union. A number has no <code>.toUpperCase()</code>, so:</p>
-<pre><code><span class="tok-comment">// union1.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// union1.ts</span>
 <span class="tok-keyword">function</span> <span class="tok-function">format</span>(id: <span class="tok-keyword">string</span> | <span class="tok-keyword">number</span>) {
   <span class="tok-keyword">return</span> id.<span class="tok-function">toUpperCase</span>();
 }</code></pre>
@@ -36,7 +36,7 @@ export default {
 
 <h3>Narrowing with typeof</h3>
 <p>To use a type-specific member, you first prove which type you have. A <code>typeof</code> check does exactly that, and TypeScript <em>narrows</em> the type inside each branch:</p>
-<pre><code><span class="tok-comment">// union2.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// union2.ts</span>
 <span class="tok-keyword">function</span> <span class="tok-function">format</span>(id: <span class="tok-keyword">string</span> | <span class="tok-keyword">number</span>): <span class="tok-keyword">string</span> {
   <span class="tok-keyword">if</span> (<span class="tok-keyword">typeof</span> id === <span class="tok-string">'string'</span>) <span class="tok-keyword">return</span> id.<span class="tok-function">toUpperCase</span>();  <span class="tok-comment">// id is string here</span>
   <span class="tok-keyword">return</span> id.<span class="tok-function">toFixed</span>(<span class="tok-number">0</span>);                                <span class="tok-comment">// id is number here</span>
@@ -76,9 +76,9 @@ export default {
 
 <h3>Một giá trị có thể là một trong nhiều kiểu</h3>
 <p>Bạn viết union với toán tử <code>|</code> ("hoặc"). Nó là công cụ cho "một id có thể là chuỗi hoặc số", "một kết quả là dữ liệu hoặc một lỗi":</p>
-<pre><code><span class="tok-keyword">type</span> Id = <span class="tok-keyword">string</span> | <span class="tok-keyword">number</span>;</code></pre>
+<pre><code class="language-typescript"><span class="tok-keyword">type</span> Id = <span class="tok-keyword">string</span> | <span class="tok-keyword">number</span>;</code></pre>
 <p>Đây là quy tắc làm người ta bất ngờ đầu tiên: trước khi thu hẹp, bạn chỉ dùng được các thành viên tồn tại trên <em>mọi</em> kiểu trong union. Một số không có <code>.toUpperCase()</code>, nên:</p>
-<pre><code><span class="tok-comment">// union1.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// union1.ts</span>
 <span class="tok-keyword">function</span> <span class="tok-function">format</span>(id: <span class="tok-keyword">string</span> | <span class="tok-keyword">number</span>) {
   <span class="tok-keyword">return</span> id.<span class="tok-function">toUpperCase</span>();
 }</code></pre>
@@ -88,7 +88,7 @@ export default {
 
 <h3>Thu hẹp bằng typeof</h3>
 <p>Để dùng một thành viên riêng của kiểu, trước hết bạn chứng minh mình đang có kiểu nào. Một phép kiểm <code>typeof</code> làm đúng điều đó, và TypeScript <em>thu hẹp</em> kiểu bên trong mỗi nhánh:</p>
-<pre><code><span class="tok-comment">// union2.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// union2.ts</span>
 <span class="tok-keyword">function</span> <span class="tok-function">format</span>(id: <span class="tok-keyword">string</span> | <span class="tok-keyword">number</span>): <span class="tok-keyword">string</span> {
   <span class="tok-keyword">if</span> (<span class="tok-keyword">typeof</span> id === <span class="tok-string">'string'</span>) <span class="tok-keyword">return</span> id.<span class="tok-function">toUpperCase</span>();  <span class="tok-comment">// id là string ở đây</span>
   <span class="tok-keyword">return</span> id.<span class="tok-function">toFixed</span>(<span class="tok-number">0</span>);                                <span class="tok-comment">// id là number ở đây</span>
@@ -137,7 +137,7 @@ export default {
 <p class="lead">Combine the literal types from chapter 2 with the union operator and you get TypeScript's most practical modelling tool: a type that is "exactly one of these fixed values". Statuses, roles, sizes, directions — the finite sets that fill every real app.</p>
 
 <h3>A union of literals</h3>
-<pre><code><span class="tok-comment">// lit.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// lit.ts</span>
 <span class="tok-keyword">type</span> Status = <span class="tok-string">'draft'</span> | <span class="tok-string">'published'</span> | <span class="tok-string">'archived'</span>;
 <span class="tok-keyword">let</span> s: Status = <span class="tok-string">'deleted'</span>;</code></pre>
 <div class="out">lit.ts(2,5): error TS2322: Type '"deleted"' is not assignable to type 'Status'.</div>
@@ -145,7 +145,7 @@ export default {
 
 <h3>Narrowing by equality</h3>
 <p>With a literal union, an equality check narrows to a single member. TypeScript follows along:</p>
-<pre><code><span class="tok-keyword">function</span> <span class="tok-function">label</span>(s: Status): <span class="tok-keyword">string</span> {
+<pre><code class="language-typescript"><span class="tok-keyword">function</span> <span class="tok-function">label</span>(s: Status): <span class="tok-keyword">string</span> {
   <span class="tok-keyword">if</span> (s === <span class="tok-string">'draft'</span>) <span class="tok-keyword">return</span> <span class="tok-string">'Not published yet'</span>;   <span class="tok-comment">// s is 'draft' here</span>
   <span class="tok-comment">// here s is 'published' | 'archived'</span>
   <span class="tok-keyword">return</span> s === <span class="tok-string">'published'</span> ? <span class="tok-string">'Live'</span> : <span class="tok-string">'Archived'</span>;
@@ -154,7 +154,7 @@ export default {
 
 <h3>Narrowing object unions with in</h3>
 <p>When the union is of object shapes, the <code>in</code> operator checks for a property and narrows accordingly:</p>
-<pre><code><span class="tok-comment">// innar.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// innar.ts</span>
 <span class="tok-keyword">type</span> Admin = { role: <span class="tok-string">'admin'</span>; permissions: <span class="tok-keyword">string</span>[] };
 <span class="tok-keyword">type</span> Guest = { role: <span class="tok-string">'guest'</span> };
 
@@ -190,7 +190,7 @@ export default {
 <p class="lead">Kết hợp kiểu literal ở chương 2 với toán tử union, bạn có công cụ mô hình hoá thực tế nhất của TypeScript: một kiểu "đúng một trong các giá trị cố định này". Status, vai trò, kích cỡ, hướng — những tập hữu hạn đầy rẫy trong mọi app thật.</p>
 
 <h3>Một union của các literal</h3>
-<pre><code><span class="tok-comment">// lit.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// lit.ts</span>
 <span class="tok-keyword">type</span> Status = <span class="tok-string">'draft'</span> | <span class="tok-string">'published'</span> | <span class="tok-string">'archived'</span>;
 <span class="tok-keyword">let</span> s: Status = <span class="tok-string">'deleted'</span>;</code></pre>
 <div class="out">lit.ts(2,5): error TS2322: Type '"deleted"' is not assignable to type 'Status'.</div>
@@ -198,7 +198,7 @@ export default {
 
 <h3>Thu hẹp bằng so bằng</h3>
 <p>Với một union literal, một phép so bằng thu hẹp xuống một thành viên. TypeScript theo sát:</p>
-<pre><code><span class="tok-keyword">function</span> <span class="tok-function">label</span>(s: Status): <span class="tok-keyword">string</span> {
+<pre><code class="language-typescript"><span class="tok-keyword">function</span> <span class="tok-function">label</span>(s: Status): <span class="tok-keyword">string</span> {
   <span class="tok-keyword">if</span> (s === <span class="tok-string">'draft'</span>) <span class="tok-keyword">return</span> <span class="tok-string">'Chưa xuất bản'</span>;   <span class="tok-comment">// s là 'draft' ở đây</span>
   <span class="tok-comment">// ở đây s là 'published' | 'archived'</span>
   <span class="tok-keyword">return</span> s === <span class="tok-string">'published'</span> ? <span class="tok-string">'Đang hiển thị'</span> : <span class="tok-string">'Đã lưu trữ'</span>;
@@ -207,7 +207,7 @@ export default {
 
 <h3>Thu hẹp union object bằng in</h3>
 <p>Khi union là các dáng object, toán tử <code>in</code> kiểm tra một thuộc tính và thu hẹp tương ứng:</p>
-<pre><code><span class="tok-comment">// innar.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// innar.ts</span>
 <span class="tok-keyword">type</span> Admin = { role: <span class="tok-string">'admin'</span>; permissions: <span class="tok-keyword">string</span>[] };
 <span class="tok-keyword">type</span> Guest = { role: <span class="tok-string">'guest'</span> };
 
@@ -254,11 +254,11 @@ export default {
 
 <h3>The problem: variants with different fields</h3>
 <p>A circle has a radius; a square has a side. They're related but not the same. Model each as an object type, and give them all a common literal field — the <strong>discriminant</strong> (here, <code>kind</code>):</p>
-<pre><code><span class="tok-keyword">type</span> Shape =
+<pre><code class="language-typescript"><span class="tok-keyword">type</span> Shape =
   | { kind: <span class="tok-string">'circle'</span>; r: <span class="tok-keyword">number</span> }
   | { kind: <span class="tok-string">'square'</span>; side: <span class="tok-keyword">number</span> };</code></pre>
 <p>Because <code>kind</code> is a <em>literal</em> type on each member, TypeScript can use it to tell them apart. Try to read a variant-specific field without checking first, and it stops you:</p>
-<pre><code><span class="tok-comment">// premature.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// premature.ts</span>
 <span class="tok-keyword">function</span> <span class="tok-function">area</span>(shape: Shape) {
   <span class="tok-keyword">return</span> shape.r ** <span class="tok-number">2</span>;   <span class="tok-comment">// r only exists on the circle</span>
 }</code></pre>
@@ -267,7 +267,7 @@ export default {
 
 <h3>The payoff: switch on the discriminant</h3>
 <p>Check <code>shape.kind</code> and, inside each branch, TypeScript narrows to exactly that variant — so the right fields become available and the wrong ones stay hidden:</p>
-<pre><code><span class="tok-comment">// disc.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// disc.ts</span>
 <span class="tok-keyword">function</span> <span class="tok-function">area</span>(shape: Shape): <span class="tok-keyword">number</span> {
   <span class="tok-keyword">switch</span> (shape.kind) {
     <span class="tok-keyword">case</span> <span class="tok-string">'circle'</span>: <span class="tok-keyword">return</span> Math.PI * shape.r ** <span class="tok-number">2</span>;   <span class="tok-comment">// shape is the circle → r available</span>
@@ -306,11 +306,11 @@ export default {
 
 <h3>Vấn đề: các biến thể có field khác nhau</h3>
 <p>Hình tròn có bán kính; hình vuông có cạnh. Chúng liên quan nhưng không giống nhau. Mô hình mỗi cái thành một kiểu object, và cho tất cả một field literal chung — <strong>discriminant</strong> (ở đây, <code>kind</code>):</p>
-<pre><code><span class="tok-keyword">type</span> Shape =
+<pre><code class="language-typescript"><span class="tok-keyword">type</span> Shape =
   | { kind: <span class="tok-string">'circle'</span>; r: <span class="tok-keyword">number</span> }
   | { kind: <span class="tok-string">'square'</span>; side: <span class="tok-keyword">number</span> };</code></pre>
 <p>Vì <code>kind</code> là một kiểu <em>literal</em> trên mỗi thành viên, TypeScript dùng nó để phân biệt chúng. Thử đọc một field riêng của biến thể mà không kiểm trước, nó chặn bạn:</p>
-<pre><code><span class="tok-comment">// premature.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// premature.ts</span>
 <span class="tok-keyword">function</span> <span class="tok-function">area</span>(shape: Shape) {
   <span class="tok-keyword">return</span> shape.r ** <span class="tok-number">2</span>;   <span class="tok-comment">// r chỉ có trên hình tròn</span>
 }</code></pre>
@@ -319,7 +319,7 @@ export default {
 
 <h3>Phần thưởng: switch trên discriminant</h3>
 <p>Kiểm <code>shape.kind</code> và, bên trong mỗi nhánh, TypeScript thu hẹp về đúng biến thể đó — nên các field đúng trở nên dùng được và các field sai vẫn ẩn:</p>
-<pre><code><span class="tok-comment">// disc.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// disc.ts</span>
 <span class="tok-keyword">function</span> <span class="tok-function">area</span>(shape: Shape): <span class="tok-keyword">number</span> {
   <span class="tok-keyword">switch</span> (shape.kind) {
     <span class="tok-keyword">case</span> <span class="tok-string">'circle'</span>: <span class="tok-keyword">return</span> Math.PI * shape.r ** <span class="tok-number">2</span>;   <span class="tok-comment">// shape là hình tròn → r dùng được</span>
@@ -368,7 +368,7 @@ export default {
 
 <h3>The default that can't happen</h3>
 <p>Recall that <code>never</code> is the type no value can have. In a <code>switch</code> over a discriminated union, once you've handled every case, the <code>default</code> branch is unreachable — so the value there has type <code>never</code>. Assign it to a <code>never</code> variable as a guard:</p>
-<pre><code><span class="tok-keyword">function</span> <span class="tok-function">area</span>(shape: Shape): <span class="tok-keyword">number</span> {
+<pre><code class="language-typescript"><span class="tok-keyword">function</span> <span class="tok-function">area</span>(shape: Shape): <span class="tok-keyword">number</span> {
   <span class="tok-keyword">switch</span> (shape.kind) {
     <span class="tok-keyword">case</span> <span class="tok-string">'circle'</span>: <span class="tok-keyword">return</span> Math.PI * shape.r ** <span class="tok-number">2</span>;
     <span class="tok-keyword">case</span> <span class="tok-string">'square'</span>: <span class="tok-keyword">return</span> shape.side ** <span class="tok-number">2</span>;
@@ -381,7 +381,7 @@ export default {
 
 <h3>Add a variant, feel the compiler catch it</h3>
 <p>Now suppose someone adds a triangle to <code>Shape</code> but forgets to add a <code>case</code> for it:</p>
-<pre><code><span class="tok-comment">// exhaust.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// exhaust.ts</span>
 <span class="tok-keyword">type</span> Shape =
   | { kind: <span class="tok-string">'circle'</span>; r: <span class="tok-keyword">number</span> }
   | { kind: <span class="tok-string">'square'</span>; side: <span class="tok-keyword">number</span> }
@@ -393,7 +393,7 @@ export default {
 
 <h3>The pattern, packaged</h3>
 <p>A common tidy version uses a helper that both documents intent and can throw at runtime as a last resort:</p>
-<pre><code><span class="tok-keyword">function</span> <span class="tok-function">assertNever</span>(x: <span class="tok-keyword">never</span>): <span class="tok-keyword">never</span> {
+<pre><code class="language-typescript"><span class="tok-keyword">function</span> <span class="tok-function">assertNever</span>(x: <span class="tok-keyword">never</span>): <span class="tok-keyword">never</span> {
   <span class="tok-keyword">throw</span> <span class="tok-keyword">new</span> <span class="tok-function">Error</span>(<span class="tok-string">'Unhandled case: '</span> + <span class="tok-function">String</span>(x));
 }
 <span class="tok-comment">// default: return assertNever(shape);</span></code></pre>
@@ -420,7 +420,7 @@ export default {
 
 <h3>Cái default không thể xảy ra</h3>
 <p>Nhớ lại <code>never</code> là kiểu không giá trị nào mang được. Trong một <code>switch</code> trên một discriminated union, một khi bạn đã xử lý mọi trường hợp, nhánh <code>default</code> không thể tới được — nên giá trị ở đó mang kiểu <code>never</code>. Gán nó cho một biến <code>never</code> làm chốt chặn:</p>
-<pre><code><span class="tok-keyword">function</span> <span class="tok-function">area</span>(shape: Shape): <span class="tok-keyword">number</span> {
+<pre><code class="language-typescript"><span class="tok-keyword">function</span> <span class="tok-function">area</span>(shape: Shape): <span class="tok-keyword">number</span> {
   <span class="tok-keyword">switch</span> (shape.kind) {
     <span class="tok-keyword">case</span> <span class="tok-string">'circle'</span>: <span class="tok-keyword">return</span> Math.PI * shape.r ** <span class="tok-number">2</span>;
     <span class="tok-keyword">case</span> <span class="tok-string">'square'</span>: <span class="tok-keyword">return</span> shape.side ** <span class="tok-number">2</span>;
@@ -433,7 +433,7 @@ export default {
 
 <h3>Thêm một biến thể, cảm nhận trình biên dịch bắt được</h3>
 <p>Giờ giả sử ai đó thêm hình tam giác vào <code>Shape</code> nhưng quên thêm <code>case</code> cho nó:</p>
-<pre><code><span class="tok-comment">// exhaust.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// exhaust.ts</span>
 <span class="tok-keyword">type</span> Shape =
   | { kind: <span class="tok-string">'circle'</span>; r: <span class="tok-keyword">number</span> }
   | { kind: <span class="tok-string">'square'</span>; side: <span class="tok-keyword">number</span> }
@@ -445,7 +445,7 @@ export default {
 
 <h3>Mẫu, đóng gói lại</h3>
 <p>Một bản gọn thường gặp dùng một hàm phụ vừa tài liệu hoá ý định vừa có thể ném lỗi lúc chạy như phương án cuối:</p>
-<pre><code><span class="tok-keyword">function</span> <span class="tok-function">assertNever</span>(x: <span class="tok-keyword">never</span>): <span class="tok-keyword">never</span> {
+<pre><code class="language-typescript"><span class="tok-keyword">function</span> <span class="tok-function">assertNever</span>(x: <span class="tok-keyword">never</span>): <span class="tok-keyword">never</span> {
   <span class="tok-keyword">throw</span> <span class="tok-keyword">new</span> <span class="tok-function">Error</span>(<span class="tok-string">'Unhandled case: '</span> + <span class="tok-function">String</span>(x));
 }
 <span class="tok-comment">// default: return assertNever(shape);</span></code></pre>

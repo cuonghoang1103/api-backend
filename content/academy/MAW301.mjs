@@ -168,7 +168,7 @@ const c2 = doc('maw301-2-1-injection', '2.1 — Injection (SQL & command)|||2.1 
 <h2>Injection — SQL &amp; command</h2>
 <h3>What injection is</h3>
 <p><strong>Injection</strong> happens when untrusted input is mixed into a command or query as <em>code</em> instead of <em>data</em>. The classic is <strong>SQL injection</strong>: the app glues user input straight into a SQL string.</p>
-<pre><code>// VULNERABLE — string concatenation
+<pre><code class="language-sql">// VULNERABLE — string concatenation
 const q = "SELECT * FROM users WHERE name = '" + input + "'";
 
 // Attacker sends:   ' OR '1'='1
@@ -183,7 +183,7 @@ const q = "SELECT * FROM users WHERE name = '" + input + "'";
 <li><strong>Never pass user input to a shell</strong>; if you must call a program, use argument arrays and an allow-list.</li>
 <li>Least-privilege DB accounts limit the damage.</li>
 </ul>
-<pre><code>// SAFE — parameterized (placeholder, not concatenation)
+<pre><code class="language-sql">// SAFE — parameterized (placeholder, not concatenation)
 db.query("SELECT * FROM users WHERE name = ?", [input]);
 </code></pre>
 <div class="callout"><span class="badge">Data, not code</span> Injection dies the moment input is bound as a parameter — the engine can no longer confuse it with the query structure.</div>`,
@@ -191,7 +191,7 @@ db.query("SELECT * FROM users WHERE name = ?", [input]);
 <h2>Injection — SQL &amp; lệnh</h2>
 <h3>Injection là gì</h3>
 <p><strong>Injection</strong> xảy ra khi đầu vào không tin cậy bị trộn vào một lệnh hay truy vấn như <em>mã</em> thay vì <em>dữ liệu</em>. Kinh điển là <strong>SQL injection</strong>: ứng dụng dán thẳng đầu vào người dùng vào chuỗi SQL.</p>
-<pre><code>// DỄ TỔN THƯƠNG — ghép chuỗi
+<pre><code class="language-sql">// DỄ TỔN THƯƠNG — ghép chuỗi
 const q = "SELECT * FROM users WHERE name = '" + input + "'";
 
 // Kẻ tấn công gửi:  ' OR '1'='1
@@ -206,7 +206,7 @@ const q = "SELECT * FROM users WHERE name = '" + input + "'";
 <li><strong>Không đưa đầu vào người dùng vào shell</strong>; nếu buộc phải gọi chương trình, dùng mảng tham số và allow-list.</li>
 <li>Tài khoản CSDL quyền tối thiểu giới hạn thiệt hại.</li>
 </ul>
-<pre><code>// AN TOÀN — tham số hoá (dùng placeholder, không ghép chuỗi)
+<pre><code class="language-sql">// AN TOÀN — tham số hoá (dùng placeholder, không ghép chuỗi)
 db.query("SELECT * FROM users WHERE name = ?", [input]);
 </code></pre>
 <div class="callout"><span class="badge">Dữ liệu, không phải mã</span> Injection chết ngay khi đầu vào được gắn như tham số — bộ máy không còn nhầm nó với cấu trúc truy vấn.</div>`,
@@ -230,7 +230,7 @@ const c3 = doc('maw301-3-1-xss-csrf', '3.1 — XSS & CSRF|||3.1 — XSS & CSRF',
 <li><strong>Stored</strong> — the payload is saved (a comment, profile) and served to every viewer. Most dangerous.</li>
 <li><strong>DOM-based</strong> — vulnerable client-side JS writes untrusted data into the page.</li>
 </ul>
-<pre><code>// Untrusted comment rendered raw:
+<pre><code class="language-html">// Untrusted comment rendered raw:
 &lt;div&gt;Hello USERINPUT&lt;/div&gt;
 // Attacker stores:  &lt;script&gt;stealCookie()&lt;/script&gt;
 //  -> runs for everyone who views the page
@@ -249,7 +249,7 @@ const c3 = doc('maw301-3-1-xss-csrf', '3.1 — XSS & CSRF|||3.1 — XSS & CSRF',
 <li><strong>Stored</strong> — payload được lưu (bình luận, hồ sơ) và trả về cho mọi người xem. Nguy hiểm nhất.</li>
 <li><strong>DOM-based</strong> — mã JS phía client dễ tổn thương ghi dữ liệu không tin cậy vào trang.</li>
 </ul>
-<pre><code>// Bình luận không tin cậy render thô:
+<pre><code class="language-html">// Bình luận không tin cậy render thô:
 &lt;div&gt;Hello USERINPUT&lt;/div&gt;
 // Kẻ tấn công lưu:  &lt;script&gt;stealCookie()&lt;/script&gt;
 //  -> chạy cho mọi người xem trang

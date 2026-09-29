@@ -24,7 +24,7 @@ export default {
 
 <h3>Required parameters and inferred returns</h3>
 <p>Annotate the parameters; let the return type be inferred from what you actually return. TypeScript works it out precisely:</p>
-<pre><code><span class="tok-comment">// retinfer.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// retinfer.ts</span>
 <span class="tok-keyword">function</span> <span class="tok-function">makeUser</span>(name: <span class="tok-keyword">string</span>) {
   <span class="tok-keyword">return</span> { name, createdAt: Date.<span class="tok-function">now</span>() };
 }</code></pre>
@@ -36,7 +36,7 @@ export default {
 
 <h3>Optional parameters with ?</h3>
 <p>A <code>?</code> after the name makes a parameter optional — callers may omit it, and inside the function its type includes <code>undefined</code>. TypeScript then forces you to handle the missing case:</p>
-<pre><code><span class="tok-comment">// opt.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// opt.ts</span>
 <span class="tok-keyword">function</span> <span class="tok-function">greet</span>(name: <span class="tok-keyword">string</span>, title?: <span class="tok-keyword">string</span>) {
   <span class="tok-keyword">return</span> title.<span class="tok-function">toUpperCase</span>() + <span class="tok-string">' '</span> + name;
 }</code></pre>
@@ -45,7 +45,7 @@ export default {
 
 <h3>Default parameters</h3>
 <p>Give a parameter a default value and two things happen: callers may omit it, and inside the function it's never <code>undefined</code> (the default fills in). Notice the inferred signature makes it optional automatically:</p>
-<pre><code><span class="tok-comment">// deflt.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// deflt.ts</span>
 <span class="tok-keyword">function</span> <span class="tok-function">paginate</span>(page: <span class="tok-keyword">number</span>, size = <span class="tok-number">20</span>) {
   <span class="tok-keyword">return</span> { page, size };
 }</code></pre>
@@ -57,7 +57,7 @@ export default {
 
 <h3>Rest parameters</h3>
 <p>To accept "any number of arguments", use a rest parameter — it collects the extras into a typed array:</p>
-<pre><code><span class="tok-comment">// rest.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// rest.ts</span>
 <span class="tok-keyword">function</span> <span class="tok-function">sum</span>(...nums: <span class="tok-keyword">number</span>[]): <span class="tok-keyword">number</span> {
   <span class="tok-keyword">return</span> nums.<span class="tok-function">reduce</span>((a, b) => a + b, <span class="tok-number">0</span>);
 }
@@ -87,7 +87,7 @@ export default {
 
 <h3>Tham số bắt buộc và kiểu trả về suy luận</h3>
 <p>Chú thích tham số; để kiểu trả về được suy ra từ thứ bạn thật sự trả về. TypeScript tính ra chính xác:</p>
-<pre><code><span class="tok-comment">// retinfer.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// retinfer.ts</span>
 <span class="tok-keyword">function</span> <span class="tok-function">makeUser</span>(name: <span class="tok-keyword">string</span>) {
   <span class="tok-keyword">return</span> { name, createdAt: Date.<span class="tok-function">now</span>() };
 }</code></pre>
@@ -99,7 +99,7 @@ export default {
 
 <h3>Tham số optional với ?</h3>
 <p>Một dấu <code>?</code> sau tên khiến tham số thành optional — chỗ gọi có thể bỏ qua, và bên trong hàm kiểu của nó bao gồm <code>undefined</code>. TypeScript khi đó ép bạn xử lý trường hợp vắng mặt:</p>
-<pre><code><span class="tok-comment">// opt.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// opt.ts</span>
 <span class="tok-keyword">function</span> <span class="tok-function">greet</span>(name: <span class="tok-keyword">string</span>, title?: <span class="tok-keyword">string</span>) {
   <span class="tok-keyword">return</span> title.<span class="tok-function">toUpperCase</span>() + <span class="tok-string">' '</span> + name;
 }</code></pre>
@@ -108,7 +108,7 @@ export default {
 
 <h3>Tham số mặc định</h3>
 <p>Cho một tham số một giá trị mặc định thì hai điều xảy ra: chỗ gọi có thể bỏ qua, và bên trong hàm nó không bao giờ là <code>undefined</code> (mặc định điền vào). Để ý chữ ký suy ra tự động đánh dấu nó optional:</p>
-<pre><code><span class="tok-comment">// deflt.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// deflt.ts</span>
 <span class="tok-keyword">function</span> <span class="tok-function">paginate</span>(page: <span class="tok-keyword">number</span>, size = <span class="tok-number">20</span>) {
   <span class="tok-keyword">return</span> { page, size };
 }</code></pre>
@@ -120,7 +120,7 @@ export default {
 
 <h3>Tham số rest</h3>
 <p>Để nhận "bao nhiêu đối số cũng được", dùng một tham số rest — nó gom các phần thừa vào một mảng có kiểu:</p>
-<pre><code><span class="tok-comment">// rest.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// rest.ts</span>
 <span class="tok-keyword">function</span> <span class="tok-function">sum</span>(...nums: <span class="tok-keyword">number</span>[]): <span class="tok-keyword">number</span> {
   <span class="tok-keyword">return</span> nums.<span class="tok-function">reduce</span>((a, b) => a + b, <span class="tok-number">0</span>);
 }
@@ -160,7 +160,7 @@ export default {
 
 <h3>The function type syntax</h3>
 <p>It reads like an arrow function with types instead of a body: <code>(params) =&gt; ReturnType</code>.</p>
-<pre><code><span class="tok-keyword">type</span> Formatter = (value: <span class="tok-keyword">number</span>) => <span class="tok-keyword">string</span>;
+<pre><code class="language-typescript"><span class="tok-keyword">type</span> Formatter = (value: <span class="tok-keyword">number</span>) => <span class="tok-keyword">string</span>;
 
 <span class="tok-keyword">const</span> money: Formatter = (v) => <span class="tok-string">'\$'</span> + v.<span class="tok-function">toFixed</span>(<span class="tok-number">2</span>);
 <span class="tok-keyword">const</span> percent: Formatter = (v) => v + <span class="tok-string">'%'</span>;</code></pre>
@@ -168,11 +168,11 @@ export default {
 
 <h3>Typing a callback parameter</h3>
 <p>The common case: a function that takes another function. Describe the callback inline:</p>
-<pre><code><span class="tok-keyword">function</span> <span class="tok-function">onClick</span>(handler: (x: <span class="tok-keyword">number</span>) => <span class="tok-keyword">void</span>) {
+<pre><code class="language-typescript"><span class="tok-keyword">function</span> <span class="tok-function">onClick</span>(handler: (x: <span class="tok-keyword">number</span>) => <span class="tok-keyword">void</span>) {
   handler(<span class="tok-number">42</span>);
 }</code></pre>
 <p>Now <code>onClick</code> only accepts a handler that takes a number. Pass one with the wrong parameter type and TypeScript explains precisely what's wrong:</p>
-<pre><code><span class="tok-comment">// cb.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// cb.ts</span>
 <span class="tok-function">onClick</span>((x: <span class="tok-keyword">string</span>) => {});</code></pre>
 <div class="out">cb.ts(2,9): error TS2345: Argument of type '(x: string) => void' is not assignable to parameter of type '(x: number) => void'.
   Types of parameters 'x' and 'x' are incompatible.
@@ -181,7 +181,7 @@ export default {
 
 <h3>Where this shows up: the array methods</h3>
 <p>Every <code>map</code>, <code>filter</code>, <code>forEach</code> takes a callback, and TypeScript types them for you. Hover the parameter and it already knows the element type:</p>
-<pre><code><span class="tok-keyword">const</span> names = [<span class="tok-string">'An'</span>, <span class="tok-string">'Bình'</span>];
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> names = [<span class="tok-string">'An'</span>, <span class="tok-string">'Bình'</span>];
 <span class="tok-keyword">const</span> upper = names.<span class="tok-function">map</span>((n) => n.<span class="tok-function">toUpperCase</span>());   <span class="tok-comment">// n is string, upper is string[]</span></code></pre>
 <p>You never annotated <code>n</code> — the array's element type flowed into the callback automatically. This is contextual typing again, and it's most of why day-to-day TypeScript feels light.</p>
 <div class="callout ok">A function type <code>(a: A) =&gt; B</code> is a value-level type just like <code>string</code> or <code>User</code>. You can name it with <code>type</code>, use it as a parameter, put it in an interface, store it in an array. Chapter 6 makes these generic so one type describes callbacks for <em>any</em> element type.</div>
@@ -211,7 +211,7 @@ export default {
 
 <h3>Cú pháp kiểu hàm</h3>
 <p>Nó đọc như một arrow function với kiểu thay cho thân: <code>(tham-số) =&gt; KiểuTrảVề</code>.</p>
-<pre><code><span class="tok-keyword">type</span> Formatter = (value: <span class="tok-keyword">number</span>) => <span class="tok-keyword">string</span>;
+<pre><code class="language-typescript"><span class="tok-keyword">type</span> Formatter = (value: <span class="tok-keyword">number</span>) => <span class="tok-keyword">string</span>;
 
 <span class="tok-keyword">const</span> money: Formatter = (v) => <span class="tok-string">'\$'</span> + v.<span class="tok-function">toFixed</span>(<span class="tok-number">2</span>);
 <span class="tok-keyword">const</span> percent: Formatter = (v) => v + <span class="tok-string">'%'</span>;</code></pre>
@@ -219,11 +219,11 @@ export default {
 
 <h3>Gõ kiểu một tham số callback</h3>
 <p>Trường hợp thường gặp: một hàm nhận một hàm khác. Mô tả callback ngay tại chỗ:</p>
-<pre><code><span class="tok-keyword">function</span> <span class="tok-function">onClick</span>(handler: (x: <span class="tok-keyword">number</span>) => <span class="tok-keyword">void</span>) {
+<pre><code class="language-typescript"><span class="tok-keyword">function</span> <span class="tok-function">onClick</span>(handler: (x: <span class="tok-keyword">number</span>) => <span class="tok-keyword">void</span>) {
   handler(<span class="tok-number">42</span>);
 }</code></pre>
 <p>Giờ <code>onClick</code> chỉ nhận một handler nhận một số. Truyền vào một cái sai kiểu tham số thì TypeScript giải thích chính xác chỗ sai:</p>
-<pre><code><span class="tok-comment">// cb.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// cb.ts</span>
 <span class="tok-function">onClick</span>((x: <span class="tok-keyword">string</span>) => {});</code></pre>
 <div class="out">cb.ts(2,9): error TS2345: Argument of type '(x: string) => void' is not assignable to parameter of type '(x: number) => void'.
   Types of parameters 'x' and 'x' are incompatible.
@@ -232,7 +232,7 @@ export default {
 
 <h3>Nó xuất hiện ở đâu: các method của mảng</h3>
 <p>Mọi <code>map</code>, <code>filter</code>, <code>forEach</code> đều nhận một callback, và TypeScript gõ kiểu chúng hộ bạn. Rê chuột lên tham số và nó đã biết sẵn kiểu phần tử:</p>
-<pre><code><span class="tok-keyword">const</span> names = [<span class="tok-string">'An'</span>, <span class="tok-string">'Bình'</span>];
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> names = [<span class="tok-string">'An'</span>, <span class="tok-string">'Bình'</span>];
 <span class="tok-keyword">const</span> upper = names.<span class="tok-function">map</span>((n) => n.<span class="tok-function">toUpperCase</span>());   <span class="tok-comment">// n là string, upper là string[]</span></code></pre>
 <p>Bạn chẳng bao giờ chú thích <code>n</code> — kiểu phần tử của mảng tự trôi vào callback. Đây lại là gõ kiểu theo ngữ cảnh, và nó là phần lớn lý do TypeScript hằng ngày thấy nhẹ nhàng.</p>
 <div class="callout ok">Một kiểu hàm <code>(a: A) =&gt; B</code> là một kiểu ở tầng giá trị y như <code>string</code> hay <code>User</code>. Bạn đặt tên nó bằng <code>type</code>, dùng làm tham số, đặt vào một interface, lưu vào một mảng. Chương 6 làm chúng generic để một kiểu mô tả callback cho <em>bất kỳ</em> kiểu phần tử nào.</div>
@@ -272,7 +272,7 @@ export default {
 
 <h3>Overloads: multiple signatures, one implementation</h3>
 <p>Sometimes a function's return type depends on how it's called. You declare several <em>overload signatures</em>, then one implementation that covers them all:</p>
-<pre><code><span class="tok-comment">// over.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// over.ts</span>
 <span class="tok-keyword">function</span> <span class="tok-function">len</span>(x: <span class="tok-keyword">string</span>): <span class="tok-keyword">number</span>;
 <span class="tok-keyword">function</span> <span class="tok-function">len</span>(x: <span class="tok-keyword">unknown</span>[]): <span class="tok-keyword">number</span>;
 <span class="tok-keyword">function</span> <span class="tok-function">len</span>(x: <span class="tok-keyword">string</span> | <span class="tok-keyword">unknown</span>[]): <span class="tok-keyword">number</span> {
@@ -287,7 +287,7 @@ export default {
 
 <h3>The void-return subtlety</h3>
 <p>Here's a rule that surprises everyone, and it is deliberate. A callback typed to return <code>void</code> will accept a function that <em>does</em> return a value — the return is simply ignored:</p>
-<pre><code><span class="tok-comment">// voidcb.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// voidcb.ts</span>
 <span class="tok-keyword">type</span> Cb = () => <span class="tok-keyword">void</span>;
 <span class="tok-keyword">const</span> f: Cb = () => <span class="tok-number">42</span>;          <span class="tok-comment">// returns a number — still allowed</span>
 
@@ -323,7 +323,7 @@ nums.<span class="tok-function">forEach</span>(n => dst.<span class="tok-functio
 
 <h3>Overload: nhiều chữ ký, một phần cài đặt</h3>
 <p>Đôi khi kiểu trả về của một hàm phụ thuộc vào cách nó được gọi. Bạn khai báo vài <em>chữ ký overload</em>, rồi một phần cài đặt bao trọn tất cả:</p>
-<pre><code><span class="tok-comment">// over.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// over.ts</span>
 <span class="tok-keyword">function</span> <span class="tok-function">len</span>(x: <span class="tok-keyword">string</span>): <span class="tok-keyword">number</span>;
 <span class="tok-keyword">function</span> <span class="tok-function">len</span>(x: <span class="tok-keyword">unknown</span>[]): <span class="tok-keyword">number</span>;
 <span class="tok-keyword">function</span> <span class="tok-function">len</span>(x: <span class="tok-keyword">string</span> | <span class="tok-keyword">unknown</span>[]): <span class="tok-keyword">number</span> {
@@ -338,7 +338,7 @@ nums.<span class="tok-function">forEach</span>(n => dst.<span class="tok-functio
 
 <h3>Điều tinh tế của void</h3>
 <p>Đây là một quy tắc làm ai cũng bất ngờ, và nó là chủ ý. Một callback khai kiểu trả về <code>void</code> sẽ nhận một hàm <em>có</em> trả về giá trị — cái trả về đơn giản bị phớt lờ:</p>
-<pre><code><span class="tok-comment">// voidcb.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// voidcb.ts</span>
 <span class="tok-keyword">type</span> Cb = () => <span class="tok-keyword">void</span>;
 <span class="tok-keyword">const</span> f: Cb = () => <span class="tok-number">42</span>;          <span class="tok-comment">// trả về một số — vẫn được phép</span>
 
@@ -384,7 +384,7 @@ nums.<span class="tok-function">forEach</span>(n => dst.<span class="tok-functio
 
 <h3>strict mode forbids an untyped this</h3>
 <p>Use <code>this</code> in a standalone function and, because TypeScript can't know what it will be, strict mode stops you:</p>
-<pre><code><span class="tok-comment">// this2.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// this2.ts</span>
 <span class="tok-keyword">function</span> <span class="tok-function">whoAmI</span>() {
   <span class="tok-keyword">return</span> this.name;
 }</code></pre>
@@ -393,7 +393,7 @@ nums.<span class="tok-function">forEach</span>(n => dst.<span class="tok-functio
 
 <h3>The this parameter</h3>
 <p>TypeScript lets you declare <code>this</code> as a special <em>first parameter</em> that isn't a real argument — it only tells the compiler what context the function expects. Then callers who use the wrong context are caught:</p>
-<pre><code><span class="tok-comment">// this3.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// this3.ts</span>
 <span class="tok-keyword">interface</span> Box { value: <span class="tok-keyword">number</span>; }
 
 <span class="tok-keyword">function</span> <span class="tok-function">reset</span>(<span class="tok-keyword">this</span>: Box) {
@@ -405,7 +405,7 @@ nums.<span class="tok-function">forEach</span>(n => dst.<span class="tok-functio
 
 <h3>Arrow functions don't have their own this</h3>
 <p>The reliable escape from <code>this</code> confusion: an arrow function captures <code>this</code> from where it was <em>written</em>, not where it's called. Inside a class, an arrow-function property always points at the instance, even when passed around as a callback:</p>
-<pre><code><span class="tok-keyword">class</span> Counter {
+<pre><code class="language-javascript"><span class="tok-keyword">class</span> Counter {
   count = <span class="tok-number">0</span>;
   inc = () => { <span class="tok-keyword">this</span>.count++; };   <span class="tok-comment">// arrow: this is always this Counter</span>
 }
@@ -436,7 +436,7 @@ nums.<span class="tok-function">forEach</span>(n => dst.<span class="tok-functio
 
 <h3>Chế độ strict cấm một this không kiểu</h3>
 <p>Dùng <code>this</code> trong một hàm độc lập và, vì TypeScript không thể biết nó sẽ là gì, chế độ strict chặn bạn:</p>
-<pre><code><span class="tok-comment">// this2.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// this2.ts</span>
 <span class="tok-keyword">function</span> <span class="tok-function">whoAmI</span>() {
   <span class="tok-keyword">return</span> this.name;
 }</code></pre>
@@ -445,7 +445,7 @@ nums.<span class="tok-function">forEach</span>(n => dst.<span class="tok-functio
 
 <h3>Tham số this</h3>
 <p>TypeScript cho bạn khai <code>this</code> như một <em>tham số đầu tiên</em> đặc biệt không phải đối số thật — nó chỉ nói với trình biên dịch hàm mong ngữ cảnh nào. Rồi chỗ gọi dùng sai ngữ cảnh sẽ bị bắt:</p>
-<pre><code><span class="tok-comment">// this3.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// this3.ts</span>
 <span class="tok-keyword">interface</span> Box { value: <span class="tok-keyword">number</span>; }
 
 <span class="tok-keyword">function</span> <span class="tok-function">reset</span>(<span class="tok-keyword">this</span>: Box) {
@@ -457,7 +457,7 @@ nums.<span class="tok-function">forEach</span>(n => dst.<span class="tok-functio
 
 <h3>Arrow function không có this riêng</h3>
 <p>Lối thoát đáng tin khỏi mớ bòng bong <code>this</code>: một arrow function bắt <code>this</code> từ nơi nó được <em>viết</em>, không phải nơi nó được gọi. Bên trong một class, một thuộc tính arrow-function luôn trỏ về instance, kể cả khi được truyền đi làm callback:</p>
-<pre><code><span class="tok-keyword">class</span> Counter {
+<pre><code class="language-javascript"><span class="tok-keyword">class</span> Counter {
   count = <span class="tok-number">0</span>;
   inc = () => { <span class="tok-keyword">this</span>.count++; };   <span class="tok-comment">// arrow: this luôn là Counter này</span>
 }

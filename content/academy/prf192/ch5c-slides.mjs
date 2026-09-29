@@ -63,7 +63,7 @@ export default {
 <li><strong>HEAP</strong> — named on the slide but deliberately left empty. It is memory you request explicitly at run time with <code>malloc</code> and release with <code>free</code>. PRF192 never allocates on the heap; it is drawn only so you know the fourth region exists and is <em>not</em> where your ordinary variables live.</li>
 <li><strong>The addresses on the slide are just an illustration</strong> — they are the numbers one particular compiler on one particular machine produced. Yours will differ every run (address randomisation). What is <em>not</em> illustrative is the <em>grouping</em>: globals far from locals, code far from both.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int myVar = 10;                       /* data segment  */
 
@@ -96,7 +96,7 @@ Read the exponents, not the digits: the global sits at <strong>0x1040…</strong
 <li><strong>HEAP</strong> — được gọi tên trên slide nhưng cố ý để trống. Đó là bộ nhớ bạn xin tường minh lúc chạy bằng <code>malloc</code> và trả lại bằng <code>free</code>. PRF192 không bao giờ cấp phát trên heap; nó được vẽ ra chỉ để bạn biết vùng thứ tư tồn tại và <em>không phải</em> nơi biến thường của bạn nằm.</li>
 <li><strong>Các địa chỉ trên slide chỉ để minh hoạ</strong> — đó là con số mà một trình biên dịch cụ thể trên một máy cụ thể sinh ra. Máy bạn sẽ khác, và khác cả giữa hai lần chạy (do ngẫu nhiên hoá địa chỉ). Thứ <em>không</em> mang tính minh hoạ là cách <em>gom nhóm</em>: toàn cục nằm rất xa cục bộ, mã nằm rất xa cả hai.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int myVar = 10;                       /* đoạn dữ liệu  */
 
@@ -198,7 +198,7 @@ Bốn địa chỉ khác nhau, cách nhau 60 byte. Tên thì trùng; ô nhớ th
 <li><strong>What the slide asks</strong> — three tasks, in order: "Rewrite, compile and run this program", "Draw memory map", "Explain the result". Notice the order: <em>run first</em>, then explain. The surprise is the teaching device.</li>
 <li><strong>About the code on this slide</strong> — the program itself is an image on the slide, so the exact source is not in the extracted text and is not reproduced here character-for-character. What follows is the canonical version of this exercise; if your copy of the slide differs in variable names or in the printed wording, the mechanism and the answer are identical.</li>
 <li><strong>The program</strong> —
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 void swap(int a, int b) {
     int temp;
@@ -232,7 +232,7 @@ int main(void) {
 <code>&nbsp;&nbsp;inside swap : a = 8, b = 5</code><br>
 <code>after&nbsp;&nbsp;swap : a = 5, b = 8</code><br>
 <strong>Explanation:</strong> <code>swap</code>'s parameters are <em>copies</em> living at different addresses (measured: <code>main</code> 0x16f0aa3c8 / 0x16f0aa3c4 versus <code>swap</code> 0x16f0aa38c / 0x16f0aa388). Lines 3–5 swap the copies; line 6 destroys them. <code>main</code>'s <code>a</code> and <code>b</code> were never touched. The fix needs addresses:
-<pre><code>void swap(int *pa, int *pb) {
+<pre><code class="language-java">void swap(int *pa, int *pb) {
     int t = *pa;
     *pa = *pb;
     *pb = t;
@@ -245,7 +245,7 @@ Also compiled and run: this version prints <code>a=8 b=5</code> in <code>main</c
 <li><strong>Slide yêu cầu gì</strong> — ba việc, theo thứ tự: "Rewrite, compile and run this program", "Draw memory map", "Explain the result". Để ý thứ tự: <em>chạy trước</em>, giải thích sau. Chính sự bất ngờ là công cụ dạy học.</li>
 <li><strong>Về đoạn code trên slide này</strong> — bản thân chương trình nằm trong ẢNH của slide, nên mã nguồn chính xác không có trong phần chữ trích ra và ở đây KHÔNG tái tạo nguyên văn từng ký tự. Dưới đây là phiên bản chuẩn của bài này; nếu bản slide của bạn khác tên biến hay khác câu chữ in ra thì cơ chế và đáp án vẫn y hệt.</li>
 <li><strong>Chương trình</strong> —
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 void swap(int a, int b) {
     int temp;
@@ -279,7 +279,7 @@ int main(void) {
 <code>&nbsp;&nbsp;inside swap : a = 8, b = 5</code><br>
 <code>after&nbsp;&nbsp;swap : a = 5, b = 8</code><br>
 <strong>Giải thích:</strong> tham số của <code>swap</code> là <em>bản sao</em> nằm ở địa chỉ khác (đo được: <code>main</code> 0x16f0aa3c8 / 0x16f0aa3c4 so với <code>swap</code> 0x16f0aa38c / 0x16f0aa388). Dòng 3–5 hoán đổi các bản sao; dòng 6 huỷ chúng. <code>a</code> và <code>b</code> của <code>main</code> chưa hề bị đụng tới. Muốn sửa thì phải dùng địa chỉ:
-<pre><code>void swap(int *pa, int *pb) {
+<pre><code class="language-java">void swap(int *pa, int *pb) {
     int t = *pa;
     *pa = *pb;
     *pb = t;
@@ -313,7 +313,7 @@ Bản này cũng đã biên dịch và chạy: nó in <code>a=8 b=5</code> trong
 <ul>
 <li><strong>Stage 1: pick nouns → variables</strong> — the slide's note "(Suitable types)" is doing real work. "A positive integer" → <code>int</code> or <code>long</code>; "a resistance" → <code>double</code>; "a year" → <code>int</code>. Getting the type wrong here poisons every function downstream.</li>
 <li><strong>Stage 2: re-order into an algorithm</strong> — the slide writes the result as pseudo-code:
-<pre><code>Begin
+<pre><code class="language-c">Begin
     Verb1  a ;   // complex
     Verb2  b ;   // complex
     Verb3  c ;   // Simple
@@ -321,7 +321,7 @@ Bản này cũng đã biên dịch và chạy: nó in <code>a=8 b=5</code> trong
 End.</code></pre>
 Each line is tagged <em>complex</em> or <em>Simple</em>. Complex ones become your own functions; Simple ones stay inline as library calls.</li>
 <li><strong>Stage 3: the skeleton it produces</strong> — the slide shows exactly what you should have on paper before coding:
-<pre><code>// library functions
+<pre><code class="language-c">// library functions
 #include &lt;stdio.h&gt;
 
 void verb1(Type a) {  }
@@ -342,7 +342,7 @@ int main() {
 <ul>
 <li><strong>Chặng 1: nhặt danh từ → biến</strong> — ghi chú "(Suitable types)" trên slide gánh việc thật. "Một số nguyên dương" → <code>int</code> hoặc <code>long</code>; "một điện trở" → <code>double</code>; "một năm" → <code>int</code>. Chọn sai kiểu ở đây là đầu độc mọi hàm phía sau.</li>
 <li><strong>Chặng 2: sắp lại thành thuật toán</strong> — slide viết kết quả dưới dạng mã giả:
-<pre><code>Begin
+<pre><code class="language-c">Begin
     Verb1  a ;   // phức tạp
     Verb2  b ;   // phức tạp
     Verb3  c ;   // đơn giản
@@ -350,7 +350,7 @@ int main() {
 End.</code></pre>
 Mỗi dòng gắn nhãn <em>complex</em> hay <em>Simple</em>. Cái phức tạp thành hàm của bạn; cái đơn giản để nguyên tại chỗ bằng lời gọi thư viện.</li>
 <li><strong>Chặng 3: bộ khung nó sinh ra</strong> — slide cho thấy đúng thứ bạn phải có trên giấy TRƯỚC khi gõ code:
-<pre><code>// hàm thư viện
+<pre><code class="language-c">// hàm thư viện
 #include &lt;stdio.h&gt;
 
 void verb1(Type a) {  }
@@ -394,7 +394,7 @@ int main() {
 <li><strong>The slide's noun list</strong> — "Nouns: the integer n → <code>int n</code>". One noun, one variable. Everything else in this problem is machinery, not data from the problem statement.</li>
 <li><strong>The slide's verb list</strong> — "Begin / Accept n → <em>simple</em> / Print n first primes → <em>function</em> / End." Exactly the Simple-versus-complex split from slide 55: <code>scanf</code> handles the first, you write the second.</li>
 <li><strong>The body it gives you</strong> — written as pseudo-code with the second-level discovery marked:
-<pre><code>Function printNPrimes(int n)
+<pre><code class="language-c">Function printNPrimes(int n)
     int count = 0;
     int value = 2;
     while (count &lt; n)
@@ -431,7 +431,7 @@ int main() {
 <li><strong>Danh sách danh từ của slide</strong> — "Nouns: the integer n → <code>int n</code>". Một danh từ, một biến. Mọi thứ còn lại trong bài này là bộ máy, không phải dữ liệu từ đề bài.</li>
 <li><strong>Danh sách động từ của slide</strong> — "Begin / Accept n → <em>simple</em> / Print n first primes → <em>function</em> / End." Đúng kiểu chia Simple–complex ở slide 55: <code>scanf</code> lo cái đầu, bạn viết cái sau.</li>
 <li><strong>Thân hàm slide đưa cho bạn</strong> — viết dạng mã giả, có đánh dấu phát hiện tầng hai:
-<pre><code>Function printNPrimes(int n)
+<pre><code class="language-c">Function printNPrimes(int n)
     int count = 0;
     int value = 2;
     while (count &lt; n)
@@ -469,7 +469,7 @@ int main() {
 <ul>
 <li><strong>What is on this slide</strong> — the finished source and a console screenshot, both as images; the extracted text carries only the two captions. The program below is the faithful C translation of the pseudo-code on slide 57 and it has been compiled and run; if your slide's version differs in cosmetic details, the behaviour is the same.</li>
 <li><strong>The full program</strong> —
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int  isPrime(int value);          /* prototypes, slide 44 */
 void printNPrimes(int n);
@@ -516,7 +516,7 @@ Both match the slide's stated expected output and the hand trace on slide 57.</p
 <ul>
 <li><strong>Trên slide này có gì</strong> — mã nguồn hoàn chỉnh và một ảnh chụp cửa sổ console, cả hai đều là ẢNH; phần chữ trích ra chỉ còn hai dòng nhãn. Chương trình dưới đây là bản dịch trung thành mã giả của slide 57 sang C và đã được biên dịch, chạy thật; nếu bản trên slide của bạn khác vài chi tiết hình thức thì hành vi vẫn như nhau.</li>
 <li><strong>Chương trình đầy đủ</strong> —
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int  isPrime(int value);          /* prototype, slide 44 */
 void printNPrimes(int n);
@@ -569,7 +569,7 @@ Cả hai khớp kết quả mong đợi ghi trên slide và khớp bảng vết 
 <li><strong>The formula for LCM</strong> — <code>lcm(a, b) = a * b / gcd(a, b)</code>. Note <code>lcm</code> may call <code>gcd</code>; that is a function calling another function, exactly the nesting slide 51 drew.</li>
 <li><strong>The overflow detail worth a mark</strong> — write <code>a / gcd(a, b) * b</code>, not <code>a * b / gcd(a, b)</code>. Both are mathematically equal, but the second computes <code>a * b</code> first and can overflow <code>int</code> for inputs as small as 50000 and 60000. Divide first: <code>a / g</code> is exact, because <code>g</code> divides <code>a</code>.</li>
 <li><strong>The full solution</strong> —
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int gcd(int a, int b);
 int lcm(int a, int b);
@@ -620,7 +620,7 @@ The trace table above was also printed by an instrumented build and matches step
 <li><strong>Công thức BCNN</strong> — <code>lcm(a, b) = a * b / gcd(a, b)</code>. Để ý <code>lcm</code> có thể gọi <code>gcd</code>; đó là hàm gọi hàm, đúng kiểu lồng nhau slide 51 đã vẽ.</li>
 <li><strong>Chi tiết tràn số đáng một điểm</strong> — hãy viết <code>a / gcd(a, b) * b</code>, đừng viết <code>a * b / gcd(a, b)</code>. Về toán thì bằng nhau, nhưng cách thứ hai tính <code>a * b</code> trước và tràn <code>int</code> ngay với dữ liệu nhỏ như 50000 và 60000. Chia trước: <code>a / g</code> luôn chia hết, vì <code>g</code> là ước của <code>a</code>.</li>
 <li><strong>Lời giải đầy đủ</strong> —
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int gcd(int a, int b);
 int lcm(int a, int b);
@@ -733,7 +733,7 @@ Bảng vết ở trên cũng đã được in ra từ một bản dựng có g�
 <li><strong>Two locals nested</strong> — if the second function is called <em>from inside</em> the first, the inner bar sits entirely inside the outer bar, and the two frames coexist at different addresses (0x…34c inside 0x…38c, measured on slide 51).</li>
 <li><strong>Extent is not about usefulness</strong> — a local variable exists even while its function is blocked waiting inside a call to another function. It is unreachable by name from there (that is scope), but it is still allocated.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int r = 100;                       /* bar spans the whole program */
 
@@ -768,7 +768,7 @@ The <code>auto</code> column never moves because that <code>c</code> is a <em>di
 <li><strong>Hai biến cục bộ lồng nhau</strong> — nếu hàm thứ hai được gọi <em>từ bên trong</em> hàm thứ nhất, thanh trong nằm trọn trong thanh ngoài, và hai khung cùng tồn tại ở hai địa chỉ khác nhau (0x…34c nằm trong 0x…38c, đã đo ở slide 51).</li>
 <li><strong>Extent không nói về chuyện có dùng được hay không</strong> — một biến cục bộ vẫn tồn tại ngay cả khi hàm của nó đang đứng chờ bên trong một lời gọi hàm khác. Từ chỗ đó không gọi tên nó được (đấy là scope), nhưng ô nhớ vẫn đang được giữ.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int r = 100;                       /* thanh trải hết chương trình */
 
@@ -845,7 +845,7 @@ Cột <code>auto</code> đứng im vì <code>c</code> đó là một <em>biến 
 <li><strong>Why this is a warning slide, not a feature slide</strong> — shadowing is legal, and it is one of the most reliable sources of "the value didn't change and I don't know why". You assign to what you think is the global; you are actually assigning to a local that is about to be destroyed.</li>
 <li><strong>How to not be bitten</strong> — the real fix is slide 61's advice: stop using globals. With no globals there is nothing to shadow. When you must keep one, give it a name locals would never use (a <code>g_</code> prefix, for example), and turn on <code>-Wshadow</code>, which <code>-Wall</code> does <em>not</em> include.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int input = 100;                    /* global */
 
@@ -880,7 +880,7 @@ The global survives unchanged, proving the two <code>input</code>s are separate 
 <li><strong>Vì sao đây là slide cảnh báo, không phải slide giới thiệu tính năng</strong> — che tên là hợp lệ, và nó là một trong những nguồn đáng tin cậy nhất của câu than "giá trị không đổi mà tôi không hiểu vì sao". Bạn tưởng mình gán cho biến toàn cục; thực ra bạn gán cho một biến cục bộ sắp bị huỷ.</li>
 <li><strong>Cách để không bị cắn</strong> — cách sửa thật sự là lời khuyên ở slide 61: đừng dùng biến toàn cục nữa. Không có biến toàn cục thì không có gì để che. Khi buộc phải giữ một cái, hãy đặt cho nó cái tên mà biến cục bộ không bao giờ dùng (ví dụ tiền tố <code>g_</code>), và bật <code>-Wshadow</code> — cờ mà <code>-Wall</code> KHÔNG bao gồm.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int input = 100;                    /* toàn cục */
 
@@ -932,7 +932,7 @@ Biến toàn cục sống sót nguyên vẹn, chứng minh hai cái <code>input<
         `<p class="y-chinh">🎯 The deck's own exam question: <em>"Given the following function and a case of using it. What is the value of the variable <code>t</code> when the function terminates?"</em></p>
 <ul>
 <li><strong>The code, exactly as on the slide</strong> —
-<pre><code>int f(int a, int b, int c)
+<pre><code class="language-c">int f(int a, int b, int c)
 {
     int t = 2 * (a + b - c) / 5;
     return t;
@@ -961,7 +961,7 @@ int t = 3 * f(y, x, z);</code></pre></li>
         `<p class="y-chinh">🎯 Câu hỏi thi do chính bộ slide đưa ra: <em>"Given the following function and a case of using it. What is the value of the variable <code>t</code> when the function terminates?"</em> — cho hàm sau và một ca dùng nó, giá trị của biến <code>t</code> là bao nhiêu?</p>
 <ul>
 <li><strong>Đoạn mã, đúng như trên slide</strong> —
-<pre><code>int f(int a, int b, int c)
+<pre><code class="language-c">int f(int a, int b, int c)
 {
     int t = 2 * (a + b - c) / 5;
     return t;
@@ -993,7 +993,7 @@ int t = 3 * f(y, x, z);</code></pre></li>
 <ul>
 <li><strong>The slide's analysis, verbatim</strong> — "Variable: <code>long n;</code>" · "Operation: Check a long integer n whether it is power of 2 or not (named <code>isPower2</code>)" · the body is one line: <code>return ((n &amp; (n-1))==0);</code></li>
 <li><strong>The slide's <code>main</code></strong> —
-<pre><code>Do
+<pre><code class="language-c">Do
     accept n;
 While (n &lt;= 0)
 if (isPower2(n)==1) Print out " It is power of 2"
@@ -1002,7 +1002,7 @@ else                print out " It is not power of 2"</code></pre></li>
 <li><strong>Read the slide's table this way</strong> — for <code>n = 8</code>: <code>n</code> = <code>0000 1000</code>, <code>n-1</code> = <code>0000 0111</code>, <code>n &amp; (n-1)</code> = <code>0000 0000</code> → power of 2. For <code>n = 12</code>: <code>0000 1100</code> and <code>0000 1011</code> share bit 3 → result <code>0000 1000</code> = 8 ≠ 0 → not a power of 2.</li>
 <li><strong>Why the <code>do … while (n &lt;= 0)</code> loop is not decoration</strong> — it is load-bearing. <code>isPower2(0)</code> returns <strong>1</strong>, which is wrong: 0 is not a power of 2. The input loop makes 0 unreachable. A robust standalone function would instead read <code>return n &gt; 0 &amp;&amp; (n &amp; (n - 1)) == 0;</code></li>
 <li><strong>The full program</strong> —
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int isPower2(long n) {
     return ((n &amp; (n - 1)) == 0);
@@ -1038,7 +1038,7 @@ int main(void) {
 <ul>
 <li><strong>Phần phân tích của slide, nguyên văn</strong> — "Variable: <code>long n;</code>" · "Operation: Check a long integer n whether it is power of 2 or not (named <code>isPower2</code>)" · thân hàm đúng một dòng: <code>return ((n &amp; (n-1))==0);</code></li>
 <li><strong><code>main</code> theo slide</strong> —
-<pre><code>Do
+<pre><code class="language-c">Do
     accept n;
 While (n &lt;= 0)
 if (isPower2(n)==1) Print out " It is power of 2"
@@ -1047,7 +1047,7 @@ else                print out " It is not power of 2"</code></pre></li>
 <li><strong>Đọc bảng của slide như thế này</strong> — với <code>n = 8</code>: <code>n</code> = <code>0000 1000</code>, <code>n-1</code> = <code>0000 0111</code>, <code>n &amp; (n-1)</code> = <code>0000 0000</code> → là luỹ thừa của 2. Với <code>n = 12</code>: <code>0000 1100</code> và <code>0000 1011</code> chung bit thứ 3 → kết quả <code>0000 1000</code> = 8 ≠ 0 → không phải.</li>
 <li><strong>Vòng <code>do … while (n &lt;= 0)</code> không phải để trang trí</strong> — nó chịu lực. <code>isPower2(0)</code> trả về <strong>1</strong>, và điều đó SAI: 0 không phải luỹ thừa của 2. Vòng nhập làm cho số 0 không bao giờ tới được hàm. Một hàm đứng riêng cho chắc chắn thì phải viết <code>return n &gt; 0 &amp;&amp; (n &amp; (n - 1)) == 0;</code></li>
 <li><strong>Chương trình đầy đủ</strong> —
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int isPower2(long n) {
     return ((n &amp; (n - 1)) == 0);
@@ -1089,7 +1089,7 @@ int main(void) {
 <li><strong>The order of the tests matters</strong> — check the year, then the month, then the day. <code>daysInMonth(13, y)</code> must never be called, so the month check has to happen first. Short-circuit <code>&amp;&amp;</code> would do the same job in a single expression.</li>
 <li><strong>The correct leap-year rule</strong> — a year is a leap year if it is divisible by 4, <em>except</em> centuries, <em>unless</em> the century is divisible by 400. In C: <code>(y % 4 == 0 &amp;&amp; y % 100 != 0) || (y % 400 == 0)</code>. So 2024 yes, 2023 no, 1900 <strong>no</strong>, 2000 <strong>yes</strong>.</li>
 <li><strong>The full program</strong> —
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int isLeapYear(int y) {
     return (y % 4 == 0 &amp;&amp; y % 100 != 0) || (y % 400 == 0);
@@ -1139,7 +1139,7 @@ int main(void) {
 <li><strong>Thứ tự các phép kiểm quan trọng</strong> — kiểm năm, rồi tháng, rồi ngày. <code>daysInMonth(13, y)</code> không bao giờ được phép chạy, nên phép kiểm tháng phải đứng trước. Toán tử <code>&amp;&amp;</code> đoản mạch cũng làm đúng việc đó trong một biểu thức duy nhất.</li>
 <li><strong>Luật năm nhuận ĐÚNG</strong> — một năm là năm nhuận nếu chia hết cho 4, <em>trừ</em> các năm tròn thế kỷ, <em>trừ khi</em> năm thế kỷ đó chia hết cho 400. Bằng C: <code>(y % 4 == 0 &amp;&amp; y % 100 != 0) || (y % 400 == 0)</code>. Nên 2024 có, 2023 không, 1900 <strong>không</strong>, 2000 <strong>có</strong>.</li>
 <li><strong>Chương trình đầy đủ</strong> —
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int isLeapYear(int y) {
     return (y % 4 == 0 &amp;&amp; y % 100 != 0) || (y % 400 == 0);
@@ -1191,7 +1191,7 @@ int main(void) {
 <li><strong>"A function is highly cohesive if all its statements focus to the same purpose."</strong> — slide 16's definition, compressed. The practical test stays the same: can you name it with one verb phrase?</li>
 <li><strong>"Parameters make a function low coupling."</strong> — the sharpest line on the slide. A function that receives what it needs through parameters is independent; one that reaches out to globals is welded to its surroundings. This sentence is the summary of slides 19–20 <em>and</em> the reason slide 61 warned against globals.</li>
 <li><strong>"4 parts of a function: Return type, function name, parameters, body"</strong> — with the syntax repeated:
-<pre><code>returnType functionName( Type param1, Type param2, …)
+<pre><code class="language-c">returnType functionName( Type param1, Type param2, …)
 {
     &lt;&lt;statements&gt;
 }</code></pre>
@@ -1207,7 +1207,7 @@ The first three parts together are the <em>header</em>; the header is also what 
 <li><strong>"A function is highly cohesive if all it's statements focus to the same purpose."</strong> — định nghĩa của slide 16, nén lại. Phép thử thực dụng vẫn thế: bạn có đặt tên được cho nó bằng một cụm động từ không?</li>
 <li><strong>"Parameters make a function low coupling."</strong> — câu sắc nhất trên slide. Hàm nhận thứ nó cần qua tham số thì độc lập; hàm thò tay ra biến toàn cục thì bị hàn vào môi trường xung quanh. Câu này là bản tóm tắt của slide 19–20 <em>và</em> là lý do slide 61 cảnh báo về biến toàn cục.</li>
 <li><strong>"4 parts of a function: Return type, function name, parameters, body"</strong> — kèm cú pháp nhắc lại:
-<pre><code>returnType functionName( Type param1, Type param2, …)
+<pre><code class="language-c">returnType functionName( Type param1, Type param2, …)
 {
     &lt;&lt;statements&gt;
 }</code></pre>
@@ -1249,7 +1249,7 @@ Ba phần đầu gộp lại là <em>header</em>; mà header cũng chính là pr
 <li><strong>What comes next — Slot 10, Pointers</strong> — every unanswered question in this deck points there: how does a function change its caller's variable? how does a function return more than one value? how do you pass a large object without copying it? The answer to all three is the same, and it is the address.</li>
 </ul>
 <p class="dap-an">✅ One last measurement that ties extent to the next chapter. Returning the address of a local looks like a way out of pass-by-value and is not:
-<pre><code>int *makeLocal(void) {
+<pre><code class="language-c">int *makeLocal(void) {
     int x = 42;
     return &amp;x;          /* x dies the instant this returns */
 }</code></pre>
@@ -1265,7 +1265,7 @@ Compiled with <code>cc -Wall</code>, this produces the warning <em>"address of s
 <li><strong>Tiếp theo là gì — Slot 10, Con trỏ</strong> — mọi câu hỏi còn bỏ ngỏ trong bộ slide này đều chỉ về đó: làm sao một hàm sửa được biến của người gọi? làm sao một hàm trả về nhiều hơn một giá trị? làm sao truyền một đối tượng lớn mà không phải chép? Cả ba đều chung một đáp án, và đó là ĐỊA CHỈ.</li>
 </ul>
 <p class="dap-an">✅ Một phép đo cuối nối extent với chương sau. Trả về địa chỉ của biến cục bộ trông như một lối thoát khỏi truyền-theo-giá-trị, nhưng không phải:
-<pre><code>int *makeLocal(void) {
+<pre><code class="language-c">int *makeLocal(void) {
     int x = 42;
     return &amp;x;          /* x chết ngay khi hàm này trả về */
 }</code></pre>

@@ -250,7 +250,7 @@ const c4 = doc('tbi301c-4-1-sql-for-bi', '4.1 — SQL for BI analysis|||4.1 — 
 <h2>SQL for BI analysis</h2>
 <h3>Joining fact to dimensions</h3>
 <p>A typical BI query joins a fact table to one or more dimensions to add readable context (a product name instead of a bare key), then aggregates.</p>
-<pre><code>SELECT d.year, d.month, p.category, SUM(f.amount) AS total_sales
+<pre><code class="language-sql">SELECT d.year, d.month, p.category, SUM(f.amount) AS total_sales
 FROM FactSales f
 JOIN DimDate d ON f.date_key = d.date_key
 JOIN DimProduct p ON f.product_key = p.product_key
@@ -259,14 +259,14 @@ ORDER BY d.year, d.month;
 </code></pre>
 <h3>Window functions</h3>
 <p>Window functions compute across a set of rows without collapsing them into one — essential for rankings and running totals.</p>
-<pre><code>SELECT month, total_sales,
+<pre><code class="language-sql">SELECT month, total_sales,
        RANK() OVER (ORDER BY total_sales DESC) AS sales_rank,
        SUM(total_sales) OVER (ORDER BY month) AS running_total
 FROM monthly_sales;
 </code></pre>
 <h3>CTEs for readability</h3>
 <p>A <strong>CTE (Common Table Expression)</strong>, written with <code>WITH</code>, breaks a complex query into named, readable steps — common in BI queries that first aggregate, then rank or compare periods.</p>
-<pre><code>WITH monthly AS (
+<pre><code class="language-sql">WITH monthly AS (
   SELECT d.month, SUM(f.amount) AS total_sales
   FROM FactSales f JOIN DimDate d ON f.date_key = d.date_key
   GROUP BY d.month
@@ -280,7 +280,7 @@ FROM monthly;
 <h2>SQL cho phân tích BI</h2>
 <h3>Join fact với dimension</h3>
 <p>Một truy vấn BI điển hình join bảng fact với một hoặc nhiều dimension để thêm ngữ cảnh dễ đọc (tên sản phẩm thay vì chỉ khoá trơ), rồi tổng hợp.</p>
-<pre><code>SELECT d.year, d.month, p.category, SUM(f.amount) AS total_sales
+<pre><code class="language-sql">SELECT d.year, d.month, p.category, SUM(f.amount) AS total_sales
 FROM FactSales f
 JOIN DimDate d ON f.date_key = d.date_key
 JOIN DimProduct p ON f.product_key = p.product_key
@@ -289,14 +289,14 @@ ORDER BY d.year, d.month;
 </code></pre>
 <h3>Window function</h3>
 <p>Window function tính toán trên một tập dòng mà không thu gọn chúng thành một dòng — thiết yếu cho xếp hạng và tổng luỹ tiến.</p>
-<pre><code>SELECT month, total_sales,
+<pre><code class="language-sql">SELECT month, total_sales,
        RANK() OVER (ORDER BY total_sales DESC) AS sales_rank,
        SUM(total_sales) OVER (ORDER BY month) AS running_total
 FROM monthly_sales;
 </code></pre>
 <h3>CTE để dễ đọc</h3>
 <p>Một <strong>CTE (Common Table Expression)</strong>, viết bằng <code>WITH</code>, chia một truy vấn phức tạp thành các bước có tên, dễ đọc — phổ biến trong truy vấn BI khi cần tổng hợp trước, rồi xếp hạng hoặc so sánh giữa các kỳ.</p>
-<pre><code>WITH monthly AS (
+<pre><code class="language-sql">WITH monthly AS (
   SELECT d.month, SUM(f.amount) AS total_sales
   FROM FactSales f JOIN DimDate d ON f.date_key = d.date_key
   GROUP BY d.month

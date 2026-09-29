@@ -428,12 +428,12 @@ export default {
   <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Create a .c file</div><div class="lz-nsub">File → New → Source File, save with a <code>.c</code> extension (not .cpp).</div></div></div>
   <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Compile &amp; run</div><div class="lz-nsub">Press <kbd>F11</kbd> (Compile &amp; Run). A black window shows the result.</div></div></div>
 </div>
-<pre><span class="tok-comment">// Type this and press F11</span>
+<pre><code class="language-c"><span class="tok-comment">// Type this and press F11</span>
 <span class="tok-keyword">#include</span> &lt;stdio.h&gt;
 <span class="tok-type">int</span> <span class="tok-function">main</span>() {
     <span class="tok-function">printf</span>(<span class="tok-string">"Moi truong da san sang!"</span>);
     <span class="tok-keyword">return</span> 0;
-}</pre>
+}</code></pre>
 <div class="pitfall">If the result window appears then <em>closes immediately</em>, add <code>getchar();</code> before <code>return 0;</code> so it waits for you. And remember to save the file with a <code>.c</code> extension — a <code>.cpp</code> file compiles as C++, which has some different rules.</div>
 
 <h3>Option B — VS Code + GCC (recommended long-term)</h3>
@@ -445,12 +445,12 @@ export default {
   <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Install the C/C++ extension</div><div class="lz-nsub">In VS Code, install Microsoft's "C/C++" extension.</div></div></div>
   <div class="lz-node"><div class="lz-badge">5</div><div class="lz-nbody"><div class="lz-ntitle">Compile &amp; run</div><div class="lz-nsub">Open the Terminal (<kbd>Ctrl</kbd>+<kbd>&#96;</kbd>) and run the commands below.</div></div></div>
 </div>
-<pre><span class="tok-comment"># Compile hello.c into a program named hello</span>
+<pre><code class="language-bash"><span class="tok-comment"># Compile hello.c into a program named hello</span>
 gcc hello.c -o hello
 <span class="tok-comment"># Run (Windows)</span>
 .\\hello
 <span class="tok-comment"># Run (macOS/Linux)</span>
-./hello</pre>
+./hello</code></pre>
 <div class="pitfall">Common error: <code>gcc</code> is not recognized (<em>"'gcc' is not recognized"</em>) → GCC isn't on the PATH; redo step 3 then <strong>reopen</strong> VS Code/Terminal. PATH is only read when a new window opens.</div>
 
 <h3>Debugging in VS Code</h3>
@@ -482,12 +482,12 @@ gcc hello.c -o hello
   <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Tạo file .c</div><div class="lz-nsub">File → New → Source File, lưu với đuôi <code>.c</code> (không phải .cpp).</div></div></div>
   <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Biên dịch &amp; chạy</div><div class="lz-nsub">Nhấn <kbd>F11</kbd> (Compile &amp; Run). Cửa sổ đen hiện kết quả.</div></div></div>
 </div>
-<pre><span class="tok-comment">// Gõ thử rồi nhấn F11</span>
+<pre><code class="language-c"><span class="tok-comment">// Gõ thử rồi nhấn F11</span>
 <span class="tok-keyword">#include</span> &lt;stdio.h&gt;
 <span class="tok-type">int</span> <span class="tok-function">main</span>() {
     <span class="tok-function">printf</span>(<span class="tok-string">"Moi truong da san sang!"</span>);
     <span class="tok-keyword">return</span> 0;
-}</pre>
+}</code></pre>
 <div class="pitfall">Nếu cửa sổ kết quả hiện rồi <em>tắt ngay</em>, thêm <code>getchar();</code> trước <code>return 0;</code> để nó dừng chờ bạn xem. Và nhớ lưu file đuôi <code>.c</code> — để <code>.cpp</code> sẽ biên dịch theo C++, khác một số quy tắc.</div>
 
 <h3>Lựa chọn B — VS Code + GCC (khuyên dùng lâu dài)</h3>
@@ -499,12 +499,12 @@ gcc hello.c -o hello
   <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Cài extension C/C++</div><div class="lz-nsub">Trong VS Code, cài extension "C/C++" của Microsoft.</div></div></div>
   <div class="lz-node"><div class="lz-badge">5</div><div class="lz-nbody"><div class="lz-ntitle">Biên dịch &amp; chạy</div><div class="lz-nsub">Mở Terminal (<kbd>Ctrl</kbd>+<kbd>&#96;</kbd>), gõ lệnh bên dưới.</div></div></div>
 </div>
-<pre><span class="tok-comment"># Biên dịch file hello.c thành chương trình hello</span>
+<pre><code class="language-bash"><span class="tok-comment"># Biên dịch file hello.c thành chương trình hello</span>
 gcc hello.c -o hello
 <span class="tok-comment"># Chạy (Windows)</span>
 .\\hello
 <span class="tok-comment"># Chạy (macOS/Linux)</span>
-./hello</pre>
+./hello</code></pre>
 <div class="pitfall">Lỗi hay gặp: <code>gcc</code> không nhận diện được (<em>"'gcc' is not recognized"</em>) → GCC chưa vào PATH, làm lại bước 3 rồi <strong>mở lại</strong> VS Code/Terminal. PATH chỉ được đọc khi mở cửa sổ mới.</div>
 
 <h3>Gỡ lỗi (debug) trong VS Code</h3>
@@ -554,13 +554,13 @@ gcc hello.c -o hello
   <div class="lz-step"><div class="lz-k">Run</div><div class="lz-t">Result</div><div class="lz-d">The CPU executes it</div></div>
 </div>
 <h3>Your first C program</h3>
-<pre><span class="tok-comment">// A program that prints one line of text</span>
+<pre><code class="language-c"><span class="tok-comment">// A program that prints one line of text</span>
 <span class="tok-keyword">#include</span> &lt;stdio.h&gt;
 
 <span class="tok-type">int</span> <span class="tok-function">main</span>() {
     <span class="tok-function">printf</span>(<span class="tok-string">"Xin chao PRF192!"</span>);
     <span class="tok-keyword">return</span> 0;
-}</pre>
+}</code></pre>
 <div class="out"><b>Output:</b> Xin chao PRF192!</div>
 <div class="pitfall">Beginners often forget the <code>;</code> at the end of a statement, or write <code>Printf</code> (capital P). C is case-sensitive and requires <code>;</code> — missing it is an immediate compile error.</div>
 <div class="note-ct">Don't rush to fully understand <code>#include</code> or <code>return 0</code> — lesson 1.3 dissects them. For now just: type it correctly, compile, see the text appear. That feeling of "the machine obeys me" is your first motivation.</div>
@@ -590,13 +590,13 @@ gcc hello.c -o hello
 </div>
 
 <h3>Chương trình C đầu tiên</h3>
-<pre><span class="tok-comment">// Chương trình in ra một dòng chữ</span>
+<pre><code class="language-c"><span class="tok-comment">// Chương trình in ra một dòng chữ</span>
 <span class="tok-keyword">#include</span> &lt;stdio.h&gt;
 
 <span class="tok-type">int</span> <span class="tok-function">main</span>() {
     <span class="tok-function">printf</span>(<span class="tok-string">"Xin chao PRF192!"</span>);
     <span class="tok-keyword">return</span> 0;
-}</pre>
+}</code></pre>
 <div class="out"><b>Output:</b> Xin chao PRF192!</div>
 
 <div class="pitfall">Người mới hay quên dấu <code>;</code> cuối câu lệnh, hoặc viết <code>Printf</code> (P hoa). C phân biệt hoa–thường và bắt buộc <code>;</code> — thiếu là báo lỗi biên dịch ngay.</div>
@@ -675,7 +675,7 @@ gcc hello.c -o hello
 <span class="eyebrow">Chapter 1 · Lesson 1.3</span>
 <h2>The structure of a C program</h2>
 <p class="lead">Now let's dissect the program from lesson 1.1 and understand the role of each part.</p>
-<pre><span class="tok-comment">// (1) Preprocessor directive — load a library</span>
+<pre><code class="language-c"><span class="tok-comment">// (1) Preprocessor directive — load a library</span>
 <span class="tok-keyword">#include</span> &lt;stdio.h&gt;
 
 <span class="tok-comment">// (2) The main function — where the program starts</span>
@@ -683,7 +683,7 @@ gcc hello.c -o hello
     <span class="tok-comment">// (3) Function body — statements, each ends with ;</span>
     <span class="tok-function">printf</span>(<span class="tok-string">"Diem = %d"</span>, 8);
     <span class="tok-keyword">return</span> 0;   <span class="tok-comment">// (4) return 0 = finished with no error</span>
-}</pre>
+}</code></pre>
 <h3>Four parts</h3>
 <ul>
   <li><strong>(1) <code>#include &lt;stdio.h&gt;</code></strong> — loads the standard I/O library so you can use <code>printf</code>, <code>scanf</code>.</li>
@@ -698,7 +698,7 @@ gcc hello.c -o hello
 <span class="eyebrow">Chương 1 · Bài 1.3</span>
 <h2>Cấu trúc một chương trình C</h2>
 <p class="lead">Giờ ta mổ xẻ chương trình ở bài 1.1, hiểu vai trò từng phần.</p>
-<pre><span class="tok-comment">// (1) Chỉ thị tiền xử lý — nạp thư viện</span>
+<pre><code class="language-c"><span class="tok-comment">// (1) Chỉ thị tiền xử lý — nạp thư viện</span>
 <span class="tok-keyword">#include</span> &lt;stdio.h&gt;
 
 <span class="tok-comment">// (2) Hàm main — nơi chương trình bắt đầu chạy</span>
@@ -706,7 +706,7 @@ gcc hello.c -o hello
     <span class="tok-comment">// (3) Thân hàm — các câu lệnh, mỗi câu kết thúc bằng ;</span>
     <span class="tok-function">printf</span>(<span class="tok-string">"Diem = %d"</span>, 8);
     <span class="tok-keyword">return</span> 0;   <span class="tok-comment">// (4) trả 0 = chạy xong không lỗi</span>
-}</pre>
+}</code></pre>
 <h3>Bốn thành phần</h3>
 <ul>
   <li><strong>(1) <code>#include &lt;stdio.h&gt;</code></strong> — nạp thư viện nhập/xuất chuẩn để dùng được <code>printf</code>, <code>scanf</code>.</li>
@@ -760,14 +760,14 @@ gcc hello.c -o hello
   <thead><tr><th>Variable →</th><th><code>age</code></th><th><code>score</code></th><th><code>grade</code></th></tr></thead>
   <tbody><tr><td>Stored value</td><td>20</td><td>8.5</td><td>'A'</td></tr></tbody>
 </table>
-<pre><span class="tok-type">int</span> age = 20;        <span class="tok-comment">// declare an integer variable, assign 20</span>
+<pre><code class="language-c"><span class="tok-type">int</span> age = 20;        <span class="tok-comment">// declare an integer variable, assign 20</span>
 <span class="tok-type">float</span> score = 8.5;    <span class="tok-comment">// a real number</span>
 <span class="tok-type">char</span> grade = <span class="tok-string">'A'</span>;     <span class="tok-comment">// one character — use single quotes</span>
-age = age + 1;         <span class="tok-comment">// a variable's value can change</span></pre>
+age = age + 1;         <span class="tok-comment">// a variable's value can change</span></code></pre>
 <h3>Constants</h3>
 <p>A constant is a value that <strong>never changes</strong> throughout the program. Use <code>const</code> or <code>#define</code>:</p>
-<pre><span class="tok-keyword">const</span> <span class="tok-type">float</span> PI = 3.14159;
-<span class="tok-keyword">#define</span> MAX 100</pre>
+<pre><code class="language-c"><span class="tok-keyword">const</span> <span class="tok-type">float</span> PI = 3.14159;
+<span class="tok-keyword">#define</span> MAX 100</code></pre>
 <h3>Naming rules</h3>
 <ul>
   <li>Only letters, digits and <code>_</code>; <strong>must not</strong> start with a digit.</li>
@@ -785,14 +785,14 @@ age = age + 1;         <span class="tok-comment">// a variable's value can chang
   <thead><tr><th>Tên biến →</th><th><code>age</code></th><th><code>score</code></th><th><code>grade</code></th></tr></thead>
   <tbody><tr><td>Giá trị đang chứa</td><td>20</td><td>8.5</td><td>'A'</td></tr></tbody>
 </table>
-<pre><span class="tok-type">int</span> age = 20;        <span class="tok-comment">// khai báo biến số nguyên, gán 20</span>
+<pre><code class="language-c"><span class="tok-type">int</span> age = 20;        <span class="tok-comment">// khai báo biến số nguyên, gán 20</span>
 <span class="tok-type">float</span> score = 8.5;    <span class="tok-comment">// số thực</span>
 <span class="tok-type">char</span> grade = <span class="tok-string">'A'</span>;     <span class="tok-comment">// một ký tự — dùng nháy đơn</span>
-age = age + 1;         <span class="tok-comment">// giá trị biến có thể thay đổi</span></pre>
+age = age + 1;         <span class="tok-comment">// giá trị biến có thể thay đổi</span></code></pre>
 <h3>Hằng số (constant)</h3>
 <p>Hằng là giá trị <strong>không đổi</strong> suốt chương trình. Dùng <code>const</code> hoặc <code>#define</code>:</p>
-<pre><span class="tok-keyword">const</span> <span class="tok-type">float</span> PI = 3.14159;
-<span class="tok-keyword">#define</span> MAX 100</pre>
+<pre><code class="language-c"><span class="tok-keyword">const</span> <span class="tok-type">float</span> PI = 3.14159;
+<span class="tok-keyword">#define</span> MAX 100</code></pre>
 <h3>Quy tắc đặt tên</h3>
 <ul>
   <li>Chỉ gồm chữ, số, dấu <code>_</code>; <strong>không</strong> bắt đầu bằng số.</li>
@@ -824,9 +824,9 @@ age = age + 1;         <span class="tok-comment">// giá trị biến có thể 
 </table>
 <div class="note-ct"><code>char</code> is really a <strong>small integer</strong>: <code>'A'</code> is stored as the number 65 (ASCII). So <code>'A' + 1</code> gives 'B'. Understanding this makes string handling in chapter 9 much easier.</div>
 <h3>Implicit casting — the integer-division trap</h3>
-<pre><span class="tok-type">int</span> a = 7, b = 2;
+<pre><code class="language-c"><span class="tok-type">int</span> a = 7, b = 2;
 <span class="tok-function">printf</span>(<span class="tok-string">"%d\\n"</span>, a / b);        <span class="tok-comment">// 3  — integer division, the fraction is lost!</span>
-<span class="tok-function">printf</span>(<span class="tok-string">"%f\\n"</span>, (<span class="tok-type">float</span>)a / b); <span class="tok-comment">// 3.5 — cast to float before dividing</span></pre>
+<span class="tok-function">printf</span>(<span class="tok-string">"%f\\n"</span>, (<span class="tok-type">float</span>)a / b); <span class="tok-comment">// 3.5 — cast to float before dividing</span></code></pre>
 <div class="out"><b>Output:</b> 3<br>3.500000</div>
 <div class="pitfall">Dividing two <code>int</code>s always gives an <code>int</code> (drops the decimals). For a real result, cast at least one operand to <code>float</code>/<code>double</code>.</div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Why 0.1 + 0.2 is not exactly 0.3.</b> <code>float</code>/<code>double</code> store numbers in binary (IEEE-754), and 0.1 has no exact binary representation — just like 1/3 has no exact decimal one. <code>printf("%.20f", 0.1)</code> actually prints <code>0.10000000000000000555…</code>. <em>Never compare floats with <code>==</code>; compare <code>fabs(a - b) &lt; 1e-9</code> instead. This bites almost every beginner once.</em></div>
@@ -846,9 +846,9 @@ age = age + 1;         <span class="tok-comment">// giá trị biến có thể 
 </table>
 <div class="note-ct"><code>char</code> thực chất là <strong>số nguyên nhỏ</strong>: <code>'A'</code> lưu trong máy là số 65 (mã ASCII). Vì vậy <code>'A' + 1</code> cho ra 'B'. Hiểu điều này giúp bạn xử lý chuỗi ở chương 9 dễ hơn.</div>
 <h3>Ép kiểu ngầm — bẫy chia số nguyên</h3>
-<pre><span class="tok-type">int</span> a = 7, b = 2;
+<pre><code class="language-c"><span class="tok-type">int</span> a = 7, b = 2;
 <span class="tok-function">printf</span>(<span class="tok-string">"%d\\n"</span>, a / b);        <span class="tok-comment">// 3  — chia nguyên, mất phần lẻ!</span>
-<span class="tok-function">printf</span>(<span class="tok-string">"%f\\n"</span>, (<span class="tok-type">float</span>)a / b); <span class="tok-comment">// 3.5 — ép float trước khi chia</span></pre>
+<span class="tok-function">printf</span>(<span class="tok-string">"%f\\n"</span>, (<span class="tok-type">float</span>)a / b); <span class="tok-comment">// 3.5 — ép float trước khi chia</span></code></pre>
 <div class="out"><b>Output:</b> 3<br>3.500000</div>
 <div class="pitfall">Chia hai số <code>int</code> luôn cho kết quả <code>int</code> (bỏ phần thập phân). Muốn kết quả thực, ép ít nhất một toán hạng sang <code>float</code>/<code>double</code>.</div>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Vì sao 0.1 + 0.2 không đúng bằng 0.3.</b> <code>float</code>/<code>double</code> lưu số ở dạng nhị phân (IEEE-754), và 0.1 không có biểu diễn nhị phân chính xác — giống 1/3 không có biểu diễn thập phân chính xác. <code>printf("%.20f", 0.1)</code> thực ra in ra <code>0.10000000000000000555…</code>. <em>Đừng bao giờ so sánh số thực bằng <code>==</code>; hãy so <code>fabs(a - b) &lt; 1e-9</code>. Hầu như người mới nào cũng dính lỗi này một lần.</em></div>
@@ -874,10 +874,10 @@ age = age + 1;         <span class="tok-comment">// giá trị biến có thể 
     <tr><td><code>%s</code></td><td>string</td></tr>
   </tbody>
 </table>
-<pre><span class="tok-type">int</span> tuoi;
+<pre><code class="language-c"><span class="tok-type">int</span> tuoi;
 <span class="tok-function">printf</span>(<span class="tok-string">"Nhap tuoi: "</span>);
 <span class="tok-function">scanf</span>(<span class="tok-string">"%d"</span>, &amp;tuoi);        <span class="tok-comment">// NOTE the &amp; before the variable name</span>
-<span class="tok-function">printf</span>(<span class="tok-string">"Nam sau ban %d tuoi"</span>, tuoi + 1);</pre>
+<span class="tok-function">printf</span>(<span class="tok-string">"Nam sau ban %d tuoi"</span>, tuoi + 1);</code></pre>
 <div class="pitfall">Forgetting the <code>&amp;</code> in <code>scanf("%d", &amp;tuoi)</code> is the most classic beginner mistake — the program runs but reads input wrong / crashes. <code>&amp;</code> means "address of the variable" — you'll fully understand it in chapter 6 (pointers). <code>printf</code>, however, does <strong>not</strong> need <code>&amp;</code>.</div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>scanf("%s", …) has no bounds check.</b> <code>scanf("%s", name)</code> keeps writing characters until it sees whitespace, even past the end of your array — a classic <strong>buffer overflow</strong>. The safe form limits the width: <code>scanf("%19s", name)</code> for a 20-byte array (reserve 1 byte for the terminator). <em>This exact bug family (unchecked input length) is behind decades of real-world security exploits.</em></div>
 <a class="link-card codelab" href="/code-lab/c?ref=%2Fcourses%2Fprogramming-fundamentals%2Flearn&reflabel=PRF192%20%E2%80%94%20C%C6%A1%20s%E1%BB%9F%20l%E1%BA%ADp%20tr%C3%ACnh#module-279" target="_blank" rel="noopener">
@@ -899,10 +899,10 @@ age = age + 1;         <span class="tok-comment">// giá trị biến có thể 
     <tr><td><code>%s</code></td><td>chuỗi</td></tr>
   </tbody>
 </table>
-<pre><span class="tok-type">int</span> tuoi;
+<pre><code class="language-c"><span class="tok-type">int</span> tuoi;
 <span class="tok-function">printf</span>(<span class="tok-string">"Nhap tuoi: "</span>);
 <span class="tok-function">scanf</span>(<span class="tok-string">"%d"</span>, &amp;tuoi);        <span class="tok-comment">// LƯU Ý dấu &amp; trước tên biến</span>
-<span class="tok-function">printf</span>(<span class="tok-string">"Nam sau ban %d tuoi"</span>, tuoi + 1);</pre>
+<span class="tok-function">printf</span>(<span class="tok-string">"Nam sau ban %d tuoi"</span>, tuoi + 1);</code></pre>
 <div class="pitfall">Quên dấu <code>&amp;</code> trong <code>scanf("%d", &amp;tuoi)</code> là lỗi kinh điển nhất của người mới — chương trình chạy nhưng nhập liệu sai/crash. <code>&amp;</code> nghĩa là "địa chỉ của biến" — bạn sẽ hiểu rõ ở chương 6 (con trỏ). Còn <code>printf</code> thì <strong>không</strong> cần <code>&amp;</code>.</div>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>scanf("%s", …) không kiểm tra giới hạn.</b> <code>scanf("%s", name)</code> cứ ghi ký tự tới khi gặp khoảng trắng, kể cả vượt quá cuối mảng — một <strong>tràn bộ đệm (buffer overflow)</strong> kinh điển. Cách an toàn là giới hạn độ rộng: <code>scanf("%19s", name)</code> cho mảng 20 byte (chừa 1 byte cho ký tự kết thúc). <em>Đúng họ lỗi này (độ dài đầu vào không kiểm tra) đứng sau hàng chục năm lỗ hổng bảo mật thực tế.</em></div>
 <a class="link-card codelab" href="/code-lab/c?ref=%2Fcourses%2Fprogramming-fundamentals%2Flearn&reflabel=PRF192%20%E2%80%94%20C%C6%A1%20s%E1%BB%9F%20l%E1%BA%ADp%20tr%C3%ACnh#module-279" target="_blank" rel="noopener">
@@ -958,11 +958,11 @@ age = age + 1;         <span class="tok-comment">// giá trị biến có thể 
     <tr><td>Increment/decrement</td><td><code>++ --</code></td><td>+1 / -1</td></tr>
   </tbody>
 </table>
-<pre><span class="tok-type">int</span> a = 10, b = 3;
+<pre><code class="language-c"><span class="tok-type">int</span> a = 10, b = 3;
 <span class="tok-function">printf</span>(<span class="tok-string">"%d\\n"</span>, a % b);      <span class="tok-comment">// 1  (10 mod 3 = 1)</span>
 <span class="tok-function">printf</span>(<span class="tok-string">"%d\\n"</span>, a &gt; b);      <span class="tok-comment">// 1  (true)</span>
 <span class="tok-function">printf</span>(<span class="tok-string">"%d\\n"</span>, a &gt; b &amp;&amp; b &gt; 5); <span class="tok-comment">// 0  (b&gt;5 is false)</span>
-a += 5;                    <span class="tok-comment">// a = a + 5 = 15</span></pre>
+a += 5;                    <span class="tok-comment">// a = a + 5 = 15</span></code></pre>
 <div class="out"><b>Output:</b> 1<br>1<br>0</div>
 <div class="note-ct">The <code>%</code> (remainder) operator is extremely useful: <code>n % 2 == 0</code> to test for even numbers, <code>n % 10</code> to get the last digit. You'll use it constantly in numeric problems.</div>
 </div>
@@ -980,11 +980,11 @@ a += 5;                    <span class="tok-comment">// a = a + 5 = 15</span></p
     <tr><td>Tăng/giảm</td><td><code>++ --</code></td><td>+1 / -1</td></tr>
   </tbody>
 </table>
-<pre><span class="tok-type">int</span> a = 10, b = 3;
+<pre><code class="language-c"><span class="tok-type">int</span> a = 10, b = 3;
 <span class="tok-function">printf</span>(<span class="tok-string">"%d\\n"</span>, a % b);      <span class="tok-comment">// 1  (10 chia 3 dư 1)</span>
 <span class="tok-function">printf</span>(<span class="tok-string">"%d\\n"</span>, a &gt; b);      <span class="tok-comment">// 1  (đúng)</span>
 <span class="tok-function">printf</span>(<span class="tok-string">"%d\\n"</span>, a &gt; b &amp;&amp; b &gt; 5); <span class="tok-comment">// 0  (b&gt;5 sai)</span>
-a += 5;                    <span class="tok-comment">// a = a + 5 = 15</span></pre>
+a += 5;                    <span class="tok-comment">// a = a + 5 = 15</span></code></pre>
 <div class="out"><b>Output:</b> 1<br>1<br>0</div>
 <div class="note-ct">Toán tử <code>%</code> (chia lấy dư) cực kỳ hữu ích: <code>n % 2 == 0</code> để kiểm tra số chẵn, <code>n % 10</code> để lấy chữ số hàng đơn vị. Bạn sẽ dùng nó liên tục ở các bài toán số học.</div>
 </div>
@@ -1011,8 +1011,8 @@ a += 5;                    <span class="tok-comment">// a = a + 5 = 15</span></p
   <div class="lz-layer"><span class="lz-lname">&amp;&amp; · ||</span><span class="lz-lnote">and · or</span></div>
   <div class="lz-layer"><span class="lz-lname">= += -= …</span><span class="lz-lnote">assignment — last</span></div>
 </div>
-<pre><span class="tok-function">printf</span>(<span class="tok-string">"%d"</span>, 2 + 3 * 4);     <span class="tok-comment">// 14, NOT 20 (multiply first)</span>
-<span class="tok-function">printf</span>(<span class="tok-string">"%d"</span>, (2 + 3) * 4);   <span class="tok-comment">// 20 (parentheses change order)</span></pre>
+<pre><code class="language-c"><span class="tok-function">printf</span>(<span class="tok-string">"%d"</span>, 2 + 3 * 4);     <span class="tok-comment">// 14, NOT 20 (multiply first)</span>
+<span class="tok-function">printf</span>(<span class="tok-string">"%d"</span>, (2 + 3) * 4);   <span class="tok-comment">// 20 (parentheses change order)</span></code></pre>
 <div class="callout">Practical tip: <strong>when in doubt, add parentheses</strong>. They don't slow the program and make your intent clear to you (and the grader). Don't force the reader to memorise the precedence table.</div>
 <div class="pitfall">Assignment <code>=</code> and comparison <code>==</code> are completely different. Accidentally writing <code>if (x = 5)</code> (one =) <em>assigns</em> 5 to x and is always true — a logic bug the compiler usually won't flag. Always use <code>==</code> to compare.</div>
 </div>
@@ -1031,8 +1031,8 @@ a += 5;                    <span class="tok-comment">// a = a + 5 = 15</span></p
   <div class="lz-layer"><span class="lz-lname">&amp;&amp; · ||</span><span class="lz-lnote">và · hoặc</span></div>
   <div class="lz-layer"><span class="lz-lname">= += -= …</span><span class="lz-lnote">gán — cuối cùng</span></div>
 </div>
-<pre><span class="tok-function">printf</span>(<span class="tok-string">"%d"</span>, 2 + 3 * 4);     <span class="tok-comment">// 14, KHÔNG phải 20 (nhân trước)</span>
-<span class="tok-function">printf</span>(<span class="tok-string">"%d"</span>, (2 + 3) * 4);   <span class="tok-comment">// 20 (ngoặc đổi thứ tự)</span></pre>
+<pre><code class="language-c"><span class="tok-function">printf</span>(<span class="tok-string">"%d"</span>, 2 + 3 * 4);     <span class="tok-comment">// 14, KHÔNG phải 20 (nhân trước)</span>
+<span class="tok-function">printf</span>(<span class="tok-string">"%d"</span>, (2 + 3) * 4);   <span class="tok-comment">// 20 (ngoặc đổi thứ tự)</span></code></pre>
 <div class="callout">Mẹo thực dụng: <strong>khi nghi ngờ, thêm ngoặc</strong>. Ngoặc không làm chậm chương trình mà giúp bạn (và người chấm) đọc rõ ý định. Đừng bắt người đọc phải nhớ bảng ưu tiên.</div>
 <div class="pitfall">Gán <code>=</code> và so sánh <code>==</code> khác nhau hoàn toàn. Viết nhầm <code>if (x = 5)</code> (một dấu =) sẽ <em>gán</em> 5 cho x và luôn đúng — lỗi logic mà compiler thường không báo. Luôn dùng <code>==</code> khi so sánh.</div>
 </div>
@@ -1082,23 +1082,23 @@ a += 5;                    <span class="tok-comment">// a = a + 5 = 15</span></p
   <div class="lz-layer"><span class="lz-lname">✔ True</span><span class="lz-lnote">run the block inside <code>if</code></span></div>
   <div class="lz-layer"><span class="lz-lname">✘ False</span><span class="lz-lnote">run the <code>else</code> block</span></div>
 </div>
-<pre><span class="tok-type">int</span> diem = 7;
+<pre><code class="language-c"><span class="tok-type">int</span> diem = 7;
 <span class="tok-keyword">if</span> (diem &gt;= 5) {
     <span class="tok-function">printf</span>(<span class="tok-string">"Dau"</span>);
 } <span class="tok-keyword">else</span> {
     <span class="tok-function">printf</span>(<span class="tok-string">"Truot"</span>);
-}</pre>
+}</code></pre>
 <h3>Multiple branches: <code>else if</code></h3>
-<pre><span class="tok-keyword">if</span> (diem &gt;= 8)      <span class="tok-function">printf</span>(<span class="tok-string">"Gioi"</span>);
+<pre><code class="language-c"><span class="tok-keyword">if</span> (diem &gt;= 8)      <span class="tok-function">printf</span>(<span class="tok-string">"Gioi"</span>);
 <span class="tok-keyword">else if</span> (diem &gt;= 6.5) <span class="tok-function">printf</span>(<span class="tok-string">"Kha"</span>);
 <span class="tok-keyword">else if</span> (diem &gt;= 5)   <span class="tok-function">printf</span>(<span class="tok-string">"Trung binh"</span>);
-<span class="tok-keyword">else</span>                 <span class="tok-function">printf</span>(<span class="tok-string">"Yeu"</span>);</pre>
+<span class="tok-keyword">else</span>                 <span class="tok-function">printf</span>(<span class="tok-string">"Yeu"</span>);</code></pre>
 <h3><code>switch</code> — pick by a discrete value</h3>
-<pre><span class="tok-keyword">switch</span> (chon) {
+<pre><code class="language-c"><span class="tok-keyword">switch</span> (chon) {
     <span class="tok-keyword">case</span> 1: <span class="tok-function">printf</span>(<span class="tok-string">"Mot"</span>); <span class="tok-keyword">break</span>;
     <span class="tok-keyword">case</span> 2: <span class="tok-function">printf</span>(<span class="tok-string">"Hai"</span>); <span class="tok-keyword">break</span>;
     <span class="tok-keyword">default</span>: <span class="tok-function">printf</span>(<span class="tok-string">"Khac"</span>);
-}</pre>
+}</code></pre>
 <div class="pitfall">Forgetting <code>break;</code> in a <code>switch</code> → the program "falls through" to the following cases, running branches you didn't want. Unless intentional, always end each case with <code>break;</code>.</div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>An if is not free at the hardware level.</b> Every <code>if</code> compiles to a conditional jump; the CPU (CEA201, chapter 12) <em>guesses</em> which way it will go and starts executing ahead of time. A wrong guess flushes the pipeline and costs real cycles — which is why unpredictable branches (e.g. checking random data) run slower than predictable ones (e.g. checking a sorted array), even with identical C code. <em>The syllabus stops at "if chooses a path"; the hardware course explains why the choice has a cost.</em></div>
 </div>
@@ -1113,23 +1113,23 @@ a += 5;                    <span class="tok-comment">// a = a + 5 = 15</span></p
   <div class="lz-layer"><span class="lz-lname">✔ Đúng (true)</span><span class="lz-lnote">chạy khối lệnh trong <code>if</code></span></div>
   <div class="lz-layer"><span class="lz-lname">✘ Sai (false)</span><span class="lz-lnote">chạy khối <code>else</code></span></div>
 </div>
-<pre><span class="tok-type">int</span> diem = 7;
+<pre><code class="language-c"><span class="tok-type">int</span> diem = 7;
 <span class="tok-keyword">if</span> (diem &gt;= 5) {
     <span class="tok-function">printf</span>(<span class="tok-string">"Dau"</span>);
 } <span class="tok-keyword">else</span> {
     <span class="tok-function">printf</span>(<span class="tok-string">"Truot"</span>);
-}</pre>
+}</code></pre>
 <h3>Nhiều nhánh: <code>else if</code></h3>
-<pre><span class="tok-keyword">if</span> (diem &gt;= 8)      <span class="tok-function">printf</span>(<span class="tok-string">"Gioi"</span>);
+<pre><code class="language-c"><span class="tok-keyword">if</span> (diem &gt;= 8)      <span class="tok-function">printf</span>(<span class="tok-string">"Gioi"</span>);
 <span class="tok-keyword">else if</span> (diem &gt;= 6.5) <span class="tok-function">printf</span>(<span class="tok-string">"Kha"</span>);
 <span class="tok-keyword">else if</span> (diem &gt;= 5)   <span class="tok-function">printf</span>(<span class="tok-string">"Trung binh"</span>);
-<span class="tok-keyword">else</span>                 <span class="tok-function">printf</span>(<span class="tok-string">"Yeu"</span>);</pre>
+<span class="tok-keyword">else</span>                 <span class="tok-function">printf</span>(<span class="tok-string">"Yeu"</span>);</code></pre>
 <h3><code>switch</code> — chọn theo giá trị rời rạc</h3>
-<pre><span class="tok-keyword">switch</span> (chon) {
+<pre><code class="language-c"><span class="tok-keyword">switch</span> (chon) {
     <span class="tok-keyword">case</span> 1: <span class="tok-function">printf</span>(<span class="tok-string">"Mot"</span>); <span class="tok-keyword">break</span>;
     <span class="tok-keyword">case</span> 2: <span class="tok-function">printf</span>(<span class="tok-string">"Hai"</span>); <span class="tok-keyword">break</span>;
     <span class="tok-keyword">default</span>: <span class="tok-function">printf</span>(<span class="tok-string">"Khac"</span>);
-}</pre>
+}</code></pre>
 <div class="pitfall">Quên <code>break;</code> trong <code>switch</code> → chương trình "rơi" (fall-through) xuống các case sau, chạy cả những nhánh không mong muốn. Trừ khi cố ý, luôn kết thúc mỗi case bằng <code>break;</code>.</div>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>if không miễn phí ở tầng phần cứng.</b> Mỗi <code>if</code> dịch ra một lệnh nhảy có điều kiện; CPU (CEA201, chương 12) <em>đoán</em> nó sẽ đi hướng nào và chạy trước. Đoán sai làm xả pipeline và tốn chu kỳ thật — đó là lý do nhánh khó đoán (vd kiểm dữ liệu ngẫu nhiên) chạy chậm hơn nhánh dễ đoán (vd kiểm mảng đã sắp xếp), dù code C giống hệt nhau. <em>Giáo trình dừng ở "if chọn một nhánh"; môn phần cứng giải thích vì sao lựa chọn đó có cái giá.</em></div>
 </div>
@@ -1146,9 +1146,9 @@ a += 5;                    <span class="tok-comment">// a = a + 5 = 15</span></p
 <h2>Loops: <code>for</code>, <code>while</code>, <code>do-while</code></h2>
 <p class="lead">A computer is best at <strong>repetition</strong>. Instead of writing 100 identical lines, you tell it "do this 100 times". C has three loop kinds, differing in <em>when the condition is checked</em>.</p>
 <h3>1. <code>for</code> — when you know the count in advance</h3>
-<pre><span class="tok-keyword">for</span> (<span class="tok-type">int</span> i = 1; i &lt;= 5; i++) {
+<pre><code class="language-c"><span class="tok-keyword">for</span> (<span class="tok-type">int</span> i = 1; i &lt;= 5; i++) {
     <span class="tok-function">printf</span>(<span class="tok-string">"%d "</span>, i);
-}</pre>
+}</code></pre>
 <div class="out"><b>Output:</b> 1 2 3 4 5</div>
 <div class="lz-flow">
   <div class="lz-step"><div class="lz-k">Init</div><div class="lz-t">i = 1</div><div class="lz-d">runs once at the start</div></div>
@@ -1158,8 +1158,8 @@ a += 5;                    <span class="tok-comment">// a = a + 5 = 15</span></p
 </div>
 <p style="font-size:.86rem;color:var(--text-muted);margin-top:-.4rem">When <code>i &lt;= 5</code> is false → exit the loop.</p>
 <h3>2. <code>while</code> — loop until the condition is false</h3>
-<pre><span class="tok-type">int</span> n = 8;
-<span class="tok-keyword">while</span> (n &gt; 1) { <span class="tok-function">printf</span>(<span class="tok-string">"%d "</span>, n); n = n / 2; }</pre>
+<pre><code class="language-c"><span class="tok-type">int</span> n = 8;
+<span class="tok-keyword">while</span> (n &gt; 1) { <span class="tok-function">printf</span>(<span class="tok-string">"%d "</span>, n); n = n / 2; }</code></pre>
 <div class="out"><b>Output:</b> 8 4 2</div>
 <h3>3. <code>do-while</code> — runs the body at least once</h3>
 <p>The condition is checked at the <em>end</em>, good for menus or re-prompting until valid.</p>
@@ -1180,9 +1180,9 @@ a += 5;                    <span class="tok-comment">// a = a + 5 = 15</span></p
 <h2>Vòng lặp: <code>for</code>, <code>while</code>, <code>do-while</code></h2>
 <p class="lead">Máy tính giỏi nhất việc <strong>lặp đi lặp lại</strong>. Thay vì viết 100 dòng giống nhau, ta bảo máy "làm việc này 100 lần". C có ba loại vòng lặp, khác nhau ở <em>thời điểm kiểm tra điều kiện</em>.</p>
 <h3>1. <code>for</code> — khi biết trước số lần</h3>
-<pre><span class="tok-keyword">for</span> (<span class="tok-type">int</span> i = 1; i &lt;= 5; i++) {
+<pre><code class="language-c"><span class="tok-keyword">for</span> (<span class="tok-type">int</span> i = 1; i &lt;= 5; i++) {
     <span class="tok-function">printf</span>(<span class="tok-string">"%d "</span>, i);
-}</pre>
+}</code></pre>
 <div class="out"><b>Output:</b> 1 2 3 4 5</div>
 <div class="lz-flow">
   <div class="lz-step"><div class="lz-k">Khởi tạo</div><div class="lz-t">i = 1</div><div class="lz-d">chạy 1 lần lúc đầu</div></div>
@@ -1192,8 +1192,8 @@ a += 5;                    <span class="tok-comment">// a = a + 5 = 15</span></p
 </div>
 <p style="font-size:.86rem;color:var(--text-muted);margin-top:-.4rem">Khi điều kiện <code>i &lt;= 5</code> sai → thoát vòng lặp.</p>
 <h3>2. <code>while</code> — lặp tới khi điều kiện sai</h3>
-<pre><span class="tok-type">int</span> n = 8;
-<span class="tok-keyword">while</span> (n &gt; 1) { <span class="tok-function">printf</span>(<span class="tok-string">"%d "</span>, n); n = n / 2; }</pre>
+<pre><code class="language-c"><span class="tok-type">int</span> n = 8;
+<span class="tok-keyword">while</span> (n &gt; 1) { <span class="tok-function">printf</span>(<span class="tok-string">"%d "</span>, n); n = n / 2; }</code></pre>
 <div class="out"><b>Output:</b> 8 4 2</div>
 <h3>3. <code>do-while</code> — chạy thân ít nhất 1 lần</h3>
 <p>Điều kiện kiểm tra ở <em>cuối</em>, hợp với menu hoặc nhập lại tới khi hợp lệ.</p>
@@ -1348,7 +1348,7 @@ a += 5;                    <span class="tok-comment">// a = a + 5 = 15</span></p
 <span class="eyebrow">Chapter 5 · Lesson 5.2</span>
 <h2>Defining &amp; calling functions</h2>
 <p class="lead">A function has: a <strong>return type</strong>, a <strong>name</strong>, <strong>parameters</strong> (inputs) and a <strong>body</strong>.</p>
-<pre><span class="tok-keyword">#include</span> <span class="tok-string">&lt;stdio.h&gt;</span>
+<pre><code class="language-c"><span class="tok-keyword">#include</span> <span class="tok-string">&lt;stdio.h&gt;</span>
 
 <span class="tok-comment">// return type · name · parameters</span>
 <span class="tok-type">int</span> <span class="tok-function">tong</span>(<span class="tok-type">int</span> a, <span class="tok-type">int</span> b) {
@@ -1359,7 +1359,7 @@ a += 5;                    <span class="tok-comment">// a = a + 5 = 15</span></p
     <span class="tok-type">int</span> s = <span class="tok-function">tong</span>(3, 5);  <span class="tok-comment">// call the function, s = 8</span>
     <span class="tok-function">printf</span>(<span class="tok-string">"%d"</span>, s);
     <span class="tok-keyword">return</span> 0;
-}</pre>
+}</code></pre>
 <div class="out"><b>Output:</b> 8</div>
 <div class="lz-flow">
   <div class="lz-step"><div class="lz-k">Call</div><div class="lz-t">tong(3, 5)</div><div class="lz-d">pass arguments 3, 5</div></div>
@@ -1368,10 +1368,10 @@ a += 5;                    <span class="tok-comment">// a = a + 5 = 15</span></p
 </div>
 <h3>Pass by value</h3>
 <p>When you call a function, C <strong>copies</strong> the argument value into the parameter. Changing the parameter inside the function does <em>not</em> affect the original variable:</p>
-<pre><span class="tok-type">void</span> <span class="tok-function">tang</span>(<span class="tok-type">int</span> x) { x = x + 1; }   <span class="tok-comment">// edits the copy</span>
+<pre><code class="language-c"><span class="tok-type">void</span> <span class="tok-function">tang</span>(<span class="tok-type">int</span> x) { x = x + 1; }   <span class="tok-comment">// edits the copy</span>
 <span class="tok-type">int</span> n = 5;
 <span class="tok-function">tang</span>(n);
-<span class="tok-function">printf</span>(<span class="tok-string">"%d"</span>, n);   <span class="tok-comment">// still 5 !</span></pre>
+<span class="tok-function">printf</span>(<span class="tok-string">"%d"</span>, n);   <span class="tok-comment">// still 5 !</span></code></pre>
 <div class="pitfall">This confuses many people: the function "changes" the variable but nothing changes outside. To let a function modify the original variable, use a <strong>pointer</strong> (chapter 6).</div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Where do parameters actually live? The stack frame.</b> Every call pushes a new <strong>stack frame</strong>: a block holding the parameters, local variables and the return address, stacked on top of the caller's frame. That is exactly why the copy in "pass by value" disappears when the function returns — its frame is popped off and that memory is gone. <em>Chapter N2 (Stack vs Heap) draws this frame-by-frame; keep this call in mind when you get there.</em></div>
 </div>
@@ -1379,7 +1379,7 @@ a += 5;                    <span class="tok-comment">// a = a + 5 = 15</span></p
 <span class="eyebrow">Chương 5 · Bài 5.2</span>
 <h2>Định nghĩa &amp; gọi hàm</h2>
 <p class="lead">Một hàm gồm: <strong>kiểu trả về</strong>, <strong>tên</strong>, <strong>tham số</strong> (đầu vào) và <strong>thân hàm</strong>.</p>
-<pre><span class="tok-keyword">#include</span> <span class="tok-string">&lt;stdio.h&gt;</span>
+<pre><code class="language-c"><span class="tok-keyword">#include</span> <span class="tok-string">&lt;stdio.h&gt;</span>
 
 <span class="tok-comment">// kiểu trả về · tên · tham số</span>
 <span class="tok-type">int</span> <span class="tok-function">tong</span>(<span class="tok-type">int</span> a, <span class="tok-type">int</span> b) {
@@ -1390,7 +1390,7 @@ a += 5;                    <span class="tok-comment">// a = a + 5 = 15</span></p
     <span class="tok-type">int</span> s = <span class="tok-function">tong</span>(3, 5);  <span class="tok-comment">// gọi hàm, s = 8</span>
     <span class="tok-function">printf</span>(<span class="tok-string">"%d"</span>, s);
     <span class="tok-keyword">return</span> 0;
-}</pre>
+}</code></pre>
 <div class="out"><b>Output:</b> 8</div>
 <div class="lz-flow">
   <div class="lz-step"><div class="lz-k">Gọi</div><div class="lz-t">tong(3, 5)</div><div class="lz-d">truyền đối số 3, 5</div></div>
@@ -1399,10 +1399,10 @@ a += 5;                    <span class="tok-comment">// a = a + 5 = 15</span></p
 </div>
 <h3>Truyền theo giá trị (pass by value)</h3>
 <p>Khi gọi hàm, C <strong>sao chép</strong> giá trị đối số vào tham số. Sửa tham số bên trong hàm <em>không</em> ảnh hưởng biến gốc:</p>
-<pre><span class="tok-type">void</span> <span class="tok-function">tang</span>(<span class="tok-type">int</span> x) { x = x + 1; }   <span class="tok-comment">// sửa bản sao</span>
+<pre><code class="language-c"><span class="tok-type">void</span> <span class="tok-function">tang</span>(<span class="tok-type">int</span> x) { x = x + 1; }   <span class="tok-comment">// sửa bản sao</span>
 <span class="tok-type">int</span> n = 5;
 <span class="tok-function">tang</span>(n);
-<span class="tok-function">printf</span>(<span class="tok-string">"%d"</span>, n);   <span class="tok-comment">// vẫn là 5 !</span></pre>
+<span class="tok-function">printf</span>(<span class="tok-string">"%d"</span>, n);   <span class="tok-comment">// vẫn là 5 !</span></code></pre>
 <div class="pitfall">Đây là lý do nhiều người bối rối: hàm "sửa" biến nhưng ra ngoài không đổi. Muốn hàm thay đổi được biến gốc, phải dùng <strong>con trỏ</strong> (chương 6).</div>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Tham số thực ra sống ở đâu? Stack frame.</b> Mỗi lần gọi hàm đẩy thêm một <strong>stack frame</strong>: một khối chứa tham số, biến cục bộ và địa chỉ trả về, xếp chồng lên frame của hàm gọi. Đó chính xác là lý do bản sao trong "truyền theo giá trị" biến mất khi hàm return — frame của nó bị gỡ khỏi stack và vùng nhớ đó mất đi. <em>Chương N2 (Stack vs Heap) sẽ vẽ chi tiết từng frame; nhớ lại chỗ này khi tới đó.</em></div>
 </div>
@@ -1422,13 +1422,13 @@ a += 5;                    <span class="tok-comment">// a = a + 5 = 15</span></p
   <div class="lz-layer"><span class="lz-lname">Local variable</span><span class="lz-lnote">declared in a function → usable only in that function</span></div>
   <div class="lz-layer"><span class="lz-lname">Global variable</span><span class="lz-lnote">declared outside every function → usable everywhere (use sparingly)</span></div>
 </div>
-<pre><span class="tok-type">void</span> <span class="tok-function">f</span>() {
+<pre><code class="language-c"><span class="tok-type">void</span> <span class="tok-function">f</span>() {
     <span class="tok-type">int</span> x = 10;    <span class="tok-comment">// x lives only inside f()</span>
 }
 <span class="tok-type">int</span> <span class="tok-function">main</span>() {
     <span class="tok-function">f</span>();
     <span class="tok-comment">// printf("%d", x);  // ERROR: x does not exist here</span>
-}</pre>
+}</code></pre>
 <h3>Built-in vs user-defined functions</h3>
 <ul>
   <li><strong>Built-in:</strong> <code>printf</code>, <code>scanf</code>, <code>sqrt</code>… live in libraries, just <code>#include</code> them.</li>
@@ -1444,13 +1444,13 @@ a += 5;                    <span class="tok-comment">// a = a + 5 = 15</span></p
   <div class="lz-layer"><span class="lz-lname">Biến cục bộ (local)</span><span class="lz-lnote">khai trong hàm → chỉ dùng trong hàm đó</span></div>
   <div class="lz-layer"><span class="lz-lname">Biến toàn cục (global)</span><span class="lz-lnote">khai ngoài mọi hàm → dùng khắp nơi (hạn chế dùng)</span></div>
 </div>
-<pre><span class="tok-type">void</span> <span class="tok-function">f</span>() {
+<pre><code class="language-c"><span class="tok-type">void</span> <span class="tok-function">f</span>() {
     <span class="tok-type">int</span> x = 10;    <span class="tok-comment">// x chỉ sống trong f()</span>
 }
 <span class="tok-type">int</span> <span class="tok-function">main</span>() {
     <span class="tok-function">f</span>();
     <span class="tok-comment">// printf("%d", x);  // LỖI: x không tồn tại ở đây</span>
-}</pre>
+}</code></pre>
 <h3>Hàm dựng sẵn vs tự định nghĩa</h3>
 <ul>
   <li><strong>Dựng sẵn (built-in):</strong> <code>printf</code>, <code>scanf</code>, <code>sqrt</code>… nằm trong thư viện, chỉ cần <code>#include</code>.</li>
@@ -1570,11 +1570,11 @@ a += 5;                    <span class="tok-comment">// a = a + 5 = 15</span></p
   <li><code>&amp;n</code> — "<strong>address of</strong> n" (address-of).</li>
   <li><code>*p</code> — "<strong>the value at</strong> the address p points to" (dereference).</li>
 </ul>
-<pre><span class="tok-type">int</span> n = 5;
+<pre><code class="language-c"><span class="tok-type">int</span> n = 5;
 <span class="tok-type">int</span> *p = &amp;n;        <span class="tok-comment">// p points to n</span>
 <span class="tok-function">printf</span>(<span class="tok-string">"%d\\n"</span>, *p);   <span class="tok-comment">// 5  — read through the pointer</span>
 *p = 10;             <span class="tok-comment">// write through the pointer → n becomes 10</span>
-<span class="tok-function">printf</span>(<span class="tok-string">"%d\\n"</span>, n);    <span class="tok-comment">// 10 !</span></pre>
+<span class="tok-function">printf</span>(<span class="tok-string">"%d\\n"</span>, n);    <span class="tok-comment">// 10 !</span></code></pre>
 <div class="out"><b>Output:</b> 5<br>10</div>
 <div class="note-ct">Remember the <code>&amp;</code> in <code>scanf("%d", &amp;n)</code> from chapter 2 — it is exactly "address of n". Now you see why: <code>scanf</code> needs the address to write the input into n's memory cell.</div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Pointer arithmetic scales by the type's size.</b> <code>p + 1</code> does not add 1 byte — it adds <code>sizeof(*p)</code> bytes, so for <code>int *p</code> it jumps 4 bytes (typically), landing on the next <code>int</code>. This is exactly how array indexing (chapter 8) really works: <code>a[i]</code> is compiler sugar for <code>*(a + i)</code>. <em>Understanding this now makes chapter N3's array-pointer equivalence click instantly instead of feeling like magic.</em></div>
@@ -1593,11 +1593,11 @@ a += 5;                    <span class="tok-comment">// a = a + 5 = 15</span></p
   <li><code>&amp;n</code> — "<strong>địa chỉ của</strong> n" (address-of).</li>
   <li><code>*p</code> — "<strong>giá trị tại</strong> địa chỉ p trỏ tới" (dereference).</li>
 </ul>
-<pre><span class="tok-type">int</span> n = 5;
+<pre><code class="language-c"><span class="tok-type">int</span> n = 5;
 <span class="tok-type">int</span> *p = &amp;n;        <span class="tok-comment">// p trỏ tới n</span>
 <span class="tok-function">printf</span>(<span class="tok-string">"%d\\n"</span>, *p);   <span class="tok-comment">// 5  — đọc qua con trỏ</span>
 *p = 10;             <span class="tok-comment">// ghi qua con trỏ → n đổi thành 10</span>
-<span class="tok-function">printf</span>(<span class="tok-string">"%d\\n"</span>, n);    <span class="tok-comment">// 10 !</span></pre>
+<span class="tok-function">printf</span>(<span class="tok-string">"%d\\n"</span>, n);    <span class="tok-comment">// 10 !</span></code></pre>
 <div class="out"><b>Output:</b> 5<br>10</div>
 <div class="note-ct">Nhớ lại dấu <code>&amp;</code> trong <code>scanf("%d", &amp;n)</code> ở chương 2 — chính là "địa chỉ của n". Giờ bạn hiểu vì sao: <code>scanf</code> cần địa chỉ để ghi giá trị nhập vào đúng ô nhớ của n.</div>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Phép toán con trỏ co giãn theo kích thước kiểu.</b> <code>p + 1</code> không cộng 1 byte — nó cộng <code>sizeof(*p)</code> byte, nên với <code>int *p</code> nó nhảy 4 byte (thường vậy), rơi đúng vào <code>int</code> kế tiếp. Đây chính xác là cách chỉ số mảng (chương 8) hoạt động thật: <code>a[i]</code> là cú pháp đường của <code>*(a + i)</code>. <em>Hiểu điều này ngay bây giờ giúp sự tương đương mảng-con trỏ ở chương N3 sáng tỏ ngay lập tức thay vì cảm thấy như phép màu.</em></div>
@@ -1614,30 +1614,30 @@ a += 5;                    <span class="tok-comment">// a = a + 5 = 15</span></p
 <span class="eyebrow">Chapter 6 · Lesson 6.2</span>
 <h2>Pointers as parameters — pass by reference</h2>
 <p class="lead">In chapter 5 we saw a function can't change the original variable (pass by value). Passing the <strong>address</strong> (a pointer) solves it: the function receives the address and writes straight into the original cell.</p>
-<pre><span class="tok-type">void</span> <span class="tok-function">tang</span>(<span class="tok-type">int</span> *x) { *x = *x + 1; }  <span class="tok-comment">// edit through the pointer</span>
+<pre><code class="language-c"><span class="tok-type">void</span> <span class="tok-function">tang</span>(<span class="tok-type">int</span> *x) { *x = *x + 1; }  <span class="tok-comment">// edit through the pointer</span>
 <span class="tok-type">int</span> n = 5;
 <span class="tok-function">tang</span>(&amp;n);              <span class="tok-comment">// pass the ADDRESS of n</span>
-<span class="tok-function">printf</span>(<span class="tok-string">"%d"</span>, n);      <span class="tok-comment">// 6 — n changed !</span></pre>
+<span class="tok-function">printf</span>(<span class="tok-string">"%d"</span>, n);      <span class="tok-comment">// 6 — n changed !</span></code></pre>
 <div class="out"><b>Output:</b> 6</div>
 <h3>The classic use: a swap function</h3>
-<pre><span class="tok-type">void</span> <span class="tok-function">swap</span>(<span class="tok-type">int</span> *a, <span class="tok-type">int</span> *b) {
+<pre><code class="language-java"><span class="tok-type">void</span> <span class="tok-function">swap</span>(<span class="tok-type">int</span> *a, <span class="tok-type">int</span> *b) {
     <span class="tok-type">int</span> t = *a; *a = *b; *b = t;
-}</pre>
+}</code></pre>
 <div class="pitfall">You cannot write a working <code>swap</code> with pass by value — inside it would only swap two copies. Pointers are required. This is a very common interview/exam question.</div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 6 · Bài 6.2</span>
 <h2>Con trỏ làm tham số — truyền theo tham chiếu</h2>
 <p class="lead">Ở chương 5 ta thấy hàm không sửa được biến gốc (pass by value). Truyền <strong>địa chỉ</strong> (con trỏ) giải quyết điều đó: hàm nhận địa chỉ và ghi thẳng vào ô nhớ gốc.</p>
-<pre><span class="tok-type">void</span> <span class="tok-function">tang</span>(<span class="tok-type">int</span> *x) { *x = *x + 1; }  <span class="tok-comment">// sửa qua con trỏ</span>
+<pre><code class="language-c"><span class="tok-type">void</span> <span class="tok-function">tang</span>(<span class="tok-type">int</span> *x) { *x = *x + 1; }  <span class="tok-comment">// sửa qua con trỏ</span>
 <span class="tok-type">int</span> n = 5;
 <span class="tok-function">tang</span>(&amp;n);              <span class="tok-comment">// truyền ĐỊA CHỈ của n</span>
-<span class="tok-function">printf</span>(<span class="tok-string">"%d"</span>, n);      <span class="tok-comment">// 6 — n đã đổi !</span></pre>
+<span class="tok-function">printf</span>(<span class="tok-string">"%d"</span>, n);      <span class="tok-comment">// 6 — n đã đổi !</span></code></pre>
 <div class="out"><b>Output:</b> 6</div>
 <h3>Ứng dụng kinh điển: hàm hoán đổi</h3>
-<pre><span class="tok-type">void</span> <span class="tok-function">swap</span>(<span class="tok-type">int</span> *a, <span class="tok-type">int</span> *b) {
+<pre><code class="language-java"><span class="tok-type">void</span> <span class="tok-function">swap</span>(<span class="tok-type">int</span> *a, <span class="tok-type">int</span> *b) {
     <span class="tok-type">int</span> t = *a; *a = *b; *b = t;
-}</pre>
+}</code></pre>
 <div class="pitfall">Không thể viết hàm <code>swap</code> hoạt động đúng nếu truyền theo giá trị — bên trong sẽ chỉ đổi hai bản sao. Bắt buộc dùng con trỏ. Đây là câu hỏi phỏng vấn/kiểm tra rất hay gặp.</div>
 </div>
 `,
@@ -1652,11 +1652,11 @@ a += 5;                    <span class="tok-comment">// a = a + 5 = 15</span></p
 <span class="eyebrow">Chapter 6 · Lesson 6.3</span>
 <h2>Dynamic allocation — <code>malloc</code> &amp; <code>free</code></h2>
 <p class="lead">Sometimes while writing code you <em>don't yet know</em> how many cells you need (e.g. how many elements the user enters at run time). <strong>Dynamic allocation</strong> lets you request memory at run time via <code>malloc</code>, and give it back with <code>free</code>.</p>
-<pre><span class="tok-keyword">#include</span> &lt;stdlib.h&gt;
+<pre><code class="language-c"><span class="tok-keyword">#include</span> &lt;stdlib.h&gt;
 <span class="tok-type">int</span> n = 5;
 <span class="tok-type">int</span> *a = (<span class="tok-type">int</span>*) <span class="tok-function">malloc</span>(n * <span class="tok-keyword">sizeof</span>(<span class="tok-type">int</span>)); <span class="tok-comment">// request an array of 5 ints</span>
 a[0] = 10;               <span class="tok-comment">// use it like a normal array</span>
-<span class="tok-function">free</span>(a);                 <span class="tok-comment">// return the memory when done</span></pre>
+<span class="tok-function">free</span>(a);                 <span class="tok-comment">// return the memory when done</span></code></pre>
 <div class="lz-flow">
   <div class="lz-step"><div class="lz-k">Request</div><div class="lz-t">malloc(...)</div><div class="lz-d">allocate a region</div></div>
   <div class="lz-step"><div class="lz-k">Use</div><div class="lz-t">a[i] = …</div><div class="lz-d">read/write like an array</div></div>
@@ -1669,11 +1669,11 @@ a[0] = 10;               <span class="tok-comment">// use it like a normal array
 <span class="eyebrow">Chương 6 · Bài 6.3</span>
 <h2>Cấp phát động — <code>malloc</code> &amp; <code>free</code></h2>
 <p class="lead">Đôi khi lúc viết code ta <em>chưa biết</em> cần bao nhiêu ô nhớ (vd: số phần tử người dùng nhập lúc chạy). <strong>Cấp phát động</strong> cho phép xin bộ nhớ khi chạy, qua <code>malloc</code>, và trả lại bằng <code>free</code>.</p>
-<pre><span class="tok-keyword">#include</span> &lt;stdlib.h&gt;
+<pre><code class="language-c"><span class="tok-keyword">#include</span> &lt;stdlib.h&gt;
 <span class="tok-type">int</span> n = 5;
 <span class="tok-type">int</span> *a = (<span class="tok-type">int</span>*) <span class="tok-function">malloc</span>(n * <span class="tok-keyword">sizeof</span>(<span class="tok-type">int</span>)); <span class="tok-comment">// xin mảng 5 int</span>
 a[0] = 10;               <span class="tok-comment">// dùng như mảng bình thường</span>
-<span class="tok-function">free</span>(a);                 <span class="tok-comment">// trả lại bộ nhớ khi xong</span></pre>
+<span class="tok-function">free</span>(a);                 <span class="tok-comment">// trả lại bộ nhớ khi xong</span></code></pre>
 <div class="lz-flow">
   <div class="lz-step"><div class="lz-k">Xin</div><div class="lz-t">malloc(...)</div><div class="lz-d">cấp một vùng nhớ</div></div>
   <div class="lz-step"><div class="lz-k">Dùng</div><div class="lz-t">a[i] = …</div><div class="lz-d">đọc/ghi như mảng</div></div>
@@ -1722,10 +1722,10 @@ a[0] = 10;               <span class="tok-comment">// dùng như mảng bình th
 <h2><code>stdlib.h</code> &amp; <code>time.h</code></h2>
 <p class="lead">The standard library gives you a wealth of ready-made functions — no reinventing the wheel. Just <code>#include</code> the right header.</p>
 <h3>Random numbers</h3>
-<pre><span class="tok-keyword">#include</span> &lt;stdlib.h&gt;
+<pre><code class="language-c"><span class="tok-keyword">#include</span> &lt;stdlib.h&gt;
 <span class="tok-keyword">#include</span> &lt;time.h&gt;
 <span class="tok-function">srand</span>(<span class="tok-function">time</span>(NULL));       <span class="tok-comment">// seed with the current time</span>
-<span class="tok-type">int</span> r = <span class="tok-function">rand</span>() % 6 + 1;  <span class="tok-comment">// a number 1..6 (dice)</span></pre>
+<span class="tok-type">int</span> r = <span class="tok-function">rand</span>() % 6 + 1;  <span class="tok-comment">// a number 1..6 (dice)</span></code></pre>
 <div class="callout"><code>rand() % n</code> gives a remainder 0..n-1. For 1..6 use <code>% 6 + 1</code>. Without calling <code>srand</code>, every run produces the exact same sequence.</div>
 <table>
   <thead><tr><th>Function</th><th>Purpose</th></tr></thead>
@@ -1742,10 +1742,10 @@ a[0] = 10;               <span class="tok-comment">// dùng như mảng bình th
 <h2><code>stdlib.h</code> &amp; <code>time.h</code></h2>
 <p class="lead">Thư viện chuẩn cho bạn hàng loạt hàm dùng sẵn — không phải phát minh lại bánh xe. Chỉ cần <code>#include</code> đúng header.</p>
 <h3>Số ngẫu nhiên</h3>
-<pre><span class="tok-keyword">#include</span> &lt;stdlib.h&gt;
+<pre><code class="language-c"><span class="tok-keyword">#include</span> &lt;stdlib.h&gt;
 <span class="tok-keyword">#include</span> &lt;time.h&gt;
 <span class="tok-function">srand</span>(<span class="tok-function">time</span>(NULL));       <span class="tok-comment">// gieo mầm theo thời gian</span>
-<span class="tok-type">int</span> r = <span class="tok-function">rand</span>() % 6 + 1;  <span class="tok-comment">// số 1..6 (xúc xắc)</span></pre>
+<span class="tok-type">int</span> r = <span class="tok-function">rand</span>() % 6 + 1;  <span class="tok-comment">// số 1..6 (xúc xắc)</span></code></pre>
 <div class="callout"><code>rand() % n</code> cho số dư 0..n-1. Muốn 1..6 thì <code>% 6 + 1</code>. Không gọi <code>srand</code> thì mỗi lần chạy ra dãy giống hệt nhau.</div>
 <table>
   <thead><tr><th>Hàm</th><th>Công dụng</th></tr></thead>
@@ -1768,9 +1768,9 @@ a[0] = 10;               <span class="tok-comment">// dùng như mảng bình th
 <div class="ml-en">
 <span class="eyebrow">Chapter 7 · Lesson 7.2</span>
 <h2><code>math.h</code> &amp; <code>ctype.h</code></h2>
-<pre><span class="tok-keyword">#include</span> &lt;math.h&gt;
+<pre><code class="language-c"><span class="tok-keyword">#include</span> &lt;math.h&gt;
 <span class="tok-function">printf</span>(<span class="tok-string">"%.2f\\n"</span>, <span class="tok-function">sqrt</span>(2));   <span class="tok-comment">// 1.41 — square root</span>
-<span class="tok-function">printf</span>(<span class="tok-string">"%.0f\\n"</span>, <span class="tok-function">pow</span>(2, 10)); <span class="tok-comment">// 1024 — power</span></pre>
+<span class="tok-function">printf</span>(<span class="tok-string">"%.0f\\n"</span>, <span class="tok-function">pow</span>(2, 10)); <span class="tok-comment">// 1024 — power</span></code></pre>
 <div class="out"><b>Output:</b> 1.41<br>1024</div>
 <table>
   <thead><tr><th>math.h</th><th>ctype.h</th></tr></thead>
@@ -1791,9 +1791,9 @@ a[0] = 10;               <span class="tok-comment">// dùng như mảng bình th
 <div class="ml-vi">
 <span class="eyebrow">Chương 7 · Bài 7.2</span>
 <h2><code>math.h</code> &amp; <code>ctype.h</code></h2>
-<pre><span class="tok-keyword">#include</span> &lt;math.h&gt;
+<pre><code class="language-c"><span class="tok-keyword">#include</span> &lt;math.h&gt;
 <span class="tok-function">printf</span>(<span class="tok-string">"%.2f\\n"</span>, <span class="tok-function">sqrt</span>(2));   <span class="tok-comment">// 1.41 — căn bậc hai</span>
-<span class="tok-function">printf</span>(<span class="tok-string">"%.0f\\n"</span>, <span class="tok-function">pow</span>(2, 10)); <span class="tok-comment">// 1024 — luỹ thừa</span></pre>
+<span class="tok-function">printf</span>(<span class="tok-string">"%.0f\\n"</span>, <span class="tok-function">pow</span>(2, 10)); <span class="tok-comment">// 1024 — luỹ thừa</span></code></pre>
 <div class="out"><b>Output:</b> 1.41<br>1024</div>
 <table>
   <thead><tr><th>math.h</th><th>ctype.h</th></tr></thead>
@@ -1857,9 +1857,9 @@ a[0] = 10;               <span class="tok-comment">// dùng như mảng bình th
   <div class="lz-layer"><span class="lz-lname">a[1] … a[n-2]</span><span class="lz-lnote">the middle elements</span></div>
   <div class="lz-layer"><span class="lz-lname">a[n-1]</span><span class="lz-lnote">the last element (NOT a[n])</span></div>
 </div>
-<pre><span class="tok-type">int</span> a[5] = {10, 20, 30, 40, 50};
+<pre><code class="language-c"><span class="tok-type">int</span> a[5] = {10, 20, 30, 40, 50};
 <span class="tok-keyword">for</span> (<span class="tok-type">int</span> i = 0; i &lt; 5; i++)
-    <span class="tok-function">printf</span>(<span class="tok-string">"%d "</span>, a[i]);   <span class="tok-comment">// traverse the array</span></pre>
+    <span class="tok-function">printf</span>(<span class="tok-string">"%d "</span>, a[i]);   <span class="tok-comment">// traverse the array</span></code></pre>
 <div class="out"><b>Output:</b> 10 20 30 40 50</div>
 <div class="pitfall">Array <code>a[5]</code> has valid indices 0..4. Accessing <code>a[5]</code> is <strong>out of bounds</strong> — C doesn't error, it just reads/writes some other memory cell, causing hard-to-find bugs. Always keep loops within <code>i &lt; n</code>.</div>
 </div>
@@ -1872,9 +1872,9 @@ a[0] = 10;               <span class="tok-comment">// dùng như mảng bình th
   <div class="lz-layer"><span class="lz-lname">a[1] … a[n-2]</span><span class="lz-lnote">các phần tử giữa</span></div>
   <div class="lz-layer"><span class="lz-lname">a[n-1]</span><span class="lz-lnote">phần tử cuối (KHÔNG phải a[n])</span></div>
 </div>
-<pre><span class="tok-type">int</span> a[5] = {10, 20, 30, 40, 50};
+<pre><code class="language-c"><span class="tok-type">int</span> a[5] = {10, 20, 30, 40, 50};
 <span class="tok-keyword">for</span> (<span class="tok-type">int</span> i = 0; i &lt; 5; i++)
-    <span class="tok-function">printf</span>(<span class="tok-string">"%d "</span>, a[i]);   <span class="tok-comment">// duyệt mảng</span></pre>
+    <span class="tok-function">printf</span>(<span class="tok-string">"%d "</span>, a[i]);   <span class="tok-comment">// duyệt mảng</span></code></pre>
 <div class="out"><b>Output:</b> 10 20 30 40 50</div>
 <div class="pitfall">Mảng <code>a[5]</code> có chỉ số hợp lệ 0..4. Truy cập <code>a[5]</code> là <strong>tràn mảng</strong> (out of bounds) — C không báo lỗi mà đọc/ghi bừa vào ô nhớ khác, gây bug khó tìm. Luôn kiểm soát vòng lặp <code>i &lt; n</code>.</div>
 </div>
@@ -1890,12 +1890,12 @@ a[0] = 10;               <span class="tok-comment">// dùng như mảng bình th
 <span class="eyebrow">Chapter 8 · Lesson 8.2</span>
 <h2>Matrices — 2D arrays</h2>
 <p class="lead">A 2D array <code>a[row][col]</code> stores data as a table — like a grid of many subjects' scores for many students.</p>
-<pre><span class="tok-type">int</span> m[2][3] = {{1,2,3},{4,5,6}};
+<pre><code class="language-c"><span class="tok-type">int</span> m[2][3] = {{1,2,3},{4,5,6}};
 <span class="tok-keyword">for</span> (<span class="tok-type">int</span> i = 0; i &lt; 2; i++) {
     <span class="tok-keyword">for</span> (<span class="tok-type">int</span> j = 0; j &lt; 3; j++)
         <span class="tok-function">printf</span>(<span class="tok-string">"%d "</span>, m[i][j]);
     <span class="tok-function">printf</span>(<span class="tok-string">"\\n"</span>);
-}</pre>
+}</code></pre>
 <div class="out"><b>Output:</b><br>1 2 3<br>4 5 6</div>
 <div class="note-ct">Traversing a matrix needs <strong>nested loops</strong>: the outer loop over rows, the inner over columns. Master this pattern and you can do every matrix problem (add, transpose, find max…).</div>
 </div>
@@ -1903,12 +1903,12 @@ a[0] = 10;               <span class="tok-comment">// dùng như mảng bình th
 <span class="eyebrow">Chương 8 · Bài 8.2</span>
 <h2>Ma trận — mảng hai chiều</h2>
 <p class="lead">Mảng 2 chiều <code>a[hàng][cột]</code> lưu dữ liệu dạng bảng — như bảng điểm nhiều môn của nhiều sinh viên.</p>
-<pre><span class="tok-type">int</span> m[2][3] = {{1,2,3},{4,5,6}};
+<pre><code class="language-c"><span class="tok-type">int</span> m[2][3] = {{1,2,3},{4,5,6}};
 <span class="tok-keyword">for</span> (<span class="tok-type">int</span> i = 0; i &lt; 2; i++) {
     <span class="tok-keyword">for</span> (<span class="tok-type">int</span> j = 0; j &lt; 3; j++)
         <span class="tok-function">printf</span>(<span class="tok-string">"%d "</span>, m[i][j]);
     <span class="tok-function">printf</span>(<span class="tok-string">"\\n"</span>);
-}</pre>
+}</code></pre>
 <div class="out"><b>Output:</b><br>1 2 3<br>4 5 6</div>
 <div class="note-ct">Duyệt ma trận cần <strong>vòng lặp lồng nhau</strong>: vòng ngoài đi qua hàng, vòng trong đi qua cột. Nắm mẫu này là làm được mọi bài ma trận (cộng, chuyển vị, tìm max…).</div>
 </div>
@@ -1925,8 +1925,8 @@ a[0] = 10;               <span class="tok-comment">// dùng như mảng bình th
 <h2>Linear search &amp; selection sort</h2>
 <h3>Linear search</h3>
 <p>Scan each element in turn until you meet the value you're looking for.</p>
-<pre><span class="tok-keyword">for</span> (<span class="tok-type">int</span> i = 0; i &lt; n; i++)
-    <span class="tok-keyword">if</span> (a[i] == x) { <span class="tok-function">printf</span>(<span class="tok-string">"Thay o vi tri %d"</span>, i); <span class="tok-keyword">break</span>; }</pre>
+<pre><code class="language-c"><span class="tok-keyword">for</span> (<span class="tok-type">int</span> i = 0; i &lt; n; i++)
+    <span class="tok-keyword">if</span> (a[i] == x) { <span class="tok-function">printf</span>(<span class="tok-string">"Thay o vi tri %d"</span>, i); <span class="tok-keyword">break</span>; }</code></pre>
 <h3>Selection sort</h3>
 <div class="lz-flow">
   <div class="lz-step"><div class="lz-k">Step</div><div class="lz-t">Find the smallest</div><div class="lz-d">in the unsorted part</div></div>
@@ -1946,8 +1946,8 @@ a[0] = 10;               <span class="tok-comment">// dùng như mảng bình th
 <h2>Tìm kiếm tuyến tính &amp; sắp xếp chọn</h2>
 <h3>Tìm kiếm tuyến tính (linear search)</h3>
 <p>Duyệt lần lượt từng phần tử tới khi gặp giá trị cần tìm.</p>
-<pre><span class="tok-keyword">for</span> (<span class="tok-type">int</span> i = 0; i &lt; n; i++)
-    <span class="tok-keyword">if</span> (a[i] == x) { <span class="tok-function">printf</span>(<span class="tok-string">"Thay o vi tri %d"</span>, i); <span class="tok-keyword">break</span>; }</pre>
+<pre><code class="language-c"><span class="tok-keyword">for</span> (<span class="tok-type">int</span> i = 0; i &lt; n; i++)
+    <span class="tok-keyword">if</span> (a[i] == x) { <span class="tok-function">printf</span>(<span class="tok-string">"Thay o vi tri %d"</span>, i); <span class="tok-keyword">break</span>; }</code></pre>
 <h3>Sắp xếp chọn (selection sort)</h3>
 <div class="lz-flow">
   <div class="lz-step"><div class="lz-k">Bước</div><div class="lz-t">Tìm nhỏ nhất</div><div class="lz-d">trong phần chưa sắp</div></div>
@@ -1974,14 +1974,14 @@ a[0] = 10;               <span class="tok-comment">// dùng như mảng bình th
 <span class="eyebrow">Chapter 8 · Lesson 8.4</span>
 <h2><code>struct</code> — organising composite data</h2>
 <p class="lead">Arrays store many elements of the <em>same type</em>. But a "student" has several fields of <em>different types</em>: name (string), age (int), score (float). A <strong>struct</strong> groups them into a new type.</p>
-<pre><span class="tok-keyword">struct</span> SinhVien {
+<pre><code class="language-c"><span class="tok-keyword">struct</span> SinhVien {
     <span class="tok-type">char</span> ten[50];
     <span class="tok-type">int</span> tuoi;
     <span class="tok-type">float</span> diem;
 };
 
 <span class="tok-keyword">struct</span> SinhVien sv = {<span class="tok-string">"An"</span>, 20, 8.5};
-<span class="tok-function">printf</span>(<span class="tok-string">"%s - %.1f"</span>, sv.ten, sv.diem); <span class="tok-comment">// access with the . operator</span></pre>
+<span class="tok-function">printf</span>(<span class="tok-string">"%s - %.1f"</span>, sv.ten, sv.diem); <span class="tok-comment">// access with the . operator</span></code></pre>
 <div class="out"><b>Output:</b> An - 8.5</div>
 <div class="callout">The most powerful combo: an <strong>array of structs</strong> — <code>struct SinhVien ds[100];</code> to manage a whole list of students. That is exactly the Workshop 3 task.</div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>sizeof(struct) is not always the sum of its fields.</b> A <code>struct { char c; int n; }</code> looks like 1+4=5 bytes, but <code>sizeof</code> usually reports 8: the compiler inserts <strong>padding</strong> so <code>int n</code> starts at a 4-byte-aligned address (CPUs read aligned memory faster — CEA201). <em>Reordering fields from biggest to smallest often shrinks a struct's memory footprint with zero behavior change — a real technique in memory-constrained code like IOT102.</em></div>
@@ -1990,14 +1990,14 @@ a[0] = 10;               <span class="tok-comment">// dùng như mảng bình th
 <span class="eyebrow">Chương 8 · Bài 8.4</span>
 <h2><code>struct</code> — tổ chức dữ liệu phức hợp</h2>
 <p class="lead">Mảng lưu nhiều phần tử <em>cùng kiểu</em>. Nhưng một "sinh viên" gồm nhiều thông tin <em>khác kiểu</em>: tên (chuỗi), tuổi (int), điểm (float). <strong>struct</strong> gom chúng thành một kiểu mới.</p>
-<pre><span class="tok-keyword">struct</span> SinhVien {
+<pre><code class="language-c"><span class="tok-keyword">struct</span> SinhVien {
     <span class="tok-type">char</span> ten[50];
     <span class="tok-type">int</span> tuoi;
     <span class="tok-type">float</span> diem;
 };
 
 <span class="tok-keyword">struct</span> SinhVien sv = {<span class="tok-string">"An"</span>, 20, 8.5};
-<span class="tok-function">printf</span>(<span class="tok-string">"%s - %.1f"</span>, sv.ten, sv.diem); <span class="tok-comment">// truy cập bằng dấu .</span></pre>
+<span class="tok-function">printf</span>(<span class="tok-string">"%s - %.1f"</span>, sv.ten, sv.diem); <span class="tok-comment">// truy cập bằng dấu .</span></code></pre>
 <div class="out"><b>Output:</b> An - 8.5</div>
 <div class="callout">Kết hợp mạnh nhất: <strong>mảng struct</strong> — <code>struct SinhVien ds[100];</code> để quản lý cả danh sách sinh viên. Đây chính là đề Workshop 3.</div>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>sizeof(struct) không phải luôn bằng tổng các trường.</b> Một <code>struct { char c; int n; }</code> trông như 1+4=5 byte, nhưng <code>sizeof</code> thường báo 8: compiler chèn <strong>padding</strong> để <code>int n</code> bắt đầu tại địa chỉ căn 4 byte (CPU đọc bộ nhớ căn chỉnh nhanh hơn — CEA201). <em>Sắp xếp lại các trường từ to tới nhỏ thường thu nhỏ dung lượng struct mà hành vi không đổi — một kỹ thuật thật trong code hạn chế bộ nhớ như IOT102.</em></div>
@@ -2104,9 +2104,9 @@ a[0] = 10;               <span class="tok-comment">// dùng như mảng bình th
   <div class="lz-layer"><span class="lz-lname">'A' 'n' 'h'</span><span class="lz-lnote">the characters of the string "Anh"</span></div>
   <div class="lz-layer"><span class="lz-lname">'\\0'</span><span class="lz-lnote">null — marks the END of the string</span></div>
 </div>
-<pre><span class="tok-type">char</span> ten[50] = <span class="tok-string">"Anh"</span>;   <span class="tok-comment">// '\\0' is added automatically at the end</span>
+<pre><code class="language-c"><span class="tok-type">char</span> ten[50] = <span class="tok-string">"Anh"</span>;   <span class="tok-comment">// '\\0' is added automatically at the end</span>
 <span class="tok-function">printf</span>(<span class="tok-string">"%s"</span>, ten);         <span class="tok-comment">// prints until it meets '\\0'</span>
-<span class="tok-function">scanf</span>(<span class="tok-string">"%s"</span>, ten);          <span class="tok-comment">// reads 1 word (stops at a space)</span></pre>
+<span class="tok-function">scanf</span>(<span class="tok-string">"%s"</span>, ten);          <span class="tok-comment">// reads 1 word (stops at a space)</span></code></pre>
 <div class="pitfall"><code>scanf("%s", ten)</code> only reads up to the first space — entering "Nguyen Van A" gets only "Nguyen". To read a full line with spaces, use <code>fgets(ten, 50, stdin)</code>. Note <code>%s</code> needs no <code>&amp;</code> because an array name is already an address.</div>
 </div>
 <div class="ml-vi">
@@ -2117,9 +2117,9 @@ a[0] = 10;               <span class="tok-comment">// dùng như mảng bình th
   <div class="lz-layer"><span class="lz-lname">'A' 'n' 'h'</span><span class="lz-lnote">các ký tự của chuỗi "Anh"</span></div>
   <div class="lz-layer"><span class="lz-lname">'\\0'</span><span class="lz-lnote">null — đánh dấu KẾT THÚC chuỗi</span></div>
 </div>
-<pre><span class="tok-type">char</span> ten[50] = <span class="tok-string">"Anh"</span>;   <span class="tok-comment">// tự thêm '\\0' ở cuối</span>
+<pre><code class="language-c"><span class="tok-type">char</span> ten[50] = <span class="tok-string">"Anh"</span>;   <span class="tok-comment">// tự thêm '\\0' ở cuối</span>
 <span class="tok-function">printf</span>(<span class="tok-string">"%s"</span>, ten);         <span class="tok-comment">// in tới khi gặp '\\0'</span>
-<span class="tok-function">scanf</span>(<span class="tok-string">"%s"</span>, ten);          <span class="tok-comment">// đọc 1 từ (dừng ở dấu cách)</span></pre>
+<span class="tok-function">scanf</span>(<span class="tok-string">"%s"</span>, ten);          <span class="tok-comment">// đọc 1 từ (dừng ở dấu cách)</span></code></pre>
 <div class="pitfall"><code>scanf("%s", ten)</code> chỉ đọc tới dấu cách đầu tiên — nhập "Nguyen Van A" chỉ lấy "Nguyen". Muốn đọc cả dòng có dấu cách, dùng <code>fgets(ten, 50, stdin)</code>. Lưu ý <code>%s</code> không cần <code>&amp;</code> vì tên mảng đã là địa chỉ.</div>
 </div>
 `,
@@ -2143,9 +2143,9 @@ a[0] = 10;               <span class="tok-comment">// dùng như mảng bình th
     <tr><td><code>strcmp(a, b)</code></td><td>compare (0 if equal)</td></tr>
   </tbody>
 </table>
-<pre><span class="tok-keyword">#include</span> &lt;string.h&gt;
+<pre><code class="language-c"><span class="tok-keyword">#include</span> &lt;string.h&gt;
 <span class="tok-type">char</span> s[50] = <span class="tok-string">"Hello"</span>;
-<span class="tok-function">printf</span>(<span class="tok-string">"%d"</span>, <span class="tok-function">strlen</span>(s));  <span class="tok-comment">// 5</span></pre>
+<span class="tok-function">printf</span>(<span class="tok-string">"%d"</span>, <span class="tok-function">strlen</span>(s));  <span class="tok-comment">// 5</span></code></pre>
 <div class="out"><b>Output:</b> 5</div>
 <div class="pitfall">To compare two strings you must use <code>strcmp(a, b) == 0</code>, NOT <code>a == b</code> (that compares addresses and is almost always wrong). A very common trap.</div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>strcpy has no bounds check — a real security bug family.</b> <code>strcpy(a, b)</code> copies until it hits <code>b</code>'s <code>'\\0'</code>, no matter how small <code>a</code> is — if <code>b</code> is longer than <code>a</code>'s buffer, it overwrites whatever memory comes after, which can corrupt other variables or even the return address on the stack. Modern C prefers <code>strncpy(a, b, sizeof(a)-1)</code> (and still must manually add the <code>'\\0'</code>). <em>This exact bug — an unchecked copy — is the root cause behind decades of real-world buffer-overflow exploits.</em></div>
@@ -2163,9 +2163,9 @@ a[0] = 10;               <span class="tok-comment">// dùng như mảng bình th
     <tr><td><code>strcmp(a, b)</code></td><td>so sánh (0 nếu bằng)</td></tr>
   </tbody>
 </table>
-<pre><span class="tok-keyword">#include</span> &lt;string.h&gt;
+<pre><code class="language-c"><span class="tok-keyword">#include</span> &lt;string.h&gt;
 <span class="tok-type">char</span> s[50] = <span class="tok-string">"Hello"</span>;
-<span class="tok-function">printf</span>(<span class="tok-string">"%d"</span>, <span class="tok-function">strlen</span>(s));  <span class="tok-comment">// 5</span></pre>
+<span class="tok-function">printf</span>(<span class="tok-string">"%d"</span>, <span class="tok-function">strlen</span>(s));  <span class="tok-comment">// 5</span></code></pre>
 <div class="out"><b>Output:</b> 5</div>
 <div class="pitfall">So sánh hai chuỗi phải dùng <code>strcmp(a, b) == 0</code>, KHÔNG dùng <code>a == b</code> (cái đó so sánh địa chỉ, gần như luôn sai). Đây là bẫy rất phổ biến.</div>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>strcpy không kiểm giới hạn — cả một họ lỗi bảo mật thật.</b> <code>strcpy(a, b)</code> chép tới khi gặp <code>'\\0'</code> của <code>b</code>, bất kể <code>a</code> nhỏ cỡ nào — nếu <code>b</code> dài hơn bộ đệm của <code>a</code>, nó ghi đè lên bất cứ vùng nhớ nào phía sau, có thể phá hỏng biến khác hoặc cả địa chỉ trả về trên stack. C hiện đại ưu tiên <code>strncpy(a, b, sizeof(a)-1)</code> (và vẫn phải tự thêm <code>'\\0'</code>). <em>Đúng lỗi này — copy không kiểm tra — là gốc rễ sau hàng chục năm lỗ hổng tràn bộ đệm thực tế.</em></div>
@@ -2286,17 +2286,17 @@ a[0] = 10;               <span class="tok-comment">// dùng như mảng bình th
 <span class="eyebrow">Chapter 10 · Lesson 10.2</span>
 <h2>Open, read, write, close a file</h2>
 <h3>Writing to a file</h3>
-<pre>FILE *f = <span class="tok-function">fopen</span>(<span class="tok-string">"diem.txt"</span>, <span class="tok-string">"w"</span>); <span class="tok-comment">// "w" = write (overwrite)</span>
+<pre><code class="language-c">FILE *f = <span class="tok-function">fopen</span>(<span class="tok-string">"diem.txt"</span>, <span class="tok-string">"w"</span>); <span class="tok-comment">// "w" = write (overwrite)</span>
 <span class="tok-keyword">if</span> (f != NULL) {
     <span class="tok-function">fprintf</span>(f, <span class="tok-string">"An 8.5\\n"</span>);
     <span class="tok-function">fclose</span>(f);
-}</pre>
+}</code></pre>
 <h3>Reading from a file</h3>
-<pre>FILE *f = <span class="tok-function">fopen</span>(<span class="tok-string">"diem.txt"</span>, <span class="tok-string">"r"</span>); <span class="tok-comment">// "r" = read</span>
+<pre><code class="language-c">FILE *f = <span class="tok-function">fopen</span>(<span class="tok-string">"diem.txt"</span>, <span class="tok-string">"r"</span>); <span class="tok-comment">// "r" = read</span>
 <span class="tok-type">char</span> ten[50]; <span class="tok-type">float</span> d;
 <span class="tok-keyword">while</span> (<span class="tok-function">fscanf</span>(f, <span class="tok-string">"%s %f"</span>, ten, &amp;d) == 2)
     <span class="tok-function">printf</span>(<span class="tok-string">"%s: %.1f\\n"</span>, ten, d);
-<span class="tok-function">fclose</span>(f);</pre>
+<span class="tok-function">fclose</span>(f);</code></pre>
 <table>
   <thead><tr><th>Mode</th><th>Meaning</th></tr></thead>
   <tbody>
@@ -2311,17 +2311,17 @@ a[0] = 10;               <span class="tok-comment">// dùng như mảng bình th
 <span class="eyebrow">Chương 10 · Bài 10.2</span>
 <h2>Mở, đọc, ghi, đóng file</h2>
 <h3>Ghi ra file</h3>
-<pre>FILE *f = <span class="tok-function">fopen</span>(<span class="tok-string">"diem.txt"</span>, <span class="tok-string">"w"</span>); <span class="tok-comment">// "w" = ghi (ghi đè)</span>
+<pre><code class="language-c">FILE *f = <span class="tok-function">fopen</span>(<span class="tok-string">"diem.txt"</span>, <span class="tok-string">"w"</span>); <span class="tok-comment">// "w" = ghi (ghi đè)</span>
 <span class="tok-keyword">if</span> (f != NULL) {
     <span class="tok-function">fprintf</span>(f, <span class="tok-string">"An 8.5\\n"</span>);
     <span class="tok-function">fclose</span>(f);
-}</pre>
+}</code></pre>
 <h3>Đọc từ file</h3>
-<pre>FILE *f = <span class="tok-function">fopen</span>(<span class="tok-string">"diem.txt"</span>, <span class="tok-string">"r"</span>); <span class="tok-comment">// "r" = đọc</span>
+<pre><code class="language-c">FILE *f = <span class="tok-function">fopen</span>(<span class="tok-string">"diem.txt"</span>, <span class="tok-string">"r"</span>); <span class="tok-comment">// "r" = đọc</span>
 <span class="tok-type">char</span> ten[50]; <span class="tok-type">float</span> d;
 <span class="tok-keyword">while</span> (<span class="tok-function">fscanf</span>(f, <span class="tok-string">"%s %f"</span>, ten, &amp;d) == 2)
     <span class="tok-function">printf</span>(<span class="tok-string">"%s: %.1f\\n"</span>, ten, d);
-<span class="tok-function">fclose</span>(f);</pre>
+<span class="tok-function">fclose</span>(f);</code></pre>
 <table>
   <thead><tr><th>Chế độ</th><th>Ý nghĩa</th></tr></thead>
   <tbody>
@@ -2416,7 +2416,7 @@ a[0] = 10;               <span class="tok-comment">// dùng như mảng bình th
 <h3>Reading error messages</h3>
 <p>The compiler reports errors with a <strong>line number</strong>. Always read the <em>first</em> error first — later ones are usually consequences. The real error may be on the line <em>just before</em> the reported one (e.g. a missing <code>;</code>).</p>
 <h3>Debugging with printf</h3>
-<pre><span class="tok-function">printf</span>(<span class="tok-string">"DEBUG: i=%d, tong=%d\\n"</span>, i, tong); <span class="tok-comment">// print the state mid-way</span></pre>
+<pre><code class="language-c"><span class="tok-function">printf</span>(<span class="tok-string">"DEBUG: i=%d, tong=%d\\n"</span>, i, tong); <span class="tok-comment">// print the state mid-way</span></code></pre>
 <div class="note-ct">A simple but powerful technique: sprinkle <code>printf</code> to see variable values at each step and pin down where a value first goes wrong. Later you'll learn a debugger with breakpoints, but the "print to inspect" mindset is always useful.</div>
 <a class="link-card codelab" href="/code-lab/c?ref=%2Fcourses%2Fprogramming-fundamentals%2Flearn&reflabel=PRF192%20%E2%80%94%20C%C6%A1%20s%E1%BB%9F%20l%E1%BA%ADp%20tr%C3%ACnh#module-579" target="_blank" rel="noopener">
   <span class="lc-ico">🐞</span>
@@ -2436,7 +2436,7 @@ a[0] = 10;               <span class="tok-comment">// dùng như mảng bình th
 <h3>Đọc thông báo lỗi</h3>
 <p>Compiler báo lỗi kèm <strong>số dòng</strong>. Luôn đọc <em>lỗi đầu tiên</em> trước — các lỗi sau thường là hệ quả. Lỗi thật có thể ở dòng <em>ngay trước</em> dòng báo (vd thiếu <code>;</code>).</p>
 <h3>Debug bằng printf</h3>
-<pre><span class="tok-function">printf</span>(<span class="tok-string">"DEBUG: i=%d, tong=%d\\n"</span>, i, tong); <span class="tok-comment">// in trạng thái giữa chừng</span></pre>
+<pre><code class="language-c"><span class="tok-function">printf</span>(<span class="tok-string">"DEBUG: i=%d, tong=%d\\n"</span>, i, tong); <span class="tok-comment">// in trạng thái giữa chừng</span></code></pre>
 <div class="note-ct">Kỹ thuật đơn giản mà mạnh: rải <code>printf</code> để xem giá trị biến ở từng bước, khoanh vùng chỗ giá trị bắt đầu sai. Sau này bạn sẽ học trình gỡ lỗi (debugger) đặt breakpoint, nhưng tư duy "in ra để soi" luôn hữu dụng.</p></div>
 <a class="link-card codelab" href="/code-lab/c?ref=%2Fcourses%2Fprogramming-fundamentals%2Flearn&reflabel=PRF192%20%E2%80%94%20C%C6%A1%20s%E1%BB%9F%20l%E1%BA%ADp%20tr%C3%ACnh#module-579" target="_blank" rel="noopener">
   <span class="lc-ico">🐞</span>
@@ -2510,10 +2510,10 @@ a[0] = 10;               <span class="tok-comment">// dùng như mảng bình th
 </div>
 <h3>Why do local variables "vanish"?</h3>
 <p>Local variables live on the <strong>stack</strong>; when the function ends, its stack region is reclaimed. So <strong>never return the address of a local variable</strong> from a function:</p>
-<pre><span class="tok-type">int</span>* <span class="tok-function">sai</span>() {
+<pre><code class="language-c"><span class="tok-type">int</span>* <span class="tok-function">sai</span>() {
     <span class="tok-type">int</span> x = 5;
     <span class="tok-keyword">return</span> &amp;x;   <span class="tok-comment">// DANGEROUS: x vanishes after the function returns</span>
-}</pre>
+}</code></pre>
 <h3>Three common memory bugs</h3>
 <div class="lz-map">
   <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Memory leak</div><div class="lz-nsub">malloc but forget free → eats RAM over time</div></div></div>
@@ -2532,10 +2532,10 @@ a[0] = 10;               <span class="tok-comment">// dùng như mảng bình th
 </div>
 <h3>Vì sao biến cục bộ "biến mất"?</h3>
 <p>Biến cục bộ nằm trên <strong>stack</strong>; khi hàm kết thúc, vùng stack của nó bị thu hồi. Vì vậy <strong>đừng trả về địa chỉ biến cục bộ</strong> từ một hàm:</p>
-<pre><span class="tok-type">int</span>* <span class="tok-function">sai</span>() {
+<pre><code class="language-c"><span class="tok-type">int</span>* <span class="tok-function">sai</span>() {
     <span class="tok-type">int</span> x = 5;
     <span class="tok-keyword">return</span> &amp;x;   <span class="tok-comment">// NGUY HIỂM: x biến mất sau khi hàm return</span>
-}</pre>
+}</code></pre>
 <h3>Ba lỗi bộ nhớ hay gặp</h3>
 <div class="lz-map">
   <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Memory leak</div><div class="lz-nsub">malloc mà quên free → ngốn RAM dần</div></div></div>
@@ -2563,17 +2563,17 @@ a[0] = 10;               <span class="tok-comment">// dùng như mảng bình th
 <h2>Advanced pointers</h2>
 <h3>The array &amp; pointer relationship</h3>
 <p class="lead">An array name is really the <strong>address of the first element</strong>. So <code>a[i]</code> is equivalent to <code>*(a + i)</code>.</p>
-<pre><span class="tok-type">int</span> a[3] = {10, 20, 30};
-<span class="tok-function">printf</span>(<span class="tok-string">"%d"</span>, *(a + 1)); <span class="tok-comment">// 20 — same as a[1]</span></pre>
+<pre><code class="language-c"><span class="tok-type">int</span> a[3] = {10, 20, 30};
+<span class="tok-function">printf</span>(<span class="tok-string">"%d"</span>, *(a + 1)); <span class="tok-comment">// 20 — same as a[1]</span></code></pre>
 <h3>Multi-level pointers (pointer to pointer)</h3>
-<pre><span class="tok-type">int</span> n = 5;
+<pre><code class="language-c"><span class="tok-type">int</span> n = 5;
 <span class="tok-type">int</span> *p = &amp;n;
 <span class="tok-type">int</span> **pp = &amp;p;    <span class="tok-comment">// pp points to p</span>
-<span class="tok-function">printf</span>(<span class="tok-string">"%d"</span>, **pp); <span class="tok-comment">// 5</span></pre>
+<span class="tok-function">printf</span>(<span class="tok-string">"%d"</span>, **pp); <span class="tok-comment">// 5</span></code></pre>
 <h3>Function pointers (callbacks)</h3>
 <p>A pointer can also point to a <em>function</em>, letting you "pass behaviour" as a parameter — the basis of callbacks, very handy for custom sorting.</p>
-<pre><span class="tok-type">void</span> (*fp)(<span class="tok-type">int</span>) = &amp;<span class="tok-function">tang</span>; <span class="tok-comment">// fp points to the tang function</span>
-fp(5);                        <span class="tok-comment">// call through the function pointer</span></pre>
+<pre><code class="language-c"><span class="tok-type">void</span> (*fp)(<span class="tok-type">int</span>) = &amp;<span class="tok-function">tang</span>; <span class="tok-comment">// fp points to the tang function</span>
+fp(5);                        <span class="tok-comment">// call through the function pointer</span></code></pre>
 <div class="note-ct">This goes beyond PRF192 requirements but is very valuable: understanding array = pointer lets you read others' C code fluently, and function pointers are a stepping stone to higher-order thinking in modern languages.</div>
 </div>
 <div class="ml-vi">
@@ -2581,17 +2581,17 @@ fp(5);                        <span class="tok-comment">// call through the func
 <h2>Con trỏ nâng cao</h2>
 <h3>Quan hệ mảng &amp; con trỏ</h3>
 <p class="lead">Tên mảng thực chất là <strong>địa chỉ phần tử đầu</strong>. Vì vậy <code>a[i]</code> tương đương <code>*(a + i)</code>.</p>
-<pre><span class="tok-type">int</span> a[3] = {10, 20, 30};
-<span class="tok-function">printf</span>(<span class="tok-string">"%d"</span>, *(a + 1)); <span class="tok-comment">// 20 — giống a[1]</span></pre>
+<pre><code class="language-c"><span class="tok-type">int</span> a[3] = {10, 20, 30};
+<span class="tok-function">printf</span>(<span class="tok-string">"%d"</span>, *(a + 1)); <span class="tok-comment">// 20 — giống a[1]</span></code></pre>
 <h3>Con trỏ đa cấp (con trỏ tới con trỏ)</h3>
-<pre><span class="tok-type">int</span> n = 5;
+<pre><code class="language-c"><span class="tok-type">int</span> n = 5;
 <span class="tok-type">int</span> *p = &amp;n;
 <span class="tok-type">int</span> **pp = &amp;p;    <span class="tok-comment">// pp trỏ tới p</span>
-<span class="tok-function">printf</span>(<span class="tok-string">"%d"</span>, **pp); <span class="tok-comment">// 5</span></pre>
+<span class="tok-function">printf</span>(<span class="tok-string">"%d"</span>, **pp); <span class="tok-comment">// 5</span></code></pre>
 <h3>Con trỏ hàm (callback)</h3>
 <p>Con trỏ còn có thể trỏ tới một <em>hàm</em>, cho phép "truyền hành vi" như tham số — nền tảng của callback, rất hay dùng khi sắp xếp tuỳ biến.</p>
-<pre><span class="tok-type">void</span> (*fp)(<span class="tok-type">int</span>) = &amp;<span class="tok-function">tang</span>; <span class="tok-comment">// fp trỏ tới hàm tang</span>
-fp(5);                        <span class="tok-comment">// gọi qua con trỏ hàm</span></pre>
+<pre><code class="language-c"><span class="tok-type">void</span> (*fp)(<span class="tok-type">int</span>) = &amp;<span class="tok-function">tang</span>; <span class="tok-comment">// fp trỏ tới hàm tang</span>
+fp(5);                        <span class="tok-comment">// gọi qua con trỏ hàm</span></code></pre>
 <div class="note-ct">Đây là kiến thức vượt yêu cầu PRF192 nhưng cực giá trị: hiểu mảng = con trỏ giúp bạn đọc code C của người khác trôi chảy, và con trỏ hàm là bước đệm tới tư duy hàm bậc cao ở các ngôn ngữ hiện đại.</div>
 </div>
 `,
@@ -2624,8 +2624,8 @@ fp(5);                        <span class="tok-comment">// gọi qua con trỏ h
 <span class="tok-comment">// declarations here</span>
 <span class="tok-keyword">#endif</span></pre>
 <h3>Makefile — build with one command</h3>
-<pre>all:
-	gcc main.c sinhvien.c -o app</pre>
+<pre><code class="language-bash">all:
+	gcc main.c sinhvien.c -o app</code></pre>
 <p>Type <code>make</code> to build the whole project instead of typing each file by hand.</p>
 <div class="lz-flow">
   <div class="lz-step"><div class="lz-k">Write</div><div class="lz-t">Several .c / .h</div><div class="lz-d">split by feature</div></div>
@@ -2655,8 +2655,8 @@ fp(5);                        <span class="tok-comment">// gọi qua con trỏ h
 <span class="tok-comment">// khai báo ở đây</span>
 <span class="tok-keyword">#endif</span></pre>
 <h3>Makefile — biên dịch một lệnh</h3>
-<pre>all:
-	gcc main.c sinhvien.c -o app</pre>
+<pre><code class="language-bash">all:
+	gcc main.c sinhvien.c -o app</code></pre>
 <p>Gõ <code>make</code> để biên dịch cả dự án thay vì gõ tay từng file.</p>
 <div class="lz-flow">
   <div class="lz-step"><div class="lz-k">Viết</div><div class="lz-t">Nhiều .c / .h</div><div class="lz-d">chia theo chức năng</div></div>

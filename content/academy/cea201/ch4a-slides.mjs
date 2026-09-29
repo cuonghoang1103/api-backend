@@ -222,7 +222,7 @@ export default {
 <li><strong>Block size is a trade-off, not "bigger is better".</strong> Too small and you pay a fresh miss every few words. Too big and you drag in data you never touch and evict something you did need. Ch.5 returns to this; Figure 4.3 is where the tension is born.</li>
 </ul>
 <p class="nhan">📐 <strong>Measured, not asserted.</strong> The sharpest proof of spatial locality in the whole course is walking a matrix by rows versus by columns. Same array, same number of additions, same result — only the order changes:</p>
-<pre>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #define N 4096
 static double a[N][N];          /* 128 MB, far bigger than any cache */
 
@@ -232,7 +232,7 @@ for (int i = 0; i &lt; N; i++)
 
 /* by COLUMN — i runs innermost: a[i][j] and a[i+1][j] are 32768 bytes apart */
 for (int j = 0; j &lt; N; j++)
-    for (int i = 0; i &lt; N; i++) s2 += a[i][j];</pre>
+    for (int i = 0; i &lt; N; i++) s2 += a[i][j];</code></pre>
 <table>
 <tr><th>Array</th><th>By row</th><th>By column</th><th>Column ÷ row</th></tr>
 <tr><td>4096×4096 double (128 MB)</td><td>0,019–0,033 s</td><td>0,065–0,073 s</td><td><strong>2,2–3,5×</strong></td></tr>
@@ -248,7 +248,7 @@ for (int j = 0; j &lt; N; j++)
 <li><strong>Kích thước khối là ĐÁNH ĐỔI, không phải "càng to càng tốt".</strong> Nhỏ quá thì cứ vài từ lại trượt một lần. To quá thì lôi về cả đống chẳng bao giờ đụng tới, lại đuổi mất thứ đang cần. Ch.5 quay lại chuyện này; Figure 4.3 là nơi mâu thuẫn ấy sinh ra.</li>
 </ul>
 <p class="nhan">📐 <strong>ĐO THẬT, không phán bừa.</strong> Bằng chứng sắc nhất về cục bộ không gian trong cả môn là duyệt ma trận theo HÀNG so với theo CỘT. Cùng một mảng, cùng số phép cộng, cùng kết quả — chỉ khác THỨ TỰ:</p>
-<pre>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #define N 4096
 static double a[N][N];          /* 128 MB, lớn hơn mọi cache rất nhiều */
 
@@ -258,7 +258,7 @@ for (int i = 0; i &lt; N; i++)
 
 /* theo CỘT — i chạy trong: a[i][j] và a[i+1][j] cách nhau 32768 byte */
 for (int j = 0; j &lt; N; j++)
-    for (int i = 0; i &lt; N; i++) s2 += a[i][j];</pre>
+    for (int i = 0; i &lt; N; i++) s2 += a[i][j];</code></pre>
 <table>
 <tr><th>Mảng</th><th>Theo hàng</th><th>Theo cột</th><th>Cột ÷ hàng</th></tr>
 <tr><td>4096×4096 double (128 MB)</td><td>0,019–0,033 s</td><td>0,065–0,073 s</td><td><strong>2,2–3,5 lần</strong></td></tr>

@@ -118,7 +118,7 @@ const defTable = (vi) => `<div class="table-wrap"><table>
 <thead><tr>${(vi ? ['ID', 'Tên defect', 'Dòng', 'Mục checklist', 'Mức độ', 'Mô tả', 'Cách sửa'] : ['ID', 'Defect name', 'Line', 'Checklist item', 'Severity', 'Description', 'Fixing solution']).map((h) => `<th>${h}</th>`).join('')}</tr></thead>
 <tbody>${defRows(vi)}</tbody></table></div>`;
 
-const FIXED = `<pre><code>package controller;
+const FIXED = `<pre><code class="language-sql">package controller;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -253,7 +253,7 @@ public final class ReviewCodeFixed {
     }
 }</code></pre>`;
 
-const RUN_ORIG = `<pre><code>$ javac -Xlint:all controller/ReviewCode.java          # verbatim copy of sourcecode.pdf
+const RUN_ORIG = `<pre><code class="language-sql">$ javac -Xlint:all controller/ReviewCode.java          # verbatim copy of sourcecode.pdf
 controller/ReviewCode.java:77: error: cannot find symbol
         Statement st = con.createStatement();
         ^
@@ -270,7 +270,7 @@ Start...
 Exception in thread "main" java.lang.NullPointerException: Cannot invoke "String.equals(Object)" because "&lt;local1&gt;" is null
 	at controller.ReviewCode.main(ReviewCode.java:19)</code></pre>`;
 
-const RUN_FIXED = `<pre><code>$ javac -Xlint:all -d out controller/ReviewCodeFixed.java     # 0 errors, 0 warnings
+const RUN_FIXED = `<pre><code class="language-bash">$ javac -Xlint:all -d out controller/ReviewCodeFixed.java     # 0 errors, 0 warnings
 $ java controller.ReviewCodeFixed          (logger prefix lines removed)
 INFO: Start...
 INFO: x&lt;y
@@ -826,7 +826,7 @@ ${RUN_FIXED}
 };
 
 /* ═══════════════════════════ Lesson 3 — static-analysis tools ═══════════════════════════ */
-const TOOLRUN = `<pre><code>$ java -jar ecj-3.45.0.jar -17 -warn:all -proceedOnError ReviewCode.java   # imports fixed
+const TOOLRUN = `<pre><code class="language-bash">$ java -jar ecj-3.45.0.jar -17 -warn:all -proceedOnError ReviewCode.java   # imports fixed
 WARNING line 19:  Null pointer access: The variable name can only be null at this location
 WARNING line 23:  Resource leak: 'file' is never closed
 WARNING line 35:  Redundant specification of type arguments &lt;String&gt;
@@ -1229,7 +1229,7 @@ ${mapTable(true)}
 };
 
 /* ═══════════════════════════ Lesson 4 — Lab 1 → PE Question 1 ═══════════════════════════ */
-const PE_CODE = `<pre><code> 1  public class fileProcessor {
+const PE_CODE = `<pre><code class="language-java"> 1  public class fileProcessor {
  2      private BufferedReader reader;
  3      private String FilePath;
  4      public void openFile(String filePath) {
@@ -1264,7 +1264,7 @@ const PE_CODE = `<pre><code> 1  public class fileProcessor {
 33          readFile();
 34      }
 35  }</code></pre>`;
-const PE_RUN = `<pre><code>$ javac fileProcessor.java            # with "import java.io.*;" added on top
+const PE_RUN = `<pre><code class="language-java">$ javac fileProcessor.java            # with "import java.io.*;" added on top
 fileProcessor.java:24: error: unreported exception IOException; must be caught or declared to be thrown
             reader.close();                 (line 24 = paper line 23 + the added import line)
 
@@ -1281,7 +1281,7 @@ line 2
 Invalid file path
 Processing file...
 Error reading file: missing.txt (No such file or directory)</code></pre>`;
-const PE_FIX = `<pre><code>import java.io.BufferedReader;
+const PE_FIX = `<pre><code class="language-java">import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 

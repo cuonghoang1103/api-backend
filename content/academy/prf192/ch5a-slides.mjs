@@ -57,7 +57,7 @@ export default {
 <li><strong>Walkthrough survives into this slot</strong> — slide 66 is a walkthrough <em>with functions</em>, where you must also track which variable belongs to which function. The technique does not change; the table just gains a column per call.</li>
 <li><strong>"Debug program"</strong> — the third line. Modules are the single biggest debugging aid you will meet in this course: a bug in a 15-line function is found by reading 15 lines.</li>
 </ul>
-<pre><code>/* the three constructs, one line each */
+<pre><code class="language-c">/* the three constructs, one line each */
 s = s + i;                      /* sequence  */
 if (n % i == 0) s = s + i;      /* selection */
 for (i = 1; i &lt;= n; i++) ...    /* iteration */</code></pre>
@@ -71,7 +71,7 @@ for (i = 1; i &lt;= n; i++) ...    /* iteration */</code></pre>
 <li><strong>Chạy tay còn sống tiếp trong slot này</strong> — slide 66 là một bài chạy tay <em>có hàm</em>, ở đó bạn phải theo dõi thêm biến nào thuộc hàm nào. Kỹ thuật không đổi; bảng chỉ thêm một cột cho mỗi lời gọi.</li>
 <li><strong>"Debug program"</strong> — dòng thứ ba. Module là công cụ gỡ lỗi mạnh nhất bạn gặp trong môn này: một lỗi nằm trong hàm 15 dòng thì đọc 15 dòng là ra.</li>
 </ul>
-<pre><code>/* ba cấu trúc, mỗi cái một dòng */
+<pre><code class="language-c">/* ba cấu trúc, mỗi cái một dòng */
 s = s + i;                      /* tuần tự   */
 if (n % i == 0) s = s + i;      /* rẽ nhánh  */
 for (i = 1; i &lt;= n; i++) ...    /* lặp       */</code></pre>
@@ -87,7 +87,7 @@ for (i = 1; i &lt;= n; i++) ...    /* lặp       */</code></pre>
 <li><strong>Abstraction</strong> — "Functions hide implementation details, focusing on functionality." You call <code>printf</code> every day without knowing how it formats. That is abstraction, and your own functions earn the same privilege.</li>
 <li><strong>Scalability &amp; Collaboration</strong> — "Modular design enables handling larger and more complex systems" and "Teams can work on separate modules independently". The second one is only possible <em>because</em> of low coupling: two people can edit two files only if the files do not share hidden state.</li>
 </ul>
-<pre><code>/* Reusability, made concrete: one definition, three uses */
+<pre><code class="language-c">/* Reusability, made concrete: one definition, three uses */
 printf("%d %d %d\\n", tongUoc(12), tongUoc(18), tongUoc(28));</code></pre>
 <p class="dap-an">✅ Compiled and run, that line prints <strong>28 39 56</strong>. Check by hand: 12 → 1+2+3+4+6+12 = 28 · 18 → 1+2+3+6+9+18 = 39 · 28 → 1+2+4+7+14+28 = 56.</p>
 <p class="meo">💡 Notice that reasons 6 and 7 (scalability, collaboration) are not about your code at all — they are about <em>people</em>. That is the real reason this design vocabulary exists: it lets two programmers agree on a boundary without reading each other's code.</p>`,
@@ -100,7 +100,7 @@ printf("%d %d %d\\n", tongUoc(12), tongUoc(18), tongUoc(28));</code></pre>
 <li><strong>Abstraction (trừu tượng hoá)</strong> — "Functions hide implementation details, focusing on functionality." Bạn gọi <code>printf</code> mỗi ngày mà không biết nó định dạng thế nào. Đó là trừu tượng hoá, và hàm của chính bạn cũng được hưởng đặc quyền đó.</li>
 <li><strong>Scalability &amp; Collaboration</strong> — "Modular design enables handling larger and more complex systems" và "Teams can work on separate modules independently". Cái thứ hai chỉ có được <em>nhờ</em> ghép nối thấp: hai người sửa hai file được chỉ khi hai file không chia nhau trạng thái ngầm.</li>
 </ul>
-<pre><code>/* Tái sử dụng, cho cụ thể: một định nghĩa, ba lời gọi */
+<pre><code class="language-c">/* Tái sử dụng, cho cụ thể: một định nghĩa, ba lời gọi */
 printf("%d %d %d\\n", tongUoc(12), tongUoc(18), tongUoc(28));</code></pre>
 <p class="dap-an">✅ Đã biên dịch và chạy thật, dòng đó in ra <strong>28 39 56</strong>. Kiểm tay: 12 → 1+2+3+4+6+12 = 28 · 18 → 1+2+3+6+9+18 = 39 · 28 → 1+2+4+7+14+28 = 56.</p>
 <p class="meo">💡 Để ý lý do 6 và 7 (mở rộng, cộng tác) hoàn toàn không nói về code — chúng nói về <em>con người</em>. Đó mới là lý do thật sự khiến bộ từ vựng thiết kế này tồn tại: nó cho hai lập trình viên thống nhất một đường ranh mà không phải đọc code của nhau.</p>`],
@@ -185,7 +185,7 @@ printf("%d %d %d\\n", tongUoc(12), tongUoc(18), tongUoc(28));</code></pre>
 <li><strong>"Natural thinking: A large task is divided into some smaller tasks"</strong> — the deck's justification. Modularity is not a programming invention; it is how people already handle any complex job.</li>
 <li><strong>The rice example, exactly as printed</strong> — (1) Clean the pot; (2) Measure rice; (3) Washing rice; (4) add water; (5) Boil; (6) Keep hot 10 minutes. Six modules. Notice every single one starts with a <strong>verb</strong> — which is the identification rule slide 16 will state formally.</li>
 </ul>
-<pre><code>/* the rice recipe, written as C module headers */
+<pre><code class="language-c">/* the rice recipe, written as C module headers */
 void cleanThePot(void);
 void measureRice(int cups);
 void washRice(void);
@@ -203,7 +203,7 @@ void keepHot(int minutes);</code></pre>
 <li><strong>"Natural thinking: A large task is divided into some smaller tasks"</strong> — lời biện hộ của bộ slide. Chia module không phải phát minh của lập trình; đó là cách con người vốn đã xử lý mọi việc phức tạp.</li>
 <li><strong>Ví dụ nấu cơm, đúng nguyên văn</strong> — (1) Clean the pot; (2) Measure rice; (3) Washing rice; (4) add water; (5) Boil; (6) Keep hot 10 minutes. Sáu module. Để ý từng cái đều mở đầu bằng một <strong>động từ</strong> — đúng là quy tắc nhận diện mà slide 16 sẽ phát biểu hình thức.</li>
 </ul>
-<pre><code>/* công thức nấu cơm, viết thành các phần đầu hàm C */
+<pre><code class="language-c">/* công thức nấu cơm, viết thành các phần đầu hàm C */
 void cleanThePot(void);
 void measureRice(int cups);
 void washRice(void);
@@ -223,7 +223,7 @@ void keepHot(int minutes);</code></pre>
 <li><strong>"Some related modules can be put into a file"</strong> — the next level up: modules group into files, files group into libraries. Same idea applied twice.</li>
 <li><strong>"(You used it — stdio.h)"</strong> — the deck's proof that you already rely on this. <code>stdio.h</code> is a file collecting the input/output modules: <code>printf</code>, <code>scanf</code>, <code>getchar</code>, <code>fopen</code>. Related modules, one file, one <code>#include</code>.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;    /* printf, scanf, getchar, fopen, ...  */
+<pre><code class="language-c">#include &lt;stdio.h&gt;    /* printf, scanf, getchar, fopen, ...  */
 #include &lt;stdlib.h&gt;   /* system, malloc, abs, rand, ...      */
 #include &lt;math.h&gt;     /* sqrt, pow, fabs, sin, ...           */</code></pre>
 <p class="dap-an">✅ Test of the grouping principle: which header would you expect <code>sqrt</code> in? It is a mathematical computation, so <code>math.h</code> — and compiling <code>sqrt(15.0)</code> with only <code>stdio.h</code> included produces <em>"implicit declaration of function 'sqrt'"</em>. The grouping is not decoration; the compiler enforces it.</p>
@@ -237,7 +237,7 @@ void keepHot(int minutes);</code></pre>
 <li><strong>"Some related modules can be put into a file"</strong> — tầng tiếp theo: module gom thành file, file gom thành thư viện. Cùng một ý tưởng áp hai lần.</li>
 <li><strong>"(You used it — stdio.h)"</strong> — bằng chứng của bộ slide rằng bạn đã dựa vào chuyện này rồi. <code>stdio.h</code> là một file gom các module vào/ra: <code>printf</code>, <code>scanf</code>, <code>getchar</code>, <code>fopen</code>. Module liên quan, một file, một dòng <code>#include</code>.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;    /* printf, scanf, getchar, fopen, ...  */
+<pre><code class="language-c">#include &lt;stdio.h&gt;    /* printf, scanf, getchar, fopen, ...  */
 #include &lt;stdlib.h&gt;   /* system, malloc, abs, rand, ...      */
 #include &lt;math.h&gt;     /* sqrt, pow, fabs, sin, ...           */</code></pre>
 <p class="dap-an">✅ Phép thử nguyên tắc gom nhóm: bạn đoán <code>sqrt</code> nằm ở header nào? Nó là phép tính toán học nên nằm ở <code>math.h</code> — và biên dịch <code>sqrt(15.0)</code> khi chỉ <code>#include &lt;stdio.h&gt;</code> sẽ ra <em>"implicit declaration of function 'sqrt'"</em>. Việc gom nhóm không phải trang trí; trình biên dịch cưỡng chế nó.</p>
@@ -253,7 +253,7 @@ void keepHot(int minutes);</code></pre>
 <li><strong>Note what the slide does NOT do</strong> — it does not put the <code>scanf</code> inside <code>sumDivisors</code>. Input stays in <code>main</code>; the computing module receives <code>n</code> as a parameter. That single choice is what slides 15–24 will spend ten slides justifying.</li>
 <li><strong>About <code>system("pause")</code></strong> — it is a Windows/Dev-C++ habit that keeps the console window open. It costs you portability (it fails on macOS/Linux) and it launches a whole shell. Fine for a lab, not for real code.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 
 int sumDivisors(int n) {           /* Task 2 - the module we implement */
@@ -282,7 +282,7 @@ int main(void) {
 <li><strong>Để ý điều slide KHÔNG làm</strong> — nó không nhét <code>scanf</code> vào trong <code>sumDivisors</code>. Việc nhập ở lại <code>main</code>; module tính toán nhận <code>n</code> qua tham số. Đúng một lựa chọn đó là thứ mà slide 15–24 sẽ dùng mười slide để biện minh.</li>
 <li><strong>Về <code>system("pause")</code></strong> — đó là thói quen Windows/Dev-C++ để giữ cửa sổ console không đóng. Cái giá là mất tính di động (nó hỏng trên macOS/Linux) và nó khởi chạy hẳn một shell. Được cho bài lab, không được cho code thật.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 
 int sumDivisors(int n) {           /* Task 2 - module ta tự cài đặt */
@@ -333,7 +333,7 @@ int main(void) {
 <li><strong>"It can be re-used in some programs" ← "if it is stored in an outside file (library file), it can be used in some programs."</strong> The step from reuse-in-one-program to reuse-across-programs is purely a matter of where the text lives: same function, moved into a <code>.h</code>/<code>.c</code> pair.</li>
 <li><strong>Note the missing fourth row</strong> — the table says nothing about speed. Modules do not make programs faster; a call has a small cost. You trade a little speed for a lot of maintainability, knowingly.</li>
 </ul>
-<pre><code>/* characteristic 2 in one line: one name, three uses */
+<pre><code class="language-c">/* characteristic 2 in one line: one name, three uses */
 int tongUoc(int x) { int i, s = 0; for (i = 1; i &lt;= x; i++) if (x % i == 0) s += i; return s; }
 
 printf("%d %d %d\\n", tongUoc(12), tongUoc(18), tongUoc(28));
@@ -349,7 +349,7 @@ printf("%d\\n", tongUoc(12) + tongUoc(18));</code></pre>
 <li><strong>"It can be re-used in some programs" ← "if it is stored in an outside file (library file), it can be used in some programs."</strong> Bước từ tái dùng trong một chương trình lên tái dùng giữa nhiều chương trình thuần tuý là chuyện đoạn chữ ấy nằm ở đâu: vẫn hàm đó, chuyển sang cặp <code>.h</code>/<code>.c</code>.</li>
 <li><strong>Để ý hàng thứ tư KHÔNG có</strong> — bảng không nói gì về tốc độ. Module không làm chương trình nhanh hơn; một lời gọi có chi phí nhỏ. Bạn đánh đổi một chút tốc độ lấy rất nhiều khả năng bảo trì, một cách có ý thức.</li>
 </ul>
-<pre><code>/* đặc trưng 2 gói trong một dòng: một cái tên, ba lần dùng */
+<pre><code class="language-c">/* đặc trưng 2 gói trong một dòng: một cái tên, ba lần dùng */
 int tongUoc(int x) { int i, s = 0; for (i = 1; i &lt;= x; i++) if (x % i == 0) s += i; return s; }
 
 printf("%d %d %d\\n", tongUoc(12), tongUoc(18), tongUoc(28));
@@ -389,7 +389,7 @@ printf("%d\\n", tongUoc(12) + tongUoc(18));</code></pre>
 <li><strong>"Focuses on" is the verb test again</strong> — a module that focuses has a focus you can name. If naming it requires a paragraph, it has no focus.</li>
 <li><strong>The link forward</strong> — slide 14 turns these three soft sentences into six checkable statements, and slides 16–20 turn those into named categories. Abstraction descending into precision, slide by slide.</li>
 </ul>
-<pre><code>/* three legal decompositions of the same problem -- only one is good */
+<pre><code class="language-c">/* three legal decompositions of the same problem -- only one is good */
 /* A */ void lamTatCa(void);                              /* nothing gained     */
 /* B */ int  nhapVaTinh(void);   void inKetQua(int s);    /* input hidden in B1 */
 /* C */ int  nhapSo(void);  int tongUoc(int x);  void inUoc(int x);   /* good  */</code></pre>
@@ -404,7 +404,7 @@ printf("%d\\n", tongUoc(12) + tongUoc(18));</code></pre>
 <li><strong>"Focuses on" lại chính là phép thử động từ</strong> — một module có tiêu điểm thì tiêu điểm đó gọi tên được. Nếu gọi tên nó phải mất một đoạn văn thì nó không có tiêu điểm.</li>
 <li><strong>Nối về phía trước</strong> — slide 14 biến ba câu mềm này thành sáu phát biểu kiểm được, và slide 16–20 biến chúng thành các hạng mục có tên. Từ trừu tượng đi xuống chính xác, từng slide một.</li>
 </ul>
-<pre><code>/* ba cách phân rã hợp lệ cho cùng bài toán -- chỉ một cái tốt */
+<pre><code class="language-c">/* ba cách phân rã hợp lệ cho cùng bài toán -- chỉ một cái tốt */
 /* A */ void lamTatCa(void);                              /* chẳng được gì      */
 /* B */ int  nhapVaTinh(void);   void inKetQua(int s);    /* nhập lẫn vào B1    */
 /* C */ int  nhapSo(void);  int tongUoc(int x);  void inUoc(int x);   /* tốt   */</code></pre>
@@ -421,7 +421,7 @@ printf("%d\\n", tongUoc(12) + tongUoc(18));</code></pre>
 <li><strong>Stipulation 2: "Each module is highly cohesive"</strong> — defined on slide 16, graded on slides 17–18.</li>
 <li><strong>Stipulation 3: "Each module exhibits low coupling"</strong> — defined on slide 19, classified on slide 20. Together with 2, this is the sentence the whole lesson is built around.</li>
 </ul>
-<pre><code>/* stipulation 1, both ways, same behaviour */
+<pre><code class="language-c">/* stipulation 1, both ways, same behaviour */
 int loaiDiem_nhieuLoiRa(int d) {              /* several exits */
     if (d &lt; 0 || d &gt; 10) return -1;
     if (d &gt;= 8) return 3;
@@ -447,7 +447,7 @@ int loaiDiem_motLoiRa(int d) {                /* ONE exit      */
 <li><strong>Quy định 2: "Each module is highly cohesive"</strong> — định nghĩa ở slide 16, xếp hạng ở slide 17–18.</li>
 <li><strong>Quy định 3: "Each module exhibits low coupling"</strong> — định nghĩa ở slide 19, phân loại ở slide 20. Cùng với quy định 2, đây là câu mà cả bài học được dựng quanh nó.</li>
 </ul>
-<pre><code>/* quy định 1, viết cả hai kiểu, cùng hành vi */
+<pre><code class="language-c">/* quy định 1, viết cả hai kiểu, cùng hành vi */
 int loaiDiem_nhieuLoiRa(int d) {              /* nhiều lối ra */
     if (d &lt; 0 || d &gt; 10) return -1;
     if (d &gt;= 8) return 3;
@@ -475,7 +475,7 @@ int loaiDiem_motLoiRa(int d) {                /* MỘT lối ra   */
 <li><strong>The rule under it</strong> — <em>"All modules should be self-contained (independent)."</em> Self-contained means: everything it needs arrives through its parameters.</li>
 <li><strong>Why the two faults travel together</strong> — once input lives inside the processing module, the value has nowhere to go except a global, and the moment it is a global, every other module is coupled to it. Fixing cohesion usually fixes coupling for free.</li>
 </ul>
-<pre><code>/* the slide's design, made runnable */
+<pre><code class="language-c">/* the slide's design, made runnable */
 int n;                              /* common data -- the problem */
 int sumXau(void) {
     int i, s = 0;
@@ -497,7 +497,7 @@ int tongUoc(int x) { int i, s = 0; for (i = 1; i &lt;= x; i++) if (x % i == 0) s
 <li><strong>Luật đi kèm</strong> — <em>"All modules should be self-contained (independent)."</em> Tự chứa nghĩa là: mọi thứ nó cần đều đi vào qua tham số của nó.</li>
 <li><strong>Vì sao hai lỗi luôn đi cùng nhau</strong> — khi việc nhập đã nằm trong module xử lý thì giá trị chẳng biết đi đâu ngoài một biến toàn cục, và khoảnh khắc nó thành biến toàn cục thì mọi module khác đều bị ghép nối vào nó. Sửa cohesion thường sửa luôn coupling miễn phí.</li>
 </ul>
-<pre><code>/* thiết kế trên slide, viết thành code chạy được */
+<pre><code class="language-c">/* thiết kế trên slide, viết thành code chạy được */
 int n;                              /* dữ liệu chung -- chính là vấn đề */
 int sumXau(void) {
     int i, s = 0;
@@ -521,7 +521,7 @@ int tongUoc(int x) { int i, s = 0; for (i = 1; i &lt;= x; i++) if (x % i == 0) s
 <li><strong>How to apply the verb test in practice</strong> — describe your function in one sentence. Count the verbs. "Read n <em>and</em> compute its divisor sum" has two → split. "Compute the divisor sum of x" has one → keep.</li>
 <li><strong>Why cohesion is judged from the inside</strong> — you never need to look at any other module to measure it. Open the function, read its statements, ask whether each one serves the name on the door.</li>
 </ul>
-<pre><code>/* FUNCTIONAL cohesion -- one verb, one job, nothing else in the box */
+<pre><code class="language-c">/* FUNCTIONAL cohesion -- one verb, one job, nothing else in the box */
 double tinhDienTich(double r) {
     return 3.14159265358979 * r * r;
 }
@@ -541,7 +541,7 @@ void tinhVaIn(double r) {
 <li><strong>Áp phép thử động từ thế nào trong thực tế</strong> — mô tả hàm của bạn bằng một câu. Đếm số động từ. "Đọc n <em>và</em> tính tổng ước của nó" có hai → tách. "Tính tổng ước của x" có một → giữ nguyên.</li>
 <li><strong>Vì sao cohesion được chấm từ bên trong</strong> — bạn không cần nhìn module nào khác để đo nó. Mở hàm ra, đọc từng câu lệnh, hỏi xem mỗi câu có phục vụ cái tên ghi ngoài cửa không.</li>
 </ul>
-<pre><code>/* cohesion FUNCTIONAL -- một động từ, một việc, trong hộp không còn gì khác */
+<pre><code class="language-c">/* cohesion FUNCTIONAL -- một động từ, một việc, trong hộp không còn gì khác */
 double tinhDienTich(double r) {
     return 3.14159265358979 * r * r;
 }
@@ -563,7 +563,7 @@ void tinhVaIn(double r) {
 <li><strong>The deck's own worked case</strong> — "One module for two tasks: Sum divisors of the integer n / Print out divisors of the integer n", with the damning consequence: <em>"In the case of the operation for summing of n is not used, this module can not be applied."</em></li>
 <li><strong>Read that consequence carefully</strong> — the cost of low cohesion is stated as an inability to <em>reuse</em>. If you only want to print the divisors, you must also pay for a sum you do not want. That is the mechanism by which low cohesion wastes your time later.</li>
 </ul>
-<pre><code>/* COINCIDENTAL: three tasks with nothing in common */
+<pre><code class="language-c">/* COINCIDENTAL: three tasks with nothing in common */
 void doStuff(int n) {
     printf("Hello\\n");                 /* greet  */
     printf("%d\\n", n * n);             /* square */
@@ -591,7 +591,7 @@ void khoiTao(void) { diem = 0; tien = 0.0; printf("init done\\n"); }</code></pre
 <li><strong>Ca cụ thể mà chính bộ slide nêu</strong> — "One module for two tasks: Sum divisors of the integer n / Print out divisors of the integer n", kèm hậu quả đanh thép: <em>"In the case of the operation for summing of n is not used, this module can not be applied."</em></li>
 <li><strong>Đọc kỹ cái hậu quả đó</strong> — cái giá của cohesion thấp được phát biểu thành sự BẤT LỰC trong tái sử dụng. Nếu bạn chỉ muốn in các ước, bạn vẫn phải trả tiền cho một phép tổng mình không cần. Đó chính là cơ chế mà cohesion thấp dùng để ăn mòn thời gian của bạn về sau.</li>
 </ul>
-<pre><code>/* COINCIDENTAL: ba việc chẳng liên quan gì nhau */
+<pre><code class="language-c">/* COINCIDENTAL: ba việc chẳng liên quan gì nhau */
 void doStuff(int n) {
     printf("Hello\\n");                 /* chào   */
     printf("%d\\n", n * n);             /* bình phương */
@@ -621,7 +621,7 @@ void khoiTao(void) { diem = 0; tien = 0.0; printf("init done\\n"); }</code></pre
 <li><strong>Functional — "performs a single specific task"</strong>, the top of the scale, recognised by: <em>"The module identifier suggests a precise verb phrase."</em> <code>tinhDienTich</code>, <code>tongUoc</code>, <code>kiemTraNguyenTo</code>.</li>
 <li><strong>The whole ladder, in order</strong> — coincidental &lt; logical &lt; temporal &lt; communicational &lt; sequential &lt; functional. Six rungs; know the order, because "which is higher" is a standard exam question.</li>
 </ul>
-<pre><code>/* COMMUNICATIONAL: two computations over the SAME n, both run every call */
+<pre><code class="language-c">/* COMMUNICATIONAL: two computations over the SAME n, both run every call */
 void thongKe(int n) {
     int i, s = 0, d = 0;
     for (i = 1; i &lt;= n; i++) if (n % i == 0) { s += i; d++; }
@@ -644,7 +644,7 @@ double tinhDienTich(double r) { return 3.14159265358979 * r * r; }</code></pre>
 <li><strong>Functional (theo chức năng) — "performs a single specific task"</strong>, đỉnh của thang, nhận ra bằng: <em>"The module identifier suggests a precise verb phrase."</em> <code>tinhDienTich</code>, <code>tongUoc</code>, <code>kiemTraNguyenTo</code>.</li>
 <li><strong>Cả cái thang, đúng thứ tự</strong> — coincidental &lt; logical &lt; temporal &lt; communicational &lt; sequential &lt; functional. Sáu bậc; phải thuộc thứ tự, vì "cái nào cao hơn" là câu hỏi thi tiêu chuẩn.</li>
 </ul>
-<pre><code>/* COMMUNICATIONAL: hai phép tính trên CÙNG n, cả hai chạy mỗi lời gọi */
+<pre><code class="language-c">/* COMMUNICATIONAL: hai phép tính trên CÙNG n, cả hai chạy mỗi lời gọi */
 void thongKe(int n) {
     int i, s = 0, d = 0;
     for (i = 1; i &lt;= n; i++) if (n % i == 0) { s += i; d++; }
@@ -669,7 +669,7 @@ double tinhDienTich(double r) { return 3.14159265358979 * r * r; }</code></pre>
 <li><strong>"Sharing the performance"</strong> means the work only completes correctly if some other module has already done, or will later do, part of it — typically by setting a global first.</li>
 <li><strong>The design question</strong> — "In designing for low coupling, we ask what kind of data to avoid passing to the module." Notice it is a question about <em>data</em>, which is exactly what slide 20 then classifies into five kinds.</li>
 </ul>
-<pre><code>/* HIGH coupling: the module needs a global that someone else must set first */
+<pre><code class="language-c">/* HIGH coupling: the module needs a global that someone else must set first */
 int n;
 int sumDivisorsGlobal(void) {
     int i, s = 0;
@@ -693,7 +693,7 @@ int sumDivisors(int x) {
 <li><strong>"Chia sẻ việc thực hiện"</strong> nghĩa là công việc chỉ hoàn tất đúng nếu một module khác đã làm trước, hoặc sẽ làm sau, một phần của nó — thường là bằng cách gán một biến toàn cục trước.</li>
 <li><strong>Câu hỏi thiết kế</strong> — "In designing for low coupling, we ask what kind of data to avoid passing to the module." Để ý đây là câu hỏi về <em>dữ liệu</em>, đúng là thứ mà slide 20 sẽ chia thành năm loại.</li>
 </ul>
-<pre><code>/* GHÉP NỐI CAO: module cần một biến toàn cục mà người khác phải gán trước */
+<pre><code class="language-c">/* GHÉP NỐI CAO: module cần một biến toàn cục mà người khác phải gán trước */
 int n;
 int sumDivisorsGlobal(void) {
     int i, s = 0;
@@ -719,7 +719,7 @@ int sumDivisors(int x) {
 <li><strong>Content (worst)</strong> — "accesses the internals of another module". One module reaches in and changes another's private state directly, bypassing its interface. Any change to the internals silently breaks the intruder.</li>
 <li><strong>Read the list as a ladder to climb down</strong> — when you find content or common coupling, the fix is almost always to push the dependency down the list: turn shared state into a parameter, turn a flag into two separate functions.</li>
 </ul>
-<pre><code>/* DATA: a value, consumed, not controlling anything      -- lowest, good */
+<pre><code class="language-java">/* DATA: a value, consumed, not controlling anything      -- lowest, good */
 int tongUoc(int x);
 /* CONTROL: the second parameter picks a branch           -- higher       */
 int tinh(int x, int flag) { if (flag == 0) return tongUoc(x); else return x * x; }
@@ -740,7 +740,7 @@ void B_xau(struct Counter *c)    { c-&gt;dem = 99; }   /* B pokes the field  */<
 <li><strong>Content (tệ nhất)</strong> — "accesses the internals of another module". Một module thò tay vào sửa thẳng trạng thái riêng của module khác, đi vòng qua giao diện của nó. Chỉ cần đổi phần ruột là kẻ thò tay vỡ âm thầm.</li>
 <li><strong>Đọc danh sách như một cái thang để tụt xuống</strong> — khi phát hiện content hay common coupling, cách sửa gần như luôn là đẩy sự phụ thuộc xuống thấp hơn trong danh sách: biến trạng thái chung thành tham số, biến một lá cờ thành hai hàm riêng.</li>
 </ul>
-<pre><code>/* DATA: một giá trị, được tiêu thụ, không điều khiển gì   -- thấp nhất, tốt */
+<pre><code class="language-java">/* DATA: một giá trị, được tiêu thụ, không điều khiển gì   -- thấp nhất, tốt */
 int tongUoc(int x);
 /* CONTROL: tham số thứ hai chọn nhánh                     -- cao hơn        */
 int tinh(int x, int flag) { if (flag == 0) return tongUoc(x); else return x * x; }
@@ -763,7 +763,7 @@ void B_xau(struct Counter *c)    { c-&gt;dem = 99; }   /* B chọc thẳng vào 
 <li><strong>Compare with slide 15</strong> — slide 15 had the same three jobs, but input was buried inside the computing module and the data was a global. Same problem, same jobs, opposite design. The only real difference is <em>where the data travels</em>.</li>
 <li><strong>Why three and not two</strong> — printing the divisors and summing them are different verbs producing different outputs (a list on screen versus a number). By slide 16's verb test they are two modules, even though both loop over the same divisors.</li>
 </ul>
-<pre><code>/* the chart, written as prototypes -- the design before any body exists */
+<pre><code class="language-c">/* the chart, written as prototypes -- the design before any body exists */
 int  getInput(void);          /* Module 1 - Input Handling     */
 int  sumOfDivisors(int n);    /* Module 2 - Summing Divisors   */
 void printDivisors(int n);    /* Module 3 - Printing Divisors  */
@@ -779,7 +779,7 @@ int  main(void);              /* coordinator                   */</code></pre>
 <li><strong>So với slide 15</strong> — slide 15 cũng đúng ba việc đó, nhưng việc nhập bị chôn trong module tính toán và dữ liệu là biến toàn cục. Cùng bài toán, cùng các việc, thiết kế ngược nhau. Khác biệt thật sự duy nhất là <em>dữ liệu đi đường nào</em>.</li>
 <li><strong>Vì sao ba chứ không phải hai</strong> — in các ước và tính tổng chúng là hai động từ khác nhau cho hai kết quả khác nhau (một danh sách trên màn hình so với một con số). Theo phép thử động từ ở slide 16 thì đó là hai module, dù cả hai đều duyệt trên cùng tập ước.</li>
 </ul>
-<pre><code>/* sơ đồ, viết thành prototype -- thiết kế trước khi có thân hàm nào */
+<pre><code class="language-c">/* sơ đồ, viết thành prototype -- thiết kế trước khi có thân hàm nào */
 int  getInput(void);          /* Module 1 - Nhập dữ liệu       */
 int  sumOfDivisors(int n);    /* Module 2 - Tính tổng ước      */
 void printDivisors(int n);    /* Module 3 - In các ước         */
@@ -797,7 +797,7 @@ int  main(void);              /* điều phối                     */</code></p
 <li><strong>The word doing the work: "given"</strong> — modules 2 and 3 both say "of a given integer" rather than "of n". That is the whole difference from slide 15, expressed in English before it is expressed in C.</li>
 <li><strong>What each contract buys you</strong> — because Module 2 promises only a calculation, you can call it from a test, from a loop over many numbers, or from a completely different program. Because Module 1 promises only reading, swapping <code>scanf</code> for a file read touches one function.</li>
 </ul>
-<pre><code>int getInput(void) {                     /* Module 1: read, return, nothing else */
+<pre><code class="language-c">int getInput(void) {                     /* Module 1: read, return, nothing else */
     int n;
     printf("Enter a positive integer: ");
     scanf("%d", &amp;n);
@@ -824,7 +824,7 @@ void printDivisors(int n) {              /* Module 3: print, return nothing     
 <li><strong>Chữ gánh việc: "given" (cho trước)</strong> — module 2 và 3 đều nói "of a given integer" chứ không nói "of n". Đó là toàn bộ khác biệt so với slide 15, diễn đạt bằng tiếng Anh trước khi diễn đạt bằng C.</li>
 <li><strong>Mỗi hợp đồng mua cho bạn cái gì</strong> — vì Module 2 chỉ hứa tính toán, bạn gọi được nó từ một bài kiểm thử, từ một vòng lặp qua nhiều số, hay từ một chương trình hoàn toàn khác. Vì Module 1 chỉ hứa đọc, đổi <code>scanf</code> sang đọc file chỉ đụng một hàm.</li>
 </ul>
-<pre><code>int getInput(void) {                     /* Module 1: đọc, trả về, không gì khác */
+<pre><code class="language-c">int getInput(void) {                     /* Module 1: đọc, trả về, không gì khác */
     int n;
     printf("Enter a positive integer: ");
     scanf("%d", &amp;n);
@@ -853,7 +853,7 @@ void printDivisors(int n) {              /* Module 3: in, không trả về gì 
 <li><strong>Each function is short enough to read at a glance</strong> — five to seven lines each, satisfying slide 14's "readable amount of code" guideline, and the whole file is still under thirty lines.</li>
 <li><strong>What the Output panel proves</strong> — that the decomposition costs nothing at runtime. Same problem, same answer as slide 9's single-module version; only the shape of the source changed.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int getInput(void) {
     int n;
@@ -889,7 +889,7 @@ int main(void) {
 <li><strong>Mỗi hàm đủ ngắn để đọc trong một cái liếc</strong> — năm tới bảy dòng mỗi cái, thoả hướng dẫn "a readable amount of code" của slide 14, và cả file vẫn dưới ba mươi dòng.</li>
 <li><strong>Khung Output chứng minh điều gì</strong> — rằng việc phân rã không tốn gì lúc chạy. Cùng bài toán, cùng đáp án với bản một-module của slide 9; chỉ hình dạng mã nguồn là đổi.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int getInput(void) {
     int n;
@@ -927,7 +927,7 @@ int main(void) {
 <li><strong>Consequence 1 — "Reusability: Each module can be reused in other programs without modification."</strong> Test it honestly: <code>sumOfDivisors</code> mentions no global, no <code>scanf</code>, no label text. Copy it into any program and it compiles and works.</li>
 <li><strong>Consequence 2 — "Ease of Maintenance: Modifications to one module (e.g., changing the input method) won't affect others."</strong> Swap <code>scanf</code> for a file read inside <code>getInput</code> and the other three functions do not change by one character — because they never knew where n came from.</li>
 </ul>
-<pre><code>/* the reusability claim, tested: same Module 2, no edits, a different program */
+<pre><code class="language-c">/* the reusability claim, tested: same Module 2, no edits, a different program */
 int main(void) {
     int k, tong = 0;
     for (k = 1; k &lt;= 10; k++) tong += sumOfDivisors(k);   /* reused 10 times */
@@ -945,7 +945,7 @@ int main(void) {
 <li><strong>Hệ quả 1 — "Reusability: Each module can be reused in other programs without modification."</strong> Hãy kiểm cho thật: <code>sumOfDivisors</code> không nhắc tới biến toàn cục nào, không <code>scanf</code>, không chữ nhãn nào. Chép nó vào chương trình bất kỳ là dịch được và chạy.</li>
 <li><strong>Hệ quả 2 — "Ease of Maintenance: Modifications to one module (e.g., changing the input method) won't affect others."</strong> Đổi <code>scanf</code> thành đọc file bên trong <code>getInput</code> thì ba hàm kia không đổi một ký tự — vì chúng chưa bao giờ biết n từ đâu tới.</li>
 </ul>
-<pre><code>/* kiểm lời hứa tái sử dụng: vẫn Module 2, không sửa gì, một chương trình khác */
+<pre><code class="language-c">/* kiểm lời hứa tái sử dụng: vẫn Module 2, không sửa gì, một chương trình khác */
 int main(void) {
     int k, tong = 0;
     for (k = 1; k &lt;= 10; k++) tong += sumOfDivisors(k);   /* tái dùng 10 lần */
@@ -965,7 +965,7 @@ int main(void) {
 <li><strong>Step 4 — "Check that each module is low in coupling (modules are independent)."</strong> Apply slides 19–20: could you compile this function in a file by itself, given only its parameters? If it needs a global, fix it now.</li>
 <li><strong>Note the shape of the recipe</strong> — two creative steps then two checking steps. The checks come last on purpose: you cannot judge cohesion of a module that does not exist yet, and the checks are cheap to run repeatedly.</li>
 </ul>
-<pre><code>/* Steps 1-4 on "print the n first primes" (the deck's own slide-57 problem) */
+<pre><code class="language-c">/* Steps 1-4 on "print the n first primes" (the deck's own slide-57 problem) */
 /* 1. verbs:  accept n · check whether a value is prime · print · count       */
 /* 2. modules: accept -&gt; scanf (library) · print -&gt; printf (library)          */
 /*             laNguyenTo, inNSoNguyenTo -&gt; mine                              */
@@ -994,7 +994,7 @@ void inNSoNguyenTo(int n) {          /* 4. takes n as a parameter -&gt; data    
 <li><strong>Bước 4 — "Check that each module is low in coupling (modules are independent)."</strong> Áp slide 19–20: bạn có dịch được hàm này trong một file riêng, chỉ với các tham số của nó, không? Nếu nó cần một biến toàn cục thì sửa ngay bây giờ.</li>
 <li><strong>Chú ý hình dạng của công thức</strong> — hai bước sáng tạo rồi hai bước kiểm tra. Các bước kiểm đặt sau cùng là có chủ ý: không thể chấm cohesion của một module chưa tồn tại, và các phép kiểm thì chạy đi chạy lại rất rẻ.</li>
 </ul>
-<pre><code>/* Bước 1-4 cho bài "in n số nguyên tố đầu tiên" (chính đề ở slide 57)       */
+<pre><code class="language-c">/* Bước 1-4 cho bài "in n số nguyên tố đầu tiên" (chính đề ở slide 57)       */
 /* 1. động từ: nhận n · kiểm một số có nguyên tố không · in · đếm            */
 /* 2. module:  nhận -&gt; scanf (thư viện) · in -&gt; printf (thư viện)           */
 /*             laNguyenTo, inNSoNguyenTo -&gt; của mình                        */

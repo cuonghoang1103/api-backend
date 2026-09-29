@@ -72,7 +72,7 @@ ${slide('git-07', 3, 'GitHub flow: một nhánh sống lâu là main')}
 <h3>Trunk-based development — GitHub flow, taken further</h3>
 ${slide('git-07', 4, 'Trunk-based: nhánh sống vài giờ, việc dở nằm sau cờ')}
 <p>Same shape, stricter discipline: branches live <strong>hours, not days</strong>, and everyone integrates into <code>main</code> at least daily. Work too big for a day ships <em>behind a feature flag</em> rather than on a long branch.</p>
-<pre><code><span class="tok-comment">// The unfinished feature is on main, merged, and switched off.</span>
+<pre><code class="language-bash"><span class="tok-comment">// The unfinished feature is on main, merged, and switched off.</span>
 <span class="tok-keyword">if</span> (flags.newCheckout) {
   <span class="tok-keyword">return</span> renderNewCheckout();
 }
@@ -179,7 +179,7 @@ ${slide('git-07', 3, 'GitHub flow: một nhánh sống lâu là main')}
 <h3>Trunk-based development — GitHub flow, đẩy xa hơn</h3>
 ${slide('git-07', 4, 'Trunk-based: nhánh sống vài giờ, việc dở nằm sau cờ')}
 <p>Cùng hình dạng, kỷ luật khắt khe hơn: nhánh sống <strong>vài giờ, không phải vài ngày</strong>, và mọi người tích hợp vào <code>main</code> ít nhất mỗi ngày một lần. Phần việc quá lớn cho một ngày thì lên production <em>sau một cờ tính năng</em> chứ không nằm trên một nhánh dài ngày.</p>
-<pre><code><span class="tok-comment">// Tính năng chưa xong đã nằm trên main, đã merge, và đang tắt.</span>
+<pre><code class="language-bash"><span class="tok-comment">// Tính năng chưa xong đã nằm trên main, đã merge, và đang tắt.</span>
 <span class="tok-keyword">if</span> (flags.newCheckout) {
   <span class="tok-keyword">return</span> renderNewCheckout();
 }
@@ -280,13 +280,13 @@ git log --oneline --graph      <span class="tok-comment"># hai "cái bướu" r�
 
 <h3>Two kinds of tag, and why it matters</h3>
 ${slide('git-07', 8, 'Tag nhẹ là một file, tag annotated là một đối tượng')}
-<pre><code>git tag v1.5.0                                  <span class="tok-comment"># LIGHTWEIGHT — just a name</span>
+<pre><code class="language-bash">git tag v1.5.0                                  <span class="tok-comment"># LIGHTWEIGHT — just a name</span>
 git tag -a v1.5.0 -m <span class="tok-string">"Release 1.5.0"</span>          <span class="tok-comment"># ANNOTATED — a real object</span></code></pre>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-k">Lightweight</span><span class="lz-v">A file under <code>.git/refs/tags/</code> containing a hash. No author, no date, no message. A private bookmark.</span></div>
   <div class="lz-layer"><span class="lz-k">Annotated</span><span class="lz-v">A full object in the database: tagger, date, message, and optionally a GPG/SSH signature. What a release is.</span></div>
 </div>
-<pre><code>git show v1.5.0 | head -6</code></pre>
+<pre><code class="language-bash">git show v1.5.0 | head -6</code></pre>
 <div class="out">tag v1.5.0
 Tagger: Nguyen Van An &lt;an@example.com&gt;
 Date:   Thu Aug 21 14:20:00 2026 +0700
@@ -309,14 +309,14 @@ ${slide('git-07', 9, 'Semver: MAJOR.MINOR.PATCH')}
 
 <h3>Everyday tag commands</h3>
 ${slide('git-07', 10, 'Sắp tag theo số và bẫy bản -rc')}
-<pre><code>git tag                              <span class="tok-comment"># list, alphabetically</span>
+<pre><code class="language-bash">git tag                              <span class="tok-comment"># list, alphabetically</span>
 git tag -l <span class="tok-string">"v1.5.*"</span>                   <span class="tok-comment"># filter</span>
 git tag -n9                          <span class="tok-comment"># list with up to 9 lines of message</span>
 git tag -a v1.5.0 -m <span class="tok-string">"…"</span> 3f8a1c9      <span class="tok-comment"># tag a PAST commit</span>
 git show v1.5.0                      <span class="tok-comment"># the tag and the commit it points at</span>
 git checkout v1.5.0                  <span class="tok-comment"># detached HEAD at that release (3.1)</span>
 git tag -d v1.5.0                    <span class="tok-comment"># delete locally</span></code></pre>
-<pre><code><span class="tok-comment"># Sorted the way humans expect (v1.10.0 AFTER v1.9.0):</span>
+<pre><code class="language-bash"><span class="tok-comment"># Sorted the way humans expect (v1.10.0 AFTER v1.9.0):</span>
 git tag --sort=-version:refname | head -5</code></pre>
 <div class="out">v1.10.0
 v1.9.2
@@ -325,7 +325,7 @@ v1.9.0
 v1.8.4</div>
 <p>Without <code>--sort=version:refname</code> you get plain alphabetical order, where <code>v1.10.0</code> sorts before <code>v1.9.0</code>. That has broken more release scripts than any other single detail here.</p>
 <div class="callout warn"><strong>Pre-releases need one more setting.</strong> Plain <code>--sort=-version:refname</code> puts <code>v2.0.0-rc.1</code> <em>above</em> <code>v2.0.0</code> — the opposite of semver, where a pre-release comes first. Git 2.51, real output from a repository with both tags:
-<pre><code>git tag --sort=-version:refname | head -3
+<pre><code class="language-bash">git tag --sort=-version:refname | head -3
 v2.0.0-rc.1
 v2.0.0-beta.1
 v2.0.0
@@ -336,26 +336,26 @@ v2.0.0-beta.1</code></pre>
 Set it once with <code>git config --global versionsort.suffix -</code> (and <code>git config --global tag.sort -version:refname</code> to make plain <code>git tag</code> use this order). A release script that picks "the newest tag" without it will happily pick a release candidate.</div>
 
 <h3>Tags are not pushed automatically</h3>
-<pre><code>git push origin v1.5.0            <span class="tok-comment"># one tag</span>
+<pre><code class="language-bash">git push origin v1.5.0            <span class="tok-comment"># one tag</span>
 git push --follow-tags            <span class="tok-comment"># commits + annotated tags pointing into them</span>
 git push origin --tags            <span class="tok-comment"># every local tag, including junk</span></code></pre>
 <p>Worth repeating from 5.3 because it is the most common release-day confusion: you tagged, you pushed, and the release workflow did not fire — because the tag never left your machine.</p>
 
 <h3>git describe — a human name for any commit</h3>
 ${slide('git-07', 11, 'Giải phẫu một chuỗi git describe')}
-<pre><code>git describe --tags</code></pre>
+<pre><code class="language-bash">git describe --tags</code></pre>
 <div class="out">v1.5.0-14-ga7c2f91</div>
 <div class="kv-grid">
   <div class="kv"><span class="k">v1.5.0</span><span class="v">The most recent annotated tag reachable from here.</span></div>
   <div class="kv"><span class="k">14</span><span class="v">Commits since that tag.</span></div>
   <div class="kv"><span class="k">ga7c2f91</span><span class="v">The current commit ("g" for git).</span></div>
 </div>
-<pre><code>git describe --tags --always --dirty</code></pre>
+<pre><code class="language-bash">git describe --tags --always --dirty</code></pre>
 <div class="out">v1.5.0-14-ga7c2f91-dirty</div>
 <p>Bake this into your build and every deployed artefact can say exactly which commit it is — including whether it was built from an uncommitted working tree, which the <code>-dirty</code> suffix reveals. It is the cheapest possible answer to "what is actually running in production?"</p>
 
 <h3>Fixing a tag you pushed wrong</h3>
-<pre><code>git tag -d v1.5.0                       <span class="tok-comment"># delete locally</span>
+<pre><code class="language-bash">git tag -d v1.5.0                       <span class="tok-comment"># delete locally</span>
 git push origin --delete v1.5.0         <span class="tok-comment"># delete on the remote</span>
 git tag -a v1.5.0 -m <span class="tok-string">"…"</span> &lt;right-hash&gt;   <span class="tok-comment"># re-create</span>
 git push origin v1.5.0                  <span class="tok-comment"># push again</span></code></pre>
@@ -366,7 +366,7 @@ git push origin v1.5.0                  <span class="tok-comment"># push again</
 on:
   push:
     tags: [<span class="tok-string">'v*.*.*'</span>]</code></pre>
-<pre><code><span class="tok-comment"># npm keeps package.json and the tag in step for you:</span>
+<pre><code class="language-bash"><span class="tok-comment"># npm keeps package.json and the tag in step for you:</span>
 npm version patch      <span class="tok-comment"># 1.5.0 → 1.5.1, commits, and creates tag v1.5.1</span>
 npm version minor      <span class="tok-comment"># 1.5.1 → 1.6.0</span>
 npm version major      <span class="tok-comment"># 1.6.0 → 2.0.0</span>
@@ -414,13 +414,13 @@ git describe --tags         <span class="tok-comment"># nhap</span></code></pre>
 
 <h3>Hai loại tag, và vì sao khác biệt đó quan trọng</h3>
 ${slide('git-07', 8, 'Tag nhẹ là một file, tag annotated là một đối tượng')}
-<pre><code>git tag v1.5.0                                  <span class="tok-comment"># NHẸ — chỉ là một cái tên</span>
+<pre><code class="language-bash">git tag v1.5.0                                  <span class="tok-comment"># NHẸ — chỉ là một cái tên</span>
 git tag -a v1.5.0 -m <span class="tok-string">"Release 1.5.0"</span>          <span class="tok-comment"># CÓ CHÚ THÍCH — một đối tượng thật</span></code></pre>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-k">Nhẹ (lightweight)</span><span class="lz-v">Một file dưới <code>.git/refs/tags/</code> chứa một mã băm. Không tác giả, không ngày, không lời nhắn. Một cái đánh dấu trang riêng tư.</span></div>
   <div class="lz-layer"><span class="lz-k">Có chú thích (annotated)</span><span class="lz-v">Một đối tượng đầy đủ trong cơ sở dữ liệu: người gắn tag, ngày, lời nhắn, và tuỳ chọn thêm chữ ký GPG/SSH. Đây mới là một bản phát hành.</span></div>
 </div>
-<pre><code>git show v1.5.0 | head -6</code></pre>
+<pre><code class="language-bash">git show v1.5.0 | head -6</code></pre>
 <div class="out">tag v1.5.0
 Tagger: Nguyen Van An &lt;an@example.com&gt;
 Date:   Thu Aug 21 14:20:00 2026 +0700
@@ -443,14 +443,14 @@ ${slide('git-07', 9, 'Semver: MAJOR.MINOR.PATCH')}
 
 <h3>Các lệnh tag hằng ngày</h3>
 ${slide('git-07', 10, 'Sắp tag theo số và bẫy bản -rc')}
-<pre><code>git tag                              <span class="tok-comment"># liệt kê, theo bảng chữ cái</span>
+<pre><code class="language-bash">git tag                              <span class="tok-comment"># liệt kê, theo bảng chữ cái</span>
 git tag -l <span class="tok-string">"v1.5.*"</span>                   <span class="tok-comment"># lọc</span>
 git tag -n9                          <span class="tok-comment"># liệt kê kèm tối đa 9 dòng lời nhắn</span>
 git tag -a v1.5.0 -m <span class="tok-string">"…"</span> 3f8a1c9      <span class="tok-comment"># gắn tag cho một commit QUÁ KHỨ</span>
 git show v1.5.0                      <span class="tok-comment"># cái tag và commit nó trỏ tới</span>
 git checkout v1.5.0                  <span class="tok-comment"># HEAD lìa cành tại bản phát hành đó (bài 3.1)</span>
 git tag -d v1.5.0                    <span class="tok-comment"># xoá ở cục bộ</span></code></pre>
-<pre><code><span class="tok-comment"># Sắp theo cách con người mong đợi (v1.10.0 SAU v1.9.0):</span>
+<pre><code class="language-bash"><span class="tok-comment"># Sắp theo cách con người mong đợi (v1.10.0 SAU v1.9.0):</span>
 git tag --sort=-version:refname | head -5</code></pre>
 <div class="out">v1.10.0
 v1.9.2
@@ -459,7 +459,7 @@ v1.9.0
 v1.8.4</div>
 <p>Không có <code>--sort=version:refname</code> thì bạn nhận thứ tự bảng chữ cái thuần tuý, nơi <code>v1.10.0</code> đứng trước <code>v1.9.0</code>. Chi tiết đó đã làm hỏng nhiều script phát hành hơn bất kỳ chi tiết đơn lẻ nào khác ở đây.</p>
 <div class="callout warn"><strong>Bản tiền phát hành cần thêm một thiết lập.</strong> Chỉ có <code>--sort=-version:refname</code> thì <code>v2.0.0-rc.1</code> đứng <em>trên</em> <code>v2.0.0</code> — ngược với semver, nơi bản tiền phát hành (pre-release) phải đứng trước. Output thật của Git 2.51 trong một kho có cả hai tag:
-<pre><code>git tag --sort=-version:refname | head -3
+<pre><code class="language-bash">git tag --sort=-version:refname | head -3
 v2.0.0-rc.1
 v2.0.0-beta.1
 v2.0.0
@@ -470,26 +470,26 @@ v2.0.0-beta.1</code></pre>
 Đặt một lần bằng <code>git config --global versionsort.suffix -</code> (và <code>git config --global tag.sort -version:refname</code> để <code>git tag</code> trần cũng sắp theo thứ tự này). Script phát hành nào chọn "tag mới nhất" mà thiếu nó sẽ vui vẻ chọn nhầm một bản rc (release candidate — bản ứng viên).</div>
 
 <h3>Tag không tự động được push</h3>
-<pre><code>git push origin v1.5.0            <span class="tok-comment"># một tag</span>
+<pre><code class="language-bash">git push origin v1.5.0            <span class="tok-comment"># một tag</span>
 git push --follow-tags            <span class="tok-comment"># commit + các tag có chú thích trỏ vào chúng</span>
 git push origin --tags            <span class="tok-comment"># mọi tag cục bộ, kể cả rác</span></code></pre>
 <p>Đáng nhắc lại từ bài 5.3 vì đây là nỗi bối rối phổ biến nhất trong ngày phát hành: bạn đã gắn tag, đã push, mà workflow phát hành không chạy — vì cái tag chưa bao giờ rời khỏi máy bạn.</p>
 
 <h3>git describe — một cái tên đọc được cho mọi commit</h3>
 ${slide('git-07', 11, 'Giải phẫu một chuỗi git describe')}
-<pre><code>git describe --tags</code></pre>
+<pre><code class="language-bash">git describe --tags</code></pre>
 <div class="out">v1.5.0-14-ga7c2f91</div>
 <div class="kv-grid">
   <div class="kv"><span class="k">v1.5.0</span><span class="v">Tag có chú thích gần nhất với tới được từ đây.</span></div>
   <div class="kv"><span class="k">14</span><span class="v">Số commit kể từ tag đó.</span></div>
   <div class="kv"><span class="k">ga7c2f91</span><span class="v">Commit hiện tại ("g" là git).</span></div>
 </div>
-<pre><code>git describe --tags --always --dirty</code></pre>
+<pre><code class="language-bash">git describe --tags --always --dirty</code></pre>
 <div class="out">v1.5.0-14-ga7c2f91-dirty</div>
 <p>Nướng cái này vào bản dựng và mọi sản phẩm đã triển khai đều nói được chính xác nó là commit nào — kể cả việc nó được dựng từ một cây làm việc chưa commit, thứ mà hậu tố <code>-dirty</code> phơi ra. Đó là câu trả lời rẻ nhất có thể cho "trên production thật ra đang chạy cái gì?"</p>
 
 <h3>Sửa một tag đã đẩy sai</h3>
-<pre><code>git tag -d v1.5.0                       <span class="tok-comment"># xoá cục bộ</span>
+<pre><code class="language-bash">git tag -d v1.5.0                       <span class="tok-comment"># xoá cục bộ</span>
 git push origin --delete v1.5.0         <span class="tok-comment"># xoá trên remote</span>
 git tag -a v1.5.0 -m <span class="tok-string">"…"</span> &lt;mã-băm-đúng&gt;  <span class="tok-comment"># tạo lại</span>
 git push origin v1.5.0                  <span class="tok-comment"># push lại</span></code></pre>
@@ -500,7 +500,7 @@ git push origin v1.5.0                  <span class="tok-comment"># push lại</
 on:
   push:
     tags: [<span class="tok-string">'v*.*.*'</span>]</code></pre>
-<pre><code><span class="tok-comment"># npm giữ package.json và tag khớp nhau hộ bạn:</span>
+<pre><code class="language-bash"><span class="tok-comment"># npm giữ package.json và tag khớp nhau hộ bạn:</span>
 npm version patch      <span class="tok-comment"># 1.5.0 → 1.5.1, commit, và tạo tag v1.5.1</span>
 npm version minor      <span class="tok-comment"># 1.5.1 → 1.6.0</span>
 npm version major      <span class="tok-comment"># 1.6.0 → 2.0.0</span>
@@ -557,12 +557,12 @@ git describe --tags         <span class="tok-comment"># nhap</span></code></pre>
 
 <h3>The changelog, straight from history</h3>
 ${slide('git-07', 13, 'Changelog: dữ liệu thô từ git log, viết lại cho người đọc')}
-<pre><code>git log --oneline v1.4.0..v1.5.0</code></pre>
+<pre><code class="language-bash">git log --oneline v1.4.0..v1.5.0</code></pre>
 <div class="out">a7c2f91 fix(auth): reject expired refresh tokens on /auth/refresh
 3f8a1c9 feat(auth): add refresh token rotation
 9e2d4b7 perf(feed): batch the author lookup into one query
 5f7a9c2 chore(deps): bump prisma to 6.2.0</div>
-<pre><code><span class="tok-comment"># Grouped by type, ready to paste:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Grouped by type, ready to paste:</span>
 git log --pretty=format:<span class="tok-string">"- %s (%h)"</span> v1.4.0..v1.5.0 --grep=<span class="tok-string">"^feat"</span>
 git log --pretty=format:<span class="tok-string">"- %s (%h)"</span> v1.4.0..v1.5.0 --grep=<span class="tok-string">"^fix"</span></code></pre>
 <div class="out">- feat(auth): add refresh token rotation (3f8a1c9)</div>
@@ -588,7 +588,7 @@ git log --pretty=format:<span class="tok-string">"- %s (%h)"</span> v1.4.0..v1.5
 <div class="callout ok">Write for the person deciding whether to upgrade. "Fixed auth bug" tells them nothing; "sessions never expired, a 40-day-old token still worked" tells them whether this is urgent. The <strong>Security</strong> section deserves its own heading precisely so it can be scanned for in a hurry.</div>
 
 <h3>GitHub Releases</h3>
-<pre><code>gh release create v1.5.0 --generate-notes
+<pre><code class="language-bash">gh release create v1.5.0 --generate-notes
 gh release create v1.5.0 --notes-file CHANGELOG-1.5.0.md
 gh release create v1.5.0 ./dist/app-1.5.0.zip --title <span class="tok-string">"1.5.0 — Token rotation"</span>
 gh release list
@@ -617,7 +617,7 @@ ${slide('git-07', 14, 'Cắt một bản phát hành trong 5 bước')}
 
 <h3>Hotfix — production is broken right now</h3>
 ${slide('git-07', 15, 'Hotfix rẽ từ tag đang chạy, không từ main')}
-<pre><code><span class="tok-comment"># 1. Branch from the RELEASED code, not from main. main may contain</span>
+<pre><code class="language-bash"><span class="tok-comment"># 1. Branch from the RELEASED code, not from main. main may contain</span>
 <span class="tok-comment">#    unreleased work you do not want to ship in an emergency.</span>
 git switch -c hotfix/payment-timeout v1.5.0
 
@@ -634,7 +634,7 @@ git switch main &amp;&amp; git merge hotfix/payment-timeout &amp;&amp; git push<
 
 <h3>cherry-pick — one commit onto another branch</h3>
 ${slide('git-07', 16, 'cherry-pick -x: cùng thay đổi, mã băm mới, có dấu vết')}
-<pre><code>git switch release/1.4
+<pre><code class="language-bash">git switch release/1.4
 git cherry-pick a7c2f91          <span class="tok-comment"># apply just that commit here</span>
 git cherry-pick a7c2f91 3f8a1c9  <span class="tok-comment"># several, in order</span>
 git cherry-pick -x a7c2f91       <span class="tok-comment"># record "(cherry picked from commit …)" in the message</span></code></pre>
@@ -688,12 +688,12 @@ fix: sua loi trong a.txt
 
 <h3>Changelog, thẳng từ lịch sử</h3>
 ${slide('git-07', 13, 'Changelog: dữ liệu thô từ git log, viết lại cho người đọc')}
-<pre><code>git log --oneline v1.4.0..v1.5.0</code></pre>
+<pre><code class="language-bash">git log --oneline v1.4.0..v1.5.0</code></pre>
 <div class="out">a7c2f91 fix(auth): reject expired refresh tokens on /auth/refresh
 3f8a1c9 feat(auth): add refresh token rotation
 9e2d4b7 perf(feed): batch the author lookup into one query
 5f7a9c2 chore(deps): bump prisma to 6.2.0</div>
-<pre><code><span class="tok-comment"># Gom theo loại, sẵn sàng để dán:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Gom theo loại, sẵn sàng để dán:</span>
 git log --pretty=format:<span class="tok-string">"- %s (%h)"</span> v1.4.0..v1.5.0 --grep=<span class="tok-string">"^feat"</span>
 git log --pretty=format:<span class="tok-string">"- %s (%h)"</span> v1.4.0..v1.5.0 --grep=<span class="tok-string">"^fix"</span></code></pre>
 <div class="out">- feat(auth): add refresh token rotation (3f8a1c9)</div>
@@ -719,7 +719,7 @@ git log --pretty=format:<span class="tok-string">"- %s (%h)"</span> v1.4.0..v1.5
 <div class="callout ok">Hãy viết cho người đang quyết định có nên nâng cấp hay không. "Sửa lỗi auth" chẳng nói gì với họ; "phiên đăng nhập không bao giờ hết hạn, một token 40 ngày tuổi vẫn chạy" cho họ biết chuyện này có gấp hay không. Mục <strong>Bảo mật</strong> xứng đáng có tiêu đề riêng đúng để người ta lướt mắt tìm được nó lúc vội.</div>
 
 <h3>GitHub Releases</h3>
-<pre><code>gh release create v1.5.0 --generate-notes
+<pre><code class="language-bash">gh release create v1.5.0 --generate-notes
 gh release create v1.5.0 --notes-file CHANGELOG-1.5.0.md
 gh release create v1.5.0 ./dist/app-1.5.0.zip --title <span class="tok-string">"1.5.0 — Xoay vong token"</span>
 gh release list
@@ -748,7 +748,7 @@ ${slide('git-07', 14, 'Cắt một bản phát hành trong 5 bước')}
 
 <h3>Hotfix — production đang hỏng ngay lúc này</h3>
 ${slide('git-07', 15, 'Hotfix rẽ từ tag đang chạy, không từ main')}
-<pre><code><span class="tok-comment"># 1. Rẽ nhánh từ MÃ ĐÃ PHÁT HÀNH, không phải từ main. main có thể chứa</span>
+<pre><code class="language-bash"><span class="tok-comment"># 1. Rẽ nhánh từ MÃ ĐÃ PHÁT HÀNH, không phải từ main. main có thể chứa</span>
 <span class="tok-comment">#    phần việc chưa phát hành mà bạn không muốn đẩy lên trong lúc khẩn cấp.</span>
 git switch -c hotfix/payment-timeout v1.5.0
 
@@ -765,7 +765,7 @@ git switch main &amp;&amp; git merge hotfix/payment-timeout &amp;&amp; git push<
 
 <h3>cherry-pick — một commit sang một nhánh khác</h3>
 ${slide('git-07', 16, 'cherry-pick -x: cùng thay đổi, mã băm mới, có dấu vết')}
-<pre><code>git switch release/1.4
+<pre><code class="language-bash">git switch release/1.4
 git cherry-pick a7c2f91          <span class="tok-comment"># chỉ áp đúng commit đó vào đây</span>
 git cherry-pick a7c2f91 3f8a1c9  <span class="tok-comment"># vài cái, theo thứ tự</span>
 git cherry-pick -x a7c2f91       <span class="tok-comment"># ghi "(cherry picked from commit …)" vào lời nhắn</span></code></pre>

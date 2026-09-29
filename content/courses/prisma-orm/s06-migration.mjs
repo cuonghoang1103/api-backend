@@ -25,7 +25,7 @@ export default {
 <p class="lead">A Prisma migration is two things: a folder containing plain SQL, and a row in a table recording that the folder ran. That is the entire mechanism. Everything confusing about migrations — drift, <code>P3009</code>, checksum failures, the deploy that will not proceed — becomes obvious once you have looked at both halves.</p>
 
 <h3>Half one: the folder</h3>
-<pre><code>ls -R prisma/migrations | head -20</code></pre>
+<pre><code class="language-bash">ls -R prisma/migrations | head -20</code></pre>
 <div class="out">prisma/migrations:
 0_init
 20260622_add_message_reply_support
@@ -41,12 +41,12 @@ migration.sql</div>
   <div class="kv"><span class="k"><code>migration_lock.toml</code></span><span class="v">Records the provider the migrations were written for. Switching provider makes it error rather than silently generating MySQL SQL against PostgreSQL. Commit it; never edit it.</span></div>
   <div class="kv"><span class="k">All of it is committed</span><span class="v">Migrations are source code. They are reviewed, they are versioned, and their history is how a new developer builds a database that matches production.</span></div>
 </div>
-<pre><code>cat prisma/migrations/20260623_add_dev_post_video_url/migration.sql</code></pre>
+<pre><code class="language-bash">cat prisma/migrations/20260623_add_dev_post_video_url/migration.sql</code></pre>
 <div class="out">-- AlterTable
 ALTER TABLE "dev_posts" ADD COLUMN     "video_url" VARCHAR(500);</div>
 
 <h3>Half two: the table</h3>
-<pre><code>docker exec -it pg-hoc psql -U student -d hocprisma -c "\\d _prisma_migrations"</code></pre>
+<pre><code class="language-bash">docker exec -it pg-hoc psql -U student -d hocprisma -c "\\d _prisma_migrations"</code></pre>
 <div class="out">                       Table "public._prisma_migrations"
        Column        |           Type           | Nullable |    Default
 ---------------------+--------------------------+----------+---------------
@@ -58,7 +58,7 @@ ALTER TABLE "dev_posts" ADD COLUMN     "video_url" VARCHAR(500);</div>
  rolled_back_at      | timestamp with time zone |          |
  started_at          | timestamp with time zone | not null | now()
  applied_steps_count | integer                  | not null | 0</div>
-<pre><code>SELECT migration_name, started_at, finished_at, rolled_back_at, applied_steps_count
+<pre><code class="language-sql">SELECT migration_name, started_at, finished_at, rolled_back_at, applied_steps_count
 FROM _prisma_migrations ORDER BY started_at DESC LIMIT 4;</code></pre>
 <div class="out">        migration_name          |         started_at         |        finished_at         | rolled_back_at | applied_steps_count
 --------------------------------+----------------------------+----------------------------+----------------+---------------------
@@ -80,7 +80,7 @@ FROM _prisma_migrations ORDER BY started_at DESC LIMIT 4;</code></pre>
   <div class="lz-step"><span class="lz-k">Failed</span><span class="lz-t">Row, no <code>finished_at</code>, no <code>rolled_back_at</code></span><span class="lz-d">It started and did not finish. <strong>Every subsequent <code>migrate deploy</code> refuses to run</strong> with <code>P3009</code> until a human resolves it. Lesson 6.5 is the protocol.</span></div>
   <div class="lz-step"><span class="lz-k">Resolved</span><span class="lz-t">Row with <code>rolled_back_at</code></span><span class="lz-d">A failed migration a human marked as cleaned up. Deploys continue past it, and Prisma will retry it if the folder is still there.</span></div>
 </div>
-<pre><code>npx prisma migrate status</code></pre>
+<pre><code class="language-bash">npx prisma migrate status</code></pre>
 <div class="out">3 migrations found in prisma/migrations
 
 Following migration have not yet been applied:
@@ -91,7 +91,7 @@ To apply migrations in production run &#96;prisma migrate deploy&#96;.</div>
 <p><code>migrate status</code> is read-only and safe on any database, including production. It is the first command to run when a deploy behaves strangely, and it costs nothing.</p>
 
 <h3>The checksum, and why you must not edit an applied migration</h3>
-<pre><code><span class="tok-comment"># Change one character in a migration that has already run</span>
+<pre><code class="language-bash"><span class="tok-comment"># Change one character in a migration that has already run</span>
 echo "-- them mot dong chu thich" &gt;&gt; prisma/migrations/20260823041207_khoi_tao/migration.sql
 npx prisma migrate deploy</code></pre>
 <div class="out">Error: P3006
@@ -116,7 +116,7 @@ The migration &#96;20260823041207_khoi_tao&#96; was modified after it was applie
 </div>
 
 <h3>Reading a real migration history</h3>
-<pre><code><span class="tok-comment"># The CuongThai repository, measured</span>
+<pre><code class="language-bash"><span class="tok-comment"># The CuongThai repository, measured</span>
 ls prisma/migrations | wc -l
 ls prisma/migrations | head -6
 wc -l prisma/migrations/*/migration.sql | tail -1</code></pre>
@@ -144,7 +144,7 @@ wc -l prisma/migrations/*/migration.sql | tail -1</code></pre>
 <p class="lead">Một migration của Prisma là hai thứ: một thư mục chứa SQL thuần, và một hàng trong một cái bảng ghi lại rằng thư mục đó đã chạy. Đó là toàn bộ cơ chế. Mọi thứ khó hiểu về migration — trôi dạt, <code>P3009</code>, lỗi checksum, cái deploy không chịu đi tiếp — đều trở nên hiển nhiên một khi bạn đã nhìn vào cả hai nửa.</p>
 
 <h3>Nửa thứ nhất: thư mục</h3>
-<pre><code>ls -R prisma/migrations | head -20</code></pre>
+<pre><code class="language-bash">ls -R prisma/migrations | head -20</code></pre>
 <div class="out">prisma/migrations:
 0_init
 20260622_add_message_reply_support
@@ -160,12 +160,12 @@ migration.sql</div>
   <div class="kv"><span class="k"><code>migration_lock.toml</code></span><span class="v">Ghi lại provider mà các migration được viết cho. Đổi provider thì nó báo lỗi thay vì âm thầm sinh SQL của MySQL cho PostgreSQL. Hãy commit nó; đừng bao giờ sửa nó.</span></div>
   <div class="kv"><span class="k">Tất cả đều được commit</span><span class="v">Migration là mã nguồn. Chúng được review, được đánh phiên bản, và lịch sử của chúng là cách một lập trình viên mới dựng ra một cơ sở dữ liệu khớp với production.</span></div>
 </div>
-<pre><code>cat prisma/migrations/20260623_add_dev_post_video_url/migration.sql</code></pre>
+<pre><code class="language-bash">cat prisma/migrations/20260623_add_dev_post_video_url/migration.sql</code></pre>
 <div class="out">-- AlterTable
 ALTER TABLE "dev_posts" ADD COLUMN     "video_url" VARCHAR(500);</div>
 
 <h3>Nửa thứ hai: cái bảng</h3>
-<pre><code>docker exec -it pg-hoc psql -U student -d hocprisma -c "\\d _prisma_migrations"</code></pre>
+<pre><code class="language-bash">docker exec -it pg-hoc psql -U student -d hocprisma -c "\\d _prisma_migrations"</code></pre>
 <div class="out">                       Table "public._prisma_migrations"
        Column        |           Type           | Nullable |    Default
 ---------------------+--------------------------+----------+---------------
@@ -177,7 +177,7 @@ ALTER TABLE "dev_posts" ADD COLUMN     "video_url" VARCHAR(500);</div>
  rolled_back_at      | timestamp with time zone |          |
  started_at          | timestamp with time zone | not null | now()
  applied_steps_count | integer                  | not null | 0</div>
-<pre><code>SELECT migration_name, started_at, finished_at, rolled_back_at, applied_steps_count
+<pre><code class="language-sql">SELECT migration_name, started_at, finished_at, rolled_back_at, applied_steps_count
 FROM _prisma_migrations ORDER BY started_at DESC LIMIT 4;</code></pre>
 <div class="out">        migration_name          |         started_at         |        finished_at         | rolled_back_at | applied_steps_count
 --------------------------------+----------------------------+----------------------------+----------------+---------------------
@@ -199,7 +199,7 @@ FROM _prisma_migrations ORDER BY started_at DESC LIMIT 4;</code></pre>
   <div class="lz-step"><span class="lz-k">Hỏng</span><span class="lz-t">Có hàng, không <code>finished_at</code>, không <code>rolled_back_at</code></span><span class="lz-d">Nó đã bắt đầu và chưa xong. <strong>Mọi lần <code>migrate deploy</code> sau đó đều từ chối chạy</strong> với <code>P3009</code> cho tới khi có người xử lý. Bài 6.5 là giao thức xử lý.</span></div>
   <div class="lz-step"><span class="lz-k">Đã xử lý</span><span class="lz-t">Có hàng kèm <code>rolled_back_at</code></span><span class="lz-d">Một migration hỏng mà con người đã đánh dấu là đã dọn xong. Các lần deploy đi tiếp qua nó, và Prisma sẽ thử lại nó nếu thư mục vẫn còn đó.</span></div>
 </div>
-<pre><code>npx prisma migrate status</code></pre>
+<pre><code class="language-bash">npx prisma migrate status</code></pre>
 <div class="out">3 migrations found in prisma/migrations
 
 Following migration have not yet been applied:
@@ -210,7 +210,7 @@ To apply migrations in production run &#96;prisma migrate deploy&#96;.</div>
 <p><code>migrate status</code> chỉ đọc và an toàn trên mọi cơ sở dữ liệu, kể cả production. Nó là câu lệnh đầu tiên nên chạy khi một bản deploy cư xử lạ, và nó không tốn gì.</p>
 
 <h3>Checksum, và vì sao bạn không được sửa một migration đã áp dụng</h3>
-<pre><code><span class="tok-comment"># Đổi một ký tự trong một migration vốn đã chạy</span>
+<pre><code class="language-bash"><span class="tok-comment"># Đổi một ký tự trong một migration vốn đã chạy</span>
 echo "-- them mot dong chu thich" &gt;&gt; prisma/migrations/20260823041207_khoi_tao/migration.sql
 npx prisma migrate deploy</code></pre>
 <div class="out">Error: P3006
@@ -235,7 +235,7 @@ The migration &#96;20260823041207_khoi_tao&#96; was modified after it was applie
 </div>
 
 <h3>Đọc một lịch sử migration thật</h3>
-<pre><code><span class="tok-comment"># Kho mã CuongThai, đo thật</span>
+<pre><code class="language-bash"><span class="tok-comment"># Kho mã CuongThai, đo thật</span>
 ls prisma/migrations | wc -l
 ls prisma/migrations | head -6
 wc -l prisma/migrations/*/migration.sql | tail -1</code></pre>
@@ -279,7 +279,7 @@ wc -l prisma/migrations/*/migration.sql | tail -1</code></pre>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Compare shadow against the real database</span><span class="lz-d">If they differ, someone changed the real database outside the migration history. That is <strong>drift</strong>, and Lesson 6.4 is about it.</span></div>
   <div class="lz-step"><span class="lz-k">5</span><span class="lz-t">Drop the shadow, write the file, apply it</span><span class="lz-d">Then regenerate the client and run the seed. The shadow database exists for perhaps two seconds and you never see it.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Watch it happen: list databases while migrate dev runs</span>
+<pre><code class="language-bash"><span class="tok-comment"># Watch it happen: list databases while migrate dev runs</span>
 npx prisma migrate dev --name them_cot &amp;
 sleep 0.4
 docker exec pg-hoc psql -U student -d postgres -c "\\l" | grep shadow</code></pre>
@@ -289,7 +289,7 @@ docker exec pg-hoc psql -U student -d postgres -c "\\l" | grep shadow</code></pr
 </div>
 
 <h3>Why it fails on a hosted database</h3>
-<pre><code>npx prisma migrate dev --name them_cot</code></pre>
+<pre><code class="language-bash">npx prisma migrate dev --name them_cot</code></pre>
 <div class="out">Error: P3014
 
 Prisma Migrate could not create the shadow database. Please make sure the database
@@ -304,7 +304,7 @@ ERROR: permission denied to create database</div>
   <div class="kv"><span class="k">It must be a different database</span><span class="v">Pointing <code>shadowDatabaseUrl</code> at your development database means Prisma <strong>drops every table in it</strong> on each <code>migrate dev</code>. That is not a warning, it is the documented behaviour — the shadow database is reset by design.</span></div>
   <div class="kv"><span class="k">Never point it at anything real</span><span class="v">Not staging, not a shared team database, and obviously not production. The URL belongs in a local <code>.env</code> and nowhere else.</span></div>
 </div>
-<pre><code>datasource db {
+<pre><code class="language-typescript">datasource db {
   provider          = "postgresql"
   url               = env("DATABASE_URL")
   shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
@@ -312,7 +312,7 @@ ERROR: permission denied to create database</div>
 <pre><code><span class="tok-comment"># .env — a second database on the same server, created once by hand</span>
 DATABASE_URL="postgresql://student:matkhau@localhost:5432/hocprisma"
 SHADOW_DATABASE_URL="postgresql://student:matkhau@localhost:5432/hocprisma_shadow"</code></pre>
-<pre><code>docker exec pg-hoc psql -U student -d postgres -c "CREATE DATABASE hocprisma_shadow;"
+<pre><code class="language-sql">docker exec pg-hoc psql -U student -d postgres -c "CREATE DATABASE hocprisma_shadow;"
 npx prisma migrate dev --name them_cot</code></pre>
 <div class="out">CREATE DATABASE
 Environment variables loaded from .env
@@ -324,7 +324,7 @@ The following migration(s) have been created and applied from new schema changes
 Your database is now in sync with your schema.</div>
 
 <h3>The other failure: a migration that cannot replay</h3>
-<pre><code>npx prisma migrate dev --name bat_ky</code></pre>
+<pre><code class="language-bash">npx prisma migrate dev --name bat_ky</code></pre>
 <div class="out">Error: P3006
 
 Migration &#96;20260706130000_add_music_and_profile&#96; failed to apply cleanly to the
@@ -340,7 +340,7 @@ ERROR: relation "post_music_post_id_key" already exists</div>
 </div>
 
 <h3>Production does not use one</h3>
-<pre><code>npx prisma migrate deploy</code></pre>
+<pre><code class="language-bash">npx prisma migrate deploy</code></pre>
 <div class="out">Environment variables loaded from .env
 Prisma schema loaded from prisma/schema.prisma
 Datasource "db": PostgreSQL database "cuonghoangdev"
@@ -361,13 +361,13 @@ All migrations have been successfully applied.</div>
 </div>
 
 <h3>The command that answers "did that work?"</h3>
-<pre><code><span class="tok-comment"># Compare the live database against the schema file. Empty = no drift.</span>
+<pre><code class="language-bash"><span class="tok-comment"># Compare the live database against the schema file. Empty = no drift.</span>
 npx prisma migrate diff \\
   --from-schema-datasource prisma/schema.prisma \\
   --to-schema-datamodel prisma/schema.prisma \\
   --script</code></pre>
 <div class="out">-- This is an empty migration.</div>
-<pre><code><span class="tok-comment"># Compare the migration history against the live database instead</span>
+<pre><code class="language-bash"><span class="tok-comment"># Compare the migration history against the live database instead</span>
 npx prisma migrate diff \\
   --from-migrations ./prisma/migrations \\
   --to-schema-datasource prisma/schema.prisma \\
@@ -400,7 +400,7 @@ npx prisma migrate diff \\
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">So shadow với cơ sở dữ liệu thật</span><span class="lz-d">Nếu hai bên khác nhau thì có ai đó đã đổi cơ sở dữ liệu thật ngoài lịch sử migration. Đó là <strong>trôi dạt</strong>, và Bài 6.4 nói về nó.</span></div>
   <div class="lz-step"><span class="lz-k">5</span><span class="lz-t">Xoá shadow, ghi tệp, áp dụng nó</span><span class="lz-d">Rồi sinh lại client và chạy seed. Shadow database tồn tại có lẽ hai giây và bạn không bao giờ nhìn thấy nó.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Xem nó xảy ra: liệt kê các cơ sở dữ liệu trong lúc migrate dev đang chạy</span>
+<pre><code class="language-bash"><span class="tok-comment"># Xem nó xảy ra: liệt kê các cơ sở dữ liệu trong lúc migrate dev đang chạy</span>
 npx prisma migrate dev --name them_cot &amp;
 sleep 0.4
 docker exec pg-hoc psql -U student -d postgres -c "\\l" | grep shadow</code></pre>
@@ -410,7 +410,7 @@ docker exec pg-hoc psql -U student -d postgres -c "\\l" | grep shadow</code></pr
 </div>
 
 <h3>Vì sao nó hỏng trên cơ sở dữ liệu thuê</h3>
-<pre><code>npx prisma migrate dev --name them_cot</code></pre>
+<pre><code class="language-bash">npx prisma migrate dev --name them_cot</code></pre>
 <div class="out">Error: P3014
 
 Prisma Migrate could not create the shadow database. Please make sure the database
@@ -425,7 +425,7 @@ ERROR: permission denied to create database</div>
   <div class="kv"><span class="k">Nó phải là một cơ sở dữ liệu KHÁC</span><span class="v">Trỏ <code>shadowDatabaseUrl</code> vào cơ sở dữ liệu phát triển của bạn nghĩa là Prisma <strong>xoá sạch mọi bảng trong đó</strong> ở mỗi lần <code>migrate dev</code>. Đó không phải một lời cảnh báo, đó là hành vi được ghi trong tài liệu — shadow database vốn được thiết kế để bị xoá sạch.</span></div>
   <div class="kv"><span class="k">Đừng bao giờ trỏ nó vào thứ gì có thật</span><span class="v">Không phải staging, không phải một cơ sở dữ liệu dùng chung của đội, và hiển nhiên không phải production. Cái URL đó thuộc về một tệp <code>.env</code> ở máy bạn và không thuộc về đâu khác.</span></div>
 </div>
-<pre><code>datasource db {
+<pre><code class="language-typescript">datasource db {
   provider          = "postgresql"
   url               = env("DATABASE_URL")
   shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
@@ -433,7 +433,7 @@ ERROR: permission denied to create database</div>
 <pre><code><span class="tok-comment"># .env — một cơ sở dữ liệu thứ hai trên cùng máy chủ, tạo tay một lần</span>
 DATABASE_URL="postgresql://student:matkhau@localhost:5432/hocprisma"
 SHADOW_DATABASE_URL="postgresql://student:matkhau@localhost:5432/hocprisma_shadow"</code></pre>
-<pre><code>docker exec pg-hoc psql -U student -d postgres -c "CREATE DATABASE hocprisma_shadow;"
+<pre><code class="language-sql">docker exec pg-hoc psql -U student -d postgres -c "CREATE DATABASE hocprisma_shadow;"
 npx prisma migrate dev --name them_cot</code></pre>
 <div class="out">CREATE DATABASE
 Environment variables loaded from .env
@@ -445,7 +445,7 @@ The following migration(s) have been created and applied from new schema changes
 Your database is now in sync with your schema.</div>
 
 <h3>Sự cố còn lại: một migration không phát lại được</h3>
-<pre><code>npx prisma migrate dev --name bat_ky</code></pre>
+<pre><code class="language-bash">npx prisma migrate dev --name bat_ky</code></pre>
 <div class="out">Error: P3006
 
 Migration &#96;20260706130000_add_music_and_profile&#96; failed to apply cleanly to the
@@ -461,7 +461,7 @@ ERROR: relation "post_music_post_id_key" already exists</div>
 </div>
 
 <h3>Production không dùng shadow database</h3>
-<pre><code>npx prisma migrate deploy</code></pre>
+<pre><code class="language-bash">npx prisma migrate deploy</code></pre>
 <div class="out">Environment variables loaded from .env
 Prisma schema loaded from prisma/schema.prisma
 Datasource "db": PostgreSQL database "cuonghoangdev"
@@ -482,13 +482,13 @@ All migrations have been successfully applied.</div>
 </div>
 
 <h3>Câu lệnh trả lời "vừa rồi có ăn thua không?"</h3>
-<pre><code><span class="tok-comment"># So cơ sở dữ liệu đang sống với tệp lược đồ. Rỗng = không trôi dạt.</span>
+<pre><code class="language-bash"><span class="tok-comment"># So cơ sở dữ liệu đang sống với tệp lược đồ. Rỗng = không trôi dạt.</span>
 npx prisma migrate diff \\
   --from-schema-datasource prisma/schema.prisma \\
   --to-schema-datamodel prisma/schema.prisma \\
   --script</code></pre>
 <div class="out">-- This is an empty migration.</div>
-<pre><code><span class="tok-comment"># Hoặc so lịch sử migration với cơ sở dữ liệu đang sống</span>
+<pre><code class="language-bash"><span class="tok-comment"># Hoặc so lịch sử migration với cơ sở dữ liệu đang sống</span>
 npx prisma migrate diff \\
   --from-migrations ./prisma/migrations \\
   --to-schema-datasource prisma/schema.prisma \\
@@ -529,7 +529,7 @@ npx prisma migrate diff \\
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Edit it — this is the point</span><span class="lz-d">Split a destructive step into safe ones, add a backfill, add a <code>CONCURRENTLY</code>, add the partial index Prisma cannot declare.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Apply with <code>migrate deploy</code>, then verify</span><span class="lz-d">No shadow database is involved, so a repository with a broken history still works. Then <code>migrate diff</code> again: empty output means the schema and the database agree.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Step 2 — generate the starting point</span>
+<pre><code class="language-bash"><span class="tok-comment"># Step 2 — generate the starting point</span>
 mkdir -p prisma/migrations/20260823063000_them_slug
 
 npx prisma migrate diff \\
@@ -546,7 +546,7 @@ CREATE UNIQUE INDEX "posts_slug_key" ON "posts"("slug");</div>
 <div class="callout warn">
 <p><strong>That generated SQL is correct and will fail.</strong> <code>ADD COLUMN … NOT NULL</code> with no default cannot be applied to a table that already has rows — PostgreSQL has nothing to put in the existing ones. This is exactly the case where the generator gives you the shape and a human has to supply the plan. Step 3 is where the value is.</p>
 </div>
-<pre><code><span class="tok-comment">-- Step 3 — the edited version that actually works</span>
+<pre><code class="language-sql"><span class="tok-comment">-- Step 3 — the edited version that actually works</span>
 
 <span class="tok-comment">-- 1. Add it nullable, so existing rows survive</span>
 ALTER TABLE "posts" ADD COLUMN "slug" TEXT;
@@ -559,7 +559,7 @@ WHERE "slug" IS NULL;
 <span class="tok-comment">-- 3. Now the constraint can be satisfied</span>
 ALTER TABLE "posts" ALTER COLUMN "slug" SET NOT NULL;
 CREATE UNIQUE INDEX "posts_slug_key" ON "posts"("slug");</code></pre>
-<pre><code>npx prisma migrate deploy
+<pre><code class="language-bash">npx prisma migrate deploy
 npx prisma migrate diff --from-schema-datasource prisma/schema.prisma \\
                         --to-schema-datamodel prisma/schema.prisma --script</code></pre>
 <div class="out">Applying migration &#96;20260823063000_them_slug&#96;
@@ -570,7 +570,7 @@ The following migration(s) have been applied:
 <p>Empty diff. The database now matches the schema, the migration is recorded in <code>_prisma_migrations</code> like any other, and nothing about the rest of the toolchain knows or cares that a human wrote the SQL.</p>
 
 <h3>Renaming a column without losing data</h3>
-<pre><code><span class="tok-comment">// You rename a field in the schema</span>
+<pre><code class="language-typescript"><span class="tok-comment">// You rename a field in the schema</span>
 model User {
   fullName String? @map("ho_ten")     <span class="tok-comment">// was: fullName String? @map("full_name")</span>
 }</code></pre>
@@ -581,14 +581,14 @@ ALTER TABLE "users" ADD COLUMN     "ho_ten" TEXT;</div>
 <p><strong>Trap — Prisma cannot see a rename.</strong> It diffs two schema states, and "column <code>full_name</code> gone, column <code>ho_ten</code> new" is indistinguishable from a rename. So the generated migration <strong>drops the column and every value in it</strong>. On a development database with test data this is invisible. On production it is silent, permanent data loss, and the migration reports success.</p>
 <p>The fix is one line, and you must write it yourself every time:</p>
 </div>
-<pre><code><span class="tok-comment">-- The hand-written version</span>
+<pre><code class="language-sql"><span class="tok-comment">-- The hand-written version</span>
 ALTER TABLE "users" RENAME COLUMN "full_name" TO "ho_ten";</code></pre>
 <div class="callout ok">
 <p><strong>Read every generated migration before committing it, and look specifically for <code>DROP</code>.</strong> A <code>DROP COLUMN</code> or <code>DROP TABLE</code> you did not consciously intend is the single highest-risk line that can appear in a migration. <code>migrate dev</code> does warn about data loss in its prompt — but in a pipeline, or when you are moving quickly, the warning is a line of yellow text between two lines of green.</p>
 </div>
 
 <h3>The five things Prisma cannot declare</h3>
-<pre><code><span class="tok-comment">-- 1. Partial index — "unique among live rows only"</span>
+<pre><code class="language-sql"><span class="tok-comment">-- 1. Partial index — "unique among live rows only"</span>
 CREATE UNIQUE INDEX "users_email_active_key"
   ON "users"("email") WHERE "deleted_at" IS NULL;
 
@@ -616,7 +616,7 @@ ALTER TABLE "posts" ADD COLUMN "search" tsvector
 </div>
 
 <h3>The index that must not lock the table</h3>
-<pre><code><span class="tok-comment">-- What Prisma generates: locks the table for the whole build</span>
+<pre><code class="language-sql"><span class="tok-comment">-- What Prisma generates: locks the table for the whole build</span>
 CREATE INDEX "posts_author_id_idx" ON "posts"("author_id");
 
 <span class="tok-comment">-- What production needs: no write lock, but it CANNOT run in a transaction</span>
@@ -633,7 +633,7 @@ Time: 91104.882 ms      ← slower overall, and writes continue throughout</div>
 </div>
 
 <h3>A realistic hand-written migration, annotated</h3>
-<pre><code><span class="tok-comment">-- prisma/migrations/20260823064500_them_xoa_mem/migration.sql</span>
+<pre><code class="language-sql"><span class="tok-comment">-- prisma/migrations/20260823064500_them_xoa_mem/migration.sql</span>
 <span class="tok-comment">-- Adds soft delete to posts. Written by hand because of steps 3 and 4,</span>
 <span class="tok-comment">-- which the generator cannot express.</span>
 
@@ -678,7 +678,7 @@ CREATE UNIQUE INDEX "posts_slug_active_key"
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Sửa nó — đây mới là trọng tâm</span><span class="lz-d">Chẻ một bước phá huỷ thành các bước an toàn, thêm một lần đổ dữ liệu, thêm <code>CONCURRENTLY</code>, thêm cái partial index mà Prisma không khai được.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Áp dụng bằng <code>migrate deploy</code>, rồi kiểm lại</span><span class="lz-d">Không có shadow database nào tham gia, nên một kho có lịch sử hỏng vẫn chạy được. Sau đó <code>migrate diff</code> lần nữa: output rỗng nghĩa là lược đồ và cơ sở dữ liệu đồng ý với nhau.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Bước 2 — sinh ra điểm khởi đầu</span>
+<pre><code class="language-bash"><span class="tok-comment"># Bước 2 — sinh ra điểm khởi đầu</span>
 mkdir -p prisma/migrations/20260823063000_them_slug
 
 npx prisma migrate diff \\
@@ -695,7 +695,7 @@ CREATE UNIQUE INDEX "posts_slug_key" ON "posts"("slug");</div>
 <div class="callout warn">
 <p><strong>Đoạn SQL sinh ra đó vừa đúng vừa sẽ hỏng.</strong> <code>ADD COLUMN … NOT NULL</code> không kèm giá trị mặc định thì không áp dụng được lên một bảng vốn đã có hàng — PostgreSQL không có gì để điền vào những hàng cũ. Đây đúng là trường hợp bộ sinh cho bạn cái hình dạng còn con người phải cung cấp kế hoạch. Bước 3 mới là chỗ có giá trị.</p>
 </div>
-<pre><code><span class="tok-comment">-- Bước 3 — bản đã sửa và thật sự chạy được</span>
+<pre><code class="language-sql"><span class="tok-comment">-- Bước 3 — bản đã sửa và thật sự chạy được</span>
 
 <span class="tok-comment">-- 1. Thêm ở dạng cho phép null, để các hàng cũ sống sót</span>
 ALTER TABLE "posts" ADD COLUMN "slug" TEXT;
@@ -708,7 +708,7 @@ WHERE "slug" IS NULL;
 <span class="tok-comment">-- 3. Giờ mới thoả được ràng buộc</span>
 ALTER TABLE "posts" ALTER COLUMN "slug" SET NOT NULL;
 CREATE UNIQUE INDEX "posts_slug_key" ON "posts"("slug");</code></pre>
-<pre><code>npx prisma migrate deploy
+<pre><code class="language-bash">npx prisma migrate deploy
 npx prisma migrate diff --from-schema-datasource prisma/schema.prisma \\
                         --to-schema-datamodel prisma/schema.prisma --script</code></pre>
 <div class="out">Applying migration &#96;20260823063000_them_slug&#96;
@@ -719,7 +719,7 @@ The following migration(s) have been applied:
 <p>Chênh lệch rỗng. Cơ sở dữ liệu giờ khớp lược đồ, migration được ghi vào <code>_prisma_migrations</code> như mọi cái khác, và phần còn lại của bộ công cụ không biết cũng chẳng quan tâm rằng đoạn SQL đó do con người viết.</p>
 
 <h3>Đổi tên một cột mà không mất dữ liệu</h3>
-<pre><code><span class="tok-comment">// Bạn đổi tên một trường trong lược đồ</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Bạn đổi tên một trường trong lược đồ</span>
 model User {
   fullName String? @map("ho_ten")     <span class="tok-comment">// trước là: fullName String? @map("full_name")</span>
 }</code></pre>
@@ -730,14 +730,14 @@ ALTER TABLE "users" ADD COLUMN     "ho_ten" TEXT;</div>
 <p><strong>Bẫy — Prisma không nhìn thấy một lần đổi tên.</strong> Nó so hai trạng thái lược đồ, và "cột <code>full_name</code> biến mất, cột <code>ho_ten</code> xuất hiện" thì không phân biệt được với một lần đổi tên. Nên migration sinh ra <strong>xoá cột đó cùng mọi giá trị trong nó</strong>. Trên cơ sở dữ liệu phát triển với dữ liệu thử thì chuyện này vô hình. Trên production đó là mất dữ liệu vĩnh viễn trong im lặng, và migration thì báo thành công.</p>
 <p>Cách vá chỉ một dòng, và bạn phải tự viết nó mỗi lần:</p>
 </div>
-<pre><code><span class="tok-comment">-- Bản viết tay</span>
+<pre><code class="language-sql"><span class="tok-comment">-- Bản viết tay</span>
 ALTER TABLE "users" RENAME COLUMN "full_name" TO "ho_ten";</code></pre>
 <div class="callout ok">
 <p><strong>Hãy đọc mọi migration sinh ra trước khi commit, và tìm riêng chữ <code>DROP</code>.</strong> Một <code>DROP COLUMN</code> hay <code>DROP TABLE</code> mà bạn không cố ý là dòng rủi ro cao nhất có thể xuất hiện trong một migration. <code>migrate dev</code> có cảnh báo về mất dữ liệu trong câu hỏi của nó — nhưng trong một đường ống, hoặc khi bạn đang làm nhanh, lời cảnh báo ấy là một dòng chữ vàng nằm giữa hai dòng chữ xanh.</p>
 </div>
 
 <h3>Năm thứ Prisma không khai được</h3>
-<pre><code><span class="tok-comment">-- 1. Partial index — "unique chỉ trong các hàng còn sống"</span>
+<pre><code class="language-sql"><span class="tok-comment">-- 1. Partial index — "unique chỉ trong các hàng còn sống"</span>
 CREATE UNIQUE INDEX "users_email_active_key"
   ON "users"("email") WHERE "deleted_at" IS NULL;
 
@@ -765,7 +765,7 @@ ALTER TABLE "posts" ADD COLUMN "search" tsvector
 </div>
 
 <h3>Cái chỉ mục không được phép khoá bảng</h3>
-<pre><code><span class="tok-comment">-- Thứ Prisma sinh ra: khoá bảng suốt quá trình dựng</span>
+<pre><code class="language-sql"><span class="tok-comment">-- Thứ Prisma sinh ra: khoá bảng suốt quá trình dựng</span>
 CREATE INDEX "posts_author_id_idx" ON "posts"("author_id");
 
 <span class="tok-comment">-- Thứ production cần: không khoá ghi, nhưng KHÔNG chạy được trong giao dịch</span>
@@ -782,7 +782,7 @@ Time: 91104.882 ms      ← tổng thời gian lâu hơn, và write vẫn chạy
 </div>
 
 <h3>Một migration viết tay thực tế, có chú giải</h3>
-<pre><code><span class="tok-comment">-- prisma/migrations/20260823064500_them_xoa_mem/migration.sql</span>
+<pre><code class="language-sql"><span class="tok-comment">-- prisma/migrations/20260823064500_them_xoa_mem/migration.sql</span>
 <span class="tok-comment">-- Thêm xoá mềm cho posts. Viết tay vì bước 3 và 4,</span>
 <span class="tok-comment">-- những thứ bộ sinh không diễn đạt được.</span>
 
@@ -838,7 +838,7 @@ CREATE UNIQUE INDEX "posts_slug_active_key"
 </div>
 
 <h3>Detecting it, without touching anything</h3>
-<pre><code><span class="tok-comment"># Does the live database match my schema file?</span>
+<pre><code class="language-bash"><span class="tok-comment"># Does the live database match my schema file?</span>
 npx prisma migrate diff \\
   --from-schema-datasource prisma/schema.prisma \\
   --to-schema-datamodel   prisma/schema.prisma \\
@@ -851,13 +851,13 @@ DROP INDEX "posts_title_trgm";</div>
 <div class="callout warn">
 <p><strong>Read that output the right way round.</strong> It is <em>the SQL that would make the database match the schema</em> — so it tells you what the database has that your schema does not. A column <code>ghi_chu_tam</code> exists in the database and not in your schema; a trigram index exists in the database and not in your schema. Neither of those is necessarily wrong. The trigram index is almost certainly a deliberate hand-written addition from Lesson 6.3, and running this SQL would delete it.</p>
 </div>
-<pre><code><span class="tok-comment"># The other question: does the live database match my MIGRATIONS?</span>
+<pre><code class="language-bash"><span class="tok-comment"># The other question: does the live database match my MIGRATIONS?</span>
 npx prisma migrate diff \\
   --from-migrations       ./prisma/migrations \\
   --to-schema-datasource  prisma/schema.prisma \\
   --shadow-database-url   "$SHADOW_DATABASE_URL" \\
   --script</code></pre>
-<pre><code><span class="tok-comment"># And the read-only summary, safe on production</span>
+<pre><code class="language-bash"><span class="tok-comment"># And the read-only summary, safe on production</span>
 npx prisma migrate status</code></pre>
 <div class="out">Following migration have not yet been applied:
 20260823064500_them_xoa_mem
@@ -874,7 +874,7 @@ The following is a summary of the differences:
   <div class="lz-step"><span class="lz-k">2 · Undo it</span><span class="lz-t">Safe if you understand it</span><span class="lz-d">The change was a mistake. Write a normal forward migration that removes it, review it like any other, deploy it. Slower than option 3 and it leaves a record.</span></div>
   <div class="lz-step"><span class="lz-k">3 · Reset</span><span class="lz-t">Destroys everything</span><span class="lz-d"><code>migrate reset</code> drops the database and replays every migration. Correct on a local development database. <strong>Never on anything shared</strong>, and the CuongThai repository lists it as forbidden for exactly this reason — the prompt says "all data will be lost" and it means it literally.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Option 1 — adopt an existing change into the history</span>
+<pre><code class="language-sql"><span class="tok-comment"># Option 1 — adopt an existing change into the history</span>
 <span class="tok-comment"># Step A: add it to schema.prisma so the schema describes reality</span>
 <span class="tok-comment">#         model Post { … @@index([title], map: "posts_title_trgm") }</span>
 
@@ -895,19 +895,19 @@ npx prisma migrate resolve --applied 20260823070000_ghi_nhan_trgm</code></pre>
 
 <h3>Adopting a database that predates Prisma</h3>
 <p>The same machinery solves a bigger problem: a production database that has existed for years, has no migration history, and now needs one. Five steps, in order.</p>
-<pre><code><span class="tok-comment"># 1 — Introspect: write a schema that describes what is actually there</span>
+<pre><code class="language-bash"><span class="tok-comment"># 1 — Introspect: write a schema that describes what is actually there</span>
 npx prisma db pull</code></pre>
 <div class="out">✔ Introspected 112 models and wrote them into prisma/schema.prisma in 1.84s
 
 *** WARNING ***
 The following models were commented out because we could not retrieve columns
 for them. Please check your privileges: "pg_stat_statements"</div>
-<pre><code><span class="tok-comment"># 2 — Rename by hand: add @map / @@map, name the relations, fix the types.</span>
+<pre><code class="language-bash"><span class="tok-comment"># 2 — Rename by hand: add @map / @@map, name the relations, fix the types.</span>
 <span class="tok-comment">#     This is the slow part, and it is worth doing properly — every</span>
 <span class="tok-comment">#     subsequent db pull preserves what you write here.</span>
 npx prisma format
 npx prisma validate</code></pre>
-<pre><code><span class="tok-comment"># 3 — Generate a baseline migration from nothing to the current schema</span>
+<pre><code class="language-bash"><span class="tok-comment"># 3 — Generate a baseline migration from nothing to the current schema</span>
 mkdir -p prisma/migrations/0_init
 
 npx prisma migrate diff \\
@@ -917,10 +917,10 @@ npx prisma migrate diff \\
 
 wc -l prisma/migrations/0_init/migration.sql</code></pre>
 <div class="out">3184 prisma/migrations/0_init/migration.sql</div>
-<pre><code><span class="tok-comment"># 4 — Mark it applied. This does NOT run the SQL — the tables already exist.</span>
+<pre><code class="language-bash"><span class="tok-comment"># 4 — Mark it applied. This does NOT run the SQL — the tables already exist.</span>
 npx prisma migrate resolve --applied 0_init</code></pre>
 <div class="out">Migration 0_init marked as applied.</div>
-<pre><code><span class="tok-comment"># 5 — Verify: empty diff means the baseline is honest</span>
+<pre><code class="language-bash"><span class="tok-comment"># 5 — Verify: empty diff means the baseline is honest</span>
 npx prisma migrate diff --from-schema-datasource prisma/schema.prisma \\
                         --to-schema-datamodel prisma/schema.prisma --script
 npx prisma migrate status</code></pre>
@@ -939,7 +939,7 @@ Database schema is up to date!</div>
 </div>
 
 <h3>Drift you should keep</h3>
-<pre><code><span class="tok-comment">// A table another system owns: tell Prisma to leave it alone</span>
+<pre><code class="language-typescript"><span class="tok-comment">// A table another system owns: tell Prisma to leave it alone</span>
 /// Managed by the analytics pipeline. Do not migrate.
 model events_raw {
   id   BigInt   @id
@@ -955,7 +955,7 @@ model events_raw {
 </div>
 
 <h3>The one command to never run without thinking</h3>
-<pre><code>npx prisma migrate reset</code></pre>
+<pre><code class="language-bash">npx prisma migrate reset</code></pre>
 <div class="out">? Are you sure you want to reset your database? All data will be lost. › (y/N)
 
 Applying migration &#96;0_init&#96;
@@ -990,7 +990,7 @@ The seed command has been executed.</div>
 </div>
 
 <h3>Phát hiện nó mà không đụng vào gì</h3>
-<pre><code><span class="tok-comment"># Cơ sở dữ liệu đang sống có khớp tệp lược đồ của tôi không?</span>
+<pre><code class="language-bash"><span class="tok-comment"># Cơ sở dữ liệu đang sống có khớp tệp lược đồ của tôi không?</span>
 npx prisma migrate diff \\
   --from-schema-datasource prisma/schema.prisma \\
   --to-schema-datamodel   prisma/schema.prisma \\
@@ -1003,13 +1003,13 @@ DROP INDEX "posts_title_trgm";</div>
 <div class="callout warn">
 <p><strong>Đọc output đó cho đúng chiều.</strong> Nó là <em>đoạn SQL sẽ làm cơ sở dữ liệu khớp với lược đồ</em> — nên nó nói cho bạn biết cơ sở dữ liệu đang có gì mà lược đồ của bạn không có. Một cột <code>ghi_chu_tam</code> tồn tại dưới cơ sở dữ liệu mà không có trong lược đồ; một chỉ mục trigram tồn tại dưới cơ sở dữ liệu mà không có trong lược đồ. Không cái nào nhất thiết là sai. Cái chỉ mục trigram gần như chắc chắn là một bổ sung viết tay có chủ ý từ Bài 6.3, và chạy đoạn SQL này sẽ xoá nó.</p>
 </div>
-<pre><code><span class="tok-comment"># Câu hỏi còn lại: cơ sở dữ liệu đang sống có khớp các MIGRATION của tôi không?</span>
+<pre><code class="language-bash"><span class="tok-comment"># Câu hỏi còn lại: cơ sở dữ liệu đang sống có khớp các MIGRATION của tôi không?</span>
 npx prisma migrate diff \\
   --from-migrations       ./prisma/migrations \\
   --to-schema-datasource  prisma/schema.prisma \\
   --shadow-database-url   "$SHADOW_DATABASE_URL" \\
   --script</code></pre>
-<pre><code><span class="tok-comment"># Và bản tóm tắt chỉ đọc, an toàn trên production</span>
+<pre><code class="language-bash"><span class="tok-comment"># Và bản tóm tắt chỉ đọc, an toàn trên production</span>
 npx prisma migrate status</code></pre>
 <div class="out">Following migration have not yet been applied:
 20260823064500_them_xoa_mem
@@ -1026,7 +1026,7 @@ The following is a summary of the differences:
   <div class="lz-step"><span class="lz-k">2 · Gỡ bỏ nó</span><span class="lz-t">An toàn nếu bạn hiểu nó</span><span class="lz-d">Thay đổi đó là một sai lầm. Hãy viết một migration tiến bình thường để gỡ nó, review như mọi cái khác, rồi deploy. Chậm hơn cách 3 và nó để lại một bản ghi.</span></div>
   <div class="lz-step"><span class="lz-k">3 · Reset</span><span class="lz-t">Phá sạch mọi thứ</span><span class="lz-d"><code>migrate reset</code> xoá cơ sở dữ liệu rồi phát lại mọi migration. Đúng trên một cơ sở dữ liệu phát triển ở máy. <strong>Không bao giờ trên thứ gì dùng chung</strong>, và kho mã CuongThai liệt nó vào nhóm cấm đúng vì lý do này — câu hỏi nói "mọi dữ liệu sẽ mất" và nó nói theo nghĩa đen.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Cách 1 — nhận nuôi một thay đổi đã có vào lịch sử</span>
+<pre><code class="language-sql"><span class="tok-comment"># Cách 1 — nhận nuôi một thay đổi đã có vào lịch sử</span>
 <span class="tok-comment"># Bước A: thêm nó vào schema.prisma để lược đồ mô tả đúng thực tại</span>
 <span class="tok-comment">#         model Post { … @@index([title], map: "posts_title_trgm") }</span>
 
@@ -1047,19 +1047,19 @@ npx prisma migrate resolve --applied 20260823070000_ghi_nhan_trgm</code></pre>
 
 <h3>Tiếp quản một cơ sở dữ liệu có trước Prisma</h3>
 <p>Cũng bộ máy ấy giải một bài toán lớn hơn: một cơ sở dữ liệu production tồn tại nhiều năm, không có lịch sử migration nào, và giờ cần có. Năm bước, theo thứ tự.</p>
-<pre><code><span class="tok-comment"># 1 — Nội soi: viết ra một lược đồ mô tả đúng những gì đang có</span>
+<pre><code class="language-bash"><span class="tok-comment"># 1 — Nội soi: viết ra một lược đồ mô tả đúng những gì đang có</span>
 npx prisma db pull</code></pre>
 <div class="out">✔ Introspected 112 models and wrote them into prisma/schema.prisma in 1.84s
 
 *** WARNING ***
 The following models were commented out because we could not retrieve columns
 for them. Please check your privileges: "pg_stat_statements"</div>
-<pre><code><span class="tok-comment"># 2 — Đổi tên bằng tay: thêm @map / @@map, đặt tên quan hệ, sửa kiểu.</span>
+<pre><code class="language-bash"><span class="tok-comment"># 2 — Đổi tên bằng tay: thêm @map / @@map, đặt tên quan hệ, sửa kiểu.</span>
 <span class="tok-comment">#     Đây là phần chậm, và đáng làm cho tử tế — mọi lần db pull sau đó</span>
 <span class="tok-comment">#     đều giữ nguyên những gì bạn viết ở đây.</span>
 npx prisma format
 npx prisma validate</code></pre>
-<pre><code><span class="tok-comment"># 3 — Sinh một migration nền, từ trống rỗng tới lược đồ hiện tại</span>
+<pre><code class="language-bash"><span class="tok-comment"># 3 — Sinh một migration nền, từ trống rỗng tới lược đồ hiện tại</span>
 mkdir -p prisma/migrations/0_init
 
 npx prisma migrate diff \\
@@ -1069,10 +1069,10 @@ npx prisma migrate diff \\
 
 wc -l prisma/migrations/0_init/migration.sql</code></pre>
 <div class="out">3184 prisma/migrations/0_init/migration.sql</div>
-<pre><code><span class="tok-comment"># 4 — Đánh dấu là đã áp dụng. Bước này KHÔNG chạy SQL — các bảng vốn đã có.</span>
+<pre><code class="language-bash"><span class="tok-comment"># 4 — Đánh dấu là đã áp dụng. Bước này KHÔNG chạy SQL — các bảng vốn đã có.</span>
 npx prisma migrate resolve --applied 0_init</code></pre>
 <div class="out">Migration 0_init marked as applied.</div>
-<pre><code><span class="tok-comment"># 5 — Kiểm lại: chênh lệch rỗng nghĩa là migration nền trung thực</span>
+<pre><code class="language-bash"><span class="tok-comment"># 5 — Kiểm lại: chênh lệch rỗng nghĩa là migration nền trung thực</span>
 npx prisma migrate diff --from-schema-datasource prisma/schema.prisma \\
                         --to-schema-datamodel prisma/schema.prisma --script
 npx prisma migrate status</code></pre>
@@ -1091,7 +1091,7 @@ Database schema is up to date!</div>
 </div>
 
 <h3>Loại trôi dạt mà bạn nên giữ</h3>
-<pre><code><span class="tok-comment">// Một bảng do hệ thống khác sở hữu: bảo Prisma để yên nó</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Một bảng do hệ thống khác sở hữu: bảo Prisma để yên nó</span>
 /// Do dường ống phân tích quản lý. Không migrate.
 model events_raw {
   id   BigInt   @id
@@ -1107,7 +1107,7 @@ model events_raw {
 </div>
 
 <h3>Câu lệnh không bao giờ được gõ mà chưa nghĩ</h3>
-<pre><code>npx prisma migrate reset</code></pre>
+<pre><code class="language-bash">npx prisma migrate reset</code></pre>
 <div class="out">? Are you sure you want to reset your database? All data will be lost. › (y/N)
 
 Applying migration &#96;0_init&#96;
@@ -1149,7 +1149,7 @@ The seed command has been executed.</div>
   <div class="lz-step"><span class="lz-k">Deploy step 2</span><span class="lz-t">Start the new code</span><span class="lz-d">Only after migrations succeeded. If a migration fails, the old version keeps running against the old schema, which is the correct outcome.</span></div>
   <div class="lz-step"><span class="lz-k">Never</span><span class="lz-t">In the container entrypoint</span><span class="lz-d">Scale to three replicas and three containers run <code>migrate deploy</code> simultaneously. Prisma takes an advisory lock so they do not corrupt each other, but two of them then wait — and a slow migration becomes three failed health checks and a rollback.</span></div>
 </div>
-<pre><code><span class="tok-comment"># A deploy step that fails loudly and does not proceed</span>
+<pre><code class="language-bash"><span class="tok-comment"># A deploy step that fails loudly and does not proceed</span>
 set -euo pipefail
 
 echo "==&gt; migrate status"
@@ -1176,13 +1176,13 @@ echo "==&gt; start containers"</code></pre>
   <div class="kv"><span class="k">Long, and blocking writes</span><span class="v"><code>CREATE INDEX</code> without <code>CONCURRENTLY</code> · <code>ADD CONSTRAINT … CHECK</code> without <code>NOT VALID</code> · <code>ADD FOREIGN KEY</code>. They scan the whole table under a lock that blocks writes.</span></div>
   <div class="kv"><span class="k">The hidden one: lock queueing</span><span class="v">A statement waiting for a lock <strong>blocks everything behind it</strong>, even reads that would have been fine. So a 30-second <code>ALTER TABLE</code> that waits 10 seconds for an open transaction becomes 40 seconds of total outage on that table. Set <code>lock_timeout</code> and retry rather than waiting.</span></div>
 </div>
-<pre><code><span class="tok-comment">-- Put this at the top of any migration that touches a large hot table</span>
+<pre><code class="language-sql"><span class="tok-comment">-- Put this at the top of any migration that touches a large hot table</span>
 SET lock_timeout = '3s';
 SET statement_timeout = '30s';
 
 <span class="tok-comment">-- Now a blocked ALTER fails fast instead of queueing behind a long transaction</span>
 ALTER TABLE "posts" ADD COLUMN "slug" TEXT;</code></pre>
-<pre><code><span class="tok-comment">-- The two-step forms that avoid a full-table lock</span>
+<pre><code class="language-sql"><span class="tok-comment">-- The two-step forms that avoid a full-table lock</span>
 
 <span class="tok-comment">-- CHECK constraint: validate separately, under a weaker lock</span>
 ALTER TABLE "orders" ADD CONSTRAINT "orders_total_khong_am"
@@ -1224,9 +1224,9 @@ ALTER TABLE "posts" DROP CONSTRAINT "posts_slug_not_null";</code></pre>
 </div>
 
 <h3>Big backfills do not belong in a migration</h3>
-<pre><code><span class="tok-comment">-- In a migration: fine for thousands of rows, an outage for millions</span>
+<pre><code class="language-typescript"><span class="tok-comment">-- In a migration: fine for thousands of rows, an outage for millions</span>
 UPDATE "posts" SET "slug" = … WHERE "slug" IS NULL;</code></pre>
-<pre><code><span class="tok-comment">// As a separate script: batched, resumable, and it does not block the deploy</span>
+<pre><code class="language-javascript"><span class="tok-comment">// As a separate script: batched, resumable, and it does not block the deploy</span>
 for (;;) {
   const batch = await prisma.post.findMany({
     where:  { slug: null },
@@ -1249,7 +1249,7 @@ da xu ly 388</div>
 <p>The split is: <strong>the migration changes the shape, a script moves the data.</strong> The migration adds the nullable column and takes milliseconds; the script fills it over an hour while the site stays up; a later migration adds the <code>NOT NULL</code> once the script has finished. Three small safe steps instead of one long dangerous one.</p>
 
 <h3>When a migration fails half-way</h3>
-<pre><code>npx prisma migrate deploy</code></pre>
+<pre><code class="language-bash">npx prisma migrate deploy</code></pre>
 <div class="out">Error: P3009
 
 migrate found failed migrations in the target database, new migrations will not be
@@ -1265,14 +1265,14 @@ ERROR: check constraint "orders_total_khong_am" is violated by some row</div>
   <div class="lz-layer"><span class="lz-lname">3 · Decide: forward or back</span><span class="lz-lnote">If the applied part is harmless, finish the rest by hand and mark the migration <code>--applied</code>. If it must be undone, undo the applied statements by hand and mark it <code>--rolled-back</code>. Either way, a human decides and a human verifies.</span></div>
   <div class="lz-layer"><span class="lz-lname">4 · Fix the cause in a new migration</span><span class="lz-lnote">Here: the constraint failed because real rows violate it. The fix is a migration that repairs those rows first, then adds the constraint — not an edit to the failed file, which is now recorded with a checksum.</span></div>
 </div>
-<pre><code><span class="tok-comment">-- Step 2: what actually ran</span>
+<pre><code class="language-sql"><span class="tok-comment">-- Step 2: what actually ran</span>
 SELECT migration_name, started_at, applied_steps_count, left(logs, 200) AS error
 FROM _prisma_migrations
 WHERE finished_at IS NULL AND rolled_back_at IS NULL;</code></pre>
 <div class="out">      migration_name         |         started_at         | applied_steps_count |                error
 -----------------------------+----------------------------+---------------------+-------------------------------
  20260823071500_them_rang_buoc | 2026-08-23 07:15:02.118+00 |                   1 | ERROR: check constraint ...</div>
-<pre><code><span class="tok-comment"># Step 3, "undo" branch: clean up by hand, then record the decision</span>
+<pre><code class="language-sql"><span class="tok-comment"># Step 3, "undo" branch: clean up by hand, then record the decision</span>
 psql "$DATABASE_URL" -c 'ALTER TABLE "orders" DROP CONSTRAINT IF EXISTS "orders_total_khong_am";'
 npx prisma migrate resolve --rolled-back 20260823071500_them_rang_buoc
 
@@ -1307,7 +1307,7 @@ npx prisma migrate resolve --applied 20260823071500_them_rang_buoc</code></pre>
   <div class="lz-step"><span class="lz-k">Deploy bước 2</span><span class="lz-t">Khởi động mã mới</span><span class="lz-d">Chỉ sau khi migration thành công. Nếu một migration hỏng thì phiên bản cũ tiếp tục chạy với lược đồ cũ, và đó là kết cục đúng.</span></div>
   <div class="lz-step"><span class="lz-k">Đừng bao giờ</span><span class="lz-t">Đặt vào entrypoint của container</span><span class="lz-d">Nhân lên ba bản chạy là ba container cùng chạy <code>migrate deploy</code> một lúc. Prisma có lấy một advisory lock nên chúng không phá nhau, nhưng hai cái còn lại phải đợi — và một migration chậm trở thành ba lần kiểm sức khoẻ thất bại cộng một lần quay lui.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Một bước deploy hỏng là báo to và không đi tiếp</span>
+<pre><code class="language-bash"><span class="tok-comment"># Một bước deploy hỏng là báo to và không đi tiếp</span>
 set -euo pipefail
 
 echo "==&gt; migrate status"
@@ -1334,13 +1334,13 @@ echo "==&gt; khoi dong container"</code></pre>
   <div class="kv"><span class="k">Lâu, và chặn ghi</span><span class="v"><code>CREATE INDEX</code> không có <code>CONCURRENTLY</code> · <code>ADD CONSTRAINT … CHECK</code> không có <code>NOT VALID</code> · <code>ADD FOREIGN KEY</code>. Chúng quét cả bảng dưới một khoá chặn ghi.</span></div>
   <div class="kv"><span class="k">Cái ẩn: hàng đợi khoá</span><span class="v">Một câu lệnh đang đợi khoá thì <strong>chặn mọi thứ xếp sau nó</strong>, kể cả những lần đọc lẽ ra chẳng sao. Nên một <code>ALTER TABLE</code> 30 giây mà phải đợi 10 giây cho một giao dịch đang mở sẽ thành 40 giây gián đoạn toàn phần trên cái bảng đó. Hãy đặt <code>lock_timeout</code> rồi thử lại, thay vì ngồi đợi.</span></div>
 </div>
-<pre><code><span class="tok-comment">-- Đặt cái này lên đầu bất kỳ migration nào đụng vào một bảng lớn đang nóng</span>
+<pre><code class="language-sql"><span class="tok-comment">-- Đặt cái này lên đầu bất kỳ migration nào đụng vào một bảng lớn đang nóng</span>
 SET lock_timeout = '3s';
 SET statement_timeout = '30s';
 
 <span class="tok-comment">-- Giờ một ALTER bị chặn sẽ hỏng nhanh thay vì xếp hàng sau một giao dịch dài</span>
 ALTER TABLE "posts" ADD COLUMN "slug" TEXT;</code></pre>
-<pre><code><span class="tok-comment">-- Hai dạng chia làm hai bước để tránh khoá cả bảng</span>
+<pre><code class="language-sql"><span class="tok-comment">-- Hai dạng chia làm hai bước để tránh khoá cả bảng</span>
 
 <span class="tok-comment">-- Ràng buộc CHECK: kiểm riêng ra, dưới một khoá nhẹ hơn</span>
 ALTER TABLE "orders" ADD CONSTRAINT "orders_total_khong_am"
@@ -1382,9 +1382,9 @@ ALTER TABLE "posts" DROP CONSTRAINT "posts_slug_not_null";</code></pre>
 </div>
 
 <h3>Đổ dữ liệu lớn không thuộc về một migration</h3>
-<pre><code><span class="tok-comment">-- Trong một migration: ổn với vài nghìn hàng, là một sự cố với hàng triệu</span>
+<pre><code class="language-typescript"><span class="tok-comment">-- Trong một migration: ổn với vài nghìn hàng, là một sự cố với hàng triệu</span>
 UPDATE "posts" SET "slug" = … WHERE "slug" IS NULL;</code></pre>
-<pre><code><span class="tok-comment">// Dưới dạng một script riêng: chia lô, chạy lại được, và không chặn lần deploy</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Dưới dạng một script riêng: chia lô, chạy lại được, và không chặn lần deploy</span>
 for (;;) {
   const batch = await prisma.post.findMany({
     where:  { slug: null },
@@ -1407,7 +1407,7 @@ da xu ly 388</div>
 <p>Cách chia là: <strong>migration đổi hình dạng, script chuyển dữ liệu.</strong> Migration thêm cột cho phép null và mất vài mili giây; script điền đầy nó trong một giờ trong khi trang vẫn sống; một migration sau đó thêm <code>NOT NULL</code> khi script đã xong. Ba bước nhỏ và an toàn thay vì một bước dài và nguy hiểm.</p>
 
 <h3>Khi một migration chết giữa chừng</h3>
-<pre><code>npx prisma migrate deploy</code></pre>
+<pre><code class="language-bash">npx prisma migrate deploy</code></pre>
 <div class="out">Error: P3009
 
 migrate found failed migrations in the target database, new migrations will not be
@@ -1423,14 +1423,14 @@ ERROR: check constraint "orders_total_khong_am" is violated by some row</div>
   <div class="lz-layer"><span class="lz-lname">3 · Quyết: đi tiếp hay lùi lại</span><span class="lz-lnote">Nếu phần đã áp dụng vô hại thì hoàn tất phần còn lại bằng tay rồi đánh dấu migration là <code>--applied</code>. Nếu phải gỡ bỏ thì gỡ các câu lệnh đã chạy bằng tay rồi đánh dấu <code>--rolled-back</code>. Đằng nào cũng là con người quyết và con người kiểm.</span></div>
   <div class="lz-layer"><span class="lz-lname">4 · Vá nguyên nhân trong một migration MỚI</span><span class="lz-lnote">Ở đây: ràng buộc hỏng vì có những hàng thật vi phạm nó. Cách vá là một migration sửa những hàng ấy trước rồi mới thêm ràng buộc — không phải sửa cái tệp đã hỏng, vốn giờ đã được ghi lại kèm một checksum.</span></div>
 </div>
-<pre><code><span class="tok-comment">-- Bước 2: thật ra cái gì đã chạy</span>
+<pre><code class="language-sql"><span class="tok-comment">-- Bước 2: thật ra cái gì đã chạy</span>
 SELECT migration_name, started_at, applied_steps_count, left(logs, 200) AS error
 FROM _prisma_migrations
 WHERE finished_at IS NULL AND rolled_back_at IS NULL;</code></pre>
 <div class="out">      migration_name         |         started_at         | applied_steps_count |                error
 -----------------------------+----------------------------+---------------------+-------------------------------
  20260823071500_them_rang_buoc | 2026-08-23 07:15:02.118+00 |                   1 | ERROR: check constraint ...</div>
-<pre><code><span class="tok-comment"># Bước 3, nhánh "gỡ bỏ": dọn bằng tay, rồi ghi lại quyết định</span>
+<pre><code class="language-sql"><span class="tok-comment"># Bước 3, nhánh "gỡ bỏ": dọn bằng tay, rồi ghi lại quyết định</span>
 psql "$DATABASE_URL" -c 'ALTER TABLE "orders" DROP CONSTRAINT IF EXISTS "orders_total_khong_am";'
 npx prisma migrate resolve --rolled-back 20260823071500_them_rang_buoc
 

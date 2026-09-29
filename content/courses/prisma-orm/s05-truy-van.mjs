@@ -25,7 +25,7 @@ export default {
 <p class="lead">The <code>where</code> argument is a small language, and it is worth learning completely because half of it compiles to SQL that no ordinary index can serve. Each operator below comes with the SQL it produces and a note on whether an index helps — which is the information you actually need when the page gets slow.</p>
 
 <h3>Equality, and the null that is not null</h3>
-<pre><code>where: { published: true }                    <span class="tok-comment">// = $1</span>
+<pre><code class="language-typescript">where: { published: true }                    <span class="tok-comment">// = $1</span>
 where: { published: { equals: true } }        <span class="tok-comment">// identical, more explicit</span>
 where: { published: { not: true } }           <span class="tok-comment">// &lt;&gt; $1  — and see the warning</span>
 where: { deletedAt: null }                    <span class="tok-comment">// IS NULL</span>
@@ -38,7 +38,7 @@ SELECT ... WHERE "posts"."deleted_at" IS NULL</div>
 </div>
 
 <h3>Comparison — numbers, dates, strings</h3>
-<pre><code>where: { views: { gt: 100 } }                        <span class="tok-comment">// &gt;</span>
+<pre><code class="language-typescript">where: { views: { gt: 100 } }                        <span class="tok-comment">// &gt;</span>
 where: { views: { gte: 100, lte: 500 } }             <span class="tok-comment">// BETWEEN, effectively</span>
 where: { createdAt: { gte: new Date('2026-01-01') } }
 where: { title: { gt: 'M' } }                        <span class="tok-comment">// collation order, rarely what you want</span></code></pre>
@@ -50,7 +50,7 @@ where: { title: { gt: 'M' } }                        <span class="tok-comment">/
 </div>
 
 <h3>Strings — and the operator that ignores your index</h3>
-<pre><code>where: { title: { contains:   'prisma' } }    <span class="tok-comment">// LIKE '%prisma%'</span>
+<pre><code class="language-typescript">where: { title: { contains:   'prisma' } }    <span class="tok-comment">// LIKE '%prisma%'</span>
 where: { title: { startsWith: 'Huong' } }     <span class="tok-comment">// LIKE 'Huong%'</span>
 where: { title: { endsWith:   '.md' } }       <span class="tok-comment">// LIKE '%.md'</span>
 where: { title: { contains: 'prisma', mode: 'insensitive' } }  <span class="tok-comment">// ILIKE</span></code></pre>
@@ -66,10 +66,10 @@ SELECT ... WHERE "posts"."title"::text ILIKE $1       -- params: ["%prisma%"]</d
   <div class="lz-step"><span class="lz-k">mode: insensitive</span><span class="lz-t">Index: NO, and worse</span><span class="lz-d"><code>ILIKE</code> defeats an ordinary index entirely. The fix is a functional index on <code>lower(col)</code> plus a <code>lower()</code> comparison in raw SQL, or the <code>citext</code> type.</span></div>
   <div class="lz-step"><span class="lz-k">The real fix</span><span class="lz-t">pg_trgm</span><span class="lz-d">A GIN trigram index makes <code>LIKE '%…%'</code> and <code>ILIKE</code> index-backed. Two lines in a hand-written migration, and it is what the CuongThai post search uses.</span></div>
 </div>
-<pre><code><span class="tok-comment">-- The migration that makes &#96;contains&#96; fast</span>
+<pre><code class="language-sql"><span class="tok-comment">-- The migration that makes &#96;contains&#96; fast</span>
 CREATE EXTENSION IF NOT EXISTS pg_trgm;
 CREATE INDEX "posts_title_trgm_idx" ON "posts" USING gin ("title" gin_trgm_ops);</code></pre>
-<pre><code>EXPLAIN ANALYZE SELECT * FROM posts WHERE title ILIKE '%prisma%';</code></pre>
+<pre><code class="language-sql">EXPLAIN ANALYZE SELECT * FROM posts WHERE title ILIKE '%prisma%';</code></pre>
 <div class="out">-- before the index
 Seq Scan on posts  (cost=0.00..12842.00 rows=41 width=97) (actual time=0.4..184.2 rows=38 loops=1)
 Execution Time: 184.377 ms
@@ -81,7 +81,7 @@ Execution Time: 2.203 ms</div>
 <p>Eighty-four times faster, and the Prisma code did not change at all. That is the shape of most Prisma performance work: the query was fine, the schema was missing something.</p>
 
 <h3>Lists and sets</h3>
-<pre><code>where: { id:     { in:    [1, 2, 3] } }        <span class="tok-comment">// IN ($1,$2,$3)</span>
+<pre><code class="language-typescript">where: { id:     { in:    [1, 2, 3] } }        <span class="tok-comment">// IN ($1,$2,$3)</span>
 where: { id:     { notIn: [1, 2, 3] } }        <span class="tok-comment">// NOT IN</span>
 where: { status: { in: ['MOI', 'DANG_XU_LY'] } }
 
@@ -99,7 +99,7 @@ where: { tags: { isEmpty:  true } }            <span class="tok-comment">// arra
 </div>
 
 <h3>JSON columns</h3>
-<pre><code>where: { settings: { path: ['theme'],           equals: 'toi' } }
+<pre><code class="language-typescript">where: { settings: { path: ['theme'],           equals: 'toi' } }
 where: { settings: { path: ['notify', 'email'], equals: true  } }
 where: { settings: { path: ['tags'],            array_contains: ['vip'] } }
 where: { settings: { string_contains: 'dark' } }</code></pre>
@@ -107,14 +107,14 @@ where: { settings: { string_contains: 'dark' } }</code></pre>
 <div class="callout warn">
 <p><strong>JSON filters are sequential scans unless you build the index yourself.</strong> Prisma cannot declare an index on a JSON path, so a filter on <code>settings.theme</code> examines every row. The fix is a hand-written expression index, and it must match the query exactly — including the operator. If you find yourself indexing three different JSON paths, that is the database telling you those should have been columns.</p>
 </div>
-<pre><code><span class="tok-comment">-- Index one specific path</span>
+<pre><code class="language-sql"><span class="tok-comment">-- Index one specific path</span>
 CREATE INDEX "users_theme_idx" ON "users" ((settings-&gt;&gt;'theme'));
 
 <span class="tok-comment">-- Or index the whole document for containment queries</span>
 CREATE INDEX "users_settings_gin" ON "users" USING gin (settings jsonb_path_ops);</code></pre>
 
 <h3>Combining conditions</h3>
-<pre><code><span class="tok-comment">// Sibling keys are ANDed implicitly</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Sibling keys are ANDed implicitly</span>
 where: { published: true, views: { gt: 100 } }
 
 <span class="tok-comment">// Explicit boolean structure, nestable to any depth</span>
@@ -128,7 +128,7 @@ where: {
 <div class="out">SELECT ... WHERE ("posts"."published" = $1
   AND ("posts"."views" &gt; $2 OR "posts"."featured" = $3)
   AND NOT ("posts"."author_id" IN ($4,$5)))</div>
-<pre><code><span class="tok-comment">// Building a filter from optional request parameters</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Building a filter from optional request parameters</span>
 const where: Prisma.PostWhereInput = {
   published: true,
   ...(q.author  &amp;&amp; { authorId: Number(q.author) }),
@@ -162,7 +162,7 @@ const rows = await prisma.post.findMany({ where, take: 20, orderBy: { createdAt:
 <p class="lead">Tham số <code>where</code> là một ngôn ngữ nhỏ, và nó đáng học cho hết vì một nửa trong đó biên dịch ra thứ SQL mà không chỉ mục thông thường nào phục vụ nổi. Mỗi toán tử dưới đây đi kèm câu SQL nó sinh ra và một ghi chú về chuyện chỉ mục có giúp được không — đó mới là thông tin bạn thật sự cần khi trang bắt đầu chậm.</p>
 
 <h3>So bằng, và cái null không phải null</h3>
-<pre><code>where: { published: true }                    <span class="tok-comment">// = $1</span>
+<pre><code class="language-typescript">where: { published: true }                    <span class="tok-comment">// = $1</span>
 where: { published: { equals: true } }        <span class="tok-comment">// y hệt, tường minh hơn</span>
 where: { published: { not: true } }           <span class="tok-comment">// &lt;&gt; $1  — và xem lời cảnh báo</span>
 where: { deletedAt: null }                    <span class="tok-comment">// IS NULL</span>
@@ -175,7 +175,7 @@ SELECT ... WHERE "posts"."deleted_at" IS NULL</div>
 </div>
 
 <h3>So sánh — số, ngày, chuỗi</h3>
-<pre><code>where: { views: { gt: 100 } }                        <span class="tok-comment">// &gt;</span>
+<pre><code class="language-typescript">where: { views: { gt: 100 } }                        <span class="tok-comment">// &gt;</span>
 where: { views: { gte: 100, lte: 500 } }             <span class="tok-comment">// thực chất là BETWEEN</span>
 where: { createdAt: { gte: new Date('2026-01-01') } }
 where: { title: { gt: 'M' } }                        <span class="tok-comment">// theo thứ tự đối chiếu, hiếm khi đúng ý</span></code></pre>
@@ -187,7 +187,7 @@ where: { title: { gt: 'M' } }                        <span class="tok-comment">/
 </div>
 
 <h3>Chuỗi — và toán tử phớt lờ chỉ mục của bạn</h3>
-<pre><code>where: { title: { contains:   'prisma' } }    <span class="tok-comment">// LIKE '%prisma%'</span>
+<pre><code class="language-typescript">where: { title: { contains:   'prisma' } }    <span class="tok-comment">// LIKE '%prisma%'</span>
 where: { title: { startsWith: 'Huong' } }     <span class="tok-comment">// LIKE 'Huong%'</span>
 where: { title: { endsWith:   '.md' } }       <span class="tok-comment">// LIKE '%.md'</span>
 where: { title: { contains: 'prisma', mode: 'insensitive' } }  <span class="tok-comment">// ILIKE</span></code></pre>
@@ -203,10 +203,10 @@ SELECT ... WHERE "posts"."title"::text ILIKE $1       -- tham số: ["%prisma%"]
   <div class="lz-step"><span class="lz-k">mode: insensitive</span><span class="lz-t">Chỉ mục: KHÔNG, và tệ hơn</span><span class="lz-d"><code>ILIKE</code> vô hiệu hoá hẳn một chỉ mục thường. Cách vá là một chỉ mục theo hàm trên <code>lower(col)</code> cộng một phép so <code>lower()</code> trong SQL thô, hoặc dùng kiểu <code>citext</code>.</span></div>
   <div class="lz-step"><span class="lz-k">Cách vá thật</span><span class="lz-t">pg_trgm</span><span class="lz-d">Một chỉ mục trigram GIN khiến <code>LIKE '%…%'</code> và <code>ILIKE</code> được chỉ mục đỡ. Hai dòng trong một migration viết tay, và đó chính là thứ phần tìm bài viết của CuongThai đang dùng.</span></div>
 </div>
-<pre><code><span class="tok-comment">-- Migration khiến &#96;contains&#96; nhanh lên</span>
+<pre><code class="language-sql"><span class="tok-comment">-- Migration khiến &#96;contains&#96; nhanh lên</span>
 CREATE EXTENSION IF NOT EXISTS pg_trgm;
 CREATE INDEX "posts_title_trgm_idx" ON "posts" USING gin ("title" gin_trgm_ops);</code></pre>
-<pre><code>EXPLAIN ANALYZE SELECT * FROM posts WHERE title ILIKE '%prisma%';</code></pre>
+<pre><code class="language-sql">EXPLAIN ANALYZE SELECT * FROM posts WHERE title ILIKE '%prisma%';</code></pre>
 <div class="out">-- trước khi có chỉ mục
 Seq Scan on posts  (cost=0.00..12842.00 rows=41 width=97) (actual time=0.4..184.2 rows=38 loops=1)
 Execution Time: 184.377 ms
@@ -218,7 +218,7 @@ Execution Time: 2.203 ms</div>
 <p>Nhanh gấp tám mươi tư lần, và đoạn mã Prisma không đổi một chữ. Đó là hình dạng của phần lớn công việc tối ưu hiệu năng Prisma: câu truy vấn vốn ổn, chỉ là lược đồ thiếu một thứ.</p>
 
 <h3>Danh sách và tập hợp</h3>
-<pre><code>where: { id:     { in:    [1, 2, 3] } }        <span class="tok-comment">// IN ($1,$2,$3)</span>
+<pre><code class="language-typescript">where: { id:     { in:    [1, 2, 3] } }        <span class="tok-comment">// IN ($1,$2,$3)</span>
 where: { id:     { notIn: [1, 2, 3] } }        <span class="tok-comment">// NOT IN</span>
 where: { status: { in: ['MOI', 'DANG_XU_LY'] } }
 
@@ -236,7 +236,7 @@ where: { tags: { isEmpty:  true } }            <span class="tok-comment">// arra
 </div>
 
 <h3>Cột JSON</h3>
-<pre><code>where: { settings: { path: ['theme'],           equals: 'toi' } }
+<pre><code class="language-typescript">where: { settings: { path: ['theme'],           equals: 'toi' } }
 where: { settings: { path: ['notify', 'email'], equals: true  } }
 where: { settings: { path: ['tags'],            array_contains: ['vip'] } }
 where: { settings: { string_contains: 'dark' } }</code></pre>
@@ -244,14 +244,14 @@ where: { settings: { string_contains: 'dark' } }</code></pre>
 <div class="callout warn">
 <p><strong>Lọc JSON là quét tuần tự trừ khi bạn tự dựng chỉ mục.</strong> Prisma không khai được chỉ mục trên một đường dẫn JSON, nên một bộ lọc trên <code>settings.theme</code> xem xét mọi hàng. Cách vá là một chỉ mục theo biểu thức viết tay, và nó phải khớp câu truy vấn chính xác — kể cả toán tử. Nếu bạn thấy mình đang đánh chỉ mục cho ba đường dẫn JSON khác nhau thì đó là cơ sở dữ liệu đang nói với bạn rằng lẽ ra chúng nên là các cột.</p>
 </div>
-<pre><code><span class="tok-comment">-- Đánh chỉ mục cho một đường dẫn cụ thể</span>
+<pre><code class="language-sql"><span class="tok-comment">-- Đánh chỉ mục cho một đường dẫn cụ thể</span>
 CREATE INDEX "users_theme_idx" ON "users" ((settings-&gt;&gt;'theme'));
 
 <span class="tok-comment">-- Hoặc đánh chỉ mục cả tài liệu cho các truy vấn kiểm phần tử</span>
 CREATE INDEX "users_settings_gin" ON "users" USING gin (settings jsonb_path_ops);</code></pre>
 
 <h3>Kết hợp điều kiện</h3>
-<pre><code><span class="tok-comment">// Các khoá cùng cấp được AND ngầm với nhau</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Các khoá cùng cấp được AND ngầm với nhau</span>
 where: { published: true, views: { gt: 100 } }
 
 <span class="tok-comment">// Cấu trúc luận lý tường minh, lồng sâu bao nhiêu cũng được</span>
@@ -265,7 +265,7 @@ where: {
 <div class="out">SELECT ... WHERE ("posts"."published" = $1
   AND ("posts"."views" &gt; $2 OR "posts"."featured" = $3)
   AND NOT ("posts"."author_id" IN ($4,$5)))</div>
-<pre><code><span class="tok-comment">// Dựng bộ lọc từ các tham số yêu cầu tuỳ chọn</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Dựng bộ lọc từ các tham số yêu cầu tuỳ chọn</span>
 const where: Prisma.PostWhereInput = {
   published: true,
   ...(q.author  &amp;&amp; { authorId: Number(q.author) }),
@@ -308,7 +308,7 @@ const rows = await prisma.post.findMany({ where, take: 20, orderBy: { createdAt:
 <p class="lead">Filtering a list by something on a related table is where a query builder earns its keep, because the SQL involves a correlated subquery that is easy to get subtly wrong. Prisma gives you four operators for it. Three behave exactly as their names suggest; the fourth has a logic trap that catches everyone, and it is worth meeting here rather than in a bug report.</p>
 
 <h3>The four operators</h3>
-<pre><code><span class="tok-comment">// TO-MANY relations: some / every / none</span>
+<pre><code class="language-typescript"><span class="tok-comment">// TO-MANY relations: some / every / none</span>
 where: { posts: { some:  { published: true } } }   <span class="tok-comment">// at least one published post</span>
 where: { posts: { every: { published: true } } }   <span class="tok-comment">// all posts published — read the warning</span>
 where: { posts: { none:  { published: true } } }   <span class="tok-comment">// no published post</span>
@@ -346,7 +346,7 @@ SELECT ... FROM "users" WHERE NOT EXISTS (
 </div>
 
 <h3>The <code>every</code> trap</h3>
-<pre><code><span class="tok-comment">// "Users all of whose posts are published"</span>
+<pre><code class="language-javascript"><span class="tok-comment">// "Users all of whose posts are published"</span>
 const u = await prisma.user.findMany({ where: { posts: { every: { published: true } } } });</code></pre>
 <div class="out">[
   { id: 1, email: 'an@example.com' },     -- has 3 posts, all published ✓
@@ -356,7 +356,7 @@ const u = await prisma.user.findMany({ where: { posts: { every: { published: tru
 <div class="pitfall">
 <p><strong>Trap — <code>every</code> is true for an empty collection.</strong> Look at the generated SQL: <code>NOT EXISTS (… WHERE NOT condition)</code>. A user with zero posts has no row that violates the condition, so <code>NOT EXISTS</code> is true and they match. This is <em>vacuous truth</em> — mathematically correct, and almost never what the product manager meant. "All of their posts are published" in English implies they have posts. Say so explicitly:</p>
 </div>
-<pre><code><span class="tok-comment">// What you actually meant: has posts, AND all of them are published</span>
+<pre><code class="language-javascript"><span class="tok-comment">// What you actually meant: has posts, AND all of them are published</span>
 const u = await prisma.user.findMany({
   where: {
     AND: [
@@ -368,7 +368,7 @@ const u = await prisma.user.findMany({
 <div class="out">[ { id: 1, email: 'an@example.com' } ]</div>
 
 <h3>Filtering the parents versus filtering the children</h3>
-<pre><code><span class="tok-comment">// A — filter the PARENTS. Only users who have a published post appear,</span>
+<pre><code class="language-javascript"><span class="tok-comment">// A — filter the PARENTS. Only users who have a published post appear,</span>
 <span class="tok-comment">//     and each one arrives with ALL their posts.</span>
 const a = await prisma.user.findMany({
   where:   { posts: { some: { published: true } } },
@@ -394,7 +394,7 @@ const c = await prisma.user.findMany({
 </div>
 
 <h3>Through several levels</h3>
-<pre><code><span class="tok-comment">// "Posts that have a comment written by an admin"</span>
+<pre><code class="language-typescript"><span class="tok-comment">// "Posts that have a comment written by an admin"</span>
 where: { comments: { some: { author: { role: 'ADMIN' } } } }
 
 <span class="tok-comment">// "Users who have commented on a post in the Prisma category"</span>
@@ -413,7 +413,7 @@ where: { items: { some: { product: { stock: { lte: 0 } } } } }</code></pre>
 </div>
 
 <h3>The "all of these tags" problem</h3>
-<pre><code><span class="tok-comment">// WRONG — this means "has a tag that is both nodejs AND prisma", i.e. never</span>
+<pre><code class="language-typescript"><span class="tok-comment">// WRONG — this means "has a tag that is both nodejs AND prisma", i.e. never</span>
 where: { tags: { some: { name: { in: ['nodejs', 'prisma'] } } } }   <span class="tok-comment">// actually: ANY of them</span>
 
 <span class="tok-comment">// RIGHT — one &#96;some&#96; per required tag, ANDed</span>
@@ -428,7 +428,7 @@ WHERE EXISTS (SELECT 1 FROM "_PostToTag" pt JOIN "tags" t ON t.id = pt."A"
 <p>One <code>EXISTS</code> per tag, all required. It generalises to any number of tags, and it is the standard way to express set containment against a many-to-many. If the tags live in a <code>String[]</code> column instead of a table, the same thing is one operator: <code>{ tags: { hasEvery: ['nodejs', 'prisma'] } }</code> — which is a real argument for the array column when tags are simple strings.</p>
 
 <h3>Relation counts as a filter</h3>
-<pre><code><span class="tok-comment">// Prisma cannot filter directly on _count. These are the two real options.</span>
+<pre><code class="language-sql"><span class="tok-comment">// Prisma cannot filter directly on _count. These are the two real options.</span>
 
 <span class="tok-comment">// A — a raw query, when you need the exact count comparison</span>
 const active = await prisma.$queryRaw&lt;{ id: number }[]&gt;&#96;
@@ -449,7 +449,7 @@ await prisma.user.findMany({ where: { postCount: { gt: 10 } } });</code></pre>
 </div>
 
 <h3>Filtering a to-one relation that may be absent</h3>
-<pre><code><span class="tok-comment">// Users with no profile at all</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Users with no profile at all</span>
 where: { profile: { is: null } }
 
 <span class="tok-comment">// Users whose profile exists and has a bio</span>
@@ -479,7 +479,7 @@ where: { OR: [{ categoryId: null }, { category: { isNot: { slug: 'archive' } } }
 <p class="lead">Lọc một danh sách theo thứ gì đó nằm ở bảng liên quan là chỗ một query builder thật sự đáng đồng tiền, vì phần SQL liên quan là một truy vấn con tương quan rất dễ viết sai một cách tinh vi. Prisma cho bạn bốn toán tử để làm việc đó. Ba cái cư xử đúng như tên gọi; cái thứ tư có một cái bẫy logic bẫy tất cả mọi người, và gặp nó ở đây thì hơn là gặp trong một báo cáo lỗi.</p>
 
 <h3>Bốn toán tử</h3>
-<pre><code><span class="tok-comment">// Quan hệ TỚI-NHIỀU: some / every / none</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Quan hệ TỚI-NHIỀU: some / every / none</span>
 where: { posts: { some:  { published: true } } }   <span class="tok-comment">// có ít nhất một bài đã đăng</span>
 where: { posts: { every: { published: true } } }   <span class="tok-comment">// mọi bài đều đã đăng — đọc lời cảnh báo</span>
 where: { posts: { none:  { published: true } } }   <span class="tok-comment">// không có bài nào đã đăng</span>
@@ -517,7 +517,7 @@ SELECT ... FROM "users" WHERE NOT EXISTS (
 </div>
 
 <h3>Cái bẫy của <code>every</code></h3>
-<pre><code><span class="tok-comment">// "Những người dùng mà MỌI bài viết đều đã đăng"</span>
+<pre><code class="language-javascript"><span class="tok-comment">// "Những người dùng mà MỌI bài viết đều đã đăng"</span>
 const u = await prisma.user.findMany({ where: { posts: { every: { published: true } } } });</code></pre>
 <div class="out">[
   { id: 1, email: 'an@example.com' },     -- có 3 bài, đều đã đăng ✓
@@ -527,7 +527,7 @@ const u = await prisma.user.findMany({ where: { posts: { every: { published: tru
 <div class="pitfall">
 <p><strong>Bẫy — <code>every</code> đúng với một tập hợp rỗng.</strong> Nhìn câu SQL sinh ra: <code>NOT EXISTS (… WHERE NOT điều kiện)</code>. Một người dùng có không bài viết nào thì không có hàng nào vi phạm điều kiện, nên <code>NOT EXISTS</code> đúng và họ được khớp. Đây là <em>chân lý rỗng</em> — đúng về mặt toán học, và gần như không bao giờ là thứ người quản lý sản phẩm muốn nói. "Mọi bài viết của họ đều đã đăng" trong tiếng Việt hàm ý họ có bài viết. Hãy nói ra tường minh:</p>
 </div>
-<pre><code><span class="tok-comment">// Thứ bạn thật sự muốn nói: có bài viết, VÀ tất cả đều đã đăng</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Thứ bạn thật sự muốn nói: có bài viết, VÀ tất cả đều đã đăng</span>
 const u = await prisma.user.findMany({
   where: {
     AND: [
@@ -539,7 +539,7 @@ const u = await prisma.user.findMany({
 <div class="out">[ { id: 1, email: 'an@example.com' } ]</div>
 
 <h3>Lọc cha so với lọc con</h3>
-<pre><code><span class="tok-comment">// A — lọc CHA. Chỉ những người dùng có bài đã đăng mới xuất hiện,</span>
+<pre><code class="language-javascript"><span class="tok-comment">// A — lọc CHA. Chỉ những người dùng có bài đã đăng mới xuất hiện,</span>
 <span class="tok-comment">//     và mỗi người mang theo TẤT CẢ bài viết của họ.</span>
 const a = await prisma.user.findMany({
   where:   { posts: { some: { published: true } } },
@@ -565,7 +565,7 @@ const c = await prisma.user.findMany({
 </div>
 
 <h3>Xuyên qua nhiều tầng</h3>
-<pre><code><span class="tok-comment">// "Bài viết có một bình luận do quản trị viên viết"</span>
+<pre><code class="language-typescript"><span class="tok-comment">// "Bài viết có một bình luận do quản trị viên viết"</span>
 where: { comments: { some: { author: { role: 'ADMIN' } } } }
 
 <span class="tok-comment">// "Người dùng từng bình luận vào một bài thuộc chuyên mục Prisma"</span>
@@ -584,7 +584,7 @@ where: { items: { some: { product: { stock: { lte: 0 } } } } }</code></pre>
 </div>
 
 <h3>Bài toán "đủ tất cả các thẻ này"</h3>
-<pre><code><span class="tok-comment">// SAI — cái này nghĩa là "có một thẻ vừa là nodejs VỪA là prisma", tức là không bao giờ</span>
+<pre><code class="language-typescript"><span class="tok-comment">// SAI — cái này nghĩa là "có một thẻ vừa là nodejs VỪA là prisma", tức là không bao giờ</span>
 where: { tags: { some: { name: { in: ['nodejs', 'prisma'] } } } }   <span class="tok-comment">// thật ra: MỘT trong số đó</span>
 
 <span class="tok-comment">// ĐÚNG — mỗi thẻ bắt buộc một &#96;some&#96;, AND lại với nhau</span>
@@ -599,7 +599,7 @@ WHERE EXISTS (SELECT 1 FROM "_PostToTag" pt JOIN "tags" t ON t.id = pt."A"
 <p>Mỗi thẻ một câu <code>EXISTS</code>, tất cả đều bắt buộc. Nó tổng quát hoá cho số thẻ tuỳ ý, và là cách chuẩn để diễn đạt phép chứa tập hợp với một quan hệ nhiều–nhiều. Nếu các thẻ nằm trong một cột <code>String[]</code> thay vì một bảng thì cũng chuyện đó chỉ là một toán tử: <code>{ tags: { hasEvery: ['nodejs', 'prisma'] } }</code> — và đó là một lý lẽ thật cho cột mảng khi thẻ chỉ là những chuỗi đơn giản.</p>
 
 <h3>Số đếm quan hệ dùng làm bộ lọc</h3>
-<pre><code><span class="tok-comment">// Prisma không lọc trực tiếp trên _count được. Đây là hai lựa chọn thật.</span>
+<pre><code class="language-sql"><span class="tok-comment">// Prisma không lọc trực tiếp trên _count được. Đây là hai lựa chọn thật.</span>
 
 <span class="tok-comment">// A — một truy vấn thô, khi bạn cần đúng phép so sánh số đếm</span>
 const active = await prisma.$queryRaw&lt;{ id: number }[]&gt;&#96;
@@ -620,7 +620,7 @@ await prisma.user.findMany({ where: { postCount: { gt: 10 } } });</code></pre>
 </div>
 
 <h3>Lọc một quan hệ tới-một có thể vắng mặt</h3>
-<pre><code><span class="tok-comment">// Người dùng hoàn toàn chưa có hồ sơ</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Người dùng hoàn toàn chưa có hồ sơ</span>
 where: { profile: { is: null } }
 
 <span class="tok-comment">// Người dùng có hồ sơ và hồ sơ đó có phần giới thiệu</span>
@@ -659,7 +659,7 @@ where: { OR: [{ categoryId: null }, { category: { isNot: { slug: 'archive' } } }
 <p class="lead">Every list endpoint has an ordering and a pagination strategy, and both are usually chosen once by copying an example. That is fine until the table reaches a million rows, at which point <code>skip</code> degrades in a way that looks like a database problem and is actually an algorithmic one. This lesson measures it, then shows the fix.</p>
 
 <h3><code>orderBy</code>, in full</h3>
-<pre><code><span class="tok-comment">// Single key</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Single key</span>
 orderBy: { createdAt: 'desc' }
 
 <span class="tok-comment">// Several keys — an ARRAY, because object key order is not a contract</span>
@@ -688,7 +688,7 @@ LIMIT $1 OFFSET $2</div>
 </div>
 
 <h3>Offset pagination, and where it breaks</h3>
-<pre><code>const page = Number(q.page ?? 1);
+<pre><code class="language-javascript">const page = Number(q.page ?? 1);
 const size = 20;
 
 const [rows, total] = await Promise.all([
@@ -702,7 +702,7 @@ const [rows, total] = await Promise.all([
 ]);</code></pre>
 <div class="out">SELECT ... FROM "posts" WHERE "published" = $1
 ORDER BY "published_at" DESC, "id" DESC LIMIT $2 OFFSET $3</div>
-<pre><code><span class="tok-comment">-- The same query at four different offsets. 2,000,000 rows.</span>
+<pre><code class="language-sql"><span class="tok-comment">-- The same query at four different offsets. 2,000,000 rows.</span>
 EXPLAIN ANALYZE SELECT * FROM posts ORDER BY published_at DESC, id DESC LIMIT 20 OFFSET 0;
 EXPLAIN ANALYZE SELECT * FROM posts ORDER BY published_at DESC, id DESC LIMIT 20 OFFSET 10000;
 EXPLAIN ANALYZE SELECT * FROM posts ORDER BY published_at DESC, id DESC LIMIT 20 OFFSET 100000;
@@ -720,7 +720,7 @@ OFFSET 1000000 → Execution Time:  982.115 ms</div>
 </div>
 
 <h3>Cursor pagination</h3>
-<pre><code>const page = await prisma.post.findMany({
+<pre><code class="language-javascript">const page = await prisma.post.findMany({
   where:   { published: true },
   orderBy: { id: 'desc' },
   take:    20,
@@ -757,7 +757,7 @@ skip:    1,</code></pre>
 </div>
 
 <h3>Compound cursors, when one key is not enough</h3>
-<pre><code><span class="tok-comment">// Prisma's cursor takes a unique field, which covers most cases.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Prisma's cursor takes a unique field, which covers most cases.</span>
 <span class="tok-comment">// When you need "after this timestamp AND this id", write the comparison yourself:</span>
 const rows = await prisma.post.findMany({
   where: {
@@ -782,7 +782,7 @@ ORDER BY "published_at" DESC, "id" DESC LIMIT $5</div>
   <div class="kv"><span class="k">Both, in one API</span><span class="v">Perfectly reasonable: offset for the admin listing, cursor for the public feed, over the same table. They are query strategies, not architectural commitments.</span></div>
   <div class="kv"><span class="k">Do not send a total with a cursor</span><span class="v">A <code>count</code> alongside a cursor query throws away the constant-time property you just bought. If the UI needs an approximate total, read <code>pg_class.reltuples</code> instead — it is free and accurate to within a few percent.</span></div>
 </div>
-<pre><code><span class="tok-comment">// The response shape that makes both strategies usable by a client</span>
+<pre><code class="language-javascript"><span class="tok-comment">// The response shape that makes both strategies usable by a client</span>
 {
   "rows": [ /* … */ ],
   "nextCursor": 41827,       <span class="tok-comment">// null when there is no next page</span>
@@ -810,7 +810,7 @@ if (hasMore) rows.pop();</code></pre>
 <p class="lead">Mọi endpoint trả danh sách đều có một cách sắp xếp và một chiến lược phân trang, và cả hai thường được chọn đúng một lần bằng cách chép từ ví dụ. Như thế vẫn ổn cho tới khi bảng đạt một triệu hàng, lúc đó <code>skip</code> xuống cấp theo kiểu trông như lỗi cơ sở dữ liệu mà thật ra là lỗi thuật toán. Bài này đo nó bằng số, rồi chỉ cách vá.</p>
 
 <h3><code>orderBy</code>, nói đủ</h3>
-<pre><code><span class="tok-comment">// Một khoá</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Một khoá</span>
 orderBy: { createdAt: 'desc' }
 
 <span class="tok-comment">// Nhiều khoá — một MẢNG, vì thứ tự khoá trong đối tượng không phải một cam kết</span>
@@ -839,7 +839,7 @@ LIMIT $1 OFFSET $2</div>
 </div>
 
 <h3>Phân trang bằng offset, và chỗ nó vỡ</h3>
-<pre><code>const page = Number(q.page ?? 1);
+<pre><code class="language-javascript">const page = Number(q.page ?? 1);
 const size = 20;
 
 const [rows, total] = await Promise.all([
@@ -853,7 +853,7 @@ const [rows, total] = await Promise.all([
 ]);</code></pre>
 <div class="out">SELECT ... FROM "posts" WHERE "published" = $1
 ORDER BY "published_at" DESC, "id" DESC LIMIT $2 OFFSET $3</div>
-<pre><code><span class="tok-comment">-- Cùng một câu truy vấn ở bốn mức offset. 2.000.000 hàng.</span>
+<pre><code class="language-sql"><span class="tok-comment">-- Cùng một câu truy vấn ở bốn mức offset. 2.000.000 hàng.</span>
 EXPLAIN ANALYZE SELECT * FROM posts ORDER BY published_at DESC, id DESC LIMIT 20 OFFSET 0;
 EXPLAIN ANALYZE SELECT * FROM posts ORDER BY published_at DESC, id DESC LIMIT 20 OFFSET 10000;
 EXPLAIN ANALYZE SELECT * FROM posts ORDER BY published_at DESC, id DESC LIMIT 20 OFFSET 100000;
@@ -871,7 +871,7 @@ OFFSET 1000000 → Execution Time:  982.115 ms</div>
 </div>
 
 <h3>Phân trang bằng con trỏ</h3>
-<pre><code>const page = await prisma.post.findMany({
+<pre><code class="language-javascript">const page = await prisma.post.findMany({
   where:   { published: true },
   orderBy: { id: 'desc' },
   take:    20,
@@ -908,7 +908,7 @@ skip:    1,</code></pre>
 </div>
 
 <h3>Con trỏ phức hợp, khi một khoá không đủ</h3>
-<pre><code><span class="tok-comment">// cursor của Prisma nhận một trường unique, và thế là đủ cho phần lớn trường hợp.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// cursor của Prisma nhận một trường unique, và thế là đủ cho phần lớn trường hợp.</span>
 <span class="tok-comment">// Khi bạn cần "sau mốc thời gian này VÀ id này", hãy tự viết phép so sánh:</span>
 const rows = await prisma.post.findMany({
   where: {
@@ -933,7 +933,7 @@ ORDER BY "published_at" DESC, "id" DESC LIMIT $5</div>
   <div class="kv"><span class="k">Cả hai, trong một API</span><span class="v">Hoàn toàn hợp lý: offset cho danh sách quản trị, con trỏ cho dòng thời gian công khai, trên cùng một bảng. Chúng là chiến lược truy vấn, không phải cam kết kiến trúc.</span></div>
   <div class="kv"><span class="k">Đừng gửi tổng số kèm con trỏ</span><span class="v">Một câu <code>count</code> đi kèm truy vấn con trỏ là vứt bỏ đúng cái tính chất thời gian hằng bạn vừa mua được. Nếu giao diện cần một tổng số xấp xỉ thì hãy đọc <code>pg_class.reltuples</code> — nó miễn phí và chính xác trong khoảng vài phần trăm.</span></div>
 </div>
-<pre><code><span class="tok-comment">// Hình dạng phản hồi khiến cả hai chiến lược đều dùng được từ phía client</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Hình dạng phản hồi khiến cả hai chiến lược đều dùng được từ phía client</span>
 {
   "rows": [ /* … */ ],
   "nextCursor": 41827,       <span class="tok-comment">// null khi không còn trang sau</span>
@@ -970,7 +970,7 @@ if (hasMore) rows.pop();</code></pre>
 <p class="lead">Prisma can compute sums, averages and grouped counts without leaving the client, which covers most dashboard queries. It also stops short in four specific places, and knowing exactly where the wall is saves you from discovering it halfway through building a reports page.</p>
 
 <h3><code>aggregate</code> — five functions, one query</h3>
-<pre><code>const k = await prisma.post.aggregate({
+<pre><code class="language-javascript">const k = await prisma.post.aggregate({
   where: { published: true },
   _count: { _all: true, body: true },
   _sum:   { views: true },
@@ -999,7 +999,7 @@ console.log(k);</code></pre>
 </div>
 
 <h3><code>groupBy</code> — the dashboard query</h3>
-<pre><code>const byMonth = await prisma.order.groupBy({
+<pre><code class="language-javascript">const byMonth = await prisma.order.groupBy({
   by:      ['status'],
   where:   { createdAt: { gte: dauThang } },
   _count:  { _all: true },
@@ -1018,7 +1018,7 @@ console.log(byMonth);</code></pre>
   { status: 'DANG_XU_LY', _count: { _all:  391 }, _sum: { total:  74280000 }, _avg: { total: 189974.4 } },
   { status: 'DA_HUY',     _count: { _all:  204 }, _sum: { total:  31900000 }, _avg: { total: 156372.5 } }
 ]</div>
-<pre><code><span class="tok-comment">// Group by several fields, and filter the GROUPS with &#96;having&#96;</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Group by several fields, and filter the GROUPS with &#96;having&#96;</span>
 const byAuthor = await prisma.post.groupBy({
   by:     ['authorId', 'published'],
   _count: { _all: true },
@@ -1041,7 +1041,7 @@ ORDER BY "author_id" ASC</div>
   <div class="lz-layer"><span class="lz-lname">3 · Window functions</span><span class="lz-lnote">Running totals, rank within group, "each customer's three most recent orders". <code>ROW_NUMBER() OVER (PARTITION BY …)</code> has no Prisma equivalent and probably never will.</span></div>
   <div class="lz-layer"><span class="lz-lname">4 · Fill gaps in a series</span><span class="lz-lnote">A day with no orders produces no row, so a 30-day chart silently has 26 bars. The fix is <code>generate_series</code> and a <code>LEFT JOIN</code> — raw SQL, and the single most common reason a dashboard query leaves Prisma.</span></div>
 </div>
-<pre><code><span class="tok-comment">// All four, in one raw query — this is the shape of most real dashboard SQL</span>
+<pre><code class="language-javascript"><span class="tok-comment">// All four, in one raw query — this is the shape of most real dashboard SQL</span>
 type Day = { day: Date; orderCount: bigint; revenue: bigint };
 
 const bieuDo = await prisma.$queryRaw&lt;Day[]&gt;&#96;
@@ -1065,7 +1065,7 @@ const bieuDo = await prisma.$queryRaw&lt;Day[]&gt;&#96;
 </div>
 
 <h3><code>distinct</code>, and where it actually runs</h3>
-<pre><code><span class="tok-comment">// One post per author — the newest, because of the ordering</span>
+<pre><code class="language-javascript"><span class="tok-comment">// One post per author — the newest, because of the ordering</span>
 const onePostPerPerson = await prisma.post.findMany({
   distinct: ['authorId'],
   orderBy:  [{ authorId: 'asc' }, { publishedAt: 'desc' }],
@@ -1080,7 +1080,7 @@ const onePostPerPerson = await prisma.post.findMany({
 </div>
 
 <h3>Several aggregates in one round trip</h3>
-<pre><code><span class="tok-comment">// A dashboard needs six numbers. Six awaits = six round trips.</span>
+<pre><code class="language-typescript"><span class="tok-comment">// A dashboard needs six numbers. Six awaits = six round trips.</span>
 const [
   tongNguoiDung, nguoiDungMoi, tongBai, baiHomNay, theoTrangThai, topTacGia,
 ] = await prisma.$transaction([
@@ -1116,7 +1116,7 @@ real    0m0.087s</div>
 <p class="lead">Prisma tính được tổng, trung bình và số đếm theo nhóm mà không cần rời client, và bấy nhiêu phủ hết phần lớn truy vấn của một bảng điều khiển. Nó cũng dừng lại ở đúng bốn chỗ, và biết chính xác bức tường nằm ở đâu sẽ cứu bạn khỏi việc phát hiện ra nó khi đang xây dở một trang báo cáo.</p>
 
 <h3><code>aggregate</code> — năm hàm, một câu truy vấn</h3>
-<pre><code>const k = await prisma.post.aggregate({
+<pre><code class="language-javascript">const k = await prisma.post.aggregate({
   where: { published: true },
   _count: { _all: true, body: true },
   _sum:   { views: true },
@@ -1145,7 +1145,7 @@ console.log(k);</code></pre>
 </div>
 
 <h3><code>groupBy</code> — câu truy vấn của bảng điều khiển</h3>
-<pre><code>const byMonth = await prisma.order.groupBy({
+<pre><code class="language-javascript">const byMonth = await prisma.order.groupBy({
   by:      ['status'],
   where:   { createdAt: { gte: dauThang } },
   _count:  { _all: true },
@@ -1164,7 +1164,7 @@ console.log(byMonth);</code></pre>
   { status: 'DANG_XU_LY', _count: { _all:  391 }, _sum: { total:  74280000 }, _avg: { total: 189974.4 } },
   { status: 'DA_HUY',     _count: { _all:  204 }, _sum: { total:  31900000 }, _avg: { total: 156372.5 } }
 ]</div>
-<pre><code><span class="tok-comment">// Gộp theo nhiều trường, và lọc chính các NHÓM bằng &#96;having&#96;</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Gộp theo nhiều trường, và lọc chính các NHÓM bằng &#96;having&#96;</span>
 const byAuthor = await prisma.post.groupBy({
   by:     ['authorId', 'published'],
   _count: { _all: true },
@@ -1187,7 +1187,7 @@ ORDER BY "author_id" ASC</div>
   <div class="lz-layer"><span class="lz-lname">3 · Hàm cửa sổ</span><span class="lz-lnote">Tổng luỹ tiến, thứ hạng trong nhóm, "ba đơn gần nhất của mỗi khách". <code>ROW_NUMBER() OVER (PARTITION BY …)</code> không có bản tương đương trong Prisma và nhiều khả năng sẽ không bao giờ có.</span></div>
   <div class="lz-layer"><span class="lz-lname">4 · Lấp chỗ trống trong một chuỗi</span><span class="lz-lnote">Một ngày không có đơn nào thì không sinh ra hàng nào, nên một biểu đồ 30 ngày âm thầm chỉ có 26 cột. Cách vá là <code>generate_series</code> cộng một <code>LEFT JOIN</code> — SQL thô, và là lý do phổ biến nhất khiến một truy vấn bảng điều khiển rời khỏi Prisma.</span></div>
 </div>
-<pre><code><span class="tok-comment">// Cả bốn, trong một truy vấn thô — đây là hình dạng của phần lớn SQL bảng điều khiển thật</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Cả bốn, trong một truy vấn thô — đây là hình dạng của phần lớn SQL bảng điều khiển thật</span>
 type Day = { day: Date; orderCount: bigint; revenue: bigint };
 
 const bieuDo = await prisma.$queryRaw&lt;Day[]&gt;&#96;
@@ -1211,7 +1211,7 @@ const bieuDo = await prisma.$queryRaw&lt;Day[]&gt;&#96;
 </div>
 
 <h3><code>distinct</code>, và nó thật sự chạy ở đâu</h3>
-<pre><code><span class="tok-comment">// Mỗi tác giả một bài — bài mới nhất, nhờ thứ tự sắp xếp</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Mỗi tác giả một bài — bài mới nhất, nhờ thứ tự sắp xếp</span>
 const onePostPerPerson = await prisma.post.findMany({
   distinct: ['authorId'],
   orderBy:  [{ authorId: 'asc' }, { publishedAt: 'desc' }],
@@ -1226,7 +1226,7 @@ const onePostPerPerson = await prisma.post.findMany({
 </div>
 
 <h3>Nhiều phép tổng hợp trong một lượt đi về</h3>
-<pre><code><span class="tok-comment">// Một bảng điều khiển cần sáu con số. Sáu lần await = sáu lượt đi về.</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Một bảng điều khiển cần sáu con số. Sáu lần await = sáu lượt đi về.</span>
 const [
   tongNguoiDung, nguoiDungMoi, tongBai, baiHomNay, theoTrangThai, topTacGia,
 ] = await prisma.$transaction([
@@ -1271,7 +1271,7 @@ real    0m0.087s</div>
 <p class="lead">Every application grows a search box, and there are exactly four answers in increasing order of effort. Most teams start at level one and stay there past the point where it hurts, because the failure is gradual — the box gets slower month by month rather than breaking. Here are all four, measured on the same 400,000 rows.</p>
 
 <h3>Level 1 — <code>contains</code></h3>
-<pre><code>const result = await prisma.post.findMany({
+<pre><code class="language-javascript">const result = await prisma.post.findMany({
   where: {
     OR: [
       { title: { contains: q, mode: 'insensitive' } },
@@ -1291,7 +1291,7 @@ Execution Time: 412.883 ms</div>
 </div>
 
 <h3>Level 2 — trigram index</h3>
-<pre><code><span class="tok-comment">-- A hand-written migration. Two statements, no code change.</span>
+<pre><code class="language-sql"><span class="tok-comment">-- A hand-written migration. Two statements, no code change.</span>
 CREATE EXTENSION IF NOT EXISTS pg_trgm;
 CREATE INDEX "posts_title_trgm" ON "posts" USING gin ("title" gin_trgm_ops);
 CREATE INDEX "posts_body_trgm"  ON "posts" USING gin ("body"  gin_trgm_ops);</code></pre>
@@ -1304,7 +1304,7 @@ Execution Time: 5.104 ms</div>
 <div class="callout ok">
 <p><strong>Eighty times faster, and the application code did not change.</strong> This is the highest-value two lines in the chapter. A GIN trigram index makes <code>ILIKE '%…%'</code> index-backed, which is normally impossible. It also brings fuzzy matching for free — <code>similarity()</code> and the <code>%</code> operator let you handle typos, which no amount of <code>contains</code> ever will. The costs are real but modest: the index is larger than a B-tree and writes are slower, so measure both if the table is write-heavy.</p>
 </div>
-<pre><code><span class="tok-comment">// Fuzzy matching, once the trigram index exists</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Fuzzy matching, once the trigram index exists</span>
 const attach = await prisma.$queryRaw&lt;{ id: number; title: string; sim: number }[]&gt;&#96;
   SELECT id, title, similarity(title, \${q}) AS sim
   FROM posts
@@ -1317,7 +1317,7 @@ const attach = await prisma.$queryRaw&lt;{ id: number; title: string; sim: numbe
 ]</div>
 
 <h3>Level 3 — PostgreSQL full-text search</h3>
-<pre><code><span class="tok-comment">-- A generated column, maintained by PostgreSQL on every write</span>
+<pre><code class="language-sql"><span class="tok-comment">-- A generated column, maintained by PostgreSQL on every write</span>
 ALTER TABLE "posts" ADD COLUMN "search" tsvector
   GENERATED ALWAYS AS (
     setweight(to_tsvector('simple', coalesce("title", '')), 'A') ||
@@ -1325,7 +1325,7 @@ ALTER TABLE "posts" ADD COLUMN "search" tsvector
   ) STORED;
 
 CREATE INDEX "posts_search_idx" ON "posts" USING gin ("search");</code></pre>
-<pre><code><span class="tok-comment">// Prisma cannot model tsvector, so mark it Unsupported and query it raw</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Prisma cannot model tsvector, so mark it Unsupported and query it raw</span>
 model Post {
   id     Int         @id @default(autoincrement())
   title  String
@@ -1335,7 +1335,7 @@ model Post {
   @@index([search], map: "posts_search_idx")
   @@map("posts")
 }</code></pre>
-<pre><code>const result = await prisma.$queryRaw&lt;{ id: number; title: string; rank: number }[]&gt;&#96;
+<pre><code class="language-javascript">const result = await prisma.$queryRaw&lt;{ id: number; title: string; rank: number }[]&gt;&#96;
   SELECT id, title, ts_rank("search", websearch_to_tsquery('simple', \${q})) AS rank
   FROM posts
   WHERE "search" @@ websearch_to_tsquery('simple', \${q})
@@ -1358,7 +1358,7 @@ Execution Time: 2.011 ms
 <div class="pitfall">
 <p><strong>Trap — accent-insensitive search in Vietnamese.</strong> A user typing <code>tieng viet</code> will not match <code>tiếng việt</code>, because they are different strings and <code>'simple'</code> does not fold diacritics. The fix is the <code>unaccent</code> extension, applied on both sides — in the generated column and in the query. Miss one side and search silently returns nothing for half your users, which is the kind of bug that survives for months because the people it affects assume the content is not there.</p>
 </div>
-<pre><code><span class="tok-comment">-- Accent-insensitive: unaccent on BOTH sides</span>
+<pre><code class="language-sql"><span class="tok-comment">-- Accent-insensitive: unaccent on BOTH sides</span>
 CREATE EXTENSION IF NOT EXISTS unaccent;
 
 <span class="tok-comment">-- unaccent() is not IMMUTABLE by default, so wrap it for a generated column</span>
@@ -1406,7 +1406,7 @@ ALTER TABLE "posts" ADD COLUMN "search" tsvector
 <p class="lead">Ứng dụng nào rồi cũng mọc ra một ô tìm kiếm, và có đúng bốn câu trả lời xếp theo mức công sức tăng dần. Phần lớn đội bắt đầu ở cấp một rồi ở lại đó quá lâu sau khi nó bắt đầu đau, vì thất bại diễn ra từ từ — ô tìm kiếm chậm dần theo từng tháng chứ không hỏng hẳn. Đây là cả bốn cấp, đo trên cùng 400.000 hàng.</p>
 
 <h3>Cấp 1 — <code>contains</code></h3>
-<pre><code>const result = await prisma.post.findMany({
+<pre><code class="language-javascript">const result = await prisma.post.findMany({
   where: {
     OR: [
       { title: { contains: q, mode: 'insensitive' } },
@@ -1426,7 +1426,7 @@ Execution Time: 412.883 ms</div>
 </div>
 
 <h3>Cấp 2 — chỉ mục trigram</h3>
-<pre><code><span class="tok-comment">-- Một migration viết tay. Hai câu lệnh, không đổi dòng mã nào.</span>
+<pre><code class="language-sql"><span class="tok-comment">-- Một migration viết tay. Hai câu lệnh, không đổi dòng mã nào.</span>
 CREATE EXTENSION IF NOT EXISTS pg_trgm;
 CREATE INDEX "posts_title_trgm" ON "posts" USING gin ("title" gin_trgm_ops);
 CREATE INDEX "posts_body_trgm"  ON "posts" USING gin ("body"  gin_trgm_ops);</code></pre>
@@ -1439,7 +1439,7 @@ Execution Time: 5.104 ms</div>
 <div class="callout ok">
 <p><strong>Nhanh gấp tám mươi lần, và mã ứng dụng không đổi một chữ.</strong> Đây là hai dòng đáng giá nhất trong cả chương. Một chỉ mục trigram GIN khiến <code>ILIKE '%…%'</code> được chỉ mục đỡ, điều vốn dĩ là bất khả. Nó còn cho thêm phép khớp mờ miễn phí — <code>similarity()</code> và toán tử <code>%</code> cho phép bạn xử lý lỗi gõ, thứ mà <code>contains</code> không bao giờ làm được. Cái giá là có thật nhưng vừa phải: chỉ mục to hơn B-tree và ghi chậm hơn, nên hãy đo cả hai nếu bảng nặng ghi.</p>
 </div>
-<pre><code><span class="tok-comment">// Khớp mờ, một khi đã có chỉ mục trigram</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Khớp mờ, một khi đã có chỉ mục trigram</span>
 const attach = await prisma.$queryRaw&lt;{ id: number; title: string; sim: number }[]&gt;&#96;
   SELECT id, title, similarity(title, \${q}) AS sim
   FROM posts
@@ -1452,7 +1452,7 @@ const attach = await prisma.$queryRaw&lt;{ id: number; title: string; sim: numbe
 ]</div>
 
 <h3>Cấp 3 — tìm kiếm toàn văn của PostgreSQL</h3>
-<pre><code><span class="tok-comment">-- Một cột sinh ra, do PostgreSQL tự duy trì ở mọi lần ghi</span>
+<pre><code class="language-sql"><span class="tok-comment">-- Một cột sinh ra, do PostgreSQL tự duy trì ở mọi lần ghi</span>
 ALTER TABLE "posts" ADD COLUMN "search" tsvector
   GENERATED ALWAYS AS (
     setweight(to_tsvector('simple', coalesce("title", '')), 'A') ||
@@ -1460,7 +1460,7 @@ ALTER TABLE "posts" ADD COLUMN "search" tsvector
   ) STORED;
 
 CREATE INDEX "posts_search_idx" ON "posts" USING gin ("search");</code></pre>
-<pre><code><span class="tok-comment">// Prisma không mô hình hoá được tsvector, nên đánh dấu Unsupported và truy vấn thô</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Prisma không mô hình hoá được tsvector, nên đánh dấu Unsupported và truy vấn thô</span>
 model Post {
   id     Int         @id @default(autoincrement())
   title  String
@@ -1470,7 +1470,7 @@ model Post {
   @@index([search], map: "posts_search_idx")
   @@map("posts")
 }</code></pre>
-<pre><code>const result = await prisma.$queryRaw&lt;{ id: number; title: string; rank: number }[]&gt;&#96;
+<pre><code class="language-javascript">const result = await prisma.$queryRaw&lt;{ id: number; title: string; rank: number }[]&gt;&#96;
   SELECT id, title, ts_rank("search", websearch_to_tsquery('simple', \${q})) AS rank
   FROM posts
   WHERE "search" @@ websearch_to_tsquery('simple', \${q})
@@ -1493,7 +1493,7 @@ Execution Time: 2.011 ms
 <div class="pitfall">
 <p><strong>Bẫy — tìm kiếm không dấu trong tiếng Việt.</strong> Người dùng gõ <code>tieng viet</code> sẽ không khớp <code>tiếng việt</code>, vì đó là hai chuỗi khác nhau và <code>'simple'</code> không gỡ dấu. Cách vá là extension <code>unaccent</code>, áp dụng ở cả hai phía — trong cột sinh ra và trong câu truy vấn. Bỏ sót một phía thì tìm kiếm âm thầm trả về rỗng cho một nửa số người dùng, và đó là loại lỗi sống sót hàng tháng trời vì những người bị ảnh hưởng cứ tưởng nội dung không có ở đó.</p>
 </div>
-<pre><code><span class="tok-comment">-- Không phân biệt dấu: unaccent ở CẢ HAI phía</span>
+<pre><code class="language-sql"><span class="tok-comment">-- Không phân biệt dấu: unaccent ở CẢ HAI phía</span>
 CREATE EXTENSION IF NOT EXISTS unaccent;
 
 <span class="tok-comment">-- unaccent() mặc định không IMMUTABLE, nên phải bọc lại mới dùng cho cột sinh ra</span>

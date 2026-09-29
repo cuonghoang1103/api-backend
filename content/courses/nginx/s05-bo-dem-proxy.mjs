@@ -18,7 +18,7 @@ export default {
 <p class="lead">A reverse proxy that keeps responses is a different thing from one that forwards them. Three directives make the change, and the whole chapter is measured against an upstream that counts how many times it was called — so every result says plainly whether the request reached your application.</p>
 
 <h3>The three directives</h3>
-<pre><code>http {
+<pre><code class="language-bash">http {
   <span class="tok-comment"># The store: lives at the http level, CANNOT go inside a server block</span>
   proxy_cache_path /var/cache/nginx
                    levels=1:2            <span class="tok-comment"># a 2-level directory tree, to avoid one folder with a million files</span>
@@ -90,7 +90,7 @@ export default {
 <p class="lead">Một con reverse proxy biết GIỮ phản hồi là một thứ khác hẳn con proxy chỉ chuyển tiếp chúng. Ba chỉ thị làm nên thay đổi đó, và cả chương này được đo trên một upstream biết ĐẾM số lần nó bị gọi — nên mọi kết quả đều nói thẳng ra rằng request có tới được ứng dụng của bạn hay không.</p>
 
 <h3>Ba chỉ thị</h3>
-<pre><code>http {
+<pre><code class="language-bash">http {
   <span class="tok-comment"># Kho chứa: nằm ở tầng http, KHÔNG đặt trong server được</span>
   proxy_cache_path /var/cache/nginx
                    levels=1:2            <span class="tok-comment"># cây thư mục 2 tầng, tránh 1 thư mục triệu tệp</span>
@@ -200,7 +200,7 @@ Phuong thuc:
 <div class="pitfall">
 <p><strong>Trap — <code>Authorization</code> is not part of the cache key and does not prevent caching, so an authenticated response with no <code>Cache-Control</code> is stored and served to everyone.</strong> The three rows above are one config, one URL and three requests: user A's private profile was cached, then an anonymous visitor and a different logged-in user both received it. Nothing errored, nothing was logged as unusual, and the application was returning correct data every time it was asked — it just stopped being asked. The failure is a collaboration: the application omitted <code>Cache-Control: private</code>, and the proxy had no way to know the response was personal. Fix it on both sides. In the application, every response carrying user data gets <code>Cache-Control: private, no-store</code>. In Nginx, add a belt: <code>proxy_no_cache \$http_authorization \$cookie_phien;</code> and <code>proxy_cache_bypass \$http_authorization \$cookie_phien;</code> so a request that carries credentials is neither stored nor served from the shared cache.</p>
 </div>
-<pre><code>location /api/ {
+<pre><code class="language-bash">location /api/ {
   proxy_cache kho;
   proxy_cache_valid 200 10s;
 
@@ -272,7 +272,7 @@ Phuong thuc:
 <div class="pitfall">
 <p><strong>Bẫy — <code>Authorization</code> KHÔNG nằm trong khoá cache và cũng KHÔNG ngăn việc cache, nên một phản hồi đã xác thực mà thiếu <code>Cache-Control</code> sẽ bị cất và đem phát cho tất cả.</strong> Ba dòng ở trên là MỘT cấu hình, MỘT URL và BA request: hồ sơ riêng của người dùng A bị cache, rồi một khách vãng lai và một người dùng đã đăng nhập KHÁC đều nhận đúng nó. Không có lỗi nào, không có gì được ghi lại là bất thường, và ứng dụng thì trả về dữ liệu ĐÚNG mỗi lần nó được hỏi — chỉ là nó thôi được hỏi. Kiểu hỏng này là một sự hợp tác: ứng dụng quên <code>Cache-Control: private</code>, còn con proxy thì không có cách nào biết phản hồi ấy là riêng tư. Hãy vá cả HAI phía. Trong ứng dụng: mọi phản hồi mang dữ liệu người dùng đều nhận <code>Cache-Control: private, no-store</code>. Ở Nginx: thêm một cái thắt lưng — <code>proxy_no_cache \$http_authorization \$cookie_phien;</code> và <code>proxy_cache_bypass \$http_authorization \$cookie_phien;</code> để một request có mang thông tin đăng nhập thì KHÔNG được cất vào và cũng KHÔNG được lấy ra từ bộ đệm dùng chung.</p>
 </div>
-<pre><code>location /api/ {
+<pre><code class="language-bash">location /api/ {
   proxy_cache kho;
   proxy_cache_valid 200 10s;
 
@@ -357,7 +357,7 @@ D) Upstream khai X-Accel-Expires: 2 VA Cache-Control: max-age=600
   <div class="kv"><span class="k">The backend is not yours → proxy_cache_valid, plus ignore if needed</span><span class="v">A third-party API or a legacy service that sends nothing useful. Set the lifetime in the config, scoped to that one location, and accept that you are now the one asserting how fresh the data is.</span></div>
   <div class="kv"><span class="k">Different statuses want different lifetimes</span><span class="v"><code>proxy_cache_valid 200 10m;</code> <code>proxy_cache_valid 404 1m;</code> <code>proxy_cache_valid 500 502 503 504 1s;</code> — caching a <code>404</code> briefly stops a scanner from reaching your application at all, and one second on <code>5xx</code> collapses a thundering retry storm into a trickle without hiding a real outage.</span></div>
 </div>
-<pre><code><span class="tok-comment"># "Nginx holds it 10 minutes, the browser revalidates every time"</span>
+<pre><code class="language-bash"><span class="tok-comment"># "Nginx holds it 10 minutes, the browser revalidates every time"</span>
 <span class="tok-comment"># — written on the APPLICATION side, not in the config:</span>
 res.setHeader('X-Accel-Expires', '600');        <span class="tok-comment"># read by Nginx only, then stripped</span>
 res.setHeader('Cache-Control', 'no-cache');     <span class="tok-comment"># the browser sees this one</span>
@@ -425,7 +425,7 @@ D) Upstream khai X-Accel-Expires: 2 VA Cache-Control: max-age=600
   <div class="kv"><span class="k">Backend không phải của bạn → proxy_cache_valid, kèm ignore nếu cần</span><span class="v">Một API bên thứ ba hay một dịch vụ cũ chẳng gửi gì hữu ích. Hãy đặt thời hạn trong cấu hình, KHOANH vào đúng một location đó, và chấp nhận rằng giờ CHÍNH BẠN là người khẳng định dữ liệu tươi tới đâu.</span></div>
   <div class="kv"><span class="k">Mã trạng thái khác nhau muốn thời hạn khác nhau</span><span class="v"><code>proxy_cache_valid 200 10m;</code> <code>proxy_cache_valid 404 1m;</code> <code>proxy_cache_valid 500 502 503 504 1s;</code> — cache một cú <code>404</code> trong chốc lát là chặn được đám quét dạo chạm tới ứng dụng của bạn, còn một giây trên <code>5xx</code> bóp một cơn bão thử-lại thành một dòng nhỏ giọt mà KHÔNG che giấu một sự cố thật.</span></div>
 </div>
-<pre><code><span class="tok-comment"># "Nginx giữ 10 phút, trình duyệt hỏi lại mỗi lần"</span>
+<pre><code class="language-bash"><span class="tok-comment"># "Nginx giữ 10 phút, trình duyệt hỏi lại mỗi lần"</span>
 <span class="tok-comment"># — viết ở phía ỨNG DỤNG, không phải ở cấu hình:</span>
 res.setHeader('X-Accel-Expires', '600');        <span class="tok-comment"># chỉ Nginx đọc, rồi bị lột đi</span>
 res.setHeader('Cache-Control', 'no-cache');     <span class="tok-comment"># trình duyệt thấy cái này</span>
@@ -491,7 +491,7 @@ proxy_cache_valid 500 502 503 504 1s;   <span class="tok-comment"># dập bão t
 <div class="callout warn">
 <p><strong>The lock is not free, and the trade is worth stating plainly.</strong> The waiting requests poll for the entry rather than being woken the instant it arrives, so a follower can sit for up to half a second after the leader has already finished. Measured: the slowest of the twenty went from 1.01s to 1.51s. What you bought is your backend receiving one query instead of twenty. On an endpoint that is expensive for the backend, that is an obviously good trade. On a cheap endpoint with a large fan-out of waiters, it may not be — and now you can decide with numbers instead of by reputation.</p>
 </div>
-<pre><code>location /api/danh-sach {
+<pre><code class="language-bash">location /api/danh-sach {
   proxy_cache kho;
   proxy_cache_valid 200 60s;
 
@@ -564,7 +564,7 @@ proxy_cache_valid 500 502 503 504 1s;   <span class="tok-comment"># dập bão t
 <div class="callout warn">
 <p><strong>Cái khoá KHÔNG miễn phí, và cuộc đổi chác này đáng được nói thẳng.</strong> Đám request đang chờ đi HỎI THĂM cái mục theo chu kỳ chứ không được đánh thức ngay lúc nó về, nên một kẻ đi theo có thể ngồi thêm tới nửa giây SAU KHI kẻ dẫn đầu đã xong. Đo được: kẻ chậm nhất trong hai mươi đi từ 1,01s lên 1,51s. Cái bạn MUA được là backend nhận một truy vấn thay vì hai mươi. Với một điểm cuối đắt đỏ cho backend thì đó rõ ràng là cuộc đổi chác tốt. Với một điểm cuối rẻ mà có đông kẻ chờ thì có thể không — và giờ bạn quyết định bằng CON SỐ chứ không bằng tiếng đồn.</p>
 </div>
-<pre><code>location /api/danh-sach {
+<pre><code class="language-bash">location /api/danh-sach {
   proxy_cache kho;
   proxy_cache_valid 200 60s;
 
@@ -644,7 +644,7 @@ proxy_cache_valid 500 502 503 504 1s;   <span class="tok-comment"># dập bão t
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">It cannot invent what was never cached</span><span class="lz-d">Row 6: a URL nobody had requested before is a <code>502</code> regardless. Stale-serving covers your popular paths, which is usually most of your traffic — but it is not a substitute for the backend being up.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">background_update means nobody waits for the recovery either</span><span class="lz-d">Row 7: the first request after the backend returned still got the stale copy instantly, while a separate request refreshed the entry. Without it, that one unlucky user pays the full backend latency.</span></div>
 </div>
-<pre><code>location /api/ {
+<pre><code class="language-bash">location /api/ {
   proxy_cache kho;
   proxy_cache_valid 200 60s;
 
@@ -715,7 +715,7 @@ proxy_cache_valid 500 502 503 504 1s;   <span class="tok-comment"># dập bão t
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Nó không BỊA ra được thứ chưa từng được cache</span><span class="lz-d">Dòng 6: một URL chưa ai từng gọi thì vẫn là <code>502</code>. Phục vụ bản cũ che chở những đường dẫn ĐÔNG KHÁCH của bạn, mà đó thường là phần lớn lưu lượng — nhưng nó KHÔNG thay thế được việc backend phải sống.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">background_update nghĩa là cả lúc HỒI PHỤC cũng không ai phải chờ</span><span class="lz-d">Dòng 7: request đầu tiên sau khi backend quay lại VẪN nhận bản cũ ngay lập tức, trong khi một request riêng đi làm mới cái mục. Thiếu nó thì đúng một người xui xẻo ấy trả trọn cái độ trễ của backend.</span></div>
 </div>
-<pre><code>location /api/ {
+<pre><code class="language-bash">location /api/ {
   proxy_cache kho;
   proxy_cache_valid 200 60s;
 

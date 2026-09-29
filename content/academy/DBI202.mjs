@@ -483,9 +483,9 @@ SET NULL → <b>fails here</b>, because Enrol.sid is part of that table's primar
 <p>Đọc đúng nghĩa đen: mọi sid xuất hiện trong Enrol đều phải có mặt trong Student. Tương đương <span class="badge">π<sub>sid</sub>(Enrol) − π<sub>sid</sub>(Student) = ∅</span> — và phép trừ đó chính là truy vấn mà người kiểm toán chạy để tìm các dòng mồ côi trong một cơ sở dữ liệu chưa từng khai báo khoá ngoại.</p>
 
 <h3>Chuyện gì xảy ra khi xoá một dòng đang được tham chiếu</h3>
-<pre><span class="tok-keyword">FOREIGN KEY</span> (sid) <span class="tok-keyword">REFERENCES</span> Student(sid)
+<pre><code class="language-sql"><span class="tok-keyword">FOREIGN KEY</span> (sid) <span class="tok-keyword">REFERENCES</span> Student(sid)
     <span class="tok-keyword">ON DELETE</span> NO ACTION    <span class="tok-comment">-- mặc định: từ chối phép xoá</span>
-    <span class="tok-keyword">ON UPDATE</span> CASCADE      <span class="tok-comment">-- lan truyền khi khoá đổi</span></pre>
+    <span class="tok-keyword">ON UPDATE</span> CASCADE      <span class="tok-comment">-- lan truyền khi khoá đổi</span></code></pre>
 <table><thead><tr><th>Chính sách</th><th>Hiệu ứng</th><th>Dùng khi</th></tr></thead><tbody>
 <tr><td>NO ACTION / RESTRICT</td><td>phép xoá thất bại</td><td>dòng con không bao giờ được mồ côi (hoá đơn)</td></tr>
 <tr><td>CASCADE</td><td>các dòng con bị xoá theo</td><td>dòng con vô nghĩa nếu đứng một mình (dòng chi tiết đơn hàng)</td></tr>
@@ -679,20 +679,20 @@ SET NULL → <b>thất bại ở đây</b>, vì Enrol.sid là một phần khoá
     gpa, year      salary, dept</div>
 
 <h3>Strategy 1 — one table per subclass (the "ER" way)</h3>
-<pre><span class="tok-keyword">CREATE TABLE</span> Person  (pid <span class="tok-type">INT PRIMARY KEY</span>, name <span class="tok-type">NVARCHAR</span>(100), dob <span class="tok-type">DATE</span>);
+<pre><code class="language-sql"><span class="tok-keyword">CREATE TABLE</span> Person  (pid <span class="tok-type">INT PRIMARY KEY</span>, name <span class="tok-type">NVARCHAR</span>(100), dob <span class="tok-type">DATE</span>);
 <span class="tok-keyword">CREATE TABLE</span> Student (pid <span class="tok-type">INT PRIMARY KEY REFERENCES</span> Person(pid), gpa <span class="tok-type">DECIMAL</span>(3,2), year <span class="tok-type">INT</span>);
-<span class="tok-keyword">CREATE TABLE</span> Lecturer(pid <span class="tok-type">INT PRIMARY KEY REFERENCES</span> Person(pid), salary <span class="tok-type">MONEY</span>, dept <span class="tok-type">NVARCHAR</span>(50));</pre>
+<span class="tok-keyword">CREATE TABLE</span> Lecturer(pid <span class="tok-type">INT PRIMARY KEY REFERENCES</span> Person(pid), salary <span class="tok-type">MONEY</span>, dept <span class="tok-type">NVARCHAR</span>(50));</code></pre>
 <p>Shared attributes live once, in Person; each subclass table holds only its own. Reading a full student needs a join.</p>
 
 <h3>Strategy 2 — one table per concrete class (the "OO" way)</h3>
-<pre><span class="tok-keyword">CREATE TABLE</span> Student (pid, name, dob, gpa, year);      <span class="tok-comment">-- everything repeated</span>
-<span class="tok-keyword">CREATE TABLE</span> Lecturer(pid, name, dob, salary, dept);</pre>
+<pre><code class="language-sql"><span class="tok-keyword">CREATE TABLE</span> Student (pid, name, dob, gpa, year);      <span class="tok-comment">-- everything repeated</span>
+<span class="tok-keyword">CREATE TABLE</span> Lecturer(pid, name, dob, salary, dept);</code></pre>
 <p>No joins, but the common attributes are duplicated in the schema, and a query over "all people" needs a UNION. A person who is both a student and a lecturer is stored twice.</p>
 
 <h3>Strategy 3 — one wide table (the "NULL" way)</h3>
-<pre><span class="tok-keyword">CREATE TABLE</span> Person (pid, name, dob, kind <span class="tok-type">CHAR</span>(1), gpa, year, salary, dept,
+<pre><code class="language-sql"><span class="tok-keyword">CREATE TABLE</span> Person (pid, name, dob, kind <span class="tok-type">CHAR</span>(1), gpa, year, salary, dept,
     <span class="tok-keyword">CONSTRAINT</span> ck_kind <span class="tok-keyword">CHECK</span> (
-        (kind = <span class="tok-string">'S'</span> <span class="tok-keyword">AND</span> salary <span class="tok-keyword">IS NULL</span>) <span class="tok-keyword">OR</span> (kind = <span class="tok-string">'L'</span> <span class="tok-keyword">AND</span> gpa <span class="tok-keyword">IS NULL</span>)));</pre>
+        (kind = <span class="tok-string">'S'</span> <span class="tok-keyword">AND</span> salary <span class="tok-keyword">IS NULL</span>) <span class="tok-keyword">OR</span> (kind = <span class="tok-string">'L'</span> <span class="tok-keyword">AND</span> gpa <span class="tok-keyword">IS NULL</span>)));</code></pre>
 <p>One table, no joins, but every row carries the columns of every subclass, mostly null — and only a CHECK constraint stops nonsense combinations.</p>
 
 <h3>Which one — the comparison you must be able to argue</h3>
@@ -724,20 +724,20 @@ Subclasses queried separately and almost never together → strategy 2.</div>
     gpa, year      salary, dept</div>
 
 <h3>Chiến lược 1 — mỗi lớp con một bảng (kiểu "ER")</h3>
-<pre><span class="tok-keyword">CREATE TABLE</span> Person  (pid <span class="tok-type">INT PRIMARY KEY</span>, name <span class="tok-type">NVARCHAR</span>(100), dob <span class="tok-type">DATE</span>);
+<pre><code class="language-sql"><span class="tok-keyword">CREATE TABLE</span> Person  (pid <span class="tok-type">INT PRIMARY KEY</span>, name <span class="tok-type">NVARCHAR</span>(100), dob <span class="tok-type">DATE</span>);
 <span class="tok-keyword">CREATE TABLE</span> Student (pid <span class="tok-type">INT PRIMARY KEY REFERENCES</span> Person(pid), gpa <span class="tok-type">DECIMAL</span>(3,2), year <span class="tok-type">INT</span>);
-<span class="tok-keyword">CREATE TABLE</span> Lecturer(pid <span class="tok-type">INT PRIMARY KEY REFERENCES</span> Person(pid), salary <span class="tok-type">MONEY</span>, dept <span class="tok-type">NVARCHAR</span>(50));</pre>
+<span class="tok-keyword">CREATE TABLE</span> Lecturer(pid <span class="tok-type">INT PRIMARY KEY REFERENCES</span> Person(pid), salary <span class="tok-type">MONEY</span>, dept <span class="tok-type">NVARCHAR</span>(50));</code></pre>
 <p>Thuộc tính chung nằm đúng một chỗ, trong Person; mỗi bảng lớp con chỉ giữ phần riêng. Đọc đầy đủ một sinh viên thì phải nối bảng.</p>
 
 <h3>Chiến lược 2 — mỗi lớp cụ thể một bảng (kiểu "hướng đối tượng")</h3>
-<pre><span class="tok-keyword">CREATE TABLE</span> Student (pid, name, dob, gpa, year);      <span class="tok-comment">-- lặp lại mọi thứ</span>
-<span class="tok-keyword">CREATE TABLE</span> Lecturer(pid, name, dob, salary, dept);</pre>
+<pre><code class="language-sql"><span class="tok-keyword">CREATE TABLE</span> Student (pid, name, dob, gpa, year);      <span class="tok-comment">-- lặp lại mọi thứ</span>
+<span class="tok-keyword">CREATE TABLE</span> Lecturer(pid, name, dob, salary, dept);</code></pre>
 <p>Không phải nối bảng, nhưng thuộc tính chung bị nhân bản trong lược đồ, và truy vấn "tất cả mọi người" phải dùng UNION. Người vừa là sinh viên vừa là giảng viên bị lưu hai lần.</p>
 
 <h3>Chiến lược 3 — một bảng rộng (kiểu "nhiều NULL")</h3>
-<pre><span class="tok-keyword">CREATE TABLE</span> Person (pid, name, dob, kind <span class="tok-type">CHAR</span>(1), gpa, year, salary, dept,
+<pre><code class="language-sql"><span class="tok-keyword">CREATE TABLE</span> Person (pid, name, dob, kind <span class="tok-type">CHAR</span>(1), gpa, year, salary, dept,
     <span class="tok-keyword">CONSTRAINT</span> ck_kind <span class="tok-keyword">CHECK</span> (
-        (kind = <span class="tok-string">'S'</span> <span class="tok-keyword">AND</span> salary <span class="tok-keyword">IS NULL</span>) <span class="tok-keyword">OR</span> (kind = <span class="tok-string">'L'</span> <span class="tok-keyword">AND</span> gpa <span class="tok-keyword">IS NULL</span>)));</pre>
+        (kind = <span class="tok-string">'S'</span> <span class="tok-keyword">AND</span> salary <span class="tok-keyword">IS NULL</span>) <span class="tok-keyword">OR</span> (kind = <span class="tok-string">'L'</span> <span class="tok-keyword">AND</span> gpa <span class="tok-keyword">IS NULL</span>)));</code></pre>
 <p>Một bảng, không phải nối, nhưng mỗi dòng mang theo cột của mọi lớp con, đa phần là null — và chỉ có ràng buộc CHECK ngăn được các tổ hợp vô nghĩa.</p>
 
 <h3>Chọn cái nào — bảng so sánh bạn phải biện luận được</h3>
@@ -801,12 +801,12 @@ put the FK on Branch, the side with total participation: <span class="badge">Bra
 <b>Result: 6 tables.</b> Now check each one against 1NF–BCNF (Chapter 4) — a correct conversion is usually already in 3NF.</div>
 
 <h3>Then write the DDL in dependency order</h3>
-<pre><span class="tok-comment">-- parents first, children after: a FK cannot reference a table that does not exist yet</span>
+<pre><code class="language-sql"><span class="tok-comment">-- parents first, children after: a FK cannot reference a table that does not exist yet</span>
 <span class="tok-keyword">CREATE TABLE</span> Member (...);
 <span class="tok-keyword">CREATE TABLE</span> Book   (...);
 <span class="tok-keyword">CREATE TABLE</span> Branch (... manager_mid <span class="tok-type">INT</span> <span class="tok-keyword">NOT NULL UNIQUE REFERENCES</span> Member(mid));
 <span class="tok-keyword">CREATE TABLE</span> Copy   (... <span class="tok-keyword">FOREIGN KEY</span>(brid) <span class="tok-keyword">REFERENCES</span> Branch(brid) <span class="tok-keyword">ON DELETE CASCADE</span>);
-<span class="tok-keyword">CREATE TABLE</span> Borrow (...);</pre>
+<span class="tok-keyword">CREATE TABLE</span> Borrow (...);</code></pre>
 <p>When two tables reference each other, create them without the constraint and add it afterwards with <span class="badge">ALTER TABLE … ADD CONSTRAINT</span>.</p>
 
 <div class="pitfall"><b>Creating a separate table for a 1:N relationship</b> is the most frequent conversion error. <span class="badge">Teaches(lid, cid)</span> for "one lecturer teaches many courses" adds a join to every query and lets a course have two lecturers — the very thing the cardinality forbids. A 1:N relationship is <em>always</em> just a foreign key.</div>
@@ -849,12 +849,12 @@ put the FK on Branch, the side with total participation: <span class="badge">Bra
 <b>Kết quả: 6 bảng.</b> Giờ hãy soi từng bảng theo 1NF–BCNF (Chương 4) — một phép chuyển đúng thường đã đạt sẵn 3NF.</div>
 
 <h3>Rồi viết DDL theo thứ tự phụ thuộc</h3>
-<pre><span class="tok-comment">-- bảng cha trước, bảng con sau: FK không thể tham chiếu bảng chưa tồn tại</span>
+<pre><code class="language-sql"><span class="tok-comment">-- bảng cha trước, bảng con sau: FK không thể tham chiếu bảng chưa tồn tại</span>
 <span class="tok-keyword">CREATE TABLE</span> Member (...);
 <span class="tok-keyword">CREATE TABLE</span> Book   (...);
 <span class="tok-keyword">CREATE TABLE</span> Branch (... manager_mid <span class="tok-type">INT</span> <span class="tok-keyword">NOT NULL UNIQUE REFERENCES</span> Member(mid));
 <span class="tok-keyword">CREATE TABLE</span> Copy   (... <span class="tok-keyword">FOREIGN KEY</span>(brid) <span class="tok-keyword">REFERENCES</span> Branch(brid) <span class="tok-keyword">ON DELETE CASCADE</span>);
-<span class="tok-keyword">CREATE TABLE</span> Borrow (...);</pre>
+<span class="tok-keyword">CREATE TABLE</span> Borrow (...);</code></pre>
 <p>Khi hai bảng tham chiếu lẫn nhau, hãy tạo chúng trước mà chưa có ràng buộc rồi thêm sau bằng <span class="badge">ALTER TABLE … ADD CONSTRAINT</span>.</p>
 
 <div class="pitfall"><b>Tạo một bảng riêng cho liên kết 1:N</b> là lỗi chuyển đổi hay gặp nhất. <span class="badge">Teaches(lid, cid)</span> cho "một giảng viên dạy nhiều môn" làm mọi truy vấn phải nối thêm một bảng và còn cho phép một môn có hai giảng viên — đúng điều mà bản số cấm. Liên kết 1:N <em>luôn luôn</em> chỉ là một khoá ngoại.</div>
@@ -1243,13 +1243,13 @@ product_id → unit_price &nbsp; <em>(cũng chỉ một phần khoá)</em><br>
 <span class="eyebrow">Chapter 5 · Lesson 5.1</span>
 <h2>SQL DDL — turning your design into tables</h2>
 <p class="lead">Data Definition Language (DDL) creates the schema. This is where your ER diagram and normalization become real tables, with the constraints that enforce your rules.</p>
-<pre><span class="tok-keyword">CREATE TABLE</span> Student (
+<pre><code class="language-sql"><span class="tok-keyword">CREATE TABLE</span> Student (
     id       <span class="tok-type">INT</span> <span class="tok-keyword">PRIMARY KEY</span>,
     name     <span class="tok-type">NVARCHAR</span>(100) <span class="tok-keyword">NOT NULL</span>,
     email    <span class="tok-type">VARCHAR</span>(100) <span class="tok-keyword">UNIQUE</span>,
     age      <span class="tok-type">INT</span> <span class="tok-keyword">CHECK</span> (age &gt;= 16),
     classId  <span class="tok-type">INT</span> <span class="tok-keyword">FOREIGN KEY REFERENCES</span> Class(id)
-);</pre>
+);</code></pre>
 <table>
   <thead><tr><th>Constraint</th><th>Enforces</th></tr></thead>
   <tbody>
@@ -1271,13 +1271,13 @@ product_id → unit_price &nbsp; <em>(cũng chỉ một phần khoá)</em><br>
 <span class="eyebrow">Chương 5 · Bài 5.1</span>
 <h2>SQL DDL — biến thiết kế thành bảng</h2>
 <p class="lead">Ngôn ngữ định nghĩa dữ liệu (DDL) tạo lược đồ. Đây là nơi sơ đồ ER và chuẩn hóa của bạn thành bảng thật, với các ràng buộc thực thi luật của bạn.</p>
-<pre><span class="tok-keyword">CREATE TABLE</span> Student (
+<pre><code class="language-sql"><span class="tok-keyword">CREATE TABLE</span> Student (
     id       <span class="tok-type">INT</span> <span class="tok-keyword">PRIMARY KEY</span>,
     name     <span class="tok-type">NVARCHAR</span>(100) <span class="tok-keyword">NOT NULL</span>,
     email    <span class="tok-type">VARCHAR</span>(100) <span class="tok-keyword">UNIQUE</span>,
     age      <span class="tok-type">INT</span> <span class="tok-keyword">CHECK</span> (age &gt;= 16),
     classId  <span class="tok-type">INT</span> <span class="tok-keyword">FOREIGN KEY REFERENCES</span> Class(id)
-);</pre>
+);</code></pre>
 <table>
   <thead><tr><th>Ràng buộc</th><th>Thực thi</th></tr></thead>
   <tbody>
@@ -1337,8 +1337,8 @@ product_id → unit_price &nbsp; <em>(cũng chỉ một phần khoá)</em><br>
 <b>Design rule:</b> declare NOT NULL by default and allow NULL only when "unknown" is a genuine, meaningful state.</div>
 
 <h3>Surrogate keys and IDENTITY</h3>
-<pre>id <span class="tok-type">INT IDENTITY</span>(1,1) <span class="tok-keyword">PRIMARY KEY</span>          <span class="tok-comment">-- auto-increment, per table</span>
-id <span class="tok-type">UNIQUEIDENTIFIER DEFAULT NEWID</span>()       <span class="tok-comment">-- GUID: unique across servers, but 16 bytes</span></pre>
+<pre><code class="language-sql">id <span class="tok-type">INT IDENTITY</span>(1,1) <span class="tok-keyword">PRIMARY KEY</span>          <span class="tok-comment">-- auto-increment, per table</span>
+id <span class="tok-type">UNIQUEIDENTIFIER DEFAULT NEWID</span>()       <span class="tok-comment">-- GUID: unique across servers, but 16 bytes</span></code></pre>
 <div class="out"><b>Natural key or surrogate?</b> A natural key (student code, ISBN) is meaningful and needs no extra column, but it changes when the business changes and it is wide, so every foreign key copies that width. A surrogate is meaningless, narrow, immutable — and requires an extra UNIQUE constraint on the natural key so you do not insert the same student twice.<br>
 <b>Common practice:</b> surrogate primary key + UNIQUE on the natural key. You get both.</div>
 
@@ -1380,8 +1380,8 @@ id <span class="tok-type">UNIQUEIDENTIFIER DEFAULT NEWID</span>()       <span cl
 <b>Quy tắc thiết kế:</b> mặc định khai NOT NULL, chỉ cho phép NULL khi "không biết" thật sự là một trạng thái có nghĩa.</div>
 
 <h3>Khoá thay thế và IDENTITY</h3>
-<pre>id <span class="tok-type">INT IDENTITY</span>(1,1) <span class="tok-keyword">PRIMARY KEY</span>          <span class="tok-comment">-- tự tăng, theo từng bảng</span>
-id <span class="tok-type">UNIQUEIDENTIFIER DEFAULT NEWID</span>()       <span class="tok-comment">-- GUID: duy nhất xuyên máy chủ, nhưng 16 byte</span></pre>
+<pre><code class="language-sql">id <span class="tok-type">INT IDENTITY</span>(1,1) <span class="tok-keyword">PRIMARY KEY</span>          <span class="tok-comment">-- tự tăng, theo từng bảng</span>
+id <span class="tok-type">UNIQUEIDENTIFIER DEFAULT NEWID</span>()       <span class="tok-comment">-- GUID: duy nhất xuyên máy chủ, nhưng 16 byte</span></code></pre>
 <div class="out"><b>Khoá tự nhiên hay khoá thay thế?</b> Khoá tự nhiên (mã sinh viên, ISBN) có ý nghĩa và không tốn thêm cột, nhưng nó đổi khi nghiệp vụ đổi và nó rộng, nên mọi khoá ngoại đều phải chép theo độ rộng đó. Khoá thay thế thì vô nghĩa, hẹp, bất biến — và đòi hỏi thêm một ràng buộc UNIQUE trên khoá tự nhiên để bạn không chèn trùng một sinh viên hai lần.<br>
 <b>Thực hành phổ biến:</b> khoá chính thay thế + UNIQUE trên khoá tự nhiên. Được cả hai.</div>
 
@@ -1403,7 +1403,7 @@ id <span class="tok-type">UNIQUEIDENTIFIER DEFAULT NEWID</span>()       <span cl
 <p class="lead">Lesson 2.4 explained <em>why</em> constraints exist. Here is the exact syntax the lab and the PE expect — including the naming convention that makes error messages readable.</p>
 
 <h3>A complete table definition</h3>
-<pre><span class="tok-keyword">CREATE TABLE</span> Enrolment (
+<pre><code class="language-sql"><span class="tok-keyword">CREATE TABLE</span> Enrolment (
     enrol_id   <span class="tok-type">INT IDENTITY</span>(1,1),
     sid        <span class="tok-type">INT</span>            <span class="tok-keyword">NOT NULL</span>,
     cid        <span class="tok-type">CHAR</span>(6)       <span class="tok-keyword">NOT NULL</span>,
@@ -1417,7 +1417,7 @@ id <span class="tok-type">UNIQUEIDENTIFIER DEFAULT NEWID</span>()       <span cl
     <span class="tok-keyword">CONSTRAINT</span> fk_enrol_crs  <span class="tok-keyword">FOREIGN KEY</span> (cid) <span class="tok-keyword">REFERENCES</span> Course(cid),
     <span class="tok-keyword">CONSTRAINT</span> ck_enrol_grade <span class="tok-keyword">CHECK</span> (grade <span class="tok-keyword">IS NULL OR</span> grade <span class="tok-keyword">BETWEEN</span> 0 <span class="tok-keyword">AND</span> 10),
     <span class="tok-keyword">CONSTRAINT</span> ck_enrol_status <span class="tok-keyword">CHECK</span> (status <span class="tok-keyword">IN</span> (<span class="tok-string">'ACTIVE'</span>, <span class="tok-string">'DROPPED'</span>, <span class="tok-string">'DONE'</span>))
-);</pre>
+);</code></pre>
 <div class="out"><b>Read the design decisions in that block:</b><br>
 <b>enrol_id</b> is a surrogate key, but <b>uq_enrol (sid, cid)</b> still enforces the real business rule — a student cannot enrol twice in one course. Without it the surrogate key would allow exactly that.<br>
 <b>grade is nullable</b> because "not graded yet" is a genuine unknown; the CHECK therefore has to tolerate NULL explicitly.<br>
@@ -1434,10 +1434,10 @@ id <span class="tok-type">UNIQUEIDENTIFIER DEFAULT NEWID</span>()       <span cl
 </tbody></table>
 
 <h3>Changing a table that already holds data</h3>
-<pre><span class="tok-keyword">ALTER TABLE</span> Student <span class="tok-keyword">ADD</span> email <span class="tok-type">NVARCHAR</span>(100) <span class="tok-keyword">NULL</span>;               <span class="tok-comment">-- 1. add nullable</span>
+<pre><code class="language-sql"><span class="tok-keyword">ALTER TABLE</span> Student <span class="tok-keyword">ADD</span> email <span class="tok-type">NVARCHAR</span>(100) <span class="tok-keyword">NULL</span>;               <span class="tok-comment">-- 1. add nullable</span>
 <span class="tok-keyword">UPDATE</span> Student <span class="tok-keyword">SET</span> email = sid + <span class="tok-string">'@fpt.edu.vn'</span> <span class="tok-keyword">WHERE</span> email <span class="tok-keyword">IS NULL</span>;  <span class="tok-comment">-- 2. backfill</span>
 <span class="tok-keyword">ALTER TABLE</span> Student <span class="tok-keyword">ALTER COLUMN</span> email <span class="tok-type">NVARCHAR</span>(100) <span class="tok-keyword">NOT NULL</span>;    <span class="tok-comment">-- 3. tighten</span>
-<span class="tok-keyword">ALTER TABLE</span> Student <span class="tok-keyword">ADD CONSTRAINT</span> uq_student_email <span class="tok-keyword">UNIQUE</span> (email);  <span class="tok-comment">-- 4. constrain</span></pre>
+<span class="tok-keyword">ALTER TABLE</span> Student <span class="tok-keyword">ADD CONSTRAINT</span> uq_student_email <span class="tok-keyword">UNIQUE</span> (email);  <span class="tok-comment">-- 4. constrain</span></code></pre>
 <p>That three-step dance — add nullable, backfill, then tighten — is the only way to add a NOT NULL column to a non-empty table. Adding it directly fails, because existing rows would have no value.</p>
 <div class="out"><b>Adding a constraint to dirty data:</b> <span class="badge">ALTER TABLE … ADD CONSTRAINT ck … CHECK (…)</span> validates every existing row and fails if any row breaks the rule. Find the offenders first with <span class="badge">SELECT * FROM T WHERE NOT (condition)</span>, fix them, then add the constraint. <span class="badge">WITH NOCHECK</span> skips validation of old rows — convenient, dangerous, and it leaves the constraint "untrusted" so the optimiser stops using it.</div>
 
@@ -1451,7 +1451,7 @@ id <span class="tok-type">UNIQUEIDENTIFIER DEFAULT NEWID</span>()       <span cl
 <p class="lead">Bài 2.4 giải thích <em>vì sao</em> có ràng buộc. Đây là cú pháp chính xác mà bài lab và PE mong đợi — kèm quy ước đặt tên giúp thông báo lỗi đọc được.</p>
 
 <h3>Một định nghĩa bảng đầy đủ</h3>
-<pre><span class="tok-keyword">CREATE TABLE</span> Enrolment (
+<pre><code class="language-sql"><span class="tok-keyword">CREATE TABLE</span> Enrolment (
     enrol_id   <span class="tok-type">INT IDENTITY</span>(1,1),
     sid        <span class="tok-type">INT</span>            <span class="tok-keyword">NOT NULL</span>,
     cid        <span class="tok-type">CHAR</span>(6)       <span class="tok-keyword">NOT NULL</span>,
@@ -1465,7 +1465,7 @@ id <span class="tok-type">UNIQUEIDENTIFIER DEFAULT NEWID</span>()       <span cl
     <span class="tok-keyword">CONSTRAINT</span> fk_enrol_crs  <span class="tok-keyword">FOREIGN KEY</span> (cid) <span class="tok-keyword">REFERENCES</span> Course(cid),
     <span class="tok-keyword">CONSTRAINT</span> ck_enrol_grade <span class="tok-keyword">CHECK</span> (grade <span class="tok-keyword">IS NULL OR</span> grade <span class="tok-keyword">BETWEEN</span> 0 <span class="tok-keyword">AND</span> 10),
     <span class="tok-keyword">CONSTRAINT</span> ck_enrol_status <span class="tok-keyword">CHECK</span> (status <span class="tok-keyword">IN</span> (<span class="tok-string">'ACTIVE'</span>, <span class="tok-string">'DROPPED'</span>, <span class="tok-string">'DONE'</span>))
-);</pre>
+);</code></pre>
 <div class="out"><b>Đọc các quyết định thiết kế trong khối đó:</b><br>
 <b>enrol_id</b> là khoá thay thế, nhưng <b>uq_enrol (sid, cid)</b> mới là thứ áp đặt luật nghiệp vụ thật — một sinh viên không được đăng ký hai lần cùng một môn. Thiếu nó thì khoá thay thế cho phép đúng chuyện đó xảy ra.<br>
 <b>grade cho phép null</b> vì "chưa chấm" là một ẩn số có thật; do đó ràng buộc CHECK phải chấp nhận NULL một cách tường minh.<br>
@@ -1482,10 +1482,10 @@ id <span class="tok-type">UNIQUEIDENTIFIER DEFAULT NEWID</span>()       <span cl
 </tbody></table>
 
 <h3>Sửa một bảng đã có dữ liệu</h3>
-<pre><span class="tok-keyword">ALTER TABLE</span> Student <span class="tok-keyword">ADD</span> email <span class="tok-type">NVARCHAR</span>(100) <span class="tok-keyword">NULL</span>;               <span class="tok-comment">-- 1. thêm cột cho phép null</span>
+<pre><code class="language-sql"><span class="tok-keyword">ALTER TABLE</span> Student <span class="tok-keyword">ADD</span> email <span class="tok-type">NVARCHAR</span>(100) <span class="tok-keyword">NULL</span>;               <span class="tok-comment">-- 1. thêm cột cho phép null</span>
 <span class="tok-keyword">UPDATE</span> Student <span class="tok-keyword">SET</span> email = sid + <span class="tok-string">'@fpt.edu.vn'</span> <span class="tok-keyword">WHERE</span> email <span class="tok-keyword">IS NULL</span>;  <span class="tok-comment">-- 2. lấp dữ liệu</span>
 <span class="tok-keyword">ALTER TABLE</span> Student <span class="tok-keyword">ALTER COLUMN</span> email <span class="tok-type">NVARCHAR</span>(100) <span class="tok-keyword">NOT NULL</span>;    <span class="tok-comment">-- 3. siết lại</span>
-<span class="tok-keyword">ALTER TABLE</span> Student <span class="tok-keyword">ADD CONSTRAINT</span> uq_student_email <span class="tok-keyword">UNIQUE</span> (email);  <span class="tok-comment">-- 4. ràng buộc</span></pre>
+<span class="tok-keyword">ALTER TABLE</span> Student <span class="tok-keyword">ADD CONSTRAINT</span> uq_student_email <span class="tok-keyword">UNIQUE</span> (email);  <span class="tok-comment">-- 4. ràng buộc</span></code></pre>
 <p>Điệu nhảy ba bước đó — thêm cột null, lấp dữ liệu, rồi siết lại — là cách duy nhất để thêm một cột NOT NULL vào bảng đã có dữ liệu. Thêm thẳng sẽ thất bại, vì các dòng cũ không có giá trị nào.</p>
 <div class="out"><b>Thêm ràng buộc vào dữ liệu bẩn:</b> <span class="badge">ALTER TABLE … ADD CONSTRAINT ck … CHECK (…)</span> kiểm mọi dòng hiện có và thất bại nếu có dòng nào phạm luật. Hãy tìm các dòng vi phạm trước bằng <span class="badge">SELECT * FROM T WHERE NOT (điều kiện)</span>, sửa chúng, rồi mới thêm ràng buộc. <span class="badge">WITH NOCHECK</span> bỏ qua việc kiểm dữ liệu cũ — tiện, nguy hiểm, và nó để lại một ràng buộc "không đáng tin" khiến bộ tối ưu thôi không dùng tới.</div>
 
@@ -1513,11 +1513,11 @@ id <span class="tok-type">UNIQUEIDENTIFIER DEFAULT NEWID</span>()       <span cl
 <span class="eyebrow">Chapter 6 · Lesson 6.1</span>
 <h2>Querying — SELECT, WHERE, JOIN</h2>
 <p class="lead">This is the heart of daily database work. <span class="badge">SELECT</span> chooses columns, <span class="badge">WHERE</span> filters rows, <span class="badge">JOIN</span> combines tables on a matching key.</p>
-<pre><span class="tok-keyword">SELECT</span> s.name, c.name <span class="tok-keyword">AS</span> className
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> s.name, c.name <span class="tok-keyword">AS</span> className
 <span class="tok-keyword">FROM</span> Student s
 <span class="tok-keyword">JOIN</span> Class c <span class="tok-keyword">ON</span> s.classId = c.id
 <span class="tok-keyword">WHERE</span> s.age &gt;= 18
-<span class="tok-keyword">ORDER BY</span> s.name;</pre>
+<span class="tok-keyword">ORDER BY</span> s.name;</code></pre>
 <div class="out">Returns each adult student with the name of their class — data pulled from two tables, matched on <span class="badge">classId = id</span>.</div>
 <table>
   <thead><tr><th>JOIN type</th><th>Returns</th></tr></thead>
@@ -1538,11 +1538,11 @@ id <span class="tok-type">UNIQUEIDENTIFIER DEFAULT NEWID</span>()       <span cl
 <span class="eyebrow">Chương 6 · Bài 6.1</span>
 <h2>Truy vấn — SELECT, WHERE, JOIN</h2>
 <p class="lead">Đây là trái tim của công việc CSDL hằng ngày. <span class="badge">SELECT</span> chọn cột, <span class="badge">WHERE</span> lọc hàng, <span class="badge">JOIN</span> ghép bảng theo khóa khớp.</p>
-<pre><span class="tok-keyword">SELECT</span> s.name, c.name <span class="tok-keyword">AS</span> className
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> s.name, c.name <span class="tok-keyword">AS</span> className
 <span class="tok-keyword">FROM</span> Student s
 <span class="tok-keyword">JOIN</span> Class c <span class="tok-keyword">ON</span> s.classId = c.id
 <span class="tok-keyword">WHERE</span> s.age &gt;= 18
-<span class="tok-keyword">ORDER BY</span> s.name;</pre>
+<span class="tok-keyword">ORDER BY</span> s.name;</code></pre>
 <div class="out">Trả về mỗi sinh viên đủ tuổi kèm tên lớp — dữ liệu lấy từ hai bảng, khớp theo <span class="badge">classId = id</span>.</div>
 <table>
   <thead><tr><th>Kiểu JOIN</th><th>Trả về</th></tr></thead>
@@ -1580,21 +1580,21 @@ id <span class="tok-type">UNIQUEIDENTIFIER DEFAULT NEWID</span>()       <span cl
   3   Chi    NULL              30  HR      ← nobody works here</div>
 
 <h3>INNER JOIN — only matching rows</h3>
-<pre><span class="tok-keyword">SELECT</span> e.name, d.dname
-<span class="tok-keyword">FROM</span> Employee e <span class="tok-keyword">INNER JOIN</span> Department d <span class="tok-keyword">ON</span> e.did = d.did;</pre>
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> e.name, d.dname
+<span class="tok-keyword">FROM</span> Employee e <span class="tok-keyword">INNER JOIN</span> Department d <span class="tok-keyword">ON</span> e.did = d.did;</code></pre>
 <div class="out"><b>Result — 2 rows:</b> (An, Sales) · (Binh, IT).<br>
 Chi has no department (NULL never matches anything) and HR has no employees. Both disappear.</div>
 
 <h3>LEFT JOIN — every row of the left table</h3>
-<pre><span class="tok-keyword">SELECT</span> e.name, d.dname
-<span class="tok-keyword">FROM</span> Employee e <span class="tok-keyword">LEFT JOIN</span> Department d <span class="tok-keyword">ON</span> e.did = d.did;</pre>
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> e.name, d.dname
+<span class="tok-keyword">FROM</span> Employee e <span class="tok-keyword">LEFT JOIN</span> Department d <span class="tok-keyword">ON</span> e.did = d.did;</code></pre>
 <div class="out"><b>Result — 3 rows:</b> (An, Sales) · (Binh, IT) · <b>(Chi, NULL)</b>.<br>
 This is how you answer "list all employees, with their department if they have one". The unmatched side is filled with NULL.</div>
 
 <h3>The anti-join pattern — "who has nothing?"</h3>
-<pre><span class="tok-keyword">SELECT</span> d.dname
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> d.dname
 <span class="tok-keyword">FROM</span> Department d <span class="tok-keyword">LEFT JOIN</span> Employee e <span class="tok-keyword">ON</span> d.did = e.did
-<span class="tok-keyword">WHERE</span> e.eid <span class="tok-keyword">IS NULL</span>;      <span class="tok-comment">-- keep only the rows that did NOT match</span></pre>
+<span class="tok-keyword">WHERE</span> e.eid <span class="tok-keyword">IS NULL</span>;      <span class="tok-comment">-- keep only the rows that did NOT match</span></code></pre>
 <div class="out"><b>Result: HR.</b> This three-line idiom answers a whole family of exam questions: departments with no employees, customers with no orders, products never sold. Learn it as one unit — LEFT JOIN plus <span class="badge">WHERE right.key IS NULL</span>.</div>
 
 <h3>RIGHT and FULL</h3>
@@ -1630,21 +1630,21 @@ LEFT is required so the top manager, whose <span class="badge">mgr_id</span> is 
   3   Chi    NULL              30  HR      ← không ai làm ở đây</div>
 
 <h3>INNER JOIN — chỉ những dòng khớp</h3>
-<pre><span class="tok-keyword">SELECT</span> e.name, d.dname
-<span class="tok-keyword">FROM</span> Employee e <span class="tok-keyword">INNER JOIN</span> Department d <span class="tok-keyword">ON</span> e.did = d.did;</pre>
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> e.name, d.dname
+<span class="tok-keyword">FROM</span> Employee e <span class="tok-keyword">INNER JOIN</span> Department d <span class="tok-keyword">ON</span> e.did = d.did;</code></pre>
 <div class="out"><b>Kết quả — 2 dòng:</b> (An, Sales) · (Binh, IT).<br>
 Chi không thuộc phòng nào (NULL không bao giờ khớp với gì cả) và HR không có nhân viên. Cả hai biến mất.</div>
 
 <h3>LEFT JOIN — giữ mọi dòng của bảng bên trái</h3>
-<pre><span class="tok-keyword">SELECT</span> e.name, d.dname
-<span class="tok-keyword">FROM</span> Employee e <span class="tok-keyword">LEFT JOIN</span> Department d <span class="tok-keyword">ON</span> e.did = d.did;</pre>
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> e.name, d.dname
+<span class="tok-keyword">FROM</span> Employee e <span class="tok-keyword">LEFT JOIN</span> Department d <span class="tok-keyword">ON</span> e.did = d.did;</code></pre>
 <div class="out"><b>Kết quả — 3 dòng:</b> (An, Sales) · (Binh, IT) · <b>(Chi, NULL)</b>.<br>
 Đây là cách trả lời "liệt kê tất cả nhân viên, kèm phòng ban nếu có". Phía không khớp được lấp bằng NULL.</div>
 
 <h3>Khuôn phản nối — "ai không có gì?"</h3>
-<pre><span class="tok-keyword">SELECT</span> d.dname
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> d.dname
 <span class="tok-keyword">FROM</span> Department d <span class="tok-keyword">LEFT JOIN</span> Employee e <span class="tok-keyword">ON</span> d.did = e.did
-<span class="tok-keyword">WHERE</span> e.eid <span class="tok-keyword">IS NULL</span>;      <span class="tok-comment">-- chỉ giữ những dòng KHÔNG khớp</span></pre>
+<span class="tok-keyword">WHERE</span> e.eid <span class="tok-keyword">IS NULL</span>;      <span class="tok-comment">-- chỉ giữ những dòng KHÔNG khớp</span></code></pre>
 <div class="out"><b>Kết quả: HR.</b> Thành ngữ ba dòng này trả lời cả một họ câu hỏi thi: phòng ban không có nhân viên, khách hàng chưa từng đặt hàng, sản phẩm chưa bán được cái nào. Hãy học nó như một khối — LEFT JOIN cộng <span class="badge">WHERE khoá_phải IS NULL</span>.</div>
 
 <h3>RIGHT và FULL</h3>
@@ -1679,14 +1679,14 @@ Bắt buộc dùng LEFT để người quản lý cao nhất, vốn có <span cl
 <span class="eyebrow">Chapter 6 · Lesson 6.3</span>
 <h2>Aggregation &amp; subqueries — asking harder questions</h2>
 <p class="lead">To answer "how many students per class?" you group rows and count. To answer "which classes are above average?" you nest one query inside another.</p>
-<pre><span class="tok-keyword">SELECT</span> classId, <span class="tok-function">COUNT</span>(*) <span class="tok-keyword">AS</span> total
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> classId, <span class="tok-function">COUNT</span>(*) <span class="tok-keyword">AS</span> total
 <span class="tok-keyword">FROM</span> Student
 <span class="tok-keyword">GROUP BY</span> classId
-<span class="tok-keyword">HAVING</span> <span class="tok-function">COUNT</span>(*) &gt; 30;</pre>
+<span class="tok-keyword">HAVING</span> <span class="tok-function">COUNT</span>(*) &gt; 30;</code></pre>
 <div class="out">Groups students by class, counts each group, and keeps only classes with more than 30. <b>WHERE</b> filters rows before grouping; <b>HAVING</b> filters groups after.</div>
-<pre><span class="tok-comment">-- subquery: students older than the average</span>
+<pre><code class="language-sql"><span class="tok-comment">-- subquery: students older than the average</span>
 <span class="tok-keyword">SELECT</span> name <span class="tok-keyword">FROM</span> Student
-<span class="tok-keyword">WHERE</span> age &gt; (<span class="tok-keyword">SELECT</span> <span class="tok-function">AVG</span>(age) <span class="tok-keyword">FROM</span> Student);</pre>
+<span class="tok-keyword">WHERE</span> age &gt; (<span class="tok-keyword">SELECT</span> <span class="tok-function">AVG</span>(age) <span class="tok-keyword">FROM</span> Student);</code></pre>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Window functions — aggregate without collapsing rows.</b> &#96;GROUP BY&#96; folds many rows into one; a <b>window function</b> computes an aggregate <em>alongside</em> each row, keeping them all. <span class="badge">AVG(age) OVER (PARTITION BY classId)</span> shows every student next to their class average, and <span class="badge">ROW_NUMBER() OVER (ORDER BY score DESC)</span> ranks them — things a plain GROUP BY cannot do. It replaces many awkward self-joins and correlated subqueries with one clean clause. <em>The syllabus stops at GROUP BY/HAVING; window functions are the tool professionals reach for daily and rarely appear in intro courses.</em></div>
 <a class="link-card codelab" href="/code-lab/sql?ref=%2Fcourses%2Fintroduction-to-databases%2Flearn&reflabel=DBI202%20%E2%80%94%20Database%20Systems#module-408" target="_blank" rel="noopener">
   <span class="lc-ico">📊</span>
@@ -1698,14 +1698,14 @@ Bắt buộc dùng LEFT để người quản lý cao nhất, vốn có <span cl
 <span class="eyebrow">Chương 6 · Bài 6.3</span>
 <h2>Tổng hợp &amp; truy vấn con — hỏi câu khó hơn</h2>
 <p class="lead">Để trả lời "bao nhiêu sinh viên mỗi lớp?" bạn gom hàng và đếm. Để trả lời "lớp nào trên trung bình?" bạn lồng một truy vấn trong truy vấn khác.</p>
-<pre><span class="tok-keyword">SELECT</span> classId, <span class="tok-function">COUNT</span>(*) <span class="tok-keyword">AS</span> total
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> classId, <span class="tok-function">COUNT</span>(*) <span class="tok-keyword">AS</span> total
 <span class="tok-keyword">FROM</span> Student
 <span class="tok-keyword">GROUP BY</span> classId
-<span class="tok-keyword">HAVING</span> <span class="tok-function">COUNT</span>(*) &gt; 30;</pre>
+<span class="tok-keyword">HAVING</span> <span class="tok-function">COUNT</span>(*) &gt; 30;</code></pre>
 <div class="out">Gom sinh viên theo lớp, đếm mỗi nhóm, và chỉ giữ lớp có hơn 30. <b>WHERE</b> lọc hàng trước khi gom; <b>HAVING</b> lọc nhóm sau khi gom.</div>
-<pre><span class="tok-comment">-- truy vấn con: sinh viên lớn hơn tuổi trung bình</span>
+<pre><code class="language-sql"><span class="tok-comment">-- truy vấn con: sinh viên lớn hơn tuổi trung bình</span>
 <span class="tok-keyword">SELECT</span> name <span class="tok-keyword">FROM</span> Student
-<span class="tok-keyword">WHERE</span> age &gt; (<span class="tok-keyword">SELECT</span> <span class="tok-function">AVG</span>(age) <span class="tok-keyword">FROM</span> Student);</pre>
+<span class="tok-keyword">WHERE</span> age &gt; (<span class="tok-keyword">SELECT</span> <span class="tok-function">AVG</span>(age) <span class="tok-keyword">FROM</span> Student);</code></pre>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Hàm cửa sổ — tổng hợp mà không gộp mất dòng.</b> &#96;GROUP BY&#96; gộp nhiều dòng thành một; một <b>hàm cửa sổ (window function)</b> tính tổng hợp <em>bên cạnh</em> mỗi dòng, giữ lại tất cả. <span class="badge">AVG(age) OVER (PARTITION BY classId)</span> hiện mỗi sinh viên cạnh trung bình lớp của họ, và <span class="badge">ROW_NUMBER() OVER (ORDER BY score DESC)</span> xếp hạng họ — điều GROUP BY thường không làm được. Nó thay nhiều self-join và truy vấn con tương quan vụng về bằng một mệnh đề gọn. <em>Giáo trình dừng ở GROUP BY/HAVING; hàm cửa sổ là công cụ dân chuyên dùng hằng ngày và hiếm xuất hiện ở khóa nhập môn.</em></div>
 <a class="link-card codelab" href="/code-lab/sql?ref=%2Fcourses%2Fintroduction-to-databases%2Flearn&reflabel=DBI202%20%E2%80%94%20Database%20Systems#module-408" target="_blank" rel="noopener">
   <span class="lc-ico">📊</span>
@@ -1727,14 +1727,14 @@ Bắt buộc dùng LEFT để người quản lý cao nhất, vốn có <span cl
 <p class="lead">A subquery answers a question the outer query then uses. There are two kinds, and telling them apart explains both the syntax and the performance.</p>
 
 <h3>Non-correlated: the inner query runs once</h3>
-<pre><span class="tok-keyword">SELECT</span> name <span class="tok-keyword">FROM</span> Student
-<span class="tok-keyword">WHERE</span> sid <span class="tok-keyword">IN</span> (<span class="tok-keyword">SELECT</span> sid <span class="tok-keyword">FROM</span> Enrolment <span class="tok-keyword">WHERE</span> cid = <span class="tok-string">'DBI202'</span>);</pre>
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> name <span class="tok-keyword">FROM</span> Student
+<span class="tok-keyword">WHERE</span> sid <span class="tok-keyword">IN</span> (<span class="tok-keyword">SELECT</span> sid <span class="tok-keyword">FROM</span> Enrolment <span class="tok-keyword">WHERE</span> cid = <span class="tok-string">'DBI202'</span>);</code></pre>
 <p>The inner SELECT does not mention the outer table, so the engine evaluates it once, keeps the result set, and filters with it.</p>
 
 <h3>Correlated: the inner query runs per outer row</h3>
-<pre><span class="tok-keyword">SELECT</span> s.name <span class="tok-keyword">FROM</span> Student s
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> s.name <span class="tok-keyword">FROM</span> Student s
 <span class="tok-keyword">WHERE EXISTS</span> (<span class="tok-keyword">SELECT</span> 1 <span class="tok-keyword">FROM</span> Enrolment e
-              <span class="tok-keyword">WHERE</span> e.sid = s.sid <span class="tok-keyword">AND</span> e.cid = <span class="tok-string">'DBI202'</span>);   <span class="tok-comment">-- ← s.sid ties them together</span></pre>
+              <span class="tok-keyword">WHERE</span> e.sid = s.sid <span class="tok-keyword">AND</span> e.cid = <span class="tok-string">'DBI202'</span>);   <span class="tok-comment">-- ← s.sid ties them together</span></code></pre>
 <p><span class="badge">EXISTS</span> stops at the first matching row — it asks "is there at least one?", never "how many?". That is why <span class="badge">SELECT 1</span> is idiomatic: the selected value is irrelevant.</p>
 
 <h3>The NOT IN trap you will meet in the PE</h3>
@@ -1750,12 +1750,12 @@ Bắt buộc dùng LEFT để người quản lý cao nhất, vốn có <span cl
 <b>Empty-set behaviour, which is the exam question:</b> <span class="badge">&gt; ALL (empty set)</span> is TRUE (vacuously — there is nothing to fail against), while <span class="badge">&gt; ANY (empty set)</span> is FALSE.</div>
 
 <h3>The "for all" pattern — division from lesson 2.3, in SQL</h3>
-<pre><span class="tok-comment">-- Students who have enrolled in EVERY course of the IT department</span>
+<pre><code class="language-sql"><span class="tok-comment">-- Students who have enrolled in EVERY course of the IT department</span>
 <span class="tok-keyword">SELECT</span> s.name <span class="tok-keyword">FROM</span> Student s
 <span class="tok-keyword">WHERE NOT EXISTS</span> (
     <span class="tok-keyword">SELECT</span> 1 <span class="tok-keyword">FROM</span> Course c <span class="tok-keyword">WHERE</span> c.dept = <span class="tok-string">'IT'</span>
       <span class="tok-keyword">AND NOT EXISTS</span> (<span class="tok-keyword">SELECT</span> 1 <span class="tok-keyword">FROM</span> Enrolment e
-                       <span class="tok-keyword">WHERE</span> e.sid = s.sid <span class="tok-keyword">AND</span> e.cid = c.cid));</pre>
+                       <span class="tok-keyword">WHERE</span> e.sid = s.sid <span class="tok-keyword">AND</span> e.cid = c.cid));</code></pre>
 <div class="out"><b>Read it aloud:</b> "there does not exist an IT course that this student has not taken". The double negation <em>is</em> the universal quantifier — SQL has no FOR ALL.<br>
 <b>The counting alternative</b>, usually easier to write and to read:<br>
 <span class="badge">GROUP BY s.sid HAVING COUNT(DISTINCT e.cid) = (SELECT COUNT(*) FROM Course WHERE dept='IT')</span><br>
@@ -1779,14 +1779,14 @@ Both are accepted; be able to produce at least one under exam pressure.</div>
 <p class="lead">Truy vấn con trả lời một câu hỏi mà truy vấn ngoài dùng tới. Có hai loại, và phân biệt được chúng giải thích cả cú pháp lẫn hiệu năng.</p>
 
 <h3>Không tương quan: truy vấn trong chạy một lần</h3>
-<pre><span class="tok-keyword">SELECT</span> name <span class="tok-keyword">FROM</span> Student
-<span class="tok-keyword">WHERE</span> sid <span class="tok-keyword">IN</span> (<span class="tok-keyword">SELECT</span> sid <span class="tok-keyword">FROM</span> Enrolment <span class="tok-keyword">WHERE</span> cid = <span class="tok-string">'DBI202'</span>);</pre>
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> name <span class="tok-keyword">FROM</span> Student
+<span class="tok-keyword">WHERE</span> sid <span class="tok-keyword">IN</span> (<span class="tok-keyword">SELECT</span> sid <span class="tok-keyword">FROM</span> Enrolment <span class="tok-keyword">WHERE</span> cid = <span class="tok-string">'DBI202'</span>);</code></pre>
 <p>Truy vấn con không nhắc tới bảng ngoài, nên bộ máy tính nó một lần, giữ lại tập kết quả rồi lọc bằng tập đó.</p>
 
 <h3>Tương quan: truy vấn trong chạy cho từng dòng ngoài</h3>
-<pre><span class="tok-keyword">SELECT</span> s.name <span class="tok-keyword">FROM</span> Student s
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> s.name <span class="tok-keyword">FROM</span> Student s
 <span class="tok-keyword">WHERE EXISTS</span> (<span class="tok-keyword">SELECT</span> 1 <span class="tok-keyword">FROM</span> Enrolment e
-              <span class="tok-keyword">WHERE</span> e.sid = s.sid <span class="tok-keyword">AND</span> e.cid = <span class="tok-string">'DBI202'</span>);   <span class="tok-comment">-- ← s.sid buộc hai bên lại</span></pre>
+              <span class="tok-keyword">WHERE</span> e.sid = s.sid <span class="tok-keyword">AND</span> e.cid = <span class="tok-string">'DBI202'</span>);   <span class="tok-comment">-- ← s.sid buộc hai bên lại</span></code></pre>
 <p><span class="badge">EXISTS</span> dừng ngay ở dòng khớp đầu tiên — nó hỏi "có ít nhất một không?", không bao giờ hỏi "có bao nhiêu?". Vì thế viết <span class="badge">SELECT 1</span> là thành ngữ chuẩn: giá trị được chọn không quan trọng.</p>
 
 <h3>Cái bẫy NOT IN bạn sẽ gặp trong PE</h3>
@@ -1802,12 +1802,12 @@ Both are accepted; be able to produce at least one under exam pressure.</div>
 <b>Ứng xử với tập rỗng, và đây là câu hỏi thi:</b> <span class="badge">&gt; ALL (tập rỗng)</span> là TRUE (đúng một cách hình thức — chẳng có gì để sai), còn <span class="badge">&gt; ANY (tập rỗng)</span> là FALSE.</div>
 
 <h3>Khuôn "với mọi" — phép chia ở bài 2.3, viết bằng SQL</h3>
-<pre><span class="tok-comment">-- Sinh viên đã đăng ký MỌI môn của bộ môn IT</span>
+<pre><code class="language-sql"><span class="tok-comment">-- Sinh viên đã đăng ký MỌI môn của bộ môn IT</span>
 <span class="tok-keyword">SELECT</span> s.name <span class="tok-keyword">FROM</span> Student s
 <span class="tok-keyword">WHERE NOT EXISTS</span> (
     <span class="tok-keyword">SELECT</span> 1 <span class="tok-keyword">FROM</span> Course c <span class="tok-keyword">WHERE</span> c.dept = <span class="tok-string">'IT'</span>
       <span class="tok-keyword">AND NOT EXISTS</span> (<span class="tok-keyword">SELECT</span> 1 <span class="tok-keyword">FROM</span> Enrolment e
-                       <span class="tok-keyword">WHERE</span> e.sid = s.sid <span class="tok-keyword">AND</span> e.cid = c.cid));</pre>
+                       <span class="tok-keyword">WHERE</span> e.sid = s.sid <span class="tok-keyword">AND</span> e.cid = c.cid));</code></pre>
 <div class="out"><b>Đọc thành lời:</b> "không tồn tại môn IT nào mà sinh viên này chưa học". Phép phủ định hai lần <em>chính là</em> lượng từ phổ quát — SQL không có FOR ALL.<br>
 <b>Cách thay thế bằng đếm</b>, thường dễ viết và dễ đọc hơn:<br>
 <span class="badge">GROUP BY s.sid HAVING COUNT(DISTINCT e.cid) = (SELECT COUNT(*) FROM Course WHERE dept='IT')</span><br>
@@ -1839,7 +1839,7 @@ Cả hai đều được chấp nhận; hãy chắc chắn viết được ít n
 <p class="lead">SELECT is forgiving; UPDATE and DELETE are not. This lesson covers the syntax and, just as importantly, the habits that stop a one-character mistake from clearing a table.</p>
 
 <h3>INSERT — four forms</h3>
-<pre><span class="tok-comment">-- 1. one row, named columns (always name them)</span>
+<pre><code class="language-sql"><span class="tok-comment">-- 1. one row, named columns (always name them)</span>
 <span class="tok-keyword">INSERT INTO</span> Student (sid, name, city) <span class="tok-keyword">VALUES</span> (1, N<span class="tok-string">'An'</span>, N<span class="tok-string">'Hà Nội'</span>);
 
 <span class="tok-comment">-- 2. several rows in one statement — one transaction, far faster</span>
@@ -1851,15 +1851,15 @@ Cả hai đều được chấp nhận; hãy chắc chắn viết được ít n
 <span class="tok-keyword">SELECT</span> sid, name <span class="tok-keyword">FROM</span> Student <span class="tok-keyword">WHERE</span> status = <span class="tok-string">'GRADUATED'</span>;
 
 <span class="tok-comment">-- 4. capture what was inserted (SQL Server specific)</span>
-<span class="tok-keyword">INSERT INTO</span> Student (name) <span class="tok-keyword">OUTPUT</span> inserted.sid <span class="tok-keyword">VALUES</span> (N<span class="tok-string">'Dũng'</span>);</pre>
+<span class="tok-keyword">INSERT INTO</span> Student (name) <span class="tok-keyword">OUTPUT</span> inserted.sid <span class="tok-keyword">VALUES</span> (N<span class="tok-string">'Dũng'</span>);</code></pre>
 <p>Naming the columns is not style: without the list, adding a column to the table later breaks every unnamed INSERT in your codebase.</p>
 
 <h3>UPDATE with data from another table</h3>
-<pre><span class="tok-comment">-- SQL Server syntax: UPDATE the alias, then join</span>
+<pre><code class="language-sql"><span class="tok-comment">-- SQL Server syntax: UPDATE the alias, then join</span>
 <span class="tok-keyword">UPDATE</span> e
 <span class="tok-keyword">SET</span> e.salary = e.salary * 1.1
 <span class="tok-keyword">FROM</span> Employee e <span class="tok-keyword">JOIN</span> Department d <span class="tok-keyword">ON</span> e.did = d.did
-<span class="tok-keyword">WHERE</span> d.dname = <span class="tok-string">'IT'</span>;</pre>
+<span class="tok-keyword">WHERE</span> d.dname = <span class="tok-string">'IT'</span>;</code></pre>
 <div class="out"><b>The safety ritual — do this every time:</b><br>
 <b>1.</b> Write it as a SELECT first: <span class="badge">SELECT e.* FROM Employee e JOIN … WHERE …</span> and look at the rows.<br>
 <b>2.</b> Count them. Does the number match what you intended?<br>
@@ -1894,7 +1894,7 @@ This is the single habit that separates people who have dropped production data 
 <p class="lead">SELECT thì bao dung; UPDATE và DELETE thì không. Bài này nói về cú pháp và, quan trọng không kém, những thói quen ngăn một lỗi sai một ký tự xoá sạch cả bảng.</p>
 
 <h3>INSERT — bốn dạng</h3>
-<pre><span class="tok-comment">-- 1. một dòng, có nêu tên cột (luôn luôn nêu tên)</span>
+<pre><code class="language-sql"><span class="tok-comment">-- 1. một dòng, có nêu tên cột (luôn luôn nêu tên)</span>
 <span class="tok-keyword">INSERT INTO</span> Student (sid, name, city) <span class="tok-keyword">VALUES</span> (1, N<span class="tok-string">'An'</span>, N<span class="tok-string">'Hà Nội'</span>);
 
 <span class="tok-comment">-- 2. nhiều dòng trong một lệnh — một giao dịch, nhanh hơn hẳn</span>
@@ -1906,15 +1906,15 @@ This is the single habit that separates people who have dropped production data 
 <span class="tok-keyword">SELECT</span> sid, name <span class="tok-keyword">FROM</span> Student <span class="tok-keyword">WHERE</span> status = <span class="tok-string">'GRADUATED'</span>;
 
 <span class="tok-comment">-- 4. lấy lại thứ vừa chèn (riêng của SQL Server)</span>
-<span class="tok-keyword">INSERT INTO</span> Student (name) <span class="tok-keyword">OUTPUT</span> inserted.sid <span class="tok-keyword">VALUES</span> (N<span class="tok-string">'Dũng'</span>);</pre>
+<span class="tok-keyword">INSERT INTO</span> Student (name) <span class="tok-keyword">OUTPUT</span> inserted.sid <span class="tok-keyword">VALUES</span> (N<span class="tok-string">'Dũng'</span>);</code></pre>
 <p>Nêu tên cột không phải chuyện phong cách: thiếu danh sách cột thì sau này chỉ cần thêm một cột vào bảng là mọi lệnh INSERT không nêu tên trong mã nguồn của bạn đều hỏng.</p>
 
 <h3>UPDATE lấy dữ liệu từ bảng khác</h3>
-<pre><span class="tok-comment">-- cú pháp SQL Server: UPDATE theo bí danh, rồi mới nối bảng</span>
+<pre><code class="language-sql"><span class="tok-comment">-- cú pháp SQL Server: UPDATE theo bí danh, rồi mới nối bảng</span>
 <span class="tok-keyword">UPDATE</span> e
 <span class="tok-keyword">SET</span> e.salary = e.salary * 1.1
 <span class="tok-keyword">FROM</span> Employee e <span class="tok-keyword">JOIN</span> Department d <span class="tok-keyword">ON</span> e.did = d.did
-<span class="tok-keyword">WHERE</span> d.dname = <span class="tok-string">'IT'</span>;</pre>
+<span class="tok-keyword">WHERE</span> d.dname = <span class="tok-string">'IT'</span>;</code></pre>
 <div class="out"><b>Nghi thức an toàn — làm mỗi lần:</b><br>
 <b>1.</b> Viết nó thành SELECT trước: <span class="badge">SELECT e.* FROM Employee e JOIN … WHERE …</span> và nhìn các dòng.<br>
 <b>2.</b> Đếm chúng. Con số có khớp với ý định của bạn không?<br>
@@ -1985,8 +1985,8 @@ This is the single habit that separates people who have dropped production data 
   <div class="lz-layer"><b>Cursor</b> — steps through query rows one at a time (use sparingly — set-based SQL is faster).</div>
   <div class="lz-layer"><b>Trigger</b> — code that fires automatically on INSERT/UPDATE/DELETE; enforces rules or logs changes.</div>
 </div>
-<pre><span class="tok-keyword">CREATE VIEW</span> AdultStudents <span class="tok-keyword">AS</span>
-  <span class="tok-keyword">SELECT</span> id, name <span class="tok-keyword">FROM</span> Student <span class="tok-keyword">WHERE</span> age &gt;= 18;</pre>
+<pre><code class="language-sql"><span class="tok-keyword">CREATE VIEW</span> AdultStudents <span class="tok-keyword">AS</span>
+  <span class="tok-keyword">SELECT</span> id, name <span class="tok-keyword">FROM</span> Student <span class="tok-keyword">WHERE</span> age &gt;= 18;</code></pre>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The &#96;inserted&#96; / &#96;deleted&#96; magic tables.</b> Inside a trigger, SQL Server exposes two virtual tables: <span class="badge">inserted</span> (the new rows) and <span class="badge">deleted</span> (the old rows) — an UPDATE shows up in both. A trigger must be written <em>set-based</em> over these, not row-by-row, or it breaks on a multi-row statement. <b>INSTEAD OF</b> triggers go further: they replace the operation entirely, which is how you make an otherwise read-only <em>view</em> updatable. <em>The syllabus lists trigger as a concept; these pseudo-tables and INSTEAD OF are what make triggers actually work in practice.</em></div>
 <a class="link-card codelab" href="/code-lab/sql?ref=%2Fcourses%2Fintroduction-to-databases%2Flearn&reflabel=DBI202%20%E2%80%94%20Database%20Systems#module-721" target="_blank" rel="noopener">
   <span class="lc-ico">⚙️</span>
@@ -2005,8 +2005,8 @@ This is the single habit that separates people who have dropped production data 
   <div class="lz-layer"><b>Cursor</b> — duyệt từng hàng kết quả (dùng dè sẻn — SQL theo tập nhanh hơn).</div>
   <div class="lz-layer"><b>Trigger</b> — code tự chạy khi INSERT/UPDATE/DELETE; thực thi luật hoặc ghi log thay đổi.</div>
 </div>
-<pre><span class="tok-keyword">CREATE VIEW</span> AdultStudents <span class="tok-keyword">AS</span>
-  <span class="tok-keyword">SELECT</span> id, name <span class="tok-keyword">FROM</span> Student <span class="tok-keyword">WHERE</span> age &gt;= 18;</pre>
+<pre><code class="language-sql"><span class="tok-keyword">CREATE VIEW</span> AdultStudents <span class="tok-keyword">AS</span>
+  <span class="tok-keyword">SELECT</span> id, name <span class="tok-keyword">FROM</span> Student <span class="tok-keyword">WHERE</span> age &gt;= 18;</code></pre>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Hai bảng ảo &#96;inserted&#96; / &#96;deleted&#96;.</b> Bên trong một trigger, SQL Server cấp hai bảng ảo: <span class="badge">inserted</span> (các hàng mới) và <span class="badge">deleted</span> (các hàng cũ) — một UPDATE hiện ở cả hai. Trigger phải viết <em>theo tập</em> trên chúng, không phải từng hàng, nếu không sẽ hỏng với câu lệnh nhiều hàng. Trigger <b>INSTEAD OF</b> đi xa hơn: nó thay thế hẳn thao tác, đó là cách làm cho một <em>view</em> vốn chỉ đọc trở nên cập nhật được. <em>Giáo trình liệt kê trigger như một khái niệm; hai bảng ảo này và INSTEAD OF mới là thứ khiến trigger thật sự chạy được.</em></div>
 <a class="link-card codelab" href="/code-lab/sql?ref=%2Fcourses%2Fintroduction-to-databases%2Flearn&reflabel=DBI202%20%E2%80%94%20Database%20Systems#module-721" target="_blank" rel="noopener">
   <span class="lc-ico">⚙️</span>
@@ -2027,14 +2027,14 @@ This is the single habit that separates people who have dropped production data 
 <h2>A view is a stored query that behaves like a table</h2>
 <p class="lead">A view stores no data — it stores a SELECT. Every reference to it re-runs that SELECT. That gives you three things: a simpler name for a complicated join, a security boundary, and a stable interface while the tables underneath change.</p>
 
-<pre><span class="tok-keyword">CREATE VIEW</span> v_StudentGrades <span class="tok-keyword">AS</span>
+<pre><code class="language-sql"><span class="tok-keyword">CREATE VIEW</span> v_StudentGrades <span class="tok-keyword">AS</span>
 <span class="tok-keyword">SELECT</span> s.sid, s.name, c.cid, c.title, e.grade
 <span class="tok-keyword">FROM</span> Student s
 <span class="tok-keyword">JOIN</span> Enrolment e <span class="tok-keyword">ON</span> s.sid = e.sid
 <span class="tok-keyword">JOIN</span> Course c <span class="tok-keyword">ON</span> c.cid = e.cid
 <span class="tok-keyword">WHERE</span> e.status = <span class="tok-string">'ACTIVE'</span>;
 
-<span class="tok-keyword">SELECT</span> * <span class="tok-keyword">FROM</span> v_StudentGrades <span class="tok-keyword">WHERE</span> grade &lt; 4;   <span class="tok-comment">-- use it like a table</span></pre>
+<span class="tok-keyword">SELECT</span> * <span class="tok-keyword">FROM</span> v_StudentGrades <span class="tok-keyword">WHERE</span> grade &lt; 4;   <span class="tok-comment">-- use it like a table</span></code></pre>
 
 <h3>The three reasons views exist</h3>
 <div class="lz-stack">
@@ -2070,14 +2070,14 @@ This is the single habit that separates people who have dropped production data 
 <h2>View là một truy vấn được lưu lại nhưng dùng như một cái bảng</h2>
 <p class="lead">View không lưu dữ liệu — nó lưu một câu SELECT. Mỗi lần tham chiếu tới nó là chạy lại câu SELECT đó. Điều này cho bạn ba thứ: một cái tên gọn cho phép nối phức tạp, một ranh giới bảo mật, và một giao diện ổn định trong khi các bảng bên dưới thay đổi.</p>
 
-<pre><span class="tok-keyword">CREATE VIEW</span> v_StudentGrades <span class="tok-keyword">AS</span>
+<pre><code class="language-sql"><span class="tok-keyword">CREATE VIEW</span> v_StudentGrades <span class="tok-keyword">AS</span>
 <span class="tok-keyword">SELECT</span> s.sid, s.name, c.cid, c.title, e.grade
 <span class="tok-keyword">FROM</span> Student s
 <span class="tok-keyword">JOIN</span> Enrolment e <span class="tok-keyword">ON</span> s.sid = e.sid
 <span class="tok-keyword">JOIN</span> Course c <span class="tok-keyword">ON</span> c.cid = e.cid
 <span class="tok-keyword">WHERE</span> e.status = <span class="tok-string">'ACTIVE'</span>;
 
-<span class="tok-keyword">SELECT</span> * <span class="tok-keyword">FROM</span> v_StudentGrades <span class="tok-keyword">WHERE</span> grade &lt; 4;   <span class="tok-comment">-- dùng như một cái bảng</span></pre>
+<span class="tok-keyword">SELECT</span> * <span class="tok-keyword">FROM</span> v_StudentGrades <span class="tok-keyword">WHERE</span> grade &lt; 4;   <span class="tok-comment">-- dùng như một cái bảng</span></code></pre>
 
 <h3>Ba lý do view tồn tại</h3>
 <div class="lz-stack">
@@ -2122,7 +2122,7 @@ This is the single habit that separates people who have dropped production data 
 <p class="lead">A stored procedure is a named, compiled block of T-SQL. It runs where the data is, so a loop of ten statements costs one network round trip instead of ten — and it can be granted to a user who has no rights on the underlying tables at all.</p>
 
 <h3>A complete procedure with parameters and error handling</h3>
-<pre><span class="tok-keyword">CREATE PROCEDURE</span> sp_EnrolStudent
+<pre><code class="language-sql"><span class="tok-keyword">CREATE PROCEDURE</span> sp_EnrolStudent
     @sid <span class="tok-type">INT</span>,
     @cid <span class="tok-type">CHAR</span>(6),
     @result <span class="tok-type">NVARCHAR</span>(100) <span class="tok-keyword">OUTPUT</span>
@@ -2149,11 +2149,11 @@ This is the single habit that separates people who have dropped production data 
         <span class="tok-keyword">SET</span> @result = <span class="tok-keyword">ERROR_MESSAGE</span>();
         <span class="tok-keyword">RETURN</span> -1;
     <span class="tok-keyword">END CATCH</span>
-<span class="tok-keyword">END</span>;</pre>
-<pre><span class="tok-comment">-- calling it</span>
+<span class="tok-keyword">END</span>;</code></pre>
+<pre><code class="language-sql"><span class="tok-comment">-- calling it</span>
 <span class="tok-keyword">DECLARE</span> @msg <span class="tok-type">NVARCHAR</span>(100), @rc <span class="tok-type">INT</span>;
 <span class="tok-keyword">EXEC</span> @rc = sp_EnrolStudent @sid = 1, @cid = <span class="tok-string">'DBI202'</span>, @result = @msg <span class="tok-keyword">OUTPUT</span>;
-<span class="tok-keyword">SELECT</span> @rc <span class="tok-keyword">AS</span> code, @msg <span class="tok-keyword">AS</span> message;</pre>
+<span class="tok-keyword">SELECT</span> @rc <span class="tok-keyword">AS</span> code, @msg <span class="tok-keyword">AS</span> message;</code></pre>
 <div class="out"><b>Why both statements are inside one transaction:</b> if the seat count update fails after the insert succeeded, the enrolment would exist without a seat being deducted. The transaction makes them one atomic unit — either both happen or neither does (lesson 8.3).</div>
 
 <h3>Procedure or function? The decision table</h3>
@@ -2164,7 +2164,7 @@ This is the single habit that separates people who have dropped production data 
 <tr><td>Transactions</td><td>yes</td><td>no</td><td></td></tr>
 <tr><td>TRY…CATCH</td><td>yes</td><td>no</td></tr>
 </tbody></table>
-<pre><span class="tok-comment">-- scalar function: usable anywhere a value is</span>
+<pre><code class="language-sql"><span class="tok-comment">-- scalar function: usable anywhere a value is</span>
 <span class="tok-keyword">CREATE FUNCTION</span> fn_GPA(@sid <span class="tok-type">INT</span>) <span class="tok-keyword">RETURNS</span> <span class="tok-type">DECIMAL</span>(4,2) <span class="tok-keyword">AS</span>
 <span class="tok-keyword">BEGIN</span>
     <span class="tok-keyword">RETURN</span> (<span class="tok-keyword">SELECT AVG</span>(grade) <span class="tok-keyword">FROM</span> Enrolment <span class="tok-keyword">WHERE</span> sid = @sid);
@@ -2174,7 +2174,7 @@ This is the single habit that separates people who have dropped production data 
 <span class="tok-keyword">CREATE FUNCTION</span> fn_StudentsOf(@cid <span class="tok-type">CHAR</span>(6)) <span class="tok-keyword">RETURNS TABLE AS</span>
 <span class="tok-keyword">RETURN</span> (<span class="tok-keyword">SELECT</span> s.* <span class="tok-keyword">FROM</span> Student s <span class="tok-keyword">JOIN</span> Enrolment e <span class="tok-keyword">ON</span> s.sid = e.sid <span class="tok-keyword">WHERE</span> e.cid = @cid);
 
-<span class="tok-keyword">SELECT</span> * <span class="tok-keyword">FROM</span> fn_StudentsOf(<span class="tok-string">'DBI202'</span>);</pre>
+<span class="tok-keyword">SELECT</span> * <span class="tok-keyword">FROM</span> fn_StudentsOf(<span class="tok-string">'DBI202'</span>);</code></pre>
 
 <div class="pitfall"><b>A scalar function inside a WHERE clause runs once per row and blocks index use.</b> <span class="badge">WHERE fn_GPA(sid) &gt; 8</span> on a 100,000-row table executes the function 100,000 times and forces a full scan. Rewrite it as a join to an <em>inline table-valued</em> function, which the optimiser can expand into the outer query. This is the single most common cause of a "mysteriously slow" query in student projects.</div>
 
@@ -2186,7 +2186,7 @@ This is the single habit that separates people who have dropped production data 
 <p class="lead">Thủ tục lưu trữ là một khối T-SQL có tên và đã biên dịch. Nó chạy ngay tại chỗ dữ liệu nằm, nên một vòng mười câu lệnh chỉ tốn một lần đi lại qua mạng thay vì mười — và nó có thể được cấp cho một người dùng hoàn toàn không có quyền gì trên các bảng bên dưới.</p>
 
 <h3>Một thủ tục đầy đủ có tham số và xử lý lỗi</h3>
-<pre><span class="tok-keyword">CREATE PROCEDURE</span> sp_EnrolStudent
+<pre><code class="language-sql"><span class="tok-keyword">CREATE PROCEDURE</span> sp_EnrolStudent
     @sid <span class="tok-type">INT</span>,
     @cid <span class="tok-type">CHAR</span>(6),
     @result <span class="tok-type">NVARCHAR</span>(100) <span class="tok-keyword">OUTPUT</span>
@@ -2213,11 +2213,11 @@ This is the single habit that separates people who have dropped production data 
         <span class="tok-keyword">SET</span> @result = <span class="tok-keyword">ERROR_MESSAGE</span>();
         <span class="tok-keyword">RETURN</span> -1;
     <span class="tok-keyword">END CATCH</span>
-<span class="tok-keyword">END</span>;</pre>
-<pre><span class="tok-comment">-- cách gọi</span>
+<span class="tok-keyword">END</span>;</code></pre>
+<pre><code class="language-sql"><span class="tok-comment">-- cách gọi</span>
 <span class="tok-keyword">DECLARE</span> @msg <span class="tok-type">NVARCHAR</span>(100), @rc <span class="tok-type">INT</span>;
 <span class="tok-keyword">EXEC</span> @rc = sp_EnrolStudent @sid = 1, @cid = <span class="tok-string">'DBI202'</span>, @result = @msg <span class="tok-keyword">OUTPUT</span>;
-<span class="tok-keyword">SELECT</span> @rc <span class="tok-keyword">AS</span> code, @msg <span class="tok-keyword">AS</span> message;</pre>
+<span class="tok-keyword">SELECT</span> @rc <span class="tok-keyword">AS</span> code, @msg <span class="tok-keyword">AS</span> message;</code></pre>
 <div class="out"><b>Vì sao hai câu lệnh nằm trong cùng một giao dịch:</b> nếu lệnh trừ chỗ ngồi thất bại sau khi lệnh chèn đã thành công thì sẽ có một đăng ký mà không trừ chỗ nào. Giao dịch biến chúng thành một khối nguyên tử — hoặc cả hai xảy ra, hoặc không cái nào (bài 8.3).</div>
 
 <h3>Thủ tục hay hàm? Bảng quyết định</h3>
@@ -2228,7 +2228,7 @@ This is the single habit that separates people who have dropped production data 
 <tr><td>Giao dịch</td><td>được</td><td>không</td></tr>
 <tr><td>TRY…CATCH</td><td>được</td><td>không</td></tr>
 </tbody></table>
-<pre><span class="tok-comment">-- hàm vô hướng: dùng được ở bất cứ đâu cần một giá trị</span>
+<pre><code class="language-sql"><span class="tok-comment">-- hàm vô hướng: dùng được ở bất cứ đâu cần một giá trị</span>
 <span class="tok-keyword">CREATE FUNCTION</span> fn_GPA(@sid <span class="tok-type">INT</span>) <span class="tok-keyword">RETURNS</span> <span class="tok-type">DECIMAL</span>(4,2) <span class="tok-keyword">AS</span>
 <span class="tok-keyword">BEGIN</span>
     <span class="tok-keyword">RETURN</span> (<span class="tok-keyword">SELECT AVG</span>(grade) <span class="tok-keyword">FROM</span> Enrolment <span class="tok-keyword">WHERE</span> sid = @sid);
@@ -2238,7 +2238,7 @@ This is the single habit that separates people who have dropped production data 
 <span class="tok-keyword">CREATE FUNCTION</span> fn_StudentsOf(@cid <span class="tok-type">CHAR</span>(6)) <span class="tok-keyword">RETURNS TABLE AS</span>
 <span class="tok-keyword">RETURN</span> (<span class="tok-keyword">SELECT</span> s.* <span class="tok-keyword">FROM</span> Student s <span class="tok-keyword">JOIN</span> Enrolment e <span class="tok-keyword">ON</span> s.sid = e.sid <span class="tok-keyword">WHERE</span> e.cid = @cid);
 
-<span class="tok-keyword">SELECT</span> * <span class="tok-keyword">FROM</span> fn_StudentsOf(<span class="tok-string">'DBI202'</span>);</pre>
+<span class="tok-keyword">SELECT</span> * <span class="tok-keyword">FROM</span> fn_StudentsOf(<span class="tok-string">'DBI202'</span>);</code></pre>
 
 <div class="pitfall"><b>Hàm vô hướng đặt trong mệnh đề WHERE chạy một lần cho mỗi dòng và chặn việc dùng chỉ mục.</b> <span class="badge">WHERE fn_GPA(sid) &gt; 8</span> trên bảng 100.000 dòng sẽ gọi hàm 100.000 lần và buộc quét toàn bảng. Hãy viết lại thành phép nối với một hàm <em>trả bảng nội tuyến</em>, thứ mà bộ tối ưu khai triển được vào truy vấn ngoài. Đây là nguyên nhân phổ biến nhất của truy vấn "tự dưng chậm" trong đồ án sinh viên.</div>
 
@@ -2260,7 +2260,7 @@ This is the single habit that separates people who have dropped production data 
 <h3>The two magic tables</h3>
 <p>Inside any trigger you get two virtual tables: <span class="badge">inserted</span> (the new version of the affected rows) and <span class="badge">deleted</span> (the old version). INSERT populates only <em>inserted</em>; DELETE only <em>deleted</em>; UPDATE populates <b>both</b> — an update is modelled as a delete plus an insert.</p>
 
-<pre><span class="tok-keyword">CREATE TRIGGER</span> trg_Enrolment_Audit
+<pre><code class="language-sql"><span class="tok-keyword">CREATE TRIGGER</span> trg_Enrolment_Audit
 <span class="tok-keyword">ON</span> Enrolment <span class="tok-keyword">AFTER UPDATE</span>
 <span class="tok-keyword">AS</span>
 <span class="tok-keyword">BEGIN</span>
@@ -2269,7 +2269,7 @@ This is the single habit that separates people who have dropped production data 
     <span class="tok-keyword">SELECT</span> i.sid, i.cid, d.grade, i.grade, <span class="tok-keyword">SYSDATETIME</span>(), <span class="tok-keyword">SUSER_SNAME</span>()
     <span class="tok-keyword">FROM</span> inserted i <span class="tok-keyword">JOIN</span> deleted d <span class="tok-keyword">ON</span> i.sid = d.sid <span class="tok-keyword">AND</span> i.cid = d.cid
     <span class="tok-keyword">WHERE ISNULL</span>(i.grade, -1) &lt;&gt; <span class="tok-keyword">ISNULL</span>(d.grade, -1);   <span class="tok-comment">-- only real changes</span>
-<span class="tok-keyword">END</span>;</pre>
+<span class="tok-keyword">END</span>;</code></pre>
 <div class="out"><b>Trace it.</b> <span class="badge">UPDATE Enrolment SET grade = 8.5 WHERE sid = 1 AND cid = 'DBI202'</span> (old grade 6.0):<br>
 <em>deleted</em> holds (1, DBI202, 6.0) · <em>inserted</em> holds (1, DBI202, 8.5) → the join produces one row → one audit record: 6.0 → 8.5, with the timestamp and the login. The user did nothing special; the history is captured automatically. That is the strongest argument for triggers: a rule no application can bypass.</div>
 
@@ -2286,7 +2286,7 @@ This is the single habit that separates people who have dropped production data 
 This is the number-one trigger bug in student projects, and it only shows up once someone runs a bulk update.</div>
 
 <h3>Cursors — and the set-based alternative</h3>
-<pre><span class="tok-keyword">DECLARE</span> @sid <span class="tok-type">INT</span>, @gpa <span class="tok-type">DECIMAL</span>(4,2);
+<pre><code class="language-sql"><span class="tok-keyword">DECLARE</span> @sid <span class="tok-type">INT</span>, @gpa <span class="tok-type">DECIMAL</span>(4,2);
 <span class="tok-keyword">DECLARE</span> c <span class="tok-keyword">CURSOR LOCAL FAST_FORWARD FOR SELECT</span> sid <span class="tok-keyword">FROM</span> Student;
 <span class="tok-keyword">OPEN</span> c;
 <span class="tok-keyword">FETCH NEXT FROM</span> c <span class="tok-keyword">INTO</span> @sid;
@@ -2296,7 +2296,7 @@ This is the number-one trigger bug in student projects, and it only shows up onc
     <span class="tok-keyword">UPDATE</span> Student <span class="tok-keyword">SET</span> gpa = @gpa <span class="tok-keyword">WHERE</span> sid = @sid;
     <span class="tok-keyword">FETCH NEXT FROM</span> c <span class="tok-keyword">INTO</span> @sid;
 <span class="tok-keyword">END</span>
-<span class="tok-keyword">CLOSE</span> c; <span class="tok-keyword">DEALLOCATE</span> c;</pre>
+<span class="tok-keyword">CLOSE</span> c; <span class="tok-keyword">DEALLOCATE</span> c;</code></pre>
 <div class="out"><b>The same job, set-based:</b><br>
 <span class="badge">UPDATE s SET s.gpa = x.avg_g FROM Student s JOIN (SELECT sid, AVG(grade) avg_g FROM Enrolment GROUP BY sid) x ON x.sid = s.sid;</span><br>
 <b>One statement instead of 2n.</b> On 10,000 students the cursor issues 20,000 statements and typically takes minutes; the set-based UPDATE is one operation and takes well under a second. Always try to express the loop as a join first — reach for a cursor only when each row genuinely needs a different action (calling a procedure per row, sending a message, generating dynamic SQL).<br>
@@ -2314,7 +2314,7 @@ This is the number-one trigger bug in student projects, and it only shows up onc
 <h3>Hai bảng ảo thần kỳ</h3>
 <p>Bên trong mọi trigger bạn có hai bảng ảo: <span class="badge">inserted</span> (bản mới của các dòng bị tác động) và <span class="badge">deleted</span> (bản cũ). Lệnh INSERT chỉ lấp <em>inserted</em>; DELETE chỉ lấp <em>deleted</em>; UPDATE lấp <b>cả hai</b> — một phép cập nhật được mô hình hoá thành xoá cộng chèn.</p>
 
-<pre><span class="tok-keyword">CREATE TRIGGER</span> trg_Enrolment_Audit
+<pre><code class="language-sql"><span class="tok-keyword">CREATE TRIGGER</span> trg_Enrolment_Audit
 <span class="tok-keyword">ON</span> Enrolment <span class="tok-keyword">AFTER UPDATE</span>
 <span class="tok-keyword">AS</span>
 <span class="tok-keyword">BEGIN</span>
@@ -2323,7 +2323,7 @@ This is the number-one trigger bug in student projects, and it only shows up onc
     <span class="tok-keyword">SELECT</span> i.sid, i.cid, d.grade, i.grade, <span class="tok-keyword">SYSDATETIME</span>(), <span class="tok-keyword">SUSER_SNAME</span>()
     <span class="tok-keyword">FROM</span> inserted i <span class="tok-keyword">JOIN</span> deleted d <span class="tok-keyword">ON</span> i.sid = d.sid <span class="tok-keyword">AND</span> i.cid = d.cid
     <span class="tok-keyword">WHERE ISNULL</span>(i.grade, -1) &lt;&gt; <span class="tok-keyword">ISNULL</span>(d.grade, -1);   <span class="tok-comment">-- chỉ ghi khi thật sự đổi</span>
-<span class="tok-keyword">END</span>;</pre>
+<span class="tok-keyword">END</span>;</code></pre>
 <div class="out"><b>Chạy tay.</b> <span class="badge">UPDATE Enrolment SET grade = 8.5 WHERE sid = 1 AND cid = 'DBI202'</span> (điểm cũ 6,0):<br>
 <em>deleted</em> chứa (1, DBI202, 6.0) · <em>inserted</em> chứa (1, DBI202, 8.5) → phép nối cho một dòng → một bản ghi kiểm toán: 6,0 → 8,5, kèm mốc thời gian và tài khoản. Người dùng không phải làm gì đặc biệt; lịch sử được ghi lại tự động. Đó là lập luận mạnh nhất cho trigger: một luật mà không ứng dụng nào lách được.</div>
 
@@ -2340,7 +2340,7 @@ This is the number-one trigger bug in student projects, and it only shows up onc
 Đây là lỗi trigger số một trong đồ án sinh viên, và nó chỉ lộ ra khi có ai đó chạy một lệnh cập nhật hàng loạt.</div>
 
 <h3>Cursor — và cách làm theo tập hợp</h3>
-<pre><span class="tok-keyword">DECLARE</span> @sid <span class="tok-type">INT</span>, @gpa <span class="tok-type">DECIMAL</span>(4,2);
+<pre><code class="language-sql"><span class="tok-keyword">DECLARE</span> @sid <span class="tok-type">INT</span>, @gpa <span class="tok-type">DECIMAL</span>(4,2);
 <span class="tok-keyword">DECLARE</span> c <span class="tok-keyword">CURSOR LOCAL FAST_FORWARD FOR SELECT</span> sid <span class="tok-keyword">FROM</span> Student;
 <span class="tok-keyword">OPEN</span> c;
 <span class="tok-keyword">FETCH NEXT FROM</span> c <span class="tok-keyword">INTO</span> @sid;
@@ -2350,7 +2350,7 @@ This is the number-one trigger bug in student projects, and it only shows up onc
     <span class="tok-keyword">UPDATE</span> Student <span class="tok-keyword">SET</span> gpa = @gpa <span class="tok-keyword">WHERE</span> sid = @sid;
     <span class="tok-keyword">FETCH NEXT FROM</span> c <span class="tok-keyword">INTO</span> @sid;
 <span class="tok-keyword">END</span>
-<span class="tok-keyword">CLOSE</span> c; <span class="tok-keyword">DEALLOCATE</span> c;</pre>
+<span class="tok-keyword">CLOSE</span> c; <span class="tok-keyword">DEALLOCATE</span> c;</code></pre>
 <div class="out"><b>Cùng công việc đó, viết theo tập hợp:</b><br>
 <span class="badge">UPDATE s SET s.gpa = x.avg_g FROM Student s JOIN (SELECT sid, AVG(grade) avg_g FROM Enrolment GROUP BY sid) x ON x.sid = s.sid;</span><br>
 <b>Một câu lệnh thay vì 2n câu.</b> Với 10.000 sinh viên, cursor phát ra 20.000 câu lệnh và thường mất vài phút; lệnh UPDATE theo tập hợp là một thao tác và mất chưa tới một giây. Luôn thử diễn đạt vòng lặp thành phép nối trước — chỉ dùng cursor khi mỗi dòng thật sự cần một hành động khác nhau (gọi một thủ tục cho từng dòng, gửi thông điệp, sinh SQL động).<br>
@@ -2380,7 +2380,7 @@ This is the number-one trigger bug in student projects, and it only shows up onc
 <span class="eyebrow">Chapter 8 · Lesson 8.1</span>
 <h2>Indexing — making queries fast</h2>
 <p class="lead">Without an index, finding a row means scanning the whole table — O(n). An <strong>index</strong> is like a book's index: a sorted structure (usually a B-tree) that lets the DBMS jump to matching rows in O(log n).</p>
-<pre><span class="tok-keyword">CREATE INDEX</span> idx_student_email <span class="tok-keyword">ON</span> Student(email);</pre>
+<pre><code class="language-sql"><span class="tok-keyword">CREATE INDEX</span> idx_student_email <span class="tok-keyword">ON</span> Student(email);</code></pre>
 <div class="pitfall"><b>The trade-off:</b> indexes speed up reads but slow down writes (every INSERT/UPDATE must also update the index) and use disk. Index the columns you filter/join on often — not every column.</div>
 <h3>Transactions & ACID</h3>
 <p>A <strong>transaction</strong> groups statements so they all succeed or all roll back — the foundation of reliable databases. It guarantees <span class="badge">ACID</span>: Atomicity, Consistency, Isolation, Durability.</p>
@@ -2395,7 +2395,7 @@ This is the number-one trigger bug in student projects, and it only shows up onc
 <span class="eyebrow">Chương 8 · Bài 8.1</span>
 <h2>Chỉ mục — làm truy vấn nhanh</h2>
 <p class="lead">Không có chỉ mục, tìm một hàng là quét cả bảng — O(n). Một <strong>chỉ mục (index)</strong> giống mục lục của sách: một cấu trúc đã sắp (thường là B-tree) cho phép DBMS nhảy tới hàng khớp trong O(log n).</p>
-<pre><span class="tok-keyword">CREATE INDEX</span> idx_student_email <span class="tok-keyword">ON</span> Student(email);</pre>
+<pre><code class="language-sql"><span class="tok-keyword">CREATE INDEX</span> idx_student_email <span class="tok-keyword">ON</span> Student(email);</code></pre>
 <div class="pitfall"><b>Đánh đổi:</b> chỉ mục tăng tốc đọc nhưng làm chậm ghi (mỗi INSERT/UPDATE phải cập nhật cả chỉ mục) và tốn đĩa. Đánh chỉ mục các cột bạn lọc/join thường xuyên — không phải mọi cột.</div>
 <h3>Giao dịch &amp; ACID</h3>
 <p>Một <strong>giao dịch (transaction)</strong> gom các câu lệnh để tất cả thành công hoặc tất cả hoàn tác — nền tảng của CSDL đáng tin. Nó đảm bảo <span class="badge">ACID</span>: Nguyên tử, Nhất quán, Cô lập, Bền vững.</p>
@@ -2425,8 +2425,8 @@ This is the number-one trigger bug in student projects, and it only shows up onc
 <b>Choose the key carefully:</b> narrow (every nonclustered index carries a copy of it), increasing (so inserts append instead of splitting pages), and rarely updated. An <span class="badge">INT IDENTITY</span> satisfies all three — a <span class="badge">UNIQUEIDENTIFIER DEFAULT NEWID()</span> satisfies none, and fragments the table badly.</div>
 
 <h3>Nonclustered — a separate sorted copy of some columns</h3>
-<pre><span class="tok-keyword">CREATE INDEX</span> ix_Enrolment_cid <span class="tok-keyword">ON</span> Enrolment(cid);
-<span class="tok-keyword">CREATE INDEX</span> ix_Enrolment_cid_grade <span class="tok-keyword">ON</span> Enrolment(cid) <span class="tok-keyword">INCLUDE</span> (grade);   <span class="tok-comment">-- covering</span></pre>
+<pre><code class="language-sql"><span class="tok-keyword">CREATE INDEX</span> ix_Enrolment_cid <span class="tok-keyword">ON</span> Enrolment(cid);
+<span class="tok-keyword">CREATE INDEX</span> ix_Enrolment_cid_grade <span class="tok-keyword">ON</span> Enrolment(cid) <span class="tok-keyword">INCLUDE</span> (grade);   <span class="tok-comment">-- covering</span></code></pre>
 <div class="out"><b>Without INCLUDE:</b> the index finds the matching rows by <span class="badge">cid</span>, then must jump back to the table for <span class="badge">grade</span> — one extra read per row ("key lookup"). Above a few hundred rows the optimiser decides the jumps are not worth it and scans the whole table instead.<br>
 <b>With INCLUDE:</b> <span class="badge">grade</span> is stored inside the index, so the query is answered entirely from it — a <b>covering index</b>. That single word "covering" explains most 100× speed-ups in practice.</div>
 
@@ -2466,8 +2466,8 @@ Query: <span class="badge">SELECT sid, grade FROM Enrolment WHERE cid = 'DBI202'
 <b>Chọn khoá cho cẩn thận:</b> hẹp (mọi chỉ mục không gom cụm đều mang theo một bản sao của nó), tăng dần (để phép chèn nối vào cuối thay vì làm tách trang), và ít khi bị sửa. Một <span class="badge">INT IDENTITY</span> thoả cả ba — còn <span class="badge">UNIQUEIDENTIFIER DEFAULT NEWID()</span> không thoả cái nào, và làm phân mảnh bảng nặng nề.</div>
 
 <h3>Không gom cụm — một bản sao đã sắp của vài cột</h3>
-<pre><span class="tok-keyword">CREATE INDEX</span> ix_Enrolment_cid <span class="tok-keyword">ON</span> Enrolment(cid);
-<span class="tok-keyword">CREATE INDEX</span> ix_Enrolment_cid_grade <span class="tok-keyword">ON</span> Enrolment(cid) <span class="tok-keyword">INCLUDE</span> (grade);   <span class="tok-comment">-- phủ truy vấn</span></pre>
+<pre><code class="language-sql"><span class="tok-keyword">CREATE INDEX</span> ix_Enrolment_cid <span class="tok-keyword">ON</span> Enrolment(cid);
+<span class="tok-keyword">CREATE INDEX</span> ix_Enrolment_cid_grade <span class="tok-keyword">ON</span> Enrolment(cid) <span class="tok-keyword">INCLUDE</span> (grade);   <span class="tok-comment">-- phủ truy vấn</span></code></pre>
 <div class="out"><b>Không có INCLUDE:</b> chỉ mục tìm được các dòng khớp theo <span class="badge">cid</span>, rồi phải nhảy ngược về bảng để lấy <span class="badge">grade</span> — thêm một lần đọc cho mỗi dòng ("key lookup"). Vượt vài trăm dòng là bộ tối ưu thấy các cú nhảy đó không đáng và quay sang quét cả bảng.<br>
 <b>Có INCLUDE:</b> <span class="badge">grade</span> được lưu ngay trong chỉ mục, nên truy vấn được trả lời hoàn toàn từ chỉ mục — một <b>chỉ mục phủ</b>. Đúng một chữ "phủ" đó giải thích phần lớn các lần tăng tốc gấp 100 lần trong thực tế.</div>
 
@@ -2509,11 +2509,11 @@ Truy vấn: <span class="badge">SELECT sid, grade FROM Enrolment WHERE cid = 'DB
 <h2>Making several statements behave as one</h2>
 <p class="lead">A bank transfer is two UPDATEs. If the machine dies between them, money has vanished. A <strong>transaction</strong> is the promise that this cannot happen — and the isolation level is how much of that promise you are willing to pay for.</p>
 
-<pre><span class="tok-keyword">BEGIN TRANSACTION</span>;
+<pre><code class="language-sql"><span class="tok-keyword">BEGIN TRANSACTION</span>;
     <span class="tok-keyword">UPDATE</span> Account <span class="tok-keyword">SET</span> balance = balance - 1000 <span class="tok-keyword">WHERE</span> id = 1;
     <span class="tok-keyword">UPDATE</span> Account <span class="tok-keyword">SET</span> balance = balance + 1000 <span class="tok-keyword">WHERE</span> id = 2;
     <span class="tok-keyword">IF</span> @@ERROR &lt;&gt; 0 <span class="tok-keyword">ROLLBACK TRANSACTION</span>;
-<span class="tok-keyword">ELSE COMMIT TRANSACTION</span>;</pre>
+<span class="tok-keyword">ELSE COMMIT TRANSACTION</span>;</code></pre>
 
 <h3>ACID, one line each</h3>
 <table><thead><tr><th>Property</th><th>Promise</th><th>Mechanism</th></tr></thead><tbody>
@@ -2552,11 +2552,11 @@ Booking the last seat: T1 runs <span class="badge">SELECT seats FROM Course WHER
 <h2>Làm cho nhiều câu lệnh hành xử như một</h2>
 <p class="lead">Một lệnh chuyển khoản là hai câu UPDATE. Nếu máy chết ở giữa, tiền bốc hơi. <strong>Giao dịch</strong> là lời hứa rằng chuyện đó không thể xảy ra — còn mức cô lập là phần lời hứa mà bạn sẵn lòng trả giá để có.</p>
 
-<pre><span class="tok-keyword">BEGIN TRANSACTION</span>;
+<pre><code class="language-sql"><span class="tok-keyword">BEGIN TRANSACTION</span>;
     <span class="tok-keyword">UPDATE</span> Account <span class="tok-keyword">SET</span> balance = balance - 1000 <span class="tok-keyword">WHERE</span> id = 1;
     <span class="tok-keyword">UPDATE</span> Account <span class="tok-keyword">SET</span> balance = balance + 1000 <span class="tok-keyword">WHERE</span> id = 2;
     <span class="tok-keyword">IF</span> @@ERROR &lt;&gt; 0 <span class="tok-keyword">ROLLBACK TRANSACTION</span>;
-<span class="tok-keyword">ELSE COMMIT TRANSACTION</span>;</pre>
+<span class="tok-keyword">ELSE COMMIT TRANSACTION</span>;</code></pre>
 
 <h3>ACID, mỗi chữ một dòng</h3>
 <table><thead><tr><th>Tính chất</th><th>Lời hứa</th><th>Cơ chế</th></tr></thead><tbody>
@@ -2647,7 +2647,7 @@ Booking the last seat: T1 runs <span class="badge">SELECT seats FROM Course WHER
 <b>10. Update from another table:</b> <span class="badge">UPDATE e SET … FROM Employee e JOIN … WHERE …</span> (lesson 6.5).</div>
 
 <h3>A script skeleton that always works</h3>
-<pre><span class="tok-keyword">CREATE DATABASE</span> PE_Test;
+<pre><code class="language-sql"><span class="tok-keyword">CREATE DATABASE</span> PE_Test;
 <span class="tok-keyword">GO</span>
 <span class="tok-keyword">USE</span> PE_Test;
 <span class="tok-keyword">GO</span>
@@ -2662,7 +2662,7 @@ Booking the last seat: T1 runs <span class="badge">SELECT seats FROM Course WHER
 <span class="tok-keyword">INSERT INTO</span> Department <span class="tok-keyword">VALUES</span> (10, N<span class="tok-string">'Sales'</span>), (20, N<span class="tok-string">'IT'</span>);
 <span class="tok-keyword">INSERT INTO</span> Employee <span class="tok-keyword">VALUES</span> (1, N<span class="tok-string">'An'</span>, 1000, 10), (2, N<span class="tok-string">'Bình'</span>, 2000, 20);
 <span class="tok-keyword">GO</span>
-<span class="tok-comment">-- 3. Question 1: ...</span></pre>
+<span class="tok-comment">-- 3. Question 1: ...</span></code></pre>
 <p>Keep every answer under a numbered comment. A marker reading 200 lines needs to find question 5 in two seconds.</p>
 
 <div class="pitfall"><b>Three things that lose marks after the SQL is already correct:</b> (1) missing <span class="badge">N</span> before Vietnamese literals, so the marker's data shows "Nguyên Thi Hoa"; (2) forgetting <span class="badge">GO</span> between batches, so <span class="badge">CREATE PROCEDURE</span> fails with "must be the first statement in a batch"; (3) creating objects in the wrong database because you skipped <span class="badge">USE</span>.</div>
@@ -2696,7 +2696,7 @@ Booking the last seat: T1 runs <span class="badge">SELECT seats FROM Course WHER
 <b>10. Cập nhật lấy dữ liệu từ bảng khác:</b> <span class="badge">UPDATE e SET … FROM Employee e JOIN … WHERE …</span> (bài 6.5).</div>
 
 <h3>Bộ khung script luôn chạy được</h3>
-<pre><span class="tok-keyword">CREATE DATABASE</span> PE_Test;
+<pre><code class="language-sql"><span class="tok-keyword">CREATE DATABASE</span> PE_Test;
 <span class="tok-keyword">GO</span>
 <span class="tok-keyword">USE</span> PE_Test;
 <span class="tok-keyword">GO</span>
@@ -2711,7 +2711,7 @@ Booking the last seat: T1 runs <span class="badge">SELECT seats FROM Course WHER
 <span class="tok-keyword">INSERT INTO</span> Department <span class="tok-keyword">VALUES</span> (10, N<span class="tok-string">'Sales'</span>), (20, N<span class="tok-string">'IT'</span>);
 <span class="tok-keyword">INSERT INTO</span> Employee <span class="tok-keyword">VALUES</span> (1, N<span class="tok-string">'An'</span>, 1000, 10), (2, N<span class="tok-string">'Bình'</span>, 2000, 20);
 <span class="tok-keyword">GO</span>
-<span class="tok-comment">-- 3. Câu 1: ...</span></pre>
+<span class="tok-comment">-- 3. Câu 1: ...</span></code></pre>
 <p>Đặt mỗi câu trả lời dưới một dòng chú thích có đánh số. Người chấm đọc 200 dòng cần tìm ra câu 5 trong hai giây.</p>
 
 <div class="pitfall"><b>Ba thứ làm mất điểm dù SQL đã đúng:</b> (1) thiếu chữ <span class="badge">N</span> trước hằng chuỗi tiếng Việt, nên dữ liệu của người chấm hiện ra "Nguyên Thi Hoa"; (2) quên <span class="badge">GO</span> giữa các batch, khiến <span class="badge">CREATE PROCEDURE</span> báo "must be the first statement in a batch"; (3) tạo đối tượng nhầm cơ sở dữ liệu vì bỏ qua <span class="badge">USE</span>.</div>

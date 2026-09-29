@@ -27,7 +27,7 @@ export default {
 
 <h3>Scalar subquery — a single value</h3>
 <p>A <em>scalar</em> subquery returns exactly one value, so you can drop it anywhere a value fits. Show each note next to the table-wide average views — the subquery computes the average once:</p>
-<pre><code>SELECT title, views, (SELECT round(avg(views),1) FROM note) AS overall_avg
+<pre><code class="language-sql">SELECT title, views, (SELECT round(avg(views),1) FROM note) AS overall_avg
 FROM note ORDER BY id;</code></pre>
 <div class="out">    title     | views | overall_avg
 --------------+-------+-------------
@@ -40,7 +40,7 @@ FROM note ORDER BY id;</code></pre>
  Orphan draft |     5 |        51.7
 (7 rows)</div>
 <p>Every row shows the same <code>51.7</code> — the one average, attached to each row for comparison. The same scalar subquery shines in <code>WHERE</code>: filter to notes whose views beat the average, without hardcoding a number:</p>
-<pre><code>SELECT title, views FROM note
+<pre><code class="language-sql">SELECT title, views FROM note
 WHERE views &gt; (SELECT avg(views) FROM note)
 ORDER BY views DESC;</code></pre>
 <div class="out">    title     | views
@@ -53,7 +53,7 @@ ORDER BY views DESC;</code></pre>
 
 <h3>IN subquery — filter against a set</h3>
 <p>A subquery can also return a <em>column of values</em>, and <code>IN</code> tests membership against it. "Notes written by users in Hanoi" — the inner query produces the Hanoi user ids, the outer keeps notes whose <code>user_id</code> is among them:</p>
-<pre><code>SELECT title FROM note
+<pre><code class="language-sql">SELECT title FROM note
 WHERE user_id IN (SELECT id FROM app_user WHERE city='Hanoi')
 ORDER BY id;</code></pre>
 <div class="out">    title
@@ -86,7 +86,7 @@ ORDER BY id;</code></pre>
 
 <h3>Subquery vô hướng — một giá trị duy nhất</h3>
 <p>Một subquery <em>vô hướng</em> trả về đúng một giá trị, nên bạn có thể đặt nó ở bất cứ đâu một giá trị vừa. Hiện mỗi note cạnh trung bình views của cả bảng — subquery tính trung bình một lần:</p>
-<pre><code>SELECT title, views, (SELECT round(avg(views),1) FROM note) AS overall_avg
+<pre><code class="language-sql">SELECT title, views, (SELECT round(avg(views),1) FROM note) AS overall_avg
 FROM note ORDER BY id;</code></pre>
 <div class="out">    title     | views | overall_avg
 --------------+-------+-------------
@@ -99,7 +99,7 @@ FROM note ORDER BY id;</code></pre>
  Orphan draft |     5 |        51.7
 (7 rows)</div>
 <p>Mọi dòng hiện cùng một <code>51.7</code> — một trung bình duy nhất, gắn vào mỗi dòng để so sánh. Cùng subquery vô hướng đó toả sáng trong <code>WHERE</code>: lọc các note có views vượt trung bình, không cần gõ cứng một con số:</p>
-<pre><code>SELECT title, views FROM note
+<pre><code class="language-sql">SELECT title, views FROM note
 WHERE views &gt; (SELECT avg(views) FROM note)
 ORDER BY views DESC;</code></pre>
 <div class="out">    title     | views
@@ -112,7 +112,7 @@ ORDER BY views DESC;</code></pre>
 
 <h3>Subquery IN — lọc theo một tập</h3>
 <p>Một subquery cũng có thể trả về một <em>cột các giá trị</em>, và <code>IN</code> kiểm việc thuộc tập đó. "Note viết bởi user ở Hà Nội" — truy vấn trong sinh ra các id user Hà Nội, truy vấn ngoài giữ các note có <code>user_id</code> nằm trong đó:</p>
-<pre><code>SELECT title FROM note
+<pre><code class="language-sql">SELECT title FROM note
 WHERE user_id IN (SELECT id FROM app_user WHERE city='Hanoi')
 ORDER BY id;</code></pre>
 <div class="out">    title
@@ -155,7 +155,7 @@ ORDER BY id;</code></pre>
 
 <h3>Correlated subquery — one lookup per outer row</h3>
 <p>Notice the inner query references <code>n.id</code> from the outer query — so it runs once for <em>each</em> note, counting that note's comments:</p>
-<pre><code>SELECT n.title,
+<pre><code class="language-sql">SELECT n.title,
        (SELECT count(*) FROM comment c WHERE c.note_id = n.id) AS comments
 FROM note n ORDER BY n.id;</code></pre>
 <div class="out">    title     | comments
@@ -172,7 +172,7 @@ FROM note n ORDER BY n.id;</code></pre>
 
 <h3>EXISTS / NOT EXISTS — "is there at least one?"</h3>
 <p>When you only care <em>whether</em> a match exists (not how many), <code>EXISTS</code> is the tool. It stops at the first match, so it's efficient. "Users who have written at least one note":</p>
-<pre><code>SELECT u.name FROM app_user u
+<pre><code class="language-sql">SELECT u.name FROM app_user u
 WHERE EXISTS (SELECT 1 FROM note n WHERE n.user_id = u.id)
 ORDER BY u.id;</code></pre>
 <div class="out"> name
@@ -182,7 +182,7 @@ ORDER BY u.id;</code></pre>
  Minh
 (3 rows)</div>
 <p>The <code>SELECT 1</code> is idiomatic — <code>EXISTS</code> only checks whether a row comes back, not what's in it. Flip to <code>NOT EXISTS</code> for the opposite — the "find the orphans" question from Chapter 5, written as a subquery:</p>
-<pre><code>SELECT u.name FROM app_user u
+<pre><code class="language-sql">SELECT u.name FROM app_user u
 WHERE NOT EXISTS (SELECT 1 FROM note n WHERE n.user_id = u.id)
 ORDER BY u.id;</code></pre>
 <div class="out"> name
@@ -192,7 +192,7 @@ ORDER BY u.id;</code></pre>
 
 <h3>The NOT IN trap — NULL makes it return nothing</h3>
 <p>You'd think "users with no notes" could also be written with <code>NOT IN</code>. It usually works — until the subquery returns a <code>NULL</code>. Our <code>note</code> table has one row with <code>user_id = NULL</code> (the orphan draft), and watch what that does:</p>
-<pre><code>SELECT u.name FROM app_user u
+<pre><code class="language-sql">SELECT u.name FROM app_user u
 WHERE u.id NOT IN (SELECT user_id FROM note)
 ORDER BY u.id;</code></pre>
 <div class="out"> name
@@ -222,7 +222,7 @@ ORDER BY u.id;</code></pre>
 
 <h3>Subquery tương quan — một lần tra cho mỗi dòng ngoài</h3>
 <p>Để ý truy vấn trong tham chiếu <code>n.id</code> từ truy vấn ngoài — nên nó chạy một lần cho <em>mỗi</em> note, đếm bình luận của note đó:</p>
-<pre><code>SELECT n.title,
+<pre><code class="language-sql">SELECT n.title,
        (SELECT count(*) FROM comment c WHERE c.note_id = n.id) AS comments
 FROM note n ORDER BY n.id;</code></pre>
 <div class="out">    title     | comments
@@ -239,7 +239,7 @@ FROM note n ORDER BY n.id;</code></pre>
 
 <h3>EXISTS / NOT EXISTS — "có ít nhất một không?"</h3>
 <p>Khi bạn chỉ quan tâm <em>liệu</em> có một cái khớp (không phải bao nhiêu), <code>EXISTS</code> là công cụ. Nó dừng ở cái khớp đầu tiên, nên hiệu quả. "User đã viết ít nhất một note":</p>
-<pre><code>SELECT u.name FROM app_user u
+<pre><code class="language-sql">SELECT u.name FROM app_user u
 WHERE EXISTS (SELECT 1 FROM note n WHERE n.user_id = u.id)
 ORDER BY u.id;</code></pre>
 <div class="out"> name
@@ -249,7 +249,7 @@ ORDER BY u.id;</code></pre>
  Minh
 (3 rows)</div>
 <p>Cái <code>SELECT 1</code> là thành ngữ — <code>EXISTS</code> chỉ kiểm có một dòng trả về hay không, không quan tâm trong đó có gì. Lật sang <code>NOT EXISTS</code> cho điều ngược lại — câu hỏi "tìm mồ côi" từ Chương 5, viết dưới dạng subquery:</p>
-<pre><code>SELECT u.name FROM app_user u
+<pre><code class="language-sql">SELECT u.name FROM app_user u
 WHERE NOT EXISTS (SELECT 1 FROM note n WHERE n.user_id = u.id)
 ORDER BY u.id;</code></pre>
 <div class="out"> name
@@ -259,7 +259,7 @@ ORDER BY u.id;</code></pre>
 
 <h3>Bẫy NOT IN — NULL khiến nó trả về rỗng</h3>
 <p>Bạn sẽ nghĩ "user không có note" cũng viết được bằng <code>NOT IN</code>. Nó thường chạy — cho tới khi subquery trả về một <code>NULL</code>. Bảng <code>note</code> của ta có một dòng <code>user_id = NULL</code> (bản nháp mồ côi), xem nó làm gì:</p>
-<pre><code>SELECT u.name FROM app_user u
+<pre><code class="language-sql">SELECT u.name FROM app_user u
 WHERE u.id NOT IN (SELECT user_id FROM note)
 ORDER BY u.id;</code></pre>
 <div class="out"> name
@@ -299,7 +299,7 @@ ORDER BY u.id;</code></pre>
 
 <h3>WITH — a named, reusable step</h3>
 <p>Define a CTE up front, then <code>SELECT</code> from it as if it were a table. Here <code>author_stats</code> summarises notes per author, and the main query joins it to names and filters:</p>
-<pre><code>WITH author_stats AS (
+<pre><code class="language-sql">WITH author_stats AS (
   SELECT user_id, count(*) AS notes, sum(views) AS total_views
   FROM note WHERE user_id IS NOT NULL
   GROUP BY user_id
@@ -317,7 +317,7 @@ ORDER BY s.total_views DESC;</code></pre>
 
 <h3>The clean fix for fan-out sums</h3>
 <p>Recall the Chapter 6 problem: summing a value across a one-to-many join multiplies it. Watch it happen — total views per author, but joined through comments:</p>
-<pre><code>SELECT u.name, sum(n.views) AS wrong_views
+<pre><code class="language-sql">SELECT u.name, sum(n.views) AS wrong_views
 FROM app_user u
 JOIN note n    ON n.user_id = u.id
 JOIN comment c ON c.note_id = n.id
@@ -328,7 +328,7 @@ GROUP BY u.name ORDER BY u.name;</code></pre>
  Lan   |          45
 (2 rows)</div>
 <p>Cuong's real total is 210 (120 + 90), but this reports <strong>240</strong> — his "Intro" note (120 views) has 2 comments, so its 120 got added <em>twice</em>, while his comment-less "Indexes" note dropped out of the INNER JOIN entirely. The numbers are simply wrong. The fix: <strong>aggregate the "many" side first, in a CTE, so each note joins to a single pre-counted row</strong>:</p>
-<pre><code>WITH note_comments AS (
+<pre><code class="language-sql">WITH note_comments AS (
   SELECT note_id, count(*) AS comments
   FROM comment GROUP BY note_id
 )
@@ -377,7 +377,7 @@ GROUP BY u.name ORDER BY u.name;</code></pre>
 
 <h3>WITH — một bước có tên, tái dùng được</h3>
 <p>Định nghĩa một CTE ở đầu, rồi <code>SELECT</code> từ nó như thể nó là một bảng. Ở đây <code>author_stats</code> tóm tắt note mỗi tác giả, và truy vấn chính join nó với tên và lọc:</p>
-<pre><code>WITH author_stats AS (
+<pre><code class="language-sql">WITH author_stats AS (
   SELECT user_id, count(*) AS notes, sum(views) AS total_views
   FROM note WHERE user_id IS NOT NULL
   GROUP BY user_id
@@ -395,7 +395,7 @@ ORDER BY s.total_views DESC;</code></pre>
 
 <h3>Cách sửa gọn cho fan-out sum</h3>
 <p>Nhớ lại vấn đề Chương 6: cộng một giá trị qua một join một-nhiều nhân nó lên. Xem nó xảy ra — tổng views mỗi tác giả, nhưng join qua bình luận:</p>
-<pre><code>SELECT u.name, sum(n.views) AS wrong_views
+<pre><code class="language-sql">SELECT u.name, sum(n.views) AS wrong_views
 FROM app_user u
 JOIN note n    ON n.user_id = u.id
 JOIN comment c ON c.note_id = n.id
@@ -406,7 +406,7 @@ GROUP BY u.name ORDER BY u.name;</code></pre>
  Lan   |          45
 (2 rows)</div>
 <p>Tổng thật của Cuong là 210 (120 + 90), nhưng cái này báo <strong>240</strong> — note "Intro" của anh (120 views) có 2 bình luận, nên 120 của nó bị cộng <em>hai lần</em>, còn note "Indexes" không bình luận rớt khỏi INNER JOIN hoàn toàn. Các con số đơn giản là sai. Cách sửa: <strong>tổng hợp phía "nhiều" trước, trong một CTE, để mỗi note join với một dòng đã đếm sẵn</strong>:</p>
-<pre><code>WITH note_comments AS (
+<pre><code class="language-sql">WITH note_comments AS (
   SELECT note_id, count(*) AS comments
   FROM comment GROUP BY note_id
 )
@@ -465,7 +465,7 @@ GROUP BY u.name ORDER BY u.name;</code></pre>
 
 <h3>The shape of a recursive CTE</h3>
 <p>A <code>WITH RECURSIVE</code> has two parts joined by <code>UNION ALL</code>: an <strong>anchor</strong> (where to start) and a <strong>recursive step</strong> (how to get from the current rows to the next ones). Here we start at the top boss and walk down, numbering levels:</p>
-<pre><code>WITH RECURSIVE chain AS (
+<pre><code class="language-sql">WITH RECURSIVE chain AS (
   SELECT id, name, manager_id, 1 AS level          <span class="tok-comment">-- anchor: the top (no manager)</span>
   FROM employee WHERE manager_id IS NULL
   UNION ALL
@@ -485,7 +485,7 @@ SELECT level, name FROM chain ORDER BY level, name;</code></pre>
 
 <h3>Building a path as you descend</h3>
 <p>The recursive step can accumulate a value down the chain — here, concatenating names into a full path from the top:</p>
-<pre><code>WITH RECURSIVE tree AS (
+<pre><code class="language-sql">WITH RECURSIVE tree AS (
   SELECT id, name, manager_id, name::text AS path
   FROM employee WHERE manager_id IS NULL
   UNION ALL
@@ -525,7 +525,7 @@ SELECT path FROM tree ORDER BY path;</code></pre>
 
 <h3>Hình của một CTE đệ quy</h3>
 <p>Một <code>WITH RECURSIVE</code> có hai phần nối bằng <code>UNION ALL</code>: một <strong>mỏ neo (anchor)</strong> (bắt đầu ở đâu) và một <strong>bước đệ quy</strong> (làm sao đi từ các dòng hiện tại sang các dòng kế). Ở đây ta bắt đầu ở sếp cao nhất và đi xuống, đánh số cấp:</p>
-<pre><code>WITH RECURSIVE chain AS (
+<pre><code class="language-sql">WITH RECURSIVE chain AS (
   SELECT id, name, manager_id, 1 AS level          <span class="tok-comment">-- neo: đỉnh (không quản lý)</span>
   FROM employee WHERE manager_id IS NULL
   UNION ALL
@@ -545,7 +545,7 @@ SELECT level, name FROM chain ORDER BY level, name;</code></pre>
 
 <h3>Dựng một đường dẫn khi đi xuống</h3>
 <p>Bước đệ quy có thể tích luỹ một giá trị dọc chuỗi — ở đây, nối tên thành một đường dẫn đầy đủ từ đỉnh:</p>
-<pre><code>WITH RECURSIVE tree AS (
+<pre><code class="language-sql">WITH RECURSIVE tree AS (
   SELECT id, name, manager_id, name::text AS path
   FROM employee WHERE manager_id IS NULL
   UNION ALL

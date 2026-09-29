@@ -24,7 +24,7 @@ export default {
 
 <h3>private: only inside the class</h3>
 <p>A <code>private</code> field is invisible outside its class. The constructor parameter <code>public readonly owner</code> is a parameter property — the modifier turns the argument into a class field automatically:</p>
-<pre><code><span class="tok-comment">// access.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// access.ts</span>
 <span class="tok-keyword">class</span> BankAccount {
   <span class="tok-keyword">private</span> balance = <span class="tok-number">0</span>;
   <span class="tok-keyword">constructor</span>(<span class="tok-keyword">public</span> <span class="tok-keyword">readonly</span> owner: <span class="tok-keyword">string</span>) {}
@@ -38,7 +38,7 @@ console.<span class="tok-function">log</span>(acc.balance);   <span class="tok-c
 
 <h3>readonly: assignable once</h3>
 <p>A <code>readonly</code> field can be set at construction but never reassigned:</p>
-<pre><code><span class="tok-comment">// readonly.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// readonly.ts</span>
 <span class="tok-keyword">class</span> BankAccount {
   <span class="tok-keyword">constructor</span>(<span class="tok-keyword">public</span> <span class="tok-keyword">readonly</span> owner: <span class="tok-keyword">string</span>) {}
 }
@@ -70,7 +70,7 @@ acc.owner = <span class="tok-string">'Bob'</span>;   <span class="tok-comment">/
 
 <h3>private: chỉ trong class</h3>
 <p>Một field <code>private</code> vô hình bên ngoài class của nó. Tham số constructor <code>public readonly owner</code> là một parameter property — modifier biến đối số thành một field của class tự động:</p>
-<pre><code><span class="tok-comment">// access.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// access.ts</span>
 <span class="tok-keyword">class</span> BankAccount {
   <span class="tok-keyword">private</span> balance = <span class="tok-number">0</span>;
   <span class="tok-keyword">constructor</span>(<span class="tok-keyword">public</span> <span class="tok-keyword">readonly</span> owner: <span class="tok-keyword">string</span>) {}
@@ -84,7 +84,7 @@ console.<span class="tok-function">log</span>(acc.balance);   <span class="tok-c
 
 <h3>readonly: gán được một lần</h3>
 <p>Một field <code>readonly</code> đặt được lúc dựng nhưng không bao giờ gán lại:</p>
-<pre><code><span class="tok-comment">// readonly.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// readonly.ts</span>
 <span class="tok-keyword">class</span> BankAccount {
   <span class="tok-keyword">constructor</span>(<span class="tok-keyword">public</span> <span class="tok-keyword">readonly</span> owner: <span class="tok-keyword">string</span>) {}
 }
@@ -126,7 +126,7 @@ acc.owner = <span class="tok-string">'Bob'</span>;   <span class="tok-comment">/
 
 <h3>abstract: a base you can't instantiate</h3>
 <p>An <code>abstract</code> class defines shared behaviour and declares <code>abstract</code> methods that subclasses must fill in. You can't create one directly — only its concrete subclasses:</p>
-<pre><code><span class="tok-comment">// abstract.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// abstract.ts</span>
 <span class="tok-keyword">interface</span> Shape { <span class="tok-function">area</span>(): <span class="tok-keyword">number</span>; }
 <span class="tok-keyword">abstract</span> <span class="tok-keyword">class</span> Base <span class="tok-keyword">implements</span> Shape {
   <span class="tok-keyword">abstract</span> <span class="tok-function">area</span>(): <span class="tok-keyword">number</span>;
@@ -142,7 +142,7 @@ acc.owner = <span class="tok-string">'Bob'</span>;   <span class="tok-comment">/
 
 <h3>implements: match an interface</h3>
 <p><code>implements Shape</code> is a promise checked at compile time — the class must have everything the interface declares. Forget a method and you hear about it immediately:</p>
-<pre><code><span class="tok-comment">// implements.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// implements.ts</span>
 <span class="tok-keyword">interface</span> Shape { <span class="tok-function">area</span>(): <span class="tok-keyword">number</span>; }
 <span class="tok-keyword">class</span> Square <span class="tok-keyword">implements</span> Shape {
   <span class="tok-keyword">constructor</span>(<span class="tok-keyword">private</span> side: <span class="tok-keyword">number</span>) {}
@@ -175,7 +175,7 @@ acc.owner = <span class="tok-string">'Bob'</span>;   <span class="tok-comment">/
 
 <h3>abstract: một nền không tạo thực thể được</h3>
 <p>Một class <code>abstract</code> định nghĩa hành vi chung và khai các phương thức <code>abstract</code> mà lớp con phải điền. Bạn không tạo trực tiếp được — chỉ các lớp con cụ thể của nó:</p>
-<pre><code><span class="tok-comment">// abstract.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// abstract.ts</span>
 <span class="tok-keyword">interface</span> Shape { <span class="tok-function">area</span>(): <span class="tok-keyword">number</span>; }
 <span class="tok-keyword">abstract</span> <span class="tok-keyword">class</span> Base <span class="tok-keyword">implements</span> Shape {
   <span class="tok-keyword">abstract</span> <span class="tok-function">area</span>(): <span class="tok-keyword">number</span>;
@@ -191,7 +191,7 @@ acc.owner = <span class="tok-string">'Bob'</span>;   <span class="tok-comment">/
 
 <h3>implements: khớp một interface</h3>
 <p><code>implements Shape</code> là một lời hứa kiểm lúc biên dịch — class phải có mọi thứ interface khai. Quên một phương thức là bạn nghe ngay:</p>
-<pre><code><span class="tok-comment">// implements.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// implements.ts</span>
 <span class="tok-keyword">interface</span> Shape { <span class="tok-function">area</span>(): <span class="tok-keyword">number</span>; }
 <span class="tok-keyword">class</span> Square <span class="tok-keyword">implements</span> Shape {
   <span class="tok-keyword">constructor</span>(<span class="tok-keyword">private</span> side: <span class="tok-keyword">number</span>) {}
@@ -234,7 +234,7 @@ acc.owner = <span class="tok-string">'Bob'</span>;   <span class="tok-comment">/
 
 <h3>#private: enforced at runtime, not just by the compiler</h3>
 <p>A field named with <code>#</code> is genuinely inaccessible from outside the class — the compiler rejects it, and so does the JavaScript engine at runtime (a TypeScript <code>private</code>, by contrast, disappears after compilation and can be reached with a cast):</p>
-<pre><code><span class="tok-comment">// hashprivate.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// hashprivate.ts</span>
 <span class="tok-keyword">class</span> Counter {
   #count = <span class="tok-number">0</span>;   <span class="tok-comment">// truly private (enforced at runtime)</span>
   <span class="tok-function">inc</span>(): <span class="tok-keyword">void</span> { <span class="tok-keyword">this</span>.#count++; }
@@ -248,7 +248,7 @@ console.<span class="tok-function">log</span>(c.#count);   <span class="tok-comm
 
 <h3>Getters, setters &amp; static</h3>
 <p>The example already shows a getter: <code>get value()</code> exposes <code>#count</code> read-only, so callers read <code>c.value</code> (no parentheses) but can't set it. A <code>set</code> accessor would let them assign with validation. And <code>static</code> members belong to the class itself, not an instance:</p>
-<pre><code><span class="tok-keyword">class</span> User {
+<pre><code class="language-javascript"><span class="tok-keyword">class</span> User {
   <span class="tok-keyword">static</span> <span class="tok-function">fromRow</span>(row: { name: <span class="tok-keyword">string</span> }): User { <span class="tok-keyword">return</span> <span class="tok-keyword">new</span> <span class="tok-function">User</span>(row.name); }
   <span class="tok-keyword">constructor</span>(<span class="tok-keyword">public</span> name: <span class="tok-keyword">string</span>) {}
 }
@@ -278,7 +278,7 @@ console.<span class="tok-function">log</span>(c.#count);   <span class="tok-comm
 
 <h3>#private: ép lúc chạy, không chỉ bởi trình biên dịch</h3>
 <p>Một field đặt tên với <code>#</code> thật sự không truy cập được từ ngoài class — trình biên dịch từ chối, và engine JavaScript cũng vậy lúc chạy (một <code>private</code> của TypeScript, ngược lại, biến mất sau khi biên dịch và chạm được qua một phép ép):</p>
-<pre><code><span class="tok-comment">// hashprivate.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// hashprivate.ts</span>
 <span class="tok-keyword">class</span> Counter {
   #count = <span class="tok-number">0</span>;   <span class="tok-comment">// thật sự private (ép lúc chạy)</span>
   <span class="tok-function">inc</span>(): <span class="tok-keyword">void</span> { <span class="tok-keyword">this</span>.#count++; }
@@ -292,7 +292,7 @@ console.<span class="tok-function">log</span>(c.#count);   <span class="tok-comm
 
 <h3>Getter, setter &amp; static</h3>
 <p>Ví dụ đã cho thấy một getter: <code>get value()</code> phơi <code>#count</code> chỉ-đọc, nên bên gọi đọc <code>c.value</code> (không ngoặc) nhưng không đặt được. Một accessor <code>set</code> sẽ cho họ gán kèm validate. Và thành viên <code>static</code> thuộc về chính class, không phải một thực thể:</p>
-<pre><code><span class="tok-keyword">class</span> User {
+<pre><code class="language-javascript"><span class="tok-keyword">class</span> User {
   <span class="tok-keyword">static</span> <span class="tok-function">fromRow</span>(row: { name: <span class="tok-keyword">string</span> }): User { <span class="tok-keyword">return</span> <span class="tok-keyword">new</span> <span class="tok-function">User</span>(row.name); }
   <span class="tok-keyword">constructor</span>(<span class="tok-keyword">public</span> name: <span class="tok-keyword">string</span>) {}
 }
@@ -332,7 +332,7 @@ console.<span class="tok-function">log</span>(c.#count);   <span class="tok-comm
 
 <h3>A method decorator</h3>
 <p>A method decorator receives the original method and a <em>context</em> object (its name, kind, etc.), and may return a replacement. This <code>@logged</code> wraps a method to log each call, then delegates to the original:</p>
-<pre><code><span class="tok-comment">// decorator.ts  (stage-3 decorators — no experimentalDecorators needed)</span>
+<pre><code class="language-javascript"><span class="tok-comment">// decorator.ts  (stage-3 decorators — no experimentalDecorators needed)</span>
 <span class="tok-keyword">function</span> <span class="tok-function">logged</span>&lt;T, A <span class="tok-keyword">extends</span> <span class="tok-keyword">any</span>[], R&gt;(
   target: (<span class="tok-keyword">this</span>: T, ...args: A) =&gt; R,
   context: ClassMethodDecoratorContext,
@@ -376,7 +376,7 @@ console.<span class="tok-function">log</span>(c.#count);   <span class="tok-comm
 
 <h3>Một method decorator</h3>
 <p>Một method decorator nhận phương thức gốc và một object <em>context</em> (tên, loại, v.v. của nó), và có thể trả về một bản thay thế. <code>@logged</code> này bọc một phương thức để log mỗi lần gọi, rồi uỷ thác cho bản gốc:</p>
-<pre><code><span class="tok-comment">// decorator.ts  (decorator stage-3 — không cần experimentalDecorators)</span>
+<pre><code class="language-javascript"><span class="tok-comment">// decorator.ts  (decorator stage-3 — không cần experimentalDecorators)</span>
 <span class="tok-keyword">function</span> <span class="tok-function">logged</span>&lt;T, A <span class="tok-keyword">extends</span> <span class="tok-keyword">any</span>[], R&gt;(
   target: (<span class="tok-keyword">this</span>: T, ...args: A) =&gt; R,
   context: ClassMethodDecoratorContext,

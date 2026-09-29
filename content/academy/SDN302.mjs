@@ -250,13 +250,13 @@ npm install express mongoose</pre></div>
   <div class="lz-layer"><b>Git + GitHub</b> — quản lý phiên bản cho assignment và project.</div>
 </div>
 <div class="out"><b>Kiểm tra cài đặt trong terminal:</b>
-<pre><span class="tok-comment"># Node phai la 20.x tro len</span>
+<pre><code class="language-bash"><span class="tok-comment"># Node phai la 20.x tro len</span>
 node -v
 npm -v
 
 <span class="tok-comment"># Tao mot project va cai Express + Mongoose</span>
 npm init -y
-npm install express mongoose</pre></div>
+npm install express mongoose</code></pre></div>
 <a class="link-card exphub" href="/exp-hub/sdn302-cai-dat-moi-truong?ref=%2Fcourses%2Fserver-side-development-nodejs-express-mongodb%2Flearn&reflabel=SDN302" target="_blank" rel="noopener">
   <span class="lc-ico">🛠️</span>
   <span class="lc-body"><span class="lc-title">Cài Node + MongoDB + Postman — từng bước</span><span class="lc-sub">Cài mọi thứ và nối tới MongoDB Atlas, kèm link, trên Exp Hub.</span></span>
@@ -419,13 +419,13 @@ npm install express mongoose</pre></div>
 <p class="lead">Node runs JavaScript on the server using one main thread and an <strong>event loop</strong>. Instead of blocking while waiting for a file or database, it registers a callback and moves on — so one thread handles thousands of concurrent connections.</p>
 <h3>Blocking vs non-blocking</h3>
 <div class="out"><b>Blocking (bad on a server):</b>
-<pre><span class="tok-keyword">const</span> data = fs.<span class="tok-function">readFileSync</span>(<span class="tok-string">'big.txt'</span>); <span class="tok-comment">// thread frozen here</span>
-<span class="tok-function">doNext</span>();</pre>
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> data = fs.<span class="tok-function">readFileSync</span>(<span class="tok-string">'big.txt'</span>); <span class="tok-comment">// thread frozen here</span>
+<span class="tok-function">doNext</span>();</code></pre>
 <b>Non-blocking (the Node way):</b>
-<pre>fs.<span class="tok-function">readFile</span>(<span class="tok-string">'big.txt'</span>, (err, data) =&gt; {
+<pre><code class="language-javascript">fs.<span class="tok-function">readFile</span>(<span class="tok-string">'big.txt'</span>, (err, data) =&gt; {
   <span class="tok-comment">// runs later, when the file is ready</span>
 });
-<span class="tok-function">doNext</span>(); <span class="tok-comment">// runs immediately, no waiting</span></pre>
+<span class="tok-function">doNext</span>(); <span class="tok-comment">// runs immediately, no waiting</span></code></pre>
 <em>The non-blocking version lets the single thread do other work while the disk reads — that is why Node scales.</em></div>
 <h3>The event loop, simplified</h3>
 <div class="lz-flow">
@@ -434,13 +434,13 @@ npm install express mongoose</pre></div>
   <div class="lz-step"><b>Event loop</b><span>when the stack is empty, pushes queued callbacks to run</span></div>
 </div>
 <h3>Modules &amp; npm</h3>
-<div class="out"><pre><span class="tok-comment">// CommonJS (classic Node)</span>
+<div class="out"><pre><code class="language-javascript"><span class="tok-comment">// CommonJS (classic Node)</span>
 <span class="tok-keyword">const</span> express = <span class="tok-function">require</span>(<span class="tok-string">'express'</span>);
 module.exports = myFunction;
 
 <span class="tok-comment">// ES Modules (modern, "type":"module" in package.json)</span>
 <span class="tok-keyword">import</span> express <span class="tok-keyword">from</span> <span class="tok-string">'express'</span>;
-<span class="tok-keyword">export default</span> myFunction;</pre></div>
+<span class="tok-keyword">export default</span> myFunction;</code></pre></div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The microtask queue runs before timers.</b> Promises (and <code>await</code>) resolve on the <em>microtask</em> queue, which the event loop drains fully before the next <code>setTimeout</code> callback. That is why a resolved promise logs before a <code>setTimeout(…, 0)</code>. Understanding this ordering explains puzzling async bugs the syllabus never touches — and it is a favourite senior interview question.</div>
 <div class="pitfall">Do not put CPU-heavy work (huge loops, image processing) on the main thread — it blocks the event loop and freezes every other request. Offload it to a worker thread or a separate service.</div>
 </div>
@@ -450,13 +450,13 @@ module.exports = myFunction;
 <p class="lead">Node chạy JavaScript trên server bằng một luồng chính và một <strong>event loop</strong>. Thay vì chặn khi chờ một tệp hay database, nó đăng ký một callback và đi tiếp — nên một luồng xử lý hàng nghìn kết nối đồng thời.</p>
 <h3>Chặn vs không chặn</h3>
 <div class="out"><b>Chặn (tệ trên server):</b>
-<pre><span class="tok-keyword">const</span> data = fs.<span class="tok-function">readFileSync</span>(<span class="tok-string">'big.txt'</span>); <span class="tok-comment">// luong dong bang o day</span>
-<span class="tok-function">doNext</span>();</pre>
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> data = fs.<span class="tok-function">readFileSync</span>(<span class="tok-string">'big.txt'</span>); <span class="tok-comment">// luong dong bang o day</span>
+<span class="tok-function">doNext</span>();</code></pre>
 <b>Không chặn (cách của Node):</b>
-<pre>fs.<span class="tok-function">readFile</span>(<span class="tok-string">'big.txt'</span>, (err, data) =&gt; {
+<pre><code class="language-javascript">fs.<span class="tok-function">readFile</span>(<span class="tok-string">'big.txt'</span>, (err, data) =&gt; {
   <span class="tok-comment">// chay sau, khi tep san sang</span>
 });
-<span class="tok-function">doNext</span>(); <span class="tok-comment">// chay ngay, khong cho</span></pre>
+<span class="tok-function">doNext</span>(); <span class="tok-comment">// chay ngay, khong cho</span></code></pre>
 <em>Bản không chặn để luồng đơn làm việc khác trong khi đĩa đọc — đó là lý do Node khả mở.</em></div>
 <h3>Event loop, đơn giản hoá</h3>
 <div class="lz-flow">
@@ -465,13 +465,13 @@ module.exports = myFunction;
   <div class="lz-step"><b>Event loop</b><span>khi stack rỗng, đẩy callback trong hàng đợi ra chạy</span></div>
 </div>
 <h3>Module &amp; npm</h3>
-<div class="out"><pre><span class="tok-comment">// CommonJS (Node co dien)</span>
+<div class="out"><pre><code class="language-javascript"><span class="tok-comment">// CommonJS (Node co dien)</span>
 <span class="tok-keyword">const</span> express = <span class="tok-function">require</span>(<span class="tok-string">'express'</span>);
 module.exports = myFunction;
 
 <span class="tok-comment">// ES Modules (hien dai, "type":"module" trong package.json)</span>
 <span class="tok-keyword">import</span> express <span class="tok-keyword">from</span> <span class="tok-string">'express'</span>;
-<span class="tok-keyword">export default</span> myFunction;</pre></div>
+<span class="tok-keyword">export default</span> myFunction;</code></pre></div>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Hàng đợi microtask chạy trước timer.</b> Promise (và <code>await</code>) resolve trên hàng đợi <em>microtask</em>, mà event loop rút cạn hoàn toàn trước callback <code>setTimeout</code> tiếp theo. Đó là lý do một promise đã resolve log ra trước một <code>setTimeout(…, 0)</code>. Hiểu thứ tự này giải thích các bug async khó hiểu mà giáo trình không chạm — và là câu phỏng vấn senior ưa thích.</div>
 <div class="pitfall">Đừng đặt việc nặng CPU (vòng lặp khổng lồ, xử lý ảnh) trên luồng chính — nó chặn event loop và đóng băng mọi request khác. Đẩy nó sang worker thread hoặc một service riêng.</div>
 </div>`,
@@ -498,7 +498,7 @@ module.exports = myFunction;
   </tbody>
 </table>
 <h3>Worked example — a raw Node server</h3>
-<div class="out"><pre><span class="tok-keyword">const</span> http = <span class="tok-function">require</span>(<span class="tok-string">'http'</span>);
+<div class="out"><pre><code class="language-javascript"><span class="tok-keyword">const</span> http = <span class="tok-function">require</span>(<span class="tok-string">'http'</span>);
 
 <span class="tok-keyword">const</span> server = http.<span class="tok-function">createServer</span>((req, res) =&gt; {
   <span class="tok-keyword">if</span> (req.url === <span class="tok-string">'/api/hello'</span> &amp;&amp; req.method === <span class="tok-string">'GET'</span>) {
@@ -510,7 +510,7 @@ module.exports = myFunction;
   }
 });
 
-server.<span class="tok-function">listen</span>(<span class="tok-number">3000</span>, () =&gt; <span class="tok-function">console</span>.log(<span class="tok-string">'Listening on 3000'</span>));</pre>
+server.<span class="tok-function">listen</span>(<span class="tok-number">3000</span>, () =&gt; <span class="tok-function">console</span>.log(<span class="tok-string">'Listening on 3000'</span>));</code></pre>
 <em>Notice how much manual work this is: parsing the URL, matching the method, setting headers. Express turns all of this into <code>app.get('/api/hello', ...)</code>.</em></div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>REST maps HTTP methods to intentions.</b> GET reads (safe, no side effects), POST creates, PUT/PATCH updates, DELETE removes. Using the right method is not decoration — caches, proxies and browsers behave differently per method (a GET can be cached and prefetched; a POST cannot). Designing to this "uniform interface" is what makes an API predictable, a REST principle the raw server does not enforce for you.</div>
 <div class="pitfall">A raw server does not parse JSON bodies for you — <code>req</code> streams raw chunks you must collect and <code>JSON.parse</code>. This is exactly the tedium Express middleware (<code>express.json()</code>) removes; know it exists so you understand what the middleware does.</div>
@@ -531,7 +531,7 @@ server.<span class="tok-function">listen</span>(<span class="tok-number">3000</s
   </tbody>
 </table>
 <h3>Ví dụ có lời giải — một server Node thuần</h3>
-<div class="out"><pre><span class="tok-keyword">const</span> http = <span class="tok-function">require</span>(<span class="tok-string">'http'</span>);
+<div class="out"><pre><code class="language-javascript"><span class="tok-keyword">const</span> http = <span class="tok-function">require</span>(<span class="tok-string">'http'</span>);
 
 <span class="tok-keyword">const</span> server = http.<span class="tok-function">createServer</span>((req, res) =&gt; {
   <span class="tok-keyword">if</span> (req.url === <span class="tok-string">'/api/hello'</span> &amp;&amp; req.method === <span class="tok-string">'GET'</span>) {
@@ -543,7 +543,7 @@ server.<span class="tok-function">listen</span>(<span class="tok-number">3000</s
   }
 });
 
-server.<span class="tok-function">listen</span>(<span class="tok-number">3000</span>, () =&gt; <span class="tok-function">console</span>.log(<span class="tok-string">'Listening on 3000'</span>));</pre>
+server.<span class="tok-function">listen</span>(<span class="tok-number">3000</span>, () =&gt; <span class="tok-function">console</span>.log(<span class="tok-string">'Listening on 3000'</span>));</code></pre>
 <em>Để ý phải làm thủ công bao nhiêu: phân tích URL, khớp method, đặt header. Express biến tất cả thành <code>app.get('/api/hello', ...)</code>.</em></div>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>REST ánh xạ method HTTP với ý định.</b> GET đọc (an toàn, không tác dụng phụ), POST tạo, PUT/PATCH cập nhật, DELETE xoá. Dùng đúng method không phải trang trí — cache, proxy và trình duyệt hành xử khác nhau theo method (một GET có thể được cache và prefetch; một POST thì không). Thiết kế theo "giao diện đồng nhất" này là điều làm API dễ đoán, một nguyên tắc REST mà server thuần không tự thực thi cho bạn.</div>
 <div class="pitfall">Server thuần không tự phân tích JSON body — <code>req</code> stream các chunk thô mà bạn phải gom lại và <code>JSON.parse</code>. Đây chính là sự nhọc nhằn mà middleware Express (<code>express.json()</code>) loại bỏ; biết nó tồn tại để hiểu middleware làm gì.</div>
@@ -585,7 +585,7 @@ server.<span class="tok-function">listen</span>(<span class="tok-number">3000</s
 <h2>Express: routing made simple</h2>
 <p class="lead">Express is a thin, fast framework over Node's HTTP module. It replaces manual URL/method matching with clean route handlers and gives you middleware — the two ideas that make server code readable.</p>
 <h3>Your first Express app</h3>
-<div class="out"><pre><span class="tok-keyword">const</span> express = <span class="tok-function">require</span>(<span class="tok-string">'express'</span>);
+<div class="out"><pre><code class="language-javascript"><span class="tok-keyword">const</span> express = <span class="tok-function">require</span>(<span class="tok-string">'express'</span>);
 <span class="tok-keyword">const</span> app = <span class="tok-function">express</span>();
 app.<span class="tok-function">use</span>(express.<span class="tok-function">json</span>()); <span class="tok-comment">// parse JSON bodies for us</span>
 
@@ -598,10 +598,10 @@ app.<span class="tok-function">get</span>(<span class="tok-string">'/api/product
   res.<span class="tok-function">json</span>({ id, name: <span class="tok-string">'Book'</span> });
 });
 
-app.<span class="tok-function">listen</span>(<span class="tok-number">3000</span>);</pre>
+app.<span class="tok-function">listen</span>(<span class="tok-number">3000</span>);</code></pre>
 <em>Compare to the raw server: no URL parsing, no manual headers — <code>res.json()</code> sets Content-Type and serialises for you.</em></div>
 <h3>Organise with Router</h3>
-<div class="out"><pre><span class="tok-comment">// routes/products.js</span>
+<div class="out"><pre><code class="language-javascript"><span class="tok-comment">// routes/products.js</span>
 <span class="tok-keyword">const</span> router = express.<span class="tok-function">Router</span>();
 router.<span class="tok-function">get</span>(<span class="tok-string">'/'</span>, getAll);
 router.<span class="tok-function">post</span>(<span class="tok-string">'/'</span>, create);
@@ -610,11 +610,11 @@ router.<span class="tok-function">delete</span>(<span class="tok-string">'/:id'<
 module.exports = router;
 
 <span class="tok-comment">// app.js</span>
-app.<span class="tok-function">use</span>(<span class="tok-string">'/api/products'</span>, <span class="tok-function">require</span>(<span class="tok-string">'./routes/products'</span>));</pre></div>
+app.<span class="tok-function">use</span>(<span class="tok-string">'/api/products'</span>, <span class="tok-function">require</span>(<span class="tok-string">'./routes/products'</span>));</code></pre></div>
 <h3>Express Generator (CLO3)</h3>
-<div class="out"><pre><span class="tok-comment"># Scaffold a full Express app skeleton</span>
+<div class="out"><pre><code class="language-bash"><span class="tok-comment"># Scaffold a full Express app skeleton</span>
 npx express-generator --view=ejs myapp
-cd myapp &amp;&amp; npm install &amp;&amp; npm start</pre></div>
+cd myapp &amp;&amp; npm install &amp;&amp; npm start</code></pre></div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Mount routers per resource, not per verb.</b> One router file per resource (<code>products</code>, <code>users</code>, <code>orders</code>), each with its five CRUD routes, keeps a growing API navigable — you always know which file owns a URL. This "resource router" convention scales to dozens of endpoints without a 1,000-line app.js. The generator hints at it; disciplined teams enforce it.</div>
 <div class="pitfall">Forgetting <code>app.use(express.json())</code> means <code>req.body</code> is <code>undefined</code> on POST/PUT — a classic "why is my body empty?" bug. Add the JSON parser before your routes.</div>
 </div>
@@ -623,7 +623,7 @@ cd myapp &amp;&amp; npm install &amp;&amp; npm start</pre></div>
 <h2>Express: định tuyến đơn giản</h2>
 <p class="lead">Express là một framework mỏng, nhanh trên module HTTP của Node. Nó thay việc khớp URL/method thủ công bằng các route handler sạch và cho bạn middleware — hai ý tưởng làm code server dễ đọc.</p>
 <h3>App Express đầu tiên</h3>
-<div class="out"><pre><span class="tok-keyword">const</span> express = <span class="tok-function">require</span>(<span class="tok-string">'express'</span>);
+<div class="out"><pre><code class="language-javascript"><span class="tok-keyword">const</span> express = <span class="tok-function">require</span>(<span class="tok-string">'express'</span>);
 <span class="tok-keyword">const</span> app = <span class="tok-function">express</span>();
 app.<span class="tok-function">use</span>(express.<span class="tok-function">json</span>()); <span class="tok-comment">// tu parse JSON body cho ta</span>
 
@@ -636,10 +636,10 @@ app.<span class="tok-function">get</span>(<span class="tok-string">'/api/product
   res.<span class="tok-function">json</span>({ id, name: <span class="tok-string">'Book'</span> });
 });
 
-app.<span class="tok-function">listen</span>(<span class="tok-number">3000</span>);</pre>
+app.<span class="tok-function">listen</span>(<span class="tok-number">3000</span>);</code></pre>
 <em>So với server thuần: không phân tích URL, không header thủ công — <code>res.json()</code> đặt Content-Type và serialise cho bạn.</em></div>
 <h3>Tổ chức với Router</h3>
-<div class="out"><pre><span class="tok-comment">// routes/products.js</span>
+<div class="out"><pre><code class="language-javascript"><span class="tok-comment">// routes/products.js</span>
 <span class="tok-keyword">const</span> router = express.<span class="tok-function">Router</span>();
 router.<span class="tok-function">get</span>(<span class="tok-string">'/'</span>, getAll);
 router.<span class="tok-function">post</span>(<span class="tok-string">'/'</span>, create);
@@ -648,11 +648,11 @@ router.<span class="tok-function">delete</span>(<span class="tok-string">'/:id'<
 module.exports = router;
 
 <span class="tok-comment">// app.js</span>
-app.<span class="tok-function">use</span>(<span class="tok-string">'/api/products'</span>, <span class="tok-function">require</span>(<span class="tok-string">'./routes/products'</span>));</pre></div>
+app.<span class="tok-function">use</span>(<span class="tok-string">'/api/products'</span>, <span class="tok-function">require</span>(<span class="tok-string">'./routes/products'</span>));</code></pre></div>
 <h3>Express Generator (CLO3)</h3>
-<div class="out"><pre><span class="tok-comment"># Tao khung mot app Express day du</span>
+<div class="out"><pre><code class="language-bash"><span class="tok-comment"># Tao khung mot app Express day du</span>
 npx express-generator --view=ejs myapp
-cd myapp &amp;&amp; npm install &amp;&amp; npm start</pre></div>
+cd myapp &amp;&amp; npm install &amp;&amp; npm start</code></pre></div>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Gắn router theo tài nguyên, không theo động từ.</b> Một file router mỗi tài nguyên (<code>products</code>, <code>users</code>, <code>orders</code>), mỗi cái năm route CRUD, giữ một API lớn dần vẫn dễ điều hướng — bạn luôn biết file nào sở hữu một URL. Quy ước "resource router" này khả mở tới hàng chục endpoint mà không cần một app.js 1.000 dòng. Generator gợi ý điều đó; nhóm kỷ luật thực thi nó.</div>
 <div class="pitfall">Quên <code>app.use(express.json())</code> nghĩa là <code>req.body</code> bị <code>undefined</code> khi POST/PUT — một bug kinh điển "sao body của em rỗng?". Thêm JSON parser trước các route.</div>
 </div>`,
@@ -678,7 +678,7 @@ cd myapp &amp;&amp; npm install &amp;&amp; npm start</pre></div>
   </tbody>
 </table>
 <h3>Worked example — a custom logger and an error handler</h3>
-<div class="out"><pre><span class="tok-comment">// custom middleware — runs for every request</span>
+<div class="out"><pre><code class="language-javascript"><span class="tok-comment">// custom middleware — runs for every request</span>
 app.<span class="tok-function">use</span>((req, res, next) =&gt; {
   <span class="tok-function">console</span>.log(<span class="tok-string">&#96;\${req.method} \${req.url}&#96;</span>);
   <span class="tok-function">next</span>(); <span class="tok-comment">// pass control to the next middleware/route</span>
@@ -693,7 +693,7 @@ app.<span class="tok-function">get</span>(<span class="tok-string">'/api/me'</sp
 app.<span class="tok-function">use</span>((err, req, res, next) =&gt; {
   <span class="tok-function">console</span>.error(err);
   res.<span class="tok-function">status</span>(err.status || <span class="tok-number">500</span>).<span class="tok-function">json</span>({ error: err.message });
-});</pre>
+});</code></pre>
 <em>Note the template literal uses <code>&#96;...&#96;</code> and <code>\${...}</code> — that is Express reading <code>req.method</code> and <code>req.url</code>.</em></div>
 <h3>Order matters</h3>
 <div class="callout ok">Middleware runs top to bottom. Put <code>express.json()</code> and <code>cors()</code> <em>before</em> routes, and the error handler <em>after</em> all routes. A misplaced middleware silently does nothing (e.g., a body parser after the route that needs the body).</div>
@@ -715,7 +715,7 @@ app.<span class="tok-function">use</span>((err, req, res, next) =&gt; {
   </tbody>
 </table>
 <h3>Ví dụ có lời giải — logger tự viết và một error handler</h3>
-<div class="out"><pre><span class="tok-comment">// middleware tu viet — chay cho moi request</span>
+<div class="out"><pre><code class="language-javascript"><span class="tok-comment">// middleware tu viet — chay cho moi request</span>
 app.<span class="tok-function">use</span>((req, res, next) =&gt; {
   <span class="tok-function">console</span>.log(<span class="tok-string">&#96;\${req.method} \${req.url}&#96;</span>);
   <span class="tok-function">next</span>(); <span class="tok-comment">// chuyen quyen toi middleware/route ke tiep</span>
@@ -730,7 +730,7 @@ app.<span class="tok-function">get</span>(<span class="tok-string">'/api/me'</sp
 app.<span class="tok-function">use</span>((err, req, res, next) =&gt; {
   <span class="tok-function">console</span>.error(err);
   res.<span class="tok-function">status</span>(err.status || <span class="tok-number">500</span>).<span class="tok-function">json</span>({ error: err.message });
-});</pre>
+});</code></pre>
 <em>Để ý template literal dùng <code>&#96;...&#96;</code> và <code>\${...}</code> — đó là Express đọc <code>req.method</code> và <code>req.url</code>.</em></div>
 <h3>Thứ tự quan trọng</h3>
 <div class="callout ok">Middleware chạy từ trên xuống. Đặt <code>express.json()</code> và <code>cors()</code> <em>trước</em> các route, và error handler <em>sau</em> mọi route. Một middleware đặt sai chỗ âm thầm không làm gì (vd body parser đặt sau route cần body).</div>
@@ -784,23 +784,23 @@ app.<span class="tok-function">use</span>((err, req, res, next) =&gt; {
   </tbody>
 </table>
 <h3>A document</h3>
-<div class="out"><pre>{
+<div class="out"><pre><code class="language-javascript">{
   <span class="tok-string">"_id"</span>: <span class="tok-string">"665f..."</span>,
   <span class="tok-string">"name"</span>: <span class="tok-string">"Clean Code"</span>,
   <span class="tok-string">"price"</span>: <span class="tok-number">25</span>,
   <span class="tok-string">"tags"</span>: [<span class="tok-string">"tech"</span>, <span class="tok-string">"programming"</span>],
   <span class="tok-string">"author"</span>: { <span class="tok-string">"name"</span>: <span class="tok-string">"Martin"</span> }
-}</pre>
+}</code></pre>
 <em>Arrays and nested objects live directly inside a document — no join needed to read them.</em></div>
 <h3>The four CRUD operations (mongo shell)</h3>
-<div class="out"><pre><span class="tok-comment">// Create</span>
+<div class="out"><pre><code class="language-javascript"><span class="tok-comment">// Create</span>
 db.products.<span class="tok-function">insertOne</span>({ name: <span class="tok-string">'Book'</span>, price: <span class="tok-number">25</span> });
 <span class="tok-comment">// Read</span>
 db.products.<span class="tok-function">find</span>({ price: { $gt: <span class="tok-number">20</span> } });
 <span class="tok-comment">// Update</span>
 db.products.<span class="tok-function">updateOne</span>({ name: <span class="tok-string">'Book'</span> }, { $set: { price: <span class="tok-number">30</span> } });
 <span class="tok-comment">// Delete</span>
-db.products.<span class="tok-function">deleteOne</span>({ name: <span class="tok-string">'Book'</span> });</pre></div>
+db.products.<span class="tok-function">deleteOne</span>({ name: <span class="tok-string">'Book'</span> });</code></pre></div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Embed vs reference is the key modelling decision.</b> Embed data you always read together and that does not grow unbounded (a product's few tags). Reference data that is shared or grows without limit (a user's thousands of orders). The rule: "data that is read together, stored together". Getting this right avoids both huge documents and needless populate calls — a modelling judgement the syllabus leaves you to learn by pain.</div>
 <div class="pitfall">MongoDB will happily insert a document with a typo'd field or wrong type — there is no database-level schema. That flexibility is a trap; without Mongoose validation, your collection silently fills with inconsistent data.</div>
 </div>
@@ -819,23 +819,23 @@ db.products.<span class="tok-function">deleteOne</span>({ name: <span class="tok
   </tbody>
 </table>
 <h3>Một document</h3>
-<div class="out"><pre>{
+<div class="out"><pre><code class="language-javascript">{
   <span class="tok-string">"_id"</span>: <span class="tok-string">"665f..."</span>,
   <span class="tok-string">"name"</span>: <span class="tok-string">"Clean Code"</span>,
   <span class="tok-string">"price"</span>: <span class="tok-number">25</span>,
   <span class="tok-string">"tags"</span>: [<span class="tok-string">"tech"</span>, <span class="tok-string">"programming"</span>],
   <span class="tok-string">"author"</span>: { <span class="tok-string">"name"</span>: <span class="tok-string">"Martin"</span> }
-}</pre>
+}</code></pre>
 <em>Mảng và object lồng nằm ngay trong document — không cần join để đọc chúng.</em></div>
 <h3>Bốn thao tác CRUD (mongo shell)</h3>
-<div class="out"><pre><span class="tok-comment">// Create (tao)</span>
+<div class="out"><pre><code class="language-javascript"><span class="tok-comment">// Create (tao)</span>
 db.products.<span class="tok-function">insertOne</span>({ name: <span class="tok-string">'Book'</span>, price: <span class="tok-number">25</span> });
 <span class="tok-comment">// Read (doc)</span>
 db.products.<span class="tok-function">find</span>({ price: { $gt: <span class="tok-number">20</span> } });
 <span class="tok-comment">// Update (cap nhat)</span>
 db.products.<span class="tok-function">updateOne</span>({ name: <span class="tok-string">'Book'</span> }, { $set: { price: <span class="tok-number">30</span> } });
 <span class="tok-comment">// Delete (xoa)</span>
-db.products.<span class="tok-function">deleteOne</span>({ name: <span class="tok-string">'Book'</span> });</pre></div>
+db.products.<span class="tok-function">deleteOne</span>({ name: <span class="tok-string">'Book'</span> });</code></pre></div>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Nhúng vs tham chiếu là quyết định mô hình then chốt.</b> Nhúng dữ liệu luôn đọc cùng nhau và không phình vô hạn (vài tag của một sản phẩm). Tham chiếu dữ liệu dùng chung hoặc phình không giới hạn (hàng nghìn order của một user). Quy tắc: "dữ liệu đọc cùng nhau, lưu cùng nhau". Làm đúng điều này tránh cả document khổng lồ lẫn populate thừa — một phán đoán mô hình mà giáo trình để bạn học bằng đau thương.</div>
 <div class="pitfall">MongoDB sẵn lòng chèn một document có field gõ sai hay sai kiểu — không có schema ở mức database. Sự linh hoạt đó là cái bẫy; không có Mongoose validation, collection của bạn âm thầm đầy dữ liệu không nhất quán.</div>
 </div>`,
@@ -851,7 +851,7 @@ db.products.<span class="tok-function">deleteOne</span>({ name: <span class="tok
 <h2>Mongoose: structure over flexible data</h2>
 <p class="lead">Mongoose is an ODM (Object Data Modeling) library that adds a <strong>schema, validation, and relationships</strong> on top of MongoDB — giving your flexible documents the safety of a defined shape. This is CLO5.</p>
 <h3>Schema &amp; model</h3>
-<div class="out"><pre><span class="tok-keyword">const</span> mongoose = <span class="tok-function">require</span>(<span class="tok-string">'mongoose'</span>);
+<div class="out"><pre><code class="language-javascript"><span class="tok-keyword">const</span> mongoose = <span class="tok-function">require</span>(<span class="tok-string">'mongoose'</span>);
 
 <span class="tok-keyword">const</span> productSchema = <span class="tok-keyword">new</span> mongoose.<span class="tok-function">Schema</span>({
   name:  { type: String, required: <span class="tok-keyword">true</span> },
@@ -859,19 +859,19 @@ db.products.<span class="tok-function">deleteOne</span>({ name: <span class="tok
   author: { type: mongoose.Schema.Types.ObjectId, ref: <span class="tok-string">'User'</span> }
 }, { timestamps: <span class="tok-keyword">true</span> });
 
-<span class="tok-keyword">const</span> Product = mongoose.<span class="tok-function">model</span>(<span class="tok-string">'Product'</span>, productSchema);</pre>
+<span class="tok-keyword">const</span> Product = mongoose.<span class="tok-function">model</span>(<span class="tok-string">'Product'</span>, productSchema);</code></pre>
 <em>The <code>required</code>, <code>min</code> rules run automatically on save — invalid data is rejected before it hits MongoDB.</em></div>
 <h3>Async CRUD with Mongoose</h3>
-<div class="out"><pre><span class="tok-comment">// always await — DB calls are asynchronous</span>
+<div class="out"><pre><code class="language-javascript"><span class="tok-comment">// always await — DB calls are asynchronous</span>
 <span class="tok-keyword">const</span> p = <span class="tok-keyword">await</span> Product.<span class="tok-function">create</span>({ name: <span class="tok-string">'Book'</span>, price: <span class="tok-number">25</span> });
 <span class="tok-keyword">const</span> all = <span class="tok-keyword">await</span> Product.<span class="tok-function">find</span>({ price: { $gte: <span class="tok-number">20</span> } });
 <span class="tok-keyword">await</span> Product.<span class="tok-function">findByIdAndUpdate</span>(id, { price: <span class="tok-number">30</span> });
-<span class="tok-keyword">await</span> Product.<span class="tok-function">findByIdAndDelete</span>(id);</pre></div>
+<span class="tok-keyword">await</span> Product.<span class="tok-function">findByIdAndDelete</span>(id);</code></pre></div>
 <h3>Population — Mongoose's answer to JOIN (CLO5)</h3>
-<div class="out"><pre><span class="tok-comment">// author is stored as an ObjectId reference;</span>
+<div class="out"><pre><code class="language-javascript"><span class="tok-comment">// author is stored as an ObjectId reference;</span>
 <span class="tok-comment">// populate() replaces it with the full User document</span>
 <span class="tok-keyword">const</span> product = <span class="tok-keyword">await</span> Product.<span class="tok-function">findById</span>(id).<span class="tok-function">populate</span>(<span class="tok-string">'author'</span>);
-<span class="tok-comment">// product.author is now { _id, name, email } not just an id</span></pre>
+<span class="tok-comment">// product.author is now { _id, name, email } not just an id</span></code></pre>
 <em>Populate cross-references documents — e.g., fill each comment with its user's info on query. This is a headline outcome the Project must demonstrate.</em></div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Select fields to avoid over-fetching and leaking data.</b> <code>.populate('author', 'name')</code> returns only the author's name — never the password hash. And <code>.select('-password')</code> on a user query excludes sensitive fields by default. Deciding exactly which fields cross the wire is both a performance and a security habit that the basic "use populate" instruction skips.</div>
 <div class="pitfall">Reading a Mongoose result before <code>await</code> gives you a pending Promise, not data. <code>const p = Product.find()</code> then <code>p.length</code> is a bug — you must <code>await Product.find()</code> first.</div>
@@ -881,7 +881,7 @@ db.products.<span class="tok-function">deleteOne</span>({ name: <span class="tok
 <h2>Mongoose: cấu trúc cho dữ liệu linh hoạt</h2>
 <p class="lead">Mongoose là một thư viện ODM (Object Data Modeling) thêm <strong>schema, validation, và quan hệ</strong> lên trên MongoDB — cho document linh hoạt của bạn sự an toàn của một hình dạng đã định. Đây là CLO5.</p>
 <h3>Schema &amp; model</h3>
-<div class="out"><pre><span class="tok-keyword">const</span> mongoose = <span class="tok-function">require</span>(<span class="tok-string">'mongoose'</span>);
+<div class="out"><pre><code class="language-javascript"><span class="tok-keyword">const</span> mongoose = <span class="tok-function">require</span>(<span class="tok-string">'mongoose'</span>);
 
 <span class="tok-keyword">const</span> productSchema = <span class="tok-keyword">new</span> mongoose.<span class="tok-function">Schema</span>({
   name:  { type: String, required: <span class="tok-keyword">true</span> },
@@ -889,19 +889,19 @@ db.products.<span class="tok-function">deleteOne</span>({ name: <span class="tok
   author: { type: mongoose.Schema.Types.ObjectId, ref: <span class="tok-string">'User'</span> }
 }, { timestamps: <span class="tok-keyword">true</span> });
 
-<span class="tok-keyword">const</span> Product = mongoose.<span class="tok-function">model</span>(<span class="tok-string">'Product'</span>, productSchema);</pre>
+<span class="tok-keyword">const</span> Product = mongoose.<span class="tok-function">model</span>(<span class="tok-string">'Product'</span>, productSchema);</code></pre>
 <em>Các luật <code>required</code>, <code>min</code> chạy tự động khi save — dữ liệu sai bị từ chối trước khi tới MongoDB.</em></div>
 <h3>CRUD bất đồng bộ với Mongoose</h3>
-<div class="out"><pre><span class="tok-comment">// luon await — call DB la bat dong bo</span>
+<div class="out"><pre><code class="language-javascript"><span class="tok-comment">// luon await — call DB la bat dong bo</span>
 <span class="tok-keyword">const</span> p = <span class="tok-keyword">await</span> Product.<span class="tok-function">create</span>({ name: <span class="tok-string">'Book'</span>, price: <span class="tok-number">25</span> });
 <span class="tok-keyword">const</span> all = <span class="tok-keyword">await</span> Product.<span class="tok-function">find</span>({ price: { $gte: <span class="tok-number">20</span> } });
 <span class="tok-keyword">await</span> Product.<span class="tok-function">findByIdAndUpdate</span>(id, { price: <span class="tok-number">30</span> });
-<span class="tok-keyword">await</span> Product.<span class="tok-function">findByIdAndDelete</span>(id);</pre></div>
+<span class="tok-keyword">await</span> Product.<span class="tok-function">findByIdAndDelete</span>(id);</code></pre></div>
 <h3>Population — câu trả lời của Mongoose cho JOIN (CLO5)</h3>
-<div class="out"><pre><span class="tok-comment">// author luu duoi dang tham chieu ObjectId;</span>
+<div class="out"><pre><code class="language-javascript"><span class="tok-comment">// author luu duoi dang tham chieu ObjectId;</span>
 <span class="tok-comment">// populate() thay no bang document User day du</span>
 <span class="tok-keyword">const</span> product = <span class="tok-keyword">await</span> Product.<span class="tok-function">findById</span>(id).<span class="tok-function">populate</span>(<span class="tok-string">'author'</span>);
-<span class="tok-comment">// product.author gio la { _id, name, email } khong chi la id</span></pre>
+<span class="tok-comment">// product.author gio la { _id, name, email } khong chi la id</span></code></pre>
 <em>Populate liên kết chéo các document — vd điền mỗi comment với info user của nó khi truy vấn. Đây là đầu ra tiêu điểm Project phải thể hiện.</em></div>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Chọn field để tránh over-fetch và rò rỉ dữ liệu.</b> <code>.populate('author', 'name')</code> chỉ trả tên tác giả — không bao giờ trả password hash. Và <code>.select('-password')</code> trên truy vấn user loại field nhạy cảm mặc định. Quyết định chính xác field nào đi qua dây là thói quen cả về hiệu năng lẫn bảo mật mà chỉ dẫn "dùng populate" cơ bản bỏ qua.</div>
 <div class="pitfall">Đọc kết quả Mongoose trước <code>await</code> cho bạn một Promise đang chờ, không phải dữ liệu. <code>const p = Product.find()</code> rồi <code>p.length</code> là bug — bạn phải <code>await Product.find()</code> trước.</div>
@@ -950,7 +950,7 @@ db.products.<span class="tok-function">deleteOne</span>({ name: <span class="tok
   <div class="lz-layer"><b>Model (Mongoose)</b> — the only layer that touches the database</div>
 </div>
 <h3>Worked example — the create endpoint, done right</h3>
-<div class="out"><pre><span class="tok-comment">// controllers/product.controller.js</span>
+<div class="out"><pre><code class="language-javascript"><span class="tok-comment">// controllers/product.controller.js</span>
 <span class="tok-keyword">exports</span>.create = <span class="tok-keyword">async</span> (req, res, next) =&gt; {
   <span class="tok-keyword">try</span> {
     <span class="tok-keyword">const</span> { name, price } = req.body;
@@ -959,7 +959,7 @@ db.products.<span class="tok-function">deleteOne</span>({ name: <span class="tok
     <span class="tok-keyword">const</span> product = <span class="tok-keyword">await</span> productService.<span class="tok-function">create</span>({ name, price });
     res.<span class="tok-function">status</span>(<span class="tok-number">201</span>).<span class="tok-function">json</span>(product);   <span class="tok-comment">// 201 Created</span>
   } <span class="tok-keyword">catch</span> (err) { <span class="tok-function">next</span>(err); }   <span class="tok-comment">// forward to error handler</span>
-};</pre>
+};</code></pre>
 <em>Every REST rule in one function: validate → 400 on bad input, 201 on create, and errors forwarded, never swallowed.</em></div>
 <h3>Status codes — the REST vocabulary</h3>
 <table>
@@ -992,7 +992,7 @@ db.products.<span class="tok-function">deleteOne</span>({ name: <span class="tok
   <div class="lz-layer"><b>Model (Mongoose)</b> — lớp duy nhất chạm database</div>
 </div>
 <h3>Ví dụ có lời giải — endpoint create, làm đúng cách</h3>
-<div class="out"><pre><span class="tok-comment">// controllers/product.controller.js</span>
+<div class="out"><pre><code class="language-javascript"><span class="tok-comment">// controllers/product.controller.js</span>
 <span class="tok-keyword">exports</span>.create = <span class="tok-keyword">async</span> (req, res, next) =&gt; {
   <span class="tok-keyword">try</span> {
     <span class="tok-keyword">const</span> { name, price } = req.body;
@@ -1001,7 +1001,7 @@ db.products.<span class="tok-function">deleteOne</span>({ name: <span class="tok
     <span class="tok-keyword">const</span> product = <span class="tok-keyword">await</span> productService.<span class="tok-function">create</span>({ name, price });
     res.<span class="tok-function">status</span>(<span class="tok-number">201</span>).<span class="tok-function">json</span>(product);   <span class="tok-comment">// 201 Created</span>
   } <span class="tok-keyword">catch</span> (err) { <span class="tok-function">next</span>(err); }   <span class="tok-comment">// chuyen toi error handler</span>
-};</pre>
+};</code></pre>
 <em>Mọi luật REST trong một hàm: validate → 400 khi đầu vào sai, 201 khi tạo, và lỗi được chuyển đi, không bao giờ nuốt.</em></div>
 <h3>Mã trạng thái — từ vựng của REST</h3>
 <table>
@@ -1034,26 +1034,26 @@ db.products.<span class="tok-function">deleteOne</span>({ name: <span class="tok
 <h2>Server-side templating (CLO8)</h2>
 <p class="lead">Sometimes the server renders HTML directly instead of returning JSON — for admin pages, emails, or simple sites. <strong>EJS</strong> and <strong>Handlebars</strong> are template engines that inject data into HTML on the server.</p>
 <h3>EJS — JavaScript inside HTML</h3>
-<div class="out"><pre><span class="tok-comment">// app.js</span>
+<div class="out"><pre><code class="language-javascript"><span class="tok-comment">// app.js</span>
 app.<span class="tok-function">set</span>(<span class="tok-string">'view engine'</span>, <span class="tok-string">'ejs'</span>);
 app.<span class="tok-function">get</span>(<span class="tok-string">'/products'</span>, <span class="tok-keyword">async</span> (req, res) =&gt; {
   <span class="tok-keyword">const</span> products = <span class="tok-keyword">await</span> Product.<span class="tok-function">find</span>();
   res.<span class="tok-function">render</span>(<span class="tok-string">'products'</span>, { products }); <span class="tok-comment">// views/products.ejs</span>
-});</pre>
-<pre><span class="tok-comment">&lt;!-- views/products.ejs --&gt;</span>
+});</code></pre>
+<pre><code class="language-xml"><span class="tok-comment">&lt;!-- views/products.ejs --&gt;</span>
 &lt;ul&gt;
   &lt;% products.forEach(p =&gt; { %&gt;
     &lt;li&gt;&lt;%= p.name %&gt; - &lt;%= p.price %&gt;&lt;/li&gt;
   &lt;% }) %&gt;
-&lt;/ul&gt;</pre>
+&lt;/ul&gt;</code></pre>
 <em><code>&lt;%= %&gt;</code> outputs a value (escaped); <code>&lt;% %&gt;</code> runs logic. EJS feels like HTML with JavaScript sprinkled in.</em></div>
 <h3>Handlebars — logic-less templates</h3>
-<div class="out"><pre><span class="tok-comment">&lt;!-- Handlebars: {{ }} for values, {{#each}} for loops --&gt;</span>
+<div class="out"><pre><code class="language-html"><span class="tok-comment">&lt;!-- Handlebars: {{ }} for values, {{#each}} for loops --&gt;</span>
 &lt;ul&gt;
   {{#each products}}
     &lt;li&gt;{{this.name}} - {{this.price}}&lt;/li&gt;
   {{/each}}
-&lt;/ul&gt;</pre>
+&lt;/ul&gt;</code></pre>
 <em>Handlebars deliberately limits logic in the template, pushing you to prepare data in the controller — a cleaner separation.</em></div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>API-first vs server-rendered — know which you are building.</b> A React app expects <em>JSON</em> from your API (no templating). Server-side templating is for when the server owns the whole page (admin dashboards, transactional emails, SEO-critical pages). Mixing them confuses the architecture. Deciding upfront "does the client render, or does the server?" is an architectural call the syllabus lists as two techniques but does not tell you when to choose each.</div>
 <div class="pitfall">Never build interpolated HTML by string concatenation with user input — it invites cross-site scripting (XSS). Template engines escape output by default (EJS <code>&lt;%= %&gt;</code>, Handlebars <code>{{ }}</code>); use them rather than hand-built strings.</div>
@@ -1063,26 +1063,26 @@ app.<span class="tok-function">get</span>(<span class="tok-string">'/products'</
 <h2>Templating phía server (CLO8)</h2>
 <p class="lead">Đôi khi server render HTML trực tiếp thay vì trả JSON — cho trang admin, email, hay site đơn giản. <strong>EJS</strong> và <strong>Handlebars</strong> là các template engine chèn dữ liệu vào HTML tại server.</p>
 <h3>EJS — JavaScript bên trong HTML</h3>
-<div class="out"><pre><span class="tok-comment">// app.js</span>
+<div class="out"><pre><code class="language-javascript"><span class="tok-comment">// app.js</span>
 app.<span class="tok-function">set</span>(<span class="tok-string">'view engine'</span>, <span class="tok-string">'ejs'</span>);
 app.<span class="tok-function">get</span>(<span class="tok-string">'/products'</span>, <span class="tok-keyword">async</span> (req, res) =&gt; {
   <span class="tok-keyword">const</span> products = <span class="tok-keyword">await</span> Product.<span class="tok-function">find</span>();
   res.<span class="tok-function">render</span>(<span class="tok-string">'products'</span>, { products }); <span class="tok-comment">// views/products.ejs</span>
-});</pre>
-<pre><span class="tok-comment">&lt;!-- views/products.ejs --&gt;</span>
+});</code></pre>
+<pre><code class="language-xml"><span class="tok-comment">&lt;!-- views/products.ejs --&gt;</span>
 &lt;ul&gt;
   &lt;% products.forEach(p =&gt; { %&gt;
     &lt;li&gt;&lt;%= p.name %&gt; - &lt;%= p.price %&gt;&lt;/li&gt;
   &lt;% }) %&gt;
-&lt;/ul&gt;</pre>
+&lt;/ul&gt;</code></pre>
 <em><code>&lt;%= %&gt;</code> xuất một giá trị (đã escape); <code>&lt;% %&gt;</code> chạy logic. EJS cảm giác như HTML rắc thêm JavaScript.</em></div>
 <h3>Handlebars — template ít logic</h3>
-<div class="out"><pre><span class="tok-comment">&lt;!-- Handlebars: {{ }} cho gia tri, {{#each}} cho vong lap --&gt;</span>
+<div class="out"><pre><code class="language-html"><span class="tok-comment">&lt;!-- Handlebars: {{ }} cho gia tri, {{#each}} cho vong lap --&gt;</span>
 &lt;ul&gt;
   {{#each products}}
     &lt;li&gt;{{this.name}} - {{this.price}}&lt;/li&gt;
   {{/each}}
-&lt;/ul&gt;</pre>
+&lt;/ul&gt;</code></pre>
 <em>Handlebars cố ý hạn chế logic trong template, đẩy bạn chuẩn bị dữ liệu ở controller — một sự tách bạch sạch hơn.</em></div>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>API-first vs server-rendered — biết mình đang xây cái nào.</b> Một app React mong đợi <em>JSON</em> từ API của bạn (không templating). Templating phía server dành cho khi server sở hữu cả trang (dashboard admin, email giao dịch, trang cần SEO). Trộn chúng làm rối kiến trúc. Quyết định trước "client render hay server render?" là một lựa chọn kiến trúc mà giáo trình liệt kê như hai kỹ thuật nhưng không nói khi nào chọn cái nào.</div>
 <div class="pitfall">Đừng bao giờ dựng HTML nội suy bằng nối chuỗi với đầu vào người dùng — nó mời gọi cross-site scripting (XSS). Template engine escape đầu ra mặc định (EJS <code>&lt;%= %&gt;</code>, Handlebars <code>{{ }}</code>); dùng chúng thay vì chuỗi tự dựng.</div>
@@ -1124,7 +1124,7 @@ app.<span class="tok-function">get</span>(<span class="tok-string">'/products'</
 <h2>Authentication done safely (CLO6)</h2>
 <p class="lead">Authentication proves <em>who</em> a user is. The two non-negotiables: never store a plain-text password, and never trust the client. Get these wrong and you fail the security part outright.</p>
 <h3>Hashing passwords with bcrypt</h3>
-<div class="out"><pre><span class="tok-keyword">const</span> bcrypt = <span class="tok-function">require</span>(<span class="tok-string">'bcrypt'</span>);
+<div class="out"><pre><code class="language-javascript"><span class="tok-keyword">const</span> bcrypt = <span class="tok-function">require</span>(<span class="tok-string">'bcrypt'</span>);
 
 <span class="tok-comment">// on register — hash before saving</span>
 <span class="tok-keyword">const</span> hash = <span class="tok-keyword">await</span> bcrypt.<span class="tok-function">hash</span>(password, <span class="tok-number">10</span>); <span class="tok-comment">// 10 salt rounds</span>
@@ -1132,7 +1132,7 @@ app.<span class="tok-function">get</span>(<span class="tok-string">'/products'</
 
 <span class="tok-comment">// on login — compare, never decrypt</span>
 <span class="tok-keyword">const</span> ok = <span class="tok-keyword">await</span> bcrypt.<span class="tok-function">compare</span>(password, user.password);
-<span class="tok-keyword">if</span> (!ok) <span class="tok-keyword">return</span> res.<span class="tok-function">status</span>(<span class="tok-number">401</span>).<span class="tok-function">json</span>({ error: <span class="tok-string">'Invalid credentials'</span> });</pre>
+<span class="tok-keyword">if</span> (!ok) <span class="tok-keyword">return</span> res.<span class="tok-function">status</span>(<span class="tok-number">401</span>).<span class="tok-function">json</span>({ error: <span class="tok-string">'Invalid credentials'</span> });</code></pre>
 <em>bcrypt is a one-way hash with a built-in salt — you cannot reverse it, only compare. This is why a database leak does not expose passwords.</em></div>
 <h3>Sessions &amp; cookies vs stateless</h3>
 <div class="lz-flow">
@@ -1141,13 +1141,13 @@ app.<span class="tok-function">get</span>(<span class="tok-string">'/products'</
   <div class="lz-step"><b>Next requests</b><span>browser sends the cookie → server looks up the session</span></div>
 </div>
 <h3>Passport-local</h3>
-<div class="out"><pre><span class="tok-comment">// Passport standardises the login strategy</span>
+<div class="out"><pre><code class="language-javascript"><span class="tok-comment">// Passport standardises the login strategy</span>
 passport.<span class="tok-function">use</span>(<span class="tok-keyword">new</span> <span class="tok-function">LocalStrategy</span>(<span class="tok-keyword">async</span> (email, password, done) =&gt; {
   <span class="tok-keyword">const</span> user = <span class="tok-keyword">await</span> User.<span class="tok-function">findOne</span>({ email });
   <span class="tok-keyword">if</span> (!user || !(<span class="tok-keyword">await</span> bcrypt.<span class="tok-function">compare</span>(password, user.password)))
     <span class="tok-keyword">return</span> <span class="tok-function">done</span>(<span class="tok-keyword">null</span>, <span class="tok-keyword">false</span>);
   <span class="tok-keyword">return</span> <span class="tok-function">done</span>(<span class="tok-keyword">null</span>, user);
-}));</pre></div>
+}));</code></pre></div>
 <a class="link-card codelab" href="/code-lab/authentication?ref=%2Fcourses%2Fserver-side-development-nodejs-express-mongodb%2Flearn&reflabel=SDN302#module-949" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: Password Hashing with bcrypt (Code Lab)</span><span class="lc-sub">Implement secure register/login on the Authentication track.</span></span>
@@ -1161,7 +1161,7 @@ passport.<span class="tok-function">use</span>(<span class="tok-keyword">new</sp
 <h2>Xác thực an toàn (CLO6)</h2>
 <p class="lead">Xác thực chứng minh người dùng <em>là ai</em>. Hai điều không thoả hiệp: đừng bao giờ lưu mật khẩu chữ thô, và đừng bao giờ tin client. Sai những cái này là rớt thẳng phần bảo mật.</p>
 <h3>Băm mật khẩu với bcrypt</h3>
-<div class="out"><pre><span class="tok-keyword">const</span> bcrypt = <span class="tok-function">require</span>(<span class="tok-string">'bcrypt'</span>);
+<div class="out"><pre><code class="language-javascript"><span class="tok-keyword">const</span> bcrypt = <span class="tok-function">require</span>(<span class="tok-string">'bcrypt'</span>);
 
 <span class="tok-comment">// khi dang ky — bam truoc khi luu</span>
 <span class="tok-keyword">const</span> hash = <span class="tok-keyword">await</span> bcrypt.<span class="tok-function">hash</span>(password, <span class="tok-number">10</span>); <span class="tok-comment">// 10 salt rounds</span>
@@ -1169,7 +1169,7 @@ passport.<span class="tok-function">use</span>(<span class="tok-keyword">new</sp
 
 <span class="tok-comment">// khi dang nhap — so sanh, khong bao gio giai ma</span>
 <span class="tok-keyword">const</span> ok = <span class="tok-keyword">await</span> bcrypt.<span class="tok-function">compare</span>(password, user.password);
-<span class="tok-keyword">if</span> (!ok) <span class="tok-keyword">return</span> res.<span class="tok-function">status</span>(<span class="tok-number">401</span>).<span class="tok-function">json</span>({ error: <span class="tok-string">'Invalid credentials'</span> });</pre>
+<span class="tok-keyword">if</span> (!ok) <span class="tok-keyword">return</span> res.<span class="tok-function">status</span>(<span class="tok-number">401</span>).<span class="tok-function">json</span>({ error: <span class="tok-string">'Invalid credentials'</span> });</code></pre>
 <em>bcrypt là băm một chiều có salt tích hợp — bạn không đảo ngược được, chỉ so sánh. Đó là lý do một vụ rò rỉ database không lộ mật khẩu.</em></div>
 <h3>Session &amp; cookie vs stateless</h3>
 <div class="lz-flow">
@@ -1178,13 +1178,13 @@ passport.<span class="tok-function">use</span>(<span class="tok-keyword">new</sp
   <div class="lz-step"><b>Request sau</b><span>trình duyệt gửi cookie → server tra session</span></div>
 </div>
 <h3>Passport-local</h3>
-<div class="out"><pre><span class="tok-comment">// Passport chuan hoa chien luoc dang nhap</span>
+<div class="out"><pre><code class="language-javascript"><span class="tok-comment">// Passport chuan hoa chien luoc dang nhap</span>
 passport.<span class="tok-function">use</span>(<span class="tok-keyword">new</span> <span class="tok-function">LocalStrategy</span>(<span class="tok-keyword">async</span> (email, password, done) =&gt; {
   <span class="tok-keyword">const</span> user = <span class="tok-keyword">await</span> User.<span class="tok-function">findOne</span>({ email });
   <span class="tok-keyword">if</span> (!user || !(<span class="tok-keyword">await</span> bcrypt.<span class="tok-function">compare</span>(password, user.password)))
     <span class="tok-keyword">return</span> <span class="tok-function">done</span>(<span class="tok-keyword">null</span>, <span class="tok-keyword">false</span>);
   <span class="tok-keyword">return</span> <span class="tok-function">done</span>(<span class="tok-keyword">null</span>, user);
-}));</pre></div>
+}));</code></pre></div>
 <a class="link-card codelab" href="/code-lab/authentication?ref=%2Fcourses%2Fserver-side-development-nodejs-express-mongodb%2Flearn&reflabel=SDN302#module-949" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: Password Hashing với bcrypt (Code Lab)</span><span class="lc-sub">Hiện thực register/login an toàn trên track Authentication.</span></span>
@@ -1205,7 +1205,7 @@ passport.<span class="tok-function">use</span>(<span class="tok-keyword">new</sp
 <h2>Token auth (JWT), HTTPS, CORS &amp; uploads</h2>
 <p class="lead">For an API consumed by a React app, <strong>token-based auth (JWT)</strong> is often preferred over sessions: the server stays stateless and the token travels in a header.</p>
 <h3>JWT flow</h3>
-<div class="out"><pre><span class="tok-keyword">const</span> jwt = <span class="tok-function">require</span>(<span class="tok-string">'jsonwebtoken'</span>);
+<div class="out"><pre><code class="language-javascript"><span class="tok-keyword">const</span> jwt = <span class="tok-function">require</span>(<span class="tok-string">'jsonwebtoken'</span>);
 
 <span class="tok-comment">// on login — sign a token</span>
 <span class="tok-keyword">const</span> token = jwt.<span class="tok-function">sign</span>({ id: user._id }, process.env.JWT_SECRET, { expiresIn: <span class="tok-string">'1d'</span> });
@@ -1219,20 +1219,20 @@ res.<span class="tok-function">json</span>({ token });
     req.user = jwt.<span class="tok-function">verify</span>(token, process.env.JWT_SECRET);
     <span class="tok-function">next</span>();
   } <span class="tok-keyword">catch</span> { res.<span class="tok-function">status</span>(<span class="tok-number">401</span>).<span class="tok-function">json</span>({ error: <span class="tok-string">'Unauthorized'</span> }); }
-}</pre>
+}</code></pre>
 <em>The client stores the token and sends <code>Authorization: Bearer &lt;token&gt;</code> on each request; the server verifies its signature — no session storage needed.</em></div>
 <h3>CORS — let your React app call the API</h3>
-<div class="out"><pre><span class="tok-keyword">const</span> cors = <span class="tok-function">require</span>(<span class="tok-string">'cors'</span>);
-app.<span class="tok-function">use</span>(<span class="tok-function">cors</span>({ origin: <span class="tok-string">'https://myapp.com'</span> })); <span class="tok-comment">// allow your front-end origin</span></pre>
+<div class="out"><pre><code class="language-javascript"><span class="tok-keyword">const</span> cors = <span class="tok-function">require</span>(<span class="tok-string">'cors'</span>);
+app.<span class="tok-function">use</span>(<span class="tok-function">cors</span>({ origin: <span class="tok-string">'https://myapp.com'</span> })); <span class="tok-comment">// allow your front-end origin</span></code></pre>
 <em>Without CORS, a browser blocks your React app (different origin) from calling the API. Enable it for the specific origin, not <code>*</code> in production.</em></div>
 <h3>File uploads with Multer</h3>
-<div class="out"><pre><span class="tok-keyword">const</span> multer = <span class="tok-function">require</span>(<span class="tok-string">'multer'</span>);
+<div class="out"><pre><code class="language-javascript"><span class="tok-keyword">const</span> multer = <span class="tok-function">require</span>(<span class="tok-string">'multer'</span>);
 <span class="tok-keyword">const</span> upload = <span class="tok-function">multer</span>({ dest: <span class="tok-string">'uploads/'</span> });
 app.<span class="tok-function">post</span>(<span class="tok-string">'/upload'</span>, upload.<span class="tok-function">single</span>(<span class="tok-string">'file'</span>), (req, res) =&gt; {
   res.<span class="tok-function">json</span>({ file: req.file.filename });
-});</pre></div>
+});</code></pre></div>
 <h3>File downloads (syllabus sessions 35&ndash;36)</h3>
-<div class="out"><pre><span class="tok-comment">// 1. serve an uploads folder as static files</span>
+<div class="out"><pre><code class="language-javascript"><span class="tok-comment">// 1. serve an uploads folder as static files</span>
 app.<span class="tok-function">use</span>(<span class="tok-string">'/files'</span>, express.<span class="tok-function">static</span>(<span class="tok-string">'uploads'</span>));
 
 <span class="tok-comment">// 2. force a download, with a friendly filename</span>
@@ -1240,13 +1240,13 @@ app.<span class="tok-function">use</span>(<span class="tok-string">'/files'</spa
 app.<span class="tok-function">get</span>(<span class="tok-string">'/download/:name'</span>, (req, res) =&gt; {
   <span class="tok-keyword">const</span> safe = path.<span class="tok-function">basename</span>(req.params.name);        <span class="tok-comment">// strips ../ path traversal</span>
   res.<span class="tok-function">download</span>(path.<span class="tok-function">join</span>(__dirname, <span class="tok-string">'uploads'</span>, safe), <span class="tok-string">'report.pdf'</span>);
-});</pre>
+});</code></pre>
 <em><code>express.static</code> lets the browser <em>render</em> the file; <code>res.download</code> sets <code>Content-Disposition: attachment</code> so it is <em>saved</em> instead. Always run the requested name through <code>path.basename</code> &mdash; raw user input in a file path is a path-traversal hole.</em></div>
 
 <h3>HTTPS &mdash; key, certificate and the HTTP&rarr;HTTPS redirect (syllabus sessions 31&ndash;32)</h3>
 <div class="out"><pre><span class="tok-comment"># a self-signed key + certificate, for local development only</span>
 openssl req -x509 -newkey rsa:2048 -nodes -keyout key.pem -out cert.pem -days 365</pre>
-<pre><span class="tok-keyword">const</span> https = <span class="tok-function">require</span>(<span class="tok-string">'https'</span>);
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> https = <span class="tok-function">require</span>(<span class="tok-string">'https'</span>);
 <span class="tok-keyword">const</span> fs = <span class="tok-function">require</span>(<span class="tok-string">'fs'</span>);
 
 https.<span class="tok-function">createServer</span>({
@@ -1258,7 +1258,7 @@ https.<span class="tok-function">createServer</span>({
 <span class="tok-function">require</span>(<span class="tok-string">'http'</span>).<span class="tok-function">createServer</span>((req, res) =&gt; {
   res.<span class="tok-function">writeHead</span>(<span class="tok-number">301</span>, { Location: <span class="tok-string">'https://'</span> + req.headers.host + req.url });
   res.<span class="tok-function">end</span>();
-}).<span class="tok-function">listen</span>(<span class="tok-number">80</span>);</pre>
+}).<span class="tok-function">listen</span>(<span class="tok-number">80</span>);</code></pre>
 <em>HTTPS encrypts the <em>whole</em> request &mdash; including the <code>Authorization</code> header carrying the JWT above, which travels in clear text over plain HTTP. A self-signed certificate is fine for development (the browser will warn); in production the certificate comes from a CA and is usually terminated by the hosting platform or a reverse proxy, so your Node app keeps listening on plain HTTP behind it.</em></div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Keep the JWT secret in an environment variable, never in code.</b> A signing secret committed to Git is a full account-forgery key for anyone who reads the repo. Load it from <code>process.env.JWT_SECRET</code> (via a <code>.env</code> file that is git-ignored). This env-not-code discipline for secrets is the single most common real-world back-end mistake — and it is not on the syllabus.</div>
 <div class="pitfall">Do not put sensitive data (passwords, roles you do not want visible) inside the JWT <em>payload</em> — it is only base64-encoded, not encrypted. Anyone can decode and read it; only the signature is protected.</div>
@@ -1268,7 +1268,7 @@ https.<span class="tok-function">createServer</span>({
 <h2>Token auth (JWT), HTTPS, CORS &amp; upload</h2>
 <p class="lead">Với một API được app React tiêu thụ, <strong>xác thực bằng token (JWT)</strong> thường được ưa hơn session: server giữ stateless và token đi trong header.</p>
 <h3>Luồng JWT</h3>
-<div class="out"><pre><span class="tok-keyword">const</span> jwt = <span class="tok-function">require</span>(<span class="tok-string">'jsonwebtoken'</span>);
+<div class="out"><pre><code class="language-javascript"><span class="tok-keyword">const</span> jwt = <span class="tok-function">require</span>(<span class="tok-string">'jsonwebtoken'</span>);
 
 <span class="tok-comment">// khi dang nhap — ky mot token</span>
 <span class="tok-keyword">const</span> token = jwt.<span class="tok-function">sign</span>({ id: user._id }, process.env.JWT_SECRET, { expiresIn: <span class="tok-string">'1d'</span> });
@@ -1282,20 +1282,20 @@ res.<span class="tok-function">json</span>({ token });
     req.user = jwt.<span class="tok-function">verify</span>(token, process.env.JWT_SECRET);
     <span class="tok-function">next</span>();
   } <span class="tok-keyword">catch</span> { res.<span class="tok-function">status</span>(<span class="tok-number">401</span>).<span class="tok-function">json</span>({ error: <span class="tok-string">'Unauthorized'</span> }); }
-}</pre>
+}</code></pre>
 <em>Client lưu token và gửi <code>Authorization: Bearer &lt;token&gt;</code> mỗi request; server verify chữ ký — không cần lưu session.</em></div>
 <h3>CORS — cho app React gọi API</h3>
-<div class="out"><pre><span class="tok-keyword">const</span> cors = <span class="tok-function">require</span>(<span class="tok-string">'cors'</span>);
-app.<span class="tok-function">use</span>(<span class="tok-function">cors</span>({ origin: <span class="tok-string">'https://myapp.com'</span> })); <span class="tok-comment">// cho phep origin front-end cua ban</span></pre>
+<div class="out"><pre><code class="language-javascript"><span class="tok-keyword">const</span> cors = <span class="tok-function">require</span>(<span class="tok-string">'cors'</span>);
+app.<span class="tok-function">use</span>(<span class="tok-function">cors</span>({ origin: <span class="tok-string">'https://myapp.com'</span> })); <span class="tok-comment">// cho phep origin front-end cua ban</span></code></pre>
 <em>Không có CORS, trình duyệt chặn app React (khác origin) gọi API. Bật nó cho origin cụ thể, không phải <code>*</code> ở production.</em></div>
 <h3>Upload file với Multer</h3>
-<div class="out"><pre><span class="tok-keyword">const</span> multer = <span class="tok-function">require</span>(<span class="tok-string">'multer'</span>);
+<div class="out"><pre><code class="language-javascript"><span class="tok-keyword">const</span> multer = <span class="tok-function">require</span>(<span class="tok-string">'multer'</span>);
 <span class="tok-keyword">const</span> upload = <span class="tok-function">multer</span>({ dest: <span class="tok-string">'uploads/'</span> });
 app.<span class="tok-function">post</span>(<span class="tok-string">'/upload'</span>, upload.<span class="tok-function">single</span>(<span class="tok-string">'file'</span>), (req, res) =&gt; {
   res.<span class="tok-function">json</span>({ file: req.file.filename });
-});</pre></div>
+});</code></pre></div>
 <h3>Tải file xuống (buổi 35&ndash;36 của giáo trình)</h3>
-<div class="out"><pre><span class="tok-comment">// 1. phuc vu thu muc uploads nhu file tinh</span>
+<div class="out"><pre><code class="language-javascript"><span class="tok-comment">// 1. phuc vu thu muc uploads nhu file tinh</span>
 app.<span class="tok-function">use</span>(<span class="tok-string">'/files'</span>, express.<span class="tok-function">static</span>(<span class="tok-string">'uploads'</span>));
 
 <span class="tok-comment">// 2. ep trinh duyet TAI XUONG, kem ten file than thien</span>
@@ -1303,13 +1303,13 @@ app.<span class="tok-function">use</span>(<span class="tok-string">'/files'</spa
 app.<span class="tok-function">get</span>(<span class="tok-string">'/download/:name'</span>, (req, res) =&gt; {
   <span class="tok-keyword">const</span> safe = path.<span class="tok-function">basename</span>(req.params.name);        <span class="tok-comment">// cat bo ../ path traversal</span>
   res.<span class="tok-function">download</span>(path.<span class="tok-function">join</span>(__dirname, <span class="tok-string">'uploads'</span>, safe), <span class="tok-string">'report.pdf'</span>);
-});</pre>
+});</code></pre>
 <em><code>express.static</code> để trình duyệt <em>hiển thị</em> file; <code>res.download</code> đặt <code>Content-Disposition: attachment</code> nên file được <em>lưu về máy</em>. Luôn cho tên file người dùng gửi lên đi qua <code>path.basename</code> &mdash; nhét thẳng input người dùng vào đường dẫn là lỗ path traversal.</em></div>
 
 <h3>HTTPS &mdash; khoá, chứng chỉ và chuyển hướng HTTP&rarr;HTTPS (buổi 31&ndash;32 của giáo trình)</h3>
 <div class="out"><pre><span class="tok-comment"># khoa + chung chi tu ky, CHI dung cho may local</span>
 openssl req -x509 -newkey rsa:2048 -nodes -keyout key.pem -out cert.pem -days 365</pre>
-<pre><span class="tok-keyword">const</span> https = <span class="tok-function">require</span>(<span class="tok-string">'https'</span>);
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> https = <span class="tok-function">require</span>(<span class="tok-string">'https'</span>);
 <span class="tok-keyword">const</span> fs = <span class="tok-function">require</span>(<span class="tok-string">'fs'</span>);
 
 https.<span class="tok-function">createServer</span>({
@@ -1321,7 +1321,7 @@ https.<span class="tok-function">createServer</span>({
 <span class="tok-function">require</span>(<span class="tok-string">'http'</span>).<span class="tok-function">createServer</span>((req, res) =&gt; {
   res.<span class="tok-function">writeHead</span>(<span class="tok-number">301</span>, { Location: <span class="tok-string">'https://'</span> + req.headers.host + req.url });
   res.<span class="tok-function">end</span>();
-}).<span class="tok-function">listen</span>(<span class="tok-number">80</span>);</pre>
+}).<span class="tok-function">listen</span>(<span class="tok-number">80</span>);</code></pre>
 <em>HTTPS mã hoá <em>toàn bộ</em> request &mdash; kể cả header <code>Authorization</code> mang JWT ở trên, thứ đi dạng chữ thường trên HTTP trần. Chứng chỉ tự ký đủ dùng khi phát triển (trình duyệt sẽ cảnh báo); ở production chứng chỉ do CA cấp và thường được nền tảng hosting hoặc reverse proxy kết thúc, nên app Node của bạn vẫn nghe HTTP thường ở phía sau.</em></div>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Giữ JWT secret trong biến môi trường, không bao giờ trong code.</b> Một secret ký commit vào Git là chìa khoá giả mạo tài khoản cho bất kỳ ai đọc repo. Nạp nó từ <code>process.env.JWT_SECRET</code> (qua một tệp <code>.env</code> đã git-ignore). Kỷ luật secret-để-env-không-trong-code này là lỗi back-end thực tế phổ biến nhất — và không có trong giáo trình.</div>
 <div class="pitfall">Đừng đặt dữ liệu nhạy cảm (mật khẩu, vai trò bạn không muốn lộ) trong <em>payload</em> JWT — nó chỉ base64-encode, không mã hoá. Ai cũng decode và đọc được; chỉ chữ ký được bảo vệ.</div>
@@ -1363,11 +1363,11 @@ https.<span class="tok-function">createServer</span>({
 <h2>Integrating React &amp; deploying</h2>
 <p class="lead">Your API is only useful once a front-end talks to it and it runs somewhere public. This lesson closes the loop: React → your API → deployed.</p>
 <h3>Calling the API from React</h3>
-<div class="out"><pre><span class="tok-comment">// React component — call the deployed API</span>
+<div class="out"><pre><code class="language-javascript"><span class="tok-comment">// React component — call the deployed API</span>
 <span class="tok-keyword">const</span> res = <span class="tok-keyword">await</span> fetch(<span class="tok-string">&#96;\${API_URL}/api/products&#96;</span>, {
   headers: { Authorization: <span class="tok-string">&#96;Bearer \${token}&#96;</span> }
 });
-<span class="tok-keyword">const</span> products = <span class="tok-keyword">await</span> res.<span class="tok-function">json</span>();</pre>
+<span class="tok-keyword">const</span> products = <span class="tok-keyword">await</span> res.<span class="tok-function">json</span>();</code></pre>
 <em>The front-end sends the JWT in the Authorization header; the back-end's CORS config must allow the React app's origin.</em></div>
 <h3>Deployment steps</h3>
 <div class="lz-flow">
@@ -1386,11 +1386,11 @@ https.<span class="tok-function">createServer</span>({
 <h2>Tích hợp React &amp; triển khai</h2>
 <p class="lead">API của bạn chỉ hữu ích khi một front-end nói chuyện với nó và nó chạy ở đâu đó công khai. Bài này khép vòng: React → API của bạn → đã triển khai.</p>
 <h3>Gọi API từ React</h3>
-<div class="out"><pre><span class="tok-comment">// React component — goi API da trien khai</span>
+<div class="out"><pre><code class="language-javascript"><span class="tok-comment">// React component — goi API da trien khai</span>
 <span class="tok-keyword">const</span> res = <span class="tok-keyword">await</span> fetch(<span class="tok-string">&#96;\${API_URL}/api/products&#96;</span>, {
   headers: { Authorization: <span class="tok-string">&#96;Bearer \${token}&#96;</span> }
 });
-<span class="tok-keyword">const</span> products = <span class="tok-keyword">await</span> res.<span class="tok-function">json</span>();</pre>
+<span class="tok-keyword">const</span> products = <span class="tok-keyword">await</span> res.<span class="tok-function">json</span>();</code></pre>
 <em>Front-end gửi JWT trong header Authorization; cấu hình CORS của back-end phải cho phép origin của app React.</em></div>
 <h3>Các bước triển khai</h3>
 <div class="lz-flow">
@@ -1467,7 +1467,7 @@ https.<span class="tok-function">createServer</span>({
   <div class="lz-step"><b>60–85 min</b><span>test every route in Postman, fix, add populate/auth if asked</span></div>
 </div>
 <h3>The starter snippet — memorise this skeleton</h3>
-<div class="out"><pre><span class="tok-keyword">const</span> express = <span class="tok-function">require</span>(<span class="tok-string">'express'</span>);
+<div class="out"><pre><code class="language-javascript"><span class="tok-keyword">const</span> express = <span class="tok-function">require</span>(<span class="tok-string">'express'</span>);
 <span class="tok-keyword">const</span> mongoose = <span class="tok-function">require</span>(<span class="tok-string">'mongoose'</span>);
 <span class="tok-keyword">const</span> app = <span class="tok-function">express</span>(); app.<span class="tok-function">use</span>(express.<span class="tok-function">json</span>());
 mongoose.<span class="tok-function">connect</span>(process.env.MONGODB_URI);
@@ -1484,7 +1484,7 @@ app.<span class="tok-function">post</span>(<span class="tok-string">'/api/items'
   } <span class="tok-keyword">catch</span> (e) { <span class="tok-function">next</span>(e); }
 });
 app.<span class="tok-function">use</span>((err, req, res, next) =&gt; res.<span class="tok-function">status</span>(<span class="tok-number">500</span>).<span class="tok-function">json</span>({ error: err.message }));
-app.<span class="tok-function">listen</span>(<span class="tok-number">3000</span>);</pre>
+app.<span class="tok-function">listen</span>(<span class="tok-number">3000</span>);</code></pre>
 <em>If you can type this from memory in ten minutes, the Practical Exam becomes "extend a working app" instead of "start from a blank file under panic".</em></div>
 <h3>Question bank — practise by CLO</h3>
 <p><b>CLO1-2 (Node/Express):</b></p>
@@ -1525,7 +1525,7 @@ app.<span class="tok-function">listen</span>(<span class="tok-number">3000</span
   <div class="lz-step"><b>60–85 phút</b><span>test mọi route trong Postman, sửa, thêm populate/auth nếu được hỏi</span></div>
 </div>
 <h3>Snippet khởi đầu — học thuộc bộ khung này</h3>
-<div class="out"><pre><span class="tok-keyword">const</span> express = <span class="tok-function">require</span>(<span class="tok-string">'express'</span>);
+<div class="out"><pre><code class="language-javascript"><span class="tok-keyword">const</span> express = <span class="tok-function">require</span>(<span class="tok-string">'express'</span>);
 <span class="tok-keyword">const</span> mongoose = <span class="tok-function">require</span>(<span class="tok-string">'mongoose'</span>);
 <span class="tok-keyword">const</span> app = <span class="tok-function">express</span>(); app.<span class="tok-function">use</span>(express.<span class="tok-function">json</span>());
 mongoose.<span class="tok-function">connect</span>(process.env.MONGODB_URI);
@@ -1542,7 +1542,7 @@ app.<span class="tok-function">post</span>(<span class="tok-string">'/api/items'
   } <span class="tok-keyword">catch</span> (e) { <span class="tok-function">next</span>(e); }
 });
 app.<span class="tok-function">use</span>((err, req, res, next) =&gt; res.<span class="tok-function">status</span>(<span class="tok-number">500</span>).<span class="tok-function">json</span>({ error: err.message }));
-app.<span class="tok-function">listen</span>(<span class="tok-number">3000</span>);</pre>
+app.<span class="tok-function">listen</span>(<span class="tok-number">3000</span>);</code></pre>
 <em>Nếu bạn gõ được cái này từ trí nhớ trong mười phút, Practical Exam thành "mở rộng một app đang chạy" thay vì "bắt đầu từ file trắng trong hoảng loạn".</em></div>
 <h3>Ngân hàng câu hỏi — luyện theo CLO</h3>
 <p><b>CLO1-2 (Node/Express):</b></p>
@@ -1611,21 +1611,21 @@ app.<span class="tok-function">listen</span>(<span class="tok-number">3000</span
 <p class="lead">Express is minimal — you impose structure yourself. Larger teams often want structure built in. The two frameworks below are the syllabus' answer to that, and one powerful MongoDB feature rounds out the toolkit.</p>
 <h3>NestJS — opinionated structure</h3>
 <p>NestJS layers TypeScript, dependency injection, and a module/controller/service architecture on top of Express. It enforces the MVC layering you did by hand — useful when many developers share a large codebase.</p>
-<div class="out"><pre><span class="tok-comment">// A NestJS controller — decorators declare routes</span>
+<div class="out"><pre><code class="language-bash"><span class="tok-comment">// A NestJS controller — decorators declare routes</span>
 @<span class="tok-function">Controller</span>(<span class="tok-string">'products'</span>)
 <span class="tok-keyword">export class</span> ProductController {
   <span class="tok-function">constructor</span>(<span class="tok-keyword">private</span> service: ProductService) {}
   @<span class="tok-function">Get</span>() <span class="tok-function">findAll</span>() { <span class="tok-keyword">return</span> <span class="tok-keyword">this</span>.service.<span class="tok-function">findAll</span>(); }
-}</pre></div>
+}</code></pre></div>
 <h3>Hono — ultrafast &amp; edge-ready</h3>
 <p>Hono is a tiny, fast framework that runs not just on Node but on edge runtimes (Cloudflare Workers, Deno, Bun). Its API resembles Express but is built for the modern, serverless edge.</p>
 <h3>MongoDB aggregation pipeline</h3>
-<div class="out"><pre><span class="tok-comment">// group orders by user and sum their totals</span>
+<div class="out"><pre><code class="language-javascript"><span class="tok-comment">// group orders by user and sum their totals</span>
 <span class="tok-keyword">await</span> Order.<span class="tok-function">aggregate</span>([
   { $match: { status: <span class="tok-string">'paid'</span> } },
   { $group: { _id: <span class="tok-string">'\$userId'</span>, total: { $sum: <span class="tok-string">'\$amount'</span> } } },
   { $sort: { total: -<span class="tok-number">1</span> } }
-]);</pre>
+]);</code></pre>
 <em>Aggregation does grouping, joining (<code>$lookup</code>) and computing inside MongoDB — far faster than pulling all data into Node and looping.</em></div>
 <div class="callout"><b>Frameworks trade freedom for guardrails.</b> Express gives you total freedom (and total responsibility for structure); NestJS gives you strong conventions (and less freedom). Neither is "better" — the right choice depends on team size and how much structure you want enforced. Understanding this trade-off, rather than memorising one framework, is what lets you pick tools wisely across a career.</div>
 <div class="pitfall">Do not reach for NestJS on a tiny project just because it is "advanced" — its structure is overhead you do not need for a 3-resource API. Match the tool's weight to the project's size.</div>
@@ -1637,21 +1637,21 @@ app.<span class="tok-function">listen</span>(<span class="tok-number">3000</span
 <p class="lead">Express tối giản — bạn tự áp cấu trúc. Nhóm lớn thường muốn cấu trúc có sẵn. Hai framework dưới đây chính là câu trả lời của giáo trình cho điều đó, cộng thêm một tính năng MongoDB mạnh.</p>
 <h3>NestJS — cấu trúc có định hướng</h3>
 <p>NestJS phủ TypeScript, dependency injection, và kiến trúc module/controller/service lên trên Express. Nó thực thi phân lớp MVC mà bạn làm bằng tay — hữu ích khi nhiều dev chia sẻ một codebase lớn.</p>
-<div class="out"><pre><span class="tok-comment">// Mot controller NestJS — decorator khai bao route</span>
+<div class="out"><pre><code class="language-bash"><span class="tok-comment">// Mot controller NestJS — decorator khai bao route</span>
 @<span class="tok-function">Controller</span>(<span class="tok-string">'products'</span>)
 <span class="tok-keyword">export class</span> ProductController {
   <span class="tok-function">constructor</span>(<span class="tok-keyword">private</span> service: ProductService) {}
   @<span class="tok-function">Get</span>() <span class="tok-function">findAll</span>() { <span class="tok-keyword">return</span> <span class="tok-keyword">this</span>.service.<span class="tok-function">findAll</span>(); }
-}</pre></div>
+}</code></pre></div>
 <h3>Hono — cực nhanh &amp; sẵn sàng cho edge</h3>
 <p>Hono là một framework nhỏ, nhanh chạy không chỉ trên Node mà trên các edge runtime (Cloudflare Workers, Deno, Bun). API của nó giống Express nhưng được xây cho edge serverless hiện đại.</p>
 <h3>MongoDB aggregation pipeline</h3>
-<div class="out"><pre><span class="tok-comment">// gom order theo user va tinh tong</span>
+<div class="out"><pre><code class="language-javascript"><span class="tok-comment">// gom order theo user va tinh tong</span>
 <span class="tok-keyword">await</span> Order.<span class="tok-function">aggregate</span>([
   { $match: { status: <span class="tok-string">'paid'</span> } },
   { $group: { _id: <span class="tok-string">'\$userId'</span>, total: { $sum: <span class="tok-string">'\$amount'</span> } } },
   { $sort: { total: -<span class="tok-number">1</span> } }
-]);</pre>
+]);</code></pre>
 <em>Aggregation làm gom nhóm, join (<code>$lookup</code>) và tính toán bên trong MongoDB — nhanh hơn nhiều so với kéo hết dữ liệu vào Node và lặp.</em></div>
 <div class="callout"><b>Framework đánh đổi tự do lấy lan can bảo vệ.</b> Express cho bạn tự do hoàn toàn (và trách nhiệm hoàn toàn về cấu trúc); NestJS cho bạn quy ước mạnh (và ít tự do hơn). Không cái nào "tốt hơn" — lựa chọn đúng tuỳ quy mô nhóm và mức cấu trúc bạn muốn thực thi. Hiểu sự đánh đổi này, thay vì học thuộc một framework, là điều giúp bạn chọn công cụ khôn ngoan suốt sự nghiệp.</div>
 <div class="pitfall">Đừng vớ NestJS cho một project bé chỉ vì nó "nâng cao" — cấu trúc của nó là gánh nặng bạn không cần cho một API 3 tài nguyên. Khớp trọng lượng công cụ với quy mô project.</div>
@@ -1675,7 +1675,7 @@ app.<span class="tok-function">listen</span>(<span class="tok-number">3000</span
   <div class="lz-layer"><b>Security headers &amp; logging</b> — <code>helmet()</code> for headers, <code>morgan()</code> for request logs.</div>
 </div>
 <div class="out"><b>Worked example — a unique, indexed email:</b>
-<pre>email: { type: String, required: <span class="tok-keyword">true</span>, unique: <span class="tok-keyword">true</span>, index: <span class="tok-keyword">true</span> }</pre>
+<pre><code class="language-javascript">email: { type: String, required: <span class="tok-keyword">true</span>, unique: <span class="tok-keyword">true</span>, index: <span class="tok-keyword">true</span> }</code></pre>
 <em>The unique index both enforces "one account per email" at the database level AND makes login lookups by email fast — two wins from one line.</em></div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Validate at the edge, trust nothing inside.</b> Put all input validation in one place (a validation middleware per route) so by the time a request reaches your service layer, the data is already guaranteed clean. This "validate at the boundary" pattern means your business logic never has to defensively re-check inputs — it is a cornerstone of robust back-ends that the CRUD-focused syllabus does not emphasise.</div>
 <div class="pitfall">Adding a <code>unique</code> constraint to a schema does NOT retroactively clean existing duplicate data, and the index build can fail if duplicates already exist. Enforce uniqueness from the start, or clean the collection before adding the index.</div>
@@ -1692,7 +1692,7 @@ app.<span class="tok-function">listen</span>(<span class="tok-number">3000</span
   <div class="lz-layer"><b>Header bảo mật &amp; logging</b> — <code>helmet()</code> cho header, <code>morgan()</code> cho log request.</div>
 </div>
 <div class="out"><b>Ví dụ có lời giải — một email unique có index:</b>
-<pre>email: { type: String, required: <span class="tok-keyword">true</span>, unique: <span class="tok-keyword">true</span>, index: <span class="tok-keyword">true</span> }</pre>
+<pre><code class="language-javascript">email: { type: String, required: <span class="tok-keyword">true</span>, unique: <span class="tok-keyword">true</span>, index: <span class="tok-keyword">true</span> }</code></pre>
 <em>Index unique vừa thực thi "một tài khoản mỗi email" ở mức database VỪA làm tra cứu đăng nhập theo email nhanh — hai lợi ích từ một dòng.</em></div>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Validate ở ranh giới, đừng tin gì bên trong.</b> Đặt mọi validation đầu vào ở một chỗ (một validation middleware mỗi route) để khi một request tới lớp service, dữ liệu đã được đảm bảo sạch. Khuôn "validate ở ranh giới" này nghĩa là logic nghiệp vụ không bao giờ phải phòng thủ kiểm lại đầu vào — một nền tảng của back-end bền mà giáo trình tập trung CRUD không nhấn.</div>
 <div class="pitfall">Thêm ràng buộc <code>unique</code> vào schema KHÔNG dọn hồi tố dữ liệu trùng đã có, và việc build index có thể thất bại nếu đã tồn tại bản trùng. Thực thi tính duy nhất từ đầu, hoặc dọn collection trước khi thêm index.</div>

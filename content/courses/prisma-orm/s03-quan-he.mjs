@@ -25,7 +25,7 @@ export default {
 <p class="lead">A relation in the database is one column with a constraint on it. A relation in Prisma is <em>three</em> things: the scalar that holds the value, the field you traverse from this side, and the field you traverse from the other side. Understanding why it needs all three — and which of them exists in SQL — makes every relation error in this chapter obvious rather than mysterious.</p>
 
 <h3>The anatomy, labelled</h3>
-<pre><code>model User {
+<pre><code class="language-typescript">model User {
   id    Int    @id @default(autoincrement())
   email String @unique
 
@@ -51,14 +51,14 @@ model Post {
 </div>
 
 <h3>The error you will meet on your first relation</h3>
-<pre><code><span class="tok-comment">// Post declares the relation; User says nothing back</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Post declares the relation; User says nothing back</span>
 model User { id       Int  @id @default(autoincrement()) }
 model    Post {
   id       Int  @id @default(autoincrement())
   authorId Int
   author   User @relation(fields: [authorId], references: [id])
 }</code></pre>
-<pre><code>npx prisma validate</code></pre>
+<pre><code class="language-bash">npx prisma validate</code></pre>
 <div class="out">error: Error validating field &#96;author&#96; in model &#96;Post&#96;: The relation field &#96;author&#96; on model &#96;Post&#96; is missing an opposite relation field on the model &#96;User&#96;. Either run &#96;prisma format&#96; or add it manually.
   --&gt;  prisma/schema.prisma:9
    |
@@ -99,7 +99,7 @@ Validation Error Count: 1</div>
 </div>
 
 <h3>What the client gains from each side</h3>
-<pre><code><span class="tok-comment">// From the owning side: filter on the scalar, or traverse the relation</span>
+<pre><code class="language-typescript"><span class="tok-comment">// From the owning side: filter on the scalar, or traverse the relation</span>
 await prisma.post.findMany({ where: { authorId: 1 } });                 <span class="tok-comment">// the column</span>
 await prisma.post.findMany({ where: { author: { email: 'an@x.com' } } });<span class="tok-comment">// the relation</span>
 await prisma.post.findMany({ include: { author: true } });
@@ -112,7 +112,7 @@ await prisma.user.findMany({ include: { _count: { select: { posts: true } } } })
 <p><code>some</code> became an <code>EXISTS</code> subquery, which is exactly what you would have written by hand and exactly what the planner likes. <code>none</code> becomes <code>NOT EXISTS</code>, and <code>every</code> becomes a <code>NOT EXISTS</code> over the negated condition — a small piece of logic that is easy to get backwards in raw SQL and impossible to get backwards here.</p>
 
 <h3>Setting a relation: three ways, one column</h3>
-<pre><code><span class="tok-comment">// A — write the scalar directly. Simplest, and no existence check.</span>
+<pre><code class="language-typescript"><span class="tok-comment">// A — write the scalar directly. Simplest, and no existence check.</span>
 await prisma.post.create({ data: { title: 'A', authorId: 1 } });
 
 <span class="tok-comment">// B — connect an existing row. Prisma verifies it exists first.</span>
@@ -138,7 +138,7 @@ COMMIT</div>
 </div>
 
 <h3>The one thing the database does not know</h3>
-<pre><code><span class="tok-comment">// Prisma sees a relation. PostgreSQL sees a constraint.</span>
+<pre><code class="language-bash"><span class="tok-comment">// Prisma sees a relation. PostgreSQL sees a constraint.</span>
 docker exec -it pg-hoc psql -U student -d hocprisma -c "\\d posts"</code></pre>
 <div class="out">Indexes:
     "posts_pkey" PRIMARY KEY, btree (id)
@@ -160,7 +160,7 @@ Foreign-key constraints:
 <p class="lead">Một quan hệ dưới cơ sở dữ liệu là một cột kèm một ràng buộc. Một quan hệ trong Prisma là <em>ba</em> thứ: trường vô hướng giữ giá trị, trường bạn đi qua từ phía này, và trường bạn đi qua từ phía kia. Hiểu vì sao nó cần cả ba — và cái nào trong ba tồn tại dưới SQL — khiến mọi lỗi quan hệ trong chương này thành hiển nhiên thay vì bí ẩn.</p>
 
 <h3>Giải phẫu, dán nhãn</h3>
-<pre><code>model User {
+<pre><code class="language-typescript">model User {
   id    Int    @id @default(autoincrement())
   email String @unique
 
@@ -186,14 +186,14 @@ model Post {
 </div>
 
 <h3>Lỗi bạn sẽ gặp ở quan hệ đầu tiên của mình</h3>
-<pre><code><span class="tok-comment">// Post khai quan hệ; User không nói lại gì</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Post khai quan hệ; User không nói lại gì</span>
 model User { id       Int  @id @default(autoincrement()) }
 model    Post {
   id       Int  @id @default(autoincrement())
   authorId Int
   author   User @relation(fields: [authorId], references: [id])
 }</code></pre>
-<pre><code>npx prisma validate</code></pre>
+<pre><code class="language-bash">npx prisma validate</code></pre>
 <div class="out">error: Error validating field &#96;author&#96; in model &#96;Post&#96;: The relation field &#96;author&#96; on model &#96;Post&#96; is missing an opposite relation field on the model &#96;User&#96;. Either run &#96;prisma format&#96; or add it manually.
   --&gt;  prisma/schema.prisma:9
    |
@@ -234,7 +234,7 @@ Validation Error Count: 1</div>
 </div>
 
 <h3>Client được gì từ mỗi phía</h3>
-<pre><code><span class="tok-comment">// Từ phía sở hữu: lọc theo cột, hoặc đi qua quan hệ</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Từ phía sở hữu: lọc theo cột, hoặc đi qua quan hệ</span>
 await prisma.post.findMany({ where: { authorId: 1 } });                 <span class="tok-comment">// cột</span>
 await prisma.post.findMany({ where: { author: { email: 'an@x.com' } } });<span class="tok-comment">// quan hệ</span>
 await prisma.post.findMany({ include: { author: true } });
@@ -247,7 +247,7 @@ await prisma.user.findMany({ include: { _count: { select: { posts: true } } } })
 <p><code>some</code> đã thành một truy vấn con <code>EXISTS</code>, đúng thứ bạn sẽ viết bằng tay và đúng thứ bộ lập kế hoạch ưa. <code>none</code> thành <code>NOT EXISTS</code>, còn <code>every</code> thành một <code>NOT EXISTS</code> trên điều kiện phủ định — một mẩu logic rất dễ viết ngược trong SQL thô và không thể viết ngược ở đây.</p>
 
 <h3>Gán một quan hệ: ba cách, một cột</h3>
-<pre><code><span class="tok-comment">// A — ghi thẳng vào trường vô hướng. Đơn giản nhất, và không kiểm tồn tại.</span>
+<pre><code class="language-typescript"><span class="tok-comment">// A — ghi thẳng vào trường vô hướng. Đơn giản nhất, và không kiểm tồn tại.</span>
 await prisma.post.create({ data: { title: 'A', authorId: 1 } });
 
 <span class="tok-comment">// B — nối tới một hàng đã có. Prisma kiểm nó tồn tại trước.</span>
@@ -273,7 +273,7 @@ COMMIT</div>
 </div>
 
 <h3>Điều duy nhất cơ sở dữ liệu không biết</h3>
-<pre><code><span class="tok-comment">// Prisma nhìn thấy một quan hệ. PostgreSQL nhìn thấy một ràng buộc.</span>
+<pre><code class="language-bash"><span class="tok-comment">// Prisma nhìn thấy một quan hệ. PostgreSQL nhìn thấy một ràng buộc.</span>
 docker exec -it pg-hoc psql -U student -d hocprisma -c "\\d posts"</code></pre>
 <div class="out">Indexes:
     "posts_pkey" PRIMARY KEY, btree (id)
@@ -304,7 +304,7 @@ Foreign-key constraints:
 <p class="lead">One-to-many is nine relations out of ten. The declaration is easy; the part worth your attention is what happens when the parent row is deleted, because there are five answers, they behave very differently on real data, and the default is not what most people assume.</p>
 
 <h3>Required or optional — the choice that shapes your code</h3>
-<pre><code>model Post {
+<pre><code class="language-typescript">model Post {
   id         Int       @id @default(autoincrement())
   title      String
 
@@ -327,7 +327,7 @@ Foreign-key constraints:
 </div>
 
 <h3>The five behaviours, run against real rows</h3>
-<pre><code><span class="tok-comment">// Setup: one author, three posts, then delete the author</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Setup: one author, three posts, then delete the author</span>
 await prisma.user.create({
   data: {
     email: 'an@example.com',
@@ -342,7 +342,7 @@ await prisma.user.delete({ where: { email: 'an@example.com' } });</code></pre>
   <div class="lz-layer"><span class="lz-lname"><code>SetDefault</code> — reassign to a fallback</span><span class="lz-lnote">Children get the column's <code>@default</code>, so that default must reference a row that exists — an "unknown author" placeholder. Rarely used, and it fails loudly if the default id has itself been deleted.</span></div>
   <div class="lz-layer"><span class="lz-lname"><code>NoAction</code> — hand it to the database</span><span class="lz-lnote">Prisma emits no behaviour and lets the constraint decide. On PostgreSQL it behaves like <code>Restrict</code> but can be deferred to the end of a transaction, which is the one thing <code>Restrict</code> cannot do. Reach for it only when you need that.</span></div>
 </div>
-<pre><code><span class="tok-comment">// Restrict (the default) — what the failure looks like</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Restrict (the default) — what the failure looks like</span>
 await prisma.user.delete({ where: { email: 'an@example.com' } });</code></pre>
 <div class="out">PrismaClientKnownRequestError:
 Invalid &#96;prisma.user.delete()&#96; invocation:
@@ -373,13 +373,13 @@ category   Category? @relation(fields: [categoryId], references: [id], onDelete:
 </div>
 
 <h3>Cascade depth: the thing to check before you ship it</h3>
-<pre><code>model User    { id Int @id  posts Post[] }
+<pre><code class="language-typescript">model User    { id Int @id  posts Post[] }
 model Post    { id Int @id  authorId Int  author User @relation(fields:[authorId], references:[id], onDelete: Cascade)
                 comments Comment[] }
 model Comment { id Int @id  postId Int  post Post @relation(fields:[postId], references:[id], onDelete: Cascade)
                 reactions Reaction[] }
 model Reaction{ id Int @id  commentId Int comment Comment @relation(fields:[commentId], references:[id], onDelete: Cascade) }</code></pre>
-<pre><code><span class="tok-comment">-- Before deleting one user, ask what goes with them</span>
+<pre><code class="language-sql"><span class="tok-comment">-- Before deleting one user, ask what goes with them</span>
 SELECT
   (SELECT count(*) FROM posts     WHERE author_id = 1)                          AS posts,
   (SELECT count(*) FROM comments  WHERE post_id IN (SELECT id FROM posts WHERE author_id = 1)) AS comments,
@@ -393,7 +393,7 @@ SELECT
 </div>
 
 <h3>Reading and writing the "many" side</h3>
-<pre><code><span class="tok-comment">// Filter the children as you include them</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Filter the children as you include them</span>
 const u = await prisma.user.findUniqueOrThrow({
   where: { id: 1 },
   include: {
@@ -443,7 +443,7 @@ prisma:query COMMIT</div>
 <p class="lead">Một–nhiều chiếm chín trên mười quan hệ. Phần khai báo thì dễ; phần đáng để bạn chú ý là chuyện gì xảy ra khi hàng cha bị xoá, vì có tới năm câu trả lời, chúng cư xử rất khác nhau trên dữ liệu thật, và giá trị mặc định không phải thứ phần lớn người ta tưởng.</p>
 
 <h3>Bắt buộc hay tuỳ chọn — lựa chọn định hình mã của bạn</h3>
-<pre><code>model Post {
+<pre><code class="language-typescript">model Post {
   id         Int       @id @default(autoincrement())
   title      String
 
@@ -466,7 +466,7 @@ prisma:query COMMIT</div>
 </div>
 
 <h3>Năm hành vi, chạy trên hàng dữ liệu thật</h3>
-<pre><code><span class="tok-comment">// Dựng: một tác giả, ba bài viết, rồi xoá tác giả</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Dựng: một tác giả, ba bài viết, rồi xoá tác giả</span>
 await prisma.user.create({
   data: {
     email: 'an@example.com',
@@ -481,7 +481,7 @@ await prisma.user.delete({ where: { email: 'an@example.com' } });</code></pre>
   <div class="lz-layer"><span class="lz-lname"><code>SetDefault</code> — chuyển sang một giá trị dự phòng</span><span class="lz-lnote">Con nhận <code>@default</code> của cột, nên cái mặc định đó phải trỏ tới một hàng có thật — một "tác giả không rõ" đóng thế. Ít dùng, và nó hỏng rất ầm ĩ nếu chính cái id mặc định cũng đã bị xoá.</span></div>
   <div class="lz-layer"><span class="lz-lname"><code>NoAction</code> — trao lại cho cơ sở dữ liệu</span><span class="lz-lnote">Prisma không phát ra hành vi nào và để ràng buộc tự quyết. Trên PostgreSQL nó hành xử như <code>Restrict</code> nhưng hoãn được tới cuối giao dịch, và đó là điều duy nhất <code>Restrict</code> không làm được. Chỉ với tay tới nó khi bạn cần đúng điều đó.</span></div>
 </div>
-<pre><code><span class="tok-comment">// Restrict (mặc định) — thất bại trông thế nào</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Restrict (mặc định) — thất bại trông thế nào</span>
 await prisma.user.delete({ where: { email: 'an@example.com' } });</code></pre>
 <div class="out">PrismaClientKnownRequestError:
 Invalid &#96;prisma.user.delete()&#96; invocation:
@@ -512,13 +512,13 @@ category   Category? @relation(fields: [categoryId], references: [id], onDelete:
 </div>
 
 <h3>Độ sâu dây chuyền: thứ cần kiểm trước khi đưa lên chạy</h3>
-<pre><code>model User    { id Int @id  posts Post[] }
+<pre><code class="language-typescript">model User    { id Int @id  posts Post[] }
 model Post    { id Int @id  authorId Int  author User @relation(fields:[authorId], references:[id], onDelete: Cascade)
                 comments Comment[] }
 model Comment { id Int @id  postId Int  post Post @relation(fields:[postId], references:[id], onDelete: Cascade)
                 reactions Reaction[] }
 model Reaction{ id Int @id  commentId Int comment Comment @relation(fields:[commentId], references:[id], onDelete: Cascade) }</code></pre>
-<pre><code><span class="tok-comment">-- Trước khi xoá một người dùng, hỏi xem cái gì đi theo họ</span>
+<pre><code class="language-sql"><span class="tok-comment">-- Trước khi xoá một người dùng, hỏi xem cái gì đi theo họ</span>
 SELECT
   (SELECT count(*) FROM posts     WHERE author_id = 1)                          AS posts,
   (SELECT count(*) FROM comments  WHERE post_id IN (SELECT id FROM posts WHERE author_id = 1)) AS comments,
@@ -532,7 +532,7 @@ SELECT
 </div>
 
 <h3>Đọc và ghi phía "nhiều"</h3>
-<pre><code><span class="tok-comment">// Lọc các con ngay lúc include chúng</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Lọc các con ngay lúc include chúng</span>
 const u = await prisma.user.findUniqueOrThrow({
   where: { id: 1 },
   include: {
@@ -591,7 +591,7 @@ prisma:query COMMIT</div>
 <p class="lead">A one-to-one relation is a one-to-many with a <code>@unique</code> on the foreign key. That is the entire mechanism, and it explains everything that follows — including why a required one-to-one on both sides is not something you can build, and why choosing the wrong side to hold the key can make a whole model uncreatable.</p>
 
 <h3>The declaration</h3>
-<pre><code>model User {
+<pre><code class="language-typescript">model User {
   id      Int      @id @default(autoincrement())
   email   String   @unique
 
@@ -625,7 +625,7 @@ ALTER TABLE "profiles" ADD CONSTRAINT "profiles_user_id_fkey"
 </div>
 
 <h3>Which side holds the key — and why it decides your code</h3>
-<pre><code><span class="tok-comment">// WRONG WAY ROUND — User holds the key to Profile</span>
+<pre><code class="language-typescript"><span class="tok-comment">// WRONG WAY ROUND — User holds the key to Profile</span>
 model User {
   id        Int     @id @default(autoincrement())
   email     String  @unique
@@ -637,7 +637,7 @@ model Profile {
   bio  String?
   user User?
 }</code></pre>
-<pre><code><span class="tok-comment">// Now try to register a new user with no profile yet</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Now try to register a new user with no profile yet</span>
 await prisma.user.create({ data: { email: 'moi@example.com' } });</code></pre>
 <div class="out">TypeScript error:
 Property 'profile' is missing in type '{ email: string; }' but required in type 'UserCreateInput'.
@@ -654,7 +654,7 @@ await prisma.user.create({
 </div>
 
 <h3>The relation you cannot express</h3>
-<pre><code><span class="tok-comment">// Required on BOTH sides — a user must have a profile AND vice versa</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Required on BOTH sides — a user must have a profile AND vice versa</span>
 model User    { id Int @id  profile Profile }   <span class="tok-comment">// no ?</span>
 model Profile { id Int @id  userId Int @unique  user User @relation(...) }</code></pre>
 <div class="out">error: Error parsing attribute "@relation": The relation field &#96;profile&#96; on model &#96;User&#96; is required. This is no longer valid because it's not possible to enforce this constraint on the database level.</div>
@@ -668,7 +668,7 @@ model Profile { id Int @id  userId Int @unique  user User @relation(...) }</code
   <div class="kv"><span class="k">Do not split — three fields you always read</span><span class="v"><code>bio</code>, <code>avatar</code>, <code>website</code> on a profile page you load with the user anyway. That is a join on every request in exchange for nothing. Put them on <code>users</code>.</span></div>
   <div class="kv"><span class="k">Do not split — to "keep the model tidy"</span><span class="v">A table is a storage decision, not an organisational one. Tidy your code with modules; leave the schema shaped by how the data is read and written.</span></div>
 </div>
-<pre><code><span class="tok-comment">// From the CuongThai schema: extended profile fields live ON the user table,</span>
+<pre><code class="language-typescript"><span class="tok-comment">// From the CuongThai schema: extended profile fields live ON the user table,</span>
 <span class="tok-comment">// because they are loaded with every profile view. Splitting would buy nothing.</span>
 model User {
   id            Int       @id @default(autoincrement())
@@ -684,7 +684,7 @@ model User {
 }</code></pre>
 
 <h3>Working with it from the client</h3>
-<pre><code><span class="tok-comment">// Create both at once</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Create both at once</span>
 await prisma.user.create({
   data: { email: 'an@example.com', profile: { create: { bio: 'Xin chao' } } },
 });
@@ -714,7 +714,7 @@ const p = await prisma.user.findUnique({ where: { id: 1 } }).profile();</code></
 </div>
 
 <h3>The other one-to-one: sharing a primary key</h3>
-<pre><code><span class="tok-comment">// The Profile's id IS the User's id — no separate key, no separate sequence</span>
+<pre><code class="language-typescript"><span class="tok-comment">// The Profile's id IS the User's id — no separate key, no separate sequence</span>
 model Profile {
   id   Int     @id                         <span class="tok-comment">// no @default — it comes from User</span>
   bio  String?
@@ -741,7 +741,7 @@ model Profile {
 <p class="lead">Một quan hệ một–một chính là một–nhiều cộng thêm một <code>@unique</code> trên khoá ngoại. Đó là toàn bộ cơ chế, và nó giải thích mọi thứ theo sau — kể cả vì sao một quan hệ một–một bắt buộc ở cả hai phía là thứ bạn không dựng được, và vì sao chọn nhầm phía giữ khoá có thể khiến cả một model không tạo nổi.</p>
 
 <h3>Cách khai</h3>
-<pre><code>model User {
+<pre><code class="language-typescript">model User {
   id      Int      @id @default(autoincrement())
   email   String   @unique
 
@@ -775,7 +775,7 @@ ALTER TABLE "profiles" ADD CONSTRAINT "profiles_user_id_fkey"
 </div>
 
 <h3>Phía nào giữ khoá — và vì sao nó quyết định mã của bạn</h3>
-<pre><code><span class="tok-comment">// NGƯỢC ĐỜI — User giữ khoá tới Profile</span>
+<pre><code class="language-typescript"><span class="tok-comment">// NGƯỢC ĐỜI — User giữ khoá tới Profile</span>
 model User {
   id        Int     @id @default(autoincrement())
   email     String  @unique
@@ -787,7 +787,7 @@ model Profile {
   bio  String?
   user User?
 }</code></pre>
-<pre><code><span class="tok-comment">// Giờ thử đăng ký một người dùng mới chưa có hồ sơ</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Giờ thử đăng ký một người dùng mới chưa có hồ sơ</span>
 await prisma.user.create({ data: { email: 'moi@example.com' } });</code></pre>
 <div class="out">TypeScript error:
 Property 'profile' is missing in type '{ email: string; }' but required in type 'UserCreateInput'.
@@ -804,7 +804,7 @@ await prisma.user.create({
 </div>
 
 <h3>Quan hệ bạn không diễn đạt được</h3>
-<pre><code><span class="tok-comment">// Bắt buộc ở CẢ HAI phía — người dùng phải có hồ sơ VÀ ngược lại</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Bắt buộc ở CẢ HAI phía — người dùng phải có hồ sơ VÀ ngược lại</span>
 model User    { id Int @id  profile Profile }   <span class="tok-comment">// không có ?</span>
 model Profile { id Int @id  userId Int @unique  user User @relation(...) }</code></pre>
 <div class="out">error: Error parsing attribute "@relation": The relation field &#96;profile&#96; on model &#96;User&#96; is required. This is no longer valid because it's not possible to enforce this constraint on the database level.</div>
@@ -818,7 +818,7 @@ model Profile { id Int @id  userId Int @unique  user User @relation(...) }</code
   <div class="kv"><span class="k">Đừng tách — ba trường bạn luôn đọc cùng nhau</span><span class="v"><code>bio</code>, <code>avatar</code>, <code>website</code> trên một trang hồ sơ mà bạn vốn đã nạp cùng người dùng. Đó là một phép join ở mọi yêu cầu để đổi lấy con số không. Cứ để chúng trên <code>users</code>.</span></div>
   <div class="kv"><span class="k">Đừng tách — để "cho model gọn gàng"</span><span class="v">Một cái bảng là quyết định lưu trữ, không phải quyết định sắp xếp. Hãy dọn mã bằng module; để lược đồ được định hình bởi cách dữ liệu được đọc và ghi.</span></div>
 </div>
-<pre><code><span class="tok-comment">// Từ lược đồ CuongThai: các trường hồ sơ mở rộng nằm NGAY TRÊN bảng user,</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Từ lược đồ CuongThai: các trường hồ sơ mở rộng nằm NGAY TRÊN bảng user,</span>
 <span class="tok-comment">// vì chúng được nạp cùng mọi lần xem hồ sơ. Tách ra chẳng đổi lại được gì.</span>
 model User {
   id            Int       @id @default(autoincrement())
@@ -834,7 +834,7 @@ model User {
 }</code></pre>
 
 <h3>Làm việc với nó từ phía client</h3>
-<pre><code><span class="tok-comment">// Tạo cả hai cùng lúc</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Tạo cả hai cùng lúc</span>
 await prisma.user.create({
   data: { email: 'an@example.com', profile: { create: { bio: 'Xin chao' } } },
 });
@@ -864,7 +864,7 @@ const p = await prisma.user.findUnique({ where: { id: 1 } }).profile();</code></
 </div>
 
 <h3>Dạng một–một còn lại: dùng chung khoá chính</h3>
-<pre><code><span class="tok-comment">// id của Profile CHÍNH LÀ id của User — không khoá riêng, không sequence riêng</span>
+<pre><code class="language-typescript"><span class="tok-comment">// id của Profile CHÍNH LÀ id của User — không khoá riêng, không sequence riêng</span>
 model Profile {
   id   Int     @id                         <span class="tok-comment">// không @default — nó đến từ User</span>
   bio  String?
@@ -900,7 +900,7 @@ model Profile {
 <p class="lead">Many-to-many needs a third table. Prisma offers to create and manage it invisibly, which is delightful for about six months and then becomes the migration you were putting off. This lesson shows both forms, the exact moment the implicit one stops being enough, and how to convert without losing rows.</p>
 
 <h3>Implicit: two lines, no join model</h3>
-<pre><code>model Post {
+<pre><code class="language-typescript">model Post {
   id         Int        @id @default(autoincrement())
   title      String
   categories Category[] <span class="tok-comment">// that is all</span>
@@ -911,7 +911,7 @@ model Category {
   name  String @unique
   posts Post[] <span class="tok-comment">// and that</span>
 }</code></pre>
-<pre><code>npx prisma migrate dev --name nhieu_nhieu_an
+<pre><code class="language-bash">npx prisma migrate dev --name nhieu_nhieu_an
 docker exec -it pg-hoc psql -U student -d hocprisma -c "\\d \\"_CategoryToPost\\""</code></pre>
 <div class="out">           Table "public._CategoryToPost"
  Column |  Type   | Nullable | Default
@@ -930,7 +930,7 @@ Foreign-key constraints:
   <div class="lz-step"><span class="lz-k">Cascades</span><span class="lz-t">Always <code>ON DELETE CASCADE</code></span><span class="lz-d">Not configurable. Delete a post and its links vanish, which is correct — a link to a deleted row is meaningless.</span></div>
   <div class="lz-step"><span class="lz-k">Visibility</span><span class="lz-t">Absent from Prisma Client</span><span class="lz-d">There is no <code>prisma.categoryToPost</code>. You manipulate the relation only through <code>connect</code>, <code>disconnect</code> and <code>set</code> on either side.</span></div>
 </div>
-<pre><code><span class="tok-comment">// The whole API for an implicit many-to-many</span>
+<pre><code class="language-typescript"><span class="tok-comment">// The whole API for an implicit many-to-many</span>
 await prisma.post.create({
   data: { title: 'A', categories: { connect: [{ id: 1 }, { id: 2 }] } },
 });
@@ -961,7 +961,7 @@ prisma:query INSERT INTO "public"."_CategoryToPost" ("A","B") VALUES ($1,$2), ($
 </div>
 
 <h3>Explicit: the join table as a model you own</h3>
-<pre><code>model Post {
+<pre><code class="language-typescript">model Post {
   id         Int            @id @default(autoincrement())
   title      String
   categories PostCategory[]
@@ -995,7 +995,7 @@ model PostCategory {
   <div class="kv"><span class="k">You get per-side cascades</span><span class="v">Here: delete a post and its links go; delete a category and the delete is <em>refused</em> while posts still use it. The implicit table cascades both ways with no choice.</span></div>
   <div class="kv"><span class="k">You pay in verbosity</span><span class="v"><code>connect</code> becomes a nested create through the join model. Every query gains one level of nesting. It is more code for more control, and it is the right trade more often than people expect.</span></div>
 </div>
-<pre><code><span class="tok-comment">// Writing through an explicit join</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Writing through an explicit join</span>
 await prisma.post.create({
   data: {
     title: 'Bai moi',
@@ -1047,7 +1047,7 @@ const stats = await prisma.postCategory.groupBy({
 </div>
 
 <h3>Converting implicit to explicit, without losing rows</h3>
-<pre><code><span class="tok-comment">-- Hand-written migration. The old table's columns are A and B, alphabetically:</span>
+<pre><code class="language-sql"><span class="tok-comment">-- Hand-written migration. The old table's columns are A and B, alphabetically:</span>
 <span class="tok-comment">-- A = Category (the alphabetically first model), B = Post.</span>
 
 CREATE TABLE "post_category" (
@@ -1070,7 +1070,7 @@ ALTER TABLE "post_category" ADD CONSTRAINT "post_category_category_id_fkey"
 
 <span class="tok-comment">-- Only now, and only after verifying the counts match</span>
 DROP TABLE "_CategoryToPost";</code></pre>
-<pre><code><span class="tok-comment">-- The verification that must pass before the DROP</span>
+<pre><code class="language-sql"><span class="tok-comment">-- The verification that must pass before the DROP</span>
 SELECT (SELECT count(*) FROM "_CategoryToPost") AS cu,
        (SELECT count(*) FROM "post_category")   AS moi;</code></pre>
 <div class="out"> cu  | moi
@@ -1093,7 +1093,7 @@ SELECT (SELECT count(*) FROM "_CategoryToPost") AS cu,
 <p class="lead">Nhiều–nhiều cần một bảng thứ ba. Prisma đề nghị tạo và quản lý nó một cách vô hình, và điều đó thật dễ chịu trong khoảng sáu tháng rồi trở thành cái migration bạn cứ hoãn mãi. Bài này chỉ cả hai dạng, đúng thời điểm dạng ẩn ngừng đủ dùng, và cách chuyển đổi mà không mất hàng nào.</p>
 
 <h3>Ẩn: hai dòng, không có model nối</h3>
-<pre><code>model Post {
+<pre><code class="language-typescript">model Post {
   id         Int        @id @default(autoincrement())
   title      String
   categories Category[] <span class="tok-comment">// chỉ vậy thôi</span>
@@ -1104,7 +1104,7 @@ model Category {
   name  String @unique
   posts Post[] <span class="tok-comment">// và vậy</span>
 }</code></pre>
-<pre><code>npx prisma migrate dev --name nhieu_nhieu_an
+<pre><code class="language-bash">npx prisma migrate dev --name nhieu_nhieu_an
 docker exec -it pg-hoc psql -U student -d hocprisma -c "\\d \\"_CategoryToPost\\""</code></pre>
 <div class="out">           Table "public._CategoryToPost"
  Column |  Type   | Nullable | Default
@@ -1123,7 +1123,7 @@ Foreign-key constraints:
   <div class="lz-step"><span class="lz-k">Dây chuyền</span><span class="lz-t">Luôn <code>ON DELETE CASCADE</code></span><span class="lz-d">Không cấu hình được. Xoá một bài viết thì các mối nối của nó biến mất, và như thế là đúng — một mối nối tới một hàng đã bị xoá thì vô nghĩa.</span></div>
   <div class="lz-step"><span class="lz-k">Khả kiến</span><span class="lz-t">Vắng mặt khỏi Prisma Client</span><span class="lz-d">Không có <code>prisma.categoryToPost</code>. Bạn chỉ thao tác quan hệ ấy qua <code>connect</code>, <code>disconnect</code> và <code>set</code> từ một trong hai phía.</span></div>
 </div>
-<pre><code><span class="tok-comment">// Toàn bộ API của một quan hệ nhiều–nhiều ẩn</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Toàn bộ API của một quan hệ nhiều–nhiều ẩn</span>
 await prisma.post.create({
   data: { title: 'A', categories: { connect: [{ id: 1 }, { id: 2 }] } },
 });
@@ -1154,7 +1154,7 @@ prisma:query INSERT INTO "public"."_CategoryToPost" ("A","B") VALUES ($1,$2), ($
 </div>
 
 <h3>Tường minh: bảng nối là một model do bạn sở hữu</h3>
-<pre><code>model Post {
+<pre><code class="language-typescript">model Post {
   id         Int            @id @default(autoincrement())
   title      String
   categories PostCategory[]
@@ -1188,7 +1188,7 @@ model PostCategory {
   <div class="kv"><span class="k">Bạn có dây chuyền riêng cho từng phía</span><span class="v">Ở đây: xoá một bài viết thì các mối nối đi theo; xoá một chuyên mục thì lệnh xoá bị <em>từ chối</em> khi vẫn còn bài dùng nó. Bảng ẩn thì cascade cả hai chiều, không cho chọn.</span></div>
   <div class="kv"><span class="k">Bạn trả giá bằng sự dài dòng</span><span class="v"><code>connect</code> trở thành một lệnh create lồng qua model nối. Mọi truy vấn mọc thêm một tầng lồng. Nhiều mã hơn để đổi lấy nhiều quyền kiểm soát hơn, và đó là đánh đổi đúng đắn thường xuyên hơn người ta tưởng.</span></div>
 </div>
-<pre><code><span class="tok-comment">// Ghi qua một bảng nối tường minh</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Ghi qua một bảng nối tường minh</span>
 await prisma.post.create({
   data: {
     title: 'Bai moi',
@@ -1240,7 +1240,7 @@ const stats = await prisma.postCategory.groupBy({
 </div>
 
 <h3>Chuyển từ ẩn sang tường minh mà không mất hàng nào</h3>
-<pre><code><span class="tok-comment">-- Migration viết tay. Hai cột của bảng cũ là A và B, theo thứ tự chữ cái:</span>
+<pre><code class="language-sql"><span class="tok-comment">-- Migration viết tay. Hai cột của bảng cũ là A và B, theo thứ tự chữ cái:</span>
 <span class="tok-comment">-- A = Category (model đứng trước theo bảng chữ cái), B = Post.</span>
 
 CREATE TABLE "post_category" (
@@ -1263,7 +1263,7 @@ ALTER TABLE "post_category" ADD CONSTRAINT "post_category_category_id_fkey"
 
 <span class="tok-comment">-- Chỉ tới lúc này, và chỉ sau khi đã đối chiếu số lượng khớp</span>
 DROP TABLE "_CategoryToPost";</code></pre>
-<pre><code><span class="tok-comment">-- Phép kiểm bắt buộc phải qua trước khi DROP</span>
+<pre><code class="language-sql"><span class="tok-comment">-- Phép kiểm bắt buộc phải qua trước khi DROP</span>
 SELECT (SELECT count(*) FROM "_CategoryToPost") AS cu,
        (SELECT count(*) FROM "post_category")   AS moi;</code></pre>
 <div class="out"> cu  | moi
@@ -1295,7 +1295,7 @@ SELECT (SELECT count(*) FROM "_CategoryToPost") AS cu,
 <p class="lead">Two situations make Prisma unable to guess which field pairs with which: a model that relates to itself, and two models connected more than once. Both are solved by the same argument — <code>@relation("Ten")</code> — and both produce error messages that are perfectly clear once you know what they are about. This lesson covers the shapes and then the query that self-relations always eventually need.</p>
 
 <h3>Self-relation, one-to-many: a comment tree</h3>
-<pre><code>model Comment {
+<pre><code class="language-typescript">model Comment {
   id       Int       @id @default(autoincrement())
   body     String
   postId   Int       @map("post_id")
@@ -1314,7 +1314,7 @@ SELECT (SELECT count(*) FROM "_CategoryToPost") AS cu,
   <div class="lz-step"><span class="lz-k"><code>onDelete: Cascade</code> recurses</span><span class="lz-t">Deleting a comment deletes its whole subtree</span><span class="lz-d">PostgreSQL follows the cascade down every level. Usually what you want for replies; check the depth before you rely on it.</span></div>
   <div class="lz-step"><span class="lz-k">Index the parent</span><span class="lz-t"><code>@@index([parentId])</code></span><span class="lz-d">"Give me the replies to this comment" is the query the whole feature is built on, and it is a sequential scan without this line.</span></div>
 </div>
-<pre><code><span class="tok-comment">// Reading a fixed depth is easy — and each level is one more query</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Reading a fixed depth is easy — and each level is one more query</span>
 const roots = await prisma.comment.findMany({
   where: { postId: 1, parentId: null },
   include: { replies: { include: { replies: true } } },   <span class="tok-comment">// three levels</span>
@@ -1328,7 +1328,7 @@ prisma:query SELECT ... FROM "comments" WHERE "parent_id" IN ($1,$2,$3,$4,$5,$6,
 </div>
 
 <h3>The query a comment tree eventually needs</h3>
-<pre><code><span class="tok-comment">// A recursive CTE: the whole subtree, any depth, in ONE query</span>
+<pre><code class="language-sql"><span class="tok-comment">// A recursive CTE: the whole subtree, any depth, in ONE query</span>
 type Node = { id: number; body: string; parentId: number | null; depth: number; path: number[] };
 
 const tree = await prisma.$queryRaw&lt;Node[]&gt;&#96;
@@ -1357,7 +1357,7 @@ const tree = await prisma.$queryRaw&lt;Node[]&gt;&#96;
 </div>
 
 <h3>Self-relation, one-to-one: the manager chain</h3>
-<pre><code>model Employee {
+<pre><code class="language-typescript">model Employee {
   id       Int       @id @default(autoincrement())
   name     String
 
@@ -1371,7 +1371,7 @@ const tree = await prisma.$queryRaw&lt;Node[]&gt;&#96;
 <p>Note that both sides are optional, and both must be — exactly as in Lesson 3.3, and for the same reason. Drop the <code>@unique</code> and you are back to a one-to-many, which is the shape an org chart usually actually wants: one manager, many reports.</p>
 
 <h3>Self-relation, many-to-many: following</h3>
-<pre><code>model User {
+<pre><code class="language-typescript">model User {
   id           Int    @id @default(autoincrement())
   username     String @unique
 
@@ -1379,7 +1379,7 @@ const tree = await prisma.$queryRaw&lt;Node[]&gt;&#96;
   dangTheoDoi  User[] @relation("TheoDoi")
   nguoiTheoDoi User[] @relation("TheoDoi")
 }</code></pre>
-<pre><code><span class="tok-comment">// Explicit, once you want to know WHEN — which you always eventually do</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Explicit, once you want to know WHEN — which you always eventually do</span>
 model User {
   id           Int      @id @default(autoincrement())
   username     String   @unique
@@ -1405,12 +1405,12 @@ model Follow {
   <div class="kv"><span class="k">Index the reverse direction</span><span class="v">The primary key indexes <code>(follower, followee)</code>, which serves "who do I follow". "Who follows me" needs <code>@@index([followingId])</code> or it scans.</span></div>
   <div class="kv"><span class="k">What it still cannot stop</span><span class="v">Following yourself. No schema constraint expresses that in Prisma — it needs a database <code>CHECK</code> constraint added by hand, or a check in your service layer.</span></div>
 </div>
-<pre><code><span class="tok-comment">-- The CHECK Prisma cannot declare, added in a hand-written migration</span>
+<pre><code class="language-sql"><span class="tok-comment">-- The CHECK Prisma cannot declare, added in a hand-written migration</span>
 ALTER TABLE "follow" ADD CONSTRAINT "follow_khong_tu_theo_doi"
   CHECK ("nguoi_theo_doi_id" &lt;&gt; "nguoi_duoc_theo_doi_id");</code></pre>
 
 <h3>Two models, two relations</h3>
-<pre><code>model User {
+<pre><code class="language-typescript">model User {
   id       Int    @id @default(autoincrement())
   username String @unique
 
@@ -1431,7 +1431,7 @@ model Post {
   @@index([authorId])
   @@index([approverId])
 }</code></pre>
-<pre><code><span class="tok-comment">// Remove the names and see what Prisma says</span>
+<pre><code class="language-bash"><span class="tok-comment">// Remove the names and see what Prisma says</span>
 npx prisma validate</code></pre>
 <div class="out">error: Error validating model "Post": Ambiguous relation detected. The fields &#96;author&#96; and &#96;nguoiDuyet&#96; in model &#96;Post&#96; both refer to &#96;User&#96;. Please provide different relation names for them by adding &#96;@relation(&lt;name&gt;)&#96;.
   --&gt;  prisma/schema.prisma:18</div>
@@ -1465,7 +1465,7 @@ categories Category[] @relation("PhanLoai")</code></pre>
 <p class="lead">Có hai tình huống khiến Prisma không đoán nổi trường nào ghép với trường nào: một model quan hệ với chính nó, và hai model nối với nhau nhiều hơn một lần. Cả hai đều được giải bằng cùng một tham số — <code>@relation("Ten")</code> — và cả hai đều sinh ra những thông báo lỗi hoàn toàn rõ ràng, một khi bạn biết chúng nói về chuyện gì. Bài này nói các hình dạng, rồi tới câu truy vấn mà tự quan hệ rốt cuộc bao giờ cũng cần.</p>
 
 <h3>Tự quan hệ, một–nhiều: cây bình luận</h3>
-<pre><code>model Comment {
+<pre><code class="language-typescript">model Comment {
   id       Int       @id @default(autoincrement())
   body     String
   postId   Int       @map("post_id")
@@ -1484,7 +1484,7 @@ categories Category[] @relation("PhanLoai")</code></pre>
   <div class="lz-step"><span class="lz-k"><code>onDelete: Cascade</code> đi đệ quy</span><span class="lz-t">Xoá một bình luận là xoá cả cây con của nó</span><span class="lz-d">PostgreSQL đi theo dây chuyền xuống mọi tầng. Thường là đúng ý cho phần trả lời; hãy kiểm độ sâu trước khi trông cậy vào nó.</span></div>
   <div class="lz-step"><span class="lz-k">Đánh chỉ mục cho cha</span><span class="lz-t"><code>@@index([parentId])</code></span><span class="lz-d">"Cho tôi các trả lời của bình luận này" là câu truy vấn mà cả tính năng dựng trên nó, và nó là một lần quét tuần tự nếu thiếu dòng này.</span></div>
 </div>
-<pre><code><span class="tok-comment">// Đọc một độ sâu cố định thì dễ — và mỗi tầng là thêm một câu truy vấn</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Đọc một độ sâu cố định thì dễ — và mỗi tầng là thêm một câu truy vấn</span>
 const roots = await prisma.comment.findMany({
   where: { postId: 1, parentId: null },
   include: { replies: { include: { replies: true } } },   <span class="tok-comment">// ba tầng</span>
@@ -1498,7 +1498,7 @@ prisma:query SELECT ... FROM "comments" WHERE "parent_id" IN ($1,$2,$3,$4,$5,$6,
 </div>
 
 <h3>Câu truy vấn mà một cây bình luận rốt cuộc sẽ cần</h3>
-<pre><code><span class="tok-comment">// Một CTE đệ quy: cả cây con, sâu bao nhiêu cũng được, trong MỘT câu truy vấn</span>
+<pre><code class="language-sql"><span class="tok-comment">// Một CTE đệ quy: cả cây con, sâu bao nhiêu cũng được, trong MỘT câu truy vấn</span>
 type Node = { id: number; body: string; parentId: number | null; depth: number; path: number[] };
 
 const tree = await prisma.$queryRaw&lt;Node[]&gt;&#96;
@@ -1527,7 +1527,7 @@ const tree = await prisma.$queryRaw&lt;Node[]&gt;&#96;
 </div>
 
 <h3>Tự quan hệ, một–một: chuỗi quản lý</h3>
-<pre><code>model Employee {
+<pre><code class="language-typescript">model Employee {
   id       Int       @id @default(autoincrement())
   name     String
 
@@ -1541,7 +1541,7 @@ const tree = await prisma.$queryRaw&lt;Node[]&gt;&#96;
 <p>Để ý cả hai phía đều tuỳ chọn, và bắt buộc phải thế — đúng như ở Bài 3.3, và vì cùng một lý do. Bỏ cái <code>@unique</code> đi thì bạn quay lại quan hệ một–nhiều, vốn mới là hình dạng mà một sơ đồ tổ chức thường thật sự muốn: một cấp trên, nhiều cấp dưới.</p>
 
 <h3>Tự quan hệ, nhiều–nhiều: theo dõi</h3>
-<pre><code>model User {
+<pre><code class="language-typescript">model User {
   id           Int    @id @default(autoincrement())
   username     String @unique
 
@@ -1549,7 +1549,7 @@ const tree = await prisma.$queryRaw&lt;Node[]&gt;&#96;
   dangTheoDoi  User[] @relation("TheoDoi")
   nguoiTheoDoi User[] @relation("TheoDoi")
 }</code></pre>
-<pre><code><span class="tok-comment">// Dạng tường minh, khi bạn muốn biết LÚC NÀO — và bao giờ bạn cũng sẽ muốn</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Dạng tường minh, khi bạn muốn biết LÚC NÀO — và bao giờ bạn cũng sẽ muốn</span>
 model User {
   id           Int      @id @default(autoincrement())
   username     String   @unique
@@ -1575,12 +1575,12 @@ model Follow {
   <div class="kv"><span class="k">Đánh chỉ mục cho chiều ngược</span><span class="v">Khoá chính đánh chỉ mục <code>(người theo dõi, người được theo dõi)</code>, phục vụ câu "tôi đang theo dõi ai". Câu "ai đang theo dõi tôi" cần <code>@@index([followingId])</code> nếu không nó quét.</span></div>
   <div class="kv"><span class="k">Thứ nó vẫn không chặn được</span><span class="v">Tự theo dõi chính mình. Không ràng buộc nào trong lược đồ Prisma diễn đạt được điều đó — nó cần một ràng buộc <code>CHECK</code> của cơ sở dữ liệu thêm bằng tay, hoặc một phép kiểm trong tầng dịch vụ của bạn.</span></div>
 </div>
-<pre><code><span class="tok-comment">-- Cái CHECK mà Prisma không khai được, thêm trong một migration viết tay</span>
+<pre><code class="language-sql"><span class="tok-comment">-- Cái CHECK mà Prisma không khai được, thêm trong một migration viết tay</span>
 ALTER TABLE "follow" ADD CONSTRAINT "follow_khong_tu_theo_doi"
   CHECK ("nguoi_theo_doi_id" &lt;&gt; "nguoi_duoc_theo_doi_id");</code></pre>
 
 <h3>Hai model, hai quan hệ</h3>
-<pre><code>model User {
+<pre><code class="language-typescript">model User {
   id       Int    @id @default(autoincrement())
   username String @unique
 
@@ -1601,7 +1601,7 @@ model Post {
   @@index([authorId])
   @@index([approverId])
 }</code></pre>
-<pre><code><span class="tok-comment">// Bỏ hai cái tên đi rồi xem Prisma nói gì</span>
+<pre><code class="language-bash"><span class="tok-comment">// Bỏ hai cái tên đi rồi xem Prisma nói gì</span>
 npx prisma validate</code></pre>
 <div class="out">error: Error validating model "Post": Ambiguous relation detected. The fields &#96;author&#96; and &#96;nguoiDuyet&#96; in model &#96;Post&#96; both refer to &#96;User&#96;. Please provide different relation names for them by adding &#96;@relation(&lt;name&gt;)&#96;.
   --&gt;  prisma/schema.prisma:18</div>

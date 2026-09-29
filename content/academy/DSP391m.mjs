@@ -358,7 +358,7 @@ const c5 = doc('dsp391m-5-1-model', 'Phase 5 — Modeling & training|||Giai đo�
 Regression     -&gt; Linear Regression, Random Forest, XGBoost
 Clustering     -&gt; K-Means, DBSCAN
 </code></pre>
-<pre><code>from sklearn.model_selection import train_test_split, cross_val_score
+<pre><code class="language-python">from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.ensemble import RandomForestClassifier
 
 X_tr, X_te, y_tr, y_te = train_test_split(X, y, test_size=0.2,
@@ -384,7 +384,7 @@ model.fit(X_tr, y_tr)
 Hồi quy    -&gt; Linear Regression, Random Forest, XGBoost
 Phân cụm   -&gt; K-Means, DBSCAN
 </code></pre>
-<pre><code>from sklearn.model_selection import train_test_split, cross_val_score
+<pre><code class="language-python">from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.ensemble import RandomForestClassifier
 
 X_tr, X_te, y_tr, y_te = train_test_split(X, y, test_size=0.2,
@@ -421,7 +421,7 @@ Regression:     MAE, RMSE, R2
 </code></pre>
 <p><strong>Precision</strong> = of those we flagged, how many were right. <strong>Recall</strong> = of the real positives, how many we caught. The business decides which matters more (fraud → recall; spam → precision).</p>
 <h3>Tune hyperparameters</h3>
-<pre><code>from sklearn.model_selection import GridSearchCV
+<pre><code class="language-python">from sklearn.model_selection import GridSearchCV
 grid = {"n_estimators": [100, 300], "max_depth": [None, 10, 20]}
 search = GridSearchCV(model, grid, cv=5, scoring="f1")
 search.fit(X_tr, y_tr)
@@ -440,7 +440,7 @@ Hồi quy:   MAE, RMSE, R2
 </code></pre>
 <p><strong>Precision</strong> = trong số ta gắn cờ, bao nhiêu đúng. <strong>Recall</strong> = trong số ca dương thật, ta bắt được bao nhiêu. Bài toán kinh doanh quyết định cái nào quan trọng hơn (gian lận → recall; spam → precision).</p>
 <h3>Tinh chỉnh siêu tham số</h3>
-<pre><code>from sklearn.model_selection import GridSearchCV
+<pre><code class="language-python">from sklearn.model_selection import GridSearchCV
 grid = {"n_estimators": [100, 300], "max_depth": [None, 10, 20]}
 search = GridSearchCV(model, grid, cv=5, scoring="f1")
 search.fit(X_tr, y_tr)
@@ -464,7 +464,7 @@ const c7 = doc('dsp391m-7-1-deploy', 'Phase 7 — Deployment, MLOps & dashboard|
 <h2>Deploy the model &amp; build a dashboard</h2>
 <p>A model in a notebook helps no one. CRISP-DM's final phase is <strong>Deployment</strong>: package the model so a real user can get a prediction. For a capstone, a small demo is enough — but do it properly.</p>
 <h3>Save &amp; serve</h3>
-<pre><code>import joblib
+<pre><code class="language-python">import joblib
 joblib.dump(model, "model.pkl")       # persist the trained model
 
 # serve it — a Streamlit app or a FastAPI endpoint
@@ -487,7 +487,7 @@ pred = loaded.predict(new_data)
 <h2>Triển khai mô hình &amp; dựng dashboard</h2>
 <p>Một mô hình nằm trong notebook chẳng giúp được ai. Giai đoạn cuối của CRISP-DM là <strong>Deployment</strong>: đóng gói mô hình để người dùng thật lấy được dự đoán. Với đồ án, một bản demo nhỏ là đủ — nhưng làm cho đàng hoàng.</p>
 <h3>Lưu &amp; phục vụ</h3>
-<pre><code>import joblib
+<pre><code class="language-python">import joblib
 joblib.dump(model, "model.pkl")       # lưu mô hình đã huấn luyện
 
 # phục vụ nó — app Streamlit hoặc endpoint FastAPI

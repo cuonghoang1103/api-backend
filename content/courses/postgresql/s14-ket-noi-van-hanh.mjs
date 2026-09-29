@@ -31,7 +31,7 @@ export default {
 
 <h3>Measure it</h3>
 <p>Three ways of running 50 trivial queries from Node.js with the <code>pg</code> driver, against the same local server:</p>
-<pre><code><span class="tok-comment">// A. một kết nối MỚI cho mỗi truy vấn</span>
+<pre><code class="language-javascript"><span class="tok-comment">// A. một kết nối MỚI cho mỗi truy vấn</span>
 <span class="tok-keyword">for</span> (<span class="tok-keyword">let</span> i = 0; i &lt; 50; i++) {
   <span class="tok-keyword">const</span> c = <span class="tok-keyword">new</span> pg.Client(CFG);
   <span class="tok-keyword">await</span> c.connect(); <span class="tok-keyword">await</span> c.query(<span class="tok-string">'SELECT 1'</span>); <span class="tok-keyword">await</span> c.end();
@@ -48,7 +48,7 @@ pool (max 10)            :    10.27 ms cho 50 → 0.205 ms/truy vấn
 
 <h3>The wall: max_connections</h3>
 <p>The server will not fork processes forever. Ask it where the limit is:</p>
-<pre><code><span class="tok-keyword">SHOW</span> max_connections;
+<pre><code class="language-sql"><span class="tok-keyword">SHOW</span> max_connections;
 <span class="tok-keyword">SHOW</span> superuser_reserved_connections;</code></pre>
 <div class="out"> max_connections | superuser_reserved_connections
 -----------------+--------------------------------
@@ -68,7 +68,7 @@ LỖI: sorry, too many clients already</div>
 <div class="callout warn">The dangerous property of this bug is that it is invisible until it is total. Under normal load the pools sit half-empty and nothing looks wrong. The first time every client is busy simultaneously, the 101st connection fails — and because a failing health check often triggers a restart, which opens fresh connections, the system can drive itself further into the wall.</div>
 
 <h3>Check your real usage</h3>
-<pre><code><span class="tok-keyword">SELECT</span> count(*) <span class="tok-keyword">AS</span> dang_dung,
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> count(*) <span class="tok-keyword">AS</span> dang_dung,
        (<span class="tok-keyword">SELECT</span> setting::int <span class="tok-keyword">FROM</span> pg_settings <span class="tok-keyword">WHERE</span> name=<span class="tok-string">'max_connections'</span>) <span class="tok-keyword">AS</span> toi_da
 <span class="tok-keyword">FROM</span> pg_stat_activity;</code></pre>
 <div class="out"> dang_dung | toi_da
@@ -91,7 +91,7 @@ LỖI: sorry, too many clients already</div>
 
 <h3>Đo nó</h3>
 <p>Ba cách chạy 50 truy vấn tầm thường từ Node.js bằng driver <code>pg</code>, tới cùng một máy chủ cục bộ:</p>
-<pre><code><span class="tok-comment">// A. một kết nối MỚI cho mỗi truy vấn</span>
+<pre><code class="language-javascript"><span class="tok-comment">// A. một kết nối MỚI cho mỗi truy vấn</span>
 <span class="tok-keyword">for</span> (<span class="tok-keyword">let</span> i = 0; i &lt; 50; i++) {
   <span class="tok-keyword">const</span> c = <span class="tok-keyword">new</span> pg.Client(CFG);
   <span class="tok-keyword">await</span> c.connect(); <span class="tok-keyword">await</span> c.query(<span class="tok-string">'SELECT 1'</span>); <span class="tok-keyword">await</span> c.end();
@@ -108,7 +108,7 @@ pool (max 10)            :    10.27 ms cho 50 → 0.205 ms/truy vấn
 
 <h3>Bức tường: max_connections</h3>
 <p>Máy chủ sẽ không fork tiến trình mãi mãi. Hỏi nó xem giới hạn nằm ở đâu:</p>
-<pre><code><span class="tok-keyword">SHOW</span> max_connections;
+<pre><code class="language-sql"><span class="tok-keyword">SHOW</span> max_connections;
 <span class="tok-keyword">SHOW</span> superuser_reserved_connections;</code></pre>
 <div class="out"> max_connections | superuser_reserved_connections
 -----------------+--------------------------------
@@ -128,7 +128,7 @@ LỖI: sorry, too many clients already</div>
 <div class="callout warn">Tính chất nguy hiểm của con bug này là nó VÔ HÌNH cho tới khi nó TOÀN PHẦN. Ở tải bình thường các pool nằm vơi một nửa và chẳng có gì trông có vẻ sai. Lần đầu tiên mọi client cùng bận đồng thời, kết nối thứ 101 hỏng — và vì một health check hỏng thường kích hoạt restart, mà restart thì mở kết nối mới, hệ thống có thể tự lái mình đâm sâu hơn vào tường.</div>
 
 <h3>Kiểm mức dùng THẬT của bạn</h3>
-<pre><code><span class="tok-keyword">SELECT</span> count(*) <span class="tok-keyword">AS</span> dang_dung,
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> count(*) <span class="tok-keyword">AS</span> dang_dung,
        (<span class="tok-keyword">SELECT</span> setting::int <span class="tok-keyword">FROM</span> pg_settings <span class="tok-keyword">WHERE</span> name=<span class="tok-string">'max_connections'</span>) <span class="tok-keyword">AS</span> toi_da
 <span class="tok-keyword">FROM</span> pg_stat_activity;</code></pre>
 <div class="out"> dang_dung | toi_da
@@ -264,7 +264,7 @@ cuongthai.com:  12 × 10 = 120   >   max_connections = 100   ❌</div>
 
 <h3>Autovacuum's actual threshold</h3>
 <p>Autovacuum is a background process that vacuums tables when they have accumulated enough dead rows. "Enough" is computed, and you can read the inputs:</p>
-<pre><code><span class="tok-keyword">SELECT</span> name, setting, unit <span class="tok-keyword">FROM</span> pg_settings
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> name, setting, unit <span class="tok-keyword">FROM</span> pg_settings
 <span class="tok-keyword">WHERE</span> name <span class="tok-keyword">LIKE</span> <span class="tok-string">'autovacuum%'</span> <span class="tok-keyword">ORDER BY</span> name;</code></pre>
 <div class="out">              name               | setting | unit
 ---------------------------------+---------+------
@@ -284,7 +284,7 @@ cuongthai.com:  12 × 10 = 120   >   max_connections = 100   ❌</div>
 
 <h3>Watch it fire</h3>
 <p>Give a small table an aggressive threshold, make 1,000 rows dead, and wait:</p>
-<pre><code><span class="tok-keyword">ALTER TABLE</span> av_demo <span class="tok-keyword">SET</span> (autovacuum_vacuum_threshold = 100, autovacuum_vacuum_scale_factor = 0);
+<pre><code class="language-sql"><span class="tok-keyword">ALTER TABLE</span> av_demo <span class="tok-keyword">SET</span> (autovacuum_vacuum_threshold = 100, autovacuum_vacuum_scale_factor = 0);
 <span class="tok-keyword">UPDATE</span> av_demo <span class="tok-keyword">SET</span> v = v || <span class="tok-string">'!'</span>;   <span class="tok-comment">-- 1000 dòng chết</span></code></pre>
 <div class="out">[15s] autovacuum_count=0 · n_dead_tup=1000 · last_autovacuum=chưa
 [30s] autovacuum_count=1 · n_dead_tup=0    · last_autovacuum=2026-08-26 10:46:33+00
@@ -297,7 +297,7 @@ cuongthai.com:  12 × 10 = 120   >   max_connections = 100   ❌</div>
 
 <h3>Finding what is bloated</h3>
 <p>One query, safe to run on production, answers "which table needs attention":</p>
-<pre><code><span class="tok-keyword">SELECT</span> relname, n_live_tup, n_dead_tup,
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> relname, n_live_tup, n_dead_tup,
        <span class="tok-keyword">CASE WHEN</span> n_live_tup &gt; 0
             <span class="tok-keyword">THEN</span> round(100.0 * n_dead_tup / n_live_tup, 1)
             <span class="tok-keyword">ELSE</span> 0 <span class="tok-keyword">END</span> <span class="tok-keyword">AS</span> phan_tram_chet,
@@ -333,7 +333,7 @@ cuongthai.com:  12 × 10 = 120   >   max_connections = 100   ❌</div>
 
 <h3>Ngưỡng THẬT của autovacuum</h3>
 <p>Autovacuum là một tiến trình nền, nó vacuum các bảng khi chúng đã tích đủ dòng chết. "Đủ" là một con số ĐƯỢC TÍNH, và bạn đọc được các đầu vào:</p>
-<pre><code><span class="tok-keyword">SELECT</span> name, setting, unit <span class="tok-keyword">FROM</span> pg_settings
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> name, setting, unit <span class="tok-keyword">FROM</span> pg_settings
 <span class="tok-keyword">WHERE</span> name <span class="tok-keyword">LIKE</span> <span class="tok-string">'autovacuum%'</span> <span class="tok-keyword">ORDER BY</span> name;</code></pre>
 <div class="out">              name               | setting | unit
 ---------------------------------+---------+------
@@ -353,7 +353,7 @@ cuongthai.com:  12 × 10 = 120   >   max_connections = 100   ❌</div>
 
 <h3>Nhìn nó chạy</h3>
 <p>Cho một bảng nhỏ một ngưỡng gắt, làm 1.000 dòng chết đi, rồi chờ:</p>
-<pre><code><span class="tok-keyword">ALTER TABLE</span> av_demo <span class="tok-keyword">SET</span> (autovacuum_vacuum_threshold = 100, autovacuum_vacuum_scale_factor = 0);
+<pre><code class="language-sql"><span class="tok-keyword">ALTER TABLE</span> av_demo <span class="tok-keyword">SET</span> (autovacuum_vacuum_threshold = 100, autovacuum_vacuum_scale_factor = 0);
 <span class="tok-keyword">UPDATE</span> av_demo <span class="tok-keyword">SET</span> v = v || <span class="tok-string">'!'</span>;   <span class="tok-comment">-- 1000 dòng chết</span></code></pre>
 <div class="out">[15s] autovacuum_count=0 · n_dead_tup=1000 · last_autovacuum=chưa
 [30s] autovacuum_count=1 · n_dead_tup=0    · last_autovacuum=2026-08-26 10:46:33+00
@@ -366,7 +366,7 @@ cuongthai.com:  12 × 10 = 120   >   max_connections = 100   ❌</div>
 
 <h3>Tìm xem cái nào đang phình</h3>
 <p>Một truy vấn, chạy an toàn trên production, trả lời "bảng nào cần để mắt":</p>
-<pre><code><span class="tok-keyword">SELECT</span> relname, n_live_tup, n_dead_tup,
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> relname, n_live_tup, n_dead_tup,
        <span class="tok-keyword">CASE WHEN</span> n_live_tup &gt; 0
             <span class="tok-keyword">THEN</span> round(100.0 * n_dead_tup / n_live_tup, 1)
             <span class="tok-keyword">ELSE</span> 0 <span class="tok-keyword">END</span> <span class="tok-keyword">AS</span> phan_tram_chet,
@@ -410,7 +410,7 @@ cuongthai.com:  12 × 10 = 120   >   max_connections = 100   ❌</div>
 <p class="lead">"The site is slow" is not a diagnosis. PostgreSQL ships with enough introspection to turn it into one, and the whole skill is knowing which view answers which question. There are three you will use constantly.</p>
 
 <h3>pg_stat_activity — what is happening right now</h3>
-<pre><code><span class="tok-keyword">SELECT</span> pid, state, wait_event_type, wait_event,
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> pid, state, wait_event_type, wait_event,
        now()-xact_start <span class="tok-keyword">AS</span> tuoi_giao_dich, left(query,40) <span class="tok-keyword">AS</span> truy_van
 <span class="tok-keyword">FROM</span> pg_stat_activity
 <span class="tok-keyword">WHERE</span> backend_type=<span class="tok-string">'client backend'</span>;</code></pre>
@@ -429,12 +429,12 @@ cuongthai.com:  12 × 10 = 120   >   max_connections = 100   ❌</div>
 
 <h3>pg_stat_statements — what has been expensive over time</h3>
 <p>This is an extension and it must be preloaded, which requires a restart — do it before you need it:</p>
-<pre><code><span class="tok-comment"># postgresql.conf</span>
+<pre><code class="language-sql"><span class="tok-comment"># postgresql.conf</span>
 shared_preload_libraries = <span class="tok-string">'pg_stat_statements'</span>
 <span class="tok-comment"># rồi khởi động lại, rồi:</span>
 <span class="tok-keyword">CREATE EXTENSION</span> pg_stat_statements;</code></pre>
 <p>Then it answers the question that matters. A workload of eight queries — five cheap ones, two expensive ones, one aggregate:</p>
-<pre><code><span class="tok-keyword">SELECT</span> calls,
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> calls,
        round(total_exec_time::numeric,1) <span class="tok-keyword">AS</span> tong_ms,
        round(mean_exec_time::numeric,2)  <span class="tok-keyword">AS</span> tb_ms,
        rows, left(query,52) <span class="tok-keyword">AS</span> truy_van
@@ -451,7 +451,7 @@ shared_preload_libraries = <span class="tok-string">'pg_stat_statements'</span>
 
 <h3>pg_stat_user_indexes — indexes nobody uses</h3>
 <p>Chapter 9 warned that an unused index is pure cost: it slows every write and occupies disk while helping nothing. This finds them:</p>
-<pre><code><span class="tok-keyword">SELECT</span> relname, indexrelname, idx_scan,
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> relname, indexrelname, idx_scan,
        pg_size_pretty(pg_relation_size(indexrelid)) <span class="tok-keyword">AS</span> kich_thuoc
 <span class="tok-keyword">FROM</span> pg_stat_user_indexes
 <span class="tok-keyword">WHERE</span> idx_scan = 0
@@ -479,7 +479,7 @@ shared_preload_libraries = <span class="tok-string">'pg_stat_statements'</span>
 <p class="lead">"Trang web chậm" không phải một CHẨN ĐOÁN. PostgreSQL có sẵn đủ công cụ tự soi để biến nó thành chẩn đoán, và toàn bộ kỹ năng nằm ở chỗ biết khung nhìn nào trả lời câu hỏi nào. Có ba cái bạn sẽ dùng liên tục.</p>
 
 <h3>pg_stat_activity — chuyện gì đang xảy ra NGAY LÚC NÀY</h3>
-<pre><code><span class="tok-keyword">SELECT</span> pid, state, wait_event_type, wait_event,
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> pid, state, wait_event_type, wait_event,
        now()-xact_start <span class="tok-keyword">AS</span> tuoi_giao_dich, left(query,40) <span class="tok-keyword">AS</span> truy_van
 <span class="tok-keyword">FROM</span> pg_stat_activity
 <span class="tok-keyword">WHERE</span> backend_type=<span class="tok-string">'client backend'</span>;</code></pre>
@@ -498,12 +498,12 @@ shared_preload_libraries = <span class="tok-string">'pg_stat_statements'</span>
 
 <h3>pg_stat_statements — cái gì đã ĐẮT theo thời gian</h3>
 <p>Đây là một phần mở rộng và nó phải được nạp trước, tức là cần KHỞI ĐỘNG LẠI — hãy làm việc đó TRƯỚC khi bạn cần tới nó:</p>
-<pre><code><span class="tok-comment"># postgresql.conf</span>
+<pre><code class="language-sql"><span class="tok-comment"># postgresql.conf</span>
 shared_preload_libraries = <span class="tok-string">'pg_stat_statements'</span>
 <span class="tok-comment"># rồi khởi động lại, rồi:</span>
 <span class="tok-keyword">CREATE EXTENSION</span> pg_stat_statements;</code></pre>
 <p>Rồi nó trả lời câu hỏi thật sự quan trọng. Một khối việc gồm tám truy vấn — năm cái rẻ, hai cái đắt, một phép tổng hợp:</p>
-<pre><code><span class="tok-keyword">SELECT</span> calls,
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> calls,
        round(total_exec_time::numeric,1) <span class="tok-keyword">AS</span> tong_ms,
        round(mean_exec_time::numeric,2)  <span class="tok-keyword">AS</span> tb_ms,
        rows, left(query,52) <span class="tok-keyword">AS</span> truy_van
@@ -520,7 +520,7 @@ shared_preload_libraries = <span class="tok-string">'pg_stat_statements'</span>
 
 <h3>pg_stat_user_indexes — những chỉ mục KHÔNG AI dùng</h3>
 <p>Chương 9 đã cảnh báo rằng một chỉ mục không ai dùng là chi phí thuần: nó làm chậm mọi lệnh ghi và chiếm đĩa mà chẳng giúp gì. Câu này tìm ra chúng:</p>
-<pre><code><span class="tok-keyword">SELECT</span> relname, indexrelname, idx_scan,
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> relname, indexrelname, idx_scan,
        pg_size_pretty(pg_relation_size(indexrelid)) <span class="tok-keyword">AS</span> kich_thuoc
 <span class="tok-keyword">FROM</span> pg_stat_user_indexes
 <span class="tok-keyword">WHERE</span> idx_scan = 0

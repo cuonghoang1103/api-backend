@@ -69,7 +69,7 @@ ${gallery('dk-03', [
 
 <h3>The four parts</h3>
 ${slide('dk-03', 3, '“nginx” là 4 trường — Docker tự điền 3')}
-<pre><code><span class="tok-comment"># The full form, with nothing left out:</span>
+<pre><code class="language-bash"><span class="tok-comment"># The full form, with nothing left out:</span>
 docker.io/library/nginx:1.27-alpine
 <span class="tok-comment"># ^^^^^^^^ ^^^^^^^ ^^^^^ ^^^^^^^^^^^</span>
 <span class="tok-comment"># registry namespace repo  tag</span>
@@ -86,7 +86,7 @@ nginx@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10</d
   <div class="lz-layer"><span class="lz-lname">tag — defaults to latest</span><span class="lz-lnote">A human label pointing at one image. It is a <strong>mutable pointer</strong>, not a version — Lesson 3.2 is about why that matters more than anything else in this chapter.</span></div>
   <div class="lz-layer"><span class="lz-lname">or @digest — instead of a tag</span><span class="lz-lnote"><code>nginx@sha256:6564…</code> names the content itself. Immutable by construction: that string can only ever refer to those exact bytes.</span></div>
 </div>
-<pre><code><span class="tok-comment"># All four of these pull the same image</span>
+<pre><code class="language-bash"><span class="tok-comment"># All four of these pull the same image</span>
 docker pull nginx:1.27-alpine
 docker pull library/nginx:1.27-alpine
 docker pull docker.io/nginx:1.27-alpine
@@ -139,7 +139,7 @@ docker image inspect nginx:1.27-alpine --format '{{index .RepoDigests 0}}'</code
 </ol>
 <h3>Official images and everything else</h3>
 ${slide('dk-03', 5, 'Phần trước dấu / cho biết ai chịu trách nhiệm về ảnh')}
-<pre><code>docker pull nginx:1.27-alpine        <span class="tok-comment"># official: library namespace, no slash</span>
+<pre><code class="language-bash">docker pull nginx:1.27-alpine        <span class="tok-comment"># official: library namespace, no slash</span>
 docker pull bitnami/nginx:latest     <span class="tok-comment"># a company's image</span>
 docker pull ghcr.io/jqlang/jq:latest <span class="tok-comment"># a project's own registry</span>
 docker images --format 'table {{.Repository}}\\t{{.Tag}}\\t{{.Size}}' | head -5</code></pre>
@@ -159,7 +159,7 @@ ghcr.io/jqlang/jq   latest         5.24MB</div>
 
 <h3>What is actually in there: the manifest</h3>
 ${slide('dk-03', 6, 'Một tag trỏ tới một chỉ mục — bên dưới là nhiều ảnh')}
-<pre><code>docker buildx imagetools inspect nginx:1.27-alpine | head -12</code></pre>
+<pre><code class="language-bash">docker buildx imagetools inspect nginx:1.27-alpine | head -12</code></pre>
 <div class="out">Name:      docker.io/library/nginx:1.27-alpine
 MediaType: application/vnd.oci.image.index.v1+json
 Digest:    sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10
@@ -201,7 +201,7 @@ unknown/unknown sha256:02689ce8ee2c attestation-manifest</div>
 <tr><td>Attestation manifest</td><td>SBOM and build provenance attached by BuildKit; platform <code>unknown/unknown</code>, never pulled to run.</td><td><code>vnd.docker.reference.type: attestation-manifest</code></td></tr>
 </table>
 
-<pre><code>docker image inspect nginx:1.27-alpine \\
+<pre><code class="language-bash">docker image inspect nginx:1.27-alpine \\
   --format 'os={{.Os}} arch={{.Architecture}} layers={{len .RootFS.Layers}} created={{.Created}}'
 docker image inspect nginx:1.27-alpine --format '{{json .Config.Labels}}' | tr ',' '\\n' | head -4</code></pre>
 <div class="out">os=linux arch=arm64 layers=8 created=2025-04-16T14:50:31Z
@@ -301,7 +301,7 @@ done</code></pre>
 
 <h3>Bốn phần</h3>
 ${slide('dk-03', 3, '“nginx” là 4 trường — Docker tự điền 3')}
-<pre><code><span class="tok-comment"># Dạng đầy đủ, không bỏ sót gì:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Dạng đầy đủ, không bỏ sót gì:</span>
 docker.io/library/nginx:1.27-alpine
 <span class="tok-comment"># ^^^^^^^^ ^^^^^^^ ^^^^^ ^^^^^^^^^^^</span>
 <span class="tok-comment"># registry không-gian-tên kho  tag</span>
@@ -318,7 +318,7 @@ nginx@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10</d
   <div class="lz-layer"><span class="lz-lname">tag — mặc định là latest</span><span class="lz-lnote">Một cái nhãn cho người đọc, trỏ tới một cái ảnh. Nó là một <strong>CON TRỎ THAY ĐỔI ĐƯỢC</strong>, không phải một phiên bản — Bài 3.2 nói về việc vì sao điều đó quan trọng hơn mọi thứ khác trong chương này.</span></div>
   <div class="lz-layer"><span class="lz-lname">hoặc @digest — thay cho tag</span><span class="lz-lnote"><code>nginx@sha256:6564…</code> gọi tên chính NỘI DUNG. Bất biến theo cấu tạo: cái chuỗi đó chỉ có thể trỏ tới đúng những byte ấy.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Cả bốn lệnh này kéo về CÙNG một cái ảnh</span>
+<pre><code class="language-bash"><span class="tok-comment"># Cả bốn lệnh này kéo về CÙNG một cái ảnh</span>
 docker pull nginx:1.27-alpine
 docker pull library/nginx:1.27-alpine
 docker pull docker.io/nginx:1.27-alpine
@@ -371,7 +371,7 @@ docker image inspect nginx:1.27-alpine --format '{{index .RepoDigests 0}}'</code
 </ol>
 <h3>Ảnh chính thức và mọi thứ còn lại</h3>
 ${slide('dk-03', 5, 'Phần trước dấu / cho biết ai chịu trách nhiệm về ảnh')}
-<pre><code>docker pull nginx:1.27-alpine        <span class="tok-comment"># chính thức: không gian tên library, không có dấu /</span>
+<pre><code class="language-bash">docker pull nginx:1.27-alpine        <span class="tok-comment"># chính thức: không gian tên library, không có dấu /</span>
 docker pull bitnami/nginx:latest     <span class="tok-comment"># ảnh của một công ty</span>
 docker pull ghcr.io/jqlang/jq:latest <span class="tok-comment"># registry riêng của một dự án</span>
 docker images --format 'table {{.Repository}}\\t{{.Tag}}\\t{{.Size}}' | head -5</code></pre>
@@ -391,7 +391,7 @@ ghcr.io/jqlang/jq   latest         5.24MB</div>
 
 <h3>Bên trong thật sự có gì: cái manifest</h3>
 ${slide('dk-03', 6, 'Một tag trỏ tới một chỉ mục — bên dưới là nhiều ảnh')}
-<pre><code>docker buildx imagetools inspect nginx:1.27-alpine | head -12</code></pre>
+<pre><code class="language-bash">docker buildx imagetools inspect nginx:1.27-alpine | head -12</code></pre>
 <div class="out">Name:      docker.io/library/nginx:1.27-alpine
 MediaType: application/vnd.oci.image.index.v1+json
 Digest:    sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10
@@ -433,7 +433,7 @@ unknown/unknown sha256:02689ce8ee2c attestation-manifest</div>
 <tr><td>Attestation manifest (manifest chứng thực)</td><td>SBOM và thông tin xuất xứ bản dựng do BuildKit đính kèm; nền tảng <code>unknown/unknown</code>, không bao giờ được kéo về để chạy.</td><td><code>vnd.docker.reference.type: attestation-manifest</code></td></tr>
 </table>
 
-<pre><code>docker image inspect nginx:1.27-alpine \\
+<pre><code class="language-bash">docker image inspect nginx:1.27-alpine \\
   --format 'os={{.Os}} arch={{.Architecture}} tầng={{len .RootFS.Layers}} tạo lúc={{.Created}}'
 docker image inspect nginx:1.27-alpine --format '{{json .Config.Labels}}' | tr ',' '\\n' | head -4</code></pre>
 <div class="out">os=linux arch=arm64 tầng=8 tạo lúc=2025-04-16T14:50:31Z
@@ -542,7 +542,7 @@ done</code></pre>
 
 <h3>Watch a tag move</h3>
 ${slide('dk-03', 8, 'Tag là nhãn dán: docker tag dời nó đi không cảnh báo')}
-<pre><code>docker pull alpine:3.20
+<pre><code class="language-bash">docker pull alpine:3.20
 docker tag alpine:3.20 demo:v1
 docker images demo --format '{{.Repository}}:{{.Tag}} {{.ID}}'
 
@@ -585,7 +585,7 @@ ${slide('dk-03', 10, ':latest chỉ là tên mặc định — hôm nay nó là 
   <div class="kv"><span class="k">It can cross a major version</span><span class="v">This is the outage. <code>postgres:latest</code> moved from 16 to 17, and in 2025 to 18; your Compose file pulled it on a fresh machine; the data directory is from an older version and the server refuses to start. Postgres 18 even moved the data directory itself (below).</span></div>
   <div class="kv"><span class="k">It breaks reproducibility silently</span><span class="v">Two developers, one Compose file, two different Node versions — and the bug only appears on one machine. Nothing in git differs, which is what makes it expensive to find.</span></div>
 </div>
-<pre><code><span class="tok-comment"># The failure, in three commands</span>
+<pre><code class="language-bash"><span class="tok-comment"># The failure, in three commands</span>
 docker pull postgres:latest &gt;/dev/null
 docker image inspect postgres:latest --format '{{range .Config.Env}}{{println .}}{{end}}' | grep PG_MAJOR
 <span class="tok-comment"># six months later, on a new machine, the SAME command gives:</span>
@@ -627,7 +627,7 @@ exited 1</div>
 
 <h3>Digests: the immutable name</h3>
 ${slide('dk-03', 11, 'Digest = SHA-256 của chính các byte manifest')}
-<pre><code>docker image inspect nginx:1.27-alpine --format '{{index .RepoDigests 0}}'
+<pre><code class="language-bash">docker image inspect nginx:1.27-alpine --format '{{index .RepoDigests 0}}'
 docker pull nginx@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10
 docker images nginx --format '{{.Repository}}:{{.Tag}} {{.ID}}'</code></pre>
 <div class="out">nginx@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10
@@ -664,7 +664,7 @@ a00cf050ee0d</div>
   <div class="lz-stage">Use both</div>
   <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">tag@digest — readable and pinned</span><span class="lz-nsub"><code>nginx:1.27-alpine@sha256:6564…</code> is legal and is the best form: a human can see the version, the machine uses the digest, and a bot can bump both together.</span></div></div>
 </div>
-<pre><code><span class="tok-comment"># Pinning in the three places it matters</span>
+<pre><code class="language-bash"><span class="tok-comment"># Pinning in the three places it matters</span>
 <span class="tok-comment"># Dockerfile</span>
 FROM node:22-alpine@sha256:b6f26b36c8ff49624cfdac716b8ea1138d606df02586a77d364bb5536a634f85
 
@@ -705,7 +705,7 @@ docker.io/library/nginx:latest@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3
 
 <h3>Tagging your own images</h3>
 ${slide('dk-03', 13, 'Ghim tag@digest và chiến lược đặt tag')}
-<pre><code><span class="tok-comment"># One build, several names — tags are cheap; the image is stored once</span>
+<pre><code class="language-bash"><span class="tok-comment"># One build, several names — tags are cheap; the image is stored once</span>
 GIT_SHA=\$(git rev-parse --short HEAD)
 docker build -t app:latest \\
              -t app:1.4.2 \\
@@ -730,7 +730,7 @@ latest 45bd1fe29757</div>
   <div class="lz-step"><span class="lz-k">Deploy by digest or immutable tag</span><span class="lz-t">never by a moving alias</span><span class="lz-d">A rollback then means retagging or redeploying a specific digest — a ten-second operation with a guaranteed outcome.</span></div>
   <div class="lz-step"><span class="lz-k">Record where it came from</span><span class="lz-t">--label org.opencontainers.image.revision=\$GIT_SHA</span><span class="lz-d">So an image found on a server without its tags can still be traced back to a commit (Lesson 3.1).</span></div>
 </div>
-<pre><code>docker rmi demo:v1 &gt;/dev/null 2&gt;&amp;1; docker image prune -f &gt;/dev/null</code></pre>
+<pre><code class="language-bash">docker rmi demo:v1 &gt;/dev/null 2&gt;&amp;1; docker image prune -f &gt;/dev/null</code></pre>
 
 
 <h3>When to use a tag, a digest, or both</h3>
@@ -801,7 +801,7 @@ docker buildx imagetools inspect postgres:latest --format '{{json (index .Image 
 
 <h3>Nhìn một cái tag di chuyển</h3>
 ${slide('dk-03', 8, 'Tag là nhãn dán: docker tag dời nó đi không cảnh báo')}
-<pre><code>docker pull alpine:3.20
+<pre><code class="language-bash">docker pull alpine:3.20
 docker tag alpine:3.20 demo:v1
 docker images demo --format '{{.Repository}}:{{.Tag}} {{.ID}}'
 
@@ -844,7 +844,7 @@ ${slide('dk-03', 10, ':latest chỉ là tên mặc định — hôm nay nó là 
   <div class="kv"><span class="k">Nó có thể nhảy qua một phiên bản LỚN</span><span class="v">Đây chính là cú sự cố. <code>postgres:latest</code> nhảy từ 16 sang 17, rồi năm 2025 sang 18; file Compose của bạn kéo nó về trên một cái máy mới; thư mục dữ liệu là của bản cũ và máy chủ từ chối khởi động. Postgres 18 còn dời luôn cả chỗ đặt thư mục dữ liệu (ở dưới).</span></div>
   <div class="kv"><span class="k">Nó phá khả năng tái lập trong im lặng</span><span class="v">Hai lập trình viên, một file Compose, hai phiên bản Node khác nhau — và con bọ chỉ hiện ra trên một cái máy. Không có gì trong git khác nhau, và đó là thứ khiến nó đắt để tìm ra.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Cú hỏng, trong ba câu lệnh</span>
+<pre><code class="language-bash"><span class="tok-comment"># Cú hỏng, trong ba câu lệnh</span>
 docker pull postgres:latest &gt;/dev/null
 docker image inspect postgres:latest --format '{{range .Config.Env}}{{println .}}{{end}}' | grep PG_MAJOR
 <span class="tok-comment"># sáu tháng sau, trên một máy mới, CÙNG câu lệnh đó cho ra:</span>
@@ -886,7 +886,7 @@ exited 1</div>
 
 <h3>Digest: cái tên bất biến</h3>
 ${slide('dk-03', 11, 'Digest = SHA-256 của chính các byte manifest')}
-<pre><code>docker image inspect nginx:1.27-alpine --format '{{index .RepoDigests 0}}'
+<pre><code class="language-bash">docker image inspect nginx:1.27-alpine --format '{{index .RepoDigests 0}}'
 docker pull nginx@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10
 docker images nginx --format '{{.Repository}}:{{.Tag}} {{.ID}}'</code></pre>
 <div class="out">nginx@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10
@@ -923,7 +923,7 @@ a00cf050ee0d</div>
   <div class="lz-stage">Dùng cả hai</div>
   <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">tag@digest — vừa đọc được vừa được ghim</span><span class="lz-nsub"><code>nginx:1.27-alpine@sha256:6564…</code> là hợp lệ và là dạng TỐT NHẤT: người đọc thấy phiên bản, máy dùng digest, và một con bot nâng được cả hai cùng lúc.</span></div></div>
 </div>
-<pre><code><span class="tok-comment"># Ghim ở ba chỗ có ý nghĩa</span>
+<pre><code class="language-bash"><span class="tok-comment"># Ghim ở ba chỗ có ý nghĩa</span>
 <span class="tok-comment"># Dockerfile</span>
 FROM node:22-alpine@sha256:b6f26b36c8ff49624cfdac716b8ea1138d606df02586a77d364bb5536a634f85
 
@@ -964,7 +964,7 @@ docker.io/library/nginx:latest@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3
 
 <h3>Đặt tag cho ảnh của chính bạn</h3>
 ${slide('dk-03', 13, 'Ghim tag@digest và chiến lược đặt tag')}
-<pre><code><span class="tok-comment"># Một lượt dựng, nhiều cái tên — tag thì rẻ; ảnh chỉ được lưu một lần</span>
+<pre><code class="language-bash"><span class="tok-comment"># Một lượt dựng, nhiều cái tên — tag thì rẻ; ảnh chỉ được lưu một lần</span>
 GIT_SHA=\$(git rev-parse --short HEAD)
 docker build -t app:latest \\
              -t app:1.4.2 \\
@@ -989,7 +989,7 @@ latest 45bd1fe29757</div>
   <div class="lz-step"><span class="lz-k">Triển khai bằng digest hoặc tag bất biến</span><span class="lz-t">đừng bao giờ bằng một bí danh di chuyển được</span><span class="lz-d">Khi đó quay lui chỉ là gắn lại tag hoặc triển khai lại một digest cụ thể — một thao tác mười giây với kết quả chắc chắn.</span></div>
   <div class="lz-step"><span class="lz-k">Ghi lại nó từ đâu ra</span><span class="lz-t">--label org.opencontainers.image.revision=\$GIT_SHA</span><span class="lz-d">Để một cái ảnh tìm thấy trên máy chủ mà không còn tag nào vẫn truy được về một commit (Bài 3.1).</span></div>
 </div>
-<pre><code>docker rmi demo:v1 &gt;/dev/null 2&gt;&amp;1; docker image prune -f &gt;/dev/null</code></pre>
+<pre><code class="language-bash">docker rmi demo:v1 &gt;/dev/null 2&gt;&amp;1; docker image prune -f &gt;/dev/null</code></pre>
 
 
 <h3>Khi nào dùng tag, khi nào dùng digest, khi nào dùng cả hai</h3>
@@ -1069,7 +1069,7 @@ docker buildx imagetools inspect postgres:latest --format '{{json (index .Image 
 
 <h3>Logging in, and where the password goes</h3>
 ${slide('dk-03', 16, 'config.json: mật khẩu chỉ được base64 — không phải mã hoá')}
-<pre><code>echo "\$DOCKER_TOKEN" | docker login -u cuonghoang1103 --password-stdin
+<pre><code class="language-bash">echo "\$DOCKER_TOKEN" | docker login -u cuonghoang1103 --password-stdin
 cat ~/.docker/config.json</code></pre>
 <div class="out">Login Succeeded
 {
@@ -1080,7 +1080,7 @@ cat ~/.docker/config.json</code></pre>
   }
 }</div>
 <div class="callout warn"><strong>That <code>auth</code> field is base64, not encryption.</strong> <code>echo '…' | base64 -d</code> prints <code>username:token</code> in plain text. Anyone who reads <code>~/.docker/config.json</code> — a backup, a shared machine, a container you mounted your home directory into — has your registry credentials. Two things follow: use an access token rather than your account password (revocable, scoped), and on a workstation install a credential helper so the secret lives in the OS keychain instead:
-<pre><code><span class="tok-comment"># Linux: pass/gpg-backed  ·  macOS: Keychain  ·  Windows: Credential Manager</span>
+<pre><code class="language-bash"><span class="tok-comment"># Linux: pass/gpg-backed  ·  macOS: Keychain  ·  Windows: Credential Manager</span>
 sudo apt install -y golang-docker-credential-helpers   <span class="tok-comment"># Ubuntu/Debian package name</span>
 printf '{"credsStore":"pass"}\\n' &gt; ~/.docker/config.json
 docker login          <span class="tok-comment"># the token now goes to the keychain, not the file</span></code></pre></div>
@@ -1129,7 +1129,7 @@ cuong:matkhau123</div>
 
 <h3>Pushing an image</h3>
 ${slide('dk-03', 14, 'Registry chỉ là một API HTTP — đẩy là vài lệnh PUT')}
-<pre><code><span class="tok-comment"># The repository name must match where it is going — tag, then push</span>
+<pre><code class="language-bash"><span class="tok-comment"># The repository name must match where it is going — tag, then push</span>
 docker pull alpine:3.20
 docker tag alpine:3.20 cuonghoang1103/demo:1.0
 docker push cuonghoang1103/demo:1.0
@@ -1175,7 +1175,7 @@ af79558cf9ed: Pushed
 
 <h3>Pull rate limits</h3>
 ${slide('dk-03', 17, 'Docker Hub đếm lượt kéo — ẩn danh thì đếm theo IP')}
-<pre><code>curl -s "https://auth.docker.io/token?service=registry.docker.io&amp;scope=repository:library/alpine:pull" \\
+<pre><code class="language-bash">curl -s "https://auth.docker.io/token?service=registry.docker.io&amp;scope=repository:library/alpine:pull" \\
   | jq -r .token \\
   | { read T; curl -sI -H "Authorization: Bearer \$T" \\
       https://registry-1.docker.io/v2/library/alpine/manifests/latest \\
@@ -1207,7 +1207,7 @@ ratelimit-remaining: 32;w=3600</div>
 
 <h3>Your own registry, in one command</h3>
 ${slide('dk-03', 18, 'Gương kéo xuyên: cả nhóm kéo từ một máy trong mạng')}
-<pre><code>docker run -d --name registry -p 5000:5000 -v regdata:/var/lib/registry registry:2
+<pre><code class="language-bash">docker run -d --name registry -p 5000:5000 -v regdata:/var/lib/registry registry:2
 docker tag alpine:3.20 localhost:5000/alpine:3.20
 docker push localhost:5000/alpine:3.20
 curl -s localhost:5000/v2/_catalog; echo
@@ -1215,7 +1215,7 @@ curl -s localhost:5000/v2/alpine/tags/list; echo</code></pre>
 <div class="out">{"repositories":["alpine"]}
 {"name":"alpine","tags":["3.20"]}</div>
 <p>That is a complete, standards-compliant registry: it speaks the same API as Docker Hub, and <code>docker pull localhost:5000/alpine:3.20</code> works from anywhere that can reach it. It has no authentication and no TLS, so it is for a laptop or a private network — Harbor or a reverse proxy with basic auth is the next step up.</p>
-<pre><code><span class="tok-comment"># A pull-through cache — /etc/docker/daemon.json on every machine</span>
+<pre><code class="language-bash"><span class="tok-comment"># A pull-through cache — /etc/docker/daemon.json on every machine</span>
 {
   "registry-mirrors": ["http://registry-cache.internal:5000"],
   "live-restore": true
@@ -1246,9 +1246,9 @@ docker pull -q localhost:18032/library/busybox:1.36  0.02s user 0.02s system 1% 
 <tr><td><code>-v cachedata:/var/lib/registry</code></td><td>keeps the cache across container restarts; without it every restart starts cold</td></tr>
 </table>
 <h3>Talking to an insecure registry</h3>
-<pre><code><span class="tok-comment"># /etc/docker/daemon.json — for a plain-HTTP registry on a private network</span>
+<pre><code class="language-bash"><span class="tok-comment"># /etc/docker/daemon.json — for a plain-HTTP registry on a private network</span>
 { "insecure-registries": ["registry.internal:5000"] }</code></pre>
-<pre><code>sudo systemctl restart docker
+<pre><code class="language-bash">sudo systemctl restart docker
 docker info --format '{{json .RegistryConfig.IndexConfigs}}' | tr ',' '\\n' | head -3</code></pre>
 <div class="out">{"docker.io":{"Name":"docker.io"
 "Mirrors":[]
@@ -1259,7 +1259,7 @@ docker info --format '{{json .RegistryConfig.IndexConfigs}}' | tr ',' '\\n' | he
 <div class="out">["::1/128","127.0.0.0/8"]</div>
 <p>That is why every <code>localhost:18030/…</code> push in this chapter worked over plain HTTP. A registry on another machine in your network — say a teammate's laptop at <code>192.168.1.20:5000</code> — is not in that list, and the error is <code>http: server gave HTTP response to HTTPS client</code> until you add it to <code>insecure-registries</code> (Docker Desktop: Settings → Docker Engine) or put TLS in front of it.</p>
 
-<pre><code>docker rm -f registry &gt;/dev/null; docker volume rm regdata &gt;/dev/null
+<pre><code class="language-bash">docker rm -f registry &gt;/dev/null; docker volume rm regdata &gt;/dev/null
 docker rmi localhost:5000/alpine:3.20 cuonghoang1103/demo:1.0 &gt;/dev/null 2&gt;&amp;1</code></pre>
 
 
@@ -1331,7 +1331,7 @@ docker rmi localhost:5000/alpine:3.20 cuonghoang1103/demo:1.0 &gt;/dev/null 2&gt
 
 <h3>Đăng nhập, và mật khẩu đi đâu</h3>
 ${slide('dk-03', 16, 'config.json: mật khẩu chỉ được base64 — không phải mã hoá')}
-<pre><code>echo "\$DOCKER_TOKEN" | docker login -u cuonghoang1103 --password-stdin
+<pre><code class="language-bash">echo "\$DOCKER_TOKEN" | docker login -u cuonghoang1103 --password-stdin
 cat ~/.docker/config.json</code></pre>
 <div class="out">Login Succeeded
 {
@@ -1342,7 +1342,7 @@ cat ~/.docker/config.json</code></pre>
   }
 }</div>
 <div class="callout warn"><strong>Cái trường <code>auth</code> kia là base64, KHÔNG phải mã hoá.</strong> <code>echo '…' | base64 -d</code> in ra <code>tên_người_dùng:token</code> bằng chữ thường. Bất cứ ai đọc được <code>~/.docker/config.json</code> — một bản sao lưu, một cái máy dùng chung, một container mà bạn gắn thư mục nhà vào — đều có thông tin đăng nhập registry của bạn. Hai điều rút ra: hãy dùng access token thay cho mật khẩu tài khoản (thu hồi được, giới hạn phạm vi được), và trên máy làm việc thì hãy cài một credential helper để bí mật nằm trong keychain của hệ điều hành thay vì trong file:
-<pre><code><span class="tok-comment"># Linux: nền pass/gpg  ·  macOS: Keychain  ·  Windows: Credential Manager</span>
+<pre><code class="language-bash"><span class="tok-comment"># Linux: nền pass/gpg  ·  macOS: Keychain  ·  Windows: Credential Manager</span>
 sudo apt install -y golang-docker-credential-helpers   <span class="tok-comment"># Ubuntu/Debian package name</span>
 printf '{"credsStore":"pass"}\\n' &gt; ~/.docker/config.json
 docker login          <span class="tok-comment"># token giờ vào keychain, không vào file</span></code></pre></div>
@@ -1391,7 +1391,7 @@ cuong:matkhau123</div>
 
 <h3>Đẩy một cái ảnh lên</h3>
 ${slide('dk-03', 14, 'Registry chỉ là một API HTTP — đẩy là vài lệnh PUT')}
-<pre><code><span class="tok-comment"># Tên kho phải KHỚP với nơi nó sắp đi — gắn tag trước, rồi push</span>
+<pre><code class="language-bash"><span class="tok-comment"># Tên kho phải KHỚP với nơi nó sắp đi — gắn tag trước, rồi push</span>
 docker pull alpine:3.20
 docker tag alpine:3.20 cuonghoang1103/demo:1.0
 docker push cuonghoang1103/demo:1.0
@@ -1437,7 +1437,7 @@ af79558cf9ed: Pushed
 
 <h3>Giới hạn tần suất kéo</h3>
 ${slide('dk-03', 17, 'Docker Hub đếm lượt kéo — ẩn danh thì đếm theo IP')}
-<pre><code>curl -s "https://auth.docker.io/token?service=registry.docker.io&amp;scope=repository:library/alpine:pull" \\
+<pre><code class="language-bash">curl -s "https://auth.docker.io/token?service=registry.docker.io&amp;scope=repository:library/alpine:pull" \\
   | jq -r .token \\
   | { read T; curl -sI -H "Authorization: Bearer \$T" \\
       https://registry-1.docker.io/v2/library/alpine/manifests/latest \\
@@ -1469,7 +1469,7 @@ ratelimit-remaining: 32;w=3600</div>
 
 <h3>Registry của riêng bạn, bằng một câu lệnh</h3>
 ${slide('dk-03', 18, 'Gương kéo xuyên: cả nhóm kéo từ một máy trong mạng')}
-<pre><code>docker run -d --name registry -p 5000:5000 -v regdata:/var/lib/registry registry:2
+<pre><code class="language-bash">docker run -d --name registry -p 5000:5000 -v regdata:/var/lib/registry registry:2
 docker tag alpine:3.20 localhost:5000/alpine:3.20
 docker push localhost:5000/alpine:3.20
 curl -s localhost:5000/v2/_catalog; echo
@@ -1477,7 +1477,7 @@ curl -s localhost:5000/v2/alpine/tags/list; echo</code></pre>
 <div class="out">{"repositories":["alpine"]}
 {"name":"alpine","tags":["3.20"]}</div>
 <p>Đó là một registry hoàn chỉnh và đúng chuẩn: nó nói cùng cái API với Docker Hub, và <code>docker pull localhost:5000/alpine:3.20</code> chạy được từ bất cứ đâu với tới nó. Nó không có xác thực và không có TLS, nên nó dành cho một cái laptop hoặc một mạng riêng — Harbor hay một reverse proxy có basic auth là bước tiếp theo.</p>
-<pre><code><span class="tok-comment"># Một bộ đệm kéo xuyên — /etc/docker/daemon.json trên MỌI máy</span>
+<pre><code class="language-bash"><span class="tok-comment"># Một bộ đệm kéo xuyên — /etc/docker/daemon.json trên MỌI máy</span>
 {
   "registry-mirrors": ["http://registry-cache.internal:5000"],
   "live-restore": true
@@ -1508,9 +1508,9 @@ docker pull -q localhost:18032/library/busybox:1.36  0.02s user 0.02s system 1% 
 <tr><td><code>-v cachedata:/var/lib/registry</code></td><td>giữ bộ đệm qua các lần khởi động lại container; thiếu nó thì mỗi lần khởi động lại là bắt đầu nguội</td></tr>
 </table>
 <h3>Nói chuyện với một registry không bảo mật</h3>
-<pre><code><span class="tok-comment"># /etc/docker/daemon.json — cho một registry chạy HTTP thuần trên mạng riêng</span>
+<pre><code class="language-bash"><span class="tok-comment"># /etc/docker/daemon.json — cho một registry chạy HTTP thuần trên mạng riêng</span>
 { "insecure-registries": ["registry.internal:5000"] }</code></pre>
-<pre><code>sudo systemctl restart docker
+<pre><code class="language-bash">sudo systemctl restart docker
 docker info --format '{{json .RegistryConfig.IndexConfigs}}' | tr ',' '\\n' | head -3</code></pre>
 <div class="out">{"docker.io":{"Name":"docker.io"
 "Mirrors":[]
@@ -1521,7 +1521,7 @@ docker info --format '{{json .RegistryConfig.IndexConfigs}}' | tr ',' '\\n' | he
 <div class="out">["::1/128","127.0.0.0/8"]</div>
 <p>Đó là lý do mọi lượt đẩy <code>localhost:18030/…</code> trong chương này chạy được qua HTTP thường. Một registry trên máy khác trong mạng của bạn — ví dụ laptop của bạn cùng nhóm ở <code>192.168.1.20:5000</code> — không nằm trong danh sách đó, và lỗi sẽ là <code>http: server gave HTTP response to HTTPS client</code> cho tới khi bạn thêm nó vào <code>insecure-registries</code> (Docker Desktop: Settings → Docker Engine) hoặc đặt TLS phía trước.</p>
 
-<pre><code>docker rm -f registry &gt;/dev/null; docker volume rm regdata &gt;/dev/null
+<pre><code class="language-bash">docker rm -f registry &gt;/dev/null; docker volume rm regdata &gt;/dev/null
 docker rmi localhost:5000/alpine:3.20 cuonghoang1103/demo:1.0 &gt;/dev/null 2&gt;&amp;1</code></pre>
 
 
@@ -1648,7 +1648,7 @@ exit=255</div>
 So read the path in the message. <code>exec /usr/local/bin/node</code> or <code>exec /bin/sh</code> (a real binary) ⇒ architecture. <code>exec /run.sh</code> or <code>exec /docker-entrypoint.sh</code> (your script) ⇒ check its first line: a missing <code>#!</code>, or a Windows line ending turning it into <code>#!/bin/sh\\r</code> (then the message is <code>exec /run.sh: no such file or directory</code> — measured the same way). The <code>WARNING … does not match the detected host platform</code> line appears only in the architecture case.</div>
 <h3>Reading an index</h3>
 ${slide('dk-03', 20, 'Mỗi máy tự chọn mục khớp CPU của nó trong chỉ mục')}
-<pre><code>docker buildx imagetools inspect --raw node:22-alpine \\
+<pre><code class="language-bash">docker buildx imagetools inspect --raw node:22-alpine \\
   | jq -r '.manifests[] | "\\(.platform.os)/\\(.platform.architecture)\\(.platform.variant // "") \\(.digest[0:19])"'</code></pre>
 <div class="out">linux/amd64 sha256:b64da1de5a51
 unknown/unknown sha256:392560769c9e
@@ -1662,7 +1662,7 @@ linux/s390x sha256:a13e916dbc76
 unknown/unknown sha256:dce75336ebc8</div>
 <p class="note-ct">Real output (course Mac, 23/09/2026). The Engine 27 version listed invented digests and a <code>ppc64le</code> build; today <code>node:22-alpine</code> has five platforms, each followed by its <em>own</em> attestation entry. The <code>armv6</code>/<code>arm64v8</code> spelling (no slash) comes from this <code>jq</code> filter gluing the variant onto the architecture; <code>imagetools inspect</code> prints <code>linux/arm64/v8</code>.</p>
 <p>Five real platforms plus an <code>unknown/unknown</code> entry per platform, which is the attestation manifest — build provenance and an SBOM, attached to the index by modern BuildKit. It is not a platform and is skipped when Docker chooses which image to pull.</p>
-<pre><code><span class="tok-comment"># What does THIS machine resolve that tag to?</span>
+<pre><code class="language-bash"><span class="tok-comment"># What does THIS machine resolve that tag to?</span>
 docker pull -q node:22-alpine &gt;/dev/null
 docker image inspect node:22-alpine --format '{{.Os}}/{{.Architecture}}'
 docker version --format '{{.Server.Arch}}'</code></pre>
@@ -1672,14 +1672,14 @@ amd64</div>
 
 <h3>--platform, and what it really costs</h3>
 ${slide('dk-03', 21, 'Rosetta gần như miễn phí, QEMU chậm khoảng 3 lần')}
-<pre><code><span class="tok-comment"># Ask for a specific platform explicitly</span>
+<pre><code class="language-bash"><span class="tok-comment"># Ask for a specific platform explicitly</span>
 docker pull --platform linux/arm64 alpine:3.20
 docker run --rm --platform linux/arm64 alpine uname -m
 docker run --rm alpine uname -m</code></pre>
 <div class="out">aarch64
 x86_64</div>
 <p>An ARM binary just ran on an x86 machine. That works because Docker Desktop, and Linux hosts with <code>binfmt_misc</code> configured, transparently route foreign binaries through QEMU emulation. It is genuinely useful — and it is <strong>slow</strong>, in a way that surprises people:</p>
-<pre><code><span class="tok-comment"># Install the emulators on a plain Linux host (one time)</span>
+<pre><code class="language-bash"><span class="tok-comment"># Install the emulators on a plain Linux host (one time)</span>
 docker run --privileged --rm tonistiigi/binfmt --install all
 ls /proc/sys/fs/binfmt_misc/ | head -5
 
@@ -1723,7 +1723,7 @@ done</code></pre>
 <p>(An empty <code>docker run --rm alpine:3.20 true</code> takes 0.25 s, so the container overhead is small here.) Two practical lessons. On a Mac, running an amd64-only image — an old tool, a vendor image — is cheap enough for daily development. But emulation cost depends heavily on the workload: a sequential hash is Rosetta's best case, while compiling native modules, JIT-heavy runtimes and anything that probes CPU features can be far slower or break. And the plain Linux box has <em>no</em> emulator at all — that is why Form 2 above ended in <code>exec format error</code> instead of running slowly.</p>
 <h3>Building for both</h3>
 ${slide('dk-03', 22, 'Docker 29: một lệnh dựng hai kiến trúc, --load thẳng về máy')}
-<pre><code>docker buildx create --name multi --driver docker-container --use
+<pre><code class="language-bash">docker buildx create --name multi --driver docker-container --use
 docker buildx inspect --bootstrap | head -6</code></pre>
 <div class="out">Name:          multi
 Driver:        docker-container
@@ -1731,7 +1731,7 @@ Nodes:
 Name:      multi0
 Status:    running
 Platforms: linux/amd64, linux/amd64/v2, linux/arm64, linux/arm/v7, linux/riscv64</div>
-<pre><code><span class="tok-comment"># Build both architectures and push the index in one command</span>
+<pre><code class="language-bash"><span class="tok-comment"># Build both architectures and push the index in one command</span>
 docker buildx build --platform linux/amd64,linux/arm64 \\
   -t ghcr.io/cuonghoang1103/app:1.0 --push .
 
@@ -1813,7 +1813,7 @@ services:
     image: someorg/oldthing:2.1
     platform: linux/amd64</code></pre>
 <div class="callout ok"><strong><code>platform: linux/amd64</code> in Compose is the pragmatic fix for one stubborn service.</strong> An old image with no ARM build will then run under emulation on an Apple Silicon laptop — slowly, but it runs, and the rest of your stack stays native. Put a comment next to it saying why, because a whole Compose file pinned to <code>linux/amd64</code> is how a team ends up emulating everything and wondering why their machines are slow.</div>
-<pre><code>docker buildx rm multi &gt;/dev/null 2&gt;&amp;1; docker rmi alpine:3.20 &gt;/dev/null 2&gt;&amp;1</code></pre>
+<pre><code class="language-bash">docker buildx rm multi &gt;/dev/null 2&gt;&amp;1; docker rmi alpine:3.20 &gt;/dev/null 2&gt;&amp;1</code></pre>
 
 <h3>Why exec format error happens</h3>
 <div class="lz-flow">
@@ -1936,7 +1936,7 @@ exit=255</div>
 Nên hãy đọc đường dẫn trong thông báo. <code>exec /usr/local/bin/node</code> hay <code>exec /bin/sh</code> (một chương trình thật) ⇒ kiến trúc. <code>exec /run.sh</code> hay <code>exec /docker-entrypoint.sh</code> (script của bạn) ⇒ kiểm dòng đầu của nó: thiếu <code>#!</code>, hoặc kiểu xuống dòng Windows biến nó thành <code>#!/bin/sh\\r</code> (khi đó thông báo là <code>exec /run.sh: no such file or directory</code> — đo cùng cách). Dòng <code>WARNING … does not match the detected host platform</code> chỉ xuất hiện trong trường hợp kiến trúc.</div>
 <h3>Đọc một cái chỉ mục</h3>
 ${slide('dk-03', 20, 'Mỗi máy tự chọn mục khớp CPU của nó trong chỉ mục')}
-<pre><code>docker buildx imagetools inspect --raw node:22-alpine \\
+<pre><code class="language-bash">docker buildx imagetools inspect --raw node:22-alpine \\
   | jq -r '.manifests[] | "\\(.platform.os)/\\(.platform.architecture)\\(.platform.variant // "") \\(.digest[0:19])"'</code></pre>
 <div class="out">linux/amd64 sha256:b64da1de5a51
 unknown/unknown sha256:392560769c9e
@@ -1950,7 +1950,7 @@ linux/s390x sha256:a13e916dbc76
 unknown/unknown sha256:dce75336ebc8</div>
 <p class="note-ct">Output thật (máy Mac của khoá, 23/09/2026). Bản viết theo Engine 27 liệt kê những digest bịa và một bản <code>ppc64le</code>; hôm nay <code>node:22-alpine</code> có năm nền tảng, mỗi cái đi kèm một mục chứng thực <em>RIÊNG</em>. Cách viết <code>armv6</code>/<code>arm64v8</code> (không có dấu gạch chéo) là do bộ lọc <code>jq</code> này dán phần variant vào ngay sau kiến trúc; <code>imagetools inspect</code> thì in <code>linux/arm64/v8</code>.</p>
 <p>Năm nền tảng thật, mỗi nền tảng thêm một mục <code>unknown/unknown</code>, và đó là manifest chứng thực — xuất xứ bản dựng và một SBOM, do BuildKit hiện đại đính kèm vào chỉ mục. Nó không phải một nền tảng và bị bỏ qua khi Docker chọn xem phải kéo ảnh nào.</p>
-<pre><code><span class="tok-comment"># CÁI MÁY NÀY phân giải cái tag đó ra thành gì?</span>
+<pre><code class="language-bash"><span class="tok-comment"># CÁI MÁY NÀY phân giải cái tag đó ra thành gì?</span>
 docker pull -q node:22-alpine &gt;/dev/null
 docker image inspect node:22-alpine --format '{{.Os}}/{{.Architecture}}'
 docker version --format '{{.Server.Arch}}'</code></pre>
@@ -1960,14 +1960,14 @@ amd64</div>
 
 <h3>--platform, và cái giá thật của nó</h3>
 ${slide('dk-03', 21, 'Rosetta gần như miễn phí, QEMU chậm khoảng 3 lần')}
-<pre><code><span class="tok-comment"># Yêu cầu một nền tảng cụ thể một cách tường minh</span>
+<pre><code class="language-bash"><span class="tok-comment"># Yêu cầu một nền tảng cụ thể một cách tường minh</span>
 docker pull --platform linux/arm64 alpine:3.20
 docker run --rm --platform linux/arm64 alpine uname -m
 docker run --rm alpine uname -m</code></pre>
 <div class="out">aarch64
 x86_64</div>
 <p>Một chương trình ARM vừa chạy trên một cái máy x86. Chuyện đó được vì Docker Desktop, và các máy chủ Linux có cấu hình <code>binfmt_misc</code>, âm thầm định tuyến những chương trình ngoại lai qua mô phỏng QEMU. Nó thật sự hữu ích — và nó <strong>CHẬM</strong>, chậm theo cách làm người ta bất ngờ:</p>
-<pre><code><span class="tok-comment"># Cài các bộ mô phỏng trên một máy chủ Linux thuần (làm một lần)</span>
+<pre><code class="language-bash"><span class="tok-comment"># Cài các bộ mô phỏng trên một máy chủ Linux thuần (làm một lần)</span>
 docker run --privileged --rm tonistiigi/binfmt --install all
 ls /proc/sys/fs/binfmt_misc/ | head -5
 
@@ -2011,7 +2011,7 @@ done</code></pre>
 <p>(Một <code>docker run --rm alpine:3.20 true</code> rỗng mất 0,25 giây, nên chi phí của bản thân container ở đây là nhỏ.) Hai bài học thực tế. Trên Mac, chạy một ảnh chỉ có amd64 — một công cụ cũ, một ảnh của nhà cung cấp — đủ rẻ để dùng hằng ngày khi phát triển. Nhưng cái giá của mô phỏng phụ thuộc rất nhiều vào loại việc: băm tuần tự là trường hợp đẹp nhất của Rosetta, còn biên dịch mô-đun native, runtime dùng JIT nhiều, và bất cứ thứ gì dò tính năng CPU có thể chậm hơn nhiều hoặc hỏng hẳn. Và máy Linux thuần thì KHÔNG có bộ mô phỏng nào — đó là lý do Dạng 2 ở trên kết thúc bằng <code>exec format error</code> thay vì chạy chậm.</p>
 <h3>Dựng cho cả hai</h3>
 ${slide('dk-03', 22, 'Docker 29: một lệnh dựng hai kiến trúc, --load thẳng về máy')}
-<pre><code>docker buildx create --name multi --driver docker-container --use
+<pre><code class="language-bash">docker buildx create --name multi --driver docker-container --use
 docker buildx inspect --bootstrap | head -6</code></pre>
 <div class="out">Name:          multi
 Driver:        docker-container
@@ -2019,7 +2019,7 @@ Nodes:
 Name:      multi0
 Status:    running
 Platforms: linux/amd64, linux/amd64/v2, linux/arm64, linux/arm/v7, linux/riscv64</div>
-<pre><code><span class="tok-comment"># Dựng cả hai kiến trúc rồi đẩy chỉ mục lên, trong một câu lệnh</span>
+<pre><code class="language-bash"><span class="tok-comment"># Dựng cả hai kiến trúc rồi đẩy chỉ mục lên, trong một câu lệnh</span>
 docker buildx build --platform linux/amd64,linux/arm64 \\
   -t ghcr.io/cuonghoang1103/app:1.0 --push .
 
@@ -2101,7 +2101,7 @@ services:
     image: someorg/oldthing:2.1
     platform: linux/amd64</code></pre>
 <div class="callout ok"><strong><code>platform: linux/amd64</code> trong Compose là cách chữa thực dụng cho MỘT dịch vụ cứng đầu.</strong> Một ảnh cũ không có bản dựng ARM khi đó sẽ chạy dưới mô phỏng trên một laptop Apple Silicon — chậm, nhưng nó CHẠY, và phần còn lại của hệ thống vẫn native. Hãy đặt một dòng chú thích bên cạnh nói rõ vì sao, bởi vì cả một file Compose bị ghim vào <code>linux/amd64</code> là cách một đội rốt cuộc mô phỏng MỌI THỨ rồi tự hỏi sao máy mình chậm thế.</div>
-<pre><code>docker buildx rm multi &gt;/dev/null 2&gt;&amp;1; docker rmi alpine:3.20 &gt;/dev/null 2&gt;&amp;1</code></pre>
+<pre><code class="language-bash">docker buildx rm multi &gt;/dev/null 2&gt;&amp;1; docker rmi alpine:3.20 &gt;/dev/null 2&gt;&amp;1</code></pre>
 
 <h3>Vì sao có lỗi exec format error</h3>
 <div class="lz-flow">
@@ -2187,7 +2187,7 @@ services:
 
 <h3>Where the space actually is</h3>
 ${slide('dk-03', 24, 'docker system df: máy dựng ở nhà đang ôm 355 GB bộ đệm')}
-<pre><code>docker system df
+<pre><code class="language-bash">docker system df
 docker system df -v | head -20
 df -h /var/lib/docker | tail -1</code></pre>
 <div class="out">TYPE            TOTAL     ACTIVE    SIZE      RECLAIMABLE
@@ -2202,7 +2202,7 @@ Build Cache     412       0         11.03GB   11.03GB (100%)
   <div class="kv"><span class="k">Local Volumes · RECLAIMABLE</span><span class="v">Volumes no container references. Here be dragons: this number includes the anonymous volume holding a database from a container you deleted last month, which may be the only copy of that data.</span></div>
   <div class="kv"><span class="k">Containers</span><span class="v">Writable layers of stopped containers. Usually small, occasionally not — a container that logged to a file inside itself can be gigabytes.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Which images specifically, biggest first</span>
+<pre><code class="language-bash"><span class="tok-comment"># Which images specifically, biggest first</span>
 docker images --format '{{.Size}}\\t{{.Repository}}:{{.Tag}}\\t{{.CreatedSince}}' | sort -hr | head -8
 <span class="tok-comment"># And the dangling ones — untagged, referenced by nothing</span>
 docker images -f dangling=true --format '{{.ID}} {{.Size}} {{.CreatedSince}}' | head -5</code></pre>
@@ -2247,7 +2247,7 @@ ${slide('dk-03', 25, 'Thang dọn đĩa: leo từ dưới lên, rủi ro tăng m
   <div class="lz-step"><span class="lz-k">4 · Old tagged images — think first</span><span class="lz-t">docker image prune -a --filter "until=336h"</span><span class="lz-d">Removes tagged images older than two weeks that no container uses. Costs a re-pull, and on a production host it may remove the image you would roll back to.</span></div>
   <div class="lz-step"><span class="lz-k">5 · Volumes — DANGEROUS</span><span class="lz-t">docker volume ls -f dangling=true, then read the list</span><span class="lz-d">Never prune volumes reflexively. Look at each one, confirm what it holds, and take a backup of anything you are unsure about. This is the step that deletes databases.</span></div>
 </div>
-<pre><code>docker builder prune -f
+<pre><code class="language-bash">docker builder prune -f
 docker image prune -f
 docker container prune -f
 docker system df</code></pre>
@@ -2276,7 +2276,7 @@ Build Cache     0         0         0B        0B</div>
 
 <h3>Filters, so you keep what matters</h3>
 ${slide('dk-03', 26, 'prune -a xoá luôn bản bạn định quay lui về')}
-<pre><code><span class="tok-comment"># Everything unused older than a week, but keep anything labelled as protected</span>
+<pre><code class="language-bash"><span class="tok-comment"># Everything unused older than a week, but keep anything labelled as protected</span>
 docker image prune -a -f \\
   --filter "until=168h" \\
   --filter "label!=keep=true"
@@ -2319,7 +2319,7 @@ docker build --label keep=true -t app:1.4.2 .
 docker image prune -a -f --filter "label!=keep=true"</code></pre>
 <h3>Volumes deserve their own paragraph</h3>
 ${slide('dk-03', 27, 'volume prune chỉ xoá volume vô danh — vẫn phải nhìn trước')}
-<pre><code>docker volume ls -f dangling=true
+<pre><code class="language-bash">docker volume ls -f dangling=true
 docker volume inspect \$(docker volume ls -qf dangling=true | head -1) \\
   --format '{{.Name}} {{.Mountpoint}} {{.CreatedAt}}'
 sudo du -sh /var/lib/docker/volumes/* 2&gt;/dev/null | sort -hr | head -5</code></pre>
@@ -2331,7 +2331,7 @@ local     pgdata_old
 1.1G	/var/lib/docker/volumes/pgdata
 890M	/var/lib/docker/volumes/pgdata_old
 <span class="tok-comment"># That 3.9G random name is an anonymous volume — quite possibly a database.</span></div>
-<pre><code><span class="tok-comment"># Look inside before deciding anything</span>
+<pre><code class="language-bash"><span class="tok-comment"># Look inside before deciding anything</span>
 sudo ls /var/lib/docker/volumes/4f9a2c1e8b3d…/_data | head -5
 <span class="tok-comment"># Or without root, through a container:</span>
 docker run --rm -v 4f9a2c1e8b3d…:/v alpine ls -la /v | head -5</code></pre>
@@ -2391,7 +2391,7 @@ RandomizedDelaySec=1800
 
 [Install]
 WantedBy=timers.target</code></pre>
-<pre><code>sudo systemctl daemon-reload
+<pre><code class="language-bash">sudo systemctl daemon-reload
 sudo systemctl enable --now docker-prune.timer
 systemctl list-timers docker-prune.timer --no-pager</code></pre>
 <div class="out">NEXT                        LEFT      LAST  PASSED  UNIT                ACTIVATES
@@ -2468,7 +2468,7 @@ Sun 2026-08-24 04:00:00 UTC 1 day 6h  -     -       docker-prune.timer  docker-p
 
 <h3>Chỗ trống thật ra nằm ở đâu</h3>
 ${slide('dk-03', 24, 'docker system df: máy dựng ở nhà đang ôm 355 GB bộ đệm')}
-<pre><code>docker system df
+<pre><code class="language-bash">docker system df
 docker system df -v | head -20
 df -h /var/lib/docker | tail -1</code></pre>
 <div class="out">TYPE            TOTAL     ACTIVE    SIZE      RECLAIMABLE
@@ -2483,7 +2483,7 @@ Build Cache     412       0         11.03GB   11.03GB (100%)
   <div class="kv"><span class="k">Local Volumes · RECLAIMABLE</span><span class="v">Những volume không container nào tham chiếu. Ở đây có rồng: con số này bao gồm cả cái volume vô danh đang giữ một cơ sở dữ liệu từ một container bạn xoá tháng trước, và đó có thể là bản duy nhất của dữ liệu ấy.</span></div>
   <div class="kv"><span class="k">Containers</span><span class="v">Tầng ghi được của các container đã dừng. Thường nhỏ, thỉnh thoảng thì không — một container ghi log vào một file bên trong chính nó có thể nặng hàng gigabyte.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Cụ thể là những ảnh nào, lớn nhất trước</span>
+<pre><code class="language-bash"><span class="tok-comment"># Cụ thể là những ảnh nào, lớn nhất trước</span>
 docker images --format '{{.Size}}\\t{{.Repository}}:{{.Tag}}\\t{{.CreatedSince}}' | sort -hr | head -8
 <span class="tok-comment"># Và những cái mồ côi — không tag, không gì tham chiếu tới</span>
 docker images -f dangling=true --format '{{.ID}} {{.Size}} {{.CreatedSince}}' | head -5</code></pre>
@@ -2528,7 +2528,7 @@ ${slide('dk-03', 25, 'Thang dọn đĩa: leo từ dưới lên, rủi ro tăng m
   <div class="lz-step"><span class="lz-k">4 · Ảnh cũ có tag — nghĩ trước đã</span><span class="lz-t">docker image prune -a --filter "until=336h"</span><span class="lz-d">Gỡ những ảnh có tag cũ hơn hai tuần mà không container nào dùng. Tốn một lượt kéo lại, và trên máy chủ production nó có thể gỡ mất cái ảnh bạn định quay lui về.</span></div>
   <div class="lz-step"><span class="lz-k">5 · Volume — NGUY HIỂM</span><span class="lz-t">docker volume ls -f dangling=true, rồi ĐỌC cái danh sách</span><span class="lz-d">Đừng bao giờ tỉa volume theo phản xạ. Hãy nhìn từng cái, xác nhận nó chứa gì, và sao lưu bất cứ thứ gì bạn không chắc. Đây là bước xoá mất cơ sở dữ liệu.</span></div>
 </div>
-<pre><code>docker builder prune -f
+<pre><code class="language-bash">docker builder prune -f
 docker image prune -f
 docker container prune -f
 docker system df</code></pre>
@@ -2557,7 +2557,7 @@ Build Cache     0         0         0B        0B</div>
 
 <h3>Bộ lọc, để bạn giữ lại thứ đáng giữ</h3>
 ${slide('dk-03', 26, 'prune -a xoá luôn bản bạn định quay lui về')}
-<pre><code><span class="tok-comment"># Mọi thứ không dùng và cũ hơn một tuần, nhưng giữ lại thứ có nhãn bảo vệ</span>
+<pre><code class="language-bash"><span class="tok-comment"># Mọi thứ không dùng và cũ hơn một tuần, nhưng giữ lại thứ có nhãn bảo vệ</span>
 docker image prune -a -f \\
   --filter "until=168h" \\
   --filter "label!=keep=true"
@@ -2600,7 +2600,7 @@ docker build --label keep=true -t app:1.4.2 .
 docker image prune -a -f --filter "label!=keep=true"</code></pre>
 <h3>Volume xứng đáng một đoạn riêng</h3>
 ${slide('dk-03', 27, 'volume prune chỉ xoá volume vô danh — vẫn phải nhìn trước')}
-<pre><code>docker volume ls -f dangling=true
+<pre><code class="language-bash">docker volume ls -f dangling=true
 docker volume inspect \$(docker volume ls -qf dangling=true | head -1) \\
   --format '{{.Name}} {{.Mountpoint}} {{.CreatedAt}}'
 sudo du -sh /var/lib/docker/volumes/* 2&gt;/dev/null | sort -hr | head -5</code></pre>
@@ -2612,7 +2612,7 @@ local     pgdata_old
 1.1G	/var/lib/docker/volumes/pgdata
 890M	/var/lib/docker/volumes/pgdata_old
 <span class="tok-comment"># Cái 3,9G tên ngẫu nhiên kia là một volume vô danh — rất có thể là một cơ sở dữ liệu.</span></div>
-<pre><code><span class="tok-comment"># Nhìn vào bên trong TRƯỚC KHI quyết định bất cứ điều gì</span>
+<pre><code class="language-bash"><span class="tok-comment"># Nhìn vào bên trong TRƯỚC KHI quyết định bất cứ điều gì</span>
 sudo ls /var/lib/docker/volumes/4f9a2c1e8b3d…/_data | head -5
 <span class="tok-comment"># Hoặc không cần root, qua một container:</span>
 docker run --rm -v 4f9a2c1e8b3d…:/v alpine ls -la /v | head -5</code></pre>
@@ -2672,7 +2672,7 @@ RandomizedDelaySec=1800
 
 [Install]
 WantedBy=timers.target</code></pre>
-<pre><code>sudo systemctl daemon-reload
+<pre><code class="language-bash">sudo systemctl daemon-reload
 sudo systemctl enable --now docker-prune.timer
 systemctl list-timers docker-prune.timer --no-pager</code></pre>
 <div class="out">NEXT                        LEFT      LAST  PASSED  UNIT                ACTIVATES

@@ -2,7 +2,7 @@
  * PRJ301 — Java Web Application Development (Phát triển ứng dụng Java web). Kỳ 4.
  * Bám syllabus FPTU (sylID 13165, 9 CLO). Tiên quyết: DBI202, PRO192.
  * Servlet/JSP, scope, JDBC, MVC, JPA, AI. Tomcat 10+ + NetBeans 13 + SQL Server 2019.
- * Song ngữ EN/VN. Code Java/JSP <pre>+.tok-*. Ví dụ giải từng bước + ★ ngoài giáo trình.
+ * Song ngữ EN/VN. Code Java/JSP <pre><code class="language-java">+.tok-*. Ví dụ giải từng bước + ★ ngoài giáo trình.
  * Deep-link CodeLab java-core + sql + spring-boot; setup → Exp Hub.
  * Seed: node scripts/academy-seed-course.mjs --file ./content/academy/PRJ301.mjs --apply
  */
@@ -273,7 +273,7 @@ export default {
         resp.<span class="tok-function">setContentType</span>(<span class="tok-string">"text/html"</span>);
         resp.<span class="tok-function">getWriter</span>().<span class="tok-function">println</span>(<span class="tok-string">"&lt;h1&gt;Hello, PRJ301!&lt;/h1&gt;"</span>);
     }
-}</pre>
+}</code></pre>
 <div class="out">Deploy to Tomcat, visit <span class="badge">localhost:8080/app/hello</span> → the browser shows "Hello, PRJ301!". The <span class="badge">@WebServlet("/hello")</span> maps that URL to this class.</div>
 
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>HTTP is stateless — and why that matters.</b> Each request is independent; the server does not remember the last one. So how does a site "remember" you are logged in? Through <b>cookies</b> and <b>sessions</b> (Chapter 4). Understanding that the web is stateless by default explains every session bug you will ever hit — and is the reason the session scope exists at all.</div>
@@ -299,14 +299,14 @@ export default {
 <p>Response mang một <strong>mã trạng thái</strong>: 200 OK, 404 Not Found, 500 Server Error, 302 Redirect — bạn đã thấy chúng khi debug ở các môn trước.</p>
 
 <h3>Ví dụ có lời giải · Servlet đầu tiên</h3>
-<pre><span class="tok-keyword">@WebServlet</span>(<span class="tok-string">"/hello"</span>)
+<pre><code class="language-java"><span class="tok-keyword">@WebServlet</span>(<span class="tok-string">"/hello"</span>)
 <span class="tok-keyword">public class</span> <span class="tok-type">HelloServlet</span> <span class="tok-keyword">extends</span> <span class="tok-type">HttpServlet</span> {
     <span class="tok-keyword">protected void</span> <span class="tok-function">doGet</span>(<span class="tok-type">HttpServletRequest</span> req, <span class="tok-type">HttpServletResponse</span> resp)
             <span class="tok-keyword">throws</span> IOException {
         resp.<span class="tok-function">setContentType</span>(<span class="tok-string">"text/html"</span>);
         resp.<span class="tok-function">getWriter</span>().<span class="tok-function">println</span>(<span class="tok-string">"&lt;h1&gt;Hello, PRJ301!&lt;/h1&gt;"</span>);
     }
-}</pre>
+}</code></pre>
 <div class="out">Deploy lên Tomcat, truy cập <span class="badge">localhost:8080/app/hello</span> → trình duyệt hiện "Hello, PRJ301!". <span class="badge">@WebServlet("/hello")</span> ánh xạ URL đó tới lớp này.</div>
 
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>HTTP không trạng thái (stateless) — và vì sao điều đó quan trọng.</b> Mỗi request độc lập; server không nhớ request trước. Vậy làm sao một site "nhớ" bạn đã đăng nhập? Qua <b>cookie</b> và <b>session</b> (Chương 4). Hiểu rằng web mặc định không trạng thái giải thích mọi lỗi session bạn sẽ gặp — và là lý do phạm vi session tồn tại.</div>
@@ -350,7 +350,7 @@ export default {
     <tr><td>Seeing all routes at once</td><td>scattered across files</td><td>all in one file</td></tr>
   </tbody>
 </table>
-<pre><span class="tok-comment">&lt;!-- web.xml: the same mapping as @WebServlet("/login") --&gt;</span>
+<pre><code class="language-xml"><span class="tok-comment">&lt;!-- web.xml: the same mapping as @WebServlet("/login") --&gt;</span>
 <span class="tok-type">&lt;servlet&gt;</span>
     <span class="tok-type">&lt;servlet-name&gt;</span>LoginServlet<span class="tok-type">&lt;/servlet-name&gt;</span>
     <span class="tok-type">&lt;servlet-class&gt;</span>controller.LoginServlet<span class="tok-type">&lt;/servlet-class&gt;</span>
@@ -362,7 +362,7 @@ export default {
 
 <span class="tok-type">&lt;welcome-file-list&gt;</span>          <span class="tok-comment">&lt;!-- what "/" shows --&gt;</span>
     <span class="tok-type">&lt;welcome-file&gt;</span>index.jsp<span class="tok-type">&lt;/welcome-file&gt;</span>
-<span class="tok-type">&lt;/welcome-file-list&gt;</span></pre>
+<span class="tok-type">&lt;/welcome-file-list&gt;</span></code></pre>
 
 <h3>URL patterns — how Tomcat picks a servlet</h3>
 <table>
@@ -414,7 +414,7 @@ export default {
     <tr><td>Nhìn thấy toàn bộ tuyến đường</td><td>rải rác khắp các file</td><td>gom trong một file</td></tr>
   </tbody>
 </table>
-<pre><span class="tok-comment">&lt;!-- web.xml: cùng ánh xạ với @WebServlet("/login") --&gt;</span>
+<pre><code class="language-xml"><span class="tok-comment">&lt;!-- web.xml: cùng ánh xạ với @WebServlet("/login") --&gt;</span>
 <span class="tok-type">&lt;servlet&gt;</span>
     <span class="tok-type">&lt;servlet-name&gt;</span>LoginServlet<span class="tok-type">&lt;/servlet-name&gt;</span>
     <span class="tok-type">&lt;servlet-class&gt;</span>controller.LoginServlet<span class="tok-type">&lt;/servlet-class&gt;</span>
@@ -426,7 +426,7 @@ export default {
 
 <span class="tok-type">&lt;welcome-file-list&gt;</span>          <span class="tok-comment">&lt;!-- "/" sẽ hiện trang nào --&gt;</span>
     <span class="tok-type">&lt;welcome-file&gt;</span>index.jsp<span class="tok-type">&lt;/welcome-file&gt;</span>
-<span class="tok-type">&lt;/welcome-file-list&gt;</span></pre>
+<span class="tok-type">&lt;/welcome-file-list&gt;</span></code></pre>
 
 <h3>Mẫu URL — Tomcat chọn servlet như thế nào</h3>
 <table>
@@ -475,9 +475,9 @@ export default {
 <p>Because <span class="badge">init()</span> runs once, a Servlet is created a single time and reused for many requests — so never store per-user data in a Servlet field (that would leak between users).</p>
 
 <h3>Reading form input</h3>
-<pre><span class="tok-type">String</span> user = req.<span class="tok-function">getParameter</span>(<span class="tok-string">"username"</span>);
+<pre><code class="language-java"><span class="tok-type">String</span> user = req.<span class="tok-function">getParameter</span>(<span class="tok-string">"username"</span>);
 <span class="tok-type">String</span> pass = req.<span class="tok-function">getParameter</span>(<span class="tok-string">"password"</span>);
-<span class="tok-comment">// getParameter always returns String — parse if you need a number</span></pre>
+<span class="tok-comment">// getParameter always returns String — parse if you need a number</span></code></pre>
 
 <h3>Forward vs redirect — a classic exam question</h3>
 <table>
@@ -512,9 +512,9 @@ export default {
 <p>Vì <span class="badge">init()</span> chạy một lần, một Servlet được tạo duy nhất và tái dùng cho nhiều request — nên đừng bao giờ lưu dữ liệu riêng của người dùng vào trường của Servlet (sẽ rò rỉ giữa các người dùng).</p>
 
 <h3>Đọc input từ form</h3>
-<pre><span class="tok-type">String</span> user = req.<span class="tok-function">getParameter</span>(<span class="tok-string">"username"</span>);
+<pre><code class="language-java"><span class="tok-type">String</span> user = req.<span class="tok-function">getParameter</span>(<span class="tok-string">"username"</span>);
 <span class="tok-type">String</span> pass = req.<span class="tok-function">getParameter</span>(<span class="tok-string">"password"</span>);
-<span class="tok-comment">// getParameter luôn trả String — parse nếu cần số</span></pre>
+<span class="tok-comment">// getParameter luôn trả String — parse nếu cần số</span></code></pre>
 
 <h3>Forward vs redirect — câu hỏi thi kinh điển</h3>
 <table>
@@ -559,27 +559,27 @@ export default {
     <tr><td><span class="badge">getHeader("User-Agent")</span></td><td>String</td><td>browser info, referer, custom headers</td></tr>
   </tbody>
 </table>
-<pre><span class="tok-type">String</span>[] hobbies = req.<span class="tok-function">getParameterValues</span>(<span class="tok-string">"hobby"</span>);
+<pre><code class="language-java"><span class="tok-type">String</span>[] hobbies = req.<span class="tok-function">getParameterValues</span>(<span class="tok-string">"hobby"</span>);
 <span class="tok-keyword">if</span> (hobbies != <span class="tok-keyword">null</span>) {                 <span class="tok-comment">// null when NOTHING was ticked</span>
     <span class="tok-keyword">for</span> (<span class="tok-type">String</span> h : hobbies) { <span class="tok-comment">/* … */</span> }
-}</pre>
+}</code></pre>
 <div class="note-ct">Three request facts worth memorising: an unticked checkbox sends <em>nothing at all</em> (so the parameter is null, not "false"); every parameter arrives as a String, even numbers; and a text field left empty sends <span class="badge">""</span>, which is not the same as null.</div>
 
 <h3>GET vs POST, revisited at the code level</h3>
-<pre><span class="tok-keyword">protected void</span> <span class="tok-function">doGet</span>(HttpServletRequest req, HttpServletResponse resp) {
+<pre><code class="language-java"><span class="tok-keyword">protected void</span> <span class="tok-function">doGet</span>(HttpServletRequest req, HttpServletResponse resp) {
     <span class="tok-comment">// show the form</span>
 }
 <span class="tok-keyword">protected void</span> <span class="tok-function">doPost</span>(HttpServletRequest req, HttpServletResponse resp) {
     <span class="tok-function">processData</span>(req, resp);           <span class="tok-comment">// handle the submission</span>
-}</pre>
+}</code></pre>
 <div class="out">A form with <span class="badge">method="post"</span> whose Servlet only implements <span class="badge">doGet</span> produces <b>HTTP 405 Method Not Allowed</b>. This is the single most common "my form does nothing" bug in the practical exam, and the error message names the cause exactly.</div>
 
 <h3>Controlling the response</h3>
-<pre>resp.<span class="tok-function">setContentType</span>(<span class="tok-string">"text/html;charset=UTF-8"</span>);   <span class="tok-comment">// type + encoding</span>
+<pre><code class="language-java">resp.<span class="tok-function">setContentType</span>(<span class="tok-string">"text/html;charset=UTF-8"</span>);   <span class="tok-comment">// type + encoding</span>
 resp.<span class="tok-function">setCharacterEncoding</span>(<span class="tok-string">"UTF-8"</span>);
 resp.<span class="tok-function">sendError</span>(404, <span class="tok-string">"Product not found"</span>);        <span class="tok-comment">// a proper error page</span>
 resp.<span class="tok-function">setHeader</span>(<span class="tok-string">"Cache-Control"</span>, <span class="tok-string">"no-store"</span>);      <span class="tok-comment">// don't cache this page</span>
-resp.<span class="tok-function">sendRedirect</span>(<span class="tok-string">"home"</span>);                        <span class="tok-comment">// 302 to another URL</span></pre>
+resp.<span class="tok-function">sendRedirect</span>(<span class="tok-string">"home"</span>);                        <span class="tok-comment">// 302 to another URL</span></code></pre>
 
 <h3>The Vietnamese-text bug, solved once</h3>
 <p>Submitting "Nguyễn Văn A" and getting "Nguyá»…n VÄƒn A" is an encoding mismatch, not a database problem. Fix it at all three points:</p>
@@ -609,27 +609,27 @@ resp.<span class="tok-function">sendRedirect</span>(<span class="tok-string">"ho
     <tr><td><span class="badge">getHeader("User-Agent")</span></td><td>String</td><td>thông tin trình duyệt, referer, header tuỳ biến</td></tr>
   </tbody>
 </table>
-<pre><span class="tok-type">String</span>[] hobbies = req.<span class="tok-function">getParameterValues</span>(<span class="tok-string">"hobby"</span>);
+<pre><code class="language-java"><span class="tok-type">String</span>[] hobbies = req.<span class="tok-function">getParameterValues</span>(<span class="tok-string">"hobby"</span>);
 <span class="tok-keyword">if</span> (hobbies != <span class="tok-keyword">null</span>) {                 <span class="tok-comment">// null khi KHÔNG tick cái nào</span>
     <span class="tok-keyword">for</span> (<span class="tok-type">String</span> h : hobbies) { <span class="tok-comment">/* … */</span> }
-}</pre>
+}</code></pre>
 <div class="note-ct">Ba sự thật về request đáng thuộc: một checkbox không tick thì <em>không gửi gì cả</em> (nên tham số là null, không phải "false"); mọi tham số đều tới dưới dạng String, kể cả số; và một ô văn bản để trống gửi <span class="badge">""</span>, khác hẳn null.</div>
 
 <h3>GET và POST, nhìn lại ở mức code</h3>
-<pre><span class="tok-keyword">protected void</span> <span class="tok-function">doGet</span>(HttpServletRequest req, HttpServletResponse resp) {
+<pre><code class="language-java"><span class="tok-keyword">protected void</span> <span class="tok-function">doGet</span>(HttpServletRequest req, HttpServletResponse resp) {
     <span class="tok-comment">// hiển thị form</span>
 }
 <span class="tok-keyword">protected void</span> <span class="tok-function">doPost</span>(HttpServletRequest req, HttpServletResponse resp) {
     <span class="tok-function">processData</span>(req, resp);           <span class="tok-comment">// xử lý dữ liệu gửi lên</span>
-}</pre>
+}</code></pre>
 <div class="out">Một form có <span class="badge">method="post"</span> mà Servlet chỉ cài đặt <span class="badge">doGet</span> sẽ cho ra <b>HTTP 405 Method Not Allowed</b>. Đây là lỗi "form của em bấm không ăn gì" phổ biến nhất trong thi thực hành, và thông báo lỗi nêu đúng nguyên nhân.</div>
 
 <h3>Điều khiển response</h3>
-<pre>resp.<span class="tok-function">setContentType</span>(<span class="tok-string">"text/html;charset=UTF-8"</span>);   <span class="tok-comment">// kiểu + bảng mã</span>
+<pre><code class="language-java">resp.<span class="tok-function">setContentType</span>(<span class="tok-string">"text/html;charset=UTF-8"</span>);   <span class="tok-comment">// kiểu + bảng mã</span>
 resp.<span class="tok-function">setCharacterEncoding</span>(<span class="tok-string">"UTF-8"</span>);
 resp.<span class="tok-function">sendError</span>(404, <span class="tok-string">"Product not found"</span>);        <span class="tok-comment">// trang lỗi đúng chuẩn</span>
 resp.<span class="tok-function">setHeader</span>(<span class="tok-string">"Cache-Control"</span>, <span class="tok-string">"no-store"</span>);      <span class="tok-comment">// đừng cache trang này</span>
-resp.<span class="tok-function">sendRedirect</span>(<span class="tok-string">"home"</span>);                        <span class="tok-comment">// 302 sang URL khác</span></pre>
+resp.<span class="tok-function">sendRedirect</span>(<span class="tok-string">"home"</span>);                        <span class="tok-comment">// 302 sang URL khác</span></code></pre>
 
 <h3>Lỗi tiếng Việt, giải một lần cho xong</h3>
 <p>Gửi lên "Nguyễn Văn A" mà nhận về "Nguyá»…n VÄƒn A" là lệch bảng mã, không phải lỗi cơ sở dữ liệu. Sửa ở cả ba điểm:</p>
@@ -666,7 +666,7 @@ resp.<span class="tok-function">sendRedirect</span>(<span class="tok-string">"ho
     <tr><td>Typical use</td><td>page size for one listing servlet</td><td>DB URL, upload path, app name</td></tr>
   </tbody>
 </table>
-<pre><span class="tok-comment">&lt;!-- web.xml --&gt;</span>
+<pre><code class="language-xml"><span class="tok-comment">&lt;!-- web.xml --&gt;</span>
 <span class="tok-type">&lt;context-param&gt;</span>
     <span class="tok-type">&lt;param-name&gt;</span>uploadDir<span class="tok-type">&lt;/param-name&gt;</span>
     <span class="tok-type">&lt;param-value&gt;</span>/var/data/uploads<span class="tok-type">&lt;/param-value&gt;</span>
@@ -679,27 +679,27 @@ resp.<span class="tok-function">sendRedirect</span>(<span class="tok-string">"ho
         <span class="tok-type">&lt;param-name&gt;</span>pageSize<span class="tok-type">&lt;/param-name&gt;</span>
         <span class="tok-type">&lt;param-value&gt;</span>10<span class="tok-type">&lt;/param-value&gt;</span>
     <span class="tok-type">&lt;/init-param&gt;</span>
-<span class="tok-type">&lt;/servlet&gt;</span></pre>
-<pre><span class="tok-keyword">public class</span> <span class="tok-type">ProductListServlet</span> <span class="tok-keyword">extends</span> <span class="tok-type">HttpServlet</span> {
+<span class="tok-type">&lt;/servlet&gt;</span></code></pre>
+<pre><code class="language-java"><span class="tok-keyword">public class</span> <span class="tok-type">ProductListServlet</span> <span class="tok-keyword">extends</span> <span class="tok-type">HttpServlet</span> {
     <span class="tok-keyword">private int</span> pageSize;
 
     <span class="tok-keyword">public void</span> <span class="tok-function">init</span>() {                    <span class="tok-comment">// runs once, at startup</span>
         pageSize = <span class="tok-type">Integer</span>.<span class="tok-function">parseInt</span>(<span class="tok-function">getInitParameter</span>(<span class="tok-string">"pageSize"</span>));
     }
-}</pre>
+}</code></pre>
 <div class="note-ct">This is also the right place for anything expensive: reading configuration, opening a connection pool, loading a cache. <span class="badge">init()</span> runs once; <span class="badge">doGet()</span> runs thousands of times.</div>
 
 <h3>ServletContext — the application-wide object</h3>
 <p>One <span class="badge">ServletContext</span> exists per web application. It gives you config, a shared attribute store (the application scope of Chapter 4), the real path on disk, and a log:</p>
-<pre>ServletContext ctx = <span class="tok-function">getServletContext</span>();
+<pre><code class="language-java">ServletContext ctx = <span class="tok-function">getServletContext</span>();
 <span class="tok-type">String</span> dir  = ctx.<span class="tok-function">getInitParameter</span>(<span class="tok-string">"uploadDir"</span>);
 <span class="tok-type">String</span> real = ctx.<span class="tok-function">getRealPath</span>(<span class="tok-string">"/images"</span>);      <span class="tok-comment">// physical folder</span>
 ctx.<span class="tok-function">setAttribute</span>(<span class="tok-string">"visitorCount"</span>, 1);           <span class="tok-comment">// shared by ALL users</span>
-ctx.<span class="tok-function">log</span>(<span class="tok-string">"Application started"</span>);</pre>
+ctx.<span class="tok-function">log</span>(<span class="tok-string">"Application started"</span>);</code></pre>
 
 <h3>Server-side validation — the pattern to memorise</h3>
 <p>The practical exam nearly always includes a form that must reject bad input <em>and keep what the user typed</em>. This is the standard shape:</p>
-<pre><span class="tok-type">String</span> name = req.<span class="tok-function">getParameter</span>(<span class="tok-string">"name"</span>);
+<pre><code class="language-java"><span class="tok-type">String</span> name = req.<span class="tok-function">getParameter</span>(<span class="tok-string">"name"</span>);
 <span class="tok-type">String</span> ageStr = req.<span class="tok-function">getParameter</span>(<span class="tok-string">"age"</span>);
 <span class="tok-type">Map</span>&lt;String, String&gt; errors = <span class="tok-keyword">new</span> <span class="tok-type">HashMap</span>&lt;&gt;();
 
@@ -722,7 +722,7 @@ ctx.<span class="tok-function">log</span>(<span class="tok-string">"Application 
     req.<span class="tok-function">getRequestDispatcher</span>(<span class="tok-string">"register.jsp"</span>).<span class="tok-function">forward</span>(req, resp);
     <span class="tok-keyword">return</span>;
 }
-<span class="tok-comment">// valid → save and redirect (PRG, Lesson 2.1)</span></pre>
+<span class="tok-comment">// valid → save and redirect (PRG, Lesson 2.1)</span></code></pre>
 <div class="out">Two details that earn marks: <b>forward</b> (not redirect) so the errors and the typed values survive in the request; and re-displaying the user's input so they do not retype a long form. A validation that clears the form is technically correct and practically hostile.</div>
 
 <div class="pitfall"><b>Trap:</b> <span class="badge">Integer.parseInt(null)</span> and <span class="badge">parseInt("")</span> both throw. Any parameter that will be parsed as a number must be null-checked first, or parsed inside try/catch as above — this single omission is the most common 500 error in student projects.</div>
@@ -743,7 +743,7 @@ ctx.<span class="tok-function">log</span>(<span class="tok-string">"Application 
     <tr><td>Dùng điển hình</td><td>số dòng mỗi trang cho một servlet danh sách</td><td>URL CSDL, đường dẫn upload, tên app</td></tr>
   </tbody>
 </table>
-<pre><span class="tok-comment">&lt;!-- web.xml --&gt;</span>
+<pre><code class="language-xml"><span class="tok-comment">&lt;!-- web.xml --&gt;</span>
 <span class="tok-type">&lt;context-param&gt;</span>
     <span class="tok-type">&lt;param-name&gt;</span>uploadDir<span class="tok-type">&lt;/param-name&gt;</span>
     <span class="tok-type">&lt;param-value&gt;</span>/var/data/uploads<span class="tok-type">&lt;/param-value&gt;</span>
@@ -756,27 +756,27 @@ ctx.<span class="tok-function">log</span>(<span class="tok-string">"Application 
         <span class="tok-type">&lt;param-name&gt;</span>pageSize<span class="tok-type">&lt;/param-name&gt;</span>
         <span class="tok-type">&lt;param-value&gt;</span>10<span class="tok-type">&lt;/param-value&gt;</span>
     <span class="tok-type">&lt;/init-param&gt;</span>
-<span class="tok-type">&lt;/servlet&gt;</span></pre>
-<pre><span class="tok-keyword">public class</span> <span class="tok-type">ProductListServlet</span> <span class="tok-keyword">extends</span> <span class="tok-type">HttpServlet</span> {
+<span class="tok-type">&lt;/servlet&gt;</span></code></pre>
+<pre><code class="language-java"><span class="tok-keyword">public class</span> <span class="tok-type">ProductListServlet</span> <span class="tok-keyword">extends</span> <span class="tok-type">HttpServlet</span> {
     <span class="tok-keyword">private int</span> pageSize;
 
     <span class="tok-keyword">public void</span> <span class="tok-function">init</span>() {                    <span class="tok-comment">// chạy một lần, lúc khởi động</span>
         pageSize = <span class="tok-type">Integer</span>.<span class="tok-function">parseInt</span>(<span class="tok-function">getInitParameter</span>(<span class="tok-string">"pageSize"</span>));
     }
-}</pre>
+}</code></pre>
 <div class="note-ct">Đây cũng là chỗ đúng cho mọi thứ tốn kém: đọc cấu hình, mở connection pool, nạp bộ đệm. <span class="badge">init()</span> chạy một lần; <span class="badge">doGet()</span> chạy hàng nghìn lần.</div>
 
 <h3>ServletContext — đối tượng cấp toàn ứng dụng</h3>
 <p>Mỗi ứng dụng web có đúng một <span class="badge">ServletContext</span>. Nó cho bạn cấu hình, một kho thuộc tính dùng chung (chính là phạm vi application ở Chương 4), đường dẫn thật trên đĩa, và một bộ ghi log:</p>
-<pre>ServletContext ctx = <span class="tok-function">getServletContext</span>();
+<pre><code class="language-java">ServletContext ctx = <span class="tok-function">getServletContext</span>();
 <span class="tok-type">String</span> dir  = ctx.<span class="tok-function">getInitParameter</span>(<span class="tok-string">"uploadDir"</span>);
 <span class="tok-type">String</span> real = ctx.<span class="tok-function">getRealPath</span>(<span class="tok-string">"/images"</span>);      <span class="tok-comment">// thư mục vật lý</span>
 ctx.<span class="tok-function">setAttribute</span>(<span class="tok-string">"visitorCount"</span>, 1);           <span class="tok-comment">// MỌI người dùng đều thấy</span>
-ctx.<span class="tok-function">log</span>(<span class="tok-string">"Application started"</span>);</pre>
+ctx.<span class="tok-function">log</span>(<span class="tok-string">"Application started"</span>);</code></pre>
 
 <h3>Kiểm dữ liệu phía server — mẫu phải thuộc</h3>
 <p>Thi thực hành gần như luôn có một form phải từ chối dữ liệu sai <em>và giữ lại thứ người dùng đã gõ</em>. Đây là hình dạng chuẩn:</p>
-<pre><span class="tok-type">String</span> name = req.<span class="tok-function">getParameter</span>(<span class="tok-string">"name"</span>);
+<pre><code class="language-java"><span class="tok-type">String</span> name = req.<span class="tok-function">getParameter</span>(<span class="tok-string">"name"</span>);
 <span class="tok-type">String</span> ageStr = req.<span class="tok-function">getParameter</span>(<span class="tok-string">"age"</span>);
 <span class="tok-type">Map</span>&lt;String, String&gt; errors = <span class="tok-keyword">new</span> <span class="tok-type">HashMap</span>&lt;&gt;();
 
@@ -799,7 +799,7 @@ ctx.<span class="tok-function">log</span>(<span class="tok-string">"Application 
     req.<span class="tok-function">getRequestDispatcher</span>(<span class="tok-string">"register.jsp"</span>).<span class="tok-function">forward</span>(req, resp);
     <span class="tok-keyword">return</span>;
 }
-<span class="tok-comment">// hợp lệ → lưu rồi redirect (PRG, Bài 2.1)</span></pre>
+<span class="tok-comment">// hợp lệ → lưu rồi redirect (PRG, Bài 2.1)</span></code></pre>
 <div class="out">Hai chi tiết ăn điểm: dùng <b>forward</b> (không phải redirect) để danh sách lỗi và giá trị đã gõ sống sót trong request; và hiển thị lại dữ liệu người dùng để họ khỏi phải gõ lại cả cái form dài. Một bộ kiểm xoá trắng form thì đúng về kỹ thuật nhưng thù địch về thực tế.</div>
 
 <div class="pitfall"><b>Bẫy:</b> <span class="badge">Integer.parseInt(null)</span> và <span class="badge">parseInt("")</span> đều ném ngoại lệ. Mọi tham số sẽ được ép sang số đều phải kiểm null trước, hoặc ép trong try/catch như trên — chỉ mỗi chỗ thiếu này là lỗi 500 phổ biến nhất trong đồ án sinh viên.</div>
@@ -826,12 +826,12 @@ ctx.<span class="tok-function">log</span>(<span class="tok-string">"Application 
 <span class="eyebrow">Chapter 3 · Lesson 3.1</span>
 <h2>JSP — writing pages the clean way</h2>
 <p class="lead">Printing HTML from a Servlet with <span class="badge">getWriter().println</span> gets ugly fast. <strong>JSP</strong> (JavaServer Pages) flips it around: you write an HTML page and drop in dynamic values. JSP is the <em>View</em> in MVC — its only job is display.</p>
-<pre><span class="tok-keyword">&lt;h1&gt;</span>Welcome, \${user.name}<span class="tok-keyword">&lt;/h1&gt;</span>
+<pre><code class="language-xml"><span class="tok-keyword">&lt;h1&gt;</span>Welcome, \${user.name}<span class="tok-keyword">&lt;/h1&gt;</span>
 <span class="tok-keyword">&lt;ul&gt;</span>
   <span class="tok-type">&lt;c:forEach</span> var=<span class="tok-string">"p"</span> items=<span class="tok-string">"\${products}"</span><span class="tok-type">&gt;</span>
     <span class="tok-keyword">&lt;li&gt;</span>\${p.name} — \${p.price}<span class="tok-keyword">&lt;/li&gt;</span>
   <span class="tok-type">&lt;/c:forEach&gt;</span>
-<span class="tok-keyword">&lt;/ul&gt;</span></pre>
+<span class="tok-keyword">&lt;/ul&gt;</span></code></pre>
 <div class="lz-stack">
   <div class="lz-layer"><b>EL (Expression Language)</b> — <span class="badge">\${user.name}</span> reads a value the Servlet stored, calling getName() for you. Clean, no Java code.</div>
   <div class="lz-layer"><b>JSTL</b> — tag library for logic in the page: <span class="badge">&lt;c:forEach&gt;</span> (loop), <span class="badge">&lt;c:if&gt;</span> (condition), <span class="badge">&lt;c:choose&gt;</span>.</div>
@@ -845,12 +845,12 @@ ctx.<span class="tok-function">log</span>(<span class="tok-string">"Application 
 <span class="eyebrow">Chương 3 · Bài 3.1</span>
 <h2>JSP — viết trang một cách sạch sẽ</h2>
 <p class="lead">In HTML từ Servlet bằng <span class="badge">getWriter().println</span> nhanh chóng trở nên xấu xí. <strong>JSP</strong> (JavaServer Pages) lật ngược lại: bạn viết một trang HTML và chèn các giá trị động. JSP là <em>View</em> trong MVC — nhiệm vụ duy nhất là hiển thị.</p>
-<pre><span class="tok-keyword">&lt;h1&gt;</span>Welcome, \${user.name}<span class="tok-keyword">&lt;/h1&gt;</span>
+<pre><code class="language-xml"><span class="tok-keyword">&lt;h1&gt;</span>Welcome, \${user.name}<span class="tok-keyword">&lt;/h1&gt;</span>
 <span class="tok-keyword">&lt;ul&gt;</span>
   <span class="tok-type">&lt;c:forEach</span> var=<span class="tok-string">"p"</span> items=<span class="tok-string">"\${products}"</span><span class="tok-type">&gt;</span>
     <span class="tok-keyword">&lt;li&gt;</span>\${p.name} — \${p.price}<span class="tok-keyword">&lt;/li&gt;</span>
   <span class="tok-type">&lt;/c:forEach&gt;</span>
-<span class="tok-keyword">&lt;/ul&gt;</span></pre>
+<span class="tok-keyword">&lt;/ul&gt;</span></code></pre>
 <div class="lz-stack">
   <div class="lz-layer"><b>EL (Expression Language)</b> — <span class="badge">\${user.name}</span> đọc một giá trị Servlet đã lưu, gọi getName() giúp bạn. Sạch, không code Java.</div>
   <div class="lz-layer"><b>JSTL</b> — thư viện thẻ cho logic trong trang: <span class="badge">&lt;c:forEach&gt;</span> (lặp), <span class="badge">&lt;c:if&gt;</span> (điều kiện), <span class="badge">&lt;c:choose&gt;</span>.</div>
@@ -891,7 +891,7 @@ ctx.<span class="tok-function">log</span>(<span class="tok-string">"Application 
 </table>
 
 <h3>The four JSP tags — recognise them in the exam</h3>
-<pre><span class="tok-comment">&lt;%-- 1. Directive: instructions to the translator --%&gt;</span>
+<pre><code class="language-xml"><span class="tok-comment">&lt;%-- 1. Directive: instructions to the translator --%&gt;</span>
 &lt;%@ page contentType=<span class="tok-string">"text/html;charset=UTF-8"</span> %&gt;
 &lt;%@ page import=<span class="tok-string">"java.util.List"</span> %&gt;
 &lt;%@ include file=<span class="tok-string">"header.jsp"</span> %&gt;              <span class="tok-comment">// merged at translation time</span>
@@ -904,7 +904,7 @@ ctx.<span class="tok-function">log</span>(<span class="tok-string">"Application 
 &lt;% <span class="tok-type">String</span> user = (<span class="tok-type">String</span>) session.<span class="tok-function">getAttribute</span>(<span class="tok-string">"user"</span>); %&gt;
 
 <span class="tok-comment">&lt;%-- 4. Expression: prints a value --%&gt;</span>
-&lt;%= user %&gt;        <span class="tok-comment">// old style — use \${user} instead</span></pre>
+&lt;%= user %&gt;        <span class="tok-comment">// old style — use \${user} instead</span></code></pre>
 <div class="out"><b>The difference that gets tested:</b> a <b>declaration</b> <span class="badge">&lt;%! %&gt;</span> creates an instance field shared by every user — so <span class="badge">counter</span> above counts across all visitors and is a thread-safety hazard. A <b>scriptlet</b> <span class="badge">&lt;% %&gt;</span> creates a local variable inside the service method, private to that one request. Same-looking syntax, completely different lifetime.</div>
 
 <h3>The nine implicit objects (session 22)</h3>
@@ -922,7 +922,7 @@ ctx.<span class="tok-function">log</span>(<span class="tok-string">"Application 
 </table>
 
 <h3>Configuring JSP in web.xml (session 23)</h3>
-<pre><span class="tok-type">&lt;jsp-config&gt;</span>
+<pre><code class="language-xml"><span class="tok-type">&lt;jsp-config&gt;</span>
   <span class="tok-type">&lt;jsp-property-group&gt;</span>
     <span class="tok-type">&lt;url-pattern&gt;</span>*.jsp<span class="tok-type">&lt;/url-pattern&gt;</span>
     <span class="tok-type">&lt;page-encoding&gt;</span>UTF-8<span class="tok-type">&lt;/page-encoding&gt;</span>
@@ -934,7 +934,7 @@ ctx.<span class="tok-function">log</span>(<span class="tok-string">"Application 
 <span class="tok-type">&lt;error-page&gt;</span>                       <span class="tok-comment">&lt;!-- friendly 404 --&gt;</span>
   <span class="tok-type">&lt;error-code&gt;</span>404<span class="tok-type">&lt;/error-code&gt;</span>
   <span class="tok-type">&lt;location&gt;</span>/WEB-INF/jsp/404.jsp<span class="tok-type">&lt;/location&gt;</span>
-<span class="tok-type">&lt;/error-page&gt;</span></pre>
+<span class="tok-type">&lt;/error-page&gt;</span></code></pre>
 <div class="note-ct"><span class="badge">scripting-invalid</span> is worth knowing for the exam: it makes the server reject any page containing a scriptlet. Teams use it to enforce the "no Java in the View" rule mechanically instead of by code review.</div>
 
 <div class="pitfall"><b>Two include mechanisms, not interchangeable.</b> <span class="badge">&lt;%@ include file="a.jsp" %&gt;</span> is a <em>static</em> include: the file is pasted in before translation, so both files share variables — and changing the included file may not take effect until the container recompiles. <span class="badge">&lt;jsp:include page="a.jsp" /&gt;</span> is <em>dynamic</em>: a separate request runs at page-render time, always up to date, no shared local variables. Use static for a fragment of markup, dynamic for a reusable component.</div>
@@ -964,7 +964,7 @@ ctx.<span class="tok-function">log</span>(<span class="tok-string">"Application 
 </table>
 
 <h3>Bốn loại thẻ JSP — nhận diện được trong phòng thi</h3>
-<pre><span class="tok-comment">&lt;%-- 1. Directive: chỉ thị cho bộ dịch --%&gt;</span>
+<pre><code class="language-xml"><span class="tok-comment">&lt;%-- 1. Directive: chỉ thị cho bộ dịch --%&gt;</span>
 &lt;%@ page contentType=<span class="tok-string">"text/html;charset=UTF-8"</span> %&gt;
 &lt;%@ page import=<span class="tok-string">"java.util.List"</span> %&gt;
 &lt;%@ include file=<span class="tok-string">"header.jsp"</span> %&gt;              <span class="tok-comment">// ghép lúc dịch</span>
@@ -977,7 +977,7 @@ ctx.<span class="tok-function">log</span>(<span class="tok-string">"Application 
 &lt;% <span class="tok-type">String</span> user = (<span class="tok-type">String</span>) session.<span class="tok-function">getAttribute</span>(<span class="tok-string">"user"</span>); %&gt;
 
 <span class="tok-comment">&lt;%-- 4. Expression: in ra một giá trị --%&gt;</span>
-&lt;%= user %&gt;        <span class="tok-comment">// kiểu cũ — hãy dùng \${user} thay thế</span></pre>
+&lt;%= user %&gt;        <span class="tok-comment">// kiểu cũ — hãy dùng \${user} thay thế</span></code></pre>
 <div class="out"><b>Khác biệt hay bị ra đề:</b> một <b>declaration</b> <span class="badge">&lt;%! %&gt;</span> tạo ra một trường của đối tượng, dùng chung cho mọi người dùng — nên biến <span class="badge">counter</span> ở trên đếm gộp mọi khách và là một hiểm hoạ về an toàn luồng. Một <b>scriptlet</b> <span class="badge">&lt;% %&gt;</span> tạo một biến cục bộ bên trong phương thức service, riêng cho đúng một request đó. Cú pháp trông giống nhau, vòng đời khác hẳn nhau.</div>
 
 <h3>Chín đối tượng ngầm định (buổi 22)</h3>
@@ -995,7 +995,7 @@ ctx.<span class="tok-function">log</span>(<span class="tok-string">"Application 
 </table>
 
 <h3>Cấu hình JSP trong web.xml (buổi 23)</h3>
-<pre><span class="tok-type">&lt;jsp-config&gt;</span>
+<pre><code class="language-xml"><span class="tok-type">&lt;jsp-config&gt;</span>
   <span class="tok-type">&lt;jsp-property-group&gt;</span>
     <span class="tok-type">&lt;url-pattern&gt;</span>*.jsp<span class="tok-type">&lt;/url-pattern&gt;</span>
     <span class="tok-type">&lt;page-encoding&gt;</span>UTF-8<span class="tok-type">&lt;/page-encoding&gt;</span>
@@ -1007,7 +1007,7 @@ ctx.<span class="tok-function">log</span>(<span class="tok-string">"Application 
 <span class="tok-type">&lt;error-page&gt;</span>                       <span class="tok-comment">&lt;!-- trang 404 thân thiện --&gt;</span>
   <span class="tok-type">&lt;error-code&gt;</span>404<span class="tok-type">&lt;/error-code&gt;</span>
   <span class="tok-type">&lt;location&gt;</span>/WEB-INF/jsp/404.jsp<span class="tok-type">&lt;/location&gt;</span>
-<span class="tok-type">&lt;/error-page&gt;</span></pre>
+<span class="tok-type">&lt;/error-page&gt;</span></code></pre>
 <div class="note-ct"><span class="badge">scripting-invalid</span> đáng biết để đi thi: nó khiến server từ chối mọi trang có chứa scriptlet. Các đội dùng nó để thi hành luật "không có Java trong View" bằng máy móc thay vì bằng việc rà soát code.</div>
 
 <div class="pitfall"><b>Hai cơ chế include, không thay thế nhau được.</b> <span class="badge">&lt;%@ include file="a.jsp" %&gt;</span> là include <em>tĩnh</em>: file được dán vào trước khi dịch, nên hai file dùng chung biến — và sửa file được include có thể chưa có tác dụng cho tới khi container biên dịch lại. <span class="badge">&lt;jsp:include page="a.jsp" /&gt;</span> là <em>động</em>: một request riêng chạy vào lúc render trang, luôn mới nhất, không dùng chung biến cục bộ. Dùng tĩnh cho một mảnh mã đánh dấu, dùng động cho một thành phần tái sử dụng.</div>
@@ -1029,11 +1029,11 @@ ctx.<span class="tok-function">log</span>(<span class="tok-string">"Application 
 
 <h3>What <span class="badge">\${user.name}</span> really does</h3>
 <div class="out">EL does not read a field. It calls the <b>getter</b>: <span class="badge">\${user.name}</span> → <span class="badge">user.getName()</span>. Which means: a <span class="badge">private String name</span> with no <span class="badge">getName()</span> prints <em>nothing</em> — the classic "my JSP shows blank" bug. Your model classes must follow JavaBean conventions: private fields, public getters, and a no-argument constructor.</div>
-<pre>\${user.name}          <span class="tok-comment">// user.getName()</span>
+<pre><code class="language-java">\${user.name}          <span class="tok-comment">// user.getName()</span>
 \${user["name"]}       <span class="tok-comment">// identical — needed when the key has dots/spaces</span>
 \${list[0]}            <span class="tok-comment">// first element of a List or array</span>
 \${map["key"]}         <span class="tok-comment">// map.get("key")</span>
-\${order.customer.address.city}   <span class="tok-comment">// chained getters, null-safe</span></pre>
+\${order.customer.address.city}   <span class="tok-comment">// chained getters, null-safe</span></code></pre>
 
 <h3>Operators — all examinable</h3>
 <table>
@@ -1073,21 +1073,21 @@ ctx.<span class="tok-function">log</span>(<span class="tok-string">"Application 
 <div class="out"><b>Worked example:</b> a Servlet does <span class="badge">req.setAttribute("user", account)</span> and the session also holds a different <span class="badge">"user"</span>. In the JSP, <span class="badge">\${user}</span> finds the <em>request</em> one first. To be explicit — and you should be — write <span class="badge">\${sessionScope.user}</span>. Name collisions across scopes cause bugs that look impossible until you know this order.</div>
 
 <h3>EL functions (the fn: library) and static fields</h3>
-<pre>&lt;%@ taglib prefix=<span class="tok-string">"fn"</span> uri=<span class="tok-string">"http://java.sun.com/jsp/jstl/functions"</span> %&gt;
+<pre><code class="language-xml">&lt;%@ taglib prefix=<span class="tok-string">"fn"</span> uri=<span class="tok-string">"http://java.sun.com/jsp/jstl/functions"</span> %&gt;
 
 \${fn:length(products)}                <span class="tok-comment">// size of a list</span>
 \${fn:toUpperCase(user.name)}
 \${fn:contains(title, 'java')}
-\${fn:substring(desc, 0, 100)}...</pre>
+\${fn:substring(desc, 0, 100)}...</code></pre>
 
 <p><strong>Static fields (syllabus session 37).</strong> Plain EL 2.x cannot see a class's static members at all — <span class="badge">\${Integer.MAX_VALUE}</span> resolves to nothing and prints an empty string, which is exactly the silent failure described in the trap below. Two ways to reach them:</p>
-<pre><span class="tok-comment">// 1. EL 3.0+ (Tomcat 8+): import the class, then use the :: static reference</span>
+<pre><code class="language-xml"><span class="tok-comment">// 1. EL 3.0+ (Tomcat 8+): import the class, then use the :: static reference</span>
 &lt;%@ page import=<span class="tok-string">"com.app.Status"</span> %&gt;
 \${Status.ACTIVE}                      <span class="tok-comment">// EL 3.0 static field reference</span>
 
 <span class="tok-comment">// 2. Portable and always safe: expose it as a normal attribute from the Servlet</span>
 req.setAttribute(<span class="tok-string">"ACTIVE"</span>, Status.ACTIVE);
-\${ACTIVE}                             <span class="tok-comment">// in the JSP</span></pre>
+\${ACTIVE}                             <span class="tok-comment">// in the JSP</span></code></pre>
 <p>Option 2 is what the Practical Exam expects: EL reads <em>attributes</em>, so the controller's job is to put every value the view needs into a scope first.</p>
 
 <div class="pitfall"><b>Trap:</b> EL swallows errors by design. A typo — <span class="badge">\${user.nmae}</span> — or a null object prints an empty string rather than throwing, so a blank page gives you no clue. Debug in this order: (1) did the Servlet actually <span class="badge">setAttribute</span> under exactly that name? (2) is the scope the one you think? (3) does the getter exist and is it public? Nine times out of ten it is the getter or a typo in the attribute name.</div>
@@ -1101,11 +1101,11 @@ req.setAttribute(<span class="tok-string">"ACTIVE"</span>, Status.ACTIVE);
 
 <h3><span class="badge">\${user.name}</span> thực sự làm gì</h3>
 <div class="out">EL không đọc trường dữ liệu. Nó gọi <b>getter</b>: <span class="badge">\${user.name}</span> → <span class="badge">user.getName()</span>. Nghĩa là: một <span class="badge">private String name</span> mà không có <span class="badge">getName()</span> sẽ in ra <em>không gì cả</em> — đúng lỗi kinh điển "JSP của em hiện trắng trơn". Các lớp model của bạn phải theo quy ước JavaBean: trường private, getter public, và một hàm khởi tạo không tham số.</div>
-<pre>\${user.name}          <span class="tok-comment">// user.getName()</span>
+<pre><code class="language-java">\${user.name}          <span class="tok-comment">// user.getName()</span>
 \${user["name"]}       <span class="tok-comment">// y hệt — cần khi khoá có dấu chấm/khoảng trắng</span>
 \${list[0]}            <span class="tok-comment">// phần tử đầu của List hoặc mảng</span>
 \${map["key"]}         <span class="tok-comment">// map.get("key")</span>
-\${order.customer.address.city}   <span class="tok-comment">// chuỗi getter, an toàn với null</span></pre>
+\${order.customer.address.city}   <span class="tok-comment">// chuỗi getter, an toàn với null</span></code></pre>
 
 <h3>Các toán tử — đều có thể ra đề</h3>
 <table>
@@ -1145,21 +1145,21 @@ req.setAttribute(<span class="tok-string">"ACTIVE"</span>, Status.ACTIVE);
 <div class="out"><b>Ví dụ có lời giải:</b> một Servlet làm <span class="badge">req.setAttribute("user", account)</span> trong khi session cũng đang giữ một <span class="badge">"user"</span> khác. Trong JSP, <span class="badge">\${user}</span> tìm thấy cái ở <em>request</em> trước. Muốn tường minh — và bạn nên tường minh — thì viết <span class="badge">\${sessionScope.user}</span>. Trùng tên giữa các phạm vi gây ra những lỗi trông như bất khả cho tới khi bạn biết thứ tự này.</div>
 
 <h3>Hàm EL (thư viện fn:) và trường tĩnh</h3>
-<pre>&lt;%@ taglib prefix=<span class="tok-string">"fn"</span> uri=<span class="tok-string">"http://java.sun.com/jsp/jstl/functions"</span> %&gt;
+<pre><code class="language-xml">&lt;%@ taglib prefix=<span class="tok-string">"fn"</span> uri=<span class="tok-string">"http://java.sun.com/jsp/jstl/functions"</span> %&gt;
 
 \${fn:length(products)}                <span class="tok-comment">// số phần tử của một list</span>
 \${fn:toUpperCase(user.name)}
 \${fn:contains(title, 'java')}
-\${fn:substring(desc, 0, 100)}...</pre>
+\${fn:substring(desc, 0, 100)}...</code></pre>
 
 <p><strong>Trường tĩnh (buổi 37 của syllabus).</strong> EL 2.x thuần không nhìn thấy thành viên static của một lớp — <span class="badge">\${Integer.MAX_VALUE}</span> không phân giải được và in ra chuỗi rỗng, đúng kiểu lỗi im lặng mô tả ở phần bẫy bên dưới. Hai cách chạm tới chúng:</p>
-<pre><span class="tok-comment">// 1. EL 3.0+ (Tomcat 8+): import lớp rồi dùng tham chiếu static</span>
+<pre><code class="language-xml"><span class="tok-comment">// 1. EL 3.0+ (Tomcat 8+): import lớp rồi dùng tham chiếu static</span>
 &lt;%@ page import=<span class="tok-string">"com.app.Status"</span> %&gt;
 \${Status.ACTIVE}                      <span class="tok-comment">// tham chiếu trường tĩnh của EL 3.0</span>
 
 <span class="tok-comment">// 2. Cách khả chuyển và luôn an toàn: đẩy nó ra thành một attribute bình thường từ Servlet</span>
 req.setAttribute(<span class="tok-string">"ACTIVE"</span>, Status.ACTIVE);
-\${ACTIVE}                             <span class="tok-comment">// trong JSP</span></pre>
+\${ACTIVE}                             <span class="tok-comment">// trong JSP</span></code></pre>
 <p>Cách 2 là thứ bài thi thực hành mong đợi: EL đọc <em>attribute</em>, nên việc của controller là đặt sẵn mọi giá trị mà view cần vào một scope.</p>
 
 <div class="pitfall"><b>Bẫy:</b> EL nuốt lỗi theo đúng thiết kế. Một lỗi gõ nhầm — <span class="badge">\${user.nmae}</span> — hay một đối tượng null sẽ in ra chuỗi rỗng thay vì ném ngoại lệ, nên một trang trắng chẳng cho bạn manh mối nào. Hãy gỡ lỗi theo thứ tự: (1) Servlet có thực sự <span class="badge">setAttribute</span> đúng cái tên đó không? (2) phạm vi có đúng như bạn nghĩ không? (3) getter có tồn tại và có public không? Chín trên mười lần là do getter hoặc gõ nhầm tên thuộc tính.</div>
@@ -1178,12 +1178,12 @@ req.setAttribute(<span class="tok-string">"ACTIVE"</span>, Status.ACTIVE);
 <span class="eyebrow">Chapter 3 · Lesson 3.4</span>
 <h2>Logic in the page, without Java in the page</h2>
 <p class="lead">EL displays a value; JSTL adds the loops and conditions a view legitimately needs. Together they replace every scriptlet you would otherwise write. Two declarations at the top of the page unlock everything below.</p>
-<pre>&lt;%@ taglib prefix=<span class="tok-string">"c"</span>   uri=<span class="tok-string">"http://java.sun.com/jsp/jstl/core"</span> %&gt;
-&lt;%@ taglib prefix=<span class="tok-string">"fmt"</span> uri=<span class="tok-string">"http://java.sun.com/jsp/jstl/fmt"</span> %&gt;</pre>
+<pre><code class="language-xml">&lt;%@ taglib prefix=<span class="tok-string">"c"</span>   uri=<span class="tok-string">"http://java.sun.com/jsp/jstl/core"</span> %&gt;
+&lt;%@ taglib prefix=<span class="tok-string">"fmt"</span> uri=<span class="tok-string">"http://java.sun.com/jsp/jstl/fmt"</span> %&gt;</code></pre>
 <div class="note-ct">JSTL is not built into Tomcat — the .jar must be in <span class="badge">WEB-INF/lib/</span>. "The tags print as plain text" always means a missing jar or a mistyped uri.</div>
 
 <h3>Core tags — the ones you will actually use</h3>
-<pre><span class="tok-comment">&lt;%-- loop with index and separator handling --%&gt;</span>
+<pre><code class="language-xml"><span class="tok-comment">&lt;%-- loop with index and separator handling --%&gt;</span>
 <span class="tok-type">&lt;c:forEach</span> var=<span class="tok-string">"p"</span> items=<span class="tok-string">"\${products}"</span> varStatus=<span class="tok-string">"st"</span><span class="tok-type">&gt;</span>
   &lt;tr class="\${st.index % 2 == 0 ? 'even' : 'odd'}"&gt;
     &lt;td&gt;\${st.count}&lt;/td&gt;          <span class="tok-comment">&lt;!-- 1-based row number --&gt;</span>
@@ -1207,7 +1207,7 @@ req.setAttribute(<span class="tok-string">"ACTIVE"</span>, Status.ACTIVE);
 <span class="tok-type">&lt;c:url</span> var=<span class="tok-string">"editLink"</span> value=<span class="tok-string">"/product/edit"</span><span class="tok-type">&gt;</span>
   <span class="tok-type">&lt;c:param</span> name=<span class="tok-string">"id"</span> value=<span class="tok-string">"\${p.id}"</span>/<span class="tok-type">&gt;</span>
 <span class="tok-type">&lt;/c:url&gt;</span>
-&lt;a href="\${editLink}"&gt;Edit&lt;/a&gt;</pre>
+&lt;a href="\${editLink}"&gt;Edit&lt;/a&gt;</code></pre>
 <table>
   <thead><tr><th>Tag</th><th>Does</th></tr></thead>
   <tbody>
@@ -1236,12 +1236,12 @@ req.setAttribute(<span class="tok-string">"ACTIVE"</span>, Status.ACTIVE);
 <span class="eyebrow">Chương 3 · Bài 3.4</span>
 <h2>Có logic trong trang, mà không có Java trong trang</h2>
 <p class="lead">EL hiển thị một giá trị; JSTL bổ sung các vòng lặp và điều kiện mà một view có quyền cần tới. Cùng nhau chúng thay thế mọi scriptlet bạn lẽ ra phải viết. Hai dòng khai báo ở đầu trang mở khoá tất cả những gì bên dưới.</p>
-<pre>&lt;%@ taglib prefix=<span class="tok-string">"c"</span>   uri=<span class="tok-string">"http://java.sun.com/jsp/jstl/core"</span> %&gt;
-&lt;%@ taglib prefix=<span class="tok-string">"fmt"</span> uri=<span class="tok-string">"http://java.sun.com/jsp/jstl/fmt"</span> %&gt;</pre>
+<pre><code class="language-xml">&lt;%@ taglib prefix=<span class="tok-string">"c"</span>   uri=<span class="tok-string">"http://java.sun.com/jsp/jstl/core"</span> %&gt;
+&lt;%@ taglib prefix=<span class="tok-string">"fmt"</span> uri=<span class="tok-string">"http://java.sun.com/jsp/jstl/fmt"</span> %&gt;</code></pre>
 <div class="note-ct">JSTL không có sẵn trong Tomcat — file .jar phải nằm trong <span class="badge">WEB-INF/lib/</span>. Hiện tượng "các thẻ in ra như văn bản thường" luôn có nghĩa là thiếu jar hoặc gõ sai uri.</div>
 
 <h3>Thẻ core — những cái bạn thực sự sẽ dùng</h3>
-<pre><span class="tok-comment">&lt;%-- lặp kèm chỉ số và xử lý dòng chẵn lẻ --%&gt;</span>
+<pre><code class="language-xml"><span class="tok-comment">&lt;%-- lặp kèm chỉ số và xử lý dòng chẵn lẻ --%&gt;</span>
 <span class="tok-type">&lt;c:forEach</span> var=<span class="tok-string">"p"</span> items=<span class="tok-string">"\${products}"</span> varStatus=<span class="tok-string">"st"</span><span class="tok-type">&gt;</span>
   &lt;tr class="\${st.index % 2 == 0 ? 'even' : 'odd'}"&gt;
     &lt;td&gt;\${st.count}&lt;/td&gt;          <span class="tok-comment">&lt;!-- số thứ tự dòng, đếm từ 1 --&gt;</span>
@@ -1265,7 +1265,7 @@ req.setAttribute(<span class="tok-string">"ACTIVE"</span>, Status.ACTIVE);
 <span class="tok-type">&lt;c:url</span> var=<span class="tok-string">"editLink"</span> value=<span class="tok-string">"/product/edit"</span><span class="tok-type">&gt;</span>
   <span class="tok-type">&lt;c:param</span> name=<span class="tok-string">"id"</span> value=<span class="tok-string">"\${p.id}"</span>/<span class="tok-type">&gt;</span>
 <span class="tok-type">&lt;/c:url&gt;</span>
-&lt;a href="\${editLink}"&gt;Sua&lt;/a&gt;</pre>
+&lt;a href="\${editLink}"&gt;Sua&lt;/a&gt;</code></pre>
 <table>
   <thead><tr><th>Thẻ</th><th>Làm gì</th></tr></thead>
   <tbody>
@@ -1305,7 +1305,7 @@ req.setAttribute(<span class="tok-string">"ACTIVE"</span>, Status.ACTIVE);
 
 <h3>The easy route: a .tag file (no Java at all)</h3>
 <p>Create <span class="badge">WEB-INF/tags/productCard.tag</span>:</p>
-<pre>&lt;%@ tag pageEncoding=<span class="tok-string">"UTF-8"</span> %&gt;
+<pre><code class="language-xml">&lt;%@ tag pageEncoding=<span class="tok-string">"UTF-8"</span> %&gt;
 &lt;%@ attribute name=<span class="tok-string">"product"</span> required=<span class="tok-string">"true"</span> type=<span class="tok-string">"model.Product"</span> %&gt;
 &lt;%@ attribute name=<span class="tok-string">"showPrice"</span> required=<span class="tok-string">"false"</span> type=<span class="tok-string">"java.lang.Boolean"</span> %&gt;
 &lt;%@ taglib prefix=<span class="tok-string">"c"</span> uri=<span class="tok-string">"http://java.sun.com/jsp/jstl/core"</span> %&gt;
@@ -1316,18 +1316,18 @@ req.setAttribute(<span class="tok-string">"ACTIVE"</span>, Status.ACTIVE);
   &lt;c:if test="\${showPrice}"&gt;
     &lt;p class="price"&gt;&lt;fmt:formatNumber value="\${product.price}" type="currency"/&gt;&lt;/p&gt;
   &lt;/c:if&gt;
-&lt;/div&gt;</pre>
+&lt;/div&gt;</code></pre>
 <p>Use it in any JSP:</p>
-<pre>&lt;%@ taglib prefix=<span class="tok-string">"my"</span> tagdir=<span class="tok-string">"/WEB-INF/tags"</span> %&gt;
+<pre><code class="language-xml">&lt;%@ taglib prefix=<span class="tok-string">"my"</span> tagdir=<span class="tok-string">"/WEB-INF/tags"</span> %&gt;
 
 <span class="tok-type">&lt;c:forEach</span> var=<span class="tok-string">"p"</span> items=<span class="tok-string">"\${products}"</span><span class="tok-type">&gt;</span>
     &lt;my:productCard product="\${p}" showPrice="true"/&gt;
-<span class="tok-type">&lt;/c:forEach&gt;</span></pre>
+<span class="tok-type">&lt;/c:forEach&gt;</span></code></pre>
 <div class="out">No Java class, no XML descriptor, no server restart. The <span class="badge">tagdir</span> attribute is all the registration a .tag file needs — which is why this is the form to reach for in coursework and in the exam.</div>
 
 <h3>The full route: a Java tag handler</h3>
 <p>When the tag needs real logic (formatting a date as "3 hours ago", rendering a permission-aware menu), write a class extending <span class="badge">SimpleTagSupport</span> and declare it in a <span class="badge">.tld</span> file:</p>
-<pre><span class="tok-keyword">public class</span> <span class="tok-type">TimeAgoTag</span> <span class="tok-keyword">extends</span> <span class="tok-type">SimpleTagSupport</span> {
+<pre><code class="language-java"><span class="tok-keyword">public class</span> <span class="tok-type">TimeAgoTag</span> <span class="tok-keyword">extends</span> <span class="tok-type">SimpleTagSupport</span> {
     <span class="tok-keyword">private</span> <span class="tok-type">Date</span> value;
     <span class="tok-keyword">public void</span> <span class="tok-function">setValue</span>(<span class="tok-type">Date</span> v) { <span class="tok-keyword">this</span>.value = v; }
 
@@ -1337,7 +1337,7 @@ req.setAttribute(<span class="tok-string">"ACTIVE"</span>, Status.ACTIVE);
                                 : (mins / 60) + <span class="tok-string">" hours ago"</span>;
         <span class="tok-function">getJspContext</span>().<span class="tok-function">getOut</span>().<span class="tok-function">write</span>(text);
     }
-}</pre>
+}</code></pre>
 
 <h3>Which one to use</h3>
 <table>
@@ -1360,7 +1360,7 @@ req.setAttribute(<span class="tok-string">"ACTIVE"</span>, Status.ACTIVE);
 
 <h3>Đường dễ: một file .tag (không cần Java)</h3>
 <p>Tạo <span class="badge">WEB-INF/tags/productCard.tag</span>:</p>
-<pre>&lt;%@ tag pageEncoding=<span class="tok-string">"UTF-8"</span> %&gt;
+<pre><code class="language-xml">&lt;%@ tag pageEncoding=<span class="tok-string">"UTF-8"</span> %&gt;
 &lt;%@ attribute name=<span class="tok-string">"product"</span> required=<span class="tok-string">"true"</span> type=<span class="tok-string">"model.Product"</span> %&gt;
 &lt;%@ attribute name=<span class="tok-string">"showPrice"</span> required=<span class="tok-string">"false"</span> type=<span class="tok-string">"java.lang.Boolean"</span> %&gt;
 &lt;%@ taglib prefix=<span class="tok-string">"c"</span> uri=<span class="tok-string">"http://java.sun.com/jsp/jstl/core"</span> %&gt;
@@ -1371,18 +1371,18 @@ req.setAttribute(<span class="tok-string">"ACTIVE"</span>, Status.ACTIVE);
   &lt;c:if test="\${showPrice}"&gt;
     &lt;p class="price"&gt;&lt;fmt:formatNumber value="\${product.price}" type="currency"/&gt;&lt;/p&gt;
   &lt;/c:if&gt;
-&lt;/div&gt;</pre>
+&lt;/div&gt;</code></pre>
 <p>Dùng nó trong bất kỳ JSP nào:</p>
-<pre>&lt;%@ taglib prefix=<span class="tok-string">"my"</span> tagdir=<span class="tok-string">"/WEB-INF/tags"</span> %&gt;
+<pre><code class="language-xml">&lt;%@ taglib prefix=<span class="tok-string">"my"</span> tagdir=<span class="tok-string">"/WEB-INF/tags"</span> %&gt;
 
 <span class="tok-type">&lt;c:forEach</span> var=<span class="tok-string">"p"</span> items=<span class="tok-string">"\${products}"</span><span class="tok-type">&gt;</span>
     &lt;my:productCard product="\${p}" showPrice="true"/&gt;
-<span class="tok-type">&lt;/c:forEach&gt;</span></pre>
+<span class="tok-type">&lt;/c:forEach&gt;</span></code></pre>
 <div class="out">Không lớp Java, không file mô tả XML, không phải khởi động lại server. Thuộc tính <span class="badge">tagdir</span> là toàn bộ phần đăng ký mà một file .tag cần — đó là lý do đây là dạng nên chọn khi làm bài tập và khi đi thi.</div>
 
 <h3>Đường đầy đủ: một tag handler bằng Java</h3>
 <p>Khi thẻ cần logic thật (định dạng ngày thành "3 giờ trước", dựng menu theo quyền), hãy viết một lớp kế thừa <span class="badge">SimpleTagSupport</span> và khai báo nó trong một file <span class="badge">.tld</span>:</p>
-<pre><span class="tok-keyword">public class</span> <span class="tok-type">TimeAgoTag</span> <span class="tok-keyword">extends</span> <span class="tok-type">SimpleTagSupport</span> {
+<pre><code class="language-java"><span class="tok-keyword">public class</span> <span class="tok-type">TimeAgoTag</span> <span class="tok-keyword">extends</span> <span class="tok-type">SimpleTagSupport</span> {
     <span class="tok-keyword">private</span> <span class="tok-type">Date</span> value;
     <span class="tok-keyword">public void</span> <span class="tok-function">setValue</span>(<span class="tok-type">Date</span> v) { <span class="tok-keyword">this</span>.value = v; }
 
@@ -1392,7 +1392,7 @@ req.setAttribute(<span class="tok-string">"ACTIVE"</span>, Status.ACTIVE);
                                 : (mins / 60) + <span class="tok-string">" gio truoc"</span>;
         <span class="tok-function">getJspContext</span>().<span class="tok-function">getOut</span>().<span class="tok-function">write</span>(text);
     }
-}</pre>
+}</code></pre>
 
 <h3>Nên dùng cái nào</h3>
 <table>
@@ -1437,11 +1437,11 @@ req.setAttribute(<span class="tok-string">"ACTIVE"</span>, Status.ACTIVE);
     <tr><td><span class="badge">application</span></td><td>the whole app's life</td><td>every user</td><td>a site-wide visitor counter</td></tr>
   </tbody>
 </table>
-<pre><span class="tok-comment">// store the logged-in user for the whole visit</span>
+<pre><code class="language-java"><span class="tok-comment">// store the logged-in user for the whole visit</span>
 HttpSession session = req.<span class="tok-function">getSession</span>();
 session.<span class="tok-function">setAttribute</span>(<span class="tok-string">"user"</span>, user);
 <span class="tok-comment">// later, on any request from the same user:</span>
-User u = (User) session.<span class="tok-function">getAttribute</span>(<span class="tok-string">"user"</span>);</pre>
+User u = (User) session.<span class="tok-function">getAttribute</span>(<span class="tok-string">"user"</span>);</code></pre>
 <div class="out">Login stores the user in <b>session</b> scope; each later request reads it back — that is how the site "remembers" you are logged in. Logout calls <span class="badge">session.invalidate()</span>.</div>
 
 <div class="pitfall"><b>Trap (very common):</b> putting one user's data in <b>application</b> scope shows it to <em>everyone</em>. Cart in application scope = all users share one cart. Per-user data must go in <b>session</b>; data for one screen goes in <b>request</b>.</div>
@@ -1461,11 +1461,11 @@ User u = (User) session.<span class="tok-function">getAttribute</span>(<span cla
     <tr><td><span class="badge">application</span></td><td>cả vòng đời app</td><td>mọi người dùng</td><td>bộ đếm khách toàn site</td></tr>
   </tbody>
 </table>
-<pre><span class="tok-comment">// lưu người đã đăng nhập cho cả phiên</span>
+<pre><code class="language-java"><span class="tok-comment">// lưu người đã đăng nhập cho cả phiên</span>
 HttpSession session = req.<span class="tok-function">getSession</span>();
 session.<span class="tok-function">setAttribute</span>(<span class="tok-string">"user"</span>, user);
 <span class="tok-comment">// sau đó, ở bất kỳ request nào từ cùng người dùng:</span>
-User u = (User) session.<span class="tok-function">getAttribute</span>(<span class="tok-string">"user"</span>);</pre>
+User u = (User) session.<span class="tok-function">getAttribute</span>(<span class="tok-string">"user"</span>);</code></pre>
 <div class="out">Đăng nhập lưu người dùng vào phạm vi <b>session</b>; mỗi request sau đọc lại nó — đó là cách site "nhớ" bạn đã đăng nhập. Đăng xuất gọi <span class="badge">session.invalidate()</span>.</div>
 
 <div class="pitfall"><b>Bẫy (rất phổ biến):</b> đặt dữ liệu của một người vào phạm vi <b>application</b> khiến <em>mọi người</em> thấy nó. Giỏ hàng ở application scope = mọi người dùng chung một giỏ. Dữ liệu riêng từng người phải vào <b>session</b>; dữ liệu cho một màn hình vào <b>request</b>.</div>
@@ -1495,7 +1495,7 @@ User u = (User) session.<span class="tok-function">getAttribute</span>(<span cla
 <div class="note-ct">That is the entire mechanism behind "the site remembers I am logged in". The session lives on the <em>server</em>; the cookie only carries its id. Delete the cookie and the server has a session nobody can claim.</div>
 
 <h3>Working with cookies</h3>
-<pre><span class="tok-comment">// create</span>
+<pre><code class="language-java"><span class="tok-comment">// create</span>
 <span class="tok-type">Cookie</span> c = <span class="tok-keyword">new</span> <span class="tok-type">Cookie</span>(<span class="tok-string">"username"</span>, user.<span class="tok-function">getUsername</span>());
 c.<span class="tok-function">setMaxAge</span>(7 * 24 * 60 * 60);      <span class="tok-comment">// 7 days, in SECONDS</span>
 c.<span class="tok-function">setPath</span>(<span class="tok-string">"/"</span>);                     <span class="tok-comment">// send it for the whole app</span>
@@ -1514,7 +1514,7 @@ resp.<span class="tok-function">addCookie</span>(c);
 <span class="tok-type">Cookie</span> kill = <span class="tok-keyword">new</span> <span class="tok-type">Cookie</span>(<span class="tok-string">"username"</span>, <span class="tok-string">""</span>);
 kill.<span class="tok-function">setMaxAge</span>(0);
 kill.<span class="tok-function">setPath</span>(<span class="tok-string">"/"</span>);
-resp.<span class="tok-function">addCookie</span>(kill);</pre>
+resp.<span class="tok-function">addCookie</span>(kill);</code></pre>
 <div class="out"><b>maxAge decides everything:</b> a positive number = persistent, survives closing the browser. <span class="badge">-1</span> (the default) = a <em>session cookie</em>, deleted when the browser closes. <span class="badge">0</span> = delete now. In a JSP, read a cookie with <span class="badge">\${cookie.username.value}</span>.</div>
 
 <h3>Cookie vs session — the comparison the exam wants</h3>
@@ -1531,12 +1531,12 @@ resp.<span class="tok-function">addCookie</span>(kill);</pre>
 </table>
 
 <h3>Managing the session</h3>
-<pre>HttpSession s = req.<span class="tok-function">getSession</span>();          <span class="tok-comment">// create if absent</span>
+<pre><code class="language-java">HttpSession s = req.<span class="tok-function">getSession</span>();          <span class="tok-comment">// create if absent</span>
 HttpSession t = req.<span class="tok-function">getSession</span>(<span class="tok-keyword">false</span>);     <span class="tok-comment">// null if none — use this to CHECK login</span>
 
 s.<span class="tok-function">setMaxInactiveInterval</span>(30 * 60);       <span class="tok-comment">// 30 minutes of inactivity</span>
 s.<span class="tok-function">getId</span>();                                <span class="tok-comment">// the JSESSIONID value</span>
-s.<span class="tok-function">invalidate</span>();                           <span class="tok-comment">// logout: destroy everything</span></pre>
+s.<span class="tok-function">invalidate</span>();                           <span class="tok-comment">// logout: destroy everything</span></code></pre>
 <pre><span class="tok-comment">&lt;!-- web.xml: default timeout for the whole app, in MINUTES --&gt;</span>
 <span class="tok-type">&lt;session-config&gt;</span>
     <span class="tok-type">&lt;session-timeout&gt;</span>30<span class="tok-type">&lt;/session-timeout&gt;</span>
@@ -1544,7 +1544,7 @@ s.<span class="tok-function">invalidate</span>();                           <spa
 <div class="note-ct">Two unit traps in one lesson: <span class="badge">setMaxInactiveInterval</span> takes <b>seconds</b>, <span class="badge">&lt;session-timeout&gt;</span> is in <b>minutes</b>, and <span class="badge">Cookie.setMaxAge</span> is in seconds. Mixing them up gives sessions that expire in 30 seconds or last 30 hours.</div>
 
 <h3>Ví dụ có lời giải · "Remember my username"</h3>
-<pre><span class="tok-comment">// on successful login</span>
+<pre><code class="language-java"><span class="tok-comment">// on successful login</span>
 req.<span class="tok-function">getSession</span>().<span class="tok-function">setAttribute</span>(<span class="tok-string">"user"</span>, account);       <span class="tok-comment">// identity → session</span>
 
 <span class="tok-keyword">if</span> (<span class="tok-string">"on"</span>.<span class="tok-function">equals</span>(req.<span class="tok-function">getParameter</span>(<span class="tok-string">"remember"</span>))) {
@@ -1552,7 +1552,7 @@ req.<span class="tok-function">getSession</span>().<span class="tok-function">se
     c.<span class="tok-function">setMaxAge</span>(30 * 24 * 60 * 60);                     <span class="tok-comment">// convenience → cookie</span>
     resp.<span class="tok-function">addCookie</span>(c);
 }
-<span class="tok-comment">// the login page then pre-fills: value="\${cookie.lastUser.value}"</span></pre>
+<span class="tok-comment">// the login page then pre-fills: value="\${cookie.lastUser.value}"</span></code></pre>
 <div class="out">Note what goes where: the <b>username</b> (harmless) in the cookie, the <b>authenticated account object</b> in the session. Never the password, and never a flag like <span class="badge">isAdmin=true</span> in a cookie — the user can edit it.</div>
 
 <div class="pitfall"><b>Trap:</b> checking login with <span class="badge">req.getSession()</span>. That call <em>creates</em> a session if none exists, so the check "is there a session?" is always true. To test whether a user is logged in, use <span class="badge">getSession(false)</span> and then check the attribute: <span class="badge">HttpSession s = req.getSession(false); if (s == null || s.getAttribute("user") == null) → redirect to login</span>.</div>
@@ -1574,7 +1574,7 @@ req.<span class="tok-function">getSession</span>().<span class="tok-function">se
 <div class="note-ct">Đó là toàn bộ cơ chế đằng sau chuyện "trang web nhớ tôi đã đăng nhập". Session sống trên <em>server</em>; cookie chỉ mang cái id của nó. Xoá cookie đi thì server còn một session mà không ai nhận.</div>
 
 <h3>Làm việc với cookie</h3>
-<pre><span class="tok-comment">// tạo</span>
+<pre><code class="language-java"><span class="tok-comment">// tạo</span>
 <span class="tok-type">Cookie</span> c = <span class="tok-keyword">new</span> <span class="tok-type">Cookie</span>(<span class="tok-string">"username"</span>, user.<span class="tok-function">getUsername</span>());
 c.<span class="tok-function">setMaxAge</span>(7 * 24 * 60 * 60);      <span class="tok-comment">// 7 ngày, tính bằng GIÂY</span>
 c.<span class="tok-function">setPath</span>(<span class="tok-string">"/"</span>);                     <span class="tok-comment">// gửi kèm cho toàn app</span>
@@ -1593,7 +1593,7 @@ resp.<span class="tok-function">addCookie</span>(c);
 <span class="tok-type">Cookie</span> kill = <span class="tok-keyword">new</span> <span class="tok-type">Cookie</span>(<span class="tok-string">"username"</span>, <span class="tok-string">""</span>);
 kill.<span class="tok-function">setMaxAge</span>(0);
 kill.<span class="tok-function">setPath</span>(<span class="tok-string">"/"</span>);
-resp.<span class="tok-function">addCookie</span>(kill);</pre>
+resp.<span class="tok-function">addCookie</span>(kill);</code></pre>
 <div class="out"><b>maxAge quyết định tất cả:</b> một số dương = cookie bền, sống qua cả lần đóng trình duyệt. <span class="badge">-1</span> (mặc định) = <em>cookie phiên</em>, bị xoá khi đóng trình duyệt. <span class="badge">0</span> = xoá ngay. Trong JSP, đọc cookie bằng <span class="badge">\${cookie.username.value}</span>.</div>
 
 <h3>Cookie và session — bảng so sánh mà đề thi muốn</h3>
@@ -1610,12 +1610,12 @@ resp.<span class="tok-function">addCookie</span>(kill);</pre>
 </table>
 
 <h3>Quản lý session</h3>
-<pre>HttpSession s = req.<span class="tok-function">getSession</span>();          <span class="tok-comment">// tạo mới nếu chưa có</span>
+<pre><code class="language-java">HttpSession s = req.<span class="tok-function">getSession</span>();          <span class="tok-comment">// tạo mới nếu chưa có</span>
 HttpSession t = req.<span class="tok-function">getSession</span>(<span class="tok-keyword">false</span>);     <span class="tok-comment">// null nếu chưa có — dùng cái này để KIỂM đăng nhập</span>
 
 s.<span class="tok-function">setMaxInactiveInterval</span>(30 * 60);       <span class="tok-comment">// 30 phút không hoạt động</span>
 s.<span class="tok-function">getId</span>();                                <span class="tok-comment">// giá trị JSESSIONID</span>
-s.<span class="tok-function">invalidate</span>();                           <span class="tok-comment">// đăng xuất: huỷ sạch</span></pre>
+s.<span class="tok-function">invalidate</span>();                           <span class="tok-comment">// đăng xuất: huỷ sạch</span></code></pre>
 <pre><span class="tok-comment">&lt;!-- web.xml: thời gian hết hạn mặc định cho cả app, tính bằng PHÚT --&gt;</span>
 <span class="tok-type">&lt;session-config&gt;</span>
     <span class="tok-type">&lt;session-timeout&gt;</span>30<span class="tok-type">&lt;/session-timeout&gt;</span>
@@ -1623,7 +1623,7 @@ s.<span class="tok-function">invalidate</span>();                           <spa
 <div class="note-ct">Hai cái bẫy đơn vị trong cùng một bài: <span class="badge">setMaxInactiveInterval</span> nhận <b>giây</b>, <span class="badge">&lt;session-timeout&gt;</span> tính bằng <b>phút</b>, và <span class="badge">Cookie.setMaxAge</span> tính bằng giây. Nhầm chúng với nhau là ra session hết hạn sau 30 giây hoặc sống tới 30 tiếng.</div>
 
 <h3>Ví dụ có lời giải · "Ghi nhớ tên đăng nhập"</h3>
-<pre><span class="tok-comment">// khi đăng nhập thành công</span>
+<pre><code class="language-java"><span class="tok-comment">// khi đăng nhập thành công</span>
 req.<span class="tok-function">getSession</span>().<span class="tok-function">setAttribute</span>(<span class="tok-string">"user"</span>, account);       <span class="tok-comment">// danh tính → session</span>
 
 <span class="tok-keyword">if</span> (<span class="tok-string">"on"</span>.<span class="tok-function">equals</span>(req.<span class="tok-function">getParameter</span>(<span class="tok-string">"remember"</span>))) {
@@ -1631,7 +1631,7 @@ req.<span class="tok-function">getSession</span>().<span class="tok-function">se
     c.<span class="tok-function">setMaxAge</span>(30 * 24 * 60 * 60);                     <span class="tok-comment">// tiện lợi → cookie</span>
     resp.<span class="tok-function">addCookie</span>(c);
 }
-<span class="tok-comment">// trang đăng nhập sau đó điền sẵn: value="\${cookie.lastUser.value}"</span></pre>
+<span class="tok-comment">// trang đăng nhập sau đó điền sẵn: value="\${cookie.lastUser.value}"</span></code></pre>
 <div class="out">Để ý cái gì nằm ở đâu: <b>tên đăng nhập</b> (vô hại) trong cookie, <b>đối tượng tài khoản đã xác thực</b> trong session. Không bao giờ để mật khẩu, và không bao giờ để một cờ kiểu <span class="badge">isAdmin=true</span> trong cookie — người dùng sửa được nó.</div>
 
 <div class="pitfall"><b>Bẫy:</b> kiểm đăng nhập bằng <span class="badge">req.getSession()</span>. Lời gọi đó <em>tạo mới</em> một session nếu chưa có, nên phép kiểm "có session không?" luôn đúng. Muốn kiểm người dùng đã đăng nhập chưa, hãy dùng <span class="badge">getSession(false)</span> rồi kiểm thuộc tính: <span class="badge">HttpSession s = req.getSession(false); if (s == null || s.getAttribute("user") == null) → chuyển về trang đăng nhập</span>.</div>
@@ -1653,25 +1653,25 @@ req.<span class="tok-function">getSession</span>().<span class="tok-function">se
 
 <h3>Use 1 — caching data that rarely changes</h3>
 <p>A category list read from the database on every page view is a wasted query for data that changes once a month. Load it once at startup and keep it in the application scope:</p>
-<pre><span class="tok-keyword">public class</span> <span class="tok-type">CategoryCacheServlet</span> <span class="tok-keyword">extends</span> <span class="tok-type">HttpServlet</span> {
+<pre><code class="language-java"><span class="tok-keyword">public class</span> <span class="tok-type">CategoryCacheServlet</span> <span class="tok-keyword">extends</span> <span class="tok-type">HttpServlet</span> {
     <span class="tok-keyword">public void</span> <span class="tok-function">init</span>() {                       <span class="tok-comment">// once, at startup</span>
         <span class="tok-type">List</span>&lt;Category&gt; cats = <span class="tok-keyword">new</span> <span class="tok-type">CategoryDAO</span>().<span class="tok-function">findAll</span>();
         <span class="tok-function">getServletContext</span>().<span class="tok-function">setAttribute</span>(<span class="tok-string">"categories"</span>, cats);
     }
-}</pre>
-<pre><span class="tok-comment">&lt;!-- any JSP, no Servlet needed --&gt;</span>
+}</code></pre>
+<pre><code class="language-xml"><span class="tok-comment">&lt;!-- any JSP, no Servlet needed --&gt;</span>
 <span class="tok-type">&lt;c:forEach</span> var=<span class="tok-string">"cat"</span> items=<span class="tok-string">"\${applicationScope.categories}"</span><span class="tok-type">&gt;</span>
     &lt;li&gt;&lt;c:out value="\${cat.name}"/&gt;&lt;/li&gt;
-<span class="tok-type">&lt;/c:forEach&gt;</span></pre>
+<span class="tok-type">&lt;/c:forEach&gt;</span></code></pre>
 <div class="note-ct">A menu that appears on every page is the textbook case: one query at startup replaces one query per page view per user. (A Listener, Chapter 8, is the tidier place to do this.)</div>
 
 <h3>Use 2 — a site-wide counter</h3>
-<pre>ServletContext ctx = <span class="tok-function">getServletContext</span>();
+<pre><code class="language-java">ServletContext ctx = <span class="tok-function">getServletContext</span>();
 <span class="tok-keyword">synchronized</span> (ctx) {                          <span class="tok-comment">// ← see the hazard below</span>
     <span class="tok-type">Integer</span> n = (<span class="tok-type">Integer</span>) ctx.<span class="tok-function">getAttribute</span>(<span class="tok-string">"visits"</span>);
     n = (n == <span class="tok-keyword">null</span>) ? 1 : n + 1;
     ctx.<span class="tok-function">setAttribute</span>(<span class="tok-string">"visits"</span>, n);
-}</pre>
+}</code></pre>
 
 <h3>The hazard: many threads, one object</h3>
 <div class="pitfall"><b>Tomcat handles each request on its own thread, and they all share the ServletContext.</b> Two users hitting the counter at the same moment can both read 100, both compute 101, and both store 101 — one visit vanishes. Worse, a shared <span class="badge">ArrayList</span> or <span class="badge">HashMap</span> written by two threads at once can corrupt internally and throw at a completely unrelated moment. Cures: <span class="badge">synchronized</span> around read-modify-write as above, or a thread-safe type (<span class="badge">AtomicInteger</span>, <span class="badge">ConcurrentHashMap</span>), or — best — keep application-scope data <b>read-only after startup</b>.</div>
@@ -1697,25 +1697,25 @@ req.<span class="tok-function">getSession</span>().<span class="tok-function">se
 
 <h3>Công dụng 1 — cache dữ liệu ít thay đổi</h3>
 <p>Một danh sách danh mục đọc từ cơ sở dữ liệu ở mỗi lượt xem trang là một truy vấn lãng phí cho thứ dữ liệu mỗi tháng đổi một lần. Hãy nạp một lần lúc khởi động và giữ nó trong phạm vi application:</p>
-<pre><span class="tok-keyword">public class</span> <span class="tok-type">CategoryCacheServlet</span> <span class="tok-keyword">extends</span> <span class="tok-type">HttpServlet</span> {
+<pre><code class="language-java"><span class="tok-keyword">public class</span> <span class="tok-type">CategoryCacheServlet</span> <span class="tok-keyword">extends</span> <span class="tok-type">HttpServlet</span> {
     <span class="tok-keyword">public void</span> <span class="tok-function">init</span>() {                       <span class="tok-comment">// một lần, lúc khởi động</span>
         <span class="tok-type">List</span>&lt;Category&gt; cats = <span class="tok-keyword">new</span> <span class="tok-type">CategoryDAO</span>().<span class="tok-function">findAll</span>();
         <span class="tok-function">getServletContext</span>().<span class="tok-function">setAttribute</span>(<span class="tok-string">"categories"</span>, cats);
     }
-}</pre>
-<pre><span class="tok-comment">&lt;!-- bất kỳ JSP nào, không cần Servlet --&gt;</span>
+}</code></pre>
+<pre><code class="language-xml"><span class="tok-comment">&lt;!-- bất kỳ JSP nào, không cần Servlet --&gt;</span>
 <span class="tok-type">&lt;c:forEach</span> var=<span class="tok-string">"cat"</span> items=<span class="tok-string">"\${applicationScope.categories}"</span><span class="tok-type">&gt;</span>
     &lt;li&gt;&lt;c:out value="\${cat.name}"/&gt;&lt;/li&gt;
-<span class="tok-type">&lt;/c:forEach&gt;</span></pre>
+<span class="tok-type">&lt;/c:forEach&gt;</span></code></pre>
 <div class="note-ct">Một menu xuất hiện ở mọi trang là ví dụ sách giáo khoa: một truy vấn lúc khởi động thay cho một truy vấn mỗi lượt xem trang của mỗi người dùng. (Một Listener, Chương 8, mới là chỗ gọn gàng để làm việc này.)</div>
 
 <h3>Công dụng 2 — bộ đếm toàn site</h3>
-<pre>ServletContext ctx = <span class="tok-function">getServletContext</span>();
+<pre><code class="language-java">ServletContext ctx = <span class="tok-function">getServletContext</span>();
 <span class="tok-keyword">synchronized</span> (ctx) {                          <span class="tok-comment">// ← xem phần hiểm hoạ bên dưới</span>
     <span class="tok-type">Integer</span> n = (<span class="tok-type">Integer</span>) ctx.<span class="tok-function">getAttribute</span>(<span class="tok-string">"visits"</span>);
     n = (n == <span class="tok-keyword">null</span>) ? 1 : n + 1;
     ctx.<span class="tok-function">setAttribute</span>(<span class="tok-string">"visits"</span>, n);
-}</pre>
+}</code></pre>
 
 <h3>Hiểm hoạ: nhiều luồng, một đối tượng</h3>
 <div class="pitfall"><b>Tomcat xử lý mỗi request trên một luồng riêng, và tất cả cùng dùng chung ServletContext.</b> Hai người chạm vào bộ đếm cùng khoảnh khắc có thể cùng đọc ra 100, cùng tính ra 101, và cùng ghi 101 — một lượt truy cập bốc hơi. Tệ hơn, một <span class="badge">ArrayList</span> hay <span class="badge">HashMap</span> dùng chung bị hai luồng ghi cùng lúc có thể hỏng cấu trúc bên trong rồi ném ngoại lệ ở một thời điểm chẳng liên quan gì. Thuốc chữa: <span class="badge">synchronized</span> quanh cụm đọc-sửa-ghi như trên, hoặc một kiểu an toàn luồng (<span class="badge">AtomicInteger</span>, <span class="badge">ConcurrentHashMap</span>), hoặc — tốt nhất — giữ dữ liệu phạm vi application <b>chỉ đọc sau khi khởi động</b>.</div>
@@ -1770,13 +1770,13 @@ req.<span class="tok-function">getSession</span>().<span class="tok-function">se
 <span class="eyebrow">Chapter 5 · Lesson 5.1</span>
 <h2>JDBC — Java talking to your database</h2>
 <p class="lead">This is where DBI202 pays off. <strong>JDBC</strong> is the standard Java API to run SQL against a database. The pattern is always the same five steps: connect, prepare a statement, execute, read the results, close.</p>
-<pre><span class="tok-type">String</span> sql = <span class="tok-string">"SELECT * FROM Account WHERE username = ?"</span>;
+<pre><code class="language-sql"><span class="tok-type">String</span> sql = <span class="tok-string">"SELECT * FROM Account WHERE username = ?"</span>;
 <span class="tok-keyword">try</span> (<span class="tok-type">Connection</span> con = DriverManager.<span class="tok-function">getConnection</span>(url, u, p);
      <span class="tok-type">PreparedStatement</span> ps = con.<span class="tok-function">prepareStatement</span>(sql)) {
     ps.<span class="tok-function">setString</span>(1, username);           <span class="tok-comment">// fills the ?</span>
     <span class="tok-type">ResultSet</span> rs = ps.<span class="tok-function">executeQuery</span>();
     <span class="tok-keyword">if</span> (rs.<span class="tok-function">next</span>()) { <span class="tok-comment">/* read columns: rs.getString("...") */</span> }
-}</pre>
+}</code></pre>
 
 <h3>Always use PreparedStatement, never string concatenation</h3>
 <p>Building SQL by gluing strings is the classic security hole:</p>
@@ -1797,13 +1797,13 @@ req.<span class="tok-function">getSession</span>().<span class="tok-function">se
 <span class="eyebrow">Chương 5 · Bài 5.1</span>
 <h2>JDBC — Java nói chuyện với cơ sở dữ liệu</h2>
 <p class="lead">Đây là lúc DBI202 sinh lời. <strong>JDBC</strong> là API Java chuẩn để chạy SQL tới một cơ sở dữ liệu. Mẫu luôn giống nhau ở năm bước: kết nối, chuẩn bị câu lệnh, thực thi, đọc kết quả, đóng.</p>
-<pre><span class="tok-type">String</span> sql = <span class="tok-string">"SELECT * FROM Account WHERE username = ?"</span>;
+<pre><code class="language-sql"><span class="tok-type">String</span> sql = <span class="tok-string">"SELECT * FROM Account WHERE username = ?"</span>;
 <span class="tok-keyword">try</span> (<span class="tok-type">Connection</span> con = DriverManager.<span class="tok-function">getConnection</span>(url, u, p);
      <span class="tok-type">PreparedStatement</span> ps = con.<span class="tok-function">prepareStatement</span>(sql)) {
     ps.<span class="tok-function">setString</span>(1, username);           <span class="tok-comment">// điền vào ?</span>
     <span class="tok-type">ResultSet</span> rs = ps.<span class="tok-function">executeQuery</span>();
     <span class="tok-keyword">if</span> (rs.<span class="tok-function">next</span>()) { <span class="tok-comment">/* đọc cột: rs.getString("...") */</span> }
-}</pre>
+}</code></pre>
 
 <h3>Luôn dùng PreparedStatement, không bao giờ nối chuỗi</h3>
 <p>Dựng SQL bằng cách dán chuỗi là lỗ hổng bảo mật kinh điển:</p>
@@ -1855,7 +1855,7 @@ req.<span class="tok-function">getSession</span>().<span class="tok-function">se
 </div>
 
 <h3>The SQL Server connection string, decoded</h3>
-<pre><span class="tok-type">String</span> url = <span class="tok-string">"jdbc:sqlserver://localhost:1433"</span>
+<pre><code class="language-java"><span class="tok-type">String</span> url = <span class="tok-string">"jdbc:sqlserver://localhost:1433"</span>
            + <span class="tok-string">";databaseName=SWP391"</span>
            + <span class="tok-string">";encrypt=true;trustServerCertificate=true"</span>
            + <span class="tok-string">";sendStringParametersAsUnicode=true"</span>;   <span class="tok-comment">// Vietnamese text</span>
@@ -1863,7 +1863,7 @@ req.<span class="tok-function">getSession</span>().<span class="tok-function">se
 
 <span class="tok-keyword">try</span> (<span class="tok-type">Connection</span> con = <span class="tok-type">DriverManager</span>.<span class="tok-function">getConnection</span>(url, user, pass)) {
     <span class="tok-comment">// con is open here, and closed automatically at the end of the block</span>
-}</pre>
+}</code></pre>
 <table>
   <thead><tr><th>Part</th><th>Meaning</th></tr></thead>
   <tbody>
@@ -1918,7 +1918,7 @@ req.<span class="tok-function">getSession</span>().<span class="tok-function">se
 </div>
 
 <h3>Giải mã chuỗi kết nối SQL Server</h3>
-<pre><span class="tok-type">String</span> url = <span class="tok-string">"jdbc:sqlserver://localhost:1433"</span>
+<pre><code class="language-java"><span class="tok-type">String</span> url = <span class="tok-string">"jdbc:sqlserver://localhost:1433"</span>
            + <span class="tok-string">";databaseName=SWP391"</span>
            + <span class="tok-string">";encrypt=true;trustServerCertificate=true"</span>
            + <span class="tok-string">";sendStringParametersAsUnicode=true"</span>;   <span class="tok-comment">// cho tiếng Việt</span>
@@ -1926,7 +1926,7 @@ req.<span class="tok-function">getSession</span>().<span class="tok-function">se
 
 <span class="tok-keyword">try</span> (<span class="tok-type">Connection</span> con = <span class="tok-type">DriverManager</span>.<span class="tok-function">getConnection</span>(url, user, pass)) {
     <span class="tok-comment">// con đang mở ở đây, và tự đóng khi kết thúc khối lệnh</span>
-}</pre>
+}</code></pre>
 <table>
   <thead><tr><th>Thành phần</th><th>Ý nghĩa</th></tr></thead>
   <tbody>
@@ -1983,7 +1983,7 @@ req.<span class="tok-function">getSession</span>().<span class="tok-function">se
 Calling executeQuery on an UPDATE throws an exception, and vice versa. That row count is also how you know whether the update actually matched anything.</div>
 
 <h3>A complete DAO — read, list, insert, update, delete</h3>
-<pre><span class="tok-keyword">public class</span> <span class="tok-type">ProductDAO</span> {
+<pre><code class="language-sql"><span class="tok-keyword">public class</span> <span class="tok-type">ProductDAO</span> {
 
     <span class="tok-comment">// READ ONE</span>
     <span class="tok-keyword">public</span> <span class="tok-type">Product</span> <span class="tok-function">findById</span>(<span class="tok-keyword">int</span> id) <span class="tok-keyword">throws</span> <span class="tok-type">SQLException</span> {
@@ -2047,7 +2047,7 @@ Calling executeQuery on an UPDATE throws an exception, and vice versa. That row 
         p.<span class="tok-function">setCategoryId</span>(rs.<span class="tok-function">getInt</span>(<span class="tok-string">"categoryId"</span>));
         <span class="tok-keyword">return</span> p;
     }
-}</pre>
+}</code></pre>
 <div class="note-ct">Three habits in that code worth copying: a private <span class="badge">map()</span> so row-to-object logic exists once; named columns (<span class="badge">rs.getString("name")</span>) instead of indexes, so adding a column does not break everything; and returning <span class="badge">boolean</span>/<span class="badge">int</span> from update and delete so the Servlet can tell the user "not found" instead of silently pretending it worked.</div>
 
 <h3>ResultSet: the cursor rule</h3>
@@ -2078,7 +2078,7 @@ Calling executeQuery on an UPDATE throws an exception, and vice versa. That row 
 Gọi executeQuery cho một câu UPDATE sẽ ném ngoại lệ, và ngược lại. Con số đếm dòng đó cũng là cách bạn biết câu lệnh cập nhật có thực sự khớp được gì không.</div>
 
 <h3>Một DAO đầy đủ — đọc một, đọc nhiều, thêm, sửa, xoá</h3>
-<pre><span class="tok-keyword">public class</span> <span class="tok-type">ProductDAO</span> {
+<pre><code class="language-sql"><span class="tok-keyword">public class</span> <span class="tok-type">ProductDAO</span> {
 
     <span class="tok-comment">// ĐỌC MỘT</span>
     <span class="tok-keyword">public</span> <span class="tok-type">Product</span> <span class="tok-function">findById</span>(<span class="tok-keyword">int</span> id) <span class="tok-keyword">throws</span> <span class="tok-type">SQLException</span> {
@@ -2142,7 +2142,7 @@ Gọi executeQuery cho một câu UPDATE sẽ ném ngoại lệ, và ngược l�
         p.<span class="tok-function">setCategoryId</span>(rs.<span class="tok-function">getInt</span>(<span class="tok-string">"categoryId"</span>));
         <span class="tok-keyword">return</span> p;
     }
-}</pre>
+}</code></pre>
 <div class="note-ct">Ba thói quen trong đoạn code đó đáng chép lại: một hàm <span class="badge">map()</span> riêng để logic đổi dòng thành đối tượng chỉ tồn tại một chỗ; gọi cột theo tên (<span class="badge">rs.getString("name")</span>) thay vì theo chỉ số, để thêm một cột không làm hỏng mọi thứ; và trả về <span class="badge">boolean</span>/<span class="badge">int</span> từ hàm sửa/xoá để Servlet nói được với người dùng "không tìm thấy" thay vì âm thầm giả vờ đã thành công.</div>
 
 <h3>ResultSet: luật con trỏ</h3>
@@ -2169,7 +2169,7 @@ Gọi executeQuery cho một câu UPDATE sẽ ném ngoại lệ, và ngược l�
 <div class="out">JDBC connections start with <span class="badge">autoCommit = true</span>: every statement is its own transaction, committed the moment it runs. That is convenient for single statements and dangerous for grouped ones — there is nothing left to roll back.</div>
 
 <h3>The transaction pattern, in full</h3>
-<pre><span class="tok-type">Connection</span> con = <span class="tok-keyword">null</span>;
+<pre><code class="language-java"><span class="tok-type">Connection</span> con = <span class="tok-keyword">null</span>;
 <span class="tok-keyword">try</span> {
     con = <span class="tok-type">DBContext</span>.<span class="tok-function">getConnection</span>();
     con.<span class="tok-function">setAutoCommit</span>(<span class="tok-keyword">false</span>);          <span class="tok-comment">// ← the transaction begins</span>
@@ -2188,7 +2188,7 @@ Gọi executeQuery cho một câu UPDATE sẽ ném ngoại lệ, và ngược l�
         con.<span class="tok-function">setAutoCommit</span>(<span class="tok-keyword">true</span>);        <span class="tok-comment">// restore before returning it to the pool</span>
         con.<span class="tok-function">close</span>();
     }
-}</pre>
+}</code></pre>
 <div class="note-ct"><b>The detail that makes or breaks it:</b> all three methods must receive the <em>same</em> <span class="badge">Connection</span>. A DAO method that opens its own connection is in a different transaction and will commit independently — the rollback then leaves half the work behind. This is why transactional DAO methods take a Connection parameter.</div>
 
 <h3>ACID, in the terms of this example</h3>
@@ -2211,11 +2211,11 @@ Gọi executeQuery cho một câu UPDATE sẽ ném ngoại lệ, và ngược l�
           username=<span class="tok-string">"sa"</span> password=<span class="tok-string">"…"</span>
           driverClassName=<span class="tok-string">"com.microsoft.sqlserver.jdbc.SQLServerDriver"</span>
           url=<span class="tok-string">"jdbc:sqlserver://localhost:1433;databaseName=SWP391"</span>/<span class="tok-type">&gt;</span></pre>
-<pre><span class="tok-comment">// in your DBContext, instead of DriverManager</span>
+<pre><code class="language-java"><span class="tok-comment">// in your DBContext, instead of DriverManager</span>
 <span class="tok-type">Context</span> ctx = <span class="tok-keyword">new</span> <span class="tok-type">InitialContext</span>();
 <span class="tok-type">DataSource</span> ds = (<span class="tok-type">DataSource</span>) ctx.<span class="tok-function">lookup</span>(<span class="tok-string">"java:comp/env/jdbc/myDB"</span>);
 <span class="tok-type">Connection</span> con = ds.<span class="tok-function">getConnection</span>();   <span class="tok-comment">// borrowed, not created</span>
-<span class="tok-comment">// con.close() RETURNS it to the pool — it does not really close</span></pre>
+<span class="tok-comment">// con.close() RETURNS it to the pool — it does not really close</span></code></pre>
 <div class="out">Two wins beyond speed: the credentials move out of your source code into Tomcat's configuration, and <span class="badge">maxTotal</span> caps how many connections your app can ever hold — so a leak degrades one app instead of taking down the database server.</div>
 
 <div class="pitfall"><b>Trap:</b> forgetting <span class="badge">setAutoCommit(true)</span> before returning a pooled connection. The next request borrows a connection that is silently inside a transaction, and its writes never commit — producing the maddening bug "the data saves on my machine but not on the server". Restore the flag in <span class="badge">finally</span>, always.</div>
@@ -2231,7 +2231,7 @@ Gọi executeQuery cho một câu UPDATE sẽ ném ngoại lệ, và ngược l�
 <div class="out">Kết nối JDBC khởi đầu với <span class="badge">autoCommit = true</span>: mỗi câu lệnh là một giao dịch riêng, được commit ngay khoảnh khắc nó chạy. Điều đó tiện cho câu lệnh đơn lẻ và nguy hiểm cho nhóm câu lệnh — chẳng còn gì để quay lui nữa.</div>
 
 <h3>Mẫu giao dịch, đầy đủ</h3>
-<pre><span class="tok-type">Connection</span> con = <span class="tok-keyword">null</span>;
+<pre><code class="language-java"><span class="tok-type">Connection</span> con = <span class="tok-keyword">null</span>;
 <span class="tok-keyword">try</span> {
     con = <span class="tok-type">DBContext</span>.<span class="tok-function">getConnection</span>();
     con.<span class="tok-function">setAutoCommit</span>(<span class="tok-keyword">false</span>);          <span class="tok-comment">// ← giao dịch bắt đầu</span>
@@ -2250,7 +2250,7 @@ Gọi executeQuery cho một câu UPDATE sẽ ném ngoại lệ, và ngược l�
         con.<span class="tok-function">setAutoCommit</span>(<span class="tok-keyword">true</span>);        <span class="tok-comment">// khôi phục trước khi trả về pool</span>
         con.<span class="tok-function">close</span>();
     }
-}</pre>
+}</code></pre>
 <div class="note-ct"><b>Chi tiết quyết định thành bại:</b> cả ba phương thức phải nhận <em>cùng một</em> <span class="badge">Connection</span>. Một phương thức DAO tự mở kết nối riêng thì nằm ở một giao dịch khác và sẽ commit độc lập — khi đó lệnh rollback để lại một nửa công việc. Đây là lý do các phương thức DAO có tính giao dịch phải nhận Connection làm tham số.</div>
 
 <h3>ACID, diễn đạt theo đúng ví dụ này</h3>
@@ -2273,11 +2273,11 @@ Gọi executeQuery cho một câu UPDATE sẽ ném ngoại lệ, và ngược l�
           username=<span class="tok-string">"sa"</span> password=<span class="tok-string">"…"</span>
           driverClassName=<span class="tok-string">"com.microsoft.sqlserver.jdbc.SQLServerDriver"</span>
           url=<span class="tok-string">"jdbc:sqlserver://localhost:1433;databaseName=SWP391"</span>/<span class="tok-type">&gt;</span></pre>
-<pre><span class="tok-comment">// trong DBContext của bạn, thay cho DriverManager</span>
+<pre><code class="language-java"><span class="tok-comment">// trong DBContext của bạn, thay cho DriverManager</span>
 <span class="tok-type">Context</span> ctx = <span class="tok-keyword">new</span> <span class="tok-type">InitialContext</span>();
 <span class="tok-type">DataSource</span> ds = (<span class="tok-type">DataSource</span>) ctx.<span class="tok-function">lookup</span>(<span class="tok-string">"java:comp/env/jdbc/myDB"</span>);
 <span class="tok-type">Connection</span> con = ds.<span class="tok-function">getConnection</span>();   <span class="tok-comment">// mượn, không phải tạo mới</span>
-<span class="tok-comment">// con.close() TRẢ nó về pool — nó không đóng thật</span></pre>
+<span class="tok-comment">// con.close() TRẢ nó về pool — nó không đóng thật</span></code></pre>
 <div class="out">Hai cái lợi ngoài tốc độ: thông tin đăng nhập chuyển ra khỏi mã nguồn vào cấu hình của Tomcat, và <span class="badge">maxTotal</span> chặn trần số kết nối mà app của bạn có thể giữ — nên một chỗ rò rỉ chỉ làm suy yếu một app thay vì hạ gục cả máy chủ cơ sở dữ liệu.</div>
 
 <div class="pitfall"><b>Bẫy:</b> quên <span class="badge">setAutoCommit(true)</span> trước khi trả một kết nối về pool. Request kế tiếp mượn phải một kết nối đang âm thầm nằm trong một giao dịch, và các lệnh ghi của nó chẳng bao giờ được commit — sinh ra cái lỗi phát điên "dữ liệu lưu được trên máy em mà lên server thì không". Hãy khôi phục cờ đó trong khối <span class="badge">finally</span>, luôn luôn.</div>
@@ -2318,7 +2318,7 @@ Gọi executeQuery cho một câu UPDATE sẽ ném ngoại lệ, và ngược l�
   <div class="lz-step">4 · Stores the user in session; sets a request attribute</div>
   <div class="lz-step">5 · Forwards to home.jsp (View), which shows \${user.name}</div>
 </div>
-<pre><span class="tok-comment">// Controller (Servlet)</span>
+<pre><code class="language-java"><span class="tok-comment">// Controller (Servlet)</span>
 <span class="tok-type">Account</span> acc = dao.<span class="tok-function">check</span>(user, pass);   <span class="tok-comment">// Model</span>
 <span class="tok-keyword">if</span> (acc != <span class="tok-keyword">null</span>) {
     req.<span class="tok-function">getSession</span>().<span class="tok-function">setAttribute</span>(<span class="tok-string">"user"</span>, acc);
@@ -2326,7 +2326,7 @@ Gọi executeQuery cho một câu UPDATE sẽ ném ngoại lệ, và ngược l�
 } <span class="tok-keyword">else</span> {
     req.<span class="tok-function">setAttribute</span>(<span class="tok-string">"error"</span>, <span class="tok-string">"Invalid login"</span>);
     req.<span class="tok-function">getRequestDispatcher</span>(<span class="tok-string">"login.jsp"</span>).<span class="tok-function">forward</span>(req, resp);
-}</pre>
+}</code></pre>
 <div class="note-ct">Notice: the Servlet never writes HTML, and the JSP never queries the database. Each layer does its one job — that separation IS the pattern.</div>
 
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The Front Controller — one Servlet to rule them all.</b> Instead of one Servlet per action (LoginServlet, LogoutServlet, ProductServlet…), large apps route <em>every</em> request through a single <b>Front Controller</b> Servlet that reads an "action" parameter and dispatches to the right handler. This is exactly how Spring MVC's DispatcherServlet works under the hood — so understanding it here is your bridge to the framework used across the industry (and hinted at in this course's tools).</div>
@@ -2349,7 +2349,7 @@ Gọi executeQuery cho một câu UPDATE sẽ ném ngoại lệ, và ngược l�
   <div class="lz-step">4 · Lưu người dùng vào session; đặt một request attribute</div>
   <div class="lz-step">5 · Forward tới home.jsp (View), hiển thị \${user.name}</div>
 </div>
-<pre><span class="tok-comment">// Controller (Servlet)</span>
+<pre><code class="language-java"><span class="tok-comment">// Controller (Servlet)</span>
 <span class="tok-type">Account</span> acc = dao.<span class="tok-function">check</span>(user, pass);   <span class="tok-comment">// Model</span>
 <span class="tok-keyword">if</span> (acc != <span class="tok-keyword">null</span>) {
     req.<span class="tok-function">getSession</span>().<span class="tok-function">setAttribute</span>(<span class="tok-string">"user"</span>, acc);
@@ -2357,7 +2357,7 @@ Gọi executeQuery cho một câu UPDATE sẽ ném ngoại lệ, và ngược l�
 } <span class="tok-keyword">else</span> {
     req.<span class="tok-function">setAttribute</span>(<span class="tok-string">"error"</span>, <span class="tok-string">"Invalid login"</span>);
     req.<span class="tok-function">getRequestDispatcher</span>(<span class="tok-string">"login.jsp"</span>).<span class="tok-function">forward</span>(req, resp);
-}</pre>
+}</code></pre>
 <div class="note-ct">Để ý: Servlet không bao giờ viết HTML, và JSP không bao giờ truy vấn CSDL. Mỗi tầng làm đúng một việc — sự tách bạch đó CHÍNH LÀ mẫu MVC.</div>
 
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Front Controller — một Servlet cai quản tất cả.</b> Thay vì một Servlet cho mỗi hành động (LoginServlet, LogoutServlet, ProductServlet…), app lớn định tuyến <em>mọi</em> request qua một Servlet <b>Front Controller</b> duy nhất, đọc tham số "action" và điều phối tới handler đúng. Đây đúng là cách DispatcherServlet của Spring MVC hoạt động bên dưới — nên hiểu nó ở đây là cầu nối của bạn tới framework dùng khắp ngành (và được gợi ý trong công cụ của môn).</div>
@@ -2376,7 +2376,7 @@ Gọi executeQuery cho một câu UPDATE sẽ ném ngoại lệ, và ngược l�
 <p class="lead">By the middle of the assignment you have LoginServlet, LogoutServlet, ProductListServlet, ProductAddServlet, ProductEditServlet, ProductDeleteServlet… and the same six lines of session checking pasted into each. The <strong>Front Controller</strong> pattern replaces the pile with one entry point and a dispatch table.</p>
 
 <h3>The shape</h3>
-<pre><span class="tok-keyword">@WebServlet</span>(<span class="tok-string">"/product"</span>)
+<pre><code class="language-java"><span class="tok-keyword">@WebServlet</span>(<span class="tok-string">"/product"</span>)
 <span class="tok-keyword">public class</span> <span class="tok-type">ProductController</span> <span class="tok-keyword">extends</span> <span class="tok-type">HttpServlet</span> {
 
     <span class="tok-keyword">protected void</span> <span class="tok-function">doGet</span>(HttpServletRequest req, HttpServletResponse resp)
@@ -2407,11 +2407,11 @@ Gọi executeQuery cho một câu UPDATE sẽ ném ngoại lệ, và ngược l�
             req.<span class="tok-function">getRequestDispatcher</span>(<span class="tok-string">"/WEB-INF/jsp/error.jsp"</span>).<span class="tok-function">forward</span>(req, resp);
         }
     }
-}</pre>
+}</code></pre>
 <div class="out">URLs become <span class="badge">/product?action=list</span>, <span class="badge">/product?action=detail&amp;id=7</span>. Every request to products passes one door, so authentication, error handling and logging are written once instead of six times.</div>
 
 <h3>One handler method, fully worked</h3>
-<pre><span class="tok-keyword">private void</span> <span class="tok-function">detail</span>(HttpServletRequest req, HttpServletResponse resp)
+<pre><code class="language-java"><span class="tok-keyword">private void</span> <span class="tok-function">detail</span>(HttpServletRequest req, HttpServletResponse resp)
         <span class="tok-keyword">throws</span> Exception {
     <span class="tok-type">String</span> idStr = req.<span class="tok-function">getParameter</span>(<span class="tok-string">"id"</span>);
     <span class="tok-keyword">if</span> (idStr == <span class="tok-keyword">null</span>) { resp.<span class="tok-function">sendError</span>(400); <span class="tok-keyword">return</span>; }
@@ -2421,7 +2421,7 @@ Gọi executeQuery cho một câu UPDATE sẽ ném ngoại lệ, và ngược l�
 
     req.<span class="tok-function">setAttribute</span>(<span class="tok-string">"product"</span>, p);
     req.<span class="tok-function">getRequestDispatcher</span>(<span class="tok-string">"/WEB-INF/jsp/product-detail.jsp"</span>).<span class="tok-function">forward</span>(req, resp);
-}</pre>
+}</code></pre>
 
 <h3>The layout markers expect</h3>
 <pre>controller/   ProductController · AccountController      <span class="tok-comment">// Servlets</span>
@@ -2453,7 +2453,7 @@ web/WEB-INF/jsp/   product-list.jsp · product-detail.jsp <span class="tok-comme
 <p class="lead">Tới giữa bài tập lớn bạn đã có LoginServlet, LogoutServlet, ProductListServlet, ProductAddServlet, ProductEditServlet, ProductDeleteServlet… và cùng sáu dòng kiểm session dán vào từng cái. Mẫu <strong>Front Controller</strong> thay cả đống đó bằng một cửa vào duy nhất và một bảng điều phối.</p>
 
 <h3>Hình dạng của nó</h3>
-<pre><span class="tok-keyword">@WebServlet</span>(<span class="tok-string">"/product"</span>)
+<pre><code class="language-java"><span class="tok-keyword">@WebServlet</span>(<span class="tok-string">"/product"</span>)
 <span class="tok-keyword">public class</span> <span class="tok-type">ProductController</span> <span class="tok-keyword">extends</span> <span class="tok-type">HttpServlet</span> {
 
     <span class="tok-keyword">protected void</span> <span class="tok-function">doGet</span>(HttpServletRequest req, HttpServletResponse resp)
@@ -2484,11 +2484,11 @@ web/WEB-INF/jsp/   product-list.jsp · product-detail.jsp <span class="tok-comme
             req.<span class="tok-function">getRequestDispatcher</span>(<span class="tok-string">"/WEB-INF/jsp/error.jsp"</span>).<span class="tok-function">forward</span>(req, resp);
         }
     }
-}</pre>
+}</code></pre>
 <div class="out">URL trở thành <span class="badge">/product?action=list</span>, <span class="badge">/product?action=detail&amp;id=7</span>. Mọi request về sản phẩm đều đi qua một cánh cửa, nên phần xác thực, xử lý lỗi và ghi log chỉ viết một lần thay vì sáu lần.</div>
 
 <h3>Một phương thức xử lý, làm đầy đủ</h3>
-<pre><span class="tok-keyword">private void</span> <span class="tok-function">detail</span>(HttpServletRequest req, HttpServletResponse resp)
+<pre><code class="language-java"><span class="tok-keyword">private void</span> <span class="tok-function">detail</span>(HttpServletRequest req, HttpServletResponse resp)
         <span class="tok-keyword">throws</span> Exception {
     <span class="tok-type">String</span> idStr = req.<span class="tok-function">getParameter</span>(<span class="tok-string">"id"</span>);
     <span class="tok-keyword">if</span> (idStr == <span class="tok-keyword">null</span>) { resp.<span class="tok-function">sendError</span>(400); <span class="tok-keyword">return</span>; }
@@ -2498,7 +2498,7 @@ web/WEB-INF/jsp/   product-list.jsp · product-detail.jsp <span class="tok-comme
 
     req.<span class="tok-function">setAttribute</span>(<span class="tok-string">"product"</span>, p);
     req.<span class="tok-function">getRequestDispatcher</span>(<span class="tok-string">"/WEB-INF/jsp/product-detail.jsp"</span>).<span class="tok-function">forward</span>(req, resp);
-}</pre>
+}</code></pre>
 
 <h3>Bố cục mà người chấm mong đợi</h3>
 <pre>controller/   ProductController · AccountController      <span class="tok-comment">// các Servlet</span>
@@ -2538,15 +2538,15 @@ web/WEB-INF/jsp/   product-list.jsp · product-detail.jsp <span class="tok-comme
 <p class="lead">Look at any PRJ301 practical exam paper or assignment brief and you will find some version of "display a list with search, sorting and paging". It combines everything: parameters, DAO, MVC and JSTL. Here it is end to end.</p>
 
 <h3>Paging in SQL Server: OFFSET / FETCH</h3>
-<pre><span class="tok-comment">-- page 3, 10 rows per page → skip (3-1)*10 = 20</span>
+<pre><code class="language-sql"><span class="tok-comment">-- page 3, 10 rows per page → skip (3-1)*10 = 20</span>
 SELECT id, name, price FROM Product
 ORDER BY id DESC
-OFFSET ? ROWS FETCH NEXT ? ROWS ONLY;</pre>
+OFFSET ? ROWS FETCH NEXT ? ROWS ONLY;</code></pre>
 <div class="out"><b>The formula, once:</b> <span class="badge">offset = (page − 1) × pageSize</span>. And to know how many page links to draw you need the total: <span class="badge">totalPages = (int) Math.ceil(totalRows / (double) pageSize)</span> — the cast to double matters, or integer division silently drops the last partial page.</div>
 <div class="note-ct"><span class="badge">OFFSET/FETCH</span> requires an <span class="badge">ORDER BY</span> — it is the ordering that makes "row 21 to 30" meaningful at all. SQL Server 2012+ supports it; older tutorials use <span class="badge">ROW_NUMBER()</span>, and MySQL uses <span class="badge">LIMIT ? OFFSET ?</span>.</div>
 
 <h3>The DAO: dynamic filter, safe sort, one page of data</h3>
-<pre><span class="tok-keyword">public</span> <span class="tok-type">List</span>&lt;Product&gt; <span class="tok-function">search</span>(<span class="tok-type">String</span> keyword, <span class="tok-type">Integer</span> catId,
+<pre><code class="language-sql"><span class="tok-keyword">public</span> <span class="tok-type">List</span>&lt;Product&gt; <span class="tok-function">search</span>(<span class="tok-type">String</span> keyword, <span class="tok-type">Integer</span> catId,
                             <span class="tok-type">String</span> sortBy, <span class="tok-keyword">int</span> page, <span class="tok-keyword">int</span> pageSize) <span class="tok-keyword">throws</span> SQLException {
 
     <span class="tok-comment">// 1 · whitelist the sort column — NEVER concatenate user input into SQL</span>
@@ -2586,11 +2586,11 @@ OFFSET ? ROWS FETCH NEXT ? ROWS ONLY;</pre>
         }
     }
     <span class="tok-keyword">return</span> list;
-}</pre>
+}</code></pre>
 <div class="out">Two techniques worth stealing: <span class="badge">WHERE 1 = 1</span> so every added condition can start with <span class="badge">AND</span> without checking whether it is the first; and a parallel <span class="badge">List&lt;Object&gt; params</span> so the bind order can never drift out of step with the <span class="badge">?</span> marks.</div>
 
 <h3>The controller</h3>
-<pre><span class="tok-type">String</span> keyword = req.<span class="tok-function">getParameter</span>(<span class="tok-string">"keyword"</span>);
+<pre><code class="language-java"><span class="tok-type">String</span> keyword = req.<span class="tok-function">getParameter</span>(<span class="tok-string">"keyword"</span>);
 <span class="tok-type">String</span> sortBy  = req.<span class="tok-function">getParameter</span>(<span class="tok-string">"sortBy"</span>);
 <span class="tok-keyword">int</span> page = 1;
 <span class="tok-keyword">try</span> { page = <span class="tok-type">Integer</span>.<span class="tok-function">parseInt</span>(req.<span class="tok-function">getParameter</span>(<span class="tok-string">"page"</span>)); } <span class="tok-keyword">catch</span> (<span class="tok-type">Exception</span> ignored) {}
@@ -2603,10 +2603,10 @@ OFFSET ? ROWS FETCH NEXT ? ROWS ONLY;</pre>
 req.<span class="tok-function">setAttribute</span>(<span class="tok-string">"products"</span>, dao.<span class="tok-function">search</span>(keyword, catId, sortBy, page, pageSize));
 req.<span class="tok-function">setAttribute</span>(<span class="tok-string">"page"</span>, page);
 req.<span class="tok-function">setAttribute</span>(<span class="tok-string">"totalPages"</span>, totalPages);
-req.<span class="tok-function">setAttribute</span>(<span class="tok-string">"keyword"</span>, keyword);        <span class="tok-comment">// so the box keeps its text</span></pre>
+req.<span class="tok-function">setAttribute</span>(<span class="tok-string">"keyword"</span>, keyword);        <span class="tok-comment">// so the box keeps its text</span></code></pre>
 
 <h3>The JSP: pagination links that keep the filters</h3>
-<pre><span class="tok-type">&lt;c:forEach</span> begin=<span class="tok-string">"1"</span> end=<span class="tok-string">"\${totalPages}"</span> var=<span class="tok-string">"i"</span><span class="tok-type">&gt;</span>
+<pre><code class="language-xml"><span class="tok-type">&lt;c:forEach</span> begin=<span class="tok-string">"1"</span> end=<span class="tok-string">"\${totalPages}"</span> var=<span class="tok-string">"i"</span><span class="tok-type">&gt;</span>
   <span class="tok-type">&lt;c:url</span> var=<span class="tok-string">"pageLink"</span> value=<span class="tok-string">"/product"</span><span class="tok-type">&gt;</span>
     <span class="tok-type">&lt;c:param</span> name=<span class="tok-string">"action"</span>  value=<span class="tok-string">"list"</span>/<span class="tok-type">&gt;</span>
     <span class="tok-type">&lt;c:param</span> name=<span class="tok-string">"page"</span>    value=<span class="tok-string">"\${i}"</span>/<span class="tok-type">&gt;</span>
@@ -2614,7 +2614,7 @@ req.<span class="tok-function">setAttribute</span>(<span class="tok-string">"key
     <span class="tok-type">&lt;c:param</span> name=<span class="tok-string">"sortBy"</span>  value=<span class="tok-string">"\${param.sortBy}"</span>/<span class="tok-type">&gt;</span>
   <span class="tok-type">&lt;/c:url&gt;</span>
   &lt;a href="\${pageLink}" class="\${i == page ? 'active' : ''}"&gt;\${i}&lt;/a&gt;
-<span class="tok-type">&lt;/c:forEach&gt;</span></pre>
+<span class="tok-type">&lt;/c:forEach&gt;</span></code></pre>
 <div class="note-ct">Carrying <span class="badge">keyword</span> and <span class="badge">sortBy</span> into every page link is what stops the classic bug where clicking "page 2" silently discards the user's search. <span class="badge">c:param</span> also URL-encodes the value, so a keyword with a space or Vietnamese diacritics survives the trip.</div>
 
 <div class="pitfall"><b>The injection that PreparedStatement does not stop.</b> <span class="badge">?</span> placeholders work for <em>values</em>, never for column or table names — you cannot write <span class="badge">ORDER BY ?</span>. So sorting must be handled by mapping the user's choice to a fixed string, exactly as the switch above does. Concatenating <span class="badge">"ORDER BY " + req.getParameter("sortBy")</span> is a real, exploitable injection point, and it is the one students leave open because "PreparedStatement protects me".</div>
@@ -2627,15 +2627,15 @@ req.<span class="tok-function">setAttribute</span>(<span class="tok-string">"key
 <p class="lead">Nhìn bất kỳ đề thi thực hành hay đề bài tập lớn PRJ301 nào bạn cũng sẽ thấy một biến thể của "hiển thị danh sách có tìm kiếm, sắp xếp và phân trang". Nó gộp mọi thứ: tham số, DAO, MVC và JSTL. Đây là bản làm từ đầu đến cuối.</p>
 
 <h3>Phân trang trong SQL Server: OFFSET / FETCH</h3>
-<pre><span class="tok-comment">-- trang 3, 10 dòng mỗi trang → bỏ qua (3-1)*10 = 20</span>
+<pre><code class="language-sql"><span class="tok-comment">-- trang 3, 10 dòng mỗi trang → bỏ qua (3-1)*10 = 20</span>
 SELECT id, name, price FROM Product
 ORDER BY id DESC
-OFFSET ? ROWS FETCH NEXT ? ROWS ONLY;</pre>
+OFFSET ? ROWS FETCH NEXT ? ROWS ONLY;</code></pre>
 <div class="out"><b>Công thức, một lần cho xong:</b> <span class="badge">offset = (page − 1) × pageSize</span>. Và để biết vẽ bao nhiêu nút số trang thì cần tổng số dòng: <span class="badge">totalPages = (int) Math.ceil(totalRows / (double) pageSize)</span> — cái ép kiểu sang double là quan trọng, không thì phép chia số nguyên âm thầm làm mất trang lẻ cuối cùng.</div>
 <div class="note-ct"><span class="badge">OFFSET/FETCH</span> bắt buộc phải có <span class="badge">ORDER BY</span> — chính thứ tự mới làm cho "dòng 21 tới 30" có nghĩa. SQL Server 2012 trở lên hỗ trợ nó; các tutorial cũ dùng <span class="badge">ROW_NUMBER()</span>, còn MySQL dùng <span class="badge">LIMIT ? OFFSET ?</span>.</div>
 
 <h3>DAO: lọc động, sắp xếp an toàn, lấy đúng một trang dữ liệu</h3>
-<pre><span class="tok-keyword">public</span> <span class="tok-type">List</span>&lt;Product&gt; <span class="tok-function">search</span>(<span class="tok-type">String</span> keyword, <span class="tok-type">Integer</span> catId,
+<pre><code class="language-sql"><span class="tok-keyword">public</span> <span class="tok-type">List</span>&lt;Product&gt; <span class="tok-function">search</span>(<span class="tok-type">String</span> keyword, <span class="tok-type">Integer</span> catId,
                             <span class="tok-type">String</span> sortBy, <span class="tok-keyword">int</span> page, <span class="tok-keyword">int</span> pageSize) <span class="tok-keyword">throws</span> SQLException {
 
     <span class="tok-comment">// 1 · lọc cột sắp xếp theo danh sách trắng — ĐỪNG BAO GIỜ nối dữ liệu người dùng vào SQL</span>
@@ -2675,11 +2675,11 @@ OFFSET ? ROWS FETCH NEXT ? ROWS ONLY;</pre>
         }
     }
     <span class="tok-keyword">return</span> list;
-}</pre>
+}</code></pre>
 <div class="out">Hai kỹ thuật đáng học lỏm: <span class="badge">WHERE 1 = 1</span> để mọi điều kiện thêm vào đều bắt đầu bằng <span class="badge">AND</span> mà không phải kiểm xem nó có phải cái đầu tiên không; và một <span class="badge">List&lt;Object&gt; params</span> chạy song song để thứ tự gán tham số không bao giờ lệch khỏi các dấu <span class="badge">?</span>.</div>
 
 <h3>Controller</h3>
-<pre><span class="tok-type">String</span> keyword = req.<span class="tok-function">getParameter</span>(<span class="tok-string">"keyword"</span>);
+<pre><code class="language-java"><span class="tok-type">String</span> keyword = req.<span class="tok-function">getParameter</span>(<span class="tok-string">"keyword"</span>);
 <span class="tok-type">String</span> sortBy  = req.<span class="tok-function">getParameter</span>(<span class="tok-string">"sortBy"</span>);
 <span class="tok-keyword">int</span> page = 1;
 <span class="tok-keyword">try</span> { page = <span class="tok-type">Integer</span>.<span class="tok-function">parseInt</span>(req.<span class="tok-function">getParameter</span>(<span class="tok-string">"page"</span>)); } <span class="tok-keyword">catch</span> (<span class="tok-type">Exception</span> ignored) {}
@@ -2692,10 +2692,10 @@ OFFSET ? ROWS FETCH NEXT ? ROWS ONLY;</pre>
 req.<span class="tok-function">setAttribute</span>(<span class="tok-string">"products"</span>, dao.<span class="tok-function">search</span>(keyword, catId, sortBy, page, pageSize));
 req.<span class="tok-function">setAttribute</span>(<span class="tok-string">"page"</span>, page);
 req.<span class="tok-function">setAttribute</span>(<span class="tok-string">"totalPages"</span>, totalPages);
-req.<span class="tok-function">setAttribute</span>(<span class="tok-string">"keyword"</span>, keyword);        <span class="tok-comment">// để ô tìm kiếm giữ lại chữ đã gõ</span></pre>
+req.<span class="tok-function">setAttribute</span>(<span class="tok-string">"keyword"</span>, keyword);        <span class="tok-comment">// để ô tìm kiếm giữ lại chữ đã gõ</span></code></pre>
 
 <h3>JSP: các liên kết phân trang giữ nguyên bộ lọc</h3>
-<pre><span class="tok-type">&lt;c:forEach</span> begin=<span class="tok-string">"1"</span> end=<span class="tok-string">"\${totalPages}"</span> var=<span class="tok-string">"i"</span><span class="tok-type">&gt;</span>
+<pre><code class="language-xml"><span class="tok-type">&lt;c:forEach</span> begin=<span class="tok-string">"1"</span> end=<span class="tok-string">"\${totalPages}"</span> var=<span class="tok-string">"i"</span><span class="tok-type">&gt;</span>
   <span class="tok-type">&lt;c:url</span> var=<span class="tok-string">"pageLink"</span> value=<span class="tok-string">"/product"</span><span class="tok-type">&gt;</span>
     <span class="tok-type">&lt;c:param</span> name=<span class="tok-string">"action"</span>  value=<span class="tok-string">"list"</span>/<span class="tok-type">&gt;</span>
     <span class="tok-type">&lt;c:param</span> name=<span class="tok-string">"page"</span>    value=<span class="tok-string">"\${i}"</span>/<span class="tok-type">&gt;</span>
@@ -2703,7 +2703,7 @@ req.<span class="tok-function">setAttribute</span>(<span class="tok-string">"key
     <span class="tok-type">&lt;c:param</span> name=<span class="tok-string">"sortBy"</span>  value=<span class="tok-string">"\${param.sortBy}"</span>/<span class="tok-type">&gt;</span>
   <span class="tok-type">&lt;/c:url&gt;</span>
   &lt;a href="\${pageLink}" class="\${i == page ? 'active' : ''}"&gt;\${i}&lt;/a&gt;
-<span class="tok-type">&lt;/c:forEach&gt;</span></pre>
+<span class="tok-type">&lt;/c:forEach&gt;</span></code></pre>
 <div class="note-ct">Mang theo <span class="badge">keyword</span> và <span class="badge">sortBy</span> vào mọi liên kết trang chính là thứ ngăn cái lỗi kinh điển: bấm "trang 2" là lặng lẽ vứt mất từ khoá người dùng vừa tìm. <span class="badge">c:param</span> còn mã hoá URL giúp bạn, nên một từ khoá có dấu cách hay dấu tiếng Việt vẫn sống sót qua chuyến đi.</div>
 
 <div class="pitfall"><b>Kiểu injection mà PreparedStatement KHÔNG chặn.</b> Dấu <span class="badge">?</span> chỉ dùng được cho <em>giá trị</em>, không bao giờ cho tên cột hay tên bảng — bạn không viết được <span class="badge">ORDER BY ?</span>. Nên việc sắp xếp phải xử lý bằng cách ánh xạ lựa chọn của người dùng sang một chuỗi cố định, đúng như khối switch ở trên. Nối chuỗi <span class="badge">"ORDER BY " + req.getParameter("sortBy")</span> là một điểm injection có thật và khai thác được, và đó chính là chỗ sinh viên để hở vì nghĩ "đã có PreparedStatement bảo vệ rồi".</div>
@@ -2730,17 +2730,17 @@ req.<span class="tok-function">setAttribute</span>(<span class="tok-string">"key
 <span class="eyebrow">Chapter 7 · Lesson 7.1</span>
 <h2>JPA — stop writing SQL by hand</h2>
 <p class="lead">Writing JDBC for every query is repetitive. <strong>JPA</strong> (Java Persistence API) is <em>object-relational mapping</em>: you annotate a Java class to map it to a table, then save and load <em>objects</em> — JPA generates the SQL for you.</p>
-<pre><span class="tok-keyword">@Entity</span>
+<pre><code class="language-java"><span class="tok-keyword">@Entity</span>
 <span class="tok-keyword">public class</span> <span class="tok-type">Account</span> {
     <span class="tok-keyword">@Id</span> <span class="tok-type">String</span> username;
     <span class="tok-type">String</span> password;
     <span class="tok-type">String</span> fullName;
     <span class="tok-comment">// getters/setters</span>
-}</pre>
+}</code></pre>
 <div class="out"><b>@Entity</b> = "this class is a table". <b>@Id</b> = "this field is the primary key". A row becomes an object; a column becomes a field.</div>
-<pre><span class="tok-comment">// Save and find — no SQL written</span>
+<pre><code class="language-java"><span class="tok-comment">// Save and find — no SQL written</span>
 em.<span class="tok-function">persist</span>(newAccount);              <span class="tok-comment">// INSERT</span>
-<span class="tok-type">Account</span> a = em.<span class="tok-function">find</span>(<span class="tok-type">Account</span>.<span class="tok-keyword">class</span>, <span class="tok-string">"an01"</span>);  <span class="tok-comment">// SELECT by id</span></pre>
+<span class="tok-type">Account</span> a = em.<span class="tok-function">find</span>(<span class="tok-type">Account</span>.<span class="tok-keyword">class</span>, <span class="tok-string">"an01"</span>);  <span class="tok-comment">// SELECT by id</span></code></pre>
 <p>The <strong>EntityManager</strong> is your gateway: <span class="badge">persist</span> (insert), <span class="badge">find</span> (select by id), <span class="badge">merge</span> (update), <span class="badge">remove</span> (delete). For complex queries, JPQL looks like SQL but over entities.</p>
 
 <div class="note-ct">JDBC (Chapter 5) vs JPA (this chapter): JDBC gives you full control and is closer to the metal; JPA removes boilerplate and thinks in objects. Know both — the exam and real projects use each.</div>
@@ -2757,17 +2757,17 @@ em.<span class="tok-function">persist</span>(newAccount);              <span cla
 <span class="eyebrow">Chương 7 · Bài 7.1</span>
 <h2>JPA — thôi viết SQL bằng tay</h2>
 <p class="lead">Viết JDBC cho mỗi truy vấn thì lặp đi lặp lại. <strong>JPA</strong> (Java Persistence API) là <em>ánh xạ đối tượng-quan hệ</em>: bạn gắn annotation cho một lớp Java để ánh xạ nó tới một bảng, rồi lưu và nạp <em>đối tượng</em> — JPA sinh SQL giúp bạn.</p>
-<pre><span class="tok-keyword">@Entity</span>
+<pre><code class="language-java"><span class="tok-keyword">@Entity</span>
 <span class="tok-keyword">public class</span> <span class="tok-type">Account</span> {
     <span class="tok-keyword">@Id</span> <span class="tok-type">String</span> username;
     <span class="tok-type">String</span> password;
     <span class="tok-type">String</span> fullName;
     <span class="tok-comment">// getter/setter</span>
-}</pre>
+}</code></pre>
 <div class="out"><b>@Entity</b> = "lớp này là một bảng". <b>@Id</b> = "trường này là khóa chính". Một hàng thành một đối tượng; một cột thành một trường.</div>
-<pre><span class="tok-comment">// Lưu và tìm — không viết SQL</span>
+<pre><code class="language-java"><span class="tok-comment">// Lưu và tìm — không viết SQL</span>
 em.<span class="tok-function">persist</span>(newAccount);              <span class="tok-comment">// INSERT</span>
-<span class="tok-type">Account</span> a = em.<span class="tok-function">find</span>(<span class="tok-type">Account</span>.<span class="tok-keyword">class</span>, <span class="tok-string">"an01"</span>);  <span class="tok-comment">// SELECT theo id</span></pre>
+<span class="tok-type">Account</span> a = em.<span class="tok-function">find</span>(<span class="tok-type">Account</span>.<span class="tok-keyword">class</span>, <span class="tok-string">"an01"</span>);  <span class="tok-comment">// SELECT theo id</span></code></pre>
 <p><strong>EntityManager</strong> là cổng của bạn: <span class="badge">persist</span> (thêm), <span class="badge">find</span> (chọn theo id), <span class="badge">merge</span> (cập nhật), <span class="badge">remove</span> (xóa). Với truy vấn phức tạp, JPQL trông như SQL nhưng trên entity.</p>
 
 <div class="note-ct">JDBC (Chương 5) vs JPA (chương này): JDBC cho bạn toàn quyền và sát phần cứng hơn; JPA loại bỏ code lặp và tư duy bằng đối tượng. Biết cả hai — thi và dự án thật dùng mỗi cái.</div>
@@ -2810,7 +2810,7 @@ em.<span class="tok-function">persist</span>(newAccount);              <span cla
 <span class="tok-type">&lt;/persistence-unit&gt;</span></pre>
 
 <h3>The EntityManager lifecycle — heavy factory, cheap manager</h3>
-<pre><span class="tok-comment">// ONE factory per application — expensive to build</span>
+<pre><code class="language-java"><span class="tok-comment">// ONE factory per application — expensive to build</span>
 <span class="tok-type">EntityManagerFactory</span> emf = <span class="tok-type">Persistence</span>.<span class="tok-function">createEntityManagerFactory</span>(<span class="tok-string">"MyPU"</span>);
 
 <span class="tok-comment">// ONE manager per request/operation — cheap, NOT thread-safe</span>
@@ -2824,21 +2824,21 @@ em.<span class="tok-function">persist</span>(newAccount);              <span cla
     <span class="tok-keyword">throw</span> e;
 } <span class="tok-keyword">finally</span> {
     em.<span class="tok-function">close</span>();
-}</pre>
+}</code></pre>
 <div class="note-ct">In RESOURCE_LOCAL mode every write must be inside <span class="badge">begin()</span> … <span class="badge">commit()</span>. Forgetting it is the number-one JPA surprise: no exception, no error — the insert simply never reaches the database.</div>
 
 <h3>JPQL — SQL over objects, not tables</h3>
-<pre><span class="tok-comment">// note: Product is the CLASS name, p.name is the FIELD name</span>
+<pre><code class="language-sql"><span class="tok-comment">// note: Product is the CLASS name, p.name is the FIELD name</span>
 <span class="tok-type">List</span>&lt;Product&gt; list = em.<span class="tok-function">createQuery</span>(
         <span class="tok-string">"SELECT p FROM Product p WHERE p.price &gt; :min ORDER BY p.name"</span>, <span class="tok-type">Product</span>.<span class="tok-keyword">class</span>)
     .<span class="tok-function">setParameter</span>(<span class="tok-string">"min"</span>, <span class="tok-keyword">new</span> <span class="tok-type">BigDecimal</span>(<span class="tok-string">"100000"</span>))
     .<span class="tok-function">setFirstResult</span>((page - 1) * size)      <span class="tok-comment">// paging, JPA style</span>
     .<span class="tok-function">setMaxResults</span>(size)
-    .<span class="tok-function">getResultList</span>();</pre>
+    .<span class="tok-function">getResultList</span>();</code></pre>
 <div class="out">Named parameters (<span class="badge">:min</span>) give the same injection protection as <span class="badge">?</span> in JDBC. The class-name/field-name detail is what catches people: JPQL fails on <span class="badge">SELECT * FROM Product</span> because it is not SQL and there is no table involved.</div>
 
 <h3>Relationships — the reason ORMs exist</h3>
-<pre><span class="tok-keyword">@Entity</span>
+<pre><code class="language-java"><span class="tok-keyword">@Entity</span>
 <span class="tok-keyword">public class</span> <span class="tok-type">Category</span> {
     <span class="tok-keyword">@Id</span> <span class="tok-keyword">@GeneratedValue</span>(strategy = GenerationType.IDENTITY)
     <span class="tok-keyword">private int</span> id;
@@ -2856,7 +2856,7 @@ em.<span class="tok-function">persist</span>(newAccount);              <span cla
     <span class="tok-keyword">@ManyToOne</span>
     <span class="tok-keyword">@JoinColumn</span>(name = <span class="tok-string">"categoryId"</span>)   <span class="tok-comment">// the actual FK column</span>
     <span class="tok-keyword">private</span> <span class="tok-type">Category</span> category;         <span class="tok-comment">// an OBJECT, not an int</span>
-}</pre>
+}</code></pre>
 <div class="out"><b>This is the payoff.</b> With JDBC you store <span class="badge">categoryId</span> and write a JOIN whenever you want the name. With JPA you write <span class="badge">product.getCategory().getName()</span> — and in the JSP, <span class="badge">\${p.category.name}</span>. The mapping annotations are the price you pay once for that convenience everywhere.</div>
 
 <h3>Lazy vs eager — one setting, two failure modes</h3>
@@ -2868,9 +2868,9 @@ em.<span class="tok-function">persist</span>(newAccount);              <span cla
     <tr><td>Cure</td><td>fetch it inside the transaction: <span class="badge">JOIN FETCH</span></td><td>make it LAZY and fetch deliberately</td></tr>
   </tbody>
 </table>
-<pre><span class="tok-comment">// solves BOTH problems: one query, everything needed, no lazy surprise</span>
+<pre><code class="language-sql"><span class="tok-comment">// solves BOTH problems: one query, everything needed, no lazy surprise</span>
 em.<span class="tok-function">createQuery</span>(<span class="tok-string">"SELECT p FROM Product p JOIN FETCH p.category"</span>, <span class="tok-type">Product</span>.<span class="tok-keyword">class</span>)
-  .<span class="tok-function">getResultList</span>();</pre>
+  .<span class="tok-function">getResultList</span>();</code></pre>
 
 <div class="pitfall"><b>Trap:</b> forwarding entities to a JSP after closing the EntityManager. The JSP renders <span class="badge">\${p.category.name}</span>, JPA tries to load the category lazily, the manager is gone, and you get <span class="badge">LazyInitializationException</span> — an exception thrown by the <em>View</em>, for a mistake made in the <em>Controller</em>. Fetch everything the page needs while the manager is open, or convert to plain objects before forwarding.</div>
 
@@ -2898,7 +2898,7 @@ em.<span class="tok-function">createQuery</span>(<span class="tok-string">"SELEC
 <span class="tok-type">&lt;/persistence-unit&gt;</span></pre>
 
 <h3>Vòng đời EntityManager — factory thì nặng, manager thì nhẹ</h3>
-<pre><span class="tok-comment">// MỘT factory cho cả ứng dụng — tạo ra rất tốn kém</span>
+<pre><code class="language-java"><span class="tok-comment">// MỘT factory cho cả ứng dụng — tạo ra rất tốn kém</span>
 <span class="tok-type">EntityManagerFactory</span> emf = <span class="tok-type">Persistence</span>.<span class="tok-function">createEntityManagerFactory</span>(<span class="tok-string">"MyPU"</span>);
 
 <span class="tok-comment">// MỘT manager cho mỗi request/thao tác — rẻ, KHÔNG an toàn luồng</span>
@@ -2912,21 +2912,21 @@ em.<span class="tok-function">createQuery</span>(<span class="tok-string">"SELEC
     <span class="tok-keyword">throw</span> e;
 } <span class="tok-keyword">finally</span> {
     em.<span class="tok-function">close</span>();
-}</pre>
+}</code></pre>
 <div class="note-ct">Ở chế độ RESOURCE_LOCAL, mọi thao tác ghi đều phải nằm giữa <span class="badge">begin()</span> … <span class="badge">commit()</span>. Quên nó là cú bất ngờ số một của JPA: không ngoại lệ, không báo lỗi — câu insert đơn giản là không bao giờ tới được cơ sở dữ liệu.</div>
 
 <h3>JPQL — SQL viết trên đối tượng, không phải trên bảng</h3>
-<pre><span class="tok-comment">// lưu ý: Product là tên LỚP, p.name là tên TRƯỜNG</span>
+<pre><code class="language-sql"><span class="tok-comment">// lưu ý: Product là tên LỚP, p.name là tên TRƯỜNG</span>
 <span class="tok-type">List</span>&lt;Product&gt; list = em.<span class="tok-function">createQuery</span>(
         <span class="tok-string">"SELECT p FROM Product p WHERE p.price &gt; :min ORDER BY p.name"</span>, <span class="tok-type">Product</span>.<span class="tok-keyword">class</span>)
     .<span class="tok-function">setParameter</span>(<span class="tok-string">"min"</span>, <span class="tok-keyword">new</span> <span class="tok-type">BigDecimal</span>(<span class="tok-string">"100000"</span>))
     .<span class="tok-function">setFirstResult</span>((page - 1) * size)      <span class="tok-comment">// phân trang, kiểu JPA</span>
     .<span class="tok-function">setMaxResults</span>(size)
-    .<span class="tok-function">getResultList</span>();</pre>
+    .<span class="tok-function">getResultList</span>();</code></pre>
 <div class="out">Tham số có tên (<span class="badge">:min</span>) cho cùng mức bảo vệ chống injection như dấu <span class="badge">?</span> trong JDBC. Chi tiết tên-lớp/tên-trường mới là thứ bẫy người ta: JPQL báo lỗi với <span class="badge">SELECT * FROM Product</span> vì nó không phải SQL và chẳng có cái bảng nào tham gia ở đây cả.</div>
 
 <h3>Quan hệ — lý do các ORM tồn tại</h3>
-<pre><span class="tok-keyword">@Entity</span>
+<pre><code class="language-java"><span class="tok-keyword">@Entity</span>
 <span class="tok-keyword">public class</span> <span class="tok-type">Category</span> {
     <span class="tok-keyword">@Id</span> <span class="tok-keyword">@GeneratedValue</span>(strategy = GenerationType.IDENTITY)
     <span class="tok-keyword">private int</span> id;
@@ -2944,7 +2944,7 @@ em.<span class="tok-function">createQuery</span>(<span class="tok-string">"SELEC
     <span class="tok-keyword">@ManyToOne</span>
     <span class="tok-keyword">@JoinColumn</span>(name = <span class="tok-string">"categoryId"</span>)   <span class="tok-comment">// đúng cột khoá ngoại</span>
     <span class="tok-keyword">private</span> <span class="tok-type">Category</span> category;         <span class="tok-comment">// một ĐỐI TƯỢNG, không phải một int</span>
-}</pre>
+}</code></pre>
 <div class="out"><b>Đây chính là phần thưởng.</b> Với JDBC bạn lưu <span class="badge">categoryId</span> rồi viết một câu JOIN mỗi lần cần tên danh mục. Với JPA bạn viết <span class="badge">product.getCategory().getName()</span> — và trong JSP là <span class="badge">\${p.category.name}</span>. Các annotation ánh xạ là cái giá bạn trả một lần cho sự tiện lợi ở khắp mọi nơi.</div>
 
 <h3>Lazy và eager — một thiết lập, hai kiểu hỏng</h3>
@@ -2956,9 +2956,9 @@ em.<span class="tok-function">createQuery</span>(<span class="tok-string">"SELEC
     <tr><td>Cách chữa</td><td>nạp sẵn trong giao dịch: <span class="badge">JOIN FETCH</span></td><td>đặt LAZY rồi nạp một cách có chủ đích</td></tr>
   </tbody>
 </table>
-<pre><span class="tok-comment">// giải CẢ HAI vấn đề: một truy vấn, đủ mọi thứ cần, không bất ngờ vì lazy</span>
+<pre><code class="language-sql"><span class="tok-comment">// giải CẢ HAI vấn đề: một truy vấn, đủ mọi thứ cần, không bất ngờ vì lazy</span>
 em.<span class="tok-function">createQuery</span>(<span class="tok-string">"SELECT p FROM Product p JOIN FETCH p.category"</span>, <span class="tok-type">Product</span>.<span class="tok-keyword">class</span>)
-  .<span class="tok-function">getResultList</span>();</pre>
+  .<span class="tok-function">getResultList</span>();</code></pre>
 
 <div class="pitfall"><b>Bẫy:</b> forward các entity sang JSP sau khi đã đóng EntityManager. JSP render <span class="badge">\${p.category.name}</span>, JPA định nạp danh mục theo kiểu lazy, manager thì đã biến mất, và bạn nhận <span class="badge">LazyInitializationException</span> — một ngoại lệ do <em>View</em> ném ra, vì một sai lầm phạm ở <em>Controller</em>. Hãy nạp sẵn mọi thứ trang cần trong lúc manager còn mở, hoặc chuyển sang đối tượng thuần trước khi forward.</div>
 
@@ -2994,7 +2994,7 @@ em.<span class="tok-function">createQuery</span>(<span class="tok-string">"SELEC
 </div>
 
 <h3>The interface: three methods, one crucial line</h3>
-<pre><span class="tok-keyword">@WebFilter</span>(<span class="tok-string">"/admin/*"</span>)
+<pre><code class="language-java"><span class="tok-keyword">@WebFilter</span>(<span class="tok-string">"/admin/*"</span>)
 <span class="tok-keyword">public class</span> <span class="tok-type">AuthFilter</span> <span class="tok-keyword">implements</span> <span class="tok-type">Filter</span> {
 
     <span class="tok-keyword">public void</span> <span class="tok-function">init</span>(<span class="tok-type">FilterConfig</span> cfg) { <span class="tok-comment">/* once, at startup */</span> }
@@ -3016,11 +3016,11 @@ em.<span class="tok-function">createQuery</span>(<span class="tok-string">"SELEC
     }
 
     <span class="tok-keyword">public void</span> <span class="tok-function">destroy</span>() { <span class="tok-comment">/* once, at shutdown */</span> }
-}</pre>
+}</code></pre>
 <div class="out"><b><span class="badge">chain.doFilter()</span> is the whole idea.</b> Call it and the request proceeds to the next filter or the Servlet; omit it and the request stops right there. Everything before that line runs on the way in; anything you write after it runs on the way back out, once the response has been produced.</div>
 
 <h3>The encoding filter — the correct home for Lesson 2.2's fix</h3>
-<pre><span class="tok-keyword">@WebFilter</span>(<span class="tok-string">"/*"</span>)
+<pre><code class="language-java"><span class="tok-keyword">@WebFilter</span>(<span class="tok-string">"/*"</span>)
 <span class="tok-keyword">public class</span> <span class="tok-type">EncodingFilter</span> <span class="tok-keyword">implements</span> <span class="tok-type">Filter</span> {
     <span class="tok-keyword">public void</span> <span class="tok-function">doFilter</span>(ServletRequest req, ServletResponse resp, FilterChain chain)
             <span class="tok-keyword">throws</span> IOException, ServletException {
@@ -3028,7 +3028,7 @@ em.<span class="tok-function">createQuery</span>(<span class="tok-string">"SELEC
         resp.<span class="tok-function">setCharacterEncoding</span>(<span class="tok-string">"UTF-8"</span>);
         chain.<span class="tok-function">doFilter</span>(req, resp);
     }
-}</pre>
+}</code></pre>
 <div class="note-ct">This is why Lesson 2.2 said a filter is the professional place for it: the encoding must be set before the first <span class="badge">getParameter</span>, and a filter is guaranteed to run before the Servlet does. One class fixes Vietnamese text for the entire application.</div>
 
 <h3>What filters are used for</h3>
@@ -3073,7 +3073,7 @@ em.<span class="tok-function">createQuery</span>(<span class="tok-string">"SELEC
 </div>
 
 <h3>Giao diện: ba phương thức, một dòng then chốt</h3>
-<pre><span class="tok-keyword">@WebFilter</span>(<span class="tok-string">"/admin/*"</span>)
+<pre><code class="language-java"><span class="tok-keyword">@WebFilter</span>(<span class="tok-string">"/admin/*"</span>)
 <span class="tok-keyword">public class</span> <span class="tok-type">AuthFilter</span> <span class="tok-keyword">implements</span> <span class="tok-type">Filter</span> {
 
     <span class="tok-keyword">public void</span> <span class="tok-function">init</span>(<span class="tok-type">FilterConfig</span> cfg) { <span class="tok-comment">/* một lần, lúc khởi động */</span> }
@@ -3095,11 +3095,11 @@ em.<span class="tok-function">createQuery</span>(<span class="tok-string">"SELEC
     }
 
     <span class="tok-keyword">public void</span> <span class="tok-function">destroy</span>() { <span class="tok-comment">/* một lần, lúc tắt */</span> }
-}</pre>
+}</code></pre>
 <div class="out"><b><span class="badge">chain.doFilter()</span> chính là toàn bộ ý tưởng.</b> Gọi nó thì request đi tiếp tới filter kế hoặc tới Servlet; bỏ nó đi thì request dừng lại ngay tại chỗ. Mọi thứ trước dòng đó chạy ở lượt đi vào; những gì bạn viết sau nó chạy ở lượt đi ra, khi response đã được tạo xong.</div>
 
 <h3>Filter mã hoá — chỗ ở đúng đắn cho bản sửa ở Bài 2.2</h3>
-<pre><span class="tok-keyword">@WebFilter</span>(<span class="tok-string">"/*"</span>)
+<pre><code class="language-java"><span class="tok-keyword">@WebFilter</span>(<span class="tok-string">"/*"</span>)
 <span class="tok-keyword">public class</span> <span class="tok-type">EncodingFilter</span> <span class="tok-keyword">implements</span> <span class="tok-type">Filter</span> {
     <span class="tok-keyword">public void</span> <span class="tok-function">doFilter</span>(ServletRequest req, ServletResponse resp, FilterChain chain)
             <span class="tok-keyword">throws</span> IOException, ServletException {
@@ -3107,7 +3107,7 @@ em.<span class="tok-function">createQuery</span>(<span class="tok-string">"SELEC
         resp.<span class="tok-function">setCharacterEncoding</span>(<span class="tok-string">"UTF-8"</span>);
         chain.<span class="tok-function">doFilter</span>(req, resp);
     }
-}</pre>
+}</code></pre>
 <div class="note-ct">Đây là lý do Bài 2.2 nói filter mới là chỗ chuyên nghiệp để làm việc đó: bảng mã phải được đặt trước lần <span class="badge">getParameter</span> đầu tiên, và filter thì chắc chắn chạy trước Servlet. Một lớp duy nhất sửa vấn đề tiếng Việt cho toàn bộ ứng dụng.</div>
 
 <h3>Filter được dùng để làm gì</h3>
@@ -3166,7 +3166,7 @@ em.<span class="tok-function">createQuery</span>(<span class="tok-string">"SELEC
 <div class="note-ct">Notice the pattern in the names: three <em>lifecycle</em> listeners (context, session, request) and three matching <em>attribute</em> listeners for the same three scopes. Remember the pattern and you can reconstruct the whole table in the exam.</div>
 
 <h3>Use 1 — startup initialisation, done properly</h3>
-<pre><span class="tok-keyword">@WebListener</span>
+<pre><code class="language-java"><span class="tok-keyword">@WebListener</span>
 <span class="tok-keyword">public class</span> <span class="tok-type">AppInitListener</span> <span class="tok-keyword">implements</span> <span class="tok-type">ServletContextListener</span> {
 
     <span class="tok-keyword">public void</span> <span class="tok-function">contextInitialized</span>(<span class="tok-type">ServletContextEvent</span> e) {
@@ -3183,11 +3183,11 @@ em.<span class="tok-function">createQuery</span>(<span class="tok-string">"SELEC
     <span class="tok-keyword">public void</span> <span class="tok-function">contextDestroyed</span>(<span class="tok-type">ServletContextEvent</span> e) {
         <span class="tok-comment">// close pools, stop background threads, deregister JDBC drivers</span>
     }
-}</pre>
+}</code></pre>
 <div class="out">This is the tidy home for the cache from Lesson 4.3. It runs <b>before the first request</b> and it belongs to the application rather than to any one Servlet — which is exactly what "load once at startup" should mean.</div>
 
 <h3>Use 2 — counting online users</h3>
-<pre><span class="tok-keyword">@WebListener</span>
+<pre><code class="language-java"><span class="tok-keyword">@WebListener</span>
 <span class="tok-keyword">public class</span> <span class="tok-type">OnlineCounter</span> <span class="tok-keyword">implements</span> <span class="tok-type">HttpSessionListener</span> {
 
     <span class="tok-keyword">public void</span> <span class="tok-function">sessionCreated</span>(<span class="tok-type">HttpSessionEvent</span> e) { <span class="tok-function">change</span>(e, +1); }
@@ -3200,9 +3200,9 @@ em.<span class="tok-function">createQuery</span>(<span class="tok-string">"SELEC
             ctx.<span class="tok-function">setAttribute</span>(<span class="tok-string">"onlineUsers"</span>, (n == <span class="tok-keyword">null</span> ? 0 : n) + delta);
         }
     }
-}</pre>
-<pre><span class="tok-comment">&lt;!-- any JSP --&gt;</span>
-Online now: \${applicationScope.onlineUsers}</pre>
+}</code></pre>
+<pre><code class="language-java"><span class="tok-comment">&lt;!-- any JSP --&gt;</span>
+Online now: \${applicationScope.onlineUsers}</code></pre>
 <div class="note-ct"><span class="badge">sessionDestroyed</span> fires on <span class="badge">invalidate()</span> (logout) <em>and</em> on timeout — so the count naturally decreases when someone simply closes the browser and their session expires. Nothing else in the Servlet API tells you that.</div>
 
 <h3>Registering a listener</h3>
@@ -3245,7 +3245,7 @@ Online now: \${applicationScope.onlineUsers}</pre>
 <div class="note-ct">Để ý quy luật trong các tên gọi: ba listener <em>vòng đời</em> (context, session, request) và ba listener <em>thuộc tính</em> tương ứng cho đúng ba phạm vi đó. Nhớ quy luật là bạn dựng lại được cả bảng ngay trong phòng thi.</div>
 
 <h3>Công dụng 1 — khởi tạo lúc startup, làm cho đúng chỗ</h3>
-<pre><span class="tok-keyword">@WebListener</span>
+<pre><code class="language-java"><span class="tok-keyword">@WebListener</span>
 <span class="tok-keyword">public class</span> <span class="tok-type">AppInitListener</span> <span class="tok-keyword">implements</span> <span class="tok-type">ServletContextListener</span> {
 
     <span class="tok-keyword">public void</span> <span class="tok-function">contextInitialized</span>(<span class="tok-type">ServletContextEvent</span> e) {
@@ -3262,11 +3262,11 @@ Online now: \${applicationScope.onlineUsers}</pre>
     <span class="tok-keyword">public void</span> <span class="tok-function">contextDestroyed</span>(<span class="tok-type">ServletContextEvent</span> e) {
         <span class="tok-comment">// đóng pool, dừng luồng nền, gỡ đăng ký driver JDBC</span>
     }
-}</pre>
+}</code></pre>
 <div class="out">Đây mới là chỗ ở gọn gàng cho cái cache ở Bài 4.3. Nó chạy <b>trước request đầu tiên</b> và thuộc về ứng dụng chứ không thuộc về riêng Servlet nào — đúng nghĩa mà "nạp một lần lúc khởi động" phải mang.</div>
 
 <h3>Công dụng 2 — đếm người đang online</h3>
-<pre><span class="tok-keyword">@WebListener</span>
+<pre><code class="language-java"><span class="tok-keyword">@WebListener</span>
 <span class="tok-keyword">public class</span> <span class="tok-type">OnlineCounter</span> <span class="tok-keyword">implements</span> <span class="tok-type">HttpSessionListener</span> {
 
     <span class="tok-keyword">public void</span> <span class="tok-function">sessionCreated</span>(<span class="tok-type">HttpSessionEvent</span> e) { <span class="tok-function">change</span>(e, +1); }
@@ -3279,9 +3279,9 @@ Online now: \${applicationScope.onlineUsers}</pre>
             ctx.<span class="tok-function">setAttribute</span>(<span class="tok-string">"onlineUsers"</span>, (n == <span class="tok-keyword">null</span> ? 0 : n) + delta);
         }
     }
-}</pre>
-<pre><span class="tok-comment">&lt;!-- bất kỳ JSP nào --&gt;</span>
-Dang online: \${applicationScope.onlineUsers}</pre>
+}</code></pre>
+<pre><code class="language-java"><span class="tok-comment">&lt;!-- bất kỳ JSP nào --&gt;</span>
+Dang online: \${applicationScope.onlineUsers}</code></pre>
 <div class="note-ct"><span class="badge">sessionDestroyed</span> kích hoạt khi gọi <span class="badge">invalidate()</span> (đăng xuất) <em>và</em> khi hết hạn — nên con số tự động giảm xuống khi ai đó chỉ đơn giản đóng trình duyệt rồi session của họ hết hạn. Không có thứ gì khác trong Servlet API báo cho bạn biết điều đó.</div>
 
 <h3>Đăng ký một listener</h3>
@@ -3347,15 +3347,15 @@ Dang online: \${applicationScope.onlineUsers}</pre>
 <p class="lead">Almost every assignment needs it — a product photo, an avatar, a CV. Upload breaks two assumptions you have relied on all course: <span class="badge">getParameter</span> stops working, and the data no longer fits in a String.</p>
 
 <h3>The form must declare enctype</h3>
-<pre>&lt;form action="product" method="post" <b>enctype="multipart/form-data"</b>&gt;
+<pre><code class="language-html">&lt;form action="product" method="post" <b>enctype="multipart/form-data"</b>&gt;
     &lt;input type="text" name="name"/&gt;
     &lt;input type="file" name="image" accept="image/*"/&gt;
     &lt;button&gt;Save&lt;/button&gt;
-&lt;/form&gt;</pre>
+&lt;/form&gt;</code></pre>
 <div class="out"><b>Miss that attribute and nothing works:</b> the browser sends only the file <em>name</em>, not its bytes. This is the single most common upload bug, and it produces no error — just an empty file.</div>
 
 <h3>The Servlet side</h3>
-<pre><span class="tok-keyword">@WebServlet</span>(<span class="tok-string">"/product"</span>)
+<pre><code class="language-java"><span class="tok-keyword">@WebServlet</span>(<span class="tok-string">"/product"</span>)
 <span class="tok-keyword">@MultipartConfig</span>(
     fileSizeThreshold = 1024 * 1024,       <span class="tok-comment">// 1MB kept in memory</span>
     maxFileSize       = 5  * 1024 * 1024,  <span class="tok-comment">// 5MB per file</span>
@@ -3395,7 +3395,7 @@ Dang online: \${applicationScope.onlineUsers}</pre>
         product.<span class="tok-function">setImage</span>(stored);
     }
   }
-}</pre>
+}</code></pre>
 
 <h3>Where to put the files — and why not in the project folder</h3>
 <table>
@@ -3418,15 +3418,15 @@ Dang online: \${applicationScope.onlineUsers}</pre>
 <p class="lead">Gần như bài tập lớn nào cũng cần — ảnh sản phẩm, ảnh đại diện, một file CV. Upload phá vỡ hai giả định bạn dựa vào suốt môn học: <span class="badge">getParameter</span> ngừng hoạt động, và dữ liệu không còn nhét vừa một String.</p>
 
 <h3>Form bắt buộc phải khai báo enctype</h3>
-<pre>&lt;form action="product" method="post" <b>enctype="multipart/form-data"</b>&gt;
+<pre><code class="language-html">&lt;form action="product" method="post" <b>enctype="multipart/form-data"</b>&gt;
     &lt;input type="text" name="name"/&gt;
     &lt;input type="file" name="image" accept="image/*"/&gt;
     &lt;button&gt;Luu&lt;/button&gt;
-&lt;/form&gt;</pre>
+&lt;/form&gt;</code></pre>
 <div class="out"><b>Thiếu thuộc tính đó là chẳng chạy gì:</b> trình duyệt chỉ gửi <em>tên</em> file chứ không gửi các byte của nó. Đây là lỗi upload phổ biến nhất, và nó không sinh ra lỗi nào cả — chỉ là một file rỗng.</div>
 
 <h3>Phía Servlet</h3>
-<pre><span class="tok-keyword">@WebServlet</span>(<span class="tok-string">"/product"</span>)
+<pre><code class="language-java"><span class="tok-keyword">@WebServlet</span>(<span class="tok-string">"/product"</span>)
 <span class="tok-keyword">@MultipartConfig</span>(
     fileSizeThreshold = 1024 * 1024,       <span class="tok-comment">// 1MB giữ trong bộ nhớ</span>
     maxFileSize       = 5  * 1024 * 1024,  <span class="tok-comment">// 5MB mỗi file</span>
@@ -3466,7 +3466,7 @@ Dang online: \${applicationScope.onlineUsers}</pre>
         product.<span class="tok-function">setImage</span>(stored);
     }
   }
-}</pre>
+}</code></pre>
 
 <h3>Để file ở đâu — và vì sao không để trong thư mục dự án</h3>
 <table>
@@ -3497,7 +3497,7 @@ Dang online: \${applicationScope.onlineUsers}</pre>
 <p class="lead">CLO7 asks you to "combine web front-end and back-end". Everything so far reloads the whole page for every action. Some features cannot work that way: checking whether a username is taken while the user types, adding to a cart without losing the page, filtering a list live.</p>
 
 <h3>The Servlet returns data, not a page</h3>
-<pre><span class="tok-keyword">@WebServlet</span>(<span class="tok-string">"/api/check-username"</span>)
+<pre><code class="language-java"><span class="tok-keyword">@WebServlet</span>(<span class="tok-string">"/api/check-username"</span>)
 <span class="tok-keyword">public class</span> <span class="tok-type">CheckUsernameServlet</span> <span class="tok-keyword">extends</span> <span class="tok-type">HttpServlet</span> {
     <span class="tok-keyword">protected void</span> <span class="tok-function">doGet</span>(HttpServletRequest req, HttpServletResponse resp)
             <span class="tok-keyword">throws</span> IOException {
@@ -3509,11 +3509,11 @@ Dang online: \${applicationScope.onlineUsers}</pre>
         resp.<span class="tok-function">setCharacterEncoding</span>(<span class="tok-string">"UTF-8"</span>);
         resp.<span class="tok-function">getWriter</span>().<span class="tok-function">write</span>(<span class="tok-string">"{\\"available\\": "</span> + !taken + <span class="tok-string">"}"</span>);
     }
-}</pre>
+}</code></pre>
 <div class="note-ct">No forward, no JSP — the Servlet writes JSON straight to the response. For anything beyond a trivial object, use a library (Gson: <span class="badge">new Gson().toJson(list)</span>) rather than building JSON with string concatenation, which breaks the moment a value contains a quote or a Vietnamese character.</div>
 
 <h3>The browser side, with fetch</h3>
-<pre>&lt;input id="username" name="username"/&gt;
+<pre><code class="language-html">&lt;input id="username" name="username"/&gt;
 &lt;span id="msg"&gt;&lt;/span&gt;
 
 &lt;script&gt;
@@ -3530,15 +3530,15 @@ input.addEventListener('input', () =&gt; {
         data.available ? 'Available' : 'Already taken';
   }, 400);
 });
-&lt;/script&gt;</pre>
+&lt;/script&gt;</code></pre>
 <div class="out">Without the debounce, typing eight characters fires eight requests and eight database queries. With it, one request fires 400 ms after the user pauses. The same idea as debouncing a hardware button — filter out changes that have not settled.</div>
 
 <h3>Posting JSON back</h3>
-<pre>await fetch(ctx + '/api/cart', {
+<pre><code class="language-java">await fetch(ctx + '/api/cart', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({ productId: 7, qty: 2 })
-});</pre>
+});</code></pre>
 <div class="note-ct"><b>Important:</b> a JSON body is <em>not</em> form data, so <span class="badge">req.getParameter("productId")</span> returns null. The Servlet must read the raw body — <span class="badge">req.getReader().lines().collect(Collectors.joining())</span> — and parse it (Gson). This surprises everyone the first time.</div>
 
 <h3>When to use which</h3>
@@ -3563,7 +3563,7 @@ input.addEventListener('input', () =&gt; {
 <p class="lead">CLO7 yêu cầu bạn "kết hợp front-end và back-end trong ứng dụng Java web". Mọi thứ tới giờ đều nạp lại cả trang cho từng hành động. Có những tính năng không thể hoạt động theo kiểu đó: kiểm tên đăng nhập đã có ai dùng chưa ngay khi người dùng đang gõ, thêm vào giỏ mà không mất vị trí trang, lọc danh sách trực tiếp.</p>
 
 <h3>Servlet trả về dữ liệu, không phải một trang</h3>
-<pre><span class="tok-keyword">@WebServlet</span>(<span class="tok-string">"/api/check-username"</span>)
+<pre><code class="language-java"><span class="tok-keyword">@WebServlet</span>(<span class="tok-string">"/api/check-username"</span>)
 <span class="tok-keyword">public class</span> <span class="tok-type">CheckUsernameServlet</span> <span class="tok-keyword">extends</span> <span class="tok-type">HttpServlet</span> {
     <span class="tok-keyword">protected void</span> <span class="tok-function">doGet</span>(HttpServletRequest req, HttpServletResponse resp)
             <span class="tok-keyword">throws</span> IOException {
@@ -3575,11 +3575,11 @@ input.addEventListener('input', () =&gt; {
         resp.<span class="tok-function">setCharacterEncoding</span>(<span class="tok-string">"UTF-8"</span>);
         resp.<span class="tok-function">getWriter</span>().<span class="tok-function">write</span>(<span class="tok-string">"{\\"available\\": "</span> + !taken + <span class="tok-string">"}"</span>);
     }
-}</pre>
+}</code></pre>
 <div class="note-ct">Không forward, không JSP — Servlet ghi thẳng JSON vào response. Với bất cứ thứ gì phức tạp hơn một đối tượng tí hon, hãy dùng thư viện (Gson: <span class="badge">new Gson().toJson(list)</span>) thay vì dựng JSON bằng nối chuỗi, vốn vỡ ngay khoảnh khắc một giá trị chứa dấu nháy hoặc ký tự tiếng Việt.</div>
 
 <h3>Phía trình duyệt, dùng fetch</h3>
-<pre>&lt;input id="username" name="username"/&gt;
+<pre><code class="language-html">&lt;input id="username" name="username"/&gt;
 &lt;span id="msg"&gt;&lt;/span&gt;
 
 &lt;script&gt;
@@ -3596,15 +3596,15 @@ input.addEventListener('input', () =&gt; {
         data.available ? 'Dung duoc' : 'Da co nguoi dung';
   }, 400);
 });
-&lt;/script&gt;</pre>
+&lt;/script&gt;</code></pre>
 <div class="out">Không có phần debounce thì gõ tám ký tự là bắn tám request và tám truy vấn cơ sở dữ liệu. Có nó thì đúng một request bắn ra 400 ms sau khi người dùng dừng tay. Cùng ý tưởng với chống dội một nút bấm phần cứng — lọc bỏ những thay đổi chưa ổn định.</div>
 
 <h3>Gửi JSON ngược lên</h3>
-<pre>await fetch(ctx + '/api/cart', {
+<pre><code class="language-java">await fetch(ctx + '/api/cart', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({ productId: 7, qty: 2 })
-});</pre>
+});</code></pre>
 <div class="note-ct"><b>Quan trọng:</b> một thân request dạng JSON <em>không phải</em> dữ liệu form, nên <span class="badge">req.getParameter("productId")</span> trả về null. Servlet phải đọc thân thô — <span class="badge">req.getReader().lines().collect(Collectors.joining())</span> — rồi phân tích nó (bằng Gson). Chuyện này làm ai cũng bất ngờ ở lần đầu.</div>
 
 <h3>Khi nào dùng cái nào</h3>
@@ -3755,7 +3755,7 @@ input.addEventListener('input', () =&gt; {
 <div class="out">Compare it with Chapter 6's flow: the DAO has been replaced by an HTTP call. Everything you know about MVC, scopes and forwarding still applies unchanged.</div>
 
 <h3>A minimal service class</h3>
-<pre><span class="tok-keyword">public class</span> <span class="tok-type">AiService</span> {
+<pre><code class="language-java"><span class="tok-keyword">public class</span> <span class="tok-type">AiService</span> {
 
     <span class="tok-keyword">private final</span> <span class="tok-type">String</span> apiKey;      <span class="tok-comment">// from context-param — NEVER hard-coded</span>
 
@@ -3781,7 +3781,7 @@ input.addEventListener('input', () =&gt; {
 
         <span class="tok-keyword">return</span> <span class="tok-function">extractText</span>(res.<span class="tok-function">body</span>());
     }
-}</pre>
+}</code></pre>
 
 <h3>The rules that matter more than the code</h3>
 <table>
@@ -3826,7 +3826,7 @@ input.addEventListener('input', () =&gt; {
 <div class="out">So với luồng ở Chương 6: DAO đã được thay bằng một lời gọi HTTP. Mọi thứ bạn biết về MVC, scope và forward vẫn áp dụng y nguyên.</div>
 
 <h3>Một lớp dịch vụ tối giản</h3>
-<pre><span class="tok-keyword">public class</span> <span class="tok-type">AiService</span> {
+<pre><code class="language-java"><span class="tok-keyword">public class</span> <span class="tok-type">AiService</span> {
 
     <span class="tok-keyword">private final</span> <span class="tok-type">String</span> apiKey;      <span class="tok-comment">// lấy từ context-param — ĐỪNG viết cứng</span>
 
@@ -3852,7 +3852,7 @@ input.addEventListener('input', () =&gt; {
 
         <span class="tok-keyword">return</span> <span class="tok-function">extractText</span>(res.<span class="tok-function">body</span>());
     }
-}</pre>
+}</code></pre>
 
 <h3>Những quy tắc còn quan trọng hơn đoạn code</h3>
 <table>

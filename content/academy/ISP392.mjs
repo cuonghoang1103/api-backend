@@ -399,7 +399,7 @@ const s5 = doc('isp392-5-1-backend-database', 'Stage 5 — Building the backend 
 <li><strong>Authorization</strong> — check permission (can this role do this action?).</li>
 <li><strong>Validate every input</strong> — never trust data from the client.</li>
 </ul>
-<pre><code>Example endpoint (create booking):
+<pre><code class="language-sql">Example endpoint (create booking):
   POST /api/v1/bookings
   1. Auth middleware: is the token valid? -&gt; who is the user?
   2. Validate body: roomId is a number, times are valid
@@ -426,7 +426,7 @@ const s5 = doc('isp392-5-1-backend-database', 'Stage 5 — Building the backend 
 <li><strong>Uỷ quyền (authorization)</strong> — kiểm tra quyền (vai trò này làm được việc này không?).</li>
 <li><strong>Kiểm tra mọi đầu vào</strong> — không bao giờ tin dữ liệu từ client.</li>
 </ul>
-<pre><code>Ví dụ endpoint (tạo đơn đặt):
+<pre><code class="language-sql">Ví dụ endpoint (tạo đơn đặt):
   POST /api/v1/bookings
   1. Middleware xác thực: token hợp lệ? -&gt; ai là người dùng?
   2. Kiểm tra body: roomId là số, thời gian hợp lệ
@@ -451,7 +451,7 @@ const s6 = doc('isp392-6-1-frontend-integration', 'Stage 6 — Building the fron
 <p>Turn the Figma mockups into <strong>reusable components</strong> (a Button, a Card, a BookingForm). Manage <strong>state</strong> — the data a screen currently shows — and re-render when it changes.</p>
 <h3>Connect to the real API</h3>
 <p>Replace the fake data from Stage 4 with real calls to the backend built in Stage 5. Every request has three states you must handle:</p>
-<pre><code>Fetching data (every screen):
+<pre><code class="language-javascript">Fetching data (every screen):
   loading  -&gt; show a spinner / skeleton
   success  -&gt; render the data
   error    -&gt; show a friendly message + retry
@@ -477,7 +477,7 @@ const bookings = await res.json();
 <p>Biến mockup Figma thành các <strong>component tái dùng</strong> (Button, Card, BookingForm). Quản lý <strong>trạng thái (state)</strong> — dữ liệu màn hình đang hiển thị — và vẽ lại khi nó đổi.</p>
 <h3>Kết nối API thật</h3>
 <p>Thay dữ liệu giả ở Giai đoạn 4 bằng lời gọi thật tới backend đã xây ở Giai đoạn 5. Mỗi request có ba trạng thái bạn phải xử lý:</p>
-<pre><code>Lấy dữ liệu (mọi màn hình):
+<pre><code class="language-javascript">Lấy dữ liệu (mọi màn hình):
   loading  -&gt; hiện spinner / skeleton
   success  -&gt; vẽ dữ liệu ra
   error    -&gt; hiện thông báo thân thiện + nút thử lại

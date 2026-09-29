@@ -149,7 +149,7 @@ T3=\$(date +%s%N)</code></pre>
 ${slide('dv-06', 5, 'Về bản cũ: đo bằng mili giây hay bằng phút')}
 <p>The other way to get back to a previous version is to rebuild it: check out the old commit and run the pipeline again. People reach for this because it needs no special layout — you already have git. Here is what it costs, on a project deliberately kept small (83 npm packages, 61 TypeScript files):</p>
 
-<pre><code>T0=\$(date +%s%N)
+<pre><code class="language-bash">T0=\$(date +%s%N)
 git clone -q /tmp/kho-lui.git /tmp/lui-build
 T1=\$(date +%s%N)
 cd /tmp/lui-build &amp;&amp; npm ci --no-audit --no-fund
@@ -465,7 +465,7 @@ T3=\$(date +%s%N)</code></pre>
 ${slide('dv-06', 5, 'Về bản cũ: đo bằng mili giây hay bằng phút')}
 <p>Cách khác để quay về một phiên bản cũ là DỰNG LẠI nó: lấy commit cũ ra rồi chạy lại đường ống. Người ta hay chọn cách này vì nó không cần bố cục đặc biệt gì — bạn vốn đã có git. Đây là cái giá của nó, trên một dự án cố tình làm nhỏ (83 gói npm, 61 tệp TypeScript):</p>
 
-<pre><code>T0=\$(date +%s%N)
+<pre><code class="language-bash">T0=\$(date +%s%N)
 git clone -q /tmp/kho-lui.git /tmp/lui-build
 T1=\$(date +%s%N)
 cd /tmp/lui-build &amp;&amp; npm ci --no-audit --no-fund
@@ -745,7 +745,7 @@ v2 ghi : {"id":1002}</div>
 ${slide('dv-06', 11, 'Chốt kiểm sức khoẻ nông là có chủ đích')}
 <p>Because of what a health endpoint usually is:</p>
 
-<pre><code>if (req.url === "/health") { res.writeHead(200); return res.end("ok\\n"); }</code></pre>
+<pre><code class="language-bash">if (req.url === "/health") { res.writeHead(200); return res.end("ok\\n"); }</code></pre>
 
 <p>It answers before touching anything. It does not open a database connection, it does not run a query, it does not read a config value. That is deliberate — a health check that talks to the database will report the app as unhealthy during a database blip and get the process killed by whatever supervises it, which turns a five-second database hiccup into a restart loop. So health checks are kept shallow on purpose, and a shallow health check cannot possibly detect a schema mismatch.</p>
 
@@ -793,7 +793,7 @@ ${slide('dv-06', 15, 'Tầm lùi đo bằng lược đồ, không bằng đĩa')
 
 <h3>Run it yourself: the lying rollback on the lab VPS</h3>
 <p>The measurement at the top of this lesson came from the original sandbox. It reproduces in a few lines on the lab VPS from Lesson 6.1 (PostgreSQL 16.15, Node 18). The test app does not need a database driver: it asks <code>psql</code>, which is enough to show the shape. Release <code>v1</code> reads column <code>ten</code>, <code>v2</code> reads <code>ho_ten</code>, and <code>/health</code> answers before touching anything:</p>
-<pre><code>// app-db.mjs (trich) — /health nong, /don doc cot qua psql
+<pre><code class="language-javascript">// app-db.mjs (trich) — /health nong, /don doc cot qua psql
 const COT = BAN === 'v1' ? 'ten' : 'ho_ten';          // v2 doc cot moi
 const sql = (q) =&gt; execFileSync('psql', ['-d', 'lab', '-XtAc', q], { stdio: ['ignore', 'pipe', 'pipe'] }).toString().trim();
 if (req.url === '/health') { res.writeHead(200); return res.end('ok\\n'); }
@@ -930,7 +930,7 @@ v2 ghi : {"id":1002}</div>
 ${slide('dv-06', 11, 'Chốt kiểm sức khoẻ nông là có chủ đích')}
 <p>Vì bản chất của một endpoint sức khoẻ thường là thế này:</p>
 
-<pre><code>if (req.url === "/health") { res.writeHead(200); return res.end("ok\\n"); }</code></pre>
+<pre><code class="language-bash">if (req.url === "/health") { res.writeHead(200); return res.end("ok\\n"); }</code></pre>
 
 <p>Nó trả lời TRƯỚC KHI đụng vào bất cứ thứ gì. Nó không mở kết nối cơ sở dữ liệu, không chạy truy vấn, không đọc giá trị cấu hình nào. Đó là CỐ Ý — một chốt kiểm sức khoẻ có nói chuyện với cơ sở dữ liệu sẽ báo ứng dụng là ốm trong lúc cơ sở dữ liệu chớp một cái, rồi bị cái thứ đang giám sát nó giết chết, biến một cú nấc năm giây của cơ sở dữ liệu thành một vòng lặp khởi động lại. Nên chốt kiểm sức khoẻ được giữ NÔNG có chủ đích, mà một chốt kiểm nông thì không thể nào phát hiện được một cú lệch lược đồ.</p>
 
@@ -978,7 +978,7 @@ ${slide('dv-06', 15, 'Tầm lùi đo bằng lược đồ, không bằng đĩa')
 
 <h3>Tự chạy: cú lùi nói dối trên VPS thí nghiệm</h3>
 <p>Phép đo ở đầu bài lấy từ hộp cát gốc. Nó tái hiện được bằng vài dòng trên VPS thí nghiệm của bài 6.1 (PostgreSQL 16.15, Node 18). Ứng dụng thử không cần trình điều khiển CSDL: nó hỏi <code>psql</code>, vậy là đủ để thấy hình dạng. Bản <code>v1</code> đọc cột <code>ten</code>, <code>v2</code> đọc <code>ho_ten</code>, còn <code>/health</code> trả lời trước khi đụng vào bất cứ thứ gì:</p>
-<pre><code>// app-db.mjs (trich) — /health nong, /don doc cot qua psql
+<pre><code class="language-javascript">// app-db.mjs (trich) — /health nong, /don doc cot qua psql
 const COT = BAN === 'v1' ? 'ten' : 'ho_ten';          // v2 doc cot moi
 const sql = (q) =&gt; execFileSync('psql', ['-d', 'lab', '-XtAc', q], { stdio: ['ignore', 'pipe', 'pipe'] }).toString().trim();
 if (req.url === '/health') { res.writeHead(200); return res.end('ok\\n'); }
@@ -1150,7 +1150,7 @@ cua so hong: 2026-08-23 21:45:26.112258+00 → 2026-08-23 21:45:27.809144+00
 ${slide('dv-06', 19, 'DROP COLUMN 1,3 ms: nhanh nhất, một chiều')}
 <p>Dropping a column is the one migration in this course that is genuinely one-way. It is also, measured, the <em>fastest</em> thing in the entire course. On a 200,000-row table with real data in it:</p>
 
-<pre><code>alter table kh drop column dien_thoai;</code></pre>
+<pre><code class="language-sql">alter table kh drop column dien_thoai;</code></pre>
 
 <div class="out">ALTER TABLE
 Time: 1.287 ms</div>
@@ -1175,7 +1175,7 @@ Time: 1.287 ms</div>
 
 <p>PostgreSQL implements <code>DROP COLUMN</code> as a catalogue edit — it marks the column dropped and stops showing it. The old values stay in every row on disk. You can see them:</p>
 
-<pre><code>select attname, attnum, attisdropped from pg_attribute
+<pre><code class="language-sql">select attname, attnum, attisdropped from pg_attribute
  where attrelid='kh'::regclass and attnum &gt; 0;</code></pre>
 
 <div class="out">           attname            | attnum | attisdropped
@@ -1188,7 +1188,7 @@ Time: 1.287 ms</div>
 
 <p>The dropped column is still row 3 of the catalogue, renamed to a placeholder and flagged. The new <code>dien_thoai</code> is <code>attnum = 5</code> — a different column that happens to share a name. And with <code>pageinspect</code> you can read the raw heap and find the data still sitting there:</p>
 
-<pre><code>create extension if not exists pageinspect;
+<pre><code class="language-bash">create extension if not exists pageinspect;
 select substring(encode(t_data,'escape') from 1 for 120)
   from heap_page_items(get_raw_page('kh',0)) where lp=1;</code></pre>
 
@@ -1357,7 +1357,7 @@ cua so hong: 2026-08-23 21:45:26.112258+00 → 2026-08-23 21:45:27.809144+00
 ${slide('dv-06', 19, 'DROP COLUMN 1,3 ms: nhanh nhất, một chiều')}
 <p>Xoá một cột là migration duy nhất trong khoá này thật sự MỘT CHIỀU. Nó cũng là, đo thật, thứ <em>NHANH NHẤT</em> trong cả khoá học. Trên một bảng 200.000 dòng có dữ liệu thật:</p>
 
-<pre><code>alter table kh drop column dien_thoai;</code></pre>
+<pre><code class="language-sql">alter table kh drop column dien_thoai;</code></pre>
 
 <div class="out">ALTER TABLE
 Time: 1.287 ms</div>
@@ -1382,7 +1382,7 @@ Time: 1.287 ms</div>
 
 <p>PostgreSQL cài đặt <code>DROP COLUMN</code> như một lần sửa DANH MỤC — nó đánh dấu cột đã xoá rồi thôi hiển thị. Các giá trị cũ nằm nguyên trong mọi dòng trên đĩa. Bạn nhìn thấy được:</p>
 
-<pre><code>select attname, attnum, attisdropped from pg_attribute
+<pre><code class="language-sql">select attname, attnum, attisdropped from pg_attribute
  where attrelid='kh'::regclass and attnum &gt; 0;</code></pre>
 
 <div class="out">           attname            | attnum | attisdropped
@@ -1395,7 +1395,7 @@ Time: 1.287 ms</div>
 
 <p>Cột đã xoá vẫn là dòng số 3 của danh mục, đổi tên thành một chỗ giữ chỗ và gắn cờ. Cột <code>dien_thoai</code> MỚI là <code>attnum = 5</code> — một cột KHÁC tình cờ trùng tên. Và với <code>pageinspect</code> bạn đọc được trang heap thô và thấy dữ liệu vẫn ngồi đó:</p>
 
-<pre><code>create extension if not exists pageinspect;
+<pre><code class="language-bash">create extension if not exists pageinspect;
 select substring(encode(t_data,'escape') from 1 for 120)
   from heap_page_items(get_raw_page('kh',0)) where lp=1;</code></pre>
 
@@ -1583,7 +1583,7 @@ thu that su da roi khoi may: 40</div>
 <h3>A second thing the outbox buys, for free</h3>
 <p>Look again at the direct-send version. The email goes out <em>after</em> the insert but <em>inside</em> the same request. If the process is killed between the two — a deploy, an OOM kill, a crash — you get an order with no email, or an email for an order that was rolled back by the database. The outbox makes both impossible, because the intent and the data commit together or not at all:</p>
 
-<pre><code>await c.query("begin");
+<pre><code class="language-sql">await c.query("begin");
 const r = await c.query("insert into dh (email) values (\$1) returning id", [email]);
 <span class="tok-comment">// Y DINH gui nam CUNG giao dich voi don hang</span>
 await c.query("insert into hop_gui (den, than) values (\$1, \$2)",
@@ -1609,7 +1609,7 @@ await c.query("commit");</code></pre>
 <h3>Two more one-way doors: sessions and uploads</h3>
 ${slide('dv-06', 22, 'Phiên đăng nhập: bản cũ không đọc được')}
 <p>Emails and payments leave the machine. Two other things never leave it, and still do not come back cleanly: the <strong>sessions</strong> the new version issued, and the <strong>files</strong> users uploaded while it ran. Sessions, measured on the lab VPS: a small app signs a session token with HMAC, using the same key in every release. v1 puts <code>{ userId: 42 }</code> in the token; v2 renames the field to <code>{ sub: 42 }</code> but can still read the old form. An, who logged in under v1, and Binh, who logged in under v2, then a rollback:</p>
-<pre><code>// app-phien.mjs (trich) — cung khoa ky, chi doi hinh dang phien
+<pre><code class="language-javascript">// app-phien.mjs (trich) — cung khoa ky, chi doi hinh dang phien
 if (req.url === '/dang-nhap') return res.end(cap(BAN === 'v1' ? { userId: 42 } : { sub: 42 }) + '\\n');
 const p = doc((req.headers.cookie || '').replace('phien=', ''));
 const id = BAN === 'v1' ? p?.userId : (p?.sub ?? p?.userId);   // v2 doc duoc ca kieu cu
@@ -1767,7 +1767,7 @@ thu that su da roi khoi may: 40</div>
 <h3>Thứ thứ hai hộp gửi mua được, miễn phí</h3>
 <p>Nhìn lại bản gửi thẳng. Email đi ra <em>SAU</em> lệnh chèn nhưng <em>TRONG</em> cùng một request. Nếu tiến trình bị giết giữa hai bước đó — một lần deploy, một cú OOM, một cú sập — bạn được một đơn hàng không có email, hoặc một email cho một đơn hàng mà cơ sở dữ liệu đã cuộn lại. Hộp gửi làm cả hai chuyện đó bất khả, vì ý định và dữ liệu cùng chốt hoặc cùng không:</p>
 
-<pre><code>await c.query("begin");
+<pre><code class="language-sql">await c.query("begin");
 const r = await c.query("insert into dh (email) values (\$1) returning id", [email]);
 <span class="tok-comment">// Y DINH gui nam CUNG giao dich voi don hang</span>
 await c.query("insert into hop_gui (den, than) values (\$1, \$2)",
@@ -1793,7 +1793,7 @@ await c.query("commit");</code></pre>
 <h3>Thêm hai cánh cửa một chiều: phiên đăng nhập và tệp tải lên</h3>
 ${slide('dv-06', 22, 'Phiên đăng nhập: bản cũ không đọc được')}
 <p>Email và tiền thì rời khỏi máy. Có hai thứ KHÔNG bao giờ rời khỏi máy mà vẫn không quay lại gọn gàng: những <strong>phiên đăng nhập</strong> mà bản mới đã cấp, và những <strong>tệp</strong> người dùng tải lên trong lúc nó chạy. Phiên đăng nhập, đo trên VPS thí nghiệm: một ứng dụng nhỏ ký token phiên bằng HMAC, dùng CÙNG một khoá ở mọi bản. v1 đặt <code>{ userId: 42 }</code> vào token; v2 đổi tên trường thành <code>{ sub: 42 }</code> nhưng vẫn đọc được kiểu cũ. An đăng nhập lúc v1, Bình đăng nhập lúc v2, rồi lùi bản:</p>
-<pre><code>// app-phien.mjs (trich) — cung khoa ky, chi doi hinh dang phien
+<pre><code class="language-javascript">// app-phien.mjs (trich) — cung khoa ky, chi doi hinh dang phien
 if (req.url === '/dang-nhap') return res.end(cap(BAN === 'v1' ? { userId: 42 } : { sub: 42 }) + '\\n');
 const p = doc((req.headers.cookie || '').replace('phien=', ''));
 const id = BAN === 'v1' ? p?.userId : (p?.sub ?? p?.userId);   // v2 doc duoc ca kieu cu
@@ -1947,7 +1947,7 @@ ${slide('dv-06', 25, 'Chuỗi bộ đệm: ai xoá được, mất bao lâu')}
 ${slide('dv-06', 26, 'Script lùi: kiểm PHIÊN BẢN qua cửa trước')}
 <p>Everything in this chapter comes together in one shape: <strong>verify through the front door, using the address the user uses, and check the version rather than the status code.</strong></p>
 
-<pre><code>#!/bin/bash
+<pre><code class="language-bash">#!/bin/bash
 set -euo pipefail
 GOC=/srv/vps/lui
 CUA_TRUOC=http://127.0.0.1:3320      <span class="tok-comment"># dung dia chi NGUOI DUNG di vao</span>
@@ -2191,7 +2191,7 @@ ${slide('dv-06', 25, 'Chuỗi bộ đệm: ai xoá được, mất bao lâu')}
 ${slide('dv-06', 26, 'Script lùi: kiểm PHIÊN BẢN qua cửa trước')}
 <p>Mọi thứ trong chương này gộp lại thành một hình dạng: <strong>kiểm qua CỬA TRƯỚC, bằng đúng địa chỉ người dùng đi vào, và kiểm PHIÊN BẢN chứ không phải mã trạng thái.</strong></p>
 
-<pre><code>#!/bin/bash
+<pre><code class="language-bash">#!/bin/bash
 set -euo pipefail
 GOC=/srv/vps/lui
 CUA_TRUOC=http://127.0.0.1:3320      <span class="tok-comment"># dung dia chi NGUOI DUNG di vao</span>

@@ -24,12 +24,12 @@ export default {
 
 <h3>Measure before you optimise</h3>
 <p>Ask the compiler where its time goes with <code>--extendedDiagnostics</code>:</p>
-<pre><code>npx tsc --noEmit --extendedDiagnostics</code></pre>
+<pre><code class="language-bash">npx tsc --noEmit --extendedDiagnostics</code></pre>
 <p>It prints a breakdown — <code>Files</code> (how many were loaded), <code>Lines of Library</code> (the built-in and dependency <code>.d.ts</code> you're checking), <code>Check time</code> and <code>Total time</code>. The numbers vary run to run, so read the <em>shape</em>: if <code>Check time</code> dominates and <code>Lines of Library</code> is huge, most of your build is spent verifying declaration files from dependencies — not your own code. That's a specific, fixable problem.</p>
 
 <h3>skipLibCheck: stop re-checking dependencies' types</h3>
 <p>The fix for exactly that case is <code>skipLibCheck</code>. It tells TypeScript not to type-check <em>inside</em> <code>.d.ts</code> files — your code is still fully checked against them, but their internals are trusted:</p>
-<pre><code>{
+<pre><code class="language-typescript">{
   "compilerOptions": {
     "skipLibCheck": true
   }
@@ -59,12 +59,12 @@ export default {
 
 <h3>Đo trước khi tối ưu</h3>
 <p>Hỏi trình biên dịch thời gian đi đâu bằng <code>--extendedDiagnostics</code>:</p>
-<pre><code>npx tsc --noEmit --extendedDiagnostics</code></pre>
+<pre><code class="language-bash">npx tsc --noEmit --extendedDiagnostics</code></pre>
 <p>Nó in một bảng phân tích — <code>Files</code> (bao nhiêu file được tải), <code>Lines of Library</code> (các <code>.d.ts</code> có sẵn và của dependency bạn đang kiểm), <code>Check time</code> và <code>Total time</code>. Các con số dao động theo lần chạy, nên hãy đọc <em>hình dạng</em>: nếu <code>Check time</code> chiếm phần lớn và <code>Lines of Library</code> khổng lồ, đa số build của bạn dành cho việc xác minh file khai báo từ dependency — không phải code của chính bạn. Đó là một vấn đề cụ thể, sửa được.</p>
 
 <h3>skipLibCheck: thôi kiểm lại kiểu của dependency</h3>
 <p>Cách sửa đúng cho trường hợp đó là <code>skipLibCheck</code>. Nó bảo TypeScript đừng kiểm kiểu <em>bên trong</em> các file <code>.d.ts</code> — code của bạn vẫn được kiểm đầy đủ dựa trên chúng, nhưng phần ruột của chúng được tin:</p>
-<pre><code>{
+<pre><code class="language-typescript">{
   "compilerOptions": {
     "skipLibCheck": true
   }
@@ -104,7 +104,7 @@ export default {
 
 <h3>incremental: cache between builds</h3>
 <p>Turn on <code>incremental</code> and TypeScript writes a <code>.tsbuildinfo</code> file recording what it checked. The next build reads it and skips the unchanged parts:</p>
-<pre><code>{
+<pre><code class="language-typescript">{
   "compilerOptions": {
     "incremental": true
   }
@@ -113,13 +113,13 @@ export default {
 
 <h3>project references: split the build</h3>
 <p>For a big repo — say a shared package, a backend, and a frontend — <code>project references</code> let each part be its own TypeScript project that builds separately and depends on the others' <em>compiled outputs</em>. Mark a referenced project <code>composite</code>, and list dependencies under <code>references</code>:</p>
-<pre><code><span class="tok-comment">// backend/tsconfig.json</span>
+<pre><code class="language-typescript"><span class="tok-comment">// backend/tsconfig.json</span>
 {
   "compilerOptions": { "composite": true },
   "references": [{ "path": "../shared" }]
 }</code></pre>
 <p>Then build the whole graph with <strong>build mode</strong>, which walks the references in dependency order and only rebuilds what changed:</p>
-<pre><code>npx tsc -b</code></pre>
+<pre><code class="language-bash">npx tsc -b</code></pre>
 <p>Now editing the backend doesn't re-check the shared package if it didn't change, and the frontend and backend can build in parallel. This is how monorepos keep type-checking fast at scale — the project graph mirrors your package graph.</p>
 
 <div class="callout ok"><code>incremental: true</code> caches a build in <code>.tsbuildinfo</code> so the next one only re-checks changes — one flag, always worth it. <code>project references</code> (<code>composite</code> + <code>references</code>, built with <code>tsc -b</code>) split a big repo into independently-built projects that mirror your package structure.</div>
@@ -145,7 +145,7 @@ export default {
 
 <h3>incremental: cache giữa các build</h3>
 <p>Bật <code>incremental</code> và TypeScript ghi một file <code>.tsbuildinfo</code> ghi lại những gì nó đã kiểm. Build sau đọc nó và bỏ qua các phần không đổi:</p>
-<pre><code>{
+<pre><code class="language-typescript">{
   "compilerOptions": {
     "incremental": true
   }
@@ -154,13 +154,13 @@ export default {
 
 <h3>project references: chia build</h3>
 <p>Với một repo lớn — ví dụ một package dùng chung, một backend, và một frontend — <code>project references</code> cho mỗi phần là một dự án TypeScript riêng, build tách và phụ thuộc vào <em>đầu ra đã biên dịch</em> của các phần khác. Đánh dấu một dự án được tham chiếu là <code>composite</code>, và liệt kê phụ thuộc dưới <code>references</code>:</p>
-<pre><code><span class="tok-comment">// backend/tsconfig.json</span>
+<pre><code class="language-typescript"><span class="tok-comment">// backend/tsconfig.json</span>
 {
   "compilerOptions": { "composite": true },
   "references": [{ "path": "../shared" }]
 }</code></pre>
 <p>Rồi build cả đồ thị bằng <strong>build mode</strong>, thứ đi qua các reference theo thứ tự phụ thuộc và chỉ build lại phần đổi:</p>
-<pre><code>npx tsc -b</code></pre>
+<pre><code class="language-bash">npx tsc -b</code></pre>
 <p>Giờ sửa backend không kiểm lại package dùng chung nếu nó không đổi, và frontend với backend build song song được. Đây là cách các monorepo giữ kiểm kiểu nhanh ở quy mô lớn — đồ thị dự án phản chiếu đồ thị package của bạn.</p>
 
 <div class="callout ok"><code>incremental: true</code> cache một build vào <code>.tsbuildinfo</code> để build sau chỉ kiểm lại phần đổi — một cờ, luôn đáng. <code>project references</code> (<code>composite</code> + <code>references</code>, build bằng <code>tsc -b</code>) chia một repo lớn thành các dự án build độc lập phản chiếu cấu trúc package của bạn.</div>
@@ -196,7 +196,7 @@ export default {
 
 <h3>Why bundlers need isolatedModules</h3>
 <p>A per-file transpiler sees one file at a time with no cross-file type information. Some TypeScript constructs can't be compiled correctly that way, so <code>isolatedModules: true</code> makes the compiler flag them — guaranteeing your code is safe for a fast transpiler. The most common one: re-exporting a type without marking it as a type:</p>
-<pre><code><span class="tok-comment">// reexport.ts  (compiled with isolatedModules)</span>
+<pre><code class="language-typescript"><span class="tok-comment">// reexport.ts  (compiled with isolatedModules)</span>
 <span class="tok-keyword">export</span> { User } <span class="tok-keyword">from</span> <span class="tok-string">'./types'</span>;   <span class="tok-comment">// User is a type — needs &#96;export type&#96;</span></code></pre>
 <div class="out">reexport.ts(2,10): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.</div>
 <p>A single-file transpiler can't tell whether <code>User</code> is a value or a type — so it doesn't know whether to emit a real re-export or erase it. <code>isolatedModules</code> forces you to be explicit: write <code>export type { User }</code>. The fix is trivial, and the payoff is that esbuild/SWC can safely erase types without ever consulting <code>./types</code>.</p>
@@ -227,7 +227,7 @@ export default {
 
 <h3>Vì sao bundler cần isolatedModules</h3>
 <p>Một bộ transpile từng-file thấy một file mỗi lần, không có thông tin kiểu chéo-file. Vài cấu trúc TypeScript không biên dịch đúng theo cách đó, nên <code>isolatedModules: true</code> làm trình biên dịch tô đỏ chúng — bảo đảm code của bạn an toàn cho một bộ transpile nhanh. Cái phổ biến nhất: re-export một kiểu mà không đánh dấu nó là kiểu:</p>
-<pre><code><span class="tok-comment">// reexport.ts  (biên dịch với isolatedModules)</span>
+<pre><code class="language-typescript"><span class="tok-comment">// reexport.ts  (biên dịch với isolatedModules)</span>
 <span class="tok-keyword">export</span> { User } <span class="tok-keyword">from</span> <span class="tok-string">'./types'</span>;   <span class="tok-comment">// User là một kiểu — cần &#96;export type&#96;</span></code></pre>
 <div class="out">reexport.ts(2,10): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.</div>
 <p>Một bộ transpile một-file không biết <code>User</code> là một giá trị hay một kiểu — nên nó không biết nên xuất một re-export thật hay xoá nó đi. <code>isolatedModules</code> ép bạn tường minh: viết <code>export type { User }</code>. Cách sửa tầm thường, và phần thưởng là esbuild/SWC có thể xoá kiểu an toàn mà không bao giờ phải hỏi tới <code>./types</code>.</p>
@@ -268,7 +268,7 @@ export default {
 
 <h3>The problem, made explicit</h3>
 <p><code>verbatimModuleSyntax</code> stops TypeScript from silently guessing which imports are type-only. If you import something used purely as a type without saying so, it's an error — and that's a good thing, because it makes the runtime cost visible:</p>
-<pre><code><span class="tok-comment">// verbatim.ts  (compiled with verbatimModuleSyntax)</span>
+<pre><code class="language-javascript"><span class="tok-comment">// verbatim.ts  (compiled with verbatimModuleSyntax)</span>
 <span class="tok-keyword">import</span> { User } <span class="tok-keyword">from</span> <span class="tok-string">'./types'</span>;   <span class="tok-comment">// used only as a type — needs &#96;import type&#96;</span>
 <span class="tok-keyword">const</span> u: User = { id: <span class="tok-number">1</span>, name: <span class="tok-string">'Ada'</span> };</code></pre>
 <div class="out">verbatim.ts(2,10): error TS1484: 'User' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.</div>
@@ -300,7 +300,7 @@ export default {
 
 <h3>Vấn đề, làm tường minh</h3>
 <p><code>verbatimModuleSyntax</code> chặn TypeScript âm thầm đoán import nào là chỉ-kiểu. Nếu bạn import một thứ dùng thuần như một kiểu mà không nói vậy, đó là lỗi — và đó là điều tốt, vì nó làm chi phí lúc chạy hiện rõ:</p>
-<pre><code><span class="tok-comment">// verbatim.ts  (biên dịch với verbatimModuleSyntax)</span>
+<pre><code class="language-javascript"><span class="tok-comment">// verbatim.ts  (biên dịch với verbatimModuleSyntax)</span>
 <span class="tok-keyword">import</span> { User } <span class="tok-keyword">from</span> <span class="tok-string">'./types'</span>;   <span class="tok-comment">// dùng thuần như kiểu — cần &#96;import type&#96;</span>
 <span class="tok-keyword">const</span> u: User = { id: <span class="tok-number">1</span>, name: <span class="tok-string">'Ada'</span> };</code></pre>
 <div class="out">verbatim.ts(2,10): error TS1484: 'User' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.</div>

@@ -163,11 +163,11 @@ const EX1 = {
   <li>Verify Node: open a terminal and run <code>node -v</code> — a version number means success.</li>
   <li>Verify npm: run <code>npm -v</code> — a version number means npm installed too.</li>
 </ol>
-<pre><span class="tok-comment"># expected output (versions will differ)</span>
+<pre><code class="language-bash"><span class="tok-comment"># expected output (versions will differ)</span>
 $ node -v
 v20.11.1
 $ npm -v
-10.2.4</pre>
+10.2.4</code></pre>
 <div class="pitfall"><b>Common trap:</b> after installing, a terminal you already had open still uses the old PATH — <strong>close and reopen the terminal</strong> (or your whole editor) before running <code>node -v</code>, otherwise you get “command not found” even though Node is installed.</div>
 <div class="callout"><span class="badge">★ Tip</span> Prefer <strong>nvm</strong> (Node Version Manager) on macOS/Linux, or <strong>nvm-windows</strong>. It lets you switch Node versions per project — invaluable once you juggle several courses/projects with different Node requirements.</div>
 <div class="di-toi"><a class="link-card exphub" href="${EXPHUB}" target="_blank" rel="noopener"><span class="lc-ico">🛠️</span><span class="lc-body"><span class="lc-title">Full environment setup guide</span><span class="lc-sub">Node, VS Code, extensions — on Exp Hub.</span></span><span class="lc-cta">EXP HUB →</span></a></div>`,
@@ -189,11 +189,11 @@ $ npm -v
   <li>Kiểm Node: mở terminal, chạy <code>node -v</code> — hiện số phiên bản là thành công.</li>
   <li>Kiểm npm: chạy <code>npm -v</code> — hiện số phiên bản là npm cũng đã cài.</li>
 </ol>
-<pre><span class="tok-comment"># kết quả mong đợi (phiên bản có thể khác)</span>
+<pre><code class="language-bash"><span class="tok-comment"># kết quả mong đợi (phiên bản có thể khác)</span>
 $ node -v
 v20.11.1
 $ npm -v
-10.2.4</pre>
+10.2.4</code></pre>
 <div class="pitfall"><b>Bẫy thường gặp:</b> sau khi cài, terminal đang mở sẵn vẫn dùng PATH cũ — hãy <strong>đóng và mở lại terminal</strong> (hoặc cả editor) trước khi chạy <code>node -v</code>, nếu không sẽ báo “command not found” dù Node đã cài.</div>
 <div class="callout"><span class="badge">★ Mẹo</span> Nên dùng <strong>nvm</strong> (Node Version Manager) trên macOS/Linux, hoặc <strong>nvm-windows</strong>. Nó cho phép đổi phiên bản Node theo từng dự án — cực hữu ích khi bạn làm nhiều môn/dự án cần Node khác nhau.</div>
 <div class="di-toi"><a class="link-card exphub" href="${EXPHUB}" target="_blank" rel="noopener"><span class="lc-ico">🛠️</span><span class="lc-body"><span class="lc-title">Hướng dẫn cài môi trường đầy đủ</span><span class="lc-sub">Node, VS Code, tiện ích — trên Exp Hub.</span></span><span class="lc-cta">EXP HUB →</span></a></div>`,
@@ -213,21 +213,21 @@ const EX2 = {
 <h3>Steps</h3>
 <ol>
   <li>Create the app (no global install needed thanks to <code>npx</code>):
-<pre>npx create-react-app my-app
-cd my-app</pre></li>
+<pre><code class="language-bash">npx create-react-app my-app
+cd my-app</code></pre></li>
   <li>Start the dev server:
-<pre>npm start</pre>
+<pre><code class="language-bash">npm start</code></pre>
   It opens <code>http://localhost:3000</code> with the spinning-logo starter page and hot-reload.</li>
   <li>Stop the server any time with <kbd>Ctrl</kbd>+<kbd>C</kbd>.</li>
   <li>Open <code>src/</code> — the two files that matter first are <code>index.js</code> (the entry point) and <code>App.js</code> (your root component).</li>
   <li>Replace <code>src/index.js</code> with the minimal version below to strip the starter styling and start clean:</li>
 </ol>
-<pre><span class="hljs-keyword">import</span> <span class="hljs-title class_">React</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
+<pre><code class="language-javascript"><span class="hljs-keyword">import</span> <span class="hljs-title class_">React</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
 <span class="hljs-keyword">import</span> <span class="hljs-title class_">ReactDOM</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react-dom/client&#x27;</span>;
 <span class="hljs-keyword">import</span> <span class="hljs-title class_">App</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./App&#x27;</span>;
 
 <span class="hljs-keyword">const</span> root = <span class="hljs-title class_">ReactDOM</span>.<span class="hljs-title function_">createRoot</span>(<span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;root&#x27;</span>));
-root.<span class="hljs-title function_">render</span>(<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">App</span> /&gt;</span></span>);</pre>
+root.<span class="hljs-title function_">render</span>(<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">App</span> /&gt;</span></span>);</code></pre>
 <div class="out"><b>Result:</b> a clean app. <code>createRoot</code> grabs the single <code>&lt;div id="root"&gt;</code> in <code>public/index.html</code> and mounts your <code>&lt;App /&gt;</code> tree into it — that one div is the whole SPA.</div>
 <h3>Understand the structure</h3>
 <table>
@@ -248,21 +248,21 @@ root.<span class="hljs-title function_">render</span>(<span class="language-xml"
 <h3>Các bước</h3>
 <ol>
   <li>Tạo app (không cần cài toàn cục nhờ <code>npx</code>):
-<pre>npx create-react-app my-app
-cd my-app</pre></li>
+<pre><code class="language-bash">npx create-react-app my-app
+cd my-app</code></pre></li>
   <li>Khởi động dev server:
-<pre>npm start</pre>
+<pre><code class="language-bash">npm start</code></pre>
   Nó mở <code>http://localhost:3000</code> với trang mẫu logo xoay và hot-reload.</li>
   <li>Dừng server bất cứ lúc nào bằng <kbd>Ctrl</kbd>+<kbd>C</kbd>.</li>
   <li>Mở <code>src/</code> — hai file quan trọng đầu tiên là <code>index.js</code> (điểm vào) và <code>App.js</code> (component gốc).</li>
   <li>Thay <code>src/index.js</code> bằng bản tối giản dưới đây để bỏ style mẫu và bắt đầu sạch:</li>
 </ol>
-<pre><span class="hljs-keyword">import</span> <span class="hljs-title class_">React</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
+<pre><code class="language-javascript"><span class="hljs-keyword">import</span> <span class="hljs-title class_">React</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
 <span class="hljs-keyword">import</span> <span class="hljs-title class_">ReactDOM</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react-dom/client&#x27;</span>;
 <span class="hljs-keyword">import</span> <span class="hljs-title class_">App</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./App&#x27;</span>;
 
 <span class="hljs-keyword">const</span> root = <span class="hljs-title class_">ReactDOM</span>.<span class="hljs-title function_">createRoot</span>(<span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;root&#x27;</span>));
-root.<span class="hljs-title function_">render</span>(<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">App</span> /&gt;</span></span>);</pre>
+root.<span class="hljs-title function_">render</span>(<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">App</span> /&gt;</span></span>);</code></pre>
 <div class="out"><b>Kết quả:</b> một app sạch. <code>createRoot</code> lấy đúng một <code>&lt;div id="root"&gt;</code> trong <code>public/index.html</code> và gắn cây <code>&lt;App /&gt;</code> vào đó — chính cái div đó là toàn bộ SPA.</div>
 <h3>Hiểu cấu trúc</h3>
 <table>
@@ -291,20 +291,20 @@ const EX3 = {
 <h2>Install, set up &amp; push code to Git</h2>
 <p class="lead"><b>Goal:</b> put a project under version control and push it to GitHub — the exact flow you use to submit labs.</p>
 <h3>1 · Install &amp; verify</h3>
-<pre>git --version   <span class="tok-comment"># prints a version if Git is installed (download at git-scm.com)</span></pre>
+<pre><code class="language-bash">git --version   <span class="tok-comment"># prints a version if Git is installed (download at git-scm.com)</span></code></pre>
 <h3>2 · Configure your identity (once per machine)</h3>
-<pre>git config --global user.name  <span class="tok-string">"Your Name"</span>
-git config --global user.email <span class="tok-string">"you@example.com"</span></pre>
+<pre><code class="language-bash">git config --global user.name  <span class="tok-string">"Your Name"</span>
+git config --global user.email <span class="tok-string">"you@example.com"</span></code></pre>
 <h3>3 · Create a repo on GitHub</h3>
 <p>Sign in at <a href="https://github.com" target="_blank" rel="noopener">github.com</a>, click <b>New</b>, name it, create it (empty, no README so the quick-setup panel shows). Copy the repository URL.</p>
 <h3>4 · Initialise, commit &amp; push</h3>
-<pre>cd my-app
+<pre><code class="language-bash">cd my-app
 git init
 git add --all
 git commit -m <span class="tok-string">"Initial commit"</span>
 git branch -M main
 git remote add origin &lt;repository URL&gt;
-git push -u origin main</pre>
+git push -u origin main</code></pre>
 <div class="out"><b>Result:</b> refresh the GitHub page — your files are there. From now on the daily loop is <code>git add</code> → <code>git commit -m "..."</code> → <code>git push</code>.</div>
 <div class="pitfall"><b>Two classic traps.</b> (1) Add a <code>.gitignore</code> with <code>node_modules/</code> <em>before</em> your first <code>git add --all</code>, or you will commit tens of thousands of files. CRA/Vite generate one for you. (2) The slides say <code>origin master</code>; new GitHub repos default to <code>main</code>. Match your remote's default branch (use <code>git branch -M main</code> as above).</div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> Prefer feature branches: <code>git checkout -b feature/login</code>, commit there, push, then open a <strong>Pull Request</strong> on GitHub to merge into <code>main</code>. It keeps <code>main</code> always working and is exactly how teams (and PRJ301/SWP391) collaborate.</div>
@@ -313,20 +313,20 @@ git push -u origin main</pre>
 <h2>Cài, cấu hình &amp; push code lên Git</h2>
 <p class="lead"><b>Mục tiêu:</b> đưa một dự án vào quản lý phiên bản và đẩy lên GitHub — đúng quy trình bạn dùng để nộp lab.</p>
 <h3>1 · Cài &amp; kiểm</h3>
-<pre>git --version   <span class="tok-comment"># in ra phiên bản nếu Git đã cài (tải ở git-scm.com)</span></pre>
+<pre><code class="language-bash">git --version   <span class="tok-comment"># in ra phiên bản nếu Git đã cài (tải ở git-scm.com)</span></code></pre>
 <h3>2 · Cấu hình danh tính (một lần mỗi máy)</h3>
-<pre>git config --global user.name  <span class="tok-string">"Tên của bạn"</span>
-git config --global user.email <span class="tok-string">"you@example.com"</span></pre>
+<pre><code class="language-bash">git config --global user.name  <span class="tok-string">"Tên của bạn"</span>
+git config --global user.email <span class="tok-string">"you@example.com"</span></code></pre>
 <h3>3 · Tạo repo trên GitHub</h3>
 <p>Đăng nhập <a href="https://github.com" target="_blank" rel="noopener">github.com</a>, bấm <b>New</b>, đặt tên, tạo (để trống, không README để bảng quick-setup hiện ra). Chép URL repository.</p>
 <h3>4 · Khởi tạo, commit &amp; push</h3>
-<pre>cd my-app
+<pre><code class="language-bash">cd my-app
 git init
 git add --all
 git commit -m <span class="tok-string">"Initial commit"</span>
 git branch -M main
 git remote add origin &lt;repository URL&gt;
-git push -u origin main</pre>
+git push -u origin main</code></pre>
 <div class="out"><b>Kết quả:</b> tải lại trang GitHub — file của bạn đã ở đó. Từ nay vòng lặp hằng ngày là <code>git add</code> → <code>git commit -m "..."</code> → <code>git push</code>.</div>
 <div class="pitfall"><b>Hai bẫy kinh điển.</b> (1) Thêm file <code>.gitignore</code> chứa <code>node_modules/</code> <em>trước</em> lần <code>git add --all</code> đầu tiên, nếu không bạn sẽ commit hàng vạn file. CRA/Vite tự sinh sẵn một file. (2) Slide ghi <code>origin master</code>; repo GitHub mới mặc định là <code>main</code>. Hãy khớp nhánh mặc định của remote (dùng <code>git branch -M main</code> như trên).</div>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> Nên dùng nhánh tính năng: <code>git checkout -b feature/login</code>, commit ở đó, push, rồi mở <strong>Pull Request</strong> trên GitHub để gộp vào <code>main</code>. Cách này giữ <code>main</code> luôn chạy được và đúng cách các nhóm (và PRJ301/SWP391) cộng tác.</div>

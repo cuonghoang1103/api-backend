@@ -1244,7 +1244,7 @@ web/
   views/common/header.jsp, footer.jsp (from the chosen UI theme)
 </pre>
 <h3>A thin controller — the MVC arrows in code</h3>
-<pre>
+<pre><code class="language-java">
 @WebServlet("/freelancer/apply")
 public class ApplyJobController extends HttpServlet {
     private final JobApplyService service = new JobApplyService();
@@ -1263,7 +1263,7 @@ public class ApplyJobController extends HttpServlet {
         }
     }
 }
-</pre>
+</code></pre>
 <div class="out"><b>Notice:</b> no SQL and no business rule in the servlet. "Is the post still open? Has this freelancer already applied?" lives in <code>JobApplyService</code>; the INSERT lives in <code>JobApplyDAO</code>. The role check lives in <code>AuthFilter</code>, so every freelancer URL is protected once.</div>`,
 `<h2>🔧 Ngoài slide — kiến trúc của một đồ án SWP391 thật</h2>
 <h3>Cấu trúc package mọi thành viên cùng theo (NetBeans, Java web)</h3>
@@ -1280,7 +1280,7 @@ web/
   views/common/header.jsp, footer.jsp (lấy từ UI theme đã chọn)
 </pre>
 <h3>Controller mỏng — các mũi tên MVC trong code</h3>
-<pre>
+<pre><code class="language-java">
 @WebServlet("/freelancer/apply")
 public class ApplyJobController extends HttpServlet {
     private final JobApplyService service = new JobApplyService();
@@ -1299,7 +1299,7 @@ public class ApplyJobController extends HttpServlet {
         }
     }
 }
-</pre>
+</code></pre>
 <div class="out"><b>Để ý:</b> servlet không có SQL và không có business rule. "Bài còn hạn không? Freelancer này apply chưa?" nằm trong <code>JobApplyService</code>; câu INSERT nằm trong <code>JobApplyDAO</code>. Kiểm tra vai trò nằm trong <code>AuthFilter</code>, nên mọi URL của freelancer được bảo vệ một lần.</div>`),
     bi(`<h3>REST API design — when your team chooses client–server (React / mobile ↔ Spring Boot)</h3>
 <p>Design endpoints around <strong>nouns (resources)</strong>; the HTTP method is the verb. Prompt #8 of the teacher's Claude_Prompts.txt (Technical Design Spec) asks for exactly this: URL structure per actor, success/error formats, pagination and upload rules.</p>
@@ -1807,7 +1807,7 @@ clearDebitCount ()                 begin Reset debitCount to zero; end
 <li><strong>Savings</strong> — credit = add amount; debit = deduct, increment debitCount, bank charge beyond maxFreeDebits; plus <code>clearDebitCount</code> monthly.</li>
 </ul>
 <p class="nhan">Java equivalent</p>
-<pre>
+<pre><code class="language-java">
 public abstract class Account {
     protected int accountNumber;
     protected double balance = 0;
@@ -1815,7 +1815,7 @@ public abstract class Account {
     protected abstract void credit(double amount);
     protected abstract void debit(double amount);
 }
-</pre>`,
+</code></pre>`,
     `<p class="y-chinh">🎯 Lớp trừu tượng không có instance; nó là khuôn mẫu mà mỗi lớp con phải hiện thực các operation trừu tượng của nó.</p>
 <ul>
 <li><strong>Abstract class</strong> — không có instance; dùng làm khuôn để tạo lớp con (<code>Account {abstract}</code>, tên in nghiêng).</li>
@@ -1828,7 +1828,7 @@ public abstract class Account {
 <li><strong>Savings</strong> — credit = cộng amount; debit = trừ, tăng debitCount, thu phí khi vượt maxFreeDebits; thêm <code>clearDebitCount</code> hằng tháng.</li>
 </ul>
 <p class="nhan">Tương đương Java</p>
-<pre>
+<pre><code class="language-java">
 public abstract class Account {
     protected int accountNumber;
     protected double balance = 0;
@@ -1836,7 +1836,7 @@ public abstract class Account {
     protected abstract void credit(double amount);
     protected abstract void debit(double amount);
 }
-</pre>`],
+</code></pre>`],
   [53, 'Polymorphism & dynamic binding (1/2)',
     `<p class="y-chinh">🎯 Polymorphism: many classes share one operation name with different implementations; dynamic binding picks the implementation at run time.</p>
 <ul>
@@ -2341,11 +2341,11 @@ end
 <h3>3.4.3 Sequence Diagram — Apply job (refused)</h3>
 <p>Same as messages 1–9, then: <code>post.expired &lt; today</code> → <em>"Post expired"</em> (BR-05), or <code>exists = true</code> → <em>"Already applied"</em>; the controller forwards back to <code>post-detail.jsp</code> with <code>error</code> set. Draw it as an <code>alt</code> frame or as its own small diagram.</p>
 <h3>3.4.4 Database Queries</h3>
-<pre>
+<pre><code class="language-sql">
 SELECT * FROM Post WHERE postID = ?;
 SELECT COUNT(*) FROM JobApply WHERE freelanceID = ? AND postID = ?;
 INSERT INTO JobApply (freelanceID, postID, status, dateApply, Resume) VALUES (?, ?, '0', ?, ?);
-</pre>
+</code></pre>
 <h3>Before you submit the SDS — checklist</h3>
 <ul>
 <li>Record of Changes has this iteration's rows (A/M/D, who, what).</li>
@@ -2380,11 +2380,11 @@ end
 <h3>3.4.3 Sequence Diagram — Apply job (bị từ chối)</h3>
 <p>Giống message 1–9, rồi: <code>post.expired &lt; today</code> → <em>"Post expired"</em> (BR-05), hoặc <code>exists = true</code> → <em>"Already applied"</em>; controller forward về <code>post-detail.jsp</code> kèm <code>error</code>. Vẽ bằng khung <code>alt</code> hoặc một diagram nhỏ riêng.</p>
 <h3>3.4.4 Database Queries</h3>
-<pre>
+<pre><code class="language-sql">
 SELECT * FROM Post WHERE postID = ?;
 SELECT COUNT(*) FROM JobApply WHERE freelanceID = ? AND postID = ?;
 INSERT INTO JobApply (freelanceID, postID, status, dateApply, Resume) VALUES (?, ?, '0', ?, ?);
-</pre>
+</code></pre>
 <h3>Trước khi nộp SDS — checklist</h3>
 <ul>
 <li>Record of Changes có các dòng của iteration này (A/M/D, ai, cái gì).</li>

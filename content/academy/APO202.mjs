@@ -132,7 +132,7 @@ const c1 = doc('apo202-1-1-data-model', '1.1 — Python quick review & the data 
 </ul>
 <h3>The data model &amp; dunder methods</h3>
 <p>Python's power comes from the <strong>data model</strong>: your classes plug into language features by implementing special "dunder" (double-underscore) methods. The interpreter calls them for you.</p>
-<pre><code>class Vector:
+<pre><code class="language-python">class Vector:
     def __init__(self, x, y):     # constructor
         self.x, self.y = x, y
 
@@ -159,7 +159,7 @@ print(v)                          # Vector(4, 6)  -&gt; uses __repr__
 </ul>
 <h3>Mô hình dữ liệu &amp; dunder methods</h3>
 <p>Sức mạnh của Python đến từ <strong>mô hình dữ liệu</strong>: lớp của bạn cắm vào các tính năng ngôn ngữ bằng cách hiện thực các method đặc biệt "dunder" (hai gạch dưới). Trình thông dịch sẽ tự gọi chúng.</p>
-<pre><code>class Vector:
+<pre><code class="language-python">class Vector:
     def __init__(self, x, y):     # hàm khởi tạo
         self.x, self.y = x, y
 
@@ -191,7 +191,7 @@ const c2 = doc('apo202-2-1-classes-pillars', '2.1 — Classes, objects & the fou
 <h2>Classes, objects &amp; the four OOP pillars</h2>
 <h3>Instances, attributes &amp; self</h3>
 <p>A <strong>class attribute</strong> is shared by all instances; an <strong>instance attribute</strong> (set on <code>self</code>) belongs to one object. The first parameter <code>self</code> is the instance the method is called on.</p>
-<pre><code>class Account:
+<pre><code class="language-python">class Account:
     bank = "FPT Bank"            # class attribute (shared)
 
     def __init__(self, owner, balance=0):
@@ -219,7 +219,7 @@ const c2 = doc('apo202-2-1-classes-pillars', '2.1 — Classes, objects & the fou
 <h2>Lớp, đối tượng &amp; bốn trụ cột OOP</h2>
 <h3>Instance, thuộc tính &amp; self</h3>
 <p>Một <strong>thuộc tính lớp (class attribute)</strong> được mọi instance dùng chung; một <strong>thuộc tính instance</strong> (đặt trên <code>self</code>) thuộc về một đối tượng. Tham số đầu <code>self</code> là chính instance mà method được gọi trên đó.</p>
-<pre><code>class Account:
+<pre><code class="language-python">class Account:
     bank = "FPT Bank"            # thuộc tính lớp (dùng chung)
 
     def __init__(self, owner, balance=0):
@@ -258,7 +258,7 @@ const c3 = doc('apo202-3-1-inheritance-mro-abc', '3.1 — Inheritance, polymorph
 <h2>Inheritance, polymorphism, MRO &amp; ABCs</h2>
 <h3>super() and overriding</h3>
 <p>A subclass overrides a method by redefining it; <code>super()</code> calls the base version so you extend rather than replace.</p>
-<pre><code>class Animal:
+<pre><code class="language-python">class Animal:
     def speak(self):
         return "..."
 
@@ -271,7 +271,7 @@ for a in (Animal(), Dog()):
 </code></pre>
 <h3>MRO — Method Resolution Order</h3>
 <p>With multiple inheritance, Python resolves attribute lookups in a fixed order computed by the <strong>C3 linearization</strong> algorithm. Inspect it with <code>Cls.__mro__</code> or <code>Cls.mro()</code>.</p>
-<pre><code>class A: ...
+<pre><code class="language-python">class A: ...
 class B(A): ...
 class C(A): ...
 class D(B, C): ...
@@ -279,7 +279,7 @@ print([c.__name__ for c in D.__mro__])
 # ['D', 'B', 'C', 'A', 'object']
 </code></pre>
 <h3>Abstract Base Classes</h3>
-<pre><code>from abc import ABC, abstractmethod
+<pre><code class="language-python">from abc import ABC, abstractmethod
 
 class Shape(ABC):
     @abstractmethod
@@ -296,7 +296,7 @@ class Circle(Shape):
 <h2>Kế thừa, đa hình, MRO &amp; abstract base class</h2>
 <h3>super() và ghi đè</h3>
 <p>Lớp con ghi đè một method bằng cách định nghĩa lại; <code>super()</code> gọi phiên bản của lớp cha để bạn mở rộng thay vì thay thế hoàn toàn.</p>
-<pre><code>class Animal:
+<pre><code class="language-python">class Animal:
     def speak(self):
         return "..."
 
@@ -309,7 +309,7 @@ for a in (Animal(), Dog()):
 </code></pre>
 <h3>MRO — thứ tự phân giải method</h3>
 <p>Với đa kế thừa, Python phân giải việc tra cứu thuộc tính theo một thứ tự cố định tính bằng thuật toán <strong>C3 linearization</strong>. Xem bằng <code>Cls.__mro__</code> hoặc <code>Cls.mro()</code>.</p>
-<pre><code>class A: ...
+<pre><code class="language-python">class A: ...
 class B(A): ...
 class C(A): ...
 class D(B, C): ...
@@ -317,7 +317,7 @@ print([c.__name__ for c in D.__mro__])
 # ['D', 'B', 'C', 'A', 'object']
 </code></pre>
 <h3>Abstract Base Class</h3>
-<pre><code>from abc import ABC, abstractmethod
+<pre><code class="language-python">from abc import ABC, abstractmethod
 
 class Shape(ABC):
     @abstractmethod
@@ -345,7 +345,7 @@ const c4 = doc('apo202-4-1-property-descriptor-decorator', '4.1 — Properties, 
 <h2>Properties, descriptors &amp; decorators</h2>
 <h3>property — managed attributes</h3>
 <p><code>@property</code> lets a method look like an attribute, so you add validation without changing the public API.</p>
-<pre><code>class Celsius:
+<pre><code class="language-python">class Celsius:
     def __init__(self, t): self._t = t
 
     @property
@@ -364,7 +364,7 @@ c.temp = 30        # calls the setter (validation runs)
 <p>A <strong>descriptor</strong> is any object defining <code>__get__</code>, <code>__set__</code> or <code>__delete__</code>. <code>property</code> is itself a descriptor. Descriptors power reusable, class-level attribute logic.</p>
 <h3>Decorators</h3>
 <p>A <strong>decorator</strong> is a callable that takes a function and returns a new function — wrapping behaviour around it.</p>
-<pre><code>import functools
+<pre><code class="language-python">import functools
 
 def timed(func):
     @functools.wraps(func)          # keep name/docstring
@@ -383,7 +383,7 @@ def work(n): return sum(range(n))
 <h2>Property, descriptor &amp; decorator</h2>
 <h3>property — thuộc tính có kiểm soát</h3>
 <p><code>@property</code> giúp một method trông như một thuộc tính, để bạn thêm kiểm tra mà không đổi API công khai.</p>
-<pre><code>class Celsius:
+<pre><code class="language-python">class Celsius:
     def __init__(self, t): self._t = t
 
     @property
@@ -402,7 +402,7 @@ c.temp = 30        # gọi setter (kiểm tra chạy)
 <p>Một <strong>descriptor</strong> là đối tượng bất kỳ có định nghĩa <code>__get__</code>, <code>__set__</code> hoặc <code>__delete__</code>. Bản thân <code>property</code> là một descriptor. Descriptor cấp sức cho logic thuộc tính tái sử dụng ở cấp lớp.</p>
 <h3>Decorator</h3>
 <p>Một <strong>decorator</strong> là một callable nhận vào một hàm và trả về một hàm mới — bọc thêm hành vi quanh nó.</p>
-<pre><code>import functools
+<pre><code class="language-python">import functools
 
 def timed(func):
     @functools.wraps(func)          # giữ tên/docstring
@@ -434,7 +434,7 @@ const c5 = doc('apo202-5-1-iterator-generator-context', '5.1 — Iterators, gene
 <p>An <strong>iterable</strong> returns an <strong>iterator</strong> from <code>__iter__</code>; the iterator yields items from <code>__next__</code> and raises <code>StopIteration</code> when done. This is what <code>for</code> uses under the hood.</p>
 <h3>Generators — lazy sequences with yield</h3>
 <p>A <strong>generator</strong> function uses <code>yield</code>; calling it returns an iterator that produces values <em>on demand</em> — you can model infinite or huge sequences without storing them.</p>
-<pre><code>def countdown(n):
+<pre><code class="language-python">def countdown(n):
     while n &gt; 0:
         yield n            # pauses here, resumes on next()
         n -= 1
@@ -445,7 +445,7 @@ for x in countdown(3):
 squares = (i * i for i in range(5))   # generator expression
 </code></pre>
 <h3>Context managers — with</h3>
-<pre><code>class Timer:
+<pre><code class="language-python">class Timer:
     def __enter__(self):
         # ... setup (e.g. start timer) ...
         return self
@@ -463,7 +463,7 @@ with open("data.txt") as f:   # file is closed automatically
 <p>Một <strong>iterable</strong> trả về một <strong>iterator</strong> từ <code>__iter__</code>; iterator sinh phần tử qua <code>__next__</code> và ném <code>StopIteration</code> khi hết. Đây chính là thứ mà <code>for</code> dùng bên dưới.</p>
 <h3>Generator — dãy lười với yield</h3>
 <p>Một hàm <strong>generator</strong> dùng <code>yield</code>; gọi nó trả về một iterator sinh giá trị <em>theo yêu cầu</em> — bạn có thể mô hình hoá dãy vô hạn hay cực lớn mà không lưu hết vào bộ nhớ.</p>
-<pre><code>def countdown(n):
+<pre><code class="language-python">def countdown(n):
     while n &gt; 0:
         yield n            # tạm dừng ở đây, chạy tiếp khi next()
         n -= 1
@@ -474,7 +474,7 @@ for x in countdown(3):
 squares = (i * i for i in range(5))   # generator expression
 </code></pre>
 <h3>Context manager — with</h3>
-<pre><code>class Timer:
+<pre><code class="language-python">class Timer:
     def __enter__(self):
         # ... thiết lập (vd bắt đầu đo giờ) ...
         return self
@@ -500,7 +500,7 @@ const c6 = doc('apo202-6-1-exceptions-packages-venv', '6.1 — Exceptions, modul
     `<span class="eyebrow">APO202 · Chapter 6 · Lesson 6.1</span>
 <h2>Exceptions, modules, packages &amp; venv</h2>
 <h3>Handling exceptions</h3>
-<pre><code>class InsufficientFunds(Exception):     # custom exception
+<pre><code class="language-python">class InsufficientFunds(Exception):     # custom exception
     pass
 
 try:
@@ -522,7 +522,7 @@ finally:
 <li>The <code>if __name__ == "__main__":</code> guard makes a file usable both as a script and as an importable module.</li>
 </ul>
 <h3>Virtual environments</h3>
-<pre><code>python -m venv .venv          # create an isolated environment
+<pre><code class="language-bash">python -m venv .venv          # create an isolated environment
 source .venv/bin/activate     # activate (Linux/macOS)
 pip install requests          # installs only into .venv
 pip freeze &gt; requirements.txt # pin dependencies
@@ -531,7 +531,7 @@ pip freeze &gt; requirements.txt # pin dependencies
     `<span class="eyebrow">APO202 · Chương 6 · Bài 6.1</span>
 <h2>Ngoại lệ, module, package &amp; môi trường ảo</h2>
 <h3>Xử lý ngoại lệ</h3>
-<pre><code>class InsufficientFunds(Exception):     # ngoại lệ tự định nghĩa
+<pre><code class="language-python">class InsufficientFunds(Exception):     # ngoại lệ tự định nghĩa
     pass
 
 try:
@@ -553,7 +553,7 @@ finally:
 <li>Chốt <code>if __name__ == "__main__":</code> giúp một file dùng được vừa như script vừa như module import được.</li>
 </ul>
 <h3>Môi trường ảo</h3>
-<pre><code>python -m venv .venv          # tạo môi trường cách ly
+<pre><code class="language-bash">python -m venv .venv          # tạo môi trường cách ly
 source .venv/bin/activate     # kích hoạt (Linux/macOS)
 pip install requests          # chỉ cài vào .venv
 pip freeze &gt; requirements.txt # ghim phiên bản phụ thuộc
@@ -641,7 +641,7 @@ const c8 = doc('apo202-8-1-testing-packaging-pro', '8.1 — Testing (pytest), pa
 <h2>Testing (pytest), packaging &amp; professional practice</h2>
 <h3>Testing with pytest</h3>
 <p><strong>pytest</strong> discovers files named <code>test_*.py</code> and functions named <code>test_*</code>; you just use plain <code>assert</code>.</p>
-<pre><code>import pytest
+<pre><code class="language-python">import pytest
 
 def add(a, b): return a + b
 
@@ -672,7 +672,7 @@ def test_deposit(account):
 <h2>Testing (pytest), đóng gói &amp; thực hành chuyên nghiệp</h2>
 <h3>Kiểm thử với pytest</h3>
 <p><strong>pytest</strong> tự tìm file tên <code>test_*.py</code> và hàm tên <code>test_*</code>; bạn chỉ cần dùng <code>assert</code> thuần.</p>
-<pre><code>import pytest
+<pre><code class="language-python">import pytest
 
 def add(a, b): return a + b
 

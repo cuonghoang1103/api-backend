@@ -27,7 +27,7 @@ export default {
 <h2>Schema-less data, without leaving the database</h2>
 <p class="lead">Chapter 2 introduced <code>jsonb</code> in the list of types. Now it earns a chapter of its own, because it is the feature that lets one database hold both rigidly structured data and genuinely variable data — and because it is also the feature most often misused.</p>
 <p>Examples use a small <code>product</code> table where <code>props</code> is deliberately irregular — not every product has the same specs:</p>
-<pre><code><span class="tok-keyword">CREATE TABLE</span> product (
+<pre><code class="language-sql"><span class="tok-keyword">CREATE TABLE</span> product (
   id    int <span class="tok-keyword">GENERATED ALWAYS AS IDENTITY PRIMARY KEY</span>,
   name  text <span class="tok-keyword">NOT NULL</span>,
   props jsonb <span class="tok-keyword">NOT NULL</span>
@@ -39,7 +39,7 @@ export default {
 
 <h3>json vs jsonb — always pick jsonb</h3>
 <p>PostgreSQL has two JSON types, and the difference is visible in one query:</p>
-<pre><code><span class="tok-keyword">SELECT</span> <span class="tok-string">'{"b":1,"a":2,"a":3}'</span>::json;
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> <span class="tok-string">'{"b":1,"a":2,"a":3}'</span>::json;
 <span class="tok-keyword">SELECT</span> <span class="tok-string">'{"b":1,"a":2,"a":3}'</span>::jsonb;</code></pre>
 <div class="out">      kieu_json
 ---------------------
@@ -51,7 +51,7 @@ export default {
 <p><code>json</code> stores the <strong>exact text you gave it</strong>, duplicate keys, whitespace, key order and all — it re-parses on every access. <code>jsonb</code> stores a decomposed binary form: keys sorted, whitespace dropped, duplicates resolved (last one wins). That normalisation is what makes <code>jsonb</code> fast to query and, crucially, <strong>indexable</strong>. Use <code>json</code> only when you must reproduce a document byte-for-byte, which is rare.</p>
 
 <h3>Three ways to reach inside</h3>
-<pre><code><span class="tok-keyword">SELECT</span> name,
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> name,
        props-&gt;<span class="tok-string">'brand'</span>            <span class="tok-keyword">AS</span> mui_ten,
        props-&gt;&gt;<span class="tok-string">'brand'</span>           <span class="tok-keyword">AS</span> mui_ten_kep,
        jsonb_typeof(props-&gt;<span class="tok-string">'brand'</span>) <span class="tok-keyword">AS</span> kieu
@@ -64,7 +64,7 @@ export default {
 (3 rows)</div>
 <p>Look at the quotes. <code>-&gt;</code> returns <strong>jsonb</strong> — the string <code>"Acme"</code> as a JSON value, quotes included. <code>-&gt;&gt;</code> returns <strong>text</strong> — the bare characters. That single character is the source of most JSONB confusion: comparing <code>props-&gt;'brand' = 'Acme'</code> fails, because you are comparing a JSON string to a text literal.</p>
 <p>For nested paths, chain the arrows or use <code>#&gt;&gt;</code> with a path array:</p>
-<pre><code><span class="tok-keyword">SELECT</span> name,
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> name,
        props-&gt;<span class="tok-string">'specs'</span>-&gt;&gt;<span class="tok-string">'ram'</span>   <span class="tok-keyword">AS</span> ram,
        props#&gt;&gt;<span class="tok-string">'{specs,cpu}'</span>    <span class="tok-keyword">AS</span> cpu
 <span class="tok-keyword">FROM</span> product <span class="tok-keyword">ORDER BY</span> id;</code></pre>
@@ -98,7 +98,7 @@ export default {
 <h2>Dữ liệu không lược đồ, mà không phải rời khỏi cơ sở dữ liệu</h2>
 <p class="lead">Chương 2 đã giới thiệu <code>jsonb</code> trong danh sách các kiểu. Giờ nó xứng đáng có một chương riêng, vì đây là tính năng cho phép MỘT cơ sở dữ liệu chứa cả dữ liệu có cấu trúc chặt lẫn dữ liệu thật sự biến thiên — và cũng vì đây là tính năng bị DÙNG SAI nhiều nhất.</p>
 <p>Ví dụ dùng một bảng <code>product</code> nhỏ, trong đó <code>props</code> CỐ Ý để không đều — không phải sản phẩm nào cũng có cùng bộ thông số:</p>
-<pre><code><span class="tok-keyword">CREATE TABLE</span> product (
+<pre><code class="language-sql"><span class="tok-keyword">CREATE TABLE</span> product (
   id    int <span class="tok-keyword">GENERATED ALWAYS AS IDENTITY PRIMARY KEY</span>,
   name  text <span class="tok-keyword">NOT NULL</span>,
   props jsonb <span class="tok-keyword">NOT NULL</span>
@@ -110,7 +110,7 @@ export default {
 
 <h3>json và jsonb — luôn chọn jsonb</h3>
 <p>PostgreSQL có HAI kiểu JSON, và khác biệt hiện ra chỉ trong một truy vấn:</p>
-<pre><code><span class="tok-keyword">SELECT</span> <span class="tok-string">'{"b":1,"a":2,"a":3}'</span>::json;
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> <span class="tok-string">'{"b":1,"a":2,"a":3}'</span>::json;
 <span class="tok-keyword">SELECT</span> <span class="tok-string">'{"b":1,"a":2,"a":3}'</span>::jsonb;</code></pre>
 <div class="out">      kieu_json
 ---------------------
@@ -122,7 +122,7 @@ export default {
 <p><code>json</code> lưu <strong>ĐÚNG cái văn bản bạn đưa</strong>, kể cả khoá trùng, khoảng trắng, thứ tự khoá — và nó phân tích lại ở MỖI lần truy cập. <code>jsonb</code> lưu một dạng nhị phân đã tách rời: khoá được sắp, khoảng trắng bỏ đi, khoá trùng được giải quyết (cái cuối thắng). Chính việc chuẩn hoá đó làm <code>jsonb</code> truy vấn nhanh và, quan trọng nhất, <strong>ĐÁNH CHỈ MỤC ĐƯỢC</strong>. Chỉ dùng <code>json</code> khi bạn buộc phải tái tạo tài liệu chính xác từng byte, và điều đó hiếm.</p>
 
 <h3>Ba cách với vào bên trong</h3>
-<pre><code><span class="tok-keyword">SELECT</span> name,
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> name,
        props-&gt;<span class="tok-string">'brand'</span>            <span class="tok-keyword">AS</span> mui_ten,
        props-&gt;&gt;<span class="tok-string">'brand'</span>           <span class="tok-keyword">AS</span> mui_ten_kep,
        jsonb_typeof(props-&gt;<span class="tok-string">'brand'</span>) <span class="tok-keyword">AS</span> kieu
@@ -135,7 +135,7 @@ export default {
 (3 rows)</div>
 <p>Nhìn cái dấu nháy. <code>-&gt;</code> trả về <strong>jsonb</strong> — chuỗi <code>"Acme"</code> ở dạng một giá trị JSON, KÈM dấu nháy. <code>-&gt;&gt;</code> trả về <strong>text</strong> — các ký tự trần. Đúng một ký tự đó là nguồn gốc của phần lớn sự bối rối với JSONB: so sánh <code>props-&gt;'brand' = 'Acme'</code> sẽ THẤT BẠI, vì bạn đang so một chuỗi JSON với một hằng text.</p>
 <p>Với đường dẫn lồng nhau, hãy nối các mũi tên hoặc dùng <code>#&gt;&gt;</code> với một mảng đường dẫn:</p>
-<pre><code><span class="tok-keyword">SELECT</span> name,
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> name,
        props-&gt;<span class="tok-string">'specs'</span>-&gt;&gt;<span class="tok-string">'ram'</span>   <span class="tok-keyword">AS</span> ram,
        props#&gt;&gt;<span class="tok-string">'{specs,cpu}'</span>    <span class="tok-keyword">AS</span> cpu
 <span class="tok-keyword">FROM</span> product <span class="tok-keyword">ORDER BY</span> id;</code></pre>
@@ -180,7 +180,7 @@ export default {
 
 <h3>Containment: the operator you will use most</h3>
 <p><code>@&gt;</code> asks "does the left document contain the right one?" It matches at any depth and ignores everything you did not mention:</p>
-<pre><code><span class="tok-keyword">SELECT</span> name <span class="tok-keyword">FROM</span> product <span class="tok-keyword">WHERE</span> props @&gt; <span class="tok-string">'{"brand":"Acme"}'</span>;</code></pre>
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> name <span class="tok-keyword">FROM</span> product <span class="tok-keyword">WHERE</span> props @&gt; <span class="tok-string">'{"brand":"Acme"}'</span>;</code></pre>
 <div class="out">     name
 ---------------
  Laptop Pro 14
@@ -188,7 +188,7 @@ export default {
  Keyboard K1
 (3 rows)</div>
 <p>It looks inside arrays too — this finds every product whose <code>tags</code> array contains <code>"light"</code>, without caring what else is in the array:</p>
-<pre><code><span class="tok-keyword">SELECT</span> name <span class="tok-keyword">FROM</span> product <span class="tok-keyword">WHERE</span> props @&gt; <span class="tok-string">'{"tags":["light"]}'</span>;</code></pre>
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> name <span class="tok-keyword">FROM</span> product <span class="tok-keyword">WHERE</span> props @&gt; <span class="tok-string">'{"tags":["light"]}'</span>;</code></pre>
 <div class="out">     name
 ---------------
  Laptop Air 13
@@ -196,7 +196,7 @@ export default {
 (2 rows)</div>
 
 <h3>Existence: does this key exist at all?</h3>
-<pre><code><span class="tok-keyword">SELECT</span> name <span class="tok-keyword">FROM</span> product <span class="tok-keyword">WHERE</span> props ? <span class="tok-string">'specs'</span>;                <span class="tok-comment">-- có khoá specs</span>
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> name <span class="tok-keyword">FROM</span> product <span class="tok-keyword">WHERE</span> props ? <span class="tok-string">'specs'</span>;                <span class="tok-comment">-- có khoá specs</span>
 <span class="tok-keyword">SELECT</span> name <span class="tok-keyword">FROM</span> product <span class="tok-keyword">WHERE</span> props-&gt;<span class="tok-string">'specs'</span> ? <span class="tok-string">'storage'</span>;   <span class="tok-comment">-- specs có khoá storage</span></code></pre>
 <div class="out">     name              |    name
 ---------------        | ---------
@@ -210,11 +210,11 @@ export default {
 
 <h3>GIN: the index that makes this fast</h3>
 <p>Everything so far scanned five rows. Real tables do not. Measured on a <code>ev</code> table with <strong>200,000 rows</strong> (26 MB), searching for one specific price:</p>
-<pre><code><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> count(*) <span class="tok-keyword">FROM</span> ev <span class="tok-keyword">WHERE</span> props @&gt; <span class="tok-string">'{"price":1234}'</span>;</code></pre>
+<pre><code class="language-sql"><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> count(*) <span class="tok-keyword">FROM</span> ev <span class="tok-keyword">WHERE</span> props @&gt; <span class="tok-string">'{"price":1234}'</span>;</code></pre>
 <div class="out">-- KHÔNG có chỉ mục
  Execution Time: 56.789 ms</div>
 <p>Now add a GIN index — the index type built for "many keys per row", which is exactly what a document is:</p>
-<pre><code><span class="tok-keyword">CREATE INDEX</span> ev_props_gin <span class="tok-keyword">ON</span> ev <span class="tok-keyword">USING GIN</span> (props);</code></pre>
+<pre><code class="language-sql"><span class="tok-keyword">CREATE INDEX</span> ev_props_gin <span class="tok-keyword">ON</span> ev <span class="tok-keyword">USING GIN</span> (props);</code></pre>
 <div class="out"> Aggregate  (cost=97.21..97.22 rows=1 width=8) (actual time=1.242..1.244 rows=1 loops=1)
    -&gt;  Bitmap Heap Scan on ev  (cost=21.59..97.16 rows=20 width=0) (actual time=0.812..1.229 rows=100 loops=1)
          Recheck Cond: (props @&gt; '{"price": 1234}'::jsonb)
@@ -238,7 +238,7 @@ CÓ GIN index: 31.463 ms</div>
 <p>The same index, on the same table, now buys 42% instead of 45×. When a query returns a large fraction of the rows, the database must visit those rows regardless, and the index only saves the filtering. <strong>An index is a tool for finding a few rows among many</strong> — Chapter 9's lesson, and it applies to GIN exactly as it applies to B-tree.</p>
 
 <h3>Two GIN flavours</h3>
-<pre><code><span class="tok-keyword">CREATE INDEX</span> … <span class="tok-keyword">USING GIN</span> (props);                  <span class="tok-comment">-- mặc định</span>
+<pre><code class="language-sql"><span class="tok-keyword">CREATE INDEX</span> … <span class="tok-keyword">USING GIN</span> (props);                  <span class="tok-comment">-- mặc định</span>
 <span class="tok-keyword">CREATE INDEX</span> … <span class="tok-keyword">USING GIN</span> (props jsonb_path_ops);   <span class="tok-comment">-- gọn hơn</span></code></pre>
 <div class="out"> indexrelname      | pg_size_pretty
 -------------------+----------------
@@ -259,7 +259,7 @@ CÓ GIN index: 31.463 ms</div>
 
 <h3>Containment: toán tử bạn sẽ dùng nhiều nhất</h3>
 <p><code>@&gt;</code> hỏi "tài liệu bên trái có CHỨA tài liệu bên phải không?". Nó khớp ở MỌI độ sâu và bỏ qua mọi thứ bạn không nhắc tới:</p>
-<pre><code><span class="tok-keyword">SELECT</span> name <span class="tok-keyword">FROM</span> product <span class="tok-keyword">WHERE</span> props @&gt; <span class="tok-string">'{"brand":"Acme"}'</span>;</code></pre>
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> name <span class="tok-keyword">FROM</span> product <span class="tok-keyword">WHERE</span> props @&gt; <span class="tok-string">'{"brand":"Acme"}'</span>;</code></pre>
 <div class="out">     name
 ---------------
  Laptop Pro 14
@@ -267,7 +267,7 @@ CÓ GIN index: 31.463 ms</div>
  Keyboard K1
 (3 rows)</div>
 <p>Nó nhìn được cả vào bên trong MẢNG — câu này tìm mọi sản phẩm có mảng <code>tags</code> chứa <code>"light"</code>, chẳng cần quan tâm trong mảng còn gì khác:</p>
-<pre><code><span class="tok-keyword">SELECT</span> name <span class="tok-keyword">FROM</span> product <span class="tok-keyword">WHERE</span> props @&gt; <span class="tok-string">'{"tags":["light"]}'</span>;</code></pre>
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> name <span class="tok-keyword">FROM</span> product <span class="tok-keyword">WHERE</span> props @&gt; <span class="tok-string">'{"tags":["light"]}'</span>;</code></pre>
 <div class="out">     name
 ---------------
  Laptop Air 13
@@ -275,7 +275,7 @@ CÓ GIN index: 31.463 ms</div>
 (2 rows)</div>
 
 <h3>Tồn tại: khoá này có tồn tại không?</h3>
-<pre><code><span class="tok-keyword">SELECT</span> name <span class="tok-keyword">FROM</span> product <span class="tok-keyword">WHERE</span> props ? <span class="tok-string">'specs'</span>;                <span class="tok-comment">-- có khoá specs</span>
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> name <span class="tok-keyword">FROM</span> product <span class="tok-keyword">WHERE</span> props ? <span class="tok-string">'specs'</span>;                <span class="tok-comment">-- có khoá specs</span>
 <span class="tok-keyword">SELECT</span> name <span class="tok-keyword">FROM</span> product <span class="tok-keyword">WHERE</span> props-&gt;<span class="tok-string">'specs'</span> ? <span class="tok-string">'storage'</span>;   <span class="tok-comment">-- specs có khoá storage</span></code></pre>
 <div class="out">     name              |    name
 ---------------        | ---------
@@ -289,11 +289,11 @@ CÓ GIN index: 31.463 ms</div>
 
 <h3>GIN: chỉ mục làm cho việc này nhanh</h3>
 <p>Mọi thứ tới giờ đều quét năm dòng. Bảng thật thì không như vậy. Đo trên một bảng <code>ev</code> có <strong>200.000 dòng</strong> (26 MB), tìm một mức giá cụ thể:</p>
-<pre><code><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> count(*) <span class="tok-keyword">FROM</span> ev <span class="tok-keyword">WHERE</span> props @&gt; <span class="tok-string">'{"price":1234}'</span>;</code></pre>
+<pre><code class="language-sql"><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> count(*) <span class="tok-keyword">FROM</span> ev <span class="tok-keyword">WHERE</span> props @&gt; <span class="tok-string">'{"price":1234}'</span>;</code></pre>
 <div class="out">-- KHÔNG có chỉ mục
  Execution Time: 56.789 ms</div>
 <p>Giờ thêm một chỉ mục GIN — loại chỉ mục sinh ra cho "nhiều khoá trên mỗi dòng", mà một tài liệu thì đúng là như thế:</p>
-<pre><code><span class="tok-keyword">CREATE INDEX</span> ev_props_gin <span class="tok-keyword">ON</span> ev <span class="tok-keyword">USING GIN</span> (props);</code></pre>
+<pre><code class="language-sql"><span class="tok-keyword">CREATE INDEX</span> ev_props_gin <span class="tok-keyword">ON</span> ev <span class="tok-keyword">USING GIN</span> (props);</code></pre>
 <div class="out"> Aggregate  (cost=97.21..97.22 rows=1 width=8) (actual time=1.242..1.244 rows=1 loops=1)
    -&gt;  Bitmap Heap Scan on ev  (cost=21.59..97.16 rows=20 width=0) (actual time=0.812..1.229 rows=100 loops=1)
          Recheck Cond: (props @&gt; '{"price": 1234}'::jsonb)
@@ -317,7 +317,7 @@ CÓ GIN index: 31,463 ms</div>
 <p>Cùng chỉ mục đó, trên cùng bảng đó, giờ chỉ mua được 42% thay vì 45 lần. Khi một truy vấn trả về một phần LỚN số dòng, cơ sở dữ liệu dù sao cũng phải ghé thăm những dòng ấy, và chỉ mục chỉ tiết kiệm được khâu lọc. <strong>Chỉ mục là công cụ để tìm MỘT ÍT dòng giữa RẤT NHIỀU dòng</strong> — bài học của Chương 9, và nó đúng với GIN y như với B-tree.</p>
 
 <h3>Hai hương vị GIN</h3>
-<pre><code><span class="tok-keyword">CREATE INDEX</span> … <span class="tok-keyword">USING GIN</span> (props);                  <span class="tok-comment">-- mặc định</span>
+<pre><code class="language-sql"><span class="tok-keyword">CREATE INDEX</span> … <span class="tok-keyword">USING GIN</span> (props);                  <span class="tok-comment">-- mặc định</span>
 <span class="tok-keyword">CREATE INDEX</span> … <span class="tok-keyword">USING GIN</span> (props jsonb_path_ops);   <span class="tok-comment">-- gọn hơn</span></code></pre>
 <div class="out"> indexrelname      | pg_size_pretty
 -------------------+----------------
@@ -347,12 +347,12 @@ CÓ GIN index: 31,463 ms</div>
 
 <h3>Why LIKE is not search</h3>
 <p><code>WHERE body LIKE '%jump%'</code> finds the letters <code>j-u-m-p</code>. It misses <em>jumped</em> if you searched for <em>jumping</em>, matches <em>jumper</em> when you did not want it, cannot rank results, and on a large table it scans everything. Watch what <code>to_tsvector</code> does instead:</p>
-<pre><code><span class="tok-keyword">SELECT</span> to_tsvector(<span class="tok-string">'english'</span>, <span class="tok-string">'The quick brown foxes were jumping over the lazy dogs'</span>);</code></pre>
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> to_tsvector(<span class="tok-string">'english'</span>, <span class="tok-string">'The quick brown foxes were jumping over the lazy dogs'</span>);</code></pre>
 <div class="out"> 'brown':3 'dog':10 'fox':4 'jump':6 'lazi':9 'quick':2
 (1 row)</div>
 <p>Three things happened. <strong>Stop words are gone</strong> — <em>the</em>, <em>were</em>, <em>over</em> carry no search value. <strong>Words are stemmed</strong> to a root: <em>foxes</em> → <code>fox</code>, <em>jumping</em> → <code>jump</code>, <em>lazy</em> → <code>lazi</code>. And <strong>positions are kept</strong> (the numbers), which is what makes phrase search and ranking possible.</p>
 <p>Stemming is the whole point:</p>
-<pre><code><span class="tok-keyword">SELECT</span> to_tsvector(<span class="tok-string">'english'</span>, <span class="tok-string">'jumping jumped jumps'</span>);</code></pre>
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> to_tsvector(<span class="tok-string">'english'</span>, <span class="tok-string">'jumping jumped jumps'</span>);</code></pre>
 <div class="out"> 'jump':1,2,3
 (1 row)</div>
 <p>Three different words, one lexeme at three positions. A search for any of them now finds all of them — something no <code>LIKE</code> pattern can do.</p>
@@ -365,7 +365,7 @@ CÓ GIN index: 31,463 ms</div>
 <div class="lz-step"><span class="lz-k">→</span><span class="lz-t">The query runs the same pipeline</span><span class="lz-d">That is why searching <code>fox</code> finds <em>foxes</em> — both sides were reduced to the same lexeme before <code>@@</code> compared them.</span></div>
 </div>
 <h3>Matching with @@</h3>
-<pre><code><span class="tok-keyword">SELECT</span> to_tsvector(<span class="tok-string">'english'</span>, <span class="tok-string">'The quick brown foxes were jumping over the lazy dogs'</span>)
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> to_tsvector(<span class="tok-string">'english'</span>, <span class="tok-string">'The quick brown foxes were jumping over the lazy dogs'</span>)
        @@ to_tsquery(<span class="tok-string">'english'</span>, <span class="tok-string">'fox &amp; dog'</span>) <span class="tok-keyword">AS</span> khop;</code></pre>
 <div class="out"> khop
 ------
@@ -375,7 +375,7 @@ CÓ GIN index: 31,463 ms</div>
 
 <h3>Storing it: a generated column with weights</h3>
 <p>Computing <code>to_tsvector</code> on every query is wasted work. Store it once, and while you are there, tell PostgreSQL that a title matters more than a body:</p>
-<pre><code><span class="tok-keyword">CREATE TABLE</span> article (
+<pre><code class="language-sql"><span class="tok-keyword">CREATE TABLE</span> article (
   id    int <span class="tok-keyword">GENERATED ALWAYS AS IDENTITY PRIMARY KEY</span>,
   title text <span class="tok-keyword">NOT NULL</span>,
   body  text <span class="tok-keyword">NOT NULL</span>,
@@ -391,7 +391,7 @@ CÓ GIN index: 31,463 ms</div>
 <p>Read the letters: <code>'basic':3A</code> came from the title, <code>'cost':13B</code> from the body, and <code>'index':2A,8B,12B</code> appears in both. Because the column is <code>GENERATED … STORED</code>, PostgreSQL maintains it on every insert and update — there is nothing for the application to remember, and no trigger to write (this is the modern replacement for the trigger-based approach you will find in older tutorials).</p>
 
 <h3>Ranking</h3>
-<pre><code><span class="tok-keyword">SELECT</span> id, title, round(ts_rank(tsv, to_tsquery(<span class="tok-string">'english'</span>,<span class="tok-string">'index'</span>))::numeric,4) <span class="tok-keyword">AS</span> hang
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> id, title, round(ts_rank(tsv, to_tsquery(<span class="tok-string">'english'</span>,<span class="tok-string">'index'</span>))::numeric,4) <span class="tok-keyword">AS</span> hang
 <span class="tok-keyword">FROM</span> article <span class="tok-keyword">WHERE</span> tsv @@ to_tsquery(<span class="tok-string">'english'</span>,<span class="tok-string">'index'</span>)
 <span class="tok-keyword">ORDER BY</span> hang <span class="tok-keyword">DESC</span>;</code></pre>
 <div class="out"> id |           title            |  hang
@@ -423,12 +423,12 @@ CÓ GIN index: 31,463 ms</div>
 
 <h3>Vì sao LIKE không phải là tìm kiếm</h3>
 <p><code>WHERE body LIKE '%jump%'</code> tìm các chữ cái <code>j-u-m-p</code>. Nó BỎ SÓT <em>jumped</em> nếu bạn tìm <em>jumping</em>, lại KHỚP <em>jumper</em> khi bạn không muốn, không xếp hạng được kết quả, và trên bảng lớn thì nó quét sạch. Hãy xem <code>to_tsvector</code> làm gì thay vào đó:</p>
-<pre><code><span class="tok-keyword">SELECT</span> to_tsvector(<span class="tok-string">'english'</span>, <span class="tok-string">'The quick brown foxes were jumping over the lazy dogs'</span>);</code></pre>
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> to_tsvector(<span class="tok-string">'english'</span>, <span class="tok-string">'The quick brown foxes were jumping over the lazy dogs'</span>);</code></pre>
 <div class="out"> 'brown':3 'dog':10 'fox':4 'jump':6 'lazi':9 'quick':2
 (1 row)</div>
 <p>Ba việc đã xảy ra. <strong>Từ dừng biến mất</strong> — <em>the</em>, <em>were</em>, <em>over</em> không mang giá trị tìm kiếm nào. <strong>Từ được đưa về GỐC</strong>: <em>foxes</em> → <code>fox</code>, <em>jumping</em> → <code>jump</code>, <em>lazy</em> → <code>lazi</code>. Và <strong>vị trí được giữ lại</strong> (các con số), đó là thứ làm cho tìm theo cụm và xếp hạng trở nên khả thi.</p>
 <p>Việc đưa về gốc chính là điểm mấu chốt:</p>
-<pre><code><span class="tok-keyword">SELECT</span> to_tsvector(<span class="tok-string">'english'</span>, <span class="tok-string">'jumping jumped jumps'</span>);</code></pre>
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> to_tsvector(<span class="tok-string">'english'</span>, <span class="tok-string">'jumping jumped jumps'</span>);</code></pre>
 <div class="out"> 'jump':1,2,3
 (1 row)</div>
 <p>Ba từ khác nhau, MỘT lexeme ở ba vị trí. Tìm bất kỳ cái nào trong số đó giờ đều ra cả ba — điều mà không mẫu <code>LIKE</code> nào làm được.</p>
@@ -441,7 +441,7 @@ CÓ GIN index: 31,463 ms</div>
 <div class="lz-step"><span class="lz-k">→</span><span class="lz-t">Câu truy vấn chạy qua ĐÚNG cái đường ống đó</span><span class="lz-d">Đó là lý do tìm <code>fox</code> lại ra <em>foxes</em> — cả hai phía đều đã được rút về cùng một lexeme TRƯỚC KHI <code>@@</code> đem chúng ra so.</span></div>
 </div>
 <h3>Khớp bằng @@</h3>
-<pre><code><span class="tok-keyword">SELECT</span> to_tsvector(<span class="tok-string">'english'</span>, <span class="tok-string">'The quick brown foxes were jumping over the lazy dogs'</span>)
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> to_tsvector(<span class="tok-string">'english'</span>, <span class="tok-string">'The quick brown foxes were jumping over the lazy dogs'</span>)
        @@ to_tsquery(<span class="tok-string">'english'</span>, <span class="tok-string">'fox &amp; dog'</span>) <span class="tok-keyword">AS</span> khop;</code></pre>
 <div class="out"> khop
 ------
@@ -451,7 +451,7 @@ CÓ GIN index: 31,463 ms</div>
 
 <h3>Lưu lại: một cột GENERATED có trọng số</h3>
 <p>Tính <code>to_tsvector</code> ở mỗi truy vấn là việc thừa. Hãy lưu nó MỘT lần, và nhân tiện, nói cho PostgreSQL biết tiêu đề quan trọng hơn phần thân:</p>
-<pre><code><span class="tok-keyword">CREATE TABLE</span> article (
+<pre><code class="language-sql"><span class="tok-keyword">CREATE TABLE</span> article (
   id    int <span class="tok-keyword">GENERATED ALWAYS AS IDENTITY PRIMARY KEY</span>,
   title text <span class="tok-keyword">NOT NULL</span>,
   body  text <span class="tok-keyword">NOT NULL</span>,
@@ -467,7 +467,7 @@ CÓ GIN index: 31,463 ms</div>
 <p>Đọc các chữ cái: <code>'basic':3A</code> đến từ tiêu đề, <code>'cost':13B</code> từ phần thân, và <code>'index':2A,8B,12B</code> xuất hiện ở CẢ HAI. Vì cột là <code>GENERATED … STORED</code>, PostgreSQL tự bảo trì nó ở mọi lần chèn và cập nhật — ứng dụng không có gì phải nhớ, và không phải viết trigger nào (đây là bản thay thế hiện đại cho cách dùng trigger mà bạn sẽ thấy trong các hướng dẫn cũ).</p>
 
 <h3>Xếp hạng</h3>
-<pre><code><span class="tok-keyword">SELECT</span> id, title, round(ts_rank(tsv, to_tsquery(<span class="tok-string">'english'</span>,<span class="tok-string">'index'</span>))::numeric,4) <span class="tok-keyword">AS</span> hang
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> id, title, round(ts_rank(tsv, to_tsquery(<span class="tok-string">'english'</span>,<span class="tok-string">'index'</span>))::numeric,4) <span class="tok-keyword">AS</span> hang
 <span class="tok-keyword">FROM</span> article <span class="tok-keyword">WHERE</span> tsv @@ to_tsquery(<span class="tok-string">'english'</span>,<span class="tok-string">'index'</span>)
 <span class="tok-keyword">ORDER BY</span> hang <span class="tok-keyword">DESC</span>;</code></pre>
 <div class="out"> id |           title            |  hang
@@ -505,23 +505,23 @@ CÓ GIN index: 31,463 ms</div>
 <span class="eyebrow">Chapter 13 · Lesson 13.4 · Phase 4 — In production</span>
 <h2>When the user cannot spell it</h2>
 <p class="lead">Full-text search is built on words, so it needs the word to be roughly right. It will not find <em>Nguyen</em> for <em>Nguyn</em>, and it does nothing for a partial match inside a product code. That is what the <code>pg_trgm</code> extension is for — a completely different way of comparing strings, based on three-character fragments.</p>
-<pre><code><span class="tok-keyword">CREATE EXTENSION IF NOT EXISTS</span> pg_trgm;</code></pre>
+<pre><code class="language-sql"><span class="tok-keyword">CREATE EXTENSION IF NOT EXISTS</span> pg_trgm;</code></pre>
 
 <h3>What a trigram is</h3>
-<pre><code><span class="tok-keyword">SELECT</span> show_trgm(<span class="tok-string">'cat'</span>);</code></pre>
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> show_trgm(<span class="tok-string">'cat'</span>);</code></pre>
 <div class="out">        ba_ky_tu
 -------------------------
  {"  c"," ca","at ",cat}
 (1 row)</div>
 <p>The word is padded and cut into overlapping three-character slices. Two strings are then compared by how many trigrams they share — which means comparison degrades <em>gracefully</em> as spelling drifts, instead of flipping from match to no-match.</p>
-<pre><code><span class="tok-keyword">SELECT</span> similarity(<span class="tok-string">'PostgreSQL'</span>,<span class="tok-string">'PostgresSQL'</span>) <span class="tok-keyword">AS</span> gan_giong,
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> similarity(<span class="tok-string">'PostgreSQL'</span>,<span class="tok-string">'PostgresSQL'</span>) <span class="tok-keyword">AS</span> gan_giong,
        similarity(<span class="tok-string">'PostgreSQL'</span>,<span class="tok-string">'MySQL'</span>)       <span class="tok-keyword">AS</span> khac_han;</code></pre>
 <div class="out"> gan_giong |  khac_han
 -----------+------------
  0.7692308 | 0.13333334
 (1 row)</div>
 <p>A typo scores 0.77; an unrelated word scores 0.13. Now the useful version — search a table with a misspelled, half-remembered phrase:</p>
-<pre><code><span class="tok-keyword">SELECT</span> title, round(similarity(title,<span class="tok-string">'postgres indexs'</span>)::numeric,3) <span class="tok-keyword">AS</span> diem
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> title, round(similarity(title,<span class="tok-string">'postgres indexs'</span>)::numeric,3) <span class="tok-keyword">AS</span> diem
 <span class="tok-keyword">FROM</span> article <span class="tok-keyword">ORDER BY</span> diem <span class="tok-keyword">DESC</span> <span class="tok-keyword">LIMIT</span> 3;</code></pre>
 <div class="out">           title            | diem
 ----------------------------+-------
@@ -533,11 +533,11 @@ CÓ GIN index: 31,463 ms</div>
 
 <h3>The other half: making ILIKE '%…%' fast</h3>
 <p>A B-tree index is useless for a leading wildcard — it can find prefixes, and <code>'%12345%'</code> has no prefix. So this is a sequential scan every time, forever. Measured on 200,000 rows:</p>
-<pre><code><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> count(*) <span class="tok-keyword">FROM</span> article <span class="tok-keyword">WHERE</span> title <span class="tok-keyword">ILIKE</span> <span class="tok-string">'%12345%'</span>;</code></pre>
+<pre><code class="language-sql"><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> count(*) <span class="tok-keyword">FROM</span> article <span class="tok-keyword">WHERE</span> title <span class="tok-keyword">ILIKE</span> <span class="tok-string">'%12345%'</span>;</code></pre>
 <div class="out">-- KHÔNG index
  Execution Time: 46.240 ms</div>
 <p>A trigram GIN index changes that, because <code>%12345%</code> still contains trigrams the index knows about:</p>
-<pre><code><span class="tok-keyword">CREATE INDEX</span> article_title_trgm <span class="tok-keyword">ON</span> article <span class="tok-keyword">USING GIN</span> (title gin_trgm_ops);</code></pre>
+<pre><code class="language-sql"><span class="tok-keyword">CREATE INDEX</span> article_title_trgm <span class="tok-keyword">ON</span> article <span class="tok-keyword">USING GIN</span> (title gin_trgm_ops);</code></pre>
 <div class="out">-- CÓ index
  Execution Time: 0.210 ms</div>
 <p><strong>46.240 ms → 0.210 ms, about 220×</strong> — on the one query shape everyone is told is unindexable. If your admin panel has a "search by name" box that does <code>ILIKE '%…%'</code>, this index is very likely the highest-value five minutes available to you.</p>
@@ -560,23 +560,23 @@ CÓ GIN index: 31,463 ms</div>
 <span class="eyebrow">Chương 13 · Bài 13.4 · Giai đoạn 4 — Trên production</span>
 <h2>Khi người dùng không đánh vần nổi</h2>
 <p class="lead">Full-text search dựng trên TỪ, nên nó cần cái từ đó phải gần đúng. Nó sẽ không tìm ra <em>Nguyen</em> khi bạn gõ <em>Nguyn</em>, và nó chẳng làm được gì với một đoạn khớp nằm giữa một mã sản phẩm. Đó là việc của phần mở rộng <code>pg_trgm</code> — một cách so sánh chuỗi HOÀN TOÀN KHÁC, dựa trên các mẩu ba ký tự.</p>
-<pre><code><span class="tok-keyword">CREATE EXTENSION IF NOT EXISTS</span> pg_trgm;</code></pre>
+<pre><code class="language-sql"><span class="tok-keyword">CREATE EXTENSION IF NOT EXISTS</span> pg_trgm;</code></pre>
 
 <h3>Trigram là gì</h3>
-<pre><code><span class="tok-keyword">SELECT</span> show_trgm(<span class="tok-string">'cat'</span>);</code></pre>
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> show_trgm(<span class="tok-string">'cat'</span>);</code></pre>
 <div class="out">        ba_ky_tu
 -------------------------
  {"  c"," ca","at ",cat}
 (1 row)</div>
 <p>Từ đó được đệm thêm rồi cắt thành các lát ba ký tự CHỒNG LẤN nhau. Hai chuỗi sau đó được so bằng số trigram chúng dùng CHUNG — nghĩa là phép so sánh SUY GIẢM MỀM khi chính tả lệch dần, thay vì lật phắt từ khớp sang không-khớp.</p>
-<pre><code><span class="tok-keyword">SELECT</span> similarity(<span class="tok-string">'PostgreSQL'</span>,<span class="tok-string">'PostgresSQL'</span>) <span class="tok-keyword">AS</span> gan_giong,
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> similarity(<span class="tok-string">'PostgreSQL'</span>,<span class="tok-string">'PostgresSQL'</span>) <span class="tok-keyword">AS</span> gan_giong,
        similarity(<span class="tok-string">'PostgreSQL'</span>,<span class="tok-string">'MySQL'</span>)       <span class="tok-keyword">AS</span> khac_han;</code></pre>
 <div class="out"> gan_giong |  khac_han
 -----------+------------
  0.7692308 | 0.13333334
 (1 row)</div>
 <p>Một lỗi gõ được 0,77 điểm; một từ chẳng liên quan được 0,13. Giờ tới phiên bản hữu dụng — tìm trong một bảng bằng một cụm từ nhớ mang máng và gõ sai:</p>
-<pre><code><span class="tok-keyword">SELECT</span> title, round(similarity(title,<span class="tok-string">'postgres indexs'</span>)::numeric,3) <span class="tok-keyword">AS</span> diem
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> title, round(similarity(title,<span class="tok-string">'postgres indexs'</span>)::numeric,3) <span class="tok-keyword">AS</span> diem
 <span class="tok-keyword">FROM</span> article <span class="tok-keyword">ORDER BY</span> diem <span class="tok-keyword">DESC</span> <span class="tok-keyword">LIMIT</span> 3;</code></pre>
 <div class="out">           title            | diem
 ----------------------------+-------
@@ -588,11 +588,11 @@ CÓ GIN index: 31,463 ms</div>
 
 <h3>Nửa còn lại: làm cho ILIKE '%…%' nhanh</h3>
 <p>Chỉ mục B-tree VÔ DỤNG với ký tự đại diện ở đầu — nó tìm được tiền tố, mà <code>'%12345%'</code> thì không có tiền tố. Nên đây là quét tuần tự, mọi lần, mãi mãi. Đo trên 200.000 dòng:</p>
-<pre><code><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> count(*) <span class="tok-keyword">FROM</span> article <span class="tok-keyword">WHERE</span> title <span class="tok-keyword">ILIKE</span> <span class="tok-string">'%12345%'</span>;</code></pre>
+<pre><code class="language-sql"><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> count(*) <span class="tok-keyword">FROM</span> article <span class="tok-keyword">WHERE</span> title <span class="tok-keyword">ILIKE</span> <span class="tok-string">'%12345%'</span>;</code></pre>
 <div class="out">-- KHÔNG index
  Execution Time: 46,240 ms</div>
 <p>Một chỉ mục GIN trigram đổi được điều đó, vì <code>%12345%</code> vẫn CHỨA những trigram mà chỉ mục biết:</p>
-<pre><code><span class="tok-keyword">CREATE INDEX</span> article_title_trgm <span class="tok-keyword">ON</span> article <span class="tok-keyword">USING GIN</span> (title gin_trgm_ops);</code></pre>
+<pre><code class="language-sql"><span class="tok-keyword">CREATE INDEX</span> article_title_trgm <span class="tok-keyword">ON</span> article <span class="tok-keyword">USING GIN</span> (title gin_trgm_ops);</code></pre>
 <div class="out">-- CÓ index
  Execution Time: 0,210 ms</div>
 <p><strong>46,240 ms → 0,210 ms, khoảng 220 lần</strong> — trên đúng cái dạng truy vấn mà ai cũng được dạy rằng không đánh chỉ mục được. Nếu trang quản trị của bạn có một ô "tìm theo tên" chạy <code>ILIKE '%…%'</code>, thì chỉ mục này rất có thể là năm phút đáng giá nhất bạn có thể bỏ ra.</p>

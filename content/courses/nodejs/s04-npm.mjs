@@ -21,7 +21,7 @@ export default {
 <p class="lead">Every Node project is defined by one file. <code>package.json</code> says what the project is, what it depends on, and how to run it. Get it right and anyone can clone your repo and be running in two commands.</p>
 
 <h3>Starting a project</h3>
-<pre><code>npm init -y</code></pre>
+<pre><code class="language-bash">npm init -y</code></pre>
 <div class="out">{
   "name": "npmdemo",
   "version": "1.0.0",
@@ -35,7 +35,7 @@ export default {
   "license": "ISC"
 }</div>
 <p>That is the skeleton. For a real backend you immediately add two things — the module system and the Node version:</p>
-<pre><code>{
+<pre><code class="language-typescript">{
   <span class="tok-string">"name"</span>: <span class="tok-string">"notes-api"</span>,
   <span class="tok-string">"version"</span>: <span class="tok-string">"1.0.0"</span>,
   <span class="tok-string">"type"</span>: <span class="tok-string">"module"</span>,                  <span class="tok-comment">// ESM — see lesson 1.5</span>
@@ -50,7 +50,7 @@ export default {
 <div class="callout ok"><code>node --watch</code> restarts the server when a file changes — built into Node since v18. You no longer need <code>nodemon</code> for that. One dependency less is one dependency less.</div>
 
 <h3>dependencies vs devDependencies</h3>
-<pre><code>npm i express          <span class="tok-comment"># → dependencies: needed to RUN</span>
+<pre><code class="language-bash">npm i express          <span class="tok-comment"># → dependencies: needed to RUN</span>
 npm i -D eslint        <span class="tok-comment"># → devDependencies: only to DEVELOP</span></code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k">dependencies</span><span class="v">Anything imported by code that runs in production: express, prisma client, bcrypt.</span></div>
@@ -60,7 +60,7 @@ npm i -D eslint        <span class="tok-comment"># → devDependencies: only to 
 <div class="pitfall">A very common production crash: putting something in <code>devDependencies</code> that production actually imports. It works locally (where everything is installed) and dies on the server with <code>Cannot find module</code> — but only after deploy. Rule of thumb: if <code>src/</code> imports it, it belongs in <code>dependencies</code>.</div>
 
 <h3>npm scripts — your project's command list</h3>
-<pre><code>npm run dev             <span class="tok-comment"># run any script by name</span>
+<pre><code class="language-bash">npm run dev             <span class="tok-comment"># run any script by name</span>
 npm start               <span class="tok-comment"># "start" and "test" don't need "run"</span>
 npm test</code></pre>
 <p>Scripts are how a project documents itself. A newcomer should never need to ask "how do I run this?" — the answer is in <code>scripts</code>. Two conventions worth adopting:</p>
@@ -70,7 +70,7 @@ npm test</code></pre>
 </div>
 
 <h3>Useful npm commands</h3>
-<pre><code>npm i &lt;pkg&gt;                  <span class="tok-comment"># install and save to package.json</span>
+<pre><code class="language-bash">npm i &lt;pkg&gt;                  <span class="tok-comment"># install and save to package.json</span>
 npm i -D &lt;pkg&gt;               <span class="tok-comment"># install as a dev dependency</span>
 npm un &lt;pkg&gt;                 <span class="tok-comment"># uninstall</span>
 npm ls &lt;pkg&gt;                 <span class="tok-comment"># why is this package here? show the tree</span>
@@ -102,7 +102,7 @@ npx &lt;tool&gt;                   <span class="tok-comment"># run a tool withou
 <p class="lead">Mỗi dự án Node được định nghĩa bằng một file duy nhất. <code>package.json</code> nói dự án là gì, phụ thuộc vào những gì, và chạy bằng cách nào. Làm đúng file này thì ai clone repo về cũng chạy được chỉ bằng hai câu lệnh.</p>
 
 <h3>Khởi tạo dự án</h3>
-<pre><code>npm init -y</code></pre>
+<pre><code class="language-bash">npm init -y</code></pre>
 <div class="out">{
   "name": "npmdemo",
   "version": "1.0.0",
@@ -116,7 +116,7 @@ npx &lt;tool&gt;                   <span class="tok-comment"># run a tool withou
   "license": "ISC"
 }</div>
 <p>Đó là bộ khung. Với một backend thật, bạn thêm ngay hai thứ — hệ module và phiên bản Node:</p>
-<pre><code>{
+<pre><code class="language-typescript">{
   <span class="tok-string">"name"</span>: <span class="tok-string">"notes-api"</span>,
   <span class="tok-string">"version"</span>: <span class="tok-string">"1.0.0"</span>,
   <span class="tok-string">"type"</span>: <span class="tok-string">"module"</span>,                  <span class="tok-comment">// ESM — xem bài 1.5</span>
@@ -131,7 +131,7 @@ npx &lt;tool&gt;                   <span class="tok-comment"># run a tool withou
 <div class="callout ok"><code>node --watch</code> tự khởi động lại server khi file thay đổi — có sẵn trong Node từ v18. Bạn không còn cần <code>nodemon</code> cho việc đó nữa. Bớt được một phụ thuộc là bớt được một phụ thuộc.</div>
 
 <h3>dependencies và devDependencies</h3>
-<pre><code>npm i express          <span class="tok-comment"># → dependencies: cần để CHẠY</span>
+<pre><code class="language-bash">npm i express          <span class="tok-comment"># → dependencies: cần để CHẠY</span>
 npm i -D eslint        <span class="tok-comment"># → devDependencies: chỉ cần khi PHÁT TRIỂN</span></code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k">dependencies</span><span class="v">Mọi thứ được import bởi code chạy trên production: express, prisma client, bcrypt.</span></div>
@@ -141,7 +141,7 @@ npm i -D eslint        <span class="tok-comment"># → devDependencies: chỉ c�
 <div class="pitfall">Một kiểu sập production rất hay gặp: bỏ nhầm vào <code>devDependencies</code> một gói mà production thật sự có import. Ở máy bạn thì chạy ngon (vì cài hết), nhưng lên server thì chết với lỗi <code>Cannot find module</code> — và chỉ lộ ra SAU khi deploy. Nguyên tắc bỏ túi: nếu <code>src/</code> có import nó, chỗ của nó là <code>dependencies</code>.</div>
 
 <h3>npm scripts — danh sách lệnh của dự án</h3>
-<pre><code>npm run dev             <span class="tok-comment"># chạy script bất kỳ theo tên</span>
+<pre><code class="language-bash">npm run dev             <span class="tok-comment"># chạy script bất kỳ theo tên</span>
 npm start               <span class="tok-comment"># "start" và "test" không cần chữ "run"</span>
 npm test</code></pre>
 <p>Scripts là cách một dự án tự viết tài liệu cho mình. Người mới vào không bao giờ phải hỏi "chạy cái này kiểu gì?" — câu trả lời nằm trong <code>scripts</code>. Hai quy ước đáng theo:</p>
@@ -151,7 +151,7 @@ npm test</code></pre>
 </div>
 
 <h3>Vài lệnh npm hay dùng</h3>
-<pre><code>npm i &lt;gói&gt;                  <span class="tok-comment"># cài và ghi vào package.json</span>
+<pre><code class="language-bash">npm i &lt;gói&gt;                  <span class="tok-comment"># cài và ghi vào package.json</span>
 npm i -D &lt;gói&gt;               <span class="tok-comment"># cài như phụ thuộc phát triển</span>
 npm un &lt;gói&gt;                 <span class="tok-comment"># gỡ cài đặt</span>
 npm ls &lt;gói&gt;                 <span class="tok-comment"># vì sao gói này có mặt? in ra cây phụ thuộc</span>
@@ -207,7 +207,7 @@ npx &lt;công cụ&gt;                <span class="tok-comment"># chạy công c
 
 <h3>What the range symbols really allow</h3>
 <p>Same package, three ways of writing the requirement. Here is what each one actually resolves to today:</p>
-<pre><code>npm view <span class="tok-string">"express@^4.18.0"</span> version
+<pre><code class="language-bash">npm view <span class="tok-string">"express@^4.18.0"</span> version
 npm view <span class="tok-string">"express@~4.18.0"</span> version
 npm view <span class="tok-string">"express@4.18.0"</span>  version</code></pre>
 <div class="out">^4.18.0    → 4.22.2      (minor may move: 4.18 → 4.22)
@@ -221,7 +221,7 @@ npm view <span class="tok-string">"express@4.18.0"</span>  version</code></pre>
 
 <h3>The experiment: how teams end up on different versions</h3>
 <p>A project created a while ago, when 4.18.0 was current. Its <code>package.json</code> says <code>^4.18.0</code> and its lockfile pins 4.18.0:</p>
-<pre><code><span class="tok-comment"># Colleague clones the repo and runs npm ci — respects the lockfile</span>
+<pre><code class="language-bash"><span class="tok-comment"># Colleague clones the repo and runs npm ci — respects the lockfile</span>
 npm ci</code></pre>
 <div class="out">received: 4.18.0   ✅ identical to everyone else</div>
 <pre><code><span class="tok-comment"># Someone else deletes the lockfile and runs npm install</span>
@@ -241,7 +241,7 @@ rm package-lock.json &amp;&amp; npm install</code></pre>
 <div class="pitfall">Never add <code>package-lock.json</code> to <code>.gitignore</code>. You will see advice to do it — it is wrong for applications. (Libraries are a different case: they don't ship a lockfile because the consuming app decides the tree.) Also never hand-edit the lockfile; change <code>package.json</code> and let npm regenerate it.</div>
 
 <h3>Upgrading on purpose</h3>
-<pre><code>npm outdated                 <span class="tok-comment"># what is behind, and by how much</span>
+<pre><code class="language-bash">npm outdated                 <span class="tok-comment"># what is behind, and by how much</span>
 npm update                   <span class="tok-comment"># move within the allowed ranges</span>
 npm i express@latest         <span class="tok-comment"># jump a major deliberately — read the changelog first</span></code></pre>
 <div class="note-ct">Deploys on this site install with <code>npm ci</code>, precisely so the container runs the exact tree that was tested in CI. The alternative — <code>npm install</code> at deploy time — means the image you tested and the image you shipped can quietly differ, and you would have no record of what changed.</div>
@@ -270,7 +270,7 @@ npm i express@latest         <span class="tok-comment"># jump a major deliberate
 
 <h3>Các ký hiệu dải thật sự cho phép điều gì</h3>
 <p>Cùng một gói, ba cách viết yêu cầu. Đây là kết quả thật mà mỗi cách phân giải ra ở thời điểm này:</p>
-<pre><code>npm view <span class="tok-string">"express@^4.18.0"</span> version
+<pre><code class="language-bash">npm view <span class="tok-string">"express@^4.18.0"</span> version
 npm view <span class="tok-string">"express@~4.18.0"</span> version
 npm view <span class="tok-string">"express@4.18.0"</span>  version</code></pre>
 <div class="out">^4.18.0    → 4.22.2      (minor được phép nhảy: 4.18 → 4.22)
@@ -284,7 +284,7 @@ npm view <span class="tok-string">"express@4.18.0"</span>  version</code></pre>
 
 <h3>Thí nghiệm: vì sao cả nhóm lại chạy các bản khác nhau</h3>
 <p>Một dự án tạo từ lâu, hồi đó 4.18.0 còn là bản mới. File <code>package.json</code> ghi <code>^4.18.0</code> và lockfile ghim 4.18.0:</p>
-<pre><code><span class="tok-comment"># Đồng nghiệp clone repo về rồi chạy npm ci — tôn trọng lockfile</span>
+<pre><code class="language-bash"><span class="tok-comment"># Đồng nghiệp clone repo về rồi chạy npm ci — tôn trọng lockfile</span>
 npm ci</code></pre>
 <div class="out">nhận được: 4.18.0   ✅ giống hệt mọi người</div>
 <pre><code><span class="tok-comment"># Người khác lỡ xoá lockfile rồi chạy npm install</span>
@@ -304,7 +304,7 @@ rm package-lock.json &amp;&amp; npm install</code></pre>
 <div class="pitfall">Đừng bao giờ đưa <code>package-lock.json</code> vào <code>.gitignore</code>. Bạn sẽ gặp lời khuyên làm vậy — nó sai với ứng dụng. (Thư viện là chuyện khác: thư viện không phát hành kèm lockfile vì ứng dụng dùng nó mới là bên quyết định cây phụ thuộc.) Cũng đừng bao giờ sửa tay lockfile; hãy sửa <code>package.json</code> rồi để npm tự sinh lại.</div>
 
 <h3>Nâng cấp một cách có chủ đích</h3>
-<pre><code>npm outdated                 <span class="tok-comment"># gói nào đang lạc hậu, và lạc hậu bao nhiêu</span>
+<pre><code class="language-bash">npm outdated                 <span class="tok-comment"># gói nào đang lạc hậu, và lạc hậu bao nhiêu</span>
 npm update                   <span class="tok-comment"># nhích lên trong phạm vi dải cho phép</span>
 npm i express@latest         <span class="tok-comment"># nhảy hẳn một major — đọc changelog trước đã</span></code></pre>
 <div class="note-ct">Việc deploy của website này cài bằng <code>npm ci</code>, chính là để container chạy đúng cái cây phụ thuộc đã được kiểm thử trong CI. Cách còn lại — chạy <code>npm install</code> lúc deploy — nghĩa là image bạn test và image bạn ship có thể âm thầm khác nhau, mà bạn lại chẳng có bằng chứng nào về việc gì đã đổi.</div>
@@ -334,7 +334,7 @@ npm i express@latest         <span class="tok-comment"># nhảy hẳn một majo
 <p class="lead">You audit your own code. But how much of what runs in production did you actually write? Let's count.</p>
 
 <h3>One dependency, sixty-seven packages</h3>
-<pre><code>npm init -y
+<pre><code class="language-bash">npm init -y
 npm i express@4
 ls node_modules | wc -l</code></pre>
 <div class="out">packages in node_modules : 67
@@ -344,23 +344,23 @@ size of node_modules     : 3.9M</div>
 
 <h3>Installing runs code — before you import anything</h3>
 <p>A package can declare lifecycle scripts that npm executes automatically at install time. Here is a harmless package whose only job is to prove the point:</p>
-<pre><code>{
+<pre><code class="language-javascript">{
   <span class="tok-string">"name"</span>: <span class="tok-string">"harmless-package"</span>,
   <span class="tok-string">"scripts"</span>: {
     <span class="tok-string">"postinstall"</span>: <span class="tok-string">"node -e \\"require('fs').writeFileSync(os.homedir()+'/.i-was-here.txt', ...)\\""</span>
   }
 }</code></pre>
-<pre><code>npm install ./harmless-package     <span class="tok-comment"># we never imported it</span>
+<pre><code class="language-bash">npm install ./harmless-package     <span class="tok-comment"># we never imported it</span>
 ls ~/.i-was-here.txt</code></pre>
 <div class="out">⚠️  file created in HOME: "this script ran during npm install"</div>
 <p>Read that again: <strong>no import, no require, no code of ours ran</strong> — and the package already wrote a file outside the project. A real attacker would read your environment variables, your SSH keys or your cloud credentials instead.</p>
-<pre><code>npm install --ignore-scripts ./harmless-package</code></pre>
+<pre><code class="language-bash">npm install --ignore-scripts ./harmless-package</code></pre>
 <div class="out">✅ no file — the script was blocked</div>
 <div class="callout warn"><code>--ignore-scripts</code> is a strong default for CI. Be aware some legitimate packages need install scripts to compile native code (sharp, bcrypt, better-sqlite3) — so test before enforcing it globally. You can set it permanently with <code>npm config set ignore-scripts true</code> and opt in per package.</div>
 
 <h3>Pinned versions are not automatically safe either</h3>
 <p>Lesson 4.2 argued for the lockfile. Here is the counterweight — the same express 4.18.0 we pinned:</p>
-<pre><code>npm audit</code></pre>
+<pre><code class="language-bash">npm audit</code></pre>
 <div class="out">send  &lt;0.19.0
 send vulnerable to template injection that can lead to XSS
 node_modules/send
@@ -403,7 +403,7 @@ node_modules/send
 <p class="lead">Bạn rà soát kỹ code của mình. Nhưng trong những thứ đang chạy trên production, bao nhiêu phần thật sự do bạn viết? Ta đếm thử.</p>
 
 <h3>Một phụ thuộc, sáu mươi bảy gói</h3>
-<pre><code>npm init -y
+<pre><code class="language-bash">npm init -y
 npm i express@4
 ls node_modules | wc -l</code></pre>
 <div class="out">số gói trong node_modules : 67
@@ -413,23 +413,23 @@ kích thước node_modules   : 3.9M</div>
 
 <h3>Việc cài đặt có chạy code — trước cả khi bạn import gì</h3>
 <p>Một gói có thể khai báo các script vòng đời để npm tự động chạy lúc cài. Đây là một gói vô hại mà nhiệm vụ duy nhất là chứng minh điều đó:</p>
-<pre><code>{
+<pre><code class="language-javascript">{
   <span class="tok-string">"name"</span>: <span class="tok-string">"goi-vo-hai"</span>,
   <span class="tok-string">"scripts"</span>: {
     <span class="tok-string">"postinstall"</span>: <span class="tok-string">"node -e \\"require('fs').writeFileSync(os.homedir()+'/.no-la-toi-day.txt', ...)\\""</span>
   }
 }</code></pre>
-<pre><code>npm install ./goi-vo-hai     <span class="tok-comment"># ta chưa hề import nó</span>
+<pre><code class="language-bash">npm install ./goi-vo-hai     <span class="tok-comment"># ta chưa hề import nó</span>
 ls ~/.no-la-toi-day.txt</code></pre>
 <div class="out">⚠️  File đã bị tạo ở thư mục HOME: "script nay da chay luc npm install"</div>
 <p>Hãy đọc lại: <strong>không import, không require, không một dòng code nào của ta chạy</strong> — vậy mà gói đó đã ghi được một file ra ngoài phạm vi dự án. Kẻ tấn công thật sẽ đọc biến môi trường, khoá SSH hoặc thông tin đăng nhập đám mây của bạn thay vì ghi một file vô hại.</p>
-<pre><code>npm install --ignore-scripts ./goi-vo-hai</code></pre>
+<pre><code class="language-bash">npm install --ignore-scripts ./goi-vo-hai</code></pre>
 <div class="out">✅ KHÔNG có file — script đã bị chặn</div>
 <div class="callout warn"><code>--ignore-scripts</code> là một mặc định tốt cho CI. Nhưng lưu ý vài gói chính đáng cần script cài đặt để biên dịch mã native (sharp, bcrypt, better-sqlite3) — nên hãy thử kỹ trước khi áp dụng toàn cục. Bạn có thể bật vĩnh viễn bằng <code>npm config set ignore-scripts true</code> rồi mở ngoại lệ cho từng gói.</div>
 
 <h3>Ghim phiên bản cũng KHÔNG tự động an toàn</h3>
 <p>Bài 4.2 đã bênh vực lockfile. Đây là mặt đối trọng — vẫn đúng bản express 4.18.0 mà ta vừa ghim:</p>
-<pre><code>npm audit</code></pre>
+<pre><code class="language-bash">npm audit</code></pre>
 <div class="out">send  &lt;0.19.0
 send vulnerable to template injection that can lead to XSS
 node_modules/send

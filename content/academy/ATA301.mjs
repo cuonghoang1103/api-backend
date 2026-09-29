@@ -6,7 +6,7 @@
  * 8 chương: Dow Theory → biểu đồ/mô hình giá → xu hướng/hỗ trợ-kháng cự →
  * chỉ báo xu hướng (MA/MACD) → chỉ báo dao động (RSI/Stochastic) → khối lượng
  * → Elliott/Fibonacci → hệ thống giao dịch & quản lý rủi ro. Số ví dụ trong
- * <pre><code> đều là GIẢ ĐỊNH minh hoạ — KHÔNG phải khuyến nghị đầu tư.
+ * <pre><code class="language-javascript"> đều là GIẢ ĐỊNH minh hoạ — KHÔNG phải khuyến nghị đầu tư.
  * Giữ NGUYÊN slug/semester/thumb(v3). ⚠️ KHÔNG backtick/${; "\n"→\\n.
  */
 const bi = (en, vi) => `<div class="ml-en">${en}</div>\n<div class="ml-vi">${vi}</div>`;

@@ -633,7 +633,7 @@ const shutdown = async (signal: string) =&gt; {
   });
   setTimeout(() =&gt; process.exit(1), HARD_LIMIT_MS).unref();   // 4. backstop
 };</code></pre>
-<pre><code>Why the sleep is not a hack — it is the only correct answer:
+<pre><code class="language-bash">Why the sleep is not a hack — it is the only correct answer:
 
   The load balancer discovers you are unready by POLLING.
   There is no push. So the minimum honest wait is:

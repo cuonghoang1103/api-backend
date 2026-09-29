@@ -227,7 +227,7 @@ SDP (Semidefinite Program):
   minimize c^T x   s.t.  x1 F1 + ... + xn Fn + G  is psd
 </code></pre>
 <p>Nesting: <strong>LP &lt;= QP &lt;= SOCP &lt;= SDP</strong> — a solver for the bigger class handles the smaller ones.</p>
-<pre><code># CVXPY: a tiny LP
+<pre><code class="language-python"># CVXPY: a tiny LP
 import cvxpy as cp
 x = cp.Variable(2)
 prob = cp.Problem(cp.Minimize(x[0] + x[1]),
@@ -252,7 +252,7 @@ SDP (Quy hoạch nửa xác định):
   minimize c^T x   s.t.  x1 F1 + ... + xn Fn + G  nửa xác định dương
 </code></pre>
 <p>Bao hàm: <strong>LP &lt;= QP &lt;= SOCP &lt;= SDP</strong> — bộ giải cho lớp lớn hơn xử lý được lớp nhỏ hơn.</p>
-<pre><code># CVXPY: một LP nhỏ
+<pre><code class="language-python"># CVXPY: một LP nhỏ
 import cvxpy as cp
 x = cp.Variable(2)
 prob = cp.Problem(cp.Minimize(x[0] + x[1]),

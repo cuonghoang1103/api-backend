@@ -114,7 +114,7 @@ export default {
 <li><strong>"Data structure: A structure of data stored"</strong> — this is the slide where the term enters the course. A data structure is a decision about <em>how the bytes are laid out</em>, and the array is the simplest such decision there is.</li>
 <li><strong>The five operations</strong> — <em>Add, Search, Remove, Update, Sort</em>. Notice what is easy and what is hard in a contiguous block: <em>Search</em> by index is instant, but <em>Add</em> and <em>Remove</em> in the middle require shifting everything after it, because the block may not have holes.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     int a[10];                          /* nhom 10 so nguyen */
@@ -132,7 +132,7 @@ int main(void) {
 <li><strong>"Cấu trúc dữ liệu: cách dữ liệu được tổ chức khi lưu"</strong> — đây là slide mà thuật ngữ ấy bước vào môn học. Cấu trúc dữ liệu là một quyết định về <em>cách xếp các byte</em>, và mảng là quyết định đơn giản nhất có thể có.</li>
 <li><strong>Năm thao tác</strong> — <em>Thêm, Tìm, Xoá, Sửa, Sắp xếp</em>. Hãy để ý cái gì dễ và cái gì khó trong một khối liền kề: <em>Tìm</em> theo chỉ số là tức thì, nhưng <em>Thêm</em> và <em>Xoá</em> ở giữa thì phải dồn toàn bộ phần phía sau, vì khối không được phép có lỗ hổng.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     int a[10];                          /* nhom 10 so nguyen */
@@ -172,7 +172,7 @@ int main(void) {
 <li><strong>The picture</strong> — same ten-box row as slide 5, with <code>a[3] = 15</code> marked. Copy this picture into your notes: whenever an exercise confuses you, redraw the boxes and write indexes underneath.</li>
 <li><strong>Same type, single value</strong> — every box holds exactly one value of the declared type. An <code>int</code> array box cannot hold a <code>double</code>; C will silently convert and truncate rather than complain.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     int guard = 111;
@@ -195,7 +195,7 @@ int main(void) {
 <li><strong>Hình vẽ</strong> — vẫn là hàng mười ô như slide 5, có đánh dấu <code>a[3] = 15</code>. Hãy chép hình này vào vở: mỗi khi một bài tập làm bạn rối, vẽ lại các ô và ghi chỉ số bên dưới.</li>
 <li><strong>Cùng kiểu, một giá trị</strong> — mỗi ô giữ đúng một giá trị thuộc kiểu đã khai. Ô của mảng <code>int</code> không giữ được <code>double</code>; C sẽ âm thầm ép kiểu và cắt phần thập phân chứ không kêu ca.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     int guard = 111;
@@ -220,7 +220,7 @@ int main(void) {
 <li><strong>The stack segment</strong> — from Slot 10: local variables live there and vanish when the function returns. So a static array is automatically cleaned up, and equally automatically <em>gone</em> the moment you leave the function. Never <code>return</code> a pointer to a local array.</li>
 <li><strong>Declaration does not mean initialisation</strong> — <code>int a1[5];</code> reserves 20 bytes and puts <em>nothing</em> in them. Slide 11 comes back to this in a bright pink box.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #define MAXN 100
 
 int main(void) {
@@ -242,7 +242,7 @@ int main(void) {
 <li><strong>Vùng stack</strong> — nhắc lại từ Slot 10: biến cục bộ sống ở đó và biến mất khi hàm kết thúc. Nên mảng tĩnh được dọn tự động, và cũng tự động <em>mất</em> ngay khi bạn rời khỏi hàm. Đừng bao giờ <code>return</code> một con trỏ tới mảng cục bộ.</li>
 <li><strong>Khai báo không phải là khởi tạo</strong> — <code>int a1[5];</code> giữ 20 byte và đặt vào đó… <em>không gì cả</em>. Slide 11 sẽ quay lại chuyện này bằng một khung màu hồng chói.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #define MAXN 100
 
 int main(void) {
@@ -266,7 +266,7 @@ int main(void) {
 <li><strong>Heap vs stack — the real reason to bother</strong> — the size may come from the user (<code>scanf("%d", &amp;n)</code> then <code>calloc(n, sizeof(int))</code>), the block survives after the function that created it returns, and it can be <strong>resized</strong> with <code>realloc</code>. Slides 17-20 are built entirely on these three advantages.</li>
 <li><strong>The price</strong> — you must <code>free()</code> it yourself. The stack cleans up; the heap does not.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 
 int main(void) {
@@ -296,7 +296,7 @@ int main(void) {
 <li><strong>Heap so với stack — lý do thật sự để đổi</strong> — kích thước có thể đến từ người dùng (<code>scanf("%d", &amp;n)</code> rồi <code>calloc(n, sizeof(int))</code>), khối sống sót cả sau khi hàm tạo ra nó kết thúc, và nó <strong>đổi được kích thước</strong> bằng <code>realloc</code>. Slide 17-20 dựng hoàn toàn trên ba lợi thế này.</li>
 <li><strong>Cái giá phải trả</strong> — bạn phải tự <code>free()</code>. Stack tự dọn; heap thì không.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 
 int main(void) {
@@ -365,7 +365,7 @@ int main(void) {
 <li><strong>Why the slide insists on the pointer form</strong> — because in three slides' time the array will arrive inside a function as a bare pointer, and there the pointer form is all you have. The school's own Solution on slide 20 writes every loop as <code>*(a + i)</code> for exactly this reason.</li>
 <li><strong>A consequence that surprises everyone</strong> — since <code>a[i]</code> means <code>*(a+i)</code> and addition commutes, <code>i[a]</code> is legal C and means the same thing. Never write it; do recognise it in a trick question.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     int a[] = {2, 4, 6, -2};
@@ -385,7 +385,7 @@ int main(void) {
 <li><strong>Vì sao slide nhấn mạnh dạng con trỏ</strong> — vì chỉ ba slide nữa thôi, mảng sẽ bước vào hàm dưới dạng một con trỏ trần, và ở đó dạng con trỏ là tất cả những gì bạn có. Bài Solution của chính trường ở slide 20 viết mọi vòng lặp bằng <code>*(a + i)</code> đúng vì lý do này.</li>
 <li><strong>Một hệ quả làm ai cũng ngạc nhiên</strong> — vì <code>a[i]</code> nghĩa là <code>*(a+i)</code> mà phép cộng có tính giao hoán, nên <code>i[a]</code> là C hợp lệ và có cùng nghĩa. Đừng bao giờ viết như thế; nhưng hãy nhận ra nó khi gặp câu hỏi mẹo.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     int a[] = {2, 4, 6, -2};
@@ -406,7 +406,7 @@ int main(void) {
 <li><strong>The one-element shortcut</strong> — because partial initialisation zero-fills, <code>int a[100] = {0};</code> zeroes all hundred elements. Memorise it; it is the cheapest way to start a counting array.</li>
 <li><strong>What is NOT allowed</strong> — you cannot assign a whole array after declaration: <code>int a[3]; a = {1,2,3};</code> is a compile error. Initialisation with braces happens only at the declaration.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     int a[] = {2, 4, 6, -2};        /* trinh bien dich TU dem: 4 phan tu */
@@ -427,7 +427,7 @@ int main(void) {
 <li><strong>Mẹo một phần tử</strong> — vì khởi tạo thiếu sẽ đổ 0 cho phần còn lại, nên <code>int a[100] = {0};</code> làm sạch cả trăm phần tử. Hãy thuộc lòng; đó là cách rẻ nhất để bắt đầu một mảng đếm.</li>
 <li><strong>Điều KHÔNG được phép</strong> — bạn không gán được cả mảng sau khi khai báo: <code>int a[3]; a = {1,2,3};</code> là lỗi biên dịch. Khởi tạo bằng ngoặc nhọn chỉ xảy ra ngay tại chỗ khai báo.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     int a[] = {2, 4, 6, -2};        /* trinh bien dich TU dem: 4 phan tu */
@@ -451,7 +451,7 @@ int main(void) {
 <li><strong>When direction matters</strong> — printing in reverse, finding the <em>last</em> occurrence rather than the first, or shifting elements right to insert (you must copy from the end or you overwrite what you have not copied yet).</li>
 <li><strong>Declare <code>i</code> outside the loop</strong> — the slide writes <code>int i;</code> above the <code>for</code>. In C89 (the Dev-C++ default in labs) declaring inside the <code>for</code> header is rejected. Follow the slide's style in exams.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     int a[6] = {3, 5, 8, 1, 2, 0};
@@ -477,7 +477,7 @@ int main(void) {
 <li><strong>Khi nào chiều duyệt mới quan trọng</strong> — in ngược, tìm vị trí xuất hiện <em>cuối cùng</em> thay vì đầu tiên, hoặc dồn phần tử sang phải để chèn (phải chép từ cuối lên, không thì bạn đè lên chính thứ chưa kịp chép).</li>
 <li><strong>Khai <code>i</code> ở ngoài vòng lặp</strong> — slide viết <code>int i;</code> phía trên chữ <code>for</code>. Theo C89 (mặc định của Dev-C++ trong phòng lab), khai báo ngay trong dấu ngoặc của <code>for</code> bị từ chối. Trong phòng thi hãy theo đúng lối viết của slide.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     int a[6] = {3, 5, 8, 1, 2, 0};
@@ -503,7 +503,7 @@ int main(void) {
 <li><strong><code>int a[]</code> and <code>int *a</code> are the same thing here</strong> — in a parameter list only. The slide deliberately mixes both spellings so you stop believing there is a difference. Elsewhere (a local declaration) they are completely different.</li>
 <li><strong>Example 2 is the odd one</strong> — <code>void input(int a[], int *pn)</code> passes <em>a pointer to</em> the count, because that function must also <em>report back</em> how many values it read. That is exactly Exercise 1 on slides 22-24; hold the thought.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 void f(int a[], int n) {
     printf("  trong ham: sizeof(a) = %zu -&gt; n tinh duoc = %zu (SAI)\\n",
@@ -534,7 +534,7 @@ int main(void) {
 <li><strong><code>int a[]</code> và <code>int *a</code> là một</strong> — chỉ trong danh sách tham số. Slide cố tình trộn cả hai lối viết để bạn thôi tin rằng chúng khác nhau. Ở chỗ khác (khai báo biến cục bộ) thì chúng khác nhau hoàn toàn.</li>
 <li><strong>Ví dụ 2 là ví dụ lạ</strong> — <code>void input(int a[], int *pn)</code> truyền <em>con trỏ tới</em> số lượng, vì hàm đó còn phải <em>báo ngược về</em> nó đã đọc được bao nhiêu giá trị. Đó đúng là bài Exercise 1 ở slide 22-24; hãy giữ ý này lại.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 void f(int a[], int n) {
     printf("  trong ham: sizeof(a) = %zu -&gt; n tinh duoc = %zu (SAI)\\n",
@@ -590,7 +590,7 @@ int main(void) {
 <li><strong>Line 29, <code>while(getchar() != '\\n');</code></strong> — clearing the input buffer, exactly the technique from Slot 06's <code>scanf</code> traps. Without it the leftover newline would be swallowed by a later read.</li>
 <li><strong>The console is the acceptance test</strong> — 6 elements, values <code>3 5 8 1 2 0</code> → <code>Max value: 8</code>, <code>Inputted array: 3 5 8 1 2 0</code>, <code>Even values in array: 8 2 0</code>.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #define MAXN 100
 
 /* Prototypes */
@@ -626,7 +626,7 @@ int main() {
 <li><strong>Dòng 29, <code>while(getchar() != '\\n');</code></strong> — dọn vùng đệm bàn phím, đúng kỹ thuật đã học ở các bẫy <code>scanf</code> của Slot 06. Không có nó thì ký tự xuống dòng còn sót sẽ bị một lệnh đọc sau nuốt mất.</li>
 <li><strong>Khung console chính là bài kiểm nghiệm thu</strong> — 6 phần tử, giá trị <code>3 5 8 1 2 0</code> → <code>Max value: 8</code>, <code>Inputted array: 3 5 8 1 2 0</code>, <code>Even values in array: 8 2 0</code>.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #define MAXN 100
 
 /* Prototypes */
@@ -664,7 +664,7 @@ int main() {
 <li><strong><code>printEven(int *a, int n)</code>, lines 64-72</strong> — the same loop plus the optional <code>if</code> from slide 12: <code>if (a[i] % 2 == 0) printf("%d ", a[i]);</code>.</li>
 <li><strong>Four functions, one skeleton</strong> — <code>for (i = 0; i &lt; n; i++) { … }</code>. Learn the skeleton and you have all four; learn the four separately and you will forget them.</li>
 </ul>
-<pre><code>void input(int *a, int n) {
+<pre><code class="language-c">void input(int *a, int n) {
     int i;
     for (i = 0; i &lt; n; i++) { scanf("%d", &amp;a[i]); }
 }
@@ -693,7 +693,7 @@ void printEven(int *a, int n) {
 <li><strong><code>printEven(int *a, int n)</code>, dòng 64-72</strong> — vẫn vòng lặp ấy cộng thêm câu <code>if</code> tuỳ chọn của slide 12: <code>if (a[i] % 2 == 0) printf("%d ", a[i]);</code>.</li>
 <li><strong>Bốn hàm, một bộ xương</strong> — <code>for (i = 0; i &lt; n; i++) { … }</code>. Thuộc bộ xương thì có cả bốn; học thuộc riêng lẻ bốn cái thì sẽ quên.</li>
 </ul>
-<pre><code>void input(int *a, int n) {
+<pre><code class="language-c">void input(int *a, int n) {
     int i;
     for (i = 0; i &lt; n; i++) { scanf("%d", &amp;a[i]); }
 }
@@ -746,7 +746,7 @@ void printEven(int *a, int n) {
 <li><strong>Lines 6-9 — the prototypes gained <code>const</code></strong>: <code>int max(const int *a, int n)</code>, <code>void print(const int *a, int n)</code>, <code>void printEven(const int *a, int n)</code>, while <code>input</code> stays plain <code>int *a</code>. That is a precise statement of intent: <em>input writes to the array, the other three only read it</em>. The compiler now rejects an accidental write inside those three.</li>
 <li><strong>Line 28 — <code>input(a, n);</code> is unchanged</strong>. A dynamic array is passed to a function exactly like a static one, because slide 13 showed the function receives a pointer either way.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 #define MAXN 100
 
@@ -783,7 +783,7 @@ int main() {
 <li><strong>Dòng 6-9 — các nguyên mẫu được thêm <code>const</code></strong>: <code>int max(const int *a, int n)</code>, <code>void print(const int *a, int n)</code>, <code>void printEven(const int *a, int n)</code>, riêng <code>input</code> vẫn là <code>int *a</code> trần. Đó là một lời tuyên bố ý định rất chính xác: <em>input GHI vào mảng, ba hàm kia chỉ ĐỌC</em>. Từ nay trình biên dịch sẽ bác bỏ mọi lệnh ghi lỡ tay trong ba hàm đó.</li>
 <li><strong>Dòng 28 — <code>input(a, n);</code> không đổi một chữ</strong>. Mảng động truyền vào hàm y hệt mảng tĩnh, vì slide 13 đã chỉ ra rằng đằng nào hàm cũng chỉ nhận một con trỏ.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 #define MAXN 100
 
@@ -823,7 +823,7 @@ int main() {
 <li><strong>Lines 51-56 — fill only the new tail</strong>: <code>input(a + n, newSize - n);</code>. This is the cleverest line on the slide. <code>a + n</code> is the address of the first <em>new</em> box, and <code>newSize - n</code> is how many there are. The same <code>input</code> function, aimed at a sub-range.</li>
 <li><strong>Line 61 — <code>free(a);</code></strong>, the obligation that came with the heap.</li>
 </ul>
-<pre><code>    maxVal = max(a, n);
+<pre><code class="language-c">    maxVal = max(a, n);
     printf("\\nMax value: %d\\n", maxVal);
     printf("\\nInputted array: ");       print(a, n);
     printf("\\nEven values in array: "); printEven(a, n);
@@ -858,7 +858,7 @@ int main() {
 <li><strong>Dòng 51-56 — chỉ nhập phần đuôi mới</strong>: <code>input(a + n, newSize - n);</code>. Đây là dòng khéo nhất trên slide. <code>a + n</code> là địa chỉ ô <em>mới</em> đầu tiên, còn <code>newSize - n</code> là số ô mới. Vẫn hàm <code>input</code> ấy, chỉ nhắm vào một đoạn con.</li>
 <li><strong>Dòng 61 — <code>free(a);</code></strong>, nghĩa vụ đi kèm với heap.</li>
 </ul>
-<pre><code>    maxVal = max(a, n);
+<pre><code class="language-c">    maxVal = max(a, n);
     printf("\\nMax value: %d\\n", maxVal);
     printf("\\nInputted array: ");       print(a, n);
     printf("\\nEven values in array: "); printEven(a, n);
@@ -894,7 +894,7 @@ int main() {
 <li><strong>Why learn both notations</strong> — they compile to identical machine code, so this is not about speed. It is about reading other people's C, and about the moment in Slot 16-18 when you walk a string with <code>*(s + i)</code> or <code>*s++</code> and the bracket form stops being natural.</li>
 <li><strong>The parameters are <code>const int *a</code></strong> in three of the four — the compiler now guarantees that <code>max</code>, <code>print</code> and <code>printEven</code> cannot modify the caller's array, which is the one risk that came with array decay.</li>
 </ul>
-<pre><code>/* Function definitions */
+<pre><code class="language-c">/* Function definitions */
 void input(int *a, int n) {
     for (int i = 0; i &lt; n; i++) { scanf("%d", a + i); }         /* KHONG co &amp; */
 }
@@ -926,7 +926,7 @@ void printEven(const int *a, int n) {
 <li><strong>Vì sao phải học cả hai lối viết</strong> — chúng dịch ra mã máy y hệt nhau, nên chuyện này không liên quan tới tốc độ. Nó liên quan tới việc đọc mã C của người khác, và tới khoảnh khắc ở Slot 16-18 khi bạn đi trên một chuỗi bằng <code>*(s + i)</code> hay <code>*s++</code>, lúc đó dạng ngoặc vuông không còn tự nhiên nữa.</li>
 <li><strong>Tham số là <code>const int *a</code></strong> ở ba trong bốn hàm — trình biên dịch nay bảo đảm <code>max</code>, <code>print</code> và <code>printEven</code> không thể sửa mảng của nơi gọi, tức là chặn đúng cái rủi ro đi kèm với hiện tượng suy biến mảng.</li>
 </ul>
-<pre><code>/* Dinh nghia cac ham */
+<pre><code class="language-c">/* Dinh nghia cac ham */
 void input(int *a, int n) {
     for (int i = 0; i &lt; n; i++) { scanf("%d", a + i); }         /* KHONG co &amp; */
 }
@@ -1008,7 +1008,7 @@ void printEven(const int *a, int n) {
 <li><strong>Lines 15-20 — unchanged from Demo 1</strong>: <code>max(a, n)</code>, <code>print(a, n)</code>, <code>printEven(a, n)</code>. Once <code>n</code> is known, everything downstream is the code you already have.</li>
 <li><strong>Check the console by hand</strong> — values 2, 3, 1, 8, 9, 5 (the 0 is the terminator and is <em>not</em> stored, so <code>n</code> is 6, not 7). Max = 9. Even values = 2 and 8. This time 0 does <strong>not</strong> appear among the even values, precisely because it was consumed as the sentinel — the contrast with slide 21 is worth a moment.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #define MAXN 100
 /* Input an array, number of elements is stored at pn.
    User will terminate inputting when 0 is entered. */
@@ -1040,7 +1040,7 @@ int main()
 <li><strong>Dòng 15-20 — giữ nguyên như Demo 1</strong>: <code>max(a, n)</code>, <code>print(a, n)</code>, <code>printEven(a, n)</code>. Một khi đã biết <code>n</code>, mọi thứ phía sau chính là đoạn mã bạn đã có sẵn.</li>
 <li><strong>Kiểm khung console bằng tay</strong> — các giá trị 2, 3, 1, 8, 9, 5 (số 0 là dấu kết thúc và <em>không</em> được lưu, nên <code>n</code> bằng 6 chứ không phải 7). Lớn nhất = 9. Số chẵn = 2 và 8. Lần này số 0 <strong>không</strong> xuất hiện trong danh sách số chẵn, đúng vì nó đã bị dùng làm giá trị canh — chỗ tương phản với slide 21 đáng dừng lại một nhịp.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #define MAXN 100
 /* Nhap mang, so phan tu duoc luu tai pn.
    Nguoi dung ket thuc nhap khi go so 0.   */
@@ -1074,7 +1074,7 @@ int main()
 <li><strong>Read the two diagrams</strong> — first: <code>x = 3</code> arrives, the box at index 0 gets 3, and the label says <code>n = 0 → 1</code>. Second: the array already holds <code>3 5 2</code> with <code>n = 3</code>, <code>x = 7</code> arrives, it goes into index 3, and <code>n = 3 → 4</code>. The pictures are the semantics of <code>a[(*pn)++] = x</code>.</li>
 <li><strong>Line 32 — <code>while (x != 0 &amp;&amp; *pn &lt; MAXN);</code></strong>, the two exit conditions of slide 22: sentinel reached, or array full.</li>
 </ul>
-<pre><code>void input(int *a, int *pn)
+<pre><code class="language-c">void input(int *a, int *pn)
 {   *pn = 0;                        /* reset the number of elements */
     printf("Enter maximum %d elements, 0 for termination\\n", MAXN);
     int x;                          /* inputted value */
@@ -1109,7 +1109,7 @@ void printEven(int *a, int n)
 <li><strong>Đọc hai sơ đồ</strong> — hình thứ nhất: <code>x = 3</code> đi vào, ô ở chỉ số 0 nhận số 3, và nhãn ghi <code>n = 0 → 1</code>. Hình thứ hai: mảng đã có <code>3 5 2</code> với <code>n = 3</code>, <code>x = 7</code> đi vào, rơi vào chỉ số 3, và <code>n = 3 → 4</code>. Hai hình ấy chính là ngữ nghĩa của <code>a[(*pn)++] = x</code>.</li>
 <li><strong>Dòng 32 — <code>while (x != 0 &amp;&amp; *pn &lt; MAXN);</code></strong>, đúng hai điều kiện thoát của slide 22: gặp giá trị canh, hoặc mảng đã đầy.</li>
 </ul>
-<pre><code>void input(int *a, int *pn)
+<pre><code class="language-c">void input(int *a, int *pn)
 {   *pn = 0;                        /* dat lai so phan tu */
     printf("Enter maximum %d elements, 0 for termination\\n", MAXN);
     int x;                          /* gia tri vua nhap   */

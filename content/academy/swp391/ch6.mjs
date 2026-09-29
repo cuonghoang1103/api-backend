@@ -128,7 +128,7 @@ const L61 = {
 </tbody>
 </table>
 <p class="nhan">A links file the teacher can use in 30 seconds</p>
-<pre>SE18xx - G5 - Job IT for Freelancer - Iteration 2
+<pre><code class="language-xml">SE18xx - G5 - Job IT for Freelancer - Iteration 2
 Tag (source + DB scripts): https://gitlab.com/&lt;group&gt;/&lt;project&gt;/-/tags/iter2
 DB scripts in the tag:     database/iter2/01_schema.sql, 02_data.sql (MySQL 8.0)
 Demo accounts:             see database/iter2/README.md (one per role)
@@ -137,19 +137,19 @@ Member  Screens this iteration                 Video
 M1      Apply Job, List Apply                  https://…
 M2      Create Post, Update Post, My Posts     https://…
 M3      Manage Applicants, Change Status        https://…
-M4      Dashboard (Recruiter), Mark Freelancer https://…</pre>
+M4      Dashboard (Recruiter), Mark Freelancer https://…</code></pre>
 <h3>The same tag from the command line</h3>
-<pre>git switch main
+<pre><code class="language-bash">git switch main
 git pull origin main                    # the merged state everyone tested
 git log --oneline -5                    # check the top commit is the one Round 3 ran on
 git tag -a iter2 -m "Iteration 2: Apply Job, Create/Update Post, Manage Applicants, Dashboard; DB script database/iter2"
 git push origin iter2                   # a tag is NOT pushed by a normal git push
-git show iter2                          # tagger, date, message, commit</pre>
+git show iter2                          # tagger, date, message, commit</code></pre>
 <p class="nhan">Wrong commit tagged? Fix it before the deadline, and say so</p>
-<pre>git tag -d iter2                        # delete locally
+<pre><code class="language-bash">git tag -d iter2                        # delete locally
 git push origin --delete iter2          # delete on GitLab
 git tag -a iter2 &lt;right-sha&gt; -m "…"     # re-create on the right commit
-git push origin iter2</pre>
+git push origin iter2</code></pre>
 <div class="pitfall co-tieu-de"><strong>Never move a tag after the deadline.</strong> The teacher may already have cloned it; changing it silently looks like submitting late. If you must, tell the teacher in Slack and keep the old one as <code>iter2-old</code>.</div>
 <div class="pitfall co-tieu-de"><strong>Tagging before the DB script is committed.</strong> The tag then holds code that expects tables the teacher does not have. Commit <code>database/iterN/</code> first, run it on an empty schema (lesson 6.2), then tag.</div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <strong>Semantic versions next to iteration tags.</strong> Industry tags releases as MAJOR.MINOR.PATCH. You can add <code>v0.1.0</code>, <code>v0.2.0</code>, <code>v1.0.0</code> on the same commits as <code>iter1–3</code>, and <code>v0.2.1</code> for a fix after a Leakage. <code>git describe --tags</code> then tells anyone which release a build came from.</div>`,
@@ -166,7 +166,7 @@ git push origin iter2</pre>
 </tbody>
 </table>
 <p class="nhan">Một file link giáo viên dùng được trong 30 giây</p>
-<pre>SE18xx - G5 - Job IT for Freelancer - Iteration 2
+<pre><code class="language-xml">SE18xx - G5 - Job IT for Freelancer - Iteration 2
 Tag (source + DB scripts): https://gitlab.com/&lt;group&gt;/&lt;project&gt;/-/tags/iter2
 DB scripts in the tag:     database/iter2/01_schema.sql, 02_data.sql (MySQL 8.0)
 Demo accounts:             see database/iter2/README.md (one per role)
@@ -175,19 +175,19 @@ Member  Screens this iteration                 Video
 M1      Apply Job, List Apply                  https://…
 M2      Create Post, Update Post, My Posts     https://…
 M3      Manage Applicants, Change Status        https://…
-M4      Dashboard (Recruiter), Mark Freelancer https://…</pre>
+M4      Dashboard (Recruiter), Mark Freelancer https://…</code></pre>
 <h3>Cùng cái tag đó bằng dòng lệnh</h3>
-<pre>git switch main
+<pre><code class="language-bash">git switch main
 git pull origin main                    # trạng thái đã merge mà cả nhóm đã test
 git log --oneline -5                    # kiểm commit trên cùng đúng là commit Round 3 đã chạy
 git tag -a iter2 -m "Iteration 2: Apply Job, Create/Update Post, Manage Applicants, Dashboard; DB script database/iter2"
 git push origin iter2                   # git push thường KHÔNG đẩy tag lên
-git show iter2                          # người tạo, ngày, mô tả, commit</pre>
+git show iter2                          # người tạo, ngày, mô tả, commit</code></pre>
 <p class="nhan">Gắn nhầm commit? Sửa trước hạn nộp, và báo cho giáo viên</p>
-<pre>git tag -d iter2                        # xoá ở máy
+<pre><code class="language-bash">git tag -d iter2                        # xoá ở máy
 git push origin --delete iter2          # xoá trên GitLab
 git tag -a iter2 &lt;sha-đúng&gt; -m "…"      # tạo lại trên đúng commit
-git push origin iter2</pre>
+git push origin iter2</code></pre>
 <div class="pitfall co-tieu-de"><strong>Đừng bao giờ dời tag sau hạn nộp.</strong> Giáo viên có thể đã clone về rồi; lặng lẽ đổi tag trông y như nộp muộn. Nếu buộc phải đổi, báo giáo viên trên Slack và giữ tag cũ dưới tên <code>iter2-old</code>.</div>
 <div class="pitfall co-tieu-de"><strong>Gắn tag trước khi commit DB script.</strong> Khi đó tag chứa code cần những bảng giáo viên không có. Commit <code>database/iterN/</code> trước, chạy thử trên một schema trống (bài 6.2), rồi mới gắn tag.</div>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <strong>Semantic version song song với tag iteration.</strong> Trong ngành, bản phát hành được gắn tag MAJOR.MINOR.PATCH. Bạn có thể thêm <code>v0.1.0</code>, <code>v0.2.0</code>, <code>v1.0.0</code> trên đúng các commit của <code>iter1–3</code>, và <code>v0.2.1</code> cho bản sửa sau một Leakage. Khi đó <code>git describe --tags</code> cho ai cũng biết một bản build đến từ bản phát hành nào.</div>`),
@@ -215,11 +215,11 @@ const L62 = {
 <li>plan, record and share a 3–5 minute demo that covers happy path, unhappy cases and data effects.</li>
 </ul></div>
 <h3>What goes into database/iterN/</h3>
-<pre>database/
+<pre><code class="language-sql">database/
   iter2/
     01_schema.sql     CREATE DATABASE + every table, key, index, view, procedure (whole DB, not a diff)
     02_data.sql       demo data: lookup tables first, then users, then posts, then applications
-    README.md         MySQL version, how to run, one demo account per role (demo passwords only)</pre>
+    README.md         MySQL version, how to run, one demo account per role (demo passwords only)</code></pre>
 <ul>
 <li><strong>Whole database, every iteration</strong> — the teacher should build the DB from zero with the scripts of ONE tag. Keep a <code>03_changes_from_iter1.sql</code> only as extra information.</li>
 <li><strong>Foreign-key order</strong> — Role → User → Freelancer / Recruiter → Categories, JobType, Duration → Post → JobApply. A dump from mysqldump handles this; a hand-written file must follow it.</li>
@@ -255,11 +255,11 @@ mysql -u root -p jobit &lt; database/iter2/02_data.sql
 <li>lên kịch bản, quay và chia sẻ video demo 3–5 phút phủ luồng chính, case không suôn sẻ và tác động lên dữ liệu.</li>
 </ul></div>
 <h3>Trong database/iterN/ có gì</h3>
-<pre>database/
+<pre><code class="language-sql">database/
   iter2/
     01_schema.sql     CREATE DATABASE + mọi bảng, khoá, index, view, procedure (cả DB, không phải phần chênh)
     02_data.sql       dữ liệu demo: bảng tra cứu trước, rồi user, rồi bài đăng, rồi đơn ứng tuyển
-    README.md         phiên bản MySQL, cách chạy, mỗi role một tài khoản demo (chỉ mật khẩu demo)</pre>
+    README.md         phiên bản MySQL, cách chạy, mỗi role một tài khoản demo (chỉ mật khẩu demo)</code></pre>
 <ul>
 <li><strong>Cả database, mỗi iteration</strong> — giáo viên phải dựng được DB từ số 0 chỉ với script của MỘT tag. Chỉ giữ <code>03_changes_from_iter1.sql</code> như thông tin thêm.</li>
 <li><strong>Thứ tự khoá ngoại</strong> — Role → User → Freelancer / Recruiter → Categories, JobType, Duration → Post → JobApply. Dump bằng mysqldump tự lo việc này; file viết tay phải tuân theo.</li>
@@ -402,7 +402,7 @@ const L63 = {
 </ol>`),
     bi(`<h3>Step 3 — configuration outside the code</h3>
 <p>The same WAR must run on your laptop, a teammate's laptop and a server. So the database address and passwords are read at run time, never typed into <code>DBContext.java</code>.</p>
-<pre>public class DBContext {
+<pre><code class="language-java">public class DBContext {
     public static Connection getConnection() throws SQLException {
         String url  = System.getenv().getOrDefault("DB_URL",
                 "jdbc:mysql://localhost:3306/jobit?useUnicode=true&amp;characterEncoding=UTF-8");
@@ -410,7 +410,7 @@ const L63 = {
         String pass = System.getenv("DB_PASSWORD");              // set on each machine, never committed
         return DriverManager.getConnection(url, user, pass);
     }
-}</pre>
+}</code></pre>
 <ul>
 <li><strong>Environment variables</strong> — set <code>DB_PASSWORD</code> in <code>tomcat/bin/setenv.bat</code> (Windows) or <code>setenv.sh</code>, which is not in Git.</li>
 <li><strong>Or a JNDI DataSource</strong> — a <code>&lt;Resource&gt;</code> in Tomcat's <code>conf/context.xml</code> gives connection pooling as well.</li>
@@ -432,7 +432,7 @@ EXPOSE 8080</pre>
 <p class="ghi-chu">Naming the WAR <code>ROOT.war</code> makes the app answer at <code>/</code> instead of <code>/jobit-1.0/</code>. For a deeper container guide see <a href="/exp-hub/docker" target="_blank" rel="noopener">Exp Hub › Docker</a>.</p>`,
     `<h3>Bước 3 — cấu hình nằm ngoài code</h3>
 <p>Cùng một file WAR phải chạy được trên laptop của bạn, laptop của bạn cùng nhóm và trên server. Vì vậy địa chỉ database và mật khẩu được đọc lúc chạy, không bao giờ gõ cứng vào <code>DBContext.java</code>.</p>
-<pre>public class DBContext {
+<pre><code class="language-java">public class DBContext {
     public static Connection getConnection() throws SQLException {
         String url  = System.getenv().getOrDefault("DB_URL",
                 "jdbc:mysql://localhost:3306/jobit?useUnicode=true&amp;characterEncoding=UTF-8");
@@ -440,7 +440,7 @@ EXPOSE 8080</pre>
         String pass = System.getenv("DB_PASSWORD");              // set on each machine, never committed
         return DriverManager.getConnection(url, user, pass);
     }
-}</pre>
+}</code></pre>
 <ul>
 <li><strong>Biến môi trường</strong> — đặt <code>DB_PASSWORD</code> trong <code>tomcat/bin/setenv.bat</code> (Windows) hoặc <code>setenv.sh</code>, file này không nằm trong Git.</li>
 <li><strong>Hoặc JNDI DataSource</strong> — một <code>&lt;Resource&gt;</code> trong <code>conf/context.xml</code> của Tomcat, được thêm cả connection pool.</li>
@@ -468,7 +468,7 @@ EXPOSE 8080</pre>
 <li>Put them in environment variables (as in Step 3) — never in the source.</li>
 <li>Invite the teammates to the inbox so every tester sees the e-mails.</li>
 </ol>
-<pre>// Jakarta Mail 2.x (Tomcat 10+); on Tomcat 9 use javax.mail 1.6 — same code, javax.* imports
+<pre><code class="language-java">// Jakarta Mail 2.x (Tomcat 10+); on Tomcat 9 use javax.mail 1.6 — same code, javax.* imports
 public class Mailer {
     public static void send(String to, String subject, String html) throws MessagingException {
         Properties p = new Properties();
@@ -488,7 +488,7 @@ public class Mailer {
         m.setContent(html, "text/html; charset=UTF-8");
         Transport.send(m);
     }
-}</pre>
+}</code></pre>
 <p class="nhan">Test cases for an e-mail feature</p>
 <ul>
 <li><strong>Arrives</strong> — exactly one e-mail per action, to the right address.</li>
@@ -506,7 +506,7 @@ public class Mailer {
 <li>Đặt chúng vào biến môi trường (như Bước 3) — không bao giờ vào source.</li>
 <li>Mời các bạn cùng nhóm vào inbox để tester nào cũng thấy e-mail.</li>
 </ol>
-<pre>// Jakarta Mail 2.x (Tomcat 10+); on Tomcat 9 use javax.mail 1.6 — same code, javax.* imports
+<pre><code class="language-java">// Jakarta Mail 2.x (Tomcat 10+); on Tomcat 9 use javax.mail 1.6 — same code, javax.* imports
 public class Mailer {
     public static void send(String to, String subject, String html) throws MessagingException {
         Properties p = new Properties();
@@ -526,7 +526,7 @@ public class Mailer {
         m.setContent(html, "text/html; charset=UTF-8");
         Transport.send(m);
     }
-}</pre>
+}</code></pre>
 <p class="nhan">Test case cho một tính năng e-mail</p>
 <ul>
 <li><strong>Có tới</strong> — đúng một e-mail cho mỗi thao tác, đúng địa chỉ nhận.</li>

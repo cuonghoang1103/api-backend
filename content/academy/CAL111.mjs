@@ -348,7 +348,7 @@ const c5 = doc('cal111-5-1-antiderivatives', '5.1 — Antiderivatives & indefini
 ∫ sin x dx    = -cos x + C
 </code></pre>
 <h3>Substitution — the reverse chain rule</h3>
-<pre><code>∫ 2x (x^2 + 1)^3 dx
+<pre><code class="language-javascript">∫ 2x (x^2 + 1)^3 dx
   let u = x^2 + 1  ->  du = 2x dx
   = ∫ u^3 du = u^4/4 + C = (x^2 + 1)^4 / 4 + C
 </code></pre>

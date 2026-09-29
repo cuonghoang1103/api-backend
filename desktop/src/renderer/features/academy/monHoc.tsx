@@ -41,6 +41,7 @@ import LessonQuizPlayer, { type QuizData } from '@/app/courses/[slug]/learn/Less
 import LessonPdfViewer from '@/app/courses/[slug]/learn/LessonPdfViewer';
 import { CourseRoadmapPanel } from '@/components/academy/CourseRoadmap';
 import { docSlide } from '@/components/academy/docSlide';
+import { useToMauCode } from '@/lib/toMauCode';
 import { khoaGiaSu, useGiaSuBaiStore, type LuotGiaSu } from '@/store/giaSuBaiStore';
 import { luotCanGui } from './dongBoGiaSu';
 import { duongTaiLieu, laBaiQuiz, locPdf, useChiTietBai, useChungChi, useTienDo, type TuyChonGoi } from './chiTietBai';
@@ -603,6 +604,15 @@ function DocBai({
     [ct?.teachingNotes],
   );
 
+  /* Tô màu code kiểu VS Code + nút "Sao chép" — dùng CHUNG bộ tô của web
+     (`@/lib/toMauCode`, highlight.js theo `language-*`). Trước bản này app đổ
+     HTML ra mà chưa bao giờ chạy bộ tô: code trong bài hiện toàn chữ trắng
+     (người dùng báo 29/09/2026), dù CSS `.hljs-*` đã có sẵn trong vùng cắt từ web. */
+  const khungNoiDungRef = useRef<HTMLDivElement | null>(null);
+  const khungGiangRef = useRef<HTMLDivElement | null>(null);
+  useToMauCode(() => khungNoiDungRef.current, [bai.id, html]);
+  useToMauCode(() => khungGiangRef.current, [bai.id, ghiChuGiang]);
+
   /* Đề của bài QUIZ. Máy chủ trả `quizData` dạng object; bản cũ có thể là
      CHUỖI JSON — nhận cả hai, vì một `JSON.parse` thiếu ở đây là trang trắng. */
   const deQuiz = useMemo<QuizData | null>(() => {
@@ -700,7 +710,7 @@ function DocBai({
       )}
 
       {html
-        ? <div className="ct-hv-noidung rich-content" data-ml="vi" dangerouslySetInnerHTML={{ __html: html }} />
+        ? <div ref={khungNoiDungRef} className="ct-hv-noidung rich-content" data-ml="vi" dangerouslySetInnerHTML={{ __html: html }} />
         : (
           <p className="ct-muted">
             Bài này chưa có nội dung chữ.{' '}
@@ -716,6 +726,7 @@ function DocBai({
           nhất của lời than "trên app desktop đăng sơ sài". */}
       {ghiChuGiang && (
         <div
+          ref={khungGiangRef}
           className="ct-hv-noidung rich-content"
           data-ml="vi"
           dangerouslySetInnerHTML={{ __html: ghiChuGiang }}

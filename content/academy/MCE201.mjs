@@ -442,7 +442,7 @@ const c8 = doc('mce201-8-1-digital-embedded-control', '8.1 — Digital control &
 <pre><code>ADC step (LSB) = Vref / 2^N
   12-bit, Vref=3.3V: step = 3.3 / 4096 = 0.806 mV</code></pre>
 <h3>Discrete PID (runs every Ts)</h3>
-<pre><code># Python: PID roi rac tren vi dieu khien
+<pre><code class="language-python"># Python: PID roi rac tren vi dieu khien
 integral = 0.0
 e_prev = 0.0
 def pid_step(setpoint, measured, Ts, Kp, Ki, Kd):
@@ -464,7 +464,7 @@ def pid_step(setpoint, measured, Ts, Kp, Ki, Kd):
 <pre><code>Buoc ADC (LSB) = Vref / 2^N
   12-bit, Vref=3.3V: buoc = 3.3 / 4096 = 0.806 mV</code></pre>
 <h3>PID rời rạc (chạy mỗi Ts)</h3>
-<pre><code># Python: PID roi rac tren vi dieu khien
+<pre><code class="language-python"># Python: PID roi rac tren vi dieu khien
 integral = 0.0
 e_prev = 0.0
 def pid_step(setpoint, measured, Ts, Kp, Ki, Kd):

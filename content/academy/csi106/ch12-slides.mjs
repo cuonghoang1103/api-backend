@@ -245,18 +245,18 @@ export default {
 <li><strong>The crucial contrast</strong> — cryptography hides the <em>meaning</em>; steganography hides the <em>existence</em>. They compose: encrypt first, then hide the ciphertext in an image, and the attacker must both notice and break it.</li>
 <li><strong>Hash functions — the service the slide never names, and you need it</strong> — a hash turns any input into a fixed-size fingerprint. The property that matters is the <strong>avalanche effect</strong>: change one character and the whole output changes. Measured here with <code>shasum -a 256</code>:</li>
 </ul>
-<pre>$ printf 'CSI106' | shasum -a 256
+<pre><code class="language-bash">$ printf 'CSI106' | shasum -a 256
 4bc85ba8afb7da19f02ab5a47c9eef02c278f1178a2126e8dcbce29c04deddf6
 $ printf 'CSI107' | shasum -a 256
-9af962875cc7128c6bbaeeef35c6fa409c380572f8cbe7e159e5fe13cca3fe12</pre>
+9af962875cc7128c6bbaeeef35c6fa409c380572f8cbe7e159e5fe13cca3fe12</code></pre>
 <p class="dap-an">✅ Result: one character changed (6 → 7) and <strong>every</strong> hex digit of the 64-character output is different. That is what makes a hash usable for integrity: a single flipped bit in a downloaded file gives a completely different checksum, so tampering cannot hide.</p>
 <ul>
 <li><strong>Why passwords must never be stored in plain form</strong> — anyone who reads the database (an attacker, or a curious administrator) instantly owns every account, on <em>every other site</em> where the user reused the password. Store the hash instead: to check a login you hash what was typed and compare.</li>
 <li><strong>And why the hash alone is not enough — salt</strong> — if two users choose the same password, their stored hashes are identical, and an attacker can precompute hashes of common passwords once and look them all up. A <em>salt</em> is a random string stored next to each user and mixed into the hash. Measured:</li>
 </ul>
-<pre>$ printf 'matkhau123'      | shasum -a 256 → fc8d5c17ee6bd893ac3d47583df509da68ada40070b9c9e1890cae52bc62de28
+<pre><code class="language-bash">$ printf 'matkhau123'      | shasum -a 256 → fc8d5c17ee6bd893ac3d47583df509da68ada40070b9c9e1890cae52bc62de28
 $ printf 'x7Kq9matkhau123'  | shasum -a 256 → 1c993083cb89dfa6655a285db8e77f447632b36d9e4600c5945debf26c7b68dc
-$ printf 'zP2vmatkhau123'   | shasum -a 256 → b256d1a2c310dd10eee2f51f6d767ed31dbd4a982cfc5e5c5fd10e2f308f2c9b</pre>
+$ printf 'zP2vmatkhau123'   | shasum -a 256 → b256d1a2c310dd10eee2f51f6d767ed31dbd4a982cfc5e5c5fd10e2f308f2c9b</code></pre>
 <p class="dap-an">✅ Same password, two different salts, two unrelated hashes. The precomputed table is now useless — it would have to be rebuilt for every salt. In production you go one step further and use a <em>slow</em> password hash (bcrypt, scrypt, Argon2) so that each guess costs real time; plain SHA-256 is far too fast for this job.</p>
 <p class="meo">💡 Mnemonic for the two Greek words: <strong>crypt</strong>o = crypt = a hidden <em>tomb</em>, the content is sealed; <strong>stegan</strong>o = a <em>cover</em> laid on top, you do not even see there is a tomb.</p>`,
         `<p class="y-chinh">🎯 Từ mục tiêu và tấn công chuyển sang <em>phòng vệ</em>. ITU-T định nghĩa các dịch vụ an toàn; slide gọi tên hai kỹ thuật hiện thực hoá chúng: <strong>mật mã học</strong> (tổng quát) và <strong>giấu tin</strong> (chuyên biệt).</p>
@@ -266,18 +266,18 @@ $ printf 'zP2vmatkhau123'   | shasum -a 256 → b256d1a2c310dd10eee2f51f6d767ed3
 <li><strong>Chỗ tương phản then chốt</strong> — mật mã học giấu <em>ý nghĩa</em>; giấu tin giấu <em>sự tồn tại</em>. Hai thứ ghép được với nhau: mã hoá trước, rồi giấu bản mã vào trong ảnh, thế là kẻ tấn công vừa phải nhận ra vừa phải phá được.</li>
 <li><strong>Hàm băm — dịch vụ mà slide không gọi tên, nhưng bạn cần nó</strong> — hàm băm biến mọi đầu vào thành một dấu vân tay có độ dài cố định. Tính chất đáng kể là <strong>hiệu ứng tuyết lở</strong>: đổi một ký tự thì toàn bộ đầu ra đổi. Đo thật bằng <code>shasum -a 256</code>:</li>
 </ul>
-<pre>$ printf 'CSI106' | shasum -a 256
+<pre><code class="language-bash">$ printf 'CSI106' | shasum -a 256
 4bc85ba8afb7da19f02ab5a47c9eef02c278f1178a2126e8dcbce29c04deddf6
 $ printf 'CSI107' | shasum -a 256
-9af962875cc7128c6bbaeeef35c6fa409c380572f8cbe7e159e5fe13cca3fe12</pre>
+9af962875cc7128c6bbaeeef35c6fa409c380572f8cbe7e159e5fe13cca3fe12</code></pre>
 <p class="dap-an">✅ Kết quả: đổi đúng một ký tự (6 → 7) và <strong>mọi</strong> chữ số hex trong 64 ký tự đầu ra đều khác. Chính điều đó khiến hàm băm dùng được cho tính toàn vẹn: một bit bị lật trong file vừa tải xuống cho ra một checksum hoàn toàn khác, nên việc can thiệp không giấu được.</p>
 <ul>
 <li><strong>Vì sao TUYỆT ĐỐI không lưu mật khẩu dạng thô</strong> — ai đọc được cơ sở dữ liệu (kẻ tấn công, hoặc một quản trị viên tò mò) là lập tức sở hữu mọi tài khoản, kể cả trên <em>mọi trang khác</em> mà người dùng xài lại mật khẩu ấy. Hãy lưu bản băm: muốn kiểm tra đăng nhập thì băm cái vừa gõ rồi so sánh.</li>
 <li><strong>Và vì sao chỉ băm thôi vẫn chưa đủ — cần salt</strong> — nếu hai người chọn cùng mật khẩu thì hai bản băm lưu lại giống hệt nhau, và kẻ tấn công chỉ cần tính trước bảng băm của các mật khẩu phổ biến một lần rồi tra hàng loạt. <em>Salt</em> là một chuỗi ngẫu nhiên lưu cạnh từng người dùng và trộn vào trước khi băm. Đo thật:</li>
 </ul>
-<pre>$ printf 'matkhau123'      | shasum -a 256 → fc8d5c17ee6bd893ac3d47583df509da68ada40070b9c9e1890cae52bc62de28
+<pre><code class="language-bash">$ printf 'matkhau123'      | shasum -a 256 → fc8d5c17ee6bd893ac3d47583df509da68ada40070b9c9e1890cae52bc62de28
 $ printf 'x7Kq9matkhau123'  | shasum -a 256 → 1c993083cb89dfa6655a285db8e77f447632b36d9e4600c5945debf26c7b68dc
-$ printf 'zP2vmatkhau123'   | shasum -a 256 → b256d1a2c310dd10eee2f51f6d767ed31dbd4a982cfc5e5c5fd10e2f308f2c9b</pre>
+$ printf 'zP2vmatkhau123'   | shasum -a 256 → b256d1a2c310dd10eee2f51f6d767ed31dbd4a982cfc5e5c5fd10e2f308f2c9b</code></pre>
 <p class="dap-an">✅ Cùng một mật khẩu, hai salt khác nhau, hai bản băm chẳng liên quan gì nhau. Bảng tính trước trở thành vô dụng — muốn dùng thì phải dựng lại cho từng salt. Trong hệ thống thật người ta còn đi thêm một bước nữa: dùng hàm băm mật khẩu <em>CHẬM</em> (bcrypt, scrypt, Argon2) để mỗi lần đoán đều tốn thời gian thật; SHA-256 trần quá nhanh cho việc này.</p>
 <p class="meo">💡 Mẹo nhớ hai chữ Hy Lạp: <strong>crypt</strong>o = crypt = cái <em>hầm mộ</em> kín, nội dung bị niêm phong; <strong>stegan</strong>o = một <em>tấm phủ</em> đặt lên trên, bạn thậm chí không thấy là có cái hầm mộ nào.</p>`],
 
@@ -325,14 +325,14 @@ $ printf 'zP2vmatkhau123'   | shasum -a 256 → b256d1a2c310dd10eee2f51f6d767ed3
 <li><strong>How weak is it?</strong> — the key is one number from 1 to 25. Twenty-five tries and you are in. A monoalphabetic substitution cipher (any permutation of the alphabet) does better: 26! = 403.291.461.126.605.635.584.000.000 ≈ 4,03 × 10<sup>26</sup> keys — but it still falls to frequency analysis in minutes, because E stays the commonest letter whatever you call it.</li>
 <li><strong>Real symmetric ciphers</strong> — DES (1977, 56-bit key, broken by brute force in 1998 in 56 hours) and AES (2001, 128/192/256-bit keys, still unbroken). Run for real with <code>openssl</code>:</li>
 </ul>
-<pre>$ printf 'Diem thi CSI106: 9.0' &gt; diem.txt
+<pre><code class="language-bash">$ printf 'Diem thi CSI106: 9.0' &gt; diem.txt
 $ openssl enc -aes-256-cbc -pbkdf2 -in diem.txt -out diem.enc -pass pass:khoabimat
 $ xxd -p diem.enc
 53616c7465645f5fdb5091689805dac49b144863d39a47860a27f37907fc1cfe45ee5a184b1a1edda3e81d0c6cb326bd
 $ openssl enc -d -aes-256-cbc -pbkdf2 -in diem.enc -pass pass:khoabimat
 Diem thi CSI106: 9.0
 $ openssl enc -d -aes-256-cbc -pbkdf2 -in diem.enc -pass pass:khoasai
-bad decrypt</pre>
+bad decrypt</code></pre>
 <p class="dap-an">✅ Same key both ways → the text comes back exactly. One character wrong in the key → <code>bad decrypt</code> and nothing readable. That is "symmetric" demonstrated, not asserted.</p>
 <p class="pitfall">⚠️ The fatal arithmetic of symmetric keys: <em>n</em> people who all need to talk privately in pairs need n(n−1)/2 different keys. For 10 people that is 45; for 1.000 people it is <strong>499.500</strong> keys, every one of which must be delivered over a secure channel and then kept secret. That number is the reason asymmetric cryptography had to be invented.</p>`,
         `<p class="y-chinh">🎯 Hình 12.2: Alice mã hoá, Bob giải mã, và giữa hai người có một đường nét đứt ghi <strong>"Secure key-exchange channel"</strong> (kênh trao khoá an toàn). Mọi cái hay và mọi cái dở của mật mã đối xứng đều nằm trong cái đường nét đứt ấy.</p>
@@ -358,14 +358,14 @@ bad decrypt</pre>
 <li><strong>Nó yếu tới mức nào?</strong> — khoá chỉ là một số từ 1 tới 25. Thử hai mươi lăm lần là vào. Mã thay thế đơn (một hoán vị bất kỳ của bảng chữ cái) khá hơn: 26! = 403.291.461.126.605.635.584.000.000 ≈ 4,03 × 10<sup>26</sup> khoá — nhưng vẫn gục trước phân tích tần suất trong vài phút, vì E vẫn là chữ hay gặp nhất dù bạn gọi nó là gì.</li>
 <li><strong>Các hệ mật đối xứng thật</strong> — DES (1977, khoá 56 bit, bị vét cạn phá trong 56 giờ năm 1998) và AES (2001, khoá 128/192/256 bit, tới nay chưa bị phá). Chạy thật bằng <code>openssl</code>:</li>
 </ul>
-<pre>$ printf 'Diem thi CSI106: 9.0' &gt; diem.txt
+<pre><code class="language-bash">$ printf 'Diem thi CSI106: 9.0' &gt; diem.txt
 $ openssl enc -aes-256-cbc -pbkdf2 -in diem.txt -out diem.enc -pass pass:khoabimat
 $ xxd -p diem.enc
 53616c7465645f5fdb5091689805dac49b144863d39a47860a27f37907fc1cfe45ee5a184b1a1edda3e81d0c6cb326bd
 $ openssl enc -d -aes-256-cbc -pbkdf2 -in diem.enc -pass pass:khoabimat
 Diem thi CSI106: 9.0
 $ openssl enc -d -aes-256-cbc -pbkdf2 -in diem.enc -pass pass:khoasai
-bad decrypt</pre>
+bad decrypt</code></pre>
 <p class="dap-an">✅ Cùng một khoá cho cả hai chiều → chữ trở về nguyên vẹn. Sai một ký tự trong khoá → <code>bad decrypt</code> và không còn gì đọc được. "Đối xứng" được CHỨNG MINH chứ không phải được khẳng định suông.</p>
 <p class="pitfall">⚠️ Phép tính chí mạng của khoá đối xứng: <em>n</em> người muốn nói riêng với nhau từng đôi một thì cần n(n−1)/2 khoá khác nhau. Mười người là 45; <strong>một nghìn người là 499.500</strong> khoá, mà cái nào cũng phải giao qua kênh an toàn rồi giữ bí mật. Chính con số ấy là lý do mật mã bất đối xứng buộc phải ra đời.</p>`],
 
@@ -477,7 +477,7 @@ bad decrypt</pre>
 <li><strong>Why it is hard to break</strong> — an attacker sees (e, n) = (13, 77) and C = 26. To find d they need φ(n), and to find φ(n) they need p and q, which means <em>factoring n</em>. Factoring 77 takes a second; factoring a 2048-bit n (617 decimal digits) has never been done. The security of RSA is exactly the difficulty of factoring, no more and no less.</li>
 <li><strong>The same machine run backwards is a digital signature</strong> — sign with the <em>private</em> key, verify with the <em>public</em> key. That gives integrity, authentication and non-repudiation in one move, which is the answer to the "repudiation" attack of slide 8. Run for real with openssl 3.6.4:</li>
 </ul>
-<pre>$ openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:2048 -out private.pem
+<pre><code class="language-bash">$ openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:2048 -out private.pem
 $ openssl rsa -in private.pem -pubout -out public.pem
 $ printf 'Bai nop cuoi ky CSI106 - Nguyen Van A' &gt; baiviet.txt
 $ openssl dgst -sha256 -sign private.pem -out chuky.bin baiviet.txt
@@ -485,7 +485,7 @@ $ openssl dgst -sha256 -verify public.pem -signature chuky.bin baiviet.txt
 Verified OK
 # now change ONE character of the document (A → B) and verify again:
 $ openssl dgst -sha256 -verify public.pem -signature chuky.bin baiviet_sua.txt
-Verification failure</pre>
+Verification failure</code></pre>
 <p class="dap-an">✅ <code>Verified OK</code> on the original, <code>Verification failure</code> after a single letter changed — and the signature file is 256 bytes, exactly 2048 bits, the size of the modulus. Notice the command signs a SHA-256 <em>hash</em>, not the document: hashing first is what lets a 256-byte signature cover a file of any size.</p>
 <p class="pitfall">⚠️ Two exam traps. (1) <strong>P must be smaller than n.</strong> With n = 77 you cannot encrypt 100 — modular arithmetic would map it onto 100 mod 77 = 23 and decryption returns 23, not 100. Real RSA splits the message into blocks smaller than n. (2) Do not confuse the two directions: <em>encrypt</em> = public key of the receiver; <em>sign</em> = private key of the sender. Same algebra, opposite keys, completely different purpose.</p>`,
         `<p class="y-chinh">🎯 Hình 12.4 — thuật toán thật, gói trong bốn ô: Bob chọn p và q, tính n = p × q, chọn e và d; công bố (e, n); Alice tính <strong>C = P<sup>e</sup> mod n</strong>; Bob lấy lại <strong>P = C<sup>d</sup> mod n</strong>.</p>
@@ -529,7 +529,7 @@ Verification failure</pre>
 <li><strong>Vì sao khó phá</strong> — kẻ tấn công thấy (e, n) = (13, 77) và C = 26. Muốn tìm d thì cần φ(n), muốn có φ(n) thì cần p và q, tức là phải <em>phân tích n ra thừa số</em>. Phân tích 77 mất một giây; phân tích một n 2048 bit (617 chữ số thập phân) thì chưa ai làm được. Độ an toàn của RSA đúng bằng độ khó của bài toán phân tích thừa số, không hơn không kém.</li>
 <li><strong>Chạy đúng cỗ máy ấy theo chiều ngược thì thành chữ ký số</strong> — ký bằng khoá <em>riêng</em>, kiểm bằng khoá <em>công khai</em>. Một nước đi mà được cả tính toàn vẹn, tính xác thực và chống chối bỏ — tức là câu trả lời cho kiểu tấn công "repudiation" ở slide 8. Chạy thật bằng openssl 3.6.4:</li>
 </ul>
-<pre>$ openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:2048 -out private.pem
+<pre><code class="language-bash">$ openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:2048 -out private.pem
 $ openssl rsa -in private.pem -pubout -out public.pem
 $ printf 'Bai nop cuoi ky CSI106 - Nguyen Van A' &gt; baiviet.txt
 $ openssl dgst -sha256 -sign private.pem -out chuky.bin baiviet.txt
@@ -537,7 +537,7 @@ $ openssl dgst -sha256 -verify public.pem -signature chuky.bin baiviet.txt
 Verified OK
 # bây giờ đổi MỘT ký tự của tài liệu (A → B) rồi kiểm lại:
 $ openssl dgst -sha256 -verify public.pem -signature chuky.bin baiviet_sua.txt
-Verification failure</pre>
+Verification failure</code></pre>
 <p class="dap-an">✅ <code>Verified OK</code> với bản gốc, <code>Verification failure</code> sau khi đổi đúng một chữ cái — và file chữ ký nặng 256 byte, đúng 2048 bit, bằng kích thước modulus. Để ý lệnh ký lên một <em>bản băm</em> SHA-256 chứ không lên tài liệu: chính việc băm trước mới cho phép một chữ ký 256 byte phủ được file lớn tuỳ ý.</p>
 <p class="pitfall">⚠️ Hai bẫy thi. (1) <strong>P phải NHỎ HƠN n.</strong> Với n = 77 bạn không mã hoá được số 100 — số học modulo sẽ ánh xạ nó thành 100 mod 77 = 23 và giải mã trả về 23 chứ không phải 100. RSA thật chia thông điệp thành các khối nhỏ hơn n. (2) Đừng lẫn hai chiều: <em>mã hoá</em> = khoá công khai của người NHẬN; <em>ký</em> = khoá riêng của người GỬI. Cùng một đại số, khoá ngược nhau, mục đích khác hẳn nhau.</p>`],
 

@@ -233,7 +233,7 @@ expires 1y + add_header Cache-Control "public, max-age=31536000, immutable"
   <div class="kv"><span class="k">immutable is what makes a year-long cache safe</span><span class="v">With a content-hashed filename, the content behind a URL can never change, so <code>immutable</code> tells the browser not to revalidate even on a reload. That turns a <code>304</code> round trip into no request at all, which on a page with forty assets is the difference you can feel.</span></div>
   <div class="kv"><span class="k">HTML gets the opposite treatment</span><span class="v">The document that references the hashed assets must never be cached long, or visitors keep loading the old page pointing at old assets. <code>no-cache</code> on HTML plus a year on hashed assets is the standard pairing, and it is why <code>expires</code> belongs per-location rather than at the top of the file.</span></div>
 </div>
-<pre><code><span class="tok-comment"># The standard pair: HTML always revalidates, hashed assets cache for a year</span>
+<pre><code class="language-bash"><span class="tok-comment"># The standard pair: HTML always revalidates, hashed assets cache for a year</span>
 location = /index.html {
   add_header Cache-Control "no-cache" always;   <span class="tok-comment"># revalidate EVERY time, but still use 304</span>
 }
@@ -320,7 +320,7 @@ expires 1y + add_header Cache-Control "public, max-age=31536000, immutable"
   <div class="kv"><span class="k">immutable mới là thứ làm một năm cache trở nên AN TOÀN</span><span class="v">Với tên tệp có băm nội dung thì nội dung nằm sau một URL không bao giờ đổi được, nên <code>immutable</code> bảo trình duyệt đừng xác thực lại KỂ CẢ khi người dùng bấm tải lại. Nó biến một vòng <code>304</code> thành KHÔNG request nào cả, mà trên một trang có bốn mươi tài nguyên thì đó là khác biệt bạn CẢM THẤY được.</span></div>
   <div class="kv"><span class="k">HTML thì nhận đối xử NGƯỢC LẠI</span><span class="v">Cái tài liệu tham chiếu tới đám tài nguyên có băm thì KHÔNG BAO GIỜ được cache lâu, không thì khách cứ nạp mãi trang cũ trỏ vào tài nguyên cũ. <code>no-cache</code> cho HTML cộng một năm cho tài nguyên có băm là cặp tiêu chuẩn, và đó là lý do <code>expires</code> thuộc về TỪNG location chứ không thuộc về đầu file.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Cặp chuẩn: HTML luôn hỏi lại, tài nguyên có băm thì cache một năm</span>
+<pre><code class="language-bash"><span class="tok-comment"># Cặp chuẩn: HTML luôn hỏi lại, tài nguyên có băm thì cache một năm</span>
 location = /index.html {
   add_header Cache-Control "no-cache" always;   <span class="tok-comment"># hỏi lại MỖI lần, nhưng vẫn dùng 304</span>
 }
@@ -398,7 +398,7 @@ gzip_static (tep)   Content-Length: 31327    ETag: "6a8b295e-7a5f"
   <div class="kv"><span class="k">gzip_static keeps both</span><span class="v">A strong ETag computed from the <code>.gz</code> file's own inode, and a real <code>Content-Length</code>. It behaves like an ordinary static file because it is one.</span></div>
   <div class="kv"><span class="k">Vary: Accept-Encoding is not optional</span><span class="v"><code>gzip_vary on;</code> tells every cache between you and the user that the response differs by encoding. Without it a shared cache can hand a gzipped body to a client that did not ask for one — a real breakage that shows up only behind a CDN or a corporate proxy.</span></div>
 </div>
-<pre><code>http {
+<pre><code class="language-bash">http {
   gzip              on;
   gzip_vary         on;          <span class="tok-comment"># MANDATORY whenever any cache sits in between</span>
   gzip_comp_level   5;           <span class="tok-comment"># 4–6; higher means paying real CPU for a few percent</span>
@@ -471,7 +471,7 @@ gzip_static (tep)   Content-Length: 31327    ETag: "6a8b295e-7a5f"
   <div class="kv"><span class="k">gzip_static giữ được CẢ HAI</span><span class="v">Một ETag MẠNH tính từ chính inode của tệp <code>.gz</code>, và một <code>Content-Length</code> thật. Nó cư xử như một tệp tĩnh bình thường vì nó ĐÚNG LÀ một tệp tĩnh bình thường.</span></div>
   <div class="kv"><span class="k">Vary: Accept-Encoding KHÔNG phải tuỳ chọn</span><span class="v"><code>gzip_vary on;</code> báo cho mọi bộ đệm nằm giữa bạn và người dùng rằng phản hồi KHÁC NHAU theo phép mã hoá. Thiếu nó thì một bộ đệm dùng chung có thể trao một thân đã nén cho một client chưa từng xin — một kiểu hỏng có thật và chỉ lộ ra khi đứng sau một CDN hay một proxy công ty.</span></div>
 </div>
-<pre><code>http {
+<pre><code class="language-bash">http {
   gzip              on;
   gzip_vary         on;          <span class="tok-comment"># BẮT BUỘC khi có bất cứ bộ đệm nào ở giữa</span>
   gzip_comp_level   5;           <span class="tok-comment"># 4–6; cao hơn là trả CPU thật cho vài phần trăm</span>
@@ -549,7 +549,7 @@ gzip_static (tep)   Content-Length: 31327    ETag: "6a8b295e-7a5f"
   <div class="kv"><span class="k">open_file_cache_errors caches the misses too</span><span class="v">With it on, a repeated request for a missing file does not re-stat the filesystem every time. That matters under a scanner hammering non-existent paths, which is a load pattern you get whether you want it or not.</span></div>
   <div class="kv"><span class="k">The cost is staleness for up to open_file_cache_valid</span><span class="v">A file replaced on disk may keep being served from the old descriptor until the entry is revalidated. With <code>30s</code> that is a half-minute window after a deploy — usually fine, and worth knowing before you spend an hour wondering why the new file is not appearing.</span></div>
 </div>
-<pre><code>http {
+<pre><code class="language-bash">http {
   sendfile        on;
   tcp_nopush      on;          <span class="tok-comment"># only has an effect when sendfile is on</span>
   tcp_nodelay     on;          <span class="tok-comment"># for keep-alive connections, send the final packet at once</span>
@@ -616,7 +616,7 @@ gzip_static (tep)   Content-Length: 31327    ETag: "6a8b295e-7a5f"
   <div class="kv"><span class="k">open_file_cache_errors cache cả những lần TRƯỢT</span><span class="v">Bật nó lên thì một request lặp đi lặp lại tới một tệp không tồn tại sẽ không phải stat lại hệ tệp mỗi lần. Điều đó có nghĩa lý khi có một con quét dạo nện liên tục vào những đường dẫn không có, mà đó là kiểu tải bạn nhận được dù có muốn hay không.</span></div>
   <div class="kv"><span class="k">Cái giá là dữ liệu CŨ trong tối đa open_file_cache_valid</span><span class="v">Một tệp vừa bị thay trên đĩa vẫn có thể được phục vụ từ mô tả tệp cũ cho tới khi mục đó được xác thực lại. Với <code>30s</code> thì đó là một cửa sổ nửa phút sau khi deploy — thường thì không sao, và đáng biết TRƯỚC khi bạn tốn một tiếng tự hỏi vì sao tệp mới chưa hiện ra.</span></div>
 </div>
-<pre><code>http {
+<pre><code class="language-bash">http {
   sendfile        on;
   tcp_nopush      on;          <span class="tok-comment"># chỉ có tác dụng khi sendfile on</span>
   tcp_nodelay     on;          <span class="tok-comment"># cho kết nối giữ-sống, gửi ngay gói cuối</span>
@@ -664,7 +664,7 @@ gzip_static (tep)   Content-Length: 31327    ETag: "6a8b295e-7a5f"
 <p class="lead">Four lessons of pieces. Here they are as one config for a realistic site — a single-page app with content-hashed assets, an HTML entry point, and a directory of user uploads — with every route measured afterwards. The last measurement found a bug in the config written above it, which is left in because it is the most useful thing in the lesson.</p>
 
 <h3>The config</h3>
-<pre><code>http {
+<pre><code class="language-bash">http {
   include       /etc/nginx/mime.types;
   default_type  application/octet-stream;   <span class="tok-comment"># NOT text/plain (4.1)</span>
 
@@ -776,7 +776,7 @@ tep khong ton tai   404  Cache-Control: public, max-age=31536000, immutable
 <p class="lead">Bốn bài toàn là các mảnh rời. Đây là chúng gộp thành MỘT cấu hình cho một site thực tế — một ứng dụng một-trang có tài nguyên băm nội dung, một điểm vào HTML, và một thư mục tệp người dùng tải lên — kèm phép đo TỪNG tuyến sau đó. Phép đo cuối cùng đã tìm ra một con lỗi trong chính cái cấu hình viết ngay phía trên nó, và nó được GIỮ NGUYÊN vì đó là thứ hữu ích nhất trong cả bài.</p>
 
 <h3>Cấu hình</h3>
-<pre><code>http {
+<pre><code class="language-bash">http {
   include       /etc/nginx/mime.types;
   default_type  application/octet-stream;   <span class="tok-comment"># KHÔNG phải text/plain (4.1)</span>
 

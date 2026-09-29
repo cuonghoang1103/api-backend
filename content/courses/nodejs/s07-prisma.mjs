@@ -30,7 +30,7 @@ export default {
 
 <h3>First, the failure we are fixing</h3>
 <p>Chapter 5 stored notes in <code>new Map()</code>. Here is that store meeting an ordinary restart — nothing exotic, just the thing that happens on every deploy:</p>
-<pre><code><span class="tok-comment"># with the in-memory service</span>
+<pre><code class="language-bash"><span class="tok-comment"># with the in-memory service</span>
 curl -X POST /api/v1/notes -d '{"title":"Learning Prisma"}'   <span class="tok-comment"># 201, id 1</span>
 kill %1 &amp;&amp; node src/index.mjs                                 <span class="tok-comment"># restart, like a deploy</span>
 curl /api/v1/notes</code></pre>
@@ -64,7 +64,7 @@ curl /api/v1/notes</code></pre>
 
 <h3>Measurement 1 — what a fresh connection costs</h3>
 <p>Fifty trivial <code>SELECT 1</code> queries, run two ways against the same local PostgreSQL 15.4:</p>
-<pre><code><span class="tok-comment">// A: a brand-new connection for every query</span>
+<pre><code class="language-javascript"><span class="tok-comment">// A: a brand-new connection for every query</span>
 <span class="tok-keyword">for</span> (<span class="tok-keyword">let</span> i = <span class="tok-number">0</span>; i &lt; <span class="tok-number">50</span>; i++) {
   <span class="tok-keyword">const</span> c = <span class="tok-keyword">new</span> pg.<span class="tok-fn">Client</span>({ connectionString });
   <span class="tok-keyword">await</span> c.<span class="tok-fn">connect</span>();
@@ -111,7 +111,7 @@ cause: 12 PrismaClient × pool of 10 = 120 connections &gt; max_connections 100<
 
 <h3>One client per process — the rule and the reason</h3>
 <p>Every <code>new PrismaClient()</code> creates its own pool. Create one in a request handler and you have created a pool per request; the process will fall over in minutes. There is exactly one correct shape:</p>
-<pre><code><span class="tok-comment">// src/db.mjs — created once, imported everywhere</span>
+<pre><code class="language-javascript"><span class="tok-comment">// src/db.mjs — created once, imported everywhere</span>
 <span class="tok-keyword">import</span> <span class="tok-string">'dotenv/config'</span>;
 <span class="tok-keyword">import</span> { PrismaPg } <span class="tok-keyword">from</span> <span class="tok-string">'@prisma/adapter-pg'</span>;
 <span class="tok-keyword">import</span> { PrismaClient } <span class="tok-keyword">from</span> <span class="tok-string">'../generated/prisma/client.ts'</span>;
@@ -129,12 +129,12 @@ GET  /api/v1/notes?q=prisma 200 12.9ms
 PATCH /api/v1/notes/1 200 7.2ms
 DELETE /api/v1/notes/2 204 6.7ms</div>
 <p>91.7ms then 3.9ms — a 24× difference for identical work. That first request paid for the connection handshake. In production this is the request that arrives one second after a deploy, and it is why a health check that touches the database is worth having: it warms the pool before real users do.</p>
-<pre><code><span class="tok-comment">// warm the pool at boot instead of on a user's request</span>
+<pre><code class="language-javascript"><span class="tok-comment">// warm the pool at boot instead of on a user's request</span>
 <span class="tok-keyword">await</span> prisma.$<span class="tok-fn">connect</span>();
 <span class="tok-keyword">const</span> server = <span class="tok-fn">createApp</span>().<span class="tok-fn">listen</span>(PORT);</code></pre>
 
 <h3>Setting it up, exactly as run</h3>
-<pre><code>npm i prisma @prisma/client @prisma/adapter-pg
+<pre><code class="language-bash">npm i prisma @prisma/client @prisma/adapter-pg
 npm i -D dotenv
 npx prisma init --datasource-provider postgresql</code></pre>
 <div class="out">prisma/
@@ -143,7 +143,7 @@ prisma.config.ts
 .env
 .gitignore</div>
 <p><code>prisma.config.ts</code> is where Prisma 7 reads its settings, and it is plain code — which is why the <code>.env</code> file is loaded explicitly:</p>
-<pre><code><span class="tok-keyword">import</span> <span class="tok-string">"dotenv/config"</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> <span class="tok-string">"dotenv/config"</span>;
 <span class="tok-keyword">import</span> { defineConfig } <span class="tok-keyword">from</span> <span class="tok-string">"prisma/config"</span>;
 
 <span class="tok-keyword">export default</span> <span class="tok-fn">defineConfig</span>({
@@ -174,7 +174,7 @@ prisma.config.ts
 
 <h3>Trước hết, nhìn thẳng vào lỗi cần sửa</h3>
 <p>Chương 5 giữ ghi chú trong <code>new Map()</code>. Đây là cái kho đó gặp một lần khởi động lại bình thường — không có gì bất thường, đúng thứ xảy ra ở mỗi lần deploy:</p>
-<pre><code><span class="tok-comment"># với service lưu trong RAM</span>
+<pre><code class="language-bash"><span class="tok-comment"># với service lưu trong RAM</span>
 curl -X POST /api/v1/notes -d '{"title":"Learning Prisma"}'   <span class="tok-comment"># 201, id 1</span>
 kill %1 &amp;&amp; node src/index.mjs                                 <span class="tok-comment"># khởi động lại, y như deploy</span>
 curl /api/v1/notes</code></pre>
@@ -208,7 +208,7 @@ curl /api/v1/notes</code></pre>
 
 <h3>Phép đo 1 — một kết nối mới tốn bao nhiêu</h3>
 <p>Năm mươi truy vấn <code>SELECT 1</code> tầm thường, chạy theo hai cách trên cùng một PostgreSQL 15.4 local:</p>
-<pre><code><span class="tok-comment">// A: mở kết nối mới toanh cho mỗi truy vấn</span>
+<pre><code class="language-javascript"><span class="tok-comment">// A: mở kết nối mới toanh cho mỗi truy vấn</span>
 <span class="tok-keyword">for</span> (<span class="tok-keyword">let</span> i = <span class="tok-number">0</span>; i &lt; <span class="tok-number">50</span>; i++) {
   <span class="tok-keyword">const</span> c = <span class="tok-keyword">new</span> pg.<span class="tok-fn">Client</span>({ connectionString });
   <span class="tok-keyword">await</span> c.<span class="tok-fn">connect</span>();
@@ -255,7 +255,7 @@ nguyên nhân: 12 PrismaClient × pool 10 = 120 kết nối &gt; max_connections
 
 <h3>Mỗi tiến trình một client — quy tắc và lý do</h3>
 <p>Mỗi lần <code>new PrismaClient()</code> là tạo thêm một pool riêng. Tạo nó trong một hàm xử lý request nghĩa là bạn tạo một pool cho mỗi request; tiến trình sẽ đổ trong vài phút. Chỉ có đúng một hình dạng đúng:</p>
-<pre><code><span class="tok-comment">// src/db.mjs — tạo một lần, import khắp nơi</span>
+<pre><code class="language-javascript"><span class="tok-comment">// src/db.mjs — tạo một lần, import khắp nơi</span>
 <span class="tok-keyword">import</span> <span class="tok-string">'dotenv/config'</span>;
 <span class="tok-keyword">import</span> { PrismaPg } <span class="tok-keyword">from</span> <span class="tok-string">'@prisma/adapter-pg'</span>;
 <span class="tok-keyword">import</span> { PrismaClient } <span class="tok-keyword">from</span> <span class="tok-string">'../generated/prisma/client.ts'</span>;
@@ -273,12 +273,12 @@ GET  /api/v1/notes?q=prisma 200 12.9ms
 PATCH /api/v1/notes/1 200 7.2ms
 DELETE /api/v1/notes/2 204 6.7ms</div>
 <p>91,7ms rồi 3,9ms — chênh 24 lần cho cùng một khối lượng công việc. Request đầu tiên đã trả tiền cho màn bắt tay kết nối. Trên production đây chính là request tới một giây sau khi deploy, và đó là lý do một health check có chạm vào cơ sở dữ liệu là đáng có: nó làm nóng pool trước khi người dùng thật đến.</p>
-<pre><code><span class="tok-comment">// làm nóng pool lúc khởi động thay vì bắt request của người dùng gánh</span>
+<pre><code class="language-javascript"><span class="tok-comment">// làm nóng pool lúc khởi động thay vì bắt request của người dùng gánh</span>
 <span class="tok-keyword">await</span> prisma.$<span class="tok-fn">connect</span>();
 <span class="tok-keyword">const</span> server = <span class="tok-fn">createApp</span>().<span class="tok-fn">listen</span>(PORT);</code></pre>
 
 <h3>Cài đặt, đúng như đã chạy</h3>
-<pre><code>npm i prisma @prisma/client @prisma/adapter-pg
+<pre><code class="language-bash">npm i prisma @prisma/client @prisma/adapter-pg
 npm i -D dotenv
 npx prisma init --datasource-provider postgresql</code></pre>
 <div class="out">prisma/
@@ -287,7 +287,7 @@ prisma.config.ts
 .env
 .gitignore</div>
 <p><code>prisma.config.ts</code> là nơi Prisma 7 đọc cấu hình, và nó là code thuần — vì vậy file <code>.env</code> phải được nạp một cách tường minh:</p>
-<pre><code><span class="tok-keyword">import</span> <span class="tok-string">"dotenv/config"</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> <span class="tok-string">"dotenv/config"</span>;
 <span class="tok-keyword">import</span> { defineConfig } <span class="tok-keyword">from</span> <span class="tok-string">"prisma/config"</span>;
 
 <span class="tok-keyword">export default</span> <span class="tok-fn">defineConfig</span>({
@@ -325,7 +325,7 @@ prisma.config.ts
 <p class="lead">A migration is the only piece of your code that runs <em>once</em>, against data you cannot recreate, usually while users are online. Everything else can be redeployed. This lesson writes the Notes schema, then deliberately breaks a migration on a table with data in it, so the failure you meet at work is the second time you see it, not the first.</p>
 
 <h3>The schema is a description, not a script</h3>
-<pre><code><span class="tok-keyword">model</span> User {
+<pre><code class="language-typescript"><span class="tok-keyword">model</span> User {
   id        Int      @id @default(autoincrement())
   email     String   @unique
   name      String   @db.VarChar(80)
@@ -359,7 +359,7 @@ prisma.config.ts
 <div class="pitfall">Forget the back-relation and <code>prisma generate</code> stops with <em>"The relation field <code>author</code> on model <code>Note</code> is missing an opposite relation field on model <code>User</code>"</em>. Every relation is two fields. When two models are related twice (say <code>author</code> and <code>lastEditor</code>, both pointing at <code>User</code>), each pair needs its own name: <code>@relation("NoteAuthor")</code> and <code>@relation("NoteEditor")</code>, or Prisma cannot tell which back-relation belongs to which.</div>
 
 <h3>What <code>migrate dev</code> actually does</h3>
-<pre><code>npx prisma migrate dev --name init</code></pre>
+<pre><code class="language-bash">npx prisma migrate dev --name init</code></pre>
 <div class="out">Prisma schema loaded from prisma/schema.prisma
 Datasource "db": PostgreSQL database "notesdemo", schema "public" at "localhost:5433"
 
@@ -373,7 +373,7 @@ prisma/migrations/
 
 Your database is now in sync with your schema.</div>
 <p>The generated <code>migration.sql</code> is ordinary SQL you can read, review and put in a pull request:</p>
-<pre><code><span class="tok-comment">-- CreateTable</span>
+<pre><code class="language-sql"><span class="tok-comment">-- CreateTable</span>
 CREATE TABLE "Note" (
     "id" SERIAL NOT NULL,
     "title" VARCHAR(200) NOT NULL,
@@ -417,8 +417,8 @@ ALTER TABLE "Note" ADD CONSTRAINT "Note_authorId_fkey"
 
 <h3>A second migration, and what changed</h3>
 <p>Adding tags and a <code>version</code> column produces exactly the SQL you would have written by hand:</p>
-<pre><code>npx prisma migrate dev --name add_tags_and_version</code></pre>
-<pre><code><span class="tok-comment">-- AlterTable</span>
+<pre><code class="language-bash">npx prisma migrate dev --name add_tags_and_version</code></pre>
+<pre><code class="language-sql"><span class="tok-comment">-- AlterTable</span>
 ALTER TABLE "Note" ADD COLUMN "version" INTEGER NOT NULL DEFAULT 1;
 
 <span class="tok-comment">-- CreateTable</span>
@@ -432,13 +432,13 @@ CREATE TABLE "NoteTag" (
 
 <h3>Drift: when the database and the history disagree</h3>
 <p>Somebody fixes production at 2am with <code>psql</code>. One column, no migration file. Now the database contains something the migration history has never heard of. First surprise — <code>migrate status</code> does <strong>not</strong> notice:</p>
-<pre><code>psql&gt; ALTER TABLE "Note" ADD COLUMN "hotfix_col" text;
+<pre><code class="language-sql">psql&gt; ALTER TABLE "Note" ADD COLUMN "hotfix_col" text;
 npx prisma migrate status</code></pre>
 <div class="out">2 migrations found in prisma/migrations
 
 Database schema is up to date!</div>
 <p><code>migrate status</code> only reads the history table; it never compares real columns. The command that actually compares is <code>migrate diff</code>:</p>
-<pre><code>npx prisma migrate diff \\
+<pre><code class="language-bash">npx prisma migrate diff \\
   --from-migrations ./prisma/migrations \\
   --to-config-datasource \\
   --script</code></pre>
@@ -458,10 +458,10 @@ All data will be lost.</div>
 
 <h3>The failure rehearsal: a migration that dies halfway</h3>
 <p>The table has rows. The migration adds a required column with no default:</p>
-<pre><code><span class="tok-comment">-- prisma/migrations/20260727170000_add_slug/migration.sql</span>
+<pre><code class="language-sql"><span class="tok-comment">-- prisma/migrations/20260727170000_add_slug/migration.sql</span>
 ALTER TABLE "Note" ADD COLUMN "slug" TEXT NOT NULL;
 CREATE UNIQUE INDEX "Note_slug_key" ON "Note"("slug");</code></pre>
-<pre><code>npx prisma migrate deploy</code></pre>
+<pre><code class="language-bash">npx prisma migrate deploy</code></pre>
 <div class="out">Applying migration \`20260727170000_add_slug\`
 Error: P3018
 
@@ -488,15 +488,15 @@ The \`20260727170000_add_slug\` migration started at 2026-07-27 16:31:07.258768 
 <p>No <code>slug</code> column, <code>applied_steps_count = 0</code>, no <code>finished_at</code>: PostgreSQL runs DDL inside a transaction, so this migration rolled itself back completely. That is the good case — and it is why you check instead of assuming.</p>
 
 <h3>Recovering, in the order that is safe</h3>
-<pre><code><span class="tok-comment"># 1. tell Prisma the failed migration left nothing behind</span>
+<pre><code class="language-bash"><span class="tok-comment"># 1. tell Prisma the failed migration left nothing behind</span>
 npx prisma migrate resolve --rolled-back "20260727170000_add_slug"</code></pre>
 <div class="out">Migration 20260727170000_add_slug marked as rolled back.</div>
-<pre><code><span class="tok-comment">-- 2. rewrite it in three steps that any table can survive</span>
+<pre><code class="language-sql"><span class="tok-comment">-- 2. rewrite it in three steps that any table can survive</span>
 ALTER TABLE "Note" ADD COLUMN "slug" TEXT;                       <span class="tok-comment">-- nullable first</span>
 UPDATE "Note" SET "slug" = 'note-' || "id" WHERE "slug" IS NULL;  <span class="tok-comment">-- backfill</span>
 ALTER TABLE "Note" ALTER COLUMN "slug" SET NOT NULL;              <span class="tok-comment">-- then tighten</span>
 CREATE UNIQUE INDEX "Note_slug_key" ON "Note"("slug");</code></pre>
-<pre><code>npx prisma migrate deploy</code></pre>
+<pre><code class="language-bash">npx prisma migrate deploy</code></pre>
 <div class="out">The following migration(s) have been applied:
 migrations/
   └─ 20260727170000_add_slug/
@@ -530,7 +530,7 @@ All migrations have been successfully applied.
 <p class="lead">Migration là đoạn code duy nhất của bạn chạy <em>một lần</em>, trên dữ liệu không tạo lại được, thường là lúc người dùng đang online. Mọi thứ khác đều deploy lại được. Bài này viết lược đồ cho Notes, rồi cố tình làm hỏng một migration trên bảng đã có dữ liệu, để lần bạn gặp sự cố ở chỗ làm là lần thứ hai chứ không phải lần đầu.</p>
 
 <h3>Lược đồ là một bản mô tả, không phải một kịch bản</h3>
-<pre><code><span class="tok-keyword">model</span> User {
+<pre><code class="language-typescript"><span class="tok-keyword">model</span> User {
   id        Int      @id @default(autoincrement())
   email     String   @unique
   name      String   @db.VarChar(80)
@@ -564,7 +564,7 @@ All migrations have been successfully applied.
 <div class="pitfall">Quên quan hệ ngược thì <code>prisma generate</code> dừng lại với <em>"The relation field <code>author</code> on model <code>Note</code> is missing an opposite relation field on model <code>User</code>"</em>. Mọi quan hệ đều là hai trường. Khi hai model có quan hệ với nhau hai lần (ví dụ <code>author</code> và <code>lastEditor</code> cùng trỏ tới <code>User</code>), mỗi cặp phải có tên riêng: <code>@relation("NoteAuthor")</code> và <code>@relation("NoteEditor")</code>, nếu không Prisma không biết quan hệ ngược nào thuộc về cái nào.</div>
 
 <h3><code>migrate dev</code> thật ra làm gì</h3>
-<pre><code>npx prisma migrate dev --name init</code></pre>
+<pre><code class="language-bash">npx prisma migrate dev --name init</code></pre>
 <div class="out">Prisma schema loaded from prisma/schema.prisma
 Datasource "db": PostgreSQL database "notesdemo", schema "public" at "localhost:5433"
 
@@ -578,7 +578,7 @@ prisma/migrations/
 
 Your database is now in sync with your schema.</div>
 <p>File <code>migration.sql</code> sinh ra là SQL bình thường, bạn đọc được, review được, và đưa vào pull request được:</p>
-<pre><code><span class="tok-comment">-- CreateTable</span>
+<pre><code class="language-sql"><span class="tok-comment">-- CreateTable</span>
 CREATE TABLE "Note" (
     "id" SERIAL NOT NULL,
     "title" VARCHAR(200) NOT NULL,
@@ -622,8 +622,8 @@ ALTER TABLE "Note" ADD CONSTRAINT "Note_authorId_fkey"
 
 <h3>Migration thứ hai, và nó đổi gì</h3>
 <p>Thêm thẻ và cột <code>version</code> sinh ra đúng thứ SQL mà bạn sẽ tự viết bằng tay:</p>
-<pre><code>npx prisma migrate dev --name add_tags_and_version</code></pre>
-<pre><code><span class="tok-comment">-- AlterTable</span>
+<pre><code class="language-bash">npx prisma migrate dev --name add_tags_and_version</code></pre>
+<pre><code class="language-sql"><span class="tok-comment">-- AlterTable</span>
 ALTER TABLE "Note" ADD COLUMN "version" INTEGER NOT NULL DEFAULT 1;
 
 <span class="tok-comment">-- CreateTable</span>
@@ -637,13 +637,13 @@ CREATE TABLE "NoteTag" (
 
 <h3>Trôi lệch (drift): khi CSDL và lịch sử nói khác nhau</h3>
 <p>Ai đó chữa cháy production lúc 2 giờ sáng bằng <code>psql</code>. Một cột, không file migration. Giờ cơ sở dữ liệu chứa một thứ mà lịch sử migration chưa từng nghe nói tới. Bất ngờ đầu tiên — <code>migrate status</code> <strong>không</strong> nhận ra:</p>
-<pre><code>psql&gt; ALTER TABLE "Note" ADD COLUMN "hotfix_col" text;
+<pre><code class="language-sql">psql&gt; ALTER TABLE "Note" ADD COLUMN "hotfix_col" text;
 npx prisma migrate status</code></pre>
 <div class="out">2 migrations found in prisma/migrations
 
 Database schema is up to date!</div>
 <p><code>migrate status</code> chỉ đọc bảng lịch sử; nó không bao giờ so cột thật. Lệnh thật sự so sánh là <code>migrate diff</code>:</p>
-<pre><code>npx prisma migrate diff \\
+<pre><code class="language-bash">npx prisma migrate diff \\
   --from-migrations ./prisma/migrations \\
   --to-config-datasource \\
   --script</code></pre>
@@ -663,10 +663,10 @@ All data will be lost.</div>
 
 <h3>Diễn tập sự cố: một migration chết giữa đường</h3>
 <p>Bảng đã có dữ liệu. Migration thêm một cột bắt buộc mà không có giá trị mặc định:</p>
-<pre><code><span class="tok-comment">-- prisma/migrations/20260727170000_add_slug/migration.sql</span>
+<pre><code class="language-sql"><span class="tok-comment">-- prisma/migrations/20260727170000_add_slug/migration.sql</span>
 ALTER TABLE "Note" ADD COLUMN "slug" TEXT NOT NULL;
 CREATE UNIQUE INDEX "Note_slug_key" ON "Note"("slug");</code></pre>
-<pre><code>npx prisma migrate deploy</code></pre>
+<pre><code class="language-bash">npx prisma migrate deploy</code></pre>
 <div class="out">Applying migration \`20260727170000_add_slug\`
 Error: P3018
 
@@ -693,15 +693,15 @@ The \`20260727170000_add_slug\` migration started at 2026-07-27 16:31:07.258768 
 <p>Không có cột <code>slug</code>, <code>applied_steps_count = 0</code>, không có <code>finished_at</code>: PostgreSQL chạy lệnh DDL bên trong một transaction, nên migration này đã tự cuộn ngược hoàn toàn. Đó là trường hợp may — và chính vì thế bạn phải kiểm tra thay vì phỏng đoán.</p>
 
 <h3>Khắc phục, theo đúng thứ tự an toàn</h3>
-<pre><code><span class="tok-comment"># 1. báo cho Prisma biết migration hỏng không để lại gì</span>
+<pre><code class="language-bash"><span class="tok-comment"># 1. báo cho Prisma biết migration hỏng không để lại gì</span>
 npx prisma migrate resolve --rolled-back "20260727170000_add_slug"</code></pre>
 <div class="out">Migration 20260727170000_add_slug marked as rolled back.</div>
-<pre><code><span class="tok-comment">-- 2. viết lại thành ba bước mà bảng nào cũng chịu được</span>
+<pre><code class="language-sql"><span class="tok-comment">-- 2. viết lại thành ba bước mà bảng nào cũng chịu được</span>
 ALTER TABLE "Note" ADD COLUMN "slug" TEXT;                       <span class="tok-comment">-- cho phép NULL trước</span>
 UPDATE "Note" SET "slug" = 'note-' || "id" WHERE "slug" IS NULL;  <span class="tok-comment">-- điền dữ liệu</span>
 ALTER TABLE "Note" ALTER COLUMN "slug" SET NOT NULL;              <span class="tok-comment">-- rồi mới siết</span>
 CREATE UNIQUE INDEX "Note_slug_key" ON "Note"("slug");</code></pre>
-<pre><code>npx prisma migrate deploy</code></pre>
+<pre><code class="language-bash">npx prisma migrate deploy</code></pre>
 <div class="out">The following migration(s) have been applied:
 migrations/
   └─ 20260727170000_add_slug/
@@ -750,7 +750,7 @@ All migrations have been successfully applied.
 <p class="lead">Lesson 5.5 made a promise: the layered structure exists so that storage can change without the HTTP layer noticing. This lesson collects on it — and reports the honest cost, down to the line count.</p>
 
 <h3>The five operations</h3>
-<pre><code><span class="tok-comment">// create</span>
+<pre><code class="language-typescript"><span class="tok-comment">// create</span>
 <span class="tok-keyword">await</span> prisma.note.<span class="tok-fn">create</span>({ data: { title, body, slug, authorId } });
 
 <span class="tok-comment">// read one — returns null when there is no row</span>
@@ -777,7 +777,7 @@ All migrations have been successfully applied.
 
 <h3>Missing rows: null or exception, pick deliberately</h3>
 <p>The route layer from chapter 5 expects <code>null</code> for "not found" and a boolean from delete. Prisma throws instead, with a code — so the service translates once, and the routes keep the shape they already had:</p>
-<pre><code><span class="tok-keyword">export async function</span> <span class="tok-fn">update</span>(id, patch) {
+<pre><code class="language-javascript"><span class="tok-keyword">export async function</span> <span class="tok-fn">update</span>(id, patch) {
   <span class="tok-keyword">try</span> {
     <span class="tok-keyword">return await</span> prisma.note.<span class="tok-fn">update</span>({ where: { id }, data: patch });
   } <span class="tok-keyword">catch</span> (err) {
@@ -788,7 +788,7 @@ All migrations have been successfully applied.
 <div class="callout">That <code>throw err</code> is not decoration. Swallowing every exception here would turn a dead database into a tidy 404, and you would spend an afternoon looking for the missing note that was never missing. Translate the one error you understand; let the rest reach the error handler.</div>
 
 <h3>The service, rewritten</h3>
-<pre><code><span class="tok-comment">// src/services/notes.service.mjs — chapter 7 version</span>
+<pre><code class="language-javascript"><span class="tok-comment">// src/services/notes.service.mjs — chapter 7 version</span>
 <span class="tok-keyword">import</span> { prisma } <span class="tok-keyword">from</span> <span class="tok-string">'../db.mjs'</span>;
 
 <span class="tok-keyword">const</span> AUTHOR_ID = <span class="tok-number">1</span>;   <span class="tok-comment">// chapter 8 replaces this with the logged-in user</span>
@@ -809,7 +809,7 @@ All migrations have been successfully applied.
 
 <h3>The honest diff</h3>
 <p>Here is the router change, produced by <code>diff</code> on the two real files:</p>
-<pre><code>-import * as service from '../services/notes.service.mem.mjs';
+<pre><code class="language-javascript">-import * as service from '../services/notes.service.mem.mjs';
 +import * as service from '../services/notes.service.pg.mjs';
 
 -router.get('/', (req, res) =&gt; {
@@ -830,19 +830,19 @@ All migrations have been successfully applied.
 <div class="pitfall">Express 5 forwards a rejected promise from a handler to your error handler — Express 4 does not (we proved it in lesson 5.1: the request hung forever). Adding <code>await</code> to handlers on Express 4 without <code>try/catch</code> or a wrapper is how a "small change to use a database" turns into requests that never answer.</div>
 
 <h3>Running it — every response captured from the real server</h3>
-<pre><code>curl -i -X POST localhost:3077/api/v1/notes \\
+<pre><code class="language-bash">curl -i -X POST localhost:3077/api/v1/notes \\
   -H 'Content-Type: application/json' \\
   -d '{"title":"Learning Prisma","body":"chuong 7"}'</code></pre>
 <div class="out">HTTP/1.1 201 Created
 Location: /api/v1/notes/1
 Content-Type: application/json; charset=utf-8
 ETag: W/"c6-hFRwcUoSrK6bPKqFlhgUHr/T0Yw"</div>
-<pre><code>curl "localhost:3077/api/v1/notes?q=prisma"</code></pre>
+<pre><code class="language-bash">curl "localhost:3077/api/v1/notes?q=prisma"</code></pre>
 <div class="out">{"items":[{"id":1,"title":"Learning Prisma","slug":"note-1785169979420",
   "body":"chuong 7","pinned":false,"authorId":1,
   "createdAt":"2026-07-27T16:32:59.481Z","updatedAt":"2026-07-27T16:32:59.481Z",
   "version":1}],"page":1,"limit":10,"total":1}</div>
-<pre><code>curl localhost:3077/api/v1/notes/999
+<pre><code class="language-bash">curl localhost:3077/api/v1/notes/999
 curl -X PATCH localhost:3077/api/v1/notes/1 -d '{"body":"đã sửa"}' -H 'Content-Type: application/json'
 curl -X DELETE localhost:3077/api/v1/notes/2
 curl -X POST localhost:3077/api/v1/notes -d '{"body":"no title"}' -H 'Content-Type: application/json'</code></pre>
@@ -854,13 +854,13 @@ POST   → {"error":{"code":"VALIDATION_FAILED","message":"title is required"}} 
 
 <h3>Transactions, demonstrated rather than defined</h3>
 <p>Two writes that belong together: create a note, then create its tag. The tag name is deliberately too long for <code>VarChar(40)</code>, so the second write fails. First without a transaction:</p>
-<pre><code><span class="tok-keyword">const</span> note = <span class="tok-keyword">await</span> prisma.note.<span class="tok-fn">create</span>({ data: { … } });
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> note = <span class="tok-keyword">await</span> prisma.note.<span class="tok-fn">create</span>({ data: { … } });
 <span class="tok-keyword">await</span> prisma.tag.<span class="tok-fn">create</span>({ data: { name: <span class="tok-string">'x'</span>.<span class="tok-fn">repeat</span>(<span class="tok-number">60</span>) } });   <span class="tok-comment">// fails</span></code></pre>
 <div class="out">before: 1 note, 0 tag
 error : P2000 - The provided value for the column is too long for the column's type
 after : 2 note, 0 tag   &lt;- the note WAS written, the tag was not: half-finished data</div>
 <p>Now the identical scenario inside <code>$transaction</code>:</p>
-<pre><code><span class="tok-keyword">await</span> prisma.$<span class="tok-fn">transaction</span>(<span class="tok-keyword">async</span> (tx) =&gt; {
+<pre><code class="language-typescript"><span class="tok-keyword">await</span> prisma.$<span class="tok-fn">transaction</span>(<span class="tok-keyword">async</span> (tx) =&gt; {
   <span class="tok-keyword">await</span> tx.note.<span class="tok-fn">create</span>({ data: { … } });
   <span class="tok-keyword">await</span> tx.tag.<span class="tok-fn">create</span>({ data: { name: <span class="tok-string">'y'</span>.<span class="tok-fn">repeat</span>(<span class="tok-number">60</span>) } });   <span class="tok-comment">// still fails</span>
 });</code></pre>
@@ -880,7 +880,7 @@ transaction. The timeout for this transaction was 5000 ms, however 6045 ms passe
 since the start of the transaction. Consider increasing the interactive transaction
 timeout or doing less work in the transaction.</div>
 <p>Raising the timeout works and is usually the wrong fix:</p>
-<pre><code><span class="tok-keyword">await</span> prisma.$<span class="tok-fn">transaction</span>(<span class="tok-keyword">async</span> (tx) =&gt; { … },
+<pre><code class="language-typescript"><span class="tok-keyword">await</span> prisma.$<span class="tok-fn">transaction</span>(<span class="tok-keyword">async</span> (tx) =&gt; { … },
   { timeout: <span class="tok-number">15000</span>, maxWait: <span class="tok-number">5000</span> });</code></pre>
 <div class="out">with timeout: 15000 -> completed normally</div>
 <div class="callout warn">An open transaction occupies one pool slot <em>and</em> one PostgreSQL backend, and holds its locks the whole time. Ten concurrent transactions each waiting six seconds on an external API will drain a pool of ten, and then every other request in the process queues behind them — the incident looks like "the database is down" while the database is idle. Do the HTTP call first, then open the transaction around the writes only.</div>
@@ -912,7 +912,7 @@ timeout or doing less work in the transaction.</div>
 <p class="lead">Bài 5.5 đã hứa: cấu trúc phân tầng tồn tại để tầng lưu trữ có thể thay đổi mà tầng HTTP không hay biết. Bài này đến đòi lời hứa đó — và báo cáo cái giá thật, chi tiết tới từng dòng.</p>
 
 <h3>Năm thao tác</h3>
-<pre><code><span class="tok-comment">// tạo</span>
+<pre><code class="language-typescript"><span class="tok-comment">// tạo</span>
 <span class="tok-keyword">await</span> prisma.note.<span class="tok-fn">create</span>({ data: { title, body, slug, authorId } });
 
 <span class="tok-comment">// đọc một — trả về null khi không có dòng nào</span>
@@ -939,7 +939,7 @@ timeout or doing less work in the transaction.</div>
 
 <h3>Không tìm thấy dòng: null hay ngoại lệ, hãy chọn có chủ đích</h3>
 <p>Tầng route của chương 5 mong nhận <code>null</code> cho "không tìm thấy" và một giá trị boolean từ lệnh xoá. Prisma thì ném lỗi, kèm mã — nên service dịch một lần, còn route giữ nguyên hình dạng vốn có:</p>
-<pre><code><span class="tok-keyword">export async function</span> <span class="tok-fn">update</span>(id, patch) {
+<pre><code class="language-javascript"><span class="tok-keyword">export async function</span> <span class="tok-fn">update</span>(id, patch) {
   <span class="tok-keyword">try</span> {
     <span class="tok-keyword">return await</span> prisma.note.<span class="tok-fn">update</span>({ where: { id }, data: patch });
   } <span class="tok-keyword">catch</span> (err) {
@@ -950,7 +950,7 @@ timeout or doing less work in the transaction.</div>
 <div class="callout">Dòng <code>throw err</code> đó không phải để trang trí. Nuốt hết mọi ngoại lệ ở đây sẽ biến một cơ sở dữ liệu đã chết thành một lỗi 404 gọn gàng, và bạn sẽ mất cả buổi chiều đi tìm ghi chú "biến mất" mà thật ra chưa từng biến mất. Chỉ dịch đúng cái lỗi bạn hiểu; phần còn lại để nó đi tới bộ xử lý lỗi.</div>
 
 <h3>Service, viết lại</h3>
-<pre><code><span class="tok-comment">// src/services/notes.service.mjs — bản chương 7</span>
+<pre><code class="language-javascript"><span class="tok-comment">// src/services/notes.service.mjs — bản chương 7</span>
 <span class="tok-keyword">import</span> { prisma } <span class="tok-keyword">from</span> <span class="tok-string">'../db.mjs'</span>;
 
 <span class="tok-keyword">const</span> AUTHOR_ID = <span class="tok-number">1</span>;   <span class="tok-comment">// chương 8 sẽ thay bằng người dùng đang đăng nhập</span>
@@ -971,7 +971,7 @@ timeout or doing less work in the transaction.</div>
 
 <h3>Bản diff trung thực</h3>
 <p>Đây là thay đổi ở router, do lệnh <code>diff</code> sinh ra trên hai file thật:</p>
-<pre><code>-import * as service from '../services/notes.service.mem.mjs';
+<pre><code class="language-javascript">-import * as service from '../services/notes.service.mem.mjs';
 +import * as service from '../services/notes.service.pg.mjs';
 
 -router.get('/', (req, res) =&gt; {
@@ -992,19 +992,19 @@ timeout or doing less work in the transaction.</div>
 <div class="pitfall">Express 5 tự chuyển một promise bị từ chối trong handler tới bộ xử lý lỗi của bạn — Express 4 thì không (chúng ta đã chứng minh ở bài 5.1: request treo vĩnh viễn). Thêm <code>await</code> vào handler trên Express 4 mà không có <code>try/catch</code> hay lớp bọc chính là cách một "thay đổi nhỏ để dùng cơ sở dữ liệu" biến thành những request không bao giờ có câu trả lời.</div>
 
 <h3>Chạy thử — mọi phản hồi đều chép từ server thật</h3>
-<pre><code>curl -i -X POST localhost:3077/api/v1/notes \\
+<pre><code class="language-bash">curl -i -X POST localhost:3077/api/v1/notes \\
   -H 'Content-Type: application/json' \\
   -d '{"title":"Learning Prisma","body":"chuong 7"}'</code></pre>
 <div class="out">HTTP/1.1 201 Created
 Location: /api/v1/notes/1
 Content-Type: application/json; charset=utf-8
 ETag: W/"c6-hFRwcUoSrK6bPKqFlhgUHr/T0Yw"</div>
-<pre><code>curl "localhost:3077/api/v1/notes?q=prisma"</code></pre>
+<pre><code class="language-bash">curl "localhost:3077/api/v1/notes?q=prisma"</code></pre>
 <div class="out">{"items":[{"id":1,"title":"Learning Prisma","slug":"note-1785169979420",
   "body":"chuong 7","pinned":false,"authorId":1,
   "createdAt":"2026-07-27T16:32:59.481Z","updatedAt":"2026-07-27T16:32:59.481Z",
   "version":1}],"page":1,"limit":10,"total":1}</div>
-<pre><code>curl localhost:3077/api/v1/notes/999
+<pre><code class="language-bash">curl localhost:3077/api/v1/notes/999
 curl -X PATCH localhost:3077/api/v1/notes/1 -d '{"body":"đã sửa"}' -H 'Content-Type: application/json'
 curl -X DELETE localhost:3077/api/v1/notes/2
 curl -X POST localhost:3077/api/v1/notes -d '{"body":"no title"}' -H 'Content-Type: application/json'</code></pre>
@@ -1016,13 +1016,13 @@ POST   → {"error":{"code":"VALIDATION_FAILED","message":"title is required"}} 
 
 <h3>Transaction, chứng minh thay vì định nghĩa</h3>
 <p>Hai lệnh ghi phải đi cùng nhau: tạo ghi chú, rồi tạo thẻ cho nó. Tên thẻ được cố ý làm dài quá <code>VarChar(40)</code> nên lệnh ghi thứ hai sẽ hỏng. Trước hết là khi không có transaction:</p>
-<pre><code><span class="tok-keyword">const</span> note = <span class="tok-keyword">await</span> prisma.note.<span class="tok-fn">create</span>({ data: { … } });
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> note = <span class="tok-keyword">await</span> prisma.note.<span class="tok-fn">create</span>({ data: { … } });
 <span class="tok-keyword">await</span> prisma.tag.<span class="tok-fn">create</span>({ data: { name: <span class="tok-string">'x'</span>.<span class="tok-fn">repeat</span>(<span class="tok-number">60</span>) } });   <span class="tok-comment">// hỏng</span></code></pre>
 <div class="out">trước: 1 note, 0 tag
 lỗi  : P2000 - The provided value for the column is too long for the column's type
 sau  : 2 note, 0 tag   &lt;- note ĐÃ ghi, tag thì không: dữ liệu nửa vời</div>
 <p>Giờ là đúng kịch bản đó nhưng đặt trong <code>$transaction</code>:</p>
-<pre><code><span class="tok-keyword">await</span> prisma.$<span class="tok-fn">transaction</span>(<span class="tok-keyword">async</span> (tx) =&gt; {
+<pre><code class="language-typescript"><span class="tok-keyword">await</span> prisma.$<span class="tok-fn">transaction</span>(<span class="tok-keyword">async</span> (tx) =&gt; {
   <span class="tok-keyword">await</span> tx.note.<span class="tok-fn">create</span>({ data: { … } });
   <span class="tok-keyword">await</span> tx.tag.<span class="tok-fn">create</span>({ data: { name: <span class="tok-string">'y'</span>.<span class="tok-fn">repeat</span>(<span class="tok-number">60</span>) } });   <span class="tok-comment">// vẫn hỏng</span>
 });</code></pre>
@@ -1042,7 +1042,7 @@ transaction. The timeout for this transaction was 5000 ms, however 6045 ms passe
 since the start of the transaction. Consider increasing the interactive transaction
 timeout or doing less work in the transaction.</div>
 <p>Nâng thời gian chờ thì chạy được, và thường là cách sửa sai:</p>
-<pre><code><span class="tok-keyword">await</span> prisma.$<span class="tok-fn">transaction</span>(<span class="tok-keyword">async</span> (tx) =&gt; { … },
+<pre><code class="language-typescript"><span class="tok-keyword">await</span> prisma.$<span class="tok-fn">transaction</span>(<span class="tok-keyword">async</span> (tx) =&gt; { … },
   { timeout: <span class="tok-number">15000</span>, maxWait: <span class="tok-number">5000</span> });</code></pre>
 <div class="out">với timeout: 15000 -> chạy xong bình thường</div>
 <div class="callout warn">Một transaction đang mở chiếm một chỗ trong pool <em>và</em> một backend PostgreSQL, đồng thời giữ khoá suốt thời gian đó. Mười transaction đồng thời, mỗi cái chờ sáu giây một API bên ngoài, sẽ vét cạn một pool mười chỗ, và rồi mọi request khác trong tiến trình phải xếp hàng sau chúng — sự cố trông như "cơ sở dữ liệu chết" trong khi cơ sở dữ liệu đang rảnh. Hãy gọi HTTP trước, rồi mới mở transaction chỉ bao quanh các lệnh ghi.</div>
@@ -1094,7 +1094,7 @@ timeout or doing less work in the transaction.</div>
   <div class="lz-node"><span class="lz-k">many-to-many</span><span class="lz-v">Note ↔ Tag through <code>NoteTag</code>. Two foreign keys, compound primary key.</span></div>
   <div class="lz-node"><span class="lz-k">one-to-one</span><span class="lz-v">User → Profile. Same as one-to-many plus <code>@unique</code> on the foreign key.</span></div>
 </div>
-<pre><code><span class="tok-comment">// read a user with their notes</span>
+<pre><code class="language-typescript"><span class="tok-comment">// read a user with their notes</span>
 <span class="tok-keyword">await</span> prisma.user.<span class="tok-fn">findMany</span>({ include: { notes: <span class="tok-keyword">true</span> } });
 
 <span class="tok-comment">// only the fields you need — from both sides</span>
@@ -1131,12 +1131,12 @@ SELECT "Note"."id", "Note"."title", "Note"."slug", "Note"."body", "Note"."pinned
 
 <h3>The experiment: 50 users, 1000 notes, five ways</h3>
 <p>Every run counts the SQL statements by listening to Prisma's <code>query</code> event, so the numbers are not estimates:</p>
-<pre><code><span class="tok-keyword">const</span> prisma = <span class="tok-keyword">new</span> <span class="tok-fn">PrismaClient</span>({
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> prisma = <span class="tok-keyword">new</span> <span class="tok-fn">PrismaClient</span>({
   adapter, log: [{ emit: <span class="tok-string">'event'</span>, level: <span class="tok-string">'query'</span> }],
 });
 <span class="tok-keyword">let</span> queries = <span class="tok-number">0</span>;
 prisma.$<span class="tok-fn">on</span>(<span class="tok-string">'query'</span>, () =&gt; { queries++; });</code></pre>
-<pre><code><span class="tok-comment">// A. the loop — the bug we are hunting</span>
+<pre><code class="language-javascript"><span class="tok-comment">// A. the loop — the bug we are hunting</span>
 <span class="tok-keyword">const</span> users = <span class="tok-keyword">await</span> prisma.user.<span class="tok-fn">findMany</span>();
 <span class="tok-keyword">for</span> (<span class="tok-keyword">const</span> u <span class="tok-keyword">of</span> users) {
   <span class="tok-keyword">const</span> notes = <span class="tok-keyword">await</span> prisma.note.<span class="tok-fn">findMany</span>({ where: { authorId: u.id } });
@@ -1156,7 +1156,7 @@ E. include + select 2 columns         3ms     2 SQL queries   1000 notes</div>
 
 <h3>Fixing it without <code>include</code></h3>
 <p>Sometimes the shape you need does not map onto <code>include</code>. Then fetch both sets and join in memory — still two queries:</p>
-<pre><code><span class="tok-keyword">const</span> [users, notes] = <span class="tok-keyword">await</span> Promise.<span class="tok-fn">all</span>([
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> [users, notes] = <span class="tok-keyword">await</span> Promise.<span class="tok-fn">all</span>([
   prisma.user.<span class="tok-fn">findMany</span>(),
   prisma.note.<span class="tok-fn">findMany</span>({ where: { authorId: { <span class="tok-keyword">in</span>: ids } } }),
 ]);
@@ -1165,7 +1165,7 @@ E. include + select 2 columns         3ms     2 SQL queries   1000 notes</div>
 <p>This is the "dataloader" pattern in its simplest form: collect the ids, fetch once with <code>in</code>, index by key. Row C above is exactly this code — 12ms, two queries.</p>
 
 <h3>Do not fetch what you are only going to count</h3>
-<pre><code><span class="tok-comment">// wrong: 1000 rows travel the network so you can call .length</span>
+<pre><code class="language-javascript"><span class="tok-comment">// wrong: 1000 rows travel the network so you can call .length</span>
 <span class="tok-keyword">const</span> users = <span class="tok-keyword">await</span> prisma.user.<span class="tok-fn">findMany</span>({ include: { notes: <span class="tok-keyword">true</span> } });
 users.<span class="tok-fn">map</span>(u =&gt; u.notes.length);
 
@@ -1183,7 +1183,7 @@ select 4 columns  :  50.1 KB     (6.4× smaller)</div>
 <div class="callout ok"><code>omit</code> is the mirror image and often more maintainable: <code>omit: { body: true }</code> keeps every future column automatically while dropping the one you know is heavy. With <code>select</code> you must remember to add new fields; with <code>omit</code> you must remember to exclude new heavy ones. Pick per endpoint.</div>
 
 <h3>Reading the query log while you develop</h3>
-<pre><code><span class="tok-keyword">const</span> prisma = <span class="tok-keyword">new</span> <span class="tok-fn">PrismaClient</span>({
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> prisma = <span class="tok-keyword">new</span> <span class="tok-fn">PrismaClient</span>({
   adapter,
   log: process.env.NODE_ENV === <span class="tok-string">'development'</span>
     ? [{ emit: <span class="tok-string">'event'</span>, level: <span class="tok-string">'query'</span> }]
@@ -1215,7 +1215,7 @@ prisma.$<span class="tok-fn">on</span>(<span class="tok-string">'query'</span>, 
   <div class="lz-node"><span class="lz-k">nhiều–nhiều</span><span class="lz-v">Note ↔ Tag qua <code>NoteTag</code>. Hai khoá ngoại, khoá chính ghép.</span></div>
   <div class="lz-node"><span class="lz-k">một–một</span><span class="lz-v">User → Profile. Giống một–nhiều cộng thêm <code>@unique</code> trên khoá ngoại.</span></div>
 </div>
-<pre><code><span class="tok-comment">// đọc người dùng kèm ghi chú của họ</span>
+<pre><code class="language-typescript"><span class="tok-comment">// đọc người dùng kèm ghi chú của họ</span>
 <span class="tok-keyword">await</span> prisma.user.<span class="tok-fn">findMany</span>({ include: { notes: <span class="tok-keyword">true</span> } });
 
 <span class="tok-comment">// chỉ lấy những trường bạn cần — ở cả hai phía</span>
@@ -1252,12 +1252,12 @@ SELECT "Note"."id", "Note"."title", "Note"."slug", "Note"."body", "Note"."pinned
 
 <h3>Thí nghiệm: 50 người dùng, 1000 ghi chú, năm cách</h3>
 <p>Mỗi lần chạy đều đếm số câu lệnh SQL bằng cách nghe sự kiện <code>query</code> của Prisma, nên các con số không phải ước lượng:</p>
-<pre><code><span class="tok-keyword">const</span> prisma = <span class="tok-keyword">new</span> <span class="tok-fn">PrismaClient</span>({
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> prisma = <span class="tok-keyword">new</span> <span class="tok-fn">PrismaClient</span>({
   adapter, log: [{ emit: <span class="tok-string">'event'</span>, level: <span class="tok-string">'query'</span> }],
 });
 <span class="tok-keyword">let</span> queries = <span class="tok-number">0</span>;
 prisma.$<span class="tok-fn">on</span>(<span class="tok-string">'query'</span>, () =&gt; { queries++; });</code></pre>
-<pre><code><span class="tok-comment">// A. vòng lặp — con bug chúng ta đang săn</span>
+<pre><code class="language-javascript"><span class="tok-comment">// A. vòng lặp — con bug chúng ta đang săn</span>
 <span class="tok-keyword">const</span> users = <span class="tok-keyword">await</span> prisma.user.<span class="tok-fn">findMany</span>();
 <span class="tok-keyword">for</span> (<span class="tok-keyword">const</span> u <span class="tok-keyword">of</span> users) {
   <span class="tok-keyword">const</span> notes = <span class="tok-keyword">await</span> prisma.note.<span class="tok-fn">findMany</span>({ where: { authorId: u.id } });
@@ -1277,7 +1277,7 @@ E. include + select 2 cột              3ms     2 truy vấn SQL   1000 ghi ch�
 
 <h3>Sửa mà không dùng <code>include</code></h3>
 <p>Đôi khi hình dạng dữ liệu bạn cần không ánh xạ được vào <code>include</code>. Khi đó hãy lấy cả hai tập rồi ghép trong bộ nhớ — vẫn chỉ là hai truy vấn:</p>
-<pre><code><span class="tok-keyword">const</span> [users, notes] = <span class="tok-keyword">await</span> Promise.<span class="tok-fn">all</span>([
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> [users, notes] = <span class="tok-keyword">await</span> Promise.<span class="tok-fn">all</span>([
   prisma.user.<span class="tok-fn">findMany</span>(),
   prisma.note.<span class="tok-fn">findMany</span>({ where: { authorId: { <span class="tok-keyword">in</span>: ids } } }),
 ]);
@@ -1286,7 +1286,7 @@ E. include + select 2 cột              3ms     2 truy vấn SQL   1000 ghi ch�
 <p>Đây là mẫu "dataloader" ở dạng đơn giản nhất: gom id lại, lấy một lần bằng <code>in</code>, rồi lập chỉ mục theo khoá. Dòng C ở trên chính là đoạn code này — 12ms, hai truy vấn.</p>
 
 <h3>Đừng tải về thứ mà bạn chỉ định đếm</h3>
-<pre><code><span class="tok-comment">// sai: 1000 dòng chạy qua mạng chỉ để bạn gọi .length</span>
+<pre><code class="language-javascript"><span class="tok-comment">// sai: 1000 dòng chạy qua mạng chỉ để bạn gọi .length</span>
 <span class="tok-keyword">const</span> users = <span class="tok-keyword">await</span> prisma.user.<span class="tok-fn">findMany</span>({ include: { notes: <span class="tok-keyword">true</span> } });
 users.<span class="tok-fn">map</span>(u =&gt; u.notes.length);
 
@@ -1304,7 +1304,7 @@ select 4 cột  :  50,1 KB     (nhỏ hơn 6,4 lần)</div>
 <div class="callout ok"><code>omit</code> là hình ảnh phản chiếu và thường dễ bảo trì hơn: <code>omit: { body: true }</code> giữ lại mọi cột thêm vào sau này một cách tự động trong khi vẫn bỏ đi cái cột bạn biết là nặng. Với <code>select</code> bạn phải nhớ bổ sung trường mới; với <code>omit</code> bạn phải nhớ loại trừ trường nặng mới. Hãy chọn theo từng endpoint.</div>
 
 <h3>Đọc log truy vấn trong lúc phát triển</h3>
-<pre><code><span class="tok-keyword">const</span> prisma = <span class="tok-keyword">new</span> <span class="tok-fn">PrismaClient</span>({
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> prisma = <span class="tok-keyword">new</span> <span class="tok-fn">PrismaClient</span>({
   adapter,
   log: process.env.NODE_ENV === <span class="tok-string">'development'</span>
     ? [{ emit: <span class="tok-string">'event'</span>, level: <span class="tok-string">'query'</span> }]
@@ -1347,7 +1347,7 @@ prisma.$<span class="tok-fn">on</span>(<span class="tok-string">'query'</span>, 
 
 <h3>The query, before</h3>
 <p>"Twenty most recent notes by one author" — the most ordinary query an API ever runs:</p>
-<pre><code>EXPLAIN (ANALYZE, BUFFERS)
+<pre><code class="language-sql">EXPLAIN (ANALYZE, BUFFERS)
 SELECT id, title FROM "Note"
 WHERE "authorId" = 7
 ORDER BY "createdAt" DESC
@@ -1375,11 +1375,11 @@ Execution Time: 28.618 ms</div>
 
 <h3>The index, and the same query after</h3>
 <p>Declare it in the schema — an index is part of your data model, not a production hotfix:</p>
-<pre><code><span class="tok-keyword">model</span> Note {
+<pre><code class="language-typescript"><span class="tok-keyword">model</span> Note {
   …
   @@index([authorId, createdAt(sort: Desc)])
 }</code></pre>
-<pre><code>npx prisma migrate dev --name index_note_author_created</code></pre>
+<pre><code class="language-bash">npx prisma migrate dev --name index_note_author_created</code></pre>
 <div class="out">-- CreateIndex
 CREATE INDEX "Note_authorId_createdAt_idx" ON "Note"("authorId", "createdAt" DESC);</div>
 <div class="out">Limit  (cost=0.42..69.59 rows=20) (actual time=0.098..0.112 rows=20 loops=1)
@@ -1432,7 +1432,7 @@ WHERE title = 'Ghi chú số 4242'   Parallel Seq Scan    31.801 ms  (no index o
   <div class="lz-step"><span class="lz-n">3</span><span class="lz-t">look for Seq Scan + Rows Removed</span></div>
   <div class="lz-step"><span class="lz-n">4</span><span class="lz-t">add the index, measure again</span></div>
 </div>
-<pre><code><span class="tok-comment">// get the SQL Prisma will send, without running it</span>
+<pre><code class="language-javascript"><span class="tok-comment">// get the SQL Prisma will send, without running it</span>
 prisma.$<span class="tok-fn">on</span>(<span class="tok-string">'query'</span>, (e) =&gt; console.log(e.query, e.params));</code></pre>
 <div class="callout warn"><code>EXPLAIN ANALYZE</code> <strong>runs</strong> the query — on an <code>UPDATE</code> or <code>DELETE</code> it really updates or deletes. Wrap those in <code>BEGIN; … ROLLBACK;</code>. Also measure against realistic data volumes: on 100 rows every plan looks the same, which is exactly why these problems ship.</div>
 <div class="pitfall">A freshly loaded table has no statistics, and the planner guesses badly until it does. Run <code>ANALYZE "Note";</code> after a bulk import before you trust any plan — the numbers in this lesson were all taken after an explicit <code>ANALYZE</code>.</div>
@@ -1454,7 +1454,7 @@ prisma.$<span class="tok-fn">on</span>(<span class="tok-string">'query'</span>, 
 
 <h3>Truy vấn, lúc chưa có chỉ mục</h3>
 <p>"Hai mươi ghi chú mới nhất của một tác giả" — truy vấn bình thường nhất mà một API từng chạy:</p>
-<pre><code>EXPLAIN (ANALYZE, BUFFERS)
+<pre><code class="language-sql">EXPLAIN (ANALYZE, BUFFERS)
 SELECT id, title FROM "Note"
 WHERE "authorId" = 7
 ORDER BY "createdAt" DESC
@@ -1482,11 +1482,11 @@ Execution Time: 28.618 ms</div>
 
 <h3>Chỉ mục, và cũng truy vấn đó sau khi có nó</h3>
 <p>Hãy khai báo trong lược đồ — chỉ mục là một phần của mô hình dữ liệu, không phải bản vá nóng trên production:</p>
-<pre><code><span class="tok-keyword">model</span> Note {
+<pre><code class="language-typescript"><span class="tok-keyword">model</span> Note {
   …
   @@index([authorId, createdAt(sort: Desc)])
 }</code></pre>
-<pre><code>npx prisma migrate dev --name index_note_author_created</code></pre>
+<pre><code class="language-bash">npx prisma migrate dev --name index_note_author_created</code></pre>
 <div class="out">-- CreateIndex
 CREATE INDEX "Note_authorId_createdAt_idx" ON "Note"("authorId", "createdAt" DESC);</div>
 <div class="out">Limit  (cost=0.42..69.59 rows=20) (actual time=0.098..0.112 rows=20 loops=1)
@@ -1539,7 +1539,7 @@ WHERE title = 'Ghi chú số 4242'   Parallel Seq Scan    31,801 ms  (title khô
   <div class="lz-step"><span class="lz-n">3</span><span class="lz-t">soi Seq Scan + Rows Removed</span></div>
   <div class="lz-step"><span class="lz-n">4</span><span class="lz-t">thêm chỉ mục, đo lại</span></div>
 </div>
-<pre><code><span class="tok-comment">// lấy chính câu SQL mà Prisma sẽ gửi, không cần chạy nó</span>
+<pre><code class="language-javascript"><span class="tok-comment">// lấy chính câu SQL mà Prisma sẽ gửi, không cần chạy nó</span>
 prisma.$<span class="tok-fn">on</span>(<span class="tok-string">'query'</span>, (e) =&gt; console.log(e.query, e.params));</code></pre>
 <div class="callout warn"><code>EXPLAIN ANALYZE</code> <strong>có chạy thật</strong> truy vấn — với <code>UPDATE</code> hay <code>DELETE</code> thì nó cập nhật hoặc xoá thật. Hãy bọc những câu đó trong <code>BEGIN; … ROLLBACK;</code>. Và hãy đo trên lượng dữ liệu sát thực tế: với 100 dòng thì kế hoạch nào trông cũng như nhau, và đó chính xác là lý do những vấn đề này lọt lên production.</div>
 <div class="pitfall">Một bảng vừa nạp dữ liệu xong thì chưa có thống kê, và bộ lập kế hoạch sẽ đoán rất tệ cho tới khi có. Hãy chạy <code>ANALYZE "Note";</code> sau khi nhập hàng loạt rồi mới tin bất kỳ kế hoạch nào — mọi con số trong bài này đều được lấy sau một lệnh <code>ANALYZE</code> tường minh.</div>
@@ -1575,7 +1575,7 @@ skip: 700000, take: 20             108.6ms
 where id &gt; cursor, take: 20          0.6ms
 count(*) over the whole table       41.7ms</div>
 <p><code>OFFSET</code> is not a jump — the database produces every skipped row and throws it away. Page 35,000 costs 108ms of work to return twenty rows, and page 1 costs 1ms, which is why "the app gets slower the deeper you scroll" is a real, reproducible complaint. Cursor pagination reads from the index at the position you name and stops after twenty:</p>
-<pre><code><span class="tok-comment">// page 1</span>
+<pre><code class="language-javascript"><span class="tok-comment">// page 1</span>
 <span class="tok-keyword">const</span> page = <span class="tok-keyword">await</span> prisma.note.<span class="tok-fn">findMany</span>({
   where: { authorId }, orderBy: { id: <span class="tok-string">'desc'</span> }, take: <span class="tok-number">20</span>,
 });
@@ -1597,7 +1597,7 @@ count(*) over the whole table       41.7ms</div>
 
 <h3>Unique violations become 409, not 500</h3>
 <p>Two users register with the same email, or two requests race to create the same slug. The database is the only place that can decide, and it answers with an error you can catch:</p>
-<pre><code><span class="tok-keyword">await</span> prisma.note.<span class="tok-fn">create</span>({ data: { slug: <span class="tok-string">'bulk-1'</span>, … } });   <span class="tok-comment">// slug already exists</span></code></pre>
+<pre><code class="language-typescript"><span class="tok-keyword">await</span> prisma.note.<span class="tok-fn">create</span>({ data: { slug: <span class="tok-string">'bulk-1'</span>, … } });   <span class="tok-comment">// slug already exists</span></code></pre>
 <div class="out">code       : P2002
 message    : Unique constraint failed on the fields: (\`slug\`)
 class      : PrismaClientKnownRequestError
@@ -1605,7 +1605,7 @@ meta       : { modelName: "Note", driverAdapterError: { cause: {
                originalCode: "23505",
                originalMessage: "duplicate key value violates unique constraint \\"Note_slug_key\\"",
                constraint: { fields: ["slug"] } } } }</div>
-<pre><code><span class="tok-comment">// translate once, in the service layer</span>
+<pre><code class="language-javascript"><span class="tok-comment">// translate once, in the service layer</span>
 <span class="tok-keyword">try</span> {
   <span class="tok-keyword">return await</span> prisma.note.<span class="tok-fn">create</span>({ data });
 } <span class="tok-keyword">catch</span> (err) {
@@ -1620,7 +1620,7 @@ meta       : { modelName: "Note", driverAdapterError: { cause: {
 
 <h3>The lost update, and the version column that stops it</h3>
 <p>Chapter 6 reproduced this bug with a <code>Map</code>: A and B both open note 42, A saves a new title, B saves a full object built from what they loaded — and A's change is gone with no error anywhere. The fix is one integer column and one <code>where</code> clause:</p>
-<pre><code><span class="tok-keyword">const</span> updated = <span class="tok-keyword">await</span> prisma.note.<span class="tok-fn">updateMany</span>({
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> updated = <span class="tok-keyword">await</span> prisma.note.<span class="tok-fn">updateMany</span>({
   where: { id, version: clientVersion },              <span class="tok-comment">// only if nothing changed</span>
   data: { ...patch, version: { increment: <span class="tok-number">1</span> } },
 });
@@ -1647,7 +1647,7 @@ final state: body="A sửa" version=2   &lt;- A's change was NOT lost</div>
 
 <h3>Raw SQL, and the one line that leaks the table</h3>
 <p>Prisma covers most needs, but sometimes you want SQL. There are two ways, and the difference is not stylistic. The variable below is what an attacker types into a search box:</p>
-<pre><code><span class="tok-keyword">const</span> evil = <span class="tok-string">"bulk-1' OR '1'='1"</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> evil = <span class="tok-string">"bulk-1' OR '1'='1"</span>;
 
 <span class="tok-comment">// A: string concatenation</span>
 <span class="tok-keyword">await</span> prisma.$<span class="tok-fn">queryRawUnsafe</span>(
@@ -1665,7 +1665,7 @@ C. prisma.note.count({ where })    -&gt; 0 rows</div>
 <div class="pitfall">Raw queries also skip Prisma's type mapping. <code>SELECT count(*)</code> comes back as a JavaScript <code>BigInt</code> and <code>JSON.stringify</code> throws "Do not know how to serialize a BigInt" — cast in SQL (<code>count(*)::int</code>) or convert in JS. And <code>SELECT pg_sleep(0.1)</code> fails outright with <code>UnsupportedNativeDataType: void</code>; write <code>SELECT 1 FROM pg_sleep(0.1)</code>. Both of these cost real minutes the first time.</div>
 
 <h3>The final shape of the list endpoint</h3>
-<pre><code><span class="tok-keyword">export async function</span> <span class="tok-fn">list</span>({ cursor, limit = <span class="tok-number">20</span>, authorId }) {
+<pre><code class="language-javascript"><span class="tok-keyword">export async function</span> <span class="tok-fn">list</span>({ cursor, limit = <span class="tok-number">20</span>, authorId }) {
   <span class="tok-keyword">const</span> take = Math.<span class="tok-fn">min</span>(limit, <span class="tok-number">50</span>);
   <span class="tok-keyword">const</span> items = <span class="tok-keyword">await</span> prisma.note.<span class="tok-fn">findMany</span>({
     where: { authorId, ...(cursor ? { id: { lt: cursor } } : {}) },
@@ -1702,7 +1702,7 @@ skip: 700000, take: 20             108,6ms
 where id &gt; con trỏ, take: 20         0,6ms
 count(*) toàn bảng                  41,7ms</div>
 <p><code>OFFSET</code> không phải là một cú nhảy — cơ sở dữ liệu vẫn sinh ra mọi dòng bị bỏ qua rồi vứt đi. Trang thứ 35.000 tốn 108ms công việc để trả về hai mươi dòng, còn trang 1 tốn 1ms, và đó là lý do "ứng dụng càng cuộn sâu càng chậm" là một lời phàn nàn có thật, tái hiện được. Phân trang bằng con trỏ đọc từ chỉ mục ngay tại vị trí bạn chỉ ra rồi dừng sau hai mươi dòng:</p>
-<pre><code><span class="tok-comment">// trang 1</span>
+<pre><code class="language-javascript"><span class="tok-comment">// trang 1</span>
 <span class="tok-keyword">const</span> page = <span class="tok-keyword">await</span> prisma.note.<span class="tok-fn">findMany</span>({
   where: { authorId }, orderBy: { id: <span class="tok-string">'desc'</span> }, take: <span class="tok-number">20</span>,
 });
@@ -1724,7 +1724,7 @@ count(*) toàn bảng                  41,7ms</div>
 
 <h3>Vi phạm ràng buộc duy nhất thành 409, không phải 500</h3>
 <p>Hai người dùng đăng ký cùng một email, hoặc hai request đua nhau tạo cùng một slug. Cơ sở dữ liệu là nơi duy nhất phán xử được, và nó trả lời bằng một lỗi bạn bắt được:</p>
-<pre><code><span class="tok-keyword">await</span> prisma.note.<span class="tok-fn">create</span>({ data: { slug: <span class="tok-string">'bulk-1'</span>, … } });   <span class="tok-comment">// slug đã tồn tại</span></code></pre>
+<pre><code class="language-typescript"><span class="tok-keyword">await</span> prisma.note.<span class="tok-fn">create</span>({ data: { slug: <span class="tok-string">'bulk-1'</span>, … } });   <span class="tok-comment">// slug đã tồn tại</span></code></pre>
 <div class="out">code       : P2002
 message    : Unique constraint failed on the fields: (\`slug\`)
 lớp lỗi    : PrismaClientKnownRequestError
@@ -1732,7 +1732,7 @@ meta       : { modelName: "Note", driverAdapterError: { cause: {
                originalCode: "23505",
                originalMessage: "duplicate key value violates unique constraint \\"Note_slug_key\\"",
                constraint: { fields: ["slug"] } } } }</div>
-<pre><code><span class="tok-comment">// dịch một lần, ở tầng service</span>
+<pre><code class="language-javascript"><span class="tok-comment">// dịch một lần, ở tầng service</span>
 <span class="tok-keyword">try</span> {
   <span class="tok-keyword">return await</span> prisma.note.<span class="tok-fn">create</span>({ data });
 } <span class="tok-keyword">catch</span> (err) {
@@ -1747,7 +1747,7 @@ meta       : { modelName: "Note", driverAdapterError: { cause: {
 
 <h3>Mất bản cập nhật, và cột version chặn đứng nó</h3>
 <p>Chương 6 đã tái hiện con bug này bằng <code>Map</code>: A và B cùng mở ghi chú 42, A lưu tiêu đề mới, B lưu nguyên một object dựng từ dữ liệu họ đã tải về — và thay đổi của A biến mất mà chẳng có lỗi nào ở đâu cả. Cách sửa là một cột số nguyên và một mệnh đề <code>where</code>:</p>
-<pre><code><span class="tok-keyword">const</span> updated = <span class="tok-keyword">await</span> prisma.note.<span class="tok-fn">updateMany</span>({
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> updated = <span class="tok-keyword">await</span> prisma.note.<span class="tok-fn">updateMany</span>({
   where: { id, version: clientVersion },              <span class="tok-comment">// chỉ khi chưa ai đổi</span>
   data: { ...patch, version: { increment: <span class="tok-number">1</span> } },
 });
@@ -1774,7 +1774,7 @@ trạng thái cuối: body="A sửa" version=2   &lt;- thay đổi của A KHÔN
 
 <h3>SQL thô, và một dòng làm lộ cả bảng</h3>
 <p>Prisma phủ được hầu hết nhu cầu, nhưng đôi khi bạn muốn viết SQL. Có hai cách, và khác biệt giữa chúng không phải chuyện thẩm mỹ. Biến bên dưới là thứ kẻ tấn công gõ vào ô tìm kiếm:</p>
-<pre><code><span class="tok-keyword">const</span> evil = <span class="tok-string">"bulk-1' OR '1'='1"</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> evil = <span class="tok-string">"bulk-1' OR '1'='1"</span>;
 
 <span class="tok-comment">// A: nối chuỗi</span>
 <span class="tok-keyword">await</span> prisma.$<span class="tok-fn">queryRawUnsafe</span>(
@@ -1792,7 +1792,7 @@ C. prisma.note.count({ where }) -&gt; 0 dòng</div>
 <div class="pitfall">Truy vấn thô cũng bỏ qua phép ánh xạ kiểu của Prisma. <code>SELECT count(*)</code> trả về một <code>BigInt</code> của JavaScript và <code>JSON.stringify</code> sẽ ném "Do not know how to serialize a BigInt" — hãy ép kiểu ngay trong SQL (<code>count(*)::int</code>) hoặc chuyển đổi trong JS. Và <code>SELECT pg_sleep(0.1)</code> thì hỏng thẳng với <code>UnsupportedNativeDataType: void</code>; phải viết <code>SELECT 1 FROM pg_sleep(0.1)</code>. Cả hai cái này đều ngốn của bạn vài phút thật sự trong lần đầu gặp.</div>
 
 <h3>Hình dạng cuối cùng của endpoint danh sách</h3>
-<pre><code><span class="tok-keyword">export async function</span> <span class="tok-fn">list</span>({ cursor, limit = <span class="tok-number">20</span>, authorId }) {
+<pre><code class="language-javascript"><span class="tok-keyword">export async function</span> <span class="tok-fn">list</span>({ cursor, limit = <span class="tok-number">20</span>, authorId }) {
   <span class="tok-keyword">const</span> take = Math.<span class="tok-fn">min</span>(limit, <span class="tok-number">50</span>);
   <span class="tok-keyword">const</span> items = <span class="tok-keyword">await</span> prisma.note.<span class="tok-fn">findMany</span>({
     where: { authorId, ...(cursor ? { id: { lt: cursor } } : {}) },

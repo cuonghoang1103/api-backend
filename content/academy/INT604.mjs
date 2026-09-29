@@ -583,7 +583,7 @@ User(author)  1—* Comment   : một user viết nhiều bình luận</div>
 <p class="lead">Đây là toàn bộ CSDL. Chú ý hai thứ — cột <code>version</code> trên <code>tickets</code> và tập giá trị <code>status</code> cố định. Hai cái đó là <strong>hàng rào cuối cùng</strong>: cột version cho một UPDATE có canh từ chối agent thứ hai, và tập status đóng khiến một chuyển trạng thái bất hợp lệ phát hiện được thay vì "chỉ là một chuỗi khác".</p>
 
 <h3>DDL (PostgreSQL)</h3>
-<pre><span class="tok-keyword">CREATE TABLE</span> users (
+<pre><code class="language-sql"><span class="tok-keyword">CREATE TABLE</span> users (
   id          <span class="tok-type">BIGSERIAL</span> <span class="tok-keyword">PRIMARY KEY</span>,
   email       <span class="tok-type">VARCHAR</span>(255) <span class="tok-keyword">UNIQUE NOT NULL</span>,
   password    <span class="tok-type">VARCHAR</span>(255) <span class="tok-keyword">NOT NULL</span>,      <span class="tok-comment">-- hash bcrypt</span>
@@ -616,7 +616,7 @@ User(author)  1—* Comment   : một user viết nhiều bình luận</div>
 );
 
 <span class="tok-keyword">CREATE INDEX</span> idx_ticket_status   <span class="tok-keyword">ON</span> tickets(status);      <span class="tok-comment">-- truy vấn hàng đợi nhanh</span>
-<span class="tok-keyword">CREATE INDEX</span> idx_ticket_assignee <span class="tok-keyword">ON</span> tickets(assignee_id);</pre>
+<span class="tok-keyword">CREATE INDEX</span> idx_ticket_assignee <span class="tok-keyword">ON</span> tickets(assignee_id);</code></pre>
 
 <h3>Ví dụ có lời giải — vì sao cột version mới là người gác thật</h3>
 <div class="out"><b>Tình huống:</b> hai lượt nhận cho ticket_id = 42 (assignee NULL, version 0) tới cùng một mili-giây.
@@ -780,10 +780,10 @@ User(author)  1—* Comment   : một user viết nhiều bình luận</div>
 <p class="lead">Two design choices here carry the whole project: the <code>status</code> as a Java enum (a closed set, not free text) and the <code>@Version</code> field (the concurrency guard used in Section 4).</p>
 
 <h3>The status enum — a closed set</h3>
-<pre><span class="tok-keyword">public enum</span> <span class="tok-type">TicketStatus</span> { OPEN, ASSIGNED, IN_PROGRESS, RESOLVED, CLOSED }</pre>
+<pre><code class="language-java"><span class="tok-keyword">public enum</span> <span class="tok-type">TicketStatus</span> { OPEN, ASSIGNED, IN_PROGRESS, RESOLVED, CLOSED }</code></pre>
 
 <h3>The Ticket entity</h3>
-<pre><span class="tok-keyword">@Entity</span> <span class="tok-keyword">@Table</span>(name = <span class="tok-string">"tickets"</span>)
+<pre><code class="language-java"><span class="tok-keyword">@Entity</span> <span class="tok-keyword">@Table</span>(name = <span class="tok-string">"tickets"</span>)
 <span class="tok-keyword">public class</span> <span class="tok-type">Ticket</span> {
   <span class="tok-keyword">@Id</span> <span class="tok-keyword">@GeneratedValue</span>(strategy = IDENTITY) <span class="tok-type">Long</span> id;
   <span class="tok-type">String</span> subject;
@@ -797,7 +797,7 @@ User(author)  1—* Comment   : một user viết nhiều bình luận</div>
 
   <span class="tok-keyword">@Version</span> <span class="tok-keyword">long</span> version;           <span class="tok-comment">// ← the optimistic-lock guard (Section 4)</span>
   <span class="tok-type">Instant</span> createdAt = Instant.now();
-}</pre>
+}</code></pre>
 <div class="pitfall"><strong>Trap:</strong> <code>@Enumerated(EnumType.ORDINAL)</code> (the default!) stores the enum as its position — 0,1,2… Insert a new status in the middle later and every existing row's meaning shifts. <strong>Always</strong> use <code>EnumType.STRING</code>.</div>
 
 <h3>A GET slice — list tickets for the caller</h3>
@@ -826,10 +826,10 @@ User(author)  1—* Comment   : một user viết nhiều bình luận</div>
 <p class="lead">Hai lựa chọn thiết kế ở đây gánh cả dự án: <code>status</code> là enum Java (tập đóng, không phải chuỗi tự do) và trường <code>@Version</code> (rào tương tranh dùng ở Mục 4).</p>
 
 <h3>Enum trạng thái — một tập đóng</h3>
-<pre><span class="tok-keyword">public enum</span> <span class="tok-type">TicketStatus</span> { OPEN, ASSIGNED, IN_PROGRESS, RESOLVED, CLOSED }</pre>
+<pre><code class="language-java"><span class="tok-keyword">public enum</span> <span class="tok-type">TicketStatus</span> { OPEN, ASSIGNED, IN_PROGRESS, RESOLVED, CLOSED }</code></pre>
 
 <h3>Entity Ticket</h3>
-<pre><span class="tok-keyword">@Entity</span> <span class="tok-keyword">@Table</span>(name = <span class="tok-string">"tickets"</span>)
+<pre><code class="language-java"><span class="tok-keyword">@Entity</span> <span class="tok-keyword">@Table</span>(name = <span class="tok-string">"tickets"</span>)
 <span class="tok-keyword">public class</span> <span class="tok-type">Ticket</span> {
   <span class="tok-keyword">@Id</span> <span class="tok-keyword">@GeneratedValue</span>(strategy = IDENTITY) <span class="tok-type">Long</span> id;
   <span class="tok-type">String</span> subject;
@@ -843,7 +843,7 @@ User(author)  1—* Comment   : một user viết nhiều bình luận</div>
 
   <span class="tok-keyword">@Version</span> <span class="tok-keyword">long</span> version;           <span class="tok-comment">// ← rào optimistic-lock (Mục 4)</span>
   <span class="tok-type">Instant</span> createdAt = Instant.now();
-}</pre>
+}</code></pre>
 <div class="pitfall"><strong>Bẫy:</strong> <code>@Enumerated(EnumType.ORDINAL)</code> (mặc định!) lưu enum theo vị trí — 0,1,2… Chèn thêm một status vào giữa về sau và ý nghĩa mọi dòng cũ dịch hết. <strong>Luôn</strong> dùng <code>EnumType.STRING</code>.</div>
 
 <h3>Một lát cắt GET — liệt kê ticket của người gọi</h3>
@@ -895,12 +895,12 @@ User(author)  1—* Comment   : một user viết nhiều bình luận</div>
 }</pre>
 
 <h3>Login returns a signed token</h3>
-<pre><span class="tok-keyword">public</span> <span class="tok-type">String</span> <span class="tok-function">login</span>(<span class="tok-type">String</span> email, <span class="tok-type">String</span> password) {
+<pre><code class="language-java"><span class="tok-keyword">public</span> <span class="tok-type">String</span> <span class="tok-function">login</span>(<span class="tok-type">String</span> email, <span class="tok-type">String</span> password) {
   <span class="tok-type">User</span> u = users.findByEmail(email).orElseThrow(() -&gt; <span class="tok-keyword">new</span> <span class="tok-type">UnauthorizedException</span>(<span class="tok-string">"Bad credentials"</span>));
   <span class="tok-keyword">if</span> (!encoder.matches(password, u.getPasswordHash()))
     <span class="tok-keyword">throw new</span> <span class="tok-type">UnauthorizedException</span>(<span class="tok-string">"Bad credentials"</span>);   <span class="tok-comment">// same message → no user enumeration</span>
   <span class="tok-keyword">return</span> jwt.<span class="tok-function">issue</span>(u.getId(), u.getRole());   <span class="tok-comment">// subject = id, claim = role</span>
-}</pre>
+}</code></pre>
 
 <div class="pitfall"><strong>Trap:</strong> different error messages for "no such email" vs "wrong password". That lets an attacker enumerate which emails exist. Return one generic <code>"Bad credentials"</code> for both.</div>
 
@@ -929,12 +929,12 @@ User(author)  1—* Comment   : một user viết nhiều bình luận</div>
 }</pre>
 
 <h3>Đăng nhập trả token đã ký</h3>
-<pre><span class="tok-keyword">public</span> <span class="tok-type">String</span> <span class="tok-function">login</span>(<span class="tok-type">String</span> email, <span class="tok-type">String</span> password) {
+<pre><code class="language-java"><span class="tok-keyword">public</span> <span class="tok-type">String</span> <span class="tok-function">login</span>(<span class="tok-type">String</span> email, <span class="tok-type">String</span> password) {
   <span class="tok-type">User</span> u = users.findByEmail(email).orElseThrow(() -&gt; <span class="tok-keyword">new</span> <span class="tok-type">UnauthorizedException</span>(<span class="tok-string">"Sai thông tin đăng nhập"</span>));
   <span class="tok-keyword">if</span> (!encoder.matches(password, u.getPasswordHash()))
     <span class="tok-keyword">throw new</span> <span class="tok-type">UnauthorizedException</span>(<span class="tok-string">"Sai thông tin đăng nhập"</span>);   <span class="tok-comment">// cùng thông báo → không dò được user</span>
   <span class="tok-keyword">return</span> jwt.<span class="tok-function">issue</span>(u.getId(), u.getRole());   <span class="tok-comment">// subject = id, claim = role</span>
-}</pre>
+}</code></pre>
 
 <div class="pitfall"><strong>Bẫy:</strong> thông báo lỗi khác nhau cho "không có email" vs "sai mật khẩu". Điều đó cho kẻ tấn công dò xem email nào tồn tại. Trả một thông báo chung <code>"Sai thông tin đăng nhập"</code> cho cả hai.</div>
 
@@ -1047,7 +1047,7 @@ User(author)  1—* Comment   : một user viết nhiều bình luận</div>
   <div class="lz-step">CLOSED</div>
 </div>
 <p>Only these moves are legal (plus RESOLVED → IN_PROGRESS to re-open). Encode them once, in the service:</p>
-<pre><span class="tok-comment">// the single source of truth for legal transitions</span>
+<pre><code class="language-java"><span class="tok-comment">// the single source of truth for legal transitions</span>
 <span class="tok-keyword">static final</span> <span class="tok-type">Map</span>&lt;TicketStatus, Set&lt;TicketStatus&gt;&gt; NEXT = Map.<span class="tok-function">of</span>(
   OPEN,        Set.of(ASSIGNED),
   ASSIGNED,    Set.of(IN_PROGRESS, OPEN),        <span class="tok-comment">// can release back to the queue</span>
@@ -1058,7 +1058,7 @@ User(author)  1—* Comment   : một user viết nhiều bình luận</div>
 <span class="tok-keyword">void</span> <span class="tok-function">check</span>(TicketStatus from, TicketStatus to) {
   <span class="tok-keyword">if</span> (!NEXT.get(from).contains(to))
     <span class="tok-keyword">throw new</span> <span class="tok-type">IllegalTransitionException</span>(from + <span class="tok-string">" → "</span> + to);
-}</pre>
+}</code></pre>
 
 <h3>The naive assign — has a race</h3>
 <pre><span class="tok-keyword">@Transactional</span>
@@ -1131,7 +1131,7 @@ Final state: ticket 88 belongs to exactly ONE agent (Lan).</div>
   <div class="lz-step">CLOSED</div>
 </div>
 <p>Chỉ những bước này hợp lệ (thêm RESOLVED → IN_PROGRESS để mở lại). Mã hoá chúng một lần, trong service:</p>
-<pre><span class="tok-comment">// nguồn sự thật duy nhất cho các chuyển hợp lệ</span>
+<pre><code class="language-java"><span class="tok-comment">// nguồn sự thật duy nhất cho các chuyển hợp lệ</span>
 <span class="tok-keyword">static final</span> <span class="tok-type">Map</span>&lt;TicketStatus, Set&lt;TicketStatus&gt;&gt; NEXT = Map.<span class="tok-function">of</span>(
   OPEN,        Set.of(ASSIGNED),
   ASSIGNED,    Set.of(IN_PROGRESS, OPEN),        <span class="tok-comment">// trả lại hàng đợi được</span>
@@ -1142,7 +1142,7 @@ Final state: ticket 88 belongs to exactly ONE agent (Lan).</div>
 <span class="tok-keyword">void</span> <span class="tok-function">check</span>(TicketStatus from, TicketStatus to) {
   <span class="tok-keyword">if</span> (!NEXT.get(from).contains(to))
     <span class="tok-keyword">throw new</span> <span class="tok-type">IllegalTransitionException</span>(from + <span class="tok-string">" → "</span> + to);
-}</pre>
+}</code></pre>
 
 <h3>Gán ngây thơ — có race</h3>
 <pre><span class="tok-keyword">@Transactional</span>
@@ -1387,24 +1387,24 @@ POST /tickets/88/start         (Lan)    → 422  CLOSED → IN_PROGRESS bất h�
 <p class="lead">Three layers: a unit test for the transition rules, a MockMvc test for the HTTP contract, and a <strong>concurrency test</strong> that fires many agents at one OPEN ticket and asserts exactly one wins.</p>
 
 <h3>1) Unit test — the state machine in isolation</h3>
-<pre><span class="tok-keyword">@Test</span> <span class="tok-keyword">void</span> <span class="tok-function">illegalTransitionRejected</span>() {
+<pre><code class="language-java"><span class="tok-keyword">@Test</span> <span class="tok-keyword">void</span> <span class="tok-function">illegalTransitionRejected</span>() {
   assertThrows(IllegalTransitionException.class,
       () -&gt; service.check(TicketStatus.OPEN, TicketStatus.RESOLVED));  <span class="tok-comment">// can't skip stages</span>
 }
 <span class="tok-keyword">@Test</span> <span class="tok-keyword">void</span> <span class="tok-function">legalTransitionAllowed</span>() {
   assertDoesNotThrow(() -&gt; service.check(TicketStatus.ASSIGNED, TicketStatus.IN_PROGRESS));
-}</pre>
+}</code></pre>
 
 <h3>2) MockMvc — the HTTP contract</h3>
-<pre><span class="tok-keyword">@Test</span> <span class="tok-keyword">void</span> <span class="tok-function">secondAssignReturns409</span>() <span class="tok-keyword">throws</span> Exception {
+<pre><code class="language-java"><span class="tok-keyword">@Test</span> <span class="tok-keyword">void</span> <span class="tok-function">secondAssignReturns409</span>() <span class="tok-keyword">throws</span> Exception {
   mvc.<span class="tok-function">perform</span>(post(<span class="tok-string">"/api/tickets/88/assign"</span>).with(jwt(lan)))
      .andExpect(status().isOk());
   mvc.<span class="tok-function">perform</span>(post(<span class="tok-string">"/api/tickets/88/assign"</span>).with(jwt(minh)))
      .andExpect(status().isConflict());   <span class="tok-comment">// 409 — already taken</span>
-}</pre>
+}</code></pre>
 
 <h3>3) The concurrency test — the star of the demo</h3>
-<pre><span class="tok-keyword">@Test</span>
+<pre><code class="language-java"><span class="tok-keyword">@Test</span>
 <span class="tok-keyword">void</span> <span class="tok-function">tenAgentsRaceForOneTicket_onlyOneWins</span>() <span class="tok-keyword">throws</span> Exception {
   <span class="tok-keyword">int</span> N = <span class="tok-number">10</span>;
   <span class="tok-keyword">var</span> ready = <span class="tok-keyword">new</span> <span class="tok-type">CountDownLatch</span>(N);
@@ -1428,7 +1428,7 @@ POST /tickets/88/start         (Lan)    → 422  CLOSED → IN_PROGRESS bất h�
   <span class="tok-type">Ticket</span> t = tickets.findById(<span class="tok-number">88L</span>).orElseThrow();
   assertThat(t.getStatus()).<span class="tok-function">isEqualTo</span>(ASSIGNED);
   assertThat(t.getAssignedAgent()).<span class="tok-function">isNotNull</span>();     <span class="tok-comment">// owned by exactly one agent</span>
-}</pre>
+}</code></pre>
 
 <div class="pitfall"><strong>Trap:</strong> a "concurrency" test with a plain for-loop and no latch. Sequential calls never collide, so the test is green even against the buggy read-then-write assign. If it can't fail on the buggy version, it proves nothing — swap the naive assign back in once and watch it go red.</div>
 
@@ -1446,24 +1446,24 @@ POST /tickets/88/start         (Lan)    → 422  CLOSED → IN_PROGRESS bất h�
 <p class="lead">Ba lớp: unit test cho luật chuyển trạng thái, MockMvc test cho hợp đồng HTTP, và một <strong>test đồng thời</strong> bắn nhiều agent vào một ticket OPEN và khẳng định đúng một kẻ thắng.</p>
 
 <h3>1) Unit test — máy trạng thái đứng riêng</h3>
-<pre><span class="tok-keyword">@Test</span> <span class="tok-keyword">void</span> <span class="tok-function">illegalTransitionRejected</span>() {
+<pre><code class="language-java"><span class="tok-keyword">@Test</span> <span class="tok-keyword">void</span> <span class="tok-function">illegalTransitionRejected</span>() {
   assertThrows(IllegalTransitionException.class,
       () -&gt; service.check(TicketStatus.OPEN, TicketStatus.RESOLVED));  <span class="tok-comment">// không nhảy cóc giai đoạn</span>
 }
 <span class="tok-keyword">@Test</span> <span class="tok-keyword">void</span> <span class="tok-function">legalTransitionAllowed</span>() {
   assertDoesNotThrow(() -&gt; service.check(TicketStatus.ASSIGNED, TicketStatus.IN_PROGRESS));
-}</pre>
+}</code></pre>
 
 <h3>2) MockMvc — hợp đồng HTTP</h3>
-<pre><span class="tok-keyword">@Test</span> <span class="tok-keyword">void</span> <span class="tok-function">secondAssignReturns409</span>() <span class="tok-keyword">throws</span> Exception {
+<pre><code class="language-java"><span class="tok-keyword">@Test</span> <span class="tok-keyword">void</span> <span class="tok-function">secondAssignReturns409</span>() <span class="tok-keyword">throws</span> Exception {
   mvc.<span class="tok-function">perform</span>(post(<span class="tok-string">"/api/tickets/88/assign"</span>).with(jwt(lan)))
      .andExpect(status().isOk());
   mvc.<span class="tok-function">perform</span>(post(<span class="tok-string">"/api/tickets/88/assign"</span>).with(jwt(minh)))
      .andExpect(status().isConflict());   <span class="tok-comment">// 409 — đã có người nhận</span>
-}</pre>
+}</code></pre>
 
 <h3>3) Test đồng thời — ngôi sao của buổi demo</h3>
-<pre><span class="tok-keyword">@Test</span>
+<pre><code class="language-java"><span class="tok-keyword">@Test</span>
 <span class="tok-keyword">void</span> <span class="tok-function">tenAgentsRaceForOneTicket_onlyOneWins</span>() <span class="tok-keyword">throws</span> Exception {
   <span class="tok-keyword">int</span> N = <span class="tok-number">10</span>;
   <span class="tok-keyword">var</span> ready = <span class="tok-keyword">new</span> <span class="tok-type">CountDownLatch</span>(N);
@@ -1487,7 +1487,7 @@ POST /tickets/88/start         (Lan)    → 422  CLOSED → IN_PROGRESS bất h�
   <span class="tok-type">Ticket</span> t = tickets.findById(<span class="tok-number">88L</span>).orElseThrow();
   assertThat(t.getStatus()).<span class="tok-function">isEqualTo</span>(ASSIGNED);
   assertThat(t.getAssignedAgent()).<span class="tok-function">isNotNull</span>();     <span class="tok-comment">// thuộc đúng một agent</span>
-}</pre>
+}</code></pre>
 
 <div class="pitfall"><strong>Bẫy:</strong> test "đồng thời" bằng vòng for thường không latch. Lời gọi tuần tự không bao giờ đụng nhau, nên test xanh kể cả với gán đọc-rồi-ghi đầy bug. Nếu nó không thể fail trên bản có bug, nó chẳng chứng minh gì — thay gán ngây thơ vào lại một lần và xem nó đỏ.</div>
 
@@ -1663,12 +1663,12 @@ $ curl -X POST localhost:8080/api/tickets/88/assign -H "Authorization: Bearer $T
 <p class="lead">The core is correct. These four additions are what a reviewer of a helpdesk system notices — each a small, self-contained ★ beyond the syllabus.</p>
 
 <h3>1) SLA timer — a scheduled breach check</h3>
-<pre><span class="tok-keyword">@Scheduled</span>(fixedRate = <span class="tok-number">60_000</span>)   <span class="tok-comment">// every minute</span>
+<pre><code class="language-java"><span class="tok-keyword">@Scheduled</span>(fixedRate = <span class="tok-number">60_000</span>)   <span class="tok-comment">// every minute</span>
 <span class="tok-keyword">public void</span> <span class="tok-function">flagSlaBreaches</span>() {
   <span class="tok-type">Instant</span> cutoff = Instant.now().minus(<span class="tok-number">4</span>, HOURS);   <span class="tok-comment">// HIGH priority SLA = 4h</span>
   tickets.<span class="tok-function">markBreached</span>(cutoff);   <span class="tok-comment">// UPDATE ... SET sla_breached=true</span>
   <span class="tok-comment">//   WHERE priority='HIGH' AND status IN ('OPEN','ASSIGNED') AND created_at &lt; :cutoff</span>
-}</pre>
+}</code></pre>
 <p>A background job, not a per-request check — so breaches surface even for tickets nobody has opened in hours.</p>
 
 <h3>2) Reporting — agent workload &amp; average resolution time</h3>
@@ -1689,10 +1689,10 @@ audit.<span class="tok-function">save</span>(<span class="tok-keyword">new</span
 <p>An append-only audit trail answers "why is this ticket CLOSED?" and is the foundation of event sourcing. Because it shares the transaction, the log can never disagree with the ticket.</p>
 
 <h3>4) Pessimistic locking — the alternative under heavy contention</h3>
-<pre><span class="tok-keyword">@Lock</span>(LockModeType.PESSIMISTIC_WRITE)
+<pre><code class="language-sql"><span class="tok-keyword">@Lock</span>(LockModeType.PESSIMISTIC_WRITE)
 <span class="tok-keyword">@Query</span>(<span class="tok-string">"select t from Ticket t where t.id = :id"</span>)
 <span class="tok-type">Optional</span>&lt;Ticket&gt; <span class="tok-function">findByIdForUpdate</span>(<span class="tok-keyword">@Param</span>(<span class="tok-string">"id"</span>) <span class="tok-type">Long</span> id);
-<span class="tok-comment">// SELECT ... FOR UPDATE — the second agent BLOCKS until the first commits, then sees ASSIGNED</span></pre>
+<span class="tok-comment">// SELECT ... FOR UPDATE — the second agent BLOCKS until the first commits, then sees ASSIGNED</span></code></pre>
 <div class="kv-grid">
   <div class="kv"><b>Atomic UPDATE / @Version</b><span>rare clashes, no waiting, loser retries. Default for claim.</span></div>
   <div class="kv"><b>Pessimistic FOR UPDATE</b><span>heavy contention, losers wait, no retry. Risk: reduced throughput &amp; deadlocks.</span></div>
@@ -1715,12 +1715,12 @@ audit.<span class="tok-function">save</span>(<span class="tok-keyword">new</span
 <p class="lead">Phần lõi đã đúng. Bốn bổ sung này là thứ người chấm một hệ thống helpdesk để ý — mỗi cái một ★ nhỏ, độc lập, vượt giáo trình.</p>
 
 <h3>1) SLA timer — kiểm vi phạm định giờ</h3>
-<pre><span class="tok-keyword">@Scheduled</span>(fixedRate = <span class="tok-number">60_000</span>)   <span class="tok-comment">// mỗi phút</span>
+<pre><code class="language-java"><span class="tok-keyword">@Scheduled</span>(fixedRate = <span class="tok-number">60_000</span>)   <span class="tok-comment">// mỗi phút</span>
 <span class="tok-keyword">public void</span> <span class="tok-function">flagSlaBreaches</span>() {
   <span class="tok-type">Instant</span> cutoff = Instant.now().minus(<span class="tok-number">4</span>, HOURS);   <span class="tok-comment">// SLA ưu tiên HIGH = 4h</span>
   tickets.<span class="tok-function">markBreached</span>(cutoff);   <span class="tok-comment">// UPDATE ... SET sla_breached=true</span>
   <span class="tok-comment">//   WHERE priority='HIGH' AND status IN ('OPEN','ASSIGNED') AND created_at &lt; :cutoff</span>
-}</pre>
+}</code></pre>
 <p>Một job nền, không phải kiểm mỗi request — nên vi phạm nổi lên kể cả với ticket không ai mở suốt mấy giờ.</p>
 
 <h3>2) Báo cáo — khối lượng của agent &amp; thời gian giải quyết trung bình</h3>
@@ -1741,10 +1741,10 @@ audit.<span class="tok-function">save</span>(<span class="tok-keyword">new</span
 <p>Một vết audit chỉ-thêm trả lời "vì sao ticket này CLOSED?" và là nền tảng của event sourcing. Vì nó chia sẻ transaction, log không bao giờ mâu thuẫn với ticket.</p>
 
 <h3>4) Khoá pessimistic — phương án khi tranh chấp nặng</h3>
-<pre><span class="tok-keyword">@Lock</span>(LockModeType.PESSIMISTIC_WRITE)
+<pre><code class="language-sql"><span class="tok-keyword">@Lock</span>(LockModeType.PESSIMISTIC_WRITE)
 <span class="tok-keyword">@Query</span>(<span class="tok-string">"select t from Ticket t where t.id = :id"</span>)
 <span class="tok-type">Optional</span>&lt;Ticket&gt; <span class="tok-function">findByIdForUpdate</span>(<span class="tok-keyword">@Param</span>(<span class="tok-string">"id"</span>) <span class="tok-type">Long</span> id);
-<span class="tok-comment">// SELECT ... FOR UPDATE — agent thứ hai BỊ CHẶN tới khi cái đầu commit, rồi thấy ASSIGNED</span></pre>
+<span class="tok-comment">// SELECT ... FOR UPDATE — agent thứ hai BỊ CHẶN tới khi cái đầu commit, rồi thấy ASSIGNED</span></code></pre>
 <div class="kv-grid">
   <div class="kv"><b>Atomic UPDATE / @Version</b><span>đụng độ hiếm, không chờ, kẻ thua retry. Mặc định cho nhận việc.</span></div>
   <div class="kv"><b>Pessimistic FOR UPDATE</b><span>tranh chấp nặng, kẻ thua chờ, không retry. Rủi ro: giảm thông lượng &amp; deadlock.</span></div>

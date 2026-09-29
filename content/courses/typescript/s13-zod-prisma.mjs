@@ -24,7 +24,7 @@ export default {
 
 <h3>A schema that validates and infers</h3>
 <p>A Zod schema is a runtime value that describes a shape. From it, <code>z.infer</code> extracts a static type — so the validator and the type come from one declaration and can never disagree:</p>
-<pre><code><span class="tok-comment">// infer.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// infer.ts</span>
 <span class="tok-keyword">import</span> { z } <span class="tok-keyword">from</span> <span class="tok-string">'zod'</span>;
 <span class="tok-keyword">const</span> UserSchema = z.<span class="tok-function">object</span>({
   id: z.<span class="tok-function">number</span>(),
@@ -63,7 +63,7 @@ export default {
 
 <h3>Một schema vừa validate vừa suy kiểu</h3>
 <p>Một schema Zod là một giá trị lúc chạy mô tả một hình dạng. Từ nó, <code>z.infer</code> rút ra một kiểu tĩnh — nên bộ validate và kiểu đến từ một khai báo và không bao giờ bất đồng:</p>
-<pre><code><span class="tok-comment">// infer.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// infer.ts</span>
 <span class="tok-keyword">import</span> { z } <span class="tok-keyword">from</span> <span class="tok-string">'zod'</span>;
 <span class="tok-keyword">const</span> UserSchema = z.<span class="tok-function">object</span>({
   id: z.<span class="tok-function">number</span>(),
@@ -112,7 +112,7 @@ export default {
 
 <h3>safeParse returns a union you must narrow</h3>
 <p>The result is <code>{ success: true; data: T } | { success: false; error: ZodError }</code>. Reach for <code>data</code> without checking <code>success</code> and the compiler stops you:</p>
-<pre><code><span class="tok-comment">// safeparse.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// safeparse.ts</span>
 <span class="tok-keyword">import</span> { z } <span class="tok-keyword">from</span> <span class="tok-string">'zod'</span>;
 <span class="tok-keyword">const</span> UserSchema = z.<span class="tok-function">object</span>({ id: z.<span class="tok-function">number</span>(), name: z.<span class="tok-function">string</span>() });
 <span class="tok-keyword">function</span> <span class="tok-function">handle</span>(raw: <span class="tok-keyword">unknown</span>) {
@@ -124,7 +124,7 @@ export default {
 
 <h3>Narrow first, then use the typed data</h3>
 <p>Check <code>success</code> and each branch is fully typed — <code>error</code> on failure, the typed value on success:</p>
-<pre><code><span class="tok-comment">// narrow.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// narrow.ts</span>
 <span class="tok-keyword">function</span> <span class="tok-function">handle</span>(raw: <span class="tok-keyword">unknown</span>): <span class="tok-keyword">string</span> {
   <span class="tok-keyword">const</span> result = UserSchema.<span class="tok-function">safeParse</span>(raw);
   <span class="tok-keyword">if</span> (!result.success) {
@@ -158,7 +158,7 @@ export default {
 
 <h3>safeParse trả một union bạn phải thu hẹp</h3>
 <p>Kết quả là <code>{ success: true; data: T } | { success: false; error: ZodError }</code>. Với tới <code>data</code> mà không kiểm <code>success</code> thì trình biên dịch chặn bạn:</p>
-<pre><code><span class="tok-comment">// safeparse.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// safeparse.ts</span>
 <span class="tok-keyword">import</span> { z } <span class="tok-keyword">from</span> <span class="tok-string">'zod'</span>;
 <span class="tok-keyword">const</span> UserSchema = z.<span class="tok-function">object</span>({ id: z.<span class="tok-function">number</span>(), name: z.<span class="tok-function">string</span>() });
 <span class="tok-keyword">function</span> <span class="tok-function">handle</span>(raw: <span class="tok-keyword">unknown</span>) {
@@ -170,7 +170,7 @@ export default {
 
 <h3>Thu hẹp trước, rồi dùng data có kiểu</h3>
 <p>Kiểm <code>success</code> và mỗi nhánh có kiểu đầy đủ — <code>error</code> khi thất bại, giá trị có kiểu khi thành công:</p>
-<pre><code><span class="tok-comment">// narrow.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// narrow.ts</span>
 <span class="tok-keyword">function</span> <span class="tok-function">handle</span>(raw: <span class="tok-keyword">unknown</span>): <span class="tok-keyword">string</span> {
   <span class="tok-keyword">const</span> result = UserSchema.<span class="tok-function">safeParse</span>(raw);
   <span class="tok-keyword">if</span> (!result.success) {
@@ -214,7 +214,7 @@ export default {
 
 <h3>Coerce and enum: the config pattern</h3>
 <p>Environment variables arrive as strings (chapter 11). <code>z.coerce.number()</code> parses one to a number during validation, and <code>z.enum</code> restricts a string to a fixed set — exactly what you want for config, validated once at startup:</p>
-<pre><code><span class="tok-comment">// transform.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// transform.ts</span>
 <span class="tok-keyword">import</span> { z } <span class="tok-keyword">from</span> <span class="tok-string">'zod'</span>;
 <span class="tok-keyword">const</span> EnvSchema = z.<span class="tok-function">object</span>({
   PORT: z.coerce.<span class="tok-function">number</span>(),          <span class="tok-comment">// takes a string, outputs a number</span>
@@ -251,7 +251,7 @@ export default {
 
 <h3>Coerce và enum: pattern cấu hình</h3>
 <p>Biến môi trường đến dưới dạng chuỗi (chương 11). <code>z.coerce.number()</code> phân tích một chuỗi thành số trong lúc validate, và <code>z.enum</code> giới hạn một chuỗi về một tập cố định — đúng thứ bạn muốn cho config, validate một lần lúc khởi động:</p>
-<pre><code><span class="tok-comment">// transform.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// transform.ts</span>
 <span class="tok-keyword">import</span> { z } <span class="tok-keyword">from</span> <span class="tok-string">'zod'</span>;
 <span class="tok-keyword">const</span> EnvSchema = z.<span class="tok-function">object</span>({
   PORT: z.coerce.<span class="tok-function">number</span>(),          <span class="tok-comment">// nhận một chuỗi, xuất một số</span>
@@ -298,7 +298,7 @@ export default {
 
 <h3>Model types mirror the schema — including nullability</h3>
 <p>Import a model type straight from the generated client. An optional column (<code>fullName String?</code> in the schema) becomes <code>string | null</code>, so the strict-null discipline applies automatically:</p>
-<pre><code><span class="tok-comment">// prisma-model.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// prisma-model.ts</span>
 <span class="tok-keyword">import</span> { User } <span class="tok-keyword">from</span> <span class="tok-string">'@prisma/client'</span>;   <span class="tok-comment">// generated from schema.prisma</span>
 <span class="tok-keyword">function</span> <span class="tok-function">greet</span>(user: User): <span class="tok-keyword">string</span> {
   <span class="tok-keyword">const</span> name: <span class="tok-keyword">string</span> = user.fullName;   <span class="tok-comment">// fullName is optional in the schema</span>
@@ -310,7 +310,7 @@ export default {
 
 <h3>Query result types with GetPayload</h3>
 <p>A query with <code>select</code> or <code>include</code> returns a <em>narrower</em> shape than the full model. <code>Prisma.ModelGetPayload&lt;…&gt;</code> gives you exactly that shape — a type that has only the selected fields:</p>
-<pre><code><span class="tok-comment">// prisma-select.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// prisma-select.ts</span>
 <span class="tok-keyword">import</span> { Prisma } <span class="tok-keyword">from</span> <span class="tok-string">'@prisma/client'</span>;
 <span class="tok-keyword">type</span> UserPreview = Prisma.UserGetPayload&lt;{ select: { id: <span class="tok-keyword">true</span>; username: <span class="tok-keyword">true</span> } }&gt;;
 <span class="tok-keyword">const</span> p: UserPreview = { id: <span class="tok-number">1</span>, username: <span class="tok-string">'ada'</span> };
@@ -341,7 +341,7 @@ console.<span class="tok-function">log</span>(p.email);   <span class="tok-comme
 
 <h3>Kiểu model phản chiếu schema — kể cả tính null</h3>
 <p>Import một kiểu model thẳng từ client được sinh. Một cột tuỳ chọn (<code>fullName String?</code> trong schema) thành <code>string | null</code>, nên kỷ luật strict-null áp dụng tự động:</p>
-<pre><code><span class="tok-comment">// prisma-model.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// prisma-model.ts</span>
 <span class="tok-keyword">import</span> { User } <span class="tok-keyword">from</span> <span class="tok-string">'@prisma/client'</span>;   <span class="tok-comment">// sinh từ schema.prisma</span>
 <span class="tok-keyword">function</span> <span class="tok-function">greet</span>(user: User): <span class="tok-keyword">string</span> {
   <span class="tok-keyword">const</span> name: <span class="tok-keyword">string</span> = user.fullName;   <span class="tok-comment">// fullName là tuỳ chọn trong schema</span>
@@ -353,7 +353,7 @@ console.<span class="tok-function">log</span>(p.email);   <span class="tok-comme
 
 <h3>Kiểu kết quả truy vấn với GetPayload</h3>
 <p>Một truy vấn có <code>select</code> hay <code>include</code> trả về một hình dạng <em>hẹp hơn</em> model đầy đủ. <code>Prisma.ModelGetPayload&lt;…&gt;</code> cho bạn đúng hình dạng đó — một kiểu chỉ có các field đã chọn:</p>
-<pre><code><span class="tok-comment">// prisma-select.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// prisma-select.ts</span>
 <span class="tok-keyword">import</span> { Prisma } <span class="tok-keyword">from</span> <span class="tok-string">'@prisma/client'</span>;
 <span class="tok-keyword">type</span> UserPreview = Prisma.UserGetPayload&lt;{ select: { id: <span class="tok-keyword">true</span>; username: <span class="tok-keyword">true</span> } }&gt;;
 <span class="tok-keyword">const</span> p: UserPreview = { id: <span class="tok-number">1</span>, username: <span class="tok-string">'ada'</span> };

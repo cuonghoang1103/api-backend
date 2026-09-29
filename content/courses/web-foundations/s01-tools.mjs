@@ -66,7 +66,7 @@ ${gallery('wf-tools', [
 </div>
 
 <h3>Creating and removing things</h3>
-<pre><code>mkdir my-project        # make a folder
+<pre><code class="language-bash">mkdir my-project        # make a folder
 cd my-project           # go into it
 touch index.html        # create an empty file  [Windows: ni index.html]
 mkdir src               # a sub-folder
@@ -94,7 +94,7 @@ rm copy.html            # delete a file — no undo, be careful!</code></pre>
 <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Anything else is relative</span><span class="lz-d">It is glued onto your current folder. <code>src/app.js</code>, <code>./src/app.js</code> and <code>../other/app.js</code> all mean different files depending on where <code>pwd</code> says you are.</span></div>
 <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">So pwd is the missing half of every relative path</span><span class="lz-d">When a command says "no such file" and you can see the file, run <code>pwd</code>. You are almost certainly in a different folder than you think.</span></div>
 </div>
-<pre><code>pwd
+<pre><code class="language-bash">pwd
 ls
 cd src
 pwd
@@ -123,7 +123,7 @@ console.log('hello');</div>
 </div>
 
 <h3>Tạo và xoá</h3>
-<pre><code>mkdir my-project        # tạo một thư mục
+<pre><code class="language-bash">mkdir my-project        # tạo một thư mục
 cd my-project           # đi vào nó
 touch index.html        # tạo một file rỗng  [Windows: ni index.html]
 mkdir src               # một thư mục con
@@ -151,7 +151,7 @@ rm copy.html            # xoá file — KHÔNG hoàn tác được, cẩn thận
 <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Còn lại đều là tương đối</span><span class="lz-d">Nó bị dán vào thư mục hiện tại của bạn. <code>src/app.js</code>, <code>./src/app.js</code> và <code>../other/app.js</code> đều trỏ tới file khác nhau tuỳ theo <code>pwd</code> nói bạn đang ở đâu.</span></div>
 <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Nên pwd là nửa còn thiếu của mọi đường dẫn tương đối</span><span class="lz-d">Khi một lệnh bảo "không có file đó" mà bạn nhìn thấy file rành rành, hãy chạy <code>pwd</code>. Gần như chắc chắn bạn đang ở một thư mục khác chỗ bạn tưởng.</span></div>
 </div>
-<pre><code>pwd
+<pre><code class="language-bash">pwd
 ls
 cd src
 pwd
@@ -281,7 +281,7 @@ console.log('hello');</div>
 </div>
 
 <h3>The everyday commands</h3>
-<pre><code>git init                 # turn a folder into a Git repo (once per project)
+<pre><code class="language-bash">git init                 # turn a folder into a Git repo (once per project)
 git status               # what changed? what is staged? — run this constantly
 git add index.html       # stage one file  (git add . stages everything)
 git commit -m "Add home page"   # snapshot the staged changes with a message
@@ -289,7 +289,7 @@ git log --oneline        # see the timeline of commits</code></pre>
 <p>Think of it as a loop: edit → <code>git add</code> → <code>git commit</code>, over and over. Each commit is a labelled save point you can return to.</p>
 
 <h3>Undo, safely</h3>
-<pre><code>git restore index.html          # throw away un-staged edits to a file
+<pre><code class="language-bash">git restore index.html          # throw away un-staged edits to a file
 git restore --staged index.html # un-stage (keep the edit, remove from shortlist)
 git log --oneline               # find a commit hash to inspect or revert</code></pre>
 <p class="pitfall"><strong>Write commit messages a human can read.</strong> "Fix login redirect bug" tells future-you what happened; "asdf" tells you nothing. Small, frequent, well-labelled commits are worth their weight in gold when something breaks.</p>
@@ -338,7 +338,7 @@ Untracked files:
 </div>
 
 <h3>Các lệnh hằng ngày</h3>
-<pre><code>git init                 # biến một thư mục thành repo Git (một lần mỗi dự án)
+<pre><code class="language-bash">git init                 # biến một thư mục thành repo Git (một lần mỗi dự án)
 git status               # cái gì đổi? cái gì đã stage? — chạy liên tục
 git add index.html       # stage một file  (git add . stage tất cả)
 git commit -m "Them trang chu"   # chụp các thay đổi đã stage kèm thông điệp
@@ -346,7 +346,7 @@ git log --oneline        # xem dòng thời gian các commit</code></pre>
 <p>Hãy coi như một vòng lặp: sửa → <code>git add</code> → <code>git commit</code>, lặp đi lặp lại. Mỗi commit là một điểm lưu có nhãn để bạn quay về.</p>
 
 <h3>Hoàn tác, an toàn</h3>
-<pre><code>git restore index.html          # vứt bỏ chỉnh sửa CHƯA stage của một file
+<pre><code class="language-bash">git restore index.html          # vứt bỏ chỉnh sửa CHƯA stage của một file
 git restore --staged index.html # bỏ stage (giữ chỉnh sửa, gỡ khỏi danh sách)
 git log --oneline               # tìm mã hash của commit để xem hoặc revert</code></pre>
 <p class="pitfall"><strong>Viết thông điệp commit để người đọc được.</strong> "Sua bug chuyen huong dang nhap" cho bạn-tương-lai biết đã xảy ra gì; "asdf" chẳng nói gì. Commit nhỏ, thường xuyên, có nhãn rõ đáng giá vàng khi có sự cố.</p>
@@ -399,7 +399,7 @@ Untracked files:
 
 <h3>The word to learn: "remote"</h3>
 <p>A <strong>remote</strong> is a copy of your repository somewhere else (on GitHub). By convention it is named <code>origin</code>. You <strong>push</strong> your local commits up to it and <strong>pull</strong> others' commits down.</p>
-<pre><code># first time: connect your local repo to a GitHub repo you created
+<pre><code class="language-bash"># first time: connect your local repo to a GitHub repo you created
 git remote add origin https://github.com/you/my-project.git
 git branch -M main
 git push -u origin main         # upload commits; -u links the branches
@@ -438,7 +438,7 @@ git push                        # send today's commits to GitHub</code></pre>
 
 <h3>Từ cần học: "remote"</h3>
 <p>Một <strong>remote</strong> là một bản sao repository của bạn ở nơi khác (trên GitHub). Theo quy ước nó tên là <code>origin</code>. Bạn <strong>push</strong> các commit local lên nó và <strong>pull</strong> commit của người khác về.</p>
-<pre><code># lần đầu: nối repo local với một repo GitHub bạn đã tạo
+<pre><code class="language-bash"># lần đầu: nối repo local với một repo GitHub bạn đã tạo
 git remote add origin https://github.com/ban/my-project.git
 git branch -M main
 git push -u origin main         # tải commit lên; -u liên kết hai nhánh
@@ -488,7 +488,7 @@ git push                        # gửi commit hôm nay lên GitHub</code></pre>
 
 <h3>package.json — the ID card of a project</h3>
 <p>Every project has a <code>package.json</code>: its name, version, scripts, and the list of libraries it needs. Create one with:</p>
-<pre><code>npm init -y        # -y accepts the defaults</code></pre>
+<pre><code class="language-bash">npm init -y        # -y accepts the defaults</code></pre>
 <pre><code>{
   "name": "my-project",
   "version": "1.0.0",
@@ -501,7 +501,7 @@ git push                        # gửi commit hôm nay lên GitHub</code></pre>
 }</code></pre>
 
 <h3>Installing libraries</h3>
-<pre><code>npm install dayjs        # a runtime dependency (your app needs it to run)
+<pre><code class="language-bash">npm install dayjs        # a runtime dependency (your app needs it to run)
 npm install -D prettier  # a dev dependency (only needed while developing)
 npm install              # install everything listed in package.json</code></pre>
 <div class="kv-grid">
@@ -543,7 +543,7 @@ found 0 vulnerabilities</div>
 
 <h3>package.json — chứng minh thư của một dự án</h3>
 <p>Mọi dự án đều có <code>package.json</code>: tên, phiên bản, các script, và danh sách thư viện nó cần. Tạo một cái bằng:</p>
-<pre><code>npm init -y        # -y chấp nhận các giá trị mặc định</code></pre>
+<pre><code class="language-bash">npm init -y        # -y chấp nhận các giá trị mặc định</code></pre>
 <pre><code>{
   "name": "my-project",
   "version": "1.0.0",
@@ -556,7 +556,7 @@ found 0 vulnerabilities</div>
 }</code></pre>
 
 <h3>Cài thư viện</h3>
-<pre><code>npm install dayjs        # một dependency runtime (app cần để chạy)
+<pre><code class="language-bash">npm install dayjs        # một dependency runtime (app cần để chạy)
 npm install -D prettier  # một dev dependency (chỉ cần khi phát triển)
 npm install              # cài tất cả những gì liệt kê trong package.json</code></pre>
 <div class="kv-grid">

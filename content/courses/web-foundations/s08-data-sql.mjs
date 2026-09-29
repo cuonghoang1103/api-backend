@@ -156,7 +156,7 @@ ${gallery('wf-sql', [
 5  | Old Announcement    | 80    | true</code></pre>
 
 <h3>SELECT columns FROM table</h3>
-<pre><code>SELECT title, views FROM posts;</code></pre>
+<pre><code class="language-sql">SELECT title, views FROM posts;</code></pre>
 <p>Result — every row, but only the two named columns:</p>
 <pre><code>title              | views
 -------------------+------
@@ -168,7 +168,7 @@ Old Announcement    | 80</code></pre>
 <p><code>SELECT * FROM posts;</code> means "give me every column" — <code>*</code> is a wildcard for "all".</p>
 
 <h3>WHERE — keep only matching rows</h3>
-<pre><code>SELECT title, views FROM posts WHERE published = true;</code></pre>
+<pre><code class="language-sql">SELECT title, views FROM posts WHERE published = true;</code></pre>
 <p>Result — row 3 ("Draft Post") is excluded because <code>published</code> is false:</p>
 <pre><code>title              | views
 -------------------+------
@@ -178,7 +178,7 @@ Node.js Basics      | 300
 Old Announcement    | 80</code></pre>
 
 <h3>ORDER BY — control the order</h3>
-<pre><code>SELECT title, views FROM posts WHERE published = true ORDER BY views DESC;</code></pre>
+<pre><code class="language-sql">SELECT title, views FROM posts WHERE published = true ORDER BY views DESC;</code></pre>
 <p>Result — same 4 rows as above, now sorted by <code>views</code> highest first (<code>DESC</code> = descending; <code>ASC</code> = ascending, the default):</p>
 <pre><code>title              | views
 -------------------+------
@@ -188,7 +188,7 @@ Old Announcement    | 80
 Learning SQL        | 45</code></pre>
 
 <h3>LIMIT — take only the first N</h3>
-<pre><code>SELECT title, views FROM posts WHERE published = true ORDER BY views DESC LIMIT 2;</code></pre>
+<pre><code class="language-sql">SELECT title, views FROM posts WHERE published = true ORDER BY views DESC LIMIT 2;</code></pre>
 <p>Result — only the top 2 rows survive:</p>
 <pre><code>title              | views
 -------------------+------
@@ -232,7 +232,7 @@ WHERE user_id = 7 ORDER BY created_at DESC LIMIT 3;
 5  | Old Announcement    | 80    | true</code></pre>
 
 <h3>SELECT cột FROM bảng</h3>
-<pre><code>SELECT title, views FROM posts;</code></pre>
+<pre><code class="language-sql">SELECT title, views FROM posts;</code></pre>
 <p>Kết quả — mọi dòng, nhưng chỉ hai cột được nêu tên:</p>
 <pre><code>title              | views
 -------------------+------
@@ -244,7 +244,7 @@ Old Announcement    | 80</code></pre>
 <p><code>SELECT * FROM posts;</code> nghĩa là "cho tôi mọi cột" — <code>*</code> là ký tự đại diện cho "tất cả".</p>
 
 <h3>WHERE — chỉ giữ dòng khớp điều kiện</h3>
-<pre><code>SELECT title, views FROM posts WHERE published = true;</code></pre>
+<pre><code class="language-sql">SELECT title, views FROM posts WHERE published = true;</code></pre>
 <p>Kết quả — dòng 3 ("Draft Post") bị loại vì <code>published</code> là false:</p>
 <pre><code>title              | views
 -------------------+------
@@ -254,7 +254,7 @@ Node.js Basics      | 300
 Old Announcement    | 80</code></pre>
 
 <h3>ORDER BY — kiểm soát thứ tự</h3>
-<pre><code>SELECT title, views FROM posts WHERE published = true ORDER BY views DESC;</code></pre>
+<pre><code class="language-sql">SELECT title, views FROM posts WHERE published = true ORDER BY views DESC;</code></pre>
 <p>Kết quả — cùng 4 dòng trên, giờ sắp theo <code>views</code> cao nhất trước (<code>DESC</code> = giảm dần; <code>ASC</code> = tăng dần, mặc định):</p>
 <pre><code>title              | views
 -------------------+------
@@ -264,7 +264,7 @@ Old Announcement    | 80
 Learning SQL        | 45</code></pre>
 
 <h3>LIMIT — chỉ lấy N dòng đầu</h3>
-<pre><code>SELECT title, views FROM posts WHERE published = true ORDER BY views DESC LIMIT 2;</code></pre>
+<pre><code class="language-sql">SELECT title, views FROM posts WHERE published = true ORDER BY views DESC LIMIT 2;</code></pre>
 <p>Kết quả — chỉ 2 dòng đầu sống sót:</p>
 <pre><code>title              | views
 -------------------+------
@@ -317,7 +317,7 @@ WHERE user_id = 7 ORDER BY created_at DESC LIMIT 3;
 3  | Draft Post          | 3     | false</code></pre>
 
 <h3>INSERT INTO — create a new row</h3>
-<pre><code>INSERT INTO posts (title, views, published)
+<pre><code class="language-sql">INSERT INTO posts (title, views, published)
 VALUES ('New Tutorial', 0, false);</code></pre>
 <p>Result — a new row 4 is added (the database usually assigns the <code>id</code> automatically):</p>
 <pre><code>id | title              | views | published
@@ -328,7 +328,7 @@ VALUES ('New Tutorial', 0, false);</code></pre>
 4  | New Tutorial        | 0     | false</code></pre>
 
 <h3>UPDATE ... SET ... WHERE — change existing rows</h3>
-<pre><code>UPDATE posts SET published = true WHERE id = 4;</code></pre>
+<pre><code class="language-sql">UPDATE posts SET published = true WHERE id = 4;</code></pre>
 <p>Result — only row 4 changes; every other row is untouched:</p>
 <pre><code>id | title              | views | published
 ---+--------------------+-------+----------
@@ -338,7 +338,7 @@ VALUES ('New Tutorial', 0, false);</code></pre>
 4  | New Tutorial        | 0     | true</code></pre>
 
 <h3>DELETE FROM ... WHERE — remove rows</h3>
-<pre><code>DELETE FROM posts WHERE id = 3;</code></pre>
+<pre><code class="language-sql">DELETE FROM posts WHERE id = 3;</code></pre>
 <p>Result — row 3 ("Draft Post") is gone entirely:</p>
 <pre><code>id | title              | views | published
 ---+--------------------+-------+----------
@@ -373,7 +373,7 @@ VALUES ('New Tutorial', 0, false);</code></pre>
 3  | Draft Post          | 3     | false</code></pre>
 
 <h3>INSERT INTO — tạo một dòng mới</h3>
-<pre><code>INSERT INTO posts (title, views, published)
+<pre><code class="language-sql">INSERT INTO posts (title, views, published)
 VALUES ('New Tutorial', 0, false);</code></pre>
 <p>Kết quả — một dòng 4 mới được thêm (database thường tự gán <code>id</code>):</p>
 <pre><code>id | title              | views | published
@@ -384,7 +384,7 @@ VALUES ('New Tutorial', 0, false);</code></pre>
 4  | New Tutorial        | 0     | false</code></pre>
 
 <h3>UPDATE ... SET ... WHERE — đổi dòng đang có</h3>
-<pre><code>UPDATE posts SET published = true WHERE id = 4;</code></pre>
+<pre><code class="language-sql">UPDATE posts SET published = true WHERE id = 4;</code></pre>
 <p>Kết quả — chỉ dòng 4 đổi; mọi dòng khác không đụng tới:</p>
 <pre><code>id | title              | views | published
 ---+--------------------+-------+----------
@@ -394,7 +394,7 @@ VALUES ('New Tutorial', 0, false);</code></pre>
 4  | New Tutorial        | 0     | true</code></pre>
 
 <h3>DELETE FROM ... WHERE — xoá dòng</h3>
-<pre><code>DELETE FROM posts WHERE id = 3;</code></pre>
+<pre><code class="language-sql">DELETE FROM posts WHERE id = 3;</code></pre>
 <p>Kết quả — dòng 3 ("Draft Post") biến mất hoàn toàn:</p>
 <pre><code>id | title              | views | published
 ---+--------------------+-------+----------
@@ -440,7 +440,7 @@ VALUES ('New Tutorial', 0, false);</code></pre>
 </div>
 
 <h3>The example tables</h3>
-<pre><code>users
+<pre><code class="language-sql">users
 id | name
 ---+------
 1  | Lan
@@ -456,7 +456,7 @@ id | title              | user_id   ← foreign key, points at users.id
 <p><code>posts.user_id = 1</code> means "this post belongs to the user whose id is 1" — that is the entire relationship, one number.</p>
 
 <h3>INNER JOIN — only rows that match on both sides</h3>
-<pre><code>SELECT posts.title, users.name
+<pre><code class="language-sql">SELECT posts.title, users.name
 FROM posts
 INNER JOIN users ON posts.user_id = users.id;</code></pre>
 <p>Result — post 4 ("Orphan Draft") is DROPPED because its <code>user_id</code> is NULL and matches no user:</p>
@@ -467,7 +467,7 @@ Learning SQL        | Lan
 Minh's Notes        | Minh</code></pre>
 
 <h3>LEFT JOIN — keep every row from the left table regardless</h3>
-<pre><code>SELECT posts.title, users.name
+<pre><code class="language-sql">SELECT posts.title, users.name
 FROM posts
 LEFT JOIN users ON posts.user_id = users.id;</code></pre>
 <p>Result — post 4 is KEPT, with <code>name</code> filled in as NULL since it has no matching user:</p>
@@ -519,7 +519,7 @@ id | title              | user_id   ← khoá ngoại, trỏ vào users.id
 <p><code>posts.user_id = 1</code> nghĩa là "post này thuộc về user có id là 1" — đó là toàn bộ mối quan hệ, một con số.</p>
 
 <h3>INNER JOIN — chỉ dòng khớp ở cả hai bên</h3>
-<pre><code>SELECT posts.title, users.name
+<pre><code class="language-sql">SELECT posts.title, users.name
 FROM posts
 INNER JOIN users ON posts.user_id = users.id;</code></pre>
 <p>Kết quả — post 4 ("Orphan Draft") bị LOẠI vì <code>user_id</code> của nó là NULL và không khớp user nào:</p>
@@ -530,7 +530,7 @@ Learning SQL        | Lan
 Minh's Notes        | Minh</code></pre>
 
 <h3>LEFT JOIN — giữ mọi dòng từ bảng bên trái bất kể thế nào</h3>
-<pre><code>SELECT posts.title, users.name
+<pre><code class="language-sql">SELECT posts.title, users.name
 FROM posts
 LEFT JOIN users ON posts.user_id = users.id;</code></pre>
 <p>Kết quả — post 4 được GIỮ, với <code>name</code> điền là NULL vì nó không có user khớp:</p>
@@ -573,7 +573,7 @@ Orphan Draft        | NULL</code></pre>
 <p>An ORM sits between your code and the database. You call a method like <code>prisma.user.findMany()</code>; the ORM builds the SQL (<code>SELECT * FROM users;</code>), runs it, and hands you back plain JavaScript objects — an array of <code>{ id, name, email }</code> — instead of raw rows. You get autocomplete, type-checking, and no hand-written SQL strings scattered through your app.</p>
 
 <h3>A tiny Prisma schema</h3>
-<pre><code>// prisma/schema.prisma
+<pre><code class="language-sql">// prisma/schema.prisma
 model User {
   id    Int    @id @default(autoincrement())
   name  String
@@ -590,7 +590,7 @@ model Post {
 <p>Compare this to Lesson 8.4: <code>User</code>/<code>Post</code> are the <code>users</code>/<code>posts</code> tables, <code>authorId</code> is the foreign key (<code>user_id</code>), and <code>posts</code> on <code>User</code> plus <code>author</code> on <code>Post</code> describe the same one-to-many relationship — just spelled as a schema instead of two separate tables.</p>
 
 <h3>Reading and writing through Prisma</h3>
-<pre><code>// SELECT * FROM users WHERE id = 1;
+<pre><code class="language-sql">// SELECT * FROM users WHERE id = 1;
 const user = await prisma.user.findUnique({ where: { id: 1 } });
 
 // SELECT * FROM users;
@@ -646,7 +646,7 @@ model Post {
 <p>So với Bài 8.4: <code>User</code>/<code>Post</code> là bảng <code>users</code>/<code>posts</code>, <code>authorId</code> là khoá ngoại (<code>user_id</code>), và <code>posts</code> trên <code>User</code> cùng <code>author</code> trên <code>Post</code> mô tả đúng quan hệ một-nhiều đó — chỉ đánh vần thành một schema thay vì hai bảng riêng.</p>
 
 <h3>Đọc và ghi qua Prisma</h3>
-<pre><code>// SELECT * FROM users WHERE id = 1;
+<pre><code class="language-sql">// SELECT * FROM users WHERE id = 1;
 const user = await prisma.user.findUnique({ where: { id: 1 } });
 
 // SELECT * FROM users;

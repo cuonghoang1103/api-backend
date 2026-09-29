@@ -26,7 +26,7 @@ export default {
 
 <h3>OVER () — a total on every row</h3>
 <p>Add <code>OVER ()</code> to an aggregate and it becomes a window function: it computes over all the rows but reports on <em>each</em> one. Show every sale with the grand total and its share of it — without collapsing the eight rows into one:</p>
-<pre><code>SELECT seller, amount,
+<pre><code class="language-sql">SELECT seller, amount,
        sum(amount) OVER ()                            AS grand_total,
        round(100.0 * amount / sum(amount) OVER (), 1) AS pct_of_total
 FROM sale ORDER BY id;</code></pre>
@@ -45,7 +45,7 @@ FROM sale ORDER BY id;</code></pre>
 
 <h3>PARTITION BY — a separate window per group</h3>
 <p><code>PARTITION BY</code> is the window equivalent of <code>GROUP BY</code>: it splits the rows into groups and computes the aggregate <em>within each group</em>, still keeping every row. Each sale next to its region's total:</p>
-<pre><code>SELECT region, seller, amount,
+<pre><code class="language-sql">SELECT region, seller, amount,
        sum(amount) OVER (PARTITION BY region) AS region_total
 FROM sale ORDER BY region, id;</code></pre>
 <div class="out"> region | seller | amount | region_total
@@ -83,7 +83,7 @@ FROM sale ORDER BY region, id;</code></pre>
 
 <h3>OVER () — một tổng trên mỗi dòng</h3>
 <p>Thêm <code>OVER ()</code> vào một hàm tổng hợp là nó thành một hàm cửa sổ: nó tính trên mọi dòng nhưng báo cáo trên <em>mỗi</em> dòng. Hiện mỗi giao dịch với tổng lớn và phần chia của nó — mà không gộp tám dòng thành một:</p>
-<pre><code>SELECT seller, amount,
+<pre><code class="language-sql">SELECT seller, amount,
        sum(amount) OVER ()                            AS grand_total,
        round(100.0 * amount / sum(amount) OVER (), 1) AS pct_of_total
 FROM sale ORDER BY id;</code></pre>
@@ -102,7 +102,7 @@ FROM sale ORDER BY id;</code></pre>
 
 <h3>PARTITION BY — một cửa sổ riêng cho mỗi nhóm</h3>
 <p><code>PARTITION BY</code> là tương đương cửa sổ của <code>GROUP BY</code>: nó chia các dòng thành nhóm và tính hàm tổng hợp <em>trong mỗi nhóm</em>, vẫn giữ mọi dòng. Mỗi giao dịch cạnh tổng của vùng nó:</p>
-<pre><code>SELECT region, seller, amount,
+<pre><code class="language-sql">SELECT region, seller, amount,
        sum(amount) OVER (PARTITION BY region) AS region_total
 FROM sale ORDER BY region, id;</code></pre>
 <div class="out"> region | seller | amount | region_total
@@ -150,7 +150,7 @@ FROM sale ORDER BY region, id;</code></pre>
 
 <h3>The three ranking functions</h3>
 <p>All three rank within each region by amount (highest first). The North region has a tie — Alice and Bob both sold 150 — which is where they diverge:</p>
-<pre><code>SELECT region, seller, amount,
+<pre><code class="language-sql">SELECT region, seller, amount,
        row_number() OVER (PARTITION BY region ORDER BY amount DESC) AS rn,
        rank()       OVER (PARTITION BY region ORDER BY amount DESC) AS rnk,
        dense_rank() OVER (PARTITION BY region ORDER BY amount DESC) AS drnk
@@ -176,7 +176,7 @@ FROM sale ORDER BY region, amount DESC, seller;</code></pre>
 
 <h3>Top-N per group — and why you need a subquery</h3>
 <p>A window function is computed <em>after</em> <code>WHERE</code>, so you can't filter on <code>rn</code> in the same query's <code>WHERE</code>. Wrap it in a CTE (or subquery), then filter. "Top 2 sales per region":</p>
-<pre><code>WITH ranked AS (
+<pre><code class="language-sql">WITH ranked AS (
   SELECT region, seller, amount,
          row_number() OVER (PARTITION BY region ORDER BY amount DESC) AS rn
   FROM sale
@@ -213,7 +213,7 @@ SELECT region, seller, amount FROM ranked WHERE rn &lt;= 2 ORDER BY region, rn;<
 
 <h3>Ba hàm xếp hạng</h3>
 <p>Cả ba xếp hạng trong mỗi vùng theo amount (cao trước). Vùng North có một đồng hạng — Alice và Bob đều bán 150 — đó là chỗ chúng rẽ nhánh:</p>
-<pre><code>SELECT region, seller, amount,
+<pre><code class="language-sql">SELECT region, seller, amount,
        row_number() OVER (PARTITION BY region ORDER BY amount DESC) AS rn,
        rank()       OVER (PARTITION BY region ORDER BY amount DESC) AS rnk,
        dense_rank() OVER (PARTITION BY region ORDER BY amount DESC) AS drnk
@@ -239,7 +239,7 @@ FROM sale ORDER BY region, amount DESC, seller;</code></pre>
 
 <h3>Top-N mỗi nhóm — và vì sao cần một subquery</h3>
 <p>Một hàm cửa sổ được tính <em>sau</em> <code>WHERE</code>, nên bạn không thể lọc theo <code>rn</code> trong <code>WHERE</code> của cùng truy vấn. Hãy bọc nó trong một CTE (hoặc subquery), rồi lọc. "Top 2 giao dịch mỗi vùng":</p>
-<pre><code>WITH ranked AS (
+<pre><code class="language-sql">WITH ranked AS (
   SELECT region, seller, amount,
          row_number() OVER (PARTITION BY region ORDER BY amount DESC) AS rn
   FROM sale
@@ -286,7 +286,7 @@ SELECT region, seller, amount FROM ranked WHERE rn &lt;= 2 ORDER BY region, rn;<
 
 <h3>Running total — an ordered SUM</h3>
 <p>When a window has <code>ORDER BY</code> but no explicit frame, it defaults to "all rows from the start up to the current row" — so <code>sum()</code> over it becomes a <strong>running total</strong>. Cumulative sales per seller over time:</p>
-<pre><code>SELECT seller, sold_on, amount,
+<pre><code class="language-sql">SELECT seller, sold_on, amount,
        sum(amount) OVER (PARTITION BY seller ORDER BY sold_on) AS running_total
 FROM sale ORDER BY seller, sold_on;</code></pre>
 <div class="out"> seller |  sold_on   | amount | running_total
@@ -304,7 +304,7 @@ FROM sale ORDER BY seller, sold_on;</code></pre>
 
 <h3>LAG — compare each row to the previous one</h3>
 <p><code>lag(col)</code> reaches back to the previous row in the window's order; <code>lead(col)</code> reaches forward. Perfect for "change since last time" — subtract the previous amount from the current:</p>
-<pre><code>SELECT seller, sold_on, amount,
+<pre><code class="language-sql">SELECT seller, sold_on, amount,
        lag(amount) OVER (PARTITION BY seller ORDER BY sold_on)          AS prev_amount,
        amount - lag(amount) OVER (PARTITION BY seller ORDER BY sold_on) AS change
 FROM sale ORDER BY seller, sold_on;</code></pre>
@@ -351,7 +351,7 @@ FROM sale ORDER BY seller, sold_on;</code></pre>
 
 <h3>Tổng luỹ tiến — một SUM có thứ tự</h3>
 <p>Khi một cửa sổ có <code>ORDER BY</code> nhưng không có khung tường minh, nó mặc định là "mọi dòng từ đầu tới dòng hiện tại" — nên <code>sum()</code> trên nó thành một <strong>tổng luỹ tiến</strong>. Doanh số tích luỹ mỗi người bán theo thời gian:</p>
-<pre><code>SELECT seller, sold_on, amount,
+<pre><code class="language-sql">SELECT seller, sold_on, amount,
        sum(amount) OVER (PARTITION BY seller ORDER BY sold_on) AS running_total
 FROM sale ORDER BY seller, sold_on;</code></pre>
 <div class="out"> seller |  sold_on   | amount | running_total
@@ -369,7 +369,7 @@ FROM sale ORDER BY seller, sold_on;</code></pre>
 
 <h3>LAG — so mỗi dòng với dòng trước</h3>
 <p><code>lag(col)</code> với ngược lại dòng trước theo thứ tự cửa sổ; <code>lead(col)</code> với tới trước. Hoàn hảo cho "thay đổi so với lần trước" — trừ amount trước khỏi amount hiện tại:</p>
-<pre><code>SELECT seller, sold_on, amount,
+<pre><code class="language-sql">SELECT seller, sold_on, amount,
        lag(amount) OVER (PARTITION BY seller ORDER BY sold_on)          AS prev_amount,
        amount - lag(amount) OVER (PARTITION BY seller ORDER BY sold_on) AS change
 FROM sale ORDER BY seller, sold_on;</code></pre>
@@ -426,7 +426,7 @@ FROM sale ORDER BY seller, sold_on;</code></pre>
 
 <h3>Frames — a sliding subset of rows</h3>
 <p>The default frame with <code>ORDER BY</code> is "start of partition to current row" (that's what made the running total). Override it with <code>ROWS BETWEEN</code> to get a <em>sliding window</em> — here, the average of the current row and the one before it (a 2-row moving average):</p>
-<pre><code>SELECT seller, sold_on, amount,
+<pre><code class="language-sql">SELECT seller, sold_on, amount,
        round(avg(amount) OVER (PARTITION BY seller ORDER BY sold_on
                                ROWS BETWEEN 1 PRECEDING AND CURRENT ROW), 1) AS moving_avg2
 FROM sale ORDER BY seller, sold_on;</code></pre>
@@ -445,7 +445,7 @@ FROM sale ORDER BY seller, sold_on;</code></pre>
 
 <h3>FIRST_VALUE — the top of the window on every row</h3>
 <p><code>first_value(col)</code> returns the value from the first row of the (ordered) window — handy for "compared to the best". The top seller's amount in each region, shown on every row:</p>
-<pre><code>SELECT region, seller, amount,
+<pre><code class="language-sql">SELECT region, seller, amount,
        first_value(amount) OVER (PARTITION BY region ORDER BY amount DESC) AS top_amount
 FROM sale ORDER BY region, amount DESC, seller;</code></pre>
 <div class="out"> region | seller | amount | top_amount
@@ -463,7 +463,7 @@ FROM sale ORDER BY region, amount DESC, seller;</code></pre>
 
 <h3>NTILE — split into equal buckets</h3>
 <p><code>ntile(n)</code> divides the ordered rows into <code>n</code> roughly equal groups and labels each row with its bucket number — the basis of quartiles, deciles, and percentile cohorts. Split all sales into a top and bottom half by amount:</p>
-<pre><code>SELECT seller, amount,
+<pre><code class="language-sql">SELECT seller, amount,
        ntile(2) OVER (ORDER BY amount DESC) AS half
 FROM sale ORDER BY amount DESC, seller;</code></pre>
 <div class="out"> seller | amount | half
@@ -501,7 +501,7 @@ FROM sale ORDER BY amount DESC, seller;</code></pre>
 
 <h3>Khung — một tập con trượt của các dòng</h3>
 <p>Khung mặc định với <code>ORDER BY</code> là "đầu phân vùng tới dòng hiện tại" (đó là cái làm nên tổng luỹ tiến). Ghi đè nó bằng <code>ROWS BETWEEN</code> để có một <em>cửa sổ trượt</em> — ở đây, trung bình của dòng hiện tại và dòng trước nó (trung bình trượt 2 dòng):</p>
-<pre><code>SELECT seller, sold_on, amount,
+<pre><code class="language-sql">SELECT seller, sold_on, amount,
        round(avg(amount) OVER (PARTITION BY seller ORDER BY sold_on
                                ROWS BETWEEN 1 PRECEDING AND CURRENT ROW), 1) AS moving_avg2
 FROM sale ORDER BY seller, sold_on;</code></pre>
@@ -520,7 +520,7 @@ FROM sale ORDER BY seller, sold_on;</code></pre>
 
 <h3>FIRST_VALUE — đỉnh cửa sổ trên mọi dòng</h3>
 <p><code>first_value(col)</code> trả về giá trị từ dòng đầu của cửa sổ (đã sắp) — tiện cho "so với người giỏi nhất". Amount của người bán top trong mỗi vùng, hiện trên mọi dòng:</p>
-<pre><code>SELECT region, seller, amount,
+<pre><code class="language-sql">SELECT region, seller, amount,
        first_value(amount) OVER (PARTITION BY region ORDER BY amount DESC) AS top_amount
 FROM sale ORDER BY region, amount DESC, seller;</code></pre>
 <div class="out"> region | seller | amount | top_amount
@@ -538,7 +538,7 @@ FROM sale ORDER BY region, amount DESC, seller;</code></pre>
 
 <h3>NTILE — chia thành các nhóm bằng nhau</h3>
 <p><code>ntile(n)</code> chia các dòng đã sắp thành <code>n</code> nhóm xấp xỉ bằng nhau và gán mỗi dòng số nhóm của nó — nền tảng của tứ phân, thập phân, và nhóm phần trăm. Chia mọi giao dịch thành nửa trên và nửa dưới theo amount:</p>
-<pre><code>SELECT seller, amount,
+<pre><code class="language-sql">SELECT seller, amount,
        ntile(2) OVER (ORDER BY amount DESC) AS half
 FROM sale ORDER BY amount DESC, seller;</code></pre>
 <div class="out"> seller | amount | half

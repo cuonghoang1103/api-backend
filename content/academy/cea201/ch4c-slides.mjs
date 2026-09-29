@@ -343,7 +343,7 @@ export default {
 <tr><td><strong>FIFO</strong></td><td>10</td><td>0.3750</td><td>worst — throws out block 0 at #6 right after using it at #4</td></tr>
 </table>
 <p class="nhan">The simulator (Python) — run it and reproduce every table above</p>
-<pre>import random
+<pre><code class="language-python">import random
 K, SEQ = 4, [0,2,5,0,4,1,5,0,3,1,0,5,2,1,3,2]
 
 def run(policy, seq, k=K, seed=None):
@@ -370,7 +370,7 @@ def run(policy, seq, k=K, seed=None):
 
 for p in ('LRU', 'FIFO', 'LFU'):
     print(p, run(p, SEQ))
-print('RANDOM', sum(run('RAND', SEQ, seed=i) for i in range(1000000)) / 1000000)</pre>
+print('RANDOM', sum(run('RAND', SEQ, seed=i) for i in range(1000000)) / 1000000)</code></pre>
 <ul>
 <li><strong>Why FIFO loses here — look at access #6.</strong> Block 0 was used one step earlier (#4) yet FIFO evicts it because it arrived first. LRU keeps it and collects hits at #8 and #11. FIFO's blind spot is that <em>arrival order is not usage order</em>.</li>
 <li><strong>Why LFU loses — look at accesses #13 to #16.</strong> Blocks 0, 1 and 5 have accumulated counts of 3–4, so they can never be evicted. Blocks 2 and 3, each with count 1, take turns kicking each other out: miss, hit, miss, miss. That is <em>cache pollution by stale popularity</em>, and it is the classic reason real hardware does not use pure LFU.</li>
@@ -446,7 +446,7 @@ print('RANDOM', sum(run('RAND', SEQ, seed=i) for i in range(1000000)) / 1000000)
 <tr><td><strong>FIFO</strong></td><td>10</td><td>0,3750</td><td>tệ nhất — vứt khối 0 ở #6 ngay sau khi vừa dùng nó ở #4</td></tr>
 </table>
 <p class="nhan">Chương trình mô phỏng (Python) — chạy đi, dựng lại được mọi bảng ở trên</p>
-<pre>import random
+<pre><code class="language-python">import random
 K, SEQ = 4, [0,2,5,0,4,1,5,0,3,1,0,5,2,1,3,2]
 
 def run(policy, seq, k=K, seed=None):
@@ -473,7 +473,7 @@ def run(policy, seq, k=K, seed=None):
 
 for p in ('LRU', 'FIFO', 'LFU'):
     print(p, run(p, SEQ))
-print('RANDOM', sum(run('RAND', SEQ, seed=i) for i in range(1000000)) / 1000000)</pre>
+print('RANDOM', sum(run('RAND', SEQ, seed=i) for i in range(1000000)) / 1000000)</code></pre>
 <ul>
 <li><strong>Vì sao FIFO thua ở đây — nhìn lượt #6.</strong> Khối 0 vừa được dùng ngay bước trước (#4) mà FIFO vẫn đuổi nó vì nó vào sớm nhất. LRU giữ lại và thu về hai lần trúng ở #8 và #11. Điểm mù của FIFO là <em>thứ tự vào KHÔNG phải thứ tự dùng</em>.</li>
 <li><strong>Vì sao LFU thua — nhìn các lượt #13 tới #16.</strong> Khối 0, 1, 5 đã tích số đếm 3–4 nên không bao giờ bị đuổi được nữa. Khối 2 và 3, mỗi đứa đếm 1, thay nhau hất nhau ra: trượt, trúng, trượt, trượt. Đó là <em>ô nhiễm cache bởi danh tiếng cũ</em>, và là lý do kinh điển khiến phần cứng thật không dùng LFU thuần.</li>

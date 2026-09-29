@@ -55,7 +55,7 @@ export default {
 <li><strong>"Using the key array"</strong> — the key is the field you compare against. Here the key is the element itself because the array holds plain <code>int</code>s. When the array holds structures (slides 61–65 of this same deck), the key becomes one field, e.g. the student id, and the return value is still the index of the whole record.</li>
 <li><strong>Link back to Slot 08–09</strong> — a search is the textbook example of a function that must return a value, not print it. If the function printed "found at 5" it could not be reused by <code>removeFirst</code>. The case study on slide 41 does exactly that reuse: <code>removeFirst</code> calls <code>searchValue</code>.</li>
 </ul>
-<pre><code>/* hop dong chung cua moi ham tim kiem trong chuong nay */
+<pre><code class="language-c">/* hop dong chung cua moi ham tim kiem trong chuong nay */
 int search(int x, int a[], int n);   /* tra ve chi so 0..n-1, hoac -1 */
 
 /* cach dung dung: */
@@ -71,7 +71,7 @@ else          printf("Not found\\n");</code></pre>
 <li><strong>"Dựa trên mảng khoá"</strong> — khoá là trường mà bạn đem ra so sánh. Ở đây khoá chính là phần tử, vì mảng chứa <code>int</code> trần. Khi mảng chứa struct (slide 61–65 của chính bộ slide này), khoá trở thành một trường, ví dụ mã sinh viên, còn giá trị trả về vẫn là chỉ số của cả bản ghi.</li>
 <li><strong>Nối về Slot 08–09</strong> — tìm kiếm là ví dụ kinh điển của một hàm PHẢI trả về giá trị chứ không in ra. Nếu hàm tự in "found at 5" thì <code>removeFirst</code> không dùng lại được nó. Case study ở slide 41 dùng lại đúng như vậy: <code>removeFirst</code> gọi <code>searchValue</code>.</li>
 </ul>
-<pre><code>/* hop dong chung cua moi ham tim kiem trong chuong nay */
+<pre><code class="language-c">/* hop dong chung cua moi ham tim kiem trong chuong nay */
 int search(int x, int a[], int n);   /* tra ve chi so 0..n-1, hoac -1 */
 
 /* cach dung dung: */
@@ -89,7 +89,7 @@ else          printf("Not found\\n");</code></pre>
 <li><strong>The <code>return</code> inside the loop is the whole optimisation</strong> — without it you would keep scanning after the match and end up reporting the last occurrence instead of the first. Note there is no <code>break</code> and no result variable: <code>return i;</code> leaves the function immediately.</li>
 <li><strong>Notice the two different signatures</strong> — the slide writes <code>int firstLinearSearch(int x, int a[], int n)</code> but <code>int lastLinearSearch(double x, double *a, int n)</code>. That is deliberate: <code>int a[]</code> and <code>int *a</code> are the <em>same</em> parameter type in C (slide 13), and the algorithm does not care what the element type is.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int soSanh;                                  /* bien dem phep so sanh */
 
@@ -128,7 +128,7 @@ int main(void) {
 <li><strong>Lệnh <code>return</code> nằm TRONG vòng lặp chính là toàn bộ chỗ tối ưu</strong> — thiếu nó thì bạn vẫn quét tiếp sau khi đã khớp, và cuối cùng báo về vị trí CUỐI thay vì vị trí ĐẦU. Để ý: không có <code>break</code>, không có biến kết quả — <code>return i;</code> rời hàm ngay lập tức.</li>
 <li><strong>Chú ý hai chữ ký khác nhau</strong> — slide viết <code>int firstLinearSearch(int x, int a[], int n)</code> nhưng <code>int lastLinearSearch(double x, double *a, int n)</code>. Đó là cố ý: <code>int a[]</code> và <code>int *a</code> là CÙNG một kiểu tham số trong C (slide 13), và thuật toán chẳng quan tâm kiểu phần tử là gì.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int soSanh;                                  /* bien dem phep so sanh */
 
@@ -169,7 +169,7 @@ int main(void) {
 <li><strong>The declaration inside the block</strong> — <code>int pos2</code> is declared in the middle of the <code>if</code> body. That is C99 and later; the very old C89 compilers some classrooms still use would reject it and want the declaration at the top of the block.</li>
 <li><strong>Exam variant to be ready for</strong> — "what if x = 9?" Then first = 6 and last = 8. "What if x = 7?" Then <code>pos1</code> is −1, the <code>else</code> branch runs, and the program prints <code>7 does not exist!</code> — the second search is never called at all.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int firstLinearSearch(int x, int a[], int n) {
     int i;
@@ -207,7 +207,7 @@ int main() {
 <li><strong>Khai báo nằm giữa khối lệnh</strong> — <code>int pos2</code> được khai ngay giữa thân <code>if</code>. Đó là C99 trở đi; các trình biên dịch C89 rất cũ mà một số phòng máy còn dùng sẽ từ chối và đòi khai báo ở đầu khối.</li>
 <li><strong>Biến thể đề thi cần sẵn sàng</strong> — "nếu x = 9 thì sao?" Khi đó first = 6 và last = 8. "Nếu x = 7?" Khi đó <code>pos1</code> bằng −1, nhánh <code>else</code> chạy, chương trình in <code>7 does not exist!</code> — lượt tìm thứ hai không hề được gọi.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int firstLinearSearch(int x, int a[], int n) {
     int i;
@@ -247,7 +247,7 @@ int main() {
 <li><strong>Why the window shrinks so fast</strong> — the widths of the four windows are 11, 5, 2, 1. Each step is roughly half the previous, which is where the <code>log₂(n)+1</code> of slide 29 comes from.</li>
 <li><strong>c-1 and c+1, not c</strong> — this is where infinite loops are born. If you write <code>j = c</code> instead of <code>j = c-1</code>, the window can stop shrinking (i=6, j=7, c=6 → j=6, then i=6, j=6, c=6 → j=6 forever). The ±1 is legitimate because <code>a[c]</code> has already been tested and eliminated.</li>
 </ul>
-<pre><code>int binarySearch(int x, int a[], int n) {
+<pre><code class="language-c">int binarySearch(int x, int a[], int n) {
     int i = 0, j = n - 1, c;
     while (i &lt;= j) {
         c = (i + j) / 2;
@@ -274,7 +274,7 @@ int main() {
 <li><strong>Vì sao cửa sổ co nhanh đến vậy</strong> — bề rộng bốn cửa sổ là 11, 5, 2, 1. Mỗi bước còn khoảng một nửa bước trước, và đó chính là chỗ sinh ra công thức <code>log₂(n)+1</code> của slide 29.</li>
 <li><strong>c−1 và c+1, chứ không phải c</strong> — đây là nơi đẻ ra vòng lặp vô tận. Nếu bạn viết <code>j = c</code> thay vì <code>j = c-1</code>, cửa sổ có thể ngừng co lại (i=6, j=7, c=6 → j=6, rồi i=6, j=6, c=6 → j=6 mãi mãi). Cộng/trừ 1 là hợp lệ vì <code>a[c]</code> vừa được thử và loại rồi.</li>
 </ul>
-<pre><code>int binarySearch(int x, int a[], int n) {
+<pre><code class="language-c">int binarySearch(int x, int a[], int n) {
     int i = 0, j = n - 1, c;
     while (i &lt;= j) {
         c = (i + j) / 2;
@@ -303,7 +303,7 @@ int main() {
 <li><strong>Reading the Evaluation table</strong> — it is a bookkeeping argument. Start with <code>n = 2ᵐ</code> elements and spend 1 comparison; you are left with <code>2ᵐ⁻¹</code>, spend 1 more; then <code>2ᵐ⁻²</code>, 1 more; … down to <code>2⁰ = 1</code>, 1 more. Add the column up: <strong>m + 1 = log₂(n) + 1</strong>.</li>
 <li><strong>What that number means in practice</strong> — for n = 1000 linear search averages 500 comparisons and costs 1000 to prove absence; binary search costs about 11. For n = 1,000,000 it is 20. Doubling the data adds exactly <em>one</em> probe.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int binarySearch(int x, int a[], int n) {
     int i = 0, j = n - 1, c;
@@ -343,7 +343,7 @@ int main() {
 <li><strong>Đọc bảng Evaluation thế nào</strong> — đó là một phép cộng sổ. Bắt đầu với <code>n = 2ᵐ</code> phần tử, tốn 1 phép so sánh; còn lại <code>2ᵐ⁻¹</code>, tốn thêm 1; rồi <code>2ᵐ⁻²</code>, thêm 1; … cho tới <code>2⁰ = 1</code>, thêm 1. Cộng cột lại: <strong>m + 1 = log₂(n) + 1</strong>.</li>
 <li><strong>Con số đó nghĩa là gì trong thực tế</strong> — với n = 1000, tìm tuyến tính trung bình 500 phép và tốn 1000 phép để chứng minh "không có"; binary chỉ khoảng 11. Với n = 1.000.000 thì là 20. Gấp đôi dữ liệu chỉ thêm ĐÚNG MỘT lần dò.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int binarySearch(int x, int a[], int n) {
     int i = 0, j = n - 1, c;
@@ -386,7 +386,7 @@ int main() {
 <li><strong>Why only these two</strong> — the slide says so plainly: <em>"Only two sorting algorithms are introduced here."</em> Both are O(n²) and neither is what production code uses (that is quicksort/mergesort, in DSA later). They are taught because you can trace them by hand on paper, which is precisely what the exam asks.</li>
 <li><strong>Sorting is also a search enabler</strong> — remember slide 28: Binary Search requires sorted input. Sorting once, then binary-searching many times, is the classic trade.</li>
 </ul>
-<pre><code>/* Quan he thu tu nam trong DUNG MOT phep so sanh */
+<pre><code class="language-c">/* Quan he thu tu nam trong DUNG MOT phep so sanh */
 if (a[i] &gt; a[j]) swap(&amp;a[i], &amp;a[j]);   /* tang dan  */
 if (a[i] &lt; a[j]) swap(&amp;a[i], &amp;a[j]);   /* giam dan  */
 
@@ -409,7 +409,7 @@ if (strcmp(s[i], s[j]) &gt; 0) swapString(s[i], s[j]);</code></pre>
 <li><strong>Vì sao chỉ hai thuật toán này</strong> — slide nói thẳng: <em>"Only two sorting algorithms are introduced here."</em> Cả hai đều O(n²) và không phải thứ mã sản phẩm dùng (thứ đó là quicksort/mergesort, học ở DSA sau). Chúng được dạy vì bạn chạy tay được trên giấy, mà đề thi hỏi đúng chuyện đó.</li>
 <li><strong>Sắp xếp còn là bàn đạp cho tìm kiếm</strong> — nhớ lại slide 28: Binary Search đòi dữ liệu đã sắp. Sắp một lần rồi tìm nhị phân nhiều lần là phép đánh đổi kinh điển.</li>
 </ul>
-<pre><code>/* Quan he thu tu nam trong DUNG MOT phep so sanh */
+<pre><code class="language-c">/* Quan he thu tu nam trong DUNG MOT phep so sanh */
 if (a[i] &gt; a[j]) swap(&amp;a[i], &amp;a[j]);   /* tang dan  */
 if (a[i] &lt; a[j]) swap(&amp;a[i], &amp;a[j]);   /* giam dan  */
 
@@ -434,7 +434,7 @@ if (strcmp(s[i], s[j]) &gt; 0) swapString(s[i], s[j]);</code></pre>
 <li><strong>The arrows in the picture cross</strong> — at i = 2 the arrow goes from index 4 (value 3) back to index 2, and at i = 3 from index 6 (value 4) back to index 3. Selection Sort moves elements over long distances, which is exactly why it needs so few swaps.</li>
 <li><strong>The Vietnamese caption</strong> — <em>"Với n=7, Số lần so sánh = 6+5+4+3+2+1 = 7(6)/2"</em> = 21, <em>"Tổng quát: Số lần so sánh: n(n−1)/2"</em>.</li>
 </ul>
-<pre><code>void ascSelectionSort(int *a, int n) {
+<pre><code class="language-java">void ascSelectionSort(int *a, int n) {
     int minIndex, i, j;
     for (i = 0; i &lt; n - 1; i++) {
         minIndex = i;
@@ -465,7 +465,7 @@ if (strcmp(s[i], s[j]) &gt; 0) swapString(s[i], s[j]);</code></pre>
 <li><strong>Các mũi tên trong hình bắt chéo nhau</strong> — ở i = 2 mũi tên đi từ chỉ số 4 (giá trị 3) ngược về chỉ số 2, ở i = 3 từ chỉ số 6 (giá trị 4) về chỉ số 3. Selection Sort dời phần tử đi rất xa, và đó đúng là lý do nó cần ít lần đổi chỗ.</li>
 <li><strong>Dòng chú thích tiếng Việt trên slide</strong> — <em>"Với n=7, Số lần so sánh = 6+5+4+3+2+1 = 7(6)/2"</em> = 21, <em>"Tổng quát: Số lần so sánh: n(n−1)/2"</em>.</li>
 </ul>
-<pre><code>void ascSelectionSort(int *a, int n) {
+<pre><code class="language-java">void ascSelectionSort(int *a, int n) {
     int minIndex, i, j;
     for (i = 0; i &lt; n - 1; i++) {
         minIndex = i;
@@ -498,7 +498,7 @@ if (strcmp(s[i], s[j]) &gt; 0) swapString(s[i], s[j]);</code></pre>
 <li><strong><code>int* a</code> in the signature</strong> — the function takes a pointer, which is what an array argument decays to (slide 13). That is why the sort can modify the caller's array while <code>swap1</code> from Slot 10 could not modify the caller's <code>int</code>s.</li>
 <li><strong><code>print</code> is separate</strong> — lines 20–23 define <code>void print(int *a, int n)</code>. Keeping "sort" and "show" apart is the habit the whole case study on slides 38–43 is built on.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 void ascSelectionSort(int* a, int n)
 {   int minIndex;          /* index of min. value in a group */
     int i, j;              /* vars for looping */
@@ -545,7 +545,7 @@ int main()
 <li><strong><code>int* a</code> trong chữ ký</strong> — hàm nhận một con trỏ, đúng thứ mà một đối số mảng suy biến thành (slide 13). Đó là lý do hàm sắp xếp SỬA ĐƯỢC mảng của người gọi, trong khi <code>swap1</code> ở Slot 10 thì không sửa được hai biến <code>int</code> của người gọi.</li>
 <li><strong><code>print</code> tách riêng</strong> — dòng 20–23 định nghĩa <code>void print(int *a, int n)</code>. Tách "sắp xếp" khỏi "hiển thị" là thói quen mà cả case study ở slide 38–43 dựng trên đó.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 void ascSelectionSort(int* a, int n)
 {   int minIndex;          /* index of min. value in a group */
     int i, j;              /* vars for looping */
@@ -593,7 +593,7 @@ int main()
 <li><strong>Adjacent-only swaps</strong> — unlike Selection Sort, a value can only move one position per comparison. A value that belongs 4 places away needs 4 swaps. That is why Bubble Sort's swap count explodes: measured on a reversed 10-element array it did <strong>45 swaps</strong> versus Selection Sort's 5.</li>
 <li><strong>The missing early exit</strong> — "repeated until no swaps are needed" means: add <code>int swapped = 0;</code> at the top of each pass, set it inside the <code>if</code>, and <code>if (!swapped) break;</code> at the end of the pass. On an already-sorted array that turns 45 comparisons into 9. Slide 34's code has no such flag.</li>
 </ul>
-<pre><code>void ascBubbleSort(int *a, int n) {              /* dung nhu slide */
+<pre><code class="language-java">void ascBubbleSort(int *a, int n) {              /* dung nhu slide */
     int i, j;
     for (i = 0; i &lt; n - 1; i++)
         for (j = n - 1; j &gt; i; j--)
@@ -627,7 +627,7 @@ void ascBubbleSortOpt(int *a, int n) {           /* ban co CO swapped */
 <li><strong>Chỉ đổi chỗ hai ô KỀ nhau</strong> — khác Selection Sort, mỗi phép so sánh chỉ dời được một giá trị đi một vị trí. Một giá trị phải đi xa 4 chỗ thì cần 4 lần đổi chỗ. Vì thế số lần đổi chỗ của Bubble Sort bùng nổ: đo trên mảng 10 phần tử xếp ngược, nó đổi chỗ <strong>45 lần</strong> so với 5 lần của Selection Sort.</li>
 <li><strong>Cái thoát sớm còn thiếu</strong> — "lặp cho tới khi không cần đổi chỗ" nghĩa là: thêm <code>int swapped = 0;</code> ở đầu mỗi lượt, bật nó trong <code>if</code>, và <code>if (!swapped) break;</code> ở cuối lượt. Trên mảng đã sắp sẵn, chuyện đó biến 45 phép so sánh thành 9. Mã ở slide 34 không có cờ ấy.</li>
 </ul>
-<pre><code>void ascBubbleSort(int *a, int n) {              /* dung nhu slide */
+<pre><code class="language-java">void ascBubbleSort(int *a, int n) {              /* dung nhu slide */
     int i, j;
     for (i = 0; i &lt; n - 1; i++)
         for (j = n - 1; j &gt; i; j--)
@@ -664,7 +664,7 @@ void ascBubbleSortOpt(int *a, int n) {           /* ban co CO swapped */
 <li><strong>Complexity is the same, cost is not</strong> — both are O(n²) comparisons. On data where writes are expensive (sorting big structures, or an array in a file), the swap count is what you pay for, and Selection Sort wins by a lot.</li>
 <li><strong>What the exam does with this slide</strong> — it gives you a five-element array and asks for the array after a named pass. Use the table below as the template: one row per <code>i</code>, and remember the settled prefix grows from the left.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 void ascBubbleSort(int* a, int n)
 {   int i, j;                       /* vars for looping */
     /* Loop n-1 pass */
@@ -710,7 +710,7 @@ int main()
 <li><strong>Độ phức tạp như nhau, chi phí thì không</strong> — cả hai đều O(n²) phép so sánh. Trên dữ liệu mà phép GHI đắt (sắp các struct lớn, hoặc mảng nằm trong file), thứ bạn phải trả là số lần đổi chỗ, và Selection Sort thắng đậm.</li>
 <li><strong>Đề thi làm gì với slide này</strong> — nó cho bạn một mảng năm phần tử và hỏi mảng trông thế nào sau một lượt nhất định. Dùng bảng dưới đây làm khuôn: mỗi <code>i</code> một hàng, và nhớ rằng phần đã chốt lớn dần từ bên TRÁI.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 void ascBubbleSort(int* a, int n)
 {   int i, j;                       /* vars for looping */
     /* Loop n-1 pass */
@@ -757,7 +757,7 @@ int main()
 <li><strong>"Others- Quit"</strong> — the menu has no explicit "0 to exit". Anything outside 1…7 ends the program, which is why slide 40's loop condition is <code>while (choice &gt;= 1 &amp;&amp; choice &lt;= 7)</code> and the <code>switch</code> has a <code>default:</code> that prints "Goodbye!".</li>
 <li><strong>Maximum 100 elements, not exactly 100</strong> — the array is declared <code>int a[100]</code> but <code>n</code> starts at 0 and grows. This is the "logical size vs physical size" distinction from slide 17: the capacity is fixed, the length is a separate variable.</li>
 </ul>
-<pre><code>/* Menu -&gt; ham, anh xa 1-1 (slide 37 se khai day du) */
+<pre><code class="language-c">/* Menu -&gt; ham, anh xa 1-1 (slide 37 se khai day du) */
 1- Add a value                   -&gt; void addValue(int *a, int *n, int value);
 2- Search a value                -&gt; int  searchValue(int *a, int n, int value);
 3- Remove the first existence    -&gt; void removeFirst(int *a, int *n, int value);
@@ -774,7 +774,7 @@ int main()
 <li><strong>"Others- Quit"</strong> — menu không có mục "0 để thoát". Bất cứ số nào ngoài 1…7 đều kết thúc chương trình, đó là lý do điều kiện vòng lặp ở slide 40 là <code>while (choice &gt;= 1 &amp;&amp; choice &lt;= 7)</code> và <code>switch</code> có nhánh <code>default:</code> in "Goodbye!".</li>
 <li><strong>Tối đa 100 phần tử, không phải đúng 100</strong> — mảng khai <code>int a[100]</code> nhưng <code>n</code> bắt đầu từ 0 rồi lớn dần. Đây là phân biệt "kích thước logic và kích thước vật lý" ở slide 17: sức chứa cố định, còn độ dài là một biến riêng.</li>
 </ul>
-<pre><code>/* Menu -&gt; ham, anh xa 1-1 (slide 37 se khai day du) */
+<pre><code class="language-c">/* Menu -&gt; ham, anh xa 1-1 (slide 37 se khai day du) */
 1- Add a value                   -&gt; void addValue(int *a, int *n, int value);
 2- Search a value                -&gt; int  searchValue(int *a, int n, int value);
 3- Remove the first existence    -&gt; void removeFirst(int *a, int *n, int value);
@@ -793,7 +793,7 @@ int main()
 <li><strong>One <code>value</code> variable for four operations</strong> — add, search, remove-one and remove-all all read one integer from the keyboard. Reusing a single variable is fine because only one menu branch is alive at a time; it keeps <code>main</code> short.</li>
 <li><strong>The alternative the slide rejects</strong> — slide 17 offered dynamic allocation (<code>malloc</code>/<code>realloc</code>) as the "no waste, no shortage" solution. This case study deliberately picks the simpler static array to keep the focus on the seven operations. Exercise 4 (slide 45) keeps the same choice.</li>
 </ul>
-<pre><code>#define MAX_SIZE 100
+<pre><code class="language-c">#define MAX_SIZE 100
 
 int a[MAX_SIZE];   /* suc chua: co dinh, 100 o = 400 byte tren stack */
 int n = 0;         /* do dai that: 0 luc bat dau, lon dan theo thao tac */
@@ -818,7 +818,7 @@ for (i = 0; i &lt; MAX_SIZE; i++) ...     /* SAI: doc 100 - n o rac */</code></p
 <li><strong>Một biến <code>value</code> cho bốn thao tác</strong> — thêm, tìm, xoá một và xoá tất cả đều đọc một số nguyên từ bàn phím. Dùng lại một biến là ổn vì tại một thời điểm chỉ một nhánh menu đang sống; nhờ vậy <code>main</code> gọn.</li>
 <li><strong>Phương án mà slide KHÔNG chọn</strong> — slide 17 đã đưa ra cấp phát động (<code>malloc</code>/<code>realloc</code>) như lời giải "không thừa, không thiếu". Case study này cố ý chọn mảng tĩnh đơn giản hơn để giữ trọng tâm ở bảy thao tác. Exercise 4 (slide 45) giữ nguyên lựa chọn ấy.</li>
 </ul>
-<pre><code>#define MAX_SIZE 100
+<pre><code class="language-c">#define MAX_SIZE 100
 
 int a[MAX_SIZE];   /* suc chua: co dinh, 100 o = 400 byte tren stack */
 int n = 0;         /* do dai that: 0 luc bat dau, lon dan theo thao tac */
@@ -846,7 +846,7 @@ for (i = 0; i &lt; MAX_SIZE; i++) ...     /* SAI: doc 100 - n o rac */</code></p
 <li><strong>Naming drift, and why you should notice it</strong> — the analysis says <code>add</code>, <code>search</code>, <code>removeOne</code>, <code>removeAll</code>, <code>printAsc</code>; the code says <code>addValue</code>, <code>searchValue</code>, <code>removeFirst</code>, <code>removeAll</code>, <code>printAscending</code>. Harmless here, but in a team the analysis document and the code drifting apart is how bugs are born.</li>
 <li><strong><code>removeOne(int pos, …)</code> takes a POSITION, not a value</strong> — that is a genuinely better design than the delivered <code>removeFirst(int *a, int *n, int value)</code>: separating "find where" from "delete there" lets you reuse the delete for menu item 4 too.</li>
 </ul>
-<pre><code>/* Functions (theo dung slide) */
+<pre><code class="language-python">/* Functions (theo dung slide) */
 int  menu();                                  /* Get user choice        */
 int  isFull (int *a, int n);                  /* mang day chua?         */
 int  isEmpty(int *a, int n);                  /* mang rong chua?        */
@@ -874,7 +874,7 @@ void print    (int *a, int n);</code></pre>
 <li><strong>Tên bị trôi, và vì sao bạn nên để ý</strong> — bản phân tích ghi <code>add</code>, <code>search</code>, <code>removeOne</code>, <code>removeAll</code>, <code>printAsc</code>; mã lại ghi <code>addValue</code>, <code>searchValue</code>, <code>removeFirst</code>, <code>removeAll</code>, <code>printAscending</code>. Ở đây vô hại, nhưng trong một đội thì tài liệu phân tích và mã trôi xa nhau chính là chỗ đẻ ra lỗi.</li>
 <li><strong><code>removeOne(int pos, …)</code> nhận VỊ TRÍ, không nhận giá trị</strong> — đó thật sự là thiết kế tốt hơn bản bàn giao <code>removeFirst(int *a, int *n, int value)</code>: tách "tìm ở đâu" khỏi "xoá chỗ đó" cho phép dùng lại phép xoá cho cả mục menu 4.</li>
 </ul>
-<pre><code>/* Functions (theo dung slide) */
+<pre><code class="language-python">/* Functions (theo dung slide) */
 int  menu();                                  /* Get user choice        */
 int  isFull (int *a, int n);                  /* mang day chua?         */
 int  isEmpty(int *a, int n);                  /* mang rong chua?        */
@@ -904,7 +904,7 @@ void print    (int *a, int n);</code></pre>
 <li><strong>Ten <code>printf</code>s and one <code>scanf</code></strong> — lines 21–31. Notice the menu strings are copied verbatim from slide 35, parentheses and all; that is what makes the console screenshots on slide 44 match the spec.</li>
 <li><strong><code>#include &lt;stdlib.h&gt;</code> without using it</strong> — line 2. Nothing in the delivered code calls <code>malloc</code> or <code>exit</code>. Harmless, but worth spotting: it is a leftover from the dynamic-array version of slide 18.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 
 #define MAX_SIZE 100
@@ -946,7 +946,7 @@ int main() {
 <li><strong>Mười lệnh <code>printf</code> và một <code>scanf</code></strong> — dòng 21–31. Để ý các chuỗi menu được chép nguyên xi từ slide 35, đủ cả dấu ngoặc; nhờ vậy ảnh chụp console ở slide 44 mới khớp với đặc tả.</li>
 <li><strong><code>#include &lt;stdlib.h&gt;</code> mà không dùng tới</strong> — dòng 2. Mã bàn giao không gọi <code>malloc</code> hay <code>exit</code> ở đâu cả. Vô hại, nhưng đáng nhận ra: đó là di tích còn sót của bản mảng động ở slide 18.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 
 #define MAX_SIZE 100
@@ -990,7 +990,7 @@ int main() {
 <li><strong>Every case ends in <code>break;</code></strong> — without it, C falls through into the next case and you would add a value and immediately be asked to search for one. This is the classic <code>switch</code> trap from Slot 05–07.</li>
 <li><strong>Declaring <code>int pos</code> inside a <code>case</code></strong> — legal in C99 only because it is enclosed in the switch's block; if you ever add another declaration in a different case, wrap each case body in <code>{ }</code> to avoid "jump into scope of variable" errors.</li>
 </ul>
-<pre><code>        switch (choice) {
+<pre><code class="language-c">        switch (choice) {
             case 1:
                 printf("Enter value to add: ");
                 scanf("%d", &amp;value);
@@ -1029,7 +1029,7 @@ int main() {
 <li><strong>Mọi case đều kết bằng <code>break;</code></strong> — thiếu nó thì C rơi xuyên xuống case kế tiếp, và bạn vừa thêm một giá trị xong sẽ bị hỏi luôn muốn tìm số nào. Đây là cái bẫy <code>switch</code> kinh điển từ Slot 05–07.</li>
 <li><strong>Khai <code>int pos</code> bên trong một <code>case</code></strong> — chỉ hợp lệ từ C99, và chỉ vì nó nằm trong khối của switch; nếu sau này bạn thêm một khai báo nữa ở case khác, hãy bọc thân từng case trong <code>{ }</code> để tránh lỗi "jump into scope of variable".</li>
 </ul>
-<pre><code>        switch (choice) {
+<pre><code class="language-c">        switch (choice) {
             case 1:
                 printf("Enter value to add: ");
                 scanf("%d", &amp;value);
@@ -1070,7 +1070,7 @@ int main() {
 <li><strong><code>return 0;</code> at line 82</strong> — outside the loop, after it. Reaching it is the only normal way this program ends.</li>
 <li><strong>Design observation</strong> — there is no menu item that empties the array, and no confirmation before a destructive remove. In a real program both would be requirements; here they are left out to keep the case study at one screen per concept.</li>
 </ul>
-<pre><code>            case 4:
+<pre><code class="language-c">            case 4:
                 printf("Enter value to remove (all occurrences): ");
                 scanf("%d", &amp;value);
                 removeAll(a, &amp;n, value);
@@ -1117,7 +1117,7 @@ int main() {
 <li><strong><code>return 0;</code> ở dòng 82</strong> — nằm NGOÀI vòng lặp, sau nó. Chạm tới đó là con đường kết thúc bình thường duy nhất của chương trình này.</li>
 <li><strong>Nhận xét về thiết kế</strong> — không có mục menu nào làm rỗng mảng, và không có bước xác nhận trước một thao tác xoá phá huỷ. Trong chương trình thật thì cả hai đều là yêu cầu; ở đây chúng bị bỏ đi để giữ case study mỗi khái niệm gọn trong một màn hình.</li>
 </ul>
-<pre><code>            case 4:
+<pre><code class="language-c">            case 4:
                 printf("Enter value to remove (all occurrences): ");
                 scanf("%d", &amp;value);
                 removeAll(a, &amp;n, value);
@@ -1166,7 +1166,7 @@ int main() {
 <li><strong><code>removeFirst</code>, lines 105–116, is the reuse payoff</strong> — <code>int pos = searchValue(a, *n, value);</code> — note <code>*n</code>, because <code>removeFirst</code> holds a pointer but <code>searchValue</code> wants the number. Then <code>if (pos == -1) { report; return; }</code> and the shift loop.</li>
 <li><strong>The shift loop is the deletion</strong> — <code>for (int i = pos; i &lt; *n - 1; i++) a[i] = a[i + 1];</code> then <code>(*n)--;</code>. Nothing is erased; the hole is closed by sliding the tail left one place, and the count drops so the old last element becomes invisible.</li>
 </ul>
-<pre><code>/* Add a value to the array */
+<pre><code class="language-c">/* Add a value to the array */
 void addValue(int *a, int *n, int value) {
     if (*n &gt;= MAX_SIZE) {
         printf("Array is full. Cannot add more values.\\n");
@@ -1217,7 +1217,7 @@ void removeFirst(int *a, int *n, int value) {
 <li><strong><code>removeFirst</code>, dòng 105–116, là chỗ hái quả của việc dùng lại</strong> — <code>int pos = searchValue(a, *n, value);</code> — chú ý dấu <code>*n</code>, vì <code>removeFirst</code> đang giữ một con trỏ còn <code>searchValue</code> lại muốn một con số. Rồi <code>if (pos == -1) { báo; return; }</code> và vòng dồn.</li>
 <li><strong>Vòng dồn chính là phép xoá</strong> — <code>for (int i = pos; i &lt; *n - 1; i++) a[i] = a[i + 1];</code> rồi <code>(*n)--;</code>. Không có gì bị xoá cả; cái lỗ được bịt bằng cách trượt phần đuôi sang trái một ô, và số đếm giảm đi nên phần tử cuối cũ trở thành vô hình.</li>
 </ul>
-<pre><code>/* Add a value to the array */
+<pre><code class="language-c">/* Add a value to the array */
 void addValue(int *a, int *n, int value) {
     if (*n &gt;= MAX_SIZE) {
         printf("Array is full. Cannot add more values.\\n");
@@ -1270,7 +1270,7 @@ void removeFirst(int *a, int *n, int value) {
 <li><strong>Cost</strong> — each removal shifts the whole tail, so removing k copies from n elements costs up to k·n moves. For the 100-element maximum here that is irrelevant; for a million elements you would instead do a single compacting pass.</li>
 <li><strong><code>printArray</code>, lines 139–144</strong> — the plain forward traversal of slide 12, with <code>printf("%d ", a[i])</code> and one <code>printf("\\n")</code> after the loop. With <code>n = 0</code> it prints just the newline, which is correct behaviour for an empty array.</li>
 </ul>
-<pre><code>/* Remove all occurrences of a value */
+<pre><code class="language-c">/* Remove all occurrences of a value */
 void removeAll(int *a, int *n, int value) {
     int count = 0;
     for (int i = 0; i &lt; *n; ) {          /* KHONG co i++ o day */
@@ -1318,7 +1318,7 @@ void printArray(int *a, int n) {
 <li><strong>Chi phí</strong> — mỗi lần xoá đều dồn cả phần đuôi, nên xoá k bản sao trong n phần tử tốn tới k·n phép dời. Với mức tối đa 100 phần tử ở đây thì chẳng đáng kể; với một triệu phần tử thì phải làm một lượt nén duy nhất thay vì thế.</li>
 <li><strong><code>printArray</code>, dòng 139–144</strong> — chính là phép duyệt xuôi của slide 12, với <code>printf("%d ", a[i])</code> và một <code>printf("\\n")</code> sau vòng lặp. Với <code>n = 0</code> nó chỉ in đúng ký tự xuống dòng, và đó là hành vi đúng cho một mảng rỗng.</li>
 </ul>
-<pre><code>/* Remove all occurrences of a value */
+<pre><code class="language-c">/* Remove all occurrences of a value */
 void removeAll(int *a, int *n, int value) {
     int count = 0;
     for (int i = 0; i &lt; *n; ) {          /* KHONG co i++ o day */
@@ -1368,7 +1368,7 @@ void printArray(int *a, int n) {
 <li><strong>Both end by delegating</strong> — <code>printArray(temp, n);</code>. Neither function contains a <code>printf</code> of its own. That is why the three menu outputs on slide 44 are formatted identically.</li>
 <li><strong>Cost of the copy</strong> — <code>int temp[MAX_SIZE]</code> is 400 bytes on the stack, allocated whether <code>n</code> is 3 or 100. Cheap here, but it is a real design choice: you are trading memory for the guarantee that the caller's array is untouched.</li>
 </ul>
-<pre><code>/* Print the array in ascending order */
+<pre><code class="language-java">/* Print the array in ascending order */
 void printAscending(int *a, int n) {
     int temp[MAX_SIZE];
     for (int i = 0; i &lt; n; i++) temp[i] = a[i];      /* 1. chep ra ban sao */
@@ -1418,7 +1418,7 @@ void printDescending(int *a, int n) {
 <li><strong>Cả hai đều kết thúc bằng uỷ nhiệm</strong> — <code>printArray(temp, n);</code>. Không hàm nào chứa một lệnh <code>printf</code> của riêng nó. Đó là lý do ba dòng kết quả trên slide 44 có định dạng giống hệt nhau.</li>
 <li><strong>Cái giá của bản sao</strong> — <code>int temp[MAX_SIZE]</code> là 400 byte trên ngăn xếp, cấp phát bất kể <code>n</code> bằng 3 hay 100. Ở đây thì rẻ, nhưng đó là một lựa chọn thiết kế thật: bạn đang đổi bộ nhớ lấy bảo đảm rằng mảng của người gọi không bị đụng vào.</li>
 </ul>
-<pre><code>/* Print the array in ascending order */
+<pre><code class="language-java">/* Print the array in ascending order */
 void printAscending(int *a, int n) {
     int temp[MAX_SIZE];
     for (int i = 0; i &lt; n; i++) temp[i] = a[i];      /* 1. chep ra ban sao */
@@ -1544,7 +1544,7 @@ Value 8 removed successfully (first occurrence).</code></pre>
 <li><strong>"Others - Quit"</strong> is the <code>default:</code> label, and the loop condition becomes <code>while (choice &gt;= 1 &amp;&amp; choice &lt;= 5)</code>. Anything the user types outside 1–5 falls into <code>default</code> and ends the program — that is why the menu does not need a dedicated exit number.</li>
 <li><strong>Searching real numbers must not use <code>==</code></strong> — this is the one genuinely new hazard the type swap introduces, and it is why <code>searchValue</code> below compares with a tolerance.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;math.h&gt;
 #define MAXN 100
 #define EPS  1e-9
@@ -1628,7 +1628,7 @@ int main(void)
 <li><strong>"Others - Quit"</strong> là nhãn <code>default:</code>, và điều kiện lặp thành <code>while (choice &gt;= 1 &amp;&amp; choice &lt;= 5)</code>. Người dùng gõ bất cứ số nào ngoài 1–5 đều rơi vào <code>default</code> và chương trình kết thúc — đó là lý do menu không cần một số thoát riêng.</li>
 <li><strong>Tìm kiếm số thực KHÔNG được dùng <code>==</code></strong> — đây là hiểm hoạ thật sự mới mà việc đổi kiểu mang tới, và là lý do <code>searchValue</code> dưới đây so sánh có sai số cho phép.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;math.h&gt;
 #define MAXN 100
 #define EPS  1e-9
@@ -1723,7 +1723,7 @@ int main(void)
 <li><strong>Counting rows and columns from the array itself</strong> — <code>sizeof(m)/sizeof(m[0])</code> is the number of rows, <code>sizeof(m[0])/sizeof(m[0][0])</code> the number of columns. Measured on this matrix: 60/20 = 3 rows, 20/4 = 5 columns. This works <em>only</em> where <code>m</code> was declared (see slide 48).</li>
 <li><strong>Flat and nested initialisers are the same thing</strong> — <code>int a[2][3] = {{1,2,3},{4,5,6}};</code> and <code>int a[2][3] = {1,2,3,4,5,6};</code> produce byte-identical arrays, because the braces are only punctuation over a run that was flat all along.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void)
 {   int m[3][5] = { {1, 7, 6, 3, 7}, {2, -9, 2, 5, 8}, {-5, 40, 0, 5, 9} };
@@ -1767,7 +1767,7 @@ int main(void)
 <li><strong>Đếm hàng và cột từ chính mảng</strong> — <code>sizeof(m)/sizeof(m[0])</code> ra SỐ HÀNG, <code>sizeof(m[0])/sizeof(m[0][0])</code> ra SỐ CỘT. Đo trên ma trận này: 60/20 = 3 hàng, 20/4 = 5 cột. Mẹo này chỉ chạy <em>ở nơi <code>m</code> được khai báo</em> (xem slide 48).</li>
 <li><strong>Khởi tạo phẳng và khởi tạo lồng nhau là một</strong> — <code>int a[2][3] = {{1,2,3},{4,5,6}};</code> và <code>int a[2][3] = {1,2,3,4,5,6};</code> cho hai mảng giống nhau từng byte (đã kiểm bằng vòng so sánh: giống hệt), bởi vì cặp ngoặc nhọn chỉ là dấu chấm câu đặt lên một dải vốn đã phẳng.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void)
 {   int m[3][5] = { {1, 7, 6, 3, 7}, {2, -9, 2, 5, 8}, {-5, 40, 0, 5, 9} };
@@ -1813,7 +1813,7 @@ int main(void)
 <li><strong>main does no arithmetic and no formatting</strong> — line 21 delegates the display to <code>printMatrix</code>, line 22 delegates the total to <code>calculateSum</code>, and line 23 only prints the returned number. Same division of labour as the case study on slides 38–44.</li>
 <li><strong>1 + 2 + 7 + 2 + 8 + 5 = 25</strong> — check the console number by hand; it is the kind of arithmetic an exam paper will ask you to do without a compiler.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 /* Function Prototypes */
 int  calculateSum(int rows, int cols, int arr[rows][cols]);
 void printMatrix (int rows, int cols, int arr[rows][cols]);
@@ -1864,7 +1864,7 @@ Sum of all elements: 25</code></pre>
 <li><strong><code>main</code> không tính toán và không định dạng</strong> — dòng 21 uỷ nhiệm việc hiển thị cho <code>printMatrix</code>, dòng 22 uỷ nhiệm việc cộng cho <code>calculateSum</code>, dòng 23 chỉ in con số nhận về. Đúng cách chia việc của case study slide 38–44.</li>
 <li><strong>1 + 2 + 7 + 2 + 8 + 5 = 25</strong> — hãy tự cộng tay để đối chiếu con số trên console; đó chính là kiểu tính mà đề thi bắt bạn làm khi không có trình biên dịch bên cạnh.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 /* Function Prototypes */
 int  calculateSum(int rows, int cols, int arr[rows][cols]);
 void printMatrix (int rows, int cols, int arr[rows][cols]);
@@ -1917,7 +1917,7 @@ Sum of all elements: 25</code></pre>
 <li><strong><code>%4d</code> is what makes it a matrix on screen</strong> — a fixed field width of 4 right-aligns every number, so columns line up whether the value is <code>1</code> or <code>-9</code> or <code>40</code>. Plain <code>"%d "</code> would print a ragged staircase. The <code>printf("\\n")</code> after the inner loop is what ends each row.</li>
 <li><strong><code>calculateSum</code> returns, it does not print</strong> — the same reusability rule as the search functions of slide 25: a function that computed and printed could not be used to feed an average or a maximum.</li>
 </ul>
-<pre><code>/* Function to calculate the sum of elements of the 2D array */
+<pre><code class="language-c">/* Function to calculate the sum of elements of the 2D array */
 int calculateSum(int rows, int cols, int arr[rows][cols]) {
     int sum = 0;
     for (int i = 0; i &lt; rows; i++) {
@@ -1953,7 +1953,7 @@ void printMatrix(int rows, int cols, int arr[rows][cols]) {
 <li><strong><code>%4d</code> mới là thứ biến nó thành ma trận trên màn hình</strong> — bề rộng trường cố định bằng 4 canh phải mọi con số, nên các cột thẳng hàng dù giá trị là <code>1</code>, <code>-9</code> hay <code>40</code>. Viết <code>"%d "</code> trơn sẽ cho một cầu thang lởm chởm. Lệnh <code>printf("\\n")</code> sau vòng trong chính là thứ kết thúc mỗi hàng.</li>
 <li><strong><code>calculateSum</code> TRẢ VỀ chứ không in</strong> — cùng nguyên tắc tái sử dụng với các hàm tìm kiếm ở slide 25: một hàm vừa tính vừa in thì không dùng lại được để tính trung bình hay tìm lớn nhất.</li>
 </ul>
-<pre><code>/* Function to calculate the sum of elements of the 2D array */
+<pre><code class="language-c">/* Function to calculate the sum of elements of the 2D array */
 int calculateSum(int rows, int cols, int arr[rows][cols]) {
     int sum = 0;
     for (int i = 0; i &lt; rows; i++) {
@@ -1991,7 +1991,7 @@ void printMatrix(int rows, int cols, int arr[rows][cols]) {
 <li><strong>Dynamic 2-D takes a loop, not one call</strong> — <code>int** m = (int**)calloc(row, sizeof(int*));</code> then <code>for (i=0; i&lt;row; i++) m[i] = (int*)calloc(col, sizeof(int));</code>. First an array of <em>pointers</em>, then one array of <code>int</code> per row. <code>row + 1</code> allocations in total.</li>
 <li><strong>The syntax is identical, the memory is not</strong> — <code>m[i][j]</code> reads the same on both, which is precisely the trap. For <code>int**</code>, <code>m[i][j]</code> means "follow the pointer at <code>m[i]</code>, then step <code>j</code>" — two memory reads, and the rows can sit anywhere. Row-major applies to <code>int m[3][5]</code> and <strong>not</strong> to <code>int**</code>.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 
 int main(void)
@@ -2038,7 +2038,7 @@ int main(void)
 <li><strong>Động 2 chiều cần một vòng lặp, không phải một lời gọi</strong> — <code>int** m = (int**)calloc(row, sizeof(int*));</code> rồi <code>for (i=0; i&lt;row; i++) m[i] = (int*)calloc(col, sizeof(int));</code>. Trước là một mảng các <em>con trỏ</em>, sau là mỗi hàng một mảng <code>int</code>. Tổng cộng <code>row + 1</code> lần cấp phát.</li>
 <li><strong>Cú pháp giống hệt, bộ nhớ thì không</strong> — <code>m[i][j]</code> viết y như nhau, và đó chính xác là cái bẫy. Với <code>int**</code>, <code>m[i][j]</code> nghĩa là "theo con trỏ ở <code>m[i]</code>, rồi bước <code>j</code> ô" — hai lần đọc bộ nhớ, và các hàng nằm ở đâu cũng được. Row-major áp dụng cho <code>int m[3][5]</code> và <strong>KHÔNG</strong> áp dụng cho <code>int**</code>.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 
 int main(void)
@@ -2087,7 +2087,7 @@ int main(void)
 <li><strong>Row-major has a speed consequence, not just an addressing one</strong> — walking <code>i</code> outside and <code>j</code> inside visits memory in the order it is stored; swapping the loops jumps a whole row every step and misses the cache almost every time. Measured below.</li>
 <li><strong>The six operations are the chapter's table of contents</strong> — Add and Remove change <code>n</code> and therefore need it by address (slides 38–42); Search returns an index or −1 (slides 25–29); Sort reorders, or copies-then-reorders when positions must be preserved (slides 30–34, 43); Input and Output are the traversals of slides 20–24. Every exercise in the deck is one or more of these six.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void)
 {   int m[3][5] = { {1,7,6,3,7}, {2,-9,2,5,8}, {-5,40,0,5,9} };
@@ -2123,7 +2123,7 @@ int main(void)
 <li><strong>Row-major kéo theo hệ quả về TỐC ĐỘ, không chỉ về địa chỉ</strong> — cho <code>i</code> chạy ngoài và <code>j</code> chạy trong là đi qua bộ nhớ đúng thứ tự nó được lưu; đảo hai vòng lại thì mỗi bước nhảy trọn một hàng và hầu như lần nào cũng trượt cache. Số đo ở dưới.</li>
 <li><strong>Sáu thao tác chính là mục lục của cả chương</strong> — Add và Remove làm đổi <code>n</code> nên cần <code>n</code> theo địa chỉ (slide 38–42); Search trả về chỉ số hoặc −1 (slide 25–29); Sort sắp lại, hoặc chép-rồi-sắp khi phải giữ nguyên vị trí (slide 30–34, 43); Input và Output là các lượt duyệt của slide 20–24. Mọi bài tập trong bộ slide đều là một hoặc vài trong sáu thứ này.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void)
 {   int m[3][5] = { {1,7,6,3,7}, {2,-9,2,5,8}, {-5,40,0,5,9} };

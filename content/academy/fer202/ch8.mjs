@@ -89,7 +89,7 @@ const EX12 = {
   content: bi(
     `<span class="eyebrow">Chapter 8 · Exercise 12 · Slot 9–10 slide 14</span>
 <h2>useState — three small components</h2>
-<pre><span class="hljs-comment">// 1) Counter</span>
+<pre><code class="language-javascript"><span class="hljs-comment">// 1) Counter</span>
 <span class="hljs-keyword">function</span> <span class="hljs-title function_">Counter</span>(<span class="hljs-params"></span>) {
   <span class="hljs-keyword">const</span> [n, setN] = <span class="hljs-title class_">React</span>.<span class="hljs-title function_">useState</span>(<span class="hljs-number">0</span>);
   <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{()</span> =&gt;</span> setN(c =&gt; c + 1)}&gt;Count: {n}<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></span>;
@@ -103,12 +103,12 @@ const EX12 = {
 <span class="hljs-keyword">function</span> <span class="hljs-title function_">Toggle</span>(<span class="hljs-params"></span>) {
   <span class="hljs-keyword">const</span> [show, setShow] = <span class="hljs-title class_">React</span>.<span class="hljs-title function_">useState</span>(<span class="hljs-literal">false</span>);
   <span class="hljs-keyword">return</span> (<span class="language-xml"><span class="hljs-tag">&lt;&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{()</span> =&gt;</span> setShow(s =&gt; !s)}&gt;{show ? &#x27;Hide&#x27; : &#x27;Show&#x27;}<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>{show &amp;&amp; <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Now you see me<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>}<span class="hljs-tag">&lt;/&gt;</span></span>);
-}</pre>
+}</code></pre>
 <div class="out"><b>Result:</b> the counter increments per click, the paragraph mirrors the input as you type, and the button hides/shows the text.</div>
 <div class="di-toi"><a class="link-card codelab" href="${CODELAB}" target="_blank" rel="noopener"><span class="lc-ico">⌨️</span><span class="lc-body"><span class="lc-title">Build the three</span><span class="lc-sub">Counter, Echo, Toggle — Code Lab.</span></span><span class="lc-cta">PRACTICE →</span></a></div>`,
     `<span class="eyebrow">Chương 8 · Exercise 12 · Slot 9–10 slide 14</span>
 <h2>useState — ba component nhỏ</h2>
-<pre><span class="hljs-comment">// 1) Counter</span>
+<pre><code class="language-javascript"><span class="hljs-comment">// 1) Counter</span>
 <span class="hljs-keyword">function</span> <span class="hljs-title function_">Counter</span>(<span class="hljs-params"></span>) {
   <span class="hljs-keyword">const</span> [n, setN] = <span class="hljs-title class_">React</span>.<span class="hljs-title function_">useState</span>(<span class="hljs-number">0</span>);
   <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{()</span> =&gt;</span> setN(c =&gt; c + 1)}&gt;Count: {n}<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></span>;
@@ -122,7 +122,7 @@ const EX12 = {
 <span class="hljs-keyword">function</span> <span class="hljs-title function_">Toggle</span>(<span class="hljs-params"></span>) {
   <span class="hljs-keyword">const</span> [show, setShow] = <span class="hljs-title class_">React</span>.<span class="hljs-title function_">useState</span>(<span class="hljs-literal">false</span>);
   <span class="hljs-keyword">return</span> (<span class="language-xml"><span class="hljs-tag">&lt;&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{()</span> =&gt;</span> setShow(s =&gt; !s)}&gt;{show ? &#x27;Ẩn&#x27; : &#x27;Hiện&#x27;}<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>{show &amp;&amp; <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Giờ bạn thấy tôi<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>}<span class="hljs-tag">&lt;/&gt;</span></span>);
-}</pre>
+}</code></pre>
 <div class="out"><b>Kết quả:</b> counter tăng mỗi lần bấm, đoạn văn phản chiếu input khi gõ, và nút ẩn/hiện text.</div>
 <div class="di-toi"><a class="link-card codelab" href="${CODELAB}" target="_blank" rel="noopener"><span class="lc-ico">⌨️</span><span class="lc-body"><span class="lc-title">Dựng cả ba</span><span class="lc-sub">Counter, Echo, Toggle — Code Lab.</span></span><span class="lc-cta">LUYỆN TẬP →</span></a></div>`,
   ),
@@ -137,7 +137,7 @@ const EX13 = {
     `<span class="eyebrow">Chapter 8 · Exercise 13 · Slot 9–10 slide 22</span>
 <h2>useEffect — fetch posts by user</h2>
 <p class="lead"><b>Goal:</b> a <code>UserPosts</code> component that fetches posts for a <code>userId</code> when it mounts and refetches when <code>userId</code> changes.</p>
-<pre><span class="hljs-keyword">function</span> <span class="hljs-title function_">UserPosts</span>(<span class="hljs-params">{ userId }</span>) {
+<pre><code class="language-javascript"><span class="hljs-keyword">function</span> <span class="hljs-title function_">UserPosts</span>(<span class="hljs-params">{ userId }</span>) {
   <span class="hljs-keyword">const</span> [posts, setPosts] = <span class="hljs-title class_">React</span>.<span class="hljs-title function_">useState</span>([]);
   <span class="hljs-keyword">const</span> [loading, setLoading] = <span class="hljs-title class_">React</span>.<span class="hljs-title function_">useState</span>(<span class="hljs-literal">true</span>);
 
@@ -156,12 +156,12 @@ const EX13 = {
 
   <span class="hljs-keyword">if</span> (loading) <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Loading…<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span></span>;
   <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">ul</span>&gt;</span>{posts.map(p =&gt; <span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">key</span>=<span class="hljs-string">{p.id}</span>&gt;</span>{p.title}<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>)}<span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span></span>;
-}</pre>
+}</code></pre>
 <div class="pitfall"><b>Trap:</b> put <code>userId</code> in the dependency array or the list never updates when the prop changes. The <code>active</code> flag in cleanup prevents a slow earlier response from overwriting a newer one (a race).</div>`,
     `<span class="eyebrow">Chương 8 · Exercise 13 · Slot 9–10 slide 22</span>
 <h2>useEffect — fetch bài viết theo user</h2>
 <p class="lead"><b>Mục tiêu:</b> component <code>UserPosts</code> fetch bài viết cho một <code>userId</code> khi mount và fetch lại khi <code>userId</code> đổi.</p>
-<pre><span class="hljs-keyword">function</span> <span class="hljs-title function_">UserPosts</span>(<span class="hljs-params">{ userId }</span>) {
+<pre><code class="language-javascript"><span class="hljs-keyword">function</span> <span class="hljs-title function_">UserPosts</span>(<span class="hljs-params">{ userId }</span>) {
   <span class="hljs-keyword">const</span> [posts, setPosts] = <span class="hljs-title class_">React</span>.<span class="hljs-title function_">useState</span>([]);
   <span class="hljs-keyword">const</span> [loading, setLoading] = <span class="hljs-title class_">React</span>.<span class="hljs-title function_">useState</span>(<span class="hljs-literal">true</span>);
 
@@ -180,7 +180,7 @@ const EX13 = {
 
   <span class="hljs-keyword">if</span> (loading) <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Đang tải…<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span></span>;
   <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">ul</span>&gt;</span>{posts.map(p =&gt; <span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">key</span>=<span class="hljs-string">{p.id}</span>&gt;</span>{p.title}<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>)}<span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span></span>;
-}</pre>
+}</code></pre>
 <div class="pitfall"><b>Bẫy:</b> đưa <code>userId</code> vào mảng phụ thuộc, nếu không danh sách không cập nhật khi prop đổi. Cờ <code>active</code> trong cleanup ngăn một response cũ về chậm ghi đè response mới (race).</div>`,
   ),
 };
@@ -193,7 +193,7 @@ const EX14 = {
   content: bi(
     `<span class="eyebrow">Chapter 8 · Exercise 14 · Slot 9–10 slide 37</span>
 <h2>useContext — a light/dark theme</h2>
-<pre><span class="hljs-keyword">const</span> themes = {
+<pre><code class="language-javascript"><span class="hljs-keyword">const</span> themes = {
   <span class="hljs-attr">light</span>: { <span class="hljs-attr">foreground</span>: <span class="hljs-string">&#x27;#000000&#x27;</span>, <span class="hljs-attr">background</span>: <span class="hljs-string">&#x27;#eeeeee&#x27;</span> },
   <span class="hljs-attr">dark</span>:  { <span class="hljs-attr">foreground</span>: <span class="hljs-string">&#x27;#ffffff&#x27;</span>, <span class="hljs-attr">background</span>: <span class="hljs-string">&#x27;#61dafb&#x27;</span> },
 };
@@ -212,11 +212,11 @@ const EX14 = {
 <span class="hljs-keyword">function</span> <span class="hljs-title function_">Toolbar</span>(<span class="hljs-params"></span>) {           <span class="hljs-comment">// no props drilled through here</span>
   <span class="hljs-keyword">const</span> theme = <span class="hljs-title class_">React</span>.<span class="hljs-title function_">useContext</span>(<span class="hljs-title class_">ThemeContext</span>);
   <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">style</span>=<span class="hljs-string">{{</span> <span class="hljs-attr">color:</span> <span class="hljs-attr">theme.foreground</span>, <span class="hljs-attr">background:</span> <span class="hljs-attr">theme.background</span> }}&gt;</span>Hello<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>;
-}</pre>
+}</code></pre>
 <div class="out"><b>Result:</b> <code>Toolbar</code> reads the theme straight from context — no props passed through intermediate components. Toggling at the top updates every consumer.</div>`,
     `<span class="eyebrow">Chương 8 · Exercise 14 · Slot 9–10 slide 37</span>
 <h2>useContext — theme sáng/tối</h2>
-<pre><span class="hljs-keyword">const</span> themes = {
+<pre><code class="language-javascript"><span class="hljs-keyword">const</span> themes = {
   <span class="hljs-attr">light</span>: { <span class="hljs-attr">foreground</span>: <span class="hljs-string">&#x27;#000000&#x27;</span>, <span class="hljs-attr">background</span>: <span class="hljs-string">&#x27;#eeeeee&#x27;</span> },
   <span class="hljs-attr">dark</span>:  { <span class="hljs-attr">foreground</span>: <span class="hljs-string">&#x27;#ffffff&#x27;</span>, <span class="hljs-attr">background</span>: <span class="hljs-string">&#x27;#61dafb&#x27;</span> },
 };
@@ -235,7 +235,7 @@ const EX14 = {
 <span class="hljs-keyword">function</span> <span class="hljs-title function_">Toolbar</span>(<span class="hljs-params"></span>) {           <span class="hljs-comment">// không props nào bị khoan qua đây</span>
   <span class="hljs-keyword">const</span> theme = <span class="hljs-title class_">React</span>.<span class="hljs-title function_">useContext</span>(<span class="hljs-title class_">ThemeContext</span>);
   <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">style</span>=<span class="hljs-string">{{</span> <span class="hljs-attr">color:</span> <span class="hljs-attr">theme.foreground</span>, <span class="hljs-attr">background:</span> <span class="hljs-attr">theme.background</span> }}&gt;</span>Hello<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>;
-}</pre>
+}</code></pre>
 <div class="out"><b>Kết quả:</b> <code>Toolbar</code> đọc theme thẳng từ context — không props nào truyền qua các component trung gian. Toggle ở trên cập nhật mọi consumer.</div>`,
   ),
 };
@@ -248,7 +248,7 @@ const EX15 = {
   content: bi(
     `<span class="eyebrow">Chapter 8 · Exercise 15 · Slot 9–10 slide 44</span>
 <h2>useReducer — counter &amp; question bank</h2>
-<pre><span class="hljs-keyword">function</span> <span class="hljs-title function_">counterReducer</span>(<span class="hljs-params">state, action</span>) {
+<pre><code class="language-javascript"><span class="hljs-keyword">function</span> <span class="hljs-title function_">counterReducer</span>(<span class="hljs-params">state, action</span>) {
   <span class="hljs-keyword">switch</span> (action.<span class="hljs-property">type</span>) {
     <span class="hljs-keyword">case</span> <span class="hljs-string">&#x27;INCREMENT&#x27;</span>: <span class="hljs-keyword">return</span> { <span class="hljs-attr">count</span>: state.<span class="hljs-property">count</span> + <span class="hljs-number">1</span> };
     <span class="hljs-keyword">case</span> <span class="hljs-string">&#x27;DECREMENT&#x27;</span>: <span class="hljs-keyword">return</span> { <span class="hljs-attr">count</span>: state.<span class="hljs-property">count</span> - <span class="hljs-number">1</span> };
@@ -267,13 +267,13 @@ const EX15 = {
       <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{()</span> =&gt;</span> dispatch({ type: &#x27;RESET&#x27; })}&gt;Reset<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
     <span class="hljs-tag">&lt;/&gt;</span></span>
   );
-}</pre>
+}</code></pre>
 <p><b>Question Bank:</b> hold <code>{ questions, current, score }</code> in one <code>initialState</code>; a reducer handles <code>ANSWER</code>, <code>NEXT</code>, <code>RESTART</code>. All quiz logic lives in the pure reducer — the component just dispatches.</p>
 <div class="callout"><span class="badge">★ Why a reducer here</span> A quiz has several related transitions on shared state (current question, score, finished). A reducer keeps them in one predictable, testable place — the same pattern you meet again as Redux in Chapter 12.</div>
 <div class="di-toi"><a class="link-card codelab" href="${CODELAB}" target="_blank" rel="noopener"><span class="lc-ico">⌨️</span><span class="lc-body"><span class="lc-title">Build the reducer</span><span class="lc-sub">Counter &amp; quiz — Code Lab.</span></span><span class="lc-cta">PRACTICE →</span></a></div>`,
     `<span class="eyebrow">Chương 8 · Exercise 15 · Slot 9–10 slide 44</span>
 <h2>useReducer — counter &amp; ngân hàng câu hỏi</h2>
-<pre><span class="hljs-keyword">function</span> <span class="hljs-title function_">counterReducer</span>(<span class="hljs-params">state, action</span>) {
+<pre><code class="language-javascript"><span class="hljs-keyword">function</span> <span class="hljs-title function_">counterReducer</span>(<span class="hljs-params">state, action</span>) {
   <span class="hljs-keyword">switch</span> (action.<span class="hljs-property">type</span>) {
     <span class="hljs-keyword">case</span> <span class="hljs-string">&#x27;INCREMENT&#x27;</span>: <span class="hljs-keyword">return</span> { <span class="hljs-attr">count</span>: state.<span class="hljs-property">count</span> + <span class="hljs-number">1</span> };
     <span class="hljs-keyword">case</span> <span class="hljs-string">&#x27;DECREMENT&#x27;</span>: <span class="hljs-keyword">return</span> { <span class="hljs-attr">count</span>: state.<span class="hljs-property">count</span> - <span class="hljs-number">1</span> };
@@ -292,7 +292,7 @@ const EX15 = {
       <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{()</span> =&gt;</span> dispatch({ type: &#x27;RESET&#x27; })}&gt;Reset<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
     <span class="hljs-tag">&lt;/&gt;</span></span>
   );
-}</pre>
+}</code></pre>
 <p><b>Ngân hàng câu hỏi:</b> giữ <code>{ questions, current, score }</code> trong một <code>initialState</code>; một reducer xử lý <code>ANSWER</code>, <code>NEXT</code>, <code>RESTART</code>. Mọi logic quiz nằm trong reducer thuần — component chỉ dispatch.</p>
 <div class="callout"><span class="badge">★ Vì sao dùng reducer ở đây</span> Một quiz có nhiều chuyển trạng thái liên quan trên state dùng chung (câu hiện tại, điểm, kết thúc). Reducer giữ chúng ở một chỗ dễ đoán, dễ test — đúng mẫu bạn gặp lại ở Redux (Chương 12).</div>
 <div class="di-toi"><a class="link-card codelab" href="${CODELAB}" target="_blank" rel="noopener"><span class="lc-ico">⌨️</span><span class="lc-body"><span class="lc-title">Dựng reducer</span><span class="lc-sub">Counter &amp; quiz — Code Lab.</span></span><span class="lc-cta">LUYỆN TẬP →</span></a></div>`,

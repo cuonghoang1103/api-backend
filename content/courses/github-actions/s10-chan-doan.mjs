@@ -78,7 +78,7 @@ ${slide('ga-10', 5, 'Case file 10.1: two features dead at once, and the one curl
 
 <h3>The diagnosis, one command each</h3>
 ${slide('ga-10', 6, '401 means the route exists, 404 means it does not — measured against production on 24 September 2026')}
-<pre><code>$ curl -sI https://api.cuongthai.com/api/v1/gifs
+<pre><code class="language-bash">$ curl -sI https://api.cuongthai.com/api/v1/gifs
 HTTP/1.1 404 Not Found              <- KHONG mount
 
 $ curl -sI https://api.cuongthai.com/api/v1/messages/threads
@@ -277,7 +277,7 @@ ${slide('ga-10', 5, 'Hồ sơ 10.1: hai tính năng chết cùng lúc, và mỗi
 
 <h3>Chẩn đoán, mỗi cái một lệnh</h3>
 ${slide('ga-10', 6, '401 nghĩa là route có, 404 nghĩa là route không có — đo trên production ngày 24/09/2026')}
-<pre><code>$ curl -sI https://api.cuongthai.com/api/v1/gifs
+<pre><code class="language-bash">$ curl -sI https://api.cuongthai.com/api/v1/gifs
 HTTP/1.1 404 Not Found              <- KHONG mount
 
 $ curl -sI https://api.cuongthai.com/api/v1/messages/threads
@@ -579,7 +579,7 @@ ${slide('ga-10', 13, 'Three layers of fix, each stopping a different gap: one so
 <p>The pattern: the type checker sees <em>shapes</em> of code it opens; only the database sees <em>data</em>. api-backend met the fourth row again on 19 September 2026 (commit <code>543e565a</code>: a 560-character description into a 500-character column killed a seed), which is why <code>npx prisma db seed</code> is on the checklist next to <code>typecheck:seed</code> and not instead of it.</p>
 
 
-<pre><code><span class="tok-comment"># 1. tsconfig.seed.json — kiem THAT seed script</span>
+<pre><code class="language-javascript"><span class="tok-comment"># 1. tsconfig.seed.json — kiem THAT seed script</span>
 { "extends": "./tsconfig.json",
   "compilerOptions": { "noEmit": true, "rootDir": "." },
   "include": ["prisma/**/*.ts", "src/**/*"],
@@ -778,7 +778,7 @@ ${slide('ga-10', 13, 'Ba lớp vá, mỗi lớp chặn một chỗ hở khác: m
 <p>Khuôn chung: bộ kiểm kiểu thấy <em>hình dạng</em> của mã mà nó mở; chỉ CSDL thấy <em>dữ liệu</em>. api-backend gặp lại đúng dòng thứ tư ngày 19/09/2026 (commit <code>543e565a</code>: một mô tả 560 ký tự vào cột 500 ký tự làm chết seed), và đó là lý do <code>npx prisma db seed</code> nằm trong checklist CẠNH <code>typecheck:seed</code> chứ không thay cho nó.</p>
 
 
-<pre><code><span class="tok-comment"># 1. tsconfig.seed.json — kiem THAT seed script</span>
+<pre><code class="language-javascript"><span class="tok-comment"># 1. tsconfig.seed.json — kiem THAT seed script</span>
 { "extends": "./tsconfig.json",
   "compilerOptions": { "noEmit": true, "rootDir": "." },
   "include": ["prisma/**/*.ts", "src/**/*"],
@@ -942,7 +942,7 @@ fi</code></pre>
 </div>
 
 <h3>The fix, and the meta-fix</h3>
-<pre><code><span class="tok-comment"># fix cu the: dung node -e (image LUON co node)</span>
+<pre><code class="language-javascript"><span class="tok-comment"># fix cu the: dung node -e (image LUON co node)</span>
 docker exec frontend node -e "
   require('http').get('http://localhost:3000/', r =&gt; process.exit(r.statusCode&lt;400?0:1));
 "
@@ -1146,7 +1146,7 @@ fi</code></pre>
 </div>
 
 <h3>Bản vá, và bản vá META</h3>
-<pre><code><span class="tok-comment"># fix cu the: dung node -e (image LUON co node)</span>
+<pre><code class="language-javascript"><span class="tok-comment"># fix cu the: dung node -e (image LUON co node)</span>
 docker exec frontend node -e "
   require('http').get('http://localhost:3000/', r =&gt; process.exit(r.statusCode&lt;400?0:1));
 "

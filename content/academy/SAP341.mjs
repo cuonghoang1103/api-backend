@@ -358,7 +358,7 @@ const c5 = doc('sap341-5-1-open-sql-cds', '5.1 — Open SQL & CDS Views|||5.1 �
 <h2>Open SQL &amp; CDS Views</h2>
 <h3>Open SQL — one syntax, any database</h3>
 <p><strong>Open SQL</strong> is ABAP's database-independent SELECT. SAP translates it to the native SQL of whatever database runs underneath, so the same code works on HANA or any other.</p>
-<pre><code>DATA lt_orders TYPE STANDARD TABLE OF zorders.
+<pre><code class="language-sql">DATA lt_orders TYPE STANDARD TABLE OF zorders.
 
 SELECT order_id, cust_id, amount
   FROM zorders
@@ -389,7 +389,7 @@ SELECT SINGLE amount FROM zorders
 <h2>Truy vấn Open SQL &amp; CDS View</h2>
 <h3>Open SQL — một cú pháp, mọi CSDL</h3>
 <p><strong>Open SQL</strong> là câu SELECT độc lập CSDL của ABAP. SAP dịch nó sang SQL gốc của bất kỳ CSDL nào bên dưới, nên cùng một đoạn mã chạy trên HANA hay CSDL khác.</p>
-<pre><code>DATA lt_orders TYPE STANDARD TABLE OF zorders.
+<pre><code class="language-sql">DATA lt_orders TYPE STANDARD TABLE OF zorders.
 
 SELECT order_id, cust_id, amount
   FROM zorders
@@ -502,7 +502,7 @@ const c7 = doc('sap341-7-1-reports-selection-screen', '7.1 — Reports (classica
 <h2>Reports &amp; selection screens</h2>
 <h3>Selection screen — ask the user for input</h3>
 <p>An executable report can generate an input screen automatically from <code>PARAMETERS</code> (single fields) and <code>SELECT-OPTIONS</code> (ranges, e.g. "amount from … to …").</p>
-<pre><code>REPORT z_order_list.
+<pre><code class="language-sql">REPORT z_order_list.
 
 PARAMETERS p_cust TYPE zorders-cust_id.
 SELECT-OPTIONS s_amt FOR zorders-amount.
@@ -529,7 +529,7 @@ lo_alv-&gt;display( ).
 <h2>Báo cáo &amp; selection screen</h2>
 <h3>Selection screen — hỏi dữ liệu vào từ người dùng</h3>
 <p>Một executable report có thể tự sinh màn hình nhập từ <code>PARAMETERS</code> (field đơn) và <code>SELECT-OPTIONS</code> (khoảng, vd "số tiền từ … đến …").</p>
-<pre><code>REPORT z_order_list.
+<pre><code class="language-sql">REPORT z_order_list.
 
 PARAMETERS p_cust TYPE zorders-cust_id.
 SELECT-OPTIONS s_amt FOR zorders-amount.

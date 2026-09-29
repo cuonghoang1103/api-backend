@@ -1230,7 +1230,7 @@ coreutils: /usr/bin/ls</div>
 ${slide('lx-00', 23, 'Triết lý Unix: mỗi chương trình một việc, nối bằng ống')}
 <div class="callout ok"><strong>Write programs that do one thing well, and that work together, on text streams.</strong> That is the entire design, from 1978, and it is why Chapter 3's pipes are the most important idea in this course.</div>
 <p>Compare the two worlds. A monolithic tool has a "search" feature, a "sort" feature and an "export" feature, and can only combine them in ways its author anticipated. Unix ships <code>grep</code>, <code>sort</code> and <code>tee</code> as separate programs — so you can combine them in ways nobody anticipated:</p>
-<pre><code><span class="tok-comment"># Nobody wrote "top 5 IPs by 500-error count". You just did.</span>
+<pre><code class="language-bash"><span class="tok-comment"># Nobody wrote "top 5 IPs by 500-error count". You just did.</span>
 grep <span class="tok-string">' 500 '</span> access.log | awk <span class="tok-string">'{print \$1}'</span> | sort | uniq -c | sort -rn | head -5</code></pre>
 <div class="out">    412 203.0.113.44
      87 198.51.100.9
@@ -1247,7 +1247,7 @@ ${slide('lx-00', 22, '“Mọi thứ là một file”: ổ đĩa, tiến trình
   <div class="kv"><span class="k">Kernel state</span><span class="v"><code>/proc/cpuinfo</code>, <code>/proc/meminfo</code>, <code>/sys/class/…</code>. Not real files — the kernel generates them when you read.</span></div>
   <div class="kv"><span class="k">Processes</span><span class="v"><code>/proc/1234/</code> is process 1234: its command line, environment, open files. Chapter 5 uses this.</span></div>
 </div>
-<pre><code>cat /proc/meminfo | head -3        <span class="tok-comment"># kernel state, read like a text file</span>
+<pre><code class="language-bash">cat /proc/meminfo | head -3        <span class="tok-comment"># kernel state, read like a text file</span>
 <span class="tok-keyword">echo</span> <span class="tok-string">"noise"</span> &gt; /dev/null            <span class="tok-comment"># the universal wastebasket</span>
 head -c 8 /dev/urandom | xxd       <span class="tok-comment"># randomness, read like a file</span></code></pre>
 <div class="out">MemTotal:       16316904 kB
@@ -1411,7 +1411,7 @@ coreutils: /usr/bin/ls</div>
 ${slide('lx-00', 23, 'Triết lý Unix: mỗi chương trình một việc, nối bằng ống')}
 <div class="callout ok"><strong>Hãy viết những chương trình làm một việc và làm giỏi, và phối hợp được với nhau, trên các dòng văn bản.</strong> Đó là toàn bộ thiết kế, từ năm 1978, và đó là lý do ống dẫn ở Chương 3 là ý tưởng quan trọng nhất của khoá này.</div>
 <p>Hãy so hai thế giới. Một công cụ nguyên khối có tính năng "tìm", tính năng "sắp xếp" và tính năng "xuất ra", và chỉ ghép chúng lại được theo những cách mà tác giả nó lường trước. Unix giao <code>grep</code>, <code>sort</code> và <code>tee</code> như những chương trình riêng — nên bạn ghép chúng theo những cách chẳng ai lường trước:</p>
-<pre><code><span class="tok-comment"># Không ai viết công cụ "top 5 IP theo số lỗi 500". Bạn vừa tự viết ra.</span>
+<pre><code class="language-bash"><span class="tok-comment"># Không ai viết công cụ "top 5 IP theo số lỗi 500". Bạn vừa tự viết ra.</span>
 grep <span class="tok-string">' 500 '</span> access.log | awk <span class="tok-string">'{print \$1}'</span> | sort | uniq -c | sort -rn | head -5</code></pre>
 <div class="out">    412 203.0.113.44
      87 198.51.100.9
@@ -1428,7 +1428,7 @@ ${slide('lx-00', 22, '“Mọi thứ là một file”: ổ đĩa, tiến trình
   <div class="kv"><span class="k">Trạng thái kernel</span><span class="v"><code>/proc/cpuinfo</code>, <code>/proc/meminfo</code>, <code>/sys/class/…</code>. Không phải file thật — kernel sinh ra chúng vào lúc bạn đọc.</span></div>
   <div class="kv"><span class="k">Tiến trình</span><span class="v"><code>/proc/1234/</code> chính là tiến trình 1234: dòng lệnh, môi trường, các file đang mở của nó. Chương 5 dùng tới cái này.</span></div>
 </div>
-<pre><code>cat /proc/meminfo | head -3        <span class="tok-comment"># trạng thái kernel, đọc như một file chữ</span>
+<pre><code class="language-bash">cat /proc/meminfo | head -3        <span class="tok-comment"># trạng thái kernel, đọc như một file chữ</span>
 <span class="tok-keyword">echo</span> <span class="tok-string">"noise"</span> &gt; /dev/null            <span class="tok-comment"># cái sọt rác vạn năng</span>
 head -c 8 /dev/urandom | xxd       <span class="tok-comment"># sự ngẫu nhiên, đọc như một file</span></code></pre>
 <div class="out">MemTotal:       16316904 kB
@@ -1592,7 +1592,7 @@ ${slide('lx-00', 27, 'macOS: zsh mặc định từ 2019, còn /bin/bash kẹt �
   <div class="kv"><span class="k">No systemd</span><span class="v">macOS uses <code>launchd</code>. Chapter 11 is Linux-only; read it, and run it on a container or a server.</span></div>
   <div class="kv"><span class="k">Different filesystem layout</span><span class="v">No <code>/proc</code>. Package installs land in <code>/opt/homebrew</code> or <code>/usr/local</code>, not <code>/usr</code>.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Get the GNU tools so commands behave as on a server:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Get the GNU tools so commands behave as on a server:</span>
 brew install coreutils findutils gnu-sed grep gawk
 <span class="tok-comment"># They install with a 'g' prefix: gsed, ggrep, gfind. Either use those,</span>
 <span class="tok-comment"># or put the gnubin directories first in PATH (Chapter 8).</span></code></pre>
@@ -1652,7 +1652,7 @@ head -1 deploy.sh                     # want: #!/usr/bin/env bash</code></pre>
 <div class="callout warn"><strong>A zsh trap when you paste commands from this course.</strong> In an interactive zsh with default settings, <code>#</code> does <em>not</em> start a comment. Real output on the Mac, from a fresh zsh with no configuration:<br><code>% ls -d . # xem thu</code><br><code>ls: #: No such file or directory</code><br><code>ls: thu: No such file or directory</code><br><code>ls: xem: No such file or directory</code><br><code>.</code><br>zsh passed <code>#</code>, <code>xem</code> and <code>thu</code> to <code>ls</code> as file names. The option <code>setopt interactivecomments</code> (put it in your own <code>~/.zshrc</code> if you want it permanently; many zsh frameworks already set it) makes <code>#</code> a comment again. In bash and in all scripts, <code>#</code> is always a comment.</div>
 
 <h3>Linux — you are already there</h3>
-<pre><code>cat /etc/os-release | head -2
+<pre><code class="language-bash">cat /etc/os-release | head -2
 uname -srm</code></pre>
 <div class="out">PRETTY_NAME="Ubuntu 24.04.5 LTS"
 NAME="Ubuntu"
@@ -1663,7 +1663,7 @@ Linux 7.0.12-linuxkit aarch64</div>
 <h3>The disposable playground — Docker</h3>
 ${slide('lx-00', 29, 'Docker: một Ubuntu để phá, dựng lại trong 1,5 giây')}
 <p>Even on Linux, a container is the right place to run the destructive parts of this course. It starts in a second and <code>exit</code> throws it away entirely:</p>
-<pre><code><span class="tok-comment"># A clean Ubuntu shell. --rm deletes the container when you leave.</span>
+<pre><code class="language-bash"><span class="tok-comment"># A clean Ubuntu shell. --rm deletes the container when you leave.</span>
 docker run --rm -it ubuntu:24.04 bash
 
 <span class="tok-comment"># Inside, get the tools this course uses:</span>
@@ -1680,7 +1680,7 @@ apt update &amp;&amp; apt install -y \\
 <tr><td><code>ubuntu:24.04</code> · <code>bash</code></td><td>Image and tag · the command to run inside</td><td>match your server's distribution</td></tr>
 </table>
 <p>Measured on the course Mac: <code>docker run --rm ubuntu:24.04 true</code> — start a container, run nothing, delete it — took about 1.5 seconds. One more thing you will notice in a shared folder: a file created inside the container at 08:57 showed as 15:57 on the Mac. The clock is the same; the container runs in UTC and the Mac in +07 (Chapter 11).</p>
-<pre><code><span class="tok-comment"># Keep a lab container between sessions, with a folder shared from your machine:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Keep a lab container between sessions, with a folder shared from your machine:</span>
 docker run -it --name lab -v <span class="tok-string">"\$PWD/lab:/root/lab"</span> ubuntu:24.04 bash
 <span class="tok-comment"># Later:</span>
 docker start -ai lab</code></pre>
@@ -1707,7 +1707,7 @@ EOF
   <div class="kv"><span class="k">Ctrl-U / Ctrl-W</span><span class="v">Delete to the start of the line / delete the previous word.</span></div>
   <div class="kv"><span class="k">Ctrl-L</span><span class="v">Clear the screen without losing what you have typed.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Two optional installs that pay for themselves immediately:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Two optional installs that pay for themselves immediately:</span>
 sudo apt install -y tldr bat   <span class="tok-comment"># short examples; a nicer cat with syntax highlighting</span>
 tldr tar                        <span class="tok-comment"># the five tar commands anyone actually uses</span></code></pre>
 <div class="callout warn"><strong>Measured in September 2026 on Ubuntu 24.04:</strong> both tldr clients in the Ubuntu archive (<code>tldr</code> 0.9.2 and <code>tealdeer</code> 1.6.1) fail when they try to download the pages — "Could not find central directory end" — because the old archive address on tldr.sh no longer serves a zip file. The official Python client works: <code>sudo apt install -y pipx</code>, then <code>pipx install tldr</code> (it lands in <code>~/.local/bin</code>, version 3.4.4 at the time of writing). And on Ubuntu the <code>bat</code> package installs the command as <code>batcat</code>, because another package already used the name <code>bat</code>. In the minimal Docker image, <code>man</code> answers "This system has been minimized…" until you run <code>unminimize</code>.</div>
@@ -1842,7 +1842,7 @@ ${slide('lx-00', 27, 'macOS: zsh mặc định từ 2019, còn /bin/bash kẹt �
   <div class="kv"><span class="k">Không có systemd</span><span class="v">macOS dùng <code>launchd</code>. Chương 11 chỉ dành cho Linux; hãy đọc nó, và chạy nó trên một container hay một máy chủ.</span></div>
   <div class="kv"><span class="k">Bố cục hệ thống file khác</span><span class="v">Không có <code>/proc</code>. Gói cài đặt rơi vào <code>/opt/homebrew</code> hoặc <code>/usr/local</code>, không phải <code>/usr</code>.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Cài bộ công cụ GNU để các lệnh hành xử như trên máy chủ:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Cài bộ công cụ GNU để các lệnh hành xử như trên máy chủ:</span>
 brew install coreutils findutils gnu-sed grep gawk
 <span class="tok-comment"># Chúng cài kèm tiền tố 'g': gsed, ggrep, gfind. Hoặc dùng những tên đó,</span>
 <span class="tok-comment"># hoặc đưa các thư mục gnubin lên đầu PATH (Chương 8).</span></code></pre>
@@ -1902,7 +1902,7 @@ head -1 deploy.sh                     # muốn thấy: #!/usr/bin/env bash</code
 <div class="callout warn"><strong>Một cái bẫy của zsh khi bạn dán lệnh từ khoá này.</strong> Trong zsh tương tác với thiết lập mặc định, <code>#</code> KHÔNG mở đầu chú thích. Output thật trên Mac, từ một zsh sạch không có cấu hình:<br><code>% ls -d . # xem thu</code><br><code>ls: #: No such file or directory</code><br><code>ls: thu: No such file or directory</code><br><code>ls: xem: No such file or directory</code><br><code>.</code><br>zsh đã đưa <code>#</code>, <code>xem</code> và <code>thu</code> cho <code>ls</code> như tên file. Tuỳ chọn <code>setopt interactivecomments</code> (tự đặt vào <code>~/.zshrc</code> của bạn nếu muốn giữ lâu dài; nhiều bộ cấu hình zsh đã bật sẵn) làm <code>#</code> trở lại là chú thích. Trong bash và trong mọi script, <code>#</code> luôn là chú thích.</div>
 
 <h3>Linux — bạn đã ở sẵn đó rồi</h3>
-<pre><code>cat /etc/os-release | head -2
+<pre><code class="language-bash">cat /etc/os-release | head -2
 uname -srm</code></pre>
 <div class="out">PRETTY_NAME="Ubuntu 24.04.5 LTS"
 NAME="Ubuntu"
@@ -1913,7 +1913,7 @@ Linux 7.0.12-linuxkit aarch64</div>
 <h3>Sân tập vứt đi — Docker</h3>
 ${slide('lx-00', 29, 'Docker: một Ubuntu để phá, dựng lại trong 1,5 giây')}
 <p>Ngay cả khi đang ở Linux, một container vẫn là chỗ đúng để chạy những phần phá hoại của khoá này. Nó khởi động trong một giây và <code>exit</code> là vứt nó đi hoàn toàn:</p>
-<pre><code><span class="tok-comment"># Một shell Ubuntu sạch. --rm xoá container khi bạn rời đi.</span>
+<pre><code class="language-bash"><span class="tok-comment"># Một shell Ubuntu sạch. --rm xoá container khi bạn rời đi.</span>
 docker run --rm -it ubuntu:24.04 bash
 
 <span class="tok-comment"># Bên trong, cài các công cụ khoá này dùng:</span>
@@ -1930,7 +1930,7 @@ apt update &amp;&amp; apt install -y \\
 <tr><td><code>ubuntu:24.04</code> · <code>bash</code></td><td>Ảnh và nhãn · lệnh chạy bên trong</td><td>chọn khớp distro của máy chủ</td></tr>
 </table>
 <p>Đo trên Mac của khoá: <code>docker run --rm ubuntu:24.04 true</code> — khởi động một container, không chạy gì, xoá nó — mất khoảng 1,5 giây. Còn một điều bạn sẽ để ý ở thư mục chia sẻ: một file tạo trong container lúc 08:57 hiện trên Mac là 15:57. Đồng hồ là một; container chạy giờ UTC còn Mac chạy giờ +07 (Chương 11).</p>
-<pre><code><span class="tok-comment"># Giữ một container thí nghiệm qua nhiều buổi, có chia sẻ một thư mục từ máy bạn:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Giữ một container thí nghiệm qua nhiều buổi, có chia sẻ một thư mục từ máy bạn:</span>
 docker run -it --name lab -v <span class="tok-string">"\$PWD/lab:/root/lab"</span> ubuntu:24.04 bash
 <span class="tok-comment"># Về sau:</span>
 docker start -ai lab</code></pre>
@@ -1957,7 +1957,7 @@ EOF
   <div class="kv"><span class="k">Ctrl-U / Ctrl-W</span><span class="v">Xoá tới đầu dòng / xoá từ đứng trước.</span></div>
   <div class="kv"><span class="k">Ctrl-L</span><span class="v">Xoá màn hình mà không mất thứ bạn đang gõ.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Hai thứ tuỳ chọn nhưng trả công ngay lập tức:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Hai thứ tuỳ chọn nhưng trả công ngay lập tức:</span>
 sudo apt install -y tldr bat   <span class="tok-comment"># ví dụ ngắn gọn; một cat đẹp hơn có tô màu cú pháp</span>
 tldr tar                        <span class="tok-comment"># năm lệnh tar mà người ta thật sự dùng</span></code></pre>
 <div class="callout warn"><strong>Đo lại tháng 9/2026 trên Ubuntu 24.04:</strong> cả hai client tldr trong kho của Ubuntu (<code>tldr</code> 0.9.2 và <code>tealdeer</code> 1.6.1) đều hỏng khi tải trang — “Could not find central directory end” — vì địa chỉ tệp nén cũ trên tldr.sh không còn trả về file zip. Client Python chính thức thì chạy: <code>sudo apt install -y pipx</code>, rồi <code>pipx install tldr</code> (nó nằm ở <code>~/.local/bin</code>, bản 3.4.4 vào lúc viết). Còn trên Ubuntu gói <code>bat</code> cài lệnh dưới tên <code>batcat</code>, vì một gói khác đã dùng mất tên <code>bat</code>. Trong ảnh Docker tối giản, <code>man</code> trả lời “This system has been minimized…” cho tới khi bạn chạy <code>unminimize</code>.</div>
@@ -2067,7 +2067,7 @@ ${slide('lx-00', 25, 'Bốn đường có một shell Linux — chọn theo máy
 
 <h3>The four ways to look something up</h3>
 ${slide('lx-00', 31, 'Sáu cách tra cứu — chọn theo câu hỏi bạn đang có')}
-<pre><code>man tar                    <span class="tok-comment"># the full manual. Complete, dense, offline.</span>
+<pre><code class="language-bash">man tar                    <span class="tok-comment"># the full manual. Complete, dense, offline.</span>
 tar --help | head -20      <span class="tok-comment"># a summary. Faster, and usually enough.</span>
 tldr tar                   <span class="tok-comment"># the five commands people actually use.</span>
 <span class="tok-keyword">type</span> -a python            <span class="tok-comment"># what IS this thing, and where does it live?</span></code></pre>
@@ -2077,7 +2077,7 @@ tldr tar                   <span class="tok-comment"># the five commands people 
   <div class="kv"><span class="k">tldr</span><span class="v">Community examples. The right first stop for <code>tar</code>, <code>find</code>, <code>ffmpeg</code> — the commands with a hundred flags and five real uses.</span></div>
   <div class="kv"><span class="k">apropos</span><span class="v"><code>apropos compress</code> searches man page descriptions when you do not know the command's name at all.</span></div>
 </div>
-<pre><code><span class="tok-comment"># The move that finds a flag in ten seconds:</span>
+<pre><code class="language-bash"><span class="tok-comment"># The move that finds a flag in ten seconds:</span>
 ls --help | grep -i <span class="tok-string">"sort"</span></code></pre>
 <div class="out">      --sort=WORD            sort by WORD instead of name: none (-U), size (-S),
                                time (-t), version (-v), extension (-X), width
@@ -2149,7 +2149,7 @@ ${slide('lx-00', 34, 'Ba câu hỏi trước MỌI lệnh phá huỷ: cái gì �
   <div class="lz-step"><div class="lz-k">2</div><div class="lz-t">Where am I?</div><div class="lz-d"><code>pwd</code>. The same <code>rm -rf *</code> is harmless in <code>/tmp/lab</code> and catastrophic in <code>/</code>.</div></div>
   <div class="lz-step"><div class="lz-k">3</div><div class="lz-t">Am I root?</div><div class="lz-d">A <code>#</code> prompt instead of <code>$</code> means no permission will stop you. Chapter 4.</div></div>
 </div>
-<pre><code><span class="tok-comment"># The habit: preview with ls, then swap in the destructive command.</span>
+<pre><code class="language-bash"><span class="tok-comment"># The habit: preview with ls, then swap in the destructive command.</span>
 ls -la *.log                    <span class="tok-comment"># ← LOOK first</span>
 rm *.log                        <span class="tok-comment"># ← then act</span>
 
@@ -2256,7 +2256,7 @@ logs/app-27.log</div>
 
 <h3>Bốn cách tra cứu</h3>
 ${slide('lx-00', 31, 'Sáu cách tra cứu — chọn theo câu hỏi bạn đang có')}
-<pre><code>man tar                    <span class="tok-comment"># sách hướng dẫn đầy đủ. Trọn vẹn, đặc, chạy ngoại tuyến.</span>
+<pre><code class="language-bash">man tar                    <span class="tok-comment"># sách hướng dẫn đầy đủ. Trọn vẹn, đặc, chạy ngoại tuyến.</span>
 tar --help | head -20      <span class="tok-comment"># bản tóm tắt. Nhanh hơn, và thường là đủ.</span>
 tldr tar                   <span class="tok-comment"># năm lệnh mà người ta thật sự dùng.</span>
 <span class="tok-keyword">type</span> -a python            <span class="tok-comment"># cái này LÀ cái gì, và nó nằm ở đâu?</span></code></pre>
@@ -2266,7 +2266,7 @@ tldr tar                   <span class="tok-comment"># năm lệnh mà người 
   <div class="kv"><span class="k">tldr</span><span class="v">Ví dụ do cộng đồng viết. Điểm dừng đầu tiên đúng đắn cho <code>tar</code>, <code>find</code>, <code>ffmpeg</code> — những lệnh có một trăm cờ và năm cách dùng thật.</span></div>
   <div class="kv"><span class="k">apropos</span><span class="v"><code>apropos compress</code> tìm trong phần mô tả của các trang man khi bạn hoàn toàn không biết tên lệnh.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Nước đi tìm ra một cái cờ trong mười giây:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Nước đi tìm ra một cái cờ trong mười giây:</span>
 ls --help | grep -i <span class="tok-string">"sort"</span></code></pre>
 <div class="out">      --sort=WORD            sort by WORD instead of name: none (-U), size (-S),
                                time (-t), version (-v), extension (-X), width
@@ -2338,7 +2338,7 @@ ${slide('lx-00', 34, 'Ba câu hỏi trước MỌI lệnh phá huỷ: cái gì �
   <div class="lz-step"><div class="lz-k">2</div><div class="lz-t">Tôi đang ở đâu?</div><div class="lz-d"><code>pwd</code>. Cùng một lệnh <code>rm -rf *</code> là vô hại ở <code>/tmp/lab</code> và là thảm hoạ ở <code>/</code>.</div></div>
   <div class="lz-step"><div class="lz-k">3</div><div class="lz-t">Tôi có đang là root không?</div><div class="lz-d">Dấu nhắc <code>#</code> thay vì <code>$</code> nghĩa là không có quyền nào chặn bạn lại. Chương 4.</div></div>
 </div>
-<pre><code><span class="tok-comment"># Thói quen: xem trước bằng ls, rồi mới thay bằng lệnh phá huỷ.</span>
+<pre><code class="language-bash"><span class="tok-comment"># Thói quen: xem trước bằng ls, rồi mới thay bằng lệnh phá huỷ.</span>
 ls -la *.log                    <span class="tok-comment"># ← NHÌN trước</span>
 rm *.log                        <span class="tok-comment"># ← rồi mới hành động</span>
 

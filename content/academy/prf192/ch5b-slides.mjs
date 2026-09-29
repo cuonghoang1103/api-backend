@@ -59,7 +59,7 @@ export default {
 <li><strong>How to choose between them</strong> — ask "who needs the result?" If only the screen needs it, print it and return nothing. If the caller might want to add it, compare it, or store it, return it. Returning is more reusable; printing is a dead end.</li>
 <li><strong>The last line of the slide</strong> — "The description of the internal logic of a function [is] the function's <em>definition</em>." That word matters from slide 44 onward, where <em>definition</em> (with a body) is deliberately contrasted with <em>declaration/prototype</em> (no body, just a semicolon).</li>
 </ul>
-<pre><code>void printDivisors(int n);   /* takes data, returns nothing */
+<pre><code class="language-c">void printDivisors(int n);   /* takes data, returns nothing */
 int  sumDivisors(int n);     /* takes data, returns a value */</code></pre>
 <p class="dap-an">✅ Both examples compiled and run. <code>printDivisors(12)</code> prints <code>1, 2, 3, 4, 6, 12, </code> and <code>sumDivisors(12)</code> returns <strong>28</strong> — exactly the numbers on the slide. Checked further: <code>sumDivisors(28) = 56</code> and <code>sumDivisors(6) = 12</code> (both are perfect numbers, so the sum is twice the number itself).</p>
 <p class="meo">💡 "Reusable" is not decoration. If <code>sumDivisors</code> asked the user for <code>n</code> itself instead of taking it as a parameter, it could never be used inside a loop, inside another calculation, or in a program with no keyboard. Taking data <em>in</em> as a parameter is what makes a function reusable — this is the low-coupling rule from slide 19 written in C.</p>`,
@@ -71,7 +71,7 @@ int  sumDivisors(int n);     /* takes data, returns a value */</code></pre>
 <li><strong>Chọn giữa hai kiểu thế nào</strong> — hỏi "ai cần kết quả?". Nếu chỉ màn hình cần thì in ra rồi không trả gì. Nếu người gọi có thể muốn cộng thêm, so sánh, hay cất đi thì phải trả về. Trả về thì dùng lại được nhiều hơn; in ra là ngõ cụt.</li>
 <li><strong>Dòng cuối của slide</strong> — "mô tả logic bên trong của hàm chính là <em>định nghĩa</em> hàm". Chữ này quan trọng từ slide 44 trở đi, chỗ bộ slide cố ý đối chiếu <em>định nghĩa</em> (có thân hàm) với <em>khai báo/nguyên mẫu</em> (không thân, chỉ một dấu chấm phẩy).</li>
 </ul>
-<pre><code>void printDivisors(int n);   /* nhận dữ liệu, không trả gì  */
+<pre><code class="language-c">void printDivisors(int n);   /* nhận dữ liệu, không trả gì  */
 int  sumDivisors(int n);     /* nhận dữ liệu, trả một giá trị */</code></pre>
 <p class="dap-an">✅ Cả hai ví dụ đã biên dịch và chạy thật. <code>printDivisors(12)</code> in ra <code>1, 2, 3, 4, 6, 12, </code> và <code>sumDivisors(12)</code> trả về <strong>28</strong> — đúng bằng con số trên slide. Kiểm thêm: <code>sumDivisors(28) = 56</code> và <code>sumDivisors(6) = 12</code> (đều là số hoàn hảo nên tổng bằng đúng hai lần chính nó).</p>
 <p class="meo">💡 Chữ "dùng lại được" không phải để trang trí. Nếu <code>sumDivisors</code> tự hỏi người dùng nhập <code>n</code> thay vì nhận <code>n</code> làm tham số thì nó không bao giờ dùng được trong một vòng lặp, trong một phép tính khác, hay trong chương trình không có bàn phím. Nhận dữ liệu <em>vào</em> qua tham số chính là thứ làm hàm dùng lại được — đó là luật low coupling ở slide 19 viết bằng C.</p>`],
@@ -85,7 +85,7 @@ int  sumDivisors(int n);     /* nhận dữ liệu, trả một giá trị */</c
 <li><strong>There is no semicolon after the header of a definition</strong> — <code>int f(int n) { … }</code>. Put one in — <code>int f(int n); { … }</code> — and you have accidentally written a prototype followed by a stray block, which is a completely different program. This is the single most common syntax mistake on this topic.</li>
 <li><strong>Each parameter needs its own type</strong> — <code>int f(int a, int b)</code> is correct; <code>int f(int a, b)</code> is not, even though maths would allow the shorthand. C has no "same as previous" rule for parameters.</li>
 </ul>
-<pre><code>int sumDivisors(int n)      /* header: type, name, parameters — NO semicolon */
+<pre><code class="language-c">int sumDivisors(int n)      /* header: type, name, parameters — NO semicolon */
 {                           /* body starts                                   */
     int i, s = 0;
     for (i = 1; i &lt;= n; i++)
@@ -102,7 +102,7 @@ int  sumDivisors(int n);     /* nhận dữ liệu, trả một giá trị */</c
 <li><strong>KHÔNG có dấu chấm phẩy sau đầu hàm của một định nghĩa</strong> — <code>int f(int n) { … }</code>. Thêm một dấu vào — <code>int f(int n); { … }</code> — là bạn vô tình viết một prototype rồi một khối lạc lõng đằng sau, thành một chương trình hoàn toàn khác. Đây là lỗi cú pháp hay gặp nhất của chủ đề này.</li>
 <li><strong>Mỗi tham số phải có kiểu riêng</strong> — <code>int f(int a, int b)</code> mới đúng; <code>int f(int a, b)</code> thì sai, dù toán học cho phép viết tắt như vậy. C không có luật "giống cái trước" cho tham số.</li>
 </ul>
-<pre><code>int sumDivisors(int n)      /* đầu hàm: kiểu, tên, tham số — KHÔNG chấm phẩy */
+<pre><code class="language-c">int sumDivisors(int n)      /* đầu hàm: kiểu, tên, tham số — KHÔNG chấm phẩy */
 {                           /* thân hàm bắt đầu                              */
     int i, s = 0;
     for (i = 1; i &lt;= n; i++)
@@ -121,7 +121,7 @@ int  sumDivisors(int n);     /* nhận dữ liệu, trả một giá trị */</c
 <li><strong>The slide's notation review</strong> — "3.0 and 3. are the same; 3.3500 = 3.35; 3.30 = 3.3; 3.0 = 3." In a C literal, trailing zeros after the point are optional and so is the digit after the point: <code>3.</code> is a perfectly legal <code>double</code> literal. It is legal but easy to misread, which is why <code>3.0</code> is the better habit.</li>
 <li><strong>The local variable <code>result</code></strong> — it is not required (<code>return (a+b+c)/3.0;</code> works), but it is good style: it names the thing being computed and gives you somewhere to put a breakpoint. It lives only while the function runs — that is the "extent" idea from slide 61.</li>
 </ul>
-<pre><code>double average(int a, int b, int c)
+<pre><code class="language-c">double average(int a, int b, int c)
 {
     double result;
     result = (a + b + c) / 3. ;   /* the dot makes it real division */
@@ -137,7 +137,7 @@ int  sumDivisors(int n);     /* nhận dữ liệu, trả một giá trị */</c
 <li><strong>Phần ôn về cách viết số trên slide</strong> — "3.0 và 3. là như nhau; 3.3500 = 3.35; 3.30 = 3.3; 3.0 = 3.". Trong hằng số C, các số 0 đuôi sau dấu chấm là tuỳ chọn, và cả chữ số sau dấu chấm cũng vậy: <code>3.</code> là một hằng <code>double</code> hoàn toàn hợp lệ. Hợp lệ nhưng dễ đọc nhầm, nên viết <code>3.0</code> là thói quen tốt hơn.</li>
 <li><strong>Biến cục bộ <code>result</code></strong> — không bắt buộc (<code>return (a+b+c)/3.0;</code> vẫn chạy), nhưng là phong cách tốt: nó đặt tên cho thứ đang được tính và cho bạn một chỗ để đặt breakpoint. Nó chỉ sống trong lúc hàm chạy — đó chính là khái niệm "extent" ở slide 61.</li>
 </ul>
-<pre><code>double average(int a, int b, int c)
+<pre><code class="language-c">double average(int a, int b, int c)
 {
     double result;
     result = (a + b + c) / 3. ;   /* dấu chấm làm nó thành chia thực */
@@ -151,7 +151,7 @@ int  sumDivisors(int n);     /* nhận dữ liệu, trả một giá trị */</c
 <ul>
 <li><strong>What a complete program needs that a lone function does not</strong> — an <code>#include</code> line so <code>printf</code>/<code>scanf</code> are declared, a <code>main</code> to start from, and a <code>return 0;</code> at the end of <code>main</code>. The function alone does not run; something has to call it.</li>
 <li><strong>Type this and run it</strong> — it is the faithful version of what is on screen:
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 double average(int a, int b, int c);   /* prototype — see slide 44 */
 
@@ -180,7 +180,7 @@ double average(int a, int b, int c)
 <ul>
 <li><strong>Chương trình hoàn chỉnh cần gì mà một hàm đứng lẻ không có</strong> — một dòng <code>#include</code> để <code>printf</code>/<code>scanf</code> được khai báo, một hàm <code>main</code> để bắt đầu, và <code>return 0;</code> ở cuối <code>main</code>. Hàm đứng một mình thì không chạy; phải có ai đó gọi nó.</li>
 <li><strong>Gõ cái này rồi chạy</strong> — đây là bản trung thành với những gì trên màn hình:
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 double average(int a, int b, int c);   /* nguyên mẫu — xem slide 44 */
 
@@ -215,7 +215,7 @@ double average(int a, int b, int c)
 <li><strong>The other language's word for it</strong> — "A function that does not return a value is called a <em>subroutine</em> or <em>procedure</em> in other languages." Pascal spells it <code>procedure</code>, Visual Basic <code>Sub</code>, Fortran <code>SUBROUTINE</code>. C chose to have only functions and to mark the no-result case with <code>void</code>.</li>
 <li><strong>Why <code>return;</code> early is genuinely useful</strong> — a guard clause. <code>void printDivisors(int n) { if (n &lt;= 0) return; … }</code> rejects nonsense input on line one instead of wrapping the whole body in an <code>if</code>. This does not break the "one exit point" rule from slide 14 in any way that matters: you still leave through the bottom of the function conceptually.</li>
 </ul>
-<pre><code>void show(int n)
+<pre><code class="language-c">void show(int n)
 {
     if (n &lt; 0) return;            /* legal: bare return, leaves early */
     printf("%d\\n", n);
@@ -232,7 +232,7 @@ double average(int a, int b, int c)
 <li><strong>Ngôn ngữ khác gọi nó là gì</strong> — "A function that does not return a value is called a <em>subroutine</em> or <em>procedure</em> in other languages". Pascal gọi là <code>procedure</code>, Visual Basic là <code>Sub</code>, Fortran là <code>SUBROUTINE</code>. C chọn cách chỉ có một loại là hàm, và đánh dấu trường hợp không có kết quả bằng <code>void</code>.</li>
 <li><strong>Vì sao <code>return;</code> sớm thật sự hữu ích</strong> — đó là câu lệnh chốt chặn đầu vào. <code>void printDivisors(int n) { if (n &lt;= 0) return; … }</code> loại bỏ dữ liệu vô lý ngay dòng đầu thay vì bọc cả thân hàm trong một <code>if</code>. Chuyện này không phá luật "một điểm ra" ở slide 14 theo nghĩa đáng kể nào: về mặt khái niệm bạn vẫn ra ở đáy hàm.</li>
 </ul>
-<pre><code>void show(int n)
+<pre><code class="language-c">void show(int n)
 {
     if (n &lt; 0) return;            /* hợp lệ: return trần, thoát sớm  */
     printf("%d\\n", n);
@@ -247,7 +247,7 @@ double average(int a, int b, int c)
 <ul>
 <li><strong>Why this function must be <code>void</code></strong> — it prints a <em>list</em>. A C function can return at most one value, and "1, 2, 3, 4, 6, 12" is not one value. Printing is the only way to deliver many results without arrays, which arrive in Slot 13-15.</li>
 <li><strong>The complete program</strong> —
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 void printDivisors(int n);
 
@@ -275,7 +275,7 @@ void printDivisors(int n)
 <ul>
 <li><strong>Vì sao hàm này BẮT BUỘC phải là <code>void</code></strong> — nó in ra một <em>danh sách</em>. Một hàm C trả về nhiều nhất một giá trị, mà "1, 2, 3, 4, 6, 12" không phải một giá trị. In ra màn hình là cách duy nhất giao nhiều kết quả khi chưa có mảng — mảng phải đến Slot 13-15 mới học.</li>
 <li><strong>Chương trình hoàn chỉnh</strong> —
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 void printDivisors(int n);
 
@@ -309,7 +309,7 @@ void printDivisors(int n)
 <li><strong>Which signatures are actually standard</strong> — exactly two: <code>int main(void)</code> and <code>int main(int argc, char *argv[])</code>. The second one receives command-line arguments and belongs to a later slot. <code>void main()</code> is <strong>not</strong> standard C, despite being common in old textbooks and in Turbo C.</li>
 <li><strong>main is a module too</strong> — everything from part 3 applies to it. Slide 9 already drew it as "Declare the main module and its data". A good <code>main</code> is a short list of calls: accept, compute, print. If <code>main</code> is 200 lines long, the module analysis has not been done.</li>
 </ul>
-<pre><code>int main(void)
+<pre><code class="language-c">int main(void)
 {
     /* … */
     return 0;        /* 0 = success, the OS reads this */
@@ -324,7 +324,7 @@ void printDivisors(int n)
 <li><strong>Chữ ký nào mới thật sự chuẩn</strong> — đúng hai cái: <code>int main(void)</code> và <code>int main(int argc, char *argv[])</code>. Cái thứ hai nhận tham số dòng lệnh, thuộc slot sau. <code>void main()</code> <strong>KHÔNG</strong> phải C chuẩn, dù rất phổ biến trong sách cũ và trong Turbo C.</li>
 <li><strong>main cũng là một module</strong> — mọi thứ ở phần 3 đều áp dụng cho nó. Slide 9 đã vẽ nó là "Declare the main module and it's data". Một hàm <code>main</code> tốt là một danh sách ngắn các lời gọi: nhập, tính, in. Nếu <code>main</code> dài 200 dòng thì việc phân tích module chưa được làm.</li>
 </ul>
-<pre><code>int main(void)
+<pre><code class="language-c">int main(void)
 {
     /* … */
     return 0;        /* 0 = thành công, hệ điều hành đọc số này */
@@ -361,7 +361,7 @@ void printDivisors(int n)
 <li><strong>Worked through on the deck's own example</strong> — task: "compute the sum of divisors of a positive integer n". Verb = compute → returns a number → <code>int</code>. Nouns = the integer n → one parameter <code>int n</code>. By hand with n = 12: try 1 (divides, total 1), 2 (total 3), 3 (total 6), 4 (total 10), 5 (no), 6 (total 16), …, 12 (total 28). The by-hand run just told you the loop bounds and the accumulator.</li>
 <li><strong>Translate, don't invent</strong> — "try every i from 1 to n; if i divides n, add it" is four English words away from <code>for (i=1; i&lt;=n; i++) if (n%i==0) s += i;</code>. When the C is hard to write, it is usually because the English step was still vague.</li>
 </ul>
-<pre><code>/* Verb: compute.  Nouns: sum, divisors, n.  Returns: a number. */
+<pre><code class="language-c">/* Verb: compute.  Nouns: sum, divisors, n.  Returns: a number. */
 int sumDivisors(int n)
 {
     int i, s = 0;
@@ -380,7 +380,7 @@ int sumDivisors(int n)
 <li><strong>Chạy thử trên chính ví dụ của bộ slide</strong> — việc: "tính tổng các ước của số nguyên dương n". Động từ = tính → trả về một con số → <code>int</code>. Danh từ = số nguyên n → một tham số <code>int n</code>. Làm tay với n = 12: thử 1 (chia hết, tổng 1), 2 (tổng 3), 3 (tổng 6), 4 (tổng 10), 5 (không), 6 (tổng 16), …, 12 (tổng 28). Lần làm tay đó vừa nói cho bạn biết cận vòng lặp và biến cộng dồn.</li>
 <li><strong>Dịch, đừng sáng tác</strong> — "thử mọi i từ 1 tới n; nếu i chia hết n thì cộng vào" chỉ cách <code>for (i=1; i&lt;=n; i++) if (n%i==0) s += i;</code> đúng vài chữ. Khi code C khó viết ra thì thường là vì bước tiếng Việt vẫn còn mơ hồ.</li>
 </ul>
-<pre><code>/* Động từ: tính.  Danh từ: tổng, các ước, n.  Trả về: một con số. */
+<pre><code class="language-c">/* Động từ: tính.  Danh từ: tổng, các ước, n.  Trả về: một con số. */
 int sumDivisors(int n)
 {
     int i, s = 0;
@@ -400,7 +400,7 @@ int sumDivisors(int n)
 <li><strong>The slide's testing convention</strong> — "Functions for testing will return <strong>1 for true and 0 for false</strong>." That is the C convention (C89 has no <code>bool</code>) and it is why a <code>Check…</code> function is an <code>int</code> function, not a <code>void</code> one.</li>
 <li><strong>The slide's testing algorithm</strong> — "Common algorithm in testing is checking all cases which cause FALSE. TRUE is accepted when no case causes FALSE." That is a genuinely important pattern: loop, <code>return 0;</code> the instant you find a counter-example, and <code>return 1;</code> only after the loop finishes untouched. Do <em>not</em> write <code>else return 1;</code> inside the loop — that answers after examining one value.</li>
 <li><strong>Before and after</strong> —
-<pre><code>/* low cohesion: checks AND prints */
+<pre><code class="language-c">/* low cohesion: checks AND prints */
 void checkAndPrintPrime(int n) {
     int i, ok = 1;
     if (n &lt; 2) ok = 0;
@@ -428,7 +428,7 @@ int isPrime(int n) {
 <li><strong>Quy ước kiểm tra trên slide</strong> — "Functions for testing will return <strong>1 for true and 0 for false</strong>". Đó là quy ước của C (C89 không có kiểu <code>bool</code>) và cũng là lý do một hàm dạng <code>Check…</code> phải là hàm <code>int</code>, không phải <code>void</code>.</li>
 <li><strong>Thuật toán kiểm tra trên slide</strong> — "Common algorithm in testing is checking all cases which cause FALSE. TRUE is accept when no case cause FALSE" — duyệt mọi trường hợp làm cho SAI; chỉ khi không có trường hợp nào làm SAI thì mới nhận ĐÚNG. Đây là một mẫu rất đáng nhớ: lặp, <code>return 0;</code> ngay khi tìm được một phản ví dụ, và <code>return 1;</code> chỉ sau khi vòng lặp chạy hết mà không bị chặn. TUYỆT ĐỐI đừng viết <code>else return 1;</code> bên trong vòng lặp — như thế là kết luận sau khi mới xét một giá trị.</li>
 <li><strong>Trước và sau</strong> —
-<pre><code>/* kém gắn kết: vừa KIỂM TRA vừa IN */
+<pre><code class="language-c">/* kém gắn kết: vừa KIỂM TRA vừa IN */
 void checkAndPrintPrime(int n) {
     int i, ok = 1;
     if (n &lt; 2) ok = 0;
@@ -456,7 +456,7 @@ int isPrime(int n) {
 <li><strong>The symptom</strong> — the function uses a variable it never declared and never received. That variable is a global, declared above all the functions, and slide 15 already flagged this: "Some modules access a common data is not encouraged. All modules should be self-contained (independent)."</li>
 <li><strong>Why it hurts, concretely</strong> — a function reading a global can only ever work on <em>one</em> value at a time. <code>sumDivisorsGlobal()</code> that reads the global <code>n</code> cannot be called twice with different numbers in the same expression, cannot be tested without setting up global state first, and quietly breaks when someone else changes <code>n</code> for their own reasons.</li>
 <li><strong>Before and after</strong> —
-<pre><code>int n;                                /* global — high coupling */
+<pre><code class="language-c">int n;                                /* global — high coupling */
 int sumDivisorsGlobal(void) {         /* where does n come from?     */
     int i, s = 0;
     for (i = 1; i &lt;= n; i++) if (n % i == 0) s += i;
@@ -479,7 +479,7 @@ int sumDivisors(int k) {              /* better: data comes IN       */
 <li><strong>Triệu chứng</strong> — hàm dùng một biến mà nó không hề khai báo và cũng không hề nhận vào. Biến đó là biến toàn cục, khai báo ở trên tất cả các hàm, và slide 15 đã cảnh báo rồi: "Some modules access a common data is not encouraged. All modules should be self-contained (independent)".</li>
 <li><strong>Nó hại ở đâu, nói cụ thể</strong> — hàm đọc biến toàn cục thì chỉ làm việc được với <em>một</em> giá trị tại một thời điểm. Hàm <code>sumDivisorsGlobal()</code> đọc biến toàn cục <code>n</code> không gọi được hai lần với hai số khác nhau trong cùng một biểu thức, không kiểm thử được nếu chưa dựng sẵn trạng thái toàn cục, và hỏng âm thầm khi người khác đổi <code>n</code> vì lý do của họ.</li>
 <li><strong>Trước và sau</strong> —
-<pre><code>int n;                                /* toàn cục — ràng buộc cao */
+<pre><code class="language-c">int n;                                /* toàn cục — ràng buộc cao */
 int sumDivisorsGlobal(void) {         /* n ở đâu ra vậy?          */
     int i, s = 0;
     for (i = 1; i &lt;= n; i++) if (n % i == 0) s += i;
@@ -524,7 +524,7 @@ int sumDivisors(int k) {              /* tốt hơn: dữ liệu đi VÀO  */
 <li><strong>"You can use either the built-in library functions or your own functions"</strong> — and the syntax is identical. <code>printf("hi")</code> and <code>printDivisors(12)</code> are the same kind of construct; only where the definition lives differs.</li>
 <li><strong>"If you use the built-in library functions, your program needs to begin with the necessary include file"</strong> — this is the link to slide 46. <code>printf</code> needs <code>#include &lt;stdio.h&gt;</code>; <code>sqrt</code> needs <code>&lt;math.h&gt;</code>; <code>system</code> needs <code>&lt;stdlib.h&gt;</code>. Without the include, the compiler has never heard of the name.</li>
 <li><strong>Parameters vs arguments, the exam-safe version</strong> —
-<pre><code>double average(int a, int b, int c)   /* a, b, c are PARAMETERS */
+<pre><code class="language-c">double average(int a, int b, int c)   /* a, b, c are PARAMETERS */
 { return (a + b + c) / 3.0; }
 
 int x = 5, y = 8, z = 10;
@@ -541,7 +541,7 @@ Arguments do not have to be variables — literals, expressions, even other func
 <li><strong>"You can use either the built-in library functions or your own functions"</strong> — và cú pháp y hệt nhau. <code>printf("hi")</code> và <code>printDivisors(12)</code> là cùng một loại cấu trúc; chỉ khác chỗ định nghĩa nằm ở đâu.</li>
 <li><strong>"If you use the built-in library functions, your program needs to begin with the necessary include file"</strong> — đây là mối nối sang slide 46. <code>printf</code> cần <code>#include &lt;stdio.h&gt;</code>; <code>sqrt</code> cần <code>&lt;math.h&gt;</code>; <code>system</code> cần <code>&lt;stdlib.h&gt;</code>. Không có dòng include thì trình biên dịch chưa từng nghe tới cái tên đó.</li>
 <li><strong>Tham số và đối số, bản an toàn cho đề thi</strong> —
-<pre><code>double average(int a, int b, int c)   /* a, b, c là THAM SỐ */
+<pre><code class="language-c">double average(int a, int b, int c)   /* a, b, c là THAM SỐ */
 { return (a + b + c) / 3.0; }
 
 int x = 5, y = 8, z = 10;
@@ -559,7 +559,7 @@ printf("%f\\n", average(1, 2, 3));     /* 1, 2, 3 cũng vậy    */</code></pre>
 <ul>
 <li><strong>The slide's analysis</strong> — "Print out divisors of the positive integer n: <code>for i = 1 … n; if (n%i == 0) print out i;</code>". Two lines of pseudo-code, and they are already the loop body.</li>
 <li><strong>The slide's solution function</strong>, printed verbatim on the slide and labelled "User-defined function":
-<pre><code>void printDivisors(int n)
+<pre><code class="language-c">void printDivisors(int n)
 {
     int i;
     for (i = 1; i &lt;= n; i++)
@@ -569,7 +569,7 @@ printf("%f\\n", average(1, 2, 3));     /* 1, 2, 3 cũng vậy    */</code></pre>
 <li><strong>Why the loop runs to <code>i &lt;= n</code> and not <code>i &lt; n</code></strong> — because <code>n</code> divides itself and counts as a divisor: the answer for 12 must end in 12. Write <code>i &lt; n</code> and you get the <em>proper</em> divisors instead, and the perfect-number check on slide 35 stops working.</li>
 <li><strong>Now the "three times" part</strong> — the task is repeated, so the repetition belongs in <code>main</code>, in a loop, <em>not</em> inside the function. Keeping "how many times" out of the function is what lets slide 41 ask "what if the program performs this task 20 times?" and have the answer be "change one number".</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 void printDivisors(int n);
 
@@ -598,7 +598,7 @@ void printDivisors(int n)
 <ul>
 <li><strong>Phân tích trên slide</strong> — "Print out divisors of the positive integer n: <code>for i = 1 … n; if (n%i == 0) print out i;</code>". Hai dòng mã giả, và chúng đã chính là thân vòng lặp.</li>
 <li><strong>Hàm lời giải của slide</strong>, in nguyên văn trên slide và dán nhãn "User-defined function":
-<pre><code>void printDivisors(int n)
+<pre><code class="language-c">void printDivisors(int n)
 {
     int i;
     for (i = 1; i &lt;= n; i++)
@@ -608,7 +608,7 @@ void printDivisors(int n)
 <li><strong>Vì sao vòng lặp chạy tới <code>i &lt;= n</code> chứ không phải <code>i &lt; n</code></strong> — vì <code>n</code> chia hết cho chính nó và được tính là một ước: đáp án của 12 phải kết thúc bằng 12. Viết <code>i &lt; n</code> thì bạn được các ước <em>thực sự</em> (proper divisors) thay vì toàn bộ ước, và phép kiểm số hoàn hảo ở slide 35 sẽ hết chạy.</li>
 <li><strong>Còn phần "ba lần"</strong> — việc bị lặp lại, nên chuyện lặp thuộc về <code>main</code>, nằm trong một vòng lặp, <em>không</em> nằm trong hàm. Giữ chuyện "bao nhiêu lần" ở ngoài hàm chính là thứ cho phép slide 41 hỏi "nếu chương trình phải làm việc này 20 lần thì sao?" và câu trả lời là "đổi một con số".</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 void printDivisors(int n);
 
@@ -642,7 +642,7 @@ void printDivisors(int n)
 <li><strong>That is slide 3's list, made concrete</strong> — "Reusability: Functions allow reuse of code, reducing duplication" and "Maintainability: Modular code supports easy updates and changes". This slide is the proof, not the claim.</li>
 <li><strong>Label check — parameter and argument</strong> — the slide marks <code>n</code> in <code>void printDivisors(int n)</code> as the <em>parameter</em>, and the <code>n</code> inside <code>printDivisors(n)</code> in <code>main</code> as the <em>argument</em>. They are two different variables in two different memory blocks that happen to share a name; slide 52 ("Pass by value") spells out exactly that: "Although they have the same names, they are still different."</li>
 <li><strong>Go one step further</strong> — make it read the count from the user, and neither the function nor the loop body changes at all:
-<pre><code>int times, k, n;
+<pre><code class="language-c">int times, k, n;
 printf("How many numbers? ");
 scanf("%d", &amp;times);
 for (k = 1; k &lt;= times; k++) { scanf("%d", &amp;n); printDivisors(n); printf("\\n"); }</code></pre></li>
@@ -656,7 +656,7 @@ for (k = 1; k &lt;= times; k++) { scanf("%d", &amp;n); printDivisors(n); printf(
 <li><strong>Đó chính là danh sách ở slide 3, cụ thể hoá</strong> — "Reusability: Functions allow reuse of code, reducing duplication" và "Maintainability: Modular code supports easy updates and changes". Slide này là BẰNG CHỨNG, không phải lời tuyên bố.</li>
 <li><strong>Soi lại nhãn — tham số và đối số</strong> — slide đánh dấu <code>n</code> trong <code>void printDivisors(int n)</code> là <em>parameter</em>, còn <code>n</code> bên trong <code>printDivisors(n)</code> ở <code>main</code> là <em>argument</em>. Chúng là hai biến khác nhau nằm ở hai ô nhớ khác nhau, chỉ tình cờ trùng tên; slide 52 ("Pass by value") nói thẳng: "Although they have the same names, they are still different".</li>
 <li><strong>Đi thêm một bước</strong> — cho người dùng nhập luôn số lần, và cả hàm lẫn thân vòng lặp đều không đổi một chữ:
-<pre><code>int times, k, n;
+<pre><code class="language-c">int times, k, n;
 printf("How many numbers? ");
 scanf("%d", &amp;times);
 for (k = 1; k &lt;= times; k++) { scanf("%d", &amp;n); printDivisors(n); printf("\\n"); }</code></pre></li>
@@ -672,7 +672,7 @@ for (k = 1; k &lt;= times; k++) { scanf("%d", &amp;n); printDivisors(n); printf(
 <li><strong>The body is the Practice 1 loop with one word changed</strong> — where <code>printDivisors</code> printed <code>i</code>, <code>sumDivisors</code> adds it to an accumulator. Same traversal, different action. That is the normal relationship between a "print all X" function and a "total the X" function.</li>
 <li><strong>Do not forget to initialise</strong> — <code>int i, s = 0;</code>. Leave off the <code>= 0</code> and <code>s</code> starts as whatever was left in that memory; the program then prints a different wrong answer on different runs. This bug does not crash and does not warn.</li>
 <li><strong>The complete program</strong> —
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int sumDivisors(int n);                 /* prototype */
 
@@ -703,7 +703,7 @@ int sumDivisors(int n)
 <li><strong>Thân hàm chính là vòng lặp Practice 1 đổi một chữ</strong> — chỗ <code>printDivisors</code> in <code>i</code> ra thì <code>sumDivisors</code> cộng nó vào biến tích luỹ. Cùng cách duyệt, khác hành động. Đó là quan hệ bình thường giữa hàm "in mọi X" và hàm "cộng tổng X".</li>
 <li><strong>Đừng quên khởi tạo</strong> — <code>int i, s = 0;</code>. Bỏ <code>= 0</code> đi thì <code>s</code> khởi đầu bằng bất cứ thứ gì còn sót trong ô nhớ đó; chương trình sẽ in ra đáp án sai KHÁC NHAU giữa các lần chạy. Con bug này không làm sập và không có cảnh báo.</li>
 <li><strong>Chương trình hoàn chỉnh</strong> —
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int sumDivisors(int n);                 /* nguyên mẫu */
 
@@ -736,7 +736,7 @@ int sumDivisors(int n)
 <li><strong>Reading doubles</strong> — <code>scanf</code> needs <code>%lf</code> for a <code>double</code> (<code>%f</code> is for <code>float</code>). <code>printf</code>, by contrast, uses <code>%f</code> for both because of default argument promotion. Mixing these up is the classic "my numbers are all zeros" bug.</li>
 <li><strong>Apply slide 35's recipe</strong> — verb = <em>compute</em> → returns a value · nouns = <em>three resistances</em> → three <code>double</code> parameters · result = <em>a real number</em> → return type <code>double</code>. Header: <code>double equivalent(double r1, double r2, double r3)</code>.</li>
 <li><strong>The complete program</strong> —
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 double equivalent(double r1, double r2, double r3);
 
@@ -763,7 +763,7 @@ double equivalent(double r1, double r2, double r3)
 <li><strong>Đọc số thực</strong> — <code>scanf</code> cần <code>%lf</code> cho <code>double</code> (<code>%f</code> là cho <code>float</code>). Ngược lại <code>printf</code> dùng <code>%f</code> cho cả hai, do luật nâng kiểu đối số mặc định. Lẫn hai cái này chính là con bug kinh điển "sao số của em toàn số 0".</li>
 <li><strong>Áp công thức slide 35</strong> — động từ = <em>tính</em> → trả về giá trị · danh từ = <em>ba điện trở</em> → ba tham số <code>double</code> · kết quả = <em>một số thực</em> → kiểu trả về <code>double</code>. Đầu hàm: <code>double equivalent(double r1, double r2, double r3)</code>.</li>
 <li><strong>Chương trình hoàn chỉnh</strong> —
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 double equivalent(double r1, double r2, double r3);
 
@@ -792,7 +792,7 @@ double equivalent(double r1, double r2, double r3)
 <li><strong>Why you need one: calling before defining</strong> — a C compiler reads the file top to bottom, once. If <code>main</code> comes first and calls <code>average</code>, then at that moment the compiler has never seen <code>average</code>. A prototype above <code>main</code> fixes it; so does putting the whole definition above <code>main</code>, but that forces you to write your program upside-down.</li>
 <li><strong>C89 vs C99, and why it matters today</strong> — under C89 an undeclared function was <em>implicitly</em> assumed to return <code>int</code>, so it often compiled and then misbehaved. C99 <strong>removed</strong> that rule: calling an undeclared function is an error. Modern compilers enforce this even in old modes.</li>
 <li><strong>Prototype has a semicolon, definition does not</strong> — the difference between the two forms is one character:
-<pre><code>int sumDivisors(int n);     /* PROTOTYPE   — semicolon, no body */
+<pre><code class="language-c">int sumDivisors(int n);     /* PROTOTYPE   — semicolon, no body */
 
 int sumDivisors(int n)      /* DEFINITION  — no semicolon, body */
 { … }</code></pre></li>
@@ -807,7 +807,7 @@ int sumDivisors(int n)      /* DEFINITION  — no semicolon, body */
 <li><strong>Vì sao bạn cần nó: gọi hàm trước khi định nghĩa</strong> — trình biên dịch C đọc file từ trên xuống, đúng một lượt. Nếu <code>main</code> đứng trước và gọi <code>average</code> thì ngay lúc đó trình biên dịch chưa từng thấy <code>average</code>. Một nguyên mẫu đặt trên <code>main</code> giải quyết xong; đặt cả định nghĩa lên trên <code>main</code> cũng được, nhưng như thế bạn buộc phải viết chương trình ngược đầu.</li>
 <li><strong>C89 so với C99, và vì sao chuyện đó còn quan trọng hôm nay</strong> — theo C89, hàm chưa khai báo được <em>ngầm định</em> coi là trả về <code>int</code>, nên nó thường vẫn dịch được rồi chạy sai. C99 đã <strong>BỎ</strong> luật đó: gọi hàm chưa khai báo là LỖI. Trình biên dịch hiện đại áp dụng điều này kể cả ở chế độ cũ.</li>
 <li><strong>Nguyên mẫu có dấu chấm phẩy, định nghĩa thì không</strong> — khác biệt giữa hai dạng đúng một ký tự:
-<pre><code>int sumDivisors(int n);     /* NGUYÊN MẪU — chấm phẩy, không thân */
+<pre><code class="language-c">int sumDivisors(int n);     /* NGUYÊN MẪU — chấm phẩy, không thân */
 
 int sumDivisors(int n)      /* ĐỊNH NGHĨA  — không chấm phẩy, có thân */
 { … }</code></pre></li>
@@ -820,7 +820,7 @@ int sumDivisors(int n)      /* ĐỊNH NGHĨA  — không chấm phẩy, có th�
         `<p class="y-chinh">🎯 The prototype pattern shown in a real file: prototypes at the top, <code>main</code> in the middle, definitions at the bottom — so the program reads top-down like an outline.</p>
 <ul>
 <li><strong>The canonical layout</strong> —
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 void printDivisors(int n);        /* what the program can do  */
 int  sumDivisors(int n);
@@ -848,7 +848,7 @@ int sumDivisors(int n)
         `<p class="y-chinh">🎯 Mẫu dùng nguyên mẫu trên một file thật: nguyên mẫu ở trên đầu, <code>main</code> ở giữa, định nghĩa ở dưới — để chương trình đọc từ trên xuống như một bản dàn ý.</p>
 <ul>
 <li><strong>Bố cục chuẩn</strong> —
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 void printDivisors(int n);        /* chương trình LÀM ĐƯỢC gì */
 int  sumDivisors(int n);
@@ -883,7 +883,7 @@ int sumDivisors(int n)
 <li><strong>No semicolon</strong> — <code>#include &lt;stdio.h&gt;</code> ends with no <code>;</code>, because it is a <em>preprocessor directive</em>, not a C statement. Same for <code>#define</code>. Adding a semicolon pastes a stray one into your code.</li>
 <li><strong>It must be the real filename</strong> — <code>#include &lt;stdio.h&gt;</code> not <code>&lt;stdio&gt;</code>, and the <code>.h</code> is part of the name. (<code>&lt;stdio&gt;</code> with no extension is C++, a different language.)</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;      /* system directory: printf, scanf  */
+<pre><code class="language-c">#include &lt;stdio.h&gt;      /* system directory: printf, scanf  */
 #include &lt;stdlib.h&gt;     /* system directory: system, malloc */
 #include &lt;math.h&gt;       /* system directory: sqrt, pow      */
 #include "divisors.h"   /* your directory:   your prototypes */</code></pre>
@@ -897,7 +897,7 @@ int sumDivisors(int n)
 <li><strong>Không có dấu chấm phẩy</strong> — <code>#include &lt;stdio.h&gt;</code> kết thúc mà không có <code>;</code>, vì nó là một <em>chỉ thị tiền xử lý</em>, không phải câu lệnh C. <code>#define</code> cũng vậy. Thêm dấu chấm phẩy là bạn dán một dấu lạc lõng vào code của mình.</li>
 <li><strong>Phải đúng tên file</strong> — <code>#include &lt;stdio.h&gt;</code> chứ không phải <code>&lt;stdio&gt;</code>, và phần <code>.h</code> là một phần của cái tên. (<code>&lt;stdio&gt;</code> không có đuôi là C++, một ngôn ngữ khác.)</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;      /* thư mục hệ thống: printf, scanf  */
+<pre><code class="language-c">#include &lt;stdio.h&gt;      /* thư mục hệ thống: printf, scanf  */
 #include &lt;stdlib.h&gt;     /* thư mục hệ thống: system, malloc */
 #include &lt;math.h&gt;       /* thư mục hệ thống: sqrt, pow      */
 #include "divisors.h"   /* thư mục của bạn:  nguyên mẫu của bạn */</code></pre>

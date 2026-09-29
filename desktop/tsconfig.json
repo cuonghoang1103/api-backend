@@ -48,6 +48,9 @@
       ],
       "@/lib/queryClient": [
         "../frontend/src/lib/queryClient.ts"
+      ],
+      "@/lib/toMauCode": [
+        "../frontend/src/lib/toMauCode.ts"
       ]
     }
   },

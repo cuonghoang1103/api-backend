@@ -2027,7 +2027,7 @@ ${JV(67)}
     ]),
     bi(`<h3>Ví dụ có lời giải · Worked example — the guide's matrix, run for real</h3>
 <p>The five columns of slide 39 describe a function that returns b ÷ a and requires a &gt; 0 and b ≥ 0. Written in Java with the flowchart's statement blocks marked:</p>
-<pre><code>public static int divide(int a, int b) {
+<pre><code class="language-java">public static int divide(int a, int b) {
     int result;
     if (a &gt; 0) {                       // Condition 1
         result = 0;                    // statements A
@@ -2042,7 +2042,7 @@ ${JV(67)}
     return result;
 }</code></pre>
 <p>Two JUnit 5 suites were run under JaCoCo 0.8.13 (JDK 21). <strong>Proper suite</strong> = the five columns of slide 39 (basic case + one condition changed at a time). <strong>Improper suite</strong> = the three columns of slide 49 (two conditions changed at once). Real output:</p>
-<pre><code>##### proper suite (slide 39)
+<pre><code class="language-java">##### proper suite (slide 39)
 PASSED 0001-01-0010 N  a=5 b=10 -&gt; 2
 PASSED 0001-01-0020 NL a=1 b=10 -&gt; 10
 PASSED 0001-01-0030 EL a=0 b=10 -&gt; IllegalArgumentException
@@ -2076,7 +2076,7 @@ Method divide: lines 6/7, branches 3/4
 <p class="ghi-chu">Outside the syllabus because CTFL 2018 stops at decision coverage (condition-based techniques are in the Advanced Technical Test Analyst syllabus).</p></div>`,
     `<h3>Ví dụ có lời giải · Ma trận của bộ hướng dẫn, chạy thật</h3>
 <p>Năm cột ở slide 39 mô tả một hàm trả về b ÷ a, yêu cầu a &gt; 0 và b ≥ 0. Viết bằng Java, đánh dấu các khối xử lý của lưu đồ:</p>
-<pre><code>public static int divide(int a, int b) {
+<pre><code class="language-java">public static int divide(int a, int b) {
     int result;
     if (a &gt; 0) {                       // Condition 1
         result = 0;                    // statements A
@@ -2091,7 +2091,7 @@ Method divide: lines 6/7, branches 3/4
     return result;
 }</code></pre>
 <p>Hai bộ JUnit 5 được chạy dưới JaCoCo 0.8.13 (JDK 21). <strong>Bộ đúng</strong> = năm cột của slide 39 (ca cơ sở + mỗi lần đổi một điều kiện). <strong>Bộ sai</strong> = ba cột của slide 49 (đổi hai điều kiện một lúc). Kết quả thật:</p>
-<pre><code>##### proper suite (slide 39)
+<pre><code class="language-java">##### proper suite (slide 39)
 PASSED 0001-01-0010 N  a=5 b=10 -&gt; 2
 PASSED 0001-01-0020 NL a=1 b=10 -&gt; 10
 PASSED 0001-01-0030 EL a=0 b=10 -&gt; IllegalArgumentException
@@ -3719,7 +3719,7 @@ const L26 = {
 <li><strong>Giá trị giới hạn (limit)</strong> = giới hạn của miền dữ liệu do ngôn ngữ hay nền tảng đặt ra (ví dụ <code>Integer.MAX_VALUE</code>); test theo cùng cách, trừ những giá trị vượt giới hạn không thể tạo ra.</li>
 </ul>`),
     bi(`<h3>Ví dụ có lời giải · Worked example — a SWP391-style method to C0 = C1 = 100 % with JUnit + JaCoCo</h3>
-<pre><code>public static String classify(double weightKg, double heightM) {
+<pre><code class="language-java">public static String classify(double weightKg, double heightM) {
     if (weightKg &lt;= 0 || heightM &lt;= 0) {
         throw new IllegalArgumentException("weight and height must be positive");
     }
@@ -3757,7 +3757,7 @@ Method classify: lines 10/10, branches 10/10</code></pre>
 <p>It keeps the script aligned with the PCL (checklist item 19) and makes adding a boundary case a one-line change.</p>
 <p class="ghi-chu">Outside the syllabus because CTFL does not cover specific frameworks.</p></div>`,
     `<h3>Ví dụ có lời giải · Một method kiểu SWP391 tới C0 = C1 = 100 % với JUnit + JaCoCo</h3>
-<pre><code>public static String classify(double weightKg, double heightM) {
+<pre><code class="language-java">public static String classify(double weightKg, double heightM) {
     if (weightKg &lt;= 0 || heightM &lt;= 0) {
         throw new IllegalArgumentException("weight and height must be positive");
     }
@@ -4441,7 +4441,7 @@ Method execute: lines 16/16, branches 10/10</code></pre>
 <p>Vậy năm cột black-box rút từ DD cũng cho C0/C1 100 % trên một bản cài đặt trung thành — dấu hiệu tốt rằng các bước của DD đã được phủ hết. (UTCID09, SQL lỗi với cờ “0”, là tổ hợp bất thường thêm, không cần cho coverage.)</p>`),
     bi(`<h3>Ví dụ có lời giải 2 · Worked sheet — FA23 PE Question 2: <code>countCharacters(String)</code></h3>
 <p>The exam asks: “design and create the <strong>minimum</strong> component test cases needed to achieve <strong>100 % statement coverage and 100 % decision coverage</strong>” for:</p>
-<pre><code>public static HashMap&lt;String, Integer&gt; countCharacters(String input) {
+<pre><code class="language-java">public static HashMap&lt;String, Integer&gt; countCharacters(String input) {
     int upperCaseCount = 0;
     int lowerCaseCount = 0;
     int numericCount = 0;
@@ -4469,13 +4469,13 @@ Method execute: lines 16/16, branches 10/10</code></pre>
 ${matrix(C_IDS, C_ROWS, false)}
 <p>UTCID01 alone is the answer to the question. UTCID02 (empty string — the loop body never runs) and UTCID03 (null — the method has no null check and throws) are good practice for the lab's N/A/B mix but are not needed for coverage. In the exam template the “Lines of code” cell is blank, so “Lack of test cases” shows −(number of cases).</p>
 <p><strong>JUnit script</strong> (minimal):</p>
-<pre><code>@Test // UTCID01 (N): one character of each class
+<pre><code class="language-java">@Test // UTCID01 (N): one character of each class
 void utcid01_oneOfEachKind() {
     Map&lt;String, Integer&gt; r = CharacterCounter.countCharacters("Aa1@");
     assertEquals(Map.of("UpperCase", 1, "LowerCase", 1, "Numeric", 1, "SpecialCharacter", 1), r);
 }</code></pre>
 <p><strong>Real output</strong> (JDK 21, JUnit 5.12.2, JaCoCo 0.8.13; line numbers L9–L17 are those of the exam listing, where line 1 is the import; per-line lists shortened to the decision lines) — run 1 with UTCID01 only, run 2 with the popular but <em>wrong</em> answer “A”, “a”, “1” (three tests, no special character), run 3 with UTCID01–03:</p>
-<pre><code>### Run 1: minimal suite (UTCID01 only)
+<pre><code class="language-java">### Run 1: minimal suite (UTCID01 only)
 PASSED utcid01_oneOfEachKind()
 Tests run: 1, passed: 1, failed: 0
 Method countCharacters: lines 18/18, branches 8/8
@@ -4505,7 +4505,7 @@ Method countCharacters: lines 18/18, branches 8/8</code></pre>
 <p>If you do write several cases, make sure each column has at least one “O” in every block and that no two columns are identical.</p></div>`,
     `<h3>Ví dụ có lời giải 2 · Sheet mẫu — Câu 2 đề PE FA23: <code>countCharacters(String)</code></h3>
 <p>Đề hỏi: “thiết kế và tạo <strong>số component test case tối thiểu</strong> cần để đạt <strong>100 % statement coverage và 100 % decision coverage</strong>” cho:</p>
-<pre><code>public static HashMap&lt;String, Integer&gt; countCharacters(String input) {
+<pre><code class="language-java">public static HashMap&lt;String, Integer&gt; countCharacters(String input) {
     int upperCaseCount = 0;
     int lowerCaseCount = 0;
     int numericCount = 0;
@@ -4533,13 +4533,13 @@ Method countCharacters: lines 18/18, branches 8/8</code></pre>
 ${matrix(C_IDS, C_ROWS, true)}
 <p>Chỉ UTCID01 là đáp án của câu hỏi. UTCID02 (chuỗi rỗng — thân vòng lặp không chạy) và UTCID03 (null — method không kiểm null nên ném exception) là thói quen tốt cho tỉ lệ N/A/B của lab nhưng không cần cho coverage. Trong template đề thi, ô “Lines of code” để trống nên “Lack of test cases” hiện −(số ca).</p>
 <p><strong>JUnit script</strong> (tối thiểu):</p>
-<pre><code>@Test // UTCID01 (N): one character of each class
+<pre><code class="language-java">@Test // UTCID01 (N): one character of each class
 void utcid01_oneOfEachKind() {
     Map&lt;String, Integer&gt; r = CharacterCounter.countCharacters("Aa1@");
     assertEquals(Map.of("UpperCase", 1, "LowerCase", 1, "Numeric", 1, "SpecialCharacter", 1), r);
 }</code></pre>
 <p><strong>Kết quả thật</strong> (JDK 21, JUnit 5.12.2, JaCoCo 0.8.13; số dòng L9–L17 theo đúng đoạn code trong đề, dòng 1 là import; danh sách từng dòng được rút gọn còn các dòng quyết định) — lần 1 chỉ UTCID01, lần 2 với đáp án phổ biến nhưng <em>sai</em> “A”, “a”, “1” (ba test, không có ký tự đặc biệt), lần 3 với UTCID01–03:</p>
-<pre><code>### Run 1: minimal suite (UTCID01 only)
+<pre><code class="language-java">### Run 1: minimal suite (UTCID01 only)
 PASSED utcid01_oneOfEachKind()
 Tests run: 1, passed: 1, failed: 0
 Method countCharacters: lines 18/18, branches 8/8
@@ -4848,7 +4848,7 @@ const L29 = {
 </ol>`),
     bi(`<h3>Ví dụ có lời giải · Worked example — the sheet's own <code>mySum</code>, run and corrected</h3>
 <p>3.WB_Other gives this example (as printed, the <code>if</code>/<code>else if</code> blocks lack their closing braces and would not compile):</p>
-<pre><code>public int mySum(int a, int b) {
+<pre><code class="language-java">public int mySum(int a, int b) {
     if (a &lt; 0) {
         return -1;
     } else if (b &lt; 0) {
@@ -4876,7 +4876,7 @@ Method mySum: lines 5/5, branches 4/4</code></pre>
 <p class="ghi-chu">Outside the syllabus because CTFL's techniques select test cases by hand.</p></div>`,
     `<h3>Ví dụ có lời giải · Chính ví dụ <code>mySum</code> của file, chạy thật và sửa lỗi</h3>
 <p>Sheet 3.WB_Other đưa ví dụ này (bản in trong file thiếu dấu đóng ngoặc của khối <code>if</code>/<code>else if</code> nên không biên dịch được):</p>
-<pre><code>public int mySum(int a, int b) {
+<pre><code class="language-java">public int mySum(int a, int b) {
     if (a &lt; 0) {
         return -1;
     } else if (b &lt; 0) {

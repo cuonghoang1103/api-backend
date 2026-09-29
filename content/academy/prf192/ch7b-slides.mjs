@@ -109,7 +109,7 @@ export default {
 <li><strong>Two functions, two granularities</strong> — <code>getchar()</code> takes exactly one character and does no conversion at all; <code>scanf(…)</code> takes as many items as the format string asks for and converts text into <code>int</code>, <code>double</code>, and so on. Same stream, two different windows onto it.</li>
 <li><strong>They share the stream</strong> — mixing them is legal and common (slide 47's last example does exactly that), but whatever one leaves behind, the other will find. The two functions are not independent; there is only one queue.</li>
 </ul>
-<pre><code>/* Ba lần đọc, MỘT dòng người dùng gõ: "AB\\n" */
+<pre><code class="language-c">/* Ba lần đọc, MỘT dòng người dùng gõ: "AB\\n" */
 char a = getchar();   /* 'A'  — lấy khỏi hàng đợi */
 char b = getchar();   /* 'B'  — lấy tiếp          */
 char c = getchar();   /* '\\n' — CÒN LẠI là nó     */</code></pre>
@@ -122,7 +122,7 @@ char c = getchar();   /* '\\n' — CÒN LẠI là nó     */</code></pre>
 <li><strong>Hai hàm, hai cỡ hạt</strong> — <code>getchar()</code> lấy đúng một ký tự và không chuyển đổi gì cả; <code>scanf(…)</code> lấy bao nhiêu mục là do chuỗi định dạng đòi, và biến chữ thành <code>int</code>, <code>double</code>… Cùng một dòng, hai khung cửa khác nhau nhìn vào.</li>
 <li><strong>Chúng dùng CHUNG một dòng</strong> — trộn hai hàm là hợp lệ và rất hay gặp (ví dụ cuối của slide 47 làm đúng thế), nhưng thứ hàm này bỏ lại thì hàm kia sẽ nhặt được. Hai hàm không độc lập; chỉ có MỘT hàng đợi.</li>
 </ul>
-<pre><code>/* Ba lần đọc, MỘT dòng người dùng gõ: "AB\\n" */
+<pre><code class="language-c">/* Ba lần đọc, MỘT dòng người dùng gõ: "AB\\n" */
 char a = getchar();   /* 'A'  — lấy khỏi hàng đợi */
 char b = getchar();   /* 'B'  — lấy tiếp          */
 char c = getchar();   /* '\\n' — CÒN LẠI là nó     */</code></pre>
@@ -137,7 +137,7 @@ char c = getchar();   /* '\\n' — CÒN LẠI là nó     */</code></pre>
 <li><strong>The slide's program, and its instruction</strong> — "Copy, paste, compile and run the program with input: Ctrl + Z". The screenshot shows <code>Code inputted:-1</code>. That <code>-1</code> is the whole point of the exercise: it proves <code>getchar</code> has a second kind of answer.</li>
 <li><strong>Getting one character is rarely the goal</strong> — you use <code>getchar()</code> in loops (count characters, as in Exercise 2) or as a broom (clear the buffer, slide 36). Both uses show up again before this block ends.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 int main()
 {
     char c;
@@ -156,7 +156,7 @@ int main()
 <li><strong>Chương trình trên slide và lời dặn kèm theo</strong> — "chép, dán, biên dịch và chạy chương trình với dữ liệu vào: Ctrl + Z". Ảnh chụp cho thấy <code>Code inputted:-1</code>. Con <code>-1</code> đó chính là toàn bộ mục đích của bài tập: nó chứng minh <code>getchar</code> có một loại câu trả lời thứ hai.</li>
 <li><strong>Lấy một ký tự hiếm khi là mục tiêu</strong> — bạn dùng <code>getchar()</code> trong vòng lặp (đếm ký tự, như Exercise 2) hoặc như một cái chổi (quét sạch bộ đệm, slide 36). Cả hai cách dùng đều trở lại trước khi khối này kết thúc.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 int main()
 {
     char c;
@@ -177,7 +177,7 @@ int main()
 <li><strong>The non-standard answer, and the warning that follows it</strong> — "In some tools, the function <code>fflush(stdin)</code> is implemented for this purpose (in stdio.h)". Note "in some tools": slide 38 will put a yellow warning under it, and the measurement below shows it flatly does not work here.</li>
 <li><strong>The rule of thumb from the last bullet</strong> — "make clear the keyboard buffer <em>before</em> the operation of accepting a character (or a string)". Clear before a <code>%c</code> read or a string read, not before a <code>%d</code> read — <code>%d</code> skips whitespace on its own (slide 45).</li>
 </ul>
-<pre><code>/* clear empties input buffer */
+<pre><code class="language-java">/* clear empties input buffer */
 void clear (void) {
     while ( getchar() != '\\n' );
 }</code></pre>
@@ -191,7 +191,7 @@ void clear (void) {
 <li><strong>Câu trả lời ngoài chuẩn, và lời cảnh báo đi kèm</strong> — "ở một số công cụ, hàm <code>fflush(stdin)</code> được cài đặt cho mục đích này (trong stdio.h)". Để ý chữ "một số công cụ": slide 38 sẽ dán một dòng cảnh báo nền vàng dưới nó, còn phép đo bên dưới cho thấy ở đây nó thẳng thừng không chạy.</li>
 <li><strong>Quy tắc bỏ túi ở gạch đầu dòng cuối</strong> — "hãy dọn bộ đệm bàn phím <em>trước</em> thao tác nhận một ký tự (hoặc một chuỗi)". Dọn trước lần đọc <code>%c</code> hay đọc chuỗi, chứ đừng dọn trước lần đọc <code>%d</code> — <code>%d</code> tự bỏ qua khoảng trắng (slide 45).</li>
 </ul>
-<pre><code>/* clear empties input buffer */
+<pre><code class="language-java">/* clear empties input buffer */
 void clear (void) {
     while ( getchar() != '\\n' );
 }</code></pre>
@@ -207,7 +207,7 @@ void clear (void) {
 <li><strong>Why <code>%c</code> is the guilty specifier</strong> — unlike <code>%d</code>, <code>%c</code> does <strong>not</strong> skip leading whitespace. It takes the very next byte, whatever it is. Newline is whitespace, and whitespace is exactly what <code>%c</code> refuses to skip.</li>
 <li><strong>Read the screenshot carefully</strong> — the output line reads <code>c2 = </code> then a line break, then <code>, ASCII code c2 = 10</code>. The program is not broken in some mysterious way; it faithfully printed character 10, which <em>is</em> a line break.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 int main()
 {
     char c1, c2;
@@ -235,7 +235,7 @@ int main()
 <li><strong>Vì sao <code>%c</code> là thủ phạm</strong> — khác <code>%d</code>, <code>%c</code> <strong>không</strong> bỏ qua khoảng trắng đứng đầu. Nó lấy đúng byte kế tiếp, bất kể byte đó là gì. Dấu xuống dòng là khoảng trắng, mà khoảng trắng chính là thứ <code>%c</code> từ chối bỏ qua.</li>
 <li><strong>Nhìn kỹ ảnh chụp màn hình</strong> — dòng kết quả ghi <code>c2 = </code> rồi xuống hàng, rồi <code>, ASCII code c2 = 10</code>. Chương trình không hỏng theo cách bí ẩn nào cả; nó in ra trung thực ký tự mã 10, mà ký tự đó <em>chính là</em> một lần xuống dòng.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 int main()
 {
     char c1, c2;
@@ -265,7 +265,7 @@ int main()
 <li><strong>"Undefined behaviour" is not "usually works"</strong> — Microsoft's runtime chose to make it clear the input buffer, so it works in Dev-C++ and Visual Studio on Windows. glibc and Apple's libc chose not to. Same source file, same compiler flags, two different programs.</li>
 <li><strong>What to write in an exam</strong> — if the question asks how to clear the buffer, answer with the <code>clear()</code> loop of slide 39 and mention <code>fflush(stdin)</code> only as "non-standard, Windows-specific". Writing <code>fflush(stdin)</code> as <em>the</em> answer is how you lose a mark you did not need to lose.</li>
 </ul>
-<pre><code>printf("Input c1: ");
+<pre><code class="language-c">printf("Input c1: ");
 fflush(stdin);          /* NON-STANDARD — undefined behaviour on input streams */
 scanf("%c", &amp;c1);
 printf("Input c2: ");
@@ -287,7 +287,7 @@ c2 = getchar();</code></pre>
 <li><strong>"Không xác định" KHÔNG đồng nghĩa "thường thì chạy"</strong> — thư viện của Microsoft chọn cách dọn bộ đệm nhập, nên nó chạy trong Dev-C++ và Visual Studio trên Windows. glibc và libc của Apple chọn không làm gì. Cùng một file mã nguồn, cùng cờ biên dịch, ra hai chương trình khác nhau.</li>
 <li><strong>Viết gì trong bài thi</strong> — nếu đề hỏi cách dọn bộ đệm, hãy trả lời bằng vòng lặp <code>clear()</code> ở slide 39, và chỉ nhắc <code>fflush(stdin)</code> kèm chú "ngoài chuẩn, riêng Windows". Viết <code>fflush(stdin)</code> như là <em>câu trả lời chính</em> là cách mất điểm không đáng mất.</li>
 </ul>
-<pre><code>printf("Input c1: ");
+<pre><code class="language-c">printf("Input c1: ");
 fflush(stdin);          /* NGOÀI CHUẨN — hành vi không xác định với dòng nhập */
 scanf("%c", &amp;c1);
 printf("Input c2: ");
@@ -311,7 +311,7 @@ c2 = getchar();</code></pre>
 <li><strong>Placement matters more than the code</strong> — <code>clear()</code> goes <em>after</em> the read that left junk, not before the read that will suffer. The effect is the same here, but "clean up after yourself" scales to loops, where "clean up before" leaves the very first iteration unprotected.</li>
 <li><strong>A second standard fix, worth knowing</strong> — for <code>%c</code> specifically, you can put a space in the format string: <code>scanf(" %c", &amp;c2)</code>. A blank in a <code>scanf</code> format means "skip any amount of whitespace, including none". It is shorter, but it only helps <code>%c</code>; <code>clear()</code> also handles typed-in rubbish like <code>Abcd</code>.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 void clear(){
     while(getchar()!='\\n');
@@ -344,7 +344,7 @@ int main()
 <li><strong>Đặt ở ĐÂU quan trọng hơn cả code</strong> — <code>clear()</code> đặt <em>sau</em> lần đọc để lại rác, chứ không phải trước lần đọc sắp lãnh đủ. Ở đây hiệu quả như nhau, nhưng thói quen "dọn sau khi mình bày" mới đúng trong vòng lặp, còn "dọn trước" thì vòng đầu tiên vẫn hở.</li>
 <li><strong>Một cách chuẩn thứ hai, nên biết</strong> — riêng với <code>%c</code>, bạn có thể đặt một dấu cách trong chuỗi định dạng: <code>scanf(" %c", &amp;c2)</code>. Một dấu trắng trong chuỗi định dạng của <code>scanf</code> nghĩa là "bỏ qua bao nhiêu khoảng trắng cũng được, kể cả không có". Ngắn hơn, nhưng chỉ cứu được <code>%c</code>; còn <code>clear()</code> xử lý được cả rác người dùng gõ nhầm kiểu <code>Abcd</code>.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 void clear(){
     while(getchar()!='\\n');
@@ -379,7 +379,7 @@ int main()
 <li><strong>Why <code>ctype.h</code> and not <code>c &gt;= '0' &amp;&amp; c &lt;= '9'</code></strong> — <code>isdigit(c)</code> and <code>isalpha(c)</code> (slides 19–28) say what you mean, cover both letter cases in one call, and do not assume the alphabet is contiguous in the character set. The exercise is deliberately placed <em>after</em> the ctype half of the deck.</li>
 <li><strong>The order of the tests is not free</strong> — <code>else</code> chains are exclusive, so each character is counted exactly once and the three counts always add up to the number of characters typed. Turning the <code>else if</code> into a second plain <code>if</code> would double-count nothing here, but it would stop the totals from being a useful self-check.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;ctype.h&gt;
 
 int main(void)
@@ -414,7 +414,7 @@ int main(void)
 <li><strong>Vì sao dùng <code>ctype.h</code> chứ không <code>c &gt;= '0' &amp;&amp; c &lt;= '9'</code></strong> — <code>isdigit(c)</code> và <code>isalpha(c)</code> (slide 19–28) nói đúng ý bạn định nói, gộp cả chữ hoa lẫn chữ thường trong một lời gọi, và không giả định bảng chữ cái nằm liền nhau trong bảng mã. Bài tập được đặt <em>sau</em> phần ctype là có chủ ý.</li>
 <li><strong>Thứ tự các phép kiểm không phải tuỳ tiện</strong> — chuỗi <code>else</code> loại trừ nhau nên mỗi ký tự được đếm đúng một lần, và ba con số cộng lại luôn bằng số ký tự đã gõ. Đổi <code>else if</code> thành một <code>if</code> rời thì ở đây chưa đếm trùng, nhưng tổng ba số mất luôn tác dụng tự kiểm.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;ctype.h&gt;
 
 int main(void)
@@ -451,7 +451,7 @@ int main(void)
 <li><strong>Stop condition 3 — the buffer ran out</strong> — "or emptied the buffer, in which case scanf <strong>waits</strong> until the user adds more data values". That is why <code>scanf("%d%d")</code> happily accepts your two numbers on two separate lines.</li>
 <li><strong>Why <code>&amp;</code> is not optional</strong> — <code>scanf</code> must <em>write into</em> your variables, so it needs their addresses (Slot 10). Passing the value instead of the address compiles with a warning under <code>-Wall</code> and typically crashes at run time. The only common exception is a string name, which is already an address.</li>
 </ul>
-<pre><code>int   n;   scanf("%d",  &amp;n);     /* đọc một số nguyên            */
+<pre><code class="language-c">int   n;   scanf("%d",  &amp;n);     /* đọc một số nguyên            */
 char  c;   scanf("%c",  &amp;c);     /* đọc đúng MỘT ký tự, kể cả '\\n' */
 double x;  scanf("%lf", &amp;x);     /* đọc một số thực double        */
 int a, b;  scanf("%d%d", &amp;a, &amp;b);/* đọc hai số, cách nhau bởi khoảng trắng */</code></pre>
@@ -472,7 +472,7 @@ int a, b;  scanf("%d%d", &amp;a, &amp;b);/* đọc hai số, cách nhau bởi kh
 <li><strong>Điều kiện dừng 3 — bộ đệm cạn</strong> — "hoặc đã vét sạch bộ đệm, khi đó scanf <strong>chờ</strong> tới lúc người dùng thêm dữ liệu". Đó là lý do <code>scanf("%d%d")</code> vui vẻ nhận hai số bạn gõ trên hai dòng khác nhau.</li>
 <li><strong>Vì sao <code>&amp;</code> không được thiếu</strong> — <code>scanf</code> phải <em>ghi vào</em> biến của bạn, nên nó cần địa chỉ của biến (Slot 10). Truyền giá trị thay vì địa chỉ thì dịch được kèm cảnh báo với <code>-Wall</code> và thường sập lúc chạy. Ngoại lệ thường gặp duy nhất là tên một chuỗi, vốn đã là địa chỉ.</li>
 </ul>
-<pre><code>int   n;   scanf("%d",  &amp;n);     /* đọc một số nguyên            */
+<pre><code class="language-c">int   n;   scanf("%d",  &amp;n);     /* đọc một số nguyên            */
 char  c;   scanf("%c",  &amp;c);     /* đọc đúng MỘT ký tự, kể cả '\\n' */
 double x;  scanf("%lf", &amp;x);     /* đọc một số thực double        */
 int a, b;  scanf("%d%d", &amp;a, &amp;b);/* đọc hai số, cách nhau bởi khoảng trắng */</code></pre>
@@ -605,7 +605,7 @@ int a, b;  scanf("%d%d", &amp;a, &amp;b);/* đọc hai số, cách nhau bởi kh
 <li><strong>Whitespace in the <em>format string</em> is a separate rule</strong> — a blank inside the quotes does not mean "expect exactly one space", it means "skip any run of whitespace here, including none". That is why <code>scanf(" %c")</code> works as a fix on slide 39, and why <code>scanf("%d %d")</code> behaves identically to <code>scanf("%d%d")</code>.</li>
 <li><strong>Consequence you can rely on</strong> — the user may spread the values over lines, pad them with tabs, or bunch them up; a numeric <code>scanf</code> does not care. What it <em>does</em> care about is the trailing newline, which stays in the buffer for the next read to trip over.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 int main(){
     int x, y;
     printf("Input x and y: ");
@@ -630,7 +630,7 @@ int main(){
 <li><strong>Khoảng trắng trong <em>chuỗi định dạng</em> lại là luật riêng</strong> — một dấu trắng trong ngoặc kép KHÔNG có nghĩa "chờ đúng một dấu cách", mà là "bỏ qua bao nhiêu khoảng trắng liền nhau ở đây cũng được, kể cả không có". Vì thế <code>scanf(" %c")</code> mới chữa được lỗi ở slide 39, và <code>scanf("%d %d")</code> hành xử hệt như <code>scanf("%d%d")</code>.</li>
 <li><strong>Hệ quả bạn có thể tin cậy</strong> — người dùng gõ mỗi số một dòng, chèn tab, hay dồn sát nhau: <code>scanf</code> số học không quan tâm. Cái nó <em>có</em> để lại là dấu xuống dòng cuối cùng, nằm im trong bộ đệm chờ lần đọc sau vấp phải.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 int main(){
     int x, y;
     printf("Input x and y: ");
@@ -657,7 +657,7 @@ int main(){
 <li><strong>The half-fix if you want tolerance</strong> — write the format as <code>"%d , %d &amp; %d"</code>. The blanks you add are whitespace instructions, so spaces around the separators become optional again while the comma and ampersand stay compulsory. The slide does not mention this, but it is exactly the rule of slide 45 applied deliberately.</li>
 <li><strong>Where you meet this for real</strong> — reading a date as <code>dd/mm/yyyy</code> with <code>scanf("%d/%d/%d", &amp;d, &amp;m, &amp;y)</code>, or a CSV-ish line. Handy, and fragile: any user who types the separator differently gets a partially-filled set of variables and no error message unless you check the return value.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 int n;
 int main()
 {   int m, k;
@@ -682,7 +682,7 @@ int main()
 <li><strong>Cách chữa nửa vời nếu bạn muốn dễ tính hơn</strong> — viết định dạng thành <code>"%d , %d &amp; %d"</code>. Mấy dấu trắng bạn thêm vào là chỉ thị khoảng trắng, nên dấu cách quanh dấu tách trở lại thành tuỳ chọn, còn dấu phẩy và dấu <code>&amp;</code> vẫn bắt buộc. Slide không nói điều này, nhưng đó đúng là luật của slide 45 được dùng có chủ đích.</li>
 <li><strong>Bạn gặp nó thật ở đâu</strong> — đọc một ngày dạng <code>dd/mm/yyyy</code> bằng <code>scanf("%d/%d/%d", &amp;d, &amp;m, &amp;y)</code>, hay một dòng kiểu CSV. Tiện, và mong manh: người dùng nào gõ dấu tách khác đi là nhận về một bộ biến điền dở dang mà không một lời báo lỗi, trừ khi bạn kiểm giá trị trả về.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 int n;
 int main()
 {   int m, k;
@@ -709,7 +709,7 @@ int main()
 <li><strong>Top-right and the bottom row, the fix</strong> — <code>scanf("%d%*c%c", &amp;n, &amp;c)</code>. Whatever single character sits between the number and the one you want — a space, a newline, even a stray <code>P</code> — is eaten by <code>%*c</code> and <code>c</code> receives <code>D</code> in all three cases.</li>
 <li><strong>Bottom-right, mixing the two functions</strong> — <code>scanf("%d%*c", &amp;n); c = getchar();</code>. Same result, and it is the cleanest reading of the intent: "read the number, drop the separator, now fetch a character". It also shows <code>scanf</code> and <code>getchar()</code> sharing one buffer, as slide 34 said.</li>
 </ul>
-<pre><code>int n; char c;
+<pre><code class="language-c">int n; char c;
 
 scanf("%d%c",   &amp;n, &amp;c);   /* c nhận NGAY ký tự kế tiếp — kể cả '\\n' */
 scanf("%d%*c%c", &amp;n, &amp;c);  /* bỏ MỘT ký tự rồi mới lấy c            */
@@ -734,7 +734,7 @@ scanf("%d%*c",  &amp;n); c = getchar();  /* cùng ý, viết tách ra         */
 <li><strong>Trên-phải và cả hàng dưới, cách chữa</strong> — <code>scanf("%d%*c%c", &amp;n, &amp;c)</code>. Bất kể ký tự đơn nào chen giữa con số và ký tự bạn cần — dấu cách, dấu xuống dòng, thậm chí một chữ <code>P</code> lạc — đều bị <code>%*c</code> ăn mất, và <code>c</code> nhận <code>D</code> ở cả ba trường hợp.</li>
 <li><strong>Dưới-phải, trộn hai hàm</strong> — <code>scanf("%d%*c", &amp;n); c = getchar();</code>. Cùng kết quả, và đọc ra ý định sạch nhất: "đọc con số, bỏ dấu tách, giờ lấy một ký tự". Nó cũng cho thấy <code>scanf</code> và <code>getchar()</code> dùng chung MỘT bộ đệm, đúng như slide 34 đã nói.</li>
 </ul>
-<pre><code>int n; char c;
+<pre><code class="language-c">int n; char c;
 
 scanf("%d%c",   &amp;n, &amp;c);   /* c nhận NGAY ký tự kế tiếp — kể cả '\\n' */
 scanf("%d%*c%c", &amp;n, &amp;c);  /* bỏ MỘT ký tự rồi mới lấy c            */
@@ -761,7 +761,7 @@ scanf("%d%*c",  &amp;n); c = getchar();  /* cùng ý, viết tách ra         */
 <li><strong>Why "number of fields" and not "was it OK"</strong> — the count tells you <em>where</em> the input went wrong, not just <em>that</em> it did. With <code>scanf("%d%d%d", …)</code> returning 2 you know the third value is missing and the first two are good, which is enough to write a precise error message.</li>
 <li><strong>The rule to apply for the rest of your life</strong> — compare the return value against the number of specifiers you expected to fill: <code>if (scanf("%d", &amp;n) != 1) { /* handle it */ }</code>. Ignoring the return value is the root cause of most of the weird behaviour in slides 44, 46 and 49.</li>
 </ul>
-<pre><code>int n;
+<pre><code class="language-c">int n;
 if (scanf("%d", &amp;n) != 1) {          /* 0 = rác, -1 = hết dữ liệu vào */
     printf("Khong doc duoc so nguyen!\\n");
     /* ...và PHẢI dọn bộ đệm trước khi thử lại — xem slide 50 */
@@ -785,7 +785,7 @@ if (scanf("%d", &amp;n) != 1) {          /* 0 = rác, -1 = hết dữ liệu và
 <li><strong>Vì sao là "số trường" chứ không phải "có ổn không"</strong> — con đếm cho bạn biết dữ liệu vào hỏng <em>ở đâu</em>, chứ không chỉ là <em>có hỏng</em>. Với <code>scanf("%d%d%d", …)</code> trả về 2, bạn biết giá trị thứ ba thiếu còn hai giá trị đầu tốt — đủ để viết một câu báo lỗi chính xác.</li>
 <li><strong>Quy tắc dùng suốt đời</strong> — đem giá trị trả về so với số specifier bạn mong được điền: <code>if (scanf("%d", &amp;n) != 1) { /* xử lý */ }</code>. Bỏ qua giá trị trả về chính là gốc rễ của phần lớn những hành vi kỳ quặc ở slide 44, 46 và 49.</li>
 </ul>
-<pre><code>int n;
+<pre><code class="language-c">int n;
 if (scanf("%d", &amp;n) != 1) {          /* 0 = rác, -1 = hết dữ liệu vào */
     printf("Khong doc duoc so nguyen!\\n");
     /* ...và PHẢI dọn bộ đệm trước khi thử lại — xem slide 50 */
@@ -811,7 +811,7 @@ if (scanf("%d", &amp;n) != 1) {          /* 0 = rác, -1 = hết dữ liệu và
 <li><strong>Screenshot <code>12dfghjkl;</code> → count=1, m=12</strong> — the first conversion succeeded and stopped at <code>d</code>. Partial success is the normal case, not an exotic one, and it is why "did it work" is the wrong question.</li>
 <li><strong>Screenshots <code>12 789 asd</code> → count=2 and <code>12 789 12.7803</code> → count=3</strong> — the ladder climbs one rung at a time as each field becomes readable, and only the last row has all three variables holding what the user meant.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 int main()
 {   int m = 2, n = 37; double x = 0.0;   /* giá trị cũ, để thấy cái gì KHÔNG bị ghi đè */
     int count;
@@ -837,7 +837,7 @@ int main()
 <li><strong>Ảnh <code>12dfghjkl;</code> → count=1, m=12</strong> — phép chuyển đổi đầu thành công rồi dừng ở chữ <code>d</code>. Thành công một phần là trường hợp BÌNH THƯỜNG, không phải hiếm gặp, và đó là lý do "có chạy không" là câu hỏi sai.</li>
 <li><strong>Ảnh <code>12 789 asd</code> → count=2 và <code>12 789 12.7803</code> → count=3</strong> — cái thang leo từng nấc một khi mỗi trường trở nên đọc được, và chỉ hàng cuối cùng mới có cả ba biến giữ đúng thứ người dùng định nhập.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 int main()
 {   int m = 2, n = 37; double x = 0.0;   /* giá trị cũ, để thấy cái gì KHÔNG bị ghi đè */
     int count;
@@ -903,7 +903,7 @@ int main()
 <li><strong><code>main</code> is three lines and says nothing about validation</strong> — <code>int n; n = getInt(5, 10); printf("n = %d", n);</code>. That is the point of modularisation: the caller states <em>what</em> it wants (an integer in 5..10) and knows nothing of <em>how</em> it is enforced.</li>
 <li><strong>The screenshot is the acceptance test</strong> — four attempts, four different messages: <code>test7</code> → "No input accepted!", <code>7.5</code> → "Trailing characters!", <code>20</code> → "Out of range!", <code>8</code> → <code>n = 8</code>. Those are exactly the first three error classes of slide 50 plus the success case.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 // Clear input buffer
 void clear(){
     while(getchar()!='\\n');
@@ -934,7 +934,7 @@ int main(){
 <li><strong><code>main</code> chỉ ba dòng và không nói gì về kiểm tra hợp lệ</strong> — <code>int n; n = getInt(5, 10); printf("n = %d", n);</code>. Đó chính là ý nghĩa của chia module: bên gọi nói ra <em>cái nó muốn</em> (một số nguyên trong 5..10) và không biết gì về <em>cách</em> điều đó được cưỡng chế.</li>
 <li><strong>Ảnh chụp chính là bài kiểm nghiệm thu</strong> — bốn lần thử, bốn thông báo khác nhau: <code>test7</code> → "No input accepted!", <code>7.5</code> → "Trailing characters!", <code>20</code> → "Out of range!", <code>8</code> → <code>n = 8</code>. Đó đúng là ba loại lỗi đầu của slide 50 cộng trường hợp thành công.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 // Clear input buffer
 void clear(){
     while(getchar()!='\\n');
@@ -967,7 +967,7 @@ int main(){
 <li><strong>Branch 3 — <code>else if (value &lt; min || value &gt; max)</code></strong> → "Out of range!" and, notably, <strong>no</strong> <code>clear()</code>. That is correct and worth noticing: to reach this branch, <code>lastCharacter</code> must already have been the newline, so the line is fully consumed and there is nothing left to sweep.</li>
 <li><strong>Branch 4 — <code>else { flag = 0; }</code></strong> → the only way out. <code>do…while(flag==1)</code> then exits and <code>return value;</code> hands back a number that is guaranteed to satisfy all three promises of slide 51.</li>
 </ul>
-<pre><code>int getInt(int min, int max){
+<pre><code class="language-c">int getInt(int min, int max){
     int value, flag = 1, count;
     char lastCharacter;
 
@@ -1009,7 +1009,7 @@ int main(){
 <li><strong>Nhánh 3 — <code>else if (value &lt; min || value &gt; max)</code></strong> → "Out of range!" và, đáng chú ý, <strong>KHÔNG</strong> gọi <code>clear()</code>. Như thế là đúng và rất đáng để ý: muốn tới được nhánh này thì <code>lastCharacter</code> đã phải là dấu xuống dòng rồi, tức cả dòng đã tiêu thụ hết, chẳng còn gì để quét.</li>
 <li><strong>Nhánh 4 — <code>else { flag = 0; }</code></strong> → lối ra duy nhất. <code>do…while(flag==1)</code> khi đó thoát và <code>return value;</code> trao lại một con số bảo đảm thoả cả ba lời hứa của slide 51.</li>
 </ul>
-<pre><code>int getInt(int min, int max){
+<pre><code class="language-c">int getInt(int min, int max){
     int value, flag = 1, count;
     char lastCharacter;
 
@@ -1053,7 +1053,7 @@ int main(){
 <li><strong>Fix the two holes found on slide 52 while you are here</strong> — test <code>count == EOF</code> first and give up, treat <code>count == 1</code> as trailing, initialise <code>lastCharacter</code>, and use the EOF-safe <code>clear()</code>. The exercise says nothing about this; your marks in the practical exam do.</li>
 <li><strong>Boundaries belong in your test plan</strong> — a range test must be checked at <code>lower</code>, at <code>upper</code>, just below and just above. <code>value &lt; lower || value &gt; upper</code> is inclusive on both ends, so 1.5 and 9.75 must be <em>accepted</em> in the run below.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 void clear(void)                       /* CÓ chặn EOF — xem slide 52 */
 {
@@ -1119,7 +1119,7 @@ double getDouble(double lower, double upper)
 <li><strong>Nhân tiện hãy vá luôn hai lỗ hổng tìm được ở slide 52</strong> — kiểm <code>count == EOF</code> trước tiên rồi bỏ cuộc, coi <code>count == 1</code> là có rác thừa, khởi tạo <code>lastCharacter</code>, và dùng bản <code>clear()</code> chặn EOF. Đề bài không nói gì về mấy thứ này; điểm thi thực hành của bạn thì có.</li>
 <li><strong>Biên phải nằm trong kế hoạch kiểm thử</strong> — kiểm một khoảng thì phải thử ở <code>lower</code>, ở <code>upper</code>, ngay dưới và ngay trên. Điều kiện <code>value &lt; lower || value &gt; upper</code> là bao gồm cả hai đầu, nên 1.5 và 9.75 phải được <em>chấp nhận</em> trong lần chạy dưới đây.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 void clear(void)                       /* CÓ chặn EOF — xem slide 52 */
 {

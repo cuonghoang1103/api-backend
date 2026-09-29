@@ -323,7 +323,7 @@ const c5 = doc('mac103-5-1-techniques', '5.1 — Integration techniques & applic
 <h2>Integration techniques &amp; applications</h2>
 <h3>Substitution (reverse chain rule)</h3>
 <p>When the integrand contains a function and its derivative, substitute u = g(x), du = g'(x) dx:</p>
-<pre><code>integral of 2x * cos(x^2) dx    let u = x^2, du = 2x dx
+<pre><code class="language-javascript">integral of 2x * cos(x^2) dx    let u = x^2, du = 2x dx
   = integral of cos(u) du = sin(u) + C = sin(x^2) + C
 </code></pre>
 <h3>Integration by parts (reverse product rule)</h3>

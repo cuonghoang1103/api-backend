@@ -121,10 +121,10 @@ const EX26 = {
 <ol>
   <li>Install: <code>npm install -g json-server</code> (or as a dev dependency).</li>
   <li>Create <code>db.json</code>:
-<pre>{
+<pre><code class="language-javascript">{
   "posts":  [ { "id": 1, "title": "Hello", "body": "First post" } ],
   "users":  [ { "id": 1, "name": "An" } ]
-}</pre></li>
+}</code></pre></li>
   <li>Start it: <code>json-server --watch db.json --port 3001</code>.</li>
   <li>You now have a REST API for free:
     <ul>
@@ -142,10 +142,10 @@ const EX26 = {
 <ol>
   <li>Cài: <code>npm install -g json-server</code> (hoặc làm dev dependency).</li>
   <li>Tạo <code>db.json</code>:
-<pre>{
+<pre><code class="language-javascript">{
   "posts":  [ { "id": 1, "title": "Hello", "body": "First post" } ],
   "users":  [ { "id": 1, "name": "An" } ]
-}</pre></li>
+}</code></pre></li>
   <li>Chạy: <code>json-server --watch db.json --port 3001</code>.</li>
   <li>Bạn có ngay một REST API miễn phí:
     <ul>
@@ -168,7 +168,7 @@ const EX27 = {
   content: bi(
     `<span class="eyebrow">Chapter 11 · Exercise 27 · Slot 19 slide 20</span>
 <h2>AxiosDemo — fetch and display</h2>
-<pre><span class="hljs-keyword">import</span> <span class="hljs-title class_">React</span>, { useState, useEffect } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
+<pre><code class="language-javascript"><span class="hljs-keyword">import</span> <span class="hljs-title class_">React</span>, { useState, useEffect } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
 <span class="hljs-keyword">import</span> axios <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;axios&#x27;</span>;
 
 <span class="hljs-keyword">function</span> <span class="hljs-title function_">AxiosDemo</span>(<span class="hljs-params"></span>) {
@@ -187,13 +187,13 @@ const EX27 = {
   <span class="hljs-keyword">if</span> (error)   <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Error: {error}<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span></span>;
   <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">ul</span>&gt;</span>{data.map(p =&gt; <span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">key</span>=<span class="hljs-string">{p.id}</span>&gt;</span>{p.title}<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>)}<span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span></span>;
 }
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title class_">AxiosDemo</span>;</pre>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title class_">AxiosDemo</span>;</code></pre>
 <p><b>Extend it:</b> add buttons that <code>axios.post</code> a new post, <code>axios.put</code> an edit, and <code>axios.delete</code> one — the full CRUD from Slot 19 slide 19, ideally against your json-server from Exercise 26.</p>
 <div class="pitfall"><b>Trap:</b> axios puts the parsed body on <code>res.data</code> — do not call <code>.json()</code> (that is a <code>fetch</code> thing). And errors reject the promise, so handle them in <code>.catch</code>/<code>try…catch</code>, unlike <code>fetch</code> which only rejects on network failure (a 404 still "succeeds").</div>
 <div class="di-toi"><a class="link-card codelab" href="${CODELAB}" target="_blank" rel="noopener"><span class="lc-ico">⌨️</span><span class="lc-body"><span class="lc-title">Build AxiosDemo</span><span class="lc-sub">GET + full CRUD — Code Lab.</span></span><span class="lc-cta">PRACTICE →</span></a></div>`,
     `<span class="eyebrow">Chương 11 · Exercise 27 · Slot 19 slide 20</span>
 <h2>AxiosDemo — fetch và hiển thị</h2>
-<pre><span class="hljs-keyword">import</span> <span class="hljs-title class_">React</span>, { useState, useEffect } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
+<pre><code class="language-javascript"><span class="hljs-keyword">import</span> <span class="hljs-title class_">React</span>, { useState, useEffect } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
 <span class="hljs-keyword">import</span> axios <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;axios&#x27;</span>;
 
 <span class="hljs-keyword">function</span> <span class="hljs-title function_">AxiosDemo</span>(<span class="hljs-params"></span>) {
@@ -212,7 +212,7 @@ const EX27 = {
   <span class="hljs-keyword">if</span> (error)   <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Lỗi: {error}<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span></span>;
   <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">ul</span>&gt;</span>{data.map(p =&gt; <span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">key</span>=<span class="hljs-string">{p.id}</span>&gt;</span>{p.title}<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>)}<span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span></span>;
 }
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title class_">AxiosDemo</span>;</pre>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title class_">AxiosDemo</span>;</code></pre>
 <p><b>Mở rộng:</b> thêm nút <code>axios.post</code> tạo post mới, <code>axios.put</code> sửa, <code>axios.delete</code> xoá — CRUD đầy đủ từ Slot 19 slide 19, tốt nhất chạy với json-server ở Exercise 26.</p>
 <div class="pitfall"><b>Bẫy:</b> axios đặt body đã parse ở <code>res.data</code> — đừng gọi <code>.json()</code> (đó là của <code>fetch</code>). Và lỗi làm reject promise, nên xử lý ở <code>.catch</code>/<code>try…catch</code>, khác <code>fetch</code> chỉ reject khi lỗi mạng (một 404 vẫn "thành công").</div>
 <div class="di-toi"><a class="link-card codelab" href="${CODELAB}" target="_blank" rel="noopener"><span class="lc-ico">⌨️</span><span class="lc-body"><span class="lc-title">Dựng AxiosDemo</span><span class="lc-sub">GET + CRUD đầy đủ — Code Lab.</span></span><span class="lc-cta">LUYỆN TẬP →</span></a></div>`,

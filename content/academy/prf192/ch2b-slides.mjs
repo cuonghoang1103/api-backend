@@ -33,7 +33,7 @@ export default {
 <li><strong>The five naming rules</strong> — names may contain letters, digits and underscores; must begin with a letter or an underscore; are case-sensitive (<code>myVar</code> and <code>myvar</code> are two different variables); may not contain whitespace or special characters such as <code>!</code>, <code>#</code>, <code>%</code>; and must not be a C reserved word (the table on slide 24).</li>
 <li><strong>Several variables, one type, one line</strong> — <code>int i, j, k = 0;</code> declares three ints but initialises only <code>k</code>. This is a classic exam trap: the <code>= 0</code> binds to <code>k</code> alone.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main() {
     char   section;                 /* declared, not initialised */
@@ -58,7 +58,7 @@ int main() {
 <li><strong>Năm quy tắc đặt tên</strong> — tên gồm chữ cái, chữ số và dấu gạch dưới; phải bắt đầu bằng chữ cái hoặc gạch dưới; phân biệt HOA–thường (<code>myVar</code> và <code>myvar</code> là hai biến khác nhau); không chứa khoảng trắng hay ký tự đặc biệt như <code>!</code>, <code>#</code>, <code>%</code>; và không được trùng từ khoá dành riêng của C (bảng ở slide 24).</li>
 <li><strong>Nhiều biến, một kiểu, một dòng</strong> — <code>int i, j, k = 0;</code> khai báo ba biến int nhưng chỉ khởi tạo <code>k</code>. Đây là bẫy thi kinh điển: phần <code>= 0</code> chỉ dính vào <code>k</code>.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main() {
     char   section;                 /* khai bao, chua khoi tao  */
@@ -85,7 +85,7 @@ int main() {
 <li><strong>Case matters</strong> — keywords are lowercase only. <code>Int</code>, <code>FLOAT</code> and <code>Return</code> are <em>not</em> keywords; the compiler treats them as ordinary identifiers, which is precisely why <code>Float f1;</code> on slide 29 fails.</li>
 <li><strong>The error message you get</strong> — reusing a keyword produces a confusing diagnostic, because the parser sees a command where it expected a name:</li>
 </ul>
-<pre><code>int main() {
+<pre><code class="language-c">int main() {
     int double = 5;      /* error: expected identifier before 'double' */
     int for    = 3;      /* error: expected identifier before 'for'    */
     int printf = 7;      /* legal! printf is a library name, not a keyword
@@ -102,7 +102,7 @@ int main() {
 <li><strong>Phân biệt HOA–thường</strong> — từ khoá chỉ viết thường. <code>Int</code>, <code>FLOAT</code>, <code>Return</code> <em>không</em> phải từ khoá; trình biên dịch coi chúng là định danh thường, và đó chính là lý do <code>Float f1;</code> ở slide 29 bị lỗi.</li>
 <li><strong>Thông báo lỗi bạn sẽ nhận</strong> — dùng lại từ khoá cho ra lỗi khó hiểu, vì bộ phân tích cú pháp gặp một lệnh ở chỗ nó đang chờ một cái tên:</li>
 </ul>
-<pre><code>int main() {
+<pre><code class="language-c">int main() {
     int double = 5;      /* error: expected identifier before 'double' */
     int for    = 3;      /* error: expected identifier before 'for'    */
     int printf = 7;      /* HOP LE! printf la ten thu vien, khong phai
@@ -121,7 +121,7 @@ int main() {
 <li><strong>Step 4 — the formulas</strong> — area = width × height, perimeter = 2 × (width + height). Both sides are lengths, so <code>float</code> or <code>double</code> is the right type; <code>int</code> would silently destroy a 5.5 cm side.</li>
 <li><strong>Step 5 — the program</strong>, using <code>scanf</code> for input (slide 42) and <code>%.2f</code> for two decimals (slide 40):</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main() {
     double rectangleWidth, rectangleHeight;
@@ -147,7 +147,7 @@ int main() {
 <li><strong>Bước 4 — công thức</strong> — diện tích = rộng × cao, chu vi = 2 × (rộng + cao). Hai cạnh là độ dài nên kiểu đúng là <code>float</code> hoặc <code>double</code>; dùng <code>int</code> sẽ âm thầm phá hỏng một cạnh 5,5 cm.</li>
 <li><strong>Bước 5 — chương trình</strong>, nhập bằng <code>scanf</code> (slide 42) và in hai chữ số thập phân bằng <code>%.2f</code> (slide 40):</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main() {
     double rectangleWidth, rectangleHeight;
@@ -175,7 +175,7 @@ int main() {
 <li><strong>4. Input a fresh value into the variable's memory location</strong> — <code>scanf("%d", &amp;x);</code>. Note the wording on the slide: <em>into the memory location</em>. That is why <code>scanf</code> needs the address operator <code>&amp;</code> and <code>printf</code> does not.</li>
 <li><strong>Mapping back to slide 6</strong> — slide 6 said a variable has two basic operations, <em>set value</em> and <em>get value</em>. Operations 1, 2 and 4 are all "set"; operations 2 and 3 are "get". Everything else in programming is built from these two verbs.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main() {
     int x, y;
@@ -199,7 +199,7 @@ int main() {
 <li><strong>4. Nhập giá trị mới vào ô nhớ của biến</strong> — <code>scanf("%d", &amp;x);</code>. Chú ý cách slide diễn đạt: <em>vào ô nhớ</em>. Đó là lý do <code>scanf</code> cần toán tử địa chỉ <code>&amp;</code> còn <code>printf</code> thì không.</li>
 <li><strong>Nối ngược về slide 6</strong> — slide 6 nói biến có hai thao tác cơ bản là <em>đặt giá trị</em> và <em>lấy giá trị</em>. Thao tác 1, 2, 4 đều là "đặt"; thao tác 2 và 3 là "lấy". Mọi thứ khác trong lập trình đều dựng từ hai động từ này.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main() {
     int x, y;
@@ -225,7 +225,7 @@ int main() {
 <li><strong>Escape sequences already appear</strong> — the <code>\\n</code> at the end of each format string is what puts the next output on a new line (the full table is slide 33).</li>
 <li><strong>Read the Output box on the slide</strong> — it is the marking scheme in miniature. In the practical exam you are judged on the exact characters your program prints, spaces included.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main() {
     char   grade = 'A';
@@ -249,7 +249,7 @@ int main() {
 <li><strong>Escape sequence đã xuất hiện</strong> — dấu <code>\\n</code> cuối mỗi chuỗi định dạng là thứ đẩy phần in tiếp theo xuống dòng mới (bảng đầy đủ ở slide 33).</li>
 <li><strong>Đọc kỹ khung Output trên slide</strong> — đó là thang chấm điểm thu nhỏ. Trong bài thi thực hành, bạn bị chấm theo đúng từng ký tự chương trình in ra, kể cả dấu cách.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main() {
     char   grade = 'A';
@@ -275,7 +275,7 @@ int main() {
 <li><strong>"&amp; String format" on the slide</strong> — the slide also reminds you that the first argument of <code>printf</code>/<code>scanf</code> is a <em>format string</em>, and that <code>&amp;</code> appears inside <code>scanf</code>'s argument list for exactly this reason: <code>scanf</code> must be told <em>where</em> to put the value.</li>
 <li><strong>Why addresses change every run</strong> — the operating system loads the program at a different base each time (address-space randomisation), so do not be alarmed that your numbers differ from the slide's.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main() {
     char   c = 'A';
@@ -299,7 +299,7 @@ int main() {
 <li><strong>Dòng "&amp; String format" trên slide</strong> — slide nhắc thêm rằng tham số đầu của <code>printf</code>/<code>scanf</code> là một <em>chuỗi định dạng</em>, và <code>&amp;</code> xuất hiện trong danh sách tham số của <code>scanf</code> chính vì lẽ đó: phải chỉ cho <code>scanf</code> biết <em>đặt giá trị vào đâu</em>.</li>
 <li><strong>Vì sao địa chỉ đổi sau mỗi lần chạy</strong> — hệ điều hành nạp chương trình ở một gốc khác nhau mỗi lần (ngẫu nhiên hoá không gian địa chỉ), nên đừng hoảng khi số của bạn khác số trên slide.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main() {
     char   c = 'A';
@@ -331,7 +331,7 @@ int main() {
 <code>Float f1; f2 = 5.1;</code> ✘ <strong>wrong</strong> — <code>Float</code> with a capital F is not a C type, and <code>f2</code> is never declared.</li>
 <li><strong>Q6 — Little-endian vs big-endian</strong> — the order in which the bytes of a multi-byte value are laid out. Little-endian stores the <em>least</em> significant byte at the lowest address (Intel x86); big-endian stores the <em>most</em> significant byte first (network byte order, older Motorola).</li>
 </ul>
-<pre><code>/* the two broken lines, repaired */
+<pre><code class="language-c">/* the two broken lines, repaired */
 int m = 19, k = 2;        /* one type word covers both names */
 float f1, f2 = 5.1f;      /* lowercase 'float', and f2 declared */
 
@@ -354,7 +354,7 @@ float f1, f2 = 5.1f;      /* lowercase 'float', and f2 declared */
 <code>Float f1; f2 = 5.1;</code> ✘ <strong>SAI</strong> — <code>Float</code> viết hoa chữ F không phải kiểu của C, và <code>f2</code> chưa hề được khai báo.</li>
 <li><strong>Câu 6 — Little-endian và big-endian</strong> — là thứ tự sắp các byte của một giá trị nhiều byte. Little-endian đặt byte <em>thấp</em> nhất ở địa chỉ nhỏ nhất (Intel x86); big-endian đặt byte <em>cao</em> nhất trước (thứ tự byte của mạng, dòng Motorola cũ).</li>
 </ul>
-<pre><code>/* hai dong hong, da sua lai */
+<pre><code class="language-c">/* hai dong hong, da sua lai */
 int m = 19, k = 2;        /* mot tu kieu phu cho ca hai ten   */
 float f1, f2 = 5.1f;      /* 'float' viet thuong, va khai f2  */
 
@@ -395,7 +395,7 @@ float f1, f2 = 5.1f;      /* 'float' viet thuong, va khai f2  */
 <li><strong>Spot them in one line</strong> — <code>printf("n = %d\\n", 25);</code> contains <em>two</em> literals: the string <code>"n = %d\\n"</code> and the number <code>25</code>.</li>
 <li><strong>Why this matters for size</strong> — the type of a literal decides how many bytes go into the executable, and slide 35 shows how to control that with suffixes.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main() {
     char   ch  = 'K';          /* character literal */
@@ -416,7 +416,7 @@ int main() {
 <li><strong>Nhận diện trong một dòng</strong> — <code>printf("n = %d\\n", 25);</code> chứa <em>hai</em> literal: chuỗi <code>"n = %d\\n"</code> và số <code>25</code>.</li>
 <li><strong>Vì sao chuyện này liên quan tới kích thước</strong> — kiểu của literal quyết định bao nhiêu byte đi vào tệp thực thi, và slide 35 chỉ cách điều khiển điều đó bằng hậu tố.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main() {
     char   ch  = 'K';          /* literal ky tu */
@@ -440,7 +440,7 @@ int main() {
 <li><strong>The assignment operator</strong> — the slide also names the tool that puts any of these into a variable: the operator <code>=</code>. It copies the value on the right into the variable on the left (see slide 43).</li>
 <li><strong>Character vs string — the difference that costs marks</strong> — <code>'A'</code> is <strong>one byte</strong>; <code>"A"</code> is <strong>two bytes</strong>: 'A' followed by the terminating <code>'\\0'</code>. Single quotes and double quotes are not interchangeable in C.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main() {
     char c1 = 'A';      /* 1. quoted      */
@@ -464,7 +464,7 @@ int main() {
 <li><strong>Toán tử gán</strong> — slide cũng gọi tên công cụ đưa bất kỳ dạng nào ở trên vào biến: toán tử <code>=</code>. Nó chép giá trị ở vế phải vào biến ở vế trái (xem slide 43).</li>
 <li><strong>Ký tự khác chuỗi — chỗ khác nhau làm mất điểm</strong> — <code>'A'</code> là <strong>một byte</strong>; <code>"A"</code> là <strong>hai byte</strong>: 'A' rồi tới ký tự kết thúc <code>'\\0'</code>. Nháy đơn và nháy kép trong C không thay thế cho nhau được.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main() {
     char c1 = 'A';      /* 1. nhay don      */
@@ -489,7 +489,7 @@ int main() {
 <li><strong>They are ONE character each</strong> — this is the fact exams test. <code>'\\n'</code> is a valid <code>char</code> literal; <code>sizeof("A\\nB")</code> is 4, not 5, because the array holds 'A', '\\n', 'B' and '\\0'.</li>
 <li><strong>Why a backslash and not something else</strong> — the backslash is rare in ordinary text, so it can be reserved as the "the next character means something different" marker without getting in the way.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main() {
     printf("Name\\tMark\\n");
@@ -509,7 +509,7 @@ int main() {
 <li><strong>Mỗi cái là MỘT ký tự</strong> — đây là điều đề thi hay kiểm. <code>'\\n'</code> là literal <code>char</code> hợp lệ; <code>sizeof("A\\nB")</code> bằng 4 chứ không phải 5, vì mảng chứa 'A', '\\n', 'B' và '\\0'.</li>
 <li><strong>Vì sao lại là dấu gạch chéo ngược</strong> — ký tự này hiếm gặp trong văn bản thường, nên có thể dành riêng làm dấu hiệu "ký tự tiếp theo mang nghĩa khác" mà không vướng víu gì.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main() {
     printf("Ten\\tDiem\\n");
@@ -531,7 +531,7 @@ int main() {
 <li><strong>Why this is not a compiler bug</strong> — inside a string literal the backslash <em>always</em> has this meaning. The rule has no exceptions, which is what makes it predictable; you simply have to escape the escape character.</li>
 <li><strong>Where it bites you later</strong> — file paths in Slot 19–20 (Files). <code>fopen("D:\\data\\numbers.txt", "r")</code> silently opens the wrong name and returns <code>NULL</code>, and beginners blame the file rather than the string.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main() {
     /* WRONG - \\T is undefined, \\n is newline, \\t is tab */
@@ -551,7 +551,7 @@ int main() {
 <li><strong>Vì sao đây không phải lỗi của trình biên dịch</strong> — bên trong string literal, dấu gạch chéo ngược <em>luôn luôn</em> mang nghĩa đó. Quy tắc không có ngoại lệ, và chính vì thế nó đoán trước được; bạn chỉ cần escape luôn cái ký tự escape.</li>
 <li><strong>Nó cắn bạn ở đâu về sau</strong> — đường dẫn tệp trong Slot 19–20 (Tệp tin). <code>fopen("D:\\data\\numbers.txt", "r")</code> âm thầm mở sai tên và trả về <code>NULL</code>, rồi người mới đổ lỗi cho cái tệp thay vì cho chuỗi.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main() {
     /* SAI - \\T khong xac dinh, \\n la xuong dong, \\t la tab */
@@ -573,7 +573,7 @@ int main() {
 <li><strong>Base prefixes still apply</strong> — from slide 32: no prefix = decimal, leading <code>0</code> = octal, leading <code>0x</code> = hexadecimal. So <code>0x1FUL</code> is an unsigned long with value 31.</li>
 <li><strong>Why you should care</strong> — <code>float x = 3.14;</code> makes the compiler build a <em>double</em> literal and then truncate it to float on every assignment. Worse, <code>long total = 100000 * 50000;</code> multiplies two <em>ints</em>, overflows 32 bits, and stores the wrong answer into a long. Writing <code>100000L * 50000</code> fixes it.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main() {
     printf("%d %d %d %d\\n",
@@ -597,7 +597,7 @@ int main() {
 <li><strong>Tiền tố cơ số vẫn còn hiệu lực</strong> — theo slide 32: không tiền tố = thập phân, bắt đầu bằng <code>0</code> = bát phân, bắt đầu bằng <code>0x</code> = thập lục phân. Nên <code>0x1FUL</code> là một unsigned long có giá trị 31.</li>
 <li><strong>Vì sao phải quan tâm</strong> — <code>float x = 3.14;</code> khiến trình biên dịch dựng một literal <em>double</em> rồi cắt xuống float ở mỗi lần gán. Tệ hơn, <code>long total = 100000 * 50000;</code> nhân hai số <em>int</em>, tràn 32 bit, rồi cất kết quả sai vào một biến long. Viết <code>100000L * 50000</code> là xong.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main() {
     printf("%d %d %d %d\\n",
@@ -623,7 +623,7 @@ int main() {
 <li><strong>Back to slide 12</strong> — "a type qualified as <code>const</code> is unmodifiable; if a program instruction attempts to modify it, the compiler will report an error." That error appears at compile time, which is the cheapest place to find a bug.</li>
 <li><strong>Naming convention</strong> — constants are conventionally written in UPPERCASE (<code>PI</code>, <code>MAX_SIZE</code>, <code>VAT_RATE</code>) so a reader can tell at a glance that the value never moves.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main() {
     const double PI = 3.14159;
@@ -645,7 +645,7 @@ int main() {
 <li><strong>Nối về slide 12</strong> — "kiểu được bổ nghĩa <code>const</code> là không sửa được; nếu một câu lệnh cố sửa nó, trình biên dịch sẽ báo lỗi". Lỗi ấy hiện ra lúc biên dịch, là chỗ rẻ nhất để bắt được bug.</li>
 <li><strong>Quy ước đặt tên</strong> — hằng theo thông lệ viết IN HOA (<code>PI</code>, <code>MAX_SIZE</code>, <code>VAT_RATE</code>) để người đọc liếc qua là biết ngay giá trị này không bao giờ nhúc nhích.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main() {
     const double PI = 3.14159;
@@ -669,7 +669,7 @@ int main() {
 <li><strong>No memory, no type</strong> — the name never exists at run time; by then it has already been replaced by its text. So <code>&amp;PI</code> is impossible, and <code>sizeof(PI)</code> means <code>sizeof(3.14159)</code> = <code>sizeof(double)</code> = 8.</li>
 <li><strong>Its real strength</strong> — it works anywhere text works, including places where a variable is not allowed. In C89, <code>int a[MAX];</code> with <code>#define MAX 100</code> compiles, while <code>const int MAX = 100;</code> does not.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #define PI       3.14159
 #define MAX      100
 #define GREETING "Hello PRF192"
@@ -693,7 +693,7 @@ int main() {
 <li><strong>Không bộ nhớ, không kiểu</strong> — cái tên không hề tồn tại lúc chạy; tới lúc đó nó đã bị thay bằng đoạn chữ của nó rồi. Vì vậy <code>&amp;PI</code> là bất khả, còn <code>sizeof(PI)</code> nghĩa là <code>sizeof(3.14159)</code> = <code>sizeof(double)</code> = 8.</li>
 <li><strong>Sức mạnh thật của nó</strong> — nó chạy được ở mọi nơi chữ chạy được, kể cả những chỗ không cho dùng biến. Trong C89, <code>int a[MAX];</code> với <code>#define MAX 100</code> biên dịch được, còn <code>const int MAX = 100;</code> thì không.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #define PI       3.14159
 #define MAX      100
 #define GREETING "Hello PRF192"
@@ -719,7 +719,7 @@ int main() {
 <li><strong>Consequence 3 — the famous parenthesis trap</strong> — <code>#define SUM a + b</code> style macros expand textually and inherit the surrounding operators' precedence. Always wrap the value in parentheses.</li>
 <li><strong>const vs #define, side by side</strong> — <code>const</code>: has type, has size, has address, respects scope, checked by the compiler. <code>#define</code>: no type, no size, no address, file-wide, pure text. Both give the value one name and one place to edit, which was the point.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #define HALF   1/2          /* DANGEROUS: no parentheses   */
 #define HALF_OK (1.0/2.0)   /* safe: parenthesised, double */
 
@@ -738,7 +738,7 @@ int main() {
 <li><strong>Hệ quả 3 — cái bẫy dấu ngoặc nổi tiếng</strong> — macro kiểu <code>#define SUM a + b</code> bung ra theo văn bản và thừa hưởng độ ưu tiên của các toán tử xung quanh. Luôn bọc phần giá trị trong ngoặc tròn.</li>
 <li><strong>const và #define, đặt cạnh nhau</strong> — <code>const</code>: có kiểu, có kích thước, có địa chỉ, tôn trọng phạm vi, được trình biên dịch kiểm. <code>#define</code>: không kiểu, không kích thước, không địa chỉ, có hiệu lực cả tệp, thuần văn bản. Cả hai đều cho giá trị một cái tên và một chỗ duy nhất để sửa, vốn là mục đích ban đầu.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #define HALF   1/2          /* NGUY HIEM: khong co ngoac   */
 #define HALF_OK (1.0/2.0)   /* an toan: co ngoac, kieu double */
 
@@ -759,7 +759,7 @@ int main() {
 <li><strong>Multi-digit numbers</strong> — typing "25" sends <em>two</em> characters, '2' (50) and '5' (53). <code>%d</code> reads digit by digit and builds 2×10 + 5 = 25. That is why input conversion is a loop, not a single lookup.</li>
 <li><strong>"Conversion rules are pre-defined in C"</strong> — you never write this code; you only choose which rule to apply, by picking a conversion specifier (slide 40).</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main() {
     char ch = '3';      /* the CHARACTER 3: ASCII 51 */
@@ -781,7 +781,7 @@ int main() {
 <li><strong>Số nhiều chữ số</strong> — gõ "25" là gửi đi <em>hai</em> ký tự, '2' (50) và '5' (53). <code>%d</code> đọc từng chữ số rồi dựng ra 2×10 + 5 = 25. Vì thế việc chuyển đổi lúc nhập là một vòng lặp chứ không phải một phép tra bảng.</li>
 <li><strong>"Quy tắc chuyển đổi đã định nghĩa sẵn trong C"</strong> — bạn không bao giờ phải viết đoạn mã đó; bạn chỉ chọn áp dụng quy tắc nào, bằng cách chọn conversion specifier (slide 40).</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main() {
     char ch = '3';      /* KY TU 3: ASCII 51    */
@@ -805,7 +805,7 @@ int main() {
 <li><strong>Width and precision</strong> — between <code>%</code> and the letter you may write a field width and a precision: <code>%5d</code> right-aligns in 5 columns, <code>%-5d</code> left-aligns, <code>%8.2f</code> uses 8 columns with 2 decimals, <code>%.3s</code> prints only the first 3 characters.</li>
 <li><strong>Count them, always</strong> — the number of specifiers must equal the number of arguments after the format string, in the same order. A mismatch is not a compile error in C89; it is garbage output or a crash.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main() {
     int    n = 255;
@@ -828,7 +828,7 @@ int main() {
 <li><strong>Độ rộng và độ chính xác</strong> — giữa <code>%</code> và chữ cái, bạn viết được độ rộng trường và độ chính xác: <code>%5d</code> canh phải trong 5 cột, <code>%-5d</code> canh trái, <code>%8.2f</code> dùng 8 cột với 2 chữ số thập phân, <code>%.3s</code> chỉ in 3 ký tự đầu.</li>
 <li><strong>Luôn luôn đếm lại</strong> — số specifier phải bằng số tham số đứng sau chuỗi định dạng, và đúng thứ tự. Lệch nhau không phải lỗi biên dịch trong C89; nó là kết quả rác hoặc một cú sập.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main() {
     int    n = 255;
@@ -853,7 +853,7 @@ int main() {
 <li><strong>Contrast with printf</strong> — <code>printf("%d", n)</code> only needs to <em>read</em> n, so the value is enough and no <code>&amp;</code> appears. Remembering <em>why</em> beats memorising "scanf has &amp;, printf does not".</li>
 <li><strong>The one exception</strong> — when you read a string into a char array, you write <code>scanf("%s", name)</code> without <code>&amp;</code>, because an array name is already the address of its first element (Slot 13–15).</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main() {
     int n, m;
@@ -876,7 +876,7 @@ int main() {
 <li><strong>Đối chiếu với printf</strong> — <code>printf("%d", n)</code> chỉ cần <em>đọc</em> n, nên chỉ cần giá trị và không có <code>&amp;</code> nào. Nhớ <em>vì sao</em> tốt hơn nhiều so với học vẹt "scanf có &amp;, printf không có".</li>
 <li><strong>Một ngoại lệ duy nhất</strong> — khi đọc chuỗi vào mảng char, bạn viết <code>scanf("%s", name)</code> không có <code>&amp;</code>, vì tên mảng vốn đã là địa chỉ phần tử đầu tiên (Slot 13–15).</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main() {
     int n, m;
@@ -901,7 +901,7 @@ int main() {
 <li><strong>Never put <code>\\n</code> in a scanf format</strong> — it does not mean "wait for Enter"; it means "skip whitespace", and it makes the program appear to hang until you type something else.</li>
 <li><strong>printf is the mirror image</strong> — everything in the format string that is not a specifier is printed verbatim, which is how you build labelled output.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main() {
     int  age;
@@ -924,7 +924,7 @@ int main() {
 <li><strong>Đừng bao giờ đặt <code>\\n</code> trong chuỗi định dạng của scanf</strong> — nó không có nghĩa "chờ bấm Enter"; nó có nghĩa "bỏ qua khoảng trắng", và nó làm chương trình trông như treo cho tới khi bạn gõ thêm thứ khác.</li>
 <li><strong>printf là hình ảnh phản chiếu</strong> — mọi thứ trong chuỗi định dạng mà không phải specifier đều được in nguyên văn, và đó là cách bạn dựng ra kết quả có nhãn.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main() {
     int  age;
@@ -949,7 +949,7 @@ int main() {
 <li><strong>Consequences of that direction</strong> — the left side must be something that can be written to (a variable), so <code>5 = x;</code> and <code>x + 1 = 7;</code> are errors. The right side may be any expression that produces a value.</li>
 <li><strong>= is not ==</strong> — <code>=</code> assigns, <code>==</code> compares (slide 50). <code>if (x = 5)</code> compiles, assigns 5 to x and is always true; <code>if (x == 5)</code> is the test you meant.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main() {
     int x = 1, y = 9;
@@ -971,7 +971,7 @@ int main() {
 <li><strong>Hệ quả của chiều đó</strong> — vế trái phải là thứ ghi vào được (một biến), nên <code>5 = x;</code> và <code>x + 1 = 7;</code> đều là lỗi. Vế phải thì là biểu thức bất kỳ miễn sinh ra được một giá trị.</li>
 <li><strong>= không phải ==</strong> — <code>=</code> là gán, <code>==</code> là so sánh (slide 50). <code>if (x = 5)</code> vẫn biên dịch, nó gán 5 cho x và luôn luôn đúng; <code>if (x == 5)</code> mới là phép kiểm bạn định viết.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main() {
     int x = 1, y = 9;
@@ -995,7 +995,7 @@ int main() {
 <li><strong>Step 4 — the question: "Why does the user not have a chance to press ENTER before the program terminates?"</strong> The last <code>scanf</code> consumed the digits you typed but left the <strong>newline</strong> character in the input buffer. The following <code>getchar()</code> finds that newline already waiting, returns immediately, and the window closes.</li>
 <li><strong>Step 5 — the fix</strong> — flush the leftover newline first, then pause: <code>while (getchar() != '\\n');</code> followed by <code>getchar();</code>. Two calls, because the first one eats the leftover and the second one really waits.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main() {
     int    i1, i2;
@@ -1026,7 +1026,7 @@ int main() {
 <li><strong>Bước 4 — câu hỏi: "Vì sao người dùng không kịp bấm ENTER trước khi chương trình kết thúc?"</strong> Lệnh <code>scanf</code> cuối cùng đã ăn hết các chữ số bạn gõ nhưng để lại ký tự <strong>xuống dòng</strong> trong bộ đệm nhập. Lệnh <code>getchar()</code> ngay sau đó thấy sẵn ký tự ấy đang chờ, trả về ngay lập tức, và cửa sổ đóng lại.</li>
 <li><strong>Bước 5 — cách sửa</strong> — dọn sạch ký tự xuống dòng còn sót trước, rồi mới dừng: <code>while (getchar() != '\\n');</code> tiếp theo là <code>getchar();</code>. Hai lời gọi, vì cái thứ nhất ăn phần thừa còn cái thứ hai mới thật sự chờ.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main() {
     int    i1, i2;

@@ -681,7 +681,7 @@ updates:
 <h3>The one thing to do today</h3>
 <p>Regardless of the pinning decision, one grep is worth running on any repository:</p>
 
-<pre><code><span class="tok-comment"># co action nao ghim vao mot NHANH khong?</span>
+<pre><code class="language-bash"><span class="tok-comment"># co action nao ghim vao mot NHANH khong?</span>
 grep -rn "uses:.*@\\(main\\|master\\|develop\\)" .github/workflows/
 
 <span class="tok-comment"># kiem ke: dung nhung gi, ghim kieu gi</span>
@@ -885,7 +885,7 @@ updates:
 <h3>Một việc nên làm ngay hôm nay</h3>
 <p>Bất kể quyết định về ghim thế nào, có một lệnh grep đáng chạy trên bất kỳ kho nào:</p>
 
-<pre><code><span class="tok-comment"># co action nao ghim vao mot NHANH khong?</span>
+<pre><code class="language-bash"><span class="tok-comment"># co action nao ghim vao mot NHANH khong?</span>
 grep -rn "uses:.*@\\(main\\|master\\|develop\\)" .github/workflows/
 
 <span class="tok-comment"># kiem ke: dung nhung gi, ghim kieu gi</span>
@@ -1948,7 +1948,7 @@ Xin chao Cuong tu composite action</div>
 <li><strong>No <code>@ref</code> on a local action.</strong> <code>./.github/actions/chao-ga</code> is whatever the checked-out commit contains — so a pull request that edits the action runs its own edited version. That is convenient for development and exactly why a local action is not a security boundary.</li>
 </ul>
 <h3>The composite action for that block</h3>
-<pre><code><span class="tok-comment"># .github/actions/ssh-vps/action.yml</span>
+<pre><code class="language-bash"><span class="tok-comment"># .github/actions/ssh-vps/action.yml</span>
 name: Cai SSH toi VPS
 inputs:
   host:    { required: true }
@@ -1972,7 +1972,7 @@ runs:
 
 <p>Called from any of the nine:</p>
 
-<pre><code>- uses: ./.github/actions/ssh-vps
+<pre><code class="language-bash">- uses: ./.github/actions/ssh-vps
   with:
     host: &#36;{{ secrets.VPS_HOST }}
     user: &#36;{{ secrets.VPS_USER }}
@@ -2186,7 +2186,7 @@ Xin chao Cuong tu composite action</div>
 <li><strong>Action cục bộ không có <code>@ref</code>.</strong> <code>./.github/actions/chao-ga</code> là bất cứ thứ gì commit được checkout chứa — nên một pull request sửa action sẽ chạy CHÍNH bản đã sửa của nó. Tiện cho phát triển, và đúng là lý do một action cục bộ không phải ranh giới bảo mật.</li>
 </ul>
 <h3>Composite action cho khối ấy</h3>
-<pre><code><span class="tok-comment"># .github/actions/ssh-vps/action.yml</span>
+<pre><code class="language-bash"><span class="tok-comment"># .github/actions/ssh-vps/action.yml</span>
 name: Cai SSH toi VPS
 inputs:
   host:    { required: true }
@@ -2210,7 +2210,7 @@ runs:
 
 <p>Gọi từ bất kỳ cái nào trong chín:</p>
 
-<pre><code>- uses: ./.github/actions/ssh-vps
+<pre><code class="language-bash">- uses: ./.github/actions/ssh-vps
   with:
     host: &#36;{{ secrets.VPS_HOST }}
     user: &#36;{{ secrets.VPS_USER }}

@@ -117,7 +117,7 @@ ${slide('dv-09', 5, 'CPU đúng = hai lần đọc /proc/stat, một phép trừ
 <span class="tok-comment"># cpu  91419 0 66238 9302856 3770 0 13102 904 0 0</span>
 <span class="tok-comment"># user nice system idle iowait irq softirq steal guest guest_nice</span></code></pre>
 
-<pre><code>doc() { awk '/^cpu /{t=0;for(i=2;i&lt;=NF;i++)t+=\$i; print t, \$5}' /proc/stat; }
+<pre><code class="language-bash">doc() { awk '/^cpu /{t=0;for(i=2;i&lt;=NF;i++)t+=\$i; print t, \$5}' /proc/stat; }
 read T1 I1 &lt; &lt;(doc); sleep 1; read T2 I2 &lt; &lt;(doc)
 <span class="tok-comment"># ban% = 100 * (delta tong - delta idle) / delta tong</span></code></pre>
 
@@ -285,7 +285,7 @@ ${slide('dv-09', 5, 'CPU đúng = hai lần đọc /proc/stat, một phép trừ
 <span class="tok-comment"># cpu  91419 0 66238 9302856 3770 0 13102 904 0 0</span>
 <span class="tok-comment"># user nice system idle iowait irq softirq steal guest guest_nice</span></code></pre>
 
-<pre><code>doc() { awk '/^cpu /{t=0;for(i=2;i&lt;=NF;i++)t+=\$i; print t, \$5}' /proc/stat; }
+<pre><code class="language-bash">doc() { awk '/^cpu /{t=0;for(i=2;i&lt;=NF;i++)t+=\$i; print t, \$5}' /proc/stat; }
 read T1 I1 &lt; &lt;(doc); sleep 1; read T2 I2 &lt; &lt;(doc)
 <span class="tok-comment"># ban% = 100 * (delta tong - delta idle) / delta tong</span></code></pre>
 
@@ -470,7 +470,7 @@ ${slide('dv-09', 11, 'Đuôi 5% thành trải nghiệm của đa số: 0,95 mũ 
 ${slide('dv-09', 9, 'Phân vị bằng sort + awk — pv.sh, và vì sao ít mẫu thì p95 nhảy')}
 <p>You do not need Prometheus for this. Nginx can log <code>$request_time</code> for every request — not in its default <code>combined</code> format, which has no duration field (Lesson 9.3 measures what that costs), but with one variable added to a <code>log_format</code> (the Nginx course covers the log format). With that field last on the line, the whole calculation is a sort:</p>
 
-<pre><code><span class="tok-comment"># p50/p95/p99 tu mot tep log co truong thoi gian</span>
+<pre><code class="language-bash"><span class="tok-comment"># p50/p95/p99 tu mot tep log co truong thoi gian</span>
 awk '{print \$NF}' access.log | sort -n | awk '
   {a[NR]=\$1}
   END{printf "p50=%.0fms p95=%.0fms p99=%.0fms max=%.0fms\\n",
@@ -618,7 +618,7 @@ ${slide('dv-09', 11, 'Đuôi 5% thành trải nghiệm của đa số: 0,95 mũ 
 ${slide('dv-09', 9, 'Phân vị bằng sort + awk — pv.sh, và vì sao ít mẫu thì p95 nhảy')}
 <p>Bạn không cần Prometheus cho việc này. Nginx GHI ĐƯỢC <code>$request_time</code> cho mỗi request — không phải trong định dạng mặc định <code>combined</code>, thứ không có trường thời lượng nào (Bài 9.3 đo xem điều đó tốn gì), mà bằng cách thêm một biến vào <code>log_format</code> (khoá Nginx nói về định dạng log). Khi trường đó đứng cuối dòng, toàn bộ phép tính là một lần sắp xếp:</p>
 
-<pre><code><span class="tok-comment"># p50/p95/p99 tu mot tep log co truong thoi gian</span>
+<pre><code class="language-bash"><span class="tok-comment"># p50/p95/p99 tu mot tep log co truong thoi gian</span>
 awk '{print \$NF}' access.log | sort -n | awk '
   {a[NR]=\$1}
   END{printf "p50=%.0fms p95=%.0fms p99=%.0fms max=%.0fms\\n",
@@ -769,7 +769,7 @@ ${slide('dv-09', 12, 'Log thiếu trường: trả lời nhanh mà SAI — và l
 <h3>Structured does not mean JSON everywhere</h3>
 <p>The measurement above compares two extremes, and there is a middle that is often the right answer on a single server: keep the human-readable format and <em>add the fields you need</em>. Nginx makes this trivial:</p>
 
-<pre><code>log_format huu_dung '\$remote_addr \$status \$request_time \$upstream_response_time '
+<pre><code class="language-bash">log_format huu_dung '\$remote_addr \$status \$request_time \$upstream_response_time '
                     '\$upstream_addr \$upstream_status "\$request_uri" '
                     '\$body_bytes_sent \$upstream_cache_status';</code></pre>
 
@@ -948,7 +948,7 @@ ${slide('dv-09', 12, 'Log thiếu trường: trả lời nhanh mà SAI — và l
 <h3>Có cấu trúc KHÔNG có nghĩa là JSON ở mọi nơi</h3>
 <p>Phép đo ở trên so hai thái cực, và có một chặng giữa thường là câu trả lời đúng trên một máy chủ đơn lẻ: giữ định dạng người-đọc-được và <em>THÊM những trường bạn cần</em>. Nginx làm chuyện đó dễ như bỡn:</p>
 
-<pre><code>log_format huu_dung '\$remote_addr \$status \$request_time \$upstream_response_time '
+<pre><code class="language-bash">log_format huu_dung '\$remote_addr \$status \$request_time \$upstream_response_time '
                     '\$upstream_addr \$upstream_status "\$request_uri" '
                     '\$body_bytes_sent \$upstream_cache_status';</code></pre>
 
@@ -1106,7 +1106,7 @@ ${slide('dv-09', 17, 'Ngưỡng 90% cho 5 giờ, xu hướng cho 24 giờ — c�
 <h3>The arithmetic</h3>
 <p>It is one subtraction and one division, over samples you are already collecting:</p>
 
-<pre><code>DUNG=\$(df --output=used /srv | tail -1)
+<pre><code class="language-bash">DUNG=\$(df --output=used /srv | tail -1)
 TONG=\$(df --output=size /srv | tail -1)
 echo "\$(date +%s) \$DUNG" >> dia.dat
 
@@ -1320,7 +1320,7 @@ ${slide('dv-09', 17, 'Ngưỡng 90% cho 5 giờ, xu hướng cho 24 giờ — c�
 <h3>Phép tính</h3>
 <p>Nó là một phép trừ và một phép chia, trên những mẫu bạn vốn đã thu thập:</p>
 
-<pre><code>DUNG=\$(df --output=used /srv | tail -1)
+<pre><code class="language-bash">DUNG=\$(df --output=used /srv | tail -1)
 TONG=\$(df --output=size /srv | tail -1)
 echo "\$(date +%s) \$DUNG" >> dia.dat
 
@@ -1525,7 +1525,7 @@ $ MA=$(curl -s -o /dev/null -w "%{http_code}" --max-time 3 $U); echo "[\${MA:-00
 ${slide('dv-09', 22, '/health 200 trong khi trang chủ 502 — đo lại 29/09 trên VPS thí nghiệm')}
 <p>An application on port 3361 answering everything correctly, behind nginx on 3360. The proxy has two location blocks, and one of them points at a port nobody is listening on:</p>
 
-<pre><code>location /health { proxy_pass http://127.0.0.1:3361; }   <span class="tok-comment"># dung</span>
+<pre><code class="language-bash">location /health { proxy_pass http://127.0.0.1:3361; }   <span class="tok-comment"># dung</span>
 location /       { proxy_pass http://127.0.0.1:3399; }   <span class="tok-comment"># CONG SAI</span></code></pre>
 
 <div class="out">=== kiem TU BEN TRONG (thang ung dung) ===
@@ -1569,7 +1569,7 @@ location /       { proxy_pass http://127.0.0.1:3399; }   <span class="tok-commen
 ${slide('dv-09', 23, 'Mã 200 chưa chứng minh trang chạy: kiểm NỘI DUNG, tên miền thật, hạn chứng chỉ')}
 <p>Not <code>/health</code>. The whole point is to exercise the path users take:</p>
 
-<pre><code><span class="tok-comment"># kiem tu MOT MAY KHAC, dung ten mien that, va doi thu THAT SU co tren trang</span>
+<pre><code class="language-bash"><span class="tok-comment"># kiem tu MOT MAY KHAC, dung ten mien that, va doi thu THAT SU co tren trang</span>
 curl -sS --max-time 10 https://vidu.com/ \\
   | grep -q 'id="trang-chu"' || echo "TRANG CHU HONG"
 
@@ -1722,7 +1722,7 @@ ${slide('dv-09', 27, 'Chọn công cụ: tự viết, Uptime Kuma, Prometheus + 
 ${slide('dv-09', 22, '/health 200 trong khi trang chủ 502 — đo lại 29/09 trên VPS thí nghiệm')}
 <p>Một ứng dụng ở cổng 3361 trả lời mọi thứ đúng đắn, đứng sau nginx ở 3360. Con proxy có hai khối location, và một trong hai trỏ vào một cổng chẳng ai nghe:</p>
 
-<pre><code>location /health { proxy_pass http://127.0.0.1:3361; }   <span class="tok-comment"># dung</span>
+<pre><code class="language-bash">location /health { proxy_pass http://127.0.0.1:3361; }   <span class="tok-comment"># dung</span>
 location /       { proxy_pass http://127.0.0.1:3399; }   <span class="tok-comment"># CONG SAI</span></code></pre>
 
 <div class="out">=== kiem TU BEN TRONG (thang ung dung) ===
@@ -1766,7 +1766,7 @@ location /       { proxy_pass http://127.0.0.1:3399; }   <span class="tok-commen
 ${slide('dv-09', 23, 'Mã 200 chưa chứng minh trang chạy: kiểm NỘI DUNG, tên miền thật, hạn chứng chỉ')}
 <p>Không phải <code>/health</code>. Toàn bộ ý nghĩa của nó là đi qua con đường NGƯỜI DÙNG đi:</p>
 
-<pre><code><span class="tok-comment"># kiem tu MOT MAY KHAC, dung ten mien that, va doi thu THAT SU co tren trang</span>
+<pre><code class="language-bash"><span class="tok-comment"># kiem tu MOT MAY KHAC, dung ten mien that, va doi thu THAT SU co tren trang</span>
 curl -sS --max-time 10 https://vidu.com/ \\
   | grep -q 'id="trang-chu"' || echo "TRANG CHU HONG"
 

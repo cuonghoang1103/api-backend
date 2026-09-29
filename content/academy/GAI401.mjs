@@ -129,7 +129,7 @@ const c1 = doc('gai401-1-1-what-is-genai', '1.1 — What is Generative AI|||1.1 
 </ul>
 <h3>What can be generated</h3>
 <p>Text, code, images, audio/music, video and 3D — often <strong>multimodal</strong> (one model handling several of these).</p>
-<pre><code># A first "generation": sampling from a distribution
+<pre><code class="language-python"># A first "generation": sampling from a distribution
 import numpy as np
 rng = np.random.default_rng(0)
 
@@ -151,7 +151,7 @@ print(samples)   # five brand-new values the model "made up"
 </ul>
 <h3>Sinh được những gì</h3>
 <p>Văn bản, mã, hình ảnh, âm thanh/nhạc, video và 3D — thường là <strong>đa phương thức</strong> (một mô hình xử lý nhiều loại).</p>
-<pre><code># "Sinh" đầu tiên: lấy mẫu từ một phân phối
+<pre><code class="language-python"># "Sinh" đầu tiên: lấy mẫu từ một phân phối
 import numpy as np
 rng = np.random.default_rng(0)
 
@@ -183,7 +183,7 @@ const c2 = doc('gai401-2-1-deep-learning', '2.1 — Deep learning foundations|||
 <li><strong>Gradient descent</strong> — nudge each weight in the direction that lowers the loss.</li>
 <li><strong>Backpropagation</strong> — the chain rule that computes those gradients efficiently.</li>
 </ul>
-<pre><code>import torch
+<pre><code class="language-python">import torch
 import torch.nn as nn
 
 net = nn.Sequential(nn.Linear(8, 16), nn.ReLU(), nn.Linear(16, 4))
@@ -209,7 +209,7 @@ opt.step()                  # 3) update weights
 <li><strong>Gradient descent</strong> — đẩy mỗi trọng số theo hướng làm giảm mất mát.</li>
 <li><strong>Backpropagation</strong> — quy tắc chuỗi tính các gradient đó một cách hiệu quả.</li>
 </ul>
-<pre><code>import torch
+<pre><code class="language-python">import torch
 import torch.nn as nn
 
 net = nn.Sequential(nn.Linear(8, 16), nn.ReLU(), nn.Linear(16, 4))
@@ -242,7 +242,7 @@ const c3 = doc('gai401-3-1-classic-gen-models', '3.1 — Classic generative mode
 <p>A <strong>VAE</strong> forces the latent space to follow a smooth distribution (a Gaussian). Because the space is continuous and structured, you can <strong>sample</strong> a random latent vector and decode it into a plausible new example.</p>
 <h3>Generative Adversarial Network (GAN)</h3>
 <p>A <strong>GAN</strong> pits two networks against each other: a <strong>generator</strong> that fabricates fakes and a <strong>discriminator</strong> that tries to tell real from fake. They improve together until the fakes look real. GANs produce sharp images but can be unstable to train.</p>
-<pre><code># VAE loss = reconstruction + KL (keep latent close to a Gaussian)
+<pre><code class="language-python"># VAE loss = reconstruction + KL (keep latent close to a Gaussian)
 def vae_loss(x, x_hat, mu, logvar):
     recon = ((x - x_hat) ** 2).mean()
     kl = -0.5 * (1 + logvar - mu.pow(2) - logvar.exp()).mean()
@@ -257,7 +257,7 @@ def vae_loss(x, x_hat, mu, logvar):
 <p><strong>VAE</strong> buộc không gian ẩn tuân theo một phân phối trơn (Gaussian). Vì không gian liên tục và có cấu trúc, bạn có thể <strong>lấy mẫu</strong> một vector ẩn ngẫu nhiên rồi giải mã thành ví dụ mới hợp lý.</p>
 <h3>Mạng đối kháng sinh (GAN)</h3>
 <p><strong>GAN</strong> cho hai mạng đấu nhau: một <strong>generator</strong> chế ra hàng giả và một <strong>discriminator</strong> cố phân biệt thật với giả. Chúng cùng tiến bộ đến khi hàng giả trông như thật. GAN cho ảnh sắc nét nhưng huấn luyện dễ mất ổn định.</p>
-<pre><code># Mất mát VAE = tái dựng + KL (giữ không gian ẩn gần Gaussian)
+<pre><code class="language-python"># Mất mát VAE = tái dựng + KL (giữ không gian ẩn gần Gaussian)
 def vae_loss(x, x_hat, mu, logvar):
     recon = ((x - x_hat) ** 2).mean()
     kl = -0.5 * (1 + logvar - mu.pow(2) - logvar.exp()).mean()
@@ -336,7 +336,7 @@ const c5 = doc('gai401-5-1-llm', '5.1 — Large language models (LLM)|||5.1 — 
 <p>An LLM (like GPT, a <em>decoder-only</em> Transformer) is trained <strong>self-supervised</strong> on enormous text: at every position it predicts the next token, with the true next token as the label. No manual labelling is needed — the text supervises itself.</p>
 <h3>Scaling &amp; emergent abilities</h3>
 <p><strong>Scaling laws</strong> show loss falls predictably as data, parameters and compute grow. Past certain scales, <strong>emergent abilities</strong> appear — arithmetic, translation, in-context learning — that smaller models simply do not have.</p>
-<pre><code>from transformers import pipeline
+<pre><code class="language-python">from transformers import pipeline
 gen = pipeline("text-generation", model="gpt2")
 out = gen("Generative AI is", max_new_tokens=20)
 print(out[0]["generated_text"])   # the model predicts one token at a time
@@ -350,7 +350,7 @@ print(out[0]["generated_text"])   # the model predicts one token at a time
 <p>Một LLM (như GPT, Transformer <em>chỉ-decoder</em>) được huấn luyện <strong>tự giám sát</strong> trên khối văn bản khổng lồ: tại mỗi vị trí nó dự đoán token kế tiếp, lấy token thật kế tiếp làm nhãn. Không cần gán nhãn tay — văn bản tự giám sát chính nó.</p>
 <h3>Scaling &amp; khả năng mới nổi</h3>
 <p><strong>Scaling laws</strong> cho thấy mất mát giảm có quy luật khi dữ liệu, tham số và sức tính tăng. Qua một số ngưỡng quy mô, <strong>khả năng mới nổi (emergent)</strong> xuất hiện — làm toán, dịch, học trong ngữ cảnh — thứ mà mô hình nhỏ đơn giản không có.</p>
-<pre><code>from transformers import pipeline
+<pre><code class="language-python">from transformers import pipeline
 gen = pipeline("text-generation", model="gpt2")
 out = gen("Generative AI is", max_new_tokens=20)
 print(out[0]["generated_text"])   # mô hình dự đoán từng token một
@@ -375,7 +375,7 @@ const c6 = doc('gai401-6-1-prompt-finetune', '6.1 — Prompting & fine-tuning|||
 <p>An LLM only knows its training data. <strong>RAG</strong> retrieves relevant documents (via embedding search) and pastes them into the prompt, so the model answers from <em>current, private</em> knowledge without retraining.</p>
 <h3>Fine-tuning &amp; LoRA</h3>
 <p>When prompting is not enough, <strong>fine-tune</strong> on your own examples. <strong>LoRA</strong> (Low-Rank Adaptation) trains only a few small extra matrices instead of all billions of weights — cheap, fast, and easy to swap.</p>
-<pre><code># Few-shot prompt built in Python (no fine-tuning needed)
+<pre><code class="language-python"># Few-shot prompt built in Python (no fine-tuning needed)
 shots = [
     ("Great movie!", "positive"),
     ("Total waste of time.", "negative"),
@@ -393,7 +393,7 @@ print(prompt)
 <p>Một LLM chỉ biết dữ liệu nó đã học. <strong>RAG</strong> truy hồi tài liệu liên quan (tìm bằng embedding) rồi dán vào prompt, để mô hình trả lời từ tri thức <em>mới, riêng tư</em> mà không cần huấn luyện lại.</p>
 <h3>Fine-tuning &amp; LoRA</h3>
 <p>Khi prompt chưa đủ, hãy <strong>fine-tune</strong> trên ví dụ của bạn. <strong>LoRA</strong> (Low-Rank Adaptation) chỉ huấn luyện vài ma trận nhỏ thêm vào thay vì cả tỉ trọng số — rẻ, nhanh và dễ tráo.</p>
-<pre><code># Prompt few-shot dựng bằng Python (không cần fine-tune)
+<pre><code class="language-python"># Prompt few-shot dựng bằng Python (không cần fine-tune)
 shots = [
     ("Great movie!", "positive"),
     ("Total waste of time.", "negative"),
@@ -422,7 +422,7 @@ const c7 = doc('gai401-7-1-image-multimodal', '7.1 — Image & multimodal genera
 <p><strong>Stable Diffusion</strong> runs the process in a compressed <em>latent</em> space (fast, runs on a normal GPU) and is <strong>text-conditioned</strong>: a text encoder guides denoising so the output matches your prompt. <strong>DALL-E</strong> does the same job with its own architecture. Both turn a sentence into a picture.</p>
 <h3>Multimodal models</h3>
 <p><strong>Multimodal</strong> models handle several media at once — describe an image (vision-to-text), answer questions about a chart, or generate audio from text — by embedding every modality into a shared space.</p>
-<pre><code>from diffusers import StableDiffusionPipeline
+<pre><code class="language-python">from diffusers import StableDiffusionPipeline
 pipe = StableDiffusionPipeline.from_pretrained("runwayml/stable-diffusion-v1-5")
 image = pipe("a watercolor fox in a misty forest").images[0]
 image.save("fox.png")   # text prompt in, image out
@@ -436,7 +436,7 @@ image.save("fox.png")   # text prompt in, image out
 <p><strong>Stable Diffusion</strong> chạy quá trình trong không gian <em>ẩn (latent)</em> nén (nhanh, chạy được trên GPU thường) và <strong>điều kiện theo văn bản</strong>: một bộ mã hoá văn bản dẫn dắt việc khử nhiễu để đầu ra khớp prompt. <strong>DALL-E</strong> làm cùng việc đó với kiến trúc riêng. Cả hai biến một câu thành một bức ảnh.</p>
 <h3>Mô hình đa phương thức</h3>
 <p>Mô hình <strong>đa phương thức</strong> xử lý nhiều loại media cùng lúc — mô tả một ảnh (ảnh sang chữ), trả lời câu hỏi về một biểu đồ, hay sinh âm thanh từ chữ — bằng cách nhúng mọi phương thức vào một không gian chung.</p>
-<pre><code>from diffusers import StableDiffusionPipeline
+<pre><code class="language-python">from diffusers import StableDiffusionPipeline
 pipe = StableDiffusionPipeline.from_pretrained("runwayml/stable-diffusion-v1-5")
 image = pipe("a watercolor fox in a misty forest").images[0]
 image.save("fox.png")   # đưa prompt chữ vào, nhận ảnh ra
@@ -463,7 +463,7 @@ const c8 = doc('gai401-8-1-eval-ethics', '8.1 — Evaluation, ethics & applicati
 <p>Training on scraped text and images raises <strong>copyright</strong> and consent questions; generated output can echo training data. Know your data provenance and licence.</p>
 <h3>Applications</h3>
 <p>Chat assistants, code generation, search, content creation, tutoring, drug/material discovery — evaluate each with the right metric and a human in the loop.</p>
-<pre><code># A simple, honest evaluation: does the answer cite its source?
+<pre><code class="language-python"># A simple, honest evaluation: does the answer cite its source?
 def is_grounded(answer, sources):
     return any(s[:40] in answer for s in sources)
 
@@ -481,7 +481,7 @@ print(is_grounded("Per the 2023 report, revenue rose 12%.",
 <p>Huấn luyện trên văn bản và ảnh thu thập đặt ra câu hỏi <strong>bản quyền</strong> và sự đồng ý; đầu ra sinh ra có thể lặp lại dữ liệu huấn luyện. Hãy nắm nguồn gốc và giấy phép dữ liệu của bạn.</p>
 <h3>Ứng dụng</h3>
 <p>Trợ lý hội thoại, sinh mã, tìm kiếm, sáng tạo nội dung, gia sư, khám phá thuốc/vật liệu — đánh giá mỗi việc bằng thước đo phù hợp và có người trong vòng lặp.</p>
-<pre><code># Một đánh giá đơn giản, trung thực: câu trả lời có trích nguồn không?
+<pre><code class="language-python"># Một đánh giá đơn giản, trung thực: câu trả lời có trích nguồn không?
 def is_grounded(answer, sources):
     return any(s[:40] in answer for s in sources)
 

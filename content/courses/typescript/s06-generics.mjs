@@ -24,7 +24,7 @@ export default {
 
 <h3>The problem: <code>any</code> throws the type away</h3>
 <p>Say you want a function that returns whatever you give it. The lazy version uses <code>any</code>:</p>
-<pre><code><span class="tok-comment">// gen1.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// gen1.ts</span>
 <span class="tok-keyword">function</span> <span class="tok-function">identity</span>(x: <span class="tok-keyword">any</span>) { <span class="tok-keyword">return</span> x; }
 <span class="tok-keyword">const</span> n = <span class="tok-function">identity</span>(<span class="tok-number">42</span>);   <span class="tok-comment">// n: any — the type is gone</span>
 n.<span class="tok-function">toUpperCase</span>();          <span class="tok-comment">// no compile error… crashes at runtime</span></code></pre>
@@ -33,7 +33,7 @@ n.<span class="tok-function">toUpperCase</span>();          <span class="tok-com
 
 <h3>The fix: a type parameter</h3>
 <p>Write <code>&lt;T&gt;</code> after the function name to declare a type parameter, then use <code>T</code> where a type goes. <code>T</code> is not a fixed type — it's filled in per call:</p>
-<pre><code><span class="tok-comment">// gen2.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// gen2.ts</span>
 <span class="tok-keyword">function</span> <span class="tok-function">identity</span>&lt;T&gt;(x: T): T { <span class="tok-keyword">return</span> x; }
 <span class="tok-keyword">let</span> count = <span class="tok-number">42</span>;              <span class="tok-comment">// count: number</span>
 <span class="tok-keyword">const</span> n = <span class="tok-function">identity</span>(count);   <span class="tok-comment">// n: number (T inferred as number)</span>
@@ -44,7 +44,7 @@ n.<span class="tok-function">toUpperCase</span>();             <span class="tok-
 
 <h3>The mental model</h3>
 <p>Read <code>&lt;T&gt;</code> as "for some type T, to be decided by the caller". The function body is written once, generically, but every call gets its own concrete <code>T</code>. Here's the same idea preserving element types:</p>
-<pre><code><span class="tok-comment">// gen3.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// gen3.ts</span>
 <span class="tok-keyword">function</span> <span class="tok-function">first</span>&lt;T&gt;(arr: T[]): T | <span class="tok-keyword">undefined</span> { <span class="tok-keyword">return</span> arr[<span class="tok-number">0</span>]; }
 <span class="tok-keyword">const</span> x = <span class="tok-function">first</span>([<span class="tok-number">1</span>, <span class="tok-number">2</span>, <span class="tok-number">3</span>]);   <span class="tok-comment">// x: number | undefined</span>
 <span class="tok-keyword">const</span> y = <span class="tok-function">first</span>([<span class="tok-string">'a'</span>, <span class="tok-string">'b'</span>]);  <span class="tok-comment">// y: string | undefined</span></code></pre>
@@ -53,7 +53,7 @@ n.<span class="tok-function">toUpperCase</span>();             <span class="tok-
 
 <h3>Explicit type arguments</h3>
 <p>Inference is the norm, but you can pin <code>T</code> yourself with <code>&lt;…&gt;</code> at the call site. When you do, TypeScript checks the argument against it:</p>
-<pre><code><span class="tok-comment">// gen4.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// gen4.ts</span>
 <span class="tok-keyword">function</span> <span class="tok-function">identity</span>&lt;T&gt;(x: T): T { <span class="tok-keyword">return</span> x; }
 <span class="tok-keyword">const</span> a = <span class="tok-function">identity</span>&lt;<span class="tok-keyword">string</span>&gt;(<span class="tok-number">42</span>);  <span class="tok-comment">// forcing T = string, passing a number</span></code></pre>
 <div class="out">gen4.ts(3,28): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.</div>
@@ -82,7 +82,7 @@ n.<span class="tok-function">toUpperCase</span>();             <span class="tok-
 
 <h3>Vấn đề: <code>any</code> vứt bỏ kiểu</h3>
 <p>Giả sử bạn muốn một hàm trả lại đúng thứ bạn đưa vào. Bản lười dùng <code>any</code>:</p>
-<pre><code><span class="tok-comment">// gen1.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// gen1.ts</span>
 <span class="tok-keyword">function</span> <span class="tok-function">identity</span>(x: <span class="tok-keyword">any</span>) { <span class="tok-keyword">return</span> x; }
 <span class="tok-keyword">const</span> n = <span class="tok-function">identity</span>(<span class="tok-number">42</span>);   <span class="tok-comment">// n: any — kiểu đã mất</span>
 n.<span class="tok-function">toUpperCase</span>();          <span class="tok-comment">// không lỗi biên dịch… sập lúc chạy</span></code></pre>
@@ -91,7 +91,7 @@ n.<span class="tok-function">toUpperCase</span>();          <span class="tok-com
 
 <h3>Cách sửa: một tham số kiểu</h3>
 <p>Viết <code>&lt;T&gt;</code> sau tên hàm để khai báo một tham số kiểu, rồi dùng <code>T</code> ở chỗ cần một kiểu. <code>T</code> không phải một kiểu cố định — nó được điền theo từng lần gọi:</p>
-<pre><code><span class="tok-comment">// gen2.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// gen2.ts</span>
 <span class="tok-keyword">function</span> <span class="tok-function">identity</span>&lt;T&gt;(x: T): T { <span class="tok-keyword">return</span> x; }
 <span class="tok-keyword">let</span> count = <span class="tok-number">42</span>;              <span class="tok-comment">// count: number</span>
 <span class="tok-keyword">const</span> n = <span class="tok-function">identity</span>(count);   <span class="tok-comment">// n: number (T suy ra là number)</span>
@@ -102,7 +102,7 @@ n.<span class="tok-function">toUpperCase</span>();             <span class="tok-
 
 <h3>Mô hình tư duy</h3>
 <p>Đọc <code>&lt;T&gt;</code> là "với một kiểu T nào đó, do bên gọi quyết định". Thân hàm viết một lần, tổng quát, nhưng mỗi lần gọi nhận một <code>T</code> cụ thể riêng. Đây là cùng ý tưởng, giữ nguyên kiểu phần tử:</p>
-<pre><code><span class="tok-comment">// gen3.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// gen3.ts</span>
 <span class="tok-keyword">function</span> <span class="tok-function">first</span>&lt;T&gt;(arr: T[]): T | <span class="tok-keyword">undefined</span> { <span class="tok-keyword">return</span> arr[<span class="tok-number">0</span>]; }
 <span class="tok-keyword">const</span> x = <span class="tok-function">first</span>([<span class="tok-number">1</span>, <span class="tok-number">2</span>, <span class="tok-number">3</span>]);   <span class="tok-comment">// x: number | undefined</span>
 <span class="tok-keyword">const</span> y = <span class="tok-function">first</span>([<span class="tok-string">'a'</span>, <span class="tok-string">'b'</span>]);  <span class="tok-comment">// y: string | undefined</span></code></pre>
@@ -111,7 +111,7 @@ n.<span class="tok-function">toUpperCase</span>();             <span class="tok-
 
 <h3>Đối số kiểu tường minh</h3>
 <p>Suy kiểu là mặc định, nhưng bạn có thể tự ghim <code>T</code> bằng <code>&lt;…&gt;</code> tại chỗ gọi. Khi làm vậy, TypeScript kiểm đối số ngược lại nó:</p>
-<pre><code><span class="tok-comment">// gen4.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// gen4.ts</span>
 <span class="tok-keyword">function</span> <span class="tok-function">identity</span>&lt;T&gt;(x: T): T { <span class="tok-keyword">return</span> x; }
 <span class="tok-keyword">const</span> a = <span class="tok-function">identity</span>&lt;<span class="tok-keyword">string</span>&gt;(<span class="tok-number">42</span>);  <span class="tok-comment">// ép T = string, lại truyền một số</span></code></pre>
 <div class="out">gen4.ts(3,28): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.</div>
@@ -150,7 +150,7 @@ n.<span class="tok-function">toUpperCase</span>();             <span class="tok-
 
 <h3>Why an unconstrained T is untouchable</h3>
 <p>Try to read <code>.length</code> off a plain <code>T</code> and TypeScript stops you — nothing promised <code>T</code> has a length:</p>
-<pre><code><span class="tok-comment">// con1.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// con1.ts</span>
 <span class="tok-keyword">function</span> <span class="tok-function">longest</span>&lt;T&gt;(a: T, b: T) {
   <span class="tok-keyword">return</span> a.length &gt; b.length ? a : b;   <span class="tok-comment">// T could be anything</span>
 }</code></pre>
@@ -160,7 +160,7 @@ con1.ts(3,23): error TS2339: Property 'length' does not exist on type 'T'.</div>
 
 <h3>Constrain with <code>extends</code></h3>
 <p>Add <code>T extends { length: number }</code> — "T can be any type, as long as it has a numeric <code>length</code>". Now the body is allowed to read <code>.length</code>, and the <em>caller</em> is checked against the constraint:</p>
-<pre><code><span class="tok-comment">// con2.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// con2.ts</span>
 <span class="tok-keyword">function</span> <span class="tok-function">longest</span>&lt;T <span class="tok-keyword">extends</span> { length: <span class="tok-keyword">number</span> }&gt;(a: T, b: T): T {
   <span class="tok-keyword">return</span> a.length &gt; b.length ? a : b;
 }
@@ -172,7 +172,7 @@ con1.ts(3,23): error TS2339: Property 'length' does not exist on type 'T'.</div>
 
 <h3><code>keyof</code> and <code>T[K]</code>: a truly safe getter</h3>
 <p>The famous example. You want "get a property by name", returning exactly that property's type. Two type parameters do it: <code>T</code> for the object, and <code>K extends keyof T</code> for a key that's guaranteed to exist on <code>T</code>. The return type <code>T[K]</code> is an <em>indexed access</em> — "the type of T at key K":</p>
-<pre><code><span class="tok-comment">// con3.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// con3.ts</span>
 <span class="tok-keyword">function</span> <span class="tok-function">getProp</span>&lt;T, K <span class="tok-keyword">extends</span> <span class="tok-keyword">keyof</span> T&gt;(obj: T, key: K): T[K] {
   <span class="tok-keyword">return</span> obj[key];
 }
@@ -206,7 +206,7 @@ con1.ts(3,23): error TS2339: Property 'length' does not exist on type 'T'.</div>
 
 <h3>Vì sao T không ràng buộc thì không đụng được</h3>
 <p>Thử đọc <code>.length</code> trên một <code>T</code> trần và TypeScript chặn bạn — không có gì hứa <code>T</code> có length:</p>
-<pre><code><span class="tok-comment">// con1.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// con1.ts</span>
 <span class="tok-keyword">function</span> <span class="tok-function">longest</span>&lt;T&gt;(a: T, b: T) {
   <span class="tok-keyword">return</span> a.length &gt; b.length ? a : b;   <span class="tok-comment">// T có thể là bất cứ gì</span>
 }</code></pre>
@@ -216,7 +216,7 @@ con1.ts(3,23): error TS2339: Property 'length' does not exist on type 'T'.</div>
 
 <h3>Ràng buộc bằng <code>extends</code></h3>
 <p>Thêm <code>T extends { length: number }</code> — "T có thể là kiểu nào cũng được, miễn là nó có một <code>length</code> kiểu số". Giờ thân hàm được phép đọc <code>.length</code>, và <em>bên gọi</em> bị kiểm ngược lại ràng buộc:</p>
-<pre><code><span class="tok-comment">// con2.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// con2.ts</span>
 <span class="tok-keyword">function</span> <span class="tok-function">longest</span>&lt;T <span class="tok-keyword">extends</span> { length: <span class="tok-keyword">number</span> }&gt;(a: T, b: T): T {
   <span class="tok-keyword">return</span> a.length &gt; b.length ? a : b;
 }
@@ -228,7 +228,7 @@ con1.ts(3,23): error TS2339: Property 'length' does not exist on type 'T'.</div>
 
 <h3><code>keyof</code> và <code>T[K]</code>: một getter thật sự an toàn</h3>
 <p>Ví dụ kinh điển. Bạn muốn "lấy một thuộc tính theo tên", trả về đúng kiểu của thuộc tính đó. Hai tham số kiểu làm được: <code>T</code> cho object, và <code>K extends keyof T</code> cho một key được bảo đảm tồn tại trên <code>T</code>. Kiểu trả về <code>T[K]</code> là một <em>truy cập theo chỉ mục</em> — "kiểu của T tại key K":</p>
-<pre><code><span class="tok-comment">// con3.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// con3.ts</span>
 <span class="tok-keyword">function</span> <span class="tok-function">getProp</span>&lt;T, K <span class="tok-keyword">extends</span> <span class="tok-keyword">keyof</span> T&gt;(obj: T, key: K): T[K] {
   <span class="tok-keyword">return</span> obj[key];
 }
@@ -272,7 +272,7 @@ con1.ts(3,23): error TS2339: Property 'length' does not exist on type 'T'.</div>
 
 <h3>A generic interface</h3>
 <p>Put <code>&lt;T&gt;</code> after the name and use <code>T</code> in the fields. Now <code>Box&lt;number&gt;</code> and <code>Box&lt;string&gt;</code> are two different, fully-checked types from one declaration:</p>
-<pre><code><span class="tok-comment">// box1.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// box1.ts</span>
 <span class="tok-keyword">interface</span> Box&lt;T&gt; { value: T; }
 <span class="tok-keyword">const</span> nb: Box&lt;<span class="tok-keyword">number</span>&gt; = { value: <span class="tok-number">42</span> };
 <span class="tok-keyword">const</span> sb: Box&lt;<span class="tok-keyword">string</span>&gt; = { value: <span class="tok-string">'hi'</span> };
@@ -282,7 +282,7 @@ con1.ts(3,23): error TS2339: Property 'length' does not exist on type 'T'.</div>
 
 <h3>A generic class</h3>
 <p>Classes carry their type parameter across all their methods. A <code>Stack&lt;T&gt;</code> stores <code>T[]</code> internally, so <code>push</code> takes a <code>T</code> and <code>pop</code> returns <code>T | undefined</code> — consistently, for whatever <code>T</code> you instantiate with:</p>
-<pre><code><span class="tok-comment">// stack1.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// stack1.ts</span>
 <span class="tok-keyword">class</span> Stack&lt;T&gt; {
   <span class="tok-keyword">private</span> items: T[] = [];
   <span class="tok-function">push</span>(item: T): <span class="tok-keyword">void</span> { <span class="tok-keyword">this</span>.items.<span class="tok-function">push</span>(item); }
@@ -297,7 +297,7 @@ s.<span class="tok-function">push</span>(<span class="tok-string">'x'</span>);  
 
 <h3>Default type parameters</h3>
 <p>Like value parameters, type parameters can have a default with <code>= </code>. It makes the argument optional at the use site — handy when a sensible fallback exists:</p>
-<pre><code><span class="tok-comment">// def1.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// def1.ts</span>
 <span class="tok-keyword">interface</span> ApiResult&lt;T = <span class="tok-keyword">unknown</span>&gt; { ok: <span class="tok-keyword">boolean</span>; data: T; }
 <span class="tok-keyword">const</span> a: ApiResult = { ok: <span class="tok-keyword">true</span>, data: <span class="tok-number">123</span> };        <span class="tok-comment">// T defaults to unknown</span>
 <span class="tok-keyword">const</span> b: ApiResult&lt;<span class="tok-keyword">string</span>&gt; = { ok: <span class="tok-keyword">true</span>, data: <span class="tok-string">'x'</span> };
@@ -328,7 +328,7 @@ a.data.<span class="tok-function">toUpperCase</span>();   <span class="tok-comme
 
 <h3>Một interface generic</h3>
 <p>Đặt <code>&lt;T&gt;</code> sau tên và dùng <code>T</code> trong các field. Giờ <code>Box&lt;number&gt;</code> và <code>Box&lt;string&gt;</code> là hai kiểu khác nhau, được kiểm đầy đủ, từ một khai báo:</p>
-<pre><code><span class="tok-comment">// box1.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// box1.ts</span>
 <span class="tok-keyword">interface</span> Box&lt;T&gt; { value: T; }
 <span class="tok-keyword">const</span> nb: Box&lt;<span class="tok-keyword">number</span>&gt; = { value: <span class="tok-number">42</span> };
 <span class="tok-keyword">const</span> sb: Box&lt;<span class="tok-keyword">string</span>&gt; = { value: <span class="tok-string">'hi'</span> };
@@ -338,7 +338,7 @@ a.data.<span class="tok-function">toUpperCase</span>();   <span class="tok-comme
 
 <h3>Một class generic</h3>
 <p>Class mang tham số kiểu của nó xuyên suốt mọi phương thức. Một <code>Stack&lt;T&gt;</code> lưu <code>T[]</code> bên trong, nên <code>push</code> nhận một <code>T</code> và <code>pop</code> trả <code>T | undefined</code> — nhất quán, với bất cứ <code>T</code> nào bạn khởi tạo:</p>
-<pre><code><span class="tok-comment">// stack1.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// stack1.ts</span>
 <span class="tok-keyword">class</span> Stack&lt;T&gt; {
   <span class="tok-keyword">private</span> items: T[] = [];
   <span class="tok-function">push</span>(item: T): <span class="tok-keyword">void</span> { <span class="tok-keyword">this</span>.items.<span class="tok-function">push</span>(item); }
@@ -353,7 +353,7 @@ s.<span class="tok-function">push</span>(<span class="tok-string">'x'</span>);  
 
 <h3>Tham số kiểu mặc định</h3>
 <p>Như tham số giá trị, tham số kiểu có thể có mặc định với <code>= </code>. Nó làm đối số thành tuỳ chọn tại chỗ dùng — tiện khi có một fallback hợp lý:</p>
-<pre><code><span class="tok-comment">// def1.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// def1.ts</span>
 <span class="tok-keyword">interface</span> ApiResult&lt;T = <span class="tok-keyword">unknown</span>&gt; { ok: <span class="tok-keyword">boolean</span>; data: T; }
 <span class="tok-keyword">const</span> a: ApiResult = { ok: <span class="tok-keyword">true</span>, data: <span class="tok-number">123</span> };        <span class="tok-comment">// T mặc định là unknown</span>
 <span class="tok-keyword">const</span> b: ApiResult&lt;<span class="tok-keyword">string</span>&gt; = { ok: <span class="tok-keyword">true</span>, data: <span class="tok-string">'x'</span> };
@@ -394,7 +394,7 @@ a.data.<span class="tok-function">toUpperCase</span>();   <span class="tok-comme
 
 <h3>Two parameters: transform T into U</h3>
 <p>A <code>map</code>-like helper takes a <code>T[]</code> and a function <code>T → U</code>, and returns <code>U[]</code>. The two parameters connect: <code>U</code> is inferred from what the callback <em>returns</em>, so the result type tracks the transformation automatically:</p>
-<pre><code><span class="tok-comment">// map1.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// map1.ts</span>
 <span class="tok-keyword">function</span> <span class="tok-function">mapArr</span>&lt;T, U&gt;(arr: T[], fn: (x: T) =&gt; U): U[] {
   <span class="tok-keyword">return</span> arr.<span class="tok-function">map</span>(fn);
 }
@@ -406,7 +406,7 @@ lens[<span class="tok-number">0</span>].<span class="tok-function">toUpperCase</
 
 <h3>A typed fetch wrapper — and its honest caveat</h3>
 <p>The everyday reason to reach for generics: give a network call a payload type. The caller passes <code>T</code>, and everything downstream is typed:</p>
-<pre><code><span class="tok-comment">// fetch1.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// fetch1.ts</span>
 <span class="tok-keyword">async</span> <span class="tok-keyword">function</span> <span class="tok-function">getJson</span>&lt;T&gt;(url: <span class="tok-keyword">string</span>): <span class="tok-keyword">Promise</span>&lt;T&gt; {
   <span class="tok-keyword">const</span> res = <span class="tok-keyword">await</span> <span class="tok-function">fetch</span>(url);
   <span class="tok-keyword">return</span> (<span class="tok-keyword">await</span> res.<span class="tok-function">json</span>()) <span class="tok-keyword">as</span> T;   <span class="tok-comment">// an ASSERTION — not validated at runtime</span>
@@ -422,7 +422,7 @@ lens[<span class="tok-number">0</span>].<span class="tok-function">toUpperCase</
 
 <h3>Pitfall: a type parameter used only once</h3>
 <p>A generic earns its keep only when the same <code>T</code> appears in <em>two or more</em> places, linking them. If <code>T</code> shows up once, it's doing nothing a plain type couldn't:</p>
-<pre><code><span class="tok-comment">// smell — T appears only in the parameter:</span>
+<pre><code class="language-javascript"><span class="tok-comment">// smell — T appears only in the parameter:</span>
 <span class="tok-keyword">function</span> <span class="tok-function">logIt</span>&lt;T&gt;(x: T): <span class="tok-keyword">void</span> { console.<span class="tok-function">log</span>(x); }
 <span class="tok-comment">// simpler and identical in effect:</span>
 <span class="tok-keyword">function</span> <span class="tok-function">logIt2</span>(x: <span class="tok-keyword">unknown</span>): <span class="tok-keyword">void</span> { console.<span class="tok-function">log</span>(x); }</code></pre>
@@ -452,7 +452,7 @@ lens[<span class="tok-number">0</span>].<span class="tok-function">toUpperCase</
 
 <h3>Hai tham số: biến đổi T thành U</h3>
 <p>Một helper kiểu <code>map</code> nhận một <code>T[]</code> và một hàm <code>T → U</code>, rồi trả <code>U[]</code>. Hai tham số nối với nhau: <code>U</code> được suy ra từ thứ callback <em>trả về</em>, nên kiểu kết quả tự động bám theo phép biến đổi:</p>
-<pre><code><span class="tok-comment">// map1.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// map1.ts</span>
 <span class="tok-keyword">function</span> <span class="tok-function">mapArr</span>&lt;T, U&gt;(arr: T[], fn: (x: T) =&gt; U): U[] {
   <span class="tok-keyword">return</span> arr.<span class="tok-function">map</span>(fn);
 }
@@ -464,7 +464,7 @@ lens[<span class="tok-number">0</span>].<span class="tok-function">toUpperCase</
 
 <h3>Một wrapper fetch có kiểu — và lời cảnh báo thành thật của nó</h3>
 <p>Lý do đời thường nhất để cần generics: cho một lời gọi mạng một kiểu payload. Bên gọi truyền <code>T</code>, và mọi thứ phía sau đều có kiểu:</p>
-<pre><code><span class="tok-comment">// fetch1.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// fetch1.ts</span>
 <span class="tok-keyword">async</span> <span class="tok-keyword">function</span> <span class="tok-function">getJson</span>&lt;T&gt;(url: <span class="tok-keyword">string</span>): <span class="tok-keyword">Promise</span>&lt;T&gt; {
   <span class="tok-keyword">const</span> res = <span class="tok-keyword">await</span> <span class="tok-function">fetch</span>(url);
   <span class="tok-keyword">return</span> (<span class="tok-keyword">await</span> res.<span class="tok-function">json</span>()) <span class="tok-keyword">as</span> T;   <span class="tok-comment">// một PHÉP ÉP — không validate lúc chạy</span>
@@ -480,7 +480,7 @@ lens[<span class="tok-number">0</span>].<span class="tok-function">toUpperCase</
 
 <h3>Bẫy: một tham số kiểu chỉ dùng một lần</h3>
 <p>Một generic chỉ đáng đồng tiền khi cùng một <code>T</code> xuất hiện ở <em>hai chỗ trở lên</em>, nối chúng lại. Nếu <code>T</code> hiện ra đúng một lần, nó chẳng làm gì mà một kiểu thường không làm được:</p>
-<pre><code><span class="tok-comment">// mùi lạ — T chỉ hiện trong tham số:</span>
+<pre><code class="language-javascript"><span class="tok-comment">// mùi lạ — T chỉ hiện trong tham số:</span>
 <span class="tok-keyword">function</span> <span class="tok-function">logIt</span>&lt;T&gt;(x: T): <span class="tok-keyword">void</span> { console.<span class="tok-function">log</span>(x); }
 <span class="tok-comment">// đơn giản hơn và hiệu quả y hệt:</span>
 <span class="tok-keyword">function</span> <span class="tok-function">logIt2</span>(x: <span class="tok-keyword">unknown</span>): <span class="tok-keyword">void</span> { console.<span class="tok-function">log</span>(x); }</code></pre>

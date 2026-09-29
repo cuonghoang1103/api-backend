@@ -87,7 +87,7 @@ ${slide('dv-08', 3, '137 = 128 + 9: bị gỡ đi, không phải vỡ')}
 ${slide('dv-08', 4, 'Đo thật với Docker: exit 137 và OOMKilled=true')}
 <p>The sandbox this course is written in has 16 GB of RAM, which is no use for measuring what happens on a 1 GB VPS. So the measurements below use a real control group with a real limit — the same mechanism Docker uses for <code>--memory</code>, and the same mechanism a cheap VPS uses to give you the slice you paid for:</p>
 
-<pre><code>CG=/sys/fs/cgroup/memory/thu
+<pre><code class="language-bash">CG=/sys/fs/cgroup/memory/thu
 mkdir -p \$CG
 echo \$((256*1024*1024)) > \$CG/memory.limit_in_bytes
 echo \$((256*1024*1024)) > \$CG/memory.memsw.limit_in_bytes   <span class="tok-comment"># khong cho tran sang swap</span>
@@ -307,7 +307,7 @@ ${slide('dv-08', 3, '137 = 128 + 9: bị gỡ đi, không phải vỡ')}
 ${slide('dv-08', 4, 'Đo thật với Docker: exit 137 và OOMKilled=true')}
 <p>Cái hộp cát viết khoá học này có 16 GB RAM, chẳng dùng được gì cho việc đo xem chuyện gì xảy ra trên một VPS 1 GB. Nên các phép đo dưới đây dùng một control group THẬT với một giới hạn THẬT — đúng cái cơ chế Docker dùng cho <code>--memory</code>, và đúng cái cơ chế một VPS rẻ tiền dùng để cấp cho bạn phần bạn đã trả tiền:</p>
 
-<pre><code>CG=/sys/fs/cgroup/memory/thu
+<pre><code class="language-bash">CG=/sys/fs/cgroup/memory/thu
 mkdir -p \$CG
 echo \$((256*1024*1024)) > \$CG/memory.limit_in_bytes
 echo \$((256*1024*1024)) > \$CG/memory.memsw.limit_in_bytes   <span class="tok-comment"># khong cho tran sang swap</span>
@@ -558,7 +558,7 @@ ${slide('dv-08', 8, 'Nhân giết cái TO NHẤT: csdl chết, bản dựng tho�
 ${slide('dv-08', 10, 'Thang oom_score_adj và các điểm đo thật')}
 <p>Every process has a score, visible per-process and adjustable:</p>
 
-<pre><code>cat /proc/&lt;pid&gt;/oom_score         <span class="tok-comment"># diem tinh ra, cang cao cang de bi giet</span>
+<pre><code class="language-bash">cat /proc/&lt;pid&gt;/oom_score         <span class="tok-comment"># diem tinh ra, cang cao cang de bi giet</span>
 cat /proc/&lt;pid&gt;/oom_score_adj     <span class="tok-comment"># -1000 … +1000, do BAN dat</span></code></pre>
 
 <div class="out">  csdl pid=7782  oom_score=676  adj=0</div>
@@ -574,7 +574,7 @@ ${slide('dv-08', 9, 'Đo lại trên cgroup v2: adj=0 thì csdl chết, adj=1000
 
 <p>So the measurement uses the same lever from the other end, which any process can do to itself: the build raises <em>its own</em> score before it starts allocating.</p>
 
-<pre><code><span class="tok-comment"># trong script dung, TRUOC khi cap phat gi:</span>
+<pre><code class="language-bash"><span class="tok-comment"># trong script dung, TRUOC khi cap phat gi:</span>
 echo 1000 > /proc/self/oom_score_adj
 exec node dung.mjs</code></pre>
 
@@ -793,7 +793,7 @@ ${slide('dv-08', 8, 'Nhân giết cái TO NHẤT: csdl chết, bản dựng tho�
 ${slide('dv-08', 10, 'Thang oom_score_adj và các điểm đo thật')}
 <p>Mọi tiến trình đều có một điểm số, xem được theo từng tiến trình và chỉnh được:</p>
 
-<pre><code>cat /proc/&lt;pid&gt;/oom_score         <span class="tok-comment"># diem tinh ra, cang cao cang de bi giet</span>
+<pre><code class="language-bash">cat /proc/&lt;pid&gt;/oom_score         <span class="tok-comment"># diem tinh ra, cang cao cang de bi giet</span>
 cat /proc/&lt;pid&gt;/oom_score_adj     <span class="tok-comment"># -1000 … +1000, do BAN dat</span></code></pre>
 
 <div class="out">  csdl pid=7782  oom_score=676  adj=0</div>
@@ -809,7 +809,7 @@ ${slide('dv-08', 9, 'Đo lại trên cgroup v2: adj=0 thì csdl chết, adj=1000
 
 <p>Nên phép đo dùng đúng cái đòn bẩy ấy từ đầu kia, thứ mà mọi tiến trình đều tự làm được với chính nó: bản dựng NÂNG điểm của <em>CHÍNH NÓ</em> lên trước khi bắt đầu cấp phát.</p>
 
-<pre><code><span class="tok-comment"># trong script dung, TRUOC khi cap phat gi:</span>
+<pre><code class="language-bash"><span class="tok-comment"># trong script dung, TRUOC khi cap phat gi:</span>
 echo 1000 > /proc/self/oom_score_adj
 exec node dung.mjs</code></pre>
 
@@ -1002,7 +1002,7 @@ RestartCount=8 OOMKilled=true ExitCode=137</div>
 ${slide('dv-08', 13, 'Có swap: 137 thành 0, RAM ghim ở trần, swap lớn dần')}
 <p>Lesson 8.1 measured a 500 MB allocation inside a 256 MB cgroup being killed at 401 ms. Adding a 512 MB swap file and raising the group&#39;s combined memory+swap ceiling to 768 MB:</p>
 
-<pre><code>fallocate -l 512M /swap-thu
+<pre><code class="language-bash">fallocate -l 512M /swap-thu
 chmod 600 /swap-thu          <span class="tok-comment"># bat buoc: swapon TU CHOI tep ai cung doc duoc</span>
 mkswap /swap-thu &amp;&amp; swapon /swap-thu
 
@@ -1260,7 +1260,7 @@ docker inspect -f "$F" $(docker compose ps -q)</code></pre>
 ${slide('dv-08', 13, 'Có swap: 137 thành 0, RAM ghim ở trần, swap lớn dần')}
 <p>Bài 8.1 đo một cú cấp phát 500 MB trong cgroup 256 MB bị giết ở mốc 401 ms. Thêm một tệp swap 512 MB và nâng trần bộ-nhớ-cộng-swap của nhóm lên 768 MB:</p>
 
-<pre><code>fallocate -l 512M /swap-thu
+<pre><code class="language-bash">fallocate -l 512M /swap-thu
 chmod 600 /swap-thu          <span class="tok-comment"># bat buoc: swapon TU CHOI tep ai cung doc duoc</span>
 mkswap /swap-thu &amp;&amp; swapon /swap-thu
 
@@ -1692,7 +1692,7 @@ ${slide('dv-08', 22, 'Cache build, ảnh cũ, log, bản phát hành — cùng �
 <div class="lz-step"><span class="lz-k">the real fix</span><span class="lz-t">do not put growth on the data disk</span><span class="lz-d">build elsewhere; cap logs; bound release retention (6.1)</span></div>
 </div>
 
-<pre><code><span class="tok-comment"># bon cho gan nhu chac chan la thu pham, theo thu tu hay gap:</span>
+<pre><code class="language-bash"><span class="tok-comment"># bon cho gan nhu chac chan la thu pham, theo thu tu hay gap:</span>
 docker system df                      <span class="tok-comment"># bo dem dung + anh mo coi</span>
 du -sh /var/log/* | sort -h | tail    <span class="tok-comment"># log khong gioi han</span>
 du -sh /srv/*/ban/* | sort -h | tail  <span class="tok-comment"># ban phat hanh cu (6.1)</span>
@@ -1938,7 +1938,7 @@ ${slide('dv-08', 22, 'Cache build, ảnh cũ, log, bản phát hành — cùng �
 <div class="lz-step"><span class="lz-k">cách chữa thật</span><span class="lz-t">đừng đặt thứ tăng trưởng lên đĩa dữ liệu</span><span class="lz-d">dựng ở chỗ khác; chặn trần log; giới hạn số bản giữ (6.1)</span></div>
 </div>
 
-<pre><code><span class="tok-comment"># bon cho gan nhu chac chan la thu pham, theo thu tu hay gap:</span>
+<pre><code class="language-bash"><span class="tok-comment"># bon cho gan nhu chac chan la thu pham, theo thu tu hay gap:</span>
 docker system df                      <span class="tok-comment"># bo dem dung + anh mo coi</span>
 du -sh /var/log/* | sort -h | tail    <span class="tok-comment"># log khong gioi han</span>
 du -sh /srv/*/ban/* | sort -h | tail  <span class="tok-comment"># ban phat hanh cu (6.1)</span>
@@ -2117,7 +2117,7 @@ ${slide('dv-08', 25, 'Dời bản dựng khỏi VPS: máy nhà dựng, GHCR, VPS
 ${slide('dv-08', 26, 'Node 18 định heap theo cả máy; Node 20/22 lấy nửa trần cgroup')}
 <p>If a build must run on the small machine, bound it explicitly rather than letting it find the ceiling by hitting it:</p>
 
-<pre><code><span class="tok-comment"># Node: dat tran vung nho cu the, va no NEM loi thay vi bi giet</span>
+<pre><code class="language-bash"><span class="tok-comment"># Node: dat tran vung nho cu the, va no NEM loi thay vi bi giet</span>
 NODE_OPTIONS=--max-old-space-size=384 npm run build
 
 <span class="tok-comment"># cgroup/systemd: bop truoc khi giet</span>
@@ -2152,7 +2152,7 @@ node v22.23.2 heap_size_limit = 259 MB</div>
 ${slide('dv-08', 28, 'docker stats đo từng container; mem_limit trong compose')}
 <p>The build is not the only thing competing. On a small VPS the resident set at rest is usually: the database (largest, by design), the application, nginx, and the log shipper. A build lands on top of all of it, and 8.2 established who loses.</p>
 
-<pre><code><span class="tok-comment"># truoc khi dung, xem con bao nhieu cho thuc su:</span>
+<pre><code class="language-bash"><span class="tok-comment"># truoc khi dung, xem con bao nhieu cho thuc su:</span>
 free -m                      <span class="tok-comment"># cot 'available', KHONG phai 'free'</span>
 ps -eo rss,comm --sort=-rss | head -8
 cat /sys/fs/cgroup/memory/memory.max_usage_in_bytes   <span class="tok-comment"># dinh da tung cham</span>
@@ -2348,7 +2348,7 @@ ${slide('dv-08', 25, 'Dời bản dựng khỏi VPS: máy nhà dựng, GHCR, VPS
 ${slide('dv-08', 26, 'Node 18 định heap theo cả máy; Node 20/22 lấy nửa trần cgroup')}
 <p>Nếu một bản dựng buộc phải chạy trên cái máy nhỏ, hãy chặn nó một cách tường minh chứ đừng để nó tìm ra cái trần bằng cách đâm vào:</p>
 
-<pre><code><span class="tok-comment"># Node: dat tran vung nho cu the, va no NEM loi thay vi bi giet</span>
+<pre><code class="language-bash"><span class="tok-comment"># Node: dat tran vung nho cu the, va no NEM loi thay vi bi giet</span>
 NODE_OPTIONS=--max-old-space-size=384 npm run build
 
 <span class="tok-comment"># cgroup/systemd: bop truoc khi giet</span>
@@ -2383,7 +2383,7 @@ node v22.23.2 heap_size_limit = 259 MB</div>
 ${slide('dv-08', 28, 'docker stats đo từng container; mem_limit trong compose')}
 <p>Bản dựng không phải thứ duy nhất tranh giành. Trên một VPS nhỏ, phần thường trú lúc nghỉ thường là: cơ sở dữ liệu (to nhất, theo thiết kế), ứng dụng, nginx, và bộ gửi log. Một bản dựng đáp xuống trên tất cả những thứ đó, và bài 8.2 đã xác lập ai là người thua.</p>
 
-<pre><code><span class="tok-comment"># truoc khi dung, xem con bao nhieu cho thuc su:</span>
+<pre><code class="language-bash"><span class="tok-comment"># truoc khi dung, xem con bao nhieu cho thuc su:</span>
 free -m                      <span class="tok-comment"># cot 'available', KHONG phai 'free'</span>
 ps -eo rss,comm --sort=-rss | head -8
 cat /sys/fs/cgroup/memory/memory.max_usage_in_bytes   <span class="tok-comment"># dinh da tung cham</span>

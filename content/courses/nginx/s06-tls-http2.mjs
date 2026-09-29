@@ -18,7 +18,7 @@ export default {
 <p class="lead">Enabling HTTPS is four lines, and the whole chapter could stop there if one of those four lines were not the single most common way to break TLS in a way that works on your laptop and fails for a real user.</p>
 
 <h3>The four lines</h3>
-<pre><code>server {
+<pre><code class="language-bash">server {
   listen 443 ssl;
   http2 on;                                      <span class="tok-comment"># nginx ≥ 1.25.1; on older versions write "listen 443 ssl http2;"</span>
   server_name vidu.com;
@@ -108,7 +108,7 @@ echo | openssl s_client -connect vidu.com:443 -servername vidu.com 2&gt;/dev/nul
 <p class="lead">Bật HTTPS lên tốn bốn dòng, và cả chương này lẽ ra đã dừng ở đó nếu một trong bốn dòng ấy không phải là cách phá TLS PHỔ BIẾN NHẤT theo kiểu chạy ngon trên máy bạn mà hỏng với một người dùng thật.</p>
 
 <h3>Bốn dòng</h3>
-<pre><code>server {
+<pre><code class="language-bash">server {
   listen 443 ssl;
   http2 on;                                      <span class="tok-comment"># nginx ≥ 1.25.1; cũ hơn thì viết "listen 443 ssl http2;"</span>
   server_name vidu.com;
@@ -245,7 +245,7 @@ Trong 21 cai do, 12 cai KHONG co ECDHE:
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">TLS 1.3 removed the choice entirely</span><span class="lz-d">All five of its cipher suites are forward-secret and AEAD, so <code>ssl_ciphers</code> does not apply to TLS 1.3 at all. The list you write only matters for the TLS 1.2 clients you still support — which is why the modern block is short.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">A smaller list is a smaller attack surface</span><span class="lz-d">Three accepted instead of twenty-one. Every suite you keep is one more implementation that has to be correct, and the history of TLS is largely a history of suites that turned out not to be.</span></div>
 </div>
-<pre><code>ssl_protocols TLSv1.2 TLSv1.3;
+<pre><code class="language-bash">ssl_protocols TLSv1.2 TLSv1.3;
 ssl_prefer_server_ciphers off;      <span class="tok-comment"># let the CLIENT choose — it knows its own hardware</span>
 ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:
             ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:
@@ -326,7 +326,7 @@ Trong 21 cai do, 12 cai KHONG co ECDHE:
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">TLS 1.3 đã XOÁ hẳn quyền chọn</span><span class="lz-d">Cả năm bộ mã của nó đều forward-secret và đều là AEAD, nên <code>ssl_ciphers</code> KHÔNG áp dụng cho TLS 1.3 chút nào. Cái danh sách bạn viết chỉ có nghĩa lý với đám client TLS 1.2 mà bạn còn hỗ trợ — và đó là lý do khối hiện đại rất NGẮN.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Danh sách nhỏ hơn là bề mặt tấn công nhỏ hơn</span><span class="lz-d">Ba cái được chấp nhận thay vì hai mươi mốt. Mỗi bộ mã bạn giữ lại là thêm một phần cài đặt phải ĐÚNG, và lịch sử của TLS phần lớn là lịch sử của những bộ mã hoá ra là không đúng.</span></div>
 </div>
-<pre><code>ssl_protocols TLSv1.2 TLSv1.3;
+<pre><code class="language-bash">ssl_protocols TLSv1.2 TLSv1.3;
 ssl_prefer_server_ciphers off;      <span class="tok-comment"># để CLIENT chọn — nó biết phần cứng của nó</span>
 ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:
             ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:
@@ -407,7 +407,7 @@ ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">And HTTP/2 makes it structural</span><span class="lz-d">One connection carries every request for that origin, so the browser cannot open six connections and handshake six times. Lesson 6.4 measures what else it changes, but this is the part that shows up in the numbers above.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Session resumption covers returning visitors</span><span class="lz-d">When a client does have to reconnect — a new page load, a reopened laptop — a cached session lets it skip the expensive part. <code>ssl_session_cache shared:SSL:10m;</code> holds roughly 40,000 sessions and is one line.</span></div>
 </div>
-<pre><code>http {
+<pre><code class="language-bash">http {
   <span class="tok-comment"># A session cache shared across workers — ONE line, ~40,000 sessions</span>
   ssl_session_cache   shared:SSL:10m;
   ssl_session_timeout 1d;
@@ -481,7 +481,7 @@ ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Và HTTP/2 làm điều đó thành CẤU TRÚC</span><span class="lz-d">Một kết nối mang mọi request tới cùng một gốc, nên trình duyệt KHÔNG thể mở sáu kết nối rồi bắt tay sáu lần. Bài 6.4 đo xem nó còn đổi gì nữa, nhưng đây là phần hiện ra trong những con số ở trên.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Nối lại phiên lo cho khách quay lại</span><span class="lz-d">Khi một client BUỘC phải nối lại — một lượt tải trang mới, một cái laptop vừa mở nắp — thì một phiên đã cache cho phép nó bỏ qua phần đắt đỏ. <code>ssl_session_cache shared:SSL:10m;</code> giữ chừng 40.000 phiên và nó chỉ là MỘT dòng.</span></div>
 </div>
-<pre><code>http {
+<pre><code class="language-bash">http {
   <span class="tok-comment"># Vé phiên dùng chung giữa các worker — MỘT dòng, ~40.000 phiên</span>
   ssl_session_cache   shared:SSL:10m;
   ssl_session_timeout 1d;
@@ -704,7 +704,7 @@ tren HTTP (cong 80)      : KHONG co — va dung ra la the</div>
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Start with a short max-age</span><span class="lz-d"><code>max-age=300</code> for a week, then raise it. HSTS is not revocable: once a browser has stored two years, that browser will refuse plain HTTP for two years whatever you do to the server. Get it wrong at full length and the only fix is waiting.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">includeSubDomains and preload are one-way doors</span><span class="lz-d"><code>includeSubDomains</code> covers every subdomain including the internal one on plain HTTP that you forgot about. <code>preload</code> ships your domain inside browsers, and removal takes months. Both are correct for a mature site and dangerous as a first step.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Port 80 — the ORDER MATTERS: ACME comes ABOVE the redirect</span>
+<pre><code class="language-bash"><span class="tok-comment"># Port 80 — the ORDER MATTERS: ACME comes ABOVE the redirect</span>
 server {
   listen 80;
   listen [::]:80;
@@ -789,7 +789,7 @@ tren HTTP (cong 80)      : KHONG co — va dung ra la the</div>
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Hãy bắt đầu bằng max-age NHỎ</span><span class="lz-d"><code>max-age=300</code> trong một tuần, rồi mới nâng. HSTS KHÔNG thu hồi được: một khi trình duyệt đã cất hai năm thì nó sẽ từ chối HTTP trần suốt hai năm, dù bạn làm gì với máy chủ đi nữa. Làm sai ở độ dài tối đa thì cách chữa duy nhất là ĐỢI.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">includeSubDomains và preload là những cánh cửa MỘT CHIỀU</span><span class="lz-d"><code>includeSubDomains</code> phủ MỌI tên miền con, kể cả cái nội bộ đang chạy HTTP trần mà bạn quên mất. <code>preload</code> nhét tên miền của bạn vào bên trong các trình duyệt, và việc gỡ ra mất hàng tháng. Cả hai đều ĐÚNG với một site đã trưởng thành và NGUY khi làm bước đầu tiên.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Cổng 80 — thứ tự QUAN TRỌNG: ACME đứng TRÊN cú chuyển hướng</span>
+<pre><code class="language-bash"><span class="tok-comment"># Cổng 80 — thứ tự QUAN TRỌNG: ACME đứng TRÊN cú chuyển hướng</span>
 server {
   listen 80;
   listen [::]:80;

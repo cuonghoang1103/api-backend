@@ -109,7 +109,7 @@ ${slide('lx-10', 4, 'Đọc df từng cột; df -i; bẫy -BG làm tròn lên')}
 <tr><td><code>du --apparent-size</code></td><td>the size files <em>claim</em>, not blocks used</td><td>sparse VM images, database files</td></tr>
 <tr><td><code>du --inodes</code></td><td>count files instead of bytes (GNU)</td><td><code>du --inodes -x -d1 /var | sort -n</code></td></tr>
 </table>
-<pre><code>truncate -s 1G /tmp/sparse          <span class="tok-comment"># a SPARSE file: a size, but no blocks yet</span>
+<pre><code class="language-bash">truncate -s 1G /tmp/sparse          <span class="tok-comment"># a SPARSE file: a size, but no blocks yet</span>
 ls -lh /tmp/sparse
 du -h /tmp/sparse; du -h --apparent-size /tmp/sparse</code></pre>
 <div class="out">-rw-r--r-- 1 root root 1.0G Sep 28 15:20 /tmp/sparse
@@ -131,7 +131,7 @@ ${slide('lx-10', 5, 'du -d1 | sort -h: bốn lệnh từ cả máy xuống đún
 4.8G    /usr
 69G     /var
 75G     /</div>
-<pre><code><span class="tok-comment"># Then follow the biggest one down</span>
+<pre><code class="language-bash"><span class="tok-comment"># Then follow the biggest one down</span>
 du -h --max-depth=1 /var/lib/docker | sort -h | tail
 du -h --max-depth=1 /var/lib/docker/overlay2 | sort -h | tail -5
 
@@ -146,13 +146,13 @@ find / -xdev -type f -printf '%s\\t%p\\n' 2&gt;/dev/null \\
   <div class="kv"><span class="k"><code>sort -h</code></span><span class="v">Sorts human-readable sizes correctly: <code>2.3G</code> after <code>900M</code>. Plain <code>sort</code> puts <code>900M</code> last (Lesson 3.4).</span></div>
   <div class="kv"><span class="k"><code>2&gt;/dev/null</code></span><span class="v">Silences the permission-denied noise so the real output is readable (Lesson 3.1).</span></div>
 </div>
-<pre><code>sudo apt install ncdu
+<pre><code class="language-bash">sudo apt install ncdu
 sudo ncdu -x /</code></pre>
 <div class="callout ok"><code>ncdu</code> is worth installing on every server before you need it. It gives you an interactive, sorted tree you navigate with arrow keys, showing each directory's share of the total — so finding the offending 40 GB takes three keypresses instead of five <code>du</code> commands. Press <code>d</code> to delete from inside it, though on a production machine reading first is wiser.</div>
 
 <h3>Measured: four commands from the whole machine to the culprit</h3>
 <p>A tree built to look like a small VPS (real files of the right sizes, in an Ubuntu 24.04 container). The method is the same on a real server: at each level read only the <strong>last</strong> line — <code>sort -h</code> puts the biggest there — and descend into it.</p>
-<pre><code>cd /vps
+<pre><code class="language-bash">cd /vps
 du -h --max-depth=1 . | sort -h
 du -h --max-depth=1 var | sort -h
 du -h -d1 var/lib | sort -h
@@ -178,7 +178,7 @@ du -h -d1 var/lib/docker | sort -h</code></pre>
 3.1M	var/cache
 40M	var/log</div>
 <p>"3.1M" sorts after "207M" because the character <code>3</code> comes after <code>2</code>, so the 3 MB directory looks like the biggest. Second, on a real server always add <code>-x</code> to <code>du /</code>: it stops at filesystem boundaries, so the numbers describe the disk that is full and not <code>/proc</code>, a network share or a second disk mounted under <code>/mnt</code>.</p>
-<pre><code><span class="tok-comment"># Individual big files, newest first — "what grew overnight?"</span>
+<pre><code class="language-bash"><span class="tok-comment"># Individual big files, newest first — "what grew overnight?"</span>
 sudo find / -xdev -type f -size +500M -mtime -1 -exec ls -lh {} + 2&gt;/dev/null</code></pre>
 <p><code>-size +500M</code> means "larger than 500 MiB", <code>-mtime -1</code> "modified within the last 24 hours", <code>-xdev</code> the same "one filesystem" rule as <code>du -x</code>, and <code>-exec ls -lh {} +</code> prints them with readable sizes in one <code>ls</code> call (Lesson 2.3).</p>
 
@@ -192,7 +192,7 @@ df -i /                     <span class="tok-comment"># the OTHER number</span><
 Filesystem      Inodes  IUsed IFree IUse% Mounted on
 /dev/vda1      5242880 5242880     0  100% /</div>
 <p>Every file and directory consumes one inode (Lesson 2.4), and a filesystem is created with a fixed number of them. Millions of tiny files — a session directory, a cache, unrotated mail, one <code>node_modules</code> per deploy — exhaust the inode table while using barely any space. The symptom is <code>No space left on device</code> from every write while <code>df -h</code> insists there are 43 GB free.</p>
-<pre><code><span class="tok-comment"># Which directories hold the most FILES (not the most bytes)</span>
+<pre><code class="language-bash"><span class="tok-comment"># Which directories hold the most FILES (not the most bytes)</span>
 sudo find / -xdev -type d -exec sh -c 'echo "\$(ls -A "\$1" 2&gt;/dev/null | wc -l) \$1"' _ {} \\; 2&gt;/dev/null \\
   | sort -rn | head -10</code></pre>
 <div class="out">1841203 /var/spool/postfix/maildrop
@@ -201,7 +201,7 @@ sudo find / -xdev -type d -exec sh -c 'echo "\$(ls -A "\$1" 2&gt;/dev/null | wc 
 <div class="callout warn">Inode exhaustion cannot be fixed by deleting a few large files — you must delete <em>many</em> files, or recreate the filesystem with more inodes. It is also a case where <code>df -h</code> actively misleads, so make <code>df -i</code> part of your reflex: whenever a write fails with "no space" and <code>df -h</code> looks fine, run <code>df -i</code> before anything else.</div>
 <h3>Measured: filling the inode table on an empty disk</h3>
 <p>Docker can create a small in-memory filesystem with a fixed number of inodes (<code>--tmpfs /data:size=64m,nr_inodes=2000</code>), which reproduces this failure in seconds without touching a real disk:</p>
-<pre><code>df -h /data; df -i /data
+<pre><code class="language-bash">df -h /data; df -i /data
 mkdir -p /data/sess
 i=0; while touch /data/sess/s$i; do i=$((i+1)); done; echo "created $i files"
 df -h /data | tail -1; df -i /data | tail -1
@@ -229,7 +229,7 @@ sudo lsof +L1 2&gt;/dev/null | head</code></pre>
 <div class="out">COMMAND   PID  USER  FD  TYPE  SIZE/OFF  NLINK  NODE NAME
 nginx     812  root  8w  REG   32212254720  0  4021 /var/log/nginx/access.log (deleted)</div>
 <p>Someone ran <code>rm access.log</code> to free space. The <em>name</em> is gone, so <code>du</code> cannot see it — but nginx still holds the file open, so the 30 GB is still allocated (Lesson 2.4: <code>unlink()</code> removes a name, and the data survives until the last name <em>and</em> the last open handle go). The space returns only when that process closes the file or exits.</p>
-<pre><code>sudo lsof +L1                              <span class="tok-comment"># NLINK 0 = deleted but open</span>
+<pre><code class="language-bash">sudo lsof +L1                              <span class="tok-comment"># NLINK 0 = deleted but open</span>
 sudo ls -l /proc/*/fd/* 2&gt;/dev/null | grep deleted | head
 
 <span class="tok-comment"># The fix, in order of preference</span>
@@ -238,7 +238,7 @@ sudo kill -USR1 812                        <span class="tok-comment"># nginx: re
 sudo truncate -s 0 /proc/812/fd/8          <span class="tok-comment"># last resort: empty it through the fd</span></code></pre>
 <div class="callout ok"><strong>Never delete an active log file — truncate it instead.</strong> <code>sudo truncate -s 0 /var/log/nginx/access.log</code> frees the space immediately, keeps the inode, and the writing process carries on with no reload and no gap. <code>rm</code> on an open log gives you the worst of both: the space stays used <em>and</em> the process keeps writing into a file nobody can read. Better still, let <code>logrotate</code> handle it — Lesson 10.3.</div>
 <h3>Measured: rm, lsof +L1, and truncating through /proc</h3>
-<pre><code>mkdir -p /data/log &amp;&amp; head -c 40M /dev/urandom &gt; /data/log/access.log
+<pre><code class="language-bash">mkdir -p /data/log &amp;&amp; head -c 40M /dev/urandom &gt; /data/log/access.log
 sleep 3000 3&gt;&gt;/data/log/access.log &amp;       <span class="tok-comment"># a "daemon" holding the log open on fd 3</span>
 df -h /data
 rm /data/log/access.log
@@ -262,7 +262,7 @@ mount | grep -E ' / | /var'
 findmnt -t ext4,xfs,btrfs</code></pre>
 <div class="out">/dev/vdb1  200G  12G  178G   7% /var/lib/docker</div>
 <p>If a filesystem is mounted at <code>/var/lib/docker</code>, anything that was in that directory <em>before</em> the mount is still on the root filesystem, invisible and consuming space. <code>du</code> shows the mounted volume's contents; <code>df /</code> counts the hidden data underneath. Unmount the volume and look, or check <code>du -sh</code> against <code>df</code> for that path.</p>
-<pre><code>lsblk                                <span class="tok-comment"># the block devices and their mount points</span>
+<pre><code class="language-bash">lsblk                                <span class="tok-comment"># the block devices and their mount points</span>
 findmnt                              <span class="tok-comment"># the mount tree, readable</span>
 cat /etc/fstab                       <span class="tok-comment"># what mounts at boot</span></code></pre>
 <div class="out">NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
@@ -273,7 +273,7 @@ vdb    252:16   0  200G  0 disk
 └─vdb1 252:17   0  200G  0 part /var/lib/docker</div>
 <h3>Measured: looking underneath a mount without unmounting it</h3>
 <p>Unmounting <code>/var/lib/docker</code> on a running server means stopping Docker. There is a gentler way: a <strong>bind mount</strong> of the parent filesystem somewhere else. A plain <code>mount --bind</code> (not <code>--rbind</code>) does not carry the mounts nested inside it, so through the new path you see what is really stored <em>under</em> the mount point. Reproduced with two tmpfs filesystems in a short-lived container:</p>
-<pre><code>mount -t tmpfs -o size=100m tmpfs /srv
+<pre><code class="language-bash">mount -t tmpfs -o size=100m tmpfs /srv
 mkdir -p /srv/docker
 head -c 30M /dev/zero &gt; /srv/docker/cu-truoc-khi-gan.img    <span class="tok-comment"># written BEFORE the next mount</span>
 mount -t tmpfs -o size=200m tmpfs /srv/docker                <span class="tok-comment"># the "data disk" arrives</span>
@@ -306,7 +306,7 @@ Reserved GDT blocks:      1024</div>
   <div class="lz-layer"><span class="lz-lname">Backups and uploads</span><span class="lz-lnote">A backup script with no retention, or user uploads with no lifecycle. Both grow forever by design unless someone stops them.</span></div>
   <div class="lz-layer"><span class="lz-lname">Build artefacts</span><span class="lz-lnote"><code>node_modules</code> per release, <code>target/</code>, <code>.next/</code>. One per deploy adds up quickly if old releases are never pruned.</span></div>
 </div>
-<pre><code>docker system df                     <span class="tok-comment"># images / containers / volumes / build cache</span>
+<pre><code class="language-bash">docker system df                     <span class="tok-comment"># images / containers / volumes / build cache</span>
 docker system prune -a --volumes      <span class="tok-comment"># DESTRUCTIVE — read the next callout</span>
 journalctl --disk-usage
 sudo journalctl --vacuum-size=500M
@@ -329,7 +329,7 @@ free_gb=\$(df --output=avail -BG / | tail -1 | tr -dc '0-9')
 <div class="callout">That check exists because of a real failure mode: a build that runs out of space partway leaves a half-written image, a corrupted layer cache, or — worse — a database that could not flush. On 2026-08-18 this project hit exactly that: build cache had grown to 7.6 GB on the same disk as Postgres, a deploy died with <code>no space left on device</code> while <code>next build</code> was running, and the disk was down to 1.8 GB. Five lines of precondition would have turned an outage into a refusal.</div>
 <h3>The guard, written so that it cannot round its way past you</h3>
 <p>The guard above uses <code>-BG</code>, and the measurement earlier in this lesson showed that <code>-BG</code> rounds up: 4.01 GB free prints as <code>5G</code> and passes a "at least 5 GB" test. Compare in megabytes instead, name the path, and return an error the caller can act on:</p>
-<pre><code>can_deploy() {                                  <span class="tok-comment"># usage: can_deploy NEED_MB PATH</span>
+<pre><code class="language-bash">can_deploy() {                                  <span class="tok-comment"># usage: can_deploy NEED_MB PATH</span>
   local need_mb=$1 path=$2 avail_mb
   avail_mb=$(df -BM --output=avail "$path" | tail -1 | tr -dc 0-9)
   if (( avail_mb &lt; need_mb )); then
@@ -348,7 +348,7 @@ rc=0</div>
 
 <h3>Try it step by step</h3>
 <p>All three invisible cases on your own machine in ten minutes, inside a throw-away container (Docker Desktop on Mac/Windows, or Docker on Linux). Nothing touches your real disk:</p>
-<pre><code>docker run -it --rm --tmpfs /data:rw,size=64m,nr_inodes=2000 ubuntu:24.04 bash
+<pre><code class="language-bash">docker run -it --rm --tmpfs /data:rw,size=64m,nr_inodes=2000 ubuntu:24.04 bash
 <span class="tok-comment"># inside the container:</span>
 apt-get update -qq &amp;&amp; apt-get install -y -qq lsof &gt;/dev/null
 df -h /data; df -i /data                                   <span class="tok-comment"># 1. two different "full"s</span>
@@ -470,7 +470,7 @@ ${slide('lx-10', 4, 'Đọc df từng cột; df -i; bẫy -BG làm tròn lên')}
 <tr><td><code>du --apparent-size</code></td><td>kích thước file <em>khai</em>, không phải số khối thật</td><td>ảnh đĩa máy ảo thưa, file cơ sở dữ liệu</td></tr>
 <tr><td><code>du --inodes</code></td><td>đếm số file thay cho số byte (GNU)</td><td><code>du --inodes -x -d1 /var | sort -n</code></td></tr>
 </table>
-<pre><code>truncate -s 1G /tmp/sparse          <span class="tok-comment"># một file THƯA: có kích thước, chưa có khối nào</span>
+<pre><code class="language-bash">truncate -s 1G /tmp/sparse          <span class="tok-comment"># một file THƯA: có kích thước, chưa có khối nào</span>
 ls -lh /tmp/sparse
 du -h /tmp/sparse; du -h --apparent-size /tmp/sparse</code></pre>
 <div class="out">-rw-r--r-- 1 root root 1.0G Sep 28 15:20 /tmp/sparse
@@ -492,7 +492,7 @@ ${slide('lx-10', 5, 'du -d1 | sort -h: bốn lệnh từ cả máy xuống đún
 4.8G    /usr
 69G     /var
 75G     /</div>
-<pre><code><span class="tok-comment"># Rồi lần xuống theo nhánh lớn nhất</span>
+<pre><code class="language-bash"><span class="tok-comment"># Rồi lần xuống theo nhánh lớn nhất</span>
 du -h --max-depth=1 /var/lib/docker | sort -h | tail
 du -h --max-depth=1 /var/lib/docker/overlay2 | sort -h | tail -5
 
@@ -507,13 +507,13 @@ find / -xdev -type f -printf '%s\\t%p\\n' 2&gt;/dev/null \\
   <div class="kv"><span class="k"><code>sort -h</code></span><span class="v">Sắp xếp đúng những kích thước cho người đọc: <code>2.3G</code> đứng sau <code>900M</code>. <code>sort</code> trần thì đẩy <code>900M</code> xuống cuối (Bài 3.4).</span></div>
   <div class="kv"><span class="k"><code>2&gt;/dev/null</code></span><span class="v">Dập tiếng đám nhiễu permission-denied để phần output thật đọc được (Bài 3.1).</span></div>
 </div>
-<pre><code>sudo apt install ncdu
+<pre><code class="language-bash">sudo apt install ncdu
 sudo ncdu -x /</code></pre>
 <div class="callout ok"><code>ncdu</code> đáng được cài lên mọi máy chủ TRƯỚC khi bạn cần tới nó. Nó cho bạn một cây thư mục tương tác đã sắp xếp, đi lại bằng phím mũi tên, hiện phần chiếm của từng thư mục trong tổng số — nên tìm ra chỗ 40 GB đang gây chuyện chỉ tốn ba lần bấm phím thay vì năm lệnh <code>du</code>. Nhấn <code>d</code> để xoá ngay từ bên trong nó, dù trên một máy production thì đọc trước vẫn khôn ngoan hơn.</div>
 
 <h3>Đo thật: bốn lệnh từ cả cái máy xuống đúng thủ phạm</h3>
 <p>Một cây thư mục dựng cho giống một VPS nhỏ (file thật, đúng kích thước, trong container Ubuntu 24.04). Trên máy chủ thật cách làm y hệt: ở mỗi tầng chỉ đọc dòng <strong>CUỐI</strong> — <code>sort -h</code> đặt cái lớn nhất ở đó — rồi đi xuống nó.</p>
-<pre><code>cd /vps
+<pre><code class="language-bash">cd /vps
 du -h --max-depth=1 . | sort -h
 du -h --max-depth=1 var | sort -h
 du -h -d1 var/lib | sort -h
@@ -539,7 +539,7 @@ du -h -d1 var/lib/docker | sort -h</code></pre>
 3.1M	var/cache
 40M	var/log</div>
 <p>"3.1M" đứng sau "207M" vì ký tự <code>3</code> đứng sau <code>2</code>, nên cái thư mục 3 MB trông như là lớn nhất. Thứ hai, trên máy chủ thật hãy luôn thêm <code>-x</code> cho <code>du /</code>: nó dừng ở ranh giới hệ thống file, nên các con số mô tả đúng cái đĩa đang đầy chứ không phải <code>/proc</code>, một ổ mạng hay một đĩa thứ hai gắn dưới <code>/mnt</code>.</p>
-<pre><code><span class="tok-comment"># Từng file lớn, sửa gần đây — "cái gì phình ra qua đêm?"</span>
+<pre><code class="language-bash"><span class="tok-comment"># Từng file lớn, sửa gần đây — "cái gì phình ra qua đêm?"</span>
 sudo find / -xdev -type f -size +500M -mtime -1 -exec ls -lh {} + 2&gt;/dev/null</code></pre>
 <p><code>-size +500M</code> nghĩa là "lớn hơn 500 MiB", <code>-mtime -1</code> là "được sửa trong 24 giờ qua", <code>-xdev</code> là đúng luật "một hệ thống file" như <code>du -x</code>, còn <code>-exec ls -lh {} +</code> in chúng ra với kích thước dễ đọc chỉ trong một lần gọi <code>ls</code> (Bài 2.3).</p>
 
@@ -553,7 +553,7 @@ df -i /                     <span class="tok-comment"># con số CÒN LẠI</spa
 Filesystem      Inodes  IUsed IFree IUse% Mounted on
 /dev/vda1      5242880 5242880     0  100% /</div>
 <p>Mỗi file và mỗi thư mục đều tiêu một inode (Bài 2.4), và một hệ thống file được tạo ra với một số inode CỐ ĐỊNH. Hàng triệu file tí hon — một thư mục phiên, một bộ đệm, thư chưa xoay vòng, mỗi lần deploy một <code>node_modules</code> — làm cạn bảng inode trong khi gần như không tốn chỗ. Triệu chứng là mọi lệnh ghi đều báo <code>No space left on device</code> trong khi <code>df -h</code> khăng khăng rằng còn 43 GB trống.</p>
-<pre><code><span class="tok-comment"># Thư mục nào giữ nhiều FILE nhất (không phải nhiều byte nhất)</span>
+<pre><code class="language-bash"><span class="tok-comment"># Thư mục nào giữ nhiều FILE nhất (không phải nhiều byte nhất)</span>
 sudo find / -xdev -type d -exec sh -c 'echo "\$(ls -A "\$1" 2&gt;/dev/null | wc -l) \$1"' _ {} \\; 2&gt;/dev/null \\
   | sort -rn | head -10</code></pre>
 <div class="out">1841203 /var/spool/postfix/maildrop
@@ -562,7 +562,7 @@ sudo find / -xdev -type d -exec sh -c 'echo "\$(ls -A "\$1" 2&gt;/dev/null | wc 
 <div class="callout warn">Hết inode thì KHÔNG chữa được bằng cách xoá vài file lớn — bạn phải xoá THẬT NHIỀU file, hoặc tạo lại hệ thống file với nhiều inode hơn. Đây cũng là trường hợp mà <code>df -h</code> chủ động gây hiểu nhầm, nên hãy đưa <code>df -i</code> vào phản xạ: mỗi khi một lệnh ghi hỏng với lỗi "no space" mà <code>df -h</code> trông vẫn ổn, hãy chạy <code>df -i</code> trước mọi thứ khác.</div>
 <h3>Đo thật: làm đầy bảng inode trên một cái đĩa trống</h3>
 <p>Docker tạo được một hệ thống file nhỏ trong bộ nhớ với số inode cố định (<code>--tmpfs /data:size=64m,nr_inodes=2000</code>), nhờ đó dựng lại kiểu hỏng này trong vài giây mà không đụng tới đĩa thật nào:</p>
-<pre><code>df -h /data; df -i /data
+<pre><code class="language-bash">df -h /data; df -i /data
 mkdir -p /data/sess
 i=0; while touch /data/sess/s$i; do i=$((i+1)); done; echo "tạo được $i file"
 df -h /data | tail -1; df -i /data | tail -1
@@ -590,7 +590,7 @@ sudo lsof +L1 2&gt;/dev/null | head</code></pre>
 <div class="out">COMMAND   PID  USER  FD  TYPE  SIZE/OFF  NLINK  NODE NAME
 nginx     812  root  8w  REG   32212254720  0  4021 /var/log/nginx/access.log (deleted)</div>
 <p>Ai đó đã chạy <code>rm access.log</code> để giải phóng chỗ. CÁI TÊN thì mất rồi nên <code>du</code> không thấy nó — nhưng nginx vẫn đang giữ file đó mở, nên 30 GB kia vẫn đang được cấp phát (Bài 2.4: <code>unlink()</code> gỡ một CÁI TÊN, còn dữ liệu sống tiếp cho tới khi cái tên cuối cùng <em>VÀ</em> cái tay cầm cuối cùng cùng biến mất). Chỗ trống chỉ quay lại khi tiến trình đó đóng file hoặc thoát.</p>
-<pre><code>sudo lsof +L1                              <span class="tok-comment"># NLINK 0 = đã xoá mà vẫn mở</span>
+<pre><code class="language-bash">sudo lsof +L1                              <span class="tok-comment"># NLINK 0 = đã xoá mà vẫn mở</span>
 sudo ls -l /proc/*/fd/* 2&gt;/dev/null | grep deleted | head
 
 <span class="tok-comment"># Cách chữa, xếp theo thứ tự ưu tiên</span>
@@ -599,7 +599,7 @@ sudo kill -USR1 812                        <span class="tok-comment"># nginx: m�
 sudo truncate -s 0 /proc/812/fd/8          <span class="tok-comment"># phương án cuối: làm rỗng nó qua chính cái fd</span></code></pre>
 <div class="callout ok"><strong>Đừng bao giờ XOÁ một file log đang hoạt động — hãy CẮT TRẮNG nó.</strong> <code>sudo truncate -s 0 /var/log/nginx/access.log</code> giải phóng chỗ ngay lập tức, giữ nguyên inode, và tiến trình đang ghi cứ thế chạy tiếp mà không cần reload và không có khoảng đứt. <code>rm</code> lên một file log đang mở cho bạn cái tệ của cả hai phía: chỗ vẫn bị chiếm <em>VÀ</em> tiến trình vẫn ghi vào một file mà không ai đọc được. Tốt hơn nữa là để <code>logrotate</code> lo — Bài 10.3.</div>
 <h3>Đo thật: rm, lsof +L1, và cắt trắng qua /proc</h3>
-<pre><code>mkdir -p /data/log &amp;&amp; head -c 40M /dev/urandom &gt; /data/log/access.log
+<pre><code class="language-bash">mkdir -p /data/log &amp;&amp; head -c 40M /dev/urandom &gt; /data/log/access.log
 sleep 3000 3&gt;&gt;/data/log/access.log &amp;       <span class="tok-comment"># một "daemon" giữ file log mở ở fd 3</span>
 df -h /data
 rm /data/log/access.log
@@ -623,7 +623,7 @@ mount | grep -E ' / | /var'
 findmnt -t ext4,xfs,btrfs</code></pre>
 <div class="out">/dev/vdb1  200G  12G  178G   7% /var/lib/docker</div>
 <p>Nếu một hệ thống file được gắn tại <code>/var/lib/docker</code>, thì mọi thứ từng nằm trong thư mục đó <em>TRƯỚC</em> lần gắn vẫn còn nguyên trên hệ thống file gốc, vô hình và vẫn chiếm chỗ. <code>du</code> hiện ra nội dung của cái ổ đã gắn; <code>df /</code> thì tính cả phần dữ liệu ẩn bên dưới. Hãy tháo cái ổ ra rồi nhìn, hoặc đối chiếu <code>du -sh</code> với <code>df</code> cho đúng đường dẫn đó.</p>
-<pre><code>lsblk                                <span class="tok-comment"># các thiết bị khối và điểm gắn của chúng</span>
+<pre><code class="language-bash">lsblk                                <span class="tok-comment"># các thiết bị khối và điểm gắn của chúng</span>
 findmnt                              <span class="tok-comment"># cây mount, dễ đọc</span>
 cat /etc/fstab                       <span class="tok-comment"># cái gì được gắn lúc khởi động</span></code></pre>
 <div class="out">NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
@@ -634,7 +634,7 @@ vdb    252:16   0  200G  0 disk
 └─vdb1 252:17   0  200G  0 part /var/lib/docker</div>
 <h3>Đo thật: nhìn xuống bên dưới một điểm gắn mà không phải tháo nó ra</h3>
 <p>Tháo <code>/var/lib/docker</code> trên một máy chủ đang chạy nghĩa là phải dừng Docker. Có một cách nhẹ nhàng hơn: gắn kiểu <strong>bind</strong> (bind mount) hệ thống file cha vào một chỗ khác. Một lệnh <code>mount --bind</code> trần (không phải <code>--rbind</code>) KHÔNG mang theo các điểm gắn lồng bên trong, nên qua đường dẫn mới bạn thấy được thứ thật sự nằm <em>DƯỚI</em> điểm gắn. Dựng lại bằng hai tmpfs trong một container ngắn hạn:</p>
-<pre><code>mount -t tmpfs -o size=100m tmpfs /srv
+<pre><code class="language-bash">mount -t tmpfs -o size=100m tmpfs /srv
 mkdir -p /srv/docker
 head -c 30M /dev/zero &gt; /srv/docker/cu-truoc-khi-gan.img    <span class="tok-comment"># ghi TRƯỚC lần gắn kế tiếp</span>
 mount -t tmpfs -o size=200m tmpfs /srv/docker                <span class="tok-comment"># "ổ dữ liệu" tới</span>
@@ -667,7 +667,7 @@ Reserved GDT blocks:      1024</div>
   <div class="lz-layer"><span class="lz-lname">Sao lưu và file tải lên</span><span class="lz-lnote">Một script sao lưu không có chính sách giữ lại, hay file người dùng tải lên không có vòng đời. Cả hai lớn lên mãi mãi theo đúng thiết kế, trừ khi có người dừng chúng lại.</span></div>
   <div class="lz-layer"><span class="lz-lname">Tệp phẩm của bản dựng</span><span class="lz-lnote">Mỗi bản phát hành một <code>node_modules</code>, rồi <code>target/</code>, <code>.next/</code>. Mỗi lần deploy một bộ thì cộng dồn rất nhanh nếu các bản cũ không bao giờ được tỉa.</span></div>
 </div>
-<pre><code>docker system df                     <span class="tok-comment"># ảnh / container / ổ đĩa / bộ đệm dựng</span>
+<pre><code class="language-bash">docker system df                     <span class="tok-comment"># ảnh / container / ổ đĩa / bộ đệm dựng</span>
 docker system prune -a --volumes      <span class="tok-comment"># PHÁ HUỶ — đọc phần cảnh báo ngay dưới</span>
 journalctl --disk-usage
 sudo journalctl --vacuum-size=500M
@@ -690,7 +690,7 @@ free_gb=\$(df --output=avail -BG / | tail -1 | tr -dc '0-9')
 <div class="callout">Phép kiểm đó tồn tại vì một kiểu hỏng có thật: một bản dựng hết chỗ giữa chừng để lại một ảnh ghi dở, một bộ đệm lớp bị hỏng, hoặc — tệ hơn — một cơ sở dữ liệu không xả được bộ đệm. Ngày 18/08/2026 chính dự án này dính đúng chuyện đó: bộ đệm dựng đã phình lên 7,6 GB trên cùng cái đĩa chứa Postgres, một lần deploy chết với <code>no space left on device</code> ngay lúc <code>next build</code> đang chạy, và đĩa tụt xuống còn 1,8 GB. Năm dòng điều kiện tiên quyết lẽ ra đã biến một sự cố thành một lời từ chối.</div>
 <h3>Cái chốt chặn, viết sao cho nó không thể làm tròn mà lọt qua</h3>
 <p>Chốt chặn ở trên dùng <code>-BG</code>, và phép đo ở đầu bài đã cho thấy <code>-BG</code> làm tròn lên: còn 4,01 GB trống thì in ra <code>5G</code> và qua được phép kiểm "ít nhất 5 GB". Hãy so bằng megabyte, nêu rõ đường dẫn, và trả về một mã lỗi mà nơi gọi xử lý được:</p>
-<pre><code>can_deploy() {                                  <span class="tok-comment"># cách dùng: can_deploy SỐ_MB_CẦN ĐƯỜNG_DẪN</span>
+<pre><code class="language-bash">can_deploy() {                                  <span class="tok-comment"># cách dùng: can_deploy SỐ_MB_CẦN ĐƯỜNG_DẪN</span>
   local need_mb=$1 path=$2 avail_mb
   avail_mb=$(df -BM --output=avail "$path" | tail -1 | tr -dc 0-9)
   if (( avail_mb &lt; need_mb )); then
@@ -709,7 +709,7 @@ rc=0</div>
 
 <h3>Chạy thử từng bước</h3>
 <p>Cả ba trường hợp "vô hình" ngay trên máy bạn trong mười phút, bên trong một container vứt đi (Docker Desktop trên Mac/Windows, hoặc Docker trên Linux). Không có gì đụng tới đĩa thật của bạn:</p>
-<pre><code>docker run -it --rm --tmpfs /data:rw,size=64m,nr_inodes=2000 ubuntu:24.04 bash
+<pre><code class="language-bash">docker run -it --rm --tmpfs /data:rw,size=64m,nr_inodes=2000 ubuntu:24.04 bash
 <span class="tok-comment"># bên trong container:</span>
 apt-get update -qq &amp;&amp; apt-get install -y -qq lsof &gt;/dev/null
 df -h /data; df -i /data                                   <span class="tok-comment"># 1. hai kiểu "đầy" khác nhau</span>
@@ -801,7 +801,7 @@ exit</code></pre>
 <h3>update is not upgrade</h3>
 ${slide('lx-10', 10, 'apt đi 4 chặng: kho → danh mục → .deb → dpkg')}
 ${slide('lx-10', 11, 'update làm mới danh mục — upgrade mới là cài')}
-<pre><code>sudo apt update              <span class="tok-comment"># refresh the CATALOGUE. Installs nothing.</span>
+<pre><code class="language-bash">sudo apt update              <span class="tok-comment"># refresh the CATALOGUE. Installs nothing.</span>
 sudo apt upgrade             <span class="tok-comment"># install newer versions of what you have</span>
 sudo apt full-upgrade        <span class="tok-comment"># …and allow removing packages to do it</span></code></pre>
 <div class="out">Hit:1 http://archive.ubuntu.com/ubuntu noble InRelease
@@ -813,14 +813,14 @@ Fetched 126 kB in 1s (98.4 kB/s)
   <div class="kv"><span class="k"><code>upgrade</code></span><span class="v">Upgrades installed packages, but never removes one to satisfy a dependency. Safe and conservative.</span></div>
   <div class="kv"><span class="k"><code>full-upgrade</code></span><span class="v">Will remove packages if that is what the upgrade needs. Required across a distribution release; think before running it on a production box.</span></div>
 </div>
-<pre><code>apt list --upgradable                 <span class="tok-comment"># what would change</span>
+<pre><code class="language-bash">apt list --upgradable                 <span class="tok-comment"># what would change</span>
 apt-get -s upgrade                    <span class="tok-comment"># -s: simulate, change nothing</span>
 apt changelog nginx                   <span class="tok-comment"># why it changed</span></code></pre>
 <div class="callout ok">Two conventions worth knowing. <strong><code>apt</code> is for humans</strong> — colours, progress bars, and an interface that may change between releases. <strong><code>apt-get</code> is for scripts</strong> — a stable interface the maintainers promise not to break, which is why every Dockerfile uses it. In a script, also add <code>DEBIAN_FRONTEND=noninteractive</code> so a package that wants to ask a question fails instead of hanging forever waiting for input nobody will provide.</div>
 
 <h3>Measured: the four stages on a real Ubuntu 24.04</h3>
 <p>"apt" is really four places on disk, and knowing them explains every command in this lesson: <strong>sources</strong> (where to download from), the <strong>catalogue</strong> (what exists, in which version), the <strong>download cache</strong> (the <code>.deb</code> files) and <strong>dpkg's database</strong> (what is installed, and which file belongs to which package).</p>
-<pre><code>cat /etc/apt/sources.list.d/ubuntu.sources      <span class="tok-comment"># 1. sources</span>
+<pre><code class="language-bash">cat /etc/apt/sources.list.d/ubuntu.sources      <span class="tok-comment"># 1. sources</span>
 du -sh /var/lib/apt/lists                       <span class="tok-comment"># 2. catalogue, filled by apt update</span>
 ls /var/cache/apt/archives                      <span class="tok-comment"># 3. downloaded .deb files</span>
 grep -c '^Package:' /var/lib/dpkg/status         <span class="tok-comment"># 4. what dpkg has installed</span>
@@ -837,7 +837,7 @@ lock  partial
 /var/lib/dpkg/info/jq.list
 /var/lib/dpkg/info/jq.md5sums</div>
 <p>Three things in that output are worth knowing. Ubuntu 24.04 describes its repositories in the <strong>deb822</strong> format (<code>.sources</code> files with <code>Types:</code>, <code>URIs:</code>, <code>Suites:</code>, <code>Signed-By:</code>); the old one-line <code>/etc/apt/sources.list</code> still exists but contains only a comment. The catalogue is 55 MB of indexes, which is why a Dockerfile deletes <code>/var/lib/apt/lists/*</code> in the same <code>RUN</code>. And the download cache is empty: the <code>ubuntu:24.04</code> image ships <code>/etc/apt/apt.conf.d/docker-clean</code>, which deletes every <code>.deb</code> right after installing — on a normal server they accumulate until <code>apt clean</code>. <code>jq.list</code> is the list of files the package installed (what <code>dpkg -L</code> prints), and <code>jq.md5sums</code> the checksum of each (what <code>dpkg --verify</code> compares against).</p>
-<pre><code>apt update</code></pre>
+<pre><code class="language-bash">apt update</code></pre>
 <div class="out">Hit:1 http://ports.ubuntu.com/ubuntu-ports noble InRelease
 Hit:2 http://ports.ubuntu.com/ubuntu-ports noble-updates InRelease
 Hit:3 http://ports.ubuntu.com/ubuntu-ports noble-backports InRelease
@@ -850,7 +850,7 @@ Reading state information...
 
 <h3>Installing and removing</h3>
 ${slide('lx-10', 12, 'remove giữ cấu hình, purge xoá, dữ liệu thì không ai xoá; dpkg -l')}
-<pre><code>sudo apt install nginx
+<pre><code class="language-bash">sudo apt install nginx
 sudo apt install nginx=1.24.0-2ubuntu7   <span class="tok-comment"># a specific version</span>
 sudo apt install --no-install-recommends nginx   <span class="tok-comment"># skip optional extras</span>
 sudo apt install -y --no-install-recommends nginx curl jq
@@ -865,7 +865,7 @@ sudo apt autoremove --purge  <span class="tok-comment"># dependencies nothing ne
 </div>
 <div class="callout warn">Neither <code>remove</code> nor <code>purge</code> touches <strong>data</strong>. Purging <code>postgresql</code> leaves <code>/var/lib/postgresql</code> intact — deliberately, because deleting a database during a package operation would be indefensible. That is good news when you did not mean it and a surprise when you were trying to reclaim disk space. Data directories are yours to remove, explicitly, after taking a backup.</div>
 <h3>Measured: remove, autoremove, purge — and the two letters of dpkg -l</h3>
-<pre><code>apt-get remove -y nginx-light
+<pre><code class="language-bash">apt-get remove -y nginx-light
 dpkg -l | grep nginx
 apt-get autoremove --purge -y
 ls -d /etc/nginx</code></pre>
@@ -895,12 +895,12 @@ ls: cannot access '/etc/nginx': No such file or directory</div>
 <tr><td><code>un</code></td><td>unknown · not installed</td><td>measured: <code>dpkg -l systemd-sysv</code> before installing it</td></tr>
 <tr><td><code>iU</code> · <code>iF</code></td><td>install · unpacked / half-configured</td><td>an interrupted install ⇒ <code>sudo dpkg --configure -a</code></td></tr>
 </table>
-<pre><code>dpkg -l | awk '/^rc/ {print $2}'                 <span class="tok-comment"># packages that left config behind</span>
+<pre><code class="language-bash">dpkg -l | awk '/^rc/ {print $2}'                 <span class="tok-comment"># packages that left config behind</span>
 sudo apt purge $(dpkg -l | awk '/^rc/ {print $2}')  <span class="tok-comment"># clean them up, after reading the list</span></code></pre>
 
 <h3>Finding things</h3>
 ${slide('lx-10', 13, 'dpkg -S/-L, apt policy, apt-mark hold')}
-<pre><code>apt search nginx             <span class="tok-comment"># search names and descriptions</span>
+<pre><code class="language-bash">apt search nginx             <span class="tok-comment"># search names and descriptions</span>
 apt show nginx               <span class="tok-comment"># version, size, dependencies, description</span>
 apt policy nginx             <span class="tok-comment"># installed vs available, and from which repo</span>
 apt list --installed | wc -l
@@ -919,7 +919,7 @@ apt-file search bin/htpasswd <span class="tok-comment"># which package WOULD pro
         100 /var/lib/dpkg/status</div>
 <div class="callout ok"><code>apt policy</code> is the command that answers "why is it installing that version". It lists every repository offering the package with a priority number, and the one with the highest priority wins. When a machine keeps installing an old version despite a newer one existing, or pulls from an unexpected third-party repo, this output shows exactly why in five lines.</div>
 <h3>Reading apt policy and dpkg -S, measured</h3>
-<pre><code>apt policy nginx
+<pre><code class="language-bash">apt policy nginx
 dpkg -S /usr/sbin/nginx /etc/nginx/nginx.conf
 dpkg -S /usr/local/bin/foo; echo "rc=$?"</code></pre>
 <div class="out">nginx:
@@ -954,7 +954,7 @@ apt-mark showhold</code></pre>
 docker-ce</div>
 <div class="callout warn">A hold is a promise to yourself that you will revisit it. Held packages stop receiving <strong>security updates</strong>, and unattended-upgrades skips them silently — so a hold placed to work around a bug in March is still there in December, quietly accumulating vulnerabilities. Record why in a comment or a ticket, and check <code>apt-mark showhold</code> whenever you audit a server.</div>
 <h3>Measured: a hold really does block a security fix</h3>
-<pre><code>apt-mark hold perl-base
+<pre><code class="language-bash">apt-mark hold perl-base
 apt-get -s upgrade            <span class="tok-comment"># -s: simulate</span>
 apt-mark unhold perl-base</code></pre>
 <div class="out">perl-base set on hold.
@@ -969,7 +969,7 @@ Canceled hold on perl-base.</div>
 
 <h3>Third-party repositories and keys</h3>
 ${slide('lx-10', 14, 'Một chữ ký bảo vệ cả chuỗi — signed-by giới hạn khoá')}
-<pre><code><span class="tok-comment"># The modern, correct way: a keyring file plus a signed-by line</span>
+<pre><code class="language-bash"><span class="tok-comment"># The modern, correct way: a keyring file plus a signed-by line</span>
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg \\
   | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
 
@@ -983,12 +983,12 @@ sudo apt update</code></pre>
   <div class="kv"><span class="k"><code>apt-key add</code></span><span class="v"><strong>Deprecated.</strong> It added keys to a global trust store with exactly the problem above. Ubuntu 24.04 (apt 2.8) still ships it but prints <code>Warning: apt-key is deprecated</code>; the apt in Debian 13 no longer has it at all. Any tutorial still using it is out of date.</span></div>
   <div class="kv"><span class="k"><code>add-apt-repository ppa:…</code></span><span class="v">Fine for Ubuntu PPAs — it handles the keyring correctly. Remember a PPA is a stranger's build server with root-equivalent trust on your machine.</span></div>
 </div>
-<pre><code>ls /etc/apt/sources.list.d/          <span class="tok-comment"># which third parties this machine trusts</span>
+<pre><code class="language-bash">ls /etc/apt/sources.list.d/          <span class="tok-comment"># which third parties this machine trusts</span>
 grep -r '^deb' /etc/apt/sources.list /etc/apt/sources.list.d/</code></pre>
 <div class="callout">Running that on a server you inherit is a two-second audit worth doing. Every line is a party that can install software as root on the next <code>apt upgrade</code>. A repository added years ago for one tool, whose domain has since changed hands, is a real supply-chain risk — and it is also the usual cause of <code>apt update</code> failing with a signature error nobody can explain.</div>
 <h3>The chain of trust, measured</h3>
 <p>Why does one signing key protect thousands of packages? Because apt checks a chain, and every link can be checked by hand with ordinary tools:</p>
-<pre><code>cd /var/lib/apt/lists
+<pre><code class="language-bash">cd /var/lib/apt/lists
 gpgv --keyring /usr/share/keyrings/ubuntu-archive-keyring.gpg \\
   ports.ubuntu.com_ubuntu-ports_dists_noble-security_InRelease
 apt-get download jq                              <span class="tok-comment"># fetch the .deb without installing</span>
@@ -1010,14 +1010,14 @@ ps aux | grep -E 'apt|dpkg|unattended'</code></pre>
 /var/lib/dpkg/lock-frontend:
                      root  1842 F.... unattended-upgr</div>
 <p>Almost always the answer is <code>unattended-upgrades</code> doing its job in the background. Wait for it. Deleting the lock file while another process holds it is how a package database gets corrupted — and the corruption surfaces days later as an upgrade that cannot proceed.</p>
-<pre><code><span class="tok-comment"># A genuinely interrupted install (power cut, OOM kill)</span>
+<pre><code class="language-bash"><span class="tok-comment"># A genuinely interrupted install (power cut, OOM kill)</span>
 sudo dpkg --configure -a          <span class="tok-comment"># finish what was half-done</span>
 sudo apt --fix-broken install     <span class="tok-comment"># resolve missing dependencies</span>
 sudo apt clean &amp;&amp; sudo apt update <span class="tok-comment"># clear a corrupted cache</span></code></pre>
 <div class="callout warn"><strong>Never delete <code>/var/lib/dpkg/lock*</code> to "fix" a lock error unless you have confirmed no apt or dpkg process is running.</strong> The lock exists precisely to stop two package operations from interleaving, and removing it mid-operation leaves the package database inconsistent — half-configured packages, files claimed by nothing, and an <code>apt</code> that refuses to do anything until someone repairs it by hand. <code>fuser</code> first; wait; then, if the process really is dead, remove the lock.</div>
 
 <h3>Unattended upgrades</h3>
-<pre><code>sudo apt install unattended-upgrades
+<pre><code class="language-bash">sudo apt install unattended-upgrades
 sudo dpkg-reconfigure -plow unattended-upgrades
 cat /etc/apt/apt.conf.d/50unattended-upgrades | grep -v '^//' | grep -v '^\$'
 sudo unattended-upgrade --dry-run --debug</code></pre>
@@ -1034,7 +1034,7 @@ ${slide('lx-10', 16, 'Cùng việc, bốn trình quản lý gói: apt · dnf · 
   <div class="kv"><span class="k"><code>dpkg -L pkg</code></span><span class="v"><code>rpm -ql pkg</code></span></div>
 </div>
 <p>dnf has one feature apt lacks and it is a good one: <code>dnf history</code> lists every transaction, and <code>dnf history undo &lt;id&gt;</code> reverses it. On Debian and Ubuntu the nearest equivalent is reading <code>/var/log/apt/history.log</code> and undoing it by hand.</p>
-<pre><code><span class="tok-comment"># Fedora 44, dnf5 — measured, as an ordinary user</span>
+<pre><code class="language-bash"><span class="tok-comment"># Fedora 44, dnf5 — measured, as an ordinary user</span>
 rpm -qf /usr/bin/bash
 dnf history list | head -3</code></pre>
 <div class="out">bash-5.3.9-3.fc44.x86_64
@@ -1047,7 +1047,7 @@ ID Command line                           Date and time       Action(s) Altered
 <h3>Verifying a download: sha256sum and gpg</h3>
 ${slide('lx-10', 15, 'File tải về: sha256sum -c, rồi gpg --verify file tổng')}
 <p>Not everything comes from apt. A binary from GitHub Releases, an ISO, an installer script — each arrives with no chain of trust unless you check it yourself. Projects publish a <strong>checksum file</strong> (a list of SHA-256 hashes) next to the downloads, and serious ones also <strong>sign</strong> that file. Two commands cover both.</p>
-<pre><code>curl -fLO https://github.com/jqlang/jq/releases/download/jq-1.8.1/jq-linux-arm64
+<pre><code class="language-bash">curl -fLO https://github.com/jqlang/jq/releases/download/jq-1.8.1/jq-linux-arm64
 curl -fLO https://github.com/jqlang/jq/releases/download/jq-1.8.1/sha256sum.txt
 sha256sum -c --ignore-missing sha256sum.txt; echo "exit=$?"
 printf x &gt;&gt; jq-linux-arm64                     <span class="tok-comment"># simulate a corrupted or swapped file</span>
@@ -1067,7 +1067,7 @@ exit=1</div>
 <tr><td><code>--quiet</code> · <code>--status</code></td><td>print only failures · print nothing, use the exit code</td></tr>
 </table>
 <p>A checksum only proves the file matches the list. If an attacker controls the download server, they replace both. A <strong>signature</strong> on the list closes that gap, because the attacker does not have the signing key. Ubuntu's own ISO list is the classic example:</p>
-<pre><code>curl -fLO https://releases.ubuntu.com/24.04/SHA256SUMS
+<pre><code class="language-bash">curl -fLO https://releases.ubuntu.com/24.04/SHA256SUMS
 curl -fLO https://releases.ubuntu.com/24.04/SHA256SUMS.gpg
 gpg --verify SHA256SUMS.gpg SHA256SUMS                 <span class="tok-comment"># first try: no key yet</span>
 gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys 843938DF228D22F7B3742BC0D94AA3F0EFE21092
@@ -1083,7 +1083,7 @@ Primary key fingerprint: 8439 38DF 228D 22F7 B374  2BC0 D94A A3F0 EFE2 1092</div
 <p>"Good signature" means the list was signed by that key and has not changed since. The WARNING that follows is normal and honest: gpg has no way of knowing whether the key really belongs to Ubuntu. That is your job, once — compare the fingerprint with the one published on Ubuntu's own verification page. Then run <code>sha256sum -c --ignore-missing SHA256SUMS</code> next to the ISO. Measured the other way round, changing one character of <code>SHA256SUMS</code> turns the result into <code>gpg: BAD signature from "Ubuntu CD Image Automatic Signing Key (2012) …"</code>.</p>
 <div class="callout warn"><strong>On a Mac, use <code>shasum -a 256 -c</code>.</strong> macOS 27 does have a <code>sha256sum</code> (<code>/sbin/sha256sum</code>, BSD, "sha256sum (Darwin) 1.0"), and it checks lists in the GNU format — but measured with <code>--ignore-missing</code> and a list in which no file was present, it printed nothing and exited <strong>0</strong>, where GNU prints "no file was verified" and exits 1. A script that trusts that exit code would accept a download that was never checked. <code>shasum -a 256 -c --ignore-missing</code> behaves like GNU (exit 1).</div>
 
-<pre><code>sudo npm install -g typescript        <span class="tok-comment"># DON'T</span>
+<pre><code class="language-bash">sudo npm install -g typescript        <span class="tok-comment"># DON'T</span>
 sudo pip install requests             <span class="tok-comment"># DON'T</span>
 sudo gem install rails                <span class="tok-comment"># DON'T</span></code></pre>
 <div class="lz-stack">
@@ -1091,7 +1091,7 @@ sudo gem install rails                <span class="tok-comment"># DON'T</span></
   <div class="lz-layer"><span class="lz-lname">It runs install hooks as root</span><span class="lz-lnote">npm and pip packages execute code at install time. <code>sudo</code> hands an arbitrary package from the internet full control of your machine — a supply-chain risk you took on for convenience.</span></div>
   <div class="lz-layer"><span class="lz-lname">Modern Python refuses outright</span><span class="lz-lnote">PEP 668: <code>error: externally-managed-environment</code>. The distribution is telling you that <code>/usr/lib/python3</code> belongs to <code>apt</code>. Use a virtualenv or <code>pipx</code>.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Do this instead</span>
+<pre><code class="language-bash"><span class="tok-comment"># Do this instead</span>
 python3 -m venv .venv &amp;&amp; . .venv/bin/activate &amp;&amp; pip install requests
 pipx install black                    <span class="tok-comment"># CLI tools, each isolated</span>
 
@@ -1118,7 +1118,7 @@ export PATH="\$HOME/.npm-global/bin:\$PATH"</code></pre>
 </table>
 
 <h3>Try it step by step</h3>
-<pre><code>docker run -it --rm ubuntu:24.04 bash
+<pre><code class="language-bash">docker run -it --rm ubuntu:24.04 bash
 <span class="tok-comment"># inside:</span>
 apt-get update -qq
 apt list --upgradable 2&gt;/dev/null | head -5
@@ -1200,7 +1200,7 @@ exit</code></pre>
 <h3>update không phải upgrade</h3>
 ${slide('lx-10', 10, 'apt đi 4 chặng: kho → danh mục → .deb → dpkg')}
 ${slide('lx-10', 11, 'update làm mới danh mục — upgrade mới là cài')}
-<pre><code>sudo apt update              <span class="tok-comment"># làm mới DANH MỤC. Không cài gì cả.</span>
+<pre><code class="language-bash">sudo apt update              <span class="tok-comment"># làm mới DANH MỤC. Không cài gì cả.</span>
 sudo apt upgrade             <span class="tok-comment"># cài bản mới hơn cho những gì bạn đang có</span>
 sudo apt full-upgrade        <span class="tok-comment"># …và cho phép GỠ gói nếu cần để làm được việc đó</span></code></pre>
 <div class="out">Hit:1 http://archive.ubuntu.com/ubuntu noble InRelease
@@ -1212,14 +1212,14 @@ Fetched 126 kB in 1s (98.4 kB/s)
   <div class="kv"><span class="k"><code>upgrade</code></span><span class="v">Nâng cấp các gói đã cài, nhưng không bao giờ GỠ một gói nào để thoả một thứ phụ thuộc. An toàn và thận trọng.</span></div>
   <div class="kv"><span class="k"><code>full-upgrade</code></span><span class="v">SẼ gỡ gói nếu việc nâng cấp cần thế. Bắt buộc khi đi qua một bản phát hành mới của bản phân phối; hãy nghĩ kỹ trước khi chạy nó trên một máy production.</span></div>
 </div>
-<pre><code>apt list --upgradable                 <span class="tok-comment"># cái gì sẽ đổi</span>
+<pre><code class="language-bash">apt list --upgradable                 <span class="tok-comment"># cái gì sẽ đổi</span>
 apt-get -s upgrade                    <span class="tok-comment"># -s: mô phỏng, không đổi gì</span>
 apt changelog nginx                   <span class="tok-comment"># vì sao nó đổi</span></code></pre>
 <div class="callout ok">Hai quy ước đáng biết. <strong><code>apt</code> dành cho CON NGƯỜI</strong> — có màu, có thanh tiến độ, và một giao diện có thể thay đổi giữa các bản phát hành. <strong><code>apt-get</code> dành cho SCRIPT</strong> — một giao diện ổn định mà những người bảo trì cam kết không phá vỡ, và đó là lý do mọi Dockerfile đều dùng nó. Trong script, hãy thêm cả <code>DEBIAN_FRONTEND=noninteractive</code> để một gói muốn hỏi câu gì đó sẽ HỎNG thay vì treo mãi mãi chờ một câu trả lời mà chẳng ai đưa.</div>
 
 <h3>Đo thật: bốn chặng trên một Ubuntu 24.04 thật</h3>
 <p>"apt" thật ra là bốn chỗ trên đĩa, và biết bốn chỗ đó là giải thích được mọi lệnh trong bài này: <strong>nguồn</strong> (tải từ đâu), <strong>danh mục</strong> (có gì, bản nào), <strong>bộ đệm tải về</strong> (các file <code>.deb</code>) và <strong>cơ sở dữ liệu của dpkg</strong> (cái gì đã cài, file nào thuộc gói nào).</p>
-<pre><code>cat /etc/apt/sources.list.d/ubuntu.sources      <span class="tok-comment"># 1. nguồn</span>
+<pre><code class="language-bash">cat /etc/apt/sources.list.d/ubuntu.sources      <span class="tok-comment"># 1. nguồn</span>
 du -sh /var/lib/apt/lists                       <span class="tok-comment"># 2. danh mục, do apt update đổ đầy</span>
 ls /var/cache/apt/archives                      <span class="tok-comment"># 3. các file .deb đã tải</span>
 grep -c '^Package:' /var/lib/dpkg/status         <span class="tok-comment"># 4. dpkg đã cài những gì</span>
@@ -1236,7 +1236,7 @@ lock  partial
 /var/lib/dpkg/info/jq.list
 /var/lib/dpkg/info/jq.md5sums</div>
 <p>Có ba điều đáng biết trong output đó. Ubuntu 24.04 mô tả các kho của nó theo định dạng <strong>deb822</strong> (file <code>.sources</code> với <code>Types:</code>, <code>URIs:</code>, <code>Suites:</code>, <code>Signed-By:</code>); file một-dòng-một-kho <code>/etc/apt/sources.list</code> kiểu cũ vẫn còn nhưng chỉ chứa một dòng chú thích. Danh mục là 55 MB chỉ mục, và đó là lý do một Dockerfile xoá <code>/var/lib/apt/lists/*</code> ngay trong cùng lệnh <code>RUN</code>. Còn bộ đệm tải về thì rỗng: ảnh <code>ubuntu:24.04</code> có sẵn <code>/etc/apt/apt.conf.d/docker-clean</code>, thứ xoá mọi file <code>.deb</code> ngay sau khi cài — trên một máy chủ bình thường chúng tích lại cho tới khi bạn <code>apt clean</code>. <code>jq.list</code> là danh sách file mà gói đã cài ra (thứ <code>dpkg -L</code> in ra), còn <code>jq.md5sums</code> là mã băm của từng file (thứ <code>dpkg --verify</code> đem ra so).</p>
-<pre><code>apt update</code></pre>
+<pre><code class="language-bash">apt update</code></pre>
 <div class="out">Hit:1 http://ports.ubuntu.com/ubuntu-ports noble InRelease
 Hit:2 http://ports.ubuntu.com/ubuntu-ports noble-updates InRelease
 Hit:3 http://ports.ubuntu.com/ubuntu-ports noble-backports InRelease
@@ -1249,7 +1249,7 @@ Reading state information...
 
 <h3>Cài và gỡ</h3>
 ${slide('lx-10', 12, 'remove giữ cấu hình, purge xoá, dữ liệu thì không ai xoá; dpkg -l')}
-<pre><code>sudo apt install nginx
+<pre><code class="language-bash">sudo apt install nginx
 sudo apt install nginx=1.24.0-2ubuntu7   <span class="tok-comment"># một phiên bản cụ thể</span>
 sudo apt install --no-install-recommends nginx   <span class="tok-comment"># bỏ qua phần kèm thêm tuỳ chọn</span>
 sudo apt install -y --no-install-recommends nginx curl jq
@@ -1264,7 +1264,7 @@ sudo apt autoremove --purge  <span class="tok-comment"># những thứ phụ thu
 </div>
 <div class="callout warn">Cả <code>remove</code> lẫn <code>purge</code> đều KHÔNG đụng tới <strong>DỮ LIỆU</strong>. Purge <code>postgresql</code> vẫn để nguyên <code>/var/lib/postgresql</code> — một cách có chủ ý, vì xoá một cơ sở dữ liệu trong lúc thao tác gói là điều không thể biện hộ. Đó là tin tốt khi bạn không cố ý, và là điều bất ngờ khi bạn đang cố đòi lại chỗ trống trên đĩa. Thư mục dữ liệu là của bạn, và phải do bạn xoá một cách tường minh, sau khi đã sao lưu.</div>
 <h3>Đo thật: remove, autoremove, purge — và hai chữ cái của dpkg -l</h3>
-<pre><code>apt-get remove -y nginx-light
+<pre><code class="language-bash">apt-get remove -y nginx-light
 dpkg -l | grep nginx
 apt-get autoremove --purge -y
 ls -d /etc/nginx</code></pre>
@@ -1294,12 +1294,12 @@ ls: cannot access '/etc/nginx': No such file or directory</div>
 <tr><td><code>un</code></td><td>không rõ · chưa cài</td><td>đo thật: <code>dpkg -l systemd-sysv</code> trước khi cài nó</td></tr>
 <tr><td><code>iU</code> · <code>iF</code></td><td>cài · mới giải nén / cấu hình dở</td><td>một lần cài bị ngắt ⇒ <code>sudo dpkg --configure -a</code></td></tr>
 </table>
-<pre><code>dpkg -l | awk '/^rc/ {print $2}'                 <span class="tok-comment"># những gói còn bỏ lại cấu hình</span>
+<pre><code class="language-bash">dpkg -l | awk '/^rc/ {print $2}'                 <span class="tok-comment"># những gói còn bỏ lại cấu hình</span>
 sudo apt purge $(dpkg -l | awk '/^rc/ {print $2}')  <span class="tok-comment"># dọn chúng, sau khi đã đọc danh sách</span></code></pre>
 
 <h3>Tìm mọi thứ</h3>
 ${slide('lx-10', 13, 'dpkg -S/-L, apt policy, apt-mark hold')}
-<pre><code>apt search nginx             <span class="tok-comment"># tìm trong tên và mô tả</span>
+<pre><code class="language-bash">apt search nginx             <span class="tok-comment"># tìm trong tên và mô tả</span>
 apt show nginx               <span class="tok-comment"># phiên bản, kích thước, phụ thuộc, mô tả</span>
 apt policy nginx             <span class="tok-comment"># đã cài với đang có, và từ kho nào</span>
 apt list --installed | wc -l
@@ -1318,7 +1318,7 @@ apt-file search bin/htpasswd <span class="tok-comment"># gói nào SẼ cung c�
         100 /var/lib/dpkg/status</div>
 <div class="callout ok"><code>apt policy</code> là cái lệnh trả lời câu "vì sao nó lại cài đúng cái phiên bản đó". Nó liệt kê mọi kho có cung cấp gói đó kèm một con số ưu tiên, và cái có ưu tiên cao nhất thắng. Khi một cái máy cứ cài mãi một phiên bản cũ dù đã có bản mới hơn, hoặc kéo về từ một kho bên thứ ba không ngờ tới, output này cho thấy chính xác vì sao chỉ trong năm dòng.</div>
 <h3>Đọc apt policy và dpkg -S, đo thật</h3>
-<pre><code>apt policy nginx
+<pre><code class="language-bash">apt policy nginx
 dpkg -S /usr/sbin/nginx /etc/nginx/nginx.conf
 dpkg -S /usr/local/bin/foo; echo "rc=$?"</code></pre>
 <div class="out">nginx:
@@ -1353,7 +1353,7 @@ apt-mark showhold</code></pre>
 docker-ce</div>
 <div class="callout warn">Một lệnh giữ (hold) là một lời hứa với chính mình rằng bạn sẽ quay lại xem xét nó. Gói bị giữ thì THÔI NHẬN <strong>bản vá an ninh</strong>, và unattended-upgrades bỏ qua chúng trong im lặng — nên một lệnh giữ đặt ra hồi tháng Ba để né một cái lỗi thì tới tháng Mười Hai vẫn còn đó, lặng lẽ tích luỹ lỗ hổng. Hãy ghi lý do vào một dòng chú thích hay một cái ticket, và hãy kiểm <code>apt-mark showhold</code> mỗi lần bạn rà soát một máy chủ.</div>
 <h3>Đo thật: một lệnh giữ chặn luôn cả bản vá an ninh</h3>
-<pre><code>apt-mark hold perl-base
+<pre><code class="language-bash">apt-mark hold perl-base
 apt-get -s upgrade            <span class="tok-comment"># -s: chỉ mô phỏng</span>
 apt-mark unhold perl-base</code></pre>
 <div class="out">perl-base set on hold.
@@ -1368,7 +1368,7 @@ Canceled hold on perl-base.</div>
 
 <h3>Kho của bên thứ ba và khoá GPG</h3>
 ${slide('lx-10', 14, 'Một chữ ký bảo vệ cả chuỗi — signed-by giới hạn khoá')}
-<pre><code><span class="tok-comment"># Cách đời mới và đúng: một file keyring cộng với một dòng signed-by</span>
+<pre><code class="language-bash"><span class="tok-comment"># Cách đời mới và đúng: một file keyring cộng với một dòng signed-by</span>
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg \\
   | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
 
@@ -1382,12 +1382,12 @@ sudo apt update</code></pre>
   <div class="kv"><span class="k"><code>apt-key add</code></span><span class="v"><strong>Đã khai tử.</strong> Nó thêm khoá vào một kho tin cậy TOÀN CỤC với đúng cái vấn đề ở trên. Ubuntu 24.04 (apt 2.8) vẫn còn kèm lệnh này nhưng in ra <code>Warning: apt-key is deprecated</code>; apt của Debian 13 thì không còn nó nữa. Mọi bài hướng dẫn còn dùng nó là đã lỗi thời.</span></div>
   <div class="kv"><span class="k"><code>add-apt-repository ppa:…</code></span><span class="v">Ổn với PPA của Ubuntu — nó xử lý phần keyring cho đúng. Hãy nhớ một PPA là máy chủ dựng của một người lạ, mang mức tin cậy ngang root trên máy bạn.</span></div>
 </div>
-<pre><code>ls /etc/apt/sources.list.d/          <span class="tok-comment"># máy này đang tin những bên thứ ba nào</span>
+<pre><code class="language-bash">ls /etc/apt/sources.list.d/          <span class="tok-comment"># máy này đang tin những bên thứ ba nào</span>
 grep -r '^deb' /etc/apt/sources.list /etc/apt/sources.list.d/</code></pre>
 <div class="callout">Chạy dòng đó trên một máy chủ bạn tiếp quản là một phép rà soát hai giây rất đáng làm. Mỗi dòng là một bên có thể cài phần mềm với quyền root ở lần <code>apt upgrade</code> kế tiếp. Một cái kho thêm vào từ nhiều năm trước cho một công cụ nào đó, mà tên miền của nó từ đó đã đổi chủ, là một rủi ro chuỗi cung ứng có thật — và nó cũng là nguyên nhân thường gặp của việc <code>apt update</code> hỏng với một lỗi chữ ký mà chẳng ai giải thích nổi.</div>
 <h3>Chuỗi tin cậy, đo thật</h3>
 <p>Vì sao một khoá ký lại bảo vệ được hàng nghìn gói? Vì apt kiểm theo một CHUỖI, và mắt xích nào cũng tự tay kiểm lại được bằng công cụ bình thường:</p>
-<pre><code>cd /var/lib/apt/lists
+<pre><code class="language-bash">cd /var/lib/apt/lists
 gpgv --keyring /usr/share/keyrings/ubuntu-archive-keyring.gpg \\
   ports.ubuntu.com_ubuntu-ports_dists_noble-security_InRelease
 apt-get download jq                              <span class="tok-comment"># lấy file .deb về mà không cài</span>
@@ -1409,14 +1409,14 @@ ps aux | grep -E 'apt|dpkg|unattended'</code></pre>
 /var/lib/dpkg/lock-frontend:
                      root  1842 F.... unattended-upgr</div>
 <p>Gần như luôn luôn, câu trả lời là <code>unattended-upgrades</code> đang làm việc của nó ở dưới nền. Hãy chờ nó. Xoá file khoá trong lúc một tiến trình khác đang giữ nó chính là cách làm hỏng cơ sở dữ liệu gói — và chỗ hỏng đó lộ ra vài ngày sau dưới dạng một lần nâng cấp không tài nào chạy được.</p>
-<pre><code><span class="tok-comment"># Một lần cài THẬT SỰ bị ngắt giữa chừng (mất điện, bị OOM giết)</span>
+<pre><code class="language-bash"><span class="tok-comment"># Một lần cài THẬT SỰ bị ngắt giữa chừng (mất điện, bị OOM giết)</span>
 sudo dpkg --configure -a          <span class="tok-comment"># hoàn tất phần làm dở</span>
 sudo apt --fix-broken install     <span class="tok-comment"># giải quyết các thứ phụ thuộc còn thiếu</span>
 sudo apt clean &amp;&amp; sudo apt update <span class="tok-comment"># xoá một bộ đệm đã hỏng</span></code></pre>
 <div class="callout warn"><strong>Đừng bao giờ xoá <code>/var/lib/dpkg/lock*</code> để "chữa" một lỗi khoá, trừ khi bạn đã xác nhận là không có tiến trình apt hay dpkg nào đang chạy.</strong> Cái khoá tồn tại chính là để ngăn hai thao tác gói xen kẽ vào nhau, và gỡ nó ra giữa chừng để lại một cơ sở dữ liệu gói không nhất quán — những gói cấu hình dở, những file chẳng thuộc về đâu, và một <code>apt</code> từ chối làm bất cứ việc gì cho tới khi có người sửa tay. <code>fuser</code> trước; chờ; rồi, nếu tiến trình đó thật sự đã chết, mới gỡ khoá.</div>
 
 <h3>Nâng cấp không cần trông</h3>
-<pre><code>sudo apt install unattended-upgrades
+<pre><code class="language-bash">sudo apt install unattended-upgrades
 sudo dpkg-reconfigure -plow unattended-upgrades
 cat /etc/apt/apt.conf.d/50unattended-upgrades | grep -v '^//' | grep -v '^\$'
 sudo unattended-upgrade --dry-run --debug</code></pre>
@@ -1433,7 +1433,7 @@ ${slide('lx-10', 16, 'Cùng việc, bốn trình quản lý gói: apt · dnf · 
   <div class="kv"><span class="k"><code>dpkg -L pkg</code></span><span class="v"><code>rpm -ql pkg</code></span></div>
 </div>
 <p>dnf có một tính năng mà apt không có, và đó là một tính năng tốt: <code>dnf history</code> liệt kê mọi giao dịch, còn <code>dnf history undo &lt;id&gt;</code> đảo ngược nó. Trên Debian và Ubuntu thì thứ gần nhất là đọc <code>/var/log/apt/history.log</code> rồi tự tay hoàn tác.</p>
-<pre><code><span class="tok-comment"># Fedora 44, dnf5 — đo thật, bằng người dùng thường</span>
+<pre><code class="language-bash"><span class="tok-comment"># Fedora 44, dnf5 — đo thật, bằng người dùng thường</span>
 rpm -qf /usr/bin/bash
 dnf history list | head -3</code></pre>
 <div class="out">bash-5.3.9-3.fc44.x86_64
@@ -1446,7 +1446,7 @@ ID Command line                           Date and time       Action(s) Altered
 <h3>Kiểm một file tải về: sha256sum và gpg</h3>
 ${slide('lx-10', 15, 'File tải về: sha256sum -c, rồi gpg --verify file tổng')}
 <p>Không phải thứ gì cũng tới từ apt. Một file chạy lấy từ GitHub Releases, một file ISO, một script cài đặt — mỗi thứ đến tay bạn mà không có chuỗi tin cậy nào, trừ khi bạn tự kiểm. Các dự án công bố một <strong>file mã băm</strong> (checksum — danh sách mã SHA-256) cạnh các file tải về, và dự án nghiêm túc còn <strong>ký</strong> file đó. Hai lệnh lo được cả hai.</p>
-<pre><code>curl -fLO https://github.com/jqlang/jq/releases/download/jq-1.8.1/jq-linux-arm64
+<pre><code class="language-bash">curl -fLO https://github.com/jqlang/jq/releases/download/jq-1.8.1/jq-linux-arm64
 curl -fLO https://github.com/jqlang/jq/releases/download/jq-1.8.1/sha256sum.txt
 sha256sum -c --ignore-missing sha256sum.txt; echo "exit=$?"
 printf x &gt;&gt; jq-linux-arm64                     <span class="tok-comment"># giả lập một file hỏng hay bị tráo</span>
@@ -1466,7 +1466,7 @@ exit=1</div>
 <tr><td><code>--quiet</code> · <code>--status</code></td><td>chỉ in chỗ hỏng · không in gì, dùng mã thoát</td></tr>
 </table>
 <p>Mã băm chỉ chứng minh file khớp với danh sách. Nếu kẻ tấn công chiếm được máy chủ tải về, hắn thay cả hai. Một <strong>chữ ký</strong> trên danh sách lấp chỗ hổng đó, vì hắn không có khoá ký. Danh sách ISO của chính Ubuntu là ví dụ kinh điển:</p>
-<pre><code>curl -fLO https://releases.ubuntu.com/24.04/SHA256SUMS
+<pre><code class="language-bash">curl -fLO https://releases.ubuntu.com/24.04/SHA256SUMS
 curl -fLO https://releases.ubuntu.com/24.04/SHA256SUMS.gpg
 gpg --verify SHA256SUMS.gpg SHA256SUMS                 <span class="tok-comment"># lần đầu: chưa có khoá</span>
 gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys 843938DF228D22F7B3742BC0D94AA3F0EFE21092
@@ -1482,7 +1482,7 @@ Primary key fingerprint: 8439 38DF 228D 22F7 B374  2BC0 D94A A3F0 EFE2 1092</div
 <p>"Good signature" nghĩa là danh sách được ký bằng khoá đó và chưa hề thay đổi từ lúc ký. Dòng WARNING theo sau là bình thường và trung thực: gpg không có cách nào biết cái khoá đó có thật sự là của Ubuntu hay không. Đó là việc của bạn, làm một lần — so vân tay (fingerprint) với vân tay công bố trên chính trang hướng dẫn kiểm file của Ubuntu. Rồi chạy <code>sha256sum -c --ignore-missing SHA256SUMS</code> ngay cạnh file ISO. Đo theo chiều ngược lại, sửa một ký tự của <code>SHA256SUMS</code> là kết quả biến thành <code>gpg: BAD signature from "Ubuntu CD Image Automatic Signing Key (2012) …"</code>.</p>
 <div class="callout warn"><strong>Trên Mac, hãy dùng <code>shasum -a 256 -c</code>.</strong> macOS 27 CÓ lệnh <code>sha256sum</code> (<code>/sbin/sha256sum</code>, bản BSD, "sha256sum (Darwin) 1.0"), và nó đọc được danh sách theo định dạng GNU — nhưng đo thật với <code>--ignore-missing</code> và một danh sách trong đó không file nào có mặt, nó chẳng in gì và thoát <strong>0</strong>, trong khi GNU in "no file was verified" và thoát 1. Một script tin vào mã thoát đó sẽ chấp nhận một file chưa hề được kiểm. <code>shasum -a 256 -c --ignore-missing</code> hành xử giống GNU (thoát 1).</div>
 
-<pre><code>sudo npm install -g typescript        <span class="tok-comment"># ĐỪNG</span>
+<pre><code class="language-bash">sudo npm install -g typescript        <span class="tok-comment"># ĐỪNG</span>
 sudo pip install requests             <span class="tok-comment"># ĐỪNG</span>
 sudo gem install rails                <span class="tok-comment"># ĐỪNG</span></code></pre>
 <div class="lz-stack">
@@ -1490,7 +1490,7 @@ sudo gem install rails                <span class="tok-comment"># ĐỪNG</span>
   <div class="lz-layer"><span class="lz-lname">Nó chạy các móc cài đặt với quyền root</span><span class="lz-lnote">Các gói npm và pip THỰC THI mã lúc cài. <code>sudo</code> trao cho một gói tuỳ ý lấy từ internet toàn quyền trên máy bạn — một rủi ro chuỗi cung ứng bạn nhận lấy để đổi lấy sự tiện lợi.</span></div>
   <div class="lz-layer"><span class="lz-lname">Python đời mới từ chối thẳng</span><span class="lz-lnote">PEP 668: <code>error: externally-managed-environment</code>. Bản phân phối đang nói với bạn rằng <code>/usr/lib/python3</code> thuộc về <code>apt</code>. Hãy dùng virtualenv hoặc <code>pipx</code>.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Hãy làm thế này thay vào</span>
+<pre><code class="language-bash"><span class="tok-comment"># Hãy làm thế này thay vào</span>
 python3 -m venv .venv &amp;&amp; . .venv/bin/activate &amp;&amp; pip install requests
 pipx install black                    <span class="tok-comment"># công cụ dòng lệnh, mỗi cái một chỗ riêng</span>
 
@@ -1517,7 +1517,7 @@ export PATH="\$HOME/.npm-global/bin:\$PATH"</code></pre>
 </table>
 
 <h3>Chạy thử từng bước</h3>
-<pre><code>docker run -it --rm ubuntu:24.04 bash
+<pre><code class="language-bash">docker run -it --rm ubuntu:24.04 bash
 <span class="tok-comment"># bên trong:</span>
 apt-get update -qq
 apt list --upgradable 2&gt;/dev/null | head -5
@@ -1611,7 +1611,7 @@ ${slide('lx-10', 17, 'Hai đường của log: journald hứng, file tự ghi')}
   <div class="lz-layer"><span class="lz-lname">journald</span><span class="lz-lnote">A structured binary store, indexed and queryable. Everything systemd starts logs here automatically — anything a service writes to stdout or stderr is captured. Read with <code>journalctl</code>.</span></div>
   <div class="lz-layer"><span class="lz-lname">Plain files in /var/log</span><span class="lz-lnote">What applications write themselves: <code>nginx/access.log</code>, <code>mysql/error.log</code>, your own app. Read with <code>less</code>, <code>tail</code>, <code>grep</code> (Chapter 3). Rotated by <code>logrotate</code>.</span></div>
 </div>
-<pre><code>ls /var/log/</code></pre>
+<pre><code class="language-bash">ls /var/log/</code></pre>
 <div class="out">auth.log      dpkg.log     journal/     nginx/       syslog
 auth.log.1    dpkg.log.1   kern.log     postgresql/  syslog.1
 auth.log.2.gz              kern.log.1                syslog.2.gz</div>
@@ -1620,7 +1620,7 @@ auth.log.2.gz              kern.log.1                syslog.2.gz</div>
 
 <h3>journalctl: the filters that matter</h3>
 ${slide('lx-10', 18, 'journalctl lọc theo 4 trục: unit · thời gian · mức · theo dõi')}
-<pre><code>journalctl -u nginx                    <span class="tok-comment"># one unit</span>
+<pre><code class="language-bash">journalctl -u nginx                    <span class="tok-comment"># one unit</span>
 journalctl -u nginx -f                 <span class="tok-comment"># follow, like tail -f</span>
 journalctl -u nginx -n 50              <span class="tok-comment"># last 50 lines</span>
 journalctl -u nginx --since today
@@ -1642,7 +1642,7 @@ Aug 22 14:31:11 vps myapp[5012]: ERROR connection refused (db:5432)</div>
   <div class="kv"><span class="k"><code>-b -1</code></span><span class="v">The previous boot. After an unexplained reboot, this is where the reason is — the current boot's log starts <em>after</em> whatever happened.</span></div>
   <div class="kv"><span class="k"><code>-o</code></span><span class="v">Output format: <code>short</code>, <code>json</code>, <code>json-pretty</code>, <code>cat</code> (message only), <code>verbose</code> (every field). <code>cat</code> is good for piping into other tools.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Combine freely — filters are ANDed</span>
+<pre><code class="language-bash"><span class="tok-comment"># Combine freely — filters are ANDed</span>
 journalctl -u myapp -p err --since '1 hour ago' -o cat
 journalctl -u myapp --since today | grep -c ERROR
 journalctl -u myapp -f | grep --line-buffered ERROR     <span class="tok-comment"># Lesson 3.2!</span></code></pre>
@@ -1650,11 +1650,11 @@ journalctl -u myapp -f | grep --line-buffered ERROR     <span class="tok-comment
 
 <h3>Measured: one crashing service, read four ways</h3>
 <p>To get real output, this lesson ran systemd inside a short-lived Ubuntu 24.04 container (host name <code>vps</code>) with one small service: a Python program that prints a startup line, a warning and an error, then exits with code 3, and <code>Restart=on-failure</code> restarts it two seconds later. A program marks the priority of a line by starting it with <code>&lt;4&gt;</code> (warning) or <code>&lt;3&gt;</code> (error); journald strips the marker and stores the number.</p>
-<pre><code>journalctl -u myapp -p err --no-pager</code></pre>
+<pre><code class="language-bash">journalctl -u myapp -p err --no-pager</code></pre>
 <div class="out">Sep 28 15:22:54 vps python3[163]: ERROR connection refused (db:5432)
 Sep 28 15:22:59 vps python3[170]: ERROR connection refused (db:5432)
 Sep 28 15:23:04 vps python3[175]: ERROR connection refused (db:5432)</div>
-<pre><code>journalctl -u myapp --since "15:22:55" --until "15:23:00" --no-pager</code></pre>
+<pre><code class="language-bash">journalctl -u myapp --since "15:22:55" --until "15:23:00" --no-pager</code></pre>
 <div class="out">Sep 28 15:22:55 vps systemd[1]: myapp.service: Main process exited, code=exited, status=3/NOTIMPLEMENTED
 Sep 28 15:22:55 vps systemd[1]: myapp.service: Failed with result 'exit-code'.
 Sep 28 15:22:57 vps systemd[1]: myapp.service: Scheduled restart job, restart counter is at 1.
@@ -1662,7 +1662,7 @@ Sep 28 15:22:57 vps systemd[1]: Started myapp.service - Demo app cho Bai 10.3.
 Sep 28 15:22:57 vps python3[170]: listening on 127.0.0.1:3000
 Sep 28 15:22:58 vps python3[170]: slow query: 2300 ms (SELECT * FROM posts)
 Sep 28 15:22:59 vps python3[170]: ERROR connection refused (db:5432)</div>
-<pre><code>journalctl -u myapp -p warning..err -o cat --no-pager | head -4</code></pre>
+<pre><code class="language-bash">journalctl -u myapp -p warning..err -o cat --no-pager | head -4</code></pre>
 <div class="out">slow query: 2300 ms (SELECT * FROM posts)
 ERROR connection refused (db:5432)
 myapp.service: Failed with result 'exit-code'.
@@ -1672,7 +1672,7 @@ slow query: 2300 ms (SELECT * FROM posts)</div>
 <h3>Priorities, and the out-of-memory kill that -p err misses</h3>
 ${slide('lx-10', 19, 'Mức ưu tiên 0–7: -p err bỏ sót cả lần bị OOM giết')}
 <p>A second service in the same container was given <code>MemoryMax=60M</code> and a program that allocates memory until it is stopped. The journal records each line with a <code>PRIORITY</code> field, which <code>-o json</code> exposes:</p>
-<pre><code>journalctl -u anram -o json | jq -r '[.PRIORITY, .MESSAGE] | @tsv'
+<pre><code class="language-bash">journalctl -u anram -o json | jq -r '[.PRIORITY, .MESSAGE] | @tsv'
 journalctl -u anram -p err
 journalctl -k | grep 'Killed process'</code></pre>
 <div class="out">6	Started anram.service - Tien trinh an RAM (demo OOM).
@@ -1695,7 +1695,7 @@ Sep 28 15:22:57 vps kernel: Memory cgroup out of memory: Killed process 64868 (p
 
 <h3>Beyond units: other selectors</h3>
 ${slide('lx-10', 20, '-o json: mỗi dòng log là một bản ghi có trường')}
-<pre><code>journalctl _PID=5012                   <span class="tok-comment"># one process</span>
+<pre><code class="language-bash">journalctl _PID=5012                   <span class="tok-comment"># one process</span>
 journalctl _UID=1001                   <span class="tok-comment"># one user</span>
 journalctl /usr/sbin/nginx             <span class="tok-comment"># one executable</span>
 journalctl _SYSTEMD_UNIT=ssh.service _PID=743   <span class="tok-comment"># several fields, ANDed</span>
@@ -1704,7 +1704,7 @@ journalctl _SYSTEMD_UNIT=nginx.service + _SYSTEMD_UNIT=postgresql.service   <spa
 journalctl -F _SYSTEMD_UNIT | head     <span class="tok-comment"># what units exist in the journal</span></code></pre>
 <p>Because the journal is structured rather than plain text, every line carries fields — the unit, the PID, the UID, the executable, the boot ID. <code>-o verbose</code> shows them all, and any of them can be a filter. This is the real advantage over text logs: you can ask "everything this PID logged" without a regex that also matches the PID appearing inside a message.</p>
 <h3>Measured: fields, the + operator, and jq</h3>
-<pre><code>journalctl -t deploy -p err -o json-pretty -n 1</code></pre>
+<pre><code class="language-bash">journalctl -t deploy -p err -o json-pretty -n 1</code></pre>
 <div class="out">{
 	"__REALTIME_TIMESTAMP" : "1790611498019750",
 	…
@@ -1724,7 +1724,7 @@ journalctl -F _SYSTEMD_UNIT | head     <span class="tok-comment"># what units ex
 	…
 }</div>
 <p>Fields starting with an underscore (<code>_PID</code>, <code>_HOSTNAME</code>, <code>_SYSTEMD_UNIT</code>) are added by journald itself and cannot be faked by the program; the others (<code>MESSAGE</code>, <code>PRIORITY</code>, <code>SYSLOG_IDENTIFIER</code>) come from the sender. <code>__REALTIME_TIMESTAMP</code> is microseconds since 1970 in UTC — the journal always stores UTC, and only the display is converted. An earlier version of this lesson showed <code>journalctl -u nginx + -u postgresql</code>; measured on systemd 255 it fails:</p>
-<pre><code>journalctl -u myapp + -u nginx
+<pre><code class="language-bash">journalctl -u myapp + -u nginx
 journalctl _SYSTEMD_UNIT=myapp.service + SYSLOG_IDENTIFIER=deploy -n 4 --no-pager</code></pre>
 <div class="out">"+" can only be used between terms
 Sep 28 15:23:25 vps python3[201]: ERROR connection refused (db:5432)
@@ -1735,9 +1735,9 @@ Sep 28 15:23:30 vps python3[203]: ERROR connection refused (db:5432)</div>
 
 <h3>Keeping the journal from eating the disk</h3>
 ${slide('lx-10', 21, 'Journal cần trần: mặc định 10% đĩa, tối đa 4G')}
-<pre><code>journalctl --disk-usage</code></pre>
+<pre><code class="language-bash">journalctl --disk-usage</code></pre>
 <div class="out">Archived and active journals take up 2.1G in the file system.</div>
-<pre><code>sudo journalctl --vacuum-size=500M     <span class="tok-comment"># trim to 500 MB now</span>
+<pre><code class="language-bash">sudo journalctl --vacuum-size=500M     <span class="tok-comment"># trim to 500 MB now</span>
 sudo journalctl --vacuum-time=14d      <span class="tok-comment"># drop anything older than 14 days</span>
 
 <span class="tok-comment"># /etc/systemd/journald.conf.d/size.conf — the permanent fix</span>
@@ -1745,13 +1745,13 @@ sudo journalctl --vacuum-time=14d      <span class="tok-comment"># drop anything
 SystemMaxUse=500M
 SystemMaxFileSize=50M
 MaxRetentionSec=1month</code></pre>
-<pre><code>sudo systemctl restart systemd-journald</code></pre>
+<pre><code class="language-bash">sudo systemctl restart systemd-journald</code></pre>
 <div class="callout warn">By default journald uses up to <strong>10% of the filesystem, capped at 4 GB</strong> — so on an 80 GB disk the cap, 4 GB, is what applies (measured on a container with no configuration at all: <code>max 4.0G</code>). That is fine until it shares a disk with a database, at which point the journal quietly grows into the space Postgres needed. Set <code>SystemMaxUse</code> explicitly on every server; it takes four lines and it removes a whole class of 3am disk-full incident (Lesson 10.1).</div>
-<pre><code><span class="tok-comment"># Is the journal even persistent?</span>
+<pre><code class="language-bash"><span class="tok-comment"># Is the journal even persistent?</span>
 ls -d /var/log/journal 2&gt;/dev/null || echo "volatile — logs are lost on reboot"</code></pre>
 <p>If <code>/var/log/journal</code> does not exist, journald keeps everything in <code>/run</code> — memory — and the entire log history disappears on reboot. That is the default in many container images and on some minimal installs, and it is a nasty surprise when you reboot to fix something and then cannot investigate what happened. <code>sudo mkdir -p /var/log/journal &amp;&amp; sudo systemctl restart systemd-journald</code> makes it persistent.</p>
 <h3>Measured: the limit journald actually applies</h3>
-<pre><code>journalctl -u systemd-journald | grep 'System Journal'     <span class="tok-comment"># no drop-in: the default</span>
+<pre><code class="language-bash">journalctl -u systemd-journald | grep 'System Journal'     <span class="tok-comment"># no drop-in: the default</span>
 sudo mkdir -p /etc/systemd/journald.conf.d
 printf '[Journal]\\nSystemMaxUse=500M\\nMaxRetentionSec=1month\\n' | sudo tee /etc/systemd/journald.conf.d/10-gioi-han.conf
 sudo systemctl restart systemd-journald
@@ -1767,7 +1767,7 @@ MaxRetentionSec=1month</div>
 
 <h3>logrotate: for the file-based logs</h3>
 ${slide('lx-10', 22, 'logrotate đổi tên file — app vẫn ghi vào inode cũ')}
-<pre><code>cat /etc/logrotate.d/nginx                   <span class="tok-comment"># Ubuntu 24.04, nginx 1.24</span></code></pre>
+<pre><code class="language-bash">cat /etc/logrotate.d/nginx                   <span class="tok-comment"># Ubuntu 24.04, nginx 1.24</span></code></pre>
 <div class="out">/var/log/nginx/*.log {
         daily
         missingok
@@ -1793,7 +1793,7 @@ ${slide('lx-10', 22, 'logrotate đổi tên file — app vẫn ghi vào inode c�
   <div class="kv"><span class="k"><code>postrotate</code></span><span class="v">Tell the process to reopen its log — here <code>invoke-rc.d nginx rotate</code>, whose init script sends nginx <code>SIGUSR1</code> (<code>start-stop-daemon --stop --signal USR1</code>), exactly the signal from Lesson 5.3. Without this the process keeps writing to the renamed file (Lesson 10.1's deleted-but-open problem).</span></div>
   <div class="kv"><span class="k"><code>copytruncate</code></span><span class="v">For programs that cannot be told to reopen: copy the file, then truncate the original in place. Simpler, but lines written during the copy are lost.</span></div>
 </div>
-<pre><code>sudo logrotate -d /etc/logrotate.d/nginx     <span class="tok-comment"># -d: debug, changes nothing</span>
+<pre><code class="language-bash">sudo logrotate -d /etc/logrotate.d/nginx     <span class="tok-comment"># -d: debug, changes nothing</span>
 sudo logrotate -f /etc/logrotate.d/nginx     <span class="tok-comment"># -f: force a rotation now</span>
 cat /var/lib/logrotate/status | grep nginx   <span class="tok-comment"># when it last rotated</span></code></pre>
 <div class="callout ok">The <code>postrotate</code> versus <code>copytruncate</code> choice is the whole design problem of log rotation. Renaming a file the process has open does not disturb it — it keeps writing into the same inode, now called <code>access.log.1</code>, and the new <code>access.log</code> stays empty forever. <code>postrotate</code> solves it properly by asking the process to reopen; <code>copytruncate</code> avoids the question at the cost of a small race. When your own application's logs stop appearing after a rotation, this is why — and the fix is to handle <code>SIGUSR1</code> or <code>SIGHUP</code>, or to log to stdout and let journald handle it.</div>
@@ -1802,7 +1802,7 @@ cat /var/lib/logrotate/status | grep nginx   <span class="tok-comment"># when it
 <pre><code><span class="tok-comment"># the "app"</span>
 exec 3&gt;&gt;/srv/app/log/app.log
 i=0; while :; do i=$((i+1)); echo "$(date +%T) request $i" &gt;&amp;3; sleep 0.2; done</code></pre>
-<pre><code><span class="tok-comment"># /srv/app/lr-create.conf — rename + create, NO postrotate</span>
+<pre><code class="language-bash"><span class="tok-comment"># /srv/app/lr-create.conf — rename + create, NO postrotate</span>
 /srv/app/log/app.log {
     rotate 3
     create 0640 root root
@@ -1816,7 +1816,7 @@ i=0; while :; do i=$((i+1)); echo "$(date +%T) request $i" &gt;&amp;3; sleep 0.2
   0 log/app.log
  20 log/app.log.1</div>
 <p>The new <code>app.log</code> stays at 0 lines while <code>app.log.1</code> keeps growing: the program is still writing to the inode that is now called <code>.1</code>. With <code>copytruncate</code> instead, logrotate copies the content and then truncates the <em>same</em> inode, so the program carries on in <code>app.log</code> (measured: 10 lines in <code>app.log</code>, 5 in the copy). With <code>create</code> plus a <code>postrotate</code> that sends the program a signal it handles by reopening the file, the result is the same without the copy:</p>
-<pre><code><span class="tok-comment"># the app, version 2: write its PID, reopen fd 3 on SIGUSR1</span>
+<pre><code class="language-bash"><span class="tok-comment"># the app, version 2: write its PID, reopen fd 3 on SIGUSR1</span>
 echo $$ &gt; /run/ghi.pid
 mo(){ exec 3&gt;&gt;/srv/app/log/app.log; }
 mo; trap mo USR1
@@ -1848,7 +1848,7 @@ considering log /srv/app/log/app.log
 <p><code>-d</code> prints the plan and changes nothing — the first thing to run on a new configuration. Why "does not need rotating"? The file had no schedule (<code>daily</code>/<code>weekly</code>) or <code>size</code> line of its own, so it fell back to a size threshold it had not reached; <code>-f</code> forces a rotation regardless. On a real server logrotate runs once a day from a systemd timer (<code>systemctl list-timers logrotate.timer</code>); Chapter 16 builds a complete rotation and retention setup.</p>
 
 <h3>Writing to the log from a script</h3>
-<pre><code>logger "deploy started"                        <span class="tok-comment"># goes to the journal</span>
+<pre><code class="language-bash">logger "deploy started"                        <span class="tok-comment"># goes to the journal</span>
 logger -t deploy -p user.info "release v1.4"
 logger -t deploy -p user.err "rollback triggered"
 
@@ -1866,7 +1866,7 @@ Aug 22 16:09:44 vps deploy[6188]: rollback triggered</div>
   <div class="lz-step"><span class="lz-k">4 · Check the kernel</span><span class="lz-t">journalctl -k --since '30 min ago'</span><span class="lz-d">OOM kills, I/O errors, filesystems remounted read-only. None of these appear in an application's own log.</span></div>
   <div class="lz-step"><span class="lz-k">5 · Read AROUND the first error</span><span class="lz-t">the ten lines before it</span><span class="lz-d">The first error is usually a symptom. What the service was doing immediately before is usually the cause.</span></div>
 </div>
-<pre><code><span class="tok-comment"># The four commands, as one paste-able block</span>
+<pre><code class="language-bash"><span class="tok-comment"># The four commands, as one paste-able block</span>
 journalctl -u myapp --since '30 min ago' -p err -o cat
 journalctl --since '30 min ago' -p warning | tail -50
 journalctl -k --since '30 min ago' | grep -iE 'oom|error|remount'
@@ -1887,7 +1887,7 @@ Aug 22 03:14:52 vps kernel: oom_reaper: reaped process 5012 (node), now anon-rss
 <h3>UTC in the container, +07 on your machine</h3>
 ${slide('lx-10', 23, 'Container giờ UTC, máy +07: lệch đúng 7 tiếng')}
 <p>The course's own incident list includes a cron job that ran seven hours off. The cause is visible in two commands:</p>
-<pre><code>date                                            <span class="tok-comment"># on the Mac</span>
+<pre><code class="language-bash">date                                            <span class="tok-comment"># on the Mac</span>
 docker run --rm ubuntu:24.04 date
 docker run --rm -e TZ=Asia/Ho_Chi_Minh ubuntu:24.04 date
 docker run --rm -e TZ=UTC-7 ubuntu:24.04 date
@@ -1898,7 +1898,7 @@ Mon Sep 28 15:23:57 Asia 2026
 Mon Sep 28 22:23:57 UTC 2026
 Mon Sep 28 08:23:57 UTC 2026</div>
 <p>Three separate lessons in five lines. Containers run in UTC unless told otherwise. The <code>ubuntu:24.04</code> image has no <code>tzdata</code> package, so <code>TZ=Asia/Ho_Chi_Minh</code> silently does nothing — the time is still UTC, labelled "Asia", with no error. And the POSIX form without tzdata has its sign <em>reversed</em>: <code>UTC-7</code> means "seven hours ahead of UTC" (and still prints the label UTC), while <code>UTC+7</code> puts you 14 hours away from Vietnam. The reliable fix is to install <code>tzdata</code> in the image and set <code>ENV TZ=Asia/Ho_Chi_Minh</code>; on a server, <code>sudo timedatectl set-timezone Asia/Ho_Chi_Minh</code>.</p>
-<pre><code><span class="tok-comment"># the same journal entry, machine set to Asia/Ho_Chi_Minh</span>
+<pre><code class="language-bash"><span class="tok-comment"># the same journal entry, machine set to Asia/Ho_Chi_Minh</span>
 journalctl -t deploy -n 1
 journalctl -t deploy -n 1 --utc
 journalctl -t deploy -n 1 -o short-iso</code></pre>
@@ -1928,7 +1928,7 @@ Sep 28 15:22:57 vps deploy[168]: rollback: healthcheck 502
 
 <h3>Try it step by step</h3>
 <p>You do not need root or a server to practise <code>journalctl</code>: any Linux with systemd (Fedora, Ubuntu desktop, WSL2 with systemd enabled) runs short services for your own user. Measured on Fedora 44 as an ordinary user:</p>
-<pre><code>systemd-run --user --unit=lx10-thu bash -c 'echo bat dau; echo "&lt;4&gt;cham: 2300 ms"; echo "&lt;3&gt;ERROR ket noi db" &gt;&amp;2; sleep 1; exit 3'
+<pre><code class="language-bash">systemd-run --user --unit=lx10-thu bash -c 'echo bat dau; echo "&lt;4&gt;cham: 2300 ms"; echo "&lt;3&gt;ERROR ket noi db" &gt;&amp;2; sleep 1; exit 3'
 journalctl --user -u lx10-thu --no-pager
 journalctl --user -u lx10-thu -p err --no-pager
 journalctl --user -u lx10-thu -o json --no-pager | jq -r '[.PRIORITY, .MESSAGE] | @tsv'
@@ -2022,7 +2022,7 @@ ${slide('lx-10', 17, 'Hai đường của log: journald hứng, file tự ghi')}
   <div class="lz-layer"><span class="lz-lname">journald</span><span class="lz-lnote">Một kho nhị phân CÓ CẤU TRÚC, được đánh chỉ mục và truy vấn được. Mọi thứ systemd khởi động đều tự động ghi log vào đây — bất cứ thứ gì một dịch vụ ghi ra stdout hay stderr đều được hứng lại. Đọc bằng <code>journalctl</code>.</span></div>
   <div class="lz-layer"><span class="lz-lname">File thường trong /var/log</span><span class="lz-lnote">Thứ do chính ứng dụng tự ghi: <code>nginx/access.log</code>, <code>mysql/error.log</code>, ứng dụng của bạn. Đọc bằng <code>less</code>, <code>tail</code>, <code>grep</code> (Chương 3). Do <code>logrotate</code> xoay vòng.</span></div>
 </div>
-<pre><code>ls /var/log/</code></pre>
+<pre><code class="language-bash">ls /var/log/</code></pre>
 <div class="out">auth.log      dpkg.log     journal/     nginx/       syslog
 auth.log.1    dpkg.log.1   kern.log     postgresql/  syslog.1
 auth.log.2.gz              kern.log.1                syslog.2.gz</div>
@@ -2031,7 +2031,7 @@ auth.log.2.gz              kern.log.1                syslog.2.gz</div>
 
 <h3>journalctl: những bộ lọc có ý nghĩa</h3>
 ${slide('lx-10', 18, 'journalctl lọc theo 4 trục: unit · thời gian · mức · theo dõi')}
-<pre><code>journalctl -u nginx                    <span class="tok-comment"># một unit</span>
+<pre><code class="language-bash">journalctl -u nginx                    <span class="tok-comment"># một unit</span>
 journalctl -u nginx -f                 <span class="tok-comment"># theo dõi, như tail -f</span>
 journalctl -u nginx -n 50              <span class="tok-comment"># 50 dòng cuối</span>
 journalctl -u nginx --since today
@@ -2053,7 +2053,7 @@ Aug 22 14:31:11 vps myapp[5012]: ERROR connection refused (db:5432)</div>
   <div class="kv"><span class="k"><code>-b -1</code></span><span class="v">Lần khởi động trước. Sau một lần khởi động lại không rõ lý do, đây là chỗ chứa nguyên nhân — log của lần khởi động HIỆN TẠI bắt đầu <em>SAU</em> khi chuyện đó đã xảy ra.</span></div>
   <div class="kv"><span class="k"><code>-o</code></span><span class="v">Định dạng đầu ra: <code>short</code>, <code>json</code>, <code>json-pretty</code>, <code>cat</code> (chỉ thông điệp), <code>verbose</code> (mọi trường). <code>cat</code> tiện để đưa qua ống vào công cụ khác.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Ghép thoải mái — các bộ lọc nối với nhau bằng VÀ</span>
+<pre><code class="language-bash"><span class="tok-comment"># Ghép thoải mái — các bộ lọc nối với nhau bằng VÀ</span>
 journalctl -u myapp -p err --since '1 hour ago' -o cat
 journalctl -u myapp --since today | grep -c ERROR
 journalctl -u myapp -f | grep --line-buffered ERROR     <span class="tok-comment"># Bài 3.2!</span></code></pre>
@@ -2061,11 +2061,11 @@ journalctl -u myapp -f | grep --line-buffered ERROR     <span class="tok-comment
 
 <h3>Đo thật: một dịch vụ hay sập, đọc theo bốn cách</h3>
 <p>Để có output thật, bài này chạy systemd bên trong một container Ubuntu 24.04 ngắn hạn (tên máy <code>vps</code>) với một dịch vụ nhỏ: một chương trình Python in một dòng khởi động, một cảnh báo và một lỗi, rồi thoát với mã 3, và <code>Restart=on-failure</code> khởi động lại nó sau hai giây. Chương trình đánh dấu mức ưu tiên của một dòng bằng cách mở đầu dòng bằng <code>&lt;4&gt;</code> (warning) hay <code>&lt;3&gt;</code> (error); journald gỡ dấu đó ra và cất con số lại.</p>
-<pre><code>journalctl -u myapp -p err --no-pager</code></pre>
+<pre><code class="language-bash">journalctl -u myapp -p err --no-pager</code></pre>
 <div class="out">Sep 28 15:22:54 vps python3[163]: ERROR connection refused (db:5432)
 Sep 28 15:22:59 vps python3[170]: ERROR connection refused (db:5432)
 Sep 28 15:23:04 vps python3[175]: ERROR connection refused (db:5432)</div>
-<pre><code>journalctl -u myapp --since "15:22:55" --until "15:23:00" --no-pager</code></pre>
+<pre><code class="language-bash">journalctl -u myapp --since "15:22:55" --until "15:23:00" --no-pager</code></pre>
 <div class="out">Sep 28 15:22:55 vps systemd[1]: myapp.service: Main process exited, code=exited, status=3/NOTIMPLEMENTED
 Sep 28 15:22:55 vps systemd[1]: myapp.service: Failed with result 'exit-code'.
 Sep 28 15:22:57 vps systemd[1]: myapp.service: Scheduled restart job, restart counter is at 1.
@@ -2073,7 +2073,7 @@ Sep 28 15:22:57 vps systemd[1]: Started myapp.service - Demo app cho Bai 10.3.
 Sep 28 15:22:57 vps python3[170]: listening on 127.0.0.1:3000
 Sep 28 15:22:58 vps python3[170]: slow query: 2300 ms (SELECT * FROM posts)
 Sep 28 15:22:59 vps python3[170]: ERROR connection refused (db:5432)</div>
-<pre><code>journalctl -u myapp -p warning..err -o cat --no-pager | head -4</code></pre>
+<pre><code class="language-bash">journalctl -u myapp -p warning..err -o cat --no-pager | head -4</code></pre>
 <div class="out">slow query: 2300 ms (SELECT * FROM posts)
 ERROR connection refused (db:5432)
 myapp.service: Failed with result 'exit-code'.
@@ -2083,7 +2083,7 @@ slow query: 2300 ms (SELECT * FROM posts)</div>
 <h3>Mức ưu tiên, và lần bị giết vì hết bộ nhớ mà -p err bỏ sót</h3>
 ${slide('lx-10', 19, 'Mức ưu tiên 0–7: -p err bỏ sót cả lần bị OOM giết')}
 <p>Một dịch vụ thứ hai trong cùng container được đặt <code>MemoryMax=60M</code> và chạy một chương trình xin bộ nhớ cho tới khi bị chặn lại. Journal ghi mỗi dòng kèm một trường <code>PRIORITY</code>, thứ mà <code>-o json</code> phơi ra:</p>
-<pre><code>journalctl -u anram -o json | jq -r '[.PRIORITY, .MESSAGE] | @tsv'
+<pre><code class="language-bash">journalctl -u anram -o json | jq -r '[.PRIORITY, .MESSAGE] | @tsv'
 journalctl -u anram -p err
 journalctl -k | grep 'Killed process'</code></pre>
 <div class="out">6	Started anram.service - Tien trinh an RAM (demo OOM).
@@ -2106,7 +2106,7 @@ Sep 28 15:22:57 vps kernel: Memory cgroup out of memory: Killed process 64868 (p
 
 <h3>Ngoài unit: những bộ chọn khác</h3>
 ${slide('lx-10', 20, '-o json: mỗi dòng log là một bản ghi có trường')}
-<pre><code>journalctl _PID=5012                   <span class="tok-comment"># một tiến trình</span>
+<pre><code class="language-bash">journalctl _PID=5012                   <span class="tok-comment"># một tiến trình</span>
 journalctl _UID=1001                   <span class="tok-comment"># một người dùng</span>
 journalctl /usr/sbin/nginx             <span class="tok-comment"># một chương trình</span>
 journalctl _SYSTEMD_UNIT=ssh.service _PID=743   <span class="tok-comment"># nhiều trường, nối bằng VÀ</span>
@@ -2115,7 +2115,7 @@ journalctl _SYSTEMD_UNIT=nginx.service + _SYSTEMD_UNIT=postgresql.service   <spa
 journalctl -F _SYSTEMD_UNIT | head     <span class="tok-comment"># journal đang có những unit nào</span></code></pre>
 <p>Vì journal có CẤU TRÚC chứ không phải văn bản thuần, mỗi dòng đều mang theo các trường — unit, PID, UID, chương trình, mã lần khởi động. <code>-o verbose</code> hiện ra tất cả, và bất kỳ trường nào cũng làm bộ lọc được. Đây mới là lợi thế thật so với log dạng văn bản: bạn hỏi được "mọi thứ mà PID này đã ghi" mà không cần một cái regex vốn cũng sẽ khớp trúng cái PID xuất hiện bên trong một thông điệp.</p>
 <h3>Đo thật: các trường, toán tử +, và jq</h3>
-<pre><code>journalctl -t deploy -p err -o json-pretty -n 1</code></pre>
+<pre><code class="language-bash">journalctl -t deploy -p err -o json-pretty -n 1</code></pre>
 <div class="out">{
 	"__REALTIME_TIMESTAMP" : "1790611498019750",
 	…
@@ -2135,7 +2135,7 @@ journalctl -F _SYSTEMD_UNIT | head     <span class="tok-comment"># journal đang
 	…
 }</div>
 <p>Những trường bắt đầu bằng gạch dưới (<code>_PID</code>, <code>_HOSTNAME</code>, <code>_SYSTEMD_UNIT</code>) do chính journald thêm vào và chương trình không làm giả được; những trường còn lại (<code>MESSAGE</code>, <code>PRIORITY</code>, <code>SYSLOG_IDENTIFIER</code>) do bên gửi cung cấp. <code>__REALTIME_TIMESTAMP</code> là số micro giây kể từ 1970 theo UTC — journal luôn LƯU giờ UTC, chỉ phần HIỂN THỊ mới được đổi. Một phiên bản trước của bài này có dòng <code>journalctl -u nginx + -u postgresql</code>; đo thật trên systemd 255 thì nó hỏng:</p>
-<pre><code>journalctl -u myapp + -u nginx
+<pre><code class="language-bash">journalctl -u myapp + -u nginx
 journalctl _SYSTEMD_UNIT=myapp.service + SYSLOG_IDENTIFIER=deploy -n 4 --no-pager</code></pre>
 <div class="out">"+" can only be used between terms
 Sep 28 15:23:25 vps python3[201]: ERROR connection refused (db:5432)
@@ -2146,9 +2146,9 @@ Sep 28 15:23:30 vps python3[203]: ERROR connection refused (db:5432)</div>
 
 <h3>Giữ journal khỏi ăn hết đĩa</h3>
 ${slide('lx-10', 21, 'Journal cần trần: mặc định 10% đĩa, tối đa 4G')}
-<pre><code>journalctl --disk-usage</code></pre>
+<pre><code class="language-bash">journalctl --disk-usage</code></pre>
 <div class="out">Archived and active journals take up 2.1G in the file system.</div>
-<pre><code>sudo journalctl --vacuum-size=500M     <span class="tok-comment"># cắt xuống 500 MB ngay</span>
+<pre><code class="language-bash">sudo journalctl --vacuum-size=500M     <span class="tok-comment"># cắt xuống 500 MB ngay</span>
 sudo journalctl --vacuum-time=14d      <span class="tok-comment"># bỏ mọi thứ cũ hơn 14 ngày</span>
 
 <span class="tok-comment"># /etc/systemd/journald.conf.d/size.conf — cách chữa lâu dài</span>
@@ -2156,13 +2156,13 @@ sudo journalctl --vacuum-time=14d      <span class="tok-comment"># bỏ mọi th
 SystemMaxUse=500M
 SystemMaxFileSize=50M
 MaxRetentionSec=1month</code></pre>
-<pre><code>sudo systemctl restart systemd-journald</code></pre>
+<pre><code class="language-bash">sudo systemctl restart systemd-journald</code></pre>
 <div class="callout warn">Mặc định journald dùng tới <strong>10% hệ thống file, chặn trên ở 4 GB</strong> — nên trên một cái đĩa 80 GB thì mức chặn 4 GB mới là thứ có hiệu lực (đo trên một container không cấu hình gì: <code>max 4.0G</code>). Chuyện đó không sao cho tới khi nó dùng chung đĩa với một cơ sở dữ liệu, và lúc ấy cái journal lặng lẽ phình vào đúng phần chỗ mà Postgres cần. Hãy đặt <code>SystemMaxUse</code> một cách tường minh trên mọi máy chủ; nó tốn bốn dòng và gỡ bỏ cả một lớp sự cố đĩa-đầy lúc 3 giờ sáng (Bài 10.1).</div>
-<pre><code><span class="tok-comment"># Journal có được lưu lâu dài không đã?</span>
+<pre><code class="language-bash"><span class="tok-comment"># Journal có được lưu lâu dài không đã?</span>
 ls -d /var/log/journal 2&gt;/dev/null || echo "chỉ trong bộ nhớ — log mất khi khởi động lại"</code></pre>
 <p>Nếu <code>/var/log/journal</code> không tồn tại, journald giữ mọi thứ trong <code>/run</code> — tức bộ nhớ — và toàn bộ lịch sử log biến mất khi khởi động lại. Đó là mặc định trong nhiều ảnh container và trên vài bản cài tối giản, và nó là một bất ngờ khó chịu khi bạn khởi động lại để chữa một thứ gì đó rồi sau đó không điều tra được chuyện đã xảy ra. Lệnh <code>sudo mkdir -p /var/log/journal &amp;&amp; sudo systemctl restart systemd-journald</code> làm nó lưu lâu dài.</p>
 <h3>Đo thật: mức trần mà journald thật sự áp dụng</h3>
-<pre><code>journalctl -u systemd-journald | grep 'System Journal'     <span class="tok-comment"># chưa có drop-in: mặc định</span>
+<pre><code class="language-bash">journalctl -u systemd-journald | grep 'System Journal'     <span class="tok-comment"># chưa có drop-in: mặc định</span>
 sudo mkdir -p /etc/systemd/journald.conf.d
 printf '[Journal]\\nSystemMaxUse=500M\\nMaxRetentionSec=1month\\n' | sudo tee /etc/systemd/journald.conf.d/10-gioi-han.conf
 sudo systemctl restart systemd-journald
@@ -2178,7 +2178,7 @@ MaxRetentionSec=1month</div>
 
 <h3>logrotate: cho những file log dạng file</h3>
 ${slide('lx-10', 22, 'logrotate đổi tên file — app vẫn ghi vào inode cũ')}
-<pre><code>cat /etc/logrotate.d/nginx                   <span class="tok-comment"># Ubuntu 24.04, nginx 1.24</span></code></pre>
+<pre><code class="language-bash">cat /etc/logrotate.d/nginx                   <span class="tok-comment"># Ubuntu 24.04, nginx 1.24</span></code></pre>
 <div class="out">/var/log/nginx/*.log {
         daily
         missingok
@@ -2204,7 +2204,7 @@ ${slide('lx-10', 22, 'logrotate đổi tên file — app vẫn ghi vào inode c�
   <div class="kv"><span class="k"><code>postrotate</code></span><span class="v">Bảo tiến trình MỞ LẠI file log của nó — ở đây là <code>invoke-rc.d nginx rotate</code>, mà script khởi động của nó gửi cho nginx tín hiệu <code>SIGUSR1</code> (<code>start-stop-daemon --stop --signal USR1</code>) — đúng cái tín hiệu ở Bài 5.3. Không có nó, tiến trình cứ ghi tiếp vào file đã đổi tên (chính là vấn đề đã-xoá-mà-vẫn-mở ở Bài 10.1).</span></div>
   <div class="kv"><span class="k"><code>copytruncate</code></span><span class="v">Dành cho chương trình không bảo được là hãy mở lại: chép file ra, rồi cắt trắng bản gốc tại chỗ. Đơn giản hơn, nhưng những dòng ghi ra trong lúc đang chép thì mất.</span></div>
 </div>
-<pre><code>sudo logrotate -d /etc/logrotate.d/nginx     <span class="tok-comment"># -d: gỡ lỗi, không đổi gì</span>
+<pre><code class="language-bash">sudo logrotate -d /etc/logrotate.d/nginx     <span class="tok-comment"># -d: gỡ lỗi, không đổi gì</span>
 sudo logrotate -f /etc/logrotate.d/nginx     <span class="tok-comment"># -f: ép xoay vòng ngay</span>
 cat /var/lib/logrotate/status | grep nginx   <span class="tok-comment"># lần xoay vòng gần nhất là khi nào</span></code></pre>
 <div class="callout ok">Lựa chọn giữa <code>postrotate</code> và <code>copytruncate</code> chính là toàn bộ bài toán thiết kế của việc xoay vòng log. Đổi tên một file mà tiến trình đang mở thì KHÔNG làm nó bận tâm — nó cứ ghi tiếp vào đúng cái inode đó, nay mang tên <code>access.log.1</code>, còn file <code>access.log</code> mới thì rỗng mãi mãi. <code>postrotate</code> giải quyết chuyện đó cho tử tế bằng cách YÊU CẦU tiến trình mở lại; <code>copytruncate</code> né hẳn câu hỏi với cái giá là một tình huống tranh chấp nhỏ. Khi log của chính ứng dụng bạn thôi xuất hiện sau một lần xoay vòng, lý do là đây — và cách chữa là xử lý <code>SIGUSR1</code> hoặc <code>SIGHUP</code>, hoặc ghi ra stdout rồi để journald lo.</div>
@@ -2213,7 +2213,7 @@ cat /var/lib/logrotate/status | grep nginx   <span class="tok-comment"># lần x
 <pre><code><span class="tok-comment"># "ứng dụng"</span>
 exec 3&gt;&gt;/srv/app/log/app.log
 i=0; while :; do i=$((i+1)); echo "$(date +%T) request $i" &gt;&amp;3; sleep 0.2; done</code></pre>
-<pre><code><span class="tok-comment"># /srv/app/lr-create.conf — đổi tên + create, KHÔNG có postrotate</span>
+<pre><code class="language-bash"><span class="tok-comment"># /srv/app/lr-create.conf — đổi tên + create, KHÔNG có postrotate</span>
 /srv/app/log/app.log {
     rotate 3
     create 0640 root root
@@ -2227,7 +2227,7 @@ i=0; while :; do i=$((i+1)); echo "$(date +%T) request $i" &gt;&amp;3; sleep 0.2
   0 log/app.log
  20 log/app.log.1</div>
 <p><code>app.log</code> mới đứng yên ở 0 dòng trong khi <code>app.log.1</code> cứ lớn dần: chương trình vẫn ghi vào cái inode giờ mang tên <code>.1</code>. Dùng <code>copytruncate</code> thay vào, logrotate chép nội dung ra rồi cắt trắng CHÍNH inode đó, nên chương trình cứ thế ghi tiếp vào <code>app.log</code> (đo thật: 10 dòng trong <code>app.log</code>, 5 dòng trong bản chép). Dùng <code>create</code> cộng một <code>postrotate</code> gửi cho chương trình một tín hiệu mà nó xử lý bằng cách mở lại file, kết quả cũng thế mà không phải chép:</p>
-<pre><code><span class="tok-comment"># ứng dụng, phiên bản 2: ghi PID ra file, mở lại fd 3 khi nhận SIGUSR1</span>
+<pre><code class="language-bash"><span class="tok-comment"># ứng dụng, phiên bản 2: ghi PID ra file, mở lại fd 3 khi nhận SIGUSR1</span>
 echo $$ &gt; /run/ghi.pid
 mo(){ exec 3&gt;&gt;/srv/app/log/app.log; }
 mo; trap mo USR1
@@ -2259,7 +2259,7 @@ considering log /srv/app/log/app.log
 <p><code>-d</code> in kế hoạch mà không đổi gì — thứ đầu tiên nên chạy với một cấu hình mới. Vì sao "does not need rotating"? File đó không có dòng lịch (<code>daily</code>/<code>weekly</code>) hay dòng <code>size</code> của riêng nó, nên rơi về một ngưỡng kích thước mà nó chưa chạm tới; <code>-f</code> ép xoay vòng bất kể. Trên máy chủ thật, logrotate chạy mỗi ngày một lần từ một systemd timer (<code>systemctl list-timers logrotate.timer</code>); Chương 16 dựng một bộ xoay vòng và lưu giữ hoàn chỉnh.</p>
 
 <h3>Ghi vào log từ một script</h3>
-<pre><code>logger "bắt đầu deploy"                        <span class="tok-comment"># đi thẳng vào journal</span>
+<pre><code class="language-bash">logger "bắt đầu deploy"                        <span class="tok-comment"># đi thẳng vào journal</span>
 logger -t deploy -p user.info "phát hành v1.4"
 logger -t deploy -p user.err "đã kích hoạt quay lui"
 
@@ -2277,7 +2277,7 @@ Aug 22 16:09:44 vps deploy[6188]: đã kích hoạt quay lui</div>
   <div class="lz-step"><span class="lz-k">4 · Kiểm phần nhân</span><span class="lz-t">journalctl -k --since '30 min ago'</span><span class="lz-d">OOM giết, lỗi I/O, hệ thống file bị gắn lại ở chế độ chỉ-đọc. Không cái nào xuất hiện trong log của chính ứng dụng.</span></div>
   <div class="lz-step"><span class="lz-k">5 · Đọc QUANH cái lỗi đầu tiên</span><span class="lz-t">mười dòng ngay trước nó</span><span class="lz-d">Lỗi đầu tiên thường là TRIỆU CHỨNG. Thứ dịch vụ đang làm ngay trước đó thường mới là NGUYÊN NHÂN.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Bốn lệnh, gói thành một khối dán được</span>
+<pre><code class="language-bash"><span class="tok-comment"># Bốn lệnh, gói thành một khối dán được</span>
 journalctl -u myapp --since '30 min ago' -p err -o cat
 journalctl --since '30 min ago' -p warning | tail -50
 journalctl -k --since '30 min ago' | grep -iE 'oom|error|remount'
@@ -2298,7 +2298,7 @@ Aug 22 03:14:52 vps kernel: oom_reaper: reaped process 5012 (node), now anon-rss
 <h3>Container giờ UTC, máy bạn giờ +07</h3>
 ${slide('lx-10', 23, 'Container giờ UTC, máy +07: lệch đúng 7 tiếng')}
 <p>Danh sách sự cố của chính khoá này có một công việc cron chạy lệch bảy tiếng. Nguyên nhân hiện ra chỉ trong hai lệnh:</p>
-<pre><code>date                                            <span class="tok-comment"># trên Mac</span>
+<pre><code class="language-bash">date                                            <span class="tok-comment"># trên Mac</span>
 docker run --rm ubuntu:24.04 date
 docker run --rm -e TZ=Asia/Ho_Chi_Minh ubuntu:24.04 date
 docker run --rm -e TZ=UTC-7 ubuntu:24.04 date
@@ -2309,7 +2309,7 @@ Mon Sep 28 15:23:57 Asia 2026
 Mon Sep 28 22:23:57 UTC 2026
 Mon Sep 28 08:23:57 UTC 2026</div>
 <p>Ba bài học riêng trong năm dòng. Container chạy giờ UTC nếu không ai bảo khác. Ảnh <code>ubuntu:24.04</code> không có gói <code>tzdata</code>, nên <code>TZ=Asia/Ho_Chi_Minh</code> lặng lẽ chẳng làm gì — giờ vẫn là UTC, dán nhãn "Asia", không báo lỗi. Và dạng POSIX khi không có tzdata thì dấu bị <em>NGƯỢC</em>: <code>UTC-7</code> nghĩa là "đi trước UTC bảy tiếng" (mà nhãn vẫn in là UTC), còn <code>UTC+7</code> đẩy bạn lệch 14 tiếng so với Việt Nam. Cách sửa chắc chắn là cài <code>tzdata</code> vào ảnh rồi đặt <code>ENV TZ=Asia/Ho_Chi_Minh</code>; trên máy chủ thì <code>sudo timedatectl set-timezone Asia/Ho_Chi_Minh</code>.</p>
-<pre><code><span class="tok-comment"># cùng một dòng journal, máy đặt múi giờ Asia/Ho_Chi_Minh</span>
+<pre><code class="language-bash"><span class="tok-comment"># cùng một dòng journal, máy đặt múi giờ Asia/Ho_Chi_Minh</span>
 journalctl -t deploy -n 1
 journalctl -t deploy -n 1 --utc
 journalctl -t deploy -n 1 -o short-iso</code></pre>
@@ -2339,7 +2339,7 @@ Sep 28 15:22:57 vps deploy[168]: rollback: healthcheck 502
 
 <h3>Chạy thử từng bước</h3>
 <p>Bạn không cần root hay máy chủ để luyện <code>journalctl</code>: Linux nào có systemd (Fedora, Ubuntu desktop, WSL2 đã bật systemd) cũng chạy được dịch vụ ngắn cho chính người dùng của bạn. Đo thật trên Fedora 44 bằng người dùng thường:</p>
-<pre><code>systemd-run --user --unit=lx10-thu bash -c 'echo bat dau; echo "&lt;4&gt;cham: 2300 ms"; echo "&lt;3&gt;ERROR ket noi db" &gt;&amp;2; sleep 1; exit 3'
+<pre><code class="language-bash">systemd-run --user --unit=lx10-thu bash -c 'echo bat dau; echo "&lt;4&gt;cham: 2300 ms"; echo "&lt;3&gt;ERROR ket noi db" &gt;&amp;2; sleep 1; exit 3'
 journalctl --user -u lx10-thu --no-pager
 journalctl --user -u lx10-thu -p err --no-pager
 journalctl --user -u lx10-thu -o json --no-pager | jq -r '[.PRIORITY, .MESSAGE] | @tsv'

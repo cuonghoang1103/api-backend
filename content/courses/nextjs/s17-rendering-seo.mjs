@@ -252,7 +252,7 @@ export default {
 
 <h3>Metadata: telling search engines about the page</h3>
 <p>You met <code>metadata</code> in Chapter 8. For SEO it is essential — the <code>&lt;title&gt;</code> (the blue link in Google results) and the <code>description</code> (the grey text under it):</p>
-<pre><code><span class="tok-comment">// static — most pages</span>
+<pre><code class="language-javascript"><span class="tok-comment">// static — most pages</span>
 export const metadata = {
   title: 'Learn Next.js — CuongThai',
   description: 'A beginner-friendly Next.js and React course, zero to production.',
@@ -313,7 +313,7 @@ export async function generateMetadata({ params }) {
 
 <h3>Metadata: nói cho máy tìm kiếm biết về trang</h3>
 <p>Bạn đã gặp <code>metadata</code> ở Chương 8. Với SEO nó thiết yếu — <code>&lt;title&gt;</code> (link xanh trong kết quả Google) và <code>description</code> (chữ xám dưới nó):</p>
-<pre><code><span class="tok-comment">// tĩnh — đa số trang</span>
+<pre><code class="language-javascript"><span class="tok-comment">// tĩnh — đa số trang</span>
 export const metadata = {
   title: 'Học Next.js — CuongThai',
   description: 'Khoá Next.js và React thân thiện người mới, số 0 tới production.',
@@ -377,7 +377,7 @@ export async function generateMetadata({ params }) {
 
 <h3>Setting Open Graph in metadata</h3>
 <p>It is part of the same <code>metadata</code> you already use — just an <code>openGraph</code> section:</p>
-<pre><code>export const metadata = {
+<pre><code class="language-javascript">export const metadata = {
   title: 'Learn Next.js — CuongThai',
   description: 'Zero to production, in Vietnamese and English.',
   openGraph: {
@@ -432,7 +432,7 @@ export async function generateMetadata({ params }) {
 
 <h3>Đặt Open Graph trong metadata</h3>
 <p>Nó là một phần của cùng <code>metadata</code> bạn đã dùng — chỉ thêm một mục <code>openGraph</code>:</p>
-<pre><code>export const metadata = {
+<pre><code class="language-javascript">export const metadata = {
   title: 'Học Next.js — CuongThai',
   description: 'Số 0 tới production, tiếng Việt và tiếng Anh.',
   openGraph: {

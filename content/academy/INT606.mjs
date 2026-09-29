@@ -596,7 +596,7 @@ Now a seat can have one CANCELLED row plus one active row. <em>Why beyond syllab
 <p class="lead">Đây là toàn bộ CSDL. Chú ý một dòng — <code>UNIQUE</code> trên <code>orders.seat_id</code>. Ràng buộc đơn lẻ đó là <strong>hàng rào cuối cùng</strong>: kể cả khi hai lần thanh toán lọt qua Redis và mọi kiểm tra trong code Node, chính PostgreSQL từ chối ghi hai đơn hoạt động cho một ghế.</p>
 
 <h3>DDL (PostgreSQL)</h3>
-<pre><span class="tok-keyword">CREATE TABLE</span> users (
+<pre><code class="language-sql"><span class="tok-keyword">CREATE TABLE</span> users (
   id          <span class="tok-type">BIGSERIAL</span> <span class="tok-keyword">PRIMARY KEY</span>,
   email       <span class="tok-type">VARCHAR</span>(255) <span class="tok-keyword">UNIQUE NOT NULL</span>,
   password    <span class="tok-type">VARCHAR</span>(255) <span class="tok-keyword">NOT NULL</span>,      <span class="tok-comment">-- hash bcrypt</span>
@@ -629,7 +629,7 @@ Now a seat can have one CANCELLED row plus one active row. <em>Why beyond syllab
   checkin_code <span class="tok-type">VARCHAR</span>(20) <span class="tok-keyword">UNIQUE NOT NULL</span>,
   created_at   <span class="tok-type">TIMESTAMP</span> <span class="tok-keyword">NOT NULL DEFAULT</span> now(),
   <span class="tok-keyword">CONSTRAINT</span> uq_active_seat <span class="tok-keyword">UNIQUE</span> (seat_id)     <span class="tok-comment">-- ★ một đơn mỗi ghế</span>
-);</pre>
+);</code></pre>
 
 <h3>Ví dụ có lời giải — vì sao UNIQUE mới là người gác thật</h3>
 <div class="out"><b>Tình huống:</b> hai INSERT cho seat_id = 42 tới cùng một mili-giây (cả hai đã lọt qua Redis).
@@ -731,7 +731,7 @@ Giờ một ghế có thể có một dòng CANCELLED cộng một dòng hoạt 
 <p class="lead">Scaffold with <code>npm init -y</code> and install <b>express, pg, redis, jsonwebtoken, bcrypt, zod, dotenv</b>. Then wire two connections — one to Postgres, one to Redis — and split your code into three layers so the flash-sale logic stays testable.</p>
 
 <h3>Config &amp; the two connections</h3>
-<pre><span class="tok-comment">// src/db.js — one pooled Postgres client</span>
+<pre><code class="language-javascript"><span class="tok-comment">// src/db.js — one pooled Postgres client</span>
 <span class="tok-keyword">import</span> pg <span class="tok-keyword">from</span> <span class="tok-string">'pg'</span>;
 <span class="tok-keyword">export const</span> pool = <span class="tok-keyword">new</span> pg.Pool({
   connectionString: process.env.DATABASE_URL
@@ -743,7 +743,7 @@ Giờ một ghế có thể có một dòng CANCELLED cộng một dòng hoạt 
 <span class="tok-keyword">export const</span> redis = createClient({
   url: process.env.REDIS_URL ?? <span class="tok-string">'redis://localhost:6379'</span>,
 });
-<span class="tok-keyword">await</span> redis.connect();</pre>
+<span class="tok-keyword">await</span> redis.connect();</code></pre>
 <p>Both read an environment variable with a local default — the same values will come from Docker in Section 7, with no code change.</p>
 
 <h3>The three layers — one responsibility each</h3>
@@ -760,7 +760,7 @@ Route ──dto──▶ Service ──▶ Repository ──SQL──▶ Postgre
    └──json/status─┘  (map row → response, choose 200/201/409…)</div>
 
 <h3>Wiring the app</h3>
-<pre><span class="tok-comment">// src/app.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// src/app.js</span>
 <span class="tok-keyword">import</span> express <span class="tok-keyword">from</span> <span class="tok-string">'express'</span>;
 <span class="tok-keyword">import</span> authRoutes <span class="tok-keyword">from</span> <span class="tok-string">'./routes/auth.routes.js'</span>;
 <span class="tok-keyword">import</span> eventRoutes <span class="tok-keyword">from</span> <span class="tok-string">'./routes/event.routes.js'</span>;
@@ -772,7 +772,7 @@ app.use(express.json());
 app.use(<span class="tok-string">'/api/auth'</span>, authRoutes);
 app.use(<span class="tok-string">'/api'</span>, eventRoutes);
 app.use(<span class="tok-string">'/api'</span>, orderRoutes);
-app.use(errorHandler);          <span class="tok-comment">// one place that turns thrown errors into JSON</span></pre>
+app.use(errorHandler);          <span class="tok-comment">// one place that turns thrown errors into JSON</span></code></pre>
 
 <div class="callout ok">Why layer at all? Because you can then <strong>test the service without HTTP</strong> and <strong>swap the router (REST→GraphQL) without touching business rules</strong>. Each layer depends only on the one below it.</div>
 
@@ -790,7 +790,7 @@ app.use(errorHandler);          <span class="tok-comment">// one place that turn
 <p class="lead">Tạo khung bằng <code>npm init -y</code> và cài <b>express, pg, redis, jsonwebtoken, bcrypt, zod, dotenv</b>. Rồi nối hai kết nối — một tới Postgres, một tới Redis — và tách code thành ba lớp để logic flash-sale luôn test được.</p>
 
 <h3>Cấu hình &amp; hai kết nối</h3>
-<pre><span class="tok-comment">// src/db.js — một client Postgres có pool</span>
+<pre><code class="language-javascript"><span class="tok-comment">// src/db.js — một client Postgres có pool</span>
 <span class="tok-keyword">import</span> pg <span class="tok-keyword">from</span> <span class="tok-string">'pg'</span>;
 <span class="tok-keyword">export const</span> pool = <span class="tok-keyword">new</span> pg.Pool({
   connectionString: process.env.DATABASE_URL
@@ -802,7 +802,7 @@ app.use(errorHandler);          <span class="tok-comment">// one place that turn
 <span class="tok-keyword">export const</span> redis = createClient({
   url: process.env.REDIS_URL ?? <span class="tok-string">'redis://localhost:6379'</span>,
 });
-<span class="tok-keyword">await</span> redis.connect();</pre>
+<span class="tok-keyword">await</span> redis.connect();</code></pre>
 <p>Cả hai đọc một biến môi trường với giá trị mặc định cục bộ — chính các giá trị này sẽ đến từ Docker ở Mục 7, không cần đổi code.</p>
 
 <h3>Ba lớp — mỗi lớp một trách nhiệm</h3>
@@ -819,7 +819,7 @@ Route ──dto──▶ Service ──▶ Repository ──SQL──▶ Postgre
    └──json/status─┘  (ánh xạ row → response, chọn 200/201/409…)</div>
 
 <h3>Ráp app</h3>
-<pre><span class="tok-comment">// src/app.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// src/app.js</span>
 <span class="tok-keyword">import</span> express <span class="tok-keyword">from</span> <span class="tok-string">'express'</span>;
 <span class="tok-keyword">import</span> authRoutes <span class="tok-keyword">from</span> <span class="tok-string">'./routes/auth.routes.js'</span>;
 <span class="tok-keyword">import</span> eventRoutes <span class="tok-keyword">from</span> <span class="tok-string">'./routes/event.routes.js'</span>;
@@ -831,7 +831,7 @@ app.use(express.json());
 app.use(<span class="tok-string">'/api/auth'</span>, authRoutes);
 app.use(<span class="tok-string">'/api'</span>, eventRoutes);
 app.use(<span class="tok-string">'/api'</span>, orderRoutes);
-app.use(errorHandler);          <span class="tok-comment">// một nơi biến lỗi ném ra thành JSON</span></pre>
+app.use(errorHandler);          <span class="tok-comment">// một nơi biến lỗi ném ra thành JSON</span></code></pre>
 
 <div class="callout ok">Vì sao phải phân lớp? Vì khi đó bạn có thể <strong>test service không cần HTTP</strong> và <strong>thay router (REST→GraphQL) mà không đụng quy tắc nghiệp vụ</strong>. Mỗi lớp chỉ phụ thuộc vào lớp ngay dưới.</div>
 
@@ -857,7 +857,7 @@ app.use(errorHandler);          <span class="tok-comment">// một nơi biến l
 <p class="lead">A repository is a thin set of functions, each running one <strong>parameterised</strong> query. Parameters (<code>$1, $2</code>) are how you stay safe from SQL injection — never build SQL by string concatenation.</p>
 
 <h3>The seat &amp; order repositories</h3>
-<pre><span class="tok-comment">// src/repos/seat.repo.js</span>
+<pre><code class="language-sql"><span class="tok-comment">// src/repos/seat.repo.js</span>
 <span class="tok-keyword">import</span> { pool } <span class="tok-keyword">from</span> <span class="tok-string">'../db.js'</span>;
 
 <span class="tok-keyword">export function</span> <span class="tok-function">availableSeats</span>(eventId) {
@@ -886,7 +886,7 @@ app.use(errorHandler);          <span class="tok-comment">// một nơi biến l
       ORDER BY o.created_at DESC&#96;</span>,
     [buyerId],
   ).then((r) =&gt; r.rows);
-}</pre>
+}</code></pre>
 
 <h3>Worked example — parameterised vs string-built</h3>
 <div class="out"><b>Attacker sends</b> eventId = <span class="tok-string">"0; DROP TABLE orders; --"</span>
@@ -906,7 +906,7 @@ app.use(errorHandler);          <span class="tok-comment">// một nơi biến l
 <p class="lead">Một repository là một tập hàm mỏng, mỗi hàm chạy một truy vấn <strong>tham số hoá</strong>. Tham số (<code>$1, $2</code>) là cách bạn giữ an toàn khỏi SQL injection — đừng bao giờ ghép SQL bằng nối chuỗi.</p>
 
 <h3>Repository ghế &amp; đơn hàng</h3>
-<pre><span class="tok-comment">// src/repos/seat.repo.js</span>
+<pre><code class="language-sql"><span class="tok-comment">// src/repos/seat.repo.js</span>
 <span class="tok-keyword">import</span> { pool } <span class="tok-keyword">from</span> <span class="tok-string">'../db.js'</span>;
 
 <span class="tok-keyword">export function</span> <span class="tok-function">availableSeats</span>(eventId) {
@@ -935,7 +935,7 @@ app.use(errorHandler);          <span class="tok-comment">// một nơi biến l
       ORDER BY o.created_at DESC&#96;</span>,
     [buyerId],
   ).then((r) =&gt; r.rows);
-}</pre>
+}</code></pre>
 
 <h3>Ví dụ có lời giải — tham số hoá vs ghép chuỗi</h3>
 <div class="out"><b>Kẻ tấn công gửi</b> eventId = <span class="tok-string">"0; DROP TABLE orders; --"</span>
@@ -963,7 +963,7 @@ app.use(errorHandler);          <span class="tok-comment">// một nơi biến l
 <p class="lead">Let's ship the first vertical slice end-to-end: an endpoint that returns an event's AVAILABLE seats as clean JSON. During a flash sale thousands of buyers refresh this exact list, so we also add a short Redis cache — the template every other read endpoint copies.</p>
 
 <h3>Step 1 — the service (business intent, no HTTP)</h3>
-<pre><span class="tok-comment">// src/services/seat.service.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// src/services/seat.service.js</span>
 <span class="tok-keyword">import</span> { redis } <span class="tok-keyword">from</span> <span class="tok-string">'../redis.js'</span>;
 <span class="tok-keyword">import</span> * <span class="tok-keyword">as</span> seatRepo <span class="tok-keyword">from</span> <span class="tok-string">'../repos/seat.repo.js'</span>;
 
@@ -975,10 +975,10 @@ app.use(errorHandler);          <span class="tok-comment">// một nơi biến l
   <span class="tok-keyword">const</span> rows = <span class="tok-keyword">await</span> seatRepo.availableSeats(eventId);
   <span class="tok-keyword">await</span> redis.set(key, JSON.stringify(rows), { EX: <span class="tok-number">5</span> }); <span class="tok-comment">// cache 5s</span>
   <span class="tok-keyword">return</span> rows;
-}</pre>
+}</code></pre>
 
 <h3>Step 2 — the route (HTTP only)</h3>
-<pre><span class="tok-comment">// src/routes/event.routes.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// src/routes/event.routes.js</span>
 <span class="tok-keyword">import</span> { Router } <span class="tok-keyword">from</span> <span class="tok-string">'express'</span>;
 <span class="tok-keyword">import</span> * <span class="tok-keyword">as</span> seatService <span class="tok-keyword">from</span> <span class="tok-string">'../services/seat.service.js'</span>;
 
@@ -989,7 +989,7 @@ r.get(<span class="tok-string">'/events/:id/seats'</span>, <span class="tok-keyw
     res.json(seats);
   } <span class="tok-keyword">catch</span> (e) { next(e); }   <span class="tok-comment">// hand errors to the error middleware</span>
 });
-<span class="tok-keyword">export default</span> r;</pre>
+<span class="tok-keyword">export default</span> r;</code></pre>
 
 <h3>Step 3 — test it (real output)</h3>
 <div class="out"><b>Request:</b>  curl http://localhost:4000/api/events/1/seats
@@ -1019,7 +1019,7 @@ r.get(<span class="tok-string">'/events/:id/seats'</span>, <span class="tok-keyw
 <p class="lead">Hãy ship lát cắt dọc đầu tiên từ đầu đến cuối: một endpoint trả về ghế AVAILABLE của sự kiện dưới dạng JSON sạch. Trong flash sale hàng nghìn người mua làm mới đúng danh sách này, nên ta thêm một cache Redis ngắn — khuôn mà mọi endpoint đọc khác sao chép lại.</p>
 
 <h3>Bước 1 — service (ý định nghiệp vụ, không HTTP)</h3>
-<pre><span class="tok-comment">// src/services/seat.service.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// src/services/seat.service.js</span>
 <span class="tok-keyword">import</span> { redis } <span class="tok-keyword">from</span> <span class="tok-string">'../redis.js'</span>;
 <span class="tok-keyword">import</span> * <span class="tok-keyword">as</span> seatRepo <span class="tok-keyword">from</span> <span class="tok-string">'../repos/seat.repo.js'</span>;
 
@@ -1031,10 +1031,10 @@ r.get(<span class="tok-string">'/events/:id/seats'</span>, <span class="tok-keyw
   <span class="tok-keyword">const</span> rows = <span class="tok-keyword">await</span> seatRepo.availableSeats(eventId);
   <span class="tok-keyword">await</span> redis.set(key, JSON.stringify(rows), { EX: <span class="tok-number">5</span> }); <span class="tok-comment">// cache 5s</span>
   <span class="tok-keyword">return</span> rows;
-}</pre>
+}</code></pre>
 
 <h3>Bước 2 — route (chỉ HTTP)</h3>
-<pre><span class="tok-comment">// src/routes/event.routes.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// src/routes/event.routes.js</span>
 <span class="tok-keyword">import</span> { Router } <span class="tok-keyword">from</span> <span class="tok-string">'express'</span>;
 <span class="tok-keyword">import</span> * <span class="tok-keyword">as</span> seatService <span class="tok-keyword">from</span> <span class="tok-string">'../services/seat.service.js'</span>;
 
@@ -1045,7 +1045,7 @@ r.get(<span class="tok-string">'/events/:id/seats'</span>, <span class="tok-keyw
     res.json(seats);
   } <span class="tok-keyword">catch</span> (e) { next(e); }   <span class="tok-comment">// chuyển lỗi cho error middleware</span>
 });
-<span class="tok-keyword">export default</span> r;</pre>
+<span class="tok-keyword">export default</span> r;</code></pre>
 
 <h3>Bước 3 — thử nó (kết quả thật)</h3>
 <div class="out"><b>Request:</b>  curl http://localhost:4000/api/events/1/seats
@@ -1087,17 +1087,17 @@ r.get(<span class="tok-string">'/events/:id/seats'</span>, <span class="tok-keyw
 <p class="lead">A <strong>BUYER</strong> browses events and holds/buys seats; an <strong>ORGANIZER</strong> creates events. After login the client holds a signed JWT and sends it on every request; middleware verifies it and attaches the user.</p>
 
 <h3>Hash the password &amp; issue a token</h3>
-<pre><span class="tok-comment">// register</span>
+<pre><code class="language-javascript"><span class="tok-comment">// register</span>
 <span class="tok-keyword">const</span> hash = <span class="tok-keyword">await</span> bcrypt.<span class="tok-function">hash</span>(password, <span class="tok-number">12</span>);
 <span class="tok-keyword">const</span> user = <span class="tok-keyword">await</span> prisma.user.<span class="tok-function">create</span>({ data: { email, passwordHash: hash, role: <span class="tok-string">"BUYER"</span> } });
 
 <span class="tok-comment">// login</span>
 <span class="tok-keyword">const</span> ok = <span class="tok-keyword">await</span> bcrypt.<span class="tok-function">compare</span>(password, user.passwordHash);
 <span class="tok-keyword">if</span> (!ok) <span class="tok-keyword">throw new</span> <span class="tok-type">UnauthorizedError</span>(<span class="tok-string">"Bad credentials"</span>);   <span class="tok-comment">// one message → no enumeration</span>
-<span class="tok-keyword">const</span> token = jwt.<span class="tok-function">sign</span>({ sub: user.id, role: user.role }, process.env.JWT_SECRET, { expiresIn: <span class="tok-string">"1h"</span> });</pre>
+<span class="tok-keyword">const</span> token = jwt.<span class="tok-function">sign</span>({ sub: user.id, role: user.role }, process.env.JWT_SECRET, { expiresIn: <span class="tok-string">"1h"</span> });</code></pre>
 
 <h3>The auth middleware</h3>
-<pre><span class="tok-keyword">function</span> <span class="tok-function">requireAuth</span>(req, res, next) {
+<pre><code class="language-javascript"><span class="tok-keyword">function</span> <span class="tok-function">requireAuth</span>(req, res, next) {
   <span class="tok-keyword">const</span> h = req.headers.authorization;
   <span class="tok-keyword">if</span> (!h?.startsWith(<span class="tok-string">"Bearer "</span>)) <span class="tok-keyword">return</span> res.<span class="tok-function">status</span>(<span class="tok-number">401</span>).<span class="tok-function">json</span>({ message: <span class="tok-string">"No token"</span> });
   <span class="tok-keyword">try</span> {
@@ -1109,7 +1109,7 @@ r.get(<span class="tok-string">'/events/:id/seats'</span>, <span class="tok-keyw
   <span class="tok-keyword">return</span> (req, res, next) =&gt;
     req.user.role === role ? next() : res.<span class="tok-function">status</span>(<span class="tok-number">403</span>).<span class="tok-function">json</span>({ message: <span class="tok-string">"Forbidden"</span> });
 }
-app.<span class="tok-function">post</span>(<span class="tok-string">"/api/events"</span>, requireAuth, <span class="tok-function">requireRole</span>(<span class="tok-string">"ORGANIZER"</span>), createEvent);</pre>
+app.<span class="tok-function">post</span>(<span class="tok-string">"/api/events"</span>, requireAuth, <span class="tok-function">requireRole</span>(<span class="tok-string">"ORGANIZER"</span>), createEvent);</code></pre>
 
 <div class="pitfall"><strong>Trap:</strong> using the same JWT secret in dev and prod, or committing it. It lives only in <code>process.env.JWT_SECRET</code>, is different per environment, and never enters git. A leaked secret lets anyone forge any user's token.</div>
 
@@ -1127,17 +1127,17 @@ app.<span class="tok-function">post</span>(<span class="tok-string">"/api/events
 <p class="lead">Một <strong>BUYER</strong> duyệt sự kiện và giữ/mua ghế; một <strong>ORGANIZER</strong> tạo sự kiện. Sau đăng nhập client giữ một JWT đã ký và gửi ở mọi request; middleware xác minh và gắn user.</p>
 
 <h3>Băm mật khẩu &amp; phát token</h3>
-<pre><span class="tok-comment">// đăng ký</span>
+<pre><code class="language-javascript"><span class="tok-comment">// đăng ký</span>
 <span class="tok-keyword">const</span> hash = <span class="tok-keyword">await</span> bcrypt.<span class="tok-function">hash</span>(password, <span class="tok-number">12</span>);
 <span class="tok-keyword">const</span> user = <span class="tok-keyword">await</span> prisma.user.<span class="tok-function">create</span>({ data: { email, passwordHash: hash, role: <span class="tok-string">"BUYER"</span> } });
 
 <span class="tok-comment">// đăng nhập</span>
 <span class="tok-keyword">const</span> ok = <span class="tok-keyword">await</span> bcrypt.<span class="tok-function">compare</span>(password, user.passwordHash);
 <span class="tok-keyword">if</span> (!ok) <span class="tok-keyword">throw new</span> <span class="tok-type">UnauthorizedError</span>(<span class="tok-string">"Sai thông tin đăng nhập"</span>);   <span class="tok-comment">// một thông báo → không dò được</span>
-<span class="tok-keyword">const</span> token = jwt.<span class="tok-function">sign</span>({ sub: user.id, role: user.role }, process.env.JWT_SECRET, { expiresIn: <span class="tok-string">"1h"</span> });</pre>
+<span class="tok-keyword">const</span> token = jwt.<span class="tok-function">sign</span>({ sub: user.id, role: user.role }, process.env.JWT_SECRET, { expiresIn: <span class="tok-string">"1h"</span> });</code></pre>
 
 <h3>Middleware xác thực</h3>
-<pre><span class="tok-keyword">function</span> <span class="tok-function">requireAuth</span>(req, res, next) {
+<pre><code class="language-javascript"><span class="tok-keyword">function</span> <span class="tok-function">requireAuth</span>(req, res, next) {
   <span class="tok-keyword">const</span> h = req.headers.authorization;
   <span class="tok-keyword">if</span> (!h?.startsWith(<span class="tok-string">"Bearer "</span>)) <span class="tok-keyword">return</span> res.<span class="tok-function">status</span>(<span class="tok-number">401</span>).<span class="tok-function">json</span>({ message: <span class="tok-string">"Thiếu token"</span> });
   <span class="tok-keyword">try</span> {
@@ -1149,7 +1149,7 @@ app.<span class="tok-function">post</span>(<span class="tok-string">"/api/events
   <span class="tok-keyword">return</span> (req, res, next) =&gt;
     req.user.role === role ? next() : res.<span class="tok-function">status</span>(<span class="tok-number">403</span>).<span class="tok-function">json</span>({ message: <span class="tok-string">"Không có quyền"</span> });
 }
-app.<span class="tok-function">post</span>(<span class="tok-string">"/api/events"</span>, requireAuth, <span class="tok-function">requireRole</span>(<span class="tok-string">"ORGANIZER"</span>), createEvent);</pre>
+app.<span class="tok-function">post</span>(<span class="tok-string">"/api/events"</span>, requireAuth, <span class="tok-function">requireRole</span>(<span class="tok-string">"ORGANIZER"</span>), createEvent);</code></pre>
 
 <div class="pitfall"><strong>Bẫy:</strong> dùng cùng một JWT secret ở dev và prod, hoặc commit nó. Nó chỉ sống trong <code>process.env.JWT_SECRET</code>, khác nhau mỗi môi trường, và không bao giờ vào git. Secret bị lộ cho phép bất kỳ ai giả mạo token của bất kỳ user nào.</div>
 
@@ -1182,13 +1182,13 @@ app.<span class="tok-function">post</span>(<span class="tok-string">"/api/events
 <p>You could rely only on <code>UNIQUE(event_id, seat_id)</code> — correct, but every one of 10,000 buyers would hammer a write transaction on the same row and most would get a constraint error <em>after</em> a round-trip. A Redis hold rejects losers in microseconds, before they ever touch the database, and gives the winner a 2-minute window to pay.</p>
 
 <h3>The atomic hold — SET NX PX</h3>
-<pre><span class="tok-comment">// try to hold seat A12 for THIS user, for 120 seconds</span>
+<pre><code class="language-javascript"><span class="tok-comment">// try to hold seat A12 for THIS user, for 120 seconds</span>
 <span class="tok-keyword">const</span> key = <span class="tok-string">"hold:event:42:seat:A12"</span>;
 <span class="tok-keyword">const</span> ok = <span class="tok-keyword">await</span> redis.<span class="tok-function">set</span>(key, userId, { NX: <span class="tok-keyword">true</span>, PX: <span class="tok-number">120000</span> });
 <span class="tok-comment">//   NX  = only set if the key does NOT already exist  (atomic test-and-set)
 //   PX  = auto-expire after 120000 ms  (abandoned holds free themselves)</span>
 <span class="tok-keyword">if</span> (ok === <span class="tok-keyword">null</span>)
-  <span class="tok-keyword">throw new</span> <span class="tok-type">ConflictError</span>(<span class="tok-string">"Seat is being purchased by someone else"</span>);  <span class="tok-comment">// → 409</span></pre>
+  <span class="tok-keyword">throw new</span> <span class="tok-type">ConflictError</span>(<span class="tok-string">"Seat is being purchased by someone else"</span>);  <span class="tok-comment">// → 409</span></code></pre>
 <div class="out">10,000 requests run SET key userId NX PX 120000 on the same key.
 Redis is single-threaded → it serialises them: the FIRST sets the key and returns OK,
 every other returns nil (key already exists) → 9,999 clean 409s in microseconds.
@@ -1196,10 +1196,10 @@ Exactly ONE user holds seat A12. ✅  And if they never pay, PX frees it in 2 mi
 
 <h3>Release safely — a Lua compare-and-delete</h3>
 <p>When the buyer cancels or finishes, release the hold — but only if <em>you</em> still own it (a slow request must not delete a hold that already expired and was re-taken):</p>
-<pre><span class="tok-comment">// atomic: delete the key ONLY if its value is still my userId</span>
+<pre><code class="language-javascript"><span class="tok-comment">// atomic: delete the key ONLY if its value is still my userId</span>
 <span class="tok-keyword">const</span> RELEASE = <span class="tok-string">"if redis.call('get', KEYS[1]) == ARGV[1] "</span> +
                 <span class="tok-string">"then return redis.call('del', KEYS[1]) else return 0 end"</span>;
-<span class="tok-keyword">await</span> redis.<span class="tok-function">eval</span>(RELEASE, { keys: [key], arguments: [String(userId)] });</pre>
+<span class="tok-keyword">await</span> redis.<span class="tok-function">eval</span>(RELEASE, { keys: [key], arguments: [String(userId)] });</code></pre>
 
 <h3>Confirm the sale — the Postgres UNIQUE backstop</h3>
 <pre><span class="tok-comment">// buyer pays within the hold window → persist the ticket</span>
@@ -1232,13 +1232,13 @@ Exactly ONE user holds seat A12. ✅  And if they never pay, PX frees it in 2 mi
 <p>Bạn có thể chỉ dựa vào <code>UNIQUE(event_id, seat_id)</code> — đúng, nhưng mỗi người trong 10.000 người mua sẽ dập một transaction ghi vào cùng một dòng và phần lớn nhận lỗi ràng buộc <em>sau</em> một vòng khứ hồi. Một hold Redis từ chối kẻ thua trong micro-giây, trước khi họ chạm tới cơ sở dữ liệu, và cho người thắng một cửa sổ 2 phút để thanh toán.</p>
 
 <h3>Hold nguyên tử — SET NX PX</h3>
-<pre><span class="tok-comment">// thử giữ ghế A12 cho user NÀY, trong 120 giây</span>
+<pre><code class="language-javascript"><span class="tok-comment">// thử giữ ghế A12 cho user NÀY, trong 120 giây</span>
 <span class="tok-keyword">const</span> key = <span class="tok-string">"hold:event:42:seat:A12"</span>;
 <span class="tok-keyword">const</span> ok = <span class="tok-keyword">await</span> redis.<span class="tok-function">set</span>(key, userId, { NX: <span class="tok-keyword">true</span>, PX: <span class="tok-number">120000</span> });
 <span class="tok-comment">//   NX  = chỉ set nếu key CHƯA tồn tại  (test-and-set nguyên tử)
 //   PX  = tự hết hạn sau 120000 ms  (hold bị bỏ tự giải phóng)</span>
 <span class="tok-keyword">if</span> (ok === <span class="tok-keyword">null</span>)
-  <span class="tok-keyword">throw new</span> <span class="tok-type">ConflictError</span>(<span class="tok-string">"Ghế đang được người khác mua"</span>);  <span class="tok-comment">// → 409</span></pre>
+  <span class="tok-keyword">throw new</span> <span class="tok-type">ConflictError</span>(<span class="tok-string">"Ghế đang được người khác mua"</span>);  <span class="tok-comment">// → 409</span></code></pre>
 <div class="out">10.000 request chạy SET key userId NX PX 120000 trên cùng một key.
 Redis đơn luồng → nó tuần tự hoá: cái ĐẦU set key và trả OK,
 mọi cái khác trả nil (key đã tồn tại) → 9.999 lần 409 sạch trong micro-giây.
@@ -1246,10 +1246,10 @@ mọi cái khác trả nil (key đã tồn tại) → 9.999 lần 409 sạch tro
 
 <h3>Giải phóng an toàn — Lua compare-and-delete</h3>
 <p>Khi người mua huỷ hoặc xong, giải phóng hold — nhưng chỉ khi <em>bạn</em> vẫn sở hữu nó (một request chậm không được xoá một hold đã hết hạn và bị người khác giữ lại):</p>
-<pre><span class="tok-comment">// nguyên tử: xoá key CHỈ khi giá trị của nó vẫn là userId của tôi</span>
+<pre><code class="language-javascript"><span class="tok-comment">// nguyên tử: xoá key CHỈ khi giá trị của nó vẫn là userId của tôi</span>
 <span class="tok-keyword">const</span> RELEASE = <span class="tok-string">"if redis.call('get', KEYS[1]) == ARGV[1] "</span> +
                 <span class="tok-string">"then return redis.call('del', KEYS[1]) else return 0 end"</span>;
-<span class="tok-keyword">await</span> redis.<span class="tok-function">eval</span>(RELEASE, { keys: [key], arguments: [String(userId)] });</pre>
+<span class="tok-keyword">await</span> redis.<span class="tok-function">eval</span>(RELEASE, { keys: [key], arguments: [String(userId)] });</code></pre>
 
 <h3>Xác nhận bán — chốt chặn UNIQUE của Postgres</h3>
 <pre><span class="tok-comment">// người mua trả tiền trong cửa sổ hold → lưu vé</span>
@@ -1285,7 +1285,7 @@ mọi cái khác trả nil (key đã tồn tại) → 9.999 lần 409 sạch tro
 <p class="lead">Buying a seat is two requests: <code>POST /holds</code> reserves it for two minutes, then <code>POST /purchases</code> converts the hold into a sold ticket. Each step has a precise status code so the client can react.</p>
 
 <h3>The endpoints</h3>
-<pre>router.<span class="tok-function">post</span>(<span class="tok-string">"/api/holds"</span>, requireAuth, <span class="tok-keyword">async</span> (req, res, next) =&gt; {
+<pre><code class="language-javascript">router.<span class="tok-function">post</span>(<span class="tok-string">"/api/holds"</span>, requireAuth, <span class="tok-keyword">async</span> (req, res, next) =&gt; {
   <span class="tok-keyword">try</span> {
     <span class="tok-keyword">const</span> hold = <span class="tok-keyword">await</span> holdService.<span class="tok-function">hold</span>(req.body.eventId, req.body.seatId, req.user.sub);
     res.<span class="tok-function">status</span>(<span class="tok-number">201</span>).<span class="tok-function">json</span>({ expiresInSec: <span class="tok-number">120</span>, hold });   <span class="tok-comment">// 201 — seat held</span>
@@ -1297,17 +1297,17 @@ router.<span class="tok-function">post</span>(<span class="tok-string">"/api/pur
     <span class="tok-keyword">const</span> ticket = <span class="tok-keyword">await</span> purchaseService.<span class="tok-function">buy</span>(req.body.eventId, req.body.seatId, req.user.sub);
     res.<span class="tok-function">status</span>(<span class="tok-number">201</span>).<span class="tok-function">json</span>(ticket);       <span class="tok-comment">// 201 — ticket sold</span>
   } <span class="tok-keyword">catch</span> (e) { next(e); }
-});</pre>
+});</code></pre>
 
 <h3>The purchase service checks you still hold the seat</h3>
-<pre><span class="tok-keyword">async function</span> <span class="tok-function">buy</span>(eventId, seatId, userId) {
+<pre><code class="language-javascript"><span class="tok-keyword">async function</span> <span class="tok-function">buy</span>(eventId, seatId, userId) {
   <span class="tok-keyword">const</span> holder = <span class="tok-keyword">await</span> redis.<span class="tok-function">get</span>(&#96;hold:event:\${eventId}:seat:\${seatId}&#96;);
   <span class="tok-keyword">if</span> (String(holder) !== String(userId))
     <span class="tok-keyword">throw new</span> <span class="tok-type">ConflictError</span>(<span class="tok-string">"Your hold expired — please reselect the seat"</span>);  <span class="tok-comment">// 409</span>
   <span class="tok-keyword">const</span> ticket = <span class="tok-keyword">await</span> persistTicket(eventId, seatId, userId);   <span class="tok-comment">// UNIQUE backstop</span>
   <span class="tok-keyword">await</span> <span class="tok-function">releaseHold</span>(eventId, seatId, userId);                 <span class="tok-comment">// Lua compare-and-delete</span>
   <span class="tok-keyword">return</span> ticket;
-}</pre>
+}</code></pre>
 
 <h3>Worked example — the status-code contract</h3>
 <table>
@@ -1338,7 +1338,7 @@ router.<span class="tok-function">post</span>(<span class="tok-string">"/api/pur
 <p class="lead">Mua một ghế là hai request: <code>POST /holds</code> giữ nó trong hai phút, rồi <code>POST /purchases</code> biến hold thành vé đã bán. Mỗi bước có mã trạng thái chính xác để client phản ứng.</p>
 
 <h3>Các endpoint</h3>
-<pre>router.<span class="tok-function">post</span>(<span class="tok-string">"/api/holds"</span>, requireAuth, <span class="tok-keyword">async</span> (req, res, next) =&gt; {
+<pre><code class="language-javascript">router.<span class="tok-function">post</span>(<span class="tok-string">"/api/holds"</span>, requireAuth, <span class="tok-keyword">async</span> (req, res, next) =&gt; {
   <span class="tok-keyword">try</span> {
     <span class="tok-keyword">const</span> hold = <span class="tok-keyword">await</span> holdService.<span class="tok-function">hold</span>(req.body.eventId, req.body.seatId, req.user.sub);
     res.<span class="tok-function">status</span>(<span class="tok-number">201</span>).<span class="tok-function">json</span>({ expiresInSec: <span class="tok-number">120</span>, hold });   <span class="tok-comment">// 201 — đã giữ ghế</span>
@@ -1350,17 +1350,17 @@ router.<span class="tok-function">post</span>(<span class="tok-string">"/api/pur
     <span class="tok-keyword">const</span> ticket = <span class="tok-keyword">await</span> purchaseService.<span class="tok-function">buy</span>(req.body.eventId, req.body.seatId, req.user.sub);
     res.<span class="tok-function">status</span>(<span class="tok-number">201</span>).<span class="tok-function">json</span>(ticket);       <span class="tok-comment">// 201 — đã bán vé</span>
   } <span class="tok-keyword">catch</span> (e) { next(e); }
-});</pre>
+});</code></pre>
 
 <h3>Service mua kiểm bạn vẫn giữ ghế</h3>
-<pre><span class="tok-keyword">async function</span> <span class="tok-function">buy</span>(eventId, seatId, userId) {
+<pre><code class="language-javascript"><span class="tok-keyword">async function</span> <span class="tok-function">buy</span>(eventId, seatId, userId) {
   <span class="tok-keyword">const</span> holder = <span class="tok-keyword">await</span> redis.<span class="tok-function">get</span>(&#96;hold:event:\${eventId}:seat:\${seatId}&#96;);
   <span class="tok-keyword">if</span> (String(holder) !== String(userId))
     <span class="tok-keyword">throw new</span> <span class="tok-type">ConflictError</span>(<span class="tok-string">"Hold của bạn đã hết hạn — hãy chọn lại ghế"</span>);  <span class="tok-comment">// 409</span>
   <span class="tok-keyword">const</span> ticket = <span class="tok-keyword">await</span> persistTicket(eventId, seatId, userId);   <span class="tok-comment">// chốt chặn UNIQUE</span>
   <span class="tok-keyword">await</span> <span class="tok-function">releaseHold</span>(eventId, seatId, userId);                 <span class="tok-comment">// Lua compare-and-delete</span>
   <span class="tok-keyword">return</span> ticket;
-}</pre>
+}</code></pre>
 
 <h3>Ví dụ có lời giải — hợp đồng mã trạng thái</h3>
 <table>
@@ -1472,7 +1472,7 @@ router.<span class="tok-function">post</span>(<span class="tok-string">"/api/pur
 <p class="lead">The demo that wins marks: fire a hundred concurrent buyers at one seat and assert exactly one gets it. Then fire hundreds at a 50-seat event and assert exactly 50 tickets exist — never 51.</p>
 
 <h3>1) One seat, one hundred buyers</h3>
-<pre>test(<span class="tok-string">"100 concurrent holds on one seat — exactly one succeeds"</span>, <span class="tok-keyword">async</span> () =&gt; {
+<pre><code class="language-javascript">test(<span class="tok-string">"100 concurrent holds on one seat — exactly one succeeds"</span>, <span class="tok-keyword">async</span> () =&gt; {
   <span class="tok-keyword">const</span> payload = { eventId: <span class="tok-number">42</span>, seatId: <span class="tok-string">"A12"</span> };
 
   <span class="tok-comment">// Promise.all fires all 100 together — the real stampede</span>
@@ -1485,10 +1485,10 @@ router.<span class="tok-function">post</span>(<span class="tok-string">"/api/pur
   <span class="tok-keyword">const</span> rejected = results.<span class="tok-function">filter</span>(r =&gt; r.status === <span class="tok-number">409</span>).length;
   expect(held).<span class="tok-function">toBe</span>(<span class="tok-number">1</span>);          <span class="tok-comment">// exactly one hold won</span>
   expect(rejected).<span class="tok-function">toBe</span>(<span class="tok-number">99</span>);      <span class="tok-comment">// the rest got clean 409s</span>
-});</pre>
+});</code></pre>
 
 <h3>2) A 50-seat event, 300 buyers — never oversell</h3>
-<pre>test(<span class="tok-string">"300 buyers, 50 seats — exactly 50 tickets sold"</span>, <span class="tok-keyword">async</span> () =&gt; {
+<pre><code class="language-javascript">test(<span class="tok-string">"300 buyers, 50 seats — exactly 50 tickets sold"</span>, <span class="tok-keyword">async</span> () =&gt; {
   <span class="tok-keyword">await</span> Promise.<span class="tok-function">all</span>(
     Array.<span class="tok-function">from</span>({ length: <span class="tok-number">300</span> }, (_, i) =&gt;
       request(app).<span class="tok-function">post</span>(<span class="tok-string">"/api/purchases"</span>).<span class="tok-function">set</span>(auth(buyers[i]))
@@ -1496,7 +1496,7 @@ router.<span class="tok-function">post</span>(<span class="tok-string">"/api/pur
   );
   <span class="tok-keyword">const</span> sold = <span class="tok-keyword">await</span> prisma.ticket.<span class="tok-function">count</span>({ where: { eventId: <span class="tok-number">42</span>, status: <span class="tok-string">"SOLD"</span> } });
   expect(sold).<span class="tok-function">toBe</span>(<span class="tok-number">50</span>);         <span class="tok-comment">// capacity respected — never 51</span>
-});</pre>
+});</code></pre>
 
 <h3>Why Promise.all is the whole point</h3>
 <div class="out">A sequential loop with await runs buyer 1 to completion before buyer 2 begins —
@@ -1522,7 +1522,7 @@ and this test goes red with held &gt; 1 or sold &gt; 50 — which is exactly wha
 <p class="lead">Bản demo ăn điểm: bắn một trăm người mua đồng thời vào một ghế và khẳng định đúng một người được. Rồi bắn hàng trăm vào một sự kiện 50 ghế và khẳng định đúng 50 vé tồn tại — không bao giờ 51.</p>
 
 <h3>1) Một ghế, một trăm người mua</h3>
-<pre>test(<span class="tok-string">"100 hold đồng thời trên một ghế — đúng một thành công"</span>, <span class="tok-keyword">async</span> () =&gt; {
+<pre><code class="language-javascript">test(<span class="tok-string">"100 hold đồng thời trên một ghế — đúng một thành công"</span>, <span class="tok-keyword">async</span> () =&gt; {
   <span class="tok-keyword">const</span> payload = { eventId: <span class="tok-number">42</span>, seatId: <span class="tok-string">"A12"</span> };
 
   <span class="tok-comment">// Promise.all bắn cả 100 cùng lúc — cơn giẫm đạp thật</span>
@@ -1535,10 +1535,10 @@ and this test goes red with held &gt; 1 or sold &gt; 50 — which is exactly wha
   <span class="tok-keyword">const</span> rejected = results.<span class="tok-function">filter</span>(r =&gt; r.status === <span class="tok-number">409</span>).length;
   expect(held).<span class="tok-function">toBe</span>(<span class="tok-number">1</span>);          <span class="tok-comment">// đúng một hold thắng</span>
   expect(rejected).<span class="tok-function">toBe</span>(<span class="tok-number">99</span>);      <span class="tok-comment">// phần còn lại nhận 409 sạch</span>
-});</pre>
+});</code></pre>
 
 <h3>2) Sự kiện 50 ghế, 300 người mua — không bao giờ bán quá</h3>
-<pre>test(<span class="tok-string">"300 người mua, 50 ghế — đúng 50 vé bán ra"</span>, <span class="tok-keyword">async</span> () =&gt; {
+<pre><code class="language-javascript">test(<span class="tok-string">"300 người mua, 50 ghế — đúng 50 vé bán ra"</span>, <span class="tok-keyword">async</span> () =&gt; {
   <span class="tok-keyword">await</span> Promise.<span class="tok-function">all</span>(
     Array.<span class="tok-function">from</span>({ length: <span class="tok-number">300</span> }, (_, i) =&gt;
       request(app).<span class="tok-function">post</span>(<span class="tok-string">"/api/purchases"</span>).<span class="tok-function">set</span>(auth(buyers[i]))
@@ -1546,7 +1546,7 @@ and this test goes red with held &gt; 1 or sold &gt; 50 — which is exactly wha
   );
   <span class="tok-keyword">const</span> sold = <span class="tok-keyword">await</span> prisma.ticket.<span class="tok-function">count</span>({ where: { eventId: <span class="tok-number">42</span>, status: <span class="tok-string">"SOLD"</span> } });
   expect(sold).<span class="tok-function">toBe</span>(<span class="tok-number">50</span>);         <span class="tok-comment">// tôn trọng sức chứa — không bao giờ 51</span>
-});</pre>
+});</code></pre>
 
 <h3>Vì sao Promise.all là toàn bộ vấn đề</h3>
 <div class="out">Vòng tuần tự có await chạy người mua 1 xong hẳn trước khi người 2 bắt đầu —
@@ -1713,25 +1713,25 @@ $ curl -X POST localhost:3000/api/holds -H "Authorization: Bearer $T" \\
 
 <h3>1) General-admission capacity — an atomic counter</h3>
 <p>For events without assigned seats, you just cap total tickets. A Redis <code>DECR</code> is an atomic counter: it never lets two buyers both see "1 left".</p>
-<pre><span class="tok-comment">// seed once: SET stock:event:42 500</span>
+<pre><code class="language-javascript"><span class="tok-comment">// seed once: SET stock:event:42 500</span>
 <span class="tok-keyword">const</span> left = <span class="tok-keyword">await</span> redis.<span class="tok-function">decr</span>(<span class="tok-string">"stock:event:42"</span>);   <span class="tok-comment">// atomic decrement, returns new value</span>
 <span class="tok-keyword">if</span> (left &lt; <span class="tok-number">0</span>) {
   <span class="tok-keyword">await</span> redis.<span class="tok-function">incr</span>(<span class="tok-string">"stock:event:42"</span>);           <span class="tok-comment">// give it back — we oversold by trying</span>
   <span class="tok-keyword">throw new</span> <span class="tok-type">ConflictError</span>(<span class="tok-string">"Sold out"</span>);       <span class="tok-comment">// → 409</span>
 }
-<span class="tok-comment">// left >= 0 → this buyer got a ticket; persist it in Postgres</span></pre>
+<span class="tok-comment">// left >= 0 → this buyer got a ticket; persist it in Postgres</span></code></pre>
 
 <h3>2) Virtual waiting room — a fair queue</h3>
-<pre><span class="tok-comment">// on arrival, push the user onto a Redis list (FIFO) and give them a position</span>
+<pre><code class="language-javascript"><span class="tok-comment">// on arrival, push the user onto a Redis list (FIFO) and give them a position</span>
 <span class="tok-keyword">const</span> pos = <span class="tok-keyword">await</span> redis.<span class="tok-function">rpush</span>(<span class="tok-string">"queue:event:42"</span>, userId);   <span class="tok-comment">// position = length</span>
-<span class="tok-comment">// a worker admits N users per second by LPOP-ing and flipping a "can-buy" flag</span></pre>
+<span class="tok-comment">// a worker admits N users per second by LPOP-ing and flipping a "can-buy" flag</span></code></pre>
 <p>A waiting room turns a chaotic stampede into an orderly line — buyers see "you are #4,213" instead of a crashed page.</p>
 
 <h3>3) Rate limiting — shield the hold endpoint</h3>
-<pre><span class="tok-comment">// token-bucket per user in Redis: max 5 hold attempts / 10s</span>
+<pre><code class="language-javascript"><span class="tok-comment">// token-bucket per user in Redis: max 5 hold attempts / 10s</span>
 <span class="tok-keyword">const</span> n = <span class="tok-keyword">await</span> redis.<span class="tok-function">incr</span>(&#96;rl:hold:\${userId}&#96;);
 <span class="tok-keyword">if</span> (n === <span class="tok-number">1</span>) <span class="tok-keyword">await</span> redis.<span class="tok-function">expire</span>(&#96;rl:hold:\${userId}&#96;, <span class="tok-number">10</span>);
-<span class="tok-keyword">if</span> (n &gt; <span class="tok-number">5</span>) <span class="tok-keyword">throw new</span> <span class="tok-type">TooManyRequestsError</span>();   <span class="tok-comment">// → 429, blocks seat-sniping bots</span></pre>
+<span class="tok-keyword">if</span> (n &gt; <span class="tok-number">5</span>) <span class="tok-keyword">throw new</span> <span class="tok-type">TooManyRequestsError</span>();   <span class="tok-comment">// → 429, blocks seat-sniping bots</span></code></pre>
 
 <h3>4) Live seat map — Redis pub/sub + WebSocket</h3>
 <pre><span class="tok-comment">// when a seat is held or sold, publish the change...</span>
@@ -1757,25 +1757,25 @@ $ curl -X POST localhost:3000/api/holds -H "Authorization: Bearer $T" \\
 
 <h3>1) Sức chứa vé đứng (GA) — một bộ đếm nguyên tử</h3>
 <p>Với sự kiện không ghế cố định, bạn chỉ giới hạn tổng vé. Một <code>DECR</code> Redis là bộ đếm nguyên tử: không bao giờ để hai người mua cùng thấy "còn 1".</p>
-<pre><span class="tok-comment">// gieo một lần: SET stock:event:42 500</span>
+<pre><code class="language-javascript"><span class="tok-comment">// gieo một lần: SET stock:event:42 500</span>
 <span class="tok-keyword">const</span> left = <span class="tok-keyword">await</span> redis.<span class="tok-function">decr</span>(<span class="tok-string">"stock:event:42"</span>);   <span class="tok-comment">// giảm nguyên tử, trả giá trị mới</span>
 <span class="tok-keyword">if</span> (left &lt; <span class="tok-number">0</span>) {
   <span class="tok-keyword">await</span> redis.<span class="tok-function">incr</span>(<span class="tok-string">"stock:event:42"</span>);           <span class="tok-comment">// trả lại — ta lỡ giảm quá</span>
   <span class="tok-keyword">throw new</span> <span class="tok-type">ConflictError</span>(<span class="tok-string">"Hết vé"</span>);          <span class="tok-comment">// → 409</span>
 }
-<span class="tok-comment">// left >= 0 → người này có vé; lưu vào Postgres</span></pre>
+<span class="tok-comment">// left >= 0 → người này có vé; lưu vào Postgres</span></code></pre>
 
 <h3>2) Phòng chờ ảo — hàng đợi công bằng</h3>
-<pre><span class="tok-comment">// khi tới, đẩy user vào một list Redis (FIFO) và cho họ một vị trí</span>
+<pre><code class="language-javascript"><span class="tok-comment">// khi tới, đẩy user vào một list Redis (FIFO) và cho họ một vị trí</span>
 <span class="tok-keyword">const</span> pos = <span class="tok-keyword">await</span> redis.<span class="tok-function">rpush</span>(<span class="tok-string">"queue:event:42"</span>, userId);   <span class="tok-comment">// vị trí = độ dài</span>
-<span class="tok-comment">// một worker cho N user/giây vào bằng cách LPOP và bật cờ "được-mua"</span></pre>
+<span class="tok-comment">// một worker cho N user/giây vào bằng cách LPOP và bật cờ "được-mua"</span></code></pre>
 <p>Phòng chờ biến cơn giẫm đạp hỗn loạn thành hàng ngay ngắn — người mua thấy "bạn là #4.213" thay vì một trang sập.</p>
 
 <h3>3) Giới hạn tần suất — che chắn endpoint hold</h3>
-<pre><span class="tok-comment">// token-bucket mỗi user trong Redis: tối đa 5 lần hold / 10s</span>
+<pre><code class="language-javascript"><span class="tok-comment">// token-bucket mỗi user trong Redis: tối đa 5 lần hold / 10s</span>
 <span class="tok-keyword">const</span> n = <span class="tok-keyword">await</span> redis.<span class="tok-function">incr</span>(&#96;rl:hold:\${userId}&#96;);
 <span class="tok-keyword">if</span> (n === <span class="tok-number">1</span>) <span class="tok-keyword">await</span> redis.<span class="tok-function">expire</span>(&#96;rl:hold:\${userId}&#96;, <span class="tok-number">10</span>);
-<span class="tok-keyword">if</span> (n &gt; <span class="tok-number">5</span>) <span class="tok-keyword">throw new</span> <span class="tok-type">TooManyRequestsError</span>();   <span class="tok-comment">// → 429, chặn bot cướp ghế</span></pre>
+<span class="tok-keyword">if</span> (n &gt; <span class="tok-number">5</span>) <span class="tok-keyword">throw new</span> <span class="tok-type">TooManyRequestsError</span>();   <span class="tok-comment">// → 429, chặn bot cướp ghế</span></code></pre>
 
 <h3>4) Sơ đồ ghế trực tiếp — Redis pub/sub + WebSocket</h3>
 <pre><span class="tok-comment">// khi một ghế được giữ hoặc bán, publish thay đổi...</span>

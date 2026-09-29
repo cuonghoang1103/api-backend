@@ -76,7 +76,7 @@ secrets.ANTHROPIC_API_KEY    1</div>
 
 <p>The SSH key is stored <strong>base64-encoded</strong> and decoded inside the step — a common pattern, because a multi-line PEM key is awkward to paste into a secret field:</p>
 
-<pre><code>env:
+<pre><code class="language-bash">env:
   VPS_SSH_PRIVATE_KEY_B64: &#36;{{ secrets.VPS_SSH_PRIVATE_KEY }}
 run: |
   echo "\$VPS_SSH_PRIVATE_KEY_B64" | base64 -d &gt; ~/.ssh/deploy_key</code></pre>
@@ -123,7 +123,7 @@ while IFS= read -r dong; do
 done &lt;&lt;&lt; "$KHOA"</code></pre>
 <p>In a JavaScript action the equivalent is <code>core.setSecret(value)</code> from <code>@actions/core</code>, which registers the value without printing a workflow command line at all.</p>
 
-<pre><code>- name: Tinh ra mot gia tri phai duoc che
+<pre><code class="language-bash">- name: Tinh ra mot gia tri phai duoc che
   run: |
     KHOA=\$(echo "\$B64" | base64 -d)
     echo "::add-mask::\$KHOA"      <span class="tok-comment"># dang ky voi runner TRUOC khi dung</span>
@@ -278,7 +278,7 @@ secrets.ANTHROPIC_API_KEY    1</div>
 
 <p>Cái khoá SSH được lưu dạng <strong>base64</strong> rồi giải mã ngay trong bước — một khuôn mẫu phổ biến, bởi một khoá PEM nhiều dòng thì dán vào ô bí mật rất vướng:</p>
 
-<pre><code>env:
+<pre><code class="language-bash">env:
   VPS_SSH_PRIVATE_KEY_B64: &#36;{{ secrets.VPS_SSH_PRIVATE_KEY }}
 run: |
   echo "\$VPS_SSH_PRIVATE_KEY_B64" | base64 -d &gt; ~/.ssh/deploy_key</code></pre>
@@ -325,7 +325,7 @@ while IFS= read -r dong; do
 done &lt;&lt;&lt; "$KHOA"</code></pre>
 <p>Trong một action JavaScript, cách tương đương là <code>core.setSecret(value)</code> của <code>@actions/core</code> — nó đăng ký giá trị mà không in dòng workflow command nào ra cả.</p>
 
-<pre><code>- name: Tinh ra mot gia tri phai duoc che
+<pre><code class="language-bash">- name: Tinh ra mot gia tri phai duoc che
   run: |
     KHOA=\$(echo "\$B64" | base64 -d)
     echo "::add-mask::\$KHOA"      <span class="tok-comment"># dang ky voi runner TRUOC khi dung</span>
@@ -906,7 +906,7 @@ job_workflow_ref   .../deploy.yml@refs/heads/main</div>
 
 <h3>A real token from the sandbox, decoded</h3>
 <p>Everything above is checkable without a cloud account. A JWT is three base64url parts separated by dots — header, payload, signature — and the first two are plain JSON. The sandbox job <code>co-id-token</code> requested a token and printed only the <strong>decoded payload</strong>: never the token itself, never the signature (run <a href="https://github.com/cuonghoang1103/ga-san-tap/actions/runs/36006295897" target="_blank" rel="noopener">36006295897</a>). The script is short enough to read in full:</p>
-<pre><code><span class="tok-comment"># ch06/doc-claims.sh — prints the CLAIMS of this job&#39;s OIDC token, not the token</span>
+<pre><code class="language-bash"><span class="tok-comment"># ch06/doc-claims.sh — prints the CLAIMS of this job&#39;s OIDC token, not the token</span>
 [ -n "$ACTIONS_ID_TOKEN_REQUEST_URL" ] || { echo "no id-token: write"; exit 0; }
 jwt=$(curl -sS -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \\
         "$ACTIONS_ID_TOKEN_REQUEST_URL" | jq -r .value)
@@ -943,7 +943,7 @@ steps:
 <h3>Writing the trust policy on the cloud side</h3>
 ${slide('ga-06', 17, 'A trust policy is only as narrow as the sub string you write')}
 <p>OIDC moves the security decision out of GitHub and into one JSON document on the cloud side. For AWS it is the role&#39;s trust policy; the part that matters is the <code>Condition</code>:</p>
-<pre><code>{
+<pre><code class="language-bash">{
   "Effect": "Allow",
   "Principal": { "Federated": "arn:aws:iam::123456789012:oidc-provider/token.actions.githubusercontent.com" },
   "Action": "sts:AssumeRoleWithWebIdentity",
@@ -1094,7 +1094,7 @@ job_workflow_ref   .../deploy.yml@refs/heads/main</div>
 
 <h3>Một token thật từ sân tập, đã giải mã</h3>
 <p>Mọi điều bên trên kiểm được mà không cần tài khoản cloud. Một JWT là ba phần base64url nối bằng dấu chấm — header, payload, chữ ký — và hai phần đầu chỉ là JSON thường. Job <code>co-id-token</code> trên sân tập xin một token rồi chỉ in <strong>payload đã giải mã</strong>: không bao giờ in bản thân token, không bao giờ in chữ ký (run <a href="https://github.com/cuonghoang1103/ga-san-tap/actions/runs/36006295897" target="_blank" rel="noopener">36006295897</a>). Script đủ ngắn để đọc trọn:</p>
-<pre><code><span class="tok-comment"># ch06/doc-claims.sh — in CLAIMS cua token OIDC cua job, KHONG in token</span>
+<pre><code class="language-bash"><span class="tok-comment"># ch06/doc-claims.sh — in CLAIMS cua token OIDC cua job, KHONG in token</span>
 [ -n "$ACTIONS_ID_TOKEN_REQUEST_URL" ] || { echo "thieu id-token: write"; exit 0; }
 jwt=$(curl -sS -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \\
         "$ACTIONS_ID_TOKEN_REQUEST_URL" | jq -r .value)
@@ -1131,7 +1131,7 @@ steps:
 <h3>Viết chính sách tin cậy phía cloud</h3>
 ${slide('ga-06', 17, 'Chính sách tin cậy chỉ hẹp bằng chuỗi sub bạn viết')}
 <p>OIDC chuyển quyết định bảo mật ra khỏi GitHub, vào MỘT tài liệu JSON phía cloud. Với AWS đó là trust policy của vai trò; phần quan trọng là <code>Condition</code>:</p>
-<pre><code>{
+<pre><code class="language-bash">{
   "Effect": "Allow",
   "Principal": { "Federated": "arn:aws:iam::123456789012:oidc-provider/token.actions.githubusercontent.com" },
   "Action": "sts:AssumeRoleWithWebIdentity",
@@ -1593,7 +1593,7 @@ n=$(( $(grep -l 'pull_request_target' $W/*.yml | wc -l) ))       <span class="to
 <p>Those numbers are the ones 6.4 arrived at by hand. Producing them again in under a second is the point — an audit you run once is a snapshot, and an audit you run on every change is a control.</p>
 
 <h3>The checks, and what each grep actually asks</h3>
-<pre><code><span class="tok-comment"># 1. bieu thuc SU KIEN noi suy thang vao run:  — bay o bai 3.1</span>
+<pre><code class="language-bash"><span class="tok-comment"># 1. bieu thuc SU KIEN noi suy thang vao run:  — bay o bai 3.1</span>
 grep -h -A40 '^\\s*run:' \$W/*.yml | grep -c '&#36;{{ *github\\.event\\.'
 
 <span class="tok-comment"># 2. pull_request_target — bay o bai 1.4</span>
@@ -1666,7 +1666,7 @@ ${slide('ga-06', 25, 'The deliberate-failure test: the check catches the draft f
 
 <h3>The real tools: zizmor on api-backend</h3>
 <p>The kv-grid above recommends running the real tools alongside the script. Here is what that looks like on this course&#39;s own repository. zizmor 1.30.1 in offline mode (no network, no token), run locally in a container against a read-only copy of api-backend&#39;s <code>.github/workflows</code> on 24/09/2026:</p>
-<pre><code>docker run --rm -v "$PWD/.github":/w/.github:ro -w /w \\
+<pre><code class="language-bash">docker run --rm -v "$PWD/.github":/w/.github:ro -w /w \\
   ghcr.io/zizmorcore/zizmor:latest --offline --format plain .github/workflows</code></pre>
 <div class="out">194 findings (134 suppressed, 16 unsafe fixes): 4 informational, 0 low, 25 medium, 31 high</div>
 ${slide('ga-06', 26, 'zizmor on api-backend&#39;s 14 workflows: 60 findings, grouped by rule')}
@@ -1769,7 +1769,7 @@ n=$(( $(grep -l 'pull_request_target' $W/*.yml | wc -l) ))       <span class="to
 <p>Mấy con số ấy là những con số bài 6.4 đã lần ra bằng tay. Đẻ lại chúng trong chưa tới một giây mới là điểm chính — một cuộc soát bạn chạy MỘT lần là một bức ảnh chụp, còn một cuộc soát bạn chạy ở mọi thay đổi là một BIỆN PHÁP KIỂM SOÁT.</p>
 
 <h3>Các phép kiểm, và mỗi lệnh grep thật ra hỏi gì</h3>
-<pre><code><span class="tok-comment"># 1. bieu thuc SU KIEN noi suy thang vao run:  — bay o bai 3.1</span>
+<pre><code class="language-bash"><span class="tok-comment"># 1. bieu thuc SU KIEN noi suy thang vao run:  — bay o bai 3.1</span>
 grep -h -A40 '^\\s*run:' \$W/*.yml | grep -c '&#36;{{ *github\\.event\\.'
 
 <span class="tok-comment"># 2. pull_request_target — bay o bai 1.4</span>
@@ -1842,7 +1842,7 @@ ${slide('ga-06', 25, 'Phép thử làm hỏng: bộ kiểm bắt được tệp 
 
 <h3>Công cụ thật: zizmor trên api-backend</h3>
 <p>Lưới kv phía trên khuyên chạy công cụ thật song song với script. Đây là hình hài chuyện đó trên chính kho của khoá học. zizmor 1.30.1 ở chế độ offline (không mạng, không token), chạy ở máy trong một container trên bản chỉ-đọc của <code>.github/workflows</code> của api-backend, ngày 24/09/2026:</p>
-<pre><code>docker run --rm -v "$PWD/.github":/w/.github:ro -w /w \\
+<pre><code class="language-bash">docker run --rm -v "$PWD/.github":/w/.github:ro -w /w \\
   ghcr.io/zizmorcore/zizmor:latest --offline --format plain .github/workflows</code></pre>
 <div class="out">194 findings (134 suppressed, 16 unsafe fixes): 4 informational, 0 low, 25 medium, 31 high</div>
 ${slide('ga-06', 26, 'zizmor trên 14 workflow của api-backend: 60 phát hiện, gom theo luật')}

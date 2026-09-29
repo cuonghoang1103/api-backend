@@ -139,7 +139,7 @@ ${slide('git-06', 6, 'Mô tả PR, Closes #n và gh pr create')}
 
 <h3>Draft pull requests</h3>
 ${slide('git-06', 3, 'Vòng đời một pull request')}
-<pre><code><span class="tok-comment"># Open as a draft to get CI running and share direction early:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Open as a draft to get CI running and share direction early:</span>
 gh pr create --draft --title <span class="tok-string">"fix(auth): reject expired refresh tokens"</span> --body-file .github/pr.md</code></pre>
 <p>A draft cannot be merged and does not request review, but CI runs and colleagues can comment. It is the honest way to say "this is the direction, tell me now if it is wrong" without consuming a reviewer's full attention on unfinished code.</p>
 
@@ -266,7 +266,7 @@ ${slide('git-06', 6, 'Mô tả PR, Closes #n và gh pr create')}
 
 <h3>Pull request nháp</h3>
 ${slide('git-06', 3, 'Vòng đời một pull request')}
-<pre><code><span class="tok-comment"># Mở ở dạng nháp để CI chạy và chia sẻ hướng đi sớm:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Mở ở dạng nháp để CI chạy và chia sẻ hướng đi sớm:</span>
 gh pr create --draft --title <span class="tok-string">"fix(auth): tu choi refresh token het han"</span> --body-file .github/pr.md</code></pre>
 <p>Một bản nháp không merge được và không yêu cầu review, nhưng CI vẫn chạy và đồng nghiệp vẫn bình luận được. Đó là cách trung thực để nói "đây là hướng đi, hãy nói ngay nếu nó sai" mà không ngốn trọn sự chú ý của người review cho phần mã chưa xong.</p>
 
@@ -332,14 +332,14 @@ ${slide('git-06', 7, 'Ba loại verdict và vòng review')}
 <div class="callout ok">Two rules from GitHub's own documentation (as of 09/2026) that surprise student teams: <strong>the author of a pull request cannot approve it</strong> — only Comment is available on your own PR, so on a one-person repository "require 1 approval" means nobody but an admin bypass can ever merge. And if the reviewer who requested changes is unavailable, <strong>anyone with write access can dismiss that blocking review</strong> (with a reason that stays in the timeline) — the holiday case above has an exit, it is just a visible one.</div>
 
 <h3>Batch your comments</h3>
-<pre><code><span class="tok-comment"># On GitHub: "Start a review" instead of "Add single comment".</span>
+<pre><code class="language-bash"><span class="tok-comment"># On GitHub: "Start a review" instead of "Add single comment".</span>
 gh pr review 431 --comment --body <span class="tok-string">"Two questions inline, otherwise this looks right."</span>
 gh pr review 431 --approve
 gh pr review 431 --request-changes --body <span class="tok-string">"The token comparison is off by a factor of 1000."</span></code></pre>
 <p>Single comments send a notification each. Fifteen of them over twenty minutes is fifteen interruptions, and the author starts responding to comment three while you are still forming the point in comment eleven. Start a review, write everything, submit once.</p>
 
 <h3>Suggested changes</h3>
-<pre><code>&#96;&#96;&#96;suggestion
+<pre><code class="language-bash">&#96;&#96;&#96;suggestion
   if (payload.exp * 1000 &lt; Date.now()) {
 &#96;&#96;&#96;</code></pre>
 <p>A <code>suggestion</code> block renders as a diff the author can apply with one button, and it becomes a real commit. Ideal for typos, naming and one-line fixes — it removes an entire round trip. Do not use it for anything the author should think about; applying a suggestion is not the same as understanding it.</p>
@@ -396,7 +396,7 @@ praise: nice — the table-driven test makes the edge cases obvious.</code></pre
 </div>
 
 <h3>Useful gh commands</h3>
-<pre><code>gh pr list                       <span class="tok-comment"># open PRs in this repository</span>
+<pre><code class="language-bash">gh pr list                       <span class="tok-comment"># open PRs in this repository</span>
 gh pr status                     <span class="tok-comment"># yours, and ones awaiting your review</span>
 gh pr checkout 431               <span class="tok-comment"># check out a PR branch locally</span>
 gh pr diff 431                   <span class="tok-comment"># read the diff in the terminal</span>
@@ -448,14 +448,14 @@ ${slide('git-06', 7, 'Ba loại verdict và vòng review')}
 <div class="callout ok">Hai luật trong chính tài liệu của GitHub (tính đến 09/2026) hay làm nhóm sinh viên bất ngờ: <strong>tác giả không tự duyệt được pull request của mình</strong> — trên PR của bạn chỉ có Comment, nên với kho một người thì "bắt buộc 1 lượt duyệt" nghĩa là không ai merge được, trừ khi admin dùng quyền vượt luật (bypass). Và nếu người đã request changes không có mặt, <strong>bất kỳ ai có quyền ghi (write) đều có thể gạt bỏ (dismiss) lượt review chặn đó</strong> — kèm một lý do nằm lại trong dòng thời gian của PR. Ca "đi nghỉ" ở trên có lối ra, chỉ là một lối ra ai cũng thấy.</div>
 
 <h3>Hãy gom các bình luận lại</h3>
-<pre><code><span class="tok-comment"># Trên GitHub: bấm "Start a review" thay vì "Add single comment".</span>
+<pre><code class="language-bash"><span class="tok-comment"># Trên GitHub: bấm "Start a review" thay vì "Add single comment".</span>
 gh pr review 431 --comment --body <span class="tok-string">"Hai cau hoi o trong, con lai thi nhin dung."</span>
 gh pr review 431 --approve
 gh pr review 431 --request-changes --body <span class="tok-string">"Phep so token lech mot he so 1000."</span></code></pre>
 <p>Bình luận lẻ mỗi cái gửi một thông báo. Mười lăm cái trong hai mươi phút là mười lăm lần cắt ngang, và tác giả bắt đầu trả lời bình luận số ba trong khi bạn còn đang hình thành ý ở bình luận số mười một. Hãy bắt đầu một lượt review, viết hết, gửi một lần.</p>
 
 <h3>Gợi ý thay đổi</h3>
-<pre><code>&#96;&#96;&#96;suggestion
+<pre><code class="language-bash">&#96;&#96;&#96;suggestion
   if (payload.exp * 1000 &lt; Date.now()) {
 &#96;&#96;&#96;</code></pre>
 <p>Một khối <code>suggestion</code> hiện ra như một bản diff mà tác giả áp được bằng một nút, và nó trở thành một commit thật. Lý tưởng cho lỗi chính tả, đặt tên và các bản vá một dòng — nó bỏ hẳn một vòng đi lại. Đừng dùng nó cho thứ mà tác giả cần suy nghĩ; áp một gợi ý không giống với hiểu nó.</p>
@@ -512,7 +512,7 @@ praise: hay đấy — cái test dạng bảng làm các ca biên hiện ra rấ
 </div>
 
 <h3>Vài lệnh gh hữu ích</h3>
-<pre><code>gh pr list                       <span class="tok-comment"># các PR đang mở trong kho này</span>
+<pre><code class="language-bash">gh pr list                       <span class="tok-comment"># các PR đang mở trong kho này</span>
 gh pr status                     <span class="tok-comment"># của bạn, và những cái đang chờ bạn review</span>
 gh pr checkout 431               <span class="tok-comment"># checkout nhánh của một PR về máy</span>
 gh pr diff 431                   <span class="tok-comment"># đọc diff ngay trong terminal</span>
@@ -564,7 +564,7 @@ gh pr view 431 --comments        <span class="tok-comment"># mô tả + mọi b�
 
 <h3>Merge commit — keep everything</h3>
 ${slide('git-06', 9, 'Nút 1: merge commit — đồ thị thật')}
-<pre><code>git switch main &amp;&amp; git merge --no-ff feature/login</code></pre>
+<pre><code class="language-bash">git switch main &amp;&amp; git merge --no-ff feature/login</code></pre>
 <div class="out">*   8c4f2a1 (main) Merge pull request #431 from feature/login
 |\\
 | * 1a2b3c4 fix: address review — use the shared helper
@@ -630,7 +630,7 @@ hint: If you are sure you want to delete it, run 'git branch -D feature/refresh-
 Git is not wrong: the commit on <code>main</code> is a brand-new one, and your branch's commits really are on no other branch. Check that the pull request shows <strong>Merged</strong> (<code>gh pr view &lt;number&gt;</code>), then delete with <code>git branch -D</code>. That capital D is normal in a squash team — and it is exactly why you check first.</div>
 
 <h3>Auto-merge</h3>
-<pre><code>gh pr merge 431 --squash --auto --delete-branch</code></pre>
+<pre><code class="language-bash">gh pr merge 431 --squash --auto --delete-branch</code></pre>
 <p>Queues the merge to happen the moment every required check passes and every required approval is in. Useful for a small PR approved while CI is still running — instead of coming back in six minutes, it merges itself.</p>
 
 <h3>Merge queues, for busy repositories</h3>
@@ -682,7 +682,7 @@ Deleted branch feature/three-ways (was 5d0873f).   <span class="tok-comment"># r
 
 <h3>Merge commit — giữ lại mọi thứ</h3>
 ${slide('git-06', 9, 'Nút 1: merge commit — đồ thị thật')}
-<pre><code>git switch main &amp;&amp; git merge --no-ff feature/login</code></pre>
+<pre><code class="language-bash">git switch main &amp;&amp; git merge --no-ff feature/login</code></pre>
 <div class="out">*   8c4f2a1 (main) Merge pull request #431 from feature/login
 |\\
 | * 1a2b3c4 fix: address review — use the shared helper
@@ -748,7 +748,7 @@ hint: If you are sure you want to delete it, run 'git branch -D feature/refresh-
 Git không sai: commit trên <code>main</code> là một commit hoàn toàn mới, và các commit của nhánh bạn thật sự không nằm trên nhánh nào khác. Hãy kiểm pull request đã hiện <strong>Merged</strong> (<code>gh pr view &lt;số&gt;</code>), rồi xoá bằng <code>git branch -D</code>. Chữ D hoa là chuyện bình thường trong một nhóm dùng squash — và đó chính là lý do phải kiểm trước.</div>
 
 <h3>Auto-merge</h3>
-<pre><code>gh pr merge 431 --squash --auto --delete-branch</code></pre>
+<pre><code class="language-bash">gh pr merge 431 --squash --auto --delete-branch</code></pre>
 <p>Xếp hàng để merge ngay khoảnh khắc mọi kiểm tra bắt buộc qua và mọi lượt duyệt bắt buộc đã có. Hữu ích cho một PR nhỏ được duyệt trong lúc CI còn đang chạy — thay vì quay lại sau sáu phút, nó tự merge.</p>
 
 <h3>Hàng đợi merge, cho kho mã bận rộn</h3>
@@ -822,7 +822,7 @@ ${slide('git-06', 13, 'Nhánh bảo vệ và những luật nên bật')}
 <div class="callout warn"><strong>Check your plan first (GitHub Docs, 09/2026):</strong> protected branches and rulesets are available in <em>public</em> repositories on GitHub Free, and in public <em>and private</em> repositories on GitHub Pro, Team and Enterprise. A private SWP391 repository on a Free personal account has none of this — the settings page tells you so. Students can claim GitHub Pro free through the GitHub Student Developer Pack, which unlocks it for private repositories. Two more rules worth knowing by name: <strong>Require approval of the most recent reviewable push</strong> (the last person who pushed cannot be the one whose approval counts) and <strong>Do not allow bypassing the above settings</strong> (without it, admins can merge past the rules).</div>
 
 <h3>What a protected push looks like</h3>
-<pre><code>git push origin main</code></pre>
+<pre><code class="language-bash">git push origin main</code></pre>
 <div class="out">remote: error: GH006: Protected branch update failed for refs/heads/main.
 remote: error: Changes must be made through a pull request.
  ! [remote rejected] main -&gt; main (protected branch hook declined)</div>
@@ -849,7 +849,7 @@ ${slide('git-06', 14, 'CODEOWNERS: luật khớp cuối cùng thắng')}
 
 <h3>Required status checks</h3>
 ${slide('git-06', 15, 'Kiểm tra bắt buộc, bẫy Pending, ruleset')}
-<pre><code><span class="tok-comment"># .github/workflows/ci.yml — the job name is what you require</span>
+<pre><code class="language-bash"><span class="tok-comment"># .github/workflows/ci.yml — the job name is what you require</span>
 name: CI
 on: [pull_request]
 jobs:
@@ -943,7 +943,7 @@ ${slide('git-06', 13, 'Nhánh bảo vệ và những luật nên bật')}
 <div class="callout warn"><strong>Kiểm gói tài khoản trước (GitHub Docs, 09/2026):</strong> nhánh bảo vệ và ruleset có ở kho <em>public</em> với GitHub Free, và ở kho public <em>lẫn private</em> với GitHub Pro, Team và Enterprise. Một kho SWP391 để private trên tài khoản cá nhân Free thì không có gì trong số này — trang cài đặt sẽ báo thẳng. Sinh viên nhận được GitHub Pro miễn phí qua gói GitHub Student Developer Pack, và Pro mở khoá tính năng này cho kho private. Thêm hai luật đáng biết tên: <strong>Require approval of the most recent reviewable push</strong> (người push cuối cùng không được là người có lượt duyệt được tính) và <strong>Do not allow bypassing the above settings</strong> (thiếu nó thì admin vẫn merge vượt luật được).</div>
 
 <h3>Một lần push bị chặn trông thế nào</h3>
-<pre><code>git push origin main</code></pre>
+<pre><code class="language-bash">git push origin main</code></pre>
 <div class="out">remote: error: GH006: Protected branch update failed for refs/heads/main.
 remote: error: Changes must be made through a pull request.
  ! [remote rejected] main -&gt; main (protected branch hook declined)</div>
@@ -970,7 +970,7 @@ ${slide('git-06', 14, 'CODEOWNERS: luật khớp cuối cùng thắng')}
 
 <h3>Kiểm tra trạng thái bắt buộc</h3>
 ${slide('git-06', 15, 'Kiểm tra bắt buộc, bẫy Pending, ruleset')}
-<pre><code><span class="tok-comment"># .github/workflows/ci.yml — TÊN JOB là thứ bạn khai vào luật</span>
+<pre><code class="language-bash"><span class="tok-comment"># .github/workflows/ci.yml — TÊN JOB là thứ bạn khai vào luật</span>
 name: CI
 on: [pull_request]
 jobs:

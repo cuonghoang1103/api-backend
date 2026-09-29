@@ -69,7 +69,7 @@ ${gallery('lx-04', [
 
 <h3>Reading the ten characters</h3>
 ${slide('lx-04', 3, 'Mười ký tự: 1 loại + 3 lớp rwx, mỗi lớp một chữ số hệ tám')}
-<pre><code>ls -l deploy.sh</code></pre>
+<pre><code class="language-bash">ls -l deploy.sh</code></pre>
 <div class="out">-rwxr-xr--  1 deploy  developers  2048 Aug 22 10:14 deploy.sh</div>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">-</span><span class="lz-lnote">Type. <code>-</code> regular file · <code>d</code> directory · <code>l</code> symlink · <code>c</code>/<code>b</code> device · <code>s</code> socket · <code>p</code> pipe.</span></div>
@@ -90,7 +90,7 @@ ${slide('lx-04', 4, 'Nhân chỉ chọn MỘT lớp — lớp khớp đầu tiê
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Otherwise</span><span class="lz-d">Use the "other" triplet.</span></div>
   <div class="lz-step"><span class="lz-k">5</span><span class="lz-t">Is the needed bit there?</span><span class="lz-d">Yes → allowed. No → <code>EACCES</code>, which your shell prints as <em>Permission denied</em>.</span></div>
 </div>
-<pre><code><span class="tok-comment"># as an ordinary user: owner of a file that is r--rwxrwx</span>
+<pre><code class="language-bash"><span class="tok-comment"># as an ordinary user: owner of a file that is r--rwxrwx</span>
 echo hi &gt; note.txt &amp;&amp; chmod 477 note.txt
 echo more &gt;&gt; note.txt
 
@@ -128,7 +128,7 @@ ${slide('lx-04', 5, 'Trên thư mục, rwx là quyền trên danh sách tên')}
   </div>
 </div>
 
-<pre><code>ls -ld secret/
+<pre><code class="language-bash">ls -ld secret/
 <span class="tok-comment"># d--x------  can enter, cannot list</span>
 cd secret/          <span class="tok-comment"># works — x is enough</span>
 ls                  <span class="tok-comment"># FAILS — needs r</span>
@@ -139,7 +139,7 @@ hunter2</div>
 
 <h3>The consequence that surprises everyone</h3>
 ${slide('lx-04', 6, 'Xoá file là sửa THƯ MỤC')}
-<pre><code>ls -l notes.txt
+<pre><code class="language-bash">ls -l notes.txt
 <span class="tok-comment"># -r--r--r--  root root  notes.txt   ← owned by root, read-only</span>
 ls -ld .
 <span class="tok-comment"># drwxrwxrwx  you  you   .           ← YOUR directory, writable</span>
@@ -153,7 +153,7 @@ ls: cannot access 'notes.txt': No such file or directory</div>
 
 <h3>Every component of the path is checked</h3>
 ${slide('lx-04', 7, 'Mọi thư mục trên đường dẫn cần x — namei -l chỉ ra chỗ gãy')}
-<pre><code>cat /srv/app/config/db.yml</code></pre>
+<pre><code class="language-bash">cat /srv/app/config/db.yml</code></pre>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">/</span><span class="lz-t">need x</span><span class="lz-d">Traverse the root directory. Essentially always granted.</span></div>
   <div class="lz-step"><span class="lz-k">/srv</span><span class="lz-t">need x</span><span class="lz-d">Traverse. Not r — you never listed it.</span></div>
@@ -183,7 +183,7 @@ rw- = 4+2+0 = 6        -wx = 0+2+1 = 3        --- = 0</code></pre>
 
 <h3>Run it step by step</h3>
 <p>Ten commands in the course sandbox, as your normal user. Predict each output before you press Enter.</p>
-<pre><code>mkdir -p ~/thu-linux/ch4 &amp;&amp; cd ~/thu-linux/ch4
+<pre><code class="language-bash">mkdir -p ~/thu-linux/ch4 &amp;&amp; cd ~/thu-linux/ch4
 echo 'echo deploy OK' &gt; deploy.sh &amp;&amp; chmod 754 deploy.sh
 ls -l deploy.sh
 stat -c '%A %a %U:%G %n' deploy.sh
@@ -262,7 +262,7 @@ hunter2</div>
 
 <h3>Đọc mười ký tự</h3>
 ${slide('lx-04', 3, 'Mười ký tự: 1 loại + 3 lớp rwx, mỗi lớp một chữ số hệ tám')}
-<pre><code>ls -l deploy.sh</code></pre>
+<pre><code class="language-bash">ls -l deploy.sh</code></pre>
 <div class="out">-rwxr-xr--  1 deploy  developers  2048 Aug 22 10:14 deploy.sh</div>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">-</span><span class="lz-lnote">Loại. <code>-</code> file thường · <code>d</code> thư mục · <code>l</code> liên kết tượng trưng · <code>c</code>/<code>b</code> thiết bị · <code>s</code> socket · <code>p</code> ống.</span></div>
@@ -283,7 +283,7 @@ ${slide('lx-04', 4, 'Nhân chỉ chọn MỘT lớp — lớp khớp đầu tiê
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Còn lại</span><span class="lz-d">Dùng bộ ba "khác" (other).</span></div>
   <div class="lz-step"><span class="lz-k">5</span><span class="lz-t">Có đúng bit cần không?</span><span class="lz-d">Có → cho phép. Không → <code>EACCES</code>, thứ shell in ra thành <em>Permission denied</em>.</span></div>
 </div>
-<pre><code><span class="tok-comment"># người dùng thường: làm chủ một file mang r--rwxrwx</span>
+<pre><code class="language-bash"><span class="tok-comment"># người dùng thường: làm chủ một file mang r--rwxrwx</span>
 echo hi &gt; note.txt &amp;&amp; chmod 477 note.txt
 echo more &gt;&gt; note.txt
 
@@ -321,7 +321,7 @@ ${slide('lx-04', 5, 'Trên thư mục, rwx là quyền trên danh sách tên')}
   </div>
 </div>
 
-<pre><code>ls -ld secret/
+<pre><code class="language-bash">ls -ld secret/
 <span class="tok-comment"># d--x------  vào được, không liệt kê được</span>
 cd secret/          <span class="tok-comment"># chạy được — chỉ x là đủ</span>
 ls                  <span class="tok-comment"># HỎNG — cần r</span>
@@ -332,7 +332,7 @@ hunter2</div>
 
 <h3>Hệ quả làm ai cũng bất ngờ</h3>
 ${slide('lx-04', 6, 'Xoá file là sửa THƯ MỤC')}
-<pre><code>ls -l notes.txt
+<pre><code class="language-bash">ls -l notes.txt
 <span class="tok-comment"># -r--r--r--  root root  notes.txt   ← root sở hữu, chỉ đọc</span>
 ls -ld .
 <span class="tok-comment"># drwxrwxrwx  you  you   .           ← thư mục CỦA BẠN, ghi được</span>
@@ -346,7 +346,7 @@ ls: cannot access 'notes.txt': No such file or directory</div>
 
 <h3>Mọi thành phần của đường dẫn đều bị kiểm</h3>
 ${slide('lx-04', 7, 'Mọi thư mục trên đường dẫn cần x — namei -l chỉ ra chỗ gãy')}
-<pre><code>cat /srv/app/config/db.yml</code></pre>
+<pre><code class="language-bash">cat /srv/app/config/db.yml</code></pre>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">/</span><span class="lz-t">cần x</span><span class="lz-d">Đi xuyên qua thư mục gốc. Về cơ bản luôn được cấp.</span></div>
   <div class="lz-step"><span class="lz-k">/srv</span><span class="lz-t">cần x</span><span class="lz-d">Đi xuyên qua. Không cần r — bạn có liệt kê nó đâu.</span></div>
@@ -376,7 +376,7 @@ rw- = 4+2+0 = 6        -wx = 0+2+1 = 3        --- = 0</code></pre>
 
 <h3>Chạy thử từng bước</h3>
 <p>Mười lệnh trong sân tập của khoá, bằng người dùng thường của bạn. Đoán trước output của từng lệnh rồi mới bấm Enter.</p>
-<pre><code>mkdir -p ~/thu-linux/ch4 &amp;&amp; cd ~/thu-linux/ch4
+<pre><code class="language-bash">mkdir -p ~/thu-linux/ch4 &amp;&amp; cd ~/thu-linux/ch4
 echo 'echo deploy OK' &gt; deploy.sh &amp;&amp; chmod 754 deploy.sh
 ls -l deploy.sh
 stat -c '%A %a %U:%G %n' deploy.sh
@@ -464,7 +464,7 @@ hunter2</div>
 
 <h3>chmod: two syntaxes for the same nine bits</h3>
 ${slide('lx-04', 8, 'chmod: ký hiệu chỉnh vài bit, hệ tám đặt lại cả 9 bit')}
-<pre><code><span class="tok-comment"># Octal — sets ALL nine bits at once, absolutely</span>
+<pre><code class="language-bash"><span class="tok-comment"># Octal — sets ALL nine bits at once, absolutely</span>
 chmod 644 notes.txt
 chmod 755 deploy.sh
 chmod 600 ~/.ssh/id_ed25519
@@ -484,9 +484,9 @@ chmod u=rw,g=r,o= config.yml  <span class="tok-comment"># several clauses at onc
 
 <h3>The recursive trap</h3>
 ${slide('lx-04', 9, 'chmod -R 755 và chữ X hoa')}
-<pre><code>chmod -R 755 /srv/app        <span class="tok-comment"># WRONG — every .env, .jpg and .json is now executable</span></code></pre>
+<pre><code class="language-bash">chmod -R 755 /srv/app        <span class="tok-comment"># WRONG — every .env, .jpg and .json is now executable</span></code></pre>
 <p><code>-R</code> applies the same mode to files and directories alike, but directories need <code>x</code> and data files must not have it. The correct form uses the capital <code>X</code>, which means "execute, but <strong>only</strong> for directories and for files that already have some execute bit":</p>
-<pre><code>chmod -R u=rwX,go=rX /srv/app      <span class="tok-comment"># directories get x, plain files do not</span>
+<pre><code class="language-bash">chmod -R u=rwX,go=rX /srv/app      <span class="tok-comment"># directories get x, plain files do not</span>
 
 <span class="tok-comment"># Or split it explicitly with find</span>
 find /srv/app -type d -exec chmod 755 {} +
@@ -497,7 +497,7 @@ drwxr-xr-x  config
 -rwxr-xr-x  deploy.sh</div>
 <div class="callout ok">Capital <code>X</code> is one of the highest-value details in this chapter. It preserves the executable bit on scripts that already had it, adds traversal to every directory, and leaves data files alone — in a single command that is safe to re-run.</div>
 <div class="callout warn"><strong>…but only if you run it BEFORE the damage.</strong> <code>X</code> decides by looking at whether a file <em>already</em> has an execute bit. After a <code>chmod -R 755</code>, every file has one, so <code>chmod -R u=rwX,go=rX</code> keeps them all executable. And <code>go=rX</code> also <em>opens</em> things: a <code>.env</code> that was <code>600</code> becomes <code>644</code>. Rebuilt in a sandbox tree (<code>.env</code> 600, <code>config/</code> 700, <code>deploy.sh</code> 755):</div>
-<pre><code>chmod -R 755 . ; chmod -R u=rwX,go=rX . ; find . -printf '%M %p\\n' | sort -k2
+<pre><code class="language-bash">chmod -R 755 . ; chmod -R u=rwX,go=rX . ; find . -printf '%M %p\\n' | sort -k2
 find . -type f -exec chmod 644 {} + ; chmod +x deploy.sh ; chmod 600 .env</code></pre>
 <div class="out">-rwxr-xr-x ./.env
 drwxr-xr-x ./config
@@ -507,7 +507,7 @@ drwxr-xr-x ./config
 
 <h3>chown and chgrp: who owns it</h3>
 ${slide('lx-04', 11, 'Đổi chủ cần root; đổi nhóm chỉ sang nhóm mình đang ở')}
-<pre><code>sudo chown deploy file.txt              <span class="tok-comment"># change owner</span>
+<pre><code class="language-bash">sudo chown deploy file.txt              <span class="tok-comment"># change owner</span>
 sudo chown deploy:developers file.txt   <span class="tok-comment"># owner AND group</span>
 sudo chown :developers file.txt         <span class="tok-comment"># group only (note the colon)</span>
 sudo chgrp developers file.txt          <span class="tok-comment"># same thing, dedicated command</span>
@@ -534,7 +534,7 @@ umask -S       <span class="tok-comment"># show it in symbolic form instead</spa
 
 <h3>Why your umask may say 0002, not 0022</h3>
 <p>Run <code>umask</code> after logging in to an Ubuntu 24.04 server and you will very likely see <code>0002</code>, not the <code>0022</code> printed above. Nothing is broken. Ubuntu's PAM stack loads <code>pam_umask</code> with the <code>usergroups</code> behaviour (<code>USERGROUPS_ENAB yes</code> in <code>/etc/login.defs</code>): when a user is not root and the username equals the primary group name — the default "user private group" that <code>useradd</code> creates — the group bits of the mask are made equal to the owner bits, so <code>022</code> becomes <code>002</code>.</p>
-<pre><code>su - an -c umask                  <span class="tok-comment"># a login through PAM, like SSH</span>
+<pre><code class="language-bash">su - an -c umask                  <span class="tok-comment"># a login through PAM, like SSH</span>
 su - -c umask                     <span class="tok-comment"># root, same machine, same PAM</span>
 docker exec -u an lx04-u bash -c umask   <span class="tok-comment"># no PAM at all</span></code></pre>
 <div class="out">0002
@@ -546,7 +546,7 @@ docker exec -u an lx04-u bash -c umask   <span class="tok-comment"># no PAM at a
 
 <h3>Where this bites in practice</h3>
 ${slide('lx-04', 12, 'SSH bỏ qua khoá riêng mà người khác đọc được')}
-<pre><code>ssh vps
+<pre><code class="language-bash">ssh vps
 <span class="tok-comment"># Permissions 0644 for '/home/you/.ssh/id_ed25519' are too open.</span>
 <span class="tok-comment"># It is required that your private key files are NOT accessible by others.</span>
 <span class="tok-comment"># This private key will be ignored.</span>
@@ -556,7 +556,7 @@ chmod 700 ~/.ssh
 chmod 644 ~/.ssh/id_ed25519.pub
 chmod 600 ~/.ssh/authorized_keys</code></pre>
 <p>SSH refuses to use a private key that anyone else can read, and it refuses loudly rather than falling back — which is correct, and which is the single most common permission error people meet. The numbers above are the ones SSH expects; <code>700</code> on the directory matters as much as <code>600</code> on the key.</p>
-<pre><code><span class="tok-comment"># A web app cannot write its upload directory</span>
+<pre><code class="language-bash"><span class="tok-comment"># A web app cannot write its upload directory</span>
 sudo chown -R www-data:www-data /srv/app/uploads
 sudo chmod 755 /srv/app/uploads
 
@@ -590,14 +590,14 @@ drwx------ deploy deploy config      ← here
 </table>
 <p>Two outputs worth recognising. Changing an owner without root, or a group you are not in, fails with <code>Operation not permitted</code> — not "Permission denied": the bits are not the problem, you simply are not allowed to perform that operation (Lesson 4.5 uses the difference). And <code>chown -v</code> reports <code>changed ownership of 'bao-cao.txt' from an:developers to alice:developers</code>, which is a handy audit line in a deploy log.</p>
 
-<pre><code>chmod -R --preserve-root 755 /</code></pre>
+<pre><code class="language-bash">chmod -R --preserve-root 755 /</code></pre>
 <div class="out">chmod: it is dangerous to operate recursively on '/'
 chmod: use --no-preserve-root to override this failsafe</div>
 <p>That guard is what saves you when a script runs <code>chmod -R 755 "$APP_DIR/"</code> with <code>APP_DIR</code> empty — the path collapses to <code>/</code>. Without the flag, GNU chmod would start walking the whole disk.</p>
 
 <h3>Run it step by step</h3>
 <p>Logged in as your normal user (on Ubuntu the login umask is <code>0002</code>, see above), in the sandbox:</p>
-<pre><code>cd ~/thu-linux/ch4
+<pre><code class="language-bash">cd ~/thu-linux/ch4
 for m in 022 077 002 027; do (umask $m; touch f$m; mkdir d$m); done
 stat -c '%a %n' f0* d0* | sort -k2
 id -Gn
@@ -681,7 +681,7 @@ chown: changing ownership of 'f022': Operation not permitted</div>
 
 <h3>chmod: hai cú pháp cho cùng chín bit</h3>
 ${slide('lx-04', 8, 'chmod: ký hiệu chỉnh vài bit, hệ tám đặt lại cả 9 bit')}
-<pre><code><span class="tok-comment"># Hệ tám — đặt CẢ chín bit một lượt, một cách tuyệt đối</span>
+<pre><code class="language-bash"><span class="tok-comment"># Hệ tám — đặt CẢ chín bit một lượt, một cách tuyệt đối</span>
 chmod 644 notes.txt
 chmod 755 deploy.sh
 chmod 600 ~/.ssh/id_ed25519
@@ -701,9 +701,9 @@ chmod u=rw,g=r,o= config.yml  <span class="tok-comment"># nhiều mệnh đề m
 
 <h3>Cái bẫy của -R</h3>
 ${slide('lx-04', 9, 'chmod -R 755 và chữ X hoa')}
-<pre><code>chmod -R 755 /srv/app        <span class="tok-comment"># SAI — mọi file .env, .jpg và .json giờ đều chạy được</span></code></pre>
+<pre><code class="language-bash">chmod -R 755 /srv/app        <span class="tok-comment"># SAI — mọi file .env, .jpg và .json giờ đều chạy được</span></code></pre>
 <p><code>-R</code> áp cùng một chế độ lên cả file lẫn thư mục, nhưng thư mục thì CẦN <code>x</code> còn file dữ liệu thì KHÔNG ĐƯỢC có. Dạng đúng dùng chữ <code>X</code> viết hoa, nghĩa là "quyền chạy, nhưng <strong>CHỈ</strong> cho thư mục và cho những file vốn đã có sẵn một bit chạy nào đó":</p>
-<pre><code>chmod -R u=rwX,go=rX /srv/app      <span class="tok-comment"># thư mục được x, file thường thì không</span>
+<pre><code class="language-bash">chmod -R u=rwX,go=rX /srv/app      <span class="tok-comment"># thư mục được x, file thường thì không</span>
 
 <span class="tok-comment"># Hoặc tách tường minh bằng find</span>
 find /srv/app -type d -exec chmod 755 {} +
@@ -714,7 +714,7 @@ drwxr-xr-x  config
 -rwxr-xr-x  deploy.sh</div>
 <div class="callout ok">Chữ <code>X</code> viết hoa là một trong những chi tiết giá trị nhất của chương này. Nó giữ nguyên bit chạy trên những script vốn đã có, thêm quyền đi xuyên qua cho mọi thư mục, và để yên file dữ liệu — gói trong một lệnh duy nhất mà chạy lại bao nhiêu lần cũng an toàn.</div>
 <div class="callout warn"><strong>…nhưng CHỈ khi bạn chạy nó TRƯỚC khi lỡ tay.</strong> <code>X</code> quyết định bằng cách nhìn xem file <em>ĐÃ</em> có bit chạy chưa. Sau một lần <code>chmod -R 755</code>, file nào cũng có, nên <code>chmod -R u=rwX,go=rX</code> giữ nguyên tất cả ở trạng thái chạy được. Và <code>go=rX</code> còn <em>MỞ</em> thêm: một <code>.env</code> đang <code>600</code> thành <code>644</code>. Dựng lại trong một cây ở sân tập (<code>.env</code> 600, <code>config/</code> 700, <code>deploy.sh</code> 755):</div>
-<pre><code>chmod -R 755 . ; chmod -R u=rwX,go=rX . ; find . -printf '%M %p\\n' | sort -k2
+<pre><code class="language-bash">chmod -R 755 . ; chmod -R u=rwX,go=rX . ; find . -printf '%M %p\\n' | sort -k2
 find . -type f -exec chmod 644 {} + ; chmod +x deploy.sh ; chmod 600 .env</code></pre>
 <div class="out">-rwxr-xr-x ./.env
 drwxr-xr-x ./config
@@ -724,7 +724,7 @@ drwxr-xr-x ./config
 
 <h3>chown và chgrp: ai sở hữu nó</h3>
 ${slide('lx-04', 11, 'Đổi chủ cần root; đổi nhóm chỉ sang nhóm mình đang ở')}
-<pre><code>sudo chown deploy file.txt              <span class="tok-comment"># đổi chủ sở hữu</span>
+<pre><code class="language-bash">sudo chown deploy file.txt              <span class="tok-comment"># đổi chủ sở hữu</span>
 sudo chown deploy:developers file.txt   <span class="tok-comment"># chủ sở hữu VÀ nhóm</span>
 sudo chown :developers file.txt         <span class="tok-comment"># chỉ nhóm (để ý dấu hai chấm)</span>
 sudo chgrp developers file.txt          <span class="tok-comment"># y hệt, bằng lệnh riêng</span>
@@ -751,7 +751,7 @@ umask -S       <span class="tok-comment"># hiện ra dưới dạng ký hiệu t
 
 <h3>Vì sao umask của bạn có thể là 0002 chứ không phải 0022</h3>
 <p>Đăng nhập vào một máy chủ Ubuntu 24.04 rồi gõ <code>umask</code>, rất có thể bạn sẽ thấy <code>0002</code>, không phải <code>0022</code> như in ở trên. Không có gì hỏng cả. Bộ PAM của Ubuntu nạp <code>pam_umask</code> với hành vi <code>usergroups</code> (<code>USERGROUPS_ENAB yes</code> trong <code>/etc/login.defs</code>): khi người dùng không phải root và tên người dùng trùng tên nhóm chính — chính là "nhóm riêng của người dùng" (user private group) mà <code>useradd</code> tạo mặc định — các bit nhóm của mặt nạ được đặt bằng các bit của chủ, nên <code>022</code> thành <code>002</code>.</p>
-<pre><code>su - an -c umask                  <span class="tok-comment"># đăng nhập qua PAM, giống SSH</span>
+<pre><code class="language-bash">su - an -c umask                  <span class="tok-comment"># đăng nhập qua PAM, giống SSH</span>
 su - -c umask                     <span class="tok-comment"># root, cùng máy, cùng PAM</span>
 docker exec -u an lx04-u bash -c umask   <span class="tok-comment"># hoàn toàn không qua PAM</span></code></pre>
 <div class="out">0002
@@ -763,7 +763,7 @@ docker exec -u an lx04-u bash -c umask   <span class="tok-comment"># hoàn toàn
 
 <h3>Chỗ này cắn ở đâu trong thực tế</h3>
 ${slide('lx-04', 12, 'SSH bỏ qua khoá riêng mà người khác đọc được')}
-<pre><code>ssh vps
+<pre><code class="language-bash">ssh vps
 <span class="tok-comment"># Permissions 0644 for '/home/you/.ssh/id_ed25519' are too open.</span>
 <span class="tok-comment"># It is required that your private key files are NOT accessible by others.</span>
 <span class="tok-comment"># This private key will be ignored.</span>
@@ -773,7 +773,7 @@ chmod 700 ~/.ssh
 chmod 644 ~/.ssh/id_ed25519.pub
 chmod 600 ~/.ssh/authorized_keys</code></pre>
 <p>SSH từ chối dùng một khoá riêng mà người khác đọc được, và nó từ chối một cách ồn ào chứ không lặng lẽ lùi về cách khác — điều đó là đúng, và đó cũng là lỗi quyền phổ biến nhất người ta gặp. Những con số ở trên là thứ SSH mong đợi; <code>700</code> trên thư mục quan trọng ngang <code>600</code> trên cái khoá.</p>
-<pre><code><span class="tok-comment"># Một ứng dụng web không ghi được vào thư mục tải lên của nó</span>
+<pre><code class="language-bash"><span class="tok-comment"># Một ứng dụng web không ghi được vào thư mục tải lên của nó</span>
 sudo chown -R www-data:www-data /srv/app/uploads
 sudo chmod 755 /srv/app/uploads
 
@@ -806,14 +806,14 @@ drwx------ deploy deploy config      ← chỗ này
 <tr><td><code>--preserve-root</code></td><td>từ chối đệ quy trên <code>/</code>. <strong>KHÔNG</strong> phải mặc định của chmod/chown/chgrp (chỉ <code>rm</code> bật sẵn) — hãy thêm vào script</td><td><code>chmod -R --preserve-root 755 "$DIR"</code></td></tr>
 </table>
 <p>Hai output nên nhận ra ngay. Đổi chủ mà không phải root, hay đổi sang một nhóm mình không thuộc, hỏng với <code>Operation not permitted</code> — không phải "Permission denied": vấn đề không nằm ở các bit, mà là bạn đơn giản không được phép làm thao tác đó (Bài 4.5 dùng đúng sự khác biệt này). Còn <code>chown -v</code> báo <code>changed ownership of 'bao-cao.txt' from an:developers to alice:developers</code>, một dòng kiểm tra tiện lợi trong log deploy.</p>
-<pre><code>chmod -R --preserve-root 755 /</code></pre>
+<pre><code class="language-bash">chmod -R --preserve-root 755 /</code></pre>
 <div class="out">chmod: it is dangerous to operate recursively on '/'
 chmod: use --no-preserve-root to override this failsafe</div>
 <p>Cái chốt đó cứu bạn khi một script chạy <code>chmod -R 755 "$APP_DIR/"</code> mà <code>APP_DIR</code> rỗng — đường dẫn sụp thành <code>/</code>. Không có cờ này, chmod của GNU sẽ bắt đầu đi khắp cả ổ đĩa.</p>
 
 <h3>Chạy thử từng bước</h3>
 <p>Đăng nhập bằng người dùng thường (trên Ubuntu umask lúc đăng nhập là <code>0002</code>, xem ở trên), trong sân tập:</p>
-<pre><code>cd ~/thu-linux/ch4
+<pre><code class="language-bash">cd ~/thu-linux/ch4
 for m in 022 077 002 027; do (umask $m; touch f$m; mkdir d$m); done
 stat -c '%a %n' f0* d0* | sort -k2
 id -Gn
@@ -912,7 +912,7 @@ chown: changing ownership of 'f022': Operation not permitted</div>
 
 <h3>setuid: how passwd works</h3>
 ${slide('lx-04', 13, 'setuid: passwd chạy với EUID của chủ file')}
-<pre><code>ls -l /usr/bin/passwd
+<pre><code class="language-bash">ls -l /usr/bin/passwd
 ls -l /etc/shadow</code></pre>
 <div class="out">-rwsr-xr-x 1 root root 68208 Mar 23 14:57 /usr/bin/passwd
 -rw-r----- 1 root shadow 1847 Aug 22 09:31 /etc/shadow</div>
@@ -924,7 +924,7 @@ ls -l /etc/shadow</code></pre>
 </div>
 <div class="callout warn"><strong>A setuid-root program is a security boundary written in C by a human.</strong> If it can be tricked into running arbitrary commands, reading arbitrary files, or writing where it should not, an ordinary user becomes root. That is why the list of setuid binaries on a well-run system is short, audited, and shrinking — and why you should essentially never create one. If you need a user to run one specific privileged action, use <code>sudo</code> with a narrow rule (Lesson 4.4), which is auditable and revocable; a setuid script is neither. Linux ignores the setuid bit on shell scripts entirely, precisely because making one safe is not achievable.</div>
 
-<pre><code><span class="tok-comment"># Audit every setuid binary on the machine — do this on a server you inherit</span>
+<pre><code class="language-bash"><span class="tok-comment"># Audit every setuid binary on the machine — do this on a server you inherit</span>
 find / -perm -4000 -type f 2&gt;/dev/null | sort
 
 <span class="tok-comment"># setgid binaries too</span>
@@ -943,13 +943,13 @@ find / -perm -2000 -type f 2&gt;/dev/null | sort</code></pre>
 <h3>setgid on a directory: the one you will actually use</h3>
 ${slide('lx-04', 14, 'setgid trên thư mục: file mới theo nhóm của thư mục')}
 <p>Normally a new file gets <em>your</em> primary group. In a shared directory that is wrong: files created by different people end up in different groups, and the team loses access to each other's work. setgid on the directory fixes it:</p>
-<pre><code>sudo mkdir /srv/shared
+<pre><code class="language-bash">sudo mkdir /srv/shared
 sudo chgrp developers /srv/shared
 sudo chmod 2775 /srv/shared        <span class="tok-comment"># 2 = setgid, 775 = rwxrwxr-x</span>
 ls -ld /srv/shared</code></pre>
 <div class="out">drwxrwsr-x 3 root developers 4096 Aug 22 11:02 /srv/shared</div>
 <p>Note the <code>s</code> in the group-execute position. Now every file created inside inherits the group <code>developers</code> regardless of who made it, and — because setgid also propagates to new subdirectories — the whole tree keeps the behaviour without further work.</p>
-<pre><code><span class="tok-comment"># Verify</span>
+<pre><code class="language-bash"><span class="tok-comment"># Verify</span>
 touch /srv/shared/from-alice.txt
 ls -l /srv/shared/</code></pre>
 <div class="out">-rw-rw-r-- 1 alice developers 0 Aug 22 11:03 from-alice.txt</div>
@@ -957,11 +957,11 @@ ls -l /srv/shared/</code></pre>
 
 <h3>The sticky bit: how /tmp survives</h3>
 ${slide('lx-04', 15, 'Bit dính: ai cũng ghi, chỉ xoá được file của mình')}
-<pre><code>ls -ld /tmp</code></pre>
+<pre><code class="language-bash">ls -ld /tmp</code></pre>
 <div class="out">drwxrwxrwt 10 root root 4096 Aug 22 11:10 /tmp</div>
 <p><code>/tmp</code> is <code>777</code> — every user can create files there, which is the point. But recall Lesson 4.1: <code>w</code> on a directory means you may delete <em>any</em> entry in it. Without protection, any user could delete every other user's temporary files, including the socket your database is listening on.</p>
 <p>The <code>t</code> at the end is the sticky bit, and it adds one rule: <strong>you may only remove or rename an entry if you own the entry, or own the directory, or are root</strong>. World-writable stays world-writable; only deletion is restricted.</p>
-<pre><code>sudo chmod 1777 /srv/scratch        <span class="tok-comment"># 1 = sticky</span>
+<pre><code class="language-bash">sudo chmod 1777 /srv/scratch        <span class="tok-comment"># 1 = sticky</span>
 ls -ld /srv/scratch</code></pre>
 <div class="out">drwxrwxrwt 2 root root 4096 Aug 22 11:12 /srv/scratch</div>
 <div class="callout">Any directory you make world-writable should have the sticky bit — the two go together, and a <code>777</code> directory <em>without</em> it is a real vulnerability rather than a stylistic issue. If you ever type <code>chmod 777</code> on a shared directory, the number you meant was <code>1777</code>.</div>
@@ -976,7 +976,7 @@ ls -ld /srv/scratch</code></pre>
 
 <h3>Setting and clearing them</h3>
 ${slide('lx-04', 16, 's/S, t/T — và chmod 775 không gỡ setgid của thư mục')}
-<pre><code>chmod 4755 prog        <span class="tok-comment"># setuid, octal</span>
+<pre><code class="language-bash">chmod 4755 prog        <span class="tok-comment"># setuid, octal</span>
 chmod u+s prog         <span class="tok-comment"># setuid, symbolic</span>
 chmod 2775 dir         <span class="tok-comment"># setgid</span>
 chmod g+s dir          <span class="tok-comment"># setgid, symbolic</span>
@@ -984,7 +984,7 @@ chmod 1777 dir         <span class="tok-comment"># sticky</span>
 chmod +t dir           <span class="tok-comment"># sticky, symbolic</span>
 chmod 0755 prog        <span class="tok-comment"># clear ALL special bits (leading 0)</span></code></pre>
 <div class="callout warn"><strong>Corrected on 28/09/2026 — this box used to say the opposite for Linux.</strong> On GNU coreutils (Ubuntu, Fedora, WSL), a numeric <code>chmod</code> on a <em>directory</em> <strong>keeps</strong> its setuid and setgid bits: <code>chmod 775 /srv/shared</code>, and even <code>chmod 0775</code>, leave <code>drwxrwsr-x</code> as it was. The chmod(1) manual says so directly: "For directories chmod preserves set-user-ID and set-group-ID bits unless you explicitly specify otherwise." To clear them you need <code>g-s</code>, a double leading zero (<code>00775</code>) or <code>=775</code>. The fear is still justified in three places: on a regular <em>file</em>, <code>chmod 755</code> clears setuid/setgid immediately; the sticky bit is not preserved (<code>chmod 777</code> removes the <code>t</code> of a <code>1777</code> directory); and on <strong>macOS</strong>, <code>chmod 775</code> does clear the <code>s</code> of a directory (tested). So the habit stays the same: when a directory has special bits, write all four digits and read <code>ls -ld</code> afterwards.</div>
-<pre><code>chmod 775 /srv/shared;   ls -ld /srv/shared
+<pre><code class="language-bash">chmod 775 /srv/shared;   ls -ld /srv/shared
 chmod 0775 /srv/shared;  ls -ld /srv/shared
 chmod 00775 /srv/shared; ls -ld /srv/shared</code></pre>
 <div class="out">drwxrwsr-x 3 root developers 4096 Sep 28 09:30 /srv/shared
@@ -994,7 +994,7 @@ drwxrwxr-x 3 root developers 4096 Sep 28 09:30 /srv/shared</div>
 <h3>POSIX ACLs in practice: one more person, without changing owner or group</h3>
 ${slide('lx-04', 17, 'ACL: cấp cho đúng một người, không đổi chủ hay nhóm')}
 <p>The nine bits give you exactly one owner and one group. Real life asks for more: "nginx must be able to write the uploads directory, but it belongs to <code>an</code> and should stay that way". An <strong>ACL</strong> (Access Control List) adds named entries — one user or one group each — on top of the bits. Ubuntu needs the small <code>acl</code> package for the two commands; the kernel and ext4/xfs/btrfs support it already.</p>
-<pre><code>ls -ld uploads
+<pre><code class="language-bash">ls -ld uploads
 su -s /bin/bash www-data -c 'touch uploads/t.txt'
 setfacl -m u:www-data:rwx uploads
 ls -ld uploads
@@ -1030,7 +1030,7 @@ ${slide('lx-04', 18, 'Rà file setuid; capability là lối thay thế')}
 
 <h3>Run it step by step</h3>
 <p>The full shared-directory recipe, in a throwaway container as root (<code>alice</code> and <code>bob</code> both in <code>developers</code>). <code>su -</code> logs in through PAM, so each user gets Ubuntu's login umask <code>0002</code>; the last two lines repeat the test with <code>umask 022</code>.</p>
-<pre><code>mkdir /srv/shared &amp;&amp; chgrp developers /srv/shared &amp;&amp; chmod 2775 /srv/shared
+<pre><code class="language-bash">mkdir /srv/shared &amp;&amp; chgrp developers /srv/shared &amp;&amp; chmod 2775 /srv/shared
 ls -ld /srv/shared
 su - alice -c 'touch /srv/shared/ke-hoach.md'
 su - bob -c 'echo sua-boi-bob &gt;&gt; /srv/shared/ke-hoach.md &amp;&amp; ls -l /srv/shared'
@@ -1112,7 +1112,7 @@ total 4
 
 <h3>setuid: passwd hoạt động thế nào</h3>
 ${slide('lx-04', 13, 'setuid: passwd chạy với EUID của chủ file')}
-<pre><code>ls -l /usr/bin/passwd
+<pre><code class="language-bash">ls -l /usr/bin/passwd
 ls -l /etc/shadow</code></pre>
 <div class="out">-rwsr-xr-x 1 root root 68208 Mar 23 14:57 /usr/bin/passwd
 -rw-r----- 1 root shadow 1847 Aug 22 09:31 /etc/shadow</div>
@@ -1124,7 +1124,7 @@ ls -l /etc/shadow</code></pre>
 </div>
 <div class="callout warn"><strong>Một chương trình setuid-root là một ranh giới an ninh do con người viết bằng C.</strong> Nếu nó bị lừa để chạy lệnh tuỳ ý, đọc file tuỳ ý, hay ghi vào chỗ không được phép, thì một người dùng thường trở thành root. Đó là lý do danh sách file setuid trên một hệ thống được quản trị tốt thì ngắn, được rà soát, và ngày càng ngắn đi — và là lý do bạn về cơ bản KHÔNG BAO GIỜ nên tạo ra một cái. Nếu cần cho một người chạy đúng một hành động đặc quyền, hãy dùng <code>sudo</code> với một luật hẹp (Bài 4.4), thứ vừa ghi lại được vừa thu hồi được; một script setuid thì không có cả hai. Linux BỎ QUA hoàn toàn bit setuid trên script shell, chính vì làm cho một cái như thế an toàn là chuyện không đạt được.</div>
 
-<pre><code><span class="tok-comment"># Rà soát mọi file setuid trên máy — hãy làm việc này với một máy chủ bạn tiếp quản</span>
+<pre><code class="language-bash"><span class="tok-comment"># Rà soát mọi file setuid trên máy — hãy làm việc này với một máy chủ bạn tiếp quản</span>
 find / -perm -4000 -type f 2&gt;/dev/null | sort
 
 <span class="tok-comment"># cả file setgid nữa</span>
@@ -1143,13 +1143,13 @@ find / -perm -2000 -type f 2&gt;/dev/null | sort</code></pre>
 <h3>setgid trên thư mục: cái bạn sẽ thật sự dùng</h3>
 ${slide('lx-04', 14, 'setgid trên thư mục: file mới theo nhóm của thư mục')}
 <p>Bình thường một file mới nhận nhóm chính của <em>BẠN</em>. Trong một thư mục dùng chung thì điều đó sai: file do những người khác nhau tạo ra rơi vào những nhóm khác nhau, và cả đội mất quyền truy cập vào việc của nhau. setgid trên thư mục chữa đúng chuyện đó:</p>
-<pre><code>sudo mkdir /srv/shared
+<pre><code class="language-bash">sudo mkdir /srv/shared
 sudo chgrp developers /srv/shared
 sudo chmod 2775 /srv/shared        <span class="tok-comment"># 2 = setgid, 775 = rwxrwxr-x</span>
 ls -ld /srv/shared</code></pre>
 <div class="out">drwxrwsr-x 3 root developers 4096 Aug 22 11:02 /srv/shared</div>
 <p>Để ý chữ <code>s</code> ở vị trí quyền chạy của nhóm. Giờ mọi file tạo ra bên trong đều thừa kế nhóm <code>developers</code> bất kể ai tạo, và — vì setgid cũng lan sang các thư mục con mới — cả cây giữ được hành vi đó mà không cần làm gì thêm.</p>
-<pre><code><span class="tok-comment"># Kiểm lại</span>
+<pre><code class="language-bash"><span class="tok-comment"># Kiểm lại</span>
 touch /srv/shared/from-alice.txt
 ls -l /srv/shared/</code></pre>
 <div class="out">-rw-rw-r-- 1 alice developers 0 Aug 22 11:03 from-alice.txt</div>
@@ -1157,11 +1157,11 @@ ls -l /srv/shared/</code></pre>
 
 <h3>Bit dính: /tmp sống sót ra sao</h3>
 ${slide('lx-04', 15, 'Bit dính: ai cũng ghi, chỉ xoá được file của mình')}
-<pre><code>ls -ld /tmp</code></pre>
+<pre><code class="language-bash">ls -ld /tmp</code></pre>
 <div class="out">drwxrwxrwt 10 root root 4096 Aug 22 11:10 /tmp</div>
 <p><code>/tmp</code> là <code>777</code> — người dùng nào cũng tạo file ở đó được, và đó chính là mục đích. Nhưng hãy nhớ lại Bài 4.1: <code>w</code> trên một thư mục nghĩa là bạn xoá được <em>BẤT KỲ</em> mục nào trong đó. Không có gì bảo vệ thì người dùng nào cũng xoá được file tạm của mọi người khác, kể cả cái socket mà cơ sở dữ liệu của bạn đang lắng nghe trên đó.</p>
 <p>Chữ <code>t</code> ở cuối chính là bit dính, và nó thêm đúng một luật: <strong>bạn chỉ gỡ hoặc đổi tên được một mục nếu bạn sở hữu mục đó, hoặc sở hữu thư mục, hoặc là root</strong>. Cả thế giới vẫn ghi được như cũ; chỉ việc XOÁ là bị siết.</p>
-<pre><code>sudo chmod 1777 /srv/scratch        <span class="tok-comment"># 1 = dính</span>
+<pre><code class="language-bash">sudo chmod 1777 /srv/scratch        <span class="tok-comment"># 1 = dính</span>
 ls -ld /srv/scratch</code></pre>
 <div class="out">drwxrwxrwt 2 root root 4096 Aug 22 11:12 /srv/scratch</div>
 <div class="callout">Bất kỳ thư mục nào bạn cho cả thế giới ghi đều nên có bit dính — hai thứ đi liền nhau, và một thư mục <code>777</code> mà <em>KHÔNG</em> có nó là một lỗ hổng thật sự chứ không phải chuyện hình thức. Nếu có lúc nào bạn gõ <code>chmod 777</code> lên một thư mục dùng chung, con số bạn định gõ là <code>1777</code>.</div>
@@ -1176,7 +1176,7 @@ ls -ld /srv/scratch</code></pre>
 
 <h3>Đặt và gỡ chúng</h3>
 ${slide('lx-04', 16, 's/S, t/T — và chmod 775 không gỡ setgid của thư mục')}
-<pre><code>chmod 4755 prog        <span class="tok-comment"># setuid, hệ tám</span>
+<pre><code class="language-bash">chmod 4755 prog        <span class="tok-comment"># setuid, hệ tám</span>
 chmod u+s prog         <span class="tok-comment"># setuid, ký hiệu</span>
 chmod 2775 dir         <span class="tok-comment"># setgid</span>
 chmod g+s dir          <span class="tok-comment"># setgid, ký hiệu</span>
@@ -1184,7 +1184,7 @@ chmod 1777 dir         <span class="tok-comment"># dính</span>
 chmod +t dir           <span class="tok-comment"># dính, ký hiệu</span>
 chmod 0755 prog        <span class="tok-comment"># xoá TẤT CẢ bit đặc biệt (số 0 đứng đầu)</span></code></pre>
 <div class="callout warn"><strong>Đã sửa ngày 28/09/2026 — khung này trước đây nói NGƯỢC lại với Linux.</strong> Trên coreutils của GNU (Ubuntu, Fedora, WSL), <code>chmod</code> dạng số trên một <em>THƯ MỤC</em> <strong>GIỮ NGUYÊN</strong> bit setuid và setgid: <code>chmod 775 /srv/shared</code>, và cả <code>chmod 0775</code>, để yên <code>drwxrwsr-x</code> như cũ. Trang chmod(1) nói thẳng: "For directories chmod preserves set-user-ID and set-group-ID bits unless you explicitly specify otherwise" (với thư mục, chmod giữ bit set-user-ID và set-group-ID trừ khi bạn chỉ định rõ khác đi). Muốn gỡ thì phải dùng <code>g-s</code>, hai số 0 đứng đầu (<code>00775</code>) hoặc <code>=775</code>. Nỗi lo cũ vẫn đúng ở ba chỗ: trên một <em>FILE</em> thường, <code>chmod 755</code> gỡ setuid/setgid ngay lập tức; bit dính KHÔNG được giữ (<code>chmod 777</code> gỡ chữ <code>t</code> của một thư mục <code>1777</code>); và trên <strong>macOS</strong>, <code>chmod 775</code> CÓ gỡ chữ <code>s</code> của thư mục (đã thử). Nên thói quen vẫn thế: khi thư mục có bit đặc biệt, hãy viết đủ bốn chữ số rồi đọc lại <code>ls -ld</code>.</div>
-<pre><code>chmod 775 /srv/shared;   ls -ld /srv/shared
+<pre><code class="language-bash">chmod 775 /srv/shared;   ls -ld /srv/shared
 chmod 0775 /srv/shared;  ls -ld /srv/shared
 chmod 00775 /srv/shared; ls -ld /srv/shared</code></pre>
 <div class="out">drwxrwsr-x 3 root developers 4096 Sep 28 09:30 /srv/shared
@@ -1194,7 +1194,7 @@ drwxrwxr-x 3 root developers 4096 Sep 28 09:30 /srv/shared</div>
 <h3>ACL POSIX trong thực tế: thêm một người, không đổi chủ, không đổi nhóm</h3>
 ${slide('lx-04', 17, 'ACL: cấp cho đúng một người, không đổi chủ hay nhóm')}
 <p>Chín bit cho bạn đúng một chủ và một nhóm. Đời thật đòi nhiều hơn: "nginx phải ghi được vào thư mục uploads, nhưng thư mục là của <code>an</code> và phải giữ nguyên như thế". Một <strong>ACL</strong> (Access Control List — danh sách kiểm soát truy cập) thêm các mục có tên — mỗi mục một người dùng hoặc một nhóm — chồng lên các bit. Ubuntu cần gói nhỏ <code>acl</code> để có hai lệnh; nhân và ext4/xfs/btrfs thì hỗ trợ sẵn.</p>
-<pre><code>ls -ld uploads
+<pre><code class="language-bash">ls -ld uploads
 su -s /bin/bash www-data -c 'touch uploads/t.txt'
 setfacl -m u:www-data:rwx uploads
 ls -ld uploads
@@ -1230,7 +1230,7 @@ ${slide('lx-04', 18, 'Rà file setuid; capability là lối thay thế')}
 
 <h3>Chạy thử từng bước</h3>
 <p>Trọn công thức thư mục dùng chung, trong một container vứt đi với quyền root (<code>alice</code> và <code>bob</code> đều thuộc <code>developers</code>). <code>su -</code> đăng nhập qua PAM, nên mỗi người nhận umask lúc đăng nhập của Ubuntu là <code>0002</code>; hai dòng cuối lặp lại phép thử với <code>umask 022</code>.</p>
-<pre><code>mkdir /srv/shared &amp;&amp; chgrp developers /srv/shared &amp;&amp; chmod 2775 /srv/shared
+<pre><code class="language-bash">mkdir /srv/shared &amp;&amp; chgrp developers /srv/shared &amp;&amp; chmod 2775 /srv/shared
 ls -ld /srv/shared
 su - alice -c 'touch /srv/shared/ke-hoach.md'
 su - bob -c 'echo sua-boi-bob &gt;&gt; /srv/shared/ke-hoach.md &amp;&amp; ls -l /srv/shared'
@@ -1315,7 +1315,7 @@ total 4
 
 <h3>/etc/passwd — the account list</h3>
 ${slide('lx-04', 19, '/etc/passwd 7 trường — UID mới là danh tính')}
-<pre><code>grep -E '^(root|deploy):' /etc/passwd</code></pre>
+<pre><code class="language-bash">grep -E '^(root|deploy):' /etc/passwd</code></pre>
 <div class="out">root:x:0:0:root:/root:/bin/bash
 deploy:x:1001:1001:Deploy user:/home/deploy:/bin/bash</div>
 <div class="lz-stack">
@@ -1330,7 +1330,7 @@ deploy:x:1001:1001:Deploy user:/home/deploy:/bin/bash</div>
 <div class="callout"><strong>UID 0 is root, whatever it is called.</strong> Renaming root changes nothing, and creating a second account with UID 0 creates a second root — which is why a stray <code>uid=0</code> line is something to look for on a machine you suspect. Check with <code>awk -F: '\$3 == 0' /etc/passwd</code>; it should print exactly one line.</div>
 
 <h3>System accounts versus people</h3>
-<pre><code>awk -F: '\$3 &lt; 1000 {print \$1, \$3, \$7}' /etc/passwd | head
+<pre><code class="language-bash">awk -F: '\$3 &lt; 1000 {print \$1, \$3, \$7}' /etc/passwd | head
 awk -F: '\$3 &gt;= 1000 {print \$1, \$3, \$7}' /etc/passwd</code></pre>
 <div class="out">root 0 /bin/bash
 daemon 1 /usr/sbin/nologin
@@ -1343,7 +1343,7 @@ deploy 1001 /bin/bash</div>
 
 <h3>/etc/shadow and /etc/group</h3>
 ${slide('lx-04', 20, 'Nhóm chính ở passwd, nhóm phụ ở group — id gộp cả hai')}
-<pre><code>sudo grep deploy /etc/shadow
+<pre><code class="language-bash">sudo grep deploy /etc/shadow
 grep developers /etc/group</code></pre>
 <div class="out">deploy:\$y\$j9T\$Xk2...redacted...:19958:0:99999:7:::
 developers:x:1002:deploy,alice,bob</div>
@@ -1390,7 +1390,7 @@ uid=1001(alice) gid=1002(alice) groups=1002(alice),1001(developers),1005(docker)
 
 <h3>Group membership does not apply until you log in again</h3>
 ${slide('lx-04', 22, 'Nhóm mới không vào shell đang chạy')}
-<pre><code>sudo usermod -aG docker \$USER
+<pre><code class="language-bash">sudo usermod -aG docker \$USER
 docker ps</code></pre>
 <div class="out">permission denied while trying to connect to the Docker daemon socket</div>
 <p>The change is real — <code>id \$USER</code> confirms it — but your <em>current shell</em> still carries the group list it was given at login. Group membership is copied into the process at login time and inherited by children; nothing re-reads <code>/etc/group</code> for a running process.</p>
@@ -1460,27 +1460,27 @@ User deploy may run the following commands on lab:
     (root) NOPASSWD: /usr/bin/systemctl restart myapp, /usr/bin/systemctl status myapp
     (root) /usr/bin/journalctl</div>
 <p>Then test from the user's side. With a rule for <code>/usr/bin/id</code> only, as <code>deploy</code>:</p>
-<pre><code>sudo -n id -un
+<pre><code class="language-bash">sudo -n id -un
 sudo cat /etc/shadow
 sudo -k; sudo -n true</code></pre>
 <div class="out">root
 Sorry, user deploy is not allowed to execute '/usr/bin/cat /etc/shadow' as root on lab.
 sudo: a password is required</div>
 <p><code>-n</code> (non-interactive) makes sudo fail at once instead of waiting for a password — exactly what you want inside a script or CI job, where a hidden prompt would hang forever. <code>sudo -k</code> forgets the cached credential (15 minutes by default on Ubuntu), which is how you check that a <code>NOPASSWD</code> rule really works on its own. Files in <code>/etc/sudoers.d/</code> must be mode <code>0440</code>, and their names must not contain a dot or end in <code>~</code>, or sudo silently skips them.</p>
-<pre><code><span class="tok-comment"># Who ran what</span>
+<pre><code class="language-bash"><span class="tok-comment"># Who ran what</span>
 sudo journalctl _COMM=sudo --since today
 sudo grep sudo /var/log/auth.log | tail -20</code></pre>
 <div class="out">Aug 22 11:42:03 vps sudo: deploy : TTY=pts/1 ; PWD=/srv/app ;
   USER=root ; COMMAND=/bin/systemctl restart myapp</div>
 <div class="callout warn"><strong>Corrected on 28/09/2026.</strong> This block used to say <code>journalctl -u sudo</code>. That filters by the systemd <em>unit</em> <code>sudo.service</code>, which does not exist — sudo runs inside your login session — so it always prints <code>-- No entries --</code>. Filter by the program instead: <code>journalctl _COMM=sudo</code> or <code>journalctl -t sudo</code>. Real output on Fedora 44, including a refused attempt:</div>
-<pre><code>journalctl -u sudo -n 2
+<pre><code class="language-bash">journalctl -u sudo -n 2
 journalctl -t sudo -n 1</code></pre>
 <div class="out">-- No entries --
 Sep 23 20:14:10 CuongThai sudo[367644]: Cuong03dx : a password is required ; PWD=/home/Cuong03dx ; USER=root ; COMMAND=/usr/sbin/true</div>
 
 <h3>Run it step by step</h3>
 <p>In a throwaway container as root (<code>apt-get install -y sudo</code> first). Every command changes the system, which is exactly why it belongs in a container.</p>
-<pre><code>groupadd developers
+<pre><code class="language-bash">groupadd developers
 useradd -m -s /bin/bash -G developers -c "Deploy user" deploy
 grep '^deploy:' /etc/passwd
 id deploy
@@ -1565,7 +1565,7 @@ sudo: a password is required</div>
 
 <h3>/etc/passwd — danh sách tài khoản</h3>
 ${slide('lx-04', 19, '/etc/passwd 7 trường — UID mới là danh tính')}
-<pre><code>grep -E '^(root|deploy):' /etc/passwd</code></pre>
+<pre><code class="language-bash">grep -E '^(root|deploy):' /etc/passwd</code></pre>
 <div class="out">root:x:0:0:root:/root:/bin/bash
 deploy:x:1001:1001:Deploy user:/home/deploy:/bin/bash</div>
 <div class="lz-stack">
@@ -1580,7 +1580,7 @@ deploy:x:1001:1001:Deploy user:/home/deploy:/bin/bash</div>
 <div class="callout"><strong>UID 0 LÀ root, bất kể nó tên gì.</strong> Đổi tên root chẳng thay đổi gì, và tạo một tài khoản thứ hai với UID 0 là tạo ra một root thứ hai — đó là lý do một dòng <code>uid=0</code> lạc chỗ là thứ cần tìm trên một máy bạn nghi ngờ. Kiểm bằng <code>awk -F: '\$3 == 0' /etc/passwd</code>; nó phải in ra đúng một dòng.</div>
 
 <h3>Tài khoản hệ thống so với con người</h3>
-<pre><code>awk -F: '\$3 &lt; 1000 {print \$1, \$3, \$7}' /etc/passwd | head
+<pre><code class="language-bash">awk -F: '\$3 &lt; 1000 {print \$1, \$3, \$7}' /etc/passwd | head
 awk -F: '\$3 &gt;= 1000 {print \$1, \$3, \$7}' /etc/passwd</code></pre>
 <div class="out">root 0 /bin/bash
 daemon 1 /usr/sbin/nologin
@@ -1593,7 +1593,7 @@ deploy 1001 /bin/bash</div>
 
 <h3>/etc/shadow và /etc/group</h3>
 ${slide('lx-04', 20, 'Nhóm chính ở passwd, nhóm phụ ở group — id gộp cả hai')}
-<pre><code>sudo grep deploy /etc/shadow
+<pre><code class="language-bash">sudo grep deploy /etc/shadow
 grep developers /etc/group</code></pre>
 <div class="out">deploy:\$y\$j9T\$Xk2...đã che...:19958:0:99999:7:::
 developers:x:1002:deploy,alice,bob</div>
@@ -1640,7 +1640,7 @@ uid=1001(alice) gid=1002(alice) groups=1002(alice),1001(developers),1005(docker)
 
 <h3>Vào nhóm mới chưa có hiệu lực cho tới khi đăng nhập lại</h3>
 ${slide('lx-04', 22, 'Nhóm mới không vào shell đang chạy')}
-<pre><code>sudo usermod -aG docker \$USER
+<pre><code class="language-bash">sudo usermod -aG docker \$USER
 docker ps</code></pre>
 <div class="out">permission denied while trying to connect to the Docker daemon socket</div>
 <p>Thay đổi là có thật — <code>id \$USER</code> xác nhận điều đó — nhưng <em>SHELL HIỆN TẠI</em> của bạn vẫn mang danh sách nhóm mà nó được cấp lúc đăng nhập. Tư cách thành viên nhóm được CHÉP vào tiến trình lúc đăng nhập rồi được các tiến trình con thừa kế; không có gì đọc lại <code>/etc/group</code> cho một tiến trình đang chạy.</p>
@@ -1710,27 +1710,27 @@ User deploy may run the following commands on lab:
     (root) NOPASSWD: /usr/bin/systemctl restart myapp, /usr/bin/systemctl status myapp
     (root) /usr/bin/journalctl</div>
 <p>Rồi thử từ phía người dùng. Với một luật chỉ cho <code>/usr/bin/id</code>, đăng nhập bằng <code>deploy</code>:</p>
-<pre><code>sudo -n id -un
+<pre><code class="language-bash">sudo -n id -un
 sudo cat /etc/shadow
 sudo -k; sudo -n true</code></pre>
 <div class="out">root
 Sorry, user deploy is not allowed to execute '/usr/bin/cat /etc/shadow' as root on lab.
 sudo: a password is required</div>
 <p><code>-n</code> (non-interactive — không tương tác) làm sudo hỏng ngay thay vì chờ mật khẩu — đúng thứ bạn cần trong script hay job CI, nơi một lời hỏi mật khẩu vô hình sẽ treo mãi mãi. <code>sudo -k</code> quên thông tin xác thực đang nhớ tạm (mặc định 15 phút trên Ubuntu), đó là cách kiểm một luật <code>NOPASSWD</code> có thật sự tự chạy được không. File trong <code>/etc/sudoers.d/</code> phải mang chế độ <code>0440</code>, và tên file không được chứa dấu chấm hay kết thúc bằng <code>~</code>, nếu không sudo lặng lẽ bỏ qua.</p>
-<pre><code><span class="tok-comment"># Ai đã chạy gì</span>
+<pre><code class="language-bash"><span class="tok-comment"># Ai đã chạy gì</span>
 sudo journalctl _COMM=sudo --since today
 sudo grep sudo /var/log/auth.log | tail -20</code></pre>
 <div class="out">Aug 22 11:42:03 vps sudo: deploy : TTY=pts/1 ; PWD=/srv/app ;
   USER=root ; COMMAND=/bin/systemctl restart myapp</div>
 <div class="callout warn"><strong>Đã sửa ngày 28/09/2026.</strong> Khối này trước đây ghi <code>journalctl -u sudo</code>. Lệnh đó lọc theo <em>UNIT</em> systemd <code>sudo.service</code>, thứ không hề tồn tại — sudo chạy bên trong phiên đăng nhập của bạn — nên nó luôn in <code>-- No entries --</code>. Hãy lọc theo chương trình: <code>journalctl _COMM=sudo</code> hoặc <code>journalctl -t sudo</code>. Output thật trên Fedora 44, gồm cả một lần bị từ chối:</div>
-<pre><code>journalctl -u sudo -n 2
+<pre><code class="language-bash">journalctl -u sudo -n 2
 journalctl -t sudo -n 1</code></pre>
 <div class="out">-- No entries --
 Sep 23 20:14:10 CuongThai sudo[367644]: Cuong03dx : a password is required ; PWD=/home/Cuong03dx ; USER=root ; COMMAND=/usr/sbin/true</div>
 
 <h3>Chạy thử từng bước</h3>
 <p>Trong một container vứt đi với quyền root (chạy <code>apt-get install -y sudo</code> trước). Lệnh nào cũng đổi hệ thống, và đó chính là lý do chúng thuộc về container.</p>
-<pre><code>groupadd developers
+<pre><code class="language-bash">groupadd developers
 useradd -m -s /bin/bash -G developers -c "Deploy user" deploy
 grep '^deploy:' /etc/passwd
 id deploy
@@ -1834,7 +1834,7 @@ ${slide('lx-04', 25, 'Chẩn đoán 6 bước: đọc ra nguyên nhân, đừng 
 </div>
 
 <h3>Step 1: who is actually running this</h3>
-<pre><code>id                                    <span class="tok-comment"># you, right now</span>
+<pre><code class="language-bash">id                                    <span class="tok-comment"># you, right now</span>
 ps -o user,group,pid,cmd -C nginx     <span class="tok-comment"># what a running process runs as</span>
 systemctl show myapp -p User -p Group <span class="tok-comment"># what a unit is configured to use</span></code></pre>
 <div class="out">uid=1001(deploy) gid=1001(deploy) groups=1001(deploy),1002(developers)
@@ -1852,7 +1852,7 @@ www-data www-data 813 nginx: worker process</div>
  drwxr-xr-x deploy deploy config
  -rw-r--r-- deploy deploy db.yml</div>
 <p>The file is world-readable. It does not matter: <code>www-data</code> is not <code>deploy</code> and not in the <code>deploy</code> group, so it cannot traverse <code>app</code>, and the walk stops there (Lesson 4.1). Every <code>chmod</code> applied to <code>db.yml</code> will have no effect at all — which is exactly the situation in which people conclude permissions are broken and reach for <code>777</code>.</p>
-<pre><code><span class="tok-comment"># The correct fix: grant traversal on the one directory that blocks it</span>
+<pre><code class="language-bash"><span class="tok-comment"># The correct fix: grant traversal on the one directory that blocks it</span>
 sudo chmod o+x /srv/app
 <span class="tok-comment"># or, better, use a group</span>
 sudo chgrp -R webread /srv/app/config &amp;&amp; sudo usermod -aG webread www-data</code></pre>
@@ -1885,7 +1885,7 @@ ${slide('lx-04', 27, 'Chỉ-đọc, bất biến, noexec: chmod vô dụng')}
 <tr><td><code>Operation not permitted</code></td><td>EPERM (1)</td><td>you may not do this operation at all: chown/chmod on someone else's file, deleting in a sticky directory, an immutable file, a missing capability</td><td><code>ls -l</code> (owner), <code>lsattr</code></td></tr>
 <tr><td><code>Read-only file system</code></td><td>EROFS (30)</td><td>the whole filesystem is mounted read-only — root included</td><td><code>findmnt -O ro</code>, <code>dmesg</code></td></tr>
 </table>
-<pre><code><span class="tok-comment"># as root, on a tmpfs, in a container started with --cap-add LINUX_IMMUTABLE</span>
+<pre><code class="language-bash"><span class="tok-comment"># as root, on a tmpfs, in a container started with --cap-add LINUX_IMMUTABLE</span>
 chattr +i app.conf; lsattr app.conf
 echo x &gt;&gt; app.conf
 rm app.conf
@@ -1942,7 +1942,7 @@ sudo -u www-data touch /srv/app/uploads/test.txt</code></pre>
  drwxr-xr-x root   root   srv
  drwxr-xr-x deploy deploy app
  drwxr-xr-x deploy deploy uploads     ← www-data can enter and READ, but not WRITE</div>
-<pre><code>id www-data
+<pre><code class="language-bash">id www-data
 <span class="tok-comment"># uid=33(www-data) gid=33(www-data) groups=33(www-data)</span>
 
 <span class="tok-comment"># Not the owner, not in the deploy group → the "other" bits apply: r-x. No w.</span>
@@ -1957,7 +1957,7 @@ sudo -u www-data touch /srv/app/uploads/test.txt &amp;&amp; echo OK</code></pre>
 
 <h3>Run it step by step</h3>
 <p>The whole procedure on the <code>db.yml</code> case from Lesson 4.1, in a container as root (user <code>an</code> exists, <code>sudo</code> installed):</p>
-<pre><code>mkdir -p /srv/app/config &amp;&amp; echo 'db: prod' &gt; /srv/app/config/db.yml
+<pre><code class="language-bash">mkdir -p /srv/app/config &amp;&amp; echo 'db: prod' &gt; /srv/app/config/db.yml
 chown -R an:an /srv/app &amp;&amp; chmod 750 /srv/app
 id www-data                                  <span class="tok-comment"># 1 who</span>
 sudo -u www-data cat /srv/app/config/db.yml  <span class="tok-comment"># 3 prove it</span>
@@ -2056,7 +2056,7 @@ ${slide('lx-04', 25, 'Chẩn đoán 6 bước: đọc ra nguyên nhân, đừng 
 </div>
 
 <h3>Bước 1: ai thật sự đang chạy cái này</h3>
-<pre><code>id                                    <span class="tok-comment"># bạn, ngay lúc này</span>
+<pre><code class="language-bash">id                                    <span class="tok-comment"># bạn, ngay lúc này</span>
 ps -o user,group,pid,cmd -C nginx     <span class="tok-comment"># một tiến trình đang chạy dưới danh nghĩa ai</span>
 systemctl show myapp -p User -p Group <span class="tok-comment"># một unit được cấu hình dùng danh nghĩa nào</span></code></pre>
 <div class="out">uid=1001(deploy) gid=1001(deploy) groups=1001(deploy),1002(developers)
@@ -2074,7 +2074,7 @@ www-data www-data 813 nginx: worker process</div>
  drwxr-xr-x deploy deploy config
  -rw-r--r-- deploy deploy db.yml</div>
 <p>File thì cả thế giới đọc được. Chuyện đó không quan trọng: <code>www-data</code> không phải <code>deploy</code> và không ở trong nhóm <code>deploy</code>, nên nó không đi xuyên qua được <code>app</code>, và cuộc đi dừng lại ngay đó (Bài 4.1). Mọi lệnh <code>chmod</code> áp lên <code>db.yml</code> sẽ hoàn toàn không có tác dụng — và đó chính xác là tình huống mà người ta kết luận rằng hệ thống quyền bị hỏng rồi vớ lấy <code>777</code>.</p>
-<pre><code><span class="tok-comment"># Cách chữa đúng: cấp quyền đi xuyên qua trên đúng cái thư mục đang chặn</span>
+<pre><code class="language-bash"><span class="tok-comment"># Cách chữa đúng: cấp quyền đi xuyên qua trên đúng cái thư mục đang chặn</span>
 sudo chmod o+x /srv/app
 <span class="tok-comment"># hoặc, tốt hơn, dùng một nhóm</span>
 sudo chgrp -R webread /srv/app/config &amp;&amp; sudo usermod -aG webread www-data</code></pre>
@@ -2107,7 +2107,7 @@ ${slide('lx-04', 27, 'Chỉ-đọc, bất biến, noexec: chmod vô dụng')}
 <tr><td><code>Operation not permitted</code></td><td>EPERM (1)</td><td>bạn không được làm thao tác này: chown/chmod file của người khác, xoá trong thư mục có bit dính, file bất biến, thiếu capability</td><td><code>ls -l</code> (chủ), <code>lsattr</code></td></tr>
 <tr><td><code>Read-only file system</code></td><td>EROFS (30)</td><td>cả hệ thống file đang gắn chỉ-đọc — root cũng chịu</td><td><code>findmnt -O ro</code>, <code>dmesg</code></td></tr>
 </table>
-<pre><code><span class="tok-comment"># root, trên tmpfs, trong container chạy với --cap-add LINUX_IMMUTABLE</span>
+<pre><code class="language-bash"><span class="tok-comment"># root, trên tmpfs, trong container chạy với --cap-add LINUX_IMMUTABLE</span>
 chattr +i app.conf; lsattr app.conf
 echo x &gt;&gt; app.conf
 rm app.conf
@@ -2164,7 +2164,7 @@ sudo -u www-data touch /srv/app/uploads/test.txt</code></pre>
  drwxr-xr-x root   root   srv
  drwxr-xr-x deploy deploy app
  drwxr-xr-x deploy deploy uploads     ← www-data vào và ĐỌC được, nhưng không GHI được</div>
-<pre><code>id www-data
+<pre><code class="language-bash">id www-data
 <span class="tok-comment"># uid=33(www-data) gid=33(www-data) groups=33(www-data)</span>
 
 <span class="tok-comment"># Không phải chủ, không ở trong nhóm deploy → các bit "other" áp dụng: r-x. Không có w.</span>
@@ -2179,7 +2179,7 @@ sudo -u www-data touch /srv/app/uploads/test.txt &amp;&amp; echo OK</code></pre>
 
 <h3>Chạy thử từng bước</h3>
 <p>Trọn quy trình trên đúng ca <code>db.yml</code> của Bài 4.1, trong container với quyền root (đã có người dùng <code>an</code>, đã cài <code>sudo</code>):</p>
-<pre><code>mkdir -p /srv/app/config &amp;&amp; echo 'db: prod' &gt; /srv/app/config/db.yml
+<pre><code class="language-bash">mkdir -p /srv/app/config &amp;&amp; echo 'db: prod' &gt; /srv/app/config/db.yml
 chown -R an:an /srv/app &amp;&amp; chmod 750 /srv/app
 id www-data                                  <span class="tok-comment"># 1 ai</span>
 sudo -u www-data cat /srv/app/config/db.yml  <span class="tok-comment"># 3 chứng minh</span>

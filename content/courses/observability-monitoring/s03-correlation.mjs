@@ -53,7 +53,7 @@ logger.error('Express error handler', {
 <p>So the state today is precise and a little absurd: a user can send you a screenshot showing <code>X-Request-ID: V1StGXR8_Z5j</code>, and there is no query that finds it. The id was generated, returned, and discarded.</p>
 
 <h3>Why the obvious fix is the wrong one</h3>
-<pre><code>Option A: pass req into everything.
+<pre><code class="language-javascript">Option A: pass req into everything.
 
   router.post('/notes', (req, res) =&gt; createNote(req, body))
   createNote(req, body)   → validateOwner(req, ...)
@@ -159,7 +159,7 @@ logger.error('Express error handler', {
 <p>Nên trạng thái hôm nay thì chính xác và hơi phi lý: người dùng gửi cho bạn một ảnh chụp màn hình có <code>X-Request-ID: V1StGXR8_Z5j</code>, và không có truy vấn nào tìm ra nó. Cái id đã được sinh ra, được trả về, rồi bị vứt đi.</p>
 
 <h3>Vì sao cách chữa hiển nhiên lại là cách sai</h3>
-<pre><code>Cách A: truyền req vào mọi thứ.
+<pre><code class="language-javascript">Cách A: truyền req vào mọi thứ.
 
   router.post('/notes', (req, res) =&gt; createNote(req, body))
   createNote(req, body)   → validateOwner(req, ...)
@@ -566,7 +566,7 @@ prisma.$use(async (params, next) =&gt; {
   return prisma.$queryRawUnsafe(
     &#96;/*requestId='\${ctx.requestId}',route='\${ctx.route}'*/ &#96; + sql);
 });</code></pre>
-<pre><code>Without it, the slow-query log says:
+<pre><code class="language-sql">Without it, the slow-query log says:
 
   duration: 4821.332 ms  execute: SELECT ... FROM "Note" WHERE ...
 
@@ -676,7 +676,7 @@ prisma.$use(async (params, next) =&gt; {
   return prisma.$queryRawUnsafe(
     &#96;/*requestId='\${ctx.requestId}',route='\${ctx.route}'*/ &#96; + sql);
 });</code></pre>
-<pre><code>Không có nó, log truy vấn chậm nói:
+<pre><code class="language-sql">Không có nó, log truy vấn chậm nói:
 
   duration: 4821.332 ms  execute: SELECT ... FROM "Note" WHERE ...
 

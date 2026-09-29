@@ -68,7 +68,7 @@ ${gallery('dk-01', [
 
 <h3>Namespaces: what the process can see</h3>
 ${slide('dk-01', 3, 'Container là một tiến trình đeo hai lớp kính: namespace và cgroup')}
-<pre><code>docker run -d --name web nginx:1.27-alpine
+<pre><code class="language-bash">docker run -d --name web nginx:1.27-alpine
 PID=\$(docker inspect -f '{{.State.Pid}}' web)
 echo "host PID: \$PID"
 sudo ls -l /proc/\$PID/ns/</code></pre>
@@ -82,7 +82,7 @@ lrwxrwxrwx 1 root root 0 Aug 22 20:41 time -&gt; 'time:[4026531834]'
 lrwxrwxrwx 1 root root 0 Aug 22 20:41 user -&gt; 'user:[4026531837]'
 lrwxrwxrwx 1 root root 0 Aug 22 20:41 uts -&gt; 'uts:[4026532504]'</div>
 <p>Those numbers in brackets are namespace identifiers. Compare them with your own shell's and you will see which ones the container was given fresh and which it shares with the host:</p>
-<pre><code>sudo ls -l /proc/self/ns/ | awk '{print \$9, \$11}'
+<pre><code class="language-bash">sudo ls -l /proc/self/ns/ | awk '{print \$9, \$11}'
 lsns -t pid -t net -t mnt | head -6</code></pre>
 <div class="out">cgroup 'cgroup:[4026531835]'
 ipc 'ipc:[4026531839]'
@@ -150,7 +150,7 @@ uts uts:[4026531838]</div>
 
 <h3>Prove there is no second kernel</h3>
 ${slide('dk-01', 5, 'Chỉ có một nhân — trên Mac là nhân của máy ảo')}
-<pre><code><span class="tok-comment"># Host kernel</span>
+<pre><code class="language-bash"><span class="tok-comment"># Host kernel</span>
 uname -r
 <span class="tok-comment"># "Kernel" as seen from inside a container of a totally different distro</span>
 docker run --rm alpine uname -r
@@ -179,7 +179,7 @@ docker info --format '{{.NCPU}} CPU {{.MemTotal}} {{.OperatingSystem}}'</code></
 
 <h3>cgroups: what the process can use</h3>
 ${slide('dk-01', 6, 'cgroup là vài file trong /sys/fs/cgroup')}
-<pre><code>docker run -d --name limited --memory 256m --cpus 0.5 nginx:1.27-alpine
+<pre><code class="language-bash">docker run -d --name limited --memory 256m --cpus 0.5 nginx:1.27-alpine
 docker inspect -f '{{.HostConfig.Memory}} {{.HostConfig.NanoCpus}}' limited
 CID=\$(docker inspect -f '{{.Id}}' limited)
 cat /sys/fs/cgroup/system.slice/docker-\$CID.scope/memory.max
@@ -200,7 +200,7 @@ cat /sys/fs/cgroup/system.slice/docker-\$CID.scope/cpu.max</code></pre>
 <h3>Hitting the ceiling: exit 137, and the swap trap</h3>
 ${slide('dk-01', 7, 'Vượt trần bộ nhớ ⇒ SIGKILL ⇒ exit 137')}
 <p>Try the obvious experiment first — allocate 400 MB under a 256 MB cap:</p>
-<pre><code><span class="tok-comment"># Watch a limit being enforced: allocate 400MB with a 256MB cap</span>
+<pre><code class="language-bash"><span class="tok-comment"># Watch a limit being enforced: allocate 400MB with a 256MB cap</span>
 docker run --rm --memory 256m alpine sh -c \\
   'dd if=/dev/zero of=/dev/null bs=1M count=400 2&gt;/dev/null; \\
    head -c 400m /dev/zero | tail -c 1 &gt; /dev/null; echo survived'
@@ -226,7 +226,7 @@ ${slide('dk-01', 8, 'Ranh giới mỏng ở bốn chỗ')}
   <div class="kv"><span class="k">Anything you explicitly share</span><span class="v"><code>--net=host</code> removes the network namespace. <code>--pid=host</code> removes the process one. <code>-v /var/run/docker.sock:/var/run/docker.sock</code> hands the container control of the whole daemon. Each is legitimate and each dissolves part of the boundary.</span></div>
   <div class="kv"><span class="k">Kernel modules, most of /sys, and most capabilities</span><span class="v">Docker drops most Linux capabilities by default and applies a seccomp filter blocking about 44 syscalls. That default is a big part of the safety — Chapter 6 covers what <code>--privileged</code> throws away.</span></div>
 </div>
-<pre><code><span class="tok-comment"># See the boundary dissolve — same command, one flag apart</span>
+<pre><code class="language-bash"><span class="tok-comment"># See the boundary dissolve — same command, one flag apart</span>
 docker run --rm alpine hostname
 docker run --rm --uts=host alpine hostname
 docker run --rm alpine ip -o addr | wc -l
@@ -304,7 +304,7 @@ OOMKilled=true</div>
 
 <h3>Namespace: tiến trình nhìn thấy được gì</h3>
 ${slide('dk-01', 3, 'Container là một tiến trình đeo hai lớp kính: namespace và cgroup')}
-<pre><code>docker run -d --name web nginx:1.27-alpine
+<pre><code class="language-bash">docker run -d --name web nginx:1.27-alpine
 PID=\$(docker inspect -f '{{.State.Pid}}' web)
 echo "PID trên máy chủ: \$PID"
 sudo ls -l /proc/\$PID/ns/</code></pre>
@@ -318,7 +318,7 @@ lrwxrwxrwx 1 root root 0 Aug 22 20:41 time -&gt; 'time:[4026531834]'
 lrwxrwxrwx 1 root root 0 Aug 22 20:41 user -&gt; 'user:[4026531837]'
 lrwxrwxrwx 1 root root 0 Aug 22 20:41 uts -&gt; 'uts:[4026532504]'</div>
 <p>Mấy con số trong ngoặc vuông là định danh của namespace. Đem so với namespace của chính shell bạn thì sẽ thấy cái nào container được cấp mới và cái nào nó dùng chung với máy chủ:</p>
-<pre><code>sudo ls -l /proc/self/ns/ | awk '{print \$9, \$11}'
+<pre><code class="language-bash">sudo ls -l /proc/self/ns/ | awk '{print \$9, \$11}'
 lsns -t pid -t net -t mnt | head -6</code></pre>
 <div class="out">cgroup 'cgroup:[4026531835]'
 ipc 'ipc:[4026531839]'
@@ -386,7 +386,7 @@ uts uts:[4026531838]</div>
 
 <h3>Chứng minh không có cái nhân thứ hai</h3>
 ${slide('dk-01', 5, 'Chỉ có một nhân — trên Mac là nhân của máy ảo')}
-<pre><code><span class="tok-comment"># Nhân của máy chủ</span>
+<pre><code class="language-bash"><span class="tok-comment"># Nhân của máy chủ</span>
 uname -r
 <span class="tok-comment"># "Nhân" nhìn từ bên trong container của những bản phân phối hoàn toàn khác</span>
 docker run --rm alpine uname -r
@@ -415,7 +415,7 @@ docker info --format '{{.NCPU}} CPU {{.MemTotal}} {{.OperatingSystem}}'</code></
 
 <h3>cgroup: tiến trình dùng được bao nhiêu</h3>
 ${slide('dk-01', 6, 'cgroup là vài file trong /sys/fs/cgroup')}
-<pre><code>docker run -d --name limited --memory 256m --cpus 0.5 nginx:1.27-alpine
+<pre><code class="language-bash">docker run -d --name limited --memory 256m --cpus 0.5 nginx:1.27-alpine
 docker inspect -f '{{.HostConfig.Memory}} {{.HostConfig.NanoCpus}}' limited
 CID=\$(docker inspect -f '{{.Id}}' limited)
 cat /sys/fs/cgroup/system.slice/docker-\$CID.scope/memory.max
@@ -436,7 +436,7 @@ cat /sys/fs/cgroup/system.slice/docker-\$CID.scope/cpu.max</code></pre>
 <h3>Chạm trần: exit 137, và cái bẫy swap</h3>
 ${slide('dk-01', 7, 'Vượt trần bộ nhớ ⇒ SIGKILL ⇒ exit 137')}
 <p>Thử thí nghiệm hiển nhiên trước — cấp phát 400 MB dưới trần 256 MB:</p>
-<pre><code><span class="tok-comment"># Nhìn một giới hạn được thực thi: cấp phát 400MB với trần 256MB</span>
+<pre><code class="language-bash"><span class="tok-comment"># Nhìn một giới hạn được thực thi: cấp phát 400MB với trần 256MB</span>
 docker run --rm --memory 256m alpine sh -c \\
   'dd if=/dev/zero of=/dev/null bs=1M count=400 2&gt;/dev/null; \\
    head -c 400m /dev/zero | tail -c 1 &gt; /dev/null; echo sống sót'
@@ -462,7 +462,7 @@ ${slide('dk-01', 8, 'Ranh giới mỏng ở bốn chỗ')}
   <div class="kv"><span class="k">Bất cứ thứ gì bạn CHỦ ĐỘNG chia sẻ</span><span class="v"><code>--net=host</code> bỏ namespace mạng. <code>--pid=host</code> bỏ namespace tiến trình. <code>-v /var/run/docker.sock:/var/run/docker.sock</code> trao cho container quyền điều khiển toàn bộ tiến trình nền. Mỗi cái đều chính đáng và mỗi cái đều làm tan một phần ranh giới.</span></div>
   <div class="kv"><span class="k">Mô-đun nhân, phần lớn /sys, và phần lớn capability</span><span class="v">Docker mặc định bỏ đi phần lớn capability của Linux và áp một bộ lọc seccomp chặn khoảng 44 lời gọi hệ thống. Mức mặc định đó là một phần lớn của sự an toàn — Chương 6 nói <code>--privileged</code> vứt đi những gì.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Nhìn ranh giới tan ra — cùng câu lệnh, hơn nhau một cái cờ</span>
+<pre><code class="language-bash"><span class="tok-comment"># Nhìn ranh giới tan ra — cùng câu lệnh, hơn nhau một cái cờ</span>
 docker run --rm alpine hostname
 docker run --rm --uts=host alpine hostname
 docker run --rm alpine ip -o addr | wc -l
@@ -548,7 +548,7 @@ OOMKilled=true</div>
 
 <h3>Read an image backwards</h3>
 ${slide('dk-01', 9, 'docker history đọc ngược Dockerfile, từ dưới lên')}
-<pre><code>docker pull node:22-alpine
+<pre><code class="language-bash">docker pull node:22-alpine
 docker history node:22-alpine</code></pre>
 <div class="out">IMAGE          CREATED       CREATED BY                                      SIZE      COMMENT
 b8f2c1a4e9d3   3 weeks ago   CMD ["node"]                                    0B        buildkit.dockerfile.v0
@@ -593,7 +593,7 @@ b8f2c1a4e9d3   3 weeks ago   CMD ["node"]                                    0B 
 
 <h3>Layers are content, and content has a hash</h3>
 ${slide('dk-01', 10, 'Tầng giống hệt nhau lưu và tải đúng một lần')}
-<pre><code>docker image inspect node:22-alpine --format '{{json .RootFS.Layers}}' | tr ',' '\\n' | head -4
+<pre><code class="language-bash">docker image inspect node:22-alpine --format '{{json .RootFS.Layers}}' | tr ',' '\\n' | head -4
 docker image inspect node:22-alpine --format '{{.Id}}'</code></pre>
 <div class="out">["sha256:b2848c02ac6ff53d265469b5b30f649f335e546a83330cd8916d54e65e640409"
 "sha256:d3fef5bdc333a5f541322c84298b0e6cef6957113ad169e848a42c4b779fbe2c"
@@ -602,7 +602,7 @@ docker image inspect node:22-alpine --format '{{.Id}}'</code></pre>
 sha256:c610fcdfb1d5b4740dd70c284ed3cb16bb857e0f7166196e36a5501df7a3aa32</div>
 <p class="note-ct">Output from the course's Mac (Docker Desktop 4.91, arm64) — an earlier version of this lesson showed made-up digests here. Your digests will differ: they are hashes of the exact bytes of <em>your</em> copy of the image, which depends on its version and CPU architecture.</p>
 <p>Every layer is identified by the SHA-256 of its contents. That is what makes the whole system work: if two images contain a byte-identical layer, it is <em>the same layer</em>, stored once on disk and downloaded once. Pull <code>node:22-alpine</code> and then <code>nginx:1.27-alpine</code> and the shared Alpine base is fetched only the first time.</p>
-<pre><code>docker images node --format '{{.Repository}}:{{.Tag}} {{.Size}}'
+<pre><code class="language-bash">docker images node --format '{{.Repository}}:{{.Tag}} {{.Size}}'
 docker images nginx --format '{{.Repository}}:{{.Tag}} {{.Size}}'
 docker system df</code></pre>
 <div class="out">node:22-alpine 185MB
@@ -642,7 +642,7 @@ ${slide('dk-01', 11, 'overlayfs: lowerdir + upperdir ⇒ merged')}
   <div class="lz-layer"><span class="lz-lname">Layer 2 — RUN install node</span><span class="lz-lnote">Read-only. 167MB. Shared by every image built FROM node:22-alpine.</span></div>
   <div class="lz-layer"><span class="lz-lname">Layer 1 — ADD alpine rootfs (lowerdir)</span><span class="lz-lnote">Read-only. 8.83MB. Shared by every Alpine-based image on the machine.</span></div>
 </div>
-<pre><code>docker run -d --name n1 node:22-alpine sleep 600
+<pre><code class="language-bash">docker run -d --name n1 node:22-alpine sleep 600
 docker inspect n1 --format '{{json .GraphDriver.Data}}' | tr ',' '\\n'</code></pre>
 <div class="out">{"LowerDir":"/var/lib/docker/overlay2/8fa1…/diff:/var/lib/docker/overlay2/2b7c…/diff"
  "MergedDir":"/var/lib/docker/overlay2/9e4d…/merged"
@@ -667,7 +667,7 @@ workdir=/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/184
 
 <h3>Copy-on-write, demonstrated</h3>
 ${slide('dk-01', 12, 'Ghi lần đầu chép trọn file lên tầng ghi')}
-<pre><code>docker exec n1 sh -c 'ls -l /usr/local/bin/node | cut -c1-60'
+<pre><code class="language-bash">docker exec n1 sh -c 'ls -l /usr/local/bin/node | cut -c1-60'
 docker exec n1 sh -c 'echo hi &gt;&gt; /usr/local/bin/docker-entrypoint.sh'
 docker diff n1 | head -6
 docker ps -s --filter name=n1 --format '{{.Names}} {{.Size}}'</code></pre>
@@ -682,7 +682,7 @@ n1 32.8kB (virtual 170MB)</div>
 
 <h3>Deleting does not shrink — and this matters for secrets</h3>
 ${slide('dk-01', 13, 'Xoá chỉ là dán nhãn .wh — byte gốc vẫn trong ảnh')}
-<pre><code>docker exec n1 rm /usr/local/bin/docker-entrypoint.sh
+<pre><code class="language-bash">docker exec n1 rm /usr/local/bin/docker-entrypoint.sh
 docker diff n1 | grep entrypoint
 docker exec n1 ls /usr/local/bin/</code></pre>
 <div class="out">D /usr/local/bin/docker-entrypoint.sh
@@ -728,7 +728,7 @@ ${slide('dk-01', 14, 'Hai luật: ít đổi để dưới, dọn trong cùng RU
   <div class="lz-step"><span class="lz-k">Rule 1 · Put what changes rarely at the bottom</span><span class="lz-t">system packages → dependencies → your source</span><span class="lz-d">A layer is invalidated by any change below it. Source code changes hourly; the base OS changes monthly. Ordering by change frequency is the whole of build-cache strategy (Chapter 5).</span></div>
   <div class="lz-step"><span class="lz-k">Rule 2 · Clean up in the SAME layer that made the mess</span><span class="lz-t">RUN apt-get install … &amp;&amp; rm -rf /var/lib/apt/lists/*</span><span class="lz-d">One <code>RUN</code> is one layer, so the install and the cleanup net out to a smaller diff. Two separate <code>RUN</code>s keep the full weight of the first, plus a whiteout. This one habit routinely saves 100MB+.</span></div>
 </div>
-<pre><code>docker rm -f n1
+<pre><code class="language-bash">docker rm -f n1
 docker image inspect node:22-alpine --format '{{len .RootFS.Layers}} layers'</code></pre>
 <div class="out">4 layers</div>
 
@@ -803,7 +803,7 @@ DB_PASS=bimat123</div>
 
 <h3>Đọc một ảnh theo chiều ngược</h3>
 ${slide('dk-01', 9, 'docker history đọc ngược Dockerfile, từ dưới lên')}
-<pre><code>docker pull node:22-alpine
+<pre><code class="language-bash">docker pull node:22-alpine
 docker history node:22-alpine</code></pre>
 <div class="out">IMAGE          CREATED       CREATED BY                                      SIZE      COMMENT
 b8f2c1a4e9d3   3 weeks ago   CMD ["node"]                                    0B        buildkit.dockerfile.v0
@@ -848,7 +848,7 @@ b8f2c1a4e9d3   3 weeks ago   CMD ["node"]                                    0B 
 
 <h3>Tầng là NỘI DUNG, và nội dung thì có mã băm</h3>
 ${slide('dk-01', 10, 'Tầng giống hệt nhau lưu và tải đúng một lần')}
-<pre><code>docker image inspect node:22-alpine --format '{{json .RootFS.Layers}}' | tr ',' '\\n' | head -4
+<pre><code class="language-bash">docker image inspect node:22-alpine --format '{{json .RootFS.Layers}}' | tr ',' '\\n' | head -4
 docker image inspect node:22-alpine --format '{{.Id}}'</code></pre>
 <div class="out">["sha256:b2848c02ac6ff53d265469b5b30f649f335e546a83330cd8916d54e65e640409"
 "sha256:d3fef5bdc333a5f541322c84298b0e6cef6957113ad169e848a42c4b779fbe2c"
@@ -857,7 +857,7 @@ docker image inspect node:22-alpine --format '{{.Id}}'</code></pre>
 sha256:c610fcdfb1d5b4740dd70c284ed3cb16bb857e0f7166196e36a5501df7a3aa32</div>
 <p class="note-ct">Output thật trên máy Mac của khoá (Docker Desktop 4.91, arm64) — bản cũ của bài này in ở đây những mã băm bịa ra. Mã băm trên máy bạn sẽ khác: chúng là băm của đúng từng byte trong bản ảnh CỦA BẠN, mà bản đó phụ thuộc phiên bản và kiến trúc CPU.</p>
 <p>Mỗi tầng được định danh bằng SHA-256 của chính nội dung nó. Đó là thứ khiến cả hệ thống chạy được: nếu hai ảnh chứa một tầng giống nhau tới từng byte thì đó là <em>CÙNG MỘT TẦNG</em>, lưu một lần trên đĩa và tải một lần. Kéo <code>node:22-alpine</code> rồi kéo <code>nginx:1.27-alpine</code> thì phần nền Alpine dùng chung chỉ được tải ở lần đầu.</p>
-<pre><code>docker images node --format '{{.Repository}}:{{.Tag}} {{.Size}}'
+<pre><code class="language-bash">docker images node --format '{{.Repository}}:{{.Tag}} {{.Size}}'
 docker images nginx --format '{{.Repository}}:{{.Tag}} {{.Size}}'
 docker system df</code></pre>
 <div class="out">node:22-alpine 185MB
@@ -897,7 +897,7 @@ ${slide('dk-01', 11, 'overlayfs: lowerdir + upperdir ⇒ merged')}
   <div class="lz-layer"><span class="lz-lname">Tầng 2 — RUN cài node</span><span class="lz-lnote">Chỉ đọc. 167MB. Dùng chung bởi MỌI ảnh dựng FROM node:22-alpine.</span></div>
   <div class="lz-layer"><span class="lz-lname">Tầng 1 — ADD rootfs của alpine (lowerdir)</span><span class="lz-lnote">Chỉ đọc. 8,83MB. Dùng chung bởi mọi ảnh nền Alpine trên máy.</span></div>
 </div>
-<pre><code>docker run -d --name n1 node:22-alpine sleep 600
+<pre><code class="language-bash">docker run -d --name n1 node:22-alpine sleep 600
 docker inspect n1 --format '{{json .GraphDriver.Data}}' | tr ',' '\\n'</code></pre>
 <div class="out">{"LowerDir":"/var/lib/docker/overlay2/8fa1…/diff:/var/lib/docker/overlay2/2b7c…/diff"
  "MergedDir":"/var/lib/docker/overlay2/9e4d…/merged"
@@ -922,7 +922,7 @@ workdir=/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/snapshots/184
 
 <h3>Sao chép-khi-ghi, chứng minh tận mắt</h3>
 ${slide('dk-01', 12, 'Ghi lần đầu chép trọn file lên tầng ghi')}
-<pre><code>docker exec n1 sh -c 'ls -l /usr/local/bin/node | cut -c1-60'
+<pre><code class="language-bash">docker exec n1 sh -c 'ls -l /usr/local/bin/node | cut -c1-60'
 docker exec n1 sh -c 'echo hi &gt;&gt; /usr/local/bin/docker-entrypoint.sh'
 docker diff n1 | head -6
 docker ps -s --filter name=n1 --format '{{.Names}} {{.Size}}'</code></pre>
@@ -937,7 +937,7 @@ n1 32.8kB (virtual 170MB)</div>
 
 <h3>Xoá KHÔNG làm nhỏ đi — và điều này quan trọng với bí mật</h3>
 ${slide('dk-01', 13, 'Xoá chỉ là dán nhãn .wh — byte gốc vẫn trong ảnh')}
-<pre><code>docker exec n1 rm /usr/local/bin/docker-entrypoint.sh
+<pre><code class="language-bash">docker exec n1 rm /usr/local/bin/docker-entrypoint.sh
 docker diff n1 | grep entrypoint
 docker exec n1 ls /usr/local/bin/</code></pre>
 <div class="out">D /usr/local/bin/docker-entrypoint.sh
@@ -983,7 +983,7 @@ ${slide('dk-01', 14, 'Hai luật: ít đổi để dưới, dọn trong cùng RU
   <div class="lz-step"><span class="lz-k">Luật 1 · Thứ ít đổi thì để dưới cùng</span><span class="lz-t">gói hệ thống → thư viện phụ thuộc → mã nguồn của bạn</span><span class="lz-d">Một tầng bị vô hiệu bởi bất kỳ thay đổi nào NẰM DƯỚI nó. Mã nguồn đổi hàng giờ; hệ điều hành nền đổi hàng tháng. Sắp xếp theo tần suất thay đổi chính là toàn bộ chiến lược cache lúc dựng (Chương 5).</span></div>
   <div class="lz-step"><span class="lz-k">Luật 2 · Dọn dẹp ngay TRONG cái tầng đã bày ra</span><span class="lz-t">RUN apt-get install … &amp;&amp; rm -rf /var/lib/apt/lists/*</span><span class="lz-d">Một <code>RUN</code> là một tầng, nên phần cài và phần dọn bù trừ nhau thành một cái diff nhỏ hơn. Hai lệnh <code>RUN</code> riêng thì giữ nguyên trọn sức nặng của cái đầu, cộng thêm một whiteout. Riêng thói quen này thường tiết kiệm hơn 100MB.</span></div>
 </div>
-<pre><code>docker rm -f n1
+<pre><code class="language-bash">docker rm -f n1
 docker image inspect node:22-alpine --format '{{len .RootFS.Layers}} tầng'</code></pre>
 <div class="out">4 tầng</div>
 
@@ -1068,7 +1068,7 @@ DB_PASS=bimat123</div>
 <h3>run is pull + create + start</h3>
 ${slide('dk-01', 15, 'docker run = pull + create + start')}
 ${slide('dk-01', 16, 'Sáu trạng thái và lệnh chuyển giữa chúng')}
-<pre><code>docker pull nginx:1.27-alpine                       <span class="tok-comment"># 1. fetch the image</span>
+<pre><code class="language-bash">docker pull nginx:1.27-alpine                       <span class="tok-comment"># 1. fetch the image</span>
 CID=\$(docker create --name web -p 8080:80 nginx:1.27-alpine)   <span class="tok-comment"># 2. make a container</span>
 docker ps -a --filter name=web --format '{{.Names}} {{.Status}}'
 docker start web                                     <span class="tok-comment"># 3. start the process</span>
@@ -1100,7 +1100,7 @@ web Up 1 second</div>
 <tr><td><code>docker rm</code> (<code>-f</code> = stop first)</td><td>must be stopped</td><td><strong>deleted for good</strong></td></tr>
 <tr><td><code>docker run --rm</code></td><td>normal</td><td>deleted automatically when PID 1 exits</td></tr>
 </table>
-<pre><code>docker pause web   &amp;&amp; docker ps --format '{{.Names}} {{.Status}}'
+<pre><code class="language-bash">docker pause web   &amp;&amp; docker ps --format '{{.Names}} {{.Status}}'
 docker unpause web &amp;&amp; docker stop web
 docker ps -a --filter name=web --format '{{.Names}} {{.Status}}'
 docker start web &amp;&amp; docker rm -f web</code></pre>
@@ -1118,7 +1118,7 @@ curl exit 28</div>
 
 <h3>stop is a negotiation; kill is not</h3>
 ${slide('dk-01', 17, 'docker stop: SIGTERM → chờ → SIGKILL (đo thật)')}
-<pre><code>docker run -d --name w nginx:1.27-alpine
+<pre><code class="language-bash">docker run -d --name w nginx:1.27-alpine
 time docker stop w                <span class="tok-comment"># nginx handles SIGTERM: fast</span>
 docker rm w
 
@@ -1164,7 +1164,7 @@ docker run -d --name slow --init alpine sleep 600 &amp;&amp; docker stop slow &a
 <h3>PID 1 is special, and shell form breaks it</h3>
 ${slide('dk-01', 18, 'PID 1 phải tự bắt SIGTERM')}
 ${slide('dk-01', 19, 'Shell làm PID 1 và ba cách sửa')}
-<pre><code><span class="tok-comment"># Shell form — the command is wrapped in /bin/sh -c</span>
+<pre><code class="language-bash"><span class="tok-comment"># Shell form — the command is wrapped in /bin/sh -c</span>
 docker run -d --name shellform alpine sh -c 'sleep 600; echo done'
 docker exec shellform ps -o pid,args
 
@@ -1195,7 +1195,7 @@ Do not rely on it. The shell stays in place as soon as anything follows the app 
   <div class="kv"><span class="k">Fix B — exec in your entrypoint</span><span class="v">If you genuinely need a shell script wrapper, end it with <code>exec node server.js</code>. <code>exec</code> replaces the shell rather than forking, so your app inherits PID 1.</span></div>
   <div class="kv"><span class="k">Fix C — --init</span><span class="v"><code>docker run --init</code> inserts a tiny init (<code>tini</code>) as PID 1 that forwards signals and reaps zombies. The right answer when the process really does spawn children — a test runner, a supervisor, anything using <code>child_process</code>.</span></div>
 </div>
-<pre><code>docker rm -f shellform execform
+<pre><code class="language-bash">docker rm -f shellform execform
 docker run -d --name good --init alpine sh -c 'exec sleep 600'
 docker exec good ps -o pid,args | head -3
 time docker stop good; docker rm good</code></pre>
@@ -1225,7 +1225,7 @@ process.on('SIGTERM', () =&gt; {
 
 <h3>Exit codes tell you what happened</h3>
 ${slide('dk-01', 20, 'Mã thoát kể lại chuyện gì đã xảy ra')}
-<pre><code>docker run --name a alpine true;                 echo "a: \$(docker inspect -f '{{.State.ExitCode}}' a)"
+<pre><code class="language-bash">docker run --name a alpine true;                 echo "a: \$(docker inspect -f '{{.State.ExitCode}}' a)"
 docker run --name b alpine false;                echo "b: \$(docker inspect -f '{{.State.ExitCode}}' b)"
 docker run --name c alpine /bin/nope 2&gt;/dev/null; echo "c: \$(docker inspect -f '{{.State.ExitCode}}' c)"
 docker run --name d alpine /etc/hostname 2&gt;/dev/null; echo "d: \$(docker inspect -f '{{.State.ExitCode}}' d)"
@@ -1256,7 +1256,7 @@ Run 'docker run --help' for more information
 <p>Read the error from the right: <code>exec: "/bin/nope": stat /bin/nope: no such file or directory</code> (127) or <code>exec: "/etc/hostname": permission denied</code> (126) — runc (Lesson 1.5) tried to <code>exec</code> the command inside the new container and could not. Nothing ran, so there is nothing in <code>docker logs</code>; the reason is only on your terminal.</p>
 
 <h3>Watch it happen: docker events</h3>
-<pre><code>docker events --filter type=container --format '{{.Time}} {{.Action}} {{.Actor.Attributes.name}}' &amp;
+<pre><code class="language-bash">docker events --filter type=container --format '{{.Time}} {{.Action}} {{.Actor.Attributes.name}}' &amp;
 docker run -d --name ev --rm alpine sleep 2
 sleep 4; kill %1</code></pre>
 <div class="out">1790169685 create ev
@@ -1340,7 +1340,7 @@ die 0</div>
 <h3>run là pull + create + start</h3>
 ${slide('dk-01', 15, 'docker run = pull + create + start')}
 ${slide('dk-01', 16, 'Sáu trạng thái và lệnh chuyển giữa chúng')}
-<pre><code>docker pull nginx:1.27-alpine                       <span class="tok-comment"># 1. lấy ảnh về</span>
+<pre><code class="language-bash">docker pull nginx:1.27-alpine                       <span class="tok-comment"># 1. lấy ảnh về</span>
 CID=\$(docker create --name web -p 8080:80 nginx:1.27-alpine)   <span class="tok-comment"># 2. tạo container</span>
 docker ps -a --filter name=web --format '{{.Names}} {{.Status}}'
 docker start web                                     <span class="tok-comment"># 3. khởi chạy tiến trình</span>
@@ -1372,7 +1372,7 @@ web Up 1 second</div>
 <tr><td><code>docker rm</code> (<code>-f</code> = dừng trước)</td><td>phải đã dừng</td><td><strong>xoá vĩnh viễn</strong></td></tr>
 <tr><td><code>docker run --rm</code></td><td>bình thường</td><td>tự xoá khi PID 1 thoát</td></tr>
 </table>
-<pre><code>docker pause web   &amp;&amp; docker ps --format '{{.Names}} {{.Status}}'
+<pre><code class="language-bash">docker pause web   &amp;&amp; docker ps --format '{{.Names}} {{.Status}}'
 docker unpause web &amp;&amp; docker stop web
 docker ps -a --filter name=web --format '{{.Names}} {{.Status}}'
 docker start web &amp;&amp; docker rm -f web</code></pre>
@@ -1390,7 +1390,7 @@ curl thoát 28</div>
 
 <h3>stop là một cuộc thương lượng; kill thì không</h3>
 ${slide('dk-01', 17, 'docker stop: SIGTERM → chờ → SIGKILL (đo thật)')}
-<pre><code>docker run -d --name w nginx:1.27-alpine
+<pre><code class="language-bash">docker run -d --name w nginx:1.27-alpine
 time docker stop w                <span class="tok-comment"># nginx xử lý SIGTERM: nhanh</span>
 docker rm w
 
@@ -1436,7 +1436,7 @@ docker run -d --name slow --init alpine sleep 600 &amp;&amp; docker stop slow &a
 <h3>PID 1 là đặc biệt, và dạng shell làm hỏng nó</h3>
 ${slide('dk-01', 18, 'PID 1 phải tự bắt SIGTERM')}
 ${slide('dk-01', 19, 'Shell làm PID 1 và ba cách sửa')}
-<pre><code><span class="tok-comment"># Dạng shell — câu lệnh bị bọc trong /bin/sh -c</span>
+<pre><code class="language-bash"><span class="tok-comment"># Dạng shell — câu lệnh bị bọc trong /bin/sh -c</span>
 docker run -d --name shellform alpine sh -c 'sleep 600; echo xong'
 docker exec shellform ps -o pid,args
 
@@ -1467,7 +1467,7 @@ docker exec s1 ps -o pid,args</code></pre>
   <div class="kv"><span class="k">Cách sửa B — exec trong entrypoint của bạn</span><span class="v">Nếu bạn thật sự cần một script shell bọc ngoài thì hãy kết thúc nó bằng <code>exec node server.js</code>. <code>exec</code> THAY THẾ cái shell chứ không rẽ nhánh, nên ứng dụng của bạn thừa hưởng PID 1.</span></div>
   <div class="kv"><span class="k">Cách sửa C — --init</span><span class="v"><code>docker run --init</code> chèn một init tí hon (<code>tini</code>) làm PID 1, nó chuyển tiếp tín hiệu và thu dọn tiến trình xác. Đây là câu trả lời đúng khi tiến trình thật sự có sinh con — một bộ chạy test, một bộ giám sát, bất cứ thứ gì dùng <code>child_process</code>.</span></div>
 </div>
-<pre><code>docker rm -f shellform execform
+<pre><code class="language-bash">docker rm -f shellform execform
 docker run -d --name good --init alpine sh -c 'exec sleep 600'
 docker exec good ps -o pid,args | head -3
 time docker stop good; docker rm good</code></pre>
@@ -1497,7 +1497,7 @@ process.on('SIGTERM', () =&gt; {
 
 <h3>Mã thoát nói cho bạn biết chuyện gì đã xảy ra</h3>
 ${slide('dk-01', 20, 'Mã thoát kể lại chuyện gì đã xảy ra')}
-<pre><code>docker run --name a alpine true;                 echo "a: \$(docker inspect -f '{{.State.ExitCode}}' a)"
+<pre><code class="language-bash">docker run --name a alpine true;                 echo "a: \$(docker inspect -f '{{.State.ExitCode}}' a)"
 docker run --name b alpine false;                echo "b: \$(docker inspect -f '{{.State.ExitCode}}' b)"
 docker run --name c alpine /bin/nope 2&gt;/dev/null; echo "c: \$(docker inspect -f '{{.State.ExitCode}}' c)"
 docker run --name d alpine /etc/hostname 2&gt;/dev/null; echo "d: \$(docker inspect -f '{{.State.ExitCode}}' d)"
@@ -1528,7 +1528,7 @@ Run 'docker run --help' for more information
 <p>Đọc thông báo lỗi từ bên phải: <code>exec: "/bin/nope": stat /bin/nope: no such file or directory</code> (127) hay <code>exec: "/etc/hostname": permission denied</code> (126) — runc (Bài 1.5) đã cố <code>exec</code> câu lệnh bên trong container mới và không làm được. Chưa có gì chạy, nên <code>docker logs</code> trống trơn; lý do chỉ nằm trên terminal của bạn.</p>
 
 <h3>Xem tận mắt: docker events</h3>
-<pre><code>docker events --filter type=container --format '{{.Time}} {{.Action}} {{.Actor.Attributes.name}}' &amp;
+<pre><code class="language-bash">docker events --filter type=container --format '{{.Time}} {{.Action}} {{.Actor.Attributes.name}}' &amp;
 docker run -d --name ev --rm alpine sleep 2
 sleep 4; kill %1</code></pre>
 <div class="out">1790169685 create ev
@@ -1620,7 +1620,7 @@ die 0</div>
 
 <h3>Watch it happen</h3>
 ${slide('dk-01', 21, 'restart giữ dữ liệu, rm xoá')}
-<pre><code>docker run -d --name db -e POSTGRES_PASSWORD=x postgres:16-alpine
+<pre><code class="language-sql">docker run -d --name db -e POSTGRES_PASSWORD=x postgres:16-alpine
 sleep 6
 docker exec db psql -U postgres -c 'create table important (id int, note text);'
 docker exec db psql -U postgres -c "insert into important values (1,'six months of work');"
@@ -1631,7 +1631,7 @@ INSERT 0 1
 ----+--------------------
   1 | six months of work
 (1 row)</div>
-<pre><code>docker restart db &amp;&amp; sleep 5
+<pre><code class="language-sql">docker restart db &amp;&amp; sleep 5
 docker exec db psql -U postgres -c 'select count(*) from important;'   <span class="tok-comment"># survives a restart</span>
 docker rm -f db
 docker run -d --name db -e POSTGRES_PASSWORD=x postgres:16-alpine &amp;&amp; sleep 6
@@ -1712,7 +1712,7 @@ ${slide('dk-01', 23, 'Ba đường đưa dữ liệu ra khỏi tầng ghi')}
 
 <h3>Getting data out — docker cp</h3>
 ${slide('dk-01', 24, 'docker cp cứu file từ container đã dừng — commit thì đừng')}
-<pre><code><span class="tok-comment"># Out of a container — works even on a STOPPED one</span>
+<pre><code class="language-bash"><span class="tok-comment"># Out of a container — works even on a STOPPED one</span>
 docker exec db pg_dump -U postgres postgres &gt; /tmp/dump.sql
 docker cp db:/var/lib/postgresql/data/postgresql.conf ./pg.conf
 
@@ -1726,7 +1726,7 @@ ls -lh pg.conf</code></pre>
 <div class="callout warn"><strong><code>docker cp</code> is not a deployment mechanism.</strong> Copying a fixed file into a running container produces a machine whose state exists nowhere in version control, cannot be reproduced, and vanishes on the next deploy. It is a debugging and rescue tool. If you find yourself doing it twice for the same file, the file belongs in the image or in a mounted volume.</div>
 
 <h3>docker commit, and why you should not build this way</h3>
-<pre><code>docker run -d --name tinker alpine sleep 600
+<pre><code class="language-bash">docker run -d --name tinker alpine sleep 600
 docker exec tinker apk add --no-cache curl jq
 docker commit -m 'added curl and jq' tinker my-tools:v1
 docker images my-tools
@@ -1747,7 +1747,7 @@ afa79e82afba   Less than a second ago   sleep 600                               
 
 <h3>save versus export</h3>
 ${slide('dk-01', 25, 'save giữ nguyên ảnh — export ép phẳng container')}
-<pre><code>docker save my-tools:v1 -o tools-image.tar        <span class="tok-comment"># an IMAGE: all layers + metadata</span>
+<pre><code class="language-bash">docker save my-tools:v1 -o tools-image.tar        <span class="tok-comment"># an IMAGE: all layers + metadata</span>
 docker export tinker  -o tinker-fs.tar           <span class="tok-comment"># a CONTAINER: one flat filesystem</span>
 ls -lh tools-image.tar tinker-fs.tar
 tar -tf tools-image.tar | head -4
@@ -1785,7 +1785,7 @@ bin/ash</div>
 <tr><td><code>docker save</code> / <code>load</code></td><td>Moving an image to a machine with no registry: <code>docker save app:v2 | ssh vps docker load</code></td><td>Backing up data (volumes are not in it)</td></tr>
 <tr><td><code>docker export</code> / <code>import</code></td><td>Extracting a container's files as one tar; deliberately flattening</td><td>Moving an image (CMD, ENV and history are lost)</td></tr>
 </table>
-<pre><code>docker rm -f tinker db; docker rmi my-tools:v1; rm -f tools-image.tar tinker-fs.tar</code></pre>
+<pre><code class="language-bash">docker rm -f tinker db; docker rmi my-tools:v1; rm -f tools-image.tar tinker-fs.tar</code></pre>
 
 <h3>🧪 Practice (15–20 min)</h3>
 <div class="callout ok"><p><strong>Situation:</strong> your group runs Postgres with a plain <code>docker run</code> and no <code>-v</code>. A teammate types <code>docker rm -f thu-db</code> "to restart it clean" and the <code>users</code> table is gone. Get it back, then make sure it cannot happen again.</p><ol>
@@ -1844,7 +1844,7 @@ V=\$(docker inspect thu-db --format '{{range .Mounts}}{{.Name}}{{end}}'); echo \
 
 <h3>Nhìn tận mắt</h3>
 ${slide('dk-01', 21, 'restart giữ dữ liệu, rm xoá')}
-<pre><code>docker run -d --name db -e POSTGRES_PASSWORD=x postgres:16-alpine
+<pre><code class="language-sql">docker run -d --name db -e POSTGRES_PASSWORD=x postgres:16-alpine
 sleep 6
 docker exec db psql -U postgres -c 'create table important (id int, note text);'
 docker exec db psql -U postgres -c "insert into important values (1,'sáu tháng làm việc');"
@@ -1855,7 +1855,7 @@ INSERT 0 1
 ----+--------------------
   1 | sáu tháng làm việc
 (1 row)</div>
-<pre><code>docker restart db &amp;&amp; sleep 5
+<pre><code class="language-sql">docker restart db &amp;&amp; sleep 5
 docker exec db psql -U postgres -c 'select count(*) from important;'   <span class="tok-comment"># sống sót qua restart</span>
 docker rm -f db
 docker run -d --name db -e POSTGRES_PASSWORD=x postgres:16-alpine &amp;&amp; sleep 6
@@ -1936,7 +1936,7 @@ ${slide('dk-01', 23, 'Ba đường đưa dữ liệu ra khỏi tầng ghi')}
 
 <h3>Lấy dữ liệu ra — docker cp</h3>
 ${slide('dk-01', 24, 'docker cp cứu file từ container đã dừng — commit thì đừng')}
-<pre><code><span class="tok-comment"># Ra khỏi một container — chạy được cả với container ĐÃ DỪNG</span>
+<pre><code class="language-bash"><span class="tok-comment"># Ra khỏi một container — chạy được cả với container ĐÃ DỪNG</span>
 docker exec db pg_dump -U postgres postgres &gt; /tmp/dump.sql
 docker cp db:/var/lib/postgresql/data/postgresql.conf ./pg.conf
 
@@ -1950,7 +1950,7 @@ ls -lh pg.conf</code></pre>
 <div class="callout warn"><strong><code>docker cp</code> KHÔNG phải một cơ chế triển khai.</strong> Chép một file cố định vào một container đang chạy tạo ra một cái máy có trạng thái không tồn tại ở bất cứ đâu trong quản lý phiên bản, không tái lập được, và biến mất ở lần deploy kế tiếp. Nó là một công cụ gỡ lỗi và cứu hộ. Nếu bạn thấy mình làm điều đó tới lần thứ hai cho cùng một file thì cái file đó thuộc về IMAGE hoặc về một volume được gắn vào.</div>
 
 <h3>docker commit, và vì sao đừng dựng ảnh theo kiểu đó</h3>
-<pre><code>docker run -d --name tinker alpine sleep 600
+<pre><code class="language-bash">docker run -d --name tinker alpine sleep 600
 docker exec tinker apk add --no-cache curl jq
 docker commit -m 'đã thêm curl và jq' tinker my-tools:v1
 docker images my-tools
@@ -1971,7 +1971,7 @@ afa79e82afba   Less than a second ago   sleep 600                               
 
 <h3>save khác export</h3>
 ${slide('dk-01', 25, 'save giữ nguyên ảnh — export ép phẳng container')}
-<pre><code>docker save my-tools:v1 -o tools-image.tar        <span class="tok-comment"># một IMAGE: mọi tầng + siêu dữ liệu</span>
+<pre><code class="language-bash">docker save my-tools:v1 -o tools-image.tar        <span class="tok-comment"># một IMAGE: mọi tầng + siêu dữ liệu</span>
 docker export tinker  -o tinker-fs.tar           <span class="tok-comment"># một CONTAINER: một hệ thống file phẳng</span>
 ls -lh tools-image.tar tinker-fs.tar
 tar -tf tools-image.tar | head -4
@@ -2009,7 +2009,7 @@ bin/ash</div>
 <tr><td><code>docker save</code> / <code>load</code></td><td>Chuyển ảnh sang máy không có registry: <code>docker save app:v2 | ssh vps docker load</code></td><td>Sao lưu dữ liệu (volume không nằm trong đó)</td></tr>
 <tr><td><code>docker export</code> / <code>import</code></td><td>Rút toàn bộ file của một container thành một tar; cố ý ép phẳng</td><td>Chuyển ảnh (mất CMD, ENV và lịch sử)</td></tr>
 </table>
-<pre><code>docker rm -f tinker db; docker rmi my-tools:v1; rm -f tools-image.tar tinker-fs.tar</code></pre>
+<pre><code class="language-bash">docker rm -f tinker db; docker rmi my-tools:v1; rm -f tools-image.tar tinker-fs.tar</code></pre>
 
 <h3>🧪 Thực hành (15–20 phút)</h3>
 <div class="callout ok"><p><strong>Tình huống:</strong> nhóm bạn chạy Postgres bằng một lệnh <code>docker run</code> trơn, không có <code>-v</code>. Một bạn gõ <code>docker rm -f thu-db</code> "cho nó khởi động lại sạch sẽ" và bảng <code>users</code> biến mất. Lấy lại nó, rồi bảo đảm chuyện đó không lặp lại.</p><ol>
@@ -2084,7 +2084,7 @@ ${slide('dk-01', 26, 'Docker là bốn chương trình xếp chồng')}
   <div class="lz-layer"><span class="lz-lname">containerd-shim-runc-v2</span><span class="lz-lnote">One tiny process per container, sitting between containerd and your process. It holds the container's stdio and reports the exit code — and because it is separate, containerd and dockerd can both restart without killing anything.</span></div>
   <div class="lz-layer"><span class="lz-lname">runc</span><span class="lz-lnote">The thing that actually creates the container: sets up namespaces and cgroups (Lesson 1.1), applies the seccomp and capability configuration, pivots to the new root, and <code>exec</code>s your binary. It runs for milliseconds and then it is gone — <code>runc</code> is not in the process list of a running container.</span></div>
 </div>
-<pre><code>docker run -d --name w nginx:1.27-alpine
+<pre><code class="language-bash">docker run -d --name w nginx:1.27-alpine
 ps -ef | grep -E 'dockerd|containerd|nginx: master' | grep -v grep | cut -c1-110</code></pre>
 <div class="out">root        1069       1  0 Sep22 ?        00:03:02 /usr/bin/containerd
 root        1673       1  0 Sep22 ?        00:08:24 /usr/bin/dockerd -H fd:// --containerd=/run/containerd/con
@@ -2129,7 +2129,7 @@ desktop-linux *   Docker Desktop                            unix:///Users/admin/
 
 <h3>Why the shim exists</h3>
 ${slide('dk-01', 28, 'live-restore: container sống qua lần khởi động lại dockerd')}
-<pre><code>docker info --format '{{.LiveRestoreEnabled}}'
+<pre><code class="language-bash">docker info --format '{{.LiveRestoreEnabled}}'
 sudo systemctl restart docker
 sleep 3
 docker ps --format '{{.Names}} {{.Status}}'</code></pre>
@@ -2137,13 +2137,13 @@ docker ps --format '{{.Names}} {{.Status}}'</code></pre>
 web Up 4 seconds</div>
 <div class="callout warn"><strong>Read that output carefully.</strong> <code>Up 4 seconds</code> after a daemon restart only happens to containers that have a restart policy (<code>--restart always</code> or <code>unless-stopped</code>) — this output came from such a container named <code>web</code>. The <code>w</code> started above with a bare <code>docker run -d</code> would instead show <code>Exited</code> and stay down, which is the pitfall at the end of this lesson. (For this upgrade we did not restart the daemon on a real machine to re-record it; the behaviour described is the documented one.)</div>
 <p>With the default settings, restarting the daemon stopped and restarted the container — note the <code>Up 4 seconds</code> on a container that had been running for minutes. The shim makes the alternative possible: because your process's parent is the shim and not the daemon, the daemon can go away and come back without the container noticing. Turning that on is one setting:</p>
-<pre><code><span class="tok-comment"># /etc/docker/daemon.json</span>
+<pre><code class="language-bash"><span class="tok-comment"># /etc/docker/daemon.json</span>
 {
   "live-restore": true,
   "log-driver": "json-file",
   "log-opts": { "max-size": "10m", "max-file": "3" }
 }</code></pre>
-<pre><code>sudo systemctl reload docker      <span class="tok-comment"># reload, not restart</span>
+<pre><code class="language-bash">sudo systemctl reload docker      <span class="tok-comment"># reload, not restart</span>
 docker info --format '{{.LiveRestoreEnabled}}'</code></pre>
 <div class="out">true</div>
 <div class="callout ok"><strong><code>live-restore: true</code> belongs on every production host</strong>, alongside the log rotation settings in the same file (Chapter 11 explains those). It means a Docker upgrade, or a daemon crash, is not an outage for everything running on the machine. The trade-offs are small and specific: it does not work with Swarm mode, and containers cannot be reconfigured while the daemon is down.</div>
@@ -2159,7 +2159,7 @@ ${slide('dk-01', 29, 'OCI: ảnh theo chuẩn mở, runtime thay được')}
 <div class="callout"><strong>This is what actually happened when "Kubernetes deprecated Docker" in 2020.</strong> Kubernetes removed <em>dockershim</em>, the adapter that let it drive dockerd, and started talking to containerd directly — one layer lower in exactly the stack above. Images built with Docker were unaffected, because they are OCI images, not "Docker images". The headlines were alarming and the change was invisible to anyone who was only building and shipping images.</div>
 
 <h3>Swapping the runtime</h3>
-<pre><code>docker info --format '{{json .Runtimes}}'
+<pre><code class="language-bash">docker info --format '{{json .Runtimes}}'
 docker run --rm --runtime=runc alpine echo default
 <span class="tok-comment"># With gVisor installed, this runs your process against a user-space kernel</span>
 <span class="tok-comment"># docker run --rm --runtime=runsc alpine dmesg | head -1</span></code></pre>
@@ -2181,7 +2181,7 @@ sudo ctr --namespace moby containers info \$(docker inspect -f '{{.Id}}' w) \\
 <div class="out">CONTAINER                                                           IMAGE    RUNTIME
 8c40e93b1a41d2f3c1bd7b6c2e6f4a9c9b8f2d1e5a3c7d9e0b1f2a3c4d5e6f70    -        io.containerd.runc.v2</div>
 <p>Docker registers its containers in a containerd namespace called <code>moby</code>. You will almost never need this, but it is worth seeing once: it makes concrete that Docker is a layer of convenience over a general-purpose runtime, not a monolith. When a container is stuck in a way <code>docker</code> cannot fix, this is the level you drop to.</p>
-<pre><code>docker rm -f w</code></pre>
+<pre><code class="language-bash">docker rm -f w</code></pre>
 
 <h3>🧪 Practice (15–20 min)</h3>
 <div class="callout ok"><p><strong>Situation:</strong> after <code>apt upgrade</code> on the group's VPS, somebody asks "will upgrading Docker kill our running containers?" Half the group says yes, half says no. Answer with evidence from your own machine — without restarting any daemon.</p><ol>
@@ -2251,7 +2251,7 @@ ${slide('dk-01', 26, 'Docker là bốn chương trình xếp chồng')}
   <div class="lz-layer"><span class="lz-lname">containerd-shim-runc-v2</span><span class="lz-lnote">Một tiến trình tí hon cho MỖI container, ngồi giữa containerd và tiến trình của bạn. Nó giữ stdio của container và báo lại mã thoát — và vì nó tách riêng nên cả containerd lẫn dockerd đều khởi động lại được mà không giết thứ gì.</span></div>
   <div class="lz-layer"><span class="lz-lname">runc</span><span class="lz-lnote">Cái thứ THẬT SỰ tạo ra container: dựng namespace và cgroup (Bài 1.1), áp cấu hình seccomp và capability, xoay sang thư mục gốc mới, rồi <code>exec</code> chương trình của bạn. Nó chạy vài mili giây rồi biến mất — <code>runc</code> KHÔNG có mặt trong danh sách tiến trình của một container đang chạy.</span></div>
 </div>
-<pre><code>docker run -d --name w nginx:1.27-alpine
+<pre><code class="language-bash">docker run -d --name w nginx:1.27-alpine
 ps -ef | grep -E 'dockerd|containerd|nginx: master' | grep -v grep | cut -c1-110</code></pre>
 <div class="out">root        1069       1  0 Sep22 ?        00:03:02 /usr/bin/containerd
 root        1673       1  0 Sep22 ?        00:08:24 /usr/bin/dockerd -H fd:// --containerd=/run/containerd/con
@@ -2296,7 +2296,7 @@ desktop-linux *   Docker Desktop                            unix:///Users/admin/
 
 <h3>Vì sao có cái shim</h3>
 ${slide('dk-01', 28, 'live-restore: container sống qua lần khởi động lại dockerd')}
-<pre><code>docker info --format '{{.LiveRestoreEnabled}}'
+<pre><code class="language-bash">docker info --format '{{.LiveRestoreEnabled}}'
 sudo systemctl restart docker
 sleep 3
 docker ps --format '{{.Names}} {{.Status}}'</code></pre>
@@ -2304,13 +2304,13 @@ docker ps --format '{{.Names}} {{.Status}}'</code></pre>
 web Up 4 seconds</div>
 <div class="callout warn"><strong>Đọc kỹ output đó.</strong> <code>Up 4 seconds</code> sau khi khởi động lại tiến trình nền chỉ xảy ra với container CÓ chính sách khởi động lại (<code>--restart always</code> hoặc <code>unless-stopped</code>) — output này đến từ một container như vậy tên <code>web</code>. Còn <code>w</code> chạy ở trên bằng một lệnh <code>docker run -d</code> trần sẽ hiện <code>Exited</code> và nằm chết luôn, đúng cái bẫy ở cuối bài. (Lần nâng cấp này chúng tôi không khởi động lại tiến trình nền trên máy thật để ghi lại; hành vi mô tả là hành vi theo tài liệu.) Docker Desktop trên Mac của khoá báo <code>docker info -f '{{.LiveRestoreEnabled}}'</code> = <code>false</code>.</div>
 <p>Với thiết lập mặc định, khởi động lại tiến trình nền đã DỪNG rồi khởi chạy lại container — hãy để ý dòng <code>Up 4 seconds</code> trên một container vốn đã chạy hàng phút. Cái shim làm cho lựa chọn ngược lại trở nên khả thi: vì cha của tiến trình bạn là shim chứ không phải tiến trình nền, nên tiến trình nền có thể biến mất rồi quay lại mà container không hề hay biết. Bật cái đó lên chỉ là một dòng cấu hình:</p>
-<pre><code><span class="tok-comment"># /etc/docker/daemon.json</span>
+<pre><code class="language-bash"><span class="tok-comment"># /etc/docker/daemon.json</span>
 {
   "live-restore": true,
   "log-driver": "json-file",
   "log-opts": { "max-size": "10m", "max-file": "3" }
 }</code></pre>
-<pre><code>sudo systemctl reload docker      <span class="tok-comment"># reload, KHÔNG phải restart</span>
+<pre><code class="language-bash">sudo systemctl reload docker      <span class="tok-comment"># reload, KHÔNG phải restart</span>
 docker info --format '{{.LiveRestoreEnabled}}'</code></pre>
 <div class="out">true</div>
 <div class="callout ok"><strong><code>live-restore: true</code> nên có mặt trên MỌI máy chủ production</strong>, cùng với phần thiết lập xoay vòng log trong chính file đó (Chương 11 giải thích chúng). Nó nghĩa là một lần nâng cấp Docker, hay một cú sập của tiến trình nền, không phải là một sự cố cho mọi thứ đang chạy trên máy. Cái giá thì nhỏ và cụ thể: nó không dùng được với chế độ Swarm, và không cấu hình lại được container trong lúc tiến trình nền đang tắt.</div>
@@ -2326,7 +2326,7 @@ ${slide('dk-01', 29, 'OCI: ảnh theo chuẩn mở, runtime thay được')}
 <div class="callout"><strong>Đây chính là chuyện đã thật sự xảy ra khi "Kubernetes khai tử Docker" năm 2020.</strong> Kubernetes gỡ bỏ <em>dockershim</em>, cái bộ chuyển đổi cho phép nó điều khiển dockerd, và bắt đầu nói chuyện thẳng với containerd — thấp hơn ĐÚNG MỘT TẦNG trong cái chồng ở trên. Ảnh dựng bằng Docker không bị ảnh hưởng gì, vì chúng là ảnh OCI chứ không phải "ảnh Docker". Mấy dòng tít thì đáng sợ còn thay đổi thật thì vô hình với bất cứ ai chỉ dựng và đem ảnh đi.</div>
 
 <h3>Đổi cái runtime</h3>
-<pre><code>docker info --format '{{json .Runtimes}}'
+<pre><code class="language-bash">docker info --format '{{json .Runtimes}}'
 docker run --rm --runtime=runc alpine echo mặc-định
 <span class="tok-comment"># Nếu đã cài gVisor, lệnh này chạy tiến trình của bạn trên một nhân ở không gian người dùng</span>
 <span class="tok-comment"># docker run --rm --runtime=runsc alpine dmesg | head -1</span></code></pre>
@@ -2348,7 +2348,7 @@ sudo ctr --namespace moby containers info \$(docker inspect -f '{{.Id}}' w) \\
 <div class="out">CONTAINER                                                           IMAGE    RUNTIME
 8c40e93b1a41d2f3c1bd7b6c2e6f4a9c9b8f2d1e5a3c7d9e0b1f2a3c4d5e6f70    -        io.containerd.runc.v2</div>
 <p>Docker đăng ký container của nó trong một namespace của containerd tên là <code>moby</code>. Bạn gần như sẽ không bao giờ cần tới chuyện này, nhưng đáng nhìn một lần: nó cụ thể hoá việc Docker là một lớp tiện lợi nằm trên một runtime đa dụng, chứ không phải một khối liền. Khi một container kẹt theo cái kiểu mà <code>docker</code> không gỡ nổi thì đây là cái tầng bạn tụt xuống.</p>
-<pre><code>docker rm -f w</code></pre>
+<pre><code class="language-bash">docker rm -f w</code></pre>
 
 <h3>🧪 Thực hành (15–20 phút)</h3>
 <div class="callout ok"><p><strong>Tình huống:</strong> sau khi <code>apt upgrade</code> trên VPS của nhóm, có người hỏi "nâng cấp Docker có giết các container đang chạy không?" Nửa nhóm bảo có, nửa bảo không. Trả lời bằng bằng chứng trên chính máy bạn — mà không khởi động lại tiến trình nền nào.</p><ol>

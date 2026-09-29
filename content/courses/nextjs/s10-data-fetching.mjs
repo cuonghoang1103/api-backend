@@ -27,7 +27,7 @@ export default {
 <h2>The default way to load data is just await</h2>
 <p class="lead">In Chapter 5 you fetched on the client with <code>useEffect</code>, a loading state, and a race guard. In the App Router, the <em>default</em> place to load a page's data is a Server Component — and there it is far simpler: mark the component <code>async</code> and <code>await</code> the data directly in the body.</p>
 
-<pre><code><span class="tok-comment">// app/courses/page.tsx — a Server Component</span>
+<pre><code class="language-javascript"><span class="tok-comment">// app/courses/page.tsx — a Server Component</span>
 export default async function CoursesPage() {
   const res = await fetch('https://api.cuongthai.com/courses');
   const courses = await res.json();
@@ -77,7 +77,7 @@ export default async function CoursesPage() {
 <h2>Cách mặc định để tải dữ liệu chỉ là await</h2>
 <p class="lead">Ở Chương 5 bạn fetch trên client với <code>useEffect</code>, một state loading, và một chốt chống đua. Trong App Router, chỗ <em>mặc định</em> để tải dữ liệu của một trang là một Server Component — và ở đó đơn giản hơn hẳn: đánh dấu component <code>async</code> và <code>await</code> dữ liệu thẳng trong thân.</p>
 
-<pre><code><span class="tok-comment">// app/courses/page.tsx — một Server Component</span>
+<pre><code class="language-javascript"><span class="tok-comment">// app/courses/page.tsx — một Server Component</span>
 export default async function CoursesPage() {
   const res = await fetch('https://api.cuongthai.com/courses');
   const courses = await res.json();
@@ -142,7 +142,7 @@ export default async function CoursesPage() {
 </div>
 
 <h3>Set it explicitly and you never guess</h3>
-<pre><code><span class="tok-comment">// cache this result and reuse it (static-ish)</span>
+<pre><code class="language-typescript"><span class="tok-comment">// cache this result and reuse it (static-ish)</span>
 await fetch(url, { cache: 'force-cache' });
 
 <span class="tok-comment">// never cache — fetch fresh on every request (dynamic)</span>
@@ -158,7 +158,7 @@ await fetch(url, { next: { revalidate: 60 } });</code></pre>
 
 <h3>Request memoization: automatic dedup within one render</h3>
 <p>Separate from the persistent cache, Next.js <em>memoizes</em> identical fetches during a single render pass. If a layout and a page both call <code>fetch('/api/user')</code> with the same options while rendering one request, the actual network call happens <strong>once</strong> and both get the result.</p>
-<pre><code><span class="tok-comment">// layout.tsx and page.tsx both do this during one request:</span>
+<pre><code class="language-javascript"><span class="tok-comment">// layout.tsx and page.tsx both do this during one request:</span>
 const user = await fetch('/api/user').then(r =&gt; r.json());
 <span class="tok-comment">// → only ONE real request; the second is served from memoization</span></code></pre>
 <p>This means you can fetch the same data in each component that needs it, without threading it through props or worrying about duplicate calls. It is scoped to one render and cleared afterwards — different from the cross-request Data Cache above.</p>
@@ -198,7 +198,7 @@ const user = await fetch('/api/user').then(r =&gt; r.json());
 </div>
 
 <h3>Đặt tường minh thì không bao giờ phải đoán</h3>
-<pre><code><span class="tok-comment">// cache kết quả này và dùng lại (kiểu tĩnh)</span>
+<pre><code class="language-typescript"><span class="tok-comment">// cache kết quả này và dùng lại (kiểu tĩnh)</span>
 await fetch(url, { cache: 'force-cache' });
 
 <span class="tok-comment">// không bao giờ cache — fetch mới mỗi request (động)</span>
@@ -214,7 +214,7 @@ await fetch(url, { next: { revalidate: 60 } });</code></pre>
 
 <h3>Request memoization: tự dedupe trong một lần render</h3>
 <p>Tách khỏi cache bền, Next.js <em>ghi nhớ</em> các fetch giống hệt nhau trong một lượt render. Nếu một layout và một page cùng gọi <code>fetch('/api/user')</code> với cùng tuỳ chọn trong lúc render một request, cú gọi mạng thật xảy ra <strong>một lần</strong> và cả hai đều nhận kết quả.</p>
-<pre><code><span class="tok-comment">// layout.tsx và page.tsx đều làm thế này trong một request:</span>
+<pre><code class="language-javascript"><span class="tok-comment">// layout.tsx và page.tsx đều làm thế này trong một request:</span>
 const user = await fetch('/api/user').then(r =&gt; r.json());
 <span class="tok-comment">// → chỉ MỘT request thật; cái thứ hai lấy từ memoization</span></code></pre>
 <p>Nghĩa là bạn có thể fetch cùng dữ liệu ở mỗi component cần nó, không phải luồn qua props hay lo gọi trùng. Nó khoanh trong một lần render và xoá sau đó — khác với Data Cache xuyên-request ở trên.</p>
@@ -260,7 +260,7 @@ const user = await fetch('/api/user').then(r =&gt; r.json());
 <p class="lead">Caching trades freshness for speed. Revalidation is how you buy some freshness back on your terms. There are two models, and real apps use both.</p>
 
 <h3>1 · Time-based: refresh every N seconds</h3>
-<pre><code>await fetch(url, { next: { revalidate: 60 } });
+<pre><code class="language-javascript">await fetch(url, { next: { revalidate: 60 } });
 
 <span class="tok-comment">// or for a whole route, in the page/layout:</span>
 export const revalidate = 60;   <span class="tok-comment">// seconds</span></code></pre>
@@ -268,7 +268,7 @@ export const revalidate = 60;   <span class="tok-comment">// seconds</span></cod
 
 <h3>2 · On-demand: refresh exactly when data changes</h3>
 <p>Time windows are guesses. When you <em>know</em> the data changed — a user published a post — you can invalidate precisely:</p>
-<pre><code>import { revalidatePath, revalidateTag } from 'next/cache';
+<pre><code class="language-javascript">import { revalidatePath, revalidateTag } from 'next/cache';
 
 <span class="tok-comment">// after a mutation (e.g. in a Server Action, Chapter 12):</span>
 revalidatePath('/blog');           <span class="tok-comment">// this route's cache is now stale</span>
@@ -314,7 +314,7 @@ revalidateTag('courses');          <span class="tok-comment">// any fetch tagged
 <p class="lead">Cache đánh đổi độ tươi lấy tốc độ. Revalidate là cách bạn mua lại một phần độ tươi theo điều kiện của mình. Có hai mô hình, và app thật dùng cả hai.</p>
 
 <h3>1 · Theo thời gian: làm mới mỗi N giây</h3>
-<pre><code>await fetch(url, { next: { revalidate: 60 } });
+<pre><code class="language-javascript">await fetch(url, { next: { revalidate: 60 } });
 
 <span class="tok-comment">// hoặc cho cả route, trong page/layout:</span>
 export const revalidate = 60;   <span class="tok-comment">// giây</span></code></pre>
@@ -322,7 +322,7 @@ export const revalidate = 60;   <span class="tok-comment">// giây</span></code>
 
 <h3>2 · Theo yêu cầu: làm mới đúng lúc dữ liệu đổi</h3>
 <p>Cửa sổ thời gian là phỏng đoán. Khi bạn <em>biết</em> dữ liệu đã đổi — một người dùng vừa đăng bài — bạn có thể vô hiệu hoá chính xác:</p>
-<pre><code>import { revalidatePath, revalidateTag } from 'next/cache';
+<pre><code class="language-javascript">import { revalidatePath, revalidateTag } from 'next/cache';
 
 <span class="tok-comment">// sau một mutation (ví dụ trong một Server Action, Chương 12):</span>
 revalidatePath('/blog');           <span class="tok-comment">// cache của route này giờ đã cũ</span>
@@ -379,14 +379,14 @@ revalidateTag('courses');          <span class="tok-comment">// mọi fetch gắ
 
 <h3>1 · loading.tsx — an instant fallback for the whole route</h3>
 <p>Drop a <code>loading.tsx</code> in a route folder and Next.js automatically wraps the page in a Suspense boundary. While the page's data resolves, the layout renders with <code>loading.tsx</code> in its slot — instantly, on navigation. No state to manage; you saw this file in Chapter 8, now you know what it is for.</p>
-<pre><code><span class="tok-comment">// app/courses/loading.tsx</span>
+<pre><code class="language-javascript"><span class="tok-comment">// app/courses/loading.tsx</span>
 export default function Loading() {
   return &lt;CourseListSkeleton /&gt;;   <span class="tok-comment">// shown while page data loads</span>
 }</code></pre>
 
 <h3>2 · &lt;Suspense&gt; — stream one slow piece, show the rest now</h3>
 <p>For finer control, wrap just the slow component in <code>&lt;Suspense&gt;</code>. Everything outside renders immediately; the wrapped part streams in when ready.</p>
-<pre><code>import { Suspense } from 'react';
+<pre><code class="language-javascript">import { Suspense } from 'react';
 
 export default function Page() {
   return (
@@ -401,10 +401,10 @@ export default function Page() {
 
 <div class="pitfall">
 <p><strong>The waterfall: sequential awaits that should be parallel.</strong> Writing two awaits one after another makes the second wait for the first even when they are independent:</p>
-<pre><code>const user = await getUser();       <span class="tok-comment">// 300ms</span>
+<pre><code class="language-javascript">const user = await getUser();       <span class="tok-comment">// 300ms</span>
 const posts = await getPosts();     <span class="tok-comment">// 300ms → total 600ms, needlessly serial</span></code></pre>
 <p>If neither depends on the other, start them together and await once — total time is the slower one, not the sum:</p>
-<pre><code>const [user, posts] = await Promise.all([getUser(), getPosts()]);   <span class="tok-comment">// ~300ms</span></code></pre>
+<pre><code class="language-typescript">const [user, posts] = await Promise.all([getUser(), getPosts()]);   <span class="tok-comment">// ~300ms</span></code></pre>
 <p>Only chain awaits when one genuinely needs the other's result. Otherwise <code>Promise.all</code>.</p>
 </div>
 
@@ -439,14 +439,14 @@ const posts = await getPosts();     <span class="tok-comment">// 300ms → total
 
 <h3>1 · loading.tsx — fallback tức thì cho cả route</h3>
 <p>Đặt một <code>loading.tsx</code> vào thư mục route và Next.js tự bọc page trong một ranh giới Suspense. Trong lúc dữ liệu của page giải quyết, layout render với <code>loading.tsx</code> ở khe của nó — tức thì, khi điều hướng. Không state phải quản; bạn đã thấy file này ở Chương 8, giờ bạn biết nó để làm gì.</p>
-<pre><code><span class="tok-comment">// app/courses/loading.tsx</span>
+<pre><code class="language-javascript"><span class="tok-comment">// app/courses/loading.tsx</span>
 export default function Loading() {
   return &lt;CourseListSkeleton /&gt;;   <span class="tok-comment">// hiện trong lúc dữ liệu page tải</span>
 }</code></pre>
 
 <h3>2 · &lt;Suspense&gt; — stream một mảnh chậm, hiện phần còn lại ngay</h3>
 <p>Muốn điều khiển mịn hơn, chỉ bọc component chậm trong <code>&lt;Suspense&gt;</code>. Mọi thứ bên ngoài render ngay; phần được bọc stream vào khi sẵn sàng.</p>
-<pre><code>import { Suspense } from 'react';
+<pre><code class="language-javascript">import { Suspense } from 'react';
 
 export default function Page() {
   return (
@@ -461,10 +461,10 @@ export default function Page() {
 
 <div class="pitfall">
 <p><strong>Waterfall: các await nối tiếp lẽ ra phải song song.</strong> Viết hai await liền nhau làm cái thứ hai đợi cái thứ nhất dù chúng độc lập:</p>
-<pre><code>const user = await getUser();       <span class="tok-comment">// 300ms</span>
+<pre><code class="language-javascript">const user = await getUser();       <span class="tok-comment">// 300ms</span>
 const posts = await getPosts();     <span class="tok-comment">// 300ms → tổng 600ms, nối tiếp vô ích</span></code></pre>
 <p>Nếu không cái nào phụ thuộc cái kia, hãy khởi động cùng lúc và await một lần — tổng thời gian là cái chậm hơn, không phải tổng:</p>
-<pre><code>const [user, posts] = await Promise.all([getUser(), getPosts()]);   <span class="tok-comment">// ~300ms</span></code></pre>
+<pre><code class="language-typescript">const [user, posts] = await Promise.all([getUser(), getPosts()]);   <span class="tok-comment">// ~300ms</span></code></pre>
 <p>Chỉ nối await khi cái này thật sự cần kết quả cái kia. Còn lại thì <code>Promise.all</code>.</p>
 </div>
 

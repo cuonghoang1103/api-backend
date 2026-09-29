@@ -128,7 +128,7 @@ const c1 = doc('ebs311-1-1-cortex-m-architecture', '1.1 — ARM Cortex-M archite
 <p>Everything shares one 4&nbsp;GB address space — code (Flash), SRAM, and <strong>peripherals are just memory addresses</strong>. Writing a bit at a fixed address toggles an LED. That is why C pointers can drive hardware directly.</p>
 <h3>Boot: the vector table</h3>
 <p>On reset the core reads two words from address 0: the <strong>initial stack pointer</strong>, then the <strong>reset handler</strong> address. The whole <strong>vector table</strong> lists one address per exception/interrupt.</p>
-<pre><code>#include &lt;stdint.h&gt;
+<pre><code class="language-c">#include &lt;stdint.h&gt;
 
 /* A peripheral register is just a volatile pointer to an address. */
 #define GPIOA_ODR  (*(volatile uint32_t *)0x40020014u)
@@ -149,7 +149,7 @@ void led_off(void) { GPIOA_ODR &amp;= ~(1u &lt;&lt; 5); }  /* clear bit 5 */
 <p>Mọi thứ chung một không gian địa chỉ 4&nbsp;GB — mã (Flash), SRAM, và <strong>ngoại vi cũng chỉ là địa chỉ bộ nhớ</strong>. Ghi một bit vào địa chỉ cố định là bật một LED. Nhờ đó con trỏ C điều khiển phần cứng trực tiếp.</p>
 <h3>Khởi động: bảng vector</h3>
 <p>Khi reset, lõi đọc hai từ ở địa chỉ 0: <strong>con trỏ ngăn xếp ban đầu</strong>, rồi địa chỉ <strong>reset handler</strong>. Cả <strong>bảng vector</strong> liệt kê một địa chỉ cho mỗi ngoại lệ/ngắt.</p>
-<pre><code>#include &lt;stdint.h&gt;
+<pre><code class="language-c">#include &lt;stdint.h&gt;
 
 /* Thanh ghi ngoại vi chỉ là con trỏ volatile trỏ tới một địa chỉ. */
 #define GPIOA_ODR  (*(volatile uint32_t *)0x40020014u)
@@ -181,7 +181,7 @@ const c2 = doc('ebs311-2-1-interrupts-timers-gpio', '2.1 — Interrupts, timers,
 </ul>
 <h3>Timers</h3>
 <p>A hardware <strong>timer</strong> counts clock ticks: it makes periodic interrupts (a system tick), generates <strong>PWM</strong> to dim an LED or drive a motor, and does <strong>input capture</strong> to measure a pulse width — all without CPU effort.</p>
-<pre><code>volatile uint8_t g_button_pressed = 0;
+<pre><code class="language-java">volatile uint8_t g_button_pressed = 0;
 
 /* ISR: keep it tiny. */
 void EXTI0_IRQHandler(void)
@@ -203,7 +203,7 @@ void EXTI0_IRQHandler(void)
 </ul>
 <h3>Timer</h3>
 <p>Một <strong>timer</strong> phần cứng đếm nhịp xung: tạo ngắt định kỳ (một system tick), sinh <strong>PWM</strong> để chỉnh sáng LED hay chạy động cơ, và <strong>input capture</strong> để đo độ rộng xung — tất cả không tốn công CPU.</p>
-<pre><code>volatile uint8_t g_button_pressed = 0;
+<pre><code class="language-java">volatile uint8_t g_button_pressed = 0;
 
 /* ISR: giữ thật nhỏ. */
 void EXTI0_IRQHandler(void)
@@ -279,7 +279,7 @@ const c4 = doc('ebs311-4-1-rtos', '4.1 — RTOS: tasks, scheduling & synchroniza
 <li><strong>Semaphore</strong> — signal that an event happened, or count a resource.</li>
 <li><strong>Mutex</strong> — guard a shared resource; supports <strong>priority inheritance</strong> to fight <strong>priority inversion</strong> (a low task holding a lock a high task needs).</li>
 </ul>
-<pre><code>void vSensorTask(void *pv)
+<pre><code class="language-java">void vSensorTask(void *pv)
 {
     for (;;) {
         int reading = adc_read();
@@ -306,7 +306,7 @@ vTaskStartScheduler();
 <li><strong>Semaphore</strong> — báo một sự kiện đã xảy ra, hoặc đếm tài nguyên.</li>
 <li><strong>Mutex</strong> — canh gác tài nguyên dùng chung; hỗ trợ <strong>kế thừa ưu tiên</strong> để chống <strong>đảo ưu tiên</strong> (task thấp giữ khoá mà task cao cần).</li>
 </ul>
-<pre><code>void vSensorTask(void *pv)
+<pre><code class="language-java">void vSensorTask(void *pv)
 {
     for (;;) {
         int reading = adc_read();

@@ -172,11 +172,11 @@ const c2 = doc('adm401-2-1-language-env', '2.1 — Language & environment (Dart/
 <h2>Language &amp; environment</h2>
 <p class="lead">Install the SDK, open the starter project, and learn just enough <strong>Dart</strong> to be productive.</p>
 <h3>Set up &amp; run</h3>
-<pre><code>flutter create my_app     # scaffold a project
+<pre><code class="language-bash">flutter create my_app     # scaffold a project
 cd my_app
 flutter run               # run on an emulator or device</code></pre>
 <p>Every Flutter app starts at <code>main()</code>, which hands a root widget to <code>runApp()</code>:</p>
-<pre><code>import 'package:flutter/material.dart';
+<pre><code class="language-java">import 'package:flutter/material.dart';
 
 void main() {
   runApp(const MyApp());
@@ -200,11 +200,11 @@ class MyApp extends StatelessWidget {
 <h2>Ngôn ngữ &amp; môi trường</h2>
 <p class="lead">Cài SDK, mở dự án mẫu, và học vừa đủ <strong>Dart</strong> để làm việc hiệu quả.</p>
 <h3>Cài đặt &amp; chạy</h3>
-<pre><code>flutter create my_app     # tạo khung dự án
+<pre><code class="language-bash">flutter create my_app     # tạo khung dự án
 cd my_app
 flutter run               # chạy trên máy ảo hoặc thiết bị</code></pre>
 <p>Mọi app Flutter bắt đầu ở <code>main()</code>, hàm này trao widget gốc cho <code>runApp()</code>:</p>
-<pre><code>import 'package:flutter/material.dart';
+<pre><code class="language-java">import 'package:flutter/material.dart';
 
 void main() {
   runApp(const MyApp());
@@ -254,7 +254,7 @@ const c3 = doc('adm401-3-1-widgets-layout', '3.1 — Widgets/components & layout
   ],
 )</code></pre>
 <p>In <strong>React Native</strong> the same idea uses components inside JSX:</p>
-<pre><code>&lt;View style={styles.center}&gt;
+<pre><code class="language-html">&lt;View style={styles.center}&gt;
   &lt;Text&gt;Welcome&lt;/Text&gt;
   &lt;Button title="Start" onPress={handleStart} /&gt;
 &lt;/View&gt;</code></pre>
@@ -278,7 +278,7 @@ const c3 = doc('adm401-3-1-widgets-layout', '3.1 — Widgets/components & layout
   ],
 )</code></pre>
 <p>Trong <strong>React Native</strong> cùng ý tưởng dùng component trong JSX:</p>
-<pre><code>&lt;View style={styles.center}&gt;
+<pre><code class="language-html">&lt;View style={styles.center}&gt;
   &lt;Text&gt;Welcome&lt;/Text&gt;
   &lt;Button title="Start" onPress={handleStart} /&gt;
 &lt;/View&gt;</code></pre>
@@ -369,7 +369,7 @@ class _CounterState extends State&lt;Counter&gt; {
 }</code></pre>
 <h3>App-wide state</h3>
 <p>When many screens share data, lift it out of a single widget. A common pattern is <strong>Provider + ChangeNotifier</strong>:</p>
-<pre><code>class CartModel extends ChangeNotifier {
+<pre><code class="language-java">class CartModel extends ChangeNotifier {
   final items = &lt;String&gt;[];
   void add(String p) {
     items.add(p);
@@ -399,7 +399,7 @@ class _CounterState extends State&lt;Counter&gt; {
 }</code></pre>
 <h3>State toàn app</h3>
 <p>Khi nhiều màn cùng dùng chung dữ liệu, nâng nó ra khỏi một widget. Mẫu phổ biến là <strong>Provider + ChangeNotifier</strong>:</p>
-<pre><code>class CartModel extends ChangeNotifier {
+<pre><code class="language-java">class CartModel extends ChangeNotifier {
   final items = &lt;String&gt;[];
   void add(String p) {
     items.add(p);
@@ -477,7 +477,7 @@ const c7 = doc('adm401-7-1-device-testing', '7.1 — Device features & testing||
 <h2>Device features &amp; testing</h2>
 <p class="lead">A mobile app can use the phone itself — camera, location, notifications — but only with the user&#39;s <strong>permission</strong>. And before you ship, you <strong>test</strong>.</p>
 <h3>Access device features (plugins)</h3>
-<pre><code>// Camera / gallery
+<pre><code class="language-python">// Camera / gallery
 final image = await ImagePicker().pickImage(source: ImageSource.camera);
 
 // Location
@@ -502,7 +502,7 @@ print(pos.latitude.toString() + ', ' + pos.longitude.toString());</code></pre>
 <h2>Tính năng thiết bị &amp; kiểm thử</h2>
 <p class="lead">App di động có thể dùng chính chiếc điện thoại — camera, vị trí, thông báo — nhưng chỉ khi được người dùng <strong>cấp quyền</strong>. Và trước khi phát hành, bạn phải <strong>kiểm thử</strong>.</p>
 <h3>Truy cập tính năng thiết bị (plugin)</h3>
-<pre><code>// Camera / thư viện ảnh
+<pre><code class="language-python">// Camera / thư viện ảnh
 final image = await ImagePicker().pickImage(source: ImageSource.camera);
 
 // Vị trí

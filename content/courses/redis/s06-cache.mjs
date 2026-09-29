@@ -25,7 +25,7 @@ export default {
 <p class="lead">Almost every cache in the world is one of four shapes, and almost every cache in the world is the first one. Knowing which you have matters because the failure modes are completely different: one of them serves stale data forever, one of them loses writes on a crash, and one of them turns a Redis outage into a total outage.</p>
 
 <h3>Cache-aside (lazy loading) — the one you have</h3>
-<pre><code>async function getProduct(id) {
+<pre><code class="language-javascript">async function getProduct(id) {
   const key = &#96;product:\${id}&#96;;
 
   const hit = await redis.get(key);              <span class="tok-comment">// 1. look in the cache</span>
@@ -51,7 +51,7 @@ export default {
   <div class="lz-layer"><span class="lz-lname">Write-through — write to cache and DB together</span><span class="lz-lnote">Every write goes to both, synchronously, before returning. The cache is never stale and reads after a write are always correct. You pay for it on every write — two round trips instead of one, and a write that fails halfway leaves you deciding which of the two is the truth. Good when reads vastly outnumber writes and staleness is genuinely unacceptable.</span></div>
   <div class="lz-layer"><span class="lz-lname">Write-behind (write-back) — write to cache, flush later</span><span class="lz-lnote">The write returns as soon as Redis has it; a background worker persists to the database seconds later. Extremely fast writes, and the only pattern here that can <strong>lose committed data</strong> — if Redis dies with unflushed writes, they are gone, and no amount of RDB/AOF tuning makes that safe (Chapter 9). Legitimate for metrics, view counts and telemetry. Not for anything a user would notice missing.</span></div>
 </div>
-<pre><code><span class="tok-comment"># The same read, priced. DB row fetch vs Redis GET, measured locally.</span>
+<pre><code class="language-sql"><span class="tok-comment"># The same read, priced. DB row fetch vs Redis GET, measured locally.</span>
 time psql -c "SELECT * FROM products WHERE id = 4201" &gt;/dev/null
 time redis-cli GET product:4201 &gt;/dev/null
 redis-cli INFO stats | grep -E "keyspace_hits|keyspace_misses"</code></pre>
@@ -91,7 +91,7 @@ keyspace_misses:9117</div>
 <p class="lead">Gần như mọi bộ đệm trên đời đều thuộc một trong bốn hình dáng, và gần như mọi bộ đệm trên đời đều là cái đầu tiên. Biết mình đang dùng cái nào là chuyện quan trọng vì các kiểu hỏng của chúng khác nhau hoàn toàn: một cái phục vụ dữ liệu ôi thiu mãi mãi, một cái mất dữ liệu đã ghi khi máy sập, và một cái biến sự cố của Redis thành sự cố toàn hệ thống.</p>
 
 <h3>Cache-aside (nạp lười) — cái bạn đang dùng</h3>
-<pre><code>async function getProduct(id) {
+<pre><code class="language-javascript">async function getProduct(id) {
   const key = &#96;product:\${id}&#96;;
 
   const hit = await redis.get(key);              <span class="tok-comment">// 1. tìm trong bộ đệm</span>
@@ -117,7 +117,7 @@ keyspace_misses:9117</div>
   <div class="lz-layer"><span class="lz-lname">Write-through — ghi vào bộ đệm và CSDL cùng lúc</span><span class="lz-lnote">Mỗi lần ghi đều đi vào cả hai, đồng bộ, trước khi trả về. Bộ đệm không bao giờ ôi và lượt đọc ngay sau lượt ghi luôn đúng. Bạn trả giá ở mỗi lần ghi — hai vòng đi-về thay vì một, và một lần ghi hỏng giữa chừng để lại cho bạn câu hỏi bên nào mới là sự thật. Tốt khi lượt đọc áp đảo lượt ghi và sự ôi thiu thật sự không chấp nhận được.</span></div>
   <div class="lz-layer"><span class="lz-lname">Write-behind (write-back) — ghi vào bộ đệm, đẩy xuống sau</span><span class="lz-lnote">Lệnh ghi trả về ngay khi Redis nhận được; một worker chạy nền ghi xuống cơ sở dữ liệu vài giây sau. Ghi cực nhanh, và là khuôn duy nhất ở đây có thể <strong>làm mất dữ liệu đã ghi nhận</strong> — nếu Redis chết khi còn lượt ghi chưa đẩy xuống thì chúng mất luôn, và không mức tinh chỉnh RDB/AOF nào làm chuyện đó an toàn được (Chương 9). Chính đáng cho số liệu đo, lượt xem và dữ liệu đo đạc. Không dành cho bất cứ thứ gì mà người dùng sẽ nhận ra là thiếu.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Cùng một lượt đọc, có bảng giá. Lấy một dòng CSDL với một lệnh GET, đo tại chỗ.</span>
+<pre><code class="language-sql"><span class="tok-comment"># Cùng một lượt đọc, có bảng giá. Lấy một dòng CSDL với một lệnh GET, đo tại chỗ.</span>
 time psql -c "SELECT * FROM products WHERE id = 4201" &gt;/dev/null
 time redis-cli GET product:4201 &gt;/dev/null
 redis-cli INFO stats | grep -E "keyspace_hits|keyspace_misses"</code></pre>
@@ -181,7 +181,7 @@ redis-cli TTL product:4201
 </div>
 
 <h3>2 · Delete on write — the obvious one, with two subtleties</h3>
-<pre><code><span class="tok-comment">// In the same transaction boundary as the DB write</span>
+<pre><code class="language-typescript"><span class="tok-comment">// In the same transaction boundary as the DB write</span>
 await db.product.update({ where: { id }, data });
 await redis.unlink(&#96;product:\${id}&#96;);        <span class="tok-comment">// UNLINK, not DEL</span></code></pre>
 <div class="callout"><strong>Delete, do not update.</strong> Writing the new value into the cache looks more efficient and creates a race: two concurrent writers can interleave so that the <em>older</em> value lands last and then sits there for the full TTL. Deleting is idempotent and self-correcting — whoever reads next reloads the current truth. And prefer <code>UNLINK</code> over <code>DEL</code>: <code>DEL</code> frees the memory synchronously, so deleting a 200 MB key blocks the server for hundreds of milliseconds, while <code>UNLINK</code> unlinks it from the keyspace immediately and frees it on a background thread (Lesson 2.3). For a small string the two are identical; make <code>UNLINK</code> the habit and you never have to think about which case you are in.</div>
@@ -207,7 +207,7 @@ OK
 </div>
 
 <h3>4 · Tags — when one write invalidates many keys</h3>
-<pre><code><span class="tok-comment"># Every cached page records which entities it depends on</span>
+<pre><code class="language-html"><span class="tok-comment"># Every cached page records which entities it depends on</span>
 redis-cli SET page:home '&lt;html&gt;…&lt;/html&gt;' EX 600
 redis-cli SADD tag:product:4201 page:home page:category:5 page:search:redis
 redis-cli EXPIRE tag:product:4201 900        <span class="tok-comment"># longer than the page TTL</span>
@@ -301,7 +301,7 @@ redis-cli TTL product:4201
 </div>
 
 <h3>2 · Xoá khi ghi — cái hiển nhiên, kèm hai chỗ tinh tế</h3>
-<pre><code><span class="tok-comment">// Trong cùng ranh giới giao dịch với lượt ghi CSDL</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Trong cùng ranh giới giao dịch với lượt ghi CSDL</span>
 await db.product.update({ where: { id }, data });
 await redis.unlink(&#96;product:\${id}&#96;);        <span class="tok-comment">// UNLINK, không phải DEL</span></code></pre>
 <div class="callout"><strong>Hãy xoá, đừng cập nhật.</strong> Ghi giá trị mới vào bộ đệm trông có vẻ hiệu quả hơn và tạo ra một cuộc đua: hai bên ghi đồng thời có thể xen kẽ sao cho giá trị <em>cũ hơn</em> lại rơi xuống sau cùng rồi nằm đó suốt cả TTL. Xoá thì gọi bao nhiêu lần cũng ra một kết quả và tự sửa được — ai đọc tiếp theo sẽ nạp lại sự thật hiện tại. Và hãy ưu tiên <code>UNLINK</code> hơn <code>DEL</code>: <code>DEL</code> giải phóng bộ nhớ một cách đồng bộ, nên xoá một khoá 200 MB sẽ chặn máy chủ hàng trăm mili giây, trong khi <code>UNLINK</code> gỡ nó khỏi không gian khoá ngay lập tức và giải phóng ở một luồng nền (Bài 2.3). Với một chuỗi nhỏ thì hai lệnh y hệt nhau; hãy biến <code>UNLINK</code> thành thói quen là bạn không bao giờ phải nghĩ mình đang ở trường hợp nào.</div>
@@ -327,7 +327,7 @@ OK
 </div>
 
 <h3>4 · Nhãn — khi một lượt ghi vô hiệu hoá nhiều khoá</h3>
-<pre><code><span class="tok-comment"># Mỗi trang đã đệm ghi lại nó phụ thuộc vào những thực thể nào</span>
+<pre><code class="language-html"><span class="tok-comment"># Mỗi trang đã đệm ghi lại nó phụ thuộc vào những thực thể nào</span>
 redis-cli SET page:home '&lt;html&gt;…&lt;/html&gt;' EX 600
 redis-cli SADD tag:product:4201 page:home page:category:5 page:search:redis
 redis-cli EXPIRE tag:product:4201 900        <span class="tok-comment"># dài hơn TTL của trang</span>
@@ -415,7 +415,7 @@ OK
 <p class="lead">A cache that is working perfectly can destroy your database in the instant it stops working. The failure is not gradual: at 09:00:00 the cache is serving 40,000 requests a second at 3 ms, and at 09:00:01 all 40,000 of them are queries. Three different problems get called "stampede" and they need three different fixes.</p>
 
 <h3>Watching one happen</h3>
-<pre><code><span class="tok-comment"># One hot key, 200 concurrent readers, cache-aside with no protection</span>
+<pre><code class="language-bash"><span class="tok-comment"># One hot key, 200 concurrent readers, cache-aside with no protection</span>
 redis-cli SET hot:homepage '{"data":"…"}' EX 5 &gt;/dev/null
 node bench-stampede.js --clients 200 --seconds 20 | tail -6</code></pre>
 <div class="out">t=00s  cache hits 39812  db queries 1     p99 3ms
@@ -434,7 +434,7 @@ totals: 194236 hits, 582 db queries for 4 distinct recomputes</div>
 </div>
 
 <h3>Fix A — jitter, and why it is not optional</h3>
-<pre><code>const BASE = 300, JITTER = 60;
+<pre><code class="language-javascript">const BASE = 300, JITTER = 60;
 const ttl = BASE + Math.floor(Math.random() * JITTER);   <span class="tok-comment">// 300–359s</span>
 await redis.set(key, value, { EX: ttl });</code></pre>
 <div class="kv-grid">
@@ -446,7 +446,7 @@ await redis.set(key, value, { EX: ttl });</code></pre>
 </div>
 
 <h3>Fix B — single-flight with a lock</h3>
-<pre><code>async function getWithLock(key, loader, ttl = 300) {
+<pre><code class="language-javascript">async function getWithLock(key, loader, ttl = 300) {
   const hit = await redis.get(key);
   if (hit !== null) return JSON.parse(hit);
 
@@ -482,7 +482,7 @@ await redis.set(key, value, { EX: ttl });</code></pre>
 </div>
 
 <h3>Fix C — probabilistic early recompute</h3>
-<pre><code><span class="tok-comment">// Store the value WITH how long it took to compute and when it expires</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Store the value WITH how long it took to compute and when it expires</span>
 const raw = await redis.get(key);
 if (raw) {
   const { value, delta, expiry } = JSON.parse(raw);   <span class="tok-comment">// delta = compute ms</span>
@@ -533,7 +533,7 @@ redis-cli SET lock:page:home 1 NX EX 30</code></pre>
 <p class="lead">Một bộ đệm đang chạy hoàn hảo có thể phá nát cơ sở dữ liệu của bạn ngay khoảnh khắc nó ngừng chạy. Kiểu hỏng này không từ từ: lúc 09:00:00 bộ đệm phục vụ 40.000 yêu cầu mỗi giây ở mức 3 ms, và lúc 09:00:01 cả 40.000 cái đó đều là truy vấn. Ba vấn đề khác nhau cùng bị gọi là "giẫm đạp" và chúng cần ba cách chữa khác nhau.</p>
 
 <h3>Xem một cú giẫm đạp diễn ra</h3>
-<pre><code><span class="tok-comment"># Một khoá nóng, 200 bên đọc đồng thời, cache-aside không có bảo vệ gì</span>
+<pre><code class="language-bash"><span class="tok-comment"># Một khoá nóng, 200 bên đọc đồng thời, cache-aside không có bảo vệ gì</span>
 redis-cli SET hot:homepage '{"data":"…"}' EX 5 &gt;/dev/null
 node bench-stampede.js --clients 200 --seconds 20 | tail -6</code></pre>
 <div class="out">t=00s  cache hits 39812  db queries 1     p99 3ms
@@ -552,7 +552,7 @@ totals: 194236 hits, 582 db queries for 4 distinct recomputes</div>
 </div>
 
 <h3>Cách A — rắc nhiễu, và vì sao nó không phải tuỳ chọn</h3>
-<pre><code>const BASE = 300, JITTER = 60;
+<pre><code class="language-javascript">const BASE = 300, JITTER = 60;
 const ttl = BASE + Math.floor(Math.random() * JITTER);   <span class="tok-comment">// 300–359 giây</span>
 await redis.set(key, value, { EX: ttl });</code></pre>
 <div class="kv-grid">
@@ -564,7 +564,7 @@ await redis.set(key, value, { EX: ttl });</code></pre>
 </div>
 
 <h3>Cách B — một-lượt-duy-nhất bằng khoá</h3>
-<pre><code>async function getWithLock(key, loader, ttl = 300) {
+<pre><code class="language-javascript">async function getWithLock(key, loader, ttl = 300) {
   const hit = await redis.get(key);
   if (hit !== null) return JSON.parse(hit);
 
@@ -600,7 +600,7 @@ await redis.set(key, value, { EX: ttl });</code></pre>
 </div>
 
 <h3>Cách C — tính lại sớm theo xác suất</h3>
-<pre><code><span class="tok-comment">// Lưu giá trị KÈM thời gian tính ra nó và mốc nó hết hạn</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Lưu giá trị KÈM thời gian tính ra nó và mốc nó hết hạn</span>
 const raw = await redis.get(key);
 if (raw) {
   const { value, delta, expiry } = JSON.parse(raw);   <span class="tok-comment">// delta = số ms để tính</span>
@@ -666,7 +666,7 @@ redis-cli SET lock:page:home 1 NX EX 30</code></pre>
   <div class="lz-layer"><span class="lz-lname">⚠ Tempting — update the database, then update the cache</span><span class="lz-lnote">No fiction, but two concurrent writers can interleave so the older value lands in the cache last: A writes DB(1), B writes DB(2), B writes cache(2), A writes cache(1). The database says 2, the cache says 1, for a full TTL. Writing values into a cache is always a race; deleting never is.</span></div>
   <div class="lz-layer"><span class="lz-lname">✅ Best — update the database, then delete the cache</span><span class="lz-lnote">Cache-aside with invalidation. Delete is idempotent, so concurrent writers cannot order themselves wrongly; whoever reads next reloads the committed truth. This is what you should write, and it still has one rare race — below.</span></div>
 </div>
-<pre><code><span class="tok-comment">// The ordering to write. Note: DB first, delete second, and the delete</span>
+<pre><code class="language-typescript"><span class="tok-comment">// The ordering to write. Note: DB first, delete second, and the delete</span>
 <span class="tok-comment">// is best-effort — the TTL is what makes it safe if this line never runs.</span>
 await db.$transaction(async (tx) =&gt; {
   await tx.product.update({ where: { id }, data });
@@ -683,7 +683,7 @@ await redis.unlink(&#96;product:\${id}&#96;).catch(logAndContinue);</code></pre>
 <div class="callout"><strong>How worried to be: it needs a reader to be slower than an entire write transaction, in a window that opens only on a miss.</strong> In practice that is rare — the reader has to stall between its SELECT and its SET for longer than W takes to commit and delete. It is not <em>never</em>: a GC pause, a slow serialisation step, or an oversubscribed container will do it. And the consequence is bounded by the TTL, which is precisely why Lesson 6.2 insists the TTL stays as a backstop even when you invalidate explicitly. For most applications, "rare and bounded by 300 seconds" is the right amount of wrong. When it is not, you have three real options, below.</div>
 
 <h3>Three ways to close it further</h3>
-<pre><code><span class="tok-comment">// 1 · Delayed double delete — cheap, covers the T3 write-back</span>
+<pre><code class="language-typescript"><span class="tok-comment">// 1 · Delayed double delete — cheap, covers the T3 write-back</span>
 await db.product.update({ where: { id }, data });
 await redis.unlink(key);
 setTimeout(() =&gt; redis.unlink(key).catch(noop), 500);   <span class="tok-comment">// again, after the window</span>
@@ -702,7 +702,7 @@ await redis.expire(key, 5);        <span class="tok-comment">// a late write-bac
 </div>
 
 <h3>Read-your-writes: the bug users actually report</h3>
-<pre><code><span class="tok-comment">// User edits their bio and the next page load shows the OLD bio.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// User edits their bio and the next page load shows the OLD bio.</span>
 <span class="tok-comment">// The invalidation worked; the read went to a REPLICA that has not</span>
 <span class="tok-comment">// caught up, and cached that stale row for 300 seconds.</span>
 
@@ -754,7 +754,7 @@ if (!pinned) await redis.set(key, JSON.stringify(row), { EX: ttl });</code></pre
   <div class="lz-layer"><span class="lz-lname">⚠ Hấp dẫn — cập nhật cơ sở dữ liệu, rồi cập nhật bộ đệm</span><span class="lz-lnote">Không bịa, nhưng hai bên ghi đồng thời có thể xen kẽ sao cho giá trị cũ hơn rơi vào bộ đệm sau cùng: A ghi CSDL(1), B ghi CSDL(2), B ghi đệm(2), A ghi đệm(1). Cơ sở dữ liệu nói 2, bộ đệm nói 1, suốt trọn một TTL. Ghi giá trị vào bộ đệm luôn là một cuộc đua; xoá thì không bao giờ.</span></div>
   <div class="lz-layer"><span class="lz-lname">✅ Tốt nhất — cập nhật cơ sở dữ liệu, rồi xoá bộ đệm</span><span class="lz-lnote">Cache-aside kèm vô hiệu hoá. Xoá thì gọi bao nhiêu lần cũng ra một kết quả, nên các bên ghi đồng thời không thể tự xếp sai thứ tự; ai đọc tiếp theo sẽ nạp lại sự thật đã ghi nhận. Đây là thứ bạn nên viết, và nó vẫn còn đúng một cuộc đua hiếm — ngay dưới đây.</span></div>
 </div>
-<pre><code><span class="tok-comment">// Thứ tự nên viết. Lưu ý: CSDL trước, xoá sau, và phép xoá là</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Thứ tự nên viết. Lưu ý: CSDL trước, xoá sau, và phép xoá là</span>
 <span class="tok-comment">// cố-gắng-hết-sức — chính TTL mới là thứ giữ an toàn nếu dòng này không chạy.</span>
 await db.$transaction(async (tx) =&gt; {
   await tx.product.update({ where: { id }, data });
@@ -771,7 +771,7 @@ await redis.unlink(&#96;product:\${id}&#96;).catch(logAndContinue);</code></pre>
 <div class="callout"><strong>Lo tới mức nào: nó đòi một bên đọc phải chậm hơn cả một giao dịch ghi trọn vẹn, trong một cửa sổ chỉ mở ra khi có trượt.</strong> Trong thực tế chuyện đó hiếm — bên đọc phải khựng lại giữa lệnh SELECT và lệnh SET của nó lâu hơn thời gian W ghi nhận rồi xoá. Nhưng không phải <em>không bao giờ</em>: một nhịp dọn rác, một bước tuần tự hoá chậm, hay một container bị nhồi quá tải là đủ. Và hậu quả bị chặn trên bởi TTL, đó chính xác là lý do Bài 6.2 nhất quyết bắt giữ TTL làm lưới đỡ kể cả khi bạn đã vô hiệu hoá tường minh. Với phần lớn ứng dụng thì "hiếm và bị chặn trong 300 giây" là mức sai vừa phải. Khi nó không vừa phải, bạn có ba lựa chọn thật, ngay dưới.</div>
 
 <h3>Ba cách thu hẹp nó thêm</h3>
-<pre><code><span class="tok-comment">// 1 · Xoá hai lần có trễ — rẻ, phủ được lượt ghi ngược ở T3</span>
+<pre><code class="language-typescript"><span class="tok-comment">// 1 · Xoá hai lần có trễ — rẻ, phủ được lượt ghi ngược ở T3</span>
 await db.product.update({ where: { id }, data });
 await redis.unlink(key);
 setTimeout(() =&gt; redis.unlink(key).catch(noop), 500);   <span class="tok-comment">// lại lần nữa, sau cửa sổ</span>
@@ -790,7 +790,7 @@ await redis.expire(key, 5);        <span class="tok-comment">// một lượt gh
 </div>
 
 <h3>Đọc-thấy-cái-mình-vừa-ghi: cái lỗi người dùng thật sự báo</h3>
-<pre><code><span class="tok-comment">// Người dùng sửa tiểu sử và lượt tải trang tiếp theo hiện tiểu sử CŨ.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Người dùng sửa tiểu sử và lượt tải trang tiếp theo hiện tiểu sử CŨ.</span>
 <span class="tok-comment">// Phép vô hiệu hoá đã chạy đúng; lượt đọc đi vào một BẢN SAO chưa</span>
 <span class="tok-comment">// bắt kịp, và đã đệm cái dòng ôi đó suốt 300 giây.</span>
 
@@ -879,7 +879,7 @@ keys       mem      clients blocked requests            connections
 </div>
 
 <h3>Per-cache numbers only exist if you count them</h3>
-<pre><code><span class="tok-comment">// Redis cannot break hits down by prefix. Your code can.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Redis cannot break hits down by prefix. Your code can.</span>
 async function cached(name, key, loader, ttl) {
   const t0 = performance.now();
   let hit = true;
@@ -1002,7 +1002,7 @@ keys       mem      clients blocked requests            connections
 </div>
 
 <h3>Số liệu theo từng bộ đệm chỉ tồn tại nếu bạn tự đếm</h3>
-<pre><code><span class="tok-comment">// Redis không tách được lượt trúng theo tiền tố. Mã của bạn thì được.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Redis không tách được lượt trúng theo tiền tố. Mã của bạn thì được.</span>
 async function cached(name, key, loader, ttl) {
   const t0 = performance.now();
   let hit = true;

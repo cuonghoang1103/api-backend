@@ -418,7 +418,7 @@ ${slide('dv-05', 7, 'Mở rộng → chuyển → thu hẹp: bốn lần deploy'
 
 <h3>The migration for phase 2</h3>
 ${slide('dv-05', 8, 'Giai đoạn 2: thêm cột, lấp, trigger đồng bộ (bản đã sửa)')}
-<pre><code><span class="tok-comment">-- 1. them cot moi (cho NULL — an toan voi ma cu)</span>
+<pre><code class="language-sql"><span class="tok-comment">-- 1. them cot moi (cho NULL — an toan voi ma cu)</span>
 alter table nguoi_dung add column dia_chi_email text;
 
 <span class="tok-comment">-- 2. chep du lieu dang co</span>
@@ -587,7 +587,7 @@ ${slide('dv-05', 7, 'Mở rộng → chuyển → thu hẹp: bốn lần deploy'
 
 <h3>Migration cho giai đoạn 2</h3>
 ${slide('dv-05', 8, 'Giai đoạn 2: thêm cột, lấp, trigger đồng bộ (bản đã sửa)')}
-<pre><code><span class="tok-comment">-- 1. them cot moi (cho NULL — an toan voi ma cu)</span>
+<pre><code class="language-sql"><span class="tok-comment">-- 1. them cot moi (cho NULL — an toan voi ma cu)</span>
 alter table nguoi_dung add column dia_chi_email text;
 
 <span class="tok-comment">-- 2. chep du lieu dang co</span>
@@ -782,7 +782,7 @@ ${slide('dv-05', 13, 'Trong 9,4 giây ALTER chạy, cả đọc lẫn ghi đều
     ghi OK: 55   bi CHAN/het gio:  5   (trong 4742 ms)</div>
 <p>Five writes hit their half-second timeout and failed. The batch that took 2,179 ms with no migration took 4,742 ms during one — more than twice as long, because writes were queuing behind the lock rather than executing.</p>
 <div class="pitfall"><strong>Trap — <code>ALTER TABLE</code> takes an <code>ACCESS EXCLUSIVE</code> lock, which conflicts with <em>everything</em>, including <code>SELECT</code>.</strong> Not just writes — reads too. And the lock is taken at the <em>start</em> of the statement and held until it commits, so a two-second rewrite is two seconds during which the table does not exist as far as your application is concerned. Worse: the <code>ALTER</code> must first <em>wait</em> for existing transactions on the table to finish, and while it waits, every new query queues behind it. One long-running <code>SELECT</code> can turn a fast migration into a total stall — the migration waits for the query, and everything else waits for the migration.</div>
-<pre><code><span class="tok-comment">-- chan viec cho khoa VO HAN: tha hong nhanh con hon lam nghen ca bang</span>
+<pre><code class="language-sql"><span class="tok-comment">-- chan viec cho khoa VO HAN: tha hong nhanh con hon lam nghen ca bang</span>
 SET lock_timeout = '3s';
 ALTER TABLE lon ADD COLUMN moi text;
 
@@ -905,7 +905,7 @@ alter table nd5m drop constraint ck_ten_nn;       -- CHECK da het viec</code></p
 <p>The PostgreSQL documentation states both halves: validation "acquires only a <code>SHARE UPDATE EXCLUSIVE</code> lock", and for <code>SET NOT NULL</code> "if a valid <code>CHECK</code> constraint exists … which proves no <code>NULL</code> can exist, then the table scan is skipped". The same pattern works for foreign keys. For <code>UNIQUE</code> there is no <code>NOT VALID</code>; build the index with <code>CREATE UNIQUE INDEX CONCURRENTLY</code> and then attach it with <code>ADD CONSTRAINT … UNIQUE USING INDEX</code>.</p>
 
 <h3>The checklist before running a migration on production</h3>
-<pre><code><span class="tok-comment">-- 1. co giao dich nao dang chay lau khong? (chung se CHAN migration)</span>
+<pre><code class="language-sql"><span class="tok-comment">-- 1. co giao dich nao dang chay lau khong? (chung se CHAN migration)</span>
 select pid, now()-xact_start as lau, left(query,60)
 from pg_stat_activity
 where xact_start is not null and now()-xact_start &gt; interval '30 seconds'
@@ -1005,7 +1005,7 @@ ${slide('dv-05', 13, 'Trong 9,4 giây ALTER chạy, cả đọc lẫn ghi đều
     ghi OK: 55   bi CHAN/het gio:  5   (trong 4742 ms)</div>
 <p>Năm lệnh ghi chạm hạn nửa giây và HỎNG. Cái lô mất 2.179 ms khi không có migration thì mất 4.742 ms khi có một cái — hơn GẤP ĐÔI, vì các lệnh ghi đang XẾP HÀNG sau cái khoá chứ không được thực thi.</p>
 <div class="pitfall"><strong>Bẫy — <code>ALTER TABLE</code> lấy khoá <code>ACCESS EXCLUSIVE</code>, thứ xung đột với <em>MỌI THỨ</em>, kể cả <code>SELECT</code>.</strong> Không chỉ lệnh ghi — cả lệnh đọc. Và cái khoá được lấy ngay ở ĐẦU câu lệnh rồi giữ tới khi nó được ghi nhận, nên một lần ghi lại bảng mất hai giây là hai giây mà cái bảng KHÔNG TỒN TẠI dưới góc nhìn của ứng dụng bạn. Tệ hơn: lệnh <code>ALTER</code> trước hết phải <em>CHỜ</em> các giao dịch đang có trên bảng kết thúc, và TRONG LÚC NÓ CHỜ thì mọi truy vấn mới đều xếp hàng phía sau nó. Một lệnh <code>SELECT</code> chạy lâu có thể biến một migration nhanh thành một cú nghẽn toàn tập — migration chờ cái truy vấn, và mọi thứ khác chờ migration.</div>
-<pre><code><span class="tok-comment">-- chan viec cho khoa VO HAN: tha hong nhanh con hon lam nghen ca bang</span>
+<pre><code class="language-sql"><span class="tok-comment">-- chan viec cho khoa VO HAN: tha hong nhanh con hon lam nghen ca bang</span>
 SET lock_timeout = '3s';
 ALTER TABLE lon ADD COLUMN moi text;
 
@@ -1128,7 +1128,7 @@ alter table nd5m drop constraint ck_ten_nn;       -- CHECK da het viec</code></p
 <p>Tài liệu PostgreSQL nói rõ cả hai nửa: bước xác thực "chỉ lấy khoá <code>SHARE UPDATE EXCLUSIVE</code>", và với <code>SET NOT NULL</code> "nếu có một ràng buộc <code>CHECK</code> hợp lệ … chứng minh không thể có <code>NULL</code>, thì bỏ qua việc quét bảng". Cùng khuôn đó dùng được cho khoá ngoại. Với <code>UNIQUE</code> thì không có <code>NOT VALID</code>; hãy dựng chỉ mục bằng <code>CREATE UNIQUE INDEX CONCURRENTLY</code> rồi gắn nó vào bằng <code>ADD CONSTRAINT … UNIQUE USING INDEX</code>.</p>
 
 <h3>Danh mục kiểm trước khi chạy một migration trên production</h3>
-<pre><code><span class="tok-comment">-- 1. co giao dich nao dang chay lau khong? (chung se CHAN migration)</span>
+<pre><code class="language-sql"><span class="tok-comment">-- 1. co giao dich nao dang chay lau khong? (chung se CHAN migration)</span>
 select pid, now()-xact_start as lau, left(query,60)
 from pg_stat_activity
 where xact_start is not null and now()-xact_start &gt; interval '30 seconds'
@@ -1197,7 +1197,7 @@ from pg_stat_activity where wait_event_type = 'Lock';</code></pre>
 <h3>Producing the state</h3>
 ${slide('dv-05', 19, 'P3018 rồi P3009: mọi deploy sau bị chặn')}
 <p>A three-statement migration whose third statement fails on data that already exists:</p>
-<pre><code>create table don_hang(id serial primary key, ma text);
+<pre><code class="language-sql">create table don_hang(id serial primary key, ma text);
 insert into don_hang(ma) values ('A'),('B'),('A');
 alter table don_hang add constraint uq_ma unique (ma);   <span class="tok-comment">-- SE HONG: co 'A' trung</span></code></pre>
 <div class="out">    ERROR:  could not create unique index "uq_ma"
@@ -1264,7 +1264,7 @@ ${slide('dv-05', 23, 'CONCURRENTLY phải đứng một mình một tệp; hỏn
 <br>· <code>ERROR: CREATE INDEX CONCURRENTLY cannot run inside a transaction block</code>
 <br>· <code>ERROR: CREATE DATABASE cannot run inside a transaction block</code>
 <br>So the very statement recommended in Lesson 5.3 for avoiding write locks is the one that cannot be made atomic. Put it in its own migration file, alone, and make that file idempotent — <code>CREATE INDEX CONCURRENTLY IF NOT EXISTS</code>, plus a check for the <code>INVALID</code> index a failed concurrent build leaves behind.</div>
-<pre><code><span class="tok-comment">-- mot lan CREATE INDEX CONCURRENTLY hong de lai mot chi muc INVALID</span>
+<pre><code class="language-sql"><span class="tok-comment">-- mot lan CREATE INDEX CONCURRENTLY hong de lai mot chi muc INVALID</span>
 <span class="tok-comment">-- no KHONG duoc dung, va no VAN chiem cho. Tim va don:</span>
 select indexrelid::regclass as ten
 from pg_index where not indisvalid;
@@ -1427,7 +1427,7 @@ All migrations have been successfully applied.</div></li>
 <h3>Tạo ra cái trạng thái đó</h3>
 ${slide('dv-05', 19, 'P3018 rồi P3009: mọi deploy sau bị chặn')}
 <p>Một migration ba câu lệnh mà câu thứ ba hỏng vì dữ liệu vốn đã có sẵn:</p>
-<pre><code>create table don_hang(id serial primary key, ma text);
+<pre><code class="language-sql">create table don_hang(id serial primary key, ma text);
 insert into don_hang(ma) values ('A'),('B'),('A');
 alter table don_hang add constraint uq_ma unique (ma);   <span class="tok-comment">-- SE HONG: co 'A' trung</span></code></pre>
 <div class="out">    ERROR:  could not create unique index "uq_ma"
@@ -1494,7 +1494,7 @@ ${slide('dv-05', 23, 'CONCURRENTLY phải đứng một mình một tệp; hỏn
 <br>· <code>ERROR: CREATE INDEX CONCURRENTLY cannot run inside a transaction block</code>
 <br>· <code>ERROR: CREATE DATABASE cannot run inside a transaction block</code>
 <br>Nghĩa là chính cái câu lệnh được khuyên dùng ở Bài 5.3 để né khoá ghi lại là cái KHÔNG làm cho nguyên tử được. Hãy đặt nó vào một tệp migration RIÊNG, một mình, và làm cho tệp đó bất biến khi lặp lại — <code>CREATE INDEX CONCURRENTLY IF NOT EXISTS</code>, cộng thêm một phép kiểm cái chỉ mục <code>INVALID</code> mà một lần dựng concurrently hỏng để lại.</div>
-<pre><code><span class="tok-comment">-- mot lan CREATE INDEX CONCURRENTLY hong de lai mot chi muc INVALID</span>
+<pre><code class="language-sql"><span class="tok-comment">-- mot lan CREATE INDEX CONCURRENTLY hong de lai mot chi muc INVALID</span>
 <span class="tok-comment">-- no KHONG duoc dung, va no VAN chiem cho. Tim va don:</span>
 select indexrelid::regclass as ten
 from pg_index where not indisvalid;
@@ -1681,7 +1681,7 @@ ${slide('dv-05', 24, 'Lấp một phát giữ khoá 3,8 s; theo lô lâu nhất 
   <div class="kv"><span class="k">A batch can be interrupted safely</span><span class="v">Kill the single statement at 90% and all of it rolls back. Kill the batched version and 90% is committed — restart it and it picks up where it stopped, because it selects rows that are still null.</span></div>
   <div class="kv"><span class="k">And it can be paused</span><span class="v">Add a <code>sleep</code> between batches and the backfill becomes something you can run during business hours. The single statement offers no such control.</span></div>
 </div>
-<pre><code><span class="tok-comment">-- mot lo: chon dong CHUA lap, khoa chung, cap nhat, tra ve so dong</span>
+<pre><code class="language-sql"><span class="tok-comment">-- mot lo: chon dong CHUA lap, khoa chung, cap nhat, tra ve so dong</span>
 with c as (
   select id from bf
   where moi is null
@@ -1740,7 +1740,7 @@ $ psql -qAt -c "select count(*) from nd1m where email_lo is null"
 
 <h3>Where the migration runs in the deploy</h3>
 ${slide('dv-05', 26, 'Migration nằm TRƯỚC bước tráo, và có trần thời gian')}
-<pre><code><span class="tok-comment">#!/bin/bash — trao.sh, ban co migration</span>
+<pre><code class="language-bash"><span class="tok-comment">#!/bin/bash — trao.sh, ban co migration</span>
 set -euo pipefail
 exec 9&gt;/var/lock/trao.lock; flock -w 30 9
 
@@ -1878,7 +1878,7 @@ ${slide('dv-05', 24, 'Lấp một phát giữ khoá 3,8 s; theo lô lâu nhất 
   <div class="kv"><span class="k">Một lô có thể bị cắt ngang một cách AN TOÀN</span><span class="v">Giết câu lệnh đơn ở mốc 90% thì TOÀN BỘ lùi lại. Giết bản chia lô thì 90% ĐÃ ĐƯỢC GHI NHẬN — chạy lại thì nó tiếp tục từ chỗ dừng, vì nó chọn những dòng vẫn còn null.</span></div>
   <div class="kv"><span class="k">Và nó TẠM DỪNG được</span><span class="v">Thêm một lệnh <code>sleep</code> giữa các lô là cuộc lấp dữ liệu thành thứ bạn chạy được ngay trong giờ làm việc. Câu lệnh đơn không cho bạn khả năng kiểm soát nào như vậy.</span></div>
 </div>
-<pre><code><span class="tok-comment">-- mot lo: chon dong CHUA lap, khoa chung, cap nhat, tra ve so dong</span>
+<pre><code class="language-sql"><span class="tok-comment">-- mot lo: chon dong CHUA lap, khoa chung, cap nhat, tra ve so dong</span>
 with c as (
   select id from bf
   where moi is null
@@ -1937,7 +1937,7 @@ $ psql -qAt -c "select count(*) from nd1m where email_lo is null"
 
 <h3>Migration chạy ở đâu trong quy trình deploy</h3>
 ${slide('dv-05', 26, 'Migration nằm TRƯỚC bước tráo, và có trần thời gian')}
-<pre><code><span class="tok-comment">#!/bin/bash — trao.sh, ban co migration</span>
+<pre><code class="language-bash"><span class="tok-comment">#!/bin/bash — trao.sh, ban co migration</span>
 set -euo pipefail
 exec 9&gt;/var/lock/trao.lock; flock -w 30 9
 

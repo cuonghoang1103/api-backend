@@ -24,19 +24,19 @@ export default {
 
 <h3>Bug 1 — the typo</h3>
 <p>You meant <code>email</code>, your fingers wrote <code>emial</code>. In JavaScript this is not an error; reading a property that doesn't exist just returns <code>undefined</code>, and your code limps on until something downstream chokes on <code>undefined</code>.</p>
-<pre><code><span class="tok-comment">// typo.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// typo.ts</span>
 <span class="tok-keyword">interface</span> User { id: <span class="tok-keyword">string</span>; email: <span class="tok-keyword">string</span>; }
 
 <span class="tok-keyword">function</span> <span class="tok-function">sendTo</span>(u: User) {
   <span class="tok-keyword">return</span> u.emial;   <span class="tok-comment">// typo</span>
 }</code></pre>
-<pre><code>npx tsc --noEmit --strict typo.ts</code></pre>
+<pre><code class="language-bash">npx tsc --noEmit --strict typo.ts</code></pre>
 <div class="out">typo.ts(3,12): error TS2551: Property 'emial' does not exist on type 'User'. Did you mean 'email'?</div>
 <p>Line, column, error code, and — because TypeScript knows the shape of <code>User</code> — the exact fix: <em>"Did you mean 'email'?"</em>. In plain JavaScript you would find this bug when an email fails to send, in production, with no clue where it started.</p>
 
 <h3>Bug 2 — the missing argument</h3>
 <p>A function needs a title <em>and</em> a body; you call it with only a title. JavaScript sets the missing parameter to <code>undefined</code> and runs on.</p>
-<pre><code><span class="tok-comment">// args.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// args.ts</span>
 <span class="tok-keyword">function</span> <span class="tok-function">createNote</span>(title: <span class="tok-keyword">string</span>, body: <span class="tok-keyword">string</span>) {
   <span class="tok-keyword">return</span> { title, body };
 }
@@ -46,7 +46,7 @@ export default {
 
 <h3>Bug 3 — the wrong type flowing through</h3>
 <p>This is the subtle, expensive one. You sum an array, accidentally concatenate a string, and now a "number" is really a string — three lines away from where the mistake was made.</p>
-<pre><code><span class="tok-comment">// undef.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// undef.ts</span>
 <span class="tok-keyword">const</span> prices = [<span class="tok-number">10</span>, <span class="tok-number">20</span>, <span class="tok-number">30</span>];
 <span class="tok-keyword">const</span> total = prices.<span class="tok-function">reduce</span>((a, b) => a + b) + <span class="tok-string">'5'</span>;  <span class="tok-comment">// oops: "605"</span>
 <span class="tok-keyword">const</span> n: <span class="tok-keyword">number</span> = total;</code></pre>
@@ -83,19 +83,19 @@ export default {
 
 <h3>Bug 1 — gõ sai tên</h3>
 <p>Bạn định viết <code>email</code>, ngón tay gõ thành <code>emial</code>. Trong JavaScript đây không phải lỗi; đọc một thuộc tính không tồn tại chỉ trả về <code>undefined</code>, và code của bạn khập khiễng đi tiếp cho tới khi một chỗ nào đó phía dưới nghẹn với <code>undefined</code>.</p>
-<pre><code><span class="tok-comment">// typo.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// typo.ts</span>
 <span class="tok-keyword">interface</span> User { id: <span class="tok-keyword">string</span>; email: <span class="tok-keyword">string</span>; }
 
 <span class="tok-keyword">function</span> <span class="tok-function">sendTo</span>(u: User) {
   <span class="tok-keyword">return</span> u.emial;   <span class="tok-comment">// gõ sai</span>
 }</code></pre>
-<pre><code>npx tsc --noEmit --strict typo.ts</code></pre>
+<pre><code class="language-bash">npx tsc --noEmit --strict typo.ts</code></pre>
 <div class="out">typo.ts(3,12): error TS2551: Property 'emial' does not exist on type 'User'. Did you mean 'email'?</div>
 <p>Dòng, cột, mã lỗi, và — vì TypeScript biết dáng của <code>User</code> — đúng cách sửa: <em>"Did you mean 'email'?"</em> (Ý bạn là 'email'?). Trong JavaScript thuần, bạn sẽ tìm ra con bug này khi một email gửi thất bại, trên production, không manh mối nó bắt đầu từ đâu.</p>
 
 <h3>Bug 2 — thiếu đối số</h3>
 <p>Một hàm cần tiêu đề <em>và</em> thân bài; bạn gọi nó chỉ với tiêu đề. JavaScript đặt tham số thiếu thành <code>undefined</code> rồi chạy tiếp.</p>
-<pre><code><span class="tok-comment">// args.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// args.ts</span>
 <span class="tok-keyword">function</span> <span class="tok-function">createNote</span>(title: <span class="tok-keyword">string</span>, body: <span class="tok-keyword">string</span>) {
   <span class="tok-keyword">return</span> { title, body };
 }
@@ -105,7 +105,7 @@ export default {
 
 <h3>Bug 3 — sai kiểu trôi xuyên qua</h3>
 <p>Đây là con tinh vi và đắt đỏ. Bạn cộng một mảng, lỡ tay nối thêm một chuỗi, và giờ một "số" thực ra là chuỗi — cách chỗ gây lỗi ba dòng.</p>
-<pre><code><span class="tok-comment">// undef.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// undef.ts</span>
 <span class="tok-keyword">const</span> prices = [<span class="tok-number">10</span>, <span class="tok-number">20</span>, <span class="tok-number">30</span>];
 <span class="tok-keyword">const</span> total = prices.<span class="tok-function">reduce</span>((a, b) => a + b) + <span class="tok-string">'5'</span>;  <span class="tok-comment">// hỏng: "605"</span>
 <span class="tok-keyword">const</span> n: <span class="tok-keyword">number</span> = total;</code></pre>
@@ -156,16 +156,16 @@ export default {
 
 <h3>What it cannot prove: that reality matches your claims</h3>
 <p>The moment data enters your program from outside — an HTTP request, a JSON file, a database row, <code>localStorage</code> — TypeScript has no way to check it, because checking happens at compile time and that data doesn't exist yet. You <em>tell</em> TypeScript what shape the data has, and it believes you. If you lie, it cannot know.</p>
-<pre><code><span class="tok-comment">// lie.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// lie.ts</span>
 <span class="tok-keyword">interface</span> User { email: <span class="tok-keyword">string</span>; }
 
 <span class="tok-keyword">const</span> raw: <span class="tok-keyword">unknown</span> = <span class="tok-keyword">null</span>;        <span class="tok-comment">// pretend this came from JSON.parse</span>
 <span class="tok-keyword">const</span> u = raw <span class="tok-keyword">as</span> User;             <span class="tok-comment">// "trust me, it's a User"</span>
 <span class="tok-function">console.log</span>(u.email.<span class="tok-function">toUpperCase</span>());</code></pre>
-<pre><code>npx tsc --noEmit --strict lie.ts</code></pre>
+<pre><code class="language-bash">npx tsc --noEmit --strict lie.ts</code></pre>
 <div class="out">(no output — exit code 0, TypeScript is happy)</div>
 <p>TypeScript accepts it. The <code>as User</code> is a promise you made, and it trusts promises. Now run the same file:</p>
-<pre><code>npx tsx lie.ts</code></pre>
+<pre><code class="language-bash">npx tsx lie.ts</code></pre>
 <div class="out">TypeError: Cannot read properties of null (reading 'email')</div>
 <p>It crashes at runtime — because at runtime the value really is <code>null</code>, the type was a fiction, and there was no type left to protect anything. The type system was <em>none the wiser</em>.</p>
 <div class="pitfall"><code>as</code> is not a conversion and not a check — it is you overriding the compiler and taking responsibility. Every <code>as</code> is a place TypeScript stopped protecting you. Use it rarely, and never on untrusted external data. To actually verify incoming data you need a <em>runtime</em> check written in real JavaScript, or a validation library — that is chapter 13 (Zod).</div>
@@ -199,16 +199,16 @@ export default {
 
 <h3>Nó không chứng minh được: rằng thực tế khớp với lời bạn khai</h3>
 <p>Ngay khi dữ liệu đi vào chương trình từ bên ngoài — một request HTTP, một file JSON, một dòng cơ sở dữ liệu, <code>localStorage</code> — TypeScript không có cách nào kiểm tra nó, vì việc kiểm diễn ra lúc biên dịch còn dữ liệu đó thì chưa tồn tại. Bạn <em>bảo</em> TypeScript dữ liệu có dáng gì, và nó tin bạn. Nếu bạn nói dối, nó không thể biết.</p>
-<pre><code><span class="tok-comment">// lie.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// lie.ts</span>
 <span class="tok-keyword">interface</span> User { email: <span class="tok-keyword">string</span>; }
 
 <span class="tok-keyword">const</span> raw: <span class="tok-keyword">unknown</span> = <span class="tok-keyword">null</span>;        <span class="tok-comment">// giả bộ nó đến từ JSON.parse</span>
 <span class="tok-keyword">const</span> u = raw <span class="tok-keyword">as</span> User;             <span class="tok-comment">// "tin tôi đi, nó là User"</span>
 <span class="tok-function">console.log</span>(u.email.<span class="tok-function">toUpperCase</span>());</code></pre>
-<pre><code>npx tsc --noEmit --strict lie.ts</code></pre>
+<pre><code class="language-bash">npx tsc --noEmit --strict lie.ts</code></pre>
 <div class="out">(không có output — mã thoát 0, TypeScript hài lòng)</div>
 <p>TypeScript chấp nhận. Cái <code>as User</code> là một lời hứa bạn đưa ra, và nó tin lời hứa. Giờ chạy chính file đó:</p>
-<pre><code>npx tsx lie.ts</code></pre>
+<pre><code class="language-bash">npx tsx lie.ts</code></pre>
 <div class="out">TypeError: Cannot read properties of null (reading 'email')</div>
 <p>Nó sập lúc chạy — vì lúc chạy giá trị thật sự là <code>null</code>, cái kiểu chỉ là chuyện bịa, và chẳng còn kiểu nào để bảo vệ gì cả. Hệ thống kiểu <em>hoàn toàn không hay biết</em>.</p>
 <div class="pitfall"><code>as</code> không phải phép chuyển đổi và không phải phép kiểm tra — nó là bạn ghi đè trình biên dịch và tự chịu trách nhiệm. Mỗi <code>as</code> là một chỗ TypeScript ngừng bảo vệ bạn. Hãy dùng nó thật hiếm, và tuyệt đối không dùng lên dữ liệu ngoài không đáng tin. Để thật sự kiểm chứng dữ liệu đi vào bạn cần một phép kiểm <em>lúc chạy</em> viết bằng JavaScript thật, hoặc một thư viện validate — đó là chương 13 (Zod).</div>
@@ -248,12 +248,12 @@ export default {
 
 <h3>The compiler already knows</h3>
 <p>You do not write <code>const n: number = 5</code>. You write <code>const n = 5</code> and TypeScript infers <code>number</code>. To <em>see</em> what it inferred, we can ask the compiler to emit a declaration file — a pure listing of the types it worked out:</p>
-<pre><code><span class="tok-comment">// infer.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// infer.ts</span>
 <span class="tok-keyword">let</span> a = <span class="tok-string">'CuongThai'</span>;
 <span class="tok-keyword">const</span> b = <span class="tok-string">'CuongThai'</span>;
 <span class="tok-keyword">const</span> arr = [<span class="tok-number">1</span>, <span class="tok-number">2</span>, <span class="tok-number">3</span>];
 <span class="tok-keyword">const</span> mixed = [<span class="tok-number">1</span>, <span class="tok-string">'two'</span>, <span class="tok-keyword">true</span>];</code></pre>
-<pre><code>npx tsc --declaration --emitDeclarationOnly infer.ts
+<pre><code class="language-bash">npx tsc --declaration --emitDeclarationOnly infer.ts
 cat infer.d.ts</code></pre>
 <div class="out">declare let a: string;
 declare const b = "CuongThai";
@@ -271,7 +271,7 @@ declare const mixed: (string | number | boolean)[];</div>
 
 <h3>Where inference stops — and strict mode matters</h3>
 <p>Inference works from values. A <strong>function parameter has no value yet</strong> at the point it's declared, so TypeScript can't infer it — and under strict mode it refuses to guess:</p>
-<pre><code><span class="tok-comment">// implicit.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// implicit.ts</span>
 <span class="tok-keyword">function</span> <span class="tok-function">greet</span>(name) {   <span class="tok-comment">// no type — from where?</span>
   <span class="tok-keyword">return</span> <span class="tok-string">'Hi '</span> + name;
 }</code></pre>
@@ -297,12 +297,12 @@ declare const mixed: (string | number | boolean)[];</div>
 
 <h3>Trình biên dịch đã biết sẵn</h3>
 <p>Bạn không viết <code>const n: number = 5</code>. Bạn viết <code>const n = 5</code> và TypeScript suy ra <code>number</code>. Để <em>nhìn thấy</em> nó suy ra gì, ta có thể bảo trình biên dịch xuất một file khai báo — một bản liệt kê thuần các kiểu nó tính ra:</p>
-<pre><code><span class="tok-comment">// infer.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// infer.ts</span>
 <span class="tok-keyword">let</span> a = <span class="tok-string">'CuongThai'</span>;
 <span class="tok-keyword">const</span> b = <span class="tok-string">'CuongThai'</span>;
 <span class="tok-keyword">const</span> arr = [<span class="tok-number">1</span>, <span class="tok-number">2</span>, <span class="tok-number">3</span>];
 <span class="tok-keyword">const</span> mixed = [<span class="tok-number">1</span>, <span class="tok-string">'two'</span>, <span class="tok-keyword">true</span>];</code></pre>
-<pre><code>npx tsc --declaration --emitDeclarationOnly infer.ts
+<pre><code class="language-bash">npx tsc --declaration --emitDeclarationOnly infer.ts
 cat infer.d.ts</code></pre>
 <div class="out">declare let a: string;
 declare const b = "CuongThai";
@@ -320,7 +320,7 @@ declare const mixed: (string | number | boolean)[];</div>
 
 <h3>Nơi suy luận dừng lại — và vì sao chế độ strict quan trọng</h3>
 <p>Suy luận hoạt động từ giá trị. Một <strong>tham số hàm chưa có giá trị</strong> tại điểm nó được khai báo, nên TypeScript không suy ra được — và dưới chế độ strict nó từ chối đoán mò:</p>
-<pre><code><span class="tok-comment">// implicit.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// implicit.ts</span>
 <span class="tok-keyword">function</span> <span class="tok-function">greet</span>(name) {   <span class="tok-comment">// không có kiểu — lấy từ đâu?</span>
   <span class="tok-keyword">return</span> <span class="tok-string">'Hi '</span> + name;
 }</code></pre>
@@ -359,18 +359,18 @@ declare const mixed: (string | number | boolean)[];</div>
 
 <h3>any — the off switch</h3>
 <p><code>any</code> means "stop checking this value entirely". It is the one type that is assignable to and from everything. Watch what it permits:</p>
-<pre><code><span class="tok-comment">// anyoff.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// anyoff.ts</span>
 <span class="tok-keyword">const</span> x: <span class="tok-keyword">any</span> = <span class="tok-string">'hello'</span>;
 x.foo.bar.<span class="tok-function">baz</span>();       <span class="tok-comment">// calling methods that don't exist</span>
 <span class="tok-keyword">const</span> n: <span class="tok-keyword">number</span> = x;      <span class="tok-comment">// assigning a string to a number</span></code></pre>
-<pre><code>npx tsc --noEmit --strict anyoff.ts</code></pre>
+<pre><code class="language-bash">npx tsc --noEmit --strict anyoff.ts</code></pre>
 <div class="out">(no output — exit code 0. Every line above is a bug, and TypeScript reported none of them.)</div>
 <p>That is the danger. <code>any</code> doesn't just skip one check — it poisons everything downstream. A single <code>any</code> can silently disable type safety across a whole chain of code, and it's invisible: nothing is red, so you feel safe while having no protection at all.</p>
 <div class="pitfall">Reaching for <code>any</code> to make an error go away is like disconnecting a smoke alarm because it's beeping. The beep was the point. If you don't know a value's type, that is information — not a reason to blind the compiler.</div>
 
 <h3>unknown — the safe door</h3>
 <p><code>unknown</code> also means "I don't know the type yet", but it is the <em>safe</em> version. You can assign anything <em>to</em> it, but you can't <em>do</em> anything with it until you prove what it is:</p>
-<pre><code><span class="tok-comment">// unknown.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// unknown.ts</span>
 <span class="tok-keyword">function</span> <span class="tok-function">handle</span>(input: <span class="tok-keyword">unknown</span>) {
   <span class="tok-comment">// input.toUpperCase()  → error: 'input' is of type 'unknown'</span>
   <span class="tok-keyword">if</span> (<span class="tok-keyword">typeof</span> input === <span class="tok-string">'string'</span>) {
@@ -406,18 +406,18 @@ x.foo.bar.<span class="tok-function">baz</span>();       <span class="tok-commen
 
 <h3>any — cái công tắc tắt</h3>
 <p><code>any</code> nghĩa là "ngừng kiểm tra giá trị này hoàn toàn". Nó là kiểu duy nhất gán được vào và gán ra từ mọi thứ. Xem nó cho phép những gì:</p>
-<pre><code><span class="tok-comment">// anyoff.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// anyoff.ts</span>
 <span class="tok-keyword">const</span> x: <span class="tok-keyword">any</span> = <span class="tok-string">'hello'</span>;
 x.foo.bar.<span class="tok-function">baz</span>();       <span class="tok-comment">// gọi method không tồn tại</span>
 <span class="tok-keyword">const</span> n: <span class="tok-keyword">number</span> = x;      <span class="tok-comment">// gán một chuỗi cho một số</span></code></pre>
-<pre><code>npx tsc --noEmit --strict anyoff.ts</code></pre>
+<pre><code class="language-bash">npx tsc --noEmit --strict anyoff.ts</code></pre>
 <div class="out">(không có output — mã thoát 0. Mọi dòng ở trên đều là bug, và TypeScript không báo dòng nào.)</div>
 <p>Đó là mối nguy. <code>any</code> không chỉ bỏ qua một phép kiểm — nó đầu độc mọi thứ phía dưới. Chỉ một <code>any</code> có thể âm thầm tắt an toàn kiểu suốt cả một chuỗi code, và nó vô hình: không có gì đỏ, nên bạn thấy an toàn trong khi chẳng có bảo vệ nào cả.</p>
 <div class="pitfall">Với tay tới <code>any</code> để cho hết lỗi cũng như tháo dây cái báo khói vì nó đang kêu. Tiếng kêu đó mới là điều quan trọng. Nếu bạn không biết kiểu của một giá trị, đó là một thông tin — không phải một cái cớ để bịt mắt trình biên dịch.</div>
 
 <h3>unknown — cánh cửa an toàn</h3>
 <p><code>unknown</code> cũng nghĩa là "tôi chưa biết kiểu", nhưng nó là phiên bản <em>an toàn</em>. Bạn gán được bất cứ thứ gì <em>vào</em> nó, nhưng không <em>làm</em> được gì với nó cho tới khi chứng minh nó là gì:</p>
-<pre><code><span class="tok-comment">// unknown.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// unknown.ts</span>
 <span class="tok-keyword">function</span> <span class="tok-function">handle</span>(input: <span class="tok-keyword">unknown</span>) {
   <span class="tok-comment">// input.toUpperCase()  → lỗi: 'input' có kiểu 'unknown'</span>
   <span class="tok-keyword">if</span> (<span class="tok-keyword">typeof</span> input === <span class="tok-string">'string'</span>) {

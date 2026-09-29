@@ -56,7 +56,7 @@ ${gallery('git-12', [
 <h2>Scripts Git runs for you</h2>
 <p class="lead">A hook is an executable file in <code>.git/hooks/</code> that Git runs at a defined moment. If it exits non-zero, the operation is refused. That single mechanism is how a leaked secret, a broken build or a malformed commit message gets stopped at the cheapest possible moment — before the commit exists.</p>
 
-<pre><code>ls .git/hooks/</code></pre>
+<pre><code class="language-bash">ls .git/hooks/</code></pre>
 <div class="out">applypatch-msg.sample     pre-commit.sample      pre-push.sample
 commit-msg.sample         pre-rebase.sample      prepare-commit-msg.sample
 post-update.sample        pre-receive.sample     update.sample</div>
@@ -76,7 +76,7 @@ ${slide('git-12', 4, 'Hook là một file: đúng tên + chmod +x')}
 
 <h3>A pre-commit hook that stops the worst mistake</h3>
 ${slide('git-12', 5, 'pre-commit chặn ký hiệu xung đột và file lớn')}
-<pre><code><span class="tok-comment">#!/usr/bin/env bash</span>
+<pre><code class="language-bash"><span class="tok-comment">#!/usr/bin/env bash</span>
 <span class="tok-comment"># .git/hooks/pre-commit — refuse obvious secrets and leftover markers</span>
 <span class="tok-keyword">set</span> -euo pipefail
 
@@ -98,7 +98,7 @@ files=\$(git diff --cached --name-only --diff-filter=ACM)
 <h3>The problem: .git/hooks is not shared</h3>
 ${slide('git-12', 7, '.git/hooks không đi theo bản clone → core.hooksPath')}
 <p><code>.git/</code> is not part of the repository, so hooks are never cloned. Your colleague has none, and a rule only you enforce is not a rule. Two fixes:</p>
-<pre><code><span class="tok-comment"># A. Commit a hooks directory and point Git at it (Git 2.9+):</span>
+<pre><code class="language-bash"><span class="tok-comment"># A. Commit a hooks directory and point Git at it (Git 2.9+):</span>
 mkdir -p .githooks &amp;&amp; mv .git/hooks/pre-commit .githooks/
 chmod +x .githooks/pre-commit
 git add .githooks &amp;&amp; git commit -m <span class="tok-string">"chore: add shared git hooks"</span>
@@ -107,10 +107,10 @@ git config core.hooksPath .githooks</code></pre>
 
 <h3>B. husky + lint-staged, the Node ecosystem answer</h3>
 ${slide('git-12', 8, 'Dự án Node: husky + lint-staged + commitlint')}
-<pre><code>npm install --save-dev husky lint-staged
+<pre><code class="language-bash">npm install --save-dev husky lint-staged
 npx husky init                      <span class="tok-comment"># creates .husky/ and adds "prepare": "husky"</span>
 <span class="tok-keyword">echo</span> <span class="tok-string">"npx lint-staged"</span> &gt; .husky/pre-commit</code></pre>
-<pre><code><span class="tok-comment">// package.json</span>
+<pre><code class="language-bash"><span class="tok-comment">// package.json</span>
 {
   <span class="tok-string">"scripts"</span>: { <span class="tok-string">"prepare"</span>: <span class="tok-string">"husky"</span> },
   <span class="tok-string">"lint-staged"</span>: {
@@ -122,10 +122,10 @@ npx husky init                      <span class="tok-comment"># creates .husky/ 
 <div class="callout ok"><strong>What we saw running it (husky 9.1.7, lint-staged 16.4, 09/2026):</strong> <code>npx husky init</code> adds <code>"prepare": "husky"</code> and writes <code>npm test</code> into <code>.husky/pre-commit</code> — replace that line, or every commit runs your whole test suite. Afterwards <code>git config core.hooksPath</code> prints <code>.husky/_</code>: husky uses exactly the <code>core.hooksPath</code> mechanism of option A, it just sets it for you on every <code>npm install</code>. And lint-staged really does touch only staged files: we staged a messy <code>gio.js</code> and left an equally messy <code>nhap.js</code> unstaged — the commit contained a formatted <code>gio.js</code> and <code>nhap.js</code> was not touched.</div>
 
 <h3>commit-msg: enforcing the convention</h3>
-<pre><code>npm install --save-dev @commitlint/{cli,config-conventional}
+<pre><code class="language-javascript">npm install --save-dev @commitlint/{cli,config-conventional}
 <span class="tok-keyword">echo</span> <span class="tok-string">"export default { extends: ['@commitlint/config-conventional'] };"</span> &gt; commitlint.config.mjs
 <span class="tok-keyword">echo</span> <span class="tok-string">'npx commitlint --edit \$1'</span> &gt; .husky/commit-msg</code></pre>
-<pre><code>git commit -m <span class="tok-string">"updated stuff"</span></code></pre>
+<pre><code class="language-bash">git commit -m <span class="tok-string">"updated stuff"</span></code></pre>
 <div class="out">⧗   input: updated stuff
 ✖   subject may not be empty [subject-empty]
 ✖   type may not be empty [type-empty]
@@ -133,7 +133,7 @@ npx husky init                      <span class="tok-comment"># creates .husky/ 
 <p>Refused at the moment it costs nothing to fix. This is what makes the automated changelog and version calculation of 7.3 reliable rather than aspirational.</p>
 
 <h3>pre-push: the slower gate</h3>
-<pre><code><span class="tok-comment">#!/usr/bin/env bash</span>
+<pre><code class="language-bash"><span class="tok-comment">#!/usr/bin/env bash</span>
 <span class="tok-comment"># .husky/pre-push — the checks too slow for every commit</span>
 npx tsc --noEmit || <span class="tok-keyword">exit</span> 1
 npm test -- --run --silent || <span class="tok-keyword">exit</span> 1</code></pre>
@@ -145,7 +145,7 @@ npm test -- --run --silent || <span class="tok-keyword">exit</span> 1</code></pr
 <div class="callout warn">Hooks are a convenience, never a control. Anyone can pass <code>--no-verify</code>, and a fresh clone without <code>npm install</code> has no hooks at all. Anything that <em>must</em> hold belongs in CI plus branch protection (6.4). Hooks make the right thing fast; CI makes it mandatory.</div>
 
 <h3>Skipping, deliberately</h3>
-<pre><code>git commit --no-verify -m <span class="tok-string">"wip: mid-refactor, tests intentionally red"</span>
+<pre><code class="language-bash">git commit --no-verify -m <span class="tok-string">"wip: mid-refactor, tests intentionally red"</span>
 git push --no-verify
 HUSKY=0 git commit -m <span class="tok-string">"…"</span>          <span class="tok-comment"># disable husky for one command</span></code></pre>
 <p>Skipping is legitimate for a "wip" commit you are about to squash (3.5). It is not legitimate as a habit — if you find yourself always skipping, the hook is too slow or too strict, and that is the thing to fix.</p>
@@ -190,7 +190,7 @@ lich.js:6: leftover conflict marker
 <h2>Những script Git chạy hộ bạn</h2>
 <p class="lead">Một hook là một file thực thi được trong <code>.git/hooks/</code> mà Git chạy ở một thời điểm định sẵn. Nếu nó thoát khác 0, thao tác bị từ chối. Chỉ một cơ chế đó thôi là cách một bí mật bị lộ, một bản dựng hỏng hay một lời nhắn commit sai định dạng bị chặn lại ở khoảnh khắc rẻ nhất có thể — trước khi commit tồn tại.</p>
 
-<pre><code>ls .git/hooks/</code></pre>
+<pre><code class="language-bash">ls .git/hooks/</code></pre>
 <div class="out">applypatch-msg.sample     pre-commit.sample      pre-push.sample
 commit-msg.sample         pre-rebase.sample      prepare-commit-msg.sample
 post-update.sample        pre-receive.sample     update.sample</div>
@@ -210,7 +210,7 @@ ${slide('git-12', 4, 'Hook là một file: đúng tên + chmod +x')}
 
 <h3>Một hook pre-commit chặn sai lầm tệ nhất</h3>
 ${slide('git-12', 5, 'pre-commit chặn ký hiệu xung đột và file lớn')}
-<pre><code><span class="tok-comment">#!/usr/bin/env bash</span>
+<pre><code class="language-bash"><span class="tok-comment">#!/usr/bin/env bash</span>
 <span class="tok-comment"># .git/hooks/pre-commit — từ chối bí mật rõ ràng và ký hiệu xung đột còn sót</span>
 <span class="tok-keyword">set</span> -euo pipefail
 
@@ -232,7 +232,7 @@ files=\$(git diff --cached --name-only --diff-filter=ACM)
 <h3>Vấn đề: .git/hooks KHÔNG được chia sẻ</h3>
 ${slide('git-12', 7, '.git/hooks không đi theo bản clone → core.hooksPath')}
 <p><code>.git/</code> không thuộc kho mã, nên hook không bao giờ được clone. Đồng nghiệp của bạn không có cái nào, và một luật chỉ mình bạn áp thì không phải là luật. Hai cách sửa:</p>
-<pre><code><span class="tok-comment"># A. Commit một thư mục hook rồi trỏ Git vào đó (Git 2.9+):</span>
+<pre><code class="language-bash"><span class="tok-comment"># A. Commit một thư mục hook rồi trỏ Git vào đó (Git 2.9+):</span>
 mkdir -p .githooks &amp;&amp; mv .git/hooks/pre-commit .githooks/
 chmod +x .githooks/pre-commit
 git add .githooks &amp;&amp; git commit -m <span class="tok-string">"chore: them git hook dung chung"</span>
@@ -241,10 +241,10 @@ git config core.hooksPath .githooks</code></pre>
 
 <h3>B. husky + lint-staged, câu trả lời của hệ sinh thái Node</h3>
 ${slide('git-12', 8, 'Dự án Node: husky + lint-staged + commitlint')}
-<pre><code>npm install --save-dev husky lint-staged
+<pre><code class="language-bash">npm install --save-dev husky lint-staged
 npx husky init                      <span class="tok-comment"># tạo .husky/ và thêm "prepare": "husky"</span>
 <span class="tok-keyword">echo</span> <span class="tok-string">"npx lint-staged"</span> &gt; .husky/pre-commit</code></pre>
-<pre><code><span class="tok-comment">// package.json</span>
+<pre><code class="language-bash"><span class="tok-comment">// package.json</span>
 {
   <span class="tok-string">"scripts"</span>: { <span class="tok-string">"prepare"</span>: <span class="tok-string">"husky"</span> },
   <span class="tok-string">"lint-staged"</span>: {
@@ -256,10 +256,10 @@ npx husky init                      <span class="tok-comment"># tạo .husky/ v�
 <div class="callout ok"><strong>Chạy thật thì thấy gì (husky 9.1.7, lint-staged 16.4, 09/2026):</strong> <code>npx husky init</code> thêm <code>"prepare": "husky"</code> và ghi sẵn <code>npm test</code> vào <code>.husky/pre-commit</code> — hãy thay dòng đó, không thì mỗi lần commit lại chạy cả bộ test. Sau đó <code>git config core.hooksPath</code> in ra <code>.husky/_</code>: husky dùng đúng cơ chế <code>core.hooksPath</code> của cách A, chỉ là nó tự đặt hộ bạn sau mỗi lần <code>npm install</code>. Và lint-staged đúng là chỉ đụng tới file đã staging: kho thử staging một file <code>gio.js</code> viết lộn xộn và để nguyên <code>nhap.js</code> cũng lộn xộn mà không staging — commit chứa <code>gio.js</code> đã được định dạng, còn <code>nhap.js</code> không bị đụng tới.</div>
 
 <h3>commit-msg: ép quy ước</h3>
-<pre><code>npm install --save-dev @commitlint/{cli,config-conventional}
+<pre><code class="language-javascript">npm install --save-dev @commitlint/{cli,config-conventional}
 <span class="tok-keyword">echo</span> <span class="tok-string">"export default { extends: ['@commitlint/config-conventional'] };"</span> &gt; commitlint.config.mjs
 <span class="tok-keyword">echo</span> <span class="tok-string">'npx commitlint --edit \$1'</span> &gt; .husky/commit-msg</code></pre>
-<pre><code>git commit -m <span class="tok-string">"cap nhat linh tinh"</span></code></pre>
+<pre><code class="language-bash">git commit -m <span class="tok-string">"cap nhat linh tinh"</span></code></pre>
 <div class="out">⧗   input: cap nhat linh tinh
 ✖   subject may not be empty [subject-empty]
 ✖   type may not be empty [type-empty]
@@ -267,7 +267,7 @@ npx husky init                      <span class="tok-comment"># tạo .husky/ v�
 <p>Bị từ chối vào đúng khoảnh khắc sửa lại chẳng tốn gì. Đây là thứ làm cho changelog tự sinh và việc tính phiên bản ở bài 7.3 trở nên đáng tin thay vì chỉ là mong ước.</p>
 
 <h3>pre-push: cửa chậm hơn</h3>
-<pre><code><span class="tok-comment">#!/usr/bin/env bash</span>
+<pre><code class="language-bash"><span class="tok-comment">#!/usr/bin/env bash</span>
 <span class="tok-comment"># .husky/pre-push — những phép kiểm quá chậm cho mỗi lần commit</span>
 npx tsc --noEmit || <span class="tok-keyword">exit</span> 1
 npm test -- --run --silent || <span class="tok-keyword">exit</span> 1</code></pre>
@@ -279,7 +279,7 @@ npm test -- --run --silent || <span class="tok-keyword">exit</span> 1</code></pr
 <div class="callout warn">Hook là một tiện lợi, không bao giờ là một biện pháp kiểm soát. Ai cũng truyền được <code>--no-verify</code>, và một bản clone mới chưa chạy <code>npm install</code> thì hoàn toàn không có hook nào. Bất cứ thứ gì <em>BẮT BUỘC</em> phải giữ đều thuộc về CI cộng bảo vệ nhánh (bài 6.4). Hook làm cho việc đúng trở nên nhanh; CI làm cho nó trở thành bắt buộc.</div>
 
 <h3>Bỏ qua, một cách có chủ ý</h3>
-<pre><code>git commit --no-verify -m <span class="tok-string">"wip: dang refactor do, test co tinh de do"</span>
+<pre><code class="language-bash">git commit --no-verify -m <span class="tok-string">"wip: dang refactor do, test co tinh de do"</span>
 git push --no-verify
 HUSKY=0 git commit -m <span class="tok-string">"…"</span>          <span class="tok-comment"># tắt husky cho một lệnh</span></code></pre>
 <p>Bỏ qua là chính đáng với một commit "wip" mà bạn sắp gộp lại (bài 3.5). Nó không chính đáng khi thành thói quen — nếu bạn thấy mình lúc nào cũng bỏ qua thì cái hook quá chậm hoặc quá khắt khe, và ĐÓ mới là thứ cần sửa.</p>
@@ -333,7 +333,7 @@ lich.js:6: leftover conflict marker
 <h2>Anyone can commit as anyone</h2>
 <p class="lead">The author field of a commit is whatever <code>user.name</code> and <code>user.email</code> say. Git does not verify it, because it cannot — a distributed system has no central authority to ask. Which means this works, from any machine, in thirty seconds:</p>
 
-<pre><code>git config user.name <span class="tok-string">"Linus Torvalds"</span>
+<pre><code class="language-xml">git config user.name <span class="tok-string">"Linus Torvalds"</span>
 git config user.email <span class="tok-string">"torvalds@linux-foundation.org"</span>
 git commit --allow-empty -m <span class="tok-string">"feat: definitely written by Linus"</span>
 git log -1 --format=<span class="tok-string">'%an &lt;%ae&gt;'</span></code></pre>
@@ -344,11 +344,11 @@ git log -1 --format=<span class="tok-string">'%an &lt;%ae&gt;'</span></code></pr
 ${slide('git-12', 11, 'Trường tác giả chỉ là chữ tự khai')}
 ${slide('git-12', 12, 'Ký bằng khoá SSH và xác minh ở máy mình')}
 <p>Git 2.34+ can sign with the SSH key you already made in 0.3. No GPG, no keyring, no expiry management:</p>
-<pre><code>git config --global gpg.format ssh
+<pre><code class="language-bash">git config --global gpg.format ssh
 git config --global user.signingkey ~/.ssh/id_ed25519.pub
 git config --global commit.gpgsign true      <span class="tok-comment"># sign every commit</span>
 git config --global tag.gpgsign true         <span class="tok-comment"># and every annotated tag</span></code></pre>
-<pre><code>git commit -m <span class="tok-string">"feat(auth): add refresh token rotation"</span>
+<pre><code class="language-bash">git commit -m <span class="tok-string">"feat(auth): add refresh token rotation"</span>
 git log --show-signature -1 | head -4</code></pre>
 <div class="out">commit 3f8a1c9d2e5b7a4c6f8e0a2b4d6c8e0f2a4b6c8d
 Good "git" signature for an@example.com with ED25519 key SHA256:4d7a1e…
@@ -357,7 +357,7 @@ Author: Nguyen Van An &lt;an@example.com&gt;</div>
 
 <h3>Verifying locally</h3>
 ${slide('git-12', 13, 'Đọc %G? và ký tag phát hành')}
-<pre><code><span class="tok-comment"># Tell Git which keys you trust, and for which identity:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Tell Git which keys you trust, and for which identity:</span>
 <span class="tok-keyword">echo</span> <span class="tok-string">"an@example.com \$(cat ~/.ssh/id_ed25519.pub)"</span> &gt;&gt; ~/.git-allowed-signers
 git config --global gpg.ssh.allowedSignersFile ~/.git-allowed-signers
 
@@ -376,7 +376,7 @@ git log --format=<span class="tok-string">'%h %G? %an %s'</span> -5</code></pre>
 <div class="callout warn"><strong>Two things our test repository showed (git 2.51):</strong> first, before <code>gpg.ssh.allowedSignersFile</code> exists, <code>git log --show-signature</code> prints <code>error: gpg.ssh.allowedSignersFile needs to be configured and exist for ssh signature verification</code> and then <code>No signature</code> — even on a commit that <em>is</em> signed. Read it as "cannot check", not "unsigned". Second, <strong>G</strong> only means "signed by a key in my file": a commit signed with An’s key but committed as <code>binh@example.com</code> still showed <code>G</code>, with <code>Good "git" signature for an@example.com</code>. Git reports whose key it was; comparing that email with the author is your job. A signature from a key that is not in the file shows <code>U</code> and <code>No principal matched.</code>; a commit whose content was edited after signing shows <code>B</code> and <code>incorrect signature</code>.</div>
 
 <h3>GPG, if your organisation requires it</h3>
-<pre><code>gpg --full-generate-key                     <span class="tok-comment"># RSA 4096 or ed25519, with an expiry</span>
+<pre><code class="language-bash">gpg --full-generate-key                     <span class="tok-comment"># RSA 4096 or ed25519, with an expiry</span>
 gpg --list-secret-keys --keyid-format=long  <span class="tok-comment"># find the key id</span>
 git config --global user.signingkey 3AA5C34371567BD2
 git config --global commit.gpgsign true
@@ -394,7 +394,7 @@ ${slide('git-12', 14, 'Khoá Signing, nhãn Verified, vigilant mode')}
 <div class="callout warn"><strong>Vigilant mode (GitHub Docs, 09/2026).</strong> By default an unsigned commit simply has no badge, so a forged commit and an honest unsigned one look the same. Settings → SSH and GPG keys → <strong>Flag unsigned commits as unverified</strong> changes that for commits bearing your identity: unsigned ones are shown as <strong>Unverified</strong>. A third label appears too — <strong>Partially verified</strong>: the signature is valid, but the commit lists an author who is not the committer and who has vigilant mode on. GitHub’s own advice is to enable it only if you sign <em>all</em> your commits and tags from every machine, because anything unsigned you push afterwards turns Unverified. One more documented detail: once GitHub has verified a signature it stores that result, so the commit stays Verified even if you later rotate or revoke the key.</div>
 
 <h3>Signing tags — the higher-value case</h3>
-<pre><code>git tag -s v1.5.0 -m <span class="tok-string">"Release 1.5.0"</span>
+<pre><code class="language-bash">git tag -s v1.5.0 -m <span class="tok-string">"Release 1.5.0"</span>
 git verify-tag v1.5.0
 git push origin v1.5.0</code></pre>
 <p>If you sign only one thing, sign release tags. A tag is what a build pipeline consumes and what users download; proving that <code>v1.5.0</code> is the version <em>you</em> cut is worth more than proving authorship of one commit among five hundred.</p>
@@ -462,7 +462,7 @@ f7659bb G Nguyen Van An feat(auth): them xoay vong refresh token
 <h2>Ai cũng commit dưới danh nghĩa bất kỳ ai</h2>
 <p class="lead">Trường tác giả của một commit là bất cứ thứ gì <code>user.name</code> và <code>user.email</code> khai. Git không xác minh nó, vì nó không xác minh nổi — một hệ phân tán không có cơ quan trung ương nào để hỏi. Nghĩa là chuyện này chạy được, từ bất kỳ cái máy nào, trong ba mươi giây:</p>
 
-<pre><code>git config user.name <span class="tok-string">"Linus Torvalds"</span>
+<pre><code class="language-xml">git config user.name <span class="tok-string">"Linus Torvalds"</span>
 git config user.email <span class="tok-string">"torvalds@linux-foundation.org"</span>
 git commit --allow-empty -m <span class="tok-string">"feat: chac chan do Linus viet"</span>
 git log -1 --format=<span class="tok-string">'%an &lt;%ae&gt;'</span></code></pre>
@@ -473,11 +473,11 @@ git log -1 --format=<span class="tok-string">'%an &lt;%ae&gt;'</span></code></pr
 ${slide('git-12', 11, 'Trường tác giả chỉ là chữ tự khai')}
 ${slide('git-12', 12, 'Ký bằng khoá SSH và xác minh ở máy mình')}
 <p>Git 2.34+ ký được bằng chính cái khoá SSH bạn đã tạo ở bài 0.3. Không GPG, không keyring, không phải quản lý hạn dùng:</p>
-<pre><code>git config --global gpg.format ssh
+<pre><code class="language-bash">git config --global gpg.format ssh
 git config --global user.signingkey ~/.ssh/id_ed25519.pub
 git config --global commit.gpgsign true      <span class="tok-comment"># ký mọi commit</span>
 git config --global tag.gpgsign true         <span class="tok-comment"># và mọi tag có chú thích</span></code></pre>
-<pre><code>git commit -m <span class="tok-string">"feat(auth): them xoay vong refresh token"</span>
+<pre><code class="language-bash">git commit -m <span class="tok-string">"feat(auth): them xoay vong refresh token"</span>
 git log --show-signature -1 | head -4</code></pre>
 <div class="out">commit 3f8a1c9d2e5b7a4c6f8e0a2b4d6c8e0f2a4b6c8d
 Good "git" signature for an@example.com with ED25519 key SHA256:4d7a1e…
@@ -486,7 +486,7 @@ Author: Nguyen Van An &lt;an@example.com&gt;</div>
 
 <h3>Xác minh ở máy mình</h3>
 ${slide('git-12', 13, 'Đọc %G? và ký tag phát hành')}
-<pre><code><span class="tok-comment"># Nói cho Git biết bạn tin những khoá nào, và cho danh tính nào:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Nói cho Git biết bạn tin những khoá nào, và cho danh tính nào:</span>
 <span class="tok-keyword">echo</span> <span class="tok-string">"an@example.com \$(cat ~/.ssh/id_ed25519.pub)"</span> &gt;&gt; ~/.git-allowed-signers
 git config --global gpg.ssh.allowedSignersFile ~/.git-allowed-signers
 
@@ -505,7 +505,7 @@ git log --format=<span class="tok-string">'%h %G? %an %s'</span> -5</code></pre>
 <div class="callout warn"><strong>Hai điều kho thử cho thấy (git 2.51):</strong> thứ nhất, khi chưa có <code>gpg.ssh.allowedSignersFile</code>, <code>git log --show-signature</code> in <code>error: gpg.ssh.allowedSignersFile needs to be configured and exist for ssh signature verification</code> rồi ghi <code>No signature</code> — kể cả với commit <em>có</em> ký. Hãy đọc là "không kiểm được", đừng đọc là "không ký". Thứ hai, <strong>G</strong> chỉ nghĩa là "được ký bởi một khoá có trong file của tôi": một commit ký bằng khoá của An nhưng committer khai là <code>binh@example.com</code> vẫn hiện <code>G</code>, kèm dòng <code>Good "git" signature for an@example.com</code>. Git báo khoá đó là của ai; so email ấy với tác giả là việc của bạn. Chữ ký từ một khoá không có trong file hiện <code>U</code> và <code>No principal matched.</code> (không khớp danh tính nào); một commit bị sửa nội dung sau khi ký hiện <code>B</code> và <code>incorrect signature</code> (chữ ký sai).</div>
 
 <h3>GPG, nếu tổ chức của bạn yêu cầu</h3>
-<pre><code>gpg --full-generate-key                     <span class="tok-comment"># RSA 4096 hoặc ed25519, kèm hạn dùng</span>
+<pre><code class="language-bash">gpg --full-generate-key                     <span class="tok-comment"># RSA 4096 hoặc ed25519, kèm hạn dùng</span>
 gpg --list-secret-keys --keyid-format=long  <span class="tok-comment"># tìm id khoá</span>
 git config --global user.signingkey 3AA5C34371567BD2
 git config --global commit.gpgsign true
@@ -523,7 +523,7 @@ ${slide('git-12', 14, 'Khoá Signing, nhãn Verified, vigilant mode')}
 <div class="callout warn"><strong>Vigilant mode — chế độ cảnh giác (GitHub Docs, 09/2026).</strong> Mặc định một commit không ký chỉ đơn giản là không có huy hiệu, nên một commit giả danh và một commit trung thực mà không ký trông y hệt nhau. Settings → SSH and GPG keys → <strong>Flag unsigned commits as unverified</strong> đổi điều đó cho các commit mang danh tính của bạn: commit không ký sẽ hiện <strong>Unverified</strong>. Xuất hiện thêm nhãn thứ ba — <strong>Partially verified</strong> (xác minh một phần): chữ ký hợp lệ, nhưng commit có một tác giả khác committer và người đó đang bật vigilant mode. Chính GitHub khuyên chỉ bật khi bạn ký <em>MỌI</em> commit và tag từ mọi máy, vì bất cứ thứ gì không ký bạn push sau đó đều thành Unverified. Thêm một chi tiết có trong docs: khi GitHub đã xác minh một chữ ký thì nó lưu kết quả lại, nên commit vẫn Verified kể cả khi sau này bạn thay hoặc thu hồi khoá.</div>
 
 <h3>Ký tag — trường hợp giá trị hơn</h3>
-<pre><code>git tag -s v1.5.0 -m <span class="tok-string">"Release 1.5.0"</span>
+<pre><code class="language-bash">git tag -s v1.5.0 -m <span class="tok-string">"Release 1.5.0"</span>
 git verify-tag v1.5.0
 git push origin v1.5.0</code></pre>
 <p>Nếu chỉ ký một thứ, hãy ký tag phát hành. Một tag là thứ mà pipeline dựng bản tiêu thụ và là thứ người dùng tải về; chứng minh rằng <code>v1.5.0</code> đúng là bản <em>bạn</em> cắt ra đáng giá hơn chứng minh quyền tác giả của một commit giữa năm trăm cái.</p>

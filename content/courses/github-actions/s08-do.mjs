@@ -155,7 +155,7 @@ ${slide('ga-08', 5, 'A typo in a command name is 127 from the shell; a typo in a
 <h3>126 and 2: the program never started — but part of the script did</h3>
 ${slide('ga-08', 6, 'Missing execute bit gives 126; a missing fi gives 2 — and the lines before the syntax error still ran')}
 <p><strong>126</strong> came from <code>./scripts/chay.sh: Permission denied</code>. The script is in the repository and the shell found it, but its file mode in Git is <code>100644</code> — no executable bit — so the kernel refused to run it. The cause is almost always that the file was created on a machine or editor that did not set the bit, or that it was committed from Windows, where Git cannot see Unix permissions at all. The repair is not <code>chmod</code> in the workflow; it is fixing the mode in Git so every checkout is right:</p>
-<pre><code>git ls-files -s scripts/chay.sh        # 100644 = not executable
+<pre><code class="language-bash">git ls-files -s scripts/chay.sh        # 100644 = not executable
 git update-index --chmod=+x scripts/chay.sh
 git commit -m "make chay.sh executable"  # now 100755</code></pre>
 <p>The alternative that avoids the question entirely is <code>run: bash scripts/chay.sh</code> — calling the interpreter explicitly does not need the executable bit. Both are fine; what is not fine is a <code>chmod +x</code> step in CI that makes the pipeline pass while every developer&#39;s checkout still has the broken mode.</p>
@@ -393,7 +393,7 @@ ${slide('ga-08', 5, 'Gõ sai tên lệnh là 127 từ shell; gõ sai tên script
 <h3>126 và 2: chương trình chưa hề khởi động — nhưng một phần script thì CÓ</h3>
 ${slide('ga-08', 6, 'Thiếu bit thực thi cho 126; thiếu fi cho 2 — và các dòng trước lỗi cú pháp vẫn đã chạy')}
 <p><strong>126</strong> đến từ <code>./scripts/chay.sh: Permission denied</code>. Script có trong kho và shell đã tìm thấy nó, nhưng chế độ tệp của nó trong Git là <code>100644</code> — không có bit thực thi — nên nhân hệ điều hành từ chối chạy. Nguyên nhân gần như luôn là tệp được tạo trên một máy hay một trình soạn thảo không đặt bit ấy, hoặc được commit từ Windows, nơi Git không nhìn thấy quyền kiểu Unix. Cách vá KHÔNG phải <code>chmod</code> trong workflow; mà là sửa chế độ tệp ngay trong Git để mọi lần checkout đều đúng:</p>
-<pre><code>git ls-files -s scripts/chay.sh        # 100644 = không thực thi được
+<pre><code class="language-bash">git ls-files -s scripts/chay.sh        # 100644 = không thực thi được
 git update-index --chmod=+x scripts/chay.sh
 git commit -m "cho chay.sh thuc thi duoc"  # giờ là 100755</code></pre>
 <p>Cách né hẳn câu hỏi này là <code>run: bash scripts/chay.sh</code> — gọi thẳng trình thông dịch thì không cần bit thực thi. Cả hai đều ổn; thứ KHÔNG ổn là một bước <code>chmod +x</code> trong CI làm pipeline xanh trong khi bản checkout của mọi lập trình viên vẫn mang chế độ hỏng.</p>
@@ -1116,7 +1116,7 @@ heap_size_limit  = 8.240 MB</div>
 
 <h3>What to print when you do need CI to tell you</h3>
 ${slide('ga-08', 17, 'One step prints the image, the architecture and the heap ceiling — ask the machine before guessing')}
-<pre><code>- name: May nay la may nao
+<pre><code class="language-javascript">- name: May nay la may nao
   run: |
     uname -a
     echo "runner: \$RUNNER_OS \$RUNNER_ARCH"
@@ -1314,7 +1314,7 @@ heap_size_limit  = 8.240 MB</div>
 
 <h3>In gì ra khi bạn THẬT SỰ cần CI nói cho biết</h3>
 ${slide('ga-08', 17, 'Một bước in ra ảnh, kiến trúc và trần heap — hỏi cỗ máy trước khi đoán')}
-<pre><code>- name: May nay la may nao
+<pre><code class="language-javascript">- name: May nay la may nao
   run: |
     uname -a
     echo "runner: \$RUNNER_OS \$RUNNER_ARCH"
@@ -1521,7 +1521,7 @@ test (20)  Run npm test  &gt; node --test "test-that/*.test.js"
 test (20)  Run npm test  Could not find '/home/runner/work/ga-san-tap/ga-san-tap/ch08/app/test-that/*.test.js'
 test (20)  Run npm test  ##[error]Process completed with exit code 1.</div>
 <p><code>--log-failed</code> printed 10 lines for this run instead of the whole job log — only the steps that failed, each line prefixed with the job and step name. For a larger log, combine it with <code>grep</code>: the line you want is just above <code>##[error]</code>, and <code>grep -F</code> avoids having to escape the brackets:</p>
-<pre><code>gh run view RUN_ID --log-failed | grep -F -B 25 "##[error]"      # 25 lines of context above each error
+<pre><code class="language-bash">gh run view RUN_ID --log-failed | grep -F -B 25 "##[error]"      # 25 lines of context above each error
 gh run view --job JOB_ID --log | grep -n -F "not ok"             # jump to failing node:test cases
 gh api repos/OWNER/REPO/check-runs/JOB_ID/annotations           # the annotations as JSON</code></pre>
 <p>The last command returns annotations with file and line. On the <code>lint</code> job of run 36011088172, which turned shellcheck output into <code>::error file=…,line=…::</code> commands, it returned:</p>
@@ -1738,7 +1738,7 @@ test (20)  Run npm test  &gt; node --test "test-that/*.test.js"
 test (20)  Run npm test  Could not find '/home/runner/work/ga-san-tap/ga-san-tap/ch08/app/test-that/*.test.js'
 test (20)  Run npm test  ##[error]Process completed with exit code 1.</div>
 <p><code>--log-failed</code> in ra 10 dòng cho run này thay vì cả log của job — chỉ các bước đã hỏng, mỗi dòng có tên job và tên bước đứng trước. Với một log dài hơn, kết hợp nó với <code>grep</code>: dòng bạn cần nằm ngay trên <code>##[error]</code>, và <code>grep -F</code> giúp khỏi phải thoát dấu ngoặc vuông:</p>
-<pre><code>gh run view RUN_ID --log-failed | grep -F -B 25 "##[error]"      # 25 dòng ngữ cảnh phía trên mỗi lỗi
+<pre><code class="language-bash">gh run view RUN_ID --log-failed | grep -F -B 25 "##[error]"      # 25 dòng ngữ cảnh phía trên mỗi lỗi
 gh run view --job JOB_ID --log | grep -n -F "not ok"             # nhảy tới các ca node:test hỏng
 gh api repos/OWNER/REPO/check-runs/JOB_ID/annotations           # annotation dạng JSON</code></pre>
 <p>Lệnh cuối trả về annotation kèm tệp và dòng. Trên job <code>lint</code> của run 36011088172, job đã biến đầu ra của shellcheck thành các lệnh <code>::error file=…,line=…::</code>, nó trả về:</p>
@@ -1912,7 +1912,7 @@ verify: run under the 1600 MB constraint again
 </div>
 
 <h3>Turning the reproduction into a CI step</h3>
-<pre><code>- name: Build phai chay duoc voi heap bop toi 2GB
+<pre><code class="language-bash">- name: Build phai chay duoc voi heap bop toi 2GB
   env:
     NODE_OPTIONS: --max-old-space-size=2048
   run: |
@@ -1982,7 +1982,7 @@ ${slide('ga-08', 28, 'A re-run replays the old commit; only a new run on the fix
       matrix:
         node: [20, 22, 24]        # 20 = the oldest version in "engines" — keep it
 </code></pre>
-<pre><code>{
+<pre><code class="language-bash">{
   "engines": { "node": "&gt;=20" }
 }</code></pre>
 <p>Remove the Node 20 leg to "make CI green" and the next Node-22-only API that slips into the code passes CI and fails on a user&#39;s machine instead — the same bug class, with the evidence moved from your CI log to someone else&#39;s bug report. If Node 20 support is really being dropped, change <code>engines</code> and the matrix together, in one commit that says so.</p>
@@ -2088,7 +2088,7 @@ kiem:    chay lai duoi rang buoc 1600 MB
 </div>
 
 <h3>Biến bản tái lập thành một bước CI</h3>
-<pre><code>- name: Build phai chay duoc voi heap bop toi 2GB
+<pre><code class="language-bash">- name: Build phai chay duoc voi heap bop toi 2GB
   env:
     NODE_OPTIONS: --max-old-space-size=2048
   run: |
@@ -2158,7 +2158,7 @@ ${slide('ga-08', 28, 'Chạy lại là phát lại commit cũ; chỉ một run m
       matrix:
         node: [20, 22, 24]        # 20 = phiên bản cũ nhất trong "engines" — giữ nó
 </code></pre>
-<pre><code>{
+<pre><code class="language-bash">{
   "engines": { "node": "&gt;=20" }
 }</code></pre>
 <p>Bỏ nhánh Node 20 đi để "làm CI xanh", thì API chỉ-có-từ-Node-22 kế tiếp lọt vào mã sẽ qua CI và hỏng trên máy của người dùng — cùng một loại bug, chỉ có bằng chứng bị dời từ log CI của bạn sang báo cáo lỗi của người khác. Nếu thật sự bỏ hỗ trợ Node 20, hãy đổi <code>engines</code> và ma trận CÙNG nhau, trong một commit nói rõ điều đó.</p>

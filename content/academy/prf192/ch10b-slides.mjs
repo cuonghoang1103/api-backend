@@ -52,7 +52,7 @@ export default {
 <li><strong>The syntax box is two lines, not one</strong> — <code>FILE *fptr;</code> declares the handle (slide 17), <code>fptr = fopen("filename.txt", "w");</code> fills it. A handle you never assigned is a wild pointer; <code>-Wall</code> will warn <em>"variable is uninitialized when used here"</em>, and the Demo on slide 28 actually triggers that warning.</li>
 <li><strong>Where the file lands</strong> — with a bare name like <code>"filename.txt"</code> the file is created in the program's <em>current working directory</em>, which is not always the folder holding the <code>.c</code> file. If you "cannot find" the file you just wrote, look there before blaming the code.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     FILE *fptr;                          /* tay cam (handle) */
@@ -74,7 +74,7 @@ int main(void) {
 <li><strong>Khung cú pháp có HAI dòng chứ không phải một</strong> — <code>FILE *fptr;</code> khai tay cầm (slide 17), <code>fptr = fopen("filename.txt", "w");</code> mới điền giá trị vào. Tay cầm chưa gán là con trỏ hoang; <code>-Wall</code> sẽ cảnh báo <em>"variable is uninitialized when used here"</em>, và Demo ở slide 28 dính đúng cảnh báo này.</li>
 <li><strong>Tệp rơi vào đâu</strong> — với cái tên trần như <code>"filename.txt"</code>, tệp được tạo trong <em>thư mục làm việc hiện tại</em> của chương trình, không phải lúc nào cũng là thư mục chứa tệp <code>.c</code>. Nếu "không tìm thấy" tệp vừa ghi, hãy nhìn vào đó trước khi đổ lỗi cho mã.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     FILE *fptr;                          /* tay cam (handle) */
@@ -98,7 +98,7 @@ int main(void) {
 <li><strong><code>&lt;stdlib.h&gt;</code> on line 2 is needed for <code>exit()</code></strong>, not for <code>fopen</code>. <code>fopen</code>, <code>fclose</code>, <code>FILE</code> and <code>NULL</code> all come from <code>&lt;stdio.h&gt;</code>.</li>
 <li><strong>What the slide forgot: <code>fclose</code></strong> — this program never closes the file. It happens to work because <code>return 0</code> from <code>main</code> flushes and closes every stream; but the habit is dangerous, as the measurement below shows.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 int main()
 {
@@ -127,7 +127,7 @@ int main()
 <li><strong><code>&lt;stdlib.h&gt;</code> ở dòng 2 là để có <code>exit()</code></strong>, không phải để có <code>fopen</code>. <code>fopen</code>, <code>fclose</code>, <code>FILE</code> và <code>NULL</code> đều nằm trong <code>&lt;stdio.h&gt;</code>.</li>
 <li><strong>Thứ slide quên: <code>fclose</code></strong> — chương trình này không hề đóng tệp. Nó chạy được vì <code>return 0</code> từ <code>main</code> sẽ xả bộ đệm và đóng mọi luồng; nhưng thói quen ấy nguy hiểm, như phép đo bên dưới cho thấy.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 int main()
 {
@@ -196,7 +196,7 @@ int main()
 <li><strong>The correct shape</strong> — <code>int c; while ((c = fgetc(fp)) != EOF) putchar(c);</code>. Read, test, then use: a <code>while</code> loop, never a <code>do…while</code>. Note the inner parentheses around the assignment — without them <code>c = fgetc(fp) != EOF</code> stores 0 or 1 into <code>c</code>.</li>
 <li><strong><code>getc</code> vs <code>fgetc</code></strong> — identical behaviour; <code>getc</code> is allowed to be a macro that may evaluate its argument more than once, so <code>getc(f[i++])</code> is unsafe. Prefer <code>fgetc</code> and the question disappears.</li>
 </ul>
-<pre><code>/* Ban SLIDE — chay duoc voi van ban thuan, nhung co 2 loi */
+<pre><code class="language-c">/* Ban SLIDE — chay duoc voi van ban thuan, nhung co 2 loi */
 char s;
 do { s = getc(fp); printf("%c", s); } while (s != EOF);
 
@@ -214,7 +214,7 @@ while ((c = fgetc(fp)) != EOF) putchar(c);</code></pre>
 <li><strong>Dáng viết đúng</strong> — <code>int c; while ((c = fgetc(fp)) != EOF) putchar(c);</code>. Đọc, kiểm, rồi mới dùng: vòng <code>while</code>, không bao giờ <code>do…while</code>. Chú ý cặp ngoặc bao quanh phép gán — thiếu nó thì <code>c = fgetc(fp) != EOF</code> cất số 0 hoặc 1 vào <code>c</code>.</li>
 <li><strong><code>getc</code> so với <code>fgetc</code></strong> — hành vi y hệt; <code>getc</code> được phép là một macro có thể tính đối số nhiều lần, nên <code>getc(f[i++])</code> là không an toàn. Cứ dùng <code>fgetc</code> là hết chuyện.</li>
 </ul>
-<pre><code>/* Ban SLIDE — chay duoc voi van ban thuan, nhung co 2 loi */
+<pre><code class="language-c">/* Ban SLIDE — chay duoc voi van ban thuan, nhung co 2 loi */
 char s;
 do { s = getc(fp); printf("%c", s); } while (s != EOF);
 
@@ -272,7 +272,7 @@ while ((c = fgetc(fp)) != EOF) putchar(c);</code></pre>
 <li><strong>Line 16 — <code>fclose(fptr);</code></strong> — this program does close, and that is what makes the 42 bytes reach the disk before the process ends.</li>
 <li><strong>The file-size detail worth a mark</strong> — Explorer reports <strong>42 bytes</strong>. Count the characters and you get 40. The two extra bytes are Windows line endings: each <code>\\n</code> written in text mode becomes <code>\\r\\n</code> on disk, and there are two of them.</li>
 </ul>
-<pre><code>int main() {
+<pre><code class="language-c">int main() {
     FILE *fptr;
     int num = 42;
 
@@ -300,7 +300,7 @@ while ((c = fgetc(fp)) != EOF) putchar(c);</code></pre>
 <li><strong>Dòng 16 — <code>fclose(fptr);</code></strong> — chương trình này CÓ đóng tệp, và chính nhờ vậy 42 byte mới xuống được đĩa trước khi tiến trình kết thúc.</li>
 <li><strong>Chi tiết kích thước tệp đáng một điểm</strong> — Explorer báo <strong>42 byte</strong>. Đếm ký tự thì chỉ ra 40. Hai byte dôi ra là ký tự xuống dòng kiểu Windows: mỗi <code>\\n</code> ghi ở chế độ văn bản trở thành <code>\\r\\n</code> trên đĩa, mà ở đây có hai cái.</li>
 </ul>
-<pre><code>int main() {
+<pre><code class="language-c">int main() {
     FILE *fptr;
     int num = 42;
 
@@ -330,7 +330,7 @@ while ((c = fgetc(fp)) != EOF) putchar(c);</code></pre>
 <li><strong>Where the rounding happens</strong> — you type <code>25.8889</code> and Notepad shows <code>25.89</code>. The value was not truncated on input; <code>fprintf</code> wrote it with <code>%.2lf</code>, so the file only ever held two decimals. The precision is lost at <em>write</em> time and can never be recovered by reading.</li>
 <li><strong>The final table</strong> — <code>Account / Name / Balance</code> with the columns aligned by <code>%-10d%-13s%7.2lf</code>. The numbers are right-aligned in a 7-wide field, which is why <code>999.12</code> and <code>12.45</code> line up on the decimal point.</li>
 </ul>
-<pre><code>int main() {
+<pre><code class="language-c">int main() {
     FILE *ptr;
     // Write data to file
     inputClients(ptr, "client.txt");
@@ -350,7 +350,7 @@ while ((c = fgetc(fp)) != EOF) putchar(c);</code></pre>
 <li><strong>Chỗ làm tròn xảy ra</strong> — bạn gõ <code>25.8889</code> mà Notepad hiện <code>25.89</code>. Giá trị không bị cắt lúc nhập; <code>fprintf</code> ghi nó bằng <code>%.2lf</code>, nên trong tệp chưa bao giờ có quá hai chữ số thập phân. Độ chính xác mất ở khâu GHI và không bao giờ đọc lại được nữa.</li>
 <li><strong>Bảng cuối</strong> — <code>Account / Name / Balance</code>, các cột thẳng hàng nhờ <code>%-10d%-13s%7.2lf</code>. Số căn phải trong ô rộng 7, nên <code>999.12</code> và <code>12.45</code> thẳng nhau ở dấu chấm thập phân.</li>
 </ul>
-<pre><code>int main() {
+<pre><code class="language-c">int main() {
     FILE *ptr;
     // Write data to file
     inputClients(ptr, "client.txt");
@@ -372,7 +372,7 @@ while ((c = fgetc(fp)) != EOF) putchar(c);</code></pre>
 <li><strong>Line 33 — <code>while(!feof(stdin))</code> is wrong even though it works here</strong> — <code>feof</code> answers "did a previous read already hit the end?", not "is there more?". With the priming read the program happens to produce the right number of records, but the condition is blind to a <em>different</em> failure: a value that does not parse.</li>
 <li><strong>The measurement that proves it</strong> — I fed the compiled program one malformed line, <code>6668 MinhTT abc</code>. <code>scanf</code> returned 2 instead of 3, left <code>abc</code> sitting in the input, and never set the EOF flag. The loop then span forever: in <strong>2 seconds it printed 4,018,142 <code>#</code> prompts</strong> and 8 MB of output before I killed it.</li>
 </ul>
-<pre><code>/* Ban SLIDE: dieu kien mu voi loi phan tich */
+<pre><code class="language-c">/* Ban SLIDE: dieu kien mu voi loi phan tich */
 scanf("%d%29s%lf", &amp;account, name, &amp;balance);
 while (!feof(stdin)) {
     fprintf(p, "%d %s %.2lf\\n", account, name, balance);
@@ -396,7 +396,7 @@ while (scanf("%d%29s%lf", &amp;account, name, &amp;balance) == 3) {
 <li><strong>Dòng 33 — <code>while(!feof(stdin))</code> SAI dù ở đây nó chạy được</strong> — <code>feof</code> trả lời câu "lần đọc TRƯỚC đã chạm hết tệp chưa?", không phải câu "còn dữ liệu không?". Nhờ lệnh đọc mồi mà chương trình tình cờ cho đúng số bản ghi, nhưng điều kiện ấy mù trước một loại hỏng KHÁC: một giá trị không phân tích được.</li>
 <li><strong>Phép đo chứng minh</strong> — tôi đưa vào chương trình đã biên dịch đúng một dòng sai: <code>6668 MinhTT abc</code>. <code>scanf</code> trả về 2 thay vì 3, để nguyên chữ <code>abc</code> trong luồng nhập, và không hề bật cờ EOF. Vòng lặp quay mãi: trong <strong>2 giây nó in ra 4.018.142 dấu nhắc <code>#</code></strong> và 8 MB đầu ra trước khi tôi giết tiến trình.</li>
 </ul>
-<pre><code>/* Ban SLIDE: dieu kien mu voi loi phan tich */
+<pre><code class="language-c">/* Ban SLIDE: dieu kien mu voi loi phan tich */
 scanf("%d%29s%lf", &amp;account, name, &amp;balance);
 while (!feof(stdin)) {
     fprintf(p, "%d %s %.2lf\\n", account, name, balance);
@@ -458,7 +458,7 @@ while (scanf("%d%29s%lf", &amp;account, name, &amp;balance) == 3) {
 <li><strong>Return value — "the number of objects successfully written"</strong>, i.e. elements, <strong>not bytes</strong>. So the correct error check for one record is <code>if (fwrite(&amp;p, sizeof p, 1, f) != 1) { … }</code>, never <code>!= sizeof p</code>.</li>
 <li><strong>What "binary form" really means</strong> — <code>fwrite</code> copies the bytes of memory as they are. No conversion, no formatting, no <code>%d</code>. The value 101 travels to disk as the four bytes <code>65 00 00 00</code>, which is what slide 13 drew and what slide 36 will measure.</li>
 </ul>
-<pre><code>struct Product { int product_id; float price; int quantity; };
+<pre><code class="language-c">struct Product { int product_id; float price; int quantity; };
 
 struct Product p = {101, 10.99f, 50};
 FILE *f = fopen("products.bin", "wb");      /* chu 'b' BAT BUOC */
@@ -479,7 +479,7 @@ fclose(f);</code></pre>
 <li><strong>Giá trị trả về — "số đối tượng ghi thành công"</strong>, tức là số PHẦN TỬ, <strong>không phải số byte</strong>. Vậy phép kiểm lỗi đúng cho một bản ghi là <code>if (fwrite(&amp;p, sizeof p, 1, f) != 1) { … }</code>, không bao giờ là <code>!= sizeof p</code>.</li>
 <li><strong>"Dạng nhị phân" thật sự nghĩa là gì</strong> — <code>fwrite</code> chép nguyên xi các byte trong bộ nhớ. Không chuyển đổi, không định dạng, không <code>%d</code>. Giá trị 101 xuống đĩa thành bốn byte <code>65 00 00 00</code>, đúng thứ slide 13 đã vẽ và slide 36 sắp đo.</li>
 </ul>
-<pre><code>struct Product { int product_id; float price; int quantity; };
+<pre><code class="language-c">struct Product { int product_id; float price; int quantity; };
 
 struct Product p = {101, 10.99f, 50};
 FILE *f = fopen("products.bin", "wb");      /* chu 'b' BAT BUOC */
@@ -502,7 +502,7 @@ fclose(f);</code></pre>
 <li><strong>The loop shape slide 35 will use</strong> — <code>while (fread(&amp;product, sizeof(struct Product), 1, filePtr) == 1)</code>. One record per call, and the condition is the call itself. Compare it with slide 30's <code>while(!feof(p))</code>: the binary half of this deck gets it right and the text half does not.</li>
 <li><strong>Mode <code>"rb"</code></strong> — the reading twin of <code>"wb"</code>. The <code>b</code> matters for the same reason as before, and it also documents intent to whoever reads the code next.</li>
 </ul>
-<pre><code>struct Product p;
+<pre><code class="language-c">struct Product p;
 FILE *f = fopen("products.bin", "rb");
 if (f == NULL) { perror("fopen"); return 1; }
 
@@ -523,7 +523,7 @@ fclose(f);</code></pre>
 <li><strong>Dáng vòng lặp mà slide 35 sẽ dùng</strong> — <code>while (fread(&amp;product, sizeof(struct Product), 1, filePtr) == 1)</code>. Mỗi lời gọi một bản ghi, và điều kiện chính là lời gọi ấy. Hãy so với <code>while(!feof(p))</code> ở slide 30: nửa nhị phân của deck này làm đúng, còn nửa văn bản thì không.</li>
 <li><strong>Chế độ <code>"rb"</code></strong> — bản song sinh đọc của <code>"wb"</code>. Chữ <code>b</code> quan trọng vì cùng lý do như trước, và nó còn nói rõ ý định cho người đọc mã sau này.</li>
 </ul>
-<pre><code>struct Product p;
+<pre><code class="language-c">struct Product p;
 FILE *f = fopen("products.bin", "rb");
 if (f == NULL) { perror("fopen"); return 1; }
 
@@ -546,7 +546,7 @@ fclose(f);</code></pre>
 <li><strong>Line 16 — <code>const char *filename = "products.bin";</code></strong> — the <code>.bin</code> extension is a human convention only; nothing in C checks it. What actually makes the file binary is the <code>"wb"</code> on line 37.</li>
 <li><strong>Lines 19–20 then 23 and 26</strong> — ask how many, write them all, then read them all back. The whole program is <em>write everything, close, reopen, read everything</em> — the file is the only thing that survives between the two halves, which is exactly the point slide 7 made about why files exist.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 
 // Define the structure for product information
@@ -583,7 +583,7 @@ int main() {
 <li><strong>Dòng 16 — <code>const char *filename = "products.bin";</code></strong> — đuôi <code>.bin</code> chỉ là quy ước của con người; trong C không có gì kiểm tra nó. Thứ thật sự làm tệp thành nhị phân là chữ <code>"wb"</code> ở dòng 37.</li>
 <li><strong>Dòng 19–20 rồi 23 và 26</strong> — hỏi bao nhiêu sản phẩm, ghi hết, rồi đọc lại hết. Cả chương trình là <em>ghi hết, đóng, mở lại, đọc hết</em> — tệp là thứ DUY NHẤT sống sót giữa hai nửa, đúng ý slide 7 đã nói về lý do tồn tại của tệp.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 
 // Define the structure for product information
@@ -622,7 +622,7 @@ int main() {
 <li><strong>Line 52 — the heart of the slide</strong> — <code>fwrite(&amp;product, sizeof(struct Product), 1, filePtr);</code>. One call, one record, 12 bytes. No format string, no field separators, no newline: the three values go to disk exactly as they sit in memory.</li>
 <li><strong>What is missing from line 52</strong> — the return value is ignored. The safe version is <code>if (fwrite(...) != 1) { … }</code>; a full disk is the realistic case where this matters, and it is exactly the case where silence is worst.</li>
 </ul>
-<pre><code>void writeProducts(const char *filename, int numProducts) {
+<pre><code class="language-c">void writeProducts(const char *filename, int numProducts) {
     FILE *filePtr;
     struct Product product;
 
@@ -654,7 +654,7 @@ int main() {
 <li><strong>Dòng 52 — trái tim của slide</strong> — <code>fwrite(&amp;product, sizeof(struct Product), 1, filePtr);</code>. Một lời gọi, một bản ghi, 12 byte. Không chuỗi định dạng, không dấu ngăn cách trường, không xuống dòng: ba giá trị xuống đĩa đúng như chúng nằm trong bộ nhớ.</li>
 <li><strong>Thứ THIẾU ở dòng 52</strong> — giá trị trả về bị bỏ qua. Bản an toàn là <code>if (fwrite(...) != 1) { … }</code>; đĩa đầy là tình huống thực tế mà chuyện này quan trọng, và cũng đúng là tình huống mà sự im lặng tệ nhất.</li>
 </ul>
-<pre><code>void writeProducts(const char *filename, int numProducts) {
+<pre><code class="language-c">void writeProducts(const char *filename, int numProducts) {
     FILE *filePtr;
     struct Product product;
 
@@ -688,7 +688,7 @@ int main() {
 <li><strong>The reopen is the point of the whole demo</strong> — <code>writeProducts</code> closed the file, <code>readProducts</code> opens it again from scratch. Nothing is passed between them in memory; the only channel is the 36 bytes on disk. That is the difference between a program's output and <em>stored data</em>, which is the thesis of slide 7.</li>
 <li><strong>What a text editor makes of those 36 bytes</strong> — the slide shows Notepad displaying <code>e x/A2 f xwA g è@d</code>, which is the file interpreted as characters. My own <code>cat -v</code> gave the same kind of soup. That is slide 12's claim — <em>"their contents can only be read by a program"</em> — demonstrated rather than asserted.</li>
 </ul>
-<pre><code>void readProducts(const char *filename) {
+<pre><code class="language-c">void readProducts(const char *filename) {
     FILE *filePtr;
     struct Product product;
 
@@ -718,7 +718,7 @@ int main() {
 <li><strong>Việc mở lại tệp mới là điểm mấu chốt của cả demo</strong> — <code>writeProducts</code> đã đóng tệp, <code>readProducts</code> mở lại từ đầu. Không có gì được truyền giữa hai hàm trong bộ nhớ; kênh duy nhất là 36 byte nằm trên đĩa. Đó chính là khác biệt giữa "đầu ra của chương trình" và <em>dữ liệu được lưu</em>, tức luận điểm của slide 7.</li>
 <li><strong>Trình soạn thảo văn bản làm gì với 36 byte ấy</strong> — slide chụp Notepad hiện <code>e x/A2 f xwA g è@d</code>, tức là tệp bị diễn giải thành ký tự. Lệnh <code>cat -v</code> của tôi cho ra đúng thứ cháo tương tự. Đó là khẳng định của slide 12 — <em>"nội dung chỉ đọc được bằng chương trình"</em> — được CHỨNG MINH chứ không chỉ nói suông.</li>
 </ul>
-<pre><code>void readProducts(const char *filename) {
+<pre><code class="language-c">void readProducts(const char *filename) {
     FILE *filePtr;
     struct Product product;
 
@@ -794,7 +794,7 @@ int main() {
 <li><strong>Its partner <code>ftell()</code></strong> — not on the slide but inseparable from it: <code>long ftell(FILE *)</code> returns the current position. The two together give you the idiom for a file's size: <code>fseek(f, 0, SEEK_END); long n = ftell(f);</code> — measured on <code>products.bin</code>, <code>n</code> = 36 = 3 records × 12 bytes.</li>
 <li><strong>Where this pays off</strong> — updating one record of a 10,000-record file. Without <code>fseek</code> you read all 10,000, change one, write all 10,000 back. With it you seek, read 12 bytes, seek back, write 12 bytes, and touch nothing else.</li>
 </ul>
-<pre><code>/* kich thuoc tep bang fseek + ftell */
+<pre><code class="language-c">/* kich thuoc tep bang fseek + ftell */
 FILE *f = fopen("products.bin", "rb");
 fseek(f, 0, SEEK_END);
 long n = ftell(f);
@@ -821,7 +821,7 @@ fclose(f);</code></pre>
 <li><strong>Người bạn đồng hành <code>ftell()</code></strong> — không có trên slide nhưng không tách rời được: <code>long ftell(FILE *)</code> trả về vị trí hiện tại. Hai hàm gộp lại cho mẹo tính kích thước tệp: <code>fseek(f, 0, SEEK_END); long n = ftell(f);</code> — đo trên <code>products.bin</code>, <code>n</code> = 36 = 3 bản ghi × 12 byte.</li>
 <li><strong>Chỗ nó đáng tiền</strong> — cập nhật một bản ghi trong tệp 10.000 bản ghi. Không có <code>fseek</code> thì phải đọc cả 10.000, sửa một, ghi lại cả 10.000. Có nó thì dời vị trí, đọc 12 byte, dời lại, ghi 12 byte, và không đụng tới gì khác.</li>
 </ul>
-<pre><code>/* kich thuoc tep bang fseek + ftell */
+<pre><code class="language-c">/* kich thuoc tep bang fseek + ftell */
 FILE *f = fopen("products.bin", "rb");
 fseek(f, 0, SEEK_END);
 long n = ftell(f);
@@ -938,7 +938,7 @@ fclose(f);</code></pre>
 <li><strong>Line 12 — <code>while ((c=fgetc(f))!=EOF) putchar(c);</code></strong> — the correct loop shape from slide 25, with one flaw carried over: <code>c</code> was declared <code>char</code> on line 5, not <code>int</code>. On this pure-ASCII file it works; on a file containing byte 0xFF it would stop early, measured at 2 of 5 characters on slide 25's test file.</li>
 <li><strong>Line 14 — <code>getchar();</code></strong> — the portable version of slide 28's <code>system("pause")</code>: wait for one keypress so the console window does not vanish. Costs nothing and works everywhere.</li>
 </ul>
-<pre><code>/*test_rewind.c */
+<pre><code class="language-c">/*test_rewind.c */
 #include &lt;stdio.h&gt;
 int main()
 {   char fname[] = "test_rewind.txt";
@@ -965,7 +965,7 @@ int main()
 <li><strong>Dòng 12 — <code>while ((c=fgetc(f))!=EOF) putchar(c);</code></strong> — đúng dáng vòng lặp chuẩn ở slide 25, nhưng mang theo một lỗi cũ: <code>c</code> được khai là <code>char</code> ở dòng 5 chứ không phải <code>int</code>. Trên tệp ASCII thuần thì chạy được; trên tệp có byte 0xFF thì nó dừng sớm, đo được 2 trên 5 ký tự với tệp thử ở slide 25.</li>
 <li><strong>Dòng 14 — <code>getchar();</code></strong> — bản khả chuyển của <code>system("pause")</code> ở slide 28: chờ một phím để cửa sổ console không biến mất. Không tốn gì và chạy được ở mọi nơi.</li>
 </ul>
-<pre><code>/*test_rewind.c */
+<pre><code class="language-c">/*test_rewind.c */
 #include &lt;stdio.h&gt;
 int main()
 {   char fname[] = "test_rewind.txt";

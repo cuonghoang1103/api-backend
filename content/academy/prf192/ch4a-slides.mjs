@@ -192,7 +192,7 @@ Display x</code></pre></li>
 <li><strong>Hand-trace it, input x = 0</strong> — line 3: is 0 negative? no (0 is neither positive nor negative) ⟶ x stays 0 · line 4: display 0. Correct, and it is the boundary case a tester would try first.</li>
 </ul>
 <p class="dap-an">✅ Đáp án: the three traces give |−17| = <strong>17</strong>, |7| = <strong>7</strong>, |0| = <strong>0</strong>. Verified by compiling the C version below with <code>cc -Wall</code>: input −17 prints 17, input 7 prints 7.</p>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     int x;
@@ -217,7 +217,7 @@ Display x</code></pre></li>
 <li><strong>Chạy tay với x = 0</strong> — dòng 3: 0 có âm không? không (0 không âm cũng không dương) ⟶ x vẫn 0 · dòng 4: hiện 0. Đúng, và đây là ca biên mà người kiểm thử sẽ thử đầu tiên.</li>
 </ul>
 <p class="dap-an">✅ Đáp án: ba lần chạy tay cho |−17| = <strong>17</strong>, |7| = <strong>7</strong>, |0| = <strong>0</strong>. Đã kiểm bằng cách biên dịch bản C dưới đây với <code>cc -Wall</code>: nhập −17 in ra 17, nhập 7 in ra 7.</p>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     int x;
@@ -236,7 +236,7 @@ int main(void) {
 <li><strong>What changes between the three languages</strong> — only the I/O library and the boilerplate. C uses <code>printf</code>/<code>scanf</code>, C++ uses <code>cout</code>/<code>cin</code>, Java uses <code>System.out.println</code> and a <code>Scanner</code>.</li>
 <li><strong>What does NOT change</strong> — the <code>if (x &lt; 0) x = -x;</code> line is character-for-character identical in all three. Control flow is the shared core of the whole C family, which is why learning it once in PRF192 pays off in every later course.</li>
 <li><strong>Worked translation, C</strong>:
-<pre><code>int x;
+<pre><code class="language-c">int x;
 printf("Enter an integer: ");
 scanf("%d", &amp;x);
 if (x &lt; 0) x = -x;
@@ -252,7 +252,7 @@ printf("%d\\n", x);</code></pre></li>
 <li><strong>Cái gì đổi giữa ba ngôn ngữ</strong> — chỉ thư viện vào/ra và phần khung. C dùng <code>printf</code>/<code>scanf</code>, C++ dùng <code>cout</code>/<code>cin</code>, Java dùng <code>System.out.println</code> và một <code>Scanner</code>.</li>
 <li><strong>Cái gì KHÔNG đổi</strong> — dòng <code>if (x &lt; 0) x = -x;</code> giống hệt nhau tới từng ký tự ở cả ba. Luồng điều khiển là phần lõi dùng chung của cả họ nhà C, nên học một lần ở PRF192 là dùng được cho mọi môn sau.</li>
 <li><strong>Bản dịch đã giải, C</strong>:
-<pre><code>int x;
+<pre><code class="language-c">int x;
 printf("Enter an integer: ");
 scanf("%d", &amp;x);
 if (x &lt; 0) x = -x;
@@ -324,14 +324,14 @@ hiện             17         7        0</code></pre></li>
 <ul>
 <li><strong>Simple statement — syntax <code>Expression;</code></strong> — an expression plus a semicolon. The semicolon is not decoration: it is what turns the <em>expression</em> <code>a + b</code> into the <em>statement</em> <code>a + b;</code>. In C the semicolon is a terminator, not a separator.</li>
 <li><strong>Code block — "a set of statements enclosed in curly braces"</strong>:
-<pre><code>{
+<pre><code class="language-c">{
     statement
     ...
     statement
 }</code></pre>
 A block counts as <strong>one</strong> statement everywhere the grammar expects a statement. That single sentence is the whole reason <code>if (c) { … }</code> works.</li>
 <li><strong>Where this matters immediately</strong> — <code>if (condition) statement</code> takes exactly <em>one</em> statement. Want two? Wrap them in a block. Forget the braces and only the first line is controlled by the <code>if</code>:
-<pre><code>if (x &lt; 0)
+<pre><code class="language-c">if (x &lt; 0)
     printf("negative\\n");
     x = -x;          /* NOT part of the if — always runs */</code></pre></li>
 <li><strong>The empty statement</strong> — a lone <code>;</code> is a legal statement that does nothing. That is why <code>if (x &gt; 0);</code> compiles silently and then does nothing, one of the most painful typos in C.</li>
@@ -343,14 +343,14 @@ A block counts as <strong>one</strong> statement everywhere the grammar expects 
 <ul>
 <li><strong>Câu lệnh đơn — cú pháp <code>Expression;</code></strong> — một biểu thức cộng dấu chấm phẩy. Dấu chấm phẩy không phải đồ trang trí: chính nó biến <em>biểu thức</em> <code>a + b</code> thành <em>câu lệnh</em> <code>a + b;</code>. Trong C dấu chấm phẩy là dấu kết thúc, không phải dấu ngăn cách.</li>
 <li><strong>Khối lệnh — "một tập câu lệnh đặt trong cặp ngoặc nhọn"</strong>:
-<pre><code>{
+<pre><code class="language-c">{
     statement
     ...
     statement
 }</code></pre>
 Một khối được tính là <strong>MỘT</strong> câu lệnh ở mọi chỗ ngữ pháp đòi một câu lệnh. Đúng một câu đó là toàn bộ lý do <code>if (c) { … }</code> chạy được.</li>
 <li><strong>Chỗ này có tác dụng ngay lập tức</strong> — <code>if (condition) statement</code> chỉ nhận đúng <em>một</em> câu lệnh. Muốn hai? Bọc chúng vào một khối. Quên ngoặc là chỉ dòng đầu chịu sự chi phối của <code>if</code>:
-<pre><code>if (x &lt; 0)
+<pre><code class="language-c">if (x &lt; 0)
     printf("negative\\n");
     x = -x;          /* KHÔNG thuộc if — luôn luôn chạy */</code></pre></li>
 <li><strong>Câu lệnh rỗng</strong> — một dấu <code>;</code> đứng một mình là câu lệnh hợp lệ và không làm gì. Nhờ vậy <code>if (x &gt; 0);</code> biên dịch im lặng rồi chẳng làm gì, một trong những lỗi gõ nhầm đau đớn nhất của C.</li>
@@ -389,7 +389,7 @@ Một khối được tính là <strong>MỘT</strong> câu lệnh ở mọi ch�
 <li><strong>Grammar details that cost marks</strong> — the parentheses around the condition are compulsory · there is <strong>no</strong> semicolon after <code>)</code> · there is <strong>no</strong> semicolon after <code>}</code> · the word <code>then</code> does not exist in C (that is Pascal).</li>
 <li><strong>The condition is any expression</strong> — <code>if (x)</code> means "if x is non-zero". <code>if (x != 0)</code> is identical but says so out loud; prefer it.</li>
 <li><strong>The single biggest beginner bug: <code>=</code> versus <code>==</code></strong>. <code>==</code> asks "are these equal?" and yields 1 or 0. <code>=</code> <em>assigns</em> and yields the value assigned. Both are expressions, so both compile:
-<pre><code>int x = 5;
+<pre><code class="language-c">int x = 5;
 if (x = 0)  printf("THEN\\n");
 else        printf("ELSE, x=%d\\n", x);</code></pre></li>
 <li><strong>Trace it</strong> — <code>x = 0</code> stores 0 into x <em>and</em> evaluates to 0 · 0 means false · so the ELSE branch runs · and x has been silently destroyed: it is now 0, not 5. The test did not test anything; it overwrote the variable.</li>
@@ -404,7 +404,7 @@ else        printf("ELSE, x=%d\\n", x);</code></pre></li>
 <li><strong>Chi tiết ngữ pháp hay mất điểm</strong> — cặp ngoặc tròn quanh điều kiện là bắt buộc · <strong>không</strong> có dấu chấm phẩy sau <code>)</code> · <strong>không</strong> có dấu chấm phẩy sau <code>}</code> · từ khoá <code>then</code> không tồn tại trong C (đó là Pascal).</li>
 <li><strong>Điều kiện là một biểu thức bất kỳ</strong> — <code>if (x)</code> nghĩa là "nếu x khác 0". <code>if (x != 0)</code> hoàn toàn tương đương nhưng nói rõ ra; nên dùng cách này.</li>
 <li><strong>Lỗi lớn nhất của người mới: <code>=</code> với <code>==</code></strong>. <code>==</code> hỏi "hai cái này bằng nhau không?" và cho ra 1 hoặc 0. <code>=</code> thì <em>gán</em> và cho ra chính giá trị vừa gán. Cả hai đều là biểu thức, nên cả hai đều biên dịch được:
-<pre><code>int x = 5;
+<pre><code class="language-c">int x = 5;
 if (x = 0)  printf("THEN\\n");
 else        printf("ELSE, x=%d\\n", x);</code></pre></li>
 <li><strong>Chạy tay</strong> — <code>x = 0</code> lưu 0 vào x <em>và</em> cho giá trị 0 · 0 nghĩa là sai · nên nhánh ELSE chạy · và x đã bị phá âm thầm: bây giờ nó là 0, không còn là 5. Phép thử không thử được gì; nó ghi đè lên biến.</li>
@@ -418,20 +418,20 @@ else        printf("ELSE, x=%d\\n", x);</code></pre></li>
 <ul>
 <li><strong>What the sentence is really about</strong> — <code>else</code> is not a statement of its own. It is a <em>clause</em> of the <code>if</code> statement. So the parser must be able to say "this <code>else</code> continues that <code>if</code>". If the <code>if</code> was already terminated, there is nothing to continue and you get <code>error: 'else' without a previous 'if'</code>.</li>
 <li><strong>Killer number one — a stray semicolon</strong>:
-<pre><code>if (x &gt; 0);            /* ← this ; ENDS the if statement */
+<pre><code class="language-c">if (x &gt; 0);            /* ← this ; ENDS the if statement */
     printf("pos\\n");
 else                   /* compile error: this else has no if */
     printf("neg\\n");</code></pre>
 The <code>;</code> is the empty statement from slide 12, and it becomes the <code>if</code>'s body. The <code>printf</code> is then an ordinary statement, and the <code>else</code> has nothing to attach to.</li>
 <li><strong>Killer number two — two statements without braces</strong>:
-<pre><code>if (x &gt; 0)
+<pre><code class="language-c">if (x &gt; 0)
     printf("pos\\n");
     x = 0;             /* ← the if already ended here */
 else                   /* compile error */
     printf("neg\\n");</code></pre>
 Same cause: the <code>if</code> owns exactly one statement, so it finished at the first semicolon.</li>
 <li><strong>The fix is always the same</strong> — braces:
-<pre><code>if (x &gt; 0) {
+<pre><code class="language-c">if (x &gt; 0) {
     printf("pos\\n");
     x = 0;
 } else {
@@ -445,20 +445,20 @@ Same cause: the <code>if</code> owns exactly one statement, so it finished at th
 <ul>
 <li><strong>Câu đó thực chất nói về cái gì</strong> — <code>else</code> không phải một câu lệnh độc lập. Nó là một <em>mệnh đề</em> của câu lệnh <code>if</code>. Nên bộ phân tích cú pháp phải nói được "cái <code>else</code> này nối tiếp cái <code>if</code> kia". Nếu <code>if</code> đã kết thúc rồi thì chẳng còn gì để nối, và bạn nhận <code>error: 'else' without a previous 'if'</code>.</li>
 <li><strong>Thủ phạm số một — một dấu chấm phẩy lạc</strong>:
-<pre><code>if (x &gt; 0);            /* ← dấu ; này KẾT THÚC câu lệnh if */
+<pre><code class="language-c">if (x &gt; 0);            /* ← dấu ; này KẾT THÚC câu lệnh if */
     printf("pos\\n");
 else                   /* lỗi biên dịch: else này không có if nào */
     printf("neg\\n");</code></pre>
 Dấu <code>;</code> chính là câu lệnh rỗng ở slide 12, và nó trở thành thân của <code>if</code>. Câu <code>printf</code> khi đó chỉ là một câu lệnh bình thường, còn <code>else</code> không còn chỗ bám.</li>
 <li><strong>Thủ phạm số hai — hai câu lệnh mà không có ngoặc nhọn</strong>:
-<pre><code>if (x &gt; 0)
+<pre><code class="language-c">if (x &gt; 0)
     printf("pos\\n");
     x = 0;             /* ← if đã kết thúc ở đây rồi */
 else                   /* lỗi biên dịch */
     printf("neg\\n");</code></pre>
 Cùng nguyên nhân: <code>if</code> chỉ sở hữu đúng một câu lệnh, nên nó đã hết ở dấu chấm phẩy đầu tiên.</li>
 <li><strong>Cách chữa luôn luôn giống nhau</strong> — ngoặc nhọn:
-<pre><code>if (x &gt; 0) {
+<pre><code class="language-c">if (x &gt; 0) {
     printf("pos\\n");
     x = 0;
 } else {
@@ -475,7 +475,7 @@ Cùng nguyên nhân: <code>if</code> chỉ sở hữu đúng một câu lệnh, 
 <li><strong>Syntax on the slide</strong> — <code>if (condition1) { … } else if (condition2) { … } else { … }</code>. There is no <code>elseif</code> keyword in C: it is literally an <code>else</code> whose single statement happens to be another <code>if</code>. That is why the slide calls it <em>Nested if</em>.</li>
 <li><strong>Order is semantics, not style</strong> — because later conditions are only reached when all earlier ones were false, each condition may assume the previous ones failed. That is exactly why the example can write <code>N &lt;= 6</code> instead of <code>N &gt; 3 &amp;&amp; N &lt;= 6</code>.</li>
 <li><strong>Example 1, verbatim from the slide</strong> — buying N T-shirts with promotion: N≤3 ⟶ 120000/item · items 4 to 6 ⟶ 90000/item · items 7 to 10 ⟶ 85000/item · from the 11th ⟶ 70000/item. Design given on the slide: Begin · <code>N, t int</code> · Accept N · Compute t · Print t · End. The slide's own solution:
-<pre><code>if (N &lt;= 3)       t = N * 120000;
+<pre><code class="language-c">if (N &lt;= 3)       t = N * 120000;
 else if (N &lt;= 6)  t = 3*120000 + (N-3) * 90000;
 else if (N &lt;= 10) t = 3*120000 + 3*90000 + (N-6) * 85000;
 else              t = 3*120000 + 3*90000 + 4*85000 + (N-10) * 70000;</code></pre></li>
@@ -491,7 +491,7 @@ else              t = 3*120000 + 3*90000 + 4*85000 + (N-10) * 70000;</code></pre
 <li><strong>Cú pháp trên slide</strong> — <code>if (condition1) { … } else if (condition2) { … } else { … }</code>. C không có từ khoá <code>elseif</code>: đây đúng nghĩa là một <code>else</code> mà câu lệnh duy nhất của nó tình cờ lại là một <code>if</code> khác. Vì vậy slide gọi nó là <em>Nested if</em> (if lồng nhau).</li>
 <li><strong>Thứ tự là ngữ nghĩa, không phải phong cách</strong> — vì các điều kiện sau chỉ được chạm tới khi mọi điều kiện trước đã sai, nên mỗi điều kiện có quyền giả định các điều kiện trước đều trượt. Đó đúng là lý do ví dụ viết được <code>N &lt;= 6</code> thay vì <code>N &gt; 3 &amp;&amp; N &lt;= 6</code>.</li>
 <li><strong>Ví dụ 1, nguyên văn từ slide</strong> — mua N áo thun có khuyến mãi: N≤3 ⟶ 120000/chiếc · chiếc thứ 4 đến 6 ⟶ 90000/chiếc · chiếc thứ 7 đến 10 ⟶ 85000/chiếc · từ chiếc thứ 11 ⟶ 70000/chiếc. Thiết kế slide cho sẵn: Begin · <code>N, t int</code> · Accept N · Compute t · Print t · End. Lời giải của chính slide:
-<pre><code>if (N &lt;= 3)       t = N * 120000;
+<pre><code class="language-c">if (N &lt;= 3)       t = N * 120000;
 else if (N &lt;= 6)  t = 3*120000 + (N-3) * 90000;
 else if (N &lt;= 10) t = 3*120000 + 3*90000 + (N-6) * 85000;
 else              t = 3*120000 + 3*90000 + 4*85000 + (N-10) * 70000;</code></pre></li>
@@ -509,12 +509,12 @@ else              t = 3*120000 + 3*90000 + 4*85000 + (N-10) * 70000;</code></pre
 <li><strong>Reading the slide's chart</strong> — the x-axis marks are 100, 150, 200 kWh; the price steps are 950, 1250, 1350, 1550. So: the first 100 kWh at 950 · kWh 101–150 at 1250 · kWh 151–200 at 1350 · every kWh above 200 at 1550. Same shape as the T-shirt problem, so the same four-branch chain applies.</li>
 <li><strong>Step 1 — precompute the full-tier constants</strong> (this is the part students skip and then get wrong): 100×950 = 95000 · 50×1250 = 62500 · 50×1350 = 67500. Running totals: 95000 · 157500 · 225000.</li>
 <li><strong>Step 2 — write the chain</strong>:
-<pre><code>if (n &lt;= 100)      t = n * 950;
+<pre><code class="language-c">if (n &lt;= 100)      t = n * 950;
 else if (n &lt;= 150) t = 95000 + (n - 100) * 1250;
 else if (n &lt;= 200) t = 157500 + (n - 150) * 1350;
 else               t = 225000 + (n - 200) * 1550;</code></pre></li>
 <li><strong>Step 3 — the full program</strong>:
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     long n, t;
@@ -538,12 +538,12 @@ int main(void) {
 <li><strong>Đọc biểu đồ trên slide</strong> — các mốc trên trục là 100, 150, 200 kWh; các bậc giá là 950, 1250, 1350, 1550. Vậy: 100 kWh đầu giá 950 · kWh thứ 101–150 giá 1250 · kWh thứ 151–200 giá 1350 · mỗi kWh trên 200 giá 1550. Cùng hình dạng với bài áo thun, nên dùng lại đúng chuỗi bốn nhánh.</li>
 <li><strong>Bước 1 — tính sẵn các hằng của bậc đầy</strong> (đây là phần sinh viên hay bỏ qua rồi làm sai): 100×950 = 95000 · 50×1250 = 62500 · 50×1350 = 67500. Tổng dồn: 95000 · 157500 · 225000.</li>
 <li><strong>Bước 2 — viết chuỗi điều kiện</strong>:
-<pre><code>if (n &lt;= 100)      t = n * 950;
+<pre><code class="language-c">if (n &lt;= 100)      t = n * 950;
 else if (n &lt;= 150) t = 95000 + (n - 100) * 1250;
 else if (n &lt;= 200) t = 157500 + (n - 150) * 1350;
 else               t = 225000 + (n - 200) * 1550;</code></pre></li>
 <li><strong>Bước 3 — chương trình đầy đủ</strong>:
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     long n, t;
@@ -567,7 +567,7 @@ int main(void) {
         `<p class="y-chinh">🎯 "Ambiguity may arise in the case of nested if else constructs. <strong>To which if does the else belong?</strong>" — the classic dangling-else problem, stated by the slide as a question with two candidate interpretations.</p>
 <ul>
 <li><strong>The ambiguous code</strong> — indentation suggests one reading, the grammar picks the other:
-<pre><code>if (a &gt; 0)
+<pre><code class="language-c">if (a &gt; 0)
     if (b &gt; 0)
         printf("both positive\\n");
 else
@@ -582,7 +582,7 @@ else
         `<p class="y-chinh">🎯 "Nhập nhằng có thể phát sinh khi các cấu trúc if else lồng nhau. <strong>Cái else thuộc về if nào?</strong>" — bài toán dangling else kinh điển, được slide nêu thành một câu hỏi với hai cách hiểu ứng viên.</p>
 <ul>
 <li><strong>Đoạn code nhập nhằng</strong> — thụt lề gợi ý một cách hiểu, còn ngữ pháp chọn cách kia:
-<pre><code>if (a &gt; 0)
+<pre><code class="language-c">if (a &gt; 0)
     if (b &gt; 0)
         printf("both positive\\n");
 else
@@ -599,13 +599,13 @@ else
         `<p class="y-chinh">🎯 The rule, verbatim: <em>"The rule in C is that an else always belongs to the innermost if available. Use { } to explicitly determine statements."</em></p>
 <ul>
 <li><strong>Interpretation B always wins</strong> — the <code>else</code> binds to the nearest preceding <code>if</code> that does not already have an <code>else</code>. Indentation has zero influence. So the ambiguous snippet on slide 18 really means:
-<pre><code>if (a &gt; 0) {
+<pre><code class="language-c">if (a &gt; 0) {
     if (b &gt; 0) printf("both positive\\n");
     else       printf("??\\n");
 }</code></pre></li>
 <li><strong>Trace the real meaning, three inputs</strong> — a=1, b=2 ⟶ outer TRUE, inner TRUE ⟶ prints <code>both positive</code> · a=1, b=−2 ⟶ outer TRUE, inner FALSE ⟶ prints <code>??</code> · a=−1, b=5 ⟶ outer FALSE ⟶ prints <strong>nothing</strong>.</li>
 <li><strong>The fix when you actually wanted interpretation A</strong> — brace the inner <code>if</code> so it is complete and the <code>else</code> has to jump outward:
-<pre><code>if (a &gt; 0) {
+<pre><code class="language-c">if (a &gt; 0) {
     if (b &gt; 0) printf("both positive\\n");
 } else {
     printf("a is not positive\\n");
@@ -618,13 +618,13 @@ else
         `<p class="y-chinh">🎯 Luật, nguyên văn: <em>"The rule in C is that an else always belongs to the innermost if available. Use { } to explicitly determine statements."</em> — <code>else</code> luôn thuộc về <code>if</code> gần nhất còn trống.</p>
 <ul>
 <li><strong>Cách hiểu B luôn thắng</strong> — <code>else</code> gắn vào <code>if</code> gần nhất phía trước mà chưa có <code>else</code>. Thụt lề không có chút ảnh hưởng nào. Vậy đoạn nhập nhằng ở slide 18 thực sự có nghĩa là:
-<pre><code>if (a &gt; 0) {
+<pre><code class="language-c">if (a &gt; 0) {
     if (b &gt; 0) printf("both positive\\n");
     else       printf("??\\n");
 }</code></pre></li>
 <li><strong>Chạy tay theo nghĩa thật, ba bộ dữ liệu</strong> — a=1, b=2 ⟶ if ngoài ĐÚNG, if trong ĐÚNG ⟶ in <code>both positive</code> · a=1, b=−2 ⟶ ngoài ĐÚNG, trong SAI ⟶ in <code>??</code> · a=−1, b=5 ⟶ ngoài SAI ⟶ <strong>không in gì</strong>.</li>
 <li><strong>Cách chữa khi bạn thật sự muốn cách hiểu A</strong> — đóng ngoặc cho <code>if</code> bên trong để nó hoàn chỉnh, buộc <code>else</code> phải nhảy ra ngoài:
-<pre><code>if (a &gt; 0) {
+<pre><code class="language-c">if (a &gt; 0) {
     if (b &gt; 0) printf("both positive\\n");
 } else {
     printf("a is not positive\\n");
@@ -640,10 +640,10 @@ else
 <ul>
 <li><strong>Statement versus expression — the whole point</strong> — <code>if…else</code> chooses which statement to <em>run</em>; <code>? :</code> chooses which value to <em>produce</em>. So it can sit inside an assignment, a <code>printf</code> argument, or another expression, where an <code>if</code> cannot.</li>
 <li><strong>The slide's example — marks</strong>. Case 1: mark &gt; 7 · Case 2: mark &lt; 7. Written with <code>if…else</code>:
-<pre><code>if (mark &gt; 7) printf("Gioi\\n");
+<pre><code class="language-c">if (mark &gt; 7) printf("Gioi\\n");
 else          printf("Chua gioi\\n");</code></pre>
 Written with <code>? :</code>:
-<pre><code>printf("%s\\n", (mark &gt; 7) ? "Gioi" : "Chua gioi");</code></pre></li>
+<pre><code class="language-c">printf("%s\\n", (mark &gt; 7) ? "Gioi" : "Chua gioi");</code></pre></li>
 <li><strong>Trace, three inputs</strong> — mark = 8.5 ⟶ 8.5 &gt; 7 is TRUE ⟶ value is <code>"Gioi"</code> · mark = 7.0 ⟶ 7.0 &gt; 7 is FALSE (strictly greater!) ⟶ <code>"Chua gioi"</code> · mark = 6.0 ⟶ FALSE ⟶ <code>"Chua gioi"</code>.</li>
 <li><strong>Only one arm is evaluated</strong> — just like <code>if…else</code>, <code>? :</code> is short-circuiting. In <code>(n != 0) ? (100 / n) : 0</code> the division never happens when n is 0, so this is safe.</li>
 <li><strong>Classic compact uses</strong> — <code>max = (a &gt; b) ? a : b;</code> · <code>abs = (x &lt; 0) ? -x : x;</code> · printing a plural: <code>printf("%d file%s\\n", n, (n == 1) ? "" : "s");</code>. Each is one short expression whose meaning you can read in a single glance.</li>
@@ -655,10 +655,10 @@ Written with <code>? :</code>:
 <ul>
 <li><strong>Câu lệnh và biểu thức — đây mới là điểm mấu chốt</strong> — <code>if…else</code> chọn xem <em>chạy</em> câu lệnh nào; <code>? :</code> chọn xem <em>sinh ra</em> giá trị nào. Nhờ vậy nó nằm được bên trong một phép gán, một tham số của <code>printf</code>, hay trong một biểu thức khác — những chỗ mà <code>if</code> không vào được.</li>
 <li><strong>Ví dụ của slide — điểm số</strong>. Case 1: mark &gt; 7 · Case 2: mark &lt; 7. Viết bằng <code>if…else</code>:
-<pre><code>if (mark &gt; 7) printf("Gioi\\n");
+<pre><code class="language-c">if (mark &gt; 7) printf("Gioi\\n");
 else          printf("Chua gioi\\n");</code></pre>
 Viết bằng <code>? :</code>:
-<pre><code>printf("%s\\n", (mark &gt; 7) ? "Gioi" : "Chua gioi");</code></pre></li>
+<pre><code class="language-c">printf("%s\\n", (mark &gt; 7) ? "Gioi" : "Chua gioi");</code></pre></li>
 <li><strong>Chạy tay, ba bộ dữ liệu</strong> — mark = 8.5 ⟶ 8.5 &gt; 7 là ĐÚNG ⟶ giá trị là <code>"Gioi"</code> · mark = 7.0 ⟶ 7.0 &gt; 7 là SAI (lớn hơn thực sự!) ⟶ <code>"Chua gioi"</code> · mark = 6.0 ⟶ SAI ⟶ <code>"Chua gioi"</code>.</li>
 <li><strong>Chỉ một nhánh được tính</strong> — hệt như <code>if…else</code>, <code>? :</code> cũng đoản mạch. Trong <code>(n != 0) ? (100 / n) : 0</code>, phép chia không bao giờ xảy ra khi n bằng 0, nên viết vậy là an toàn.</li>
 <li><strong>Các cách dùng gọn kinh điển</strong> — <code>max = (a &gt; b) ? a : b;</code> · <code>abs = (x &lt; 0) ? -x : x;</code> · in số nhiều: <code>printf("%d file%s\\n", n, (n == 1) ? "" : "s");</code>. Mỗi cái là một biểu thức ngắn mà bạn đọc một cái là hiểu.</li>
@@ -671,7 +671,7 @@ Viết bằng <code>? :</code>:
         `<p class="y-chinh">🎯 The Select-1/n construct: one integral expression is compared against a list of constants, and execution <strong>jumps into</strong> the matching <code>case</code> and then runs forward until it meets a <code>break</code>.</p>
 <ul>
 <li><strong>Syntax, verbatim from the slide</strong>:
-<pre><code>switch (variable or expression)
+<pre><code class="language-c">switch (variable or expression)
 {
     case constant :
         statement(s);
@@ -688,7 +688,7 @@ Viết bằng <code>? :</code>:
 <li><strong>Restriction 3 — the slide states the fall-through rule</strong>: "If the break statement is missed, the next statements are executed until a break is detected or all statements in the body of the switch are executed."</li>
 <li><strong><code>default</code></strong> — runs when no case matched. It is optional, it may be placed anywhere (conventionally last), and omitting it means an unmatched value silently does nothing. Always write one, even if it only prints "invalid input".</li>
 <li><strong>Deliberate fall-through, the one legitimate use</strong> — stacking labels to share a body:
-<pre><code>switch (d) {
+<pre><code class="language-c">switch (d) {
     case 1:
     case 2:  printf("Bac 1-2\\n"); break;
     case 3:  printf("Bac 3\\n");          /* no break — falls through! */
@@ -702,7 +702,7 @@ Viết bằng <code>? :</code>:
         `<p class="y-chinh">🎯 Khối Chọn-1/n: một biểu thức nguyên được so với một danh sách hằng, rồi luồng thực thi <strong>nhảy vào</strong> đúng <code>case</code> khớp và chạy thẳng xuống cho tới khi gặp <code>break</code>.</p>
 <ul>
 <li><strong>Cú pháp, nguyên văn từ slide</strong>:
-<pre><code>switch (variable or expression)
+<pre><code class="language-c">switch (variable or expression)
 {
     case constant :
         statement(s);
@@ -719,7 +719,7 @@ Viết bằng <code>? :</code>:
 <li><strong>Ràng buộc 3 — slide phát biểu luật fall-through</strong>: "Nếu thiếu câu lệnh break thì các câu lệnh kế tiếp vẫn được chạy cho đến khi gặp một break, hoặc cho đến khi hết toàn bộ thân switch."</li>
 <li><strong><code>default</code></strong> — chạy khi không case nào khớp. Nó là tuỳ chọn, đặt ở đâu cũng được (theo thông lệ là cuối), và bỏ nó đi nghĩa là một giá trị không khớp sẽ âm thầm không làm gì. Hãy luôn viết một cái, dù chỉ để in "dữ liệu không hợp lệ".</li>
 <li><strong>Fall-through cố ý, trường hợp dùng chính đáng duy nhất</strong> — xếp chồng nhãn để dùng chung một thân:
-<pre><code>switch (d) {
+<pre><code class="language-c">switch (d) {
     case 1:
     case 2:  printf("Bac 1-2\\n"); break;
     case 3:  printf("Bac 3\\n");          /* thiếu break — rơi xuống! */
@@ -739,7 +739,7 @@ Viết bằng <code>? :</code>:
 <li><strong>The method, step by step</strong> — (1) write the two variables and their initial values in a table · (2) find the <code>case</code> label that equals the input; if none, jump to <code>default</code> · (3) from that label, execute every statement <em>downward</em>, updating the table · (4) stop at the first <code>break</code> or at the closing brace · (5) read the final values off the table. The paired options exist precisely to catch people who stop at the matched case instead of falling through.</li>
 <li><strong>Why an "amount, count" pair is the giveaway</strong> — a correct <code>switch</code> with every <code>break</code> in place would give the same count for every input (usually 1). Options with counts 2, 3, 4 and 10 only make sense if several case bodies ran, i.e. if breaks are missing on purpose.</li>
 <li><strong>An equivalent exercise you can run</strong> — trace this and predict the output for x = 8 and x = 7:
-<pre><code>int money = 0, n = 0;
+<pre><code class="language-c">int money = 0, n = 0;
 switch (x) {
     case 9:  money += 500000; n++;
     case 8:  money += 200000; n++;
@@ -760,7 +760,7 @@ printf("%d, %d\\n", money, n);</code></pre></li>
 <li><strong>Phương pháp, từng bước</strong> — (1) kẻ bảng hai biến với giá trị ban đầu · (2) tìm nhãn <code>case</code> bằng đúng giá trị nhập; không có thì nhảy tới <code>default</code> · (3) từ nhãn đó, chạy mọi câu lệnh <em>đi xuống</em>, cập nhật bảng · (4) dừng ở <code>break</code> đầu tiên hoặc ở dấu ngoặc đóng · (5) đọc giá trị cuối trên bảng. Các phương án dạng cặp sinh ra đúng là để bắt những ai dừng lại ở case vừa khớp thay vì chạy tiếp xuống.</li>
 <li><strong>Vì sao cặp "tiền, số đếm" là dấu hiệu tố cáo</strong> — một <code>switch</code> đúng chuẩn với đủ <code>break</code> sẽ cho cùng một số đếm với mọi đầu vào (thường là 1). Các phương án có số đếm 2, 3, 4 và 10 chỉ có nghĩa khi nhiều thân case cùng chạy, tức là các <code>break</code> bị bỏ có chủ ý.</li>
 <li><strong>Một bài tập tương đương bạn chạy được</strong> — truy vết đoạn này và dự đoán kết quả với x = 8 và x = 7:
-<pre><code>int money = 0, n = 0;
+<pre><code class="language-c">int money = 0, n = 0;
 switch (x) {
     case 9:  money += 500000; n++;
     case 8:  money += 200000; n++;
@@ -782,7 +782,7 @@ printf("%d, %d\\n", money, n);</code></pre></li>
 <li><strong>The slide's analysis — Verbs ⟶ statements</strong> — Begin · Accept num1, op, num2 with the format string <code>"%lf%c%lf"</code> · <code>switch (op)</code> with four cases plus <code>default</code> · End. This noun/verb method is worth stealing for every exercise in the course.</li>
 <li><strong>The slide's switch, restated</strong> — <code>case '+'</code>, <code>case '-'</code>, <code>case '*'</code> each compute and print then <code>break</code>; <code>case '/'</code> first checks <code>if (num2 == 0)</code> and prints "Divide by 0", else computes and prints, then <code>break</code>; <code>default</code> prints "Op is not supported". Notice the <code>if…else</code> nested inside a <code>case</code> — constructs nest freely.</li>
 <li><strong>The complete program</strong>:
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     double num1, num2, result;
@@ -816,7 +816,7 @@ int main(void) {
 <li><strong>Phân tích của slide — Động từ ⟶ câu lệnh</strong> — Begin · Nhận num1, op, num2 với chuỗi định dạng <code>"%lf%c%lf"</code> · <code>switch (op)</code> gồm bốn case cộng <code>default</code> · End. Phương pháp danh từ/động từ này đáng "mượn" để dùng cho mọi bài tập trong môn.</li>
 <li><strong>Đoạn switch của slide, viết lại</strong> — <code>case '+'</code>, <code>case '-'</code>, <code>case '*'</code> mỗi cái tính rồi in rồi <code>break</code>; <code>case '/'</code> kiểm <code>if (num2 == 0)</code> trước rồi in "Divide by 0", ngược lại mới tính và in, sau đó <code>break</code>; <code>default</code> in "Op is not supported". Để ý có một <code>if…else</code> lồng trong một <code>case</code> — các khối cấu trúc lồng nhau thoải mái.</li>
 <li><strong>Chương trình hoàn chỉnh</strong>:
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     double num1, num2, result;

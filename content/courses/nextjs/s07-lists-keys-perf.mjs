@@ -40,7 +40,7 @@ export default {
 
 <h3>Why this matters in practice</h3>
 <p>This explains a whole family of "my input lost its text" / "my component reset for no reason" bugs. If you conditionally render the same component under two different wrappers, or swap its element type, React remounts it and its state vanishes:</p>
-<pre><code><span class="tok-comment">// ❌ two different types at the same position → remount, state lost on toggle</span>
+<pre><code class="language-html"><span class="tok-comment">// ❌ two different types at the same position → remount, state lost on toggle</span>
 {isWide ? &lt;section&gt;&lt;Editor /&gt;&lt;/section&gt; : &lt;div&gt;&lt;Editor /&gt;&lt;/div&gt;}
 
 <span class="tok-comment">// ✅ keep the type stable; vary the class instead</span>
@@ -91,7 +91,7 @@ export default {
 
 <h3>Vì sao điều này quan trọng trên thực tế</h3>
 <p>Điều này giải thích cả một họ bug "input mất chữ" / "component tự reset vô cớ". Nếu bạn render có điều kiện cùng một component dưới hai cái bọc khác nhau, hay tráo type element của nó, React remount nó và state biến mất:</p>
-<pre><code><span class="tok-comment">// ❌ hai type khác nhau ở cùng vị trí → remount, mất state khi toggle</span>
+<pre><code class="language-html"><span class="tok-comment">// ❌ hai type khác nhau ở cùng vị trí → remount, mất state khi toggle</span>
 {isWide ? &lt;section&gt;&lt;Editor /&gt;&lt;/section&gt; : &lt;div&gt;&lt;Editor /&gt;&lt;/div&gt;}
 
 <span class="tok-comment">// ✅ giữ type ổn định; đổi class thay vì đổi type</span>
@@ -139,13 +139,13 @@ export default {
 
 <h3>What a key does</h3>
 <p>When React reconciles a list, it matches old and new items <em>by key</em>, not by position. A stable key lets it say "the item with key <code>42</code> is still here, just at a new index — keep its DOM node and its state, only move it". Without keys, React falls back to position and gets it wrong the moment the list changes shape.</p>
-<pre><code>{todos.map((todo) =&gt; (
+<pre><code class="language-typescript">{todos.map((todo) =&gt; (
   &lt;TodoRow key={todo.id} todo={todo} /&gt;   <span class="tok-comment">// stable id from the data — correct</span>
 ))}</code></pre>
 
 <h3>The index-as-key bug, concretely</h3>
 <p>Using the array index as a key looks fine and works — until the list reorders or an item is inserted or removed from the front. Then the keys no longer identify items; they identify <em>positions</em>, and React attaches the wrong state to the wrong item:</p>
-<pre><code>{todos.map((todo, i) =&gt; (
+<pre><code class="language-typescript">{todos.map((todo, i) =&gt; (
   &lt;TodoRow key={i} todo={todo} /&gt;   <span class="tok-comment">// ❌ key = position, not identity</span>
 ))}</code></pre>
 <p>Picture a list of rows, each with an internal checkbox or a text input (its own state). You tick the second row, then delete the first row. With <code>key={i}</code>, every remaining row shifts up one index — so the row that was index 2 is now index 1. React matches by key (=index), sees "index 1 still exists", and <strong>keeps index 1's old state</strong> — which belonged to a different todo. The checkbox you ticked now appears on the wrong row. The data is fine; the <em>state React kept</em> is attached to the wrong item.</p>
@@ -189,13 +189,13 @@ export default {
 
 <h3>Một key làm gì</h3>
 <p>Khi React reconcile một danh sách, nó khớp phần tử cũ và mới <em>theo key</em>, không phải theo vị trí. Một key ổn định cho phép nó nói "phần tử có key <code>42</code> vẫn ở đây, chỉ ở một chỉ số mới — giữ nút DOM và state của nó, chỉ di chuyển thôi". Không có key, React quay về vị trí và làm sai ngay khi danh sách đổi hình dạng.</p>
-<pre><code>{todos.map((todo) =&gt; (
+<pre><code class="language-typescript">{todos.map((todo) =&gt; (
   &lt;TodoRow key={todo.id} todo={todo} /&gt;   <span class="tok-comment">// id ổn định từ dữ liệu — đúng</span>
 ))}</code></pre>
 
 <h3>Bug chỉ-số-làm-key, cụ thể</h3>
 <p>Dùng chỉ số mảng làm key trông ổn và chạy được — cho tới khi danh sách sắp lại hoặc một phần tử bị chèn/xoá ở đầu. Khi đó các key không còn định danh phần tử; chúng định danh <em>vị trí</em>, và React gắn nhầm state vào nhầm phần tử:</p>
-<pre><code>{todos.map((todo, i) =&gt; (
+<pre><code class="language-typescript">{todos.map((todo, i) =&gt; (
   &lt;TodoRow key={i} todo={todo} /&gt;   <span class="tok-comment">// ❌ key = vị trí, không phải danh tính</span>
 ))}</code></pre>
 <p>Hình dung một danh sách hàng, mỗi hàng có một checkbox hay một ô nhập nội bộ (state riêng của nó). Bạn tick hàng thứ hai, rồi xoá hàng đầu. Với <code>key={i}</code>, mọi hàng còn lại dịch lên một chỉ số — nên hàng từng là chỉ số 2 giờ là chỉ số 1. React khớp theo key (=chỉ số), thấy "chỉ số 1 vẫn tồn tại", và <strong>giữ state cũ của chỉ số 1</strong> — vốn thuộc về một todo khác. Checkbox bạn tick giờ hiện trên nhầm hàng. Dữ liệu thì ổn; <em>state mà React giữ</em> bị gắn nhầm phần tử.</p>
@@ -342,7 +342,7 @@ export default {
 <p class="lead">Lesson 7.3 said a child re-renders whenever its parent does, even with unchanged props. <code>React.memo</code> is how you opt a component out of that: wrap it, and React will skip its re-render when its props are the same as last time.</p>
 
 <h3>What React.memo does</h3>
-<pre><code>const Row = React.memo(function Row({ label }) {
+<pre><code class="language-javascript">const Row = React.memo(function Row({ label }) {
   return &lt;li&gt;{label}&lt;/li&gt;;
 });</code></pre>
 <p>A memoised component compares its new props to its previous props (a shallow <code>Object.is</code> check per prop). If they are all equal, React <strong>reuses last render's output and skips calling the function.</strong> Captured live — a plain child and a memoised child, both under a parent that re-renders three times, with an unchanged prop:</p>
@@ -352,7 +352,7 @@ MEMO  child renders (props unchanged):   1</div>
 
 <h3>The catch: props must be referentially stable</h3>
 <p><code>React.memo</code> compares props with <code>Object.is</code>, so it only helps if the props actually stay equal between renders. Pass a fresh object, array or function as a prop and the memo is defeated — the prop is a new reference every render, so the comparison always says "changed":</p>
-<pre><code><span class="tok-comment">// ❌ memo useless — a new object and a new function every render</span>
+<pre><code class="language-javascript"><span class="tok-comment">// ❌ memo useless — a new object and a new function every render</span>
 &lt;Row label="x" style={{ margin: 4 }} onClick={() =&gt; go()} /&gt;
 
 <span class="tok-comment">// ✅ stabilise the references so memo can actually skip</span>
@@ -392,7 +392,7 @@ const onClick = useCallback(() =&gt; go(), []);
 <p class="lead">Bài 7.3 nói một con render lại mỗi khi cha render lại, dù props không đổi. <code>React.memo</code> là cách bạn cho một component thoát khỏi điều đó: bọc nó, và React sẽ bỏ qua render lại nó khi props của nó giống lần trước.</p>
 
 <h3>React.memo làm gì</h3>
-<pre><code>const Row = React.memo(function Row({ label }) {
+<pre><code class="language-javascript">const Row = React.memo(function Row({ label }) {
   return &lt;li&gt;{label}&lt;/li&gt;;
 });</code></pre>
 <p>Một component memo hoá so props mới với props trước (một phép so nông <code>Object.is</code> mỗi prop). Nếu tất cả bằng nhau, React <strong>tái dùng output của render trước và bỏ qua việc gọi hàm.</strong> Ghi trực tiếp — một con thường và một con memo, cả hai dưới một cha render lại ba lần, với một prop không đổi:</p>
@@ -402,7 +402,7 @@ MEMO  child renders (props unchanged):   1</div>
 
 <h3>Cái bẫy: props phải ổn định về tham chiếu</h3>
 <p><code>React.memo</code> so props bằng <code>Object.is</code>, nên nó chỉ giúp nếu props thật sự giữ bằng nhau giữa các render. Truyền một object, mảng hay hàm mới làm prop là memo bị vô hiệu — prop là một tham chiếu mới mỗi render, nên phép so luôn nói "đã đổi":</p>
-<pre><code><span class="tok-comment">// ❌ memo vô dụng — một object mới và một hàm mới mỗi render</span>
+<pre><code class="language-javascript"><span class="tok-comment">// ❌ memo vô dụng — một object mới và một hàm mới mỗi render</span>
 &lt;Row label="x" style={{ margin: 4 }} onClick={() =&gt; go()} /&gt;
 
 <span class="tok-comment">// ✅ ổn định tham chiếu để memo thật sự bỏ qua được</span>

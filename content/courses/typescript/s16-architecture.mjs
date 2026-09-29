@@ -27,7 +27,7 @@ export default {
 
 <h3>A discriminated union allows only the valid states</h3>
 <p>Model it as a discriminated union instead (chapter 5): each state lists exactly the fields it has, and the <code>status</code> discriminant makes them mutually exclusive:</p>
-<pre><code><span class="tok-comment">// states.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// states.ts</span>
 <span class="tok-keyword">type</span> State =
   | { status: <span class="tok-string">'loading'</span> }
   | { status: <span class="tok-string">'success'</span>; data: <span class="tok-keyword">string</span> }
@@ -66,7 +66,7 @@ export default {
 
 <h3>Một discriminated union chỉ cho các trạng thái hợp lệ</h3>
 <p>Hãy mô hình nó thành một discriminated union (chương 5): mỗi trạng thái liệt kê đúng các field nó có, và discriminant <code>status</code> làm chúng loại trừ lẫn nhau:</p>
-<pre><code><span class="tok-comment">// states.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// states.ts</span>
 <span class="tok-keyword">type</span> State =
   | { status: <span class="tok-string">'loading'</span> }
   | { status: <span class="tok-string">'success'</span>; data: <span class="tok-keyword">string</span> }
@@ -112,7 +112,7 @@ export default {
 
 <h3>unknown: anything, but prove it first</h3>
 <p><code>unknown</code> is the type-safe counterpart to <code>any</code>. It accepts any value — but you can't <em>do</em> anything with it until you narrow:</p>
-<pre><code><span class="tok-comment">// unknown.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// unknown.ts</span>
 <span class="tok-keyword">function</span> <span class="tok-function">handle</span>(input: <span class="tok-keyword">unknown</span>): <span class="tok-keyword">string</span> {
   <span class="tok-keyword">return</span> input.<span class="tok-function">toUpperCase</span>();   <span class="tok-comment">// unknown must be narrowed first</span>
 }</code></pre>
@@ -121,14 +121,14 @@ export default {
 
 <h3>never: the empty type, for exhaustiveness</h3>
 <p><code>never</code> is the type with no values — nothing is assignable to it:</p>
-<pre><code><span class="tok-comment">// never.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// never.ts</span>
 <span class="tok-keyword">const</span> n: <span class="tok-keyword">never</span> = <span class="tok-number">5</span>;   <span class="tok-comment">// no value is assignable to never</span></code></pre>
 <div class="out">never.ts(2,7): error TS2322: Type '5' is not assignable to type 'never'.</div>
 <p>That looks useless until you remember the exhaustiveness check from chapter 5: assigning the "impossible" leftover to a <code>never</code> variable in a <code>switch</code>'s default makes the compiler prove you handled every case. It's also the return type of a function that never returns (one that always throws).</p>
 
 <h3>any: the escape hatch that removes the net</h3>
 <p><code>any</code> switches off type-checking entirely — and unlike the two above, it fails <em>silently</em>:</p>
-<pre><code><span class="tok-comment">// anytrap.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// anytrap.ts</span>
 <span class="tok-keyword">const</span> x: <span class="tok-keyword">any</span> = <span class="tok-string">'hello'</span>;
 x.foo.bar.<span class="tok-function">baz</span>();   <span class="tok-comment">// any turns off all checking — no error, crashes at runtime</span></code></pre>
 <div class="out">(no output — exit code 0)</div>
@@ -157,7 +157,7 @@ x.foo.bar.<span class="tok-function">baz</span>();   <span class="tok-comment">/
 
 <h3>unknown: bất cứ gì, nhưng chứng minh trước đã</h3>
 <p><code>unknown</code> là bản an-toàn-kiểu của <code>any</code>. Nó nhận mọi giá trị — nhưng bạn không <em>làm</em> được gì với nó tới khi thu hẹp:</p>
-<pre><code><span class="tok-comment">// unknown.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// unknown.ts</span>
 <span class="tok-keyword">function</span> <span class="tok-function">handle</span>(input: <span class="tok-keyword">unknown</span>): <span class="tok-keyword">string</span> {
   <span class="tok-keyword">return</span> input.<span class="tok-function">toUpperCase</span>();   <span class="tok-comment">// unknown phải được thu hẹp trước</span>
 }</code></pre>
@@ -166,14 +166,14 @@ x.foo.bar.<span class="tok-function">baz</span>();   <span class="tok-comment">/
 
 <h3>never: kiểu rỗng, cho exhaustiveness</h3>
 <p><code>never</code> là kiểu không có giá trị nào — không gì gán được cho nó:</p>
-<pre><code><span class="tok-comment">// never.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// never.ts</span>
 <span class="tok-keyword">const</span> n: <span class="tok-keyword">never</span> = <span class="tok-number">5</span>;   <span class="tok-comment">// không giá trị nào gán được cho never</span></code></pre>
 <div class="out">never.ts(2,7): error TS2322: Type '5' is not assignable to type 'never'.</div>
 <p>Nhìn có vẻ vô dụng tới khi bạn nhớ phép kiểm đầy đủ ở chương 5: gán phần "không thể có" còn sót cho một biến <code>never</code> trong default của một <code>switch</code> làm trình biên dịch chứng minh bạn đã xử lý mọi case. Nó cũng là kiểu trả về của một hàm không bao giờ trả về (một hàm luôn ném).</p>
 
 <h3>any: cửa thoát gỡ luôn tấm lưới</h3>
 <p><code>any</code> tắt kiểm kiểu hoàn toàn — và khác hai cái trên, nó thất bại <em>âm thầm</em>:</p>
-<pre><code><span class="tok-comment">// anytrap.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// anytrap.ts</span>
 <span class="tok-keyword">const</span> x: <span class="tok-keyword">any</span> = <span class="tok-string">'hello'</span>;
 x.foo.bar.<span class="tok-function">baz</span>();   <span class="tok-comment">// any tắt mọi kiểm — không lỗi, sập lúc chạy</span></code></pre>
 <div class="out">(no output — exit code 0)</div>
@@ -212,7 +212,7 @@ x.foo.bar.<span class="tok-function">baz</span>();   <span class="tok-comment">/
 
 <h3>type vs interface: the one real difference</h3>
 <p>They overlap heavily, but interfaces support <em>declaration merging</em> — declare the same interface twice and they combine (that's how the Express augmentation in chapter 10 worked). Type aliases can't:</p>
-<pre><code><span class="tok-comment">// duptype.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// duptype.ts</span>
 <span class="tok-keyword">type</span> Point = { x: <span class="tok-keyword">number</span> };
 <span class="tok-keyword">type</span> Point = { y: <span class="tok-keyword">number</span> };   <span class="tok-comment">// type aliases can't be declared twice</span></code></pre>
 <div class="out">duptype.ts(2,6): error TS2300: Duplicate identifier 'Point'.</div>
@@ -247,7 +247,7 @@ x.foo.bar.<span class="tok-function">baz</span>();   <span class="tok-comment">/
 
 <h3>type so với interface: khác biệt thật duy nhất</h3>
 <p>Chúng trùng nhau rất nhiều, nhưng interface hỗ trợ <em>gộp khai báo</em> — khai cùng một interface hai lần và chúng kết hợp (đó là cách phần bổ sung Express ở chương 10 hoạt động). Type alias thì không:</p>
-<pre><code><span class="tok-comment">// duptype.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// duptype.ts</span>
 <span class="tok-keyword">type</span> Point = { x: <span class="tok-keyword">number</span> };
 <span class="tok-keyword">type</span> Point = { y: <span class="tok-keyword">number</span> };   <span class="tok-comment">// type alias không khai hai lần được</span></code></pre>
 <div class="out">duptype.ts(2,6): error TS2300: Duplicate identifier 'Point'.</div>
@@ -291,7 +291,7 @@ x.foo.bar.<span class="tok-function">baz</span>();   <span class="tok-comment">/
 <p class="lead">Sixteen chapters come down to one architecture: <strong>validate at the edges, trust the inside</strong>. External data enters through a validator, becomes a precise type, and from there the compiler carries that guarantee through every function, module, and boundary. Here is the whole idea in one function.</p>
 
 <h3>Validate at the edge, trust inside</h3>
-<pre><code><span class="tok-comment">// capstone.ts — validate at the edge, trust inside</span>
+<pre><code class="language-javascript"><span class="tok-comment">// capstone.ts — validate at the edge, trust inside</span>
 <span class="tok-keyword">import</span> { z } <span class="tok-keyword">from</span> <span class="tok-string">'zod'</span>;
 <span class="tok-keyword">const</span> UserSchema = z.<span class="tok-function">object</span>({ id: z.<span class="tok-function">number</span>(), name: z.<span class="tok-function">string</span>() });
 <span class="tok-keyword">type</span> User = z.infer&lt;<span class="tok-keyword">typeof</span> UserSchema&gt;;
@@ -335,7 +335,7 @@ x.foo.bar.<span class="tok-function">baz</span>();   <span class="tok-comment">/
 <p class="lead">Mười sáu chương quy về một kiến trúc: <strong>validate tại các biên, tin bên trong</strong>. Dữ liệu từ ngoài vào qua một bộ validate, trở thành một kiểu chính xác, và từ đó trình biên dịch mang bảo đảm ấy qua mọi hàm, module, và biên giới. Đây là trọn ý tưởng trong một hàm.</p>
 
 <h3>Validate tại biên, tin bên trong</h3>
-<pre><code><span class="tok-comment">// capstone.ts — validate tại biên, tin bên trong</span>
+<pre><code class="language-javascript"><span class="tok-comment">// capstone.ts — validate tại biên, tin bên trong</span>
 <span class="tok-keyword">import</span> { z } <span class="tok-keyword">from</span> <span class="tok-string">'zod'</span>;
 <span class="tok-keyword">const</span> UserSchema = z.<span class="tok-function">object</span>({ id: z.<span class="tok-function">number</span>(), name: z.<span class="tok-function">string</span>() });
 <span class="tok-keyword">type</span> User = z.infer&lt;<span class="tok-keyword">typeof</span> UserSchema&gt;;

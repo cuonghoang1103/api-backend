@@ -55,7 +55,7 @@ O(n^2)      quadratic    nested loop over n
 O(2^n)      exponential  naive recursive subsets
 </code></pre>
 <p>Drop constants and lower-order terms: <code>3n + 5</code> is <strong>O(n)</strong>; <code>2n^2 + n</code> is <strong>O(n^2)</strong>.</p>
-<pre><code># Count basic operations, not seconds
+<pre><code class="language-python"># Count basic operations, not seconds
 def has_duplicate(nums):        # time O(n^2), space O(1)
     for i in range(len(nums)):
         for j in range(i + 1, len(nums)):
@@ -81,7 +81,7 @@ O(n^2)      bậc hai     vòng lặp lồng trên n
 O(2^n)      mũ          liệt kê tập con đệ quy ngây thơ
 </code></pre>
 <p>Bỏ hằng số và bậc thấp: <code>3n + 5</code> là <strong>O(n)</strong>; <code>2n^2 + n</code> là <strong>O(n^2)</strong>.</p>
-<pre><code># Đếm số phép cơ bản, không đếm giây
+<pre><code class="language-python"># Đếm số phép cơ bản, không đếm giây
 def has_duplicate(nums):        # thời gian O(n^2), bộ nhớ O(1)
     for i in range(len(nums)):
         for j in range(i + 1, len(nums)):
@@ -115,7 +115,7 @@ const c2 = doc('csd204-2-1-linear', '2.1 — Arrays, lists, stacks & queues|||2.
 <li><strong>Stack</strong> — last in, first out. Use a list: <code>append</code>/<code>pop</code> are O(1). Used for undo, call stacks, DFS.</li>
 <li><strong>Queue</strong> — first in, first out. Use <code>collections.deque</code>: <code>append</code>/<code>popleft</code> are O(1). Used for BFS, task buffers.</li>
 </ul>
-<pre><code>from collections import deque
+<pre><code class="language-python">from collections import deque
 stack = []            # LIFO
 stack.append(1); stack.append(2)
 stack.pop()           # -> 2   (O(1))
@@ -139,7 +139,7 @@ queue.popleft()       # -> 1   (O(1))
 <li><strong>Ngăn xếp</strong> — vào sau ra trước. Dùng list: <code>append</code>/<code>pop</code> là O(1). Dùng cho undo, call stack, DFS.</li>
 <li><strong>Hàng đợi</strong> — vào trước ra trước. Dùng <code>collections.deque</code>: <code>append</code>/<code>popleft</code> là O(1). Dùng cho BFS, bộ đệm công việc.</li>
 </ul>
-<pre><code>from collections import deque
+<pre><code class="language-python">from collections import deque
 stack = []            # LIFO
 stack.append(1); stack.append(2)
 stack.pop()           # -> 2   (O(1))
@@ -167,7 +167,7 @@ const c3 = doc('csd204-3-1-recursion', '3.1 — Recursion|||3.1 — Đệ quy',
 <li><strong>Base case</strong> — the smallest input, solved directly, with NO further call. Miss it and you get infinite recursion (a stack overflow).</li>
 <li><strong>Recursive case</strong> — solve a smaller sub-problem, then combine.</li>
 </ul>
-<pre><code>def factorial(n):           # time O(n), space O(n) call stack
+<pre><code class="language-python">def factorial(n):           # time O(n), space O(n) call stack
     if n <= 1:              # base case
         return 1
     return n * factorial(n - 1)   # recursive case
@@ -187,7 +187,7 @@ def fib(n):                 # naive: time O(2^n) — VERY slow
 <li><strong>Trường hợp cơ sở (base case)</strong> — dữ liệu nhỏ nhất, giải trực tiếp, KHÔNG gọi tiếp. Thiếu nó là đệ quy vô hạn (tràn ngăn xếp).</li>
 <li><strong>Bước đệ quy</strong> — giải một bài con nhỏ hơn rồi ghép lại.</li>
 </ul>
-<pre><code>def factorial(n):           # thời gian O(n), bộ nhớ O(n) call stack
+<pre><code class="language-python">def factorial(n):           # thời gian O(n), bộ nhớ O(n) call stack
     if n <= 1:              # trường hợp cơ sở
         return 1
     return n * factorial(n - 1)   # bước đệ quy
@@ -224,7 +224,7 @@ heap sort    O(n log n)  O(n log n)  O(n log n)  no
 </code></pre>
 <p>The three simple sorts are O(n^2) — fine for tiny or nearly-sorted data. For real workloads use an O(n log n) sort.</p>
 <h3>Merge sort — divide and conquer</h3>
-<pre><code>def merge_sort(a):              # time O(n log n), space O(n)
+<pre><code class="language-python">def merge_sort(a):              # time O(n log n), space O(n)
     if len(a) <= 1:
         return a
     mid = len(a) // 2
@@ -252,7 +252,7 @@ heap sort    O(n log n)  O(n log n)  O(n log n)  không
 </code></pre>
 <p>Ba sort đơn giản là O(n^2) — chỉ ổn với dữ liệu nhỏ hoặc gần như đã sắp. Với dữ liệu thật, dùng sort O(n log n).</p>
 <h3>Merge sort — chia để trị</h3>
-<pre><code>def merge_sort(a):              # thời gian O(n log n), bộ nhớ O(n)
+<pre><code class="language-python">def merge_sort(a):              # thời gian O(n log n), bộ nhớ O(n)
     if len(a) <= 1:
         return a
     mid = len(a) // 2
@@ -285,7 +285,7 @@ const c5 = doc('csd204-5-1-search-hash', '5.1 — Searching & hash tables|||5.1 
 <li><strong>Linear search</strong> — check every element: <strong>O(n)</strong>. Works on any list.</li>
 <li><strong>Binary search</strong> — halve the range each step: <strong>O(log n)</strong>. Requires a <em>sorted</em> list.</li>
 </ul>
-<pre><code>def binary_search(a, target):   # a is sorted; time O(log n)
+<pre><code class="language-python">def binary_search(a, target):   # a is sorted; time O(log n)
     lo, hi = 0, len(a) - 1
     while lo <= hi:
         mid = (lo + hi) // 2
@@ -299,7 +299,7 @@ const c5 = doc('csd204-5-1-search-hash', '5.1 — Searching & hash tables|||5.1 
 </code></pre>
 <h3>Hash tables (Python dict / set)</h3>
 <p>A <strong>hash function</strong> maps a key to a bucket index, giving <strong>average O(1)</strong> insert, lookup and delete. Two keys landing in the same bucket is a <strong>collision</strong>, resolved by <em>chaining</em> (a list per bucket) or <em>open addressing</em> (probe the next slot). Worst case is O(n) if everything collides.</p>
-<pre><code>seen = {}                       # dict: average O(1) per op
+<pre><code class="language-java">seen = {}                       # dict: average O(1) per op
 seen["apple"] = 3
 "apple" in seen                 # -> True  (O(1))
 </code></pre>
@@ -311,7 +311,7 @@ seen["apple"] = 3
 <li><strong>Tìm tuyến tính</strong> — duyệt từng phần tử: <strong>O(n)</strong>. Dùng cho danh sách bất kỳ.</li>
 <li><strong>Tìm nhị phân</strong> — cắt đôi khoảng mỗi bước: <strong>O(log n)</strong>. Cần danh sách <em>đã sắp</em>.</li>
 </ul>
-<pre><code>def binary_search(a, target):   # a đã sắp; thời gian O(log n)
+<pre><code class="language-python">def binary_search(a, target):   # a đã sắp; thời gian O(log n)
     lo, hi = 0, len(a) - 1
     while lo <= hi:
         mid = (lo + hi) // 2
@@ -325,7 +325,7 @@ seen["apple"] = 3
 </code></pre>
 <h3>Bảng băm (dict / set của Python)</h3>
 <p>Một <strong>hàm băm</strong> ánh xạ khoá thành chỉ số ô, cho chèn/tra/xoá <strong>trung bình O(1)</strong>. Hai khoá rơi vào cùng một ô là <strong>va chạm (collision)</strong>, xử lý bằng <em>chaining</em> (mỗi ô một danh sách) hoặc <em>open addressing</em> (dò ô kế). Xấu nhất là O(n) nếu mọi thứ đều va chạm.</p>
-<pre><code>seen = {}                       # dict: trung bình O(1) mỗi thao tác
+<pre><code class="language-java">seen = {}                       # dict: trung bình O(1) mỗi thao tác
 seen["apple"] = 3
 "apple" in seen                 # -> True  (O(1))
 </code></pre>
@@ -351,7 +351,7 @@ const c6 = doc('csd204-6-1-trees', '6.1 — Trees, BST, AVL & heaps|||6.1 — C�
 <li><strong>Preorder</strong> / <strong>Postorder</strong> — node first / node last.</li>
 <li><strong>BFS / level-order</strong> — level by level, using a queue.</li>
 </ul>
-<pre><code>class Node:
+<pre><code class="language-python">class Node:
     def __init__(self, key):
         self.key = key
         self.left = None
@@ -368,7 +368,7 @@ def insert(root, key):          # O(h): O(log n) balanced, O(n) worst
 </code></pre>
 <h3>Balancing &amp; heaps</h3>
 <p>An <strong>AVL tree</strong> rotates on insert/delete to keep height O(log n), guaranteeing O(log n) operations. A <strong>heap</strong> is a complete tree where each parent beats its children; a <strong>priority queue</strong> built on <code>heapq</code> gives push/pop in <strong>O(log n)</strong> and peek-min in O(1).</p>
-<pre><code>import heapq
+<pre><code class="language-python">import heapq
 pq = []
 heapq.heappush(pq, 5)           # O(log n)
 heapq.heappush(pq, 1)
@@ -385,7 +385,7 @@ heapq.heappop(pq)               # -> 1  (smallest, O(log n))
 <li><strong>Preorder</strong> / <strong>Postorder</strong> — nút trước / nút sau.</li>
 <li><strong>BFS / theo mức</strong> — từng mức một, dùng hàng đợi.</li>
 </ul>
-<pre><code>class Node:
+<pre><code class="language-python">class Node:
     def __init__(self, key):
         self.key = key
         self.left = None
@@ -402,7 +402,7 @@ def insert(root, key):          # O(h): O(log n) cân bằng, O(n) xấu nhất
 </code></pre>
 <h3>Cân bằng &amp; heap</h3>
 <p>Cây <strong>AVL</strong> xoay khi chèn/xoá để giữ chiều cao O(log n), bảo đảm mọi thao tác O(log n). <strong>Heap</strong> là cây đầy đủ mà mỗi cha vượt các con; <strong>hàng đợi ưu tiên</strong> dựng trên <code>heapq</code> cho push/pop <strong>O(log n)</strong> và xem phần tử nhỏ nhất O(1).</p>
-<pre><code>import heapq
+<pre><code class="language-python">import heapq
 pq = []
 heapq.heappush(pq, 5)           # O(log n)
 heapq.heappush(pq, 1)
@@ -432,7 +432,7 @@ const c7 = doc('csd204-7-1-graphs', '7.1 — Graphs: BFS, DFS, Dijkstra & MST|||
 <li><strong>BFS</strong> — a queue; visits nearest first; finds shortest path in an <em>unweighted</em> graph.</li>
 <li><strong>DFS</strong> — a stack/recursion; goes deep first; used for cycles, topological sort, components.</li>
 </ul>
-<pre><code>from collections import deque
+<pre><code class="language-python">from collections import deque
 def bfs(graph, start):          # O(V + E)
     seen = {start}
     q = deque([start])
@@ -461,7 +461,7 @@ def bfs(graph, start):          # O(V + E)
 <li><strong>BFS</strong> — dùng hàng đợi; thăm nút gần trước; tìm đường ngắn nhất trong đồ thị <em>không trọng số</em>.</li>
 <li><strong>DFS</strong> — dùng ngăn xếp/đệ quy; đi sâu trước; dùng để tìm chu trình, sắp thứ tự tô-pô, thành phần liên thông.</li>
 </ul>
-<pre><code>from collections import deque
+<pre><code class="language-python">from collections import deque
 def bfs(graph, start):          # O(V + E)
     seen = {start}
     q = deque([start])
@@ -497,7 +497,7 @@ const c8 = doc('csd204-8-1-dp-greedy', '8.1 — Dynamic programming & greedy|||8
 <li><strong>Memoization</strong> (top-down) — recursion plus a cache.</li>
 <li><strong>Tabulation</strong> (bottom-up) — fill a table from small to large.</li>
 </ul>
-<pre><code>def fib(n):                     # DP: time O(n), space O(n)
+<pre><code class="language-python">def fib(n):                     # DP: time O(n), space O(n)
     memo = {0: 0, 1: 1}
     for i in range(2, n + 1):
         memo[i] = memo[i - 1] + memo[i - 2]
@@ -515,7 +515,7 @@ const c8 = doc('csd204-8-1-dp-greedy', '8.1 — Dynamic programming & greedy|||8
 <li><strong>Memoization</strong> (trên xuống) — đệ quy cộng bộ nhớ đệm.</li>
 <li><strong>Tabulation</strong> (dưới lên) — điền bảng từ nhỏ đến lớn.</li>
 </ul>
-<pre><code>def fib(n):                     # DP: thời gian O(n), bộ nhớ O(n)
+<pre><code class="language-python">def fib(n):                     # DP: thời gian O(n), bộ nhớ O(n)
     memo = {0: 0, 1: 1}
     for i in range(2, n + 1):
         memo[i] = memo[i - 1] + memo[i - 2]

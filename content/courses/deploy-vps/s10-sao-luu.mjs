@@ -147,7 +147,7 @@ ${slide('dv-10', 5, 'Bản dump là ảnh chụp lúc BẮT ĐẦU — đo bằn
 ${slide('dv-10', 6, 'Script sao lưu của chương: mỗi dòng một việc')}
 <pre><code>15 3 * * * /usr/local/bin/sao-luu.sh >> /var/log/sao-luu.log 2>&amp;1</code></pre>
 
-<pre><code>#!/bin/bash
+<pre><code class="language-bash">#!/bin/bash
 set -euo pipefail
 NGAY=\$(date +%Y%m%d-%H%M%S)
 DICH=/srv/sao-luu
@@ -406,7 +406,7 @@ ${slide('dv-10', 5, 'Bản dump là ảnh chụp lúc BẮT ĐẦU — đo bằn
 ${slide('dv-10', 6, 'Script sao lưu của chương: mỗi dòng một việc')}
 <pre><code>15 3 * * * /usr/local/bin/sao-luu.sh >> /var/log/sao-luu.log 2>&amp;1</code></pre>
 
-<pre><code>#!/bin/bash
+<pre><code class="language-bash">#!/bin/bash
 set -euo pipefail
 NGAY=\$(date +%Y%m%d-%H%M%S)
 DICH=/srv/sao-luu
@@ -670,7 +670,7 @@ ${slide('dv-10', 11, 'RPO và RTO trên một trục thời gian')}
 ${slide('dv-10', 12, 'Seed lại xoá tiến độ qua CASCADE — cứu MỘT bảng')}
 <p>The most common real recovery is not "the server burned down" — it is "somebody ran a DELETE without a WHERE at 14:20". You do not want last night&#39;s whole database back; you want one table as of 03:15, next to the current one:</p>
 
-<pre><code><span class="tok-comment"># chi mot bang, vao mot CSDL TAM — KHONG de len production</span>
+<pre><code class="language-sql"><span class="tok-comment"># chi mot bang, vao mot CSDL TAM — KHONG de len production</span>
 psql -c "create database cuu;"
 pg_restore -d cuu -t don sao-luu.dump
 
@@ -937,7 +937,7 @@ ${slide('dv-10', 11, 'RPO và RTO trên một trục thời gian')}
 ${slide('dv-10', 12, 'Seed lại xoá tiến độ qua CASCADE — cứu MỘT bảng')}
 <p>Cú phục hồi thật phổ biến nhất không phải "máy chủ cháy rụi" — mà là "có người chạy một câu DELETE không kèm WHERE lúc 14:20". Bạn KHÔNG muốn cả cơ sở dữ liệu đêm qua về; bạn muốn MỘT bảng ở thời điểm 03:15, đặt cạnh cái hiện tại:</p>
 
-<pre><code><span class="tok-comment"># chi mot bang, vao mot CSDL TAM — KHONG de len production</span>
+<pre><code class="language-sql"><span class="tok-comment"># chi mot bang, vao mot CSDL TAM — KHONG de len production</span>
 psql -c "create database cuu;"
 pg_restore -d cuu -t don sao-luu.dump
 
@@ -1173,7 +1173,7 @@ bf=300000</div>
 <p>The reason <code>psql</code> exits 0 is documented and reasonable: by default it treats a script as a sequence of independent statements, reports errors as it goes, and keeps going. That is the right behaviour for an interactive session and a catastrophic one for a restore.</p>
 
 <h3>Two flags that turn the lie into an error</h3>
-<pre><code>psql -v ON_ERROR_STOP=1 -d ph3 -f sl.sql</code></pre>
+<pre><code class="language-bash">psql -v ON_ERROR_STOP=1 -d ph3 -f sl.sql</code></pre>
 
 <div class="out">  ma thoat: 3</div>
 
@@ -1375,7 +1375,7 @@ bf=300000</div>
 <p>Lý do <code>psql</code> thoát 0 thì có ghi tài liệu và hợp lý: mặc định nó coi một script là một chuỗi câu lệnh ĐỘC LẬP, báo lỗi khi gặp, rồi đi tiếp. Đó là hành vi ĐÚNG cho một phiên tương tác và là thảm hoạ cho một cú phục hồi.</p>
 
 <h3>Hai cái cờ biến lời nói dối thành một lỗi</h3>
-<pre><code>psql -v ON_ERROR_STOP=1 -d ph3 -f sl.sql</code></pre>
+<pre><code class="language-bash">psql -v ON_ERROR_STOP=1 -d ph3 -f sl.sql</code></pre>
 
 <div class="out">  ma thoat: 3</div>
 
@@ -1560,7 +1560,7 @@ $ psql -d ph4 -Atc "select count(*) from pg_tables where schemaname='public'"
 <p class="lead">10.3 established that every cheap check can be passed by a broken backup. This lesson is the expensive check, and the point is that it turns out not to be expensive at all.</p>
 
 <h3>The script</h3>
-<pre><code>#!/bin/bash
+<pre><code class="language-sql">#!/bin/bash
 <span class="tok-comment"># kiem-sao-luu.sh — phuc hoi vao CSDL tam roi DOI CHIEU so dong</span>
 set -euo pipefail
 TEP="\${1:?can duong dan ban sao luu}"
@@ -1840,7 +1840,7 @@ ma thoat 2</div>
 <p class="lead">Bài 10.3 xác lập rằng mọi phép kiểm rẻ tiền đều bị một bản sao lưu hỏng vượt qua được. Bài này là phép kiểm ĐẮT, và điểm mấu chốt là hoá ra nó chẳng đắt chút nào.</p>
 
 <h3>Cái script</h3>
-<pre><code>#!/bin/bash
+<pre><code class="language-sql">#!/bin/bash
 <span class="tok-comment"># kiem-sao-luu.sh — phuc hoi vao CSDL tam roi DOI CHIEU so dong</span>
 set -euo pipefail
 TEP="\${1:?can duong dan ban sao luu}"

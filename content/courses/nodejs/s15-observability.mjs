@@ -37,7 +37,7 @@ export default {
 <h3>What is actually wrong with <code>console.log</code></h3>
 <p>Nothing, while you are reading it with your eyes. Everything, the moment a machine has to read it. Compare one line of each:</p>
 
-<pre><code>[2026-07-25T17:20:00.000Z] INFO request finished reqId=r-0 method=GET url=/api/v1/notes status=200 ms=12
+<pre><code class="language-typescript">[2026-07-25T17:20:00.000Z] INFO request finished reqId=r-0 method=GET url=/api/v1/notes status=200 ms=12
 
 {"level":30,"time":1785206560047,"pid":31843,"hostname":"Cuong-Hoang.local","reqId":"r-0","method":"GET","url":"/api/v1/notes","status":200,"ms":12,"msg":"request finished"}</code></pre>
 
@@ -86,7 +86,7 @@ pino-http (sync)        9.410    4ms    8ms   52ms  486 B/dòng  21,86MB</div>
 <h3>What those 486 bytes actually contain</h3>
 <p>Worth looking at before deciding it is harmless. One request, logged by <code>pino-http</code> out of the box, formatted for reading:</p>
 
-<pre><code>{
+<pre><code class="language-typescript">{
  "level": 30,
  "time": 1785206702944,
  "pid": 32249,
@@ -118,7 +118,7 @@ pino-http (sync)        9.410    4ms    8ms   52ms  486 B/dòng  21,86MB</div>
 
 <p>This is not a bug in pino-http. It is the honest default: it logs the request, and headers are part of the request. It is your job to say which parts must never be written down. pino has a purpose-built option for exactly this:</p>
 
-<pre><code>const logger = pino({
+<pre><code class="language-javascript">const logger = pino({
   redact: {
     paths: [
       'req.headers.authorization',
@@ -154,7 +154,7 @@ console.log có canh cấp độ bằng if            0,9ms  114.209.618 lần/g
 <h3>What this site does</h3>
 <p>The backend behind cuongthai.com does not use pino. It has a 40-line <code>src/utils/logger.ts</code> that wraps <code>console.*</code> and switches format by environment:</p>
 
-<pre><code>const line = config.nodeEnv === 'production'
+<pre><code class="language-javascript">const line = config.nodeEnv === 'production'
   ? JSON.stringify(record)                       // máy đọc
   : \`[\${record.ts}] \${level.toUpperCase()} \${message}\`;  // người đọc</code></pre>
 
@@ -162,7 +162,7 @@ console.log có canh cấp độ bằng if            0,9ms  114.209.618 lần/g
 
 <div class="note-ct">
 <p><strong>How cuongthai.com does it.</strong> HTTP access logs come from <code>morgan('combined')</code>, with one deliberate override worth copying: some endpoints accept a JWT in the query string for SSE streaming, and morgan's default <code>:url</code> token would write that token into the access log verbatim. The site overrides the token to strip it — the same class of leak this lesson found in pino-http, caught by someone who thought about it in advance:</p>
-<pre><code>morgan.token('url', (req) =&gt; (req.originalUrl || req.url || '')
+<pre><code class="language-typescript">morgan.token('url', (req) =&gt; (req.originalUrl || req.url || '')
   .replace(/([?&amp;](?:token|code)=)[^&amp;]+/gi, '$1[REDACTED]'));</code></pre>
 <p>Health probes are excluded via <code>skip</code>, so uptime checks every ten seconds do not drown the real traffic.</p>
 </div>
@@ -203,7 +203,7 @@ console.log có canh cấp độ bằng if            0,9ms  114.209.618 lần/g
 <h3>Vấn đề thật sự của <code>console.log</code></h3>
 <p>Không có vấn đề gì cả, chừng nào <em>mắt bạn</em> đọc nó. Có mọi vấn đề, ngay khi <em>một cái máy</em> phải đọc nó. So một dòng của mỗi kiểu:</p>
 
-<pre><code>[2026-07-25T17:20:00.000Z] INFO request finished reqId=r-0 method=GET url=/api/v1/notes status=200 ms=12
+<pre><code class="language-typescript">[2026-07-25T17:20:00.000Z] INFO request finished reqId=r-0 method=GET url=/api/v1/notes status=200 ms=12
 
 {"level":30,"time":1785206560047,"pid":31843,"hostname":"Cuong-Hoang.local","reqId":"r-0","method":"GET","url":"/api/v1/notes","status":200,"ms":12,"msg":"request finished"}</code></pre>
 
@@ -252,7 +252,7 @@ pino-http (sync)        9.410    4ms    8ms   52ms  486 B/dòng  21,86MB</div>
 <h3>486 byte đó thật ra chứa gì</h3>
 <p>Nên nhìn tận mắt trước khi kết luận nó vô hại. Một request, log bởi <code>pino-http</code> nguyên bản, định dạng lại cho dễ đọc:</p>
 
-<pre><code>{
+<pre><code class="language-typescript">{
  "level": 30,
  "time": 1785206702944,
  "pid": 32249,
@@ -284,7 +284,7 @@ pino-http (sync)        9.410    4ms    8ms   52ms  486 B/dòng  21,86MB</div>
 
 <p>Đây không phải lỗi của pino-http. Đó là mặc định trung thực: nó log request, mà header là một phần của request. Việc nói phần nào <em>không bao giờ được viết ra</em> là việc của bạn. pino có sẵn một tuỳ chọn sinh ra đúng cho chuyện này:</p>
 
-<pre><code>const logger = pino({
+<pre><code class="language-javascript">const logger = pino({
   redact: {
     paths: [
       'req.headers.authorization',
@@ -320,7 +320,7 @@ console.log có canh cấp độ bằng if            0,9ms  114.209.618 lần/g
 <h3>Site này đang làm gì</h3>
 <p>Backend sau cuongthai.com không dùng pino. Nó có một file <code>src/utils/logger.ts</code> dài 40 dòng bọc quanh <code>console.*</code> và đổi định dạng theo môi trường:</p>
 
-<pre><code>const line = config.nodeEnv === 'production'
+<pre><code class="language-javascript">const line = config.nodeEnv === 'production'
   ? JSON.stringify(record)                       // cho máy đọc
   : \`[\${record.ts}] \${level.toUpperCase()} \${message}\`;  // cho người đọc</code></pre>
 
@@ -328,7 +328,7 @@ console.log có canh cấp độ bằng if            0,9ms  114.209.618 lần/g
 
 <div class="note-ct">
 <p><strong>cuongthai.com làm thế nào.</strong> Access log HTTP đến từ <code>morgan('combined')</code>, kèm đúng một chỗ ghi đè rất đáng bắt chước: vài endpoint nhận JWT qua query string để chạy SSE, và token <code>:url</code> mặc định của morgan sẽ ghi nguyên cái JWT ấy vào access log. Site ghi đè token đó để cắt bỏ — cùng loại lỗ rò mà bài này vừa tìm thấy ở pino-http, chỉ khác là có người đã nghĩ tới trước:</p>
-<pre><code>morgan.token('url', (req) =&gt; (req.originalUrl || req.url || '')
+<pre><code class="language-typescript">morgan.token('url', (req) =&gt; (req.originalUrl || req.url || '')
   .replace(/([?&amp;](?:token|code)=)[^&amp;]+/gi, '$1[REDACTED]'));</code></pre>
 <p>Các endpoint kiểm tra sức khoẻ được loại ra bằng <code>skip</code>, nên phép kiểm uptime chạy mỗi mười giây không nhấn chìm lưu lượng thật.</p>
 </div>
@@ -416,7 +416,7 @@ befb9fd3 | route: trả lời</div>
 <h3>The hard part is not the id. It is getting it everywhere.</h3>
 <p>The obvious implementation is to pass it down:</p>
 
-<pre><code>async function listNotes(userId, reqId) {           // ← tham số mới
+<pre><code class="language-javascript">async function listNotes(userId, reqId) {           // ← tham số mới
   log.info({ reqId, userId }, 'service: bắt đầu');
   return repoFindNotes(userId, reqId);              // ← truyền tiếp
 }</code></pre>
@@ -426,7 +426,7 @@ befb9fd3 | route: trả lời</div>
 <h3><code>AsyncLocalStorage</code>: ambient context that survives <code>await</code></h3>
 <p>Node has a core module for exactly this. <code>AsyncLocalStorage</code> holds a value that is visible to everything running "inside" a call — including across <code>await</code>, timers, promise chains and callbacks — without any of those things naming it:</p>
 
-<pre><code>import { AsyncLocalStorage } from 'node:async_hooks';
+<pre><code class="language-javascript">import { AsyncLocalStorage } from 'node:async_hooks';
 import { randomUUID } from 'node:crypto';
 
 const als = new AsyncLocalStorage();
@@ -484,7 +484,7 @@ bộ đếm pid+seq                         30,8ms   32.426.736/giây   p3e-lflr
 <h3>Honouring the id you were given</h3>
 <p>The id must not be generated fresh at every hop, or a request that crosses three services gets three ids and the whole exercise fails. The rule is: <strong>accept an inbound <code>X-Request-ID</code> if there is one, generate only if there is not</strong>, and always echo it back:</p>
 
-<pre><code>const incoming = (req.headers['x-request-id'])?.trim();
+<pre><code class="language-javascript">const incoming = (req.headers['x-request-id'])?.trim();
 const id = incoming &amp;&amp; incoming.length &lt;= 64 ? incoming : nanoid(12);
 req.id = id;
 res.setHeader('X-Request-ID', id);</code></pre>
@@ -590,7 +590,7 @@ befb9fd3 | route: trả lời</div>
 <h3>Phần khó không phải cái mã. Phần khó là đưa nó tới MỌI NƠI.</h3>
 <p>Cách cài đặt hiển nhiên là truyền nó xuống:</p>
 
-<pre><code>async function listNotes(userId, reqId) {           // ← tham số mới
+<pre><code class="language-javascript">async function listNotes(userId, reqId) {           // ← tham số mới
   log.info({ reqId, userId }, 'service: bắt đầu');
   return repoFindNotes(userId, reqId);              // ← truyền tiếp
 }</code></pre>
@@ -600,7 +600,7 @@ befb9fd3 | route: trả lời</div>
 <h3><code>AsyncLocalStorage</code>: ngữ cảnh sống sót qua <code>await</code></h3>
 <p>Node có sẵn một module lõi sinh ra đúng cho việc này. <code>AsyncLocalStorage</code> giữ một giá trị nhìn thấy được bởi mọi thứ đang chạy "bên trong" một lời gọi — kể cả xuyên qua <code>await</code>, timer, chuỗi promise và callback — mà không thứ nào trong số đó phải gọi tên nó:</p>
 
-<pre><code>import { AsyncLocalStorage } from 'node:async_hooks';
+<pre><code class="language-javascript">import { AsyncLocalStorage } from 'node:async_hooks';
 import { randomUUID } from 'node:crypto';
 
 const als = new AsyncLocalStorage();
@@ -658,7 +658,7 @@ bộ đếm pid+seq                         30,8ms   32.426.736/giây   p3e-lflr
 <h3>Tôn trọng cái mã người ta đã đưa cho bạn</h3>
 <p>Mã không được sinh mới ở mỗi chặng, nếu không một request đi qua ba dịch vụ sẽ có ba mã và cả bài tập này thất bại. Quy tắc là: <strong>nhận <code>X-Request-ID</code> từ bên ngoài nếu có, chỉ sinh mới khi không có</strong>, và luôn dội ngược lại:</p>
 
-<pre><code>const incoming = (req.headers['x-request-id'])?.trim();
+<pre><code class="language-javascript">const incoming = (req.headers['x-request-id'])?.trim();
 const id = incoming &amp;&amp; incoming.length &lt;= 64 ? incoming : nanoid(12);
 req.id = id;
 res.setHeader('X-Request-ID', id);</code></pre>
@@ -760,7 +760,7 @@ jq 'select(.status == 500)'          3,69s   1 dòng khớp</div>
 <h3>The question a log can answer that a metric cannot</h3>
 <p>Because every line is a typed record, the log file is a database you did not have to set up. Computing p50/p95/max per URL directly from those million lines:</p>
 
-<pre><code>$ jq -s 'group_by(.url)[] | {url: .[0].url, n: length,
+<pre><code class="language-bash">$ jq -s 'group_by(.url)[] | {url: .[0].url, n: length,
     p50: (map(.durationMs)|sort|.[(length*0.5)|floor]),
     p95: (map(.durationMs)|sort|.[(length*0.95)|floor]),
     max: (map(.durationMs)|max)}' -c logs/haystack.log</code></pre>
@@ -780,7 +780,7 @@ jq 'select(.status == 500)'          3,69s   1 dòng khớp</div>
 <p>The obvious way to cut log cost is to log less. The obvious way to log less — raise the level to <code>warn</code> — is also the way to throw away exactly the context you need when something breaks, because the interesting lines are the <code>info</code> ones <em>around</em> the error.</p>
 <p>The better strategy is <strong>keep everything abnormal, sample the rest</strong>. Run over the same million lines: keep 100% of 5xx, 100% of anything slower than 1000ms, and 1% of everything else, chosen by a stable hash of the request id so that <em>all</em> lines of a sampled request survive together:</p>
 
-<pre><code>let h = 0;
+<pre><code class="language-javascript">let h = 0;
 const s = record.requestId;
 for (let i = 0; i &lt; s.length; i++) h = (h * 31 + s.charCodeAt(i)) &gt;&gt;&gt; 0;
 const sampled = (h % 10000) &lt; RATE * 10000;
@@ -814,7 +814,7 @@ request chậm  giữ 1/1 (100%)</div>
 <h3>Rotation: the outage that logging causes</h3>
 <p>At 24,6GB a day, a 100GB disk fills in four days. When it fills, PostgreSQL stops accepting writes, Docker cannot start containers, and the log that would have told you why cannot be written. <strong>This is the single most common way logging takes down a service</strong>, and this project has lived it — the VPS once filled its disk and killed Postgres with it.</p>
 
-<pre><code># /etc/docker/daemon.json — trần cứng cho MỌI container
+<pre><code class="language-typescript"># /etc/docker/daemon.json — trần cứng cho MỌI container
 {
   "log-driver": "json-file",
   "log-opts": { "max-size": "50m", "max-file": "5" }
@@ -889,7 +889,7 @@ jq 'select(.status == 500)'          3,69s   1 dòng khớp</div>
 <h3>Câu hỏi mà log trả lời được còn metric thì không</h3>
 <p>Vì mỗi dòng là một bản ghi có kiểu, file log chính là một cơ sở dữ liệu bạn không phải dựng. Tính p50/p95/max theo từng URL trực tiếp từ một triệu dòng đó:</p>
 
-<pre><code>$ jq -s 'group_by(.url)[] | {url: .[0].url, n: length,
+<pre><code class="language-bash">$ jq -s 'group_by(.url)[] | {url: .[0].url, n: length,
     p50: (map(.durationMs)|sort|.[(length*0.5)|floor]),
     p95: (map(.durationMs)|sort|.[(length*0.95)|floor]),
     max: (map(.durationMs)|max)}' -c logs/haystack.log</code></pre>
@@ -909,7 +909,7 @@ jq 'select(.status == 500)'          3,69s   1 dòng khớp</div>
 <p>Cách hiển nhiên để cắt chi phí log là log ít đi. Cách hiển nhiên để log ít đi — nâng cấp độ lên <code>warn</code> — cũng chính là cách vứt bỏ đúng cái ngữ cảnh bạn cần khi có sự cố, vì những dòng đáng giá là các dòng <code>info</code> nằm <em>xung quanh</em> lỗi.</p>
 <p>Chiến lược tốt hơn là <strong>giữ hết mọi thứ bất thường, lấy mẫu phần còn lại</strong>. Chạy trên cùng một triệu dòng đó: giữ 100% lỗi 5xx, 100% mọi thứ chậm hơn 1000ms, và 1% phần còn lại, chọn bằng một hàm băm ổn định trên mã request để <em>mọi</em> dòng của một request được chọn đều sống sót cùng nhau:</p>
 
-<pre><code>let h = 0;
+<pre><code class="language-javascript">let h = 0;
 const s = record.requestId;
 for (let i = 0; i &lt; s.length; i++) h = (h * 31 + s.charCodeAt(i)) &gt;&gt;&gt; 0;
 const sampled = (h % 10000) &lt; RATE * 10000;
@@ -943,7 +943,7 @@ request chậm  giữ 1/1 (100%)</div>
 <h3>Xoay vòng log: sự cố do chính việc ghi log gây ra</h3>
 <p>Ở mức 24,6GB một ngày, một ổ đĩa 100GB đầy trong bốn ngày. Khi nó đầy, PostgreSQL ngừng nhận ghi, Docker không khởi động được container, và cái log lẽ ra nói cho bạn biết vì sao thì không ghi nổi. <strong>Đây là cách phổ biến nhất mà việc ghi log đánh sập một dịch vụ</strong>, và chính dự án này đã trải qua — VPS từng đầy đĩa và kéo Postgres chết theo.</p>
 
-<pre><code># /etc/docker/daemon.json — trần cứng cho MỌI container
+<pre><code class="language-typescript"># /etc/docker/daemon.json — trần cứng cho MỌI container
 {
   "log-driver": "json-file",
   "log-opts": { "max-size": "50m", "max-file": "5" }
@@ -998,7 +998,7 @@ request chậm  giữ 1/1 (100%)</div>
 <p>The Counter-versus-Gauge distinction matters more than it looks. A counter never resets except when the process restarts, and Prometheus detects that reset and corrects for it. A gauge that you increment and decrement by hand will drift out of sync the first time an error path skips the decrement — and drift silently, forever, because nothing recomputes it.</p>
 
 <h3>A working <code>/metrics</code> in fifteen lines</h3>
-<pre><code>import client from 'prom-client';
+<pre><code class="language-javascript">import client from 'prom-client';
 
 const reg = new client.Registry();
 client.collectDefaultMetrics({ register: reg });   // CPU, RAM, event loop, GC
@@ -1147,7 +1147,7 @@ thêm nhãn user_id                      426 chuỗi       300 chuỗi          
 <p>Phân biệt Counter với Gauge quan trọng hơn vẻ ngoài của nó. Counter không bao giờ reset trừ khi tiến trình khởi động lại, và Prometheus phát hiện được lần reset ấy rồi tự hiệu chỉnh. Còn một gauge mà bạn tự tay tăng rồi tự tay giảm sẽ lệch khỏi sự thật ngay lần đầu một nhánh lỗi bỏ qua bước giảm — và lệch trong im lặng, mãi mãi, vì không có gì tính lại nó.</p>
 
 <h3>Một <code>/metrics</code> chạy được trong mười lăm dòng</h3>
-<pre><code>import client from 'prom-client';
+<pre><code class="language-javascript">import client from 'prom-client';
 
 const reg = new client.Registry();
 client.collectDefaultMetrics({ register: reg });   // CPU, RAM, event loop, GC
@@ -1305,7 +1305,7 @@ thêm nhãn user_id                      426 chuỗi       300 chuỗi          
 <h3>Turning it on</h3>
 <p>The remarkable part is how little application code changes. Auto-instrumentation monkey-patches the libraries you already use — <code>http</code>, <code>express</code>, <code>pg</code>, <code>ioredis</code>, and about forty more:</p>
 
-<pre><code>// PHẢI nạp TRƯỚC mọi import khác, nếu không việc vá thư viện không kịp
+<pre><code class="language-javascript">// PHẢI nạp TRƯỚC mọi import khác, nếu không việc vá thư viện không kịp
 import { NodeSDK } from '@opentelemetry/sdk-node';
 import { BatchSpanProcessor } from '@opentelemetry/sdk-trace-base';
 import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node';
@@ -1368,7 +1368,7 @@ GET                                   60,19ms
 <h3>Connecting logs to traces</h3>
 <p>Step 4 of that loop only works if a log line can name its trace. pino has a <code>mixin</code> hook that runs on every line — read the active span from OpenTelemetry's context and attach its ids:</p>
 
-<pre><code>const logger = pino({
+<pre><code class="language-javascript">const logger = pino({
   mixin() {
     const span = trace.getSpan(context.active());
     if (!span) return {};
@@ -1418,7 +1418,7 @@ sampler = 0,01       4.916    3ms    7ms      1.024        187MB</div>
 <h3>Manual spans: where auto-instrumentation stops</h3>
 <p>Auto-instrumentation traces I/O. It cannot see your business logic, because it does not know which of your function calls are meaningful. Add spans by hand only where a name would help a future incident:</p>
 
-<pre><code>const span = tracer.startSpan('service.listNotes');
+<pre><code class="language-javascript">const span = tracer.startSpan('service.listNotes');
 const out = await context.with(trace.setSpan(context.active(), span), async () =&gt; {
   const notes = await repo.find(authorId);
   span.setAttribute('notes.count', notes.length);      // ← thuộc tính, KHÔNG phải nhãn
@@ -1472,7 +1472,7 @@ span.end();</code></pre>
 <h3>Bật nó lên</h3>
 <p>Điều đáng nể là code ứng dụng gần như không đổi. Auto-instrumentation vá nóng các thư viện bạn vốn đang dùng — <code>http</code>, <code>express</code>, <code>pg</code>, <code>ioredis</code>, và khoảng bốn mươi cái nữa:</p>
 
-<pre><code>// PHẢI nạp TRƯỚC mọi import khác, nếu không việc vá thư viện không kịp
+<pre><code class="language-javascript">// PHẢI nạp TRƯỚC mọi import khác, nếu không việc vá thư viện không kịp
 import { NodeSDK } from '@opentelemetry/sdk-node';
 import { BatchSpanProcessor } from '@opentelemetry/sdk-trace-base';
 import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node';
@@ -1535,7 +1535,7 @@ GET                                   60,19ms
 <h3>Nối log với trace</h3>
 <p>Bước 4 của vòng lặp đó chỉ chạy được nếu một dòng log gọi được tên trace của nó. pino có hook <code>mixin</code> chạy trên mọi dòng — đọc span đang hoạt động từ ngữ cảnh của OpenTelemetry rồi gắn mã của nó vào:</p>
 
-<pre><code>const logger = pino({
+<pre><code class="language-javascript">const logger = pino({
   mixin() {
     const span = trace.getSpan(context.active());
     if (!span) return {};
@@ -1585,7 +1585,7 @@ sampler = 0,01       4.916    3ms    7ms      1.024        187MB</div>
 <h3>Span thủ công: nơi auto-instrumentation dừng lại</h3>
 <p>Auto-instrumentation theo dõi I/O. Nó không nhìn thấy logic nghiệp vụ của bạn, vì nó không biết lời gọi hàm nào của bạn là có ý nghĩa. Chỉ thêm span bằng tay ở những chỗ mà một cái tên sẽ giúp ích cho một sự cố tương lai:</p>
 
-<pre><code>const span = tracer.startSpan('service.listNotes');
+<pre><code class="language-javascript">const span = tracer.startSpan('service.listNotes');
 const out = await context.with(trace.setSpan(context.active(), span), async () =&gt; {
   const notes = await repo.find(authorId);
   span.setAttribute('notes.count', notes.length);      // ← thuộc tính, KHÔNG phải nhãn
@@ -1643,7 +1643,7 @@ span.end();</code></pre>
 
 <p>The rule that prevents it: <strong>liveness answers only "is this process capable of responding at all". Nothing else.</strong></p>
 
-<pre><code>// liveness — không chạm vào bất cứ thứ gì bên ngoài
+<pre><code class="language-typescript">// liveness — không chạm vào bất cứ thứ gì bên ngoài
 app.get('/health/live', (req, res) =&gt; res.json({ status: 'ok' }));
 
 // readiness — allowed to check dependencies, and MUST have a timeout
@@ -1760,7 +1760,7 @@ app.get('/health/ready', async (req, res) =&gt; {
 
 <p>Quy tắc ngăn được nó: <strong>liveness chỉ trả lời đúng một câu "tiến trình này còn có khả năng phản hồi hay không". Không gì khác.</strong></p>
 
-<pre><code>// liveness — không chạm vào bất cứ thứ gì bên ngoài
+<pre><code class="language-typescript">// liveness — không chạm vào bất cứ thứ gì bên ngoài
 app.get('/health/live', (req, res) =&gt; res.json({ status: 'ok' }));
 
 // readiness — được phép kiểm phụ thuộc, và BẮT BUỘC phải có timeout

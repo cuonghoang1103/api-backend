@@ -69,7 +69,7 @@ ${gallery('lx-02', [
 
 <h3>Creating</h3>
 ${slide('lx-02', 3, 'Năm lệnh làm 90% việc với file — mỗi lệnh một cờ quan trọng')}
-<pre><code>touch notes.txt                    <span class="tok-comment"># create an empty file, or update its mtime</span>
+<pre><code class="language-bash">touch notes.txt                    <span class="tok-comment"># create an empty file, or update its mtime</span>
 mkdir logs                         <span class="tok-comment"># one directory</span>
 mkdir -p build/assets/images       <span class="tok-comment"># the whole path, creating parents as needed</span>
 mkdir -p src/{api,web,shared}      <span class="tok-comment"># brace expansion — three at once</span></code></pre>
@@ -99,7 +99,7 @@ cp -v *.md docs/                   <span class="tok-comment"># print what it doe
 cp -r src/ /tmp/dest/       <span class="tok-comment"># → /tmp/dest/src/…   (STILL the directory) — GNU cp ignores</span>
                             <span class="tok-comment">#   the slash, but rsync and macOS cp do NOT. Build the habit now.</span></code></pre>
 <div class="callout warn"><strong>Corrected, measured on Ubuntu 24.04 (coreutils 9.4):</strong> an earlier version of this lesson said the slash version copies the <em>contents</em>. It does not. GNU <code>cp</code> ignores a trailing slash on the source, so when the destination already exists both lines create <code>dest/src/</code>. It is macOS <code>cp</code> (BSD) that reads <code>src/</code> as "what is inside" — so the same command gives two different trees on your Mac and on the VPS. The portable way to say "copy the contents" is <code>cp -a src/. dest/</code>: <code>.</code> names the directory itself, so everything inside it — dotfiles included — lands directly in <code>dest</code> on both systems.</div>
-<pre><code>cp -r src dst          <span class="tok-comment"># dst does not exist yet → dst is a copy of src</span>
+<pre><code class="language-bash">cp -r src dst          <span class="tok-comment"># dst does not exist yet → dst is a copy of src</span>
 cp -r src dst          <span class="tok-comment"># run it again: dst exists now</span>
 ls dst
 rm -rf dst; mkdir dst
@@ -130,7 +130,7 @@ rm -r olddir/                      <span class="tok-comment"># a directory and i
 rm -f file.txt                     <span class="tok-comment"># force: no prompt, no error if missing</span>
 rmdir emptydir/                    <span class="tok-comment"># only removes an EMPTY directory — a safety net</span></code></pre>
 <div class="callout danger"><strong>There is no recycle bin.</strong> <code>rm</code> unlinks the name and the space becomes reusable immediately. Recovery requires specialist tools, usually fails on a busy filesystem, and is not something to plan around. The habits below are not beginner caution — they are what people do after losing something.</div>
-<pre><code><span class="tok-comment"># The three safety habits, in order of value:</span>
+<pre><code class="language-bash"><span class="tok-comment"># The three safety habits, in order of value:</span>
 
 <span class="tok-comment"># 1. LOOK first. Same pattern, harmless command.</span>
 ls -la *.log
@@ -149,7 +149,7 @@ rm -rf / build/        <span class="tok-comment"># ← a space that ends the mac
 
 <h3>A safer delete: move to a holding area</h3>
 ${slide('lx-02', 8, 'Ba lưới an toàn thay cho “cẩn thận hơn”')}
-<pre><code><span class="tok-comment"># For anything you are not certain about, park it instead of deleting it.</span>
+<pre><code class="language-bash"><span class="tok-comment"># For anything you are not certain about, park it instead of deleting it.</span>
 mkdir -p ~/.trash
 mv suspicious-dir ~/.trash/
 
@@ -179,7 +179,7 @@ trash-restore</code></pre>
 </tbody>
 </table>
 <p>Two of those rows changed recently enough to bite scripts written for older systems. Measured on Ubuntu 24.04:</p>
-<pre><code>cp -r cau-hinh bak-r; cp -a cau-hinh bak-a
+<pre><code class="language-bash">cp -r cau-hinh bak-r; cp -a cau-hinh bak-a
 ls -l --time-style='+%F %R' cau-hinh/app.yml bak-r/app.yml bak-a/app.yml
 echo A &gt; a.txt; echo B &gt; b.txt
 cp -n a.txt b.txt; echo "exit=$?"
@@ -196,7 +196,7 @@ exit=1</div>
 
 <h3>rm has no recycle bin — see it for yourself in a throwaway container</h3>
 <p>Do this inside <code>docker run --rm -it ubuntu:24.04 bash</code>, not on your own machine. <code>rm</code> calls <code>unlink()</code>: it removes one <em>name</em> from a directory and lowers the inode's link count. When the count reaches zero and no process holds the file open, the space is marked free and the next write can reuse it. There is no step that moves anything anywhere:</p>
-<pre><code>echo "bao cao quan trong" &gt; bao-cao.txt
+<pre><code class="language-bash">echo "bao cao quan trong" &gt; bao-cao.txt
 ls -li bao-cao.txt
 rm bao-cao.txt
 ls bao-cao.txt
@@ -206,7 +206,7 @@ ls: cannot access 'bao-cao.txt': No such file or directory
 ls: cannot access '/home/cuong/.local/share/Trash': No such file or directory</div>
 <p>The "Trash" your desktop shows is a folder, <code>~/.local/share/Trash</code>, defined by the FreeDesktop trash specification; file managers <em>move</em> things into it. <code>rm</code> has never heard of it — which is why it did not even exist here. Now the failure that turns this into a disaster: a variable that is empty.</p>
 ${slide('lx-02', 7, 'Biến rỗng + rm -rf = danh sách mọi thư mục của máy')}
-<pre><code>THU_MUC=""                       <span class="tok-comment"># forgot to set it, or typed the name wrong</span>
+<pre><code class="language-bash">THU_MUC=""                       <span class="tok-comment"># forgot to set it, or typed the name wrong</span>
 echo rm -rf "$THU_MUC"/*         <span class="tok-comment"># echo first: what would rm receive?</span></code></pre>
 <div class="out">rm -rf /bin /boot /dev /etc /home /lib /media /mnt /opt /proc /root /run /sbin /srv /sys /tmp /usr /var</div>
 <p><code>"$THU_MUC"/*</code> became <code>/*</code>, and the glob expanded it into every top-level directory of the machine. The built-in guard does not help here:</p>
@@ -222,7 +222,7 @@ bash: line 1: THU_MUC2: unbound variable</div>
 
 <h3>Try it step by step: a real trash can on the command line</h3>
 <p>If you want "undo" in the terminal, install it — do not alias <code>rm</code> to something clever. <code>trash-cli</code> writes into the same FreeDesktop Trash the file manager uses, and remembers where each item came from:</p>
-<pre><code>sudo apt install -y trash-cli
+<pre><code class="language-bash">sudo apt install -y trash-cli
 touch f{1..5}.log
 rm -I f*.log                      <span class="tok-comment"># answer n</span>
 mkdir cu &amp;&amp; echo x &gt; cu/a.txt
@@ -242,7 +242,7 @@ What file to restore [0..0]: 0</div>
 <h3>On macOS and WSL: what is different</h3>
 ${slide('lx-02', 31, 'Cùng lệnh, khác máy: Ubuntu · macOS · WSL')}
 <p>The Mac ships the BSD versions of these tools, and three of them behave differently from the VPS in ways that matter. Measured on macOS (Mac M1) in a scratch directory:</p>
-<pre><code>mkdir -p s1/sub d1 d2; touch s1/a s1/sub/b
+<pre><code class="language-bash">mkdir -p s1/sub d1 d2; touch s1/a s1/sub/b
 cp -R s1 d1; cp -R s1/ d2         <span class="tok-comment"># BSD cp: the slash DOES mean "contents"</span>
 ls d1 d2
 echo A &gt; a; echo B &gt; b; mv -n a b; echo "exit=$?"
@@ -264,7 +264,7 @@ usage: stat [-FLnq] [-f format | -l | -r | -s | -x] [-t timefmt] [file ...]
 <p>WSL2 is a real Ubuntu, so everything in this lesson behaves exactly as on the VPS — <em>inside the Linux filesystem</em> (<code>~</code>). A project kept under <code>/mnt/c/…</code> lives on the Windows drive and crosses a translation layer on every file operation; Microsoft's own guidance is to keep files in the WSL filesystem when you work with Linux tools, for speed.</p>
 
 <h3>Reading a file quickly</h3>
-<pre><code>cat small.txt                      <span class="tok-comment"># dump it all — only for SMALL files</span>
+<pre><code class="language-bash">cat small.txt                      <span class="tok-comment"># dump it all — only for SMALL files</span>
 less big.log                       <span class="tok-comment"># page through it; q to quit, / to search</span>
 head -20 file.txt                  <span class="tok-comment"># first 20 lines</span>
 tail -20 file.txt                  <span class="tok-comment"># last 20 lines</span>
@@ -348,7 +348,7 @@ bash: D: parameter null or not set</div>
 
 <h3>Tạo</h3>
 ${slide('lx-02', 3, 'Năm lệnh làm 90% việc với file — mỗi lệnh một cờ quan trọng')}
-<pre><code>touch notes.txt                    <span class="tok-comment"># tạo một file rỗng, hoặc cập nhật mtime của nó</span>
+<pre><code class="language-bash">touch notes.txt                    <span class="tok-comment"># tạo một file rỗng, hoặc cập nhật mtime của nó</span>
 mkdir logs                         <span class="tok-comment"># một thư mục</span>
 mkdir -p build/assets/images       <span class="tok-comment"># cả đường dẫn, tạo luôn thư mục cha khi cần</span>
 mkdir -p src/{api,web,shared}      <span class="tok-comment"># khai triển ngoặc nhọn — ba cái một lúc</span></code></pre>
@@ -378,7 +378,7 @@ cp -v *.md docs/                   <span class="tok-comment"># in ra nó đang l
 cp -r src/ /tmp/dest/       <span class="tok-comment"># → /tmp/dest/src/…   (VẪN là cả thư mục) — cp của GNU bỏ qua</span>
                             <span class="tok-comment">#   dấu gạch chéo, nhưng rsync và cp của macOS thì KHÔNG. Hãy tạo thói quen ngay.</span></code></pre>
 <div class="callout warn"><strong>Đã sửa, đo thật trên Ubuntu 24.04 (coreutils 9.4):</strong> bản cũ của bài này ghi rằng dòng có dấu gạch chéo chép <em>nội dung</em>. Không phải vậy. <code>cp</code> của GNU bỏ qua dấu gạch chéo cuối ở phía nguồn, nên khi đích đã tồn tại thì cả hai dòng đều tạo ra <code>dest/src/</code>. Chính <code>cp</code> của macOS (BSD) mới hiểu <code>src/</code> là "những gì bên trong" — nên cùng một lệnh cho ra hai cây thư mục khác nhau trên Mac của bạn và trên VPS. Cách viết chạy giống nhau ở mọi nơi để nói "chép phần bên trong" là <code>cp -a src/. dest/</code>: dấu <code>.</code> gọi tên chính thư mục đó, nên mọi thứ bên trong nó — kể cả file ẩn — rơi thẳng vào <code>dest</code> trên cả hai hệ thống.</div>
-<pre><code>cp -r src dst          <span class="tok-comment"># dst chưa có → dst là bản chép của src</span>
+<pre><code class="language-bash">cp -r src dst          <span class="tok-comment"># dst chưa có → dst là bản chép của src</span>
 cp -r src dst          <span class="tok-comment"># chạy lại: lúc này dst ĐÃ có</span>
 ls dst
 rm -rf dst; mkdir dst
@@ -409,7 +409,7 @@ rm -r olddir/                      <span class="tok-comment"># một thư mục 
 rm -f file.txt                     <span class="tok-comment"># ép: không hỏi, không báo lỗi nếu không có</span>
 rmdir emptydir/                    <span class="tok-comment"># chỉ xoá thư mục RỖNG — một lưới an toàn</span></code></pre>
 <div class="callout danger"><strong>Không có thùng rác.</strong> <code>rm</code> gỡ cái tên đi và chỗ trống dùng lại được ngay lập tức. Khôi phục cần công cụ chuyên dụng, thường thất bại trên một hệ thống file đang bận, và không phải thứ để lên kế hoạch dựa vào. Những thói quen dưới đây không phải sự thận trọng của người mới — đó là thứ người ta làm SAU khi đã mất mát.</div>
-<pre><code><span class="tok-comment"># Ba thói quen an toàn, theo thứ tự giá trị:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Ba thói quen an toàn, theo thứ tự giá trị:</span>
 
 <span class="tok-comment"># 1. NHÌN trước. Cùng cái mẫu, lệnh vô hại.</span>
 ls -la *.log
@@ -428,7 +428,7 @@ rm -rf / build/        <span class="tok-comment"># ← một dấu cách kết l
 
 <h3>Xoá an toàn hơn: chuyển sang một khu tạm giữ</h3>
 ${slide('lx-02', 8, 'Ba lưới an toàn thay cho “cẩn thận hơn”')}
-<pre><code><span class="tok-comment"># Với bất cứ thứ gì bạn chưa chắc, hãy cất nó đi thay vì xoá.</span>
+<pre><code class="language-bash"><span class="tok-comment"># Với bất cứ thứ gì bạn chưa chắc, hãy cất nó đi thay vì xoá.</span>
 mkdir -p ~/.trash
 mv suspicious-dir ~/.trash/
 
@@ -458,7 +458,7 @@ trash-restore</code></pre>
 </tbody>
 </table>
 <p>Hai dòng trong bảng đổi gần đây tới mức cắn được những script viết cho máy cũ. Đo thật trên Ubuntu 24.04:</p>
-<pre><code>cp -r cau-hinh bak-r; cp -a cau-hinh bak-a
+<pre><code class="language-bash">cp -r cau-hinh bak-r; cp -a cau-hinh bak-a
 ls -l --time-style='+%F %R' cau-hinh/app.yml bak-r/app.yml bak-a/app.yml
 echo A &gt; a.txt; echo B &gt; b.txt
 cp -n a.txt b.txt; echo "exit=$?"
@@ -475,7 +475,7 @@ exit=1</div>
 
 <h3>rm không có thùng rác — tự nhìn thấy trong một container vứt đi</h3>
 <p>Làm phần này bên trong <code>docker run --rm -it ubuntu:24.04 bash</code>, đừng làm trên máy của bạn. <code>rm</code> gọi <code>unlink()</code> (gỡ liên kết): nó gỡ đúng một <em>CÁI TÊN</em> khỏi một thư mục và giảm số liên kết của inode đi một. Khi số đó về 0 và không tiến trình nào còn mở file, chỗ trống được đánh dấu là rảnh và lần ghi kế tiếp có thể dùng lại. Không có bước nào "chuyển" cái gì đi đâu cả:</p>
-<pre><code>echo "bao cao quan trong" &gt; bao-cao.txt
+<pre><code class="language-bash">echo "bao cao quan trong" &gt; bao-cao.txt
 ls -li bao-cao.txt
 rm bao-cao.txt
 ls bao-cao.txt
@@ -485,7 +485,7 @@ ls: cannot access 'bao-cao.txt': No such file or directory
 ls: cannot access '/home/cuong/.local/share/Trash': No such file or directory</div>
 <p>"Thùng rác" mà màn hình desktop cho bạn thấy là một thư mục, <code>~/.local/share/Trash</code>, theo chuẩn thùng rác của FreeDesktop; trình quản lý file <em>CHUYỂN</em> đồ vào đó. <code>rm</code> chưa từng biết tới nó — đó là lý do ở đây nó còn chẳng tồn tại. Giờ là kiểu hỏng biến chuyện này thành thảm hoạ: một biến bị rỗng.</p>
 ${slide('lx-02', 7, 'Biến rỗng + rm -rf = danh sách mọi thư mục của máy')}
-<pre><code>THU_MUC=""                       <span class="tok-comment"># quên gán, hoặc gõ sai tên biến</span>
+<pre><code class="language-bash">THU_MUC=""                       <span class="tok-comment"># quên gán, hoặc gõ sai tên biến</span>
 echo rm -rf "$THU_MUC"/*         <span class="tok-comment"># echo trước: rm sẽ nhận được gì?</span></code></pre>
 <div class="out">rm -rf /bin /boot /dev /etc /home /lib /media /mnt /opt /proc /root /run /sbin /srv /sys /tmp /usr /var</div>
 <p><code>"$THU_MUC"/*</code> trở thành <code>/*</code>, và glob khai triển nó thành mọi thư mục cấp cao nhất của cái máy. Chốt an toàn có sẵn không cứu được ở đây:</p>
@@ -501,7 +501,7 @@ bash: line 1: THU_MUC2: unbound variable</div>
 
 <h3>Chạy thử từng bước: một thùng rác thật trên dòng lệnh</h3>
 <p>Muốn có "hoàn tác" trong terminal thì hãy cài nó — đừng đặt alias <code>rm</code> thành một thứ khôn lỏi. <code>trash-cli</code> ghi vào đúng cái Thùng rác FreeDesktop mà trình quản lý file dùng, và nhớ mỗi món đến từ đâu:</p>
-<pre><code>sudo apt install -y trash-cli
+<pre><code class="language-bash">sudo apt install -y trash-cli
 touch f{1..5}.log
 rm -I f*.log                      <span class="tok-comment"># trả lời n</span>
 mkdir cu &amp;&amp; echo x &gt; cu/a.txt
@@ -521,7 +521,7 @@ What file to restore [0..0]: 0</div>
 <h3>Trên macOS và WSL khác gì</h3>
 ${slide('lx-02', 31, 'Cùng lệnh, khác máy: Ubuntu · macOS · WSL')}
 <p>Mac đi kèm bản BSD của các công cụ này, và ba trong số chúng cư xử khác VPS ở những chỗ có hậu quả. Đo thật trên macOS (Mac M1), trong một thư mục nháp:</p>
-<pre><code>mkdir -p s1/sub d1 d2; touch s1/a s1/sub/b
+<pre><code class="language-bash">mkdir -p s1/sub d1 d2; touch s1/a s1/sub/b
 cp -R s1 d1; cp -R s1/ d2         <span class="tok-comment"># cp của BSD: dấu gạch chéo CÓ nghĩa "nội dung"</span>
 ls d1 d2
 echo A &gt; a; echo B &gt; b; mv -n a b; echo "exit=$?"
@@ -543,7 +543,7 @@ usage: stat [-FLnq] [-f format | -l | -r | -s | -x] [-t timefmt] [file ...]
 <p>WSL2 là một Ubuntu thật, nên mọi thứ trong bài này chạy y hệt trên VPS — <em>bên trong hệ thống file Linux</em> (<code>~</code>). Một dự án để ở <code>/mnt/c/…</code> thì nằm trên ổ Windows và phải đi qua một lớp chuyển đổi ở mỗi thao tác file; chính Microsoft khuyên để file trong hệ thống file của WSL khi làm việc bằng công cụ Linux, để có tốc độ tốt nhất.</p>
 
 <h3>Đọc nhanh một file</h3>
-<pre><code>cat small.txt                      <span class="tok-comment"># đổ hết ra — chỉ dành cho file NHỎ</span>
+<pre><code class="language-bash">cat small.txt                      <span class="tok-comment"># đổ hết ra — chỉ dành cho file NHỎ</span>
 less big.log                       <span class="tok-comment"># lật từng trang; q để thoát, / để tìm</span>
 head -20 file.txt                  <span class="tok-comment"># 20 dòng đầu</span>
 tail -20 file.txt                  <span class="tok-comment"># 20 dòng cuối</span>
@@ -666,7 +666,7 @@ ${slide('lx-02', 10, 'Bốn ký tự đại diện và ngoặc nhọn')}
   <div class="kv"><span class="k"><code>[!abc]</code></span><span class="v">One character <em>not</em> in the set. <code>[^abc]</code> works too in bash, but <code>!</code> is the portable form.</span></div>
 </div>
 
-<pre><code>ls
+<pre><code class="language-bash">ls
 <span class="tok-comment"># log1.txt log2.txt log3.txt logA.txt notes.md report.pdf</span>
 
 echo log?.txt        <span class="tok-comment"># all four — ? is any single char</span>
@@ -680,7 +680,7 @@ notes.md report.pdf</div>
 
 <h3>Named character classes</h3>
 <p>Inside brackets you can use POSIX class names, which are clearer than ranges and correct under any locale:</p>
-<pre><code>echo log[[:digit:]].txt      <span class="tok-comment"># same as [0-9]</span>
+<pre><code class="language-bash">echo log[[:digit:]].txt      <span class="tok-comment"># same as [0-9]</span>
 echo [[:upper:]]*            <span class="tok-comment"># files starting with a capital</span>
 echo *[[:space:]]*           <span class="tok-comment"># files with a space in the name</span></code></pre>
 <p>The full set: <code>alpha</code>, <code>digit</code>, <code>alnum</code>, <code>upper</code>, <code>lower</code>, <code>space</code>, <code>punct</code>, <code>xdigit</code>. Note the doubled brackets — <code>[[:digit:]]</code> is a class <em>inside</em> a bracket expression, so the outer pair is the bracket expression and the inner pair is part of the class syntax.</p>
@@ -691,7 +691,7 @@ echo *[[:space:]]*           <span class="tok-comment"># files with a space in t
   <div class="kv"><span class="k">Glob <code>*.txt</code></span><span class="v">Looks at the filesystem. Expands to files that exist.</span></div>
   <div class="kv"><span class="k">Brace <code>{a,b}.txt</code></span><span class="v">Pure text generation. Expands to <code>a.txt b.txt</code> whether or not those files exist.</span></div>
 </div>
-<pre><code>cd /tmp/empty-dir
+<pre><code class="language-bash">cd /tmp/empty-dir
 echo {a,b,c}.txt          <span class="tok-comment"># braces do not care that the dir is empty</span>
 echo *.txt                <span class="tok-comment"># glob matched nothing — see the next section</span>
 echo {1..5}               <span class="tok-comment"># ranges work too</span>
@@ -706,11 +706,11 @@ mkdir -p site/{css,js,img}  <span class="tok-comment"># the practical use: creat
 <h3>When a glob matches nothing</h3>
 ${slide('lx-02', 12, 'Glob không khớp: bash giữ nguyên chữ, zsh báo lỗi')}
 <p>Bash's default is startling the first time you meet it: <strong>an unmatched glob is passed through literally</strong>. The command receives the raw <code>*.txt</code> as an argument.</p>
-<pre><code>cd /tmp/empty-dir
+<pre><code class="language-bash">cd /tmp/empty-dir
 ls *.txt</code></pre>
 <div class="out">ls: cannot access '*.txt': No such file or directory</div>
 <p><code>ls</code> is complaining about a file literally named <code>*.txt</code>, because that is what it was handed. Usually this is just a confusing error message. In a loop it is a bug:</p>
-<pre><code>for f in *.csv; do
+<pre><code class="language-bash">for f in *.csv; do
   echo "processing \${f}"
 done</code></pre>
 <div class="out">processing *.csv</div>
@@ -722,7 +722,7 @@ shopt -s failglob      <span class="tok-comment"># unmatched glob is an ERROR �
 <h3>Dotfiles are invisible to globs</h3>
 ${slide('lx-02', 13, 'File ẩn: bash 5.2 thôi cho .* khớp . và ..')}
 <p>A leading dot must be matched literally. This is deliberate, and it is why <code>rm *</code> in your home directory does not destroy <code>.ssh</code> and <code>.bashrc</code>:</p>
-<pre><code>ls -a
+<pre><code class="language-bash">ls -a
 <span class="tok-comment"># .  ..  .env  .gitignore  app.js  README.md</span>
 
 echo *              <span class="tok-comment"># dotfiles excluded</span>
@@ -743,7 +743,7 @@ bash -c 'shopt -u globskipdots; echo .*'     <span class="tok-comment"># switch 
 <h3>Globstar: <code>**</code> for recursive matching</h3>
 ${slide('lx-02', 14, 'extglob và globstar')}
 <p>A normal <code>*</code> stops at a <code>/</code>. With <code>globstar</code> enabled, <code>**</code> crosses directory boundaries:</p>
-<pre><code>shopt -s globstar
+<pre><code class="language-bash">shopt -s globstar
 
 echo src/*.ts        <span class="tok-comment"># only files directly in src/</span>
 echo src/**/*.ts     <span class="tok-comment"># every .ts at any depth under src/</span></code></pre>
@@ -751,7 +751,7 @@ echo src/**/*.ts     <span class="tok-comment"># every .ts at any depth under sr
 src/index.ts src/api/user.ts src/api/v2/admin.ts src/lib/db.ts</div>
 <p><code>globstar</code> is off by default in bash (it is on by default in zsh, which is why macOS users often assume it always works). Put <code>shopt -s globstar</code> in your <code>~/.bashrc</code> — Chapter 3 covers that file.</p>
 <div class="callout warn"><strong>Corrected:</strong> in current bash, <code>**</code> does <em>not</em> descend into symbolic links to directories, so a link pointing back up the tree cannot make it loop — measured on bash 5.2 below (an earlier version of this lesson said the opposite). What remains true: bash builds the whole list in memory before the command even starts, and a huge list can fail with "Argument list too long". For large or untrusted trees, <code>find</code> — the next lesson — is both faster and safer.</div>
-<pre><code>ln -s ../../g/src src/lib/vong    <span class="tok-comment"># a link pointing back up to src/</span>
+<pre><code class="language-bash">ln -s ../../g/src src/lib/vong    <span class="tok-comment"># a link pointing back up to src/</span>
 echo src/**/*.ts</code></pre>
 <div class="out">src/api/user.ts src/api/v2/admin.ts src/index.ts src/lib/db.ts</div>
 <p>Same four files, no <code>src/lib/vong/…</code> repeats. And note what happens when you forget <code>shopt -s globstar</code>: <code>**</code> silently behaves like a single <code>*</code>, so <code>echo src/**/*.ts</code> prints only <code>src/api/user.ts src/lib/db.ts</code> — one level, no error.</p>
@@ -790,7 +790,7 @@ ${slide('lx-02', 11, 'Glob ≠ regex: cùng ký tự, hai ngôn ngữ khác nhau
 <tr><td>repetition</td><td>none (extglob: <code>+(…)</code>)</td><td><code>*</code> <code>+</code> <code>{2,}</code> apply to the previous item</td></tr>
 </tbody>
 </table>
-<pre><code>ls
+<pre><code class="language-bash">ls
 ls | grep '.log'              <span class="tok-comment"># regex: . is ANY character, and no anchors</span>
 ls | grep -E '\\.log$'
 find . -regextype posix-extended -regex '.*\\.log(\\.[0-9]+)?$'</code></pre>
@@ -805,7 +805,7 @@ app.log
 
 <h3>Stopping expansion: quotes</h3>
 <p>Sometimes you want the command, not the shell, to see the pattern. Quoting is how you say that:</p>
-<pre><code>grep "TODO.*fix" notes.txt     <span class="tok-comment"># quoted: grep's own regex engine sees .* </span>
+<pre><code class="language-bash">grep "TODO.*fix" notes.txt     <span class="tok-comment"># quoted: grep's own regex engine sees .* </span>
 find . -name "*.log"           <span class="tok-comment"># quoted: find does the matching, recursively</span>
 find . -name *.log             <span class="tok-comment"># UNQUOTED: shell expands first — usually wrong</span></code></pre>
 <p>That last line is the classic bug. If the current directory happens to contain exactly one <code>.log</code> file, the shell rewrites the command to <code>find . -name app.log</code> and you search for that one name everywhere. If it contains two, <code>find</code> errors out with <code>paths must precede expression</code>. If it contains none, it accidentally works — which is the worst outcome, because you learn the wrong lesson.</p>
@@ -937,7 +937,7 @@ ${slide('lx-02', 10, 'Bốn ký tự đại diện và ngoặc nhọn')}
   <div class="kv"><span class="k"><code>[!abc]</code></span><span class="v">Một ký tự KHÔNG nằm trong tập. <code>[^abc]</code> cũng chạy trong bash, nhưng <code>!</code> là dạng khả chuyển.</span></div>
 </div>
 
-<pre><code>ls
+<pre><code class="language-bash">ls
 <span class="tok-comment"># log1.txt log2.txt log3.txt logA.txt notes.md report.pdf</span>
 
 echo log?.txt        <span class="tok-comment"># cả bốn — ? là một ký tự bất kỳ</span>
@@ -951,7 +951,7 @@ notes.md report.pdf</div>
 
 <h3>Lớp ký tự có tên</h3>
 <p>Bên trong ngoặc vuông bạn dùng được tên lớp POSIX, vừa rõ hơn khoảng vừa đúng với mọi locale:</p>
-<pre><code>echo log[[:digit:]].txt      <span class="tok-comment"># giống [0-9]</span>
+<pre><code class="language-bash">echo log[[:digit:]].txt      <span class="tok-comment"># giống [0-9]</span>
 echo [[:upper:]]*            <span class="tok-comment"># file bắt đầu bằng chữ hoa</span>
 echo *[[:space:]]*           <span class="tok-comment"># file có dấu cách trong tên</span></code></pre>
 <p>Bộ đầy đủ: <code>alpha</code>, <code>digit</code>, <code>alnum</code>, <code>upper</code>, <code>lower</code>, <code>space</code>, <code>punct</code>, <code>xdigit</code>. Để ý cặp ngoặc kép lồng nhau — <code>[[:digit:]]</code> là một lớp nằm <em>BÊN TRONG</em> một biểu thức ngoặc, nên cặp ngoài là biểu thức ngoặc còn cặp trong là cú pháp của lớp.</p>
@@ -962,7 +962,7 @@ echo *[[:space:]]*           <span class="tok-comment"># file có dấu cách tr
   <div class="kv"><span class="k">Glob <code>*.txt</code></span><span class="v">Nhìn vào hệ thống file. Khai triển thành những file CÓ THẬT.</span></div>
   <div class="kv"><span class="k">Ngoặc <code>{a,b}.txt</code></span><span class="v">Sinh văn bản thuần tuý. Khai triển thành <code>a.txt b.txt</code> bất kể những file đó có tồn tại hay không.</span></div>
 </div>
-<pre><code>cd /tmp/empty-dir
+<pre><code class="language-bash">cd /tmp/empty-dir
 echo {a,b,c}.txt          <span class="tok-comment"># ngoặc nhọn không quan tâm thư mục rỗng</span>
 echo *.txt                <span class="tok-comment"># glob không khớp gì — xem phần kế tiếp</span>
 echo {1..5}               <span class="tok-comment"># khoảng cũng chạy</span>
@@ -977,11 +977,11 @@ mkdir -p site/{css,js,img}  <span class="tok-comment"># công dụng thực tế
 <h3>Khi một glob không khớp gì cả</h3>
 ${slide('lx-02', 12, 'Glob không khớp: bash giữ nguyên chữ, zsh báo lỗi')}
 <p>Mặc định của bash làm người ta giật mình lần đầu gặp: <strong>một glob không khớp sẽ được truyền qua NGUYÊN VĂN</strong>. Lệnh nhận được chính chuỗi <code>*.txt</code> làm tham số.</p>
-<pre><code>cd /tmp/empty-dir
+<pre><code class="language-bash">cd /tmp/empty-dir
 ls *.txt</code></pre>
 <div class="out">ls: cannot access '*.txt': No such file or directory</div>
 <p><code>ls</code> đang than phiền về một file tên đúng nghĩa đen là <code>*.txt</code>, vì đó là thứ nó được đưa cho. Thường thì đây chỉ là một thông báo lỗi gây rối. Nhưng trong vòng lặp thì nó là một lỗi thật:</p>
-<pre><code>for f in *.csv; do
+<pre><code class="language-bash">for f in *.csv; do
   echo "đang xử lý \${f}"
 done</code></pre>
 <div class="out">đang xử lý *.csv</div>
@@ -993,7 +993,7 @@ shopt -s failglob      <span class="tok-comment"># glob không khớp → LỖI 
 <h3>File ẩn vô hình với glob</h3>
 ${slide('lx-02', 13, 'File ẩn: bash 5.2 thôi cho .* khớp . và ..')}
 <p>Dấu chấm đứng đầu phải được khớp theo đúng nghĩa đen. Đây là chủ ý, và đó là lý do <code>rm *</code> trong thư mục nhà của bạn không phá <code>.ssh</code> và <code>.bashrc</code>:</p>
-<pre><code>ls -a
+<pre><code class="language-bash">ls -a
 <span class="tok-comment"># .  ..  .env  .gitignore  app.js  README.md</span>
 
 echo *              <span class="tok-comment"># file ẩn bị loại</span>
@@ -1014,7 +1014,7 @@ bash -c 'shopt -u globskipdots; echo .*'     <span class="tok-comment"># tắt n
 <h3>Globstar: <code>**</code> để khớp đệ quy</h3>
 ${slide('lx-02', 14, 'extglob và globstar')}
 <p>Một dấu <code>*</code> thường dừng lại ở <code>/</code>. Khi bật <code>globstar</code>, <code>**</code> vượt qua ranh giới thư mục:</p>
-<pre><code>shopt -s globstar
+<pre><code class="language-bash">shopt -s globstar
 
 echo src/*.ts        <span class="tok-comment"># chỉ file nằm trực tiếp trong src/</span>
 echo src/**/*.ts     <span class="tok-comment"># mọi file .ts ở mọi độ sâu dưới src/</span></code></pre>
@@ -1022,7 +1022,7 @@ echo src/**/*.ts     <span class="tok-comment"># mọi file .ts ở mọi độ 
 src/index.ts src/api/user.ts src/api/v2/admin.ts src/lib/db.ts</div>
 <p><code>globstar</code> mặc định TẮT trong bash (nó mặc định bật trong zsh, và đó là lý do người dùng macOS hay tưởng nó luôn chạy). Hãy đặt <code>shopt -s globstar</code> vào <code>~/.bashrc</code> — Chương 3 nói về file đó.</p>
 <div class="callout warn"><strong>Đã sửa:</strong> với bash hiện nay, <code>**</code> <em>KHÔNG</em> đi xuống các liên kết tượng trưng trỏ tới thư mục, nên một link trỏ ngược lên cây không làm nó lặp được — đo thật trên bash 5.2 ngay dưới (bản cũ của bài nói ngược lại). Điều vẫn đúng: bash dựng TOÀN BỘ danh sách trong bộ nhớ trước khi lệnh kịp khởi động, và một danh sách khổng lồ có thể hỏng với lỗi "Argument list too long". Với cây lớn hoặc cây không tin được, <code>find</code> — bài kế tiếp — vừa nhanh hơn vừa an toàn hơn.</div>
-<pre><code>ln -s ../../g/src src/lib/vong    <span class="tok-comment"># một link trỏ ngược lên src/</span>
+<pre><code class="language-bash">ln -s ../../g/src src/lib/vong    <span class="tok-comment"># một link trỏ ngược lên src/</span>
 echo src/**/*.ts</code></pre>
 <div class="out">src/api/user.ts src/api/v2/admin.ts src/index.ts src/lib/db.ts</div>
 <p>Vẫn đúng bốn file, không có <code>src/lib/vong/…</code> lặp lại. Và để ý chuyện xảy ra khi bạn quên <code>shopt -s globstar</code>: <code>**</code> lặng lẽ cư xử như một dấu <code>*</code> đơn, nên <code>echo src/**/*.ts</code> chỉ in <code>src/api/user.ts src/lib/db.ts</code> — một tầng, không báo lỗi gì.</p>
@@ -1061,7 +1061,7 @@ ${slide('lx-02', 11, 'Glob ≠ regex: cùng ký tự, hai ngôn ngữ khác nhau
 <tr><td>lặp lại</td><td>không có (extglob: <code>+(…)</code>)</td><td><code>*</code> <code>+</code> <code>{2,}</code> áp vào phần tử đứng trước</td></tr>
 </tbody>
 </table>
-<pre><code>ls
+<pre><code class="language-bash">ls
 ls | grep '.log'              <span class="tok-comment"># regex: . là MỘT ký tự BẤT KỲ, và không có neo</span>
 ls | grep -E '\\.log$'
 find . -regextype posix-extended -regex '.*\\.log(\\.[0-9]+)?$'</code></pre>
@@ -1076,7 +1076,7 @@ app.log
 
 <h3>Chặn khai triển: dấu nháy</h3>
 <p>Đôi khi bạn muốn CHÍNH LỆNH nhìn thấy cái mẫu, chứ không phải shell. Dấu nháy là cách bạn nói điều đó:</p>
-<pre><code>grep "TODO.*fix" notes.txt     <span class="tok-comment"># có nháy: bộ regex của chính grep thấy .*</span>
+<pre><code class="language-bash">grep "TODO.*fix" notes.txt     <span class="tok-comment"># có nháy: bộ regex của chính grep thấy .*</span>
 find . -name "*.log"           <span class="tok-comment"># có nháy: find tự khớp, theo cách đệ quy</span>
 find . -name *.log             <span class="tok-comment"># KHÔNG NHÁY: shell khai triển trước — thường là sai</span></code></pre>
 <p>Dòng cuối là lỗi kinh điển. Nếu thư mục hiện tại tình cờ có đúng MỘT file <code>.log</code>, shell viết lại lệnh thành <code>find . -name app.log</code> và bạn đi tìm đúng cái tên đó ở khắp nơi. Nếu có hai file, <code>find</code> báo lỗi <code>paths must precede expression</code>. Nếu không có file nào, nó tình cờ chạy đúng — và đó mới là kết cục tệ nhất, vì bạn học được một bài học sai.</p>
@@ -1186,7 +1186,7 @@ vòng lặp xong
 
 <h3>The anatomy of every find command</h3>
 ${slide('lx-02', 15, 'Mọi lệnh find có ba phần: nơi đi · phép thử · hành động')}
-<pre><code>find  <span class="tok-kw">./src</span>  <span class="tok-str">-type f -name "*.ts"</span>  <span class="tok-fn">-print</span>
+<pre><code class="language-bash">find  <span class="tok-kw">./src</span>  <span class="tok-str">-type f -name "*.ts"</span>  <span class="tok-fn">-print</span>
       └── where     └── tests            └── action</code></pre>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">Paths</span><span class="lz-lnote">Where to start walking. One or more. <code>.</code> is the usual answer. Must come <em>first</em>.</span></div>
@@ -1229,7 +1229,7 @@ ${slide('lx-02', 17, '-mtime đếm chu kỳ 24 giờ và cắt phần lẻ')}
 
 <h3>Combining tests</h3>
 ${slide('lx-02', 20, 'Thứ tự viết = thứ tự chạy: -o cần ngoặc, -delete đứng cuối')}
-<pre><code><span class="tok-comment"># AND is implicit — these two are identical</span>
+<pre><code class="language-bash"><span class="tok-comment"># AND is implicit — these two are identical</span>
 find . -type f -name "*.log"
 find . -type f -a -name "*.log"
 
@@ -1247,7 +1247,7 @@ find . -type f \\! -name "*.md"</code></pre>
 <h3>Actions: -exec, and the two terminators</h3>
 ${slide('lx-02', 18, '-exec \\; vs + vs xargs -0 — đo thật trên 5.000 file')}
 <p><code>-exec</code> runs a command for each match, with <code>{}</code> standing in for the path. How you terminate it changes the performance by orders of magnitude:</p>
-<pre><code><span class="tok-comment"># one process PER FILE — 5,000 files = 5,000 processes</span>
+<pre><code class="language-bash"><span class="tok-comment"># one process PER FILE — 5,000 files = 5,000 processes</span>
 find . -name "*.log" -exec gzip {} \\;
 
 <span class="tok-comment"># batches as many paths as fit on one command line — usually 2-3 processes total</span>
@@ -1255,19 +1255,19 @@ find . -name "*.log" -exec gzip {} +</code></pre>
 <div class="out">real  0m9.412s     # with \\;
 real  0m0.688s     # with +</div>
 <p>Use <code>+</code> whenever the command accepts multiple arguments, which is nearly always. Use <code>\\;</code> when the command takes exactly one file, or when <code>{}</code> must appear somewhere other than the end:</p>
-<pre><code>find . -name "*.jpg" -exec mv {} {}.bak \\;      <span class="tok-comment"># {} twice → must use \\;</span>
+<pre><code class="language-bash">find . -name "*.jpg" -exec mv {} {}.bak \\;      <span class="tok-comment"># {} twice → must use \\;</span>
 find . -type d -name node_modules -exec du -sh {} +</code></pre>
 <div class="callout ok"><code>-execdir</code> is the safer sibling: it runs the command from inside each file's own directory and passes <code>./name</code> instead of a long path. That closes a real race condition where a directory is replaced by a symlink mid-walk, and it sidesteps dash-leading filenames entirely.</div>
 
 <h3>Measured: <code>\\;</code> vs <code>+</code> vs <code>xargs</code> on 5,000 files</h3>
 <p>The numbers above are from an older machine. Re-measured on the course machine (Ubuntu 24.04 container, 10 CPUs, September 2026) with 5,000 small log files and <code>md5sum</code>, three runs each:</p>
-<pre><code>mkdir -p logs &amp;&amp; for i in $(seq 1 5000); do echo "dong $i" &gt; logs/app-$i.log; done
+<pre><code class="language-bash">mkdir -p logs &amp;&amp; for i in $(seq 1 5000); do echo "dong $i" &gt; logs/app-$i.log; done
 find logs -name '*.log' -exec md5sum {} \\; &gt;/dev/null                        <span class="tok-comment"># 3.13 · 2.89 · 3.17 s</span>
 find logs -name '*.log' -exec md5sum {} + &gt;/dev/null                         <span class="tok-comment"># 0.028 · 0.029 · 0.030 s</span>
 find logs -name '*.log' -print0 | xargs -0 md5sum &gt;/dev/null                <span class="tok-comment"># 0.035 · 0.031 · 0.030 s</span>
 find logs -name '*.log' -print0 | xargs -0 -P4 -n 1250 md5sum &gt;/dev/null    <span class="tok-comment"># 0.012 s each run</span></code></pre>
 <p>About a hundred times faster, from one character. The reason is visible if you ask how many arguments each run of the command received:</p>
-<pre><code>find logs -name '*.log' -exec sh -c 'echo $#' _ {} +
+<pre><code class="language-bash">find logs -name '*.log' -exec sh -c 'echo $#' _ {} +
 find pdf -name '*.pdf' -exec echo "lenh:" {} \\;
 find pdf -name '*.pdf' -exec echo "lenh:" {} +</code></pre>
 <div class="out">5000
@@ -1279,7 +1279,7 @@ lenh: pdf/Bao cao cuoi ky.pdf pdf/ok.pdf</div>
 <h3>-print0 and xargs -0: filenames with spaces</h3>
 ${slide('lx-02', 19, 'Tên có dấu cách: chỉ byte NUL tách tên an toàn')}
 <p>The default separator between <code>find</code> results is a newline — and a newline is a legal character in a filename. So is a space. Piping <code>find</code> into anything word-based is broken for exactly the filenames most likely to be user-supplied:</p>
-<pre><code><span class="tok-comment"># BROKEN: "My Report.pdf" arrives as two arguments</span>
+<pre><code class="language-bash"><span class="tok-comment"># BROKEN: "My Report.pdf" arrives as two arguments</span>
 find . -name "*.pdf" | xargs rm
 
 <span class="tok-comment"># CORRECT: NUL-separated, the one byte a filename cannot contain</span>
@@ -1302,7 +1302,7 @@ find . -name "*.pdf" -delete</code></pre>
 <tr><td><code>-t</code></td><td>Print each command before running it</td><td>debugging</td></tr>
 </tbody>
 </table>
-<pre><code>find logs -name '*.tmp' -print0 | xargs -0 -I{} mv {} {}.bak
+<pre><code class="language-bash">find logs -name '*.tmp' -print0 | xargs -0 -I{} mv {} {}.bak
 printf 'a\\nb\\nc\\n' | xargs -t -n 2 echo
 printf '' | xargs echo hi         <span class="tok-comment"># empty input…</span>
 printf '' | xargs -r echo hi      <span class="tok-comment"># …with -r</span></code></pre>
@@ -1315,7 +1315,7 @@ hi</div>
 
 <h3>-prune: skipping node_modules and .git</h3>
 <p>Filtering out a directory with <code>! -path "*/node_modules/*"</code> works, but <code>find</code> still descends into it and tests every one of the 40,000 files inside. <code>-prune</code> tells it not to enter at all:</p>
-<pre><code>find . \\( -name node_modules -o -name .git \\) -prune -o -type f -name "*.ts" -print</code></pre>
+<pre><code class="language-bash">find . \\( -name node_modules -o -name .git \\) -prune -o -type f -name "*.ts" -print</code></pre>
 <div class="out">./src/index.ts
 ./src/api/user.ts
 ./tests/user.test.ts</div>
@@ -1323,14 +1323,14 @@ hi</div>
 <div class="callout">On a large monorepo this is not a micro-optimisation. Measured on a project with 62,000 files in <code>node_modules</code>: 4.1 s without <code>-prune</code>, 0.3 s with it.</div>
 
 <h3>-maxdepth must come before the tests</h3>
-<pre><code>find . -maxdepth 2 -name "*.json"     <span class="tok-comment"># correct</span>
+<pre><code class="language-bash">find . -maxdepth 2 -name "*.json"     <span class="tok-comment"># correct</span>
 find . -name "*.json" -maxdepth 2     <span class="tok-comment"># works, but warns — and is a trap</span></code></pre>
 <div class="out">find: warning: you have specified the global option -maxdepth after the argument -name, but global options are not positional, i.e., -maxdepth affects tests specified before it as well as those specified after it.  Please specify global options before other arguments.</div>
 <div class="callout">Measured on findutils 4.9.0 (Ubuntu 24.04) — this is the exact wording. One detail the man page states and people miss: find only prints warnings like this when its standard input is a <em>terminal</em> (<code>-warn</code> is the default only then). In a script run by cron, or with input from a pipe, the same command is silent. Write the options first and you never depend on seeing it.</div>
 <p>The warning says the quiet part out loud: positional options apply to the <em>whole</em> expression regardless of where you write them, so writing one late gives a command that reads differently from how it behaves. <code>-maxdepth 1</code>, incidentally, is how you make <code>find</code> non-recursive — useful when you want <code>find</code>'s tests but not its tree walk.</p>
 
 <h3>Recipes worth keeping</h3>
-<pre><code><span class="tok-comment"># The 20 biggest files under /var, human-readable</span>
+<pre><code class="language-bash"><span class="tok-comment"># The 20 biggest files under /var, human-readable</span>
 find /var -type f -printf '%s\\t%p\\n' 2&gt;/dev/null | sort -rn | head -20 | numfmt --field=1 --to=iec
 
 <span class="tok-comment"># Delete build artefacts older than 30 days (print first! always print first)</span>
@@ -1370,7 +1370,7 @@ find . -name "*.env*" -type f -exec grep -l "SECRET" {} +</code></pre>
 <tr><td><code>-prune</code> · <code>-quit</code></td><td>Do not descend into this directory · stop after the first match</td><td><code>-quit</code>: "does at least one exist?"</td></tr>
 </tbody>
 </table>
-<pre><code>find logs -name '*.gz' -ls | head -2
+<pre><code class="language-bash">find logs -name '*.gz' -ls | head -2
 find / -name passwd -print -quit 2&gt;/dev/null
 find logs -name '*.tmp' -ok rm {} \\;            <span class="tok-comment"># answer n</span>
 find logs -maxdepth 1 -type f -name '*.gz' -printf '%TY-%Tm-%Td %TH:%TM  %6k KiB  %f\\n' | sort | head -3</code></pre>
@@ -1466,7 +1466,7 @@ logs/app-5.log</div>
 
 <h3>Giải phẫu mọi lệnh find</h3>
 ${slide('lx-02', 15, 'Mọi lệnh find có ba phần: nơi đi · phép thử · hành động')}
-<pre><code>find  <span class="tok-kw">./src</span>  <span class="tok-str">-type f -name "*.ts"</span>  <span class="tok-fn">-print</span>
+<pre><code class="language-bash">find  <span class="tok-kw">./src</span>  <span class="tok-str">-type f -name "*.ts"</span>  <span class="tok-fn">-print</span>
       └── ở đâu     └── phép thử         └── hành động</code></pre>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">Đường dẫn</span><span class="lz-lnote">Bắt đầu đi từ đâu. Một hoặc nhiều. <code>.</code> là câu trả lời thường gặp. Phải đứng <em>ĐẦU TIÊN</em>.</span></div>
@@ -1509,7 +1509,7 @@ ${slide('lx-02', 17, '-mtime đếm chu kỳ 24 giờ và cắt phần lẻ')}
 
 <h3>Ghép các phép thử</h3>
 ${slide('lx-02', 20, 'Thứ tự viết = thứ tự chạy: -o cần ngoặc, -delete đứng cuối')}
-<pre><code><span class="tok-comment"># VÀ là ngầm định — hai dòng này y hệt nhau</span>
+<pre><code class="language-bash"><span class="tok-comment"># VÀ là ngầm định — hai dòng này y hệt nhau</span>
 find . -type f -name "*.log"
 find . -type f -a -name "*.log"
 
@@ -1527,7 +1527,7 @@ find . -type f \\! -name "*.md"</code></pre>
 <h3>Hành động: -exec, và hai kiểu kết thúc</h3>
 ${slide('lx-02', 18, '-exec \\; vs + vs xargs -0 — đo thật trên 5.000 file')}
 <p><code>-exec</code> chạy một lệnh cho mỗi kết quả khớp, với <code>{}</code> thay chỗ cho đường dẫn. Cách bạn kết thúc nó làm hiệu năng chênh nhau cả bậc độ lớn:</p>
-<pre><code><span class="tok-comment"># một tiến trình MỖI FILE — 5.000 file = 5.000 tiến trình</span>
+<pre><code class="language-bash"><span class="tok-comment"># một tiến trình MỖI FILE — 5.000 file = 5.000 tiến trình</span>
 find . -name "*.log" -exec gzip {} \\;
 
 <span class="tok-comment"># gom nhiều đường dẫn nhất có thể vào một dòng lệnh — thường tổng cộng 2-3 tiến trình</span>
@@ -1535,19 +1535,19 @@ find . -name "*.log" -exec gzip {} +</code></pre>
 <div class="out">real  0m9.412s     # với \\;
 real  0m0.688s     # với +</div>
 <p>Hãy dùng <code>+</code> mỗi khi lệnh nhận được nhiều tham số, tức là gần như luôn luôn. Dùng <code>\\;</code> khi lệnh chỉ nhận đúng một file, hoặc khi <code>{}</code> phải xuất hiện ở chỗ nào đó không phải cuối:</p>
-<pre><code>find . -name "*.jpg" -exec mv {} {}.bak \\;      <span class="tok-comment"># {} hai lần → buộc phải dùng \\;</span>
+<pre><code class="language-bash">find . -name "*.jpg" -exec mv {} {}.bak \\;      <span class="tok-comment"># {} hai lần → buộc phải dùng \\;</span>
 find . -type d -name node_modules -exec du -sh {} +</code></pre>
 <div class="callout ok"><code>-execdir</code> là người anh em an toàn hơn: nó chạy lệnh từ BÊN TRONG thư mục của chính file đó và truyền <code>./tên</code> thay vì một đường dẫn dài. Điều đó bịt một tình huống tranh chấp có thật, khi một thư mục bị thay bằng liên kết tượng trưng ngay giữa lúc đang đi, và nó tránh hẳn chuyện tên file bắt đầu bằng dấu gạch ngang.</div>
 
 <h3>Đo thật: <code>\\;</code> so với <code>+</code> so với <code>xargs</code> trên 5.000 file</h3>
 <p>Mấy con số ở trên đến từ một máy cũ hơn. Đo lại trên máy của khoá (container Ubuntu 24.04, 10 CPU, tháng 9/2026) với 5.000 file log nhỏ và <code>md5sum</code>, mỗi cách ba lượt:</p>
-<pre><code>mkdir -p logs &amp;&amp; for i in $(seq 1 5000); do echo "dong $i" &gt; logs/app-$i.log; done
+<pre><code class="language-bash">mkdir -p logs &amp;&amp; for i in $(seq 1 5000); do echo "dong $i" &gt; logs/app-$i.log; done
 find logs -name '*.log' -exec md5sum {} \\; &gt;/dev/null                        <span class="tok-comment"># 3,13 · 2,89 · 3,17 s</span>
 find logs -name '*.log' -exec md5sum {} + &gt;/dev/null                         <span class="tok-comment"># 0,028 · 0,029 · 0,030 s</span>
 find logs -name '*.log' -print0 | xargs -0 md5sum &gt;/dev/null                <span class="tok-comment"># 0,035 · 0,031 · 0,030 s</span>
 find logs -name '*.log' -print0 | xargs -0 -P4 -n 1250 md5sum &gt;/dev/null    <span class="tok-comment"># 0,012 s mỗi lượt</span></code></pre>
 <p>Nhanh gấp khoảng một trăm lần, chỉ nhờ một ký tự. Lý do hiện ra ngay nếu bạn hỏi mỗi lần chạy, lệnh nhận được bao nhiêu tham số:</p>
-<pre><code>find logs -name '*.log' -exec sh -c 'echo $#' _ {} +
+<pre><code class="language-bash">find logs -name '*.log' -exec sh -c 'echo $#' _ {} +
 find pdf -name '*.pdf' -exec echo "lenh:" {} \\;
 find pdf -name '*.pdf' -exec echo "lenh:" {} +</code></pre>
 <div class="out">5000
@@ -1559,7 +1559,7 @@ lenh: pdf/Bao cao cuoi ky.pdf pdf/ok.pdf</div>
 <h3>-print0 và xargs -0: tên file có dấu cách</h3>
 ${slide('lx-02', 19, 'Tên có dấu cách: chỉ byte NUL tách tên an toàn')}
 <p>Dấu phân cách mặc định giữa các kết quả <code>find</code> là ký tự xuống dòng — mà xuống dòng lại là một ký tự HỢP LỆ trong tên file. Dấu cách cũng vậy. Nên việc đưa <code>find</code> qua ống vào bất cứ thứ gì cắt theo từ đều hỏng đúng với những tên file dễ do người dùng đặt nhất:</p>
-<pre><code><span class="tok-comment"># HỎNG: "Báo cáo của tôi.pdf" đến nơi thành nhiều tham số</span>
+<pre><code class="language-bash"><span class="tok-comment"># HỎNG: "Báo cáo của tôi.pdf" đến nơi thành nhiều tham số</span>
 find . -name "*.pdf" | xargs rm
 
 <span class="tok-comment"># ĐÚNG: phân cách bằng NUL, byte duy nhất mà tên file không thể chứa</span>
@@ -1582,7 +1582,7 @@ find . -name "*.pdf" -delete</code></pre>
 <tr><td><code>-t</code></td><td>In ra từng lệnh trước khi chạy</td><td>gỡ lỗi</td></tr>
 </tbody>
 </table>
-<pre><code>find logs -name '*.tmp' -print0 | xargs -0 -I{} mv {} {}.bak
+<pre><code class="language-bash">find logs -name '*.tmp' -print0 | xargs -0 -I{} mv {} {}.bak
 printf 'a\\nb\\nc\\n' | xargs -t -n 2 echo
 printf '' | xargs echo hi         <span class="tok-comment"># đầu vào rỗng…</span>
 printf '' | xargs -r echo hi      <span class="tok-comment"># …có -r</span></code></pre>
@@ -1595,7 +1595,7 @@ hi</div>
 
 <h3>-prune: bỏ qua node_modules và .git</h3>
 <p>Lọc bỏ một thư mục bằng <code>! -path "*/node_modules/*"</code> thì chạy được, nhưng <code>find</code> vẫn đi xuống trong đó và thử từng file trong số 40.000 file bên trong. <code>-prune</code> bảo nó đừng bước vào chút nào:</p>
-<pre><code>find . \\( -name node_modules -o -name .git \\) -prune -o -type f -name "*.ts" -print</code></pre>
+<pre><code class="language-bash">find . \\( -name node_modules -o -name .git \\) -prune -o -type f -name "*.ts" -print</code></pre>
 <div class="out">./src/index.ts
 ./src/api/user.ts
 ./tests/user.test.ts</div>
@@ -1603,14 +1603,14 @@ hi</div>
 <div class="callout">Trên một kho mã lớn, đây không phải tối ưu vụn vặt. Đo thật trên một dự án có 62.000 file trong <code>node_modules</code>: 4,1 giây khi không có <code>-prune</code>, 0,3 giây khi có.</div>
 
 <h3>-maxdepth phải đứng trước các phép thử</h3>
-<pre><code>find . -maxdepth 2 -name "*.json"     <span class="tok-comment"># đúng</span>
+<pre><code class="language-bash">find . -maxdepth 2 -name "*.json"     <span class="tok-comment"># đúng</span>
 find . -name "*.json" -maxdepth 2     <span class="tok-comment"># vẫn chạy, nhưng cảnh báo — và là một cái bẫy</span></code></pre>
 <div class="out">find: warning: you have specified the global option -maxdepth after the argument -name, but global options are not positional, i.e., -maxdepth affects tests specified before it as well as those specified after it.  Please specify global options before other arguments.</div>
 <div class="callout">Đo thật với findutils 4.9.0 (Ubuntu 24.04) — đây là nguyên văn. Một chi tiết trang man có ghi mà người ta hay bỏ qua: find chỉ in những cảnh báo kiểu này khi đầu vào chuẩn của nó là một <em>TERMINAL</em> (<code>-warn</code> chỉ là mặc định trong trường hợp đó). Trong một script do cron chạy, hoặc khi đầu vào đến từ một ống dẫn, cùng lệnh đó im lặng. Viết tuỳ chọn lên trước thì bạn không bao giờ phải dựa vào việc nhìn thấy nó.</div>
 <p>Lời cảnh báo nói toạc phần vẫn được giấu: tuỳ chọn vị trí áp dụng cho <em>TOÀN BỘ</em> biểu thức bất kể bạn viết nó ở đâu, nên viết muộn tạo ra một lệnh ĐỌC khác với cách nó CHẠY. Nhân tiện, <code>-maxdepth 1</code> chính là cách làm cho <code>find</code> không đệ quy — hữu ích khi bạn muốn các phép thử của <code>find</code> mà không muốn nó đi khắp cây.</p>
 
 <h3>Những công thức đáng giữ lại</h3>
-<pre><code><span class="tok-comment"># 20 file lớn nhất dưới /var, đọc được bằng mắt người</span>
+<pre><code class="language-bash"><span class="tok-comment"># 20 file lớn nhất dưới /var, đọc được bằng mắt người</span>
 find /var -type f -printf '%s\\t%p\\n' 2&gt;/dev/null | sort -rn | head -20 | numfmt --field=1 --to=iec
 
 <span class="tok-comment"># Xoá tệp dựng cũ hơn 30 ngày (in ra trước! luôn in ra trước)</span>
@@ -1650,7 +1650,7 @@ find . -name "*.env*" -type f -exec grep -l "SECRET" {} +</code></pre>
 <tr><td><code>-prune</code> · <code>-quit</code></td><td>Không đi vào thư mục này · dừng sau kết quả khớp đầu tiên</td><td><code>-quit</code>: "có ít nhất một cái không?"</td></tr>
 </tbody>
 </table>
-<pre><code>find logs -name '*.gz' -ls | head -2
+<pre><code class="language-bash">find logs -name '*.gz' -ls | head -2
 find / -name passwd -print -quit 2&gt;/dev/null
 find logs -name '*.tmp' -ok rm {} \\;            <span class="tok-comment"># trả lời n</span>
 find logs -maxdepth 1 -type f -name '*.gz' -printf '%TY-%Tm-%Td %TH:%TM  %6k KiB  %f\\n' | sort | head -3</code></pre>
@@ -1774,7 +1774,7 @@ ${slide('lx-02', 21, 'Tên file chỉ là con trỏ: mục thư mục → inode 
   </div>
 </div>
 
-<pre><code>echo "hello" &gt; report.txt
+<pre><code class="language-bash">echo "hello" &gt; report.txt
 ln    report.txt backup.txt      <span class="tok-comment"># hard link — a second NAME</span>
 ln -s report.txt shortcut.txt    <span class="tok-comment"># symbolic link — a small file holding a PATH</span>
 ls -li</code></pre>
@@ -1785,7 +1785,7 @@ ls -li</code></pre>
 
 <h3>The consequences, one by one</h3>
 ${slide('lx-02', 22, 'Xoá tên gốc: hard link vẫn đọc được, symlink thành link treo')}
-<pre><code>rm report.txt
+<pre><code class="language-bash">rm report.txt
 cat backup.txt        <span class="tok-comment"># still works — link count went 2 → 1</span>
 cat shortcut.txt      <span class="tok-comment"># BROKEN — its target name no longer exists</span></code></pre>
 <div class="out">hello
@@ -1798,7 +1798,7 @@ cat: shortcut.txt: No such file or directory</div>
 
 <h3>Try it step by step: watch the inode with <code>stat</code></h3>
 <p><code>ls -li</code> shows the inode; <code>stat</code> shows everything the inode holds, and a format string picks the fields. Run this in <code>~/thu-linux</code> on Ubuntu:</p>
-<pre><code>echo "hello" &gt; report.txt; ln report.txt backup.txt; ln -s report.txt shortcut.txt
+<pre><code class="language-bash">echo "hello" &gt; report.txt; ln report.txt backup.txt; ln -s report.txt shortcut.txt
 stat -c '%i %h %s %F %N' report.txt backup.txt shortcut.txt
 rm report.txt
 find . -xtype l                         <span class="tok-comment"># which symlinks now point at nothing?</span>
@@ -1837,7 +1837,7 @@ ln -sr /etc/app/config.yml current.yml <span class="tok-comment"># -r: give an a
 <p>Inside a project, prefer relative. For pointing at a fixed system path such as <code>/usr/share</code>, absolute is right.</p>
 
 <h3>Reading and following links</h3>
-<pre><code>readlink shortcut.txt        <span class="tok-comment"># the stored string, one level</span>
+<pre><code class="language-bash">readlink shortcut.txt        <span class="tok-comment"># the stored string, one level</span>
 readlink -f shortcut.txt     <span class="tok-comment"># follow every level to the real path</span>
 realpath shortcut.txt        <span class="tok-comment"># same idea, clearer name</span>
 ls -l /usr/bin/python3       <span class="tok-comment"># see a real-world chain</span>
@@ -1860,7 +1860,7 @@ mv -T /srv/app/current-new /srv/app/current</code></pre>
 
 <h3>Two traps, measured: a slash after a link, and ln without -n</h3>
 <p>Both of these are one character long and both were run for real on Ubuntu 24.04. First, <code>lien</code> is a symlink to a directory <code>that/</code> holding <code>con/a.txt</code> and <code>b.txt</code>:</p>
-<pre><code>rm lien/; echo "exit=$?"
+<pre><code class="language-bash">rm lien/; echo "exit=$?"
 rm -r lien/; echo "exit=$?"
 ls -A that
 ls -l lien</code></pre>
@@ -1871,7 +1871,7 @@ exit=1
 lrwxrwxrwx 1 cuong cuong 4 Sep 28 09:08 lien -&gt; that</div>
 <p>Read it slowly: <code>rm -r lien/</code> reported an <em>error</em> — and still <strong>emptied the real directory</strong> <code>that/</code> (the <code>ls -A that</code> line prints nothing). The trailing slash made the path mean "the directory the link points to", so <code>rm -r</code> walked into it and deleted everything inside; only then did it fail to remove <code>lien/</code> itself, because a symlink is not a directory. The link survives, pointing at an empty folder. To remove a link, name it <em>without</em> a slash: <code>rm lien</code>. Tab-completion adds that slash for you, which is exactly how this happens.</p>
 <p>Second, updating a symlink that points at a directory:</p>
-<pre><code>ln -s rel/a cur
+<pre><code class="language-bash">ln -s rel/a cur
 ln -sf rel/b cur                       <span class="tok-comment"># forgot -n</span>
 ls -l rel/a
 ln -sfn rel/b cur; ls -l cur           <span class="tok-comment"># with -n</span>
@@ -1902,7 +1902,7 @@ ${slide('lx-02', 25, 'Bảng cờ tar')}
   <div class="kv"><span class="k"><code>-v</code></span><span class="v">Verbose. Useful when creating, noisy when extracting a large archive.</span></div>
   <div class="kv"><span class="k"><code>-C DIR</code></span><span class="v">Change to DIR first. On extract it means "put it here"; on create it means "treat paths as relative to here".</span></div>
 </div>
-<pre><code>tar -czf backup.tar.gz ./project      <span class="tok-comment"># Create Zipped File</span>
+<pre><code class="language-bash">tar -czf backup.tar.gz ./project      <span class="tok-comment"># Create Zipped File</span>
 tar -tzf backup.tar.gz | head         <span class="tok-comment"># lisT — ALWAYS do this first</span>
 tar -xzf backup.tar.gz                <span class="tok-comment"># eXtract</span>
 tar -xzf backup.tar.gz -C /srv/app    <span class="tok-comment"># extract somewhere specific</span>
@@ -1915,12 +1915,12 @@ tar -xzf backup.tar.gz --strip-components=1   <span class="tok-comment"># drop t
 
 <h3>--strip-components, and why every release tarball needs it</h3>
 <p>Almost every project tarball unpacks into a versioned top directory: <code>node-v22.6.0-linux-x64/bin/node</code>. If you want the contents in <code>/usr/local</code> without that wrapper, strip one level:</p>
-<pre><code>tar -xzf node-v22.6.0-linux-x64.tar.gz -C /usr/local --strip-components=1</code></pre>
+<pre><code class="language-bash">tar -xzf node-v22.6.0-linux-x64.tar.gz -C /usr/local --strip-components=1</code></pre>
 <p>This single flag is why installation instructions in READMEs so often work in one line. It is also the flag people most often do not know exists, and instead extract-then-<code>mv</code>, which is two more chances to get a path wrong.</p>
 
 <h3>tar without -f: streaming</h3>
 <p>Leave off <code>-f</code> and tar writes to stdout or reads from stdin. That turns it into a plumbing component:</p>
-<pre><code><span class="tok-comment"># Copy a tree to another machine without a temporary file anywhere</span>
+<pre><code class="language-bash"><span class="tok-comment"># Copy a tree to another machine without a temporary file anywhere</span>
 tar -cz ./project | ssh deploy@vps "tar -xz -C /srv"
 
 <span class="tok-comment"># Copy preserving permissions and hard links, faster than cp -a on many small files</span>
@@ -1959,7 +1959,7 @@ ${slide('lx-02', 26, 'Đo thật: gzip, bzip2, xz, zstd')}
 
 <h3>Modern tar: <code>-a</code>, <code>--zstd</code>, <code>-t</code> before <code>-x</code>, and <code>-C</code></h3>
 <p>GNU tar 1.35 (Ubuntu 24.04) no longer needs you to remember which letter means which compressor. Measured, with a small <code>project/</code> containing <code>src/</code>, <code>node_modules/</code>, <code>package.json</code> and a <code>.env</code>:</p>
-<pre><code>tar -caf p.tar.zst project           <span class="tok-comment"># -a: pick the compressor from the suffix</span>
+<pre><code class="language-bash">tar -caf p.tar.zst project           <span class="tok-comment"># -a: pick the compressor from the suffix</span>
 tar -caf p.tar.xz  project
 file p.tar.zst p.tar.xz
 tar -tvf p.tar.zst | head -3         <span class="tok-comment"># list, verbose: permissions, owner, size</span>
@@ -1985,7 +1985,7 @@ project/package.json
 {}</div>
 ${slide('lx-02', 27, 'Luôn -t trước -x: bom tar, dấu / ở đầu, file ẩn bị * bỏ sót')}
 <p>Now the three things <code>-t</code> is for. Each was run for real:</p>
-<pre><code>tar -tzf bomb.tar.gz                 <span class="tok-comment"># an archive made without a top directory</span>
+<pre><code class="language-bash">tar -tzf bomb.tar.gz                 <span class="tok-comment"># an archive made without a top directory</span>
 tar -czf abs.tar.gz /etc/hostname    <span class="tok-comment"># an absolute path</span>
 tar -tzf abs.tar.gz
 cd project &amp;&amp; tar -czf ../star.tar.gz * &amp;&amp; cd ..
@@ -2030,7 +2030,7 @@ zgrep -c ERROR big.log.gz       <span class="tok-comment"># grep straight into t
 
 <h3>On macOS: what is different</h3>
 <p>Measured on macOS (BSD tools, bsdtar 3.5.3) in a scratch directory:</p>
-<pre><code>ln -sr r.txt s2.txt
+<pre><code class="language-bash">ln -sr r.txt s2.txt
 mv -T cur-new cur
 mv -h cur-new cur; ls -l cur          <span class="tok-comment"># BSD: -h = do not follow a link to a directory</span>
 ln r.txt h.txt
@@ -2139,7 +2139,7 @@ ${slide('lx-02', 21, 'Tên file chỉ là con trỏ: mục thư mục → inode 
   </div>
 </div>
 
-<pre><code>echo "hello" &gt; report.txt
+<pre><code class="language-bash">echo "hello" &gt; report.txt
 ln    report.txt backup.txt      <span class="tok-comment"># liên kết cứng — một cái TÊN thứ hai</span>
 ln -s report.txt shortcut.txt    <span class="tok-comment"># liên kết tượng trưng — một file nhỏ chứa một ĐƯỜNG DẪN</span>
 ls -li</code></pre>
@@ -2150,7 +2150,7 @@ ls -li</code></pre>
 
 <h3>Các hệ quả, từng cái một</h3>
 ${slide('lx-02', 22, 'Xoá tên gốc: hard link vẫn đọc được, symlink thành link treo')}
-<pre><code>rm report.txt
+<pre><code class="language-bash">rm report.txt
 cat backup.txt        <span class="tok-comment"># vẫn chạy — số liên kết đi từ 2 xuống 1</span>
 cat shortcut.txt      <span class="tok-comment"># HỎNG — cái tên nó trỏ tới không còn nữa</span></code></pre>
 <div class="out">hello
@@ -2163,7 +2163,7 @@ cat: shortcut.txt: No such file or directory</div>
 
 <h3>Chạy thử từng bước: nhìn inode bằng <code>stat</code></h3>
 <p><code>ls -li</code> cho thấy số inode; <code>stat</code> cho thấy mọi thứ inode đang giữ, và một chuỗi định dạng chọn ra những trường bạn cần. Chạy trong <code>~/thu-linux</code> trên Ubuntu:</p>
-<pre><code>echo "hello" &gt; report.txt; ln report.txt backup.txt; ln -s report.txt shortcut.txt
+<pre><code class="language-bash">echo "hello" &gt; report.txt; ln report.txt backup.txt; ln -s report.txt shortcut.txt
 stat -c '%i %h %s %F %N' report.txt backup.txt shortcut.txt
 rm report.txt
 find . -xtype l                         <span class="tok-comment"># symlink nào giờ trỏ vào hư không?</span>
@@ -2202,7 +2202,7 @@ ln -sr /etc/app/config.yml current.yml <span class="tok-comment"># -r: đưa đ�
 <p>Bên trong một dự án, hãy ưu tiên tương đối. Để trỏ tới một đường dẫn hệ thống cố định như <code>/usr/share</code> thì tuyệt đối mới đúng.</p>
 
 <h3>Đọc và đi theo liên kết</h3>
-<pre><code>readlink shortcut.txt        <span class="tok-comment"># chuỗi đã lưu, đúng một tầng</span>
+<pre><code class="language-bash">readlink shortcut.txt        <span class="tok-comment"># chuỗi đã lưu, đúng một tầng</span>
 readlink -f shortcut.txt     <span class="tok-comment"># đi theo mọi tầng tới đường dẫn thật</span>
 realpath shortcut.txt        <span class="tok-comment"># cùng ý tưởng, tên rõ hơn</span>
 ls -l /usr/bin/python3       <span class="tok-comment"># xem một chuỗi liên kết ngoài đời</span>
@@ -2225,7 +2225,7 @@ mv -T /srv/app/current-new /srv/app/current</code></pre>
 
 <h3>Hai cái bẫy, đo thật: dấu gạch chéo sau một link, và ln thiếu -n</h3>
 <p>Cả hai đều chỉ dài một ký tự, và cả hai đều đã chạy thật trên Ubuntu 24.04. Trước hết, <code>lien</code> là một symlink trỏ tới thư mục <code>that/</code> chứa <code>con/a.txt</code> và <code>b.txt</code>:</p>
-<pre><code>rm lien/; echo "exit=$?"
+<pre><code class="language-bash">rm lien/; echo "exit=$?"
 rm -r lien/; echo "exit=$?"
 ls -A that
 ls -l lien</code></pre>
@@ -2236,7 +2236,7 @@ exit=1
 lrwxrwxrwx 1 cuong cuong 4 Sep 28 09:08 lien -&gt; that</div>
 <p>Đọc chậm thôi: <code>rm -r lien/</code> báo <em>LỖI</em> — mà vẫn <strong>xoá sạch thư mục thật</strong> <code>that/</code> (dòng <code>ls -A that</code> không in gì). Dấu gạch chéo cuối làm đường dẫn mang nghĩa "thư mục mà link trỏ tới", nên <code>rm -r</code> đi vào trong và xoá mọi thứ bên trong đó; chỉ tới lúc ấy nó mới thất bại khi gỡ chính <code>lien/</code>, vì symlink không phải thư mục. Cái link sống sót, trỏ vào một thư mục rỗng. Muốn gỡ một link thì gọi tên nó <em>KHÔNG</em> có gạch chéo: <code>rm lien</code>. Phím Tab tự điền thêm dấu gạch chéo đó cho bạn — và đó đúng là cách chuyện này xảy ra.</p>
 <p>Thứ hai, cập nhật một symlink đang trỏ vào thư mục:</p>
-<pre><code>ln -s rel/a cur
+<pre><code class="language-bash">ln -s rel/a cur
 ln -sf rel/b cur                       <span class="tok-comment"># quên -n</span>
 ls -l rel/a
 ln -sfn rel/b cur; ls -l cur           <span class="tok-comment"># có -n</span>
@@ -2267,7 +2267,7 @@ ${slide('lx-02', 25, 'Bảng cờ tar')}
   <div class="kv"><span class="k"><code>-v</code></span><span class="v">Chi tiết. Hữu ích lúc tạo, ồn ào lúc bung một kho lớn.</span></div>
   <div class="kv"><span class="k"><code>-C DIR</code></span><span class="v">Chuyển sang DIR trước đã. Lúc bung nó nghĩa là "để vào đây"; lúc tạo nó nghĩa là "coi các đường dẫn là tương đối với chỗ này".</span></div>
 </div>
-<pre><code>tar -czf backup.tar.gz ./project      <span class="tok-comment"># Create Zipped File</span>
+<pre><code class="language-bash">tar -czf backup.tar.gz ./project      <span class="tok-comment"># Create Zipped File</span>
 tar -tzf backup.tar.gz | head         <span class="tok-comment"># lisT — LUÔN làm việc này trước</span>
 tar -xzf backup.tar.gz                <span class="tok-comment"># eXtract</span>
 tar -xzf backup.tar.gz -C /srv/app    <span class="tok-comment"># bung vào một chỗ cụ thể</span>
@@ -2280,12 +2280,12 @@ tar -xzf backup.tar.gz --strip-components=1   <span class="tok-comment"># bỏ �
 
 <h3>--strip-components, và vì sao mọi bản phát hành dạng tar đều cần nó</h3>
 <p>Gần như mọi file tar của dự án đều bung ra thành một thư mục có số phiên bản ở ngoài cùng: <code>node-v22.6.0-linux-x64/bin/node</code>. Nếu bạn muốn nội dung nằm thẳng trong <code>/usr/local</code> mà không có lớp bọc đó, hãy lột đi một tầng:</p>
-<pre><code>tar -xzf node-v22.6.0-linux-x64.tar.gz -C /usr/local --strip-components=1</code></pre>
+<pre><code class="language-bash">tar -xzf node-v22.6.0-linux-x64.tar.gz -C /usr/local --strip-components=1</code></pre>
 <p>Đúng một cái cờ này là lý do hướng dẫn cài đặt trong các file README thường chạy được chỉ trong một dòng. Nó cũng là cái cờ mà người ta hay không biết là có tồn tại nhất, và thay vào đó họ bung-rồi-<code>mv</code>, tức là thêm hai cơ hội nữa để gõ sai đường dẫn.</p>
 
 <h3>tar không có -f: chảy thành dòng</h3>
 <p>Bỏ <code>-f</code> đi thì tar ghi ra stdout hoặc đọc từ stdin. Điều đó biến nó thành một mắt xích đường ống:</p>
-<pre><code><span class="tok-comment"># Chép cả cây sang máy khác mà không cần file tạm ở bất cứ đâu</span>
+<pre><code class="language-bash"><span class="tok-comment"># Chép cả cây sang máy khác mà không cần file tạm ở bất cứ đâu</span>
 tar -cz ./project | ssh deploy@vps "tar -xz -C /srv"
 
 <span class="tok-comment"># Chép mà vẫn giữ quyền và liên kết cứng, nhanh hơn cp -a với nhiều file nhỏ</span>
@@ -2324,7 +2324,7 @@ ${slide('lx-02', 26, 'Đo thật: gzip, bzip2, xz, zstd')}
 
 <h3>tar đời mới: <code>-a</code>, <code>--zstd</code>, <code>-t</code> trước <code>-x</code>, và <code>-C</code></h3>
 <p>GNU tar 1.35 (Ubuntu 24.04) không còn bắt bạn nhớ chữ cái nào ứng với bộ nén nào. Đo thật, với một <code>project/</code> nhỏ gồm <code>src/</code>, <code>node_modules/</code>, <code>package.json</code> và một <code>.env</code>:</p>
-<pre><code>tar -caf p.tar.zst project           <span class="tok-comment"># -a: chọn bộ nén theo đuôi file</span>
+<pre><code class="language-bash">tar -caf p.tar.zst project           <span class="tok-comment"># -a: chọn bộ nén theo đuôi file</span>
 tar -caf p.tar.xz  project
 file p.tar.zst p.tar.xz
 tar -tvf p.tar.zst | head -3         <span class="tok-comment"># liệt kê chi tiết: quyền, chủ, cỡ</span>
@@ -2350,7 +2350,7 @@ project/package.json
 {}</div>
 ${slide('lx-02', 27, 'Luôn -t trước -x: bom tar, dấu / ở đầu, file ẩn bị * bỏ sót')}
 <p>Giờ là ba việc mà <code>-t</code> sinh ra để làm. Từng cái đều đã chạy thật:</p>
-<pre><code>tar -tzf bomb.tar.gz                 <span class="tok-comment"># một kho nén dựng mà không có thư mục bọc ngoài</span>
+<pre><code class="language-bash">tar -tzf bomb.tar.gz                 <span class="tok-comment"># một kho nén dựng mà không có thư mục bọc ngoài</span>
 tar -czf abs.tar.gz /etc/hostname    <span class="tok-comment"># một đường dẫn tuyệt đối</span>
 tar -tzf abs.tar.gz
 cd project &amp;&amp; tar -czf ../star.tar.gz * &amp;&amp; cd ..
@@ -2395,7 +2395,7 @@ zgrep -c ERROR big.log.gz       <span class="tok-comment"># grep thẳng vào tr
 
 <h3>Trên macOS khác gì</h3>
 <p>Đo thật trên macOS (công cụ BSD, bsdtar 3.5.3), trong một thư mục nháp:</p>
-<pre><code>ln -sr r.txt s2.txt
+<pre><code class="language-bash">ln -sr r.txt s2.txt
 mv -T cur-new cur
 mv -h cur-new cur; ls -l cur          <span class="tok-comment"># BSD: -h = không đi theo link trỏ vào thư mục</span>
 ln r.txt h.txt

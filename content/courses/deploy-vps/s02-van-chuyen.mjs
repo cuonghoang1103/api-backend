@@ -119,7 +119,7 @@ ${slide('dv-02', 7, '--delete xoá cả ảnh người dùng — chạy thử đ
     /srv/vps/dg/app.js
     ❌ anh nguoi dung DA BI XOA</div>
 <div class="pitfall"><strong>Trap — <code>--delete</code> removes anything on the server that is not in your source, including things the server created.</strong> User uploads, generated files, a SQLite database, log files. There is no confirmation and no error; the deploy reports success. This is category 3 from Lesson 1.1 — runtime state — and it is the reason that category must live <em>outside</em> the directory a deploy writes to. Without <code>--delete</code> the problem inverts: files deleted from your repository stay on the server forever, so an old route or an old asset is still being served months after it was removed.</div>
-<pre><code><span class="tok-comment"># TRUOC KHI chay that: xem no SE lam gi, ma khong lam gi ca</span>
+<pre><code class="language-bash"><span class="tok-comment"># TRUOC KHI chay that: xem no SE lam gi, ma khong lam gi ca</span>
 rsync -avn --delete ./ vps:/srv/app/          <span class="tok-comment"># -n = --dry-run</span>
 
 <span class="tok-comment"># bao ve theo tung duong dan — luat nay o phia NHAN</span>
@@ -141,7 +141,7 @@ ${slide('dv-02', 4, 'Đường rsync: chép vào thư mục mới rồi mới tr
   <div class="kv"><span class="k">And it does not need a kill</span><span class="v">A dropped connection, a laptop lid closing, a CI job timing out, a network hiccup mid-deploy. Every one of them produces this state.</span></div>
 </div>
 <div class="callout ok"><strong>The fix is the releases layout from Lesson 0.4, and this is the strongest argument for it.</strong> rsync into a <em>new</em> directory that nothing is serving from, then move the symlink. An interrupted transfer leaves a half-populated directory that no one is using; the live release is untouched. The swap itself is one <code>rename(2)</code>, which cannot be interrupted halfway.</div>
-<pre><code><span class="tok-comment"># chuyen vao thu muc MOI, dung cham vao ban dang chay</span>
+<pre><code class="language-bash"><span class="tok-comment"># chuyen vao thu muc MOI, dung cham vao ban dang chay</span>
 BAN="/srv/app/phat-hanh/\$(date -u +%Y-%m-%d-%H%M%S)-\$(git rev-parse --short HEAD)"
 rsync -a --delete --link-dest=/srv/app/hien-tai/ ./ "vps:\$BAN/"
 
@@ -325,7 +325,7 @@ ${slide('dv-02', 7, '--delete xoá cả ảnh người dùng — chạy thử đ
     /srv/vps/dg/app.js
     ❌ anh nguoi dung DA BI XOA</div>
 <div class="pitfall"><strong>Bẫy — <code>--delete</code> gỡ bỏ bất cứ thứ gì trên máy chủ mà không có trong nguồn của bạn, kể cả những thứ do chính máy chủ tạo ra.</strong> Tệp người dùng tải lên, tệp sinh ra lúc chạy, một cơ sở dữ liệu SQLite, các tệp log. Không có xác nhận và không có lỗi; lần deploy báo thành công. Đây là loại 3 ở Bài 1.1 — trạng thái lúc chạy — và nó là lý do loại đó phải sống ở <em>NGOÀI</em> cái thư mục mà deploy ghi vào. Không có <code>--delete</code> thì vấn đề lật ngược: những tệp đã xoá khỏi kho mã của bạn sẽ nằm lại trên máy chủ MÃI MÃI, nên một tuyến cũ hay một tài nguyên cũ vẫn được phục vụ nhiều tháng sau khi bị gỡ.</div>
-<pre><code><span class="tok-comment"># TRUOC KHI chay that: xem no SE lam gi, ma khong lam gi ca</span>
+<pre><code class="language-bash"><span class="tok-comment"># TRUOC KHI chay that: xem no SE lam gi, ma khong lam gi ca</span>
 rsync -avn --delete ./ vps:/srv/app/          <span class="tok-comment"># -n = --dry-run</span>
 
 <span class="tok-comment"># bao ve theo tung duong dan — luat nay o phia NHAN</span>
@@ -347,7 +347,7 @@ ${slide('dv-02', 4, 'Đường rsync: chép vào thư mục mới rồi mới tr
   <div class="kv"><span class="k">Và nó không cần tới một lệnh giết</span><span class="v">Một kết nối rớt, một cái nắp laptop gập xuống, một job CI hết giờ, một cú nghẽn mạng giữa lúc deploy. Mỗi thứ trong đó đều sinh ra đúng trạng thái này.</span></div>
 </div>
 <div class="callout ok"><strong>Cách sửa là bố cục releases ở Bài 0.4, và đây là lý lẽ MẠNH NHẤT cho nó.</strong> rsync vào một thư mục MỚI mà chẳng ai đang phục vụ từ đó, rồi di chuyển symlink. Một lần chuyển bị cắt ngang để lại một thư mục đầy dở dang mà không ai đang dùng; bản phát hành đang sống thì không hề bị đụng tới. Bản thân bước tráo là MỘT lời gọi <code>rename(2)</code>, thứ không thể bị cắt ngang giữa chừng.</div>
-<pre><code><span class="tok-comment"># chuyen vao thu muc MOI, dung cham vao ban dang chay</span>
+<pre><code class="language-bash"><span class="tok-comment"># chuyen vao thu muc MOI, dung cham vao ban dang chay</span>
 BAN="/srv/app/phat-hanh/\$(date -u +%Y-%m-%d-%H%M%S)-\$(git rev-parse --short HEAD)"
 rsync -a --delete --link-dest=/srv/app/hien-tai/ ./ "vps:\$BAN/"
 
@@ -491,7 +491,7 @@ ssh -F cfg vps hostname</code></pre>
 
 <h3>The bare repository</h3>
 ${slide('dv-02', 9, 'git push vào kho trần — hook làm phần còn lại')}
-<pre><code><span class="tok-comment"># tren MAY CHU</span>
+<pre><code class="language-bash"><span class="tok-comment"># tren MAY CHU</span>
 git init --bare /srv/app/kho.git
 
 <span class="tok-comment"># tren MAY BAN</span>
@@ -501,7 +501,7 @@ git push vps master</code></pre>
 
 <h3>The hook</h3>
 ${slide('dv-02', 10, 'Hook post-receive, từng dòng, và output thật')}
-<pre><code><span class="tok-comment">#!/bin/bash — /srv/app/kho.git/hooks/post-receive</span>
+<pre><code class="language-bash"><span class="tok-comment">#!/bin/bash — /srv/app/kho.git/hooks/post-receive</span>
 set -euo pipefail
 DICH=/srv/app
 while read -r cu moi ref; do
@@ -540,7 +540,7 @@ done</code></pre>
 <div class="pitfall"><strong>Trap — a hook that fails does not fail the push, unless you make it.</strong> <code>post-receive</code> runs <em>after</em> the objects have been accepted; git has already stored them and the push reports success whatever the hook does. A non-zero exit produces nothing on the client at all — measured on git 2.43: no warning, no error line, exit code 0; the only trace is whatever the hook itself printed. So a deploy that broke halfway through leaves you with a push that looked fine — the <code>set -euo pipefail</code> at the top of the hook stops the damage spreading, but it cannot undo the push. If you need to <em>reject</em> a push, that is <code>pre-receive</code>, which runs before anything is stored and whose exit code does decide the outcome.</div>
 
 <h3>Adding the build and the verification</h3>
-<pre><code>  <span class="tok-comment"># ... sau khi checkout, TRUOC khi trao symlink</span>
+<pre><code class="language-bash">  <span class="tok-comment"># ... sau khi checkout, TRUOC khi trao symlink</span>
   cd "\$BAN"
   npm ci --omit=dev --no-audit          <span class="tok-comment"># Bai 1.3: ci, khong phai install</span>
   npm run build
@@ -679,7 +679,7 @@ exit=0</div>
 
 <h3>Kho trần</h3>
 ${slide('dv-02', 9, 'git push vào kho trần — hook làm phần còn lại')}
-<pre><code><span class="tok-comment"># tren MAY CHU</span>
+<pre><code class="language-bash"><span class="tok-comment"># tren MAY CHU</span>
 git init --bare /srv/app/kho.git
 
 <span class="tok-comment"># tren MAY BAN</span>
@@ -689,7 +689,7 @@ git push vps master</code></pre>
 
 <h3>Cái hook</h3>
 ${slide('dv-02', 10, 'Hook post-receive, từng dòng, và output thật')}
-<pre><code><span class="tok-comment">#!/bin/bash — /srv/app/kho.git/hooks/post-receive</span>
+<pre><code class="language-bash"><span class="tok-comment">#!/bin/bash — /srv/app/kho.git/hooks/post-receive</span>
 set -euo pipefail
 DICH=/srv/app
 while read -r cu moi ref; do
@@ -728,7 +728,7 @@ done</code></pre>
 <div class="pitfall"><strong>Bẫy — một hook hỏng KHÔNG làm lần push hỏng theo, trừ khi bạn tự bắt nó phải thế.</strong> <code>post-receive</code> chạy SAU KHI các đối tượng đã được chấp nhận; git đã lưu chúng rồi và lần push báo thành công bất kể hook làm gì. Một mã thoát khác 0 KHÔNG sinh ra gì ở phía client cả — đo thật trên git 2.43: không cảnh báo, không dòng lỗi, mã thoát 0; dấu vết duy nhất là những gì chính cái hook tự in ra. Nên một lần deploy vỡ nửa chừng để lại cho bạn một lần push TRÔNG NHƯ ỔN — dòng <code>set -euo pipefail</code> ở đầu hook ngăn thiệt hại lan rộng, nhưng nó không hoàn tác được lần push. Nếu bạn cần TỪ CHỐI một lần push thì đó là <code>pre-receive</code>, hook chạy trước khi có gì được lưu và mã thoát của nó thật sự quyết định kết cục.</div>
 
 <h3>Thêm bước dựng và bước kiểm</h3>
-<pre><code>  <span class="tok-comment"># ... sau khi checkout, TRUOC khi trao symlink</span>
+<pre><code class="language-bash">  <span class="tok-comment"># ... sau khi checkout, TRUOC khi trao symlink</span>
   cd "\$BAN"
   npm ci --omit=dev --no-audit          <span class="tok-comment"># Bai 1.3: ci, khong phai install</span>
   npm run build
@@ -942,7 +942,7 @@ ${slide('dv-02', 17, 'Tag đổi được, digest thì không')}
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">A digest is the content</span><span class="lz-d"><code>app@sha256:2524aa7f…</code> names exactly one set of bytes, forever. Pull that and you get that, on every machine, in a year. It is the container equivalent of the reproducible artifact from Lesson 1.2.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Tag for humans, deploy by digest</span><span class="lz-d">Push both — <code>app:2026-08-23-0e8117e</code> to read, and record the digest to deploy. Then rollback is redeploying a digest you already have, which is the container form of the symlink swap.</span></div>
 </div>
-<pre><code><span class="tok-comment"># lay digest THAT SU sau khi day</span>
+<pre><code class="language-bash"><span class="tok-comment"># lay digest THAT SU sau khi day</span>
 docker buildx imagetools inspect ghcr.io/ban/app:2026-08-23-0e8117e \\
   --format '{{.Manifest.Digest}}'
 
@@ -1113,7 +1113,7 @@ ${slide('dv-02', 17, 'Tag đổi được, digest thì không')}
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Một digest CHÍNH LÀ nội dung</span><span class="lz-d"><code>app@sha256:2524aa7f…</code> gọi tên đúng một bộ byte, mãi mãi. Kéo cái đó về là bạn nhận đúng cái đó, trên mọi máy, sau một năm. Nó là phiên bản container của cái tạo tác tái lập được ở Bài 1.2.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Gắn tag cho NGƯỜI đọc, deploy theo DIGEST</span><span class="lz-d">Đẩy cả hai — <code>app:2026-08-23-0e8117e</code> để đọc, và ghi lại digest để deploy. Khi đó lùi bản là deploy lại một digest bạn vốn đã có, tức là dạng container của cú tráo symlink.</span></div>
 </div>
-<pre><code><span class="tok-comment"># lay digest THAT SU sau khi day</span>
+<pre><code class="language-bash"><span class="tok-comment"># lay digest THAT SU sau khi day</span>
 docker buildx imagetools inspect ghcr.io/ban/app:2026-08-23-0e8117e \\
   --format '{{.Manifest.Digest}}'
 
@@ -1551,7 +1551,7 @@ ${slide('dv-02', 24, 'Hai lần deploy chồng nhau: bản CŨ thắng')}
 
 <h3>One lock fixes it, and the flag decides the semantics</h3>
 ${slide('dv-02', 25, 'flock -n bỏ cuộc, flock -w chờ tới lượt')}
-<pre><code><span class="tok-comment"># mo mot mo ta tep tren tep khoa, roi giu khoa suot ca lan deploy</span>
+<pre><code class="language-bash"><span class="tok-comment"># mo mot mo ta tep tren tep khoa, roi giu khoa suot ca lan deploy</span>
 exec 9&gt;/var/lock/deploy.lock
 if ! flock -n 9; then
   echo "co lan deploy khac dang chay — DUNG" &gt;&amp;2
@@ -1586,7 +1586,7 @@ ${slide('dv-02', 27, 'Bước nào chạy lại được an toàn')}
 
 <h3>Resuming rather than restarting</h3>
 ${slide('dv-02', 26, '--partial nối tiếp, --timeout biến treo thành lỗi')}
-<pre><code><span class="tok-comment"># giu phan da chuyen duoc, lan sau di tiep tu do</span>
+<pre><code class="language-bash"><span class="tok-comment"># giu phan da chuyen duoc, lan sau di tiep tu do</span>
 rsync -a --partial --partial-dir=.rsync-tam ./ vps:/srv/app/phat-hanh/&lt;ban&gt;/
 
 <span class="tok-comment"># tu thu lai khi mang chap chon — 3 lan, cach nhau vai giay</span>
@@ -1740,7 +1740,7 @@ ${slide('dv-02', 24, 'Hai lần deploy chồng nhau: bản CŨ thắng')}
 
 <h3>Một cái khoá sửa được nó, và cái cờ quyết định ngữ nghĩa</h3>
 ${slide('dv-02', 25, 'flock -n bỏ cuộc, flock -w chờ tới lượt')}
-<pre><code><span class="tok-comment"># mo mot mo ta tep tren tep khoa, roi giu khoa suot ca lan deploy</span>
+<pre><code class="language-bash"><span class="tok-comment"># mo mot mo ta tep tren tep khoa, roi giu khoa suot ca lan deploy</span>
 exec 9&gt;/var/lock/deploy.lock
 if ! flock -n 9; then
   echo "co lan deploy khac dang chay — DUNG" &gt;&amp;2
@@ -1775,7 +1775,7 @@ ${slide('dv-02', 27, 'Bước nào chạy lại được an toàn')}
 
 <h3>Đi tiếp thay vì làm lại từ đầu</h3>
 ${slide('dv-02', 26, '--partial nối tiếp, --timeout biến treo thành lỗi')}
-<pre><code><span class="tok-comment"># giu phan da chuyen duoc, lan sau di tiep tu do</span>
+<pre><code class="language-bash"><span class="tok-comment"># giu phan da chuyen duoc, lan sau di tiep tu do</span>
 rsync -a --partial --partial-dir=.rsync-tam ./ vps:/srv/app/phat-hanh/&lt;ban&gt;/
 
 <span class="tok-comment"># tu thu lai khi mang chap chon — 3 lan, cach nhau vai giay</span>

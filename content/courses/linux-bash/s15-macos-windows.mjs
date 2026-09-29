@@ -69,7 +69,7 @@ ${gallery('lx-15', [
 <h3>Same family, different house</h3>
 ${slide('lx-15', 3, 'macOS là Unix có chứng nhận — nhưng không phải Linux')}
 <p>Section 0 drew the family tree; here is the part that matters for daily work. macOS is built on <strong>Darwin</strong>, whose kernel <strong>XNU</strong> combines the Mach microkernel with a layer taken from BSD Unix. The command-line tools Apple ships — <code>sed</code>, <code>grep</code>, <code>date</code>, <code>stat</code>, <code>find</code> — are mostly <strong>BSD</strong> versions. Linux is only a kernel; a distribution such as Ubuntu wraps it in <strong>GNU</strong> tools. Both families descend from the Unix ideas of 1969, but they are separate codebases, and the flags drifted apart over forty years.</p>
-<pre><code>sw_vers
+<pre><code class="language-bash">sw_vers
 uname -srm
 uname -v | cut -c1-60
 ls /proc</code></pre>
@@ -84,7 +84,7 @@ ls: /proc: No such file or directory</div>
 
 <h3>Why the default shell is zsh, and why /bin/bash is from 2007</h3>
 ${slide('lx-15', 4, 'zsh mặc định từ 2019 vì bash mới là GPLv3')}
-<pre><code>echo \$SHELL
+<pre><code class="language-bash">echo \$SHELL
 zsh --version
 /bin/bash --version | head -1
 brew info bash | head -1</code></pre>
@@ -104,7 +104,7 @@ GNU bash, version 3.2.57(1)-release (arm64-apple-darwin26)
 <h3>zsh is not bash: four differences that bite</h3>
 ${slide('lx-15', 5, 'zsh không phải bash: mảng từ 1, không tách từ, glob không khớp báo lỗi, # khi gõ tay')}
 <p>The same five-line file, run by both shells on the Mac. <code>zsh -f</code> starts zsh without reading any startup file, so what you see is zsh's default behaviour, not someone's configuration:</p>
-<pre><code><span class="tok-comment"># z1.sh</span>
+<pre><code class="language-bash"><span class="tok-comment"># z1.sh</span>
 arr=(tao cam le)
 echo "\${arr[1]} \${arr[0]}"
 v="mot hai ba"
@@ -164,7 +164,7 @@ ${slide('lx-15', 6, 'BSD vs GNU: cùng tên lệnh, khác cờ')}
 
 <h3>Reading the errors, not just avoiding them</h3>
 ${slide('lx-15', 7, 'Lỗi thật khi đem lệnh GNU sang Mac — và đọc lỗi đầu tiên cho đúng')}
-<pre><code>printf 'mode=yes\\n' &gt; m.conf
+<pre><code class="language-bash">printf 'mode=yes\\n' &gt; m.conf
 sed -i 's/yes/no/' m.conf</code></pre>
 <div class="out">sed: 1: "m.conf
 ": invalid command code m</div>
@@ -241,7 +241,7 @@ macOS: brew install bash, roi chay: bash can-bash4.sh</div>
 
 <h3>Try it step by step</h3>
 <p>On a Mac, in a scratch folder, with no configuration involved. Predict each line before you run it.</p>
-<pre><code>mkdir -p ~/thu-linux/mac15 &amp;&amp; cd ~/thu-linux/mac15
+<pre><code class="language-bash">mkdir -p ~/thu-linux/mac15 &amp;&amp; cd ~/thu-linux/mac15
 zsh -f -c 'arr=(a b c); echo "\${arr[1]} [\${arr[0]}]"'
 /bin/bash -c 'arr=(a b c); echo "\${arr[1]} [\${arr[0]}]"'
 zsh -f -c 'v="x y"; for w in \$v; do echo "[\$w]"; done'
@@ -326,7 +326,7 @@ khong co timeout</div>
 <h3>Cùng họ, khác nhà</h3>
 ${slide('lx-15', 3, 'macOS là Unix có chứng nhận — nhưng không phải Linux')}
 <p>Mục 0 đã vẽ cây họ; đây là phần quan trọng cho việc hằng ngày. macOS dựng trên <strong>Darwin</strong>, có nhân (kernel) <strong>XNU</strong> ghép vi nhân Mach với một lớp lấy từ BSD Unix. Các công cụ dòng lệnh Apple đi kèm — <code>sed</code>, <code>grep</code>, <code>date</code>, <code>stat</code>, <code>find</code> — phần lớn là bản <strong>BSD</strong>. Linux chỉ là một nhân; một bản phân phối (distro) như Ubuntu bọc nó bằng bộ công cụ <strong>GNU</strong>. Cả hai họ đều sinh ra từ ý tưởng Unix năm 1969, nhưng là hai bộ mã riêng, và cờ lệnh trôi xa nhau suốt bốn mươi năm.</p>
-<pre><code>sw_vers
+<pre><code class="language-bash">sw_vers
 uname -srm
 uname -v | cut -c1-60
 ls /proc</code></pre>
@@ -341,7 +341,7 @@ ls: /proc: No such file or directory</div>
 
 <h3>Vì sao shell mặc định là zsh, và vì sao /bin/bash là đồ năm 2007</h3>
 ${slide('lx-15', 4, 'zsh mặc định từ 2019 vì bash mới là GPLv3')}
-<pre><code>echo \$SHELL
+<pre><code class="language-bash">echo \$SHELL
 zsh --version
 /bin/bash --version | head -1
 brew info bash | head -1</code></pre>
@@ -361,7 +361,7 @@ GNU bash, version 3.2.57(1)-release (arm64-apple-darwin26)
 <h3>zsh không phải bash: bốn chỗ hay vấp</h3>
 ${slide('lx-15', 5, 'zsh không phải bash: mảng từ 1, không tách từ, glob không khớp báo lỗi, # khi gõ tay')}
 <p>Cùng một file năm dòng, chạy bằng cả hai shell trên Mac. <code>zsh -f</code> khởi động zsh mà KHÔNG đọc file khởi động nào, nên cái bạn thấy là hành vi mặc định của zsh, không phải cấu hình của ai đó:</p>
-<pre><code><span class="tok-comment"># z1.sh</span>
+<pre><code class="language-bash"><span class="tok-comment"># z1.sh</span>
 arr=(tao cam le)
 echo "\${arr[1]} \${arr[0]}"
 v="mot hai ba"
@@ -421,7 +421,7 @@ ${slide('lx-15', 6, 'BSD vs GNU: cùng tên lệnh, khác cờ')}
 
 <h3>Đọc lỗi, không chỉ né lỗi</h3>
 ${slide('lx-15', 7, 'Lỗi thật khi đem lệnh GNU sang Mac — và đọc lỗi đầu tiên cho đúng')}
-<pre><code>printf 'mode=yes\\n' &gt; m.conf
+<pre><code class="language-bash">printf 'mode=yes\\n' &gt; m.conf
 sed -i 's/yes/no/' m.conf</code></pre>
 <div class="out">sed: 1: "m.conf
 ": invalid command code m</div>
@@ -498,7 +498,7 @@ macOS: brew install bash, roi chay: bash can-bash4.sh</div>
 
 <h3>Chạy thử từng bước</h3>
 <p>Trên Mac, trong một thư mục thử, không dính tới cấu hình nào. Đoán từng dòng trước khi chạy.</p>
-<pre><code>mkdir -p ~/thu-linux/mac15 &amp;&amp; cd ~/thu-linux/mac15
+<pre><code class="language-bash">mkdir -p ~/thu-linux/mac15 &amp;&amp; cd ~/thu-linux/mac15
 zsh -f -c 'arr=(a b c); echo "\${arr[1]} [\${arr[0]}]"'
 /bin/bash -c 'arr=(a b c); echo "\${arr[1]} [\${arr[0]}]"'
 zsh -f -c 'v="x y"; for w in \$v; do echo "[\$w]"; done'
@@ -593,7 +593,7 @@ khong co timeout</div>
 <h3>Homebrew: the package manager macOS does not ship</h3>
 ${slide('lx-15', 10, 'Homebrew: trình quản lý gói mà macOS không có sẵn')}
 <p>On Ubuntu, <code>apt</code> installs into <code>/usr</code> and the system owns it (Chapter 10). macOS has no general package manager, and <code>/usr/bin</code> is protected by System Integrity Protection — not even root may write there. Homebrew fills the gap by installing everything under its own prefix, owned by your user, so <code>brew install</code> never needs <code>sudo</code>:</p>
-<pre><code>brew --prefix
+<pre><code class="language-bash">brew --prefix
 brew --version
 brew --cellar
 brew list --formula | wc -l
@@ -611,7 +611,7 @@ node 26.8.1</div>
   <div class="lz-step"><span class="lz-k">opt/</span><span class="lz-t">/opt/homebrew/opt/git → ../Cellar/git/2.51.1</span><span class="lz-d">A stable symlink to whichever version is current. Config files and plists point here so an upgrade does not break them.</span></div>
   <div class="lz-step"><span class="lz-k">bin/</span><span class="lz-t">/opt/homebrew/bin/git → ../Cellar/git/2.51.1/bin/git</span><span class="lz-d">The commands you type. This directory must be early in <code>PATH</code> (Lesson 8.1 showed <code>/etc/paths.d/homebrew</code> putting it there).</span></div>
 </div>
-<pre><code>ls -l /opt/homebrew/opt/git /opt/homebrew/bin/git | awk '{print \$1, \$9, \$10, \$11}'
+<pre><code class="language-bash">ls -l /opt/homebrew/opt/git /opt/homebrew/bin/git | awk '{print \$1, \$9, \$10, \$11}'
 /usr/bin/git --version
 git --version
 command -v git</code></pre>
@@ -657,7 +657,7 @@ brew "gnu-sed"
 brew "jq"
 brew "shellcheck"
 cask "visual-studio-code"</code></pre>
-<pre><code>brew bundle install                  <span class="tok-comment"># install everything listed (and upgrade by default)</span>
+<pre><code class="language-bash">brew bundle install                  <span class="tok-comment"># install everything listed (and upgrade by default)</span>
 brew bundle check                    <span class="tok-comment"># are all dependencies installed?</span>
 brew bundle dump --file=Brewfile     <span class="tok-comment"># write what THIS Mac has into a Brewfile</span>
 brew bundle cleanup                  <span class="tok-comment"># help: "Uninstall all dependencies not present in the Brewfile" — careful</span></code></pre>
@@ -683,7 +683,7 @@ ${slide('lx-15', 12, 'launchd thay cả systemd lẫn cron trên Mac')}
 <h3>A real LaunchAgent, written for you by brew services</h3>
 ${slide('lx-15', 13, 'Một LaunchAgent thật: brew services viết plist hộ bạn — và PATH mặc định của launchd')}
 <p>The course Mac already has one: the PostgreSQL 14 that Homebrew runs in the background. Reading it touches nothing:</p>
-<pre><code>brew services list
+<pre><code class="language-bash">brew services list
 launchctl list | grep postgres
 launchctl list | wc -l</code></pre>
 <div class="out">Name          Status  User  File
@@ -769,7 +769,7 @@ launchctl bootout gui/\$(id -u)/vn.cuongthai.sao-luu                            
 <h3>Commands only a Mac has</h3>
 ${slide('lx-15', 15, 'Những lệnh chỉ Mac mới có — pbcopy, open, mdfind, caffeinate, defaults, security')}
 <p>These have no standard Linux equivalent, and each one replaces a mouse habit. Output measured on the course Mac; the clipboard demo uses the little-used "ruler" pasteboard so as not to overwrite anyone's real clipboard, and the Keychain demo uses a throw-away keychain file that was deleted afterwards.</p>
-<pre><code>echo "lenh da chep" | pbcopy -pboard ruler
+<pre><code class="language-bash">echo "lenh da chep" | pbcopy -pboard ruler
 pbpaste -pboard ruler
 printf 'b\\na\\n' | pbcopy -pboard ruler; pbpaste -pboard ruler | sort</code></pre>
 <div class="out">lenh da chep
@@ -845,7 +845,7 @@ Timestamp               Ty Process[PID:TID]
 
 <h3>Try it step by step</h3>
 <p>Everything below is read-only or stays inside <code>~/thu-linux/mac15</code>.</p>
-<pre><code>brew --prefix; brew list --versions | head -3
+<pre><code class="language-xml">brew --prefix; brew list --versions | head -3
 type -a git; /usr/bin/git --version; git --version
 launchctl list | head -4
 launchctl print gui/\$(id -u) | head -6
@@ -919,7 +919,7 @@ date | pbcopy -pboard ruler; pbpaste -pboard ruler</code></pre>
 <h3>Homebrew: trình quản lý gói mà macOS không có sẵn</h3>
 ${slide('lx-15', 10, 'Homebrew: trình quản lý gói mà macOS không có sẵn')}
 <p>Trên Ubuntu, <code>apt</code> cài vào <code>/usr</code> và hệ thống sở hữu nó (Chương 10). macOS không có trình quản lý gói chung, và <code>/usr/bin</code> được System Integrity Protection (SIP — cơ chế bảo vệ hệ thống) khoá — đến root cũng không ghi được. Homebrew lấp khoảng trống bằng cách cài mọi thứ dưới một thư mục gốc riêng, do chính user của bạn sở hữu, nên <code>brew install</code> không bao giờ cần <code>sudo</code>:</p>
-<pre><code>brew --prefix
+<pre><code class="language-bash">brew --prefix
 brew --version
 brew --cellar
 brew list --formula | wc -l
@@ -937,7 +937,7 @@ node 26.8.1</div>
   <div class="lz-step"><span class="lz-k">opt/</span><span class="lz-t">/opt/homebrew/opt/git → ../Cellar/git/2.51.1</span><span class="lz-d">Một liên kết tượng trưng ỔN ĐỊNH trỏ tới phiên bản hiện hành. File cấu hình và plist trỏ vào đây nên nâng cấp không làm chúng hỏng.</span></div>
   <div class="lz-step"><span class="lz-k">bin/</span><span class="lz-t">/opt/homebrew/bin/git → ../Cellar/git/2.51.1/bin/git</span><span class="lz-d">Những lệnh bạn gõ. Thư mục này phải đứng sớm trong <code>PATH</code> (Bài 8.1 đã cho thấy <code>/etc/paths.d/homebrew</code> đặt nó vào đó).</span></div>
 </div>
-<pre><code>ls -l /opt/homebrew/opt/git /opt/homebrew/bin/git | awk '{print \$1, \$9, \$10, \$11}'
+<pre><code class="language-bash">ls -l /opt/homebrew/opt/git /opt/homebrew/bin/git | awk '{print \$1, \$9, \$10, \$11}'
 /usr/bin/git --version
 git --version
 command -v git</code></pre>
@@ -983,7 +983,7 @@ brew "gnu-sed"
 brew "jq"
 brew "shellcheck"
 cask "visual-studio-code"</code></pre>
-<pre><code>brew bundle install                  <span class="tok-comment"># cài mọi thứ được liệt kê (mặc định nâng cấp luôn)</span>
+<pre><code class="language-bash">brew bundle install                  <span class="tok-comment"># cài mọi thứ được liệt kê (mặc định nâng cấp luôn)</span>
 brew bundle check                    <span class="tok-comment"># đã cài đủ chưa?</span>
 brew bundle dump --file=Brewfile     <span class="tok-comment"># ghi những gì máy NÀY đang có vào Brewfile</span>
 brew bundle cleanup                  <span class="tok-comment"># help: gỡ mọi thứ KHÔNG có trong Brewfile — cẩn thận</span></code></pre>
@@ -1009,7 +1009,7 @@ ${slide('lx-15', 12, 'launchd thay cả systemd lẫn cron trên Mac')}
 <h3>Một LaunchAgent thật, do brew services viết hộ</h3>
 ${slide('lx-15', 13, 'Một LaunchAgent thật: brew services viết plist hộ bạn — và PATH mặc định của launchd')}
 <p>Máy Mac của khoá đã có sẵn một cái: PostgreSQL 14 mà Homebrew chạy nền. Đọc nó không đụng vào gì cả:</p>
-<pre><code>brew services list
+<pre><code class="language-bash">brew services list
 launchctl list | grep postgres
 launchctl list | wc -l</code></pre>
 <div class="out">Name          Status  User  File
@@ -1095,7 +1095,7 @@ launchctl bootout gui/\$(id -u)/vn.cuongthai.sao-luu                            
 <h3>Những lệnh chỉ Mac có</h3>
 ${slide('lx-15', 15, 'Những lệnh chỉ Mac mới có — pbcopy, open, mdfind, caffeinate, defaults, security')}
 <p>Những lệnh này không có bản tương đương chuẩn trên Linux, và mỗi cái thay một thói quen dùng chuột. Output đo trên Mac của khoá; bản thử khay nhớ tạm dùng khay "ruler" ít ai dùng để không ghi đè khay nhớ thật của ai, và bản thử Keychain dùng một file keychain vứt đi đã xoá sau đó.</p>
-<pre><code>echo "lenh da chep" | pbcopy -pboard ruler
+<pre><code class="language-bash">echo "lenh da chep" | pbcopy -pboard ruler
 pbpaste -pboard ruler
 printf 'b\\na\\n' | pbcopy -pboard ruler; pbpaste -pboard ruler | sort</code></pre>
 <div class="out">lenh da chep
@@ -1171,7 +1171,7 @@ Timestamp               Ty Process[PID:TID]
 
 <h3>Chạy thử từng bước</h3>
 <p>Mọi thứ dưới đây chỉ đọc hoặc nằm trong <code>~/thu-linux/mac15</code>.</p>
-<pre><code>brew --prefix; brew list --versions | head -3
+<pre><code class="language-xml">brew --prefix; brew list --versions | head -3
 type -a git; /usr/bin/git --version; git --version
 launchctl list | head -4
 launchctl print gui/\$(id -u) | head -6
@@ -1340,7 +1340,7 @@ deploy.sh: line 4: cd: \$'/tmp\\r': No such file or directory</div>
 <tr><td><code>cd: \$'/tmp\\r': No such file or directory</code></td><td>The <code>\\r</code> sticks to the last argument of every line. <code>echo</code> "worked" only because printing a carriage return at the end of a line is invisible.</td></tr>
 </table>
 <p>Three ways to <em>see</em> it, in increasing detail:</p>
-<pre><code>file deploy.sh
+<pre><code class="language-bash">file deploy.sh
 cat -A deploy.sh
 head -1 deploy.sh | xxd
 grep -c \$'\\r' deploy.sh</code></pre>
@@ -1360,7 +1360,7 @@ unix2dos file.txt                   <span class="tok-comment"># the reverse, for
 <div class="out">dos2unix: converting file deploy.sh to Unix format...
 Xin chao</div>
 <p>The same bug in <em>data</em> is harder to spot, because nothing crashes at the point of the mistake. A <code>.env</code> edited in Notepad, loaded with <code>source</code>, measured in the container:</p>
-<pre><code>printf 'PORT=3000\\r\\nHOST=db\\r\\n' &gt; .env
+<pre><code class="language-bash">printf 'PORT=3000\\r\\nHOST=db\\r\\n' &gt; .env
 . ./.env; echo "[\$PORT]" | cat -A
 curl -sS "http://127.0.0.1:\$PORT/"; echo "rc=\$?"
 PORT=\${PORT%\$'\\r'}; echo "[\$PORT]" | cat -A</code></pre>
@@ -1373,7 +1373,7 @@ rc=3
 <h3>Stop CRLF at the source: .gitattributes beats core.autocrlf</h3>
 ${slide('lx-15', 22, 'Chặn CRLF từ gốc: .gitattributes thắng core.autocrlf')}
 <p>Git can convert line endings for you. GitHub's documentation describes <code>core.autocrlf true</code> on Windows as making checked-out files "correct for Windows" while converting "to Unix style when you commit". The Git for Windows installer offers that setting during installation. The problem is that <code>core.autocrlf</code> is a setting on <em>each person's machine</em>. Simulated in the container — <code>autocrlf=true</code> is exactly what a Windows checkout does:</p>
-<pre><code>git config --global core.autocrlf true
+<pre><code class="language-bash">git config --global core.autocrlf true
 git clone -q goc may-win; cd may-win
 git ls-files --eol</code></pre>
 <div class="out">i/lf    w/crlf  attr/                 	README.md
@@ -1386,13 +1386,13 @@ i/lf    w/crlf  attr/                 	deploy.sh</div>
 Dockerfile text eol=lf
 *.ps1  text eol=crlf
 *.png  binary</code></pre>
-<pre><code>printf '*.sh text eol=lf\\n' &gt; .gitattributes
+<pre><code class="language-bash">printf '*.sh text eol=lf\\n' &gt; .gitattributes
 rm deploy.sh &amp;&amp; git checkout -- deploy.sh
 git ls-files --eol</code></pre>
 <div class="out">i/lf    w/crlf  attr/                 	README.md
 i/lf    w/lf    attr/text eol=lf      	deploy.sh</div>
 <p>Same machine, same <code>autocrlf=true</code>, but <code>deploy.sh</code> is now checked out with LF because the repository says so. <code>README.md</code> is untouched — CRLF in a Markdown file harms nobody. If CRLF has <em>already</em> been committed (someone had <code>autocrlf=false</code> and a Windows editor), add the attributes and renormalise, as GitHub's page instructs:</p>
-<pre><code>git ls-files --eol
+<pre><code class="language-bash">git ls-files --eol
 git add --renormalize .
 git status --short
 git ls-files --eol
@@ -1423,7 +1423,7 @@ build.sh: eol: lf</div>
 
 <h3>Try it step by step</h3>
 <p>No Windows needed: the container plays the Windows teammate. Type these one at a time in <code>docker run --rm -it ubuntu:24.04 bash</code>:</p>
-<pre><code>apt-get update -qq &amp;&amp; apt-get install -y -qq git dos2unix file &gt;/dev/null
+<pre><code class="language-bash">apt-get update -qq &amp;&amp; apt-get install -y -qq git dos2unix file &gt;/dev/null
 git config --global user.email a@b.c; git config --global user.name An
 git init -q goc &amp;&amp; cd goc
 printf '#!/bin/bash\\necho ok\\n' &gt; deploy.sh &amp;&amp; git add . &amp;&amp; git commit -qm dau &amp;&amp; cd ..
@@ -1589,7 +1589,7 @@ deploy.sh: line 4: cd: \$'/tmp\\r': No such file or directory</div>
 <tr><td><code>cd: \$'/tmp\\r': No such file or directory</code></td><td><code>\\r</code> dính vào đối số cuối của mọi dòng. <code>echo</code> "chạy được" chỉ vì in một ký tự về-đầu-dòng ở cuối dòng thì không ai thấy.</td></tr>
 </table>
 <p>Ba cách để <em>thấy</em> nó, chi tiết tăng dần:</p>
-<pre><code>file deploy.sh
+<pre><code class="language-bash">file deploy.sh
 cat -A deploy.sh
 head -1 deploy.sh | xxd
 grep -c \$'\\r' deploy.sh</code></pre>
@@ -1609,7 +1609,7 @@ unix2dos file.txt                   <span class="tok-comment"># chiều ngược
 <div class="out">dos2unix: converting file deploy.sh to Unix format...
 Xin chao</div>
 <p>Cùng lỗi đó nằm trong <em>dữ liệu</em> thì khó thấy hơn, vì chẳng có gì sập ngay tại chỗ sai. Một file <code>.env</code> sửa bằng Notepad, nạp bằng <code>source</code>, đo trong container:</p>
-<pre><code>printf 'PORT=3000\\r\\nHOST=db\\r\\n' &gt; .env
+<pre><code class="language-bash">printf 'PORT=3000\\r\\nHOST=db\\r\\n' &gt; .env
 . ./.env; echo "[\$PORT]" | cat -A
 curl -sS "http://127.0.0.1:\$PORT/"; echo "rc=\$?"
 PORT=\${PORT%\$'\\r'}; echo "[\$PORT]" | cat -A</code></pre>
@@ -1622,7 +1622,7 @@ rc=3
 <h3>Chặn CRLF từ gốc: .gitattributes thắng core.autocrlf</h3>
 ${slide('lx-15', 22, 'Chặn CRLF từ gốc: .gitattributes thắng core.autocrlf')}
 <p>Git có thể đổi kiểu xuống dòng giúp bạn. Tài liệu của GitHub mô tả <code>core.autocrlf true</code> trên Windows là làm cho file lấy ra (checkout) "correct for Windows" trong khi đổi "to Unix style when you commit" — lấy ra thì thành CRLF, commit thì đổi về LF. Trình cài Git for Windows có đưa ra thiết lập đó ngay lúc cài. Vấn đề là <code>core.autocrlf</code> là thiết lập trên <em>MÁY CỦA TỪNG NGƯỜI</em>. Giả lập trong container — <code>autocrlf=true</code> chính là thứ một lần checkout trên Windows làm:</p>
-<pre><code>git config --global core.autocrlf true
+<pre><code class="language-bash">git config --global core.autocrlf true
 git clone -q goc may-win; cd may-win
 git ls-files --eol</code></pre>
 <div class="out">i/lf    w/crlf  attr/                 	README.md
@@ -1635,13 +1635,13 @@ i/lf    w/crlf  attr/                 	deploy.sh</div>
 Dockerfile text eol=lf
 *.ps1  text eol=crlf
 *.png  binary</code></pre>
-<pre><code>printf '*.sh text eol=lf\\n' &gt; .gitattributes
+<pre><code class="language-bash">printf '*.sh text eol=lf\\n' &gt; .gitattributes
 rm deploy.sh &amp;&amp; git checkout -- deploy.sh
 git ls-files --eol</code></pre>
 <div class="out">i/lf    w/crlf  attr/                 	README.md
 i/lf    w/lf    attr/text eol=lf      	deploy.sh</div>
 <p>Cùng máy, cùng <code>autocrlf=true</code>, nhưng giờ <code>deploy.sh</code> được lấy ra với LF vì repo đã nói vậy. <code>README.md</code> không đổi — CRLF trong file Markdown chẳng hại ai. Nếu CRLF <em>ĐÃ</em> lỡ được commit (ai đó để <code>autocrlf=false</code> và dùng trình soạn thảo Windows), thêm file thuộc tính rồi chuẩn hoá lại, đúng như trang của GitHub hướng dẫn:</p>
-<pre><code>git ls-files --eol
+<pre><code class="language-bash">git ls-files --eol
 git add --renormalize .
 git status --short
 git ls-files --eol
@@ -1672,7 +1672,7 @@ build.sh: eol: lf</div>
 
 <h3>Chạy thử từng bước</h3>
 <p>Không cần Windows: container đóng vai bạn cùng nhóm dùng Windows. Gõ từng dòng trong <code>docker run --rm -it ubuntu:24.04 bash</code>:</p>
-<pre><code>apt-get update -qq &amp;&amp; apt-get install -y -qq git dos2unix file &gt;/dev/null
+<pre><code class="language-bash">apt-get update -qq &amp;&amp; apt-get install -y -qq git dos2unix file &gt;/dev/null
 git config --global user.email a@b.c; git config --global user.name An
 git init -q goc &amp;&amp; cd goc
 printf '#!/bin/bash\\necho ok\\n' &gt; deploy.sh &amp;&amp; git add . &amp;&amp; git commit -qm dau &amp;&amp; cd ..

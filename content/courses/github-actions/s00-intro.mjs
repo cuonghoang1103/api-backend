@@ -1519,7 +1519,7 @@ GITHUB_TOKEN Permissions
 <p class="lead">Not a tutorial workflow — the one that has run 526 times in this repository. Reading a file that is actually in service teaches more than reading one written to be read.</p>
 
 <h3>The trigger block</h3>
-<pre><code>on:
+<pre><code class="language-bash">on:
   pull_request:
     branches: [main]
   push:
@@ -1613,7 +1613,7 @@ ${slide('ga-00', 32, 'Without shell:, run: has no pipefail — a failure mid-pip
 
 <h3>The step that is designed to skip</h3>
 ${slide('ga-00', 33, 'A step designed to skip: an absent secret becomes an empty string')}
-<pre><code>- name: CV critique fabrication test (skips without an AI key)
+<pre><code class="language-bash">- name: CV critique fabrication test (skips without an AI key)
   env:
     ANTHROPIC_API_KEY: &#36;{{ secrets.ANTHROPIC_API_KEY }}
     LLM_BASE_URL: &#36;{{ secrets.LLM_BASE_URL }}
@@ -1745,7 +1745,7 @@ ${slide('ga-00', 34, 'Yellow annotation in 09/2026: checkout@v4 is being forced 
 <p class="lead">Không phải một workflow mẫu trong sách — mà cái đã chạy 526 lần trong chính kho này. Đọc một tệp ĐANG PHỤC VỤ dạy được nhiều hơn đọc một tệp viết ra để cho người ta đọc.</p>
 
 <h3>Khối kích hoạt</h3>
-<pre><code>on:
+<pre><code class="language-bash">on:
   pull_request:
     branches: [main]
   push:
@@ -1839,7 +1839,7 @@ ${slide('ga-00', 32, 'Không khai shell: thì không có pipefail — lỗi gi�
 
 <h3>Cái bước được thiết kế để BỎ QUA</h3>
 ${slide('ga-00', 33, 'Bước cố ý bỏ qua: secret vắng thành chuỗi rỗng')}
-<pre><code>- name: CV critique fabrication test (skips without an AI key)
+<pre><code class="language-bash">- name: CV critique fabrication test (skips without an AI key)
   env:
     ANTHROPIC_API_KEY: &#36;{{ secrets.ANTHROPIC_API_KEY }}
     LLM_BASE_URL: &#36;{{ secrets.LLM_BASE_URL }}

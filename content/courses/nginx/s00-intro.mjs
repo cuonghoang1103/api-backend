@@ -194,7 +194,7 @@ Internet → :443 nginx ─┬→ 127.0.0.1:3000  /api
 <p class="lead">Nginx installs in one command and starts in one more, which makes it tempting to skip straight to configuration. Five minutes spent on what actually started pays for itself immediately, because the process model explains the privilege split, the reload behaviour and half the error messages you will ever see from it.</p>
 
 <h3>Two minutes to running</h3>
-<pre><code><span class="tok-comment"># Ubuntu / Debian</span>
+<pre><code class="language-bash"><span class="tok-comment"># Ubuntu / Debian</span>
 sudo apt-get update &amp;&amp; sudo apt-get install -y nginx
 nginx -v                       <span class="tok-comment"># nginx version: nginx/1.24.0 (Ubuntu)</span>
 nginx -V 2&gt;&amp;1 | tr ' ' '\\\\n' | grep '^--with'   <span class="tok-comment"># the modules compiled in</span>
@@ -289,7 +289,7 @@ worker moi: 32227 32228 32229 32230   &lt;- da thay HET
 <p class="lead">Nginx cài bằng một câu lệnh và khởi động bằng một câu nữa, nên rất dễ bị cám dỗ nhảy thẳng vào phần cấu hình. Năm phút bỏ ra để hiểu CÁI VỪA KHỞI ĐỘNG thì tự nó trả lại ngay lập tức, vì mô hình tiến trình giải thích luôn cả việc tách đặc quyền, hành vi nạp lại, và một nửa số thông báo lỗi mà bạn sẽ từng thấy từ nó.</p>
 
 <h3>Hai phút để có một cái đang chạy</h3>
-<pre><code><span class="tok-comment"># Ubuntu / Debian</span>
+<pre><code class="language-bash"><span class="tok-comment"># Ubuntu / Debian</span>
 sudo apt-get update &amp;&amp; sudo apt-get install -y nginx
 nginx -v                       <span class="tok-comment"># nginx version: nginx/1.24.0 (Ubuntu)</span>
 nginx -V 2&gt;&amp;1 | tr ' ' '\\\\n' | grep '^--with'   <span class="tok-comment"># các module đã biên dịch vào</span>
@@ -393,7 +393,7 @@ worker moi: 32227 32228 32229 32230   &lt;- da thay HET
 <p class="lead">Nginx configuration is not a program — it is a tree of nested contexts with an inheritance rule, and once that rule is clear most of the language stops being surprising. This lesson is ten lines that run, then the one rule that explains why a setting you definitely wrote is definitely not applying.</p>
 
 <h3>Ten lines, each with a reason</h3>
-<pre><code>worker_processes  1;                       <span class="tok-comment"># how many worker processes — Lesson 0.2</span>
+<pre><code class="language-bash">worker_processes  1;                       <span class="tok-comment"># how many worker processes — Lesson 0.2</span>
 error_log         /tmp/ng/logs/error.log warn;  <span class="tok-comment"># the ERROR log: the first place to look</span>
 pid               /tmp/ng/logs/nginx.pid;  <span class="tok-comment"># where signals find the master</span>
 
@@ -439,7 +439,7 @@ http {                                     <span class="tok-comment"># ← every
 </div>
 
 <h3>The inheritance rule, measured</h3>
-<pre><code>http {
+<pre><code class="language-bash">http {
   add_header X-Tang "http" always;          <span class="tok-comment"># set at the HTTP level</span>
 
   server {
@@ -490,7 +490,7 @@ http {                                     <span class="tok-comment"># ← every
 <p class="lead">Cấu hình Nginx KHÔNG phải một chương trình — nó là một CÂY các ngữ cảnh lồng nhau kèm một luật thừa hưởng, và một khi cái luật ấy rõ ràng thì phần lớn ngôn ngữ này thôi gây bất ngờ. Bài này là mười dòng chạy được, rồi tới đúng MỘT cái luật giải thích vì sao một thiết lập mà bạn CHẮC CHẮN đã viết lại CHẮC CHẮN không có tác dụng.</p>
 
 <h3>Mười dòng, mỗi dòng một lý do</h3>
-<pre><code>worker_processes  1;                       <span class="tok-comment"># bao nhiêu tiến trình thợ — Bài 0.2</span>
+<pre><code class="language-bash">worker_processes  1;                       <span class="tok-comment"># bao nhiêu tiến trình thợ — Bài 0.2</span>
 error_log         /tmp/ng/logs/error.log warn;  <span class="tok-comment"># log LỖI: chỗ đầu tiên phải nhìn</span>
 pid               /tmp/ng/logs/nginx.pid;  <span class="tok-comment"># nơi tín hiệu tìm ra master</span>
 
@@ -536,7 +536,7 @@ http {                                     <span class="tok-comment"># ← mọi
 </div>
 
 <h3>Luật thừa hưởng, đo thật</h3>
-<pre><code>http {
+<pre><code class="language-bash">http {
   add_header X-Tang "http" always;          <span class="tok-comment"># đặt ở TẦNG HTTP</span>
 
   server {

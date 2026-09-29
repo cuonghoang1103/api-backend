@@ -132,7 +132,7 @@ const c1 = doc('los201-1-1-history-licenses', '1.1 — Linux/GNU history & open-
 <li><strong>MIT / BSD (permissive)</strong> — do almost anything, even ship a closed-source product, as long as you keep the copyright notice.</li>
 <li><strong>Apache 2.0</strong> — permissive, plus an explicit <strong>patent grant</strong> — popular for large corporate-backed projects.</li>
 </ul>
-<pre><code># See the license shipped with a package on Debian/Ubuntu:
+<pre><code class="language-bash"># See the license shipped with a package on Debian/Ubuntu:
 cat /usr/share/doc/bash/copyright
 
 # Many projects keep it at the repo root:
@@ -155,7 +155,7 @@ less LICENSE
 <li><strong>MIT / BSD (dễ dãi)</strong> — làm gần như mọi thứ, kể cả bán sản phẩm đóng mã, miễn giữ lại dòng bản quyền.</li>
 <li><strong>Apache 2.0</strong> — dễ dãi, cộng thêm điều khoản <strong>cấp quyền sáng chế</strong> rõ ràng — phổ biến ở các dự án lớn có doanh nghiệp hậu thuẫn.</li>
 </ul>
-<pre><code># Xem giấy phép đi kèm một gói trên Debian/Ubuntu:
+<pre><code class="language-bash"># Xem giấy phép đi kèm một gói trên Debian/Ubuntu:
 cat /usr/share/doc/bash/copyright
 
 # Nhiều dự án đặt ngay ở gốc kho:
@@ -185,21 +185,21 @@ const c2 = doc('los201-2-1-shell-filesystem', '2.1 — The command line & filesy
 <li><code>/bin</code>, <code>/usr/bin</code> — programs · <code>/tmp</code> — temporary files</li>
 </ul>
 <h3>Move around &amp; look</h3>
-<pre><code>pwd                 # print working directory (where am I?)
+<pre><code class="language-bash">pwd                 # print working directory (where am I?)
 ls -lah /etc        # long listing, all files, human sizes
 cd /var/log         # change directory (absolute path)
 cd ..               # go up one level
 cd ~                # go to your home directory
 </code></pre>
 <h3>Create, copy, move, delete</h3>
-<pre><code>mkdir -p project/src        # make nested dirs
+<pre><code class="language-bash">mkdir -p project/src        # make nested dirs
 cp file.txt backup.txt      # copy
 mv old.txt new.txt          # rename / move
 rm -i note.txt              # delete (ask first)
 rm -r project/              # delete a directory tree (careful!)
 </code></pre>
 <h3>Read files &amp; search</h3>
-<pre><code>cat notes.txt               # print a whole file
+<pre><code class="language-bash">cat notes.txt               # print a whole file
 less big.log                # scroll a large file (q to quit)
 grep -rn "TODO" src/        # find text in files, recursively
 man ls                      # the manual page for any command
@@ -217,21 +217,21 @@ man ls                      # the manual page for any command
 <li><code>/bin</code>, <code>/usr/bin</code> — chương trình · <code>/tmp</code> — tập tin tạm</li>
 </ul>
 <h3>Di chuyển &amp; xem</h3>
-<pre><code>pwd                 # in thư mục hiện tại (tôi đang ở đâu?)
+<pre><code class="language-bash">pwd                 # in thư mục hiện tại (tôi đang ở đâu?)
 ls -lah /etc        # liệt kê chi tiết, mọi tập tin, cỡ dễ đọc
 cd /var/log         # đổi thư mục (đường dẫn tuyệt đối)
 cd ..               # lên một cấp
 cd ~                # về thư mục nhà của bạn
 </code></pre>
 <h3>Tạo, sao chép, di chuyển, xoá</h3>
-<pre><code>mkdir -p project/src        # tạo thư mục lồng nhau
+<pre><code class="language-bash">mkdir -p project/src        # tạo thư mục lồng nhau
 cp file.txt backup.txt      # sao chép
 mv old.txt new.txt          # đổi tên / di chuyển
 rm -i note.txt              # xoá (hỏi trước)
 rm -r project/              # xoá cả cây thư mục (cẩn thận!)
 </code></pre>
 <h3>Đọc tập tin &amp; tìm kiếm</h3>
-<pre><code>cat notes.txt               # in cả tập tin
+<pre><code class="language-bash">cat notes.txt               # in cả tập tin
 less big.log                # cuộn tập tin lớn (q để thoát)
 grep -rn "TODO" src/        # tìm chữ trong tập tin, đệ quy
 man ls                      # trang hướng dẫn của mọi lệnh
@@ -261,14 +261,14 @@ kill -9 1234        # force it to stop
 </code></pre>
 <h3>Users &amp; groups</h3>
 <p>Linux is multi-user. <strong>root</strong> (UID 0) is the superuser; ordinary users borrow root power for one command with <strong>sudo</strong>.</p>
-<pre><code>whoami              # your username
+<pre><code class="language-bash">whoami              # your username
 id                  # your UID, GID and groups
 sudo apt update     # run one command as root
 cat /etc/passwd     # one line per user account
 </code></pre>
 <h3>Permissions: rwx for user / group / other</h3>
 <p>In <code>ls -l</code>, a line like <code>-rwxr-xr--</code> means: owner read/write/execute, group read/execute, others read only. As octal that is <strong>754</strong> (r=4, w=2, x=1).</p>
-<pre><code>ls -l script.sh             # -rwxr-xr-- 1 alice devs ...
+<pre><code class="language-bash">ls -l script.sh             # -rwxr-xr-- 1 alice devs ...
 chmod 755 script.sh         # rwx for owner, r-x for group &amp; other
 chmod +x script.sh          # add the execute bit
 chown alice:devs file.txt   # change owner and group
@@ -287,14 +287,14 @@ kill -9 1234        # ép dừng
 </code></pre>
 <h3>Người dùng &amp; nhóm</h3>
 <p>Linux đa người dùng. <strong>root</strong> (UID 0) là siêu người dùng; người dùng thường mượn quyền root cho một lệnh bằng <strong>sudo</strong>.</p>
-<pre><code>whoami              # tên đăng nhập của bạn
+<pre><code class="language-bash">whoami              # tên đăng nhập của bạn
 id                  # UID, GID và các nhóm của bạn
 sudo apt update     # chạy một lệnh với quyền root
 cat /etc/passwd     # mỗi dòng là một tài khoản
 </code></pre>
 <h3>Quyền: rwx cho chủ / nhóm / người khác</h3>
 <p>Trong <code>ls -l</code>, dòng như <code>-rwxr-xr--</code> nghĩa là: chủ đọc/ghi/chạy, nhóm đọc/chạy, người khác chỉ đọc. Dạng bát phân là <strong>754</strong> (r=4, w=2, x=1).</p>
-<pre><code>ls -l script.sh             # -rwxr-xr-- 1 alice devs ...
+<pre><code class="language-bash">ls -l script.sh             # -rwxr-xr-- 1 alice devs ...
 chmod 755 script.sh         # rwx cho chủ, r-x cho nhóm &amp; người khác
 chmod +x script.sh          # thêm quyền chạy
 chown alice:devs file.txt   # đổi chủ và nhóm
@@ -314,7 +314,7 @@ const c4 = doc('los201-4-1-bash-scripting', '4.1 — Bash scripting|||4.1 — L�
     `<span class="eyebrow">LOS201 · Chapter 4 · Lesson 4.1</span>
 <h2>Bash scripting</h2>
 <p>A script is just commands in a file. Start it with a <strong>shebang</strong>, make it executable, then run it.</p>
-<pre><code>#!/usr/bin/env bash
+<pre><code class="language-bash">#!/usr/bin/env bash
 echo "Hello, $USER"
 </code></pre>
 <pre><code>chmod +x hello.sh
@@ -322,11 +322,11 @@ echo "Hello, $USER"
 </code></pre>
 <h3>Variables &amp; arguments</h3>
 <p>No spaces around <code>=</code>. Read a variable with <code>$name</code>. Script arguments are <code>$1</code>, <code>$2</code>; <code>$#</code> is the count; <code>$?</code> is the last exit code (0 = success).</p>
-<pre><code>name="Linux"
+<pre><code class="language-bash">name="Linux"
 echo "Learning $name, arg1 is $1, count $#"
 </code></pre>
 <h3>Decisions &amp; loops</h3>
-<pre><code>if [ -f "$1" ]; then
+<pre><code class="language-bash">if [ -f "$1" ]; then
   echo "$1 exists"
 else
   echo "no such file"
@@ -344,14 +344,14 @@ done
 </code></pre>
 <h3>Pipes &amp; redirection</h3>
 <p>Send output to a file with <code>&gt;</code> (overwrite) or <code>&gt;&gt;</code> (append); feed input with <code>&lt;</code>; join commands with a pipe <code>|</code>.</p>
-<pre><code>ls -l | grep ".txt" &gt; list.txt      # filter, then save
+<pre><code class="language-bash">ls -l | grep ".txt" &gt; list.txt      # filter, then save
 sort &lt; names.txt | uniq             # sort a file, drop duplicates
 </code></pre>
 <div class="callout"><span class="badge">Quote your variables</span> Always write <code>"$var"</code> in double quotes. An unquoted path with a space breaks the command — a classic scripting bug.</div>`,
     `<span class="eyebrow">LOS201 · Chương 4 · Bài 4.1</span>
 <h2>Lập trình Bash</h2>
 <p>Script chỉ là các lệnh trong một tập tin. Bắt đầu bằng dòng <strong>shebang</strong>, cấp quyền chạy, rồi thực thi.</p>
-<pre><code>#!/usr/bin/env bash
+<pre><code class="language-bash">#!/usr/bin/env bash
 echo "Chào, $USER"
 </code></pre>
 <pre><code>chmod +x hello.sh
@@ -359,11 +359,11 @@ echo "Chào, $USER"
 </code></pre>
 <h3>Biến &amp; tham số</h3>
 <p>Không có khoảng trắng quanh dấu <code>=</code>. Đọc biến bằng <code>$ten</code>. Tham số của script là <code>$1</code>, <code>$2</code>; <code>$#</code> là số lượng; <code>$?</code> là mã thoát lệnh trước (0 = thành công).</p>
-<pre><code>name="Linux"
+<pre><code class="language-bash">name="Linux"
 echo "Đang học $name, tham số 1 là $1, có $# tham số"
 </code></pre>
 <h3>Rẽ nhánh &amp; vòng lặp</h3>
-<pre><code>if [ -f "$1" ]; then
+<pre><code class="language-bash">if [ -f "$1" ]; then
   echo "$1 tồn tại"
 else
   echo "không có tập tin"
@@ -381,7 +381,7 @@ done
 </code></pre>
 <h3>Pipe &amp; chuyển hướng</h3>
 <p>Ghi đầu ra ra tập tin bằng <code>&gt;</code> (ghi đè) hoặc <code>&gt;&gt;</code> (nối thêm); nạp đầu vào bằng <code>&lt;</code>; nối các lệnh bằng pipe <code>|</code>.</p>
-<pre><code>ls -l | grep ".txt" &gt; list.txt      # lọc rồi lưu lại
+<pre><code class="language-bash">ls -l | grep ".txt" &gt; list.txt      # lọc rồi lưu lại
 sort &lt; names.txt | uniq             # sắp xếp một tập tin, bỏ dòng trùng
 </code></pre>
 <div class="callout"><span class="badge">Luôn bọc nháy biến</span> Luôn viết <code>"$var"</code> trong nháy kép. Một đường dẫn có dấu cách mà không bọc nháy sẽ làm hỏng lệnh — lỗi script kinh điển.</div>`,
@@ -400,14 +400,14 @@ const c5 = doc('los201-5-1-package-management', '5.1 — Package & software mana
 <h2>Package &amp; software management</h2>
 <p>You rarely download installers on Linux. A <strong>package manager</strong> fetches software (and its <strong>dependencies</strong>) from trusted <strong>repositories</strong>, then installs, updates and removes it cleanly.</p>
 <h3>APT — Debian &amp; Ubuntu</h3>
-<pre><code>sudo apt update             # refresh the package index
+<pre><code class="language-bash">sudo apt update             # refresh the package index
 sudo apt upgrade            # update installed packages
 sudo apt install git        # install a package + its deps
 sudo apt remove git         # remove it
 apt search compiler         # search for a package
 </code></pre>
 <h3>DNF / YUM — Fedora &amp; RHEL/Rocky</h3>
-<pre><code>sudo dnf check-update
+<pre><code class="language-bash">sudo dnf check-update
 sudo dnf install git
 sudo dnf remove git
 dnf search compiler
@@ -423,14 +423,14 @@ sudo make install    # copy binaries into place (needs root)
 <h2>Quản lý gói &amp; phần mềm</h2>
 <p>Trên Linux, bạn hiếm khi tải bộ cài. Một <strong>trình quản lý gói</strong> tải phần mềm (cùng <strong>phụ thuộc</strong>) từ <strong>kho</strong> tin cậy, rồi cài, cập nhật và gỡ gọn gàng.</p>
 <h3>APT — Debian &amp; Ubuntu</h3>
-<pre><code>sudo apt update             # làm mới danh mục gói
+<pre><code class="language-bash">sudo apt update             # làm mới danh mục gói
 sudo apt upgrade            # cập nhật các gói đã cài
 sudo apt install git        # cài một gói + phụ thuộc
 sudo apt remove git         # gỡ gói đó
 apt search compiler         # tìm một gói
 </code></pre>
 <h3>DNF / YUM — Fedora &amp; RHEL/Rocky</h3>
-<pre><code>sudo dnf check-update
+<pre><code class="language-bash">sudo dnf check-update
 sudo dnf install git
 sudo dnf remove git
 dnf search compiler
@@ -456,21 +456,21 @@ const c6 = doc('los201-6-1-networking-services', '6.1 — Networking & services 
     `<span class="eyebrow">LOS201 · Chapter 6 · Lesson 6.1</span>
 <h2>Networking &amp; services</h2>
 <h3>Look at the network</h3>
-<pre><code>ip addr                     # your IP addresses
+<pre><code class="language-bash">ip addr                     # your IP addresses
 ping -c 3 example.com       # is a host reachable?
 ss -tulpn                   # which ports are listening
 curl https://example.com    # fetch a URL from the shell
 </code></pre>
 <h3>SSH — the remote shell</h3>
 <p><strong>SSH</strong> gives you an encrypted shell on another machine — how you reach servers and the lab/EDA machines. Key pairs beat passwords.</p>
-<pre><code>ssh alice@server.example.com        # log in
+<pre><code class="language-bash">ssh alice@server.example.com        # log in
 ssh-keygen -t ed25519               # create a key pair
 ssh-copy-id alice@server            # install your public key
 scp report.pdf alice@server:/tmp/   # copy a file over SSH
 </code></pre>
 <h3>systemd &amp; systemctl</h3>
 <p>Modern distros use <strong>systemd</strong> to start and supervise background <strong>services</strong> (daemons). You drive it with <code>systemctl</code>.</p>
-<pre><code>systemctl status ssh        # is the service running?
+<pre><code class="language-bash">systemctl status ssh        # is the service running?
 sudo systemctl start ssh    # start it now
 sudo systemctl enable ssh   # start it on every boot
 sudo systemctl restart ssh  # restart after a config change
@@ -480,21 +480,21 @@ journalctl -u ssh -e        # read that service's logs
     `<span class="eyebrow">LOS201 · Chương 6 · Bài 6.1</span>
 <h2>Mạng &amp; dịch vụ</h2>
 <h3>Xem mạng</h3>
-<pre><code>ip addr                     # địa chỉ IP của bạn
+<pre><code class="language-bash">ip addr                     # địa chỉ IP của bạn
 ping -c 3 example.com       # máy đích có tới được không?
 ss -tulpn                   # cổng nào đang lắng nghe
 curl https://example.com    # tải một URL ngay từ shell
 </code></pre>
 <h3>SSH — shell từ xa</h3>
 <p><strong>SSH</strong> cho bạn một shell được mã hoá trên máy khác — cách bạn vào máy chủ và máy lab/EDA. Cặp khoá tốt hơn mật khẩu.</p>
-<pre><code>ssh alice@server.example.com        # đăng nhập
+<pre><code class="language-bash">ssh alice@server.example.com        # đăng nhập
 ssh-keygen -t ed25519               # tạo cặp khoá
 ssh-copy-id alice@server            # cài khoá công khai của bạn
 scp report.pdf alice@server:/tmp/   # chép tập tin qua SSH
 </code></pre>
 <h3>systemd &amp; systemctl</h3>
 <p>Các distro hiện đại dùng <strong>systemd</strong> để khởi động và giám sát <strong>dịch vụ</strong> nền (daemon). Bạn điều khiển bằng <code>systemctl</code>.</p>
-<pre><code>systemctl status ssh        # dịch vụ có đang chạy không?
+<pre><code class="language-bash">systemctl status ssh        # dịch vụ có đang chạy không?
 sudo systemctl start ssh    # khởi động ngay
 sudo systemctl enable ssh   # tự chạy mỗi lần khởi động máy
 sudo systemctl restart ssh  # khởi động lại sau khi đổi cấu hình
@@ -515,7 +515,7 @@ const c7 = doc('los201-7-1-open-source-dev-tools', '7.1 — Open-source dev tool
     `<span class="eyebrow">LOS201 · Chapter 7 · Lesson 7.1</span>
 <h2>Open-source developer tools</h2>
 <h3>Git — version control</h3>
-<pre><code>git clone https://github.com/user/repo.git
+<pre><code class="language-bash">git clone https://github.com/user/repo.git
 cd repo
 git checkout -b my-feature   # a new branch
 git add .                    # stage changes
@@ -523,12 +523,12 @@ git commit -m "Add feature"  # record a snapshot
 git push origin my-feature   # send it to the remote
 </code></pre>
 <h3>gcc — compile C</h3>
-<pre><code>gcc -Wall -o hello hello.c   # compile with warnings on
+<pre><code class="language-bash">gcc -Wall -o hello hello.c   # compile with warnings on
 ./hello                      # run the program
 </code></pre>
 <h3>make — automate the build</h3>
 <p>A <strong>Makefile</strong> records how to build your project, so you rebuild only what changed with one command. (Indent recipe lines with a real TAB.)</p>
-<pre><code>hello: hello.c
+<pre><code class="language-bash">hello: hello.c
 	gcc -Wall -o hello hello.c
 
 clean:
@@ -549,7 +549,7 @@ make clean    # remove build artifacts
     `<span class="eyebrow">LOS201 · Chương 7 · Bài 7.1</span>
 <h2>Công cụ phát triển mã nguồn mở</h2>
 <h3>Git — quản lý phiên bản</h3>
-<pre><code>git clone https://github.com/user/repo.git
+<pre><code class="language-bash">git clone https://github.com/user/repo.git
 cd repo
 git checkout -b my-feature   # tạo nhánh mới
 git add .                    # đưa thay đổi vào staging
@@ -557,12 +557,12 @@ git commit -m "Add feature"  # ghi lại một ảnh chụp
 git push origin my-feature   # đẩy lên máy chủ từ xa
 </code></pre>
 <h3>gcc — biên dịch C</h3>
-<pre><code>gcc -Wall -o hello hello.c   # biên dịch, bật cảnh báo
+<pre><code class="language-bash">gcc -Wall -o hello hello.c   # biên dịch, bật cảnh báo
 ./hello                      # chạy chương trình
 </code></pre>
 <h3>make — tự động hoá việc dựng</h3>
 <p>Một <strong>Makefile</strong> ghi lại cách dựng dự án, nên bạn chỉ dựng lại phần thay đổi bằng một lệnh. (Thụt dòng công thức bằng TAB thật.)</p>
-<pre><code>hello: hello.c
+<pre><code class="language-bash">hello: hello.c
 	gcc -Wall -o hello hello.c
 
 clean:
@@ -601,7 +601,7 @@ const c8 = doc('los201-8-1-community-contributing', '8.1 — Community & contrib
 </ul>
 <h3>The contribution workflow</h3>
 <p>The standard "fork &amp; pull request" flow, all on the command line you now know:</p>
-<pre><code># 1) Fork on the website, then clone YOUR fork
+<pre><code class="language-bash"># 1) Fork on the website, then clone YOUR fork
 git clone https://github.com/you/project.git
 cd project
 
@@ -629,7 +629,7 @@ git push origin fix-typo-readme
 </ul>
 <h3>Quy trình đóng góp</h3>
 <p>Luồng "fork &amp; pull request" chuẩn, tất cả trên dòng lệnh bạn vừa học:</p>
-<pre><code># 1) Fork trên website, rồi clone bản fork CỦA BẠN
+<pre><code class="language-bash"># 1) Fork trên website, rồi clone bản fork CỦA BẠN
 git clone https://github.com/you/project.git
 cd project
 

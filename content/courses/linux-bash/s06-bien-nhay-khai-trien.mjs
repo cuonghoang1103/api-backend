@@ -83,7 +83,7 @@ readonly VERSION=1.2.0   <span class="tok-comment"># cannot be reassigned afterw
 unset count              <span class="tok-comment"># remove it entirely</span></code></pre>
 
 <h3>Reading a variable back</h3>
-<pre><code>echo \$name
+<pre><code class="language-bash">echo \$name
 echo "\${name}"
 echo "\${name}_backup.txt"    <span class="tok-comment"># braces REQUIRED here</span>
 echo "\$name_backup.txt"      <span class="tok-comment"># looks for a variable called name_backup</span></code></pre>
@@ -96,7 +96,7 @@ Binh_backup.txt
 
 <h3>Command substitution: capturing output</h3>
 ${slide('lx-06', 4, '$(lệnh) chạy shell con, bắt stdout, bỏ \\n cuối')}
-<pre><code>today=\$(date +%F)
+<pre><code class="language-bash">today=\$(date +%F)
 files=\$(ls | wc -l)
 branch=\$(git rev-parse --abbrev-ref HEAD)
 echo "On \${branch}, \${files} files, \${today}"</code></pre>
@@ -106,7 +106,7 @@ echo "On \${branch}, \${files} files, \${today}"</code></pre>
   <div class="kv"><span class="k"><code>\$( )</code></span><span class="v">Nests cleanly: <code>\$(dirname \$(readlink -f "\$0"))</code>. Quoting inside works normally. The form to use.</span></div>
   <div class="kv"><span class="k">Backticks</span><span class="v">Cannot nest without escaping backslashes, and the escaping rules inside them differ from everywhere else. Legacy only.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Trailing newlines are stripped — usually helpful</span>
+<pre><code class="language-bash"><span class="tok-comment"># Trailing newlines are stripped — usually helpful</span>
 content=\$(cat file.txt)
 
 <span class="tok-comment"># stderr is NOT captured — it still goes to your terminal</span>
@@ -143,7 +143,7 @@ big</div>
 
 <h3>Shell variables versus environment variables</h3>
 ${slide('lx-06', 6, 'Chỉ biến đã export mới sang tiến trình con')}
-<pre><code>myvar="local value"        <span class="tok-comment"># shell variable: this shell only</span>
+<pre><code class="language-bash">myvar="local value"        <span class="tok-comment"># shell variable: this shell only</span>
 export MYVAR="exported"    <span class="tok-comment"># environment variable: inherited by children</span>
 
 bash -c 'echo "[\$myvar] [\$MYVAR]"'</code></pre>
@@ -181,7 +181,7 @@ ${slide('lx-06', 7, 'Biến đặc biệt shell tự điền')}
   <div class="kv"><span class="k"><code>\$RANDOM</code> · <code>\$SECONDS</code></span><span class="v">A random 0–32767 · seconds since the shell started. Handy for timing a script.</span></div>
   <div class="kv"><span class="k"><code>\$LINENO</code> · <code>\$BASH_SOURCE</code></span><span class="v">Current line number · the path of the running script. The pair used in error messages and <code>trap ERR</code> (Chapter 7).</span></div>
 </div>
-<pre><code><span class="tok-comment"># The idiom for "where is this script, really" — works via symlinks</span>
+<pre><code class="language-bash"><span class="tok-comment"># The idiom for "where is this script, really" — works via symlinks</span>
 SCRIPT_DIR=\$(cd "\$(dirname "\${BASH_SOURCE[0]}")" &amp;&amp; pwd)
 echo "\$SCRIPT_DIR"</code></pre>
 <div class="out">/srv/app/scripts</div>
@@ -211,7 +211,7 @@ read -r -t 10 -p "Continue? [y/N] " answer <span class="tok-comment"># -t: timeo
 
 <h3>Run it step by step</h3>
 <p>Type these in your practice directory, one line at a time, and predict each output before pressing Enter. The output below is real (Ubuntu 24.04 container, user <code>an</code>, 28/09/2026; bash prints <code>bash:</code> instead of a script name when you type interactively).</p>
-<pre><code>mkdir -p ~/thu-linux/ch6 &amp;&amp; cd ~/thu-linux/ch6
+<pre><code class="language-bash">mkdir -p ~/thu-linux/ch6 &amp;&amp; cd ~/thu-linux/ch6
 name = "Binh"
 name="Binh"; echo "[$name_backup.txt] [\${name}_backup.txt]"
 x=$(printf 'a\\n\\n\\n'); printf '[%s]\\n' "$x"
@@ -307,7 +307,7 @@ readonly VERSION=1.2.0   <span class="tok-comment"># sau đó không gán lại 
 unset count              <span class="tok-comment"># gỡ nó đi hẳn</span></code></pre>
 
 <h3>Đọc một biến ra</h3>
-<pre><code>echo \$name
+<pre><code class="language-bash">echo \$name
 echo "\${name}"
 echo "\${name}_backup.txt"    <span class="tok-comment"># chỗ này BẮT BUỘC phải có ngoặc nhọn</span>
 echo "\$name_backup.txt"      <span class="tok-comment"># nó đi tìm một biến tên là name_backup</span></code></pre>
@@ -320,7 +320,7 @@ Binh_backup.txt
 
 <h3>Thay thế lệnh: bắt lấy output</h3>
 ${slide('lx-06', 4, '$(lệnh) chạy shell con, bắt stdout, bỏ \\n cuối')}
-<pre><code>today=\$(date +%F)
+<pre><code class="language-bash">today=\$(date +%F)
 files=\$(ls | wc -l)
 branch=\$(git rev-parse --abbrev-ref HEAD)
 echo "Trên \${branch}, \${files} file, \${today}"</code></pre>
@@ -330,7 +330,7 @@ echo "Trên \${branch}, \${files} file, \${today}"</code></pre>
   <div class="kv"><span class="k"><code>\$( )</code></span><span class="v">Lồng nhau sạch sẽ: <code>\$(dirname \$(readlink -f "\$0"))</code>. Dấu nháy bên trong hoạt động bình thường. Đây là dạng nên dùng.</span></div>
   <div class="kv"><span class="k">Dấu huyền</span><span class="v">Không lồng được nếu không thêm gạch chéo ngược, và luật thoát ký tự bên trong nó lại khác mọi chỗ khác. Chỉ còn tính di sản.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Ký tự xuống dòng ở cuối bị cắt bỏ — thường là có ích</span>
+<pre><code class="language-bash"><span class="tok-comment"># Ký tự xuống dòng ở cuối bị cắt bỏ — thường là có ích</span>
 content=\$(cat file.txt)
 
 <span class="tok-comment"># stderr KHÔNG bị bắt — nó vẫn đi thẳng ra terminal của bạn</span>
@@ -367,7 +367,7 @@ lớn</div>
 
 <h3>Biến shell so với biến môi trường</h3>
 ${slide('lx-06', 6, 'Chỉ biến đã export mới sang tiến trình con')}
-<pre><code>myvar="giá trị cục bộ"     <span class="tok-comment"># biến shell: chỉ trong shell này</span>
+<pre><code class="language-bash">myvar="giá trị cục bộ"     <span class="tok-comment"># biến shell: chỉ trong shell này</span>
 export MYVAR="đã xuất"     <span class="tok-comment"># biến môi trường: tiến trình con thừa kế</span>
 
 bash -c 'echo "[\$myvar] [\$MYVAR]"'</code></pre>
@@ -405,7 +405,7 @@ ${slide('lx-06', 7, 'Biến đặc biệt shell tự điền')}
   <div class="kv"><span class="k"><code>\$RANDOM</code> · <code>\$SECONDS</code></span><span class="v">Một số ngẫu nhiên 0–32767 · số giây kể từ khi shell khởi động. Tiện để đo thời gian một script.</span></div>
   <div class="kv"><span class="k"><code>\$LINENO</code> · <code>\$BASH_SOURCE</code></span><span class="v">Số dòng hiện tại · đường dẫn của script đang chạy. Cặp này dùng trong thông báo lỗi và <code>trap ERR</code> (Chương 7).</span></div>
 </div>
-<pre><code><span class="tok-comment"># Lối viết cho câu "script này thật ra nằm ở đâu" — chạy được cả qua liên kết tượng trưng</span>
+<pre><code class="language-bash"><span class="tok-comment"># Lối viết cho câu "script này thật ra nằm ở đâu" — chạy được cả qua liên kết tượng trưng</span>
 SCRIPT_DIR=\$(cd "\$(dirname "\${BASH_SOURCE[0]}")" &amp;&amp; pwd)
 echo "\$SCRIPT_DIR"</code></pre>
 <div class="out">/srv/app/scripts</div>
@@ -435,7 +435,7 @@ read -r -t 10 -p "Tiếp tục? [y/N] " answer <span class="tok-comment"># -t: h
 
 <h3>Chạy thử từng bước</h3>
 <p>Gõ từng dòng trong thư mục sân tập, đoán trước output của mỗi dòng rồi mới bấm Enter. Output bên dưới là THẬT (container Ubuntu 24.04, người dùng <code>an</code>, 28/09/2026; khi gõ tay, bash in <code>bash:</code> thay cho tên script).</p>
-<pre><code>mkdir -p ~/thu-linux/ch6 &amp;&amp; cd ~/thu-linux/ch6
+<pre><code class="language-bash">mkdir -p ~/thu-linux/ch6 &amp;&amp; cd ~/thu-linux/ch6
 name = "Binh"
 name="Binh"; echo "[$name_backup.txt] [\${name}_backup.txt]"
 x=$(printf 'a\\n\\n\\n'); printf '[%s]\\n' "$x"
@@ -526,7 +526,7 @@ rc=2 y=[]
 
 <h3>The mechanism: word splitting</h3>
 ${slide('lx-06', 9, 'Không nháy: một biến thành bốn tham số')}
-<pre><code>file="my report.txt"
+<pre><code class="language-bash">file="my report.txt"
 touch "\$file"
 ls -l \$file          <span class="tok-comment"># unquoted</span>
 ls -l "\$file"        <span class="tok-comment"># quoted</span></code></pre>
@@ -572,14 +572,14 @@ ${slide('lx-06', 10, 'Ba loại nháy soi bằng printf "[%s]"')}
   <div class="kv"><span class="k"><code>'single'</code></span><span class="v">Expands <strong>nothing</strong> — every character is literal, including <code>\$</code> and <code>\\</code>. The only thing it cannot contain is another single quote. Use for awk/sed programs, regexes, and anything with a literal <code>\$</code>.</span></div>
   <div class="kv"><span class="k">unquoted</span><span class="v">Everything expands, then splits, then globs. Correct only when you <em>deliberately</em> want splitting — which is rare and should carry a comment.</span></div>
 </div>
-<pre><code>name="Binh"
+<pre><code class="language-bash">name="Binh"
 echo "Hello \$name, today is \$(date +%A)"
 echo 'Hello \$name, today is \$(date +%A)'
 echo "Cost: \\\$5"                <span class="tok-comment"># backslash escapes the \$ inside double quotes</span></code></pre>
 <div class="out">Hello Binh, today is Friday
 Hello \$name, today is \$(date +%A)
 Cost: \$5</div>
-<pre><code><span class="tok-comment"># Mixing them in one argument — they simply concatenate, no space between</span>
+<pre><code class="language-bash"><span class="tok-comment"># Mixing them in one argument — they simply concatenate, no space between</span>
 echo 'literal \$HOME is '"\$HOME"
 awk -v n="\$name" '{print n, \$1}' file.txt    <span class="tok-comment"># single for awk, double for the shell value</span></code></pre>
 <div class="out">literal \$HOME is /home/deploy</div>
@@ -605,7 +605,7 @@ exec docker run --rm -v "\$PWD:/work" myimage "\$@"</code></pre>
 
 <h3>Arrays: the right way to hold a list</h3>
 ${slide('lx-06', 12, 'Mảng: "${a[@]}" là cách mở đúng duy nhất')}
-<pre><code>files=("report one.txt" "report two.txt" "notes.md")
+<pre><code class="language-bash">files=("report one.txt" "report two.txt" "notes.md")
 echo "\${#files[@]}"           <span class="tok-comment"># how many elements: 3</span>
 echo "\${files[0]}"            <span class="tok-comment"># first element (index from 0)</span>
 echo "\${files[@]}"            <span class="tok-comment"># all elements</span>
@@ -629,7 +629,7 @@ mycommand "\${args[@]}"</code></pre>
 
 <h3>IFS: what "whitespace" actually means</h3>
 ${slide('lx-06', 13, 'IFS quyết định cắt ở đâu — zsh không cắt $var')}
-<pre><code>echo "\$IFS" | cat -A          <span class="tok-comment"># default: space, tab, newline</span>
+<pre><code class="language-bash">echo "\$IFS" | cat -A          <span class="tok-comment"># default: space, tab, newline</span>
 
 line="alice:x:1001:1001::/home/alice:/bin/bash"
 IFS=':' read -r user _ uid gid _ home shell &lt;&lt;&lt; "\$line"
@@ -641,7 +641,7 @@ alice 1001 /home/alice /bin/bash</div>
 <div class="callout">Setting <code>IFS</code> globally is a known way to break a script in confusing ways, because everything downstream splits differently. Prefer the one-command form (<code>IFS=':' read …</code>), or save and restore it. The one global setting that <em>is</em> idiomatic is <code>IFS=\$'\\n\\t'</code> at the top of a strict script — it removes space from the separator list, so accidental unquoted expansions break on far fewer inputs.</div>
 
 <h3>Ten before-and-afters</h3>
-<pre><code><span class="tok-comment"># 1  test on a possibly-empty variable</span>
+<pre><code class="language-bash"><span class="tok-comment"># 1  test on a possibly-empty variable</span>
 [ \$var = "yes" ]            →  [ "\$var" = "yes" ]
 
 <span class="tok-comment"># 2  a path that might contain a space</span>
@@ -754,7 +754,7 @@ a[1]=x a[0]=[]</div>
 
 <h3>Cơ chế: cắt từ</h3>
 ${slide('lx-06', 9, 'Không nháy: một biến thành bốn tham số')}
-<pre><code>file="my report.txt"
+<pre><code class="language-bash">file="my report.txt"
 touch "\$file"
 ls -l \$file          <span class="tok-comment"># không nháy</span>
 ls -l "\$file"        <span class="tok-comment"># có nháy</span></code></pre>
@@ -800,14 +800,14 @@ ${slide('lx-06', 10, 'Ba loại nháy soi bằng printf "[%s]"')}
   <div class="kv"><span class="k"><code>'nháy đơn'</code></span><span class="v">KHÔNG khai triển <strong>gì cả</strong> — mọi ký tự đều nguyên văn, kể cả <code>\$</code> và <code>\\</code>. Thứ duy nhất nó không chứa được là một dấu nháy đơn khác. Dùng cho chương trình awk/sed, cho regex, và cho mọi thứ có dấu <code>\$</code> nguyên văn.</span></div>
   <div class="kv"><span class="k">không nháy</span><span class="v">Mọi thứ khai triển, rồi cắt, rồi glob. Chỉ đúng khi bạn <em>CỐ Ý</em> muốn cắt — chuyện hiếm, và nên kèm một dòng chú thích.</span></div>
 </div>
-<pre><code>name="Binh"
+<pre><code class="language-bash">name="Binh"
 echo "Chào \$name, hôm nay là \$(date +%A)"
 echo 'Chào \$name, hôm nay là \$(date +%A)'
 echo "Giá: \\\$5"                 <span class="tok-comment"># gạch chéo ngược thoát dấu \$ bên trong nháy kép</span></code></pre>
 <div class="out">Chào Binh, hôm nay là Friday
 Chào \$name, hôm nay là \$(date +%A)
 Giá: \$5</div>
-<pre><code><span class="tok-comment"># Trộn chúng trong một tham số — chúng chỉ đơn giản là nối lại, không có dấu cách ở giữa</span>
+<pre><code class="language-bash"><span class="tok-comment"># Trộn chúng trong một tham số — chúng chỉ đơn giản là nối lại, không có dấu cách ở giữa</span>
 echo 'nguyên văn \$HOME là '"\$HOME"
 awk -v n="\$name" '{print n, \$1}' file.txt    <span class="tok-comment"># nháy đơn cho awk, nháy kép cho giá trị của shell</span></code></pre>
 <div class="out">nguyên văn \$HOME là /home/deploy</div>
@@ -833,7 +833,7 @@ exec docker run --rm -v "\$PWD:/work" myimage "\$@"</code></pre>
 
 <h3>Mảng: cách đúng để giữ một danh sách</h3>
 ${slide('lx-06', 12, 'Mảng: "${a[@]}" là cách mở đúng duy nhất')}
-<pre><code>files=("report one.txt" "report two.txt" "notes.md")
+<pre><code class="language-bash">files=("report one.txt" "report two.txt" "notes.md")
 echo "\${#files[@]}"           <span class="tok-comment"># có bao nhiêu phần tử: 3</span>
 echo "\${files[0]}"            <span class="tok-comment"># phần tử đầu (đánh chỉ số từ 0)</span>
 echo "\${files[@]}"            <span class="tok-comment"># mọi phần tử</span>
@@ -857,7 +857,7 @@ mycommand "\${args[@]}"</code></pre>
 
 <h3>IFS: "khoảng trắng" thật ra nghĩa là gì</h3>
 ${slide('lx-06', 13, 'IFS quyết định cắt ở đâu — zsh không cắt $var')}
-<pre><code>echo "\$IFS" | cat -A          <span class="tok-comment"># mặc định: dấu cách, tab, xuống dòng</span>
+<pre><code class="language-bash">echo "\$IFS" | cat -A          <span class="tok-comment"># mặc định: dấu cách, tab, xuống dòng</span>
 
 line="alice:x:1001:1001::/home/alice:/bin/bash"
 IFS=':' read -r user _ uid gid _ home shell &lt;&lt;&lt; "\$line"
@@ -869,7 +869,7 @@ alice 1001 /home/alice /bin/bash</div>
 <div class="callout">Đặt <code>IFS</code> ở phạm vi toàn cục là một cách đã được biết đến để làm hỏng script theo những kiểu khó hiểu, vì mọi thứ phía sau đó sẽ cắt khác đi. Hãy ưu tiên dạng chỉ-một-lệnh (<code>IFS=':' read …</code>), hoặc lưu lại rồi khôi phục. Cái đặt toàn cục DUY NHẤT được coi là chuẩn mực là <code>IFS=\$'\\n\\t'</code> ở đầu một script nghiêm ngặt — nó bỏ dấu cách khỏi danh sách dấu phân cách, nên những phép khai triển lỡ quên nháy sẽ vỡ với ít đầu vào hơn nhiều.</div>
 
 <h3>Mười cặp trước–sau</h3>
-<pre><code><span class="tok-comment"># 1  kiểm một biến có thể rỗng</span>
+<pre><code class="language-bash"><span class="tok-comment"># 1  kiểm một biến có thể rỗng</span>
 [ \$var = "yes" ]            →  [ "\$var" = "yes" ]
 
 <span class="tok-comment"># 2  một đường dẫn có thể có dấu cách</span>
@@ -991,7 +991,7 @@ a[1]=x a[0]=[]</div>
 
 <h3>Defaults, and the one that fails loudly</h3>
 ${slide('lx-06', 14, 'Bốn toán tử mặc định: chưa đặt khác rỗng')}
-<pre><code>name=""
+<pre><code class="language-bash">name=""
 unset colour
 
 echo "\${name:-anonymous}"     <span class="tok-comment"># use default if unset OR empty</span>
@@ -1020,7 +1020,7 @@ green
 : "\${DEPLOY_ENV:?set DEPLOY_ENV to staging or production}"</code></pre>
 <div class="out">./deploy.sh: line 4: DATABASE_URL: DATABASE_URL is required</div>
 <div class="callout ok"><code>\${VAR:?message}</code> is the highest value-per-character construct in this chapter. Two lines at the top of a deploy script turn "the app started and then failed mysteriously three minutes later with an empty connection string" into "it refused to start and told you which variable was missing". The script exits non-zero, so CI catches it too.</div>
-<pre><code><span class="tok-comment"># Conditional flag, without an if</span>
+<pre><code class="language-bash"><span class="tok-comment"># Conditional flag, without an if</span>
 verbose=1
 rsync \${verbose:+--verbose} -a src/ dst/
 
@@ -1038,7 +1038,7 @@ port="\${PORT:-\${DEFAULT_PORT:-3000}}"</code></pre>
 <h3>Trimming: # from the left, % from the right</h3>
 ${slide('lx-06', 15, '# xén từ trái, % xén từ phải')}
 <p>Two operators remove a matching pattern from one end. The mnemonic is the keyboard: <code>#</code> is left of <code>%</code> on a US layout, and it trims from the left.</p>
-<pre><code>path="/srv/app/config/db.yml"
+<pre><code class="language-bash">path="/srv/app/config/db.yml"
 
 echo "\${path##*/}"       <span class="tok-comment"># longest match from LEFT  → basename</span>
 echo "\${path%/*}"        <span class="tok-comment"># shortest match from RIGHT → dirname</span>
@@ -1054,7 +1054,7 @@ srv/app/config/db.yml
   <div class="kv"><span class="k"><code>\${var%pat}</code></span><span class="v">Remove the shortest match from the <strong>end</strong>.</span></div>
   <div class="kv"><span class="k"><code>\${var%%pat}</code></span><span class="v">Remove the longest match from the end.</span></div>
 </div>
-<pre><code>file="archive.tar.gz"
+<pre><code class="language-bash">file="archive.tar.gz"
 echo "\${file%.*}"         <span class="tok-comment"># strip ONE extension  → archive.tar</span>
 echo "\${file%%.*}"        <span class="tok-comment"># strip ALL extensions → archive</span>
 echo "\${file##*.}"        <span class="tok-comment"># just the extension   → gz</span>
@@ -1075,7 +1075,7 @@ feature/login</div>
 
 <h3>Substitution</h3>
 ${slide('lx-06', 16, '/ và //, và dấu &amp; của bash 5.2')}
-<pre><code>s="hello world world"
+<pre><code class="language-bash">s="hello world world"
 
 echo "\${s/world/there}"      <span class="tok-comment"># FIRST occurrence</span>
 echo "\${s//world/there}"     <span class="tok-comment"># ALL occurrences (doubled slash)</span>
@@ -1087,7 +1087,7 @@ hello there there
 hell wrld wrld
 HI world world
 hello world WORLD</div>
-<pre><code><span class="tok-comment"># Practical: normalise a branch name into a docker tag</span>
+<pre><code class="language-bash"><span class="tok-comment"># Practical: normalise a branch name into a docker tag</span>
 branch="feature/user-login"
 tag="\${branch//\\//-}"        <span class="tok-comment"># slashes → dashes (the / is escaped)</span>
 echo "myapp:\${tag}"</code></pre>
@@ -1095,7 +1095,7 @@ echo "myapp:\${tag}"</code></pre>
 
 <h3>Length, slicing, and case</h3>
 ${slide('lx-06', 17, 'Độ dài, cắt lát, hoa thường')}
-<pre><code>s="deployment"
+<pre><code class="language-bash">s="deployment"
 echo "\${#s}"              <span class="tok-comment"># length: 10</span>
 echo "\${s:0:6}"           <span class="tok-comment"># from index 0, 6 chars</span>
 echo "\${s:6}"             <span class="tok-comment"># from index 6 to the end</span>
@@ -1115,7 +1115,7 @@ Deployment</div>
 
 <h3>Replacing external commands</h3>
 ${slide('lx-06', 18, 'Không fork thì nhanh gấp ~200 lần; bash 3.2 của Mac')}
-<pre><code>path="/srv/app/config/db.yml"
+<pre><code class="language-bash">path="/srv/app/config/db.yml"
 
 <span class="tok-comment"># Each of these launches a process — ~1-3 ms and a fork</span>
 basename "\$path"          <span class="tok-comment">→ db.yml</span>
@@ -1133,7 +1133,7 @@ real  0m0.089s</div>
 <div class="callout ok">There is one caveat worth knowing: <code>\${path##*/}</code> and <code>basename</code> disagree on edge cases. For <code>/srv/app/</code> with a trailing slash, <code>basename</code> gives <code>app</code>, while <code>\${path##*/}</code> gives an empty string. If you are handling paths you did not construct, <code>basename</code>'s edge-case handling may be worth the fork.</div>
 
 <h3>Indirection and listing</h3>
-<pre><code>DB_HOST=localhost
+<pre><code class="language-bash">DB_HOST=localhost
 DB_PORT=5432
 DB_NAME=app
 
@@ -1145,7 +1145,7 @@ key="DB_HOST"
 echo "\${!key}"</code></pre>
 <div class="out">DB_HOST DB_NAME DB_PORT
 localhost</div>
-<pre><code><span class="tok-comment"># A config validator built from the two together</span>
+<pre><code class="language-bash"><span class="tok-comment"># A config validator built from the two together</span>
 for var in "\${!DB_@}"; do
   : "\${!var:?\$var is empty}"
 done
@@ -1187,7 +1187,7 @@ set    :-[val] -[val] :+[A] +[A]</div>
 <tr><td><code>\${#u}</code></td><td>Length in <strong>characters of the current locale</strong></td><td><code>u="đường"</code>: <code>5</code> under C.UTF-8, <code>9</code> under <code>LC_ALL=C</code> (bytes)</td></tr>
 </table>
 <p><strong>Trap 1 — <code>&amp;</code> in the replacement.</strong> Since bash 5.2 the option <code>patsub_replacement</code> is on by default (bash(1): "This option is enabled by default"), and an unquoted <code>&amp;</code> in the replacement of <code>\${v/pat/rep}</code> means "the text that matched". It bites exactly when you insert a URL query string:</p>
-<pre><code>q="a=1&amp;b=2"; u="x?QUERY"
+<pre><code class="language-bash">q="a=1&amp;b=2"; u="x?QUERY"
 echo "\${u/QUERY/$q}"
 echo "\${u/QUERY/"$q"}"</code></pre>
 <div class="out">x?a=1QUERYb=2
@@ -1280,7 +1280,7 @@ DEPLOY DEPLOY</div>
 
 <h3>Giá trị mặc định, và cái biết kêu to</h3>
 ${slide('lx-06', 14, 'Bốn toán tử mặc định: chưa đặt khác rỗng')}
-<pre><code>name=""
+<pre><code class="language-bash">name=""
 unset colour
 
 echo "\${name:-anonymous}"     <span class="tok-comment"># dùng mặc định nếu chưa đặt HOẶC rỗng</span>
@@ -1309,7 +1309,7 @@ green
 : "\${DEPLOY_ENV:?hãy đặt DEPLOY_ENV là staging hoặc production}"</code></pre>
 <div class="out">./deploy.sh: line 4: DATABASE_URL: DATABASE_URL là bắt buộc</div>
 <div class="callout ok"><code>\${VAR:?thông điệp}</code> là cấu trúc có giá trị trên mỗi ký tự cao nhất của chương này. Hai dòng ở đầu một script deploy biến chuyện "ứng dụng lên rồi ba phút sau chết một cách bí ẩn với chuỗi kết nối rỗng" thành "nó từ chối khởi động và nói cho bạn biết thiếu biến nào". Script thoát khác 0, nên CI cũng bắt được.</div>
-<pre><code><span class="tok-comment"># Cờ có điều kiện, không cần if</span>
+<pre><code class="language-bash"><span class="tok-comment"># Cờ có điều kiện, không cần if</span>
 verbose=1
 rsync \${verbose:+--verbose} -a src/ dst/
 
@@ -1327,7 +1327,7 @@ port="\${PORT:-\${DEFAULT_PORT:-3000}}"</code></pre>
 <h3>Xén: # từ bên trái, % từ bên phải</h3>
 ${slide('lx-06', 15, '# xén từ trái, % xén từ phải')}
 <p>Hai toán tử gỡ bỏ một mẫu khớp ở một đầu. Cách nhớ nằm trên bàn phím: <code>#</code> nằm bên trái <code>%</code> trong bố cục Mỹ, và nó xén từ bên trái.</p>
-<pre><code>path="/srv/app/config/db.yml"
+<pre><code class="language-bash">path="/srv/app/config/db.yml"
 
 echo "\${path##*/}"       <span class="tok-comment"># khớp DÀI NHẤT từ TRÁI  → basename</span>
 echo "\${path%/*}"        <span class="tok-comment"># khớp NGẮN NHẤT từ PHẢI → dirname</span>
@@ -1343,7 +1343,7 @@ srv/app/config/db.yml
   <div class="kv"><span class="k"><code>\${var%mẫu}</code></span><span class="v">Gỡ chỗ khớp ngắn nhất ở <strong>CUỐI</strong> chuỗi.</span></div>
   <div class="kv"><span class="k"><code>\${var%%mẫu}</code></span><span class="v">Gỡ chỗ khớp dài nhất ở cuối chuỗi.</span></div>
 </div>
-<pre><code>file="archive.tar.gz"
+<pre><code class="language-bash">file="archive.tar.gz"
 echo "\${file%.*}"         <span class="tok-comment"># bỏ MỘT đuôi        → archive.tar</span>
 echo "\${file%%.*}"        <span class="tok-comment"># bỏ MỌI đuôi        → archive</span>
 echo "\${file##*.}"        <span class="tok-comment"># chỉ lấy phần đuôi  → gz</span>
@@ -1364,7 +1364,7 @@ feature/login</div>
 
 <h3>Thay thế</h3>
 ${slide('lx-06', 16, '/ và //, và dấu &amp; của bash 5.2')}
-<pre><code>s="hello world world"
+<pre><code class="language-bash">s="hello world world"
 
 echo "\${s/world/there}"      <span class="tok-comment"># lần khớp ĐẦU TIÊN</span>
 echo "\${s//world/there}"     <span class="tok-comment"># MỌI lần khớp (gạch chéo nhân đôi)</span>
@@ -1376,7 +1376,7 @@ hello there there
 hell wrld wrld
 HI world world
 hello world WORLD</div>
-<pre><code><span class="tok-comment"># Thực tế: chuẩn hoá tên nhánh thành một tag docker</span>
+<pre><code class="language-bash"><span class="tok-comment"># Thực tế: chuẩn hoá tên nhánh thành một tag docker</span>
 branch="feature/user-login"
 tag="\${branch//\\//-}"        <span class="tok-comment"># gạch chéo → gạch ngang (dấu / được thoát)</span>
 echo "myapp:\${tag}"</code></pre>
@@ -1384,7 +1384,7 @@ echo "myapp:\${tag}"</code></pre>
 
 <h3>Độ dài, cắt lát, và hoa thường</h3>
 ${slide('lx-06', 17, 'Độ dài, cắt lát, hoa thường')}
-<pre><code>s="deployment"
+<pre><code class="language-bash">s="deployment"
 echo "\${#s}"              <span class="tok-comment"># độ dài: 10</span>
 echo "\${s:0:6}"           <span class="tok-comment"># từ vị trí 0, lấy 6 ký tự</span>
 echo "\${s:6}"             <span class="tok-comment"># từ vị trí 6 tới hết</span>
@@ -1404,7 +1404,7 @@ Deployment</div>
 
 <h3>Thay thế các lệnh bên ngoài</h3>
 ${slide('lx-06', 18, 'Không fork thì nhanh gấp ~200 lần; bash 3.2 của Mac')}
-<pre><code>path="/srv/app/config/db.yml"
+<pre><code class="language-bash">path="/srv/app/config/db.yml"
 
 <span class="tok-comment"># Mỗi dòng dưới đây khởi chạy một tiến trình — chừng 1-3 mili giây và một lần fork</span>
 basename "\$path"          <span class="tok-comment">→ db.yml</span>
@@ -1422,7 +1422,7 @@ real  0m0.089s</div>
 <div class="callout ok">Có một điểm cần lưu ý: <code>\${path##*/}</code> và <code>basename</code> bất đồng ở các ca biên. Với <code>/srv/app/</code> có dấu gạch chéo cuối, <code>basename</code> cho <code>app</code>, còn <code>\${path##*/}</code> cho chuỗi rỗng. Nếu bạn đang xử lý những đường dẫn không phải do mình dựng nên, cách xử lý ca biên của <code>basename</code> có thể đáng để tốn một lần fork.</div>
 
 <h3>Gián tiếp và liệt kê</h3>
-<pre><code>DB_HOST=localhost
+<pre><code class="language-bash">DB_HOST=localhost
 DB_PORT=5432
 DB_NAME=app
 
@@ -1434,7 +1434,7 @@ key="DB_HOST"
 echo "\${!key}"</code></pre>
 <div class="out">DB_HOST DB_NAME DB_PORT
 localhost</div>
-<pre><code><span class="tok-comment"># Một bộ kiểm cấu hình dựng từ hai thứ trên ghép lại</span>
+<pre><code class="language-bash"><span class="tok-comment"># Một bộ kiểm cấu hình dựng từ hai thứ trên ghép lại</span>
 for var in "\${!DB_@}"; do
   : "\${!var:?\$var đang rỗng}"
 done
@@ -1476,7 +1476,7 @@ set    :-[val] -[val] :+[A] +[A]</div>
 <tr><td><code>\${#u}</code></td><td>Độ dài tính bằng <strong>ký tự của locale hiện tại</strong></td><td><code>u="đường"</code>: <code>5</code> với C.UTF-8, <code>9</code> với <code>LC_ALL=C</code> (byte)</td></tr>
 </table>
 <p><strong>Bẫy 1 — dấu <code>&amp;</code> trong phần thay thế.</strong> Từ bash 5.2, tuỳ chọn <code>patsub_replacement</code> bật sẵn (bash(1): "This option is enabled by default"), và một dấu <code>&amp;</code> không nháy trong phần thay của <code>\${v/mẫu/thay}</code> nghĩa là "đoạn vừa khớp". Nó cắn đúng lúc bạn chèn một chuỗi truy vấn URL:</p>
-<pre><code>q="a=1&amp;b=2"; u="x?QUERY"
+<pre><code class="language-bash">q="a=1&amp;b=2"; u="x?QUERY"
 echo "\${u/QUERY/$q}"
 echo "\${u/QUERY/"$q"}"</code></pre>
 <div class="out">x?a=1QUERYb=2
@@ -1578,7 +1578,7 @@ DEPLOY DEPLOY</div>
 
 <h3>Zero is success</h3>
 ${slide('lx-06', 19, 'Mã thoát: 0 là thành công, số khác là kiểu hỏng')}
-<pre><code>ls /etc &gt;/dev/null; echo \$?
+<pre><code class="language-bash">ls /etc &gt;/dev/null; echo \$?
 ls /nonexistent 2&gt;/dev/null; echo \$?
 grep -q root /etc/passwd; echo \$?
 grep -q nosuchuser /etc/passwd; echo \$?</code></pre>
@@ -1602,7 +1602,7 @@ exit 2        <span class="tok-comment"># bad usage — conventional for "you ca
 
 <h3>&amp;&amp; and ||: conditionals without if</h3>
 ${slide('lx-06', 20, 'a &amp;&amp; b || c không phải if/else')}
-<pre><code>mkdir -p build &amp;&amp; cd build           <span class="tok-comment"># cd only if mkdir succeeded</span>
+<pre><code class="language-bash">mkdir -p build &amp;&amp; cd build           <span class="tok-comment"># cd only if mkdir succeeded</span>
 grep -q ERROR log || echo "clean"    <span class="tok-comment"># echo only if grep FAILED</span>
 command -v jq &gt;/dev/null || { echo "jq required" &gt;&amp;2; exit 1; }
 
@@ -1616,7 +1616,7 @@ npm test &amp;&amp; npm run build &amp;&amp; ./deploy.sh</code></pre>
 <div class="callout warn"><strong><code>a &amp;&amp; b || c</code> is not if-then-else</strong>, and the difference bites. If <code>a</code> succeeds but <code>b</code> fails, <code>c</code> runs too — so <code>[[ -f f ]] &amp;&amp; process f || echo "no file"</code> prints "no file" when the file exists and processing failed. Use a real <code>if</code> whenever the middle command can fail.</div>
 
 <h3>if, and what it actually tests</h3>
-<pre><code>if grep -q ERROR app.log; then
+<pre><code class="language-bash">if grep -q ERROR app.log; then
   echo "errors found"
 elif grep -q WARN app.log; then
   echo "warnings only"
@@ -1673,7 +1673,7 @@ ${slide('lx-06', 23, 'Phép thử file và case')}
   <div class="kv"><span class="k"><code>-s</code> · <code>-L</code></span><span class="v">Exists and is non-empty · is a symlink.</span></div>
   <div class="kv"><span class="k"><code>-nt</code> · <code>-ot</code></span><span class="v">Newer than · older than, by modification time. The basis of a hand-rolled build check.</span></div>
 </div>
-<pre><code>if [[ ! -f \$config ]]; then
+<pre><code class="language-bash">if [[ ! -f \$config ]]; then
   echo "config missing: \$config" &gt;&amp;2
   exit 1
 fi
@@ -1684,7 +1684,7 @@ fi
 <div class="callout ok"><code>-r</code> and <code>-w</code> answer "can <em>I</em> read this", taking into account ownership, groups, every directory on the path, and even read-only mounts — the whole of Lesson 4.5 in one test. Checking <code>[[ -r \$f ]]</code> is far more reliable than inspecting <code>ls -l</code> output and reasoning about it.</div>
 
 <h3>case: cleaner than a chain of elifs</h3>
-<pre><code>case "\$1" in
+<pre><code class="language-bash">case "\$1" in
   start)
     echo "starting" ;;
   stop|halt)                         <span class="tok-comment"># several patterns</span>
@@ -1703,7 +1703,7 @@ usage: ./service.sh {start|stop|restart}</div>
 <p>Patterns are globs (Lesson 2.2), matched in order, first match wins. <code>;;</code> ends a branch; <code>;&amp;</code> falls through to the next one and <code>;;&amp;</code> continues testing — both rarely needed. Every init script and CLI dispatcher you will read is built on this.</p>
 
 <h3>Putting it together</h3>
-<pre><code>#!/usr/bin/env bash
+<pre><code class="language-bash">#!/usr/bin/env bash
 <span class="tok-comment"># Deploy guard: refuse to run unless everything is in order</span>
 
 [[ \$# -eq 1 ]] || { echo "usage: \$0 &lt;env&gt;" &gt;&amp;2; exit 2; }
@@ -1730,7 +1730,7 @@ unknown env: prod</div>
 <p>Every check exits with a distinct message on stderr and a nonzero code, so CI fails loudly and a human reading the output knows exactly which precondition was not met. Chapter 7 turns this into a full script template.</p>
 
 <h3>Exit codes you will actually meet — measured</h3>
-<pre><code>ls /khong 2&gt;/dev/null; echo $?
+<pre><code class="language-bash">ls /khong 2&gt;/dev/null; echo $?
 grep -q nobodyxx /etc/passwd; echo $?
 khonglenh 2&gt;/dev/null; echo $?
 printf 'echo hi\\n' &gt; s.sh; ./s.sh 2&gt;/dev/null; echo $?
@@ -1839,7 +1839,7 @@ a*
 
 <h3>Số 0 là thành công</h3>
 ${slide('lx-06', 19, 'Mã thoát: 0 là thành công, số khác là kiểu hỏng')}
-<pre><code>ls /etc &gt;/dev/null; echo \$?
+<pre><code class="language-bash">ls /etc &gt;/dev/null; echo \$?
 ls /nonexistent 2&gt;/dev/null; echo \$?
 grep -q root /etc/passwd; echo \$?
 grep -q nosuchuser /etc/passwd; echo \$?</code></pre>
@@ -1863,7 +1863,7 @@ exit 2        <span class="tok-comment"># dùng sai — quy ước cho "bạn g�
 
 <h3>&amp;&amp; và ||: rẽ nhánh mà không cần if</h3>
 ${slide('lx-06', 20, 'a &amp;&amp; b || c không phải if/else')}
-<pre><code>mkdir -p build &amp;&amp; cd build           <span class="tok-comment"># chỉ cd nếu mkdir thành công</span>
+<pre><code class="language-bash">mkdir -p build &amp;&amp; cd build           <span class="tok-comment"># chỉ cd nếu mkdir thành công</span>
 grep -q ERROR log || echo "sạch"     <span class="tok-comment"># chỉ echo nếu grep THẤT BẠI</span>
 command -v jq &gt;/dev/null || { echo "cần jq" &gt;&amp;2; exit 1; }
 
@@ -1877,7 +1877,7 @@ npm test &amp;&amp; npm run build &amp;&amp; ./deploy.sh</code></pre>
 <div class="callout warn"><strong><code>a &amp;&amp; b || c</code> KHÔNG PHẢI là if-then-else</strong>, và khác biệt đó cắn thật. Nếu <code>a</code> thành công nhưng <code>b</code> thất bại thì <code>c</code> cũng chạy — nên <code>[[ -f f ]] &amp;&amp; process f || echo "không có file"</code> sẽ in "không có file" ngay cả khi file CÓ tồn tại mà việc xử lý mới là thứ hỏng. Hãy dùng một lệnh <code>if</code> thật mỗi khi lệnh ở giữa có thể thất bại.</div>
 
 <h3>if, và nó thật ra kiểm cái gì</h3>
-<pre><code>if grep -q ERROR app.log; then
+<pre><code class="language-bash">if grep -q ERROR app.log; then
   echo "có lỗi"
 elif grep -q WARN app.log; then
   echo "chỉ có cảnh báo"
@@ -1934,7 +1934,7 @@ ${slide('lx-06', 23, 'Phép thử file và case')}
   <div class="kv"><span class="k"><code>-s</code> · <code>-L</code></span><span class="v">Tồn tại và khác rỗng · là một liên kết tượng trưng.</span></div>
   <div class="kv"><span class="k"><code>-nt</code> · <code>-ot</code></span><span class="v">Mới hơn · cũ hơn, tính theo thời gian sửa. Nền tảng của một phép kiểm dựng lại tự viết.</span></div>
 </div>
-<pre><code>if [[ ! -f \$config ]]; then
+<pre><code class="language-bash">if [[ ! -f \$config ]]; then
   echo "thiếu file cấu hình: \$config" &gt;&amp;2
   exit 1
 fi
@@ -1945,7 +1945,7 @@ fi
 <div class="callout ok"><code>-r</code> và <code>-w</code> trả lời câu "<em>TÔI</em> có đọc được cái này không", có tính tới quyền sở hữu, nhóm, mọi thư mục trên đường dẫn, và cả những hệ thống file gắn ở chế độ chỉ-đọc — tức là toàn bộ Bài 4.5 gói trong một phép thử. Kiểm bằng <code>[[ -r \$f ]]</code> đáng tin hơn nhiều so với việc soi output của <code>ls -l</code> rồi ngồi suy luận.</div>
 
 <h3>case: gọn hơn một chuỗi elif</h3>
-<pre><code>case "\$1" in
+<pre><code class="language-bash">case "\$1" in
   start)
     echo "đang khởi động" ;;
   stop|halt)                         <span class="tok-comment"># nhiều mẫu cùng lúc</span>
@@ -1964,7 +1964,7 @@ cách dùng: ./service.sh {start|stop|restart}</div>
 <p>Các mẫu là glob (Bài 2.2), được đối chiếu theo thứ tự, cái khớp đầu tiên thắng. <code>;;</code> kết thúc một nhánh; <code>;&amp;</code> rơi thẳng xuống nhánh kế còn <code>;;&amp;</code> tiếp tục thử — cả hai đều hiếm khi cần. Mọi script init và mọi bộ điều phối lệnh mà bạn sẽ đọc đều dựng trên cấu trúc này.</p>
 
 <h3>Ghép lại với nhau</h3>
-<pre><code>#!/usr/bin/env bash
+<pre><code class="language-bash">#!/usr/bin/env bash
 <span class="tok-comment"># Chốt chặn deploy: từ chối chạy trừ khi mọi thứ đã đâu vào đấy</span>
 
 [[ \$# -eq 1 ]] || { echo "cách dùng: \$0 &lt;env&gt;" &gt;&amp;2; exit 2; }
@@ -1991,7 +1991,7 @@ env không hợp lệ: prod</div>
 <p>Mỗi phép kiểm đều thoát ra với một thông điệp riêng trên stderr và một mã khác 0, nên CI hỏng một cách ồn ào và người đọc output biết chính xác điều kiện tiên quyết nào chưa thoả. Chương 7 sẽ biến cái này thành một khuôn script hoàn chỉnh.</p>
 
 <h3>Những mã thoát bạn sẽ thật sự gặp — đo thật</h3>
-<pre><code>ls /khong 2&gt;/dev/null; echo $?
+<pre><code class="language-bash">ls /khong 2&gt;/dev/null; echo $?
 grep -q nobodyxx /etc/passwd; echo $?
 khonglenh 2&gt;/dev/null; echo $?
 printf 'echo hi\\n' &gt; s.sh; ./s.sh 2&gt;/dev/null; echo $?
@@ -2109,7 +2109,7 @@ a*
 
 <h3>for: over a list</h3>
 ${slide('lx-06', 24, 'for qua glob, mảng, khoảng — {1..$n} không chạy')}
-<pre><code><span class="tok-comment"># Over a glob — the shell expands it into words for you (Lesson 2.2)</span>
+<pre><code class="language-bash"><span class="tok-comment"># Over a glob — the shell expands it into words for you (Lesson 2.2)</span>
 for f in *.log; do
   [[ -e \$f ]] || continue          <span class="tok-comment"># guard: unmatched glob passes through literally</span>
   echo "processing \$f"
@@ -2135,7 +2135,7 @@ processing db.log
 
 <h3>The one rule: do not parse ls</h3>
 ${slide('lx-06', 25, 'Đừng lặp trên $(ls)')}
-<pre><code><span class="tok-comment"># WRONG — breaks on any filename with a space or a glob character</span>
+<pre><code class="language-bash"><span class="tok-comment"># WRONG — breaks on any filename with a space or a glob character</span>
 for f in \$(ls *.txt); do rm "\$f"; done
 
 <span class="tok-comment"># RIGHT — the shell already gives you a properly split list</span>
@@ -2157,7 +2157,7 @@ done</code></pre>
 </div>
 <h3>while read: over lines</h3>
 ${slide('lx-06', 26, 'while IFS= read -r: giữ thụt lề, \\ và dòng cuối')}
-<pre><code>while IFS= read -r line; do
+<pre><code class="language-bash">while IFS= read -r line; do
   echo "[\$line]"
 done &lt; input.txt</code></pre>
 <div class="kv-grid">
@@ -2165,7 +2165,7 @@ done &lt; input.txt</code></pre>
   <div class="kv"><span class="k"><code>-r</code></span><span class="v">Do not interpret backslashes. Without it, a line containing <code>C:\\path</code> is mangled.</span></div>
   <div class="kv"><span class="k"><code>&lt; input.txt</code></span><span class="v">Redirect rather than pipe — <strong>no subshell</strong>, so variables set inside the loop survive (Lesson 3.2).</span></div>
 </div>
-<pre><code><span class="tok-comment"># Reading fields from a delimited file</span>
+<pre><code class="language-bash"><span class="tok-comment"># Reading fields from a delimited file</span>
 while IFS=, read -r name email role; do
   echo "\$name &lt;\$email&gt; is \$role"
 done &lt; users.csv
@@ -2184,7 +2184,7 @@ An &lt;an@example.com&gt; is editor
 <h3>Three ways a line-reading loop silently loses data</h3>
 ${slide('lx-06', 27, 'Ống dẫn chạy vòng lặp trong shell con; ký tự \\r của Windows')}
 <p>All three were reproduced in the Ubuntu container; each one prints no error.</p>
-<pre><code><span class="tok-comment"># 1 · a pipe runs the loop in a subshell — the counter dies with it</span>
+<pre><code class="language-bash"><span class="tok-comment"># 1 · a pipe runs the loop in a subshell — the counter dies with it</span>
 count=0; printf 'ERROR a\\nok\\nERROR b\\n' | while IFS= read -r l; do [[ $l == ERROR* ]] &amp;&amp; ((count++)); done; echo "pipe: $count"
 count=0; while IFS= read -r l; do [[ $l == ERROR* ]] &amp;&amp; ((count++)); done &lt; &lt;(printf 'ERROR a\\nok\\nERROR b\\n'); echo "procsub: $count"
 
@@ -2208,7 +2208,7 @@ after removing \\r: khop</div>
 <p>Case 3 is the one your Windows teammates hit: a <code>.env</code> or host list edited in Notepad looks identical in <code>cat</code>, but every comparison fails. <code>cat -A</code> shows it as <code>^M$</code> at the end of each line; fix the data with <code>dos2unix</code> or <code>sed -i 's/\\r$//' file</code>, or strip it in the script with <code>\${var%$'\\r'}</code>. The same <code>\\r</code> at the end of the shebang line is what produces <code>/usr/bin/env: 'bash\\r': No such file or directory</code>.</p>
 <p>A fourth, related trap: a command inside the loop that reads from standard input (<code>ssh</code>, <code>ffmpeg</code>, <code>cat</code>) swallows the rest of the file, and the loop ends after one line. Tested with a three-line <code>hosts</code> file and a <code>cat &gt;/dev/null</code> in the body: only <code>host=h1</code> printed; with <code>&lt;/dev/null</code> on that command all three did. Use <code>ssh -n</code>, <code>ffmpeg -nostdin</code>, or read the loop from another descriptor (<code>while read -r h &lt;&amp;3; do …; done 3&lt; hosts</code>).</p>
 <h3>mapfile: a file into an array</h3>
-<pre><code>mapfile -t lines &lt; input.txt         <span class="tok-comment"># -t strips the trailing newlines</span>
+<pre><code class="language-bash">mapfile -t lines &lt; input.txt         <span class="tok-comment"># -t strips the trailing newlines</span>
 echo "\${#lines[@]} lines"
 echo "\${lines[0]}"
 
@@ -2222,7 +2222,7 @@ import express from 'express';
 <p><code>mapfile</code> (also spelled <code>readarray</code>) is the correct replacement for <code>files=\$(ls)</code>. It gives you a real array with one element per line, so filenames with spaces are preserved and you can index, count and slice it. Bash 4+ only, which in practice means everywhere except macOS's system bash.</p>
 
 <h3>break, continue, and loop redirection</h3>
-<pre><code>for f in *.log; do
+<pre><code class="language-bash">for f in *.log; do
   [[ -s \$f ]] || continue           <span class="tok-comment"># skip empty files</span>
   grep -q FATAL "\$f" &amp;&amp; { echo "fatal in \$f"; break; }
 done
@@ -2236,7 +2236,7 @@ done &gt; summary.txt</code></pre>
 
 <h3>Functions</h3>
 ${slide('lx-06', 28, 'Hàm: local, return là mã thoát, dữ liệu qua stdout')}
-<pre><code>log() {
+<pre><code class="language-bash">log() {
   echo "[\$(date +%T)] \$*" &gt;&amp;2      <span class="tok-comment"># diagnostics go to stderr</span>
 }
 
@@ -2258,7 +2258,7 @@ deploy staging || echo "failed with \$?"</code></pre>
   <div class="kv"><span class="k">"Returning" data</span><span class="v">Print it to stdout and capture with <code>result=\$(myfunc)</code>. That is why <code>log</code> above writes to stderr — so it never contaminates a caller's capture.</span></div>
   <div class="kv"><span class="k">Arguments</span><span class="v"><code>\$1</code>, <code>\$2</code>, <code>"\$@"</code>, <code>\$#</code> — exactly like a script. <code>\$0</code> stays the script name, not the function's.</span></div>
 </div>
-<pre><code><span class="tok-comment"># The pattern: print the result, return the status</span>
+<pre><code class="language-bash"><span class="tok-comment"># The pattern: print the result, return the status</span>
 get_branch() {
   local b
   b=\$(git rev-parse --abbrev-ref HEAD 2&gt;/dev/null) || return 1
@@ -2287,7 +2287,7 @@ printf '%s\\0' *.mp4 | xargs -0 -P 4 -I{} ffmpeg -i {} {}.webm</code></pre>
 <div class="callout">The bare <code>&amp;</code> version starts <em>every</em> file at once — fine for eight, catastrophic for eight hundred, because the machine runs out of memory or file descriptors. <code>xargs -P 4</code> keeps exactly four running (Lesson 3.2), which is what you want on a machine you care about. Use <code>-P \$(nproc)</code> to match the core count.</div>
 
 <h3>A complete example</h3>
-<pre><code>#!/usr/bin/env bash
+<pre><code class="language-bash">#!/usr/bin/env bash
 <span class="tok-comment"># Summarise every log file: name, size, error count</span>
 
 summarise() {
@@ -2385,7 +2385,7 @@ zsh:1: no matches found: *.csv</div>
 
 <h3>for: qua một danh sách</h3>
 ${slide('lx-06', 24, 'for qua glob, mảng, khoảng — {1..$n} không chạy')}
-<pre><code><span class="tok-comment"># Qua một glob — shell khai triển nó thành các từ giúp bạn (Bài 2.2)</span>
+<pre><code class="language-bash"><span class="tok-comment"># Qua một glob — shell khai triển nó thành các từ giúp bạn (Bài 2.2)</span>
 for f in *.log; do
   [[ -e \$f ]] || continue          <span class="tok-comment"># chốt chặn: glob không khớp thì truyền qua nguyên văn</span>
   echo "đang xử lý \$f"
@@ -2411,7 +2411,7 @@ for ((i = 0; i &lt; 5; i++)); do echo "\$i"; done   <span class="tok-comment"># 
 
 <h3>Luật số một: đừng phân tích output của ls</h3>
 ${slide('lx-06', 25, 'Đừng lặp trên $(ls)')}
-<pre><code><span class="tok-comment"># SAI — vỡ với mọi tên file có dấu cách hoặc ký tự glob</span>
+<pre><code class="language-bash"><span class="tok-comment"># SAI — vỡ với mọi tên file có dấu cách hoặc ký tự glob</span>
 for f in \$(ls *.txt); do rm "\$f"; done
 
 <span class="tok-comment"># ĐÚNG — shell đã đưa cho bạn một danh sách cắt sẵn cho đúng</span>
@@ -2433,7 +2433,7 @@ done</code></pre>
 </div>
 <h3>while read: qua các dòng</h3>
 ${slide('lx-06', 26, 'while IFS= read -r: giữ thụt lề, \\ và dòng cuối')}
-<pre><code>while IFS= read -r line; do
+<pre><code class="language-bash">while IFS= read -r line; do
   echo "[\$line]"
 done &lt; input.txt</code></pre>
 <div class="kv-grid">
@@ -2441,7 +2441,7 @@ done &lt; input.txt</code></pre>
   <div class="kv"><span class="k"><code>-r</code></span><span class="v">Đừng diễn giải gạch chéo ngược. Không có nó, một dòng chứa <code>C:\\path</code> sẽ bị làm méo.</span></div>
   <div class="kv"><span class="k"><code>&lt; input.txt</code></span><span class="v">Chuyển hướng chứ không đưa qua ống — <strong>KHÔNG có shell con</strong>, nên biến đặt bên trong vòng lặp sống sót (Bài 3.2).</span></div>
 </div>
-<pre><code><span class="tok-comment"># Đọc các trường từ một file có dấu phân cách</span>
+<pre><code class="language-bash"><span class="tok-comment"># Đọc các trường từ một file có dấu phân cách</span>
 while IFS=, read -r name email role; do
   echo "\$name &lt;\$email&gt; là \$role"
 done &lt; users.csv
@@ -2460,7 +2460,7 @@ An &lt;an@example.com&gt; là editor
 <h3>Ba cách một vòng lặp đọc dòng âm thầm đánh mất dữ liệu</h3>
 ${slide('lx-06', 27, 'Ống dẫn chạy vòng lặp trong shell con; ký tự \\r của Windows')}
 <p>Cả ba đều đã dựng lại trong container Ubuntu; không cái nào in ra lỗi.</p>
-<pre><code><span class="tok-comment"># 1 · ống dẫn chạy vòng lặp trong shell con — biến đếm chết theo nó</span>
+<pre><code class="language-bash"><span class="tok-comment"># 1 · ống dẫn chạy vòng lặp trong shell con — biến đếm chết theo nó</span>
 count=0; printf 'ERROR a\\nok\\nERROR b\\n' | while IFS= read -r l; do [[ $l == ERROR* ]] &amp;&amp; ((count++)); done; echo "pipe: $count"
 count=0; while IFS= read -r l; do [[ $l == ERROR* ]] &amp;&amp; ((count++)); done &lt; &lt;(printf 'ERROR a\\nok\\nERROR b\\n'); echo "procsub: $count"
 
@@ -2484,7 +2484,7 @@ after removing \\r: khop</div>
 <p>Trường hợp 3 là cái các bạn cùng nhóm dùng Windows hay dính: một file <code>.env</code> hay danh sách máy sửa bằng Notepad nhìn qua <code>cat</code> thì y hệt, nhưng mọi phép so sánh đều sai. <code>cat -A</code> hiện nó thành <code>^M$</code> ở cuối mỗi dòng; sửa dữ liệu bằng <code>dos2unix</code> hoặc <code>sed -i 's/\\r$//' file</code>, hoặc gỡ ngay trong script bằng <code>\${var%$'\\r'}</code>. Cũng chính <code>\\r</code> đó ở cuối dòng shebang sinh ra lỗi <code>/usr/bin/env: 'bash\\r': No such file or directory</code>.</p>
 <p>Bẫy thứ tư, họ hàng với ba bẫy trên: một lệnh bên trong vòng lặp mà đọc đầu vào chuẩn (<code>ssh</code>, <code>ffmpeg</code>, <code>cat</code>) sẽ nuốt hết phần còn lại của file, và vòng lặp dừng sau một dòng. Đã thử với file <code>hosts</code> ba dòng và một lệnh <code>cat &gt;/dev/null</code> trong thân vòng lặp: chỉ in ra <code>host=h1</code>; thêm <code>&lt;/dev/null</code> cho lệnh đó thì in đủ ba. Dùng <code>ssh -n</code>, <code>ffmpeg -nostdin</code>, hoặc cho vòng lặp đọc từ một bộ mô tả khác (<code>while read -r h &lt;&amp;3; do …; done 3&lt; hosts</code>).</p>
 <h3>mapfile: một file vào một mảng</h3>
-<pre><code>mapfile -t lines &lt; input.txt         <span class="tok-comment"># -t cắt bỏ ký tự xuống dòng ở cuối</span>
+<pre><code class="language-bash">mapfile -t lines &lt; input.txt         <span class="tok-comment"># -t cắt bỏ ký tự xuống dòng ở cuối</span>
 echo "\${#lines[@]} dòng"
 echo "\${lines[0]}"
 
@@ -2498,7 +2498,7 @@ import express from 'express';
 <p><code>mapfile</code> (còn viết là <code>readarray</code>) chính là thứ thay thế đúng cho <code>files=\$(ls)</code>. Nó cho bạn một MẢNG thật với mỗi dòng một phần tử, nên tên file có dấu cách được giữ nguyên và bạn đánh chỉ số, đếm, cắt lát nó được. Chỉ có từ bash 4 trở lên, mà trong thực tế nghĩa là có ở mọi nơi trừ bash hệ thống của macOS.</p>
 
 <h3>break, continue, và chuyển hướng cả vòng lặp</h3>
-<pre><code>for f in *.log; do
+<pre><code class="language-bash">for f in *.log; do
   [[ -s \$f ]] || continue           <span class="tok-comment"># bỏ qua file rỗng</span>
   grep -q FATAL "\$f" &amp;&amp; { echo "có FATAL trong \$f"; break; }
 done
@@ -2512,7 +2512,7 @@ done &gt; summary.txt</code></pre>
 
 <h3>Hàm</h3>
 ${slide('lx-06', 28, 'Hàm: local, return là mã thoát, dữ liệu qua stdout')}
-<pre><code>log() {
+<pre><code class="language-bash">log() {
   echo "[\$(date +%T)] \$*" &gt;&amp;2      <span class="tok-comment"># thông báo chẩn đoán đi ra stderr</span>
 }
 
@@ -2534,7 +2534,7 @@ deploy staging || echo "hỏng với mã \$?"</code></pre>
   <div class="kv"><span class="k">"Trả về" dữ liệu</span><span class="v">In nó ra stdout rồi hứng bằng <code>result=\$(myfunc)</code>. Đó là lý do hàm <code>log</code> ở trên ghi ra stderr — để nó không bao giờ làm bẩn phần hứng của người gọi.</span></div>
   <div class="kv"><span class="k">Tham số</span><span class="v"><code>\$1</code>, <code>\$2</code>, <code>"\$@"</code>, <code>\$#</code> — y hệt như trong một script. Riêng <code>\$0</code> vẫn là tên script, không phải tên hàm.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Khuôn mẫu: in ra kết quả, trả về trạng thái</span>
+<pre><code class="language-bash"><span class="tok-comment"># Khuôn mẫu: in ra kết quả, trả về trạng thái</span>
 get_branch() {
   local b
   b=\$(git rev-parse --abbrev-ref HEAD 2&gt;/dev/null) || return 1
@@ -2563,7 +2563,7 @@ printf '%s\\0' *.mp4 | xargs -0 -P 4 -I{} ffmpeg -i {} {}.webm</code></pre>
 <div class="callout">Bản dùng dấu <code>&amp;</code> trần khởi động <em>MỌI</em> file cùng một lúc — ổn với tám cái, thảm hoạ với tám trăm cái, vì máy sẽ cạn bộ nhớ hoặc cạn bộ mô tả file. <code>xargs -P 4</code> giữ đúng bốn cái chạy cùng lúc (Bài 3.2), và đó mới là thứ bạn muốn trên một cái máy mà bạn còn quan tâm. Dùng <code>-P \$(nproc)</code> để khớp với số nhân.</div>
 
 <h3>Một ví dụ hoàn chỉnh</h3>
-<pre><code>#!/usr/bin/env bash
+<pre><code class="language-bash">#!/usr/bin/env bash
 <span class="tok-comment"># Tóm tắt mọi file log: tên, kích thước, số lỗi</span>
 
 summarise() {

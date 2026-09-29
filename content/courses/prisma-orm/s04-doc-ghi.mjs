@@ -53,10 +53,10 @@ export default {
 </div>
 
 <h3>Why <code>findUnique</code> refuses your filter</h3>
-<pre><code>await prisma.post.findUnique({ where: { title: 'Bai dau money' } });</code></pre>
+<pre><code class="language-typescript">await prisma.post.findUnique({ where: { title: 'Bai dau money' } });</code></pre>
 <div class="out">TypeScript error:
 Object literal may only specify known properties, and 'title' does not exist in type 'PostWhereUniqueInput'.</div>
-<pre><code><span class="tok-comment">// The where type is generated from the model's unique constraints only:</span>
+<pre><code class="language-bash"><span class="tok-comment">// The where type is generated from the model's unique constraints only:</span>
 export type PostWhereUniqueInput =
   | { id: number }
   | { slug: string }
@@ -64,7 +64,7 @@ export type PostWhereUniqueInput =
 <div class="callout">
 <p><strong>This restriction is a feature, and a rare one.</strong> It is a compile-time guarantee that the query returns at most one row. <code>findFirst({ where: { title } })</code> compiles happily and returns an arbitrary matching row — which is fine when you meant it and a genuine bug when you assumed titles were unique. Prisma makes you say which you meant.</p>
 </div>
-<pre><code><span class="tok-comment">// Since Prisma 5, findUnique also accepts extra non-unique filters</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Since Prisma 5, findUnique also accepts extra non-unique filters</span>
 <span class="tok-comment">// alongside the unique one — useful for authorisation checks</span>
 const post = await prisma.post.findUnique({
   where: { id: 42, authorId: currentUserId },   <span class="tok-comment">// id is unique; authorId narrows it</span>
@@ -73,7 +73,7 @@ const post = await prisma.post.findUnique({
 <p>That pattern is worth adopting: it turns "fetch the post, then check the owner" into one query that simply returns <code>null</code> for someone else's post. Fewer round trips, and no branch where you forgot the ownership check.</p>
 
 <h3>Null or throw — pick per call site, not per codebase</h3>
-<pre><code><span class="tok-comment">// Absence is expected → return null and handle it</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Absence is expected → return null and handle it</span>
 const u = await prisma.user.findUnique({ where: { email } });
 if (!u) return res.status(404).json({ error: 'Khong tim thay nguoi dung' });
 
@@ -94,13 +94,13 @@ An operation failed because it depends on one or more records that were required
 </div>
 
 <h3><code>findFirst</code> and the missing <code>orderBy</code></h3>
-<pre><code><span class="tok-comment">// "The latest post" — except it is not</span>
+<pre><code class="language-javascript"><span class="tok-comment">// "The latest post" — except it is not</span>
 const latest = await prisma.post.findFirst({ where: { published: true } });</code></pre>
 <div class="out">prisma:query SELECT ... FROM "public"."posts" WHERE "public"."posts"."published" = $1 LIMIT $2 OFFSET $3</div>
 <div class="pitfall">
 <p><strong>Trap — no <code>ORDER BY</code> means no defined order.</strong> PostgreSQL returns whichever row it finds first, which is usually insertion order on a fresh table and stops being so the moment rows are updated (an update rewrites the row at the end of the heap) or the planner switches to an index scan. So this works in development, works in staging, and returns a random post in production after the table has churned. <strong>Every <code>findFirst</code> needs an <code>orderBy</code></strong> — if you cannot name the ordering, you wanted <code>findMany</code> or <code>findUnique</code>.</p>
 </div>
-<pre><code><span class="tok-comment">// Correct</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Correct</span>
 const latest = await prisma.post.findFirst({
   where: { published: true },
   orderBy: { publishedAt: 'desc' },
@@ -113,14 +113,14 @@ const latest2 = await prisma.post.findFirst({
 });</code></pre>
 
 <h3><code>findMany</code>, and the argument you should always pass</h3>
-<pre><code><span class="tok-comment">// Every field is optional, and that is the danger</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Every field is optional, and that is the danger</span>
 const all = await prisma.post.findMany();</code></pre>
 <div class="out">prisma:query SELECT ... FROM "public"."posts" OFFSET $1
 -- 412,908 rows, 890 MB into a Node process with a 512 MB heap</div>
 <div class="callout warn">
 <p><strong>A bare <code>findMany()</code> is an unbounded read.</strong> It works on your 200-row development database and takes down the process on production. Treat <code>take</code> as mandatory: pass it always, even when you "know" the result is small, because knowing is a property of today's data. Chapter 5 covers cursor pagination for the case where you genuinely need everything.</p>
 </div>
-<pre><code>const page = await prisma.post.findMany({
+<pre><code class="language-javascript">const page = await prisma.post.findMany({
   where: { published: true },
   orderBy: { publishedAt: 'desc' },
   take: 20,
@@ -128,7 +128,7 @@ const all = await prisma.post.findMany();</code></pre>
 });</code></pre>
 
 <h3><code>count</code>, and its two other forms</h3>
-<pre><code><span class="tok-comment">// 1 — plain count</span>
+<pre><code class="language-javascript"><span class="tok-comment">// 1 — plain count</span>
 const n = await prisma.post.count({ where: { published: true } });
 
 <span class="tok-comment">// 2 — count non-null values per field, in one query</span>
@@ -152,7 +152,7 @@ console.log(users.map((u) =&gt; [u.email, u._count.posts]));</code></pre>
 </div>
 
 <h3>The "does it exist" question</h3>
-<pre><code><span class="tok-comment">// Prisma has no exists(). These are the three real options.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Prisma has no exists(). These are the three real options.</span>
 
 <span class="tok-comment">// A — count, then compare. Scans all matches. Avoid on big tables.</span>
 const a = (await prisma.user.count({ where: { email } })) &gt; 0;
@@ -215,10 +215,10 @@ SELECT "public"."users"."id" FROM "public"."users" WHERE "public"."users"."email
 </div>
 
 <h3>Vì sao <code>findUnique</code> từ chối bộ lọc của bạn</h3>
-<pre><code>await prisma.post.findUnique({ where: { title: 'Bai dau money' } });</code></pre>
+<pre><code class="language-typescript">await prisma.post.findUnique({ where: { title: 'Bai dau money' } });</code></pre>
 <div class="out">TypeScript error:
 Object literal may only specify known properties, and 'title' does not exist in type 'PostWhereUniqueInput'.</div>
-<pre><code><span class="tok-comment">// Kiểu của where được sinh CHỈ từ các ràng buộc unique của model:</span>
+<pre><code class="language-bash"><span class="tok-comment">// Kiểu của where được sinh CHỈ từ các ràng buộc unique của model:</span>
 export type PostWhereUniqueInput =
   | { id: number }
   | { slug: string }
@@ -226,7 +226,7 @@ export type PostWhereUniqueInput =
 <div class="callout">
 <p><strong>Hạn chế này là một tính năng, và là loại hiếm.</strong> Nó là một bảo đảm lúc biên dịch rằng câu truy vấn trả về nhiều nhất một hàng. <code>findFirst({ where: { title } })</code> biên dịch ngon lành và trả về một hàng khớp bất kỳ — ổn khi bạn cố ý và là một con bọ thật khi bạn tưởng tiêu đề là duy nhất. Prisma bắt bạn nói rõ mình muốn cái nào.</p>
 </div>
-<pre><code><span class="tok-comment">// Từ Prisma 5, findUnique cũng nhận thêm các bộ lọc không-unique</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Từ Prisma 5, findUnique cũng nhận thêm các bộ lọc không-unique</span>
 <span class="tok-comment">// đi kèm cái unique — rất tiện cho phép kiểm quyền</span>
 const post = await prisma.post.findUnique({
   where: { id: 42, authorId: currentUserId },   <span class="tok-comment">// id là unique; authorId thu hẹp thêm</span>
@@ -235,7 +235,7 @@ const post = await prisma.post.findUnique({
 <p>Mẫu đó đáng nhận: nó biến "lấy bài viết, rồi kiểm chủ sở hữu" thành một câu truy vấn duy nhất trả về <code>null</code> nếu là bài của người khác. Ít lượt đi về hơn, và không còn nhánh nào mà bạn quên phần kiểm quyền.</p>
 
 <h3>Null hay ném lỗi — chọn theo từng chỗ gọi, không phải theo cả kho mã</h3>
-<pre><code><span class="tok-comment">// Vắng mặt là chuyện bình thường → trả null và xử lý nó</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Vắng mặt là chuyện bình thường → trả null và xử lý nó</span>
 const u = await prisma.user.findUnique({ where: { email } });
 if (!u) return res.status(404).json({ error: 'Khong tim thay nguoi dung' });
 
@@ -256,13 +256,13 @@ An operation failed because it depends on one or more records that were required
 </div>
 
 <h3><code>findFirst</code> và cái <code>orderBy</code> bị bỏ quên</h3>
-<pre><code><span class="tok-comment">// "Bài mới nhất" — nhưng không phải vậy</span>
+<pre><code class="language-javascript"><span class="tok-comment">// "Bài mới nhất" — nhưng không phải vậy</span>
 const latest = await prisma.post.findFirst({ where: { published: true } });</code></pre>
 <div class="out">prisma:query SELECT ... FROM "public"."posts" WHERE "public"."posts"."published" = $1 LIMIT $2 OFFSET $3</div>
 <div class="pitfall">
 <p><strong>Bẫy — không có <code>ORDER BY</code> nghĩa là không có thứ tự xác định.</strong> PostgreSQL trả về hàng nào nó gặp trước, thường là theo thứ tự chèn trên một bảng còn mới và thôi như vậy ngay khi có hàng bị cập nhật (một lần update ghi lại hàng ở cuối heap) hoặc khi bộ lập kế hoạch chuyển sang quét chỉ mục. Nên nó chạy đúng lúc phát triển, chạy đúng ở staging, và trả về một bài viết ngẫu nhiên trên production sau khi bảng đã bị đảo qua đảo lại. <strong>Mọi <code>findFirst</code> đều cần một <code>orderBy</code></strong> — nếu bạn không gọi tên được thứ tự thì thứ bạn muốn là <code>findMany</code> hoặc <code>findUnique</code>.</p>
 </div>
-<pre><code><span class="tok-comment">// Đúng</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Đúng</span>
 const latest = await prisma.post.findFirst({
   where: { published: true },
   orderBy: { publishedAt: 'desc' },
@@ -275,14 +275,14 @@ const latest2 = await prisma.post.findFirst({
 });</code></pre>
 
 <h3><code>findMany</code>, và tham số bạn nên luôn truyền</h3>
-<pre><code><span class="tok-comment">// Mọi trường đều tuỳ chọn, và đó chính là chỗ nguy hiểm</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Mọi trường đều tuỳ chọn, và đó chính là chỗ nguy hiểm</span>
 const all = await prisma.post.findMany();</code></pre>
 <div class="out">prisma:query SELECT ... FROM "public"."posts" OFFSET $1
 -- 412.908 hàng, 890 MB đổ vào một tiến trình Node có heap 512 MB</div>
 <div class="callout warn">
 <p><strong>Một câu <code>findMany()</code> trần là một lần đọc không chặn biên.</strong> Nó chạy ngon trên cơ sở dữ liệu phát triển 200 hàng và hạ gục tiến trình trên production. Hãy coi <code>take</code> là bắt buộc: luôn truyền nó, ngay cả khi bạn "biết" kết quả nhỏ, vì cái biết ấy là tính chất của dữ liệu hôm nay. Chương 5 nói về phân trang bằng con trỏ cho trường hợp bạn thật sự cần tất cả.</p>
 </div>
-<pre><code>const page = await prisma.post.findMany({
+<pre><code class="language-javascript">const page = await prisma.post.findMany({
   where: { published: true },
   orderBy: { publishedAt: 'desc' },
   take: 20,
@@ -290,7 +290,7 @@ const all = await prisma.post.findMany();</code></pre>
 });</code></pre>
 
 <h3><code>count</code>, và hai dạng khác của nó</h3>
-<pre><code><span class="tok-comment">// 1 — đếm thường</span>
+<pre><code class="language-javascript"><span class="tok-comment">// 1 — đếm thường</span>
 const n = await prisma.post.count({ where: { published: true } });
 
 <span class="tok-comment">// 2 — đếm số giá trị khác null theo từng trường, trong một câu truy vấn</span>
@@ -314,7 +314,7 @@ console.log(users.map((u) =&gt; [u.email, u._count.posts]));</code></pre>
 </div>
 
 <h3>Câu hỏi "nó có tồn tại không"</h3>
-<pre><code><span class="tok-comment">// Prisma không có exists(). Đây là ba lựa chọn thật.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Prisma không có exists(). Đây là ba lựa chọn thật.</span>
 
 <span class="tok-comment">// A — đếm rồi so sánh. Quét hết các bản khớp. Tránh trên bảng lớn.</span>
 const a = (await prisma.user.count({ where: { email } })) &gt; 0;
@@ -358,7 +358,7 @@ SELECT "public"."users"."id" FROM "public"."users" WHERE "public"."users"."email
 <p class="lead">Every Prisma read returns exactly the shape you asked for, and the TypeScript type follows it precisely. That is the feature people stay for. It also means the two arguments that control it — <code>select</code> and <code>include</code> — are the ones you will type most often, and the ones with the most rules.</p>
 
 <h3>The three ways to shape a row</h3>
-<pre><code><span class="tok-comment">// 1 — neither: every scalar column, no relations</span>
+<pre><code class="language-javascript"><span class="tok-comment">// 1 — neither: every scalar column, no relations</span>
 const a = await prisma.user.findUniqueOrThrow({ where: { id: 1 } });
 <span class="tok-comment">// { id, email, fullName, password, createdAt }</span>
 
@@ -394,12 +394,12 @@ SELECT "title","author_id" FROM "posts" WHERE "author_id" IN ($1)</div>
 </div>
 
 <h3>The password column, and <code>omit</code></h3>
-<pre><code><span class="tok-comment">// The old way: select every field except one, by hand, in every query</span>
+<pre><code class="language-javascript"><span class="tok-comment">// The old way: select every field except one, by hand, in every query</span>
 const u = await prisma.user.findMany({
   select: { id: true, email: true, fullName: true, createdAt: true, updatedAt: true,
             avatarUrl: true, bio: true /* ...and remember to add new fields here forever */ },
 });</code></pre>
-<pre><code><span class="tok-comment">// Prisma 5.16+: omit says what to leave out</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Prisma 5.16+: omit says what to leave out</span>
 const u2 = await prisma.user.findMany({ omit: { password: true } });
 <span class="tok-comment">// every column except password, and new columns are included automatically</span>
 
@@ -417,7 +417,7 @@ const forLogin = await prisma.user.findUnique({
 </div>
 
 <h3>Nesting, as deep as you like</h3>
-<pre><code>const post = await prisma.post.findUniqueOrThrow({
+<pre><code class="language-javascript">const post = await prisma.post.findUniqueOrThrow({
   where: { id: 1 },
   select: {
     id: true,
@@ -448,7 +448,7 @@ prisma:query SELECT (SELECT COUNT(*) FROM "comments" WHERE "post_id" = "posts"."
 </div>
 
 <h3>Filtering and ordering the included relation</h3>
-<pre><code><span class="tok-comment">// Every findMany argument works inside an include or a nested select</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Every findMany argument works inside an include or a nested select</span>
 include: {
   posts: {
     where:   { published: true, deletedAt: null },
@@ -465,7 +465,7 @@ include: {
 </div>
 
 <h3><code>_count</code>: the number without the rows</h3>
-<pre><code><span class="tok-comment">// Wrong: loads 4,000 posts to display "4000"</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Wrong: loads 4,000 posts to display "4000"</span>
 const bad = await prisma.user.findMany({ include: { posts: true } });
 console.log(bad[0].posts.length);
 
@@ -486,7 +486,7 @@ SELECT "id","title","body","published","views","created_at","author_id" FROM "po
 SELECT "users".*, (SELECT COUNT(*) FROM "posts" WHERE "posts"."author_id" = "users"."id") FROM "users"            -- 1 row, 84 bytes</div>
 
 <h3>The fluent API: traversing instead of including</h3>
-<pre><code><span class="tok-comment">// Chain from a unique lookup to its relation — two queries, no include</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Chain from a unique lookup to its relation — two queries, no include</span>
 const posts = await prisma.user.findUnique({ where: { email } }).posts({
   where: { published: true },
   take: 10,
@@ -502,7 +502,7 @@ const author = await prisma.comment.findUnique({ where: { id: 5 } }).post().auth
 </div>
 
 <h3>Naming the shape you selected</h3>
-<pre><code>import { Prisma } from '@prisma/client';
+<pre><code class="language-javascript">import { Prisma } from '@prisma/client';
 
 <span class="tok-comment">// Define the selection once, as a value</span>
 const postSummary = {
@@ -539,7 +539,7 @@ function render(b: PostSummary) {
 <p class="lead">Mọi lần đọc bằng Prisma đều trả về đúng hình dạng bạn xin, và kiểu TypeScript đi theo chính xác. Đó là tính năng khiến người ta ở lại. Nó cũng có nghĩa hai tham số điều khiển chuyện đó — <code>select</code> và <code>include</code> — là hai thứ bạn gõ nhiều nhất, và cũng là hai thứ có nhiều luật nhất.</p>
 
 <h3>Ba cách nắn một hàng</h3>
-<pre><code><span class="tok-comment">// 1 — không dùng cái nào: mọi cột vô hướng, không quan hệ</span>
+<pre><code class="language-javascript"><span class="tok-comment">// 1 — không dùng cái nào: mọi cột vô hướng, không quan hệ</span>
 const a = await prisma.user.findUniqueOrThrow({ where: { id: 1 } });
 <span class="tok-comment">// { id, email, fullName, password, createdAt }</span>
 
@@ -575,12 +575,12 @@ SELECT "title","author_id" FROM "posts" WHERE "author_id" IN ($1)</div>
 </div>
 
 <h3>Cột mật khẩu, và <code>omit</code></h3>
-<pre><code><span class="tok-comment">// Cách cũ: chọn từng trường trừ một cái, bằng tay, ở mọi câu truy vấn</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Cách cũ: chọn từng trường trừ một cái, bằng tay, ở mọi câu truy vấn</span>
 const u = await prisma.user.findMany({
   select: { id: true, email: true, fullName: true, createdAt: true, updatedAt: true,
             avatarUrl: true, bio: true /* ...và nhớ thêm trường mới vào đây mãi mãi */ },
 });</code></pre>
-<pre><code><span class="tok-comment">// Prisma 5.16+: omit nói cái gì phải bỏ ra</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Prisma 5.16+: omit nói cái gì phải bỏ ra</span>
 const u2 = await prisma.user.findMany({ omit: { password: true } });
 <span class="tok-comment">// mọi cột trừ password, và cột mới thì tự động được lấy</span>
 
@@ -598,7 +598,7 @@ const forLogin = await prisma.user.findUnique({
 </div>
 
 <h3>Lồng nhau, sâu bao nhiêu tuỳ bạn</h3>
-<pre><code>const post = await prisma.post.findUniqueOrThrow({
+<pre><code class="language-javascript">const post = await prisma.post.findUniqueOrThrow({
   where: { id: 1 },
   select: {
     id: true,
@@ -629,7 +629,7 @@ prisma:query SELECT (SELECT COUNT(*) FROM "comments" WHERE "post_id" = "posts"."
 </div>
 
 <h3>Lọc và sắp xếp quan hệ được include</h3>
-<pre><code><span class="tok-comment">// Mọi tham số của findMany đều dùng được bên trong một include hay một select lồng</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Mọi tham số của findMany đều dùng được bên trong một include hay một select lồng</span>
 include: {
   posts: {
     where:   { published: true, deletedAt: null },
@@ -646,7 +646,7 @@ include: {
 </div>
 
 <h3><code>_count</code>: con số mà không cần các hàng</h3>
-<pre><code><span class="tok-comment">// Sai: nạp 4.000 bài viết để hiển thị "4000"</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Sai: nạp 4.000 bài viết để hiển thị "4000"</span>
 const bad = await prisma.user.findMany({ include: { posts: true } });
 console.log(bad[0].posts.length);
 
@@ -667,7 +667,7 @@ SELECT "id","title","body","published","views","created_at","author_id" FROM "po
 SELECT "users".*, (SELECT COUNT(*) FROM "posts" WHERE "posts"."author_id" = "users"."id") FROM "users"            -- 1 hàng, 84 byte</div>
 
 <h3>API kiểu chuỗi: đi qua thay vì include</h3>
-<pre><code><span class="tok-comment">// Nối từ một lần tra unique sang quan hệ của nó — hai câu truy vấn, không include</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Nối từ một lần tra unique sang quan hệ của nó — hai câu truy vấn, không include</span>
 const posts = await prisma.user.findUnique({ where: { email } }).posts({
   where: { published: true },
   take: 10,
@@ -683,7 +683,7 @@ const author = await prisma.comment.findUnique({ where: { id: 5 } }).post().auth
 </div>
 
 <h3>Đặt tên cho hình dạng bạn vừa chọn</h3>
-<pre><code>import { Prisma } from '@prisma/client';
+<pre><code class="language-javascript">import { Prisma } from '@prisma/client';
 
 <span class="tok-comment">// Định nghĩa phép chọn một lần, dưới dạng một giá trị</span>
 const postSummary = {
@@ -737,7 +737,7 @@ function render(b: PostSummary) {
 </div>
 
 <h3><code>create</code> — one row, any shape</h3>
-<pre><code>const u = await prisma.user.create({
+<pre><code class="language-javascript">const u = await prisma.user.create({
   data: {
     email: 'an@example.com',
     fullName: 'Nguyen Van An',
@@ -767,7 +767,7 @@ prisma:query COMMIT
 </div>
 
 <h3><code>connectOrCreate</code> — the tag problem, solved</h3>
-<pre><code><span class="tok-comment">// "Attach these tags; create the ones that do not exist yet"</span>
+<pre><code class="language-typescript"><span class="tok-comment">// "Attach these tags; create the ones that do not exist yet"</span>
 await prisma.post.create({
   data: {
     title: 'Bai moi',
@@ -790,7 +790,7 @@ prisma:query COMMIT</div>
 </div>
 
 <h3><code>createMany</code> — thousands in one statement</h3>
-<pre><code>const rows = Array.from({ length: 10_000 }, (_, i) =&gt; ({
+<pre><code class="language-javascript">const rows = Array.from({ length: 10_000 }, (_, i) =&gt; ({
   title: &#96;Bai \${i}&#96;,
   authorId: 1,
 }));
@@ -813,7 +813,7 @@ createMany: 486.331ms</div>
   <div class="kv"><span class="k"><code>skipDuplicates: true</code></span><span class="v">Appends <code>ON CONFLICT DO NOTHING</code>, so a unique collision is skipped instead of failing the whole batch. Exactly right for idempotent imports; PostgreSQL, MySQL and SQLite only.</span></div>
   <div class="kv"><span class="k">It is one statement, so it is atomic</span><span class="v">Without <code>skipDuplicates</code>, one bad row rolls back all ten thousand. That is usually correct for an import, and occasionally the thing that makes you validate before writing.</span></div>
 </div>
-<pre><code><span class="tok-comment">// Prisma 5.14+: the rows come back, so you can use their ids</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Prisma 5.14+: the rows come back, so you can use their ids</span>
 const post = await prisma.post.createManyAndReturn({
   data: [{ title: 'A', authorId: 1 }, { title: 'B', authorId: 1 }],
   select: { id: true, title: true },
@@ -824,7 +824,7 @@ console.log(post);</code></pre>
 [ { id: 101, title: 'A' }, { id: 102, title: 'B' } ]</div>
 
 <h3>Importing a graph, at speed</h3>
-<pre><code><span class="tok-comment">// 5,000 users, each with 3 posts. The naive nested version:</span>
+<pre><code class="language-javascript"><span class="tok-comment">// 5,000 users, each with 3 posts. The naive nested version:</span>
 <span class="tok-comment">//   for (const u of users) await prisma.user.create({ data: { ...u, posts: {...} } })</span>
 <span class="tok-comment">// = 5,000 transactions, 15,000 inserts, about 40 seconds.</span>
 
@@ -849,7 +849,7 @@ real    0m1.207s</div>
 <p>Thirty-three times faster, and the shape of the fix generalises: <strong>create parents in one batch, build an id map, create children in one batch</strong>. If the whole import must be atomic, wrap both calls in <code>prisma.$transaction</code> — Chapter 7 covers the timeout you will need to raise when you do.</p>
 
 <h3>When the unique constraint fires</h3>
-<pre><code>try {
+<pre><code class="language-javascript">try {
   await prisma.user.create({ data: { email: 'an@example.com' } });
 } catch (e) {
   if (e instanceof Prisma.PrismaClientKnownRequestError &amp;&amp; e.code === 'P2002') {
@@ -867,7 +867,7 @@ real    0m1.207s</div>
 </div>
 
 <h3>Sensible defaults, so callers cannot forget</h3>
-<pre><code><span class="tok-comment">// A create that leans on the schema instead of the caller</span>
+<pre><code class="language-typescript"><span class="tok-comment">// A create that leans on the schema instead of the caller</span>
 model Post {
   id        Int      @id @default(autoincrement())
   title     String
@@ -877,7 +877,7 @@ model Post {
   createdAt DateTime @default(now())          <span class="tok-comment">// never passed by hand</span>
   updatedAt DateTime @updatedAt
 }</code></pre>
-<pre><code>await prisma.post.create({ data: { title: 'Bai', slug: 'post', authorId: 1 } });</code></pre>
+<pre><code class="language-typescript">await prisma.post.create({ data: { title: 'Bai', slug: 'post', authorId: 1 } });</code></pre>
 <div class="out">INSERT INTO "posts" ("title","slug","author_id","updated_at") VALUES ($1,$2,$3,$4) RETURNING ...
 -- published, views and created_at came from the database defaults</div>
 <div class="callout">
@@ -905,7 +905,7 @@ model Post {
 </div>
 
 <h3><code>create</code> — một hàng, hình dạng nào cũng được</h3>
-<pre><code>const u = await prisma.user.create({
+<pre><code class="language-javascript">const u = await prisma.user.create({
   data: {
     email: 'an@example.com',
     fullName: 'Nguyen Van An',
@@ -935,7 +935,7 @@ prisma:query COMMIT
 </div>
 
 <h3><code>connectOrCreate</code> — bài toán thẻ, đã giải</h3>
-<pre><code><span class="tok-comment">// "Gắn mấy thẻ này; cái nào chưa có thì tạo"</span>
+<pre><code class="language-typescript"><span class="tok-comment">// "Gắn mấy thẻ này; cái nào chưa có thì tạo"</span>
 await prisma.post.create({
   data: {
     title: 'Bai moi',
@@ -958,7 +958,7 @@ prisma:query COMMIT</div>
 </div>
 
 <h3><code>createMany</code> — hàng nghìn hàng trong một câu lệnh</h3>
-<pre><code>const rows = Array.from({ length: 10_000 }, (_, i) =&gt; ({
+<pre><code class="language-javascript">const rows = Array.from({ length: 10_000 }, (_, i) =&gt; ({
   title: &#96;Bai \${i}&#96;,
   authorId: 1,
 }));
@@ -981,7 +981,7 @@ createMany: 486.331ms</div>
   <div class="kv"><span class="k"><code>skipDuplicates: true</code></span><span class="v">Thêm <code>ON CONFLICT DO NOTHING</code>, nên một lần đụng unique bị bỏ qua thay vì làm hỏng cả lô. Đúng y cho các lần nhập dữ liệu idempotent; chỉ có ở PostgreSQL, MySQL và SQLite.</span></div>
   <div class="kv"><span class="k">Nó là một câu lệnh, nên nó nguyên tử</span><span class="v">Không có <code>skipDuplicates</code> thì một hàng hỏng làm quay lui cả mười nghìn hàng. Thường thì đúng ý cho một lần nhập, và thỉnh thoảng là thứ khiến bạn phải kiểm dữ liệu trước khi ghi.</span></div>
 </div>
-<pre><code><span class="tok-comment">// Prisma 5.14+: các hàng quay về, nên bạn dùng được id của chúng</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Prisma 5.14+: các hàng quay về, nên bạn dùng được id của chúng</span>
 const post = await prisma.post.createManyAndReturn({
   data: [{ title: 'A', authorId: 1 }, { title: 'B', authorId: 1 }],
   select: { id: true, title: true },
@@ -992,7 +992,7 @@ console.log(post);</code></pre>
 [ { id: 101, title: 'A' }, { id: 102, title: 'B' } ]</div>
 
 <h3>Nhập một đồ thị, với tốc độ</h3>
-<pre><code><span class="tok-comment">// 5.000 người dùng, mỗi người 3 bài viết. Bản lồng nhau ngây thơ:</span>
+<pre><code class="language-javascript"><span class="tok-comment">// 5.000 người dùng, mỗi người 3 bài viết. Bản lồng nhau ngây thơ:</span>
 <span class="tok-comment">//   for (const u of users) await prisma.user.create({ data: { ...u, posts: {...} } })</span>
 <span class="tok-comment">// = 5.000 giao dịch, 15.000 lần chèn, khoảng 40 giây.</span>
 
@@ -1017,7 +1017,7 @@ real    0m1.207s</div>
 <p>Nhanh gấp ba mươi ba lần, và hình dạng của cách vá này tổng quát hoá được: <strong>tạo cha trong một lô, dựng một bản đồ id, tạo con trong một lô</strong>. Nếu cả lần nhập phải nguyên tử thì bọc cả hai lời gọi trong <code>prisma.$transaction</code> — Chương 7 nói về cái timeout bạn sẽ phải nâng lên khi làm vậy.</p>
 
 <h3>Khi ràng buộc unique nổ</h3>
-<pre><code>try {
+<pre><code class="language-javascript">try {
   await prisma.user.create({ data: { email: 'an@example.com' } });
 } catch (e) {
   if (e instanceof Prisma.PrismaClientKnownRequestError &amp;&amp; e.code === 'P2002') {
@@ -1035,7 +1035,7 @@ real    0m1.207s</div>
 </div>
 
 <h3>Giá trị mặc định hợp lý, để người gọi không quên được</h3>
-<pre><code><span class="tok-comment">// Một lệnh create dựa vào lược đồ thay vì dựa vào người gọi</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Một lệnh create dựa vào lược đồ thay vì dựa vào người gọi</span>
 model Post {
   id        Int      @id @default(autoincrement())
   title     String
@@ -1045,7 +1045,7 @@ model Post {
   createdAt DateTime @default(now())          <span class="tok-comment">// không bao giờ truyền bằng tay</span>
   updatedAt DateTime @updatedAt
 }</code></pre>
-<pre><code>await prisma.post.create({ data: { title: 'Bai', slug: 'post', authorId: 1 } });</code></pre>
+<pre><code class="language-typescript">await prisma.post.create({ data: { title: 'Bai', slug: 'post', authorId: 1 } });</code></pre>
 <div class="out">INSERT INTO "posts" ("title","slug","author_id","updated_at") VALUES ($1,$2,$3,$4) RETURNING ...
 -- published, views và created_at đến từ giá trị mặc định của cơ sở dữ liệu</div>
 <div class="callout">
@@ -1080,7 +1080,7 @@ model Post {
   <div class="kv"><span class="k"><code>upsert</code></span><span class="v">Update if the unique key exists, create otherwise. One statement on PostgreSQL (<code>ON CONFLICT DO UPDATE</code>), and therefore atomic — mostly. See below.</span></div>
   <div class="kv"><span class="k"><code>updateManyAndReturn</code></span><span class="v">Prisma 6: <code>updateMany</code> that returns the rows via <code>RETURNING</code>. Fills the gap that used to force a follow-up <code>findMany</code>.</span></div>
 </div>
-<pre><code><span class="tok-comment">// update — one row, and it must exist</span>
+<pre><code class="language-javascript"><span class="tok-comment">// update — one row, and it must exist</span>
 const post = await prisma.post.update({
   where: { id: 1 },
   data: { title: 'Doi name', published: true },
@@ -1122,7 +1122,7 @@ prisma:query UPDATE "posts" SET "published"=$1,"updated_at"=$2 WHERE "author_id"
 </div>
 
 <h3>The six atomic operators</h3>
-<pre><code><span class="tok-comment">// Numbers: computed by the database, safe under concurrency</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Numbers: computed by the database, safe under concurrency</span>
 await prisma.post.update({ where: { id: 1 }, data: { views:   { increment: 1 } } });
 await prisma.post.update({ where: { id: 1 }, data: { stock:   { decrement: 1 } } });
 await prisma.post.update({ where: { id: 1 }, data: { score:   { multiply: 2 } } });
@@ -1140,7 +1140,7 @@ UPDATE "posts" SET "tags" = array_cat("posts"."tags", $1) WHERE "id" = $2 RETURN
 <p><em>Read-then-write:</em> request A reads 120. Request B reads 120. A computes 121 and writes it. B computes 121 and writes it. The final value is 121, and one view has vanished with no error anywhere. Under a hundred concurrent readers you lose a large fraction of them.</p>
 <p><em>Atomic:</em> both send <code>SET views = views + 1</code>. PostgreSQL takes a row lock for each, applies them in some order, and the final value is 122. Always.</p>
 </div>
-<pre><code><span class="tok-comment">// Reproduce it — 100 concurrent increments, both ways</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Reproduce it — 100 concurrent increments, both ways</span>
 await prisma.post.update({ where: { id: 1 }, data: { views: 0 } });
 
 await Promise.all(Array.from({ length: 100 }, async () =&gt; {
@@ -1160,7 +1160,7 @@ nguyen from  : 100</div>
 <p>Seventy-seven of a hundred writes silently lost. On a development machine with one user this code appears to work perfectly, which is exactly why the bug reaches production. Any field that is <em>derived from its own previous value</em> — a counter, a balance, a stock level, a retry count — must use an atomic operator or an explicit transaction. Chapter 7 covers the cases atomic operators cannot express.</p>
 
 <h3><code>upsert</code>, and the race it still has</h3>
-<pre><code>await prisma.setting.upsert({
+<pre><code class="language-typescript">await prisma.setting.upsert({
   where:  { key: 'site_name' },
   update: { value: 'CuongThai' },
   create: { key: 'site_name', value: 'CuongThai' },
@@ -1174,7 +1174,7 @@ nguyen from  : 100</div>
   <div class="kv"><span class="k">How to tell which you got</span><span class="v">Read the query log. <code>ON CONFLICT</code> means the fast atomic path; a <code>SELECT</code> followed by an <code>INSERT</code> means the fallback. This is a two-second check and it tells you whether you need a retry.</span></div>
   <div class="kv"><span class="k">The retry, when you need one</span><span class="v">Catch <code>P2002</code> and call <code>upsert</code> again — the second attempt finds the row and takes the update branch. One retry is enough; a loop is a sign the unique key is wrong.</span></div>
 </div>
-<pre><code><span class="tok-comment">// Idempotent counter, correct under concurrency: upsert + atomic operator together</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Idempotent counter, correct under concurrency: upsert + atomic operator together</span>
 await prisma.pageView.upsert({
   where:  { path_day: { path: '/courses', day: homNay } },
   update: { count: { increment: 1 } },
@@ -1186,7 +1186,7 @@ RETURNING ...</div>
 <p>That single statement is a complete daily-counter implementation: no read, no branch in application code, no race. It is worth memorising as a shape.</p>
 
 <h3>Nested updates: editing the children</h3>
-<pre><code>await prisma.user.update({
+<pre><code class="language-typescript">await prisma.user.update({
   where: { id: 1 },
   data: {
     fullName: 'Nguyen Van An',
@@ -1222,7 +1222,7 @@ prisma:query COMMIT</div>
 </div>
 
 <h3>Conditional updates, without reading first</h3>
-<pre><code><span class="tok-comment">// "Publish it, but only if it is still a draft" — no read, no race</span>
+<pre><code class="language-javascript"><span class="tok-comment">// "Publish it, but only if it is still a draft" — no read, no race</span>
 const r = await prisma.post.updateMany({
   where: { id: 1, published: false },
   data:  { published: true, publishedAt: new Date() },
@@ -1260,7 +1260,7 @@ UPDATE "products" SET "stock" = "products"."stock" - $1 WHERE ("id"=$2 AND "prod
   <div class="kv"><span class="k"><code>upsert</code></span><span class="v">Sửa nếu khoá unique đã có, tạo nếu chưa. Một câu lệnh trên PostgreSQL (<code>ON CONFLICT DO UPDATE</code>), và vì thế nguyên tử — phần lớn trường hợp. Xem bên dưới.</span></div>
   <div class="kv"><span class="k"><code>updateManyAndReturn</code></span><span class="v">Prisma 6: <code>updateMany</code> có trả về các hàng thông qua <code>RETURNING</code>. Lấp đúng cái lỗ vốn buộc bạn phải <code>findMany</code> thêm một lần.</span></div>
 </div>
-<pre><code><span class="tok-comment">// update — một hàng, và nó buộc phải tồn tại</span>
+<pre><code class="language-javascript"><span class="tok-comment">// update — một hàng, và nó buộc phải tồn tại</span>
 const post = await prisma.post.update({
   where: { id: 1 },
   data: { title: 'Doi name', published: true },
@@ -1302,7 +1302,7 @@ prisma:query UPDATE "posts" SET "published"=$1,"updated_at"=$2 WHERE "author_id"
 </div>
 
 <h3>Sáu toán tử nguyên tử</h3>
-<pre><code><span class="tok-comment">// Số: do cơ sở dữ liệu tính, an toàn dưới tranh chấp</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Số: do cơ sở dữ liệu tính, an toàn dưới tranh chấp</span>
 await prisma.post.update({ where: { id: 1 }, data: { views:   { increment: 1 } } });
 await prisma.post.update({ where: { id: 1 }, data: { stock:   { decrement: 1 } } });
 await prisma.post.update({ where: { id: 1 }, data: { score:   { multiply: 2 } } });
@@ -1320,7 +1320,7 @@ UPDATE "posts" SET "tags" = array_cat("posts"."tags", $1) WHERE "id" = $2 RETURN
 <p><em>Đọc-rồi-ghi:</em> yêu cầu A đọc 120. Yêu cầu B đọc 120. A tính ra 121 rồi ghi. B tính ra 121 rồi ghi. Giá trị cuối là 121, và một lượt xem đã bốc hơi mà không có lỗi nào ở đâu cả. Với một trăm người đọc song song thì bạn mất một phần lớn trong số đó.</p>
 <p><em>Nguyên tử:</em> cả hai cùng gửi <code>SET views = views + 1</code>. PostgreSQL khoá hàng cho từng lần, áp dụng chúng theo một thứ tự nào đó, và giá trị cuối là 122. Luôn luôn.</p>
 </div>
-<pre><code><span class="tok-comment">// Dựng lại nó — 100 lần tăng song song, theo cả hai cách</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Dựng lại nó — 100 lần tăng song song, theo cả hai cách</span>
 await prisma.post.update({ where: { id: 1 }, data: { views: 0 } });
 
 await Promise.all(Array.from({ length: 100 }, async () =&gt; {
@@ -1340,7 +1340,7 @@ nguyen from  : 100</div>
 <p>Bảy mươi bảy trên một trăm lần ghi mất trong im lặng. Trên máy phát triển với một người dùng thì đoạn mã ấy trông chạy hoàn hảo, và chính vì thế con bọ đi thẳng lên production. Bất kỳ trường nào <em>được suy ra từ chính giá trị trước đó của nó</em> — một bộ đếm, một số dư, một mức tồn kho, một số lần thử lại — đều phải dùng toán tử nguyên tử hoặc một giao dịch tường minh. Chương 7 nói về những trường hợp mà toán tử nguyên tử diễn đạt không nổi.</p>
 
 <h3><code>upsert</code>, và cuộc đua nó vẫn còn</h3>
-<pre><code>await prisma.setting.upsert({
+<pre><code class="language-typescript">await prisma.setting.upsert({
   where:  { key: 'site_name' },
   update: { value: 'CuongThai' },
   create: { key: 'site_name', value: 'CuongThai' },
@@ -1354,7 +1354,7 @@ nguyen from  : 100</div>
   <div class="kv"><span class="k">Làm sao biết bạn nhận cái nào</span><span class="v">Đọc log truy vấn. <code>ON CONFLICT</code> nghĩa là đường nguyên tử nhanh; một câu <code>SELECT</code> theo sau bởi một câu <code>INSERT</code> nghĩa là đường lùi. Đây là phép kiểm hai giây và nó cho bạn biết có cần thử lại hay không.</span></div>
   <div class="kv"><span class="k">Lần thử lại, khi bạn cần</span><span class="v">Bắt <code>P2002</code> rồi gọi <code>upsert</code> lần nữa — lần thứ hai tìm thấy hàng và đi vào nhánh update. Một lần thử lại là đủ; một vòng lặp là dấu hiệu khoá unique đang sai.</span></div>
 </div>
-<pre><code><span class="tok-comment">// Bộ đếm idempotent, đúng dưới tranh chấp: upsert kết hợp toán tử nguyên tử</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Bộ đếm idempotent, đúng dưới tranh chấp: upsert kết hợp toán tử nguyên tử</span>
 await prisma.pageView.upsert({
   where:  { path_day: { path: '/courses', day: homNay } },
   update: { count: { increment: 1 } },
@@ -1366,7 +1366,7 @@ RETURNING ...</div>
 <p>Một câu lệnh duy nhất ấy là một bản cài đặt hoàn chỉnh cho bộ đếm theo ngày: không đọc, không rẽ nhánh trong mã ứng dụng, không tranh chấp. Nó đáng thuộc lòng như một hình mẫu.</p>
 
 <h3>Cập nhật lồng nhau: sửa các con</h3>
-<pre><code>await prisma.user.update({
+<pre><code class="language-typescript">await prisma.user.update({
   where: { id: 1 },
   data: {
     fullName: 'Nguyen Van An',
@@ -1402,7 +1402,7 @@ prisma:query COMMIT</div>
 </div>
 
 <h3>Cập nhật có điều kiện, không cần đọc trước</h3>
-<pre><code><span class="tok-comment">// "Đăng bài, nhưng chỉ khi nó vẫn còn là bản nháp" — không đọc, không tranh chấp</span>
+<pre><code class="language-javascript"><span class="tok-comment">// "Đăng bài, nhưng chỉ khi nó vẫn còn là bản nháp" — không đọc, không tranh chấp</span>
 const r = await prisma.post.updateMany({
   where: { id: 1, published: false },
   data:  { published: true, publishedAt: new Date() },
@@ -1443,7 +1443,7 @@ UPDATE "products" SET "stock" = "products"."stock" - $1 WHERE ("id"=$2 AND "prod
 <p class="lead">Deleting is the only operation with no undo. That single fact is why almost every production application ends up implementing soft delete — and why doing it badly, which is easy, produces a system where "deleted" rows keep showing up in exactly the places you forgot to filter.</p>
 
 <h3>The two methods</h3>
-<pre><code><span class="tok-comment">// delete — one row, by unique field. Returns it. Throws P2025 if absent.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// delete — one row, by unique field. Returns it. Throws P2025 if absent.</span>
 const post = await prisma.post.delete({ where: { id: 1 } });
 
 <span class="tok-comment">// deleteMany — any filter. Returns { count }. Never throws for zero matches.</span>
@@ -1461,7 +1461,7 @@ prisma:query DELETE FROM "public"."posts"</div>
 </div>
 
 <h3>What a cascade actually costs</h3>
-<pre><code><span class="tok-comment">-- Before deleting, ask what goes with it</span>
+<pre><code class="language-sql"><span class="tok-comment">-- Before deleting, ask what goes with it</span>
 SELECT
   (SELECT count(*) FROM posts     WHERE author_id = 1) AS posts,
   (SELECT count(*) FROM comments  WHERE post_id IN (SELECT id FROM posts WHERE author_id = 1)) AS comments,
@@ -1482,7 +1482,7 @@ Time: 4128.911 ms</div>
 </div>
 
 <h3>Soft delete: the column and the discipline</h3>
-<pre><code>model Post {
+<pre><code class="language-typescript">model Post {
   id        Int       @id @default(autoincrement())
   title     String
   authorId  Int       @map("author_id")
@@ -1493,9 +1493,9 @@ Time: 4128.911 ms</div>
   @@index([authorId])
   @@map("posts")
 }</code></pre>
-<pre><code><span class="tok-comment">-- Prisma cannot declare a partial index; add it by hand in the migration</span>
+<pre><code class="language-sql"><span class="tok-comment">-- Prisma cannot declare a partial index; add it by hand in the migration</span>
 CREATE INDEX "posts_author_active_idx" ON "posts"("author_id") WHERE "deleted_at" IS NULL;</code></pre>
-<pre><code><span class="tok-comment">// Deleting is now an update</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Deleting is now an update</span>
 await prisma.post.update({ where: { id: 1 }, data: { deletedAt: new Date() } });
 
 <span class="tok-comment">// And every read must remember to filter. This is the whole problem.</span>
@@ -1505,7 +1505,7 @@ await prisma.post.findMany({ where: { authorId: 1, deletedAt: null } });</code><
 </div>
 
 <h3>Client extensions: filtering that cannot be forgotten</h3>
-<pre><code>import { PrismaClient } from '@prisma/client';
+<pre><code class="language-javascript">import { PrismaClient } from '@prisma/client';
 
 const base = new PrismaClient();
 
@@ -1527,7 +1527,7 @@ export const prisma = base.$extends({
     },
   },
 });</code></pre>
-<pre><code><span class="tok-comment">// Now the filter is impossible to forget</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Now the filter is impossible to forget</span>
 await prisma.post.findMany({ where: { authorId: 1 } });</code></pre>
 <div class="out">prisma:query SELECT ... FROM "posts" WHERE ("author_id" = $1 AND "deleted_at" IS NULL) OFFSET $2</div>
 <div class="kv-grid">
@@ -1538,12 +1538,12 @@ await prisma.post.findMany({ where: { authorId: 1 } });</code></pre>
 </div>
 
 <h3>The trap: unique constraints and soft delete</h3>
-<pre><code>model User {
+<pre><code class="language-typescript">model User {
   id        Int       @id @default(autoincrement())
   email     String    @unique
   deletedAt DateTime? @map("deleted_at")
 }</code></pre>
-<pre><code><span class="tok-comment">// User soft-deletes their account, then wants to sign up again</span>
+<pre><code class="language-typescript"><span class="tok-comment">// User soft-deletes their account, then wants to sign up again</span>
 await prisma.user.update({ where: { email: 'an@x.com' }, data: { deletedAt: new Date() } });
 await prisma.user.create({ data: { email: 'an@x.com' } });</code></pre>
 <div class="out">PrismaClientKnownRequestError:
@@ -1556,12 +1556,12 @@ Unique constraint failed on the fields: (&#96;email&#96;)
   <div class="lz-step"><span class="lz-k">3 · Rename on delete</span><span class="lz-t">Crude, and effective</span><span class="lz-d">Set <code>email = 'an@x.com.deleted.1712...'</code> when soft-deleting. Ugly in the database, free of constraint problems, and it is what several large products actually do.</span></div>
   <div class="lz-step"><span class="lz-k">Whichever you pick</span><span class="lz-t">Write it down</span><span class="lz-d">This is the single most surprising consequence of soft delete. A comment in the schema next to <code>deletedAt</code> saves the next person an hour.</span></div>
 </div>
-<pre><code><span class="tok-comment">-- Option 1, in a hand-written migration</span>
+<pre><code class="language-typescript"><span class="tok-comment">-- Option 1, in a hand-written migration</span>
 DROP INDEX "users_email_key";
 CREATE UNIQUE INDEX "users_email_active_key" ON "users"("email") WHERE "deleted_at" IS NULL;</code></pre>
 
 <h3>Real deletion, on purpose</h3>
-<pre><code><span class="tok-comment">// A scheduled job: rows soft-deleted more than 30 days ago are erased for real.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// A scheduled job: rows soft-deleted more than 30 days ago are erased for real.</span>
 <span class="tok-comment">// Batched, so it never holds a lock for minutes.</span>
 const cutoff = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
 
@@ -1601,7 +1601,7 @@ da xoa that: 412</div>
 <p class="lead">Xoá là thao tác duy nhất không hoàn tác được. Chỉ riêng sự thật ấy là lý do gần như mọi ứng dụng production rốt cuộc đều cài xoá mềm — và cũng là lý do làm nó dở, vốn rất dễ, đẻ ra một hệ thống nơi những hàng "đã xoá" cứ hiện ra đúng ở những chỗ bạn quên lọc.</p>
 
 <h3>Hai phương thức</h3>
-<pre><code><span class="tok-comment">// delete — một hàng, theo trường unique. Trả về nó. Ném P2025 nếu không có.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// delete — một hàng, theo trường unique. Trả về nó. Ném P2025 nếu không có.</span>
 const post = await prisma.post.delete({ where: { id: 1 } });
 
 <span class="tok-comment">// deleteMany — bộ lọc bất kỳ. Trả về { count }. Không bao giờ ném lỗi khi khớp 0 hàng.</span>
@@ -1619,7 +1619,7 @@ prisma:query DELETE FROM "public"."posts"</div>
 </div>
 
 <h3>Một lần xoá dây chuyền thật sự tốn gì</h3>
-<pre><code><span class="tok-comment">-- Trước khi xoá, hỏi xem cái gì đi theo nó</span>
+<pre><code class="language-sql"><span class="tok-comment">-- Trước khi xoá, hỏi xem cái gì đi theo nó</span>
 SELECT
   (SELECT count(*) FROM posts     WHERE author_id = 1) AS posts,
   (SELECT count(*) FROM comments  WHERE post_id IN (SELECT id FROM posts WHERE author_id = 1)) AS comments,
@@ -1640,7 +1640,7 @@ Time: 4128.911 ms</div>
 </div>
 
 <h3>Xoá mềm: cái cột và cái kỷ luật</h3>
-<pre><code>model Post {
+<pre><code class="language-typescript">model Post {
   id        Int       @id @default(autoincrement())
   title     String
   authorId  Int       @map("author_id")
@@ -1651,9 +1651,9 @@ Time: 4128.911 ms</div>
   @@index([authorId])
   @@map("posts")
 }</code></pre>
-<pre><code><span class="tok-comment">-- Prisma không khai được partial index; thêm bằng tay trong migration</span>
+<pre><code class="language-sql"><span class="tok-comment">-- Prisma không khai được partial index; thêm bằng tay trong migration</span>
 CREATE INDEX "posts_author_active_idx" ON "posts"("author_id") WHERE "deleted_at" IS NULL;</code></pre>
-<pre><code><span class="tok-comment">// Xoá giờ là một lệnh update</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Xoá giờ là một lệnh update</span>
 await prisma.post.update({ where: { id: 1 }, data: { deletedAt: new Date() } });
 
 <span class="tok-comment">// Và mọi lần đọc đều phải nhớ lọc. Đó chính là toàn bộ vấn đề.</span>
@@ -1663,7 +1663,7 @@ await prisma.post.findMany({ where: { authorId: 1, deletedAt: null } });</code><
 </div>
 
 <h3>Client extension: lọc mà không thể quên</h3>
-<pre><code>import { PrismaClient } from '@prisma/client';
+<pre><code class="language-javascript">import { PrismaClient } from '@prisma/client';
 
 const base = new PrismaClient();
 
@@ -1685,7 +1685,7 @@ export const prisma = base.$extends({
     },
   },
 });</code></pre>
-<pre><code><span class="tok-comment">// Giờ bộ lọc là thứ không thể quên</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Giờ bộ lọc là thứ không thể quên</span>
 await prisma.post.findMany({ where: { authorId: 1 } });</code></pre>
 <div class="out">prisma:query SELECT ... FROM "posts" WHERE ("author_id" = $1 AND "deleted_at" IS NULL) OFFSET $2</div>
 <div class="kv-grid">
@@ -1696,12 +1696,12 @@ await prisma.post.findMany({ where: { authorId: 1 } });</code></pre>
 </div>
 
 <h3>Cái bẫy: ràng buộc unique và xoá mềm</h3>
-<pre><code>model User {
+<pre><code class="language-typescript">model User {
   id        Int       @id @default(autoincrement())
   email     String    @unique
   deletedAt DateTime? @map("deleted_at")
 }</code></pre>
-<pre><code><span class="tok-comment">// Người dùng xoá mềm tài khoản, rồi muốn đăng ký lại</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Người dùng xoá mềm tài khoản, rồi muốn đăng ký lại</span>
 await prisma.user.update({ where: { email: 'an@x.com' }, data: { deletedAt: new Date() } });
 await prisma.user.create({ data: { email: 'an@x.com' } });</code></pre>
 <div class="out">PrismaClientKnownRequestError:
@@ -1714,12 +1714,12 @@ Unique constraint failed on the fields: (&#96;email&#96;)
   <div class="lz-step"><span class="lz-k">3 · Đổi tên khi xoá</span><span class="lz-t">Thô, và hiệu quả</span><span class="lz-d">Đặt <code>email = 'an@x.com.deleted.1712...'</code> lúc xoá mềm. Xấu dưới cơ sở dữ liệu, sạch mọi rắc rối ràng buộc, và đó là thứ vài sản phẩm lớn thật sự đang làm.</span></div>
   <div class="lz-step"><span class="lz-k">Chọn cái nào cũng được</span><span class="lz-t">Nhớ ghi lại</span><span class="lz-d">Đây là hệ quả bất ngờ nhất của xoá mềm. Một dòng chú thích trong lược đồ ngay cạnh <code>deletedAt</code> tiết kiệm cho người sau một giờ đồng hồ.</span></div>
 </div>
-<pre><code><span class="tok-comment">-- Cách 1, trong một migration viết tay</span>
+<pre><code class="language-typescript"><span class="tok-comment">-- Cách 1, trong một migration viết tay</span>
 DROP INDEX "users_email_key";
 CREATE UNIQUE INDEX "users_email_active_key" ON "users"("email") WHERE "deleted_at" IS NULL;</code></pre>
 
 <h3>Xoá thật, một cách có chủ ý</h3>
-<pre><code><span class="tok-comment">// Một tác vụ theo lịch: hàng xoá mềm quá 30 ngày thì xoá thật.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Một tác vụ theo lịch: hàng xoá mềm quá 30 ngày thì xoá thật.</span>
 <span class="tok-comment">// Chia lô, nên nó không bao giờ giữ khoá suốt nhiều phút.</span>
 const cutoff = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
 

@@ -297,7 +297,7 @@ nó lồng nhau ra sao.
 <p class="lead">The selling point of OpenTelemetry is that you get a full trace without writing any spans. That is true, and it is worth understanding <em>how</em>, because the mechanism explains every way the setup goes wrong — and it goes wrong in the same way for almost everyone.</p>
 
 <h3>The mechanism: it rewrites modules as they load</h3>
-<pre><code>When you require('http') or import Prisma, OpenTelemetry has
+<pre><code class="language-javascript">When you require('http') or import Prisma, OpenTelemetry has
 already registered a hook in Node's module loader. It:
 
   1. intercepts the module before your code gets it
@@ -348,7 +348,7 @@ sdk.start();</code></pre>
     "start": "node --import ./dist/tracing.js dist/index.js"
   }
 }</code></pre>
-<pre><code>Why --import and not a plain import at the top of index.ts:
+<pre><code class="language-javascript">Why --import and not a plain import at the top of index.ts:
 
   ESM hoists ALL imports before executing ANY module body.
   So this does not work:
@@ -453,7 +453,7 @@ sampling "10% minus whatever got dropped".</code></pre>
 <p class="lead">Điểm bán hàng của OpenTelemetry là bạn có một trace đầy đủ mà không phải viết span nào. Điều đó đúng, và đáng hiểu <em>bằng cách nào</em>, vì cái cơ chế ấy giải thích mọi cách mà việc thiết lập bị sai — và nó sai theo cùng một kiểu với gần như tất cả mọi người.</p>
 
 <h3>Cơ chế: nó viết lại module ngay lúc chúng được nạp</h3>
-<pre><code>Khi bạn require('http') hay import Prisma, OpenTelemetry đã kịp
+<pre><code class="language-javascript">Khi bạn require('http') hay import Prisma, OpenTelemetry đã kịp
 đăng ký một cái móc trong trình nạp module của Node. Nó:
 
   1. chặn module lại trước khi mã của bạn nhận được
@@ -504,7 +504,7 @@ sdk.start();</code></pre>
     "start": "node --import ./dist/tracing.js dist/index.js"
   }
 }</code></pre>
-<pre><code>Vì sao dùng --import mà không phải một dòng import thường ở đầu
+<pre><code class="language-javascript">Vì sao dùng --import mà không phải một dòng import thường ở đầu
 index.ts:
 
   ESM CẨU (hoist) MỌI lệnh import lên trước khi thực thi thân

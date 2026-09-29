@@ -87,7 +87,7 @@ y = 17 + 6*5/9 - z*z           /* gán, kết quả là giá trị của y  */</
 <li><strong><code>%</code> — remainder, integers only</strong> — <code>17%3</code> → <strong>2</strong>. And <code>15.0 % 3</code> → <strong>ERROR</strong>, exactly as the slide says: <code>%</code> is undefined for floating-point operands and the compiler refuses to build.</li>
 <li><strong><code>++</code> and <code>--</code></strong> — "increase/decrease the value of a variable (prefix/postfix operators)". These are the only operators in this table that <em>change</em> their operand. That fact is the summary question on slide 61.</li>
 </ul>
-<pre><code>printf("%d %g %d\\n", 10/3, 10.0/3, 17%3);   /* 3 3.33333 2 */
+<pre><code class="language-c">printf("%d %g %d\\n", 10/3, 10.0/3, 17%3);   /* 3 3.33333 2 */
 /* float a = 15.0;  a % 3   -- will not compile */</code></pre>
 <p class="dap-an">✅ Verified by compiling: <code>10/3</code> = 3 · <code>10.0/3</code> = 3.333333 · <code>17%3</code> = 2 · <code>float a = 15.0; a % 3;</code> → <em>error: invalid operands to binary expression ('float' and 'int')</em>. ⚠️ The school slide has a copy-paste slip in this table: the Example column of the <code>* /</code> row reads <code>z = x-y;</code>, but it is illustrating multiplication, so it should read <code>z = x*y;</code>. The numeric examples underneath (<code>10/3</code>, <code>10.0/3</code>) are correct.</p>
 <p class="pitfall">⚠️ Negative operands: C99 truncates <em>toward zero</em>. <code>-7/2</code> = <strong>-3</strong> (not -4) and <code>-7%2</code> = <strong>-1</strong> (not +1). The sign of <code>%</code> follows the <em>left</em> operand: <code>7%-2</code> = <strong>+1</strong>. All three verified by compiling.</p>`,
@@ -100,7 +100,7 @@ y = 17 + 6*5/9 - z*z           /* gán, kết quả là giá trị của y  */</
 <li><strong><code>%</code> — lấy dư, CHỈ cho số nguyên</strong> — <code>17%3</code> → <strong>2</strong>. Còn <code>15.0 % 3</code> → <strong>LỖI</strong>, đúng như slide ghi: <code>%</code> không định nghĩa cho toán hạng số thực và trình biên dịch từ chối dịch.</li>
 <li><strong><code>++</code> và <code>--</code></strong> — "increase/decrease the value of a variable (prefix/postfix)". Đây là hai toán tử DUY NHẤT trong bảng này <em>làm đổi</em> toán hạng của chính nó. Chính sự thật đó là câu hỏi tổng kết ở slide 61.</li>
 </ul>
-<pre><code>printf("%d %g %d\\n", 10/3, 10.0/3, 17%3);   /* 3 3.33333 2 */
+<pre><code class="language-c">printf("%d %g %d\\n", 10/3, 10.0/3, 17%3);   /* 3 3.33333 2 */
 /* float a = 15.0;  a % 3   -- không dịch được */</code></pre>
 <p class="dap-an">✅ Đã kiểm bằng biên dịch thật: <code>10/3</code> = 3 · <code>10.0/3</code> = 3.333333 · <code>17%3</code> = 2 · <code>float a = 15.0; a % 3;</code> → <em>error: invalid operands to binary expression ('float' and 'int')</em>. ⚠️ Slide gốc của trường có một lỗi chép nhầm trong bảng này: cột Example của dòng <code>* /</code> ghi <code>z = x-y;</code>, nhưng dòng đó đang minh hoạ phép NHÂN nên phải là <code>z = x*y;</code>. Các ví dụ số bên dưới (<code>10/3</code>, <code>10.0/3</code>) thì đúng.</p>
 <p class="pitfall">⚠️ Toán hạng âm: C99 cắt <em>về phía 0</em>. <code>-7/2</code> = <strong>-3</strong> (không phải -4) và <code>-7%2</code> = <strong>-1</strong> (không phải +1). Dấu của <code>%</code> theo toán hạng <em>bên trái</em>: <code>7%-2</code> = <strong>+1</strong>. Cả ba đều đã kiểm bằng biên dịch.</p>`],
@@ -110,7 +110,7 @@ y = 17 + 6*5/9 - z*z           /* gán, kết quả là giá trị của y  */</
 <ul>
 <li><strong>What the slide is doing</strong> — declaring a couple of numeric variables, applying <code>+ - * / %</code> to them, and printing each result. The whole point is the contrast between the <code>/</code> line and the <code>%</code> line.</li>
 <li><strong>Write it yourself and run it</strong> — that is the only way this slide teaches anything. Here is a faithful version you can compile:
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     int x = 10, y = 3;
@@ -132,7 +132,7 @@ int main(void) {
 <ul>
 <li><strong>Slide đang làm gì</strong> — khai báo vài biến số, áp <code>+ - * / %</code> lên chúng, rồi in từng kết quả. Toàn bộ ý nghĩa nằm ở chỗ đối chiếu dòng <code>/</code> với dòng <code>%</code>.</li>
 <li><strong>Tự gõ lại và chạy</strong> — đó là cách duy nhất slide này dạy được điều gì. Đây là bản trung thành bạn biên dịch được ngay:
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     int x = 10, y = 3;
@@ -156,7 +156,7 @@ int main(void) {
 <ul>
 <li><strong>The rule in one line</strong> — <code>x++</code> yields the <em>old</em> value then increments; <code>++x</code> increments then yields the <em>new</em> value. Either way <code>x</code> ends up one larger; only the value handed to the surrounding expression differs.</li>
 <li><strong>Traced step by step</strong> —
-<pre><code>int x = 5, y;
+<pre><code class="language-c">int x = 5, y;
 y = x++;   /* y gets 5, then x becomes 6  =&gt; y=5 x=6 */
 x = 5;
 y = ++x;   /* x becomes 6, then y gets 6  =&gt; y=6 x=6 */</code></pre></li>
@@ -170,7 +170,7 @@ y = ++x;   /* x becomes 6, then y gets 6  =&gt; y=6 x=6 */</code></pre></li>
 <ul>
 <li><strong>Luật gói trong một dòng</strong> — <code>x++</code> trả về giá trị <em>cũ</em> rồi mới tăng; <code>++x</code> tăng trước rồi trả về giá trị <em>mới</em>. Kiểu nào thì <code>x</code> cũng lớn hơn 1 đơn vị; chỉ khác ở giá trị được đưa cho biểu thức bao quanh.</li>
 <li><strong>Chạy tay từng bước</strong> —
-<pre><code>int x = 5, y;
+<pre><code class="language-c">int x = 5, y;
 y = x++;   /* y nhận 5, rồi x thành 6  =&gt; y=5 x=6 */
 x = 5;
 y = ++x;   /* x thành 6, rồi y nhận 6  =&gt; y=6 x=6 */</code></pre></li>
@@ -191,7 +191,7 @@ y = ++x;   /* x thành 6, rồi y nhận 6  =&gt; y=6 x=6 */</code></pre></li>
 <li><strong>Do not chain them mathematically</strong> — <code>0 &lt; x &lt; 10</code> is legal C but does not mean what maths means; see slide 60 where the deck makes this its exam question. Write <code>0 &lt; x &amp;&amp; x &lt; 10</code>.</li>
 <li><strong>Never use <code>==</code> on floats</strong> — <code>0.1 + 0.2 == 0.3</code> is <em>false</em> in IEEE-754. Compare with a tolerance: <code>fabs(a - b) &lt; 1e-9</code>.</li>
 </ul>
-<pre><code>int x = 7;
+<pre><code class="language-c">int x = 7;
 printf("%d %d %d\\n", x &gt; 5, x == 5, x != 5);   /* 1 0 1 */</code></pre>
 <p class="dap-an">✅ Evaluating the slide's own earlier example <code>45 &gt; 5*x</code> for <code>x = 8</code>: <code>5*8 = 40</code> → <code>45 &gt; 40</code> → true → the expression's value is <strong>1</strong>. For <code>x = 9</code>: <code>45 &gt; 45</code> → false → <strong>0</strong>.</p>
 <p class="meo">💡 Because a comparison <em>is</em> a number, <code>if (found == 1)</code> and <code>if (found)</code> mean the same thing when <code>found</code> came from a comparison — and the second one keeps working if <code>found</code> later holds a count instead of a flag.</p>`,
@@ -204,7 +204,7 @@ printf("%d %d %d\\n", x &gt; 5, x == 5, x != 5);   /* 1 0 1 */</code></pre>
 <li><strong>Đừng nối chuỗi so sánh theo kiểu toán học</strong> — <code>0 &lt; x &lt; 10</code> hợp lệ trong C nhưng KHÔNG mang nghĩa toán học; xem slide 60, chỗ bộ slide lấy đúng chuyện này làm câu hỏi thi. Phải viết <code>0 &lt; x &amp;&amp; x &lt; 10</code>.</li>
 <li><strong>Đừng bao giờ dùng <code>==</code> với số thực</strong> — <code>0.1 + 0.2 == 0.3</code> là <em>sai</em> trong IEEE-754. So sánh có sai số: <code>fabs(a - b) &lt; 1e-9</code>.</li>
 </ul>
-<pre><code>int x = 7;
+<pre><code class="language-c">int x = 7;
 printf("%d %d %d\\n", x &gt; 5, x == 5, x != 5);   /* 1 0 1 */</code></pre>
 <p class="dap-an">✅ Tính ví dụ mà chính bộ slide đã nêu ở slide 46, <code>45 &gt; 5*x</code>, với <code>x = 8</code>: <code>5*8 = 40</code> → <code>45 &gt; 40</code> → đúng → giá trị biểu thức là <strong>1</strong>. Với <code>x = 9</code>: <code>45 &gt; 45</code> → sai → <strong>0</strong>.</p>
 <p class="meo">💡 Vì một phép so sánh CHÍNH LÀ một con số, <code>if (found == 1)</code> và <code>if (found)</code> nghĩa như nhau khi <code>found</code> lấy từ một phép so sánh — và cách thứ hai vẫn chạy đúng nếu sau này <code>found</code> chứa số đếm thay vì cờ.</p>`],
@@ -312,7 +312,7 @@ Vậy <code>n &gt;&gt; k</code> = <code>n / 2^k</code> với <code>n</code> khô
 <li><strong>The shorthand table</strong> — <code>x += y</code> is <code>x = x + y</code>; likewise <code>-=</code>, <code>*=</code>, <code>/=</code>, <code>%=</code>, and the bitwise ones <code>&amp;=</code>, <code>|=</code>, <code>^=</code>, <code>&lt;&lt;=</code>, <code>&gt;&gt;=</code>. Ten in all.</li>
 <li><strong>Why the shorthand exists</strong> — it names the variable once. <code>scores[i*2+1] += 10;</code> cannot go wrong; the long form makes you type the index twice and invites a typo.</li>
 <li><strong>Traced example</strong> —
-<pre><code>int s = 10;
+<pre><code class="language-c">int s = 10;
 s += 3;    /* s = 10 + 3  =&gt; 13 */
 s *= 2;    /* s = 13 * 2  =&gt; 26 */
 s %= 7;    /* s = 26 % 7  =&gt;  5 */</code></pre></li>
@@ -328,7 +328,7 @@ s %= 7;    /* s = 26 % 7  =&gt;  5 */</code></pre></li>
 <li><strong>Bảng gán rút gọn</strong> — <code>x += y</code> là <code>x = x + y</code>; tương tự <code>-=</code>, <code>*=</code>, <code>/=</code>, <code>%=</code>, và nhóm bit <code>&amp;=</code>, <code>|=</code>, <code>^=</code>, <code>&lt;&lt;=</code>, <code>&gt;&gt;=</code>. Tổng cộng mười cái.</li>
 <li><strong>Vì sao có dạng rút gọn</strong> — nó gọi tên biến đúng một lần. <code>scores[i*2+1] += 10;</code> không thể sai; dạng dài bắt bạn gõ chỉ số hai lần và mời gọi lỗi gõ nhầm.</li>
 <li><strong>Ví dụ chạy tay</strong> —
-<pre><code>int s = 10;
+<pre><code class="language-c">int s = 10;
 s += 3;    /* s = 10 + 3  =&gt; 13 */
 s *= 2;    /* s = 13 * 2  =&gt; 26 */
 s %= 7;    /* s = 26 % 7  =&gt;  5 */</code></pre></li>
@@ -369,10 +369,10 @@ s %= 7;    /* s = 26 % 7  =&gt;  5 */</code></pre></li>
 <li><strong>Assignment is not symmetric</strong> — in <code>a + b</code> the compiler is free to move either operand up. In <code>x = y</code> the destination type is fixed: <code>y</code> must become whatever <code>x</code> is, up or down. The variable on the left always wins.</li>
 <li><strong>Two directions, two names</strong> — if the left side is <em>higher</em>, <code>y</code> is <strong>promoted</strong> (safe, exact for the usual cases). If the left side is <em>lower</em>, <code>y</code> is <strong>truncated</strong> (lossy). Slide 57 spells both out.</li>
 <li><strong>Promotion example</strong> —
-<pre><code>int    n = 7;
+<pre><code class="language-c">int    n = 7;
 double d = n;        /* 7 becomes 7.0 exactly */</code></pre></li>
 <li><strong>Truncation example</strong> —
-<pre><code>double d = 3.7;
+<pre><code class="language-c">double d = 3.7;
 int    n = d;        /* n becomes 3 — the .7 is CUT OFF, not rounded */</code></pre></li>
 <li><strong>"Cut off, not rounded" is the exam sentence</strong> — <code>(int)3.7</code> is 3 and <code>(int)3.99</code> is also 3. Going negative, <code>(int)-3.7</code> is <strong>-3</strong>, not -4: the conversion truncates toward zero, in both directions.</li>
 <li><strong>If you want rounding, ask for it</strong> — <code>(int)(d + 0.5)</code> for non-negative <code>d</code>, or <code>round()</code> from <code>&lt;math.h&gt;</code> for the general case.</li>
@@ -384,10 +384,10 @@ int    n = d;        /* n becomes 3 — the .7 is CUT OFF, not rounded */</code>
 <li><strong>Phép gán không đối xứng</strong> — trong <code>a + b</code> trình biên dịch tự do nâng toán hạng nào cũng được. Trong <code>x = y</code> thì kiểu đích đã cố định: <code>y</code> phải trở thành đúng kiểu của <code>x</code>, lên hay xuống cũng vậy. Biến bên trái luôn thắng.</li>
 <li><strong>Hai chiều, hai tên gọi</strong> — nếu vế trái <em>cao</em> hơn thì <code>y</code> được <strong>promote</strong> (nâng cấp — an toàn, chính xác trong các trường hợp thường gặp). Nếu vế trái <em>thấp</em> hơn thì <code>y</code> bị <strong>truncate</strong> (cắt bớt — mất mát). Slide 57 nói rõ cả hai.</li>
 <li><strong>Ví dụ nâng cấp</strong> —
-<pre><code>int    n = 7;
+<pre><code class="language-c">int    n = 7;
 double d = n;        /* 7 thành 7.0, chính xác tuyệt đối */</code></pre></li>
 <li><strong>Ví dụ cắt bớt</strong> —
-<pre><code>double d = 3.7;
+<pre><code class="language-c">double d = 3.7;
 int    n = d;        /* n thành 3 — phần .7 bị CẮT, không làm tròn */</code></pre></li>
 <li><strong>"Cắt chứ không làm tròn" là câu đi thi</strong> — <code>(int)3.7</code> bằng 3 và <code>(int)3.99</code> cũng bằng 3. Sang số âm, <code>(int)-3.7</code> bằng <strong>-3</strong>, không phải -4: phép chuyển cắt về phía số 0, ở cả hai chiều.</li>
 <li><strong>Muốn làm tròn thì phải yêu cầu</strong> — <code>(int)(d + 0.5)</code> với <code>d</code> không âm, hoặc dùng <code>round()</code> trong <code>&lt;math.h&gt;</code> cho trường hợp tổng quát.</li>
@@ -401,10 +401,10 @@ int    n = d;        /* n thành 3 — phần .7 bị CẮT, không làm tròn *
 <li><strong>Rule half one, verbatim</strong> — "Promotes the right operand to the data type of the left operand if the left operand is of a higher data type than the right operand."</li>
 <li><strong>Rule half two, verbatim</strong> — "Truncates the right operand to the data type of the left operand if the left operand is of a lower data type than the right operand."</li>
 <li><strong>The picture on the slide — promotion</strong> — a single byte <code>0100 0001</code> (that is 65, the character <code>'A'</code>) being widened into four bytes <code>0000 0000 0000 0000 0000 0000 0100 0001</code>. Same value, more room. This is <code>char</code> → <code>int</code>:
-<pre><code>char c = 'A';
+<pre><code class="language-c">char c = 'A';
 int  n = c;          /* n == 65, nothing lost */</code></pre></li>
 <li><strong>The picture on the slide — truncation</strong> — four bytes ending in <code>0001 1001</code> being squeezed back into one byte <code>0001 1001</code> (that is 25). Only the low byte survives; the three high bytes are thrown away. This is <code>int</code> → <code>char</code>:
-<pre><code>int  m = 25;
+<pre><code class="language-c">int  m = 25;
 char d = m;          /* d holds 25, fits in one byte */</code></pre></li>
 <li><strong>What happens when it does <em>not</em> fit</strong> — truncation keeps only the low-order bits, which is arithmetic modulo 256 for an 8-bit <code>char</code>. <code>char c = 321;</code> stores <code>321 - 256 = 65</code>, i.e. the letter <code>'A'</code>. No warning at runtime, no error, just a different number.</li>
 <li><strong>Two truncations, two mechanisms</strong> — narrowing <em>integer</em> types drops high bits (modulo). Narrowing <em>float to integer</em> drops the fraction (truncate toward zero). Do not confuse the two: <code>(char)321</code> is 65, but <code>(int)321.9</code> is 321.</li>
@@ -416,10 +416,10 @@ char d = m;          /* d holds 25, fits in one byte */</code></pre></li>
 <li><strong>Nửa quy tắc thứ nhất, nguyên văn</strong> — "Promotes the right operand to the data type of the left operand if the left operand is of a higher data type than the right operand."</li>
 <li><strong>Nửa quy tắc thứ hai, nguyên văn</strong> — "Truncates the right operand to the data type of the left operand if the left operand is of a lower data type than the right operand."</li>
 <li><strong>Hình trên slide — nâng cấp</strong> — một byte đơn <code>0100 0001</code> (tức 65, ký tự <code>'A'</code>) được nới rộng thành bốn byte <code>0000 0000 0000 0000 0000 0000 0100 0001</code>. Cùng giá trị, rộng chỗ hơn. Đây là <code>char</code> → <code>int</code>:
-<pre><code>char c = 'A';
+<pre><code class="language-c">char c = 'A';
 int  n = c;          /* n == 65, không mất gì */</code></pre></li>
 <li><strong>Hình trên slide — cắt bớt</strong> — bốn byte kết thúc bằng <code>0001 1001</code> bị ép trở lại vào một byte <code>0001 1001</code> (tức 25). Chỉ byte thấp sống sót; ba byte cao bị vứt. Đây là <code>int</code> → <code>char</code>:
-<pre><code>int  m = 25;
+<pre><code class="language-c">int  m = 25;
 char d = m;          /* d giữ 25, vừa một byte */</code></pre></li>
 <li><strong>Chuyện gì xảy ra khi KHÔNG vừa</strong> — cắt bớt chỉ giữ lại các bit thấp, tức là lấy dư cho 256 với <code>char</code> 8 bit. <code>char c = 321;</code> lưu <code>321 - 256 = 65</code>, tức chữ <code>'A'</code>. Không cảnh báo lúc chạy, không lỗi, chỉ là một con số khác.</li>
 <li><strong>Hai kiểu cắt, hai cơ chế</strong> — thu hẹp giữa các kiểu <em>số nguyên</em> thì rụng bit cao (lấy dư). Thu hẹp từ <em>số thực sang số nguyên</em> thì rụng phần thập phân (cắt về phía 0). Đừng lẫn hai cái: <code>(char)321</code> bằng 65, còn <code>(int)321.9</code> bằng 321.</li>
@@ -467,7 +467,7 @@ char d = m;          /* d giữ 25, vừa một byte */</code></pre></li>
 <li><strong>The word "temporarily" is the whole idea</strong> — <code>(double)n</code> does <strong>not</strong> change the variable <code>n</code>. It produces a new <code>double</code> value for this one operation; <code>n</code> is still an <code>int</code> on the next line.</li>
 <li><strong>Syntax and precedence</strong> — the cast is a <em>unary</em> operator, so it binds very tightly, just below <code>++</code>/<code>--</code> and above <code>* / %</code>. That is why <code>(double)a / b</code> casts only <code>a</code>, then divides — no extra parentheses needed.</li>
 <li><strong>The canonical use</strong> — forcing real division out of two integers:
-<pre><code>int sum = 7, count = 2;
+<pre><code class="language-c">int sum = 7, count = 2;
 double avg;
 
 avg = sum / count;              /* 3.0   — wrong, int division first */
@@ -484,7 +484,7 @@ avg = (double)(sum / count);    /* 3.0   — wrong, cast comes too late */</code
 <li><strong>Chữ "tạm thời" là toàn bộ ý tưởng</strong> — <code>(double)n</code> KHÔNG làm đổi biến <code>n</code>. Nó tạo ra một giá trị <code>double</code> mới cho đúng phép toán này; sang dòng sau <code>n</code> vẫn là <code>int</code>.</li>
 <li><strong>Cú pháp và độ ưu tiên</strong> — ép kiểu là toán tử <em>một ngôi</em>, nên nó kết hợp rất chặt, ngay dưới <code>++</code>/<code>--</code> và trên <code>* / %</code>. Vì thế <code>(double)a / b</code> chỉ ép <code>a</code> rồi mới chia — không cần thêm ngoặc.</li>
 <li><strong>Công dụng kinh điển</strong> — ép ra phép chia thực từ hai số nguyên:
-<pre><code>int sum = 7, count = 2;
+<pre><code class="language-c">int sum = 7, count = 2;
 double avg;
 
 avg = sum / count;              /* 3.0   — SAI, chia nguyên trước   */

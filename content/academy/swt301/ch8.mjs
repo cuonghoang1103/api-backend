@@ -1414,7 +1414,7 @@ alice,wrong,Invalid password
 bob,secret,Unknown user
 ALICE,secret,Welcome alice</code></pre>
 <p>One generic script reads every row, runs the same steps, compares:</p>
-<pre><code>for (String[] r : table(file)) {
+<pre><code class="language-c">for (String[] r : table(file)) {
     LoginService sut = new LoginService();          // fresh SUT per row
     String actual = sut.login(r[0], r[1]);
     boolean ok = actual.equals(r[2]);               // compare with expected
@@ -1430,7 +1430,7 @@ Login,alice,wrong
 CheckMessage,Account locked,
 Login,alice,secret
 CheckMessage,Account locked,</code></pre>
-<pre><code>switch (r[0]) {                                     // keyword -&gt; keyword script
+<pre><code class="language-java">switch (r[0]) {                                     // keyword -&gt; keyword script
     case "OpenApp"      -&gt; sut = new LoginService();
     case "Login"        -&gt; last = sut.login(r[1], r[2]);
     case "CheckMessage" -&gt; passed &amp;= r[1].equals(last);
@@ -1477,7 +1477,7 @@ alice,wrong,Invalid password
 bob,secret,Unknown user
 ALICE,secret,Welcome alice</code></pre>
 <p>Một script chung đọc từng dòng, chạy cùng các bước, so sánh:</p>
-<pre><code>for (String[] r : table(file)) {
+<pre><code class="language-c">for (String[] r : table(file)) {
     LoginService sut = new LoginService();          // SUT mới cho mỗi dòng
     String actual = sut.login(r[0], r[1]);
     boolean ok = actual.equals(r[2]);               // so với kết quả mong đợi
@@ -1493,7 +1493,7 @@ Login,alice,wrong
 CheckMessage,Account locked,
 Login,alice,secret
 CheckMessage,Account locked,</code></pre>
-<pre><code>switch (r[0]) {                                     // keyword -&gt; keyword script
+<pre><code class="language-java">switch (r[0]) {                                     // keyword -&gt; keyword script
     case "OpenApp"      -&gt; sut = new LoginService();
     case "Login"        -&gt; last = sut.login(r[1], r[2]);
     case "CheckMessage" -&gt; passed &amp;= r[1].equals(last);
@@ -1847,7 +1847,7 @@ Cẩn thận với "triển khai cho cả tổ chức cùng lúc" — ngược h
 };
 
 /* ─────────────── 8.5 HANDS-ON: JUnit with the course sample kit ─────────────── */
-const BUILD_XML = `<pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+const BUILD_XML = `<pre><code class="language-xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;project name="Lab02" default="compile" basedir="." xmlns:jacoco="antlib:org.jacoco.ant" &gt;
     &lt;property name="src.dir" value="src"/&gt;
     &lt;property name="test.dir" value="test"/&gt;
@@ -1940,7 +1940,7 @@ const BUILD_XML = `<pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
     &lt;/target&gt;
 &lt;/project&gt;</code></pre>`;
 
-const CALC_J4 = `<pre><code>// src/lab02/utils/Calculator.java
+const CALC_J4 = `<pre><code class="language-java">// src/lab02/utils/Calculator.java
 package lab02.utils;
 
 public class Calculator {
@@ -1958,7 +1958,7 @@ public class Calculator {
     }
 }</code></pre>`;
 
-const TEST_J4 = `<pre><code>// test/lab02/utils/CalculatorTest.java   (JUnit 4.13.2 — line numbers matter for the output below)
+const TEST_J4 = `<pre><code class="language-java">// test/lab02/utils/CalculatorTest.java   (JUnit 4.13.2 — line numbers matter for the output below)
 package lab02.utils;
 
 import org.junit.After;
@@ -2019,7 +2019,7 @@ public class CalculatorTest {
     }
 }</code></pre>`;
 
-const RUN_J4 = `<pre><code>$ rm -rf build report
+const RUN_J4 = `<pre><code class="language-bash">$ rm -rf build report
 $ mkdir -p build/classes
 $ javac -encoding UTF-8 -g -d build/classes $(find src -name '*.java')
 $ javac -encoding UTF-8 -g -d build/classes \\
@@ -2047,7 +2047,7 @@ Tests run: 5,  Failures: 1
 $ echo $?
 1</code></pre>`;
 
-const POM = `<pre><code>&lt;!-- pom.xml (Maven 3) --&gt;
+const POM = `<pre><code class="language-xml">&lt;!-- pom.xml (Maven 3) --&gt;
 &lt;project xmlns="http://maven.apache.org/POM/4.0.0" …&gt;
   &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
   &lt;groupId&gt;lab02&lt;/groupId&gt;
@@ -2088,7 +2088,7 @@ const POM = `<pre><code>&lt;!-- pom.xml (Maven 3) --&gt;
   &lt;/build&gt;
 &lt;/project&gt;</code></pre>`;
 
-const TEST_J5 = `<pre><code>// src/test/java/lab02/utils/CalculatorTest.java   (JUnit 5 / Jupiter)
+const TEST_J5 = `<pre><code class="language-java">// src/test/java/lab02/utils/CalculatorTest.java   (JUnit 5 / Jupiter)
 package lab02.utils;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -2140,7 +2140,7 @@ class CalculatorTest {                       // no "public" needed any more
     }
 }</code></pre>`;
 
-const RUN_J5 = `<pre><code>$ mvn test          # output filtered to the interesting lines (stack traces cut)
+const RUN_J5 = `<pre><code class="language-bash">$ mvn test          # output filtered to the interesting lines (stack traces cut)
 [INFO] Running lab02.utils.CalculatorTest
 [ERROR] Tests run: 8, Failures: 2, Errors: 0, Skipped: 0, Time elapsed: 0.379 s &lt;&lt;&lt; FAILURE! -- in lab02.utils.CalculatorTest
 [ERROR] lab02.utils.CalculatorTest.average(int, int, int)[4] -- Time elapsed: 0.013 s &lt;&lt;&lt; FAILURE!
@@ -2488,7 +2488,7 @@ jobs:
           name: coverage
           path: target/site/jacoco</code></pre>`;
 
-const SEL = `<pre><code>// Selenium 4 + JUnit 5 — illustrative, NOT executed for this page (needs a browser and a real site)
+const SEL = `<pre><code class="language-java">// Selenium 4 + JUnit 5 — illustrative, NOT executed for this page (needs a browser and a real site)
 class LoginPage {                                   // Page Object: locators live in ONE place
     private final WebDriver driver;
     private final By user = By.id("user"), pass = By.id("pass"), login = By.id("login");

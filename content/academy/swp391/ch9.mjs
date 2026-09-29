@@ -276,7 +276,7 @@ volumes:
 <li><strong><code>utf8mb4</code></strong> — Vietnamese text stores and sorts correctly.</li>
 </ul>
 <p class="nhan">Step 3 — read the connection from the environment</p>
-<pre>public class DBContext {
+<pre><code class="language-java">public class DBContext {
     private static String env(String k, String def) {
         String v = System.getenv(k);
         return (v == null || v.isBlank()) ? def : v;
@@ -289,7 +289,7 @@ volumes:
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(URL, USER, PASS);
     }
-}</pre>
+}</code></pre>
 <p>The same code runs in NetBeans (defaults → your local MySQL) and in the container (values from compose). No password is written in the source.</p>
 <pre># .env.example  (committed)          # .env  (in .gitignore, never committed)
 DB_PASSWORD=change-me                 DB_PASSWORD=&lt;your local password&gt;</pre>`,
@@ -333,7 +333,7 @@ volumes:
 <li><strong><code>utf8mb4</code></strong> — chữ tiếng Việt lưu và sắp xếp đúng.</li>
 </ul>
 <p class="nhan">Bước 3 — đọc kết nối từ biến môi trường</p>
-<pre>public class DBContext {
+<pre><code class="language-java">public class DBContext {
     private static String env(String k, String def) {
         String v = System.getenv(k);
         return (v == null || v.isBlank()) ? def : v;
@@ -346,7 +346,7 @@ volumes:
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(URL, USER, PASS);
     }
-}</pre>
+}</code></pre>
 <p>Cùng một đoạn code chạy được trong NetBeans (giá trị mặc định → MySQL trên máy bạn) và trong container (giá trị từ compose). Không có mật khẩu nào nằm trong source.</p>
 <pre># .env.example  (có commit)          # .env  (trong .gitignore, không commit)
 DB_PASSWORD=change-me                 DB_PASSWORD=&lt;mật khẩu local của bạn&gt;</pre>`));

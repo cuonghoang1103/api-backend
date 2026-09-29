@@ -409,7 +409,7 @@ ${slide('dv-03', 8, 'Bốn cách dừng, cùng mười request đang bay')}
 <div class="callout warn"><strong>No <code>process.on('SIGTERM')</code> means you get SIGKILL behaviour.</strong> The default action of <code>SIGTERM</code> is to terminate the process, and Node's default handler exits at once with code <code>128 + 15 = 143</code>. So <code>kill</code>, <code>systemctl stop</code> and <code>docker stop</code> are only "graceful" if your code makes them so — ten out of ten in-flight requests got no response either way.</div>
 <h3>SIGTERM: catchable, and therefore useful</h3>
 ${slide('dv-03', 9, 'Bộ xử lý SIGTERM đúng: bốn phần')}
-<pre><code>process.on('SIGTERM', () =&gt; {
+<pre><code class="language-javascript">process.on('SIGTERM', () =&gt; {
   dang_dong = true;
   sv.close(() =&gt; { console.log('da dong sach'); process.exit(0); });
   setTimeout(() =&gt; { console.log('het gio, thoat cung'); process.exit(1); }, 10000);
@@ -426,7 +426,7 @@ ${slide('dv-03', 10, 'Cờ xả đặt SAI chỗ: 10 cú 503')}
 <div class="pitfall"><strong>Trap — a drain flag that the request handler consults will answer 503 to requests that were already in flight.</strong> The log says it correctly: it waited for all ten, and it closed cleanly. Every connection was honoured. And every user got an error page, because the handler checked the flag <em>after</em> the request had been accepted and answered <code>503</code> instead of the response it had already computed. From the client's side this is barely better than <code>SIGKILL</code> — it is a failed request either way, just with a status code attached. The bug is subtle enough that it survives review: the shutdown logic is correct, and the handler looks defensive rather than wrong.</div>
 
 <h3>The fix, and the measurement that confirms it</h3>
-<pre><code>const sv = http.createServer((req, res) =&gt; {
+<pre><code class="language-javascript">const sv = http.createServer((req, res) =&gt; {
   <span class="tok-comment">// request DA VAO thi phuc vu TU TE toi cung.</span>
   <span class="tok-comment">// Chi bao client dung ket noi lai, khong tra loi loi.</span>
   setTimeout(() =&gt; {
@@ -570,7 +570,7 @@ ${slide('dv-03', 8, 'Bốn cách dừng, cùng mười request đang bay')}
 <div class="callout warn"><strong>Không có <code>process.on('SIGTERM')</code> nghĩa là bạn nhận hành vi của SIGKILL.</strong> Hành động mặc định của <code>SIGTERM</code> là kết thúc tiến trình, và bộ xử lý mặc định của Node thoát NGAY với mã <code>128 + 15 = 143</code>. Nên <code>kill</code>, <code>systemctl stop</code> hay <code>docker stop</code> chỉ "tử tế" khi mã của BẠN làm cho nó tử tế — đằng nào thì mười trên mười request đang bay cũng không nhận được phản hồi nào.</div>
 <h3>SIGTERM: bắt được, nên dùng được</h3>
 ${slide('dv-03', 9, 'Bộ xử lý SIGTERM đúng: bốn phần')}
-<pre><code>process.on('SIGTERM', () =&gt; {
+<pre><code class="language-javascript">process.on('SIGTERM', () =&gt; {
   dang_dong = true;
   sv.close(() =&gt; { console.log('da dong sach'); process.exit(0); });
   setTimeout(() =&gt; { console.log('het gio, thoat cung'); process.exit(1); }, 10000);
@@ -587,7 +587,7 @@ ${slide('dv-03', 10, 'Cờ xả đặt SAI chỗ: 10 cú 503')}
 <div class="pitfall"><strong>Bẫy — một cái cờ xả mà bộ xử lý request đi kiểm sẽ trả 503 cho những request VỐN ĐÃ đang bay.</strong> Dòng log nói đúng: nó đã chờ đủ mười cái, và nó đã đóng sạch. Mọi kết nối đều được tôn trọng. Và MỌI người dùng đều nhận một trang lỗi, vì bộ xử lý kiểm cái cờ SAU KHI request đã được nhận rồi trả <code>503</code> thay vì cái phản hồi mà nó vốn đã tính xong. Từ phía client thì chuyện này chỉ nhỉnh hơn <code>SIGKILL</code> một chút — đằng nào cũng là một request hỏng, chỉ khác là có kèm một mã trạng thái. Cái lỗi này tinh vi đủ để sống sót qua một buổi review mã: phần logic tắt thì đúng, còn bộ xử lý thì trông như đang PHÒNG THỦ chứ không như đang sai.</div>
 
 <h3>Cách sửa, và phép đo xác nhận nó</h3>
-<pre><code>const sv = http.createServer((req, res) =&gt; {
+<pre><code class="language-javascript">const sv = http.createServer((req, res) =&gt; {
   <span class="tok-comment">// request DA VAO thi phuc vu TU TE toi cung.</span>
   <span class="tok-comment">// Chi bao client dung ket noi lai, khong tra loi loi.</span>
   setTimeout(() =&gt; {
@@ -738,7 +738,7 @@ ${slide('dv-03', 14, 'upstream.conf: tệp duy nhất lần deploy sửa + bản
   </div>
 </div>
 <p>The fixed port belongs to the proxy, and the application moves between two ports behind it. Nothing outside the machine ever sees the change.</p>
-<pre><code><span class="tok-comment"># upstream.conf — tep DUY NHAT ma lan deploy sua</span>
+<pre><code class="language-bash"><span class="tok-comment"># upstream.conf — tep DUY NHAT ma lan deploy sua</span>
 upstream ungdung { server 127.0.0.1:3101; keepalive 16; }
 
 <span class="tok-comment"># nginx.conf — khong bao gio doi</span>
@@ -754,7 +754,7 @@ server {
 <div class="note-ct"><code>proxy_next_upstream</code> is the safety net: if the chosen backend refuses a connection or returns 502/503, Nginx retries the request against another server in the pool rather than passing the failure to the client. With one server in the pool it does little; with the old and new both listed during the transition it covers the seam entirely.</div>
 
 <h3>The deploy, in four steps</h3>
-<pre><code>set -euo pipefail
+<pre><code class="language-bash">set -euo pipefail
 CU=3101; MOI=3102
 
 <span class="tok-comment"># 1. khoi dong ban moi — ban cu VAN dang phuc vu</span>
@@ -945,7 +945,7 @@ ${slide('dv-03', 14, 'upstream.conf: tệp duy nhất lần deploy sửa + bản
   </div>
 </div>
 <p>Cái cổng cố định thuộc về PROXY, còn ứng dụng thì di chuyển giữa hai cổng nằm sau nó. Không có gì bên ngoài cái máy từng nhìn thấy sự thay đổi đó.</p>
-<pre><code><span class="tok-comment"># upstream.conf — tep DUY NHAT ma lan deploy sua</span>
+<pre><code class="language-bash"><span class="tok-comment"># upstream.conf — tep DUY NHAT ma lan deploy sua</span>
 upstream ungdung { server 127.0.0.1:3101; keepalive 16; }
 
 <span class="tok-comment"># nginx.conf — khong bao gio doi</span>
@@ -961,7 +961,7 @@ server {
 <div class="note-ct"><code>proxy_next_upstream</code> là tấm lưới an toàn: nếu backend được chọn từ chối kết nối hoặc trả 502/503, Nginx thử lại request đó vào một máy khác trong bể thay vì đẩy cái lỗi tới client. Với một máy trong bể thì nó làm được ít; với cả bản cũ lẫn bản mới cùng nằm trong danh sách suốt lúc chuyển thì nó phủ trọn cái vết nứt.</div>
 
 <h3>Lần deploy, bốn bước</h3>
-<pre><code>set -euo pipefail
+<pre><code class="language-bash">set -euo pipefail
 CU=3101; MOI=3102
 
 <span class="tok-comment"># 1. khoi dong ban moi — ban cu VAN dang phuc vu</span>
@@ -1262,7 +1262,7 @@ Result=exit-code NRestarts=13 ActiveState=activating
   Sep 29 01:54:59.849043 f9cfa190e24e systemd[1]: loop.service: Failed with result 'exit-code'.</div>
 <div class="callout warn"><strong>Correct: five attempts, then <code>failed</code> — "Start request repeated too quickly". Wrong section: still going after 13 restarts in 30 seconds, and it would never stop.</strong> Why the wrong one never trips even the default limit: with the interval ignored, systemd uses its default of 10 s, and five starts spaced by <code>RestartSec=2s</code> plus the time to crash take just over 10 s — so the window never contains six. Note also what <code>verify</code> did <em>not</em> say: <code>StartLimitBurst</code> in <code>[Service]</code> produced no warning, because systemd still accepts that old spelling there for compatibility. One warning line was the whole difference.</div>
 <h3>The commands that replace <code>ps</code> and guessing</h3>
-<pre><code>systemctl status app          <span class="tok-comment"># dang chay? tu bao gio? khoi dong lai may lan?</span>
+<pre><code class="language-bash">systemctl status app          <span class="tok-comment"># dang chay? tu bao gio? khoi dong lai may lan?</span>
 systemctl restart app         <span class="tok-comment"># SIGTERM, cho, roi khoi dong lai</span>
 systemctl reload app          <span class="tok-comment"># neu unit khai ExecReload</span>
 journalctl -u app -f          <span class="tok-comment"># log, dang chay</span>
@@ -1472,7 +1472,7 @@ Result=exit-code NRestarts=13 ActiveState=activating
   Sep 29 01:54:59.849043 f9cfa190e24e systemd[1]: loop.service: Failed with result 'exit-code'.</div>
 <div class="callout warn"><strong>Đúng mục: năm lần thử, rồi <code>failed</code> — "Start request repeated too quickly". Sai mục: vẫn chạy tiếp sau 13 lần khởi động lại trong 30 giây, và sẽ không bao giờ dừng.</strong> Vì sao bản sai không chạm nổi cả giới hạn mặc định: khi interval bị phớt lờ, systemd dùng mặc định 10 giây, mà năm lần chạy cách nhau <code>RestartSec=2s</code> cộng thời gian sập trải hơn 10 giây — nên cửa sổ không bao giờ chứa đủ sáu lần. Để ý cả thứ <code>verify</code> KHÔNG nói: <code>StartLimitBurst</code> trong <code>[Service]</code> không sinh cảnh báo nào, vì systemd vẫn nhận cách viết cũ đó ở đấy để tương thích. Một dòng cảnh báo là toàn bộ khác biệt.</div>
 <h3>Những lệnh thay thế cho <code>ps</code> và sự phỏng đoán</h3>
-<pre><code>systemctl status app          <span class="tok-comment"># dang chay? tu bao gio? khoi dong lai may lan?</span>
+<pre><code class="language-bash">systemctl status app          <span class="tok-comment"># dang chay? tu bao gio? khoi dong lai may lan?</span>
 systemctl restart app         <span class="tok-comment"># SIGTERM, cho, roi khoi dong lai</span>
 systemctl reload app          <span class="tok-comment"># neu unit khai ExecReload</span>
 journalctl -u app -f          <span class="tok-comment"># log, dang chay</span>
@@ -1565,7 +1565,7 @@ ActiveState=active</div>
 <p class="lead">Everything in this chapter, assembled into one script and run three times in a row under continuous load. It works — but only after the first version deadlocked itself permanently on the second deploy, for a reason that took a look inside <code>/proc</code> to find.</p>
 
 <h3>The script</h3>
-<pre><code><span class="tok-comment">#!/bin/bash — trao.sh</span>
+<pre><code class="language-bash"><span class="tok-comment">#!/bin/bash — trao.sh</span>
 set -euo pipefail
 GOC=/srv/app; CONG_A=3101; CONG_B=3102
 
@@ -1821,7 +1821,7 @@ ${slide('dv-03', 25, 'Smoke-test sau tráo: 404 nghĩa là bản CŨ')}
 <p class="lead">Toàn bộ chương này, lắp thành một script và chạy ba lần liên tiếp dưới tải liên tục. Nó chạy được — nhưng chỉ SAU KHI bản đầu tiên tự khoá chính nó lại vĩnh viễn ở lần deploy thứ hai, vì một lý do phải ngó vào tận <code>/proc</code> mới tìm ra.</p>
 
 <h3>Cái script</h3>
-<pre><code><span class="tok-comment">#!/bin/bash — trao.sh</span>
+<pre><code class="language-bash"><span class="tok-comment">#!/bin/bash — trao.sh</span>
 set -euo pipefail
 GOC=/srv/app; CONG_A=3101; CONG_B=3102
 

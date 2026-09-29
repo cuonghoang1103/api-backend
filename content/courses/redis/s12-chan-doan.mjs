@@ -264,7 +264,7 @@ rejected_connections:41882
 </div>
 
 <h3>4 · The fork stall</h3>
-<pre><code>redis-cli INFO stats | grep latest_fork_usec
+<pre><code class="language-bash">redis-cli INFO stats | grep latest_fork_usec
 redis-cli INFO persistence | grep -E "rdb_last_bgsave_time_sec|rdb_last_cow_size|aof_rewrite_in_progress"
 redis-cli LATENCY LATEST
 cat /sys/kernel/mm/transparent_hugepage/enabled</code></pre>
@@ -372,7 +372,7 @@ rejected_connections:41882
 </div>
 
 <h3>4 · Cú khựng vì fork</h3>
-<pre><code>redis-cli INFO stats | grep latest_fork_usec
+<pre><code class="language-bash">redis-cli INFO stats | grep latest_fork_usec
 redis-cli INFO persistence | grep -E "rdb_last_bgsave_time_sec|rdb_last_cow_size|aof_rewrite_in_progress"
 redis-cli LATENCY LATEST
 cat /sys/kernel/mm/transparent_hugepage/enabled</code></pre>
@@ -736,7 +736,7 @@ diff /tmp/a /tmp/b | grep '^&gt;' | head -4</code></pre>
 </div>
 
 <h3>The eight alerts</h3>
-<pre><code><span class="tok-comment"># Prometheus rules, with the reasoning in the annotations</span>
+<pre><code class="language-css"><span class="tok-comment"># Prometheus rules, with the reasoning in the annotations</span>
 - alert: RedisMemoryHigh
   expr: redis_memory_used_bytes / redis_memory_max_bytes &gt; 0.75
   for: 10m
@@ -849,7 +849,7 @@ diff /tmp/a /tmp/b | grep '^&gt;' | head -4</code></pre>
 </div>
 
 <h3>Tám cảnh báo</h3>
-<pre><code><span class="tok-comment"># Các luật Prometheus, kèm lý lẽ trong phần chú thích</span>
+<pre><code class="language-css"><span class="tok-comment"># Các luật Prometheus, kèm lý lẽ trong phần chú thích</span>
 - alert: RedisMemoryHigh
   expr: redis_memory_used_bytes / redis_memory_max_bytes &gt; 0.75
   for: 10m

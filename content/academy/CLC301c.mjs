@@ -150,7 +150,7 @@ Container  : shares host kernel     -> MBs, starts in milliseconds
 </code></pre>
 <h3>Docker</h3>
 <p><strong>Docker</strong> is the standard container tool. You describe an image in a <strong>Dockerfile</strong>, build it, then run it identically on any machine.</p>
-<pre><code># Dockerfile
+<pre><code class="language-bash"># Dockerfile
 FROM node:22-alpine
 WORKDIR /app
 COPY . .
@@ -172,7 +172,7 @@ Container  : dùng chung kernel máy chủ    -> vài MB, chạy trong mili-giâ
 </code></pre>
 <h3>Docker</h3>
 <p><strong>Docker</strong> là công cụ container tiêu chuẩn. Bạn mô tả một image trong <strong>Dockerfile</strong>, build nó, rồi chạy y hệt trên mọi máy.</p>
-<pre><code># Dockerfile
+<pre><code class="language-bash"># Dockerfile
 FROM node:22-alpine
 WORKDIR /app
 COPY . .

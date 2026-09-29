@@ -26,7 +26,7 @@ export default {
 
 <h3>The three words: table, row, column</h3>
 <p>A <strong>table</strong> models one kind of thing (users, notes, orders). Each <strong>row</strong> is one of that thing (one user). Each <strong>column</strong> is one attribute (a username, an email) with a fixed <em>type</em>. That's it. A database is a set of such tables. Here are two — <code>users</code> and <code>notes</code>:</p>
-<pre><code>CREATE TABLE users (
+<pre><code class="language-sql">CREATE TABLE users (
   id       bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   username text NOT NULL UNIQUE,
   email    text NOT NULL
@@ -46,7 +46,7 @@ CREATE TABLE notes (
   <div class="kv"><span class="k">Foreign key</span><span class="v"><code>notes.user_id REFERENCES users(id)</code> — it says "this note belongs to that user". It's how one table <em>relates</em> to another.</span></div>
 </div>
 <p>The connection isn't stored by duplicating the user's data into every note. It's stored as a single number — the user's <code>id</code> — in the note's <code>user_id</code> column. To see a note <em>with</em> its owner, you <strong>join</strong> the two tables on that link (Chapter 5 is all about joins; here's a first taste):</p>
-<pre><code>SELECT u.username, n.title, n.pinned
+<pre><code class="language-sql">SELECT u.username, n.title, n.pinned
 FROM notes n
 JOIN users u ON u.id = n.user_id
 ORDER BY u.username, n.id;</code></pre>
@@ -60,7 +60,7 @@ ORDER BY u.username, n.id;</code></pre>
 
 <h3>Referential integrity — the database refuses bad links</h3>
 <p>Because <code>user_id</code> is a foreign key, the database will <strong>not let you</strong> create a note pointing at a user who doesn't exist. Watch it reject an orphan:</p>
-<pre><code>INSERT INTO notes (user_id, title) VALUES (999, 'orphan note');</code></pre>
+<pre><code class="language-sql">INSERT INTO notes (user_id, title) VALUES (999, 'orphan note');</code></pre>
 <div class="out">ERROR:  insert or update on table "notes" violates foreign key constraint "notes_user_id_fkey"
 DETAIL:  Key (user_id)=(999) is not present in table "users".</div>
 <p>This is huge. The <em>database itself</em> guarantees your data can never get into a broken state — no note ever dangles pointing at a deleted user. You don't have to remember to check in your application code; the rule lives with the data, where it can't be bypassed.</p>
@@ -95,7 +95,7 @@ DETAIL:  Key (user_id)=(999) is not present in table "users".</div>
 
 <h3>Ba từ: bảng, dòng, cột</h3>
 <p>Một <strong>bảng</strong> mô hình hoá một loại sự vật (users, notes, orders). Mỗi <strong>dòng</strong> là một sự vật loại đó (một user). Mỗi <strong>cột</strong> là một thuộc tính (một username, một email) với một <em>kiểu</em> cố định. Chỉ vậy thôi. Một cơ sở dữ liệu là một tập những bảng như thế. Đây là hai bảng — <code>users</code> và <code>notes</code>:</p>
-<pre><code>CREATE TABLE users (
+<pre><code class="language-sql">CREATE TABLE users (
   id       bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   username text NOT NULL UNIQUE,
   email    text NOT NULL
@@ -115,7 +115,7 @@ CREATE TABLE notes (
   <div class="kv"><span class="k">Khoá ngoại (foreign key)</span><span class="v"><code>notes.user_id REFERENCES users(id)</code> — nói rằng "note này thuộc về user kia". Đó là cách một bảng <em>quan hệ</em> với bảng khác.</span></div>
 </div>
 <p>Mối nối không được lưu bằng cách chép dữ liệu của user vào từng note. Nó được lưu bằng một con số duy nhất — <code>id</code> của user — trong cột <code>user_id</code> của note. Muốn thấy một note <em>kèm</em> chủ của nó, bạn <strong>join</strong> hai bảng theo mối nối đó (Chương 5 nói trọn về join; đây là mẩu nếm thử):</p>
-<pre><code>SELECT u.username, n.title, n.pinned
+<pre><code class="language-sql">SELECT u.username, n.title, n.pinned
 FROM notes n
 JOIN users u ON u.id = n.user_id
 ORDER BY u.username, n.id;</code></pre>
@@ -129,7 +129,7 @@ ORDER BY u.username, n.id;</code></pre>
 
 <h3>Toàn vẹn tham chiếu — cơ sở dữ liệu từ chối mối nối sai</h3>
 <p>Vì <code>user_id</code> là khoá ngoại, cơ sở dữ liệu sẽ <strong>không cho bạn</strong> tạo một note trỏ tới một user không tồn tại. Xem nó từ chối một dòng mồ côi:</p>
-<pre><code>INSERT INTO notes (user_id, title) VALUES (999, 'note mo coi');</code></pre>
+<pre><code class="language-sql">INSERT INTO notes (user_id, title) VALUES (999, 'note mo coi');</code></pre>
 <div class="out">ERROR:  insert or update on table "notes" violates foreign key constraint "notes_user_id_fkey"
 DETAIL:  Key (user_id)=(999) is not present in table "users".</div>
 <p>Điều này cực lớn. <em>Chính cơ sở dữ liệu</em> bảo đảm dữ liệu của bạn không bao giờ rơi vào trạng thái hỏng — không note nào lơ lửng trỏ tới một user đã bị xoá. Bạn không phải nhớ đi kiểm trong code ứng dụng; luật sống cùng dữ liệu, nơi không thể bị lách qua.</p>
@@ -171,7 +171,7 @@ DETAIL:  Key (user_id)=(999) is not present in table "users".</div>
 <span class="eyebrow">Chapter 1 · Lesson 1.2</span>
 <h2>ACID — the promises that make a database trustworthy</h2>
 <p class="lead">Anyone can store data. What makes PostgreSQL a <em>database</em> and not a fancy file is a set of four guarantees, abbreviated <strong>ACID</strong>: Atomicity, Consistency, Isolation, Durability. They are the reason a bank can trust it with money. We'll prove each one with a real transaction — a transfer between two accounts — and watch Postgres refuse to break its word.</p>
-<pre><code>CREATE TABLE accounts (
+<pre><code class="language-sql">CREATE TABLE accounts (
   id      text PRIMARY KEY,
   owner   text NOT NULL,
   balance numeric(12,2) NOT NULL CHECK (balance &gt;= 0)
@@ -185,7 +185,7 @@ INSERT INTO accounts VALUES ('A','Cuong', 100.00), ('B','Mai', 0.00);</code></pr
 
 <h3>A — Atomicity: all of it, or none of it</h3>
 <p>A money transfer is two steps: subtract from A, add to B. If the power dies between them, you must <strong>not</strong> end up with money subtracted from A but never added to B. A <strong>transaction</strong> (<code>BEGIN … COMMIT</code>) makes the two steps one indivisible unit. Let's deliberately break it: transfer 150 when A only has 100. The <code>CHECK (balance &gt;= 0)</code> will reject step one:</p>
-<pre><code>BEGIN;
+<pre><code class="language-sql">BEGIN;
 UPDATE accounts SET balance = balance - 150 WHERE id = 'A';   -- would make A = -50
 UPDATE accounts SET balance = balance + 150 WHERE id = 'B';
 COMMIT;</code></pre>
@@ -216,7 +216,7 @@ COMMIT
 
 <h3>I — Isolation: concurrent transactions don't see each other's mess</h3>
 <p>Many users hit the database at once. Isolation means an in-progress transaction's half-done changes are <strong>invisible</strong> to everyone else until it commits. Here two sessions run at the same time. Session A subtracts 10 from A but holds the transaction open (doesn't commit yet). Meanwhile Session B reads the balances:</p>
-<pre><code><span class="tok-comment">-- Session A (transaction still OPEN, not committed):</span>
+<pre><code class="language-sql"><span class="tok-comment">-- Session A (transaction still OPEN, not committed):</span>
 BEGIN;
 UPDATE accounts SET balance = balance - 10 WHERE id = 'A';   -- A becomes 30 *inside A's view*
 <span class="tok-comment">-- ... A pauses here, holding the transaction ...</span></code></pre>
@@ -254,7 +254,7 @@ synchronous_commit = on</div>
 <span class="eyebrow">Chương 1 · Bài 1.2</span>
 <h2>ACID — những lời hứa khiến một cơ sở dữ liệu đáng tin</h2>
 <p class="lead">Ai cũng lưu được dữ liệu. Cái khiến PostgreSQL là một <em>cơ sở dữ liệu</em> chứ không phải một file hoa mỹ là một bộ bốn bảo đảm, viết tắt là <strong>ACID</strong>: Atomicity (nguyên tử), Consistency (nhất quán), Isolation (cô lập), Durability (bền vững). Đó là lý do một ngân hàng dám giao tiền cho nó. Ta sẽ chứng minh từng cái bằng một giao dịch thật — một phi vụ chuyển tiền giữa hai tài khoản — và xem Postgres từ chối nuốt lời.</p>
-<pre><code>CREATE TABLE accounts (
+<pre><code class="language-sql">CREATE TABLE accounts (
   id      text PRIMARY KEY,
   owner   text NOT NULL,
   balance numeric(12,2) NOT NULL CHECK (balance &gt;= 0)
@@ -268,7 +268,7 @@ INSERT INTO accounts VALUES ('A','Cuong', 100.00), ('B','Mai', 0.00);</code></pr
 
 <h3>A — Atomicity: hoặc trọn vẹn, hoặc không gì cả</h3>
 <p>Một phi vụ chuyển tiền gồm hai bước: trừ ở A, cộng vào B. Nếu mất điện giữa hai bước, bạn <strong>không được phép</strong> rơi vào cảnh tiền đã trừ ở A mà chưa từng được cộng vào B. Một <strong>giao dịch</strong> (<code>BEGIN … COMMIT</code>) biến hai bước thành một khối không thể chia cắt. Hãy cố tình phá nó: chuyển 150 khi A chỉ có 100. Ràng buộc <code>CHECK (balance &gt;= 0)</code> sẽ từ chối bước một:</p>
-<pre><code>BEGIN;
+<pre><code class="language-sql">BEGIN;
 UPDATE accounts SET balance = balance - 150 WHERE id = 'A';   -- sẽ làm A = -50
 UPDATE accounts SET balance = balance + 150 WHERE id = 'B';
 COMMIT;</code></pre>
@@ -299,7 +299,7 @@ COMMIT
 
 <h3>I — Isolation: các giao dịch đồng thời không thấy mớ dở dang của nhau</h3>
 <p>Nhiều người truy cập cơ sở dữ liệu cùng lúc. Cô lập nghĩa là những thay đổi làm dở của một giao dịch đang chạy thì <strong>vô hình</strong> với mọi người khác cho tới khi nó commit. Ở đây hai phiên chạy cùng lúc. Phiên A trừ 10 khỏi A nhưng giữ giao dịch mở (chưa commit). Trong lúc đó phiên B đọc số dư:</p>
-<pre><code><span class="tok-comment">-- Phiên A (giao dịch vẫn MỞ, chưa commit):</span>
+<pre><code class="language-sql"><span class="tok-comment">-- Phiên A (giao dịch vẫn MỞ, chưa commit):</span>
 BEGIN;
 UPDATE accounts SET balance = balance - 10 WHERE id = 'A';   -- A thành 30 *trong tầm nhìn của A*
 <span class="tok-comment">-- ... A dừng ở đây, giữ giao dịch ...</span></code></pre>
@@ -449,7 +449,7 @@ synchronous_commit = on</div>
 
 <h3>Seeing the plan: EXPLAIN</h3>
 <p>You don't have to guess what the planner decided — <code>EXPLAIN</code> shows you the plan <em>without running the query</em>. Take a simple one over our notes:</p>
-<pre><code>EXPLAIN SELECT title FROM notes WHERE pinned = true;</code></pre>
+<pre><code class="language-sql">EXPLAIN SELECT title FROM notes WHERE pinned = true;</code></pre>
 <div class="out">                      QUERY PLAN
 ------------------------------------------------------
  Seq Scan on notes  (cost=0.00..1.03 rows=2 width=13)
@@ -463,7 +463,7 @@ synchronous_commit = on</div>
 
 <h3>Seeing reality: EXPLAIN ANALYZE</h3>
 <p>Add <code>ANALYZE</code> and Postgres <em>actually runs</em> the query and reports the real timings next to its estimates:</p>
-<pre><code>EXPLAIN ANALYZE SELECT title FROM notes WHERE pinned = true;</code></pre>
+<pre><code class="language-sql">EXPLAIN ANALYZE SELECT title FROM notes WHERE pinned = true;</code></pre>
 <div class="out">                                           QUERY PLAN
 ------------------------------------------------------------------------------------------------
  Seq Scan on notes  (cost=0.00..1.03 rows=2 width=13) (actual time=0.003..0.004 rows=2 loops=1)
@@ -504,7 +504,7 @@ synchronous_commit = on</div>
 
 <h3>Nhìn thấy kế hoạch: EXPLAIN</h3>
 <p>Bạn không phải đoán bộ lập kế hoạch quyết định gì — <code>EXPLAIN</code> cho bạn xem kế hoạch <em>mà không chạy truy vấn</em>. Lấy một truy vấn đơn giản trên bảng notes:</p>
-<pre><code>EXPLAIN SELECT title FROM notes WHERE pinned = true;</code></pre>
+<pre><code class="language-sql">EXPLAIN SELECT title FROM notes WHERE pinned = true;</code></pre>
 <div class="out">                      QUERY PLAN
 ------------------------------------------------------
  Seq Scan on notes  (cost=0.00..1.03 rows=2 width=13)
@@ -518,7 +518,7 @@ synchronous_commit = on</div>
 
 <h3>Nhìn thấy thực tế: EXPLAIN ANALYZE</h3>
 <p>Thêm <code>ANALYZE</code> và Postgres <em>thật sự chạy</em> truy vấn rồi báo thời gian thật bên cạnh ước lượng của nó:</p>
-<pre><code>EXPLAIN ANALYZE SELECT title FROM notes WHERE pinned = true;</code></pre>
+<pre><code class="language-sql">EXPLAIN ANALYZE SELECT title FROM notes WHERE pinned = true;</code></pre>
 <div class="out">                                           QUERY PLAN
 ------------------------------------------------------------------------------------------------
  Seq Scan on notes  (cost=0.00..1.03 rows=2 width=13) (actual time=0.003..0.004 rows=2 loops=1)

@@ -172,7 +172,7 @@ ${gallery('wf-web0', [
 
 <h3>A tiny simulation you can read</h3>
 <p>An HTTP request and response are just text. Here is what the browser roughly sends and gets back (simplified):</p>
-<pre><code>// ── The request the browser sends ──
+<pre><code class="language-html">// ── The request the browser sends ──
 GET /about HTTP/1.1
 Host: cuongthai.com
 Accept: text/html
@@ -220,7 +220,7 @@ Content-Type: text/html
 
 <h3>Một mô phỏng nhỏ bạn đọc được</h3>
 <p>Một request và response HTTP chỉ là văn bản. Đây là thứ trình duyệt gửi đi và nhận về (rút gọn):</p>
-<pre><code>// ── Request trình duyệt gửi đi ──
+<pre><code class="language-html">// ── Request trình duyệt gửi đi ──
 GET /about HTTP/1.1
 Host: cuongthai.com
 Accept: text/html
@@ -276,10 +276,10 @@ Content-Type: text/html
 
 <h3>3) Node.js &amp; npm — run JavaScript outside the browser</h3>
 <p>Install <strong>Node.js 22 LTS</strong> from nodejs.org. Node lets you run JavaScript on your machine (not just in a browser) — that is what a backend is. It comes with <strong>npm</strong>, the tool that installs libraries. Verify in a terminal:</p>
-<pre><code>node -v    # should print something like v22.x.x
+<pre><code class="language-bash">node -v    # should print something like v22.x.x
 npm -v     # should print a version number too</code></pre>
 <p>A first taste — create <code>hello.js</code>, put one line in it, and run it with Node:</p>
-<pre><code>// hello.js
+<pre><code class="language-javascript">// hello.js
 console.log("Hello from Node!");
 
 // in the terminal:
@@ -287,7 +287,7 @@ node hello.js      // → Hello from Node!</code></pre>
 
 <h3>4) Git &amp; GitHub — save and share your work</h3>
 <p><strong>Git</strong> (git-scm.com) records snapshots of your code so you can undo mistakes and see history. <strong>GitHub</strong> is where those snapshots live online. Verify and set your name once:</p>
-<pre><code>git --version
+<pre><code class="language-bash">git --version
 git config --global user.name  "Your Name"
 git config --global user.email "you@example.com"</code></pre>
 <p>The everyday loop (Chapter 1 goes deep): <code>git add .</code> → <code>git commit -m "message"</code> → <code>git push</code>.</p>
@@ -309,7 +309,7 @@ git config --global user.email "you@example.com"</code></pre>
 <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Write the versions down</span><span class="lz-d">When something breaks in three weeks, "which Node was I on?" is the first question. A note costs ten seconds now.</span></div>
 <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Only then start the tutorial</span><span class="lz-d">Debugging a half-installed toolchain while also learning the language is two problems at once, and you cannot tell which one you are looking at.</span></div>
 </div>
-<pre><code>node --version
+<pre><code class="language-bash">node --version
 npm --version
 git --version
 code --version</code></pre>
@@ -335,10 +335,10 @@ git version 2.47.1
 
 <h3>3) Node.js &amp; npm — chạy JavaScript ngoài trình duyệt</h3>
 <p>Cài <strong>Node.js 22 LTS</strong> từ nodejs.org. Node cho phép bạn chạy JavaScript trên máy (không chỉ trong trình duyệt) — đó chính là backend. Nó đi kèm <strong>npm</strong>, công cụ cài các thư viện. Kiểm tra trong terminal:</p>
-<pre><code>node -v    # in ra kiểu v22.x.x
+<pre><code class="language-bash">node -v    # in ra kiểu v22.x.x
 npm -v     # cũng in ra một số phiên bản</code></pre>
 <p>Nếm thử lần đầu — tạo file <code>hello.js</code>, viết một dòng, rồi chạy bằng Node:</p>
-<pre><code>// hello.js
+<pre><code class="language-javascript">// hello.js
 console.log("Hello from Node!");
 
 // trong terminal:
@@ -346,7 +346,7 @@ node hello.js      // → Hello from Node!</code></pre>
 
 <h3>4) Git &amp; GitHub — lưu và chia sẻ công việc</h3>
 <p><strong>Git</strong> (git-scm.com) ghi lại các ảnh chụp mã để bạn hoàn tác lỗi và xem lịch sử. <strong>GitHub</strong> là nơi các ảnh chụp đó sống trên mạng. Kiểm tra và đặt tên một lần:</p>
-<pre><code>git --version
+<pre><code class="language-bash">git --version
 git config --global user.name  "Tên của bạn"
 git config --global user.email "ban@example.com"</code></pre>
 <p>Vòng lặp hằng ngày (Chương 1 sẽ đào sâu): <code>git add .</code> → <code>git commit -m "thông điệp"</code> → <code>git push</code>.</p>
@@ -368,7 +368,7 @@ git config --global user.email "ban@example.com"</code></pre>
 <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Ghi lại các số phiên bản</span><span class="lz-d">Ba tuần nữa khi có thứ gì hỏng, "lúc đó mình dùng Node mấy nhỉ?" là câu hỏi đầu tiên. Ghi một dòng bây giờ tốn mười giây.</span></div>
 <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Rồi mới bắt đầu bài hướng dẫn</span><span class="lz-d">Gỡ lỗi một bộ công cụ cài dở trong lúc đang học ngôn ngữ là hai bài toán cùng lúc, và bạn không phân biệt nổi mình đang nhìn cái nào.</span></div>
 </div>
-<pre><code>node --version
+<pre><code class="language-bash">node --version
 npm --version
 git --version
 code --version</code></pre>

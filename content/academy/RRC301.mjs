@@ -165,7 +165,7 @@ const c2 = doc('rrc301-2-1-node-topic-message', '2.1 — Nodes, topics & message
 </ul>
 <p>A <strong>publisher</strong> writes messages onto a topic; a <strong>subscriber</strong> reads them. It is <em>anonymous</em> and <em>many-to-many</em> — publishers do not know who listens. This decoupling is why ROS parts snap together.</p>
 <h3>Publisher (Python / rclpy)</h3>
-<pre><code>import rclpy
+<pre><code class="language-python">import rclpy
 from rclpy.node import Node
 from std_msgs.msg import String
 
@@ -183,7 +183,7 @@ class Talker(Node):
 rclpy.init(); rclpy.spin(Talker())
 </code></pre>
 <h3>Subscriber (C++ / rclcpp)</h3>
-<pre><code>#include "rclcpp/rclcpp.hpp"
+<pre><code class="language-c">#include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/string.hpp"
 
 class Listener : public rclcpp::Node {
@@ -210,7 +210,7 @@ private:
 </ul>
 <p>Một <strong>publisher</strong> ghi message lên topic; một <strong>subscriber</strong> đọc chúng. Mô hình này <em>ẩn danh</em> và <em>nhiều-tới-nhiều</em> — bên phát không biết ai nghe. Chính sự tách rời đó giúp các phần ROS ghép vào nhau.</p>
 <h3>Publisher (Python / rclpy)</h3>
-<pre><code>import rclpy
+<pre><code class="language-python">import rclpy
 from rclpy.node import Node
 from std_msgs.msg import String
 
@@ -228,7 +228,7 @@ class Talker(Node):
 rclpy.init(); rclpy.spin(Talker())
 </code></pre>
 <h3>Subscriber (C++ / rclcpp)</h3>
-<pre><code>#include "rclcpp/rclcpp.hpp"
+<pre><code class="language-c">#include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/string.hpp"
 
 class Listener : public rclcpp::Node {
@@ -265,7 +265,7 @@ const c3 = doc('rrc301-3-1-service-action', '3.1 — Services & actions|||3.1 �
 <li><strong>Action</strong> — a <em>long-running</em> goal that streams <strong>feedback</strong>, returns a <strong>result</strong>, and can be <strong>cancelled</strong> (e.g. "navigate to (x, y)"). Asynchronous.</li>
 </ul>
 <h3>Service server (Python)</h3>
-<pre><code>from example_interfaces.srv import AddTwoInts
+<pre><code class="language-python">from example_interfaces.srv import AddTwoInts
 
 class AddServer(Node):
     def __init__(self):
@@ -290,7 +290,7 @@ ros2 service call /add example_interfaces/srv/AddTwoInts "{a: 2, b: 3}"
 <li><strong>Action</strong> — một mục tiêu <em>chạy lâu</em>, phát <strong>feedback</strong>, trả <strong>result</strong>, và <strong>huỷ được</strong> (ví dụ "đi tới (x, y)"). Bất đồng bộ.</li>
 </ul>
 <h3>Service server (Python)</h3>
-<pre><code>from example_interfaces.srv import AddTwoInts
+<pre><code class="language-python">from example_interfaces.srv import AddTwoInts
 
 class AddServer(Node):
     def __init__(self):
@@ -435,7 +435,7 @@ const c6 = doc('rrc301-6-1-motion-control', '6.1 — Motion control|||6.1 — Đ
 <h2>Motion control</h2>
 <h3>cmd_vel — the universal velocity command</h3>
 <p>Almost every mobile robot is driven by publishing <code>geometry_msgs/Twist</code> on <code>/cmd_vel</code>: a <strong>linear</strong> velocity (m/s forward) and an <strong>angular</strong> velocity (rad/s turn). The robot base translates that into wheel commands.</p>
-<pre><code>from geometry_msgs.msg import Twist
+<pre><code class="language-python">from geometry_msgs.msg import Twist
 cmd = Twist()
 cmd.linear.x  = 0.2    # move forward 0.2 m/s
 cmd.angular.z = 0.5    # turn left 0.5 rad/s
@@ -457,7 +457,7 @@ output = Kp*error + Ki*integral(error) + Kd*derivative(error)
 <h2>Điều khiển chuyển động</h2>
 <h3>cmd_vel — lệnh vận tốc phổ quát</h3>
 <p>Gần như mọi robot di động được điều khiển bằng cách phát <code>geometry_msgs/Twist</code> lên <code>/cmd_vel</code>: một vận tốc <strong>dài (linear)</strong> (m/s tiến) và một vận tốc <strong>góc (angular)</strong> (rad/s xoay). Đế robot chuyển lệnh đó thành lệnh cho bánh.</p>
-<pre><code>from geometry_msgs.msg import Twist
+<pre><code class="language-python">from geometry_msgs.msg import Twist
 cmd = Twist()
 cmd.linear.x  = 0.2    # tien 0.2 m/s
 cmd.angular.z = 0.5    # re trai 0.5 rad/s
@@ -531,7 +531,7 @@ const c8 = doc('rrc301-8-1-project-integration', '8.1 — Project & integration|
 <h2>Project &amp; integration</h2>
 <h3>Perceive → decide → act, in one node</h3>
 <p>The capstone pattern ties the whole course together: <strong>subscribe</strong> to a sensor topic, <strong>decide</strong>, and <strong>publish</strong> a command. Here is a minimal obstacle-avoider: go forward, but turn when the laser sees a wall ahead.</p>
-<pre><code>from sensor_msgs.msg import LaserScan
+<pre><code class="language-python">from sensor_msgs.msg import LaserScan
 from geometry_msgs.msg import Twist
 
 class Avoider(Node):
@@ -560,7 +560,7 @@ ros2 launch my_robot bringup.launch.py   # or start the whole system
 <h2>Dự án &amp; tích hợp</h2>
 <h3>Nhận thức → quyết định → hành động, trong một node</h3>
 <p>Mẫu dự án cuối gói cả môn lại: <strong>subscribe</strong> một topic cảm biến, <strong>quyết định</strong>, rồi <strong>publish</strong> một lệnh. Đây là bộ tránh vật cản tối giản: đi thẳng, nhưng rẽ khi laser thấy tường phía trước.</p>
-<pre><code>from sensor_msgs.msg import LaserScan
+<pre><code class="language-python">from sensor_msgs.msg import LaserScan
 from geometry_msgs.msg import Twist
 
 class Avoider(Node):

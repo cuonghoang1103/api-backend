@@ -85,7 +85,7 @@ ${slide('lx-01', 3, 'Dấu nhắc là thanh trạng thái: đọc 4 mẩu trư�
 ${slide('lx-01', 6, 'ls giấu file dấu chấm — ls -A để thấy .env')}
 <pre><code>ls</code></pre>
 <div class="out">README.md  node_modules  package.json  src  tests</div>
-<pre><code>ls -l</code></pre>
+<pre><code class="language-bash">ls -l</code></pre>
 <div class="out">total 48
 -rw-r--r--  1 an an  1204 Aug 21 14:20 README.md
 drwxr-xr-x 84 an an  4096 Aug 20 09:11 node_modules
@@ -98,7 +98,7 @@ drwxr-xr-x  3 an an  4096 Aug 19 16:40 tests</div>
   <div class="kv"><span class="k">-h</span><span class="v">Human-readable sizes (4.0K, 2.1M) instead of raw bytes. Only meaningful with <code>-l</code>.</span></div>
   <div class="kv"><span class="k">-t</span><span class="v">Sort by modification time, newest first. <code>ls -lat</code> is "what changed here recently?".</span></div>
 </div>
-<pre><code>ls -lah</code></pre>
+<pre><code class="language-bash">ls -lah</code></pre>
 <div class="out">total 48K
 drwxr-xr-x  7 an an 4.0K Aug 21 14:20 .
 drwxr-xr-x 12 an an 4.0K Aug 19 10:03 ..
@@ -109,7 +109,7 @@ drwxr-xr-x  8 an an 4.0K Aug 21 14:20 .git
 
 <h3>cd — move</h3>
 ${slide('lx-01', 5, 'pwd hỏi “tôi ở đâu”, cd di chuyển, cd - quay lại')}
-<pre><code>cd src              <span class="tok-comment"># into a subdirectory</span>
+<pre><code class="language-bash">cd src              <span class="tok-comment"># into a subdirectory</span>
 cd ..               <span class="tok-comment"># up one level</span>
 cd ~                <span class="tok-comment"># home. Plain 'cd' does the same.</span>
 cd -                <span class="tok-comment"># back to the PREVIOUS directory — like Alt-Tab</span>
@@ -123,20 +123,20 @@ cd /var/log         <span class="tok-comment"># an absolute path, from anywhere<
 
 <h3>The shape of every command</h3>
 ${slide('lx-01', 4, 'Mọi câu lệnh cùng một hình dạng — dấu cách là dao chẻ')}
-<pre><code>ls   -l   --sort=size   /var/log
+<pre><code class="language-bash">ls   -l   --sort=size   /var/log
 │     │        │            │
 │     │        │            └─ arguments: what to act on
 │     │        └─ long option, two dashes, often takes =value
 │     └─ short option, one dash. Combinable: -lah = -l -a -h
 └─ the command</code></pre>
 <div class="callout warn"><strong>Spaces separate arguments — always.</strong> The shell splits your line on whitespace before the program sees anything, so <code>ls-l</code> is one unknown command, and <code>ls My Documents</code> is a request for two directories called <code>My</code> and <code>Documents</code>. A filename containing a space must be quoted: <code>ls "My Documents"</code>. Chapter 6 makes this systematic; for now, quote anything with a space in it.</div>
-<pre><code><span class="tok-comment"># Same result, three ways of grouping short options:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Same result, three ways of grouping short options:</span>
 ls -l -a -h
 ls -lah
 ls -la -h</code></pre>
 
 <h3>Tab completion, and why it is a safety feature</h3>
-<pre><code>cd pro&lt;Tab&gt;                  <span class="tok-comment"># completes to projects/</span>
+<pre><code class="language-bash">cd pro&lt;Tab&gt;                  <span class="tok-comment"># completes to projects/</span>
 cd projects/ap&lt;Tab&gt;           <span class="tok-comment"># completes to api/</span>
 ls /var/lo&lt;Tab&gt;&lt;Tab&gt;          <span class="tok-comment"># two Tabs: list every match</span></code></pre>
 <div class="callout ok">Tab completion is not only convenience. A path that completes <em>exists</em>; a path that does not complete is a typo you just caught before running anything. Type the first three letters and press Tab rather than typing paths in full — it is faster and it verifies as you go.</div>
@@ -238,7 +238,7 @@ less -i app.log           <span class="tok-comment"># searches ignore case unles
 
 <h3>When you do not know the command's name</h3>
 ${slide('lx-01', 10, 'Không nhớ tên lệnh? apropos. Nhớ tên, quên cờ? --help | grep')}
-<pre><code>apropos -s 1 compress | wc -l                        <span class="tok-comment"># search the one-line descriptions, section 1 only</span>
+<pre><code class="language-bash">apropos -s 1 compress | wc -l                        <span class="tok-comment"># search the one-line descriptions, section 1 only</span>
 apropos -s 1 compress | grep -E "^(gzip|xz|zstd) "
 ls --help | grep -i "by file size"                   <span class="tok-comment"># know the command, forgot the flag</span>
 help -d cd pwd                                       <span class="tok-comment"># one-line summaries of builtins</span></code></pre>
@@ -260,7 +260,7 @@ pwd - Print the name of the current working directory.</div>
 
 <h3>Run it step by step</h3>
 <p>Nine commands, in order, in the course sandbox. Type them rather than pasting; predict each output first.</p>
-<pre><code>mkdir -p ~/thu-linux/ch1/api/{src,logs} &amp;&amp; cd ~/thu-linux/ch1/api
+<pre><code class="language-bash">mkdir -p ~/thu-linux/ch1/api/{src,logs} &amp;&amp; cd ~/thu-linux/ch1/api
 touch .env README.md src/app.ts
 pwd
 ls
@@ -369,7 +369,7 @@ ${slide('lx-01', 3, 'Dấu nhắc là thanh trạng thái: đọc 4 mẩu trư�
 ${slide('lx-01', 6, 'ls giấu file dấu chấm — ls -A để thấy .env')}
 <pre><code>ls</code></pre>
 <div class="out">README.md  node_modules  package.json  src  tests</div>
-<pre><code>ls -l</code></pre>
+<pre><code class="language-bash">ls -l</code></pre>
 <div class="out">total 48
 -rw-r--r--  1 an an  1204 Aug 21 14:20 README.md
 drwxr-xr-x 84 an an  4096 Aug 20 09:11 node_modules
@@ -382,7 +382,7 @@ drwxr-xr-x  3 an an  4096 Aug 19 16:40 tests</div>
   <div class="kv"><span class="k">-h</span><span class="v">Kích thước dạng người đọc được (4.0K, 2.1M) thay vì byte thô. Chỉ có nghĩa khi đi cùng <code>-l</code>.</span></div>
   <div class="kv"><span class="k">-t</span><span class="v">Sắp theo thời gian sửa, mới nhất trước. <code>ls -lat</code> là câu "gần đây ở đây có gì đổi?".</span></div>
 </div>
-<pre><code>ls -lah</code></pre>
+<pre><code class="language-bash">ls -lah</code></pre>
 <div class="out">total 48K
 drwxr-xr-x  7 an an 4.0K Aug 21 14:20 .
 drwxr-xr-x 12 an an 4.0K Aug 19 10:03 ..
@@ -393,7 +393,7 @@ drwxr-xr-x  8 an an 4.0K Aug 21 14:20 .git
 
 <h3>cd — di chuyển</h3>
 ${slide('lx-01', 5, 'pwd hỏi “tôi ở đâu”, cd di chuyển, cd - quay lại')}
-<pre><code>cd src              <span class="tok-comment"># vào một thư mục con</span>
+<pre><code class="language-bash">cd src              <span class="tok-comment"># vào một thư mục con</span>
 cd ..               <span class="tok-comment"># lên một cấp</span>
 cd ~                <span class="tok-comment"># về nhà. Gõ 'cd' trơn cũng vậy.</span>
 cd -                <span class="tok-comment"># về thư mục TRƯỚC ĐÓ — như Alt-Tab</span>
@@ -407,20 +407,20 @@ cd /var/log         <span class="tok-comment"># một đường dẫn tuyệt đ
 
 <h3>Hình dạng của mọi câu lệnh</h3>
 ${slide('lx-01', 4, 'Mọi câu lệnh cùng một hình dạng — dấu cách là dao chẻ')}
-<pre><code>ls   -l   --sort=size   /var/log
+<pre><code class="language-bash">ls   -l   --sort=size   /var/log
 │     │        │            │
 │     │        │            └─ tham số: tác động lên cái gì
 │     │        └─ tuỳ chọn dài, hai gạch, thường nhận =giá trị
 │     └─ tuỳ chọn ngắn, một gạch. Ghép được: -lah = -l -a -h
 └─ tên lệnh</code></pre>
 <div class="callout warn"><strong>Dấu cách ngăn cách các tham số — luôn luôn.</strong> Shell chẻ dòng của bạn theo khoảng trắng TRƯỚC khi chương trình nhìn thấy gì, nên <code>ls-l</code> là một lệnh không tồn tại, và <code>ls My Documents</code> là một yêu cầu về hai thư mục tên <code>My</code> và <code>Documents</code>. Một tên file có dấu cách buộc phải bọc nháy: <code>ls "My Documents"</code>. Chương 6 làm cho chuyện này thành hệ thống; còn giờ, hãy bọc nháy mọi thứ có dấu cách.</div>
-<pre><code><span class="tok-comment"># Cùng kết quả, ba cách gom các tuỳ chọn ngắn:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Cùng kết quả, ba cách gom các tuỳ chọn ngắn:</span>
 ls -l -a -h
 ls -lah
 ls -la -h</code></pre>
 
 <h3>Hoàn thành bằng Tab, và vì sao nó là một tính năng an toàn</h3>
-<pre><code>cd pro&lt;Tab&gt;                  <span class="tok-comment"># tự hoàn thành thành projects/</span>
+<pre><code class="language-bash">cd pro&lt;Tab&gt;                  <span class="tok-comment"># tự hoàn thành thành projects/</span>
 cd projects/ap&lt;Tab&gt;           <span class="tok-comment"># tự hoàn thành thành api/</span>
 ls /var/lo&lt;Tab&gt;&lt;Tab&gt;          <span class="tok-comment"># hai lần Tab: liệt kê mọi khả năng</span></code></pre>
 <div class="callout ok">Hoàn thành bằng Tab không chỉ là tiện. Một đường dẫn tự hoàn thành được nghĩa là nó <em>TỒN TẠI</em>; một đường dẫn không tự hoàn thành là một lỗi gõ mà bạn vừa bắt được trước khi chạy bất cứ thứ gì. Hãy gõ ba chữ đầu rồi bấm Tab thay vì gõ đủ cả đường dẫn — vừa nhanh hơn vừa kiểm chứng dọc đường.</div>
@@ -522,7 +522,7 @@ less -i app.log           <span class="tok-comment"># tìm không phân biệt h
 
 <h3>Khi không biết tên lệnh</h3>
 ${slide('lx-01', 10, 'Không nhớ tên lệnh? apropos. Nhớ tên, quên cờ? --help | grep')}
-<pre><code>apropos -s 1 compress | wc -l                        <span class="tok-comment"># tìm trong dòng mô tả, chỉ mục 1</span>
+<pre><code class="language-bash">apropos -s 1 compress | wc -l                        <span class="tok-comment"># tìm trong dòng mô tả, chỉ mục 1</span>
 apropos -s 1 compress | grep -E "^(gzip|xz|zstd) "
 ls --help | grep -i "by file size"                   <span class="tok-comment"># biết lệnh, quên cờ</span>
 help -d cd pwd                                       <span class="tok-comment"># tóm tắt một dòng của builtin</span></code></pre>
@@ -544,7 +544,7 @@ pwd - Print the name of the current working directory.</div>
 
 <h3>Chạy thử từng bước</h3>
 <p>Chín lệnh, theo đúng thứ tự, trong sân tập của khoá. Hãy gõ chứ đừng dán; đoán trước output của từng lệnh.</p>
-<pre><code>mkdir -p ~/thu-linux/ch1/api/{src,logs} &amp;&amp; cd ~/thu-linux/ch1/api
+<pre><code class="language-bash">mkdir -p ~/thu-linux/ch1/api/{src,logs} &amp;&amp; cd ~/thu-linux/ch1/api
 touch .env README.md src/app.ts
 pwd
 ls
@@ -659,7 +659,7 @@ ${slide('lx-01', 12, 'Tuyệt đối đi từ gốc, tương đối đi từ ch�
 </div>
 <pre><code>pwd</code></pre>
 <div class="out">/home/an/projects/api</div>
-<pre><code><span class="tok-comment"># These two are the same file, right now:</span>
+<pre><code class="language-bash"><span class="tok-comment"># These two are the same file, right now:</span>
 cat src/app.ts
 cat /home/an/projects/api/src/app.ts
 
@@ -677,11 +677,11 @@ ${slide('lx-01', 13, 'Bốn lối tắt . .. ~ - do shell khai triển')}
   <div class="kv"><span class="k">~</span><span class="v">Your home directory, expanded by the shell to <code>/home/an</code>. <code>~/notes</code>, <code>~an</code> (another user's home).</span></div>
   <div class="kv"><span class="k">-</span><span class="v">Only for <code>cd</code>: the previous directory. Not a real path.</span></div>
 </div>
-<pre><code>cd ~/projects/api/src
+<pre><code class="language-bash">cd ~/projects/api/src
 cd ../tests            <span class="tok-comment"># up to api/, then into tests/</span>
 pwd</code></pre>
 <div class="out">/home/an/projects/api/tests</div>
-<pre><code><span class="tok-comment"># The shell expands ~ before the command sees it — proof:</span>
+<pre><code class="language-bash"><span class="tok-comment"># The shell expands ~ before the command sees it — proof:</span>
 <span class="tok-keyword">echo</span> ~
 <span class="tok-keyword">echo</span> <span class="tok-string">"~"</span></code></pre>
 <div class="out">/home/an
@@ -690,7 +690,7 @@ pwd</code></pre>
 
 <h3>Why ./script.sh needs the dot</h3>
 ${slide('lx-01', 14, './deploy.sh cần ./ vì thư mục hiện tại không nằm trong PATH')}
-<pre><code>ls
+<pre><code class="language-bash">ls
 ./deploy.sh            <span class="tok-comment"># works</span>
 deploy.sh              <span class="tok-comment"># bash: deploy.sh: command not found</span></code></pre>
 <p>A bare word is looked up in <code>PATH</code> — a list of system directories (Chapter 8). The current directory is deliberately <strong>not</strong> in that list, so <code>./</code> is how you say "the one right here, not one from PATH".</p>
@@ -706,7 +706,7 @@ deploy.sh              <span class="tok-comment"># bash: deploy.sh: command not 
 
 <h3>Paths with spaces and awkward characters</h3>
 ${slide('lx-01', 15, 'Tên có dấu cách hay bắt đầu bằng “-”: bọc nháy, ./ và --')}
-<pre><code><span class="tok-comment"># Wrong — the shell sees two arguments:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Wrong — the shell sees two arguments:</span>
 cd My Documents
 <span class="tok-comment"># bash: cd: too many arguments</span>
 
@@ -732,7 +732,7 @@ error.log
 
 <h3>Run it step by step</h3>
 <p>A walk through the sandbox from Lesson 1.1, checking every move. <code>realpath</code> turns any relative path into the absolute one it resolves to, so it is the honest way to answer "where would this take me?" before you go there.</p>
-<pre><code>cd ~/thu-linux/ch1/api/src &amp;&amp; pwd
+<pre><code class="language-javascript">cd ~/thu-linux/ch1/api/src &amp;&amp; pwd
 realpath ../logs                    <span class="tok-comment"># where WOULD ../logs take me?</span>
 cd ../.. &amp;&amp; pwd                     <span class="tok-comment"># two levels up</span>
 cd api/src/../../api &amp;&amp; pwd         <span class="tok-comment"># a silly path — still resolves</span>
@@ -758,7 +758,7 @@ console.log(1)</div>
 <tr><td>Case of names</td><td><strong>Sensitive</strong>: <code>README.md</code> ≠ <code>readme.md</code></td><td>Insensitive by default (APFS): <code>cat readme.md</code> opens <code>README.md</code></td><td>Sensitive in <code>/home</code>; <code>/mnt/c</code> follows Windows (insensitive)</td></tr>
 <tr><td>Separator</td><td><code>/</code></td><td><code>/</code></td><td><code>/</code> inside WSL, <code>\\</code> on the Windows side</td></tr>
 </table>
-<pre><code><span class="tok-comment"># Same file, same command, two systems:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Same file, same command, two systems:</span>
 cat readme.md          <span class="tok-comment"># on Ubuntu (the file is README.md)</span>
 cat readme.md          <span class="tok-comment"># on the Mac (the file is README.md)</span></code></pre>
 <div class="out">cat: readme.md: No such file or directory
@@ -829,7 +829,7 @@ ${slide('lx-01', 12, 'Tuyệt đối đi từ gốc, tương đối đi từ ch�
 </div>
 <pre><code>pwd</code></pre>
 <div class="out">/home/an/projects/api</div>
-<pre><code><span class="tok-comment"># Ngay lúc này, hai cái này là cùng một file:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Ngay lúc này, hai cái này là cùng một file:</span>
 cat src/app.ts
 cat /home/an/projects/api/src/app.ts
 
@@ -847,11 +847,11 @@ ${slide('lx-01', 13, 'Bốn lối tắt . .. ~ - do shell khai triển')}
   <div class="kv"><span class="k">~</span><span class="v">Thư mục nhà của bạn, được shell khai triển thành <code>/home/an</code>. <code>~/notes</code>, <code>~an</code> (nhà của người dùng khác).</span></div>
   <div class="kv"><span class="k">-</span><span class="v">Chỉ dùng với <code>cd</code>: thư mục trước đó. Không phải một đường dẫn thật.</span></div>
 </div>
-<pre><code>cd ~/projects/api/src
+<pre><code class="language-bash">cd ~/projects/api/src
 cd ../tests            <span class="tok-comment"># lên api/, rồi vào tests/</span>
 pwd</code></pre>
 <div class="out">/home/an/projects/api/tests</div>
-<pre><code><span class="tok-comment"># Shell khai triển ~ TRƯỚC khi lệnh nhìn thấy — bằng chứng:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Shell khai triển ~ TRƯỚC khi lệnh nhìn thấy — bằng chứng:</span>
 <span class="tok-keyword">echo</span> ~
 <span class="tok-keyword">echo</span> <span class="tok-string">"~"</span></code></pre>
 <div class="out">/home/an
@@ -860,7 +860,7 @@ pwd</code></pre>
 
 <h3>Vì sao ./script.sh cần dấu chấm</h3>
 ${slide('lx-01', 14, './deploy.sh cần ./ vì thư mục hiện tại không nằm trong PATH')}
-<pre><code>ls
+<pre><code class="language-bash">ls
 ./deploy.sh            <span class="tok-comment"># chạy được</span>
 deploy.sh              <span class="tok-comment"># bash: deploy.sh: command not found</span></code></pre>
 <p>Một từ trần được tra trong <code>PATH</code> — một danh sách các thư mục hệ thống (Chương 8). Thư mục hiện tại CỐ Ý <strong>không</strong> nằm trong danh sách đó, nên <code>./</code> là cách bạn nói "cái ngay ở đây, không phải cái lấy từ PATH".</p>
@@ -876,7 +876,7 @@ deploy.sh              <span class="tok-comment"># bash: deploy.sh: command not 
 
 <h3>Đường dẫn có dấu cách và ký tự khó chịu</h3>
 ${slide('lx-01', 15, 'Tên có dấu cách hay bắt đầu bằng “-”: bọc nháy, ./ và --')}
-<pre><code><span class="tok-comment"># Sai — shell nhìn thấy hai tham số:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Sai — shell nhìn thấy hai tham số:</span>
 cd My Documents
 <span class="tok-comment"># bash: cd: too many arguments</span>
 
@@ -902,7 +902,7 @@ error.log
 
 <h3>Chạy thử từng bước</h3>
 <p>Một vòng đi qua sân tập của bài 1.1, kiểm từng bước. <code>realpath</code> biến mọi đường dẫn tương đối thành đường dẫn tuyệt đối mà nó thực sự trỏ tới, nên đó là cách trung thực để trả lời "lệnh này sẽ đưa tôi tới đâu?" trước khi đi.</p>
-<pre><code>cd ~/thu-linux/ch1/api/src &amp;&amp; pwd
+<pre><code class="language-javascript">cd ~/thu-linux/ch1/api/src &amp;&amp; pwd
 realpath ../logs                    <span class="tok-comment"># ../logs SẼ đưa tôi tới đâu?</span>
 cd ../.. &amp;&amp; pwd                     <span class="tok-comment"># lên hai cấp</span>
 cd api/src/../../api &amp;&amp; pwd         <span class="tok-comment"># một đường vòng vô lý — vẫn phân giải được</span>
@@ -928,7 +928,7 @@ console.log(1)</div>
 <tr><td>Chữ hoa/thường trong tên</td><td><strong>Phân biệt</strong>: <code>README.md</code> ≠ <code>readme.md</code></td><td>Mặc định KHÔNG phân biệt (APFS): <code>cat readme.md</code> mở được <code>README.md</code></td><td>Phân biệt trong <code>/home</code>; <code>/mnt/c</code> theo Windows (không phân biệt)</td></tr>
 <tr><td>Dấu ngăn</td><td><code>/</code></td><td><code>/</code></td><td><code>/</code> bên trong WSL, <code>\\</code> ở phía Windows</td></tr>
 </table>
-<pre><code><span class="tok-comment"># Cùng file, cùng lệnh, hai hệ thống:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Cùng file, cùng lệnh, hai hệ thống:</span>
 cat readme.md          <span class="tok-comment"># trên Ubuntu (file tên là README.md)</span>
 cat readme.md          <span class="tok-comment"># trên Mac (file tên là README.md)</span></code></pre>
 <div class="out">cat: readme.md: No such file or directory
@@ -992,7 +992,7 @@ hi</div>
 <h2>Every directory has a job</h2>
 <p class="lead">The top of a Linux filesystem looks arbitrary until you learn the question it answers: <em>who writes this, and does it survive a reinstall?</em> Once you can place a file by that rule, "where does this belong?" and "why is this here?" both become easy.</p>
 
-<pre><code>ls /</code></pre>
+<pre><code class="language-bash">ls /</code></pre>
 <div class="out">bin  boot  dev  etc  home  lib  media  mnt  opt  proc  root  run
 sbin  srv  sys  tmp  usr  var</div>
 ${slide('lx-01', 16, 'Cây FHS: mỗi thư mục gốc có một nhiệm vụ')}
@@ -1004,7 +1004,7 @@ ${slide('lx-01', 17, 'Đặt file đúng chỗ = trả lời 2 câu: ai ghi vào
   <div class="lz-layer"><span class="lz-k">/var</span><span class="lz-v"><strong>Variable data.</strong> Things that grow while the system runs: <code>/var/log</code> (logs), <code>/var/lib</code> (databases), <code>/var/www</code> (websites). This is the directory that fills your disk.</span></div>
   <div class="lz-layer"><span class="lz-k">/home</span><span class="lz-v"><strong>Users.</strong> One directory per person: <code>/home/an</code>. Your files, your dotfiles, your projects. Root's home is <code>/root</code>, deliberately elsewhere.</span></div>
 </div>
-<pre><code>ls /etc | head -6
+<pre><code class="language-bash">ls /etc | head -6
 ls /var/log | head -6</code></pre>
 <div class="out">apt
 crontab
@@ -1029,7 +1029,7 @@ ${slide('lx-01', 18, '/bin chỉ là lối tắt vào /usr/bin; script của b�
   <div class="kv"><span class="k">/opt</span><span class="v">Large self-contained third-party software that ships its own tree: <code>/opt/google/chrome</code>.</span></div>
   <div class="kv"><span class="k">/bin, /sbin, /lib</span><span class="v">On modern systems these are symlinks into <code>/usr</code>. Historical; treat them as the same place.</span></div>
 </div>
-<pre><code>ls -ld /bin
+<pre><code class="language-bash">ls -ld /bin
 <span class="tok-keyword">type</span> -a ls python3</code></pre>
 <div class="out">lrwxrwxrwx 1 root root 7 Apr 22  2024 /bin -&gt; usr/bin
 ls is aliased to &#96;ls --color=auto'
@@ -1041,7 +1041,7 @@ python3 is /bin/python3</div>
 
 <h3>The virtual ones — not files at all</h3>
 ${slide('lx-01', 19, '/proc, /sys, /dev không nằm trên đĩa')}
-<pre><code>cat /proc/uptime
+<pre><code class="language-bash">cat /proc/uptime
 cat /sys/class/net/eth0/address
 ls -l /dev/null /dev/urandom | head -2</code></pre>
 <div class="out">184223.41 892011.09
@@ -1094,7 +1094,7 @@ du -sh /var/* 2&gt;/dev/null | sort -rh | head -5</code></pre>
 
 <h3>Why /bin is only a shortcut now</h3>
 <p>The type output above lists <code>ls</code> twice — <code>/usr/bin/ls</code> and <code>/bin/ls</code> — yet there is only one file. Look at the root directory in long form and the reason is visible:</p>
-<pre><code>ls -l / | grep -- "-&gt;"
+<pre><code class="language-bash">ls -l / | grep -- "-&gt;"
 readlink -f /bin/ls</code></pre>
 <div class="out">lrwxrwxrwx   1 root root    7 Apr 22  2024 bin -&gt; usr/bin
 lrwxrwxrwx   1 root root    7 Apr 22  2024 lib -&gt; usr/lib
@@ -1114,7 +1114,7 @@ lrwxrwxrwx   1 root root    8 Apr 22  2024 sbin -&gt; usr/sbin
 <tr><td>Your own tools</td><td><code>/usr/local/bin</code></td><td><code>/usr/local/bin</code></td><td><code>/opt/homebrew/bin</code> (Homebrew)</td></tr>
 <tr><td>USB / extra disks</td><td><code>/media/an/…</code>, <code>/mnt</code></td><td><code>/run/media/an/…</code>, <code>/mnt</code></td><td><code>/Volumes/…</code></td></tr>
 </table>
-<pre><code><span class="tok-comment"># Ubuntu 24.04 — who cleans /tmp, and how:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Ubuntu 24.04 — who cleans /tmp, and how:</span>
 grep -v '^#' /usr/lib/tmpfiles.d/tmp.conf
 <span class="tok-comment"># Fedora 44 — same file, different rules, and /tmp is in RAM:</span>
 grep -v '^#' /usr/lib/tmpfiles.d/tmp.conf ; findmnt -no FSTYPE /tmp</code></pre>
@@ -1124,7 +1124,7 @@ q /tmp 1777 root root 10d
 q /var/tmp 1777 root root 30d
 tmpfs</div>
 <p>Read the first letter as the action (<code>D</code> = create the directory and empty it at boot, <code>q</code> = create it, and age out old files), then the mode, owner, group and the age limit. The mode <code>1777</code> is why <code>ls -ld /tmp</code> shows <code>drwxrwxrwt</code> — everyone may write, and the trailing <code>t</code> (the sticky bit, Chapter 4) stops people deleting each other's files. The practical rule survives every difference: <strong>nothing you need tomorrow belongs in <code>/tmp</code></strong>.</p>
-<pre><code><span class="tok-comment"># macOS — the root looks nothing like FHS:</span>
+<pre><code class="language-bash"><span class="tok-comment"># macOS — the root looks nothing like FHS:</span>
 ls /
 ls -ld /etc /tmp /var</code></pre>
 <div class="out">Applications  bin  cores  dev  etc  home  Library  opt  pkg  private  sbin  System  tmp  Users  usr  var  Volumes
@@ -1134,7 +1134,7 @@ lrwxr-xr-x@ 1 root  wheel  11 Sep  3 17:34 /var -&gt; private/var</div>
 
 <h3>Run it step by step</h3>
 <p>Do this in a throwaway container so you can poke at <code>/</code> freely: <code>docker run --rm -it ubuntu:24.04 bash</code> (or on your VPS, read-only). Five commands, one map.</p>
-<pre><code>ls -ld /proc /sys /tmp                  <span class="tok-comment"># size 0 = generated by the kernel; the t = sticky</span>
+<pre><code class="language-bash">ls -ld /proc /sys /tmp                  <span class="tok-comment"># size 0 = generated by the kernel; the t = sticky</span>
 cat /proc/uptime                        <span class="tok-comment"># seconds since boot — a "file" that is never on disk</span>
 ls -l /dev/null /dev/zero               <span class="tok-comment"># c = character device, "1, 3" = driver numbers</span>
 du -sh /var/* 2&gt;/dev/null | sort -rh | head -3
@@ -1212,7 +1212,7 @@ crw-rw-rw- 1 root root 1, 5 Sep 28 08:39 /dev/zero
 <h2>Mỗi thư mục có một nhiệm vụ</h2>
 <p class="lead">Phần trên cùng của một hệ thống file Linux trông tuỳ tiện cho tới khi bạn học được câu hỏi mà nó trả lời: <em>AI ghi vào đây, và nó có sống sót qua một lần cài lại không?</em> Khi bạn xếp được một file theo luật đó thì cả "cái này thuộc về đâu?" lẫn "vì sao cái này ở đây?" đều thành dễ.</p>
 
-<pre><code>ls /</code></pre>
+<pre><code class="language-bash">ls /</code></pre>
 <div class="out">bin  boot  dev  etc  home  lib  media  mnt  opt  proc  root  run
 sbin  srv  sys  tmp  usr  var</div>
 ${slide('lx-01', 16, 'Cây FHS: mỗi thư mục gốc có một nhiệm vụ')}
@@ -1224,7 +1224,7 @@ ${slide('lx-01', 17, 'Đặt file đúng chỗ = trả lời 2 câu: ai ghi vào
   <div class="lz-layer"><span class="lz-k">/var</span><span class="lz-v"><strong>Dữ liệu biến động.</strong> Những thứ phình ra trong lúc hệ thống chạy: <code>/var/log</code> (log), <code>/var/lib</code> (cơ sở dữ liệu), <code>/var/www</code> (website). Đây là cái thư mục làm đầy đĩa của bạn.</span></div>
   <div class="lz-layer"><span class="lz-k">/home</span><span class="lz-v"><strong>Người dùng.</strong> Mỗi người một thư mục: <code>/home/an</code>. File của bạn, các file dấu chấm của bạn, dự án của bạn. Nhà của root là <code>/root</code>, cố ý nằm chỗ khác.</span></div>
 </div>
-<pre><code>ls /etc | head -6
+<pre><code class="language-bash">ls /etc | head -6
 ls /var/log | head -6</code></pre>
 <div class="out">apt
 crontab
@@ -1249,7 +1249,7 @@ ${slide('lx-01', 18, '/bin chỉ là lối tắt vào /usr/bin; script của b�
   <div class="kv"><span class="k">/opt</span><span class="v">Phần mềm bên thứ ba cỡ lớn, tự đóng gói và mang theo cây thư mục riêng: <code>/opt/google/chrome</code>.</span></div>
   <div class="kv"><span class="k">/bin, /sbin, /lib</span><span class="v">Trên hệ thống đời mới, đây là symlink trỏ vào <code>/usr</code>. Mang tính lịch sử; cứ coi chúng là cùng một chỗ.</span></div>
 </div>
-<pre><code>ls -ld /bin
+<pre><code class="language-bash">ls -ld /bin
 <span class="tok-keyword">type</span> -a ls python3</code></pre>
 <div class="out">lrwxrwxrwx 1 root root 7 Apr 22  2024 /bin -&gt; usr/bin
 ls is aliased to &#96;ls --color=auto'
@@ -1261,7 +1261,7 @@ python3 is /bin/python3</div>
 
 <h3>Những thư mục ảo — hoàn toàn không phải file</h3>
 ${slide('lx-01', 19, '/proc, /sys, /dev không nằm trên đĩa')}
-<pre><code>cat /proc/uptime
+<pre><code class="language-bash">cat /proc/uptime
 cat /sys/class/net/eth0/address
 ls -l /dev/null /dev/urandom | head -2</code></pre>
 <div class="out">184223.41 892011.09
@@ -1314,7 +1314,7 @@ du -sh /var/* 2&gt;/dev/null | sort -rh | head -5</code></pre>
 
 <h3>Vì sao /bin giờ chỉ còn là lối tắt</h3>
 <p>Output của <code>type</code> ở trên liệt kê <code>ls</code> HAI lần — <code>/usr/bin/ls</code> và <code>/bin/ls</code> — trong khi chỉ có một file. Nhìn thư mục gốc ở dạng dài là thấy lý do:</p>
-<pre><code>ls -l / | grep -- "-&gt;"
+<pre><code class="language-bash">ls -l / | grep -- "-&gt;"
 readlink -f /bin/ls</code></pre>
 <div class="out">lrwxrwxrwx   1 root root    7 Apr 22  2024 bin -&gt; usr/bin
 lrwxrwxrwx   1 root root    7 Apr 22  2024 lib -&gt; usr/lib
@@ -1334,7 +1334,7 @@ lrwxrwxrwx   1 root root    8 Apr 22  2024 sbin -&gt; usr/sbin
 <tr><td>Công cụ tự cài</td><td><code>/usr/local/bin</code></td><td><code>/usr/local/bin</code></td><td><code>/opt/homebrew/bin</code> (Homebrew)</td></tr>
 <tr><td>USB / đĩa thêm</td><td><code>/media/an/…</code>, <code>/mnt</code></td><td><code>/run/media/an/…</code>, <code>/mnt</code></td><td><code>/Volumes/…</code></td></tr>
 </table>
-<pre><code><span class="tok-comment"># Ubuntu 24.04 — ai dọn /tmp, và dọn thế nào:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Ubuntu 24.04 — ai dọn /tmp, và dọn thế nào:</span>
 grep -v '^#' /usr/lib/tmpfiles.d/tmp.conf
 <span class="tok-comment"># Fedora 44 — cùng file, luật khác, và /tmp nằm trong RAM:</span>
 grep -v '^#' /usr/lib/tmpfiles.d/tmp.conf ; findmnt -no FSTYPE /tmp</code></pre>
@@ -1344,7 +1344,7 @@ q /tmp 1777 root root 10d
 q /var/tmp 1777 root root 30d
 tmpfs</div>
 <p>Đọc chữ đầu là hành động (<code>D</code> = tạo thư mục và làm rỗng nó lúc khởi động, <code>q</code> = tạo nó, và dọn file cũ theo tuổi), rồi tới quyền, chủ, nhóm và hạn tuổi. Quyền <code>1777</code> là lý do <code>ls -ld /tmp</code> hiện <code>drwxrwxrwt</code> — ai cũng được ghi, và chữ <code>t</code> ở cuối (sticky bit, Chương 4) chặn người này xoá file của người kia. Luật thực tế thì đứng vững qua mọi khác biệt: <strong>thứ gì bạn còn cần ngày mai thì không thuộc về <code>/tmp</code></strong>.</p>
-<pre><code><span class="tok-comment"># macOS — thư mục gốc trông chẳng giống FHS chút nào:</span>
+<pre><code class="language-bash"><span class="tok-comment"># macOS — thư mục gốc trông chẳng giống FHS chút nào:</span>
 ls /
 ls -ld /etc /tmp /var</code></pre>
 <div class="out">Applications  bin  cores  dev  etc  home  Library  opt  pkg  private  sbin  System  tmp  Users  usr  var  Volumes
@@ -1354,7 +1354,7 @@ lrwxr-xr-x@ 1 root  wheel  11 Sep  3 17:34 /var -&gt; private/var</div>
 
 <h3>Chạy thử từng bước</h3>
 <p>Làm trong một container vứt đi để được thoải mái chọc vào <code>/</code>: <code>docker run --rm -it ubuntu:24.04 bash</code> (hoặc trên VPS, chỉ đọc). Năm lệnh, một tấm bản đồ.</p>
-<pre><code>ls -ld /proc /sys /tmp                  <span class="tok-comment"># cỡ 0 = do nhân sinh ra; chữ t = sticky</span>
+<pre><code class="language-bash">ls -ld /proc /sys /tmp                  <span class="tok-comment"># cỡ 0 = do nhân sinh ra; chữ t = sticky</span>
 cat /proc/uptime                        <span class="tok-comment"># số giây từ lúc bật — một "file" không bao giờ nằm trên đĩa</span>
 ls -l /dev/null /dev/zero               <span class="tok-comment"># c = thiết bị ký tự, "1, 3" = số hiệu driver</span>
 du -sh /var/* 2&gt;/dev/null | sort -rh | head -3
@@ -1441,7 +1441,7 @@ crw-rw-rw- 1 root root 1, 5 Sep 28 08:39 /dev/zero
 <h2>Reading a directory listing properly</h2>
 <p class="lead"><code>ls -l</code> prints seven columns and most people read two of them. The other five answer questions you will keep asking: who owns this, when did it change, why can I not write to it, and is it even a real file?</p>
 
-<pre><code>ls -l /var/log</code></pre>
+<pre><code class="language-bash">ls -l /var/log</code></pre>
 <div class="out">total 2884
 -rw-r-----  1 syslog adm    184320 Aug 21 14:20 auth.log
 drwxr-xr-x  2 root   root     4096 Aug 19 10:03 nginx
@@ -1462,7 +1462,7 @@ ${slide('lx-01', 23, 'Ký tự đầu là LOẠI file — lưới quyền rwx')}
 
 <h3>Sorting a listing to answer a question</h3>
 ${slide('lx-01', 24, 'Sắp xếp để trả lời một câu hỏi: -S, -t, -r')}
-<pre><code>ls -lhS /var/log | head -4          <span class="tok-comment"># biggest first — what is filling this?</span>
+<pre><code class="language-bash">ls -lhS /var/log | head -4          <span class="tok-comment"># biggest first — what is filling this?</span>
 ls -lt /var/log | head -4            <span class="tok-comment"># newest first — what changed just now?</span>
 ls -ltr /var/log | tail -4           <span class="tok-comment"># newest LAST — the most useful form</span></code></pre>
 <div class="out">total 2.9M
@@ -1528,7 +1528,7 @@ tree -L 2 -d /etc/nginx      <span class="tok-comment"># directories only, two l
 
 <h3>Run it step by step: one directory, every file type</h3>
 <p>Reading <code>ls -l</code> becomes easy once you have made each kind of entry yourself. In the sandbox:</p>
-<pre><code>mkdir ~/thu-linux/ch1/xem &amp;&amp; cd ~/thu-linux/ch1/xem
+<pre><code class="language-bash">mkdir ~/thu-linux/ch1/xem &amp;&amp; cd ~/thu-linux/ch1/xem
 printf "PORT=3000\\n" &gt; .env                       <span class="tok-comment"># regular file</span>
 printf '#!/bin/bash\\necho hi\\n' &gt; deploy.sh
 chmod +x deploy.sh                                <span class="tok-comment"># regular file, executable</span>
@@ -1584,7 +1584,7 @@ Change: Mon Sep 28 15:42:50 2026
 <p>A script that must run on both (your Mac and the VPS) should either detect the system with <code>uname</code> or avoid <code>stat</code> formats altogether — Chapter 7 shows the pattern.</p>
 
 <h3>Watching ctime move while mtime stands still</h3>
-<pre><code>echo "v1" &gt; ghi-chu.txt
+<pre><code class="language-bash">echo "v1" &gt; ghi-chu.txt
 touch -d "2025-03-01 09:00" ghi-chu.txt        <span class="tok-comment"># pretend it was last edited in March 2025</span>
 stat --printf="Modify: %y\\nChange: %z\\n" ghi-chu.txt
 chmod 600 ghi-chu.txt                          <span class="tok-comment"># change permissions only</span>
@@ -1598,7 +1598,7 @@ Change: 2026-09-28 08:42:13.189572466 +0000
 <p>Three lessons in one run. <code>touch -d</code> can set mtime to anything — so mtime is a claim, not proof. It cannot set ctime: the kernel stamps ctime with "now" whenever the inode changes, which is why investigators trust it more. And <code>ls -l</code> shows the year instead of a clock because the file is older than six months.</p>
 
 <h3>On Fedora and macOS the columns carry extra marks</h3>
-<pre><code><span class="tok-comment"># Fedora 44 (btrfs, SELinux):</span>
+<pre><code class="language-bash"><span class="tok-comment"># Fedora 44 (btrfs, SELinux):</span>
 ls -ld /etc
 <span class="tok-comment"># macOS (APFS):</span>
 ls -l README.md</code></pre>
@@ -1674,7 +1674,7 @@ sleep   4087 root    3w   REG   0,68 524288000     0 61724 /srv/log/access.log (
 <h2>Đọc một danh sách thư mục cho đúng</h2>
 <p class="lead"><code>ls -l</code> in ra bảy cột và đa số người ta chỉ đọc hai. Năm cột còn lại trả lời những câu hỏi bạn sẽ hỏi đi hỏi lại: ai sở hữu cái này, nó đổi lúc nào, vì sao tôi không ghi được vào đó, và nó có phải một file thật không?</p>
 
-<pre><code>ls -l /var/log</code></pre>
+<pre><code class="language-bash">ls -l /var/log</code></pre>
 <div class="out">total 2884
 -rw-r-----  1 syslog adm    184320 Aug 21 14:20 auth.log
 drwxr-xr-x  2 root   root     4096 Aug 19 10:03 nginx
@@ -1695,7 +1695,7 @@ ${slide('lx-01', 23, 'Ký tự đầu là LOẠI file — lưới quyền rwx')}
 
 <h3>Sắp xếp một danh sách để trả lời một câu hỏi</h3>
 ${slide('lx-01', 24, 'Sắp xếp để trả lời một câu hỏi: -S, -t, -r')}
-<pre><code>ls -lhS /var/log | head -4          <span class="tok-comment"># to nhất trước — cái gì đang làm đầy chỗ này?</span>
+<pre><code class="language-bash">ls -lhS /var/log | head -4          <span class="tok-comment"># to nhất trước — cái gì đang làm đầy chỗ này?</span>
 ls -lt /var/log | head -4            <span class="tok-comment"># mới nhất trước — vừa nãy có gì đổi?</span>
 ls -ltr /var/log | tail -4           <span class="tok-comment"># mới nhất SAU CÙNG — dạng hữu ích nhất</span></code></pre>
 <div class="out">total 2.9M
@@ -1761,7 +1761,7 @@ tree -L 2 -d /etc/nginx      <span class="tok-comment"># chỉ thư mục, sâu 
 
 <h3>Chạy thử từng bước: một thư mục, đủ mọi loại file</h3>
 <p>Đọc <code>ls -l</code> sẽ thành dễ khi bạn đã tự tay tạo ra từng loại mục. Trong sân tập:</p>
-<pre><code>mkdir ~/thu-linux/ch1/xem &amp;&amp; cd ~/thu-linux/ch1/xem
+<pre><code class="language-bash">mkdir ~/thu-linux/ch1/xem &amp;&amp; cd ~/thu-linux/ch1/xem
 printf "PORT=3000\\n" &gt; .env                       <span class="tok-comment"># file thường</span>
 printf '#!/bin/bash\\necho hi\\n' &gt; deploy.sh
 chmod +x deploy.sh                                <span class="tok-comment"># file thường, chạy được</span>
@@ -1817,7 +1817,7 @@ Change: Mon Sep 28 15:42:50 2026
 <p>Một script phải chạy được ở cả hai nơi (Mac của bạn và VPS) thì hoặc dò hệ thống bằng <code>uname</code>, hoặc tránh hẳn định dạng của <code>stat</code> — Chương 7 chỉ mẫu làm.</p>
 
 <h3>Nhìn ctime nhảy trong khi mtime đứng yên</h3>
-<pre><code>echo "v1" &gt; ghi-chu.txt
+<pre><code class="language-bash">echo "v1" &gt; ghi-chu.txt
 touch -d "2025-03-01 09:00" ghi-chu.txt        <span class="tok-comment"># giả như lần sửa cuối là tháng 3/2025</span>
 stat --printf="Modify: %y\\nChange: %z\\n" ghi-chu.txt
 chmod 600 ghi-chu.txt                          <span class="tok-comment"># chỉ đổi quyền</span>
@@ -1831,7 +1831,7 @@ Change: 2026-09-28 08:42:13.189572466 +0000
 <p>Ba bài học trong một lần chạy. <code>touch -d</code> đặt được mtime thành bất cứ gì — nên mtime là một lời khai, không phải bằng chứng. Nó KHÔNG đặt được ctime: nhân tự đóng dấu ctime bằng "bây giờ" mỗi khi inode thay đổi, và vì thế người điều tra tin ctime hơn. Và <code>ls -l</code> hiện năm thay cho giờ vì file cũ hơn sáu tháng.</p>
 
 <h3>Trên Fedora và macOS các cột mang thêm ký hiệu</h3>
-<pre><code><span class="tok-comment"># Fedora 44 (btrfs, SELinux):</span>
+<pre><code class="language-bash"><span class="tok-comment"># Fedora 44 (btrfs, SELinux):</span>
 ls -ld /etc
 <span class="tok-comment"># macOS (APFS):</span>
 ls -l README.md</code></pre>

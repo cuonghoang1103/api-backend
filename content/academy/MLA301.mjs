@@ -327,7 +327,7 @@ const c5 = doc('mla301-5-1-explainability', '5.1 — Explainability (XAI): SHAP 
 <p>A linear regression or a shallow decision tree is <strong>naturally</strong> explainable — you can read the coefficients or the tree path. A gradient-boosted ensemble or a neural network is a <strong>black box</strong> — it can be more accurate but nobody can eyeball why it made a decision. XAI tools exist to explain the black box without giving up its accuracy.</p>
 <h3>SHAP — how much did each feature push the decision?</h3>
 <p>SHAP (SHapley Additive exPlanations) is grounded in game theory: it splits credit for a prediction fairly among the input features, so each feature gets a signed "contribution" — how many points it pushed the prediction up or down from the baseline.</p>
-<pre><code>import shap
+<pre><code class="language-python">import shap
 explainer = shap.Explainer(model)
 shap_values = explainer(X_test[:1])   # explain ONE customer's decision
 shap.plots.waterfall(shap_values[0])  # each feature's push, +/-, to the final score
@@ -346,7 +346,7 @@ shap.plots.waterfall(shap_values[0])  # each feature's push, +/-, to the final s
 <p>Hồi quy tuyến tính hay cây quyết định nông thì <strong>tự nhiên</strong> giải thích được — đọc trực tiếp hệ số hoặc đường đi trên cây. Một ensemble gradient boosting hay mạng nơ-ron là <strong>hộp đen</strong> — có thể chính xác hơn nhưng không ai nhìn ra ngay vì sao nó ra quyết định. Công cụ XAI ra đời để giải thích hộp đen mà không phải hy sinh độ chính xác.</p>
 <h3>SHAP — mỗi đặc trưng đẩy quyết định bao nhiêu?</h3>
 <p>SHAP (SHapley Additive exPlanations) dựa trên lý thuyết trò chơi: nó chia công bằng "công trạng" của một dự đoán cho các đặc trưng đầu vào, mỗi đặc trưng nhận một "đóng góp" có dấu — đẩy dự đoán lên hay xuống bao nhiêu so với mức nền.</p>
-<pre><code>import shap
+<pre><code class="language-python">import shap
 explainer = shap.Explainer(model)
 shap_values = explainer(X_test[:1])   # giải thích quyết định của MỘT khách hàng
 shap.plots.waterfall(shap_values[0])  # mỗi đặc trưng đẩy +/- bao nhiêu tới điểm cuối

@@ -24,25 +24,25 @@ export default {
 
 <h3>Describing a shape</h3>
 <p>You can write an object type inline with braces, listing <code>name: Type</code> for each property:</p>
-<pre><code><span class="tok-keyword">const</span> user: { name: <span class="tok-keyword">string</span>; age: <span class="tok-keyword">number</span> } = { name: <span class="tok-string">'An'</span>, age: <span class="tok-number">30</span> };</code></pre>
+<pre><code class="language-css"><span class="tok-keyword">const</span> user: { name: <span class="tok-keyword">string</span>; age: <span class="tok-keyword">number</span> } = { name: <span class="tok-string">'An'</span>, age: <span class="tok-number">30</span> };</code></pre>
 <p>Inline types get noisy fast, so you'll almost always name them (next lesson: <code>interface</code> / <code>type</code>). But the shape rules are the same however you write them, and there are two the compiler is strict about.</p>
 
 <h3>Missing property → error</h3>
-<pre><code><span class="tok-comment">// missing.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// missing.ts</span>
 <span class="tok-keyword">interface</span> Note { title: <span class="tok-keyword">string</span>; body: <span class="tok-keyword">string</span>; }
 <span class="tok-keyword">const</span> n: Note = { title: <span class="tok-string">'Hi'</span> };</code></pre>
 <div class="out">missing.ts(2,7): error TS2741: Property 'body' is missing in type '{ title: string; }' but required in type 'Note'.</div>
 <p>Every required property must be present. This is what makes "I forgot a field" a compile error instead of an <code>undefined</code> discovered in production.</p>
 
 <h3>Excess property → error (for object literals)</h3>
-<pre><code><span class="tok-comment">// excess.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// excess.ts</span>
 <span class="tok-keyword">const</span> n: Note = { title: <span class="tok-string">'Hi'</span>, body: <span class="tok-string">'x'</span>, pinned: <span class="tok-keyword">true</span> };</code></pre>
 <div class="out">excess.ts(2,43): error TS2353: Object literal may only specify known properties, and 'pinned' does not exist in type 'Note'.</div>
 <p>When you assign an <em>object literal</em> directly, TypeScript also flags <em>extra</em> properties. This "excess property check" catches typos like <code>{ tittle: 'Hi' }</code> — otherwise the misspelled key would just be silently ignored. (The check only applies to fresh literals; a variable widened elsewhere can carry extras — a nuance you'll rarely hit.)</p>
 
 <h3>Optional properties with ?</h3>
 <p>A <code>?</code> makes a property optional — it may be absent, and if present must match the type. Inside code, an optional property is <code>T | undefined</code>, so you must check before use:</p>
-<pre><code><span class="tok-comment">// optprop.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// optprop.ts</span>
 <span class="tok-keyword">interface</span> Note { title: <span class="tok-keyword">string</span>; summary?: <span class="tok-keyword">string</span>; }
 <span class="tok-keyword">function</span> <span class="tok-function">show</span>(n: Note) {
   <span class="tok-keyword">return</span> n.summary.length;
@@ -52,7 +52,7 @@ export default {
 
 <h3>readonly properties</h3>
 <p>Prefix a property with <code>readonly</code> and it can be set when the object is created but never reassigned:</p>
-<pre><code><span class="tok-comment">// ro.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// ro.ts</span>
 <span class="tok-keyword">interface</span> Note { <span class="tok-keyword">readonly</span> id: <span class="tok-keyword">string</span>; title: <span class="tok-keyword">string</span>; }
 <span class="tok-keyword">const</span> n: Note = { id: <span class="tok-string">'n1'</span>, title: <span class="tok-string">'Hi'</span> };
 n.id = <span class="tok-string">'n2'</span>;</code></pre>
@@ -81,25 +81,25 @@ n.id = <span class="tok-string">'n2'</span>;</code></pre>
 
 <h3>Mô tả một dáng</h3>
 <p>Bạn viết kiểu object ngay tại chỗ bằng ngoặc nhọn, liệt kê <code>tên: Kiểu</code> cho mỗi thuộc tính:</p>
-<pre><code><span class="tok-keyword">const</span> user: { name: <span class="tok-keyword">string</span>; age: <span class="tok-keyword">number</span> } = { name: <span class="tok-string">'An'</span>, age: <span class="tok-number">30</span> };</code></pre>
+<pre><code class="language-css"><span class="tok-keyword">const</span> user: { name: <span class="tok-keyword">string</span>; age: <span class="tok-keyword">number</span> } = { name: <span class="tok-string">'An'</span>, age: <span class="tok-number">30</span> };</code></pre>
 <p>Kiểu viết ngay tại chỗ rối rắm rất nhanh, nên bạn gần như luôn đặt tên chúng (bài sau: <code>interface</code> / <code>type</code>). Nhưng các quy tắc về dáng thì giống nhau dù viết cách nào, và có hai quy tắc trình biên dịch rất nghiêm.</p>
 
 <h3>Thiếu thuộc tính → lỗi</h3>
-<pre><code><span class="tok-comment">// missing.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// missing.ts</span>
 <span class="tok-keyword">interface</span> Note { title: <span class="tok-keyword">string</span>; body: <span class="tok-keyword">string</span>; }
 <span class="tok-keyword">const</span> n: Note = { title: <span class="tok-string">'Hi'</span> };</code></pre>
 <div class="out">missing.ts(2,7): error TS2741: Property 'body' is missing in type '{ title: string; }' but required in type 'Note'.</div>
 <p>Mọi thuộc tính bắt buộc phải có mặt. Đây là thứ biến "tôi quên một field" thành lỗi biên dịch thay vì một <code>undefined</code> phát hiện trên production.</p>
 
 <h3>Thuộc tính thừa → lỗi (với object literal)</h3>
-<pre><code><span class="tok-comment">// excess.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// excess.ts</span>
 <span class="tok-keyword">const</span> n: Note = { title: <span class="tok-string">'Hi'</span>, body: <span class="tok-string">'x'</span>, pinned: <span class="tok-keyword">true</span> };</code></pre>
 <div class="out">excess.ts(2,43): error TS2353: Object literal may only specify known properties, and 'pinned' does not exist in type 'Note'.</div>
 <p>Khi bạn gán một <em>object literal</em> trực tiếp, TypeScript còn tô đỏ thuộc tính <em>thừa</em>. "Kiểm tra thuộc tính thừa" này bắt các lỗi gõ sai như <code>{ tittle: 'Hi' }</code> — nếu không thì khoá gõ sai sẽ bị âm thầm phớt lờ. (Phép kiểm chỉ áp cho literal tươi; một biến đã nới rộng ở chỗ khác có thể mang theo thứ thừa — một tinh tế bạn hiếm khi gặp.)</p>
 
 <h3>Thuộc tính optional với ?</h3>
 <p>Một dấu <code>?</code> khiến thuộc tính thành optional — nó có thể vắng mặt, và nếu có thì phải khớp kiểu. Trong code, một thuộc tính optional là <code>T | undefined</code>, nên bạn phải kiểm trước khi dùng:</p>
-<pre><code><span class="tok-comment">// optprop.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// optprop.ts</span>
 <span class="tok-keyword">interface</span> Note { title: <span class="tok-keyword">string</span>; summary?: <span class="tok-keyword">string</span>; }
 <span class="tok-keyword">function</span> <span class="tok-function">show</span>(n: Note) {
   <span class="tok-keyword">return</span> n.summary.length;
@@ -109,7 +109,7 @@ n.id = <span class="tok-string">'n2'</span>;</code></pre>
 
 <h3>Thuộc tính readonly</h3>
 <p>Thêm tiền tố <code>readonly</code> cho một thuộc tính thì nó gán được lúc tạo object nhưng không bao giờ gán lại được:</p>
-<pre><code><span class="tok-comment">// ro.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// ro.ts</span>
 <span class="tok-keyword">interface</span> Note { <span class="tok-keyword">readonly</span> id: <span class="tok-keyword">string</span>; title: <span class="tok-keyword">string</span>; }
 <span class="tok-keyword">const</span> n: Note = { id: <span class="tok-string">'n1'</span>, title: <span class="tok-string">'Hi'</span> };
 n.id = <span class="tok-string">'n2'</span>;</code></pre>
@@ -147,7 +147,7 @@ n.id = <span class="tok-string">'n2'</span>;</code></pre>
 <p class="lead">TypeScript gives you two ways to name a type: <code>interface</code> and <code>type</code>. For describing an object they are 95% interchangeable, and the endless online debate is mostly overblown. But there are real differences worth knowing, and a simple rule to end the indecision.</p>
 
 <h3>The two syntaxes</h3>
-<pre><code><span class="tok-comment">// interface — no equals sign, braces</span>
+<pre><code class="language-typescript"><span class="tok-comment">// interface — no equals sign, braces</span>
 <span class="tok-keyword">interface</span> Note {
   title: <span class="tok-keyword">string</span>;
   body: <span class="tok-keyword">string</span>;
@@ -162,12 +162,12 @@ n.id = <span class="tok-string">'n2'</span>;</code></pre>
 
 <h3>Difference 1: interfaces merge, type aliases collide</h3>
 <p>Declare the same interface name twice and TypeScript <em>merges</em> them into one:</p>
-<pre><code><span class="tok-comment">// merge.ts — no error</span>
+<pre><code class="language-typescript"><span class="tok-comment">// merge.ts — no error</span>
 <span class="tok-keyword">interface</span> Box { width: <span class="tok-keyword">number</span>; }
 <span class="tok-keyword">interface</span> Box { height: <span class="tok-keyword">number</span>; }
 <span class="tok-keyword">const</span> b: Box = { width: <span class="tok-number">10</span>, height: <span class="tok-number">20</span> };   <span class="tok-comment">// Box has BOTH</span></code></pre>
 <p>Do the same with a <code>type</code> and it's an error:</p>
-<pre><code><span class="tok-comment">// dup.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// dup.ts</span>
 <span class="tok-keyword">type</span> Box = { width: <span class="tok-keyword">number</span> };
 <span class="tok-keyword">type</span> Box = { height: <span class="tok-keyword">number</span> };</code></pre>
 <div class="out">dup.ts(1,6): error TS2300: Duplicate identifier 'Box'.
@@ -176,7 +176,7 @@ dup.ts(2,6): error TS2300: Duplicate identifier 'Box'.</div>
 
 <h3>Difference 2: only type can express non-object types</h3>
 <p><code>interface</code> only describes object/function shapes. <code>type</code> can name <em>anything</em> — a union, a primitive alias, a tuple, a conditional type (later chapters):</p>
-<pre><code><span class="tok-keyword">type</span> ID = <span class="tok-keyword">string</span> | <span class="tok-keyword">number</span>;              <span class="tok-comment">// union — interface can't do this</span>
+<pre><code class="language-typescript"><span class="tok-keyword">type</span> ID = <span class="tok-keyword">string</span> | <span class="tok-keyword">number</span>;              <span class="tok-comment">// union — interface can't do this</span>
 <span class="tok-keyword">type</span> Status = <span class="tok-string">'draft'</span> | <span class="tok-string">'published'</span>;      <span class="tok-comment">// literal union</span>
 <span class="tok-keyword">type</span> Pair = [<span class="tok-keyword">number</span>, <span class="tok-keyword">number</span>];               <span class="tok-comment">// tuple</span></code></pre>
 <p>The moment you need a union or a literal type — which is constantly, from chapter 5 on — you need <code>type</code>. This is the single most practical difference.</p>
@@ -212,7 +212,7 @@ dup.ts(2,6): error TS2300: Duplicate identifier 'Box'.</div>
 <p class="lead">TypeScript cho bạn hai cách đặt tên một kiểu: <code>interface</code> và <code>type</code>. Để mô tả một object chúng thay thế được nhau 95%, và cuộc tranh cãi bất tận trên mạng phần lớn bị thổi phồng. Nhưng có những khác biệt thật đáng biết, và một quy tắc đơn giản để hết do dự.</p>
 
 <h3>Hai cú pháp</h3>
-<pre><code><span class="tok-comment">// interface — không dấu bằng, ngoặc nhọn</span>
+<pre><code class="language-typescript"><span class="tok-comment">// interface — không dấu bằng, ngoặc nhọn</span>
 <span class="tok-keyword">interface</span> Note {
   title: <span class="tok-keyword">string</span>;
   body: <span class="tok-keyword">string</span>;
@@ -227,12 +227,12 @@ dup.ts(2,6): error TS2300: Duplicate identifier 'Box'.</div>
 
 <h3>Khác biệt 1: interface hợp nhất, type alias va chạm</h3>
 <p>Khai cùng một tên interface hai lần thì TypeScript <em>hợp nhất</em> chúng thành một:</p>
-<pre><code><span class="tok-comment">// merge.ts — không lỗi</span>
+<pre><code class="language-typescript"><span class="tok-comment">// merge.ts — không lỗi</span>
 <span class="tok-keyword">interface</span> Box { width: <span class="tok-keyword">number</span>; }
 <span class="tok-keyword">interface</span> Box { height: <span class="tok-keyword">number</span>; }
 <span class="tok-keyword">const</span> b: Box = { width: <span class="tok-number">10</span>, height: <span class="tok-number">20</span> };   <span class="tok-comment">// Box có CẢ HAI</span></code></pre>
 <p>Làm điều tương tự với <code>type</code> thì đó là lỗi:</p>
-<pre><code><span class="tok-comment">// dup.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// dup.ts</span>
 <span class="tok-keyword">type</span> Box = { width: <span class="tok-keyword">number</span> };
 <span class="tok-keyword">type</span> Box = { height: <span class="tok-keyword">number</span> };</code></pre>
 <div class="out">dup.ts(1,6): error TS2300: Duplicate identifier 'Box'.
@@ -241,7 +241,7 @@ dup.ts(2,6): error TS2300: Duplicate identifier 'Box'.</div>
 
 <h3>Khác biệt 2: chỉ type diễn đạt được kiểu không-phải-object</h3>
 <p><code>interface</code> chỉ mô tả dáng object/hàm. <code>type</code> đặt tên được cho <em>bất cứ gì</em> — một union, một alias primitive, một tuple, một conditional type (các chương sau):</p>
-<pre><code><span class="tok-keyword">type</span> ID = <span class="tok-keyword">string</span> | <span class="tok-keyword">number</span>;              <span class="tok-comment">// union — interface không làm được</span>
+<pre><code class="language-typescript"><span class="tok-keyword">type</span> ID = <span class="tok-keyword">string</span> | <span class="tok-keyword">number</span>;              <span class="tok-comment">// union — interface không làm được</span>
 <span class="tok-keyword">type</span> Status = <span class="tok-string">'draft'</span> | <span class="tok-string">'published'</span>;      <span class="tok-comment">// literal union</span>
 <span class="tok-keyword">type</span> Pair = [<span class="tok-keyword">number</span>, <span class="tok-keyword">number</span>];               <span class="tok-comment">// tuple</span></code></pre>
 <p>Khoảnh khắc bạn cần một union hay một kiểu literal — mà điều đó liên tục xảy ra, từ chương 5 trở đi — bạn cần <code>type</code>. Đây là khác biệt thực tế nhất.</p>
@@ -288,7 +288,7 @@ dup.ts(2,6): error TS2300: Duplicate identifier 'Box'.</div>
 
 <h3>interface extends — inherit a shape</h3>
 <p>An interface can <code>extends</code> one (or several) others, gaining all their properties:</p>
-<pre><code><span class="tok-comment">// ext.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// ext.ts</span>
 <span class="tok-keyword">interface</span> Entity { id: <span class="tok-keyword">string</span>; }
 <span class="tok-keyword">interface</span> Note <span class="tok-keyword">extends</span> Entity { title: <span class="tok-keyword">string</span>; }
 <span class="tok-keyword">const</span> n: Note = { title: <span class="tok-string">'Hi'</span> };</code></pre>
@@ -297,7 +297,7 @@ dup.ts(2,6): error TS2300: Duplicate identifier 'Box'.</div>
 
 <h3>type intersection with &amp; — combine shapes</h3>
 <p>The <code>type</code> equivalent is the intersection operator <code>&amp;</code>: <code>A &amp; B</code> is a type that has everything from both:</p>
-<pre><code><span class="tok-comment">// inter.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// inter.ts</span>
 <span class="tok-keyword">type</span> Entity = { id: <span class="tok-keyword">string</span> };
 <span class="tok-keyword">type</span> Timestamps = { createdAt: <span class="tok-keyword">number</span> };
 <span class="tok-keyword">type</span> Note = Entity &amp; Timestamps &amp; { title: <span class="tok-keyword">string</span> };
@@ -309,7 +309,7 @@ dup.ts(2,6): error TS2300: Duplicate identifier 'Box'.</div>
 
 <h3>Nested shapes</h3>
 <p>Properties can themselves be objects — you nest types as deeply as the data:</p>
-<pre><code><span class="tok-keyword">interface</span> Note {
+<pre><code class="language-typescript"><span class="tok-keyword">interface</span> Note {
   id: <span class="tok-keyword">string</span>;
   author: {
     id: <span class="tok-keyword">string</span>;
@@ -338,7 +338,7 @@ dup.ts(2,6): error TS2300: Duplicate identifier 'Box'.</div>
 
 <h3>interface extends — kế thừa một dáng</h3>
 <p>Một interface có thể <code>extends</code> một (hoặc nhiều) interface khác, nhận hết thuộc tính của chúng:</p>
-<pre><code><span class="tok-comment">// ext.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// ext.ts</span>
 <span class="tok-keyword">interface</span> Entity { id: <span class="tok-keyword">string</span>; }
 <span class="tok-keyword">interface</span> Note <span class="tok-keyword">extends</span> Entity { title: <span class="tok-keyword">string</span>; }
 <span class="tok-keyword">const</span> n: Note = { title: <span class="tok-string">'Hi'</span> };</code></pre>
@@ -347,7 +347,7 @@ dup.ts(2,6): error TS2300: Duplicate identifier 'Box'.</div>
 
 <h3>type giao với &amp; — gộp các dáng</h3>
 <p>Cái tương đương cho <code>type</code> là toán tử giao <code>&amp;</code>: <code>A &amp; B</code> là một kiểu có mọi thứ từ cả hai:</p>
-<pre><code><span class="tok-comment">// inter.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// inter.ts</span>
 <span class="tok-keyword">type</span> Entity = { id: <span class="tok-keyword">string</span> };
 <span class="tok-keyword">type</span> Timestamps = { createdAt: <span class="tok-keyword">number</span> };
 <span class="tok-keyword">type</span> Note = Entity &amp; Timestamps &amp; { title: <span class="tok-keyword">string</span> };
@@ -359,7 +359,7 @@ dup.ts(2,6): error TS2300: Duplicate identifier 'Box'.</div>
 
 <h3>Dáng lồng nhau</h3>
 <p>Thuộc tính bản thân cũng có thể là object — bạn lồng kiểu sâu như dữ liệu:</p>
-<pre><code><span class="tok-keyword">interface</span> Note {
+<pre><code class="language-typescript"><span class="tok-keyword">interface</span> Note {
   id: <span class="tok-keyword">string</span>;
   author: {
     id: <span class="tok-keyword">string</span>;
@@ -398,7 +398,7 @@ dup.ts(2,6): error TS2300: Duplicate identifier 'Box'.</div>
 
 <h3>Index signatures</h3>
 <p>An index signature says "any key of this type maps to a value of that type":</p>
-<pre><code><span class="tok-comment">// idx.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// idx.ts</span>
 <span class="tok-keyword">interface</span> Scores { [subject: <span class="tok-keyword">string</span>]: <span class="tok-keyword">number</span>; }
 <span class="tok-keyword">const</span> s: Scores = { math: <span class="tok-number">9</span>, lit: <span class="tok-number">8</span> };
 s.chem = <span class="tok-string">'A'</span>;</code></pre>
@@ -408,9 +408,9 @@ s.chem = <span class="tok-string">'A'</span>;</code></pre>
 
 <h3>Record — the cleaner spelling</h3>
 <p>The built-in <code>Record&lt;Keys, Value&gt;</code> utility type does the same thing more legibly, and it's what you'll see in real code:</p>
-<pre><code><span class="tok-keyword">type</span> Scores = <span class="tok-keyword">Record</span>&lt;<span class="tok-keyword">string</span>, <span class="tok-keyword">number</span>&gt;;        <span class="tok-comment">// same as { [k: string]: number }</span></code></pre>
+<pre><code class="language-typescript"><span class="tok-keyword">type</span> Scores = <span class="tok-keyword">Record</span>&lt;<span class="tok-keyword">string</span>, <span class="tok-keyword">number</span>&gt;;        <span class="tok-comment">// same as { [k: string]: number }</span></code></pre>
 <p>Where <code>Record</code> shines is with a <em>known set</em> of keys — combine it with the literal unions from chapter 2:</p>
-<pre><code><span class="tok-keyword">type</span> Status = <span class="tok-string">'draft'</span> | <span class="tok-string">'published'</span> | <span class="tok-string">'archived'</span>;
+<pre><code class="language-typescript"><span class="tok-keyword">type</span> Status = <span class="tok-string">'draft'</span> | <span class="tok-string">'published'</span> | <span class="tok-string">'archived'</span>;
 <span class="tok-keyword">type</span> Counts = <span class="tok-keyword">Record</span>&lt;Status, <span class="tok-keyword">number</span>&gt;;
 <span class="tok-keyword">const</span> c: Counts = { draft: <span class="tok-number">3</span>, published: <span class="tok-number">10</span>, archived: <span class="tok-number">1</span> };</code></pre>
 <p>Now the keys are exactly the three statuses — miss one and it errors, add a fourth and it errors. This is <code>Record</code> at its best: a complete, exhaustive map from a fixed set of keys. (<code>Record</code> is your first utility type; chapter 8 builds the whole family, including how <code>Record</code> is defined.)</p>
@@ -443,7 +443,7 @@ s.chem = <span class="tok-string">'A'</span>;</code></pre>
 
 <h3>Index signature</h3>
 <p>Một index signature nói "bất kỳ khoá kiểu này ánh xạ tới một giá trị kiểu kia":</p>
-<pre><code><span class="tok-comment">// idx.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// idx.ts</span>
 <span class="tok-keyword">interface</span> Scores { [subject: <span class="tok-keyword">string</span>]: <span class="tok-keyword">number</span>; }
 <span class="tok-keyword">const</span> s: Scores = { math: <span class="tok-number">9</span>, lit: <span class="tok-number">8</span> };
 s.chem = <span class="tok-string">'A'</span>;</code></pre>
@@ -453,9 +453,9 @@ s.chem = <span class="tok-string">'A'</span>;</code></pre>
 
 <h3>Record — cách viết gọn hơn</h3>
 <p>Utility type sẵn có <code>Record&lt;Keys, Value&gt;</code> làm cùng việc đó dễ đọc hơn, và đó là thứ bạn sẽ thấy trong code thật:</p>
-<pre><code><span class="tok-keyword">type</span> Scores = <span class="tok-keyword">Record</span>&lt;<span class="tok-keyword">string</span>, <span class="tok-keyword">number</span>&gt;;        <span class="tok-comment">// giống { [k: string]: number }</span></code></pre>
+<pre><code class="language-typescript"><span class="tok-keyword">type</span> Scores = <span class="tok-keyword">Record</span>&lt;<span class="tok-keyword">string</span>, <span class="tok-keyword">number</span>&gt;;        <span class="tok-comment">// giống { [k: string]: number }</span></code></pre>
 <p>Chỗ <code>Record</code> toả sáng là với một <em>tập khoá đã biết</em> — kết hợp nó với các union literal ở chương 2:</p>
-<pre><code><span class="tok-keyword">type</span> Status = <span class="tok-string">'draft'</span> | <span class="tok-string">'published'</span> | <span class="tok-string">'archived'</span>;
+<pre><code class="language-typescript"><span class="tok-keyword">type</span> Status = <span class="tok-string">'draft'</span> | <span class="tok-string">'published'</span> | <span class="tok-string">'archived'</span>;
 <span class="tok-keyword">type</span> Counts = <span class="tok-keyword">Record</span>&lt;Status, <span class="tok-keyword">number</span>&gt;;
 <span class="tok-keyword">const</span> c: Counts = { draft: <span class="tok-number">3</span>, published: <span class="tok-number">10</span>, archived: <span class="tok-number">1</span> };</code></pre>
 <p>Giờ các khoá đúng là ba status — thiếu một cái là lỗi, thêm cái thứ tư là lỗi. Đây là <code>Record</code> ở phong độ đỉnh: một map đầy đủ, kín từ một tập khoá cố định. (<code>Record</code> là utility type đầu tiên của bạn; chương 8 dựng cả họ, gồm cả cách <code>Record</code> được định nghĩa.)</p>

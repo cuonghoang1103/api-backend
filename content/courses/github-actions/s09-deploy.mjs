@@ -526,7 +526,7 @@ ${slide('ga-09', 13, 'Dựng MỘT lần, gửi ảnh dạng artifact, đích ch
         with: { name: anh-ch09 }
       - run: gunzip -c anh.tar.gz | docker load    # "Loaded image: ch09-app:ff166e70"</code></pre>
 <p>In run <a href="https://github.com/cuonghoang1103/ga-san-tap/actions/runs/36018120566" target="_blank" rel="noopener">36018120566</a> the build job took 8 seconds and the deploy job 17. The point is not speed: the image that was tested is byte-for-byte the image that was deployed. Building again at the target produces a <em>different</em> image from the one you checked — and on 18 August this repository built the wrong Dockerfile at exactly that step.</p>
-<pre><code><span class="tok-comment"># o nha (hoac tren mot build server co cache am):</span>
+<pre><code class="language-bash"><span class="tok-comment"># o nha (hoac tren mot build server co cache am):</span>
 docker build -f Dockerfile.backend -t ghcr.io/&lt;owner&gt;/backend:\$SHA .
 docker build -f Dockerfile.frontend -t ghcr.io/&lt;owner&gt;/frontend:\$SHA ./frontend
 docker push ghcr.io/&lt;owner&gt;/backend:\$SHA
@@ -702,7 +702,7 @@ ${slide('ga-09', 13, 'Dựng MỘT lần, gửi ảnh dạng artifact, đích ch
         with: { name: anh-ch09 }
       - run: gunzip -c anh.tar.gz | docker load    # "Loaded image: ch09-app:ff166e70"</code></pre>
 <p>Ở run <a href="https://github.com/cuonghoang1103/ga-san-tap/actions/runs/36018120566" target="_blank" rel="noopener">36018120566</a>, job dựng mất 8 giây và job deploy 17 giây. Điểm chính không phải tốc độ: ảnh được kiểm chính là ảnh được deploy, trùng tới từng byte. Dựng lại ở đích là tạo ra một ảnh <em>KHÁC</em> cái bạn đã kiểm — và ngày 18/08 kho này dựng nhầm Dockerfile đúng ở bước ấy.</p>
-<pre><code><span class="tok-comment"># o nha (hoac tren mot build server co cache am):</span>
+<pre><code class="language-bash"><span class="tok-comment"># o nha (hoac tren mot build server co cache am):</span>
 docker build -f Dockerfile.backend -t ghcr.io/&lt;owner&gt;/backend:\$SHA .
 docker build -f Dockerfile.frontend -t ghcr.io/&lt;owner&gt;/frontend:\$SHA ./frontend
 docker push ghcr.io/&lt;owner&gt;/backend:\$SHA
@@ -1129,7 +1129,7 @@ ${slide('ga-09', 18, '"Bản trước" không phải HEAD^ — hỏi production 
 <h3>What <code>environment:</code> actually adds</h3>
 ${slide('ga-09', 20, 'environment: biến một job thành cuộc deploy có cổng')}
 <p>An environment is created in <em>Settings → Environments</em>, or through the API, which is how the sandbox one was made. Everything in the right-hand table of the slide is one of these three calls:</p>
-<pre><code># 1. create the environment: one required reviewer (you), self-review allowed, only chosen branches
+<pre><code class="language-bash"># 1. create the environment: one required reviewer (you), self-review allowed, only chosen branches
 gh api -X PUT repos/cuonghoang1103/ga-san-tap/environments/ch09-production --input - &lt;&lt;'EOF'
 {"reviewers":[{"type":"User","id":125522434}],
  "prevent_self_review":false,
@@ -1298,7 +1298,7 @@ ${slide('ga-09', 23, 'Luật environment tuỳ gói và kho công khai/riêng t�
 <h3><code>environment:</code> thật ra thêm gì</h3>
 ${slide('ga-09', 20, 'environment: biến một job thành cuộc deploy có cổng')}
 <p>Environment được tạo ở <em>Settings → Environments</em>, hoặc qua API — cách tạo cái của sân tập. Mọi thứ trong bảng bên phải của slide là một trong ba lời gọi sau:</p>
-<pre><code># 1. tạo environment: một người duyệt bắt buộc (bạn), cho tự duyệt, chỉ nhánh được chọn
+<pre><code class="language-bash"># 1. tạo environment: một người duyệt bắt buộc (bạn), cho tự duyệt, chỉ nhánh được chọn
 gh api -X PUT repos/cuonghoang1103/ga-san-tap/environments/ch09-production --input - &lt;&lt;'EOF'
 {"reviewers":[{"type":"User","id":125522434}],
  "prevent_self_review":false,
@@ -1491,7 +1491,7 @@ ${slide('ga-09', 25, 'Gửi gì, cho ai, qua đâu — xanh không phải tin t�
 </div>
 
 <h3>The single-message template</h3>
-<pre><code><span class="tok-comment"># tren viec DEPLOY PRODUCTION hong:</span>
+<pre><code class="language-bash"><span class="tok-comment"># tren viec DEPLOY PRODUCTION hong:</span>
 - name: Bao Slack neu deploy hong
   if: failure() &amp;&amp; github.ref == 'refs/heads/main'
   uses: rtCamp/action-slack-notify@v2
@@ -1656,7 +1656,7 @@ ${slide('ga-09', 25, 'Gửi gì, cho ai, qua đâu — xanh không phải tin t�
 </div>
 
 <h3>Mẫu tin nhắn ĐƠN LẺ</h3>
-<pre><code><span class="tok-comment"># tren viec DEPLOY PRODUCTION hong:</span>
+<pre><code class="language-bash"><span class="tok-comment"># tren viec DEPLOY PRODUCTION hong:</span>
 - name: Bao Slack neu deploy hong
   if: failure() &amp;&amp; github.ref == 'refs/heads/main'
   uses: rtCamp/action-slack-notify@v2

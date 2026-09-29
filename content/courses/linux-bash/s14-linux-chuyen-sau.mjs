@@ -109,7 +109,7 @@ real	0m0.003s   user 0m0.000s   sys 0m0.003s
 <h3>/proc and /sys: the kernel as a filesystem</h3>
 ${slide('lx-14', 4, '/proc và /sys: nhân mở cửa sổ dạng file')}
 <p>Lesson 5.1 introduced <code>/proc/PID/</code>. Two more windows matter at this depth. <code>/proc/sys/</code> holds the kernel's tunables, the same values the <code>sysctl</code> command reads and writes (a dot in the name is a slash in the path: <code>vm.swappiness</code> = <code>/proc/sys/vm/swappiness</code>). And <code>/sys</code> (sysfs) describes devices and kernel objects: every network card under <code>/sys/class/net/</code>, every block device under <code>/sys/block/</code>, and the entire cgroup tree under <code>/sys/fs/cgroup/</code>. None of these files exists on disk; the kernel generates the contents when you read them.</p>
-<pre><code>grep -E "^(Name|State|VmRSS|CapEff)" /proc/self/status
+<pre><code class="language-bash">grep -E "^(Name|State|VmRSS|CapEff)" /proc/self/status
 sysctl vm.swappiness net.ipv4.ip_forward
 cat /sys/class/net/eth0/mtu /sys/class/net/eth0/operstate</code></pre>
 <div class="out">Name:	grep
@@ -121,7 +121,7 @@ net.ipv4.ip_forward = 1
 65535
 up</div>
 <p>A change made with <code>sysctl -w</code> lasts until reboot. To make it permanent, put it in a file under <code>/etc/sysctl.d/</code> and apply it:</p>
-<pre><code>echo "net.ipv4.ip_unprivileged_port_start = 80" &gt; /etc/sysctl.d/99-cong.conf
+<pre><code class="language-bash">echo "net.ipv4.ip_unprivileged_port_start = 80" &gt; /etc/sysctl.d/99-cong.conf
 sysctl -p /etc/sysctl.d/99-cong.conf       <span class="tok-comment"># apply this one file</span>
 sysctl --system                            <span class="tok-comment"># re-apply EVERY file, in order</span></code></pre>
 <div class="out">net.ipv4.ip_unprivileged_port_start = 80
@@ -183,7 +183,7 @@ touch: cannot touch '/etc/x': Permission denied
 <h3>cgroups v2: a ceiling for a group of processes</h3>
 ${slide('lx-14', 7, 'cgroup v2: memory.max, cpu.max, pids.max')}
 <p>Namespaces limit what a process can <em>see</em>; <strong>control groups</strong> limit what it can <em>use</em>. With cgroup v2 (the only kind on Ubuntu 24.04, Fedora and every current distribution) there is one tree, mounted at <code>/sys/fs/cgroup</code>. Every directory is a group; its files are its settings; writing a PID into <code>cgroup.procs</code> moves that process into the group. This is the very file Docker writes when you pass <code>--memory</code> — inside a container started with <code>--memory 512m</code>, <code>cat /sys/fs/cgroup/memory.max</code> prints <code>536870912</code>. Built by hand in a privileged container:</p>
-<pre><code>cd /sys/fs/cgroup
+<pre><code class="language-bash">cd /sys/fs/cgroup
 mkdir init; for p in $(cat cgroup.procs); do echo "$p" &gt; init/cgroup.procs; done
 echo "+memory +cpu +pids" &gt; cgroup.subtree_control
 mkdir demo; echo 64M &gt; demo/memory.max; echo 0 &gt; demo/memory.swap.max
@@ -200,7 +200,7 @@ oom_kill 1
 oom_group_kill 0</div>
 <p>The second line explains a rule that trips everyone: <strong>no internal processes</strong>. A cgroup that hands controllers down to its children (<code>cgroup.subtree_control</code>) may not itself contain processes, so we first moved everything into a leaf called <code>init</code>. Then the experiment: a 200 MB allocation in a 64 MB group dies with <code>SIGKILL</code> — exit 137 = 128 + 9, the number from Lesson 5.3 — and <code>memory.events</code> records <code>oom_kill 1</code>. That counter is the proof to look for when a container "just disappears": <code>docker inspect -f '{{.State.OOMKilled}}'</code> reads the same fact.</p>
 <p>CPU and process-count limits work the same way. <code>cpu.max</code> is "quota period" in microseconds, so <code>20000 100000</code> means 20 ms of CPU in every 100 ms — 20% of one core:</p>
-<pre><code>mkdir cpu20; echo "20000 100000" &gt; cpu20/cpu.max
+<pre><code class="language-bash">mkdir cpu20; echo "20000 100000" &gt; cpu20/cpu.max
 bash -c 'echo $$ &gt; /sys/fs/cgroup/cpu20/cgroup.procs; timeout 5 bash -c "while :; do :; done"'
 grep -E "usage_usec|nr_throttled|throttled_usec" cpu20/cpu.stat
 mkdir p5; echo 5 &gt; p5/pids.max
@@ -226,7 +226,7 @@ bash: fork: retry: Resource temporarily unavailable</div>
 <h3>Let systemd do it: MemoryMax, systemd-run and OOMScoreAdjust</h3>
 ${slide('lx-14', 8, 'systemd-run, MemoryMax, OOMScoreAdjust')}
 <p>On a real server you never create cgroups by hand: systemd owns the tree, and every service already lives in its own group (<code>systemd-cgls</code> draws it). You set limits as unit directives — <code>MemoryMax=</code>, <code>CPUQuota=</code>, <code>TasksMax=</code> — which Lesson 11.1 put in a drop-in. <code>systemd-run</code> applies the same directives to a one-off command, which makes it the fastest way to <em>test</em> a limit:</p>
-<pre><code>systemd-run --scope -p MemoryMax=64M -p MemorySwapMax=0 --unit=thu-bo-nho \\
+<pre><code class="language-bash">systemd-run --scope -p MemoryMax=64M -p MemorySwapMax=0 --unit=thu-bo-nho \\
   python3 -c "b=bytearray(200*1024*1024)"; echo "exit=$?"
 journalctl -n 6 -o cat | grep -iE "thu-bo-nho|oom"
 systemd-run --unit=nang -p MemoryMax=64M -p MemorySwapMax=0 \\
@@ -259,7 +259,7 @@ pid 144's current OOM score adjust value: -900</div>
 <h3>Capabilities: root, split into pieces</h3>
 ${slide('lx-14', 9, 'Capabilities')}
 <p>Since Linux 2.2, "root" is not one privilege but about forty separate <strong>capabilities</strong> (41 on this kernel): <code>CAP_NET_BIND_SERVICE</code> (open a port below 1024), <code>CAP_CHOWN</code>, <code>CAP_KILL</code>, <code>CAP_SYS_ADMIN</code> (the catch-all: mount, set the hostname, many more)… A process's effective set is the <code>CapEff</code> hex mask in <code>/proc/PID/status</code>; <code>capsh --decode</code> turns it into names. Docker gives a container's root only 14 of them:</p>
-<pre><code>docker run --rm ubuntu:24.04 grep CapEff /proc/self/status
+<pre><code class="language-bash">docker run --rm ubuntu:24.04 grep CapEff /proc/self/status
 capsh --decode=00000000a80425fb
 docker run --rm --cap-drop ALL ubuntu:24.04 chown nobody /tmp</code></pre>
 <div class="out">CapEff:	00000000a80425fb
@@ -405,7 +405,7 @@ real	0m0.003s   user 0m0.000s   sys 0m0.003s
 <h3>/proc và /sys: nhân dưới dạng một hệ thống file</h3>
 ${slide('lx-14', 4, '/proc và /sys: nhân mở cửa sổ dạng file')}
 <p>Bài 5.1 đã giới thiệu <code>/proc/PID/</code>. Ở độ sâu này có thêm hai cửa sổ quan trọng. <code>/proc/sys/</code> chứa các núm vặn của nhân, cũng chính là những giá trị lệnh <code>sysctl</code> đọc và ghi (dấu chấm trong tên là dấu gạch chéo trong đường dẫn: <code>vm.swappiness</code> = <code>/proc/sys/vm/swappiness</code>). Còn <code>/sys</code> (sysfs) mô tả thiết bị và các đối tượng của nhân: mọi card mạng dưới <code>/sys/class/net/</code>, mọi thiết bị khối dưới <code>/sys/block/</code>, và cả cây cgroup dưới <code>/sys/fs/cgroup/</code>. Không file nào trong đó nằm trên đĩa; nhân sinh ra nội dung đúng lúc bạn đọc.</p>
-<pre><code>grep -E "^(Name|State|VmRSS|CapEff)" /proc/self/status
+<pre><code class="language-bash">grep -E "^(Name|State|VmRSS|CapEff)" /proc/self/status
 sysctl vm.swappiness net.ipv4.ip_forward
 cat /sys/class/net/eth0/mtu /sys/class/net/eth0/operstate</code></pre>
 <div class="out">Name:	grep
@@ -417,7 +417,7 @@ net.ipv4.ip_forward = 1
 65535
 up</div>
 <p>Thay đổi bằng <code>sysctl -w</code> chỉ sống tới lần khởi động lại. Muốn giữ lâu dài, ghi vào một file dưới <code>/etc/sysctl.d/</code> rồi áp dụng:</p>
-<pre><code>echo "net.ipv4.ip_unprivileged_port_start = 80" &gt; /etc/sysctl.d/99-cong.conf
+<pre><code class="language-bash">echo "net.ipv4.ip_unprivileged_port_start = 80" &gt; /etc/sysctl.d/99-cong.conf
 sysctl -p /etc/sysctl.d/99-cong.conf       <span class="tok-comment"># áp dụng riêng file này</span>
 sysctl --system                            <span class="tok-comment"># áp lại MỌI file, theo thứ tự</span></code></pre>
 <div class="out">net.ipv4.ip_unprivileged_port_start = 80
@@ -479,7 +479,7 @@ touch: cannot touch '/etc/x': Permission denied
 <h3>cgroups v2: một cái trần cho một nhóm tiến trình</h3>
 ${slide('lx-14', 7, 'cgroup v2: memory.max, cpu.max, pids.max')}
 <p>Namespace giới hạn tiến trình được <em>thấy</em> gì; <strong>control group</strong> (nhóm kiểm soát) giới hạn nó được <em>dùng</em> bao nhiêu. Với cgroup v2 (loại duy nhất trên Ubuntu 24.04, Fedora và mọi bản phân phối hiện hành) chỉ có một cây, gắn ở <code>/sys/fs/cgroup</code>. Mỗi thư mục là một nhóm; các file trong đó là thiết lập của nhóm; ghi một PID vào <code>cgroup.procs</code> là dời tiến trình đó vào nhóm. Đây chính là file Docker ghi khi bạn truyền <code>--memory</code> — trong một container chạy với <code>--memory 512m</code>, <code>cat /sys/fs/cgroup/memory.max</code> in ra <code>536870912</code>. Dựng bằng tay trong một container đặc quyền:</p>
-<pre><code>cd /sys/fs/cgroup
+<pre><code class="language-bash">cd /sys/fs/cgroup
 mkdir init; for p in $(cat cgroup.procs); do echo "$p" &gt; init/cgroup.procs; done
 echo "+memory +cpu +pids" &gt; cgroup.subtree_control
 mkdir demo; echo 64M &gt; demo/memory.max; echo 0 &gt; demo/memory.swap.max
@@ -496,7 +496,7 @@ oom_kill 1
 oom_group_kill 0</div>
 <p>Dòng thứ hai giải thích một luật làm ai cũng vấp: <strong>không có tiến trình ở nút trong</strong>. Một cgroup đã trao bộ điều khiển xuống cho các nhóm con (<code>cgroup.subtree_control</code>) thì bản thân nó không được chứa tiến trình, nên trước tiên ta dời mọi thứ vào một nút lá tên <code>init</code>. Rồi tới thí nghiệm: xin 200 MB trong một nhóm 64 MB thì chết bằng <code>SIGKILL</code> — mã 137 = 128 + 9, con số của Bài 5.3 — và <code>memory.events</code> ghi lại <code>oom_kill 1</code>. Bộ đếm đó là bằng chứng phải tìm khi một container "tự dưng biến mất": <code>docker inspect -f '{{.State.OOMKilled}}'</code> đọc cùng sự thật ấy.</p>
 <p>Giới hạn CPU và số tiến trình chạy y như vậy. <code>cpu.max</code> là "hạn mức chu kỳ" tính bằng micro giây, nên <code>20000 100000</code> nghĩa là 20 ms CPU trong mỗi 100 ms — 20% của một lõi:</p>
-<pre><code>mkdir cpu20; echo "20000 100000" &gt; cpu20/cpu.max
+<pre><code class="language-bash">mkdir cpu20; echo "20000 100000" &gt; cpu20/cpu.max
 bash -c 'echo $$ &gt; /sys/fs/cgroup/cpu20/cgroup.procs; timeout 5 bash -c "while :; do :; done"'
 grep -E "usage_usec|nr_throttled|throttled_usec" cpu20/cpu.stat
 mkdir p5; echo 5 &gt; p5/pids.max
@@ -522,7 +522,7 @@ bash: fork: retry: Resource temporarily unavailable</div>
 <h3>Để systemd làm: MemoryMax, systemd-run và OOMScoreAdjust</h3>
 ${slide('lx-14', 8, 'systemd-run, MemoryMax, OOMScoreAdjust')}
 <p>Trên một máy chủ thật bạn không bao giờ tự tay tạo cgroup: systemd sở hữu cả cây, và mỗi dịch vụ đã sống trong nhóm riêng của nó (<code>systemd-cgls</code> vẽ ra cho bạn). Bạn đặt giới hạn bằng chỉ thị trong unit — <code>MemoryMax=</code>, <code>CPUQuota=</code>, <code>TasksMax=</code> — mà Bài 11.1 đã đặt trong một drop-in. <code>systemd-run</code> áp đúng những chỉ thị đó cho một lệnh chạy một lần, nên nó là cách nhanh nhất để <em>thử</em> một giới hạn:</p>
-<pre><code>systemd-run --scope -p MemoryMax=64M -p MemorySwapMax=0 --unit=thu-bo-nho \\
+<pre><code class="language-bash">systemd-run --scope -p MemoryMax=64M -p MemorySwapMax=0 --unit=thu-bo-nho \\
   python3 -c "b=bytearray(200*1024*1024)"; echo "exit=$?"
 journalctl -n 6 -o cat | grep -iE "thu-bo-nho|oom"
 systemd-run --unit=nang -p MemoryMax=64M -p MemorySwapMax=0 \\
@@ -555,7 +555,7 @@ pid 144's current OOM score adjust value: -900</div>
 <h3>Capabilities: root, chẻ thành từng mảnh</h3>
 ${slide('lx-14', 9, 'Capabilities')}
 <p>Từ Linux 2.2, "root" không còn là một quyền duy nhất mà là khoảng bốn mươi <strong>capability</strong> (năng lực) riêng biệt (41 trên nhân này): <code>CAP_NET_BIND_SERVICE</code> (mở cổng dưới 1024), <code>CAP_CHOWN</code>, <code>CAP_KILL</code>, <code>CAP_SYS_ADMIN</code> (cái túi đựng tất cả: mount, đổi tên máy và nhiều thứ nữa)… Tập hiệu lực của một tiến trình là mặt nạ hex <code>CapEff</code> trong <code>/proc/PID/status</code>; <code>capsh --decode</code> dịch nó thành tên. Docker chỉ trao cho root trong container 14 năng lực:</p>
-<pre><code>docker run --rm ubuntu:24.04 grep CapEff /proc/self/status
+<pre><code class="language-bash">docker run --rm ubuntu:24.04 grep CapEff /proc/self/status
 capsh --decode=00000000a80425fb
 docker run --rm --cap-drop ALL ubuntu:24.04 chown nobody /tmp</code></pre>
 <div class="out">CapEff:	00000000a80425fb
@@ -682,7 +682,7 @@ ${slide('lx-14', 10, 'Phương pháp USE')}
 
 <h3>The toolbox: sysstat, and history you already have</h3>
 <p>Most of the tools come in one package: <code>sudo apt install sysstat</code> (Fedora: <code>sudo dnf install sysstat</code>) gives <code>mpstat</code>, <code>pidstat</code>, <code>iostat</code> and <code>sar</code>. On Ubuntu 24.04 it also installs a systemd timer that records a snapshot every ten minutes, so <code>sar</code> can answer "what was the machine doing at 2am?" after the fact:</p>
-<pre><code>systemctl list-timers --all | grep sysstat
+<pre><code class="language-bash">systemctl list-timers --all | grep sysstat
 sar -q -f /var/log/sysstat/sa28          <span class="tok-comment"># saDD = day of the month</span></code></pre>
 <div class="out">Mon 2026-09-28 16:50:00 UTC  5min Mon 2026-09-28 16:40:03 UTC 4min 9s ago sysstat-collect.timer  sysstat-collect.service
 Tue 2026-09-29 00:07:00 UTC    7h -                                      - sysstat-summary.timer  sysstat-summary.service
@@ -717,7 +717,7 @@ Average:      UID       PID    %usr %system  %guest   %wait    %CPU   CPU  Comma
 <h3>CPU saturation: count the queue, not the percentage</h3>
 ${slide('lx-14', 12, 'Bão hoà: vmstat r, PSI')}
 <p>A CPU at 100% is not necessarily in trouble; work <em>waiting</em> for a CPU is. Twenty CPU-bound workers on ten cores, for twelve seconds:</p>
-<pre><code>stress-ng --cpu 20 --timeout 12s -q &amp;
+<pre><code class="language-bash">stress-ng --cpu 20 --timeout 12s -q &amp;
 vmstat 1 4
 cat /proc/pressure/cpu
 cat /proc/loadavg</code></pre>
@@ -750,7 +750,7 @@ perf report --stdio --children --sort sym | grep "py::"</code></pre>
      2.64%     0.00%  [.] py::doc_cau_hinh:/tmp/app.py</div>
 <p>The script called two functions in a loop, <code>tinh_thue</code> (tax calculation) and <code>doc_cau_hinh</code> (read config). The profile settles any argument about which to optimise: 94% of samples were inside <code>tinh_thue</code>, 2.6% in <code>doc_cau_hinh</code>. Making the config reader ten times faster would save almost nothing. Three practical notes. <code>-X perf</code> (Python 3.12+) is what turns Python functions into names <code>perf</code> can show; without it you see the interpreter's C functions. A stripped binary shows only addresses — profiling <code>gzip</code> printed lines like <code>0x0000000000003104</code> until debug symbols are installed. And in virtual machines and containers the hardware counters are usually missing (<code>cycles &lt;not supported&gt;</code>), but software events like <code>task-clock</code> and <code>cpu-clock</code> sampling still work. <code>perf top</code> is the live version, like <code>top</code> for functions; on a normal user account it needs <code>kernel.perf_event_paranoid</code> ≤ 2 (the default on Fedora 44 is 2, which allows profiling your own processes).</p>
 <p>A <strong>flame graph</strong>, which Gregg released in December 2011, draws the same samples as a picture: each box is a function, the one below it is its caller, and the <em>width</em> is the share of samples. The x-axis is not time — boxes are sorted alphabetically so that identical stacks merge. You read it by looking for wide plateaus near the top. The slide redraws the numbers above; to generate the real SVG:</p>
-<pre><code>git clone --depth 1 https://github.com/brendangregg/FlameGraph
+<pre><code class="language-bash">git clone --depth 1 https://github.com/brendangregg/FlameGraph
 perf script | ./FlameGraph/stackcollapse-perf.pl &gt; out.folded
 ./FlameGraph/flamegraph.pl out.folded &gt; flame.svg      <span class="tok-comment"># open in a browser</span></code></pre>
 
@@ -893,7 +893,7 @@ ${slide('lx-14', 10, 'Phương pháp USE')}
 
 <h3>Hộp đồ nghề: sysstat, và lịch sử bạn đã có sẵn</h3>
 <p>Phần lớn công cụ nằm trong một gói: <code>sudo apt install sysstat</code> (Fedora: <code>sudo dnf install sysstat</code>) cho bạn <code>mpstat</code>, <code>pidstat</code>, <code>iostat</code> và <code>sar</code>. Trên Ubuntu 24.04 nó còn cài một timer systemd ghi một bản chụp mỗi mười phút, nên <code>sar</code> trả lời được câu "lúc 2 giờ sáng máy đang làm gì?" sau khi mọi chuyện đã qua:</p>
-<pre><code>systemctl list-timers --all | grep sysstat
+<pre><code class="language-bash">systemctl list-timers --all | grep sysstat
 sar -q -f /var/log/sysstat/sa28          <span class="tok-comment"># saDD = ngày trong tháng</span></code></pre>
 <div class="out">Mon 2026-09-28 16:50:00 UTC  5min Mon 2026-09-28 16:40:03 UTC 4min 9s ago sysstat-collect.timer  sysstat-collect.service
 Tue 2026-09-29 00:07:00 UTC    7h -                                      - sysstat-summary.timer  sysstat-summary.service
@@ -928,7 +928,7 @@ Average:      UID       PID    %usr %system  %guest   %wait    %CPU   CPU  Comma
 <h3>Bão hoà CPU: đếm hàng chờ, đừng nhìn phần trăm</h3>
 ${slide('lx-14', 12, 'Bão hoà: vmstat r, PSI')}
 <p>CPU ở 100% chưa chắc đã có chuyện; việc phải <em>chờ</em> CPU mới là chuyện. Hai mươi worker ăn CPU trên mười lõi, trong mười hai giây:</p>
-<pre><code>stress-ng --cpu 20 --timeout 12s -q &amp;
+<pre><code class="language-bash">stress-ng --cpu 20 --timeout 12s -q &amp;
 vmstat 1 4
 cat /proc/pressure/cpu
 cat /proc/loadavg</code></pre>
@@ -961,7 +961,7 @@ perf report --stdio --children --sort sym | grep "py::"</code></pre>
      2.64%     0.00%  [.] py::doc_cau_hinh:/tmp/app.py</div>
 <p>Script gọi hai hàm trong một vòng lặp, <code>tinh_thue</code> và <code>doc_cau_hinh</code>. Bản đo khép lại mọi tranh cãi nên tối ưu cái nào: 94% số mẫu nằm trong <code>tinh_thue</code>, 2,6% trong <code>doc_cau_hinh</code>. Làm hàm đọc cấu hình nhanh gấp mười lần cũng gần như chẳng tiết kiệm được gì. Ba ghi chú thực tế. <code>-X perf</code> (Python 3.12 trở lên) là thứ biến hàm Python thành cái tên mà <code>perf</code> hiển thị được; thiếu nó bạn chỉ thấy các hàm C của trình thông dịch. Một file thực thi đã bị lược ký hiệu (stripped) chỉ hiện địa chỉ — đo <code>gzip</code> in ra những dòng như <code>0x0000000000003104</code> cho tới khi cài ký hiệu gỡ lỗi. Và trong máy ảo, container thì bộ đếm phần cứng thường không có (<code>cycles &lt;not supported&gt;</code>), nhưng sự kiện phần mềm như <code>task-clock</code> và lấy mẫu theo <code>cpu-clock</code> vẫn chạy. <code>perf top</code> là bản chạy trực tiếp, như <code>top</code> nhưng cho hàm; với tài khoản thường nó cần <code>kernel.perf_event_paranoid</code> ≤ 2 (mặc định của Fedora 44 là 2, cho phép đo tiến trình của chính mình).</p>
 <p><strong>Flame graph</strong> (biểu đồ ngọn lửa), do Gregg công bố tháng 12/2011, vẽ chính những mẫu đó thành hình: mỗi hộp là một hàm, hộp ngay dưới là hàm đã gọi nó, và <em>bề rộng</em> là tỉ lệ số mẫu. Trục ngang KHÔNG phải thời gian — các hộp được xếp theo tên để những ngăn xếp giống nhau gộp lại. Bạn đọc nó bằng cách tìm những cao nguyên rộng ở gần đỉnh. Slide vẽ lại các con số ở trên; để sinh file SVG thật:</p>
-<pre><code>git clone --depth 1 https://github.com/brendangregg/FlameGraph
+<pre><code class="language-bash">git clone --depth 1 https://github.com/brendangregg/FlameGraph
 perf script | ./FlameGraph/stackcollapse-perf.pl &gt; out.folded
 ./FlameGraph/flamegraph.pl out.folded &gt; flame.svg      <span class="tok-comment"># mở bằng trình duyệt</span></code></pre>
 
@@ -1128,7 +1128,7 @@ nvme0n1
 <h3>A disk made of a file: truncate, losetup, parted</h3>
 ${slide('lx-14', 17, 'Chia đĩa trên file loop')}
 <p>A <strong>loop device</strong> makes a regular file behave like a block device. Everything below ran in <code>docker run -it --privileged --name lx14-sd ubuntu:24.04</code> (packages <code>parted lvm2 xfsprogs</code>) — <code>--privileged</code> is needed to create block devices, which is why the container is deleted straight afterwards.</p>
-<pre><code>mkdir -p /srv/lab &amp;&amp; cd /srv/lab
+<pre><code class="language-bash">mkdir -p /srv/lab &amp;&amp; cd /srv/lab
 truncate -s 1G dia1.img &amp;&amp; ls -lhs dia1.img
 L=$(losetup -fP --show dia1.img); echo "$L"
 parted -s "$L" mklabel gpt \\
@@ -1149,7 +1149,7 @@ Number  Start   End     Size   File system  Name     Flags
 <p>Two container quirks you will not see on a real server, reported honestly: <code>parted</code> printed <code>udevadm: not found</code> several times, and the partition nodes <code>/dev/loop0p1</code>/<code>p2</code> did not appear, because no udev runs inside a container. The kernel had created the partitions (they were in <code>/proc/partitions</code> as <code>259:0</code> and <code>259:1</code>), so <code>mknod /dev/loop0p1 b 259 0</code> made them usable. For the same reason <code>lsblk -f</code> shows empty columns in a container — it reads udev's database — while <code>blkid</code> reads the disk directly.</p>
 
 <h3>A filesystem, its UUID, and the inode count you choose now</h3>
-<pre><code>mkfs.ext4 -q -L du-lieu /dev/loop0p1
+<pre><code class="language-bash">mkfs.ext4 -q -L du-lieu /dev/loop0p1
 blkid /dev/loop0p1
 mkdir -p /mnt/du-lieu &amp;&amp; mount /dev/loop0p1 /mnt/du-lieu
 df -hT /mnt/du-lieu; df -i /mnt/du-lieu</code></pre>
@@ -1174,7 +1174,7 @@ ${slide('lx-14', 18, 'fstab: UUID và nofail')}
 <div class="out">UUID=47e89fa2-98ff-48b5-a59a-c59507667285 /boot ext4 defaults 1 2
 UUID=88f2f4b2-c815-454a-89ca-a73980d20cce /mnt/backup btrfs defaults,noatime,compress=zstd:1,nofail,x-systemd.device-timeout=10 0 0</div>
 <p>The backup disk's options are the lesson. <code>nofail</code>: if this disk is missing, boot anyway. <code>x-systemd.device-timeout=10</code>: wait at most 10 seconds for it instead of the default 90. Without those, a backup disk that dies or is unplugged sends the machine into emergency mode at boot — on a VPS, before SSH starts, so you are locked out until you find the provider's web console. Add a line, then <strong>check before you reboot</strong>:</p>
-<pre><code>U=$(blkid -s UUID -o value /dev/loop0p1)
+<pre><code class="language-bash">U=$(blkid -s UUID -o value /dev/loop0p1)
 echo "UUID=$U /mnt/du-lieu ext4 defaults,nofail 0 2" &gt;&gt; /etc/fstab
 findmnt --verify --tab-file /etc/fstab
 mount -a &amp;&amp; findmnt /mnt/du-lieu
@@ -1258,7 +1258,7 @@ lvreduce -r -y -L 200M vg_x/lv_x</code></pre>
   Filesystem resize failed.</div>
 <p>So on XFS, give a volume the size it needs and grow it later; never over-allocate "to be safe" expecting to take space back. ext4 can shrink, but only unmounted. XFS allocates inodes dynamically, so it does not suffer the "inodes full, space free" problem of Lesson 10.1.</p>
 <p>Lesson 11.3 explained <em>why</em> a small VPS wants swap. Here is how, on a filesystem you control (a swap file must be fully allocated, so use <code>fallocate</code> or <code>dd</code>, never <code>truncate</code>):</p>
-<pre><code>fallocate -l 2G /swapfile
+<pre><code class="language-bash">fallocate -l 2G /swapfile
 chmod 600 /swapfile
 mkswap /swapfile
 swapon /swapfile &amp;&amp; swapon --show
@@ -1284,7 +1284,7 @@ sha256sum: WARNING: 1 computed checksum did NOT match
 rc=1</div>
 <p>Because <code>-c</code> exits 1 on a mismatch, it belongs directly in a backup script: <code>sha256sum -c backup.sha256 || { echo "backup corrupt" &gt;&amp;2; exit 1; }</code>. <strong>BLAKE3</strong> (<code>b3sum</code>, package <code>b3sum</code>) is a newer hash designed to run on many cores. On the same 300 MB: <code>sha256sum</code> 0.158 s, <code>b3sum</code> 0.060 s, but <code>b3sum --num-threads 1</code> 0.295 s — on this ARM machine the CPU has SHA-256 instructions, so single-threaded SHA-256 wins and BLAKE3 wins only by using several cores. Measure on your own hardware before choosing.</p>
 <p>The subtler trap is in <code>rsync</code> (Lesson 9.4). By default it decides a file is unchanged when <strong>size and modification time</strong> match — the "quick check" — without reading the contents. Make the two coincide and it silently skips a changed file:</p>
-<pre><code>mkdir nguon dich; echo "PORT=3000" &gt; nguon/app.env; rsync -a nguon/ dich/
+<pre><code class="language-bash">mkdir nguon dich; echo "PORT=3000" &gt; nguon/app.env; rsync -a nguon/ dich/
 echo "PORT=4000" &gt; nguon/app.env; touch -r dich/app.env nguon/app.env   <span class="tok-comment"># same size, same mtime</span>
 rsync -av nguon/ dich/ | sed -n 2p; cat dich/app.env
 rsync -avc nguon/ dich/ | sed -n 2p; cat dich/app.env</code></pre>
@@ -1404,7 +1404,7 @@ nvme0n1
 <h3>Một cái đĩa làm từ file: truncate, losetup, parted</h3>
 ${slide('lx-14', 17, 'Chia đĩa trên file loop')}
 <p><strong>Loop device</strong> biến một file thường thành thứ hành xử như một thiết bị khối. Mọi thứ dưới đây chạy trong <code>docker run -it --privileged --name lx14-sd ubuntu:24.04</code> (cài <code>parted lvm2 xfsprogs</code>) — cần <code>--privileged</code> để tạo thiết bị khối, và đó là lý do container bị xoá ngay sau khi xong.</p>
-<pre><code>mkdir -p /srv/lab &amp;&amp; cd /srv/lab
+<pre><code class="language-bash">mkdir -p /srv/lab &amp;&amp; cd /srv/lab
 truncate -s 1G dia1.img &amp;&amp; ls -lhs dia1.img
 L=$(losetup -fP --show dia1.img); echo "$L"
 parted -s "$L" mklabel gpt \\
@@ -1425,7 +1425,7 @@ Number  Start   End     Size   File system  Name     Flags
 <p>Hai điều kỳ quặc của container mà bạn sẽ không gặp trên máy chủ thật, nói thật cho đủ: <code>parted</code> in ra <code>udevadm: not found</code> vài lần, và các nút thiết bị <code>/dev/loop0p1</code>/<code>p2</code> không xuất hiện, vì trong container không có udev chạy. Nhân đã tạo phân vùng (chúng có trong <code>/proc/partitions</code> với số <code>259:0</code> và <code>259:1</code>), nên <code>mknod /dev/loop0p1 b 259 0</code> làm chúng dùng được. Cũng vì lý do đó mà <code>lsblk -f</code> hiện cột trống trong container — nó đọc cơ sở dữ liệu của udev — còn <code>blkid</code> thì đọc thẳng trên đĩa.</p>
 
 <h3>Một hệ thống file, UUID của nó, và số inode bạn phải chọn ngay bây giờ</h3>
-<pre><code>mkfs.ext4 -q -L du-lieu /dev/loop0p1
+<pre><code class="language-bash">mkfs.ext4 -q -L du-lieu /dev/loop0p1
 blkid /dev/loop0p1
 mkdir -p /mnt/du-lieu &amp;&amp; mount /dev/loop0p1 /mnt/du-lieu
 df -hT /mnt/du-lieu; df -i /mnt/du-lieu</code></pre>
@@ -1450,7 +1450,7 @@ ${slide('lx-14', 18, 'fstab: UUID và nofail')}
 <div class="out">UUID=47e89fa2-98ff-48b5-a59a-c59507667285 /boot ext4 defaults 1 2
 UUID=88f2f4b2-c815-454a-89ca-a73980d20cce /mnt/backup btrfs defaults,noatime,compress=zstd:1,nofail,x-systemd.device-timeout=10 0 0</div>
 <p>Tuỳ chọn của ổ sao lưu chính là bài học. <code>nofail</code>: đĩa này mà thiếu thì vẫn cứ khởi động. <code>x-systemd.device-timeout=10</code>: chờ nó tối đa 10 giây thay vì 90 giây mặc định. Thiếu hai thứ đó, một ổ sao lưu hỏng hoặc bị rút ra sẽ đẩy máy vào chế độ khẩn cấp (emergency mode) lúc khởi động — trên VPS, trước cả khi SSH lên, nên bạn bị khoá ngoài cho tới khi tìm ra bảng điều khiển web của nhà cung cấp. Thêm một dòng, rồi <strong>kiểm trước khi khởi động lại</strong>:</p>
-<pre><code>U=$(blkid -s UUID -o value /dev/loop0p1)
+<pre><code class="language-bash">U=$(blkid -s UUID -o value /dev/loop0p1)
 echo "UUID=$U /mnt/du-lieu ext4 defaults,nofail 0 2" &gt;&gt; /etc/fstab
 findmnt --verify --tab-file /etc/fstab
 mount -a &amp;&amp; findmnt /mnt/du-lieu
@@ -1534,7 +1534,7 @@ lvreduce -r -y -L 200M vg_x/lv_x</code></pre>
   Filesystem resize failed.</div>
 <p>Vậy trên XFS, hãy cho ổ đúng cỡ nó cần rồi nới dần; đừng bao giờ cấp dư "cho chắc" rồi mong lấy lại chỗ. ext4 thu nhỏ được, nhưng chỉ khi đã tháo gắn. XFS cấp inode động, nên nó không mắc cảnh "hết inode mà còn dung lượng" của Bài 10.1.</p>
 <p>Bài 11.3 đã giải thích <em>vì sao</em> một VPS nhỏ cần swap. Đây là cách làm, trên một hệ thống file bạn tự dựng (swap file phải được cấp chỗ thật toàn bộ, nên dùng <code>fallocate</code> hoặc <code>dd</code>, đừng dùng <code>truncate</code>):</p>
-<pre><code>fallocate -l 2G /swapfile
+<pre><code class="language-bash">fallocate -l 2G /swapfile
 chmod 600 /swapfile
 mkswap /swapfile
 swapon /swapfile &amp;&amp; swapon --show
@@ -1560,7 +1560,7 @@ sha256sum: WARNING: 1 computed checksum did NOT match
 rc=1</div>
 <p>Vì <code>-c</code> thoát với mã 1 khi lệch, nó nằm thẳng trong script sao lưu được: <code>sha256sum -c backup.sha256 || { echo "bản sao lưu hỏng" &gt;&amp;2; exit 1; }</code>. <strong>BLAKE3</strong> (<code>b3sum</code>, gói <code>b3sum</code>) là một hàm băm mới hơn, thiết kế để chạy trên nhiều lõi. Cùng 300 MB: <code>sha256sum</code> 0,158 giây, <code>b3sum</code> 0,060 giây, nhưng <code>b3sum --num-threads 1</code> 0,295 giây — trên máy ARM này CPU có lệnh SHA-256 riêng, nên SHA-256 đơn luồng thắng và BLAKE3 chỉ thắng nhờ dùng nhiều lõi. Đo trên phần cứng của chính bạn rồi hãy chọn.</p>
 <p>Cái bẫy tinh vi hơn nằm ở <code>rsync</code> (Bài 9.4). Mặc định nó coi một file là không đổi khi <strong>cỡ và giờ sửa</strong> trùng nhau — cái gọi là "quick check" (kiểm nhanh) — mà không đọc nội dung. Cho hai thứ đó trùng khớp là nó lặng lẽ bỏ qua một file đã bị sửa:</p>
-<pre><code>mkdir nguon dich; echo "PORT=3000" &gt; nguon/app.env; rsync -a nguon/ dich/
+<pre><code class="language-bash">mkdir nguon dich; echo "PORT=3000" &gt; nguon/app.env; rsync -a nguon/ dich/
 echo "PORT=4000" &gt; nguon/app.env; touch -r dich/app.env nguon/app.env   <span class="tok-comment"># cùng cỡ, cùng giờ sửa</span>
 rsync -av nguon/ dich/ | sed -n 2p; cat dich/app.env
 rsync -avc nguon/ dich/ | sed -n 2p; cat dich/app.env</code></pre>
@@ -1682,7 +1682,7 @@ ssh-keygen … 0.90s user 0.01s system 95% cpu 0.954 total
 256 SHA256:pLC+2JcSU63uge/9CIKkNASIuMiLX9uIZyYSukdrSEs an@laptop (ED25519)</div>
 <p>An Ed25519 key is generated about 70 times faster, its public half is 91 bytes instead of 735 (one short line in <code>authorized_keys</code>), and it is the type current OpenSSH prefers. <code>-N ''</code> was only for the demo: a real private key should have a passphrase, unlocked once per session by <code>ssh-agent</code> (Lesson 9.3). <code>-a 100</code> sets how many rounds of key derivation protect that passphrase — it slows down someone guessing it, and does nothing if there is no passphrase.</p>
 <p>On the server, Lesson 11.3's rule stands: never trust the file, ask <code>sshd -T</code>. Two additions matter for a team server. <code>AllowGroups</code> limits who may log in at all, and <code>Match</code> blocks give some users different rules — here an <code>sftp-only</code> group that can transfer files but not get a shell or open tunnels. <code>sshd -T</code> alone ignores <code>Match</code>; <code>-C</code> describes a pretend connection so you can see what <em>that</em> user would get:</p>
-<pre><code>cat /etc/ssh/sshd_config.d/01-cung.conf
+<pre><code class="language-bash">cat /etc/ssh/sshd_config.d/01-cung.conf
 sshd -t &amp;&amp; echo "sshd -t: OK"
 sshd -T | grep -E "^(passwordauthentication|permitrootlogin|allowgroups|maxauthtries|logingracetime|x11forwarding) "
 sshd -T -C user=ban,host=x,addr=10.0.0.5 | grep -E "^(forcecommand|allowtcpforwarding) "</code></pre>
@@ -1719,7 +1719,7 @@ forcecommand internal-sftp</div>
 <h3>nftables: a ruleset you wrote and can read</h3>
 ${slide('lx-14', 24, 'nftables tự viết')}
 <p>Lesson 9.5 read the rules that <code>ufw</code> writes. On a server without ufw — RHEL-family machines, containers, a router — you write <code>/etc/nftables.conf</code> yourself, and it is short. A <strong>table</strong> holds <strong>chains</strong>; a base chain hooks into a point on the packet's path (<code>input</code> for traffic to this machine) with a default <strong>policy</strong>; <strong>rules</strong> are read top to bottom and the first verdict wins; a <strong>set</strong> is a named list the rules can test against, which you can change without reloading anything:</p>
-<pre><code>#!/usr/sbin/nft -f
+<pre><code class="language-bash">#!/usr/sbin/nft -f
 flush ruleset
 
 table inet loc {
@@ -1742,7 +1742,7 @@ table inet loc {
     }
 }</code></pre>
 <p>Read it line by line. <code>inet</code> = one table for IPv4 and IPv6. <code>policy drop</code> = anything not explicitly accepted is dropped. <code>ct state established,related accept</code> = replies to connections this machine opened (and the rest of connections already accepted) pass — without it, <code>apt</code> and <code>curl</code> break the moment you set <code>policy drop</code>. <code>iif "lo"</code> = local traffic. The set <code>chan_ip</code> is a ban list whose entries expire. SSH is accepted but new connections are rate-limited. The last rule only <em>counts</em> what falls through to the policy — a free diagnostic. Check the syntax without applying, apply, then test from <em>another</em> machine (a second container, 172.17.0.8):</p>
-<pre><code>nft -c -f /etc/nftables.conf &amp;&amp; echo "cu phap OK"
+<pre><code class="language-bash">nft -c -f /etc/nftables.conf &amp;&amp; echo "cu phap OK"
 nft -f /etc/nftables.conf
 <span class="tok-comment"># from 172.17.0.8:</span>
 curl -s -o /dev/null -m 3 -w "cong 19141: %{http_code}\\n" http://172.17.0.5:19141/
@@ -1755,7 +1755,7 @@ cong 19142: curl exit 28
 		ip saddr @chan_ip counter packets 0 bytes 0 drop
 		counter packets 3 bytes 180 comment "roi xuong day = bi chan"</div>
 <p>Port 19141 answered 200; 19142 — a server was listening there too — timed out (curl exit 28), because a dropped packet gets no reply at all. The fall-through counter recorded exactly the 3 SYN packets curl tried. Now ban the client for ten minutes by adding it to the set, no reload needed:</p>
-<pre><code>nft add element inet loc chan_ip { 172.17.0.8 timeout 10m }
+<pre><code class="language-bash">nft add element inet loc chan_ip { 172.17.0.8 timeout 10m }
 nft list set inet loc chan_ip | grep elements
 <span class="tok-comment"># from 172.17.0.8 again: port 19141 now times out too</span>
 nft list chain inet loc vao | grep chan_ip
@@ -1829,7 +1829,7 @@ table inet f2b-table {
 <h3>SELinux: the label decides, not rwx</h3>
 ${slide('lx-14', 26, 'SELinux: nhãn')}
 <p>Everything so far is <em>discretionary</em> access control: the owner of a file decides its permissions, and root can do anything. <strong>Mandatory access control</strong> (MAC) adds a policy that even root's processes must obey. Fedora and RHEL use <strong>SELinux</strong> (released by the NSA in 2000); Ubuntu and Debian use <strong>AppArmor</strong>. On the Fedora machine, read-only:</p>
-<pre><code>getenforce
+<pre><code class="language-bash">getenforce
 sestatus | head -5
 ls -Z /etc/shadow /usr/sbin/sshd ~/.bashrc
 ps -eZ | grep -E " (sshd|chronyd|dockerd)$"</code></pre>
@@ -1846,7 +1846,7 @@ system_u:system_r:chronyd_t:s0      866 ?        00:00:00 chronyd
 system_u:system_r:sshd_t:s0-s0:c0.c1023 1041 ?   00:00:02 sshd
 system_u:system_r:container_runtime_t:s0 1620 ?  01:17:08 dockerd</div>
 <p>Every file and every process carries a label <code>user:role:type:level</code>, and the part that matters is the <strong>type</strong>. The <code>targeted</code> policy says, in effect, "a process of type <code>sshd_t</code> may read files of type <code>sshd_exec_t</code>, <code>ssh_home_t</code>…"; anything not allowed is denied — even if <code>ls -l</code> says <code>644</code>. Which label a path <em>should</em> have is in the policy too: <code>matchpathcon /var/www/html/index.html</code> answers <code>httpd_sys_content_t</code>. The classic trap is the difference between <code>mv</code> and <code>cp</code>, reproduced without root in a home directory:</p>
-<pre><code>echo a &gt; /tmp/lx14-mv.txt; echo b &gt; /tmp/lx14-cp.txt
+<pre><code class="language-bash">echo a &gt; /tmp/lx14-mv.txt; echo b &gt; /tmp/lx14-cp.txt
 mv /tmp/lx14-mv.txt .; cp /tmp/lx14-cp.txt .
 ls -Z lx14-mv.txt lx14-cp.txt
 restorecon -v lx14-mv.txt</code></pre>
@@ -1855,7 +1855,7 @@ unconfined_u:object_r:user_home_t:s0 lx14-cp.txt
 Relabeled /home/…/lxhoc-14/lx14-mv.txt from unconfined_u:object_r:user_tmp_t:s0 to unconfined_u:object_r:user_home_t:s0</div>
 <p><code>cp</code> creates a new file, which gets the label of its new directory. <code>mv</code> moves the existing file, <strong>label included</strong>. Build a site in your home directory, <code>sudo mv</code> it into <code>/var/www/html</code>, and nginx gets 403 on files whose permissions are perfect, because they are still labelled <code>user_home_t</code>. <code>restorecon -Rv /var/www/html</code> resets every label to what the policy says.</p>
 <p>When SELinux does deny something, <code>setroubleshoot</code> writes an explanation to the journal. This real one from the course's Fedora machine (23/09) came from an SSH remote port forward to port 18030:</p>
-<pre><code>journalctl -t setroubleshoot --since -30d</code></pre>
+<pre><code class="language-bash">journalctl -t setroubleshoot --since -30d</code></pre>
 <div class="out">SELinux is preventing sshd-session from name_bind access on the tcp_socket port 18030.
 
 *****  Plugin bind_ports (92.2 confidence) suggests   ************************
@@ -1877,7 +1877,7 @@ ${slide('lx-14', 27, 'sudoers hẹp mà vẫn thành root')}
 <pre><code><span class="tok-comment"># /etc/sudoers.d/an — WRONG</span>
 an ALL=(root) NOPASSWD: /usr/bin/find
 an ALL=(root) NOPASSWD: /usr/bin/less /var/log/*</code></pre>
-<pre><code>sudo -l | tail -2
+<pre><code class="language-bash">sudo -l | tail -2
 sudo find /tmp -maxdepth 0 -exec /bin/sh -c "id" \\;
 sudo less /var/log/../../etc/shadow | head -2</code></pre>
 <div class="out">    (root) NOPASSWD: /usr/bin/find
@@ -1891,7 +1891,7 @@ Cmnd_Alias APP_CMDS = /usr/bin/systemctl restart nang.service, /usr/bin/journalc
 an ALL=(root) NOPASSWD: APP_CMDS
 an ALL=(root) NOPASSWD: NOEXEC: /usr/bin/find
 an ALL=(root) sudoedit /etc/nang/app.env</code></pre>
-<pre><code>visudo -c -q &amp;&amp; echo "visudo OK"
+<pre><code class="language-bash">visudo -c -q &amp;&amp; echo "visudo OK"
 sudo find /tmp -maxdepth 0 -exec /bin/sh -c id \\;
 sudo -n systemctl stop nang.service</code></pre>
 <div class="out">visudo OK
@@ -2025,7 +2025,7 @@ ssh-keygen … 0.90s user 0.01s system 95% cpu 0.954 total
 256 SHA256:pLC+2JcSU63uge/9CIKkNASIuMiLX9uIZyYSukdrSEs an@laptop (ED25519)</div>
 <p>Khoá Ed25519 được tạo nhanh hơn khoảng 70 lần, nửa công khai của nó chỉ 91 byte thay vì 735 (một dòng ngắn trong <code>authorized_keys</code>), và đó là loại mà OpenSSH hiện nay ưu tiên. <code>-N ''</code> chỉ để làm mẫu: khoá bí mật thật nên có mật khẩu (passphrase), mở khoá một lần mỗi phiên bằng <code>ssh-agent</code> (Bài 9.3). <code>-a 100</code> đặt số vòng dẫn xuất khoá bảo vệ mật khẩu đó — nó làm chậm kẻ đoán mật khẩu, và chẳng làm gì khi không có mật khẩu.</p>
 <p>Trên máy chủ, luật của Bài 11.3 vẫn giữ nguyên: đừng tin file, hãy hỏi <code>sshd -T</code>. Có hai điều bổ sung quan trọng với máy chủ của nhóm. <code>AllowGroups</code> giới hạn ai được đăng nhập, còn khối <code>Match</code> cho một số người dùng luật khác — ở đây là nhóm <code>sftp-only</code> chỉ được chuyển file, không được shell, không được mở đường hầm. <code>sshd -T</code> trần bỏ qua <code>Match</code>; <code>-C</code> mô tả một kết nối giả định để bạn thấy <em>người đó</em> sẽ nhận được gì:</p>
-<pre><code>cat /etc/ssh/sshd_config.d/01-cung.conf
+<pre><code class="language-bash">cat /etc/ssh/sshd_config.d/01-cung.conf
 sshd -t &amp;&amp; echo "sshd -t: OK"
 sshd -T | grep -E "^(passwordauthentication|permitrootlogin|allowgroups|maxauthtries|logingracetime|x11forwarding) "
 sshd -T -C user=ban,host=x,addr=10.0.0.5 | grep -E "^(forcecommand|allowtcpforwarding) "</code></pre>
@@ -2062,7 +2062,7 @@ forcecommand internal-sftp</div>
 <h3>nftables: một bộ luật bạn tự viết và đọc được</h3>
 ${slide('lx-14', 24, 'nftables tự viết')}
 <p>Bài 9.5 đã đọc những luật mà <code>ufw</code> viết ra. Trên máy không có ufw — họ RHEL, container, một bộ định tuyến — bạn tự viết <code>/etc/nftables.conf</code>, và nó ngắn thôi. Một <strong>table</strong> (bảng) chứa các <strong>chain</strong> (chuỗi); một chuỗi gốc móc vào một điểm trên đường đi của gói tin (<code>input</code> cho lưu lượng đi VÀO máy này) với một <strong>policy</strong> (chính sách) mặc định; các <strong>rule</strong> (luật) được đọc từ trên xuống và phán quyết đầu tiên thắng; một <strong>set</strong> (tập) là một danh sách có tên để luật so vào, và bạn đổi nó mà không phải nạp lại gì:</p>
-<pre><code>#!/usr/sbin/nft -f
+<pre><code class="language-bash">#!/usr/sbin/nft -f
 flush ruleset
 
 table inet loc {
@@ -2085,7 +2085,7 @@ table inet loc {
     }
 }</code></pre>
 <p>Đọc từng dòng. <code>inet</code> = một bảng cho cả IPv4 lẫn IPv6. <code>policy drop</code> = thứ gì không được chấp nhận rõ ràng thì bị vứt. <code>ct state established,related accept</code> = gói trả lời cho các kết nối mà máy này mở ra (và phần còn lại của những kết nối đã được chấp nhận) được qua — thiếu dòng này, <code>apt</code> và <code>curl</code> hỏng ngay khi bạn đặt <code>policy drop</code>. <code>iif "lo"</code> = lưu lượng nội bộ. Tập <code>chan_ip</code> là danh sách cấm có hạn dùng. SSH được nhận nhưng kết nối mới bị giới hạn tần suất. Luật cuối chỉ <em>đếm</em> những gì rơi xuống tới policy — một phép chẩn đoán miễn phí. Kiểm cú pháp mà chưa áp dụng, áp dụng, rồi thử từ một máy <em>khác</em> (container thứ hai, 172.17.0.8):</p>
-<pre><code>nft -c -f /etc/nftables.conf &amp;&amp; echo "cu phap OK"
+<pre><code class="language-bash">nft -c -f /etc/nftables.conf &amp;&amp; echo "cu phap OK"
 nft -f /etc/nftables.conf
 <span class="tok-comment"># từ 172.17.0.8:</span>
 curl -s -o /dev/null -m 3 -w "cong 19141: %{http_code}\\n" http://172.17.0.5:19141/
@@ -2098,7 +2098,7 @@ cong 19142: curl exit 28
 		ip saddr @chan_ip counter packets 0 bytes 0 drop
 		counter packets 3 bytes 180 comment "roi xuong day = bi chan"</div>
 <p>Cổng 19141 trả 200; cổng 19142 — cũng có server đang nghe ở đó — thì hết giờ (curl exit 28), vì một gói bị vứt không nhận được trả lời nào cả. Bộ đếm cuối ghi lại đúng 3 gói SYN mà curl đã thử. Giờ cấm trình khách đó mười phút bằng cách thêm nó vào tập, không cần nạp lại:</p>
-<pre><code>nft add element inet loc chan_ip { 172.17.0.8 timeout 10m }
+<pre><code class="language-bash">nft add element inet loc chan_ip { 172.17.0.8 timeout 10m }
 nft list set inet loc chan_ip | grep elements
 <span class="tok-comment"># lại từ 172.17.0.8: giờ cả cổng 19141 cũng hết giờ</span>
 nft list chain inet loc vao | grep chan_ip
@@ -2172,7 +2172,7 @@ table inet f2b-table {
 <h3>SELinux: nhãn quyết định, không phải rwx</h3>
 ${slide('lx-14', 26, 'SELinux: nhãn')}
 <p>Mọi thứ cho tới giờ là kiểm soát truy cập <em>tuỳ ý</em> (discretionary): chủ file quyết định quyền của nó, và root làm gì cũng được. <strong>Kiểm soát truy cập bắt buộc</strong> (mandatory access control — MAC) thêm một chính sách mà ngay cả tiến trình của root cũng phải tuân. Fedora và RHEL dùng <strong>SELinux</strong> (do NSA công bố năm 2000); Ubuntu và Debian dùng <strong>AppArmor</strong>. Trên máy Fedora, chỉ đọc:</p>
-<pre><code>getenforce
+<pre><code class="language-bash">getenforce
 sestatus | head -5
 ls -Z /etc/shadow /usr/sbin/sshd ~/.bashrc
 ps -eZ | grep -E " (sshd|chronyd|dockerd)$"</code></pre>
@@ -2189,7 +2189,7 @@ system_u:system_r:chronyd_t:s0      866 ?        00:00:00 chronyd
 system_u:system_r:sshd_t:s0-s0:c0.c1023 1041 ?   00:00:02 sshd
 system_u:system_r:container_runtime_t:s0 1620 ?  01:17:08 dockerd</div>
 <p>Mọi file và mọi tiến trình đều mang một nhãn <code>user:role:type:level</code>, và phần quan trọng là <strong>type</strong> (kiểu). Chính sách <code>targeted</code> nói đại ý: "một tiến trình kiểu <code>sshd_t</code> được đọc file kiểu <code>sshd_exec_t</code>, <code>ssh_home_t</code>…"; thứ gì không được cho phép thì bị từ chối — kể cả khi <code>ls -l</code> nói <code>644</code>. Một đường dẫn <em>nên</em> mang nhãn gì cũng nằm trong chính sách: <code>matchpathcon /var/www/html/index.html</code> trả lời <code>httpd_sys_content_t</code>. Cái bẫy kinh điển là khác biệt giữa <code>mv</code> và <code>cp</code>, dựng lại được mà không cần root, ngay trong thư mục nhà:</p>
-<pre><code>echo a &gt; /tmp/lx14-mv.txt; echo b &gt; /tmp/lx14-cp.txt
+<pre><code class="language-bash">echo a &gt; /tmp/lx14-mv.txt; echo b &gt; /tmp/lx14-cp.txt
 mv /tmp/lx14-mv.txt .; cp /tmp/lx14-cp.txt .
 ls -Z lx14-mv.txt lx14-cp.txt
 restorecon -v lx14-mv.txt</code></pre>
@@ -2198,7 +2198,7 @@ unconfined_u:object_r:user_home_t:s0 lx14-cp.txt
 Relabeled /home/…/lxhoc-14/lx14-mv.txt from unconfined_u:object_r:user_tmp_t:s0 to unconfined_u:object_r:user_home_t:s0</div>
 <p><code>cp</code> tạo một file mới, nên file mới nhận nhãn của thư mục mới. <code>mv</code> dời chính file cũ, <strong>mang theo cả nhãn</strong>. Dựng trang web trong thư mục nhà, <code>sudo mv</code> nó vào <code>/var/www/html</code>, là nginx trả 403 cho những file có quyền hoàn hảo, vì chúng vẫn mang nhãn <code>user_home_t</code>. <code>restorecon -Rv /var/www/html</code> đặt lại mọi nhãn về đúng như chính sách quy định.</p>
 <p>Khi SELinux thật sự từ chối một việc, <code>setroubleshoot</code> ghi lời giải thích vào journal. Lời giải thích thật dưới đây, từ chính máy Fedora của khoá học (23/09), sinh ra từ một lần chuyển tiếp cổng ngược qua SSH tới cổng 18030:</p>
-<pre><code>journalctl -t setroubleshoot --since -30d</code></pre>
+<pre><code class="language-bash">journalctl -t setroubleshoot --since -30d</code></pre>
 <div class="out">SELinux is preventing sshd-session from name_bind access on the tcp_socket port 18030.
 
 *****  Plugin bind_ports (92.2 confidence) suggests   ************************
@@ -2220,7 +2220,7 @@ ${slide('lx-14', 27, 'sudoers hẹp mà vẫn thành root')}
 <pre><code><span class="tok-comment"># /etc/sudoers.d/an — SAI</span>
 an ALL=(root) NOPASSWD: /usr/bin/find
 an ALL=(root) NOPASSWD: /usr/bin/less /var/log/*</code></pre>
-<pre><code>sudo -l | tail -2
+<pre><code class="language-bash">sudo -l | tail -2
 sudo find /tmp -maxdepth 0 -exec /bin/sh -c "id" \\;
 sudo less /var/log/../../etc/shadow | head -2</code></pre>
 <div class="out">    (root) NOPASSWD: /usr/bin/find
@@ -2234,7 +2234,7 @@ Cmnd_Alias APP_CMDS = /usr/bin/systemctl restart nang.service, /usr/bin/journalc
 an ALL=(root) NOPASSWD: APP_CMDS
 an ALL=(root) NOPASSWD: NOEXEC: /usr/bin/find
 an ALL=(root) sudoedit /etc/nang/app.env</code></pre>
-<pre><code>visudo -c -q &amp;&amp; echo "visudo OK"
+<pre><code class="language-bash">visudo -c -q &amp;&amp; echo "visudo OK"
 sudo find /tmp -maxdepth 0 -exec /bin/sh -c id \\;
 sudo -n systemctl stop nang.service</code></pre>
 <div class="out">visudo OK

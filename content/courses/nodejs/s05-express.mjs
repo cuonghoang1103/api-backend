@@ -29,7 +29,7 @@ export default {
 </div>
 
 <h3>Installing it</h3>
-<pre><code>npm init -y
+<pre><code class="language-javascript">npm init -y
 npm i express
 node -e "console.log(require('express/package.json').version)"</code></pre>
 <div class="out">5.2.1</div>
@@ -40,7 +40,7 @@ node_modules size        : 3.7M</div>
 <div class="callout"><strong>Express 5 vs Express 4.</strong> Express 5 became the default <code>latest</code> tag on npm and most tutorials on the internet still show version 4. Two differences matter enough to mention now: v5 forwards errors from <code>async</code> handlers automatically (lesson 5.4 proves it with a hanging request), and wildcard routes changed from <code>*</code> to a named <code>*splat</code> (lesson 5.2). If you land on an old tutorial and something does not behave, check the version first.</div>
 
 <h3>Your first Express app</h3>
-<pre><code><span class="tok-keyword">import</span> express <span class="tok-keyword">from</span> <span class="tok-string">'express'</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> express <span class="tok-keyword">from</span> <span class="tok-string">'express'</span>;
 
 <span class="tok-keyword">const</span> app = express();
 
@@ -58,7 +58,7 @@ app.<span class="tok-fn">get</span>(<span class="tok-string">'/created'</span>, 
 
 app.<span class="tok-fn">listen</span>(<span class="tok-number">3000</span>, () =&gt; <span class="tok-fn">console</span>.log(<span class="tok-string">'listening on 3000'</span>));</code></pre>
 <p>Nine meaningful lines. Now look at what those nine lines actually produce on the wire — this is <code>curl -i</code>, headers included, run against the server above:</p>
-<pre><code>curl -i http://localhost:3000/health</code></pre>
+<pre><code class="language-bash">curl -i http://localhost:3000/health</code></pre>
 <div class="out">HTTP/1.1 200 OK
 X-Powered-By: Express
 Content-Type: application/json; charset=utf-8
@@ -71,7 +71,7 @@ Connection: keep-alive
 <p>You wrote <code>res.json({...})</code>. Express serialised the object, set <code>Content-Type</code>, computed <code>Content-Length</code>, and generated an <code>ETag</code> so a repeat request can be answered with 304 and zero bytes of body. In lesson 3.5 you did the first three by hand and skipped the fourth.</p>
 
 <h3><code>res.json</code> vs <code>res.send</code> — not the same thing</h3>
-<pre><code>curl -i http://localhost:3000/text</code></pre>
+<pre><code class="language-bash">curl -i http://localhost:3000/text</code></pre>
 <div class="out">HTTP/1.1 200 OK
 Content-Type: text/html; charset=utf-8
 Content-Length: 8
@@ -86,7 +86,7 @@ xin chao</div>
 </div>
 
 <h3>What you get for free on an unknown route</h3>
-<pre><code>curl -i http://localhost:3000/does-not-exist</code></pre>
+<pre><code class="language-bash">curl -i http://localhost:3000/does-not-exist</code></pre>
 <div class="out">HTTP/1.1 404 Not Found
 Content-Security-Policy: default-src 'none'
 X-Content-Type-Options: nosniff
@@ -111,7 +111,7 @@ express
 <div class="callout ok">A better way to judge a framework: what does adding the <em>eleventh</em> route cost? In Express it costs three lines in a router file. In the raw version it costs another branch in an ever-growing <code>if</code> chain that already handles method, path segments, body reading and errors.</div>
 
 <h3>The mistake everyone makes in week one</h3>
-<pre><code>app.<span class="tok-fn">get</span>(<span class="tok-string">'/double'</span>, (req, res) =&gt; {
+<pre><code class="language-typescript">app.<span class="tok-fn">get</span>(<span class="tok-string">'/double'</span>, (req, res) =&gt; {
   <span class="tok-keyword">if</span> (!req.query.token) res.<span class="tok-fn">status</span>(<span class="tok-number">401</span>).<span class="tok-fn">json</span>({ error: <span class="tok-string">'Unauthorized'</span> });  <span class="tok-comment">// no return!</span>
   res.<span class="tok-fn">json</span>({ secret: <span class="tok-string">'private data'</span> });
 });</code></pre>
@@ -146,7 +146,7 @@ server logs : [error handler] ERR_HTTP_HEADERS_SENT</div>
 </div>
 
 <h3>Cài đặt</h3>
-<pre><code>npm init -y
+<pre><code class="language-javascript">npm init -y
 npm i express
 node -e "console.log(require('express/package.json').version)"</code></pre>
 <div class="out">5.2.1</div>
@@ -157,7 +157,7 @@ dung lượng node_modules  : 3.7M</div>
 <div class="callout"><strong>Express 5 và Express 4.</strong> Express 5 đã là bản <code>latest</code> mặc định trên npm, trong khi phần lớn bài hướng dẫn ngoài internet vẫn đang là bản 4. Có hai khác biệt đáng nói ngay: v5 <strong>tự động chuyển lỗi từ handler <code>async</code></strong> sang error handler (bài 5.4 sẽ chứng minh bằng một request bị treo), và route ký tự đại diện đổi từ <code>*</code> sang dạng có tên <code>*splat</code> (bài 5.2). Nếu bạn đọc một bài cũ mà thấy chạy không đúng, việc đầu tiên là kiểm tra phiên bản.</div>
 
 <h3>Ứng dụng Express đầu tiên</h3>
-<pre><code><span class="tok-keyword">import</span> express <span class="tok-keyword">from</span> <span class="tok-string">'express'</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> express <span class="tok-keyword">from</span> <span class="tok-string">'express'</span>;
 
 <span class="tok-keyword">const</span> app = express();
 
@@ -175,7 +175,7 @@ app.<span class="tok-fn">get</span>(<span class="tok-string">'/created'</span>, 
 
 app.<span class="tok-fn">listen</span>(<span class="tok-number">3000</span>, () =&gt; <span class="tok-fn">console</span>.log(<span class="tok-string">'listening on 3000'</span>));</code></pre>
 <p>Chín dòng có nghĩa. Giờ hãy xem chín dòng đó thật sự tạo ra cái gì trên đường truyền — đây là <code>curl -i</code>, có kèm header, chạy thật với server ở trên:</p>
-<pre><code>curl -i http://localhost:3000/health</code></pre>
+<pre><code class="language-bash">curl -i http://localhost:3000/health</code></pre>
 <div class="out">HTTP/1.1 200 OK
 X-Powered-By: Express
 Content-Type: application/json; charset=utf-8
@@ -188,7 +188,7 @@ Connection: keep-alive
 <p>Bạn chỉ viết <code>res.json({...})</code>. Express đã tự chuyển object thành chuỗi, đặt <code>Content-Type</code>, tính <code>Content-Length</code>, và sinh ra <code>ETag</code> để lần gọi sau có thể trả 304 với body rỗng. Ở bài 3.5 bạn làm ba việc đầu bằng tay, còn việc thứ tư thì bỏ qua.</p>
 
 <h3><code>res.json</code> và <code>res.send</code> — không phải một</h3>
-<pre><code>curl -i http://localhost:3000/text</code></pre>
+<pre><code class="language-bash">curl -i http://localhost:3000/text</code></pre>
 <div class="out">HTTP/1.1 200 OK
 Content-Type: text/html; charset=utf-8
 Content-Length: 8
@@ -203,7 +203,7 @@ xin chao</div>
 </div>
 
 <h3>Bạn được tặng gì khi route không tồn tại</h3>
-<pre><code>curl -i http://localhost:3000/does-not-exist</code></pre>
+<pre><code class="language-bash">curl -i http://localhost:3000/does-not-exist</code></pre>
 <div class="out">HTTP/1.1 404 Not Found
 Content-Security-Policy: default-src 'none'
 X-Content-Type-Options: nosniff
@@ -228,7 +228,7 @@ express
 <div class="callout ok">Có một cách đánh giá framework tốt hơn: thêm route <em>thứ mười một</em> tốn bao nhiêu? Với Express là ba dòng trong một file router. Với bản thuần là thêm một nhánh nữa vào chuỗi <code>if</code> vốn đã phải gánh cả method, cắt đường dẫn, đọc body lẫn bắt lỗi.</div>
 
 <h3>Lỗi mà ai cũng mắc trong tuần đầu</h3>
-<pre><code>app.<span class="tok-fn">get</span>(<span class="tok-string">'/double'</span>, (req, res) =&gt; {
+<pre><code class="language-typescript">app.<span class="tok-fn">get</span>(<span class="tok-string">'/double'</span>, (req, res) =&gt; {
   <span class="tok-keyword">if</span> (!req.query.token) res.<span class="tok-fn">status</span>(<span class="tok-number">401</span>).<span class="tok-fn">json</span>({ error: <span class="tok-string">'Unauthorized'</span> });  <span class="tok-comment">// thiếu return!</span>
   res.<span class="tok-fn">json</span>({ secret: <span class="tok-string">'dữ liệu riêng tư'</span> });
 });</code></pre>
@@ -276,21 +276,21 @@ server log  : [error handler] ERR_HTTP_HEADERS_SENT</div>
      └── the app (or a Router)</code></pre>
 
 <h3>Path parameters</h3>
-<pre><code>app.<span class="tok-fn">get</span>(<span class="tok-string">'/notes/:id'</span>, (req, res) =&gt; {
+<pre><code class="language-typescript">app.<span class="tok-fn">get</span>(<span class="tok-string">'/notes/:id'</span>, (req, res) =&gt; {
   res.<span class="tok-fn">json</span>({ params: req.params, query: req.query });
 });</code></pre>
-<pre><code>curl /notes/42</code></pre>
+<pre><code class="language-bash">curl /notes/42</code></pre>
 <div class="out">{"handler":":id","params":{"id":"42"},"query":{}}</div>
 <div class="callout warn"><code>req.params.id</code> is the <strong>string</strong> <code>"42"</code>, never the number 42. A URL has no types. <code>Number(req.params.id)</code> is not optional — and neither is checking the result, because <code>Number('abc')</code> is <code>NaN</code> and <code>NaN</code> passed to a database query is a 500 waiting to happen.</div>
 
 <h3>The ordering bug — a live demonstration</h3>
 <p>Two routes, declared in the wrong order on purpose:</p>
-<pre><code>app.<span class="tok-fn">get</span>(<span class="tok-string">'/notes/:id'</span>, (req, res) =&gt; res.json({ handler: <span class="tok-string">':id'</span>, params: req.params }));
+<pre><code class="language-typescript">app.<span class="tok-fn">get</span>(<span class="tok-string">'/notes/:id'</span>, (req, res) =&gt; res.json({ handler: <span class="tok-string">':id'</span>, params: req.params }));
 app.<span class="tok-fn">get</span>(<span class="tok-string">'/notes/new'</span>, (req, res) =&gt; res.json({ handler: <span class="tok-string">'new'</span> }));</code></pre>
-<pre><code>curl /notes/new</code></pre>
+<pre><code class="language-bash">curl /notes/new</code></pre>
 <div class="out">{"handler":":id","params":{"id":"new"}}</div>
 <p>The "new note" page is gone. Express never even looked at the second route: <code>/notes/:id</code> came first in the list and <code>:id</code> happily matched the literal segment <code>new</code>. In a real app the handler would then run <code>SELECT * FROM notes WHERE id = Number('new')</code> and return a 404 or a 500, and you would spend an hour debugging the database.</p>
-<pre><code><span class="tok-comment">// correct: specific routes BEFORE parameterised ones</span>
+<pre><code class="language-typescript"><span class="tok-comment">// correct: specific routes BEFORE parameterised ones</span>
 app.<span class="tok-fn">get</span>(<span class="tok-string">'/notes/new'</span>, …);
 app.<span class="tok-fn">get</span>(<span class="tok-string">'/notes/:id'</span>, …);</code></pre>
 <div class="out">GET /notes/new → {"handler":"new"}
@@ -298,7 +298,7 @@ GET /notes/42  → {"handler":":id","id":"42"}</div>
 <div class="pitfall">This class of bug scales badly: the more routes a file has, the more likely a broad pattern shadows a narrow one, and nothing warns you — there is no compile step and no duplicate-route error. The habit that prevents it: <strong>inside a resource, declare from most specific to least specific</strong>, and keep each resource in its own router file so the list stays short enough to read.</div>
 
 <h3>The query string</h3>
-<pre><code>curl "/search?q=node&amp;tags=a&amp;tags=b&amp;page=2"</code></pre>
+<pre><code class="language-bash">curl "/search?q=node&amp;tags=a&amp;tags=b&amp;page=2"</code></pre>
 <div class="out">{"q":"node","tags":["a","b"],"page":"2"}</div>
 <p>Three things to notice, all of which have caused production incidents:</p>
 <div class="kv-grid">
@@ -307,18 +307,18 @@ GET /notes/42  → {"handler":":id","id":"42"}</div>
   <div class="kv"><span class="k">The client controls the whole object</span><span class="v">Never spread <code>req.query</code> straight into a database <code>where</code> clause. Read the fields you expect, by name.</span></div>
 </div>
 <div class="callout ok">Defensive shape for a list endpoint — clamp the page size so nobody can request a million rows:
-<pre><code><span class="tok-keyword">const</span> page  = Math.max(<span class="tok-number">1</span>, Number(req.query.page ?? <span class="tok-number">1</span>) || <span class="tok-number">1</span>);
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> page  = Math.max(<span class="tok-number">1</span>, Number(req.query.page ?? <span class="tok-number">1</span>) || <span class="tok-number">1</span>);
 <span class="tok-keyword">const</span> limit = Math.min(<span class="tok-number">50</span>, Math.max(<span class="tok-number">1</span>, Number(req.query.limit ?? <span class="tok-number">10</span>) || <span class="tok-number">10</span>));</code></pre></div>
 
 <h3>Wildcards — and an Express 5 change</h3>
-<pre><code>app.<span class="tok-fn">get</span>(<span class="tok-string">'/files/*splat'</span>, (req, res) =&gt; res.json({ params: req.params }));</code></pre>
-<pre><code>curl /files/a/b/c.png</code></pre>
+<pre><code class="language-typescript">app.<span class="tok-fn">get</span>(<span class="tok-string">'/files/*splat'</span>, (req, res) =&gt; res.json({ params: req.params }));</code></pre>
+<pre><code class="language-bash">curl /files/a/b/c.png</code></pre>
 <div class="out">{"params":{"splat":["a","b","c.png"]}}</div>
 <div class="callout"><strong>Version difference.</strong> Express 4 wrote this as <code>'/files/*'</code> and put the match in <code>req.params[0]</code> as one string. Express 5 requires the wildcard to be <strong>named</strong> and gives you an array of segments. The old optional-parameter syntax <code>'/notes/:id?'</code> was also removed in v5 — declare two routes instead. This is the number-one reason a copy-pasted v4 snippet throws <code>Missing parameter name</code> on startup.</div>
 
 <h3><code>express.Router()</code> — one file per resource</h3>
 <p>A single <code>app.js</code> with forty routes is unreadable and guarantees the ordering bug above. A Router is a mini-app: same <code>.get/.post/.use</code> API, mounted under a prefix.</p>
-<pre><code><span class="tok-comment">// routes/notes.routes.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// routes/notes.routes.js</span>
 <span class="tok-keyword">import</span> { Router } <span class="tok-keyword">from</span> <span class="tok-string">'express'</span>;
 <span class="tok-keyword">const</span> router = Router();
 
@@ -327,7 +327,7 @@ router.<span class="tok-fn">post</span>(<span class="tok-string">'/'</span>,   c
 router.<span class="tok-fn">get</span>(<span class="tok-string">'/:id'</span>, getNote);      <span class="tok-comment">// → GET  /api/v1/notes/:id</span>
 
 <span class="tok-keyword">export default</span> router;</code></pre>
-<pre><code><span class="tok-comment">// app.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// app.js</span>
 <span class="tok-keyword">import</span> notesRouter <span class="tok-keyword">from</span> <span class="tok-string">'./routes/notes.routes.js'</span>;
 app.<span class="tok-fn">use</span>(<span class="tok-string">'/api/v1/notes'</span>, notesRouter);</code></pre>
 <div class="kv-grid">
@@ -361,21 +361,21 @@ app.<span class="tok-fn">use</span>(<span class="tok-string">'/api/v1/notes'</sp
      └── app (hoặc một Router)</code></pre>
 
 <h3>Tham số trên đường dẫn</h3>
-<pre><code>app.<span class="tok-fn">get</span>(<span class="tok-string">'/notes/:id'</span>, (req, res) =&gt; {
+<pre><code class="language-typescript">app.<span class="tok-fn">get</span>(<span class="tok-string">'/notes/:id'</span>, (req, res) =&gt; {
   res.<span class="tok-fn">json</span>({ params: req.params, query: req.query });
 });</code></pre>
-<pre><code>curl /notes/42</code></pre>
+<pre><code class="language-bash">curl /notes/42</code></pre>
 <div class="out">{"handler":":id","params":{"id":"42"},"query":{}}</div>
 <div class="callout warn"><code>req.params.id</code> là <strong>chuỗi</strong> <code>"42"</code>, không bao giờ là số 42. URL không có kiểu dữ liệu. Việc <code>Number(req.params.id)</code> là bắt buộc — và kiểm tra kết quả cũng bắt buộc, vì <code>Number('abc')</code> ra <code>NaN</code>, mà <code>NaN</code> ném vào truy vấn cơ sở dữ liệu là một lỗi 500 đang chờ tới lượt.</div>
 
 <h3>Bug thứ tự — xem tận mắt</h3>
 <p>Hai route, cố tình khai báo sai thứ tự:</p>
-<pre><code>app.<span class="tok-fn">get</span>(<span class="tok-string">'/notes/:id'</span>, (req, res) =&gt; res.json({ handler: <span class="tok-string">':id'</span>, params: req.params }));
+<pre><code class="language-typescript">app.<span class="tok-fn">get</span>(<span class="tok-string">'/notes/:id'</span>, (req, res) =&gt; res.json({ handler: <span class="tok-string">':id'</span>, params: req.params }));
 app.<span class="tok-fn">get</span>(<span class="tok-string">'/notes/new'</span>, (req, res) =&gt; res.json({ handler: <span class="tok-string">'new'</span> }));</code></pre>
-<pre><code>curl /notes/new</code></pre>
+<pre><code class="language-bash">curl /notes/new</code></pre>
 <div class="out">{"handler":":id","params":{"id":"new"}}</div>
 <p>Trang "tạo ghi chú mới" biến mất. Express thậm chí không thèm nhìn tới route thứ hai: <code>/notes/:id</code> đứng trước trong danh sách và <code>:id</code> khớp ngon lành với đoạn chữ <code>new</code>. Trong ứng dụng thật, handler sẽ chạy <code>SELECT * FROM notes WHERE id = Number('new')</code> rồi trả về 404 hoặc 500, còn bạn thì mất một tiếng đi gỡ lỗi ở cơ sở dữ liệu.</p>
-<pre><code><span class="tok-comment">// đúng: route cụ thể đứng TRƯỚC route có tham số</span>
+<pre><code class="language-typescript"><span class="tok-comment">// đúng: route cụ thể đứng TRƯỚC route có tham số</span>
 app.<span class="tok-fn">get</span>(<span class="tok-string">'/notes/new'</span>, …);
 app.<span class="tok-fn">get</span>(<span class="tok-string">'/notes/:id'</span>, …);</code></pre>
 <div class="out">GET /notes/new → {"handler":"new"}
@@ -383,7 +383,7 @@ GET /notes/42  → {"handler":":id","id":"42"}</div>
 <div class="pitfall">Loại bug này càng lớn càng nguy: file càng nhiều route thì khả năng một mẫu rộng che mất một mẫu hẹp càng cao, mà chẳng có gì cảnh báo bạn — không có bước biên dịch, cũng không có lỗi "route trùng". Thói quen phòng tránh: <strong>trong cùng một tài nguyên, khai báo từ cụ thể nhất tới chung nhất</strong>, và tách mỗi tài nguyên ra một file router riêng để danh sách đủ ngắn mà đọc hết.</div>
 
 <h3>Chuỗi truy vấn (query string)</h3>
-<pre><code>curl "/search?q=node&amp;tags=a&amp;tags=b&amp;page=2"</code></pre>
+<pre><code class="language-bash">curl "/search?q=node&amp;tags=a&amp;tags=b&amp;page=2"</code></pre>
 <div class="out">{"q":"node","tags":["a","b"],"page":"2"}</div>
 <p>Ba điều cần để ý, cả ba đều từng gây sự cố trên production:</p>
 <div class="kv-grid">
@@ -392,18 +392,18 @@ GET /notes/42  → {"handler":":id","id":"42"}</div>
   <div class="kv"><span class="k">Client điều khiển toàn bộ object</span><span class="v">Đừng bao giờ đổ thẳng <code>req.query</code> vào mệnh đề <code>where</code> của cơ sở dữ liệu. Hãy đọc đúng những trường bạn mong đợi, theo tên.</span></div>
 </div>
 <div class="callout ok">Hình dạng phòng thủ cho một endpoint danh sách — chặn trần số bản ghi để không ai xin được một triệu dòng:
-<pre><code><span class="tok-keyword">const</span> page  = Math.max(<span class="tok-number">1</span>, Number(req.query.page ?? <span class="tok-number">1</span>) || <span class="tok-number">1</span>);
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> page  = Math.max(<span class="tok-number">1</span>, Number(req.query.page ?? <span class="tok-number">1</span>) || <span class="tok-number">1</span>);
 <span class="tok-keyword">const</span> limit = Math.min(<span class="tok-number">50</span>, Math.max(<span class="tok-number">1</span>, Number(req.query.limit ?? <span class="tok-number">10</span>) || <span class="tok-number">10</span>));</code></pre></div>
 
 <h3>Ký tự đại diện — và một thay đổi ở Express 5</h3>
-<pre><code>app.<span class="tok-fn">get</span>(<span class="tok-string">'/files/*splat'</span>, (req, res) =&gt; res.json({ params: req.params }));</code></pre>
-<pre><code>curl /files/a/b/c.png</code></pre>
+<pre><code class="language-typescript">app.<span class="tok-fn">get</span>(<span class="tok-string">'/files/*splat'</span>, (req, res) =&gt; res.json({ params: req.params }));</code></pre>
+<pre><code class="language-bash">curl /files/a/b/c.png</code></pre>
 <div class="out">{"params":{"splat":["a","b","c.png"]}}</div>
 <div class="callout"><strong>Khác biệt phiên bản.</strong> Express 4 viết cái này là <code>'/files/*'</code> và đặt phần khớp vào <code>req.params[0]</code> dưới dạng một chuỗi. Express 5 bắt buộc ký tự đại diện phải <strong>có tên</strong> và trả về mảng các đoạn. Cú pháp tham số tuỳ chọn kiểu <code>'/notes/:id?'</code> cũng đã bị bỏ ở v5 — hãy khai báo hai route thay thế. Đây là nguyên nhân số một khiến một đoạn code v4 copy về ném lỗi <code>Missing parameter name</code> ngay lúc khởi động.</div>
 
 <h3><code>express.Router()</code> — mỗi tài nguyên một file</h3>
 <p>Một file <code>app.js</code> chứa bốn mươi route thì không đọc nổi, và bảo đảm sẽ dính bug thứ tự ở trên. Router là một ứng dụng thu nhỏ: cùng bộ API <code>.get/.post/.use</code>, được gắn dưới một tiền tố.</p>
-<pre><code><span class="tok-comment">// routes/notes.routes.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// routes/notes.routes.js</span>
 <span class="tok-keyword">import</span> { Router } <span class="tok-keyword">from</span> <span class="tok-string">'express'</span>;
 <span class="tok-keyword">const</span> router = Router();
 
@@ -412,7 +412,7 @@ router.<span class="tok-fn">post</span>(<span class="tok-string">'/'</span>,   c
 router.<span class="tok-fn">get</span>(<span class="tok-string">'/:id'</span>, getNote);      <span class="tok-comment">// → GET  /api/v1/notes/:id</span>
 
 <span class="tok-keyword">export default</span> router;</code></pre>
-<pre><code><span class="tok-comment">// app.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// app.js</span>
 <span class="tok-keyword">import</span> notesRouter <span class="tok-keyword">from</span> <span class="tok-string">'./routes/notes.routes.js'</span>;
 app.<span class="tok-fn">use</span>(<span class="tok-string">'/api/v1/notes'</span>, notesRouter);</code></pre>
 <div class="kv-grid">
@@ -450,7 +450,7 @@ app.<span class="tok-fn">use</span>(<span class="tok-string">'/api/v1/notes'</sp
 <p class="lead">Middleware is the one idea in Express worth understanding properly. Everything is middleware — body parsing, authentication, logging, your route handlers, even the error handler. Once you see the chain, Express stops having surprises.</p>
 
 <h3>The definition, in one line</h3>
-<pre><code><span class="tok-keyword">function</span> <span class="tok-fn">middleware</span>(req, res, next) { … }</code></pre>
+<pre><code class="language-javascript"><span class="tok-keyword">function</span> <span class="tok-fn">middleware</span>(req, res, next) { … }</code></pre>
 <p>A function with three arguments that gets <code>req</code>, gets <code>res</code>, and gets a <code>next</code> to call when it is done. It has exactly three legal endings:</p>
 <div class="kv-grid">
   <div class="kv"><span class="k">Call <code>next()</code></span><span class="v">"I am done, carry on down the chain." The most common ending.</span></div>
@@ -469,21 +469,21 @@ app.<span class="tok-fn">use</span>(<span class="tok-string">'/api/v1/notes'</sp
   <div class="lz-layer"><span class="lz-lname">app.use(errorHandler)</span><span class="lz-lnote">4 arguments — reached only via next(err)</span></div>
 </div>
 <p>That is not a diagram of a concept; it is the actual file order. Here it is running, with a <code>console.log</code> in each step:</p>
-<pre><code>app.<span class="tok-fn">use</span>((req, res, next) =&gt; { console.log(<span class="tok-string">'1. global logger'</span>); next(); });
+<pre><code class="language-javascript">app.<span class="tok-fn">use</span>((req, res, next) =&gt; { console.log(<span class="tok-string">'1. global logger'</span>); next(); });
 app.<span class="tok-fn">use</span>(express.<span class="tok-fn">static</span>(<span class="tok-string">'public'</span>));
 app.<span class="tok-fn">use</span>(<span class="tok-string">'/api'</span>, (req, res, next) =&gt; { console.log(<span class="tok-string">'2. only for /api/*'</span>); next(); });
 app.<span class="tok-fn">get</span>(<span class="tok-string">'/api/notes'</span>,
   (req, res, next) =&gt; { console.log(<span class="tok-string">'3. route-level middleware'</span>); next(); },
   (req, res)       =&gt; { console.log(<span class="tok-string">'4. final handler'</span>); res.json({ ok: <span class="tok-keyword">true</span> }); });
 app.<span class="tok-fn">use</span>((req, res, next) =&gt; { console.log(<span class="tok-string">'X. after the routes'</span>); next(); });</code></pre>
-<pre><code>curl /api/notes</code></pre>
+<pre><code class="language-bash">curl /api/notes</code></pre>
 <div class="out">1. global logger
 2. only for /api/*
 3. route-level middleware
 4. final handler
 {"ok":true}</div>
 <p><code>X</code> never printed — step 4 ended the response and never called <code>next()</code>, so the chain stopped there. Now the same server with a path that does not match that route:</p>
-<pre><code>curl /notes/new</code></pre>
+<pre><code class="language-bash">curl /notes/new</code></pre>
 <div class="out">1. global logger
 X. after the routes
 {"handler":"new"}</div>
@@ -492,26 +492,26 @@ X. after the routes
 <h3>The built-in middleware you will actually use</h3>
 <h4><code>express.json()</code> — and what happens without it</h4>
 <p>A route registered <strong>before</strong> <code>app.use(express.json())</code> versus one registered after, both sent the same POST body:</p>
-<pre><code>curl -X POST /no-parser   -H 'Content-Type: application/json' -d '{"title":"Note 1"}'
+<pre><code class="language-bash">curl -X POST /no-parser   -H 'Content-Type: application/json' -d '{"title":"Note 1"}'
 curl -X POST /with-parser -H 'Content-Type: application/json' -d '{"title":"Note 1"}'</code></pre>
 <div class="out">/no-parser   → {"type":"undefined"}
 /with-parser → {"body":{"title":"Note 1"},"type":"object"}</div>
 <div class="pitfall">This is the classic "why is <code>req.body</code> undefined" question, and the answer is always one of three things: you forgot <code>express.json()</code>, you registered the route above it, or the client did not send <code>Content-Type: application/json</code> — the parser deliberately ignores bodies of other types. In Express 5 an unparsed body is <code>undefined</code>, so <code>const { title } = req.body</code> throws a TypeError on the destructure. Write <code>req.body ?? {}</code> in handlers that must not crash.</div>
 <p>Malformed JSON is rejected by the parser before your handler ever runs:</p>
-<pre><code>curl -i -X POST /with-parser -H 'Content-Type: application/json' -d '{title:}'</code></pre>
+<pre><code class="language-bash">curl -i -X POST /with-parser -H 'Content-Type: application/json' -d '{title:}'</code></pre>
 <div class="out">HTTP/1.1 400 Bad Request
 SyntaxError: Expected property name or '}' in JSON at position 1
     at JSON.parse (&lt;anonymous&gt;)
     at parse (/…/node_modules/body-parser/lib/types/json.js:91:21)
     …</div>
 <div class="callout danger">Look at what that 400 leaked: absolute paths from the server's filesystem and the internal call stack. That is Express's <em>default</em> error handler, which prints stacks when <code>NODE_ENV</code> is not <code>production</code>. Two fixes, and you want both: set <code>NODE_ENV=production</code> on the server, and install your own error handler (lesson 5.4) so nothing depends on that environment variable being right.</div>
-<pre><code>app.<span class="tok-fn">use</span>(express.<span class="tok-fn">json</span>({ limit: <span class="tok-string">'100kb'</span> }));           <span class="tok-comment">// always set a limit</span>
+<pre><code class="language-typescript">app.<span class="tok-fn">use</span>(express.<span class="tok-fn">json</span>({ limit: <span class="tok-string">'100kb'</span> }));           <span class="tok-comment">// always set a limit</span>
 app.<span class="tok-fn">use</span>(express.<span class="tok-fn">urlencoded</span>({ extended: <span class="tok-keyword">true</span> }));      <span class="tok-comment">// HTML form posts</span></code></pre>
 <div class="callout warn">The default body limit is 100kb. Raising it to <code>'50mb'</code> "so uploads work" is a bad trade: every request now gets to buffer 50MB of your RAM before you have authenticated anybody. File uploads belong on a streaming path instead — chapter 10.</div>
 
 <h4><code>express.static()</code> — files without a route</h4>
-<pre><code>app.<span class="tok-fn">use</span>(express.<span class="tok-fn">static</span>(<span class="tok-string">'public'</span>));</code></pre>
-<pre><code>curl -i /hello.txt</code></pre>
+<pre><code class="language-typescript">app.<span class="tok-fn">use</span>(express.<span class="tok-fn">static</span>(<span class="tok-string">'public'</span>));</code></pre>
+<pre><code class="language-bash">curl -i /hello.txt</code></pre>
 <div class="out">HTTP/1.1 200 OK
 Accept-Ranges: bytes
 Cache-Control: public, max-age=0
@@ -520,12 +520,12 @@ ETag: W/"25-19fa43439c9"
 Content-Type: text/plain; charset=utf-8
 Content-Length: 37</div>
 <p>Content type from the extension, <code>Last-Modified</code>, <code>ETag</code>, and byte-range support — all free. Ask again with the ETag the server just gave you:</p>
-<pre><code>curl -H 'If-None-Match: W/"25-19fa43439c9"' -i /hello.txt</code></pre>
+<pre><code class="language-bash">curl -H 'If-None-Match: W/"25-19fa43439c9"' -i /hello.txt</code></pre>
 <div class="out">304 — size=0 byte</div>
 <p>Zero bytes of body on the wire because the browser already has the file. That is <code>express.static</code> implementing conditional requests for you, and it is exactly the machinery lesson 3.5's hand-written server did not have.</p>
 
 <h3>Writing your own — a request logger with real timings</h3>
-<pre><code><span class="tok-keyword">export function</span> <span class="tok-fn">requestLogger</span>(req, res, next) {
+<pre><code class="language-javascript"><span class="tok-keyword">export function</span> <span class="tok-fn">requestLogger</span>(req, res, next) {
   <span class="tok-keyword">const</span> t0 = process.hrtime.<span class="tok-fn">bigint</span>();
   res.<span class="tok-fn">on</span>(<span class="tok-string">'finish'</span>, () =&gt; {                          <span class="tok-comment">// EventEmitter, lesson 3.4</span>
     <span class="tok-keyword">const</span> ms = Number(process.hrtime.<span class="tok-fn">bigint</span>() - t0) / <span class="tok-number">1e6</span>;
@@ -541,7 +541,7 @@ DELETE /api/v1/notes/2 204 0.7ms</div>
 <div class="callout ok"><code>req.originalUrl</code> vs <code>req.url</code>: inside a router mounted at <code>/api/v1/notes</code>, <code>req.url</code> is the path <em>relative to the mount</em> (<code>/42</code>), while <code>req.originalUrl</code> is the full path the client asked for. Logs want the second one.</div>
 
 <h3>Scoped middleware — the shape of every guard</h3>
-<pre><code><span class="tok-keyword">const</span> requireAdmin = (req, res, next) =&gt; {
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> requireAdmin = (req, res, next) =&gt; {
   <span class="tok-keyword">if</span> (req.headers[<span class="tok-string">'x-role'</span>] !== <span class="tok-string">'admin'</span>) <span class="tok-keyword">return</span> res.<span class="tok-fn">status</span>(<span class="tok-number">403</span>).<span class="tok-fn">json</span>({ error: <span class="tok-string">'Forbidden'</span> });
   <span class="tok-fn">next</span>();
 };
@@ -551,11 +551,11 @@ x-role: admin  → {"users":128}           [200]</div>
 <p>Every authentication and authorisation system in chapter 8 is this function with a real token check instead of a header comparison. Notice the <code>return</code> in front of <code>res.status(403)</code> — lesson 5.1's rule, in the place it matters most: without it, a rejected request would still run the handler.</p>
 
 <h3>The hang</h3>
-<pre><code>app.<span class="tok-fn">use</span>(<span class="tok-string">'/hang'</span>, (req, res, next) =&gt; {
+<pre><code class="language-javascript">app.<span class="tok-fn">use</span>(<span class="tok-string">'/hang'</span>, (req, res, next) =&gt; {
   console.log(<span class="tok-string">'middleware ran, but never calls next()'</span>);
 });                                                  <span class="tok-comment">// ← no next(), no response</span>
 app.<span class="tok-fn">get</span>(<span class="tok-string">'/hang'</span>, (req, res) =&gt; res.json({ reached: <span class="tok-keyword">true</span> }));</code></pre>
-<pre><code>curl -m 3 /hang</code></pre>
+<pre><code class="language-bash">curl -m 3 /hang</code></pre>
 <div class="out">server: middleware ran, but never calls next()
 client: (nothing for 3 seconds)
 curl exit=28   ← Operation timed out</div>
@@ -573,7 +573,7 @@ curl exit=28   ← Operation timed out</div>
 <p class="lead">Middleware là ý tưởng duy nhất trong Express đáng để hiểu cho tới nơi. Mọi thứ đều là middleware — phân tích body, xác thực, ghi log, chính các handler route của bạn, thậm chí cả error handler. Một khi nhìn ra sợi dây chuyền này, Express hết chỗ để làm bạn bất ngờ.</p>
 
 <h3>Định nghĩa, gói trong một dòng</h3>
-<pre><code><span class="tok-keyword">function</span> <span class="tok-fn">middleware</span>(req, res, next) { … }</code></pre>
+<pre><code class="language-javascript"><span class="tok-keyword">function</span> <span class="tok-fn">middleware</span>(req, res, next) { … }</code></pre>
 <p>Một hàm ba tham số, nhận <code>req</code>, nhận <code>res</code>, và nhận một hàm <code>next</code> để gọi khi xong việc. Nó có đúng ba cái kết hợp lệ:</p>
 <div class="kv-grid">
   <div class="kv"><span class="k">Gọi <code>next()</code></span><span class="v">"Tôi xong rồi, đi tiếp xuống dây chuyền." Đây là cái kết thường gặp nhất.</span></div>
@@ -592,21 +592,21 @@ curl exit=28   ← Operation timed out</div>
   <div class="lz-layer"><span class="lz-lname">app.use(errorHandler)</span><span class="lz-lnote">4 tham số — chỉ tới được qua next(err)</span></div>
 </div>
 <p>Đó không phải sơ đồ minh hoạ một khái niệm; đó chính là thứ tự thật trong file. Đây là nó đang chạy, mỗi bước cắm một <code>console.log</code>:</p>
-<pre><code>app.<span class="tok-fn">use</span>((req, res, next) =&gt; { console.log(<span class="tok-string">'1. logger toàn cục'</span>); next(); });
+<pre><code class="language-javascript">app.<span class="tok-fn">use</span>((req, res, next) =&gt; { console.log(<span class="tok-string">'1. logger toàn cục'</span>); next(); });
 app.<span class="tok-fn">use</span>(express.<span class="tok-fn">static</span>(<span class="tok-string">'public'</span>));
 app.<span class="tok-fn">use</span>(<span class="tok-string">'/api'</span>, (req, res, next) =&gt; { console.log(<span class="tok-string">'2. chỉ chạy với /api/*'</span>); next(); });
 app.<span class="tok-fn">get</span>(<span class="tok-string">'/api/notes'</span>,
   (req, res, next) =&gt; { console.log(<span class="tok-string">'3. middleware riêng của route'</span>); next(); },
   (req, res)       =&gt; { console.log(<span class="tok-string">'4. handler cuối'</span>); res.json({ ok: <span class="tok-keyword">true</span> }); });
 app.<span class="tok-fn">use</span>((req, res, next) =&gt; { console.log(<span class="tok-string">'X. sau các route'</span>); next(); });</code></pre>
-<pre><code>curl /api/notes</code></pre>
+<pre><code class="language-bash">curl /api/notes</code></pre>
 <div class="out">1. logger toàn cục
 2. chỉ chạy với /api/*
 3. middleware riêng của route
 4. handler cuối
 {"ok":true}</div>
 <p><code>X</code> không hề in ra — bước 4 đã kết thúc phản hồi và không gọi <code>next()</code>, nên dây chuyền dừng tại đó. Giờ vẫn server đó, nhưng gọi một đường dẫn không khớp route trên:</p>
-<pre><code>curl /notes/new</code></pre>
+<pre><code class="language-bash">curl /notes/new</code></pre>
 <div class="out">1. logger toàn cục
 X. sau các route
 {"handler":"new"}</div>
@@ -615,26 +615,26 @@ X. sau các route
 <h3>Những middleware có sẵn bạn sẽ dùng thật</h3>
 <h4><code>express.json()</code> — và chuyện gì xảy ra khi thiếu nó</h4>
 <p>Một route đăng ký <strong>trước</strong> <code>app.use(express.json())</code> so với một route đăng ký sau, cùng nhận một body POST giống hệt nhau:</p>
-<pre><code>curl -X POST /no-parser   -H 'Content-Type: application/json' -d '{"title":"Ghi chú 1"}'
+<pre><code class="language-bash">curl -X POST /no-parser   -H 'Content-Type: application/json' -d '{"title":"Ghi chú 1"}'
 curl -X POST /with-parser -H 'Content-Type: application/json' -d '{"title":"Ghi chú 1"}'</code></pre>
 <div class="out">/no-parser   → {"type":"undefined"}
 /with-parser → {"body":{"title":"Ghi chú 1"},"type":"object"}</div>
 <div class="pitfall">Đây chính là câu hỏi kinh điển "sao <code>req.body</code> lại undefined", và câu trả lời luôn là một trong ba: bạn quên <code>express.json()</code>, bạn đăng ký route phía trên nó, hoặc client không gửi <code>Content-Type: application/json</code> — bộ phân tích cố tình bỏ qua body có kiểu khác. Ở Express 5, body chưa phân tích là <code>undefined</code>, nên <code>const { title } = req.body</code> sẽ ném TypeError ngay lúc bóc tách. Hãy viết <code>req.body ?? {}</code> trong những handler không được phép sập.</div>
 <p>JSON hỏng bị chặn ngay tại bộ phân tích, handler của bạn còn chưa kịp chạy:</p>
-<pre><code>curl -i -X POST /with-parser -H 'Content-Type: application/json' -d '{title:}'</code></pre>
+<pre><code class="language-bash">curl -i -X POST /with-parser -H 'Content-Type: application/json' -d '{title:}'</code></pre>
 <div class="out">HTTP/1.1 400 Bad Request
 SyntaxError: Expected property name or '}' in JSON at position 1
     at JSON.parse (&lt;anonymous&gt;)
     at parse (/…/node_modules/body-parser/lib/types/json.js:91:21)
     …</div>
 <div class="callout danger">Hãy nhìn xem cái lỗi 400 đó để lộ những gì: đường dẫn tuyệt đối trên ổ đĩa của server và cả ngăn xếp gọi hàm bên trong. Đó là error handler <em>mặc định</em> của Express, nó in stack khi <code>NODE_ENV</code> khác <code>production</code>. Có hai cách sửa, và bạn nên làm cả hai: đặt <code>NODE_ENV=production</code> trên server, và tự cài error handler của mình (bài 5.4) để không việc gì phải phụ thuộc vào chuyện biến môi trường đó có được đặt đúng hay không.</div>
-<pre><code>app.<span class="tok-fn">use</span>(express.<span class="tok-fn">json</span>({ limit: <span class="tok-string">'100kb'</span> }));           <span class="tok-comment">// luôn đặt giới hạn</span>
+<pre><code class="language-typescript">app.<span class="tok-fn">use</span>(express.<span class="tok-fn">json</span>({ limit: <span class="tok-string">'100kb'</span> }));           <span class="tok-comment">// luôn đặt giới hạn</span>
 app.<span class="tok-fn">use</span>(express.<span class="tok-fn">urlencoded</span>({ extended: <span class="tok-keyword">true</span> }));      <span class="tok-comment">// form HTML gửi lên</span></code></pre>
 <div class="callout warn">Giới hạn body mặc định là 100kb. Nâng lên <code>'50mb'</code> "cho upload chạy được" là một cuộc đổi chác tồi: từ giờ mọi request đều được phép đệm 50MB RAM của bạn trước khi bạn kịp xác thực ai cả. Tải file lên phải đi bằng đường luồng — chương 10.</div>
 
 <h4><code>express.static()</code> — phục vụ file mà không cần route</h4>
-<pre><code>app.<span class="tok-fn">use</span>(express.<span class="tok-fn">static</span>(<span class="tok-string">'public'</span>));</code></pre>
-<pre><code>curl -i /hello.txt</code></pre>
+<pre><code class="language-typescript">app.<span class="tok-fn">use</span>(express.<span class="tok-fn">static</span>(<span class="tok-string">'public'</span>));</code></pre>
+<pre><code class="language-bash">curl -i /hello.txt</code></pre>
 <div class="out">HTTP/1.1 200 OK
 Accept-Ranges: bytes
 Cache-Control: public, max-age=0
@@ -643,12 +643,12 @@ ETag: W/"25-19fa43439c9"
 Content-Type: text/plain; charset=utf-8
 Content-Length: 37</div>
 <p>Kiểu nội dung suy ra từ phần mở rộng, <code>Last-Modified</code>, <code>ETag</code>, và hỗ trợ tải theo khoảng byte — tất cả miễn phí. Giờ hỏi lại với đúng cái ETag mà server vừa đưa:</p>
-<pre><code>curl -H 'If-None-Match: W/"25-19fa43439c9"' -i /hello.txt</code></pre>
+<pre><code class="language-bash">curl -H 'If-None-Match: W/"25-19fa43439c9"' -i /hello.txt</code></pre>
 <div class="out">304 — size=0 byte</div>
 <p>Không một byte body nào chạy trên dây, vì trình duyệt đã có sẵn file. Đó là <code>express.static</code> tự cài đặt cơ chế request có điều kiện giúp bạn, và đó đúng là phần bộ máy mà server viết tay ở bài 3.5 không hề có.</p>
 
 <h3>Tự viết một cái — logger đo thời gian thật</h3>
-<pre><code><span class="tok-keyword">export function</span> <span class="tok-fn">requestLogger</span>(req, res, next) {
+<pre><code class="language-javascript"><span class="tok-keyword">export function</span> <span class="tok-fn">requestLogger</span>(req, res, next) {
   <span class="tok-keyword">const</span> t0 = process.hrtime.<span class="tok-fn">bigint</span>();
   res.<span class="tok-fn">on</span>(<span class="tok-string">'finish'</span>, () =&gt; {                          <span class="tok-comment">// EventEmitter, bài 3.4</span>
     <span class="tok-keyword">const</span> ms = Number(process.hrtime.<span class="tok-fn">bigint</span>() - t0) / <span class="tok-number">1e6</span>;
@@ -664,7 +664,7 @@ DELETE /api/v1/notes/2 204 0.7ms</div>
 <div class="callout ok"><code>req.originalUrl</code> và <code>req.url</code>: bên trong một router gắn ở <code>/api/v1/notes</code>, <code>req.url</code> là đường dẫn <em>tương đối so với chỗ gắn</em> (<code>/42</code>), còn <code>req.originalUrl</code> là đường dẫn đầy đủ mà client đã gọi. Log thì cần cái thứ hai.</div>
 
 <h3>Middleware theo phạm vi — hình dạng của mọi chốt chặn</h3>
-<pre><code><span class="tok-keyword">const</span> requireAdmin = (req, res, next) =&gt; {
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> requireAdmin = (req, res, next) =&gt; {
   <span class="tok-keyword">if</span> (req.headers[<span class="tok-string">'x-role'</span>] !== <span class="tok-string">'admin'</span>) <span class="tok-keyword">return</span> res.<span class="tok-fn">status</span>(<span class="tok-number">403</span>).<span class="tok-fn">json</span>({ error: <span class="tok-string">'Forbidden'</span> });
   <span class="tok-fn">next</span>();
 };
@@ -674,11 +674,11 @@ x-role: admin   → {"users":128}           [200]</div>
 <p>Mọi hệ thống xác thực và phân quyền ở chương 8 đều chính là hàm này, chỉ thay phép so sánh header bằng phép kiểm tra token thật. Để ý chữ <code>return</code> đứng trước <code>res.status(403)</code> — quy tắc của bài 5.1, ở đúng chỗ nó quan trọng nhất: thiếu nó thì một request đã bị từ chối vẫn chạy tiếp vào handler.</p>
 
 <h3>Cú treo</h3>
-<pre><code>app.<span class="tok-fn">use</span>(<span class="tok-string">'/hang'</span>, (req, res, next) =&gt; {
+<pre><code class="language-javascript">app.<span class="tok-fn">use</span>(<span class="tok-string">'/hang'</span>, (req, res, next) =&gt; {
   console.log(<span class="tok-string">'middleware chạy, nhưng không bao giờ gọi next()'</span>);
 });                                                  <span class="tok-comment">// ← không next(), không phản hồi</span>
 app.<span class="tok-fn">get</span>(<span class="tok-string">'/hang'</span>, (req, res) =&gt; res.json({ reached: <span class="tok-keyword">true</span> }));</code></pre>
-<pre><code>curl -m 3 /hang</code></pre>
+<pre><code class="language-bash">curl -m 3 /hang</code></pre>
 <div class="out">server: middleware chạy, nhưng không bao giờ gọi next()
 client: (im lặng suốt 3 giây)
 curl exit=28   ← Operation timed out</div>
@@ -712,7 +712,7 @@ curl exit=28   ← Operation timed out</div>
 <p class="lead">In lesson 3.5, a <code>throw</code> inside a handler killed the whole process — every visitor's connection died because one request hit a bad row. This lesson removes that failure mode permanently, with about twenty lines of code you will write once and never touch again.</p>
 
 <h3>The error handler is just middleware with four arguments</h3>
-<pre><code>app.<span class="tok-fn">use</span>((err, req, res, next) =&gt; {   <span class="tok-comment">// FOUR parameters — that is the signal</span>
+<pre><code class="language-typescript">app.<span class="tok-fn">use</span>((err, req, res, next) =&gt; {   <span class="tok-comment">// FOUR parameters — that is the signal</span>
   res.<span class="tok-fn">status</span>(<span class="tok-number">500</span>).<span class="tok-fn">json</span>({ error: <span class="tok-string">'Internal server error'</span> });
 });</code></pre>
 <div class="callout danger">Express decides a function is an error handler by counting its declared parameters, at registration time, using <code>fn.length</code>. Write <code>(err, req, res)</code> with three, and it silently becomes a normal middleware that never runs for errors. Omit the unused <code>next</code> and your error handling quietly disappears — with no warning at startup. If errors are "not reaching the handler", count the parameters first.</div>
@@ -727,7 +727,7 @@ curl exit=28   ← Operation timed out</div>
 
 <h3>Path C is the one that bites — proof</h3>
 <p>The exact same two routes, run on Express 4.22.2 and on Express 5.2.1:</p>
-<pre><code>app.<span class="tok-fn">get</span>(<span class="tok-string">'/sync-throw'</span>, (req, res) =&gt; {
+<pre><code class="language-typescript">app.<span class="tok-fn">get</span>(<span class="tok-string">'/sync-throw'</span>, (req, res) =&gt; {
   <span class="tok-keyword">throw new</span> Error(<span class="tok-string">'blew up in a sync handler'</span>);
 });
 
@@ -752,21 +752,21 @@ GET /async-throw  → {"error":{"code":"INTERNAL","message":"…"}}   [500]</div
 
 <h3>An error class that carries an HTTP status</h3>
 <p>A raw <code>Error</code> has only a message, so the handler cannot tell "note not found" (404, the client's problem) from "database is down" (500, our problem). Give the error the two facts the HTTP layer needs:</p>
-<pre><code><span class="tok-keyword">export class</span> AppError <span class="tok-keyword">extends</span> Error {
+<pre><code class="language-bash"><span class="tok-keyword">export class</span> AppError <span class="tok-keyword">extends</span> Error {
   <span class="tok-fn">constructor</span>(status, code, message) {
     <span class="tok-fn">super</span>(message);
     <span class="tok-keyword">this</span>.status = status;   <span class="tok-comment">// HTTP status</span>
     <span class="tok-keyword">this</span>.code = code;       <span class="tok-comment">// stable machine-readable string</span>
   }
 }</code></pre>
-<pre><code><span class="tok-keyword">throw new</span> <span class="tok-fn">AppError</span>(<span class="tok-number">404</span>, <span class="tok-string">'NOTE_NOT_FOUND'</span>, <span class="tok-string">'Note 42 does not exist'</span>);
+<pre><code class="language-typescript"><span class="tok-keyword">throw new</span> <span class="tok-fn">AppError</span>(<span class="tok-number">404</span>, <span class="tok-string">'NOTE_NOT_FOUND'</span>, <span class="tok-string">'Note 42 does not exist'</span>);
 <span class="tok-keyword">throw new</span> <span class="tok-fn">AppError</span>(<span class="tok-number">422</span>, <span class="tok-string">'VALIDATION_FAILED'</span>, <span class="tok-string">'title is required'</span>);</code></pre>
 <div class="out">GET /app-error   → {"error":{"code":"NOTE_NOT_FOUND","message":"Không tìm thấy ghi chú"}}   [404]
 GET /next-error  → {"error":{"code":"VALIDATION_FAILED","message":"title không được để trống"}} [422]</div>
 <div class="callout ok">Why both a <code>status</code> and a <code>code</code>? The status is for HTTP and for proxies. The <code>code</code> is for your frontend: it can branch on <code>NOTE_NOT_FOUND</code> forever, while the human-readable message is free to change, get translated, or get rewritten by a designer. Never make a client parse the message string.</div>
 
 <h3>The full handler</h3>
-<pre><code><span class="tok-keyword">export function</span> <span class="tok-fn">errorHandler</span>(err, req, res, next) {
+<pre><code class="language-typescript"><span class="tok-keyword">export function</span> <span class="tok-fn">errorHandler</span>(err, req, res, next) {
   <span class="tok-keyword">const</span> status = err.status || <span class="tok-number">500</span>;
 
   <span class="tok-comment">// 5xx = our bug: log the whole stack, we need it</span>
@@ -788,7 +788,7 @@ GET /next-error  → {"error":{"code":"VALIDATION_FAILED","message":"title khôn
 </div>
 
 <h3>The JSON 404 — and why order matters again</h3>
-<pre><code><span class="tok-comment">// AFTER every route, BEFORE the error handler</span>
+<pre><code class="language-typescript"><span class="tok-comment">// AFTER every route, BEFORE the error handler</span>
 app.<span class="tok-fn">use</span>((req, res) =&gt; {
   res.<span class="tok-fn">status</span>(<span class="tok-number">404</span>).<span class="tok-fn">json</span>({
     error: { code: <span class="tok-string">'NOT_FOUND'</span>, message: \`Cannot \${req.method} \${req.path}\` },
@@ -796,13 +796,13 @@ app.<span class="tok-fn">use</span>((req, res) =&gt; {
 });
 
 app.<span class="tok-fn">use</span>(errorHandler);   <span class="tok-comment">// LAST</span></code></pre>
-<pre><code>curl /api/v1/khong-co</code></pre>
+<pre><code class="language-bash">curl /api/v1/khong-co</code></pre>
 <div class="out">{"error":{"code":"NOT_FOUND","message":"Cannot GET /api/v1/khong-co"}}   [404]</div>
 <div class="pitfall">Put these two above your routers and every request becomes a 404, because <code>app.use</code> with no path matches everything. It is the most common way to break a working app while "tidying up" the file — and the symptom (every endpoint suddenly 404s, including ones you did not touch) sends people hunting in completely the wrong place.</div>
 
 <h3>The two errors that still kill the process</h3>
 <p>Express catches errors <em>inside a request</em>. Two categories live outside any request, and both end the process by default in modern Node:</p>
-<pre><code>process.<span class="tok-fn">on</span>(<span class="tok-string">'unhandledRejection'</span>, (reason) =&gt; {
+<pre><code class="language-typescript">process.<span class="tok-fn">on</span>(<span class="tok-string">'unhandledRejection'</span>, (reason) =&gt; {
   console.error(<span class="tok-string">'unhandledRejection'</span>, reason);
   process.<span class="tok-fn">exit</span>(<span class="tok-number">1</span>);        <span class="tok-comment">// log, then let the supervisor restart us</span>
 });
@@ -814,7 +814,7 @@ process.<span class="tok-fn">on</span>(<span class="tok-string">'uncaughtExcepti
 
 <h3>Where validation errors come from</h3>
 <p>Most 4xx responses in a real API are not thrown by you — they come from a library. The pattern is always the same: catch a known error type, convert it to your shape.</p>
-<pre><code>app.<span class="tok-fn">use</span>((err, req, res, next) =&gt; {
+<pre><code class="language-typescript">app.<span class="tok-fn">use</span>((err, req, res, next) =&gt; {
   <span class="tok-comment">// body-parser's malformed-JSON error</span>
   <span class="tok-keyword">if</span> (err.type === <span class="tok-string">'entity.parse.failed'</span>)
     err = <span class="tok-keyword">new</span> <span class="tok-fn">AppError</span>(<span class="tok-number">400</span>, <span class="tok-string">'INVALID_JSON'</span>, <span class="tok-string">'Request body is not valid JSON'</span>);
@@ -837,7 +837,7 @@ process.<span class="tok-fn">on</span>(<span class="tok-string">'uncaughtExcepti
 <p class="lead">Ở bài 3.5, một câu <code>throw</code> trong handler giết cả tiến trình — kết nối của mọi người dùng chết theo chỉ vì một request đụng phải một bản ghi hỏng. Bài này xoá vĩnh viễn kiểu hỏng đó, bằng khoảng hai mươi dòng code bạn viết một lần rồi không bao giờ đụng lại.</p>
 
 <h3>Error handler chỉ là middleware có bốn tham số</h3>
-<pre><code>app.<span class="tok-fn">use</span>((err, req, res, next) =&gt; {   <span class="tok-comment">// BỐN tham số — đó chính là tín hiệu</span>
+<pre><code class="language-typescript">app.<span class="tok-fn">use</span>((err, req, res, next) =&gt; {   <span class="tok-comment">// BỐN tham số — đó chính là tín hiệu</span>
   res.<span class="tok-fn">status</span>(<span class="tok-number">500</span>).<span class="tok-fn">json</span>({ error: <span class="tok-string">'Lỗi hệ thống'</span> });
 });</code></pre>
 <div class="callout danger">Express xác định một hàm có phải error handler hay không bằng cách <strong>đếm số tham số khai báo</strong>, ngay lúc đăng ký, qua <code>fn.length</code>. Viết <code>(err, req, res)</code> ba tham số thì nó lặng lẽ trở thành middleware thường và không bao giờ chạy cho lỗi. Bỏ cái <code>next</code> không dùng đi là toàn bộ phần xử lý lỗi của bạn biến mất — mà không có cảnh báo nào lúc khởi động. Nếu lỗi "không tới được handler", việc đầu tiên là đếm tham số.</div>
@@ -852,7 +852,7 @@ process.<span class="tok-fn">on</span>(<span class="tok-string">'uncaughtExcepti
 
 <h3>Đường C mới là đường cắn người — bằng chứng</h3>
 <p>Y hệt hai route đó, chạy trên Express 4.22.2 và trên Express 5.2.1:</p>
-<pre><code>app.<span class="tok-fn">get</span>(<span class="tok-string">'/sync-throw'</span>, (req, res) =&gt; {
+<pre><code class="language-typescript">app.<span class="tok-fn">get</span>(<span class="tok-string">'/sync-throw'</span>, (req, res) =&gt; {
   <span class="tok-keyword">throw new</span> Error(<span class="tok-string">'nổ ở handler đồng bộ'</span>);
 });
 
@@ -877,21 +877,21 @@ GET /async-throw  → {"error":{"code":"INTERNAL","message":"…"}}   [500]</div
 
 <h3>Một lớp lỗi mang theo mã HTTP</h3>
 <p>Một <code>Error</code> trần chỉ có message, nên handler không thể phân biệt "không tìm thấy ghi chú" (404, lỗi của client) với "cơ sở dữ liệu sập" (500, lỗi của ta). Hãy gắn vào lỗi đúng hai dữ kiện mà tầng HTTP cần:</p>
-<pre><code><span class="tok-keyword">export class</span> AppError <span class="tok-keyword">extends</span> Error {
+<pre><code class="language-bash"><span class="tok-keyword">export class</span> AppError <span class="tok-keyword">extends</span> Error {
   <span class="tok-fn">constructor</span>(status, code, message) {
     <span class="tok-fn">super</span>(message);
     <span class="tok-keyword">this</span>.status = status;   <span class="tok-comment">// mã trạng thái HTTP</span>
     <span class="tok-keyword">this</span>.code = code;       <span class="tok-comment">// chuỗi ổn định cho máy đọc</span>
   }
 }</code></pre>
-<pre><code><span class="tok-keyword">throw new</span> <span class="tok-fn">AppError</span>(<span class="tok-number">404</span>, <span class="tok-string">'NOTE_NOT_FOUND'</span>, <span class="tok-string">'Không tìm thấy ghi chú'</span>);
+<pre><code class="language-typescript"><span class="tok-keyword">throw new</span> <span class="tok-fn">AppError</span>(<span class="tok-number">404</span>, <span class="tok-string">'NOTE_NOT_FOUND'</span>, <span class="tok-string">'Không tìm thấy ghi chú'</span>);
 <span class="tok-keyword">throw new</span> <span class="tok-fn">AppError</span>(<span class="tok-number">422</span>, <span class="tok-string">'VALIDATION_FAILED'</span>, <span class="tok-string">'title không được để trống'</span>);</code></pre>
 <div class="out">GET /app-error   → {"error":{"code":"NOTE_NOT_FOUND","message":"Không tìm thấy ghi chú"}}   [404]
 GET /next-error  → {"error":{"code":"VALIDATION_FAILED","message":"title không được để trống"}} [422]</div>
 <div class="callout ok">Vì sao cần cả <code>status</code> lẫn <code>code</code>? Mã trạng thái dành cho HTTP và cho các proxy. Còn <code>code</code> dành cho frontend của bạn: nó có thể rẽ nhánh theo <code>NOTE_NOT_FOUND</code> mãi mãi, trong khi câu chữ dành cho người đọc thì được tự do thay đổi, được dịch, hoặc bị người thiết kế viết lại. Đừng bao giờ bắt client phải bóc tách chuỗi message.</div>
 
 <h3>Bản handler đầy đủ</h3>
-<pre><code><span class="tok-keyword">export function</span> <span class="tok-fn">errorHandler</span>(err, req, res, next) {
+<pre><code class="language-typescript"><span class="tok-keyword">export function</span> <span class="tok-fn">errorHandler</span>(err, req, res, next) {
   <span class="tok-keyword">const</span> status = err.status || <span class="tok-number">500</span>;
 
   <span class="tok-comment">// 5xx = bug của mình: ghi cả stack, ta cần nó</span>
@@ -913,7 +913,7 @@ GET /next-error  → {"error":{"code":"VALIDATION_FAILED","message":"title khôn
 </div>
 
 <h3>404 dạng JSON — và một lần nữa, thứ tự quyết định</h3>
-<pre><code><span class="tok-comment">// SAU mọi route, TRƯỚC error handler</span>
+<pre><code class="language-typescript"><span class="tok-comment">// SAU mọi route, TRƯỚC error handler</span>
 app.<span class="tok-fn">use</span>((req, res) =&gt; {
   res.<span class="tok-fn">status</span>(<span class="tok-number">404</span>).<span class="tok-fn">json</span>({
     error: { code: <span class="tok-string">'NOT_FOUND'</span>, message: \`Cannot \${req.method} \${req.path}\` },
@@ -921,13 +921,13 @@ app.<span class="tok-fn">use</span>((req, res) =&gt; {
 });
 
 app.<span class="tok-fn">use</span>(errorHandler);   <span class="tok-comment">// CUỐI CÙNG</span></code></pre>
-<pre><code>curl /api/v1/khong-co</code></pre>
+<pre><code class="language-bash">curl /api/v1/khong-co</code></pre>
 <div class="out">{"error":{"code":"NOT_FOUND","message":"Cannot GET /api/v1/khong-co"}}   [404]</div>
 <div class="pitfall">Đặt hai thứ này lên trên các router thì mọi request đều thành 404, vì <code>app.use</code> không kèm đường dẫn sẽ khớp tất cả. Đây là cách phổ biến nhất để làm hỏng một ứng dụng đang chạy ngon trong lúc "dọn dẹp cho gọn file" — và triệu chứng của nó (mọi endpoint bỗng dưng 404, kể cả những cái bạn không hề đụng vào) đẩy người ta đi tìm nguyên nhân ở nơi hoàn toàn sai.</div>
 
 <h3>Hai loại lỗi vẫn giết được tiến trình</h3>
 <p>Express bắt lỗi <em>bên trong một request</em>. Có hai loại nằm ngoài mọi request, và trong Node hiện đại thì mặc định cả hai đều kết liễu tiến trình:</p>
-<pre><code>process.<span class="tok-fn">on</span>(<span class="tok-string">'unhandledRejection'</span>, (reason) =&gt; {
+<pre><code class="language-typescript">process.<span class="tok-fn">on</span>(<span class="tok-string">'unhandledRejection'</span>, (reason) =&gt; {
   console.error(<span class="tok-string">'unhandledRejection'</span>, reason);
   process.<span class="tok-fn">exit</span>(<span class="tok-number">1</span>);        <span class="tok-comment">// ghi log, rồi để bộ giám sát khởi động lại</span>
 });
@@ -939,7 +939,7 @@ process.<span class="tok-fn">on</span>(<span class="tok-string">'uncaughtExcepti
 
 <h3>Lỗi kiểm tra dữ liệu đến từ đâu</h3>
 <p>Phần lớn phản hồi 4xx trong một API thật không do bạn ném ra — chúng đến từ thư viện. Khuôn mẫu luôn giống nhau: bắt một loại lỗi đã biết, đổi nó sang hình dạng của mình.</p>
-<pre><code>app.<span class="tok-fn">use</span>((err, req, res, next) =&gt; {
+<pre><code class="language-typescript">app.<span class="tok-fn">use</span>((err, req, res, next) =&gt; {
   <span class="tok-comment">// lỗi JSON hỏng của body-parser</span>
   <span class="tok-keyword">if</span> (err.type === <span class="tok-string">'entity.parse.failed'</span>)
     err = <span class="tok-keyword">new</span> <span class="tok-fn">AppError</span>(<span class="tok-number">400</span>, <span class="tok-string">'INVALID_JSON'</span>, <span class="tok-string">'Body của request không phải JSON hợp lệ'</span>);
@@ -990,7 +990,7 @@ process.<span class="tok-fn">on</span>(<span class="tok-string">'uncaughtExcepti
 <div class="callout ok">The one rule that keeps this honest: <strong>a service file never imports <code>req</code> or <code>res</code></strong>. If a service needs the user id, it takes a <code>userId</code> argument. That single restriction is what lets you call the same function from a route, a background job (chapter 13) and a test (chapter 14) without a fake HTTP request.</div>
 
 <h3>app.mjs — the wiring, in order</h3>
-<pre><code><span class="tok-keyword">import</span> express <span class="tok-keyword">from</span> <span class="tok-string">'express'</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> express <span class="tok-keyword">from</span> <span class="tok-string">'express'</span>;
 <span class="tok-keyword">import</span> notesRouter <span class="tok-keyword">from</span> <span class="tok-string">'./routes/notes.routes.mjs'</span>;
 <span class="tok-keyword">import</span> { notFound, errorHandler } <span class="tok-keyword">from</span> <span class="tok-string">'./middleware/errors.mjs'</span>;
 <span class="tok-keyword">import</span> { requestLogger } <span class="tok-keyword">from</span> <span class="tok-string">'./middleware/logger.mjs'</span>;
@@ -1011,7 +1011,7 @@ process.<span class="tok-fn">on</span>(<span class="tok-string">'uncaughtExcepti
 <div class="callout"><strong>Why <code>createApp()</code> returns the app instead of listening.</strong> A function that builds an app can be called by a test with no port, no socket and no cleanup — chapter 14 does exactly that. It also means you can build two apps in one process. Any file that calls <code>app.listen()</code> at import time is a file you cannot test without starting a server.</div>
 
 <h3>The router — HTTP, and nothing else</h3>
-<pre><code><span class="tok-keyword">const</span> router = <span class="tok-fn">Router</span>();
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> router = <span class="tok-fn">Router</span>();
 
 router.<span class="tok-fn">get</span>(<span class="tok-string">'/'</span>, (req, res) =&gt; {
   <span class="tok-keyword">const</span> page  = Number(req.query.page ?? <span class="tok-number">1</span>);
@@ -1043,7 +1043,7 @@ router.<span class="tok-fn">delete</span>(<span class="tok-string">'/:id'</span>
 
 <h3>Running the whole thing</h3>
 <p>Every response below is real output from this exact code, captured with <code>curl</code>. The server log line is printed by the logger middleware.</p>
-<pre><code>curl -i -X POST /api/v1/notes -H 'Content-Type: application/json' \\
+<pre><code class="language-bash">curl -i -X POST /api/v1/notes -H 'Content-Type: application/json' \\
      -d '{"title":"Learning Express","body":"chapter 5"}'</code></pre>
 <div class="out">HTTP/1.1 201 Created
 Location: /api/v1/notes/1
@@ -1053,19 +1053,19 @@ Content-Type: application/json; charset=utf-8
 
 server log: POST /api/v1/notes 201 4.9ms</div>
 <p>201 with a <code>Location</code> header pointing at the created resource — that is what "created" means in HTTP, and chapter 6 will make a habit of it. Now the same endpoint with a bad body:</p>
-<pre><code>curl -X POST /api/v1/notes -H 'Content-Type: application/json' -d '{"body":"no title"}'</code></pre>
+<pre><code class="language-bash">curl -X POST /api/v1/notes -H 'Content-Type: application/json' -d '{"body":"no title"}'</code></pre>
 <div class="out">{"error":{"code":"VALIDATION_FAILED","message":"title is required"}}   [422]
 server log: POST /api/v1/notes 422 0.9ms</div>
-<pre><code>curl "/api/v1/notes?page=1&amp;limit=10"</code></pre>
+<pre><code class="language-bash">curl "/api/v1/notes?page=1&amp;limit=10"</code></pre>
 <div class="out">{"items":[
    {"id":1,"title":"Learning Express","body":"chapter 5","createdAt":"…"},
    {"id":2,"title":"Second note","body":"","createdAt":"…"}
  ],"page":1,"limit":10,"total":2}</div>
-<pre><code>curl "/api/v1/notes?q=express"</code></pre>
+<pre><code class="language-bash">curl "/api/v1/notes?q=express"</code></pre>
 <div class="out">{"items":[{"id":1,"title":"Learning Express",…}],"page":1,"limit":10,"total":1}</div>
-<pre><code>curl /api/v1/notes/999</code></pre>
+<pre><code class="language-bash">curl /api/v1/notes/999</code></pre>
 <div class="out">{"error":{"code":"NOTE_NOT_FOUND","message":"Note 999 does not exist"}}   [404]</div>
-<pre><code>curl -X PATCH /api/v1/notes/1 -H 'Content-Type: application/json' -d '{"body":"edited"}'
+<pre><code class="language-bash">curl -X PATCH /api/v1/notes/1 -H 'Content-Type: application/json' -d '{"body":"edited"}'
 curl -X DELETE /api/v1/notes/2
 curl /api/v1/khong-co</code></pre>
 <div class="out">PATCH  → {"id":1,"title":"Learning Express","body":"edited",…}          [200]
@@ -1075,7 +1075,7 @@ DELETE → (empty body)                                                   [204]
 
 <h3>Shutting down without dropping requests</h3>
 <p>Every deploy stops the old process. If you stop it wrongly, the requests in flight at that moment die with it — for a user that is a spinner that never resolves, or worse, a payment whose response never arrived.</p>
-<pre><code><span class="tok-keyword">const</span> server = <span class="tok-fn">createApp</span>().<span class="tok-fn">listen</span>(PORT);
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> server = <span class="tok-fn">createApp</span>().<span class="tok-fn">listen</span>(PORT);
 
 <span class="tok-keyword">function</span> <span class="tok-fn">shutdown</span>(signal) {
   console.log(\`\${signal}: no longer accepting connections, draining…\`);
@@ -1136,7 +1136,7 @@ process: exited</div>
 <div class="callout ok">Một quy tắc duy nhất giữ cho cấu trúc này trung thực: <strong>file service không bao giờ đụng tới <code>req</code> hay <code>res</code></strong>. Nếu service cần id người dùng, nó nhận một tham số <code>userId</code>. Đúng một ràng buộc đó cho phép bạn gọi cùng một hàm từ route, từ một tác vụ nền (chương 13) và từ một bài test (chương 14) mà không cần dựng request HTTP giả.</div>
 
 <h3>app.mjs — phần lắp ráp, theo đúng thứ tự</h3>
-<pre><code><span class="tok-keyword">import</span> express <span class="tok-keyword">from</span> <span class="tok-string">'express'</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> express <span class="tok-keyword">from</span> <span class="tok-string">'express'</span>;
 <span class="tok-keyword">import</span> notesRouter <span class="tok-keyword">from</span> <span class="tok-string">'./routes/notes.routes.mjs'</span>;
 <span class="tok-keyword">import</span> { notFound, errorHandler } <span class="tok-keyword">from</span> <span class="tok-string">'./middleware/errors.mjs'</span>;
 <span class="tok-keyword">import</span> { requestLogger } <span class="tok-keyword">from</span> <span class="tok-string">'./middleware/logger.mjs'</span>;
@@ -1157,7 +1157,7 @@ process: exited</div>
 <div class="callout"><strong>Vì sao <code>createApp()</code> trả về app thay vì tự listen.</strong> Một hàm dựng app có thể được bài test gọi mà không cần cổng, không cần socket, không cần dọn dẹp — chương 14 làm đúng như vậy. Nó cũng cho phép bạn dựng hai app trong cùng một tiến trình. Còn file nào gọi <code>app.listen()</code> ngay lúc import thì đó là file bạn không thể test nếu không khởi động cả server.</div>
 
 <h3>Router — chỉ HTTP, không gì khác</h3>
-<pre><code><span class="tok-keyword">const</span> router = <span class="tok-fn">Router</span>();
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> router = <span class="tok-fn">Router</span>();
 
 router.<span class="tok-fn">get</span>(<span class="tok-string">'/'</span>, (req, res) =&gt; {
   <span class="tok-keyword">const</span> page  = Number(req.query.page ?? <span class="tok-number">1</span>);
@@ -1189,7 +1189,7 @@ router.<span class="tok-fn">delete</span>(<span class="tok-string">'/:id'</span>
 
 <h3>Chạy thử toàn bộ</h3>
 <p>Mọi phản hồi dưới đây là output thật của đúng đoạn code này, lấy bằng <code>curl</code>. Dòng log của server do middleware logger in ra.</p>
-<pre><code>curl -i -X POST /api/v1/notes -H 'Content-Type: application/json' \\
+<pre><code class="language-bash">curl -i -X POST /api/v1/notes -H 'Content-Type: application/json' \\
      -d '{"title":"Học Express","body":"chương 5"}'</code></pre>
 <div class="out">HTTP/1.1 201 Created
 Location: /api/v1/notes/1
@@ -1199,19 +1199,19 @@ Content-Type: application/json; charset=utf-8
 
 log server: POST /api/v1/notes 201 4.9ms</div>
 <p>201 kèm header <code>Location</code> trỏ tới tài nguyên vừa tạo — đó mới là ý nghĩa của chữ "created" trong HTTP, và chương 6 sẽ biến việc này thành thói quen. Giờ vẫn endpoint đó nhưng body sai:</p>
-<pre><code>curl -X POST /api/v1/notes -H 'Content-Type: application/json' -d '{"body":"không có tiêu đề"}'</code></pre>
+<pre><code class="language-bash">curl -X POST /api/v1/notes -H 'Content-Type: application/json' -d '{"body":"không có tiêu đề"}'</code></pre>
 <div class="out">{"error":{"code":"VALIDATION_FAILED","message":"title là bắt buộc"}}   [422]
 log server: POST /api/v1/notes 422 0.9ms</div>
-<pre><code>curl "/api/v1/notes?page=1&amp;limit=10"</code></pre>
+<pre><code class="language-bash">curl "/api/v1/notes?page=1&amp;limit=10"</code></pre>
 <div class="out">{"items":[
    {"id":1,"title":"Học Express","body":"chương 5","createdAt":"…"},
    {"id":2,"title":"Ghi chú thứ hai","body":"","createdAt":"…"}
  ],"page":1,"limit":10,"total":2}</div>
-<pre><code>curl "/api/v1/notes?q=express"</code></pre>
+<pre><code class="language-bash">curl "/api/v1/notes?q=express"</code></pre>
 <div class="out">{"items":[{"id":1,"title":"Học Express",…}],"page":1,"limit":10,"total":1}</div>
-<pre><code>curl /api/v1/notes/999</code></pre>
+<pre><code class="language-bash">curl /api/v1/notes/999</code></pre>
 <div class="out">{"error":{"code":"NOTE_NOT_FOUND","message":"Note 999 does not exist"}}   [404]</div>
-<pre><code>curl -X PATCH /api/v1/notes/1 -H 'Content-Type: application/json' -d '{"body":"đã sửa"}'
+<pre><code class="language-bash">curl -X PATCH /api/v1/notes/1 -H 'Content-Type: application/json' -d '{"body":"đã sửa"}'
 curl -X DELETE /api/v1/notes/2
 curl /api/v1/khong-co</code></pre>
 <div class="out">PATCH  → {"id":1,"title":"Học Express","body":"đã sửa",…}               [200]
@@ -1221,7 +1221,7 @@ DELETE → (body rỗng)                                                    [204
 
 <h3>Tắt server mà không đánh rơi request</h3>
 <p>Mỗi lần deploy đều dừng tiến trình cũ. Nếu bạn dừng sai cách, những request đang dở ngay lúc đó sẽ chết theo — với người dùng đó là cái vòng xoay quay mãi không dứt, hoặc tệ hơn, một giao dịch thanh toán không bao giờ nhận được phản hồi.</p>
-<pre><code><span class="tok-keyword">const</span> server = <span class="tok-fn">createApp</span>().<span class="tok-fn">listen</span>(PORT);
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> server = <span class="tok-fn">createApp</span>().<span class="tok-fn">listen</span>(PORT);
 
 <span class="tok-keyword">function</span> <span class="tok-fn">shutdown</span>(signal) {
   console.log(\`\${signal}: ngừng nhận kết nối mới, đang xả nốt…\`);

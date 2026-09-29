@@ -180,7 +180,7 @@ const c2 = doc('edb201-2-1-erd-design', '2.1 — Database design & ERD for appli
 <li><strong>N-N</strong> — many Orders contain many Products, and one Product appears on many Orders — resolved with a <strong>junction table</strong> (e.g. OrderDetail).</li>
 </ul>
 <h3>Mapping ERD to tables</h3>
-<pre><code>Customer (CustomerID PK, Name, Phone)
+<pre><code class="language-sql">Customer (CustomerID PK, Name, Phone)
 Order    (OrderID PK, OrderDate, CustomerID FK -&gt; Customer.CustomerID)
 Product  (ProductID PK, Name, Price)
 OrderDetail (OrderID FK, ProductID FK, Quantity, UnitPrice,
@@ -205,7 +205,7 @@ OrderDetail (OrderID FK, ProductID FK, Quantity, UnitPrice,
 <li><strong>N-N</strong> — nhiều Đơn hàng chứa nhiều Sản phẩm, một Sản phẩm xuất hiện ở nhiều Đơn hàng — giải quyết bằng <strong>bảng trung gian</strong> (vd OrderDetail).</li>
 </ul>
 <h3>Ánh xạ ERD sang bảng</h3>
-<pre><code>Customer (CustomerID PK, Name, Phone)
+<pre><code class="language-sql">Customer (CustomerID PK, Name, Phone)
 Order    (OrderID PK, OrderDate, CustomerID FK -&gt; Customer.CustomerID)
 Product  (ProductID PK, Name, Price)
 OrderDetail (OrderID FK, ProductID FK, Quantity, UnitPrice,
@@ -233,14 +233,14 @@ const c3 = doc('edb201-3-1-sql-select-join', '3.1 — SQL querying: SELECT, WHER
     `<span class="eyebrow">EDB201 · Chapter 3 · Lesson 3.1</span>
 <h2>SQL querying: SELECT, WHERE, JOIN</h2>
 <h3>The basic shape</h3>
-<pre><code>SELECT column1, column2
+<pre><code class="language-sql">SELECT column1, column2
 FROM   table_name
 WHERE  condition
 ORDER BY column1;
 </code></pre>
 <p><strong>SELECT</strong> picks columns, <strong>FROM</strong> picks the table, <strong>WHERE</strong> filters rows, <strong>ORDER BY</strong> sorts the result. Use <code>SELECT *</code> only while exploring — name columns explicitly in real application code.</p>
 <h3>Filtering with WHERE</h3>
-<pre><code>SELECT Name, Price FROM Product
+<pre><code class="language-sql">SELECT Name, Price FROM Product
 WHERE Price &gt; 100000 AND Price &lt; 500000;
 
 SELECT * FROM Customer WHERE Phone LIKE '090%';
@@ -251,7 +251,7 @@ SELECT * FROM Order WHERE OrderDate BETWEEN '2026-01-01' AND '2026-01-31';
 </code></pre>
 <p>Comparison operators (<code>=</code>, <code>&lt;&gt;</code>, <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code>) combine with <code>AND</code>/<code>OR</code>/<code>NOT</code>. <code>LIKE</code> pattern-matches text (<code>%</code> = any characters), <code>IN</code> checks a list, <code>BETWEEN</code> checks a range.</p>
 <h3>Joining tables</h3>
-<pre><code>-- INNER JOIN: only rows that match in BOTH tables
+<pre><code class="language-sql">-- INNER JOIN: only rows that match in BOTH tables
 SELECT o.OrderID, c.Name
 FROM Order o
 INNER JOIN Customer c ON o.CustomerID = c.CustomerID;
@@ -263,7 +263,7 @@ LEFT JOIN Order o ON o.CustomerID = c.CustomerID;
 </code></pre>
 <p><strong>INNER JOIN</strong> keeps only rows with a match on both sides. <strong>LEFT JOIN</strong> keeps every row from the left table, filling unmatched right-side columns with <code>NULL</code> — useful for "customers who never ordered" reports.</p>
 <h3>Aggregating with GROUP BY</h3>
-<pre><code>SELECT CustomerID, COUNT(*) AS OrderCount, SUM(TotalAmount) AS Revenue
+<pre><code class="language-sql">SELECT CustomerID, COUNT(*) AS OrderCount, SUM(TotalAmount) AS Revenue
 FROM Order
 GROUP BY CustomerID
 HAVING COUNT(*) &gt; 3;
@@ -273,14 +273,14 @@ HAVING COUNT(*) &gt; 3;
     `<span class="eyebrow">EDB201 · Chương 3 · Bài 3.1</span>
 <h2>SQL truy vấn: SELECT, WHERE, JOIN</h2>
 <h3>Cấu trúc cơ bản</h3>
-<pre><code>SELECT column1, column2
+<pre><code class="language-sql">SELECT column1, column2
 FROM   table_name
 WHERE  condition
 ORDER BY column1;
 </code></pre>
 <p><strong>SELECT</strong> chọn cột, <strong>FROM</strong> chọn bảng, <strong>WHERE</strong> lọc dòng, <strong>ORDER BY</strong> sắp xếp kết quả. Chỉ dùng <code>SELECT *</code> khi khám phá dữ liệu — trong mã ứng dụng thật nên nêu tên cột rõ ràng.</p>
 <h3>Lọc với WHERE</h3>
-<pre><code>SELECT Name, Price FROM Product
+<pre><code class="language-sql">SELECT Name, Price FROM Product
 WHERE Price &gt; 100000 AND Price &lt; 500000;
 
 SELECT * FROM Customer WHERE Phone LIKE '090%';
@@ -291,7 +291,7 @@ SELECT * FROM Order WHERE OrderDate BETWEEN '2026-01-01' AND '2026-01-31';
 </code></pre>
 <p>Toán tử so sánh (<code>=</code>, <code>&lt;&gt;</code>, <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code>) kết hợp với <code>AND</code>/<code>OR</code>/<code>NOT</code>. <code>LIKE</code> khớp mẫu chuỗi (<code>%</code> = mọi ký tự), <code>IN</code> kiểm tra trong danh sách, <code>BETWEEN</code> kiểm tra trong khoảng.</p>
 <h3>Kết bảng (JOIN)</h3>
-<pre><code>-- INNER JOIN: chỉ giữ dòng khớp ở CẢ HAI bảng
+<pre><code class="language-sql">-- INNER JOIN: chỉ giữ dòng khớp ở CẢ HAI bảng
 SELECT o.OrderID, c.Name
 FROM Order o
 INNER JOIN Customer c ON o.CustomerID = c.CustomerID;
@@ -303,7 +303,7 @@ LEFT JOIN Order o ON o.CustomerID = c.CustomerID;
 </code></pre>
 <p><strong>INNER JOIN</strong> chỉ giữ dòng khớp ở cả hai bên. <strong>LEFT JOIN</strong> giữ mọi dòng của bảng trái, điền <code>NULL</code> vào cột bên phải nếu không khớp — hữu ích cho báo cáo "khách hàng chưa từng đặt hàng".</p>
 <h3>Tổng hợp với GROUP BY</h3>
-<pre><code>SELECT CustomerID, COUNT(*) AS OrderCount, SUM(TotalAmount) AS Revenue
+<pre><code class="language-sql">SELECT CustomerID, COUNT(*) AS OrderCount, SUM(TotalAmount) AS Revenue
 FROM Order
 GROUP BY CustomerID
 HAVING COUNT(*) &gt; 3;
@@ -324,7 +324,7 @@ const c4 = doc('edb201-4-1-dml-transaction', '4.1 — SQL data manipulation & tr
     `<span class="eyebrow">EDB201 · Chapter 4 · Lesson 4.1</span>
 <h2>SQL data manipulation &amp; transactions</h2>
 <h3>Adding, changing, removing rows</h3>
-<pre><code>INSERT INTO Customer (Name, Phone)
+<pre><code class="language-sql">INSERT INTO Customer (Name, Phone)
 VALUES ('Nguyen Van A', '0901234567');
 
 UPDATE Product
@@ -337,7 +337,7 @@ WHERE OrderDate &lt; '2020-01-01';
 <p><strong>INSERT INTO</strong> adds new rows. <strong>UPDATE</strong> changes existing rows matched by <code>WHERE</code>. <strong>DELETE</strong> removes rows matched by <code>WHERE</code>.</p>
 <div class="callout"><span class="badge">⚠️ The most expensive typo in SQL</span> Running <code>UPDATE Product SET Price = Price * 1.1;</code> or <code>DELETE FROM Order;</code> WITHOUT a <code>WHERE</code> clause applies the change to EVERY row in the table. Always write and check the <code>WHERE</code> first — test it as a <code>SELECT</code> before turning it into an <code>UPDATE</code>/<code>DELETE</code>.</div>
 <h3>Transactions — all or nothing</h3>
-<pre><code>BEGIN TRANSACTION;
+<pre><code class="language-sql">BEGIN TRANSACTION;
 
 UPDATE Account SET Balance = Balance - 500000 WHERE AccountID = 1;
 UPDATE Account SET Balance = Balance + 500000 WHERE AccountID = 2;
@@ -356,7 +356,7 @@ COMMIT;   -- both updates become permanent together
     `<span class="eyebrow">EDB201 · Chương 4 · Bài 4.1</span>
 <h2>SQL thao tác dữ liệu &amp; transaction</h2>
 <h3>Thêm, sửa, xoá dòng</h3>
-<pre><code>INSERT INTO Customer (Name, Phone)
+<pre><code class="language-sql">INSERT INTO Customer (Name, Phone)
 VALUES ('Nguyen Van A', '0901234567');
 
 UPDATE Product
@@ -369,7 +369,7 @@ WHERE OrderDate &lt; '2020-01-01';
 <p><strong>INSERT INTO</strong> thêm dòng mới. <strong>UPDATE</strong> sửa các dòng khớp <code>WHERE</code>. <strong>DELETE</strong> xoá các dòng khớp <code>WHERE</code>.</p>
 <div class="callout"><span class="badge">⚠️ Lỗi đánh máy đắt giá nhất trong SQL</span> Chạy <code>UPDATE Product SET Price = Price * 1.1;</code> hoặc <code>DELETE FROM Order;</code> KHÔNG có <code>WHERE</code> sẽ áp dụng lên TẤT CẢ dòng trong bảng. Luôn viết và kiểm tra <code>WHERE</code> trước — thử nó dưới dạng <code>SELECT</code> rồi mới chuyển thành <code>UPDATE</code>/<code>DELETE</code>.</div>
 <h3>Transaction — làm hết hoặc không làm gì</h3>
-<pre><code>BEGIN TRANSACTION;
+<pre><code class="language-sql">BEGIN TRANSACTION;
 
 UPDATE Account SET Balance = Balance - 500000 WHERE AccountID = 1;
 UPDATE Account SET Balance = Balance + 500000 WHERE AccountID = 2;
@@ -399,7 +399,7 @@ const c5 = doc('edb201-5-1-view-procedure-function', '5.1 — Views, stored proc
     `<span class="eyebrow">EDB201 · Chapter 5 · Lesson 5.1</span>
 <h2>Views, stored procedures &amp; functions</h2>
 <h3>Views — a saved query you can query</h3>
-<pre><code>CREATE VIEW CustomerOrderSummary AS
+<pre><code class="language-sql">CREATE VIEW CustomerOrderSummary AS
 SELECT c.CustomerID, c.Name, COUNT(o.OrderID) AS OrderCount
 FROM Customer c
 LEFT JOIN Order o ON o.CustomerID = c.CustomerID
@@ -409,7 +409,7 @@ SELECT * FROM CustomerOrderSummary WHERE OrderCount &gt; 5;
 </code></pre>
 <p>A <strong>view</strong> is a virtual table backed by a <code>SELECT</code> — it doesn't store data itself. Use views to hide a complex join behind a simple name, or to expose only a subset of columns to an application (e.g. hiding a Salary column from a general-purpose report view).</p>
 <h3>Stored procedures — logic that lives in the database</h3>
-<pre><code>CREATE PROCEDURE AddOrder (@CustomerID INT, @ProductID INT, @Qty INT)
+<pre><code class="language-sql">CREATE PROCEDURE AddOrder (@CustomerID INT, @ProductID INT, @Qty INT)
 AS
 BEGIN
   INSERT INTO Order (CustomerID, OrderDate) VALUES (@CustomerID, GETDATE());
@@ -422,7 +422,7 @@ EXEC AddOrder @CustomerID = 1, @ProductID = 5, @Qty = 2;
 </code></pre>
 <p>A <strong>stored procedure</strong> bundles several statements (and parameters) into one callable unit. The application sends one call instead of several round-trip queries, and the business rule ("creating an order also creates its detail row") lives in one place instead of being copy-pasted into every app that touches orders.</p>
 <h3>Functions — a value you can use inside a query</h3>
-<pre><code>CREATE FUNCTION GetCustomerTotalSpent (@CustomerID INT)
+<pre><code class="language-sql">CREATE FUNCTION GetCustomerTotalSpent (@CustomerID INT)
 RETURNS DECIMAL(18,2)
 AS
 BEGIN
@@ -437,7 +437,7 @@ FROM Customer;
     `<span class="eyebrow">EDB201 · Chương 5 · Bài 5.1</span>
 <h2>View, stored procedure &amp; function</h2>
 <h3>View — một câu truy vấn được lưu tên, truy vấn lại được</h3>
-<pre><code>CREATE VIEW CustomerOrderSummary AS
+<pre><code class="language-sql">CREATE VIEW CustomerOrderSummary AS
 SELECT c.CustomerID, c.Name, COUNT(o.OrderID) AS OrderCount
 FROM Customer c
 LEFT JOIN Order o ON o.CustomerID = c.CustomerID
@@ -447,7 +447,7 @@ SELECT * FROM CustomerOrderSummary WHERE OrderCount &gt; 5;
 </code></pre>
 <p>Một <strong>view</strong> là bảng ảo đứng sau một câu <code>SELECT</code> — nó không tự lưu dữ liệu. Dùng view để giấu một câu JOIN phức tạp sau một cái tên đơn giản, hoặc chỉ lộ ra một số cột cho ứng dụng (vd giấu cột Salary khỏi view báo cáo dùng chung).</p>
 <h3>Stored procedure — logic sống trong CSDL</h3>
-<pre><code>CREATE PROCEDURE AddOrder (@CustomerID INT, @ProductID INT, @Qty INT)
+<pre><code class="language-sql">CREATE PROCEDURE AddOrder (@CustomerID INT, @ProductID INT, @Qty INT)
 AS
 BEGIN
   INSERT INTO Order (CustomerID, OrderDate) VALUES (@CustomerID, GETDATE());
@@ -460,7 +460,7 @@ EXEC AddOrder @CustomerID = 1, @ProductID = 5, @Qty = 2;
 </code></pre>
 <p>Một <strong>stored procedure</strong> gói nhiều câu lệnh (và tham số) vào một đơn vị gọi được. Ứng dụng chỉ cần gửi một lượt gọi thay vì nhiều lượt truy vấn qua lại, và quy tắc nghiệp vụ ("tạo đơn hàng cũng phải tạo dòng chi tiết") nằm ở một chỗ duy nhất thay vì bị chép lại ở mọi ứng dụng đụng tới đơn hàng.</p>
 <h3>Function — một giá trị dùng được ngay trong câu truy vấn</h3>
-<pre><code>CREATE FUNCTION GetCustomerTotalSpent (@CustomerID INT)
+<pre><code class="language-sql">CREATE FUNCTION GetCustomerTotalSpent (@CustomerID INT)
 RETURNS DECIMAL(18,2)
 AS
 BEGIN
@@ -490,7 +490,7 @@ const c6 = doc('edb201-6-1-connect-app', '6.1 — Connecting a database to an ap
 </code></pre>
 <p>An application connects through a <strong>driver</strong> (ODBC, JDBC for Java, ADO.NET for .NET, a Node.js/Python DB library) using a <strong>connection string</strong> — server address, database name, and credentials. The driver translates the app's calls into the network protocol the database understands.</p>
 <h3>Never build SQL by pasting in user input</h3>
-<pre><code>-- DANGEROUS: string-concatenated SQL
+<pre><code class="language-sql">-- DANGEROUS: string-concatenated SQL
 "SELECT * FROM Customer WHERE Name = '" + userInput + "'"
 -- if userInput is:  x'; DROP TABLE Customer; --
 -- the final SQL becomes two statements — SQL injection.
@@ -511,7 +511,7 @@ SELECT * FROM Customer WHERE Name = @Name;   -- @Name bound separately
 </code></pre>
 <p>Ứng dụng kết nối qua một <strong>driver</strong> (ODBC, JDBC cho Java, ADO.NET cho .NET, thư viện DB của Node.js/Python) bằng một <strong>connection string</strong> — địa chỉ server, tên CSDL, và thông tin đăng nhập. Driver dịch lệnh gọi của ứng dụng thành giao thức mạng mà CSDL hiểu.</p>
 <h3>Đừng bao giờ ghép chuỗi SQL từ dữ liệu người dùng nhập</h3>
-<pre><code>-- NGUY HIỂM: nối chuỗi SQL trực tiếp
+<pre><code class="language-sql">-- NGUY HIỂM: nối chuỗi SQL trực tiếp
 "SELECT * FROM Customer WHERE Name = '" + userInput + "'"
 -- nếu userInput là:  x'; DROP TABLE Customer; --
 -- SQL cuối cùng trở thành hai câu lệnh — SQL injection.
@@ -600,7 +600,7 @@ const c8 = doc('edb201-8-1-build-sales-app', '8.1 — Building a complete databa
 <h3>Putting every chapter together</h3>
 <p>A small <strong>sales &amp; inventory application</strong> exercises everything so far: an ERD with 1-N and N-N relationships, a normalized schema, queries with <code>JOIN</code>/<code>GROUP BY</code>, transactions when stock changes, a view/procedure for common operations, and permissions before it ships.</p>
 <h3>The ERD</h3>
-<pre><code>Category  (CategoryID PK, Name)
+<pre><code class="language-sql">Category  (CategoryID PK, Name)
 Product   (ProductID PK, Name, Price, StockQty, CategoryID FK, SupplierID FK)
 Supplier  (SupplierID PK, Name, Phone)
 Customer  (CustomerID PK, Name, Phone)
@@ -610,7 +610,7 @@ OrderDetail (OrderID FK, ProductID FK, Quantity, UnitPrice,
 </code></pre>
 <p>Product-Category and Product-Supplier are 1-N; Order-Product is N-N, resolved by OrderDetail — exactly the pattern from Chapter 2.</p>
 <h3>A sale that updates stock — as one transaction</h3>
-<pre><code>BEGIN TRANSACTION;
+<pre><code class="language-sql">BEGIN TRANSACTION;
 
 INSERT INTO Order (CustomerID, OrderDate) VALUES (3, GETDATE());
 DECLARE @OrderID INT = SCOPE_IDENTITY();
@@ -627,7 +627,7 @@ ELSE
 </code></pre>
 <p>Creating the order line and reducing stock must succeed together — this is Chapter 4's transaction lesson applied to a real business rule.</p>
 <h3>Report queries</h3>
-<pre><code>-- Revenue by month
+<pre><code class="language-sql">-- Revenue by month
 SELECT MONTH(o.OrderDate) AS Month, SUM(d.Quantity * d.UnitPrice) AS Revenue
 FROM Order o JOIN OrderDetail d ON d.OrderID = o.OrderID
 GROUP BY MONTH(o.OrderDate);
@@ -649,7 +649,7 @@ SELECT Name, StockQty FROM Product WHERE StockQty &lt; 10;
 <h3>Ghép mọi chương lại</h3>
 <p>Một <strong>ứng dụng bán hàng &amp; quản lý kho</strong> nhỏ luyện tập lại mọi thứ đã học: ERD có quan hệ 1-N và N-N, schema chuẩn hoá, truy vấn với <code>JOIN</code>/<code>GROUP BY</code>, transaction khi tồn kho thay đổi, view/procedure cho các thao tác thường gặp, và phân quyền trước khi đưa vào dùng.</p>
 <h3>ERD</h3>
-<pre><code>Category  (CategoryID PK, Name)
+<pre><code class="language-sql">Category  (CategoryID PK, Name)
 Product   (ProductID PK, Name, Price, StockQty, CategoryID FK, SupplierID FK)
 Supplier  (SupplierID PK, Name, Phone)
 Customer  (CustomerID PK, Name, Phone)
@@ -659,7 +659,7 @@ OrderDetail (OrderID FK, ProductID FK, Quantity, UnitPrice,
 </code></pre>
 <p>Product-Category và Product-Supplier là 1-N; Order-Product là N-N, giải quyết bằng OrderDetail — đúng mẫu đã học ở Chương 2.</p>
 <h3>Một lượt bán hàng cập nhật tồn kho — trong một transaction</h3>
-<pre><code>BEGIN TRANSACTION;
+<pre><code class="language-sql">BEGIN TRANSACTION;
 
 INSERT INTO Order (CustomerID, OrderDate) VALUES (3, GETDATE());
 DECLARE @OrderID INT = SCOPE_IDENTITY();
@@ -676,7 +676,7 @@ ELSE
 </code></pre>
 <p>Tạo dòng đơn hàng và giảm tồn kho phải cùng thành công — đây là bài học transaction ở Chương 4, áp dụng vào một quy tắc nghiệp vụ thật.</p>
 <h3>Truy vấn báo cáo</h3>
-<pre><code>-- Doanh thu theo tháng
+<pre><code class="language-sql">-- Doanh thu theo tháng
 SELECT MONTH(o.OrderDate) AS Month, SUM(d.Quantity * d.UnitPrice) AS Revenue
 FROM Order o JOIN OrderDetail d ON d.OrderID = o.OrderID
 GROUP BY MONTH(o.OrderDate);

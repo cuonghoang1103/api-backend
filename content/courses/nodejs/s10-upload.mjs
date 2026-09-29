@@ -90,7 +90,7 @@ busboy → stream      : 287ms server-side, RSS 57,1 →  97,4MB   (+40,3MB)</di
 
 <h3>Limits: what they do and what they do not</h3>
 <p><code>multer</code> takes a <code>limits.fileSize</code>. Setting it to 5MB and sending the 6,85MB photo:</p>
-<pre><code><span class="tok-kw">const</span> up = multer({ storage: multer.memoryStorage(), limits: { fileSize: <span class="tok-num">5</span> * <span class="tok-num">1024</span> * <span class="tok-num">1024</span> } });
+<pre><code class="language-javascript"><span class="tok-kw">const</span> up = multer({ storage: multer.memoryStorage(), limits: { fileSize: <span class="tok-num">5</span> * <span class="tok-num">1024</span> * <span class="tok-num">1024</span> } });
 app.post(<span class="tok-str">'/limited'</span>, (req, res) =&gt; {
   up.single(<span class="tok-str">'file'</span>)(req, res, (err) =&gt; {
     <span class="tok-kw">if</span> (err) <span class="tok-kw">return</span> res.status(<span class="tok-num">413</span>).json({ name: err.name, code: err.code, message: err.message, field: err.field });
@@ -186,7 +186,7 @@ busboy → stream      : 287ms phía máy chủ, RSS 57,1 →  97,4MB   (+40,3MB
 
 <h3>Giới hạn: nó làm được gì và không làm được gì</h3>
 <p><code>multer</code> nhận tuỳ chọn <code>limits.fileSize</code>. Đặt 5MB rồi gửi tấm ảnh 6,85MB:</p>
-<pre><code><span class="tok-kw">const</span> up = multer({ storage: multer.memoryStorage(), limits: { fileSize: <span class="tok-num">5</span> * <span class="tok-num">1024</span> * <span class="tok-num">1024</span> } });
+<pre><code class="language-javascript"><span class="tok-kw">const</span> up = multer({ storage: multer.memoryStorage(), limits: { fileSize: <span class="tok-num">5</span> * <span class="tok-num">1024</span> * <span class="tok-num">1024</span> } });
 app.post(<span class="tok-str">'/limited'</span>, (req, res) =&gt; {
   up.single(<span class="tok-str">'file'</span>)(req, res, (err) =&gt; {
     <span class="tok-kw">if</span> (err) <span class="tok-kw">return</span> res.status(<span class="tok-num">413</span>).json({ name: err.name, code: err.code, message: err.message, field: err.field });
@@ -249,7 +249,7 @@ HTTP 413 | client đã gửi 7.183.298 byte</div>
 
 <h3>Measurement 1 — the whole API surface you actually use</h3>
 <p>Against MinIO on localhost, with a 6,85MB photo:</p>
-<pre><code><span class="tok-kw">const</span> s3 = <span class="tok-kw">new</span> S3Client({
+<pre><code class="language-javascript"><span class="tok-kw">const</span> s3 = <span class="tok-kw">new</span> S3Client({
   region: <span class="tok-str">'auto'</span>,
   endpoint: <span class="tok-str">'http://127.0.0.1:9010'</span>,          <span class="tok-cmt">// R2: https://&lt;account&gt;.r2.cloudflarestorage.com</span>
   credentials: { accessKeyId: <span class="tok-str">'…'</span>, secretAccessKey: <span class="tok-str">'…'</span> },
@@ -272,7 +272,7 @@ List prefix "images/post/u7/"  → 1 object</div>
 
 <h3>Key layout is a design decision, not a filename</h3>
 <p>The key is the only index this system gives you. This project's rule, from <code>src/storage/keys.ts</code>:</p>
-<pre><code><span class="tok-cmt">// images/post/u7/1753660000000-a1b2c3d4e5f6.jpg</span>
+<pre><code class="language-javascript"><span class="tok-cmt">// images/post/u7/1753660000000-a1b2c3d4e5f6.jpg</span>
 <span class="tok-cmt">//   │      │    │        │             └── 6 random bytes (crypto)</span>
 <span class="tok-cmt">//   │      │    │        └── Date.now()</span>
 <span class="tok-cmt">//   │      │    └── u&lt;userId&gt; — the owner, checkable later</span>
@@ -309,7 +309,7 @@ URL đó dùng ở máy khác, không có credential nào → HTTP 206 (vẫn t�
 
 <h3>Measurement 4 — Content-Type is NOT bound by default</h3>
 <p>The server signs a PUT for a video, specifying <code>ContentType: 'video/mp4'</code>. The client then uses that URL but sends a different header:</p>
-<pre><code><span class="tok-cmt">// the server signs:</span>
+<pre><code class="language-typescript"><span class="tok-cmt">// the server signs:</span>
 getSignedUrl(s3, <span class="tok-kw">new</span> PutObjectCommand({ Bucket, Key, ContentType: <span class="tok-str">'video/mp4'</span> }), { expiresIn: <span class="tok-num">600</span> });
 <span class="tok-cmt">// the client uses that exact URL but sends different headers:</span>
 <span class="tok-cmt">// curl -X PUT -H 'Content-Type: text/html' --data-binary '&lt;script&gt;alert(document.cookie)&lt;/script&gt;'</span></code></pre>
@@ -317,7 +317,7 @@ getSignedUrl(s3, <span class="tok-kw">new</span> PutObjectCommand({ Bucket, Key,
   → client PUT text/html THÀNH CÔNG. Object lưu: {"type":"text/html","size":39}</div>
 <p>Thirty-nine bytes of HTML, stored under a <code>.mp4</code> key, with <code>Content-Type: text/html</code>, on your media domain. Serve that domain to a browser and you have stored XSS — the exact attack chapter 9 spent a lesson on, arriving through the upload door. The <code>ContentType</code> you passed to <code>PutObjectCommand</code> was a <em>default</em>, not a constraint, because it was not in <code>SignedHeaders</code>.</p>
 <p>The fix is one option:</p>
-<pre><code>getSignedUrl(s3, <span class="tok-kw">new</span> PutObjectCommand({ Bucket, Key, ContentType: <span class="tok-str">'video/mp4'</span> }), {
+<pre><code class="language-typescript">getSignedUrl(s3, <span class="tok-kw">new</span> PutObjectCommand({ Bucket, Key, ContentType: <span class="tok-str">'video/mp4'</span> }), {
   expiresIn: <span class="tok-num">600</span>,
   signableHeaders: <span class="tok-kw">new</span> Set([<span class="tok-str">'content-type'</span>]),   <span class="tok-cmt">// ← puts the headers into the signature</span>
 });</code></pre>
@@ -343,7 +343,7 @@ sau 7 giây    → HTTP 403
 
 <h3>Measurement 7 — streaming through the server, when you must</h3>
 <p>Sometimes you cannot presign (you need to inspect the bytes, or the client cannot do a second request). Then stream: <code>busboy</code> gives you the file part as a stream, and <code>@aws-sdk/lib-storage</code>'s <code>Upload</code> consumes a stream by cutting it into multipart parts:</p>
-<pre><code>bb.on(<span class="tok-str">'file'</span>, <span class="tok-kw">async</span> (_name, file) =&gt; {
+<pre><code class="language-javascript">bb.on(<span class="tok-str">'file'</span>, <span class="tok-kw">async</span> (_name, file) =&gt; {
   <span class="tok-kw">const</span> uploader = <span class="tok-kw">new</span> Upload({
     client: s3,
     params: { Bucket, Key, Body: file, ContentType: <span class="tok-str">'video/mp4'</span> },
@@ -391,7 +391,7 @@ sau 7 giây    → HTTP 403
 
 <h3>Phép đo 1 — toàn bộ bề mặt API bạn thực sự dùng</h3>
 <p>Chạy trên MinIO ở localhost, với tấm ảnh 6,85MB:</p>
-<pre><code><span class="tok-kw">const</span> s3 = <span class="tok-kw">new</span> S3Client({
+<pre><code class="language-javascript"><span class="tok-kw">const</span> s3 = <span class="tok-kw">new</span> S3Client({
   region: <span class="tok-str">'auto'</span>,
   endpoint: <span class="tok-str">'http://127.0.0.1:9010'</span>,          <span class="tok-cmt">// R2: https://&lt;account&gt;.r2.cloudflarestorage.com</span>
   credentials: { accessKeyId: <span class="tok-str">'…'</span>, secretAccessKey: <span class="tok-str">'…'</span> },
@@ -414,7 +414,7 @@ List prefix "images/post/u7/"  → 1 object</div>
 
 <h3>Bố trí key là một quyết định thiết kế, không phải một cái tên file</h3>
 <p>Key là chỉ mục duy nhất mà hệ thống này cho bạn. Luật của dự án này, trong <code>src/storage/keys.ts</code>:</p>
-<pre><code><span class="tok-cmt">// images/post/u7/1753660000000-a1b2c3d4e5f6.jpg</span>
+<pre><code class="language-javascript"><span class="tok-cmt">// images/post/u7/1753660000000-a1b2c3d4e5f6.jpg</span>
 <span class="tok-cmt">//   │      │    │        │             └── 6 byte ngẫu nhiên (crypto)</span>
 <span class="tok-cmt">//   │      │    │        └── Date.now()</span>
 <span class="tok-cmt">//   │      │    └── u&lt;userId&gt; — chủ sở hữu, kiểm được sau này</span>
@@ -451,7 +451,7 @@ URL đó dùng ở máy khác, không có credential nào → HTTP 206 (vẫn t�
 
 <h3>Phép đo 4 — Content-Type KHÔNG bị ràng buộc theo mặc định</h3>
 <p>Máy chủ ký một PUT cho video, có nêu <code>ContentType: 'video/mp4'</code>. Client sau đó dùng đúng URL ấy nhưng gửi header khác:</p>
-<pre><code><span class="tok-cmt">// máy chủ ký:</span>
+<pre><code class="language-typescript"><span class="tok-cmt">// máy chủ ký:</span>
 getSignedUrl(s3, <span class="tok-kw">new</span> PutObjectCommand({ Bucket, Key, ContentType: <span class="tok-str">'video/mp4'</span> }), { expiresIn: <span class="tok-num">600</span> });
 <span class="tok-cmt">// client dùng đúng URL đó nhưng gửi header khác:</span>
 <span class="tok-cmt">// curl -X PUT -H 'Content-Type: text/html' --data-binary '&lt;script&gt;alert(document.cookie)&lt;/script&gt;'</span></code></pre>
@@ -459,7 +459,7 @@ getSignedUrl(s3, <span class="tok-kw">new</span> PutObjectCommand({ Bucket, Key,
   → client PUT text/html THÀNH CÔNG. Object lưu: {"type":"text/html","size":39}</div>
 <p>Ba mươi chín byte HTML, nằm dưới một key <code>.mp4</code>, với <code>Content-Type: text/html</code>, trên tên miền media của bạn. Phục vụ tên miền đó cho một trình duyệt là bạn có XSS lưu trữ — đúng đòn tấn công mà chương 9 dành hẳn một bài, lần này đi vào bằng cửa upload. Cái <code>ContentType</code> bạn truyền cho <code>PutObjectCommand</code> chỉ là <em>giá trị mặc định</em>, không phải ràng buộc, vì nó không nằm trong <code>SignedHeaders</code>.</p>
 <p>Cách sửa gọn trong một tuỳ chọn:</p>
-<pre><code>getSignedUrl(s3, <span class="tok-kw">new</span> PutObjectCommand({ Bucket, Key, ContentType: <span class="tok-str">'video/mp4'</span> }), {
+<pre><code class="language-typescript">getSignedUrl(s3, <span class="tok-kw">new</span> PutObjectCommand({ Bucket, Key, ContentType: <span class="tok-str">'video/mp4'</span> }), {
   expiresIn: <span class="tok-num">600</span>,
   signableHeaders: <span class="tok-kw">new</span> Set([<span class="tok-str">'content-type'</span>]),   <span class="tok-cmt">// ← đưa header vào chữ ký</span>
 });</code></pre>
@@ -485,7 +485,7 @@ sau 7 giây    → HTTP 403
 
 <h3>Phép đo 7 — stream xuyên qua máy chủ, khi buộc phải thế</h3>
 <p>Đôi khi bạn không ký sẵn được (cần soi byte, hoặc client không gọi được request thứ hai). Khi đó hãy stream: <code>busboy</code> đưa phần file cho bạn dưới dạng stream, còn <code>Upload</code> của <code>@aws-sdk/lib-storage</code> tiêu thụ stream bằng cách cắt nó thành các phần multipart:</p>
-<pre><code>bb.on(<span class="tok-str">'file'</span>, <span class="tok-kw">async</span> (_name, file) =&gt; {
+<pre><code class="language-javascript">bb.on(<span class="tok-str">'file'</span>, <span class="tok-kw">async</span> (_name, file) =&gt; {
   <span class="tok-kw">const</span> uploader = <span class="tok-kw">new</span> Upload({
     client: s3,
     params: { Bucket, Key, Body: file, ContentType: <span class="tok-str">'video/mp4'</span> },
@@ -564,7 +564,7 @@ SVG có onload            PASS   PASS             KHÔNG NHẬN RA  CHẶN (magi
 
 <h3>Measurement 2 — the polyglot, and why sniffing is not enough</h3>
 <p>A file that starts with the six bytes <code>GIF89a</code> and continues with HTML is, as far as any sniffer is concerned, a GIF:</p>
-<pre><code><span class="tok-kw">const</span> polyglot = Buffer.concat([
+<pre><code class="language-javascript"><span class="tok-kw">const</span> polyglot = Buffer.concat([
   Buffer.from(<span class="tok-str">'GIF89a'</span>),                              <span class="tok-cmt">// a real GIF's magic bytes</span>
   Buffer.from(<span class="tok-str">'/**/=1;&lt;script&gt;alert(1)&lt;/script&gt;'</span>),  <span class="tok-cmt">// and also valid JS/HTML</span>
 ]);
@@ -581,7 +581,7 @@ sharp NÉM     : Input buffer has corrupt header: gifload_buffer: Invalid frame 
   chuỗi &lt;script&gt; còn trong file? true
   sau khi sharp re-encode: 570,4KB trong 218,4ms; còn chuỗi &lt;script&gt;? false</div>
 <p>Storing that file unchanged puts an attacker-controlled HTML string on your media domain. Whether it ever executes depends on how it is served (<code>Content-Type</code>, <code>nosniff</code>, which domain) — but the whole point of defence in depth is not to depend on that. Re-encoding removes the question: sharp decodes the pixels and writes a new file, and nothing that was not a pixel survives the trip.</p>
-<pre><code><span class="tok-cmt">// This is the entire image check you need — and it doubles as the optimisation step:</span>
+<pre><code class="language-javascript"><span class="tok-cmt">// This is the entire image check you need — and it doubles as the optimisation step:</span>
 <span class="tok-kw">const</span> out = <span class="tok-kw">await</span> sharp(buffer)
   .resize({ width: <span class="tok-num">1200</span>, withoutEnlargement: <span class="tok-kw">true</span> })
   .webp({ quality: <span class="tok-num">80</span> })
@@ -599,7 +599,7 @@ Bom 2: PNG 1183,1KB = 20000×20000 = 400 triệu điểm ảnh
   → 8 × 758KB = 5,9MB trên đường truyền, nhưng 445MB RAM + CPU trên máy chủ
 so sánh: 8 ảnh THẬT 6,85MB cùng lúc: 452,5ms | RSS +17MB</div>
 <p>Read those two lines together. Eight real photos — 54,8MB of upload — cost 17MB of memory, because sharp streams and downscales them. Eight bombs — 5,9MB of upload, one tenth the bandwidth — cost <strong>445MB, twenty-six times more</strong>. Nothing in your size limit, your MIME check or your magic-byte sniffing sees this coming. The defence is a pixel budget, chosen for your product rather than for the format:</p>
-<pre><code>sharp(buffer, { limitInputPixels: <span class="tok-num">50e6</span> })   <span class="tok-cmt">// 50 million pixels ≈ 8000×6000, wider than any consumer camera</span>
+<pre><code class="language-typescript">sharp(buffer, { limitInputPixels: <span class="tok-num">50e6</span> })   <span class="tok-cmt">// 50 million pixels ≈ 8000×6000, wider than any consumer camera</span>
   .resize({ width: <span class="tok-num">1200</span> }).webp().toBuffer();</code></pre>
 <div class="out">Bom 1 (256MP) với limitInputPixels: 50e6 → Input image exceeds pixel limit</div>
 <p>And because sharp's work happens in libvips' own threads rather than on the event loop, a queue is the other half of the answer: bound how many images you process concurrently instead of letting request volume decide.</p>
@@ -672,7 +672,7 @@ SVG có onload            PASS   PASS             KHÔNG NHẬN RA  CHẶN (magi
 
 <h3>Phép đo 2 — file lai, và vì sao đọc magic bytes vẫn chưa đủ</h3>
 <p>Một file bắt đầu bằng sáu byte <code>GIF89a</code> rồi tiếp tục bằng HTML thì, dưới mắt mọi bộ dò, là một file GIF:</p>
-<pre><code><span class="tok-kw">const</span> polyglot = Buffer.concat([
+<pre><code class="language-javascript"><span class="tok-kw">const</span> polyglot = Buffer.concat([
   Buffer.from(<span class="tok-str">'GIF89a'</span>),                              <span class="tok-cmt">// magic bytes thật của GIF</span>
   Buffer.from(<span class="tok-str">'/**/=1;&lt;script&gt;alert(1)&lt;/script&gt;'</span>),  <span class="tok-cmt">// và cũng là JS/HTML hợp lệ</span>
 ]);
@@ -689,7 +689,7 @@ sharp NÉM     : Input buffer has corrupt header: gifload_buffer: Invalid frame 
   chuỗi &lt;script&gt; còn trong file? true
   sau khi sharp re-encode: 570,4KB trong 218,4ms; còn chuỗi &lt;script&gt;? false</div>
 <p>Cất nguyên file đó là đặt một chuỗi HTML do kẻ tấn công điều khiển lên tên miền media của bạn. Nó có chạy hay không còn tuỳ cách phục vụ (<code>Content-Type</code>, <code>nosniff</code>, tên miền nào) — nhưng cả ý nghĩa của phòng thủ nhiều lớp là không phụ thuộc vào chuyện đó. Mã hoá lại xoá luôn câu hỏi: sharp giải mã điểm ảnh rồi ghi ra một file mới, và thứ gì không phải điểm ảnh thì không sống sót qua chuyến đi.</p>
-<pre><code><span class="tok-cmt">// Đây là toàn bộ phép kiểm ảnh cần thiết — và nó cũng là bước tối ưu:</span>
+<pre><code class="language-javascript"><span class="tok-cmt">// Đây là toàn bộ phép kiểm ảnh cần thiết — và nó cũng là bước tối ưu:</span>
 <span class="tok-kw">const</span> out = <span class="tok-kw">await</span> sharp(buffer)
   .resize({ width: <span class="tok-num">1200</span>, withoutEnlargement: <span class="tok-kw">true</span> })
   .webp({ quality: <span class="tok-num">80</span> })
@@ -707,7 +707,7 @@ Bom 2: PNG 1183,1KB = 20000×20000 = 400 triệu điểm ảnh
   → 8 × 758KB = 5,9MB trên đường truyền, nhưng 445MB RAM + CPU trên máy chủ
 so sánh: 8 ảnh THẬT 6,85MB cùng lúc: 452,5ms | RSS +17MB</div>
 <p>Hãy đọc hai dòng đó cạnh nhau. Tám tấm ảnh thật — 54,8MB upload — tốn 17MB bộ nhớ, vì sharp vừa stream vừa thu nhỏ. Tám quả bom — 5,9MB upload, tức một phần mười băng thông — tốn <strong>445MB, gấp hai mươi sáu lần</strong>. Không có gì trong giới hạn kích thước, lớp kiểm MIME hay việc đọc magic bytes nhìn thấy chuyện này tới. Lớp phòng thủ là một hạn mức điểm ảnh, chọn theo sản phẩm của bạn chứ không theo định dạng:</p>
-<pre><code>sharp(buffer, { limitInputPixels: <span class="tok-num">50e6</span> })   <span class="tok-cmt">// 50 triệu điểm ảnh ≈ 8000×6000, rộng hơn mọi máy ảnh phổ thông</span>
+<pre><code class="language-typescript">sharp(buffer, { limitInputPixels: <span class="tok-num">50e6</span> })   <span class="tok-cmt">// 50 triệu điểm ảnh ≈ 8000×6000, rộng hơn mọi máy ảnh phổ thông</span>
   .resize({ width: <span class="tok-num">1200</span> }).webp().toBuffer();</code></pre>
 <div class="out">Bom 1 (256MP) với limitInputPixels: 50e6 → Input image exceeds pixel limit</div>
 <p>Và vì phần việc của sharp chạy trong luồng riêng của libvips chứ không trên event loop, nửa còn lại của câu trả lời là một hàng đợi: hãy chặn số ảnh xử lý đồng thời, thay vì để lưu lượng request quyết định hộ.</p>

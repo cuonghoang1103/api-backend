@@ -979,7 +979,7 @@ L.l14.push(walk(G, [
 <li><strong>The hint</strong> — <code>use "git add &lt;file&gt;..." to include in what will be committed</code>.</li>
 </ul>
 <p class="nhan">Same step on today's Git (2.51), in a Job-IT repo</p>
-<pre>$ git status
+<pre><code class="language-bash">$ git status
 On branch main
 Your branch is up to date with 'origin/main'.
 
@@ -987,14 +987,14 @@ Untracked files:
   (use "git add &lt;file&gt;..." to include in what will be committed)
 	web/faq.jsp
 
-nothing added to commit but untracked files present (use "git add" to track)</pre>`,
+nothing added to commit but untracked files present (use "git add" to track)</code></pre>`,
     `<p class="y-chinh">🎯 File mới (<code>touch faq.html</code>) ở trạng thái <strong>Untracked</strong>: <code>git status</code> liệt kê nó và báo "nothing added to commit".</p>
 <ul>
 <li><strong>"Untracked files:"</strong> — Git bỏ qua file này ở mọi commit cho tới khi bạn add.</li>
 <li><strong>Dòng gợi ý</strong> — <code>use "git add &lt;file&gt;..." to include in what will be committed</code>.</li>
 </ul>
 <p class="nhan">Cùng bước đó trên Git hiện nay (2.51), trong repo Job-IT</p>
-<pre>$ git status
+<pre><code class="language-bash">$ git status
 On branch main
 Your branch is up to date with 'origin/main'.
 
@@ -1002,7 +1002,7 @@ Untracked files:
   (use "git add &lt;file&gt;..." to include in what will be committed)
 	web/faq.jsp
 
-nothing added to commit but untracked files present (use "git add" to track)</pre>`],
+nothing added to commit but untracked files present (use "git add" to track)</code></pre>`],
   [19, 'Git status 2/4 — Tracked-Staged',
     `<p class="y-chinh">🎯 <code>git add faq.html</code> makes the file Tracked <em>and</em> Staged at once: it appears under "Changes to be committed" as <code>new file</code>.</p>
 <ul>
@@ -1061,12 +1061,12 @@ Changes not staged for commit:
 <li><strong><code>git rm --cached faq.html</code></strong> — the command that makes a file <em>untracked but keeps it on disk</em>: status shows <code>deleted</code> under "to be committed" <em>and</em> the file under "Untracked files".</li>
 <li><strong><code>git rm -f faq.html</code></strong> — removes it from Git and deletes it from disk even if it has changes: "be careful with that!!!"</li>
 </ul>
-<pre>$ git rm --cached web/faq.jsp
+<pre><code class="language-bash">$ git rm --cached web/faq.jsp
 rm 'web/faq.jsp'
 Changes to be committed:
 	deleted:    web/faq.jsp
 Untracked files:
-	web/faq.jsp</pre>
+	web/faq.jsp</code></pre>
 <p class="meo">🧠 <strong>Remember:</strong> "<code>--cached</code> = only from Git's memory". Pair it with a <code>.gitignore</code> line so the file does not come back.</p>`,
     `<p class="y-chinh">🎯 Slide cho thấy việc xoá <code>faq.html</code> và <code>git status</code> báo <code>deleted: faq.html</code> — đọc kỹ lệnh, vì <code>rm</code> thường là xoá file thật.</p>
 <p class="nhan">Mỗi lệnh thật sự làm gì (đã chạy thử trên Git 2.51)</p>
@@ -1075,12 +1075,12 @@ Untracked files:
 <li><strong><code>git rm --cached faq.html</code></strong> — lệnh làm file thành <em>untracked nhưng vẫn giữ trên đĩa</em>: status hiện <code>deleted</code> ở phần "to be committed" <em>và</em> file nằm trong "Untracked files".</li>
 <li><strong><code>git rm -f faq.html</code></strong> — gỡ khỏi Git và xoá khỏi đĩa kể cả khi file đang có thay đổi: "cẩn thận với lệnh này!!!"</li>
 </ul>
-<pre>$ git rm --cached web/faq.jsp
+<pre><code class="language-bash">$ git rm --cached web/faq.jsp
 rm 'web/faq.jsp'
 Changes to be committed:
 	deleted:    web/faq.jsp
 Untracked files:
-	web/faq.jsp</pre>
+	web/faq.jsp</code></pre>
 <p class="meo">🧠 <strong>Mẹo nhớ:</strong> "<code>--cached</code> = chỉ xoá khỏi trí nhớ của Git". Kèm thêm một dòng <code>.gitignore</code> để file không bị theo dõi lại.</p>`],
 ]));
 L.l14.push(walk(G, [
@@ -1508,7 +1508,7 @@ L.l15.push(walk(G, [
 <li><strong>Câu hỏi về yêu cầu</strong> — mở một issue <code>Q&amp;A</code> trên GitLab: giảng viên là khách hàng, và câu trả lời trở thành một phần của yêu cầu.</li>
 </ul>`],
 ]));
-const CONFLICT_RUN = `<pre># Member B, on branch main, after committing Req #15
+const CONFLICT_RUN = `<pre><code class="language-bash"># Member B, on branch main, after committing Req #15
 $ git push
 To &lt;team-repo&gt;
  ! [rejected]        main -&gt; main (fetch first)
@@ -1533,8 +1533,8 @@ You have unmerged paths.
   (use "git merge --abort" to abort the merge)
 Unmerged paths:
   (use "git add &lt;file&gt;..." to mark resolution)
-	both modified:   web/common/header.jsp</pre>
-<pre>$ cat web/common/header.jsp
+	both modified:   web/common/header.jsp</code></pre>
+<pre><code class="language-html">$ cat web/common/header.jsp
 &lt;nav class="navbar"&gt;
   &lt;a href="home"&gt;Home&lt;/a&gt;
   &lt;a href="jobs"&gt;Find Jobs&lt;/a&gt;
@@ -1543,8 +1543,8 @@ Unmerged paths:
 =======
   &lt;a href="job/post"&gt;Post a Job&lt;/a&gt;
 &gt;&gt;&gt;&gt;&gt;&gt;&gt; 03cfb3de5600b4c584eb4db536fd1620a70626b9
-&lt;/nav&gt;</pre>
-<pre># after editing: keep BOTH links, delete the 3 marker lines
+&lt;/nav&gt;</code></pre>
+<pre><code class="language-bash"># after editing: keep BOTH links, delete the 3 marker lines
 $ git add web/common/header.jsp
 $ git commit -m "merge: keep both header links (#12, #15)"
 [main c484cd0] merge: keep both header links (#12, #15)
@@ -1557,7 +1557,7 @@ $ git log --oneline --graph
 | * 03cfb3d feat(job): add 'Post a Job' link to header (#12)
 * | 38c7f06 feat(application): add 'My Applications' link to header (#15)
 |/
-* ec5c3d9 chore: project skeleton with common header</pre>`;
+* ec5c3d9 chore: project skeleton with common header</code></pre>`;
 L.l15.push(bi(`<h3>Worked example — a real conflict in the shared header, resolved</h3>
 <p>Job-IT system, iteration 2. The leader pushed a skeleton with a common <code>header.jsp</code>. <strong>Member A</strong> (Req #12 "Post a Job") and <strong>Member B</strong> (Req #15 "My Applications") both add a menu link on the same line. A pushes first. Everything below was run on Git 2.51 and copied as printed (only the remote path is shortened to <code>&lt;team-repo&gt;</code>).</p>
 ${CONFLICT_RUN}
@@ -1596,7 +1596,7 @@ L.l15.push(bi(`<h3>Branch strategy for a team of 4–5</h3>
 </tbody>
 </table>
 <p class="nhan">Set-up B in commands</p>
-<pre># leader, first day of iteration 2
+<pre><code class="language-bash"># leader, first day of iteration 2
 git switch main &amp;&amp; git pull
 git switch -c iter2 &amp;&amp; git push -u origin iter2
 
@@ -1606,7 +1606,7 @@ git switch -c feature/12-post-job
 # ... commits ...
 git push -u origin feature/12-post-job
 # GitLab: Merge requests → New → source feature/12-post-job, target iter2
-#         description "Closes #12"; leader reviews and merges; delete branch</pre>
+#         description "Closes #12"; leader reviews and merges; delete branch</code></pre>
 <div class="pitfall co-tieu-de"><strong>Long-lived personal branches.</strong> A branch per <em>person</em> ("branch-of-A") that lives the whole iteration and merges on the last night gives one giant conflict. Branch per <em>Req</em>, keep it 1–3 days, merge often.</div>
 <h3>Tagging each iteration's submission</h3>
 <ol>
@@ -1615,9 +1615,9 @@ git push -u origin feature/12-post-job
 <li><strong>Tag</strong> — <code>git tag -a iter2 -m "Iteration 2 submission: 14 screens, DB script /database/jobit.sql"</code> then <code>git push origin iter2</code> (or Repository → Tags → New tag).</li>
 <li><strong>Submit the link</strong> — copy the tag page URL into the links file with each member's demo video, next to the Project Tracking xlsx and the RDS.</li>
 </ol>
-<pre>$ git tag -a iter1 -m "Iteration 1 submission: 8 screens, DB script in /database"
+<pre><code class="language-bash">$ git tag -a iter1 -m "Iteration 1 submission: 8 screens, DB script in /database"
 $ git push origin iter1
- * [new tag]         iter1 -&gt; iter1</pre>
+ * [new tag]         iter1 -&gt; iter1</code></pre>
 <p class="ghi-chu">A tag is permanent evidence of what you delivered on the date. Found a bug after tagging? Fix it on the next iteration's branch — never move or re-create the tag.</p>
 <div class="callout"><strong>★ Beyond the syllabus — Git Flow vs trunk-based.</strong> Set-up B is a small <em>Git Flow</em>: long-lived <code>main</code> plus release (iteration) branches. Fast-moving companies prefer <em>trunk-based development</em>: tiny branches merged into <code>main</code> several times a day, unfinished features hidden behind <em>feature flags</em>, and CI tests on every merge request. Knowing why each model exists is a good answer when a presentation reviewer asks about your process.</div>`,
 `<h3>Chiến lược nhánh cho nhóm 4–5 người</h3>
@@ -1632,7 +1632,7 @@ $ git push origin iter1
 </tbody>
 </table>
 <p class="nhan">Cách B bằng lệnh</p>
-<pre># trưởng nhóm, ngày đầu iteration 2
+<pre><code class="language-bash"># trưởng nhóm, ngày đầu iteration 2
 git switch main &amp;&amp; git pull
 git switch -c iter2 &amp;&amp; git push -u origin iter2
 
@@ -1642,7 +1642,7 @@ git switch -c feature/12-post-job
 # ... các commit ...
 git push -u origin feature/12-post-job
 # GitLab: Merge requests → New → source feature/12-post-job, target iter2
-#         mô tả "Closes #12"; trưởng nhóm review và merge; xoá nhánh</pre>
+#         mô tả "Closes #12"; trưởng nhóm review và merge; xoá nhánh</code></pre>
 <div class="pitfall co-tieu-de"><strong>Nhánh cá nhân sống quá lâu.</strong> Mỗi <em>người</em> một nhánh ("nhanh-cua-A") sống suốt iteration rồi merge vào đêm cuối sẽ sinh ra một xung đột khổng lồ. Mỗi <em>Req</em> một nhánh, giữ 1–3 ngày, merge thường xuyên.</div>
 <h3>Gắn tag cho bài nộp mỗi iteration</h3>
 <ol>
@@ -1651,9 +1651,9 @@ git push -u origin feature/12-post-job
 <li><strong>Gắn tag</strong> — <code>git tag -a iter2 -m "Iteration 2 submission: 14 screens, DB script /database/jobit.sql"</code> rồi <code>git push origin iter2</code> (hoặc Repository → Tags → New tag).</li>
 <li><strong>Nộp link</strong> — copy URL trang của tag vào file link cùng video demo của từng thành viên, bên cạnh file Project Tracking xlsx và RDS.</li>
 </ol>
-<pre>$ git tag -a iter1 -m "Iteration 1 submission: 8 screens, DB script in /database"
+<pre><code class="language-bash">$ git tag -a iter1 -m "Iteration 1 submission: 8 screens, DB script in /database"
 $ git push origin iter1
- * [new tag]         iter1 -&gt; iter1</pre>
+ * [new tag]         iter1 -&gt; iter1</code></pre>
 <p class="ghi-chu">Tag là bằng chứng vĩnh viễn về thứ bạn đã bàn giao vào ngày đó. Phát hiện lỗi sau khi gắn tag? Sửa trên nhánh của iteration sau — đừng bao giờ dời hay tạo lại tag.</p>
 <div class="callout"><strong>★ Ngoài giáo trình — Git Flow và trunk-based.</strong> Cách B là một <em>Git Flow</em> thu nhỏ: <code>main</code> sống lâu cộng các nhánh phát hành (iteration). Các công ty đi nhanh chuộng <em>trunk-based development</em>: nhánh rất ngắn, merge vào <code>main</code> nhiều lần mỗi ngày, tính năng chưa xong được giấu sau <em>feature flag</em>, và CI chạy test trên mọi merge request. Hiểu vì sao mỗi mô hình tồn tại là một câu trả lời tốt khi giám khảo buổi thuyết trình hỏi về quy trình của nhóm.</div>`));
 L.l15.push(books([

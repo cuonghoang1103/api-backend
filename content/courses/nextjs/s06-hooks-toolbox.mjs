@@ -29,7 +29,7 @@ export default {
 
 <h3>Ref vs state, in one experiment</h3>
 <p>Here is the defining difference, captured from a real render: a component that mutates a ref three times re-renders <strong>zero</strong> extra times.</p>
-<pre><code>function RefDemo() {
+<pre><code class="language-typescript">function RefDemo() {
   const c = useRef(0);
   const bump = () =&gt; { c.current++; };   <span class="tok-comment">// mutate the ref — no re-render</span>
   return &lt;div&gt;rendered&lt;/div&gt;;
@@ -44,13 +44,13 @@ export default {
 
 <h3>The two real jobs of useRef</h3>
 <p><strong>1 · Remember a value across renders, invisibly.</strong> Unlike a local variable (reset every render) and unlike state (re-renders on change), a ref persists <em>and</em> stays quiet:</p>
-<pre><code>const intervalId = useRef(null);
+<pre><code class="language-javascript">const intervalId = useRef(null);
 useEffect(() =&gt; {
   intervalId.current = setInterval(tick, 1000);
   return () =&gt; clearInterval(intervalId.current);
 }, []);</code></pre>
 <p><strong>2 · Reach a DOM node.</strong> Attach a ref to an element with the <code>ref</code> prop, and React fills <code>.current</code> with the real DOM node after commit — so you can focus, scroll, measure or play it:</p>
-<pre><code>const inputRef = useRef(null);
+<pre><code class="language-typescript">const inputRef = useRef(null);
 useEffect(() =&gt; { inputRef.current.focus(); }, []);   <span class="tok-comment">// focus on mount</span>
 return &lt;input ref={inputRef} /&gt;;</code></pre>
 
@@ -90,7 +90,7 @@ return &lt;input ref={inputRef} /&gt;;</code></pre>
 
 <h3>Ref vs state, trong một thí nghiệm</h3>
 <p>Đây là khác biệt định nghĩa, ghi từ một render thật: một component sửa một ref ba lần render lại <strong>không</strong> thêm lần nào.</p>
-<pre><code>function RefDemo() {
+<pre><code class="language-typescript">function RefDemo() {
   const c = useRef(0);
   const bump = () =&gt; { c.current++; };   <span class="tok-comment">// sửa ref — không render lại</span>
   return &lt;div&gt;rendered&lt;/div&gt;;
@@ -105,13 +105,13 @@ return &lt;input ref={inputRef} /&gt;;</code></pre>
 
 <h3>Hai việc thật của useRef</h3>
 <p><strong>1 · Nhớ một giá trị qua các render, một cách vô hình.</strong> Khác biến cục bộ (reset mỗi render) và khác state (render lại khi đổi), một ref bền <em>và</em> im lặng:</p>
-<pre><code>const intervalId = useRef(null);
+<pre><code class="language-javascript">const intervalId = useRef(null);
 useEffect(() =&gt; {
   intervalId.current = setInterval(tick, 1000);
   return () =&gt; clearInterval(intervalId.current);
 }, []);</code></pre>
 <p><strong>2 · Với tới một nút DOM.</strong> Gắn một ref vào một element bằng prop <code>ref</code>, và React điền <code>.current</code> bằng nút DOM thật sau khi commit — để bạn focus, cuộn, đo hay phát nó:</p>
-<pre><code>const inputRef = useRef(null);
+<pre><code class="language-typescript">const inputRef = useRef(null);
 useEffect(() =&gt; { inputRef.current.focus(); }, []);   <span class="tok-comment">// focus lúc mount</span>
 return &lt;input ref={inputRef} /&gt;;</code></pre>
 
@@ -159,13 +159,13 @@ return &lt;input ref={inputRef} /&gt;;</code></pre>
 <p class="lead"><code>useMemo</code> and <code>useCallback</code> are the same idea applied to two things: remember a result across renders and only recompute it when the inputs change. <code>useMemo</code> remembers a <em>value</em>; <code>useCallback</code> remembers a <em>function</em>. Both are optimisations — reach for them when you have a reason, not by reflex.</p>
 
 <h3>useMemo — recompute only when dependencies change</h3>
-<pre><code>const value = useMemo(() =&gt; expensiveCompute(dep), [dep]);</code></pre>
+<pre><code class="language-javascript">const value = useMemo(() =&gt; expensiveCompute(dep), [dep]);</code></pre>
 <p>React runs the function on the first render and caches the result. On later renders it re-runs the function <em>only if</em> a dependency changed (same <code>Object.is</code> comparison as effects); otherwise it returns the cached value. Captured from a real render — a memo depending on <code>dep</code>, across a mount, two unrelated re-renders, and one <code>dep</code> change:</p>
 <div class="out">useMemo computes (mount + 2 unrelated renders + 1 dep change): 2</div>
 <p>Read that: the expensive function ran <strong>twice</strong>, not four times. Once on mount, <em>zero</em> times during the two re-renders where <code>dep</code> was unchanged (an unrelated piece of state changed), and once when <code>dep</code> actually changed. Without <code>useMemo</code> it would have run on all four renders. That is the win — but only worth it when the computation is genuinely expensive.</p>
 
 <h3>useCallback — the same, for a function</h3>
-<pre><code>const handleSearch = useCallback((q) =&gt; { doSearch(q, filter); }, [filter]);</code></pre>
+<pre><code class="language-javascript">const handleSearch = useCallback((q) =&gt; { doSearch(q, filter); }, [filter]);</code></pre>
 <p><code>useCallback(fn, deps)</code> is exactly <code>useMemo(() =&gt; fn, deps)</code> — it returns the <em>same function reference</em> across renders until a dependency changes. Why would you care about a function's reference? Two reasons: (1) it is a dependency of an effect or another memo (a new function every render would re-trigger them — the Chapter 5 pitfall), or (2) you pass it to a child wrapped in <code>React.memo</code> (Chapter 7), which skips re-rendering only if its props are referentially equal.</p>
 
 <h3>When NOT to use them — which is most of the time</h3>
@@ -206,13 +206,13 @@ return &lt;input ref={inputRef} /&gt;;</code></pre>
 <p class="lead"><code>useMemo</code> và <code>useCallback</code> là cùng một ý áp cho hai thứ: nhớ một kết quả qua các render và chỉ tính lại khi đầu vào đổi. <code>useMemo</code> nhớ một <em>giá trị</em>; <code>useCallback</code> nhớ một <em>hàm</em>. Cả hai là tối ưu — dùng khi có lý do, đừng dùng theo phản xạ.</p>
 
 <h3>useMemo — chỉ tính lại khi phụ thuộc đổi</h3>
-<pre><code>const value = useMemo(() =&gt; expensiveCompute(dep), [dep]);</code></pre>
+<pre><code class="language-javascript">const value = useMemo(() =&gt; expensiveCompute(dep), [dep]);</code></pre>
 <p>React chạy hàm ở render đầu và cache kết quả. Ở các render sau nó chạy lại hàm <em>chỉ khi</em> một phụ thuộc đổi (cùng phép so <code>Object.is</code> như effect); nếu không nó trả về giá trị cache. Ghi từ một render thật — một memo phụ thuộc <code>dep</code>, qua một mount, hai render vô can, và một lần đổi <code>dep</code>:</p>
 <div class="out">useMemo computes (mount + 2 unrelated renders + 1 dep change): 2</div>
 <p>Đọc kỹ: hàm đắt chạy <strong>hai</strong> lần, không phải bốn. Một lần lúc mount, <em>không</em> lần nào trong hai render mà <code>dep</code> không đổi (một mẩu state khác đổi), và một lần khi <code>dep</code> thật sự đổi. Không có <code>useMemo</code> thì nó đã chạy cả bốn render. Đó là cái lợi — nhưng chỉ đáng khi phép tính thật sự đắt.</p>
 
 <h3>useCallback — y hệt, nhưng cho một hàm</h3>
-<pre><code>const handleSearch = useCallback((q) =&gt; { doSearch(q, filter); }, [filter]);</code></pre>
+<pre><code class="language-javascript">const handleSearch = useCallback((q) =&gt; { doSearch(q, filter); }, [filter]);</code></pre>
 <p><code>useCallback(fn, deps)</code> đúng bằng <code>useMemo(() =&gt; fn, deps)</code> — nó trả về <em>cùng tham chiếu hàm</em> qua các render cho tới khi một phụ thuộc đổi. Vì sao bạn phải quan tâm tham chiếu của một hàm? Hai lý do: (1) nó là phụ thuộc của một effect hay memo khác (một hàm mới mỗi render sẽ kích hoạt lại chúng — cái bẫy Chương 5), hoặc (2) bạn truyền nó cho một con bọc trong <code>React.memo</code> (Chương 7), vốn bỏ qua render lại chỉ khi props bằng nhau về tham chiếu.</p>
 
 <h3>Khi nào KHÔNG dùng chúng — tức là phần lớn thời gian</h3>
@@ -263,7 +263,7 @@ return &lt;input ref={inputRef} /&gt;;</code></pre>
 <p class="lead"><code>useState</code> is perfect for independent values. But when state gets complex — many fields that update together, transitions with rules ("you can't submit while loading") — scattering <code>setX</code> calls across handlers gets fragile. <code>useReducer</code> collects <em>all</em> the ways state can change into one pure function.</p>
 
 <h3>The reducer is a pure function of (state, action)</h3>
-<pre><code>function reducer(state, action) {
+<pre><code class="language-javascript">function reducer(state, action) {
   switch (action.type) {
     case 'inc': return { n: state.n + 1 };
     case 'add': return { n: state.n + action.by };
@@ -275,7 +275,7 @@ return &lt;input ref={inputRef} /&gt;;</code></pre>
 <p>Verified: 0 → (inc) 1 → (add 5) 6 → (inc) 7. Every transition is a line in the reducer; nothing changes state except by dispatching an action through it.</p>
 
 <h3>Wiring it up with useReducer</h3>
-<pre><code>const [state, dispatch] = useReducer(reducer, { n: 0 });
+<pre><code class="language-html">const [state, dispatch] = useReducer(reducer, { n: 0 });
 
 <span class="tok-comment">// components don't call setState — they dispatch actions</span>
 &lt;button onClick={() =&gt; dispatch({ type: 'inc' })}&gt;+1&lt;/button&gt;
@@ -313,7 +313,7 @@ return &lt;input ref={inputRef} /&gt;;</code></pre>
 <p class="lead"><code>useState</code> hoàn hảo cho các giá trị độc lập. Nhưng khi state phức tạp — nhiều trường cập nhật cùng nhau, các chuyển trạng thái có luật ("không được submit khi đang loading") — rải các lời gọi <code>setX</code> khắp handler trở nên mong manh. <code>useReducer</code> gom <em>mọi</em> cách state có thể đổi vào một hàm thuần.</p>
 
 <h3>Reducer là một hàm thuần của (state, action)</h3>
-<pre><code>function reducer(state, action) {
+<pre><code class="language-javascript">function reducer(state, action) {
   switch (action.type) {
     case 'inc': return { n: state.n + 1 };
     case 'add': return { n: state.n + action.by };
@@ -325,7 +325,7 @@ return &lt;input ref={inputRef} /&gt;;</code></pre>
 <p>Đã kiểm: 0 → (inc) 1 → (add 5) 6 → (inc) 7. Mỗi chuyển trạng thái là một dòng trong reducer; không gì đổi state trừ khi dispatch một action qua nó.</p>
 
 <h3>Nối dây bằng useReducer</h3>
-<pre><code>const [state, dispatch] = useReducer(reducer, { n: 0 });
+<pre><code class="language-html">const [state, dispatch] = useReducer(reducer, { n: 0 });
 
 <span class="tok-comment">// component không gọi setState — chúng dispatch action</span>
 &lt;button onClick={() =&gt; dispatch({ type: 'inc' })}&gt;+1&lt;/button&gt;
@@ -373,7 +373,7 @@ return &lt;input ref={inputRef} /&gt;;</code></pre>
 <p class="lead">Lifting state up (Chapter 3) is right until the state has to travel through many components that don't use it, just to forward it down — prop drilling. <code>useContext</code> lets a value be read by any component in a subtree directly, no matter how deep, without passing it as a prop at every level.</p>
 
 <h3>The three steps</h3>
-<pre><code>// 1 · create a context
+<pre><code class="language-typescript">// 1 · create a context
 const ThemeContext = createContext('light');
 
 // 2 · a provider makes a value available to everything inside it
@@ -428,7 +428,7 @@ function DeepButton() {
 <p class="lead">Nâng state lên (Chương 3) đúng cho tới khi state phải đi qua nhiều component không dùng nó, chỉ để chuyển tiếp xuống — prop drilling. <code>useContext</code> cho một giá trị được đọc bởi bất kỳ component nào trong một nhánh cây một cách trực tiếp, dù sâu tới đâu, mà không truyền nó làm prop ở mỗi tầng.</p>
 
 <h3>Ba bước</h3>
-<pre><code>// 1 · tạo một context
+<pre><code class="language-typescript">// 1 · tạo một context
 const ThemeContext = createContext('light');
 
 // 2 · một provider làm một giá trị khả dụng cho mọi thứ bên trong nó
@@ -494,7 +494,7 @@ function DeepButton() {
 
 <h3>From duplicated logic to a named hook</h3>
 <p>Say two components both track the window width. Instead of copying the effect, extract it:</p>
-<pre><code>function useWindowWidth() {
+<pre><code class="language-typescript">function useWindowWidth() {
   const [width, setWidth] = useState(window.innerWidth);
   useEffect(() =&gt; {
     const onResize = () =&gt; setWidth(window.innerWidth);
@@ -551,7 +551,7 @@ function Header() {
 
 <h3>Từ logic lặp lại tới một hook có tên</h3>
 <p>Giả sử hai component đều theo dõi chiều rộng cửa sổ. Thay vì chép effect, hãy tách nó ra:</p>
-<pre><code>function useWindowWidth() {
+<pre><code class="language-typescript">function useWindowWidth() {
   const [width, setWidth] = useState(window.innerWidth);
   useEffect(() =&gt; {
     const onResize = () =&gt; setWidth(window.innerWidth);

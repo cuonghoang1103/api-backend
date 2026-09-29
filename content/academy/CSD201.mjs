@@ -2,7 +2,7 @@
  * CSD201 — Data Structures and Algorithms (Cấu trúc dữ liệu và giải thuật). Kỳ 3.
  * Bám syllabus FPTU (sylID 10368, 8 CLO) + giáo trình Goodrich/Tamassia/Goldwasser
  * "Data Structures and Algorithms in Java 6e". Tiên quyết PRO192. Java + Eclipse.
- * Song ngữ EN/VN (.ml-en/.ml-vi, tiêu đề EN|||VI). Code Java <pre>+.tok-*+.out; sơ đồ lz-*.
+ * Song ngữ EN/VN (.ml-en/.ml-vi, tiêu đề EN|||VI). Code Java <pre><code class="language-java">+.tok-*+.out; sơ đồ lz-*.
  * Luyện: CodeLab data-structures-algorithms (#module-503..508) + java-core + /algorithms.
  * Seed: node scripts/academy-seed-course.mjs --file ./content/academy/CSD201.mjs --apply
  */
@@ -390,7 +390,7 @@ export default {
 <p class="lead">An array stores items in one contiguous block, so reading position <span class="badge">i</span> is instant — O(1). The price: a fixed size, and inserting or deleting in the middle shifts everything after it — O(n).</p>
 <pre><span class="tok-type">int</span>[] a = <span class="tok-keyword">new</span> <span class="tok-type">int</span>[5];
 a[2] = 7;              <span class="tok-comment">// O(1) access</span>
-<span class="tok-comment">// insert at front → shift all right: O(n)</span></pre>
+<span class="tok-comment">// insert at front → shift all right: O(n)</span></code></pre>
 <div class="out"><b>ArrayList</b> wraps an array and doubles its capacity when full, giving amortised O(1) append while keeping O(1) random access.</div>
 <table>
   <thead><tr><th>Operation</th><th>Array / ArrayList</th></tr></thead>
@@ -412,9 +412,9 @@ a[2] = 7;              <span class="tok-comment">// O(1) access</span>
 <span class="eyebrow">Chương 1 · Bài 1.1</span>
 <h2>Mảng &amp; mảng động</h2>
 <p class="lead">Mảng lưu các phần tử trong một khối liền kề, nên đọc vị trí <span class="badge">i</span> là tức thì — O(1). Cái giá: kích thước cố định, và chèn/xóa ở giữa phải dời mọi thứ phía sau — O(n).</p>
-<pre><span class="tok-type">int</span>[] a = <span class="tok-keyword">new</span> <span class="tok-type">int</span>[5];
+<pre><code class="language-java"><span class="tok-type">int</span>[] a = <span class="tok-keyword">new</span> <span class="tok-type">int</span>[5];
 a[2] = 7;              <span class="tok-comment">// truy cập O(1)</span>
-<span class="tok-comment">// chèn đầu → dời cả sang phải: O(n)</span></pre>
+<span class="tok-comment">// chèn đầu → dời cả sang phải: O(n)</span></code></pre>
 <div class="out"><b>ArrayList</b> bọc một mảng và gấp đôi dung lượng khi đầy, cho phép append O(1) khấu hao mà vẫn giữ truy cập ngẫu nhiên O(1).</div>
 <table>
   <thead><tr><th>Thao tác</th><th>Mảng / ArrayList</th></tr></thead>
@@ -456,12 +456,12 @@ a[2] = 7;              <span class="tok-comment">// truy cập O(1)</span>
   <div class="lz-step">→ [3|•]</div>
   <div class="lz-step">→ [9|null]</div>
 </div>
-<pre><span class="tok-keyword">class</span> <span class="tok-type">Node</span> {
+<pre><code class="language-java"><span class="tok-keyword">class</span> <span class="tok-type">Node</span> {
     <span class="tok-type">int</span> data;
     <span class="tok-type">Node</span> next;               <span class="tok-comment">// doubly: also &#96;Node prev&#96;</span>
 }
 <span class="tok-comment">// insert after a node p:</span>
-newNode.next = p.next;  p.next = newNode;   <span class="tok-comment">// O(1)</span></pre>
+newNode.next = p.next;  p.next = newNode;   <span class="tok-comment">// O(1)</span></code></pre>
 <table>
   <thead><tr><th>Variant</th><th>Extra</th></tr></thead>
   <tbody>
@@ -487,12 +487,12 @@ newNode.next = p.next;  p.next = newNode;   <span class="tok-comment">// O(1)</s
   <div class="lz-step">→ [3|•]</div>
   <div class="lz-step">→ [9|null]</div>
 </div>
-<pre><span class="tok-keyword">class</span> <span class="tok-type">Node</span> {
+<pre><code class="language-java"><span class="tok-keyword">class</span> <span class="tok-type">Node</span> {
     <span class="tok-type">int</span> data;
     <span class="tok-type">Node</span> next;               <span class="tok-comment">// đôi: thêm &#96;Node prev&#96;</span>
 }
 <span class="tok-comment">// chèn sau nút p:</span>
-newNode.next = p.next;  p.next = newNode;   <span class="tok-comment">// O(1)</span></pre>
+newNode.next = p.next;  p.next = newNode;   <span class="tok-comment">// O(1)</span></code></pre>
 <table>
   <thead><tr><th>Biến thể</th><th>Thêm</th></tr></thead>
   <tbody>
@@ -527,7 +527,7 @@ newNode.next = p.next;  p.next = newNode;   <span class="tok-comment">// O(1)</s
 <p>An empty list is simply <span class="badge">header ⇄ trailer</span>. Every real node therefore always has a non-null <span class="badge">prev</span> and a non-null <span class="badge">next</span> — no null checks anywhere in insert/delete.</p>
 
 <h3>The core pattern — memorise these six lines</h3>
-<pre><span class="tok-comment">// insert newest between predecessor p and successor s</span>
+<pre><code class="language-java"><span class="tok-comment">// insert newest between predecessor p and successor s</span>
 <span class="tok-keyword">private void</span> <span class="tok-function">addBetween</span>(<span class="tok-type">E</span> e, Node&lt;E&gt; p, Node&lt;E&gt; s) {
     Node&lt;E&gt; newest = <span class="tok-keyword">new</span> Node&lt;&gt;(e, p, s);
     p.next = newest;
@@ -541,7 +541,7 @@ newNode.next = p.next;  p.next = newNode;   <span class="tok-comment">// O(1)</s
     n.next.prev = n.prev;
     size--;
     <span class="tok-keyword">return</span> n.element;
-}</pre>
+}</code></pre>
 <p>Then every public operation is a one-liner: <span class="badge">addFirst(e)</span> = <span class="badge">addBetween(e, header, header.next)</span>; <span class="badge">addLast(e)</span> = <span class="badge">addBetween(e, trailer.prev, trailer)</span>; <span class="badge">removeLast()</span> = <span class="badge">remove(trailer.prev)</span>.</p>
 
 <h3>Worked example — deleting B from A ⇄ B ⇄ C, step by step</h3>
@@ -574,7 +574,7 @@ newNode.next = p.next;  p.next = newNode;   <span class="tok-comment">// O(1)</s
 <p>Danh sách rỗng đơn giản là <span class="badge">header ⇄ trailer</span>. Nhờ vậy mọi nút thật luôn có <span class="badge">prev</span> khác null và <span class="badge">next</span> khác null — không cần kiểm tra null ở bất kỳ đâu trong chèn/xoá.</p>
 
 <h3>Mẫu cốt lõi — thuộc lòng sáu dòng này</h3>
-<pre><span class="tok-comment">// chèn newest vào giữa nút trước p và nút sau s</span>
+<pre><code class="language-java"><span class="tok-comment">// chèn newest vào giữa nút trước p và nút sau s</span>
 <span class="tok-keyword">private void</span> <span class="tok-function">addBetween</span>(<span class="tok-type">E</span> e, Node&lt;E&gt; p, Node&lt;E&gt; s) {
     Node&lt;E&gt; newest = <span class="tok-keyword">new</span> Node&lt;&gt;(e, p, s);
     p.next = newest;
@@ -588,7 +588,7 @@ newNode.next = p.next;  p.next = newNode;   <span class="tok-comment">// O(1)</s
     n.next.prev = n.prev;
     size--;
     <span class="tok-keyword">return</span> n.element;
-}</pre>
+}</code></pre>
 <p>Sau đó mọi thao tác công khai chỉ còn một dòng: <span class="badge">addFirst(e)</span> = <span class="badge">addBetween(e, header, header.next)</span>; <span class="badge">addLast(e)</span> = <span class="badge">addBetween(e, trailer.prev, trailer)</span>; <span class="badge">removeLast()</span> = <span class="badge">remove(trailer.prev)</span>.</p>
 
 <h3>Ví dụ có lời giải — xoá B khỏi A ⇄ B ⇄ C, từng bước</h3>
@@ -635,25 +635,25 @@ newNode.next = p.next;  p.next = newNode;   <span class="tok-comment">// O(1)</s
 </tbody></table>
 
 <h3>Worked example — the loop that turns O(n) into O(n²)</h3>
-<pre><span class="tok-type">List</span>&lt;<span class="tok-type">Integer</span>&gt; list = <span class="tok-keyword">new</span> <span class="tok-type">LinkedList</span>&lt;&gt;();
+<pre><code class="language-java"><span class="tok-type">List</span>&lt;<span class="tok-type">Integer</span>&gt; list = <span class="tok-keyword">new</span> <span class="tok-type">LinkedList</span>&lt;&gt;();
 <span class="tok-comment">// ... 100_000 elements ...</span>
 <span class="tok-keyword">for</span> (<span class="tok-type">int</span> i = 0; i &lt; list.<span class="tok-function">size</span>(); i++) {
     sum += list.<span class="tok-function">get</span>(i);   <span class="tok-comment">// ← O(i) walk, EVERY iteration</span>
-}</pre>
+}</code></pre>
 <div class="out"><b>Analysis:</b> iteration i walks i nodes, so total work = 0+1+2+…+(n−1) = <b>n(n−1)/2 ≈ n²/2</b>. With n = 100,000 that is about <b>5 × 10⁹</b> pointer hops — seconds instead of milliseconds.<br>
 <b>Fix:</b> use the iterator (or the for-each loop, which compiles to it):<br>
 <span class="badge">for (int x : list) sum += x;</span> → each step is one <span class="badge">next</span> hop → total <b>O(n)</b>.<br>
 <b>Lesson:</b> the same code is fast on ArrayList and quadratic on LinkedList. Index-based loops are an <em>array</em> idiom.</div>
 
 <h3>Iterators and the exception everyone hits</h3>
-<pre><span class="tok-keyword">for</span> (<span class="tok-type">String</span> s : list) {
+<pre><code class="language-java"><span class="tok-keyword">for</span> (<span class="tok-type">String</span> s : list) {
     <span class="tok-keyword">if</span> (s.<span class="tok-function">isEmpty</span>()) list.<span class="tok-function">remove</span>(s);   <span class="tok-comment">// ✗ ConcurrentModificationException</span>
 }
 
 <span class="tok-type">Iterator</span>&lt;<span class="tok-type">String</span>&gt; it = list.<span class="tok-function">iterator</span>();
 <span class="tok-keyword">while</span> (it.<span class="tok-function">hasNext</span>()) {
     <span class="tok-keyword">if</span> (it.<span class="tok-function">next</span>().<span class="tok-function">isEmpty</span>()) it.<span class="tok-function">remove</span>();   <span class="tok-comment">// ✓ correct</span>
-}</pre>
+}</code></pre>
 <p>The collection keeps a <span class="badge">modCount</span>; the iterator remembers the value it saw at creation. Any structural change made behind the iterator's back makes the counters disagree, and the next <span class="badge">next()</span> throws — <strong>fail-fast</strong>, so you get an exception at the bug instead of silent corruption.</p>
 
 <div class="pitfall"><b>"LinkedList is faster for insertion" — half true.</b> Inserting is O(1) only if you are <em>already at the position</em> (holding an iterator). <span class="badge">list.add(k, e)</span> still walks k nodes first. In real benchmarks ArrayList usually wins anyway because arrays are contiguous and CPU-cache friendly, while list nodes are scattered across the heap.</div>
@@ -676,25 +676,25 @@ newNode.next = p.next;  p.next = newNode;   <span class="tok-comment">// O(1)</s
 </tbody></table>
 
 <h3>Ví dụ có lời giải — vòng lặp biến O(n) thành O(n²)</h3>
-<pre><span class="tok-type">List</span>&lt;<span class="tok-type">Integer</span>&gt; list = <span class="tok-keyword">new</span> <span class="tok-type">LinkedList</span>&lt;&gt;();
+<pre><code class="language-java"><span class="tok-type">List</span>&lt;<span class="tok-type">Integer</span>&gt; list = <span class="tok-keyword">new</span> <span class="tok-type">LinkedList</span>&lt;&gt;();
 <span class="tok-comment">// ... 100_000 phần tử ...</span>
 <span class="tok-keyword">for</span> (<span class="tok-type">int</span> i = 0; i &lt; list.<span class="tok-function">size</span>(); i++) {
     sum += list.<span class="tok-function">get</span>(i);   <span class="tok-comment">// ← đi bộ O(i), MỖI vòng lặp</span>
-}</pre>
+}</code></pre>
 <div class="out"><b>Phân tích:</b> vòng thứ i phải đi qua i nút, nên tổng công = 0+1+2+…+(n−1) = <b>n(n−1)/2 ≈ n²/2</b>. Với n = 100.000 là khoảng <b>5 × 10⁹</b> bước nhảy con trỏ — mất vài giây thay vì vài mili-giây.<br>
 <b>Cách sửa:</b> dùng iterator (hoặc vòng for-each, vốn biên dịch ra iterator):<br>
 <span class="badge">for (int x : list) sum += x;</span> → mỗi bước chỉ một cú nhảy <span class="badge">next</span> → tổng <b>O(n)</b>.<br>
 <b>Bài học:</b> cùng một đoạn code chạy nhanh trên ArrayList và bậc hai trên LinkedList. Vòng lặp theo chỉ số là thành ngữ của <em>mảng</em>.</div>
 
 <h3>Iterator và ngoại lệ ai cũng dính</h3>
-<pre><span class="tok-keyword">for</span> (<span class="tok-type">String</span> s : list) {
+<pre><code class="language-java"><span class="tok-keyword">for</span> (<span class="tok-type">String</span> s : list) {
     <span class="tok-keyword">if</span> (s.<span class="tok-function">isEmpty</span>()) list.<span class="tok-function">remove</span>(s);   <span class="tok-comment">// ✗ ConcurrentModificationException</span>
 }
 
 <span class="tok-type">Iterator</span>&lt;<span class="tok-type">String</span>&gt; it = list.<span class="tok-function">iterator</span>();
 <span class="tok-keyword">while</span> (it.<span class="tok-function">hasNext</span>()) {
     <span class="tok-keyword">if</span> (it.<span class="tok-function">next</span>().<span class="tok-function">isEmpty</span>()) it.<span class="tok-function">remove</span>();   <span class="tok-comment">// ✓ đúng</span>
-}</pre>
+}</code></pre>
 <p>Tập hợp giữ một biến đếm <span class="badge">modCount</span>; iterator nhớ giá trị nó thấy lúc được tạo. Bất kỳ thay đổi cấu trúc nào làm sau lưng iterator đều khiến hai bộ đếm lệch nhau, và lần <span class="badge">next()</span> kế tiếp ném ngoại lệ — <strong>fail-fast</strong>, tức bạn nhận lỗi ngay tại chỗ sai thay vì hỏng dữ liệu âm thầm.</p>
 
 <div class="pitfall"><b>"LinkedList chèn nhanh hơn" — đúng một nửa.</b> Chèn chỉ O(1) khi bạn <em>đã đứng sẵn ở vị trí đó</em> (đang cầm iterator). <span class="badge">list.add(k, e)</span> vẫn phải đi qua k nút trước. Trong đo đạc thực tế ArrayList thường thắng, vì mảng nằm liền nhau và thân thiện với cache CPU, còn các nút liên kết rải rác khắp heap.</div>
@@ -715,7 +715,7 @@ newNode.next = p.next;  p.next = newNode;   <span class="tok-comment">// O(1)</s
 <p class="lead">These three are the standard workout for linked lists. Learn the shape of each — reversal is "three pointers", cycle detection is "two speeds", merging is "compare heads" — and most list questions become variations you already know.</p>
 
 <h3>Problem 1 — Reverse a singly linked list, in place</h3>
-<pre>Node&lt;E&gt; <span class="tok-function">reverse</span>(Node&lt;E&gt; head) {
+<pre><code class="language-java">Node&lt;E&gt; <span class="tok-function">reverse</span>(Node&lt;E&gt; head) {
     Node&lt;E&gt; prev = <span class="tok-keyword">null</span>, cur = head;
     <span class="tok-keyword">while</span> (cur != <span class="tok-keyword">null</span>) {
         Node&lt;E&gt; next = cur.next;   <span class="tok-comment">// 1. remember the rest</span>
@@ -724,7 +724,7 @@ newNode.next = p.next;  p.next = newNode;   <span class="tok-comment">// O(1)</s
         cur  = next;
     }
     <span class="tok-keyword">return</span> prev;                   <span class="tok-comment">// new head</span>
-}</pre>
+}</code></pre>
 <div class="out"><b>Trace on A → B → C → null:</b><br>
 start: prev=null, cur=A<br>
 iter 1: next=B; A.next=null; prev=A; cur=B &nbsp;→&nbsp; list so far: A→null<br>
@@ -734,7 +734,7 @@ loop ends, return prev = <b>C</b>. Cost: <b>O(n) time, O(1) extra space</b>.<br>
 <b>Why "next" must be saved first:</b> line 2 destroys <span class="badge">cur.next</span>; without the copy you lose the rest of the list forever.</div>
 
 <h3>Problem 2 — Detect a cycle (Floyd's tortoise and hare)</h3>
-<pre><span class="tok-type">boolean</span> <span class="tok-function">hasCycle</span>(Node&lt;E&gt; head) {
+<pre><code class="language-java"><span class="tok-type">boolean</span> <span class="tok-function">hasCycle</span>(Node&lt;E&gt; head) {
     Node&lt;E&gt; slow = head, fast = head;
     <span class="tok-keyword">while</span> (fast != <span class="tok-keyword">null</span> &amp;&amp; fast.next != <span class="tok-keyword">null</span>) {
         slow = slow.next;          <span class="tok-comment">// 1 step</span>
@@ -742,13 +742,13 @@ loop ends, return prev = <b>C</b>. Cost: <b>O(n) time, O(1) extra space</b>.<br>
         <span class="tok-keyword">if</span> (slow == fast) <span class="tok-keyword">return</span> <span class="tok-keyword">true</span>;
     }
     <span class="tok-keyword">return</span> <span class="tok-keyword">false</span>;
-}</pre>
+}</code></pre>
 <div class="out"><b>Why it must work:</b> inside a cycle of length c, the fast pointer gains exactly 1 position on the slow pointer per iteration. The gap therefore takes every value 0,1,…,c−1 and must hit 0 within c steps — a meeting is guaranteed. If there is no cycle, fast walks off the end first.<br>
 <b>Trace on 1→2→3→4→2 (cycle back to 2):</b> (slow,fast) = (2,3) → (3,2) → (4,4) <b>meet at 4</b> → cycle detected.<br>
 <b>Cost:</b> O(n) time, O(1) space — beats the "store every visited node in a HashSet" solution, which needs O(n) memory.</div>
 
 <h3>Problem 3 — Merge two sorted lists</h3>
-<pre>Node&lt;<span class="tok-type">Integer</span>&gt; <span class="tok-function">merge</span>(Node&lt;<span class="tok-type">Integer</span>&gt; a, Node&lt;<span class="tok-type">Integer</span>&gt; b) {
+<pre><code class="language-java">Node&lt;<span class="tok-type">Integer</span>&gt; <span class="tok-function">merge</span>(Node&lt;<span class="tok-type">Integer</span>&gt; a, Node&lt;<span class="tok-type">Integer</span>&gt; b) {
     Node&lt;<span class="tok-type">Integer</span>&gt; dummy = <span class="tok-keyword">new</span> Node&lt;&gt;(0), tail = dummy;
     <span class="tok-keyword">while</span> (a != <span class="tok-keyword">null</span> &amp;&amp; b != <span class="tok-keyword">null</span>) {
         <span class="tok-keyword">if</span> (a.element &lt;= b.element) { tail.next = a; a = a.next; }
@@ -757,7 +757,7 @@ loop ends, return prev = <b>C</b>. Cost: <b>O(n) time, O(1) extra space</b>.<br>
     }
     tail.next = (a != <span class="tok-keyword">null</span>) ? a : b;   <span class="tok-comment">// attach the leftover tail</span>
     <span class="tok-keyword">return</span> dummy.next;
-}</pre>
+}</code></pre>
 <div class="out"><b>Trace on a = 1→4→7, b = 2→3→9:</b><br>
 compare 1,2 → take 1 · compare 4,2 → take 2 · compare 4,3 → take 3 · compare 4,9 → take 4 · compare 7,9 → take 7 · a exhausted → attach 9.<br>
 <b>Result:</b> 1→2→3→4→7→9 in <b>O(n+m)</b> with no extra array. Note the <span class="badge">dummy</span> node — the same sentinel trick from 1.3, so you never special-case "the result list is still empty".<br>
@@ -773,7 +773,7 @@ compare 1,2 → take 1 · compare 4,2 → take 2 · compare 4,3 → take 3 · co
 <p class="lead">Ba bài này là bài tập thể lực chuẩn cho danh sách liên kết. Nhớ lấy hình dạng của từng bài — đảo danh sách là "ba con trỏ", phát hiện chu trình là "hai tốc độ", trộn là "so hai đầu" — thì hầu hết câu hỏi về danh sách chỉ còn là biến thể bạn đã biết.</p>
 
 <h3>Bài 1 — Đảo ngược danh sách liên kết đơn, tại chỗ</h3>
-<pre>Node&lt;E&gt; <span class="tok-function">reverse</span>(Node&lt;E&gt; head) {
+<pre><code class="language-java">Node&lt;E&gt; <span class="tok-function">reverse</span>(Node&lt;E&gt; head) {
     Node&lt;E&gt; prev = <span class="tok-keyword">null</span>, cur = head;
     <span class="tok-keyword">while</span> (cur != <span class="tok-keyword">null</span>) {
         Node&lt;E&gt; next = cur.next;   <span class="tok-comment">// 1. nhớ phần còn lại</span>
@@ -782,7 +782,7 @@ compare 1,2 → take 1 · compare 4,2 → take 2 · compare 4,3 → take 3 · co
         cur  = next;
     }
     <span class="tok-keyword">return</span> prev;                   <span class="tok-comment">// đầu mới</span>
-}</pre>
+}</code></pre>
 <div class="out"><b>Chạy tay trên A → B → C → null:</b><br>
 đầu: prev=null, cur=A<br>
 vòng 1: next=B; A.next=null; prev=A; cur=B &nbsp;→&nbsp; đến giờ: A→null<br>
@@ -792,7 +792,7 @@ hết vòng, trả về prev = <b>C</b>. Chi phí: <b>O(n) thời gian, O(1) b�
 <b>Vì sao phải lưu "next" trước:</b> dòng 2 phá huỷ <span class="badge">cur.next</span>; không có bản sao là mất luôn phần đuôi danh sách.</div>
 
 <h3>Bài 2 — Phát hiện chu trình (rùa và thỏ của Floyd)</h3>
-<pre><span class="tok-type">boolean</span> <span class="tok-function">hasCycle</span>(Node&lt;E&gt; head) {
+<pre><code class="language-java"><span class="tok-type">boolean</span> <span class="tok-function">hasCycle</span>(Node&lt;E&gt; head) {
     Node&lt;E&gt; slow = head, fast = head;
     <span class="tok-keyword">while</span> (fast != <span class="tok-keyword">null</span> &amp;&amp; fast.next != <span class="tok-keyword">null</span>) {
         slow = slow.next;          <span class="tok-comment">// 1 bước</span>
@@ -800,13 +800,13 @@ hết vòng, trả về prev = <b>C</b>. Chi phí: <b>O(n) thời gian, O(1) b�
         <span class="tok-keyword">if</span> (slow == fast) <span class="tok-keyword">return</span> <span class="tok-keyword">true</span>;
     }
     <span class="tok-keyword">return</span> <span class="tok-keyword">false</span>;
-}</pre>
+}</code></pre>
 <div class="out"><b>Vì sao chắc chắn đúng:</b> bên trong chu trình dài c, con trỏ nhanh rút ngắn khoảng cách với con trỏ chậm đúng 1 vị trí mỗi vòng. Vậy khoảng cách nhận đủ mọi giá trị 0,1,…,c−1 và bắt buộc chạm 0 trong vòng c bước — gặp nhau là chắc chắn. Nếu không có chu trình, con nhanh sẽ ra khỏi đuôi trước.<br>
 <b>Chạy tay trên 1→2→3→4→2 (quay lại 2):</b> (slow,fast) = (2,3) → (3,2) → (4,4) <b>gặp nhau tại 4</b> → có chu trình.<br>
 <b>Chi phí:</b> O(n) thời gian, O(1) bộ nhớ — hơn hẳn cách "lưu mọi nút đã thăm vào HashSet" vốn tốn O(n) bộ nhớ.</div>
 
 <h3>Bài 3 — Trộn hai danh sách đã sắp xếp</h3>
-<pre>Node&lt;<span class="tok-type">Integer</span>&gt; <span class="tok-function">merge</span>(Node&lt;<span class="tok-type">Integer</span>&gt; a, Node&lt;<span class="tok-type">Integer</span>&gt; b) {
+<pre><code class="language-java">Node&lt;<span class="tok-type">Integer</span>&gt; <span class="tok-function">merge</span>(Node&lt;<span class="tok-type">Integer</span>&gt; a, Node&lt;<span class="tok-type">Integer</span>&gt; b) {
     Node&lt;<span class="tok-type">Integer</span>&gt; dummy = <span class="tok-keyword">new</span> Node&lt;&gt;(0), tail = dummy;
     <span class="tok-keyword">while</span> (a != <span class="tok-keyword">null</span> &amp;&amp; b != <span class="tok-keyword">null</span>) {
         <span class="tok-keyword">if</span> (a.element &lt;= b.element) { tail.next = a; a = a.next; }
@@ -815,7 +815,7 @@ hết vòng, trả về prev = <b>C</b>. Chi phí: <b>O(n) thời gian, O(1) b�
     }
     tail.next = (a != <span class="tok-keyword">null</span>) ? a : b;   <span class="tok-comment">// nối phần đuôi còn lại</span>
     <span class="tok-keyword">return</span> dummy.next;
-}</pre>
+}</code></pre>
 <div class="out"><b>Chạy tay trên a = 1→4→7, b = 2→3→9:</b><br>
 so 1,2 → lấy 1 · so 4,2 → lấy 2 · so 4,3 → lấy 3 · so 4,9 → lấy 4 · so 7,9 → lấy 7 · a hết → nối 9.<br>
 <b>Kết quả:</b> 1→2→3→4→7→9 trong <b>O(n+m)</b>, không cần mảng phụ. Để ý nút <span class="badge">dummy</span> — chính mẹo lính canh ở bài 1.3, nhờ đó không phải xét riêng trường hợp "danh sách kết quả còn rỗng".<br>
@@ -861,9 +861,9 @@ so 1,2 → lấy 1 · so 4,2 → lấy 2 · so 4,3 → lấy 3 · so 4,9 → l�
   <div class="lz-layer"><b>Queue (FIFO)</b> — <span class="badge">enqueue</span> / <span class="badge">dequeue</span>, O(1). Task scheduling, BFS, buffers.</div>
   <div class="lz-layer"><b>Deque</b> — a double-ended queue: add/remove at either end.</div>
 </div>
-<pre><span class="tok-type">Deque</span>&lt;<span class="tok-type">Integer</span>&gt; stack = <span class="tok-keyword">new</span> <span class="tok-function">ArrayDeque</span>&lt;&gt;();
+<pre><code class="language-java"><span class="tok-type">Deque</span>&lt;<span class="tok-type">Integer</span>&gt; stack = <span class="tok-keyword">new</span> <span class="tok-function">ArrayDeque</span>&lt;&gt;();
 stack.<span class="tok-function">push</span>(1); stack.<span class="tok-function">push</span>(2);
-stack.<span class="tok-function">pop</span>();     <span class="tok-comment">// → 2 (last in, first out)</span></pre>
+stack.<span class="tok-function">pop</span>();     <span class="tok-comment">// → 2 (last in, first out)</span></code></pre>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Ring buffers — why a queue must not shift.</b> Implementing a queue on a plain array by shifting every element on dequeue is O(n); real systems use a circular (ring) buffer with head and tail indices that wrap around with modulo, keeping enqueue and dequeue at true O(1). This is how OS I/O buffers and bounded producer–consumer queues are built. <em>The syllabus states queue ops are O(1) but leaves out the wrap-around trick that actually delivers it on an array.</em></div>
 <a class="link-card codelab" href="/code-lab/data-structures-algorithms?ref=%2Fcourses%2Fdata-structures-and-algorithms%2Flearn&reflabel=CSD201%20%E2%80%94%20Data%20Structures%20and%20Algorithms#module-503" target="_blank" rel="noopener">
   <span class="lc-ico">📚</span>
@@ -880,9 +880,9 @@ stack.<span class="tok-function">pop</span>();     <span class="tok-comment">// 
   <div class="lz-layer"><b>Hàng đợi (FIFO)</b> — <span class="badge">enqueue</span> / <span class="badge">dequeue</span>, O(1). Lập lịch tác vụ, BFS, bộ đệm.</div>
   <div class="lz-layer"><b>Deque</b> — hàng đợi hai đầu: thêm/lấy ở cả hai đầu.</div>
 </div>
-<pre><span class="tok-type">Deque</span>&lt;<span class="tok-type">Integer</span>&gt; stack = <span class="tok-keyword">new</span> <span class="tok-function">ArrayDeque</span>&lt;&gt;();
+<pre><code class="language-java"><span class="tok-type">Deque</span>&lt;<span class="tok-type">Integer</span>&gt; stack = <span class="tok-keyword">new</span> <span class="tok-function">ArrayDeque</span>&lt;&gt;();
 stack.<span class="tok-function">push</span>(1); stack.<span class="tok-function">push</span>(2);
-stack.<span class="tok-function">pop</span>();     <span class="tok-comment">// → 2 (vào sau, ra trước)</span></pre>
+stack.<span class="tok-function">pop</span>();     <span class="tok-comment">// → 2 (vào sau, ra trước)</span></code></pre>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Bộ đệm vòng (ring buffer) — vì sao hàng đợi không được dời.</b> Cài hàng đợi trên mảng thường bằng cách dời mọi phần tử khi dequeue là O(n); hệ thống thực dùng bộ đệm vòng với chỉ số head và tail quay vòng bằng phép chia lấy dư, giữ enqueue và dequeue thật sự O(1). Đây là cách xây bộ đệm I/O của hệ điều hành và hàng đợi sản xuất–tiêu thụ có giới hạn. <em>Giáo trình nói thao tác hàng đợi là O(1) nhưng bỏ qua mẹo quay vòng thực sự tạo ra điều đó trên mảng.</em></div>
 <a class="link-card codelab" href="/code-lab/data-structures-algorithms?ref=%2Fcourses%2Fdata-structures-and-algorithms%2Flearn&reflabel=CSD201%20%E2%80%94%20Data%20Structures%20and%20Algorithms#module-503" target="_blank" rel="noopener">
   <span class="lc-ico">📚</span>
@@ -904,7 +904,7 @@ stack.<span class="tok-function">pop</span>();     <span class="tok-comment">// 
 <p class="lead">A stack is easy either way: push/pop always happen at one end. A <strong>queue</strong> is where the array version gets interesting, because naively removing from the front means shifting everything left — O(n) per dequeue. The fix is to never move the data: move the <em>indices</em> instead, and wrap them around with <span class="badge">%</span>.</p>
 
 <h3>The circular array queue</h3>
-<pre><span class="tok-keyword">public class</span> <span class="tok-type">ArrayQueue</span>&lt;E&gt; {
+<pre><code class="language-java"><span class="tok-keyword">public class</span> <span class="tok-type">ArrayQueue</span>&lt;E&gt; {
     <span class="tok-keyword">private</span> <span class="tok-type">E</span>[] data;
     <span class="tok-keyword">private</span> <span class="tok-type">int</span> f = 0;      <span class="tok-comment">// index of the front element</span>
     <span class="tok-keyword">private</span> <span class="tok-type">int</span> sz = 0;     <span class="tok-comment">// number of elements</span>
@@ -923,7 +923,7 @@ stack.<span class="tok-function">pop</span>();     <span class="tok-comment">// 
         sz--;
         <span class="tok-keyword">return</span> answer;
     }
-}</pre>
+}</code></pre>
 
 <h3>Worked example — watch the indices wrap</h3>
 <div class="out"><b>Capacity 5, start empty (f=0, sz=0).</b><br>
@@ -954,7 +954,7 @@ enqueue F → avail = (2+3)%5 = <b>0</b> → wraps to the front! → [F _ C D E]
 <p class="lead">Ngăn xếp thì dễ theo cả hai cách: push/pop luôn xảy ra ở một đầu. <strong>Hàng đợi</strong> mới là chỗ bản mảng trở nên thú vị, vì lấy phần tử đầu ra một cách ngây thơ nghĩa là dời toàn bộ sang trái — O(n) mỗi lần lấy. Cách chữa là đừng bao giờ dời dữ liệu: hãy dời <em>chỉ số</em>, và cho chúng quay vòng bằng <span class="badge">%</span>.</p>
 
 <h3>Hàng đợi bằng mảng vòng</h3>
-<pre><span class="tok-keyword">public class</span> <span class="tok-type">ArrayQueue</span>&lt;E&gt; {
+<pre><code class="language-java"><span class="tok-keyword">public class</span> <span class="tok-type">ArrayQueue</span>&lt;E&gt; {
     <span class="tok-keyword">private</span> <span class="tok-type">E</span>[] data;
     <span class="tok-keyword">private</span> <span class="tok-type">int</span> f = 0;      <span class="tok-comment">// chỉ số phần tử đầu</span>
     <span class="tok-keyword">private</span> <span class="tok-type">int</span> sz = 0;     <span class="tok-comment">// số phần tử</span>
@@ -973,7 +973,7 @@ enqueue F → avail = (2+3)%5 = <b>0</b> → wraps to the front! → [F _ C D E]
         sz--;
         <span class="tok-keyword">return</span> answer;
     }
-}</pre>
+}</code></pre>
 
 <h3>Ví dụ có lời giải — nhìn chỉ số quay vòng</h3>
 <div class="out"><b>Sức chứa 5, bắt đầu rỗng (f=0, sz=0).</b><br>
@@ -1012,7 +1012,7 @@ enqueue F → avail = (2+3)%5 = <b>0</b> → quay về đầu mảng! → [F _ C
 <p class="lead">One rule explains every stack application: <strong>whenever the most recently opened thing must be closed first, you need a stack.</strong> Brackets, HTML tags, function calls, undo history, backtracking — all the same shape.</p>
 
 <h3>Application 1 — Balanced brackets</h3>
-<pre><span class="tok-type">boolean</span> <span class="tok-function">isBalanced</span>(<span class="tok-type">String</span> s) {
+<pre><code class="language-java"><span class="tok-type">boolean</span> <span class="tok-function">isBalanced</span>(<span class="tok-type">String</span> s) {
     <span class="tok-type">Deque</span>&lt;<span class="tok-type">Character</span>&gt; st = <span class="tok-keyword">new</span> <span class="tok-type">ArrayDeque</span>&lt;&gt;();
     <span class="tok-type">String</span> open = <span class="tok-string">"([{"</span>, close = <span class="tok-string">")]}"</span>;
     <span class="tok-keyword">for</span> (<span class="tok-type">char</span> c : s.<span class="tok-function">toCharArray</span>()) {
@@ -1024,7 +1024,7 @@ enqueue F → avail = (2+3)%5 = <b>0</b> → quay về đầu mảng! → [F _ C
         }
     }
     <span class="tok-keyword">return</span> st.<span class="tok-function">isEmpty</span>();                                <span class="tok-comment">// nothing left open</span>
-}</pre>
+}</code></pre>
 <div class="out"><b>Trace on <span class="badge">{[a+(b)]}</span>:</b> push { · push [ · push ( · see ) → pop ( ✓ · see ] → pop [ ✓ · see } → pop { ✓ · end, stack empty → <b>true</b>.<br>
 <b>Trace on <span class="badge">([)]</span>:</b> push ( · push [ · see ) → pop gives [ , which does not match ( → <b>false</b>. Note that counting brackets would wrongly accept this string — order matters, and only a stack captures order.</div>
 
@@ -1054,7 +1054,7 @@ push 3 → [17,3] · <span class="badge">−</span> → pop 3, pop 17 → push <
 <p class="lead">Một quy tắc giải thích mọi ứng dụng của stack: <strong>khi nào thứ mở gần nhất phải được đóng trước, khi đó bạn cần một ngăn xếp.</strong> Dấu ngoặc, thẻ HTML, lời gọi hàm, lịch sử hoàn tác, quay lui — tất cả cùng một hình dạng.</p>
 
 <h3>Ứng dụng 1 — Kiểm tra dấu ngoặc cân bằng</h3>
-<pre><span class="tok-type">boolean</span> <span class="tok-function">isBalanced</span>(<span class="tok-type">String</span> s) {
+<pre><code class="language-java"><span class="tok-type">boolean</span> <span class="tok-function">isBalanced</span>(<span class="tok-type">String</span> s) {
     <span class="tok-type">Deque</span>&lt;<span class="tok-type">Character</span>&gt; st = <span class="tok-keyword">new</span> <span class="tok-type">ArrayDeque</span>&lt;&gt;();
     <span class="tok-type">String</span> open = <span class="tok-string">"([{"</span>, close = <span class="tok-string">")]}"</span>;
     <span class="tok-keyword">for</span> (<span class="tok-type">char</span> c : s.<span class="tok-function">toCharArray</span>()) {
@@ -1066,7 +1066,7 @@ push 3 → [17,3] · <span class="badge">−</span> → pop 3, pop 17 → push <
         }
     }
     <span class="tok-keyword">return</span> st.<span class="tok-function">isEmpty</span>();                                <span class="tok-comment">// không còn gì đang mở</span>
-}</pre>
+}</code></pre>
 <div class="out"><b>Chạy tay trên <span class="badge">{[a+(b)]}</span>:</b> push { · push [ · push ( · gặp ) → pop ( ✓ · gặp ] → pop [ ✓ · gặp } → pop { ✓ · hết chuỗi, stack rỗng → <b>true</b>.<br>
 <b>Chạy tay trên <span class="badge">([)]</span>:</b> push ( · push [ · gặp ) → pop ra [ , không khớp ( → <b>false</b>. Để ý: cách "đếm số dấu ngoặc" sẽ chấp nhận nhầm chuỗi này — thứ tự mới là điều quan trọng, và chỉ ngăn xếp mới nắm được thứ tự.</div>
 
@@ -1115,7 +1115,7 @@ push 3 → [17,3] · <span class="badge">−</span> → pop 3, pop 17 → push <
 
 <h3>Worked example — sliding-window maximum in O(n)</h3>
 <p>Given an array and a window of width k, report the maximum of every window. The naive solution rescans each window: O(n·k). The deque solution keeps <em>indices</em> in decreasing order of value, so the front is always the current maximum.</p>
-<pre><span class="tok-type">int</span>[] <span class="tok-function">maxWindow</span>(<span class="tok-type">int</span>[] a, <span class="tok-type">int</span> k) {
+<pre><code class="language-java"><span class="tok-type">int</span>[] <span class="tok-function">maxWindow</span>(<span class="tok-type">int</span>[] a, <span class="tok-type">int</span> k) {
     <span class="tok-type">Deque</span>&lt;<span class="tok-type">Integer</span>&gt; dq = <span class="tok-keyword">new</span> <span class="tok-type">ArrayDeque</span>&lt;&gt;();     <span class="tok-comment">// holds indices</span>
     <span class="tok-type">int</span>[] out = <span class="tok-keyword">new</span> <span class="tok-type">int</span>[a.length - k + 1];
     <span class="tok-keyword">for</span> (<span class="tok-type">int</span> i = 0; i &lt; a.length; i++) {
@@ -1125,7 +1125,7 @@ push 3 → [17,3] · <span class="badge">−</span> → pop 3, pop 17 → push <
         <span class="tok-keyword">if</span> (i &gt;= k - 1) out[i - k + 1] = a[dq.<span class="tok-function">peekFirst</span>()];
     }
     <span class="tok-keyword">return</span> out;
-}</pre>
+}</code></pre>
 <div class="out"><b>Trace on a = [1, 3, −1, −3, 5], k = 3</b> (deque shown as values):<br>
 i=0: push 1 → [1]<br>
 i=1: 3 ≥ 1 → drop 1, push 3 → [3]<br>
@@ -1155,7 +1155,7 @@ i=4: 5 ≥ −3, ≥ −1, ≥ 3 → drop all three, push 5 → [5] → max = <b
 
 <h3>Ví dụ có lời giải — cực đại cửa sổ trượt trong O(n)</h3>
 <p>Cho một mảng và cửa sổ rộng k, hãy báo cực đại của từng cửa sổ. Cách ngây thơ quét lại mỗi cửa sổ: O(n·k). Cách dùng deque giữ <em>chỉ số</em> theo thứ tự giá trị giảm dần, nên đầu deque luôn là cực đại hiện tại.</p>
-<pre><span class="tok-type">int</span>[] <span class="tok-function">maxWindow</span>(<span class="tok-type">int</span>[] a, <span class="tok-type">int</span> k) {
+<pre><code class="language-java"><span class="tok-type">int</span>[] <span class="tok-function">maxWindow</span>(<span class="tok-type">int</span>[] a, <span class="tok-type">int</span> k) {
     <span class="tok-type">Deque</span>&lt;<span class="tok-type">Integer</span>&gt; dq = <span class="tok-keyword">new</span> <span class="tok-type">ArrayDeque</span>&lt;&gt;();     <span class="tok-comment">// chứa chỉ số</span>
     <span class="tok-type">int</span>[] out = <span class="tok-keyword">new</span> <span class="tok-type">int</span>[a.length - k + 1];
     <span class="tok-keyword">for</span> (<span class="tok-type">int</span> i = 0; i &lt; a.length; i++) {
@@ -1165,7 +1165,7 @@ i=4: 5 ≥ −3, ≥ −1, ≥ 3 → drop all three, push 5 → [5] → max = <b
         <span class="tok-keyword">if</span> (i &gt;= k - 1) out[i - k + 1] = a[dq.<span class="tok-function">peekFirst</span>()];
     }
     <span class="tok-keyword">return</span> out;
-}</pre>
+}</code></pre>
 <div class="out"><b>Chạy tay trên a = [1, 3, −1, −3, 5], k = 3</b> (deque hiển thị theo giá trị):<br>
 i=0: đẩy 1 → [1]<br>
 i=1: 3 ≥ 1 → bỏ 1, đẩy 3 → [3]<br>
@@ -1191,9 +1191,9 @@ i=4: 5 ≥ −3, ≥ −1, ≥ 3 → bỏ cả ba, đẩy 5 → [5] → cực đ
 <h2>Priority Queues &amp; Heaps</h2>
 <p class="lead">A <strong>priority queue</strong> always removes the highest-priority item, not the oldest. The efficient implementation is a <strong>binary heap</strong> — a complete binary tree kept in an array where each parent outranks its children.</p>
 <div class="out"><b>Min-heap:</b> the smallest element is always at the root. Insert and remove-min are both O(log n); peek-min is O(1).</div>
-<pre><span class="tok-type">PriorityQueue</span>&lt;<span class="tok-type">Integer</span>&gt; pq = <span class="tok-keyword">new</span> <span class="tok-function">PriorityQueue</span>&lt;&gt;();
+<pre><code class="language-java"><span class="tok-type">PriorityQueue</span>&lt;<span class="tok-type">Integer</span>&gt; pq = <span class="tok-keyword">new</span> <span class="tok-function">PriorityQueue</span>&lt;&gt;();
 pq.<span class="tok-function">add</span>(5); pq.<span class="tok-function">add</span>(1); pq.<span class="tok-function">add</span>(3);
-pq.<span class="tok-function">poll</span>();   <span class="tok-comment">// → 1 (smallest first)</span></pre>
+pq.<span class="tok-function">poll</span>();   <span class="tok-comment">// → 1 (smallest first)</span></code></pre>
 <p>Heaps power heap sort, Dijkstra's shortest path, and Huffman coding — you will meet all three later in this course.</p>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Building a heap is O(n), not O(n log n).</b> Inserting n elements one by one costs O(n log n), but Floyd's bottom-up heapify — sift down from the last internal node up to the root — builds the whole heap in O(n). The proof relies on most nodes sitting near the leaves where sift-down is cheap, so the sum telescopes to linear. <em>Courses teach insert as O(log n) and stop; the surprising O(n) bulk-build is a favourite exam trick.</em></div>
 <a class="link-card codelab" href="/code-lab/data-structures-algorithms?ref=%2Fcourses%2Fdata-structures-and-algorithms%2Flearn&reflabel=CSD201%20%E2%80%94%20Data%20Structures%20and%20Algorithms#module-507" target="_blank" rel="noopener">
@@ -1207,9 +1207,9 @@ pq.<span class="tok-function">poll</span>();   <span class="tok-comment">// → 
 <h2>Hàng đợi ưu tiên &amp; Heap</h2>
 <p class="lead"><strong>Hàng đợi ưu tiên</strong> luôn lấy phần tử ưu tiên cao nhất, không phải cũ nhất. Cách cài đặt hiệu quả là <strong>heap nhị phân</strong> — một cây nhị phân đầy đủ lưu trong mảng, nơi mỗi cha "trội" hơn các con.</p>
 <div class="out"><b>Min-heap:</b> phần tử nhỏ nhất luôn ở gốc. Chèn và lấy-min đều O(log n); xem-min là O(1).</div>
-<pre><span class="tok-type">PriorityQueue</span>&lt;<span class="tok-type">Integer</span>&gt; pq = <span class="tok-keyword">new</span> <span class="tok-function">PriorityQueue</span>&lt;&gt;();
+<pre><code class="language-java"><span class="tok-type">PriorityQueue</span>&lt;<span class="tok-type">Integer</span>&gt; pq = <span class="tok-keyword">new</span> <span class="tok-function">PriorityQueue</span>&lt;&gt;();
 pq.<span class="tok-function">add</span>(5); pq.<span class="tok-function">add</span>(1); pq.<span class="tok-function">add</span>(3);
-pq.<span class="tok-function">poll</span>();   <span class="tok-comment">// → 1 (nhỏ nhất trước)</span></pre>
+pq.<span class="tok-function">poll</span>();   <span class="tok-comment">// → 1 (nhỏ nhất trước)</span></code></pre>
 <p>Heap là động cơ của heap sort, tìm đường ngắn nhất Dijkstra, và mã hóa Huffman — bạn sẽ gặp cả ba sau trong môn này.</p>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Dựng một heap là O(n), không phải O(n log n).</b> Chèn từng phần tử một tốn O(n log n), nhưng heapify từ dưới lên của Floyd — sift-down từ nút trong cuối cùng lên tới gốc — dựng cả heap trong O(n). Chứng minh dựa vào việc hầu hết nút nằm gần lá nơi sift-down rẻ, nên tổng co lại thành tuyến tính. <em>Giáo trình dạy chèn là O(log n) rồi dừng; cách dựng hàng loạt O(n) bất ngờ là mẹo thi ưa thích.</em></div>
 <a class="link-card codelab" href="/code-lab/data-structures-algorithms?ref=%2Fcourses%2Fdata-structures-and-algorithms%2Flearn&reflabel=CSD201%20%E2%80%94%20Data%20Structures%20and%20Algorithms#module-507" target="_blank" rel="noopener">
@@ -1256,10 +1256,10 @@ pq.<span class="tok-function">poll</span>();   <span class="tok-comment">// → 
 <span class="eyebrow">Chapter 3 · Lesson 3.1</span>
 <h2>Recursion — a function that calls itself</h2>
 <p class="lead">A recursive solution defines a problem in terms of smaller versions of itself. It needs two things: a <strong>base case</strong> that stops, and a <strong>recursive case</strong> that moves toward it.</p>
-<pre><span class="tok-type">long</span> <span class="tok-function">factorial</span>(<span class="tok-type">int</span> n) {
+<pre><code class="language-java"><span class="tok-type">long</span> <span class="tok-function">factorial</span>(<span class="tok-type">int</span> n) {
     <span class="tok-keyword">if</span> (n &lt;= 1) <span class="tok-keyword">return</span> 1;      <span class="tok-comment">// base case</span>
     <span class="tok-keyword">return</span> n * <span class="tok-function">factorial</span>(n - 1); <span class="tok-comment">// recursive case</span>
-}</pre>
+}</code></pre>
 <div class="out">factorial(4) = 4·3·2·1 = 24. Each call waits on the stack until the one below returns.</div>
 <div class="pitfall"><b>Trap:</b> naive recursion can explode. Fibonacci as <span class="badge">fib(n-1)+fib(n-2)</span> recomputes the same values billions of times — O(2ⁿ). Add memoisation (cache results) to make it O(n). Also: a missing base case → <span class="badge">StackOverflowError</span>.</div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Tail-call optimisation — and why Java lacks it.</b> When a recursive call is the very last action, some compilers reuse the current stack frame instead of adding a new one, turning the recursion into a loop that never overflows the stack. Scheme, Scala and many functional languages guarantee this, but the JVM deliberately does not — so deep tail recursion in Java still throws StackOverflowError and must be rewritten as iteration. <em>The syllabus warns about stack overflow but not that the usual fix is a language-level optimisation Java chose to omit.</em></div>
@@ -1273,10 +1273,10 @@ pq.<span class="tok-function">poll</span>();   <span class="tok-comment">// → 
 <span class="eyebrow">Chương 3 · Bài 3.1</span>
 <h2>Đệ quy — hàm gọi chính nó</h2>
 <p class="lead">Lời giải đệ quy định nghĩa bài toán theo các phiên bản nhỏ hơn của chính nó. Nó cần hai thứ: một <strong>ca cơ sở</strong> để dừng, và một <strong>ca đệ quy</strong> tiến về phía đó.</p>
-<pre><span class="tok-type">long</span> <span class="tok-function">factorial</span>(<span class="tok-type">int</span> n) {
+<pre><code class="language-java"><span class="tok-type">long</span> <span class="tok-function">factorial</span>(<span class="tok-type">int</span> n) {
     <span class="tok-keyword">if</span> (n &lt;= 1) <span class="tok-keyword">return</span> 1;      <span class="tok-comment">// ca cơ sở</span>
     <span class="tok-keyword">return</span> n * <span class="tok-function">factorial</span>(n - 1); <span class="tok-comment">// ca đệ quy</span>
-}</pre>
+}</code></pre>
 <div class="out">factorial(4) = 4·3·2·1 = 24. Mỗi lời gọi chờ trên call stack tới khi lời gọi dưới trả về.</div>
 <div class="pitfall"><b>Bẫy:</b> đệ quy ngây thơ có thể bùng nổ. Fibonacci dạng <span class="badge">fib(n-1)+fib(n-2)</span> tính lại cùng giá trị hàng tỷ lần — O(2ⁿ). Thêm ghi nhớ (cache kết quả) để thành O(n). Ngoài ra: thiếu ca cơ sở → <span class="badge">StackOverflowError</span>.</div>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Tối ưu đệ quy đuôi — và vì sao Java không có.</b> Khi lời gọi đệ quy là hành động cuối cùng, một số trình biên dịch tái dùng khung ngăn xếp hiện tại thay vì thêm khung mới, biến đệ quy thành vòng lặp không bao giờ tràn stack. Scheme, Scala và nhiều ngôn ngữ hàm đảm bảo điều này, nhưng JVM cố ý không — nên đệ quy đuôi sâu trong Java vẫn ném StackOverflowError và phải viết lại thành vòng lặp. <em>Giáo trình cảnh báo tràn stack nhưng không nói cách sửa thường là một tối ưu cấp ngôn ngữ mà Java chọn bỏ.</em></div>
@@ -1300,31 +1300,31 @@ pq.<span class="tok-function">poll</span>();   <span class="tok-comment">// → 
 <p class="lead">Goodrich opens the recursion chapter with four examples on purpose: each has a different <em>branching pattern</em>, and the pattern decides the cost. Learn to see the shape, not just the code.</p>
 
 <h3>1. Factorial — linear recursion (one call per level)</h3>
-<pre><span class="tok-type">int</span> <span class="tok-function">fact</span>(<span class="tok-type">int</span> n) {
+<pre><code class="language-java"><span class="tok-type">int</span> <span class="tok-function">fact</span>(<span class="tok-type">int</span> n) {
     <span class="tok-keyword">if</span> (n == 0) <span class="tok-keyword">return</span> 1;        <span class="tok-comment">// base case</span>
     <span class="tok-keyword">return</span> n * <span class="tok-function">fact</span>(n - 1);      <span class="tok-comment">// recursive case</span>
-}</pre>
+}</code></pre>
 <div class="out"><b>Trace fact(4):</b> fact(4) → 4·fact(3) → 4·3·fact(2) → 4·3·2·fact(1) → 4·3·2·1·fact(0) → 4·3·2·1·1 = <b>24</b>.<br>
 The stack grows to depth n and then unwinds: <b>O(n) time, O(n) stack space</b>. Notice the multiplication happens on the way <em>back up</em> — nothing is computed on the way down.</div>
 
 <h3>2. The English ruler — multiple recursion (two calls, drawing between them)</h3>
-<pre><span class="tok-keyword">void</span> <span class="tok-function">drawInterval</span>(<span class="tok-type">int</span> len) {
+<pre><code class="language-java"><span class="tok-keyword">void</span> <span class="tok-function">drawInterval</span>(<span class="tok-type">int</span> len) {
     <span class="tok-keyword">if</span> (len &gt; 0) {
         <span class="tok-function">drawInterval</span>(len - 1);   <span class="tok-comment">// upper half</span>
         <span class="tok-function">drawLine</span>(len);           <span class="tok-comment">// the centre tick</span>
         <span class="tok-function">drawInterval</span>(len - 1);   <span class="tok-comment">// lower half</span>
     }
-}</pre>
+}</code></pre>
 <div class="out"><b>drawInterval(3)</b> prints ticks of length 1,2,1,3,1,2,1 — that is 2³−1 = <b>7 lines</b> from 2⁴−1 = 15 calls. Each extra unit of length <em>doubles</em> the work: <b>O(2ⁿ)</b>. This is the shape that makes naive Fibonacci exponential too.</div>
 
 <h3>3. Binary search — binary recursion that discards half</h3>
-<pre><span class="tok-type">int</span> <span class="tok-function">bsearch</span>(<span class="tok-type">int</span>[] a, <span class="tok-type">int</span> target, <span class="tok-type">int</span> lo, <span class="tok-type">int</span> hi) {
+<pre><code class="language-java"><span class="tok-type">int</span> <span class="tok-function">bsearch</span>(<span class="tok-type">int</span>[] a, <span class="tok-type">int</span> target, <span class="tok-type">int</span> lo, <span class="tok-type">int</span> hi) {
     <span class="tok-keyword">if</span> (lo &gt; hi) <span class="tok-keyword">return</span> -1;                       <span class="tok-comment">// not found</span>
     <span class="tok-type">int</span> mid = lo + (hi - lo) / 2;                 <span class="tok-comment">// overflow-safe midpoint</span>
     <span class="tok-keyword">if</span> (a[mid] == target) <span class="tok-keyword">return</span> mid;
     <span class="tok-keyword">if</span> (a[mid] &gt; target)  <span class="tok-keyword">return</span> <span class="tok-function">bsearch</span>(a, target, lo, mid - 1);
     <span class="tok-keyword">else</span>                  <span class="tok-keyword">return</span> <span class="tok-function">bsearch</span>(a, target, mid + 1, hi);
-}</pre>
+}</code></pre>
 <div class="out"><b>Search 22 in [2,4,5,7,8,9,12,14,17,19,22,25,27,28,33,37] (n=16):</b><br>
 lo=0, hi=15 → mid=7 → a[7]=14 &lt; 22 → search right half<br>
 lo=8, hi=15 → mid=11 → a[11]=25 &gt; 22 → search left<br>
@@ -1333,13 +1333,13 @@ lo=10, hi=10 → mid=10 → a[10]=22 ✓ → <b>found at index 10 in 4 probes</b
 Each call halves the range: log₂16 = 4 — <b>O(log n)</b>. Two calls appear in the code but only <em>one</em> ever runs, so the recursion is a single chain.</div>
 
 <h3>4. File-system traversal — recursion over a tree</h3>
-<pre><span class="tok-type">long</span> <span class="tok-function">diskUsage</span>(<span class="tok-type">File</span> root) {
+<pre><code class="language-java"><span class="tok-type">long</span> <span class="tok-function">diskUsage</span>(<span class="tok-type">File</span> root) {
     <span class="tok-type">long</span> total = root.<span class="tok-function">length</span>();
     <span class="tok-keyword">if</span> (root.<span class="tok-function">isDirectory</span>())
         <span class="tok-keyword">for</span> (<span class="tok-type">String</span> child : root.<span class="tok-function">list</span>())
             total += <span class="tok-function">diskUsage</span>(<span class="tok-keyword">new</span> <span class="tok-type">File</span>(root, child));
     <span class="tok-keyword">return</span> total;
-}</pre>
+}</code></pre>
 <p>The recursion mirrors the data: a directory contains directories. This is the first time recursion is not an optimisation but the <em>natural</em> expression of the structure — the same reason tree traversal in Chapter 4 is written recursively.</p>
 
 <div class="pitfall"><b>Missing or unreachable base case = <span class="badge">StackOverflowError</span>.</b> <span class="badge">fact(-1)</span> in the code above never hits <span class="badge">n == 0</span> and recurses forever. Always ask: does every recursive call move <em>strictly</em> toward the base case? Guard the input, or use <span class="badge">if (n &lt;= 0) return 1;</span>.</div>
@@ -1352,31 +1352,31 @@ Each call halves the range: log₂16 = 4 — <b>O(log n)</b>. Two calls appear i
 <p class="lead">Goodrich mở đầu chương đệ quy bằng bốn ví dụ một cách có chủ đích: mỗi ví dụ có một <em>kiểu phân nhánh</em> riêng, và chính kiểu phân nhánh quyết định chi phí. Hãy học cách nhìn ra hình dạng, chứ không chỉ đọc code.</p>
 
 <h3>1. Giai thừa — đệ quy tuyến tính (một lời gọi mỗi tầng)</h3>
-<pre><span class="tok-type">int</span> <span class="tok-function">fact</span>(<span class="tok-type">int</span> n) {
+<pre><code class="language-java"><span class="tok-type">int</span> <span class="tok-function">fact</span>(<span class="tok-type">int</span> n) {
     <span class="tok-keyword">if</span> (n == 0) <span class="tok-keyword">return</span> 1;        <span class="tok-comment">// trường hợp cơ sở</span>
     <span class="tok-keyword">return</span> n * <span class="tok-function">fact</span>(n - 1);      <span class="tok-comment">// trường hợp đệ quy</span>
-}</pre>
+}</code></pre>
 <div class="out"><b>Chạy tay fact(4):</b> fact(4) → 4·fact(3) → 4·3·fact(2) → 4·3·2·fact(1) → 4·3·2·1·fact(0) → 4·3·2·1·1 = <b>24</b>.<br>
 Ngăn xếp lớn dần tới độ sâu n rồi cuộn ngược: <b>O(n) thời gian, O(n) bộ nhớ ngăn xếp</b>. Để ý phép nhân xảy ra trên đường <em>quay về</em> — lúc đi xuống không tính gì cả.</div>
 
 <h3>2. Thước Anh — đệ quy bội (hai lời gọi, vẽ ở giữa)</h3>
-<pre><span class="tok-keyword">void</span> <span class="tok-function">drawInterval</span>(<span class="tok-type">int</span> len) {
+<pre><code class="language-java"><span class="tok-keyword">void</span> <span class="tok-function">drawInterval</span>(<span class="tok-type">int</span> len) {
     <span class="tok-keyword">if</span> (len &gt; 0) {
         <span class="tok-function">drawInterval</span>(len - 1);   <span class="tok-comment">// nửa trên</span>
         <span class="tok-function">drawLine</span>(len);           <span class="tok-comment">// vạch ở giữa</span>
         <span class="tok-function">drawInterval</span>(len - 1);   <span class="tok-comment">// nửa dưới</span>
     }
-}</pre>
+}</code></pre>
 <div class="out"><b>drawInterval(3)</b> in ra các vạch dài 1,2,1,3,1,2,1 — tức 2³−1 = <b>7 dòng</b> từ 2⁴−1 = 15 lời gọi. Mỗi đơn vị độ dài tăng thêm làm khối lượng công việc <em>nhân đôi</em>: <b>O(2ⁿ)</b>. Đây cũng là hình dạng khiến Fibonacci đệ quy ngây thơ trở nên hàm mũ.</div>
 
 <h3>3. Tìm kiếm nhị phân — đệ quy nhị phân nhưng bỏ đi một nửa</h3>
-<pre><span class="tok-type">int</span> <span class="tok-function">bsearch</span>(<span class="tok-type">int</span>[] a, <span class="tok-type">int</span> target, <span class="tok-type">int</span> lo, <span class="tok-type">int</span> hi) {
+<pre><code class="language-java"><span class="tok-type">int</span> <span class="tok-function">bsearch</span>(<span class="tok-type">int</span>[] a, <span class="tok-type">int</span> target, <span class="tok-type">int</span> lo, <span class="tok-type">int</span> hi) {
     <span class="tok-keyword">if</span> (lo &gt; hi) <span class="tok-keyword">return</span> -1;                       <span class="tok-comment">// không tìm thấy</span>
     <span class="tok-type">int</span> mid = lo + (hi - lo) / 2;                 <span class="tok-comment">// điểm giữa an toàn tràn số</span>
     <span class="tok-keyword">if</span> (a[mid] == target) <span class="tok-keyword">return</span> mid;
     <span class="tok-keyword">if</span> (a[mid] &gt; target)  <span class="tok-keyword">return</span> <span class="tok-function">bsearch</span>(a, target, lo, mid - 1);
     <span class="tok-keyword">else</span>                  <span class="tok-keyword">return</span> <span class="tok-function">bsearch</span>(a, target, mid + 1, hi);
-}</pre>
+}</code></pre>
 <div class="out"><b>Tìm 22 trong [2,4,5,7,8,9,12,14,17,19,22,25,27,28,33,37] (n=16):</b><br>
 lo=0, hi=15 → mid=7 → a[7]=14 &lt; 22 → tìm nửa phải<br>
 lo=8, hi=15 → mid=11 → a[11]=25 &gt; 22 → tìm nửa trái<br>
@@ -1385,13 +1385,13 @@ lo=10, hi=10 → mid=10 → a[10]=22 ✓ → <b>tìm thấy ở chỉ số 10 sa
 Mỗi lời gọi cắt đôi phạm vi: log₂16 = 4 — <b>O(log n)</b>. Code có hai lời gọi nhưng chỉ <em>một</em> cái thực sự chạy, nên đệ quy vẫn là một chuỗi đơn.</div>
 
 <h3>4. Duyệt hệ thống tệp — đệ quy trên cây</h3>
-<pre><span class="tok-type">long</span> <span class="tok-function">diskUsage</span>(<span class="tok-type">File</span> root) {
+<pre><code class="language-java"><span class="tok-type">long</span> <span class="tok-function">diskUsage</span>(<span class="tok-type">File</span> root) {
     <span class="tok-type">long</span> total = root.<span class="tok-function">length</span>();
     <span class="tok-keyword">if</span> (root.<span class="tok-function">isDirectory</span>())
         <span class="tok-keyword">for</span> (<span class="tok-type">String</span> child : root.<span class="tok-function">list</span>())
             total += <span class="tok-function">diskUsage</span>(<span class="tok-keyword">new</span> <span class="tok-type">File</span>(root, child));
     <span class="tok-keyword">return</span> total;
-}</pre>
+}</code></pre>
 <p>Đệ quy ở đây phản chiếu chính dữ liệu: một thư mục chứa các thư mục. Đây là lần đầu đệ quy không phải là mẹo tối ưu mà là cách diễn đạt <em>tự nhiên</em> của cấu trúc — cũng là lý do phép duyệt cây ở Chương 4 được viết đệ quy.</p>
 
 <div class="pitfall"><b>Thiếu hoặc không bao giờ chạm tới trường hợp cơ sở = <span class="badge">StackOverflowError</span>.</b> <span class="badge">fact(-1)</span> trong code trên không bao giờ gặp <span class="badge">n == 0</span> nên đệ quy vô tận. Luôn tự hỏi: mọi lời gọi đệ quy có tiến <em>nghiêm ngặt</em> về phía cơ sở không? Hãy chặn đầu vào, hoặc viết <span class="badge">if (n &lt;= 0) return 1;</span>.</div>
@@ -1544,7 +1544,7 @@ a = 1, b = 2 → n<sup>log₂1</sup> = n⁰ = 1. f(n) = 1 → bằng nhau → <b
 
 <h3>Tail recursion — and how to erase it</h3>
 <p>A call is <strong>tail recursive</strong> when the recursive call is the very last action, with nothing left to compute afterwards. Such a call carries no pending work, so its stack frame is pure waste — you can rewrite it as a loop mechanically.</p>
-<pre><span class="tok-comment">// tail recursive: nothing happens after the call</span>
+<pre><code class="language-java"><span class="tok-comment">// tail recursive: nothing happens after the call</span>
 <span class="tok-type">int</span> <span class="tok-function">bsearch</span>(<span class="tok-type">int</span>[] a, <span class="tok-type">int</span> t, <span class="tok-type">int</span> lo, <span class="tok-type">int</span> hi) {
     <span class="tok-keyword">if</span> (lo &gt; hi) <span class="tok-keyword">return</span> -1;
     <span class="tok-type">int</span> mid = lo + (hi - lo) / 2;
@@ -1561,7 +1561,7 @@ a = 1, b = 2 → n<sup>log₂1</sup> = n⁰ = 1. f(n) = 1 → bằng nhau → <b
         <span class="tok-keyword">if</span> (a[mid] &gt; t) hi = mid - 1; <span class="tok-keyword">else</span> lo = mid + 1;
     }
     <span class="tok-keyword">return</span> -1;
-}</pre>
+}</code></pre>
 <p><b>The mechanical rule:</b> wrap the body in a <span class="badge">while (true)</span>, replace the recursive call by assigning the new arguments to the parameters, and <span class="badge">continue</span>. Factorial is <em>not</em> tail recursive as written (the multiplication happens after the call) — you must add an accumulator parameter first.</p>
 
 <div class="pitfall"><b>Java does not optimise tail calls.</b> Unlike Scala, Kotlin (<span class="badge">tailrec</span>) or functional languages, the JVM keeps every frame — so a tail-recursive method in Java still overflows at ~10,000 deep. Writing a loop is not stylistic preference here; it is the only way to be safe.</div>
@@ -1598,7 +1598,7 @@ a = 1, b = 2 → n<sup>log₂1</sup> = n⁰ = 1. f(n) = 1 → bằng nhau → <b
 
 <h3>Đệ quy đuôi — và cách xoá nó đi</h3>
 <p>Một lời gọi là <strong>đệ quy đuôi</strong> khi lời gọi đệ quy là hành động cuối cùng, sau đó không còn gì phải tính. Lời gọi như vậy không mang theo công việc đang treo, nên khung ngăn xếp của nó là lãng phí thuần tuý — bạn viết lại thành vòng lặp một cách máy móc được.</p>
-<pre><span class="tok-comment">// đệ quy đuôi: sau lời gọi không còn gì xảy ra</span>
+<pre><code class="language-java"><span class="tok-comment">// đệ quy đuôi: sau lời gọi không còn gì xảy ra</span>
 <span class="tok-type">int</span> <span class="tok-function">bsearch</span>(<span class="tok-type">int</span>[] a, <span class="tok-type">int</span> t, <span class="tok-type">int</span> lo, <span class="tok-type">int</span> hi) {
     <span class="tok-keyword">if</span> (lo &gt; hi) <span class="tok-keyword">return</span> -1;
     <span class="tok-type">int</span> mid = lo + (hi - lo) / 2;
@@ -1615,7 +1615,7 @@ a = 1, b = 2 → n<sup>log₂1</sup> = n⁰ = 1. f(n) = 1 → bằng nhau → <b
         <span class="tok-keyword">if</span> (a[mid] &gt; t) hi = mid - 1; <span class="tok-keyword">else</span> lo = mid + 1;
     }
     <span class="tok-keyword">return</span> -1;
-}</pre>
+}</code></pre>
 <p><b>Quy tắc máy móc:</b> bọc thân hàm trong <span class="badge">while (true)</span>, thay lời gọi đệ quy bằng việc gán tham số mới cho chính các tham số, rồi <span class="badge">continue</span>. Giai thừa <em>không</em> phải đệ quy đuôi như đã viết (phép nhân xảy ra sau lời gọi) — phải thêm tham số tích luỹ trước đã.</p>
 
 <div class="pitfall"><b>Java không tối ưu lời gọi đuôi.</b> Khác với Scala, Kotlin (<span class="badge">tailrec</span>) hay các ngôn ngữ hàm, JVM giữ nguyên mọi khung — nên một phương thức đệ quy đuôi trong Java vẫn tràn ở độ sâu ~10.000. Viết vòng lặp ở đây không phải sở thích phong cách; đó là cách duy nhất để an toàn.</div>
@@ -1659,12 +1659,12 @@ a = 1, b = 2 → n<sup>log₂1</sup> = n⁰ = 1. f(n) = 1 → bằng nhau → <b
   <div class="lz-step">Post-order: left → right → node</div>
 </div>
 <div class="out">On a binary search tree, <b>in-order</b> traversal visits the values in sorted order — a key property.</div>
-<pre><span class="tok-keyword">void</span> <span class="tok-function">inorder</span>(<span class="tok-type">Node</span> n) {
+<pre><code class="language-java"><span class="tok-keyword">void</span> <span class="tok-function">inorder</span>(<span class="tok-type">Node</span> n) {
     <span class="tok-keyword">if</span> (n == <span class="tok-keyword">null</span>) <span class="tok-keyword">return</span>;
     <span class="tok-function">inorder</span>(n.left);
     <span class="tok-function">visit</span>(n.data);
     <span class="tok-function">inorder</span>(n.right);
-}</pre>
+}</code></pre>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Morris traversal — in-order with O(1) extra space.</b> Recursive or stack-based in-order traversal uses O(h) memory for the call stack; Morris traversal instead threads temporary links from each node to its in-order predecessor, walking the whole tree with no stack and no recursion, in O(1) auxiliary space. The links are created and undone during the walk, so the tree is left unchanged. <em>The three standard traversals are taught with recursion; achieving the same visit order in constant space is an advanced pointer technique.</em></div>
 <a class="link-card codelab" href="/code-lab/data-structures-algorithms?ref=%2Fcourses%2Fdata-structures-and-algorithms%2Flearn&reflabel=CSD201%20%E2%80%94%20Data%20Structures%20and%20Algorithms#module-506" target="_blank" rel="noopener">
   <span class="lc-ico">🌳</span>
@@ -1682,12 +1682,12 @@ a = 1, b = 2 → n<sup>log₂1</sup> = n⁰ = 1. f(n) = 1 → bằng nhau → <b
   <div class="lz-step">Post-order: trái → phải → nút</div>
 </div>
 <div class="out">Trên cây nhị phân tìm kiếm, duyệt <b>in-order</b> thăm các giá trị theo thứ tự đã sắp — một tính chất then chốt.</div>
-<pre><span class="tok-keyword">void</span> <span class="tok-function">inorder</span>(<span class="tok-type">Node</span> n) {
+<pre><code class="language-java"><span class="tok-keyword">void</span> <span class="tok-function">inorder</span>(<span class="tok-type">Node</span> n) {
     <span class="tok-keyword">if</span> (n == <span class="tok-keyword">null</span>) <span class="tok-keyword">return</span>;
     <span class="tok-function">inorder</span>(n.left);
     <span class="tok-function">visit</span>(n.data);
     <span class="tok-function">inorder</span>(n.right);
-}</pre>
+}</code></pre>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Duyệt Morris — in-order với O(1) bộ nhớ phụ.</b> Duyệt in-order bằng đệ quy hay ngăn xếp tốn O(h) bộ nhớ cho call stack; duyệt Morris thay vào đó luồn các liên kết tạm từ mỗi nút tới nút liền trước theo in-order, đi khắp cây mà không cần stack lẫn đệ quy, chỉ O(1) bộ nhớ phụ. Các liên kết được tạo rồi gỡ trong lúc đi nên cây giữ nguyên. <em>Ba phép duyệt chuẩn được dạy bằng đệ quy; đạt cùng thứ tự thăm với bộ nhớ hằng số là kỹ thuật con trỏ nâng cao.</em></div>
 <a class="link-card codelab" href="/code-lab/data-structures-algorithms?ref=%2Fcourses%2Fdata-structures-and-algorithms%2Flearn&reflabel=CSD201%20%E2%80%94%20Data%20Structures%20and%20Algorithms#module-506" target="_blank" rel="noopener">
   <span class="lc-ico">🌳</span>
@@ -1730,10 +1730,10 @@ Leaves = 8, internal = 7 → 8 = 7 + 1 ✓ the proper-tree rule.<br>
 <b>And in reverse:</b> if a complete tree holds n = 1,000,000 nodes, its height is ⌊log₂(1,000,000)⌋ = <b>19</b>. That is why a balanced tree search touches only ~20 nodes out of a million — the whole point of Chapter 4.</div>
 
 <h3>Implementation A — linked structure</h3>
-<pre><span class="tok-keyword">class</span> <span class="tok-type">Node</span>&lt;E&gt; {
+<pre><code class="language-java"><span class="tok-keyword">class</span> <span class="tok-type">Node</span>&lt;E&gt; {
     <span class="tok-type">E</span> element;
     <span class="tok-type">Node</span>&lt;E&gt; parent, left, right;   <span class="tok-comment">// parent is optional but handy</span>
-}</pre>
+}</code></pre>
 <p>Flexible, grows to any shape, one node per element. Costs three references of overhead per element, and the nodes are scattered in memory.</p>
 
 <h3>Implementation B — array layout (the heap trick)</h3>
@@ -1773,10 +1773,10 @@ Số lá = 8, nút trong = 7 → 8 = 7 + 1 ✓ đúng quy tắc cây đúng.<br>
 <b>Và ngược lại:</b> nếu một cây đầy đủ chứa n = 1.000.000 nút thì chiều cao là ⌊log₂(1.000.000)⌋ = <b>19</b>. Đó là lý do tìm kiếm trên cây cân bằng chỉ chạm ~20 nút trong một triệu — đúng tinh thần của Chương 4.</div>
 
 <h3>Cài đặt A — cấu trúc liên kết</h3>
-<pre><span class="tok-keyword">class</span> <span class="tok-type">Node</span>&lt;E&gt; {
+<pre><code class="language-java"><span class="tok-keyword">class</span> <span class="tok-type">Node</span>&lt;E&gt; {
     <span class="tok-type">E</span> element;
     <span class="tok-type">Node</span>&lt;E&gt; parent, left, right;   <span class="tok-comment">// parent không bắt buộc nhưng tiện</span>
-}</pre>
+}</code></pre>
 <p>Linh hoạt, mọc theo hình dạng bất kỳ, mỗi phần tử một nút. Đổi lại tốn ba tham chiếu phụ trội mỗi phần tử, và các nút nằm rải rác trong bộ nhớ.</p>
 
 <h3>Cài đặt B — bố trí trên mảng (mẹo của heap)</h3>
@@ -1803,14 +1803,14 @@ Không lưu con trỏ nào cả: <em>phép số học</em> chính là cấu trú
 <p class="lead">A traversal visits every node exactly once; the only question is <em>when</em> you process a node relative to its children. Three answers give the three depth-first orders; using a queue instead of recursion gives the fourth.</p>
 
 <h3>The three depth-first orders</h3>
-<pre><span class="tok-keyword">void</span> <span class="tok-function">preOrder</span>(Node n)  { <span class="tok-keyword">if</span> (n == <span class="tok-keyword">null</span>) <span class="tok-keyword">return</span>;
+<pre><code class="language-java"><span class="tok-keyword">void</span> <span class="tok-function">preOrder</span>(Node n)  { <span class="tok-keyword">if</span> (n == <span class="tok-keyword">null</span>) <span class="tok-keyword">return</span>;
     <span class="tok-function">visit</span>(n); <span class="tok-function">preOrder</span>(n.left); <span class="tok-function">preOrder</span>(n.right); }      <span class="tok-comment">// node, L, R</span>
 
 <span class="tok-keyword">void</span> <span class="tok-function">inOrder</span>(Node n)   { <span class="tok-keyword">if</span> (n == <span class="tok-keyword">null</span>) <span class="tok-keyword">return</span>;
     <span class="tok-function">inOrder</span>(n.left); <span class="tok-function">visit</span>(n); <span class="tok-function">inOrder</span>(n.right); }        <span class="tok-comment">// L, node, R</span>
 
 <span class="tok-keyword">void</span> <span class="tok-function">postOrder</span>(Node n) { <span class="tok-keyword">if</span> (n == <span class="tok-keyword">null</span>) <span class="tok-keyword">return</span>;
-    <span class="tok-function">postOrder</span>(n.left); <span class="tok-function">postOrder</span>(n.right); <span class="tok-function">visit</span>(n); }    <span class="tok-comment">// L, R, node</span></pre>
+    <span class="tok-function">postOrder</span>(n.left); <span class="tok-function">postOrder</span>(n.right); <span class="tok-function">visit</span>(n); }    <span class="tok-comment">// L, R, node</span></code></pre>
 
 <h3>Worked example — run all four on one tree</h3>
 <div class="diagram">        A
@@ -1824,7 +1824,7 @@ Không lưu con trỏ nào cả: <em>phép số học</em> chính là cấu trú
 <b>Level-order (breadth-first):</b> A B C D E F — <em>use it to print level by level or to find the shallowest match.</em></div>
 
 <h3>Level-order needs a queue, not recursion</h3>
-<pre><span class="tok-keyword">void</span> <span class="tok-function">levelOrder</span>(Node root) {
+<pre><code class="language-java"><span class="tok-keyword">void</span> <span class="tok-function">levelOrder</span>(Node root) {
     <span class="tok-type">Queue</span>&lt;Node&gt; q = <span class="tok-keyword">new</span> <span class="tok-type">LinkedList</span>&lt;&gt;();
     <span class="tok-keyword">if</span> (root != <span class="tok-keyword">null</span>) q.<span class="tok-function">add</span>(root);
     <span class="tok-keyword">while</span> (!q.<span class="tok-function">isEmpty</span>()) {
@@ -1833,7 +1833,7 @@ Không lưu con trỏ nào cả: <em>phép số học</em> chính là cấu trú
         <span class="tok-keyword">if</span> (n.left != <span class="tok-keyword">null</span>)  q.<span class="tok-function">add</span>(n.left);
         <span class="tok-keyword">if</span> (n.right != <span class="tok-keyword">null</span>) q.<span class="tok-function">add</span>(n.right);
     }
-}</pre>
+}</code></pre>
 <p>Swap the queue for a stack and you get an iterative pre-order — the difference between breadth-first and depth-first is <em>only</em> the container. That idea returns in Chapter 5 for graphs, unchanged.</p>
 
 <h3>Expression trees — where the orders become meaningful</h3>
@@ -1857,14 +1857,14 @@ Không lưu con trỏ nào cả: <em>phép số học</em> chính là cấu trú
 <p class="lead">Một phép duyệt thăm mỗi nút đúng một lần; câu hỏi duy nhất là bạn xử lý nút <em>vào lúc nào</em> so với các con của nó. Ba câu trả lời cho ba thứ tự theo chiều sâu; dùng hàng đợi thay cho đệ quy sẽ cho thứ tự thứ tư.</p>
 
 <h3>Ba thứ tự theo chiều sâu</h3>
-<pre><span class="tok-keyword">void</span> <span class="tok-function">preOrder</span>(Node n)  { <span class="tok-keyword">if</span> (n == <span class="tok-keyword">null</span>) <span class="tok-keyword">return</span>;
+<pre><code class="language-java"><span class="tok-keyword">void</span> <span class="tok-function">preOrder</span>(Node n)  { <span class="tok-keyword">if</span> (n == <span class="tok-keyword">null</span>) <span class="tok-keyword">return</span>;
     <span class="tok-function">visit</span>(n); <span class="tok-function">preOrder</span>(n.left); <span class="tok-function">preOrder</span>(n.right); }      <span class="tok-comment">// nút, T, P</span>
 
 <span class="tok-keyword">void</span> <span class="tok-function">inOrder</span>(Node n)   { <span class="tok-keyword">if</span> (n == <span class="tok-keyword">null</span>) <span class="tok-keyword">return</span>;
     <span class="tok-function">inOrder</span>(n.left); <span class="tok-function">visit</span>(n); <span class="tok-function">inOrder</span>(n.right); }        <span class="tok-comment">// T, nút, P</span>
 
 <span class="tok-keyword">void</span> <span class="tok-function">postOrder</span>(Node n) { <span class="tok-keyword">if</span> (n == <span class="tok-keyword">null</span>) <span class="tok-keyword">return</span>;
-    <span class="tok-function">postOrder</span>(n.left); <span class="tok-function">postOrder</span>(n.right); <span class="tok-function">visit</span>(n); }    <span class="tok-comment">// T, P, nút</span></pre>
+    <span class="tok-function">postOrder</span>(n.left); <span class="tok-function">postOrder</span>(n.right); <span class="tok-function">visit</span>(n); }    <span class="tok-comment">// T, P, nút</span></code></pre>
 
 <h3>Ví dụ có lời giải — chạy cả bốn trên một cây</h3>
 <div class="diagram">        A
@@ -1878,7 +1878,7 @@ Không lưu con trỏ nào cả: <em>phép số học</em> chính là cấu trú
 <b>Theo tầng (chiều rộng):</b> A B C D E F — <em>dùng để in theo từng tầng hoặc tìm kết quả nông nhất.</em></div>
 
 <h3>Duyệt theo tầng cần hàng đợi, không phải đệ quy</h3>
-<pre><span class="tok-keyword">void</span> <span class="tok-function">levelOrder</span>(Node root) {
+<pre><code class="language-java"><span class="tok-keyword">void</span> <span class="tok-function">levelOrder</span>(Node root) {
     <span class="tok-type">Queue</span>&lt;Node&gt; q = <span class="tok-keyword">new</span> <span class="tok-type">LinkedList</span>&lt;&gt;();
     <span class="tok-keyword">if</span> (root != <span class="tok-keyword">null</span>) q.<span class="tok-function">add</span>(root);
     <span class="tok-keyword">while</span> (!q.<span class="tok-function">isEmpty</span>()) {
@@ -1887,7 +1887,7 @@ Không lưu con trỏ nào cả: <em>phép số học</em> chính là cấu trú
         <span class="tok-keyword">if</span> (n.left != <span class="tok-keyword">null</span>)  q.<span class="tok-function">add</span>(n.left);
         <span class="tok-keyword">if</span> (n.right != <span class="tok-keyword">null</span>) q.<span class="tok-function">add</span>(n.right);
     }
-}</pre>
+}</code></pre>
 <p>Đổi hàng đợi thành ngăn xếp là bạn có tiền thứ tự không đệ quy — khác biệt giữa duyệt theo chiều rộng và chiều sâu <em>chỉ nằm ở</em> cái vật chứa. Ý tưởng đó quay lại nguyên vẹn ở Chương 5 với đồ thị.</p>
 
 <h3>Cây biểu thức — nơi các thứ tự trở nên có nghĩa</h3>
@@ -1953,13 +1953,13 @@ Không lưu con trỏ nào cả: <em>phép số học</em> chính là cấu trú
 <p class="lead">Searching a BST is easy — go left if smaller, right if larger. <strong>Modifying</strong> one is where the exam questions live, because the BST property (everything in the left subtree &lt; node &lt; everything in the right subtree) must survive every operation.</p>
 
 <h3>Insertion — always lands at a leaf</h3>
-<pre>Node <span class="tok-function">insert</span>(Node n, <span class="tok-type">int</span> key) {
+<pre><code class="language-java">Node <span class="tok-function">insert</span>(Node n, <span class="tok-type">int</span> key) {
     <span class="tok-keyword">if</span> (n == <span class="tok-keyword">null</span>) <span class="tok-keyword">return new</span> Node(key);        <span class="tok-comment">// found the empty spot</span>
     <span class="tok-keyword">if</span> (key &lt; n.key)      n.left  = <span class="tok-function">insert</span>(n.left, key);
     <span class="tok-keyword">else if</span> (key &gt; n.key) n.right = <span class="tok-function">insert</span>(n.right, key);
     <span class="tok-comment">// key == n.key → duplicate: ignore, or keep a counter</span>
     <span class="tok-keyword">return</span> n;
-}</pre>
+}</code></pre>
 <div class="out"><b>Insert 30, 20, 40, 35 into an empty tree:</b><br>
 30 → becomes the root.<br>
 20 &lt; 30 → left of 30.<br>
@@ -2003,13 +2003,13 @@ Không lưu con trỏ nào cả: <em>phép số học</em> chính là cấu trú
 <p class="lead">Tìm kiếm trên BST thì dễ — nhỏ hơn thì rẽ trái, lớn hơn thì rẽ phải. <strong>Thay đổi</strong> nó mới là chỗ các câu hỏi thi nằm, vì tính chất BST (mọi thứ trong cây con trái &lt; nút &lt; mọi thứ trong cây con phải) phải sống sót qua mọi thao tác.</p>
 
 <h3>Chèn — luôn hạ cánh ở một lá</h3>
-<pre>Node <span class="tok-function">insert</span>(Node n, <span class="tok-type">int</span> key) {
+<pre><code class="language-java">Node <span class="tok-function">insert</span>(Node n, <span class="tok-type">int</span> key) {
     <span class="tok-keyword">if</span> (n == <span class="tok-keyword">null</span>) <span class="tok-keyword">return new</span> Node(key);        <span class="tok-comment">// tìm được chỗ trống</span>
     <span class="tok-keyword">if</span> (key &lt; n.key)      n.left  = <span class="tok-function">insert</span>(n.left, key);
     <span class="tok-keyword">else if</span> (key &gt; n.key) n.right = <span class="tok-function">insert</span>(n.right, key);
     <span class="tok-comment">// key == n.key → trùng khoá: bỏ qua, hoặc giữ một bộ đếm</span>
     <span class="tok-keyword">return</span> n;
-}</pre>
+}</code></pre>
 <div class="out"><b>Chèn 30, 20, 40, 35 vào cây rỗng:</b><br>
 30 → thành gốc.<br>
 20 &lt; 30 → nằm bên trái 30.<br>
@@ -2073,14 +2073,14 @@ Không lưu con trỏ nào cả: <em>phép số học</em> chính là cấu trú
 <p><b>Rule of thumb:</b> if the two steps go the same way, one rotation the opposite way fixes it; if they zig-zag, you need two rotations — first straighten the zig-zag into a straight line, then rotate as in the simple case.</p>
 
 <h3>The rotation itself (right rotation at z)</h3>
-<pre>Node <span class="tok-function">rotateRight</span>(Node z) {
+<pre><code class="language-java">Node <span class="tok-function">rotateRight</span>(Node z) {
     Node y = z.left;
     z.left = y.right;      <span class="tok-comment">// y's right subtree moves under z</span>
     y.right = z;           <span class="tok-comment">// z becomes y's right child</span>
     <span class="tok-function">updateHeight</span>(z);      <span class="tok-comment">// z first — it is now lower</span>
     <span class="tok-function">updateHeight</span>(y);
     <span class="tok-keyword">return</span> y;              <span class="tok-comment">// y is the new subtree root</span>
-}</pre>
+}</code></pre>
 <div class="diagram">      z                y
      / \\              / \\
     y   T4   ⟶       x   z
@@ -2128,14 +2128,14 @@ T1  T2</div>
 <p><b>Mẹo nhớ:</b> nếu hai bước cùng chiều thì một phép xoay ngược chiều là xong; nếu chúng zic-zắc thì cần hai phép xoay — trước hết bẻ zic-zắc thành đường thẳng, rồi xoay như trường hợp đơn giản.</p>
 
 <h3>Bản thân phép xoay (xoay phải tại z)</h3>
-<pre>Node <span class="tok-function">rotateRight</span>(Node z) {
+<pre><code class="language-java">Node <span class="tok-function">rotateRight</span>(Node z) {
     Node y = z.left;
     z.left = y.right;      <span class="tok-comment">// cây con phải của y chuyển xuống dưới z</span>
     y.right = z;           <span class="tok-comment">// z thành con phải của y</span>
     <span class="tok-function">updateHeight</span>(z);      <span class="tok-comment">// z trước — giờ nó nằm thấp hơn</span>
     <span class="tok-function">updateHeight</span>(y);
     <span class="tok-keyword">return</span> y;              <span class="tok-comment">// y là gốc mới của cây con</span>
-}</pre>
+}</code></pre>
 <div class="diagram">      z                y
      / \\              / \\
     y   T4   ⟶       x   z
@@ -2182,7 +2182,7 @@ T1  T2</div>
 <div class="formula"><span class="lbl">HEAP ORDER</span>a[parent(i)] ≤ a[i] &nbsp; for every i &gt; 0 &nbsp;(min-heap)</div>
 
 <h3>Two repair operations — that is the whole data structure</h3>
-<pre><span class="tok-comment">// sift-up: a new element at the end may be too small</span>
+<pre><code class="language-java"><span class="tok-comment">// sift-up: a new element at the end may be too small</span>
 <span class="tok-keyword">void</span> <span class="tok-function">siftUp</span>(<span class="tok-type">int</span> i) {
     <span class="tok-keyword">while</span> (i &gt; 0 &amp;&amp; a[(i-1)/2] &gt; a[i]) { <span class="tok-function">swap</span>(i, (i-1)/2); i = (i-1)/2; }
 }
@@ -2194,7 +2194,7 @@ T1  T2</div>
         <span class="tok-keyword">if</span> (a[i] &lt;= a[c]) <span class="tok-keyword">break</span>;
         <span class="tok-function">swap</span>(i, c); i = c;
     }
-}</pre>
+}</code></pre>
 <p><b>insert(e)</b> = append at the end, then sift-up → O(log n). &nbsp; <b>removeMin()</b> = take a[0], move the last element to the root, shrink, then sift-down → O(log n). &nbsp; <b>peek()</b> = a[0] → O(1).</p>
 
 <h3>Worked example — insert 5 into [2, 4, 8, 9, 7]</h3>
@@ -2210,9 +2210,9 @@ children of 1 are index 3 (9) and 4 (7) → smaller is 7 → 8 &gt; 7 → swap �
 <b>Result:</b> [4, 7, 5, 9, 8], a valid heap with the new minimum 4 at the root. ✓</div>
 
 <h3>Floyd's build-heap — the O(n) surprise</h3>
-<pre><span class="tok-keyword">void</span> <span class="tok-function">buildHeap</span>() {
+<pre><code class="language-java"><span class="tok-keyword">void</span> <span class="tok-function">buildHeap</span>() {
     <span class="tok-keyword">for</span> (<span class="tok-type">int</span> i = n/2 - 1; i &gt;= 0; i--) <span class="tok-function">siftDown</span>(i);   <span class="tok-comment">// last internal node → root</span>
-}</pre>
+}</code></pre>
 <div class="out"><b>Build a heap from [9, 4, 7, 1, −2, 6, 5] (n = 7):</b><br>
 start at i = 7/2 − 1 = 2 → a[2] = 7, children 6 and 5 → swap with 5 → [9, 4, <b>5</b>, 1, −2, 6, 7]<br>
 i = 1 → a[1] = 4, children 1 and −2 → swap with −2 → [9, <b>−2</b>, 5, 1, 4, 6, 7]<br>
@@ -2232,7 +2232,7 @@ i = 0 → a[0] = 9, children −2 and 5 → swap with −2 → [−2, 9, 5, …]
 <div class="formula"><span class="lbl">THỨ TỰ HEAP</span>a[cha(i)] ≤ a[i] &nbsp; với mọi i &gt; 0 &nbsp;(heap min)</div>
 
 <h3>Hai phép sửa — đó là toàn bộ cấu trúc dữ liệu</h3>
-<pre><span class="tok-comment">// sift-up: phần tử mới ở cuối có thể quá nhỏ</span>
+<pre><code class="language-java"><span class="tok-comment">// sift-up: phần tử mới ở cuối có thể quá nhỏ</span>
 <span class="tok-keyword">void</span> <span class="tok-function">siftUp</span>(<span class="tok-type">int</span> i) {
     <span class="tok-keyword">while</span> (i &gt; 0 &amp;&amp; a[(i-1)/2] &gt; a[i]) { <span class="tok-function">swap</span>(i, (i-1)/2); i = (i-1)/2; }
 }
@@ -2244,7 +2244,7 @@ i = 0 → a[0] = 9, children −2 and 5 → swap with −2 → [−2, 9, 5, …]
         <span class="tok-keyword">if</span> (a[i] &lt;= a[c]) <span class="tok-keyword">break</span>;
         <span class="tok-function">swap</span>(i, c); i = c;
     }
-}</pre>
+}</code></pre>
 <p><b>insert(e)</b> = thêm vào cuối rồi sift-up → O(log n). &nbsp; <b>removeMin()</b> = lấy a[0], đưa phần tử cuối lên gốc, thu nhỏ, rồi sift-down → O(log n). &nbsp; <b>peek()</b> = a[0] → O(1).</p>
 
 <h3>Ví dụ có lời giải — chèn 5 vào [2, 4, 8, 9, 7]</h3>
@@ -2260,9 +2260,9 @@ con của 1 là chỉ số 3 (9) và 4 (7) → nhỏ hơn là 7 → 8 &gt; 7 →
 <b>Kết quả:</b> [4, 7, 5, 9, 8], heap hợp lệ với cực tiểu mới là 4 ở gốc. ✓</div>
 
 <h3>Build-heap của Floyd — bất ngờ O(n)</h3>
-<pre><span class="tok-keyword">void</span> <span class="tok-function">buildHeap</span>() {
+<pre><code class="language-java"><span class="tok-keyword">void</span> <span class="tok-function">buildHeap</span>() {
     <span class="tok-keyword">for</span> (<span class="tok-type">int</span> i = n/2 - 1; i &gt;= 0; i--) <span class="tok-function">siftDown</span>(i);   <span class="tok-comment">// nút trong cuối → gốc</span>
-}</pre>
+}</code></pre>
 <div class="out"><b>Dựng heap từ [9, 4, 7, 1, −2, 6, 5] (n = 7):</b><br>
 bắt đầu tại i = 7/2 − 1 = 2 → a[2] = 7, con là 6 và 5 → đổi với 5 → [9, 4, <b>5</b>, 1, −2, 6, 7]<br>
 i = 1 → a[1] = 4, con là 1 và −2 → đổi với −2 → [9, <b>−2</b>, 5, 1, 4, 6, 7]<br>
@@ -2371,9 +2371,9 @@ C ——— D        edges: A-B, A-C, B-C, B-D, C-D</div>
 B → [A, C, D]
 C → [A, B, D]
 D → [B, C]</pre>
-<pre><span class="tok-type">Map</span>&lt;<span class="tok-type">String</span>, <span class="tok-type">List</span>&lt;<span class="tok-type">String</span>&gt;&gt; g = <span class="tok-keyword">new</span> <span class="tok-type">HashMap</span>&lt;&gt;();
+<pre><code class="language-java"><span class="tok-type">Map</span>&lt;<span class="tok-type">String</span>, <span class="tok-type">List</span>&lt;<span class="tok-type">String</span>&gt;&gt; g = <span class="tok-keyword">new</span> <span class="tok-type">HashMap</span>&lt;&gt;();
 g.<span class="tok-function">computeIfAbsent</span>(<span class="tok-string">"A"</span>, k -&gt; <span class="tok-keyword">new</span> <span class="tok-type">ArrayList</span>&lt;&gt;()).<span class="tok-function">add</span>(<span class="tok-string">"B"</span>);   <span class="tok-comment">// undirected: add both ways</span>
-g.<span class="tok-function">computeIfAbsent</span>(<span class="tok-string">"B"</span>, k -&gt; <span class="tok-keyword">new</span> <span class="tok-type">ArrayList</span>&lt;&gt;()).<span class="tok-function">add</span>(<span class="tok-string">"A"</span>);</pre>
+g.<span class="tok-function">computeIfAbsent</span>(<span class="tok-string">"B"</span>, k -&gt; <span class="tok-keyword">new</span> <span class="tok-type">ArrayList</span>&lt;&gt;()).<span class="tok-function">add</span>(<span class="tok-string">"A"</span>);</code></pre>
 <p>Memory O(n + m), and "list the neighbours of v" — the operation every traversal performs — is O(deg(v)). This is what BFS, DFS, Dijkstra and Prim all want.</p>
 
 <h4>3. Adjacency matrix — an n×n table of booleans/weights</h4>
@@ -2425,9 +2425,9 @@ C ——— D        cạnh: A-B, A-C, B-C, B-D, C-D</div>
 B → [A, C, D]
 C → [A, B, D]
 D → [B, C]</pre>
-<pre><span class="tok-type">Map</span>&lt;<span class="tok-type">String</span>, <span class="tok-type">List</span>&lt;<span class="tok-type">String</span>&gt;&gt; g = <span class="tok-keyword">new</span> <span class="tok-type">HashMap</span>&lt;&gt;();
+<pre><code class="language-java"><span class="tok-type">Map</span>&lt;<span class="tok-type">String</span>, <span class="tok-type">List</span>&lt;<span class="tok-type">String</span>&gt;&gt; g = <span class="tok-keyword">new</span> <span class="tok-type">HashMap</span>&lt;&gt;();
 g.<span class="tok-function">computeIfAbsent</span>(<span class="tok-string">"A"</span>, k -&gt; <span class="tok-keyword">new</span> <span class="tok-type">ArrayList</span>&lt;&gt;()).<span class="tok-function">add</span>(<span class="tok-string">"B"</span>);   <span class="tok-comment">// vô hướng: thêm cả hai chiều</span>
-g.<span class="tok-function">computeIfAbsent</span>(<span class="tok-string">"B"</span>, k -&gt; <span class="tok-keyword">new</span> <span class="tok-type">ArrayList</span>&lt;&gt;()).<span class="tok-function">add</span>(<span class="tok-string">"A"</span>);</pre>
+g.<span class="tok-function">computeIfAbsent</span>(<span class="tok-string">"B"</span>, k -&gt; <span class="tok-keyword">new</span> <span class="tok-type">ArrayList</span>&lt;&gt;()).<span class="tok-function">add</span>(<span class="tok-string">"A"</span>);</code></pre>
 <p>Bộ nhớ O(n + m), và "liệt kê hàng xóm của v" — thao tác mà mọi phép duyệt đều làm — là O(deg(v)). Đây là thứ mà BFS, DFS, Dijkstra và Prim đều cần.</p>
 
 <h4>3. Ma trận kề — bảng n×n các bit/trọng số</h4>
@@ -2472,13 +2472,13 @@ Ma trận: 90.000 ô ≈ 720 KB, tra cứu O(1) → <b>lựa chọn đúng</b>; 
 <h2>Depth-first search — go deep, then back up</h2>
 <p class="lead">DFS follows one path as far as it goes, then backtracks. Written recursively it is six lines; what makes it powerful is what you can read off the traversal afterwards — cycles, connected components and a valid ordering of dependencies all fall out of the same walk.</p>
 
-<pre><span class="tok-keyword">void</span> <span class="tok-function">dfs</span>(<span class="tok-type">String</span> v, <span class="tok-type">Set</span>&lt;<span class="tok-type">String</span>&gt; visited) {
+<pre><code class="language-java"><span class="tok-keyword">void</span> <span class="tok-function">dfs</span>(<span class="tok-type">String</span> v, <span class="tok-type">Set</span>&lt;<span class="tok-type">String</span>&gt; visited) {
     visited.<span class="tok-function">add</span>(v);
     <span class="tok-function">visit</span>(v);                                <span class="tok-comment">// pre-order position</span>
     <span class="tok-keyword">for</span> (<span class="tok-type">String</span> u : g.<span class="tok-function">getOrDefault</span>(v, <span class="tok-type">List</span>.<span class="tok-function">of</span>()))
         <span class="tok-keyword">if</span> (!visited.<span class="tok-function">contains</span>(u)) <span class="tok-function">dfs</span>(u, visited);
     <span class="tok-comment">// post-order position — used for topological sort</span>
-}</pre>
+}</code></pre>
 <p>Cost <b>O(n + m)</b> with an adjacency list: every vertex is marked once, every edge inspected once (twice if undirected).</p>
 
 <h3>Worked example — trace DFS from A</h3>
@@ -2494,14 +2494,14 @@ C ——————┘        edges: A→B, A→C, B→D, C→D</div>
 The <em>reverse</em> of the finish order — A, C, B, D — is a valid topological ordering: every edge points forward in that list. Check: A→B ✓, A→C ✓, B→D ✓, C→D ✓.</div>
 
 <h3>Iterative DFS — the stack version</h3>
-<pre><span class="tok-type">Deque</span>&lt;<span class="tok-type">String</span>&gt; st = <span class="tok-keyword">new</span> <span class="tok-type">ArrayDeque</span>&lt;&gt;();
+<pre><code class="language-java"><span class="tok-type">Deque</span>&lt;<span class="tok-type">String</span>&gt; st = <span class="tok-keyword">new</span> <span class="tok-type">ArrayDeque</span>&lt;&gt;();
 st.<span class="tok-function">push</span>(start);
 <span class="tok-keyword">while</span> (!st.<span class="tok-function">isEmpty</span>()) {
     <span class="tok-type">String</span> v = st.<span class="tok-function">pop</span>();
     <span class="tok-keyword">if</span> (!visited.<span class="tok-function">add</span>(v)) <span class="tok-keyword">continue</span>;       <span class="tok-comment">// add() returns false if already there</span>
     <span class="tok-function">visit</span>(v);
     <span class="tok-keyword">for</span> (<span class="tok-type">String</span> u : g.<span class="tok-function">get</span>(v)) <span class="tok-keyword">if</span> (!visited.<span class="tok-function">contains</span>(u)) st.<span class="tok-function">push</span>(u);
-}</pre>
+}</code></pre>
 <p>Same traversal, no recursion — and no <span class="badge">StackOverflowError</span> on a graph with a million vertices. Replace the stack with a queue and you have BFS (lesson 5.4): the algorithms differ only in the container.</p>
 
 <h3>Three things DFS gives you for free</h3>
@@ -2520,13 +2520,13 @@ st.<span class="tok-function">push</span>(start);
 <h2>Tìm kiếm theo chiều sâu — đi sâu rồi lùi lại</h2>
 <p class="lead">DFS đi theo một đường tới hết mức rồi quay lui. Viết đệ quy chỉ sáu dòng; điều làm nó mạnh là những gì bạn đọc được từ phép duyệt sau đó — chu trình, thành phần liên thông và một thứ tự phụ thuộc hợp lệ đều rơi ra từ cùng một lần đi.</p>
 
-<pre><span class="tok-keyword">void</span> <span class="tok-function">dfs</span>(<span class="tok-type">String</span> v, <span class="tok-type">Set</span>&lt;<span class="tok-type">String</span>&gt; visited) {
+<pre><code class="language-java"><span class="tok-keyword">void</span> <span class="tok-function">dfs</span>(<span class="tok-type">String</span> v, <span class="tok-type">Set</span>&lt;<span class="tok-type">String</span>&gt; visited) {
     visited.<span class="tok-function">add</span>(v);
     <span class="tok-function">visit</span>(v);                                <span class="tok-comment">// vị trí tiền thứ tự</span>
     <span class="tok-keyword">for</span> (<span class="tok-type">String</span> u : g.<span class="tok-function">getOrDefault</span>(v, <span class="tok-type">List</span>.<span class="tok-function">of</span>()))
         <span class="tok-keyword">if</span> (!visited.<span class="tok-function">contains</span>(u)) <span class="tok-function">dfs</span>(u, visited);
     <span class="tok-comment">// vị trí hậu thứ tự — dùng cho sắp xếp tô-pô</span>
-}</pre>
+}</code></pre>
 <p>Chi phí <b>O(n + m)</b> với danh sách kề: mỗi đỉnh được đánh dấu một lần, mỗi cạnh được xét một lần (hai lần nếu vô hướng).</p>
 
 <h3>Ví dụ có lời giải — chạy tay DFS từ A</h3>
@@ -2542,14 +2542,14 @@ C ——————┘        cạnh: A→B, A→C, B→D, C→D</div>
 <em>Đảo ngược</em> thứ tự kết thúc — A, C, B, D — là một thứ tự tô-pô hợp lệ: mọi cạnh đều chỉ về phía trước trong danh sách đó. Kiểm: A→B ✓, A→C ✓, B→D ✓, C→D ✓.</div>
 
 <h3>DFS không đệ quy — bản dùng ngăn xếp</h3>
-<pre><span class="tok-type">Deque</span>&lt;<span class="tok-type">String</span>&gt; st = <span class="tok-keyword">new</span> <span class="tok-type">ArrayDeque</span>&lt;&gt;();
+<pre><code class="language-java"><span class="tok-type">Deque</span>&lt;<span class="tok-type">String</span>&gt; st = <span class="tok-keyword">new</span> <span class="tok-type">ArrayDeque</span>&lt;&gt;();
 st.<span class="tok-function">push</span>(start);
 <span class="tok-keyword">while</span> (!st.<span class="tok-function">isEmpty</span>()) {
     <span class="tok-type">String</span> v = st.<span class="tok-function">pop</span>();
     <span class="tok-keyword">if</span> (!visited.<span class="tok-function">add</span>(v)) <span class="tok-keyword">continue</span>;       <span class="tok-comment">// add() trả false nếu đã có</span>
     <span class="tok-function">visit</span>(v);
     <span class="tok-keyword">for</span> (<span class="tok-type">String</span> u : g.<span class="tok-function">get</span>(v)) <span class="tok-keyword">if</span> (!visited.<span class="tok-function">contains</span>(u)) st.<span class="tok-function">push</span>(u);
-}</pre>
+}</code></pre>
 <p>Cùng phép duyệt, không đệ quy — và không <span class="badge">StackOverflowError</span> trên đồ thị một triệu đỉnh. Thay ngăn xếp bằng hàng đợi là bạn có BFS (bài 5.4): hai thuật toán chỉ khác nhau ở cái vật chứa.</p>
 
 <h3>Ba thứ DFS cho bạn miễn phí</h3>
@@ -2576,7 +2576,7 @@ st.<span class="tok-function">push</span>(start);
 <h2>Breadth-first search — level by level</h2>
 <p class="lead">BFS explores every vertex at distance 1, then every vertex at distance 2, and so on. Because it never skips a level, <strong>the first time it reaches a vertex it has used the fewest possible edges</strong> — that single fact makes BFS the shortest-path algorithm for unweighted graphs.</p>
 
-<pre><span class="tok-keyword">void</span> <span class="tok-function">bfs</span>(<span class="tok-type">String</span> src) {
+<pre><code class="language-java"><span class="tok-keyword">void</span> <span class="tok-function">bfs</span>(<span class="tok-type">String</span> src) {
     <span class="tok-type">Map</span>&lt;<span class="tok-type">String</span>,<span class="tok-type">Integer</span>&gt; dist = <span class="tok-keyword">new</span> <span class="tok-type">HashMap</span>&lt;&gt;();
     <span class="tok-type">Map</span>&lt;<span class="tok-type">String</span>,<span class="tok-type">String</span>&gt;  parent = <span class="tok-keyword">new</span> <span class="tok-type">HashMap</span>&lt;&gt;();
     <span class="tok-type">Queue</span>&lt;<span class="tok-type">String</span>&gt; q = <span class="tok-keyword">new</span> <span class="tok-type">ArrayDeque</span>&lt;&gt;();
@@ -2591,7 +2591,7 @@ st.<span class="tok-function">push</span>(start);
             }
         }
     }
-}</pre>
+}</code></pre>
 
 <h3>Worked example — BFS from A</h3>
 <div class="diagram">A —— B —— E
@@ -2627,7 +2627,7 @@ pop E, pop F → queue empty.<br>
 <h2>Tìm kiếm theo chiều rộng — từng tầng một</h2>
 <p class="lead">BFS khám phá mọi đỉnh cách 1, rồi mọi đỉnh cách 2, và cứ thế. Vì không bao giờ nhảy cóc tầng nào, <strong>lần đầu nó chạm tới một đỉnh là lần dùng ít cạnh nhất có thể</strong> — chỉ sự thật đó làm BFS trở thành thuật toán đường đi ngắn nhất cho đồ thị không trọng số.</p>
 
-<pre><span class="tok-keyword">void</span> <span class="tok-function">bfs</span>(<span class="tok-type">String</span> src) {
+<pre><code class="language-java"><span class="tok-keyword">void</span> <span class="tok-function">bfs</span>(<span class="tok-type">String</span> src) {
     <span class="tok-type">Map</span>&lt;<span class="tok-type">String</span>,<span class="tok-type">Integer</span>&gt; dist = <span class="tok-keyword">new</span> <span class="tok-type">HashMap</span>&lt;&gt;();
     <span class="tok-type">Map</span>&lt;<span class="tok-type">String</span>,<span class="tok-type">String</span>&gt;  parent = <span class="tok-keyword">new</span> <span class="tok-type">HashMap</span>&lt;&gt;();
     <span class="tok-type">Queue</span>&lt;<span class="tok-type">String</span>&gt; q = <span class="tok-keyword">new</span> <span class="tok-type">ArrayDeque</span>&lt;&gt;();
@@ -2642,7 +2642,7 @@ pop E, pop F → queue empty.<br>
             }
         }
     }
-}</pre>
+}</code></pre>
 
 <h3>Ví dụ có lời giải — BFS từ A</h3>
 <div class="diagram">A —— B —— E
@@ -2723,7 +2723,7 @@ weights: A-B 4, A-D 2, B-D 1, B-C 8, B-E 3, D-E 7, C-E 2, C-F 6, E-F 5</div>
 <tr><td>Fibonacci heap</td><td>O(m + n log n)</td><td>theory; constants too large in practice</td></tr>
 </tbody></table>
 
-<pre><span class="tok-type">PriorityQueue</span>&lt;<span class="tok-type">int</span>[]&gt; pq = <span class="tok-keyword">new</span> <span class="tok-type">PriorityQueue</span>&lt;&gt;((x, y) -&gt; x[1] - y[1]);  <span class="tok-comment">// {vertex, dist}</span>
+<pre><code class="language-java"><span class="tok-type">PriorityQueue</span>&lt;<span class="tok-type">int</span>[]&gt; pq = <span class="tok-keyword">new</span> <span class="tok-type">PriorityQueue</span>&lt;&gt;((x, y) -&gt; x[1] - y[1]);  <span class="tok-comment">// {vertex, dist}</span>
 pq.<span class="tok-function">add</span>(<span class="tok-keyword">new</span> <span class="tok-type">int</span>[]{src, 0});
 <span class="tok-keyword">while</span> (!pq.<span class="tok-function">isEmpty</span>()) {
     <span class="tok-type">int</span>[] top = pq.<span class="tok-function">poll</span>();
@@ -2733,7 +2733,7 @@ pq.<span class="tok-function">add</span>(<span class="tok-keyword">new</span> <s
             dist[e.to] = dist[top[0]] + e.w;
             pq.<span class="tok-function">add</span>(<span class="tok-keyword">new</span> <span class="tok-type">int</span>[]{e.to, dist[e.to]});
         }
-}</pre>
+}</code></pre>
 
 <div class="pitfall"><b>Dijkstra breaks on negative edges.</b> The greedy step assumes that once a vertex is finalised nothing can make it cheaper — a negative edge discovered later violates exactly that. Use Bellman–Ford (O(n·m)) when weights can be negative; it also detects negative cycles, where "shortest path" stops being defined at all.</div>
 
@@ -2781,7 +2781,7 @@ trọng số: A-B 4, A-D 2, B-D 1, B-C 8, B-E 3, D-E 7, C-E 2, C-F 6, E-F 5</div
 <tr><td>Heap Fibonacci</td><td>O(m + n log n)</td><td>lý thuyết; hằng số quá lớn trong thực tế</td></tr>
 </tbody></table>
 
-<pre><span class="tok-type">PriorityQueue</span>&lt;<span class="tok-type">int</span>[]&gt; pq = <span class="tok-keyword">new</span> <span class="tok-type">PriorityQueue</span>&lt;&gt;((x, y) -&gt; x[1] - y[1]);  <span class="tok-comment">// {đỉnh, dist}</span>
+<pre><code class="language-java"><span class="tok-type">PriorityQueue</span>&lt;<span class="tok-type">int</span>[]&gt; pq = <span class="tok-keyword">new</span> <span class="tok-type">PriorityQueue</span>&lt;&gt;((x, y) -&gt; x[1] - y[1]);  <span class="tok-comment">// {đỉnh, dist}</span>
 pq.<span class="tok-function">add</span>(<span class="tok-keyword">new</span> <span class="tok-type">int</span>[]{src, 0});
 <span class="tok-keyword">while</span> (!pq.<span class="tok-function">isEmpty</span>()) {
     <span class="tok-type">int</span>[] top = pq.<span class="tok-function">poll</span>();
@@ -2791,7 +2791,7 @@ pq.<span class="tok-function">add</span>(<span class="tok-keyword">new</span> <s
             dist[e.to] = dist[top[0]] + e.w;
             pq.<span class="tok-function">add</span>(<span class="tok-keyword">new</span> <span class="tok-type">int</span>[]{e.to, dist[e.to]});
         }
-}</pre>
+}</code></pre>
 
 <div class="pitfall"><b>Dijkstra sai với cạnh âm.</b> Bước tham lam giả định rằng một khi đỉnh đã chốt thì không gì làm nó rẻ hơn được — một cạnh âm phát hiện sau đó vi phạm đúng điều này. Dùng Bellman–Ford (O(n·m)) khi trọng số có thể âm; nó còn phát hiện được chu trình âm, nơi khái niệm "đường ngắn nhất" không còn được định nghĩa.</div>
 
@@ -2841,7 +2841,7 @@ E-F(5) → F is on its own → <b>take</b> → all 6 vertices, 5 edges → stop.
 <b>MST = {D-B 1, A-D 2, C-E 2, B-E 3, E-F 5}, total weight 13</b> — the same set and the same total as Prim. ✓</div>
 
 <h3>Union-Find — how Kruskal answers "same component?" in near O(1)</h3>
-<pre><span class="tok-type">int</span>[] parent;
+<pre><code class="language-java"><span class="tok-type">int</span>[] parent;
 <span class="tok-type">int</span> <span class="tok-function">find</span>(<span class="tok-type">int</span> x) {                      <span class="tok-comment">// with path compression</span>
     <span class="tok-keyword">if</span> (parent[x] != x) parent[x] = <span class="tok-function">find</span>(parent[x]);
     <span class="tok-keyword">return</span> parent[x];
@@ -2851,7 +2851,7 @@ E-F(5) → F is on its own → <b>take</b> → all 6 vertices, 5 edges → stop.
     <span class="tok-keyword">if</span> (ra == rb) <span class="tok-keyword">return false</span>;             <span class="tok-comment">// already connected → cycle</span>
     parent[ra] = rb;                       <span class="tok-comment">// merge (add rank/size for speed)</span>
     <span class="tok-keyword">return true</span>;
-}</pre>
+}</code></pre>
 <p>With path compression plus union by rank, m operations cost O(m·α(n)) where α is the inverse Ackermann function — below 5 for any input that fits in the universe. Effectively constant.</p>
 
 <h3>Which one?</h3>
@@ -2902,7 +2902,7 @@ E-F(5) → F còn đứng riêng → <b>lấy</b> → đủ 6 đỉnh, 5 cạnh 
 <b>MST = {D-B 1, A-D 2, C-E 2, B-E 3, E-F 5}, tổng trọng số 13</b> — cùng tập cạnh và cùng tổng như Prim. ✓</div>
 
 <h3>Union-Find — cách Kruskal trả lời "cùng thành phần không?" gần như O(1)</h3>
-<pre><span class="tok-type">int</span>[] parent;
+<pre><code class="language-java"><span class="tok-type">int</span>[] parent;
 <span class="tok-type">int</span> <span class="tok-function">find</span>(<span class="tok-type">int</span> x) {                      <span class="tok-comment">// có nén đường đi</span>
     <span class="tok-keyword">if</span> (parent[x] != x) parent[x] = <span class="tok-function">find</span>(parent[x]);
     <span class="tok-keyword">return</span> parent[x];
@@ -2912,7 +2912,7 @@ E-F(5) → F còn đứng riêng → <b>lấy</b> → đủ 6 đỉnh, 5 cạnh 
     <span class="tok-keyword">if</span> (ra == rb) <span class="tok-keyword">return false</span>;             <span class="tok-comment">// đã nối rồi → chu trình</span>
     parent[ra] = rb;                       <span class="tok-comment">// gộp (thêm rank/size để nhanh hơn)</span>
     <span class="tok-keyword">return true</span>;
-}</pre>
+}</code></pre>
 <p>Với nén đường đi cộng gộp theo hạng, m thao tác tốn O(m·α(n)) trong đó α là hàm Ackermann ngược — nhỏ hơn 5 với mọi đầu vào lọt trong vũ trụ này. Coi như hằng số.</p>
 
 <h3>Chọn cái nào?</h3>
@@ -3152,7 +3152,7 @@ C —— D      cạnh: A-B, A-C, A-D, B-D, C-D</div>
 <p class="lead">Quick-sort picks a <strong>pivot</strong>, moves everything smaller to its left and everything larger to its right (that is <em>partitioning</em>), and then sorts the two sides recursively. The pivot lands in its final position immediately, so there is no merge step — all the work happens on the way down.</p>
 
 <h3>Lomuto partition — the one to memorise for an exam</h3>
-<pre><span class="tok-type">int</span> <span class="tok-function">partition</span>(<span class="tok-type">int</span>[] a, <span class="tok-type">int</span> lo, <span class="tok-type">int</span> hi) {
+<pre><code class="language-java"><span class="tok-type">int</span> <span class="tok-function">partition</span>(<span class="tok-type">int</span>[] a, <span class="tok-type">int</span> lo, <span class="tok-type">int</span> hi) {
     <span class="tok-type">int</span> pivot = a[hi];              <span class="tok-comment">// last element as pivot</span>
     <span class="tok-type">int</span> i = lo - 1;                 <span class="tok-comment">// end of the "smaller" zone</span>
     <span class="tok-keyword">for</span> (<span class="tok-type">int</span> j = lo; j &lt; hi; j++)
@@ -3166,7 +3166,7 @@ C —— D      cạnh: A-B, A-C, A-D, B-D, C-D</div>
         <span class="tok-function">quickSort</span>(a, lo, p - 1);
         <span class="tok-function">quickSort</span>(a, p + 1, hi);
     }
-}</pre>
+}</code></pre>
 
 <h3>Worked example — partition [7, 2, 9, 4, 3, 8, 5] with pivot 5</h3>
 <div class="out"><b>pivot = a[6] = 5, i = −1.</b><br>
@@ -3207,7 +3207,7 @@ Recurse on [2, 4, 3] and [9, 8, 7]. Final: [2, 3, 4, 5, 7, 8, 9].</div>
 <p class="lead">Quick-sort chọn một <strong>chốt</strong> (pivot), dồn mọi thứ nhỏ hơn sang trái và lớn hơn sang phải (đó là <em>phân hoạch</em>), rồi sắp xếp đệ quy hai bên. Chốt lập tức nằm đúng vị trí cuối cùng của nó, nên không có bước trộn — mọi công việc xảy ra trên đường đi xuống.</p>
 
 <h3>Phân hoạch Lomuto — bản nên thuộc để đi thi</h3>
-<pre><span class="tok-type">int</span> <span class="tok-function">partition</span>(<span class="tok-type">int</span>[] a, <span class="tok-type">int</span> lo, <span class="tok-type">int</span> hi) {
+<pre><code class="language-java"><span class="tok-type">int</span> <span class="tok-function">partition</span>(<span class="tok-type">int</span>[] a, <span class="tok-type">int</span> lo, <span class="tok-type">int</span> hi) {
     <span class="tok-type">int</span> pivot = a[hi];              <span class="tok-comment">// lấy phần tử cuối làm chốt</span>
     <span class="tok-type">int</span> i = lo - 1;                 <span class="tok-comment">// biên cuối của vùng "nhỏ hơn"</span>
     <span class="tok-keyword">for</span> (<span class="tok-type">int</span> j = lo; j &lt; hi; j++)
@@ -3221,7 +3221,7 @@ Recurse on [2, 4, 3] and [9, 8, 7]. Final: [2, 3, 4, 5, 7, 8, 9].</div>
         <span class="tok-function">quickSort</span>(a, lo, p - 1);
         <span class="tok-function">quickSort</span>(a, p + 1, hi);
     }
-}</pre>
+}</code></pre>
 
 <h3>Ví dụ có lời giải — phân hoạch [7, 2, 9, 4, 3, 8, 5] với chốt 5</h3>
 <div class="out"><b>chốt = a[6] = 5, i = −1.</b><br>
@@ -3269,13 +3269,13 @@ cuối: đổi(i+1=3, hi=6) → <b>[2, 4, 3, 5, 9, 8, 7]</b>, chỉ số chốt 
 <h2>Merge-sort — split blindly, combine carefully</h2>
 <p class="lead">Quick-sort does clever work before recursing; merge-sort does the opposite. It splits the array in half without looking at any value, sorts both halves, and puts all the intelligence into the <strong>merge</strong> — which you already wrote in lesson 1.5.</p>
 
-<pre><span class="tok-keyword">void</span> <span class="tok-function">mergeSort</span>(<span class="tok-type">int</span>[] a, <span class="tok-type">int</span> lo, <span class="tok-type">int</span> hi) {
+<pre><code class="language-java"><span class="tok-keyword">void</span> <span class="tok-function">mergeSort</span>(<span class="tok-type">int</span>[] a, <span class="tok-type">int</span> lo, <span class="tok-type">int</span> hi) {
     <span class="tok-keyword">if</span> (lo &gt;= hi) <span class="tok-keyword">return</span>;               <span class="tok-comment">// 0 or 1 element is already sorted</span>
     <span class="tok-type">int</span> mid = lo + (hi - lo) / 2;
     <span class="tok-function">mergeSort</span>(a, lo, mid);
     <span class="tok-function">mergeSort</span>(a, mid + 1, hi);
     <span class="tok-function">merge</span>(a, lo, mid, hi);              <span class="tok-comment">// needs a temporary array</span>
-}</pre>
+}</code></pre>
 
 <h3>Worked example — sort [38, 27, 43, 3, 9, 82, 10]</h3>
 <div class="out"><b>Split phase (no comparisons at all):</b><br>
@@ -3314,13 +3314,13 @@ final merge [3, 27, 38, 43] with [9, 10, 82]:<br>
 <h2>Merge-sort — chia một cách mù quáng, gộp một cách cẩn thận</h2>
 <p class="lead">Quick-sort làm phần khôn ngoan trước khi đệ quy; merge-sort thì ngược lại. Nó cắt đôi mảng mà không nhìn giá trị nào, sắp cả hai nửa, rồi dồn toàn bộ trí tuệ vào bước <strong>trộn</strong> — mà bạn đã viết ở bài 1.5.</p>
 
-<pre><span class="tok-keyword">void</span> <span class="tok-function">mergeSort</span>(<span class="tok-type">int</span>[] a, <span class="tok-type">int</span> lo, <span class="tok-type">int</span> hi) {
+<pre><code class="language-java"><span class="tok-keyword">void</span> <span class="tok-function">mergeSort</span>(<span class="tok-type">int</span>[] a, <span class="tok-type">int</span> lo, <span class="tok-type">int</span> hi) {
     <span class="tok-keyword">if</span> (lo &gt;= hi) <span class="tok-keyword">return</span>;               <span class="tok-comment">// 0 hoặc 1 phần tử là đã sắp</span>
     <span class="tok-type">int</span> mid = lo + (hi - lo) / 2;
     <span class="tok-function">mergeSort</span>(a, lo, mid);
     <span class="tok-function">mergeSort</span>(a, mid + 1, hi);
     <span class="tok-function">merge</span>(a, lo, mid, hi);              <span class="tok-comment">// cần một mảng tạm</span>
-}</pre>
+}</code></pre>
 
 <h3>Ví dụ có lời giải — sắp [38, 27, 43, 3, 9, 82, 10]</h3>
 <div class="out"><b>Giai đoạn chia (không so sánh gì cả):</b><br>
@@ -3368,14 +3368,14 @@ trộn cuối [3, 27, 38, 43] với [9, 10, 82]:<br>
 <p class="lead">You built the heap in lesson 4.7; sorting with it takes two lines. Heap-sort is the only classic sort that is simultaneously <strong>O(n log n) in the worst case</strong> and <strong>in place</strong>. Its weakness is a poor constant factor caused by jumping around memory.</p>
 
 <h3>The algorithm</h3>
-<pre><span class="tok-keyword">void</span> <span class="tok-function">heapSort</span>(<span class="tok-type">int</span>[] a) {
+<pre><code class="language-java"><span class="tok-keyword">void</span> <span class="tok-function">heapSort</span>(<span class="tok-type">int</span>[] a) {
     <span class="tok-type">int</span> n = a.length;
     <span class="tok-keyword">for</span> (<span class="tok-type">int</span> i = n/2 - 1; i &gt;= 0; i--) <span class="tok-function">siftDown</span>(a, i, n);   <span class="tok-comment">// 1. build a MAX-heap: O(n)</span>
     <span class="tok-keyword">for</span> (<span class="tok-type">int</span> end = n - 1; end &gt; 0; end--) {
         <span class="tok-function">swap</span>(a, 0, end);                                     <span class="tok-comment">// 2. biggest → its final slot</span>
         <span class="tok-function">siftDown</span>(a, 0, end);                                 <span class="tok-comment">// 3. repair the smaller heap</span>
     }
-}</pre>
+}</code></pre>
 <p>Use a <b>max</b>-heap so that the largest element ends up at the back — that gives ascending order with no reversal.</p>
 
 <h3>Worked example — sort [4, 10, 3, 5, 1]</h3>
@@ -3410,14 +3410,14 @@ end=1: swap a[0]↔a[1] → [1, <b>3</b>, 4, 5, 10]<br>
 <p class="lead">Bạn đã dựng heap ở bài 4.7; sắp xếp bằng nó chỉ tốn hai dòng. Heap-sort là phép sắp kinh điển duy nhất vừa <strong>O(n log n) ở trường hợp xấu nhất</strong> vừa <strong>tại chỗ</strong>. Điểm yếu của nó là hằng số nhân xấu do phải nhảy loạn xạ trong bộ nhớ.</p>
 
 <h3>Thuật toán</h3>
-<pre><span class="tok-keyword">void</span> <span class="tok-function">heapSort</span>(<span class="tok-type">int</span>[] a) {
+<pre><code class="language-java"><span class="tok-keyword">void</span> <span class="tok-function">heapSort</span>(<span class="tok-type">int</span>[] a) {
     <span class="tok-type">int</span> n = a.length;
     <span class="tok-keyword">for</span> (<span class="tok-type">int</span> i = n/2 - 1; i &gt;= 0; i--) <span class="tok-function">siftDown</span>(a, i, n);   <span class="tok-comment">// 1. dựng heap MAX: O(n)</span>
     <span class="tok-keyword">for</span> (<span class="tok-type">int</span> end = n - 1; end &gt; 0; end--) {
         <span class="tok-function">swap</span>(a, 0, end);                                     <span class="tok-comment">// 2. lớn nhất → về đúng ô cuối</span>
         <span class="tok-function">siftDown</span>(a, 0, end);                                 <span class="tok-comment">// 3. sửa lại heap nhỏ hơn</span>
     }
-}</pre>
+}</code></pre>
 <p>Dùng heap <b>max</b> để phần tử lớn nhất bị đẩy về cuối — nhờ đó có thứ tự tăng dần mà không phải đảo lại.</p>
 
 <h3>Ví dụ có lời giải — sắp [4, 10, 3, 5, 1]</h3>
@@ -3460,7 +3460,7 @@ end=1: đổi a[0]↔a[1] → [1, <b>3</b>, 4, 5, 10]<br>
 <p class="lead">Every sort so far asks "is a &lt; b?". Lesson 6.7 proves such algorithms cannot beat Ω(n log n). The way around it is to stop comparing and start <em>indexing</em>: if a key can be turned directly into an array position, sorting becomes counting.</p>
 
 <h3>Counting sort — the base case</h3>
-<pre><span class="tok-type">int</span>[] <span class="tok-function">countingSort</span>(<span class="tok-type">int</span>[] a, <span class="tok-type">int</span> k) {      <span class="tok-comment">// keys in 0..k</span>
+<pre><code class="language-java"><span class="tok-type">int</span>[] <span class="tok-function">countingSort</span>(<span class="tok-type">int</span>[] a, <span class="tok-type">int</span> k) {      <span class="tok-comment">// keys in 0..k</span>
     <span class="tok-type">int</span>[] count = <span class="tok-keyword">new</span> <span class="tok-type">int</span>[k + 1];
     <span class="tok-keyword">for</span> (<span class="tok-type">int</span> x : a) count[x]++;                  <span class="tok-comment">// 1. tally</span>
     <span class="tok-keyword">for</span> (<span class="tok-type">int</span> i = 1; i &lt;= k; i++) count[i] += count[i-1];   <span class="tok-comment">// 2. prefix sums</span>
@@ -3468,7 +3468,7 @@ end=1: đổi a[0]↔a[1] → [1, <b>3</b>, 4, 5, 10]<br>
     <span class="tok-keyword">for</span> (<span class="tok-type">int</span> i = a.length - 1; i &gt;= 0; i--)      <span class="tok-comment">// 3. backwards keeps it STABLE</span>
         out[--count[a[i]]] = a[i];
     <span class="tok-keyword">return</span> out;
-}</pre>
+}</code></pre>
 <div class="out"><b>Sort [2, 5, 3, 0, 2, 3, 0, 3] with k = 5:</b><br>
 counts: 0→2, 2→2, 3→3, 5→1 → count = [2, 0, 2, 3, 0, 1]<br>
 prefix sums → [2, 2, 4, 7, 7, 8] (count[v] = how many keys are ≤ v)<br>
@@ -3506,7 +3506,7 @@ place from the right: a[7]=3 → out[6]=3 · a[6]=0 → out[1]=0 · a[5]=3 → o
 <p class="lead">Mọi phép sắp tới giờ đều hỏi "a &lt; b không?". Bài 6.7 chứng minh các thuật toán như vậy không thể vượt cận Ω(n log n). Cách đi vòng là thôi so sánh và bắt đầu <em>đánh chỉ số</em>: nếu khoá biến thẳng được thành một vị trí trong mảng thì sắp xếp trở thành đếm.</p>
 
 <h3>Counting sort — trường hợp nền</h3>
-<pre><span class="tok-type">int</span>[] <span class="tok-function">countingSort</span>(<span class="tok-type">int</span>[] a, <span class="tok-type">int</span> k) {      <span class="tok-comment">// khoá trong 0..k</span>
+<pre><code class="language-java"><span class="tok-type">int</span>[] <span class="tok-function">countingSort</span>(<span class="tok-type">int</span>[] a, <span class="tok-type">int</span> k) {      <span class="tok-comment">// khoá trong 0..k</span>
     <span class="tok-type">int</span>[] count = <span class="tok-keyword">new</span> <span class="tok-type">int</span>[k + 1];
     <span class="tok-keyword">for</span> (<span class="tok-type">int</span> x : a) count[x]++;                  <span class="tok-comment">// 1. đếm</span>
     <span class="tok-keyword">for</span> (<span class="tok-type">int</span> i = 1; i &lt;= k; i++) count[i] += count[i-1];   <span class="tok-comment">// 2. tổng tiền tố</span>
@@ -3514,7 +3514,7 @@ place from the right: a[7]=3 → out[6]=3 · a[6]=0 → out[1]=0 · a[5]=3 → o
     <span class="tok-keyword">for</span> (<span class="tok-type">int</span> i = a.length - 1; i &gt;= 0; i--)      <span class="tok-comment">// 3. đi ngược để giữ ỔN ĐỊNH</span>
         out[--count[a[i]]] = a[i];
     <span class="tok-keyword">return</span> out;
-}</pre>
+}</code></pre>
 <div class="out"><b>Sắp [2, 5, 3, 0, 2, 3, 0, 3] với k = 5:</b><br>
 đếm: 0→2, 2→2, 3→3, 5→1 → count = [2, 0, 2, 3, 0, 1]<br>
 tổng tiền tố → [2, 2, 4, 7, 7, 8] (count[v] = số khoá ≤ v)<br>
@@ -3736,7 +3736,7 @@ One collision (370 and 480) instead of five. A prime modulus has no factors in c
 <b>Rule:</b> never use a table size that is a power of ten, and be careful with powers of two — <span class="badge">k mod 2^m</span> keeps only the low m bits and throws away all the high-bit information.</div>
 
 <h3>Stage 1 — hash codes for compound objects</h3>
-<pre><span class="tok-comment">// polynomial accumulation — what String.hashCode() does</span>
+<pre><code class="language-java"><span class="tok-comment">// polynomial accumulation — what String.hashCode() does</span>
 <span class="tok-type">int</span> h = 0;
 <span class="tok-keyword">for</span> (<span class="tok-type">char</span> c : s.<span class="tok-function">toCharArray</span>()) h = 31 * h + c;
 
@@ -3746,7 +3746,7 @@ One collision (370 and 480) instead of five. A prime modulus has no factors in c
     <span class="tok-keyword">if</span> (<span class="tok-keyword">this</span> == o) <span class="tok-keyword">return true</span>;
     <span class="tok-keyword">if</span> (!(o <span class="tok-keyword">instanceof</span> <span class="tok-type">Student</span> s)) <span class="tok-keyword">return false</span>;
     <span class="tok-keyword">return</span> id == s.id &amp;&amp; <span class="tok-type">Objects</span>.<span class="tok-function">equals</span>(name, s.name);
-}</pre>
+}</code></pre>
 <div class="out"><b>Why the multiplier is 31.</b> It is an odd prime, so it does not throw away bits the way an even factor would, and the JVM turns <span class="badge">31*h</span> into <span class="badge">(h &lt;&lt; 5) − h</span> — a shift and a subtraction instead of a multiplication. Using a small even number such as 2 would push every character's contribution out of the top of the int within a few characters, so long strings would collide constantly.</div>
 
 <h3>The contract you must not break</h3>
@@ -3789,7 +3789,7 @@ Chỉ một va chạm (370 và 480) thay vì năm. Mô-đun nguyên tố không 
 <b>Quy tắc:</b> đừng bao giờ lấy cỡ bảng là luỹ thừa của mười, và hãy cẩn thận với luỹ thừa của hai — <span class="badge">k mod 2^m</span> chỉ giữ m bit thấp và vứt bỏ toàn bộ thông tin ở bit cao.</div>
 
 <h3>Chặng 1 — mã băm cho đối tượng ghép</h3>
-<pre><span class="tok-comment">// tích luỹ đa thức — đúng thứ String.hashCode() làm</span>
+<pre><code class="language-java"><span class="tok-comment">// tích luỹ đa thức — đúng thứ String.hashCode() làm</span>
 <span class="tok-type">int</span> h = 0;
 <span class="tok-keyword">for</span> (<span class="tok-type">char</span> c : s.<span class="tok-function">toCharArray</span>()) h = 31 * h + c;
 
@@ -3799,7 +3799,7 @@ Chỉ một va chạm (370 và 480) thay vì năm. Mô-đun nguyên tố không 
     <span class="tok-keyword">if</span> (<span class="tok-keyword">this</span> == o) <span class="tok-keyword">return true</span>;
     <span class="tok-keyword">if</span> (!(o <span class="tok-keyword">instanceof</span> <span class="tok-type">Student</span> s)) <span class="tok-keyword">return false</span>;
     <span class="tok-keyword">return</span> id == s.id &amp;&amp; <span class="tok-type">Objects</span>.<span class="tok-function">equals</span>(name, s.name);
-}</pre>
+}</code></pre>
 <div class="out"><b>Vì sao hệ số là 31.</b> Nó là số nguyên tố lẻ nên không vứt mất bit như một hệ số chẵn, và JVM biến <span class="badge">31*h</span> thành <span class="badge">(h &lt;&lt; 5) − h</span> — một phép dịch bit và một phép trừ thay cho phép nhân. Dùng một số chẵn nhỏ như 2 sẽ đẩy đóng góp của từng ký tự ra khỏi đầu kiểu int chỉ sau vài ký tự, khiến các chuỗi dài va chạm liên tục.</div>
 
 <h3>Giao ước không được phép phá</h3>
@@ -3951,13 +3951,13 @@ Giờ tìm 8: 8 mod 7 = 1 → ô 1 <b>trống</b> → kết luận "không tìm 
 <b>Read the shape:</b> the cost is flat until roughly α = 0.7 and then explodes, because 1/(1−α)² blows up as α approaches 1. That is exactly why 0.75 is the default threshold in Java: the last comfortable point before the cliff.</div>
 
 <h3>Rehashing — doubling the table</h3>
-<pre><span class="tok-keyword">void</span> <span class="tok-function">rehash</span>() {
+<pre><code class="language-java"><span class="tok-keyword">void</span> <span class="tok-function">rehash</span>() {
     Entry[] old = table;
     table = <span class="tok-keyword">new</span> Entry[old.length * 2];      <span class="tok-comment">// or the next prime</span>
     size = 0;
     <span class="tok-keyword">for</span> (Entry e : old)
         <span class="tok-keyword">if</span> (e != <span class="tok-keyword">null</span> &amp;&amp; !e.deleted) <span class="tok-function">put</span>(e.key, e.value);   <span class="tok-comment">// re-hash EVERY key</span>
-}</pre>
+}</code></pre>
 <p>You cannot copy the slots across: the index depends on N, so every key must be hashed again. One rehash costs O(n), but because the table doubles, the cost <em>amortises</em> to O(1) per insertion — the same geometric argument as ArrayList growth in lesson 1.4.</p>
 
 <h3>Worked example — total cost of 1,000 insertions</h3>
@@ -3998,13 +3998,13 @@ Work spent on rehashing = 12 + 24 + 48 + 96 + 192 + 384 + 768 = <b>1,524 re-inse
 <b>Đọc hình dạng:</b> chi phí gần như phẳng tới khoảng α = 0,7 rồi bùng nổ, vì 1/(1−α)² tăng vọt khi α tiến tới 1. Đó đúng là lý do ngưỡng mặc định trong Java là 0,75: điểm dễ chịu cuối cùng trước vách đá.</div>
 
 <h3>Rehash — nhân đôi bảng</h3>
-<pre><span class="tok-keyword">void</span> <span class="tok-function">rehash</span>() {
+<pre><code class="language-java"><span class="tok-keyword">void</span> <span class="tok-function">rehash</span>() {
     Entry[] old = table;
     table = <span class="tok-keyword">new</span> Entry[old.length * 2];      <span class="tok-comment">// hoặc số nguyên tố kế tiếp</span>
     size = 0;
     <span class="tok-keyword">for</span> (Entry e : old)
         <span class="tok-keyword">if</span> (e != <span class="tok-keyword">null</span> &amp;&amp; !e.deleted) <span class="tok-function">put</span>(e.key, e.value);   <span class="tok-comment">// băm lại MỌI khoá</span>
-}</pre>
+}</code></pre>
 <p>Không thể chép nguyên các ô sang: chỉ số phụ thuộc vào N, nên mọi khoá đều phải băm lại. Một lần rehash tốn O(n), nhưng vì bảng nhân đôi nên chi phí được <em>khấu hao</em> về O(1) mỗi lần chèn — đúng lập luận cấp số nhân như phép nở của ArrayList ở bài 1.4.</p>
 
 <h3>Ví dụ có lời giải — tổng chi phí cho 1.000 lần chèn</h3>
@@ -4103,14 +4103,14 @@ Công dành cho rehash = 12 + 24 + 48 + 96 + 192 + 384 + 768 = <b>1.524 lần ch
 <p class="lead">Given a text T of length n and a pattern P of length m, where does P occur? The obvious algorithm re-examines characters it has already read. Knuth–Morris–Pratt never does — and that single idea takes it from O(n·m) to O(n + m).</p>
 
 <h3>Brute force — and its worst case</h3>
-<pre><span class="tok-type">int</span> <span class="tok-function">bruteForce</span>(<span class="tok-type">String</span> t, <span class="tok-type">String</span> p) {
+<pre><code class="language-java"><span class="tok-type">int</span> <span class="tok-function">bruteForce</span>(<span class="tok-type">String</span> t, <span class="tok-type">String</span> p) {
     <span class="tok-keyword">for</span> (<span class="tok-type">int</span> i = 0; i &lt;= t.<span class="tok-function">length</span>() - p.<span class="tok-function">length</span>(); i++) {
         <span class="tok-type">int</span> j = 0;
         <span class="tok-keyword">while</span> (j &lt; p.<span class="tok-function">length</span>() &amp;&amp; t.<span class="tok-function">charAt</span>(i+j) == p.<span class="tok-function">charAt</span>(j)) j++;
         <span class="tok-keyword">if</span> (j == p.<span class="tok-function">length</span>()) <span class="tok-keyword">return</span> i;      <span class="tok-comment">// full match at i</span>
     }
     <span class="tok-keyword">return</span> -1;
-}</pre>
+}</code></pre>
 <div class="out"><b>Worst case:</b> T = "aaaaaaaaab" (n = 10), P = "aaaab" (m = 5).<br>
 At i = 0 the inner loop matches a,a,a,a then fails on b → 5 comparisons wasted.<br>
 At i = 1 the same thing happens. And at i = 2, 3, 4, 5 …<br>
@@ -4155,14 +4155,14 @@ Compare T[5]='B' with P[3]='B' ✓ → j = 4 · T[6]='A' vs P[4]='A' ✓ → j =
 <p class="lead">Cho văn bản T dài n và mẫu P dài m, P xuất hiện ở đâu? Thuật toán hiển nhiên đọc lại những ký tự nó đã đọc rồi. Knuth–Morris–Pratt không bao giờ làm thế — và chỉ ý tưởng đó đưa nó từ O(n·m) xuống O(n + m).</p>
 
 <h3>Vét cạn — và trường hợp xấu nhất của nó</h3>
-<pre><span class="tok-type">int</span> <span class="tok-function">bruteForce</span>(<span class="tok-type">String</span> t, <span class="tok-type">String</span> p) {
+<pre><code class="language-java"><span class="tok-type">int</span> <span class="tok-function">bruteForce</span>(<span class="tok-type">String</span> t, <span class="tok-type">String</span> p) {
     <span class="tok-keyword">for</span> (<span class="tok-type">int</span> i = 0; i &lt;= t.<span class="tok-function">length</span>() - p.<span class="tok-function">length</span>(); i++) {
         <span class="tok-type">int</span> j = 0;
         <span class="tok-keyword">while</span> (j &lt; p.<span class="tok-function">length</span>() &amp;&amp; t.<span class="tok-function">charAt</span>(i+j) == p.<span class="tok-function">charAt</span>(j)) j++;
         <span class="tok-keyword">if</span> (j == p.<span class="tok-function">length</span>()) <span class="tok-keyword">return</span> i;      <span class="tok-comment">// khớp trọn tại i</span>
     }
     <span class="tok-keyword">return</span> -1;
-}</pre>
+}</code></pre>
 <div class="out"><b>Trường hợp xấu nhất:</b> T = "aaaaaaaaab" (n = 10), P = "aaaab" (m = 5).<br>
 Tại i = 0, vòng trong khớp a,a,a,a rồi hỏng ở b → phí 5 phép so sánh.<br>
 Tại i = 1 chuyện y hệt lặp lại. Và tại i = 2, 3, 4, 5 …<br>
@@ -4496,7 +4496,7 @@ L1: 1 → 3 →  5 → 6 → 7 → 9</div>
 <p class="lead">Lesson 5.6 used union-find as a helper inside Kruskal. It deserves its own study, because two one-line optimisations take it from O(n) per operation to a bound so close to constant that it is written with the inverse Ackermann function.</p>
 
 <h3>The three versions</h3>
-<pre><span class="tok-comment">// v1 — naive: find walks up to the root</span>
+<pre><code class="language-java"><span class="tok-comment">// v1 — naive: find walks up to the root</span>
 <span class="tok-type">int</span> <span class="tok-function">find</span>(<span class="tok-type">int</span> x) { <span class="tok-keyword">while</span> (parent[x] != x) x = parent[x]; <span class="tok-keyword">return</span> x; }   <span class="tok-comment">// O(n) worst case</span>
 
 <span class="tok-comment">// v2 — union by rank: always hang the shorter tree under the taller</span>
@@ -4512,7 +4512,7 @@ L1: 1 → 3 →  5 → 6 → 7 → 9</div>
 <span class="tok-type">int</span> <span class="tok-function">find</span>(<span class="tok-type">int</span> x) {
     <span class="tok-keyword">if</span> (parent[x] != x) parent[x] = <span class="tok-function">find</span>(parent[x]);
     <span class="tok-keyword">return</span> parent[x];
-}</pre>
+}</code></pre>
 
 <h3>Worked example — path compression in action</h3>
 <div class="out"><b>Before:</b> 1 → 2 → 3 → 4 → 5 (5 is the root), a chain of depth 4.<br>
@@ -4550,7 +4550,7 @@ The <em>next</em> find on any of those nodes costs <b>1 step</b>. One expensive 
 <p class="lead">Bài 5.6 dùng union-find như một công cụ phụ bên trong Kruskal. Nó xứng đáng được học riêng, vì hai phép tối ưu mỗi cái một dòng đưa nó từ O(n) mỗi thao tác xuống một cận gần hằng số tới mức phải viết bằng hàm Ackermann ngược.</p>
 
 <h3>Ba phiên bản</h3>
-<pre><span class="tok-comment">// v1 — ngây thơ: find đi bộ lên tận gốc</span>
+<pre><code class="language-java"><span class="tok-comment">// v1 — ngây thơ: find đi bộ lên tận gốc</span>
 <span class="tok-type">int</span> <span class="tok-function">find</span>(<span class="tok-type">int</span> x) { <span class="tok-keyword">while</span> (parent[x] != x) x = parent[x]; <span class="tok-keyword">return</span> x; }   <span class="tok-comment">// O(n) xấu nhất</span>
 
 <span class="tok-comment">// v2 — gộp theo hạng: luôn treo cây thấp dưới cây cao</span>
@@ -4566,7 +4566,7 @@ The <em>next</em> find on any of those nodes costs <b>1 step</b>. One expensive 
 <span class="tok-type">int</span> <span class="tok-function">find</span>(<span class="tok-type">int</span> x) {
     <span class="tok-keyword">if</span> (parent[x] != x) parent[x] = <span class="tok-function">find</span>(parent[x]);
     <span class="tok-keyword">return</span> parent[x];
-}</pre>
+}</code></pre>
 
 <h3>Ví dụ có lời giải — nén đường đi tại trận</h3>
 <div class="out"><b>Trước:</b> 1 → 2 → 3 → 4 → 5 (5 là gốc), một dây xích sâu 4.<br>
@@ -4635,7 +4635,7 @@ Lần find <em>kế tiếp</em> trên bất kỳ nút nào trong số đó chỉ
 </tbody></table>
 
 <h3>The reusable skeleton — type this from memory in 5 minutes</h3>
-<pre><span class="tok-keyword">import</span> java.util.*;
+<pre><code class="language-java"><span class="tok-keyword">import</span> java.util.*;
 
 <span class="tok-keyword">public class</span> <span class="tok-type">Main</span> {
     <span class="tok-keyword">static class</span> <span class="tok-type">Node</span> {
@@ -4660,7 +4660,7 @@ Lần find <em>kế tiếp</em> trên bất kỳ nút nào trong số đó chỉ
             }
         }
     }
-}</pre>
+}</code></pre>
 <p>Every CSD201 practical fits this shape. Learn to type it without thinking, so your 85 minutes go to the actual algorithm.</p>
 <div class="pitfall"><b>Write Java 8.</b> Lesson 0.4 installs JDK 8 for Eclipse, which is what the syllabus's tooling assumes. Arrow <code>switch</code> (<code>case 1 -&gt; ...</code>) needs JDK 14+, <code>var</code> needs 10+, and <code>if (x instanceof Node n)</code> needs 16+ — all three fail to compile in the exam room. Use the classic forms above.</div>
 
@@ -4691,7 +4691,7 @@ Build the adjacency list first (lesson 5.2), then BFS (queue) and DFS (recursion
 </tbody></table>
 
 <h3>Bộ khung dùng lại — gõ thuộc lòng trong 5 phút</h3>
-<pre><span class="tok-keyword">import</span> java.util.*;
+<pre><code class="language-java"><span class="tok-keyword">import</span> java.util.*;
 
 <span class="tok-keyword">public class</span> <span class="tok-type">Main</span> {
     <span class="tok-keyword">static class</span> <span class="tok-type">Node</span> {
@@ -4716,7 +4716,7 @@ Build the adjacency list first (lesson 5.2), then BFS (queue) and DFS (recursion
             }
         }
     }
-}</pre>
+}</code></pre>
 <p>Mọi đề thực hành CSD201 đều vừa cái khuôn này. Hãy luyện gõ nó mà không cần suy nghĩ, để 85 phút của bạn dành cho thuật toán thật sự.</p>
 <div class="pitfall"><b>Hãy viết Java 8.</b> Bài 0.4 cài JDK 8 cho Eclipse, đúng như bộ công cụ syllabus giả định. <code>switch</code> mũi tên (<code>case 1 -&gt; ...</code>) cần JDK 14+, <code>var</code> cần 10+, và <code>if (x instanceof Node n)</code> cần 16+ — cả ba đều không biên dịch được trong phòng thi. Hãy dùng dạng cổ điển ở trên.</div>
 

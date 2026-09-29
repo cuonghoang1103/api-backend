@@ -398,7 +398,7 @@ predict_linear(node_filesystem_avail_bytes{mountpoint="/"}[6h], 24*3600) &lt; 0<
    large it looks.</code></pre>
 
 <h3>The threshold review, which nobody schedules</h3>
-<pre><code>Every threshold decays, because the system it describes
+<pre><code class="language-bash">Every threshold decays, because the system it describes
 changes and the number does not.
 
   · Traffic grew 10× → your absolute count thresholds

@@ -196,7 +196,7 @@ export default {
 <li><strong>Why there is no counter</strong> — a sequential file does not know its own length. That is what makes EOF necessary and what makes "read until it fails" the only correct loop shape.</li>
 <li><strong>The same loop in C</strong> — compiled with <code>cc -Wall</code> and run for this lesson:</li>
 </ul>
-<pre>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 typedef struct { int key; char name[16]; double balance; } Rec;
 
 int main(void) {
@@ -206,7 +206,7 @@ int main(void) {
         printf("%d %s %.2f\\n", r.key, r.name, r.balance);
     fclose(f);
     return 0;
-}</pre>
+}</code></pre>
 <ul>
 <li><strong>The trap that this pseudocode hides</strong> — translating "while (Not EOF)" literally into C gives <code>while (!feof(f))</code>, which is <strong>wrong</strong>. <code>feof()</code> only becomes true <em>after</em> a read has already failed, so the loop runs one extra time and processes the last record twice. Measured on a 5-record file: the <code>!feof</code> version printed <strong>6</strong> lines with record 5 repeated; the <code>fread(...) == 1</code> version printed <strong>5</strong>.</li>
 </ul>
@@ -218,7 +218,7 @@ int main(void) {
 <li><strong>Vì sao không có biến đếm</strong> — tệp tuần tự không biết chiều dài của chính nó. Đó là lý do EOF là bắt buộc, và là lý do "đọc tới khi đọc hỏng" mới là hình dạng vòng lặp duy nhất đúng.</li>
 <li><strong>Cũng vòng lặp ấy, viết bằng C</strong> — đã biên dịch bằng <code>cc -Wall</code> và chạy thật cho bài này:</li>
 </ul>
-<pre>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 typedef struct { int key; char name[16]; double balance; } Rec;
 
 int main(void) {
@@ -228,7 +228,7 @@ int main(void) {
         printf("%d %s %.2f\\n", r.key, r.name, r.balance);
     fclose(f);
     return 0;
-}</pre>
+}</code></pre>
 <ul>
 <li><strong>Cái bẫy mà mã giả này giấu đi</strong> — dịch "while (Not EOF)" sang C theo nghĩa đen sẽ ra <code>while (!feof(f))</code>, và nó <strong>SAI</strong>. <code>feof()</code> chỉ thành đúng <em>SAU KHI</em> một lệnh đọc đã hỏng, nên vòng lặp chạy thừa một lượt và xử lý bản ghi cuối hai lần. Đo thật trên tệp 5 bản ghi: bản dùng <code>!feof</code> in ra <strong>6</strong> dòng với bản ghi 5 lặp lại; bản dùng <code>fread(...) == 1</code> in ra đúng <strong>5</strong> dòng.</li>
 </ul>

@@ -25,7 +25,7 @@ export default {
 <p class="lead">Every Prisma incident starts the same way — someone says the API is broken — and the temptation is to start fixing. Five minutes of ordered triage beats an hour of guessing, and the order matters more than the commands: what changed, then what is failing, then why, and only then what to do about it.</p>
 
 <h3>Question 0 — what changed?</h3>
-<pre><code><span class="tok-comment"># Almost every incident has an answer here</span>
+<pre><code class="language-bash"><span class="tok-comment"># Almost every incident has an answer here</span>
 git log --oneline -10
 docker inspect cuonghoangdev_backend --format '{{.Created}} {{.Config.Image}}'
 npx prisma migrate status</code></pre>
@@ -50,23 +50,23 @@ Following migration have not yet been applied:
 </div>
 
 <h3>The four commands</h3>
-<pre><code><span class="tok-comment"># 1. Is the container up, and for how long?</span>
+<pre><code class="language-bash"><span class="tok-comment"># 1. Is the container up, and for how long?</span>
 docker ps -a --filter name=backend --format 'table {{.Status}}\\t{{.Image}}'</code></pre>
 <div class="out">STATUS                    IMAGE
 Up 4 minutes              ghcr.io/…/backend:latest      ← khoi dong lai 4 phut truoc</div>
-<pre><code><span class="tok-comment"># 2. Can it talk to the database at all?</span>
+<pre><code class="language-javascript"><span class="tok-comment"># 2. Can it talk to the database at all?</span>
 docker exec cuonghoangdev_backend node -e \\
   "const{PrismaClient}=require('@prisma/client');const p=new PrismaClient();
    p.\\$queryRaw\\&#96;SELECT now()\\&#96;.then(r=&gt;console.log('OK',r)).catch(e=&gt;console.log('LOI',e.code,e.message.split('\\n')[0]))"</code></pre>
 <div class="out">LOI P1001 Can't reach database server at &#96;postgres:5432&#96;</div>
-<pre><code><span class="tok-comment"># 3. What is the database itself doing?</span>
+<pre><code class="language-sql"><span class="tok-comment"># 3. What is the database itself doing?</span>
 psql "$DATABASE_URL" -c "SELECT state, count(*) FROM pg_stat_activity
                          WHERE datname = current_database() GROUP BY state;"</code></pre>
 <div class="out">        state        | count
 ---------------------+-------
  idle                |    97
  active              |     3               ← 100 ket noi, max_connections = 100</div>
-<pre><code><span class="tok-comment"># 4. What did the app log at the moment it broke?</span>
+<pre><code class="language-bash"><span class="tok-comment"># 4. What did the app log at the moment it broke?</span>
 docker logs cuonghoangdev_backend --since 15m 2&gt;&amp;1 | grep -iE 'prisma|P[0-9]{4}|error' | head -30</code></pre>
 <div class="out">[13:41:07] PrismaClientInitializationError: P1001
 [13:41:09] PrismaClientKnownRequestError: P2024 Timed out fetching a new
@@ -107,7 +107,7 @@ docker logs cuonghoangdev_backend --since 15m 2&gt;&amp;1 | grep -iE 'prisma|P[0
 <p class="lead">Mọi sự cố Prisma đều bắt đầu giống hệt nhau — có người bảo API hỏng rồi — và cám dỗ là lao vào sửa. Năm phút phân loại CÓ THỨ TỰ thắng một tiếng đoán mò, và cái THỨ TỰ còn quan trọng hơn cả các câu lệnh: vừa có gì thay đổi, rồi cái gì đang hỏng, rồi vì sao, và chỉ tới lúc đó mới tính làm gì với nó.</p>
 
 <h3>Câu hỏi số 0 — vừa có gì thay đổi?</h3>
-<pre><code><span class="tok-comment"># Gần như mọi sự cố đều có câu trả lời ở đây</span>
+<pre><code class="language-bash"><span class="tok-comment"># Gần như mọi sự cố đều có câu trả lời ở đây</span>
 git log --oneline -10
 docker inspect cuonghoangdev_backend --format '{{.Created}} {{.Config.Image}}'
 npx prisma migrate status</code></pre>
@@ -132,23 +132,23 @@ Following migration have not yet been applied:
 </div>
 
 <h3>Bốn câu lệnh</h3>
-<pre><code><span class="tok-comment"># 1. Container có chạy không, và chạy được bao lâu rồi?</span>
+<pre><code class="language-bash"><span class="tok-comment"># 1. Container có chạy không, và chạy được bao lâu rồi?</span>
 docker ps -a --filter name=backend --format 'table {{.Status}}\\t{{.Image}}'</code></pre>
 <div class="out">STATUS                    IMAGE
 Up 4 minutes              ghcr.io/…/backend:latest      ← khoi dong lai 4 phut truoc</div>
-<pre><code><span class="tok-comment"># 2. Nó có nói chuyện được với cơ sở dữ liệu không?</span>
+<pre><code class="language-javascript"><span class="tok-comment"># 2. Nó có nói chuyện được với cơ sở dữ liệu không?</span>
 docker exec cuonghoangdev_backend node -e \\
   "const{PrismaClient}=require('@prisma/client');const p=new PrismaClient();
    p.\\$queryRaw\\&#96;SELECT now()\\&#96;.then(r=&gt;console.log('OK',r)).catch(e=&gt;console.log('LOI',e.code,e.message.split('\\n')[0]))"</code></pre>
 <div class="out">LOI P1001 Can't reach database server at &#96;postgres:5432&#96;</div>
-<pre><code><span class="tok-comment"># 3. Bản thân cơ sở dữ liệu đang làm gì?</span>
+<pre><code class="language-sql"><span class="tok-comment"># 3. Bản thân cơ sở dữ liệu đang làm gì?</span>
 psql "$DATABASE_URL" -c "SELECT state, count(*) FROM pg_stat_activity
                          WHERE datname = current_database() GROUP BY state;"</code></pre>
 <div class="out">        state        | count
 ---------------------+-------
  idle                |    97
  active              |     3               ← 100 ket noi, max_connections = 100</div>
-<pre><code><span class="tok-comment"># 4. Ứng dụng ghi gì vào nhật ký ĐÚNG lúc nó hỏng?</span>
+<pre><code class="language-bash"><span class="tok-comment"># 4. Ứng dụng ghi gì vào nhật ký ĐÚNG lúc nó hỏng?</span>
 docker logs cuonghoangdev_backend --since 15m 2&gt;&amp;1 | grep -iE 'prisma|P[0-9]{4}|error' | head -30</code></pre>
 <div class="out">[13:41:07] PrismaClientInitializationError: P1001
 [13:41:09] PrismaClientKnownRequestError: P2024 Timed out fetching a new
@@ -205,11 +205,11 @@ docker logs cuonghoangdev_backend --since 15m 2&gt;&amp;1 | grep -iE 'prisma|P[0
 </div>
 
 <h3>Shape 2 — the data said no</h3>
-<pre><code>await prisma.user.create({ data: { email: 'an@vidu.com', username: 'an' } });</code></pre>
+<pre><code class="language-typescript">await prisma.user.create({ data: { email: 'an@vidu.com', username: 'an' } });</code></pre>
 <div class="out">PrismaClientKnownRequestError: P2002
 Unique constraint failed on the fields: (&#96;email&#96;)
 meta: { target: [ 'email' ] }</div>
-<pre><code><span class="tok-comment">// Handle it, do not pre-check it</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Handle it, do not pre-check it</span>
 try {
   return await prisma.user.create({ data });
 } catch (e) {
@@ -238,7 +238,7 @@ try {
 <div class="out">P2024 Timed out fetching a new connection from the connection pool.
 More info: http://pris.ly/d/connection-pool
 (Current connection pool timeout: 10, connection limit: 33)</div>
-<pre><code><span class="tok-comment">-- The question P2024 is really asking: who is holding them?</span>
+<pre><code class="language-typescript"><span class="tok-comment">-- The question P2024 is really asking: who is holding them?</span>
 SELECT state, count(*), max(now() - state_change)::interval(0) AS lau_nhat
 FROM pg_stat_activity WHERE datname = current_database()
 GROUP BY state ORDER BY 2 DESC;</code></pre>
@@ -275,7 +275,7 @@ Prisma Migrate will not apply any further migrations until this is resolved.</di
 </div>
 
 <h3>Shape 7 — nothing is failing</h3>
-<pre><code><span class="tok-comment">// No error. The wrong answer.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// No error. The wrong answer.</span>
 const post = await prisma.socialPost.findMany({ where: { authorId } });
 <span class="tok-comment">// → includes soft-deleted rows, because this is a raw-ish path</span>
 <span class="tok-comment">//   the extension does not cover, or an include that bypasses it</span></code></pre>
@@ -315,11 +315,11 @@ const post = await prisma.socialPost.findMany({ where: { authorId } });
 </div>
 
 <h3>Hình dáng 2 — dữ liệu nói KHÔNG</h3>
-<pre><code>await prisma.user.create({ data: { email: 'an@vidu.com', username: 'an' } });</code></pre>
+<pre><code class="language-typescript">await prisma.user.create({ data: { email: 'an@vidu.com', username: 'an' } });</code></pre>
 <div class="out">PrismaClientKnownRequestError: P2002
 Unique constraint failed on the fields: (&#96;email&#96;)
 meta: { target: [ 'email' ] }</div>
-<pre><code><span class="tok-comment">// Hãy BẮT nó, đừng kiểm trước</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Hãy BẮT nó, đừng kiểm trước</span>
 try {
   return await prisma.user.create({ data });
 } catch (e) {
@@ -348,7 +348,7 @@ try {
 <div class="out">P2024 Timed out fetching a new connection from the connection pool.
 More info: http://pris.ly/d/connection-pool
 (Current connection pool timeout: 10, connection limit: 33)</div>
-<pre><code><span class="tok-comment">-- Câu hỏi P2024 THẬT SỰ đang đặt ra: ai đang giữ chúng?</span>
+<pre><code class="language-typescript"><span class="tok-comment">-- Câu hỏi P2024 THẬT SỰ đang đặt ra: ai đang giữ chúng?</span>
 SELECT state, count(*), max(now() - state_change)::interval(0) AS lau_nhat
 FROM pg_stat_activity WHERE datname = current_database()
 GROUP BY state ORDER BY 2 DESC;</code></pre>
@@ -385,7 +385,7 @@ Prisma Migrate will not apply any further migrations until this is resolved.</di
 </div>
 
 <h3>Hình dáng 7 — chẳng có gì hỏng cả</h3>
-<pre><code><span class="tok-comment">// Không lỗi. Câu trả lời SAI.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Không lỗi. Câu trả lời SAI.</span>
 const post = await prisma.socialPost.findMany({ where: { authorId } });
 <span class="tok-comment">// → kèm cả những hàng đã xoá mềm, vì đây là một đường mà</span>
 <span class="tok-comment">//   phần mở rộng không phủ tới, hoặc một include đi vòng qua nó</span></code></pre>
@@ -425,7 +425,7 @@ const post = await prisma.socialPost.findMany({ where: { authorId } });
 <p class="lead">Ten tools. Each answers one question, and knowing which question you have is most of the work. Three of them can change production, so they are marked — the rest are read-only and safe to run in the middle of an incident.</p>
 
 <h3>Is the schema what I think it is?</h3>
-<pre><code><span class="tok-comment"># Are all migrations applied? (read-only, safe)</span>
+<pre><code class="language-bash"><span class="tok-comment"># Are all migrations applied? (read-only, safe)</span>
 npx prisma migrate status</code></pre>
 <div class="out">Database schema is up to date!
 
@@ -434,7 +434,7 @@ Following migrations have not yet been applied:
 20260823140000_them_cot_diem
 <span class="tok-comment"># hoặc</span>
 The &#96;20260823140000_them_cot_diem&#96; migration failed. (P3009)</div>
-<pre><code><span class="tok-comment"># Does the live database match the migration history? (read-only, safe)</span>
+<pre><code class="language-bash"><span class="tok-comment"># Does the live database match the migration history? (read-only, safe)</span>
 npx prisma migrate diff \\
   --from-migrations ./prisma/migrations \\
   --to-database-url "$DATABASE_URL" \\
@@ -452,7 +452,7 @@ CREATE INDEX "socialpost_author_created_idx" ON "SocialPost"("authorId", "create
 </div>
 
 <h3>Is the schema file even valid?</h3>
-<pre><code>npx prisma validate         <span class="tok-comment"># read-only, safe</span>
+<pre><code class="language-bash">npx prisma validate         <span class="tok-comment"># read-only, safe</span>
 npx prisma format           <span class="tok-comment"># rewrites schema.prisma, no database contact</span></code></pre>
 <div class="out">Prisma schema loaded from prisma/schema.prisma
 
@@ -469,11 +469,11 @@ error: Error validating field &#96;posts&#96; in model &#96;User&#96;: The relat
 </div>
 
 <h3>What does the database actually contain? ⚠️</h3>
-<pre><code><span class="tok-comment"># ⚠️ OVERWRITES prisma/schema.prisma with the live database's structure</span>
+<pre><code class="language-bash"><span class="tok-comment"># ⚠️ OVERWRITES prisma/schema.prisma with the live database's structure</span>
 npx prisma db pull</code></pre>
 <div class="out">Introspecting based on datasource defined in prisma/schema.prisma …
 ✔ Introspected 34 models and wrote them into prisma/schema.prisma in 1.2s</div>
-<pre><code><span class="tok-comment"># The safe way: introspect into a scratch file and diff it</span>
+<pre><code class="language-bash"><span class="tok-comment"># The safe way: introspect into a scratch file and diff it</span>
 cp prisma/schema.prisma /tmp/schema.base.prisma
 npx prisma db pull --schema /tmp/soi.prisma 2&gt;/dev/null || {
   cp prisma/schema.prisma /tmp/soi.prisma
@@ -483,7 +483,7 @@ diff /tmp/schema.base.prisma /tmp/soi.prisma</code></pre>
 <div class="pitfall">
 <p><strong>Trap — <code>db pull</code> destroys everything the database cannot express.</strong> It rewrites your schema file from introspection, so <code>@map</code> names it cannot infer, <code>@relation</code> labels, comments, ordering and generator blocks are rewritten or lost. It is a legitimate tool for adopting an existing database, and a terrible one for "let me just check". Copy the schema to <code>/tmp</code> and pull into that.</p>
 </div>
-<pre><code><span class="tok-comment"># ⚠️ A GUI on your data. Do not point it at production.</span>
+<pre><code class="language-bash"><span class="tok-comment"># ⚠️ A GUI on your data. Do not point it at production.</span>
 npx prisma studio</code></pre>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">Why not production</span><span class="lz-lnote">Studio can edit and delete rows with two clicks and no confirmation dialog worth the name, over an unauthenticated local web server, using a connection from the same pool your application needs. Every one of those is a reason on its own.</span></div>
@@ -493,7 +493,7 @@ npx prisma studio</code></pre>
 </div>
 
 <h3>The four PostgreSQL views worth memorising</h3>
-<pre><code><span class="tok-comment">-- 1. Who is connected and what are they doing? (Lessons 9.4, 12.2)</span>
+<pre><code class="language-typescript"><span class="tok-comment">-- 1. Who is connected and what are they doing? (Lessons 9.4, 12.2)</span>
 SELECT pid, state, now() - state_change AS lau, left(query, 60)
 FROM pg_stat_activity
 WHERE datname = current_database() AND state != 'idle'
@@ -502,7 +502,7 @@ ORDER BY lau DESC;</code></pre>
 -------+---------------------+-----------+------------------------------
  41287 | idle in transaction | 00:06:44  | SELECT "User"."id" FROM "User"
  41302 | active              | 00:00:31  | UPDATE "SocialPost" SET …</div>
-<pre><code><span class="tok-comment">-- 2. Who is blocking whom? The question pg_stat_activity alone cannot answer.</span>
+<pre><code class="language-typescript"><span class="tok-comment">-- 2. Who is blocking whom? The question pg_stat_activity alone cannot answer.</span>
 SELECT bi.pid AS bi_chan, bi.query AS truy_van_bi_chan,
        ch.pid AS ke_chan,  ch.query AS truy_van_ke_chan,
        now() - bi.query_start AS cho_bao_lau
@@ -515,7 +515,7 @@ WHERE cardinality(pg_blocking_pids(bi.pid)) &gt; 0;</code></pre>
    41302 | ALTER TABLE "SocialPost"… |   41287 | SELECT … FROM "User"  | 00:00:31
 
 -- Bai 11.3: mot ALTER dang waitMs, va MOI truy van moi xep hang sau no.</div>
-<pre><code><span class="tok-comment">-- 3. Which tables are being scanned instead of indexed? (Lesson 9.3)</span>
+<pre><code class="language-sql"><span class="tok-comment">-- 3. Which tables are being scanned instead of indexed? (Lesson 9.3)</span>
 SELECT relname, seq_scan, seq_tup_read, idx_scan, n_live_tup, n_dead_tup
 FROM pg_stat_user_tables
 WHERE seq_scan &gt; 0
@@ -527,7 +527,7 @@ ORDER BY seq_tup_read DESC LIMIT 5;</code></pre>
 
 -- 22 ty hang doc tuan from = mot chi muc bi thieu.
 -- 418k dead tuple = autovacuum khong theo kip (Bai 11.4).</div>
-<pre><code><span class="tok-comment">-- 4. What is actually slow, cumulatively? (Lesson 9.1)</span>
+<pre><code class="language-sql"><span class="tok-comment">-- 4. What is actually slow, cumulatively? (Lesson 9.1)</span>
 SELECT calls, round(total_exec_time)::int AS tong_ms,
        round(mean_exec_time::numeric, 2) AS tb_ms, left(query, 70)
 FROM pg_stat_statements
@@ -562,7 +562,7 @@ ORDER BY total_exec_time DESC LIMIT 5;</code></pre>
 <p class="lead">Mười công cụ. Mỗi cái trả lời ĐÚNG MỘT câu hỏi, và biết mình đang có câu hỏi nào mới là phần lớn công việc. Ba cái có thể THAY ĐỔI production nên chúng được đánh dấu; phần còn lại chỉ đọc và chạy an toàn ngay giữa lúc sự cố.</p>
 
 <h3>Lược đồ có đúng như tôi nghĩ không?</h3>
-<pre><code><span class="tok-comment"># Mọi migration đã áp chưa? (chỉ đọc, an toàn)</span>
+<pre><code class="language-bash"><span class="tok-comment"># Mọi migration đã áp chưa? (chỉ đọc, an toàn)</span>
 npx prisma migrate status</code></pre>
 <div class="out">Database schema is up to date!
 
@@ -571,7 +571,7 @@ Following migrations have not yet been applied:
 20260823140000_them_cot_diem
 <span class="tok-comment"># hoặc</span>
 The &#96;20260823140000_them_cot_diem&#96; migration failed. (P3009)</div>
-<pre><code><span class="tok-comment"># Cơ sở dữ liệu đang chạy có khớp lịch sử migration không? (chỉ đọc, an toàn)</span>
+<pre><code class="language-bash"><span class="tok-comment"># Cơ sở dữ liệu đang chạy có khớp lịch sử migration không? (chỉ đọc, an toàn)</span>
 npx prisma migrate diff \\
   --from-migrations ./prisma/migrations \\
   --to-database-url "$DATABASE_URL" \\
@@ -589,7 +589,7 @@ CREATE INDEX "socialpost_author_created_idx" ON "SocialPost"("authorId", "create
 </div>
 
 <h3>Bản thân file lược đồ có hợp lệ không?</h3>
-<pre><code>npx prisma validate         <span class="tok-comment"># chỉ đọc, an toàn</span>
+<pre><code class="language-bash">npx prisma validate         <span class="tok-comment"># chỉ đọc, an toàn</span>
 npx prisma format           <span class="tok-comment"># ghi lại schema.prisma, không chạm cơ sở dữ liệu</span></code></pre>
 <div class="out">Prisma schema loaded from prisma/schema.prisma
 
@@ -606,11 +606,11 @@ error: Error validating field &#96;posts&#96; in model &#96;User&#96;: The relat
 </div>
 
 <h3>Cơ sở dữ liệu THẬT SỰ chứa gì? ⚠️</h3>
-<pre><code><span class="tok-comment"># ⚠️ GHI ĐÈ prisma/schema.prisma bằng cấu trúc của cơ sở dữ liệu đang chạy</span>
+<pre><code class="language-bash"><span class="tok-comment"># ⚠️ GHI ĐÈ prisma/schema.prisma bằng cấu trúc của cơ sở dữ liệu đang chạy</span>
 npx prisma db pull</code></pre>
 <div class="out">Introspecting based on datasource defined in prisma/schema.prisma …
 ✔ Introspected 34 models and wrote them into prisma/schema.prisma in 1.2s</div>
-<pre><code><span class="tok-comment"># Cách an toàn: nội soi vào một file nháp rồi diff</span>
+<pre><code class="language-bash"><span class="tok-comment"># Cách an toàn: nội soi vào một file nháp rồi diff</span>
 cp prisma/schema.prisma /tmp/schema.base.prisma
 npx prisma db pull --schema /tmp/soi.prisma 2&gt;/dev/null || {
   cp prisma/schema.prisma /tmp/soi.prisma
@@ -620,7 +620,7 @@ diff /tmp/schema.base.prisma /tmp/soi.prisma</code></pre>
 <div class="pitfall">
 <p><strong>Bẫy — <code>db pull</code> PHÁ HUỶ mọi thứ mà cơ sở dữ liệu không diễn đạt được.</strong> Nó viết lại file lược đồ của bạn từ kết quả nội soi, nên những cái tên <code>@map</code> nó không suy ra được, nhãn <code>@relation</code>, chú thích, thứ tự và các khối generator đều bị viết lại hoặc mất. Nó là công cụ CHÍNH ĐÁNG để tiếp quản một cơ sở dữ liệu có sẵn, và là công cụ TỆ HẠI cho việc "để tôi xem thử cái". Hãy copy lược đồ ra <code>/tmp</code> rồi pull vào đó.</p>
 </div>
-<pre><code><span class="tok-comment"># ⚠️ Một giao diện đồ hoạ trên dữ liệu của bạn. ĐỪNG trỏ nó vào production.</span>
+<pre><code class="language-bash"><span class="tok-comment"># ⚠️ Một giao diện đồ hoạ trên dữ liệu của bạn. ĐỪNG trỏ nó vào production.</span>
 npx prisma studio</code></pre>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">Vì sao không dùng với production</span><span class="lz-lnote">Studio sửa và xoá hàng bằng hai cú nhấp, với hộp thoại xác nhận chẳng đáng gọi là xác nhận, qua một máy chủ web cục bộ không xác thực, dùng một kết nối lấy từ chính cái pool mà ứng dụng của bạn đang cần. Mỗi điều đó tự nó đã là một lý do.</span></div>
@@ -630,7 +630,7 @@ npx prisma studio</code></pre>
 </div>
 
 <h3>Bốn khung nhìn PostgreSQL đáng thuộc lòng</h3>
-<pre><code><span class="tok-comment">-- 1. Ai đang nối và họ đang làm gì? (Bài 9.4, 12.2)</span>
+<pre><code class="language-typescript"><span class="tok-comment">-- 1. Ai đang nối và họ đang làm gì? (Bài 9.4, 12.2)</span>
 SELECT pid, state, now() - state_change AS lau, left(query, 60)
 FROM pg_stat_activity
 WHERE datname = current_database() AND state != 'idle'
@@ -639,7 +639,7 @@ ORDER BY lau DESC;</code></pre>
 -------+---------------------+-----------+------------------------------
  41287 | idle in transaction | 00:06:44  | SELECT "User"."id" FROM "User"
  41302 | active              | 00:00:31  | UPDATE "SocialPost" SET …</div>
-<pre><code><span class="tok-comment">-- 2. Ai đang chặn ai? Câu hỏi mà riêng pg_stat_activity không trả lời được.</span>
+<pre><code class="language-typescript"><span class="tok-comment">-- 2. Ai đang chặn ai? Câu hỏi mà riêng pg_stat_activity không trả lời được.</span>
 SELECT bi.pid AS bi_chan, bi.query AS truy_van_bi_chan,
        ch.pid AS ke_chan,  ch.query AS truy_van_ke_chan,
        now() - bi.query_start AS cho_bao_lau
@@ -652,7 +652,7 @@ WHERE cardinality(pg_blocking_pids(bi.pid)) &gt; 0;</code></pre>
    41302 | ALTER TABLE "SocialPost"… |   41287 | SELECT … FROM "User"  | 00:00:31
 
 -- Bai 11.3: mot ALTER dang waitMs, va MOI truy van moi xep hang sau no.</div>
-<pre><code><span class="tok-comment">-- 3. Bảng nào đang bị quét thay vì dùng chỉ mục? (Bài 9.3)</span>
+<pre><code class="language-sql"><span class="tok-comment">-- 3. Bảng nào đang bị quét thay vì dùng chỉ mục? (Bài 9.3)</span>
 SELECT relname, seq_scan, seq_tup_read, idx_scan, n_live_tup, n_dead_tup
 FROM pg_stat_user_tables
 WHERE seq_scan &gt; 0
@@ -664,7 +664,7 @@ ORDER BY seq_tup_read DESC LIMIT 5;</code></pre>
 
 -- 22 ty hang doc tuan from = mot chi muc bi thieu.
 -- 418k dead tuple = autovacuum khong theo kip (Bai 11.4).</div>
-<pre><code><span class="tok-comment">-- 4. Cái gì THẬT SỰ chậm, tính luỹ kế? (Bài 9.1)</span>
+<pre><code class="language-sql"><span class="tok-comment">-- 4. Cái gì THẬT SỰ chậm, tính luỹ kế? (Bài 9.1)</span>
 SELECT calls, round(total_exec_time)::int AS tong_ms,
        round(mean_exec_time::numeric, 2) AS tb_ms, left(query, 70)
 FROM pg_stat_statements
@@ -707,12 +707,12 @@ ORDER BY total_exec_time DESC LIMIT 5;</code></pre>
 <p class="lead">Chapter 12 so far has been about incidents you are already in. This lesson is about seeing them coming. Eight graphs to look at and eight alerts to be woken by — with the threshold for each, and the reasoning, because a threshold you cannot justify is a threshold someone will silence.</p>
 
 <h3>Ten lines to export everything</h3>
-<pre><code><span class="tok-comment">// schema.prisma</span>
+<pre><code class="language-typescript"><span class="tok-comment">// schema.prisma</span>
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["metrics"]
 }</code></pre>
-<pre><code><span class="tok-comment">// src/routes/metrics.ts — scraped by Prometheus, not public</span>
+<pre><code class="language-typescript"><span class="tok-comment">// src/routes/metrics.ts — scraped by Prometheus, not public</span>
 app.get('/metrics', chiNoiBo, async (_req, res) =&gt; {
   res.set('Content-Type', 'text/plain; version=0.0.4');
   res.end(await prisma.$metrics.prometheus());
@@ -743,7 +743,7 @@ prisma_datasource_queries_total 5104882</div>
 </div>
 
 <h3>Eight alerts, with thresholds</h3>
-<pre><code><span class="tok-comment"># prometheus/canh-bao.yml</span>
+<pre><code class="language-typescript"><span class="tok-comment"># prometheus/canh-bao.yml</span>
 groups:
 - name: prisma
   rules:
@@ -811,12 +811,12 @@ groups:
 <p class="lead">Chương 12 tới giờ nói về những sự cố bạn ĐANG ở trong đó. Bài này nói về việc NHÌN THẤY chúng đang tới. Tám đồ thị để nhìn và tám cảnh báo để bị đánh thức — kèm ngưỡng cho từng cái, và lý do chọn ngưỡng đó, vì một cái ngưỡng bạn không biện minh nổi là một cái ngưỡng sẽ có người tắt tiếng.</p>
 
 <h3>Mười dòng để xuất mọi thứ</h3>
-<pre><code><span class="tok-comment">// schema.prisma</span>
+<pre><code class="language-typescript"><span class="tok-comment">// schema.prisma</span>
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["metrics"]
 }</code></pre>
-<pre><code><span class="tok-comment">// src/routes/metrics.ts — cho Prometheus quét, KHÔNG công khai</span>
+<pre><code class="language-typescript"><span class="tok-comment">// src/routes/metrics.ts — cho Prometheus quét, KHÔNG công khai</span>
 app.get('/metrics', chiNoiBo, async (_req, res) =&gt; {
   res.set('Content-Type', 'text/plain; version=0.0.4');
   res.end(await prisma.$metrics.prometheus());
@@ -847,7 +847,7 @@ prisma_datasource_queries_total 5104882</div>
 </div>
 
 <h3>Tám cảnh báo, kèm ngưỡng</h3>
-<pre><code><span class="tok-comment"># prometheus/canh-bao.yml</span>
+<pre><code class="language-typescript"><span class="tok-comment"># prometheus/canh-bao.yml</span>
 groups:
 - name: prisma
   rules:

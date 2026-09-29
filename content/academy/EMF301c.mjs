@@ -221,7 +221,7 @@ const c3 = doc('emf301c-3-1-maxwell', '3.1 — Maxwell equations & time-varying 
 <li><strong>Maxwell's displacement current</strong> — a changing electric field acts like a current and creates a magnetic field. Adding dD/dt to Ampere's law was the crucial step that predicted electromagnetic waves.</li>
 </ul>
 <h3>The four equations (differential form)</h3>
-<pre><code>div D = rho              (Gauss's law: charges make E)
+<pre><code class="language-bash">div D = rho              (Gauss's law: charges make E)
 div B = 0                (no magnetic monopoles)
 curl E = - dB/dt         (Faraday: changing B makes E)
 curl H = J + dD/dt       (Ampere-Maxwell: current + changing D make H)
@@ -241,7 +241,7 @@ wave speed:  v = 1 / sqrt(mu * epsilon)   (= c in vacuum)
 <li><strong>Dòng dịch của Maxwell</strong> — điện trường biến thiên hoạt động như một dòng và sinh ra từ trường. Thêm dD/dt vào định luật Ampere là bước then chốt tiên đoán sóng điện từ.</li>
 </ul>
 <h3>Bốn phương trình (dạng vi phân)</h3>
-<pre><code>div D = rho              (Gauss: dien tich sinh E)
+<pre><code class="language-bash">div D = rho              (Gauss: dien tich sinh E)
 div B = 0                (khong co don cuc tu)
 curl E = - dB/dt         (Faraday: B bien thien sinh E)
 curl H = J + dD/dt       (Ampere-Maxwell: dong + D bien thien sinh H)

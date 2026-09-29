@@ -27,13 +27,13 @@ export default {
 <h2>Logic that lives next to the data</h2>
 <p class="lead">A function stored in the database runs where the data already is — no round trip, no serialisation, and it is available to every client that connects, not just the one application that happens to implement it. This chapter shows how to write them, and is equally honest about when putting logic here is a mistake.</p>
 <p>All examples use a <code>users</code> + <code>notes</code> schema with 500 notes and deterministic view counts, so you can reproduce every number:</p>
-<pre><code><span class="tok-keyword">INSERT INTO</span> notes (user_id, title, body, views)
+<pre><code class="language-sql"><span class="tok-keyword">INSERT INTO</span> notes (user_id, title, body, views)
 <span class="tok-keyword">SELECT</span> (g % 20)+1, <span class="tok-string">'Note '</span>||g, <span class="tok-string">'Body of note '</span>||g, 0 <span class="tok-keyword">FROM</span> generate_series(1,500) g;
 <span class="tok-keyword">UPDATE</span> notes <span class="tok-keyword">SET</span> views = (id * 37) % 101;   <span class="tok-comment">-- tất định, tái hiện được</span></code></pre>
 
 <h3>The simplest kind: a SQL function</h3>
 <p>When the body is a single query, <code>LANGUAGE sql</code> is all you need:</p>
-<pre><code><span class="tok-keyword">CREATE FUNCTION</span> note_count(uid int) <span class="tok-keyword">RETURNS</span> bigint
+<pre><code class="language-sql"><span class="tok-keyword">CREATE FUNCTION</span> note_count(uid int) <span class="tok-keyword">RETURNS</span> bigint
   <span class="tok-keyword">LANGUAGE</span> sql <span class="tok-keyword">STABLE</span>
   <span class="tok-keyword">AS</span> $$ <span class="tok-keyword">SELECT</span> count(*) <span class="tok-keyword">FROM</span> notes <span class="tok-keyword">WHERE</span> user_id = uid $$;
 
@@ -49,7 +49,7 @@ export default {
 
 <h3>PL/pgSQL: when you need variables and branching</h3>
 <p>PL/pgSQL adds real procedural constructs — declarations, <code>IF</code>, loops, exception handling:</p>
-<pre><code><span class="tok-keyword">CREATE FUNCTION</span> xep_hang(v int) <span class="tok-keyword">RETURNS</span> text
+<pre><code class="language-sql"><span class="tok-keyword">CREATE FUNCTION</span> xep_hang(v int) <span class="tok-keyword">RETURNS</span> text
   <span class="tok-keyword">LANGUAGE</span> plpgsql <span class="tok-keyword">IMMUTABLE</span>
 <span class="tok-keyword">AS</span> $$
 <span class="tok-keyword">DECLARE</span> nhan text;
@@ -75,7 +75,7 @@ $$;
 
 <h3>Volatility: the declaration that decides how often your function runs</h3>
 <p>Every function is declared <code>VOLATILE</code> (the default), <code>STABLE</code>, or <code>IMMUTABLE</code>. This is not documentation — the planner acts on it. Two functions, identical except for the marker, each raising a notice when called:</p>
-<pre><code><span class="tok-keyword">CREATE FUNCTION</span> dem_goi_volatile(x int) <span class="tok-keyword">RETURNS</span> int <span class="tok-keyword">LANGUAGE</span> plpgsql <span class="tok-keyword">VOLATILE</span>
+<pre><code class="language-sql"><span class="tok-keyword">CREATE FUNCTION</span> dem_goi_volatile(x int) <span class="tok-keyword">RETURNS</span> int <span class="tok-keyword">LANGUAGE</span> plpgsql <span class="tok-keyword">VOLATILE</span>
 <span class="tok-keyword">AS</span> $$ <span class="tok-keyword">BEGIN RAISE NOTICE</span> <span class="tok-string">'goi VOLATILE'</span>; <span class="tok-keyword">RETURN</span> x; <span class="tok-keyword">END</span>; $$;
 
 <span class="tok-keyword">CREATE FUNCTION</span> dem_goi_immutable(x int) <span class="tok-keyword">RETURNS</span> int <span class="tok-keyword">LANGUAGE</span> plpgsql <span class="tok-keyword">IMMUTABLE</span>
@@ -104,13 +104,13 @@ số lần in "goi IMMUTABLE":  1</div>
 <h2>Logic sống ngay cạnh dữ liệu</h2>
 <p class="lead">Một hàm lưu trong cơ sở dữ liệu chạy ngay tại chỗ dữ liệu đang nằm — không đi-về qua mạng, không tuần tự hoá, và mọi client kết nối vào đều dùng được, chứ không riêng cái ứng dụng tình cờ cài đặt nó. Chương này chỉ cách viết chúng, và cũng thẳng thắn không kém về việc khi nào đặt logic ở đây là SAI LẦM.</p>
 <p>Mọi ví dụ dùng lược đồ <code>users</code> + <code>notes</code> với 500 note và số lượt xem tất định, để bạn tái hiện được từng con số:</p>
-<pre><code><span class="tok-keyword">INSERT INTO</span> notes (user_id, title, body, views)
+<pre><code class="language-sql"><span class="tok-keyword">INSERT INTO</span> notes (user_id, title, body, views)
 <span class="tok-keyword">SELECT</span> (g % 20)+1, <span class="tok-string">'Note '</span>||g, <span class="tok-string">'Body of note '</span>||g, 0 <span class="tok-keyword">FROM</span> generate_series(1,500) g;
 <span class="tok-keyword">UPDATE</span> notes <span class="tok-keyword">SET</span> views = (id * 37) % 101;   <span class="tok-comment">-- tất định, tái hiện được</span></code></pre>
 
 <h3>Loại đơn giản nhất: hàm SQL</h3>
 <p>Khi thân hàm chỉ là MỘT truy vấn, <code>LANGUAGE sql</code> là đủ:</p>
-<pre><code><span class="tok-keyword">CREATE FUNCTION</span> note_count(uid int) <span class="tok-keyword">RETURNS</span> bigint
+<pre><code class="language-sql"><span class="tok-keyword">CREATE FUNCTION</span> note_count(uid int) <span class="tok-keyword">RETURNS</span> bigint
   <span class="tok-keyword">LANGUAGE</span> sql <span class="tok-keyword">STABLE</span>
   <span class="tok-keyword">AS</span> $$ <span class="tok-keyword">SELECT</span> count(*) <span class="tok-keyword">FROM</span> notes <span class="tok-keyword">WHERE</span> user_id = uid $$;
 
@@ -126,7 +126,7 @@ số lần in "goi IMMUTABLE":  1</div>
 
 <h3>PL/pgSQL: khi bạn cần biến và rẽ nhánh</h3>
 <p>PL/pgSQL thêm các cấu trúc thủ tục thật — khai báo, <code>IF</code>, vòng lặp, bắt ngoại lệ:</p>
-<pre><code><span class="tok-keyword">CREATE FUNCTION</span> xep_hang(v int) <span class="tok-keyword">RETURNS</span> text
+<pre><code class="language-sql"><span class="tok-keyword">CREATE FUNCTION</span> xep_hang(v int) <span class="tok-keyword">RETURNS</span> text
   <span class="tok-keyword">LANGUAGE</span> plpgsql <span class="tok-keyword">IMMUTABLE</span>
 <span class="tok-keyword">AS</span> $$
 <span class="tok-keyword">DECLARE</span> nhan text;
@@ -152,7 +152,7 @@ $$;
 
 <h3>Volatility: cái khai báo quyết định hàm của bạn chạy bao nhiêu lần</h3>
 <p>Mọi hàm đều được khai là <code>VOLATILE</code> (mặc định), <code>STABLE</code>, hoặc <code>IMMUTABLE</code>. Đây KHÔNG phải tài liệu cho đẹp — bộ lập kế hoạch HÀNH ĐỘNG dựa trên nó. Hai hàm giống hệt nhau trừ cái nhãn, mỗi cái in một dòng thông báo khi được gọi:</p>
-<pre><code><span class="tok-keyword">CREATE FUNCTION</span> dem_goi_volatile(x int) <span class="tok-keyword">RETURNS</span> int <span class="tok-keyword">LANGUAGE</span> plpgsql <span class="tok-keyword">VOLATILE</span>
+<pre><code class="language-sql"><span class="tok-keyword">CREATE FUNCTION</span> dem_goi_volatile(x int) <span class="tok-keyword">RETURNS</span> int <span class="tok-keyword">LANGUAGE</span> plpgsql <span class="tok-keyword">VOLATILE</span>
 <span class="tok-keyword">AS</span> $$ <span class="tok-keyword">BEGIN RAISE NOTICE</span> <span class="tok-string">'goi VOLATILE'</span>; <span class="tok-keyword">RETURN</span> x; <span class="tok-keyword">END</span>; $$;
 
 <span class="tok-keyword">CREATE FUNCTION</span> dem_goi_immutable(x int) <span class="tok-keyword">RETURNS</span> int <span class="tok-keyword">LANGUAGE</span> plpgsql <span class="tok-keyword">IMMUTABLE</span>
@@ -192,7 +192,7 @@ số lần in "goi IMMUTABLE":  1</div>
 <p>A trigger is always two objects: a <strong>function</strong> returning the special type <code>trigger</code>, and the <strong>trigger</strong> itself binding that function to a table and an event.</p>
 
 <h3>The one everybody needs: updated_at</h3>
-<pre><code><span class="tok-keyword">CREATE FUNCTION</span> set_updated_at() <span class="tok-keyword">RETURNS</span> trigger <span class="tok-keyword">LANGUAGE</span> plpgsql <span class="tok-keyword">AS</span> $$
+<pre><code class="language-sql"><span class="tok-keyword">CREATE FUNCTION</span> set_updated_at() <span class="tok-keyword">RETURNS</span> trigger <span class="tok-keyword">LANGUAGE</span> plpgsql <span class="tok-keyword">AS</span> $$
 <span class="tok-keyword">BEGIN</span>
   NEW.updated_at := now();
   <span class="tok-keyword">RETURN</span> NEW;
@@ -204,7 +204,7 @@ $$;
   <span class="tok-keyword">FOR EACH ROW</span>
   <span class="tok-keyword">EXECUTE FUNCTION</span> set_updated_at();</code></pre>
 <p>Update a row's <em>title</em> and never mention <code>updated_at</code>:</p>
-<pre><code><span class="tok-keyword">UPDATE</span> notes <span class="tok-keyword">SET</span> title=<span class="tok-string">'Note 1 (đã sửa)'</span> <span class="tok-keyword">WHERE</span> id=1;
+<pre><code class="language-sql"><span class="tok-keyword">UPDATE</span> notes <span class="tok-keyword">SET</span> title=<span class="tok-string">'Note 1 (đã sửa)'</span> <span class="tok-keyword">WHERE</span> id=1;
 <span class="tok-keyword">SELECT</span> id, title, created_at = updated_at <span class="tok-keyword">AS</span> bang_nhau, updated_at &gt; created_at <span class="tok-keyword">AS</span> moi_hon
   <span class="tok-keyword">FROM</span> notes <span class="tok-keyword">WHERE</span> id=1;</code></pre>
 <div class="out"> id |      title      | bang_nhau | moi_hon
@@ -222,7 +222,7 @@ $$;
 <div class="lz-step"><span class="lz-k">→</span><span class="lz-t">All inside one transaction</span><span class="lz-d">If any trigger raises, the original statement fails and everything rolls back together. A slow trigger makes every write on that table slow.</span></div>
 </div>
 <h3>An audit log that records only real changes</h3>
-<pre><code><span class="tok-keyword">CREATE FUNCTION</span> audit_notes() <span class="tok-keyword">RETURNS</span> trigger <span class="tok-keyword">LANGUAGE</span> plpgsql <span class="tok-keyword">AS</span> $$
+<pre><code class="language-sql"><span class="tok-keyword">CREATE FUNCTION</span> audit_notes() <span class="tok-keyword">RETURNS</span> trigger <span class="tok-keyword">LANGUAGE</span> plpgsql <span class="tok-keyword">AS</span> $$
 <span class="tok-keyword">BEGIN</span>
   <span class="tok-keyword">IF</span> TG_OP = <span class="tok-string">'UPDATE'</span> <span class="tok-keyword">AND</span> NEW.views <span class="tok-keyword">IS DISTINCT FROM</span> OLD.views <span class="tok-keyword">THEN</span>
     <span class="tok-keyword">INSERT INTO</span> note_audit (note_id, hanh_dong, views_cu, views_moi)
@@ -248,7 +248,7 @@ $$;
 
 <h3>The trap: a BEFORE trigger that returns NULL</h3>
 <p>The return value of a <code>BEFORE … FOR EACH ROW</code> trigger is not decoration. Returning <code>NULL</code> tells PostgreSQL to <strong>skip the operation entirely</strong>:</p>
-<pre><code><span class="tok-keyword">CREATE FUNCTION</span> nuot() <span class="tok-keyword">RETURNS</span> trigger <span class="tok-keyword">LANGUAGE</span> plpgsql <span class="tok-keyword">AS</span> $$ <span class="tok-keyword">BEGIN RETURN NULL</span>; <span class="tok-keyword">END</span>; $$;
+<pre><code class="language-sql"><span class="tok-keyword">CREATE FUNCTION</span> nuot() <span class="tok-keyword">RETURNS</span> trigger <span class="tok-keyword">LANGUAGE</span> plpgsql <span class="tok-keyword">AS</span> $$ <span class="tok-keyword">BEGIN RETURN NULL</span>; <span class="tok-keyword">END</span>; $$;
 <span class="tok-keyword">CREATE TRIGGER</span> bay_before <span class="tok-keyword">BEFORE INSERT</span> <span class="tok-keyword">ON</span> bay <span class="tok-keyword">FOR EACH ROW</span> <span class="tok-keyword">EXECUTE FUNCTION</span> nuot();
 
 <span class="tok-keyword">INSERT INTO</span> bay <span class="tok-keyword">VALUES</span> (1,<span class="tok-string">'a'</span>);
@@ -273,7 +273,7 @@ $$;
 <p>Một trigger luôn là hai đối tượng: một <strong>hàm</strong> trả về kiểu đặc biệt <code>trigger</code>, và bản thân <strong>trigger</strong> gắn hàm đó vào một bảng và một sự kiện.</p>
 
 <h3>Cái ai cũng cần: updated_at</h3>
-<pre><code><span class="tok-keyword">CREATE FUNCTION</span> set_updated_at() <span class="tok-keyword">RETURNS</span> trigger <span class="tok-keyword">LANGUAGE</span> plpgsql <span class="tok-keyword">AS</span> $$
+<pre><code class="language-sql"><span class="tok-keyword">CREATE FUNCTION</span> set_updated_at() <span class="tok-keyword">RETURNS</span> trigger <span class="tok-keyword">LANGUAGE</span> plpgsql <span class="tok-keyword">AS</span> $$
 <span class="tok-keyword">BEGIN</span>
   NEW.updated_at := now();
   <span class="tok-keyword">RETURN</span> NEW;
@@ -285,7 +285,7 @@ $$;
   <span class="tok-keyword">FOR EACH ROW</span>
   <span class="tok-keyword">EXECUTE FUNCTION</span> set_updated_at();</code></pre>
 <p>Cập nhật <em>title</em> của một dòng và không hề nhắc tới <code>updated_at</code>:</p>
-<pre><code><span class="tok-keyword">UPDATE</span> notes <span class="tok-keyword">SET</span> title=<span class="tok-string">'Note 1 (đã sửa)'</span> <span class="tok-keyword">WHERE</span> id=1;
+<pre><code class="language-sql"><span class="tok-keyword">UPDATE</span> notes <span class="tok-keyword">SET</span> title=<span class="tok-string">'Note 1 (đã sửa)'</span> <span class="tok-keyword">WHERE</span> id=1;
 <span class="tok-keyword">SELECT</span> id, title, created_at = updated_at <span class="tok-keyword">AS</span> bang_nhau, updated_at &gt; created_at <span class="tok-keyword">AS</span> moi_hon
   <span class="tok-keyword">FROM</span> notes <span class="tok-keyword">WHERE</span> id=1;</code></pre>
 <div class="out"> id |      title      | bang_nhau | moi_hon
@@ -303,7 +303,7 @@ $$;
 <div class="lz-step"><span class="lz-k">→</span><span class="lz-t">Tất cả nằm trong MỘT giao dịch</span><span class="lz-d">Nếu bất kỳ trigger nào ném lỗi thì câu lệnh gốc hỏng và mọi thứ cùng lùi lại. Một trigger chậm làm MỌI lệnh ghi trên bảng đó chậm.</span></div>
 </div>
 <h3>Một nhật ký kiểm toán chỉ ghi những thay đổi THẬT</h3>
-<pre><code><span class="tok-keyword">CREATE FUNCTION</span> audit_notes() <span class="tok-keyword">RETURNS</span> trigger <span class="tok-keyword">LANGUAGE</span> plpgsql <span class="tok-keyword">AS</span> $$
+<pre><code class="language-sql"><span class="tok-keyword">CREATE FUNCTION</span> audit_notes() <span class="tok-keyword">RETURNS</span> trigger <span class="tok-keyword">LANGUAGE</span> plpgsql <span class="tok-keyword">AS</span> $$
 <span class="tok-keyword">BEGIN</span>
   <span class="tok-keyword">IF</span> TG_OP = <span class="tok-string">'UPDATE'</span> <span class="tok-keyword">AND</span> NEW.views <span class="tok-keyword">IS DISTINCT FROM</span> OLD.views <span class="tok-keyword">THEN</span>
     <span class="tok-keyword">INSERT INTO</span> note_audit (note_id, hanh_dong, views_cu, views_moi)
@@ -329,7 +329,7 @@ $$;
 
 <h3>Cái bẫy: một BEFORE trigger trả về NULL</h3>
 <p>Giá trị trả về của trigger <code>BEFORE … FOR EACH ROW</code> không phải để trang trí. Trả về <code>NULL</code> là bảo PostgreSQL <strong>BỎ QUA HẲN thao tác</strong>:</p>
-<pre><code><span class="tok-keyword">CREATE FUNCTION</span> nuot() <span class="tok-keyword">RETURNS</span> trigger <span class="tok-keyword">LANGUAGE</span> plpgsql <span class="tok-keyword">AS</span> $$ <span class="tok-keyword">BEGIN RETURN NULL</span>; <span class="tok-keyword">END</span>; $$;
+<pre><code class="language-sql"><span class="tok-keyword">CREATE FUNCTION</span> nuot() <span class="tok-keyword">RETURNS</span> trigger <span class="tok-keyword">LANGUAGE</span> plpgsql <span class="tok-keyword">AS</span> $$ <span class="tok-keyword">BEGIN RETURN NULL</span>; <span class="tok-keyword">END</span>; $$;
 <span class="tok-keyword">CREATE TRIGGER</span> bay_before <span class="tok-keyword">BEFORE INSERT</span> <span class="tok-keyword">ON</span> bay <span class="tok-keyword">FOR EACH ROW</span> <span class="tok-keyword">EXECUTE FUNCTION</span> nuot();
 
 <span class="tok-keyword">INSERT INTO</span> bay <span class="tok-keyword">VALUES</span> (1,<span class="tok-string">'a'</span>);
@@ -360,7 +360,7 @@ $$;
 <span class="eyebrow">Chapter 12 · Lesson 12.3 · Phase 3 — Performance &amp; internals</span>
 <h2>Naming a query so you only write it once</h2>
 <p class="lead">A <strong>view</strong> stores a query definition, not results. Every time you select from it, PostgreSQL substitutes the definition into your query and plans the whole thing together — so a view costs nothing extra to read and is always exactly as fresh as the underlying tables.</p>
-<pre><code><span class="tok-keyword">CREATE VIEW</span> note_summary <span class="tok-keyword">AS</span>
+<pre><code class="language-sql"><span class="tok-keyword">CREATE VIEW</span> note_summary <span class="tok-keyword">AS</span>
   <span class="tok-keyword">SELECT</span> u.id <span class="tok-keyword">AS</span> user_id, u.email,
          count(n.id) <span class="tok-keyword">AS</span> so_note,
          coalesce(sum(n.views),0) <span class="tok-keyword">AS</span> tong_views
@@ -389,7 +389,7 @@ $$;
 </div>
 <h3>Some views are writable</h3>
 <p>If a view selects from a single table with no aggregation, <code>DISTINCT</code>, <code>GROUP BY</code> or set operation, PostgreSQL can translate writes back to the base table automatically:</p>
-<pre><code><span class="tok-keyword">CREATE VIEW</span> note_cua_user1 <span class="tok-keyword">AS</span>
+<pre><code class="language-sql"><span class="tok-keyword">CREATE VIEW</span> note_cua_user1 <span class="tok-keyword">AS</span>
   <span class="tok-keyword">SELECT</span> id, user_id, title, views <span class="tok-keyword">FROM</span> notes <span class="tok-keyword">WHERE</span> user_id = 1;
 
 <span class="tok-keyword">UPDATE</span> note_cua_user1 <span class="tok-keyword">SET</span> views = 5 <span class="tok-keyword">WHERE</span> id = 20;
@@ -400,7 +400,7 @@ $$;
  20 |       1 |     5
 (1 row)</div>
 <p>The aggregated view is a different story:</p>
-<pre><code><span class="tok-keyword">UPDATE</span> note_summary <span class="tok-keyword">SET</span> so_note = 0 <span class="tok-keyword">WHERE</span> user_id = 1;</code></pre>
+<pre><code class="language-sql"><span class="tok-keyword">UPDATE</span> note_summary <span class="tok-keyword">SET</span> so_note = 0 <span class="tok-keyword">WHERE</span> user_id = 1;</code></pre>
 <div class="out">ERROR:  cannot update view "note_summary"
 DETAIL:  Views containing GROUP BY are not automatically updatable.
 HINT:  To enable updating the view, provide an INSTEAD OF UPDATE trigger or an unconditional ON UPDATE DO INSTEAD rule.</div>
@@ -408,7 +408,7 @@ HINT:  To enable updating the view, provide an INSTEAD OF UPDATE trigger or an u
 
 <h3>WITH CHECK OPTION — stop rows escaping the view</h3>
 <p>A writable filtered view has a sharp edge: by default you can update a row <em>out of</em> the view's own <code>WHERE</code> clause, and it vanishes from the view you wrote it through. <code>WITH CHECK OPTION</code> forbids that:</p>
-<pre><code><span class="tok-keyword">CREATE VIEW</span> note_user1_check <span class="tok-keyword">AS</span>
+<pre><code class="language-sql"><span class="tok-keyword">CREATE VIEW</span> note_user1_check <span class="tok-keyword">AS</span>
   <span class="tok-keyword">SELECT</span> id, user_id, title <span class="tok-keyword">FROM</span> notes <span class="tok-keyword">WHERE</span> user_id = 1
   <span class="tok-keyword">WITH CHECK OPTION</span>;
 
@@ -428,7 +428,7 @@ DETAIL:  Failing row contains (20, 2, Note 20, Body of note 20, 5, …).</div>
 <span class="eyebrow">Chương 12 · Bài 12.3 · Giai đoạn 3 — Hiệu năng &amp; bên trong</span>
 <h2>Đặt tên cho một truy vấn để chỉ phải viết nó một lần</h2>
 <p class="lead">Một <strong>view</strong> lưu ĐỊNH NGHĨA truy vấn, không lưu kết quả. Mỗi lần bạn select từ nó, PostgreSQL thay định nghĩa vào truy vấn của bạn rồi lập kế hoạch cho cả cụm cùng lúc — nên một view không tốn thêm gì khi đọc và LUÔN tươi đúng bằng các bảng gốc.</p>
-<pre><code><span class="tok-keyword">CREATE VIEW</span> note_summary <span class="tok-keyword">AS</span>
+<pre><code class="language-sql"><span class="tok-keyword">CREATE VIEW</span> note_summary <span class="tok-keyword">AS</span>
   <span class="tok-keyword">SELECT</span> u.id <span class="tok-keyword">AS</span> user_id, u.email,
          count(n.id) <span class="tok-keyword">AS</span> so_note,
          coalesce(sum(n.views),0) <span class="tok-keyword">AS</span> tong_views
@@ -457,7 +457,7 @@ DETAIL:  Failing row contains (20, 2, Note 20, Body of note 20, 5, …).</div>
 </div>
 <h3>Một số view GHI được</h3>
 <p>Nếu một view select từ MỘT bảng, không tổng hợp, không <code>DISTINCT</code>, không <code>GROUP BY</code>, không phép toán tập hợp, thì PostgreSQL tự dịch lệnh ghi ngược về bảng gốc:</p>
-<pre><code><span class="tok-keyword">CREATE VIEW</span> note_cua_user1 <span class="tok-keyword">AS</span>
+<pre><code class="language-sql"><span class="tok-keyword">CREATE VIEW</span> note_cua_user1 <span class="tok-keyword">AS</span>
   <span class="tok-keyword">SELECT</span> id, user_id, title, views <span class="tok-keyword">FROM</span> notes <span class="tok-keyword">WHERE</span> user_id = 1;
 
 <span class="tok-keyword">UPDATE</span> note_cua_user1 <span class="tok-keyword">SET</span> views = 5 <span class="tok-keyword">WHERE</span> id = 20;
@@ -468,7 +468,7 @@ DETAIL:  Failing row contains (20, 2, Note 20, Body of note 20, 5, …).</div>
  20 |       1 |     5
 (1 row)</div>
 <p>View có tổng hợp thì lại là chuyện khác:</p>
-<pre><code><span class="tok-keyword">UPDATE</span> note_summary <span class="tok-keyword">SET</span> so_note = 0 <span class="tok-keyword">WHERE</span> user_id = 1;</code></pre>
+<pre><code class="language-sql"><span class="tok-keyword">UPDATE</span> note_summary <span class="tok-keyword">SET</span> so_note = 0 <span class="tok-keyword">WHERE</span> user_id = 1;</code></pre>
 <div class="out">ERROR:  cannot update view "note_summary"
 DETAIL:  Views containing GROUP BY are not automatically updatable.
 HINT:  To enable updating the view, provide an INSTEAD OF UPDATE trigger or an unconditional ON UPDATE DO INSTEAD rule.</div>
@@ -476,7 +476,7 @@ HINT:  To enable updating the view, provide an INSTEAD OF UPDATE trigger or an u
 
 <h3>WITH CHECK OPTION — chặn dòng thoát ra khỏi view</h3>
 <p>Một view có lọc mà ghi được thì có một cạnh sắc: mặc định bạn CÓ THỂ cập nhật một dòng ra NGOÀI chính mệnh đề <code>WHERE</code> của view, và nó biến mất khỏi đúng cái view bạn vừa ghi qua. <code>WITH CHECK OPTION</code> cấm điều đó:</p>
-<pre><code><span class="tok-keyword">CREATE VIEW</span> note_user1_check <span class="tok-keyword">AS</span>
+<pre><code class="language-sql"><span class="tok-keyword">CREATE VIEW</span> note_user1_check <span class="tok-keyword">AS</span>
   <span class="tok-keyword">SELECT</span> id, user_id, title <span class="tok-keyword">FROM</span> notes <span class="tok-keyword">WHERE</span> user_id = 1
   <span class="tok-keyword">WITH CHECK OPTION</span>;
 
@@ -505,7 +505,7 @@ DETAIL:  Failing row contains (20, 2, Note 20, Body of note 20, 5, …).</div>
 <span class="eyebrow">Chapter 12 · Lesson 12.4 · Phase 3 — Performance &amp; internals</span>
 <h2>A view that keeps its answers</h2>
 <p class="lead">A plain view re-runs its query every time. When that query is an expensive aggregation over millions of rows and the answer only needs to be right to within an hour, re-running it per page load is waste. A <strong>materialized view</strong> runs the query once, stores the rows on disk like a table, and hands them back instantly — until you tell it to refresh.</p>
-<pre><code><span class="tok-keyword">CREATE MATERIALIZED VIEW</span> note_summary_mv <span class="tok-keyword">AS</span>
+<pre><code class="language-sql"><span class="tok-keyword">CREATE MATERIALIZED VIEW</span> note_summary_mv <span class="tok-keyword">AS</span>
   <span class="tok-keyword">SELECT</span> u.id <span class="tok-keyword">AS</span> user_id, u.email,
          count(n.id) <span class="tok-keyword">AS</span> so_note,
          coalesce(sum(n.views),0) <span class="tok-keyword">AS</span> tong_views
@@ -515,7 +515,7 @@ DETAIL:  Failing row contains (20, 2, Note 20, Body of note 20, 5, …).</div>
 
 <h3>Watch it go stale</h3>
 <p>Insert another note for user 1, then read both objects in one query:</p>
-<pre><code><span class="tok-keyword">SELECT</span> <span class="tok-string">'view'</span> <span class="tok-keyword">AS</span> loai, tong_views <span class="tok-keyword">FROM</span> note_summary    <span class="tok-keyword">WHERE</span> user_id=1
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> <span class="tok-string">'view'</span> <span class="tok-keyword">AS</span> loai, tong_views <span class="tok-keyword">FROM</span> note_summary    <span class="tok-keyword">WHERE</span> user_id=1
 <span class="tok-keyword">UNION ALL</span>
 <span class="tok-keyword">SELECT</span> <span class="tok-string">'matview'</span>,     tong_views <span class="tok-keyword">FROM</span> note_summary_mv <span class="tok-keyword">WHERE</span> user_id=1;</code></pre>
 <div class="out">  loai   | tong_views
@@ -524,7 +524,7 @@ DETAIL:  Failing row contains (20, 2, Note 20, Body of note 20, 5, …).</div>
  matview |       2416
 (2 rows)</div>
 <p>The view is current; the materialized view is showing an answer from before the insert. That is not a bug — it is the entire trade. <code>REFRESH</code> makes them agree again:</p>
-<pre><code><span class="tok-keyword">REFRESH MATERIALIZED VIEW</span> note_summary_mv;</code></pre>
+<pre><code class="language-sql"><span class="tok-keyword">REFRESH MATERIALIZED VIEW</span> note_summary_mv;</code></pre>
 <div class="out"> tong_views
 ------------
        4416
@@ -538,11 +538,11 @@ SELECT count(*) FROM note_summary_mv;   Time: 0.318 ms</div>
 
 <h3>REFRESH locks — unless you give it a unique index</h3>
 <p>A plain <code>REFRESH</code> takes an <code>ACCESS EXCLUSIVE</code> lock: readers block for the whole rebuild. <code>CONCURRENTLY</code> avoids that, but it has a prerequisite:</p>
-<pre><code><span class="tok-keyword">REFRESH MATERIALIZED VIEW CONCURRENTLY</span> note_summary_mv;</code></pre>
+<pre><code class="language-sql"><span class="tok-keyword">REFRESH MATERIALIZED VIEW CONCURRENTLY</span> note_summary_mv;</code></pre>
 <div class="out">ERROR:  cannot refresh materialized view "public.note_summary_mv" concurrently
 HINT:  Create a unique index with no WHERE clause on one or more columns of the materialized view.</div>
 <p>Do as the hint says and it works:</p>
-<pre><code><span class="tok-keyword">CREATE UNIQUE INDEX</span> <span class="tok-keyword">ON</span> note_summary_mv (user_id);
+<pre><code class="language-sql"><span class="tok-keyword">CREATE UNIQUE INDEX</span> <span class="tok-keyword">ON</span> note_summary_mv (user_id);
 <span class="tok-keyword">REFRESH MATERIALIZED VIEW CONCURRENTLY</span> note_summary_mv;</code></pre>
 <div class="out">CREATE INDEX
 REFRESH MATERIALIZED VIEW</div>
@@ -565,7 +565,7 @@ REFRESH MATERIALIZED VIEW</div>
 <span class="eyebrow">Chương 12 · Bài 12.4 · Giai đoạn 3 — Hiệu năng &amp; bên trong</span>
 <h2>Một view giữ lại câu trả lời của nó</h2>
 <p class="lead">Một view thường chạy lại truy vấn của nó MỖI LẦN. Khi truy vấn ấy là một phép tổng hợp đắt trên hàng triệu dòng và câu trả lời chỉ cần đúng trong phạm vi một giờ, thì chạy lại nó ở mỗi lượt tải trang là lãng phí. Một <strong>materialized view</strong> chạy truy vấn MỘT lần, lưu các dòng xuống đĩa như một cái bảng, và trả về tức thì — cho tới khi bạn bảo nó làm mới.</p>
-<pre><code><span class="tok-keyword">CREATE MATERIALIZED VIEW</span> note_summary_mv <span class="tok-keyword">AS</span>
+<pre><code class="language-sql"><span class="tok-keyword">CREATE MATERIALIZED VIEW</span> note_summary_mv <span class="tok-keyword">AS</span>
   <span class="tok-keyword">SELECT</span> u.id <span class="tok-keyword">AS</span> user_id, u.email,
          count(n.id) <span class="tok-keyword">AS</span> so_note,
          coalesce(sum(n.views),0) <span class="tok-keyword">AS</span> tong_views
@@ -575,7 +575,7 @@ REFRESH MATERIALIZED VIEW</div>
 
 <h3>Nhìn nó cũ đi</h3>
 <p>Chèn thêm một note nữa cho user 1, rồi đọc cả hai đối tượng trong một truy vấn:</p>
-<pre><code><span class="tok-keyword">SELECT</span> <span class="tok-string">'view'</span> <span class="tok-keyword">AS</span> loai, tong_views <span class="tok-keyword">FROM</span> note_summary    <span class="tok-keyword">WHERE</span> user_id=1
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> <span class="tok-string">'view'</span> <span class="tok-keyword">AS</span> loai, tong_views <span class="tok-keyword">FROM</span> note_summary    <span class="tok-keyword">WHERE</span> user_id=1
 <span class="tok-keyword">UNION ALL</span>
 <span class="tok-keyword">SELECT</span> <span class="tok-string">'matview'</span>,     tong_views <span class="tok-keyword">FROM</span> note_summary_mv <span class="tok-keyword">WHERE</span> user_id=1;</code></pre>
 <div class="out">  loai   | tong_views
@@ -584,7 +584,7 @@ REFRESH MATERIALIZED VIEW</div>
  matview |       2416
 (2 rows)</div>
 <p>View thì hiện hành; materialized view thì đang hiện câu trả lời của lúc TRƯỚC khi chèn. Đó không phải bug — đó là toàn bộ cuộc đánh đổi. <code>REFRESH</code> làm chúng khớp lại:</p>
-<pre><code><span class="tok-keyword">REFRESH MATERIALIZED VIEW</span> note_summary_mv;</code></pre>
+<pre><code class="language-sql"><span class="tok-keyword">REFRESH MATERIALIZED VIEW</span> note_summary_mv;</code></pre>
 <div class="out"> tong_views
 ------------
        4416
@@ -598,11 +598,11 @@ SELECT count(*) FROM note_summary_mv;   Time: 0.318 ms</div>
 
 <h3>REFRESH có khoá — trừ khi bạn cho nó một unique index</h3>
 <p>Một lệnh <code>REFRESH</code> thường lấy khoá <code>ACCESS EXCLUSIVE</code>: người đọc bị chặn suốt cả lượt dựng lại. <code>CONCURRENTLY</code> tránh được điều đó, nhưng nó có một điều kiện tiên quyết:</p>
-<pre><code><span class="tok-keyword">REFRESH MATERIALIZED VIEW CONCURRENTLY</span> note_summary_mv;</code></pre>
+<pre><code class="language-sql"><span class="tok-keyword">REFRESH MATERIALIZED VIEW CONCURRENTLY</span> note_summary_mv;</code></pre>
 <div class="out">ERROR:  cannot refresh materialized view "public.note_summary_mv" concurrently
 HINT:  Create a unique index with no WHERE clause on one or more columns of the materialized view.</div>
 <p>Làm đúng như gợi ý và nó chạy:</p>
-<pre><code><span class="tok-keyword">CREATE UNIQUE INDEX</span> <span class="tok-keyword">ON</span> note_summary_mv (user_id);
+<pre><code class="language-sql"><span class="tok-keyword">CREATE UNIQUE INDEX</span> <span class="tok-keyword">ON</span> note_summary_mv (user_id);
 <span class="tok-keyword">REFRESH MATERIALIZED VIEW CONCURRENTLY</span> note_summary_mv;</code></pre>
 <div class="out">CREATE INDEX
 REFRESH MATERIALIZED VIEW</div>

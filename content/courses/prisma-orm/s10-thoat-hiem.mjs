@@ -32,7 +32,7 @@ export default {
   <div class="kv"><span class="k"><code>$queryRawUnsafe</code></span><span class="v">Takes a <strong>plain string</strong> plus optional parameters. Whatever is in the string is sent as SQL. Unsafe unless you built the string from constants only.</span></div>
   <div class="kv"><span class="k"><code>$executeRawUnsafe</code></span><span class="v">Same, for statements. The one place it is genuinely needed: DDL where the table name is a variable — and that is exactly the case you must whitelist by hand.</span></div>
 </div>
-<pre><code><span class="tok-comment">// Tagged template — note: NO parentheses after the function name</span>
+<pre><code class="language-sql"><span class="tok-comment">// Tagged template — note: NO parentheses after the function name</span>
 const user = await prisma.$queryRaw&#96;
   SELECT id, username FROM "User" WHERE email = \${email}&#96;;
 
@@ -45,11 +45,11 @@ const user = await prisma.$queryRawUnsafe(
 </div>
 
 <h3>What each one actually sends</h3>
-<pre><code><span class="tok-comment">// Log the SQL to see it (Lesson 9.1's $on('query'))</span>
+<pre><code class="language-sql"><span class="tok-comment">// Log the SQL to see it (Lesson 9.1's $on('query'))</span>
 await prisma.$queryRaw&#96;SELECT * FROM "User" WHERE email = \${'a@b.com'} AND "isActive" = \${true}&#96;;</code></pre>
 <div class="out">prisma:query SELECT * FROM "User" WHERE email = $1 AND "isActive" = $2
 prisma:query params: ["a@b.com", true]</div>
-<pre><code>const n = await prisma.$executeRaw&#96;
+<pre><code class="language-javascript">const n = await prisma.$executeRaw&#96;
   UPDATE "SocialPost" SET "deletedAt" = now() WHERE "authorId" = \${userId}&#96;;
 console.log(n);</code></pre>
 <div class="out">prisma:query UPDATE "SocialPost" SET "deletedAt" = now() WHERE "authorId" = $1
@@ -59,23 +59,23 @@ console.log(n);</code></pre>
 </div>
 
 <h3>The attack, run for real</h3>
-<pre><code><span class="tok-comment">// A "search by email" endpoint, written the unsafe way</span>
+<pre><code class="language-sql"><span class="tok-comment">// A "search by email" endpoint, written the unsafe way</span>
 app.get('/search', async (req, res) =&gt; {
   const rows = await prisma.$queryRawUnsafe(
     &#96;SELECT id, username FROM "User" WHERE email = '\${req.query.email}'&#96;
   );
   res.json(rows);
 });</code></pre>
-<pre><code><span class="tok-comment"># Normal use</span>
+<pre><code class="language-bash"><span class="tok-comment"># Normal use</span>
 curl "localhost:3000/tim?email=an@vidu.com"</code></pre>
 <div class="out">[{"id":"clx7…","username":"an"}]</div>
-<pre><code><span class="tok-comment"># The same endpoint, with a quote in the value</span>
+<pre><code class="language-bash"><span class="tok-comment"># The same endpoint, with a quote in the value</span>
 curl --get "localhost:3000/tim" --data-urlencode "email=x' OR 1=1 --"</code></pre>
 <div class="out">[{"id":"clx7…","username":"an"},
  {"id":"clx8…","username":"binh"},
  {"id":"clx9…","username":"admin"},
  … 12,847 rows …]</div>
-<pre><code><span class="tok-comment"># And the SQL that actually ran</span>
+<pre><code class="language-sql"><span class="tok-comment"># And the SQL that actually ran</span>
 SELECT id, username FROM "User" WHERE email = 'x' OR 1=1 --'</code></pre>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">The quote closes the literal</span><span class="lz-d"><code>'x'</code> ends where the attacker's own quote ends it, and everything after is parsed as SQL, not as data.</span></div>
@@ -88,7 +88,7 @@ SELECT id, username FROM "User" WHERE email = 'x' OR 1=1 --'</code></pre>
 </div>
 
 <h3>Dynamic queries that stay parameterised</h3>
-<pre><code><span class="tok-comment">// The problem: the filters depend on what the caller sent</span>
+<pre><code class="language-javascript"><span class="tok-comment">// The problem: the filters depend on what the caller sent</span>
 import { Prisma } from '@prisma/client';
 
 const dieuKien: Prisma.Sql[] = [Prisma.sql&#96;"deletedAt" IS NULL&#96;];
@@ -139,7 +139,7 @@ prisma:query params: ["%prisma%", "clx7…", 20]</div>
   <div class="kv"><span class="k"><code>$queryRawUnsafe</code></span><span class="v">Nhận một <strong>chuỗi thường</strong> cộng tham số tuỳ chọn. Trong chuỗi có gì thì gửi đi làm SQL đúng thứ ấy. KHÔNG an toàn, trừ khi bạn dựng chuỗi hoàn toàn từ hằng.</span></div>
   <div class="kv"><span class="k"><code>$executeRawUnsafe</code></span><span class="v">Tương tự, cho câu lệnh. Chỗ nó thật sự cần thiết: DDL với tên bảng là biến — và đó đúng là trường hợp bạn PHẢI tự lập danh sách trắng.</span></div>
 </div>
-<pre><code><span class="tok-comment">// Thẻ mẫu — chú ý: KHÔNG có dấu ngoặc sau tên hàm</span>
+<pre><code class="language-sql"><span class="tok-comment">// Thẻ mẫu — chú ý: KHÔNG có dấu ngoặc sau tên hàm</span>
 const user = await prisma.$queryRaw&#96;
   SELECT id, username FROM "User" WHERE email = \${email}&#96;;
 
@@ -152,11 +152,11 @@ const user = await prisma.$queryRawUnsafe(
 </div>
 
 <h3>Mỗi cái THẬT SỰ gửi đi cái gì</h3>
-<pre><code><span class="tok-comment">// Ghi nhật ký SQL để nhìn (dùng $on('query') của Bài 9.1)</span>
+<pre><code class="language-sql"><span class="tok-comment">// Ghi nhật ký SQL để nhìn (dùng $on('query') của Bài 9.1)</span>
 await prisma.$queryRaw&#96;SELECT * FROM "User" WHERE email = \${'a@b.com'} AND "isActive" = \${true}&#96;;</code></pre>
 <div class="out">prisma:query SELECT * FROM "User" WHERE email = $1 AND "isActive" = $2
 prisma:query params: ["a@b.com", true]</div>
-<pre><code>const n = await prisma.$executeRaw&#96;
+<pre><code class="language-javascript">const n = await prisma.$executeRaw&#96;
   UPDATE "SocialPost" SET "deletedAt" = now() WHERE "authorId" = \${userId}&#96;;
 console.log(n);</code></pre>
 <div class="out">prisma:query UPDATE "SocialPost" SET "deletedAt" = now() WHERE "authorId" = $1
@@ -166,23 +166,23 @@ console.log(n);</code></pre>
 </div>
 
 <h3>Cú tấn công, chạy thật</h3>
-<pre><code><span class="tok-comment">// Một endpoint "tìm theo email", viết theo kiểu không an toàn</span>
+<pre><code class="language-sql"><span class="tok-comment">// Một endpoint "tìm theo email", viết theo kiểu không an toàn</span>
 app.get('/search', async (req, res) =&gt; {
   const rows = await prisma.$queryRawUnsafe(
     &#96;SELECT id, username FROM "User" WHERE email = '\${req.query.email}'&#96;
   );
   res.json(rows);
 });</code></pre>
-<pre><code><span class="tok-comment"># Dùng bình thường</span>
+<pre><code class="language-bash"><span class="tok-comment"># Dùng bình thường</span>
 curl "localhost:3000/tim?email=an@vidu.com"</code></pre>
 <div class="out">[{"id":"clx7…","username":"an"}]</div>
-<pre><code><span class="tok-comment"># Cũng endpoint đó, với một dấu nháy trong giá trị</span>
+<pre><code class="language-bash"><span class="tok-comment"># Cũng endpoint đó, với một dấu nháy trong giá trị</span>
 curl --get "localhost:3000/tim" --data-urlencode "email=x' OR 1=1 --"</code></pre>
 <div class="out">[{"id":"clx7…","username":"an"},
  {"id":"clx8…","username":"binh"},
  {"id":"clx9…","username":"admin"},
  … 12.847 hang …]</div>
-<pre><code><span class="tok-comment"># Và đây là câu SQL thật sự đã chạy</span>
+<pre><code class="language-sql"><span class="tok-comment"># Và đây là câu SQL thật sự đã chạy</span>
 SELECT id, username FROM "User" WHERE email = 'x' OR 1=1 --'</code></pre>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Dấu nháy đóng chuỗi lại</span><span class="lz-d"><code>'x'</code> kết thúc đúng chỗ dấu nháy của kẻ tấn công kết thúc nó, và mọi thứ phía sau được phân tích thành SQL, không phải thành dữ liệu.</span></div>
@@ -195,7 +195,7 @@ SELECT id, username FROM "User" WHERE email = 'x' OR 1=1 --'</code></pre>
 </div>
 
 <h3>Truy vấn động mà vẫn tham số hoá</h3>
-<pre><code><span class="tok-comment">// Vấn đề: các bộ lọc phụ thuộc vào thứ người gọi gửi lên</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Vấn đề: các bộ lọc phụ thuộc vào thứ người gọi gửi lên</span>
 import { Prisma } from '@prisma/client';
 
 const dieuKien: Prisma.Sql[] = [Prisma.sql&#96;"deletedAt" IS NULL&#96;];
@@ -248,7 +248,7 @@ prisma:query params: ["%prisma%", "clx7…", 20]</div>
 <p class="lead">Once you leave the query builder you also leave the type system — not obviously, which is the problem. <code>$queryRaw&lt;User[]&gt;</code> compiles into a plain cast, so TypeScript will happily let you read a field the query never selected. This lesson shows exactly where the guarantee stops, the four value conversions that surprise people, and how to put a real check back at the boundary.</p>
 
 <h3>What the generic actually does</h3>
-<pre><code><span class="tok-comment">// It looks like the query returns User rows</span>
+<pre><code class="language-sql"><span class="tok-comment">// It looks like the query returns User rows</span>
 const users = await prisma.$queryRaw&lt;User[]&gt;&#96;SELECT id FROM "User" LIMIT 3&#96;;
 
 console.log(users[0].email.toLowerCase());   <span class="tok-comment">// tsc: fine. Runtime: ?</span></code></pre>
@@ -266,7 +266,7 @@ $queryRaw&lt;T = unknown&gt;(query: TemplateStringsArray, ...values: any[]): Pri
 </div>
 
 <h3>Conversion 1 — <code>count(*)</code> is a BigInt, and it breaks <code>res.json</code></h3>
-<pre><code>const rows = await prisma.$queryRaw&#96;
+<pre><code class="language-javascript">const rows = await prisma.$queryRaw&#96;
   SELECT "authorId", count(*) AS post_count
   FROM "SocialPost" GROUP BY "authorId"&#96;;
 console.log(rows[0]);
@@ -276,7 +276,7 @@ res.json(rows);</code></pre>
 TypeError: Do not know how to serialize a BigInt
     at JSON.stringify (&lt;anonymous&gt;)
     at ServerResponse.json (express/lib/response.js:1150:14)</div>
-<pre><code><span class="tok-comment">-- Fix at the source: cast in the SQL</span>
+<pre><code class="language-typescript"><span class="tok-comment">-- Fix at the source: cast in the SQL</span>
 SELECT "authorId", count(*)::int AS post_count FROM "SocialPost" GROUP BY "authorId";</code></pre>
 <div class="out">{ authorId: 'clx7…', post_count: 14 }         ← a plain number</div>
 <div class="callout ok">
@@ -284,12 +284,12 @@ SELECT "authorId", count(*)::int AS post_count FROM "SocialPost" GROUP BY "autho
 </div>
 
 <h3>Conversion 2 — <code>Decimal</code> stays a Decimal object</h3>
-<pre><code>const rows = await prisma.$queryRaw&#96;SELECT id, price FROM "Order" LIMIT 1&#96;;
+<pre><code class="language-sql">const rows = await prisma.$queryRaw&#96;SELECT id, price FROM "Order" LIMIT 1&#96;;
 console.log(rows[0].price, typeof rows[0].price);
 console.log(rows[0].price + 100);</code></pre>
 <div class="out">Decimal { s: 1, e: 5, d: [ 249000 ] } object
 249000100        ← string concatenation, not addition</div>
-<pre><code><span class="tok-comment">// Decimal has its own arithmetic. Use it, or convert explicitly.</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Decimal has its own arithmetic. Use it, or convert explicitly.</span>
 rows[0].price.plus(100).toString();     <span class="tok-comment">// '249100'  — exact</span>
 rows[0].price.toNumber() + 100;         <span class="tok-comment">// 249100    — float, loses precision above 2^53</span></code></pre>
 <div class="pitfall">
@@ -297,20 +297,20 @@ rows[0].price.toNumber() + 100;         <span class="tok-comment">// 249100    �
 </div>
 
 <h3>Conversion 3 — raw queries use <em>column</em> names, not field names</h3>
-<pre><code><span class="tok-comment">// schema.prisma</span>
+<pre><code class="language-typescript"><span class="tok-comment">// schema.prisma</span>
 model User {
   id        String  @id
   avatarUrl String? @map("avatar_url")
   @@map("users")
 }</code></pre>
-<pre><code><span class="tok-comment">// The builder speaks Prisma names</span>
+<pre><code class="language-typescript"><span class="tok-comment">// The builder speaks Prisma names</span>
 await prisma.user.findMany({ select: { avatarUrl: true } });   <span class="tok-comment">// ✅</span>
 
 <span class="tok-comment">// Raw speaks database names, and the mapping does not apply</span>
 await prisma.$queryRaw&#96;SELECT "avatarUrl" FROM "User"&#96;;         <span class="tok-comment">// ❌</span></code></pre>
 <div class="out">PrismaClientKnownRequestError:
 Raw query failed. Code: &#96;42P01&#96;. Message: &#96;relation "User" does not exist&#96;</div>
-<pre><code><span class="tok-comment">// Correct: the names that exist in PostgreSQL</span>
+<pre><code class="language-sql"><span class="tok-comment">// Correct: the names that exist in PostgreSQL</span>
 await prisma.$queryRaw&#96;SELECT id, avatar_url FROM users&#96;;
 
 <span class="tok-comment">// And the key returned is the column name, not the field name</span>
@@ -329,7 +329,7 @@ await prisma.$queryRaw&#96;SELECT id, avatar_url FROM users&#96;;
   <div class="lz-layer"><span class="lz-lname">Referential actions declared in the schema</span><span class="lz-lnote"><code>onDelete: Cascade</code> is a real foreign key in PostgreSQL, so it <em>does</em> apply to raw deletes. But <code>NoAction</code> emulated by Prisma at the client level does not — check the migration SQL if it matters.</span></div>
   <div class="lz-layer"><span class="lz-lname">Nothing about transactions</span><span class="lz-lnote">This one is fine: <code>tx.$queryRaw</code> inside <code>$transaction(async (tx) =&gt; …)</code> runs in that transaction, exactly as you would want. Raw and builder queries mix freely inside one transaction.</span></div>
 </div>
-<pre><code><span class="tok-comment">// Raw and builder in one transaction — this works</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Raw and builder in one transaction — this works</span>
 await prisma.$transaction(async (tx) =&gt; {
   await tx.$executeRaw&#96;LOCK TABLE "Counter" IN SHARE ROW EXCLUSIVE MODE&#96;;
   const c = await tx.counter.findUnique({ where: { key: 'order-hang' } });
@@ -337,7 +337,7 @@ await prisma.$transaction(async (tx) =&gt; {
 });</code></pre>
 
 <h3>Putting a real check back</h3>
-<pre><code>import { z } from 'zod';
+<pre><code class="language-javascript">import { z } from 'zod';
 
 const StatsRow = z.object({
   authorId: z.string(),
@@ -379,7 +379,7 @@ const rows = StatsRow.array().parse(
 <p class="lead">Rời khỏi trình dựng truy vấn là bạn cũng rời khỏi hệ kiểu — mà rời một cách KHÔNG lộ liễu, đó mới là vấn đề. <code>$queryRaw&lt;User[]&gt;</code> biên dịch thành một phép ép kiểu trần, nên TypeScript vui vẻ để bạn đọc một trường mà câu truy vấn chưa từng chọn. Bài này chỉ đúng chỗ bảo đảm ngừng lại, bốn cú chuyển đổi giá trị làm người ta ngã, và cách đặt một phép kiểm THẬT trở lại ở biên.</p>
 
 <h3>Cái generic đó THẬT SỰ làm gì</h3>
-<pre><code><span class="tok-comment">// Nhìn cứ như câu truy vấn trả về các hàng User</span>
+<pre><code class="language-sql"><span class="tok-comment">// Nhìn cứ như câu truy vấn trả về các hàng User</span>
 const users = await prisma.$queryRaw&lt;User[]&gt;&#96;SELECT id FROM "User" LIMIT 3&#96;;
 
 console.log(users[0].email.toLowerCase());   <span class="tok-comment">// tsc: ổn. Lúc chạy: ?</span></code></pre>
@@ -397,7 +397,7 @@ $queryRaw&lt;T = unknown&gt;(query: TemplateStringsArray, ...values: any[]): Pri
 </div>
 
 <h3>Chuyển đổi 1 — <code>count(*)</code> là BigInt, và nó làm vỡ <code>res.json</code></h3>
-<pre><code>const rows = await prisma.$queryRaw&#96;
+<pre><code class="language-javascript">const rows = await prisma.$queryRaw&#96;
   SELECT "authorId", count(*) AS post_count
   FROM "SocialPost" GROUP BY "authorId"&#96;;
 console.log(rows[0]);
@@ -407,7 +407,7 @@ res.json(rows);</code></pre>
 TypeError: Do not know how to serialize a BigInt
     at JSON.stringify (&lt;anonymous&gt;)
     at ServerResponse.json (express/lib/response.js:1150:14)</div>
-<pre><code><span class="tok-comment">-- Vá tại nguồn: ép kiểu ngay trong SQL</span>
+<pre><code class="language-typescript"><span class="tok-comment">-- Vá tại nguồn: ép kiểu ngay trong SQL</span>
 SELECT "authorId", count(*)::int AS post_count FROM "SocialPost" GROUP BY "authorId";</code></pre>
 <div class="out">{ authorId: 'clx7…', post_count: 14 }         ← mot count thuong</div>
 <div class="callout ok">
@@ -415,12 +415,12 @@ SELECT "authorId", count(*)::int AS post_count FROM "SocialPost" GROUP BY "autho
 </div>
 
 <h3>Chuyển đổi 2 — <code>Decimal</code> vẫn là một object Decimal</h3>
-<pre><code>const rows = await prisma.$queryRaw&#96;SELECT id, price FROM "Order" LIMIT 1&#96;;
+<pre><code class="language-sql">const rows = await prisma.$queryRaw&#96;SELECT id, price FROM "Order" LIMIT 1&#96;;
 console.log(rows[0].price, typeof rows[0].price);
 console.log(rows[0].price + 100);</code></pre>
 <div class="out">Decimal { s: 1, e: 5, d: [ 249000 ] } object
 249000100        ← noi chuoi, khong phai phep cong</div>
-<pre><code><span class="tok-comment">// Decimal có số học riêng. Dùng nó, hoặc chuyển đổi tường minh.</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Decimal có số học riêng. Dùng nó, hoặc chuyển đổi tường minh.</span>
 rows[0].price.plus(100).toString();     <span class="tok-comment">// '249100'  — chính xác</span>
 rows[0].price.toNumber() + 100;         <span class="tok-comment">// 249100    — số thực, mất chính xác trên 2^53</span></code></pre>
 <div class="pitfall">
@@ -428,20 +428,20 @@ rows[0].price.toNumber() + 100;         <span class="tok-comment">// 249100    �
 </div>
 
 <h3>Chuyển đổi 3 — truy vấn thô dùng tên <em>CỘT</em>, không phải tên TRƯỜNG</h3>
-<pre><code><span class="tok-comment">// schema.prisma</span>
+<pre><code class="language-typescript"><span class="tok-comment">// schema.prisma</span>
 model User {
   id        String  @id
   avatarUrl String? @map("avatar_url")
   @@map("users")
 }</code></pre>
-<pre><code><span class="tok-comment">// Trình dựng nói tiếng Prisma</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Trình dựng nói tiếng Prisma</span>
 await prisma.user.findMany({ select: { avatarUrl: true } });   <span class="tok-comment">// ✅</span>
 
 <span class="tok-comment">// Thô nói tiếng cơ sở dữ liệu, và phép ánh xạ KHÔNG áp dụng</span>
 await prisma.$queryRaw&#96;SELECT "avatarUrl" FROM "User"&#96;;         <span class="tok-comment">// ❌</span></code></pre>
 <div class="out">PrismaClientKnownRequestError:
 Raw query failed. Code: &#96;42P01&#96;. Message: &#96;relation "User" does not exist&#96;</div>
-<pre><code><span class="tok-comment">// Đúng: những cái tên có thật trong PostgreSQL</span>
+<pre><code class="language-sql"><span class="tok-comment">// Đúng: những cái tên có thật trong PostgreSQL</span>
 await prisma.$queryRaw&#96;SELECT id, avatar_url FROM users&#96;;
 
 <span class="tok-comment">// Và khoá trả về là tên CỘT, không phải tên trường</span>
@@ -460,7 +460,7 @@ await prisma.$queryRaw&#96;SELECT id, avatar_url FROM users&#96;;
   <div class="lz-layer"><span class="lz-lname">Hành vi tham chiếu khai trong lược đồ</span><span class="lz-lnote"><code>onDelete: Cascade</code> là một khoá ngoại THẬT trong PostgreSQL, nên nó <em>có</em> áp cho cả lệnh xoá thô. Nhưng <code>NoAction</code> do Prisma mô phỏng ở mức client thì KHÔNG — nếu điều đó quan trọng, hãy mở file SQL của migration ra xem.</span></div>
   <div class="lz-layer"><span class="lz-lname">Giao dịch thì không sao cả</span><span class="lz-lnote">Cái này ổn: <code>tx.$queryRaw</code> bên trong <code>$transaction(async (tx) =&gt; …)</code> chạy TRONG giao dịch đó, đúng như bạn muốn. Truy vấn thô và truy vấn qua trình dựng trộn thoải mái trong cùng một giao dịch.</span></div>
 </div>
-<pre><code><span class="tok-comment">// Thô và trình dựng trong một giao dịch — cái này chạy được</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Thô và trình dựng trong một giao dịch — cái này chạy được</span>
 await prisma.$transaction(async (tx) =&gt; {
   await tx.$executeRaw&#96;LOCK TABLE "Counter" IN SHARE ROW EXCLUSIVE MODE&#96;;
   const c = await tx.counter.findUnique({ where: { key: 'order-hang' } });
@@ -468,7 +468,7 @@ await prisma.$transaction(async (tx) =&gt; {
 });</code></pre>
 
 <h3>Đặt một phép kiểm THẬT trở lại</h3>
-<pre><code>import { z } from 'zod';
+<pre><code class="language-javascript">import { z } from 'zod';
 
 const StatsRow = z.object({
   authorId: z.string(),
@@ -522,7 +522,7 @@ const rows = StatsRow.array().parse(
 <span class="tok-comment">// Through the builder: 50 queries, one per author. Lesson 9.2's N+1,</span>
 <span class="tok-comment">// except there is no include that avoids it — take inside include</span>
 <span class="tok-comment">// applies per parent, which is exactly the fan-out.</span></code></pre>
-<pre><code>SELECT u.id, u.username, p.id AS post_id, p.content, p."createdAt"
+<pre><code class="language-typescript">SELECT u.id, u.username, p.id AS post_id, p.content, p."createdAt"
 FROM "User" u
 CROSS JOIN LATERAL (
   SELECT id, content, "createdAt"
@@ -543,7 +543,7 @@ WHERE u.id = ANY($1);</code></pre>
 </div>
 
 <h3>2. Window functions — rank, running total, and the previous row</h3>
-<pre><code>SELECT
+<pre><code class="language-typescript">SELECT
   u.username,
   count(p.id)::int                                      AS post_count,
   rank()       OVER (ORDER BY count(p.id) DESC)         AS hang,
@@ -569,7 +569,7 @@ LIMIT 5;</code></pre>
 </div>
 
 <h3>3. A recursive CTE — the comment tree in one query</h3>
-<pre><code><span class="tok-comment">// The self-relation from Lesson 3.4</span>
+<pre><code class="language-typescript"><span class="tok-comment">// The self-relation from Lesson 3.4</span>
 model Comment {
   id       String    @id @default(cuid())
   content  String
@@ -581,7 +581,7 @@ model Comment {
 <span class="tok-comment">// Through the builder, depth is fixed at write time:</span>
 include: { replies: { include: { replies: { include: { replies: true } } } } }
 <span class="tok-comment">// Three levels. The fourth is silently missing.</span></code></pre>
-<pre><code>WITH RECURSIVE tree AS (
+<pre><code class="language-sql">WITH RECURSIVE tree AS (
   <span class="tok-comment">-- anchor: the top-level comments of this post</span>
   SELECT id, content, "parentId", 0 AS do_sau,
          ARRAY["createdAt"] AS path
@@ -612,13 +612,13 @@ Execution Time: 3.208 ms   (any depth, one query)</div>
 </div>
 
 <h3>4. <code>ON CONFLICT DO UPDATE</code> with an expression</h3>
-<pre><code><span class="tok-comment">// What upsert can say: "if it exists, set it to this value"</span>
+<pre><code class="language-typescript"><span class="tok-comment">// What upsert can say: "if it exists, set it to this value"</span>
 await prisma.dailyStat.upsert({
   where:  { uk_ngay: { key: 'luot-xem', day } },
   create: { key: 'luot-xem', day, count: 1 },
   update: { count: { increment: 1 } },        <span class="tok-comment">// ok — increment is supported</span>
 });</code></pre>
-<pre><code><span class="tok-comment">-- What upsert cannot say: a value computed from BOTH sides,</span>
+<pre><code class="language-sql"><span class="tok-comment">-- What upsert cannot say: a value computed from BOTH sides,</span>
 <span class="tok-comment">-- for many rows at once, in one statement.</span>
 INSERT INTO "DailyStat" (key, day, count, updated_at)
 SELECT * FROM unnest($1::text[], $2::date[], $3::int[], $4::timestamptz[])
@@ -638,13 +638,13 @@ Qua upsert: 4.096 luot di ve, 4.096 giao dich, ~39 giay.</div>
 </div>
 
 <h3>5. Full-text search that ranks</h3>
-<pre><code><span class="tok-comment">-- prisma/migrations/…/migration.sql — a generated column plus a GIN index</span>
+<pre><code class="language-sql"><span class="tok-comment">-- prisma/migrations/…/migration.sql — a generated column plus a GIN index</span>
 ALTER TABLE "SocialPost"
   ADD COLUMN tim_kiem tsvector
   GENERATED ALWAYS AS (to_tsvector('simple', coalesce(content, ''))) STORED;
 
 CREATE INDEX socialpost_tim_kiem_idx ON "SocialPost" USING GIN (tim_kiem);</code></pre>
-<pre><code>const result = await prisma.$queryRaw&#96;
+<pre><code class="language-javascript">const result = await prisma.$queryRaw&#96;
   SELECT id, content,
          ts_rank(tim_kiem, truy_van) AS score,
          ts_headline('simple', content, truy_van,
@@ -697,7 +697,7 @@ Execution Time: 4.7 ms over 1.2M rows (GIN index scan)</div>
 <span class="tok-comment">// Qua trình dựng: 50 truy vấn, mỗi tác giả một cái. Chính là N+1 của Bài 9.2,</span>
 <span class="tok-comment">// mà lại không có include nào tránh được — take bên trong include</span>
 <span class="tok-comment">// áp theo TỪNG cha, và đó đúng là cú nở bung ra.</span></code></pre>
-<pre><code>SELECT u.id, u.username, p.id AS post_id, p.content, p."createdAt"
+<pre><code class="language-typescript">SELECT u.id, u.username, p.id AS post_id, p.content, p."createdAt"
 FROM "User" u
 CROSS JOIN LATERAL (
   SELECT id, content, "createdAt"
@@ -718,7 +718,7 @@ WHERE u.id = ANY($1);</code></pre>
 </div>
 
 <h3>2. Window function — xếp hạng, tổng luỹ tiến, và hàng liền trước</h3>
-<pre><code>SELECT
+<pre><code class="language-typescript">SELECT
   u.username,
   count(p.id)::int                                      AS post_count,
   rank()       OVER (ORDER BY count(p.id) DESC)         AS hang,
@@ -744,7 +744,7 @@ LIMIT 5;</code></pre>
 </div>
 
 <h3>3. CTE đệ quy — cây bình luận trong MỘT câu truy vấn</h3>
-<pre><code><span class="tok-comment">// Quan hệ tự trỏ của Bài 3.4</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Quan hệ tự trỏ của Bài 3.4</span>
 model Comment {
   id       String    @id @default(cuid())
   content  String
@@ -756,7 +756,7 @@ model Comment {
 <span class="tok-comment">// Qua trình dựng, độ sâu bị CHỐT CỨNG lúc viết mã:</span>
 include: { replies: { include: { replies: { include: { replies: true } } } } }
 <span class="tok-comment">// Ba tầng. Tầng thứ tư biến mất trong im lặng.</span></code></pre>
-<pre><code>WITH RECURSIVE tree AS (
+<pre><code class="language-sql">WITH RECURSIVE tree AS (
   <span class="tok-comment">-- mỏ neo: các bình luận gốc của bài này</span>
   SELECT id, content, "parentId", 0 AS do_sau,
          ARRAY["createdAt"] AS path
@@ -787,13 +787,13 @@ Execution Time: 3,208 ms   (do sau bao nhieu cung 1 truy van)</div>
 </div>
 
 <h3>4. <code>ON CONFLICT DO UPDATE</code> kèm BIỂU THỨC</h3>
-<pre><code><span class="tok-comment">// Thứ upsert nói được: "nếu đã có thì đặt thành giá trị này"</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Thứ upsert nói được: "nếu đã có thì đặt thành giá trị này"</span>
 await prisma.dailyStat.upsert({
   where:  { uk_ngay: { key: 'luot-xem', day } },
   create: { key: 'luot-xem', day, count: 1 },
   update: { count: { increment: 1 } },        <span class="tok-comment">// ổn — increment có hỗ trợ</span>
 });</code></pre>
-<pre><code><span class="tok-comment">-- Thứ upsert KHÔNG nói được: một giá trị tính từ CẢ HAI phía,</span>
+<pre><code class="language-sql"><span class="tok-comment">-- Thứ upsert KHÔNG nói được: một giá trị tính từ CẢ HAI phía,</span>
 <span class="tok-comment">-- cho nhiều hàng cùng lúc, trong MỘT câu lệnh.</span>
 INSERT INTO "DailyStat" (key, day, count, updated_at)
 SELECT * FROM unnest($1::text[], $2::date[], $3::int[], $4::timestamptz[])
@@ -813,13 +813,13 @@ Qua upsert: 4.096 luot di ve, 4.096 giao dich, ~39 giay.</div>
 </div>
 
 <h3>5. Tìm kiếm toàn văn CÓ XẾP HẠNG</h3>
-<pre><code><span class="tok-comment">-- prisma/migrations/…/migration.sql — một cột sinh ra cộng một chỉ mục GIN</span>
+<pre><code class="language-sql"><span class="tok-comment">-- prisma/migrations/…/migration.sql — một cột sinh ra cộng một chỉ mục GIN</span>
 ALTER TABLE "SocialPost"
   ADD COLUMN tim_kiem tsvector
   GENERATED ALWAYS AS (to_tsvector('simple', coalesce(content, ''))) STORED;
 
 CREATE INDEX socialpost_tim_kiem_idx ON "SocialPost" USING GIN (tim_kiem);</code></pre>
-<pre><code>const result = await prisma.$queryRaw&#96;
+<pre><code class="language-javascript">const result = await prisma.$queryRaw&#96;
   SELECT id, content,
          ts_rank(tim_kiem, truy_van) AS score,
          ts_headline('simple', content, truy_van,
@@ -876,12 +876,12 @@ Execution Time: 4,7 ms tren 1,2 trieu hang (quet chi muc GIN)</div>
 <p class="lead">Lesson 10.2 ended with an unsatisfying answer: raw queries lie about their types, so validate at runtime. TypedSQL is the satisfying one. You put the SQL in a file, Prisma asks the real database what that statement returns, and generates the type from the answer. The cast disappears, and so does the class of bug where a renamed column compiles fine and fails in production.</p>
 
 <h3>The setup, end to end</h3>
-<pre><code><span class="tok-comment">// schema.prisma</span>
+<pre><code class="language-typescript"><span class="tok-comment">// schema.prisma</span>
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["typedSql"]
 }</code></pre>
-<pre><code><span class="tok-comment"># prisma/sql/thongKeTacGia.sql — the directory name is fixed</span>
+<pre><code class="language-typescript"><span class="tok-comment"># prisma/sql/thongKeTacGia.sql — the directory name is fixed</span>
 <span class="tok-comment">-- @param {String} $1:tacGiaId  ID cua tac gia</span>
 <span class="tok-comment">-- @param {Int}    $2:gioiHan   So hang toi da</span>
 SELECT
@@ -895,14 +895,14 @@ WHERE p."authorId" = $1 AND p."deletedAt" IS NULL
 GROUP BY p.id
 ORDER BY p."createdAt" DESC
 LIMIT $2;</code></pre>
-<pre><code><span class="tok-comment"># Generate. Note the flag — plain &#96;prisma generate&#96; skips the .sql files.</span>
+<pre><code class="language-bash"><span class="tok-comment"># Generate. Note the flag — plain &#96;prisma generate&#96; skips the .sql files.</span>
 npx prisma generate --sql</code></pre>
 <div class="out">Prisma schema loaded from prisma/schema.prisma
 Datasource "db": PostgreSQL database "cuongthai" at "localhost:5432"
 
 ✔ Generated Prisma Client (v6.4.1) to ./node_modules/@prisma/client in 284ms
 ✔ Generated 1 SQL query to ./node_modules/@prisma/client/sql in 41ms</div>
-<pre><code><span class="tok-comment">// Use it. The import path is @prisma/client/sql, not @prisma/client.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Use it. The import path is @prisma/client/sql, not @prisma/client.</span>
 import { authorStats } from '@prisma/client/sql';
 
 const rows = await prisma.$queryRawTyped(authorStats(authorId, 20));
@@ -927,7 +927,7 @@ rows[0].not_real;  <span class="tok-comment">// ❌ Property 'khong_co_that' doe
 </div>
 
 <h3>The drift from Lesson 10.2, now caught at build</h3>
-<pre><code><span class="tok-comment">// A migration renames content → body.</span>
+<pre><code class="language-bash"><span class="tok-comment">// A migration renames content → body.</span>
 <span class="tok-comment">// The $queryRaw version of this query still compiles. Then:</span>
 npx prisma generate --sql</code></pre>
 <div class="out">Error: Failed to generate SQL queries
@@ -950,7 +950,7 @@ npx prisma generate --sql</code></pre>
   <div class="kv"><span class="k">Optional parameters</span><span class="v"><code>-- @param {String} $1:tuKhoa?</code> — the trailing <code>?</code> makes the argument <code>string | null</code>. Use it with <code>WHERE (\$1 IS NULL OR content ILIKE \$1)</code> for a filter that may be absent.</span></div>
   <div class="kv"><span class="k">A description after the name</span><span class="v">Everything after the name becomes the JSDoc comment on the generated argument. It costs one line and shows up on hover months later.</span></div>
 </div>
-<pre><code><span class="tok-comment">-- prisma/sql/timBai.sql — an optional filter, no dynamic SQL needed</span>
+<pre><code class="language-typescript"><span class="tok-comment">-- prisma/sql/timBai.sql — an optional filter, no dynamic SQL needed</span>
 <span class="tok-comment">-- @param {String}   $1:tuKhoa?   Tu khoa, bo trong de lay tat ca</span>
 <span class="tok-comment">-- @param {DateTime} $2:tuNgay?   Chi lay bai tu ngay nay tro di</span>
 SELECT id, content, "createdAt"
@@ -973,7 +973,7 @@ await prisma.$queryRawTyped(timBai(null, null));       // tat ca</div>
   <div class="lz-layer"><span class="lz-lname">Static SQL only</span><span class="lz-lnote">The file cannot be assembled at runtime. Optional parameters cover "this filter may be absent"; they do not cover "the caller chooses which of nine columns to sort by". That still needs <code>Prisma.sql</code> and <code>Prisma.raw</code> from Lesson 10.1 — and those still have no compile-time check.</span></div>
   <div class="lz-layer"><span class="lz-lname">Preview feature, PostgreSQL first</span><span class="lz-lnote">Still behind <code>previewFeatures</code> as of Prisma 6.x, with PostgreSQL the best-supported provider (MySQL and SQLite work; others do not). Preview means the API can change between minor versions — pin the Prisma version if you adopt it widely.</span></div>
 </div>
-<pre><code><span class="tok-comment"># .github/workflows/ci-lint.yml — the eight lines</span>
+<pre><code class="language-typescript"><span class="tok-comment"># .github/workflows/ci-lint.yml — the eight lines</span>
 services:
   postgres:
     image: postgres:16-alpine
@@ -1009,12 +1009,12 @@ services:
 <p class="lead">Bài 10.2 kết thúc bằng một câu trả lời không mấy dễ chịu: truy vấn thô nói dối về kiểu của nó, nên hãy kiểm lúc chạy. TypedSQL mới là câu trả lời dễ chịu. Bạn đặt câu SQL vào một file, Prisma đi HỎI THẲNG cơ sở dữ liệu thật xem câu lệnh đó trả về gì, rồi sinh kiểu từ câu trả lời. Phép ép kiểu biến mất, và cùng với nó biến mất luôn cái lớp bug mà một cột đổi tên vẫn biên dịch ngon lành rồi chết trên production.</p>
 
 <h3>Dựng từ đầu tới cuối</h3>
-<pre><code><span class="tok-comment">// schema.prisma</span>
+<pre><code class="language-typescript"><span class="tok-comment">// schema.prisma</span>
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["typedSql"]
 }</code></pre>
-<pre><code><span class="tok-comment"># prisma/sql/thongKeTacGia.sql — tên thư mục là CỐ ĐỊNH</span>
+<pre><code class="language-typescript"><span class="tok-comment"># prisma/sql/thongKeTacGia.sql — tên thư mục là CỐ ĐỊNH</span>
 <span class="tok-comment">-- @param {String} $1:tacGiaId  ID cua tac gia</span>
 <span class="tok-comment">-- @param {Int}    $2:gioiHan   So hang toi da</span>
 SELECT
@@ -1028,14 +1028,14 @@ WHERE p."authorId" = $1 AND p."deletedAt" IS NULL
 GROUP BY p.id
 ORDER BY p."createdAt" DESC
 LIMIT $2;</code></pre>
-<pre><code><span class="tok-comment"># Sinh mã. Chú ý cái cờ — &#96;prisma generate&#96; trơn BỎ QUA các file .sql.</span>
+<pre><code class="language-bash"><span class="tok-comment"># Sinh mã. Chú ý cái cờ — &#96;prisma generate&#96; trơn BỎ QUA các file .sql.</span>
 npx prisma generate --sql</code></pre>
 <div class="out">Prisma schema loaded from prisma/schema.prisma
 Datasource "db": PostgreSQL database "cuongthai" at "localhost:5432"
 
 ✔ Generated Prisma Client (v6.4.1) to ./node_modules/@prisma/client in 284ms
 ✔ Generated 1 SQL query to ./node_modules/@prisma/client/sql in 41ms</div>
-<pre><code><span class="tok-comment">// Dùng nó. Đường import là @prisma/client/sql, KHÔNG phải @prisma/client.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Dùng nó. Đường import là @prisma/client/sql, KHÔNG phải @prisma/client.</span>
 import { authorStats } from '@prisma/client/sql';
 
 const rows = await prisma.$queryRawTyped(authorStats(authorId, 20));
@@ -1060,7 +1060,7 @@ rows[0].not_real;  <span class="tok-comment">// ❌ Property 'khong_co_that' doe
 </div>
 
 <h3>Cú trôi dạt của Bài 10.2, giờ bị bắt ngay lúc build</h3>
-<pre><code><span class="tok-comment">// Một migration đổi tên content → body.</span>
+<pre><code class="language-bash"><span class="tok-comment">// Một migration đổi tên content → body.</span>
 <span class="tok-comment">// Bản $queryRaw của câu truy vấn này VẪN biên dịch được. Rồi thì:</span>
 npx prisma generate --sql</code></pre>
 <div class="out">Error: Failed to generate SQL queries
@@ -1083,7 +1083,7 @@ npx prisma generate --sql</code></pre>
   <div class="kv"><span class="k">Tham số tuỳ chọn</span><span class="v"><code>-- @param {String} $1:tuKhoa?</code> — dấu <code>?</code> ở cuối làm đối số thành <code>string | null</code>. Dùng nó cùng <code>WHERE (\$1 IS NULL OR content ILIKE \$1)</code> cho một bộ lọc có thể vắng mặt.</span></div>
   <div class="kv"><span class="k">Phần mô tả sau cái tên</span><span class="v">Mọi thứ viết sau tên sẽ thành chú thích JSDoc trên đối số được sinh ra. Tốn một dòng, và hiện lên khi bạn rê chuột vào nó mấy tháng sau.</span></div>
 </div>
-<pre><code><span class="tok-comment">-- prisma/sql/timBai.sql — một bộ lọc tuỳ chọn, không cần SQL động</span>
+<pre><code class="language-typescript"><span class="tok-comment">-- prisma/sql/timBai.sql — một bộ lọc tuỳ chọn, không cần SQL động</span>
 <span class="tok-comment">-- @param {String}   $1:tuKhoa?   Tu khoa, bo trong de lay tat ca</span>
 <span class="tok-comment">-- @param {DateTime} $2:tuNgay?   Chi lay bai tu ngay nay tro di</span>
 SELECT id, content, "createdAt"
@@ -1106,7 +1106,7 @@ await prisma.$queryRawTyped(timBai(null, null));       // tat ca</div>
   <div class="lz-layer"><span class="lz-lname">Chỉ SQL TĨNH</span><span class="lz-lnote">File không thể được lắp ráp lúc chạy. Tham số tuỳ chọn phủ được "bộ lọc này có thể vắng"; nó KHÔNG phủ được "người gọi chọn sắp xếp theo một trong chín cột". Cái đó vẫn cần <code>Prisma.sql</code> và <code>Prisma.raw</code> của Bài 10.1 — và những cái đó vẫn không có phép kiểm lúc biên dịch.</span></div>
   <div class="lz-layer"><span class="lz-lname">Tính năng xem trước, PostgreSQL đi đầu</span><span class="lz-lnote">Tới Prisma 6.x nó vẫn nằm sau <code>previewFeatures</code>, với PostgreSQL là provider được hỗ trợ tốt nhất (MySQL và SQLite chạy được; những cái khác thì không). "Xem trước" nghĩa là API có thể đổi giữa hai bản minor — hãy ghim phiên bản Prisma nếu bạn dùng nó rộng rãi.</span></div>
 </div>
-<pre><code><span class="tok-comment"># .github/workflows/ci-lint.yml — tám dòng đó</span>
+<pre><code class="language-typescript"><span class="tok-comment"># .github/workflows/ci-lint.yml — tám dòng đó</span>
 services:
   postgres:
     image: postgres:16-alpine
@@ -1156,7 +1156,7 @@ services:
   <div class="kv"><span class="k"><code>query</code></span><span class="v">Wraps operations. Sees the arguments, decides what to pass on, sees the result. The replacement for <code>$use</code>.</span></div>
   <div class="kv"><span class="k"><code>client</code></span><span class="v">Adds top-level methods to the client itself — <code>prisma.$kiemTraSucKhoe()</code>, <code>prisma.$doThoiGian()</code>.</span></div>
 </div>
-<pre><code><span class="tok-comment">// $extends returns a NEW client. It does not mutate the old one.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// $extends returns a NEW client. It does not mutate the old one.</span>
 const prismaGoc = new PrismaClient();
 const prisma    = prismaGoc.$extends(mở_rộng);   <span class="tok-comment">// ✅ assign the result</span>
 
@@ -1166,7 +1166,7 @@ prismaGoc.$extends(mở_rộng);                      <span class="tok-comment">
 </div>
 
 <h3><code>result</code> — computed fields, and the <code>needs</code> that makes them work</h3>
-<pre><code>const mediaExt = Prisma.defineExtension({
+<pre><code class="language-javascript">const mediaExt = Prisma.defineExtension({
   name: 'media-url',
   result: {
     user: {
@@ -1187,7 +1187,7 @@ prismaGoc.$extends(mở_rộng);                      <span class="tok-comment">
     },
   },
 });</code></pre>
-<pre><code>const u = await prisma.user.findUniqueOrThrow({ where: { id }, select: { avatarUrl: true } });
+<pre><code class="language-javascript">const u = await prisma.user.findUniqueOrThrow({ where: { id }, select: { avatarUrl: true } });
 console.log(u.avatarUrl);   <span class="tok-comment">// string — and avatarUrl was fetched automatically</span></code></pre>
 <div class="out">prisma:query SELECT "public"."User"."avatar_url" FROM "public"."User" WHERE …
 https://media.cuongthai.com/avatars/clx7….webp</div>
@@ -1199,7 +1199,7 @@ https://media.cuongthai.com/avatars/clx7….webp</div>
 </div>
 
 <h3><code>model</code> and <code>client</code> — methods where you expect them</h3>
-<pre><code>const truyVanExt = Prisma.defineExtension({
+<pre><code class="language-javascript">const truyVanExt = Prisma.defineExtension({
   name: 'truy-van-thuong-dung',
   model: {
     user: {
@@ -1226,7 +1226,7 @@ https://media.cuongthai.com/avatars/clx7….webp</div>
     },
   },
 });</code></pre>
-<pre><code>await prisma.user.findByEmailOrName('an@vidu.com');
+<pre><code class="language-typescript">await prisma.user.findByEmailOrName('an@vidu.com');
 await prisma.socialPost.exists({ id: postId });   <span class="tok-comment">// on every model</span>
 await prisma.$kiemTraSucKhoe();                    <span class="tok-comment">// → 1.84 (ms)</span></code></pre>
 <div class="callout ok">
@@ -1234,7 +1234,7 @@ await prisma.$kiemTraSucKhoe();                    <span class="tok-comment">// 
 </div>
 
 <h3><code>query</code> — soft delete, and what it actually covers</h3>
-<pre><code>const softDeleteExt = Prisma.defineExtension({
+<pre><code class="language-javascript">const softDeleteExt = Prisma.defineExtension({
   name: 'soft-delete',
   query: {
     socialPost: {
@@ -1255,7 +1255,7 @@ await prisma.$kiemTraSucKhoe();                    <span class="tok-comment">// 
     },
   },
 });</code></pre>
-<pre><code>await prisma.socialPost.delete({ where: { id } });
+<pre><code class="language-typescript">await prisma.socialPost.delete({ where: { id } });
 await prisma.socialPost.findMany({ where: { authorId } });</code></pre>
 <div class="out">prisma:query UPDATE "SocialPost" SET "deletedAt" = $1 WHERE "id" = $2
 prisma:query SELECT … FROM "SocialPost" WHERE "authorId" = $1 AND "deletedAt" IS NULL</div>
@@ -1273,7 +1273,7 @@ prisma:query SELECT … FROM "SocialPost" WHERE "authorId" = $1 AND "deletedAt" 
 </div>
 
 <h3>Migrating off <code>$use</code></h3>
-<pre><code><span class="tok-comment">// Old middleware — deprecated, and untyped: params.args is &#96;any&#96;</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Old middleware — deprecated, and untyped: params.args is &#96;any&#96;</span>
 prisma.$use(async (params, next) =&gt; {
   if (params.model === 'SocialPost' &amp;&amp; params.action === 'delete') {
     params.action = 'update';
@@ -1308,7 +1308,7 @@ prisma.$use(async (params, next) =&gt; {
   <div class="kv"><span class="k"><code>query</code></span><span class="v">Bọc quanh các thao tác. Nhìn thấy đối số, quyết định truyền tiếp cái gì, nhìn thấy kết quả. Bản thay thế cho <code>$use</code>.</span></div>
   <div class="kv"><span class="k"><code>client</code></span><span class="v">Thêm phương thức ở cấp cao nhất vào chính client — <code>prisma.$kiemTraSucKhoe()</code>, <code>prisma.$doThoiGian()</code>.</span></div>
 </div>
-<pre><code><span class="tok-comment">// $extends trả về một client MỚI. Nó KHÔNG sửa cái cũ.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// $extends trả về một client MỚI. Nó KHÔNG sửa cái cũ.</span>
 const prismaGoc = new PrismaClient();
 const prisma    = prismaGoc.$extends(moRong);   <span class="tok-comment">// ✅ gán kết quả lại</span>
 
@@ -1318,7 +1318,7 @@ prismaGoc.$extends(moRong);                      <span class="tok-comment">// �
 </div>
 
 <h3><code>result</code> — trường tính toán, và cái <code>needs</code> làm chúng chạy được</h3>
-<pre><code>const mediaExt = Prisma.defineExtension({
+<pre><code class="language-javascript">const mediaExt = Prisma.defineExtension({
   name: 'media-url',
   result: {
     user: {
@@ -1339,7 +1339,7 @@ prismaGoc.$extends(moRong);                      <span class="tok-comment">// �
     },
   },
 });</code></pre>
-<pre><code>const u = await prisma.user.findUniqueOrThrow({ where: { id }, select: { avatarUrl: true } });
+<pre><code class="language-javascript">const u = await prisma.user.findUniqueOrThrow({ where: { id }, select: { avatarUrl: true } });
 console.log(u.avatarUrl);   <span class="tok-comment">// string — và avatarUrl được lấy về TỰ ĐỘNG</span></code></pre>
 <div class="out">prisma:query SELECT "public"."User"."avatar_url" FROM "public"."User" WHERE …
 https://media.cuongthai.com/avatars/clx7….webp</div>
@@ -1351,7 +1351,7 @@ https://media.cuongthai.com/avatars/clx7….webp</div>
 </div>
 
 <h3><code>model</code> và <code>client</code> — phương thức nằm đúng chỗ bạn mong</h3>
-<pre><code>const truyVanExt = Prisma.defineExtension({
+<pre><code class="language-javascript">const truyVanExt = Prisma.defineExtension({
   name: 'truy-van-thuong-dung',
   model: {
     user: {
@@ -1378,7 +1378,7 @@ https://media.cuongthai.com/avatars/clx7….webp</div>
     },
   },
 });</code></pre>
-<pre><code>await prisma.user.findByEmailOrName('an@vidu.com');
+<pre><code class="language-typescript">await prisma.user.findByEmailOrName('an@vidu.com');
 await prisma.socialPost.exists({ id: postId });   <span class="tok-comment">// có trên MỌI model</span>
 await prisma.$kiemTraSucKhoe();                    <span class="tok-comment">// → 1,84 (ms)</span></code></pre>
 <div class="callout ok">
@@ -1386,7 +1386,7 @@ await prisma.$kiemTraSucKhoe();                    <span class="tok-comment">// 
 </div>
 
 <h3><code>query</code> — soft delete, và nó THẬT SỰ phủ tới đâu</h3>
-<pre><code>const softDeleteExt = Prisma.defineExtension({
+<pre><code class="language-javascript">const softDeleteExt = Prisma.defineExtension({
   name: 'soft-delete',
   query: {
     socialPost: {
@@ -1407,7 +1407,7 @@ await prisma.$kiemTraSucKhoe();                    <span class="tok-comment">// 
     },
   },
 });</code></pre>
-<pre><code>await prisma.socialPost.delete({ where: { id } });
+<pre><code class="language-typescript">await prisma.socialPost.delete({ where: { id } });
 await prisma.socialPost.findMany({ where: { authorId } });</code></pre>
 <div class="out">prisma:query UPDATE "SocialPost" SET "deletedAt" = $1 WHERE "id" = $2
 prisma:query SELECT … FROM "SocialPost" WHERE "authorId" = $1 AND "deletedAt" IS NULL</div>
@@ -1425,7 +1425,7 @@ prisma:query SELECT … FROM "SocialPost" WHERE "authorId" = $1 AND "deletedAt" 
 </div>
 
 <h3>Rời khỏi <code>$use</code></h3>
-<pre><code><span class="tok-comment">// Middleware cũ — đã lỗi thời, và không có kiểu: params.args là &#96;any&#96;</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Middleware cũ — đã lỗi thời, và không có kiểu: params.args là &#96;any&#96;</span>
 prisma.$use(async (params, next) =&gt; {
   if (params.model === 'SocialPost' &amp;&amp; params.action === 'delete') {
     params.action = 'update';

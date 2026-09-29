@@ -26,7 +26,7 @@ export default {
 
 <h3>The basic INNER JOIN</h3>
 <p>We have a <code>note</code> table (each with a <code>user_id</code>) and an <code>app_user</code> table. To show each note <em>with its author's name</em>, join them on the matching key — <code>note.user_id = app_user.id</code>:</p>
-<pre><code>SELECT n.title, u.name AS author, n.tag
+<pre><code class="language-sql">SELECT n.title, u.name AS author, n.tag
 FROM note n JOIN app_user u ON u.id = n.user_id
 ORDER BY n.id;</code></pre>
 <div class="out">    title     | author | tag
@@ -41,7 +41,7 @@ ORDER BY n.id;</code></pre>
 
 <h3>ON is the general form; USING is a shortcut</h3>
 <p><code>ON</code> lets you write any match condition, even when the columns have different names (<code>u.id = n.user_id</code>). When both tables happen to name the join column <em>the same</em>, <code>USING (col)</code> is a tidy shorthand — and it merges that column so it appears once. Here a <code>note_stat</code> table shares the column name <code>id</code> with <code>note</code>:</p>
-<pre><code>SELECT n.title, s.reads
+<pre><code class="language-sql">SELECT n.title, s.reads
 FROM note n JOIN note_stat s USING (id)
 ORDER BY n.id;</code></pre>
 <div class="out">    title     | reads
@@ -76,7 +76,7 @@ ORDER BY n.id;</code></pre>
 
 <h3>INNER JOIN cơ bản</h3>
 <p>Ta có bảng <code>note</code> (mỗi cái có một <code>user_id</code>) và bảng <code>app_user</code>. Để hiện mỗi note <em>kèm tên tác giả</em>, join chúng theo khoá khớp — <code>note.user_id = app_user.id</code>:</p>
-<pre><code>SELECT n.title, u.name AS author, n.tag
+<pre><code class="language-sql">SELECT n.title, u.name AS author, n.tag
 FROM note n JOIN app_user u ON u.id = n.user_id
 ORDER BY n.id;</code></pre>
 <div class="out">    title     | author | tag
@@ -91,7 +91,7 @@ ORDER BY n.id;</code></pre>
 
 <h3>ON là dạng tổng quát; USING là lối tắt</h3>
 <p><code>ON</code> cho bạn viết bất kỳ điều kiện khớp nào, kể cả khi các cột khác tên (<code>u.id = n.user_id</code>). Khi cả hai bảng tình cờ đặt cột join <em>cùng tên</em>, <code>USING (col)</code> là lối tắt gọn — và nó gộp cột đó để nó chỉ xuất hiện một lần. Ở đây bảng <code>note_stat</code> chia sẻ tên cột <code>id</code> với <code>note</code>:</p>
-<pre><code>SELECT n.title, s.reads
+<pre><code class="language-sql">SELECT n.title, s.reads
 FROM note n JOIN note_stat s USING (id)
 ORDER BY n.id;</code></pre>
 <div class="out">    title     | reads
@@ -136,7 +136,7 @@ ORDER BY n.id;</code></pre>
 
 <h3>LEFT JOIN — keep every row from the left table</h3>
 <p>Our data has a user (Ngoc) with no notes, and a note ("Orphan draft") with no user. A <code>LEFT JOIN</code> from <code>app_user</code> keeps <em>every</em> user, matched or not — Ngoc appears with a <code>NULL</code> title:</p>
-<pre><code>SELECT u.name, n.title
+<pre><code class="language-sql">SELECT u.name, n.title
 FROM app_user u LEFT JOIN note n ON n.user_id = u.id
 ORDER BY u.id, n.id;</code></pre>
 <div class="out"> name  |    title
@@ -151,7 +151,7 @@ ORDER BY u.id, n.id;</code></pre>
 
 <h3>The anti-join: find rows with NO match</h3>
 <p>Combine a LEFT JOIN with <code>WHERE &lt;right&gt;.id IS NULL</code> and you get a hugely useful pattern: <strong>only the unmatched rows</strong>. "Which users have written no notes?"</p>
-<pre><code>SELECT u.name
+<pre><code class="language-sql">SELECT u.name
 FROM app_user u LEFT JOIN note n ON n.user_id = u.id
 WHERE n.id IS NULL
 ORDER BY u.id;</code></pre>
@@ -163,7 +163,7 @@ ORDER BY u.id;</code></pre>
 
 <h3>RIGHT and FULL — the other directions</h3>
 <p><code>RIGHT JOIN</code> is the mirror image: keep every row from the <em>right</em> table. From <code>app_user RIGHT JOIN note</code>, the authorless "Orphan draft" is kept with a NULL author:</p>
-<pre><code>SELECT u.name AS author, n.title
+<pre><code class="language-sql">SELECT u.name AS author, n.title
 FROM app_user u RIGHT JOIN note n ON n.user_id = u.id
 ORDER BY n.id;</code></pre>
 <div class="out"> author |    title
@@ -175,7 +175,7 @@ ORDER BY n.id;</code></pre>
         | Orphan draft
 (5 rows)</div>
 <p>And <code>FULL JOIN</code> keeps unmatched rows from <strong>both</strong> sides at once — Ngoc (no notes) <em>and</em> the Orphan draft (no author) both appear:</p>
-<pre><code>SELECT u.name AS author, n.title
+<pre><code class="language-sql">SELECT u.name AS author, n.title
 FROM app_user u FULL JOIN note n ON n.user_id = u.id
 ORDER BY u.id NULLS LAST, n.id NULLS LAST;</code></pre>
 <div class="out"> author |    title
@@ -211,7 +211,7 @@ ORDER BY u.id NULLS LAST, n.id NULLS LAST;</code></pre>
 
 <h3>LEFT JOIN — giữ mọi dòng của bảng bên trái</h3>
 <p>Dữ liệu của ta có một user (Ngoc) không có note nào, và một note ("Orphan draft") không có user. Một <code>LEFT JOIN</code> từ <code>app_user</code> giữ <em>mọi</em> user, khớp hay không — Ngoc xuất hiện với title <code>NULL</code>:</p>
-<pre><code>SELECT u.name, n.title
+<pre><code class="language-sql">SELECT u.name, n.title
 FROM app_user u LEFT JOIN note n ON n.user_id = u.id
 ORDER BY u.id, n.id;</code></pre>
 <div class="out"> name  |    title
@@ -226,7 +226,7 @@ ORDER BY u.id, n.id;</code></pre>
 
 <h3>Anti-join: tìm các dòng KHÔNG khớp</h3>
 <p>Kết hợp một LEFT JOIN với <code>WHERE &lt;phải&gt;.id IS NULL</code> là bạn có một mẫu cực hữu ích: <strong>chỉ các dòng không khớp</strong>. "User nào chưa viết note nào?"</p>
-<pre><code>SELECT u.name
+<pre><code class="language-sql">SELECT u.name
 FROM app_user u LEFT JOIN note n ON n.user_id = u.id
 WHERE n.id IS NULL
 ORDER BY u.id;</code></pre>
@@ -238,7 +238,7 @@ ORDER BY u.id;</code></pre>
 
 <h3>RIGHT và FULL — các hướng còn lại</h3>
 <p><code>RIGHT JOIN</code> là ảnh gương: giữ mọi dòng của bảng bên <em>phải</em>. Từ <code>app_user RIGHT JOIN note</code>, "Orphan draft" không tác giả được giữ với author NULL:</p>
-<pre><code>SELECT u.name AS author, n.title
+<pre><code class="language-sql">SELECT u.name AS author, n.title
 FROM app_user u RIGHT JOIN note n ON n.user_id = u.id
 ORDER BY n.id;</code></pre>
 <div class="out"> author |    title
@@ -250,7 +250,7 @@ ORDER BY n.id;</code></pre>
         | Orphan draft
 (5 rows)</div>
 <p>Và <code>FULL JOIN</code> giữ các dòng không khớp từ <strong>cả hai</strong> phía cùng lúc — Ngoc (không note) <em>và</em> Orphan draft (không tác giả) đều xuất hiện:</p>
-<pre><code>SELECT u.name AS author, n.title
+<pre><code class="language-sql">SELECT u.name AS author, n.title
 FROM app_user u FULL JOIN note n ON n.user_id = u.id
 ORDER BY u.id NULLS LAST, n.id NULLS LAST;</code></pre>
 <div class="out"> author |    title
@@ -296,7 +296,7 @@ ORDER BY u.id NULLS LAST, n.id NULLS LAST;</code></pre>
 
 <h3>Chaining joins across three tables</h3>
 <p>You join as many tables as the question needs — each <code>JOIN ... ON</code> attaches one more. Here a comment links to its note, and to <em>two</em> different people: the note's author and the comment's author. Joining <code>app_user</code> twice needs two aliases (<code>au</code>, <code>cu</code>):</p>
-<pre><code>SELECT c.body, n.title, au.name AS note_author, cu.name AS commenter
+<pre><code class="language-sql">SELECT c.body, n.title, au.name AS note_author, cu.name AS commenter
 FROM comment c
 JOIN note n      ON n.id = c.note_id
 JOIN app_user au ON au.id = n.user_id     <span class="tok-comment">-- who wrote the note</span>
@@ -312,7 +312,7 @@ ORDER BY c.id;</code></pre>
 
 <h3>The self-join: a table that references itself</h3>
 <p>An <code>employee</code> table where each row has a <code>manager_id</code> pointing at another employee is a classic <em>hierarchy</em>. To show each employee next to their manager's name, join the table to itself — once as "the employee" (<code>e</code>), once as "the manager" (<code>m</code>):</p>
-<pre><code>SELECT e.name AS employee, m.name AS manager
+<pre><code class="language-sql">SELECT e.name AS employee, m.name AS manager
 FROM employee e LEFT JOIN employee m ON m.id = e.manager_id
 ORDER BY e.id;</code></pre>
 <div class="out"> employee | manager
@@ -345,7 +345,7 @@ ORDER BY e.id;</code></pre>
 
 <h3>Nối chuỗi join qua ba bảng</h3>
 <p>Bạn join bao nhiêu bảng tuỳ câu hỏi cần — mỗi <code>JOIN ... ON</code> đính thêm một bảng. Ở đây một bình luận liên kết tới note của nó, và tới <em>hai</em> người khác nhau: tác giả note và tác giả bình luận. Join <code>app_user</code> hai lần cần hai alias (<code>au</code>, <code>cu</code>):</p>
-<pre><code>SELECT c.body, n.title, au.name AS note_author, cu.name AS commenter
+<pre><code class="language-sql">SELECT c.body, n.title, au.name AS note_author, cu.name AS commenter
 FROM comment c
 JOIN note n      ON n.id = c.note_id
 JOIN app_user au ON au.id = n.user_id     <span class="tok-comment">-- ai viết note</span>
@@ -361,7 +361,7 @@ ORDER BY c.id;</code></pre>
 
 <h3>Self-join: một bảng tham chiếu chính nó</h3>
 <p>Một bảng <code>employee</code> mà mỗi dòng có một <code>manager_id</code> trỏ tới một nhân viên khác là một <em>cây phân cấp</em> kinh điển. Để hiện mỗi nhân viên cạnh tên quản lý của họ, join bảng với chính nó — một lần là "nhân viên" (<code>e</code>), một lần là "quản lý" (<code>m</code>):</p>
-<pre><code>SELECT e.name AS employee, m.name AS manager
+<pre><code class="language-sql">SELECT e.name AS employee, m.name AS manager
 FROM employee e LEFT JOIN employee m ON m.id = e.manager_id
 ORDER BY e.id;</code></pre>
 <div class="out"> employee | manager
@@ -404,7 +404,7 @@ ORDER BY e.id;</code></pre>
 
 <h3>CROSS JOIN — every combination</h3>
 <p>A <code>CROSS JOIN</code> has no <code>ON</code>: it pairs each row of one table with <em>every</em> row of the other, producing all combinations. Useful for generating a grid — every size in every colour:</p>
-<pre><code>SELECT size, color FROM sz CROSS JOIN col ORDER BY size, color;</code></pre>
+<pre><code class="language-sql">SELECT size, color FROM sz CROSS JOIN col ORDER BY size, color;</code></pre>
 <div class="out"> size | color
 ------+-------
  L    | Blue
@@ -421,7 +421,7 @@ ORDER BY e.id;</code></pre>
 
 <h3>Trap 2: fan-out — one-to-many multiplies rows</h3>
 <p>This one fools everyone once. Joining a note to its <em>many</em> comments repeats the note once per comment — the "one" side is duplicated across the "many":</p>
-<pre><code>SELECT n.title, c.body
+<pre><code class="language-sql">SELECT n.title, c.body
 FROM note n JOIN comment c ON c.note_id = n.id
 ORDER BY n.id, c.id;</code></pre>
 <div class="out">    title     |     body
@@ -434,7 +434,7 @@ ORDER BY n.id, c.id;</code></pre>
 
 <h3>Trap 3: a filter in WHERE turns LEFT JOIN into INNER</h3>
 <p>The subtlest one. In a LEFT JOIN, putting a condition on the right table in <code>WHERE</code> discards the NULL (unmatched) rows — silently undoing the LEFT. Watch the same filter in two places. In <code>WHERE</code>, it collapses to matched rows only:</p>
-<pre><code>SELECT u.name, n.title
+<pre><code class="language-sql">SELECT u.name, n.title
 FROM app_user u LEFT JOIN note n ON n.user_id = u.id
 WHERE n.tag = 'sql'
 ORDER BY u.id, n.id;</code></pre>
@@ -444,7 +444,7 @@ ORDER BY u.id, n.id;</code></pre>
  Cuong | Indexes
 (2 rows)</div>
 <p>Ngoc vanished, and so did Lan and Minh — because their <code>n.tag</code> was <code>NULL</code> or not <code>'sql'</code>, and <code>WHERE</code> ran <em>after</em> the join and dropped them. Move the same condition <strong>into the <code>ON</code></strong> and the LEFT is preserved — every user stays, with a title only where a matching sql note exists:</p>
-<pre><code>SELECT u.name, n.title
+<pre><code class="language-sql">SELECT u.name, n.title
 FROM app_user u LEFT JOIN note n ON n.user_id = u.id AND n.tag = 'sql'
 ORDER BY u.id, n.id;</code></pre>
 <div class="out"> name  |    title
@@ -486,7 +486,7 @@ ORDER BY u.id, n.id;</code></pre>
 
 <h3>CROSS JOIN — mọi tổ hợp</h3>
 <p>Một <code>CROSS JOIN</code> không có <code>ON</code>: nó ghép mỗi dòng của một bảng với <em>mọi</em> dòng của bảng kia, sinh ra tất cả tổ hợp. Hữu ích để sinh một lưới — mọi cỡ trong mọi màu:</p>
-<pre><code>SELECT size, color FROM sz CROSS JOIN col ORDER BY size, color;</code></pre>
+<pre><code class="language-sql">SELECT size, color FROM sz CROSS JOIN col ORDER BY size, color;</code></pre>
 <div class="out"> size | color
 ------+-------
  L    | Blue
@@ -503,7 +503,7 @@ ORDER BY u.id, n.id;</code></pre>
 
 <h3>Bẫy 2: fan-out — quan hệ một-nhiều nhân dòng</h3>
 <p>Cái này lừa mọi người một lần. Join một note với <em>nhiều</em> bình luận của nó lặp lại note một lần cho mỗi bình luận — phía "một" bị nhân bản qua phía "nhiều":</p>
-<pre><code>SELECT n.title, c.body
+<pre><code class="language-sql">SELECT n.title, c.body
 FROM note n JOIN comment c ON c.note_id = n.id
 ORDER BY n.id, c.id;</code></pre>
 <div class="out">    title     |     body
@@ -516,7 +516,7 @@ ORDER BY n.id, c.id;</code></pre>
 
 <h3>Bẫy 3: một bộ lọc trong WHERE biến LEFT JOIN thành INNER</h3>
 <p>Cái tinh vi nhất. Trong một LEFT JOIN, đặt một điều kiện lên bảng bên phải trong <code>WHERE</code> vứt bỏ các dòng NULL (không khớp) — âm thầm huỷ tác dụng LEFT. Xem cùng một bộ lọc ở hai chỗ. Trong <code>WHERE</code>, nó co lại chỉ còn các dòng khớp:</p>
-<pre><code>SELECT u.name, n.title
+<pre><code class="language-sql">SELECT u.name, n.title
 FROM app_user u LEFT JOIN note n ON n.user_id = u.id
 WHERE n.tag = 'sql'
 ORDER BY u.id, n.id;</code></pre>
@@ -526,7 +526,7 @@ ORDER BY u.id, n.id;</code></pre>
  Cuong | Indexes
 (2 rows)</div>
 <p>Ngoc biến mất, và Lan cùng Minh cũng vậy — vì <code>n.tag</code> của họ là <code>NULL</code> hoặc không phải <code>'sql'</code>, và <code>WHERE</code> chạy <em>sau</em> phép join rồi rớt chúng. Chuyển cùng điều kiện đó <strong>vào <code>ON</code></strong> và LEFT được giữ — mọi user ở lại, với title chỉ ở nơi có một note sql khớp:</p>
-<pre><code>SELECT u.name, n.title
+<pre><code class="language-sql">SELECT u.name, n.title
 FROM app_user u LEFT JOIN note n ON n.user_id = u.id AND n.tag = 'sql'
 ORDER BY u.id, n.id;</code></pre>
 <div class="out"> name  |    title

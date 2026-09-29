@@ -26,7 +26,7 @@ export default {
 <h3>The patient</h3>
 <p>A perfectly ordinary listing endpoint. Nothing in it looks alarming:</p>
 
-<pre><code>function slugify(s) {
+<pre><code class="language-javascript">function slugify(s) {
   return s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
 }
 function renderNote(n) {
@@ -49,7 +49,7 @@ app.get('/notes', (req, res) =&gt; {
 <h3>Taking a CPU profile without installing anything</h3>
 <p>Node has a built-in profiler. One flag, and on clean exit it writes a <code>.cpuprofile</code> file you can open in Chrome DevTools — or parse yourself, which is what the table below does:</p>
 
-<pre><code>node --cpu-prof --cpu-prof-dir=./prof server.mjs
+<pre><code class="language-bash">node --cpu-prof --cpu-prof-dir=./prof server.mjs
 # drive load through it, then let the process exit NORMALLY (SIGKILL leaves no file)</code></pre>
 
 <div class="out">tổng thời gian lấy mẫu: 6636ms, 4257 mẫu, 862 node
@@ -93,11 +93,11 @@ app.get('/notes', (req, res) =&gt; {
 <p><strong>11,6× faster. Zero libraries changed, zero infrastructure added.</strong> Each step is worth understanding separately, because each represents a different general principle.</p>
 
 <p><strong>Step 2 — precompute (2,2×).</strong> <code>NOTES</code> is static, so <code>renderNote</code> produces the identical result forever. Running it once at startup and reusing the array removes <code>renderNote</code> and <code>crypto</code> — about 30% of the profile — outright:</p>
-<pre><code>const PRECOMPUTED = NOTES.map(renderNote);           // một lần, lúc khởi động
+<pre><code class="language-javascript">const PRECOMPUTED = NOTES.map(renderNote);           // một lần, lúc khởi động
 app.get('/notes', (req, res) =&gt; res.json({ items: PRECOMPUTED }));</code></pre>
 
 <p><strong>Step 3 — pre-serialise (1,9× more).</strong> If the object never changes, neither does its JSON. <code>res.json()</code> calls <code>JSON.stringify</code> on every request; do it once instead:</p>
-<pre><code>const BODY = JSON.stringify({ items: PRECOMPUTED });
+<pre><code class="language-javascript">const BODY = JSON.stringify({ items: PRECOMPUTED });
 app.get('/notes', (req, res) =&gt; { res.type('json'); res.send(BODY); });</code></pre>
 <p>That removed the 16,9% <code>stringify</code> line and nearly doubled throughput — a bigger win than the first fix, from a change that touches two lines.</p>
 
@@ -150,7 +150,7 @@ app.get('/notes', (req, res) =&gt; { res.type('json'); res.send(BODY); });</code
 <h3>Bệnh nhân</h3>
 <p>Một endpoint danh sách hoàn toàn bình thường. Không có gì trong đó trông đáng báo động cả:</p>
 
-<pre><code>function slugify(s) {
+<pre><code class="language-javascript">function slugify(s) {
   return s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
 }
 function renderNote(n) {
@@ -173,7 +173,7 @@ app.get('/notes', (req, res) =&gt; {
 <h3>Lấy CPU profile mà không cần cài gì</h3>
 <p>Node có sẵn bộ đo hiệu năng. Một cờ, và khi tiến trình thoát bình thường nó ghi ra một file <code>.cpuprofile</code> mở được bằng Chrome DevTools — hoặc tự phân tích, đó là cách bảng dưới đây được lập:</p>
 
-<pre><code>node --cpu-prof --cpu-prof-dir=./prof server.mjs
+<pre><code class="language-bash">node --cpu-prof --cpu-prof-dir=./prof server.mjs
 # chạy tải vào nó, rồi cho tiến trình thoát BÌNH THƯỜNG (SIGKILL thì không có file)</code></pre>
 
 <div class="out">tổng thời gian lấy mẫu: 6636ms, 4257 mẫu, 862 node
@@ -217,11 +217,11 @@ app.get('/notes', (req, res) =&gt; {
 <p><strong>Nhanh gấp 11,6 lần. Không đổi thư viện nào, không thêm hạ tầng nào.</strong> Mỗi bước đáng hiểu riêng, vì mỗi bước đại diện cho một nguyên tắc tổng quát khác nhau.</p>
 
 <p><strong>Bước 2 — tính sẵn (2,2×).</strong> <code>NOTES</code> là dữ liệu tĩnh, nên <code>renderNote</code> cho ra kết quả y hệt nhau mãi mãi. Chạy nó một lần lúc khởi động rồi dùng lại mảng ấy xoá thẳng <code>renderNote</code> và <code>crypto</code> — khoảng 30% của profile:</p>
-<pre><code>const PRECOMPUTED = NOTES.map(renderNote);           // một lần, lúc khởi động
+<pre><code class="language-javascript">const PRECOMPUTED = NOTES.map(renderNote);           // một lần, lúc khởi động
 app.get('/notes', (req, res) =&gt; res.json({ items: PRECOMPUTED }));</code></pre>
 
 <p><strong>Bước 3 — tuần tự hoá sẵn (thêm 1,9×).</strong> Nếu object không bao giờ đổi thì JSON của nó cũng vậy. <code>res.json()</code> gọi <code>JSON.stringify</code> ở mọi request; hãy làm việc đó đúng một lần:</p>
-<pre><code>const BODY = JSON.stringify({ items: PRECOMPUTED });
+<pre><code class="language-javascript">const BODY = JSON.stringify({ items: PRECOMPUTED });
 app.get('/notes', (req, res) =&gt; { res.type('json'); res.send(BODY); });</code></pre>
 <p>Bước này xoá dòng <code>stringify</code> 16,9% và làm throughput tăng gần gấp đôi — thắng lớn hơn cả phép sửa đầu tiên, từ một thay đổi chạm vào hai dòng code.</p>
 
@@ -297,7 +297,7 @@ PHÂN RÃ trung bình mỗi request (11.743 request):
 <h3>The obvious fix, and its measured result</h3>
 <p>So attack the database. The query selects a <code>body</code> column of 400 bytes per row that gets truncated to 100 characters anyway. Push the truncation into SQL so 30KB less crosses the wire:</p>
 
-<pre><code>-- trước
+<pre><code class="language-sql">-- trước
 SELECT id, author_id, title, body, created_at FROM notes ORDER BY id DESC LIMIT 100
 -- sau
 SELECT id, author_id, title, left(body,100) AS body, created_at FROM notes ORDER BY id DESC LIMIT 100</code></pre>
@@ -308,7 +308,7 @@ SAU:   1.980 req/giây   DB 5,107ms</div>
 <p>A 1,3% improvement. The obvious fix did essentially nothing, which means the model of the problem was wrong. Time to look inside that 5,1ms.</p>
 
 <h3>What PostgreSQL says it costs</h3>
-<pre><code>EXPLAIN (ANALYZE, BUFFERS)
+<pre><code class="language-sql">EXPLAIN (ANALYZE, BUFFERS)
 SELECT id, author_id, title, body, created_at FROM notes ORDER BY id DESC LIMIT 100;</code></pre>
 
 <div class="out">Limit  (cost=0.29..6.24 rows=100 width=234) (actual time=0.012..0.030 rows=100 loops=1)
@@ -401,7 +401,7 @@ PHÂN RÃ trung bình mỗi request (11.743 request):
 <h3>Phép sửa hiển nhiên, và kết quả đo được của nó</h3>
 <p>Vậy thì tấn công vào cơ sở dữ liệu. Câu truy vấn lấy cột <code>body</code> 400 byte mỗi dòng rồi dù sao cũng cắt còn 100 ký tự. Đẩy phép cắt xuống SQL để bớt 30KB đi qua dây:</p>
 
-<pre><code>-- trước
+<pre><code class="language-sql">-- trước
 SELECT id, author_id, title, body, created_at FROM notes ORDER BY id DESC LIMIT 100
 -- sau
 SELECT id, author_id, title, left(body,100) AS body, created_at FROM notes ORDER BY id DESC LIMIT 100</code></pre>
@@ -412,7 +412,7 @@ SAU:   1.980 req/giây   DB 5,107ms</div>
 <p>Cải thiện 1,3%. Phép sửa hiển nhiên gần như không làm gì cả, nghĩa là mô hình về vấn đề đã sai. Đến lúc nhìn vào bên trong 5,1ms ấy.</p>
 
 <h3>PostgreSQL nói nó tốn bao nhiêu</h3>
-<pre><code>EXPLAIN (ANALYZE, BUFFERS)
+<pre><code class="language-sql">EXPLAIN (ANALYZE, BUFFERS)
 SELECT id, author_id, title, body, created_at FROM notes ORDER BY id DESC LIMIT 100;</code></pre>
 
 <div class="out">Limit  (cost=0.29..6.24 rows=100 width=234) (actual time=0.012..0.030 rows=100 loops=1)
@@ -543,7 +543,7 @@ brotli q11      br                   22  873ms   943ms       1.918 B     br</div
 <h3>Where compression should actually happen</h3>
 <p>The measured 18–46% is a cost your Node process pays with the same CPU it uses to serve requests. A reverse proxy pays it with different CPU, in optimised C, and can cache the compressed result so identical responses are compressed once rather than once per request. <strong>If you have nginx or a CDN in front, compressing in Node is paying twice for one thing.</strong></p>
 
-<pre><code># nginx — nén ở đây thay vì trong Node
+<pre><code class="language-typescript"># nginx — nén ở đây thay vì trong Node
 gzip on;
 gzip_types application/json text/css application/javascript;
 gzip_min_length 1024;
@@ -644,7 +644,7 @@ brotli q11      br                   22  873ms   943ms       1.918 B     br</div
 <h3>Việc nén nên xảy ra ở đâu</h3>
 <p>Con số 18–46% đo được là cái giá mà tiến trình Node của bạn trả bằng chính cái CPU nó dùng để phục vụ request. Một reverse proxy trả cái giá đó bằng CPU khác, bằng C đã tối ưu, và còn cache được kết quả nén để những phản hồi giống nhau chỉ bị nén một lần chứ không phải mỗi request một lần. <strong>Nếu bạn đã có nginx hoặc CDN đứng trước thì nén trong Node là trả tiền hai lần cho một việc.</strong></p>
 
-<pre><code># nginx — nén ở đây thay vì trong Node
+<pre><code class="language-typescript"># nginx — nén ở đây thay vì trong Node
 gzip on;
 gzip_types application/json text/css application/javascript;
 gzip_min_length 1024;
@@ -909,7 +909,7 @@ listener    56,8MB    130,2MB   142,6MB    173,1MB  170.000       4.144MB</div>
 <p>Read the control row first, because it teaches the most common misdiagnosis. The healthy app went from 56,6MB to <strong>122,5MB and then stopped</strong> — 123,3, then 123,4. That first doubling is not a leak. It is V8 growing its heap to a comfortable working size, allocating JIT code, filling internal caches. <strong>Memory that rises and then plateaus is normal; memory that rises linearly with traffic is a leak.</strong> One data point cannot tell them apart, which is why "RSS is 120MB, is that bad?" is an unanswerable question and "RSS rose 90MB over 100.000 requests and has not stopped" is a diagnosis.</p>
 
 <h3>Leak 1: the cache with no ceiling</h3>
-<pre><code>const cache = new Map();
+<pre><code class="language-javascript">const cache = new Map();
 
 app.get('/notes/:id', (req, res) =&gt; {
   const key = req.params.id;
@@ -921,7 +921,7 @@ app.get('/notes/:id', (req, res) =&gt; {
 
 <p>The fix is one condition — and it is genuinely free:</p>
 
-<pre><code>if (cache.size &gt;= 1000) cache.delete(cache.keys().next().value);  // bỏ cái vào sớm nhất
+<pre><code class="language-typescript">if (cache.size &gt;= 1000) cache.delete(cache.keys().next().value);  // bỏ cái vào sớm nhất
 cache.set(key, value);</code></pre>
 
 <div class="out">leak: 351,5MB, 100.000 phần tử, vẫn đang tăng
@@ -934,7 +934,7 @@ lru:  125,7MB,   1.000 phần tử, PHẲNG — không phân biệt được v�
 </div>
 
 <h3>Leak 2: the listener nobody removed</h3>
-<pre><code>app.get('/notes/:id', (req, res) =&gt; {
+<pre><code class="language-typescript">app.get('/notes/:id', (req, res) =&gt; {
   process.on('customEvent', () =&gt; {});      // đăng ký, KHÔNG BAO GIỜ gỡ
   res.json({ ok: true });
 });</code></pre>
@@ -954,7 +954,7 @@ Use emitter.setMaxListeners() to increase limit</div>
 <h3>Finding a leak you cannot see</h3>
 <p>When the culprit is not obvious, take two heap snapshots and compare:</p>
 
-<pre><code>import v8 from 'node:v8';
+<pre><code class="language-javascript">import v8 from 'node:v8';
 app.get('/__heap', (req, res) =&gt; {
   const f = v8.writeHeapSnapshot();             // ⚠ CHẶN, và file to bằng cả heap
   res.json({ file: f });
@@ -1013,7 +1013,7 @@ listener    56,8MB    130,2MB   142,6MB    173,1MB  170.000       4.144MB</div>
 <p>Đọc dòng đối chứng trước, vì nó dạy cái chẩn đoán sai phổ biến nhất. Ứng dụng khoẻ mạnh đi từ 56,6MB lên <strong>122,5MB rồi DỪNG</strong> — 123,3, rồi 123,4. Lần tăng gấp đôi đầu tiên ấy <em>không</em> phải rò rỉ. Đó là V8 nới heap ra tới một cỡ làm việc thoải mái, cấp phát mã JIT, làm đầy các bộ đệm nội bộ. <strong>Bộ nhớ tăng rồi đi ngang là bình thường; bộ nhớ tăng tuyến tính theo lưu lượng là rò rỉ.</strong> Một điểm dữ liệu không phân biệt được hai thứ đó, và đó là lý do câu "RSS 120MB, có sao không?" là một câu hỏi không trả lời được, còn câu "RSS tăng 90MB qua 100.000 request và chưa dừng" là một chẩn đoán.</p>
 
 <h3>Rò rỉ 1: cái cache không có trần</h3>
-<pre><code>const cache = new Map();
+<pre><code class="language-javascript">const cache = new Map();
 
 app.get('/notes/:id', (req, res) =&gt; {
   const key = req.params.id;
@@ -1025,7 +1025,7 @@ app.get('/notes/:id', (req, res) =&gt; {
 
 <p>Phép sửa là một câu điều kiện — và nó thật sự miễn phí:</p>
 
-<pre><code>if (cache.size &gt;= 1000) cache.delete(cache.keys().next().value);  // bỏ cái vào sớm nhất
+<pre><code class="language-typescript">if (cache.size &gt;= 1000) cache.delete(cache.keys().next().value);  // bỏ cái vào sớm nhất
 cache.set(key, value);</code></pre>
 
 <div class="out">leak: 351,5MB, 100.000 phần tử, vẫn đang tăng
@@ -1038,7 +1038,7 @@ lru:  125,7MB,   1.000 phần tử, PHẲNG — không phân biệt được v�
 </div>
 
 <h3>Rò rỉ 2: cái listener không ai gỡ</h3>
-<pre><code>app.get('/notes/:id', (req, res) =&gt; {
+<pre><code class="language-typescript">app.get('/notes/:id', (req, res) =&gt; {
   process.on('customEvent', () =&gt; {});      // đăng ký, KHÔNG BAO GIỜ gỡ
   res.json({ ok: true });
 });</code></pre>
@@ -1058,7 +1058,7 @@ Use emitter.setMaxListeners() to increase limit</div>
 <h3>Tìm chỗ rò rỉ mà bạn không nhìn thấy</h3>
 <p>Khi thủ phạm không rõ ràng, hãy chụp hai ảnh heap rồi so sánh:</p>
 
-<pre><code>import v8 from 'node:v8';
+<pre><code class="language-javascript">import v8 from 'node:v8';
 app.get('/__heap', (req, res) =&gt; {
   const f = v8.writeHeapSnapshot();             // ⚠ CHẶN, và file to bằng cả heap
   res.json({ file: f });

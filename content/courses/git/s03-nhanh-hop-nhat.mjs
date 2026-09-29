@@ -57,7 +57,7 @@ ${gallery('git-03', [
 <h2>Open the box: a branch is one line of text</h2>
 <p class="lead">People arrive at Git from systems where "make a branch" meant copying the entire source tree — minutes of waiting, gigabytes of disk. That history is why branching still <em>feels</em> heavy. In Git it is not. Let us prove it rather than assert it.</p>
 
-<pre><code>cd ~/git-lab
+<pre><code class="language-bash">cd ~/git-lab
 git branch feature/login
 cat .git/refs/heads/feature/login</code></pre>
 <div class="out">3f8a1c9d2e5b7a4c6f8e0a2b4d6c8e0f2a4b6c8d</div>
@@ -66,7 +66,7 @@ cat .git/refs/heads/feature/login</code></pre>
 
 <h3>Where you are: HEAD</h3>
 ${slide('git-03', 3, 'Một nhánh = một file 41 byte')}
-<pre><code>cat .git/HEAD</code></pre>
+<pre><code class="language-bash">cat .git/HEAD</code></pre>
 <div class="out">ref: refs/heads/main</div>
 <p><code>HEAD</code> is a pointer to a <em>pointer</em>. It does not name a commit directly; it names the branch you are on, and the branch names the commit. That indirection is what makes committing work:</p>
 <div class="lz-flow">
@@ -78,7 +78,7 @@ ${slide('git-03', 3, 'Một nhánh = một file 41 byte')}
 
 <h3>Creating and switching</h3>
 ${slide('git-03', 4, 'Commit mới chỉ dời nhánh mà HEAD đang trỏ')}
-<pre><code>git branch feature/login          <span class="tok-comment"># create, stay where you are</span>
+<pre><code class="language-bash">git branch feature/login          <span class="tok-comment"># create, stay where you are</span>
 git switch feature/login          <span class="tok-comment"># move onto it</span>
 git switch -c feature/login       <span class="tok-comment"># create AND switch — what you normally want</span>
 git switch -                      <span class="tok-comment"># back to the previous branch (like cd -)</span>
@@ -104,7 +104,7 @@ git switch main                   <span class="tok-comment"># by name</span></co
 <p>Two mechanical rules: no spaces (they need quoting forever), and slashes are just characters — <code>feature/login</code> creates a real subdirectory under <code>refs/heads/</code>, which is why you cannot have both a branch <code>feature</code> and a branch <code>feature/login</code>. Git tells you so with "cannot lock ref".</p>
 
 <h3>Listing and cleaning up</h3>
-<pre><code>git branch                    <span class="tok-comment"># local branches; * marks the current one</span>
+<pre><code class="language-bash">git branch                    <span class="tok-comment"># local branches; * marks the current one</span>
 git branch -v                 <span class="tok-comment"># with the last commit of each</span>
 git branch -a                 <span class="tok-comment"># include remote-tracking branches</span>
 git branch --merged main      <span class="tok-comment"># fully merged into main — safe to delete</span>
@@ -112,14 +112,14 @@ git branch --no-merged main   <span class="tok-comment"># still carry unique wor
 <div class="out">* feature/login  3f8a1c9 fix: reject expired refresh tokens
   main           7b3e9d1 refactor(api): extract pagination
   fix/feed-500   9e2d4b7 fix(feed): stop 500 when a post has no author</div>
-<pre><code>git branch -d feature/login   <span class="tok-comment"># delete — REFUSES if it has unmerged commits</span>
+<pre><code class="language-bash">git branch -d feature/login   <span class="tok-comment"># delete — REFUSES if it has unmerged commits</span>
 git branch -D feature/login   <span class="tok-comment"># force delete — no questions asked</span>
 git branch -m old-name new-name   <span class="tok-comment"># rename</span></code></pre>
 <div class="callout ok">Use <code>-d</code>, never <code>-D</code>, as your default. Lowercase <code>-d</code> is a safety check: it refuses when the branch holds commits that exist nowhere else. When it refuses, that is information — either merge the work or deliberately choose <code>-D</code>. And even after <code>-D</code>, the commits survive in the reflog for 30 days (Chapter 4.4), so this is recoverable.</div>
 
 <h3>Detached HEAD — not an error, just a state</h3>
 ${slide('git-03', 5, 'Detached HEAD và commit bị bỏ rơi')}
-<pre><code>git switch --detach HEAD~3
+<pre><code class="language-bash">git switch --detach HEAD~3
 cat .git/HEAD</code></pre>
 <div class="out">3f8a1c9d2e5b7a4c6f8e0a2b4d6c8e0f2a4b6c8d</div>
 <p><code>HEAD</code> now holds a commit hash directly instead of a branch name. Everything works normally, with one catch: commits you make here move <em>no branch pointer</em>, so as soon as you switch away nothing refers to them and they become garbage.</p>
@@ -174,7 +174,7 @@ hint: If you are sure you want to delete it, run 'git branch -D thu/nhanh'</code
 <h2>Mở nắp hộp ra: một nhánh là một dòng chữ</h2>
 <p class="lead">Người ta đến với Git từ những hệ mà "tạo nhánh" nghĩa là chép cả cây mã nguồn — chờ vài phút, tốn vài gigabyte. Lịch sử đó là lý do việc tạo nhánh tới giờ vẫn <em>có cảm giác</em> nặng nề. Trong Git thì không. Hãy chứng minh thay vì khẳng định suông.</p>
 
-<pre><code>cd ~/git-lab
+<pre><code class="language-bash">cd ~/git-lab
 git branch feature/login
 cat .git/refs/heads/feature/login</code></pre>
 <div class="out">3f8a1c9d2e5b7a4c6f8e0a2b4d6c8e0f2a4b6c8d</div>
@@ -183,7 +183,7 @@ cat .git/refs/heads/feature/login</code></pre>
 
 <h3>Bạn đang ở đâu: HEAD</h3>
 ${slide('git-03', 3, 'Một nhánh = một file 41 byte')}
-<pre><code>cat .git/HEAD</code></pre>
+<pre><code class="language-bash">cat .git/HEAD</code></pre>
 <div class="out">ref: refs/heads/main</div>
 <p><code>HEAD</code> là con trỏ tới một <em>con trỏ</em>. Nó không gọi tên một commit trực tiếp; nó gọi tên cái nhánh bạn đang đứng, và cái nhánh mới gọi tên commit. Chính lớp gián tiếp đó làm cho việc commit chạy được:</p>
 <div class="lz-flow">
@@ -195,7 +195,7 @@ ${slide('git-03', 3, 'Một nhánh = một file 41 byte')}
 
 <h3>Tạo và chuyển</h3>
 ${slide('git-03', 4, 'Commit mới chỉ dời nhánh mà HEAD đang trỏ')}
-<pre><code>git branch feature/login          <span class="tok-comment"># tạo, vẫn đứng nguyên chỗ cũ</span>
+<pre><code class="language-bash">git branch feature/login          <span class="tok-comment"># tạo, vẫn đứng nguyên chỗ cũ</span>
 git switch feature/login          <span class="tok-comment"># bước sang nó</span>
 git switch -c feature/login       <span class="tok-comment"># tạo VÀ chuyển — thứ bạn thường muốn</span>
 git switch -                      <span class="tok-comment"># về nhánh trước đó (như cd -)</span>
@@ -221,7 +221,7 @@ git switch main                   <span class="tok-comment"># theo tên</span></
 <p>Hai luật cơ học: không có dấu cách (sẽ phải bỏ trong nháy suốt đời), và dấu gạch chéo chỉ là ký tự — <code>feature/login</code> tạo ra một thư mục con thật dưới <code>refs/heads/</code>, và vì thế bạn không thể có đồng thời một nhánh <code>feature</code> và một nhánh <code>feature/login</code>. Git báo cho bạn bằng "cannot lock ref".</p>
 
 <h3>Liệt kê và dọn dẹp</h3>
-<pre><code>git branch                    <span class="tok-comment"># nhánh cục bộ; dấu * là nhánh hiện tại</span>
+<pre><code class="language-bash">git branch                    <span class="tok-comment"># nhánh cục bộ; dấu * là nhánh hiện tại</span>
 git branch -v                 <span class="tok-comment"># kèm commit cuối của từng nhánh</span>
 git branch -a                 <span class="tok-comment"># gồm cả nhánh theo dõi remote</span>
 git branch --merged main      <span class="tok-comment"># đã hợp nhất trọn vào main — xoá được an toàn</span>
@@ -229,14 +229,14 @@ git branch --no-merged main   <span class="tok-comment"># vẫn mang công việ
 <div class="out">* feature/login  3f8a1c9 fix: reject expired refresh tokens
   main           7b3e9d1 refactor(api): extract pagination
   fix/feed-500   9e2d4b7 fix(feed): stop 500 when a post has no author</div>
-<pre><code>git branch -d feature/login   <span class="tok-comment"># xoá — TỪ CHỐI nếu còn commit chưa hợp nhất</span>
+<pre><code class="language-bash">git branch -d feature/login   <span class="tok-comment"># xoá — TỪ CHỐI nếu còn commit chưa hợp nhất</span>
 git branch -D feature/login   <span class="tok-comment"># xoá ép — không hỏi han gì</span>
 git branch -m ten-cu ten-moi  <span class="tok-comment"># đổi tên</span></code></pre>
 <div class="callout ok">Hãy để <code>-d</code>, không phải <code>-D</code>, làm mặc định của bạn. Chữ <code>-d</code> thường là một chốt an toàn: nó từ chối khi nhánh giữ những commit không tồn tại ở chỗ nào khác. Khi nó từ chối, đó là THÔNG TIN — hoặc bạn hợp nhất phần việc đó, hoặc bạn chủ ý chọn <code>-D</code>. Và kể cả sau <code>-D</code>, các commit vẫn sống trong reflog 30 ngày (bài 4.4), nên chuyện này cứu được.</div>
 
 <h3>HEAD lìa cành — không phải lỗi, chỉ là một trạng thái</h3>
 ${slide('git-03', 5, 'Detached HEAD và commit bị bỏ rơi')}
-<pre><code>git switch --detach HEAD~3
+<pre><code class="language-bash">git switch --detach HEAD~3
 cat .git/HEAD</code></pre>
 <div class="out">3f8a1c9d2e5b7a4c6f8e0a2b4d6c8e0f2a4b6c8d</div>
 <p><code>HEAD</code> giờ giữ thẳng một mã băm commit thay vì tên một nhánh. Mọi thứ chạy bình thường, trừ một điều: commit bạn tạo ở đây <em>không dời con trỏ nhánh nào</em>, nên vừa chuyển đi chỗ khác là không còn gì trỏ tới chúng và chúng thành rác.</p>
@@ -310,7 +310,7 @@ ${slide('git-03', 6, 'Fast-forward: trước và sau')}
   <div class="lz-node"><div class="lz-badge">A</div><div class="lz-nbody"><div class="lz-ntitle">7b3e9d1 ← main</div><div class="lz-nsub">where you forked. main is still here.</div></div></div>
 </div>
 <p>Commit A is an <em>ancestor</em> of C, so there is nothing to reconcile — everything in <code>main</code> is already in <code>feature/login</code>. Git simply slides the <code>main</code> pointer forward:</p>
-<pre><code>git switch main
+<pre><code class="language-bash">git switch main
 git merge feature/login</code></pre>
 <div class="out">Updating 7b3e9d1..1a2b3c4
 Fast-forward
@@ -334,7 +334,7 @@ ${slide('git-03', 7, 'Hợp nhất ba chiều: commit merge có hai cha')}
   <div class="lz-step"><div class="lz-k">3</div><div class="lz-t">Combine both sets of changes</div><div class="lz-d">Different files or different regions → applied automatically. Same lines → a conflict (3.3).</div></div>
   <div class="lz-step"><div class="lz-k">4</div><div class="lz-t">Commit with TWO parents</div><div class="lz-d">A merge commit: parent 1 = main (D), parent 2 = feature (C).</div></div>
 </div>
-<pre><code>git merge feature/login</code></pre>
+<pre><code class="language-bash">git merge feature/login</code></pre>
 <div class="out">Merge made by the 'ort' strategy.
  src/services/auth.service.ts | 22 ++++++++++++++++++++++
  1 file changed, 22 insertions(+)</div>
@@ -342,7 +342,7 @@ ${slide('git-03', 7, 'Hợp nhất ba chiều: commit merge có hai cha')}
 
 <h3>Seeing the two shapes</h3>
 ${slide('git-03', 8, 'Đọc git log --graph và chọn kiểu merge')}
-<pre><code>git log --oneline --graph -6</code></pre>
+<pre><code class="language-bash">git log --oneline --graph -6</code></pre>
 <div class="out">*   8c4f2a1 (HEAD -&gt; main) Merge branch 'feature/login'
 |\\
 | * 1a2b3c4 (feature/login) fix: reject expired refresh tokens
@@ -353,7 +353,7 @@ ${slide('git-03', 8, 'Đọc git log --graph và chọn kiểu merge')}
 <p>Read it bottom-up: at <code>7b3e9d1</code> history splits (<code>|/</code>), the two sides develop in parallel, and at <code>8c4f2a1</code> they join (<code>|\\</code>). That merge commit has two parents — <code>HEAD^1</code> is main's side, <code>HEAD^2</code> is the feature's side, which is the practical use for the caret notation from 1.2.</p>
 
 <h3>Forcing a merge commit: --no-ff</h3>
-<pre><code>git merge --no-ff feature/login</code></pre>
+<pre><code class="language-bash">git merge --no-ff feature/login</code></pre>
 <div class="out">Merge made by the 'ort' strategy.</div>
 <p>Even when a fast-forward is possible, <code>--no-ff</code> creates a merge commit anyway. Teams choose between the two deliberately:</p>
 <div class="kv-grid">
@@ -365,17 +365,17 @@ ${slide('git-03', 8, 'Đọc git log --graph và chọn kiểu merge')}
 <div class="callout ok"><code>git log --first-parent --oneline</code> on a <code>--no-ff</code> history lists only the merge commits — one line per feature that landed, ignoring the dozens of "wip" commits inside each. On a release branch that is the changelog, almost for free.</div>
 
 <h3>Aborting and inspecting</h3>
-<pre><code>git merge --abort      <span class="tok-comment"># mid-conflict: return everything to before the merge</span>
+<pre><code class="language-bash">git merge --abort      <span class="tok-comment"># mid-conflict: return everything to before the merge</span>
 git merge --no-commit feature/login   <span class="tok-comment"># merge but stop before committing, to inspect</span>
 git merge-base main feature/login     <span class="tok-comment"># which commit is the common ancestor?</span>
 git diff HEAD^1 HEAD                  <span class="tok-comment"># what the merge changed relative to main</span>
 git diff HEAD^2 HEAD                  <span class="tok-comment"># …relative to the feature branch</span></code></pre>
 
 <h3>"Refusing to merge unrelated histories"</h3>
-<pre><code>git merge other-project/main</code></pre>
+<pre><code class="language-bash">git merge other-project/main</code></pre>
 <div class="out">fatal: refusing to merge unrelated histories</div>
 <p>There is no common ancestor at all — the two histories were created independently (a repository initialised twice, or a template repo pasted over your own). Git refuses because a three-way merge with no base would treat <em>every</em> file as a conflict. The escape hatch exists, but understand what it means before using it:</p>
-<pre><code>git merge other-project/main --allow-unrelated-histories</code></pre>
+<pre><code class="language-bash">git merge other-project/main --allow-unrelated-histories</code></pre>
 <div class="callout warn">Ninety per cent of the time this error means you did something unintended — cloned into an existing folder, or ran <code>git init</code> in a directory that was already a repository. Check <code>git log --oneline | tail -3</code> on both sides first. If the root commits differ, the flag is right; if you did not expect two roots, the flag will bury the real mistake.</div>
 
 <h3>🧪 Practice (15–20 min)</h3>
@@ -430,7 +430,7 @@ ${slide('git-03', 6, 'Fast-forward: trước và sau')}
   <div class="lz-node"><div class="lz-badge">A</div><div class="lz-nbody"><div class="lz-ntitle">7b3e9d1 ← main</div><div class="lz-nsub">chỗ bạn rẽ ra. main vẫn còn ở đây.</div></div></div>
 </div>
 <p>Commit A là <em>tổ tiên</em> của C, nên không có gì phải điều hoà — mọi thứ trong <code>main</code> đã có sẵn trong <code>feature/login</code>. Git chỉ việc trượt con trỏ <code>main</code> tiến lên:</p>
-<pre><code>git switch main
+<pre><code class="language-bash">git switch main
 git merge feature/login</code></pre>
 <div class="out">Updating 7b3e9d1..1a2b3c4
 Fast-forward
@@ -454,7 +454,7 @@ ${slide('git-03', 7, 'Hợp nhất ba chiều: commit merge có hai cha')}
   <div class="lz-step"><div class="lz-k">3</div><div class="lz-t">Ghép hai bộ thay đổi</div><div class="lz-d">File khác nhau hoặc vùng khác nhau → áp tự động. Cùng những dòng đó → một xung đột (bài 3.3).</div></div>
   <div class="lz-step"><div class="lz-k">4</div><div class="lz-t">Commit với HAI cha</div><div class="lz-d">Một commit hợp nhất: cha 1 = main (D), cha 2 = feature (C).</div></div>
 </div>
-<pre><code>git merge feature/login</code></pre>
+<pre><code class="language-bash">git merge feature/login</code></pre>
 <div class="out">Merge made by the 'ort' strategy.
  src/services/auth.service.ts | 22 ++++++++++++++++++++++
  1 file changed, 22 insertions(+)</div>
@@ -462,7 +462,7 @@ ${slide('git-03', 7, 'Hợp nhất ba chiều: commit merge có hai cha')}
 
 <h3>Nhìn thấy hai hình dạng</h3>
 ${slide('git-03', 8, 'Đọc git log --graph và chọn kiểu merge')}
-<pre><code>git log --oneline --graph -6</code></pre>
+<pre><code class="language-bash">git log --oneline --graph -6</code></pre>
 <div class="out">*   8c4f2a1 (HEAD -&gt; main) Merge branch 'feature/login'
 |\\
 | * 1a2b3c4 (feature/login) fix: reject expired refresh tokens
@@ -473,7 +473,7 @@ ${slide('git-03', 8, 'Đọc git log --graph và chọn kiểu merge')}
 <p>Đọc từ dưới lên: ở <code>7b3e9d1</code> lịch sử tách đôi (<code>|/</code>), hai bên phát triển song song, và ở <code>8c4f2a1</code> chúng nhập lại (<code>|\\</code>). Commit hợp nhất đó có hai cha — <code>HEAD^1</code> là phía main, <code>HEAD^2</code> là phía feature, và đó là công dụng thực tế của ký hiệu dấu mũ ở bài 1.2.</p>
 
 <h3>Ép tạo commit hợp nhất: --no-ff</h3>
-<pre><code>git merge --no-ff feature/login</code></pre>
+<pre><code class="language-bash">git merge --no-ff feature/login</code></pre>
 <div class="out">Merge made by the 'ort' strategy.</div>
 <p>Ngay cả khi fast-forward là khả thi, <code>--no-ff</code> vẫn tạo một commit hợp nhất. Các nhóm chọn giữa hai cách này một cách có chủ ý:</p>
 <div class="kv-grid">
@@ -485,17 +485,17 @@ ${slide('git-03', 8, 'Đọc git log --graph và chọn kiểu merge')}
 <div class="callout ok"><code>git log --first-parent --oneline</code> trên một lịch sử <code>--no-ff</code> chỉ liệt kê các commit hợp nhất — mỗi tính năng đã đáp xuống một dòng, bỏ qua hàng chục commit "wip" bên trong từng cái. Trên một nhánh phát hành thì đó gần như là changelog cho không.</div>
 
 <h3>Huỷ bỏ và soi xét</h3>
-<pre><code>git merge --abort      <span class="tok-comment"># đang giữa xung đột: trả mọi thứ về trước lúc merge</span>
+<pre><code class="language-bash">git merge --abort      <span class="tok-comment"># đang giữa xung đột: trả mọi thứ về trước lúc merge</span>
 git merge --no-commit feature/login   <span class="tok-comment"># hợp nhất nhưng dừng trước khi commit, để soi</span>
 git merge-base main feature/login     <span class="tok-comment"># commit nào là tổ tiên chung?</span>
 git diff HEAD^1 HEAD                  <span class="tok-comment"># lần merge đã đổi gì so với main</span>
 git diff HEAD^2 HEAD                  <span class="tok-comment"># …so với nhánh feature</span></code></pre>
 
 <h3>"Refusing to merge unrelated histories"</h3>
-<pre><code>git merge other-project/main</code></pre>
+<pre><code class="language-bash">git merge other-project/main</code></pre>
 <div class="out">fatal: refusing to merge unrelated histories</div>
 <p>Hoàn toàn không có tổ tiên chung — hai lịch sử được tạo ra độc lập (một kho được init hai lần, hoặc một kho mẫu dán đè lên kho của bạn). Git từ chối vì một hợp nhất ba chiều mà không có điểm gốc sẽ coi <em>mọi</em> file là xung đột. Có cửa thoát, nhưng hãy hiểu nó nghĩa là gì trước khi dùng:</p>
-<pre><code>git merge other-project/main --allow-unrelated-histories</code></pre>
+<pre><code class="language-bash">git merge other-project/main --allow-unrelated-histories</code></pre>
 <div class="callout warn">Chín mươi phần trăm trường hợp, lỗi này nghĩa là bạn đã làm một việc ngoài ý định — clone vào một thư mục đã có sẵn, hoặc chạy <code>git init</code> trong một thư mục vốn đã là kho mã. Hãy kiểm <code>git log --oneline | tail -3</code> ở cả hai phía trước. Nếu commit gốc khác nhau thì cái cờ là đúng; nếu bạn không hề chờ đợi có hai gốc thì cái cờ sẽ chôn vùi sai lầm thật.</div>
 
 <h3>🧪 Thực hành (15–20 phút)</h3>
@@ -549,14 +549,14 @@ git show --no-patch --format="%h cha: %p" HEAD
 <h2>A conflict is a question, not an error</h2>
 <p class="lead">Git resolves most merges silently. A conflict means it reached a spot where both sides changed <em>the same lines</em> and it has no basis for choosing. It is not a failure — it is Git correctly refusing to guess. Your job is to answer the question, and the panic most people feel comes entirely from not knowing how to read what is on screen.</p>
 
-<pre><code>git merge feature/login</code></pre>
+<pre><code class="language-bash">git merge feature/login</code></pre>
 <div class="out">Auto-merging src/services/auth.service.ts
 CONFLICT (content): Merge conflict in src/services/auth.service.ts
 Automatic merge failed; fix conflicts and then commit the result.</div>
 <div class="callout ok">Nothing is broken and nothing is lost. The merge is <em>paused</em>. <code>git merge --abort</code> returns you to exactly where you were, at any point, until you commit. Knowing that escape hatch exists is what makes it possible to work calmly.</div>
 
 <h3>Reading the markers</h3>
-<pre><code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+<pre><code class="language-javascript">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
   const ttl = 60 * 60;          <span class="tok-comment">// 1 hour</span>
 =======
   const ttl = 15 * 60;          <span class="tok-comment">// 15 minutes</span>
@@ -570,8 +570,8 @@ Automatic merge failed; fix conflicts and then commit the result.</div>
 
 <h3>diff3 — see what the line looked like BEFORE either side touched it</h3>
 ${slide('git-03', 9, 'Đọc một vùng xung đột kiểu zdiff3')}
-<pre><code>git config --global merge.conflictStyle zdiff3</code></pre>
-<pre><code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+<pre><code class="language-bash">git config --global merge.conflictStyle zdiff3</code></pre>
+<pre><code class="language-javascript">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
   const ttl = 60 * 60;          <span class="tok-comment">// 1 hour</span>
 ||||||| 7b3e9d1
   const ttl = 30 * 60;          <span class="tok-comment">// 30 minutes</span>
@@ -589,7 +589,7 @@ ${slide('git-03', 10, 'Bốn bước giải xung đột')}
   <div class="lz-step"><div class="lz-k">3</div><div class="lz-t">Mark it resolved</div><div class="lz-d"><code>git add &lt;file&gt;</code>. Staging a conflicted file is how you tell Git "this one is settled".</div></div>
   <div class="lz-step"><div class="lz-k">4</div><div class="lz-t">Finish and TEST</div><div class="lz-d"><code>git commit</code> (the message is pre-filled), then actually run the tests.</div></div>
 </div>
-<pre><code>git status</code></pre>
+<pre><code class="language-bash">git status</code></pre>
 <div class="out">You have unmerged paths.
   (fix conflicts and run "git commit")
   (use "git merge --abort" to abort the merge)
@@ -600,7 +600,7 @@ Unmerged paths:
 <p>The result does not have to be either side. Often the right answer is a third thing — both features, combined properly. Git is asking what the code <em>should</em> be, not which side wins.</p>
 
 <h3>When one side is simply right</h3>
-<pre><code>git checkout --ours  src/config.ts     <span class="tok-comment"># keep MY version entirely</span>
+<pre><code class="language-bash">git checkout --ours  src/config.ts     <span class="tok-comment"># keep MY version entirely</span>
 git checkout --theirs src/config.ts    <span class="tok-comment"># keep THEIR version entirely</span>
 git add src/config.ts</code></pre>
 <p>Useful for generated files — a lockfile, a build artefact, a snapshot. For hand-written code, prefer reading both: "ours" is usually a polite way of discarding a colleague's work without looking at it.</p>
@@ -615,13 +615,13 @@ git add src/config.ts</code></pre>
 </div>
 
 <h3>Tools that help</h3>
-<pre><code>git diff                       <span class="tok-comment"># during a conflict, shows a combined diff of the mess</span>
+<pre><code class="language-bash">git diff                       <span class="tok-comment"># during a conflict, shows a combined diff of the mess</span>
 git diff --name-only --diff-filter=U   <span class="tok-comment"># just the conflicted paths</span>
 git mergetool                  <span class="tok-comment"># open a three-pane visual tool</span>
 git config --global merge.tool vscode
 git config --global mergetool.vscode.cmd <span class="tok-string">'code --wait \$MERGED'</span></code></pre>
 <p>And the feature that pays off in long-lived branches:</p>
-<pre><code>git config --global rerere.enabled true</code></pre>
+<pre><code class="language-bash">git config --global rerere.enabled true</code></pre>
 <p><strong>rerere</strong> = "reuse recorded resolution". Git remembers how you resolved a particular conflict and replays that resolution automatically the next time the identical conflict appears. On a branch you rebase repeatedly, or a long-running merge you redo after every upstream change, this turns the same manual fix from a daily chore into a one-off.</p>
 
 <h3>Preventing conflicts is cheaper than resolving them</h3>
@@ -680,14 +680,14 @@ config.txt:7: leftover conflict marker</code></pre>
 <h2>Một xung đột là một CÂU HỎI, không phải một lỗi</h2>
 <p class="lead">Git hợp nhất phần lớn mọi thứ trong im lặng. Một xung đột nghĩa là nó gặp một chỗ mà cả hai bên cùng sửa <em>đúng những dòng đó</em> và nó không có căn cứ nào để chọn. Đó không phải thất bại — đó là Git từ chối đoán mò, một cách đúng đắn. Việc của bạn là trả lời câu hỏi, và nỗi hoảng loạn mà đa số người cảm thấy hoàn toàn đến từ việc không biết đọc thứ đang hiện trên màn hình.</p>
 
-<pre><code>git merge feature/login</code></pre>
+<pre><code class="language-bash">git merge feature/login</code></pre>
 <div class="out">Auto-merging src/services/auth.service.ts
 CONFLICT (content): Merge conflict in src/services/auth.service.ts
 Automatic merge failed; fix conflicts and then commit the result.</div>
 <div class="callout ok">Không có gì hỏng và không có gì mất. Việc hợp nhất đang <em>tạm dừng</em>. <code>git merge --abort</code> trả bạn về đúng chỗ bạn vừa đứng, ở bất kỳ thời điểm nào, cho tới khi bạn commit. Biết là có cửa thoát đó chính là thứ cho phép bạn làm việc bình tĩnh.</div>
 
 <h3>Đọc các ký hiệu</h3>
-<pre><code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+<pre><code class="language-javascript">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
   const ttl = 60 * 60;          <span class="tok-comment">// 1 giờ</span>
 =======
   const ttl = 15 * 60;          <span class="tok-comment">// 15 phút</span>
@@ -701,8 +701,8 @@ Automatic merge failed; fix conflicts and then commit the result.</div>
 
 <h3>diff3 — nhìn thấy dòng đó trông thế nào TRƯỚC khi cả hai bên đụng vào</h3>
 ${slide('git-03', 9, 'Đọc một vùng xung đột kiểu zdiff3')}
-<pre><code>git config --global merge.conflictStyle zdiff3</code></pre>
-<pre><code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+<pre><code class="language-bash">git config --global merge.conflictStyle zdiff3</code></pre>
+<pre><code class="language-javascript">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
   const ttl = 60 * 60;          <span class="tok-comment">// 1 giờ</span>
 ||||||| 7b3e9d1
   const ttl = 30 * 60;          <span class="tok-comment">// 30 phút</span>
@@ -720,7 +720,7 @@ ${slide('git-03', 10, 'Bốn bước giải xung đột')}
   <div class="lz-step"><div class="lz-k">3</div><div class="lz-t">Đánh dấu đã giải quyết</div><div class="lz-d"><code>git add &lt;file&gt;</code>. Đưa một file xung đột vào staging chính là cách bạn nói với Git "cái này xong rồi".</div></div>
   <div class="lz-step"><div class="lz-k">4</div><div class="lz-t">Kết thúc và CHẠY TEST</div><div class="lz-d"><code>git commit</code> (lời nhắn đã điền sẵn), rồi thật sự chạy bộ test.</div></div>
 </div>
-<pre><code>git status</code></pre>
+<pre><code class="language-bash">git status</code></pre>
 <div class="out">You have unmerged paths.
   (fix conflicts and run "git commit")
   (use "git merge --abort" to abort the merge)
@@ -731,7 +731,7 @@ Unmerged paths:
 <p>Kết quả không nhất thiết phải là một trong hai bên. Thường câu trả lời đúng là một thứ thứ ba — cả hai tính năng, ghép lại cho đúng. Git đang hỏi mã <em>nên</em> như thế nào, chứ không hỏi bên nào thắng.</p>
 
 <h3>Khi một bên đơn giản là đúng</h3>
-<pre><code>git checkout --ours  src/config.ts     <span class="tok-comment"># giữ nguyên phiên bản CỦA TÔI</span>
+<pre><code class="language-bash">git checkout --ours  src/config.ts     <span class="tok-comment"># giữ nguyên phiên bản CỦA TÔI</span>
 git checkout --theirs src/config.ts    <span class="tok-comment"># giữ nguyên phiên bản CỦA HỌ</span>
 git add src/config.ts</code></pre>
 <p>Hữu ích cho file sinh tự động — một lockfile, một sản phẩm build, một snapshot. Với mã viết tay thì nên đọc cả hai: "ours" thường là một cách lịch sự để vứt bỏ việc của đồng nghiệp mà không thèm nhìn.</p>
@@ -746,13 +746,13 @@ git add src/config.ts</code></pre>
 </div>
 
 <h3>Những công cụ giúp được</h3>
-<pre><code>git diff                       <span class="tok-comment"># khi đang xung đột, hiện một diff gộp của mớ bòng bong</span>
+<pre><code class="language-bash">git diff                       <span class="tok-comment"># khi đang xung đột, hiện một diff gộp của mớ bòng bong</span>
 git diff --name-only --diff-filter=U   <span class="tok-comment"># chỉ những đường dẫn đang xung đột</span>
 git mergetool                  <span class="tok-comment"># mở một công cụ trực quan ba khung</span>
 git config --global merge.tool vscode
 git config --global mergetool.vscode.cmd <span class="tok-string">'code --wait \$MERGED'</span></code></pre>
 <p>Và tính năng sinh lời trên những nhánh sống lâu:</p>
-<pre><code>git config --global rerere.enabled true</code></pre>
+<pre><code class="language-bash">git config --global rerere.enabled true</code></pre>
 <p><strong>rerere</strong> = "reuse recorded resolution" (dùng lại cách giải đã ghi). Git nhớ cách bạn giải một xung đột cụ thể và tự phát lại cách giải đó vào lần sau khi đúng xung đột ấy xuất hiện. Trên một nhánh bạn rebase nhiều lần, hay một lần merge dài hơi mà bạn làm lại sau mỗi thay đổi từ thượng nguồn, nó biến đúng một thao tác tay từ việc phải làm mỗi ngày thành việc chỉ làm một lần.</p>
 
 <h3>Ngăn xung đột rẻ hơn giải xung đột</h3>
@@ -822,7 +822,7 @@ config.txt:7: leftover conflict marker</code></pre>
 
 <h3>What rebase actually does</h3>
 ${slide('git-03', 11, 'Rebase sao chép commit, mã băm mới')}
-<pre><code>git switch feature/login
+<pre><code class="language-bash">git switch feature/login
 git rebase main</code></pre>
 <div class="out">Successfully rebased and updated refs/heads/feature/login.</div>
 <div class="lz-flow">
@@ -835,7 +835,7 @@ git rebase main</code></pre>
 
 <h3>The two shapes, side by side</h3>
 ${slide('git-03', 12, 'Merge vs rebase và luật vàng')}
-<pre><code><span class="tok-comment"># After merge — the fork is visible forever</span>
+<pre><code class="language-bash"><span class="tok-comment"># After merge — the fork is visible forever</span>
 git log --oneline --graph -5</code></pre>
 <div class="out">*   8c4f2a1 (HEAD -&gt; feature/login) Merge branch 'main' into feature/login
 |\\
@@ -844,7 +844,7 @@ git log --oneline --graph -5</code></pre>
 * | 9e2d4b7 feat(auth): add refresh token rotation
 |/
 * 7b3e9d1 refactor(api): extract pagination</div>
-<pre><code><span class="tok-comment"># After rebase — as if you had started from main's tip all along</span>
+<pre><code class="language-bash"><span class="tok-comment"># After rebase — as if you had started from main's tip all along</span>
 git log --oneline --graph -5</code></pre>
 <div class="out">* d4e8f0a (HEAD -&gt; feature/login) fix: reject expired refresh tokens
 * b2c6a91 feat(auth): add refresh token rotation
@@ -869,12 +869,12 @@ git log --oneline --graph -5</code></pre>
 <h3>Conflicts during a rebase</h3>
 ${slide('git-03', 13, 'Xung đột khi rebase: nhãn bị đảo')}
 <p>The mechanics differ from a merge: rebase replays commits one at a time, so it can stop several times.</p>
-<pre><code>git rebase main</code></pre>
+<pre><code class="language-bash">git rebase main</code></pre>
 <div class="out">CONFLICT (content): Merge conflict in src/services/auth.service.ts
 error: could not apply 9e2d4b7… feat(auth): add refresh token rotation
 Resolve all conflicts manually, mark them as resolved with
 "git add/rm &lt;conflicted_files&gt;", then run "git rebase --continue".</div>
-<pre><code><span class="tok-comment"># fix the file, then:</span>
+<pre><code class="language-bash"><span class="tok-comment"># fix the file, then:</span>
 git add src/services/auth.service.ts
 git rebase --continue          <span class="tok-comment"># on to the next commit</span>
 git rebase --skip              <span class="tok-comment"># drop THIS commit (it is already upstream)</span>
@@ -883,7 +883,7 @@ git rebase --abort             <span class="tok-comment"># give up entirely, bac
 <p>And this is where <code>rerere</code> (3.3) earns its keep: on a rebase of ten commits through the same conflicting region, it resolves nine of them for you after you solve the first.</p>
 
 <h3>git pull is merge or rebase — pick deliberately</h3>
-<pre><code>git pull                       <span class="tok-comment"># = git fetch + git merge origin/main (default)</span>
+<pre><code class="language-bash">git pull                       <span class="tok-comment"># = git fetch + git merge origin/main (default)</span>
 git pull --rebase              <span class="tok-comment"># = git fetch + git rebase origin/main</span>
 git config --global pull.rebase true      <span class="tok-comment"># make --rebase the default</span>
 git config --global pull.ff only          <span class="tok-comment"># or: refuse to pull unless fast-forward</span></code></pre>
@@ -891,7 +891,7 @@ git config --global pull.ff only          <span class="tok-comment"># or: refuse
 <div class="callout ok"><code>pull.rebase true</code> is safe for the everyday case even under the golden rule: you are rebasing <em>your own unpushed commits</em> onto what the server already has. Nobody else has your local commits, so nothing is being rewritten out from under anyone. This is the setting most teams end up standardising on.</div>
 
 <h3>Rebasing onto a different base</h3>
-<pre><code>git rebase --onto main feature/base feature/child</code></pre>
+<pre><code class="language-bash">git rebase --onto main feature/base feature/child</code></pre>
 <p>Read it as "take the commits in <code>feature/base..feature/child</code> and replay them onto <code>main</code>". The use case: you branched off another feature branch, that branch got squashed into main, and now your branch's parent commits no longer exist. <code>--onto</code> transplants only your own commits and leaves the vanished ones behind.</p>
 
 <h3>🧪 Practice (15–20 min)</h3>
@@ -945,7 +945,7 @@ c17550f HEAD@{4}: checkout: moving from main to feature/rebase</code></pre>
 
 <h3>Rebase thật sự làm gì</h3>
 ${slide('git-03', 11, 'Rebase sao chép commit, mã băm mới')}
-<pre><code>git switch feature/login
+<pre><code class="language-bash">git switch feature/login
 git rebase main</code></pre>
 <div class="out">Successfully rebased and updated refs/heads/feature/login.</div>
 <div class="lz-flow">
@@ -958,7 +958,7 @@ git rebase main</code></pre>
 
 <h3>Hai hình dạng, đặt cạnh nhau</h3>
 ${slide('git-03', 12, 'Merge vs rebase và luật vàng')}
-<pre><code><span class="tok-comment"># Sau merge — chỗ rẽ nhánh nhìn thấy được mãi mãi</span>
+<pre><code class="language-bash"><span class="tok-comment"># Sau merge — chỗ rẽ nhánh nhìn thấy được mãi mãi</span>
 git log --oneline --graph -5</code></pre>
 <div class="out">*   8c4f2a1 (HEAD -&gt; feature/login) Merge branch 'main' into feature/login
 |\\
@@ -967,7 +967,7 @@ git log --oneline --graph -5</code></pre>
 * | 9e2d4b7 feat(auth): add refresh token rotation
 |/
 * 7b3e9d1 refactor(api): extract pagination</div>
-<pre><code><span class="tok-comment"># Sau rebase — như thể bạn đã bắt đầu từ đầu main ngay từ đầu</span>
+<pre><code class="language-bash"><span class="tok-comment"># Sau rebase — như thể bạn đã bắt đầu từ đầu main ngay từ đầu</span>
 git log --oneline --graph -5</code></pre>
 <div class="out">* d4e8f0a (HEAD -&gt; feature/login) fix: reject expired refresh tokens
 * b2c6a91 feat(auth): add refresh token rotation
@@ -992,12 +992,12 @@ git log --oneline --graph -5</code></pre>
 <h3>Xung đột trong lúc rebase</h3>
 ${slide('git-03', 13, 'Xung đột khi rebase: nhãn bị đảo')}
 <p>Cơ chế khác với merge: rebase phát lại từng commit một, nên nó có thể dừng lại nhiều lần.</p>
-<pre><code>git rebase main</code></pre>
+<pre><code class="language-bash">git rebase main</code></pre>
 <div class="out">CONFLICT (content): Merge conflict in src/services/auth.service.ts
 error: could not apply 9e2d4b7… feat(auth): add refresh token rotation
 Resolve all conflicts manually, mark them as resolved with
 "git add/rm &lt;conflicted_files&gt;", then run "git rebase --continue".</div>
-<pre><code><span class="tok-comment"># sửa file, rồi:</span>
+<pre><code class="language-bash"><span class="tok-comment"># sửa file, rồi:</span>
 git add src/services/auth.service.ts
 git rebase --continue          <span class="tok-comment"># sang commit kế tiếp</span>
 git rebase --skip              <span class="tok-comment"># bỏ commit NÀY (nó đã có ở thượng nguồn rồi)</span>
@@ -1006,7 +1006,7 @@ git rebase --abort             <span class="tok-comment"># bỏ hẳn, về trư
 <p>Và đây là chỗ <code>rerere</code> (bài 3.3) trả công: khi rebase mười commit đi qua cùng một vùng xung đột, nó giải hộ bạn chín cái sau khi bạn giải cái đầu tiên.</p>
 
 <h3>git pull là merge hay rebase — hãy chọn có chủ ý</h3>
-<pre><code>git pull                       <span class="tok-comment"># = git fetch + git merge origin/main (mặc định)</span>
+<pre><code class="language-bash">git pull                       <span class="tok-comment"># = git fetch + git merge origin/main (mặc định)</span>
 git pull --rebase              <span class="tok-comment"># = git fetch + git rebase origin/main</span>
 git config --global pull.rebase true      <span class="tok-comment"># lấy --rebase làm mặc định</span>
 git config --global pull.ff only          <span class="tok-comment"># hoặc: từ chối pull trừ khi fast-forward</span></code></pre>
@@ -1014,7 +1014,7 @@ git config --global pull.ff only          <span class="tok-comment"># hoặc: t�
 <div class="callout ok"><code>pull.rebase true</code> an toàn cho trường hợp hằng ngày kể cả dưới luật vàng: bạn đang rebase <em>những commit chưa push của chính mình</em> lên trên thứ máy chủ đã có. Không ai khác có commit cục bộ của bạn, nên không có gì bị viết lại dưới chân người khác. Đây là thiết lập mà đa số nhóm rốt cuộc chuẩn hoá theo.</div>
 
 <h3>Rebase lên một gốc khác</h3>
-<pre><code>git rebase --onto main feature/base feature/child</code></pre>
+<pre><code class="language-bash">git rebase --onto main feature/base feature/child</code></pre>
 <p>Đọc nó là "lấy các commit trong <code>feature/base..feature/child</code> và phát lại lên <code>main</code>". Tình huống dùng: bạn rẽ nhánh từ một nhánh tính năng khác, nhánh đó bị gộp (squash) vào main, và giờ các commit cha của nhánh bạn không còn tồn tại. <code>--onto</code> ghép sang chỉ những commit của riêng bạn và bỏ lại những cái đã biến mất.</p>
 
 <h3>🧪 Thực hành (15–20 phút)</h3>
@@ -1075,7 +1075,7 @@ c17550f HEAD@{4}: checkout: moving from main to feature/rebase</code></pre>
 <h2>Turning ten "wip" commits into three good ones</h2>
 <p class="lead">You committed small and often, exactly as Chapter 1.3 recommended. Your branch now reads: <code>wip</code>, <code>fix typo</code>, <code>actually fix it</code>, <code>oops</code>, <code>final</code>. That is fine while working and embarrassing in review. Interactive rebase lets you rewrite that into the history you <em>meant</em> to write, before anyone else sees it.</p>
 
-<pre><code>git rebase -i main            <span class="tok-comment"># every commit on this branch since main</span>
+<pre><code class="language-bash">git rebase -i main            <span class="tok-comment"># every commit on this branch since main</span>
 git rebase -i HEAD~5          <span class="tok-comment"># the last five commits</span>
 git rebase -i 7b3e9d1         <span class="tok-comment"># everything AFTER that commit</span></code></pre>
 <p>Your editor opens with a to-do list. Nothing has happened yet — this is a script you are editing, and Git will execute it when you save and close:</p>
@@ -1119,14 +1119,14 @@ fixup  5f7a9c2 fix typo
 fixup  d4e8f0a actually fix it
 reword b2c6a91 add tests</code></pre>
 <p>Save and close. Git replays: the first commit is kept, the next three are folded into it and their messages discarded, and the test commit stays separate — marked <code>reword</code>, so Git stops once and lets you rename "add tests" to <code>test(auth): cover the expired-token path</code>.</p>
-<pre><code>git log --oneline main..HEAD</code></pre>
+<pre><code class="language-bash">git log --oneline main..HEAD</code></pre>
 <div class="out">c7f1a30 test(auth): cover the expired-token path
 e8b4d92 feat(auth): add refresh token rotation</div>
 <p>Five commits became two, and both mean something. That is the branch a reviewer wants: one commit per idea, each with a message that explains itself.</p>
 
 <h3>Splitting a commit that does two things</h3>
 <p>Mark it <code>edit</code>. When the rebase stops there:</p>
-<pre><code>git reset HEAD~                <span class="tok-comment"># undo the commit, keep the changes in the working dir</span>
+<pre><code class="language-bash">git reset HEAD~                <span class="tok-comment"># undo the commit, keep the changes in the working dir</span>
 git add -p src/auth.ts         <span class="tok-comment"># stage only the first idea (1.3)</span>
 git commit -m <span class="tok-string">"fix: hash passwords with bcrypt"</span>
 git add .
@@ -1136,29 +1136,29 @@ git rebase --continue</code></pre>
 
 <h3>--autosquash: mark the fixups as you go</h3>
 <p>Rather than editing the to-do list by hand, label the fix at the moment you make it:</p>
-<pre><code><span class="tok-comment"># You spot a typo in a commit you made an hour ago:</span>
+<pre><code class="language-bash"><span class="tok-comment"># You spot a typo in a commit you made an hour ago:</span>
 git commit --fixup 9e2d4b7          <span class="tok-comment"># message becomes "fixup! feat(auth): add refresh…"</span>
 git commit --squash 9e2d4b7         <span class="tok-comment"># same, but keeps the message for the combined commit</span>
 
 <span class="tok-comment"># Later, when tidying the branch:</span>
 git rebase -i --autosquash main</code></pre>
 <p>Git pre-arranges the to-do list: each <code>fixup!</code> commit is moved directly below its target and marked <code>fixup</code>. You usually just save and close. Make it permanent:</p>
-<pre><code>git config --global rebase.autosquash true</code></pre>
+<pre><code class="language-bash">git config --global rebase.autosquash true</code></pre>
 <div class="callout ok">This is the workflow that makes "commit small" and "clean history" compatible instead of opposed. Commit whenever anything works, mark corrections with <code>--fixup</code>, and one <code>rebase -i --autosquash</code> before the pull request produces a history that looks planned.</div>
 
 <h3>When it goes wrong</h3>
 ${slide('git-03', 16, 'Cứu một lần rebase hỏng bằng reflog')}
-<pre><code>git rebase --abort             <span class="tok-comment"># mid-rebase: back to exactly before you started</span>
+<pre><code class="language-bash">git rebase --abort             <span class="tok-comment"># mid-rebase: back to exactly before you started</span>
 git rebase --continue          <span class="tok-comment"># after resolving a conflict or an edit stop</span>
 git rebase --skip              <span class="tok-comment"># drop the commit currently being applied</span></code></pre>
 <p>And after the rebase has finished but the result is wrong — the case that feels unrecoverable and is not:</p>
-<pre><code>git reflog</code></pre>
+<pre><code class="language-bash">git reflog</code></pre>
 <div class="out">c7f1a30 HEAD@{0}: rebase (finish): returning to refs/heads/feature/login
 c7f1a30 HEAD@{1}: rebase (reword): test(auth): cover the expired-token path
 e8b4d92 HEAD@{3}: rebase (fixup): feat(auth): add refresh token rotation
 9e2d4b7 HEAD@{6}: rebase (start): checkout main
 b2c6a91 HEAD@{7}: commit: add tests</div>
-<pre><code>git reset --hard HEAD@{7}      <span class="tok-comment"># back to the pre-rebase state, everything restored</span></code></pre>
+<pre><code class="language-bash">git reset --hard HEAD@{7}      <span class="tok-comment"># back to the pre-rebase state, everything restored</span></code></pre>
 <div class="callout ok"><code>HEAD@{7}</code> is where the branch pointed just before <code>rebase (start)</code> — the line directly <em>below</em> it, which is your old tip "add tests". The original commits were never deleted — the branch simply stopped pointing at them. Chapter 4.4 makes this a reflex; for now, know that a bad rebase costs you one command, not your work.</div>
 
 <h3>The rule that keeps this safe</h3>
@@ -1215,7 +1215,7 @@ git reflog -6
 <h2>Biến mười commit "wip" thành ba commit tử tế</h2>
 <p class="lead">Bạn đã commit nhỏ và thường xuyên, đúng như bài 1.3 khuyên. Nhánh của bạn giờ đọc lên là: <code>wip</code>, <code>fix typo</code>, <code>actually fix it</code>, <code>oops</code>, <code>final</code>. Thế là ổn trong lúc làm và ngượng khi đưa đi review. Rebase tương tác cho phép bạn viết lại nó thành lịch sử bạn <em>đã định</em> viết, trước khi ai khác nhìn thấy.</p>
 
-<pre><code>git rebase -i main            <span class="tok-comment"># mọi commit trên nhánh này kể từ main</span>
+<pre><code class="language-bash">git rebase -i main            <span class="tok-comment"># mọi commit trên nhánh này kể từ main</span>
 git rebase -i HEAD~5          <span class="tok-comment"># năm commit gần nhất</span>
 git rebase -i 7b3e9d1         <span class="tok-comment"># mọi thứ SAU commit đó</span></code></pre>
 <p>Trình soạn thảo mở ra một danh sách việc-cần-làm. Chưa có gì xảy ra cả — đây là một kịch bản bạn đang sửa, và Git sẽ thi hành nó khi bạn lưu và đóng:</p>
@@ -1259,14 +1259,14 @@ fixup  5f7a9c2 fix typo
 fixup  d4e8f0a actually fix it
 reword b2c6a91 add tests</code></pre>
 <p>Lưu và đóng. Git phát lại: commit đầu được giữ, ba cái tiếp theo bị gấp vào trong nó và lời nhắn của chúng bị vứt đi, còn commit test thì đứng riêng — nó được đánh dấu <code>reword</code> nên Git dừng một lần cho bạn đổi "add tests" thành <code>test(auth): cover the expired-token path</code>.</p>
-<pre><code>git log --oneline main..HEAD</code></pre>
+<pre><code class="language-bash">git log --oneline main..HEAD</code></pre>
 <div class="out">c7f1a30 test(auth): cover the expired-token path
 e8b4d92 feat(auth): add refresh token rotation</div>
 <p>Năm commit thành hai, và cả hai đều có nghĩa. Đó là cái nhánh mà người review muốn thấy: mỗi commit một ý, mỗi cái một lời nhắn tự giải thích được.</p>
 
 <h3>Chẻ một commit làm hai việc</h3>
 <p>Đánh dấu nó là <code>edit</code>. Khi rebase dừng ở đó:</p>
-<pre><code>git reset HEAD~                <span class="tok-comment"># huỷ commit, giữ thay đổi ở thư mục làm việc</span>
+<pre><code class="language-bash">git reset HEAD~                <span class="tok-comment"># huỷ commit, giữ thay đổi ở thư mục làm việc</span>
 git add -p src/auth.ts         <span class="tok-comment"># chỉ staging ý thứ nhất (bài 1.3)</span>
 git commit -m <span class="tok-string">"fix: bam mat khau bang bcrypt"</span>
 git add .
@@ -1276,29 +1276,29 @@ git rebase --continue</code></pre>
 
 <h3>--autosquash: đánh dấu các bản vá ngay khi tạo</h3>
 <p>Thay vì sửa danh sách việc bằng tay, hãy gắn nhãn cho bản vá ngay lúc bạn tạo ra nó:</p>
-<pre><code><span class="tok-comment"># Bạn thấy một lỗi chính tả trong commit tạo một giờ trước:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Bạn thấy một lỗi chính tả trong commit tạo một giờ trước:</span>
 git commit --fixup 9e2d4b7          <span class="tok-comment"># lời nhắn thành "fixup! feat(auth): add refresh…"</span>
 git commit --squash 9e2d4b7         <span class="tok-comment"># tương tự, nhưng giữ lời nhắn cho commit gộp</span>
 
 <span class="tok-comment"># Về sau, khi dọn nhánh:</span>
 git rebase -i --autosquash main</code></pre>
 <p>Git sắp sẵn danh sách: mỗi commit <code>fixup!</code> được dời xuống ngay dưới commit đích và đánh dấu <code>fixup</code>. Bạn thường chỉ việc lưu và đóng. Hãy đặt nó vĩnh viễn:</p>
-<pre><code>git config --global rebase.autosquash true</code></pre>
+<pre><code class="language-bash">git config --global rebase.autosquash true</code></pre>
 <div class="callout ok">Đây là quy trình làm cho "commit nhỏ" và "lịch sử sạch" tương thích với nhau thay vì đối lập. Commit bất cứ khi nào có thứ gì chạy được, đánh dấu các bản sửa bằng <code>--fixup</code>, và một lần <code>rebase -i --autosquash</code> trước pull request cho ra một lịch sử trông như đã được lên kế hoạch.</div>
 
 <h3>Khi mọi thứ đi sai</h3>
 ${slide('git-03', 16, 'Cứu một lần rebase hỏng bằng reflog')}
-<pre><code>git rebase --abort             <span class="tok-comment"># đang giữa chừng: về đúng trước lúc bạn bắt đầu</span>
+<pre><code class="language-bash">git rebase --abort             <span class="tok-comment"># đang giữa chừng: về đúng trước lúc bạn bắt đầu</span>
 git rebase --continue          <span class="tok-comment"># sau khi giải xung đột hoặc sau một lần dừng edit</span>
 git rebase --skip              <span class="tok-comment"># bỏ commit đang được áp</span></code></pre>
 <p>Và khi rebase đã xong nhưng kết quả sai — trường hợp có cảm giác không cứu được mà thật ra thì được:</p>
-<pre><code>git reflog</code></pre>
+<pre><code class="language-bash">git reflog</code></pre>
 <div class="out">c7f1a30 HEAD@{0}: rebase (finish): returning to refs/heads/feature/login
 c7f1a30 HEAD@{1}: rebase (reword): test(auth): cover the expired-token path
 e8b4d92 HEAD@{3}: rebase (fixup): feat(auth): add refresh token rotation
 9e2d4b7 HEAD@{6}: rebase (start): checkout main
 b2c6a91 HEAD@{7}: commit: add tests</div>
-<pre><code>git reset --hard HEAD@{7}      <span class="tok-comment"># về trạng thái trước rebase, mọi thứ trở lại</span></code></pre>
+<pre><code class="language-bash">git reset --hard HEAD@{7}      <span class="tok-comment"># về trạng thái trước rebase, mọi thứ trở lại</span></code></pre>
 <div class="callout ok"><code>HEAD@{7}</code> là chỗ nhánh trỏ tới ngay trước dòng <code>rebase (start)</code> — tức dòng nằm ngay <em>DƯỚI</em> nó, chính là đầu nhánh cũ "add tests". Các commit gốc chưa bao giờ bị xoá — chỉ là cái nhánh thôi trỏ vào chúng. Bài 4.4 biến việc này thành phản xạ; còn giờ, hãy biết rằng một lần rebase hỏng tốn của bạn một lệnh, không phải công việc của bạn.</div>
 
 <h3>Luật giữ cho việc này an toàn</h3>

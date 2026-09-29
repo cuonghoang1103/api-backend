@@ -375,7 +375,7 @@ $ curl -s http://127.0.0.1:4111/api/toi          # khong gui binh
 </div>
 
 <h3>3 to 7 · The rest of the box</h3>
-<pre><code><span class="tok-comment">// 3. An Argon2 hash declares its own parameters — read them straight out of the string.</span>
+<pre><code class="language-sql"><span class="tok-comment">// 3. An Argon2 hash declares its own parameters — read them straight out of the string.</span>
 $argon2id$v=19$m=65536,t=3,p=4$c29tZXNhbHQ$…
 <span class="tok-comment">//        ↑ version   ↑ memory 64MB, 3 passes, 4 lanes — Lesson 2.3</span>
 <span class="tok-comment">// OLD records carry OLD parameters. That is shape 4 in Lesson 12.2.</span>
@@ -459,7 +459,7 @@ $ curl -s http://127.0.0.1:4111/api/toi          # khong gui binh
 </div>
 
 <h3>3 tới 7 · Phần còn lại của hộp đồ</h3>
-<pre><code><span class="tok-comment">// 3. Băm Argon2 tự khai tham số của nó — đọc ngay trong chuỗi.</span>
+<pre><code class="language-sql"><span class="tok-comment">// 3. Băm Argon2 tự khai tham số của nó — đọc ngay trong chuỗi.</span>
 $argon2id$v=19$m=65536,t=3,p=4$c29tZXNhbHQ$…
 <span class="tok-comment">//        ↑ phiên bản  ↑ bộ nhớ 64MB, 3 lượt, 4 luồng — Bài 2.3</span>
 <span class="tok-comment">// Bản ghi CŨ mang tham số CŨ. Đó là hình dạng 4 ở Bài 12.2.</span>
@@ -530,7 +530,7 @@ src/services/llm/gateway.ts:51:  process.env.OPENAI_COMPAT_API_KEY ||
 # Quet chi CHI CHO, khong ket luan. Muc 5 o day phan lon la mot chuoi doc
 # NHIEU TEN BIEN cho cung mot khoa — co chu y, khong phai bi mat chep cung.
 # Muc 2 thi khac: bay loi goi khong ghim thuat toan, va do la Bai 4.2.</div>
-<pre><code><span class="tok-comment"># Five red flags. Each one is a family of bugs from this course.</span>
+<pre><code class="language-bash"><span class="tok-comment"># Five red flags. Each one is a family of bugs from this course.</span>
 grep -rE 'jwt\\\\.decode\\\\(|decodeJwt\\\\('        src/   <span class="tok-comment"># 8.4 · decoding instead of verifying</span>
 grep -rE 'jwt\\\\.verify\\\\('  src/ | grep -v algorithms  <span class="tok-comment"># 4.2 · algorithm not pinned</span>
 grep -rE 'data:\\\\s*req\\\\.body|\\\\.\\\\.\\\\.req\\\\.body'    src/   <span class="tok-comment"># 9.5 · mass assignment</span>
@@ -594,7 +594,7 @@ src/services/llm/gateway.ts:51:  process.env.OPENAI_COMPAT_API_KEY ||
 # Quet chi CHI CHO, khong ket luan. Muc 5 o day phan lon la mot chuoi doc
 # NHIEU TEN BIEN cho cung mot khoa — co chu y, khong phai bi mat chep cung.
 # Muc 2 thi khac: bay loi goi khong ghim thuat toan, va do la Bai 4.2.</div>
-<pre><code><span class="tok-comment"># Năm dấu hiệu đỏ. Mỗi cái là một họ lỗi trong khoá học này.</span>
+<pre><code class="language-bash"><span class="tok-comment"># Năm dấu hiệu đỏ. Mỗi cái là một họ lỗi trong khoá học này.</span>
 grep -rE 'jwt\\\\.decode\\\\(|decodeJwt\\\\('        src/   <span class="tok-comment"># 8.4 · giải mã thay vì kiểm chứng</span>
 grep -rE 'jwt\\\\.verify\\\\('  src/ | grep -v algorithms  <span class="tok-comment"># 4.2 · không ghim thuật toán</span>
 grep -rE 'data:\\\\s*req\\\\.body|\\\\.\\\\.\\\\.req\\\\.body'    src/   <span class="tok-comment"># 9.5 · gán hàng loạt</span>

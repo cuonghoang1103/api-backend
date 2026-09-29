@@ -134,7 +134,7 @@ const c1 = doc('aic211-1-1-intersection', '1.1 — AI & cybersecurity intersecti
 </ul>
 <h3>Evaluating on imbalanced data</h3>
 <p>Attacks are rare, so <strong>accuracy lies</strong>: a model that says "benign" for everything can be 99.9% accurate and useless. Use <strong>precision</strong> (of the alerts raised, how many were real), <strong>recall</strong> (of the real attacks, how many were caught) and <strong>F1</strong> (their balance).</p>
-<pre><code>from sklearn.metrics import classification_report, confusion_matrix
+<pre><code class="language-python">from sklearn.metrics import classification_report, confusion_matrix
 
 y_pred = model.predict(X_test)
 print(confusion_matrix(y_test, y_pred))
@@ -157,7 +157,7 @@ print(classification_report(y_test, y_pred, digits=3))
 </ul>
 <h3>Đánh giá trên dữ liệu lệch lớp</h3>
 <p>Tấn công hiếm, nên <strong>accuracy đánh lừa</strong>: mô hình cứ nói "lành" cho mọi thứ vẫn có thể đạt 99,9% mà vô dụng. Hãy dùng <strong>precision</strong> (trong các cảnh báo, bao nhiêu là thật), <strong>recall</strong> (trong các tấn công thật, bao nhiêu bị bắt) và <strong>F1</strong> (điểm cân bằng của hai cái).</p>
-<pre><code>from sklearn.metrics import classification_report, confusion_matrix
+<pre><code class="language-python">from sklearn.metrics import classification_report, confusion_matrix
 
 y_pred = model.predict(X_test)
 print(confusion_matrix(y_test, y_pred))
@@ -194,7 +194,7 @@ const c2 = doc('aic211-2-1-data-features', '2.1 — Security data preparation & 
 <li><strong>Scale</strong> — standardise so no feature dominates by its units.</li>
 <li><strong>Windowed features</strong> — count events per source per minute (bursts betray scans/brute-force).</li>
 </ul>
-<pre><code>import pandas as pd
+<pre><code class="language-python">import pandas as pd
 from sklearn.preprocessing import StandardScaler
 
 flows = pd.read_csv("netflow.csv")
@@ -220,7 +220,7 @@ X_scaled = StandardScaler().fit_transform(X)
 <li><strong>Chuẩn hoá</strong> — để không đặc trưng nào áp đảo chỉ vì đơn vị.</li>
 <li><strong>Đặc trưng theo cửa sổ</strong> — đếm sự kiện mỗi nguồn mỗi phút (bùng nổ tố cáo quét cổng/dò mật khẩu).</li>
 </ul>
-<pre><code>import pandas as pd
+<pre><code class="language-python">import pandas as pd
 from sklearn.preprocessing import StandardScaler
 
 flows = pd.read_csv("netflow.csv")
@@ -249,7 +249,7 @@ const c3 = doc('aic211-3-1-malware-detection', '3.1 — Malware detection with M
 <li><strong>Dynamic</strong> — observed by running the file in a sandbox: API calls, files/registry touched, network contacted.</li>
 </ul>
 <h3>A defensive classifier</h3>
-<pre><code>from sklearn.ensemble import RandomForestClassifier
+<pre><code class="language-python">from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 
 # X: numeric features (entropy, num_imports, header flags...)
@@ -271,7 +271,7 @@ print(sorted(zip(clf.feature_importances_, feature_names), reverse=True)[:5])
 <li><strong>Động</strong> — quan sát khi chạy tệp trong sandbox: lời gọi API, tệp/registry bị đụng, mạng bị liên hệ.</li>
 </ul>
 <h3>Một bộ phân loại phòng thủ</h3>
-<pre><code>from sklearn.ensemble import RandomForestClassifier
+<pre><code class="language-python">from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 
 # X: đặc trưng số (entropy, num_imports, cờ header...)
@@ -304,7 +304,7 @@ const c4 = doc('aic211-4-1-intrusion-anomaly', '4.1 — Intrusion detection & an
 </ul>
 <h3>Learn normal, flag the rest</h3>
 <p>When attacks are rare or unlabelled, train <strong>only on normal traffic</strong> and score how far each new event sits from that profile. <strong>Isolation Forest</strong> isolates outliers with random splits; <strong>One-Class SVM</strong> draws a boundary around normal.</p>
-<pre><code>from sklearn.ensemble import IsolationForest
+<pre><code class="language-python">from sklearn.ensemble import IsolationForest
 
 # fit on mostly-normal traffic; contamination = expected outlier rate
 iso = IsolationForest(contamination=0.02, random_state=0)
@@ -324,7 +324,7 @@ alerts = X_live[iso.predict(X_live) == -1]  # -1 flags an outlier
 </ul>
 <h3>Học bình thường, báo phần còn lại</h3>
 <p>Khi tấn công hiếm hoặc không có nhãn, hãy huấn luyện <strong>chỉ trên lưu lượng bình thường</strong> và chấm mỗi sự kiện mới lệch bao xa khỏi hồ sơ đó. <strong>Isolation Forest</strong> cô lập điểm ngoại lai bằng các lát cắt ngẫu nhiên; <strong>One-Class SVM</strong> vẽ ranh giới quanh phần bình thường.</p>
-<pre><code>from sklearn.ensemble import IsolationForest
+<pre><code class="language-python">from sklearn.ensemble import IsolationForest
 
 # khớp trên lưu lượng phần lớn bình thường; contamination = tỉ lệ ngoại lai kỳ vọng
 iso = IsolationForest(contamination=0.02, random_state=0)
@@ -355,7 +355,7 @@ const c5 = doc('aic211-5-1-spam-phishing-nlp', '5.1 — Spam/phishing filtering 
 <li><strong>TF-IDF</strong> — weight words by how distinctive they are, damping common ones.</li>
 </ul>
 <h3>A spam classifier</h3>
-<pre><code>from sklearn.feature_extraction.text import TfidfVectorizer
+<pre><code class="language-python">from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.pipeline import make_pipeline
 
@@ -375,7 +375,7 @@ pred = model.predict(["Your account is locked, verify now"])
 <li><strong>TF-IDF</strong> — cân từ theo mức đặc trưng của nó, giảm trọng số từ phổ biến.</li>
 </ul>
 <h3>Một bộ phân loại thư rác</h3>
-<pre><code>from sklearn.feature_extraction.text import TfidfVectorizer
+<pre><code class="language-python">from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.pipeline import make_pipeline
 
@@ -408,7 +408,7 @@ const c6 = doc('aic211-6-1-fraud-ueba', '6.1 — Fraud detection & user behaviou
 <h3>UEBA: a baseline per user</h3>
 <p><strong>User and Entity Behaviour Analytics</strong> learns what is normal <em>for each account</em>, not just globally. A login time or data-download volume that is fine for one user is a red flag for another. Sudden divergence from an account's own baseline can signal <em>takeover</em> or insider abuse.</p>
 <h3>Handling extreme imbalance</h3>
-<pre><code>from sklearn.linear_model import LogisticRegression
+<pre><code class="language-python">from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import average_precision_score
 
 clf = LogisticRegression(class_weight="balanced", max_iter=1000)
@@ -428,7 +428,7 @@ print("PR-AUC:", average_precision_score(y_test, proba))  # better than accuracy
 <h3>UEBA: đường cơ sở cho từng người</h3>
 <p><strong>Phân tích hành vi người dùng và thực thể</strong> học cái gì là bình thường <em>với từng tài khoản</em>, không chỉ toàn cục. Giờ đăng nhập hay lượng dữ liệu tải xuống bình thường với người này lại là cờ đỏ với người khác. Lệch đột ngột khỏi đường cơ sở của chính tài khoản có thể báo hiệu <em>bị chiếm</em> hoặc lạm dụng nội bộ.</p>
 <h3>Xử lý mất cân bằng cực độ</h3>
-<pre><code>from sklearn.linear_model import LogisticRegression
+<pre><code class="language-python">from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import average_precision_score
 
 clf = LogisticRegression(class_weight="balanced", max_iter=1000)
@@ -515,7 +515,7 @@ const c8 = doc('aic211-8-1-xai-mlsecops-ethics', '8.1 — Ethics, explainability
 <p>The NIST <strong>AI Risk Management Framework</strong> organises trustworthy AI into four functions: <strong>Govern, Map, Measure, Manage</strong> — set policy, understand context, quantify risk, and act on it continuously.</p>
 <h3>Explainability (XAI)</h3>
 <p>A SOC analyst cannot act on "the model says bad." Explanations — <strong>feature importance</strong>, <strong>SHAP</strong> values — show <em>why</em> an alert fired, enabling triage, building trust, and exposing when a model learned a spurious shortcut.</p>
-<pre><code>import shap
+<pre><code class="language-python">import shap
 explainer = shap.TreeExplainer(clf)
 shap_values = explainer.shap_values(X_alert)
 # per-alert: which features pushed the score toward "malicious"
@@ -535,7 +535,7 @@ shap_values = explainer.shap_values(X_alert)
 <p><strong>Khung Quản trị Rủi ro AI</strong> của NIST sắp xếp AI đáng tin thành bốn chức năng: <strong>Govern, Map, Measure, Manage</strong> — đặt chính sách, hiểu ngữ cảnh, định lượng rủi ro, và hành động liên tục.</p>
 <h3>Giải thích được (XAI)</h3>
 <p>Một analyst SOC không thể hành động chỉ vì "mô hình bảo xấu." Lời giải thích — <strong>độ quan trọng đặc trưng</strong>, giá trị <strong>SHAP</strong> — cho thấy <em>vì sao</em> cảnh báo nổ, giúp phân loại, tạo niềm tin, và lộ ra khi mô hình học phải lối tắt giả tạo.</p>
-<pre><code>import shap
+<pre><code class="language-python">import shap
 explainer = shap.TreeExplainer(clf)
 shap_values = explainer.shap_values(X_alert)
 # theo từng cảnh báo: đặc trưng nào đẩy điểm về phía "độc hại"

@@ -9,7 +9,7 @@
  *   ngân hàng đề tài project + rubric, code snippet bank cho pattern.
  * Song ngữ EN/VN đối xứng. Ví dụ có lời giải + ★ ngoài giáo trình.
  * Deep-link CodeLab: java-core (OOP/patterns), system-design. UML tools → Exp Hub.
- * ESCAPE: backtick trong code -> &#96; ; ${..} -> \${ ; < > & trong <pre> -> &lt; &gt; &amp;
+ * ESCAPE: backtick trong code -> &#96; ; ${..} -> \${ ; < > & trong <pre><code class="language-javascript"> -> &lt; &gt; &amp;
  * Seed: node scripts/academy-seed-course.mjs --file ./content/academy/SWD392.mjs --apply
  */
 export default {
@@ -225,7 +225,7 @@ class Order {
 }
 class Customer
 Customer "1" -- "*" Order
-@enduml</pre>
+@enduml</code></pre>
 <em>PlantUML renders this into a real class diagram. Because it is text, it lives in Git, diffs cleanly, and an AI can generate it from your requirements.</em></div>
 <a class="link-card exphub" href="/exp-hub/swd392-cong-cu-uml?ref=%2Fcourses%2Fsoftware-architecture-and-design%2Flearn&reflabel=SWD392" target="_blank" rel="noopener">
   <span class="lc-ico">🛠️</span>
@@ -909,13 +909,13 @@ Shipped --&gt; Delivered</pre>
   </tbody>
 </table>
 <h3>Worked example — Strategy</h3>
-<div class="out"><pre><span class="tok-keyword">interface</span> PaymentStrategy { <span class="tok-keyword">void</span> <span class="tok-function">pay</span>(<span class="tok-keyword">int</span> amount); }
+<div class="out"><pre><code class="language-java"><span class="tok-keyword">interface</span> PaymentStrategy { <span class="tok-keyword">void</span> <span class="tok-function">pay</span>(<span class="tok-keyword">int</span> amount); }
 <span class="tok-keyword">class</span> CardPayment <span class="tok-keyword">implements</span> PaymentStrategy { <span class="tok-keyword">public void</span> <span class="tok-function">pay</span>(<span class="tok-keyword">int</span> a){ <span class="tok-comment">/*…*/</span> } }
 <span class="tok-keyword">class</span> WalletPayment <span class="tok-keyword">implements</span> PaymentStrategy { <span class="tok-keyword">public void</span> <span class="tok-function">pay</span>(<span class="tok-keyword">int</span> a){ <span class="tok-comment">/*…*/</span> } }
 
 <span class="tok-comment">// the context picks a strategy at runtime</span>
 checkout.<span class="tok-function">setStrategy</span>(<span class="tok-keyword">new</span> <span class="tok-function">WalletPayment</span>());
-checkout.<span class="tok-function">pay</span>(<span class="tok-number">100</span>);</pre>
+checkout.<span class="tok-function">pay</span>(<span class="tok-number">100</span>);</code></pre>
 <em>Strategy replaces a big if/else over payment types with interchangeable classes — add a new payment method without touching existing code (open/closed).</em></div>
 <h3>Observer — the pattern behind events</h3>
 <p>When an Order changes, many things must react (email, inventory, analytics). Observer lets the Order notify a list of observers without knowing who they are — exactly how notification systems and UI event handlers work.</p>
@@ -943,13 +943,13 @@ checkout.<span class="tok-function">pay</span>(<span class="tok-number">100</spa
   </tbody>
 </table>
 <h3>Ví dụ có lời giải — Strategy</h3>
-<div class="out"><pre><span class="tok-keyword">interface</span> PaymentStrategy { <span class="tok-keyword">void</span> <span class="tok-function">pay</span>(<span class="tok-keyword">int</span> amount); }
+<div class="out"><pre><code class="language-java"><span class="tok-keyword">interface</span> PaymentStrategy { <span class="tok-keyword">void</span> <span class="tok-function">pay</span>(<span class="tok-keyword">int</span> amount); }
 <span class="tok-keyword">class</span> CardPayment <span class="tok-keyword">implements</span> PaymentStrategy { <span class="tok-keyword">public void</span> <span class="tok-function">pay</span>(<span class="tok-keyword">int</span> a){ <span class="tok-comment">/*…*/</span> } }
 <span class="tok-keyword">class</span> WalletPayment <span class="tok-keyword">implements</span> PaymentStrategy { <span class="tok-keyword">public void</span> <span class="tok-function">pay</span>(<span class="tok-keyword">int</span> a){ <span class="tok-comment">/*…*/</span> } }
 
 <span class="tok-comment">// context chon mot strategy luc chay</span>
 checkout.<span class="tok-function">setStrategy</span>(<span class="tok-keyword">new</span> <span class="tok-function">WalletPayment</span>());
-checkout.<span class="tok-function">pay</span>(<span class="tok-number">100</span>);</pre>
+checkout.<span class="tok-function">pay</span>(<span class="tok-number">100</span>);</code></pre>
 <em>Strategy thay một if/else lớn theo loại thanh toán bằng các lớp thay thế được — thêm một phương thức mới không đụng code cũ (open/closed).</em></div>
 <h3>Observer — pattern đằng sau event</h3>
 <p>Khi một Order đổi, nhiều thứ phải phản ứng (email, tồn kho, analytics). Observer cho Order báo một danh sách observer mà không biết chúng là ai — đúng cách hệ notification và event handler UI hoạt động.</p>
@@ -1011,10 +1011,10 @@ checkout.<span class="tok-function">pay</span>(<span class="tok-number">100</spa
 <h3>Worked example — many-to-many</h3>
 <div class="out"><b>Model:</b> a <code>Student</code> enrolls in many <code>Course</code>s; a Course has many Students.<br>
 <b>Relational:</b> you cannot put a foreign key on either side. Create a junction table <code>Enrollment(student_id, course_id, enrolled_at)</code> with a composite key.<br>
-<pre>Student(id PK, name)
+<pre><code class="language-sql">Student(id PK, name)
 Course(id PK, title)
 Enrollment(student_id FK, course_id FK, enrolled_at,
-           PRIMARY KEY(student_id, course_id))</pre>
+           PRIMARY KEY(student_id, course_id))</code></pre>
 <em>Every many-to-many becomes a junction table — a rule the exam tests directly.</em></div>
 <h3>Normalization — a quick refresher</h3>
 <p>Normalize to remove redundancy: 1NF (atomic values), 2NF (no partial dependency on part of a composite key), 3NF (no transitive dependency between non-key columns). This is the DBI202 material applied inside the design model.</p>
@@ -1044,10 +1044,10 @@ Enrollment(student_id FK, course_id FK, enrolled_at,
 <h3>Ví dụ có lời giải — nhiều-nhiều</h3>
 <div class="out"><b>Mô hình:</b> một <code>Student</code> ghi danh nhiều <code>Course</code>; một Course có nhiều Student.<br>
 <b>Quan hệ:</b> không thể đặt khoá ngoại ở bên nào. Tạo một bảng trung gian <code>Enrollment(student_id, course_id, enrolled_at)</code> với khoá phức.<br>
-<pre>Student(id PK, name)
+<pre><code class="language-sql">Student(id PK, name)
 Course(id PK, title)
 Enrollment(student_id FK, course_id FK, enrolled_at,
-           PRIMARY KEY(student_id, course_id))</pre>
+           PRIMARY KEY(student_id, course_id))</code></pre>
 <em>Mọi nhiều-nhiều thành một bảng trung gian — một luật thi kiểm trực tiếp.</em></div>
 <h3>Chuẩn hoá — nhắc nhanh</h3>
 <p>Chuẩn hoá để bỏ dư thừa: 1NF (giá trị nguyên tử), 2NF (không phụ thuộc một phần vào một phần khoá phức), 3NF (không phụ thuộc bắc cầu giữa các cột không khoá). Đây là kiến thức DBI202 áp dụng bên trong design model.</p>

@@ -109,7 +109,7 @@ export default {
 <tr><td><code>"  "</code> (two blanks)</td><td>2</td><td>3</td><td>a blank IS a character — matters for <code>lTrim</code> on slide 36</td></tr>
 <tr><td><code>"a\\0b"</code></td><td><strong>1</strong></td><td>4</td><td>edge case: <code>strlen</code> stops at the FIRST <code>'\\0'</code>, the <code>'b'</code> is invisible to it</td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
 
 int main()
@@ -140,7 +140,7 @@ int main()
 <tr><td><code>"  "</code> (hai dấu cách)</td><td>2</td><td>3</td><td>dấu cách LÀ ký tự — chuyện này quan trọng với <code>lTrim</code> ở slide 36</td></tr>
 <tr><td><code>"a\\0b"</code></td><td><strong>1</strong></td><td>4</td><td>ca biên: <code>strlen</code> dừng ở <code>'\\0'</code> ĐẦU TIÊN, chữ <code>'b'</code> vô hình với nó</td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
 
 int main()
@@ -172,7 +172,7 @@ int main()
 <tr><td><code>"abc"</code></td><td><code>"abc"</code></td><td><code>abc</code></td><td>3</td><td>same length: nothing left over, nothing lost</td></tr>
 <tr><td><code>char d[5]</code></td><td><code>"Hi FPTU!"</code></td><td colspan="2"><strong>buffer overflow</strong></td><td>clang refuses to build it; with a runtime source it builds and corrupts memory</td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
 
 int main()
@@ -206,7 +206,7 @@ int main()
 <tr><td><code>"abc"</code></td><td><code>"abc"</code></td><td><code>abc</code></td><td>3</td><td>độ dài bằng nhau: không thừa gì, không mất gì</td></tr>
 <tr><td><code>char d[5]</code></td><td><code>"Hi FPTU!"</code></td><td colspan="2"><strong>tràn bộ đệm</strong></td><td>clang từ chối dịch; với nguồn lúc chạy thì nó dịch được rồi phá bộ nhớ</td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
 
 int main()
@@ -245,7 +245,7 @@ int main()
 <tr><td><code>"apple"</code></td><td><code>"banana"</code></td><td>-1</td><td>-1</td><td><code>'a'</code>−<code>'b'</code> = −1; here the two agree <em>by coincidence</em></td></tr>
 <tr><td><code>"Zebra"</code></td><td><code>"apple"</code></td><td>-7</td><td>-1</td><td>capital letters sort BEFORE small letters</td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
 #include &lt;stdlib.h&gt;
 
@@ -283,7 +283,7 @@ int main(){
 <tr><td><code>"apple"</code></td><td><code>"banana"</code></td><td>-1</td><td>-1</td><td><code>'a'</code>−<code>'b'</code> = −1; ở đây hai bên trùng nhau <em>do tình cờ</em></td></tr>
 <tr><td><code>"Zebra"</code></td><td><code>"apple"</code></td><td>-7</td><td>-1</td><td>chữ hoa xếp TRƯỚC chữ thường</td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
 #include &lt;stdlib.h&gt;
 
@@ -321,7 +321,7 @@ int main(){
 <tr><td><code>"Hoang"</code></td><td><code>" "</code> then <code>"Thi"</code></td><td><code>Hoang Thi</code></td><td>9</td><td>chained calls — how you build a full name</td></tr>
 <tr><td><code>char d[50];</code> uninitialised</td><td><code>"abc"</code></td><td colspan="2"><strong>undefined behaviour</strong></td><td>no <code>'\\0'</code> to find — write <code>= ""</code> first</td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
 int main(){
     char dest[50] = "This is an";
@@ -352,7 +352,7 @@ int main(){
 <tr><td><code>"Hoang"</code></td><td><code>" "</code> rồi <code>"Thi"</code></td><td><code>Hoang Thi</code></td><td>9</td><td>gọi nối tiếp — cách ghép một họ tên đầy đủ</td></tr>
 <tr><td><code>char d[50];</code> chưa khởi tạo</td><td><code>"abc"</code></td><td colspan="2"><strong>hành vi không xác định</strong></td><td>không có <code>'\\0'</code> nào để tìm — phải viết <code>= ""</code> trước</td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
 int main(){
     char dest[50] = "This is an";
@@ -384,7 +384,7 @@ int main(){
 <tr><td><code>"prf192"</code></td><td><code>PRF192</code></td><td>the length never changes — conversion is byte for byte</td></tr>
 <tr><td><code>"a-b_c"</code></td><td><code>A-B_C</code></td><td>punctuation passes through untouched</td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
 #include &lt;ctype.h&gt;
 
@@ -422,7 +422,7 @@ int main()
 <tr><td><code>"prf192"</code></td><td><code>PRF192</code></td><td>độ dài không bao giờ đổi — đổi từng byte một</td></tr>
 <tr><td><code>"a-b_c"</code></td><td><code>A-B_C</code></td><td>dấu câu đi qua mà không bị đụng</td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
 #include &lt;ctype.h&gt;
 
@@ -462,7 +462,7 @@ int main()
 <tr><td><code>"PRF192"</code></td><td><code>prf192</code></td><td>same length in, same length out</td></tr>
 <tr><td><code>"A-B_C"</code></td><td><code>a-b_c</code></td><td>punctuation survives — this is why <code>+32</code> is the wrong way</td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
 #include &lt;ctype.h&gt;
 
@@ -499,7 +499,7 @@ int main()
 <tr><td><code>"PRF192"</code></td><td><code>prf192</code></td><td>vào bao nhiêu ký tự, ra bấy nhiêu</td></tr>
 <tr><td><code>"A-B_C"</code></td><td><code>a-b_c</code></td><td>dấu câu sống sót — đây là lý do cộng 32 là cách sai</td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
 #include &lt;ctype.h&gt;
 
@@ -539,7 +539,7 @@ int main()
 <tr><td><code>"abcabc"</code></td><td><code>"bc"</code></td><td><code>"bcabc"</code></td><td>1</td><td>only the FIRST occurrence; the second is ignored</td></tr>
 <tr><td><code>"abc"</code></td><td><code>"abcd"</code></td><td><strong><code>NULL</code></strong></td><td>—</td><td>edge case: the needle is longer than the haystack</td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
 int main(){
     char s1[] = "Welcome to FPT University!";
@@ -575,7 +575,7 @@ int main(){
 <tr><td><code>"abcabc"</code></td><td><code>"bc"</code></td><td><code>"bcabc"</code></td><td>1</td><td>chỉ lần ĐẦU TIÊN; lần thứ hai bị bỏ qua</td></tr>
 <tr><td><code>"abc"</code></td><td><code>"abcd"</code></td><td><strong><code>NULL</code></strong></td><td>—</td><td>ca biên: cây kim dài hơn đống rơm</td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
 int main(){
     char s1[] = "Welcome to FPT University!";
@@ -613,7 +613,7 @@ int main(){
 <tr><td><code>"abc"</code></td><td><code>","</code></td><td><code>abc</code></td><td>no delimiter present — one token, the whole string</td></tr>
 <tr><td><code>"Hoang Thi  Hoa"</code></td><td><code>" "</code></td><td><code>Hoang</code> · <code>Thi</code> · <code>Hoa</code></td><td>double blank collapses — this is the word-splitting use</td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
 int main(){
     char str[] = "Welcome,to-FPT:University";   /* MANG, khong phai char* */
@@ -647,7 +647,7 @@ int main(){
 <tr><td><code>"abc"</code></td><td><code>","</code></td><td><code>abc</code></td><td>không có dấu phân tách nào — một mẩu, là cả chuỗi</td></tr>
 <tr><td><code>"Hoang Thi  Hoa"</code></td><td><code>" "</code></td><td><code>Hoang</code> · <code>Thi</code> · <code>Hoa</code></td><td>hai dấu cách bị gộp — đây là kiểu dùng để tách từ</td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
 int main(){
     char str[] = "Welcome,to-FPT:University";   /* MANG, khong phai char* */
@@ -674,7 +674,7 @@ int main(){
 <li><strong>The input specifier matters</strong> — <code>scanf("%s", s1)</code> stops at the first blank (slide 14), so "Hello World" would be read as two separate inputs. Use a width limit (<code>%49s</code>) so a long input cannot overflow the 50-byte array, and <code>scanf(" %c", &amp;ch)</code> with a leading blank so the pending newline is skipped.</li>
 <li><strong>Where each library function lands</strong> — <code>strcmp</code> for step 2, <code>strcpy</code>+<code>strcat</code> for step 3, <code>strlen</code> for step 4, a loop (or <code>strchr</code>) for step 5. Four of the eight, in twenty lines.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
 
 int main(void)
@@ -719,7 +719,7 @@ int main(void)
 <li><strong>Định dạng nhập rất quan trọng</strong> — <code>scanf("%s", s1)</code> dừng ở dấu cách đầu tiên (slide 14), nên "Hello World" sẽ bị đọc thành hai lần nhập. Hãy giới hạn bề rộng (<code>%49s</code>) để chuỗi dài không tràn mảng 50 byte, và dùng <code>scanf(" %c", &amp;ch)</code> có dấu cách phía trước để nuốt ký tự xuống dòng còn sót lại.</li>
 <li><strong>Hàm thư viện nào rơi vào đâu</strong> — <code>strcmp</code> cho bước 2, <code>strcpy</code>+<code>strcat</code> cho bước 3, <code>strlen</code> cho bước 4, một vòng lặp (hoặc <code>strchr</code>) cho bước 5. Bốn trong tám hàm, gói trong hai mươi dòng.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
 
 int main(void)
@@ -802,7 +802,7 @@ int main(void)
 <li><strong>Read the second row of the slide's table carefully</strong> — after the copy, the array holds <code>H o a NULL o a NULL</code>. Indexes 4, 5, 6 still contain the old <code>o</code>, <code>a</code>, <code>NULL</code>! Nothing was erased; the string simply ends earlier now. This is the same observation as slide 27: <code>strcpy</code> moves the terminator, it does not wipe the tail.</li>
 <li><strong>⚠️ The hidden defect — overlapping <code>strcpy</code></strong> — source and destination are inside the SAME array, and the C standard says the behaviour of <code>strcpy</code> is undefined if the regions overlap. It normally "works" because the copy runs left to right and the destination is to the left of the source. But it is not guaranteed, and it is checked: on macOS, <code>cc -Wall</code> compiles it and the program then <strong>dies at runtime with SIGTRAP (exit 133)</strong> the moment it hits that line. I measured all three states — it aborts by default, it runs and prints <code>Hello</code> when built with <code>-D_FORTIFY_SOURCE=0</code>, and it runs correctly and legally when <code>strcpy</code> is replaced by <code>memmove</code>.</li>
 </ul>
-<pre><code>char* lTrim(char s[])
+<pre><code class="language-c">char* lTrim(char s[])
 {
     int i = 0;
     while (s[i] == ' ') i++;               /* dem so dau cach o dau */
@@ -838,7 +838,7 @@ char* lTrimSafe(char s[])
 <li><strong>Hãy đọc kỹ hàng thứ hai trong bảng của slide</strong> — sau phép chép, mảng chứa <code>H o a NULL o a NULL</code>. Các chỉ số 4, 5, 6 VẪN còn <code>o</code>, <code>a</code>, <code>NULL</code> cũ! Không có gì bị xoá; chuỗi chỉ đơn giản là kết thúc sớm hơn. Đây đúng là nhận xét ở slide 27: <code>strcpy</code> dời dấu kết thúc chứ không lau phần đuôi.</li>
 <li><strong>⚠️ Khuyết tật ẩn — <code>strcpy</code> CHỒNG LẤN</strong> — nguồn và đích nằm trong CÙNG một mảng, mà chuẩn C nói hành vi của <code>strcpy</code> là không xác định nếu hai vùng chồng nhau. Nó thường "chạy được" vì phép chép đi từ trái sang phải và đích nằm bên trái nguồn. Nhưng không có gì bảo đảm, và người ta có kiểm: trên macOS, <code>cc -Wall</code> dịch được rồi chương trình <strong>chết ngay lúc chạy với SIGTRAP (exit 133)</strong> đúng lúc chạm dòng ấy. Tôi đã đo cả ba trạng thái — mặc định thì nó bị giết, dựng với <code>-D_FORTIFY_SOURCE=0</code> thì nó chạy và in <code>Hello</code>, còn thay <code>strcpy</code> bằng <code>memmove</code> thì nó chạy đúng và hợp lệ.</li>
 </ul>
-<pre><code>char* lTrim(char s[])
+<pre><code class="language-c">char* lTrim(char s[])
 {
     int i = 0;
     while (s[i] == ' ') i++;               /* dem so dau cach o dau */
@@ -876,7 +876,7 @@ char* lTrimSafe(char s[])
 <li><strong>Why it must be a separate pass from <code>lTrim</code></strong> — the two walk in opposite directions and use different mechanisms: <code>lTrim</code> must copy, <code>rTrim</code> need only write one byte. Slide 38 will run them one after the other.</li>
 <li><strong>⚠️ A real bug in the slide's version</strong> — for an empty string, <code>strlen(s) - 1</code> is <strong>−1</strong>, so <code>s[-1]</code> is read: that is outside the array. For a string of nothing but blanks, <code>i</code> marches down past 0 into the same territory. I ran it: on this machine the byte before the array happened not to be a blank, so the loop stopped and the program printed the right answer — which is exactly what makes this class of bug so dangerous. One guard fixes it: <code>while (i &gt;= 0 &amp;&amp; s[i] == ' ') i--;</code>.</li>
 </ul>
-<pre><code>char* rTrim(char s[])
+<pre><code class="language-c">char* rTrim(char s[])
 {
     int i = strlen(s) - 1;
     while (s[i] == ' ') i--;
@@ -912,7 +912,7 @@ char* rTrimSafe(char s[])
 <li><strong>Vì sao nó phải là một lượt quét riêng so với <code>lTrim</code></strong> — hai hàm đi ngược chiều nhau và dùng cơ chế khác nhau: <code>lTrim</code> buộc phải chép, còn <code>rTrim</code> chỉ cần ghi một byte. Slide 38 sẽ chạy chúng nối đuôi nhau.</li>
 <li><strong>⚠️ Một lỗi THẬT trong bản của slide</strong> — với chuỗi rỗng, <code>strlen(s) - 1</code> bằng <strong>−1</strong>, nên <code>s[-1]</code> bị đọc: chỗ ấy nằm ngoài mảng. Với chuỗi toàn dấu cách, <code>i</code> tụt qua 0 vào đúng vùng đất ấy. Tôi đã chạy: trên máy này byte đứng trước mảng tình cờ không phải dấu cách, nên vòng lặp dừng và chương trình in ra kết quả đúng — và chính điều đó mới làm loại lỗi này nguy hiểm. Một cái chốt là xong: <code>while (i &gt;= 0 &amp;&amp; s[i] == ' ') i--;</code>.</li>
 </ul>
-<pre><code>char* rTrim(char s[])
+<pre><code class="language-c">char* rTrim(char s[])
 {
     int i = strlen(s) - 1;
     while (s[i] == ' ') i--;
@@ -950,7 +950,7 @@ char* rTrimSafe(char s[])
 <li><strong>Line 5 — <code>ptr = strstr(s, "  ");</code></strong> — search again from the beginning. It works, but it is the inefficient part: each pass rescans the whole string, so a text with k extra blanks costs about k full scans. Searching from <code>ptr</code> instead of <code>s</code> would be enough and is a fair improvement to mention in an exam answer.</li>
 <li><strong>⚠️ Two overlapping copies, same warning as slide 36</strong> — both <code>lTrim</code>'s <code>strcpy</code> and this <code>strcpy(ptr, ptr+1)</code> copy within one array. On macOS the program is killed at the first one (SIGTRAP, exit 133). Replace both with <code>memmove</code> and the function is legal C; the behaviour and all the numbers below are unchanged.</li>
 </ul>
-<pre><code>char* trim(char s[])
+<pre><code class="language-c">char* trim(char s[])
 {
     rTrim(lTrim(s));
     char *ptr = strstr(s, "  ");
@@ -981,7 +981,7 @@ char* rTrimSafe(char s[])
 <li><strong>Dòng 5 — <code>ptr = strstr(s, "  ");</code></strong> — tìm lại từ đầu. Chạy đúng, nhưng đây là chỗ kém hiệu quả: mỗi lượt quét lại cả chuỗi, nên một văn bản có k dấu cách thừa tốn cỡ k lần quét toàn bộ. Tìm từ <code>ptr</code> thay vì từ <code>s</code> là đủ, và đó là một cải tiến đáng nêu trong bài thi.</li>
 <li><strong>⚠️ Hai phép chép chồng lấn, cùng cảnh báo với slide 36</strong> — cả <code>strcpy</code> trong <code>lTrim</code> lẫn <code>strcpy(ptr, ptr+1)</code> ở đây đều chép trong cùng một mảng. Trên macOS chương trình bị giết ngay ở cái đầu tiên (SIGTRAP, exit 133). Thay cả hai bằng <code>memmove</code> thì hàm trở thành C hợp lệ; hành vi và mọi con số dưới đây không đổi.</li>
 </ul>
-<pre><code>char* trim(char s[])
+<pre><code class="language-c">char* trim(char s[])
 {
     rTrim(lTrim(s));
     char *ptr = strstr(s, "  ");
@@ -1014,7 +1014,7 @@ char* rTrimSafe(char s[])
 <li><strong>Why the <code>i==0</code> branch has to be there</strong> — without it the very first letter would never be raised, because there is no <code>s[-1]</code> to look at. And note the short-circuit: since <code>i==0</code> is tested first, <code>s[i-1]</code> is only ever evaluated when <code>i</code> is at least 1. The extra <code>i&gt;0</code> in the slide's code is redundant but harmless, and it documents the intent.</li>
 <li><strong>The red arrows on the slide are the loop hitting indices 0, 4, 8 and 12</strong> — exactly the four word-starts of <code>"hoa anh dao no"</code>. Every other index is left in lowercase, which is what makes <code>"dAo"</code> come out as <code>"Dao"</code> rather than <code>"DAo"</code>.</li>
 </ul>
-<pre><code>char* nameStr(char s[])
+<pre><code class="language-c">char* nameStr(char s[])
 {
     trim(s);        /* trim all extra blanks   */
     strlwr(s);      /* convert it to lowercase */
@@ -1045,7 +1045,7 @@ char* rTrimSafe(char s[])
 <li><strong>Vì sao nhánh <code>i==0</code> bắt buộc phải có</strong> — không có nó thì chữ cái đầu tiên chẳng bao giờ được nâng, vì làm gì có <code>s[-1]</code> để nhìn. Và để ý phép đoản mạch: vì <code>i==0</code> được kiểm trước, <code>s[i-1]</code> chỉ được tính khi <code>i</code> từ 1 trở lên. Điều kiện <code>i&gt;0</code> thừa trong mã của slide là vô hại, và nó ghi lại ý định cho người đọc.</li>
 <li><strong>Các mũi tên đỏ trên slide là vòng lặp chạm vào chỉ số 0, 4, 8 và 12</strong> — đúng bốn chỗ bắt đầu từ của <code>"hoa anh dao no"</code>. Mọi chỉ số khác giữ nguyên chữ thường, và chính điều đó làm <code>"dAo"</code> ra thành <code>"Dao"</code> chứ không phải <code>"DAo"</code>.</li>
 </ul>
-<pre><code>char* nameStr(char s[])
+<pre><code class="language-c">char* nameStr(char s[])
 {
     trim(s);        /* trim all extra blanks   */
     strlwr(s);      /* convert it to lowercase */
@@ -1078,7 +1078,7 @@ char* rTrimSafe(char s[])
 <li><strong>The <code>i==0</code> half of the condition</strong> — it exists for the case where the sentence starts with a letter and there is no previous character to inspect. Thanks to short-circuit evaluation, <code>s[i-1]</code> is never read when <code>i</code> is 0, so no out-of-bounds access happens. Swap the two halves of the <code>||</code> and you introduce the same bug slide 37's <code>rTrim</code> has.</li>
 <li><strong>One pass, no extra memory</strong> — the whole function is a single <code>for</code> loop with two comparisons per character. No <code>strtok</code>, no copying, and it does not modify the string — which matters, because <code>strtok</code> would have destroyed it (slide 33).</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int countWords(char s[])
 {
@@ -1115,7 +1115,7 @@ int main(void)
 <li><strong>Nửa <code>i==0</code> của điều kiện</strong> — nó có mặt cho trường hợp câu bắt đầu ngay bằng một chữ cái và không có ký tự nào phía trước để nhìn. Nhờ phép đoản mạch, <code>s[i-1]</code> không bao giờ bị đọc khi <code>i</code> bằng 0, nên không có truy cập ngoài mảng. Đảo hai nửa của dấu <code>||</code> là bạn tạo ra đúng cái lỗi mà <code>rTrim</code> ở slide 37 đang mắc.</li>
 <li><strong>Một lượt quét, không tốn thêm bộ nhớ</strong> — cả hàm chỉ là một vòng <code>for</code> với hai phép so mỗi ký tự. Không <code>strtok</code>, không chép gì, và nó KHÔNG sửa chuỗi — điều này quan trọng, vì <code>strtok</code> thì đã phá nát chuỗi rồi (slide 33).</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int countWords(char s[])
 {
@@ -1154,7 +1154,7 @@ int main(void)
 <li><strong>The negation is where people slip</strong> — the second half is "<code>s[i-1]</code> is <strong>NOT</strong> a digit", so it is <code>!isdigit(s[i-1])</code>. On slide 40 the same slot held "<code>s[i-1]</code> IS a blank". Getting this backwards counts every digit individually and turns <code>123459</code> into six.</li>
 <li><strong>What it does not do</strong> — it counts groups of digits, not numbers. A minus sign, a decimal point or a thousands separator is simply not a digit, so <code>"-3.5"</code> counts as two integers (<code>3</code> and <code>5</code>). If an exam asks for signed or decimal numbers, the predicate has to grow; the loop shape does not.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;ctype.h&gt;
 
 int countIntegers(char s[])
@@ -1193,7 +1193,7 @@ int main(void)
 <li><strong>Chỗ người ta hay trượt là phép phủ định</strong> — nửa thứ hai là "<code>s[i-1]</code> <strong>KHÔNG</strong> phải chữ số", tức <code>!isdigit(s[i-1])</code>. Ở slide 40 đúng chỗ ấy là "<code>s[i-1]</code> LÀ dấu cách". Viết ngược thì mỗi chữ số được đếm riêng và <code>123459</code> hoá thành sáu.</li>
 <li><strong>Nó KHÔNG làm được gì</strong> — nó đếm các dải chữ số, không đếm các con SỐ. Dấu trừ, dấu thập phân hay dấu phân nhóm hàng nghìn đơn giản là không phải chữ số, nên <code>"-3.5"</code> được tính thành hai số nguyên (<code>3</code> và <code>5</code>). Nếu đề thi hỏi số có dấu hoặc số thập phân thì vị từ phải mở rộng; còn hình dạng vòng lặp thì không.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;ctype.h&gt;
 
 int countIntegers(char s[])
@@ -1234,7 +1234,7 @@ int main(void)
 <li><strong>Step 5 — search again, from <code>ptr + repL</code></strong> — continuing from after the replacement, not from the start. This matters when the replacement itself contains the pattern: replacing <code>"a"</code> with <code>"aa"</code> starting from the beginning would loop forever.</li>
 <li><strong>The three length cases, measured</strong> — <code>repL &lt; subL</code> (<code>"coc"</code> &rarr; <code>"bo"</code>): the string shrinks. <code>repL == subL</code> (&rarr; <code>"cuc"</code>): the length is unchanged and no shifting is needed at all. <code>repL &gt; subL</code> (&rarr; <code>"buom"</code>): the string grows, and <strong>the destination array must be big enough</strong> — nothing in this algorithm checks that.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
 
 char* replaceAll(char source[], const char subStr[], const char repStr[])
@@ -1281,7 +1281,7 @@ int main(void)
 <li><strong>Bước 5 — tìm tiếp, từ <code>ptr + repL</code></strong> — đi tiếp từ SAU chỗ vừa thay chứ không quay về đầu. Chi tiết này quan trọng khi chính chuỗi thay thế lại chứa mẫu cần tìm: thay <code>"a"</code> bằng <code>"aa"</code> mà cứ tìm lại từ đầu thì vòng lặp chạy mãi không dừng.</li>
 <li><strong>Ba trường hợp độ dài, đo thật</strong> — <code>repL &lt; subL</code> (<code>"coc"</code> &rarr; <code>"bo"</code>): chuỗi ngắn lại. <code>repL == subL</code> (&rarr; <code>"cuc"</code>): độ dài không đổi và không cần dịch gì cả. <code>repL &gt; subL</code> (&rarr; <code>"buom"</code>): chuỗi dài ra, và <strong>mảng đích phải đủ chỗ</strong> — thuật toán này không hề kiểm tra điều đó.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
 
 char* replaceAll(char source[], const char subStr[], const char repStr[])
@@ -1330,7 +1330,7 @@ int main(void)
 <li><strong>Accessing it</strong> — <code>names[i]</code> is a whole string (usable with <code>puts</code>, <code>strcpy</code>, <code>strcmp</code>); <code>names[i][j]</code> is a single character. Getting this right is the difference between <code>%s</code> and <code>%c</code> in your <code>printf</code>.</li>
 <li><strong>⚠️ The other spelling — <code>char *names[5]</code> — is NOT the same thing</strong> — that is an array of five <em>pointers</em>, 8 bytes each on a 64-bit machine (I measured <code>sizeof</code> of a 3-element version: 24). Rows can have different lengths and cost no wasted space, but if you initialise them with string literals the text lives in read-only memory: <code>p[0][0] = 'M';</code> crashed for real with <strong>SIGBUS, exit 138</strong>. Use <code>char a[n][m]</code> when you need to modify, <code>char *a[n]</code> for a fixed table of constants.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void)
 {
@@ -1365,7 +1365,7 @@ int main(void)
 <li><strong>Truy cập ra sao</strong> — <code>names[i]</code> là một CHUỖI trọn vẹn (dùng được với <code>puts</code>, <code>strcpy</code>, <code>strcmp</code>); còn <code>names[i][j]</code> là một KÝ TỰ. Phân biệt đúng chỗ này là khác biệt giữa <code>%s</code> và <code>%c</code> trong lệnh <code>printf</code> của bạn.</li>
 <li><strong>⚠️ Cách viết kia — <code>char *names[5]</code> — KHÔNG phải cùng một thứ</strong> — đó là mảng năm CON TRỎ, mỗi con 8 byte trên máy 64-bit (tôi đo <code>sizeof</code> bản 3 phần tử: 24). Các hàng được phép dài ngắn khác nhau và không tốn chỗ thừa, nhưng nếu khởi tạo bằng chuỗi hằng thì văn bản nằm trong vùng chỉ đọc: <code>p[0][0] = 'M';</code> sập thật với <strong>SIGBUS, exit 138</strong>. Cần SỬA được thì dùng <code>char a[n][m]</code>, còn bảng hằng cố định thì dùng <code>char *a[n]</code>.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void)
 {
@@ -1402,7 +1402,7 @@ int main(void)
 <li><strong>Why <code>names[i]</code> works as a <code>%s</code> argument</strong> — it is the address of row <code>i</code>, and <code>%s</code> wants exactly that: an address, from which it prints until <code>'\\0'</code> (slide 10). No copying happens.</li>
 <li><strong>The last two lines</strong> — <code>system("pause");</code> is Windows-only; on Linux or macOS it needs <code>&lt;stdlib.h&gt;</code> and does nothing useful, so drop it. Its output <em>"Press any key to continue . . ."</em> is what you see at the bottom of the slide's console box, and it is not part of your program's real output.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 #include &lt;string.h&gt;
 #define MAXN 5
@@ -1440,7 +1440,7 @@ int main(){
 <li><strong>Vì sao <code>names[i]</code> làm được tham số cho <code>%s</code></strong> — nó là ĐỊA CHỈ của hàng <code>i</code>, và <code>%s</code> cần đúng thứ ấy: một địa chỉ, rồi in từ đó cho tới khi gặp <code>'\\0'</code> (slide 10). Không hề có phép chép nào.</li>
 <li><strong>Hai dòng cuối</strong> — <code>system("pause");</code> chỉ có trên Windows; trên Linux hay macOS nó cần <code>&lt;stdlib.h&gt;</code> và chẳng làm gì có ích, nên hãy bỏ đi. Dòng <em>"Press any key to continue . . ."</em> mà nó in ra chính là dòng bạn thấy ở đáy khung console trên slide, và nó KHÔNG thuộc kết quả thật của chương trình bạn.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 #include &lt;string.h&gt;
 #define MAXN 5
@@ -1480,7 +1480,7 @@ int main(){
 <li><strong>The call</strong> — <code>listOfNames(names, MAXN);</code>. Just the array name, no <code>&amp;</code> and no brackets — the name already IS the address.</li>
 <li><strong>⚠️ The slide's screenshot does not match its own code</strong> — line 14 declares <code>names[1]</code> as <code>"Pham Ngoc Tho"</code>, but the console box on the right shows <code>Hoang Xuan Son</code> as the second name. I compiled and ran the code exactly as printed and got <strong>Pham Ngoc Tho</strong>, matching slide 44. The screenshot was clearly taken from a different edit of the program. Trust the code, not the picture.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 #include &lt;string.h&gt;
 #define MAXN 5
@@ -1518,7 +1518,7 @@ int main(){
 <li><strong>Lời gọi</strong> — <code>listOfNames(names, MAXN);</code>. Chỉ có tên mảng, không dấu <code>&amp;</code> và không ngoặc vuông — bản thân cái tên ĐÃ là địa chỉ.</li>
 <li><strong>⚠️ Ảnh chụp trên slide không khớp với chính mã của nó</strong> — dòng 14 khai <code>names[1]</code> là <code>"Pham Ngoc Tho"</code>, nhưng khung console bên phải lại hiện <code>Hoang Xuan Son</code> ở vị trí thứ hai. Tôi biên dịch và chạy đúng đoạn mã in trên slide và nhận được <strong>Pham Ngoc Tho</strong>, khớp với slide 44. Ảnh chụp rõ ràng lấy từ một bản sửa khác của chương trình. Hãy tin đoạn MÃ, đừng tin bức ảnh.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 #include &lt;string.h&gt;
 #define MAXN 5
@@ -1558,7 +1558,7 @@ int main(){
 <li><strong>Ascending order means <code>&gt; 0</code></strong> — <code>strcmp(a, b) &gt; 0</code> says a comes after b, so they are in the wrong order and must be swapped. Flip it to <code>&lt; 0</code> and you get descending. And remember slide 28: test the sign, never <code>== 1</code>.</li>
 <li><strong>Reading names with blanks</strong> — <code>scanf("%s", ...)</code> would stop at the first blank (slide 14), so "Nguyen Tien Linh" would arrive as three entries. Use <code>scanf("%30[^\\n]", names[i])</code> (slide 17) with a width limit, and clear the rest of the line afterwards. The sample data on slide 47 is single-word names, which conveniently hides this trap — do not let it hide from you.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
 #define MAXN 10
 
@@ -1612,7 +1612,7 @@ int main(void) {
 <li><strong>Tăng dần nghĩa là <code>&gt; 0</code></strong> — <code>strcmp(a, b) &gt; 0</code> nói a đứng SAU b, tức chúng đang sai thứ tự và phải đổi chỗ. Lật thành <code>&lt; 0</code> thì được thứ tự giảm dần. Và nhớ slide 28: kiểm DẤU, đừng bao giờ <code>== 1</code>.</li>
 <li><strong>Nhập tên có dấu cách</strong> — <code>scanf("%s", ...)</code> sẽ dừng ở dấu cách đầu tiên (slide 14), nên "Nguyen Tien Linh" sẽ vào thành ba mục. Hãy dùng <code>scanf("%30[^\\n]", names[i])</code> (slide 17) có giới hạn bề rộng, rồi xoá nốt phần còn lại của dòng. Dữ liệu mẫu ở slide 47 toàn tên một chữ, vô tình che mất cái bẫy này — đừng để nó che mắt bạn.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
 #define MAXN 10
 

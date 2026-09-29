@@ -30,7 +30,7 @@ export default {
 
 <h3>Plain EXPLAIN — the estimate, without running</h3>
 <p><code>EXPLAIN</code> alone shows the plan the optimiser <em>would</em> use, with its cost estimates. It does <strong>not</strong> execute the query — instant and safe, even on an <code>UPDATE</code> or <code>DELETE</code>:</p>
-<pre><code><span class="tok-keyword">EXPLAIN</span> <span class="tok-keyword">SELECT</span> count(*), avg(amount) <span class="tok-keyword">FROM</span> ord <span class="tok-keyword">WHERE</span> status = <span class="tok-string">'refunded'</span>;</code></pre>
+<pre><code class="language-sql"><span class="tok-keyword">EXPLAIN</span> <span class="tok-keyword">SELECT</span> count(*), avg(amount) <span class="tok-keyword">FROM</span> ord <span class="tok-keyword">WHERE</span> status = <span class="tok-string">'refunded'</span>;</code></pre>
 <div class="out"> Aggregate  (cost=10114.75..10114.76 rows=1 width=40)
    -&gt;  Seq Scan on ord  (cost=0.00..10067.00 rows=9550 width=6)
          Filter: (status = 'refunded'::text)</div>
@@ -43,7 +43,7 @@ export default {
 
 <h3>EXPLAIN ANALYZE — actually run it, and compare</h3>
 <p>Add <code>ANALYZE</code> and Postgres <em>runs</em> the query and reports what really happened, next to the estimates:</p>
-<pre><code><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> count(*), avg(amount) <span class="tok-keyword">FROM</span> ord <span class="tok-keyword">WHERE</span> status = <span class="tok-string">'refunded'</span>;</code></pre>
+<pre><code class="language-sql"><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> count(*), avg(amount) <span class="tok-keyword">FROM</span> ord <span class="tok-keyword">WHERE</span> status = <span class="tok-string">'refunded'</span>;</code></pre>
 <div class="out"> Aggregate  (cost=10114.75..10114.76 rows=1 width=40) (actual time=27.426..27.427 rows=1 loops=1)
    -&gt;  Seq Scan on ord  (cost=0.00..10067.00 rows=9550 width=6) (actual time=0.011..26.700 rows=10000 loops=1)
          Filter: (status = 'refunded'::text)
@@ -81,7 +81,7 @@ export default {
 
 <h3>EXPLAIN trơn — ước lượng, không chạy</h3>
 <p><code>EXPLAIN</code> một mình cho thấy plan mà trình tối ưu <em>sẽ</em> dùng, kèm ước lượng chi phí. Nó <strong>không</strong> chạy truy vấn — tức thì và an toàn, kể cả trên một <code>UPDATE</code> hay <code>DELETE</code>:</p>
-<pre><code><span class="tok-keyword">EXPLAIN</span> <span class="tok-keyword">SELECT</span> count(*), avg(amount) <span class="tok-keyword">FROM</span> ord <span class="tok-keyword">WHERE</span> status = <span class="tok-string">'refunded'</span>;</code></pre>
+<pre><code class="language-sql"><span class="tok-keyword">EXPLAIN</span> <span class="tok-keyword">SELECT</span> count(*), avg(amount) <span class="tok-keyword">FROM</span> ord <span class="tok-keyword">WHERE</span> status = <span class="tok-string">'refunded'</span>;</code></pre>
 <div class="out"> Aggregate  (cost=10114.75..10114.76 rows=1 width=40)
    -&gt;  Seq Scan on ord  (cost=0.00..10067.00 rows=9550 width=6)
          Filter: (status = 'refunded'::text)</div>
@@ -94,7 +94,7 @@ export default {
 
 <h3>EXPLAIN ANALYZE — chạy thật, và so sánh</h3>
 <p>Thêm <code>ANALYZE</code> là Postgres <em>chạy</em> truy vấn và báo cáo điều thực sự xảy ra, ngay cạnh ước lượng:</p>
-<pre><code><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> count(*), avg(amount) <span class="tok-keyword">FROM</span> ord <span class="tok-keyword">WHERE</span> status = <span class="tok-string">'refunded'</span>;</code></pre>
+<pre><code class="language-sql"><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> count(*), avg(amount) <span class="tok-keyword">FROM</span> ord <span class="tok-keyword">WHERE</span> status = <span class="tok-string">'refunded'</span>;</code></pre>
 <div class="out"> Aggregate  (cost=10114.75..10114.76 rows=1 width=40) (actual time=27.426..27.427 rows=1 loops=1)
    -&gt;  Seq Scan on ord  (cost=0.00..10067.00 rows=9550 width=6) (actual time=0.011..26.700 rows=10000 loops=1)
          Filter: (status = 'refunded'::text)
@@ -141,7 +141,7 @@ export default {
 
 <h3>Nested Loop — great for a few rows</h3>
 <p>For each row on the outer side, look up matches on the inner side. It's a nested <code>for</code> loop. Cheap <em>only</em> when the outer side is small and the inner lookup is indexed. Fetch 5 orders and their customers:</p>
-<pre><code><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> o.id, o.amount, c.name, c.city
+<pre><code class="language-sql"><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> o.id, o.amount, c.name, c.city
 <span class="tok-keyword">FROM</span> ord o <span class="tok-keyword">JOIN</span> customer c <span class="tok-keyword">ON</span> c.id = o.customer_id
 <span class="tok-keyword">WHERE</span> o.id <span class="tok-keyword">BETWEEN</span> 1 <span class="tok-keyword">AND</span> 5;</code></pre>
 <div class="out"> Nested Loop  (cost=0.71..50.04 rows=5 width=33) (actual time=0.026..0.036 rows=5 loops=1)
@@ -154,7 +154,7 @@ export default {
 
 <h3>Hash Join — the workhorse for big joins</h3>
 <p>Join every order to its customer. There's no filter, so millions of rows are involved and a Nested Loop would be hopeless. Postgres builds a <strong>hash table</strong> of the smaller side (customer) in memory, then scans the big side (ord) once, probing the hash:</p>
-<pre><code><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> c.region, count(*), sum(o.amount)
+<pre><code class="language-sql"><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> c.region, count(*), sum(o.amount)
 <span class="tok-keyword">FROM</span> ord o <span class="tok-keyword">JOIN</span> customer c <span class="tok-keyword">ON</span> c.id = o.customer_id
 <span class="tok-keyword">GROUP BY</span> c.region;</code></pre>
 <div class="out"> HashAggregate  (cost=14186.94..14186.98 rows=3 width=46) (actual time=176.307..176.310 rows=3 loops=1)
@@ -204,7 +204,7 @@ export default {
 
 <h3>Nested Loop — tuyệt cho ít dòng</h3>
 <p>Với mỗi dòng ở phía ngoài, tra các khớp ở phía trong. Đó là một vòng <code>for</code> lồng nhau. Rẻ <em>chỉ khi</em> phía ngoài nhỏ và phép tra phía trong có index. Lấy 5 đơn và khách hàng của chúng:</p>
-<pre><code><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> o.id, o.amount, c.name, c.city
+<pre><code class="language-sql"><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> o.id, o.amount, c.name, c.city
 <span class="tok-keyword">FROM</span> ord o <span class="tok-keyword">JOIN</span> customer c <span class="tok-keyword">ON</span> c.id = o.customer_id
 <span class="tok-keyword">WHERE</span> o.id <span class="tok-keyword">BETWEEN</span> 1 <span class="tok-keyword">AND</span> 5;</code></pre>
 <div class="out"> Nested Loop  (cost=0.71..50.04 rows=5 width=33) (actual time=0.026..0.036 rows=5 loops=1)
@@ -217,7 +217,7 @@ export default {
 
 <h3>Hash Join — con ngựa thồ cho join lớn</h3>
 <p>Join mọi đơn với khách của nó. Không có bộ lọc, nên hàng triệu dòng tham gia và một Nested Loop sẽ vô vọng. Postgres dựng một <strong>bảng băm</strong> của phía nhỏ hơn (customer) trong bộ nhớ, rồi quét phía lớn (ord) một lần, dò vào bảng băm:</p>
-<pre><code><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> c.region, count(*), sum(o.amount)
+<pre><code class="language-sql"><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> c.region, count(*), sum(o.amount)
 <span class="tok-keyword">FROM</span> ord o <span class="tok-keyword">JOIN</span> customer c <span class="tok-keyword">ON</span> c.id = o.customer_id
 <span class="tok-keyword">GROUP BY</span> c.region;</code></pre>
 <div class="out"> HashAggregate  (cost=14186.94..14186.98 rows=3 width=46) (actual time=176.307..176.310 rows=3 loops=1)
@@ -286,7 +286,7 @@ export default {
 
 <h3>Where it goes wrong: correlated columns</h3>
 <p>The planner assumes columns are <em>independent</em>. In our <code>customer</code> table, <code>city</code> fully determines <code>region</code> (every Hanoi customer is in the North). Ask for both and watch the estimate collapse:</p>
-<pre><code><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> * <span class="tok-keyword">FROM</span> customer <span class="tok-keyword">WHERE</span> city = <span class="tok-string">'Hanoi'</span> <span class="tok-keyword">AND</span> region = <span class="tok-string">'North'</span>;</code></pre>
+<pre><code class="language-sql"><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> * <span class="tok-keyword">FROM</span> customer <span class="tok-keyword">WHERE</span> city = <span class="tok-string">'Hanoi'</span> <span class="tok-keyword">AND</span> region = <span class="tok-string">'North'</span>;</code></pre>
 <div class="out"> Seq Scan on customer  (cost=0.00..236.00 rows=400 width=37) (actual time=0.010..1.811 rows=2000 loops=1)
    Filter: ((city = 'Hanoi'::text) AND (region = 'North'::text))
    Rows Removed by Filter: 8000</div>
@@ -294,7 +294,7 @@ export default {
 
 <h3>The fix: extended statistics</h3>
 <p>Tell Postgres the columns are related with <code>CREATE STATISTICS</code>, then re-analyze:</p>
-<pre><code><span class="tok-keyword">CREATE STATISTICS</span> st_cust_city_region (dependencies) <span class="tok-keyword">ON</span> city, region <span class="tok-keyword">FROM</span> customer;
+<pre><code class="language-sql"><span class="tok-keyword">CREATE STATISTICS</span> st_cust_city_region (dependencies) <span class="tok-keyword">ON</span> city, region <span class="tok-keyword">FROM</span> customer;
 <span class="tok-keyword">ANALYZE</span> customer;</code></pre>
 <div class="out"> Seq Scan on customer  (cost=0.00..236.00 rows=2000 width=37) (actual time=0.004..0.588 rows=2000 loops=1)
    Filter: ((city = 'Hanoi'::text) AND (region = 'North'::text))
@@ -325,7 +325,7 @@ export default {
 
 <h3>Chỗ nó sai: các cột tương quan</h3>
 <p>Bộ lập kế hoạch giả định các cột <em>độc lập</em>. Trong bảng <code>customer</code> của ta, <code>city</code> quyết định hoàn toàn <code>region</code> (mọi khách Hà Nội đều ở North). Hỏi cả hai và xem ước lượng sụp đổ:</p>
-<pre><code><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> * <span class="tok-keyword">FROM</span> customer <span class="tok-keyword">WHERE</span> city = <span class="tok-string">'Hanoi'</span> <span class="tok-keyword">AND</span> region = <span class="tok-string">'North'</span>;</code></pre>
+<pre><code class="language-sql"><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> * <span class="tok-keyword">FROM</span> customer <span class="tok-keyword">WHERE</span> city = <span class="tok-string">'Hanoi'</span> <span class="tok-keyword">AND</span> region = <span class="tok-string">'North'</span>;</code></pre>
 <div class="out"> Seq Scan on customer  (cost=0.00..236.00 rows=400 width=37) (actual time=0.010..1.811 rows=2000 loops=1)
    Filter: ((city = 'Hanoi'::text) AND (region = 'North'::text))
    Rows Removed by Filter: 8000</div>
@@ -333,7 +333,7 @@ export default {
 
 <h3>Cách sửa: thống kê mở rộng</h3>
 <p>Bảo Postgres rằng các cột có liên hệ bằng <code>CREATE STATISTICS</code>, rồi phân tích lại:</p>
-<pre><code><span class="tok-keyword">CREATE STATISTICS</span> st_cust_city_region (dependencies) <span class="tok-keyword">ON</span> city, region <span class="tok-keyword">FROM</span> customer;
+<pre><code class="language-sql"><span class="tok-keyword">CREATE STATISTICS</span> st_cust_city_region (dependencies) <span class="tok-keyword">ON</span> city, region <span class="tok-keyword">FROM</span> customer;
 <span class="tok-keyword">ANALYZE</span> customer;</code></pre>
 <div class="out"> Seq Scan on customer  (cost=0.00..236.00 rows=2000 width=37) (actual time=0.004..0.588 rows=2000 loops=1)
    Filter: ((city = 'Hanoi'::text) AND (region = 'North'::text))
@@ -365,7 +365,7 @@ export default {
 
 <h3>EXPLAIN (ANALYZE, BUFFERS)</h3>
 <p>Count a date range with no index — a full scan of the 30 MB table:</p>
-<pre><code><span class="tok-keyword">EXPLAIN</span> (ANALYZE, BUFFERS) <span class="tok-keyword">SELECT</span> count(*) <span class="tok-keyword">FROM</span> ord
+<pre><code class="language-sql"><span class="tok-keyword">EXPLAIN</span> (ANALYZE, BUFFERS) <span class="tok-keyword">SELECT</span> count(*) <span class="tok-keyword">FROM</span> ord
 <span class="tok-keyword">WHERE</span> created_at <span class="tok-keyword">BETWEEN</span> <span class="tok-string">'2024-06-01'</span> <span class="tok-keyword">AND</span> <span class="tok-string">'2024-06-02'</span>;</code></pre>
 <div class="out"> Aggregate  (cost=11320.61..11320.62 rows=1 width=8) (actual time=27.562..27.563 rows=1 loops=1)
    Buffers: shared hit=3817
@@ -381,7 +381,7 @@ export default {
 
 <h3>Act on it: an index that fits the data</h3>
 <p><code>created_at</code> is physically ordered (rows were inserted over time), so an index on it is dense and selective. Add it and re-measure the exact same query:</p>
-<pre><code><span class="tok-keyword">CREATE INDEX</span> idx_ord_created <span class="tok-keyword">ON</span> ord(created_at);</code></pre>
+<pre><code class="language-sql"><span class="tok-keyword">CREATE INDEX</span> idx_ord_created <span class="tok-keyword">ON</span> ord(created_at);</code></pre>
 <div class="out"> Aggregate  (cost=48.93..48.94 rows=1 width=8) (actual time=0.280..0.281 rows=1 loops=1)
    Buffers: shared hit=1 read=6
    -&gt;  Index Only Scan using idx_ord_created on ord  (cost=0.42..45.32 rows=1445 width=0) (actual time=0.042..0.196 rows=1441 loops=1)
@@ -413,7 +413,7 @@ export default {
 
 <h3>EXPLAIN (ANALYZE, BUFFERS)</h3>
 <p>Đếm một khoảng ngày không có index — một quét đầy đủ bảng 30 MB:</p>
-<pre><code><span class="tok-keyword">EXPLAIN</span> (ANALYZE, BUFFERS) <span class="tok-keyword">SELECT</span> count(*) <span class="tok-keyword">FROM</span> ord
+<pre><code class="language-sql"><span class="tok-keyword">EXPLAIN</span> (ANALYZE, BUFFERS) <span class="tok-keyword">SELECT</span> count(*) <span class="tok-keyword">FROM</span> ord
 <span class="tok-keyword">WHERE</span> created_at <span class="tok-keyword">BETWEEN</span> <span class="tok-string">'2024-06-01'</span> <span class="tok-keyword">AND</span> <span class="tok-string">'2024-06-02'</span>;</code></pre>
 <div class="out"> Aggregate  (cost=11320.61..11320.62 rows=1 width=8) (actual time=27.562..27.563 rows=1 loops=1)
    Buffers: shared hit=3817
@@ -429,7 +429,7 @@ export default {
 
 <h3>Hành động: một chỉ mục khớp dữ liệu</h3>
 <p><code>created_at</code> được sắp về mặt vật lý (dòng chèn theo thời gian), nên một chỉ mục trên nó dày và chọn lọc. Thêm nó rồi đo lại đúng truy vấn đó:</p>
-<pre><code><span class="tok-keyword">CREATE INDEX</span> idx_ord_created <span class="tok-keyword">ON</span> ord(created_at);</code></pre>
+<pre><code class="language-sql"><span class="tok-keyword">CREATE INDEX</span> idx_ord_created <span class="tok-keyword">ON</span> ord(created_at);</code></pre>
 <div class="out"> Aggregate  (cost=48.93..48.94 rows=1 width=8) (actual time=0.280..0.281 rows=1 loops=1)
    Buffers: shared hit=1 read=6
    -&gt;  Index Only Scan using idx_ord_created on ord  (cost=0.42..45.32 rows=1445 width=0) (actual time=0.042..0.196 rows=1441 loops=1)

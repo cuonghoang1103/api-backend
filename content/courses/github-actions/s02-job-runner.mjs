@@ -291,7 +291,7 @@ go-sai  completed/cancelled  11:04:45</div>
 <h3>The runner is a real machine, and you can look at it</h3>
 <p>Two habits pay for themselves the first time a job behaves impossibly. Neither needs any tooling:</p>
 
-<pre><code>- name: Cai gi dang chay o day
+<pre><code class="language-bash">- name: Cai gi dang chay o day
   run: |
     <span class="tok-comment"># danh tinh may</span>
     uname -a
@@ -564,7 +564,7 @@ go-sai  completed/cancelled  11:04:45</div>
 <h3>Runner là một cỗ máy thật, và bạn nhìn được vào nó</h3>
 <p>Hai thói quen tự trả tiền cho chúng ngay lần đầu một job cư xử một cách bất khả. Không cái nào cần công cụ gì:</p>
 
-<pre><code>- name: Cai gi dang chay o day
+<pre><code class="language-bash">- name: Cai gi dang chay o day
   run: |
     <span class="tok-comment"># danh tinh may</span>
     uname -a
@@ -642,7 +642,7 @@ go-sai  completed/cancelled  11:04:45</div>
 <h3>The workflow, and what it declares</h3>
 <p>This repository&#39;s desktop release declares three jobs:</p>
 
-<pre><code>jobs:
+<pre><code class="language-bash">jobs:
   kiem-tra:                 <span class="tok-comment"># khong co needs: -> chay ngay</span>
     runs-on: ubuntu-latest
 
@@ -942,7 +942,7 @@ ${slide('ga-02', 10, 'The job if: table — after failure, skip, cancel')}
 <h3>Workflow, và nó khai báo cái gì</h3>
 <p>Bản phát hành desktop của kho này khai ba job:</p>
 
-<pre><code>jobs:
+<pre><code class="language-bash">jobs:
   kiem-tra:                 <span class="tok-comment"># khong co needs: -> chay ngay</span>
     runs-on: ubuntu-latest
 
@@ -1750,7 +1750,7 @@ ${slide('ga-02', 21, 'No pipefail by default: the step stays GREEN')}
 
 <p>Write <code>run:</code> with no <code>shell:</code> and GitHub runs your script with:</p>
 
-<pre><code><span class="tok-comment"># mac dinh tren Linux va macOS</span>
+<pre><code class="language-bash"><span class="tok-comment"># mac dinh tren Linux va macOS</span>
 bash -e {0}
 
 <span class="tok-comment"># khi ban ghi ro shell: bash</span>
@@ -2000,7 +2000,7 @@ ${slide('ga-02', 21, 'Mặc định thiếu pipefail: bước vẫn XANH')}
 
 <p>Viết <code>run:</code> mà không có <code>shell:</code> thì GitHub chạy script của bạn bằng:</p>
 
-<pre><code><span class="tok-comment"># mac dinh tren Linux va macOS</span>
+<pre><code class="language-bash"><span class="tok-comment"># mac dinh tren Linux va macOS</span>
 bash -e {0}
 
 <span class="tok-comment"># khi ban ghi ro shell: bash</span>
@@ -2260,7 +2260,7 @@ ${slide('ga-02', 25, 'A matrix expands: include adds keys or new combinations')}
 
 <p>The release workflow declares <code>kiem-tra</code>, <code>dung</code> and <code>cong-bo</code>. The run had five jobs, because <code>dung</code> carries this:</p>
 
-<pre><code>  dung:
+<pre><code class="language-bash">  dung:
     name: Dung &#36;{{ matrix.ten }}
     needs: kiem-tra
     runs-on: &#36;{{ matrix.os }}
@@ -2512,7 +2512,7 @@ ${slide('ga-02', 25, 'Ma trận nở: include gắn khoá hoặc đẻ tổ hợ
 
 <p>Workflow phát hành khai <code>kiem-tra</code>, <code>dung</code> và <code>cong-bo</code>. Lần chạy có năm job, vì <code>dung</code> mang theo cái này:</p>
 
-<pre><code>  dung:
+<pre><code class="language-bash">  dung:
     name: Dung &#36;{{ matrix.ten }}
     needs: kiem-tra
     runs-on: &#36;{{ matrix.os }}

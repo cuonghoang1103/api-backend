@@ -50,7 +50,7 @@ total_connections_received:1284419</div>
   <div class="kv"><span class="k">The bottleneck is elsewhere anyway</span><span class="v">Redis is bound by memory bandwidth and network I/O, not CPU. Adding cores does not widen either. A single core saturates a gigabit link long before it runs out of cycles.</span></div>
   <div class="kv"><span class="k">Correctness is free</span><span class="v">Every command is atomic by construction. No transaction machinery, no isolation levels, no torn reads — this is what makes <code>INCR</code>, rate limiters and locks trivially correct (Chapter 7).</span></div>
 </div>
-<pre><code><span class="tok-comment"># One process, and it really is using about one core</span>
+<pre><code class="language-bash"><span class="tok-comment"># One process, and it really is using about one core</span>
 docker exec redis sh -c 'ps -o pid,nlwp,pcpu,comm -p 1'
 docker stats --no-stream --format '{{.Name}} CPU={{.CPUPerc}} MEM={{.MemUsage}}' redis</code></pre>
 <div class="out">  PID NLWP %CPU COMMAND
@@ -144,7 +144,7 @@ total_connections_received:1284419</div>
   <div class="kv"><span class="k">Đằng nào nút thắt cũng nằm chỗ khác</span><span class="v">Redis bị giới hạn bởi băng thông bộ nhớ và I/O mạng, không phải CPU. Thêm nhân không nới rộng cái nào trong hai thứ đó. Một nhân duy nhất làm bão hoà một đường gigabit từ rất lâu trước khi nó cạn chu kỳ.</span></div>
   <div class="kv"><span class="k">Tính đúng đắn là miễn phí</span><span class="v">Mọi câu lệnh nguyên tử theo cấu tạo. Không bộ máy giao dịch, không mức cô lập, không đọc dở dang — đây là thứ khiến <code>INCR</code>, các bộ giới hạn tần suất và khoá đúng một cách hiển nhiên (Chương 7).</span></div>
 </div>
-<pre><code><span class="tok-comment"># Một tiến trình, và nó đúng là đang dùng khoảng một nhân</span>
+<pre><code class="language-bash"><span class="tok-comment"># Một tiến trình, và nó đúng là đang dùng khoảng một nhân</span>
 docker exec redis sh -c 'ps -o pid,nlwp,pcpu,comm -p 1'
 docker stats --no-stream --format '{{.Name}} CPU={{.CPUPerc}} MEM={{.MemUsage}}' redis</code></pre>
 <div class="out">  PID NLWP %CPU COMMAND
@@ -263,7 +263,7 @@ redis-cli CLIENT LIST | head -2</code></pre>
   <div class="lz-step"><span class="lz-k">pubsub 32mb 8mb 60</span><span class="lz-t">the one people hit first</span><span class="lz-d">A subscriber that cannot keep up is dropped, silently, and simply stops receiving messages. This is the single most common cause of "Pub/Sub lost my message" (Chapter 8).</span></div>
   <div class="lz-step"><span class="lz-k">What "soft" means</span><span class="lz-t">over the soft limit for N seconds → disconnect</span><span class="lz-d">A brief spike is tolerated; sustained pressure is not. The hard limit disconnects immediately, no grace.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Find a client whose output buffer is growing — the one about to be dropped</span>
+<pre><code class="language-typescript"><span class="tok-comment"># Find a client whose output buffer is growing — the one about to be dropped</span>
 redis-cli CLIENT LIST | awk '{for(i=1;i&lt;=NF;i++) if($i ~ /^omem=/){split($i,a,"=");
   if(a[2]+0 &gt; 1048576) print $1, $2, $i}}'
 redis-cli INFO clients | grep -E 'client_recent_max_output|client_recent_max_input'</code></pre>
@@ -370,7 +370,7 @@ redis-cli CLIENT LIST | head -2</code></pre>
   <div class="lz-step"><span class="lz-k">pubsub 32mb 8mb 60</span><span class="lz-t">cái người ta đụng phải đầu tiên</span><span class="lz-d">Một bên đăng ký không theo kịp sẽ bị vứt, trong im lặng, và đơn giản là ngừng nhận tin nhắn. Đây là nguyên nhân phổ biến nhất của câu "Pub/Sub làm mất tin nhắn của tôi" (Chương 8).</span></div>
   <div class="lz-step"><span class="lz-k">"mềm" nghĩa là gì</span><span class="lz-t">vượt giới hạn mềm trong N giây → ngắt kết nối</span><span class="lz-d">Một cú vọt ngắn được tha thứ; áp lực kéo dài thì không. Giới hạn cứng ngắt ngay lập tức, không có ân hạn.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Tìm client có bộ đệm ra đang phình — cái sắp bị vứt</span>
+<pre><code class="language-typescript"><span class="tok-comment"># Tìm client có bộ đệm ra đang phình — cái sắp bị vứt</span>
 redis-cli CLIENT LIST | awk '{for(i=1;i&lt;=NF;i++) if($i ~ /^omem=/){split($i,a,"=");
   if(a[2]+0 &gt; 1048576) print $1, $2, $i}}'
 redis-cli INFO clients | grep -E 'client_recent_max_output|client_recent_max_input'</code></pre>
@@ -697,7 +697,7 @@ real	0m0.164s</div>
 </div>
 
 <h3>In your application</h3>
-<pre><code><span class="tok-comment">// node-redis</span>
+<pre><code class="language-javascript"><span class="tok-comment">// node-redis</span>
 const pipeline = client.multi();          <span class="tok-comment">// or client.multi({ isolated: false })</span>
 for (const id of ids) pipeline.hGetAll(&#96;user:\${id}&#96;);
 const users = await pipeline.exec();
@@ -728,7 +728,7 @@ OK
   <div class="lz-step"><span class="lz-k">Diminishing returns</span><span class="lz-t">the win is mostly captured by 100</span><span class="lz-d">Going from 1 to 100 removes 99% of the round trips. Going from 100 to 10,000 removes 0.99% more and costs you the two problems above.</span></div>
   <div class="lz-step"><span class="lz-k">The practical range</span><span class="lz-t">100–1000 commands per batch</span><span class="lz-d">Chunk a large job and let each chunk complete. <code>redis-cli --pipe</code> does exactly this internally, which is why it handles a million-line file without trouble.</span></div>
 </div>
-<pre><code><span class="tok-comment">// Chunking, which is what you actually want for a big job</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Chunking, which is what you actually want for a big job</span>
 const CHUNK = 500;
 for (let i = 0; i &lt; ids.length; i += CHUNK) {
   const p = redis.pipeline();
@@ -746,7 +746,7 @@ for (let i = 0; i &lt; ids.length; i += CHUNK) {
 </div>
 
 <h3>Bulk loading, for when you have a million of them</h3>
-<pre><code><span class="tok-comment"># Generate RESP directly and feed it to --pipe: the fastest possible load</span>
+<pre><code class="language-python"><span class="tok-comment"># Generate RESP directly and feed it to --pipe: the fastest possible load</span>
 python3 - &lt;&lt;'PY' &gt; /tmp/load.resp
 for i in range(1_000_000):
     k, v = f"user:{i}:seen", str(i)
@@ -817,7 +817,7 @@ real	0m0.164s</div>
 </div>
 
 <h3>Trong ứng dụng của bạn</h3>
-<pre><code><span class="tok-comment">// node-redis</span>
+<pre><code class="language-javascript"><span class="tok-comment">// node-redis</span>
 const pipeline = client.multi();          <span class="tok-comment">// hoặc client.multi({ isolated: false })</span>
 for (const id of ids) pipeline.hGetAll(&#96;user:\${id}&#96;);
 const users = await pipeline.exec();
@@ -848,7 +848,7 @@ OK
   <div class="lz-step"><span class="lz-k">Lợi ích giảm dần</span><span class="lz-t">phần lợi đã được gom gần hết ở mốc 100</span><span class="lz-d">Đi từ 1 lên 100 xoá 99% số vòng mạng. Đi từ 100 lên 10.000 xoá thêm 0,99% nữa và bắt bạn trả bằng hai vấn đề ở trên.</span></div>
   <div class="lz-step"><span class="lz-k">Khoảng thực tế</span><span class="lz-t">100–1000 câu lệnh mỗi lô</span><span class="lz-d">Hãy chia một việc lớn thành từng mẻ và để mỗi mẻ chạy xong. <code>redis-cli --pipe</code> làm đúng chuyện này ở bên trong, và đó là lý do nó xử lý một file triệu dòng không chút vất vả.</span></div>
 </div>
-<pre><code><span class="tok-comment">// Chia mẻ, thứ bạn thật sự cần cho một việc lớn</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Chia mẻ, thứ bạn thật sự cần cho một việc lớn</span>
 const CHUNK = 500;
 for (let i = 0; i &lt; ids.length; i += CHUNK) {
   const p = redis.pipeline();
@@ -866,7 +866,7 @@ for (let i = 0; i &lt; ids.length; i += CHUNK) {
 </div>
 
 <h3>Nạp hàng loạt, cho lúc bạn có cả triệu cái</h3>
-<pre><code><span class="tok-comment"># Sinh thẳng RESP rồi đút cho --pipe: cách nạp nhanh nhất có thể</span>
+<pre><code class="language-python"><span class="tok-comment"># Sinh thẳng RESP rồi đút cho --pipe: cách nạp nhanh nhất có thể</span>
 python3 - &lt;&lt;'PY' &gt; /tmp/load.resp
 for i in range(1_000_000):
     k, v = f"user:{i}:seen", str(i)
@@ -911,7 +911,7 @@ real	0m4.812s</div>
 <p class="lead">Connection handling is where most Redis client bugs live, and the reason is a mismatch of intuitions: people bring habits from SQL, where a connection is expensive and a pool is mandatory. Redis connections are cheap and its commands are fast, which changes the right answer — and creates a specific set of traps around the few commands that block.</p>
 
 <h3>One connection is usually enough</h3>
-<pre><code><span class="tok-comment">// node-redis: ONE client, shared, created once at startup</span>
+<pre><code class="language-javascript"><span class="tok-comment">// node-redis: ONE client, shared, created once at startup</span>
 import { createClient } from 'redis';
 export const redis = createClient({ url: process.env.REDIS_URL });
 redis.on('error', (e) =&gt; console.error('redis:', e.message));
@@ -939,7 +939,7 @@ maxclients:10000
   <div class="lz-step"><span class="lz-k">XREAD BLOCK / WAIT</span><span class="lz-t">same shape</span><span class="lz-d">Stream consumers and <code>WAIT</code> hold the connection for their duration. Give consumers a dedicated connection each.</span></div>
   <div class="lz-step"><span class="lz-k">MONITOR</span><span class="lz-t">holds the connection AND slows the server</span><span class="lz-d">Every command the server processes gets copied to that socket. Fine for a few seconds of debugging; never in an application.</span></div>
 </div>
-<pre><code><span class="tok-comment">// Two clients: one for commands, one for the subscription</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Two clients: one for commands, one for the subscription</span>
 export const redis = createClient({ url: process.env.REDIS_URL });
 export const sub   = redis.duplicate();       <span class="tok-comment">// same config, separate socket</span>
 await Promise.all([redis.connect(), sub.connect()]);
@@ -951,7 +951,7 @@ await redis.get('user:1042');                  <span class="tok-comment">// stil
 <div class="callout warn"><strong><code>sub=1</code> is how you spot it.</strong> That connection has one active subscription and, on RESP2, can no longer run <code>GET</code>. If your application mysteriously stops being able to read from Redis after a subscription starts, this is why — and it is why every client library has a <code>duplicate()</code> or equivalent.</div>
 
 <h3>Timeouts, in both directions</h3>
-<pre><code><span class="tok-comment">// Client side: never let a request hang forever</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Client side: never let a request hang forever</span>
 const redis = createClient({
   url: process.env.REDIS_URL,
   socket: {
@@ -982,7 +982,7 @@ redis-cli INFO stats | grep -E 'rejected_connections|total_connections'</code></
 <div class="out">(integer) 1
 rejected_connections:0
 total_connections_received:1284420</div>
-<pre><code><span class="tok-comment">// What a resilient wrapper looks like — for a CACHE, where a miss is survivable</span>
+<pre><code class="language-javascript"><span class="tok-comment">// What a resilient wrapper looks like — for a CACHE, where a miss is survivable</span>
 export async function cached(key, ttl, compute) {
   try {
     const hit = await redis.get(key);
@@ -1039,7 +1039,7 @@ blocked_clients:412
 <p class="lead">Xử lý kết nối là nơi phần lớn lỗi client của Redis trú ngụ, và lý do là một sự lệch pha về trực giác: người ta mang thói quen từ SQL sang, nơi một kết nối là đắt đỏ và một bể kết nối là bắt buộc. Kết nối Redis thì rẻ và câu lệnh của nó thì nhanh, điều đó đổi câu trả lời đúng — và tạo ra một nhóm bẫy rất cụ thể quanh vài câu lệnh có tính CHẶN.</p>
 
 <h3>Một kết nối thường là đủ</h3>
-<pre><code><span class="tok-comment">// node-redis: MỘT client, dùng chung, tạo một lần lúc khởi động</span>
+<pre><code class="language-javascript"><span class="tok-comment">// node-redis: MỘT client, dùng chung, tạo một lần lúc khởi động</span>
 import { createClient } from 'redis';
 export const redis = createClient({ url: process.env.REDIS_URL });
 redis.on('error', (e) =&gt; console.error('redis:', e.message));
@@ -1067,7 +1067,7 @@ maxclients:10000
   <div class="lz-step"><span class="lz-k">XREAD BLOCK / WAIT</span><span class="lz-t">cùng hình dạng</span><span class="lz-d">Bên tiêu thụ stream và lệnh <code>WAIT</code> giữ kết nối suốt thời gian của chúng. Hãy cho mỗi bên tiêu thụ một kết nối riêng.</span></div>
   <div class="lz-step"><span class="lz-k">MONITOR</span><span class="lz-t">giữ kết nối VÀ làm chậm máy chủ</span><span class="lz-d">Mọi câu lệnh máy chủ xử lý đều được chép sang cái socket đó. Ổn cho vài giây gỡ lỗi; không bao giờ ổn trong một ứng dụng.</span></div>
 </div>
-<pre><code><span class="tok-comment">// Hai client: một cho câu lệnh, một cho đăng ký</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Hai client: một cho câu lệnh, một cho đăng ký</span>
 export const redis = createClient({ url: process.env.REDIS_URL });
 export const sub   = redis.duplicate();       <span class="tok-comment">// cùng cấu hình, socket riêng</span>
 await Promise.all([redis.connect(), sub.connect()]);
@@ -1079,7 +1079,7 @@ await redis.get('user:1042');                  <span class="tok-comment">// vẫ
 <div class="callout warn"><strong><code>sub=1</code> là cách bạn nhận ra nó.</strong> Kết nối đó có một đăng ký đang hoạt động và, trên RESP2, không chạy được <code>GET</code> nữa. Nếu ứng dụng của bạn tự nhiên ngừng đọc được Redis sau khi một đăng ký bắt đầu thì đó chính là lý do — và đó là lý do mọi thư viện client đều có <code>duplicate()</code> hoặc thứ tương đương.</div>
 
 <h3>Thời gian chờ, ở cả hai phía</h3>
-<pre><code><span class="tok-comment">// Phía client: đừng bao giờ để một yêu cầu treo mãi mãi</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Phía client: đừng bao giờ để một yêu cầu treo mãi mãi</span>
 const redis = createClient({
   url: process.env.REDIS_URL,
   socket: {
@@ -1110,7 +1110,7 @@ redis-cli INFO stats | grep -E 'rejected_connections|total_connections'</code></
 <div class="out">(integer) 1
 rejected_connections:0
 total_connections_received:1284420</div>
-<pre><code><span class="tok-comment">// Một lớp bọc chịu lỗi trông thế nào — cho một CACHE, nơi một lần trượt là sống được</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Một lớp bọc chịu lỗi trông thế nào — cho một CACHE, nơi một lần trượt là sống được</span>
 export async function cached(key, ttl, compute) {
   try {
     const hit = await redis.get(key);

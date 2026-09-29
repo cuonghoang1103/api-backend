@@ -981,14 +981,14 @@ const L44 = {
 <li><strong>Common files built first</strong> — DBContext, AuthFilter, layout, Validator are ITER1 rows owned by named members.</li>
 </ul>
 <h3>2. The table — MySQL (the G5 original was SQL Server)</h3>
-<pre>CREATE TABLE categories (
+<pre><code class="language-sql">CREATE TABLE categories (
   category_id   INT AUTO_INCREMENT PRIMARY KEY,
   name          VARCHAR(50)  NOT NULL UNIQUE,
   image_url     VARCHAR(220) NULL,
   description   VARCHAR(500) NULL,
   is_active     TINYINT(1)   NOT NULL DEFAULT 1,
   created_at    DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;</pre>
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;</code></pre>
 <p class="ghi-chu">Same columns as the G5 <code>Categories</code> table (caID, categories_name 50, categories_img 220, description 500, statusCate), renamed in snake_case. The lengths matter: they are the limits your validation must enforce (Policies: "input longer than the DB column").</p>`,
     `<span class="eyebrow">Chương 4 · Bài 4.4 · stack mặc định của môn: NetBeans + Java Servlet/JSP + MySQL</span>
 <h2>Code trọn một màn hình — Servlet/JSP MVC, DAO và PreparedStatement</h2>
@@ -1023,17 +1023,17 @@ const L44 = {
 <li><strong>File dùng chung làm trước</strong> — DBContext, AuthFilter, layout, Validator là các dòng ITER1 có người phụ trách rõ ràng.</li>
 </ul>
 <h3>2. Bảng dữ liệu — MySQL (bản gốc của G5 là SQL Server)</h3>
-<pre>CREATE TABLE categories (
+<pre><code class="language-sql">CREATE TABLE categories (
   category_id   INT AUTO_INCREMENT PRIMARY KEY,
   name          VARCHAR(50)  NOT NULL UNIQUE,
   image_url     VARCHAR(220) NULL,
   description   VARCHAR(500) NULL,
   is_active     TINYINT(1)   NOT NULL DEFAULT 1,
   created_at    DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;</pre>
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;</code></pre>
 <p class="ghi-chu">Cùng các cột với bảng <code>Categories</code> của G5 (caID, categories_name 50, categories_img 220, description 500, statusCate), đổi tên theo snake_case. Độ dài rất quan trọng: đó là giới hạn mà validate của bạn phải chặn (Policies: "nhập độ dài vượt quá DB").</p>`),
     (() => {
-      const dao = `<pre><span class="tok-keyword">public class</span> CategoryDAO <span class="tok-keyword">extends</span> DBContext {
+      const dao = `<pre><code class="language-sql"><span class="tok-keyword">public class</span> CategoryDAO <span class="tok-keyword">extends</span> DBContext {
     <span class="tok-comment">// ORDER BY cannot take a ? placeholder → map user input to a fixed whitelist</span>
     <span class="tok-keyword">private static final</span> Map&lt;String, String&gt; SORT = Map.of(
         "id", "category_id", "name", "name", "created", "created_at");
@@ -1065,14 +1065,14 @@ const L44 = {
     <span class="tok-keyword">public int</span> insert(Category x)             <span class="tok-comment">// INSERT INTO categories(name, image_url, description) VALUES (?,?,?)</span>
     <span class="tok-keyword">public void</span> update(Category x)            <span class="tok-comment">// UPDATE categories SET name=?, image_url=?, description=? WHERE category_id=?</span>
     <span class="tok-keyword">public void</span> setActive(<span class="tok-keyword">int</span> id, <span class="tok-keyword">boolean</span> on)  <span class="tok-comment">// "delete" = UPDATE … SET is_active=0 (soft delete, as G5 did)</span>
-}</pre>`;
-      const sqli = `<pre><span class="tok-comment">// NEVER: user input concatenated into SQL</span>
+}</code></pre>`;
+      const sqli = `<pre><code class="language-sql"><span class="tok-comment">// NEVER: user input concatenated into SQL</span>
 String bad = "SELECT * FROM categories WHERE name LIKE '%" + kw + "%'";
 <span class="tok-comment">// kw = x%' OR '1'='1   → returns every row;   kw = x'; DROP TABLE categories; -- → disaster</span>
 
 <span class="tok-comment">// ALWAYS: a ? placeholder, value bound by the driver</span>
 String ok = "SELECT * FROM categories WHERE name LIKE ?";
-ps.setString(1, "%" + kw + "%");</pre>`;
+ps.setString(1, "%" + kw + "%");</code></pre>`;
       return bi(`<h3>3. The DAO — the only place where Category SQL lives</h3>
 ${dao}
 <p class="nhan">Line by line — what makes it safe and complete</p>
@@ -1103,7 +1103,7 @@ ${sqli}
 <div class="pitfall co-tieu-de"><strong>SQL nối chuỗi là điểm chấm, không phải chuyện phong cách.</strong> Giảng viên gõ <code>' OR '1'='1</code> vào ô tìm kiếm của bạn trong buổi demo. Chỉ một câu nối chuỗi ở bất kỳ đâu trong màn hình là một lỗi bảo mật — dùng <code>PreparedStatement</code> ở mọi nơi, kể cả các câu truy vấn "nhỏ".</div>`);
     })(),
     (() => {
-      const list = `<pre><span class="tok-keyword">@WebServlet</span>("/admin/categories")
+      const list = `<pre><code class="language-java"><span class="tok-keyword">@WebServlet</span>("/admin/categories")
 <span class="tok-keyword">public class</span> CategoryListServlet <span class="tok-keyword">extends</span> HttpServlet {
     <span class="tok-keyword">private static final int</span> SIZE = 10;
     <span class="tok-keyword">protected void</span> doGet(HttpServletRequest req, HttpServletResponse resp) <span class="tok-keyword">throws</span> … {
@@ -1123,8 +1123,8 @@ ${sqli}
         req.getSession().setAttribute("flash", "Status updated.");
         resp.sendRedirect(req.getContextPath() + "/admin/categories?" + keepQuery(req)); <span class="tok-comment">// PRG</span>
     }
-}</pre>`;
-      const detail = `<pre><span class="tok-keyword">@WebServlet</span>("/admin/category")          <span class="tok-comment">// ?id=7 → view/update · no id → add</span>
+}</code></pre>`;
+      const detail = `<pre><code class="language-java"><span class="tok-keyword">@WebServlet</span>("/admin/category")          <span class="tok-comment">// ?id=7 → view/update · no id → add</span>
 <span class="tok-keyword">public class</span> CategoryDetailServlet <span class="tok-keyword">extends</span> HttpServlet {
     <span class="tok-keyword">protected void</span> doGet(…) {
         Integer id = Validator.parseIntOrNull(req.getParameter("id"));
@@ -1151,7 +1151,7 @@ ${sqli}
         req.getSession().setAttribute("flash", c.getId() == 0 ? "Category created." : "Category updated.");
         resp.sendRedirect(req.getContextPath() + "/admin/categories");  <span class="tok-comment">// PRG: F5 will not re-insert</span>
     }
-}</pre>`;
+}</code></pre>`;
       return bi(`<h3>5. The controllers — thin servlets, no SQL</h3>
 <p class="nhan">Category list — reads the query string, asks the DAO, forwards to the JSP</p>
 ${list}
@@ -1182,7 +1182,7 @@ ${detail}
 </ol>`);
     })(),
     (() => {
-      const listJsp = `<pre>&lt;%@ page contentType="text/html; charset=UTF-8" %&gt;
+      const listJsp = `<pre><code class="language-xml">&lt;%@ page contentType="text/html; charset=UTF-8" %&gt;
 &lt;%@ taglib prefix="c" uri="jakarta.tags.core" %&gt;   <span class="tok-comment">&lt;!-- javax: http://java.sun.com/jsp/jstl/core --&gt;</span>
 &lt;jsp:include page="/common/header.jsp"&gt;&lt;jsp:param name="title" value="Categories"/&gt;&lt;/jsp:include&gt;
 &lt;jsp:include page="/common/menu.jsp"/&gt;            <span class="tok-comment">&lt;!-- role-aware menu: reach this page by clicking --&gt;</span>
@@ -1210,8 +1210,8 @@ ${detail}
 &lt;c:forEach begin="1" end="\${pages}" var="i"&gt;               <span class="tok-comment">&lt;!-- keep kw/status/sort in every link --&gt;</span>
   &lt;a class="\${i == page ? 'active' : ''}" href="?page=\${i}&amp;amp;kw=\${param.kw}&amp;amp;status=\${param.status}&amp;amp;sort=\${param.sort}"&gt;\${i}&lt;/a&gt;
 &lt;/c:forEach&gt;
-&lt;jsp:include page="/common/footer.jsp"/&gt;</pre>`;
-      const detailJsp = `<pre>&lt;c:set var="isNew" value="\${c.id == 0}"/&gt;
+&lt;jsp:include page="/common/footer.jsp"/&gt;</code></pre>`;
+      const detailJsp = `<pre><code class="language-xml">&lt;c:set var="isNew" value="\${c.id == 0}"/&gt;
 &lt;h2&gt;\${isNew ? 'Add category' : 'Category detail'}&lt;/h2&gt;
 &lt;form method="post" action="category" enctype="multipart/form-data"&gt;
   &lt;input type="hidden" name="id" value="\${c.id}"&gt;
@@ -1220,7 +1220,7 @@ ${detail}
   &lt;input type="file" name="image" accept=".jpg,.jpeg,.png"&gt; &lt;span class="error"&gt;\${err.image}&lt;/span&gt;
   &lt;textarea name="description" maxlength="500"&gt;&lt;c:out value="\${c.description}"/&gt;&lt;/textarea&gt;
   &lt;button&gt;Save&lt;/button&gt; &lt;a href="categories"&gt;Back to list&lt;/a&gt;
-&lt;/form&gt;</pre>`;
+&lt;/form&gt;</code></pre>`;
       return bi(`<h3>6. The views — shared layout, one JSP per screen</h3>
 <p class="nhan">category-list.jsp</p>
 ${listJsp}
@@ -1247,7 +1247,7 @@ ${detailJsp}
 </ul>`);
     })(),
     (() => {
-      const tx = `<pre><span class="tok-comment">// ApplyJobDAO.apply — member A's ITER2 screen "Apply job": two writes that must succeed together</span>
+      const tx = `<pre><code class="language-sql"><span class="tok-comment">// ApplyJobDAO.apply — member A's ITER2 screen "Apply job": two writes that must succeed together</span>
 <span class="tok-keyword">public void</span> apply(<span class="tok-keyword">int</span> freelancerId, <span class="tok-keyword">int</span> postId, String cvUrl) <span class="tok-keyword">throws</span> SQLException {
     <span class="tok-keyword">try</span> (Connection c = getConnection()) {
         c.setAutoCommit(<span class="tok-keyword">false</span>);                                   <span class="tok-comment">// start the transaction</span>
@@ -1265,8 +1265,8 @@ ${detailJsp}
             <span class="tok-keyword">throw</span> e;
         }
     }
-}</pre>`;
-      const auth = `<pre><span class="tok-keyword">@WebFilter</span>("/admin/*")
+}</code></pre>`;
+      const auth = `<pre><code class="language-java"><span class="tok-keyword">@WebFilter</span>("/admin/*")
 <span class="tok-keyword">public class</span> AuthFilter <span class="tok-keyword">implements</span> Filter {
     <span class="tok-keyword">public void</span> doFilter(ServletRequest rq, ServletResponse rs, FilterChain chain) <span class="tok-keyword">throws</span> … {
         HttpServletRequest req = (HttpServletRequest) rq;
@@ -1275,7 +1275,7 @@ ${detailJsp}
         <span class="tok-keyword">if</span> (!"ADMIN".equals(u.getRole())) { ((HttpServletResponse) rs).sendError(403); <span class="tok-keyword">return</span>; }
         chain.doFilter(rq, rs);
     }
-}</pre>`;
+}</code></pre>`;
       return bi(`<h3>7. When one action writes twice — a JDBC transaction</h3>
 ${tx}
 <p>If the post was closed a second ago, the insert is rolled back: no application exists for a closed post and the counter stays correct. Without <code>setAutoCommit(false)</code> the first statement would already be permanent.</p>
@@ -1505,7 +1505,7 @@ const L46 = {
 </tbody>
 </table>
 <h3>2. The daily Git loop (Student Guides slides 8–9)</h3>
-<pre><span class="tok-comment"># once — set up</span>
+<pre><code class="language-xml"><span class="tok-comment"># once — set up</span>
 git init
 git remote add origin https://gitlab.com/&lt;group&gt;/&lt;project&gt;.git
 git pull origin main
@@ -1515,7 +1515,7 @@ git pull origin main                 <span class="tok-comment"># 1. take the oth
 <span class="tok-comment">#   … code in NetBeans, build, run, click through your screen …</span>
 git add .
 git commit -m "UC37 category list: add status filter"
-git push origin main                 <span class="tok-comment"># 2. share yours the same day</span></pre>
+git push origin main                 <span class="tok-comment"># 2. share yours the same day</span></code></pre>
 <p class="nhan">Rules that make the loop safe</p>
 <ul>
 <li><strong>Compile and run before you push</strong> — slide 9: "check code đảm bảo dịch, chạy ko lỗi". A red main blocks four people.</li>
@@ -1558,7 +1558,7 @@ git push origin main                 <span class="tok-comment"># 2. share yours 
 </tbody>
 </table>
 <h3>2. Vòng Git hằng ngày (Student Guides slide 8–9)</h3>
-<pre><span class="tok-comment"># một lần — thiết lập</span>
+<pre><code class="language-xml"><span class="tok-comment"># một lần — thiết lập</span>
 git init
 git remote add origin https://gitlab.com/&lt;group&gt;/&lt;project&gt;.git
 git pull origin main
@@ -1568,7 +1568,7 @@ git pull origin main                 <span class="tok-comment"># 1. lấy việc
 <span class="tok-comment">#   … code trong NetBeans, build, chạy, bấm thử màn hình của mình …</span>
 git add .
 git commit -m "UC37 category list: add status filter"
-git push origin main                 <span class="tok-comment"># 2. chia sẻ việc của mình trong ngày</span></pre>
+git push origin main                 <span class="tok-comment"># 2. chia sẻ việc của mình trong ngày</span></code></pre>
 <p class="nhan">Luật giữ cho vòng lặp an toàn</p>
 <ul>
 <li><strong>Dịch và chạy trước khi push</strong> — slide 9: "check code đảm bảo dịch, chạy ko lỗi". main hỏng là chặn bốn người.</li>

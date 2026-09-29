@@ -54,7 +54,7 @@ ${gallery('wf-js3', [
 <p class="lead">When a function is created inside another function, it keeps a live link to that outer function's variables — even after the outer function has finished. That bundle is called a <strong>closure</strong>. You have already used closures dozens of times; this lesson just gives the thing a name.</p>
 
 <h3>The smallest example that shows it</h3>
-<pre><code>function makeCounter() {
+<pre><code class="language-javascript">function makeCounter() {
   let count = 0;              // lives in makeCounter's scope
   return function () {
     count = count + 1;        // still reachable, after makeCounter returned
@@ -75,14 +75,14 @@ next();   // 3
 </div>
 
 <h3>Two closures do not share state</h3>
-<pre><code>const a = makeCounter();
+<pre><code class="language-javascript">const a = makeCounter();
 const b = makeCounter();
 a(); a(); a();   // 3
 b();             // 1  — b has its OWN count</code></pre>
 <p class="note-ct">This is exactly why two <code>&lt;Counter /&gt;</code> components in React keep separate numbers. Same mechanism, different wrapper.</p>
 
 <h3>The classic interview trap</h3>
-<pre><code>// With var — all three print 3
+<pre><code class="language-javascript">// With var — all three print 3
 for (var i = 0; i &lt; 3; i++) {
   setTimeout(() =&gt; console.log(i), 0);
 }
@@ -96,7 +96,7 @@ for (let i = 0; i &lt; 3; i++) {
 <p>This single example is why <code>let</code> replaced <code>var</code>. It is not style; it changes what the program does.</p>
 
 <h3>A function that builds functions</h3>
-<pre><code>function multiplyBy(factor) {
+<pre><code class="language-javascript">function multiplyBy(factor) {
   return (n) =&gt; n * factor;     // factor is captured
 }
 const double = multiplyBy(2);
@@ -114,7 +114,7 @@ triple(5);   // 15</code></pre>
 <p class="lead">Khi một hàm được tạo bên trong một hàm khác, nó giữ một đường dẫn <strong>sống</strong> tới các biến của hàm ngoài — kể cả sau khi hàm ngoài đã chạy xong. Gói đó gọi là <strong>closure</strong>. Bạn đã dùng closure hàng chục lần rồi; bài này chỉ đặt tên cho nó.</p>
 
 <h3>Ví dụ nhỏ nhất cho thấy điều đó</h3>
-<pre><code>function taoBoDem() {
+<pre><code class="language-javascript">function taoBoDem() {
   let dem = 0;                // sống trong phạm vi của taoBoDem
   return function () {
     dem = dem + 1;            // vẫn với tới được, dù taoBoDem đã return
@@ -135,14 +135,14 @@ tiep();   // 3
 </div>
 
 <h3>Hai closure KHÔNG dùng chung state</h3>
-<pre><code>const a = taoBoDem();
+<pre><code class="language-javascript">const a = taoBoDem();
 const b = taoBoDem();
 a(); a(); a();   // 3
 b();             // 1  — b có dem RIÊNG của nó</code></pre>
 <p class="note-ct">Đây đúng là lý do hai component <code>&lt;Counter /&gt;</code> trong React giữ hai con số riêng. Cùng một cơ chế, khác cái vỏ.</p>
 
 <h3>Cái bẫy phỏng vấn kinh điển</h3>
-<pre><code>// Với var — cả ba đều in ra 3
+<pre><code class="language-javascript">// Với var — cả ba đều in ra 3
 for (var i = 0; i &lt; 3; i++) {
   setTimeout(() =&gt; console.log(i), 0);
 }
@@ -156,7 +156,7 @@ for (let i = 0; i &lt; 3; i++) {
 <p>Riêng ví dụ này là lý do <code>let</code> thay thế <code>var</code>. Không phải chuyện phong cách — nó đổi kết quả chương trình.</p>
 
 <h3>Hàm sinh ra hàm</h3>
-<pre><code>function nhanVoi(heSo) {
+<pre><code class="language-javascript">function nhanVoi(heSo) {
   return (n) =&gt; n * heSo;      // heSo bị "bắt giữ"
 }
 const gap2 = nhanVoi(2);
@@ -183,7 +183,7 @@ gap3(5);   // 15</code></pre>
 <p class="lead">This one sentence explains almost every confusing <code>this</code> bug. The same function can have four different <code>this</code> values depending on the call.</p>
 
 <h3>The four rules, in priority order</h3>
-<pre><code>// 1. new binding — this = the newly created object
+<pre><code class="language-javascript">// 1. new binding — this = the newly created object
 function Person(name) { this.name = name; }
 const p = new Person('Lan');      // this === p
 
@@ -209,7 +209,7 @@ fn();
 <div class="pitfall"><strong>Rule 4 is where people lose hours.</strong> Pulling a method out of its object breaks it: <code>const g = user.greet</code> then <code>g()</code> loses <code>this</code>. Passing a method as a callback does the same thing — <code>setTimeout(user.greet, 100)</code> is a detached call.</div>
 
 <h3>Arrow functions do not have their own <code>this</code></h3>
-<pre><code>const timer = {
+<pre><code class="language-javascript">const timer = {
   count: 0,
   startBroken() {
     setInterval(function () {
@@ -237,7 +237,7 @@ fn();
 <p class="lead">Riêng câu này giải thích gần như mọi lỗi khó hiểu liên quan tới <code>this</code>. Cùng một hàm có thể cho bốn giá trị <code>this</code> khác nhau tuỳ cách gọi.</p>
 
 <h3>Bốn luật, theo thứ tự ưu tiên</h3>
-<pre><code>// 1. new — this = object vừa được tạo
+<pre><code class="language-javascript">// 1. new — this = object vừa được tạo
 function Person(ten) { this.ten = ten; }
 const p = new Person('Lan');      // this === p
 
@@ -263,7 +263,7 @@ fn();
 <div class="pitfall"><strong>Luật 4 là chỗ người ta mất hàng giờ.</strong> Lôi một method ra khỏi object là nó hỏng: <code>const g = user.chao</code> rồi <code>g()</code> làm mất <code>this</code>. Truyền method làm callback cũng vậy — <code>setTimeout(user.chao, 100)</code> là một lời gọi đã tách rời.</div>
 
 <h3>Arrow function KHÔNG có <code>this</code> của riêng nó</h3>
-<pre><code>const dongHo = {
+<pre><code class="language-javascript">const dongHo = {
   dem: 0,
   chayHong() {
     setInterval(function () {
@@ -300,7 +300,7 @@ fn();
 <p class="lead">JavaScript does not copy methods into each object. Instead every object holds a link — its <strong>prototype</strong> — to another object, and missing properties are looked up along that chain. Understanding the chain explains why <code>[].map</code> works even though you never defined it.</p>
 
 <h3>The lookup chain</h3>
-<pre><code>const arr = [1, 2, 3];
+<pre><code class="language-javascript">const arr = [1, 2, 3];
 arr.map(...)
 // 1. Does arr itself have "map"?          no
 // 2. Does Array.prototype have "map"?     YES → use it
@@ -310,7 +310,7 @@ Object.getPrototypeOf(arr) === Array.prototype;          // true
 Object.getPrototypeOf(Array.prototype) === Object.prototype; // true</code></pre>
 
 <h3>class is sugar over the same machinery</h3>
-<pre><code>class Animal {
+<pre><code class="language-javascript">class Animal {
   constructor(name) { this.name = name; }
   speak() { return this.name + ' makes a sound'; }
   static create(name) { return new Animal(name); }   // called on the class
@@ -341,7 +341,7 @@ d instanceof Animal;       // true — Dog.prototype links to Animal.prototype</
 <p class="lead">JavaScript không chép method vào từng object. Thay vào đó mỗi object giữ một đường dẫn — <strong>prototype</strong> của nó — tới một object khác, và thuộc tính không có sẵn thì được tìm dọc theo chuỗi đó. Hiểu chuỗi này là hiểu vì sao <code>[].map</code> chạy được dù bạn chưa định nghĩa nó bao giờ.</p>
 
 <h3>Chuỗi tra cứu</h3>
-<pre><code>const arr = [1, 2, 3];
+<pre><code class="language-javascript">const arr = [1, 2, 3];
 arr.map(...)
 // 1. Bản thân arr có "map" không?          không
 // 2. Array.prototype có "map" không?        CÓ → dùng
@@ -351,7 +351,7 @@ Object.getPrototypeOf(arr) === Array.prototype;          // true
 Object.getPrototypeOf(Array.prototype) === Object.prototype; // true</code></pre>
 
 <h3>class chỉ là lớp vỏ đường của đúng cơ chế đó</h3>
-<pre><code>class DongVat {
+<pre><code class="language-javascript">class DongVat {
   constructor(ten) { this.ten = ten; }
   keu() { return this.ten + ' phát ra tiếng'; }
   static tao(ten) { return new DongVat(ten); }   // gọi trên CLASS
@@ -390,7 +390,7 @@ d instanceof DongVat;    // true — Cho.prototype nối tới DongVat.prototype
 <h2>Two collections you should reach for, and one habit that prevents bugs</h2>
 
 <h3>Map — a dictionary with real keys</h3>
-<pre><code>const m = new Map();
+<pre><code class="language-javascript">const m = new Map();
 m.set('a', 1);
 m.set(42, 'number key');       // keys can be ANY type, not just strings
 m.set({ id: 1 }, 'object key');
@@ -407,7 +407,7 @@ for (const [k, v] of m) console.log(k, v);   // insertion order guaranteed</code
 </div>
 
 <h3>Set — values with no duplicates</h3>
-<pre><code>const s = new Set([1, 2, 2, 3, 3, 3]);
+<pre><code class="language-javascript">const s = new Set([1, 2, 2, 3, 3, 3]);
 s.size;                    // 3
 s.has(2);                  // true
 
@@ -415,7 +415,7 @@ s.has(2);                  // true
 const unique = [...new Set(arr)];       // remove duplicates from an array</code></pre>
 
 <h3>Immutability — do not edit, replace</h3>
-<pre><code>// ❌ mutating
+<pre><code class="language-javascript">// ❌ mutating
 const arr = [1, 2, 3];
 arr.push(4);               // changes the SAME array
 obj.name = 'new';          // changes the SAME object
@@ -435,7 +435,7 @@ const obj2 = { ...obj, name: 'new' };  // new object
 <h2>Hai kiểu tập hợp nên dùng, và một thói quen chặn được cả loạt lỗi</h2>
 
 <h3>Map — từ điển với khoá thật</h3>
-<pre><code>const m = new Map();
+<pre><code class="language-javascript">const m = new Map();
 m.set('a', 1);
 m.set(42, 'khoá là số');        // khoá là KIỂU GÌ cũng được, không chỉ chuỗi
 m.set({ id: 1 }, 'khoá là object');
@@ -452,7 +452,7 @@ for (const [k, v] of m) console.log(k, v);   // đúng thứ tự thêm vào</co
 </div>
 
 <h3>Set — tập giá trị không trùng</h3>
-<pre><code>const s = new Set([1, 2, 2, 3, 3, 3]);
+<pre><code class="language-javascript">const s = new Set([1, 2, 2, 3, 3, 3]);
 s.size;                    // 3
 s.has(2);                  // true
 
@@ -460,7 +460,7 @@ s.has(2);                  // true
 const khongTrung = [...new Set(arr)];    // khử trùng lặp trong mảng</code></pre>
 
 <h3>Bất biến — đừng sửa, hãy thay</h3>
-<pre><code>// ❌ sửa tại chỗ
+<pre><code class="language-javascript">// ❌ sửa tại chỗ
 const arr = [1, 2, 3];
 arr.push(4);               // đổi CHÍNH mảng đó
 obj.ten = 'mới';           // đổi CHÍNH object đó
@@ -501,7 +501,7 @@ const obj2 = { ...obj, ten: 'mới' };  // object mới
 </div>
 
 <h3>Using it in JavaScript</h3>
-<pre><code>const re = /^\\d{10}$/;           // exactly ten digits, nothing else
+<pre><code class="language-javascript">const re = /^\\d{10}$/;           // exactly ten digits, nothing else
 re.test('0912345678');           // true
 re.test('09123');                // false
 
@@ -515,7 +515,7 @@ m[1];  // "2026"   ← capture groups start at index 1
 /hello/i.test('HELLO');          // true</code></pre>
 
 <h3>Three patterns you will actually reuse</h3>
-<pre><code>const slug   = /^[a-z0-9-]+$/;              // url-friendly text
+<pre><code class="language-javascript">const slug   = /^[a-z0-9-]+$/;              // url-friendly text
 const phone  = /^0\\d{9}$/;                  // Vietnamese mobile, simple form
 const spaces = /\\s+/g;                      // collapse runs of whitespace
 '  nhiều   khoảng  trắng '.trim().replace(spaces, ' ');</code></pre>
@@ -542,7 +542,7 @@ const spaces = /\\s+/g;                      // collapse runs of whitespace
 </div>
 
 <h3>Dùng trong JavaScript</h3>
-<pre><code>const re = /^\\d{10}$/;           // đúng mười chữ số, không gì khác
+<pre><code class="language-javascript">const re = /^\\d{10}$/;           // đúng mười chữ số, không gì khác
 re.test('0912345678');           // true
 re.test('09123');                // false
 
@@ -556,7 +556,7 @@ m[1];  // "2026"   ← nhóm bắt đánh số từ 1
 /hello/i.test('HELLO');          // true</code></pre>
 
 <h3>Ba mẫu bạn sẽ dùng lại thật</h3>
-<pre><code>const slug   = /^[a-z0-9-]+$/;              // chữ hợp cho URL
+<pre><code class="language-javascript">const slug   = /^[a-z0-9-]+$/;              // chữ hợp cho URL
 const dienThoai = /^0\\d{9}$/;               // số di động Việt Nam, dạng đơn giản
 const khoangTrang = /\\s+/g;                 // gộp nhiều khoảng trắng liền
 '  nhiều   khoảng  trắng '.trim().replace(khoangTrang, ' ');</code></pre>

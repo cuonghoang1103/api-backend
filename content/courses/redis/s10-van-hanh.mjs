@@ -573,7 +573,7 @@ selectors
 </div>
 
 <h3>Persisting them, and seeing who got denied</h3>
-<pre><code><span class="tok-comment"># Option A: aclfile — a separate file, reloadable without a restart</span>
+<pre><code class="language-bash"><span class="tok-comment"># Option A: aclfile — a separate file, reloadable without a restart</span>
 redis-cli CONFIG GET aclfile
 redis-cli ACL SAVE
 redis-cli ACL LOAD
@@ -716,7 +716,7 @@ selectors
 </div>
 
 <h3>Lưu chúng lại, và xem ai vừa bị chặn</h3>
-<pre><code><span class="tok-comment"># Cách A: aclfile — một tệp riêng, nạp lại được mà không cần khởi động lại</span>
+<pre><code class="language-bash"><span class="tok-comment"># Cách A: aclfile — một tệp riêng, nạp lại được mà không cần khởi động lại</span>
 redis-cli CONFIG GET aclfile
 redis-cli ACL SAVE
 redis-cli ACL LOAD
@@ -798,7 +798,7 @@ commands
 </div>
 
 <h3>The process: not root, and not able to do much</h3>
-<pre><code>ps -o user,args -C redis-server
+<pre><code class="language-bash">ps -o user,args -C redis-server
 systemd-analyze security redis-server | tail -3
 systemctl cat redis-server | grep -E "^User|^Group|NoNewPrivileges|ProtectSystem|ProtectHome|PrivateTmp|ReadWritePaths|CapabilityBoundingSet|MemoryDenyWriteExecute|RestrictAddressFamilies"
 ls -ld /var/lib/redis /etc/redis/redis.conf</code></pre>
@@ -827,7 +827,7 @@ drwxr-x--- 2 redis redis 4096 Aug 23 14:20 /var/lib/redis
 <div class="callout ok"><strong>Check the file permissions too — the last two lines above are doing real work.</strong> <code>/var/lib/redis</code> at <code>0750</code> owned by <code>redis</code> means no other unprivileged user on the box can read your RDB file, which contains every key and value in plaintext. <code>redis.conf</code> at <code>0640</code> matters for the same reason: it holds <code>requirepass</code>. A surprising number of installations leave both world-readable, at which point database credentials sitting in Redis are readable by any process on the machine, and no amount of network hardening helps.</div>
 
 <h3>Containers: what changes and what does not</h3>
-<pre><code><span class="tok-comment"># A hardened compose service</span>
+<pre><code class="language-typescript"><span class="tok-comment"># A hardened compose service</span>
 services:
   redis:
     image: redis:7.4-alpine
@@ -856,7 +856,7 @@ services:
 </div>
 
 <h3>A hardening checklist you can actually run</h3>
-<pre><code>echo "=== exposure ==="
+<pre><code class="language-bash">echo "=== exposure ==="
 redis-cli CONFIG GET bind protected-mode | paste - -
 ss -lntp | grep 6379
 
@@ -947,7 +947,7 @@ commands
 </div>
 
 <h3>Tiến trình: không phải root, và cũng không làm được mấy</h3>
-<pre><code>ps -o user,args -C redis-server
+<pre><code class="language-bash">ps -o user,args -C redis-server
 systemd-analyze security redis-server | tail -3
 systemctl cat redis-server | grep -E "^User|^Group|NoNewPrivileges|ProtectSystem|ProtectHome|PrivateTmp|ReadWritePaths|CapabilityBoundingSet|MemoryDenyWriteExecute|RestrictAddressFamilies"
 ls -ld /var/lib/redis /etc/redis/redis.conf</code></pre>
@@ -976,7 +976,7 @@ drwxr-x--- 2 redis redis 4096 Aug 23 14:20 /var/lib/redis
 <div class="callout ok"><strong>Hãy kiểm cả quyền tệp nữa — hai dòng cuối ở trên đang làm việc thật.</strong> <code>/var/lib/redis</code> ở mức <code>0750</code> do <code>redis</code> sở hữu nghĩa là không người dùng thường nào khác trên máy đó đọc được tệp RDB của bạn, vốn chứa mọi khoá và giá trị ở dạng văn bản thô. <code>redis.conf</code> ở mức <code>0640</code> quan trọng vì cùng lý do: nó giữ <code>requirepass</code>. Một số lượng đáng ngạc nhiên các bản cài đặt để cả hai thứ ấy ai cũng đọc được, và tới lúc đó thì thông tin xác thực cơ sở dữ liệu nằm trong Redis lại đọc được bởi mọi tiến trình trên máy, và không mức làm cứng mạng nào giúp được.</div>
 
 <h3>Container: cái gì đổi và cái gì không</h3>
-<pre><code><span class="tok-comment"># Một dịch vụ compose đã làm cứng</span>
+<pre><code class="language-typescript"><span class="tok-comment"># Một dịch vụ compose đã làm cứng</span>
 services:
   redis:
     image: redis:7.4-alpine
@@ -1005,7 +1005,7 @@ services:
 </div>
 
 <h3>Một danh mục làm cứng bạn chạy được thật</h3>
-<pre><code>echo "=== exposure ==="
+<pre><code class="language-bash">echo "=== exposure ==="
 redis-cli CONFIG GET bind protected-mode | paste - -
 ss -lntp | grep 6379
 
@@ -1083,7 +1083,7 @@ redis_version:7.4.1</div>
 <p class="lead">A Redis connection is cheap but not free, and the limits around it are set in three different places that must agree. When they do not, the symptom is a service that works fine until it suddenly cannot connect at all — with an error message that points at the wrong layer.</p>
 
 <h3>Three limits that must agree</h3>
-<pre><code>redis-cli CONFIG GET maxclients tcp-backlog
+<pre><code class="language-bash">redis-cli CONFIG GET maxclients tcp-backlog
 redis-cli INFO clients | grep -E "connected_clients|cluster_connections|maxclients|blocked_clients|total_watched_keys"
 redis-cli INFO stats | grep -E "total_connections_received|rejected_connections"
 ulimit -n
@@ -1160,7 +1160,7 @@ OK</div>
 </div>
 
 <h3>Sizing a connection pool</h3>
-<pre><code><span class="tok-comment">// Most Node clients: ONE connection, pipelined, is usually correct (Lesson 1.5)</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Most Node clients: ONE connection, pipelined, is usually correct (Lesson 1.5)</span>
 const redis = createClient({ url, socket: { keepAlive: 30000 } });
 
 <span class="tok-comment">// Blocking commands need their own connections — they park the socket</span>
@@ -1195,7 +1195,7 @@ const sub      = redis.duplicate();     <span class="tok-comment">// SUBSCRIBE (
 <p class="lead">Một kết nối Redis thì rẻ nhưng không miễn phí, và các giới hạn quanh nó được đặt ở ba nơi khác nhau mà chúng buộc phải khớp nhau. Khi chúng không khớp, triệu chứng là một dịch vụ chạy tốt cho tới khi đột nhiên không kết nối được gì cả — kèm một thông báo lỗi chỉ vào sai tầng.</p>
 
 <h3>Ba giới hạn phải khớp nhau</h3>
-<pre><code>redis-cli CONFIG GET maxclients tcp-backlog
+<pre><code class="language-bash">redis-cli CONFIG GET maxclients tcp-backlog
 redis-cli INFO clients | grep -E "connected_clients|cluster_connections|maxclients|blocked_clients|total_watched_keys"
 redis-cli INFO stats | grep -E "total_connections_received|rejected_connections"
 ulimit -n
@@ -1272,7 +1272,7 @@ OK</div>
 </div>
 
 <h3>Chọn cỡ một gáo kết nối</h3>
-<pre><code><span class="tok-comment">// Phần lớn thư viện Node: MỘT kết nối, có pipeline, thường là đúng (Bài 1.5)</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Phần lớn thư viện Node: MỘT kết nối, có pipeline, thường là đúng (Bài 1.5)</span>
 const redis = createClient({ url, socket: { keepAlive: 30000 } });
 
 <span class="tok-comment">// Lệnh chặn cần kết nối riêng của nó — chúng đỗ cái socket lại</span>

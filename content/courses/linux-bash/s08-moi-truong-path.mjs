@@ -70,7 +70,7 @@ ${gallery('lx-08', [
 
 <h3>What PATH actually is</h3>
 ${slide('lx-08', 3, 'Shell tìm lệnh: bảng băm trước, rồi PATH trái → phải')}
-<pre><code>echo "\$PATH"
+<pre><code class="language-bash">echo "\$PATH"
 echo "\$PATH" | tr ':' '\\n'</code></pre>
 <div class="out">/home/deploy/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 /home/deploy/.local/bin
@@ -105,7 +105,7 @@ builtin
 
 <h3>The hash table: a command that "disappeared"</h3>
 ${slide('lx-08', 5, 'Bảng băm nhớ đường cũ — hash -r bắt tìm lại')}
-<pre><code>node --version                   <span class="tok-comment"># runs /usr/local/bin/node — and bash hashes that path</span>
+<pre><code class="language-bash">node --version                   <span class="tok-comment"># runs /usr/local/bin/node — and bash hashes that path</span>
 sudo mv /usr/local/bin/node /usr/bin/node    <span class="tok-comment"># still on PATH; PATH itself unchanged</span>
 node --version
 hash -r; node --version</code></pre>
@@ -127,7 +127,7 @@ ${slide('lx-08', 6, 'Thứ tự trong PATH chọn phiên bản; PATH=/x xoá s�
 <pre><code>type -a python3</code></pre>
 <div class="out">python3 is /home/deploy/.local/bin/python3
 python3 is /usr/bin/python3</div>
-<pre><code><span class="tok-comment"># Prepend — your version wins</span>
+<pre><code class="language-bash"><span class="tok-comment"># Prepend — your version wins</span>
 export PATH="\$HOME/.local/bin:\$PATH"
 
 <span class="tok-comment"># Append — only used if nothing earlier provides it</span>
@@ -140,14 +140,14 @@ export PATH="\$PATH:/opt/tools/bin"</code></pre>
 
 <h3>Why the current directory must not be in PATH</h3>
 ${slide('lx-08', 7, 'Dấu . hay mục rỗng trong PATH = chạy file của người lạ')}
-<pre><code>echo "\$PATH"
+<pre><code class="language-bash">echo "\$PATH"
 <span class="tok-comment"># .:/usr/local/bin:/usr/bin:/bin      ← the leading dot is the problem</span>
 cd /tmp/downloaded-project
 ls</code></pre>
 <div class="out">README.md  ls  setup.sh</div>
 <p>There is a file called <code>ls</code> in that directory. With <code>.</code> first in <code>PATH</code>, typing <code>ls</code> runs <em>that</em> file — whatever it contains — with your privileges. The attacker does not need to break anything; they just need you to <code>cd</code> into a directory they control and type a normal command.</p>
 <div class="callout warn">This is why <code>.</code> is not in the default <code>PATH</code> on any modern system, and why running a script in the current directory requires the explicit <code>./script.sh</code> from Lesson 1.2. The dot is not a typo you keep having to add — it is the security boundary. If you ever see <code>.</code> or an empty entry (a leading, trailing or doubled colon, which means the same thing) in a <code>PATH</code>, treat it as a finding.</div>
-<pre><code><span class="tok-comment"># Empty entries are equivalent to "." — check for all three forms</span>
+<pre><code class="language-bash"><span class="tok-comment"># Empty entries are equivalent to "." — check for all three forms</span>
 echo "\$PATH" | grep -E '(^|:)(\\.)?(:|\$)' &amp;&amp; echo "PATH contains . or an empty entry"</code></pre>
 
 <h3>Where PATH entries come from</h3>
@@ -159,12 +159,12 @@ ${slide('lx-08', 8, 'PATH đến từ đâu — và macOS xếp lại nó bằng
   <div class="lz-layer"><span class="lz-lname">~/.bashrc</span><span class="lz-lnote">Interactive shells. Adding <code>PATH</code> here is common and mostly works, but it runs on every new shell — hence the duplicate-entry problem below.</span></div>
   <div class="lz-layer"><span class="lz-lname">systemd units · cron</span><span class="lz-lnote">Neither reads any of the above. cron's PATH is typically just <code>/usr/bin:/bin</code>. Lesson 8.2 and Chapter 11 cover this properly.</span></div>
 </div>
-<pre><code><span class="tok-comment"># PATH grows on every shell — the classic symptom of a bad rc file</span>
+<pre><code class="language-bash"><span class="tok-comment"># PATH grows on every shell — the classic symptom of a bad rc file</span>
 echo "\$PATH" | tr ':' '\\n' | sort | uniq -d</code></pre>
 <div class="out">/home/deploy/.local/bin
 /home/deploy/.local/bin</div>
 <p>A line like <code>export PATH="\$HOME/.local/bin:\$PATH"</code> in <code>~/.bashrc</code> prepends again every time a shell starts — and shells nest, so <code>tmux</code> inside <code>ssh</code> inside a terminal gives you three copies. Harmless in effect but a sign the line is in the wrong file, and it makes <code>PATH</code> genuinely hard to read when debugging. The idempotent form (Lesson 7.3):</p>
-<pre><code>case ":\$PATH:" in
+<pre><code class="language-bash">case ":\$PATH:" in
   *":\$HOME/.local/bin:"*) ;;                        <span class="tok-comment"># already there, do nothing</span>
   *) export PATH="\$HOME/.local/bin:\$PATH" ;;
 esac</code></pre>
@@ -172,7 +172,7 @@ esac</code></pre>
 <h3>sudo has its own PATH — measured</h3>
 ${slide('lx-08', 9, 'sudo dùng secure_path — sudo -E cũng không cứu PATH')}
 <p>The trap at the bottom of this lesson is common enough to deserve an experiment. A fake <code>node</code> lives in <code>~/.nvm-gia/bin</code>, which is on <em>your</em> <code>PATH</code>:</p>
-<pre><code>node --version
+<pre><code class="language-bash">node --version
 sudo node --version
 sudo -E node --version
 sudo env | grep ^PATH
@@ -187,7 +187,7 @@ v22.6.0</div>
 <p>Three things to read off that output. <code>sudo</code> uses the value of <code>secure_path</code> in <code>/etc/sudoers</code> (on Ubuntu 24.04: <code>/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin</code>), not yours. <code>-E</code> ("preserve environment") does not change that, because <code>secure_path</code> is applied on top of whatever is preserved. And the error comes from <code>sudo</code> itself, with exit code <strong>1</strong> — not bash's 127 — so a script that checks for 127 will misread it. The two lines that work both avoid a <code>PATH</code> lookup inside <code>sudo</code>: one hands it an absolute path, the other runs <code>env</code> (which <em>is</em> on <code>secure_path</code>) with an explicit <code>PATH</code> for just that one command.</p>
 
 <h3>Debugging a PATH problem</h3>
-<pre><code>type -a mycommand                <span class="tok-comment"># 1. what does the shell think it is?</span>
+<pre><code class="language-bash">type -a mycommand                <span class="tok-comment"># 1. what does the shell think it is?</span>
 echo "\$PATH" | tr ':' '\\n'       <span class="tok-comment"># 2. is the directory even listed?</span>
 ls -l /opt/tools/bin/mycommand   <span class="tok-comment"># 3. does the file exist, and is it +x?</span>
 hash -r                          <span class="tok-comment"># 4. clear a stale cached path</span>
@@ -224,7 +224,7 @@ env -i bash -c 'echo \$PATH'      <span class="tok-comment"># 6. what does a bar
 
 <h3>Try it step by step</h3>
 <p>In a throw-away container (<code>docker run --rm -it ubuntu:24.04 bash</code>, then <code>useradd -m an &amp;&amp; su - an</code>), type these one at a time and predict each line before pressing Enter. <code>xin</code> is a tiny script that prints where it lives.</p>
-<pre><code>mkdir -p ~/b1 ~/b2
+<pre><code class="language-bash">mkdir -p ~/b1 ~/b2
 printf '#!/bin/sh\\necho "toi o \$0"\\n' &gt; ~/b1/xin &amp;&amp; chmod +x ~/b1/xin
 PATH=~/b1:~/b2:\$PATH
 xin
@@ -319,7 +319,7 @@ toi o /home/an/b2/xin</div>
 
 <h3>PATH thật ra là gì</h3>
 ${slide('lx-08', 3, 'Shell tìm lệnh: bảng băm trước, rồi PATH trái → phải')}
-<pre><code>echo "\$PATH"
+<pre><code class="language-bash">echo "\$PATH"
 echo "\$PATH" | tr ':' '\\n'</code></pre>
 <div class="out">/home/deploy/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 /home/deploy/.local/bin
@@ -354,7 +354,7 @@ builtin
 
 <h3>Bảng băm: một lệnh "biến mất"</h3>
 ${slide('lx-08', 5, 'Bảng băm nhớ đường cũ — hash -r bắt tìm lại')}
-<pre><code>node --version                   <span class="tok-comment"># chạy /usr/local/bin/node — và bash băm đường đó lại</span>
+<pre><code class="language-bash">node --version                   <span class="tok-comment"># chạy /usr/local/bin/node — và bash băm đường đó lại</span>
 sudo mv /usr/local/bin/node /usr/bin/node    <span class="tok-comment"># vẫn nằm trong PATH; bản thân PATH không đổi</span>
 node --version
 hash -r; node --version</code></pre>
@@ -376,7 +376,7 @@ ${slide('lx-08', 6, 'Thứ tự trong PATH chọn phiên bản; PATH=/x xoá s�
 <pre><code>type -a python3</code></pre>
 <div class="out">python3 is /home/deploy/.local/bin/python3
 python3 is /usr/bin/python3</div>
-<pre><code><span class="tok-comment"># Thêm vào ĐẦU — bản của bạn thắng</span>
+<pre><code class="language-bash"><span class="tok-comment"># Thêm vào ĐẦU — bản của bạn thắng</span>
 export PATH="\$HOME/.local/bin:\$PATH"
 
 <span class="tok-comment"># Thêm vào CUỐI — chỉ dùng khi không có gì phía trước cung cấp nó</span>
@@ -389,14 +389,14 @@ export PATH="\$PATH:/opt/tools/bin"</code></pre>
 
 <h3>Vì sao thư mục hiện tại KHÔNG được nằm trong PATH</h3>
 ${slide('lx-08', 7, 'Dấu . hay mục rỗng trong PATH = chạy file của người lạ')}
-<pre><code>echo "\$PATH"
+<pre><code class="language-bash">echo "\$PATH"
 <span class="tok-comment"># .:/usr/local/bin:/usr/bin:/bin      ← dấu chấm đứng đầu là vấn đề</span>
 cd /tmp/downloaded-project
 ls</code></pre>
 <div class="out">README.md  ls  setup.sh</div>
 <p>Trong thư mục đó có một file tên là <code>ls</code>. Với dấu <code>.</code> đứng đầu <code>PATH</code>, gõ <code>ls</code> sẽ chạy <em>CÁI FILE ĐÓ</em> — bên trong nó có gì cũng mặc — với đặc quyền của bạn. Kẻ tấn công chẳng cần phá vỡ gì cả; họ chỉ cần bạn <code>cd</code> vào một thư mục do họ kiểm soát rồi gõ một lệnh bình thường.</p>
 <div class="callout warn">Đây là lý do <code>.</code> không nằm trong <code>PATH</code> mặc định trên bất kỳ hệ thống đời mới nào, và là lý do chạy một script trong thư mục hiện tại đòi phải gõ tường minh <code>./script.sh</code> như ở Bài 1.2. Dấu chấm không phải một thứ bạn cứ phải thêm vào cho đủ — nó chính là ranh giới an ninh. Nếu có lúc nào bạn thấy <code>.</code> hoặc một mục rỗng (dấu hai chấm đứng đầu, đứng cuối, hoặc lặp đôi — đều mang cùng ý nghĩa) trong một <code>PATH</code>, hãy coi đó là một phát hiện đáng điều tra.</div>
-<pre><code><span class="tok-comment"># Mục rỗng tương đương với "." — hãy kiểm cả ba dạng</span>
+<pre><code class="language-bash"><span class="tok-comment"># Mục rỗng tương đương với "." — hãy kiểm cả ba dạng</span>
 echo "\$PATH" | grep -E '(^|:)(\\.)?(:|\$)' &amp;&amp; echo "PATH có chứa . hoặc một mục rỗng"</code></pre>
 
 <h3>Các mục của PATH đến từ đâu</h3>
@@ -408,12 +408,12 @@ ${slide('lx-08', 8, 'PATH đến từ đâu — và macOS xếp lại nó bằng
   <div class="lz-layer"><span class="lz-lname">~/.bashrc</span><span class="lz-lnote">Shell tương tác. Đặt <code>PATH</code> ở đây là chuyện thường gặp và phần lớn vẫn chạy, nhưng nó chạy lại ở MỖI shell mới — nên sinh ra vấn đề trùng lặp bên dưới.</span></div>
   <div class="lz-layer"><span class="lz-lname">unit của systemd · cron</span><span class="lz-lnote">Không cái nào đọc bất kỳ thứ nào ở trên. PATH của cron điển hình chỉ là <code>/usr/bin:/bin</code>. Bài 8.2 và Chương 11 nói kỹ chuyện này.</span></div>
 </div>
-<pre><code><span class="tok-comment"># PATH phình ra ở mỗi shell — triệu chứng kinh điển của một file rc đặt sai chỗ</span>
+<pre><code class="language-bash"><span class="tok-comment"># PATH phình ra ở mỗi shell — triệu chứng kinh điển của một file rc đặt sai chỗ</span>
 echo "\$PATH" | tr ':' '\\n' | sort | uniq -d</code></pre>
 <div class="out">/home/deploy/.local/bin
 /home/deploy/.local/bin</div>
 <p>Một dòng như <code>export PATH="\$HOME/.local/bin:\$PATH"</code> trong <code>~/.bashrc</code> sẽ thêm vào đầu MỖI LẦN một shell khởi động — mà shell thì lồng nhau, nên <code>tmux</code> bên trong <code>ssh</code> bên trong một terminal cho bạn ba bản sao. Về tác dụng thì vô hại, nhưng đó là dấu hiệu dòng đó nằm nhầm file, và nó làm <code>PATH</code> thật sự khó đọc lúc gỡ lỗi. Dạng bền vững khi chạy lại (Bài 7.3):</p>
-<pre><code>case ":\$PATH:" in
+<pre><code class="language-bash">case ":\$PATH:" in
   *":\$HOME/.local/bin:"*) ;;                        <span class="tok-comment"># đã có rồi, không làm gì</span>
   *) export PATH="\$HOME/.local/bin:\$PATH" ;;
 esac</code></pre>
@@ -421,7 +421,7 @@ esac</code></pre>
 <h3>sudo có PATH riêng — đo thật</h3>
 ${slide('lx-08', 9, 'sudo dùng secure_path — sudo -E cũng không cứu PATH')}
 <p>Cái bẫy ở cuối bài này phổ biến tới mức đáng làm hẳn một thí nghiệm. Một <code>node</code> giả nằm ở <code>~/.nvm-gia/bin</code>, thư mục có trong <code>PATH</code> <em>CỦA BẠN</em>:</p>
-<pre><code>node --version
+<pre><code class="language-bash">node --version
 sudo node --version
 sudo -E node --version
 sudo env | grep ^PATH
@@ -436,7 +436,7 @@ v22.6.0</div>
 <p>Đọc ra ba điều từ output đó. <code>sudo</code> dùng giá trị <code>secure_path</code> trong <code>/etc/sudoers</code> (trên Ubuntu 24.04: <code>/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin</code>), không phải của bạn. Cờ <code>-E</code> ("preserve environment" — giữ nguyên môi trường) không đổi được điều đó, vì <code>secure_path</code> được áp ĐÈ lên bất cứ thứ gì đã được giữ lại. Và thông báo lỗi đến từ chính <code>sudo</code>, với mã thoát <strong>1</strong> — không phải 127 của bash — nên một script kiểm mã 127 sẽ đọc nhầm. Hai dòng chạy được đều tránh việc tra <code>PATH</code> bên trong <code>sudo</code>: một dòng đưa thẳng đường dẫn tuyệt đối, dòng kia chạy <code>env</code> (thứ CÓ nằm trong <code>secure_path</code>) kèm một <code>PATH</code> tường minh cho đúng một lệnh đó.</p>
 
 <h3>Gỡ một vấn đề về PATH</h3>
-<pre><code>type -a mycommand                <span class="tok-comment"># 1. shell nghĩ nó là cái gì?</span>
+<pre><code class="language-bash">type -a mycommand                <span class="tok-comment"># 1. shell nghĩ nó là cái gì?</span>
 echo "\$PATH" | tr ':' '\\n'       <span class="tok-comment"># 2. thư mục đó có được liệt kê không?</span>
 ls -l /opt/tools/bin/mycommand   <span class="tok-comment"># 3. file có tồn tại không, và có +x không?</span>
 hash -r                          <span class="tok-comment"># 4. xoá một đường dẫn đã lưu bị cũ</span>
@@ -473,7 +473,7 @@ env -i bash -c 'echo \$PATH'      <span class="tok-comment"># 6. một môi trư
 
 <h3>Chạy thử từng bước</h3>
 <p>Trong một container vứt đi (<code>docker run --rm -it ubuntu:24.04 bash</code>, rồi <code>useradd -m an &amp;&amp; su - an</code>), gõ từng dòng một và đoán output của mỗi dòng TRƯỚC khi bấm Enter. <code>xin</code> là một script tí hon in ra chỗ nó đang nằm.</p>
-<pre><code>mkdir -p ~/b1 ~/b2
+<pre><code class="language-bash">mkdir -p ~/b1 ~/b2
 printf '#!/bin/sh\\necho "toi o \$0"\\n' &gt; ~/b1/xin &amp;&amp; chmod +x ~/b1/xin
 PATH=~/b1:~/b2:\$PATH
 xin
@@ -582,7 +582,7 @@ ${slide('lx-08', 10, 'Ba loại shell — hỏi thẳng bằng login_shell và $
   <div class="lz-layer"><span class="lz-lname">Interactive non-login</span><span class="lz-lnote">A new terminal tab, a <code>tmux</code> pane, typing <code>bash</code>. Reads <strong>~/.bashrc</strong>. Has a prompt and a TTY, but you did not authenticate again.</span></div>
   <div class="lz-layer"><span class="lz-lname">Non-interactive</span><span class="lz-lnote">A script, a cron job, <code>ssh host 'command'</code>, a systemd unit. Reads <strong>nothing</strong> by default. No prompt, no TTY.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Which am I in?</span>
+<pre><code class="language-bash"><span class="tok-comment"># Which am I in?</span>
 shopt -q login_shell &amp;&amp; echo "login" || echo "not login"
 [[ \$- == *i* ]] &amp;&amp; echo "interactive" || echo "non-interactive"
 echo "\$0"                  <span class="tok-comment"># a leading dash (-bash) also means login</span></code></pre>
@@ -604,7 +604,7 @@ ${slide('lx-08', 11, 'bash đọc file nào: tuỳ loại shell (đo thật)')}
 
 <h3>Why an SSH session behaves differently from a terminal tab</h3>
 ${slide('lx-08', 13, "ssh host 'lệnh' đọc .bashrc — rồi dừng ở cái chốt")}
-<pre><code><span class="tok-comment"># Interactive login shell — reads .profile, and .profile usually sources .bashrc</span>
+<pre><code class="language-bash"><span class="tok-comment"># Interactive login shell — reads .profile, and .profile usually sources .bashrc</span>
 ssh vps
 
 <span class="tok-comment"># NON-interactive, non-login — Debian/Ubuntu bash reads ~/.bashrc, but only up to the guard</span>
@@ -613,14 +613,14 @@ ssh vps 'node --version'</code></pre>
 <div class="out">/usr/local/bin:/usr/bin:/bin
 bash: node: command not found</div>
 <p>Same machine, same user, two different answers. Logging in interactively runs the profile chain; passing a command to <code>ssh</code> does not, so a <code>PATH</code> set up by nvm or a version manager is simply absent. This catches people deploying over SSH constantly.</p>
-<pre><code><span class="tok-comment"># Force a login shell for a remote command</span>
+<pre><code class="language-bash"><span class="tok-comment"># Force a login shell for a remote command</span>
 ssh vps 'bash -lc "node --version"'
 
 <span class="tok-comment"># Or, better in a script: use the absolute path</span>
 ssh vps '/home/deploy/.nvm/versions/node/v22.6.0/bin/node --version'</code></pre>
 
 <div class="callout warn"><strong>Measured with a real <code>sshd</code> (Ubuntu 24.04 container, 28/09/2026), and it corrects a common belief.</strong> A remote command does not read "nothing": Debian and Ubuntu build bash so that, when <code>sshd</code> starts it non-interactively, it reads <code>/etc/bash.bashrc</code> and <code>~/.bashrc</code> — and the guard at the top of <code>~/.bashrc</code> (next section) stops it a few lines in. With <code>nvm</code>'s lines at the <em>end</em> of <code>~/.bashrc</code>, as its installer puts them, markers in the files show exactly that:
-<pre><code>ssh lab 'node --version'
+<pre><code class="language-bash">ssh lab 'node --version'
 ssh lab 'bash -lc "node --version"'</code></pre>
 <div class="out">  -&gt; /etc/bash.bashrc
   -&gt; ~/.bashrc (line 1, BEFORE the guard)
@@ -632,7 +632,7 @@ bash: line 1: node: command not found</div>
 So <code>bash -lc</code> is only a fix when the <code>PATH</code> line lives in <code>~/.profile</code>; a login shell that is not interactive still stops at the same guard. For deploy scripts the absolute path is the answer that cannot break. (The <code>PATH</code> the remote command did get — <code>…:/usr/games:/usr/local/games:/snap/bin</code> on Ubuntu — came from <code>/etc/environment</code> via PAM, not from any shell file.)</div>
 
 <h3>The guard at the top of ~/.bashrc</h3>
-<pre><code><span class="tok-comment"># Ubuntu's default ~/.bashrc starts with this</span>
+<pre><code class="language-bash"><span class="tok-comment"># Ubuntu's default ~/.bashrc starts with this</span>
 case \$- in
     *i*) ;;
       *) return;;
@@ -641,7 +641,7 @@ esac</code></pre>
 <div class="callout warn">This is the cause of the classic <code>scp</code> failure: someone adds <code>echo "Welcome back!"</code> or <code>neofetch</code> near the top of <code>~/.bashrc</code>, above the guard, and file transfers start failing with a protocol error while an interactive login looks perfectly normal. <strong>Anything that prints must go below the interactive guard</strong>, and preferably in the profile rather than the rc file.</div>
 
 <h3>How to organise the files</h3>
-<pre><code><span class="tok-comment"># ~/.profile — environment, once per session, inherited by everything</span>
+<pre><code class="language-bash"><span class="tok-comment"># ~/.profile — environment, once per session, inherited by everything</span>
 export EDITOR=vim
 export LANG=en_US.UTF-8
 case ":\$PATH:" in
@@ -677,7 +677,7 @@ exec bash -l                     <span class="tok-comment"># fresh LOGIN shell �
 
 <h3>Where cron and systemd fit</h3>
 ${slide('lx-08', 15, 'cron chỉ cho 6 biến: PATH=/usr/bin:/bin, SHELL=/bin/sh')}
-<pre><code><span class="tok-comment"># What a cron job actually gets</span>
+<pre><code class="language-bash"><span class="tok-comment"># What a cron job actually gets</span>
 * * * * * env &gt; /tmp/cron-env.txt
 cat /tmp/cron-env.txt</code></pre>
 <div class="out">HOME=/home/deploy
@@ -687,7 +687,7 @@ SHELL=/bin/sh
 PWD=/home/deploy</div>
 <p>Five variables, a <code>PATH</code> with two entries, and <code>SHELL=/bin/sh</code> — not bash. No <code>~/.profile</code>, no <code>~/.bashrc</code>, none of your version managers, none of your exports. Everything you rely on interactively is absent.</p>
 <div class="callout">Run for real on an Ubuntu 24.04 container on 28/09/2026 (<code>* * * * * env &gt; /tmp/cron-env.txt; mytool …</code>, with <code>mytool</code> in <code>/usr/local/bin</code>), cron handed the job <strong>six</strong> variables — the five above plus <code>LANG=C.UTF-8</code>, which cron's PAM setup reads from <code>/etc/default/locale</code> — and the job failed with <code>/bin/sh: 1: mytool: not found</code>, exit 127, while typing <code>mytool</code> by hand printed <code>mytool chay ok</code>. Note the prefix: the error comes from <code>/bin/sh</code> (dash on Ubuntu), because cron runs every line with <code>SHELL=/bin/sh</code> — bash-only syntax in a crontab line fails for the same reason.</div>
-<pre><code><span class="tok-comment"># Three ways to fix it, best first</span>
+<pre><code class="language-bash"><span class="tok-comment"># Three ways to fix it, best first</span>
 
 <span class="tok-comment"># 1. Absolute paths in the script, and set PATH at the top of the script itself</span>
 PATH=/usr/local/bin:/usr/bin:/bin
@@ -703,7 +703,7 @@ PATH=/usr/local/bin:/usr/bin:/bin
 
 <h3>Debugging which file ran</h3>
 ${slide('lx-08', 12, 'Đo bằng dấu mốc: mỗi cách gọi, một kết quả')}
-<pre><code><span class="tok-comment"># Put a marker in each file, temporarily</span>
+<pre><code class="language-bash"><span class="tok-comment"># Put a marker in each file, temporarily</span>
 echo 'echo "read: ~/.profile" &gt;&amp;2' &gt;&gt; ~/.profile
 echo 'echo "read: ~/.bashrc"  &gt;&amp;2' &gt;&gt; ~/.bashrc
 
@@ -761,7 +761,7 @@ ZDOTDIR=~/thu/zdot zsh -l -i -c exit</code></pre>
 
 <h3>Try it step by step</h3>
 <p>This experiment is safe on any Linux machine, even a real server, because it never touches your real dotfiles: it points <code>HOME</code> at a scratch directory holding copies of Ubuntu's defaults (<code>/etc/skel</code>), each with a marker line.</p>
-<pre><code>H=~/thu-home; mkdir -p \$H; cp /etc/skel/.bashrc /etc/skel/.profile \$H/
+<pre><code class="language-bash">H=~/thu-home; mkdir -p \$H; cp /etc/skel/.bashrc /etc/skel/.profile \$H/
 sed -i '1i echo "  -&gt; ~/.profile" &gt;&amp;2' \$H/.profile
 sed -i '1i echo "  -&gt; ~/.bashrc (line 1, BEFORE the guard)" &gt;&amp;2' \$H/.bashrc
 echo 'echo "  -&gt; ~/.bashrc (end of file, AFTER the guard)" &gt;&amp;2' &gt;&gt; \$H/.bashrc
@@ -852,7 +852,7 @@ ${slide('lx-08', 10, 'Ba loại shell — hỏi thẳng bằng login_shell và $
   <div class="lz-layer"><span class="lz-lname">Tương tác, không đăng nhập</span><span class="lz-lnote">Một tab terminal mới, một ô <code>tmux</code>, gõ <code>bash</code>. Đọc <strong>~/.bashrc</strong>. Có dấu nhắc và có TTY, nhưng bạn không xác thực lại.</span></div>
   <div class="lz-layer"><span class="lz-lname">Không tương tác</span><span class="lz-lnote">Một script, một công việc cron, <code>ssh host 'lệnh'</code>, một unit systemd. Mặc định KHÔNG đọc <strong>gì cả</strong>. Không dấu nhắc, không TTY.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Tôi đang ở loại nào?</span>
+<pre><code class="language-bash"><span class="tok-comment"># Tôi đang ở loại nào?</span>
 shopt -q login_shell &amp;&amp; echo "đăng nhập" || echo "không đăng nhập"
 [[ \$- == *i* ]] &amp;&amp; echo "tương tác" || echo "không tương tác"
 echo "\$0"                  <span class="tok-comment"># dấu gạch ngang đứng đầu (-bash) cũng nghĩa là đăng nhập</span></code></pre>
@@ -874,7 +874,7 @@ ${slide('lx-08', 11, 'bash đọc file nào: tuỳ loại shell (đo thật)')}
 
 <h3>Vì sao một phiên SSH hành xử khác một tab terminal</h3>
 ${slide('lx-08', 13, "ssh host 'lệnh' đọc .bashrc — rồi dừng ở cái chốt")}
-<pre><code><span class="tok-comment"># Shell đăng nhập tương tác — đọc .profile, và .profile thường source .bashrc</span>
+<pre><code class="language-bash"><span class="tok-comment"># Shell đăng nhập tương tác — đọc .profile, và .profile thường source .bashrc</span>
 ssh vps
 
 <span class="tok-comment"># KHÔNG tương tác, không đăng nhập — bash của Debian/Ubuntu có đọc ~/.bashrc, nhưng chỉ tới cái chốt</span>
@@ -883,14 +883,14 @@ ssh vps 'node --version'</code></pre>
 <div class="out">/usr/local/bin:/usr/bin:/bin
 bash: node: command not found</div>
 <p>Cùng một máy, cùng một người dùng, hai câu trả lời khác nhau. Đăng nhập tương tác thì chạy chuỗi profile; còn truyền một lệnh vào cho <code>ssh</code> thì không, nên một <code>PATH</code> do nvm hay một trình quản lý phiên bản dựng lên đơn giản là vắng mặt. Chuyện này bẫy những người deploy qua SSH suốt ngày.</p>
-<pre><code><span class="tok-comment"># Ép một shell đăng nhập cho lệnh chạy từ xa</span>
+<pre><code class="language-bash"><span class="tok-comment"># Ép một shell đăng nhập cho lệnh chạy từ xa</span>
 ssh vps 'bash -lc "node --version"'
 
 <span class="tok-comment"># Hoặc, tốt hơn trong một script: dùng đường dẫn tuyệt đối</span>
 ssh vps '/home/deploy/.nvm/versions/node/v22.6.0/bin/node --version'</code></pre>
 
 <div class="callout warn"><strong>Đo bằng một <code>sshd</code> thật (container Ubuntu 24.04, 28/09/2026), và nó sửa một niềm tin phổ biến.</strong> Một lệnh chạy từ xa KHÔNG phải là "không đọc gì": Debian và Ubuntu dựng bash sao cho khi <code>sshd</code> khởi động nó ở chế độ không tương tác, nó đọc <code>/etc/bash.bashrc</code> và <code>~/.bashrc</code> — rồi cái chốt ở đầu <code>~/.bashrc</code> (mục kế tiếp) chặn nó lại sau vài dòng. Với các dòng của <code>nvm</code> nằm ở <em>CUỐI</em> <code>~/.bashrc</code>, đúng chỗ trình cài của nó đặt vào, các dấu mốc trong file cho thấy rõ điều đó:
-<pre><code>ssh lab 'node --version'
+<pre><code class="language-bash">ssh lab 'node --version'
 ssh lab 'bash -lc "node --version"'</code></pre>
 <div class="out">  -&gt; /etc/bash.bashrc
   -&gt; ~/.bashrc (dòng 1, TRƯỚC cái chốt)
@@ -902,7 +902,7 @@ bash: line 1: node: command not found</div>
 Vậy <code>bash -lc</code> chỉ là cách chữa khi dòng <code>PATH</code> nằm trong <code>~/.profile</code>; một shell login mà không tương tác vẫn dừng ở đúng cái chốt đó. Với script deploy, đường dẫn tuyệt đối là câu trả lời không thể hỏng. (Cái <code>PATH</code> mà lệnh từ xa nhận được — <code>…:/usr/games:/usr/local/games:/snap/bin</code> trên Ubuntu — đến từ <code>/etc/environment</code> qua PAM, không từ file shell nào.)</div>
 
 <h3>Cái chốt ở đầu ~/.bashrc</h3>
-<pre><code><span class="tok-comment"># File ~/.bashrc mặc định của Ubuntu mở đầu bằng đoạn này</span>
+<pre><code class="language-bash"><span class="tok-comment"># File ~/.bashrc mặc định của Ubuntu mở đầu bằng đoạn này</span>
 case \$- in
     *i*) ;;
       *) return;;
@@ -911,7 +911,7 @@ esac</code></pre>
 <div class="callout warn">Đây là nguyên nhân của kiểu hỏng <code>scp</code> kinh điển: ai đó thêm <code>echo "Chào mừng trở lại!"</code> hay <code>neofetch</code> vào gần đầu <code>~/.bashrc</code>, PHÍA TRÊN cái chốt, và việc truyền file bắt đầu hỏng với một lỗi giao thức trong khi đăng nhập tương tác thì trông hoàn toàn bình thường. <strong>Mọi thứ có in ra đều phải nằm DƯỚI cái chốt tương tác</strong>, và tốt nhất là nằm trong file profile chứ không phải file rc.</div>
 
 <h3>Sắp xếp các file thế nào</h3>
-<pre><code><span class="tok-comment"># ~/.profile — môi trường, một lần mỗi phiên, được mọi thứ thừa kế</span>
+<pre><code class="language-bash"><span class="tok-comment"># ~/.profile — môi trường, một lần mỗi phiên, được mọi thứ thừa kế</span>
 export EDITOR=vim
 export LANG=en_US.UTF-8
 case ":\$PATH:" in
@@ -947,7 +947,7 @@ exec bash -l                     <span class="tok-comment"># shell ĐĂNG NHẬP
 
 <h3>cron và systemd nằm ở đâu trong bức tranh này</h3>
 ${slide('lx-08', 15, 'cron chỉ cho 6 biến: PATH=/usr/bin:/bin, SHELL=/bin/sh')}
-<pre><code><span class="tok-comment"># Một công việc cron THẬT SỰ nhận được gì</span>
+<pre><code class="language-bash"><span class="tok-comment"># Một công việc cron THẬT SỰ nhận được gì</span>
 * * * * * env &gt; /tmp/cron-env.txt
 cat /tmp/cron-env.txt</code></pre>
 <div class="out">HOME=/home/deploy
@@ -957,7 +957,7 @@ SHELL=/bin/sh
 PWD=/home/deploy</div>
 <p>Năm biến, một <code>PATH</code> có hai mục, và <code>SHELL=/bin/sh</code> — không phải bash. Không <code>~/.profile</code>, không <code>~/.bashrc</code>, không trình quản lý phiên bản nào của bạn, không biến export nào của bạn. Mọi thứ bạn dựa vào khi gõ tay đều vắng mặt.</p>
 <div class="callout">Chạy thật trên container Ubuntu 24.04 ngày 28/09/2026 (<code>* * * * * env &gt; /tmp/cron-env.txt; mytool …</code>, với <code>mytool</code> nằm ở <code>/usr/local/bin</code>), cron trao cho công việc <strong>SÁU</strong> biến — năm biến ở trên cộng <code>LANG=C.UTF-8</code>, thứ mà cấu hình PAM của cron đọc từ <code>/etc/default/locale</code> — và công việc hỏng với <code>/bin/sh: 1: mytool: not found</code>, mã 127, trong khi gõ tay <code>mytool</code> thì in <code>mytool chay ok</code>. Để ý tiền tố: lỗi đến từ <code>/bin/sh</code> (trên Ubuntu là dash), vì cron chạy mọi dòng bằng <code>SHELL=/bin/sh</code> — cú pháp chỉ bash mới hiểu mà viết thẳng vào dòng crontab cũng hỏng vì cùng lý do.</div>
-<pre><code><span class="tok-comment"># Ba cách chữa, tốt nhất xếp trước</span>
+<pre><code class="language-bash"><span class="tok-comment"># Ba cách chữa, tốt nhất xếp trước</span>
 
 <span class="tok-comment"># 1. Đường dẫn tuyệt đối trong script, và tự đặt PATH ở đầu chính script đó</span>
 PATH=/usr/local/bin:/usr/bin:/bin
@@ -973,7 +973,7 @@ PATH=/usr/local/bin:/usr/bin:/bin
 
 <h3>Gỡ xem file nào đã chạy</h3>
 ${slide('lx-08', 12, 'Đo bằng dấu mốc: mỗi cách gọi, một kết quả')}
-<pre><code><span class="tok-comment"># Đặt một dấu mốc vào mỗi file, tạm thời thôi</span>
+<pre><code class="language-bash"><span class="tok-comment"># Đặt một dấu mốc vào mỗi file, tạm thời thôi</span>
 echo 'echo "đã đọc: ~/.profile" &gt;&amp;2' &gt;&gt; ~/.profile
 echo 'echo "đã đọc: ~/.bashrc"  &gt;&amp;2' &gt;&gt; ~/.bashrc
 
@@ -1031,7 +1031,7 @@ ZDOTDIR=~/thu/zdot zsh -l -i -c exit</code></pre>
 
 <h3>Chạy thử từng bước</h3>
 <p>Thí nghiệm này an toàn trên mọi máy Linux, kể cả một máy chủ thật, vì nó không bao giờ đụng dotfile thật: nó trỏ <code>HOME</code> sang một thư mục nháp chứa bản sao các file mặc định của Ubuntu (<code>/etc/skel</code>), mỗi file thêm một dòng dấu mốc.</p>
-<pre><code>H=~/thu-home; mkdir -p \$H; cp /etc/skel/.bashrc /etc/skel/.profile \$H/
+<pre><code class="language-bash">H=~/thu-home; mkdir -p \$H; cp /etc/skel/.bashrc /etc/skel/.profile \$H/
 sed -i '1i echo "  -&gt; ~/.profile" &gt;&amp;2' \$H/.profile
 sed -i '1i echo "  -&gt; ~/.bashrc (dòng 1, TRƯỚC cái chốt)" &gt;&amp;2' \$H/.bashrc
 echo 'echo "  -&gt; ~/.bashrc (cuối file, SAU cái chốt)" &gt;&amp;2' &gt;&gt; \$H/.bashrc
@@ -1127,7 +1127,7 @@ HOME=\$H bash -l -c true</code></pre>
 <h3>Shell variable or environment variable: what export really does</h3>
 ${slide('lx-08', 16, 'Chỉ biến đã export mới đi theo sang tiến trình con')}
 <p>Every bash has two kinds of variables. A <strong>shell variable</strong> lives only inside that shell. An <strong>environment variable</strong> is one that has been <code>export</code>ed: when the shell starts a program (fork, then exec — Lesson 5.1), it hands the program a <em>copy</em> of its exported variables, and nothing else. <code>declare -p</code> shows which kind you have: <code>--</code> means shell-only, <code>-x</code> means exported.</p>
-<pre><code>MAU=do; bash -c 'echo "con thay [\$MAU]"'
+<pre><code class="language-bash">MAU=do; bash -c 'echo "con thay [\$MAU]"'
 export MAU; bash -c 'echo "con thay [\$MAU]"'
 declare -p MAU
 export -n MAU; declare -p MAU</code></pre>
@@ -1137,7 +1137,7 @@ declare -x MAU="do"
 declare -- MAU="do"</div>
 <p><code>export -n</code> takes the export flag away again without deleting the value; <code>unset</code> deletes the variable entirely. Note the single quotes around the child's command: they stop <em>your</em> shell from expanding <code>\$MAU</code> first, so what you see really is what the child received.</p>
 ${slide('lx-08', 17, 'Con không sửa được cha — môi trường đóng băng lúc exec')}
-<pre><code>export SO=1
+<pre><code class="language-bash">export SO=1
 bash -c 'SO=2; export SO; echo "trong con: \$SO"'
 echo "cha van: \$SO"
 ( SO=3 ); echo "sau subshell: \$SO"
@@ -1152,7 +1152,7 @@ sau subshell: 1
 
 <h3>Setting a variable for exactly one command</h3>
 ${slide('lx-08', 18, 'Đặt biến cho đúng một lệnh: tiền tố và env')}
-<pre><code>NODE_ENV=production node server.js       <span class="tok-comment"># only this invocation</span>
+<pre><code class="language-bash">NODE_ENV=production node server.js       <span class="tok-comment"># only this invocation</span>
 LOG_LEVEL=debug ./deploy.sh staging
 LC_ALL=C sort data.txt                   <span class="tok-comment"># Lesson 3.4's locale fix</span>
 
@@ -1208,7 +1208,7 @@ env \$(grep -v '^#' .env | xargs) sh -c 'echo "[\$DB_URL]"'
 ./.env: line 1: khau@localhost/app: No such file or directory
 exit=127 DB_URL=[]</div>
 <p>The <code>xargs</code> form split the value at the space and handed <code>env</code> a "command" called <code>khau@localhost/app</code>. <code>source</code> read the line as bash would: <code>DB_URL=postgres://app:mat</code> as a one-command prefix, then <code>khau@localhost/app</code> as the command — so the assignment never even reached your shell. Quote the value (<code>DB_URL="postgres://app:mat khau@localhost/app"</code>) and <code>set -a; . ./.env; set +a</code> gives a child the full string; without <code>set -a</code>, your shell has the variables but a child sees nothing, because they were never exported.</p>
-<pre><code><span class="tok-comment"># And source only trusted files: .env is EXECUTED as shell code</span>
+<pre><code class="language-bash"><span class="tok-comment"># And source only trusted files: .env is EXECUTED as shell code</span>
 echo 'rm -rf /tmp/important' &gt;&gt; .env
 source .env          <span class="tok-comment"># that line runs</span></code></pre>
 <p><code>source</code> does not parse key–value pairs; it runs the file as a bash script. A <code>.env</code> that came from a colleague, a CI artefact or an unfamiliar repository is code you are about to execute as yourself. That is fine for a file you wrote; it is not a safe way to consume a file you did not.</p>
@@ -1228,7 +1228,7 @@ DATABASE_URL=postgres://user:hunter2@localhost/app</div>
 <div class="callout">This is not an argument against environment variables — they remain far better than hard-coding a secret in source control, and they are what twelve-factor deployment assumes. It is an argument for knowing the exposure: <strong>environment variables are protected from other <em>users</em>, not from other <em>code running as you</em></strong>. Choose accordingly.</div>
 
 <div class="callout warn"><strong>The dotfiles version of this mistake.</strong> <code>export OPENAI_API_KEY=sk-…</code> in <code>~/.bashrc</code> "works", so it stays there — and then the dotfiles go into a public GitHub repository so they can be shared across machines. The key is now in git history for good: deleting the line in the next commit does not remove it, and anyone who cloned or forked in between still has it. The order of repair is fixed: <strong>rotate the key first</strong>, then clean history. Prevention is cheap: keep secrets in a separate file that git never sees and that only you can read, and load it from the rc file:
-<pre><code>install -m 600 /dev/null ~/.secrets             <span class="tok-comment"># created 600 from the start</span>
+<pre><code class="language-bash">install -m 600 /dev/null ~/.secrets             <span class="tok-comment"># created 600 from the start</span>
 echo 'export OPENAI_API_KEY=…' &gt;&gt; ~/.secrets
 echo '[ -r ~/.secrets ] &amp;&amp; . ~/.secrets' &gt;&gt; ~/.bashrc
 echo '.secrets' &gt;&gt; ~/dotfiles/.gitignore
@@ -1250,7 +1250,7 @@ ps aux | grep mysql</code></pre>
 <p>That is why database clients read a config file (<code>~/.my.cnf</code>, <code>~/.pgpass</code>) or prompt, and why <code>curl</code> has <code>--netrc</code> and <code>-H @file</code>. Whenever a tool offers a way to pass a credential that is <em>not</em> an argument, that alternative exists for this reason.</p>
 
 <h3>Practical setup for one server</h3>
-<pre><code><span class="tok-comment"># The file: owned by the service user, readable by nobody else</span>
+<pre><code class="language-bash"><span class="tok-comment"># The file: owned by the service user, readable by nobody else</span>
 sudo install -o appuser -g appuser -m 600 /dev/null /opt/app/.env
 sudo -u appuser tee -a /opt/app/.env &gt;/dev/null &lt;&lt;'EOF'
 DATABASE_URL=postgres://app:REDACTED@localhost:5432/app
@@ -1269,7 +1269,7 @@ sudo systemctl daemon-reload &amp;&amp; sudo systemctl restart myapp</code></pre
 <div class="callout ok">Two properties worth noticing. The <code>.env</code> lives <em>outside</em> the deployment directory, so a deploy that rsyncs or replaces the app tree cannot overwrite or delete it — the same reasoning behind keeping production env in <code>/opt/&lt;app&gt;/.env</code> rather than in the repo checkout. And <code>install -m 600</code> creates the file with the right mode from the start, rather than creating it world-readable and fixing it afterwards, which leaves a window where it was exposed.</div>
 
 <h3>Checking what a running process actually has</h3>
-<pre><code>systemctl show myapp -p Environment
+<pre><code class="language-bash">systemctl show myapp -p Environment
 sudo tr '\\0' '\\n' &lt; /proc/\$(pgrep -f 'dist/index.js')/environ | sort
 docker exec myapp env | sort
 docker inspect myapp --format '{{range .Config.Env}}{{println .}}{{end}}'</code></pre>
@@ -1314,7 +1314,7 @@ DATABASE_URL=postgres://app:...@localhost:5432/app</div>
 
 <h3>Try it step by step</h3>
 <p>Any Linux shell will do (a container is fine). Predict each line first.</p>
-<pre><code>X=1; bash -c 'echo "[\$X]"'
+<pre><code class="language-bash">X=1; bash -c 'echo "[\$X]"'
 export X; bash -c 'echo "[\$X]"'
 bash -c 'X=99'; echo "\$X"
 env -u X bash -c 'echo "[\${X-unset}]"'
@@ -1404,7 +1404,7 @@ X=1</div>
 <h3>Biến shell hay biến môi trường: export thật ra làm gì</h3>
 ${slide('lx-08', 16, 'Chỉ biến đã export mới đi theo sang tiến trình con')}
 <p>Mỗi bash có hai loại biến. <strong>Biến shell</strong> (shell variable) chỉ sống bên trong shell đó. <strong>Biến môi trường</strong> (environment variable) là biến đã được <code>export</code>: khi shell khởi động một chương trình (fork rồi exec — Bài 5.1), nó trao cho chương trình một <em>BẢN SAO</em> các biến đã export, và không gì khác. <code>declare -p</code> cho biết bạn đang có loại nào: <code>--</code> là chỉ-trong-shell, <code>-x</code> là đã export.</p>
-<pre><code>MAU=do; bash -c 'echo "con thay [\$MAU]"'
+<pre><code class="language-bash">MAU=do; bash -c 'echo "con thay [\$MAU]"'
 export MAU; bash -c 'echo "con thay [\$MAU]"'
 declare -p MAU
 export -n MAU; declare -p MAU</code></pre>
@@ -1414,7 +1414,7 @@ declare -x MAU="do"
 declare -- MAU="do"</div>
 <p><code>export -n</code> gỡ lại cờ export mà không xoá giá trị; <code>unset</code> thì xoá hẳn biến. Để ý cặp nháy đơn quanh lệnh của tiến trình con: chúng chặn shell <em>CỦA BẠN</em> khai triển <code>\$MAU</code> trước, nên thứ bạn thấy đúng là thứ tiến trình con nhận được.</p>
 ${slide('lx-08', 17, 'Con không sửa được cha — môi trường đóng băng lúc exec')}
-<pre><code>export SO=1
+<pre><code class="language-bash">export SO=1
 bash -c 'SO=2; export SO; echo "trong con: \$SO"'
 echo "cha van: \$SO"
 ( SO=3 ); echo "sau subshell: \$SO"
@@ -1429,7 +1429,7 @@ sau subshell: 1
 
 <h3>Đặt biến cho đúng một lệnh</h3>
 ${slide('lx-08', 18, 'Đặt biến cho đúng một lệnh: tiền tố và env')}
-<pre><code>NODE_ENV=production node server.js       <span class="tok-comment"># chỉ lần gọi này</span>
+<pre><code class="language-bash">NODE_ENV=production node server.js       <span class="tok-comment"># chỉ lần gọi này</span>
 LOG_LEVEL=debug ./deploy.sh staging
 LC_ALL=C sort data.txt                   <span class="tok-comment"># cách chữa locale ở Bài 3.4</span>
 
@@ -1485,7 +1485,7 @@ env \$(grep -v '^#' .env | xargs) sh -c 'echo "[\$DB_URL]"'
 ./.env: line 1: khau@localhost/app: No such file or directory
 exit=127 DB_URL=[]</div>
 <p>Cách <code>xargs</code> cắt giá trị ở dấu cách và đưa cho <code>env</code> một "lệnh" tên <code>khau@localhost/app</code>. <code>source</code> đọc dòng đó y như bash đọc: <code>DB_URL=postgres://app:mat</code> là một tiền tố cho-một-lệnh, rồi <code>khau@localhost/app</code> là cái lệnh — nên phép gán còn chẳng tới được shell của bạn. Bọc giá trị trong nháy (<code>DB_URL="postgres://app:mat khau@localhost/app"</code>) rồi <code>set -a; . ./.env; set +a</code> thì tiến trình con nhận trọn chuỗi; thiếu <code>set -a</code> thì shell của bạn có biến nhưng tiến trình con chẳng thấy gì, vì chúng chưa bao giờ được export.</p>
-<pre><code><span class="tok-comment"># Và chỉ source những file tin được: .env được THỰC THI như mã shell</span>
+<pre><code class="language-bash"><span class="tok-comment"># Và chỉ source những file tin được: .env được THỰC THI như mã shell</span>
 echo 'rm -rf /tmp/important' &gt;&gt; .env
 source .env          <span class="tok-comment"># dòng đó chạy thật</span></code></pre>
 <p><code>source</code> KHÔNG phân tích các cặp khoá–giá trị; nó CHẠY cái file như một script bash. Một file <code>.env</code> đến từ một đồng nghiệp, từ một tệp phẩm CI hay từ một kho mã lạ chính là MÃ mà bạn sắp thực thi với danh nghĩa của mình. Với một file do chính bạn viết thì không sao; nhưng đó không phải cách an toàn để tiêu thụ một file không phải của bạn.</p>
@@ -1505,7 +1505,7 @@ DATABASE_URL=postgres://user:hunter2@localhost/app</div>
 <div class="callout">Đây không phải lý lẽ chống lại biến môi trường — chúng vẫn tốt hơn nhiều so với việc nhúng cứng một bí mật vào hệ quản lý mã nguồn, và chúng là thứ mà lối triển khai mười hai yếu tố giả định. Đây là lý lẽ cho việc BIẾT rõ mức phơi bày: <strong>biến môi trường được bảo vệ khỏi những NGƯỜI DÙNG khác, không được bảo vệ khỏi MÃ KHÁC ĐANG CHẠY VỚI DANH NGHĨA CỦA BẠN</strong>. Hãy chọn cho phù hợp.</div>
 
 <div class="callout warn"><strong>Phiên bản dotfile của sai lầm này.</strong> <code>export OPENAI_API_KEY=sk-…</code> nằm trong <code>~/.bashrc</code> "vẫn chạy", nên nó nằm lì ở đó — rồi bộ dotfile được đưa lên một kho GitHub công khai cho tiện dùng chung giữa các máy. Cái khoá giờ nằm trong lịch sử git vĩnh viễn: xoá dòng đó ở commit sau KHÔNG gỡ được nó, và ai đã clone hay fork trong khoảng giữa vẫn giữ nó. Thứ tự sửa là cố định: <strong>XOAY KHOÁ TRƯỚC</strong>, rồi mới dọn lịch sử. Phòng thì rẻ: giữ bí mật trong một file riêng mà git không bao giờ thấy và chỉ bạn đọc được, rồi nạp nó từ file rc:
-<pre><code>install -m 600 /dev/null ~/.secrets             <span class="tok-comment"># tạo ra đã là 600 ngay từ đầu</span>
+<pre><code class="language-bash">install -m 600 /dev/null ~/.secrets             <span class="tok-comment"># tạo ra đã là 600 ngay từ đầu</span>
 echo 'export OPENAI_API_KEY=…' &gt;&gt; ~/.secrets
 echo '[ -r ~/.secrets ] &amp;&amp; . ~/.secrets' &gt;&gt; ~/.bashrc
 echo '.secrets' &gt;&gt; ~/dotfiles/.gitignore
@@ -1527,7 +1527,7 @@ ps aux | grep mysql</code></pre>
 <p>Đó là lý do các trình khách cơ sở dữ liệu đọc một file cấu hình (<code>~/.my.cnf</code>, <code>~/.pgpass</code>) hoặc hỏi trực tiếp, và là lý do <code>curl</code> có <code>--netrc</code> cùng <code>-H @file</code>. Hễ một công cụ đưa ra một cách truyền thông tin xác thực mà <em>KHÔNG</em> phải qua tham số, cách đó tồn tại chính vì lý do này.</p>
 
 <h3>Thiết lập thực tế cho một máy chủ</h3>
-<pre><code><span class="tok-comment"># Cái file: thuộc về người dùng của dịch vụ, không ai khác đọc được</span>
+<pre><code class="language-bash"><span class="tok-comment"># Cái file: thuộc về người dùng của dịch vụ, không ai khác đọc được</span>
 sudo install -o appuser -g appuser -m 600 /dev/null /opt/app/.env
 sudo -u appuser tee -a /opt/app/.env &gt;/dev/null &lt;&lt;'EOF'
 DATABASE_URL=postgres://app:REDACTED@localhost:5432/app
@@ -1546,7 +1546,7 @@ sudo systemctl daemon-reload &amp;&amp; sudo systemctl restart myapp</code></pre
 <div class="callout ok">Có hai tính chất đáng để ý. File <code>.env</code> nằm <em>NGOÀI</em> thư mục triển khai, nên một lần deploy có rsync hoặc thay cả cây ứng dụng cũng không thể ghi đè hay xoá mất nó — cũng chính là lý lẽ đằng sau việc giữ env của production ở <code>/opt/&lt;app&gt;/.env</code> thay vì trong bản checkout của kho mã. Và <code>install -m 600</code> tạo file với đúng chế độ ngay từ đầu, thay vì tạo ra một file cả thế giới đọc được rồi mới đi sửa, thứ để lại một khoảng thời gian mà nó đã bị phơi ra.</div>
 
 <h3>Kiểm xem một tiến trình đang chạy THẬT SỰ có gì</h3>
-<pre><code>systemctl show myapp -p Environment
+<pre><code class="language-bash">systemctl show myapp -p Environment
 sudo tr '\\0' '\\n' &lt; /proc/\$(pgrep -f 'dist/index.js')/environ | sort
 docker exec myapp env | sort
 docker inspect myapp --format '{{range .Config.Env}}{{println .}}{{end}}'</code></pre>
@@ -1591,7 +1591,7 @@ DATABASE_URL=postgres://app:...@localhost:5432/app</div>
 
 <h3>Chạy thử từng bước</h3>
 <p>Shell Linux nào cũng được (container là ổn). Đoán từng dòng trước.</p>
-<pre><code>X=1; bash -c 'echo "[\$X]"'
+<pre><code class="language-bash">X=1; bash -c 'echo "[\$X]"'
 export X; bash -c 'echo "[\$X]"'
 bash -c 'X=99'; echo "\$X"
 env -u X bash -c 'echo "[\${X-unset}]"'
@@ -1711,7 +1711,7 @@ mkcd newdir                     <span class="tok-comment"># BROKEN: \$1 is empty
 <div class="out">mkdir: missing operand</div>
 
 <h3>Functions: when you need arguments or logic</h3>
-<pre><code>mkcd() { mkdir -p -- "\$1" &amp;&amp; cd -- "\$1"; }
+<pre><code class="language-bash">mkcd() { mkdir -p -- "\$1" &amp;&amp; cd -- "\$1"; }
 
 extract() {
   [[ -f \$1 ]] || { echo "no such file: \$1" &gt;&amp;2; return 1; }
@@ -1757,7 +1757,7 @@ PS1='\\[\\e[32m\\]\\u@\\h\\[\\e[0m\\]:\\[\\e[34m\\]\\w\\[\\e[0m\\]\\\$ '   <span
   <div class="kv"><span class="k"><code>\\t</code> <code>\\d</code></span><span class="v">Time · date. Surprisingly useful: your scrollback becomes a timeline of when each command ran.</span></div>
   <div class="kv"><span class="k"><code>\\[</code> … <code>\\]</code></span><span class="v">Wraps non-printing characters. <strong>Required</strong> around colour codes — see the trap below.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Show the exit code of the last command, only when it failed</span>
+<pre><code class="language-bash"><span class="tok-comment"># Show the exit code of the last command, only when it failed</span>
 PS1='\${?#0}\\u@\\h:\\w\\\$ '
 
 <span class="tok-comment"># Make production hosts unmistakable</span>
@@ -1790,7 +1790,7 @@ Ctrl-G                     <span class="tok-comment"># cancel the search</span>
 Alt-.                      <span class="tok-comment"># same, but inserted so you can edit it</span>
 !docker                    <span class="tok-comment"># most recent command starting with 'docker'</span>
 history | grep rsync       <span class="tok-comment"># search without re-running anything</span></code></pre>
-<pre><code><span class="tok-comment"># A space before a command keeps it out of history — for one-off secrets</span>
+<pre><code class="language-bash"><span class="tok-comment"># A space before a command keeps it out of history — for one-off secrets</span>
  export TOKEN=sk-live-secret        <span class="tok-comment"># note the leading space</span></code></pre>
 <p>That works because of <code>ignorespace</code>, included in the <code>ignoreboth</code> setting above. It is a convenience, not a security control — the value is still in the process environment (Lesson 8.3) and visible in <code>/proc</code> — but it does keep a credential out of a file that gets backed up and read over your shoulder.</p>
 
@@ -1810,7 +1810,7 @@ shopt -p globstar        <span class="tok-comment"># print it in a form you can 
 <div class="callout warn"><code>nullglob</code> is genuinely useful in scripts and mildly hazardous interactively: with it set, <code>ls *.nonexistent</code> becomes a bare <code>ls</code> and lists the whole directory rather than reporting nothing found. Set it inside scripts where you control the code (Lesson 2.2); think twice before making it a global interactive default.</div>
 
 <h3>Completion</h3>
-<pre><code><span class="tok-comment"># Usually already enabled by /etc/bash.bashrc; if not:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Usually already enabled by /etc/bash.bashrc; if not:</span>
 if ! shopt -oq posix; then
   [[ -f /usr/share/bash-completion/bash_completion ]] &amp;&amp; . /usr/share/bash-completion/bash_completion
 fi
@@ -1869,7 +1869,7 @@ unset f</code></pre>
 
 <h3>Try it step by step</h3>
 <p>Start a clean shell with <code>bash --norc</code> (no rc file, so nothing of yours interferes) and type these, predicting each result.</p>
-<pre><code>mkdir -p /tmp/t84 &amp;&amp; cd /tmp/t84
+<pre><code class="language-bash">mkdir -p /tmp/t84 &amp;&amp; cd /tmp/t84
 printf 'alias ll="ls -l"\\nll /etc/hostname\\n' &gt; a.sh
 bash a.sh
 alias mkcd='mkdir -p \$1 &amp;&amp; cd \$1'
@@ -1890,7 +1890,7 @@ $ false
 1$ true
 $</div>
 <p>Three lessons in twelve lines. The script cannot see the alias. The alias cannot take <code>\$1</code>. And the one most people never expect: <strong>you cannot define a function while an alias of the same name exists</strong> — the alias is expanded inside the definition, bash sees <code>mkdir -p \$1 &amp;&amp; cd \$1() {</code>, and reports a syntax error. <code>unalias</code> first. Then the prompt shows the exit code only after a failure. The history half, with a pattern written as <code>sk-[l]ive</code> so the <code>grep</code> line does not match itself:</p>
-<pre><code>HISTFILE=/tmp/h84 HISTCONTROL=ignorespace
+<pre><code class="language-bash">HISTFILE=/tmp/h84 HISTCONTROL=ignorespace
  export TOKEN=sk-live-bimat
 echo \${#TOKEN}
 history -w; grep -c 'sk-[l]ive' /tmp/h84
@@ -1994,7 +1994,7 @@ mkcd newdir                     <span class="tok-comment"># HỎNG: \$1 rỗng, 
 <div class="out">mkdir: missing operand</div>
 
 <h3>Hàm: khi bạn cần tham số hoặc cần logic</h3>
-<pre><code>mkcd() { mkdir -p -- "\$1" &amp;&amp; cd -- "\$1"; }
+<pre><code class="language-bash">mkcd() { mkdir -p -- "\$1" &amp;&amp; cd -- "\$1"; }
 
 extract() {
   [[ -f \$1 ]] || { echo "không có file: \$1" &gt;&amp;2; return 1; }
@@ -2040,7 +2040,7 @@ PS1='\\[\\e[32m\\]\\u@\\h\\[\\e[0m\\]:\\[\\e[34m\\]\\w\\[\\e[0m\\]\\\$ '   <span
   <div class="kv"><span class="k"><code>\\t</code> <code>\\d</code></span><span class="v">Giờ · ngày. Hữu ích một cách bất ngờ: phần đã cuộn qua của bạn trở thành một dòng thời gian ghi lại lúc nào chạy lệnh nào.</span></div>
   <div class="kv"><span class="k"><code>\\[</code> … <code>\\]</code></span><span class="v">Bọc quanh những ký tự không in ra. <strong>BẮT BUỘC</strong> phải có quanh mã màu — xem cái bẫy bên dưới.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Hiện mã thoát của lệnh vừa rồi, chỉ khi nó hỏng</span>
+<pre><code class="language-bash"><span class="tok-comment"># Hiện mã thoát của lệnh vừa rồi, chỉ khi nó hỏng</span>
 PS1='\${?#0}\\u@\\h:\\w\\\$ '
 
 <span class="tok-comment"># Làm cho máy production không thể nhầm lẫn được</span>
@@ -2073,7 +2073,7 @@ Ctrl-G                     <span class="tok-comment"># huỷ phép tìm</span>
 Alt-.                      <span class="tok-comment"># y hệt, nhưng chèn ra để bạn sửa được</span>
 !docker                    <span class="tok-comment"># lệnh gần nhất bắt đầu bằng 'docker'</span>
 history | grep rsync       <span class="tok-comment"># tìm mà không chạy lại gì cả</span></code></pre>
-<pre><code><span class="tok-comment"># Một dấu cách đứng trước lệnh giữ nó ra khỏi lịch sử — cho bí mật dùng một lần</span>
+<pre><code class="language-bash"><span class="tok-comment"># Một dấu cách đứng trước lệnh giữ nó ra khỏi lịch sử — cho bí mật dùng một lần</span>
  export TOKEN=sk-live-secret        <span class="tok-comment"># để ý dấu cách đứng đầu</span></code></pre>
 <p>Nó chạy được nhờ <code>ignorespace</code>, vốn nằm trong thiết lập <code>ignoreboth</code> ở trên. Đó là một tiện nghi, không phải một biện pháp an ninh — giá trị đó vẫn nằm trong môi trường tiến trình (Bài 8.3) và vẫn nhìn thấy được trong <code>/proc</code> — nhưng nó giữ được một thông tin xác thực ra khỏi một file vốn hay được sao lưu và bị người ngồi sau lưng đọc thấy.</p>
 
@@ -2093,7 +2093,7 @@ shopt -p globstar        <span class="tok-comment"># in ra ở dạng dán lại
 <div class="callout warn"><code>nullglob</code> thật sự hữu ích trong script và hơi nguy khi gõ tay: khi bật nó, <code>ls *.khongtontai</code> trở thành một lệnh <code>ls</code> trần và liệt kê cả thư mục thay vì báo là không tìm thấy gì. Hãy bật nó BÊN TRONG script nơi bạn kiểm soát được mã (Bài 2.2); còn hãy nghĩ hai lần trước khi lấy nó làm mặc định toàn cục cho lúc gõ tay.</div>
 
 <h3>Gợi ý hoàn tất lệnh</h3>
-<pre><code><span class="tok-comment"># Thường đã được /etc/bash.bashrc bật sẵn; nếu chưa:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Thường đã được /etc/bash.bashrc bật sẵn; nếu chưa:</span>
 if ! shopt -oq posix; then
   [[ -f /usr/share/bash-completion/bash_completion ]] &amp;&amp; . /usr/share/bash-completion/bash_completion
 fi
@@ -2152,7 +2152,7 @@ unset f</code></pre>
 
 <h3>Chạy thử từng bước</h3>
 <p>Mở một shell sạch bằng <code>bash --norc</code> (không file rc, nên không thứ gì của bạn chen vào) rồi gõ lần lượt, đoán trước từng kết quả.</p>
-<pre><code>mkdir -p /tmp/t84 &amp;&amp; cd /tmp/t84
+<pre><code class="language-bash">mkdir -p /tmp/t84 &amp;&amp; cd /tmp/t84
 printf 'alias ll="ls -l"\\nll /etc/hostname\\n' &gt; a.sh
 bash a.sh
 alias mkcd='mkdir -p \$1 &amp;&amp; cd \$1'
@@ -2173,7 +2173,7 @@ $ false
 1$ true
 $</div>
 <p>Ba bài học trong mười hai dòng. Script không thấy bí danh. Bí danh không nhận được <code>\$1</code>. Và cái ít ai ngờ nhất: <strong>bạn KHÔNG định nghĩa được một hàm khi đang có bí danh cùng tên</strong> — bí danh bị khai triển ngay trong lời định nghĩa, bash thấy <code>mkdir -p \$1 &amp;&amp; cd \$1() {</code> và báo lỗi cú pháp. Phải <code>unalias</code> trước. Rồi dấu nhắc chỉ hiện mã thoát sau một lần hỏng. Nửa về lịch sử, với mẫu viết là <code>sk-[l]ive</code> để dòng <code>grep</code> không tự khớp chính nó:</p>
-<pre><code>HISTFILE=/tmp/h84 HISTCONTROL=ignorespace
+<pre><code class="language-bash">HISTFILE=/tmp/h84 HISTCONTROL=ignorespace
  export TOKEN=sk-live-bimat
 echo \${#TOKEN}
 history -w; grep -c 'sk-[l]ive' /tmp/h84

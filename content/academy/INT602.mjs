@@ -587,7 +587,7 @@ Now a copy can have many RETURNED rows plus at most one active (returned_at IS N
 <p class="lead">Đây là toàn bộ CSDL. Chú ý một dòng — <code>UNIQUE</code> trên <code>loans.copy_id</code>. Ràng buộc đơn lẻ đó là <strong>hàng rào cuối cùng</strong>: kể cả khi hai request lọt qua mọi kiểm tra trong code Java, chính CSDL từ chối ghi hai lượt mượn hoạt động cho một bản.</p>
 
 <h3>DDL (PostgreSQL)</h3>
-<pre><span class="tok-keyword">CREATE TABLE</span> users (
+<pre><code class="language-sql"><span class="tok-keyword">CREATE TABLE</span> users (
   id          <span class="tok-type">BIGSERIAL</span> <span class="tok-keyword">PRIMARY KEY</span>,
   email       <span class="tok-type">VARCHAR</span>(255) <span class="tok-keyword">UNIQUE NOT NULL</span>,
   password    <span class="tok-type">VARCHAR</span>(255) <span class="tok-keyword">NOT NULL</span>,      <span class="tok-comment">-- hash bcrypt</span>
@@ -628,7 +628,7 @@ Now a copy can have many RETURNED rows plus at most one active (returned_at IS N
   member_id   <span class="tok-type">BIGINT</span> <span class="tok-keyword">NOT NULL REFERENCES</span> users(id),
   created_at  <span class="tok-type">TIMESTAMP</span> <span class="tok-keyword">NOT NULL DEFAULT</span> now(),  <span class="tok-comment">-- thứ tự FIFO trong hàng đợi</span>
   status      <span class="tok-type">VARCHAR</span>(10) <span class="tok-keyword">NOT NULL DEFAULT</span> <span class="tok-string">'WAITING'</span> <span class="tok-comment">-- WAITING|READY|FULFILLED|CANCELLED</span>
-);</pre>
+);</code></pre>
 
 <h3>Ví dụ có lời giải — vì sao UNIQUE mới là người gác thật</h3>
 <div class="out"><b>Tình huống:</b> hai INSERT cho copy_id = 7 tới cùng một mili-giây (hai quầy quét cùng một barcode).
@@ -832,7 +832,7 @@ Controller ──DTO──▶ Service ──entity──▶ Repository ──SQL
 <p class="lead">Each table becomes a Java class annotated with JPA. Relationships become object references. Then a one-line interface per table gives you full CRUD — no SQL to write.</p>
 
 <h3>The BookCopy entity</h3>
-<pre><span class="tok-keyword">@Entity</span> <span class="tok-keyword">@Table</span>(name = <span class="tok-string">"book_copies"</span>)
+<pre><code class="language-java"><span class="tok-keyword">@Entity</span> <span class="tok-keyword">@Table</span>(name = <span class="tok-string">"book_copies"</span>)
 <span class="tok-keyword">@Getter</span> <span class="tok-keyword">@Setter</span>  <span class="tok-comment">// Lombok</span>
 <span class="tok-keyword">public class</span> <span class="tok-type">BookCopy</span> {
   <span class="tok-keyword">@Id</span> <span class="tok-keyword">@GeneratedValue</span>(strategy = GenerationType.IDENTITY)
@@ -849,10 +849,10 @@ Controller ──DTO──▶ Service ──entity──▶ Repository ──SQL
 
   <span class="tok-keyword">@Version</span>                        <span class="tok-comment">// ★ optimistic lock — Section 4 uses this</span>
   <span class="tok-keyword">private</span> <span class="tok-type">Long</span> version;
-}</pre>
+}</code></pre>
 
 <h3>The Loan entity — note the UNIQUE</h3>
-<pre><span class="tok-keyword">@Entity</span> <span class="tok-keyword">@Table</span>(name = <span class="tok-string">"loans"</span>,
+<pre><code class="language-java"><span class="tok-keyword">@Entity</span> <span class="tok-keyword">@Table</span>(name = <span class="tok-string">"loans"</span>,
   uniqueConstraints = <span class="tok-keyword">@UniqueConstraint</span>(name = <span class="tok-string">"uq_active_copy"</span>, columnNames = <span class="tok-string">"copy_id"</span>))
 <span class="tok-keyword">@Getter</span> <span class="tok-keyword">@Setter</span>
 <span class="tok-keyword">public class</span> <span class="tok-type">Loan</span> {
@@ -871,10 +871,10 @@ Controller ──DTO──▶ Service ──entity──▶ Repository ──SQL
 
   <span class="tok-keyword">@Enumerated</span>(EnumType.STRING)
   <span class="tok-keyword">private</span> <span class="tok-type">LoanStatus</span> status = LoanStatus.ACTIVE;
-}</pre>
+}</code></pre>
 
 <h3>Repositories — declare, don't implement</h3>
-<pre><span class="tok-keyword">public interface</span> <span class="tok-type">BookCopyRepository</span> <span class="tok-keyword">extends</span> <span class="tok-type">JpaRepository</span>&lt;BookCopy, Long&gt; {
+<pre><code class="language-java"><span class="tok-keyword">public interface</span> <span class="tok-type">BookCopyRepository</span> <span class="tok-keyword">extends</span> <span class="tok-type">JpaRepository</span>&lt;BookCopy, Long&gt; {
   <span class="tok-comment">// Spring turns the method name into SQL automatically:</span>
   <span class="tok-type">List</span>&lt;BookCopy&gt; <span class="tok-function">findByBookIdAndStatus</span>(<span class="tok-type">Long</span> bookId, <span class="tok-type">CopyStatus</span> status);
   <span class="tok-keyword">long</span> <span class="tok-function">countByBookIdAndStatus</span>(<span class="tok-type">Long</span> bookId, <span class="tok-type">CopyStatus</span> status);
@@ -885,7 +885,7 @@ Controller ──DTO──▶ Service ──entity──▶ Repository ──SQL
   <span class="tok-comment">// overdue = still out AND past due — used by the librarian list (Section 4.3)</span>
   <span class="tok-type">List</span>&lt;Loan&gt; <span class="tok-function">findByReturnedAtIsNullAndDueDateBefore</span>(<span class="tok-type">LocalDate</span> today);
   <span class="tok-keyword">long</span> <span class="tok-function">countByCopyId</span>(<span class="tok-type">Long</span> copyId);
-}</pre>
+}</code></pre>
 <p><code>findByBookIdAndStatus</code> becomes <code>SELECT * FROM book_copies WHERE book_id=? AND status=?</code>. You wrote zero SQL.</p>
 
 <div class="pitfall"><strong>Trap:</strong> <code>FetchType.EAGER</code> on <code>@ManyToOne</code> everywhere. It looks convenient but silently loads whole object graphs on every query — the classic N+1 performance bug. Default to <code>LAZY</code> and fetch what you need explicitly.</div>
@@ -904,7 +904,7 @@ Controller ──DTO──▶ Service ──entity──▶ Repository ──SQL
 <p class="lead">Mỗi bảng thành một lớp Java được annotate JPA. Quan hệ thành tham chiếu đối tượng. Rồi một interface một dòng cho mỗi bảng cho bạn CRUD đầy đủ — không phải viết SQL.</p>
 
 <h3>Entity BookCopy</h3>
-<pre><span class="tok-keyword">@Entity</span> <span class="tok-keyword">@Table</span>(name = <span class="tok-string">"book_copies"</span>)
+<pre><code class="language-java"><span class="tok-keyword">@Entity</span> <span class="tok-keyword">@Table</span>(name = <span class="tok-string">"book_copies"</span>)
 <span class="tok-keyword">@Getter</span> <span class="tok-keyword">@Setter</span>  <span class="tok-comment">// Lombok</span>
 <span class="tok-keyword">public class</span> <span class="tok-type">BookCopy</span> {
   <span class="tok-keyword">@Id</span> <span class="tok-keyword">@GeneratedValue</span>(strategy = GenerationType.IDENTITY)
@@ -921,10 +921,10 @@ Controller ──DTO──▶ Service ──entity──▶ Repository ──SQL
 
   <span class="tok-keyword">@Version</span>                        <span class="tok-comment">// ★ optimistic lock — Mục 4 dùng cái này</span>
   <span class="tok-keyword">private</span> <span class="tok-type">Long</span> version;
-}</pre>
+}</code></pre>
 
 <h3>Entity Loan — chú ý UNIQUE</h3>
-<pre><span class="tok-keyword">@Entity</span> <span class="tok-keyword">@Table</span>(name = <span class="tok-string">"loans"</span>,
+<pre><code class="language-java"><span class="tok-keyword">@Entity</span> <span class="tok-keyword">@Table</span>(name = <span class="tok-string">"loans"</span>,
   uniqueConstraints = <span class="tok-keyword">@UniqueConstraint</span>(name = <span class="tok-string">"uq_active_copy"</span>, columnNames = <span class="tok-string">"copy_id"</span>))
 <span class="tok-keyword">@Getter</span> <span class="tok-keyword">@Setter</span>
 <span class="tok-keyword">public class</span> <span class="tok-type">Loan</span> {
@@ -943,10 +943,10 @@ Controller ──DTO──▶ Service ──entity──▶ Repository ──SQL
 
   <span class="tok-keyword">@Enumerated</span>(EnumType.STRING)
   <span class="tok-keyword">private</span> <span class="tok-type">LoanStatus</span> status = LoanStatus.ACTIVE;
-}</pre>
+}</code></pre>
 
 <h3>Repository — khai báo, không hiện thực</h3>
-<pre><span class="tok-keyword">public interface</span> <span class="tok-type">BookCopyRepository</span> <span class="tok-keyword">extends</span> <span class="tok-type">JpaRepository</span>&lt;BookCopy, Long&gt; {
+<pre><code class="language-java"><span class="tok-keyword">public interface</span> <span class="tok-type">BookCopyRepository</span> <span class="tok-keyword">extends</span> <span class="tok-type">JpaRepository</span>&lt;BookCopy, Long&gt; {
   <span class="tok-comment">// Spring biến tên method thành SQL tự động:</span>
   <span class="tok-type">List</span>&lt;BookCopy&gt; <span class="tok-function">findByBookIdAndStatus</span>(<span class="tok-type">Long</span> bookId, <span class="tok-type">CopyStatus</span> status);
   <span class="tok-keyword">long</span> <span class="tok-function">countByBookIdAndStatus</span>(<span class="tok-type">Long</span> bookId, <span class="tok-type">CopyStatus</span> status);
@@ -957,7 +957,7 @@ Controller ──DTO──▶ Service ──entity──▶ Repository ──SQL
   <span class="tok-comment">// quá hạn = còn ra ngoài VÀ đã trễ hạn — dùng cho danh sách thủ thư (Mục 4.3)</span>
   <span class="tok-type">List</span>&lt;Loan&gt; <span class="tok-function">findByReturnedAtIsNullAndDueDateBefore</span>(<span class="tok-type">LocalDate</span> today);
   <span class="tok-keyword">long</span> <span class="tok-function">countByCopyId</span>(<span class="tok-type">Long</span> copyId);
-}</pre>
+}</code></pre>
 <p><code>findByBookIdAndStatus</code> thành <code>SELECT * FROM book_copies WHERE book_id=? AND status=?</code>. Bạn viết không dòng SQL nào.</p>
 
 <div class="pitfall"><strong>Bẫy:</strong> <code>FetchType.EAGER</code> trên mọi <code>@ManyToOne</code>. Nhìn tiện nhưng lặng lẽ nạp cả đồ thị đối tượng ở mỗi truy vấn — lỗi hiệu năng N+1 kinh điển. Mặc định <code>LAZY</code> và nạp thứ cần một cách tường minh.</div>
@@ -994,7 +994,7 @@ Controller ──DTO──▶ Service ──entity──▶ Repository ──SQL
 }</pre>
 
 <h3>Step 2 — the Service (business intent, no HTTP)</h3>
-<pre><span class="tok-keyword">@Service</span> <span class="tok-keyword">@RequiredArgsConstructor</span>
+<pre><code class="language-java"><span class="tok-keyword">@Service</span> <span class="tok-keyword">@RequiredArgsConstructor</span>
 <span class="tok-keyword">public class</span> <span class="tok-type">CatalogService</span> {
   <span class="tok-keyword">private final</span> <span class="tok-type">BookCopyRepository</span> copyRepo;
 
@@ -1002,10 +1002,10 @@ Controller ──DTO──▶ Service ──entity──▶ Repository ──SQL
     <span class="tok-keyword">return</span> copyRepo.findByBookIdAndStatus(bookId, CopyStatus.AVAILABLE)
         .stream().map(CopyDto::from).toList();
   }
-}</pre>
+}</code></pre>
 
 <h3>Step 3 — the Controller (HTTP only)</h3>
-<pre><span class="tok-keyword">@RestController</span> <span class="tok-keyword">@RequestMapping</span>(<span class="tok-string">"/api/books"</span>) <span class="tok-keyword">@RequiredArgsConstructor</span>
+<pre><code class="language-java"><span class="tok-keyword">@RestController</span> <span class="tok-keyword">@RequestMapping</span>(<span class="tok-string">"/api/books"</span>) <span class="tok-keyword">@RequiredArgsConstructor</span>
 <span class="tok-keyword">public class</span> <span class="tok-type">BookController</span> {
   <span class="tok-keyword">private final</span> <span class="tok-type">CatalogService</span> catalog;
 
@@ -1013,7 +1013,7 @@ Controller ──DTO──▶ Service ──entity──▶ Repository ──SQL
   <span class="tok-keyword">public</span> <span class="tok-type">List</span>&lt;CopyDto&gt; <span class="tok-function">copies</span>(<span class="tok-keyword">@PathVariable</span> <span class="tok-type">Long</span> id) {
     <span class="tok-keyword">return</span> catalog.availableCopiesOf(id);
   }
-}</pre>
+}</code></pre>
 
 <h3>Step 4 — test it (real output)</h3>
 <div class="out"><b>Request:</b>  curl http://localhost:8080/api/books/1/copies
@@ -1052,7 +1052,7 @@ Controller ──DTO──▶ Service ──entity──▶ Repository ──SQL
 }</pre>
 
 <h3>Bước 2 — Service (ý định nghiệp vụ, không HTTP)</h3>
-<pre><span class="tok-keyword">@Service</span> <span class="tok-keyword">@RequiredArgsConstructor</span>
+<pre><code class="language-java"><span class="tok-keyword">@Service</span> <span class="tok-keyword">@RequiredArgsConstructor</span>
 <span class="tok-keyword">public class</span> <span class="tok-type">CatalogService</span> {
   <span class="tok-keyword">private final</span> <span class="tok-type">BookCopyRepository</span> copyRepo;
 
@@ -1060,10 +1060,10 @@ Controller ──DTO──▶ Service ──entity──▶ Repository ──SQL
     <span class="tok-keyword">return</span> copyRepo.findByBookIdAndStatus(bookId, CopyStatus.AVAILABLE)
         .stream().map(CopyDto::from).toList();
   }
-}</pre>
+}</code></pre>
 
 <h3>Bước 3 — Controller (chỉ HTTP)</h3>
-<pre><span class="tok-keyword">@RestController</span> <span class="tok-keyword">@RequestMapping</span>(<span class="tok-string">"/api/books"</span>) <span class="tok-keyword">@RequiredArgsConstructor</span>
+<pre><code class="language-java"><span class="tok-keyword">@RestController</span> <span class="tok-keyword">@RequestMapping</span>(<span class="tok-string">"/api/books"</span>) <span class="tok-keyword">@RequiredArgsConstructor</span>
 <span class="tok-keyword">public class</span> <span class="tok-type">BookController</span> {
   <span class="tok-keyword">private final</span> <span class="tok-type">CatalogService</span> catalog;
 
@@ -1071,7 +1071,7 @@ Controller ──DTO──▶ Service ──entity──▶ Repository ──SQL
   <span class="tok-keyword">public</span> <span class="tok-type">List</span>&lt;CopyDto&gt; <span class="tok-function">copies</span>(<span class="tok-keyword">@PathVariable</span> <span class="tok-type">Long</span> id) {
     <span class="tok-keyword">return</span> catalog.availableCopiesOf(id);
   }
-}</pre>
+}</code></pre>
 
 <h3>Bước 4 — thử nó (kết quả thật)</h3>
 <div class="out"><b>Request:</b>  curl http://localhost:8080/api/books/1/copies
@@ -1122,7 +1122,7 @@ Controller ──DTO──▶ Service ──entity──▶ Repository ──SQL
 <p>The server does not store sessions. It trusts the token because only the server knows the SECRET used to sign it — tamper with one byte and the signature check fails.</p>
 
 <h3>Register &amp; login — the service</h3>
-<pre><span class="tok-keyword">@Service</span> <span class="tok-keyword">@RequiredArgsConstructor</span>
+<pre><code class="language-java"><span class="tok-keyword">@Service</span> <span class="tok-keyword">@RequiredArgsConstructor</span>
 <span class="tok-keyword">public class</span> <span class="tok-type">AuthService</span> {
   <span class="tok-keyword">private final</span> <span class="tok-type">UserRepository</span> users;
   <span class="tok-keyword">private final</span> <span class="tok-type">PasswordEncoder</span> encoder;   <span class="tok-comment">// BCryptPasswordEncoder bean</span>
@@ -1146,7 +1146,7 @@ Controller ──DTO──▶ Service ──entity──▶ Repository ──SQL
       <span class="tok-keyword">throw new</span> <span class="tok-type">UnauthorizedException</span>(<span class="tok-string">"Bad credentials"</span>);
     <span class="tok-keyword">return</span> jwt.issue(u);   <span class="tok-comment">// signs { sub: email, role, exp }</span>
   }
-}</pre>
+}</code></pre>
 
 <h3>Worked example — the login round-trip</h3>
 <div class="out"><b>1.</b> POST /api/auth/register { "email":"an@mail.com", "password":"Secret123", "fullName":"An" }
@@ -1180,7 +1180,7 @@ Controller ──DTO──▶ Service ──entity──▶ Repository ──SQL
 <p>Server không lưu session. Nó tin token vì chỉ server biết SECRET dùng để ký — sửa một byte là chữ ký sai.</p>
 
 <h3>Đăng ký &amp; đăng nhập — service</h3>
-<pre><span class="tok-keyword">@Service</span> <span class="tok-keyword">@RequiredArgsConstructor</span>
+<pre><code class="language-java"><span class="tok-keyword">@Service</span> <span class="tok-keyword">@RequiredArgsConstructor</span>
 <span class="tok-keyword">public class</span> <span class="tok-type">AuthService</span> {
   <span class="tok-keyword">private final</span> <span class="tok-type">UserRepository</span> users;
   <span class="tok-keyword">private final</span> <span class="tok-type">PasswordEncoder</span> encoder;   <span class="tok-comment">// bean BCryptPasswordEncoder</span>
@@ -1204,7 +1204,7 @@ Controller ──DTO──▶ Service ──entity──▶ Repository ──SQL
       <span class="tok-keyword">throw new</span> <span class="tok-type">UnauthorizedException</span>(<span class="tok-string">"Sai thông tin đăng nhập"</span>);
     <span class="tok-keyword">return</span> jwt.issue(u);   <span class="tok-comment">// ký { sub: email, role, exp }</span>
   }
-}</pre>
+}</code></pre>
 
 <h3>Ví dụ có lời giải — vòng đăng nhập</h3>
 <div class="out"><b>1.</b> POST /api/auth/register { "email":"an@mail.com", "password":"Secret123", "fullName":"An" }
@@ -1256,12 +1256,12 @@ Controller ──DTO──▶ Service ──entity──▶ Repository ──SQL
 <p>The <code>jwtFilter</code> reads the <code>Authorization</code> header, validates the token, and puts the user + role into the security context so these rules can fire.</p>
 
 <h3>Ownership check — role is not enough</h3>
-<pre><span class="tok-keyword">public void</span> <span class="tok-function">returnOwnLoan</span>(<span class="tok-type">Long</span> loanId, <span class="tok-type">Long</span> currentUserId) {
+<pre><code class="language-java"><span class="tok-keyword">public void</span> <span class="tok-function">returnOwnLoan</span>(<span class="tok-type">Long</span> loanId, <span class="tok-type">Long</span> currentUserId) {
   <span class="tok-type">Loan</span> loan = loans.findById(loanId).orElseThrow(NotFoundException::new);
   <span class="tok-keyword">if</span> (!loan.getMember().getId().equals(currentUserId))   <span class="tok-comment">// ★ own it?</span>
     <span class="tok-keyword">throw new</span> <span class="tok-type">ForbiddenException</span>(<span class="tok-string">"Not your loan"</span>);       <span class="tok-comment">// → 403</span>
   loanService.markReturned(loan);                        <span class="tok-comment">// release the copy</span>
-}</pre>
+}</code></pre>
 
 <h3>Worked example — the permission matrix</h3>
 <table>
@@ -1308,12 +1308,12 @@ Controller ──DTO──▶ Service ──entity──▶ Repository ──SQL
 <p><code>jwtFilter</code> đọc header <code>Authorization</code>, kiểm token, và đặt user + role vào security context để các quy tắc này kích hoạt.</p>
 
 <h3>Kiểm quyền sở hữu — chỉ role là chưa đủ</h3>
-<pre><span class="tok-keyword">public void</span> <span class="tok-function">returnOwnLoan</span>(<span class="tok-type">Long</span> loanId, <span class="tok-type">Long</span> currentUserId) {
+<pre><code class="language-java"><span class="tok-keyword">public void</span> <span class="tok-function">returnOwnLoan</span>(<span class="tok-type">Long</span> loanId, <span class="tok-type">Long</span> currentUserId) {
   <span class="tok-type">Loan</span> loan = loans.findById(loanId).orElseThrow(NotFoundException::new);
   <span class="tok-keyword">if</span> (!loan.getMember().getId().equals(currentUserId))   <span class="tok-comment">// ★ có phải của mình?</span>
     <span class="tok-keyword">throw new</span> <span class="tok-type">ForbiddenException</span>(<span class="tok-string">"Không phải lượt mượn của bạn"</span>);  <span class="tok-comment">// → 403</span>
   loanService.markReturned(loan);                        <span class="tok-comment">// trả lại bản sách</span>
-}</pre>
+}</code></pre>
 
 <h3>Ví dụ có lời giải — ma trận quyền</h3>
 <table>
@@ -1540,7 +1540,7 @@ Trạng thái cuối: đúng MỘT lượt mượn đang mở cho bản 42.</div
 <span class="tok-keyword">public record</span> <span class="tok-type">BorrowRequest</span>(<span class="tok-keyword">@NotNull</span> <span class="tok-type">Long</span> copyId) {}</pre>
 
 <h3>One error shape for the whole API</h3>
-<pre><span class="tok-keyword">@RestControllerAdvice</span>
+<pre><code class="language-java"><span class="tok-keyword">@RestControllerAdvice</span>
 <span class="tok-keyword">public class</span> <span class="tok-type">ApiExceptionHandler</span> {
 
   <span class="tok-keyword">@ExceptionHandler</span>(ConflictException.class)
@@ -1559,7 +1559,7 @@ Trạng thái cuối: đúng MỘT lượt mượn đang mở cho bản 42.</div
     <span class="tok-keyword">return</span> ResponseEntity.status(s).body(<span class="tok-keyword">new</span> <span class="tok-type">ApiError</span>(s.value(), msg));
   }
 }
-<span class="tok-keyword">public record</span> <span class="tok-type">ApiError</span>(<span class="tok-keyword">int</span> status, <span class="tok-type">String</span> message) {}</pre>
+<span class="tok-keyword">public record</span> <span class="tok-type">ApiError</span>(<span class="tok-keyword">int</span> status, <span class="tok-type">String</span> message) {}</code></pre>
 
 <h3>Worked example — the status-code contract</h3>
 <table>
@@ -1613,7 +1613,7 @@ Trạng thái cuối: đúng MỘT lượt mượn đang mở cho bản 42.</div
 <span class="tok-keyword">public record</span> <span class="tok-type">BorrowRequest</span>(<span class="tok-keyword">@NotNull</span> <span class="tok-type">Long</span> copyId) {}</pre>
 
 <h3>Một dạng lỗi cho cả API</h3>
-<pre><span class="tok-keyword">@RestControllerAdvice</span>
+<pre><code class="language-java"><span class="tok-keyword">@RestControllerAdvice</span>
 <span class="tok-keyword">public class</span> <span class="tok-type">ApiExceptionHandler</span> {
 
   <span class="tok-keyword">@ExceptionHandler</span>(ConflictException.class)
@@ -1632,7 +1632,7 @@ Trạng thái cuối: đúng MỘT lượt mượn đang mở cho bản 42.</div
     <span class="tok-keyword">return</span> ResponseEntity.status(s).body(<span class="tok-keyword">new</span> <span class="tok-type">ApiError</span>(s.value(), msg));
   }
 }
-<span class="tok-keyword">public record</span> <span class="tok-type">ApiError</span>(<span class="tok-keyword">int</span> status, <span class="tok-type">String</span> message) {}</pre>
+<span class="tok-keyword">public record</span> <span class="tok-type">ApiError</span>(<span class="tok-keyword">int</span> status, <span class="tok-type">String</span> message) {}</code></pre>
 
 <h3>Ví dụ có lời giải — hợp đồng mã trạng thái</h3>
 <table>
@@ -1751,7 +1751,7 @@ Trạng thái cuối: đúng MỘT lượt mượn đang mở cho bản 42.</div
 <p class="lead">One axios instance attaches the JWT to every request and reacts to 401 centrally. You write it once; every screen inherits authenticated calls.</p>
 
 <h3>The shared client</h3>
-<pre><span class="tok-comment">// src/api/client.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// src/api/client.js</span>
 <span class="tok-keyword">import</span> axios <span class="tok-keyword">from</span> <span class="tok-string">"axios"</span>;
 
 <span class="tok-keyword">export const</span> api = axios.<span class="tok-function">create</span>({ baseURL: <span class="tok-string">"/api"</span> });
@@ -1773,14 +1773,14 @@ api.interceptors.response.<span class="tok-function">use</span>(
     }
     <span class="tok-keyword">return</span> Promise.<span class="tok-function">reject</span>(err);
   }
-);</pre>
+);</code></pre>
 
 <h3>Login stores the token</h3>
-<pre><span class="tok-keyword">async function</span> <span class="tok-function">login</span>(email, password) {
+<pre><code class="language-javascript"><span class="tok-keyword">async function</span> <span class="tok-function">login</span>(email, password) {
   <span class="tok-keyword">const</span> { data } = <span class="tok-keyword">await</span> api.<span class="tok-function">post</span>(<span class="tok-string">"/auth/login"</span>, { email, password });
   localStorage.<span class="tok-function">setItem</span>(<span class="tok-string">"token"</span>, data.token);
   <span class="tok-keyword">return</span> data.user;   <span class="tok-comment">// { id, name, role }</span>
-}</pre>
+}</code></pre>
 
 <div class="pitfall"><strong>Trap:</strong> storing the role in state and trusting it for security. The frontend role only decides what to <em>show</em>; the backend must re-check every mutating call (Section 3). A user can edit localStorage — never let the client be the gatekeeper.</div>
 
@@ -1792,7 +1792,7 @@ api.interceptors.response.<span class="tok-function">use</span>(
 <p class="lead">Một instance axios gắn JWT vào mọi request và phản ứng 401 tập trung. Viết một lần; mọi màn hình thừa hưởng lời gọi đã xác thực.</p>
 
 <h3>Client dùng chung</h3>
-<pre><span class="tok-comment">// src/api/client.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// src/api/client.js</span>
 <span class="tok-keyword">import</span> axios <span class="tok-keyword">from</span> <span class="tok-string">"axios"</span>;
 
 <span class="tok-keyword">export const</span> api = axios.<span class="tok-function">create</span>({ baseURL: <span class="tok-string">"/api"</span> });
@@ -1814,14 +1814,14 @@ api.interceptors.response.<span class="tok-function">use</span>(
     }
     <span class="tok-keyword">return</span> Promise.<span class="tok-function">reject</span>(err);
   }
-);</pre>
+);</code></pre>
 
 <h3>Đăng nhập lưu token</h3>
-<pre><span class="tok-keyword">async function</span> <span class="tok-function">login</span>(email, password) {
+<pre><code class="language-javascript"><span class="tok-keyword">async function</span> <span class="tok-function">login</span>(email, password) {
   <span class="tok-keyword">const</span> { data } = <span class="tok-keyword">await</span> api.<span class="tok-function">post</span>(<span class="tok-string">"/auth/login"</span>, { email, password });
   localStorage.<span class="tok-function">setItem</span>(<span class="tok-string">"token"</span>, data.token);
   <span class="tok-keyword">return</span> data.user;   <span class="tok-comment">// { id, name, role }</span>
-}</pre>
+}</code></pre>
 
 <div class="pitfall"><strong>Bẫy:</strong> lưu role trong state rồi tin nó để bảo mật. Role ở frontend chỉ quyết định <em>hiển thị</em> cái gì; backend phải kiểm lại mọi lời gọi biến đổi (Mục 3). Người dùng sửa được localStorage — đừng bao giờ để client làm người gác cổng.</div>
 
@@ -1840,7 +1840,7 @@ api.interceptors.response.<span class="tok-function">use</span>(
 <p class="lead">The member browses books, sees available copies, and clicks "Borrow". The interesting part is what happens when the copy was grabbed a split second earlier: the backend returns 409, and a <em>good</em> UI recovers gracefully instead of showing a raw error.</p>
 
 <h3>The borrow button</h3>
-<pre><span class="tok-keyword">function</span> <span class="tok-function">BorrowButton</span>({ copyId, onDone }) {
+<pre><code class="language-javascript"><span class="tok-keyword">function</span> <span class="tok-function">BorrowButton</span>({ copyId, onDone }) {
   <span class="tok-keyword">const</span> [busy, setBusy] = <span class="tok-function">useState</span>(<span class="tok-keyword">false</span>);
 
   <span class="tok-keyword">async function</span> <span class="tok-function">borrow</span>() {
@@ -1862,7 +1862,7 @@ api.interceptors.response.<span class="tok-function">use</span>(
   <span class="tok-keyword">return</span> &lt;button disabled={busy} onClick={borrow}&gt;
     {busy ? <span class="tok-string">"Borrowing…"</span> : <span class="tok-string">"Borrow"</span>}
   &lt;/button&gt;;
-}</pre>
+}</code></pre>
 
 <h3>Worked example — the 409 recovery flow</h3>
 <div class="out">1. An and Binh both see "Clean Code — 1 copy available".
@@ -1888,7 +1888,7 @@ Nobody sees a stack trace; the list simply reflects reality. ✅</div>
 <p class="lead">Thành viên duyệt sách, thấy bản sao còn rảnh, và bấm "Mượn". Phần thú vị là khi bản sao vừa bị người khác giành trước một tích tắc: backend trả 409, và một giao diện <em>tốt</em> phục hồi mượt thay vì hiện lỗi thô.</p>
 
 <h3>Nút Mượn</h3>
-<pre><span class="tok-keyword">function</span> <span class="tok-function">BorrowButton</span>({ copyId, onDone }) {
+<pre><code class="language-javascript"><span class="tok-keyword">function</span> <span class="tok-function">BorrowButton</span>({ copyId, onDone }) {
   <span class="tok-keyword">const</span> [busy, setBusy] = <span class="tok-function">useState</span>(<span class="tok-keyword">false</span>);
 
   <span class="tok-keyword">async function</span> <span class="tok-function">borrow</span>() {
@@ -1910,7 +1910,7 @@ Nobody sees a stack trace; the list simply reflects reality. ✅</div>
   <span class="tok-keyword">return</span> &lt;button disabled={busy} onClick={borrow}&gt;
     {busy ? <span class="tok-string">"Đang mượn…"</span> : <span class="tok-string">"Mượn"</span>}
   &lt;/button&gt;;
-}</pre>
+}</code></pre>
 
 <h3>Ví dụ có lời giải — luồng phục hồi 409</h3>
 <div class="out">1. An và Bình đều thấy "Clean Code — còn 1 bản".
@@ -1948,17 +1948,17 @@ Không ai thấy stack trace; danh sách chỉ đơn giản phản ánh sự th�
 <p class="lead">Three layers of tests. A fast unit test for business rules, a MockMvc test for the HTTP contract, and — the one that impresses graders — a <strong>concurrency test</strong> that fires many threads at the same copy and asserts exactly one wins.</p>
 
 <h3>1) Unit test — the rule in isolation</h3>
-<pre><span class="tok-keyword">@Test</span>
+<pre><code class="language-java"><span class="tok-keyword">@Test</span>
 <span class="tok-keyword">void</span> <span class="tok-function">borrowingAnAlreadyBorrowedCopy_throwsConflict</span>() {
   <span class="tok-type">Copy</span> c = <span class="tok-keyword">new</span> <span class="tok-type">Copy</span>(); c.setStatus(CopyStatus.BORROWED);
   when(copies.findById(<span class="tok-number">42L</span>)).thenReturn(Optional.of(c));
 
   assertThrows(ConflictException.class,
       () -&gt; lendingService.borrow(<span class="tok-number">42L</span>, <span class="tok-number">7L</span>));
-}</pre>
+}</code></pre>
 
 <h3>2) MockMvc — the HTTP contract</h3>
-<pre><span class="tok-keyword">@Test</span>
+<pre><code class="language-java"><span class="tok-keyword">@Test</span>
 <span class="tok-keyword">void</span> <span class="tok-function">borrow_returns201_thenSameCopy_returns409</span>() <span class="tok-keyword">throws</span> Exception {
   mvc.<span class="tok-function">perform</span>(post(<span class="tok-string">"/api/loans"</span>).with(jwt(member))
         .contentType(APPLICATION_JSON).content(<span class="tok-string">"{\\"copyId\\":42}"</span>))
@@ -1967,10 +1967,10 @@ Không ai thấy stack trace; danh sách chỉ đơn giản phản ánh sự th�
   mvc.<span class="tok-function">perform</span>(post(<span class="tok-string">"/api/loans"</span>).with(jwt(other))
         .contentType(APPLICATION_JSON).content(<span class="tok-string">"{\\"copyId\\":42}"</span>))
      .andExpect(status().isConflict());   <span class="tok-comment">// 409 the second time</span>
-}</pre>
+}</code></pre>
 
 <h3>3) The concurrency test — the star of the demo</h3>
-<pre><span class="tok-keyword">@Test</span>
+<pre><code class="language-java"><span class="tok-keyword">@Test</span>
 <span class="tok-keyword">void</span> <span class="tok-function">twentyThreadsRaceForOneCopy_onlyOneSucceeds</span>() <span class="tok-keyword">throws</span> Exception {
   <span class="tok-keyword">int</span> N = <span class="tok-number">20</span>;
   <span class="tok-keyword">var</span> ready  = <span class="tok-keyword">new</span> <span class="tok-type">CountDownLatch</span>(N);
@@ -1992,7 +1992,7 @@ Không ai thấy stack trace; danh sách chỉ đơn giản phản ánh sự th�
 
   assertThat(ok.<span class="tok-function">get</span>()).<span class="tok-function">isEqualTo</span>(<span class="tok-number">1</span>);        <span class="tok-comment">// exactly ONE borrow won</span>
   assertThat(loans.<span class="tok-function">countByCopyIdAndReturnedAtIsNull</span>(<span class="tok-number">42L</span>)).<span class="tok-function">isEqualTo</span>(<span class="tok-number">1</span>);
-}</pre>
+}</code></pre>
 
 <h3>Why the latch matters</h3>
 <div class="out">Without a latch, threads start staggered — thread 1 often finishes before thread 2 begins,
@@ -2017,17 +2017,17 @@ simultaneously → the real race is forced → the test genuinely proves the inv
 <p class="lead">Ba lớp kiểm thử. Unit test nhanh cho luật nghiệp vụ, MockMvc test cho hợp đồng HTTP, và — cái làm giám khảo nể — một <strong>test đồng thời</strong> bắn nhiều luồng vào cùng một bản sao và khẳng định đúng một kẻ thắng.</p>
 
 <h3>1) Unit test — luật đứng riêng</h3>
-<pre><span class="tok-keyword">@Test</span>
+<pre><code class="language-java"><span class="tok-keyword">@Test</span>
 <span class="tok-keyword">void</span> <span class="tok-function">borrowingAnAlreadyBorrowedCopy_throwsConflict</span>() {
   <span class="tok-type">Copy</span> c = <span class="tok-keyword">new</span> <span class="tok-type">Copy</span>(); c.setStatus(CopyStatus.BORROWED);
   when(copies.findById(<span class="tok-number">42L</span>)).thenReturn(Optional.of(c));
 
   assertThrows(ConflictException.class,
       () -&gt; lendingService.borrow(<span class="tok-number">42L</span>, <span class="tok-number">7L</span>));
-}</pre>
+}</code></pre>
 
 <h3>2) MockMvc — hợp đồng HTTP</h3>
-<pre><span class="tok-keyword">@Test</span>
+<pre><code class="language-java"><span class="tok-keyword">@Test</span>
 <span class="tok-keyword">void</span> <span class="tok-function">borrow_returns201_thenSameCopy_returns409</span>() <span class="tok-keyword">throws</span> Exception {
   mvc.<span class="tok-function">perform</span>(post(<span class="tok-string">"/api/loans"</span>).with(jwt(member))
         .contentType(APPLICATION_JSON).content(<span class="tok-string">"{\\"copyId\\":42}"</span>))
@@ -2036,10 +2036,10 @@ simultaneously → the real race is forced → the test genuinely proves the inv
   mvc.<span class="tok-function">perform</span>(post(<span class="tok-string">"/api/loans"</span>).with(jwt(other))
         .contentType(APPLICATION_JSON).content(<span class="tok-string">"{\\"copyId\\":42}"</span>))
      .andExpect(status().isConflict());   <span class="tok-comment">// 409 lần thứ hai</span>
-}</pre>
+}</code></pre>
 
 <h3>3) Test đồng thời — ngôi sao của buổi demo</h3>
-<pre><span class="tok-keyword">@Test</span>
+<pre><code class="language-java"><span class="tok-keyword">@Test</span>
 <span class="tok-keyword">void</span> <span class="tok-function">twentyThreadsRaceForOneCopy_onlyOneSucceeds</span>() <span class="tok-keyword">throws</span> Exception {
   <span class="tok-keyword">int</span> N = <span class="tok-number">20</span>;
   <span class="tok-keyword">var</span> ready  = <span class="tok-keyword">new</span> <span class="tok-type">CountDownLatch</span>(N);
@@ -2061,7 +2061,7 @@ simultaneously → the real race is forced → the test genuinely proves the inv
 
   assertThat(ok.<span class="tok-function">get</span>()).<span class="tok-function">isEqualTo</span>(<span class="tok-number">1</span>);        <span class="tok-comment">// đúng MỘT lượt mượn thắng</span>
   assertThat(loans.<span class="tok-function">countByCopyIdAndReturnedAtIsNull</span>(<span class="tok-number">42L</span>)).<span class="tok-function">isEqualTo</span>(<span class="tok-number">1</span>);
-}</pre>
+}</code></pre>
 
 <h3>Vì sao latch quan trọng</h3>
 <div class="out">Không có latch, các luồng khởi động lệch nhau — luồng 1 thường xong trước khi luồng 2 bắt đầu,
@@ -2259,28 +2259,28 @@ $ docker compose up --build
 
 <h3>1) Pessimistic locking — the other way to win the race</h3>
 <p>Section 4 used optimistic locking. When contention is high (a popular new release, dozens of clicks a second), you can instead lock the row up front so losers <em>wait</em> rather than fail-and-retry:</p>
-<pre><span class="tok-keyword">@Lock</span>(LockModeType.PESSIMISTIC_WRITE)
+<pre><code class="language-sql"><span class="tok-keyword">@Lock</span>(LockModeType.PESSIMISTIC_WRITE)
 <span class="tok-keyword">@Query</span>(<span class="tok-string">"select c from Copy c where c.id = :id"</span>)
 <span class="tok-type">Optional</span>&lt;Copy&gt; <span class="tok-function">findByIdForUpdate</span>(<span class="tok-keyword">@Param</span>(<span class="tok-string">"id"</span>) <span class="tok-type">Long</span> id);
 <span class="tok-comment">// generates: SELECT ... FROM copies WHERE id = ? FOR UPDATE
-// the second transaction blocks until the first commits, then sees BORROWED → 409</span></pre>
+// the second transaction blocks until the first commits, then sees BORROWED → 409</span></code></pre>
 <div class="kv-grid">
   <div class="kv"><b>Optimistic (@Version)</b><span>rare conflicts, no waiting, retry the loser. Default choice for booking.</span></div>
   <div class="kv"><b>Pessimistic (FOR UPDATE)</b><span>high contention, losers wait, no retry. Risk: deadlocks &amp; reduced throughput.</span></div>
 </div>
 
 <h3>2) Overdue fines — a scheduled job</h3>
-<pre><span class="tok-keyword">@Scheduled</span>(cron = <span class="tok-string">"0 0 1 * * *"</span>)   <span class="tok-comment">// 01:00 every night</span>
+<pre><code class="language-java"><span class="tok-keyword">@Scheduled</span>(cron = <span class="tok-string">"0 0 1 * * *"</span>)   <span class="tok-comment">// 01:00 every night</span>
 <span class="tok-keyword">public void</span> <span class="tok-function">accrueFines</span>() {
   <span class="tok-keyword">var</span> overdue = loans.<span class="tok-function">findByReturnedAtIsNullAndDueAtBefore</span>(Instant.now());
   <span class="tok-keyword">for</span> (<span class="tok-type">Loan</span> l : overdue) {
     <span class="tok-keyword">long</span> days = ChronoUnit.DAYS.<span class="tok-function">between</span>(l.getDueAt(), Instant.now());
     l.<span class="tok-function">setFine</span>(days * <span class="tok-number">2000</span>);   <span class="tok-comment">// 2,000 VND / day</span>
   }
-}</pre>
+}</code></pre>
 
 <h3>3) Reporting — let the database aggregate</h3>
-<pre><span class="tok-comment">-- top 5 most-borrowed titles this month</span>
+<pre><code class="language-sql"><span class="tok-comment">-- top 5 most-borrowed titles this month</span>
 <span class="tok-keyword">SELECT</span> b.title, <span class="tok-function">COUNT</span>(*) <span class="tok-keyword">AS</span> times_borrowed
 <span class="tok-keyword">FROM</span> loans l
 <span class="tok-keyword">JOIN</span> copies c <span class="tok-keyword">ON</span> c.id = l.copy_id
@@ -2288,7 +2288,7 @@ $ docker compose up --build
 <span class="tok-keyword">WHERE</span> l.borrowed_at &gt;= date_trunc(<span class="tok-string">'month'</span>, now())
 <span class="tok-keyword">GROUP BY</span> b.title
 <span class="tok-keyword">ORDER BY</span> times_borrowed <span class="tok-keyword">DESC</span>
-<span class="tok-keyword">LIMIT</span> <span class="tok-number">5</span>;</pre>
+<span class="tok-keyword">LIMIT</span> <span class="tok-number">5</span>;</code></pre>
 <p>Aggregating in SQL is far faster than pulling every loan into Java and counting in a loop — the database is built for this.</p>
 
 <h3>4) CI — prove it on every push</h3>
@@ -2323,28 +2323,28 @@ $ docker compose up --build
 
 <h3>1) Khoá pessimistic — cách khác để thắng race</h3>
 <p>Mục 4 dùng optimistic. Khi tranh chấp cao (bản mới hot, hàng chục cú bấm mỗi giây), bạn có thể khoá dòng ngay từ đầu để kẻ thua <em>chờ</em> thay vì fail-rồi-retry:</p>
-<pre><span class="tok-keyword">@Lock</span>(LockModeType.PESSIMISTIC_WRITE)
+<pre><code class="language-sql"><span class="tok-keyword">@Lock</span>(LockModeType.PESSIMISTIC_WRITE)
 <span class="tok-keyword">@Query</span>(<span class="tok-string">"select c from Copy c where c.id = :id"</span>)
 <span class="tok-type">Optional</span>&lt;Copy&gt; <span class="tok-function">findByIdForUpdate</span>(<span class="tok-keyword">@Param</span>(<span class="tok-string">"id"</span>) <span class="tok-type">Long</span> id);
 <span class="tok-comment">// sinh ra: SELECT ... FROM copies WHERE id = ? FOR UPDATE
-// transaction thứ hai bị chặn tới khi cái đầu commit, rồi thấy BORROWED → 409</span></pre>
+// transaction thứ hai bị chặn tới khi cái đầu commit, rồi thấy BORROWED → 409</span></code></pre>
 <div class="kv-grid">
   <div class="kv"><b>Optimistic (@Version)</b><span>xung đột hiếm, không chờ, thử lại kẻ thua. Lựa chọn mặc định cho đặt chỗ.</span></div>
   <div class="kv"><b>Pessimistic (FOR UPDATE)</b><span>tranh chấp cao, kẻ thua chờ, không retry. Rủi ro: deadlock &amp; giảm thông lượng.</span></div>
 </div>
 
 <h3>2) Tiền phạt quá hạn — một job định giờ</h3>
-<pre><span class="tok-keyword">@Scheduled</span>(cron = <span class="tok-string">"0 0 1 * * *"</span>)   <span class="tok-comment">// 01:00 mỗi đêm</span>
+<pre><code class="language-java"><span class="tok-keyword">@Scheduled</span>(cron = <span class="tok-string">"0 0 1 * * *"</span>)   <span class="tok-comment">// 01:00 mỗi đêm</span>
 <span class="tok-keyword">public void</span> <span class="tok-function">accrueFines</span>() {
   <span class="tok-keyword">var</span> overdue = loans.<span class="tok-function">findByReturnedAtIsNullAndDueAtBefore</span>(Instant.now());
   <span class="tok-keyword">for</span> (<span class="tok-type">Loan</span> l : overdue) {
     <span class="tok-keyword">long</span> days = ChronoUnit.DAYS.<span class="tok-function">between</span>(l.getDueAt(), Instant.now());
     l.<span class="tok-function">setFine</span>(days * <span class="tok-number">2000</span>);   <span class="tok-comment">// 2.000 VND / ngày</span>
   }
-}</pre>
+}</code></pre>
 
 <h3>3) Báo cáo — để cơ sở dữ liệu tổng hợp</h3>
-<pre><span class="tok-comment">-- 5 đầu sách được mượn nhiều nhất tháng này</span>
+<pre><code class="language-sql"><span class="tok-comment">-- 5 đầu sách được mượn nhiều nhất tháng này</span>
 <span class="tok-keyword">SELECT</span> b.title, <span class="tok-function">COUNT</span>(*) <span class="tok-keyword">AS</span> times_borrowed
 <span class="tok-keyword">FROM</span> loans l
 <span class="tok-keyword">JOIN</span> copies c <span class="tok-keyword">ON</span> c.id = l.copy_id
@@ -2352,7 +2352,7 @@ $ docker compose up --build
 <span class="tok-keyword">WHERE</span> l.borrowed_at &gt;= date_trunc(<span class="tok-string">'month'</span>, now())
 <span class="tok-keyword">GROUP BY</span> b.title
 <span class="tok-keyword">ORDER BY</span> times_borrowed <span class="tok-keyword">DESC</span>
-<span class="tok-keyword">LIMIT</span> <span class="tok-number">5</span>;</pre>
+<span class="tok-keyword">LIMIT</span> <span class="tok-number">5</span>;</code></pre>
 <p>Tổng hợp trong SQL nhanh hơn nhiều so với kéo mọi lượt mượn vào Java rồi đếm trong vòng lặp — cơ sở dữ liệu sinh ra để làm việc này.</p>
 
 <h3>4) CI — chứng minh ở mỗi lần push</h3>

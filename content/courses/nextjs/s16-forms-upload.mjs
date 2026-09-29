@@ -129,7 +129,7 @@ export default {
 <h2>Less re-rendering, less boilerplate</h2>
 <p class="lead">In Chapter 4 you built controlled inputs — every keystroke set state and re-rendered. That is fine for a field or two; for a large form it re-renders the whole thing on every key. react-hook-form takes the <em>uncontrolled</em> approach: inputs keep their own value in the DOM, and the library reads them on submit.</p>
 
-<pre><code>'use client';
+<pre><code class="language-typescript">'use client';
 import { useForm } from 'react-hook-form';
 
 function SignupForm() {
@@ -187,7 +187,7 @@ function SignupForm() {
 <h2>Render lại ít hơn, ít rườm rà hơn</h2>
 <p class="lead">Ở Chương 4 bạn dựng input có-kiểm-soát — mỗi phím set state và render lại. Ổn với một hai trường; với một form lớn nó render lại cả form ở mỗi phím. react-hook-form dùng cách <em>uncontrolled</em>: input tự giữ giá trị trong DOM, và thư viện đọc chúng lúc submit.</p>
 
-<pre><code>'use client';
+<pre><code class="language-typescript">'use client';
 import { useForm } from 'react-hook-form';
 
 function SignupForm() {
@@ -255,7 +255,7 @@ function SignupForm() {
 <h2>Describe the data once, validate it everywhere</h2>
 <p class="lead">Validation logic duplicated in the client and the server drifts apart the day someone edits one and not the other. Zod fixes this: you define the shape and rules once as a schema, use it to validate on the client for instant feedback, and use the <em>same</em> schema on the server as the real guard.</p>
 
-<pre><code>import { z } from 'zod';
+<pre><code class="language-javascript">import { z } from 'zod';
 
 export const signupSchema = z.object({
   email:    z.string().email('Invalid email'),
@@ -266,14 +266,14 @@ export const signupSchema = z.object({
 export type Signup = z.infer&lt;typeof signupSchema&gt;;   <span class="tok-comment">// TS type, for free</span></code></pre>
 
 <h3>Client side: wire Zod into react-hook-form</h3>
-<pre><code>import { zodResolver } from '@hookform/resolvers/zod';
+<pre><code class="language-javascript">import { zodResolver } from '@hookform/resolvers/zod';
 
 const { register, handleSubmit, formState: { errors } } =
   useForm({ resolver: zodResolver(signupSchema) });</code></pre>
 <p>Now the form validates against the schema automatically, and <code>errors</code> carries the messages you wrote in the schema — no separate <code>required</code> rules on each field.</p>
 
 <h3>Server side: the real check</h3>
-<pre><code>async function signup(formData) {
+<pre><code class="language-javascript">async function signup(formData) {
   'use server';
   const parsed = signupSchema.safeParse({
     email: formData.get('email'),
@@ -318,7 +318,7 @@ const { register, handleSubmit, formState: { errors } } =
 <h2>Mô tả dữ liệu một lần, validate ở mọi nơi</h2>
 <p class="lead">Logic validation lặp ở client và server sẽ trôi lệch vào ngày ai đó sửa một bên mà quên bên kia. Zod chữa điều này: bạn định nghĩa hình dạng và luật một lần thành một schema, dùng nó validate ở client cho phản hồi tức thì, và dùng <em>cùng</em> schema đó ở server làm lá chắn thật.</p>
 
-<pre><code>import { z } from 'zod';
+<pre><code class="language-javascript">import { z } from 'zod';
 
 export const signupSchema = z.object({
   email:    z.string().email('Email không hợp lệ'),
@@ -329,14 +329,14 @@ export const signupSchema = z.object({
 export type Signup = z.infer&lt;typeof signupSchema&gt;;   <span class="tok-comment">// kiểu TS, miễn phí</span></code></pre>
 
 <h3>Phía client: nối Zod vào react-hook-form</h3>
-<pre><code>import { zodResolver } from '@hookform/resolvers/zod';
+<pre><code class="language-javascript">import { zodResolver } from '@hookform/resolvers/zod';
 
 const { register, handleSubmit, formState: { errors } } =
   useForm({ resolver: zodResolver(signupSchema) });</code></pre>
 <p>Giờ form tự validate theo schema, và <code>errors</code> mang các thông báo bạn viết trong schema — không cần luật <code>required</code> riêng trên từng trường.</p>
 
 <h3>Phía server: phép kiểm thật</h3>
-<pre><code>async function signup(formData) {
+<pre><code class="language-javascript">async function signup(formData) {
   'use server';
   const parsed = signupSchema.safeParse({
     email: formData.get('email'),
@@ -397,7 +397,7 @@ const { register, handleSubmit, formState: { errors } } =
   <div class="kv"><span class="k">Presigned URL (direct)</span><span class="v">Your server issues a short-lived signed URL; the browser uploads <em>directly</em> to storage. Better for large files — the bytes skip your server. You still record the resulting key.</span></div>
 </div>
 
-<pre><code><span class="tok-comment">// A form that carries a file uses multipart; FormData handles it</span>
+<pre><code class="language-typescript"><span class="tok-comment">// A form that carries a file uses multipart; FormData handles it</span>
 &lt;form action={uploadAvatar}&gt;
   &lt;input type="file" name="avatar" accept="image/*" /&gt;
   &lt;button&gt;Upload&lt;/button&gt;
@@ -455,7 +455,7 @@ async function uploadAvatar(formData) {
   <div class="kv"><span class="k">Presigned URL (trực tiếp)</span><span class="v">Server cấp một URL đã ký, sống ngắn; trình duyệt upload <em>thẳng</em> lên storage. Tốt cho file lớn — bytes bỏ qua server. Bạn vẫn ghi lại khoá kết quả.</span></div>
 </div>
 
-<pre><code><span class="tok-comment">// Một form mang file dùng multipart; FormData lo việc đó</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Một form mang file dùng multipart; FormData lo việc đó</span>
 &lt;form action={uploadAvatar}&gt;
   &lt;input type="file" name="avatar" accept="image/*" /&gt;
   &lt;button&gt;Upload&lt;/button&gt;
@@ -529,7 +529,7 @@ async function uploadAvatar(formData) {
 </div>
 
 <h3>A safe server upload, in shape</h3>
-<pre><code>async function uploadAvatar(formData) {
+<pre><code class="language-javascript">async function uploadAvatar(formData) {
   'use server';
   const user = await getCurrentUser();
   if (!user) throw new Error('Not authenticated');           <span class="tok-comment">// authz</span>
@@ -585,7 +585,7 @@ async function uploadAvatar(formData) {
 </div>
 
 <h3>Một upload server an toàn, dạng khung</h3>
-<pre><code>async function uploadAvatar(formData) {
+<pre><code class="language-javascript">async function uploadAvatar(formData) {
   'use server';
   const user = await getCurrentUser();
   if (!user) throw new Error('Chưa xác thực');               <span class="tok-comment">// authz</span>

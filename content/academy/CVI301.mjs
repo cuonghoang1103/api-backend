@@ -53,7 +53,7 @@ const c1 = doc('cvi301-1-1-images', '1.1 — Digital images, pixels & color spac
 <li><strong>Grayscale</strong> — a single channel of brightness; drops color to simplify many algorithms.</li>
 <li><strong>HSV</strong> — Hue, Saturation, Value. Great for color-based selection because &quot;color&quot; (hue) is separated from brightness.</li>
 </ul>
-<pre><code>import cv2
+<pre><code class="language-python">import cv2
 img = cv2.imread(&quot;photo.jpg&quot;)      # loads as BGR, shape H x W x 3
 print(img.shape, img.dtype)         # e.g. (480, 640, 3) uint8
 
@@ -74,7 +74,7 @@ print(px)                           # e.g. [ 34 120 200 ]
 <li><strong>Grayscale (ảnh xám)</strong> — một kênh độ sáng; bỏ màu để đơn giản hoá nhiều thuật toán.</li>
 <li><strong>HSV</strong> — Hue (sắc), Saturation (độ bão hoà), Value (độ sáng). Rất tốt để chọn theo màu vì &quot;màu&quot; (hue) tách khỏi độ sáng.</li>
 </ul>
-<pre><code>import cv2
+<pre><code class="language-python">import cv2
 img = cv2.imread(&quot;photo.jpg&quot;)      # nap dang BGR, shape H x W x 3
 print(img.shape, img.dtype)         # vd (480, 640, 3) uint8
 
@@ -107,7 +107,7 @@ const c2 = doc('cvi301-2-1-processing', '2.1 — Basic image processing|||2.1 �
 <li><strong>Thresholding</strong> turns a grayscale image into black/white: pixels above T become 255, below become 0.</li>
 <li><strong>Histogram equalization</strong> spreads intensities to use the full 0..255 range — it boosts contrast on dull images.</li>
 </ul>
-<pre><code>import cv2
+<pre><code class="language-python">import cv2
 gray = cv2.imread(&quot;x.jpg&quot;, cv2.IMREAD_GRAYSCALE)
 
 neg   = 255 - gray                                  # negative (point op)
@@ -127,7 +127,7 @@ hist  = cv2.calcHist([gray], [0], None, [256], [0, 256])
 <li><strong>Ngưỡng (thresholding)</strong> biến ảnh xám thành đen/trắng: pixel trên T thành 255, dưới thành 0.</li>
 <li><strong>Cân bằng histogram</strong> trải mức sáng ra toàn dải 0..255 — tăng tương phản cho ảnh xỉn.</li>
 </ul>
-<pre><code>import cv2
+<pre><code class="language-python">import cv2
 gray = cv2.imread(&quot;x.jpg&quot;, cv2.IMREAD_GRAYSCALE)
 
 neg   = 255 - gray                                  # am ban (bien doi diem)
@@ -207,7 +207,7 @@ const c4 = doc('cvi301-4-1-edges-features', '4.1 — Edge & feature detection|||
 <li><strong>Harris corner</strong> — finds points where intensity changes in two directions; corners are stable, easy to track.</li>
 <li><strong>SIFT / ORB</strong> — detect <em>keypoints</em> and compute <em>descriptors</em> that survive scale and rotation, so the same object matches across images. ORB is fast and free.</li>
 </ul>
-<pre><code>import cv2
+<pre><code class="language-python">import cv2
 gray = cv2.imread(&quot;x.jpg&quot;, cv2.IMREAD_GRAYSCALE)
 
 edges = cv2.Canny(gray, 100, 200)          # two-threshold edge map
@@ -226,7 +226,7 @@ kp, des = orb.detectAndCompute(gray, None) # keypoints + descriptors
 <li><strong>Góc Harris</strong> — tìm điểm mà độ sáng đổi theo hai hướng; góc ổn định, dễ theo dõi.</li>
 <li><strong>SIFT / ORB</strong> — dò <em>điểm khoá (keypoint)</em> và tính <em>mô tả (descriptor)</em> bền với tỉ lệ và xoay, nên cùng một vật khớp được giữa nhiều ảnh. ORB nhanh và miễn phí.</li>
 </ul>
-<pre><code>import cv2
+<pre><code class="language-python">import cv2
 gray = cv2.imread(&quot;x.jpg&quot;, cv2.IMREAD_GRAYSCALE)
 
 edges = cv2.Canny(gray, 100, 200)          # ban do bien hai nguong
@@ -308,7 +308,7 @@ const c6 = doc('cvi301-6-1-segmentation', '6.1 — Segmentation & detection|||6.
 <p>After a binary image, <strong>contours</strong> are the outlines of connected regions. From a contour you can measure area, perimeter, bounding box, and count objects.</p>
 <h3>Hough transform</h3>
 <p>The <strong>Hough transform</strong> detects parametric shapes — <em>lines</em> and <em>circles</em> — even when broken up, by voting in parameter space. Used for lane lines, coins, and grids.</p>
-<pre><code>import cv2
+<pre><code class="language-python">import cv2
 gray = cv2.imread(&quot;x.jpg&quot;, cv2.IMREAD_GRAYSCALE)
 
 _, bw = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
@@ -327,7 +327,7 @@ lines = cv2.HoughLinesP(edges, 1, 3.14/180, 80, minLineLength=50, maxLineGap=10)
 <p>Sau khi có ảnh nhị phân, <strong>contour</strong> là đường viền các vùng liên thông. Từ contour bạn đo được diện tích, chu vi, hộp bao, và đếm số vật.</p>
 <h3>Biến đổi Hough</h3>
 <p><strong>Biến đổi Hough</strong> phát hiện hình tham số — <em>đường thẳng</em> và <em>đường tròn</em> — kể cả khi bị đứt, bằng cách bỏ phiếu trong không gian tham số. Dùng cho vạch làn đường, đồng xu, lưới.</p>
-<pre><code>import cv2
+<pre><code class="language-python">import cv2
 gray = cv2.imread(&quot;x.jpg&quot;, cv2.IMREAD_GRAYSCALE)
 
 _, bw = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
@@ -404,7 +404,7 @@ const c8 = doc('cvi301-8-1-applications', '8.1 — Applications & ethics|||8.1 �
 <li><strong>OCR</strong> — read text from images (Tesseract, EasyOCR). Preprocessing (deskew, threshold) is half the battle.</li>
 <li><strong>Object tracking</strong> — follow a detected object across video frames (CSRT, KCF, or detection + a tracker like SORT).</li>
 </ul>
-<pre><code>import cv2
+<pre><code class="language-python">import cv2
 # Face DETECTION (Haar cascade) — a classic first step
 face = cv2.CascadeClassifier(cv2.data.haarcascades + &quot;haarcascade_frontalface_default.xml&quot;)
 gray = cv2.cvtColor(cv2.imread(&quot;p.jpg&quot;), cv2.COLOR_BGR2GRAY)
@@ -423,7 +423,7 @@ tracker = cv2.TrackerCSRT_create()            # single-object video tracker
 <li><strong>OCR</strong> — đọc chữ từ ảnh (Tesseract, EasyOCR). Tiền xử lý (nắn nghiêng, ngưỡng) chiếm một nửa thành công.</li>
 <li><strong>Theo dõi đối tượng</strong> — bám vật đã phát hiện qua các khung video (CSRT, KCF, hoặc detection + tracker như SORT).</li>
 </ul>
-<pre><code>import cv2
+<pre><code class="language-python">import cv2
 # PHAT HIEN khuon mat (Haar cascade) — buoc dau kinh dien
 face = cv2.CascadeClassifier(cv2.data.haarcascades + &quot;haarcascade_frontalface_default.xml&quot;)
 gray = cv2.cvtColor(cv2.imread(&quot;p.jpg&quot;), cv2.COLOR_BGR2GRAY)

@@ -52,7 +52,7 @@ export default {
 <p>No route configuration file, no <code>&lt;Route path="/about"&gt;</code> to register. You want a page at <code>/about</code>? Make <code>app/about/page.tsx</code>. The URL and the folder are the same thing. That is the single mental shift of this chapter — everything else builds on it.</p>
 
 <h3>The smallest possible page</h3>
-<pre><code><span class="tok-comment">// app/about/page.tsx</span>
+<pre><code class="language-javascript"><span class="tok-comment">// app/about/page.tsx</span>
 export default function AboutPage() {
   return &lt;h1&gt;About CuongThai&lt;/h1&gt;;
 }</code></pre>
@@ -120,7 +120,7 @@ export default function AboutPage() {
 <p>Không file cấu hình route, không phải đăng ký <code>&lt;Route path="/about"&gt;</code>. Muốn trang ở <code>/about</code>? Tạo <code>app/about/page.tsx</code>. URL và thư mục là một. Đó là cú chuyển tư duy duy nhất của chương này — mọi thứ khác dựng trên nó.</p>
 
 <h3>Trang nhỏ nhất có thể</h3>
-<pre><code><span class="tok-comment">// app/about/page.tsx</span>
+<pre><code class="language-javascript"><span class="tok-comment">// app/about/page.tsx</span>
 export default function AboutPage() {
   return &lt;h1&gt;Về CuongThai&lt;/h1&gt;;
 }</code></pre>
@@ -304,7 +304,7 @@ export default function AboutPage() {
 <p class="lead">A <code>layout.tsx</code> renders shared UI around a set of routes. The one at the top of <code>app/</code> is the <strong>root layout</strong>; it is required, and it is the only place your <code>&lt;html&gt;</code> and <code>&lt;body&gt;</code> tags live. Deeper layouts wrap smaller sections. The property that makes layouts powerful is what they do <em>not</em> do on navigation.</p>
 
 <h3>The shape of a layout</h3>
-<pre><code><span class="tok-comment">// app/layout.tsx — the ROOT layout (required)</span>
+<pre><code class="language-typescript"><span class="tok-comment">// app/layout.tsx — the ROOT layout (required)</span>
 export default function RootLayout({ children }) {
   return (
     &lt;html lang="vi"&gt;
@@ -372,7 +372,7 @@ export default function RootLayout({ children }) {
 <p class="lead">Một <code>layout.tsx</code> render UI dùng chung quanh một nhóm route. Cái ở đỉnh <code>app/</code> là <strong>root layout</strong>; nó bắt buộc, và là nơi <em>duy nhất</em> chứa thẻ <code>&lt;html&gt;</code> và <code>&lt;body&gt;</code>. Layout sâu hơn bọc các phần nhỏ hơn. Điều làm layout mạnh mẽ lại là thứ nó <em>không</em> làm khi điều hướng.</p>
 
 <h3>Hình dạng một layout</h3>
-<pre><code><span class="tok-comment">// app/layout.tsx — root layout (bắt buộc)</span>
+<pre><code class="language-typescript"><span class="tok-comment">// app/layout.tsx — root layout (bắt buộc)</span>
 export default function RootLayout({ children }) {
   return (
     &lt;html lang="vi"&gt;
@@ -450,7 +450,7 @@ export default function RootLayout({ children }) {
 <p class="lead">The previous lesson said layouts persist across navigation — but only if you navigate the right way. The App Router does <em>client-side transitions</em>: it fetches just the new segment and swaps it in, keeping the shared layout mounted. The tool for that is the <code>&lt;Link&gt;</code> component.</p>
 
 <h3>Link, not a bare anchor</h3>
-<pre><code>import Link from 'next/link';
+<pre><code class="language-javascript">import Link from 'next/link';
 
 &lt;Link href="/courses"&gt;Courses&lt;/Link&gt;
 &lt;Link href="/courses/nextjs"&gt;Next.js course&lt;/Link&gt;</code></pre>
@@ -462,7 +462,7 @@ export default function RootLayout({ children }) {
 
 <h3>Navigating from code: useRouter</h3>
 <p>Sometimes you must navigate after something happens — a form submits, a login succeeds. For that, the client hook <code>useRouter</code>:</p>
-<pre><code>'use client';
+<pre><code class="language-javascript">'use client';
 import { useRouter } from 'next/navigation';
 
 function LoginButton() {
@@ -476,7 +476,7 @@ function LoginButton() {
 <p>Import it from <code>next/navigation</code> (the App Router package), <strong>not</strong> the old <code>next/router</code>. And because it is a hook that uses browser state, it only works in a Client Component — hence the <code>'use client'</code>.</p>
 
 <h3>Highlighting the active link: usePathname</h3>
-<pre><code>'use client';
+<pre><code class="language-javascript">'use client';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -521,7 +521,7 @@ function NavItem({ href, label }) {
 <p class="lead">Bài trước nói layout giữ nguyên qua điều hướng — nhưng chỉ khi bạn điều hướng đúng cách. App Router làm <em>chuyển cảnh phía client</em>: nó chỉ fetch segment mới và tráo vào, giữ layout dùng chung vẫn mount. Công cụ cho việc đó là component <code>&lt;Link&gt;</code>.</p>
 
 <h3>Link, không phải anchor trần</h3>
-<pre><code>import Link from 'next/link';
+<pre><code class="language-javascript">import Link from 'next/link';
 
 &lt;Link href="/courses"&gt;Khoá học&lt;/Link&gt;
 &lt;Link href="/courses/nextjs"&gt;Khoá Next.js&lt;/Link&gt;</code></pre>
@@ -533,7 +533,7 @@ function NavItem({ href, label }) {
 
 <h3>Điều hướng từ code: useRouter</h3>
 <p>Đôi khi bạn phải điều hướng sau khi có việc xảy ra — form gửi xong, đăng nhập thành công. Cho việc đó, hook client <code>useRouter</code>:</p>
-<pre><code>'use client';
+<pre><code class="language-javascript">'use client';
 import { useRouter } from 'next/navigation';
 
 function LoginButton() {
@@ -547,7 +547,7 @@ function LoginButton() {
 <p>Import từ <code>next/navigation</code> (gói của App Router), <strong>không phải</strong> <code>next/router</code> cũ. Và vì nó là hook dùng state trình duyệt, nó chỉ chạy trong Client Component — nên có <code>'use client'</code>.</p>
 
 <h3>Tô đậm link đang chọn: usePathname</h3>
-<pre><code>'use client';
+<pre><code class="language-javascript">'use client';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -615,7 +615,7 @@ function NavItem({ href, label }) {
 
 <h3>Dynamic segments: one folder for many pages</h3>
 <p>You cannot make a folder per blog post. A folder named <code>[slug]</code> matches <em>any</em> value in that position and hands it to your page as a param:</p>
-<pre><code>app/blog/[slug]/page.tsx     <span class="tok-comment">// matches /blog/hello, /blog/anything</span>
+<pre><code class="language-javascript">app/blog/[slug]/page.tsx     <span class="tok-comment">// matches /blog/hello, /blog/anything</span>
 
 export default async function Post({ params }) {
   const { slug } = await params;   <span class="tok-comment">// e.g. "hello"</span>
@@ -625,7 +625,7 @@ export default async function Post({ params }) {
 
 <h3>Metadata: titles and SEO from the route</h3>
 <p>Every page should set its browser-tab title and description. In the App Router you export a <code>metadata</code> object (static) or a <code>generateMetadata</code> function (when it depends on data):</p>
-<pre><code><span class="tok-comment">// static — most pages</span>
+<pre><code class="language-javascript"><span class="tok-comment">// static — most pages</span>
 export const metadata = {
   title: 'Courses — CuongThai',
   description: 'Learn Next.js, Node.js and more.',
@@ -691,7 +691,7 @@ export async function generateMetadata({ params }) {
 
 <h3>Segment động: một thư mục cho nhiều trang</h3>
 <p>Bạn không thể tạo một thư mục cho mỗi bài blog. Một thư mục tên <code>[slug]</code> khớp <em>mọi</em> giá trị ở vị trí đó và trao nó cho page qua param:</p>
-<pre><code>app/blog/[slug]/page.tsx     <span class="tok-comment">// khớp /blog/hello, /blog/gi-cung-duoc</span>
+<pre><code class="language-javascript">app/blog/[slug]/page.tsx     <span class="tok-comment">// khớp /blog/hello, /blog/gi-cung-duoc</span>
 
 export default async function Post({ params }) {
   const { slug } = await params;   <span class="tok-comment">// ví dụ "hello"</span>
@@ -701,7 +701,7 @@ export default async function Post({ params }) {
 
 <h3>Metadata: title và SEO từ route</h3>
 <p>Mọi trang nên đặt title trên tab trình duyệt và mô tả. Trong App Router bạn export một object <code>metadata</code> (tĩnh) hoặc một hàm <code>generateMetadata</code> (khi nó phụ thuộc dữ liệu):</p>
-<pre><code><span class="tok-comment">// tĩnh — đa số trang</span>
+<pre><code class="language-javascript"><span class="tok-comment">// tĩnh — đa số trang</span>
 export const metadata = {
   title: 'Khoá học — CuongThai',
   description: 'Học Next.js, Node.js và hơn thế.',

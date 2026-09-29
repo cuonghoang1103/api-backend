@@ -74,7 +74,7 @@ ${slide('dk-11', 3, 'Bốn chính sách restart — unless-stopped là mặc đ�
   <div class="lz-step"><span class="lz-k">unless-stopped</span><span class="lz-t">always, except after an explicit stop</span><span class="lz-d"><strong>The production default.</strong> Comes back after a crash and after a host reboot, but if you ran <code>docker stop</code> to work on something, it stays stopped until you say otherwise.</span></div>
   <div class="lz-step"><span class="lz-k">always</span><span class="lz-t">always, even one you deliberately stopped</span><span class="lz-d">Restarts on daemon start regardless of the state you left it in. Occasionally what you want; usually a surprise when a container you stopped last week reappears after a reboot.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Watch a crash loop and the backoff</span>
+<pre><code class="language-bash"><span class="tok-comment"># Watch a crash loop and the backoff</span>
 docker run -d --name flaky --restart on-failure alpine:3.20 sh -c 'sleep 2; exit 1'
 sleep 25 &amp;&amp; docker inspect -f '{{ .RestartCount }} restarts, state={{ .State.Status }}' flaky</code></pre>
 <div class="out">7 restarts, state=restarting</div>
@@ -133,7 +133,7 @@ unless-stopped</div>
 
 <h3>A reboot does not always bring the stack back</h3>
 ${slide('dk-11', 6, 'Reboot: dockerd dựng lại container theo chính sách — không theo depends_on')}
-<pre><code>systemctl is-enabled docker
+<pre><code class="language-bash">systemctl is-enabled docker
 docker info --format '{{ .LiveRestoreEnabled }}'
 sudo reboot
 <span class="tok-comment"># …after it comes back</span>
@@ -179,7 +179,7 @@ TimeoutStartSec=0
 
 [Install]
 WantedBy=multi-user.target</code></pre>
-<pre><code>sudo systemctl daemon-reload &amp;&amp; sudo systemctl enable --now blog.service
+<pre><code class="language-bash">sudo systemctl daemon-reload &amp;&amp; sudo systemctl enable --now blog.service
 systemctl status blog --no-pager | head -4</code></pre>
 <div class="out">● blog.service - blog stack
      Loaded: loaded (/etc/systemd/system/blog.service; enabled; preset: enabled)
@@ -200,7 +200,7 @@ systemctl status blog --no-pager | head -4</code></pre>
 
 <h3>Reading a crash loop</h3>
 ${slide('dk-11', 7, 'Ba con số đọc một vòng lặp sập trước khi đọc log')}
-<pre><code>docker ps -a --format 'table {{.Names}}\\t{{.Status}}' | head -4
+<pre><code class="language-bash">docker ps -a --format 'table {{.Names}}\\t{{.Status}}' | head -4
 docker inspect -f '{{ .RestartCount }} {{ .State.ExitCode }} {{ .State.OOMKilled }}' blog-api-1
 docker compose logs --tail 5 api</code></pre>
 <div class="out">NAMES        STATUS
@@ -273,7 +273,7 @@ ${slide('dk-11', 3, 'Bốn chính sách restart — unless-stopped là mặc đ�
   <div class="lz-step"><span class="lz-k">unless-stopped</span><span class="lz-t">luôn luôn, trừ khi bạn dừng tường minh</span><span class="lz-d"><strong>Mặc định của production.</strong> Quay lại sau một cú sập và sau một lần khởi động lại máy, nhưng nếu bạn đã chạy <code>docker stop</code> để làm gì đó thì nó nằm yên cho tới khi bạn nói khác đi.</span></div>
   <div class="lz-step"><span class="lz-k">always</span><span class="lz-t">luôn luôn, kể cả cái bạn cố tình dừng</span><span class="lz-d">Khởi động lại lúc daemon lên bất kể bạn để nó ở trạng thái nào. Thỉnh thoảng đúng ý bạn; thường thì là một bất ngờ khi một container bạn dừng từ tuần trước bỗng hiện lại sau một lần khởi động máy.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Xem một vòng lặp sập và độ trễ tăng dần</span>
+<pre><code class="language-bash"><span class="tok-comment"># Xem một vòng lặp sập và độ trễ tăng dần</span>
 docker run -d --name flaky --restart on-failure alpine:3.20 sh -c 'sleep 2; exit 1'
 sleep 25 &amp;&amp; docker inspect -f '{{ .RestartCount }} restarts, state={{ .State.Status }}' flaky</code></pre>
 <div class="out">7 restarts, state=restarting</div>
@@ -332,7 +332,7 @@ unless-stopped</div>
 
 <h3>Khởi động lại máy không phải lúc nào cũng mang stack trở lại</h3>
 ${slide('dk-11', 6, 'Reboot: dockerd dựng lại container theo chính sách — không theo depends_on')}
-<pre><code>systemctl is-enabled docker
+<pre><code class="language-bash">systemctl is-enabled docker
 docker info --format '{{ .LiveRestoreEnabled }}'
 sudo reboot
 <span class="tok-comment"># …sau khi nó lên lại</span>
@@ -378,7 +378,7 @@ TimeoutStartSec=0
 
 [Install]
 WantedBy=multi-user.target</code></pre>
-<pre><code>sudo systemctl daemon-reload &amp;&amp; sudo systemctl enable --now blog.service
+<pre><code class="language-bash">sudo systemctl daemon-reload &amp;&amp; sudo systemctl enable --now blog.service
 systemctl status blog --no-pager | head -4</code></pre>
 <div class="out">● blog.service - blog stack
      Loaded: loaded (/etc/systemd/system/blog.service; enabled; preset: enabled)
@@ -399,7 +399,7 @@ systemctl status blog --no-pager | head -4</code></pre>
 
 <h3>Đọc một vòng lặp sập</h3>
 ${slide('dk-11', 7, 'Ba con số đọc một vòng lặp sập trước khi đọc log')}
-<pre><code>docker ps -a --format 'table {{.Names}}\\t{{.Status}}' | head -4
+<pre><code class="language-bash">docker ps -a --format 'table {{.Names}}\\t{{.Status}}' | head -4
 docker inspect -f '{{ .RestartCount }} {{ .State.ExitCode }} {{ .State.OOMKilled }}' blog-api-1
 docker compose logs --tail 5 api</code></pre>
 <div class="out">NAMES        STATUS
@@ -475,12 +475,12 @@ blog-api-1  |    triggerUncaughtException(err)</div>
 
 <h3>The failure they prevent</h3>
 ${slide('dk-11', 8, 'Không hạn mức: một chỗ rò kéo chết luôn Postgres')}
-<pre><code><span class="tok-comment"># No limit: this container will happily consume the host</span>
+<pre><code class="language-bash"><span class="tok-comment"># No limit: this container will happily consume the host</span>
 docker run --rm alpine:3.20 sh -c 'x=""; while :; do x="$x$(head -c 1M /dev/zero | tr "\\0" "a")"; done' &amp;
 free -m | head -2</code></pre>
 <div class="out">               total        used        free      shared  buff/cache   available
 Mem:            5943        5601          88           2         254          61</div>
-<pre><code><span class="tok-comment"># With a limit: the container dies, the host does not</span>
+<pre><code class="language-bash"><span class="tok-comment"># With a limit: the container dies, the host does not</span>
 docker run --rm -m 128m --name greedy alpine:3.20 \\
   sh -c 'x=""; while :; do x="$x$(head -c 1M /dev/zero | tr "\\0" "a")"; done'; echo "exit=$?"</code></pre>
 <div class="out">exit=137</div>
@@ -515,7 +515,7 @@ Memory cgroup out of memory: Killed process 511503 (dd) total-vm:206436kB, anon-
 
 <h3>Setting limits in compose</h3>
 ${slide('dk-11', 10, 'deploy.resources trong compose = mấy con số ghi vào cgroup')}
-<pre><code>services:
+<pre><code class="language-bash">services:
   api:
     deploy:
       resources:
@@ -533,7 +533,7 @@ ${slide('dk-11', 10, 'deploy.resources trong compose = mấy con số ghi vào c
       resources:
         limits: { memory: 1G, cpus: "1.0" }
     shm_size: 256mb              <span class="tok-comment"># Postgres parallel workers need it</span></code></pre>
-<pre><code>docker compose up -d api &amp;&amp; docker inspect -f \\
+<pre><code class="language-bash">docker compose up -d api &amp;&amp; docker inspect -f \\
   'mem={{ .HostConfig.Memory }} cpus={{ .HostConfig.NanoCpus }}' blog-api-1</code></pre>
 <div class="out">mem=536870912 cpus=1500000000</div>
 <div class="kv-grid">
@@ -586,14 +586,14 @@ ok</div>
   <div class="lz-step"><span class="lz-k">Telling them apart</span><span class="lz-t">docker inspect OOMKilled, then dmesg -T</span><span class="lz-d">If <code>OOMKilled</code> is true and the host is fine, it is the first case. If several containers died at once, read <code>dmesg</code> — it names the killed process and its memory usage.</span></div>
   <div class="lz-step"><span class="lz-k">Build-time OOM</span><span class="lz-t">exit 137 during docker build</span><span class="lz-d">A different instance of the same problem. Parallel cold builds of a frontend and backend on a 6GB VPS have killed <code>next build</code> here with exit 137, which is why those builds run sequentially on the server.</span></div>
 </div>
-<pre><code>docker inspect -f '{{ .State.OOMKilled }} {{ .State.ExitCode }}' blog-api-1
+<pre><code class="language-bash">docker inspect -f '{{ .State.OOMKilled }} {{ .State.ExitCode }}' blog-api-1
 sudo dmesg -T | grep -i -m2 'killed process'</code></pre>
 <div class="out">true 137
 [Fri Aug 22 03:14:07 2026] Memory cgroup out of memory: Killed process 8123 (node)
   total-vm:1284552kB, anon-rss:521884kB, file-rss:31220kB</div>
 
 <h3>Watching usage, and choosing a number</h3>
-<pre><code>docker stats --no-stream --format \\
+<pre><code class="language-bash">docker stats --no-stream --format \\
   'table {{.Name}}\\t{{.CPUPerc}}\\t{{.MemUsage}}\\t{{.MemPerc}}'</code></pre>
 <div class="out">NAME           CPU %     MEM USAGE / LIMIT     MEM %
 blog-api-1     2.14%     193.4MiB / 512MiB     37.77%
@@ -605,7 +605,7 @@ blog-worker-1  0.44%     88.7MiB / 256MiB      34.65%</div>
 
 <h3>The runtime has its own idea of memory</h3>
 ${slide('dk-11', 13, 'Node 20+ tự đọc trần cgroup — Node 18 thì không')}
-<pre><code>docker run --rm -m 512m node:22-alpine \\
+<pre><code class="language-javascript">docker run --rm -m 512m node:22-alpine \\
   node -e "console.log('heap cap:', (require('v8').getHeapStatistics().heap_size_limit/1048576).toFixed(0)+'MB')"
 docker run --rm -m 512m -e NODE_OPTIONS=--max-old-space-size=384 node:22-alpine \\
   node -e "console.log('heap cap:', (require('v8').getHeapStatistics().heap_size_limit/1048576).toFixed(0)+'MB')"</code></pre>
@@ -676,12 +676,12 @@ heap cap: 387MB</div>
 
 <h3>Cái hỏng mà chúng ngăn được</h3>
 ${slide('dk-11', 8, 'Không hạn mức: một chỗ rò kéo chết luôn Postgres')}
-<pre><code><span class="tok-comment"># Không hạn mức: container này sẽ vui vẻ ăn hết cả máy chủ</span>
+<pre><code class="language-bash"><span class="tok-comment"># Không hạn mức: container này sẽ vui vẻ ăn hết cả máy chủ</span>
 docker run --rm alpine:3.20 sh -c 'x=""; while :; do x="$x$(head -c 1M /dev/zero | tr "\\0" "a")"; done' &amp;
 free -m | head -2</code></pre>
 <div class="out">               total        used        free      shared  buff/cache   available
 Mem:            5943        5601          88           2         254          61</div>
-<pre><code><span class="tok-comment"># Có hạn mức: container chết, máy chủ thì không</span>
+<pre><code class="language-bash"><span class="tok-comment"># Có hạn mức: container chết, máy chủ thì không</span>
 docker run --rm -m 128m --name greedy alpine:3.20 \\
   sh -c 'x=""; while :; do x="$x$(head -c 1M /dev/zero | tr "\\0" "a")"; done'; echo "exit=$?"</code></pre>
 <div class="out">exit=137</div>
@@ -716,7 +716,7 @@ Memory cgroup out of memory: Killed process 511503 (dd) total-vm:206436kB, anon-
 
 <h3>Đặt hạn mức trong compose</h3>
 ${slide('dk-11', 10, 'deploy.resources trong compose = mấy con số ghi vào cgroup')}
-<pre><code>services:
+<pre><code class="language-bash">services:
   api:
     deploy:
       resources:
@@ -734,7 +734,7 @@ ${slide('dk-11', 10, 'deploy.resources trong compose = mấy con số ghi vào c
       resources:
         limits: { memory: 1G, cpus: "1.0" }
     shm_size: 256mb              <span class="tok-comment"># worker song song của Postgres cần nó</span></code></pre>
-<pre><code>docker compose up -d api &amp;&amp; docker inspect -f \\
+<pre><code class="language-bash">docker compose up -d api &amp;&amp; docker inspect -f \\
   'mem={{ .HostConfig.Memory }} cpus={{ .HostConfig.NanoCpus }}' blog-api-1</code></pre>
 <div class="out">mem=536870912 cpus=1500000000</div>
 <div class="kv-grid">
@@ -787,14 +787,14 @@ ok</div>
   <div class="lz-step"><span class="lz-k">Phân biệt hai cái</span><span class="lz-t">docker inspect OOMKilled, rồi dmesg -T</span><span class="lz-d">Nếu <code>OOMKilled</code> là true và máy chủ vẫn ổn thì đó là trường hợp thứ nhất. Nếu nhiều container chết cùng lúc thì hãy đọc <code>dmesg</code> — nó gọi tên tiến trình bị giết và mức bộ nhớ nó dùng.</span></div>
   <div class="lz-step"><span class="lz-k">OOM lúc DỰNG</span><span class="lz-t">exit 137 ngay giữa docker build</span><span class="lz-d">Một biến thể của cùng bài toán. Dựng song song frontend với backend khi cache đã bị dọn, trên một con VPS 6GB, đã giết <code>next build</code> ở đây với mã 137, và đó là lý do các lượt dựng trên máy chủ chạy tuần tự.</span></div>
 </div>
-<pre><code>docker inspect -f '{{ .State.OOMKilled }} {{ .State.ExitCode }}' blog-api-1
+<pre><code class="language-bash">docker inspect -f '{{ .State.OOMKilled }} {{ .State.ExitCode }}' blog-api-1
 sudo dmesg -T | grep -i -m2 'killed process'</code></pre>
 <div class="out">true 137
 [Fri Aug 22 03:14:07 2026] Memory cgroup out of memory: Killed process 8123 (node)
   total-vm:1284552kB, anon-rss:521884kB, file-rss:31220kB</div>
 
 <h3>Theo dõi mức dùng, và chọn một con số</h3>
-<pre><code>docker stats --no-stream --format \\
+<pre><code class="language-bash">docker stats --no-stream --format \\
   'table {{.Name}}\\t{{.CPUPerc}}\\t{{.MemUsage}}\\t{{.MemPerc}}'</code></pre>
 <div class="out">NAME           CPU %     MEM USAGE / LIMIT     MEM %
 blog-api-1     2.14%     193.4MiB / 512MiB     37.77%
@@ -806,7 +806,7 @@ blog-worker-1  0.44%     88.7MiB / 256MiB      34.65%</div>
 
 <h3>Bộ chạy có cách hiểu riêng về bộ nhớ</h3>
 ${slide('dk-11', 13, 'Node 20+ tự đọc trần cgroup — Node 18 thì không')}
-<pre><code>docker run --rm -m 512m node:22-alpine \\
+<pre><code class="language-javascript">docker run --rm -m 512m node:22-alpine \\
   node -e "console.log('heap cap:', (require('v8').getHeapStatistics().heap_size_limit/1048576).toFixed(0)+'MB')"
 docker run --rm -m 512m -e NODE_OPTIONS=--max-old-space-size=384 node:22-alpine \\
   node -e "console.log('heap cap:', (require('v8').getHeapStatistics().heap_size_limit/1048576).toFixed(0)+'MB')"</code></pre>
@@ -886,7 +886,7 @@ heap cap: 387MB</div>
 
 <h3>Where the logs actually are</h3>
 ${slide('dk-11', 14, 'Log đi đâu: stdout → dockerd → một file JSON trên máy chủ')}
-<pre><code>docker inspect -f '{{ .LogPath }}' blog-api-1
+<pre><code class="language-bash">docker inspect -f '{{ .LogPath }}' blog-api-1
 sudo ls -lh "$(docker inspect -f '{{ .LogPath }}' blog-api-1)"
 docker inspect -f '{{ .HostConfig.LogConfig.Type }} {{ .HostConfig.LogConfig.Config }}' blog-api-1</code></pre>
 <div class="out">/var/lib/docker/containers/9f2a…c1/9f2a…c1-json.log
@@ -944,7 +944,7 @@ services:
         max-file: "3"
         compress: "true"
         labels: "service"</code></pre>
-<pre><code><span class="tok-comment"># Or once, for every container the daemon ever starts</span>
+<pre><code class="language-bash"><span class="tok-comment"># Or once, for every container the daemon ever starts</span>
 sudo tee /etc/docker/daemon.json &lt;&lt;'JSON'
 {
   "log-driver": "json-file",
@@ -1007,12 +1007,12 @@ tick 18</div>
 <p>The log starts again from the lines written after the truncate, and <code>docker logs</code> keeps working (on the 33 MB file from the step-by-step section, <code>du</code> went from <code>33.0M</code> to <code>0</code>). One honest caveat: Docker's own documentation says these files "are designed to be exclusively accessed by the Docker daemon" and warns that touching them with other tools may interfere with logging. Treat <code>truncate</code> as first aid on a full disk, never as the plan; the plan is <code>max-size</code>.</p>
 
 <h3>Logging in a way that is worth reading</h3>
-<pre><code><span class="tok-comment">// Write JSON to stdout — Docker captures it, and tools can parse it</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Write JSON to stdout — Docker captures it, and tools can parse it</span>
 const log = (level, msg, extra = {}) =&gt; process.stdout.write(
   JSON.stringify({ t: new Date().toISOString(), level, msg, ...extra }) + '\\n'
 );
 log('info', 'request', { method: 'GET', path: '/api/v1/posts', ms: 42, status: 200 });</code></pre>
-<pre><code>docker compose logs --no-log-prefix --tail 2 api | jq -c '{t, level, msg, ms}'</code></pre>
+<pre><code class="language-bash">docker compose logs --no-log-prefix --tail 2 api | jq -c '{t, level, msg, ms}'</code></pre>
 <div class="out">{"t":"2026-08-22T13:44:02.118Z","level":"info","msg":"request","ms":42}
 {"t":"2026-08-22T13:44:02.663Z","level":"warn","msg":"slow query","ms":812}</div>
 <div class="kv-grid">
@@ -1076,7 +1076,7 @@ log('info', 'request', { method: 'GET', path: '/api/v1/posts', ms: 42, status: 2
 
 <h3>Log thật ra nằm ở đâu</h3>
 ${slide('dk-11', 14, 'Log đi đâu: stdout → dockerd → một file JSON trên máy chủ')}
-<pre><code>docker inspect -f '{{ .LogPath }}' blog-api-1
+<pre><code class="language-bash">docker inspect -f '{{ .LogPath }}' blog-api-1
 sudo ls -lh "$(docker inspect -f '{{ .LogPath }}' blog-api-1)"
 docker inspect -f '{{ .HostConfig.LogConfig.Type }} {{ .HostConfig.LogConfig.Config }}' blog-api-1</code></pre>
 <div class="out">/var/lib/docker/containers/9f2a…c1/9f2a…c1-json.log
@@ -1134,7 +1134,7 @@ services:
         max-file: "3"
         compress: "true"
         labels: "service"</code></pre>
-<pre><code><span class="tok-comment"># Hoặc đặt một lần, cho mọi container daemon từng khởi động</span>
+<pre><code class="language-bash"><span class="tok-comment"># Hoặc đặt một lần, cho mọi container daemon từng khởi động</span>
 sudo tee /etc/docker/daemon.json &lt;&lt;'JSON'
 {
   "log-driver": "json-file",
@@ -1197,12 +1197,12 @@ tick 18</div>
 <p>Log bắt đầu lại từ những dòng ghi sau lần truncate, và <code>docker logs</code> vẫn chạy (với file 33 MB ở mục "Chạy thử từng bước", <code>du</code> từ <code>33.0M</code> xuống <code>0</code>). Một lưu ý trung thực: chính tài liệu Docker nói các file này "được thiết kế để chỉ daemon Docker truy cập" và cảnh báo đụng vào chúng bằng công cụ khác có thể làm rối hệ thống log. Hãy coi <code>truncate</code> là sơ cứu khi đĩa đầy, đừng bao giờ coi là kế hoạch; kế hoạch là <code>max-size</code>.</p>
 
 <h3>Ghi log theo cách đáng đọc</h3>
-<pre><code><span class="tok-comment">// Ghi JSON ra stdout — Docker hứng được, và công cụ phân tích được</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Ghi JSON ra stdout — Docker hứng được, và công cụ phân tích được</span>
 const log = (level, msg, extra = {}) =&gt; process.stdout.write(
   JSON.stringify({ t: new Date().toISOString(), level, msg, ...extra }) + '\\n'
 );
 log('info', 'request', { method: 'GET', path: '/api/v1/posts', ms: 42, status: 200 });</code></pre>
-<pre><code>docker compose logs --no-log-prefix --tail 2 api | jq -c '{t, level, msg, ms}'</code></pre>
+<pre><code class="language-bash">docker compose logs --no-log-prefix --tail 2 api | jq -c '{t, level, msg, ms}'</code></pre>
 <div class="out">{"t":"2026-08-22T13:44:02.118Z","level":"info","msg":"request","ms":42}
 {"t":"2026-08-22T13:44:02.663Z","level":"warn","msg":"slow query","ms":812}</div>
 <div class="kv-grid">
@@ -1275,7 +1275,7 @@ log('info', 'request', { method: 'GET', path: '/api/v1/posts', ms: 42, status: 2
 
 <h3>What actually happens on an update</h3>
 ${slide('dk-11', 19, 'up -d tráo container = một khoảng trống: đo được 2,2 giây lỗi')}
-<pre><code>docker compose up -d 2&gt;&amp;1 | tail -4</code></pre>
+<pre><code class="language-bash">docker compose up -d 2&gt;&amp;1 | tail -4</code></pre>
 <div class="out">[+] Running 3/3
  ✔ Container blog-api-1  Recreated                          10.4s
  ✔ Container blog-web-1  Running                             0.0s
@@ -1324,7 +1324,7 @@ sleep 2 ; TAG=e76553c docker compose up -d  <span class="tok-comment"># deploy v
 
 <h3>Shut down gracefully, and the gap shrinks</h3>
 ${slide('dk-11', 20, 'Bắt SIGTERM + stop_grace_period ⇒ dừng trong 0,2 giây, không rơi request')}
-<pre><code><span class="tok-comment">// Handle the signal Docker actually sends</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Handle the signal Docker actually sends</span>
 const server = app.listen(3000);
 const shutdown = async (sig) =&gt; {
   console.log(&#96;&#36;{sig}: draining&#96;);
@@ -1341,7 +1341,7 @@ process.on('SIGINT',  () =&gt; shutdown('SIGINT'));</code></pre>
   api:
     stop_grace_period: 30s        <span class="tok-comment"># longer than the app's own 25s cap</span>
     stop_signal: SIGTERM</code></pre>
-<pre><code>docker compose stop api &amp;&amp; docker compose logs --tail 3 api</code></pre>
+<pre><code class="language-bash">docker compose stop api &amp;&amp; docker compose logs --tail 3 api</code></pre>
 <div class="out">blog-api-1  | SIGTERM: draining
 blog-api-1  | 3 requests in flight, waiting
 blog-api-1  | closed cleanly in 412ms</div>
@@ -1358,7 +1358,7 @@ ${slide('dk-11', 21, 'Dựng ở máy khác, VPS chỉ kéo về và tráo — b
   <div class="kv"><span class="k">Only committed code goes out</span><span class="v">Building from a git push rather than rsyncing a working tree means a half-edited file cannot reach production — a real failure mode when two people work on the same machine.</span></div>
   <div class="kv"><span class="k">Tag by commit, never <code>:latest</code></span><span class="v"><code>ghcr.io/me/api:9f2ac1e</code> makes "what is running?" a fact you can check, and makes rollback a matter of naming the previous tag.</span></div>
 </div>
-<pre><code><span class="tok-comment"># .github/workflows/deploy.yml — the shape, not the whole file</span>
+<pre><code class="language-css"><span class="tok-comment"># .github/workflows/deploy.yml — the shape, not the whole file</span>
 on:
   workflow_dispatch:            <span class="tok-comment"># MANUAL. See the pitfall below.</span>
 jobs:
@@ -1504,7 +1504,7 @@ unhealthy wget: server returned error: HTTP/1.1 500 Internal Server Error</div>
 
 <h3>Rolling back in forty seconds</h3>
 ${slide('dk-11', 25, 'Có migration thì quay lui KHÔNG còn là một lệnh')}
-<pre><code><span class="tok-comment"># The best case: the previous image is still on the host</span>
+<pre><code class="language-bash"><span class="tok-comment"># The best case: the previous image is still on the host</span>
 docker images --format '{{.Repository}}:{{.Tag}}\\t{{.CreatedSince}}' | grep api | head -3
 TAG=&lt;previous-sha&gt; docker compose -f compose.yaml -f compose.prod.yaml up -d --no-build api
 curl -s -o /dev/null -w '%{http_code}\\n' https://cuongthai.com/api/v1/health</code></pre>
@@ -1513,7 +1513,7 @@ ghcr.io/me/api:3b81e77	2 days ago
 [+] Running 1/1
  ✔ Container blog-api-1  Recreated                          4.1s
 200</div>
-<pre><code><span class="tok-comment"># If the swap landed a dead image, the old one is often still there as a dangling layer</span>
+<pre><code class="language-bash"><span class="tok-comment"># If the swap landed a dead image, the old one is often still there as a dangling layer</span>
 docker images -a --filter dangling=true --format '{{.ID}}\\t{{.Size}}' | head -3
 docker tag &lt;id&gt; ghcr.io/me/api:rollback
 TAG=rollback docker compose -f compose.yaml -f compose.prod.yaml up -d --no-build api</code></pre>
@@ -1586,7 +1586,7 @@ a91c4e7b2f60	213MB</div>
 
 <h3>Chuyện gì thật sự xảy ra khi cập nhật</h3>
 ${slide('dk-11', 19, 'up -d tráo container = một khoảng trống: đo được 2,2 giây lỗi')}
-<pre><code>docker compose up -d 2&gt;&amp;1 | tail -4</code></pre>
+<pre><code class="language-bash">docker compose up -d 2&gt;&amp;1 | tail -4</code></pre>
 <div class="out">[+] Running 3/3
  ✔ Container blog-api-1  Recreated                          10.4s
  ✔ Container blog-web-1  Running                             0.0s
@@ -1635,7 +1635,7 @@ sleep 2 ; TAG=e76553c docker compose up -d  <span class="tok-comment"># deploy v
 
 <h3>Tắt máy tử tế, và khoảng trống co lại</h3>
 ${slide('dk-11', 20, 'Bắt SIGTERM + stop_grace_period ⇒ dừng trong 0,2 giây, không rơi request')}
-<pre><code><span class="tok-comment">// Xử lý đúng cái tín hiệu Docker thật sự gửi</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Xử lý đúng cái tín hiệu Docker thật sự gửi</span>
 const server = app.listen(3000);
 const shutdown = async (sig) =&gt; {
   console.log(&#96;&#36;{sig}: draining&#96;);
@@ -1652,7 +1652,7 @@ process.on('SIGINT',  () =&gt; shutdown('SIGINT'));</code></pre>
   api:
     stop_grace_period: 30s        <span class="tok-comment"># dài hơn cái trần 25s của chính ứng dụng</span>
     stop_signal: SIGTERM</code></pre>
-<pre><code>docker compose stop api &amp;&amp; docker compose logs --tail 3 api</code></pre>
+<pre><code class="language-bash">docker compose stop api &amp;&amp; docker compose logs --tail 3 api</code></pre>
 <div class="out">blog-api-1  | SIGTERM: draining
 blog-api-1  | 3 requests in flight, waiting
 blog-api-1  | closed cleanly in 412ms</div>
@@ -1669,7 +1669,7 @@ ${slide('dk-11', 21, 'Dựng ở máy khác, VPS chỉ kéo về và tráo — b
   <div class="kv"><span class="k">Chỉ mã đã COMMIT mới đi ra</span><span class="v">Dựng từ một lệnh git push chứ không phải rsync cây làm việc nghĩa là một file sửa dở không thể lên tới production — một kiểu hỏng có thật khi hai người cùng làm trên một cái máy.</span></div>
   <div class="kv"><span class="k">Gắn nhãn theo commit, đừng bao giờ <code>:latest</code></span><span class="v"><code>ghcr.io/me/api:9f2ac1e</code> biến câu "cái gì đang chạy?" thành một sự thật kiểm được, và biến quay lui thành chuyện gọi tên cái nhãn trước đó.</span></div>
 </div>
-<pre><code><span class="tok-comment"># .github/workflows/deploy.yml — cái hình dạng, không phải cả file</span>
+<pre><code class="language-css"><span class="tok-comment"># .github/workflows/deploy.yml — cái hình dạng, không phải cả file</span>
 on:
   workflow_dispatch:            <span class="tok-comment"># CHẠY TAY. Xem phần bẫy bên dưới.</span>
 jobs:
@@ -1815,7 +1815,7 @@ unhealthy wget: server returned error: HTTP/1.1 500 Internal Server Error</div>
 
 <h3>Quay lui trong bốn mươi giây</h3>
 ${slide('dk-11', 25, 'Có migration thì quay lui KHÔNG còn là một lệnh')}
-<pre><code><span class="tok-comment"># Trường hợp tốt nhất: cái ảnh trước đó vẫn còn trên máy chủ</span>
+<pre><code class="language-bash"><span class="tok-comment"># Trường hợp tốt nhất: cái ảnh trước đó vẫn còn trên máy chủ</span>
 docker images --format '{{.Repository}}:{{.Tag}}\\t{{.CreatedSince}}' | grep api | head -3
 TAG=&lt;sha-trước-đó&gt; docker compose -f compose.yaml -f compose.prod.yaml up -d --no-build api
 curl -s -o /dev/null -w '%{http_code}\\n' https://cuongthai.com/api/v1/health</code></pre>
@@ -1824,7 +1824,7 @@ ghcr.io/me/api:3b81e77	2 days ago
 [+] Running 1/1
  ✔ Container blog-api-1  Recreated                          4.1s
 200</div>
-<pre><code><span class="tok-comment"># Nếu lượt tráo trúng một cái ảnh chết, ảnh cũ thường vẫn còn dạng lớp mồ côi</span>
+<pre><code class="language-bash"><span class="tok-comment"># Nếu lượt tráo trúng một cái ảnh chết, ảnh cũ thường vẫn còn dạng lớp mồ côi</span>
 docker images -a --filter dangling=true --format '{{.ID}}\\t{{.Size}}' | head -3
 docker tag &lt;id&gt; ghcr.io/me/api:rollback
 TAG=rollback docker compose -f compose.yaml -f compose.prod.yaml up -d --no-build api</code></pre>
@@ -1906,7 +1906,7 @@ a91c4e7b2f60	213MB</div>
 
 <h3>The four things that grow</h3>
 ${slide('dk-11', 26, 'Bốn thứ phình ra — docker system df trên máy Mac của người viết')}
-<pre><code>docker system df</code></pre>
+<pre><code class="language-bash">docker system df</code></pre>
 <div class="out">TYPE            TOTAL     ACTIVE    SIZE      RECLAIMABLE
 Images          24        6         8.412GB   6.109GB (72%)
 Containers      11        6         184.2MB   41.11MB (22%)
@@ -1928,7 +1928,7 @@ ${slide('dk-11', 27, 'Thang prune: bắt đầu ở bậc an toàn, dừng lại
   <div class="lz-step"><span class="lz-k">docker container prune -f</span><span class="lz-t">removes stopped containers</span><span class="lz-d">Their logs go with them, which is often what you actually wanted to reclaim. Check nothing stopped is waiting to be inspected.</span></div>
   <div class="lz-step"><span class="lz-k">docker system prune -a --volumes</span><span class="lz-t">⛔ removes every unused tagged image, and anonymous volumes too</span><span class="lz-d">The <code>-a</code> deletes every image not currently in use — including the one you would roll back to — and <code>--volumes</code> deletes data: every <em>anonymous</em> volume no container uses, such as the one a Postgres container started without <code>-v</code> keeps its database in (Lesson 1.4). On a production host this is the command that turns a disk-space problem into a data-loss incident. <strong>Corrected 09/2026:</strong> since Engine 23 (API 1.42), <code>--volumes</code> no longer removes <em>named</em> volumes — the docs say "Prune anonymous volumes", and the test in this lesson confirms it. Named volumes go only with <code>docker volume prune -a</code>.</span></div>
 </div>
-<pre><code><span class="tok-comment"># The safe sequence, with age filters so recent work survives</span>
+<pre><code class="language-bash"><span class="tok-comment"># The safe sequence, with age filters so recent work survives</span>
 docker builder prune -f --filter 'until=168h'
 docker image   prune -f --filter 'until=168h'
 docker container prune -f --filter 'until=24h'
@@ -1982,7 +1982,7 @@ Total:	580.9MB</div>
 
 <h3>A cleanup job that runs itself</h3>
 ${slide('dk-11', 28, 'Dọn tự động, nhưng phải báo cả khi THÀNH CÔNG')}
-<pre><code><span class="tok-comment"># /etc/cron.weekly/docker-cleanup — or a scheduled CI job over ssh</span>
+<pre><code class="language-bash"><span class="tok-comment"># /etc/cron.weekly/docker-cleanup — or a scheduled CI job over ssh</span>
 #!/usr/bin/env bash
 set -Eeuo pipefail
 BEFORE=$(df --output=avail -BG /var/lib/docker | tail -1 | tr -dc '0-9')
@@ -2000,7 +2000,7 @@ echo "docker-cleanup: &#36;{BEFORE}G → &#36;{AFTER}G free"
 
 <h3>The minimum monitoring worth having</h3>
 ${slide('dk-11', 29, 'Giám sát tối thiểu: 5 phép kiểm bắt gần hết những gì làm sập trang nhỏ')}
-<pre><code><span class="tok-comment"># ops/watch.sh — five checks, one cron, no infrastructure</span>
+<pre><code class="language-bash"><span class="tok-comment"># ops/watch.sh — five checks, one cron, no infrastructure</span>
 #!/usr/bin/env bash
 set -Eeuo pipefail
 fail() { echo "ALERT: $*"; curl -fsS --data-urlencode "text=$*" "$SLACK_HOOK" &gt;/dev/null; }
@@ -2050,7 +2050,7 @@ unhealthy 4 wget: server returned error: HTTP/1.1 500 Internal Server Error</div
 <p>Real output from a Mac (names shortened from <code>dk11-</code>; the first line is the old container being replaced, the time is Unix seconds). <code>FailingStreak 4</code> means four checks in a row failed, and the last check's own output tells you why. A tiny watcher that pipes <code>docker events</code> into your alert webhook reacts within seconds instead of at the next cron run — but it dies with the host, so keep the outside check too.</p>
 
 <h3>A post-deploy checklist</h3>
-<pre><code>docker compose ps --format 'table {{.Service}}\\t{{.Status}}'          <span class="tok-comment"># all Up, all (healthy)</span>
+<pre><code class="language-bash">docker compose ps --format 'table {{.Service}}\\t{{.Status}}'          <span class="tok-comment"># all Up, all (healthy)</span>
 for r in health posts auth/me; do
   printf '%-10s %s\\n' "$r" "$(curl -s -o /dev/null -w '%{http_code}' https://cuongthai.com/api/v1/$r)"
 done                                                                  <span class="tok-comment"># 200/401, never 404</span>
@@ -2124,7 +2124,7 @@ blog-api-1 38.12%
 
 <h3>Bốn thứ phình ra</h3>
 ${slide('dk-11', 26, 'Bốn thứ phình ra — docker system df trên máy Mac của người viết')}
-<pre><code>docker system df</code></pre>
+<pre><code class="language-bash">docker system df</code></pre>
 <div class="out">TYPE            TOTAL     ACTIVE    SIZE      RECLAIMABLE
 Images          24        6         8.412GB   6.109GB (72%)
 Containers      11        6         184.2MB   41.11MB (22%)
@@ -2146,7 +2146,7 @@ ${slide('dk-11', 27, 'Thang prune: bắt đầu ở bậc an toàn, dừng lại
   <div class="lz-step"><span class="lz-k">docker container prune -f</span><span class="lz-t">xoá những container đã dừng</span><span class="lz-d">Log của chúng đi theo luôn, và đó thường mới là thứ bạn thật sự muốn lấy lại. Hãy kiểm xem không có container dừng nào đang chờ được soi.</span></div>
   <div class="lz-step"><span class="lz-k">docker system prune -a --volumes</span><span class="lz-t">⛔ xoá mọi ảnh có tag không ai dùng, và cả volume vô danh</span><span class="lz-d">Cờ <code>-a</code> xoá mọi cái ảnh hiện không được dùng — kể cả bản phát hành trước mà bạn định quay lui về — còn <code>--volumes</code> xoá DỮ LIỆU: mọi volume <em>vô danh</em> không container nào dùng, ví dụ cái volume mà một container Postgres chạy thiếu <code>-v</code> dùng để chứa cơ sở dữ liệu (Bài 1.4). Trên một máy chủ production, đây là câu lệnh biến một vấn đề thiếu đĩa thành một sự cố mất dữ liệu. <strong>Đã sửa 09/2026:</strong> từ Engine 23 (API 1.42), <code>--volumes</code> KHÔNG còn xoá volume <em>có tên</em> — tài liệu ghi "Prune anonymous volumes", và phép thử trong bài này xác nhận điều đó. Volume có tên chỉ đi khi dùng <code>docker volume prune -a</code>.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Trình tự an toàn, có lọc theo tuổi để việc gần đây sống sót</span>
+<pre><code class="language-bash"><span class="tok-comment"># Trình tự an toàn, có lọc theo tuổi để việc gần đây sống sót</span>
 docker builder prune -f --filter 'until=168h'
 docker image   prune -f --filter 'until=168h'
 docker container prune -f --filter 'until=24h'
@@ -2200,7 +2200,7 @@ Total:	580.9MB</div>
 
 <h3>Một việc dọn tự chạy</h3>
 ${slide('dk-11', 28, 'Dọn tự động, nhưng phải báo cả khi THÀNH CÔNG')}
-<pre><code><span class="tok-comment"># /etc/cron.weekly/docker-cleanup — hoặc một việc CI theo lịch chạy qua ssh</span>
+<pre><code class="language-bash"><span class="tok-comment"># /etc/cron.weekly/docker-cleanup — hoặc một việc CI theo lịch chạy qua ssh</span>
 #!/usr/bin/env bash
 set -Eeuo pipefail
 BEFORE=$(df --output=avail -BG /var/lib/docker | tail -1 | tr -dc '0-9')
@@ -2218,7 +2218,7 @@ echo "docker-cleanup: &#36;{BEFORE}G → &#36;{AFTER}G free"
 
 <h3>Mức giám sát tối thiểu đáng có</h3>
 ${slide('dk-11', 29, 'Giám sát tối thiểu: 5 phép kiểm bắt gần hết những gì làm sập trang nhỏ')}
-<pre><code><span class="tok-comment"># ops/watch.sh — năm phép kiểm, một dòng cron, không cần hạ tầng</span>
+<pre><code class="language-bash"><span class="tok-comment"># ops/watch.sh — năm phép kiểm, một dòng cron, không cần hạ tầng</span>
 #!/usr/bin/env bash
 set -Eeuo pipefail
 fail() { echo "ALERT: $*"; curl -fsS --data-urlencode "text=$*" "$SLACK_HOOK" &gt;/dev/null; }
@@ -2268,7 +2268,7 @@ unhealthy 4 wget: server returned error: HTTP/1.1 500 Internal Server Error</div
 <p>Output thật trên Mac (tên rút gọn từ <code>dk11-</code>; dòng đầu là container cũ bị thay, thời điểm tính bằng giây Unix). <code>FailingStreak 4</code> nghĩa là bốn lần kiểm liên tiếp thất bại, và output của lần kiểm cuối nói luôn vì sao. Một bộ canh tí hon dẫn <code>docker events</code> vào webhook cảnh báo sẽ phản ứng trong vài giây thay vì chờ lượt cron kế tiếp — nhưng nó chết theo máy chủ, nên vẫn giữ phép kiểm từ bên ngoài.</p>
 
 <h3>Danh sách kiểm sau deploy</h3>
-<pre><code>docker compose ps --format 'table {{.Service}}\\t{{.Status}}'          <span class="tok-comment"># đều Up, đều (healthy)</span>
+<pre><code class="language-bash">docker compose ps --format 'table {{.Service}}\\t{{.Status}}'          <span class="tok-comment"># đều Up, đều (healthy)</span>
 for r in health posts auth/me; do
   printf '%-10s %s\\n' "$r" "$(curl -s -o /dev/null -w '%{http_code}' https://cuongthai.com/api/v1/$r)"
 done                                                                  <span class="tok-comment"># 200/401, không bao giờ 404</span>

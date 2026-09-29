@@ -59,7 +59,7 @@ ${gallery('git-13', [
 <span class="eyebrow">Chapter 13 · Lesson 13.1</span>
 <h2>Open this one mid-emergency</h2>
 <p class="lead">Ten situations, each with the diagnosis and the fix. Read it out of order. Before any of them, two commands are always safe and always worth running first:</p>
-<pre><code>git status                 <span class="tok-comment"># where am I, what is uncommitted</span>
+<pre><code class="language-bash">git status                 <span class="tok-comment"># where am I, what is uncommitted</span>
 git reflog -15             <span class="tok-comment"># where HEAD has been (4.4)</span></code></pre>
 <div class="callout ok"><strong>The rule that makes all of this survivable:</strong> if it was ever committed, it is recoverable for at least 30 days. Only <em>uncommitted</em> work can truly be lost. So before attempting any fix on a dirty tree: <code>git stash -u</code>. One second, and the destructive command becomes reversible.</div>
 
@@ -70,11 +70,11 @@ ${slide('git-13', 4, 'Sơ đồ chọn lệnh cứu theo sự cố')}
 
 <h3>1. I committed to the wrong branch</h3>
 ${slide('git-13', 5, 'Công thức 1: commit nhầm lên main')}
-<pre><code><span class="tok-comment"># Not pushed. Move the last commit to the right branch:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Not pushed. Move the last commit to the right branch:</span>
 git switch -c feature/right-branch      <span class="tok-comment"># brings the commit with you</span>
 git switch main
 git reset --hard HEAD~1                 <span class="tok-comment"># remove it from main</span></code></pre>
-<pre><code><span class="tok-comment"># Several commits, or you already switched away — cherry-pick them across:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Several commits, or you already switched away — cherry-pick them across:</span>
 git switch feature/right-branch
 git cherry-pick 3f8a1c9 9e2d4b7
 git switch main &amp;&amp; git reset --hard HEAD~2</code></pre>
@@ -82,21 +82,21 @@ git switch main &amp;&amp; git reset --hard HEAD~2</code></pre>
 
 <h3>2. I ran reset --hard and lost commits</h3>
 ${slide('git-13', 6, 'Công thức 2: lỡ reset --hard mất hai commit')}
-<pre><code>git reflog -10</code></pre>
+<pre><code class="language-bash">git reflog -10</code></pre>
 <div class="out">e8b4d92 HEAD@{0}: reset: moving to HEAD~3
 c7f1a30 HEAD@{1}: commit: test(auth): cover the expired-token path</div>
-<pre><code>git reset --hard HEAD@{1}</code></pre>
+<pre><code class="language-bash">git reset --hard HEAD@{1}</code></pre>
 <p>The entry <em>just before</em> the destructive one is where you were. Uncommitted changes at that moment are still gone — that is the one gap (4.4).</p>
 
 <h3>3. I deleted a branch</h3>
 ${slide('git-13', 7, 'Công thức 3: xoá nhầm nhánh chưa push')}
-<pre><code>git reflog | grep <span class="tok-string">"feature/login"</span>
+<pre><code class="language-bash">git reflog | grep <span class="tok-string">"feature/login"</span>
 git switch -c feature/login c7f1a30</code></pre>
 <p><code>git branch -D</code> even prints the hash as it deletes: "Deleted branch feature/login (was c7f1a30)". Scroll up before panicking.</p>
 
 <h3>4. I committed a secret</h3>
 <div class="callout danger"><strong>Rotate the credential first.</strong> Revoke it at the provider, issue a new one. Only then clean history — and if the commit was pushed to a public repository, assume the key is already compromised (8.3).</div>
-<pre><code><span class="tok-comment"># Not pushed, and it is the last commit:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Not pushed, and it is the last commit:</span>
 git rm --cached .env &amp;&amp; git commit --amend --no-edit
 
 <span class="tok-comment"># Anywhere in history, after rotating:</span>
@@ -107,19 +107,19 @@ git push --force --all &amp;&amp; git push --force --tags
 
 <h3>5. Someone force-pushed over my commits</h3>
 ${slide('git-13', 11, 'Khi sự cố đã lên GitHub — luật đổi hẳn')}
-<pre><code>git reflog                              <span class="tok-comment"># if you still have them locally</span>
+<pre><code class="language-bash">git reflog                              <span class="tok-comment"># if you still have them locally</span>
 git switch -c rescue e8b4d92
 git rebase origin/feature/login rescue
 git push origin rescue</code></pre>
-<pre><code><span class="tok-comment"># If your clone no longer has them, ask GitHub for the pre-push SHA:</span>
+<pre><code class="language-bash"><span class="tok-comment"># If your clone no longer has them, ask GitHub for the pre-push SHA:</span>
 gh api repos/OWNER/REPO/events \\
   --jq <span class="tok-string">'.[] | select(.type=="PushEvent") | {before: .payload.before, ref: .payload.ref}'</span>
 git fetch origin &lt;before-sha&gt;</code></pre>
 
 <h3>6. Detached HEAD, and I made commits there</h3>
 ${slide('git-13', 9, 'Công thức 5: HEAD lìa cành, và tôi đã commit ở đó')}
-<pre><code>git switch -c rescue        <span class="tok-comment"># do this BEFORE switching away</span></code></pre>
-<pre><code><span class="tok-comment"># Already switched away? They are unreferenced but alive:</span>
+<pre><code class="language-bash">git switch -c rescue        <span class="tok-comment"># do this BEFORE switching away</span></code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># Already switched away? They are unreferenced but alive:</span>
 git reflog
 git switch -c rescue &lt;hash&gt;
 <span class="tok-comment"># or, if the reflog entry expired:</span>
@@ -127,28 +127,28 @@ git fsck --lost-found</code></pre>
 
 <h3>7. A merge or rebase went wrong, mid-flight</h3>
 ${slide('git-13', 8, 'Công thức 4: merge nhầm nhánh làm dở vào main')}
-<pre><code>git merge --abort           <span class="tok-comment"># mid-merge: back to before</span>
+<pre><code class="language-bash">git merge --abort           <span class="tok-comment"># mid-merge: back to before</span>
 git rebase --abort          <span class="tok-comment"># mid-rebase: back to before</span>
 git cherry-pick --abort
 git revert --abort</code></pre>
-<pre><code><span class="tok-comment"># Already finished, and the result is wrong:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Already finished, and the result is wrong:</span>
 git reset --hard ORIG_HEAD  <span class="tok-comment"># Git saved where you were</span>
 <span class="tok-comment"># or find the entry before "rebase (start)" in the reflog (3.5)</span></code></pre>
 <p><code>--abort</code> only works <em>while</em> the operation is still in progress. Once the merge commit exists, it answers <code>fatal: There is no merge to abort (MERGE_HEAD missing).</code> (real output) — that message is your cue to switch to <code>ORIG_HEAD</code>. And if the merge was already pushed, neither applies: <code>git revert -m 1 &lt;merge&gt;</code> (recipe 8).</p>
 
 <h3>8. I pushed a bad commit to main</h3>
-<pre><code>git revert 3f8a1c9          <span class="tok-comment"># NOT reset — main is shared (4.3)</span>
+<pre><code class="language-bash">git revert 3f8a1c9          <span class="tok-comment"># NOT reset — main is shared (4.3)</span>
 git revert -m 1 8c4f2a1     <span class="tok-comment"># if it was a merge commit</span>
 git push</code></pre>
 <p>During an incident, revert first and diagnose afterwards. A revert is one mechanically safe command; a forward fix written under pressure is neither.</p>
 
 <h3>9. "fatal: refusing to merge unrelated histories"</h3>
-<pre><code>git log --oneline | tail -3
+<pre><code class="language-bash">git log --oneline | tail -3
 git log --oneline other/main | tail -3     <span class="tok-comment"># do the root commits differ?</span></code></pre>
 <p>If you did not expect two roots, you probably cloned into an existing folder or ran <code>git init</code> twice. Fix the mistake rather than passing <code>--allow-unrelated-histories</code>, which buries it (3.2).</p>
 
 <h3>10. The repository looks corrupted</h3>
-<pre><code>git fsck --full                     <span class="tok-comment"># what does Git think is wrong?</span>
+<pre><code class="language-bash">git fsck --full                     <span class="tok-comment"># what does Git think is wrong?</span>
 cat .git/HEAD                       <span class="tok-comment"># does it name a ref that exists?</span>
 git rev-parse main                  <span class="tok-comment"># does the branch resolve?</span>
 git cat-file -t \$(git rev-parse HEAD)</code></pre>
@@ -157,16 +157,16 @@ git cat-file -t \$(git rev-parse HEAD)</code></pre>
 <h3>Bonus: I dropped a stash I still needed</h3>
 ${slide('git-13', 10, 'Công thức 6: lỡ drop stash — git fsck tìm lại')}
 <p>A stash is a commit that only <code>refs/stash</code> points to. <code>git stash drop</code> — or a <code>pop</code> you did not mean — removes that pointer <em>and</em> its reflog entry, so <code>git reflog</code> will not show it. The commit itself stays in the object database, dangling, until garbage collection prunes it (by default, unreachable objects older than two weeks). First, scroll up: drop prints the full hash.</p>
-<pre><code>git stash drop</code></pre>
+<pre><code class="language-bash">git stash drop</code></pre>
 <div class="out">Dropped refs/stash@{0} (07d8f6f75ecade3d5036b06cfaa658b93576f776)</div>
-<pre><code><span class="tok-comment"># Terminal already closed? Ask fsck for commits nothing points to:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Terminal already closed? Ask fsck for commits nothing points to:</span>
 git fsck --lost-found
 git show -s --format=<span class="tok-string">"%h %s"</span> 07d8f6f      <span class="tok-comment"># "On main: …" means it is a stash</span>
 git stash apply 07d8f6f</code></pre>
 <div class="out">dangling commit 07d8f6f75ecade3d5036b06cfaa658b93576f776
 07d8f6f On main: ghi chú quan trọng</div>
 <p>In a real repository fsck may list a dozen dangling commits. Print them all with their messages and pick the one that starts with <code>On &lt;branch&gt;:</code> or <code>WIP on</code>:</p>
-<pre><code>git fsck --no-reflogs | awk <span class="tok-string">'/dangling commit/ {print $3}'</span> | xargs git show -s --format=<span class="tok-string">"%h %s"</span></code></pre>
+<pre><code class="language-bash">git fsck --no-reflogs | awk <span class="tok-string">'/dangling commit/ {print $3}'</span> | xargs git show -s --format=<span class="tok-string">"%h %s"</span></code></pre>
 
 <h3>The panic checklist</h3>
 ${slide('git-13', 12, 'Danh sách kiểm lúc hoảng')}
@@ -249,7 +249,7 @@ echo "Đã dựng 5 sự cố trong $(pwd). Cứu xong thì chạy: bash tham-ho
 <span class="eyebrow">Chương 13 · Bài 13.1</span>
 <h2>Mở bài này ra giữa lúc sự cố</h2>
 <p class="lead">Mười tình huống, mỗi cái kèm chẩn đoán và cách xử lý. Đọc lẻ, không cần theo thứ tự. Trước bất kỳ tình huống nào, hai lệnh sau lúc nào cũng an toàn và lúc nào cũng đáng chạy trước:</p>
-<pre><code>git status                 <span class="tok-comment"># tôi đang ở đâu, cái gì chưa commit</span>
+<pre><code class="language-bash">git status                 <span class="tok-comment"># tôi đang ở đâu, cái gì chưa commit</span>
 git reflog -15             <span class="tok-comment"># HEAD đã đi qua những đâu (bài 4.4)</span></code></pre>
 <div class="callout ok"><strong>Luật làm cho mọi chuyện dưới đây đều sống sót được:</strong> nếu nó từng được commit thì nó cứu được, ít nhất trong 30 ngày. Chỉ công việc <em>CHƯA COMMIT</em> mới thật sự mất được. Nên trước khi thử bất kỳ cách sửa nào trên một cây còn thay đổi: <code>git stash -u</code>. Một giây, và cái lệnh phá huỷ trở thành đảo ngược được.</div>
 
@@ -260,11 +260,11 @@ ${slide('git-13', 4, 'Sơ đồ chọn lệnh cứu theo sự cố')}
 
 <h3>1. Tôi commit nhầm nhánh</h3>
 ${slide('git-13', 5, 'Công thức 1: commit nhầm lên main')}
-<pre><code><span class="tok-comment"># Chưa push. Chuyển commit cuối sang đúng nhánh:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Chưa push. Chuyển commit cuối sang đúng nhánh:</span>
 git switch -c feature/right-branch      <span class="tok-comment"># mang commit đi theo bạn</span>
 git switch main
 git reset --hard HEAD~1                 <span class="tok-comment"># gỡ nó khỏi main</span></code></pre>
-<pre><code><span class="tok-comment"># Nhiều commit, hoặc bạn đã chuyển đi rồi — cherry-pick chúng sang:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Nhiều commit, hoặc bạn đã chuyển đi rồi — cherry-pick chúng sang:</span>
 git switch feature/right-branch
 git cherry-pick 3f8a1c9 9e2d4b7
 git switch main &amp;&amp; git reset --hard HEAD~2</code></pre>
@@ -272,21 +272,21 @@ git switch main &amp;&amp; git reset --hard HEAD~2</code></pre>
 
 <h3>2. Tôi chạy reset --hard và mất commit</h3>
 ${slide('git-13', 6, 'Công thức 2: lỡ reset --hard mất hai commit')}
-<pre><code>git reflog -10</code></pre>
+<pre><code class="language-bash">git reflog -10</code></pre>
 <div class="out">e8b4d92 HEAD@{0}: reset: moving to HEAD~3
 c7f1a30 HEAD@{1}: commit: test(auth): cover the expired-token path</div>
-<pre><code>git reset --hard HEAD@{1}</code></pre>
+<pre><code class="language-bash">git reset --hard HEAD@{1}</code></pre>
 <p>Dòng <em>ngay trước</em> cái lệnh phá huỷ là chỗ bạn đứng. Những thay đổi chưa commit ở thời điểm đó thì vẫn mất — đó là lỗ hổng duy nhất (bài 4.4).</p>
 
 <h3>3. Tôi xoá mất một nhánh</h3>
 ${slide('git-13', 7, 'Công thức 3: xoá nhầm nhánh chưa push')}
-<pre><code>git reflog | grep <span class="tok-string">"feature/login"</span>
+<pre><code class="language-bash">git reflog | grep <span class="tok-string">"feature/login"</span>
 git switch -c feature/login c7f1a30</code></pre>
 <p><code>git branch -D</code> còn in luôn mã băm ngay khi xoá: "Deleted branch feature/login (was c7f1a30)". Hãy cuộn lên nhìn trước khi hoảng.</p>
 
 <h3>4. Tôi commit một bí mật</h3>
 <div class="callout danger"><strong>Xoay chứng chỉ trước đã.</strong> Thu hồi ở nhà cung cấp, cấp cái mới. Rồi mới dọn lịch sử — và nếu commit đó đã lên một kho công khai thì hãy coi như cái khoá đã bị lộ (bài 8.3).</div>
-<pre><code><span class="tok-comment"># Chưa push, và nó là commit cuối:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Chưa push, và nó là commit cuối:</span>
 git rm --cached .env &amp;&amp; git commit --amend --no-edit
 
 <span class="tok-comment"># Nằm đâu đó trong lịch sử, sau khi đã xoay khoá:</span>
@@ -297,19 +297,19 @@ git push --force --all &amp;&amp; git push --force --tags
 
 <h3>5. Có người force-push đè lên commit của tôi</h3>
 ${slide('git-13', 11, 'Khi sự cố đã lên GitHub — luật đổi hẳn')}
-<pre><code>git reflog                              <span class="tok-comment"># nếu bạn vẫn còn chúng ở cục bộ</span>
+<pre><code class="language-bash">git reflog                              <span class="tok-comment"># nếu bạn vẫn còn chúng ở cục bộ</span>
 git switch -c rescue e8b4d92
 git rebase origin/feature/login rescue
 git push origin rescue</code></pre>
-<pre><code><span class="tok-comment"># Nếu bản clone không còn chúng, hãy hỏi GitHub lấy SHA trước lần push:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Nếu bản clone không còn chúng, hãy hỏi GitHub lấy SHA trước lần push:</span>
 gh api repos/OWNER/REPO/events \\
   --jq <span class="tok-string">'.[] | select(.type=="PushEvent") | {before: .payload.before, ref: .payload.ref}'</span>
 git fetch origin &lt;sha-truoc&gt;</code></pre>
 
 <h3>6. HEAD lìa cành, và tôi đã commit ở đó</h3>
 ${slide('git-13', 9, 'Công thức 5: HEAD lìa cành, và tôi đã commit ở đó')}
-<pre><code>git switch -c rescue        <span class="tok-comment"># làm việc này TRƯỚC khi chuyển đi</span></code></pre>
-<pre><code><span class="tok-comment"># Lỡ chuyển đi rồi? Chúng không ai trỏ tới nhưng vẫn sống:</span>
+<pre><code class="language-bash">git switch -c rescue        <span class="tok-comment"># làm việc này TRƯỚC khi chuyển đi</span></code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># Lỡ chuyển đi rồi? Chúng không ai trỏ tới nhưng vẫn sống:</span>
 git reflog
 git switch -c rescue &lt;mã băm&gt;
 <span class="tok-comment"># hoặc, nếu dòng reflog đã hết hạn:</span>
@@ -317,28 +317,28 @@ git fsck --lost-found</code></pre>
 
 <h3>7. Một lần merge hay rebase đi sai, đang giữa chừng</h3>
 ${slide('git-13', 8, 'Công thức 4: merge nhầm nhánh làm dở vào main')}
-<pre><code>git merge --abort           <span class="tok-comment"># đang merge: về trước lúc bắt đầu</span>
+<pre><code class="language-bash">git merge --abort           <span class="tok-comment"># đang merge: về trước lúc bắt đầu</span>
 git rebase --abort          <span class="tok-comment"># đang rebase: về trước lúc bắt đầu</span>
 git cherry-pick --abort
 git revert --abort</code></pre>
-<pre><code><span class="tok-comment"># Đã xong rồi, và kết quả sai:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Đã xong rồi, và kết quả sai:</span>
 git reset --hard ORIG_HEAD  <span class="tok-comment"># Git đã lưu chỗ bạn đứng</span>
 <span class="tok-comment"># hoặc tìm dòng trước "rebase (start)" trong reflog (bài 3.5)</span></code></pre>
 <p><code>--abort</code> chỉ chạy được <em>TRONG LÚC</em> thao tác còn dở. Khi commit merge đã được tạo xong, nó trả lời <code>fatal: There is no merge to abort (MERGE_HEAD missing).</code> (output thật) — thấy câu đó là tới lượt <code>ORIG_HEAD</code> (HEAD gốc — chỗ HEAD đứng trước lần di chuyển lớn gần nhất). Còn nếu merge đã push thì cả hai cách đều không dùng: <code>git revert -m 1 &lt;merge&gt;</code> (tình huống 8).</p>
 
 <h3>8. Tôi push một commit tồi lên main</h3>
-<pre><code>git revert 3f8a1c9          <span class="tok-comment"># KHÔNG dùng reset — main là nhánh chung (bài 4.3)</span>
+<pre><code class="language-bash">git revert 3f8a1c9          <span class="tok-comment"># KHÔNG dùng reset — main là nhánh chung (bài 4.3)</span>
 git revert -m 1 8c4f2a1     <span class="tok-comment"># nếu đó là một commit hợp nhất</span>
 git push</code></pre>
 <p>Trong lúc sự cố, hãy revert trước rồi chẩn đoán sau. Một lần revert là một lệnh an toàn về mặt cơ học; một bản vá tiến tới viết dưới áp lực thì không có tính chất nào trong hai tính chất đó.</p>
 
 <h3>9. "fatal: refusing to merge unrelated histories"</h3>
-<pre><code>git log --oneline | tail -3
+<pre><code class="language-bash">git log --oneline | tail -3
 git log --oneline other/main | tail -3     <span class="tok-comment"># commit gốc có khác nhau không?</span></code></pre>
 <p>Nếu bạn không hề chờ đợi có hai gốc thì nhiều khả năng bạn đã clone vào một thư mục có sẵn hoặc chạy <code>git init</code> hai lần. Hãy sửa cái sai lầm đó thay vì truyền <code>--allow-unrelated-histories</code>, thứ sẽ chôn vùi nó (bài 3.2).</p>
 
 <h3>10. Kho mã trông như bị hỏng</h3>
-<pre><code>git fsck --full                     <span class="tok-comment"># Git nghĩ cái gì đang sai?</span>
+<pre><code class="language-bash">git fsck --full                     <span class="tok-comment"># Git nghĩ cái gì đang sai?</span>
 cat .git/HEAD                       <span class="tok-comment"># nó có gọi tên một ref tồn tại không?</span>
 git rev-parse main                  <span class="tok-comment"># cái nhánh có phân giải được không?</span>
 git cat-file -t \$(git rev-parse HEAD)</code></pre>
@@ -347,16 +347,16 @@ git cat-file -t \$(git rev-parse HEAD)</code></pre>
 <h3>Thêm: Tôi lỡ drop một stash vẫn còn cần</h3>
 ${slide('git-13', 10, 'Công thức 6: lỡ drop stash — git fsck tìm lại')}
 <p>Một stash là một commit mà chỉ <code>refs/stash</code> trỏ tới. <code>git stash drop</code> — hay một lần <code>pop</code> ngoài ý muốn — gỡ con trỏ đó <em>VÀ</em> dòng reflog của nó, nên <code>git reflog</code> sẽ không hiện ra. Bản thân commit vẫn nằm trong kho đối tượng ở dạng lủng lẳng (dangling — không ai trỏ tới) cho tới khi bộ dọn rác (garbage collection) xoá nó (mặc định: đối tượng không với tới được và cũ hơn hai tuần). Việc đầu tiên: cuộn terminal lên — lệnh drop in sẵn mã băm đầy đủ.</p>
-<pre><code>git stash drop</code></pre>
+<pre><code class="language-bash">git stash drop</code></pre>
 <div class="out">Dropped refs/stash@{0} (07d8f6f75ecade3d5036b06cfaa658b93576f776)</div>
-<pre><code><span class="tok-comment"># Lỡ đóng terminal rồi? Hỏi fsck các commit không ai trỏ tới:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Lỡ đóng terminal rồi? Hỏi fsck các commit không ai trỏ tới:</span>
 git fsck --lost-found
 git show -s --format=<span class="tok-string">"%h %s"</span> 07d8f6f      <span class="tok-comment"># "On main: …" nghĩa là một stash</span>
 git stash apply 07d8f6f</code></pre>
 <div class="out">dangling commit 07d8f6f75ecade3d5036b06cfaa658b93576f776
 07d8f6f On main: ghi chú quan trọng</div>
 <p>Trong kho thật, fsck có thể liệt kê cả chục commit lủng lẳng. In hết kèm lời nhắn rồi chọn cái bắt đầu bằng <code>On &lt;nhánh&gt;:</code> hoặc <code>WIP on</code>:</p>
-<pre><code>git fsck --no-reflogs | awk <span class="tok-string">'/dangling commit/ {print $3}'</span> | xargs git show -s --format=<span class="tok-string">"%h %s"</span></code></pre>
+<pre><code class="language-bash">git fsck --no-reflogs | awk <span class="tok-string">'/dangling commit/ {print $3}'</span> | xargs git show -s --format=<span class="tok-string">"%h %s"</span></code></pre>
 
 <h3>Danh sách kiểm lúc hoảng</h3>
 ${slide('git-13', 12, 'Danh sách kiểm lúc hoảng')}
@@ -466,12 +466,12 @@ ${slide('git-13', 14, 'cuongthai.com: push không deploy — deploy là một sc
 <h3>The rule that surprises everyone: pushing does not deploy</h3>
 <div class="callout danger">Two deploy workflows once triggered on <em>every</em> push to <code>main</code> and raced each other into real outages. On 3 July the feed returned 500 because the running image lagged behind a schema change. On 6 July two concurrent deploys collided while recreating the backend container, leaving it <code>Exited(137)</code> plus orphan containers — recovered by hand with <code>docker start</code>. Both workflows are now <code>workflow_dispatch</code> only.</div>
 <p>The general lesson is bigger than one site: <strong>your branching model and your deployment trigger are two separate decisions.</strong> Coupling them tightly means an ordinary Git operation — a push, a merge, a revert — can start an irreversible action while you are still thinking. Verify what a push actually triggers rather than assuming:</p>
-<pre><code>grep -A4 <span class="tok-string">'^on:'</span> .github/workflows/*.yml
+<pre><code class="language-bash">grep -A4 <span class="tok-string">'^on:'</span> .github/workflows/*.yml
 gh run list --limit 8 --branch main       <span class="tok-comment"># what really fired on the last pushes</span></code></pre>
 
 <h3>Reviewing your own diff — the highest-value five minutes</h3>
 ${slide('git-13', 15, 'Tự review diff — năm phút đáng giá nhất')}
-<pre><code><span class="tok-comment"># 1. What am I about to send?</span>
+<pre><code class="language-bash"><span class="tok-comment"># 1. What am I about to send?</span>
 git log --oneline @{u}..HEAD
 
 <span class="tok-comment"># 2. Which files, and are any of them a surprise?</span>
@@ -494,7 +494,7 @@ ${slide('git-13', 16, 'Làm việc cùng agent AI: mỗi phiên một worktree')
   <div class="lz-layer"><span class="lz-k">Never deploy without asking</span><span class="lz-v">A deploy script that rsyncs the working tree ships someone else's half-written file to production. <code>deploy.sh</code> has done exactly that, three times.</span></div>
   <div class="lz-layer"><span class="lz-k">One build or dev server at a time</span><span class="lz-v">Two processes writing the same build cache corrupt it in ways that look like a code bug for an hour.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Give each agent its own worktree (10.1) — separate index, separate HEAD,</span>
+<pre><code class="language-bash"><span class="tok-comment"># Give each agent its own worktree (10.1) — separate index, separate HEAD,</span>
 <span class="tok-comment"># shared objects. Two sessions then cannot stage over each other at all.</span>
 git worktree add ../api-agent-a -b agent/refactor-auth
 git worktree add ../api-agent-b -b agent/add-tests</code></pre>
@@ -512,7 +512,7 @@ ${slide('git-13', 13, 'Một ngày làm việc thật của đồ án nhóm')}
 
 <h3>The cheat sheet</h3>
 ${slide('git-13', 17, 'Bảng tra nhanh Chương 13')}
-<pre><code><span class="tok-comment"># ── SEE ──────────────────────────────────────────</span>
+<pre><code class="language-bash"><span class="tok-comment"># ── SEE ──────────────────────────────────────────</span>
 git status --short                     <span class="tok-comment"># two columns: index | working dir</span>
 git diff / --staged / HEAD             <span class="tok-comment"># the three trees (1.3)</span>
 git log --oneline --graph --all -20    <span class="tok-comment"># the shape of history</span>
@@ -545,7 +545,7 @@ git rebase -i --autosquash main
 git cherry-pick -x &lt;commit&gt;</code></pre>
 
 <h3>The settings worth having on every machine</h3>
-<pre><code>git config --global init.defaultBranch main
+<pre><code class="language-bash">git config --global init.defaultBranch main
 git config --global pull.ff only                 <span class="tok-comment"># refuse a surprise merge (5.1)</span>
 git config --global push.autoSetupRemote true    <span class="tok-comment"># no more "no upstream branch" (5.3)</span>
 git config --global fetch.prune true              <span class="tok-comment"># drop dead origin/* refs</span>
@@ -615,12 +615,12 @@ ${slide('git-13', 14, 'cuongthai.com: push không deploy — deploy là một sc
 <h3>Cái luật làm ai cũng bất ngờ: push KHÔNG deploy</h3>
 <div class="callout danger">Hai workflow deploy từng kích hoạt ở <em>MỌI</em> lần push vào <code>main</code> và đua nhau tới những sự cố thật. Ngày 3 tháng 7, feed trả 500 vì ảnh đang chạy đi sau một thay đổi schema. Ngày 6 tháng 7, hai lượt deploy chạy chồng va nhau lúc dựng lại container backend, để nó ở trạng thái <code>Exited(137)</code> cùng các container mồ côi — phải cứu bằng tay với <code>docker start</code>. Giờ cả hai workflow chỉ còn <code>workflow_dispatch</code>.</div>
 <p>Bài học khái quát lớn hơn một trang web: <strong>mô hình nhánh của bạn và cơ chế kích hoạt deploy là hai quyết định tách biệt.</strong> Ghép chặt chúng nghĩa là một thao tác Git bình thường — một lần push, một lần merge, một lần revert — có thể khởi động một hành động không đảo ngược được trong khi bạn còn đang suy nghĩ. Hãy kiểm chứng xem một lần push THẬT SỰ kích hoạt cái gì thay vì phỏng đoán:</p>
-<pre><code>grep -A4 <span class="tok-string">'^on:'</span> .github/workflows/*.yml
+<pre><code class="language-bash">grep -A4 <span class="tok-string">'^on:'</span> .github/workflows/*.yml
 gh run list --limit 8 --branch main       <span class="tok-comment"># cái gì thật sự chạy ở những lần push gần đây</span></code></pre>
 
 <h3>Tự review diff của mình — năm phút giá trị nhất</h3>
 ${slide('git-13', 15, 'Tự review diff — năm phút đáng giá nhất')}
-<pre><code><span class="tok-comment"># 1. Tôi sắp gửi đi cái gì?</span>
+<pre><code class="language-bash"><span class="tok-comment"># 1. Tôi sắp gửi đi cái gì?</span>
 git log --oneline @{u}..HEAD
 
 <span class="tok-comment"># 2. Những file nào, và có cái nào lạ không?</span>
@@ -643,7 +643,7 @@ ${slide('git-13', 16, 'Làm việc cùng agent AI: mỗi phiên một worktree')
   <div class="lz-layer"><span class="lz-k">Đừng bao giờ deploy khi chưa hỏi</span><span class="lz-v">Một script deploy rsync cả cây làm việc sẽ đẩy file viết dở của người khác lên production. <code>deploy.sh</code> đã làm đúng chuyện đó, ba lần.</span></div>
   <div class="lz-layer"><span class="lz-k">Mỗi lúc chỉ MỘT bản dựng hoặc dev server</span><span class="lz-v">Hai tiến trình cùng ghi vào một cache build làm hỏng nó theo kiểu trông y như một lỗi mã trong suốt một giờ đồng hồ.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Cho mỗi agent một worktree riêng (bài 10.1) — index riêng, HEAD riêng,</span>
+<pre><code class="language-bash"><span class="tok-comment"># Cho mỗi agent một worktree riêng (bài 10.1) — index riêng, HEAD riêng,</span>
 <span class="tok-comment"># đối tượng dùng chung. Hai phiên khi đó hoàn toàn không staging đè lên nhau được.</span>
 git worktree add ../api-agent-a -b agent/refactor-auth
 git worktree add ../api-agent-b -b agent/add-tests</code></pre>
@@ -661,7 +661,7 @@ ${slide('git-13', 13, 'Một ngày làm việc thật của đồ án nhóm')}
 
 <h3>Bảng tra nhanh</h3>
 ${slide('git-13', 17, 'Bảng tra nhanh Chương 13')}
-<pre><code><span class="tok-comment"># ── NHÌN ─────────────────────────────────────────</span>
+<pre><code class="language-bash"><span class="tok-comment"># ── NHÌN ─────────────────────────────────────────</span>
 git status --short                     <span class="tok-comment"># hai cột: index | thư mục làm việc</span>
 git diff / --staged / HEAD             <span class="tok-comment"># ba cái cây (bài 1.3)</span>
 git log --oneline --graph --all -20    <span class="tok-comment"># hình dạng lịch sử</span>
@@ -694,7 +694,7 @@ git rebase -i --autosquash main
 git cherry-pick -x &lt;commit&gt;</code></pre>
 
 <h3>Những thiết lập đáng có trên mọi máy</h3>
-<pre><code>git config --global init.defaultBranch main
+<pre><code class="language-bash">git config --global init.defaultBranch main
 git config --global pull.ff only                 <span class="tok-comment"># từ chối một lần merge bất ngờ (bài 5.1)</span>
 git config --global push.autoSetupRemote true    <span class="tok-comment"># hết cảnh "no upstream branch" (bài 5.3)</span>
 git config --global fetch.prune true              <span class="tok-comment"># bỏ các ref origin/* đã chết</span>

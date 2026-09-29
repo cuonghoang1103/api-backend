@@ -145,7 +145,7 @@ sales_by_city = {"Hanoi": 120, "HCMC": 250}  # dict
 </code></pre>
 <h3>Control flow</h3>
 <p><strong>if / elif / else</strong> branches on a condition; <strong>for</strong> repeats over a collection.</p>
-<pre><code>for city, sales in sales_by_city.items():
+<pre><code class="language-python">for city, sales in sales_by_city.items():
     if sales &gt;= 200:
         print(city, "high performer")
     elif sales &gt;= 100:
@@ -155,7 +155,7 @@ sales_by_city = {"Hanoi": 120, "HCMC": 250}  # dict
 </code></pre>
 <h3>Functions</h3>
 <p>A <strong>function</strong> packages reusable logic — write it once, call it for every product/region/month.</p>
-<pre><code>def growth_pct(old_value, new_value):
+<pre><code class="language-python">def growth_pct(old_value, new_value):
     return (new_value - old_value) / old_value * 100
 
 growth_pct(120, 135)   # 12.5
@@ -181,7 +181,7 @@ sales_by_city = {"Hanoi": 120, "HCMC": 250}  # dict
 </code></pre>
 <h3>Cấu trúc điều khiển</h3>
 <p><strong>if / elif / else</strong> rẽ nhánh theo điều kiện; <strong>for</strong> lặp qua một tập hợp.</p>
-<pre><code>for city, sales in sales_by_city.items():
+<pre><code class="language-python">for city, sales in sales_by_city.items():
     if sales &gt;= 200:
         print(city, "vượt mục tiêu")
     elif sales &gt;= 100:
@@ -191,7 +191,7 @@ sales_by_city = {"Hanoi": 120, "HCMC": 250}  # dict
 </code></pre>
 <h3>Hàm (functions)</h3>
 <p>Một <strong>hàm</strong> đóng gói logic dùng lại được — viết một lần, gọi cho mọi sản phẩm/khu vực/tháng.</p>
-<pre><code>def growth_pct(old_value, new_value):
+<pre><code class="language-python">def growth_pct(old_value, new_value):
     return (new_value - old_value) / old_value * 100
 
 growth_pct(120, 135)   # 12.5
@@ -489,7 +489,7 @@ const c7 = doc('pba301-7-1-regression', '7.1 — Regression & basic business for
 <h2>Regression &amp; basic business forecasting</h2>
 <h3>Linear regression — the simplest forecasting model</h3>
 <p><strong>Linear regression</strong> fits a straight line <code>y = a + b·x</code> through the data, letting you predict <code>y</code> (e.g. revenue) from <code>x</code> (e.g. ad spend or month number). <code>b</code> is the slope — how much <code>y</code> changes per unit of <code>x</code>.</p>
-<pre><code>from sklearn.linear_model import LinearRegression
+<pre><code class="language-python">from sklearn.linear_model import LinearRegression
 
 X = df[["ad_spend"]]     # features must be 2D
 y = df["revenue"]
@@ -510,7 +510,7 @@ model.predict([[5000]])   # forecast: revenue if ad_spend = 5000
 <h2>Hồi quy &amp; dự báo kinh doanh cơ bản</h2>
 <h3>Hồi quy tuyến tính — mô hình dự báo đơn giản nhất</h3>
 <p><strong>Hồi quy tuyến tính</strong> khớp một đường thẳng <code>y = a + b·x</code> qua dữ liệu, cho phép dự báo <code>y</code> (vd doanh thu) từ <code>x</code> (vd chi quảng cáo hoặc số thứ tự tháng). <code>b</code> là độ dốc — <code>y</code> thay đổi bao nhiêu khi <code>x</code> tăng một đơn vị.</p>
-<pre><code>from sklearn.linear_model import LinearRegression
+<pre><code class="language-python">from sklearn.linear_model import LinearRegression
 
 X = df[["ad_spend"]]     # đặc trưng (feature) phải là dạng 2 chiều
 y = df["revenue"]
@@ -542,7 +542,7 @@ const c8 = doc('pba301-8-1-dashboard-case-study', '8.1 — Application: dashboar
 <h2>Application: dashboards, automated reports &amp; a business case study</h2>
 <h3>From one-off analysis to a repeatable report</h3>
 <p>Everything in Chapters 1–7 — load, clean, group, chart, describe, forecast — can be chained into ONE script that runs every time new data arrives, instead of being redone by hand.</p>
-<pre><code>def monthly_report(csv_path):
+<pre><code class="language-python">def monthly_report(csv_path):
     df = pd.read_csv(csv_path)
     df = df.dropna(subset=["revenue"])
     by_city = df.groupby("city")["revenue"].sum().sort_values(ascending=False)
@@ -570,7 +570,7 @@ monthly_report("sales_2026_09.csv")   # re-run every month with the new file
 <h2>Ứng dụng: dashboard, báo cáo tự động &amp; case study kinh doanh</h2>
 <h3>Từ phân tích rời rạc tới báo cáo lặp lại được</h3>
 <p>Mọi thứ ở Chương 1–7 — đọc, làm sạch, gom nhóm, vẽ biểu đồ, mô tả, dự báo — có thể ghép thành MỘT script chạy lại mỗi khi có dữ liệu mới, thay vì làm tay lại từ đầu.</p>
-<pre><code>def monthly_report(csv_path):
+<pre><code class="language-python">def monthly_report(csv_path):
     df = pd.read_csv(csv_path)
     df = df.dropna(subset=["revenue"])
     by_city = df.groupby("city")["revenue"].sum().sort_values(ascending=False)

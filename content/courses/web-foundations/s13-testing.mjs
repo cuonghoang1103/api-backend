@@ -118,11 +118,11 @@ ${gallery('wf-test', [
 <div class="ml-en">
 <span class="eyebrow">Chapter 13 · Lesson 13.2</span>
 <h2>Arrange, Act, Assert</h2>
-<pre><code>// tinhTien.js
+<pre><code class="language-javascript">// tinhTien.js
 export function tongTien(gio) {
   return gio.reduce((s, m) => s + m.gia * m.soLuong, 0);
 }</code></pre>
-<pre><code>// tinhTien.test.js
+<pre><code class="language-javascript">// tinhTien.test.js
 import { describe, it, expect } from 'vitest';
 import { tongTien } from './tinhTien';
 
@@ -161,18 +161,18 @@ it('làm tròn tiền lẻ đúng', () => {
 <p class="note-ct"><strong>Name tests as sentences about behaviour.</strong> <code>it('trả 0 cho giỏ rỗng')</code> tells a future reader what the rule is. <code>it('test 2')</code> tells them nothing, and when it fails they have to read the body to find out what broke.</p>
 
 <h3>Running them</h3>
-<pre><code>npm test              # watch mode while you work
+<pre><code class="language-bash">npm test              # watch mode while you work
 npx vitest run        # once, for CI
 npx vitest run --coverage</code></pre>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 13 · Bài 13.2</span>
 <h2>Chuẩn bị · Hành động · Khẳng định</h2>
-<pre><code>// tinhTien.js
+<pre><code class="language-javascript">// tinhTien.js
 export function tongTien(gio) {
   return gio.reduce((s, m) => s + m.gia * m.soLuong, 0);
 }</code></pre>
-<pre><code>// tinhTien.test.js
+<pre><code class="language-javascript">// tinhTien.test.js
 import { describe, it, expect } from 'vitest';
 import { tongTien } from './tinhTien';
 
@@ -211,7 +211,7 @@ it('làm tròn tiền lẻ đúng', () => {
 <p class="note-ct"><strong>Đặt tên test thành câu mô tả hành vi.</strong> <code>it('trả 0 cho giỏ rỗng')</code> nói cho người đọc sau biết quy tắc là gì. <code>it('test 2')</code> không nói gì cả, và khi nó đỏ thì người ta phải đọc thân hàm mới biết hỏng cái gì.</p>
 
 <h3>Chạy chúng</h3>
-<pre><code>npm test              # chế độ theo dõi, dùng khi đang code
+<pre><code class="language-bash">npm test              # chế độ theo dõi, dùng khi đang code
 npx vitest run        # chạy một lượt, dùng cho CI
 npx vitest run --coverage</code></pre>
 </div>
@@ -227,7 +227,7 @@ npx vitest run --coverage</code></pre>
 <div class="ml-en">
 <span class="eyebrow">Chapter 13 · Lesson 13.3</span>
 <h2>Test what the user experiences, not how you built it</h2>
-<pre><code>import { render, screen, fireEvent } from '@testing-library/react';
+<pre><code class="language-javascript">import { render, screen, fireEvent } from '@testing-library/react';
 import Counter from './Counter';
 
 it('tăng số khi bấm nút +', () => {
@@ -259,7 +259,7 @@ expect(screen.queryByText('Lỗi')).not.toBeInTheDocument();
 expect(await screen.findByText('Đã lưu')).toBeInTheDocument();</code></pre>
 
 <h3>A form test that is actually useful</h3>
-<pre><code>it('khoá nút Gửi cho tới khi email hợp lệ', () => {
+<pre><code class="language-javascript">it('khoá nút Gửi cho tới khi email hợp lệ', () => {
   render(&lt;ContactForm /&gt;);
   const nut = screen.getByRole('button', { name: /gửi/i });
 
@@ -280,7 +280,7 @@ expect(await screen.findByText('Đã lưu')).toBeInTheDocument();</code></pre>
 <div class="ml-vi">
 <span class="eyebrow">Chương 13 · Bài 13.3</span>
 <h2>Kiểm cái người dùng trải nghiệm, không kiểm cách bạn dựng nó</h2>
-<pre><code>import { render, screen, fireEvent } from '@testing-library/react';
+<pre><code class="language-javascript">import { render, screen, fireEvent } from '@testing-library/react';
 import Counter from './Counter';
 
 it('tăng số khi bấm nút +', () => {
@@ -312,7 +312,7 @@ expect(screen.queryByText('Lỗi')).not.toBeInTheDocument();
 expect(await screen.findByText('Đã lưu')).toBeInTheDocument();</code></pre>
 
 <h3>Một test form thật sự có ích</h3>
-<pre><code>it('khoá nút Gửi cho tới khi email hợp lệ', () => {
+<pre><code class="language-javascript">it('khoá nút Gửi cho tới khi email hợp lệ', () => {
   render(&lt;ContactForm /&gt;);
   const nut = screen.getByRole('button', { name: /gửi/i });
 
@@ -345,7 +345,7 @@ expect(await screen.findByText('Đã lưu')).toBeInTheDocument();</code></pre>
 <p class="lead">A test that calls a real API is slow, fails when the network hiccups, and breaks when someone else changes the data. Replace the boundary — the network, the clock, the random number — with something you control. That replacement is a <strong>mock</strong>.</p>
 
 <h3>Mocking fetch</h3>
-<pre><code>import { vi, it, expect } from 'vitest';
+<pre><code class="language-javascript">import { vi, it, expect } from 'vitest';
 
 it('hiện danh sách pizza khi API trả về', async () => {
   global.fetch = vi.fn().mockResolvedValue({
@@ -404,7 +404,7 @@ jobs:
 <p class="lead">Test gọi API thật thì chậm, đỏ mỗi khi mạng hắt hơi, và hỏng khi người khác đổi dữ liệu. Hãy thay cái ranh giới — mạng, đồng hồ, số ngẫu nhiên — bằng thứ bạn kiểm soát được. Cái thay thế đó gọi là <strong>mock</strong> (giả lập).</p>
 
 <h3>Giả lập fetch</h3>
-<pre><code>import { vi, it, expect } from 'vitest';
+<pre><code class="language-javascript">import { vi, it, expect } from 'vitest';
 
 it('hiện danh sách pizza khi API trả về', async () => {
   global.fetch = vi.fn().mockResolvedValue({

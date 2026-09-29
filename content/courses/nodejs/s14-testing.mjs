@@ -55,7 +55,7 @@ jest 30.4.2           0,86s*     2,08s        322          43MB
 
 <h3>What the built-in runner looks like</h3>
 <p>No install, no config file, no <code>node_modules</code> entry:</p>
-<pre><code>import { test, describe } from 'node:test';
+<pre><code class="language-javascript">import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
 import { slugify, canEdit } from '../src/slug.mjs';
 
@@ -150,7 +150,7 @@ jest 30.4.2           0,86s*     2,08s        322          43MB
 
 <h3>Bộ chạy có sẵn trông thế nào</h3>
 <p>Không cài gì, không file cấu hình, không có dòng nào trong <code>node_modules</code>:</p>
-<pre><code>import { test, describe } from 'node:test';
+<pre><code class="language-javascript">import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
 import { slugify, canEdit } from '../src/slug.mjs';
 
@@ -224,7 +224,7 @@ Tests:       12 passed, 12 total</div>
 
 <h3>The shape of a test</h3>
 <p>Three parts, in this order, every time: arrange the inputs, act by calling the thing, assert on the result. The name of the test states the rule, not the mechanics:</p>
-<pre><code>import { describe, it, expect } from 'vitest';
+<pre><code class="language-javascript">import { describe, it, expect } from 'vitest';
 import { slugify } from '../src/slug.mjs';
 
 describe('slugify', () =&gt; {
@@ -242,14 +242,14 @@ describe('slugify', () =&gt; {
 
 <h3>Why the service could not be tested — and what changed</h3>
 <p>The original Notes service imported its database module directly:</p>
-<pre><code>import { db } from './db.mjs';                 // ← khoá chặt vào PostgreSQL
+<pre><code class="language-javascript">import { db } from './db.mjs';                 // ← khoá chặt vào PostgreSQL
 export async function create(actor, input) {
   const existing = await db.query('SELECT …');
   …
 }</code></pre>
 <p>Nothing about that is wrong at runtime, and everything about it is wrong for testing: to call <code>create()</code> at all you need a running PostgreSQL. Every test becomes an integration test, at 5,5ms instead of 0,0006ms, and you cannot easily simulate "the database threw".</p>
 <p>The fix is one line of structure — pass the dependency in instead of importing it:</p>
-<pre><code>export function createNotesService(repo) {
+<pre><code class="language-javascript">export function createNotesService(repo) {
   return {
     async create(actor, input) {
       const slug = slugify(input.title);
@@ -272,7 +272,7 @@ export async function create(actor, input) {
   <div class="kv"><span class="k">Fake</span><span class="v">a miniature but genuinely working implementation, such as a repository backed by a Map</span></div>
 </div>
 <p>In practice the distinction that matters is <em>state versus interaction</em>. Assert on the returned value when you can; assert on "was this called" only when the call itself <strong>is</strong> the behaviour — as in "a duplicate slug must not reach the database at all":</p>
-<pre><code>function fakeRepo(overrides = {}) {
+<pre><code class="language-javascript">function fakeRepo(overrides = {}) {
   return {
     findBySlug: vi.fn(async () =&gt; null),
     findById:   vi.fn(async () =&gt; null),
@@ -297,7 +297,7 @@ it('rejects a duplicate slug with 409', async () =&gt; {
 
 <h3>The authorization test that is worth more than the rest</h3>
 <p>Chapter 8 established that a note belonging to someone else must answer <code>404</code>, not <code>403</code> — a <code>403</code> confirms the resource exists. That rule is invisible: nothing crashes if it regresses, the app keeps working, and only an attacker notices. It is exactly the kind of rule a test should hold in place:</p>
-<pre><code>it('404s (not 403) when the note belongs to someone else', async () =&gt; {
+<pre><code class="language-javascript">it('404s (not 403) when the note belongs to someone else', async () =&gt; {
   const repo = fakeRepo({ findById: vi.fn(async () =&gt; ({ id: 5, authorId: 99 })) });
   const svc = createNotesService(repo);
   await expect(svc.update(actor, 5, { title: 'x' })).rejects.toMatchObject({ status: 404 });
@@ -306,7 +306,7 @@ it('rejects a duplicate slug with 409', async () =&gt; {
 
 <h3>Time is a dependency too</h3>
 <p>Sessions expire fifteen minutes after they are created, and a cleaner sweeps them every five minutes. Testing that honestly with real time takes twenty minutes. Fake timers make the clock an input you control:</p>
-<pre><code>it('expires exactly at the 15 minute mark', () =&gt; {
+<pre><code class="language-javascript">it('expires exactly at the 15 minute mark', () =&gt; {
   vi.useFakeTimers();
   vi.setSystemTime(new Date('2026-07-28T10:00:00Z'));
   const s = { createdAt: Date.now() };
@@ -328,7 +328,7 @@ $ npx vitest run tests/time-real.test.mjs   (1 test, chờ THẬT 1,5 giây)
 
 <h3>Four tests that pass while checking nothing</h3>
 <p>This is the failure mode nobody warns you about. Every one of these looks like a test, is counted as a test, turns the suite green, and verifies precisely nothing:</p>
-<pre><code>async function chuyenTien() { throw new Error('INSUFFICIENT_FUNDS'); }
+<pre><code class="language-javascript">async function chuyenTien() { throw new Error('INSUFFICIENT_FUNDS'); }
 async function computeTotal() { return 5; }
 
 it('1. quên await ở rejects', () =&gt; {
@@ -395,7 +395,7 @@ Error: expected number of assertions to be 1, but got 0     ← bắt được c
 
 <h3>Hình dạng của một bài test</h3>
 <p>Ba phần, theo đúng thứ tự này, lần nào cũng vậy: chuẩn bị đầu vào, gọi thứ cần kiểm, khẳng định về kết quả. Tên bài test phát biểu <em>luật</em> chứ không mô tả thao tác:</p>
-<pre><code>import { describe, it, expect } from 'vitest';
+<pre><code class="language-javascript">import { describe, it, expect } from 'vitest';
 import { slugify } from '../src/slug.mjs';
 
 describe('slugify', () =&gt; {
@@ -413,14 +413,14 @@ describe('slugify', () =&gt; {
 
 <h3>Vì sao service không test được — và đã sửa gì</h3>
 <p>Bản Notes service ban đầu import thẳng module cơ sở dữ liệu:</p>
-<pre><code>import { db } from './db.mjs';                 // ← khoá chặt vào PostgreSQL
+<pre><code class="language-javascript">import { db } from './db.mjs';                 // ← khoá chặt vào PostgreSQL
 export async function create(actor, input) {
   const existing = await db.query('SELECT …');
   …
 }</code></pre>
 <p>Lúc chạy thật thì chẳng có gì sai, còn với việc kiểm thử thì sai toàn tập: để gọi được <code>create()</code> dù chỉ một lần, bạn phải có một PostgreSQL đang chạy. Mọi bài test đều trở thành test tích hợp, 5,5ms thay vì 0,0006ms, và bạn không có cách nào dễ dàng để mô phỏng tình huống "cơ sở dữ liệu ném lỗi".</p>
 <p>Cách sửa chỉ là một thay đổi về cấu trúc — truyền phụ thuộc vào thay vì import nó:</p>
-<pre><code>export function createNotesService(repo) {
+<pre><code class="language-javascript">export function createNotesService(repo) {
   return {
     async create(actor, input) {
       const slug = slugify(input.title);
@@ -443,7 +443,7 @@ export async function create(actor, input) {
   <div class="kv"><span class="k">Fake</span><span class="v">bản cài đặt thu nhỏ nhưng chạy thật, ví dụ repo lưu bằng Map</span></div>
 </div>
 <p>Trong thực tế, ranh giới đáng quan tâm là <em>trạng thái so với tương tác</em>. Khẳng định trên giá trị trả về khi còn khẳng định được; chỉ khẳng định "cái này có bị gọi không" khi bản thân lời gọi <strong>chính là</strong> hành vi cần kiểm — như trong "slug trùng thì tuyệt đối không được chạm tới cơ sở dữ liệu":</p>
-<pre><code>function fakeRepo(overrides = {}) {
+<pre><code class="language-javascript">function fakeRepo(overrides = {}) {
   return {
     findBySlug: vi.fn(async () =&gt; null),
     findById:   vi.fn(async () =&gt; null),
@@ -468,7 +468,7 @@ it('slug trùng thì trả 409', async () =&gt; {
 
 <h3>Bài test phân quyền đáng giá hơn tất cả những bài còn lại</h3>
 <p>Chương 8 đã chốt rằng một ghi chú của người khác phải trả <code>404</code>, không phải <code>403</code> — vì <code>403</code> là lời xác nhận rằng tài nguyên đó có tồn tại. Luật này vô hình: nếu nó bị phá thì chẳng có gì sập, ứng dụng vẫn chạy bình thường, chỉ kẻ tấn công là nhận ra. Đó đúng là loại luật cần một bài test giữ chỗ:</p>
-<pre><code>it('trả 404 (KHÔNG phải 403) khi ghi chú thuộc về người khác', async () =&gt; {
+<pre><code class="language-javascript">it('trả 404 (KHÔNG phải 403) khi ghi chú thuộc về người khác', async () =&gt; {
   const repo = fakeRepo({ findById: vi.fn(async () =&gt; ({ id: 5, authorId: 99 })) });
   const svc = createNotesService(repo);
   await expect(svc.update(actor, 5, { title: 'x' })).rejects.toMatchObject({ status: 404 });
@@ -477,7 +477,7 @@ it('slug trùng thì trả 409', async () =&gt; {
 
 <h3>Thời gian cũng là một phụ thuộc</h3>
 <p>Phiên hết hạn mười lăm phút sau khi tạo, và một bộ dọn quét mỗi năm phút. Kiểm chuyện đó một cách trung thực bằng thời gian thật thì mất hai mươi phút. Đồng hồ giả biến thời gian thành một đầu vào do bạn điều khiển:</p>
-<pre><code>it('hết hạn đúng vào mốc 15 phút', () =&gt; {
+<pre><code class="language-javascript">it('hết hạn đúng vào mốc 15 phút', () =&gt; {
   vi.useFakeTimers();
   vi.setSystemTime(new Date('2026-07-28T10:00:00Z'));
   const s = { createdAt: Date.now() };
@@ -499,7 +499,7 @@ $ npx vitest run tests/time-real.test.mjs   (1 test, chờ THẬT 1,5 giây)
 
 <h3>Bốn bài test màu xanh mà chẳng kiểm gì</h3>
 <p>Đây là kiểu hỏng mà không ai cảnh báo bạn. Từng cái một trong số này đều trông như một bài test, đều được đếm là một bài test, đều làm bộ test xanh lè, và đều xác minh đúng bằng không:</p>
-<pre><code>async function chuyenTien() { throw new Error('INSUFFICIENT_FUNDS'); }
+<pre><code class="language-javascript">async function chuyenTien() { throw new Error('INSUFFICIENT_FUNDS'); }
 async function computeTotal() { return 5; }
 
 it('1. quên await ở rejects', () =&gt; {
@@ -575,7 +575,7 @@ Error: expected number of assertions to be 1, but got 0     ← bắt được c
 
 <h3>One structural change: the app factory</h3>
 <p>A file that calls <code>app.listen()</code> at import time cannot be imported by a test — importing it starts a server. Split the two:</p>
-<pre><code>// src/app.mjs — chỉ LẮP RÁP, không nghe cổng
+<pre><code class="language-javascript">// src/app.mjs — chỉ LẮP RÁP, không nghe cổng
 export function createApp({ service, auth }) {
   const app = express();
   app.use(express.json());
@@ -592,7 +592,7 @@ createApp({ service: realService, auth: jwtAuth }).listen(3000);</code></pre>
 <p>The factory also takes its dependencies as arguments, which is what lets one test file run the whole app against a fake service and another run it against a real database — without a single environment variable.</p>
 
 <h3>The first HTTP test</h3>
-<pre><code>import request from 'supertest';
+<pre><code class="language-javascript">import request from 'supertest';
 import { createApp, headerAuth } from '../src/app.mjs';
 
 it('401 without a user', async () =&gt; {
@@ -603,7 +603,7 @@ it('401 without a user', async () =&gt; {
 
 <h3>The contract, spelled out as assertions</h3>
 <p>Six tests, each one pinning a rule that chapters 6, 8 and 9 established:</p>
-<pre><code>it('422 with the failing field named', async () =&gt; {
+<pre><code class="language-javascript">it('422 with the failing field named', async () =&gt; {
   const res = await request(app).post('/notes').set('x-user-id', '7').send({ title: '' });
   expect(res.status).toBe(422);
   expect(res.body.fields[0].path).toBe('title');       // hình dạng lỗi cũng là hợp đồng
@@ -630,7 +630,7 @@ it('409 on a duplicate slug', async () =&gt; {
 
 <h3>The test that pays for the whole file</h3>
 <p>This one is a regression test for a real vulnerability that shipped on this site:</p>
-<pre><code>it('404 when another user owns the note', async () =&gt; {
+<pre><code class="language-sql">it('404 when another user owns the note', async () =&gt; {
   const created = await request(app).post('/notes').set('x-user-id', '7').send({ title: 'Cua an' });
   const res = await request(app).patch(\`/notes/\${created.body.id}\`).set('x-user-id', '8').send({ title: 'hack' });
   expect(res.status).toBe(404);
@@ -675,7 +675,7 @@ it('409 on a duplicate slug', async () =&gt; {
 
 <h3>Một thay đổi về cấu trúc: nhà máy tạo app</h3>
 <p>Một file gọi <code>app.listen()</code> ngay lúc import thì không thể được test import — vì import nó là khởi động luôn server. Hãy tách đôi:</p>
-<pre><code>// src/app.mjs — chỉ LẮP RÁP, không nghe cổng
+<pre><code class="language-javascript">// src/app.mjs — chỉ LẮP RÁP, không nghe cổng
 export function createApp({ service, auth }) {
   const app = express();
   app.use(express.json());
@@ -692,7 +692,7 @@ createApp({ service: realService, auth: jwtAuth }).listen(3000);</code></pre>
 <p>Nhà máy này cũng nhận các phụ thuộc qua tham số, và chính điều đó cho phép một file test chạy cả ứng dụng trên một service giả còn file test khác chạy nó trên cơ sở dữ liệu thật — mà không cần một biến môi trường nào.</p>
 
 <h3>Bài test HTTP đầu tiên</h3>
-<pre><code>import request from 'supertest';
+<pre><code class="language-javascript">import request from 'supertest';
 import { createApp, headerAuth } from '../src/app.mjs';
 
 it('trả 401 khi không có người dùng', async () =&gt; {
@@ -703,7 +703,7 @@ it('trả 401 khi không có người dùng', async () =&gt; {
 
 <h3>Bản hợp đồng, viết ra thành các khẳng định</h3>
 <p>Sáu bài test, mỗi bài ghim một luật mà chương 6, 8 và 9 đã chốt:</p>
-<pre><code>it('trả 422 và gọi tên trường bị sai', async () =&gt; {
+<pre><code class="language-javascript">it('trả 422 và gọi tên trường bị sai', async () =&gt; {
   const res = await request(app).post('/notes').set('x-user-id', '7').send({ title: '' });
   expect(res.status).toBe(422);
   expect(res.body.fields[0].path).toBe('title');       // hình dạng lỗi cũng là hợp đồng
@@ -730,7 +730,7 @@ it('trả 409 khi slug trùng', async () =&gt; {
 
 <h3>Bài test trả đủ tiền cho cả file</h3>
 <p>Bài này là test hồi quy cho một lỗ hổng có thật đã từng lên production của site này:</p>
-<pre><code>it('trả 404 khi ghi chú thuộc về người khác', async () =&gt; {
+<pre><code class="language-sql">it('trả 404 khi ghi chú thuộc về người khác', async () =&gt; {
   const created = await request(app).post('/notes').set('x-user-id', '7').send({ title: 'Cua an' });
   const res = await request(app).patch(\`/notes/\${created.body.id}\`).set('x-user-id', '8').send({ title: 'hack' });
   expect(res.status).toBe(404);
@@ -794,7 +794,7 @@ it('trả 409 khi slug trùng', async () =&gt; {
   số dòng = 1</div>
 <p>The unit suite is green. In production the same code answers <code>500</code> four times out of five, because the thrown error carries a PostgreSQL <code>code</code> but no <code>status</code>, so the error handler falls through to its default. The user sees "Internal Server Error" for something that is plainly a <code>409</code>.</p>
 <p>The fix belongs in the repository, where the driver's vocabulary is already in scope:</p>
-<pre><code>async insert(n) {
+<pre><code class="language-sql">async insert(n) {
   try {
     const r = await db.query('INSERT INTO notes (title, slug, body, author_id) VALUES ($1,$2,$3,$4) RETURNING *', […]);
     return r.rows[0];
@@ -818,7 +818,7 @@ code = 22001 | value too long for type character varying(200)</div>
 <p>Tests that share a table interfere with each other. The three real options:</p>
 
 <h4>1. Transaction and rollback — the fastest correct answer</h4>
-<pre><code>beforeAll(async () =&gt; { pool = new pg.Pool({ connectionString: URL, max: 4 }); client = await pool.connect(); });
+<pre><code class="language-typescript">beforeAll(async () =&gt; { pool = new pg.Pool({ connectionString: URL, max: 4 }); client = await pool.connect(); });
 afterAll(async () =&gt; { client.release(); await pool.end(); });
 
 beforeEach(async () =&gt; {
@@ -838,7 +838,7 @@ AssertionError: expected 80 to be 20</div>
 <p>Each file truncates the table the others are mid-way through filling. Not flaky — <em>reliably</em> broken, 10 out of 10.</p>
 
 <h4>3. A schema per worker — parallel and correct</h4>
-<pre><code>const SCHEMA = 'test_w1';                       // một schema cho mỗi file test
+<pre><code class="language-sql">const SCHEMA = 'test_w1';                       // một schema cho mỗi file test
 beforeAll(async () =&gt; {
   await pool.query(\`DROP SCHEMA IF EXISTS \${SCHEMA} CASCADE\`);
   await pool.query(\`CREATE SCHEMA \${SCHEMA}\`);
@@ -913,7 +913,7 @@ AssertionError: expected 1 to be +0</div>
   số dòng = 1</div>
 <p>Bộ test đơn vị xanh lè. Còn trên production thì cũng đoạn code ấy trả <code>500</code> bốn lần trên năm, vì lỗi được ném ra có mang <code>code</code> của PostgreSQL nhưng không có <code>status</code>, nên bộ xử lý lỗi rơi xuống nhánh mặc định. Người dùng nhìn thấy "Internal Server Error" cho một chuyện rõ ràng là <code>409</code>.</p>
 <p>Chỗ để sửa là ở tầng repository, nơi từ vựng của driver vốn đã nằm trong tầm với:</p>
-<pre><code>async insert(n) {
+<pre><code class="language-sql">async insert(n) {
   try {
     const r = await db.query('INSERT INTO notes (title, slug, body, author_id) VALUES ($1,$2,$3,$4) RETURNING *', […]);
     return r.rows[0];
@@ -937,7 +937,7 @@ code = 22001 | value too long for type character varying(200)</div>
 <p>Các bài test dùng chung một cái bảng thì giẫm chân nhau. Ba lựa chọn thực tế:</p>
 
 <h4>1. Transaction rồi rollback — đáp án đúng và nhanh nhất</h4>
-<pre><code>beforeAll(async () =&gt; { pool = new pg.Pool({ connectionString: URL, max: 4 }); client = await pool.connect(); });
+<pre><code class="language-typescript">beforeAll(async () =&gt; { pool = new pg.Pool({ connectionString: URL, max: 4 }); client = await pool.connect(); });
 afterAll(async () =&gt; { client.release(); await pool.end(); });
 
 beforeEach(async () =&gt; {
@@ -957,7 +957,7 @@ AssertionError: expected 80 to be 20</div>
 <p>Mỗi file xoá sạch cái bảng mà các file kia đang đổ dữ liệu vào dở dang. Không phải chập chờn — mà là hỏng <em>một cách chắc chắn</em>, 10 trên 10.</p>
 
 <h4>3. Mỗi worker một schema — vừa song song vừa đúng</h4>
-<pre><code>const SCHEMA = 'test_w1';                       // một schema cho mỗi file test
+<pre><code class="language-sql">const SCHEMA = 'test_w1';                       // một schema cho mỗi file test
 beforeAll(async () =&gt; {
   await pool.query(\`DROP SCHEMA IF EXISTS \${SCHEMA} CASCADE\`);
   await pool.query(\`CREATE SCHEMA \${SCHEMA}\`);
@@ -1031,7 +1031,7 @@ AssertionError: expected 1 to be +0</div>
 
 <h3>A privilege escalation that survives 100% coverage</h3>
 <p>Here is the whole authorization rule for editing a note:</p>
-<pre><code>export function canEdit(user, note) {
+<pre><code class="language-javascript">export function canEdit(user, note) {
   if (!user) return false;
   if (user.role === 'ADMIN') return true;
   return note.authorId === user.id || user.role === 'EDITOR';   // ← dòng 15
@@ -1075,7 +1075,7 @@ All files          |   83.33 |    70.83 |   79.16 |   84.61 |
   <div class="kv"><span class="k">Non-deterministic concurrency</span><span class="v">the same 23505 race: it appears 0 times in 5 with a cold pool, 4 times in 5 once the connections are warm (lesson 14.4)</span></div>
 </div>
 <p>A flaky test is worse than no test. It trains the team to re-run CI instead of reading it, and once that habit exists a <em>real</em> failure gets re-run too. Two tools for hunting one down:</p>
-<pre><code># 1. Chạy lặp — chập chờn theo xác suất thì lộ ra ở tần suất
+<pre><code class="language-bash"># 1. Chạy lặp — chập chờn theo xác suất thì lộ ra ở tần suất
 for i in $(seq 1 10); do npx vitest run --config vitest.flaky.mjs; done
 # → PASS=0 FAIL=10 : not flaky, reliably broken
 # → PASS=7 FAIL=3  : that is genuinely flaky — go looking for shared state
@@ -1098,7 +1098,7 @@ $ (lần 2)
 <h3>Running it somewhere that is not your laptop</h3>
 <p>The value of CI is not that it runs the tests — it is that it runs them on a machine with none of your local state: no leftover rows, no <code>node_modules</code> from three branches ago, no environment variable you exported in October and forgot.</p>
 <p>Here is the workflow this site actually uses, step by step, from <code>.github/workflows/ci-lint.yml</code>:</p>
-<pre><code>on:
+<pre><code class="language-typescript">on:
   pull_request: { branches: [main] }
   push:
     branches: [main]
@@ -1159,7 +1159,7 @@ success  …  1m49s</div>
 
 <h3>Một lỗ leo thang quyền sống sót qua độ phủ 100%</h3>
 <p>Đây là toàn bộ luật phân quyền cho việc sửa một ghi chú:</p>
-<pre><code>export function canEdit(user, note) {
+<pre><code class="language-javascript">export function canEdit(user, note) {
   if (!user) return false;
   if (user.role === 'ADMIN') return true;
   return note.authorId === user.id || user.role === 'EDITOR';   // ← dòng 15
@@ -1203,7 +1203,7 @@ All files          |   83.33 |    70.83 |   79.16 |   84.61 |
   <div class="kv"><span class="k">Tương tranh không tất định</span><span class="v">cùng cuộc đua 23505: hiện ra 0/5 lần khi pool còn lạnh, 4/5 khi kết nối đã ấm (bài 14.4)</span></div>
 </div>
 <p>Một bài test chập chờn còn tệ hơn không có test. Nó huấn luyện cả nhóm phản xạ bấm chạy lại CI thay vì đọc CI, và một khi thói quen đó hình thành thì một lần hỏng <em>thật</em> cũng bị bấm chạy lại. Hai công cụ để đi săn:</p>
-<pre><code># 1. Chạy lặp — chập chờn theo xác suất thì lộ ra ở tần suất
+<pre><code class="language-bash"># 1. Chạy lặp — chập chờn theo xác suất thì lộ ra ở tần suất
 for i in $(seq 1 10); do npx vitest run --config vitest.flaky.mjs; done
 # → PASS=0 FAIL=10 : không phải chập chờn, mà là hỏng chắc chắn
 # → PASS=7 FAIL=3  : cái này mới đúng là chập chờn, hãy đi tìm trạng thái dùng chung
@@ -1226,7 +1226,7 @@ $ (lần 2)
 <h3>Chạy nó ở một nơi không phải máy của bạn</h3>
 <p>Giá trị của CI không nằm ở chỗ nó chạy test — mà ở chỗ nó chạy test trên một cái máy không mang theo chút trạng thái cục bộ nào của bạn: không có dòng dữ liệu sót lại, không có <code>node_modules</code> từ ba nhánh trước, không có biến môi trường bạn export từ tháng Mười rồi quên mất.</p>
 <p>Đây là workflow mà site này thật sự đang dùng, từng bước một, trích từ <code>.github/workflows/ci-lint.yml</code>:</p>
-<pre><code>on:
+<pre><code class="language-typescript">on:
   pull_request: { branches: [main] }
   push:
     branches: [main]

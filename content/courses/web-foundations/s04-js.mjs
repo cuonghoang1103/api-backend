@@ -67,7 +67,7 @@ ${gallery('wf-js1', [
 <p class="lead">JavaScript is the language that makes web pages <em>do</em> things. The first skill is storing data: a <strong>variable</strong> gives a name to a value so you can use and change it later. Everything else builds on this.</p>
 
 <h3>Declaring variables: const first, let when it changes</h3>
-<pre><code>const name = "Lan";      // a value that will not be reassigned
+<pre><code class="language-javascript">const name = "Lan";      // a value that will not be reassigned
 let score = 0;           // a value you intend to change
 score = score + 10;      // now 10
 
@@ -81,7 +81,7 @@ const total = 5;
 </div>
 
 <h3>The data types you will meet first</h3>
-<pre><code>const text    = "Hello";      // string  — text, in quotes
+<pre><code class="language-javascript">const text    = "Hello";      // string  — text, in quotes
 const age     = 25;           // number  — integers and decimals, one type
 const isOpen  = true;         // boolean — true or false
 const nothing = null;         // null    — an intentional "no value"
@@ -90,7 +90,7 @@ console.log(typeof text);     // "string"  — typeof tells you the type</code><
 <p>Unlike many languages, JavaScript has a <strong>single number type</strong> — no separate int and float. And a variable can even change type (though it is cleaner not to).</p>
 
 <h3>Working with strings</h3>
-<pre><code>const first = "Nguyen";
+<pre><code class="language-javascript">const first = "Nguyen";
 const last  = "Lan";
 const full  = first + " " + last;   // "Nguyen Lan"  — + joins strings
 
@@ -108,7 +108,7 @@ console.log(hi.length);             // 11  — strings know their length</code><
 <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Never var in new code</span><span class="lz-d">It ignores block scope, so a <code>var</code> declared inside an <code>if</code> leaks to the whole function. It exists for compatibility with code from before 2015.</span></div>
 <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">const is not "frozen"</span><span class="lz-d">It locks the <em>name</em>, not the value. <code>const a = []</code> then <code>a.push(1)</code> is perfectly legal — you changed the array, not which array <code>a</code> refers to.</span></div>
 </div>
-<pre><code>const user = { name: 'An' };
+<pre><code class="language-javascript">const user = { name: 'An' };
 user.name = 'Binh';        // fine — mutating the object
 user = { name: 'Chi' };    // TypeError: Assignment to constant variable.</code></pre>
 <div class="pitfall"><p><strong>Trap — <code>==</code> converts types before comparing, and the rules are not memorable.</strong> <code>'' == 0</code> is true, <code>'0' == 0</code> is true, but <code>'' == '0'</code> is false; <code>null == undefined</code> is true while <code>null == 0</code> is false. Nobody reasons about this correctly under pressure, and the bugs it causes are quiet — a form field that is empty passes a check for zero, and a total comes out wrong three functions later. Use <code>===</code> everywhere: it compares without converting, so the answer matches what you read on the page. The only common use for <code>==</code> is <code>x == null</code>, which deliberately catches both <code>null</code> and <code>undefined</code>.</p></div>
@@ -121,7 +121,7 @@ user = { name: 'Chi' };    // TypeError: Assignment to constant variable.</code>
 <p class="lead">JavaScript là ngôn ngữ khiến trang web <em>làm</em> được việc. Kỹ năng đầu tiên là lưu dữ liệu: một <strong>biến (variable)</strong> đặt tên cho một giá trị để bạn dùng và đổi nó về sau. Mọi thứ khác đều dựng trên điều này.</p>
 
 <h3>Khai báo biến: const trước, let khi cần đổi</h3>
-<pre><code>const name = "Lan";      // một giá trị sẽ không bị gán lại
+<pre><code class="language-javascript">const name = "Lan";      // một giá trị sẽ không bị gán lại
 let score = 0;           // một giá trị bạn định thay đổi
 score = score + 10;      // giờ là 10
 
@@ -135,7 +135,7 @@ const total = 5;
 </div>
 
 <h3>Các kiểu dữ liệu bạn gặp đầu tiên</h3>
-<pre><code>const text    = "Hello";      // string  — chữ, trong dấu nháy
+<pre><code class="language-javascript">const text    = "Hello";      // string  — chữ, trong dấu nháy
 const age     = 25;           // number  — số nguyên và số thập phân, chung một kiểu
 const isOpen  = true;         // boolean — true hoặc false
 const nothing = null;         // null    — cố ý "không có giá trị"
@@ -144,7 +144,7 @@ console.log(typeof text);     // "string"  — typeof cho biết kiểu</code></
 <p>Khác nhiều ngôn ngữ, JavaScript chỉ có <strong>một kiểu số duy nhất</strong> — không tách int và float riêng. Và một biến thậm chí có thể đổi kiểu (dù giữ nguyên kiểu thì sạch hơn).</p>
 
 <h3>Làm việc với chuỗi (string)</h3>
-<pre><code>const first = "Nguyen";
+<pre><code class="language-javascript">const first = "Nguyen";
 const last  = "Lan";
 const full  = first + " " + last;   // "Nguyen Lan"  — dấu + nối chuỗi
 
@@ -162,7 +162,7 @@ console.log(hi.length);             // 11  — chuỗi biết độ dài của m
 <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Đừng bao giờ dùng var trong mã mới</span><span class="lz-d">Nó bỏ qua phạm vi khối, nên một <code>var</code> khai trong một <code>if</code> rò ra cả hàm. Nó tồn tại để tương thích với mã từ trước 2015.</span></div>
 <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">const không có nghĩa là "đóng băng"</span><span class="lz-d">Nó khoá cái <em>tên</em>, không khoá giá trị. <code>const a = []</code> rồi <code>a.push(1)</code> hoàn toàn hợp lệ — bạn đổi cái mảng, chứ không đổi việc <code>a</code> trỏ vào mảng nào.</span></div>
 </div>
-<pre><code>const user = { name: 'An' };
+<pre><code class="language-javascript">const user = { name: 'An' };
 user.name = 'Bình';        // được — đang sửa object
 user = { name: 'Chi' };    // TypeError: Assignment to constant variable.</code></pre>
 <div class="pitfall"><p><strong>Bẫy — <code>==</code> chuyển đổi kiểu trước khi so, và luật của nó thì không nhớ nổi.</strong> <code>'' == 0</code> là đúng, <code>'0' == 0</code> là đúng, nhưng <code>'' == '0'</code> lại sai; <code>null == undefined</code> là đúng còn <code>null == 0</code> là sai. Chẳng ai suy luận đúng chuyện này khi đang gấp, và lỗi nó gây ra thì lặng lẽ — một ô nhập để trống lọt qua một phép kiểm số không, rồi một con số tổng sai đi ở ba hàm sau. Hãy dùng <code>===</code> ở mọi nơi: nó so mà không chuyển đổi, nên đáp án khớp với thứ bạn đọc trên trang. Chỗ dùng <code>==</code> hợp lý duy nhất hay gặp là <code>x == null</code>, vốn cố tình bắt cả <code>null</code> lẫn <code>undefined</code>.</p></div>
@@ -194,13 +194,13 @@ user = { name: 'Chi' };    // TypeError: Assignment to constant variable.</code>
 <p class="pitfall"><strong>Always use === and !==, never == and !=.</strong> Loose equality silently converts types, giving surprises like <code>"5" == 5</code> being <code>true</code> and <code>0 == ""</code> being <code>true</code>. Strict equality compares value <em>and</em> type — predictable. Make it a habit from day one.</p>
 
 <h3>Logical operators</h3>
-<pre><code>const age = 20;
+<pre><code class="language-javascript">const age = 20;
 age &gt;= 18 &amp;&amp; age &lt; 65    // AND: both must be true  → true
 isWeekend || isHoliday   // OR: at least one true
 !isOpen                  // NOT: flips true/false</code></pre>
 
 <h3>if / else if / else</h3>
-<pre><code>const score = 72;
+<pre><code class="language-javascript">const score = 72;
 if (score &gt;= 80) {
   console.log("Distinction");
 } else if (score &gt;= 50) {
@@ -209,10 +209,10 @@ if (score &gt;= 80) {
   console.log("Retake");
 }</code></pre>
 <p>For a quick either/or, the <strong>ternary operator</strong> is a one-line if/else:</p>
-<pre><code>const status = age &gt;= 18 ? "adult" : "minor";</code></pre>
+<pre><code class="language-javascript">const status = age &gt;= 18 ? "adult" : "minor";</code></pre>
 
 <h3>Loops — repeat without copy-paste</h3>
-<pre><code>// for: when you know how many times
+<pre><code class="language-javascript">// for: when you know how many times
 for (let i = 0; i &lt; 3; i++) {
   console.log(i);        // 0, then 1, then 2
 }
@@ -255,13 +255,13 @@ for (const fruit of fruits) {
 <p class="pitfall"><strong>Luôn dùng === và !==, đừng bao giờ == và !=.</strong> Bằng lỏng lẻo âm thầm chuyển kiểu, gây bất ngờ như <code>"5" == 5</code> ra <code>true</code> và <code>0 == ""</code> ra <code>true</code>. Bằng nghiêm ngặt so cả giá trị <em>lẫn</em> kiểu — dễ đoán. Hãy thành thói quen ngay từ ngày đầu.</p>
 
 <h3>Toán tử logic</h3>
-<pre><code>const age = 20;
+<pre><code class="language-javascript">const age = 20;
 age &gt;= 18 &amp;&amp; age &lt; 65    // VÀ: cả hai phải đúng  → true
 isWeekend || isHoliday   // HOẶC: ít nhất một cái đúng
 !isOpen                  // KHÔNG: đảo true/false</code></pre>
 
 <h3>if / else if / else</h3>
-<pre><code>const score = 72;
+<pre><code class="language-javascript">const score = 72;
 if (score &gt;= 80) {
   console.log("Giỏi");
 } else if (score &gt;= 50) {
@@ -270,10 +270,10 @@ if (score &gt;= 80) {
   console.log("Học lại");
 }</code></pre>
 <p>Cho một lựa chọn nhanh hai nhánh, <strong>toán tử ba ngôi (ternary)</strong> là if/else một dòng:</p>
-<pre><code>const status = age &gt;= 18 ? "người lớn" : "trẻ vị thành niên";</code></pre>
+<pre><code class="language-javascript">const status = age &gt;= 18 ? "người lớn" : "trẻ vị thành niên";</code></pre>
 
 <h3>Vòng lặp — lặp mà không sao chép-dán</h3>
-<pre><code>// for: khi bạn biết lặp bao nhiêu lần
+<pre><code class="language-javascript">// for: khi bạn biết lặp bao nhiêu lần
 for (let i = 0; i &lt; 3; i++) {
   console.log(i);        // 0, rồi 1, rồi 2
 }
@@ -319,7 +319,7 @@ for (const fruit of fruits) {
 <p class="lead">Instead of repeating the same steps, you wrap them in a <strong>function</strong> — give it a name, feed it inputs (parameters), and get back a result (return value). Functions are the building blocks of every program; you will write thousands.</p>
 
 <h3>Declaring and calling</h3>
-<pre><code>function add(a, b) {     // a and b are parameters (inputs)
+<pre><code class="language-javascript">function add(a, b) {     // a and b are parameters (inputs)
   return a + b;          // return sends a value back
 }
 
@@ -332,7 +332,7 @@ console.log(sum);        // 5</code></pre>
 </div>
 
 <h3>Arrow functions — the modern short form</h3>
-<pre><code>const add = (a, b) =&gt; a + b;         // one expression: auto-returns it
+<pre><code class="language-javascript">const add = (a, b) =&gt; a + b;         // one expression: auto-returns it
 const square = n =&gt; n * n;           // one parameter: parentheses optional
 const greet = name =&gt; {              // a block needs an explicit return
   const msg = "Hi " + name;
@@ -341,14 +341,14 @@ const greet = name =&gt; {              // a block needs an explicit return
 <p>Arrow functions are everywhere in modern JavaScript, especially with array methods (next lesson) and in React. Learn to read both forms — they mean the same thing.</p>
 
 <h3>Default parameters</h3>
-<pre><code>function greet(name = "friend") {
+<pre><code class="language-javascript">function greet(name = "friend") {
   return "Hello, " + name;
 }
 greet();          // "Hello, friend"  — used the default
 greet("Lan");     // "Hello, Lan"</code></pre>
 
 <h3>Scope — where a variable is visible</h3>
-<pre><code>const globalMsg = "seen everywhere";
+<pre><code class="language-javascript">const globalMsg = "seen everywhere";
 
 function demo() {
   const localMsg = "only inside demo";
@@ -374,7 +374,7 @@ demo();
 <p class="lead">Thay vì lặp lại cùng các bước, bạn gói chúng trong một <strong>hàm (function)</strong> — đặt tên, đưa vào đầu vào (tham số), và nhận lại kết quả (giá trị trả về). Hàm là viên gạch của mọi chương trình; bạn sẽ viết hàng nghìn cái.</p>
 
 <h3>Khai báo và gọi</h3>
-<pre><code>function add(a, b) {     // a và b là tham số (đầu vào)
+<pre><code class="language-javascript">function add(a, b) {     // a và b là tham số (đầu vào)
   return a + b;          // return gửi một giá trị trở lại
 }
 
@@ -387,7 +387,7 @@ console.log(sum);        // 5</code></pre>
 </div>
 
 <h3>Hàm mũi tên (arrow) — dạng ngắn hiện đại</h3>
-<pre><code>const add = (a, b) =&gt; a + b;         // một biểu thức: tự động trả về nó
+<pre><code class="language-javascript">const add = (a, b) =&gt; a + b;         // một biểu thức: tự động trả về nó
 const square = n =&gt; n * n;           // một tham số: ngoặc tuỳ chọn
 const greet = name =&gt; {              // một khối cần return tường minh
   const msg = "Hi " + name;
@@ -396,14 +396,14 @@ const greet = name =&gt; {              // một khối cần return tường mi
 <p>Hàm mũi tên có mặt khắp nơi trong JavaScript hiện đại, nhất là với các phương thức mảng (bài kế) và trong React. Hãy đọc được cả hai dạng — chúng cùng một ý nghĩa.</p>
 
 <h3>Tham số mặc định</h3>
-<pre><code>function greet(name = "bạn") {
+<pre><code class="language-javascript">function greet(name = "bạn") {
   return "Hello, " + name;
 }
 greet();          // "Hello, bạn"  — dùng giá trị mặc định
 greet("Lan");     // "Hello, Lan"</code></pre>
 
 <h3>Phạm vi (scope) — nơi một biến nhìn thấy được</h3>
-<pre><code>const globalMsg = "thấy ở mọi nơi";
+<pre><code class="language-javascript">const globalMsg = "thấy ở mọi nơi";
 
 function demo() {
   const localMsg = "chỉ trong demo";
@@ -440,13 +440,13 @@ demo();
 <p class="lead">Almost all real data is a list of things, or a thing with named fields. <strong>Arrays</strong> and <strong>objects</strong> are those two shapes — and the API response from any backend (including your future Node.js server) is exactly arrays of objects.</p>
 
 <h3>Arrays — ordered lists</h3>
-<pre><code>const scores = [90, 72, 85];
+<pre><code class="language-javascript">const scores = [90, 72, 85];
 scores[0];          // 90    — index starts at 0
 scores.length;      // 3
 scores.push(60);    // add to the end → [90, 72, 85, 60]</code></pre>
 
 <h3>The four array methods you will use forever</h3>
-<pre><code>const nums = [1, 2, 3, 4];
+<pre><code class="language-javascript">const nums = [1, 2, 3, 4];
 
 nums.forEach(n =&gt; console.log(n));      // do something with each (no new array)
 nums.map(n =&gt; n * 2);                   // [2, 4, 6, 8]   — transform each
@@ -461,7 +461,7 @@ nums.reduce((sum, n) =&gt; sum + n, 0);    // 10            — boil down to one
 <p>These pair perfectly with arrow functions — and they are the exact tools you will use in React to turn a list of data into a list of UI elements.</p>
 
 <h3>Objects — labelled data</h3>
-<pre><code>const user = {
+<pre><code class="language-javascript">const user = {
   name: "Lan",
   age: 25,
   isAdmin: false,
@@ -473,7 +473,7 @@ user.email;             // undefined    — a missing property is not an error
 user.city = "Hanoi";    // add a new property</code></pre>
 
 <h3>The shape you will see everywhere: an array of objects</h3>
-<pre><code>const users = [
+<pre><code class="language-javascript">const users = [
   { name: "Lan", age: 25 },
   { name: "Minh", age: 30 },
 ];
@@ -496,13 +496,13 @@ const names = users.map(u =&gt; u.name);   // ["Lan", "Minh"]</code></pre>
 <p class="lead">Gần như mọi dữ liệu thật là một danh sách các thứ, hoặc một thứ có các trường có tên. <strong>Mảng (array)</strong> và <strong>đối tượng (object)</strong> là hai hình dạng đó — và phản hồi API từ bất kỳ backend nào (kể cả server Node.js tương lai của bạn) chính là các mảng đối tượng.</p>
 
 <h3>Mảng — danh sách có thứ tự</h3>
-<pre><code>const scores = [90, 72, 85];
+<pre><code class="language-javascript">const scores = [90, 72, 85];
 scores[0];          // 90    — chỉ số bắt đầu từ 0
 scores.length;      // 3
 scores.push(60);    // thêm vào cuối → [90, 72, 85, 60]</code></pre>
 
 <h3>Bốn phương thức mảng bạn dùng mãi mãi</h3>
-<pre><code>const nums = [1, 2, 3, 4];
+<pre><code class="language-javascript">const nums = [1, 2, 3, 4];
 
 nums.forEach(n =&gt; console.log(n));      // làm gì đó với từng cái (không tạo mảng mới)
 nums.map(n =&gt; n * 2);                   // [2, 4, 6, 8]   — biến đổi từng cái
@@ -517,7 +517,7 @@ nums.reduce((sum, n) =&gt; sum + n, 0);    // 10            — gộp lại thà
 <p>Chúng ghép hoàn hảo với hàm mũi tên — và đúng là công cụ bạn sẽ dùng trong React để biến một danh sách dữ liệu thành một danh sách phần tử giao diện.</p>
 
 <h3>Đối tượng — dữ liệu có nhãn</h3>
-<pre><code>const user = {
+<pre><code class="language-javascript">const user = {
   name: "Lan",
   age: 25,
   isAdmin: false,
@@ -529,7 +529,7 @@ user.email;             // undefined    — thuộc tính thiếu không phải 
 user.city = "Hanoi";    // thêm một thuộc tính mới</code></pre>
 
 <h3>Hình dạng bạn thấy khắp nơi: một mảng các đối tượng</h3>
-<pre><code>const users = [
+<pre><code class="language-javascript">const users = [
   { name: "Lan", age: 25 },
   { name: "Minh", age: 30 },
 ];
@@ -563,14 +563,14 @@ const names = users.map(u =&gt; u.name);   // ["Lan", "Minh"]</code></pre>
 <p class="lead">When the browser loads your HTML, it builds a live tree of objects called the <strong>DOM</strong> (Document Object Model). JavaScript reads and changes that tree — and the page updates instantly. This is the moment your static pages come alive.</p>
 
 <h3>Selecting an element</h3>
-<pre><code>// querySelector takes any CSS selector (from Chapter 3!)
+<pre><code class="language-javascript">// querySelector takes any CSS selector (from Chapter 3!)
 const title = document.querySelector("h1");
 const btn   = document.querySelector("#save");     // by id
 const cards = document.querySelectorAll(".card");  // all matches (a list)</code></pre>
 <p>Notice you already know the selectors — <code>#save</code>, <code>.card</code> — from CSS. The DOM reuses them.</p>
 
 <h3>Reading and changing content</h3>
-<pre><code>const title = document.querySelector("h1");
+<pre><code class="language-javascript">const title = document.querySelector("h1");
 title.textContent = "Updated!";            // change the text
 title.classList.add("highlight");          // add a CSS class
 const input = document.querySelector("#name");
@@ -578,14 +578,14 @@ console.log(input.value);                   // read what the user typed</code></
 
 <h3>Events — reacting to the user</h3>
 <p>An <strong>event</strong> is something that happens: a click, a keypress, a form submit. You attach a function (a "handler") that runs when it fires:</p>
-<pre><code>const btn = document.querySelector("#save");
+<pre><code class="language-javascript">const btn = document.querySelector("#save");
 
 btn.addEventListener("click", () =&gt; {
   console.log("Button clicked!");
 });</code></pre>
 
 <h3>Putting it together: a live counter</h3>
-<pre><code>&lt;button id="inc"&gt;Add one&lt;/button&gt;
+<pre><code class="language-html">&lt;button id="inc"&gt;Add one&lt;/button&gt;
 &lt;span id="count"&gt;0&lt;/span&gt;
 
 &lt;script&gt;
@@ -617,14 +617,14 @@ btn.addEventListener("click", () =&gt; {
 <p class="lead">Khi trình duyệt tải HTML, nó dựng một cây đối tượng sống gọi là <strong>DOM</strong> (Document Object Model — mô hình đối tượng tài liệu). JavaScript đọc và thay đổi cây đó — và trang cập nhật tức thì. Đây là khoảnh khắc trang tĩnh của bạn trở nên sống động.</p>
 
 <h3>Chọn một phần tử</h3>
-<pre><code>// querySelector nhận bất kỳ bộ chọn CSS nào (từ Chương 3!)
+<pre><code class="language-javascript">// querySelector nhận bất kỳ bộ chọn CSS nào (từ Chương 3!)
 const title = document.querySelector("h1");
 const btn   = document.querySelector("#save");     // theo id
 const cards = document.querySelectorAll(".card");  // tất cả cái khớp (một danh sách)</code></pre>
 <p>Để ý bạn đã biết các bộ chọn — <code>#save</code>, <code>.card</code> — từ CSS. DOM tái dùng chúng.</p>
 
 <h3>Đọc và đổi nội dung</h3>
-<pre><code>const title = document.querySelector("h1");
+<pre><code class="language-javascript">const title = document.querySelector("h1");
 title.textContent = "Đã cập nhật!";        // đổi chữ
 title.classList.add("highlight");          // thêm một class CSS
 const input = document.querySelector("#name");
@@ -632,14 +632,14 @@ console.log(input.value);                   // đọc thứ người dùng đã 
 
 <h3>Sự kiện — phản ứng với người dùng</h3>
 <p>Một <strong>sự kiện (event)</strong> là một điều xảy ra: một cú bấm, một phím gõ, một form gửi đi. Bạn gắn một hàm ("bộ xử lý") chạy khi nó kích hoạt:</p>
-<pre><code>const btn = document.querySelector("#save");
+<pre><code class="language-javascript">const btn = document.querySelector("#save");
 
 btn.addEventListener("click", () =&gt; {
   console.log("Đã bấm nút!");
 });</code></pre>
 
 <h3>Ghép lại: một bộ đếm sống</h3>
-<pre><code>&lt;button id="inc"&gt;Thêm một&lt;/button&gt;
+<pre><code class="language-html">&lt;button id="inc"&gt;Thêm một&lt;/button&gt;
 &lt;span id="count"&gt;0&lt;/span&gt;
 
 &lt;script&gt;

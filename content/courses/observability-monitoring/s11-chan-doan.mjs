@@ -74,7 +74,7 @@ curl -s https://cuongthai.com/health          # this one checks Postgres
 docker ps --format '{{.Names}}\\t{{.Status}}'</code></pre>
 
 <h3>What each answer eliminates</h3>
-<pre><code>curl fails at TLS        → certificate. Not your code.
+<pre><code class="language-bash">curl fails at TLS        → certificate. Not your code.
                            Layers 1-4 (lesson 8.5).
 
 curl returns 404         → stale build. Not your logic.
@@ -207,7 +207,7 @@ curl -s https://cuongthai.com/health          # cái này có kiểm Postgres
 docker ps --format '{{.Names}}\\t{{.Status}}'</code></pre>
 
 <h3>Mỗi câu trả lời loại bỏ được cái gì</h3>
-<pre><code>curl hỏng ở TLS          → chứng chỉ. Không phải mã của bạn.
+<pre><code class="language-bash">curl hỏng ở TLS          → chứng chỉ. Không phải mã của bạn.
                            Tầng 1-4 (bài 8.5).
 
 curl trả 404             → bản dựng cũ. Không phải lô-gíc của bạn.
@@ -651,7 +651,7 @@ không thành một cảnh báo.</code></pre>
 <p class="lead">This project keeps a condensed log of past failures. Four of them are worth reading against the seven shapes, because each one took hours and each one had a signature that would have named it in minutes.</p>
 
 <h3>Incident 1 — the stale build (2026-07-02)</h3>
-<pre><code>SYMPTOMS as reported:
+<pre><code class="language-bash">SYMPTOMS as reported:
   "GIF picker dead, chats disappearing." Survived a
   re-login, so it looked like neither auth nor session.
   Two apparently unrelated features, broken together.
@@ -749,7 +749,7 @@ WHAT THEY BUILT: a libc ↔ engine check BEFORE pushing,
   old image) instead of a 15-minute rebuild.</code></pre>
 
 <h3>Incident 4 — the enum rename that broke production seeding (2026-08-08)</h3>
-<pre><code>SYMPTOMS:
+<pre><code class="language-bash">SYMPTOMS:
   A ContentType enum value renamed CODE → CODE_REVIEW.
   Passed the ENTIRE pre-push checklist. Broke the seed
   on production.
@@ -809,7 +809,7 @@ WHAT THEY BUILT: tsconfig.seed.json plus
 <p class="lead">Dự án này có giữ một nhật ký cô đọng về những cú hỏng đã qua. Bốn cái trong số đó đáng đọc lại bằng bảy hình dạng, vì mỗi cái đều tốn hàng giờ và mỗi cái đều có một chữ ký lẽ ra đã gọi tên được nó trong vài phút.</p>
 
 <h3>Sự cố 1 — bản dựng cũ (02/07/2026)</h3>
-<pre><code>TRIỆU CHỨNG như được báo:
+<pre><code class="language-bash">TRIỆU CHỨNG như được báo:
   "Trình chọn GIF chết, các cuộc trò chuyện biến mất." Sống sót
   qua một lần đăng nhập lại, nên trông như không phải xác thực
   mà cũng không phải phiên. Hai tính năng có vẻ chẳng liên quan,

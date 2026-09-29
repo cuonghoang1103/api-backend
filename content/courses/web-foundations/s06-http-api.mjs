@@ -380,7 +380,7 @@ DELETE /users/42     → xoá user 42</code></pre>
 
 <h3>Crossing the wire: stringify and parse</h3>
 <p>Objects live in memory, but only text can travel over HTTP. Two functions bridge the gap:</p>
-<pre><code>const user = { name: "Lan", age: 25 };
+<pre><code class="language-javascript">const user = { name: "Lan", age: 25 };
 
 const text = JSON.stringify(user);   // object → JSON text (to send)
 // '{"name":"Lan","age":25}'
@@ -430,7 +430,7 @@ back.name;                           // "Lan"</code></pre>
 
 <h3>Băng qua đường dây: stringify và parse</h3>
 <p>Đối tượng sống trong bộ nhớ, nhưng chỉ chữ mới đi qua HTTP được. Hai hàm bắc cầu:</p>
-<pre><code>const user = { name: "Lan", age: 25 };
+<pre><code class="language-javascript">const user = { name: "Lan", age: 25 };
 
 const text = JSON.stringify(user);   // đối tượng → chữ JSON (để gửi)
 // '{"name":"Lan","age":25}'

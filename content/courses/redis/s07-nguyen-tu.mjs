@@ -107,7 +107,7 @@ QUEUED
   <div class="lz-layer"><span class="lz-lname">MULTI is an isolation guarantee</span><span class="lz-lnote">Nothing runs between your commands. It costs a little (the queue, the extra round trips for <code>MULTI</code> and <code>EXEC</code>) and buys exactly that. Use it when interleaving would be a correctness bug.</span></div>
   <div class="lz-layer"><span class="lz-lname">You almost always want both</span><span class="lz-lnote">Every real client library pipelines the whole <code>MULTI … EXEC</code> block automatically, so it costs one round trip in total. When you write <code>redis.multi().set(…).expire(…).exec()</code>, you are getting isolation <em>and</em> the network saving at once.</span></div>
 </div>
-<pre><code><span class="tok-comment">// Isolation matters here: the key must never exist without its TTL</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Isolation matters here: the key must never exist without its TTL</span>
 await redis.multi()
   .hSet(&#96;sess:\${sid}&#96;, { user: String(uid) })
   .expire(&#96;sess:\${sid}&#96;, 1800)
@@ -242,7 +242,7 @@ QUEUED
   <div class="lz-layer"><span class="lz-lname">MULTI là một bảo đảm về cô lập</span><span class="lz-lnote">Không gì chạy xen giữa các lệnh của bạn. Nó tốn một chút (cái hàng đợi, thêm vòng đi-về cho <code>MULTI</code> và <code>EXEC</code>) và mua về đúng điều đó. Hãy dùng nó khi việc xen kẽ sẽ là một lỗi về tính đúng đắn.</span></div>
   <div class="lz-layer"><span class="lz-lname">Bạn gần như luôn muốn cả hai</span><span class="lz-lnote">Mọi thư viện khách thật đều tự động pipeline cả khối <code>MULTI … EXEC</code>, nên tổng cộng nó tốn một vòng đi-về. Khi bạn viết <code>redis.multi().set(…).expire(…).exec()</code> là bạn đang lấy được cả sự cô lập <em>lẫn</em> phần tiết kiệm mạng cùng lúc.</span></div>
 </div>
-<pre><code><span class="tok-comment">// Cô lập quan trọng ở đây: khoá không bao giờ được tồn tại mà thiếu TTL</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Cô lập quan trọng ở đây: khoá không bao giờ được tồn tại mà thiếu TTL</span>
 await redis.multi()
   .hSet(&#96;sess:\${sid}&#96;, { user: String(uid) })
   .expire(&#96;sess:\${sid}&#96;, 1800)
@@ -341,7 +341,7 @@ OK
 <div class="callout"><strong><code>EXEC</code> returned <code>nil</code>, and that is the entire feature.</strong> A nil reply from <code>EXEC</code> — distinct from an empty array — means "one of the keys you were watching changed, so I did not run your block". Nothing was written. Your job is to notice that nil, go back to the top, read the current value and try again. This is compare-and-swap: optimistic, lock-free, and it costs nothing at all when there is no contention, because in the common case nothing interfered and <code>EXEC</code> just runs.</div>
 
 <h3>The retry loop, written properly</h3>
-<pre><code>async function decrementIfPositive(key, maxRetries = 5) {
+<pre><code class="language-javascript">async function decrementIfPositive(key, maxRetries = 5) {
   for (let attempt = 0; attempt &lt; maxRetries; attempt++) {
     await redis.watch(key);                       <span class="tok-comment">// 1. start watching</span>
 
@@ -394,7 +394,7 @@ QUEUED
 </div>
 
 <h3>A real one: transfer between two balances</h3>
-<pre><code>async function transfer(from, to, amount) {
+<pre><code class="language-javascript">async function transfer(from, to, amount) {
   for (let i = 0; i &lt; 5; i++) {
     await redis.watch([from, to]);
     const [a, b] = (await redis.mGet([from, to])).map(Number);
@@ -414,7 +414,7 @@ QUEUED
 <div class="callout ok"><strong>Note what this buys and what it costs.</strong> It buys correctness: no interleaving can produce a state where money was created or destroyed, because if either balance moved between the read and the write, the whole block is discarded and recomputed from fresh values. It costs two extra round trips per attempt (<code>WATCH</code> and the read) and a retry loop you have to get right. Compare with the Lua version in Lesson 7.3, which is one round trip, no retries, and no possibility of an abort — at the price of writing the logic in a different language and shipping it to the server.</div>
 
 <h3>Where optimistic concurrency stops working</h3>
-<pre><code><span class="tok-comment"># 50 clients all decrementing the same key with WATCH, 1000 ops each</span>
+<pre><code class="language-bash"><span class="tok-comment"># 50 clients all decrementing the same key with WATCH, 1000 ops each</span>
 node bench-watch.js --clients 50 --ops 1000 | tail -5
 <span class="tok-comment"># The same workload as a single Lua script</span>
 node bench-lua.js --clients 50 --ops 1000 | tail -3</code></pre>
@@ -483,7 +483,7 @@ OK
 <div class="callout"><strong><code>EXEC</code> trả về <code>nil</code>, và đó là toàn bộ tính năng.</strong> Một câu trả lời nil từ <code>EXEC</code> — khác với một mảng rỗng — nghĩa là "một trong những khoá anh đang canh đã đổi, nên tôi không chạy khối của anh". Không có gì được ghi. Việc của bạn là nhận ra cái nil đó, quay lên đầu, đọc giá trị hiện tại và thử lại. Đây là so-sánh-rồi-tráo: lạc quan, không khoá, và nó chẳng tốn gì cả khi không có tranh chấp, vì trong trường hợp thường gặp thì không ai xen vào và <code>EXEC</code> cứ thế chạy.</div>
 
 <h3>Vòng lặp thử lại, viết cho đúng</h3>
-<pre><code>async function decrementIfPositive(key, maxRetries = 5) {
+<pre><code class="language-javascript">async function decrementIfPositive(key, maxRetries = 5) {
   for (let attempt = 0; attempt &lt; maxRetries; attempt++) {
     await redis.watch(key);                       <span class="tok-comment">// 1. bắt đầu canh</span>
 
@@ -536,7 +536,7 @@ QUEUED
 </div>
 
 <h3>Một ví dụ thật: chuyển tiền giữa hai số dư</h3>
-<pre><code>async function transfer(from, to, amount) {
+<pre><code class="language-javascript">async function transfer(from, to, amount) {
   for (let i = 0; i &lt; 5; i++) {
     await redis.watch([from, to]);
     const [a, b] = (await redis.mGet([from, to])).map(Number);
@@ -556,7 +556,7 @@ QUEUED
 <div class="callout ok"><strong>Hãy để ý nó mua về cái gì và tốn cái gì.</strong> Nó mua về tính đúng đắn: không cách xen kẽ nào tạo ra được một trạng thái mà tiền bị sinh ra hay biến mất, vì nếu một trong hai số dư nhúc nhích giữa lượt đọc và lượt ghi thì cả khối bị vứt đi và tính lại từ những giá trị tươi. Nó tốn thêm hai vòng đi-về cho mỗi lần thử (<code>WATCH</code> và lượt đọc) cùng một vòng lặp thử lại mà bạn phải viết cho đúng. Hãy so với bản Lua ở Bài 7.3: một vòng đi-về, không thử lại, và không có khả năng bị huỷ — với cái giá là viết logic bằng một ngôn ngữ khác rồi gửi nó lên máy chủ.</div>
 
 <h3>Chỗ mà kiểm soát đồng thời lạc quan ngừng chạy được</h3>
-<pre><code><span class="tok-comment"># 50 khách cùng giảm một khoá bằng WATCH, mỗi khách 1000 phép</span>
+<pre><code class="language-bash"><span class="tok-comment"># 50 khách cùng giảm một khoá bằng WATCH, mỗi khách 1000 phép</span>
 node bench-watch.js --clients 50 --ops 1000 | tail -5
 <span class="tok-comment"># Cùng khối lượng đó nhưng gói trong một script Lua</span>
 node bench-lua.js --clients 50 --ops 1000 | tail -3</code></pre>
@@ -597,7 +597,7 @@ LUA:   wall 4.1s · 12195 ops/s</div>
 <p class="lead">A Lua script runs inside Redis, as one atomic unit, with the full command set available and real control flow. It is the answer to every "read a value, decide, then write" problem that <code>MULTI</code> cannot express and <code>WATCH</code> handles badly. It is also a loaded gun, because while your script runs, the entire server runs nothing else.</p>
 
 <h3>The shape of a script</h3>
-<pre><code>redis-cli SET stock 5
+<pre><code class="language-typescript">redis-cli SET stock 5
 redis-cli EVAL "
   local current = tonumber(redis.call('GET', KEYS[1]) or 0)
   if current &lt;= 0 then
@@ -662,7 +662,7 @@ CUSTOM
 </div>
 
 <h3>call vs pcall, and SCRIPT LOAD</h3>
-<pre><code><span class="tok-comment"># redis.call aborts the whole script on error; pcall returns an error table</span>
+<pre><code class="language-bash"><span class="tok-comment"># redis.call aborts the whole script on error; pcall returns an error table</span>
 redis-cli SET str "hello" &gt;/dev/null
 redis-cli EVAL "redis.call('INCR', KEYS[1]); return 'never reached'" 1 str
 redis-cli EVAL "
@@ -690,7 +690,7 @@ c1e5c0e9a1a94e5bd1e0b1ba64ee0cbbb84d4064
 </div>
 
 <h3>Three scripts worth stealing</h3>
-<pre><code><span class="tok-comment">-- 1 · Clamped decrement: the cart bug from Lesson 5.5, finally fixable</span>
+<pre><code class="language-typescript"><span class="tok-comment">-- 1 · Clamped decrement: the cart bug from Lesson 5.5, finally fixable</span>
 local n = redis.call('HINCRBY', KEYS[1], ARGV[1], tonumber(ARGV[2]))
 if n &lt;= 0 then
   redis.call('HDEL', KEYS[1], ARGV[1])
@@ -759,7 +759,7 @@ OK
 <p class="lead">Một script Lua chạy bên trong Redis, như một khối nguyên tử duy nhất, với trọn bộ lệnh dùng được và có luồng điều khiển thật. Nó là câu trả lời cho mọi bài toán "đọc một giá trị, quyết định, rồi ghi" mà <code>MULTI</code> không diễn đạt nổi và <code>WATCH</code> xử lý dở. Nó cũng là một khẩu súng đã lên đạn, vì trong lúc script của bạn chạy thì cả máy chủ không chạy gì khác.</p>
 
 <h3>Hình dáng của một script</h3>
-<pre><code>redis-cli SET stock 5
+<pre><code class="language-typescript">redis-cli SET stock 5
 redis-cli EVAL "
   local current = tonumber(redis.call('GET', KEYS[1]) or 0)
   if current &lt;= 0 then
@@ -824,7 +824,7 @@ CUSTOM
 </div>
 
 <h3>call với pcall, và SCRIPT LOAD</h3>
-<pre><code><span class="tok-comment"># redis.call huỷ cả script khi có lỗi; pcall trả về một bảng lỗi</span>
+<pre><code class="language-bash"><span class="tok-comment"># redis.call huỷ cả script khi có lỗi; pcall trả về một bảng lỗi</span>
 redis-cli SET str "hello" &gt;/dev/null
 redis-cli EVAL "redis.call('INCR', KEYS[1]); return 'never reached'" 1 str
 redis-cli EVAL "
@@ -852,7 +852,7 @@ c1e5c0e9a1a94e5bd1e0b1ba64ee0cbbb84d4064
 </div>
 
 <h3>Ba script đáng chép về dùng</h3>
-<pre><code><span class="tok-comment">-- 1 · Giảm có kẹp: cái lỗi giỏ hàng ở Bài 5.5, cuối cùng cũng chữa được</span>
+<pre><code class="language-typescript"><span class="tok-comment">-- 1 · Giảm có kẹp: cái lỗi giỏ hàng ở Bài 5.5, cuối cùng cũng chữa được</span>
 local n = redis.call('HINCRBY', KEYS[1], ARGV[1], tonumber(ARGV[2]))
 if n &lt;= 0 then
   redis.call('HDEL', KEYS[1], ARGV[1])
@@ -930,7 +930,7 @@ OK
 <p class="lead">Lua scripts have one structural weakness: they are ephemeral. The script cache is memory, so a restart, a failover or a <code>SCRIPT FLUSH</code> empties it, and every client must be ready to re-send the body. Redis 7.0 added Functions — named, versioned libraries that are part of the dataset itself.</p>
 
 <h3>A library, not a script</h3>
-<pre><code>cat &gt; /tmp/mylib.lua &lt;&lt;'LUA'
+<pre><code class="language-typescript">cat &gt; /tmp/mylib.lua &lt;&lt;'LUA'
 #!lua name=inventory
 
 local function reserve(keys, args)
@@ -1034,7 +1034,7 @@ OK</div>
 </div>
 
 <h3>Which to use</h3>
-<pre><code><span class="tok-comment">// EVAL — the library handles SHA caching and NOSCRIPT for you</span>
+<pre><code class="language-javascript"><span class="tok-comment">// EVAL — the library handles SHA caching and NOSCRIPT for you</span>
 const RESERVE = &#96;local stock = tonumber(redis.call('GET', KEYS[1]) or 0) …&#96;;
 await redis.eval(RESERVE, { keys: ['stock:4201'], arguments: ['3'] });
 
@@ -1066,7 +1066,7 @@ await redis.fCall('reserve', { keys: ['stock:4201', 'reserved:4201'],
 <p class="lead">Script Lua có một điểm yếu mang tính cấu trúc: chúng phù du. Kho script nằm trong bộ nhớ, nên một lần khởi động lại, một lần chuyển đổi hay một lệnh <code>SCRIPT FLUSH</code> là nó rỗng, và mọi thư viện khách phải sẵn sàng gửi lại thân script. Redis 7.0 thêm Functions — những thư viện hàm có tên, có phiên bản, và là một phần của chính tập dữ liệu.</p>
 
 <h3>Một thư viện, không phải một script</h3>
-<pre><code>cat &gt; /tmp/mylib.lua &lt;&lt;'LUA'
+<pre><code class="language-typescript">cat &gt; /tmp/mylib.lua &lt;&lt;'LUA'
 #!lua name=inventory
 
 local function reserve(keys, args)
@@ -1170,7 +1170,7 @@ OK</div>
 </div>
 
 <h3>Nên dùng cái nào</h3>
-<pre><code><span class="tok-comment">// EVAL — thư viện khách lo hộ bạn phần nhớ đệm SHA và lỗi NOSCRIPT</span>
+<pre><code class="language-javascript"><span class="tok-comment">// EVAL — thư viện khách lo hộ bạn phần nhớ đệm SHA và lỗi NOSCRIPT</span>
 const RESERVE = &#96;local stock = tonumber(redis.call('GET', KEYS[1]) or 0) …&#96;;
 await redis.eval(RESERVE, { keys: ['stock:4201'], arguments: ['3'] });
 
@@ -1219,7 +1219,7 @@ await redis.fCall('reserve', { keys: ['stock:4201', 'reserved:4201'],
 </div>
 
 <h3>The single-instance lock, written correctly</h3>
-<pre><code>const RELEASE = &#96;
+<pre><code class="language-javascript">const RELEASE = &#96;
   if redis.call('GET', KEYS[1]) == ARGV[1] then
     return redis.call('DEL', KEYS[1])
   end
@@ -1261,7 +1261,7 @@ t=14   …resumes, believes it holds the lock…
 <div class="callout warn"><strong>No amount of Redis configuration fixes this, and it is not a Redis bug.</strong> A lock with a timeout assumes the holder notices time passing, and a process that is paused — by a stop-the-world garbage collection, a hypervisor suspending the VM, a container throttled to zero CPU, a machine that swapped to disk — does not notice anything. It wakes up believing it still holds a lock that expired eight seconds ago. Every distributed lock built on timeouts has this property. It is the core of Martin Kleppmann's 2016 critique "How to do distributed locking", and antirez's reply is worth reading beside it: the disagreement is less about the mechanism than about what people believe they are buying.</div>
 
 <h3>Fencing tokens: the actual fix</h3>
-<pre><code><span class="tok-comment">// Every acquire gets a monotonically increasing number</span>
+<pre><code class="language-sql"><span class="tok-comment">// Every acquire gets a monotonically increasing number</span>
 const fence = await redis.incr('lock:x:fence');
 const got   = await redis.set('lock:x', token, { NX: true, PX: 10000 });
 
@@ -1293,7 +1293,7 @@ redis-cli -p 6381 SET lock:x tok NX PX 10000</code></pre>
 </div>
 
 <h3>Extending a lock you still need</h3>
-<pre><code>const EXTEND = &#96;
+<pre><code class="language-javascript">const EXTEND = &#96;
   if redis.call('GET', KEYS[1]) == ARGV[1] then
     return redis.call('PEXPIRE', KEYS[1], ARGV[2])
   end
@@ -1337,7 +1337,7 @@ const timer = setInterval(async () =&gt; {
 </div>
 
 <h3>Khoá một máy, viết cho đúng</h3>
-<pre><code>const RELEASE = &#96;
+<pre><code class="language-javascript">const RELEASE = &#96;
   if redis.call('GET', KEYS[1]) == ARGV[1] then
     return redis.call('DEL', KEYS[1])
   end
@@ -1379,7 +1379,7 @@ t=14   …tỉnh lại, tin rằng mình vẫn giữ khoá…
 <div class="callout warn"><strong>Không cấu hình Redis nào chữa được chuyện này, và nó không phải lỗi của Redis.</strong> Một cái khoá có hạn giờ giả định rằng kẻ giữ nó nhận ra thời gian đang trôi, còn một tiến trình bị tạm dừng — bởi một nhịp dọn rác dừng-cả-thế-giới, bởi một trình ảo hoá treo cái máy ảo lại, bởi một container bị bóp về 0 CPU, bởi một máy vừa tráo ra đĩa — thì chẳng nhận ra gì cả. Nó tỉnh dậy và tin rằng mình vẫn giữ một cái khoá đã hết hạn tám giây trước. Mọi khoá phân tán xây trên hạn giờ đều có tính chất này. Đó là cốt lõi bài phê bình năm 2016 của Martin Kleppmann, "How to do distributed locking", và bài đáp lại của antirez đáng đọc kèm bên cạnh: chỗ bất đồng nằm ở việc người ta tin mình đang mua cái gì, hơn là nằm ở cơ chế.</div>
 
 <h3>Mã hàng rào: cách chữa thật sự</h3>
-<pre><code><span class="tok-comment">// Mỗi lần giành khoá đều nhận một con số tăng đơn điệu</span>
+<pre><code class="language-sql"><span class="tok-comment">// Mỗi lần giành khoá đều nhận một con số tăng đơn điệu</span>
 const fence = await redis.incr('lock:x:fence');
 const got   = await redis.set('lock:x', token, { NX: true, PX: 10000 });
 
@@ -1411,7 +1411,7 @@ redis-cli -p 6381 SET lock:x tok NX PX 10000</code></pre>
 </div>
 
 <h3>Kéo dài một cái khoá bạn vẫn còn cần</h3>
-<pre><code>const EXTEND = &#96;
+<pre><code class="language-javascript">const EXTEND = &#96;
   if redis.call('GET', KEYS[1]) == ARGV[1] then
     return redis.call('PEXPIRE', KEYS[1], ARGV[2])
   end

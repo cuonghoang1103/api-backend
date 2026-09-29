@@ -336,7 +336,7 @@ const c5 = doc('ite303c-5-1-security-cybercrime', '5.1 — Cybersecurity & compu
 <li><strong>Disruption</strong> — denial-of-service attacks.</li>
 </ul>
 <h3>Hats &amp; responsible disclosure</h3>
-<pre><code>White hat - tests WITH permission, reports to fix. Ethical.
+<pre><code class="language-bash">White hat - tests WITH permission, reports to fix. Ethical.
 Grey hat  - probes WITHOUT permission, then discloses.
             Good intent, but crosses a legal/ethical line.
 Black hat - attacks for personal gain. Unethical &amp; criminal.

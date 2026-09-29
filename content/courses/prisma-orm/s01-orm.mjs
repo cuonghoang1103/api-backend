@@ -46,7 +46,7 @@ export default {
 
 <h3>Identity, shown</h3>
 <p>The first mismatch is the one people meet without realising:</p>
-<pre><code>const a = await prisma.user.findUnique({ where: { id: 1 } });
+<pre><code class="language-javascript">const a = await prisma.user.findUnique({ where: { id: 1 } });
 const b = await prisma.user.findUnique({ where: { id: 1 } });
 
 console.log(a === b);
@@ -69,7 +69,7 @@ Nguyen Van An</div>
 
 <h3>N+1, the mismatch's most expensive consequence</h3>
 <p>Here it is written by hand, the way every developer writes it once:</p>
-<pre><code><span class="tok-comment">// The naive version — 1 query for posts, then 1 per post for its author</span>
+<pre><code class="language-javascript"><span class="tok-comment">// The naive version — 1 query for posts, then 1 per post for its author</span>
 const posts = await prisma.post.findMany({ take: 200 });
 
 for (const p of posts) {
@@ -82,7 +82,7 @@ prisma:query SELECT ... FROM "public"."users" WHERE "public"."users"."id" = $1 L
 ... (198 more)
 
 real    0m4.812s</div>
-<pre><code><span class="tok-comment">// The Prisma version — the relation is part of the request</span>
+<pre><code class="language-javascript"><span class="tok-comment">// The Prisma version — the relation is part of the request</span>
 const posts = await prisma.post.findMany({ take: 200, include: { author: true } });
 
 for (const p of posts) {
@@ -98,7 +98,7 @@ real    0m0.061s</div>
 </div>
 
 <h3>Granularity: where do you put the address?</h3>
-<pre><code><span class="tok-comment">// Option A — flatten it. Simple, queryable, and the fields multiply.</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Option A — flatten it. Simple, queryable, and the fields multiply.</span>
 model User {
   id            Int     @id @default(autoincrement())
   email         String  @unique
@@ -135,7 +135,7 @@ model User {
 
 <h3>Inheritance: the one Prisma refuses to solve</h3>
 <p>SQL has no subclasses, and Prisma — unlike Hibernate or Django — offers no inheritance mapping strategy. This is not an omission; it is a position. You model it explicitly, and the CuongThai codebase itself uses the first pattern:</p>
-<pre><code><span class="tok-comment">// Single-table inheritance: one table, a discriminator enum, nullable specifics</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Single-table inheritance: one table, a discriminator enum, nullable specifics</span>
 enum ContentType {
   VLOG
   ARTICLE
@@ -205,7 +205,7 @@ model Content {
 
 <h3>Bản sắc, nhìn bằng mã</h3>
 <p>Lệch đầu tiên là cái người ta gặp mà không nhận ra:</p>
-<pre><code>const a = await prisma.user.findUnique({ where: { id: 1 } });
+<pre><code class="language-javascript">const a = await prisma.user.findUnique({ where: { id: 1 } });
 const b = await prisma.user.findUnique({ where: { id: 1 } });
 
 console.log(a === b);
@@ -228,7 +228,7 @@ Nguyen Van An</div>
 
 <h3>N+1, hậu quả đắt nhất của chuyện lệch này</h3>
 <p>Đây là bản viết tay, đúng cách mà mọi lập trình viên viết ra một lần trong đời:</p>
-<pre><code><span class="tok-comment">// Bản ngây thơ — 1 câu cho các bài viết, rồi mỗi bài 1 câu cho tác giả</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Bản ngây thơ — 1 câu cho các bài viết, rồi mỗi bài 1 câu cho tác giả</span>
 const posts = await prisma.post.findMany({ take: 200 });
 
 for (const p of posts) {
@@ -241,7 +241,7 @@ prisma:query SELECT ... FROM "public"."users" WHERE "public"."users"."id" = $1 L
 ... (198 câu nữa)
 
 real    0m4.812s</div>
-<pre><code><span class="tok-comment">// Bản Prisma — quan hệ là một phần của yêu cầu</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Bản Prisma — quan hệ là một phần của yêu cầu</span>
 const posts = await prisma.post.findMany({ take: 200, include: { author: true } });
 
 for (const p of posts) {
@@ -257,7 +257,7 @@ real    0m0.061s</div>
 </div>
 
 <h3>Độ hạt: nhét cái địa chỉ vào đâu?</h3>
-<pre><code><span class="tok-comment">// Cách A — trải phẳng. Đơn giản, truy vấn được, và số trường thì nở ra.</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Cách A — trải phẳng. Đơn giản, truy vấn được, và số trường thì nở ra.</span>
 model User {
   id            Int     @id @default(autoincrement())
   email         String  @unique
@@ -294,7 +294,7 @@ model User {
 
 <h3>Kế thừa: chỗ Prisma từ chối giải</h3>
 <p>SQL không có lớp con, và Prisma — khác Hibernate hay Django — không cung cấp chiến lược ánh xạ kế thừa nào. Đây không phải thiếu sót; đây là một lập trường. Bạn mô hình hoá nó tường minh, và chính kho mã của CuongThai dùng mẫu thứ nhất:</p>
-<pre><code><span class="tok-comment">// Kế thừa một bảng: một bảng, một enum phân biệt, các trường riêng cho phép null</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Kế thừa một bảng: một bảng, một enum phân biệt, các trường riêng cho phép null</span>
 enum ContentType {
   VLOG
   ARTICLE
@@ -352,7 +352,7 @@ model Content {
 <p class="lead">Most people treat the generated client as a black box. It is not — it is ordinary TypeScript sitting in your <code>node_modules</code>, and twenty minutes reading it removes most of the mystery from the rest of this course. This lesson opens it, names the four kinds of thing inside, and shows the three commands that make it readable.</p>
 
 <h3>Where it lives, and how big it is</h3>
-<pre><code>ls -la node_modules/.prisma/client/
+<pre><code class="language-bash">ls -la node_modules/.prisma/client/
 du -sh node_modules/.prisma/client/</code></pre>
 <div class="out">total 42184
 -rw-r--r--  1 student student      384 Aug 23 04:49 default.d.ts
@@ -383,11 +383,11 @@ du -sh node_modules/.prisma/client/</code></pre>
 </div>
 
 <h3>Read it yourself — three useful commands</h3>
-<pre><code><span class="tok-comment"># 1 — the model interface, exactly as generated</span>
+<pre><code class="language-bash"><span class="tok-comment"># 1 — the model interface, exactly as generated</span>
 sed -n '/^export type User = /,/^}/p' node_modules/.prisma/client/index.d.ts</code></pre>
 <div class="out">export type User = $Result.DefaultSelection&lt;Prisma.$UserPayload&gt;</div>
 <p>Not what you expected, probably. The public <code>User</code> type is itself computed — <code>DefaultSelection</code> of a payload — because Prisma needs one type that is both "the plain row" and "the thing a payload narrows from". Follow it one level down:</p>
-<pre><code>grep -n -A 20 'export type \$UserPayload' node_modules/.prisma/client/index.d.ts | head -30</code></pre>
+<pre><code class="language-bash">grep -n -A 20 'export type \$UserPayload' node_modules/.prisma/client/index.d.ts | head -30</code></pre>
 <div class="out">1284:  export type $UserPayload&lt;ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs&gt; = {
 1285-    name: "User"
 1286-    objects: {
@@ -402,7 +402,7 @@ sed -n '/^export type User = /,/^}/p' node_modules/.prisma/client/index.d.ts</co
 1295-    composites: {}
 1296-  }</div>
 <p>There it is, in plain sight: <code>objects</code> holds the relations, <code>scalars</code> holds the columns, and the split between them is exactly the split between <code>include</code> and <code>select</code>. Every confusing type error you will ever get from Prisma is a mismatch in one of those two buckets.</p>
-<pre><code><span class="tok-comment"># 2 — every method available on a model delegate</span>
+<pre><code class="language-bash"><span class="tok-comment"># 2 — every method available on a model delegate</span>
 grep -oP '^\\s{4}\\K[a-zA-Z]+(?=&lt;)' node_modules/.prisma/client/index.d.ts \\
   | sort -u | head -20</code></pre>
 <div class="out">aggregate
@@ -421,7 +421,7 @@ groupBy
 update
 updateMany
 upsert</div>
-<pre><code><span class="tok-comment"># 3 — how many Args types one model costs you</span>
+<pre><code class="language-bash"><span class="tok-comment"># 3 — how many Args types one model costs you</span>
 grep -c 'export type User' node_modules/.prisma/client/index.d.ts
 grep -c 'export type Post' node_modules/.prisma/client/index.d.ts
 wc -l node_modules/.prisma/client/index.d.ts</code></pre>
@@ -437,7 +437,7 @@ wc -l node_modules/.prisma/client/index.d.ts</code></pre>
   <div class="lz-step"><span class="lz-k">+1 relation</span><span class="lz-t">The expensive one</span><span class="lz-d">Both models gain relation filters, nested create/update/upsert inputs, and ordering inputs referencing each other. A densely connected schema is where <code>index.d.ts</code> passes a megabyte.</span></div>
   <div class="lz-step"><span class="lz-k">Result</span><span class="lz-t">Editor lag</span><span class="lz-d">Hovering a query in a 200-model schema can take seconds, because <code>tsc</code> is evaluating deeply nested conditional types on demand. Real, and Chapter 8 lists the four mitigations that actually help.</span></div>
 </div>
-<pre><code><span class="tok-comment"># The CuongThai schema, measured — 118 migrations, dozens of models</span>
+<pre><code class="language-bash"><span class="tok-comment"># The CuongThai schema, measured — 118 migrations, dozens of models</span>
 wc -l prisma/schema.prisma
 grep -c '^model ' prisma/schema.prisma
 grep -c '^enum ' prisma/schema.prisma</code></pre>
@@ -451,11 +451,11 @@ grep -c '^enum ' prisma/schema.prisma</code></pre>
 
 <h3>Generating somewhere you can see</h3>
 <p>Since Prisma 6, generating into <code>node_modules</code> is discouraged and a custom <code>output</code> is the recommended default. It is also the best way to actually look at the code:</p>
-<pre><code>generator client {
+<pre><code class="language-typescript">generator client {
   provider = "prisma-client-js"
   output   = "../src/generated/prisma"
 }</code></pre>
-<pre><code>npx prisma generate
+<pre><code class="language-bash">npx prisma generate
 ls src/generated/prisma/</code></pre>
 <div class="out">✔ Generated Prisma Client (v6.7.0) to ./src/generated/prisma in 96ms
 
@@ -467,7 +467,7 @@ index.d.ts  index.js  libquery_engine-debian-openssl-3.0.x.count.node  package.j
 </div>
 
 <h3>The runtime is thinner than you think</h3>
-<pre><code>grep -n "class PrismaClient" -A 12 node_modules/.prisma/client/index.js | head -20</code></pre>
+<pre><code class="language-bash">grep -n "class PrismaClient" -A 12 node_modules/.prisma/client/index.js | head -20</code></pre>
 <div class="out">  const { PrismaClientKnownRequestError, ... } = require('./runtime/library.js')
   ...
   const config = {
@@ -498,7 +498,7 @@ index.d.ts  index.js  libquery_engine-debian-openssl-3.0.x.count.node  package.j
 <p class="lead">Phần lớn người dùng coi client sinh ra là một hộp đen. Nó không phải — nó là TypeScript bình thường nằm trong <code>node_modules</code> của bạn, và hai mươi phút đọc nó gỡ đi phần lớn phần huyền bí của cả khoá học này. Bài này mở nó ra, gọi tên bốn loại thứ bên trong, và chỉ ba câu lệnh khiến nó đọc được.</p>
 
 <h3>Nó nằm ở đâu, và to cỡ nào</h3>
-<pre><code>ls -la node_modules/.prisma/client/
+<pre><code class="language-bash">ls -la node_modules/.prisma/client/
 du -sh node_modules/.prisma/client/</code></pre>
 <div class="out">total 42184
 -rw-r--r--  1 student student      384 Aug 23 04:49 default.d.ts
@@ -529,11 +529,11 @@ du -sh node_modules/.prisma/client/</code></pre>
 </div>
 
 <h3>Tự đọc nó — ba câu lệnh hữu dụng</h3>
-<pre><code><span class="tok-comment"># 1 — interface của model, đúng như được sinh ra</span>
+<pre><code class="language-bash"><span class="tok-comment"># 1 — interface của model, đúng như được sinh ra</span>
 sed -n '/^export type User = /,/^}/p' node_modules/.prisma/client/index.d.ts</code></pre>
 <div class="out">export type User = $Result.DefaultSelection&lt;Prisma.$UserPayload&gt;</div>
 <p>Chắc không giống thứ bạn tưởng. Kiểu công khai <code>User</code> tự nó cũng là kiểu được tính ra — <code>DefaultSelection</code> của một payload — vì Prisma cần một kiểu vừa là "hàng thuần" vừa là "thứ mà payload thu hẹp từ đó". Đi xuống thêm một tầng:</p>
-<pre><code>grep -n -A 20 'export type \$UserPayload' node_modules/.prisma/client/index.d.ts | head -30</code></pre>
+<pre><code class="language-bash">grep -n -A 20 'export type \$UserPayload' node_modules/.prisma/client/index.d.ts | head -30</code></pre>
 <div class="out">1284:  export type $UserPayload&lt;ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs&gt; = {
 1285-    name: "User"
 1286-    objects: {
@@ -548,7 +548,7 @@ sed -n '/^export type User = /,/^}/p' node_modules/.prisma/client/index.d.ts</co
 1295-    composites: {}
 1296-  }</div>
 <p>Nó nằm ngay đó, không giấu giếm: <code>objects</code> giữ các quan hệ, <code>scalars</code> giữ các cột, và ranh giới giữa hai cái đúng bằng ranh giới giữa <code>include</code> và <code>select</code>. Mọi lỗi kiểu khó hiểu mà Prisma từng ném vào mặt bạn đều là một chỗ lệch trong một trong hai ngăn ấy.</p>
-<pre><code><span class="tok-comment"># 2 — mọi phương thức có trên một delegate của model</span>
+<pre><code class="language-bash"><span class="tok-comment"># 2 — mọi phương thức có trên một delegate của model</span>
 grep -oP '^\\s{4}\\K[a-zA-Z]+(?=&lt;)' node_modules/.prisma/client/index.d.ts \\
   | sort -u | head -20</code></pre>
 <div class="out">aggregate
@@ -567,7 +567,7 @@ groupBy
 update
 updateMany
 upsert</div>
-<pre><code><span class="tok-comment"># 3 — một model tốn của bạn bao nhiêu kiểu Args</span>
+<pre><code class="language-bash"><span class="tok-comment"># 3 — một model tốn của bạn bao nhiêu kiểu Args</span>
 grep -c 'export type User' node_modules/.prisma/client/index.d.ts
 grep -c 'export type Post' node_modules/.prisma/client/index.d.ts
 wc -l node_modules/.prisma/client/index.d.ts</code></pre>
@@ -583,7 +583,7 @@ wc -l node_modules/.prisma/client/index.d.ts</code></pre>
   <div class="lz-step"><span class="lz-k">+1 quan hệ</span><span class="lz-t">Cái đắt</span><span class="lz-d">Cả hai model đều mọc thêm bộ lọc theo quan hệ, các input create/update/upsert lồng nhau, và input sắp xếp tham chiếu lẫn nhau. Một lược đồ nối chằng chịt là nơi <code>index.d.ts</code> vượt một megabyte.</span></div>
   <div class="lz-step"><span class="lz-k">Kết quả</span><span class="lz-t">Trình soạn thảo ì</span><span class="lz-d">Rê chuột lên một câu truy vấn trong lược đồ 200 model có thể mất vài giây, vì <code>tsc</code> đang tính các kiểu điều kiện lồng sâu theo yêu cầu. Chuyện có thật, và Chương 8 liệt kê bốn cách giảm nhẹ thật sự có tác dụng.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Lược đồ của CuongThai, đo thật — 118 migration, hàng chục model</span>
+<pre><code class="language-bash"><span class="tok-comment"># Lược đồ của CuongThai, đo thật — 118 migration, hàng chục model</span>
 wc -l prisma/schema.prisma
 grep -c '^model ' prisma/schema.prisma
 grep -c '^enum ' prisma/schema.prisma</code></pre>
@@ -597,11 +597,11 @@ grep -c '^enum ' prisma/schema.prisma</code></pre>
 
 <h3>Sinh mã ra chỗ bạn nhìn thấy</h3>
 <p>Từ Prisma 6, sinh vào <code>node_modules</code> bị khuyến cáo không nên, và một <code>output</code> riêng là mặc định được khuyến nghị. Đó cũng là cách tốt nhất để thật sự nhìn vào mã:</p>
-<pre><code>generator client {
+<pre><code class="language-typescript">generator client {
   provider = "prisma-client-js"
   output   = "../src/generated/prisma"
 }</code></pre>
-<pre><code>npx prisma generate
+<pre><code class="language-bash">npx prisma generate
 ls src/generated/prisma/</code></pre>
 <div class="out">✔ Generated Prisma Client (v6.7.0) to ./src/generated/prisma in 96ms
 
@@ -613,7 +613,7 @@ index.d.ts  index.js  libquery_engine-debian-openssl-3.0.x.count.node  package.j
 </div>
 
 <h3>Phần chạy mỏng hơn bạn tưởng</h3>
-<pre><code>grep -n "class PrismaClient" -A 12 node_modules/.prisma/client/index.js | head -20</code></pre>
+<pre><code class="language-bash">grep -n "class PrismaClient" -A 12 node_modules/.prisma/client/index.js | head -20</code></pre>
 <div class="out">  const { PrismaClientKnownRequestError, ... } = require('./runtime/library.js')
   ...
   const config = {
@@ -664,7 +664,7 @@ index.d.ts  index.js  libquery_engine-debian-openssl-3.0.x.count.node  package.j
 </div>
 
 <h3>See both sides at once</h3>
-<pre><code>const prisma = new PrismaClient({ log: [{ emit: 'event', level: 'query' }] });
+<pre><code class="language-javascript">const prisma = new PrismaClient({ log: [{ emit: 'event', level: 'query' }] });
 
 prisma.$on('query', (e) =&gt; {
   console.log('SQL     :', e.query);
@@ -696,7 +696,7 @@ DURATION: 1 ms</div>
   <div class="lz-layer"><span class="lz-lname">Node-API library (the default in Prisma 3–5)</span><span class="lz-lnote"><code>libquery_engine-&lt;platform&gt;.count.node</code>, loaded into your Node process. No extra process, faster calls — and a hard dependency on the exact platform and libc it was built for. <strong>This is the layer behind the outage in the note below.</strong></span></div>
   <div class="lz-layer"><span class="lz-lname">Query compiler in WebAssembly (Prisma 6+)</span><span class="lz-lnote">No native binary at all: SQL is compiled in WASM and executed by an ordinary JavaScript driver via a <em>driver adapter</em>. Removes ~18 MB from the image and the whole class of platform-mismatch failures. Requires the adapter packages and, in 6.x, a preview flag.</span></div>
 </div>
-<pre><code><span class="tok-comment">// The WASM / driver-adapter shape — no engine binary anywhere</span>
+<pre><code class="language-javascript"><span class="tok-comment">// The WASM / driver-adapter shape — no engine binary anywhere</span>
 import { PrismaPg } from '@prisma/adapter-pg';
 import { PrismaClient } from '@prisma/client';
 
@@ -717,7 +717,7 @@ const prisma = new PrismaClient({ adapter });
 
 <h3>Reading the plan Prisma cannot show you</h3>
 <p>The engine will tell you the SQL and the duration. It will not tell you <em>why</em> a query was slow — that is PostgreSQL's job, and you ask it directly:</p>
-<pre><code><span class="tok-comment">-- Take the SQL from the log, substitute the params, and ask the planner</span>
+<pre><code class="language-typescript"><span class="tok-comment">-- Take the SQL from the log, substitute the params, and ask the planner</span>
 EXPLAIN ANALYZE
 SELECT "public"."posts".* FROM "public"."posts"
 WHERE ("public"."posts"."published" = true AND "public"."posts"."author_id" IN (1,3));</code></pre>
@@ -776,7 +776,7 @@ Execution Time: 18.501 ms</div>
 </div>
 
 <h3>Nhìn cả hai phía cùng lúc</h3>
-<pre><code>const prisma = new PrismaClient({ log: [{ emit: 'event', level: 'query' }] });
+<pre><code class="language-javascript">const prisma = new PrismaClient({ log: [{ emit: 'event', level: 'query' }] });
 
 prisma.$on('query', (e) =&gt; {
   console.log('SQL     :', e.query);
@@ -808,7 +808,7 @@ DURATION: 1 ms</div>
   <div class="lz-layer"><span class="lz-lname">Thư viện Node-API (mặc định ở Prisma 3–5)</span><span class="lz-lnote"><code>libquery_engine-&lt;nền tảng&gt;.count.node</code>, nạp thẳng vào tiến trình Node của bạn. Không thêm tiến trình, gọi nhanh hơn — và phụ thuộc cứng vào đúng nền tảng cùng libc mà nó được dựng cho. <strong>Đây chính là tầng đứng sau sự cố ở khối ghi chú bên dưới.</strong></span></div>
   <div class="lz-layer"><span class="lz-lname">Trình biên dịch truy vấn bằng WebAssembly (Prisma 6+)</span><span class="lz-lnote">Không còn nhị phân native nào: SQL được biên dịch trong WASM và thực thi bởi một trình điều khiển JavaScript bình thường qua một <em>driver adapter</em>. Bỏ đi ~18 MB khỏi ảnh và bỏ luôn cả lớp lỗi lệch nền tảng. Cần các gói adapter, và ở 6.x cần một cờ preview.</span></div>
 </div>
-<pre><code><span class="tok-comment">// Dáng của WASM / driver adapter — không có nhị phân engine ở đâu cả</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Dáng của WASM / driver adapter — không có nhị phân engine ở đâu cả</span>
 import { PrismaPg } from '@prisma/adapter-pg';
 import { PrismaClient } from '@prisma/client';
 
@@ -829,7 +829,7 @@ const prisma = new PrismaClient({ adapter });
 
 <h3>Đọc cái kế hoạch mà Prisma không chỉ cho bạn được</h3>
 <p>Engine sẽ nói cho bạn biết SQL và thời lượng. Nó không nói <em>vì sao</em> một câu truy vấn chậm — đó là việc của PostgreSQL, và bạn hỏi thẳng nó:</p>
-<pre><code><span class="tok-comment">-- Lấy SQL từ log, thay tham số vào, rồi hỏi bộ lập kế hoạch</span>
+<pre><code class="language-typescript"><span class="tok-comment">-- Lấy SQL từ log, thay tham số vào, rồi hỏi bộ lập kế hoạch</span>
 EXPLAIN ANALYZE
 SELECT "public"."posts".* FROM "public"."posts"
 WHERE ("public"."posts"."published" = true AND "public"."posts"."author_id" IN (1,3));</code></pre>
@@ -886,7 +886,7 @@ Execution Time: 18.501 ms</div>
 <p class="lead">Every Prisma schema opens with two blocks that most tutorials paste once and never mention again. They are worth ten minutes, because between them they control which database you talk to, how migrations find a scratch database, whether foreign keys exist at all, and which platform your engine is built for. Four of the settings in this lesson are ones people meet for the first time during an outage.</p>
 
 <h3><code>datasource</code> — one per schema, no more</h3>
-<pre><code>datasource db {
+<pre><code class="language-typescript">datasource db {
   provider          = "postgresql"
   url               = env("DATABASE_URL")
   directUrl         = env("DIRECT_URL")
@@ -916,7 +916,7 @@ Execution Time: 18.501 ms</div>
 </div>
 
 <h3><code>generator</code> — one or many</h3>
-<pre><code>generator client {
+<pre><code class="language-typescript">generator client {
   provider        = "prisma-client-js"
   output          = "../src/generated/prisma"
   binaryTargets   = ["native", "linux-musl-openssl-3.0.x"]
@@ -937,7 +937,7 @@ generator erd {
   <div class="kv"><span class="k"><code>previewFeatures</code></span><span class="v">Opt-in to unstable features. They can change or vanish between minor versions, so treat the list as something you review at every upgrade rather than set and forget.</span></div>
   <div class="kv"><span class="k"><code>engineType</code></span><span class="v"><code>"library"</code> (default, Node-API), <code>"binary"</code> (separate process), or <code>"client"</code> (WASM query compiler, no engine binary). Lesson 1.3 covers what each means in practice.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Proof that binaryTargets does what it says</span>
+<pre><code class="language-bash"><span class="tok-comment"># Proof that binaryTargets does what it says</span>
 ls node_modules/.prisma/client/*.node</code></pre>
 <div class="out">node_modules/.prisma/client/libquery_engine-debian-openssl-3.0.x.count.node
 node_modules/.prisma/client/libquery_engine-linux-musl-openssl-3.0.x.count.node</div>
@@ -955,7 +955,7 @@ node_modules/.prisma/client/libquery_engine-linux-musl-openssl-3.0.x.count.node<
 
 <h3>Where this is heading: <code>prisma.config.ts</code></h3>
 <p>Prisma 7 moves configuration out of the schema into a TypeScript file, which finally allows logic — reading a secret, choosing a URL per environment, registering an adapter:</p>
-<pre><code><span class="tok-comment">// prisma.config.ts — Prisma 7</span>
+<pre><code class="language-javascript"><span class="tok-comment">// prisma.config.ts — Prisma 7</span>
 import { defineConfig } from 'prisma/config';
 
 export default defineConfig({
@@ -975,7 +975,7 @@ export default defineConfig({
     user.prisma        <span class="tok-comment"># User, Role, Session</span>
     content.prisma     <span class="tok-comment"># Post, Comment, ContentType</span>
     billing.prisma     <span class="tok-comment"># Invoice, Payment</span></code></pre>
-<pre><code>npx prisma validate</code></pre>
+<pre><code class="language-bash">npx prisma validate</code></pre>
 <div class="out">Prisma schema loaded from prisma/schema
 The schema at prisma/schema is valid 🚀</div>
 <p>Models in one file reference models in another with no import statement — the folder is concatenated before parsing. The only rules are that exactly one file holds the <code>datasource</code> and <code>generator</code> blocks, and that model names stay globally unique.</p>
@@ -993,7 +993,7 @@ The schema at prisma/schema is valid 🚀</div>
 <p class="lead">Mọi lược đồ Prisma đều mở đầu bằng hai khối mà phần lớn hướng dẫn dán một lần rồi không nhắc lại. Chúng đáng mười phút, vì gộp lại chúng quyết định bạn nói chuyện với cơ sở dữ liệu nào, migration tìm cơ sở dữ liệu nháp ở đâu, khoá ngoại có tồn tại hay không, và engine của bạn được dựng cho nền tảng nào. Bốn thiết lập trong bài này là những thứ người ta gặp lần đầu ngay giữa một sự cố.</p>
 
 <h3><code>datasource</code> — mỗi lược đồ đúng một khối</h3>
-<pre><code>datasource db {
+<pre><code class="language-typescript">datasource db {
   provider          = "postgresql"
   url               = env("DATABASE_URL")
   directUrl         = env("DIRECT_URL")
@@ -1023,7 +1023,7 @@ The schema at prisma/schema is valid 🚀</div>
 </div>
 
 <h3><code>generator</code> — một hoặc nhiều</h3>
-<pre><code>generator client {
+<pre><code class="language-typescript">generator client {
   provider        = "prisma-client-js"
   output          = "../src/generated/prisma"
   binaryTargets   = ["native", "linux-musl-openssl-3.0.x"]
@@ -1044,7 +1044,7 @@ generator erd {
   <div class="kv"><span class="k"><code>previewFeatures</code></span><span class="v">Bật các tính năng chưa ổn định. Chúng có thể đổi hoặc biến mất giữa các bản minor, nên hãy coi danh sách này là thứ cần soát lại ở mỗi lần nâng cấp chứ không phải đặt xong rồi quên.</span></div>
   <div class="kv"><span class="k"><code>engineType</code></span><span class="v"><code>"library"</code> (mặc định, Node-API), <code>"binary"</code> (tiến trình riêng), hoặc <code>"client"</code> (trình biên dịch truy vấn WASM, không có nhị phân engine). Bài 1.3 nói mỗi cái nghĩa là gì trên thực tế.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Bằng chứng binaryTargets làm đúng thứ nó nói</span>
+<pre><code class="language-bash"><span class="tok-comment"># Bằng chứng binaryTargets làm đúng thứ nó nói</span>
 ls node_modules/.prisma/client/*.node</code></pre>
 <div class="out">node_modules/.prisma/client/libquery_engine-debian-openssl-3.0.x.count.node
 node_modules/.prisma/client/libquery_engine-linux-musl-openssl-3.0.x.count.node</div>
@@ -1062,7 +1062,7 @@ node_modules/.prisma/client/libquery_engine-linux-musl-openssl-3.0.x.count.node<
 
 <h3>Hướng đi tiếp: <code>prisma.config.ts</code></h3>
 <p>Prisma 7 dời phần cấu hình ra khỏi lược đồ, vào một tệp TypeScript, và nhờ vậy cuối cùng cũng viết được logic — đọc một bí mật, chọn URL theo môi trường, đăng ký một adapter:</p>
-<pre><code><span class="tok-comment">// prisma.config.ts — Prisma 7</span>
+<pre><code class="language-javascript"><span class="tok-comment">// prisma.config.ts — Prisma 7</span>
 import { defineConfig } from 'prisma/config';
 
 export default defineConfig({
@@ -1082,7 +1082,7 @@ export default defineConfig({
     user.prisma        <span class="tok-comment"># User, Role, Session</span>
     content.prisma     <span class="tok-comment"># Post, Comment, ContentType</span>
     billing.prisma     <span class="tok-comment"># Invoice, Payment</span></code></pre>
-<pre><code>npx prisma validate</code></pre>
+<pre><code class="language-bash">npx prisma validate</code></pre>
 <div class="out">Prisma schema loaded from prisma/schema
 The schema at prisma/schema is valid 🚀</div>
 <p>Model ở tệp này tham chiếu model ở tệp kia mà không cần câu lệnh import nào — cả thư mục được nối lại trước khi phân tích. Luật duy nhất là đúng một tệp giữ khối <code>datasource</code> và <code>generator</code>, và tên model phải duy nhất trên toàn cục.</p>
@@ -1122,7 +1122,7 @@ The schema at prisma/schema is valid 🚀</div>
 </div>
 
 <h3>Workflow 1 — <code>db push</code>: fast, and it will eat your data</h3>
-<pre><code><span class="tok-comment"># Add a required column to a table that already has rows</span>
+<pre><code class="language-bash"><span class="tok-comment"># Add a required column to a table that already has rows</span>
 npx prisma db push</code></pre>
 <div class="out">Environment variables loaded from .env
 Prisma schema loaded from prisma/schema.prisma
@@ -1141,7 +1141,7 @@ Datasource "db": PostgreSQL database "hocprisma", schema "public" at "localhost:
 </div>
 
 <h3>Workflow 2 — <code>migrate</code>: the one that goes to production</h3>
-<pre><code>npx prisma migrate dev --name them_slug</code></pre>
+<pre><code class="language-bash">npx prisma migrate dev --name them_slug</code></pre>
 <div class="out">Environment variables loaded from .env
 Prisma schema loaded from prisma/schema.prisma
 Datasource "db": PostgreSQL database "hocprisma", schema "public" at "localhost:5432"
@@ -1152,7 +1152,7 @@ Datasource "db": PostgreSQL database "hocprisma", schema "public" at "localhost:
 
 ? Are you sure you want to create and apply this migration? › (y/N)</div>
 <p>Same problem, different outcome: <code>migrate dev</code> writes the SQL to a file you can open and fix <em>before</em> it runs. That is the whole difference, and it is the entire reason to prefer it:</p>
-<pre><code><span class="tok-comment">-- prisma/migrations/20260823051140_them_slug/migration.sql</span>
+<pre><code class="language-sql"><span class="tok-comment">-- prisma/migrations/20260823051140_them_slug/migration.sql</span>
 <span class="tok-comment">-- Generated by Prisma; then edited by a human, which is the point</span>
 
 <span class="tok-comment">-- 1. Add it nullable, so existing rows survive</span>
@@ -1170,7 +1170,7 @@ CREATE UNIQUE INDEX "posts_slug_key" ON "posts"("slug");</code></pre>
   <div class="lz-step"><span class="lz-k">migrate status</span><span class="lz-t">Diagnosis</span><span class="lz-d">What is applied, what is pending, what failed. The first thing to run when a deploy misbehaves, and safe on any database.</span></div>
   <div class="lz-step"><span class="lz-k">migrate diff</span><span class="lz-t">The power tool</span><span class="lz-d">Prints the SQL between any two states — schema versus database, migrations versus database. The basis of drift detection and of hand-writing a migration, both in Chapter 6.</span></div>
 </div>
-<pre><code><span class="tok-comment"># The one command that answers "is my database what my schema says?"</span>
+<pre><code class="language-bash"><span class="tok-comment"># The one command that answers "is my database what my schema says?"</span>
 npx prisma migrate diff \\
   --from-schema-datasource prisma/schema.prisma \\
   --to-schema-datamodel prisma/schema.prisma \\
@@ -1184,7 +1184,7 @@ npx prisma migrate diff \\
 </div>
 
 <h3>Workflow 3 — <code>db pull</code>: adopting what exists</h3>
-<pre><code>npx prisma db pull --print | head -30</code></pre>
+<pre><code class="language-bash">npx prisma db pull --print | head -30</code></pre>
 <div class="out">model posts {
   id         Int       @id @default(autoincrement())
   title      String
@@ -1198,7 +1198,7 @@ npx prisma migrate diff \\
   @@index([author_id])
 }</div>
 <p>Functional, and clearly machine-written: table names not model names, <code>created_at</code> not <code>createdAt</code>, and a relation field called <code>users</code>. Introspection cannot invent your naming conventions — but it does <strong>preserve</strong> them once you set them:</p>
-<pre><code><span class="tok-comment">// You rename by hand, adding @map / @@map</span>
+<pre><code class="language-typescript"><span class="tok-comment">// You rename by hand, adding @map / @@map</span>
 model Post {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now()) @map("created_at")
@@ -1207,7 +1207,7 @@ model Post {
 
   @@map("posts")
 }</code></pre>
-<pre><code><span class="tok-comment"># Pull again — your names survive, and only real changes appear</span>
+<pre><code class="language-bash"><span class="tok-comment"># Pull again — your names survive, and only real changes appear</span>
 npx prisma db pull</code></pre>
 <div class="out">✔ Introspected 2 models and wrote them into prisma/schema.prisma in 128ms
 
@@ -1259,7 +1259,7 @@ These models were enriched with &#96;@@map&#96; information taken from the previ
 </div>
 
 <h3>Luồng 1 — <code>db push</code>: nhanh, và nó sẽ ăn mất dữ liệu của bạn</h3>
-<pre><code><span class="tok-comment"># Thêm một cột bắt buộc vào bảng vốn đã có hàng</span>
+<pre><code class="language-bash"><span class="tok-comment"># Thêm một cột bắt buộc vào bảng vốn đã có hàng</span>
 npx prisma db push</code></pre>
 <div class="out">Environment variables loaded from .env
 Prisma schema loaded from prisma/schema.prisma
@@ -1278,7 +1278,7 @@ Datasource "db": PostgreSQL database "hocprisma", schema "public" at "localhost:
 </div>
 
 <h3>Luồng 2 — <code>migrate</code>: luồng đi lên production</h3>
-<pre><code>npx prisma migrate dev --name them_slug</code></pre>
+<pre><code class="language-bash">npx prisma migrate dev --name them_slug</code></pre>
 <div class="out">Environment variables loaded from .env
 Prisma schema loaded from prisma/schema.prisma
 Datasource "db": PostgreSQL database "hocprisma", schema "public" at "localhost:5432"
@@ -1289,7 +1289,7 @@ Datasource "db": PostgreSQL database "hocprisma", schema "public" at "localhost:
 
 ? Are you sure you want to create and apply this migration? › (y/N)</div>
 <p>Cùng vấn đề, khác kết cục: <code>migrate dev</code> ghi phần SQL ra một tệp mà bạn mở lên và sửa được <em>trước khi</em> nó chạy. Đó là toàn bộ khác biệt, và cũng là toàn bộ lý do để ưu tiên nó:</p>
-<pre><code><span class="tok-comment">-- prisma/migrations/20260823051140_them_slug/migration.sql</span>
+<pre><code class="language-sql"><span class="tok-comment">-- prisma/migrations/20260823051140_them_slug/migration.sql</span>
 <span class="tok-comment">-- Prisma sinh ra; rồi người sửa lại, và đó mới là điểm mấu chốt</span>
 
 <span class="tok-comment">-- 1. Thêm ở dạng cho phép null, để các hàng cũ sống sót</span>
@@ -1307,7 +1307,7 @@ CREATE UNIQUE INDEX "posts_slug_key" ON "posts"("slug");</code></pre>
   <div class="lz-step"><span class="lz-k">migrate status</span><span class="lz-t">Chẩn đoán</span><span class="lz-d">Cái gì đã áp dụng, cái gì đang chờ, cái gì đã hỏng. Thứ đầu tiên nên chạy khi một bản deploy cư xử lạ, và an toàn trên mọi cơ sở dữ liệu.</span></div>
   <div class="lz-step"><span class="lz-k">migrate diff</span><span class="lz-t">Công cụ mạnh</span><span class="lz-d">In ra phần SQL giữa hai trạng thái bất kỳ — lược đồ so với cơ sở dữ liệu, migration so với cơ sở dữ liệu. Nền tảng của việc dò trôi dạt và của việc viết tay một migration, cả hai đều ở Chương 6.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Câu lệnh duy nhất trả lời "cơ sở dữ liệu của tôi có đúng như lược đồ nói không?"</span>
+<pre><code class="language-bash"><span class="tok-comment"># Câu lệnh duy nhất trả lời "cơ sở dữ liệu của tôi có đúng như lược đồ nói không?"</span>
 npx prisma migrate diff \\
   --from-schema-datasource prisma/schema.prisma \\
   --to-schema-datamodel prisma/schema.prisma \\
@@ -1321,7 +1321,7 @@ npx prisma migrate diff \\
 </div>
 
 <h3>Luồng 3 — <code>db pull</code>: tiếp quản thứ đã có</h3>
-<pre><code>npx prisma db pull --print | head -30</code></pre>
+<pre><code class="language-bash">npx prisma db pull --print | head -30</code></pre>
 <div class="out">model posts {
   id         Int       @id @default(autoincrement())
   title      String
@@ -1335,7 +1335,7 @@ npx prisma migrate diff \\
   @@index([author_id])
 }</div>
 <p>Dùng được, và rõ ràng là do máy viết: tên bảng chứ không phải tên model, <code>created_at</code> chứ không phải <code>createdAt</code>, và một trường quan hệ tên <code>users</code>. Nội soi không bịa ra quy ước đặt tên của bạn được — nhưng nó <strong>giữ</strong> chúng, một khi bạn đã đặt:</p>
-<pre><code><span class="tok-comment">// Bạn đổi tên bằng tay, thêm @map / @@map</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Bạn đổi tên bằng tay, thêm @map / @@map</span>
 model Post {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now()) @map("created_at")
@@ -1344,7 +1344,7 @@ model Post {
 
   @@map("posts")
 }</code></pre>
-<pre><code><span class="tok-comment"># Pull lại — tên của bạn sống sót, và chỉ thay đổi thật mới hiện ra</span>
+<pre><code class="language-bash"><span class="tok-comment"># Pull lại — tên của bạn sống sót, và chỉ thay đổi thật mới hiện ra</span>
 npx prisma db pull</code></pre>
 <div class="out">✔ Introspected 2 models and wrote them into prisma/schema.prisma in 128ms
 

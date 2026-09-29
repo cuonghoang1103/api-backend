@@ -145,7 +145,7 @@ const c1 = doc('pcp291-1-1-basics', '1.1 — Intro, variables, types, I/O & comp
 </ul>
 <h3>Input &amp; output</h3>
 <p><code>std::cout &lt;&lt; x</code> prints; <code>std::cin &gt;&gt; x</code> reads. The <code>&lt;&lt;</code> and <code>&gt;&gt;</code> are stream operators.</p>
-<pre><code>#include &lt;iostream&gt;
+<pre><code class="language-cpp">#include &lt;iostream&gt;
 
 int main() {
     int age = 20;            // integer
@@ -176,7 +176,7 @@ int main() {
 </ul>
 <h3>Nhập &amp; xuất</h3>
 <p><code>std::cout &lt;&lt; x</code> in ra; <code>std::cin &gt;&gt; x</code> đọc vào. Cặp <code>&lt;&lt;</code> và <code>&gt;&gt;</code> là toán tử luồng.</p>
-<pre><code>#include &lt;iostream&gt;
+<pre><code class="language-cpp">#include &lt;iostream&gt;
 
 int main() {
     int age = 20;            // số nguyên
@@ -210,7 +210,7 @@ const c2 = doc('pcp291-2-1-control-functions', '2.1 — Control flow & functions
 <h2>Control flow &amp; functions</h2>
 <h3>Branching &amp; loops</h3>
 <p><strong>Control flow</strong> decides which statements run. <code>if/else</code> and <code>switch</code> branch; <code>for</code>, <code>while</code>, <code>do-while</code> repeat.</p>
-<pre><code>for (int i = 0; i &lt; 5; ++i) {
+<pre><code class="language-cpp">for (int i = 0; i &lt; 5; ++i) {
     if (i % 2 == 0) std::cout &lt;&lt; i &lt;&lt; " is even ";
     else            std::cout &lt;&lt; i &lt;&lt; " is odd ";
 }
@@ -238,7 +238,7 @@ int factorial(int n) {             // recursion
 <h2>Điều khiển luồng &amp; hàm</h2>
 <h3>Rẽ nhánh &amp; vòng lặp</h3>
 <p><strong>Điều khiển luồng</strong> quyết định lệnh nào chạy. <code>if/else</code> và <code>switch</code> rẽ nhánh; <code>for</code>, <code>while</code>, <code>do-while</code> lặp lại.</p>
-<pre><code>for (int i = 0; i &lt; 5; ++i) {
+<pre><code class="language-cpp">for (int i = 0; i &lt; 5; ++i) {
     if (i % 2 == 0) std::cout &lt;&lt; i &lt;&lt; " chan ";
     else            std::cout &lt;&lt; i &lt;&lt; " le ";
 }
@@ -279,7 +279,7 @@ const c3 = doc('pcp291-3-1-pointers-memory', '3.1 — Pointers, references & mem
 <p>A <strong>pointer</strong> stores the <em>address</em> of another variable. <code>&amp;x</code> takes an address; <code>*p</code> <em>dereferences</em> — reads the value at that address.</p>
 <h3>References</h3>
 <p>A <strong>reference</strong> is an <em>alias</em> for an existing variable — another name for the same storage. It cannot be re-seated. References are the clean way to pass big objects without copying.</p>
-<pre><code>int x = 42;
+<pre><code class="language-cpp">int x = 42;
 int* p = &amp;x;        // p holds the address of x
 int&amp; r = x;         // r is an alias for x
 std::cout &lt;&lt; *p;    // dereference -&gt; prints 42
@@ -301,7 +301,7 @@ delete[] arr;             // MUST free, or it leaks
 <p><strong>Con trỏ</strong> lưu <em>địa chỉ</em> của một biến khác. <code>&amp;x</code> lấy địa chỉ; <code>*p</code> <em>giải tham chiếu</em> — đọc giá trị tại địa chỉ đó.</p>
 <h3>Tham chiếu</h3>
 <p><strong>Tham chiếu</strong> là một <em>bí danh</em> cho biến đã có — một tên khác cho cùng ô nhớ. Nó không thể trỏ lại chỗ khác. Tham chiếu là cách gọn để truyền đối tượng lớn mà không sao chép.</p>
-<pre><code>int x = 42;
+<pre><code class="language-cpp">int x = 42;
 int* p = &amp;x;        // p giữ địa chỉ của x
 int&amp; r = x;         // r là bí danh của x
 std::cout &lt;&lt; *p;    // giải tham chiếu -&gt; in ra 42
@@ -339,7 +339,7 @@ const c4 = doc('pcp291-4-1-classes-oop', '4.1 — Classes & object-oriented prog
 <li><strong>Constructor</strong> runs when an object is created — it initializes members.</li>
 <li><strong>Destructor</strong> (<code>~ClassName</code>) runs when the object is destroyed — it releases resources.</li>
 </ul>
-<pre><code>class Motor {
+<pre><code class="language-cpp">class Motor {
 private:                              // encapsulated state
     int rpm;
 public:
@@ -367,7 +367,7 @@ std::cout &lt;&lt; m.getRpm();   // 4500
 <li><strong>Constructor</strong> chạy khi đối tượng được tạo — khởi tạo các thành viên.</li>
 <li><strong>Destructor</strong> (<code>~TenLop</code>) chạy khi đối tượng bị hủy — giải phóng tài nguyên.</li>
 </ul>
-<pre><code>class Motor {
+<pre><code class="language-cpp">class Motor {
 private:                              // trạng thái được đóng gói
     int rpm;
 public:
@@ -401,7 +401,7 @@ const c5 = doc('pcp291-5-1-inheritance-polymorphism', '5.1 — Inheritance & pol
 <p><strong>Inheritance</strong> lets a <em>derived</em> class reuse and extend a <em>base</em> class. A <code>TempSensor</code> <strong>is-a</strong> <code>Sensor</code>, so it gets the base interface for free.</p>
 <h3>Polymorphism</h3>
 <p><strong>Polymorphism</strong> means one interface, many behaviors. A <code>virtual</code> function called through a base pointer dispatches to the <em>actual</em> object's override at run time — <strong>dynamic dispatch</strong>.</p>
-<pre><code>class Sensor {
+<pre><code class="language-python">class Sensor {
 public:
     virtual double read() const = 0;   // pure virtual -&gt; abstract class
     virtual ~Sensor() {}               // virtual destructor!
@@ -427,7 +427,7 @@ delete s;              // virtual dtor frees TempSensor correctly
 <p><strong>Kế thừa</strong> cho lớp <em>dẫn xuất</em> tái dùng và mở rộng lớp <em>cơ sở</em>. <code>TempSensor</code> <strong>là một</strong> <code>Sensor</code>, nên nó có sẵn giao diện của lớp cơ sở.</p>
 <h3>Đa hình</h3>
 <p><strong>Đa hình</strong> nghĩa là một giao diện, nhiều hành vi. Một hàm <code>virtual</code> gọi qua con trỏ lớp cơ sở sẽ điều hướng tới bản override của <em>đối tượng thực</em> lúc chạy — <strong>điều phối động</strong>.</p>
-<pre><code>class Sensor {
+<pre><code class="language-python">class Sensor {
 public:
     virtual double read() const = 0;   // thuần ảo -&gt; lớp trừu tượng
     virtual ~Sensor() {}               // destructor ảo!
@@ -531,7 +531,7 @@ const c7 = doc('pcp291-7-1-stl', '7.1 — The STL: containers, iterators, algori
 <li><code>std::set&lt;T&gt;</code> — unique, sorted elements.</li>
 </ul>
 <h3>Iterators &amp; algorithms</h3>
-<pre><code>#include &lt;vector&gt;
+<pre><code class="language-cpp">#include &lt;vector&gt;
 #include &lt;algorithm&gt;
 
 std::vector&lt;int&gt; v = {5, 2, 8, 1};
@@ -558,7 +558,7 @@ if (found != v.end()) std::cout &lt;&lt; "found 8";
 <li><code>std::set&lt;T&gt;</code> — phần tử duy nhất, đã sắp xếp.</li>
 </ul>
 <h3>Iterator &amp; thuật toán</h3>
-<pre><code>#include &lt;vector&gt;
+<pre><code class="language-cpp">#include &lt;vector&gt;
 #include &lt;algorithm&gt;
 
 std::vector&lt;int&gt; v = {5, 2, 8, 1};
@@ -596,7 +596,7 @@ const c8 = doc('pcp291-8-1-modern-cpp', '8.1 — Modern C++ & automotive embedde
 <li><code>std::shared_ptr&lt;T&gt;</code> — shared ownership via reference counting.</li>
 </ul>
 <h3>Move semantics &amp; lambdas</h3>
-<pre><code>#include &lt;memory&gt;
+<pre><code class="language-cpp">#include &lt;memory&gt;
 
 auto p = std::make_unique&lt;Motor&gt;(3000);  // RAII: auto-freed
 std::vector&lt;int&gt; a = {1, 2, 3};
@@ -619,7 +619,7 @@ int r = square(5);                          // 25
 <li><code>std::shared_ptr&lt;T&gt;</code> — sở hữu chung nhờ đếm tham chiếu.</li>
 </ul>
 <h3>Move semantics &amp; lambda</h3>
-<pre><code>#include &lt;memory&gt;
+<pre><code class="language-cpp">#include &lt;memory&gt;
 
 auto p = std::make_unique&lt;Motor&gt;(3000);  // RAII: tự giải phóng
 std::vector&lt;int&gt; a = {1, 2, 3};

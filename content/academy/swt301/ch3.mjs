@@ -2127,7 +2127,7 @@ const L33 = {
     bi(`<h3>Ví dụ có lời giải · Worked example — review a requirement and its code, and write the review log</h3>
 <p><strong>Work products under review.</strong> One requirement and the method that implements it (a technical review; you are one of the reviewers).</p>
 <div class="callout"><strong>REQ-DISC-01.</strong> Members who have been registered for at least 12 months receive a 10% discount on orders of 500,000 VND or more. VIP members receive 15%. The discount shall not exceed 200,000 VND. The final price is rounded to the nearest 1,000 VND.</div>
-<pre><code>public class DiscountService {
+<pre><code class="language-java">public class DiscountService {
     public static final double RATE = 0.1;
     public long finalPrice(long total, int months, boolean vip) {   // line 3
         double d = 0;                                                // line 4
@@ -2193,7 +2193,7 @@ const L33 = {
     `<h3>Ví dụ có lời giải · Review một yêu cầu và code của nó, rồi viết review log</h3>
 <p><strong>Sản phẩm cần review.</strong> Một yêu cầu và phương thức cài đặt nó (một buổi technical review; bạn là một reviewer).</p>
 <div class="callout"><strong>REQ-DISC-01.</strong> Thành viên đã đăng ký ít nhất 12 tháng được giảm 10% cho đơn hàng từ 500.000 VND trở lên. Thành viên VIP được giảm 15%. Mức giảm không vượt quá 200.000 VND. Giá cuối được làm tròn tới 1.000 VND gần nhất.</div>
-<pre><code>public class DiscountService {
+<pre><code class="language-java">public class DiscountService {
     public static final double RATE = 0.1;
     public long finalPrice(long total, int months, boolean vip) {   // line 3
         double d = 0;                                                // line 4
@@ -2745,7 +2745,7 @@ ENDIF</code></pre>
     bi(`<h3>Ví dụ có lời giải · Worked example — data flow, control flow and V(G), checked by running the code</h3>
 <h4>Part A — slide 98 through a real compiler</h4>
 <p>Slide 98 written line for line in Java:</p>
-<pre><code>int n = 0;                 // n defined ...
+<pre><code class="language-java">int n = 0;                 // n defined ...
 int x = in.nextInt();
 n = 1;                     // ... and re-defined without being used (dd)
 int y;                     // declared, NOT defined
@@ -2755,7 +2755,7 @@ while (x &gt; y) {            // y used before it has been defined (ur)
     x = x - n;
 }</code></pre>
 <p>Compiling it with <code>javac</code> (JDK 21) — real output:</p>
-<pre><code>DataFlowFault.java:10: error: variable y might not have been initialized
+<pre><code class="language-java">DataFlowFault.java:10: error: variable y might not have been initialized
         while (x &gt; y) {            // y used before it has been defined (ur) on the first pass
                    ^
 1 error</code></pre>
@@ -2778,7 +2778,7 @@ while (x &gt; y) {            // y used before it has been defined (ur)
 slide 98: ur-anomaly: y used in "while x &gt; y" before any definition
 slide 98: du-anomaly: n (last defined in "n := 1") goes out of scope unused when the loop runs 0 time(s)</code></pre>
 <h4>Part C — slide 103 as Java: control flow, V(G) and two defects</h4>
-<pre><code>static String gradeAsWritten(boolean[] answers) {
+<pre><code class="language-java">static String gradeAsWritten(boolean[] answers) {
     int result = 0;                         // dd-anomaly: never used before the next definition
     int right = 0;
     for (boolean correct : answers) {       // decision 1 (loop)
@@ -2829,7 +2829,7 @@ slide 102 graph 4 (labelled 5): 4 decisions -&gt; V(G) = 5</code></pre>
     `<h3>Ví dụ có lời giải · Data flow, control flow và V(G), kiểm chứng bằng cách chạy code</h3>
 <h4>Phần A — slide 98 qua một trình biên dịch thật</h4>
 <p>Slide 98 viết lại từng dòng bằng Java:</p>
-<pre><code>int n = 0;                 // n defined ...
+<pre><code class="language-java">int n = 0;                 // n defined ...
 int x = in.nextInt();
 n = 1;                     // ... and re-defined without being used (dd)
 int y;                     // declared, NOT defined
@@ -2839,7 +2839,7 @@ while (x &gt; y) {            // y used before it has been defined (ur)
     x = x - n;
 }</code></pre>
 <p>Biên dịch bằng <code>javac</code> (JDK 21) — kết quả thật:</p>
-<pre><code>DataFlowFault.java:10: error: variable y might not have been initialized
+<pre><code class="language-java">DataFlowFault.java:10: error: variable y might not have been initialized
         while (x &gt; y) {            // y used before it has been defined (ur) on the first pass
                    ^
 1 error</code></pre>
@@ -2862,7 +2862,7 @@ while (x &gt; y) {            // y used before it has been defined (ur)
 slide 98: ur-anomaly: y used in "while x &gt; y" before any definition
 slide 98: du-anomaly: n (last defined in "n := 1") goes out of scope unused when the loop runs 0 time(s)</code></pre>
 <h4>Phần C — slide 103 bằng Java: luồng điều khiển, V(G) và hai defect</h4>
-<pre><code>static String gradeAsWritten(boolean[] answers) {
+<pre><code class="language-java">static String gradeAsWritten(boolean[] answers) {
     int result = 0;                         // dd-anomaly: never used before the next definition
     int right = 0;
     for (boolean correct : answers) {       // decision 1 (loop)
@@ -3492,7 +3492,7 @@ const L35 = {
 <li><strong>So the warning may be a false alarm</strong> — the code is a deliberate safeguard for other platforms. This is the limitation on slide 105: a tool cannot tell "fail-safe" code from a real defect.</li>
 </ul>
 <p class="nhan">The same situation in C</p>
-<pre><code>#define BUFFSIZE    1000   /* platform A: 1000, platform B: 500 */
+<pre><code class="language-java">#define BUFFSIZE    1000   /* platform A: 1000, platform B: 500 */
 #define MAILBOXMAX  1000
 if (BUFFSIZE &lt; MAILBOXMAX) error_exit();</code></pre>
 <p>Analysing the build for platform A, the tool reports dead code. A person has to decide whether it is a defect.</p>`,
@@ -3504,7 +3504,7 @@ if (BUFFSIZE &lt; MAILBOXMAX) error_exit();</code></pre>
 <li><strong>Vậy cảnh báo có thể là báo động giả</strong> — đoạn code là chốt an toàn có chủ đích cho nền tảng khác. Đây là giới hạn ở slide 105: công cụ không phân biệt được code "fail-safe" với defect thật.</li>
 </ul>
 <p class="nhan">Cùng tình huống viết bằng C</p>
-<pre><code>#define BUFFSIZE    1000   /* nền tảng A: 1000, nền tảng B: 500 */
+<pre><code class="language-java">#define BUFFSIZE    1000   /* nền tảng A: 1000, nền tảng B: 500 */
 #define MAILBOXMAX  1000
 if (BUFFSIZE &lt; MAILBOXMAX) error_exit();</code></pre>
 <p>Khi phân tích bản build cho nền tảng A, công cụ báo dead code. Con người phải quyết định đó có phải defect không.</p>`],

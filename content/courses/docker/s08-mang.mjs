@@ -67,14 +67,14 @@ ${gallery('dk-08', [
 <h3>What a container's network actually looks like</h3>
 ${slide('dk-08', 3, 'Cả chương trong một hình: namespace, dây veth, cây cầu, NAT')}
 ${slide('dk-08', 4, 'Một sợi dây veth, hai đầu: eth0 ↔ veth trên máy chủ')}
-<pre><code>docker run -d --name web nginx:alpine &gt;/dev/null
+<pre><code class="language-bash">docker run -d --name web nginx:alpine &gt;/dev/null
 docker exec web ip -o -4 addr        <span class="tok-comment"># BusyBox's ip has no -brief</span>
 docker exec web ip route</code></pre>
 <div class="out">1: lo    inet 127.0.0.1/8 scope host lo\\       valid_lft forever preferred_lft forever
 2: eth0    inet 172.17.0.4/16 brd 172.17.255.255 scope global eth0\\       valid_lft forever preferred_lft forever
 default via 172.17.0.1 dev eth0
 172.17.0.0/16 dev eth0 scope link  src 172.17.0.4</div>
-<pre><code><span class="tok-comment"># The other end of that pair lives on the host, attached to the bridge</span>
+<pre><code class="language-bash"><span class="tok-comment"># The other end of that pair lives on the host, attached to the bridge</span>
 docker exec web cat /sys/class/net/eth0/iflink     <span class="tok-comment"># the index of the peer</span>
 ip -o link | grep '^615:' | cut -d' ' -f1-2
 ip -brief addr show docker0</code></pre>
@@ -144,7 +144,7 @@ ${slide('dk-08', 5, 'Năm driver — 95% thời gian chỉ cần bridge tự t�
 
 <h3>The default bridge versus a user-defined one</h3>
 ${slide('dk-08', 6, 'Bridge mặc định không trả lời tên — bridge tự tạo thì có')}
-<pre><code><span class="tok-comment"># On the DEFAULT bridge (what you get with no --network flag)</span>
+<pre><code class="language-bash"><span class="tok-comment"># On the DEFAULT bridge (what you get with no --network flag)</span>
 docker run -d --name db-a  postgres:16-alpine &gt;/dev/null
 docker run --rm alpine:3.20 nslookup db-a</code></pre>
 <div class="out">Server:		192.168.65.7
@@ -153,7 +153,7 @@ Address:	192.168.65.7:53
 Non-authoritative answer:
 
 ** server can't find db-a: NXDOMAIN</div>
-<pre><code><span class="tok-comment"># On a USER-DEFINED bridge</span>
+<pre><code class="language-bash"><span class="tok-comment"># On a USER-DEFINED bridge</span>
 docker network create app-net &gt;/dev/null
 docker run -d --name db-b --network app-net postgres:16-alpine &gt;/dev/null
 docker run --rm --network app-net alpine:3.20 nslookup db-b</code></pre>
@@ -202,7 +202,7 @@ options ndots:0
 
 <h3>Creating, attaching, inspecting</h3>
 ${slide('dk-08', 7, 'Một container vào hai mạng = hai card mạng')}
-<pre><code>docker network create --driver bridge --subnet 10.42.0.0/24 --gateway 10.42.0.1 edge
+<pre><code class="language-bash">docker network create --driver bridge --subnet 10.42.0.0/24 --gateway 10.42.0.1 edge
 docker network ls
 docker network connect edge web          <span class="tok-comment"># a running container can join another network</span>
 docker network inspect edge -f '{{ range .Containers }}{{ .Name }} {{ .IPv4Address }}{{ end }}'</code></pre>
@@ -321,14 +321,14 @@ eth1 172.27.0.2/16</div>
 <h3>Mạng của một container thật ra trông thế nào</h3>
 ${slide('dk-08', 3, 'Cả chương trong một hình: namespace, dây veth, cây cầu, NAT')}
 ${slide('dk-08', 4, 'Một sợi dây veth, hai đầu: eth0 ↔ veth trên máy chủ')}
-<pre><code>docker run -d --name web nginx:alpine &gt;/dev/null
+<pre><code class="language-bash">docker run -d --name web nginx:alpine &gt;/dev/null
 docker exec web ip -o -4 addr        <span class="tok-comment"># ip của BusyBox không có -brief</span>
 docker exec web ip route</code></pre>
 <div class="out">1: lo    inet 127.0.0.1/8 scope host lo\\       valid_lft forever preferred_lft forever
 2: eth0    inet 172.17.0.4/16 brd 172.17.255.255 scope global eth0\\       valid_lft forever preferred_lft forever
 default via 172.17.0.1 dev eth0
 172.17.0.0/16 dev eth0 scope link  src 172.17.0.4</div>
-<pre><code><span class="tok-comment"># Đầu kia của cặp đó nằm trên máy chủ, gắn vào cây cầu</span>
+<pre><code class="language-bash"><span class="tok-comment"># Đầu kia của cặp đó nằm trên máy chủ, gắn vào cây cầu</span>
 docker exec web cat /sys/class/net/eth0/iflink     <span class="tok-comment"># số của đầu dây bên kia</span>
 ip -o link | grep '^615:' | cut -d' ' -f1-2
 ip -brief addr show docker0</code></pre>
@@ -398,7 +398,7 @@ ${slide('dk-08', 5, 'Năm driver — 95% thời gian chỉ cần bridge tự t�
 
 <h3>Bridge mặc định so với bridge tự tạo</h3>
 ${slide('dk-08', 6, 'Bridge mặc định không trả lời tên — bridge tự tạo thì có')}
-<pre><code><span class="tok-comment"># Trên bridge MẶC ĐỊNH (thứ bạn nhận khi không có cờ --network)</span>
+<pre><code class="language-bash"><span class="tok-comment"># Trên bridge MẶC ĐỊNH (thứ bạn nhận khi không có cờ --network)</span>
 docker run -d --name db-a  postgres:16-alpine &gt;/dev/null
 docker run --rm alpine:3.20 nslookup db-a</code></pre>
 <div class="out">Server:		192.168.65.7
@@ -407,7 +407,7 @@ Address:	192.168.65.7:53
 Non-authoritative answer:
 
 ** server can't find db-a: NXDOMAIN</div>
-<pre><code><span class="tok-comment"># Trên bridge TỰ TẠO</span>
+<pre><code class="language-bash"><span class="tok-comment"># Trên bridge TỰ TẠO</span>
 docker network create app-net &gt;/dev/null
 docker run -d --name db-b --network app-net postgres:16-alpine &gt;/dev/null
 docker run --rm --network app-net alpine:3.20 nslookup db-b</code></pre>
@@ -456,7 +456,7 @@ options ndots:0
 
 <h3>Tạo, gắn, soi</h3>
 ${slide('dk-08', 7, 'Một container vào hai mạng = hai card mạng')}
-<pre><code>docker network create --driver bridge --subnet 10.42.0.0/24 --gateway 10.42.0.1 edge
+<pre><code class="language-bash">docker network create --driver bridge --subnet 10.42.0.0/24 --gateway 10.42.0.1 edge
 docker network ls
 docker network connect edge web          <span class="tok-comment"># container đang chạy vẫn vào thêm mạng khác được</span>
 docker network inspect edge -f '{{ range .Containers }}{{ .Name }} {{ .IPv4Address }}{{ end }}'</code></pre>
@@ -583,14 +583,14 @@ eth1 172.27.0.2/16</div>
 
 <h3>EXPOSE is documentation; -p is the actual hole</h3>
 ${slide('dk-08', 9, 'EXPOSE chỉ là ghi chú — -p mới khoét lỗ')}
-<pre><code><span class="tok-comment"># The image says it listens on 80. That is all EXPOSE does.</span>
+<pre><code class="language-bash"><span class="tok-comment"># The image says it listens on 80. That is all EXPOSE does.</span>
 docker image inspect nginx:alpine -f '{{ json .Config.ExposedPorts }}'
 docker run -d --name doc nginx:alpine &gt;/dev/null
 curl -s -o /dev/null -w '%{http_code}\\n' --max-time 2 http://localhost/ || echo "no route"</code></pre>
 <div class="out">{"80/tcp":{}}
 000
 no route</div>
-<pre><code><span class="tok-comment"># -p is what actually creates the mapping</span>
+<pre><code class="language-bash"><span class="tok-comment"># -p is what actually creates the mapping</span>
 docker run -d --name pub -p 8080:80 nginx:alpine &gt;/dev/null
 curl -s -o /dev/null -w '%{http_code}\\n' http://localhost:8080/
 docker port pub</code></pre>
@@ -607,7 +607,7 @@ ${slide('dk-08', 10, '-p đọc trái = máy chủ, phải = container')}
   <div class="kv"><span class="k"><code>-p 80</code></span><span class="v">Container port 80 → a random free high port on the host. <code>docker port</code> tells you which. Handy for tests, unusable for anything you must reach by a fixed address.</span></div>
   <div class="kv"><span class="k"><code>-p 5000-5010:5000-5010/udp</code></span><span class="v">A whole range, and a protocol other than TCP. Each port in the range gets its own rule — publishing a thousand ports really does create a thousand rules and it really is slow.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Bind to loopback and prove it from the outside</span>
+<pre><code class="language-bash"><span class="tok-comment"># Bind to loopback and prove it from the outside</span>
 docker run -d --name safe -p 127.0.0.1:5433:5432 postgres:16-alpine &gt;/dev/null
 sudo ss -lntp 'sport = :5433' | tail -1
 curl -s --max-time 2 -o /dev/null -w '%{http_code}\\n' http://&lt;host-public-ip&gt;:5433/ || echo refused</code></pre>
@@ -644,14 +644,14 @@ curl -s -o /dev/null -w '%{http_code}\\n' --max-time 3 http://127.0.0.1:18081/</
 
 <h3>The firewall trap</h3>
 ${slide('dk-08', 11, 'Gói tới cổng -p rẽ sang FORWARD — luật mở/đóng cổng ở INPUT không được hỏi')}
-<pre><code><span class="tok-comment"># UFW says the port is closed…</span>
+<pre><code class="language-bash"><span class="tok-comment"># UFW says the port is closed…</span>
 sudo ufw status | head -5</code></pre>
 <div class="out">Status: active
 To                         Action      From
 --                         ------      ----
 22/tcp                     ALLOW       Anywhere
 80,443/tcp                 ALLOW       Anywhere</div>
-<pre><code><span class="tok-comment"># …and yet 5432 answers from another machine entirely</span>
+<pre><code class="language-bash"><span class="tok-comment"># …and yet 5432 answers from another machine entirely</span>
 docker run -d --name db -p 5432:5432 -e POSTGRES_PASSWORD=x postgres:16-alpine &gt;/dev/null
 <span class="tok-comment"># from your laptop, not the server:</span>
 nc -zv &lt;server-ip&gt; 5432</code></pre>
@@ -769,7 +769,7 @@ com.docke 15848 admin  191u  IPv6 0x1b401f6a5377baf9      0t0  TCP *:18087 (LIST
 
 <h3>docker-proxy, and why you sometimes see it</h3>
 <p>For most published ports Docker installs an iptables DNAT rule and traffic never touches userspace. But it also starts a small helper process, <code>docker-proxy</code>, which listens on the host port — it exists to handle the cases iptables cannot, notably connections from the host to its own published port on loopback. You will meet it in three ways: as the process holding a port in <code>ss -lntp</code>, as an unexpected entry in a process list, and as the thing that fails with <code>address already in use</code> when a host service already owns that port.</p>
-<pre><code>docker run -d -p 8080:80 nginx:alpine</code></pre>
+<pre><code class="language-bash">docker run -d -p 8080:80 nginx:alpine</code></pre>
 <div class="out">docker: Error response from daemon: driver failed programming external connectivity on endpoint
 inspiring_swartz: failed to bind host port for 0.0.0.0:8080:172.17.0.3:80/tcp: address already in use</div>
 <p>That message means a process on the host already listens on 8080 — typically a dev server you forgot. (A container holding the port produces a different message, and a stopped container holds nothing — see below.) <code>ss -lntp 'sport = :8080'</code> names the culprit in one line.</p>
@@ -850,14 +850,14 @@ LISTEN 0      5            0.0.0.0:18087      0.0.0.0:*    users:(("python3",pid
 
 <h3>EXPOSE là tài liệu; -p mới là cái lỗ thật</h3>
 ${slide('dk-08', 9, 'EXPOSE chỉ là ghi chú — -p mới khoét lỗ')}
-<pre><code><span class="tok-comment"># Cái ảnh nói rằng nó nghe ở cổng 80. EXPOSE chỉ làm có thế.</span>
+<pre><code class="language-bash"><span class="tok-comment"># Cái ảnh nói rằng nó nghe ở cổng 80. EXPOSE chỉ làm có thế.</span>
 docker image inspect nginx:alpine -f '{{ json .Config.ExposedPorts }}'
 docker run -d --name doc nginx:alpine &gt;/dev/null
 curl -s -o /dev/null -w '%{http_code}\\n' --max-time 2 http://localhost/ || echo "no route"</code></pre>
 <div class="out">{"80/tcp":{}}
 000
 no route</div>
-<pre><code><span class="tok-comment"># -p mới là thứ thật sự tạo ra ánh xạ</span>
+<pre><code class="language-bash"><span class="tok-comment"># -p mới là thứ thật sự tạo ra ánh xạ</span>
 docker run -d --name pub -p 8080:80 nginx:alpine &gt;/dev/null
 curl -s -o /dev/null -w '%{http_code}\\n' http://localhost:8080/
 docker port pub</code></pre>
@@ -874,7 +874,7 @@ ${slide('dk-08', 10, '-p đọc trái = máy chủ, phải = container')}
   <div class="kv"><span class="k"><code>-p 80</code></span><span class="v">Cổng 80 trong container → một cổng cao còn trống ngẫu nhiên trên máy chủ. <code>docker port</code> cho biết là cổng nào. Tiện để thử, vô dụng với thứ phải gọi tới bằng địa chỉ cố định.</span></div>
   <div class="kv"><span class="k"><code>-p 5000-5010:5000-5010/udp</code></span><span class="v">Cả một dải, và một giao thức khác TCP. Mỗi cổng trong dải nhận một luật riêng — công bố một nghìn cổng thì đúng là tạo ra một nghìn luật và đúng là chậm.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Gắn vào loopback rồi chứng minh từ bên ngoài</span>
+<pre><code class="language-bash"><span class="tok-comment"># Gắn vào loopback rồi chứng minh từ bên ngoài</span>
 docker run -d --name safe -p 127.0.0.1:5433:5432 postgres:16-alpine &gt;/dev/null
 sudo ss -lntp 'sport = :5433' | tail -1
 curl -s --max-time 2 -o /dev/null -w '%{http_code}\\n' http://&lt;ip-công-khai&gt;:5433/ || echo refused</code></pre>
@@ -911,14 +911,14 @@ curl -s -o /dev/null -w '%{http_code}\\n' --max-time 3 http://127.0.0.1:18081/</
 
 <h3>Cái bẫy tường lửa</h3>
 ${slide('dk-08', 11, 'Gói tới cổng -p rẽ sang FORWARD — luật mở/đóng cổng ở INPUT không được hỏi')}
-<pre><code><span class="tok-comment"># UFW bảo cổng đó đóng…</span>
+<pre><code class="language-bash"><span class="tok-comment"># UFW bảo cổng đó đóng…</span>
 sudo ufw status | head -5</code></pre>
 <div class="out">Status: active
 To                         Action      From
 --                         ------      ----
 22/tcp                     ALLOW       Anywhere
 80,443/tcp                 ALLOW       Anywhere</div>
-<pre><code><span class="tok-comment"># …vậy mà 5432 vẫn trả lời từ một cái máy hoàn toàn khác</span>
+<pre><code class="language-bash"><span class="tok-comment"># …vậy mà 5432 vẫn trả lời từ một cái máy hoàn toàn khác</span>
 docker run -d --name db -p 5432:5432 -e POSTGRES_PASSWORD=x postgres:16-alpine &gt;/dev/null
 <span class="tok-comment"># từ máy tính của bạn, không phải từ máy chủ:</span>
 nc -zv &lt;ip-máy-chủ&gt; 5432</code></pre>
@@ -1036,7 +1036,7 @@ com.docke 15848 admin  191u  IPv6 0x1b401f6a5377baf9      0t0  TCP *:18087 (LIST
 
 <h3>docker-proxy, và vì sao thỉnh thoảng bạn thấy nó</h3>
 <p>Với phần lớn cổng công bố, Docker cài một luật DNAT của iptables và lưu lượng không bao giờ chạm tầng người dùng. Nhưng nó cũng khởi động một tiến trình phụ nhỏ tên <code>docker-proxy</code> nghe trên cổng của máy chủ — nó tồn tại để lo những trường hợp iptables không lo được, nhất là kết nối từ chính máy chủ tới cổng công bố của nó trên loopback. Bạn sẽ gặp nó theo ba cách: là tiến trình đang giữ một cổng trong <code>ss -lntp</code>, là một mục lạ trong danh sách tiến trình, và là thứ chết với lỗi <code>address already in use</code> khi một dịch vụ trên máy chủ đã chiếm cổng đó.</p>
-<pre><code>docker run -d -p 8080:80 nginx:alpine</code></pre>
+<pre><code class="language-bash">docker run -d -p 8080:80 nginx:alpine</code></pre>
 <div class="out">docker: Error response from daemon: driver failed programming external connectivity on endpoint
 inspiring_swartz: failed to bind host port for 0.0.0.0:8080:172.17.0.3:80/tcp: address already in use</div>
 <p>Thông báo đó nghĩa là trên máy chủ đã có một tiến trình nghe ở 8080 — thường là một dev server bạn quên. (Container giữ cổng thì ra thông báo KHÁC, còn container đã dừng thì không giữ gì — xem bên dưới.) <code>ss -lntp 'sport = :8080'</code> gọi tên thủ phạm trong một dòng.</p>
@@ -1126,7 +1126,7 @@ LISTEN 0      5            0.0.0.0:18087      0.0.0.0:*    users:(("python3",pid
 
 <h3>The embedded DNS server</h3>
 ${slide('dk-08', 16, 'DNS nhúng 127.0.0.11: hỏi TÊN, nhận IP HIỆN TẠI')}
-<pre><code>docker network create shop &gt;/dev/null
+<pre><code class="language-bash">docker network create shop &gt;/dev/null
 docker run -d --name api  --network shop nginx:alpine &gt;/dev/null
 docker run -d --name cache --network shop redis:7-alpine &gt;/dev/null
 docker exec api cat /etc/resolv.conf
@@ -1192,7 +1192,7 @@ UNCONN 0      0         127.0.0.11:55869      0.0.0.0:*</div>
 
 <h3>Names a container answers to</h3>
 ${slide('dk-08', 17, 'Một container, nhiều tên: tên, alias, tên dịch vụ — và xoay vòng')}
-<pre><code>docker run -d --name pg --network shop \\
+<pre><code class="language-bash">docker run -d --name pg --network shop \\
   --network-alias db --network-alias primary.db \\
   -e POSTGRES_PASSWORD=x postgres:16-alpine &gt;/dev/null
 docker exec api sh -c 'for n in pg db primary.db; do printf "%-12s " "$n"; getent hosts "$n" | awk "{print \\$1}"; done'</code></pre>
@@ -1226,7 +1226,7 @@ docker compose exec api sh -c 'getent hosts cache; getent hosts dk08-cmp-cache-1
 
 <h3>The two-tier shape you actually want</h3>
 ${slide('dk-08', 18, 'Mạng hai tầng: proxy bị chiếm cũng không gọi nổi tên CSDL')}
-<pre><code>docker network create public &gt;/dev/null
+<pre><code class="language-bash">docker network create public &gt;/dev/null
 docker network create --internal private &gt;/dev/null
 
 docker run -d --name db     --network private postgres:16-alpine -c listen_addresses='*' &gt;/dev/null
@@ -1249,7 +1249,7 @@ ${slide('dk-08', 19, 'Tên phân giải được mà vẫn refused: 4 nguyên nh
   <div class="lz-step"><span class="lz-k">The service is not up yet</span><span class="lz-t">connection refused, immediately</span><span class="lz-d">A container being "started" is not the same as its process listening. This is what healthchecks and <code>depends_on: condition: service_healthy</code> solve (Chapter 9).</span></div>
   <div class="lz-step"><span class="lz-k">Wrong port</span><span class="lz-t">you used the published host port, not the container port</span><span class="lz-d">Between containers you use the <em>container's</em> port — 5432, not 5433. The published mapping is irrelevant on the internal network, and reusing it silently connects to nothing.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Prove the loopback case, which every developer meets once</span>
+<pre><code class="language-bash"><span class="tok-comment"># Prove the loopback case, which every developer meets once</span>
 docker run -d --name lb --network shop python:3.12-alpine \\
   python -c "import http.server as h; h.HTTPServer(('127.0.0.1',8000), h.SimpleHTTPRequestHandler).serve_forever()" &gt;/dev/null
 docker exec api sh -c 'nc -z -w2 lb 8000 &amp;&amp; echo open || echo "refused — bound to loopback"'
@@ -1286,12 +1286,12 @@ tcp        0      0 127.0.0.1:8000          0.0.0.0:*               LISTEN</div>
 
 <h3>--link is dead, and its replacement is better</h3>
 ${slide('dk-08', 20, '--link đã chết: Docker 29 cảnh báo, và từ chối trên mạng tự tạo')}
-<pre><code><span class="tok-comment"># Docker 29: cache is on the user-defined network "shop" ⇒ refused outright</span>
+<pre><code class="language-bash"><span class="tok-comment"># Docker 29: cache is on the user-defined network "shop" ⇒ refused outright</span>
 docker run -d --name old --link cache:redis alpine:3.20 sleep 60</code></pre>
 <div class="out">WARNING: Links on the default bridge network are deprecated and will be removed in a future release. Use a custom network instead.
 4ba3953382627d110d3ef5cb60f0720398b04cb3dab5d106cdd123ba5ae41233
 docker: Error response from daemon: container f744043b04b49e0dc39a76aee465f51b9098a293a2b019f9d6d8b3026dab501d not attached to default bridge network</div>
-<pre><code><span class="tok-comment"># on the default bridge it still works, with a warning — web is on docker0</span>
+<pre><code class="language-bash"><span class="tok-comment"># on the default bridge it still works, with a warning — web is on docker0</span>
 docker run -d --name old2 --link web:web alpine:3.20 sleep 60
 docker exec old2 grep web /etc/hosts</code></pre>
 <div class="out">WARNING: Links on the default bridge network are deprecated and will be removed in a future release. Use a custom network instead.
@@ -1357,7 +1357,7 @@ open</div>
 
 <h3>Máy chủ DNS nhúng</h3>
 ${slide('dk-08', 16, 'DNS nhúng 127.0.0.11: hỏi TÊN, nhận IP HIỆN TẠI')}
-<pre><code>docker network create shop &gt;/dev/null
+<pre><code class="language-bash">docker network create shop &gt;/dev/null
 docker run -d --name api  --network shop nginx:alpine &gt;/dev/null
 docker run -d --name cache --network shop redis:7-alpine &gt;/dev/null
 docker exec api cat /etc/resolv.conf
@@ -1423,7 +1423,7 @@ UNCONN 0      0         127.0.0.11:55869      0.0.0.0:*</div>
 
 <h3>Những cái tên một container trả lời</h3>
 ${slide('dk-08', 17, 'Một container, nhiều tên: tên, alias, tên dịch vụ — và xoay vòng')}
-<pre><code>docker run -d --name pg --network shop \\
+<pre><code class="language-bash">docker run -d --name pg --network shop \\
   --network-alias db --network-alias primary.db \\
   -e POSTGRES_PASSWORD=x postgres:16-alpine &gt;/dev/null
 docker exec api sh -c 'for n in pg db primary.db; do printf "%-12s " "$n"; getent hosts "$n" | awk "{print \\$1}"; done'</code></pre>
@@ -1457,7 +1457,7 @@ docker compose exec api sh -c 'getent hosts cache; getent hosts dk08-cmp-cache-1
 
 <h3>Hình dạng hai tầng bạn thật sự muốn</h3>
 ${slide('dk-08', 18, 'Mạng hai tầng: proxy bị chiếm cũng không gọi nổi tên CSDL')}
-<pre><code>docker network create public &gt;/dev/null
+<pre><code class="language-bash">docker network create public &gt;/dev/null
 docker network create --internal private &gt;/dev/null
 
 docker run -d --name db     --network private postgres:16-alpine -c listen_addresses='*' &gt;/dev/null
@@ -1480,7 +1480,7 @@ ${slide('dk-08', 19, 'Tên phân giải được mà vẫn refused: 4 nguyên nh
   <div class="lz-step"><span class="lz-k">Dịch vụ chưa lên</span><span class="lz-t">connection refused, ngay lập tức</span><span class="lz-d">Một container ở trạng thái "đã khởi động" không đồng nghĩa với việc tiến trình của nó đã nghe. Đây là thứ healthcheck và <code>depends_on: condition: service_healthy</code> giải quyết (Chương 9).</span></div>
   <div class="lz-step"><span class="lz-k">Sai cổng</span><span class="lz-t">bạn dùng cổng công bố trên máy chủ chứ không phải cổng của container</span><span class="lz-d">Giữa các container thì dùng cổng của <em>container</em> — 5432, không phải 5433. Ánh xạ công bố hoàn toàn không liên quan trên mạng nội bộ, và dùng lại nó là lặng lẽ kết nối tới hư không.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Chứng minh trường hợp loopback, thứ mọi lập trình viên gặp một lần</span>
+<pre><code class="language-bash"><span class="tok-comment"># Chứng minh trường hợp loopback, thứ mọi lập trình viên gặp một lần</span>
 docker run -d --name lb --network shop python:3.12-alpine \\
   python -c "import http.server as h; h.HTTPServer(('127.0.0.1',8000), h.SimpleHTTPRequestHandler).serve_forever()" &gt;/dev/null
 docker exec api sh -c 'nc -z -w2 lb 8000 &amp;&amp; echo open || echo "refused — bound to loopback"'
@@ -1517,12 +1517,12 @@ tcp        0      0 127.0.0.1:8000          0.0.0.0:*               LISTEN</div>
 
 <h3>--link đã chết, và thứ thay thế nó tốt hơn</h3>
 ${slide('dk-08', 20, '--link đã chết: Docker 29 cảnh báo, và từ chối trên mạng tự tạo')}
-<pre><code><span class="tok-comment"># Docker 29: cache nằm trên mạng tự tạo "shop" ⇒ bị từ chối thẳng</span>
+<pre><code class="language-bash"><span class="tok-comment"># Docker 29: cache nằm trên mạng tự tạo "shop" ⇒ bị từ chối thẳng</span>
 docker run -d --name old --link cache:redis alpine:3.20 sleep 60</code></pre>
 <div class="out">WARNING: Links on the default bridge network are deprecated and will be removed in a future release. Use a custom network instead.
 4ba3953382627d110d3ef5cb60f0720398b04cb3dab5d106cdd123ba5ae41233
 docker: Error response from daemon: container f744043b04b49e0dc39a76aee465f51b9098a293a2b019f9d6d8b3026dab501d not attached to default bridge network</div>
-<pre><code><span class="tok-comment"># trên bridge mặc định thì vẫn chạy, kèm cảnh báo — web nằm trên docker0</span>
+<pre><code class="language-bash"><span class="tok-comment"># trên bridge mặc định thì vẫn chạy, kèm cảnh báo — web nằm trên docker0</span>
 docker run -d --name old2 --link web:web alpine:3.20 sleep 60
 docker exec old2 grep web /etc/hosts</code></pre>
 <div class="out">WARNING: Links on the default bridge network are deprecated and will be removed in a future release. Use a custom network instead.
@@ -1603,7 +1603,7 @@ ${slide('dk-08', 21, 'Bốn chữ localhost, bốn nơi khác nhau')}
   <div class="kv"><span class="k">In a browser on your laptop</span><span class="v">Your laptop's loopback. If the container runs on a remote VPS, this reaches nothing at all — a surprisingly common confusion when following a tutorial written for a local machine.</span></div>
   <div class="kv"><span class="k">Inside a <code>--network host</code> container</span><span class="v">The host's loopback, genuinely — because there is no separate namespace. This is the only case where the two meanings coincide.</span></div>
 </div>
-<pre><code><span class="tok-comment"># A database on the HOST, not in Docker</span>
+<pre><code class="language-bash"><span class="tok-comment"># A database on the HOST, not in Docker</span>
 sudo ss -lntp 'sport = :5432' | tail -1
 docker run --rm postgres:16-alpine psql -h localhost -U postgres -c 'select 1' 2&gt;&amp;1 | tail -2</code></pre>
 <div class="out">LISTEN 0 244 127.0.0.1:5432 0.0.0.0:* users:(("postgres",pid=1188,fd=6))
@@ -1612,7 +1612,7 @@ Connection refused</div>
 
 <h3>Reaching the host from a container</h3>
 ${slide('dk-08', 22, 'host.docker.internal: Mac có sẵn — Linux phải tự thêm')}
-<pre><code><span class="tok-comment"># Portable across Linux, macOS and Windows since Docker 20.10</span>
+<pre><code class="language-bash"><span class="tok-comment"># Portable across Linux, macOS and Windows since Docker 20.10</span>
 docker run --rm --add-host=host.docker.internal:host-gateway alpine:3.20 \\
   sh -c 'getent hosts host.docker.internal'</code></pre>
 <div class="out">172.17.0.1      host.docker.internal</div>
@@ -1627,7 +1627,7 @@ services:
   <div class="lz-step"><span class="lz-k">The service must listen on 0.0.0.0</span><span class="lz-t">a host service bound to 127.0.0.1 is still unreachable</span><span class="lz-d">The container arrives via the bridge interface, not via loopback. Postgres on <code>127.0.0.1:5432</code> refuses it, exactly as it refuses any other machine.</span></div>
   <div class="lz-step"><span class="lz-k">Better: put the service in a container too</span><span class="lz-t">then it is just a name on a network</span><span class="lz-d">Reaching back into the host is a bridge between two worlds, and it is worth avoiding when the alternative is one more service in the compose file.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Same database, now reachable — because it listens on all interfaces</span>
+<pre><code class="language-bash"><span class="tok-comment"># Same database, now reachable — because it listens on all interfaces</span>
 sudo ss -lntp 'sport = :5432' | tail -1
 docker run --rm --add-host=host.docker.internal:host-gateway postgres:16-alpine \\
   psql -h host.docker.internal -U postgres -c 'select 1' 2&gt;/dev/null | head -3</code></pre>
@@ -1680,7 +1680,7 @@ xin chao tu may Linux</div>
 
 <h3>--network host: no namespace at all</h3>
 ${slide('dk-08', 23, '--network host: bỏ hẳn namespace — được gì, mất gì')}
-<pre><code><span class="tok-comment"># real output on the Linux machine; BusyBox ip has no -brief</span>
+<pre><code class="language-bash"><span class="tok-comment"># real output on the Linux machine; BusyBox ip has no -brief</span>
 docker run --rm --network host alpine sh -c 'ip -o -4 addr | awk "{print \\$2, \\$4}" | head -5'
 <span class="tok-comment"># a host service listening on 127.0.0.1:18089 (python3 -m http.server)</span>
 docker run --rm --network host alpine wget -qO- -T 3 http://127.0.0.1:18089/</code></pre>
@@ -1696,7 +1696,7 @@ xin chao tu may Linux</div>
   <div class="kv"><span class="k">Not the same on Docker Desktop</span><span class="v">On macOS and Windows, "the host" is the Linux VM, not your laptop. Host networking there behaves differently and has only recently worked at all — do not build a workflow on it.</span></div>
   <div class="kv"><span class="k">When it is genuinely right</span><span class="v">A monitoring agent that must see the host's interfaces, a load balancer handling tens of thousands of connections where NAT is measurable, or software that needs broadcast/multicast. Otherwise: a published port.</span></div>
 </div>
-<pre><code><span class="tok-comment"># -p is silently ignored in host mode — note the warning</span>
+<pre><code class="language-bash"><span class="tok-comment"># -p is silently ignored in host mode — note the warning</span>
 docker run --rm --network host -p 8080:80 nginx:alpine nginx -t 2&gt;&amp;1 | head -2</code></pre>
 <div class="out">WARNING: Published ports are discarded when using host network mode
 nginx: configuration file /etc/nginx/nginx.conf test is successful</div>
@@ -1721,7 +1721,7 @@ xin chao tu may Linux
 
 <h3>Sharing another container's network</h3>
 ${slide('dk-08', 24, '--network container:app — mượn đôi mắt của chính app')}
-<pre><code><span class="tok-comment"># The debug container joins the app's namespace: same interfaces, same localhost</span>
+<pre><code class="language-bash"><span class="tok-comment"># The debug container joins the app's namespace: same interfaces, same localhost</span>
 docker run -d --name app -p 3000:3000 api:1.4.2 &gt;/dev/null
 docker run --rm --network container:app nicolaka/netshoot \\
   sh -c 'ss -lntp; curl -s -o /dev/null -w "%{http_code}\\n" http://localhost:3000/health'</code></pre>
@@ -1744,7 +1744,7 @@ LISTEN 0      5            0.0.0.0:3000       0.0.0.0:*
 <p>Three things to read: netshoot sees exactly the app's socket (<code>0.0.0.0:3000</code>) and the embedded DNS socket (<code>127.0.0.11:46591</code>); netshoot's <code>localhost:3000</code> IS the app (<code>200</code>); and both have the SAME hostname — Docker lets the "guest" container share the host name too. The <code>Process</code> column is empty because netshoot cannot see another container's processes (the PID namespace is still separate); for process names, use the <code>nsenter</code> approach in Lesson 8.5.</p>
 
 <h3>IPv6, briefly</h3>
-<pre><code>docker network create --ipv6 --subnet 2001:db8:1::/64 v6net &gt;/dev/null
+<pre><code class="language-bash">docker network create --ipv6 --subnet 2001:db8:1::/64 v6net &gt;/dev/null
 docker run --rm --network v6net alpine:3.20 ip -6 -o addr show eth0
 docker run --rm --network v6net alpine:3.20 ip -o addr show eth0 | awk '{print \$3, \$4}'</code></pre>
 <div class="out">11: eth0    inet6 2001:db8:1::2/64 scope global flags 02 \\       valid_lft forever preferred_lft forever
@@ -1815,7 +1815,7 @@ ${slide('dk-08', 21, 'Bốn chữ localhost, bốn nơi khác nhau')}
   <div class="kv"><span class="k">Trong trình duyệt trên máy cá nhân</span><span class="v">Loopback của máy cá nhân bạn. Nếu container chạy trên một con VPS ở xa thì nó chẳng với tới gì cả — một nhầm lẫn hay gặp đến bất ngờ khi làm theo bài hướng dẫn viết cho máy cục bộ.</span></div>
   <div class="kv"><span class="k">Bên trong container <code>--network host</code></span><span class="v">Đúng là loopback của máy chủ thật — vì không có namespace riêng nào cả. Đây là trường hợp duy nhất hai nghĩa đó trùng nhau.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Một cơ sở dữ liệu trên MÁY CHỦ, không nằm trong Docker</span>
+<pre><code class="language-bash"><span class="tok-comment"># Một cơ sở dữ liệu trên MÁY CHỦ, không nằm trong Docker</span>
 sudo ss -lntp 'sport = :5432' | tail -1
 docker run --rm postgres:16-alpine psql -h localhost -U postgres -c 'select 1' 2&gt;&amp;1 | tail -2</code></pre>
 <div class="out">LISTEN 0 244 127.0.0.1:5432 0.0.0.0:* users:(("postgres",pid=1188,fd=6))
@@ -1824,7 +1824,7 @@ Connection refused</div>
 
 <h3>Với tới máy chủ từ trong container</h3>
 ${slide('dk-08', 22, 'host.docker.internal: Mac có sẵn — Linux phải tự thêm')}
-<pre><code><span class="tok-comment"># Chạy được trên Linux, macOS và Windows kể từ Docker 20.10</span>
+<pre><code class="language-bash"><span class="tok-comment"># Chạy được trên Linux, macOS và Windows kể từ Docker 20.10</span>
 docker run --rm --add-host=host.docker.internal:host-gateway alpine:3.20 \\
   sh -c 'getent hosts host.docker.internal'</code></pre>
 <div class="out">172.17.0.1      host.docker.internal</div>
@@ -1839,7 +1839,7 @@ services:
   <div class="lz-step"><span class="lz-k">Dịch vụ phải nghe ở 0.0.0.0</span><span class="lz-t">một dịch vụ trên máy chủ gắn vào 127.0.0.1 vẫn không với tới được</span><span class="lz-d">Container đi tới qua giao diện cây cầu chứ không qua loopback. Postgres ở <code>127.0.0.1:5432</code> từ chối nó, y hệt cách nó từ chối mọi cái máy khác.</span></div>
   <div class="lz-step"><span class="lz-k">Tốt hơn: đưa luôn dịch vụ đó vào container</span><span class="lz-t">thế là nó chỉ còn là một cái tên trên một mạng</span><span class="lz-d">Với ngược vào máy chủ là bắc cầu giữa hai thế giới, và nên tránh khi phương án thay thế chỉ là thêm một dịch vụ nữa vào file compose.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Cùng cơ sở dữ liệu đó, giờ với tới được — vì nó nghe ở mọi giao diện</span>
+<pre><code class="language-bash"><span class="tok-comment"># Cùng cơ sở dữ liệu đó, giờ với tới được — vì nó nghe ở mọi giao diện</span>
 sudo ss -lntp 'sport = :5432' | tail -1
 docker run --rm --add-host=host.docker.internal:host-gateway postgres:16-alpine \\
   psql -h host.docker.internal -U postgres -c 'select 1' 2&gt;/dev/null | head -3</code></pre>
@@ -1892,7 +1892,7 @@ xin chao tu may Linux</div>
 
 <h3>--network host: không có namespace nào cả</h3>
 ${slide('dk-08', 23, '--network host: bỏ hẳn namespace — được gì, mất gì')}
-<pre><code><span class="tok-comment"># output thật trên máy Linux; ip của BusyBox không có -brief</span>
+<pre><code class="language-bash"><span class="tok-comment"># output thật trên máy Linux; ip của BusyBox không có -brief</span>
 docker run --rm --network host alpine sh -c 'ip -o -4 addr | awk "{print \\$2, \\$4}" | head -5'
 <span class="tok-comment"># một dịch vụ trên máy chủ nghe 127.0.0.1:18089 (python3 -m http.server)</span>
 docker run --rm --network host alpine wget -qO- -T 3 http://127.0.0.1:18089/</code></pre>
@@ -1908,7 +1908,7 @@ xin chao tu may Linux</div>
   <div class="kv"><span class="k">Không giống nhau trên Docker Desktop</span><span class="v">Trên macOS và Windows, "máy chủ" là cái máy ảo Linux, không phải máy cá nhân của bạn. Mạng host ở đó hành xử khác và mãi gần đây mới chạy được — đừng dựng quy trình làm việc trên nó.</span></div>
   <div class="kv"><span class="k">Khi nào nó thật sự đúng</span><span class="v">Một agent giám sát buộc phải nhìn thấy các giao diện của máy chủ, một bộ cân bằng tải xử lý hàng chục nghìn kết nối nơi NAT đo được, hoặc phần mềm cần broadcast/multicast. Còn lại: một cổng công bố.</span></div>
 </div>
-<pre><code><span class="tok-comment"># -p bị lặng lẽ bỏ qua ở chế độ host — để ý dòng cảnh báo</span>
+<pre><code class="language-bash"><span class="tok-comment"># -p bị lặng lẽ bỏ qua ở chế độ host — để ý dòng cảnh báo</span>
 docker run --rm --network host -p 8080:80 nginx:alpine nginx -t 2&gt;&amp;1 | head -2</code></pre>
 <div class="out">WARNING: Published ports are discarded when using host network mode
 nginx: configuration file /etc/nginx/nginx.conf test is successful</div>
@@ -1933,7 +1933,7 @@ xin chao tu may Linux
 
 <h3>Dùng chung mạng của một container khác</h3>
 ${slide('dk-08', 24, '--network container:app — mượn đôi mắt của chính app')}
-<pre><code><span class="tok-comment"># Container gỡ lỗi nhập vào namespace của ứng dụng: cùng giao diện, cùng localhost</span>
+<pre><code class="language-bash"><span class="tok-comment"># Container gỡ lỗi nhập vào namespace của ứng dụng: cùng giao diện, cùng localhost</span>
 docker run -d --name app -p 3000:3000 api:1.4.2 &gt;/dev/null
 docker run --rm --network container:app nicolaka/netshoot \\
   sh -c 'ss -lntp; curl -s -o /dev/null -w "%{http_code}\\n" http://localhost:3000/health'</code></pre>
@@ -1956,7 +1956,7 @@ LISTEN 0      5            0.0.0.0:3000       0.0.0.0:*
 <p>Ba điều đọc được: netshoot thấy đúng socket của app (<code>0.0.0.0:3000</code>) và cả socket DNS nhúng (<code>127.0.0.11:46591</code>); <code>localhost:3000</code> của netshoot chính là app (<code>200</code>); và hai bên có CÙNG hostname — Docker cho container "ké" dùng chung luôn tên máy. Cột <code>Process</code> trống vì netshoot không thấy tiến trình của container khác (namespace PID vẫn riêng); cần tên tiến trình thì dùng cách <code>nsenter</code> ở Bài 8.5.</p>
 
 <h3>IPv6, nói ngắn</h3>
-<pre><code>docker network create --ipv6 --subnet 2001:db8:1::/64 v6net &gt;/dev/null
+<pre><code class="language-bash">docker network create --ipv6 --subnet 2001:db8:1::/64 v6net &gt;/dev/null
 docker run --rm --network v6net alpine:3.20 ip -6 -o addr show eth0
 docker run --rm --network v6net alpine:3.20 ip -o addr show eth0 | awk '{print \$3, \$4}'</code></pre>
 <div class="out">11: eth0    inet6 2001:db8:1::2/64 scope global flags 02 \\       valid_lft forever preferred_lft forever
@@ -2040,7 +2040,7 @@ ${slide('dk-08', 25, 'Bốn câu hỏi, hỏi đúng thứ tự')}
 
 <h3>The toolkit</h3>
 ${slide('dk-08', 26, 'Soi socket của một ảnh không có công cụ — không cần sudo')}
-<pre><code><span class="tok-comment"># Inside the app's own namespace — no tools needed in the app image</span>
+<pre><code class="language-bash"><span class="tok-comment"># Inside the app's own namespace — no tools needed in the app image</span>
 docker run --rm -it --network container:api nicolaka/netshoot
 
 <span class="tok-comment"># On the app's network, as a separate container (to test reachability BETWEEN containers)</span>
@@ -2074,16 +2074,16 @@ LISTEN 0      4096      127.0.0.11:45039      0.0.0.0:*    users:(("dockerd",pid
 
 <h3>Reading the four commands that matter</h3>
 ${slide('dk-08', 28, 'dig → nc → curl -v → tcpdump: mỗi công cụ trả lời một tầng')}
-<pre><code><span class="tok-comment"># DNS: is the name known, and to which address?</span>
+<pre><code class="language-bash"><span class="tok-comment"># DNS: is the name known, and to which address?</span>
 docker run --rm --network shop nicolaka/netshoot dig +short db
 docker run --rm --network shop nicolaka/netshoot dig db @127.0.0.11 +noall +answer</code></pre>
 <div class="out">172.19.0.4
 db.			600	IN	A	172.19.0.4</div>
-<pre><code><span class="tok-comment"># Reachability: refused, timeout, or open?</span>
+<pre><code class="language-bash"><span class="tok-comment"># Reachability: refused, timeout, or open?</span>
 docker run --rm --network shop nicolaka/netshoot sh -c 'nc -zv db 5432; nc -zv -w3 db 9999'</code></pre>
 <div class="out">Connection to db (172.26.0.4) 5432 port [tcp/postgresql] succeeded!
 nc: connect to db (172.26.0.4) port 9999 (tcp) failed: Connection refused</div>
-<pre><code><span class="tok-comment"># HTTP: what actually happened, including the TLS handshake and redirects</span>
+<pre><code class="language-bash"><span class="tok-comment"># HTTP: what actually happened, including the TLS handshake and redirects</span>
 docker run --rm --network shop nicolaka/netshoot \\
   curl -sS -o /dev/null -v --max-time 5 http://api:3000/health 2&gt;&amp;1 | grep -E '^[*&gt;&lt;]' | head -8</code></pre>
 <div class="out">*   Trying 172.19.0.2:3000...
@@ -2092,7 +2092,7 @@ docker run --rm --network shop nicolaka/netshoot \\
 &gt; Host: api:3000
 &lt; HTTP/1.1 200 OK
 &lt; content-type: application/json</div>
-<pre><code><span class="tok-comment"># Packets: when you need to see that traffic really arrives</span>
+<pre><code class="language-bash"><span class="tok-comment"># Packets: when you need to see that traffic really arrives</span>
 docker run --rm --net container:api --cap-add NET_ADMIN nicolaka/netshoot \\
   timeout 8 tcpdump -ni any -c 5 'tcp port 5432'</code></pre>
 <div class="out">tcpdump: data link type LINUX_SLL2
@@ -2163,7 +2163,7 @@ nc: getaddrinfo for host "khongcoai" port 3000: Name does not resolve</div>
 
 <h3>A ten-second triage script</h3>
 ${slide('dk-08', 29, 'Kịch bản phân loại 10 giây')}
-<pre><code><span class="tok-comment"># Where is each container, and what is published where?</span>
+<pre><code class="language-bash"><span class="tok-comment"># Where is each container, and what is published where?</span>
 docker ps --format 'table {{.Names}}\\t{{.Ports}}'
 docker inspect -f '{{ .Name }} → {{ range $n, $v := .NetworkSettings.Networks }}{{ $n }} {{ $v.IPAddress }} {{ end }}' \\
   $(docker ps -q)
@@ -2265,7 +2265,7 @@ ${slide('dk-08', 25, 'Bốn câu hỏi, hỏi đúng thứ tự')}
 
 <h3>Bộ công cụ</h3>
 ${slide('dk-08', 26, 'Soi socket của một ảnh không có công cụ — không cần sudo')}
-<pre><code><span class="tok-comment"># Bên trong namespace của chính ứng dụng — không cần công cụ nào trong ảnh ứng dụng</span>
+<pre><code class="language-bash"><span class="tok-comment"># Bên trong namespace của chính ứng dụng — không cần công cụ nào trong ảnh ứng dụng</span>
 docker run --rm -it --network container:api nicolaka/netshoot
 
 <span class="tok-comment"># Trên mạng của ứng dụng, dưới dạng container riêng (để thử với tới GIỮA các container)</span>
@@ -2299,16 +2299,16 @@ LISTEN 0      4096      127.0.0.11:45039      0.0.0.0:*    users:(("dockerd",pid
 
 <h3>Đọc bốn câu lệnh quan trọng</h3>
 ${slide('dk-08', 28, 'dig → nc → curl -v → tcpdump: mỗi công cụ trả lời một tầng')}
-<pre><code><span class="tok-comment"># DNS: cái tên có được biết không, và trỏ tới địa chỉ nào?</span>
+<pre><code class="language-bash"><span class="tok-comment"># DNS: cái tên có được biết không, và trỏ tới địa chỉ nào?</span>
 docker run --rm --network shop nicolaka/netshoot dig +short db
 docker run --rm --network shop nicolaka/netshoot dig db @127.0.0.11 +noall +answer</code></pre>
 <div class="out">172.19.0.4
 db.			600	IN	A	172.19.0.4</div>
-<pre><code><span class="tok-comment"># Với tới được không: refused, timeout, hay open?</span>
+<pre><code class="language-bash"><span class="tok-comment"># Với tới được không: refused, timeout, hay open?</span>
 docker run --rm --network shop nicolaka/netshoot sh -c 'nc -zv db 5432; nc -zv -w3 db 9999'</code></pre>
 <div class="out">Connection to db (172.26.0.4) 5432 port [tcp/postgresql] succeeded!
 nc: connect to db (172.26.0.4) port 9999 (tcp) failed: Connection refused</div>
-<pre><code><span class="tok-comment"># HTTP: thật ra đã xảy ra chuyện gì, kể cả bắt tay TLS và chuyển hướng</span>
+<pre><code class="language-bash"><span class="tok-comment"># HTTP: thật ra đã xảy ra chuyện gì, kể cả bắt tay TLS và chuyển hướng</span>
 docker run --rm --network shop nicolaka/netshoot \\
   curl -sS -o /dev/null -v --max-time 5 http://api:3000/health 2&gt;&amp;1 | grep -E '^[*&gt;&lt;]' | head -8</code></pre>
 <div class="out">*   Trying 172.19.0.2:3000...
@@ -2317,7 +2317,7 @@ docker run --rm --network shop nicolaka/netshoot \\
 &gt; Host: api:3000
 &lt; HTTP/1.1 200 OK
 &lt; content-type: application/json</div>
-<pre><code><span class="tok-comment"># Gói tin: khi bạn cần thấy tận mắt là lưu lượng có tới thật</span>
+<pre><code class="language-bash"><span class="tok-comment"># Gói tin: khi bạn cần thấy tận mắt là lưu lượng có tới thật</span>
 docker run --rm --net container:api --cap-add NET_ADMIN nicolaka/netshoot \\
   timeout 8 tcpdump -ni any -c 5 'tcp port 5432'</code></pre>
 <div class="out">tcpdump: data link type LINUX_SLL2
@@ -2388,7 +2388,7 @@ nc: getaddrinfo for host "khongcoai" port 3000: Name does not resolve</div>
 
 <h3>Một script phân loại nhanh mười giây</h3>
 ${slide('dk-08', 29, 'Kịch bản phân loại 10 giây')}
-<pre><code><span class="tok-comment"># Container nào ở đâu, và cái gì công bố ở chỗ nào?</span>
+<pre><code class="language-bash"><span class="tok-comment"># Container nào ở đâu, và cái gì công bố ở chỗ nào?</span>
 docker ps --format 'table {{.Names}}\\t{{.Ports}}'
 docker inspect -f '{{ .Name }} → {{ range $n, $v := .NetworkSettings.Networks }}{{ $n }} {{ $v.IPAddress }} {{ end }}' \\
   $(docker ps -q)

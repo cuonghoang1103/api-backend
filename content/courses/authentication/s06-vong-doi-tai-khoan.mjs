@@ -34,7 +34,7 @@ export default {
 </div>
 
 <h3>Normalising an email, decision by decision</h3>
-<pre><code><span class="tok-comment">// Normalise: trim whitespace, lowercase, unify Unicode.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Normalise: trim whitespace, lowercase, unify Unicode.</span>
 export function normalizeEmail(raw: string): string {
   const t = raw.trim();
   const i = t.lastIndexOf('@');                 <span class="tok-comment">// last, not first: the local part may contain an @</span>
@@ -59,7 +59,7 @@ export function normalizeEmail(raw: string): string {
 </div>
 
 <h3>What you must NOT normalise away</h3>
-<pre><code><span class="tok-comment">// TEMPTING: collapse aliases to "block multiple accounts". DO NOT.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// TEMPTING: collapse aliases to "block multiple accounts". DO NOT.</span>
 function usedFor(e: string) {
   const [local, domain] = e.split('@');
   return local.split('+')[0].replaceAll('.', '') + '@' + domain;
@@ -74,7 +74,7 @@ function usedFor(e: string) {
 </div>
 
 <h3>Two columns, because they answer two questions</h3>
-<pre><code>model User {
+<pre><code class="language-typescript">model User {
   id              String    @id @default(cuid())
   email           String    <span class="tok-comment">// AS TYPED — for display and for SENDING mail</span>
   normalizedEmail String    @unique              <span class="tok-comment">// normalised — for LOOKUP and for the uniqueness guarantee</span>
@@ -92,7 +92,7 @@ function usedFor(e: string) {
 </div>
 
 <h3>Check-then-insert is always a race</h3>
-<pre><code><span class="tok-comment">// WRONG: there is an await between the check and the insert.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// WRONG: there is an await between the check and the insert.</span>
 const exists = await prisma.user.findUnique({ where: { normalizedEmail: ch } });
 if (exists) throw new Error('email da duoc dung');
 await prisma.user.create({ data: { email, normalizedEmail: ch, passwordHash } });</code></pre>
@@ -102,7 +102,7 @@ B: 23505 duplicate key value violates unique constraint "nguoi_dung_email_chuan_
 # Hai lan dang ky cung mot email, cach nhau vai mili giay: ca hai deu
 # thay "chua ton tai", roi ca hai cung chen. Chi rang buoc duy nhat cua
 # CO SO DU LIEU chan duoc cai thu hai.</div>
-<pre><code><span class="tok-comment">// RIGHT: just insert, and catch the unique-constraint violation.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// RIGHT: just insert, and catch the unique-constraint violation.</span>
 try {
   const u = await prisma.user.create({
     data: { email: raw.trim(), normalizedEmail: ch, passwordHash },
@@ -122,7 +122,7 @@ return res.status(202).json({ message: 'Kiểm tra hộp thư của bạn.' });<
 </div>
 
 <h3>Validating the address, and what actually validates it</h3>
-<pre><code><span class="tok-comment">// That is enough. Any stricter and you start rejecting VALID addresses.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// That is enough. Any stricter and you start rejecting VALID addresses.</span>
 const VALID = /^[^\\s@]+@[^\\s@.]+\\.[^\\s@]+$/;
 if (!VALID.test(t) || t.length &gt; 254) throw new Error('email khong hop le');</code></pre>
 <div class="note-ct">
@@ -152,7 +152,7 @@ if (!VALID.test(t) || t.length &gt; 254) throw new Error('email khong hop le');<
 </div>
 
 <h3>Chuẩn hoá email, từng quyết định một</h3>
-<pre><code><span class="tok-comment">// Chuẩn hoá: cắt khoảng trắng, hạ chữ, hợp nhất Unicode.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Chuẩn hoá: cắt khoảng trắng, hạ chữ, hợp nhất Unicode.</span>
 export function normalizeEmail(raw: string): string {
   const t = raw.trim();
   const i = t.lastIndexOf('@');                 <span class="tok-comment">// last, không phải first: local part có thể chứa @</span>
@@ -177,7 +177,7 @@ export function normalizeEmail(raw: string): string {
 </div>
 
 <h3>Cái KHÔNG được chuẩn hoá mất đi</h3>
-<pre><code><span class="tok-comment">// CÁM DỖ: gộp bí danh để "chặn nhiều tài khoản". ĐỪNG.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// CÁM DỖ: gộp bí danh để "chặn nhiều tài khoản". ĐỪNG.</span>
 function usedFor(e: string) {
   const [local, domain] = e.split('@');
   return local.split('+')[0].replaceAll('.', '') + '@' + domain;
@@ -192,7 +192,7 @@ function usedFor(e: string) {
 </div>
 
 <h3>Hai cột, vì chúng trả lời hai câu hỏi</h3>
-<pre><code>model User {
+<pre><code class="language-typescript">model User {
   id              String    @id @default(cuid())
   email           String    <span class="tok-comment">// NHƯ NGƯỜI TA GÕ — để hiển thị và để GỬI thư</span>
   normalizedEmail String    @unique              <span class="tok-comment">// đã chuẩn hoá — để TRA CỨU và bảo đảm duy nhất</span>
@@ -210,7 +210,7 @@ function usedFor(e: string) {
 </div>
 
 <h3>Kiểm rồi mới chèn LUÔN LUÔN là một cuộc đua</h3>
-<pre><code><span class="tok-comment">// SAI: có một cái await giữa lúc kiểm và lúc chèn.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// SAI: có một cái await giữa lúc kiểm và lúc chèn.</span>
 const exists = await prisma.user.findUnique({ where: { normalizedEmail: ch } });
 if (exists) throw new Error('email da duoc dung');
 await prisma.user.create({ data: { email, normalizedEmail: ch, passwordHash } });</code></pre>
@@ -220,7 +220,7 @@ B: 23505 duplicate key value violates unique constraint "nguoi_dung_email_chuan_
 # Hai lan dang ky cung mot email, cach nhau vai mili giay: ca hai deu
 # thay "chua ton tai", roi ca hai cung chen. Chi rang buoc duy nhat cua
 # CO SO DU LIEU chan duoc cai thu hai.</div>
-<pre><code><span class="tok-comment">// ĐÚNG: cứ chèn, và bắt lỗi vi phạm ràng buộc duy nhất.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// ĐÚNG: cứ chèn, và bắt lỗi vi phạm ràng buộc duy nhất.</span>
 try {
   const u = await prisma.user.create({
     data: { email: raw.trim(), normalizedEmail: ch, passwordHash },
@@ -240,7 +240,7 @@ return res.status(202).json({ message: 'Kiểm tra hộp thư của bạn.' });<
 </div>
 
 <h3>Kiểm tính hợp lệ của địa chỉ, và cái gì mới thật sự kiểm được</h3>
-<pre><code><span class="tok-comment">// Đủ rồi. Nghiêm hơn nữa là bạn đang từ chối những địa chỉ HỢP LỆ.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Đủ rồi. Nghiêm hơn nữa là bạn đang từ chối những địa chỉ HỢP LỆ.</span>
 const VALID = /^[^\\s@]+@[^\\s@.]+\\.[^\\s@]+$/;
 if (!VALID.test(t) || t.length &gt; 254) throw new Error('email khong hop le');</code></pre>
 <div class="note-ct">
@@ -279,7 +279,7 @@ if (!VALID.test(t) || t.length &gt; 254) throw new Error('email khong hop le');<
 </div>
 
 <h3>The token is Chapter 1's primitive, unchanged</h3>
-<pre><code>const token = randomBytes(32).toString('base64url');          <span class="tok-comment">// sent in the email</span>
+<pre><code class="language-javascript">const token = randomBytes(32).toString('base64url');          <span class="tok-comment">// sent in the email</span>
 const bam   = createHash('sha256').update(token).digest('hex'); <span class="tok-comment">// stored in the DB</span>
 
 await prisma.verifyToken.create({
@@ -309,7 +309,7 @@ do dai URL: 76 ky tu</div>
 <div class="pitfall">
 <p><strong>Trap — a GET that consumes the token will be consumed by a machine.</strong> Outlook Safe Links, Proofpoint, Mimecast, Slack unfurling, Skype previews and half a dozen antivirus suites fetch every URL in an incoming mail to check it. They arrive seconds after delivery, they follow redirects, and they do not run your JavaScript. Any side effect you attach to that <code>GET</code> has already happened by the time the human opens the message.</p>
 </div>
-<pre><code><span class="tok-comment">// Fix: GET only DISPLAYS. The verification sits behind a POST.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Fix: GET only DISPLAYS. The verification sits behind a POST.</span>
 app.get('/verify', async (req, res) =&gt; {
   const t = String(req.query.t ?? '');
   const r = await findValidToken(t);                     <span class="tok-comment">// READ only, changes nothing</span>
@@ -343,7 +343,7 @@ app.post('/verify', dinhDanhCsrf, async (req, res) =&gt; { <span class="tok-comm
 </div>
 
 <h3>Resending, expiry, and the address stuck on an orphan</h3>
-<pre><code><span class="tok-comment">// Resend: rate-limit per USER, and answer identically whether or not they exist.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Resend: rate-limit per USER, and answer identically whether or not they exist.</span>
 app.post('/verify/resend', limit({ perMinute: 1, perHour: 5 }), async (req, res) =&gt; {
   const ch = normalizeEmail(String(req.body.email ?? ''));
   const u = await prisma.user.findUnique({ where: { normalizedEmail: ch } });
@@ -383,7 +383,7 @@ app.post('/verify/resend', limit({ perMinute: 1, perHour: 5 }), async (req, res)
 </div>
 
 <h3>Cái token chính là nguyên thuỷ của Chương 1, không đổi gì</h3>
-<pre><code>const token = randomBytes(32).toString('base64url');          <span class="tok-comment">// gửi đi trong thư</span>
+<pre><code class="language-javascript">const token = randomBytes(32).toString('base64url');          <span class="tok-comment">// gửi đi trong thư</span>
 const bam   = createHash('sha256').update(token).digest('hex'); <span class="tok-comment">// lưu vào CSDL</span>
 
 await prisma.verifyToken.create({
@@ -413,7 +413,7 @@ do dai URL: 76 ky tu</div>
 <div class="pitfall">
 <p><strong>Bẫy — một cái GET có tiêu thụ token thì sẽ bị MÁY tiêu thụ.</strong> Outlook Safe Links, Proofpoint, Mimecast, phần xem trước của Slack, xem trước của Skype và cả tá bộ diệt virus đều tải MỌI URL trong thư đến để kiểm tra nó. Chúng tới sau vài giây kể từ lúc thư về, chúng đi theo cả chuyển hướng, và chúng KHÔNG chạy JavaScript của bạn. Mọi tác dụng phụ bạn gắn vào cái <code>GET</code> đó đều đã xảy ra xong trước khi con người mở thư ra.</p>
 </div>
-<pre><code><span class="tok-comment">// Vá: GET chỉ HIỂN THỊ. Việc xác minh nằm sau một cú POST.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Vá: GET chỉ HIỂN THỊ. Việc xác minh nằm sau một cú POST.</span>
 app.get('/verify', async (req, res) =&gt; {
   const t = String(req.query.t ?? '');
   const r = await findValidToken(t);                     <span class="tok-comment">// chỉ ĐỌC, không đổi gì</span>
@@ -447,7 +447,7 @@ app.post('/verify', dinhDanhCsrf, async (req, res) =&gt; { <span class="tok-comm
 </div>
 
 <h3>Gửi lại, hết hạn, và cái địa chỉ kẹt trên một tài khoản mồ côi</h3>
-<pre><code><span class="tok-comment">// Gửi lại: giới hạn theo NGƯỜI DÙNG, và trả lời y hệt nhau dù có hay không.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Gửi lại: giới hạn theo NGƯỜI DÙNG, và trả lời y hệt nhau dù có hay không.</span>
 app.post('/verify/resend', limit({ perMinute: 1, perHour: 5 }), async (req, res) =&gt; {
   const ch = normalizeEmail(String(req.body.email ?? ''));
   const u = await prisma.user.findUnique({ where: { normalizedEmail: ch } });
@@ -488,7 +488,7 @@ app.post('/verify/resend', limit({ perMinute: 1, perHour: 5 }), async (req, res)
 <p class="lead">Every protection in Chapters 2 through 5 — Argon2, rate limits, MFA, rotation — guards the front door. Password reset is a second door into the same house that opens for anyone who can read one mailbox, and it is usually built in an afternoon by whoever drew the short straw. Attackers know this. Treat it as the primary authentication path, because for them it is.</p>
 
 <h3>The token, stricter than verification</h3>
-<pre><code>model PasswordResetToken {
+<pre><code class="language-typescript">model PasswordResetToken {
   id                  String    @id @default(cuid())
   tokenHash           String    @unique              <span class="tok-comment">// sha256 of 32 random bytes</span>
   userId              String
@@ -508,14 +508,14 @@ app.post('/verify/resend', limit({ perMinute: 1, perHour: 5 }), async (req, res)
   <div class="lz-step"><span class="lz-k">One live token per account</span><span class="lz-t">A new request kills the old</span><span class="lz-d">Delete outstanding rows before issuing. This is also the user's own escape hatch: if they suspect a reset mail they did not ask for, requesting one themselves invalidates whatever the attacker is holding.</span></div>
   <div class="lz-step"><span class="lz-k">Bound to the credential version</span><span class="lz-t">The subtle one</span><span class="lz-d">Store the account's current credential version in the row and compare it at redemption. A password change, an MFA enrolment or an admin lock bumps the counter, and every token issued before it dies at once — including the one an attacker requested last week and was saving.</span></div>
 </div>
-<pre><code><span class="tok-comment">// Change a credential ANYWHERE → bump the counter → every old token dies with it</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Change a credential ANYWHERE → bump the counter → every old token dies with it</span>
 await prisma.user.update({
   where: { id },
   data: { passwordHash: newHash, materializedVersion: { increment: 1 } },
 });</code></pre>
 
 <h3>The Host header builds your reset link. That is a vulnerability</h3>
-<pre><code><span class="tok-comment">// WRONG, and extremely common: a URL built from what the CLIENT sent.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// WRONG, and extremely common: a URL built from what the CLIENT sent.</span>
 const url = &#96;https://\${req.headers['x-forwarded-host'] ?? req.headers.host}/dat-lai?t=\${token}&#96;;
 await sendMail(u.email, url);</code></pre>
 <div class="out">Host: cuongthai.com      X-Forwarded-Host: -                -> https://cuongthai.com/dat-lai?t=dCfIs_pU…
@@ -528,7 +528,7 @@ Host: cuongthai.com      X-Forwarded-Host: ke-tan-cong.com  -> https://ke-tan-co
 <div class="pitfall">
 <p><strong>Trap — this attack needs no XSS, no interception and no access to the victim.</strong> The attacker submits "forgot password" for someone else's address with a poisoned <code>Host</code> or <code>X-Forwarded-Host</code>. Your server sends a genuine mail, from your genuine domain, passing SPF and DKIM, landing in the real inbox — carrying a link to the attacker's host. The victim clicks a link in a legitimate mail they were half-expecting, and the token is delivered to the attacker's access log. Even without a click, some setups leak it: any image or asset your reset page loads from that host takes the token along in the <code>Referer</code>.</p>
 </div>
-<pre><code><span class="tok-comment">// RIGHT: the public URL is a CONFIG CONSTANT, not an input.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// RIGHT: the public URL is a CONFIG CONSTANT, not an input.</span>
 const PUBLIC_URL = process.env.PUBLIC_URL!;              <span class="tok-comment">// https://cuongthai.com</span>
 const url = &#96;\${PUBLIC_URL}/dat-lai?t=\${token}&#96;;
 
@@ -560,7 +560,7 @@ const url = &#96;\${PUBLIC_URL}/dat-lai?t=\${token}&#96;;
   </div>
 </div>
 <h3>The two endpoints, in full</h3>
-<pre><code>app.post('/forgot-password', limit({ ip: '5/gio', email: '3/gio' }), async (req, res) =&gt; {
+<pre><code class="language-javascript">app.post('/forgot-password', limit({ ip: '5/gio', email: '3/gio' }), async (req, res) =&gt; {
   const ch = normalizeEmail(String(req.body.email ?? ''));
   const u = await prisma.user.findUnique({ where: { normalizedEmail: ch } });
 
@@ -578,7 +578,7 @@ const url = &#96;\${PUBLIC_URL}/dat-lai?t=\${token}&#96;;
   <span class="tok-comment">// ONE single answer, for every case. Lesson 6.4.</span>
   res.status(202).json({ message: 'Nếu địa chỉ đó có tài khoản, chúng tôi đã gửi thư.' });
 });</code></pre>
-<pre><code>app.post('/reset', dinhDanhCsrf, async (req, res) =&gt; {
+<pre><code class="language-javascript">app.post('/reset', dinhDanhCsrf, async (req, res) =&gt; {
   const { t, newPassword } = req.body;
   await checkStrength(newPassword);                              <span class="tok-comment">// ← Chapter 2, exactly as at sign-up</span>
 
@@ -636,7 +636,7 @@ const url = &#96;\${PUBLIC_URL}/dat-lai?t=\${token}&#96;;
 <p class="lead">Mọi lớp bảo vệ từ Chương 2 tới Chương 5 — Argon2, giới hạn tần suất, MFA, xoay vòng — đều canh cửa trước. Đặt lại mật khẩu là một CÁNH CỬA THỨ HAI vào cùng ngôi nhà, mở ra cho bất cứ ai đọc được một hộp thư, và nó thường được dựng trong một buổi chiều bởi người rút phải cọng thăm ngắn. Kẻ tấn công biết điều đó. Hãy đối xử với nó như con đường xác thực CHÍNH, vì với họ thì nó đúng là như vậy.</p>
 
 <h3>Cái token, chặt hơn token xác minh</h3>
-<pre><code>model PasswordResetToken {
+<pre><code class="language-typescript">model PasswordResetToken {
   id                  String    @id @default(cuid())
   tokenHash           String    @unique              <span class="tok-comment">// sha256 của 32 byte ngẫu nhiên</span>
   userId              String
@@ -656,14 +656,14 @@ const url = &#96;\${PUBLIC_URL}/dat-lai?t=\${token}&#96;;
   <div class="lz-step"><span class="lz-k">Mỗi tài khoản một token sống</span><span class="lz-t">Yêu cầu mới giết cái cũ</span><span class="lz-d">Xoá mọi bản ghi còn treo trước khi phát. Đây cũng chính là lối thoát hiểm của người dùng: nếu họ nghi ngờ một lá thư đặt lại mà họ không hề yêu cầu, chỉ cần tự yêu cầu một cái là vô hiệu hoá luôn thứ kẻ tấn công đang cầm.</span></div>
   <div class="lz-step"><span class="lz-k">Buộc vào phiên bản tín vật</span><span class="lz-t">Cái tinh vi</span><span class="lz-d">Lưu phiên bản tín vật hiện tại của tài khoản vào bản ghi và so lại lúc đổi. Một lần đổi mật khẩu, một lần đăng ký MFA hay một lần bị quản trị viên khoá đều tăng bộ đếm, và mọi token phát ra trước đó chết cùng lúc — kể cả cái mà kẻ tấn công đã yêu cầu từ tuần trước và đang để dành.</span></div>
 </div>
-<pre><code><span class="tok-comment">// Đổi tín vật ở BẤT KỲ đâu → tăng bộ đếm → mọi token cũ chết theo</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Đổi tín vật ở BẤT KỲ đâu → tăng bộ đếm → mọi token cũ chết theo</span>
 await prisma.user.update({
   where: { id },
   data: { passwordHash: newHash, materializedVersion: { increment: 1 } },
 });</code></pre>
 
 <h3>Header Host đang dựng đường dẫn đặt lại của bạn. Đó là một LỖ HỔNG</h3>
-<pre><code><span class="tok-comment">// SAI, và cực kỳ phổ biến: URL dựng từ thứ CLIENT gửi lên.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// SAI, và cực kỳ phổ biến: URL dựng từ thứ CLIENT gửi lên.</span>
 const url = &#96;https://\${req.headers['x-forwarded-host'] ?? req.headers.host}/dat-lai?t=\${token}&#96;;
 await sendMail(u.email, url);</code></pre>
 <div class="out">Host: cuongthai.com      X-Forwarded-Host: -                -> https://cuongthai.com/dat-lai?t=dCfIs_pU…
@@ -676,7 +676,7 @@ Host: cuongthai.com      X-Forwarded-Host: ke-tan-cong.com  -> https://ke-tan-co
 <div class="pitfall">
 <p><strong>Bẫy — cú tấn công này KHÔNG cần XSS, không cần chặn đường truyền và không cần chạm được tới nạn nhân.</strong> Kẻ tấn công gửi "quên mật khẩu" cho địa chỉ của NGƯỜI KHÁC kèm một cái <code>Host</code> hoặc <code>X-Forwarded-Host</code> đã bị đầu độc. Máy chủ của bạn gửi một lá thư THẬT, từ tên miền THẬT của bạn, qua được cả SPF lẫn DKIM, rơi đúng vào hộp thư thật — mang theo một đường dẫn trỏ về máy chủ của kẻ tấn công. Nạn nhân bấm vào một đường dẫn nằm trong một lá thư chính danh mà họ cũng đang hơi chờ đợi, và cái token bay thẳng vào access log của kẻ tấn công. Thậm chí không cần cú bấm nào: ở một số cấu hình, chỉ cần trang đặt lại của bạn tải một tấm ảnh hay một tài nguyên nào đó từ máy chủ kia là token đã đi theo trong header <code>Referer</code>.</p>
 </div>
-<pre><code><span class="tok-comment">// ĐÚNG: URL công khai là HẰNG SỐ CẤU HÌNH, không phải đầu vào.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// ĐÚNG: URL công khai là HẰNG SỐ CẤU HÌNH, không phải đầu vào.</span>
 const PUBLIC_URL = process.env.PUBLIC_URL!;              <span class="tok-comment">// https://cuongthai.com</span>
 const url = &#96;\${PUBLIC_URL}/dat-lai?t=\${token}&#96;;
 
@@ -708,7 +708,7 @@ const url = &#96;\${PUBLIC_URL}/dat-lai?t=\${token}&#96;;
   </div>
 </div>
 <h3>Hai endpoint, đầy đủ</h3>
-<pre><code>app.post('/forgot-password', limit({ ip: '5/gio', email: '3/gio' }), async (req, res) =&gt; {
+<pre><code class="language-javascript">app.post('/forgot-password', limit({ ip: '5/gio', email: '3/gio' }), async (req, res) =&gt; {
   const ch = normalizeEmail(String(req.body.email ?? ''));
   const u = await prisma.user.findUnique({ where: { normalizedEmail: ch } });
 
@@ -726,7 +726,7 @@ const url = &#96;\${PUBLIC_URL}/dat-lai?t=\${token}&#96;;
   <span class="tok-comment">// MỘT câu trả lời duy nhất, cho mọi trường hợp. Bài 6.4.</span>
   res.status(202).json({ message: 'Nếu địa chỉ đó có tài khoản, chúng tôi đã gửi thư.' });
 });</code></pre>
-<pre><code>app.post('/reset', dinhDanhCsrf, async (req, res) =&gt; {
+<pre><code class="language-javascript">app.post('/reset', dinhDanhCsrf, async (req, res) =&gt; {
   const { t, newPassword } = req.body;
   await checkStrength(newPassword);                              <span class="tok-comment">// ← Chương 2, y hệt lúc đăng ký</span>
 
@@ -819,7 +819,7 @@ const url = &#96;\${PUBLIC_URL}/dat-lai?t=\${token}&#96;;
     <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">The other flows</span><span class="lz-nsub">Registration, reset, resend, the rate limiter itself · fix three and the fourth still answers</span></div></div>
   </div>
 </div>
-<pre><code><span class="tok-comment">// 1. The wording — the part everyone knows about</span>
+<pre><code class="language-typescript"><span class="tok-comment">// 1. The wording — the part everyone knows about</span>
 if (!u)          return res.status(404).json({ error: 'Email chưa đăng ký' });
 if (!match)        return res.status(401).json({ error: 'Sai mật khẩu' });
 
@@ -837,7 +837,7 @@ DA VA     CO  tai khoan      :  105.867 ms
 <div class="pitfall">
 <p><strong>Trap — the timing leak is created by the very thing that makes your passwords safe.</strong> Argon2id is deliberately expensive: a hundred milliseconds and up. Skip it because there is no user row and you answer in microseconds. That gap is not a subtle statistical signal needing thousands of samples — it is a hundred-thousand-fold difference, visible in a single request, measurable over the internet through jitter, and completely untouched by making both error messages identical. A team that unified the wording and shipped it has fixed the symptom that appears in a screenshot and left the actual oracle running.</p>
 </div>
-<pre><code><span class="tok-comment">// 3. The timing fix: ALWAYS hash, even when there is no account.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// 3. The timing fix: ALWAYS hash, even when there is no account.</span>
 const FAKE_HASH = process.env.FAKE_HASH!;   <span class="tok-comment">// a real Argon2id hash, generated once at startup</span>
 
 const nd  = await prisma.user.findUnique({ where: { normalizedEmail: ch } });
@@ -921,7 +921,7 @@ POST /sign-in         → 401 'Email hoặc mật khẩu không đúng'   <span 
     <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">Những luồng còn lại</span><span class="lz-nsub">Đăng ký, đặt lại, gửi lại, và chính bộ giới hạn tần suất · vá ba cái thì cái thứ tư vẫn trả lời</span></div></div>
   </div>
 </div>
-<pre><code><span class="tok-comment">// 1. Câu chữ — cái ai cũng biết</span>
+<pre><code class="language-typescript"><span class="tok-comment">// 1. Câu chữ — cái ai cũng biết</span>
 if (!u)          return res.status(404).json({ error: 'Email chưa đăng ký' });
 if (!match)        return res.status(401).json({ error: 'Sai mật khẩu' });
 
@@ -939,7 +939,7 @@ DA VA     CO  tai khoan      :  105.867 ms
 <div class="pitfall">
 <p><strong>Bẫy — cú rò rỉ thời gian sinh ra bởi CHÍNH thứ làm cho mật khẩu của bạn an toàn.</strong> Argon2id cố tình đắt: một trăm mili giây trở lên. Bỏ qua nó vì không có bản ghi người dùng thì bạn trả lời trong vài micro giây. Khoảng chênh đó không phải một tín hiệu thống kê tinh vi cần tới hàng nghìn mẫu — nó là một khác biệt gấp cả trăm nghìn lần, nhìn thấy được trong MỘT request, đo được qua Internet xuyên qua độ nhiễu, và hoàn toàn không suy suyển gì khi bạn làm hai câu báo lỗi giống hệt nhau. Một đội đã thống nhất câu chữ rồi đưa lên là đã vá cái triệu chứng xuất hiện trong ảnh chụp màn hình và để nguyên cái máy trả lời thật đang chạy.</p>
 </div>
-<pre><code><span class="tok-comment">// 3. Vá thời gian: LUÔN LUÔN băm, kể cả khi không có tài khoản.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// 3. Vá thời gian: LUÔN LUÔN băm, kể cả khi không có tài khoản.</span>
 const FAKE_HASH = process.env.FAKE_HASH!;   <span class="tok-comment">// một hash Argon2id thật, sinh một lần lúc khởi động</span>
 
 const nd  = await prisma.user.findUnique({ where: { normalizedEmail: ch } });
@@ -1019,7 +1019,7 @@ POST  /reset    { t: '…', newPassword: '…' }          → mọi phiên bị 
   <div class="lz-step"><span class="lz-k">Step 3</span><span class="lz-t">Tell the old address, with an undo</span><span class="lz-d">Mail the address being replaced: "your address is being changed to c…g@vidu.com; if this was not you, click here". That link revokes the pending change, revokes every session and forces a password reset. It is the only message that reaches the real owner.</span></div>
   <div class="lz-step"><span class="lz-k">And keep the undo alive afterwards</span><span class="lz-t">Thirty days</span><span class="lz-d">The notice is worth little if the owner reads it a week later. Keep the undo token valid well past the change, so a mail found late still rescues the account. Facebook and Google both do this; it is the difference between a warning and a remedy.</span></div>
 </div>
-<pre><code>model PendingEmailChange {
+<pre><code class="language-typescript">model PendingEmailChange {
   id                 String   @id @default(cuid())
   userId             String   @unique                  <span class="tok-comment">// one pending change per account</span>
   newEmail           String
@@ -1066,7 +1066,7 @@ ADD CONSTRAINT "user_roles_userId_fkey" FOREIGN KEY ("userId")
 </div>
 
 <h3>Releasing the identifier</h3>
-<pre><code><span class="tok-comment">// After a real deletion: the address is released, and someone MAY register it again.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// After a real deletion: the address is released, and someone MAY register it again.</span>
 <span class="tok-comment">// The new registrant must inherit NOTHING from the old one.</span>
 
 <span class="tok-comment">// WRONG — re-linking old data through the email address:</span>
@@ -1111,7 +1111,7 @@ POST  /reset    { t: '…', newPassword: '…' }          → mọi phiên bị 
   <div class="lz-step"><span class="lz-k">Bước 3</span><span class="lz-t">Báo cho địa chỉ CŨ, kèm nút hoàn tác</span><span class="lz-d">Gửi thư tới chính cái địa chỉ đang bị thay: "địa chỉ của bạn đang được đổi sang c…g@vidu.com; nếu không phải bạn thì bấm vào đây". Đường dẫn đó huỷ yêu cầu đổi, thu hồi mọi phiên và bắt buộc đặt lại mật khẩu. Đó là lá thư DUY NHẤT chạm tới được chủ nhân thật.</span></div>
   <div class="lz-step"><span class="lz-k">Và giữ nút hoàn tác sống SAU đó nữa</span><span class="lz-t">Ba mươi ngày</span><span class="lz-d">Lá thư báo chẳng đáng bao nhiêu nếu chủ nhân đọc nó sau một tuần. Hãy giữ token hoàn tác còn hiệu lực lâu sau khi đã đổi, để một lá thư tìm thấy muộn vẫn cứu được tài khoản. Facebook lẫn Google đều làm thế; đó là khác biệt giữa một lời cảnh báo và một phương thuốc.</span></div>
 </div>
-<pre><code>model PendingEmailChange {
+<pre><code class="language-typescript">model PendingEmailChange {
   id                 String   @id @default(cuid())
   userId             String   @unique                  <span class="tok-comment">// mỗi tài khoản một cái chờ</span>
   newEmail           String
@@ -1158,7 +1158,7 @@ ADD CONSTRAINT "user_roles_userId_fkey" FOREIGN KEY ("userId")
 </div>
 
 <h3>Giải phóng cái định danh</h3>
-<pre><code><span class="tok-comment">// Sau khi xoá thật: địa chỉ được giải phóng, và ai đó CÓ THỂ đăng ký lại nó.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Sau khi xoá thật: địa chỉ được giải phóng, và ai đó CÓ THỂ đăng ký lại nó.</span>
 <span class="tok-comment">// Người đăng ký mới KHÔNG được thừa kế bất cứ thứ gì của người cũ.</span>
 
 <span class="tok-comment">// SAI — nối lại dữ liệu cũ qua email:</span>

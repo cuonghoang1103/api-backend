@@ -57,7 +57,7 @@ ${gallery('wf-html', [
 
 <h3>Anatomy of an element</h3>
 <p>Most content is wrapped in an <strong>element</strong>: an opening tag, some content, and a closing tag. The closing tag has a slash.</p>
-<pre><code>&lt;p&gt;Hello, world&lt;/p&gt;
+<pre><code class="language-html">&lt;p&gt;Hello, world&lt;/p&gt;
  │   │           │
  │   │           └── closing tag (note the / )
  │   └────────────── the content
@@ -77,7 +77,7 @@ ${gallery('wf-html', [
 </div>
 
 <h3>The skeleton every page starts from</h3>
-<pre><code>&lt;!DOCTYPE html&gt;
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
 &lt;html lang="en"&gt;
   &lt;head&gt;
     &lt;meta charset="UTF-8"&gt;
@@ -114,7 +114,7 @@ ${gallery('wf-html', [
 
 <h3>Giải phẫu một phần tử</h3>
 <p>Hầu hết nội dung được bọc trong một <strong>phần tử (element)</strong>: một thẻ mở, phần nội dung, và một thẻ đóng. Thẻ đóng có dấu gạch chéo.</p>
-<pre><code>&lt;p&gt;Xin chào&lt;/p&gt;
+<pre><code class="language-html">&lt;p&gt;Xin chào&lt;/p&gt;
  │   │        │
  │   │        └── thẻ đóng (để ý dấu / )
  │   └─────────── phần nội dung
@@ -134,7 +134,7 @@ ${gallery('wf-html', [
 </div>
 
 <h3>Bộ khung mà mọi trang bắt đầu từ đó</h3>
-<pre><code>&lt;!DOCTYPE html&gt;
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
 &lt;html lang="vi"&gt;
   &lt;head&gt;
     &lt;meta charset="UTF-8"&gt;
@@ -182,14 +182,14 @@ ${gallery('wf-html', [
 
 <h3>Headings and paragraphs</h3>
 <p>There are six heading levels, <code>&lt;h1&gt;</code> (most important) down to <code>&lt;h6&gt;</code>. Use exactly <strong>one</strong> <code>&lt;h1&gt;</code> per page (the page's title), then nest lower levels like an outline. Body text goes in <code>&lt;p&gt;</code>.</p>
-<pre><code>&lt;h1&gt;Bánh mì recipes&lt;/h1&gt;
+<pre><code class="language-html">&lt;h1&gt;Bánh mì recipes&lt;/h1&gt;
 &lt;h2&gt;Ingredients&lt;/h2&gt;
 &lt;p&gt;You will need a baguette, pâté, and pickled carrots.&lt;/p&gt;
 &lt;h2&gt;Steps&lt;/h2&gt;</code></pre>
 <p class="pitfall"><strong>Do not skip levels for size.</strong> Jumping from &lt;h1&gt; straight to &lt;h4&gt; because "h4 looks smaller" breaks the outline for screen readers and SEO. Choose the level by rank; change the size with CSS.</p>
 
 <h3>Lists — ordered and unordered</h3>
-<pre><code>&lt;ul&gt;                    &lt;!-- bullets, order does not matter --&gt;
+<pre><code class="language-html">&lt;ul&gt;                    &lt;!-- bullets, order does not matter --&gt;
   &lt;li&gt;HTML&lt;/li&gt;
   &lt;li&gt;CSS&lt;/li&gt;
 &lt;/ul&gt;
@@ -233,14 +233,14 @@ ${gallery('wf-html', [
 
 <h3>Tiêu đề và đoạn văn</h3>
 <p>Có sáu cấp tiêu đề, <code>&lt;h1&gt;</code> (quan trọng nhất) xuống tới <code>&lt;h6&gt;</code>. Mỗi trang dùng đúng <strong>một</strong> <code>&lt;h1&gt;</code> (tiêu đề của trang), rồi lồng các cấp thấp hơn như một dàn ý. Chữ thân bài đặt trong <code>&lt;p&gt;</code>.</p>
-<pre><code>&lt;h1&gt;Công thức Bánh mì&lt;/h1&gt;
+<pre><code class="language-html">&lt;h1&gt;Công thức Bánh mì&lt;/h1&gt;
 &lt;h2&gt;Nguyên liệu&lt;/h2&gt;
 &lt;p&gt;Bạn cần một ổ bánh mì, pa-tê, và đồ chua.&lt;/p&gt;
 &lt;h2&gt;Các bước&lt;/h2&gt;</code></pre>
 <p class="pitfall"><strong>Đừng nhảy cấp chỉ vì cỡ chữ.</strong> Nhảy từ &lt;h1&gt; thẳng sang &lt;h4&gt; vì "h4 nhìn nhỏ hơn" làm hỏng dàn ý cho trình đọc màn hình và cho SEO. Chọn cấp theo thứ bậc; đổi cỡ chữ bằng CSS.</p>
 
 <h3>Danh sách — có thứ tự và không thứ tự</h3>
-<pre><code>&lt;ul&gt;                    &lt;!-- dấu chấm, thứ tự không quan trọng --&gt;
+<pre><code class="language-html">&lt;ul&gt;                    &lt;!-- dấu chấm, thứ tự không quan trọng --&gt;
   &lt;li&gt;HTML&lt;/li&gt;
   &lt;li&gt;CSS&lt;/li&gt;
 &lt;/ul&gt;
@@ -305,7 +305,7 @@ ${gallery('wf-html', [
 </div>
 
 <h3>A realistic page skeleton</h3>
-<pre><code>&lt;body&gt;
+<pre><code class="language-html">&lt;body&gt;
   &lt;header&gt;
     &lt;h1&gt;My Blog&lt;/h1&gt;
     &lt;nav&gt;
@@ -361,7 +361,7 @@ ${gallery('wf-html', [
 </div>
 
 <h3>Một bộ khung trang thực tế</h3>
-<pre><code>&lt;body&gt;
+<pre><code class="language-html">&lt;body&gt;
   &lt;header&gt;
     &lt;h1&gt;Blog của tôi&lt;/h1&gt;
     &lt;nav&gt;
@@ -417,7 +417,7 @@ ${gallery('wf-html', [
 <p class="lead">Forms are how a user <em>gives</em> data to a site. This is the exact bridge to the Node.js course: a form collects data in the browser and sends it to a backend route that saves it. Get comfortable here and server-side handling later will click.</p>
 
 <h3>The container and its controls</h3>
-<pre><code>&lt;form action="/signup" method="post"&gt;
+<pre><code class="language-html">&lt;form action="/signup" method="post"&gt;
   &lt;label for="email"&gt;Email&lt;/label&gt;
   &lt;input id="email" name="email" type="email" required&gt;
 
@@ -444,7 +444,7 @@ ${gallery('wf-html', [
 </div>
 
 <h3>Multi-line, dropdowns and buttons</h3>
-<pre><code>&lt;textarea name="bio" rows="4"&gt;&lt;/textarea&gt;
+<pre><code class="language-html">&lt;textarea name="bio" rows="4"&gt;&lt;/textarea&gt;
 
 &lt;select name="country"&gt;
   &lt;option value="vn"&gt;Vietnam&lt;/option&gt;
@@ -473,7 +473,7 @@ ${gallery('wf-html', [
 <p class="lead">Biểu mẫu là cách người dùng <em>đưa</em> dữ liệu cho một trang. Đây chính là cây cầu nối tới khoá Node.js: một form thu dữ liệu trong trình duyệt rồi gửi tới một route backend để lưu. Quen ở đây thì phần xử lý phía server sau này sẽ thông ngay.</p>
 
 <h3>Cái vỏ và các ô điều khiển</h3>
-<pre><code>&lt;form action="/signup" method="post"&gt;
+<pre><code class="language-html">&lt;form action="/signup" method="post"&gt;
   &lt;label for="email"&gt;Email&lt;/label&gt;
   &lt;input id="email" name="email" type="email" required&gt;
 
@@ -500,7 +500,7 @@ ${gallery('wf-html', [
 </div>
 
 <h3>Nhiều dòng, danh sách xổ và nút bấm</h3>
-<pre><code>&lt;textarea name="bio" rows="4"&gt;&lt;/textarea&gt;
+<pre><code class="language-html">&lt;textarea name="bio" rows="4"&gt;&lt;/textarea&gt;
 
 &lt;select name="country"&gt;
   &lt;option value="vn"&gt;Việt Nam&lt;/option&gt;
@@ -540,7 +540,7 @@ ${gallery('wf-html', [
 <p class="lead">The last piece of HTML is the content that needs careful structure: tabular data and media. Do it right and it is automatically accessible; do it lazily and you lock people out. Accessibility is not a separate skill bolted on — it is just good HTML.</p>
 
 <h3>Tables — for data, never for layout</h3>
-<pre><code>&lt;table&gt;
+<pre><code class="language-html">&lt;table&gt;
   &lt;thead&gt;
     &lt;tr&gt;
       &lt;th&gt;Language&lt;/th&gt;
@@ -596,7 +596,7 @@ ${gallery('wf-html', [
 <p class="lead">Mảnh cuối của HTML là loại nội dung cần cấu trúc cẩn thận: dữ liệu dạng bảng và đa phương tiện. Làm đúng thì nó tự khắc tiếp cận được; làm ẩu thì bạn khoá cửa với nhiều người. Khả năng tiếp cận không phải một kỹ năng riêng gắn thêm — nó chỉ là HTML tốt.</p>
 
 <h3>Bảng — cho dữ liệu, không bao giờ để dàn trang</h3>
-<pre><code>&lt;table&gt;
+<pre><code class="language-html">&lt;table&gt;
   &lt;thead&gt;
     &lt;tr&gt;
       &lt;th&gt;Ngôn ngữ&lt;/th&gt;

@@ -24,7 +24,7 @@ export default {
 
 <h3>Typed props</h3>
 <p>Declare a props interface and destructure it in the parameter. Optional props get a <code>?</code>, exactly like any object type:</p>
-<pre><code><span class="tok-comment">// button.tsx</span>
+<pre><code class="language-typescript"><span class="tok-comment">// button.tsx</span>
 <span class="tok-keyword">interface</span> ButtonProps { label: <span class="tok-keyword">string</span>; onClick: () =&gt; <span class="tok-keyword">void</span>; disabled?: <span class="tok-keyword">boolean</span>; }
 <span class="tok-keyword">function</span> <span class="tok-function">Button</span>({ label, onClick, disabled }: ButtonProps) {
   <span class="tok-keyword">return</span> &lt;button onClick={onClick} disabled={disabled}&gt;{label}&lt;/button&gt;;
@@ -35,7 +35,7 @@ export default {
 
 <h3>children: the ReactNode type</h3>
 <p>Anything you nest between a component's tags arrives as the <code>children</code> prop. Its type is <code>ReactNode</code> — the catch-all for "anything React can render" (elements, strings, numbers, arrays, null):</p>
-<pre><code><span class="tok-comment">// card.tsx</span>
+<pre><code class="language-typescript"><span class="tok-comment">// card.tsx</span>
 <span class="tok-keyword">import</span> { ReactNode } <span class="tok-keyword">from</span> <span class="tok-string">'react'</span>;
 <span class="tok-keyword">interface</span> CardProps { title: <span class="tok-keyword">string</span>; children: ReactNode; }
 <span class="tok-keyword">function</span> <span class="tok-function">Card</span>({ title, children }: CardProps) {
@@ -68,7 +68,7 @@ export default {
 
 <h3>Props có kiểu</h3>
 <p>Khai một interface props và giải cấu trúc nó trong tham số. Props tuỳ chọn có một <code>?</code>, y như bất kỳ kiểu object nào:</p>
-<pre><code><span class="tok-comment">// button.tsx</span>
+<pre><code class="language-typescript"><span class="tok-comment">// button.tsx</span>
 <span class="tok-keyword">interface</span> ButtonProps { label: <span class="tok-keyword">string</span>; onClick: () =&gt; <span class="tok-keyword">void</span>; disabled?: <span class="tok-keyword">boolean</span>; }
 <span class="tok-keyword">function</span> <span class="tok-function">Button</span>({ label, onClick, disabled }: ButtonProps) {
   <span class="tok-keyword">return</span> &lt;button onClick={onClick} disabled={disabled}&gt;{label}&lt;/button&gt;;
@@ -79,7 +79,7 @@ export default {
 
 <h3>children: kiểu ReactNode</h3>
 <p>Bất cứ thứ gì bạn lồng giữa các thẻ của một component đến dưới dạng prop <code>children</code>. Kiểu của nó là <code>ReactNode</code> — cái bao trọn "bất cứ thứ gì React render được" (element, chuỗi, số, mảng, null):</p>
-<pre><code><span class="tok-comment">// card.tsx</span>
+<pre><code class="language-typescript"><span class="tok-comment">// card.tsx</span>
 <span class="tok-keyword">import</span> { ReactNode } <span class="tok-keyword">from</span> <span class="tok-string">'react'</span>;
 <span class="tok-keyword">interface</span> CardProps { title: <span class="tok-keyword">string</span>; children: ReactNode; }
 <span class="tok-keyword">function</span> <span class="tok-function">Card</span>({ title, children }: CardProps) {
@@ -122,7 +122,7 @@ export default {
 
 <h3>useState: inferred, and the setter is checked too</h3>
 <p><code>useState(0)</code> infers <code>number</code> from the initial value — and crucially, the setter is typed to match, so it rejects the wrong type:</p>
-<pre><code><span class="tok-comment">// state.tsx</span>
+<pre><code class="language-javascript"><span class="tok-comment">// state.tsx</span>
 <span class="tok-keyword">import</span> { useState } <span class="tok-keyword">from</span> <span class="tok-string">'react'</span>;
 <span class="tok-keyword">function</span> <span class="tok-function">Counter</span>() {
   <span class="tok-keyword">const</span> [count, setCount] = <span class="tok-function">useState</span>(<span class="tok-number">0</span>);   <span class="tok-comment">// inferred as number</span>
@@ -134,7 +134,7 @@ export default {
 
 <h3>Explicit type when null starts it off</h3>
 <p>When the initial value is <code>null</code>, inference would lock the type to <code>null</code> forever. Give the generic explicitly. Same for a ref to a DOM node:</p>
-<pre><code><span class="tok-comment">// ref.tsx</span>
+<pre><code class="language-typescript"><span class="tok-comment">// ref.tsx</span>
 <span class="tok-keyword">import</span> { useRef, useState } <span class="tok-keyword">from</span> <span class="tok-string">'react'</span>;
 <span class="tok-keyword">interface</span> User { id: <span class="tok-keyword">number</span>; name: <span class="tok-keyword">string</span>; }
 <span class="tok-keyword">function</span> <span class="tok-function">Profile</span>() {
@@ -169,7 +169,7 @@ export default {
 
 <h3>useState: suy kiểu, và setter cũng bị kiểm</h3>
 <p><code>useState(0)</code> suy ra <code>number</code> từ giá trị đầu — và quan trọng nhất, setter được gõ kiểu khớp theo, nên nó từ chối sai kiểu:</p>
-<pre><code><span class="tok-comment">// state.tsx</span>
+<pre><code class="language-javascript"><span class="tok-comment">// state.tsx</span>
 <span class="tok-keyword">import</span> { useState } <span class="tok-keyword">from</span> <span class="tok-string">'react'</span>;
 <span class="tok-keyword">function</span> <span class="tok-function">Counter</span>() {
   <span class="tok-keyword">const</span> [count, setCount] = <span class="tok-function">useState</span>(<span class="tok-number">0</span>);   <span class="tok-comment">// suy ra là number</span>
@@ -181,7 +181,7 @@ export default {
 
 <h3>Kiểu tường minh khi khởi đầu bằng null</h3>
 <p>Khi giá trị đầu là <code>null</code>, suy kiểu sẽ khoá kiểu thành <code>null</code> mãi mãi. Hãy đưa generic tường minh. Tương tự cho một ref tới một nút DOM:</p>
-<pre><code><span class="tok-comment">// ref.tsx</span>
+<pre><code class="language-typescript"><span class="tok-comment">// ref.tsx</span>
 <span class="tok-keyword">import</span> { useRef, useState } <span class="tok-keyword">from</span> <span class="tok-string">'react'</span>;
 <span class="tok-keyword">interface</span> User { id: <span class="tok-keyword">number</span>; name: <span class="tok-keyword">string</span>; }
 <span class="tok-keyword">function</span> <span class="tok-function">Profile</span>() {
@@ -226,7 +226,7 @@ export default {
 
 <h3>A change handler</h3>
 <p>Type the parameter as <code>ChangeEvent&lt;HTMLInputElement&gt;</code> and <code>e.target</code> is an input, so <code>e.target.value</code> is a <code>string</code> — always, because that's what the DOM gives you:</p>
-<pre><code><span class="tok-comment">// form.tsx</span>
+<pre><code class="language-javascript"><span class="tok-comment">// form.tsx</span>
 <span class="tok-keyword">import</span> { ChangeEvent } <span class="tok-keyword">from</span> <span class="tok-string">'react'</span>;
 <span class="tok-keyword">function</span> <span class="tok-function">onChange</span>(e: ChangeEvent&lt;HTMLInputElement&gt;) {
   <span class="tok-keyword">const</span> value: <span class="tok-keyword">string</span> = e.target.value;   <span class="tok-comment">// typed as string</span>
@@ -262,7 +262,7 @@ export default {
 
 <h3>Một handler thay đổi</h3>
 <p>Gõ kiểu tham số là <code>ChangeEvent&lt;HTMLInputElement&gt;</code> và <code>e.target</code> là một input, nên <code>e.target.value</code> là một <code>string</code> — luôn luôn, vì đó là thứ DOM đưa cho bạn:</p>
-<pre><code><span class="tok-comment">// form.tsx</span>
+<pre><code class="language-javascript"><span class="tok-comment">// form.tsx</span>
 <span class="tok-keyword">import</span> { ChangeEvent } <span class="tok-keyword">from</span> <span class="tok-string">'react'</span>;
 <span class="tok-keyword">function</span> <span class="tok-function">onChange</span>(e: ChangeEvent&lt;HTMLInputElement&gt;) {
   <span class="tok-keyword">const</span> value: <span class="tok-keyword">string</span> = e.target.value;   <span class="tok-comment">// có kiểu string</span>
@@ -308,7 +308,7 @@ export default {
 
 <h3>Typed context</h3>
 <p><code>createContext</code> is generic. Type it with the value union — including the <code>null</code> default used when a consumer is outside any provider — and <code>useContext</code> returns that union, forcing a check:</p>
-<pre><code><span class="tok-comment">// context.tsx</span>
+<pre><code class="language-typescript"><span class="tok-comment">// context.tsx</span>
 <span class="tok-keyword">import</span> { createContext, useContext } <span class="tok-keyword">from</span> <span class="tok-string">'react'</span>;
 <span class="tok-keyword">interface</span> Theme { color: <span class="tok-keyword">string</span>; }
 <span class="tok-keyword">const</span> ThemeContext = <span class="tok-function">createContext</span>&lt;Theme | <span class="tok-keyword">null</span>&gt;(<span class="tok-keyword">null</span>);
@@ -321,7 +321,7 @@ export default {
 
 <h3>A generic component</h3>
 <p>Components take type parameters too. A <code>List&lt;T&gt;</code> renders any array, inferring the element type from what you pass — and the <code>render</code> callback is typed to match:</p>
-<pre><code><span class="tok-comment">// list.tsx</span>
+<pre><code class="language-typescript"><span class="tok-comment">// list.tsx</span>
 <span class="tok-keyword">import</span> { ReactNode } <span class="tok-keyword">from</span> <span class="tok-string">'react'</span>;
 <span class="tok-keyword">interface</span> ListProps&lt;T&gt; { items: T[]; render: (item: T) =&gt; ReactNode; }
 <span class="tok-keyword">function</span> <span class="tok-function">List</span>&lt;T&gt;({ items, render }: ListProps&lt;T&gt;) {
@@ -354,7 +354,7 @@ export default {
 
 <h3>Context có kiểu</h3>
 <p><code>createContext</code> là generic. Gõ kiểu nó bằng union giá trị — gồm cả mặc định <code>null</code> dùng khi một bên tiêu thụ ở ngoài mọi provider — và <code>useContext</code> trả về union đó, ép một phép kiểm:</p>
-<pre><code><span class="tok-comment">// context.tsx</span>
+<pre><code class="language-typescript"><span class="tok-comment">// context.tsx</span>
 <span class="tok-keyword">import</span> { createContext, useContext } <span class="tok-keyword">from</span> <span class="tok-string">'react'</span>;
 <span class="tok-keyword">interface</span> Theme { color: <span class="tok-keyword">string</span>; }
 <span class="tok-keyword">const</span> ThemeContext = <span class="tok-function">createContext</span>&lt;Theme | <span class="tok-keyword">null</span>&gt;(<span class="tok-keyword">null</span>);
@@ -367,7 +367,7 @@ export default {
 
 <h3>Một component generic</h3>
 <p>Component cũng nhận tham số kiểu. Một <code>List&lt;T&gt;</code> render bất kỳ mảng nào, suy ra kiểu phần tử từ thứ bạn truyền — và callback <code>render</code> được gõ kiểu khớp theo:</p>
-<pre><code><span class="tok-comment">// list.tsx</span>
+<pre><code class="language-typescript"><span class="tok-comment">// list.tsx</span>
 <span class="tok-keyword">import</span> { ReactNode } <span class="tok-keyword">from</span> <span class="tok-string">'react'</span>;
 <span class="tok-keyword">interface</span> ListProps&lt;T&gt; { items: T[]; render: (item: T) =&gt; ReactNode; }
 <span class="tok-keyword">function</span> <span class="tok-function">List</span>&lt;T&gt;({ items, render }: ListProps&lt;T&gt;) {

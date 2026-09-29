@@ -76,7 +76,7 @@ const EX16 = {
     `<span class="eyebrow">Chapter 6 · Exercise 16 · Slot 11–12 slide 14</span>
 <h2>Event handling patterns</h2>
 <p class="lead"><b>Goal:</b> practise every way to wire a handler and to control an event.</p>
-<pre><span class="hljs-keyword">function</span> <span class="hljs-title function_">Demo</span>(<span class="hljs-params"></span>) {
+<pre><code class="language-javascript"><span class="hljs-keyword">function</span> <span class="hljs-title function_">Demo</span>(<span class="hljs-params"></span>) {
   <span class="hljs-keyword">const</span> [text, setText] = <span class="hljs-title class_">React</span>.<span class="hljs-title function_">useState</span>(<span class="hljs-string">&#x27;&#x27;</span>);
   <span class="hljs-keyword">const</span> <span class="hljs-title function_">handleClick</span> = (<span class="hljs-params">name</span>) =&gt; <span class="hljs-title function_">alert</span>(<span class="hljs-string">&#x27;Hello &#x27;</span> + name);
   <span class="hljs-keyword">return</span> (
@@ -94,13 +94,13 @@ const EX16 = {
       <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;submit&quot;</span>&gt;</span>Submit<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
     <span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span></span>
   );
-}</pre>
+}</code></pre>
 <div class="pitfall"><b>Trap:</b> <code>onClick={handleClick('React')}</code> (no arrow) <em>calls</em> the handler during render and passes its return value. Wrap it in an arrow: <code>onClick={() =&gt; handleClick('React')}</code>.</div>
 <div class="di-toi"><a class="link-card codelab" href="${CODELAB}" target="_blank" rel="noopener"><span class="lc-ico">⌨️</span><span class="lc-body"><span class="lc-title">Wire the handlers</span><span class="lc-sub">preventDefault, stopPropagation — Code Lab.</span></span><span class="lc-cta">PRACTICE →</span></a></div>`,
     `<span class="eyebrow">Chương 6 · Exercise 16 · Slot 11–12 slide 14</span>
 <h2>Các mẫu xử lý sự kiện</h2>
 <p class="lead"><b>Mục tiêu:</b> luyện mọi cách gắn handler và điều khiển sự kiện.</p>
-<pre><span class="hljs-keyword">function</span> <span class="hljs-title function_">Demo</span>(<span class="hljs-params"></span>) {
+<pre><code class="language-javascript"><span class="hljs-keyword">function</span> <span class="hljs-title function_">Demo</span>(<span class="hljs-params"></span>) {
   <span class="hljs-keyword">const</span> [text, setText] = <span class="hljs-title class_">React</span>.<span class="hljs-title function_">useState</span>(<span class="hljs-string">&#x27;&#x27;</span>);
   <span class="hljs-keyword">const</span> <span class="hljs-title function_">handleClick</span> = (<span class="hljs-params">name</span>) =&gt; <span class="hljs-title function_">alert</span>(<span class="hljs-string">&#x27;Hello &#x27;</span> + name);
   <span class="hljs-keyword">return</span> (
@@ -118,7 +118,7 @@ const EX16 = {
       <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;submit&quot;</span>&gt;</span>Gửi<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
     <span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span></span>
   );
-}</pre>
+}</code></pre>
 <div class="pitfall"><b>Bẫy:</b> <code>onClick={handleClick('React')}</code> (không arrow) sẽ <em>gọi</em> handler ngay lúc render và truyền giá trị trả về. Bọc trong arrow: <code>onClick={() =&gt; handleClick('React')}</code>.</div>
 <div class="di-toi"><a class="link-card codelab" href="${CODELAB}" target="_blank" rel="noopener"><span class="lc-ico">⌨️</span><span class="lc-body"><span class="lc-title">Gắn các handler</span><span class="lc-sub">preventDefault, stopPropagation — Code Lab.</span></span><span class="lc-cta">LUYỆN TẬP →</span></a></div>`,
   ),
@@ -160,7 +160,7 @@ const EX18 = {
     `<span class="eyebrow">Chapter 6 · Exercise 18 · Slot 11–12 slide 32</span>
 <h2>State is a snapshot — reproduce &amp; fix</h2>
 <p class="lead"><b>Goal:</b> experience the snapshot behaviour, then fix it with the updater form.</p>
-<pre><span class="hljs-comment">// <span class="hljs-doctag">BUG:</span> all three read the same snapshot of count → +1, not +3</span>
+<pre><code class="language-javascript"><span class="hljs-comment">// <span class="hljs-doctag">BUG:</span> all three read the same snapshot of count → +1, not +3</span>
 <span class="hljs-keyword">function</span> <span class="hljs-title function_">Counter</span>(<span class="hljs-params"></span>) {
   <span class="hljs-keyword">const</span> [count, setCount] = <span class="hljs-title class_">React</span>.<span class="hljs-title function_">useState</span>(<span class="hljs-number">0</span>);
   <span class="hljs-keyword">const</span> <span class="hljs-title function_">addThree</span> = (<span class="hljs-params"></span>) =&gt; { <span class="hljs-title function_">setCount</span>(count + <span class="hljs-number">1</span>); <span class="hljs-title function_">setCount</span>(count + <span class="hljs-number">1</span>); <span class="hljs-title function_">setCount</span>(count + <span class="hljs-number">1</span>); };
@@ -168,14 +168,14 @@ const EX18 = {
 }
 
 <span class="hljs-comment">// FIX: updater form applies to the latest queued value → +3</span>
-<span class="hljs-keyword">const</span> <span class="hljs-title function_">addThree</span> = (<span class="hljs-params"></span>) =&gt; { <span class="hljs-title function_">setCount</span>(<span class="hljs-function"><span class="hljs-params">c</span> =&gt;</span> c + <span class="hljs-number">1</span>); <span class="hljs-title function_">setCount</span>(<span class="hljs-function"><span class="hljs-params">c</span> =&gt;</span> c + <span class="hljs-number">1</span>); <span class="hljs-title function_">setCount</span>(<span class="hljs-function"><span class="hljs-params">c</span> =&gt;</span> c + <span class="hljs-number">1</span>); };</pre>
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">addThree</span> = (<span class="hljs-params"></span>) =&gt; { <span class="hljs-title function_">setCount</span>(<span class="hljs-function"><span class="hljs-params">c</span> =&gt;</span> c + <span class="hljs-number">1</span>); <span class="hljs-title function_">setCount</span>(<span class="hljs-function"><span class="hljs-params">c</span> =&gt;</span> c + <span class="hljs-number">1</span>); <span class="hljs-title function_">setCount</span>(<span class="hljs-function"><span class="hljs-params">c</span> =&gt;</span> c + <span class="hljs-number">1</span>); };</code></pre>
 <div class="out"><b>Result:</b> the buggy version increments by 1 per click (three calls, one snapshot of <code>count</code>); the fixed version increments by 3.</div>
 <div class="callout"><span class="badge">★ Rule</span> When the next state depends on the previous state, always use the <strong>updater function</strong> <code>setX(prev =&gt; …)</code>. When it does not (setting a fresh value), <code>setX(value)</code> is fine.</div>
 <div class="di-toi"><a class="link-card codelab" href="${CODELAB}" target="_blank" rel="noopener"><span class="lc-ico">⌨️</span><span class="lc-body"><span class="lc-title">Reproduce the +1 bug</span><span class="lc-sub">Then fix with the updater — Code Lab.</span></span><span class="lc-cta">PRACTICE →</span></a></div>`,
     `<span class="eyebrow">Chương 6 · Exercise 18 · Slot 11–12 slide 32</span>
 <h2>State là ảnh chụp — tái hiện &amp; sửa</h2>
 <p class="lead"><b>Mục tiêu:</b> trải nghiệm hành vi ảnh chụp, rồi sửa bằng dạng updater.</p>
-<pre><span class="hljs-comment">// LỖI: cả ba đọc cùng một ảnh chụp của count → +1, không phải +3</span>
+<pre><code class="language-javascript"><span class="hljs-comment">// LỖI: cả ba đọc cùng một ảnh chụp của count → +1, không phải +3</span>
 <span class="hljs-keyword">function</span> <span class="hljs-title function_">Counter</span>(<span class="hljs-params"></span>) {
   <span class="hljs-keyword">const</span> [count, setCount] = <span class="hljs-title class_">React</span>.<span class="hljs-title function_">useState</span>(<span class="hljs-number">0</span>);
   <span class="hljs-keyword">const</span> <span class="hljs-title function_">addThree</span> = (<span class="hljs-params"></span>) =&gt; { <span class="hljs-title function_">setCount</span>(count + <span class="hljs-number">1</span>); <span class="hljs-title function_">setCount</span>(count + <span class="hljs-number">1</span>); <span class="hljs-title function_">setCount</span>(count + <span class="hljs-number">1</span>); };
@@ -183,7 +183,7 @@ const EX18 = {
 }
 
 <span class="hljs-comment">// SỬA: dạng updater áp lên giá trị mới nhất trong hàng đợi → +3</span>
-<span class="hljs-keyword">const</span> <span class="hljs-title function_">addThree</span> = (<span class="hljs-params"></span>) =&gt; { <span class="hljs-title function_">setCount</span>(<span class="hljs-function"><span class="hljs-params">c</span> =&gt;</span> c + <span class="hljs-number">1</span>); <span class="hljs-title function_">setCount</span>(<span class="hljs-function"><span class="hljs-params">c</span> =&gt;</span> c + <span class="hljs-number">1</span>); <span class="hljs-title function_">setCount</span>(<span class="hljs-function"><span class="hljs-params">c</span> =&gt;</span> c + <span class="hljs-number">1</span>); };</pre>
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">addThree</span> = (<span class="hljs-params"></span>) =&gt; { <span class="hljs-title function_">setCount</span>(<span class="hljs-function"><span class="hljs-params">c</span> =&gt;</span> c + <span class="hljs-number">1</span>); <span class="hljs-title function_">setCount</span>(<span class="hljs-function"><span class="hljs-params">c</span> =&gt;</span> c + <span class="hljs-number">1</span>); <span class="hljs-title function_">setCount</span>(<span class="hljs-function"><span class="hljs-params">c</span> =&gt;</span> c + <span class="hljs-number">1</span>); };</code></pre>
 <div class="out"><b>Kết quả:</b> bản lỗi tăng 1 mỗi lần bấm (ba lời gọi, một ảnh chụp của <code>count</code>); bản sửa tăng 3.</div>
 <div class="callout"><span class="badge">★ Quy tắc</span> Khi state kế phụ thuộc state trước, luôn dùng <strong>hàm updater</strong> <code>setX(prev =&gt; …)</code>. Khi không (đặt giá trị mới hẳn), <code>setX(value)</code> là đủ.</div>
 <div class="di-toi"><a class="link-card codelab" href="${CODELAB}" target="_blank" rel="noopener"><span class="lc-ico">⌨️</span><span class="lc-body"><span class="lc-title">Tái hiện bẫy +1</span><span class="lc-sub">Rồi sửa bằng updater — Code Lab.</span></span><span class="lc-cta">LUYỆN TẬP →</span></a></div>`,

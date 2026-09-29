@@ -318,14 +318,14 @@ export default {
 
 <h3>Prerequisite: Node.js</h3>
 <p>Install Node 22 LTS through a version manager exactly as the Node.js course chapter 0.3 describes (nvm on macOS/Linux, nvm-windows or fnm on Windows). Verify:</p>
-<pre><code>node -v
+<pre><code class="language-bash">node -v
 npm -v</code></pre>
 <div class="out">v22.21.0
 10.9.4</div>
 
 <h3>Install TypeScript</h3>
 <p>Install it <strong>per project</strong>, not globally. A global <code>tsc</code> drifts out of sync with what each project expects; a project-local one is pinned in <code>package.json</code> and everyone on the team gets the same compiler.</p>
-<pre><code><span class="tok-comment"># in a fresh folder</span>
+<pre><code class="language-bash"><span class="tok-comment"># in a fresh folder</span>
 npm init -y
 npm install -D typescript
 npx tsc -v</code></pre>
@@ -334,7 +334,7 @@ npx tsc -v</code></pre>
 
 <h3>Your first TypeScript program</h3>
 <p>Create <code>hello.ts</code>. Note the type annotations — <code>: string</code> after the parameter and after the parentheses:</p>
-<pre><code><span class="tok-comment">// hello.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// hello.ts</span>
 <span class="tok-keyword">const</span> who: <span class="tok-keyword">string</span> = <span class="tok-string">'CuongThai'</span>;
 
 <span class="tok-keyword">function</span> <span class="tok-function">greet</span>(name: <span class="tok-keyword">string</span>): <span class="tok-keyword">string</span> {
@@ -343,7 +343,7 @@ npx tsc -v</code></pre>
 
 <span class="tok-function">console.log</span>(<span class="tok-function">greet</span>(who));</code></pre>
 <p>Compile it, then look at what came out:</p>
-<pre><code>npx tsc hello.ts   <span class="tok-comment"># produces hello.js next to it</span>
+<pre><code class="language-bash">npx tsc hello.ts   <span class="tok-comment"># produces hello.js next to it</span>
 cat hello.js</code></pre>
 <div class="out">"use strict";
 const who = 'CuongThai';
@@ -352,12 +352,12 @@ function greet(name) {
 }
 console.log(greet(who));</div>
 <p>This is the single most important thing to notice in the whole setup: <strong>the types are gone.</strong> <code>: string</code> vanished. The output is plain JavaScript that any Node or browser runs. TypeScript's types exist only to check your code — they are <em>erased</em> before execution. Keep this in your head; it explains half of the surprises beginners hit.</p>
-<pre><code>node hello.js</code></pre>
+<pre><code class="language-bash">node hello.js</code></pre>
 <div class="out">Xin chào, CuongThai!</div>
 
 <h3>Skip the compile step: run .ts directly</h3>
 <p>Compiling to a <code>.js</code> file and running that is the "build" model (chapter 15). While <em>developing</em>, it's faster to run a <code>.ts</code> file directly. Two ways, both real:</p>
-<pre><code><span class="tok-comment"># A) tsx — a tiny runner, most common in projects</span>
+<pre><code class="language-bash"><span class="tok-comment"># A) tsx — a tiny runner, most common in projects</span>
 npm install -D tsx
 npx tsx hello.ts
 
@@ -368,16 +368,16 @@ node hello.ts</code></pre>
 
 <h3>See a real type error — and where it is (not) caught</h3>
 <p>Create <code>bug.ts</code> that passes a string where a number is required:</p>
-<pre><code><span class="tok-comment">// bug.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// bug.ts</span>
 <span class="tok-keyword">function</span> <span class="tok-function">double</span>(n: <span class="tok-keyword">number</span>): <span class="tok-keyword">number</span> {
   <span class="tok-keyword">return</span> n * <span class="tok-number">2</span>;
 }
 <span class="tok-function">double</span>(<span class="tok-string">'5'</span>);   <span class="tok-comment">// a string, not a number</span></code></pre>
 <p>Ask the compiler to check it (no output file needed):</p>
-<pre><code>npx tsc --noEmit --strict bug.ts</code></pre>
+<pre><code class="language-bash">npx tsc --noEmit --strict bug.ts</code></pre>
 <div class="out">bug.ts(4,8): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.</div>
 <p>Read it: file <code>bug.ts</code>, line 4, column 8, error code <code>TS2345</code>, and a plain-English reason. That is the entire value proposition in one line. Now the twist — run the <em>same</em> file with tsx:</p>
-<pre><code>npx tsx bug.ts   <span class="tok-comment"># exit code 0 — it RUNS</span></code></pre>
+<pre><code class="language-bash">npx tsx bug.ts   <span class="tok-comment"># exit code 0 — it RUNS</span></code></pre>
 <div class="pitfall">The buggy file runs without complaint under <code>tsx</code> and <code>node</code>, because those tools erase types and don't check them. Only <code>tsc</code> catches the error. Lesson: <strong>type checking (tsc) and running (tsx/node) are two separate steps.</strong> In a real project you run <code>tsc --noEmit</code> in CI to catch type errors, and use a fast runner for execution. Chapters 9 and 15 wire this up properly.</div>
 
 <h3>The editor is where you'll actually live</h3>
@@ -408,14 +408,14 @@ node hello.ts</code></pre>
 
 <h3>Điều kiện trước: Node.js</h3>
 <p>Cài Node 22 LTS qua trình quản lý phiên bản đúng như bài 0.3 khoá Node.js mô tả (nvm trên macOS/Linux, nvm-windows hoặc fnm trên Windows). Kiểm tra:</p>
-<pre><code>node -v
+<pre><code class="language-bash">node -v
 npm -v</code></pre>
 <div class="out">v22.21.0
 10.9.4</div>
 
 <h3>Cài TypeScript</h3>
 <p>Cài <strong>theo dự án</strong>, không cài toàn cục. Một <code>tsc</code> toàn cục sẽ lệch pha với thứ mỗi dự án mong đợi; bản cài trong dự án được ghim trong <code>package.json</code> và cả nhóm đều dùng chung một trình biên dịch.</p>
-<pre><code><span class="tok-comment"># trong một thư mục mới</span>
+<pre><code class="language-bash"><span class="tok-comment"># trong một thư mục mới</span>
 npm init -y
 npm install -D typescript
 npx tsc -v</code></pre>
@@ -424,7 +424,7 @@ npx tsc -v</code></pre>
 
 <h3>Chương trình TypeScript đầu tiên</h3>
 <p>Tạo <code>hello.ts</code>. Để ý các chú thích kiểu — <code>: string</code> sau tham số và sau cặp ngoặc:</p>
-<pre><code><span class="tok-comment">// hello.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// hello.ts</span>
 <span class="tok-keyword">const</span> who: <span class="tok-keyword">string</span> = <span class="tok-string">'CuongThai'</span>;
 
 <span class="tok-keyword">function</span> <span class="tok-function">greet</span>(name: <span class="tok-keyword">string</span>): <span class="tok-keyword">string</span> {
@@ -433,7 +433,7 @@ npx tsc -v</code></pre>
 
 <span class="tok-function">console.log</span>(<span class="tok-function">greet</span>(who));</code></pre>
 <p>Biên dịch nó, rồi nhìn thứ chui ra:</p>
-<pre><code>npx tsc hello.ts   <span class="tok-comment"># tạo hello.js ngay cạnh</span>
+<pre><code class="language-bash">npx tsc hello.ts   <span class="tok-comment"># tạo hello.js ngay cạnh</span>
 cat hello.js</code></pre>
 <div class="out">"use strict";
 const who = 'CuongThai';
@@ -442,12 +442,12 @@ function greet(name) {
 }
 console.log(greet(who));</div>
 <p>Đây là điều quan trọng nhất cần để ý trong toàn bộ phần cài đặt: <strong>các kiểu đã biến mất.</strong> <code>: string</code> bốc hơi. Output là JavaScript thuần mà Node hay trình duyệt nào cũng chạy. Kiểu của TypeScript chỉ tồn tại để kiểm tra code của bạn — chúng bị <em>xoá</em> trước khi thực thi. Hãy giữ điều này trong đầu; nó giải thích một nửa số bất ngờ mà người mới gặp phải.</p>
-<pre><code>node hello.js</code></pre>
+<pre><code class="language-bash">node hello.js</code></pre>
 <div class="out">Xin chào, CuongThai!</div>
 
 <h3>Bỏ qua bước biên dịch: chạy .ts trực tiếp</h3>
 <p>Biên dịch ra file <code>.js</code> rồi chạy file đó là mô hình "build" (chương 15). Còn khi <em>đang phát triển</em>, chạy thẳng một file <code>.ts</code> nhanh hơn. Hai cách, đều thật:</p>
-<pre><code><span class="tok-comment"># A) tsx — một trình chạy nhỏ gọn, phổ biến nhất trong dự án</span>
+<pre><code class="language-bash"><span class="tok-comment"># A) tsx — một trình chạy nhỏ gọn, phổ biến nhất trong dự án</span>
 npm install -D tsx
 npx tsx hello.ts
 
@@ -458,16 +458,16 @@ node hello.ts</code></pre>
 
 <h3>Xem một lỗi kiểu thật — và nơi nó (không) bị bắt</h3>
 <p>Tạo <code>bug.ts</code> truyền một chuỗi vào chỗ đòi số:</p>
-<pre><code><span class="tok-comment">// bug.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// bug.ts</span>
 <span class="tok-keyword">function</span> <span class="tok-function">double</span>(n: <span class="tok-keyword">number</span>): <span class="tok-keyword">number</span> {
   <span class="tok-keyword">return</span> n * <span class="tok-number">2</span>;
 }
 <span class="tok-function">double</span>(<span class="tok-string">'5'</span>);   <span class="tok-comment">// một chuỗi, không phải số</span></code></pre>
 <p>Bảo trình biên dịch kiểm tra nó (không cần file output):</p>
-<pre><code>npx tsc --noEmit --strict bug.ts</code></pre>
+<pre><code class="language-bash">npx tsc --noEmit --strict bug.ts</code></pre>
 <div class="out">bug.ts(4,8): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.</div>
 <p>Đọc nó: file <code>bug.ts</code>, dòng 4, cột 8, mã lỗi <code>TS2345</code>, và một lý do bằng tiếng Anh dễ hiểu. Đó là toàn bộ giá trị của TypeScript gói trong một dòng. Giờ tới cú lật — chạy <em>chính</em> file đó bằng tsx:</p>
-<pre><code>npx tsx bug.ts   <span class="tok-comment"># mã thoát 0 — nó CHẠY</span></code></pre>
+<pre><code class="language-bash">npx tsx bug.ts   <span class="tok-comment"># mã thoát 0 — nó CHẠY</span></code></pre>
 <div class="pitfall">File có bug vẫn chạy tỉnh bơ dưới <code>tsx</code> và <code>node</code>, vì các công cụ đó xoá kiểu và không kiểm tra chúng. Chỉ <code>tsc</code> bắt được lỗi. Bài học: <strong>kiểm tra kiểu (tsc) và chạy (tsx/node) là hai bước tách biệt.</strong> Trong dự án thật, bạn chạy <code>tsc --noEmit</code> trong CI để bắt lỗi kiểu, và dùng một trình chạy nhanh để thực thi. Chương 9 và 15 sẽ ráp phần này cho tử tế.</div>
 
 <h3>Editor mới là nơi bạn thật sự sống</h3>
@@ -519,7 +519,7 @@ hello.ts  ──▶  tsc (types exist)  ──▶  hello.js (types erased)
 <h3>What this explains</h3>
 <p><strong>Why a wrong type can still run.</strong> In 0.3, <code>double('5')</code> ran fine under tsx — because at runtime there is no <code>number</code> type to enforce; there is only the string <code>'5'</code>. The type was a compile-time promise, and you skipped the compile-time check.</p>
 <p><strong>Why you can't check a type at runtime.</strong> This does not work, and it's the most common beginner mistake:</p>
-<pre><code><span class="tok-keyword">type</span> User = { name: <span class="tok-keyword">string</span> };
+<pre><code class="language-javascript"><span class="tok-keyword">type</span> User = { name: <span class="tok-keyword">string</span> };
 
 <span class="tok-keyword">function</span> <span class="tok-function">handle</span>(x: <span class="tok-keyword">unknown</span>) {
   <span class="tok-comment">// ❌ does NOT work — &#96;User&#96; doesn't exist at runtime</span>
@@ -530,7 +530,7 @@ hello.ts  ──▶  tsc (types exist)  ──▶  hello.js (types erased)
 
 <h3>The running example for this course</h3>
 <p>Chapters build toward typing a small but real slice of a backend: a <strong>Notes API</strong> — the same shape of thing this website runs. A note has an id, a title, a body, an author, a status. Across the course you'll give it precise types, model its states so invalid ones can't exist, make its functions generic, validate its incoming data, and finally type the Express routes that serve it. Every concept lands on this one concrete object instead of abstract <code>Foo</code> and <code>Bar</code>.</p>
-<pre><code><span class="tok-comment">// where we're heading — precise, safe, real (chapter 5+)</span>
+<pre><code class="language-typescript"><span class="tok-comment">// where we're heading — precise, safe, real (chapter 5+)</span>
 <span class="tok-keyword">type</span> NoteStatus = <span class="tok-string">'draft'</span> | <span class="tok-string">'published'</span> | <span class="tok-string">'archived'</span>;
 
 <span class="tok-keyword">interface</span> Note {
@@ -573,7 +573,7 @@ hello.ts  ──▶  tsc (kiểu tồn tại)  ──▶  hello.js (kiểu bị 
 <h3>Điều này giải thích những gì</h3>
 <p><strong>Vì sao một kiểu sai vẫn chạy được.</strong> Ở bài 0.3, <code>double('5')</code> chạy ngon dưới tsx — vì lúc chạy không có kiểu <code>number</code> nào để ép buộc; chỉ có chuỗi <code>'5'</code>. Cái kiểu là một lời hứa của lúc biên dịch, và bạn đã bỏ qua bước kiểm tra lúc biên dịch.</p>
 <p><strong>Vì sao bạn không thể kiểm tra một kiểu lúc chạy.</strong> Đoạn này không chạy được, và là lỗi phổ biến nhất của người mới:</p>
-<pre><code><span class="tok-keyword">type</span> User = { name: <span class="tok-keyword">string</span> };
+<pre><code class="language-javascript"><span class="tok-keyword">type</span> User = { name: <span class="tok-keyword">string</span> };
 
 <span class="tok-keyword">function</span> <span class="tok-function">handle</span>(x: <span class="tok-keyword">unknown</span>) {
   <span class="tok-comment">// ❌ KHÔNG chạy được — &#96;User&#96; không tồn tại lúc chạy</span>
@@ -584,7 +584,7 @@ hello.ts  ──▶  tsc (kiểu tồn tại)  ──▶  hello.js (kiểu bị 
 
 <h3>Ví dụ xuyên suốt khoá học</h3>
 <p>Các chương tiến dần tới việc gõ kiểu cho một lát cắt nhỏ mà thật của một backend: một <strong>Notes API</strong> — đúng dáng thứ mà website này đang chạy. Một ghi chú có id, tiêu đề, thân bài, tác giả, trạng thái. Xuyên khoá bạn sẽ cho nó những kiểu chính xác, mô hình hoá các trạng thái để trạng thái không hợp lệ không tồn tại nổi, làm cho các hàm của nó generic, validate dữ liệu đi vào, và cuối cùng gõ kiểu cho các route Express phục vụ nó. Mọi khái niệm đáp xuống đúng một object cụ thể này thay vì những <code>Foo</code> và <code>Bar</code> trừu tượng.</p>
-<pre><code><span class="tok-comment">// nơi ta đang hướng tới — chính xác, an toàn, thật (chương 5+)</span>
+<pre><code class="language-typescript"><span class="tok-comment">// nơi ta đang hướng tới — chính xác, an toàn, thật (chương 5+)</span>
 <span class="tok-keyword">type</span> NoteStatus = <span class="tok-string">'draft'</span> | <span class="tok-string">'published'</span> | <span class="tok-string">'archived'</span>;
 
 <span class="tok-keyword">interface</span> Note {

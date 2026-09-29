@@ -29,7 +29,7 @@ export default {
 
 <h3>The old way: commanding the DOM by hand</h3>
 <p>Before React, you updated the page imperatively — one instruction at a time. A counter with a button looked like this:</p>
-<pre><code>let count = 0;
+<pre><code class="language-javascript">let count = 0;
 
 const p = document.createElement('p');
 const button = document.createElement('button');
@@ -46,7 +46,7 @@ document.body.append(p, button);</code></pre>
 
 <h3>The React way: describe the result</h3>
 <p>In React you write what the UI <em>is</em> for a given <code>count</code>, and stop worrying about the transitions:</p>
-<pre><code>function Counter() {
+<pre><code class="language-typescript">function Counter() {
   const [count, setCount] = useState(0);
   return (
     &lt;div&gt;
@@ -97,7 +97,7 @@ document.body.append(p, button);</code></pre>
 
 <h3>Cách cũ: tự tay ra lệnh cho DOM</h3>
 <p>Trước React, bạn cập nhật trang theo kiểu mệnh lệnh — mỗi lần một chỉ thị. Một counter có nút bấm trông thế này:</p>
-<pre><code>let count = 0;
+<pre><code class="language-javascript">let count = 0;
 
 const p = document.createElement('p');
 const button = document.createElement('button');
@@ -114,7 +114,7 @@ document.body.append(p, button);</code></pre>
 
 <h3>Cách React: mô tả kết quả</h3>
 <p>Trong React bạn viết giao diện <em>là gì</em> với một <code>count</code> cho trước, và thôi lo về các bước chuyển tiếp:</p>
-<pre><code>function Counter() {
+<pre><code class="language-typescript">function Counter() {
   const [count, setCount] = useState(0);
   return (
     &lt;div&gt;
@@ -174,21 +174,21 @@ document.body.append(p, button);</code></pre>
 
 <h3>What JSX compiles to</h3>
 <p>This JSX:</p>
-<pre><code>const el = &lt;h1 className="title"&gt;Hello&lt;/h1&gt;;</code></pre>
+<pre><code class="language-javascript">const el = &lt;h1 className="title"&gt;Hello&lt;/h1&gt;;</code></pre>
 <p>is compiled — by Babel or the TypeScript/Next compiler, before it ever reaches the browser — into this ordinary JavaScript:</p>
-<pre><code>const el = React.createElement('h1', { className: 'title' }, 'Hello');</code></pre>
+<pre><code class="language-javascript">const el = React.createElement('h1', { className: 'title' }, 'Hello');</code></pre>
 <p>That is the whole trick. JSX is <em>syntax sugar</em> for <code>createElement</code> calls. A tag name becomes the first argument, the attributes become an object (the second argument), and the children become the rest. There is no HTML being parsed at runtime — by the time your code runs, the brackets are gone.</p>
 
 <h3>An element is just an object</h3>
 <p>And what does <code>createElement</code> return? Not a DOM node, not HTML — a plain JavaScript object describing what you want. Run it and look:</p>
-<pre><code>const el = React.createElement('h1', { className: 'title' }, 'Hello');
+<pre><code class="language-javascript">const el = React.createElement('h1', { className: 'title' }, 'Hello');
 console.log(JSON.stringify({ type: el.type, props: el.props }));</code></pre>
 <div class="out">{"type":"h1","props":{"className":"title","children":"Hello"}}</div>
 <p>That is a real, verified log. An element is a lightweight description: <code>type</code> is what to render (a string like <code>'h1'</code> for a DOM tag, or a function for a component), and <code>props</code> is the bag of everything passed to it — including <code>children</code>. Because it is only an object, creating one is cheap; React can build a whole tree of them on every render and throw it away, and that is exactly what it does.</p>
 
 <h3>A component is a function that returns elements</h3>
 <p>A component is just a function whose name starts with a capital letter and that returns an element tree:</p>
-<pre><code>function Greeting({ name }) {
+<pre><code class="language-typescript">function Greeting({ name }) {
   return &lt;p&gt;Hi, {name}!&lt;/p&gt;;
 }</code></pre>
 <p>Render it to HTML and you get exactly what you'd expect — this output is from actually running it through <code>react-dom/server</code>:</p>
@@ -225,21 +225,21 @@ console.log(JSON.stringify({ type: el.type, props: el.props }));</code></pre>
 
 <h3>JSX biên dịch ra gì</h3>
 <p>Đoạn JSX này:</p>
-<pre><code>const el = &lt;h1 className="title"&gt;Hello&lt;/h1&gt;;</code></pre>
+<pre><code class="language-javascript">const el = &lt;h1 className="title"&gt;Hello&lt;/h1&gt;;</code></pre>
 <p>được biên dịch — bởi Babel hoặc trình biên dịch của TypeScript/Next, trước khi nó chạm tới trình duyệt — thành JavaScript bình thường sau đây:</p>
-<pre><code>const el = React.createElement('h1', { className: 'title' }, 'Hello');</code></pre>
+<pre><code class="language-javascript">const el = React.createElement('h1', { className: 'title' }, 'Hello');</code></pre>
 <p>Đó là toàn bộ mẹo. JSX là <em>đường cú pháp</em> cho các lời gọi <code>createElement</code>. Tên thẻ thành đối số thứ nhất, thuộc tính thành một object (đối số thứ hai), và các con thành phần còn lại. Không có HTML nào được phân tích lúc chạy — tới lúc code chạy, dấu ngoặc đã biến mất.</p>
 
 <h3>Một element chỉ là một object</h3>
 <p>Vậy <code>createElement</code> trả về gì? Không phải nút DOM, không phải HTML — một object JavaScript thuần mô tả cái bạn muốn. Chạy thử và nhìn:</p>
-<pre><code>const el = React.createElement('h1', { className: 'title' }, 'Hello');
+<pre><code class="language-javascript">const el = React.createElement('h1', { className: 'title' }, 'Hello');
 console.log(JSON.stringify({ type: el.type, props: el.props }));</code></pre>
 <div class="out">{"type":"h1","props":{"className":"title","children":"Hello"}}</div>
 <p>Đó là một log thật, đã kiểm chứng. Một element là một mô tả nhẹ: <code>type</code> là cái cần render (một chuỗi như <code>'h1'</code> cho thẻ DOM, hoặc một hàm cho component), và <code>props</code> là túi chứa mọi thứ truyền vào nó — kể cả <code>children</code>. Vì nó chỉ là một object, tạo ra một cái rất rẻ; React có thể dựng cả một cây element ở mỗi lần render rồi vứt đi, và đó đúng là điều nó làm.</p>
 
 <h3>Một component là một hàm trả về element</h3>
 <p>Component chỉ là một hàm có tên bắt đầu bằng chữ hoa và trả về một cây element:</p>
-<pre><code>function Greeting({ name }) {
+<pre><code class="language-typescript">function Greeting({ name }) {
   return &lt;p&gt;Hi, {name}!&lt;/p&gt;;
 }</code></pre>
 <p>Render nó ra HTML và bạn được đúng cái mong đợi — output này lấy từ việc CHẠY THẬT qua <code>react-dom/server</code>:</p>
@@ -285,7 +285,7 @@ console.log(JSON.stringify({ type: el.type, props: el.props }));</code></pre>
 <p class="lead">Inside JSX, anything in <code>{ }</code> is evaluated as a JavaScript <em>expression</em> and its result is inserted. That is the only escape hatch you need — and it's a strict one: expressions only, never statements.</p>
 
 <h3>Any expression goes in braces</h3>
-<pre><code>function Card({ user }) {
+<pre><code class="language-typescript">function Card({ user }) {
   return (
     &lt;div&gt;
       &lt;h2&gt;{user.name}&lt;/h2&gt;
@@ -308,7 +308,7 @@ console.log(JSON.stringify({ type: el.type, props: el.props }));</code></pre>
   <div class="kv"><span class="k">onclick → onClick</span><span class="v">Event handlers are camelCase and take a function, not a string: <code>onClick={handleClick}</code>.</span></div>
   <div class="kv"><span class="k">style is an object</span><span class="v"><code>style={{ color: 'red', fontSize: 16 }}</code> — an object with camelCased CSS keys, not a CSS string.</span></div>
 </div>
-<pre><code>&lt;button className="btn" onClick={handleSave} style={{ marginTop: 8 }}&gt;
+<pre><code class="language-html">&lt;button className="btn" onClick={handleSave} style={{ marginTop: 8 }}&gt;
   Save
 &lt;/button&gt;</code></pre>
 <p>The double braces on <code>style</code> confuse everyone once: the outer <code>{ }</code> is "enter JavaScript", the inner <code>{ }</code> is "an object literal". So <code>style={{...}}</code> means "the value of the <code>style</code> prop is this object".</p>
@@ -342,7 +342,7 @@ console.log(JSON.stringify({ type: el.type, props: el.props }));</code></pre>
 <p class="lead">Bên trong JSX, bất cứ thứ gì trong <code>{ }</code> đều được tính như một <em>biểu thức</em> JavaScript và kết quả của nó được chèn vào. Đó là cửa thoát duy nhất bạn cần — và là một cửa nghiêm ngặt: chỉ biểu thức, không bao giờ là câu lệnh.</p>
 
 <h3>Bất kỳ biểu thức nào cũng vào được trong ngoặc</h3>
-<pre><code>function Card({ user }) {
+<pre><code class="language-typescript">function Card({ user }) {
   return (
     &lt;div&gt;
       &lt;h2&gt;{user.name}&lt;/h2&gt;
@@ -365,7 +365,7 @@ console.log(JSON.stringify({ type: el.type, props: el.props }));</code></pre>
   <div class="kv"><span class="k">onclick → onClick</span><span class="v">Handler sự kiện viết camelCase và nhận một HÀM, không phải chuỗi: <code>onClick={handleClick}</code>.</span></div>
   <div class="kv"><span class="k">style là một object</span><span class="v"><code>style={{ color: 'red', fontSize: 16 }}</code> — một object có khoá CSS viết camelCase, không phải chuỗi CSS.</span></div>
 </div>
-<pre><code>&lt;button className="btn" onClick={handleSave} style={{ marginTop: 8 }}&gt;
+<pre><code class="language-html">&lt;button className="btn" onClick={handleSave} style={{ marginTop: 8 }}&gt;
   Save
 &lt;/button&gt;</code></pre>
 <p>Cặp ngoặc đôi ở <code>style</code> làm ai cũng bối rối một lần: <code>{ }</code> ngoài là "vào JavaScript", <code>{ }</code> trong là "một object literal". Vậy <code>style={{...}}</code> nghĩa là "giá trị của prop <code>style</code> là object này".</p>
@@ -410,7 +410,7 @@ console.log(JSON.stringify({ type: el.type, props: el.props }));</code></pre>
 
 <h3>Lists: <code>.map()</code> an array into elements</h3>
 <p>There is no loop syntax in JSX. To render a list you transform an array of data into an array of elements — and React knows how to render an array of elements:</p>
-<pre><code>function List() {
+<pre><code class="language-typescript">function List() {
   const items = ['a', 'b', 'c'];
   return (
     &lt;ul&gt;
@@ -424,14 +424,14 @@ console.log(JSON.stringify({ type: el.type, props: el.props }));</code></pre>
 
 <h3>Conditionals: <code>&amp;&amp;</code> and the ternary</h3>
 <p>To show an element only when a condition is true, use the <code>&amp;&amp;</code> operator. If the left side is truthy, the expression evaluates to the right side (the element); if falsy, it evaluates to the falsy value, which React skips:</p>
-<pre><code>{isLoggedIn &amp;&amp; &lt;p&gt;Welcome back!&lt;/p&gt;}
+<pre><code class="language-html">{isLoggedIn &amp;&amp; &lt;p&gt;Welcome back!&lt;/p&gt;}
 {error &amp;&amp; &lt;p className="err"&gt;{error}&lt;/p&gt;}</code></pre>
 <p>To choose between two things, use a ternary:</p>
-<pre><code>{isLoggedIn ? &lt;Dashboard /&gt; : &lt;LoginForm /&gt;}</code></pre>
+<pre><code class="language-typescript">{isLoggedIn ? &lt;Dashboard /&gt; : &lt;LoginForm /&gt;}</code></pre>
 
 <div class="pitfall">
 <p><strong>The <code>0</code> trap — the most reported React "bug" that isn't one.</strong> React skips <code>false</code>, but it does <em>not</em> skip <code>0</code> — <code>0</code> is a number, and React prints numbers. So this, when the array is empty:</p>
-<pre><code>{items.length &amp;&amp; &lt;List items={items} /&gt;}</code></pre>
+<pre><code class="language-typescript">{items.length &amp;&amp; &lt;List items={items} /&gt;}</code></pre>
 <p>evaluates <code>0 &amp;&amp; ...</code> to <code>0</code>, and a stray <strong>0</strong> appears on your page. Verified — rendering <code>{0}</code> next to a span produces:</p>
 <div class="out">&lt;div&gt;0&lt;span&gt;x&lt;/span&gt;&lt;/div&gt;</div>
 <p>whereas <code>{false}</code> in the same spot produces just <code>&lt;div&gt;&lt;span&gt;x&lt;/span&gt;&lt;/div&gt;</code>. The fix is to make the left side a real boolean: <code>{items.length &gt; 0 &amp;&amp; ...}</code> or <code>{items.length ? ... : null}</code>. Any time a naked number leaks onto the screen, look for an <code>&amp;&amp;</code> with a <code>.length</code> on its left.</p>
@@ -439,7 +439,7 @@ console.log(JSON.stringify({ type: el.type, props: el.props }));</code></pre>
 
 <h3>Extracting a variable when it gets big</h3>
 <p>When the condition or the branch grows, don't cram it into JSX — compute above the return:</p>
-<pre><code>function Feed({ posts, loading }) {
+<pre><code class="language-typescript">function Feed({ posts, loading }) {
   let body;
   if (loading) body = &lt;Spinner /&gt;;
   else if (posts.length === 0) body = &lt;Empty /&gt;;
@@ -474,7 +474,7 @@ console.log(JSON.stringify({ type: el.type, props: el.props }));</code></pre>
 
 <h3>Danh sách: <code>.map()</code> một mảng thành element</h3>
 <p>JSX không có cú pháp vòng lặp. Để render một danh sách, bạn biến một mảng dữ liệu thành một mảng element — và React biết cách render một mảng element:</p>
-<pre><code>function List() {
+<pre><code class="language-typescript">function List() {
   const items = ['a', 'b', 'c'];
   return (
     &lt;ul&gt;
@@ -488,14 +488,14 @@ console.log(JSON.stringify({ type: el.type, props: el.props }));</code></pre>
 
 <h3>Điều kiện: <code>&amp;&amp;</code> và ternary</h3>
 <p>Để chỉ hiện một element khi điều kiện đúng, dùng toán tử <code>&amp;&amp;</code>. Nếu vế trái là truthy, biểu thức cho ra vế phải (element); nếu falsy, nó cho ra giá trị falsy, mà React bỏ qua:</p>
-<pre><code>{isLoggedIn &amp;&amp; &lt;p&gt;Chào bạn quay lại!&lt;/p&gt;}
+<pre><code class="language-html">{isLoggedIn &amp;&amp; &lt;p&gt;Chào bạn quay lại!&lt;/p&gt;}
 {error &amp;&amp; &lt;p className="err"&gt;{error}&lt;/p&gt;}</code></pre>
 <p>Để chọn giữa hai thứ, dùng ternary:</p>
-<pre><code>{isLoggedIn ? &lt;Dashboard /&gt; : &lt;LoginForm /&gt;}</code></pre>
+<pre><code class="language-typescript">{isLoggedIn ? &lt;Dashboard /&gt; : &lt;LoginForm /&gt;}</code></pre>
 
 <div class="pitfall">
 <p><strong>Bẫy <code>0</code> — cái "bug" React bị báo nhiều nhất mà thật ra không phải bug.</strong> React bỏ qua <code>false</code>, nhưng <em>không</em> bỏ qua <code>0</code> — <code>0</code> là một số, và React in số. Vậy đoạn này, khi mảng rỗng:</p>
-<pre><code>{items.length &amp;&amp; &lt;List items={items} /&gt;}</code></pre>
+<pre><code class="language-typescript">{items.length &amp;&amp; &lt;List items={items} /&gt;}</code></pre>
 <p>tính <code>0 &amp;&amp; ...</code> ra <code>0</code>, và một số <strong>0</strong> lạc lõng hiện lên trang. Đã kiểm — render <code>{0}</code> cạnh một span cho ra:</p>
 <div class="out">&lt;div&gt;0&lt;span&gt;x&lt;/span&gt;&lt;/div&gt;</div>
 <p>trong khi <code>{false}</code> ở đúng chỗ đó chỉ cho ra <code>&lt;div&gt;&lt;span&gt;x&lt;/span&gt;&lt;/div&gt;</code>. Cách sửa là làm vế trái thành boolean thật: <code>{items.length &gt; 0 &amp;&amp; ...}</code> hoặc <code>{items.length ? ... : null}</code>. Mỗi khi một con số trần lọt lên màn hình, hãy tìm một <code>&amp;&amp;</code> có <code>.length</code> ở bên trái.</p>
@@ -503,7 +503,7 @@ console.log(JSON.stringify({ type: el.type, props: el.props }));</code></pre>
 
 <h3>Tách biến khi nó phình to</h3>
 <p>Khi điều kiện hoặc nhánh phình to, đừng nhồi vào JSX — tính phía trên câu return:</p>
-<pre><code>function Feed({ posts, loading }) {
+<pre><code class="language-typescript">function Feed({ posts, loading }) {
   let body;
   if (loading) body = &lt;Spinner /&gt;;
   else if (posts.length === 0) body = &lt;Empty /&gt;;
@@ -548,13 +548,13 @@ console.log(JSON.stringify({ type: el.type, props: el.props }));</code></pre>
 
 <h3>1 · A component returns exactly one element</h3>
 <p>A function can only <code>return</code> one value. <code>createElement</code> produces one element. So a component must return a single root:</p>
-<pre><code><span class="tok-comment">// ❌ two siblings, no wrapper — syntax error</span>
+<pre><code class="language-html"><span class="tok-comment">// ❌ two siblings, no wrapper — syntax error</span>
 return (
   &lt;h1&gt;Title&lt;/h1&gt;
   &lt;p&gt;Body&lt;/p&gt;
 );</code></pre>
 <p>Wrap them. If you want a wrapper DOM node, use a <code>&lt;div&gt;</code>. If you <em>don't</em> want an extra node in the DOM, use a <strong>Fragment</strong> — the empty tag <code>&lt;&gt;...&lt;/&gt;</code>:</p>
-<pre><code>return (
+<pre><code class="language-html">return (
   &lt;&gt;
     &lt;h1&gt;Title&lt;/h1&gt;
     &lt;p&gt;Body&lt;/p&gt;
@@ -570,7 +570,7 @@ return (
 
 <h3>4 · JSX is a value — treat it like one</h3>
 <p>Because an element is just an object, you can do everything with it you can do with any value: store it in a variable, put it in an array, return it from a function, pass it as a prop:</p>
-<pre><code>const badge = &lt;span className="badge"&gt;New&lt;/span&gt;;
+<pre><code class="language-typescript">const badge = &lt;span className="badge"&gt;New&lt;/span&gt;;
 const rows = data.map((d) =&gt; &lt;Row key={d.id} data={d} /&gt;);
 return &lt;Header title="Feed" action={badge} /&gt;;</code></pre>
 <p>This is the deepest point of the chapter: JSX is not a template language bolted onto JavaScript. It is JavaScript. The full power of the language — variables, functions, arrays, conditionals — is available because you never actually left it.</p>
@@ -611,13 +611,13 @@ return &lt;Header title="Feed" action={badge} /&gt;;</code></pre>
 
 <h3>1 · Một component trả về đúng một element</h3>
 <p>Một hàm chỉ <code>return</code> được một giá trị. <code>createElement</code> tạo ra một element. Nên một component phải trả về một gốc duy nhất:</p>
-<pre><code><span class="tok-comment">// ❌ hai anh em, không bọc — lỗi cú pháp</span>
+<pre><code class="language-html"><span class="tok-comment">// ❌ hai anh em, không bọc — lỗi cú pháp</span>
 return (
   &lt;h1&gt;Title&lt;/h1&gt;
   &lt;p&gt;Body&lt;/p&gt;
 );</code></pre>
 <p>Hãy bọc lại. Nếu bạn muốn một nút DOM bao ngoài, dùng <code>&lt;div&gt;</code>. Nếu bạn <em>không</em> muốn thêm một nút vào DOM, dùng <strong>Fragment</strong> — thẻ rỗng <code>&lt;&gt;...&lt;/&gt;</code>:</p>
-<pre><code>return (
+<pre><code class="language-html">return (
   &lt;&gt;
     &lt;h1&gt;Title&lt;/h1&gt;
     &lt;p&gt;Body&lt;/p&gt;
@@ -633,7 +633,7 @@ return (
 
 <h3>4 · JSX là một giá trị — hãy đối xử với nó như vậy</h3>
 <p>Vì một element chỉ là một object, bạn làm được với nó mọi thứ làm được với bất kỳ giá trị nào: lưu vào biến, bỏ vào mảng, trả về từ một hàm, truyền làm prop:</p>
-<pre><code>const badge = &lt;span className="badge"&gt;New&lt;/span&gt;;
+<pre><code class="language-typescript">const badge = &lt;span className="badge"&gt;New&lt;/span&gt;;
 const rows = data.map((d) =&gt; &lt;Row key={d.id} data={d} /&gt;);
 return &lt;Header title="Feed" action={badge} /&gt;;</code></pre>
 <p>Đây là ý sâu nhất của chương: JSX không phải một ngôn ngữ template gắn thêm vào JavaScript. Nó LÀ JavaScript. Toàn bộ sức mạnh của ngôn ngữ — biến, hàm, mảng, điều kiện — đều dùng được vì bạn chưa từng rời khỏi nó.</p>

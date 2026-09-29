@@ -100,12 +100,12 @@ export default {
 <tr><td>Delete the only node</td><td>NULL</td><td><code>list = cur-&gt;next</code> (= NULL)</td><td>empty list</td></tr>
 </table>
 <p class="nhan">Now the experiment the slide does not do. Two functions differing <em>only</em> in the order of two lines (<code>ptr_order2.c</code>, compiled with <code>cc -Wall -O2</code>):</p>
-<pre>void chen_dung(node *pre, int v){          void chen_sai(node *pre, int v){
+<pre><code class="language-c">void chen_dung(node *pre, int v){          void chen_sai(node *pre, int v){
     node *nw = malloc(sizeof(node));           node *nw = malloc(sizeof(node));
     nw-&gt;data = v;                              nw-&gt;data = v;
     nw-&gt;next  = pre-&gt;next;   /* 1 */           pre-&gt;next = nw;         /* 1 */
     pre-&gt;next = nw;          /* 2 */           nw-&gt;next  = pre-&gt;next;  /* 2 */
-}                                          }</pre>
+}                                          }</code></pre>
 <p class="nhan">Real output:</p>
 <pre>truoc:                 list -&gt; 102 -&gt; 132 -&gt; 178 -&gt; 201 -&gt; NULL   (4 nut)
 sau (dung thu tu):     list -&gt; 102 -&gt; 132 -&gt; 156 -&gt; 178 -&gt; 201 -&gt; NULL   (5 nut)
@@ -160,12 +160,12 @@ sau (sai thu tu):      list -&gt; 102 -&gt; 132 -&gt; 156 -&gt; 156 -&gt; 156 -&
 <tr><td>Xoá nút duy nhất</td><td>NULL</td><td><code>list = cur-&gt;next</code> (= NULL)</td><td>danh sách rỗng</td></tr>
 </table>
 <p class="nhan">Bây giờ là phép thử slide không làm. Hai hàm chỉ khác nhau <em>đúng</em> ở thứ tự hai dòng (<code>ptr_order2.c</code>, dịch bằng <code>cc -Wall -O2</code>):</p>
-<pre>void chen_dung(node *pre, int v){          void chen_sai(node *pre, int v){
+<pre><code class="language-c">void chen_dung(node *pre, int v){          void chen_sai(node *pre, int v){
     node *nw = malloc(sizeof(node));           node *nw = malloc(sizeof(node));
     nw-&gt;data = v;                              nw-&gt;data = v;
     nw-&gt;next  = pre-&gt;next;   /* 1 */           pre-&gt;next = nw;         /* 1 */
     pre-&gt;next = nw;          /* 2 */           nw-&gt;next  = pre-&gt;next;  /* 2 */
-}                                          }</pre>
+}                                          }</code></pre>
 <p class="nhan">Kết quả chạy thật:</p>
 <pre>truoc:                 list -&gt; 102 -&gt; 132 -&gt; 178 -&gt; 201 -&gt; NULL   (4 nut)
 sau (dung thu tu):     list -&gt; 102 -&gt; 132 -&gt; 156 -&gt; 178 -&gt; 201 -&gt; NULL   (5 nut)
@@ -498,13 +498,13 @@ can bang "int f(int a[10]) { return a[0]; }" -&gt; CAN</pre>
 <li><strong>What the slide leaves out</strong> — the symmetric question "is it full?". A linked-list queue is never full until memory runs out, so the ADT does not require the operation; an array-backed one does need it, and slide 30 shows why detecting fullness is harder than it looks.</li>
 </ul>
 <p class="nhan">The four queue operations written out in C, compiled with <code>cc -Wall</code> (from <code>sq.c</code>), so the whole ADT fits in eight lines:</p>
-<pre>int Q[MAX], front = 0, rear = 0;               /* queue(q)   : tao rong  */
+<pre><code class="language-c">int Q[MAX], front = 0, rear = 0;               /* queue(q)   : tao rong  */
 void enqueue(int v){ Q[rear++] = v; }          /* O(1), chi dich rear     */
 int  dequeue(void) { return Q[front++]; }      /* O(1), chi dich front    */
 int  queue_empty(void){ return front == rear; }/* cau hoi, khong doi gi   */
 
 /* rut can hang doi - vong lap CHI viet duoc nho co empty() */
-while (!queue_empty()) printf("%d ", dequeue());</pre>
+while (!queue_empty()) printf("%d ", dequeue());</code></pre>
 <p class="dap-an">✅ Answer to "why is <code>empty</code> one of the four primitives rather than a helper?": because it cannot be built from the other three. <code>queue</code>, <code>enqueue</code> and <code>dequeue</code> all <em>modify</em> the queue; there is no combination of them that reports the state without destroying it. Try to test emptiness by calling <code>dequeue</code> and seeing whether it fails, and you have already removed an element. An ADT needs at least one non-destructive observer, and <code>empty</code> is it. The same argument puts <code>empty</code> among the stack's four primitives on slide 24.</p>
 <p class="meo">💡 Learn the four operations of stack and queue as one table with four rows: <em>create · add · remove · test</em>. Stack fills them with stack/push/pop/empty, queue with queue/enqueue/dequeue/empty. Every ADT in this chapter has the same four roles; only the names and the restricted ends change.</p>
 <p class="pitfall">⚠️ <code>front == rear</code> means "empty" only in the <em>simple</em> array version. In a <strong>circular</strong> array (slide 30), <code>front == rear</code> is ambiguous — it is true both when the queue is empty and when it is completely full. That is why real circular implementations keep a separate <code>count</code>, or deliberately waste one slot. Writing <code>front == rear</code> as the emptiness test for a circular queue is a classic exam trap.</p>`,
@@ -517,13 +517,13 @@ while (!queue_empty()) printf("%d ", dequeue());</pre>
 <li><strong>Thứ slide bỏ sót</strong> — câu hỏi đối xứng "đã đầy chưa?". Queue bằng danh sách liên kết không bao giờ đầy cho tới khi hết bộ nhớ, nên ADT không đòi phép ấy; bản bằng mảng thì cần, và slide 30 cho thấy phát hiện "đầy" khó hơn vẻ ngoài của nó.</li>
 </ul>
 <p class="nhan">Bốn phép toán của queue viết bằng C, dịch bằng <code>cc -Wall</code> (trích <code>sq.c</code>), cả ADT gói gọn trong tám dòng:</p>
-<pre>int Q[MAX], front = 0, rear = 0;               /* queue(q)   : tao rong  */
+<pre><code class="language-c">int Q[MAX], front = 0, rear = 0;               /* queue(q)   : tao rong  */
 void enqueue(int v){ Q[rear++] = v; }          /* O(1), chi dich rear     */
 int  dequeue(void) { return Q[front++]; }      /* O(1), chi dich front    */
 int  queue_empty(void){ return front == rear; }/* cau hoi, khong doi gi   */
 
 /* rut can hang doi - vong lap CHI viet duoc nho co empty() */
-while (!queue_empty()) printf("%d ", dequeue());</pre>
+while (!queue_empty()) printf("%d ", dequeue());</code></pre>
 <p class="dap-an">✅ Đáp án cho câu "vì sao <code>empty</code> là một trong bốn phép nguyên thuỷ chứ không phải hàm phụ trợ?": vì nó KHÔNG dựng được từ ba phép kia. <code>queue</code>, <code>enqueue</code> và <code>dequeue</code> đều <em>làm thay đổi</em> hàng đợi; không tổ hợp nào của chúng báo được trạng thái mà không phá trạng thái ấy. Thử kiểm rỗng bằng cách gọi <code>dequeue</code> xem nó có hỏng không, thì bạn đã lỡ lấy mất một phần tử rồi. Một ADT cần ít nhất một PHÉP QUAN SÁT không phá huỷ, và đó là <code>empty</code>. Đúng lập luận ấy đưa <code>empty</code> vào bốn phép của stack ở slide 24.</p>
 <p class="meo">💡 Học bốn phép của stack và queue thành một bảng bốn dòng: <em>tạo · thêm · lấy · hỏi</em>. Stack điền vào bằng stack/push/pop/empty, queue điền bằng queue/enqueue/dequeue/empty. Mọi ADT trong chương này đều có đúng bốn vai ấy; chỉ tên gọi và đầu bị hạn chế là đổi.</p>
 <p class="pitfall">⚠️ <code>front == rear</code> nghĩa là "rỗng" CHỈ trong bản mảng <em>đơn giản</em>. Trong mảng <strong>VÒNG</strong> (slide 30), <code>front == rear</code> là nhập nhằng — nó đúng cả khi hàng đợi rỗng lẫn khi hàng đợi đầy kín. Vì thế hiện thực vòng thật sự phải giữ thêm biến <code>count</code>, hoặc cố ý bỏ phí một ô. Viết <code>front == rear</code> làm phép kiểm rỗng cho queue vòng là một bẫy đề kinh điển.</p>`],

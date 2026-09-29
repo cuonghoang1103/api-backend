@@ -98,7 +98,7 @@ export default {
 <tr><td>102</td><td>56</td><td>34</td></tr>
 <tr><td>103</td><td>78</td><td>12</td></tr>
 </table>
-<pre>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;stdint.h&gt;
 int main(void) {
     uint32_t x = 0x12345678u;
@@ -106,7 +106,7 @@ int main(void) {
     for (int i = 0; i &lt; 4; i++)
         printf("  &amp;x + %d  -&gt;  0x%02X\\n", i, p[i]);
     return 0;
-}</pre>
+}</code></pre>
 <p class="dap-an">✅ Real run (<code>cc -Wall</code>, Apple M1 Max, arm64): <code>&amp;x+0 → 0x78</code>, <code>&amp;x+1 → 0x56</code>, <code>&amp;x+2 → 0x34</code>, <code>&amp;x+3 → 0x12</code>. The <em>least significant</em> byte sits at the <em>lowest</em> address ⇒ <strong>this machine is little-endian</strong>. Same program: <code>uint16 0xABCD → CD AB</code>, <code>uint64 0x0123456789ABCDEF → EF CD AB 89 67 45 23 01</code>.</p>
 <p class="pitfall">⚠️ Why it corrupts files. Writing that int with <code>fwrite</code> and dumping the file gives <code>7856 3412</code> on disk. Read those same four bytes back on a big-endian machine and you get <strong>0x78563412 = 2 018 915 346</strong> instead of <strong>0x12345678 = 305 419 896</strong> — measured, not guessed. Connects to PRF192 Chapter 10 (<code>fwrite</code> on binary files) and to Chapter 6 (external memory): a binary file is only portable if the byte order is fixed by agreement, which is exactly why network protocols mandate big-endian ("network byte order").</p>`,
         `<p class="y-chinh">🎯 Loại lệnh cơ bản nhất, trình bày trên một tập lệnh THẬT. Một lệnh chuyển dữ liệu phải chỉ rõ ba thứ: <strong>nguồn ở đâu, đích ở đâu, và chuyển bao nhiêu dữ liệu</strong> — và người thiết kế EAS/390 chọn nhét cả ba vào <em>MÃ LỆNH</em> thay vì vào các trường toán hạng.</p>
@@ -139,7 +139,7 @@ int main(void) {
 <tr><td>102</td><td>56</td><td>34</td></tr>
 <tr><td>103</td><td>78</td><td>12</td></tr>
 </table>
-<pre>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;stdint.h&gt;
 int main(void) {
     uint32_t x = 0x12345678u;
@@ -147,7 +147,7 @@ int main(void) {
     for (int i = 0; i &lt; 4; i++)
         printf("  &amp;x + %d  -&gt;  0x%02X\\n", i, p[i]);
     return 0;
-}</pre>
+}</code></pre>
 <p class="dap-an">✅ Chạy thật (<code>cc -Wall</code>, Apple M1 Max, arm64): <code>&amp;x+0 → 0x78</code>, <code>&amp;x+1 → 0x56</code>, <code>&amp;x+2 → 0x34</code>, <code>&amp;x+3 → 0x12</code>. Byte có trọng số <em>THẤP NHẤT</em> nằm ở địa chỉ <em>THẤP NHẤT</em> ⇒ <strong>máy này LITTLE-ENDIAN</strong>. Cùng chương trình: <code>uint16 0xABCD → CD AB</code>, <code>uint64 0x0123456789ABCDEF → EF CD AB 89 67 45 23 01</code>.</p>
 <p class="pitfall">⚠️ Vì sao nó làm HỎNG TỆP. Ghi đúng cái int đó bằng <code>fwrite</code> rồi dump tệp ra thì trên đĩa là <code>7856 3412</code>. Đọc đúng bốn byte ấy trên một máy big-endian sẽ ra <strong>0x78563412 = 2.018.915.346</strong> thay vì <strong>0x12345678 = 305.419.896</strong> — đo thật, không đoán. Nối sang PRF192 Chương 10 (<code>fwrite</code> tệp nhị phân) và Chương 6 (bộ nhớ ngoài): một tệp nhị phân chỉ di chuyển được giữa hai máy nếu thứ tự byte được QUY ƯỚC CỐ ĐỊNH — đó đúng là lý do các giao thức mạng bắt buộc big-endian ("network byte order").</p>`],
 

@@ -241,7 +241,7 @@ ${slide('ga-01', 7, 'run: > folds two commands into one — the second one disap
 
 <p>Now put that in a step and run it for real:</p>
 
-<pre><code>- run: |
+<pre><code class="language-bash">- run: |
     echo mot
     echo hai
 
@@ -550,7 +550,7 @@ ${slide('ga-01', 7, 'run: > gập hai lệnh thành MỘT — lệnh thứ hai b
 
 <p>Giờ đặt cái đó vào một bước và chạy THẬT:</p>
 
-<pre><code>- run: |
+<pre><code class="language-bash">- run: |
     echo mot
     echo hai
 
@@ -764,7 +764,7 @@ ${slide('ga-01', 12, 'pull_request fires on only three activity types by default
 <h3>Multiple triggers in one file</h3>
 <p>A workflow can have several, and each carries its own filters — which is exactly where <code>ci-lint.yml</code>&#39;s asymmetry came from (0.3):</p>
 
-<pre><code>on:
+<pre><code class="language-bash">on:
   pull_request:
     branches: [main]          <span class="tok-comment"># KHONG co paths</span>
   push:
@@ -984,7 +984,7 @@ ${slide('ga-01', 12, 'pull_request mặc định chỉ nổ với 3 loại hoạ
 <h3>Nhiều bộ kích hoạt trong một tệp</h3>
 <p>Một workflow có thể có vài cái, và MỖI CÁI mang bộ lọc riêng — mà đó chính xác là chỗ sự bất đối xứng của <code>ci-lint.yml</code> tới từ (bài 0.3):</p>
 
-<pre><code>on:
+<pre><code class="language-bash">on:
   pull_request:
     branches: [main]          <span class="tok-comment"># KHONG co paths</span>
   push:
@@ -1641,7 +1641,7 @@ ${slide('ga-01', 19, 'pull_request runs on a THIRD commit — not your branch')}
 <h3>Why that distinction is not academic</h3>
 <p>Here is a rig built to make the difference visible. Base branch has a function and a test for it. The PR branch <strong>adds one new file</strong> and its own test — it does not touch a single file that the base branch touches. Meanwhile the base branch changes that function&#39;s signature and updates <em>its own</em> test to match:</p>
 
-<pre><code><span class="tok-comment"># main: chu ky cu</span>
+<pre><code class="language-javascript"><span class="tok-comment"># main: chu ky cu</span>
 function calc(a, b) { return a + b; }
 
 <span class="tok-comment"># nhanh PR: CHI THEM file moi, goi ham theo chu ky cu</span>
@@ -1942,7 +1942,7 @@ ${slide('ga-01', 19, 'pull_request chạy trên commit THỨ BA — không phả
 <h3>Vì sao chỗ phân biệt ấy không phải chuyện hàn lâm</h3>
 <p>Đây là một bộ đồ nghề dựng ra để cho thấy khác biệt đó. Nhánh gốc có một hàm và một bài kiểm cho nó. Nhánh PR <strong>chỉ thêm một file mới</strong> cùng bài kiểm của riêng nó — nó không đụng một file nào mà nhánh gốc đụng. Trong lúc đó nhánh gốc đổi chữ ký của hàm ấy và sửa <em>bài kiểm của chính nó</em> cho khớp:</p>
 
-<pre><code><span class="tok-comment"># main: chu ky cu</span>
+<pre><code class="language-javascript"><span class="tok-comment"># main: chu ky cu</span>
 function calc(a, b) { return a + b; }
 
 <span class="tok-comment"># nhanh PR: CHI THEM file moi, goi ham theo chu ky cu</span>

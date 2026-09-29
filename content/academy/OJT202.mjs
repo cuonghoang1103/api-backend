@@ -328,7 +328,7 @@ const c5 = doc('ojt202-5-1-real-work-skills', '5.1 — Real work: Git, code revi
     `<span class="eyebrow">OJT202 · Chapter 5 · Lesson 5.1</span>
 <h2>Real work: Git, code review &amp; Agile</h2>
 <h3>Git the team way</h3>
-<pre><code>git checkout -b feature/login-form   # branch per task
+<pre><code class="language-bash">git checkout -b feature/login-form   # branch per task
 # ... commit small, meaningful changes ...
 git push origin feature/login-form
 # open a Pull Request -> get review -> merge</code></pre>
@@ -352,7 +352,7 @@ Yes: "I'm trying to X. I expected Y but got Z.
     `<span class="eyebrow">OJT202 · Chương 5 · Bài 5.1</span>
 <h2>Kỹ năng làm việc thực tế: Git, code review &amp; Agile</h2>
 <h3>Git theo cách của đội</h3>
-<pre><code>git checkout -b feature/login-form   # mỗi việc một nhánh
+<pre><code class="language-bash">git checkout -b feature/login-form   # mỗi việc một nhánh
 # ... commit nhỏ, có ý nghĩa ...
 git push origin feature/login-form
 # mở Pull Request -> được review -> merge</code></pre>

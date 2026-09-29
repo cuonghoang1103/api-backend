@@ -210,7 +210,7 @@ redis-cli ZREVRANK lb carol</code></pre>
 <p class="lead">Redis is one binary with no dependencies, which makes installing it refreshingly boring. The interesting part is not getting it running — it is the four settings that separate "it started" from "it will not surprise you later", and those take about a minute.</p>
 
 <h3>Docker, in twenty seconds</h3>
-<pre><code>docker run -d --name redis -p 127.0.0.1:6379:6379 redis:7.4-alpine
+<pre><code class="language-bash">docker run -d --name redis -p 127.0.0.1:6379:6379 redis:7.4-alpine
 docker exec -it redis redis-cli PING
 docker exec -it redis redis-cli INFO server | grep -E 'redis_version|os|multiplexing'</code></pre>
 <div class="out">PONG
@@ -218,7 +218,7 @@ redis_version:7.4.1
 os:Linux 6.8.0-45-generic x86_64
 multiplexing_api:epoll</div>
 <div class="callout ok"><strong>Note the <code>127.0.0.1:</code> in front of the port.</strong> Without it, <code>-p 6379:6379</code> publishes Redis on every interface of the host — and because Docker's rules bypass UFW entirely, that means the open internet regardless of your firewall. An exposed Redis with no password is compromised within hours; internet-wide scanners look for exactly this. Bind to loopback, always, unless you have a specific reason and a password.</div>
-<pre><code><span class="tok-comment"># A persistent, size-capped Redis you can actually keep</span>
+<pre><code class="language-bash"><span class="tok-comment"># A persistent, size-capped Redis you can actually keep</span>
 docker run -d --name redis \\
   -p 127.0.0.1:6379:6379 \\
   -v redis-data:/data \\
@@ -231,14 +231,14 @@ docker exec redis redis-cli CONFIG GET maxmemory-policy</code></pre>
 2) "allkeys-lru"</div>
 
 <h3>Installing it directly</h3>
-<pre><code><span class="tok-comment"># Debian / Ubuntu — the official APT repository, not the distro's old package</span>
+<pre><code class="language-bash"><span class="tok-comment"># Debian / Ubuntu — the official APT repository, not the distro's old package</span>
 curl -fsSL https://packages.redis.io/gpg | sudo gpg --dearmor -o /usr/share/keyrings/redis.gpg
 echo "deb [signed-by=/usr/share/keyrings/redis.gpg] https://packages.redis.io/deb $(lsb_release -cs) main" \\
   | sudo tee /etc/apt/sources.list.d/redis.list
 sudo apt-get update &amp;&amp; sudo apt-get install -y redis
 redis-server --version</code></pre>
 <div class="out">Redis server v=7.4.1 sha=00000000:0 malloc=jemalloc-5.3.0 bits=64</div>
-<pre><code><span class="tok-comment"># macOS</span>
+<pre><code class="language-bash"><span class="tok-comment"># macOS</span>
 brew install redis &amp;&amp; brew services start redis
 
 <span class="tok-comment"># Windows — WSL2, or Docker. There is no supported native build.</span>
@@ -329,7 +329,7 @@ OK
 <p class="lead">Redis là một tệp nhị phân duy nhất không phụ thuộc gì, nên cài nó nhàm chán một cách dễ chịu. Phần thú vị không phải là cho nó chạy — mà là bốn thiết lập tách "nó đã khởi động" khỏi "nó sẽ không làm bạn bất ngờ về sau", và chừng đó tốn khoảng một phút.</p>
 
 <h3>Docker, trong hai mươi giây</h3>
-<pre><code>docker run -d --name redis -p 127.0.0.1:6379:6379 redis:7.4-alpine
+<pre><code class="language-bash">docker run -d --name redis -p 127.0.0.1:6379:6379 redis:7.4-alpine
 docker exec -it redis redis-cli PING
 docker exec -it redis redis-cli INFO server | grep -E 'redis_version|os|multiplexing'</code></pre>
 <div class="out">PONG
@@ -337,7 +337,7 @@ redis_version:7.4.1
 os:Linux 6.8.0-45-generic x86_64
 multiplexing_api:epoll</div>
 <div class="callout ok"><strong>Để ý cái <code>127.0.0.1:</code> đứng trước số cổng.</strong> Không có nó thì <code>-p 6379:6379</code> công bố Redis trên MỌI giao diện của máy chủ — và vì luật của Docker đi vòng hẳn qua UFW, điều đó nghĩa là Internet công cộng bất kể tường lửa của bạn. Một Redis phơi ra mà không có mật khẩu sẽ bị chiếm trong vài giờ; máy quét khắp Internet tìm đúng thứ này. Hãy gắn vào loopback, luôn luôn, trừ khi bạn có lý do cụ thể VÀ có mật khẩu.</div>
-<pre><code><span class="tok-comment"># Một Redis có lưu lâu dài và có trần dung lượng, thứ bạn giữ lại được</span>
+<pre><code class="language-bash"><span class="tok-comment"># Một Redis có lưu lâu dài và có trần dung lượng, thứ bạn giữ lại được</span>
 docker run -d --name redis \\
   -p 127.0.0.1:6379:6379 \\
   -v redis-data:/data \\
@@ -350,14 +350,14 @@ docker exec redis redis-cli CONFIG GET maxmemory-policy</code></pre>
 2) "allkeys-lru"</div>
 
 <h3>Cài trực tiếp</h3>
-<pre><code><span class="tok-comment"># Debian / Ubuntu — kho APT chính thức, không phải gói cũ của bản phân phối</span>
+<pre><code class="language-bash"><span class="tok-comment"># Debian / Ubuntu — kho APT chính thức, không phải gói cũ của bản phân phối</span>
 curl -fsSL https://packages.redis.io/gpg | sudo gpg --dearmor -o /usr/share/keyrings/redis.gpg
 echo "deb [signed-by=/usr/share/keyrings/redis.gpg] https://packages.redis.io/deb $(lsb_release -cs) main" \\
   | sudo tee /etc/apt/sources.list.d/redis.list
 sudo apt-get update &amp;&amp; sudo apt-get install -y redis
 redis-server --version</code></pre>
 <div class="out">Redis server v=7.4.1 sha=00000000:0 malloc=jemalloc-5.3.0 bits=64</div>
-<pre><code><span class="tok-comment"># macOS</span>
+<pre><code class="language-bash"><span class="tok-comment"># macOS</span>
 brew install redis &amp;&amp; brew services start redis
 
 <span class="tok-comment"># Windows — WSL2, hoặc Docker. Không có bản dựng gốc nào được hỗ trợ.</span>

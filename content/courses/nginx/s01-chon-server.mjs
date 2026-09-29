@@ -26,7 +26,7 @@ export default {
 <p class="lead">Selecting a server block happens in two stages, and almost every explanation skips the first one. Before Nginx compares a single hostname it has already narrowed the candidates down to the blocks listening on the socket that received the connection — so if a request reaches the wrong site, the reason is often that it never reached the right <code>listen</code> at all.</p>
 
 <h3>What listen actually declares</h3>
-<pre><code>listen 80;                 <span class="tok-comment"># every IPv4 address, port 80 — same as 0.0.0.0:80</span>
+<pre><code class="language-bash">listen 80;                 <span class="tok-comment"># every IPv4 address, port 80 — same as 0.0.0.0:80</span>
 listen 127.0.0.1:8080;     <span class="tok-comment"># loopback ONLY — nothing off-box can reach it</span>
 listen 192.0.2.10:443 ssl; <span class="tok-comment"># one specific address, with TLS — Chapter 6</span>
 listen [::]:80;            <span class="tok-comment"># IPv6; on Linux the default SHARES IPv4 as well</span>
@@ -68,7 +68,7 @@ server {
     <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">Choose a location</span><span class="lz-nsub">Only now does this begin, and only INSIDE the block already chosen · Chapter 2</span></div></div>
   </div>
 </div>
-<pre><code><span class="tok-comment"># See where NGINX is actually listening — do not read the config and guess</span>
+<pre><code class="language-bash"><span class="tok-comment"># See where NGINX is actually listening — do not read the config and guess</span>
 ss -tlnp | grep nginx
 <span class="tok-comment"># LISTEN 0 511  0.0.0.0:8080  0.0.0.0:*  users:(("nginx",pid=3218,fd=6))</span>
 
@@ -98,7 +98,7 @@ nginx -T | grep -nE '^\\\\s*(listen|server_name)'</code></pre>
 <p class="lead">Việc chọn một khối server diễn ra qua HAI chặng, và gần như mọi lời giải thích đều bỏ qua chặng thứ nhất. Trước khi Nginx so lấy một cái tên miền nào, nó đã thu hẹp danh sách ứng viên xuống còn những khối đang nghe trên đúng cái SOCKET nhận được kết nối — nên nếu một request tới nhầm trang thì lý do thường là nó chưa bao giờ tới được đúng cái <code>listen</code> cần tới.</p>
 
 <h3>listen thật ra khai báo cái gì</h3>
-<pre><code>listen 80;                 <span class="tok-comment"># mọi địa chỉ IPv4, cổng 80  — bằng 0.0.0.0:80</span>
+<pre><code class="language-bash">listen 80;                 <span class="tok-comment"># mọi địa chỉ IPv4, cổng 80  — bằng 0.0.0.0:80</span>
 listen 127.0.0.1:8080;     <span class="tok-comment"># CHỈ loopback — không ai ngoài máy tới được</span>
 listen 192.0.2.10:443 ssl; <span class="tok-comment"># một địa chỉ cụ thể, kèm TLS — Chương 6</span>
 listen [::]:80;            <span class="tok-comment"># IPv6; mặc định trên Linux là DÙNG CHUNG cả IPv4</span>
@@ -140,7 +140,7 @@ server {
     <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">Chọn location</span><span class="lz-nsub">CHỈ tới đây mới bắt đầu, và chỉ BÊN TRONG khối đã chọn xong · Chương 2</span></div></div>
   </div>
 </div>
-<pre><code><span class="tok-comment"># Xem NGINX thật sự đang nghe ở đâu — đừng đọc cấu hình rồi đoán</span>
+<pre><code class="language-bash"><span class="tok-comment"># Xem NGINX thật sự đang nghe ở đâu — đừng đọc cấu hình rồi đoán</span>
 ss -tlnp | grep nginx
 <span class="tok-comment"># LISTEN 0 511  0.0.0.0:8080  0.0.0.0:*  users:(("nginx",pid=3218,fd=6))</span>
 
@@ -179,7 +179,7 @@ nginx -T | grep -nE '^\\\\s*(listen|server_name)'</code></pre>
 <p class="lead">Once Nginx has the candidate blocks for a socket, it compares the <code>Host</code> header against their names — and it does so in a fixed order that has nothing to do with the order the blocks appear in your file. Four levels, checked in sequence, first match wins.</p>
 
 <h3>Six hosts, six blocks, measured</h3>
-<pre><code>server { listen 8080; server_name mot.vidu.com;   … }  <span class="tok-comment"># 1 · exact match</span>
+<pre><code class="language-bash">server { listen 8080; server_name mot.vidu.com;   … }  <span class="tok-comment"># 1 · exact match</span>
 server { listen 8080; server_name *.vidu.com;     … }  <span class="tok-comment"># 2 · leading wildcard</span>
 server { listen 8080; server_name www.vidu.*;     … }  <span class="tok-comment"># 3 · trailing wildcard</span>
 server { listen 8080; server_name ~^may(?&lt;so&gt;\\\\d+)\\\\.vidu\\\\.com$; … } <span class="tok-comment"># 4 · regex</span></code></pre>
@@ -225,7 +225,7 @@ khong-khop.com           8080   1 · ten CHINH XAC: mot.vidu.com  &lt;- may chu 
   <div class="lz-layer"><span class="lz-lname">An empty server_name matches a missing Host</span><span class="lz-lnote"><code>server_name "";</code> catches requests that arrive with no <code>Host</code> header at all, which HTTP/1.0 clients and some scanners still do. Useful for returning 444 to junk traffic rather than letting it reach the default server.</span></div>
   <div class="lz-layer"><span class="lz-lname">Long names need a bigger bucket</span><span class="lz-lnote"><code>could not build server_names_hash, you should increase server_names_hash_bucket_size</code> is a startup error, not a warning, and it means exactly what it says. Raise it to the next power of two; it is not a sign that anything else is wrong.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Capture the subdomain and USE it — the real reason to write a regex</span>
+<pre><code class="language-bash"><span class="tok-comment"># Capture the subdomain and USE it — the real reason to write a regex</span>
 server {
   listen 8080;
   server_name ~^(?&lt;khach&gt;[a-z0-9-]+)\\\\.vidu\\\\.com$;
@@ -251,7 +251,7 @@ server {
 <p class="lead">Khi Nginx đã có danh sách khối ứng viên cho một socket, nó đem header <code>Host</code> ra so với tên của chúng — và nó so theo một thứ tự CỐ ĐỊNH chẳng liên quan gì tới thứ tự các khối xuất hiện trong tệp của bạn. Bốn mức, kiểm tuần tự, khớp đầu tiên là thắng.</p>
 
 <h3>Sáu cái Host, sáu khối, đo thật</h3>
-<pre><code>server { listen 8080; server_name mot.vidu.com;   … }  <span class="tok-comment"># 1 · khớp chính xác</span>
+<pre><code class="language-bash">server { listen 8080; server_name mot.vidu.com;   … }  <span class="tok-comment"># 1 · khớp chính xác</span>
 server { listen 8080; server_name *.vidu.com;     … }  <span class="tok-comment"># 2 · đại diện ở ĐẦU</span>
 server { listen 8080; server_name www.vidu.*;     … }  <span class="tok-comment"># 3 · đại diện ở CUỐI</span>
 server { listen 8080; server_name ~^may(?&lt;so&gt;\\\\d+)\\\\.vidu\\\\.com$; … } <span class="tok-comment"># 4 · regex</span></code></pre>
@@ -297,7 +297,7 @@ khong-khop.com           8080   1 · ten CHINH XAC: mot.vidu.com  &lt;- may chu 
   <div class="lz-layer"><span class="lz-lname">server_name rỗng khớp với request KHÔNG có Host</span><span class="lz-lnote"><code>server_name "";</code> bắt những request tới mà hoàn toàn không có header <code>Host</code> nào, thứ mà client HTTP/1.0 và vài bộ quét vẫn còn gửi. Hữu ích để trả 444 cho lưu lượng rác thay vì để nó chạm tới máy chủ mặc định.</span></div>
   <div class="lz-layer"><span class="lz-lname">Tên dài thì cần cái xô to hơn</span><span class="lz-lnote"><code>could not build server_names_hash, you should increase server_names_hash_bucket_size</code> là một LỖI lúc khởi động chứ không phải cảnh báo, và nó nghĩa đúng như nó viết. Hãy nâng lên luỹ thừa hai kế tiếp; nó KHÔNG phải dấu hiệu rằng có gì khác đang hỏng.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Bắt được tên miền con và DÙNG nó — lý do thật để viết regex</span>
+<pre><code class="language-bash"><span class="tok-comment"># Bắt được tên miền con và DÙNG nó — lý do thật để viết regex</span>
 server {
   listen 8080;
   server_name ~^(?&lt;khach&gt;[a-z0-9-]+)\\\\.vidu\\\\.com$;
@@ -366,7 +366,7 @@ server {
 </div>
 
 <h3>What a deliberate default should do</h3>
-<pre><code><span class="tok-comment"># Option A — REFUSE OUTRIGHT. Pick this when every site has its own domain.</span>
+<pre><code class="language-bash"><span class="tok-comment"># Option A — REFUSE OUTRIGHT. Pick this when every site has its own domain.</span>
 server {
   listen 80  default_server;
   listen 443 ssl default_server;
@@ -398,7 +398,7 @@ server {
   <div class="lz-layer"><span class="lz-lname">Never make a real site the default by accident</span><span class="lz-lnote">If your marketing site happens to be first in the file, it is now also the answer for every scan, every stale DNS record and every misdirected request — and its logs fill with hostnames that have nothing to do with it. Deliberate is the whole point.</span></div>
   <div class="lz-layer"><span class="lz-lname">Log the default separately</span><span class="lz-lnote">Give the default block its own <code>access_log</code>. It becomes a clean record of who is probing your address directly, which is genuinely useful, and it keeps that noise out of your real sites' logs.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Kiem xem cong nao dang co may chu mac dinh, ke ca trong cac tep include</span>
+<pre><code class="language-bash"><span class="tok-comment"># Kiem xem cong nao dang co may chu mac dinh, ke ca trong cac tep include</span>
 nginx -T | grep -n 'default_server'
 
 <span class="tok-comment"># Va thu CHINH CAI DUONG DO — dung Host that, dung mot cai vo nghia</span>
@@ -455,7 +455,7 @@ curl -s -o /dev/null -w '%{http_code}\\\\n' -H 'Host: khong-ton-tai.invalid' htt
 </div>
 
 <h3>Một cái mặc định CÓ CHỦ Ý thì nên làm gì</h3>
-<pre><code><span class="tok-comment"># Phương án A — TỪ CHỐI THẲNG. Chọn cái này khi mọi trang đều có tên miền.</span>
+<pre><code class="language-bash"><span class="tok-comment"># Phương án A — TỪ CHỐI THẲNG. Chọn cái này khi mọi trang đều có tên miền.</span>
 server {
   listen 80  default_server;
   listen 443 ssl default_server;
@@ -487,7 +487,7 @@ server {
   <div class="lz-layer"><span class="lz-lname">Đừng bao giờ để một trang THẬT thành mặc định một cách vô tình</span><span class="lz-lnote">Nếu trang giới thiệu của bạn tình cờ đứng đầu tệp thì giờ nó cũng là câu trả lời cho MỌI lượt quét, MỌI bản ghi DNS cũ còn sót và MỌI request đi lạc — và log của nó đầy những hostname chẳng liên quan gì tới nó. CÓ CHỦ Ý mới là toàn bộ vấn đề.</span></div>
   <div class="lz-layer"><span class="lz-lname">Ghi log cho khối mặc định RIÊNG ra</span><span class="lz-lnote">Hãy cho khối mặc định một <code>access_log</code> của riêng nó. Nó trở thành một bản ghi SẠCH về việc ai đang dò thẳng vào địa chỉ của bạn, thứ thật sự có ích, và nó giữ đám nhiễu ấy khỏi log của các trang thật.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Kiem xem cong nao dang co may chu mac dinh, ke ca trong cac tep include</span>
+<pre><code class="language-bash"><span class="tok-comment"># Kiem xem cong nao dang co may chu mac dinh, ke ca trong cac tep include</span>
 nginx -T | grep -n 'default_server'
 
 <span class="tok-comment"># Va thu CHINH CAI DUONG DO — dung Host that, dung mot cai vo nghia</span>
@@ -563,7 +563,7 @@ Location: http://ke-tan-cong.com:8080/thu-muc/          &lt;- BAN khong viet don
 <div class="pitfall">
 <p><strong>Trap — the third case is the one that catches careful people, because you did not write it.</strong> When a request names a directory without a trailing slash, Nginx issues its own <code>301</code> to add one — and it builds that <code>Location</code> from <code>$host</code>. So a configuration containing not a single <code>$host</code> anywhere still emits an attacker-controlled absolute redirect, and a security review that greps for <code>$host</code> finds nothing. The same applies to the automatic redirect from <code>rewrite</code> and to <code>try_files</code> falling through to a directory. Two directives fix it at the source: <code>absolute_redirect off;</code> makes Nginx emit a relative <code>Location</code>, and <code>server_name_in_redirect on;</code> makes it use the configured name instead of the header.</p>
 </div>
-<pre><code><span class="tok-comment"># The root fix — set it at the http level and every block inherits it</span>
+<pre><code class="language-bash"><span class="tok-comment"># The root fix — set it at the http level and every block inherits it</span>
 http {
   absolute_redirect     off;   <span class="tok-comment"># Location: /folder/   (relative, no host)</span>
   server_name_in_redirect on;  <span class="tok-comment"># if you still need it absolute, use the NAME FROM THE CONFIG</span>
@@ -649,7 +649,7 @@ Location: http://ke-tan-cong.com:8080/thu-muc/          &lt;- BAN khong viet don
 <div class="pitfall">
 <p><strong>Bẫy — trường hợp thứ ba mới là cái vồ trúng người cẩn thận, vì bạn có viết nó đâu.</strong> Khi request gọi một thư mục mà thiếu dấu <code>/</code> ở cuối, Nginx tự bắn một cú <code>301</code> để thêm vào — và nó dựng cái <code>Location</code> đó từ <code>$host</code>. Nghĩa là một cấu hình không hề có lấy một chữ <code>$host</code> nào vẫn nhả ra một cú chuyển hướng tuyệt đối do kẻ tấn công điều khiển, còn một đợt rà soát an ninh đi grep chữ <code>$host</code> thì chẳng thấy gì. Cú tự chuyển hướng của <code>rewrite</code> và của <code>try_files</code> khi rơi vào một thư mục cũng y như vậy. Hai chỉ thị vá tận gốc: <code>absolute_redirect off;</code> bắt Nginx trả <code>Location</code> tương đối, còn <code>server_name_in_redirect on;</code> bắt nó dùng tên trong cấu hình thay cho header.</p>
 </div>
-<pre><code><span class="tok-comment"># Vá tận gốc — đặt ở tầng http là mọi khối đều thừa hưởng</span>
+<pre><code class="language-bash"><span class="tok-comment"># Vá tận gốc — đặt ở tầng http là mọi khối đều thừa hưởng</span>
 http {
   absolute_redirect     off;   <span class="tok-comment"># Location: /thu-muc/   (tương đối, không có host)</span>
   server_name_in_redirect on;  <span class="tok-comment"># nếu vẫn cần tuyệt đối thì dùng TÊN TRONG CẤU HÌNH</span>
@@ -700,7 +700,7 @@ return 301 https://vidu.com$request_uri;    <span class="tok-comment"># ĐÚNG</
 <p class="lead">Everything so far has been one piece at a time. Here is the whole thing running: three sites plus an admin panel on one machine, each in its own file, with a default block that refuses. Then one filename changes and the behaviour changes with it — which is the real lesson of this chapter.</p>
 
 <h3>The layout on disk</h3>
-<pre><code>/etc/nginx/
+<pre><code class="language-bash">/etc/nginx/
 ├── nginx.conf                    <span class="tok-comment"># contains only the http level plus one include line</span>
 ├── sites-available/              <span class="tok-comment"># every site, including the disabled ones</span>
 │   ├── 00-default.conf           <span class="tok-comment"># the catch-all block, NO server_name</span>
@@ -802,7 +802,7 @@ vidu.com          -> 200                 (cac site that khong he suy suyen)</div
 <p class="lead">Từ đầu chương tới giờ toàn là mổ từng mảnh. Đây là cả bộ đang chạy: ba site cộng một trang quản trị trên cùng một máy, mỗi cái một file, kèm một khối mặc định biết từ chối. Rồi đổi đúng MỘT tên file là hành vi đổi theo — và đó mới là bài học thật của cả chương này.</p>
 
 <h3>Bố cục trên đĩa</h3>
-<pre><code>/etc/nginx/
+<pre><code class="language-bash">/etc/nginx/
 ├── nginx.conf                    <span class="tok-comment"># chỉ chứa tầng http + một dòng include</span>
 ├── sites-available/              <span class="tok-comment"># mọi site, kể cả site đang tắt</span>
 │   ├── 00-default.conf           <span class="tok-comment"># khối bắt-tất, KHÔNG server_name</span>

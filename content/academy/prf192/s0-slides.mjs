@@ -29,7 +29,7 @@ export default {
 <li><strong>What "fundamentals" really means</strong> — variables and types, input/output, decisions, loops, functions, pointers, arrays, structs, strings, files. Nine blocks, listed on slide 8.</li>
 <li><strong>Your first program will look like this</strong> — every C program starts from a function called <code>main</code>:</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main() {
     printf("Programming Fundamentals using C\\n");
@@ -44,7 +44,7 @@ int main() {
 <li><strong>"Nền tảng" cụ thể là gì</strong> — biến và kiểu dữ liệu, nhập/xuất, rẽ nhánh, vòng lặp, hàm, con trỏ, mảng, struct, chuỗi, tệp tin. Chín khối, liệt kê ở slide 8.</li>
 <li><strong>Chương trình đầu tiên của bạn sẽ trông thế này</strong> — mọi chương trình C đều khởi động từ hàm tên <code>main</code>:</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main() {
     printf("Programming Fundamentals using C\\n");
@@ -82,7 +82,7 @@ int main() {
 <li><strong>System-Level Programming</strong> — operating systems (Linux, Windows kernels), device drivers, databases and embedded firmware are written in C, because at that level you must talk to fixed hardware addresses and fit into kilobytes of RAM.</li>
 <li><strong>What "fine control over memory" looks like</strong> — in C you can literally see the address of a variable, which is why Slot 10 (Pointers) exists:</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main() {
     int x = 10;
@@ -101,7 +101,7 @@ int main() {
 <li><strong>Lập trình hệ thống</strong> — hệ điều hành (nhân Linux, nhân Windows), trình điều khiển thiết bị, hệ quản trị cơ sở dữ liệu và firmware nhúng đều viết bằng C, vì ở tầng đó bạn buộc phải nói chuyện với địa chỉ phần cứng cố định và phải nhét vừa vài kilobyte RAM.</li>
 <li><strong>"Kiểm soát bộ nhớ tinh vi" trông ra sao</strong> — trong C bạn nhìn thấy được địa chỉ của biến, và đó là lý do tồn tại của Slot 10 (Con trỏ):</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main() {
     int x = 10;
@@ -122,7 +122,7 @@ int main() {
 <li><strong>Community and Resources</strong> — C has existed since 1972, so nearly every error message you will ever see has already been asked and answered somewhere. The slide explicitly mentions using tutorials and forums to <em>fix bugs in source code</em> — reading other people's diagnoses is a legitimate study skill.</li>
 <li><strong>Library example</strong> — three headers, three jobs, one program:</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;math.h&gt;
 #include &lt;string.h&gt;
 
@@ -142,7 +142,7 @@ int main() {
 <li><strong>Cộng đồng và tài nguyên</strong> — C tồn tại từ năm 1972, nên gần như mọi thông báo lỗi bạn sẽ gặp đều đã có người hỏi và có người trả lời ở đâu đó. Slide nói thẳng việc dùng hướng dẫn và diễn đàn để <em>sửa lỗi mã nguồn</em> — đọc chẩn đoán của người khác là một kỹ năng học tập chính đáng.</li>
 <li><strong>Ví dụ dùng thư viện</strong> — ba header, ba việc, một chương trình:</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;math.h&gt;
 #include &lt;string.h&gt;
 
@@ -186,7 +186,7 @@ int main() {
 <li><strong>Basic logical thinking in mathematics</strong> — you need conditions (AND, OR, NOT), inequalities, remainders, and the idea of a step-by-step procedure. Nothing beyond secondary school; no calculus is required.</li>
 <li><strong>Where the logic shows up immediately</strong> — every <code>if</code> and every loop condition is a logical proposition. "n is divisible by 3 and by 5" becomes code almost word for word:</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main() {
     int n;
@@ -207,7 +207,7 @@ int main() {
 <li><strong>Tư duy logic toán học cơ bản</strong> — bạn cần điều kiện (VÀ, HOẶC, PHỦ ĐỊNH), bất đẳng thức, phép chia lấy dư, và ý niệm về một quy trình từng bước. Không vượt quá phổ thông; không đòi hỏi giải tích.</li>
 <li><strong>Logic xuất hiện ngay lập tức ở đâu</strong> — mỗi <code>if</code> và mỗi điều kiện lặp đều là một mệnh đề logic. Câu "n chia hết cho 3 và cho 5" chuyển thành mã gần như từng chữ một:</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main() {
     int n;
@@ -325,7 +325,7 @@ int main() {
 <li><strong>Save your file as <code>.c</code>, not <code>.cpp</code></strong> — the extension chooses the language. A <code>.cpp</code> file is compiled as C++, which accepts things C rejects; you would then fail on the exam machine while "it worked at home".</li>
 <li><strong>Minimum check that the install worked</strong> — new source file, paste this, press Compile &amp; Run:</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main() {
     int a = 7, b = 3;
@@ -344,7 +344,7 @@ int main() {
 <li><strong>Lưu tệp đuôi <code>.c</code>, đừng lưu <code>.cpp</code></strong> — phần mở rộng quyết định ngôn ngữ. Tệp <code>.cpp</code> sẽ được biên dịch theo C++, vốn chấp nhận những thứ C từ chối; rồi bạn rớt trên máy thi trong khi "ở nhà vẫn chạy".</li>
 <li><strong>Phép kiểm tối thiểu xem cài đặt đã ổn chưa</strong> — tạo tệp mã nguồn mới, dán đoạn này vào, bấm Compile &amp; Run:</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main() {
     int a = 7, b = 3;
@@ -390,7 +390,7 @@ int main() {
 <li><strong>Worked example 2 — the trap</strong> — same marks but FE = 3.5. Total = 1.05 + 0.80 + 1.35 + 1.80 + 1.05 = <strong>6.05</strong>, comfortably above 5 — and you still fail, because FE = 3.5 &lt; 4. The final exam has a floor of its own.</li>
 <li><strong>Worked example 3 — what do I need?</strong> — PT = 4, WS = 5, AS = 4, PE = 3 gives a fixed part of 0.60 + 0.50 + 0.60 + 0.90 = 2.60. Need 2.60 + 0.3·FE ≥ 5 ⇒ 0.3·FE ≥ 2.40 ⇒ FE ≥ 8.0.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main() {
     double pt, ws, as, pe, fe, total;
@@ -415,7 +415,7 @@ int main() {
 <li><strong>Ví dụ giải 2 — cái bẫy</strong> — vẫn các điểm đó nhưng FE = 3,5. Total = 1,05 + 0,80 + 1,35 + 1,80 + 1,05 = <strong>6,05</strong>, dư sức trên 5 — vậy mà vẫn trượt, vì FE = 3,5 &lt; 4. Bài thi cuối kỳ có sàn riêng của nó.</li>
 <li><strong>Ví dụ giải 3 — tôi cần bao nhiêu?</strong> — PT = 4, WS = 5, AS = 4, PE = 3 cho phần cố định 0,60 + 0,50 + 0,60 + 0,90 = 2,60. Cần 2,60 + 0,3·FE ≥ 5 ⇒ 0,3·FE ≥ 2,40 ⇒ FE ≥ 8,0.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main() {
     double pt, ws, as, pe, fe, total;
@@ -487,7 +487,7 @@ int main() {
 <li><strong>Why enjoyment is a technical argument, not a slogan</strong> — programming is learned by many short feedback loops. People who enjoy the loop run it hundreds of times a semester; people who dread it run it the night before the deadline. The gap in outcome is entirely explained by the number of loops.</li>
 <li><strong>Where the fun actually starts</strong> — around Slot 05, when loops let twenty lines do work that would take a human hours. That is the first moment the machine clearly out-performs doing it by hand.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main() {
     int i, sum = 0;
@@ -506,7 +506,7 @@ int main() {
 <li><strong>Vì sao "thấy vui" là một lập luận kỹ thuật chứ không phải khẩu hiệu</strong> — lập trình được học qua rất nhiều vòng phản hồi ngắn. Người thấy vui chạy vòng đó hàng trăm lần mỗi kỳ; người thấy sợ chỉ chạy nó vào đêm trước hạn nộp. Khoảng cách kết quả giải thích trọn vẹn bằng số vòng lặp.</li>
 <li><strong>Chỗ cái vui thật sự bắt đầu</strong> — khoảng Slot 05, khi vòng lặp khiến hai mươi dòng làm được việc mà con người phải ngồi hàng giờ. Đó là khoảnh khắc đầu tiên máy tính rõ ràng thắng việc làm tay.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main() {
     int i, sum = 0;
@@ -527,7 +527,7 @@ int main() {
 <li><strong>Step 4 — verify with input, not just output</strong> — a program that only prints proves the compiler works; a program that reads input proves <code>scanf</code>, the console and your format strings work too.</li>
 <li><strong>Step 5 — deliberately break it</strong> — delete one semicolon, compile, and read the error message. Doing this once, on purpose, on a program you know is otherwise correct, teaches you to read compiler output for the rest of the semester.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main() {
     char name[30];
@@ -550,7 +550,7 @@ int main() {
 <li><strong>Bước 4 — kiểm bằng cả đầu vào, đừng chỉ kiểm đầu ra</strong> — chương trình chỉ in ra thì mới chứng minh trình biên dịch chạy; chương trình có đọc dữ liệu vào mới chứng minh <code>scanf</code>, cửa sổ console và các chuỗi định dạng của bạn cũng chạy.</li>
 <li><strong>Bước 5 — cố tình làm hỏng nó</strong> — xoá một dấu chấm phẩy, biên dịch, và đọc thông báo lỗi. Làm việc này một lần, có chủ đích, trên một chương trình mà bạn biết chắc là đúng, sẽ dạy bạn cách đọc thông báo của trình biên dịch cho cả kỳ còn lại.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main() {
     char name[30];

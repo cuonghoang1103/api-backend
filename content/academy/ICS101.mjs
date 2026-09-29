@@ -408,7 +408,7 @@ const c6 = doc('ics101-6-1-programming', '6.1 — Introduction to programming & 
 <li><strong>Control flow</strong> — <code>if/else</code> and loops (the same three structures from Chapter 5).</li>
 <li><strong>Functions</strong> — named, reusable blocks of steps — abstraction in action.</li>
 </ul>
-<pre><code>Python — is a year a leap year?
+<pre><code class="language-python">Python — is a year a leap year?
   def is_leap(year):
       if year % 4 == 0 and (year % 100 != 0 or year % 400 == 0):
           return True
@@ -434,7 +434,7 @@ const c6 = doc('ics101-6-1-programming', '6.1 — Introduction to programming & 
 <li><strong>Luồng điều khiển</strong> — <code>if/else</code> và vòng lặp (chính ba cấu trúc ở Chương 5).</li>
 <li><strong>Hàm</strong> — khối bước có tên, tái sử dụng — trừu tượng hoá trong thực tế.</li>
 </ul>
-<pre><code>Python — năm có phải năm nhuận không?
+<pre><code class="language-python">Python — năm có phải năm nhuận không?
   def is_leap(year):
       if year % 4 == 0 and (year % 100 != 0 or year % 400 == 0):
           return True
@@ -504,7 +504,7 @@ const c8 = doc('ics101-8-1-databases-ai-ethics', '8.1 — Databases, AI & profes
 <h2>Databases, AI &amp; professional ethics</h2>
 <h3>Databases</h3>
 <p>A <strong>database</strong> stores data so it can be queried reliably. In a <strong>relational database</strong> data lives in <strong>tables</strong> (rows &amp; columns); we ask questions with <strong>SQL</strong>. A <strong>primary key</strong> uniquely identifies each row.</p>
-<pre><code>SQL — students with a high GPA:
+<pre><code class="language-sql">SQL — students with a high GPA:
   SELECT name, gpa
   FROM students
   WHERE gpa &gt;= 3.5
@@ -524,7 +524,7 @@ const c8 = doc('ics101-8-1-databases-ai-ethics', '8.1 — Databases, AI & profes
 <h2>Cơ sở dữ liệu, AI &amp; đạo đức nghề nghiệp</h2>
 <h3>Cơ sở dữ liệu</h3>
 <p>Một <strong>cơ sở dữ liệu (CSDL)</strong> lưu dữ liệu để truy vấn một cách tin cậy. Trong <strong>CSDL quan hệ</strong>, dữ liệu nằm trong các <strong>bảng</strong> (hàng &amp; cột); ta đặt câu hỏi bằng <strong>SQL</strong>. <strong>Khoá chính (primary key)</strong> định danh duy nhất mỗi hàng.</p>
-<pre><code>SQL — sinh viên có GPA cao:
+<pre><code class="language-sql">SQL — sinh viên có GPA cao:
   SELECT name, gpa
   FROM students
   WHERE gpa &gt;= 3.5

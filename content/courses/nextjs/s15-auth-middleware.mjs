@@ -131,7 +131,7 @@ export default {
 <h2>Reading and writing cookies on the server</h2>
 <p class="lead">Next.js gives a <code>cookies()</code> helper from <code>next/headers</code> for working with cookies in server code. You <em>read</em> cookies almost anywhere on the server; you may only <em>set</em> or delete them where there is a response to attach them to — a Server Action or a Route Handler.</p>
 
-<pre><code>import { cookies } from 'next/headers';
+<pre><code class="language-javascript">import { cookies } from 'next/headers';
 
 <span class="tok-comment">// READ — e.g. in a Server Component</span>
 const token = (await cookies()).get('token')?.value;
@@ -186,7 +186,7 @@ const token = (await cookies()).get('token')?.value;
 <h2>Đọc và ghi cookie trên server</h2>
 <p class="lead">Next.js cho một helper <code>cookies()</code> từ <code>next/headers</code> để làm việc với cookie trong code server. Bạn <em>đọc</em> cookie gần như ở đâu trên server cũng được; nhưng chỉ <em>ghi</em> hoặc xoá được ở nơi có một response để gắn — một Server Action hoặc một Route Handler.</p>
 
-<pre><code>import { cookies } from 'next/headers';
+<pre><code class="language-javascript">import { cookies } from 'next/headers';
 
 <span class="tok-comment">// ĐỌC — ví dụ trong một Server Component</span>
 const token = (await cookies()).get('token')?.value;
@@ -251,7 +251,7 @@ const token = (await cookies()).get('token')?.value;
 <h2>Code that runs before the request reaches your route</h2>
 <p class="lead">A single <code>middleware.ts</code> at the project root runs on matching requests <em>before</em> they hit a page or handler. It is the place for cross-cutting gate-keeping: redirect unauthenticated users, rewrite URLs, set headers, handle locale.</p>
 
-<pre><code><span class="tok-comment">// middleware.ts (project root)</span>
+<pre><code class="language-javascript"><span class="tok-comment">// middleware.ts (project root)</span>
 import { NextResponse } from 'next/server';
 
 export function middleware(request) {
@@ -301,7 +301,7 @@ export const config = { matcher: ['/dashboard/:path*', '/settings/:path*'] };</c
 <h2>Code chạy trước khi request tới route của bạn</h2>
 <p class="lead">Một file <code>middleware.ts</code> duy nhất ở gốc dự án chạy trên các request khớp <em>trước</em> khi chúng tới một page hay handler. Đó là chỗ cho việc gác-cổng xuyên suốt: chuyển hướng người chưa đăng nhập, viết lại URL, đặt header, xử lý ngôn ngữ.</p>
 
-<pre><code><span class="tok-comment">// middleware.ts (gốc dự án)</span>
+<pre><code class="language-javascript"><span class="tok-comment">// middleware.ts (gốc dự án)</span>
 import { NextResponse } from 'next/server';
 
 export function middleware(request) {
@@ -361,7 +361,7 @@ export const config = { matcher: ['/dashboard/:path*', '/settings/:path*'] };</c
 <h2>One helper to get the user, used everywhere on the server</h2>
 <p class="lead">The authoritative auth check belongs on the server, close to the data (lesson 15.3). The clean way is a single helper that reads the cookie, verifies the token, and returns the user — then call it wherever you need to know who is asking.</p>
 
-<pre><code><span class="tok-comment">// lib/auth.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// lib/auth.ts</span>
 import { cookies } from 'next/headers';
 
 export async function getCurrentUser() {
@@ -414,7 +414,7 @@ export async function getCurrentUser() {
 <h2>Một helper lấy người dùng, dùng khắp nơi trên server</h2>
 <p class="lead">Phép kiểm auth có thẩm quyền thuộc về server, gần dữ liệu (bài 15.3). Cách gọn là một helper duy nhất đọc cookie, xác minh token, và trả về người dùng — rồi gọi nó ở bất cứ đâu bạn cần biết ai đang hỏi.</p>
 
-<pre><code><span class="tok-comment">// lib/auth.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// lib/auth.ts</span>
 import { cookies } from 'next/headers';
 
 export async function getCurrentUser() {

@@ -18,7 +18,7 @@ export default {
 <p class="lead">One backend is a <code>proxy_pass</code> to an address. Several backends is an <code>upstream</code> block, and the only real decision inside it is how Nginx picks which one gets the next request.</p>
 
 <h3>Four algorithms, thirty requests each, counted</h3>
-<pre><code>upstream deu      {              server ...9501; server ...9502; server ...9503; }
+<pre><code class="language-bash">upstream deu      {              server ...9501; server ...9502; server ...9503; }
 upstream trongso  {              server ...9501 weight=3; server ...9502 weight=1; }
 upstream itketnoi { least_conn;  server ...9501; server ...9502; server ...9503; }
 upstream theoip   { ip_hash;     server ...9501; server ...9502; server ...9503; }</code></pre>
@@ -37,7 +37,7 @@ upstream theoip   { ip_hash;     server ...9501; server ...9502; server ...9503;
 </div>
 
 <h3>The upstream block itself</h3>
-<pre><code>upstream api {
+<pre><code class="language-bash">upstream api {
   server 10.0.1.11:3000  weight=2;          <span class="tok-comment"># a stronger box takes more</span>
   server 10.0.1.12:3000;
   server 10.0.1.13:3000  backup;            <span class="tok-comment"># used ONLY when every primary is dead</span>
@@ -88,7 +88,7 @@ server {
 <p class="lead">Một backend là một lệnh <code>proxy_pass</code> tới một địa chỉ. NHIỀU backend là một khối <code>upstream</code>, và quyết định thật sự duy nhất bên trong nó là: Nginx CHỌN máy nào cho request tiếp theo.</p>
 
 <h3>Bốn thuật toán, mỗi cái ba mươi request, đem đếm</h3>
-<pre><code>upstream deu      {              server ...9501; server ...9502; server ...9503; }
+<pre><code class="language-bash">upstream deu      {              server ...9501; server ...9502; server ...9503; }
 upstream trongso  {              server ...9501 weight=3; server ...9502 weight=1; }
 upstream itketnoi { least_conn;  server ...9501; server ...9502; server ...9503; }
 upstream theoip   { ip_hash;     server ...9501; server ...9502; server ...9503; }</code></pre>
@@ -107,7 +107,7 @@ upstream theoip   { ip_hash;     server ...9501; server ...9502; server ...9503;
 </div>
 
 <h3>Chính cái khối upstream</h3>
-<pre><code>upstream api {
+<pre><code class="language-bash">upstream api {
   server 10.0.1.11:3000  weight=2;          <span class="tok-comment"># máy khoẻ hơn, nhận nhiều hơn</span>
   server 10.0.1.12:3000;
   server 10.0.1.13:3000  backup;            <span class="tok-comment"># CHỈ dùng khi máy chính chết hết</span>
@@ -167,7 +167,7 @@ server {
 <p class="lead">Sometimes a client has to keep reaching the same backend — an in-memory session, a per-node cache, a WebSocket that reconnects. Nginx offers two ways to arrange that, they differ by one word, and the difference is measurable in exactly the moment it matters.</p>
 
 <h3>Both forms pin a client, measured</h3>
-<pre><code>upstream bam_thuong { hash \$arg_nguoi;            server 9501; server 9502; server 9503; }
+<pre><code class="language-bash">upstream bam_thuong { hash \$arg_nguoi;            server 9501; server 9502; server 9503; }
 upstream bam_bien   { hash \$arg_nguoi consistent; server 9501; server 9502; server 9503; }</code></pre>
 <div class="out">Moi "nguoi dung" goi ba lan lien tiep:
 
@@ -204,7 +204,7 @@ Ca hai dang deu GHIM on dinh. Khac biet chi lo ra khi be MAY CHU doi.</div>
 <div class="pitfall">
 <p><strong>Trap — <code>ip_hash</code> keys on the client address, which is the wrong key more often than it looks.</strong> Everyone behind one corporate NAT or one mobile carrier gateway shares an address and therefore a backend, so a "balanced" pool can be badly skewed by a few large networks. Worse, a client whose address changes — moving from wifi to mobile data — is silently reassigned and loses its session mid-use. And behind a CDN or a load balancer, <code>\$remote_addr</code> is the proxy's address (Lesson 3.2), so <code>ip_hash</code> maps <em>everyone</em> to one backend unless <code>real_ip</code> is configured first. Prefer <code>hash \$cookie_phien consistent;</code> or <code>hash \$http_x_api_key consistent;</code> — key on something that identifies the client rather than its current network position.</p>
 </div>
-<pre><code><span class="tok-comment"># Pin by SESSION, not by network address</span>
+<pre><code class="language-bash"><span class="tok-comment"># Pin by SESSION, not by network address</span>
 upstream api {
   hash \$cookie_phien consistent;
   server 10.0.1.11:3000;
@@ -239,7 +239,7 @@ upstream api {
 <p class="lead">Đôi khi một client BẮT BUỘC phải luôn chạm tới cùng một backend — một phiên nằm trong bộ nhớ, một bộ đệm theo từng node, một WebSocket phải nối lại. Nginx cho bạn hai cách để sắp xếp chuyện đó, chúng khác nhau đúng MỘT chữ, và khác biệt ấy đo được đúng vào cái lúc nó có nghĩa lý.</p>
 
 <h3>Cả hai dạng đều GHIM được client, đo thật</h3>
-<pre><code>upstream bam_thuong { hash \$arg_nguoi;            server 9501; server 9502; server 9503; }
+<pre><code class="language-bash">upstream bam_thuong { hash \$arg_nguoi;            server 9501; server 9502; server 9503; }
 upstream bam_bien   { hash \$arg_nguoi consistent; server 9501; server 9502; server 9503; }</code></pre>
 <div class="out">Moi "nguoi dung" goi ba lan lien tiep:
 
@@ -276,7 +276,7 @@ Ca hai dang deu GHIM on dinh. Khac biet chi lo ra khi be MAY CHU doi.</div>
 <div class="pitfall">
 <p><strong>Bẫy — <code>ip_hash</code> khoá theo ĐỊA CHỈ của client, mà đó là cái khoá SAI nhiều hơn vẻ ngoài.</strong> Mọi người nằm sau một cái NAT công ty hay một cổng của nhà mạng di động đều dùng chung một địa chỉ và do đó dùng chung một backend, nên một cái bể "cân bằng" có thể lệch nặng chỉ vì vài mạng lớn. Tệ hơn, một client có địa chỉ THAY ĐỔI — chuyển từ wifi sang 4G — sẽ bị gán lại trong im lặng và mất phiên giữa chừng. Và khi đứng sau một CDN hay một bộ cân bằng tải thì <code>\$remote_addr</code> là địa chỉ của con proxy (Bài 3.2), nên <code>ip_hash</code> ánh xạ TẤT CẢ vào một backend trừ khi <code>real_ip</code> đã được cấu hình trước. Hãy ưu tiên <code>hash \$cookie_phien consistent;</code> hoặc <code>hash \$http_x_api_key consistent;</code> — khoá theo thứ ĐỊNH DANH client chứ đừng khoá theo vị trí mạng hiện tại của họ.</p>
 </div>
-<pre><code><span class="tok-comment"># Ghim theo PHIÊN, không ghim theo địa chỉ mạng</span>
+<pre><code class="language-bash"><span class="tok-comment"># Ghim theo PHIÊN, không ghim theo địa chỉ mạng</span>
 upstream api {
   hash \$cookie_phien consistent;
   server 10.0.1.11:3000;
@@ -352,7 +352,7 @@ error.log:  1 x connect() failed
 <div class="pitfall">
 <p><strong>Trap — <code>proxy_next_upstream</code> retries by default on <code>error</code> and <code>timeout</code>, and a timeout can mean the request already succeeded.</strong> If a backend received a <code>POST</code>, processed it, and was killed before answering, Nginx sees a timeout and reissues the identical request to another server — which processes it again. The order is placed twice, the email is sent twice, the charge happens twice. The defence is to not retry non-idempotent requests: <code>proxy_next_upstream error timeout non_idempotent;</code> is the <em>dangerous</em> form that opts in, and leaving <code>non_idempotent</code> out — the default — means <code>POST</code>, <code>PATCH</code> and <code>LOCK</code> are not retried after a request has been sent. Check that nobody added it to your config "to improve reliability", because it does the opposite for anything that writes.</p>
 </div>
-<pre><code>upstream api {
+<pre><code class="language-bash">upstream api {
   server 10.0.1.11:3000  max_fails=2 fail_timeout=5s;
   server 10.0.1.12:3000  max_fails=2 fail_timeout=5s;
   server 10.0.1.13:3000  backup;          <span class="tok-comment"># used only when both boxes above are dead</span>
@@ -428,7 +428,7 @@ error.log:  1 x connect() failed
 <div class="pitfall">
 <p><strong>Bẫy — <code>proxy_next_upstream</code> mặc định thử lại khi gặp <code>error</code> và <code>timeout</code>, mà một cú timeout có thể nghĩa là request ĐÃ THÀNH CÔNG rồi.</strong> Nếu một backend nhận một cú <code>POST</code>, xử lý xong, rồi bị giết TRƯỚC khi kịp trả lời, thì Nginx nhìn thấy một cú timeout và phát lại ĐÚNG cái request đó tới một máy khác — và máy đó xử lý nó LẦN NỮA. Đơn hàng được đặt hai lần, email được gửi hai lần, tiền bị trừ hai lần. Cách phòng là ĐỪNG thử lại những request không idempotent: <code>proxy_next_upstream error timeout non_idempotent;</code> là dạng NGUY HIỂM tự nguyện bật lên, còn để <code>non_idempotent</code> ra ngoài — tức mặc định — nghĩa là <code>POST</code>, <code>PATCH</code> và <code>LOCK</code> KHÔNG bị gửi lại sau khi request đã được gửi đi. Hãy kiểm xem có ai đó đã thêm nó vào cấu hình của bạn "để tăng độ tin cậy" không, vì nó làm điều NGƯỢC LẠI với mọi thứ có ghi dữ liệu.</p>
 </div>
-<pre><code>upstream api {
+<pre><code class="language-bash">upstream api {
   server 10.0.1.11:3000  max_fails=2 fail_timeout=5s;
   server 10.0.1.12:3000  max_fails=2 fail_timeout=5s;
   server 10.0.1.13:3000  backup;          <span class="tok-comment"># chỉ dùng khi hai máy trên chết hết</span>
@@ -494,7 +494,7 @@ giet may-2 (chinh),   20 request : may-3=20        (backup vao cuoc)</div>
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Three directives, and all three are required</span><span class="lz-d"><code>keepalive N</code> in the upstream block, <code>proxy_http_version 1.1</code> and <code>proxy_set_header Connection ""</code> in the location. Missing any one of them and the pool is silently unused — this is the most common way keepalive is configured and does nothing.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Why the empty Connection header</span><span class="lz-d">Lesson 3.2: by default Nginx sends <code>Connection: close</code> upstream, which tells the backend to hang up after answering. Setting it to the empty string removes the header entirely, so HTTP/1.1's default of keeping the connection alive applies.</span></div>
 </div>
-<pre><code>upstream api {
+<pre><code class="language-bash">upstream api {
   server 10.0.1.11:3000;
   server 10.0.1.12:3000;
 
@@ -556,7 +556,7 @@ location /api/ {
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Ba chỉ thị, và cả ba đều BẮT BUỘC</span><span class="lz-d"><code>keepalive N</code> trong khối upstream, <code>proxy_http_version 1.1</code> và <code>proxy_set_header Connection ""</code> trong location. Thiếu bất kỳ cái nào là cái bể KHÔNG được dùng, một cách âm thầm — và đây là cách phổ biến nhất mà keepalive được cấu hình rồi chẳng làm gì.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Vì sao phải có cái header Connection RỖNG</span><span class="lz-d">Bài 3.2: mặc định Nginx gửi <code>Connection: close</code> lên upstream, thứ bảo backend cúp máy sau khi trả lời. Đặt nó thành chuỗi rỗng là GỠ hẳn cái header đó đi, nên hành vi mặc định của HTTP/1.1 — giữ kết nối sống — được áp dụng.</span></div>
 </div>
-<pre><code>upstream api {
+<pre><code class="language-bash">upstream api {
   server 10.0.1.11:3000;
   server 10.0.1.12:3000;
 
@@ -644,7 +644,7 @@ location /api/ {
   <div class="lz-layer"><span class="lz-lname">Canary: weight the new version low</span><span class="lz-lnote"><code>server moi:3000 weight=1;</code> alongside <code>server cu:3000 weight=9;</code> sends a tenth of traffic to the new build. Watch the error rate, then shift the weights. It is crude compared with a real traffic-splitting system and it needs nothing you do not already have.</span></div>
   <div class="lz-layer"><span class="lz-lname">Draining: down plus a wait</span><span class="lz-lnote">Marking a server <code>down</code> stops new requests immediately, but requests already in flight continue. Wait for your longest expected request before shutting the process down, or you will cut off the exact users you were being careful about.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Blue-green in one include file, switched with a symlink</span>
+<pre><code class="language-bash"><span class="tok-comment"># Blue-green in one include file, switched with a symlink</span>
 <span class="tok-comment"># /etc/nginx/be-current.conf  ->  be-blue.conf or be-green.conf</span>
 upstream api { include /etc/nginx/be-hien-tai.conf; keepalive 32; }
 
@@ -708,7 +708,7 @@ upstream api { include /etc/nginx/be-hien-tai.conf; keepalive 32; }
   <div class="lz-layer"><span class="lz-lname">Canary: cho phiên bản mới trọng số thấp</span><span class="lz-lnote"><code>server moi:3000 weight=1;</code> đặt cạnh <code>server cu:3000 weight=9;</code> đẩy một phần mười lưu lượng sang bản dựng mới. Theo dõi tỷ lệ lỗi rồi dịch dần trọng số. Nó thô so với một hệ chia lưu lượng thật, và nó không cần thứ gì bạn chưa có.</span></div>
   <div class="lz-layer"><span class="lz-lname">Rút cạn: down cộng một khoảng CHỜ</span><span class="lz-lnote">Đánh dấu <code>down</code> là chặn request mới NGAY, nhưng những request ĐANG BAY vẫn tiếp tục. Hãy chờ đủ cái request dài nhất bạn dự kiến rồi mới tắt tiến trình, không thì bạn cắt đứt đúng những người dùng mà bạn đang cẩn thận vì họ.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Blue-green trong một tệp include, đổi bằng một liên kết mềm</span>
+<pre><code class="language-bash"><span class="tok-comment"># Blue-green trong một tệp include, đổi bằng một liên kết mềm</span>
 <span class="tok-comment"># /etc/nginx/be-hien-tai.conf  ->  be-xanh.conf hoặc be-luc.conf</span>
 upstream api { include /etc/nginx/be-hien-tai.conf; keepalive 32; }
 

@@ -2,7 +2,7 @@
  * WED201c — Web Design (Thiết kế web). Kỳ 3.
  * Bám syllabus FPTU (sylID 13172, 5 CLO) — dựa trên bộ Coursera "Web Design for
  * Everybody" (Univ. of Michigan). Tiên quyết: None. Công cụ: trình duyệt + Internet.
- * Song ngữ EN/VN. HTML/CSS/JS <pre>+.tok-*+.out. Link Coursera MOOC + CodeLab javascript.
+ * Song ngữ EN/VN. HTML/CSS/JS <pre><code class="language-javascript">+.tok-*+.out. Link Coursera MOOC + CodeLab javascript.
  * Grading: MOOC completion + FE=(TE+PE)/2 + Bonus; pass TE≥4 & PE≥4 & FR≥5.
  * Seed: node scripts/academy-seed-course.mjs --file ./content/academy/WED201c.mjs --apply
  */
@@ -207,7 +207,7 @@ export default {
     <span class="tok-keyword">&lt;header&gt;</span><span class="tok-keyword">&lt;h1&gt;</span>Welcome<span class="tok-keyword">&lt;/h1&gt;</span><span class="tok-keyword">&lt;/header&gt;</span>
     <span class="tok-keyword">&lt;main&gt;</span><span class="tok-keyword">&lt;p&gt;</span>Hello, web!<span class="tok-keyword">&lt;/p&gt;</span><span class="tok-keyword">&lt;/main&gt;</span>
   <span class="tok-keyword">&lt;/body&gt;</span>
-<span class="tok-keyword">&lt;/html&gt;</span></pre>
+<span class="tok-keyword">&lt;/html&gt;</span></code></pre>
 <div class="out">Semantic tags — <span class="badge">&lt;header&gt;</span>, <span class="badge">&lt;nav&gt;</span>, <span class="badge">&lt;main&gt;</span>, <span class="badge">&lt;article&gt;</span>, <span class="badge">&lt;footer&gt;</span> — tell browsers and screen readers what each part means. Use them instead of generic <span class="badge">&lt;div&gt;</span> where you can.</div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Semantic HTML is SEO and accessibility.</b> Search engines weight a single <span class="badge">&lt;h1&gt;</span> and a logical heading order, while screen readers let users jump between <span class="badge">&lt;nav&gt;</span>, <span class="badge">&lt;main&gt;</span> and <span class="badge">&lt;article&gt;</span> landmarks. A wall of <span class="badge">&lt;div&gt;</span> looks identical on screen but is invisible to both. <em>The syllabus shows the tags; it rarely explains that choosing them well is what makes a page findable and usable.</em></div>
 <div class="note-ct">The browser turns your HTML into the <b>DOM</b> (Document Object Model) — a tree of nodes that CSS styles and JavaScript manipulates. Everything later builds on this tree.</div>
@@ -221,14 +221,14 @@ export default {
 <span class="eyebrow">Chương 1 · Bài 1.1</span>
 <h2>HTML5 — bộ xương của trang</h2>
 <p class="lead">HTML đánh dấu nội dung bằng <strong>thẻ (tag)</strong>. Một thẻ như <span class="badge">&lt;p&gt;</span>…<span class="badge">&lt;/p&gt;</span> bọc một đoạn văn; trình duyệt đọc chúng và dựng trang. HTML5 thêm các thẻ <em>ngữ nghĩa</em> mô tả ý nghĩa, không chỉ hình thức.</p>
-<pre><span class="tok-keyword">&lt;!DOCTYPE html&gt;</span>
+<pre><code class="language-html"><span class="tok-keyword">&lt;!DOCTYPE html&gt;</span>
 <span class="tok-keyword">&lt;html&gt;</span>
   <span class="tok-keyword">&lt;head&gt;</span><span class="tok-keyword">&lt;title&gt;</span>My Page<span class="tok-keyword">&lt;/title&gt;</span><span class="tok-keyword">&lt;/head&gt;</span>
   <span class="tok-keyword">&lt;body&gt;</span>
     <span class="tok-keyword">&lt;header&gt;</span><span class="tok-keyword">&lt;h1&gt;</span>Welcome<span class="tok-keyword">&lt;/h1&gt;</span><span class="tok-keyword">&lt;/header&gt;</span>
     <span class="tok-keyword">&lt;main&gt;</span><span class="tok-keyword">&lt;p&gt;</span>Hello, web!<span class="tok-keyword">&lt;/p&gt;</span><span class="tok-keyword">&lt;/main&gt;</span>
   <span class="tok-keyword">&lt;/body&gt;</span>
-<span class="tok-keyword">&lt;/html&gt;</span></pre>
+<span class="tok-keyword">&lt;/html&gt;</span></code></pre>
 <div class="out">Thẻ ngữ nghĩa — <span class="badge">&lt;header&gt;</span>, <span class="badge">&lt;nav&gt;</span>, <span class="badge">&lt;main&gt;</span>, <span class="badge">&lt;article&gt;</span>, <span class="badge">&lt;footer&gt;</span> — cho trình duyệt và trình đọc màn hình biết mỗi phần nghĩa là gì. Dùng chúng thay cho <span class="badge">&lt;div&gt;</span> chung chung khi có thể.</div>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>HTML ngữ nghĩa chính là SEO và khả năng tiếp cận.</b> Công cụ tìm kiếm coi trọng một thẻ <span class="badge">&lt;h1&gt;</span> duy nhất và thứ tự heading hợp lý, còn trình đọc màn hình cho người dùng nhảy giữa các mốc <span class="badge">&lt;nav&gt;</span>, <span class="badge">&lt;main&gt;</span> và <span class="badge">&lt;article&gt;</span>. Một mớ <span class="badge">&lt;div&gt;</span> trông y hệt trên màn hình nhưng vô hình với cả hai. <em>Giáo trình chỉ các thẻ; hiếm khi giải thích rằng chọn thẻ đúng mới làm trang dễ tìm và dễ dùng.</em></div>
 <div class="note-ct">Trình duyệt biến HTML của bạn thành <b>DOM</b> (Document Object Model) — một cây các nút mà CSS tạo kiểu và JavaScript thao tác. Mọi thứ sau này dựng trên cây này.</div>
@@ -285,14 +285,14 @@ export default {
 <p>List several <span class="badge">&lt;source&gt;</span> elements and the browser takes the first it understands; the text inside is the fallback. Never use <span class="badge">autoplay</span> with sound — browsers block it and users hate it.</p>
 
 <h3>Tables — for data, never for layout</h3>
-<pre>&lt;table&gt;
+<pre><code class="language-html">&lt;table&gt;
   &lt;caption&gt;Semester 3 marks&lt;/caption&gt;
   &lt;thead&gt;&lt;tr&gt;&lt;th scope="col"&gt;Subject&lt;/th&gt;&lt;th scope="col"&gt;Mark&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
   &lt;tbody&gt;
     &lt;tr&gt;&lt;th scope="row"&gt;WED201c&lt;/th&gt;&lt;td&gt;8.5&lt;/td&gt;&lt;/tr&gt;
     &lt;tr&gt;&lt;th scope="row"&gt;DBI202&lt;/th&gt;&lt;td&gt;7.0&lt;/td&gt;&lt;/tr&gt;
   &lt;/tbody&gt;
-&lt;/table&gt;</pre>
+&lt;/table&gt;</code></pre>
 <p><span class="badge">&lt;caption&gt;</span>, <span class="badge">&lt;thead&gt;</span> and <span class="badge">scope</span> are what let a screen reader say "Subject: WED201c, Mark: 8.5" instead of reading disconnected numbers. Page layout belongs to Flexbox and Grid (lesson 2.2), not to tables.</p>
 
 <div class="pitfall"><b>An image with no <span class="badge">alt</span> fails the W3C validator and the accessibility check — both of which the MOOC 1 final project is graded on.</b> The same applies to a missing <span class="badge">&lt;title&gt;</span> and to skipped heading levels (h1 → h3). Run <span class="badge">validator.w3.org</span> before you submit; it takes ten seconds and catches all three.</div>
@@ -338,14 +338,14 @@ export default {
 <p>Liệt kê nhiều thẻ <span class="badge">&lt;source&gt;</span> và trình duyệt lấy cái đầu tiên nó hiểu; phần chữ bên trong là nội dung dự phòng. Đừng bao giờ dùng <span class="badge">autoplay</span> kèm tiếng — trình duyệt chặn, còn người dùng thì ghét.</p>
 
 <h3>Bảng — cho dữ liệu, không bao giờ để dàn trang</h3>
-<pre>&lt;table&gt;
+<pre><code class="language-html">&lt;table&gt;
   &lt;caption&gt;Điểm kỳ 3&lt;/caption&gt;
   &lt;thead&gt;&lt;tr&gt;&lt;th scope="col"&gt;Môn&lt;/th&gt;&lt;th scope="col"&gt;Điểm&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
   &lt;tbody&gt;
     &lt;tr&gt;&lt;th scope="row"&gt;WED201c&lt;/th&gt;&lt;td&gt;8.5&lt;/td&gt;&lt;/tr&gt;
     &lt;tr&gt;&lt;th scope="row"&gt;DBI202&lt;/th&gt;&lt;td&gt;7.0&lt;/td&gt;&lt;/tr&gt;
   &lt;/tbody&gt;
-&lt;/table&gt;</pre>
+&lt;/table&gt;</code></pre>
 <p><span class="badge">&lt;caption&gt;</span>, <span class="badge">&lt;thead&gt;</span> và <span class="badge">scope</span> là thứ giúp trình đọc màn hình nói "Môn: WED201c, Điểm: 8.5" thay vì đọc ra một mớ số rời rạc. Việc dàn trang thuộc về Flexbox và Grid (bài 2.2), không phải bảng.</p>
 
 <div class="pitfall"><b>Ảnh không có <span class="badge">alt</span> là trượt bộ kiểm W3C và bộ kiểm khả năng tiếp cận — mà đồ án cuối MOOC 1 chấm cả hai.</b> Điều tương tự với việc thiếu <span class="badge">&lt;title&gt;</span> và nhảy cóc cấp tiêu đề (h1 → h3). Hãy chạy <span class="badge">validator.w3.org</span> trước khi nộp; mất mười giây và bắt được cả ba lỗi.</div>
@@ -366,7 +366,7 @@ export default {
 <p class="lead">A form is the only part of a static site that sends data anywhere. HTML5 gives you typed inputs and validation for free — most of what students write JavaScript for in MOOC 3 is already in the browser.</p>
 
 <h3>A complete, correct form</h3>
-<pre>&lt;form action="/register" method="post"&gt;
+<pre><code class="language-html">&lt;form action="/register" method="post"&gt;
   &lt;label for="email"&gt;Email&lt;/label&gt;
   &lt;input type="email" id="email" name="email" required
          placeholder="you@example.com"&gt;
@@ -386,7 +386,7 @@ export default {
   &lt;/fieldset&gt;
 
   &lt;button type="submit"&gt;Register&lt;/button&gt;
-&lt;/form&gt;</pre>
+&lt;/form&gt;</code></pre>
 
 <h3>The three attributes that must line up</h3>
 <div class="out"><b><span class="badge">for</span> on the label must equal <span class="badge">id</span> on the input</b> — that pairing lets a screen reader announce the field, and it makes clicking the text focus the box (try it on a radio button: the clickable area triples).<br>
@@ -404,9 +404,9 @@ export default {
 </tbody></table>
 
 <h3>Validation without a line of JavaScript</h3>
-<pre>&lt;input type="text" name="code" required
+<pre><code class="language-html">&lt;input type="text" name="code" required
        pattern="[A-Z]{3}[0-9]{3}"
-       title="Three capital letters then three digits, e.g. WED201"&gt;</pre>
+       title="Three capital letters then three digits, e.g. WED201"&gt;</code></pre>
 <div class="out"><b>What happens on submit:</b> the browser blocks it, focuses the first invalid field and shows the <span class="badge">title</span> text as the message. <span class="badge">required</span>, <span class="badge">min</span>, <span class="badge">max</span>, <span class="badge">minlength</span>, <span class="badge">pattern</span> and the typed inputs cover most rules.<br>
 <b>Styling the states:</b> <span class="badge">input:invalid { border-color: red; }</span> and <span class="badge">input:valid { border-color: green; }</span> give live feedback with pure CSS (lesson 2.5).<br>
 <b>Still needed in JavaScript:</b> anything comparing two fields ("passwords must match"), or checking against the server ("is this email taken?") — that is MOOC 3, lesson 3.4.</div>
@@ -421,7 +421,7 @@ export default {
 <p class="lead">Biểu mẫu là phần duy nhất của một trang tĩnh gửi được dữ liệu đi đâu đó. HTML5 cho bạn các ô có kiểu và bộ kiểm tra miễn phí — phần lớn thứ mà sinh viên viết JavaScript ở MOOC 3 thì trình duyệt đã làm sẵn.</p>
 
 <h3>Một biểu mẫu đầy đủ và đúng chuẩn</h3>
-<pre>&lt;form action="/register" method="post"&gt;
+<pre><code class="language-html">&lt;form action="/register" method="post"&gt;
   &lt;label for="email"&gt;Email&lt;/label&gt;
   &lt;input type="email" id="email" name="email" required
          placeholder="you@example.com"&gt;
@@ -441,7 +441,7 @@ export default {
   &lt;/fieldset&gt;
 
   &lt;button type="submit"&gt;Đăng ký&lt;/button&gt;
-&lt;/form&gt;</pre>
+&lt;/form&gt;</code></pre>
 
 <h3>Ba thuộc tính bắt buộc phải khớp nhau</h3>
 <div class="out"><b><span class="badge">for</span> ở label phải bằng <span class="badge">id</span> ở input</b> — cặp này giúp trình đọc màn hình đọc tên trường, và làm cho việc bấm vào chữ cũng đưa con trỏ vào ô (thử với nút radio: vùng bấm được rộng gấp ba).<br>
@@ -459,9 +459,9 @@ export default {
 </tbody></table>
 
 <h3>Kiểm tra dữ liệu mà không cần một dòng JavaScript</h3>
-<pre>&lt;input type="text" name="code" required
+<pre><code class="language-html">&lt;input type="text" name="code" required
        pattern="[A-Z]{3}[0-9]{3}"
-       title="Ba chữ in hoa rồi ba chữ số, ví dụ WED201"&gt;</pre>
+       title="Ba chữ in hoa rồi ba chữ số, ví dụ WED201"&gt;</code></pre>
 <div class="out"><b>Chuyện gì xảy ra khi bấm gửi:</b> trình duyệt chặn lại, đưa con trỏ vào trường sai đầu tiên và hiện chữ trong <span class="badge">title</span> làm thông báo. <span class="badge">required</span>, <span class="badge">min</span>, <span class="badge">max</span>, <span class="badge">minlength</span>, <span class="badge">pattern</span> cùng các kiểu input phủ được hầu hết luật.<br>
 <b>Tô màu theo trạng thái:</b> <span class="badge">input:invalid { border-color: red; }</span> và <span class="badge">input:valid { border-color: green; }</span> cho phản hồi tức thời bằng CSS thuần (bài 2.5).<br>
 <b>Vẫn cần JavaScript cho:</b> mọi thứ so sánh hai trường ("mật khẩu phải khớp nhau"), hoặc kiểm với máy chủ ("email này có ai dùng chưa?") — đó là MOOC 3, bài 3.4.</div>
@@ -494,13 +494,13 @@ export default {
 <div class="out"><b>Test it in two minutes, without any special software:</b> unplug the mouse and press Tab through the whole page. Can you reach every control? Can you see where the focus is? (If you removed <span class="badge">outline</span> in CSS, you cannot — that one line makes a site unusable by keyboard.) Then run Lighthouse in Chrome DevTools → Accessibility, which scores it automatically.</div>
 
 <h3>Landmarks and ARIA — only when HTML is not enough</h3>
-<pre>&lt;header&gt;…&lt;/header&gt;
+<pre><code class="language-html">&lt;header&gt;…&lt;/header&gt;
 &lt;nav aria-label="Main"&gt;…&lt;/nav&gt;
 &lt;main&gt;…&lt;/main&gt;                       <span class="tok-comment">&lt;!-- exactly one per page --&gt;</span>
 &lt;footer&gt;…&lt;/footer&gt;
 
 &lt;button aria-expanded="false" aria-controls="menu"&gt;Menu&lt;/button&gt;
-&lt;div id="menu" hidden&gt;…&lt;/div&gt;</pre>
+&lt;div id="menu" hidden&gt;…&lt;/div&gt;</code></pre>
 <p><b>The first rule of ARIA is not to use ARIA:</b> a real <span class="badge">&lt;button&gt;</span> is already focusable, clickable with Enter and announced as a button, while <span class="badge">&lt;div role="button"&gt;</span> needs you to reimplement all three. Reach for ARIA only for things HTML has no element for — an expandable menu, a live region, a tab set.</p>
 
 <h3>Validation — the ten-second check before every submission</h3>
@@ -537,13 +537,13 @@ export default {
 <div class="out"><b>Kiểm trong hai phút, không cần phần mềm đặc biệt nào:</b> rút chuột ra và nhấn Tab đi hết cả trang. Bạn có tới được mọi nút không? Bạn có nhìn thấy con trỏ đang ở đâu không? (Nếu bạn đã xoá <span class="badge">outline</span> trong CSS thì không — đúng một dòng đó làm cả trang không dùng được bằng bàn phím.) Sau đó chạy Lighthouse trong Chrome DevTools → Accessibility để nó chấm điểm tự động.</div>
 
 <h3>Vùng mốc và ARIA — chỉ khi HTML không đủ</h3>
-<pre>&lt;header&gt;…&lt;/header&gt;
+<pre><code class="language-html">&lt;header&gt;…&lt;/header&gt;
 &lt;nav aria-label="Chính"&gt;…&lt;/nav&gt;
 &lt;main&gt;…&lt;/main&gt;                       <span class="tok-comment">&lt;!-- mỗi trang đúng một thẻ --&gt;</span>
 &lt;footer&gt;…&lt;/footer&gt;
 
 &lt;button aria-expanded="false" aria-controls="menu"&gt;Menu&lt;/button&gt;
-&lt;div id="menu" hidden&gt;…&lt;/div&gt;</pre>
+&lt;div id="menu" hidden&gt;…&lt;/div&gt;</code></pre>
 <p><b>Quy tắc số một của ARIA là đừng dùng ARIA:</b> một thẻ <span class="badge">&lt;button&gt;</span> thật thì đã tự nhận được tiêu điểm, bấm được bằng Enter và được đọc lên là "nút", trong khi <span class="badge">&lt;div role="button"&gt;</span> bắt bạn tự làm lại cả ba. Chỉ dùng ARIA cho những thứ HTML không có thẻ tương ứng — menu bung ra, vùng cập nhật động, bộ tab.</p>
 
 <h3>Kiểm chuẩn — mười giây trước mỗi lần nộp</h3>
@@ -584,9 +584,9 @@ export default {
 <span class="eyebrow">Chapter 2 · Lesson 2.1</span>
 <h2>CSS3 — making it beautiful</h2>
 <p class="lead">CSS attaches style to HTML. A <strong>selector</strong> picks elements, then a block of <span class="badge">property: value</span> rules styles them. Colours, fonts, spacing, borders — all live here.</p>
-<pre><span class="tok-function">h1</span> { <span class="tok-keyword">color</span>: navy; <span class="tok-keyword">font-size</span>: 2rem; }
+<pre><code class="language-css"><span class="tok-function">h1</span> { <span class="tok-keyword">color</span>: navy; <span class="tok-keyword">font-size</span>: 2rem; }
 <span class="tok-function">.card</span> { <span class="tok-keyword">padding</span>: 16px; <span class="tok-keyword">border</span>: 1px solid #ccc; }
-<span class="tok-function">#logo</span> { <span class="tok-keyword">width</span>: 120px; }</pre>
+<span class="tok-function">#logo</span> { <span class="tok-keyword">width</span>: 120px; }</code></pre>
 <div class="out"><b>Selectors:</b> <span class="badge">h1</span> by tag · <span class="badge">.card</span> by class · <span class="badge">#logo</span> by id. Class is the everyday workhorse.</div>
 <h3>The box model</h3>
 <div class="lz-flow">
@@ -607,9 +607,9 @@ export default {
 <span class="eyebrow">Chương 2 · Bài 2.1</span>
 <h2>CSS3 — làm cho đẹp</h2>
 <p class="lead">CSS gắn kiểu vào HTML. Một <strong>bộ chọn (selector)</strong> chọn các phần tử, rồi một khối luật <span class="badge">thuộc-tính: giá-trị</span> tạo kiểu cho chúng. Màu, font, khoảng cách, viền — đều ở đây.</p>
-<pre><span class="tok-function">h1</span> { <span class="tok-keyword">color</span>: navy; <span class="tok-keyword">font-size</span>: 2rem; }
+<pre><code class="language-css"><span class="tok-function">h1</span> { <span class="tok-keyword">color</span>: navy; <span class="tok-keyword">font-size</span>: 2rem; }
 <span class="tok-function">.card</span> { <span class="tok-keyword">padding</span>: 16px; <span class="tok-keyword">border</span>: 1px solid #ccc; }
-<span class="tok-function">#logo</span> { <span class="tok-keyword">width</span>: 120px; }</pre>
+<span class="tok-function">#logo</span> { <span class="tok-keyword">width</span>: 120px; }</code></pre>
 <div class="out"><b>Bộ chọn:</b> <span class="badge">h1</span> theo thẻ · <span class="badge">.card</span> theo class · <span class="badge">#logo</span> theo id. Class là con ngựa thồ hằng ngày.</div>
 <h3>Box model (mô hình hộp)</h3>
 <div class="lz-flow">
@@ -638,11 +638,11 @@ export default {
 <span class="eyebrow">Chapter 2 · Lesson 2.2</span>
 <h2>Layout — Flexbox &amp; Grid</h2>
 <p class="lead">Arranging boxes on a page used to be painful. Modern CSS gives two powerful systems: <strong>Flexbox</strong> for one-dimensional rows or columns, and <strong>Grid</strong> for two-dimensional layouts.</p>
-<pre><span class="tok-function">.row</span> {
+<pre><code class="language-css"><span class="tok-function">.row</span> {
   <span class="tok-keyword">display</span>: flex;
   <span class="tok-keyword">justify-content</span>: space-between;  <span class="tok-comment">/* spread along the row */</span>
   <span class="tok-keyword">align-items</span>: center;            <span class="tok-comment">/* center across it */</span>
-}</pre>
+}</code></pre>
 <div class="lz-stack">
   <div class="lz-layer"><b>Flexbox</b> — line items up in a row/column, distribute space, align them. Perfect for navbars, card rows, toolbars.</div>
   <div class="lz-layer"><b>Grid</b> — define rows AND columns; place items into cells. Perfect for page layouts and galleries.</div>
@@ -659,11 +659,11 @@ export default {
 <span class="eyebrow">Chương 2 · Bài 2.2</span>
 <h2>Bố cục — Flexbox &amp; Grid</h2>
 <p class="lead">Sắp xếp các hộp trên trang từng rất khổ. CSS hiện đại cho hai hệ mạnh: <strong>Flexbox</strong> cho hàng/cột một chiều, và <strong>Grid</strong> cho bố cục hai chiều.</p>
-<pre><span class="tok-function">.row</span> {
+<pre><code class="language-css"><span class="tok-function">.row</span> {
   <span class="tok-keyword">display</span>: flex;
   <span class="tok-keyword">justify-content</span>: space-between;  <span class="tok-comment">/* dàn theo hàng */</span>
   <span class="tok-keyword">align-items</span>: center;            <span class="tok-comment">/* căn giữa theo chiều ngang */</span>
-}</pre>
+}</code></pre>
 <div class="lz-stack">
   <div class="lz-layer"><b>Flexbox</b> — xếp các mục thành hàng/cột, phân bổ khoảng trống, căn chúng. Hoàn hảo cho navbar, hàng thẻ, thanh công cụ.</div>
   <div class="lz-layer"><b>Grid</b> — định nghĩa hàng VÀ cột; đặt các mục vào ô. Hoàn hảo cho bố cục trang và thư viện ảnh.</div>
@@ -804,14 +804,14 @@ color: hsl(211 100% 52%);        <span class="tok-comment">/* hue, saturation, l
 <b>Contrast is not optional:</b> body text needs a ratio of at least 4.5:1 against its background (3:1 for text above 24px). Check it in DevTools — hover the colour swatch and the contrast ratio is shown with a pass/fail tick.</div>
 
 <h3>Typography — the six lines that fix most pages</h3>
-<pre>body {
+<pre><code class="language-css">body {
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   font-size: 1rem;
   line-height: 1.6;            <span class="tok-comment">/* unitless: scales with font size */</span>
   color: #1a1a1a;              <span class="tok-comment">/* not pure black — softer on screen */</span>
 }
 main { max-width: 70ch; margin-inline: auto; }   <span class="tok-comment">/* readable line length */</span>
-h1, h2, h3 { line-height: 1.2; }                 <span class="tok-comment">/* headings sit tighter */</span></pre>
+h1, h2, h3 { line-height: 1.2; }                 <span class="tok-comment">/* headings sit tighter */</span></code></pre>
 <div class="out"><b>Why <span class="badge">70ch</span>.</b> Typographic research puts comfortable reading at 45–75 characters per line; beyond that the eye loses the start of the next line. On a 1920px monitor, full-width paragraphs are roughly 200 characters — which is exactly why an unstyled page feels unpleasant to read.<br>
 <b>Why <span class="badge">line-height: 1.6</span> with no unit.</b> A unitless value multiplies each element's own font size, so headings and body text both get sensible spacing. Writing <span class="badge">line-height: 24px</span> would cram a 32px heading.<br>
 <b>Why <span class="badge">system-ui</span> first.</b> It uses the operating system's own interface font — nothing to download, instant rendering, and it looks native on every platform.</div>
@@ -851,14 +851,14 @@ color: hsl(211 100% 52%);        <span class="tok-comment">/* sắc độ, độ
 <b>Tương phản không phải tuỳ chọn:</b> chữ nội dung cần tỉ lệ ít nhất 4,5:1 so với nền (3:1 với chữ trên 24px). Kiểm ngay trong DevTools — rê chuột lên ô màu là thấy tỉ lệ tương phản kèm dấu đạt/không đạt.</div>
 
 <h3>Chữ nghĩa — sáu dòng chữa được hầu hết các trang</h3>
-<pre>body {
+<pre><code class="language-css">body {
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   font-size: 1rem;
   line-height: 1.6;            <span class="tok-comment">/* không đơn vị: co giãn theo cỡ chữ */</span>
   color: #1a1a1a;              <span class="tok-comment">/* không đen tuyệt đối — dịu mắt hơn trên màn hình */</span>
 }
 main { max-width: 70ch; margin-inline: auto; }   <span class="tok-comment">/* độ dài dòng dễ đọc */</span>
-h1, h2, h3 { line-height: 1.2; }                 <span class="tok-comment">/* tiêu đề thì sít hơn */</span></pre>
+h1, h2, h3 { line-height: 1.2; }                 <span class="tok-comment">/* tiêu đề thì sít hơn */</span></code></pre>
 <div class="out"><b>Vì sao <span class="badge">70ch</span>.</b> Nghiên cứu về ấn loát cho thấy đọc thoải mái ở mức 45–75 ký tự mỗi dòng; dài hơn thì mắt lạc mất đầu dòng kế tiếp. Trên màn hình 1920px, đoạn văn chiếm hết bề ngang dài khoảng 200 ký tự — đó đúng là lý do một trang chưa tạo kiểu đọc rất khó chịu.<br>
 <b>Vì sao <span class="badge">line-height: 1.6</span> không kèm đơn vị.</b> Giá trị không đơn vị nhân với cỡ chữ của chính từng phần tử, nên cả tiêu đề lẫn chữ nội dung đều có khoảng cách hợp lý. Viết <span class="badge">line-height: 24px</span> sẽ làm tiêu đề 32px bị bó nghẹt.<br>
 <b>Vì sao đặt <span class="badge">system-ui</span> đầu tiên.</b> Nó dùng chính font giao diện của hệ điều hành — không phải tải gì, hiện ra tức thì, và trông tự nhiên trên mọi nền tảng.</div>
@@ -896,13 +896,13 @@ tr:nth-child(odd)  { background: #f6f6f6; }         <span class="tok-comment">/*
 <b>Always style <span class="badge">:focus-visible</span> next to <span class="badge">:hover</span></b> — otherwise keyboard users get no feedback at all (lesson 1.4).</div>
 
 <h3>Pseudo-elements — content that is not in the HTML</h3>
-<pre>.required label::after { content: " *"; color: red; }
+<pre><code class="language-css">.required label::after { content: " *"; color: red; }
 blockquote::before { content: "\\201C"; font-size: 3rem; }
-.external::after { content: " ↗"; }</pre>
+.external::after { content: " ↗"; }</code></pre>
 <p>Two colons for pseudo-elements, one for pseudo-classes. <span class="badge">content</span> is mandatory — without it nothing renders. Generated content is decoration only: a screen reader may skip it, so never put meaning there.</p>
 
 <h3>Transitions — animate the state change</h3>
-<pre>.btn {
+<pre><code class="language-css">.btn {
   background: #0a84ff;
   transition: background 200ms ease, transform 200ms ease;
 }
@@ -911,7 +911,7 @@ blockquote::before { content: "\\201C"; font-size: 3rem; }
 
 @media (prefers-reduced-motion: reduce) {   <span class="tok-comment">/* respect the OS setting */</span>
   * { transition: none !important; animation: none !important; }
-}</pre>
+}</code></pre>
 <div class="out"><b>Put the transition on the base rule, not on <span class="badge">:hover</span></b> — that way it animates both in and out. Declaring it only inside <span class="badge">:hover</span> gives a smooth entrance and an abrupt exit.<br>
 <b>Animate only <span class="badge">transform</span> and <span class="badge">opacity</span> when you can.</b> Those two are handled by the GPU without recalculating the layout; animating <span class="badge">width</span>, <span class="badge">top</span> or <span class="badge">margin</span> forces the browser to re-layout the page on every frame and visibly stutters on a phone.<br>
 <b>150–300 ms is the range that feels responsive</b>; above 500 ms the interface feels slow.</div>
@@ -950,13 +950,13 @@ tr:nth-child(odd)  { background: #f6f6f6; }         <span class="tok-comment">/*
 <b>Luôn tạo kiểu cho <span class="badge">:focus-visible</span> ngay cạnh <span class="badge">:hover</span></b> — nếu không, người dùng bàn phím chẳng nhận được phản hồi nào (bài 1.4).</div>
 
 <h3>Pseudo-element — nội dung không có trong HTML</h3>
-<pre>.required label::after { content: " *"; color: red; }
+<pre><code class="language-css">.required label::after { content: " *"; color: red; }
 blockquote::before { content: "\\201C"; font-size: 3rem; }
-.external::after { content: " ↗"; }</pre>
+.external::after { content: " ↗"; }</code></pre>
 <p>Hai dấu hai chấm cho pseudo-element, một dấu cho pseudo-class. <span class="badge">content</span> là bắt buộc — thiếu nó thì không hiện gì cả. Nội dung sinh ra chỉ để trang trí: trình đọc màn hình có thể bỏ qua, nên đừng bao giờ đặt ý nghĩa vào đó.</p>
 
 <h3>Transition — làm mượt sự đổi trạng thái</h3>
-<pre>.btn {
+<pre><code class="language-css">.btn {
   background: #0a84ff;
   transition: background 200ms ease, transform 200ms ease;
 }
@@ -965,7 +965,7 @@ blockquote::before { content: "\\201C"; font-size: 3rem; }
 
 @media (prefers-reduced-motion: reduce) {   <span class="tok-comment">/* tôn trọng cài đặt hệ điều hành */</span>
   * { transition: none !important; animation: none !important; }
-}</pre>
+}</code></pre>
 <div class="out"><b>Đặt transition ở luật gốc, không đặt trong <span class="badge">:hover</span></b> — như vậy nó mượt cả lúc vào lẫn lúc ra. Khai báo chỉ trong <span class="badge">:hover</span> cho một lối vào mượt mà và một lối ra giật cục.<br>
 <b>Chỉ làm chuyển động <span class="badge">transform</span> và <span class="badge">opacity</span> khi có thể.</b> Hai thứ đó do GPU xử lý mà không phải tính lại bố cục; làm chuyển động <span class="badge">width</span>, <span class="badge">top</span> hay <span class="badge">margin</span> buộc trình duyệt dựng lại bố cục trang ở mỗi khung hình và giật thấy rõ trên điện thoại.<br>
 <b>150–300 mili-giây là khoảng cho cảm giác nhạy</b>; trên 500 mili-giây thì giao diện có cảm giác chậm chạp.</div>
@@ -1008,10 +1008,10 @@ blockquote::before { content: "\\201C"; font-size: 3rem; }
 <span class="eyebrow">Chapter 3 · Lesson 3.1</span>
 <h2>JavaScript — making pages respond</h2>
 <p class="lead">HTML and CSS make a static page. <strong>JavaScript</strong> makes it react: click a button, validate a form, update content without reloading. It runs in the browser and manipulates the DOM.</p>
-<pre><span class="tok-keyword">const</span> btn = document.<span class="tok-function">querySelector</span>(<span class="tok-string">"#greet"</span>);
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> btn = document.<span class="tok-function">querySelector</span>(<span class="tok-string">"#greet"</span>);
 btn.<span class="tok-function">addEventListener</span>(<span class="tok-string">"click"</span>, () =&gt; {
   document.<span class="tok-function">querySelector</span>(<span class="tok-string">"#out"</span>).textContent = <span class="tok-string">"Hello!"</span>;
-});</pre>
+});</code></pre>
 <div class="out">Clicking the button finds the output element and changes its text — the page updates instantly, no reload. That is DOM manipulation.</div>
 <div class="lz-stack">
   <div class="lz-layer"><b>Select</b> — <span class="badge">querySelector</span> finds an element by CSS selector.</div>
@@ -1034,10 +1034,10 @@ btn.<span class="tok-function">addEventListener</span>(<span class="tok-string">
 <span class="eyebrow">Chương 3 · Bài 3.1</span>
 <h2>JavaScript — làm trang phản hồi</h2>
 <p class="lead">HTML và CSS tạo trang tĩnh. <strong>JavaScript</strong> làm nó phản ứng: bấm nút, kiểm tra form, cập nhật nội dung mà không tải lại. Nó chạy trong trình duyệt và thao tác DOM.</p>
-<pre><span class="tok-keyword">const</span> btn = document.<span class="tok-function">querySelector</span>(<span class="tok-string">"#greet"</span>);
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> btn = document.<span class="tok-function">querySelector</span>(<span class="tok-string">"#greet"</span>);
 btn.<span class="tok-function">addEventListener</span>(<span class="tok-string">"click"</span>, () =&gt; {
   document.<span class="tok-function">querySelector</span>(<span class="tok-string">"#out"</span>).textContent = <span class="tok-string">"Hello!"</span>;
-});</pre>
+});</code></pre>
 <div class="out">Bấm nút sẽ tìm phần tử output và đổi text của nó — trang cập nhật tức thì, không tải lại. Đó là thao tác DOM.</div>
 <div class="lz-stack">
   <div class="lz-layer"><b>Chọn</b> — <span class="badge">querySelector</span> tìm phần tử theo bộ chọn CSS.</div>
@@ -1070,13 +1070,13 @@ btn.<span class="tok-function">addEventListener</span>(<span class="tok-string">
 <p class="lead">MOOC 3 module 3 is "Arrays and Looping". Ninety per cent of the JavaScript in a WED201c project is this: store some values, loop over them, build some HTML. Get these fundamentals right and the DOM work in lesson 3.3 becomes easy.</p>
 
 <h3>Declaring variables — two keywords, one rule</h3>
-<pre><span class="tok-keyword">const</span> siteName = <span class="tok-string">"FPTU Web"</span>;   <span class="tok-comment">// cannot be reassigned — the default</span>
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> siteName = <span class="tok-string">"FPTU Web"</span>;   <span class="tok-comment">// cannot be reassigned — the default</span>
 <span class="tok-keyword">let</span> counter = 0;                <span class="tok-comment">// use only when the value must change</span>
 counter = counter + 1;          <span class="tok-comment">// fine</span>
 
 <span class="tok-comment">// const on an object still allows changing its contents</span>
 <span class="tok-keyword">const</span> student = { name: <span class="tok-string">"An"</span>, gpa: 8.1 };
-student.gpa = 8.5;              <span class="tok-comment">// allowed — the binding is fixed, not the object</span></pre>
+student.gpa = 8.5;              <span class="tok-comment">// allowed — the binding is fixed, not the object</span></code></pre>
 <p><b>Never use <span class="badge">var</span>.</b> It ignores block scope, so a <span class="badge">var</span> declared inside an <span class="badge">if</span> leaks out of it — a source of bugs that <span class="badge">let</span> and <span class="badge">const</span> simply removed.</p>
 
 <h3>Types, and the comparison trap</h3>
@@ -1086,7 +1086,7 @@ student.gpa = 8.5;              <span class="tok-comment">// allowed — the bin
 <b>Rule: always use <span class="badge">===</span> and <span class="badge">!==</span>.</b></div>
 
 <h3>Arrays and the loops that matter</h3>
-<pre><span class="tok-keyword">const</span> marks = [8.5, 7.0, 9.2, 6.4];
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> marks = [8.5, 7.0, 9.2, 6.4];
 
 marks.length          <span class="tok-comment">// 4</span>
 marks.push(7.8)       <span class="tok-comment">// add to the end</span>
@@ -1101,16 +1101,16 @@ marks[0]              <span class="tok-comment">// 8.5 — index starts at 0</sp
 <span class="tok-comment">// the three array methods worth memorising</span>
 <span class="tok-keyword">const</span> passed  = marks.filter(m =&gt; m &gt;= 7);         <span class="tok-comment">// [8.5, 7.0, 9.2, 7.8] — keep some</span>
 <span class="tok-keyword">const</span> rounded = marks.map(m =&gt; Math.round(m));     <span class="tok-comment">// [9, 7, 9, 6, 8]     — transform all</span>
-<span class="tok-keyword">const</span> total   = marks.reduce((sum, m) =&gt; sum + m, 0);  <span class="tok-comment">// 38.9        — one value</span></pre>
+<span class="tok-keyword">const</span> total   = marks.reduce((sum, m) =&gt; sum + m, 0);  <span class="tok-comment">// 38.9        — one value</span></code></pre>
 <div class="out"><b>Worked example — average mark and pass rate:</b><br>
 <span class="badge">const avg = marks.reduce((s, m) =&gt; s + m, 0) / marks.length;</span> → 38.9 / 5 = <b>7.78</b><br>
 <span class="badge">const rate = marks.filter(m =&gt; m &gt;= 5).length / marks.length * 100;</span> → 5/5 = <b>100%</b><br>
 The same in a classic for loop takes six lines and one accidental <span class="badge">&lt;=</span> away from an off-by-one error. That is why <span class="badge">filter/map/reduce</span> are worth learning early.</div>
 
 <h3>Functions — three ways to write one</h3>
-<pre><span class="tok-keyword">function</span> greet(name) { <span class="tok-keyword">return</span> <span class="tok-string">"Hello "</span> + name; }        <span class="tok-comment">// declaration</span>
+<pre><code class="language-javascript"><span class="tok-keyword">function</span> greet(name) { <span class="tok-keyword">return</span> <span class="tok-string">"Hello "</span> + name; }        <span class="tok-comment">// declaration</span>
 <span class="tok-keyword">const</span> greet2 = <span class="tok-keyword">function</span>(name) { <span class="tok-keyword">return</span> <span class="tok-string">"Hi "</span> + name; };  <span class="tok-comment">// expression</span>
-<span class="tok-keyword">const</span> greet3 = name =&gt; &#96;Xin chào \${name}&#96;;              <span class="tok-comment">// arrow + template string</span></pre>
+<span class="tok-keyword">const</span> greet3 = name =&gt; &#96;Xin chào \${name}&#96;;              <span class="tok-comment">// arrow + template string</span></code></pre>
 <p>Template strings with backticks and <span class="badge">\${…}</span> replace string concatenation — essential once you start building HTML in lesson 3.3.</p>
 
 <div class="pitfall"><b>An array index that does not exist gives <span class="badge">undefined</span>, not an error.</b> <span class="badge">marks[10]</span> silently returns undefined, and <span class="badge">undefined + 1</span> is <span class="badge">NaN</span> ("not a number"), which then spreads through every later calculation. If a number "becomes NaN", look for an out-of-range index or an unconverted input value.</div>
@@ -1123,13 +1123,13 @@ The same in a classic for loop takes six lines and one accidental <span class="b
 <p class="lead">MOOC 3 mô-đun 3 là "Mảng và vòng lặp". Chín mươi phần trăm JavaScript trong một đồ án WED201c chỉ là thế này: lưu vài giá trị, lặp qua chúng, dựng ra một ít HTML. Nắm chắc phần nền này thì việc thao tác DOM ở bài 3.3 trở nên dễ dàng.</p>
 
 <h3>Khai báo biến — hai từ khoá, một quy tắc</h3>
-<pre><span class="tok-keyword">const</span> siteName = <span class="tok-string">"FPTU Web"</span>;   <span class="tok-comment">// không gán lại được — mặc định dùng cái này</span>
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> siteName = <span class="tok-string">"FPTU Web"</span>;   <span class="tok-comment">// không gán lại được — mặc định dùng cái này</span>
 <span class="tok-keyword">let</span> counter = 0;                <span class="tok-comment">// chỉ dùng khi giá trị bắt buộc phải đổi</span>
 counter = counter + 1;          <span class="tok-comment">// hợp lệ</span>
 
 <span class="tok-comment">// const trên một object vẫn cho phép đổi nội dung bên trong</span>
 <span class="tok-keyword">const</span> student = { name: <span class="tok-string">"An"</span>, gpa: 8.1 };
-student.gpa = 8.5;              <span class="tok-comment">// được — cái cố định là ràng buộc tên, không phải object</span></pre>
+student.gpa = 8.5;              <span class="tok-comment">// được — cái cố định là ràng buộc tên, không phải object</span></code></pre>
 <p><b>Đừng bao giờ dùng <span class="badge">var</span>.</b> Nó bỏ qua phạm vi khối, nên một biến <span class="badge">var</span> khai trong <span class="badge">if</span> rò ra ngoài — nguồn lỗi mà <span class="badge">let</span> và <span class="badge">const</span> đã xoá sổ.</p>
 
 <h3>Kiểu dữ liệu, và cái bẫy so sánh</h3>
@@ -1139,7 +1139,7 @@ student.gpa = 8.5;              <span class="tok-comment">// được — cái c
 <b>Quy tắc: luôn dùng <span class="badge">===</span> và <span class="badge">!==</span>.</b></div>
 
 <h3>Mảng và những vòng lặp đáng dùng</h3>
-<pre><span class="tok-keyword">const</span> marks = [8.5, 7.0, 9.2, 6.4];
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> marks = [8.5, 7.0, 9.2, 6.4];
 
 marks.length          <span class="tok-comment">// 4</span>
 marks.push(7.8)       <span class="tok-comment">// thêm vào cuối</span>
@@ -1154,16 +1154,16 @@ marks[0]              <span class="tok-comment">// 8.5 — chỉ số bắt đ�
 <span class="tok-comment">// ba phương thức mảng đáng thuộc lòng</span>
 <span class="tok-keyword">const</span> passed  = marks.filter(m =&gt; m &gt;= 7);         <span class="tok-comment">// [8.5, 7.0, 9.2, 7.8] — giữ một số</span>
 <span class="tok-keyword">const</span> rounded = marks.map(m =&gt; Math.round(m));     <span class="tok-comment">// [9, 7, 9, 6, 8]     — biến đổi tất cả</span>
-<span class="tok-keyword">const</span> total   = marks.reduce((sum, m) =&gt; sum + m, 0);  <span class="tok-comment">// 38.9        — gộp về một giá trị</span></pre>
+<span class="tok-keyword">const</span> total   = marks.reduce((sum, m) =&gt; sum + m, 0);  <span class="tok-comment">// 38.9        — gộp về một giá trị</span></code></pre>
 <div class="out"><b>Ví dụ có lời giải — điểm trung bình và tỉ lệ qua môn:</b><br>
 <span class="badge">const avg = marks.reduce((s, m) =&gt; s + m, 0) / marks.length;</span> → 38,9 / 5 = <b>7,78</b><br>
 <span class="badge">const rate = marks.filter(m =&gt; m &gt;= 5).length / marks.length * 100;</span> → 5/5 = <b>100%</b><br>
 Cũng việc đó viết bằng vòng for kinh điển thì mất sáu dòng và chỉ cách một dấu <span class="badge">&lt;=</span> nhầm là lệch một đơn vị. Vì thế <span class="badge">filter/map/reduce</span> đáng học sớm.</div>
 
 <h3>Hàm — ba cách viết</h3>
-<pre><span class="tok-keyword">function</span> greet(name) { <span class="tok-keyword">return</span> <span class="tok-string">"Hello "</span> + name; }        <span class="tok-comment">// khai báo</span>
+<pre><code class="language-javascript"><span class="tok-keyword">function</span> greet(name) { <span class="tok-keyword">return</span> <span class="tok-string">"Hello "</span> + name; }        <span class="tok-comment">// khai báo</span>
 <span class="tok-keyword">const</span> greet2 = <span class="tok-keyword">function</span>(name) { <span class="tok-keyword">return</span> <span class="tok-string">"Hi "</span> + name; };  <span class="tok-comment">// biểu thức</span>
-<span class="tok-keyword">const</span> greet3 = name =&gt; &#96;Xin chào \${name}&#96;;              <span class="tok-comment">// mũi tên + chuỗi mẫu</span></pre>
+<span class="tok-keyword">const</span> greet3 = name =&gt; &#96;Xin chào \${name}&#96;;              <span class="tok-comment">// mũi tên + chuỗi mẫu</span></code></pre>
 <p>Chuỗi mẫu dùng dấu huyền và <span class="badge">\${…}</span> thay cho việc nối chuỗi — thiết yếu khi bạn bắt đầu dựng HTML ở bài 3.3.</p>
 
 <div class="pitfall"><b>Chỉ số mảng không tồn tại thì cho <span class="badge">undefined</span> chứ không báo lỗi.</b> <span class="badge">marks[10]</span> âm thầm trả về undefined, và <span class="badge">undefined + 1</span> là <span class="badge">NaN</span> ("không phải số"), rồi giá trị đó lan ra mọi phép tính về sau. Nếu một con số "bỗng thành NaN", hãy tìm chỉ số vượt phạm vi hoặc một giá trị nhập chưa chuyển kiểu.</div>
@@ -1184,9 +1184,9 @@ Cũng việc đó viết bằng vòng for kinh điển thì mất sáu dòng và
 <p class="lead">The browser turns your HTML into a tree of objects — the Document Object Model. Everything interactive is one of four operations on that tree: find a node, read it, change it, or create a new one.</p>
 
 <h3>1. Find</h3>
-<pre><span class="tok-keyword">const</span> title  = document.querySelector(<span class="tok-string">"#title"</span>);      <span class="tok-comment">// first match, any CSS selector</span>
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> title  = document.querySelector(<span class="tok-string">"#title"</span>);      <span class="tok-comment">// first match, any CSS selector</span>
 <span class="tok-keyword">const</span> cards  = document.querySelectorAll(<span class="tok-string">".card"</span>);    <span class="tok-comment">// all matches (a NodeList)</span>
-<span class="tok-keyword">const</span> first  = document.querySelector(<span class="tok-string">"nav ul li:first-child"</span>);</pre>
+<span class="tok-keyword">const</span> first  = document.querySelector(<span class="tok-string">"nav ul li:first-child"</span>);</code></pre>
 <p>You know CSS selectors already, so <span class="badge">querySelector</span> is the only finder you need — the older <span class="badge">getElementById</span> and <span class="badge">getElementsByClassName</span> do less with more typing.</p>
 
 <h3>2. Read and change content</h3>
@@ -1206,14 +1206,14 @@ el.style.display = <span class="tok-string">"none"</span>;             <span cla
 <p>Keep the look in CSS and let JavaScript only switch class names. A dark-mode toggle is then <span class="badge">document.body.classList.toggle("dark")</span> plus a <span class="badge">.dark { … }</span> block — instead of twenty <span class="badge">el.style.…</span> assignments.</p>
 
 <h3>4. Create and insert</h3>
-<pre><span class="tok-keyword">const</span> li = document.createElement(<span class="tok-string">"li"</span>);
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> li = document.createElement(<span class="tok-string">"li"</span>);
 li.textContent = <span class="tok-string">"New item"</span>;
 li.classList.add(<span class="tok-string">"todo"</span>);
 list.appendChild(li);                    <span class="tok-comment">// add at the end</span>
-li.remove();                             <span class="tok-comment">// delete it again</span></pre>
+li.remove();                             <span class="tok-comment">// delete it again</span></code></pre>
 
 <h3>Worked example — render an array as a list</h3>
-<pre><span class="tok-keyword">const</span> students = [
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> students = [
   { name: <span class="tok-string">"An"</span>,  gpa: 8.5 },
   { name: <span class="tok-string">"Bình"</span>, gpa: 6.4 },
   { name: <span class="tok-string">"Chi"</span>,  gpa: 9.1 },
@@ -1225,7 +1225,7 @@ li.remove();                             <span class="tok-comment">// delete it 
   li.textContent = &#96;\${s.name} — \${s.gpa}&#96;;
   <span class="tok-keyword">if</span> (s.gpa &gt;= 8) li.classList.add(<span class="tok-string">"excellent"</span>);
   ul.appendChild(li);
-}</pre>
+}</code></pre>
 <div class="out"><b>Result:</b> three <span class="badge">&lt;li&gt;</span> elements, two of them carrying the class <span class="badge">excellent</span> which your CSS can colour gold. This eight-line pattern — array in, elements out — is the core of the MOOC 5 capstone and of every framework you will meet later (React does exactly this, just automatically).<br>
 <b>Performance note:</b> appending inside a loop touches the page N times. For long lists, build the HTML in a string and assign once, or append into a <span class="badge">DocumentFragment</span> and insert that — one reflow instead of N.</div>
 
@@ -1239,9 +1239,9 @@ li.remove();                             <span class="tok-comment">// delete it 
 <p class="lead">Trình duyệt biến HTML của bạn thành một cây các đối tượng — Document Object Model. Mọi thứ tương tác đều là một trong bốn thao tác trên cây đó: tìm một nút, đọc nó, sửa nó, hoặc tạo một nút mới.</p>
 
 <h3>1. Tìm</h3>
-<pre><span class="tok-keyword">const</span> title  = document.querySelector(<span class="tok-string">"#title"</span>);      <span class="tok-comment">// khớp đầu tiên, dùng bộ chọn CSS bất kỳ</span>
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> title  = document.querySelector(<span class="tok-string">"#title"</span>);      <span class="tok-comment">// khớp đầu tiên, dùng bộ chọn CSS bất kỳ</span>
 <span class="tok-keyword">const</span> cards  = document.querySelectorAll(<span class="tok-string">".card"</span>);    <span class="tok-comment">// mọi phần tử khớp (một NodeList)</span>
-<span class="tok-keyword">const</span> first  = document.querySelector(<span class="tok-string">"nav ul li:first-child"</span>);</pre>
+<span class="tok-keyword">const</span> first  = document.querySelector(<span class="tok-string">"nav ul li:first-child"</span>);</code></pre>
 <p>Bạn đã biết bộ chọn CSS rồi, nên <span class="badge">querySelector</span> là công cụ tìm duy nhất bạn cần — <span class="badge">getElementById</span> và <span class="badge">getElementsByClassName</span> đời cũ làm được ít hơn mà gõ nhiều hơn.</p>
 
 <h3>2. Đọc và sửa nội dung</h3>
@@ -1261,14 +1261,14 @@ el.style.display = <span class="tok-string">"none"</span>;             <span cla
 <p>Hãy để diện mạo trong CSS và chỉ cho JavaScript bật/tắt tên class. Nút chuyển chế độ tối khi đó chỉ là <span class="badge">document.body.classList.toggle("dark")</span> cộng một khối <span class="badge">.dark { … }</span> — thay vì hai mươi dòng gán <span class="badge">el.style.…</span>.</p>
 
 <h3>4. Tạo mới và chèn vào</h3>
-<pre><span class="tok-keyword">const</span> li = document.createElement(<span class="tok-string">"li"</span>);
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> li = document.createElement(<span class="tok-string">"li"</span>);
 li.textContent = <span class="tok-string">"Mục mới"</span>;
 li.classList.add(<span class="tok-string">"todo"</span>);
 list.appendChild(li);                    <span class="tok-comment">// thêm vào cuối</span>
-li.remove();                             <span class="tok-comment">// xoá nó đi</span></pre>
+li.remove();                             <span class="tok-comment">// xoá nó đi</span></code></pre>
 
 <h3>Ví dụ có lời giải — dựng danh sách từ một mảng</h3>
-<pre><span class="tok-keyword">const</span> students = [
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> students = [
   { name: <span class="tok-string">"An"</span>,  gpa: 8.5 },
   { name: <span class="tok-string">"Bình"</span>, gpa: 6.4 },
   { name: <span class="tok-string">"Chi"</span>,  gpa: 9.1 },
@@ -1280,7 +1280,7 @@ li.remove();                             <span class="tok-comment">// xoá nó �
   li.textContent = &#96;\${s.name} — \${s.gpa}&#96;;
   <span class="tok-keyword">if</span> (s.gpa &gt;= 8) li.classList.add(<span class="tok-string">"excellent"</span>);
   ul.appendChild(li);
-}</pre>
+}</code></pre>
 <div class="out"><b>Kết quả:</b> ba phần tử <span class="badge">&lt;li&gt;</span>, hai trong số đó mang class <span class="badge">excellent</span> để CSS của bạn tô màu vàng. Khuôn tám dòng này — mảng vào, phần tử ra — là lõi của đồ án capstone MOOC 5 và của mọi framework bạn gặp sau này (React làm đúng việc đó, chỉ là tự động).<br>
 <b>Ghi chú hiệu năng:</b> gọi appendChild trong vòng lặp là đụng vào trang N lần. Với danh sách dài, hãy dựng HTML thành một chuỗi rồi gán một lần, hoặc chèn vào một <span class="badge">DocumentFragment</span> rồi đưa cả cụm vào — một lần dựng lại bố cục thay vì N lần.</div>
 
@@ -1302,14 +1302,14 @@ li.remove();                             <span class="tok-comment">// xoá nó �
 <p class="lead">An event is something that happens: a click, a keypress, a form submission. You attach a function and the browser calls it. This lesson covers the three things that go wrong: attaching, reading the event, and handling elements that do not exist yet.</p>
 
 <h3>Attaching a handler</h3>
-<pre><span class="tok-keyword">const</span> btn = document.querySelector(<span class="tok-string">"#save"</span>);
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> btn = document.querySelector(<span class="tok-string">"#save"</span>);
 
 btn.addEventListener(<span class="tok-string">"click"</span>, <span class="tok-keyword">function</span> (event) {
   console.log(<span class="tok-string">"clicked"</span>, event.target);
 });
 
 <span class="tok-comment">// arrow version, same thing</span>
-btn.addEventListener(<span class="tok-string">"click"</span>, (e) =&gt; console.log(e.type));</pre>
+btn.addEventListener(<span class="tok-string">"click"</span>, (e) =&gt; console.log(e.type));</code></pre>
 <p>Prefer <span class="badge">addEventListener</span> to the HTML <span class="badge">onclick=""</span> attribute: you can attach several handlers, remove them again, and your behaviour stays in the JavaScript file instead of scattered through the markup.</p>
 
 <h3>The events you will actually use</h3>
@@ -1323,7 +1323,7 @@ btn.addEventListener(<span class="tok-string">"click"</span>, (e) =&gt; console.
 </tbody></table>
 
 <h3>Worked example — a validated registration form</h3>
-<pre><span class="tok-keyword">const</span> form = document.querySelector(<span class="tok-string">"#register"</span>);
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> form = document.querySelector(<span class="tok-string">"#register"</span>);
 
 form.addEventListener(<span class="tok-string">"submit"</span>, <span class="tok-keyword">function</span> (e) {
   e.preventDefault();                       <span class="tok-comment">// stop the page reloading</span>
@@ -1345,7 +1345,7 @@ form.addEventListener(<span class="tok-string">"submit"</span>, <span class="tok
   }
   box.classList.remove(<span class="tok-string">"show"</span>);
   form.submit();                             <span class="tok-comment">// everything passed</span>
-});</pre>
+});</code></pre>
 <div class="out"><b>Three details that make this correct:</b><br>
 <b>1.</b> The listener is on the <em>form's</em> <span class="badge">submit</span>, not the button's <span class="badge">click</span> — so pressing Enter in a field is handled too.<br>
 <b>2.</b> <span class="badge">e.preventDefault()</span> stops the browser's default reload; without it the page refreshes and your messages vanish instantly. This is the number-one beginner bug.<br>
@@ -1353,7 +1353,7 @@ form.addEventListener(<span class="tok-string">"submit"</span>, <span class="tok
 <b>Remember lesson 1.3:</b> the HTML attributes <span class="badge">required</span> and <span class="badge">minlength</span> already do most of this. Write JavaScript only for rules HTML cannot express — such as "the two passwords must match".</div>
 
 <h3>Event delegation — one handler for a list that grows</h3>
-<pre><span class="tok-comment">// wrong: no handler on items added later</span>
+<pre><code class="language-javascript"><span class="tok-comment">// wrong: no handler on items added later</span>
 document.querySelectorAll(<span class="tok-string">".delete"</span>).forEach(b =&gt;
   b.addEventListener(<span class="tok-string">"click"</span>, remove));
 
@@ -1362,7 +1362,7 @@ list.addEventListener(<span class="tok-string">"click"</span>, (e) =&gt; {
   <span class="tok-keyword">const</span> btn = e.target.closest(<span class="tok-string">".delete"</span>);
   <span class="tok-keyword">if</span> (!btn) <span class="tok-keyword">return</span>;
   btn.closest(<span class="tok-string">"li"</span>).remove();
-});</pre>
+});</code></pre>
 <p>Events <em>bubble</em> from the clicked element up to its ancestors, so a listener on the list sees clicks on every current and future child. One handler instead of hundreds — and it keeps working after you add an item.</p>
 
 <div class="pitfall"><b><span class="badge">addEventListener("click", handler())</span> with brackets calls the function immediately and passes its return value.</b> Pass the reference: <span class="badge">handler</span>, no brackets. If you must pass an argument, wrap it: <span class="badge">() =&gt; handler(id)</span>. The symptom is a handler that runs once on page load and never again.</div>
@@ -1375,14 +1375,14 @@ list.addEventListener(<span class="tok-string">"click"</span>, (e) =&gt; {
 <p class="lead">Sự kiện là một chuyện xảy ra: một cú bấm, một phím gõ, một lần gửi biểu mẫu. Bạn gắn một hàm vào và trình duyệt gọi nó. Bài này nói về ba chỗ hay sai: cách gắn, cách đọc đối tượng sự kiện, và cách xử lý những phần tử chưa tồn tại.</p>
 
 <h3>Gắn một hàm xử lý</h3>
-<pre><span class="tok-keyword">const</span> btn = document.querySelector(<span class="tok-string">"#save"</span>);
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> btn = document.querySelector(<span class="tok-string">"#save"</span>);
 
 btn.addEventListener(<span class="tok-string">"click"</span>, <span class="tok-keyword">function</span> (event) {
   console.log(<span class="tok-string">"đã bấm"</span>, event.target);
 });
 
 <span class="tok-comment">// bản viết bằng hàm mũi tên, y hệt</span>
-btn.addEventListener(<span class="tok-string">"click"</span>, (e) =&gt; console.log(e.type));</pre>
+btn.addEventListener(<span class="tok-string">"click"</span>, (e) =&gt; console.log(e.type));</code></pre>
 <p>Hãy ưu tiên <span class="badge">addEventListener</span> hơn thuộc tính HTML <span class="badge">onclick=""</span>: bạn gắn được nhiều hàm, gỡ ra được, và hành vi nằm gọn trong tệp JavaScript thay vì rải rác khắp mã HTML.</p>
 
 <h3>Các sự kiện bạn thật sự dùng</h3>
@@ -1396,7 +1396,7 @@ btn.addEventListener(<span class="tok-string">"click"</span>, (e) =&gt; console.
 </tbody></table>
 
 <h3>Ví dụ có lời giải — biểu mẫu đăng ký có kiểm tra</h3>
-<pre><span class="tok-keyword">const</span> form = document.querySelector(<span class="tok-string">"#register"</span>);
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> form = document.querySelector(<span class="tok-string">"#register"</span>);
 
 form.addEventListener(<span class="tok-string">"submit"</span>, <span class="tok-keyword">function</span> (e) {
   e.preventDefault();                       <span class="tok-comment">// chặn trang tải lại</span>
@@ -1418,7 +1418,7 @@ form.addEventListener(<span class="tok-string">"submit"</span>, <span class="tok
   }
   box.classList.remove(<span class="tok-string">"show"</span>);
   form.submit();                             <span class="tok-comment">// mọi thứ đã hợp lệ</span>
-});</pre>
+});</code></pre>
 <div class="out"><b>Ba chi tiết làm đoạn này đúng:</b><br>
 <b>1.</b> Hàm gắn vào sự kiện <span class="badge">submit</span> của <em>biểu mẫu</em>, không phải <span class="badge">click</span> của nút — nhờ vậy nhấn Enter trong một ô cũng được xử lý.<br>
 <b>2.</b> <span class="badge">e.preventDefault()</span> chặn hành vi tải lại mặc định; thiếu nó thì trang làm mới và các thông báo của bạn biến mất tức thì. Đây là lỗi số một của người mới.<br>
@@ -1426,7 +1426,7 @@ form.addEventListener(<span class="tok-string">"submit"</span>, <span class="tok
 <b>Nhớ lại bài 1.3:</b> các thuộc tính HTML <span class="badge">required</span> và <span class="badge">minlength</span> đã làm phần lớn việc này rồi. Chỉ viết JavaScript cho những luật mà HTML không diễn đạt được — như "hai mật khẩu phải khớp nhau".</div>
 
 <h3>Uỷ quyền sự kiện — một hàm xử lý cho một danh sách còn mọc thêm</h3>
-<pre><span class="tok-comment">// sai: các mục thêm sau không có hàm xử lý nào</span>
+<pre><code class="language-javascript"><span class="tok-comment">// sai: các mục thêm sau không có hàm xử lý nào</span>
 document.querySelectorAll(<span class="tok-string">".delete"</span>).forEach(b =&gt;
   b.addEventListener(<span class="tok-string">"click"</span>, remove));
 
@@ -1435,7 +1435,7 @@ list.addEventListener(<span class="tok-string">"click"</span>, (e) =&gt; {
   <span class="tok-keyword">const</span> btn = e.target.closest(<span class="tok-string">".delete"</span>);
   <span class="tok-keyword">if</span> (!btn) <span class="tok-keyword">return</span>;
   btn.closest(<span class="tok-string">"li"</span>).remove();
-});</pre>
+});</code></pre>
 <p>Sự kiện <em>nổi bọt</em> từ phần tử bị bấm lên các phần tử tổ tiên, nên một hàm nghe đặt ở danh sách nhìn thấy mọi cú bấm vào con hiện tại lẫn con sinh ra sau này. Một hàm thay vì hàng trăm — và nó vẫn chạy sau khi bạn thêm mục mới.</p>
 
 <div class="pitfall"><b><span class="badge">addEventListener("click", handler())</span> có dấu ngoặc là gọi hàm ngay lập tức rồi truyền giá trị trả về.</b> Hãy truyền tham chiếu: <span class="badge">handler</span>, không ngoặc. Nếu buộc phải truyền tham số thì bọc lại: <span class="badge">() =&gt; handler(id)</span>. Triệu chứng là hàm chạy đúng một lần lúc tải trang rồi thôi.</div>
@@ -1477,13 +1477,13 @@ list.addEventListener(<span class="tok-string">"click"</span>, (e) =&gt; {
 <span class="eyebrow">Chapter 4 · Lesson 4.1</span>
 <h2>Responsive design — one page, every screen</h2>
 <p class="lead">A site must look right on a phone, a tablet and a desktop. <strong>Responsive design</strong> achieves this with <span class="badge">media queries</span> that apply different CSS at different screen widths.</p>
-<pre><span class="tok-comment">/* base styles = mobile first */</span>
+<pre><code class="language-css"><span class="tok-comment">/* base styles = mobile first */</span>
 <span class="tok-function">.grid</span> { <span class="tok-keyword">display</span>: block; }
 
 <span class="tok-comment">/* wider screens get columns */</span>
 <span class="tok-keyword">@media</span> (min-width: 768px) {
   <span class="tok-function">.grid</span> { <span class="tok-keyword">display</span>: grid; <span class="tok-keyword">grid-template-columns</span>: 1fr 1fr; }
-}</pre>
+}</code></pre>
 <div class="lz-stack">
   <div class="lz-layer"><b>Mobile-first</b> — write the small-screen layout first, then add complexity for bigger screens. Simpler and faster.</div>
   <div class="lz-layer"><b>The viewport tag</b> — <span class="badge">&lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;</span> is required, or mobiles pretend to be desktop.</div>
@@ -1500,13 +1500,13 @@ list.addEventListener(<span class="tok-string">"click"</span>, (e) =&gt; {
 <span class="eyebrow">Chương 4 · Bài 4.1</span>
 <h2>Thiết kế responsive — một trang, mọi màn hình</h2>
 <p class="lead">Một site phải hiển thị đúng trên điện thoại, máy tính bảng và máy để bàn. <strong>Thiết kế responsive</strong> đạt điều này bằng <span class="badge">media query</span> áp CSS khác nhau ở các bề rộng màn hình khác nhau.</p>
-<pre><span class="tok-comment">/* kiểu nền = mobile trước */</span>
+<pre><code class="language-css"><span class="tok-comment">/* kiểu nền = mobile trước */</span>
 <span class="tok-function">.grid</span> { <span class="tok-keyword">display</span>: block; }
 
 <span class="tok-comment">/* màn hình rộng hơn có cột */</span>
 <span class="tok-keyword">@media</span> (min-width: 768px) {
   <span class="tok-function">.grid</span> { <span class="tok-keyword">display</span>: grid; <span class="tok-keyword">grid-template-columns</span>: 1fr 1fr; }
-}</pre>
+}</code></pre>
 <div class="lz-stack">
   <div class="lz-layer"><b>Mobile-first</b> — viết bố cục màn hình nhỏ trước, rồi thêm phức tạp cho màn hình lớn. Đơn giản và nhanh hơn.</div>
   <div class="lz-layer"><b>Thẻ viewport</b> — <span class="badge">&lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;</span> là bắt buộc, nếu không điện thoại giả vờ là desktop.</div>
@@ -1597,7 +1597,7 @@ list.addEventListener(<span class="tok-string">"click"</span>, (e) =&gt; {
 <p class="lead"><strong>&quot;Use Existing Frameworks&quot; is syllabus session 9</strong> (MOOC 4, module 3) and <strong>accessibility and putting your code on the web are session 3</strong> (MOOC 1, module 3, taught in lesson 1.4) — both are core, examinable material, not extras. What this lesson adds on top is CSS newer than the MOOC recordings (custom properties, dark mode, container queries) and the three performance numbers your site is actually judged on.</p>
 
 <h3>Custom properties — variables that live in the browser</h3>
-<pre>:root {
+<pre><code class="language-css">:root {
   --brand: hsl(211 100% 52%);
   --text: #1a1a1a;
   --bg: #ffffff;
@@ -1608,15 +1608,15 @@ list.addEventListener(<span class="tok-string">"click"</span>, (e) =&gt; {
 @media (prefers-color-scheme: dark) {     <span class="tok-comment">/* dark mode in four lines */</span>
   :root { --text: #f2f2f2; --bg: #16181d; }
 }
-body { color: var(--text); background: var(--bg); }</pre>
+body { color: var(--text); background: var(--bg); }</code></pre>
 <div class="out"><b>Why these are not Sass variables.</b> A preprocessor variable disappears at build time; a CSS custom property is live in the browser — it inherits, it can be changed per component, and JavaScript can set it: <span class="badge">el.style.setProperty("--brand", "red")</span>. That is how theme switchers and design tokens are built, with no build step at all.</div>
 
 <h3>Container queries — the feature that replaces most breakpoints</h3>
-<pre>.sidebar { container-type: inline-size; }
+<pre><code class="language-css">.sidebar { container-type: inline-size; }
 
 @container (min-width: 400px) {
   .card { display: grid; grid-template-columns: 120px 1fr; }
-}</pre>
+}</code></pre>
 <p>A media query asks how wide the <em>screen</em> is; a container query asks how wide the <em>parent</em> is. So one card component lays itself out correctly in a narrow sidebar and in a wide main column — without knowing where it was placed. This is what finally makes a component library truly reusable.</p>
 
 <h3>Frameworks — what you gain and what you give up</h3>
@@ -1644,7 +1644,7 @@ body { color: var(--text); background: var(--bg); }</pre>
 <p class="lead"><strong>&quot;Use Existing Frameworks&quot; là buổi 9 trong giáo trình</strong> (MOOC 4, module 3) và <strong>trợ năng cùng việc đưa mã lên mạng là buổi 3</strong> (MOOC 1, module 3, dạy ở bài 1.4) — cả hai đều là nội dung chính, nằm trong phạm vi thi, không phải phần học thêm. Thứ bài này bổ sung thêm là CSS mới hơn các video MOOC (biến CSS, dark mode, container query) và ba con số hiệu năng mà trang của bạn thật sự bị đo.</p>
 
 <h3>Biến CSS — biến sống ngay trong trình duyệt</h3>
-<pre>:root {
+<pre><code class="language-css">:root {
   --brand: hsl(211 100% 52%);
   --text: #1a1a1a;
   --bg: #ffffff;
@@ -1655,15 +1655,15 @@ body { color: var(--text); background: var(--bg); }</pre>
 @media (prefers-color-scheme: dark) {     <span class="tok-comment">/* chế độ tối trong bốn dòng */</span>
   :root { --text: #f2f2f2; --bg: #16181d; }
 }
-body { color: var(--text); background: var(--bg); }</pre>
+body { color: var(--text); background: var(--bg); }</code></pre>
 <div class="out"><b>Vì sao chúng không phải biến của Sass.</b> Biến của bộ tiền xử lý biến mất lúc build; biến CSS thì sống trong trình duyệt — nó kế thừa, đổi được theo từng thành phần, và JavaScript đặt được: <span class="badge">el.style.setProperty("--brand", "red")</span>. Đó là cách dựng bộ chuyển giao diện và hệ thống design token, mà không cần bước build nào.</div>
 
 <h3>Container query — tính năng thay thế phần lớn điểm ngắt</h3>
-<pre>.sidebar { container-type: inline-size; }
+<pre><code class="language-css">.sidebar { container-type: inline-size; }
 
 @container (min-width: 400px) {
   .card { display: grid; grid-template-columns: 120px 1fr; }
-}</pre>
+}</code></pre>
 <p>Media query hỏi <em>màn hình</em> rộng bao nhiêu; container query hỏi <em>phần tử cha</em> rộng bao nhiêu. Nhờ đó một thành phần thẻ tự bố trí đúng cả trong thanh bên hẹp lẫn trong cột chính rộng — mà không cần biết mình được đặt ở đâu. Đây mới là thứ cuối cùng làm một thư viện thành phần thật sự dùng lại được.</p>
 
 <h3>Framework — được gì và mất gì</h3>

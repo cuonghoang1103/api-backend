@@ -144,7 +144,7 @@ const L2 = {
 <li><strong>Log every issue</strong> as in PE Question 1 (issue · location · description).</li>
 <li><strong>Try it yourself first</strong> (30 minutes), then compare with the log below.</li>
 </ol>
-<pre><code>${esc(CODE_LOGIN)}</code></pre>
+<pre><code class="language-java">${esc(CODE_LOGIN)}</code></pre>
 <h3>Model review log</h3>
 <div class="table-wrap"><table>
 <thead><tr><th>#</th><th>Where</th><th>Category</th><th>Severity</th><th>Issue</th><th>Fix</th></tr></thead>
@@ -167,7 +167,7 @@ const L2 = {
 <li><strong>Ghi mọi lỗi</strong> như câu 1 của đề PE (số thứ tự · vị trí · mô tả).</li>
 <li><strong>Tự làm trước</strong> (30 phút), sau đó mới so với bảng dưới.</li>
 </ol>
-<pre><code>${esc(CODE_LOGIN)}</code></pre>
+<pre><code class="language-java">${esc(CODE_LOGIN)}</code></pre>
 <h3>Bảng review mẫu</h3>
 <div class="table-wrap"><table>
 <thead><tr><th>#</th><th>Vị trí</th><th>Nhóm</th><th>Mức độ</th><th>Lỗi</th><th>Cách sửa</th></tr></thead>

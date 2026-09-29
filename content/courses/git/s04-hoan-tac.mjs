@@ -92,7 +92,7 @@ ${slide('git-04', 5, 'Đã push chưa? — lằn ranh quyết định lệnh nà
   <div class="lz-step"><div class="lz-k">pushed and shared</div><div class="lz-t">revert only</div><div class="lz-d">Adding a new commit is the only operation that does not break other people's clones.</div></div>
 </div>
 <p>Check before acting, rather than guessing:</p>
-<pre><code>git log --oneline origin/main..HEAD   <span class="tok-comment"># commits I have that the server does not</span>
+<pre><code class="language-bash">git log --oneline origin/main..HEAD   <span class="tok-comment"># commits I have that the server does not</span>
 git branch -r --contains 3f8a1c9      <span class="tok-comment"># which remote branches contain this commit?</span></code></pre>
 <div class="out">3f8a1c9 fix: reject expired refresh tokens
 9e2d4b7 feat(auth): add refresh token rotation</div>
@@ -179,7 +179,7 @@ ${slide('git-04', 5, 'Đã push chưa? — lằn ranh quyết định lệnh nà
   <div class="lz-step"><div class="lz-k">đã push và đã chia sẻ</div><div class="lz-t">Chỉ revert</div><div class="lz-d">Thêm một commit mới là thao tác duy nhất không làm hỏng bản clone của người khác.</div></div>
 </div>
 <p>Hãy kiểm trước khi hành động, thay vì đoán:</p>
-<pre><code>git log --oneline origin/main..HEAD   <span class="tok-comment"># commit tôi có mà máy chủ chưa có</span>
+<pre><code class="language-bash">git log --oneline origin/main..HEAD   <span class="tok-comment"># commit tôi có mà máy chủ chưa có</span>
 git branch -r --contains 3f8a1c9      <span class="tok-comment"># nhánh remote nào chứa commit này?</span></code></pre>
 <div class="out">3f8a1c9 fix: reject expired refresh tokens
 9e2d4b7 feat(auth): add refresh token rotation</div>
@@ -250,17 +250,17 @@ ${slide('git-04', 7, 'reset --soft: thay đổi nằm ở staging')}
 ${slide('git-04', 8, 'reset --mixed: thay đổi về file, chưa staging')}
 ${slide('git-04', 9, 'reset --hard: cả ba cây bị ghi đè')}
 <p>Start from a repository with three commits and a clean tree:</p>
-<pre><code>git log --oneline -3</code></pre>
+<pre><code class="language-bash">git log --oneline -3</code></pre>
 <div class="out">1a2b3c4 (HEAD -&gt; main) third
 9e2d4b7 second
 7b3e9d1 first</div>
-<pre><code>git reset --soft HEAD~1 &amp;&amp; git status --short</code></pre>
+<pre><code class="language-bash">git reset --soft HEAD~1 &amp;&amp; git status --short</code></pre>
 <div class="out">M  file.txt</div>
 <p>One column, on the left: the change from the "third" commit is now <strong>staged</strong>. The commit is gone from the branch, its content is not. This is the mode for "let me redo that commit properly" — <code>git commit</code> again and you are done.</p>
-<pre><code>git reset --mixed HEAD~1 &amp;&amp; git status --short</code></pre>
+<pre><code class="language-bash">git reset --mixed HEAD~1 &amp;&amp; git status --short</code></pre>
 <div class="out"> M file.txt</div>
 <p>The M moved to the right column: the change is now <strong>unstaged</strong>, still in your file. This is the mode for "undo the commit and let me re-choose what to stage" — useful after an over-eager <code>git add .</code>.</p>
-<pre><code>git reset --hard HEAD~1 &amp;&amp; git status --short</code></pre>
+<pre><code class="language-bash">git reset --hard HEAD~1 &amp;&amp; git status --short</code></pre>
 <div class="out"></div>
 <p>Nothing. The commit is gone and so is its content, from disk. If that commit existed, the reflog can bring it back (4.4). If part of the change had never been committed, that part is gone permanently.</p>
 
@@ -273,7 +273,7 @@ ${slide('git-04', 6, 'reset dời nhánh trước, commit bị bỏ rơi thành 
 </div>
 
 <h3>The everyday uses</h3>
-<pre><code><span class="tok-comment"># Undo the last commit, keep everything staged, commit again properly:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Undo the last commit, keep everything staged, commit again properly:</span>
 git reset --soft HEAD~1
 
 <span class="tok-comment"># Squash the last three commits into one (a poor man's rebase -i):</span>
@@ -288,10 +288,10 @@ git reset --hard HEAD~2</code></pre>
 <div class="callout ok">The <code>--soft HEAD~3</code> + <code>commit</code> pair is the fastest way to collapse a handful of "wip" commits when you do not need to reorder or drop anything. Interactive rebase (3.5) is more precise; this is two commands and covers the common case.</div>
 
 <h3>Resetting a single file</h3>
-<pre><code>git reset HEAD src/app.ts        <span class="tok-comment"># unstage one file (old spelling)</span>
+<pre><code class="language-bash">git reset HEAD src/app.ts        <span class="tok-comment"># unstage one file (old spelling)</span>
 git restore --staged src/app.ts  <span class="tok-comment"># same thing, modern spelling — prefer this</span></code></pre>
 <p>With a path, <code>reset</code> never moves the branch — it only copies that file from the named commit into the index. There is deliberately no <code>--hard</code> with a path: the destructive per-file operation is <code>git restore</code>, so you cannot reach it by accident while thinking about commits.</p>
-<pre><code>git reset 3f8a1c9 -- src/app.ts  <span class="tok-comment"># stage that file AS IT WAS in an old commit</span>
+<pre><code class="language-bash">git reset 3f8a1c9 -- src/app.ts  <span class="tok-comment"># stage that file AS IT WAS in an old commit</span>
 git commit -m <span class="tok-string">"revert: restore the pre-refactor auth helper"</span></code></pre>
 
 <h3>Why --hard is the most dangerous command in Git</h3>
@@ -303,12 +303,12 @@ git commit -m <span class="tok-string">"revert: restore the pre-refactor auth he
 </div>
 
 <h3>Untracked files are not touched by reset</h3>
-<pre><code>git reset --hard HEAD
+<pre><code class="language-bash">git reset --hard HEAD
 git status --short</code></pre>
 <div class="out">?? debug.log
 ?? scratch/</div>
 <p><code>--hard</code> resets <em>tracked</em> files only. New files Git has never been told about survive, which is usually what you want. To remove those too:</p>
-<pre><code>git clean -n        <span class="tok-comment"># DRY RUN — list what would be deleted. Always run this first.</span>
+<pre><code class="language-bash">git clean -n        <span class="tok-comment"># DRY RUN — list what would be deleted. Always run this first.</span>
 git clean -f        <span class="tok-comment"># delete untracked files</span>
 git clean -fd       <span class="tok-comment"># …and untracked directories</span>
 git clean -fdx      <span class="tok-comment"># …and ignored files too (node_modules, .env — careful!)</span></code></pre>
@@ -370,17 +370,17 @@ ${slide('git-04', 7, 'reset --soft: thay đổi nằm ở staging')}
 ${slide('git-04', 8, 'reset --mixed: thay đổi về file, chưa staging')}
 ${slide('git-04', 9, 'reset --hard: cả ba cây bị ghi đè')}
 <p>Bắt đầu từ một kho có ba commit và cây sạch:</p>
-<pre><code>git log --oneline -3</code></pre>
+<pre><code class="language-bash">git log --oneline -3</code></pre>
 <div class="out">1a2b3c4 (HEAD -&gt; main) third
 9e2d4b7 second
 7b3e9d1 first</div>
-<pre><code>git reset --soft HEAD~1 &amp;&amp; git status --short</code></pre>
+<pre><code class="language-bash">git reset --soft HEAD~1 &amp;&amp; git status --short</code></pre>
 <div class="out">M  file.txt</div>
 <p>Một cột, bên trái: thay đổi từ commit "third" giờ đã ở <strong>staging</strong>. Cái commit biến khỏi nhánh, nội dung của nó thì không. Đây là chế độ cho "để tôi làm lại commit đó cho tử tế" — <code>git commit</code> lần nữa là xong.</p>
-<pre><code>git reset --mixed HEAD~1 &amp;&amp; git status --short</code></pre>
+<pre><code class="language-bash">git reset --mixed HEAD~1 &amp;&amp; git status --short</code></pre>
 <div class="out"> M file.txt</div>
 <p>Chữ M nhảy sang cột phải: thay đổi giờ <strong>chưa staging</strong>, vẫn nằm trong file của bạn. Đây là chế độ cho "huỷ commit và cho tôi chọn lại thứ nào đưa vào staging" — hữu ích sau một lần <code>git add .</code> quá vội.</p>
-<pre><code>git reset --hard HEAD~1 &amp;&amp; git status --short</code></pre>
+<pre><code class="language-bash">git reset --hard HEAD~1 &amp;&amp; git status --short</code></pre>
 <div class="out"></div>
 <p>Trống trơn. Commit biến mất và nội dung của nó cũng biến khỏi đĩa. Nếu commit đó từng tồn tại thì reflog mang nó về được (bài 4.4). Nếu một phần thay đổi chưa bao giờ được commit, phần đó mất vĩnh viễn.</p>
 
@@ -393,7 +393,7 @@ ${slide('git-04', 6, 'reset dời nhánh trước, commit bị bỏ rơi thành 
 </div>
 
 <h3>Những cách dùng hằng ngày</h3>
-<pre><code><span class="tok-comment"># Huỷ commit cuối, giữ mọi thứ ở staging, commit lại cho tử tế:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Huỷ commit cuối, giữ mọi thứ ở staging, commit lại cho tử tế:</span>
 git reset --soft HEAD~1
 
 <span class="tok-comment"># Gộp ba commit cuối thành một (rebase -i của nhà nghèo):</span>
@@ -408,10 +408,10 @@ git reset --hard HEAD~2</code></pre>
 <div class="callout ok">Cặp <code>--soft HEAD~3</code> + <code>commit</code> là cách nhanh nhất để dồn một nhúm commit "wip" khi bạn không cần đổi thứ tự hay bỏ cái nào. Rebase tương tác (bài 3.5) chính xác hơn; cái này chỉ hai lệnh và phủ được trường hợp thường gặp.</div>
 
 <h3>Reset một file cụ thể</h3>
-<pre><code>git reset HEAD src/app.ts        <span class="tok-comment"># gỡ một file khỏi staging (cách viết cũ)</span>
+<pre><code class="language-bash">git reset HEAD src/app.ts        <span class="tok-comment"># gỡ một file khỏi staging (cách viết cũ)</span>
 git restore --staged src/app.ts  <span class="tok-comment"># cùng việc, cách viết mới — nên dùng cái này</span></code></pre>
 <p>Khi có đường dẫn, <code>reset</code> KHÔNG bao giờ dời nhánh — nó chỉ chép file đó từ commit được gọi tên vào index. Cố ý không có <code>--hard</code> đi cùng đường dẫn: thao tác phá huỷ theo từng file là <code>git restore</code>, nên bạn không thể chạm vào nó một cách tình cờ trong lúc đang nghĩ về commit.</p>
-<pre><code>git reset 3f8a1c9 -- src/app.ts  <span class="tok-comment"># staging file đó ĐÚNG NHƯ nó có ở một commit cũ</span>
+<pre><code class="language-bash">git reset 3f8a1c9 -- src/app.ts  <span class="tok-comment"># staging file đó ĐÚNG NHƯ nó có ở một commit cũ</span>
 git commit -m <span class="tok-string">"revert: khoi phuc helper auth truoc lan refactor"</span></code></pre>
 
 <h3>Vì sao --hard là lệnh nguy hiểm nhất của Git</h3>
@@ -423,12 +423,12 @@ git commit -m <span class="tok-string">"revert: khoi phuc helper auth truoc lan 
 </div>
 
 <h3>File chưa theo dõi không bị reset đụng tới</h3>
-<pre><code>git reset --hard HEAD
+<pre><code class="language-bash">git reset --hard HEAD
 git status --short</code></pre>
 <div class="out">?? debug.log
 ?? scratch/</div>
 <p><code>--hard</code> chỉ đặt lại các file <em>được theo dõi</em>. File mới mà Git chưa từng được cho biết thì sống sót, và đó thường là thứ bạn muốn. Muốn xoá cả chúng:</p>
-<pre><code>git clean -n        <span class="tok-comment"># CHẠY THỬ — liệt kê thứ sẽ bị xoá. Luôn chạy cái này trước.</span>
+<pre><code class="language-bash">git clean -n        <span class="tok-comment"># CHẠY THỬ — liệt kê thứ sẽ bị xoá. Luôn chạy cái này trước.</span>
 git clean -f        <span class="tok-comment"># xoá file chưa theo dõi</span>
 git clean -fd       <span class="tok-comment"># …và cả thư mục chưa theo dõi</span>
 git clean -fdx      <span class="tok-comment"># …và cả file bị ignore (node_modules, .env — cẩn thận!)</span></code></pre>
@@ -488,10 +488,10 @@ A  style.css</code></pre>
 <h2>Undo by going forwards</h2>
 <p class="lead">A bad commit is already on <code>main</code> and everyone has pulled it. <code>reset</code> is out of the question — it would rewrite history other people are standing on. <code>git revert</code> solves this by refusing to touch the past: it computes the inverse of the bad commit and adds that as a <strong>new commit</strong> on top.</p>
 
-<pre><code>git revert 3f8a1c9</code></pre>
+<pre><code class="language-bash">git revert 3f8a1c9</code></pre>
 <div class="out">[main a7c2f91] Revert "feat(feed): add author preloading"
  1 file changed, 4 insertions(+), 18 deletions(-)</div>
-<pre><code>git log --oneline -3</code></pre>
+<pre><code class="language-bash">git log --oneline -3</code></pre>
 <div class="out">a7c2f91 (HEAD -&gt; main) Revert "feat(feed): add author preloading"
 5f7a9c2 chore(deps): bump prisma to 6.2.0
 3f8a1c9 feat(feed): add author preloading</div>
@@ -507,7 +507,7 @@ ${slide('git-04', 11, 'Nhánh chung: reset + force-push so với revert')}
 </div>
 
 <h3>Reverting several commits</h3>
-<pre><code>git revert 3f8a1c9 9e2d4b7           <span class="tok-comment"># two specific commits, newest first</span>
+<pre><code class="language-bash">git revert 3f8a1c9 9e2d4b7           <span class="tok-comment"># two specific commits, newest first</span>
 git revert HEAD~3..HEAD              <span class="tok-comment"># a range — creates one revert commit per commit</span>
 git revert --no-commit HEAD~3..HEAD  <span class="tok-comment"># stage all the inversions, commit once yourself</span>
 git commit -m <span class="tok-string">"revert: roll back the whole feed preloading feature"</span></code></pre>
@@ -516,32 +516,32 @@ git commit -m <span class="tok-string">"revert: roll back the whole feed preload
 <h3>Reverting a merge commit</h3>
 ${slide('git-04', 12, 'Revert một commit merge với -m 1')}
 <p>A merge commit has two parents, so "undo it" is ambiguous: undo relative to <em>which</em> side? Git refuses to guess:</p>
-<pre><code>git revert 8c4f2a1</code></pre>
+<pre><code class="language-bash">git revert 8c4f2a1</code></pre>
 <div class="out">error: commit 8c4f2a1 is a merge but no -m option was given.
 fatal: revert failed</div>
-<pre><code>git revert -m 1 8c4f2a1</code></pre>
+<pre><code class="language-bash">git revert -m 1 8c4f2a1</code></pre>
 <p><code>-m 1</code> means "treat parent 1 as the mainline" — parent 1 is the branch you were on when you merged (usually <code>main</code>). So this says: keep main's line of history, undo everything the merged branch brought in.</p>
 <div class="callout danger"><strong>Reverting a merge has a long tail.</strong> Once you have reverted merge M, the branch's commits are considered "already in main" by Git's ancestry rules, even though their effect is gone. If you later fix the branch and merge it again, Git brings in <em>only the new commits</em> — the original changes stay reverted, and the feature ships half-missing. The standard fix is to revert the revert (<code>git revert &lt;revert-commit&gt;</code>) before merging again. Know this before you revert a merge on a real project.</div>
 
 <h3>Reverting a revert</h3>
-<pre><code>git revert a7c2f91</code></pre>
+<pre><code class="language-bash">git revert a7c2f91</code></pre>
 <div class="out">[main c3e9d04] Reapply "feat(feed): add author preloading"</div>
 <p>The feature is back. Recent Git (we ran 2.51) titles this commit <code>Reapply "…"</code>; older versions wrote the double negative <code>Revert "Revert \\"…\\""</code>, which you will still meet in older repositories — it looks absurd and means exactly the same thing. This is the normal way to say "we rolled that back on Friday to stop the bleeding; the fix is in, bring it back".</p>
 
 <h3>Conflicts during a revert</h3>
 <p>If the code has moved on since the commit you are undoing, the inverse patch may not apply cleanly:</p>
-<pre><code>git revert 3f8a1c9</code></pre>
+<pre><code class="language-bash">git revert 3f8a1c9</code></pre>
 <div class="out">error: could not revert 3f8a1c9… feat(feed): add author preloading
 hint: After resolving the conflicts, mark them with
 hint: "git add/rm &lt;pathspec&gt;", then run "git revert --continue".</div>
-<pre><code><span class="tok-comment"># resolve as in 3.3, then:</span>
+<pre><code class="language-bash"><span class="tok-comment"># resolve as in 3.3, then:</span>
 git add src/services/feed.service.ts
 git revert --continue
 git revert --abort          <span class="tok-comment"># or give up cleanly</span></code></pre>
 
 <h3>Write a message that says why</h3>
 <p>Git's default is <code>Revert "&lt;original subject&gt;"</code>, which records <em>what</em> and not <em>why</em>. Edit it:</p>
-<pre><code>git revert 3f8a1c9 --edit</code></pre>
+<pre><code class="language-bash">git revert 3f8a1c9 --edit</code></pre>
 <pre><code>Revert <span class="tok-string">"feat(feed): add author preloading"</span>
 
 This reverts commit 3f8a1c9. Preloading issued one query per post
@@ -596,10 +596,10 @@ prepared in #431.</code></pre>
 <h2>Hoàn tác bằng cách đi tới</h2>
 <p class="lead">Một commit tồi đã nằm trên <code>main</code> và mọi người đã pull về. <code>reset</code> là chuyện không tưởng — nó sẽ viết lại lịch sử mà người khác đang đứng lên trên. <code>git revert</code> giải bài này bằng cách từ chối đụng vào quá khứ: nó tính ra nghịch đảo của commit tồi rồi thêm cái đó vào như một <strong>commit MỚI</strong> ở trên cùng.</p>
 
-<pre><code>git revert 3f8a1c9</code></pre>
+<pre><code class="language-bash">git revert 3f8a1c9</code></pre>
 <div class="out">[main a7c2f91] Revert "feat(feed): add author preloading"
  1 file changed, 4 insertions(+), 18 deletions(-)</div>
-<pre><code>git log --oneline -3</code></pre>
+<pre><code class="language-bash">git log --oneline -3</code></pre>
 <div class="out">a7c2f91 (HEAD -&gt; main) Revert "feat(feed): add author preloading"
 5f7a9c2 chore(deps): bump prisma to 6.2.0
 3f8a1c9 feat(feed): add author preloading</div>
@@ -615,7 +615,7 @@ ${slide('git-04', 11, 'Nhánh chung: reset + force-push so với revert')}
 </div>
 
 <h3>Revert nhiều commit</h3>
-<pre><code>git revert 3f8a1c9 9e2d4b7           <span class="tok-comment"># hai commit cụ thể, mới nhất trước</span>
+<pre><code class="language-bash">git revert 3f8a1c9 9e2d4b7           <span class="tok-comment"># hai commit cụ thể, mới nhất trước</span>
 git revert HEAD~3..HEAD              <span class="tok-comment"># một khoảng — tạo một commit revert cho MỖI commit</span>
 git revert --no-commit HEAD~3..HEAD  <span class="tok-comment"># staging mọi phần nghịch đảo, tự commit một lần</span>
 git commit -m <span class="tok-string">"revert: lui toan bo tinh nang preload feed"</span></code></pre>
@@ -624,32 +624,32 @@ git commit -m <span class="tok-string">"revert: lui toan bo tinh nang preload fe
 <h3>Revert một commit hợp nhất</h3>
 ${slide('git-04', 12, 'Revert một commit merge với -m 1')}
 <p>Một commit hợp nhất có hai cha, nên "huỷ nó đi" là nhập nhằng: huỷ so với <em>phía nào</em>? Git từ chối đoán:</p>
-<pre><code>git revert 8c4f2a1</code></pre>
+<pre><code class="language-bash">git revert 8c4f2a1</code></pre>
 <div class="out">error: commit 8c4f2a1 is a merge but no -m option was given.
 fatal: revert failed</div>
-<pre><code>git revert -m 1 8c4f2a1</code></pre>
+<pre><code class="language-bash">git revert -m 1 8c4f2a1</code></pre>
 <p><code>-m 1</code> nghĩa là "coi cha số 1 là dòng chính" — cha 1 là nhánh bạn đang đứng khi merge (thường là <code>main</code>). Nên câu này nói: giữ dòng lịch sử của main, huỷ mọi thứ nhánh được merge mang vào.</p>
 <div class="callout danger"><strong>Revert một commit hợp nhất có cái đuôi rất dài.</strong> Khi bạn đã revert lần merge M, các commit của nhánh đó vẫn bị Git coi là "đã có trong main" theo luật tổ tiên, dù tác dụng của chúng đã biến mất. Nếu sau này bạn sửa nhánh rồi merge lại, Git chỉ mang vào <em>những commit mới</em> — các thay đổi ban đầu vẫn ở trạng thái bị revert, và tính năng lên production thiếu mất một nửa. Cách sửa chuẩn là revert chính cái revert (<code>git revert &lt;commit-revert&gt;</code>) trước khi merge lại. Hãy biết điều này TRƯỚC khi revert một merge trên dự án thật.</div>
 
 <h3>Revert chính cái revert</h3>
-<pre><code>git revert a7c2f91</code></pre>
+<pre><code class="language-bash">git revert a7c2f91</code></pre>
 <div class="out">[main c3e9d04] Reapply "feat(feed): add author preloading"</div>
 <p>Tính năng đã quay lại. Git đời mới (máy thử chạy 2.51) đặt tiêu đề commit này là <code>Reapply "…"</code>; bản cũ hơn viết kiểu phủ định kép <code>Revert "Revert \\"…\\""</code> mà bạn vẫn sẽ gặp trong các kho cũ — trông thật lố bịch nhưng nghĩa y hệt. Đây là cách bình thường để nói "hôm thứ Sáu ta lùi cái đó để cầm máu; bản vá xong rồi, mang nó trở lại".</p>
 
 <h3>Xung đột trong lúc revert</h3>
 <p>Nếu mã đã đi tiếp kể từ commit bạn đang huỷ, bản vá nghịch đảo có thể không áp gọn được:</p>
-<pre><code>git revert 3f8a1c9</code></pre>
+<pre><code class="language-bash">git revert 3f8a1c9</code></pre>
 <div class="out">error: could not revert 3f8a1c9… feat(feed): add author preloading
 hint: After resolving the conflicts, mark them with
 hint: "git add/rm &lt;pathspec&gt;", then run "git revert --continue".</div>
-<pre><code><span class="tok-comment"># giải như bài 3.3, rồi:</span>
+<pre><code class="language-bash"><span class="tok-comment"># giải như bài 3.3, rồi:</span>
 git add src/services/feed.service.ts
 git revert --continue
 git revert --abort          <span class="tok-comment"># hoặc bỏ cuộc một cách gọn ghẽ</span></code></pre>
 
 <h3>Hãy viết lời nhắn nói VÌ SAO</h3>
 <p>Mặc định của Git là <code>Revert "&lt;tiêu đề gốc&gt;"</code>, ghi lại <em>cái gì</em> chứ không ghi <em>vì sao</em>. Hãy sửa nó:</p>
-<pre><code>git revert 3f8a1c9 --edit</code></pre>
+<pre><code class="language-bash">git revert 3f8a1c9 --edit</code></pre>
 <pre><code>Revert <span class="tok-string">"feat(feed): add author preloading"</span>
 
 Revert commit 3f8a1c9. Preload bắn một truy vấn cho MỖI bài thay vì một
@@ -713,7 +713,7 @@ thật. Lùi lại ngay bây giờ; bản gộp theo lô đang được chuẩn 
 <h2>The undo button for the undo button</h2>
 <p class="lead">This is the lesson that removes fear from every other lesson. Git keeps a private journal of <strong>every position <code>HEAD</code> has held on your machine</strong> — every commit, checkout, merge, rebase and reset — for at least 30 days. Even commits that no branch points to are still in there, still reachable, still fully intact.</p>
 
-<pre><code>git reflog</code></pre>
+<pre><code class="language-bash">git reflog</code></pre>
 <div class="out">e8b4d92 HEAD@{0}: reset: moving to HEAD~2
 c7f1a30 HEAD@{1}: commit: test(auth): cover the expired-token path
 b2c6a91 HEAD@{2}: commit: feat(auth): add refresh token rotation
@@ -728,27 +728,27 @@ b2c6a91 HEAD@{2}: commit: feat(auth): add refresh token rotation
 
 <h3>Recovery 1 — a bad reset --hard</h3>
 ${slide('git-04', 13, 'reflog cứu hai commit sau reset --hard')}
-<pre><code>git reset --hard HEAD~2       <span class="tok-comment"># …and two good commits vanish</span>
+<pre><code class="language-bash">git reset --hard HEAD~2       <span class="tok-comment"># …and two good commits vanish</span>
 git reflog -3</code></pre>
 <div class="out">e8b4d92 HEAD@{0}: reset: moving to HEAD~2
 c7f1a30 HEAD@{1}: commit: test(auth): cover the expired-token path
 b2c6a91 HEAD@{2}: commit: feat(auth): add refresh token rotation</div>
-<pre><code>git reset --hard HEAD@{1}     <span class="tok-comment"># or: git reset --hard c7f1a30</span></code></pre>
+<pre><code class="language-bash">git reset --hard HEAD@{1}     <span class="tok-comment"># or: git reset --hard c7f1a30</span></code></pre>
 <div class="out">HEAD is now at c7f1a30 test(auth): cover the expired-token path</div>
 <p>Both commits are back. They were never deleted — the branch simply stopped pointing at them, and the reflog remembered where they were.</p>
 
 <h3>Recovery 2 — a deleted branch</h3>
 ${slide('git-04', 14, 'reflog: nhánh đã xoá, rebase hỏng, và giới hạn')}
-<pre><code>git branch -D feature/login</code></pre>
+<pre><code class="language-bash">git branch -D feature/login</code></pre>
 <div class="out">Deleted branch feature/login (was c7f1a30).</div>
 <p>Git even prints the hash as it deletes. If you missed it, the reflog has it — but read the right line:</p>
-<pre><code>git reflog | grep -A1 <span class="tok-string">"from feature/login"</span></code></pre>
+<pre><code class="language-bash">git reflog | grep -A1 <span class="tok-string">"from feature/login"</span></code></pre>
 <div class="out">5f7a9c2 HEAD@{0}: checkout: moving from feature/login to main
 c7f1a30 HEAD@{1}: commit: test(auth): cover the expired-token path</div>
-<pre><code>git switch -c feature/login c7f1a30</code></pre>
+<pre><code class="language-bash">git switch -c feature/login c7f1a30</code></pre>
 <div class="out">Switched to a new branch 'feature/login'</div>
 <div class="callout warn"><strong>The classic misread:</strong> a <code>checkout:</code> entry records where HEAD went <em>to</em> — here <code>main</code> — not the tip of the branch you left. The tip is the entry just <em>below</em> it (older), which is why the command uses <code>grep -A1</code> ("print one line after the match"). Recreate the branch at the <code>checkout</code> line's hash and you get a copy of <code>main</code>, with none of your work. Real output from our test repo:</div>
-<pre><code>git branch -D feature/profile
+<pre><code class="language-bash">git branch -D feature/profile
 git reflog | grep -A1 <span class="tok-string">"from feature/profile"</span></code></pre>
 <div class="out">Deleted branch feature/profile (was 40dc208).
 2d853f2 HEAD@{0}: checkout: moving from feature/profile to main
@@ -757,29 +757,29 @@ git reflog | grep -A1 <span class="tok-string">"from feature/profile"</span></co
 <p>The branch is back with every commit. A branch is a 41-byte pointer (3.1) — deleting it never touched the commits, so recreating it at the same hash restores it exactly.</p>
 
 <h3>Recovery 3 — a rebase that went wrong</h3>
-<pre><code>git reflog -8</code></pre>
+<pre><code class="language-bash">git reflog -8</code></pre>
 <div class="out">a1f9c34 HEAD@{0}: rebase (finish): returning to refs/heads/feature/login
 a1f9c34 HEAD@{1}: rebase (pick): test(auth): cover the expired-token path
 d8e2b70 HEAD@{2}: rebase (pick): feat(auth): add refresh token rotation
 5f7a9c2 HEAD@{3}: rebase (start): checkout main
 c7f1a30 HEAD@{4}: commit: test(auth): cover the expired-token path</div>
-<pre><code>git reset --hard HEAD@{4}     <span class="tok-comment"># the entry just BEFORE "rebase (start)"</span></code></pre>
+<pre><code class="language-bash">git reset --hard HEAD@{4}     <span class="tok-comment"># the entry just BEFORE "rebase (start)"</span></code></pre>
 <p>The pattern is always the same: find <code>rebase (start)</code> and take the entry immediately below it. That is where your branch stood before the rebase touched anything.</p>
 
 <h3>Per-branch reflogs</h3>
-<pre><code>git reflog show main          <span class="tok-comment"># everywhere main itself has pointed</span>
+<pre><code class="language-bash">git reflog show main          <span class="tok-comment"># everywhere main itself has pointed</span>
 git reflog show feature/login</code></pre>
 <div class="out">3f8a1c9 main@{0}: merge feature/login: Fast-forward
 7b3e9d1 main@{1}: commit: refactor(api): extract pagination
 5f7a9c2 main@{2}: pull: Fast-forward</div>
 <p>Useful for "what did <code>main</code> look like before I pulled this morning?" — <code>git diff main@{1} main</code> answers it exactly.</p>
-<pre><code>git show main@{yesterday}     <span class="tok-comment"># time-based selectors work too</span>
+<pre><code class="language-bash">git show main@{yesterday}     <span class="tok-comment"># time-based selectors work too</span>
 git diff main@{<span class="tok-string">"2 hours ago"</span>} main
 git log main@{1}..main --oneline</code></pre>
 <div class="callout warn">Time selectors read the <em>local</em> reflog, so <code>main@{yesterday}</code> means "where main pointed on this machine yesterday", not "what the project looked like yesterday". On a fresh clone the reflog is nearly empty and these expressions silently fall back to the oldest entry.</div>
 
 <h3>Finding commits the reflog missed</h3>
-<pre><code>git fsck --lost-found</code></pre>
+<pre><code class="language-bash">git fsck --lost-found</code></pre>
 <div class="out">dangling commit 4d9e2f8a1b3c5d7e9f0a2b4c6d8e0f2a4b6c8d0e
 dangling blob 7c4a1b2e...</div>
 <p>A dangling commit is one nothing refers to — typically from a dropped stash or a rebase that discarded a commit whose reflog entry has expired. Inspect each with <code>git show &lt;hash&gt;</code>, and rescue what you want with <code>git switch -c rescue &lt;hash&gt;</code>.</p>
@@ -840,7 +840,7 @@ HEAD is now at 0e8a447 fix(auth): chặn email rỗng</code></pre>
 <h2>Nút hoàn tác cho chính nút hoàn tác</h2>
 <p class="lead">Đây là bài xoá bỏ nỗi sợ khỏi mọi bài khác. Git giữ một cuốn nhật ký riêng về <strong>mọi vị trí mà <code>HEAD</code> từng đứng trên máy bạn</strong> — mọi lần commit, checkout, merge, rebase và reset — trong ít nhất 30 ngày. Kể cả những commit không nhánh nào trỏ tới vẫn nằm trong đó, vẫn với tới được, vẫn nguyên vẹn hoàn toàn.</p>
 
-<pre><code>git reflog</code></pre>
+<pre><code class="language-bash">git reflog</code></pre>
 <div class="out">e8b4d92 HEAD@{0}: reset: moving to HEAD~2
 c7f1a30 HEAD@{1}: commit: test(auth): cover the expired-token path
 b2c6a91 HEAD@{2}: commit: feat(auth): add refresh token rotation
@@ -855,27 +855,27 @@ b2c6a91 HEAD@{2}: commit: feat(auth): add refresh token rotation
 
 <h3>Cứu hộ 1 — một lần reset --hard hỏng</h3>
 ${slide('git-04', 13, 'reflog cứu hai commit sau reset --hard')}
-<pre><code>git reset --hard HEAD~2       <span class="tok-comment"># …và hai commit tử tế bốc hơi</span>
+<pre><code class="language-bash">git reset --hard HEAD~2       <span class="tok-comment"># …và hai commit tử tế bốc hơi</span>
 git reflog -3</code></pre>
 <div class="out">e8b4d92 HEAD@{0}: reset: moving to HEAD~2
 c7f1a30 HEAD@{1}: commit: test(auth): cover the expired-token path
 b2c6a91 HEAD@{2}: commit: feat(auth): add refresh token rotation</div>
-<pre><code>git reset --hard HEAD@{1}     <span class="tok-comment"># hoặc: git reset --hard c7f1a30</span></code></pre>
+<pre><code class="language-bash">git reset --hard HEAD@{1}     <span class="tok-comment"># hoặc: git reset --hard c7f1a30</span></code></pre>
 <div class="out">HEAD is now at c7f1a30 test(auth): cover the expired-token path</div>
 <p>Cả hai commit đã trở lại. Chúng chưa bao giờ bị xoá — chỉ là cái nhánh thôi trỏ vào chúng, và reflog thì nhớ chúng nằm ở đâu.</p>
 
 <h3>Cứu hộ 2 — một nhánh đã xoá</h3>
 ${slide('git-04', 14, 'reflog: nhánh đã xoá, rebase hỏng, và giới hạn')}
-<pre><code>git branch -D feature/login</code></pre>
+<pre><code class="language-bash">git branch -D feature/login</code></pre>
 <div class="out">Deleted branch feature/login (was c7f1a30).</div>
 <p>Git in luôn mã băm ngay khi xoá. Nếu bạn lỡ không để ý, reflog có nó — nhưng phải đọc đúng dòng:</p>
-<pre><code>git reflog | grep -A1 <span class="tok-string">"from feature/login"</span></code></pre>
+<pre><code class="language-bash">git reflog | grep -A1 <span class="tok-string">"from feature/login"</span></code></pre>
 <div class="out">5f7a9c2 HEAD@{0}: checkout: moving from feature/login to main
 c7f1a30 HEAD@{1}: commit: test(auth): cover the expired-token path</div>
-<pre><code>git switch -c feature/login c7f1a30</code></pre>
+<pre><code class="language-bash">git switch -c feature/login c7f1a30</code></pre>
 <div class="out">Switched to a new branch 'feature/login'</div>
 <div class="callout warn"><strong>Lỗi đọc nhầm kinh điển:</strong> một dòng <code>checkout:</code> ghi lại chỗ HEAD <em>ĐI TỚI</em> — ở đây là <code>main</code> — chứ không phải đỉnh của nhánh bạn vừa rời. Đỉnh nhánh là dòng <em>ngay BÊN DƯỚI</em> nó (cũ hơn), vì thế lệnh dùng <code>grep -A1</code> ("in thêm một dòng sau dòng khớp"). Tạo lại nhánh ở mã băm của dòng <code>checkout</code> là bạn được một bản sao của <code>main</code>, chẳng có tí công sức nào của mình. Output thật từ kho thử:</div>
-<pre><code>git branch -D feature/profile
+<pre><code class="language-bash">git branch -D feature/profile
 git reflog | grep -A1 <span class="tok-string">"from feature/profile"</span></code></pre>
 <div class="out">Deleted branch feature/profile (was 40dc208).
 2d853f2 HEAD@{0}: checkout: moving from feature/profile to main
@@ -884,29 +884,29 @@ git reflog | grep -A1 <span class="tok-string">"from feature/profile"</span></co
 <p>Nhánh trở lại với đầy đủ commit. Một nhánh là con trỏ 41 byte (bài 3.1) — xoá nó chưa bao giờ đụng tới các commit, nên tạo lại nó ở đúng mã băm đó là khôi phục y nguyên.</p>
 
 <h3>Cứu hộ 3 — một lần rebase đi sai</h3>
-<pre><code>git reflog -8</code></pre>
+<pre><code class="language-bash">git reflog -8</code></pre>
 <div class="out">a1f9c34 HEAD@{0}: rebase (finish): returning to refs/heads/feature/login
 a1f9c34 HEAD@{1}: rebase (pick): test(auth): cover the expired-token path
 d8e2b70 HEAD@{2}: rebase (pick): feat(auth): add refresh token rotation
 5f7a9c2 HEAD@{3}: rebase (start): checkout main
 c7f1a30 HEAD@{4}: commit: test(auth): cover the expired-token path</div>
-<pre><code>git reset --hard HEAD@{4}     <span class="tok-comment"># dòng ngay TRƯỚC "rebase (start)"</span></code></pre>
+<pre><code class="language-bash">git reset --hard HEAD@{4}     <span class="tok-comment"># dòng ngay TRƯỚC "rebase (start)"</span></code></pre>
 <p>Quy luật lúc nào cũng thế: tìm dòng <code>rebase (start)</code> rồi lấy dòng ngay bên dưới nó. Đó là chỗ nhánh của bạn đứng trước khi rebase đụng vào bất cứ thứ gì.</p>
 
 <h3>Reflog riêng cho từng nhánh</h3>
-<pre><code>git reflog show main          <span class="tok-comment"># mọi nơi mà chính main từng trỏ tới</span>
+<pre><code class="language-bash">git reflog show main          <span class="tok-comment"># mọi nơi mà chính main từng trỏ tới</span>
 git reflog show feature/login</code></pre>
 <div class="out">3f8a1c9 main@{0}: merge feature/login: Fast-forward
 7b3e9d1 main@{1}: commit: refactor(api): extract pagination
 5f7a9c2 main@{2}: pull: Fast-forward</div>
 <p>Hữu ích cho câu "sáng nay trước khi tôi pull thì <code>main</code> trông thế nào?" — <code>git diff main@{1} main</code> trả lời chính xác.</p>
-<pre><code>git show main@{yesterday}     <span class="tok-comment"># chọn theo thời gian cũng được</span>
+<pre><code class="language-bash">git show main@{yesterday}     <span class="tok-comment"># chọn theo thời gian cũng được</span>
 git diff main@{<span class="tok-string">"2 hours ago"</span>} main
 git log main@{1}..main --oneline</code></pre>
 <div class="callout warn">Bộ chọn theo thời gian đọc reflog <em>CỤC BỘ</em>, nên <code>main@{yesterday}</code> nghĩa là "chỗ main trỏ tới trên máy này hôm qua", không phải "dự án trông thế nào hôm qua". Trên một bản clone mới, reflog gần như trống và các biểu thức này âm thầm rơi về dòng cũ nhất.</div>
 
 <h3>Tìm những commit mà reflog bỏ sót</h3>
-<pre><code>git fsck --lost-found</code></pre>
+<pre><code class="language-bash">git fsck --lost-found</code></pre>
 <div class="out">dangling commit 4d9e2f8a1b3c5d7e9f0a2b4c6d8e0f2a4b6c8d0e
 dangling blob 7c4a1b2e...</div>
 <p>Một commit "lủng lẳng" là commit không có gì trỏ tới — thường từ một stash bị bỏ hoặc một lần rebase đã loại bỏ một commit mà dòng reflog của nó đã hết hạn. Hãy soi từng cái bằng <code>git show &lt;mã băm&gt;</code>, và cứu cái bạn cần bằng <code>git switch -c rescue &lt;mã băm&gt;</code>.</p>
@@ -976,14 +976,14 @@ HEAD is now at 0e8a447 fix(auth): chặn email rỗng</code></pre>
 <h2>A drawer for work in progress</h2>
 <p class="lead">You are halfway through a feature when a production bug arrives. Your working directory is a mess, and switching branches with modified files that differ between them is refused. <code>git stash</code> takes everything uncommitted, stores it safely, and hands you back a clean tree.</p>
 
-<pre><code>git status --short</code></pre>
+<pre><code class="language-bash">git status --short</code></pre>
 <div class="out">M  src/services/auth.service.ts
  M src/routes/auth.routes.ts</div>
-<pre><code>git stash
+<pre><code class="language-bash">git stash
 git status --short</code></pre>
 <div class="out">Saved working directory and index state WIP on feature/login: 3f8a1c9 feat(auth): rotation</div>
 <p>Clean. Switch, fix the bug, come back, and bring your work out of the drawer:</p>
-<pre><code>git switch main
+<pre><code class="language-bash">git switch main
 <span class="tok-comment"># …fix, commit, push, deploy…</span>
 git switch feature/login
 git stash pop --index</code></pre>
@@ -1004,11 +1004,11 @@ ${slide('git-04', 15, 'git stash — ngăn kéo cất việc dở')}
 <div class="callout warn">If <code>pop</code> hits a conflict, the entry is <strong>not</strong> deleted — Git keeps it precisely because the restore was incomplete. Resolve the conflict, then <code>git stash drop</code> once you are satisfied. People who do not know this end up with a pile of duplicate stashes.</div>
 
 <h3>Managing several stashes</h3>
-<pre><code>git stash list</code></pre>
+<pre><code class="language-bash">git stash list</code></pre>
 <div class="out">stash@{0}: WIP on feature/login: 3f8a1c9 feat(auth): rotation
 stash@{1}: On main: experiment with the new feed query
 stash@{2}: WIP on fix/feed-500: 9e2d4b7 fix(feed): null author</div>
-<pre><code>git stash push -m <span class="tok-string">"half-finished pagination refactor"</span>   <span class="tok-comment"># name it — do this</span>
+<pre><code class="language-bash">git stash push -m <span class="tok-string">"half-finished pagination refactor"</span>   <span class="tok-comment"># name it — do this</span>
 git stash show -p stash@{1}     <span class="tok-comment"># what is actually inside it</span>
 git stash apply stash@{1}       <span class="tok-comment"># restore a specific one</span>
 git stash drop  stash@{1}       <span class="tok-comment"># delete one</span>
@@ -1016,18 +1016,18 @@ git stash clear                 <span class="tok-comment"># delete ALL — no co
 <p>The default message, "WIP on branch: hash subject", tells you nothing three days later. <code>git stash push -m "…"</code> costs five seconds and is the difference between a usable drawer and a junk pile.</p>
 
 <h3>Untracked and ignored files</h3>
-<pre><code>git stash              <span class="tok-comment"># tracked files only — new files STAY in your working dir</span>
+<pre><code class="language-bash">git stash              <span class="tok-comment"># tracked files only — new files STAY in your working dir</span>
 git stash -u           <span class="tok-comment"># also stash untracked files</span>
 git stash -a           <span class="tok-comment"># also ignored files (node_modules, .env) — rarely what you want</span></code></pre>
 <div class="callout warn">Plain <code>git stash</code> leaves untracked files behind. If your work in progress includes a brand-new file, stashing then switching branches carries that file with you into the other branch — where it does not belong, and where a careless <code>git add .</code> will commit it. When the work involves new files, use <code>-u</code>.</div>
 
 <h3>Stashing part of your work</h3>
-<pre><code>git stash push -p                        <span class="tok-comment"># choose hunk by hunk, like git add -p</span>
+<pre><code class="language-bash">git stash push -p                        <span class="tok-comment"># choose hunk by hunk, like git add -p</span>
 git stash push -m <span class="tok-string">"just the auth bits"</span> src/services/auth.service.ts</code></pre>
 <p>Naming paths stashes only those files. Useful when one experiment is in the way and the rest of your changes are fine to keep working with.</p>
 
 <h3>Turning a stash into a branch</h3>
-<pre><code>git stash branch feature/pagination stash@{1}</code></pre>
+<pre><code class="language-bash">git stash branch feature/pagination stash@{1}</code></pre>
 <div class="out">Switched to a new branch 'feature/pagination'
 Dropped stash@{1}</div>
 <p>Creates a branch <em>from the commit the stash was made on</em>, applies the stash there, and drops it. This is the correct escape when a <code>pop</code> conflicts badly because the base has moved on: instead of fighting the conflict, restore the work in its original context and merge from there.</p>
@@ -1042,7 +1042,7 @@ Dropped stash@{1}</div>
 
 <h3>Where stashes actually live</h3>
 ${slide('git-04', 16, 'Bên trong stash, và vì sao cần pop --index')}
-<pre><code>git log --oneline --graph stash@{0} -3</code></pre>
+<pre><code class="language-bash">git log --oneline --graph stash@{0} -3</code></pre>
 <div class="out">*-.   a7c2f91 WIP on feature/login: 3f8a1c9 feat(auth): rotation
 |\\ \\
 | | * 4d9e2f8 untracked files on feature/login
@@ -1092,14 +1092,14 @@ git stash pop --index      <span class="tok-comment"># real output; pop --index 
 <h2>Một cái ngăn kéo cho việc đang làm dở</h2>
 <p class="lead">Bạn đang làm dở một tính năng thì một lỗi production ập tới. Thư mục làm việc đang bừa bộn, và đổi nhánh khi có file đã sửa mà hai nhánh khác nhau thì bị từ chối. <code>git stash</code> lấy mọi thứ chưa commit, cất đi an toàn, và trả lại cho bạn một cây sạch.</p>
 
-<pre><code>git status --short</code></pre>
+<pre><code class="language-bash">git status --short</code></pre>
 <div class="out">M  src/services/auth.service.ts
  M src/routes/auth.routes.ts</div>
-<pre><code>git stash
+<pre><code class="language-bash">git stash
 git status --short</code></pre>
 <div class="out">Saved working directory and index state WIP on feature/login: 3f8a1c9 feat(auth): rotation</div>
 <p>Sạch sẽ. Đổi nhánh, sửa lỗi, quay lại, và lấy việc của bạn ra khỏi ngăn kéo:</p>
-<pre><code>git switch main
+<pre><code class="language-bash">git switch main
 <span class="tok-comment"># …sửa, commit, push, deploy…</span>
 git switch feature/login
 git stash pop --index</code></pre>
@@ -1120,11 +1120,11 @@ ${slide('git-04', 15, 'git stash — ngăn kéo cất việc dở')}
 <div class="callout warn">Nếu <code>pop</code> gặp xung đột, mục stash <strong>KHÔNG</strong> bị xoá — Git giữ lại chính vì việc khôi phục chưa trọn vẹn. Hãy giải xung đột, rồi <code>git stash drop</code> khi bạn hài lòng. Người không biết điều này rốt cuộc có một đống stash trùng lặp.</div>
 
 <h3>Quản lý nhiều stash</h3>
-<pre><code>git stash list</code></pre>
+<pre><code class="language-bash">git stash list</code></pre>
 <div class="out">stash@{0}: WIP on feature/login: 3f8a1c9 feat(auth): rotation
 stash@{1}: On main: experiment with the new feed query
 stash@{2}: WIP on fix/feed-500: 9e2d4b7 fix(feed): null author</div>
-<pre><code>git stash push -m <span class="tok-string">"refactor phan trang lam do dang"</span>   <span class="tok-comment"># đặt tên — hãy làm việc này</span>
+<pre><code class="language-bash">git stash push -m <span class="tok-string">"refactor phan trang lam do dang"</span>   <span class="tok-comment"># đặt tên — hãy làm việc này</span>
 git stash show -p stash@{1}     <span class="tok-comment"># thật ra bên trong nó có gì</span>
 git stash apply stash@{1}       <span class="tok-comment"># khôi phục một cái cụ thể</span>
 git stash drop  stash@{1}       <span class="tok-comment"># xoá một cái</span>
@@ -1132,18 +1132,18 @@ git stash clear                 <span class="tok-comment"># xoá TẤT CẢ — 
 <p>Lời nhắn mặc định, "WIP on nhánh: mã băm tiêu đề", chẳng nói gì với bạn sau ba ngày. <code>git stash push -m "…"</code> tốn năm giây và là khác biệt giữa một ngăn kéo dùng được và một đống đồ bỏ.</p>
 
 <h3>File chưa theo dõi và file bị ignore</h3>
-<pre><code>git stash              <span class="tok-comment"># chỉ file được theo dõi — file mới VẪN NẰM ở thư mục làm việc</span>
+<pre><code class="language-bash">git stash              <span class="tok-comment"># chỉ file được theo dõi — file mới VẪN NẰM ở thư mục làm việc</span>
 git stash -u           <span class="tok-comment"># cất luôn file chưa theo dõi</span>
 git stash -a           <span class="tok-comment"># cất cả file bị ignore (node_modules, .env) — hiếm khi là thứ bạn muốn</span></code></pre>
 <div class="callout warn"><code>git stash</code> trần bỏ lại các file chưa theo dõi. Nếu việc đang dở của bạn có một file hoàn toàn mới, stash rồi đổi nhánh sẽ mang file đó theo bạn sang nhánh kia — nơi nó không thuộc về, và nơi một lần <code>git add .</code> bất cẩn sẽ commit nó. Khi công việc có file mới, hãy dùng <code>-u</code>.</div>
 
 <h3>Cất một phần công việc</h3>
-<pre><code>git stash push -p                        <span class="tok-comment"># chọn từng đoạn, như git add -p</span>
+<pre><code class="language-bash">git stash push -p                        <span class="tok-comment"># chọn từng đoạn, như git add -p</span>
 git stash push -m <span class="tok-string">"chi phan auth"</span> src/services/auth.service.ts</code></pre>
 <p>Gọi tên đường dẫn thì chỉ cất những file đó. Hữu ích khi một thí nghiệm đang vướng chân còn phần thay đổi còn lại thì vẫn làm việc tiếp được.</p>
 
 <h3>Biến một stash thành một nhánh</h3>
-<pre><code>git stash branch feature/pagination stash@{1}</code></pre>
+<pre><code class="language-bash">git stash branch feature/pagination stash@{1}</code></pre>
 <div class="out">Switched to a new branch 'feature/pagination'
 Dropped stash@{1}</div>
 <p>Tạo một nhánh <em>từ chính commit mà stash được tạo ra trên đó</em>, áp stash vào đấy, rồi bỏ stash đi. Đây là lối thoát đúng khi một lần <code>pop</code> xung đột nặng vì phần gốc đã đi tiếp: thay vì vật lộn với xung đột, hãy khôi phục công việc trong đúng ngữ cảnh gốc của nó rồi hợp nhất từ đó.</p>
@@ -1158,7 +1158,7 @@ Dropped stash@{1}</div>
 
 <h3>Stash thật ra nằm ở đâu</h3>
 ${slide('git-04', 16, 'Bên trong stash, và vì sao cần pop --index')}
-<pre><code>git log --oneline --graph stash@{0} -3</code></pre>
+<pre><code class="language-bash">git log --oneline --graph stash@{0} -3</code></pre>
 <div class="out">*-.   a7c2f91 WIP on feature/login: 3f8a1c9 feat(auth): rotation
 |\\ \\
 | | * 4d9e2f8 untracked files on feature/login

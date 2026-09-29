@@ -74,7 +74,7 @@ export default {
 <li><strong>What <code>#include</code> literally does</strong> — the preprocessor pastes the entire text of the header into your file at that point, before the compiler ever sees it. Slide 48 of Slot 08-09 proved this with <code>cc -E</code>. There is no magic, only copy-and-paste.</li>
 <li><strong>Angle brackets vs quotes</strong> — <code>#include &lt;stdio.h&gt;</code> searches the system directories; <code>#include "mylib.h"</code> searches your project folder first. Use angle brackets for the standard libraries in this chapter, always.</li>
 </ul>
-<pre><code>#include &lt;stdlib.h&gt;     /* header: cho compiler biet abs() ton tai  */
+<pre><code class="language-c">#include &lt;stdlib.h&gt;     /* header: cho compiler biet abs() ton tai  */
 #include &lt;stdio.h&gt;
 
 int main(void) {
@@ -90,7 +90,7 @@ int main(void) {
 <li><strong><code>#include</code> thật ra làm gì</strong> — bộ tiền xử lý DÁN NGUYÊN VĂN toàn bộ nội dung header vào đúng chỗ đó trong file của bạn, trước khi trình biên dịch kịp nhìn thấy. Slide 48 của Slot 08-09 đã chứng minh bằng <code>cc -E</code>. Không có phép màu nào, chỉ là chép-dán.</li>
 <li><strong>Ngoặc nhọn hay ngoặc kép</strong> — <code>#include &lt;stdio.h&gt;</code> tìm trong thư mục hệ thống; <code>#include "mylib.h"</code> tìm trong thư mục dự án của bạn trước. Với các thư viện chuẩn của chương này thì luôn dùng ngoặc nhọn.</li>
 </ul>
-<pre><code>#include &lt;stdlib.h&gt;     /* header: cho compiler biet abs() ton tai  */
+<pre><code class="language-c">#include &lt;stdlib.h&gt;     /* header: cho compiler biet abs() ton tai  */
 #include &lt;stdio.h&gt;
 
 int main(void) {
@@ -162,7 +162,7 @@ int main(void) {
 <li><strong>The one input it cannot handle</strong> — <code>abs(INT_MIN)</code>, i.e. <code>abs(-2147483648)</code>, is undefined behaviour: the positive counterpart does not fit in an <code>int</code>. This is the classic interview question about <code>abs</code>, and it is real, not a trick.</li>
 <li><strong>Do not confuse it with <code>fabs</code></strong> — <code>abs</code> is integer and lives in <code>stdlib.h</code>; <code>fabs</code> is <code>double</code> and lives in <code>math.h</code> (slide 12). Calling <code>abs(-2.7)</code> converts to <code>int</code> first and hands back <strong>2</strong>, losing the fraction without a word of warning.</li>
 </ul>
-<pre><code>#include &lt;stdlib.h&gt;
+<pre><code class="language-c">#include &lt;stdlib.h&gt;
 #include &lt;stdio.h&gt;
 int main(void) {
     printf("%d %d %d\\n", abs(-12), abs(12), abs(0));
@@ -178,7 +178,7 @@ int main(void) {
 <li><strong>Một dữ liệu vào nó không xử lý nổi</strong> — <code>abs(INT_MIN)</code>, tức <code>abs(-2147483648)</code>, là hành vi không xác định: số dương tương ứng không lọt vào <code>int</code>. Đây là câu hỏi phỏng vấn kinh điển về <code>abs</code>, và nó có thật chứ không phải mẹo vặt.</li>
 <li><strong>Đừng lẫn với <code>fabs</code></strong> — <code>abs</code> là số nguyên, ở <code>stdlib.h</code>; <code>fabs</code> là <code>double</code>, ở <code>math.h</code> (slide 12). Gọi <code>abs(-2.7)</code> thì nó ép về <code>int</code> trước rồi trả về <strong>2</strong>, mất phần lẻ mà không hé một lời cảnh báo.</li>
 </ul>
-<pre><code>#include &lt;stdlib.h&gt;
+<pre><code class="language-c">#include &lt;stdlib.h&gt;
 #include &lt;stdio.h&gt;
 int main(void) {
     printf("%d %d %d\\n", abs(-12), abs(12), abs(0));
@@ -196,7 +196,7 @@ int main(void) {
 <li><strong><code>system("pause")</code> is Windows-only</strong> — it exists purely so the console window does not vanish before you can read it, which is a Dev-C++/Windows problem. On macOS or Linux you run from a terminal and the output stays; delete that line. It also costs a process launch and is considered poor practice outside a classroom.</li>
 <li><strong>The vertical bars in the format string</strong> — <code>|%d|</code> just prints literal pipe characters around the number so the output reads like mathematical notation. Nothing in <code>printf</code> treats <code>|</code> specially.</li>
 </ul>
-<pre><code>#include &lt;stdlib.h&gt;
+<pre><code class="language-c">#include &lt;stdlib.h&gt;
 #include &lt;stdio.h&gt;
 
 int main()
@@ -219,7 +219,7 @@ int main()
 <li><strong><code>system("pause")</code> chỉ chạy trên Windows</strong> — nó tồn tại thuần tuý để cửa sổ console không biến mất trước khi bạn kịp đọc, một vấn đề của Dev-C++/Windows. Trên macOS hay Linux bạn chạy từ terminal nên kết quả nằm nguyên đó; hãy xoá dòng ấy. Nó cũng tốn một lần khởi tạo tiến trình và bị coi là thói quen xấu ngoài lớp học.</li>
 <li><strong>Hai gạch đứng trong chuỗi định dạng</strong> — <code>|%d|</code> chỉ in ra ký tự gạch đứng nguyên văn quanh con số cho giống ký hiệu toán học. Không có gì trong <code>printf</code> coi <code>|</code> là đặc biệt.</li>
 </ul>
-<pre><code>#include &lt;stdlib.h&gt;
+<pre><code class="language-c">#include &lt;stdlib.h&gt;
 #include &lt;stdio.h&gt;
 
 int main()
@@ -244,7 +244,7 @@ int main()
 <li><strong>Example 1, read carefully</strong> — <code>for (i = 0; i &lt; 10; i++) printf("Random number %d is %d\\n", i+1, rand());</code>. The <code>i+1</code> is only so the human-facing count starts at 1 while the loop counter starts at 0. Each call to <code>rand()</code> advances the generator one step.</li>
 <li><strong>Where you will actually use it</strong> — test data, shuffling a quiz, simple games, Monte-Carlo estimates. Where you must <em>not</em>: anything security-related (passwords, tokens). <code>rand</code> is predictable by design.</li>
 </ul>
-<pre><code>#include &lt;stdlib.h&gt;
+<pre><code class="language-c">#include &lt;stdlib.h&gt;
 #include &lt;stdio.h&gt;
 
 int main()
@@ -266,7 +266,7 @@ int main()
 <li><strong>Đọc kỹ Example 1</strong> — <code>for (i = 0; i &lt; 10; i++) printf("Random number %d is %d\\n", i+1, rand());</code>. Cái <code>i+1</code> chỉ để số thứ tự cho người đọc bắt đầu từ 1 trong khi biến đếm bắt đầu từ 0. Mỗi lời gọi <code>rand()</code> đẩy bộ sinh tiến một bước.</li>
 <li><strong>Chỗ bạn thật sự sẽ dùng</strong> — sinh dữ liệu thử, xáo đề trắc nghiệm, trò chơi đơn giản, ước lượng Monte-Carlo. Chỗ <em>không được</em> dùng: bất cứ thứ gì liên quan an toàn (mật khẩu, mã thông báo). <code>rand</code> đoán trước được — đó là bản chất của nó.</li>
 </ul>
-<pre><code>#include &lt;stdlib.h&gt;
+<pre><code class="language-c">#include &lt;stdlib.h&gt;
 #include &lt;stdio.h&gt;
 
 int main()
@@ -290,7 +290,7 @@ int main()
 <li><strong>The slide's variables</strong> — <code>int i, n, a = 6, b = 100;</code>. Naming the bounds <code>a</code> and <code>b</code> instead of writing 6 and 100 inside the loop is good practice: change one line and the whole program changes range.</li>
 <li><strong>The small print nobody mentions in class</strong> — <code>%</code> makes the low values very slightly more likely, because <code>RAND_MAX + 1</code> is usually not an exact multiple of the range. For a dice game the bias is invisible; for a statistics assignment it is worth knowing it exists.</li>
 </ul>
-<pre><code>#include &lt;stdlib.h&gt;
+<pre><code class="language-c">#include &lt;stdlib.h&gt;
 #include &lt;stdio.h&gt;
 
 int main()
@@ -313,7 +313,7 @@ int main()
 <li><strong>Các biến trên slide</strong> — <code>int i, n, a = 6, b = 100;</code>. Đặt tên cận là <code>a</code> và <code>b</code> thay vì gõ thẳng 6 và 100 vào trong vòng lặp là thói quen tốt: sửa một dòng là đổi khoảng cho cả chương trình.</li>
 <li><strong>Dòng chữ nhỏ ít ai nói trên lớp</strong> — phép <code>%</code> làm các giá trị nhỏ có xác suất nhỉnh hơn một chút, vì <code>RAND_MAX + 1</code> thường không chia hết cho kích thước khoảng. Với trò chơi xúc xắc thì độ lệch đó vô hình; với bài tập thống kê thì nên biết là nó có tồn tại.</li>
 </ul>
-<pre><code>#include &lt;stdlib.h&gt;
+<pre><code class="language-c">#include &lt;stdlib.h&gt;
 #include &lt;stdio.h&gt;
 
 int main()
@@ -338,7 +338,7 @@ int main()
 <li><strong><code>%.2lf</code> in the output</strong> — the slide prints two decimals. The values are full <code>double</code>s underneath; <code>%.2lf</code> only changes what you see, never what is stored. (In <code>printf</code>, <code>%f</code> and <code>%lf</code> are equivalent for <code>double</code>; in <code>scanf</code> they are absolutely not — <code>%f</code> there means <code>float</code>.)</li>
 <li><strong>How to get a different granularity</strong> — for money you usually want two decimals exactly: generate an integer number of cents with the slide-8 formula, then divide by 100.0. Do not try to round a random <code>double</code> into place afterwards.</li>
 </ul>
-<pre><code>#include &lt;stdlib.h&gt;
+<pre><code class="language-c">#include &lt;stdlib.h&gt;
 #include &lt;stdio.h&gt;
 
 int main()
@@ -362,7 +362,7 @@ int main()
 <li><strong><code>%.2lf</code> ở phần in</strong> — slide in hai chữ số thập phân. Bên dưới các giá trị vẫn là <code>double</code> đầy đủ; <code>%.2lf</code> chỉ đổi thứ bạn NHÌN THẤY, không đổi thứ được LƯU. (Trong <code>printf</code>, <code>%f</code> và <code>%lf</code> là như nhau với <code>double</code>; trong <code>scanf</code> thì tuyệt đối không — ở đó <code>%f</code> nghĩa là <code>float</code>.)</li>
 <li><strong>Muốn độ mịn khác thì làm sao</strong> — với tiền bạc bạn thường muốn đúng hai chữ số thập phân: hãy sinh một số nguyên đơn vị xu bằng công thức slide 8 rồi chia cho 100.0. Đừng sinh một <code>double</code> ngẫu nhiên rồi làm tròn sau.</li>
 </ul>
-<pre><code>#include &lt;stdlib.h&gt;
+<pre><code class="language-c">#include &lt;stdlib.h&gt;
 #include &lt;stdio.h&gt;
 
 int main()
@@ -388,7 +388,7 @@ int main()
 <li><strong><code>unsigned</code></strong> — the slide defines it: "a type that only holds non-negative integer values". <code>time</code> returns a <code>time_t</code>, which gets converted to <code>unsigned</code> at the call. Some compilers warn about that conversion; it is harmless here.</li>
 <li><strong>Repeatability is sometimes what you want</strong> — while debugging, a fixed <code>srand(1)</code> makes a failing case reproducible. Ship with <code>time(NULL)</code>, debug with a constant; knowing you can choose is the real point of this slide.</li>
 </ul>
-<pre><code>srand(time(NULL));      /* DUNG:  mot lan, truoc moi loi goi rand() */
+<pre><code class="language-c">srand(time(NULL));      /* DUNG:  mot lan, truoc moi loi goi rand() */
 for (i = 0; i &lt; 10; i++) printf("%d ", rand() % 100);
 
 for (i = 0; i &lt; 10; i++) {
@@ -405,7 +405,7 @@ for (i = 0; i &lt; 10; i++) {
 <li><strong><code>unsigned</code></strong> — slide định nghĩa luôn: "kiểu chỉ chứa giá trị nguyên không âm". <code>time</code> trả về <code>time_t</code>, được chuyển sang <code>unsigned</code> ngay tại lời gọi. Một số trình biên dịch cảnh báo phép chuyển này; ở đây nó vô hại.</li>
 <li><strong>Có lúc bạn LẠI MUỐN lặp lại được</strong> — khi gỡ lỗi, một <code>srand(1)</code> cố định làm ca lỗi tái hiện được. Khi phát hành thì dùng <code>time(NULL)</code>, khi gỡ lỗi thì dùng hằng số; biết mình được quyền chọn mới là ý chính của slide này.</li>
 </ul>
-<pre><code>srand(time(NULL));      /* DUNG:  mot lan, truoc moi loi goi rand() */
+<pre><code class="language-c">srand(time(NULL));      /* DUNG:  mot lan, truoc moi loi goi rand() */
 for (i = 0; i &lt; 10; i++) printf("%d ", rand() % 100);
 
 for (i = 0; i &lt; 10; i++) {
@@ -424,7 +424,7 @@ for (i = 0; i &lt; 10; i++) {
 <li><strong>What "different set with every run" really means</strong> — different between runs that start in different seconds. Two runs launched within the same second still match, because <code>time(NULL)</code> has one-second resolution (measured on slide 18: <code>difftime</code> only ever reports whole seconds).</li>
 <li><strong>Turning this into something useful</strong> — combine with slide 8 and you have a dice: <code>1 + rand() % 6</code>. Combine with a swap and you have a shuffle. Almost every "random" feature in a beginner program is these five lines plus arithmetic.</li>
 </ul>
-<pre><code>#include &lt;stdlib.h&gt;
+<pre><code class="language-c">#include &lt;stdlib.h&gt;
 #include &lt;stdio.h&gt;
 #include &lt;time.h&gt;      /* prototype for time(NULL) */
 
@@ -449,7 +449,7 @@ int main()
 <li><strong>"Mỗi lần chạy một bộ khác" thật ra nghĩa là gì</strong> — khác giữa những lần chạy rơi vào các GIÂY khác nhau. Hai lần chạy trong cùng một giây vẫn ra giống nhau, vì <code>time(NULL)</code> chỉ mịn tới giây (đã đo ở slide 18: <code>difftime</code> luôn báo số giây nguyên).</li>
 <li><strong>Biến nó thành thứ có ích</strong> — ghép với slide 8 là có con xúc xắc: <code>1 + rand() % 6</code>. Ghép với một phép hoán vị là có phép xáo bài. Gần như mọi tính năng "ngẫu nhiên" trong chương trình của người mới học đều là năm dòng này cộng vài phép toán.</li>
 </ul>
-<pre><code>#include &lt;stdlib.h&gt;
+<pre><code class="language-c">#include &lt;stdlib.h&gt;
 #include &lt;stdio.h&gt;
 #include &lt;time.h&gt;      /* prototype for time(NULL) */
 
@@ -476,7 +476,7 @@ int main()
 <li><strong>The linking footnote that costs people an hour</strong> — on Linux and many Unix systems <code>math.h</code>'s binary is a separate library, so you must compile with <code>cc bai.c -lm</code>. Forget it and you get "undefined reference to sqrt" even though the <code>#include</code> is right there — a <em>link</em> error, not a compile error (slide 2).</li>
 <li><strong>The row of "…" on the slide</strong> — the lecturer is signalling that the table is a sample, not a complete list. <code>math.h</code> also has <code>sin</code>, <code>cos</code>, <code>tan</code>, <code>atan2</code>, <code>fmod</code>, <code>hypot</code> and dozens more; you look them up when you need them.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;math.h&gt;
 int main(void) {
     printf("%g %g\\n", fabs(-12.5), (double) fabsf(-12.5f));
@@ -493,7 +493,7 @@ int main(void) {
 <li><strong>Ghi chú về liên kết làm người ta mất cả tiếng</strong> — trên Linux và nhiều hệ Unix, phần nhị phân của <code>math.h</code> là một thư viện riêng, nên phải biên dịch bằng <code>cc bai.c -lm</code>. Quên là nhận "undefined reference to sqrt" dù dòng <code>#include</code> nằm sờ sờ ở đó — lỗi <em>liên kết</em>, không phải lỗi biên dịch (slide 2).</li>
 <li><strong>Hàng "…" trên slide</strong> — giảng viên đang ra hiệu rằng bảng này là mẫu chứ không phải danh sách đầy đủ. <code>math.h</code> còn có <code>sin</code>, <code>cos</code>, <code>tan</code>, <code>atan2</code>, <code>fmod</code>, <code>hypot</code> và hàng chục hàm nữa; cần thì tra.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;math.h&gt;
 int main(void) {
     printf("%g %g\\n", fabs(-12.5), (double) fabsf(-12.5f));
@@ -552,7 +552,7 @@ int main(void) {
 <li><strong><code>log</code> is base <em>e</em>, not base 10</strong> — the slide states it: "return the natural logarithm", with <code>log(2.718281828459045) → 1.0</code>. Base 10 is <code>log10</code>; base 2 you build yourself as <code>log(x)/log(2)</code>, which is exactly what the demo on slide 15 does.</li>
 <li><strong><code>exp</code> undoes <code>log</code></strong> — "the natural anti-logarithm", <code>exp(1.0) → 2.718281828459045</code>. The pair is used for compound growth, half-lives, and for computing <code>a</code> to the power <code>b</code> as <code>exp(b * log(a))</code> when you want to understand what <code>pow</code> is doing internally.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;math.h&gt;
 int main(void) {
     printf("pow(12.5,3) = %g\\n", pow(12.5, 3.0));
@@ -571,7 +571,7 @@ int main(void) {
 <li><strong><code>log</code> là cơ số <em>e</em>, không phải cơ số 10</strong> — slide ghi rõ: "trả về logarit tự nhiên", với <code>log(2.718281828459045) → 1.0</code>. Cơ số 10 là <code>log10</code>; cơ số 2 thì bạn tự dựng bằng <code>log(x)/log(2)</code>, và đó đúng là việc demo ở slide 15 làm.</li>
 <li><strong><code>exp</code> là phép ngược của <code>log</code></strong> — "đối logarit tự nhiên", <code>exp(1.0) → 2.718281828459045</code>. Cặp này dùng cho tăng trưởng kép, chu kỳ bán rã, và để tính <code>a</code> mũ <code>b</code> bằng <code>exp(b * log(a))</code> khi bạn muốn hiểu <code>pow</code> làm gì bên trong.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;math.h&gt;
 int main(void) {
     printf("pow(12.5,3) = %g\\n", pow(12.5, 3.0));
@@ -638,7 +638,7 @@ int main(void) {
 <li><strong><code>CLOCKS_PER_SEC</code></strong> — the conversion factor from ticks to seconds. The slide says Dev-C++ defines it as 1000, so one tick = 1 millisecond. <em>Other platforms use other values</em>, which is why you must always divide by the constant instead of by a hard-coded number.</li>
 <li><strong>Why two clocks at all</strong> — <code>time_t</code> answers "what time is it in the world", which is what you want for timestamps and for seeding <code>srand</code>. <code>clock_t</code> answers "how much work has my program done", which is what you want when measuring an algorithm and do not care that the user went for coffee in the middle.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;time.h&gt;
 int main(void) {
     printf("CLOCKS_PER_SEC = %ld\\n", (long) CLOCKS_PER_SEC);
@@ -656,7 +656,7 @@ int main(void) {
 <li><strong><code>CLOCKS_PER_SEC</code></strong> — hệ số đổi từ nhịp sang giây. Slide nói Dev-C++ định nghĩa nó bằng 1000, tức một nhịp = 1 mili giây. <em>Nền tảng khác dùng giá trị khác</em>, và đó là lý do luôn phải chia cho HẰNG SỐ chứ không chia cho một con số gõ cứng.</li>
 <li><strong>Vì sao lại cần tới hai cái đồng hồ</strong> — <code>time_t</code> trả lời "bây giờ là mấy giờ ngoài đời", thứ bạn cần cho dấu thời gian và cho việc gieo hạt <code>srand</code>. <code>clock_t</code> trả lời "chương trình của tôi đã làm bao nhiêu việc", thứ bạn cần khi đo một thuật toán và không quan tâm giữa chừng người dùng có đi pha cà phê hay không.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;time.h&gt;
 int main(void) {
     printf("CLOCKS_PER_SEC = %ld\\n", (long) CLOCKS_PER_SEC);
@@ -677,7 +677,7 @@ int main(void) {
 <li><strong><code>clock_t clock(void);</code></strong> — "returns the current date time information using the unit clock tick". More precisely it returns the CPU time used <em>by your process so far</em>. You call it twice and subtract; divide by <code>CLOCKS_PER_SEC</code> to get seconds.</li>
 <li><strong>Which to use for measuring</strong> — <code>clock</code>, almost always. <code>difftime</code> is limited to whole seconds, so anything faster than a second measures as 0. That limitation is visible in the very next slide's output.</li>
 </ul>
-<pre><code>time_t t1 = time(NULL);          /* moc dau  */
+<pre><code class="language-c">time_t t1 = time(NULL);          /* moc dau  */
 /* … doan ma can do … */
 time_t t2 = time(NULL);          /* moc cuoi */
 printf("%.0f giay\\n", difftime(t2, t1));
@@ -697,7 +697,7 @@ printf("%.6f giay CPU\\n", (double)(c2 - c1) / CLOCKS_PER_SEC);</code></pre>
 <li><strong><code>clock_t clock(void);</code></strong> — "trả về thông tin thời gian hiện tại theo đơn vị nhịp đồng hồ". Chính xác hơn: nó trả về lượng thời gian CPU mà <em>tiến trình của bạn đã dùng tới lúc đó</em>. Bạn gọi hai lần rồi trừ; chia cho <code>CLOCKS_PER_SEC</code> để ra giây.</li>
 <li><strong>Đo thì dùng cái nào</strong> — dùng <code>clock</code>, gần như luôn luôn. <code>difftime</code> chỉ tới mức giây nguyên, nên bất cứ thứ gì nhanh hơn một giây đều đo ra 0. Hạn chế đó lộ ngay trong kết quả của slide kế tiếp.</li>
 </ul>
-<pre><code>time_t t1 = time(NULL);          /* moc dau  */
+<pre><code class="language-c">time_t t1 = time(NULL);          /* moc dau  */
 /* … doan ma can do … */
 time_t t2 = time(NULL);          /* moc cuoi */
 printf("%.0f giay\\n", difftime(t2, t1));
@@ -811,7 +811,7 @@ printf("%.6f giay CPU\\n", (double)(c2 - c1) / CLOCKS_PER_SEC);</code></pre>
 <tr><td><code>'!'</code></td><td>0</td><td>dấu câu</td></tr>
 <tr><td><code>'_'</code></td><td>0</td><td>dấu gạch dưới KHÔNG tính</td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;ctype.h&gt;
 
 int main() {
@@ -839,7 +839,7 @@ int main() {
 <tr><td><code>'!'</code></td><td>0</td><td>dấu câu</td></tr>
 <tr><td><code>'_'</code></td><td>0</td><td>dấu gạch dưới KHÔNG tính</td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;ctype.h&gt;
 
 int main() {
@@ -868,7 +868,7 @@ int main() {
 <tr><td><code>' '</code></td><td>0</td><td>0</td><td>—</td></tr>
 <tr><td><code>'?'</code></td><td>0</td><td>0</td><td>—</td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;ctype.h&gt;        /* slide ghi &lt;stdlib.h&gt; — xem Dap an */
 
 int main() {
@@ -895,7 +895,7 @@ int main() {
 <tr><td><code>' '</code></td><td>0</td><td>0</td><td>—</td></tr>
 <tr><td><code>'?'</code></td><td>0</td><td>0</td><td>—</td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;ctype.h&gt;        /* slide ghi &lt;stdlib.h&gt; — xem Dap an */
 
 int main() {
@@ -925,7 +925,7 @@ int main() {
 <tr><td><code>'7'</code></td><td>0</td><td>0</td><td>—</td></tr>
 <tr><td><code>'!'</code></td><td>0</td><td>0</td><td>—</td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;ctype.h&gt;        /* slide ghi &lt;stdlib.h&gt; */
 
 int main() {
@@ -954,7 +954,7 @@ int main() {
 <tr><td><code>'7'</code></td><td>0</td><td>0</td><td>—</td></tr>
 <tr><td><code>'!'</code></td><td>0</td><td>0</td><td>—</td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;ctype.h&gt;        /* slide ghi &lt;stdlib.h&gt; */
 
 int main() {
@@ -985,7 +985,7 @@ int main() {
 <tr><td><code>' '</code></td><td>0</td><td>32</td><td>(vô nghĩa)</td></tr>
 <tr><td><code>'!'</code></td><td>0</td><td>33</td><td>(vô nghĩa)</td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;ctype.h&gt;        /* slide ghi &lt;stdlib.h&gt; */
 
 int main() {
@@ -1013,7 +1013,7 @@ int main() {
 <tr><td><code>' '</code></td><td>0</td><td>32</td><td>(vô nghĩa)</td></tr>
 <tr><td><code>'!'</code></td><td>0</td><td>33</td><td>(vô nghĩa)</td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;ctype.h&gt;        /* slide ghi &lt;stdlib.h&gt; */
 
 int main() {
@@ -1043,7 +1043,7 @@ int main() {
 <tr><td><code>' '</code></td><td>0</td><td>0</td><td>0</td></tr>
 <tr><td><code>'!'</code></td><td>0</td><td>0</td><td>0</td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;ctype.h&gt;        /* slide ghi &lt;stdlib.h&gt; */
 
 int main() {
@@ -1071,7 +1071,7 @@ int main() {
 <tr><td><code>' '</code></td><td>0</td><td>0</td><td>0</td></tr>
 <tr><td><code>'!'</code></td><td>0</td><td>0</td><td>0</td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;ctype.h&gt;        /* slide ghi &lt;stdlib.h&gt; */
 
 int main() {
@@ -1101,7 +1101,7 @@ int main() {
 <tr><td><code>' '</code></td><td>0</td><td>32</td><td>ký tự trắng</td></tr>
 <tr><td><code>'?'</code></td><td>0</td><td>63</td><td>dấu câu</td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;ctype.h&gt;        /* slide ghi &lt;stdlib.h&gt; */
 
 int main() {
@@ -1129,7 +1129,7 @@ int main() {
 <tr><td><code>' '</code></td><td>0</td><td>32</td><td>ký tự trắng</td></tr>
 <tr><td><code>'?'</code></td><td>0</td><td>63</td><td>dấu câu</td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;ctype.h&gt;        /* slide ghi &lt;stdlib.h&gt; */
 
 int main() {
@@ -1160,7 +1160,7 @@ int main() {
 <tr><td><code>'\\v'</code></td><td>1</td><td>0</td><td>tab dọc</td></tr>
 <tr><td><code>'a'</code> / <code>'7'</code> / <code>'!'</code></td><td>0</td><td>0</td><td>không phải khoảng trắng</td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;ctype.h&gt;
 
 int main() {
@@ -1189,7 +1189,7 @@ int main() {
 <tr><td><code>'\\v'</code></td><td>1</td><td>0</td><td>tab dọc</td></tr>
 <tr><td><code>'a'</code> / <code>'7'</code> / <code>'!'</code></td><td>0</td><td>0</td><td>không phải khoảng trắng</td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;ctype.h&gt;
 
 int main() {
@@ -1219,7 +1219,7 @@ int main() {
 <tr><td><code>' '</code> (32)</td><td>32</td><td><code>' '</code></td><td>giữ nguyên</td></tr>
 <tr><td><code>'!'</code> (33)</td><td>33</td><td><code>'!'</code></td><td>giữ nguyên</td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;ctype.h&gt;
 
 int main() {
@@ -1247,7 +1247,7 @@ int main() {
 <tr><td><code>' '</code> (32)</td><td>32</td><td><code>' '</code></td><td>giữ nguyên</td></tr>
 <tr><td><code>'!'</code> (33)</td><td>33</td><td><code>'!'</code></td><td>giữ nguyên</td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;ctype.h&gt;
 
 int main() {
@@ -1277,7 +1277,7 @@ int main() {
 <tr><td><code>' '</code> (32)</td><td>32</td><td><code>' '</code></td><td>giữ nguyên</td></tr>
 <tr><td><code>'!'</code> (33)</td><td>33</td><td><code>'!'</code></td><td>giữ nguyên</td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;ctype.h&gt;
 
 int main() {
@@ -1305,7 +1305,7 @@ int main() {
 <tr><td><code>' '</code> (32)</td><td>32</td><td><code>' '</code></td><td>giữ nguyên</td></tr>
 <tr><td><code>'!'</code> (33)</td><td>33</td><td><code>'!'</code></td><td>giữ nguyên</td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;ctype.h&gt;
 
 int main() {
@@ -1326,7 +1326,7 @@ int main() {
 <li><strong>Read with <code>getchar()</code>, store in an <code>int</code></strong> — <code>int c = getchar();</code>. Using <code>int</code> rather than <code>char</code> lets you detect <code>EOF</code> (−1) and is exactly what the <code>ctype.h</code> prototypes want. This is the same reasoning as slide 19's "they all take <code>int</code>".</li>
 <li><strong>Order the tests from specific to general</strong> — <code>isdigit</code> first, then <code>isupper</code>, then <code>islower</code>, then the catch-all. Because the three are mutually exclusive the order does not change the result here, but the habit matters the moment the categories overlap (e.g. if you added <code>isalnum</code>).</li>
 </ul>
-<pre><code>/* Exercise 1: Character Classification */
+<pre><code class="language-c">/* Exercise 1: Character Classification */
 #include &lt;stdio.h&gt;
 #include &lt;ctype.h&gt;
 
@@ -1375,7 +1375,7 @@ int main(void)
 <li><strong>Đọc bằng <code>getchar()</code>, cất vào <code>int</code></strong> — <code>int c = getchar();</code>. Dùng <code>int</code> thay vì <code>char</code> cho phép bạn phát hiện <code>EOF</code> (−1) và đúng là thứ mà các nguyên mẫu của <code>ctype.h</code> mong muốn. Cùng lý lẽ với câu "cả chín hàm đều nhận <code>int</code>" ở slide 19.</li>
 <li><strong>Xếp các phép kiểm từ hẹp tới rộng</strong> — <code>isdigit</code> trước, rồi <code>isupper</code>, rồi <code>islower</code>, rồi nhánh vét. Vì ba nhóm loại trừ lẫn nhau nên ở đây thứ tự không đổi kết quả, nhưng thói quen ấy trở nên quan trọng ngay khi các nhóm chồng lấn (ví dụ nếu bạn thêm <code>isalnum</code> vào).</li>
 </ul>
-<pre><code>/* Exercise 1: Character Classification */
+<pre><code class="language-c">/* Exercise 1: Character Classification */
 #include &lt;stdio.h&gt;
 #include &lt;ctype.h&gt;
 

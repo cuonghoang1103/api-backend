@@ -57,10 +57,10 @@ ${gallery('git-05', [
 <h2>"origin" is just a nickname for a URL</h2>
 <p class="lead">Git has no concept of a server. A <strong>remote</strong> is a saved shortcut: a short name mapped to somewhere another copy of this repository lives. There is nothing special about the name <code>origin</code> — it is simply what <code>git clone</code> calls the place it cloned from.</p>
 
-<pre><code>git remote -v</code></pre>
+<pre><code class="language-bash">git remote -v</code></pre>
 <div class="out">origin  git@github.com:cuonghoang1103/api-backend.git (fetch)
 origin  git@github.com:cuonghoang1103/api-backend.git (push)</div>
-<pre><code>git remote add upstream git@github.com:original/project.git   <span class="tok-comment"># add another</span>
+<pre><code class="language-bash">git remote add upstream git@github.com:original/project.git   <span class="tok-comment"># add another</span>
 git remote rename origin github                                <span class="tok-comment"># rename</span>
 git remote remove upstream                                     <span class="tok-comment"># remove</span>
 git remote show origin                                         <span class="tok-comment"># full detail: branches, tracking, stale refs</span></code></pre>
@@ -78,13 +78,13 @@ ${slide('git-05', 4, 'origin/main không phải bản trực tiếp')}
 
 <h3>fetch — download, change nothing</h3>
 ${slide('git-05', 5, 'git fetch chỉ dời origin/main')}
-<pre><code>git fetch origin</code></pre>
+<pre><code class="language-bash">git fetch origin</code></pre>
 <div class="out">remote: Enumerating objects: 24, done.
 From github.com:cuonghoang1103/api-backend
    7b3e9d1..5f7a9c2  main       -&gt; origin/main
  * [new branch]      feature/feed -&gt; origin/feature/feed</div>
 <p>New commits are downloaded and the remote-tracking branches move. Your local branches, your working directory and your index are <strong>untouched</strong>. Nothing can break, nothing can conflict, and nothing you were doing is interrupted.</p>
-<pre><code><span class="tok-comment"># The safe review ritual, after fetching:</span>
+<pre><code class="language-bash"><span class="tok-comment"># The safe review ritual, after fetching:</span>
 git log --oneline main..origin/main     <span class="tok-comment"># what did they add?</span>
 git diff main origin/main --stat        <span class="tok-comment"># how big is it?</span>
 git log --oneline origin/main..main     <span class="tok-comment"># what do I have that they do not?</span></code></pre>
@@ -98,7 +98,7 @@ ${slide('git-05', 7, 'git 2.51: pull trần từ chối khi hai bên lệch nhau
   <div class="lz-step"><div class="lz-k">2</div><div class="lz-t">git merge origin/main</div><div class="lz-d">Integrate into your branch. Can conflict, can create a merge commit, changes your working directory.</div></div>
 </div>
 <p>That is all <code>git pull</code> is: two commands with one name. The second half is the one that can surprise you — which is why the two-step version is worth using whenever you are unsure what is waiting on the server.</p>
-<pre><code>git pull                     <span class="tok-comment"># fetch + merge (default)</span>
+<pre><code class="language-bash">git pull                     <span class="tok-comment"># fetch + merge (default)</span>
 git pull --rebase            <span class="tok-comment"># fetch + rebase (3.4)</span>
 git pull --ff-only           <span class="tok-comment"># fetch + merge, but REFUSE if it is not a fast-forward</span></code></pre>
 <div class="callout warn"><code>--ff-only</code> is the setting worth adopting. If your branch and the server have both moved, it stops and tells you, instead of silently creating a merge commit you did not ask for. You then choose <code>--rebase</code> or a real merge — deliberately. <code>git config --global pull.ff only</code> makes it the default.</div>
@@ -111,7 +111,7 @@ fatal: Need to specify how to reconcile divergent branches.</div>
 Nothing was changed; Git is asking you to decide once. <code>pull.ff only</code> is the choice this lesson recommends, and then you pick <code>--rebase</code> or <code>--no-rebase</code> by hand on the rare day the two sides really diverge. Older tutorials (and older Git) show a silent merge commit here instead.</div>
 
 <h3>Reading the divergence</h3>
-<pre><code>git status</code></pre>
+<pre><code class="language-bash">git status</code></pre>
 <div class="out">On branch main
 Your branch and 'origin/main' have diverged,
 and have 2 and 3 different commits each, respectively.</div>
@@ -121,26 +121,26 @@ and have 2 and 3 different commits each, respectively.</div>
   <div class="kv"><span class="k">"diverged, 2 and 3"</span><span class="v">Both. You must integrate before you can push — merge or rebase, your choice.</span></div>
   <div class="kv"><span class="k">"up to date"</span><span class="v">Only as of your last fetch. Run <code>git fetch</code> before believing it.</span></div>
 </div>
-<pre><code>git branch -vv               <span class="tok-comment"># every local branch, its upstream, and ahead/behind</span></code></pre>
+<pre><code class="language-bash">git branch -vv               <span class="tok-comment"># every local branch, its upstream, and ahead/behind</span></code></pre>
 <div class="out">* main          5f7a9c2 [origin/main: ahead 2, behind 3] fix(auth): reject expired
   feature/login 3f8a1c9 [origin/feature/login] feat(auth): rotation
   experiment    9e2d4b7 no upstream — never pushed</div>
 
 <h3>Cleaning up branches that were deleted on the server</h3>
-<pre><code>git fetch --prune            <span class="tok-comment"># delete origin/* refs whose branch is gone from the server</span>
+<pre><code class="language-bash">git fetch --prune            <span class="tok-comment"># delete origin/* refs whose branch is gone from the server</span>
 git config --global fetch.prune true    <span class="tok-comment"># do it on every fetch</span></code></pre>
 <p>Without pruning, <code>git branch -a</code> keeps listing <code>origin/feature/old-thing</code> for branches that were merged and deleted months ago. Turn it on once and forget about it.</p>
 
 <h3>The clone, seen through this lens</h3>
-<pre><code>git clone git@github.com:cuonghoang1103/api-backend.git</code></pre>
+<pre><code class="language-bash">git clone git@github.com:cuonghoang1103/api-backend.git</code></pre>
 <p>A clone is four operations: create a directory with a <code>.git</code>, add a remote called <code>origin</code>, fetch everything, and check out the default branch with a local branch tracking <code>origin/main</code>. Every one of those is a command you already know.</p>
-<pre><code>git clone --depth 1 &lt;url&gt;        <span class="tok-comment"># shallow: latest commit only, no history (fast CI)</span>
+<pre><code class="language-bash">git clone --depth 1 &lt;url&gt;        <span class="tok-comment"># shallow: latest commit only, no history (fast CI)</span>
 git clone --branch v1.4.0 &lt;url&gt;  <span class="tok-comment"># start on a specific branch or tag</span>
 git clone --bare &lt;url&gt;           <span class="tok-comment"># no working directory — this is what a server holds</span></code></pre>
 
 <h3>🧪 Practice (15–20 min)</h3>
 <div class="callout ok"><ol><li>Give <code>thu-git</code> a fake server if it does not have one yet (Lesson 4.1 did this): <code>git init --bare ../thu-git-server.git</code>, <code>git remote add origin ../thu-git-server.git</code>, <code>git push -u origin main</code>.</li><li>Play your teammate: <code>git clone ../thu-git-server.git ../ban-cung-nhom</code>, then inside it set <code>git config user.name "An"</code>, add a file <code>footer.js</code>, commit, and <code>git push</code>.</li><li>Back in <code>thu-git</code>, <strong>before fetching</strong>, run <code>git status -sb</code> and <code>git log --oneline -1 origin/main</code>. Write down what they claim — neither knows An pushed.</li><li><code>git fetch</code>, then <code>git log --oneline main..origin/main</code> (what did An add?) and <code>git status -sb</code> again.</li><li>Integrate with <code>git pull --ff-only</code>. It succeeds because you made no commit of your own in the meantime — a fast-forward.</li></ol>
-<pre><code>git fetch</code></pre>
+<pre><code class="language-bash">git fetch</code></pre>
 <div class="out">From ../server
    5c1df3b..ca54b35  main       -&gt; origin/main</div>
 <p>(Real output from our test repository, whose server is <code>../server.git</code>; your hashes and names will differ.)</p>
@@ -177,10 +177,10 @@ git clone --bare &lt;url&gt;           <span class="tok-comment"># no working di
 <h2>"origin" chỉ là biệt danh của một URL</h2>
 <p class="lead">Git không có khái niệm máy chủ. Một <strong>remote</strong> là một lối tắt được lưu lại: một cái tên ngắn ánh xạ tới nơi có một bản sao khác của kho mã này. Cái tên <code>origin</code> chẳng có gì đặc biệt — nó chỉ là cách <code>git clone</code> gọi cái nơi mà nó đã clone về.</p>
 
-<pre><code>git remote -v</code></pre>
+<pre><code class="language-bash">git remote -v</code></pre>
 <div class="out">origin  git@github.com:cuonghoang1103/api-backend.git (fetch)
 origin  git@github.com:cuonghoang1103/api-backend.git (push)</div>
-<pre><code>git remote add upstream git@github.com:original/project.git   <span class="tok-comment"># thêm một cái nữa</span>
+<pre><code class="language-bash">git remote add upstream git@github.com:original/project.git   <span class="tok-comment"># thêm một cái nữa</span>
 git remote rename origin github                                <span class="tok-comment"># đổi tên</span>
 git remote remove upstream                                     <span class="tok-comment"># gỡ bỏ</span>
 git remote show origin                                         <span class="tok-comment"># chi tiết đầy đủ: nhánh, theo dõi, ref cũ</span></code></pre>
@@ -198,13 +198,13 @@ ${slide('git-05', 4, 'origin/main không phải bản trực tiếp')}
 
 <h3>fetch — tải về, không đổi gì cả</h3>
 ${slide('git-05', 5, 'git fetch chỉ dời origin/main')}
-<pre><code>git fetch origin</code></pre>
+<pre><code class="language-bash">git fetch origin</code></pre>
 <div class="out">remote: Enumerating objects: 24, done.
 From github.com:cuonghoang1103/api-backend
    7b3e9d1..5f7a9c2  main       -&gt; origin/main
  * [new branch]      feature/feed -&gt; origin/feature/feed</div>
 <p>Các commit mới được tải về và các nhánh theo dõi remote dịch chuyển. Nhánh cục bộ, thư mục làm việc và index của bạn <strong>không bị đụng tới</strong>. Không gì hỏng được, không gì xung đột được, và không có việc gì bạn đang làm bị cắt ngang.</p>
-<pre><code><span class="tok-comment"># Nghi thức soi xét an toàn, sau khi fetch:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Nghi thức soi xét an toàn, sau khi fetch:</span>
 git log --oneline main..origin/main     <span class="tok-comment"># họ đã thêm gì?</span>
 git diff main origin/main --stat        <span class="tok-comment"># nó to cỡ nào?</span>
 git log --oneline origin/main..main     <span class="tok-comment"># tôi có gì mà họ chưa có?</span></code></pre>
@@ -218,7 +218,7 @@ ${slide('git-05', 7, 'git 2.51: pull trần từ chối khi hai bên lệch nhau
   <div class="lz-step"><div class="lz-k">2</div><div class="lz-t">git merge origin/main</div><div class="lz-d">Tích hợp vào nhánh của bạn. Có thể xung đột, có thể tạo commit hợp nhất, đổi thư mục làm việc của bạn.</div></div>
 </div>
 <p><code>git pull</code> chỉ có vậy: hai lệnh mang một cái tên. Nửa sau mới là phần có thể làm bạn bất ngờ — và vì thế bản hai bước đáng dùng mỗi khi bạn chưa chắc thứ gì đang chờ trên máy chủ.</p>
-<pre><code>git pull                     <span class="tok-comment"># fetch + merge (mặc định)</span>
+<pre><code class="language-bash">git pull                     <span class="tok-comment"># fetch + merge (mặc định)</span>
 git pull --rebase            <span class="tok-comment"># fetch + rebase (bài 3.4)</span>
 git pull --ff-only           <span class="tok-comment"># fetch + merge, nhưng TỪ CHỐI nếu không phải fast-forward</span></code></pre>
 <div class="callout warn"><code>--ff-only</code> là thiết lập đáng nhận. Nếu nhánh của bạn và máy chủ cùng tiến lên, nó dừng lại và báo cho bạn, thay vì âm thầm tạo một commit hợp nhất bạn không hề yêu cầu. Bạn khi đó tự chọn <code>--rebase</code> hay một lần merge thật — một cách có chủ ý. <code>git config --global pull.ff only</code> đặt nó làm mặc định.</div>
@@ -231,7 +231,7 @@ fatal: Need to specify how to reconcile divergent branches.</div>
 Không có gì bị thay đổi; Git chỉ đang bắt bạn chọn một lần. <code>pull.ff only</code> là lựa chọn bài này khuyên, rồi vào những hôm hai bên thật sự lệch nhau thì bạn tự gõ <code>--rebase</code> hoặc <code>--no-rebase</code>. Hướng dẫn cũ (và Git cũ) sẽ cho bạn thấy một commit hợp nhất âm thầm ở chỗ này.</div>
 
 <h3>Đọc trạng thái phân ly</h3>
-<pre><code>git status</code></pre>
+<pre><code class="language-bash">git status</code></pre>
 <div class="out">On branch main
 Your branch and 'origin/main' have diverged,
 and have 2 and 3 different commits each, respectively.</div>
@@ -241,26 +241,26 @@ and have 2 and 3 different commits each, respectively.</div>
   <div class="kv"><span class="k">"diverged, 2 and 3"</span><span class="v">Cả hai. Bạn phải tích hợp trước khi push được — merge hay rebase, tuỳ bạn.</span></div>
   <div class="kv"><span class="k">"up to date"</span><span class="v">Chỉ tính tới lần fetch gần nhất của bạn. Hãy chạy <code>git fetch</code> trước khi tin nó.</span></div>
 </div>
-<pre><code>git branch -vv               <span class="tok-comment"># mọi nhánh cục bộ, upstream của nó, và ahead/behind</span></code></pre>
+<pre><code class="language-bash">git branch -vv               <span class="tok-comment"># mọi nhánh cục bộ, upstream của nó, và ahead/behind</span></code></pre>
 <div class="out">* main          5f7a9c2 [origin/main: ahead 2, behind 3] fix(auth): reject expired
   feature/login 3f8a1c9 [origin/feature/login] feat(auth): rotation
   experiment    9e2d4b7 no upstream — never pushed</div>
 
 <h3>Dọn những nhánh đã bị xoá trên máy chủ</h3>
-<pre><code>git fetch --prune            <span class="tok-comment"># xoá các ref origin/* mà nhánh đã biến mất khỏi máy chủ</span>
+<pre><code class="language-bash">git fetch --prune            <span class="tok-comment"># xoá các ref origin/* mà nhánh đã biến mất khỏi máy chủ</span>
 git config --global fetch.prune true    <span class="tok-comment"># làm việc đó ở mọi lần fetch</span></code></pre>
 <p>Không prune thì <code>git branch -a</code> cứ liệt kê mãi <code>origin/feature/old-thing</code> cho những nhánh đã merge và xoá từ nhiều tháng trước. Bật một lần rồi quên nó đi.</p>
 
 <h3>Lệnh clone, nhìn qua lăng kính này</h3>
-<pre><code>git clone git@github.com:cuonghoang1103/api-backend.git</code></pre>
+<pre><code class="language-bash">git clone git@github.com:cuonghoang1103/api-backend.git</code></pre>
 <p>Một lần clone là bốn thao tác: tạo một thư mục có <code>.git</code>, thêm một remote tên <code>origin</code>, fetch mọi thứ, và checkout nhánh mặc định với một nhánh cục bộ theo dõi <code>origin/main</code>. Từng thao tác một trong số đó đều là lệnh bạn đã biết.</p>
-<pre><code>git clone --depth 1 &lt;url&gt;        <span class="tok-comment"># nông: chỉ commit mới nhất, không lịch sử (CI nhanh)</span>
+<pre><code class="language-bash">git clone --depth 1 &lt;url&gt;        <span class="tok-comment"># nông: chỉ commit mới nhất, không lịch sử (CI nhanh)</span>
 git clone --branch v1.4.0 &lt;url&gt;  <span class="tok-comment"># bắt đầu ở một nhánh hoặc tag cụ thể</span>
 git clone --bare &lt;url&gt;           <span class="tok-comment"># không có thư mục làm việc — đây là thứ một máy chủ giữ</span></code></pre>
 
 <h3>🧪 Thực hành (15–20 phút)</h3>
 <div class="callout ok"><ol><li>Cho <code>thu-git</code> một máy chủ giả nếu chưa có (bài 4.1 đã làm): <code>git init --bare ../thu-git-server.git</code>, <code>git remote add origin ../thu-git-server.git</code>, <code>git push -u origin main</code>.</li><li>Đóng vai bạn cùng nhóm: <code>git clone ../thu-git-server.git ../ban-cung-nhom</code>, rồi trong đó đặt <code>git config user.name "An"</code>, thêm file <code>footer.js</code>, commit, và <code>git push</code>.</li><li>Quay lại <code>thu-git</code>, <strong>CHƯA fetch</strong>, chạy <code>git status -sb</code> và <code>git log --oneline -1 origin/main</code>. Ghi lại chúng nói gì — cả hai đều không biết An đã push.</li><li><code>git fetch</code>, rồi <code>git log --oneline main..origin/main</code> (An đã thêm gì?) và <code>git status -sb</code> lần nữa.</li><li>Tích hợp bằng <code>git pull --ff-only</code>. Nó thành công vì trong lúc đó bạn không có commit nào của riêng mình — tua thẳng (fast-forward).</li></ol>
-<pre><code>git fetch</code></pre>
+<pre><code class="language-bash">git fetch</code></pre>
 <div class="out">From ../server
    5c1df3b..ca54b35  main       -&gt; origin/main</div>
 <p>(Output thật từ kho thử, máy chủ ở đó tên <code>../server.git</code>; mã băm và tên của bạn sẽ khác.)</p>
@@ -313,9 +313,9 @@ ${slide('git-05', 8, 'SSH key hay HTTPS + token')}
   <div class="kv"><span class="k">HTTPS — https://github.com/user/repo.git</span><span class="v">A personal access token used as the password. Works through any firewall and proxy. Tokens expire, so you re-issue them periodically.</span></div>
 </div>
 <p>Both are equally secure. Choose SSH for your own machine and HTTPS where SSH is blocked. Check which a repository uses, and switch without re-cloning:</p>
-<pre><code>git remote -v</code></pre>
+<pre><code class="language-bash">git remote -v</code></pre>
 <div class="out">origin  https://github.com/cuonghoang1103/api-backend.git (fetch)</div>
-<pre><code>git remote set-url origin git@github.com:cuonghoang1103/api-backend.git</code></pre>
+<pre><code class="language-bash">git remote set-url origin git@github.com:cuonghoang1103/api-backend.git</code></pre>
 <div class="callout ok"><strong>School or café Wi-Fi blocks port 22?</strong> SSH then just hangs. GitHub also answers SSH on port 443 at <code>ssh.github.com</code> — test with <code>ssh -T -p 443 git@ssh.github.com</code>, and if that greets you, add to <code>~/.ssh/config</code>:
 <pre><code>Host github.com
     Hostname ssh.github.com
@@ -331,14 +331,14 @@ ${slide('git-05', 9, 'Token fine-grained và credential helper')}
   <div class="lz-layer"><span class="lz-k">Classic</span><span class="lz-v">Broad scopes such as <code>repo</code>, applying to <em>every</em> repository you can reach. Simpler, and far more dangerous if it leaks.</span></div>
 </div>
 <p>For pushing code you need <strong>Contents: Read and write</strong> on the repositories in question, and nothing else. Add <strong>Workflows: Read and write</strong> only if your commits change files under <code>.github/workflows/</code> — without it, GitHub rejects the push with a message about workflow scope.</p>
-<pre><code>git push origin main</code></pre>
+<pre><code class="language-bash">git push origin main</code></pre>
 <div class="out">Username for 'https://github.com': cuonghoang1103
 Password for 'https://cuonghoang1103@github.com': &lt;paste the TOKEN, not your password&gt;</div>
 <div class="callout danger">A token is a password with your permissions attached. Never commit one, never paste one into a chat or an issue, and never put one in a URL like <code>https://user:token@github.com/…</code> — that form lands in <code>.git/config</code> in plain text and in your shell history. Use a credential helper instead, below.</div>
 <div class="callout ok"><strong>Creating a fine-grained token, step by step (GitHub, as of 09/2026):</strong> Settings → Developer settings → Personal access tokens → <strong>Fine-grained tokens</strong> → Generate new token. Give it a name that says where it will live ("macbook-cuong"). <strong>Expiration</strong>: GitHub now allows an unlimited lifetime unless an organisation forbids it — pick a date anyway (90 days). <strong>Resource owner</strong>: you, or the organisation that owns the project. <strong>Repository access</strong>: "Only select repositories" and tick only the ones you push to. <strong>Permissions</strong>: Contents → Read and write. The token is shown once; paste it when Git asks for a password and let the credential helper keep it. Note one real limit from the docs: a fine-grained token cannot push to a public repository you are not a member of — for open source, you push to your own fork (5.4) anyway.</div>
 
 <h3>Credential helpers — stop retyping</h3>
-<pre><code><span class="tok-comment"># macOS — stores in the system Keychain, encrypted</span>
+<pre><code class="language-bash"><span class="tok-comment"># macOS — stores in the system Keychain, encrypted</span>
 git config --global credential.helper osxkeychain
 
 <span class="tok-comment"># Windows — Git Credential Manager, ships with Git for Windows</span>
@@ -350,13 +350,13 @@ git config --global credential.helper libsecret
 <span class="tok-comment"># Anywhere, as a fallback: cache in memory for one hour</span>
 git config --global credential.helper <span class="tok-string">'cache --timeout=3600'</span></code></pre>
 <div class="callout warn">Avoid <code>credential.helper store</code>. Despite the reassuring name it writes your token to <code>~/.git-credentials</code> in <strong>plain text</strong>, readable by anything running as you. Use the OS keychain where one exists, and the in-memory cache where one does not.</div>
-<pre><code><span class="tok-comment"># Wrong token saved? Remove it and Git will ask again:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Wrong token saved? Remove it and Git will ask again:</span>
 git credential reject &lt;&lt;&lt; <span class="tok-string">'protocol=https
 host=github.com'</span></code></pre>
 
 <h3>Debugging authentication</h3>
 ${slide('git-05', 10, 'Tạo khoá ed25519 và đọc thông báo lỗi')}
-<pre><code>ssh -T git@github.com          <span class="tok-comment"># is SSH working at all?</span>
+<pre><code class="language-bash">ssh -T git@github.com          <span class="tok-comment"># is SSH working at all?</span>
 ssh -vT git@github.com         <span class="tok-comment"># verbose: WHICH key is being offered</span></code></pre>
 <div class="out">Hi cuonghoang1103! You've successfully authenticated, but GitHub does not provide shell access.</div>
 <div class="kv-grid">
@@ -379,11 +379,11 @@ Host github-work
   User git
   IdentityFile ~/.ssh/id_ed25519_work
   IdentitiesOnly yes</code></pre>
-<pre><code><span class="tok-comment"># Then use the alias in place of the hostname:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Then use the alias in place of the hostname:</span>
 git clone git@github-work:company/api.git
 git remote set-url origin git@github-personal:cuonghoang1103/api-backend.git</code></pre>
 <p>Pair it with the per-repository identity from 0.3 so your commits carry the right email too:</p>
-<pre><code>cd ~/work/api &amp;&amp; git config user.email an@company.com</code></pre>
+<pre><code class="language-bash">cd ~/work/api &amp;&amp; git config user.email an@company.com</code></pre>
 <div class="callout ok"><code>IdentitiesOnly yes</code> matters more than it looks. Without it, SSH offers every key in your agent in turn, and GitHub authenticates you as whichever account matches <em>first</em> — so you silently push to the work repository as your personal account. The flag forces exactly the key you named.</div>
 
 <h3>Deploy keys and CI tokens</h3>
@@ -436,9 +436,9 @@ ${slide('git-05', 8, 'SSH key hay HTTPS + token')}
   <div class="kv"><span class="k">HTTPS — https://github.com/user/repo.git</span><span class="v">Một personal access token dùng làm mật khẩu. Chạy được qua mọi tường lửa và proxy. Token hết hạn, nên thỉnh thoảng phải cấp lại.</span></div>
 </div>
 <p>Cả hai đều an toàn như nhau. Hãy chọn SSH cho máy của bạn và HTTPS ở nơi SSH bị chặn. Kiểm xem một kho đang dùng cái nào, và đổi mà không cần clone lại:</p>
-<pre><code>git remote -v</code></pre>
+<pre><code class="language-bash">git remote -v</code></pre>
 <div class="out">origin  https://github.com/cuonghoang1103/api-backend.git (fetch)</div>
-<pre><code>git remote set-url origin git@github.com:cuonghoang1103/api-backend.git</code></pre>
+<pre><code class="language-bash">git remote set-url origin git@github.com:cuonghoang1103/api-backend.git</code></pre>
 <div class="callout ok"><strong>Wi-Fi trường hay quán cà phê chặn cổng 22?</strong> SSH khi đó cứ treo im. GitHub còn nghe SSH ở cổng 443 tại <code>ssh.github.com</code> — thử bằng <code>ssh -T -p 443 git@ssh.github.com</code>, nếu nó chào bạn thì thêm vào <code>~/.ssh/config</code>:
 <pre><code>Host github.com
     Hostname ssh.github.com
@@ -454,14 +454,14 @@ ${slide('git-05', 9, 'Token fine-grained và credential helper')}
   <div class="lz-layer"><span class="lz-k">Classic</span><span class="lz-v">Các phạm vi rộng như <code>repo</code>, áp cho <em>MỌI</em> kho bạn với tới được. Đơn giản hơn, và nguy hiểm hơn nhiều nếu lộ.</span></div>
 </div>
 <p>Để push mã bạn cần <strong>Contents: Read and write</strong> trên các kho liên quan, và không cần gì thêm. Chỉ thêm <strong>Workflows: Read and write</strong> nếu commit của bạn đụng vào file dưới <code>.github/workflows/</code> — thiếu nó, GitHub từ chối push kèm thông báo về phạm vi workflow.</p>
-<pre><code>git push origin main</code></pre>
+<pre><code class="language-bash">git push origin main</code></pre>
 <div class="out">Username for 'https://github.com': cuonghoang1103
 Password for 'https://cuonghoang1103@github.com': &lt;dán TOKEN, không phải mật khẩu&gt;</div>
 <div class="callout danger">Một token là một mật khẩu kèm sẵn quyền của bạn. Đừng bao giờ commit nó, đừng dán nó vào chat hay issue, và đừng đặt nó trong URL kiểu <code>https://user:token@github.com/…</code> — dạng đó rơi vào <code>.git/config</code> dưới dạng chữ thô và vào lịch sử shell của bạn. Hãy dùng credential helper, ngay dưới đây.</div>
 <div class="callout ok"><strong>Tạo token fine-grained từng bước (GitHub, tính đến 09/2026):</strong> Settings → Developer settings → Personal access tokens → <strong>Fine-grained tokens</strong> → Generate new token. Đặt tên nói rõ nó sẽ nằm ở đâu ("macbook-cuong"). <strong>Expiration</strong> (hạn dùng): GitHub giờ cho phép vô thời hạn nếu tổ chức không cấm — vẫn nên chọn một ngày (90 ngày). <strong>Resource owner</strong> (chủ tài nguyên): bạn, hoặc tổ chức sở hữu dự án. <strong>Repository access</strong>: chọn "Only select repositories" và chỉ tích những kho bạn push. <strong>Permissions</strong>: Contents → Read and write. Token chỉ hiện MỘT lần; dán nó khi Git hỏi mật khẩu rồi để credential helper giữ. Có một giới hạn thật trong docs: token fine-grained không push được vào kho công khai mà bạn không phải thành viên — với mã nguồn mở thì đằng nào bạn cũng push vào fork của mình (bài 5.4).</div>
 
 <h3>Credential helper — thôi gõ đi gõ lại</h3>
-<pre><code><span class="tok-comment"># macOS — lưu vào Keychain của hệ thống, có mã hoá</span>
+<pre><code class="language-bash"><span class="tok-comment"># macOS — lưu vào Keychain của hệ thống, có mã hoá</span>
 git config --global credential.helper osxkeychain
 
 <span class="tok-comment"># Windows — Git Credential Manager, đi kèm Git for Windows</span>
@@ -473,13 +473,13 @@ git config --global credential.helper libsecret
 <span class="tok-comment"># Ở đâu cũng được, làm phương án lùi: giữ trong bộ nhớ một giờ</span>
 git config --global credential.helper <span class="tok-string">'cache --timeout=3600'</span></code></pre>
 <div class="callout warn">Hãy tránh <code>credential.helper store</code>. Bất chấp cái tên nghe yên tâm, nó ghi token của bạn vào <code>~/.git-credentials</code> dưới dạng <strong>chữ thô</strong>, mọi thứ chạy dưới danh nghĩa bạn đều đọc được. Hãy dùng keychain của hệ điều hành ở nơi có, và bộ nhớ tạm ở nơi không có.</div>
-<pre><code><span class="tok-comment"># Lưu nhầm token? Gỡ nó ra và Git sẽ hỏi lại:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Lưu nhầm token? Gỡ nó ra và Git sẽ hỏi lại:</span>
 git credential reject &lt;&lt;&lt; <span class="tok-string">'protocol=https
 host=github.com'</span></code></pre>
 
 <h3>Gỡ rối xác thực</h3>
 ${slide('git-05', 10, 'Tạo khoá ed25519 và đọc thông báo lỗi')}
-<pre><code>ssh -T git@github.com          <span class="tok-comment"># SSH có chạy được không?</span>
+<pre><code class="language-bash">ssh -T git@github.com          <span class="tok-comment"># SSH có chạy được không?</span>
 ssh -vT git@github.com         <span class="tok-comment"># chi tiết: khoá NÀO đang được đưa ra</span></code></pre>
 <div class="out">Hi cuonghoang1103! You've successfully authenticated, but GitHub does not provide shell access.</div>
 <div class="kv-grid">
@@ -502,11 +502,11 @@ Host github-work
   User git
   IdentityFile ~/.ssh/id_ed25519_work
   IdentitiesOnly yes</code></pre>
-<pre><code><span class="tok-comment"># Rồi dùng bí danh thay cho tên máy chủ:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Rồi dùng bí danh thay cho tên máy chủ:</span>
 git clone git@github-work:company/api.git
 git remote set-url origin git@github-personal:cuonghoang1103/api-backend.git</code></pre>
 <p>Hãy ghép nó với danh tính theo từng kho ở bài 0.3 để commit của bạn cũng mang đúng email:</p>
-<pre><code>cd ~/work/api &amp;&amp; git config user.email an@company.com</code></pre>
+<pre><code class="language-bash">cd ~/work/api &amp;&amp; git config user.email an@company.com</code></pre>
 <div class="callout ok"><code>IdentitiesOnly yes</code> quan trọng hơn vẻ ngoài của nó. Thiếu nó, SSH lần lượt đưa ra mọi khoá trong agent, và GitHub xác thực bạn dưới danh nghĩa tài khoản nào khớp <em>ĐẦU TIÊN</em> — nên bạn âm thầm push vào kho công ty dưới tài khoản cá nhân. Cái cờ ép dùng đúng khoá bạn đã chỉ định.</div>
 
 <h3>Deploy key và token cho CI</h3>
@@ -561,7 +561,7 @@ git remote set-url origin git@github-personal:cuonghoang1103/api-backend.git</co
 <h2>Sending commits the other way</h2>
 <p class="lead"><code>git push</code> is <code>fetch</code> in reverse: it uploads commits the remote does not have and asks it to move a branch pointer. The remote is allowed to refuse, and almost every push problem is one of three refusals — each with a different correct response.</p>
 
-<pre><code>git push origin main</code></pre>
+<pre><code class="language-bash">git push origin main</code></pre>
 <div class="out">Enumerating objects: 12, done.
 Writing objects: 100% (7/7), 1.24 KiB | 1.24 MiB/s, done.
 To github.com:cuonghoang1103/api-backend.git
@@ -570,7 +570,7 @@ To github.com:cuonghoang1103/api-backend.git
 
 <h3>-u, and what "upstream" means</h3>
 ${slide('git-05', 11, 'push -u nối nhánh với upstream')}
-<pre><code>git push -u origin feature/login</code></pre>
+<pre><code class="language-bash">git push -u origin feature/login</code></pre>
 <div class="out">To github.com:cuonghoang1103/api-backend.git
  * [new branch]      feature/login -&gt; feature/login
 branch 'feature/login' set up to track 'origin/feature/login'.</div>
@@ -581,7 +581,7 @@ branch 'feature/login' set up to track 'origin/feature/login'.</div>
   <div class="kv"><span class="k">git status</span><span class="v">Can say "ahead 2, behind 3".</span></div>
   <div class="kv"><span class="k">@{u}</span><span class="v">A shorthand for the upstream branch: <code>git log @{u}..HEAD</code> = "what have I not pushed?"</span></div>
 </div>
-<pre><code>git branch -vv                                   <span class="tok-comment"># which branches have an upstream</span>
+<pre><code class="language-bash">git branch -vv                                   <span class="tok-comment"># which branches have an upstream</span>
 git branch --set-upstream-to=origin/main main    <span class="tok-comment"># set it after the fact</span>
 git config --global push.autoSetupRemote true    <span class="tok-comment"># do -u automatically on first push</span></code></pre>
 <div class="callout ok">That last setting removes the most common daily papercut: pushing a new branch and being told "fatal: The current branch has no upstream branch". With <code>push.autoSetupRemote</code> on, the first <code>git push</code> creates the remote branch and the link in one go.</div>
@@ -593,13 +593,13 @@ ${slide('git-05', 12, 'Push bị từ chối: fetch first và non-fast-forward')
   <div class="lz-layer"><span class="lz-k">! [rejected] … (non-fast-forward)</span><span class="lz-v">Your history diverged — usually you rewrote commits the remote still has. Fix with <code>--force-with-lease</code>, <em>only</em> if that branch is yours (8.3).</span></div>
   <div class="lz-layer"><span class="lz-k">! [remote rejected] … (protected branch)</span><span class="lz-v">A branch protection rule refused it. Push to a branch and open a pull request instead — the rule is doing its job (6.5).</span></div>
 </div>
-<pre><code>git push</code></pre>
+<pre><code class="language-bash">git push</code></pre>
 <div class="out">! [rejected]        main -&gt; main (fetch first)
 error: failed to push some refs to 'github.com:cuonghoang1103/api-backend.git'
 hint: Updates were rejected because the remote contains work that you do not
 hint: have locally. This is usually caused by another repository pushing to
 hint: the same ref.</div>
-<pre><code>git pull --rebase &amp;&amp; git push          <span class="tok-comment"># the correct response, nine times in ten</span></code></pre>
+<pre><code class="language-bash">git pull --rebase &amp;&amp; git push          <span class="tok-comment"># the correct response, nine times in ten</span></code></pre>
 <div class="callout danger">The wrong response is <code>git push --force</code>. It tells the server "discard whatever you have and take mine" — and whatever it had was your colleague's commits, which are now gone from the server. If they have them locally they can restore them; if the only copy was on the server, that work is destroyed. Chapter 8.3 covers <code>--force-with-lease</code>, which refuses in exactly this situation.</div>
 <div class="callout warn"><strong>"non-fast-forward" does not always mean you rewrote history.</strong> Git picks the wording by what your machine already has. Real output from our test repository, same situation twice — An pushed, Cường has one commit of his own:
 <div class="out"><span class="tok-comment"># before fetching:</span>
@@ -610,30 +610,30 @@ So a plain "fetched but did not integrate" also shows up as non-fast-forward. Ch
 
 <h3>Pushing to a different name, and deleting</h3>
 ${slide('git-05', 13, 'Xoá nhánh trên máy chủ, rồi fetch --prune')}
-<pre><code>git push origin feature/login                    <span class="tok-comment"># same name on both sides</span>
+<pre><code class="language-bash">git push origin feature/login                    <span class="tok-comment"># same name on both sides</span>
 git push origin feature/login:review/login       <span class="tok-comment"># local:remote — different names</span>
 git push origin --delete feature/login           <span class="tok-comment"># delete the REMOTE branch</span>
 git push origin :feature/login                   <span class="tok-comment"># the old spelling of the same thing</span></code></pre>
 <p>The old form reads as "push nothing into <code>feature/login</code>", which is why an empty left-hand side deletes. Use <code>--delete</code>; it says what it means.</p>
-<pre><code><span class="tok-comment"># After a pull request is merged, clean up both sides:</span>
+<pre><code class="language-bash"><span class="tok-comment"># After a pull request is merged, clean up both sides:</span>
 git push origin --delete feature/login    <span class="tok-comment"># remote (or use the button on GitHub)</span>
 git branch -d feature/login               <span class="tok-comment"># local</span>
 git fetch --prune                         <span class="tok-comment"># drop the stale origin/feature/login ref</span></code></pre>
 
 <h3>Tags do not travel with commits</h3>
 ${slide('git-05', 14, 'Tag không tự đi theo commit')}
-<pre><code>git tag -a v1.5.0 -m <span class="tok-string">"Release 1.5.0"</span>
+<pre><code class="language-bash">git tag -a v1.5.0 -m <span class="tok-string">"Release 1.5.0"</span>
 git push origin main</code></pre>
 <div class="out">   7b3e9d1..5f7a9c2  main -&gt; main</div>
 <p>The commit went; the tag did not. Tags are refs of their own and must be pushed explicitly — a fact that has delayed many releases by exactly one confused hour, because the CI that triggers on tags never fired.</p>
-<pre><code>git push origin v1.5.0            <span class="tok-comment"># one tag</span>
+<pre><code class="language-bash">git push origin v1.5.0            <span class="tok-comment"># one tag</span>
 git push origin --tags            <span class="tok-comment"># every local tag</span>
 git push --follow-tags            <span class="tok-comment"># push commits + the ANNOTATED tags that point into them</span>
 git push origin --delete v1.5.0   <span class="tok-comment"># delete a tag from the remote</span></code></pre>
 <div class="callout ok"><code>--follow-tags</code> is the sane default for a release workflow: it pushes annotated tags reachable from what you are pushing, and ignores stray local tags. Chapter 7.3 covers tags and semantic versioning properly.</div>
 
 <h3>Pushing everything, and what not to do</h3>
-<pre><code>git push origin --all             <span class="tok-comment"># every local branch — rarely what you want</span>
+<pre><code class="language-bash">git push origin --all             <span class="tok-comment"># every local branch — rarely what you want</span>
 git push --dry-run origin main    <span class="tok-comment"># show what WOULD be pushed, transfer nothing</span></code></pre>
 <div class="callout warn"><code>--all</code> uploads every local branch, including <code>wip/</code>, <code>experiment-2</code> and the one with a debug password in it. On a shared repository that is noise at best. Push branches by name.</div>
 
@@ -646,7 +646,7 @@ git push --dry-run origin main    <span class="tok-comment"># show what WOULD be
 
 <h3>🧪 Practice (15–20 min)</h3>
 <div class="callout ok"><ol><li>In <code>thu-git</code> (with the fake server from 5.1): <code>git switch -c feature/avatar</code>, commit a new file, and run a bare <code>git push</code>. Read the "no upstream branch" message to the end — it tells you the fix.</li><li><code>git push -u origin feature/avatar</code>. Commit once more, then <code>git status -sb</code> and <code>git log --oneline @{u}..HEAD</code> before pushing again.</li><li>Tag your work: <code>git tag -a v0.1 -m "Bản nộp thử"</code>, then <code>git push</code> and <code>git ls-remote --tags origin</code>. Empty? Now <code>git push origin v0.1</code> and list the tags again.</li><li>In <code>../ban-cung-nhom</code> run <code>git fetch</code> so it knows the branch exists. Back in <code>thu-git</code>: <code>git switch main</code> and <code>git push origin --delete feature/avatar</code>.</li><li>In <code>../ban-cung-nhom</code>: <code>git branch -a</code> (the dead branch is still listed), then <code>git fetch --prune</code> and <code>git branch -a</code> again.</li></ol>
-<pre><code>git push origin v1.0</code></pre>
+<pre><code class="language-bash">git push origin v1.0</code></pre>
 <div class="out">To ../server.git
  * [new tag]         v1.0 -&gt; v1.0</div>
 <p>(Real output from our test repository — it had printed "Everything up-to-date" for the plain <code>git push</code> just before.)</p>
@@ -682,7 +682,7 @@ git push --dry-run origin main    <span class="tok-comment"># show what WOULD be
 <h2>Gửi commit đi theo chiều ngược lại</h2>
 <p class="lead"><code>git push</code> là <code>fetch</code> đảo chiều: nó tải lên những commit remote chưa có và yêu cầu remote dời một con trỏ nhánh. Remote có quyền từ chối, và gần như mọi vấn đề khi push đều là một trong ba lời từ chối — mỗi lời có một cách đáp đúng khác nhau.</p>
 
-<pre><code>git push origin main</code></pre>
+<pre><code class="language-bash">git push origin main</code></pre>
 <div class="out">Enumerating objects: 12, done.
 Writing objects: 100% (7/7), 1.24 KiB | 1.24 MiB/s, done.
 To github.com:cuonghoang1103/api-backend.git
@@ -691,7 +691,7 @@ To github.com:cuonghoang1103/api-backend.git
 
 <h3>-u, và "upstream" nghĩa là gì</h3>
 ${slide('git-05', 11, 'push -u nối nhánh với upstream')}
-<pre><code>git push -u origin feature/login</code></pre>
+<pre><code class="language-bash">git push -u origin feature/login</code></pre>
 <div class="out">To github.com:cuonghoang1103/api-backend.git
  * [new branch]      feature/login -&gt; feature/login
 branch 'feature/login' set up to track 'origin/feature/login'.</div>
@@ -702,7 +702,7 @@ branch 'feature/login' set up to track 'origin/feature/login'.</div>
   <div class="kv"><span class="k">git status</span><span class="v">Nói được "ahead 2, behind 3".</span></div>
   <div class="kv"><span class="k">@{u}</span><span class="v">Cách viết tắt cho nhánh upstream: <code>git log @{u}..HEAD</code> = "tôi chưa push cái gì?"</span></div>
 </div>
-<pre><code>git branch -vv                                   <span class="tok-comment"># nhánh nào đã có upstream</span>
+<pre><code class="language-bash">git branch -vv                                   <span class="tok-comment"># nhánh nào đã có upstream</span>
 git branch --set-upstream-to=origin/main main    <span class="tok-comment"># đặt sau khi đã lỡ</span>
 git config --global push.autoSetupRemote true    <span class="tok-comment"># tự làm -u ở lần push đầu</span></code></pre>
 <div class="callout ok">Thiết lập cuối cùng đó gỡ đi vết xước hằng ngày phổ biến nhất: push một nhánh mới rồi bị báo "fatal: The current branch has no upstream branch". Bật <code>push.autoSetupRemote</code> thì lần <code>git push</code> đầu tiên tạo luôn nhánh trên remote và liên kết, một phát.</div>
@@ -714,13 +714,13 @@ ${slide('git-05', 12, 'Push bị từ chối: fetch first và non-fast-forward')
   <div class="lz-layer"><span class="lz-k">! [rejected] … (non-fast-forward)</span><span class="lz-v">Lịch sử của bạn đã phân ly — thường là bạn đã viết lại những commit mà remote vẫn còn giữ. Sửa bằng <code>--force-with-lease</code>, <em>chỉ khi</em> nhánh đó là của bạn (bài 8.3).</span></div>
   <div class="lz-layer"><span class="lz-k">! [remote rejected] … (protected branch)</span><span class="lz-v">Một luật bảo vệ nhánh đã từ chối. Hãy push lên một nhánh rồi mở pull request — cái luật đang làm đúng việc của nó (bài 6.5).</span></div>
 </div>
-<pre><code>git push</code></pre>
+<pre><code class="language-bash">git push</code></pre>
 <div class="out">! [rejected]        main -&gt; main (fetch first)
 error: failed to push some refs to 'github.com:cuonghoang1103/api-backend.git'
 hint: Updates were rejected because the remote contains work that you do not
 hint: have locally. This is usually caused by another repository pushing to
 hint: the same ref.</div>
-<pre><code>git pull --rebase &amp;&amp; git push          <span class="tok-comment"># cách đáp đúng, chín trên mười lần</span></code></pre>
+<pre><code class="language-bash">git pull --rebase &amp;&amp; git push          <span class="tok-comment"># cách đáp đúng, chín trên mười lần</span></code></pre>
 <div class="callout danger">Cách đáp SAI là <code>git push --force</code>. Nó nói với máy chủ "vứt đi cái ngươi đang có và nhận cái của ta" — và cái nó đang có là commit của đồng nghiệp bạn, giờ đã biến mất khỏi máy chủ. Nếu họ còn bản cục bộ thì khôi phục được; nếu bản duy nhất nằm trên máy chủ thì phần việc đó bị huỷ. Bài 8.3 nói về <code>--force-with-lease</code>, thứ sẽ từ chối đúng trong tình huống này.</div>
 <div class="callout warn"><strong>"non-fast-forward" không phải lúc nào cũng có nghĩa là bạn đã viết lại lịch sử.</strong> Git chọn câu chữ theo thứ máy bạn đã có. Output thật từ kho thử, cùng một tình huống hai lần — An đã push, Cường có một commit của riêng mình:
 <div class="out"><span class="tok-comment"># trước khi fetch:</span>
@@ -731,30 +731,30 @@ Vậy "đã fetch mà chưa tích hợp" cũng hiện ra là non-fast-forward (k
 
 <h3>Push sang một tên khác, và xoá</h3>
 ${slide('git-05', 13, 'Xoá nhánh trên máy chủ, rồi fetch --prune')}
-<pre><code>git push origin feature/login                    <span class="tok-comment"># cùng tên ở hai phía</span>
+<pre><code class="language-bash">git push origin feature/login                    <span class="tok-comment"># cùng tên ở hai phía</span>
 git push origin feature/login:review/login       <span class="tok-comment"># cục bộ:remote — tên khác nhau</span>
 git push origin --delete feature/login           <span class="tok-comment"># xoá nhánh TRÊN REMOTE</span>
 git push origin :feature/login                   <span class="tok-comment"># cách viết cũ của cùng việc đó</span></code></pre>
 <p>Dạng cũ đọc lên là "đẩy KHÔNG GÌ CẢ vào <code>feature/login</code>", và đó là lý do vế trái để trống thì xoá. Hãy dùng <code>--delete</code>; nó nói đúng điều nó làm.</p>
-<pre><code><span class="tok-comment"># Sau khi một pull request được merge, hãy dọn cả hai phía:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Sau khi một pull request được merge, hãy dọn cả hai phía:</span>
 git push origin --delete feature/login    <span class="tok-comment"># remote (hoặc bấm nút trên GitHub)</span>
 git branch -d feature/login               <span class="tok-comment"># cục bộ</span>
 git fetch --prune                         <span class="tok-comment"># bỏ ref origin/feature/login đã cũ</span></code></pre>
 
 <h3>Tag KHÔNG đi theo commit</h3>
 ${slide('git-05', 14, 'Tag không tự đi theo commit')}
-<pre><code>git tag -a v1.5.0 -m <span class="tok-string">"Release 1.5.0"</span>
+<pre><code class="language-bash">git tag -a v1.5.0 -m <span class="tok-string">"Release 1.5.0"</span>
 git push origin main</code></pre>
 <div class="out">   7b3e9d1..5f7a9c2  main -&gt; main</div>
 <p>Commit đã đi; cái tag thì không. Tag là ref riêng và phải được push một cách tường minh — một sự thật đã làm chậm nhiều bản phát hành đúng một giờ đồng hồ bối rối, vì cái CI vốn kích hoạt theo tag chẳng bao giờ chạy.</p>
-<pre><code>git push origin v1.5.0            <span class="tok-comment"># một tag</span>
+<pre><code class="language-bash">git push origin v1.5.0            <span class="tok-comment"># một tag</span>
 git push origin --tags            <span class="tok-comment"># mọi tag cục bộ</span>
 git push --follow-tags            <span class="tok-comment"># push commit + những tag CÓ CHÚ THÍCH trỏ vào chúng</span>
 git push origin --delete v1.5.0   <span class="tok-comment"># xoá một tag khỏi remote</span></code></pre>
 <div class="callout ok"><code>--follow-tags</code> là mặc định hợp lý cho quy trình phát hành: nó push những tag có chú thích với tới được từ thứ bạn đang push, và bỏ qua các tag cục bộ lạc lõng. Bài 7.3 nói tử tế về tag và đánh phiên bản ngữ nghĩa.</div>
 
 <h3>Push mọi thứ, và những thứ không nên làm</h3>
-<pre><code>git push origin --all             <span class="tok-comment"># mọi nhánh cục bộ — hiếm khi là thứ bạn muốn</span>
+<pre><code class="language-bash">git push origin --all             <span class="tok-comment"># mọi nhánh cục bộ — hiếm khi là thứ bạn muốn</span>
 git push --dry-run origin main    <span class="tok-comment"># cho xem thứ SẼ được push, không truyền gì cả</span></code></pre>
 <div class="callout warn"><code>--all</code> tải lên mọi nhánh cục bộ, kể cả <code>wip/</code>, <code>experiment-2</code> và cái nhánh có mật khẩu debug trong đó. Trên một kho dùng chung thì nhẹ nhất cũng là tiếng ồn. Hãy push nhánh theo tên.</div>
 
@@ -767,7 +767,7 @@ git push --dry-run origin main    <span class="tok-comment"># cho xem thứ SẼ
 
 <h3>🧪 Thực hành (15–20 phút)</h3>
 <div class="callout ok"><ol><li>Trong <code>thu-git</code> (có máy chủ giả từ bài 5.1): <code>git switch -c feature/avatar</code>, commit một file mới, rồi chạy <code>git push</code> trần. Đọc hết thông báo "no upstream branch" — nó chỉ luôn cách sửa.</li><li><code>git push -u origin feature/avatar</code>. Commit thêm một lần, rồi <code>git status -sb</code> và <code>git log --oneline @{u}..HEAD</code> trước khi push tiếp.</li><li>Gắn tag: <code>git tag -a v0.1 -m "Bản nộp thử"</code>, rồi <code>git push</code> và <code>git ls-remote --tags origin</code>. Trống trơn? Giờ <code>git push origin v0.1</code> và liệt kê tag lần nữa.</li><li>Trong <code>../ban-cung-nhom</code> chạy <code>git fetch</code> để nó biết nhánh tồn tại. Quay lại <code>thu-git</code>: <code>git switch main</code> rồi <code>git push origin --delete feature/avatar</code>.</li><li>Trong <code>../ban-cung-nhom</code>: <code>git branch -a</code> (nhánh đã chết vẫn còn trong danh sách), rồi <code>git fetch --prune</code> và <code>git branch -a</code> lần nữa.</li></ol>
-<pre><code>git push origin v1.0</code></pre>
+<pre><code class="language-bash">git push origin v1.0</code></pre>
 <div class="out">To ../server.git
  * [new tag]         v1.0 -&gt; v1.0</div>
 <p>(Output thật từ kho thử — ngay trước đó, <code>git push</code> trần chỉ in "Everything up-to-date".)</p>
@@ -822,7 +822,7 @@ git push --dry-run origin main    <span class="tok-comment"># cho xem thứ SẼ
 
 <h3>Setting it up</h3>
 ${slide('git-05', 15, 'Tam giác upstream — origin — máy bạn')}
-<pre><code><span class="tok-comment"># After clicking Fork on GitHub:</span>
+<pre><code class="language-bash"><span class="tok-comment"># After clicking Fork on GitHub:</span>
 git clone git@github.com:cuonghoang1103/some-project.git
 cd some-project
 git remote add upstream https://github.com/original-owner/some-project.git
@@ -835,11 +835,11 @@ upstream  https://github.com/original-owner/some-project.git (push)</div>
   <div class="kv"><span class="k">origin</span><span class="v">Your fork. You push here. SSH, because you authenticate to it.</span></div>
   <div class="kv"><span class="k">upstream</span><span class="v">The original project. You only ever fetch. HTTPS is fine — you have no credentials for it anyway.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Belt and braces: make pushing to upstream physically impossible.</span>
+<pre><code class="language-bash"><span class="tok-comment"># Belt and braces: make pushing to upstream physically impossible.</span>
 git remote set-url --push upstream DISABLED</code></pre>
 
 <h3>The contribution loop</h3>
-<pre><code><span class="tok-comment"># 1. Start from the LATEST upstream code, not your fork's stale main.</span>
+<pre><code class="language-bash"><span class="tok-comment"># 1. Start from the LATEST upstream code, not your fork's stale main.</span>
 git fetch upstream
 git switch main
 git merge upstream/main          <span class="tok-comment"># or: git reset --hard upstream/main</span>
@@ -857,7 +857,7 @@ git push -u origin fix/null-author-500</code></pre>
 <h3>Keeping your fork in sync</h3>
 ${slide('git-05', 16, 'Đồng bộ fork từ upstream')}
 <p>A fork does not update itself. A week later, <code>origin/main</code> is a week behind the real project — and branching from it produces a pull request full of conflicts.</p>
-<pre><code>git fetch upstream
+<pre><code class="language-bash">git fetch upstream
 git switch main
 git merge --ff-only upstream/main    <span class="tok-comment"># fails loudly if you ever committed to your main</span>
 git push origin main                  <span class="tok-comment"># update your fork on GitHub too</span></code></pre>
@@ -871,18 +871,18 @@ c55a330 fix(feed): tác giả null</div>
 "Up to date" and two commits behind, at the same time. Only <code>upstream/main</code> tells the truth, and only after <code>git fetch upstream</code>. On the GitHub website the <strong>Sync fork</strong> button on your fork does the same merge for you.</div>
 <div class="callout ok">Do this <em>before starting every new contribution</em>, not when the maintainer asks you to rebase. Branching from an up-to-date main is the single biggest thing you can do to make a pull request easy to merge.</div>
 <p>If your <code>main</code> has drifted (you committed to it by accident), the blunt fix is fine — a fork's <code>main</code> should hold nothing of your own:</p>
-<pre><code>git switch main
+<pre><code class="language-bash">git switch main
 git reset --hard upstream/main
 git push --force-with-lease origin main</code></pre>
 
 <h3>Responding to review</h3>
-<pre><code><span class="tok-comment"># Reviewer asks for changes. Commit on the SAME branch and push again —</span>
+<pre><code class="language-bash"><span class="tok-comment"># Reviewer asks for changes. Commit on the SAME branch and push again —</span>
 <span class="tok-comment"># the pull request updates itself. Do not open a new one.</span>
 git switch fix/null-author-500
 <span class="tok-comment"># …edit…</span>
 git commit -m <span class="tok-string">"fix(feed): use the shared placeholder helper as requested"</span>
 git push</code></pre>
-<pre><code><span class="tok-comment"># Asked to rebase onto the latest upstream:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Asked to rebase onto the latest upstream:</span>
 git fetch upstream
 git rebase upstream/main
 git push --force-with-lease          <span class="tok-comment"># rewriting YOUR OWN fork branch — allowed (3.4)</span></code></pre>
@@ -890,7 +890,7 @@ git push --force-with-lease          <span class="tok-comment"># rewriting YOUR 
 
 <h3>Fetching someone else's pull request</h3>
 <p>To test a contribution locally — as a maintainer, or to build on someone's work:</p>
-<pre><code>git fetch upstream pull/431/head:pr-431   <span class="tok-comment"># fetch PR #431 into a local branch</span>
+<pre><code class="language-bash">git fetch upstream pull/431/head:pr-431   <span class="tok-comment"># fetch PR #431 into a local branch</span>
 git switch pr-431</code></pre>
 <p>GitHub exposes every pull request as a ref under <code>pull/&lt;n&gt;/head</code>. This works even when the contributor's fork has been deleted.</p>
 
@@ -905,7 +905,7 @@ git switch pr-431</code></pre>
 
 <h3>🧪 Practice (15–20 min)</h3>
 <div class="callout ok"><ol><li>Fake the Fork button locally, next to <code>thu-git</code>: <code>git clone --bare ../thu-git-server.git ../fork.git</code> (this is "your fork on GitHub"), then <code>git clone ../fork.git ../thu-fork</code> and <code>cd ../thu-fork</code>.</li><li>Add the original as <code>upstream</code> and make pushing to it impossible: <code>git remote add upstream ../thu-git-server.git</code>, <code>git remote set-url --push upstream DISABLED</code>, then <code>git remote -v</code>.</li><li>Play the maintainer: in <code>thu-git</code> make two commits on <code>main</code> and <code>git push</code> them to <code>thu-git-server.git</code>.</li><li>In <code>thu-fork</code>: <code>git status -sb</code> (it claims you are up to date), <code>git fetch upstream</code>, <code>git log --oneline main..upstream/main</code>, <code>git merge --ff-only upstream/main</code>, <code>git push origin main</code>.</li><li>Start a contribution: <code>git switch -c fix/readme</code>, commit, <code>git push -u origin fix/readme</code>. Then try <code>git push upstream fix/readme</code> and read the error.</li></ol>
-<pre><code>git push upstream main</code></pre>
+<pre><code class="language-bash">git push upstream main</code></pre>
 <div class="out">fatal: 'DISABLED' does not appear to be a git repository
 fatal: Could not read from remote repository.</div>
 <p><strong>Done when:</strong> <code>git log --oneline main..upstream/main</code> prints nothing after the sync, <code>git remote -v</code> shows <code>upstream  DISABLED (push)</code>, and the push to upstream fails with the message above.</p></div>
@@ -951,7 +951,7 @@ fatal: Could not read from remote repository.</div>
 
 <h3>Thiết lập</h3>
 ${slide('git-05', 15, 'Tam giác upstream — origin — máy bạn')}
-<pre><code><span class="tok-comment"># Sau khi bấm Fork trên GitHub:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Sau khi bấm Fork trên GitHub:</span>
 git clone git@github.com:cuonghoang1103/some-project.git
 cd some-project
 git remote add upstream https://github.com/original-owner/some-project.git
@@ -964,11 +964,11 @@ upstream  https://github.com/original-owner/some-project.git (push)</div>
   <div class="kv"><span class="k">origin</span><span class="v">Fork của bạn. Bạn push vào đây. Dùng SSH, vì bạn xác thực với nó.</span></div>
   <div class="kv"><span class="k">upstream</span><span class="v">Dự án gốc. Bạn chỉ fetch. HTTPS là đủ — dù sao bạn cũng chẳng có chứng chỉ cho nó.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Cho chắc: làm cho việc push vào upstream trở thành bất khả về mặt vật lý.</span>
+<pre><code class="language-bash"><span class="tok-comment"># Cho chắc: làm cho việc push vào upstream trở thành bất khả về mặt vật lý.</span>
 git remote set-url --push upstream DISABLED</code></pre>
 
 <h3>Vòng lặp đóng góp</h3>
-<pre><code><span class="tok-comment"># 1. Bắt đầu từ mã upstream MỚI NHẤT, không phải cái main đã cũ của fork bạn.</span>
+<pre><code class="language-bash"><span class="tok-comment"># 1. Bắt đầu từ mã upstream MỚI NHẤT, không phải cái main đã cũ của fork bạn.</span>
 git fetch upstream
 git switch main
 git merge upstream/main          <span class="tok-comment"># hoặc: git reset --hard upstream/main</span>
@@ -986,7 +986,7 @@ git push -u origin fix/null-author-500</code></pre>
 <h3>Giữ fork của bạn đồng bộ</h3>
 ${slide('git-05', 16, 'Đồng bộ fork từ upstream')}
 <p>Một fork không tự cập nhật. Một tuần sau, <code>origin/main</code> đã đi sau dự án thật một tuần — và tạo nhánh từ đó sinh ra một pull request đầy xung đột.</p>
-<pre><code>git fetch upstream
+<pre><code class="language-bash">git fetch upstream
 git switch main
 git merge --ff-only upstream/main    <span class="tok-comment"># báo lỗi ầm ĩ nếu bạn từng commit vào main của mình</span>
 git push origin main                  <span class="tok-comment"># cập nhật luôn fork của bạn trên GitHub</span></code></pre>
@@ -1000,18 +1000,18 @@ c55a330 fix(feed): tác giả null</div>
 Vừa "up to date" vừa chậm hai commit, cùng một lúc. Chỉ <code>upstream/main</code> nói thật, và chỉ sau <code>git fetch upstream</code>. Trên web GitHub, nút <strong>Sync fork</strong> trong trang fork của bạn làm đúng lần merge này hộ bạn.</div>
 <div class="callout ok">Hãy làm việc này <em>TRƯỚC KHI bắt đầu mỗi đóng góp mới</em>, không phải khi người bảo trì yêu cầu bạn rebase. Tạo nhánh từ một main cập nhật là việc lớn nhất bạn làm được để một pull request dễ merge.</div>
 <p>Nếu <code>main</code> của bạn đã trôi dạt (bạn lỡ commit vào nó), cách sửa thô bạo là ổn — <code>main</code> của một fork không nên giữ thứ gì của riêng bạn:</p>
-<pre><code>git switch main
+<pre><code class="language-bash">git switch main
 git reset --hard upstream/main
 git push --force-with-lease origin main</code></pre>
 
 <h3>Đáp lại review</h3>
-<pre><code><span class="tok-comment"># Người review yêu cầu sửa. Hãy commit trên CÙNG nhánh và push lại —</span>
+<pre><code class="language-bash"><span class="tok-comment"># Người review yêu cầu sửa. Hãy commit trên CÙNG nhánh và push lại —</span>
 <span class="tok-comment"># pull request tự cập nhật. Đừng mở cái mới.</span>
 git switch fix/null-author-500
 <span class="tok-comment"># …sửa…</span>
 git commit -m <span class="tok-string">"fix(feed): dung helper placeholder chung nhu duoc yeu cau"</span>
 git push</code></pre>
-<pre><code><span class="tok-comment"># Được yêu cầu rebase lên upstream mới nhất:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Được yêu cầu rebase lên upstream mới nhất:</span>
 git fetch upstream
 git rebase upstream/main
 git push --force-with-lease          <span class="tok-comment"># viết lại nhánh TRÊN FORK CỦA CHÍNH BẠN — được phép (bài 3.4)</span></code></pre>
@@ -1019,7 +1019,7 @@ git push --force-with-lease          <span class="tok-comment"># viết lại nh
 
 <h3>Lấy về pull request của người khác</h3>
 <p>Để thử một đóng góp ở máy mình — với tư cách người bảo trì, hoặc để làm tiếp trên công việc của ai đó:</p>
-<pre><code>git fetch upstream pull/431/head:pr-431   <span class="tok-comment"># lấy PR #431 vào một nhánh cục bộ</span>
+<pre><code class="language-bash">git fetch upstream pull/431/head:pr-431   <span class="tok-comment"># lấy PR #431 vào một nhánh cục bộ</span>
 git switch pr-431</code></pre>
 <p>GitHub phơi mọi pull request ra thành một ref dưới <code>pull/&lt;n&gt;/head</code>. Cách này chạy được cả khi fork của người đóng góp đã bị xoá.</p>
 
@@ -1034,7 +1034,7 @@ git switch pr-431</code></pre>
 
 <h3>🧪 Thực hành (15–20 phút)</h3>
 <div class="callout ok"><ol><li>Giả lập nút Fork ngay trên máy, cạnh <code>thu-git</code>: <code>git clone --bare ../thu-git-server.git ../fork.git</code> (đây là "fork của bạn trên GitHub"), rồi <code>git clone ../fork.git ../thu-fork</code> và <code>cd ../thu-fork</code>.</li><li>Thêm kho gốc làm <code>upstream</code> và khoá luôn đường push vào nó: <code>git remote add upstream ../thu-git-server.git</code>, <code>git remote set-url --push upstream DISABLED</code>, rồi <code>git remote -v</code>.</li><li>Đóng vai người bảo trì: trong <code>thu-git</code> tạo hai commit trên <code>main</code> và <code>git push</code> lên <code>thu-git-server.git</code>.</li><li>Trong <code>thu-fork</code>: <code>git status -sb</code> (nó bảo bạn đang cập nhật), <code>git fetch upstream</code>, <code>git log --oneline main..upstream/main</code>, <code>git merge --ff-only upstream/main</code>, <code>git push origin main</code>.</li><li>Bắt đầu một đóng góp: <code>git switch -c fix/readme</code>, commit, <code>git push -u origin fix/readme</code>. Rồi thử <code>git push upstream fix/readme</code> và đọc lỗi.</li></ol>
-<pre><code>git push upstream main</code></pre>
+<pre><code class="language-bash">git push upstream main</code></pre>
 <div class="out">fatal: 'DISABLED' does not appear to be a git repository
 fatal: Could not read from remote repository.</div>
 <p><strong>Đạt khi:</strong> sau khi đồng bộ, <code>git log --oneline main..upstream/main</code> không in gì, <code>git remote -v</code> hiện <code>upstream  DISABLED (push)</code>, và lần push vào upstream thất bại với thông báo như trên.</p></div>

@@ -72,7 +72,7 @@ ${gallery('dv-07', [
 ${slide('dv-07', 3, 'Không cờ nào: ba cú hỏng, vẫn thoát 0')}
 <p>One script with three ways to fail — a broken pipe, an unset variable, and a command that returns non-zero — run under five combinations of flags:</p>
 
-<pre><code>false | true               <span class="tok-comment"># can pipefail</span>
+<pre><code class="language-bash">false | true               <span class="tok-comment"># can pipefail</span>
 echo -n "ong:qua "
 : \${CHUA_DAT}              <span class="tok-comment"># can -u</span>
 echo -n "bien:qua "
@@ -127,7 +127,7 @@ local x; x=\$(...)              → ma 2</div>
 
 <p>The reason is that <code>local</code> is itself a command, and its exit status — success, it declared a variable — overwrites the substitution&#39;s. There is no flag for this. The fix is to split the declaration from the assignment:</p>
 
-<pre><code><span class="tok-comment"># NUOT loi, bat ke co gi:</span>
+<pre><code class="language-bash"><span class="tok-comment"># NUOT loi, bat ke co gi:</span>
 f() { local x=\$(lenh-co-the-hong); }
 <span class="tok-comment"># BAO loi:</span>
 f() { local x; x=\$(lenh-co-the-hong); }</code></pre>
@@ -279,7 +279,7 @@ vps 'bash --version | head -1'</code></pre>
 ${slide('dv-07', 3, 'Không cờ nào: ba cú hỏng, vẫn thoát 0')}
 <p>Một script với ba cách hỏng — một cái ống gãy, một biến chưa đặt, và một lệnh trả về khác không — chạy dưới năm tổ hợp cờ:</p>
 
-<pre><code>false | true               <span class="tok-comment"># can pipefail</span>
+<pre><code class="language-bash">false | true               <span class="tok-comment"># can pipefail</span>
 echo -n "ong:qua "
 : \${CHUA_DAT}              <span class="tok-comment"># can -u</span>
 echo -n "bien:qua "
@@ -334,7 +334,7 @@ local x; x=\$(...)              → ma 2</div>
 
 <p>Lý do là <code>local</code> tự nó là một LỆNH, và trạng thái thoát của nó — thành công, nó vừa khai báo một biến — ghi đè lên trạng thái của phép thay thế. Không có cờ nào cho chuyện này. Cách chữa là tách khai báo khỏi phép gán:</p>
 
-<pre><code><span class="tok-comment"># NUOT loi, bat ke co gi:</span>
+<pre><code class="language-bash"><span class="tok-comment"># NUOT loi, bat ke co gi:</span>
 f() { local x=\$(lenh-co-the-hong); }
 <span class="tok-comment"># BAO loi:</span>
 f() { local x; x=\$(lenh-co-the-hong); }</code></pre>
@@ -494,7 +494,7 @@ vps 'bash --version | head -1'</code></pre>
 <h3>The loud failure</h3>
 <p>A script built from the obvious commands, run twice with the same argument:</p>
 
-<pre><code>mkdir "\$D/ban-\$1"
+<pre><code class="language-bash">mkdir "\$D/ban-\$1"
 echo "ban \$1" > "\$D/ban-\$1/README"
 echo "PATH=/opt/ung-dung/bin:\\\$PATH" >> "\$D/moi-truong"
 ln -s "\$D/ban-\$1" "\$D/hien-tai"</code></pre>
@@ -533,7 +533,7 @@ ${slide('dv-07', 8, 'Năm lần chạy sạch, năm dòng PATH — và ba cờ c
 
 <h3>The version that survives</h3>
 ${slide('dv-07', 9, 'Idempotent: trạng thái cuối chỉ theo tham số')}
-<pre><code>mkdir -p "\$D/ban-\$1"                                <span class="tok-comment"># -p: da co thi thoi</span>
+<pre><code class="language-bash">mkdir -p "\$D/ban-\$1"                                <span class="tok-comment"># -p: da co thi thoi</span>
 echo "ban \$1" > "\$D/ban-\$1/README"                  <span class="tok-comment"># &gt; : ghi de, khong noi them</span>
 grep -qxF 'PATH=/opt/ung-dung/bin:\\\$PATH' "\$D/moi-truong" 2>/dev/null \\
   || echo 'PATH=/opt/ung-dung/bin:\\\$PATH' >> "\$D/moi-truong"
@@ -732,7 +732,7 @@ sed: 1: "f
 <h3>Kiểu hỏng ỒN ÀO</h3>
 <p>Một script dựng từ những lệnh hiển nhiên, chạy hai lần cùng tham số:</p>
 
-<pre><code>mkdir "\$D/ban-\$1"
+<pre><code class="language-bash">mkdir "\$D/ban-\$1"
 echo "ban \$1" > "\$D/ban-\$1/README"
 echo "PATH=/opt/ung-dung/bin:\\\$PATH" >> "\$D/moi-truong"
 ln -s "\$D/ban-\$1" "\$D/hien-tai"</code></pre>
@@ -771,7 +771,7 @@ ${slide('dv-07', 8, 'Năm lần chạy sạch, năm dòng PATH — và ba cờ c
 
 <h3>Bản sống sót được</h3>
 ${slide('dv-07', 9, 'Idempotent: trạng thái cuối chỉ theo tham số')}
-<pre><code>mkdir -p "\$D/ban-\$1"                                <span class="tok-comment"># -p: da co thi thoi</span>
+<pre><code class="language-bash">mkdir -p "\$D/ban-\$1"                                <span class="tok-comment"># -p: da co thi thoi</span>
 echo "ban \$1" > "\$D/ban-\$1/README"                  <span class="tok-comment"># &gt; : ghi de, khong noi them</span>
 grep -qxF 'PATH=/opt/ung-dung/bin:\\\$PATH' "\$D/moi-truong" 2>/dev/null \\
   || echo 'PATH=/opt/ung-dung/bin:\\\$PATH' >> "\$D/moi-truong"
@@ -979,7 +979,7 @@ sed: 1: "f
 <h3>The prompt that reports success</h3>
 <p>A script that asks for confirmation when the working tree is dirty. Reasonable, common, and this repository&#39;s own deploy script does exactly it. Here it is under three conditions:</p>
 
-<pre><code>read -rp "Van deploy? [y/N] " tl
+<pre><code class="language-bash">read -rp "Van deploy? [y/N] " tl
 [[ "\$tl" == "y" ]] || { echo "huy."; exit 0; }
 echo "=== DANG DEPLOY ==="</code></pre>
 
@@ -1014,7 +1014,7 @@ huy.
 
 <h3>Two lines fix it</h3>
 ${slide('dv-07', 12, '[y/N] không terminal: đừng đoán, TỪ CHỐI — echo y và --dong-y')}
-<pre><code>if [ ! -t 0 ]; then
+<pre><code class="language-bash">if [ ! -t 0 ]; then
   echo "khong co terminal de hoi — TU CHOI deploy. Dung --dong-y de bo qua." >&amp;2
   exit 4
 fi
@@ -1314,7 +1314,7 @@ usage: df [--libxo] [-b | -g | -H | -h | -k | -m | -P] [-acIilnY] [-,] [-T type]
 <h3>Lời hỏi báo cáo THÀNH CÔNG</h3>
 <p>Một script hỏi xác nhận khi cây làm việc còn thay đổi chưa commit. Hợp lý, phổ biến, và chính script deploy của kho này làm đúng thế. Đây là nó dưới ba điều kiện:</p>
 
-<pre><code>read -rp "Van deploy? [y/N] " tl
+<pre><code class="language-bash">read -rp "Van deploy? [y/N] " tl
 [[ "\$tl" == "y" ]] || { echo "huy."; exit 0; }
 echo "=== DANG DEPLOY ==="</code></pre>
 
@@ -1349,7 +1349,7 @@ huy.
 
 <h3>Hai dòng chữa được</h3>
 ${slide('dv-07', 12, '[y/N] không terminal: đừng đoán, TỪ CHỐI — echo y và --dong-y')}
-<pre><code>if [ ! -t 0 ]; then
+<pre><code class="language-bash">if [ ! -t 0 ]; then
   echo "khong co terminal de hoi — TU CHOI deploy. Dung --dong-y de bo qua." >&amp;2
   exit 4
 fi
@@ -1661,7 +1661,7 @@ ${slide('dv-07', 18, '401 ĐẠT · 404 bản cũ · 000 không ai nghe')}
 
 <p>Measured, against a version with all four routes and a version missing one:</p>
 
-<pre><code>for R in /health /api/v1/don /api/v1/gifs /api/v1/tin; do
+<pre><code class="language-bash">for R in /health /api/v1/don /api/v1/gifs /api/v1/tin; do
   MA=\$(curl -s -o /dev/null -w '%{http_code}' --max-time 2 "http://127.0.0.1:\$CONG\$R")
   case "\$MA" in
     404) echo "  ✗ \$R → 404  (KHONG gan — ban cu/dung nua voi)"; LOI=1 ;;
@@ -1696,7 +1696,7 @@ exit \$LOI</code></pre>
 ${slide('dv-07', 20, 'Bộ kiểm KHÔNG CHẠY ĐƯỢC: kết cục thứ ba')}
 <p>Here is the same check written with a tool that is not installed on this machine. The application is running perfectly on port 3330 throughout:</p>
 
-<pre><code>for i in \$(seq 1 6); do
+<pre><code class="language-bash">for i in \$(seq 1 6); do
   if xh -q http://127.0.0.1:3330/health 2>/dev/null; then echo "  san sang"; exit 0; fi
   sleep 0.5
 done
@@ -1723,7 +1723,7 @@ echo "  KHONG len duoc sau 6 lan thu"; exit 0</code></pre>
 </div>
 
 <h3>One line at the top, measured</h3>
-<pre><code>command -v xh >/dev/null || { echo "  bo kiem KHONG chay duoc: thieu xh" >&amp;2; exit 5; }</code></pre>
+<pre><code class="language-bash">command -v xh >/dev/null || { echo "  bo kiem KHONG chay duoc: thieu xh" >&amp;2; exit 5; }</code></pre>
 
 <div class="out">  bo kiem KHONG chay duoc: thieu xh
   ma thoat: 5 | mat 4 ms</div>
@@ -1740,7 +1740,7 @@ echo "  KHONG len duoc sau 6 lan thu"; exit 0</code></pre>
 ${slide('dv-07', 22, 'Nhật ký có giờ, set -x có số dòng')}
 <p>The other half of proof is the record. Timestamping every line turns "the deploy was slow" into "step 2 took 900 ms":</p>
 
-<pre><code>ghi() { printf '%s %s\\n' "\$(date +%H:%M:%S.%3N)" "\$*" | tee -a "\$LOG"; }</code></pre>
+<pre><code class="language-bash">ghi() { printf '%s %s\\n' "\$(date +%H:%M:%S.%3N)" "\$*" | tee -a "\$LOG"; }</code></pre>
 
 <div class="out">22:09:14.463 ── 1/4 dung tao tac ──
 22:09:14.867 ── 2/4 chuyen len may ──
@@ -1875,7 +1875,7 @@ ${slide('dv-07', 18, '401 ĐẠT · 404 bản cũ · 000 không ai nghe')}
 
 <p>Đo thật, trên một bản đủ bốn route và một bản thiếu một route:</p>
 
-<pre><code>for R in /health /api/v1/don /api/v1/gifs /api/v1/tin; do
+<pre><code class="language-bash">for R in /health /api/v1/don /api/v1/gifs /api/v1/tin; do
   MA=\$(curl -s -o /dev/null -w '%{http_code}' --max-time 2 "http://127.0.0.1:\$CONG\$R")
   case "\$MA" in
     404) echo "  ✗ \$R → 404  (KHONG gan — ban cu/dung nua voi)"; LOI=1 ;;
@@ -1910,7 +1910,7 @@ exit \$LOI</code></pre>
 ${slide('dv-07', 20, 'Bộ kiểm KHÔNG CHẠY ĐƯỢC: kết cục thứ ba')}
 <p>Đây là đúng phép kiểm đó viết bằng một công cụ KHÔNG được cài trên máy này. Ứng dụng chạy hoàn hảo ở cổng 3330 trong suốt thời gian đó:</p>
 
-<pre><code>for i in \$(seq 1 6); do
+<pre><code class="language-bash">for i in \$(seq 1 6); do
   if xh -q http://127.0.0.1:3330/health 2>/dev/null; then echo "  san sang"; exit 0; fi
   sleep 0.5
 done
@@ -1937,7 +1937,7 @@ echo "  KHONG len duoc sau 6 lan thu"; exit 0</code></pre>
 </div>
 
 <h3>Một dòng ở đầu, đo thật</h3>
-<pre><code>command -v xh >/dev/null || { echo "  bo kiem KHONG chay duoc: thieu xh" >&amp;2; exit 5; }</code></pre>
+<pre><code class="language-bash">command -v xh >/dev/null || { echo "  bo kiem KHONG chay duoc: thieu xh" >&amp;2; exit 5; }</code></pre>
 
 <div class="out">  bo kiem KHONG chay duoc: thieu xh
   ma thoat: 5 | mat 4 ms</div>
@@ -1954,7 +1954,7 @@ echo "  KHONG len duoc sau 6 lan thu"; exit 0</code></pre>
 ${slide('dv-07', 22, 'Nhật ký có giờ, set -x có số dòng')}
 <p>Nửa còn lại của việc chứng minh là BẢN GHI. Đóng dấu thời gian mọi dòng biến "lần deploy chậm" thành "bước 2 mất 900 ms":</p>
 
-<pre><code>ghi() { printf '%s %s\\n' "\$(date +%H:%M:%S.%3N)" "\$*" | tee -a "\$LOG"; }</code></pre>
+<pre><code class="language-bash">ghi() { printf '%s %s\\n' "\$(date +%H:%M:%S.%3N)" "\$*" | tee -a "\$LOG"; }</code></pre>
 
 <div class="out">22:09:14.463 ── 1/4 dung tao tac ──
 22:09:14.867 ── 2/4 chuyen len may ──
@@ -2095,7 +2095,7 @@ $ git show "06d33ee:smoke-routes.txt" | kiem   # doc DUNG commit dang deploy
 <h3>The script</h3>
 ${slide('dv-07', 23, 'Năm bước, và mã thoát nói bước nào hỏng')}
 ${slide('dv-07', 24, 'trap don_dep: lùi cả tiến trình, không chỉ con trỏ')}
-<pre><code>#!/bin/bash
+<pre><code class="language-bash">#!/bin/bash
 set -euo pipefail
 shopt -s inherit_errexit 2>/dev/null || true
 
@@ -2363,7 +2363,7 @@ ${slide('dv-07', 28, 'Đừng sửa script deploy lúc nó đang chạy')}
 <h3>Cái script</h3>
 ${slide('dv-07', 23, 'Năm bước, và mã thoát nói bước nào hỏng')}
 ${slide('dv-07', 24, 'trap don_dep: lùi cả tiến trình, không chỉ con trỏ')}
-<pre><code>#!/bin/bash
+<pre><code class="language-bash">#!/bin/bash
 set -euo pipefail
 shopt -s inherit_errexit 2>/dev/null || true
 

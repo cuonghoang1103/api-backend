@@ -28,7 +28,7 @@ export default {
 <p class="lead">A <code>[slug]</code> folder (Chapter 8) matches exactly one segment: <code>/blog/hello</code>. But some routes have a variable <em>depth</em> — documentation like <code>/docs/a/b/c</code>, a file browser, category trees. For those, the catch-all segment.</p>
 
 <h3>Catch-all: [...slug]</h3>
-<pre><code>app/docs/[...slug]/page.tsx
+<pre><code class="language-typescript">app/docs/[...slug]/page.tsx
 
 <span class="tok-comment">// matches /docs/a, /docs/a/b, /docs/a/b/c …</span>
 export default async function Docs({ params }) {
@@ -38,7 +38,7 @@ export default async function Docs({ params }) {
 <p>Three dots before the name. The matched value is an <strong>array</strong> of the segments, not a string. One page handles any depth. Note it does <em>not</em> match <code>/docs</code> itself (zero segments) — for that you need the optional form.</p>
 
 <h3>Optional catch-all: [[...slug]]</h3>
-<pre><code>app/shop/[[...slug]]/page.tsx
+<pre><code class="language-javascript">app/shop/[[...slug]]/page.tsx
 
 <span class="tok-comment">// matches /shop  AND  /shop/a  AND  /shop/a/b …</span>
 export default async function Shop({ params }) {
@@ -88,7 +88,7 @@ export default async function Shop({ params }) {
 <p class="lead">Một thư mục <code>[slug]</code> (Chương 8) khớp đúng một đoạn: <code>/blog/hello</code>. Nhưng vài route có <em>độ sâu</em> thay đổi — tài liệu như <code>/docs/a/b/c</code>, trình duyệt file, cây danh mục. Cho những cái đó, segment catch-all.</p>
 
 <h3>Catch-all: [...slug]</h3>
-<pre><code>app/docs/[...slug]/page.tsx
+<pre><code class="language-typescript">app/docs/[...slug]/page.tsx
 
 <span class="tok-comment">// khớp /docs/a, /docs/a/b, /docs/a/b/c …</span>
 export default async function Docs({ params }) {
@@ -98,7 +98,7 @@ export default async function Docs({ params }) {
 <p>Ba dấu chấm trước tên. Giá trị khớp là một <strong>mảng</strong> các đoạn, không phải chuỗi. Một page lo mọi độ sâu. Để ý nó <em>không</em> khớp chính <code>/docs</code> (không đoạn nào) — cho việc đó bạn cần dạng optional.</p>
 
 <h3>Optional catch-all: [[...slug]]</h3>
-<pre><code>app/shop/[[...slug]]/page.tsx
+<pre><code class="language-javascript">app/shop/[[...slug]]/page.tsx
 
 <span class="tok-comment">// khớp /shop  VÀ  /shop/a  VÀ  /shop/a/b …</span>
 export default async function Shop({ params }) {
@@ -157,7 +157,7 @@ export default async function Shop({ params }) {
 <h2>Dynamic does not have to mean rendered-on-every-request</h2>
 <p class="lead">A <code>[slug]</code> route is dynamic, but if you know the set of values ahead of time — every blog post, every course — Next.js can render each one to static HTML at build. You supply the list with <code>generateStaticParams</code>.</p>
 
-<pre><code><span class="tok-comment">// app/courses/[slug]/page.tsx</span>
+<pre><code class="language-javascript"><span class="tok-comment">// app/courses/[slug]/page.tsx</span>
 export async function generateStaticParams() {
   const courses = await getAllCourses();
   return courses.map(c =&gt; ({ slug: c.slug }));   <span class="tok-comment">// [{slug:'nextjs'}, {slug:'nodejs'}…]</span>
@@ -209,7 +209,7 @@ export default async function CoursePage({ params }) {
 <h2>Động không nhất thiết là render-mỗi-request</h2>
 <p class="lead">Một route <code>[slug]</code> là động, nhưng nếu bạn biết trước tập giá trị — mọi bài blog, mọi khoá học — Next.js có thể render từng cái ra HTML tĩnh lúc build. Bạn cung cấp danh sách bằng <code>generateStaticParams</code>.</p>
 
-<pre><code><span class="tok-comment">// app/courses/[slug]/page.tsx</span>
+<pre><code class="language-javascript"><span class="tok-comment">// app/courses/[slug]/page.tsx</span>
 export async function generateStaticParams() {
   const courses = await getAllCourses();
   return courses.map(c =&gt; ({ slug: c.slug }));   <span class="tok-comment">// [{slug:'nextjs'}, {slug:'nodejs'}…]</span>
@@ -271,7 +271,7 @@ export default async function CoursePage({ params }) {
 <h2>A folder can be an API endpoint instead of a page</h2>
 <p class="lead">Chapter 8 mentioned <code>route.ts</code> as the sibling of <code>page.tsx</code>. Where a page returns UI, a Route Handler returns <em>data</em>. You export functions named after HTTP methods; each receives a <code>Request</code> and returns a <code>Response</code>.</p>
 
-<pre><code><span class="tok-comment">// app/api/health/route.ts  →  GET /api/health</span>
+<pre><code class="language-javascript"><span class="tok-comment">// app/api/health/route.ts  →  GET /api/health</span>
 export async function GET() {
   return Response.json({ ok: true });
 }
@@ -328,7 +328,7 @@ export async function POST(request) {
 <h2>Một thư mục có thể là endpoint API thay vì một page</h2>
 <p class="lead">Chương 8 có nhắc <code>route.ts</code> là anh em của <code>page.tsx</code>. Page trả về UI, còn Route Handler trả về <em>dữ liệu</em>. Bạn export các hàm đặt tên theo phương thức HTTP; mỗi hàm nhận một <code>Request</code> và trả về một <code>Response</code>.</p>
 
-<pre><code><span class="tok-comment">// app/api/health/route.ts  →  GET /api/health</span>
+<pre><code class="language-javascript"><span class="tok-comment">// app/api/health/route.ts  →  GET /api/health</span>
 export async function GET() {
   return Response.json({ ok: true });
 }
@@ -399,7 +399,7 @@ export async function POST(request) {
 ├─ layout.tsx
 ├─ @team/page.tsx        <span class="tok-comment">// slot: team</span>
 └─ @analytics/page.tsx   <span class="tok-comment">// slot: analytics</span></code></pre>
-<pre><code><span class="tok-comment">// layout.tsx receives each @slot as a prop, named after the folder</span>
+<pre><code class="language-typescript"><span class="tok-comment">// layout.tsx receives each @slot as a prop, named after the folder</span>
 export default function Layout({ children, team, analytics }) {
   return (
     &lt;&gt;
@@ -454,7 +454,7 @@ export default function Layout({ children, team, analytics }) {
 ├─ layout.tsx
 ├─ @team/page.tsx        <span class="tok-comment">// khe: team</span>
 └─ @analytics/page.tsx   <span class="tok-comment">// khe: analytics</span></code></pre>
-<pre><code><span class="tok-comment">// layout.tsx nhận mỗi @khe làm một prop, đặt tên theo thư mục</span>
+<pre><code class="language-typescript"><span class="tok-comment">// layout.tsx nhận mỗi @khe làm một prop, đặt tên theo thư mục</span>
 export default function Layout({ children, team, analytics }) {
   return (
     &lt;&gt;

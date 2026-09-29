@@ -133,7 +133,7 @@ ${slide('ga-03', 5, 'Pasting github.event values into run: lets outside text bec
 </div>
 ${slide('ga-03', 6, 'The fix: route the value through env: and read it as a quoted variable')}
 <p>The fix is small and complete: put the value in an <code>env:</code> block and read it as a quoted shell variable.</p>
-<pre><code><span class="tok-comment"># DUNG — bien moi truong, shell doc GIA TRI chu khong doc MA</span>
+<pre><code class="language-bash"><span class="tok-comment"># DUNG — bien moi truong, shell doc GIA TRI chu khong doc MA</span>
 - run: echo "PR: \$TIEU_DE"
   env:
     TIEU_DE: &#36;{{ github.event.pull_request.title }}</code></pre>
@@ -167,7 +167,7 @@ ${slide('ga-03', 8, 'Single quotes only; a syntax error fails the whole file bef
 
 <p>The expression language uses <strong>single quotes only</strong>. Double quotes are a syntax error, and an apostrophe inside a literal is escaped by doubling it:</p>
 
-<pre><code><span class="tok-comment"># dung</span>
+<pre><code class="language-bash"><span class="tok-comment"># dung</span>
 if: github.ref == 'refs/heads/main'
 <span class="tok-comment"># SAI — nhay kep khong hop le trong bieu thuc</span>
 if: github.ref == "refs/heads/main"
@@ -340,7 +340,7 @@ ${slide('ga-03', 5, 'Dán giá trị github.event vào run: khiến chữ ngư�
 </div>
 ${slide('ga-03', 6, 'Vá: đưa giá trị qua env: và đọc nó như một biến có nháy')}
 <p>Cách vá nhỏ mà trọn vẹn: đặt giá trị vào một khối <code>env:</code> và đọc nó như một biến shell có nháy.</p>
-<pre><code><span class="tok-comment"># DUNG — bien moi truong, shell doc GIA TRI chu khong doc MA</span>
+<pre><code class="language-bash"><span class="tok-comment"># DUNG — bien moi truong, shell doc GIA TRI chu khong doc MA</span>
 - run: echo "PR: \$TIEU_DE"
   env:
     TIEU_DE: &#36;{{ github.event.pull_request.title }}</code></pre>
@@ -374,7 +374,7 @@ ${slide('ga-03', 8, 'Chỉ nháy đơn; lỗi cú pháp làm hỏng cả file tr
 
 <p>Ngôn ngữ biểu thức chỉ dùng <strong>nháy đơn</strong>. Nháy kép là lỗi cú pháp, và một dấu nháy đơn nằm trong chuỗi thì thoát bằng cách viết đôi lên:</p>
 
-<pre><code><span class="tok-comment"># dung</span>
+<pre><code class="language-bash"><span class="tok-comment"># dung</span>
 if: github.ref == 'refs/heads/main'
 <span class="tok-comment"># SAI — nhay kep khong hop le trong bieu thuc</span>
 if: github.ref == "refs/heads/main"
@@ -592,7 +592,7 @@ ${slide('ga-03', 14, 'To see what a context holds, print it — through env:')}
 
 <p>The whole of any context is printable, and doing so once for the event that is confusing you is faster than reading documentation:</p>
 
-<pre><code>- name: Do context ra xem
+<pre><code class="language-bash">- name: Do context ra xem
   run: |
     echo "\$GITHUB_CONTEXT"
     echo "\$NEEDS_CONTEXT"
@@ -739,7 +739,7 @@ ${slide('ga-03', 14, 'Muốn biết context chứa gì: in nó ra — qua env:')
 
 <p>Trọn vẹn bất kỳ context nào cũng in ra được, và làm thế đúng một lần cho cái sự kiện đang làm bạn rối thì nhanh hơn đọc tài liệu:</p>
 
-<pre><code>- name: Do context ra xem
+<pre><code class="language-bash">- name: Do context ra xem
   run: |
     echo "\$GITHUB_CONTEXT"
     echo "\$NEEDS_CONTEXT"
@@ -876,7 +876,7 @@ null == ''    true       'true'  == true    false
 <h3>Default values with <code>||</code></h3>
 <p>Because <code>||</code> returns an operand rather than a boolean, it is the idiomatic way to supply a fallback:</p>
 
-<pre><code><span class="tok-comment"># neu inputs.version rong thi lay 'latest'</span>
+<pre><code class="language-bash"><span class="tok-comment"># neu inputs.version rong thi lay 'latest'</span>
 tag: &#36;{{ inputs.version || 'latest' }}
 
 <span class="tok-comment"># chon theo nhanh</span>
@@ -1025,7 +1025,7 @@ null == ''    true       'true'  == true    false
 <h3>Giá trị mặc định với <code>||</code></h3>
 <p>Vì <code>||</code> trả về một toán hạng chứ không trả về boolean, nó là cách viết quen thuộc để cấp một giá trị dự phòng:</p>
 
-<pre><code><span class="tok-comment"># neu inputs.version rong thi lay 'latest'</span>
+<pre><code class="language-bash"><span class="tok-comment"># neu inputs.version rong thi lay 'latest'</span>
 tag: &#36;{{ inputs.version || 'latest' }}
 
 <span class="tok-comment"># chon theo nhanh</span>
@@ -1155,7 +1155,7 @@ ${slide('ga-03', 22, 'case(): choose a value by condition, no more && || trap')}
 <h3><code>hashFiles()</code> — what it computes, verified</h3>
 <p>The documented algorithm is: SHA-256 each matched file, concatenate those hashes, SHA-256 the result. That is six lines to reproduce:</p>
 
-<pre><code>def hash_files(*pats):
+<pre><code class="language-python">def hash_files(*pats):
     fs = sorted(set(f for p in pats for f in glob(p) if isfile(f)))
     outer = sha256()
     for f in fs:
@@ -1192,7 +1192,7 @@ hashFiles('ch03/b.txt', 'ch03/a.txt')  = fb7d2a24f465...2a408c8   <- KHAC</div>
 <h3><code>fromJSON()</code> — the two things it is actually for</h3>
 <p><strong>First: a matrix computed at run time.</strong> A matrix must be literal YAML, which means you cannot loop over something discovered during the run — unless the matrix value is a string that <code>fromJSON</code> parses:</p>
 
-<pre><code>jobs:
+<pre><code class="language-bash">jobs:
   tim:
     outputs:
       ds: &#36;{{ steps.q.outputs.ds }}
@@ -1219,7 +1219,7 @@ ${slide('ga-03', 25, 'Three functions need the right place: hashFiles in a step,
 <h3>A cache key that is actually correct</h3>
 <p>Putting 3.2 and this lesson together, the key from this repository reads exactly as it should:</p>
 
-<pre><code>key: nextjs-cache-&#36;{{ runner.os }}-frontend-lock-&#36;{{ hashFiles('frontend/package-lock.json') }}</code></pre>
+<pre><code class="language-bash">key: nextjs-cache-&#36;{{ runner.os }}-frontend-lock-&#36;{{ hashFiles('frontend/package-lock.json') }}</code></pre>
 
 <div class="lz-flow">
 <div class="lz-step"><span class="lz-k">a literal prefix</span><span class="lz-t"><code>nextjs-cache-</code></span><span class="lz-d">names what is in it, so a human reading the cache list can tell</span></div>
@@ -1314,7 +1314,7 @@ ${slide('ga-03', 22, 'case(): chọn giá trị theo điều kiện, không còn
 <h3><code>hashFiles()</code> — nó tính cái gì, đã kiểm chứng</h3>
 <p>Thuật toán trong tài liệu là: SHA-256 từng file khớp mẫu, nối các hash ấy lại, rồi SHA-256 kết quả. Chỉ sáu dòng để tái lập:</p>
 
-<pre><code>def hash_files(*pats):
+<pre><code class="language-python">def hash_files(*pats):
     fs = sorted(set(f for p in pats for f in glob(p) if isfile(f)))
     outer = sha256()
     for f in fs:
@@ -1351,7 +1351,7 @@ hashFiles('ch03/b.txt', 'ch03/a.txt')  = fb7d2a24f465...2a408c8   <- KHAC</div>
 <h3><code>fromJSON()</code> — hai việc nó thật sự dùng để làm</h3>
 <p><strong>Một: một ma trận TÍNH RA LÚC CHẠY.</strong> Một ma trận phải là YAML viết sẵn, nghĩa là bạn không lặp được trên thứ gì khám phá ra trong lúc chạy — trừ khi giá trị ma trận là một chuỗi mà <code>fromJSON</code> phân tích ra:</p>
 
-<pre><code>jobs:
+<pre><code class="language-bash">jobs:
   tim:
     outputs:
       ds: &#36;{{ steps.q.outputs.ds }}
@@ -1378,7 +1378,7 @@ ${slide('ga-03', 25, 'Ba hàm cần đúng chỗ: hashFiles ở bước, trạng
 <h3>Một khoá cache thật sự đúng</h3>
 <p>Ghép bài 3.2 với bài này, cái khoá của kho này đọc lên đúng như nó phải thế:</p>
 
-<pre><code>key: nextjs-cache-&#36;{{ runner.os }}-frontend-lock-&#36;{{ hashFiles('frontend/package-lock.json') }}</code></pre>
+<pre><code class="language-bash">key: nextjs-cache-&#36;{{ runner.os }}-frontend-lock-&#36;{{ hashFiles('frontend/package-lock.json') }}</code></pre>
 
 <div class="lz-flow">
 <div class="lz-step"><span class="lz-k">một tiền tố viết thật</span><span class="lz-t"><code>nextjs-cache-</code></span><span class="lz-d">gọi tên thứ nằm trong đó, để một con người đọc danh sách cache còn biết được</span></div>
@@ -1496,7 +1496,7 @@ ${slide('ga-03', 27, 'On cancel: only always() and cancelled() still run')}
 <h3>The path-filter fix from 1.5, written properly</h3>
 <p>Lesson 1.5 showed why <code>paths:</code> on a <code>pull_request</code> trigger blocks a required check forever, and said the fix is to move the condition inside the job. This is what that looks like:</p>
 
-<pre><code>jobs:
+<pre><code class="language-bash">jobs:
   kiem:
     runs-on: ubuntu-24.04
     steps:
@@ -1633,7 +1633,7 @@ ${slide('ga-03', 27, 'Bấm huỷ: chỉ always() và cancelled() còn chạy')}
 <h3>Cách vá bộ lọc đường dẫn của bài 1.5, viết cho tử tế</h3>
 <p>Bài 1.5 cho thấy vì sao <code>paths:</code> trên một kích hoạt <code>pull_request</code> chặn đứng một ô kiểm bắt buộc vĩnh viễn, và nói cách vá là đưa điều kiện vào BÊN TRONG job. Nó trông như thế này:</p>
 
-<pre><code>jobs:
+<pre><code class="language-bash">jobs:
   kiem:
     runs-on: ubuntu-24.04
     steps:

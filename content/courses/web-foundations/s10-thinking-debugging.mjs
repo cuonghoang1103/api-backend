@@ -68,7 +68,7 @@ ${gallery('wf-think', [
 
 <h3>Worked example: reverse the words in a sentence</h3>
 <p>Problem: given "the sky is blue", produce "blue is sky the" — the WORDS reversed, not the letters. Do not open your editor yet. Think first.</p>
-<pre><code>Step 1 — restate:
+<pre><code class="language-javascript">Step 1 — restate:
   Input:  a sentence, words separated by spaces
   Output: same words, in reverse order, still separated by spaces
 
@@ -126,7 +126,7 @@ What if there is only one word?          "hello"     → reversed list of 1 is u
 
 <h3>Ví dụ có lời giải: đảo thứ tự các từ trong một câu</h3>
 <p>Vấn đề: cho "the sky is blue", tạo ra "blue is sky the" — đảo CÁC TỪ, không phải đảo chữ cái. Đừng mở editor vội. Nghĩ trước.</p>
-<pre><code>Bước 1 — diễn đạt lại:
+<pre><code class="language-javascript">Bước 1 — diễn đạt lại:
   Đầu vào:  một câu, các từ cách nhau bởi dấu cách
   Đầu ra:   cùng các từ đó, theo thứ tự ngược, vẫn cách nhau bởi dấu cách
 
@@ -200,7 +200,7 @@ Nếu chỉ có một từ?             "hello"     → đảo danh sách 1 ph�
 
 <h3>Step 3 — inspect with console.log</h3>
 <p>When the message alone is not enough, make the program show its work. Print the values right before the line that breaks:</p>
-<pre><code>function getUserName(user) {
+<pre><code class="language-javascript">function getUserName(user) {
   console.log("user is:", user);   // what is it actually, right here?
   return user.name;
 }</code></pre>
@@ -215,7 +215,7 @@ Step over / step into → walk the code one line at a time</code></pre>
 
 <h3>The loop: hypothesis, then test it</h3>
 <p>Debugging is the scientific method applied to code:</p>
-<pre><code>1. Form a hypothesis  — "I think 'user' is undefined because the fetch failed"
+<pre><code class="language-javascript">1. Form a hypothesis  — "I think 'user' is undefined because the fetch failed"
 2. Test it            — console.log(user) right before the crash
 3. Confirm or reject   — if confirmed, fix that; if rejected, form a new hypothesis
 4. Repeat</code></pre>
@@ -256,7 +256,7 @@ Step over / step into → walk the code one line at a time</code></pre>
 
 <h3>Bước 3 — soi bằng console.log</h3>
 <p>Khi riêng thông điệp chưa đủ, hãy khiến chương trình phô ra việc nó làm. In các giá trị ngay trước dòng vỡ:</p>
-<pre><code>function getUserName(user) {
+<pre><code class="language-javascript">function getUserName(user) {
   console.log("user is:", user);   // nó thật sự là gì, ngay tại đây?
   return user.name;
 }</code></pre>
@@ -271,7 +271,7 @@ Step over / step into → đi từng dòng code một</code></pre>
 
 <h3>Vòng lặp: đặt giả thuyết, rồi kiểm tra</h3>
 <p>Gỡ lỗi là phương pháp khoa học áp dụng cho code:</p>
-<pre><code>1. Đặt giả thuyết   — "Tôi nghĩ 'user' bị undefined vì fetch thất bại"
+<pre><code class="language-javascript">1. Đặt giả thuyết   — "Tôi nghĩ 'user' bị undefined vì fetch thất bại"
 2. Kiểm tra nó      — console.log(user) ngay trước chỗ vỡ
 3. Xác nhận hay bác bỏ — nếu đúng, sửa chỗ đó; nếu sai, đặt giả thuyết mới
 4. Lặp lại</code></pre>
@@ -309,7 +309,7 @@ Step over / step into → đi từng dòng code một</code></pre>
 
 <h3>One branch per feature</h3>
 <p>Never write new work directly on <code>main</code>. Create a <strong>branch</strong> — an isolated copy of the code — for each feature or fix. If it goes wrong, you delete the branch and <code>main</code> was never touched.</p>
-<pre><code>git checkout main
+<pre><code class="language-bash">git checkout main
 git pull                          # start from the latest main
 git checkout -b feature/login-form
 // ... make changes ...
@@ -317,7 +317,7 @@ git status                        # see what changed</code></pre>
 
 <h3>Commit small, with clear messages</h3>
 <p>A <strong>commit</strong> is a saved checkpoint. Small, frequent commits with honest messages are easier to review, easier to undo, and easier for your future self to understand than one giant "fixed stuff" commit at the end of the day.</p>
-<pre><code>git add src/components/LoginForm.tsx
+<pre><code class="language-bash">git add src/components/LoginForm.tsx
 git commit -m "Add LoginForm with email/password fields"
 
 git add src/components/LoginForm.tsx
@@ -328,7 +328,7 @@ git commit -m "Add client-side validation for LoginForm"</code></pre>
 </div>
 
 <h3>Push, open a Pull Request, review, merge</h3>
-<pre><code>git push -u origin feature/login-form   # send the branch to GitHub
+<pre><code class="language-bash">git push -u origin feature/login-form   # send the branch to GitHub
 
 // On GitHub: click "Compare & pull request"
 // A Pull Request (PR) proposes merging your branch into main
@@ -341,12 +341,12 @@ git commit -m "Add client-side validation for LoginForm"</code></pre>
 
 <h3>Resolving a simple merge conflict</h3>
 <p>A <strong>conflict</strong> happens when two branches changed the same lines and Git cannot guess which version you want. Git marks both versions in the file:</p>
-<pre><code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+<pre><code class="language-javascript">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
 const greeting = "Welcome back!";
 =======
 const greeting = "Hello again!";
 &gt;&gt;&gt;&gt;&gt;&gt;&gt; feature/login-form</code></pre>
-<pre><code>// You edit the file by hand: pick one, pick the other, or write something new
+<pre><code class="language-javascript">// You edit the file by hand: pick one, pick the other, or write something new
 const greeting = "Welcome back!";
 
 git add src/components/LoginForm.tsx   // mark it resolved
@@ -372,7 +372,7 @@ git commit                              // completes the merge</code></pre>
 
 <h3>Một nhánh cho mỗi tính năng</h3>
 <p>Không bao giờ viết việc mới trực tiếp trên <code>main</code>. Tạo một <strong>nhánh (branch)</strong> — một bản sao tách biệt của code — cho mỗi tính năng hay sửa lỗi. Nếu sai, bạn xoá nhánh và <code>main</code> chưa từng bị đụng vào.</p>
-<pre><code>git checkout main
+<pre><code class="language-bash">git checkout main
 git pull                          # bắt đầu từ main mới nhất
 git checkout -b feature/login-form
 // ... sửa đổi ...
@@ -380,7 +380,7 @@ git status                        # xem cái gì đã đổi</code></pre>
 
 <h3>Commit nhỏ, với thông điệp rõ ràng</h3>
 <p>Một <strong>commit</strong> là một điểm lưu. Commit nhỏ, thường xuyên với thông điệp thật thà dễ review, dễ hoàn tác, và dễ cho chính bạn tương lai hiểu hơn một commit khổng lồ "sửa mấy thứ" cuối ngày.</p>
-<pre><code>git add src/components/LoginForm.tsx
+<pre><code class="language-bash">git add src/components/LoginForm.tsx
 git commit -m "Add LoginForm with email/password fields"
 
 git add src/components/LoginForm.tsx
@@ -391,7 +391,7 @@ git commit -m "Add client-side validation for LoginForm"</code></pre>
 </div>
 
 <h3>Push, mở Pull Request, review, merge</h3>
-<pre><code>git push -u origin feature/login-form   # gửi nhánh lên GitHub
+<pre><code class="language-bash">git push -u origin feature/login-form   # gửi nhánh lên GitHub
 
 // Trên GitHub: bấm "Compare & pull request"
 // Một Pull Request (PR) đề xuất gộp nhánh của bạn vào main
@@ -404,12 +404,12 @@ git commit -m "Add client-side validation for LoginForm"</code></pre>
 
 <h3>Giải quyết một xung đột merge đơn giản</h3>
 <p>Một <strong>xung đột (conflict)</strong> xảy ra khi hai nhánh đổi cùng dòng và Git không đoán được bạn muốn bản nào. Git đánh dấu cả hai bản trong file:</p>
-<pre><code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+<pre><code class="language-javascript">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
 const greeting = "Welcome back!";
 =======
 const greeting = "Hello again!";
 &gt;&gt;&gt;&gt;&gt;&gt;&gt; feature/login-form</code></pre>
-<pre><code>// Bạn sửa file bằng tay: chọn cái này, chọn cái kia, hoặc viết cái mới
+<pre><code class="language-javascript">// Bạn sửa file bằng tay: chọn cái này, chọn cái kia, hoặc viết cái mới
 const greeting = "Welcome back!";
 
 git add src/components/LoginForm.tsx   // đánh dấu đã giải quyết
@@ -459,7 +459,7 @@ Stuck on an npm package?           → its README is usually the fastest answer<
 
 <h3>Ask good questions — the minimal reproducible example</h3>
 <p>"It doesn't work" gets ignored. A good question includes a <strong>minimal reproducible example</strong>: the smallest possible piece of code that shows the problem, plus what you expected, what actually happened, and the exact error message.</p>
-<pre><code>Bad:  "my fetch is broken, help"
+<pre><code class="language-javascript">Bad:  "my fetch is broken, help"
 
 Good: "I expected fetch("/api/users") to return an array, but I get
        undefined. Here is the smallest code that reproduces it:
@@ -506,7 +506,7 @@ Kẹt với một gói npm?               → README của nó thường là câ
 
 <h3>Đặt câu hỏi tốt — ví dụ tái hiện tối thiểu</h3>
 <p>"Nó không chạy" bị lờ đi. Một câu hỏi tốt kèm một <strong>ví dụ tái hiện tối thiểu (minimal reproducible example)</strong>: mảnh code nhỏ nhất có thể cho thấy vấn đề, cộng với bạn mong đợi gì, thực tế xảy ra gì, và thông điệp lỗi chính xác.</p>
-<pre><code>Tệ:  "fetch của tôi hỏng, giúp với"
+<pre><code class="language-javascript">Tệ:  "fetch của tôi hỏng, giúp với"
 
 Tốt: "Tôi mong fetch("/api/users") trả về một mảng, nhưng tôi nhận
      undefined. Đây là code nhỏ nhất tái hiện nó:

@@ -26,7 +26,7 @@ export default {
 <p class="lead">Prisma Client is not pure JavaScript. It loads a compiled Rust binary, built for one specific combination of libc, CPU architecture and OpenSSL version. Get that combination wrong and nothing fails until the container starts — which is after the build passed, after the push passed, and after the old container was already replaced.</p>
 
 <h3>What <code>prisma generate</code> actually puts on disk</h3>
-<pre><code>npx prisma generate
+<pre><code class="language-bash">npx prisma generate
 ls -la node_modules/.prisma/client/</code></pre>
 <div class="out">index.js                                    1.2 MB   <span class="tok-comment">← the JS API</span>
 index.d.ts                                  3.8 MB   <span class="tok-comment">← the types from Chapter 8</span>
@@ -40,7 +40,7 @@ libquery_engine-debian-openssl-3.0.x.count.node  18 MB   <span class="tok-commen
 </div>
 
 <h3>The failure, exactly as it looks</h3>
-<pre><code><span class="tok-comment"># The image built on Debian, running on Alpine</span>
+<pre><code class="language-bash"><span class="tok-comment"># The image built on Debian, running on Alpine</span>
 docker logs cuonghoangdev_backend --tail 20</code></pre>
 <div class="out">PrismaClientInitializationError:
 Unable to require(&#96;/app/node_modules/.prisma/client/libquery_engine-debian-openssl-3.0.x.count.node&#96;)
@@ -52,7 +52,7 @@ Error loading shared library ld-linux-x86-64.count.2: No such file or directory
 node:internal/process/promises:288
             triggerUncaughtException(err, true);
 [nodemon] app crashed</div>
-<pre><code><span class="tok-comment"># And what the orchestrator does about it</span>
+<pre><code class="language-bash"><span class="tok-comment"># And what the orchestrator does about it</span>
 docker ps -a --filter name=backend</code></pre>
 <div class="out">CONTAINER ID   STATUS
 a3f9e21c4b7d   Restarting (1) 3 seconds ago</div>
@@ -67,7 +67,7 @@ a3f9e21c4b7d   Restarting (1) 3 seconds ago</div>
 </div>
 
 <h3>Declaring the targets</h3>
-<pre><code><span class="tok-comment">// schema.prisma — build on a Mac, run on Alpine</span>
+<pre><code class="language-typescript"><span class="tok-comment">// schema.prisma — build on a Mac, run on Alpine</span>
 generator client {
   provider      = "prisma-client-js"
   binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
@@ -78,7 +78,7 @@ generator client {
   <div class="kv"><span class="k">Debian/Ubuntu slim → <code>debian-openssl-3.0.x</code></span><span class="v"><code>node:22-slim</code> is Debian bookworm, OpenSSL 3. <code>node:22</code> (the full image) is the same. Bullseye-based images need <code>-1.1.x</code>.</span></div>
   <div class="kv"><span class="k">ARM servers</span><span class="v">A Graviton or Ampere host needs <code>linux-arm64-openssl-3.0.x</code>. Building on an Apple Silicon Mac for an x86 VPS is the same mismatch in the other direction, and it produces the identical error.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Find out what a running container actually is</span>
+<pre><code class="language-bash"><span class="tok-comment"># Find out what a running container actually is</span>
 docker run --rm node:22-alpine sh -c 'ldd --version 2&gt;&amp;1 | head -1; openssl version'
 docker run --rm node:22-slim  sh -c 'ldd --version 2&gt;&amp;1 | head -1; openssl version'</code></pre>
 <div class="out">musl libc (x86_64) Version 1.2.5
@@ -88,7 +88,7 @@ ldd (Debian GLIBC 2.36-9+deb12u13) 2.36
 OpenSSL 3.0.16 11 Feb 2025</div>
 
 <h3>The check that would have caught it</h3>
-<pre><code><span class="tok-comment">#!/usr/bin/env bash</span>
+<pre><code class="language-javascript"><span class="tok-comment">#!/usr/bin/env bash</span>
 <span class="tok-comment"># scripts/check-engine.sh — run BEFORE pushing the image to the registry</span>
 set -euo pipefail
 ANH="\$1"
@@ -125,7 +125,7 @@ docker run --rm --entrypoint node "\$ANH" \\
 </div>
 
 <h3>The engineless option</h3>
-<pre><code><span class="tok-comment"># Generate a client with no engine binary at all</span>
+<pre><code class="language-bash"><span class="tok-comment"># Generate a client with no engine binary at all</span>
 npx prisma generate --no-engine</code></pre>
 <div class="out">✔ Generated Prisma Client (v6.4.1, engine=none) in 178ms
 
@@ -152,7 +152,7 @@ node_modules/.prisma/client/  →  4.1 MB   (khong co .count.node)</div>
 <p class="lead">Prisma Client KHÔNG phải JavaScript thuần. Nó nạp một tệp nhị phân Rust đã biên dịch, dựng cho ĐÚNG MỘT tổ hợp libc, kiến trúc CPU và phiên bản OpenSSL. Sai tổ hợp đó thì không có gì hỏng cho tới lúc container KHỞI ĐỘNG — tức là sau khi build đã qua, sau khi push đã qua, và sau khi container cũ đã bị thay mất rồi.</p>
 
 <h3><code>prisma generate</code> THẬT SỰ đặt gì lên đĩa</h3>
-<pre><code>npx prisma generate
+<pre><code class="language-bash">npx prisma generate
 ls -la node_modules/.prisma/client/</code></pre>
 <div class="out">index.js                                    1,2 MB   <span class="tok-comment">← API JavaScript</span>
 index.d.ts                                  3,8 MB   <span class="tok-comment">← bộ kiểu của Chương 8</span>
@@ -166,7 +166,7 @@ libquery_engine-debian-openssl-3.0.x.count.node  18 MB   <span class="tok-commen
 </div>
 
 <h3>Cú hỏng, đúng như nó hiện ra</h3>
-<pre><code><span class="tok-comment"># Ảnh dựng trên Debian, chạy trên Alpine</span>
+<pre><code class="language-bash"><span class="tok-comment"># Ảnh dựng trên Debian, chạy trên Alpine</span>
 docker logs cuonghoangdev_backend --tail 20</code></pre>
 <div class="out">PrismaClientInitializationError:
 Unable to require(&#96;/app/node_modules/.prisma/client/libquery_engine-debian-openssl-3.0.x.count.node&#96;)
@@ -178,7 +178,7 @@ Error loading shared library ld-linux-x86-64.count.2: No such file or directory
 node:internal/process/promises:288
             triggerUncaughtException(err, true);
 [nodemon] app crashed</div>
-<pre><code><span class="tok-comment"># Và bộ điều phối làm gì với chuyện đó</span>
+<pre><code class="language-bash"><span class="tok-comment"># Và bộ điều phối làm gì với chuyện đó</span>
 docker ps -a --filter name=backend</code></pre>
 <div class="out">CONTAINER ID   STATUS
 a3f9e21c4b7d   Restarting (1) 3 seconds ago</div>
@@ -193,7 +193,7 @@ a3f9e21c4b7d   Restarting (1) 3 seconds ago</div>
 </div>
 
 <h3>Khai báo target</h3>
-<pre><code><span class="tok-comment">// schema.prisma — dựng trên Mac, chạy trên Alpine</span>
+<pre><code class="language-typescript"><span class="tok-comment">// schema.prisma — dựng trên Mac, chạy trên Alpine</span>
 generator client {
   provider      = "prisma-client-js"
   binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
@@ -204,7 +204,7 @@ generator client {
   <div class="kv"><span class="k">Debian/Ubuntu slim → <code>debian-openssl-3.0.x</code></span><span class="v"><code>node:22-slim</code> là Debian bookworm, OpenSSL 3. <code>node:22</code> (ảnh đầy đủ) cũng vậy. Ảnh nền bullseye thì cần <code>-1.1.x</code>.</span></div>
   <div class="kv"><span class="k">Máy chủ ARM</span><span class="v">Một máy Graviton hay Ampere cần <code>linux-arm64-openssl-3.0.x</code>. Dựng trên Mac Apple Silicon để chạy trên VPS x86 là ĐÚNG cú lệch đó theo chiều ngược lại, và nó cho ra y hệt một lỗi.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Xem một container đang chạy THẬT SỰ là nền gì</span>
+<pre><code class="language-bash"><span class="tok-comment"># Xem một container đang chạy THẬT SỰ là nền gì</span>
 docker run --rm node:22-alpine sh -c 'ldd --version 2&gt;&amp;1 | head -1; openssl version'
 docker run --rm node:22-slim  sh -c 'ldd --version 2&gt;&amp;1 | head -1; openssl version'</code></pre>
 <div class="out">musl libc (x86_64) Version 1.2.5
@@ -214,7 +214,7 @@ ldd (Debian GLIBC 2.36-9+deb12u13) 2.36
 OpenSSL 3.0.16 11 Feb 2025</div>
 
 <h3>Chốt kiểm lẽ ra đã bắt được nó</h3>
-<pre><code><span class="tok-comment">#!/usr/bin/env bash</span>
+<pre><code class="language-javascript"><span class="tok-comment">#!/usr/bin/env bash</span>
 <span class="tok-comment"># scripts/kiem-engine.sh — chạy TRƯỚC khi đẩy ảnh lên registry</span>
 set -euo pipefail
 ANH="\$1"
@@ -251,7 +251,7 @@ docker run --rm --entrypoint node "\$ANH" \\
 </div>
 
 <h3>Lựa chọn KHÔNG engine</h3>
-<pre><code><span class="tok-comment"># Sinh một client không kèm tệp nhị phân engine nào cả</span>
+<pre><code class="language-bash"><span class="tok-comment"># Sinh một client không kèm tệp nhị phân engine nào cả</span>
 npx prisma generate --no-engine</code></pre>
 <div class="out">✔ Generated Prisma Client (v6.4.1, engine=none) in 178ms
 
@@ -286,7 +286,7 @@ node_modules/.prisma/client/  →  4,1 MB   (khong co .count.node)</div>
 <p class="lead">Three rules decide whether a Prisma image works: the schema must be present before <code>npm ci</code>, <code>generate</code> must run on the same base as the runtime, and the CLI must still exist wherever you run migrations. Every Prisma Docker problem is one of those three, and this lesson writes a Dockerfile that gets all three right, with the reasoning next to each line.</p>
 
 <h3>Rule 1 — the schema must exist before <code>npm ci</code></h3>
-<pre><code><span class="tok-comment"># package.json</span>
+<pre><code class="language-typescript"><span class="tok-comment"># package.json</span>
 "scripts": {
   "postinstall": "prisma generate"
 }</code></pre>
@@ -429,7 +429,7 @@ frontend              <span class="tok-comment"># the frontend has its own Docke
 <p class="lead">Ba luật quyết định một ảnh Prisma có chạy được hay không: schema phải có mặt TRƯỚC <code>npm ci</code>, <code>generate</code> phải chạy trên CÙNG nền với runtime, và CLI phải còn tồn tại ở nơi bạn chạy migration. Mọi trục trặc Prisma-trong-Docker đều là một trong ba cái đó, và bài này viết một Dockerfile làm đúng cả ba, kèm lý do đặt ngay cạnh từng dòng.</p>
 
 <h3>Luật 1 — schema phải có TRƯỚC <code>npm ci</code></h3>
-<pre><code><span class="tok-comment"># package.json</span>
+<pre><code class="language-typescript"><span class="tok-comment"># package.json</span>
 "scripts": {
   "postinstall": "prisma generate"
 }</code></pre>
@@ -609,7 +609,7 @@ frontend              <span class="tok-comment"># frontend có Dockerfile riêng
   <div class="kv"><span class="k">Never: both at once</span><span class="v">Two triggers on the same event, as above. Whichever finishes first decides which window you get, and it will not be the same one twice.</span></div>
   <div class="kv"><span class="k">Gate on <code>migrate status</code></span><span class="v"><code>npx prisma migrate status</code> exits non-zero when migrations are pending or failed. Run it before the swap and after the migrate step; it turns "is the schema current?" from an assumption into a check.</span></div>
 </div>
-<pre><code><span class="tok-comment"># The deploy step, in order, with the gate</span>
+<pre><code class="language-bash"><span class="tok-comment"># The deploy step, in order, with the gate</span>
 npx prisma migrate deploy
 npx prisma migrate status          <span class="tok-comment"># must be clean before swapping</span>
 docker compose -p cuonghoangdev up -d --no-build backend</code></pre>
@@ -620,7 +620,7 @@ The following migration have been applied: 20260823120000_them_cot_ho_ten
 Database schema is up to date!</div>
 
 <h3>Expand and contract — renaming a column across three deploys</h3>
-<pre><code><span class="tok-comment">// ❌ The one-step rename. Compiles, migrates, breaks the window.</span>
+<pre><code class="language-typescript"><span class="tok-comment">// ❌ The one-step rename. Compiles, migrates, breaks the window.</span>
 model User {
   fullName String <span class="tok-comment">// was: fullName</span>
 }</code></pre>
@@ -641,7 +641,7 @@ ALTER TABLE "User" ADD COLUMN "fullName" TEXT NOT NULL;
 </div>
 
 <h3>The migrations that lock the table</h3>
-<pre><code><span class="tok-comment">-- Looks instant. Is not.</span>
+<pre><code class="language-sql"><span class="tok-comment">-- Looks instant. Is not.</span>
 ALTER TABLE "SocialPost" ADD COLUMN "score" INTEGER NOT NULL DEFAULT 0;</code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k">Adding a column with a constant default</span><span class="v">Instant since PostgreSQL 11 — the default is stored in the catalogue, no table rewrite. Safe on any size.</span></div>
@@ -649,7 +649,7 @@ ALTER TABLE "SocialPost" ADD COLUMN "score" INTEGER NOT NULL DEFAULT 0;</code></
   <div class="kv"><span class="k">Changing a column type</span><span class="v">Rewrites the table and holds <code>ACCESS EXCLUSIVE</code> for the duration. On a million rows, that is a total outage measured in minutes. Add a new column instead and expand/contract.</span></div>
   <div class="kv"><span class="k">Adding a unique constraint</span><span class="v">Builds a unique index over existing data, blocking writes, and fails outright if duplicates exist. Check for duplicates first, in a query, before writing the migration.</span></div>
 </div>
-<pre><code><span class="tok-comment">-- The first two lines of any migration that touches a big table</span>
+<pre><code class="language-sql"><span class="tok-comment">-- The first two lines of any migration that touches a big table</span>
 SET lock_timeout = '3s';
 SET statement_timeout = '30s';
 
@@ -668,7 +668,7 @@ ERROR: canceling statement due to lock timeout
 </div>
 
 <h3><code>CREATE INDEX CONCURRENTLY</code> and the transaction</h3>
-<pre><code><span class="tok-comment">-- prisma/migrations/…/migration.sql</span>
+<pre><code class="language-sql"><span class="tok-comment">-- prisma/migrations/…/migration.sql</span>
 CREATE INDEX CONCURRENTLY "socialpost_author_created_idx"
   ON "SocialPost" ("authorId", "createdAt" DESC);</code></pre>
 <div class="out">Error: ERROR: CREATE INDEX CONCURRENTLY cannot run inside a transaction block
@@ -729,7 +729,7 @@ CREATE INDEX CONCURRENTLY "socialpost_author_created_idx"
   <div class="kv"><span class="k">Tuyệt đối không: cả hai cùng lúc</span><span class="v">Hai kích hoạt trên cùng một sự kiện, như ở trên. Bên nào xong trước sẽ quyết định bạn nhận cửa sổ nào, và nó sẽ không giống nhau hai lần.</span></div>
   <div class="kv"><span class="k">Chốt cửa bằng <code>migrate status</code></span><span class="v"><code>npx prisma migrate status</code> thoát với mã khác 0 khi còn migration chờ hoặc đã thất bại. Chạy nó trước khi tráo và sau bước migrate; nó biến "lược đồ đã mới chưa?" từ một giả định thành một PHÉP KIỂM.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Bước deploy, theo thứ tự, có chốt cửa</span>
+<pre><code class="language-bash"><span class="tok-comment"># Bước deploy, theo thứ tự, có chốt cửa</span>
 npx prisma migrate deploy
 npx prisma migrate status          <span class="tok-comment"># phải sạch trước khi tráo</span>
 docker compose -p cuonghoangdev up -d --no-build backend</code></pre>
@@ -740,7 +740,7 @@ The following migration have been applied: 20260823120000_them_cot_ho_ten
 Database schema is up to date!</div>
 
 <h3>Mở rộng rồi thu hẹp — đổi tên một cột qua BA lần deploy</h3>
-<pre><code><span class="tok-comment">// ❌ Đổi tên một phát. Biên dịch được, migrate được, vỡ ngay trong cửa sổ.</span>
+<pre><code class="language-typescript"><span class="tok-comment">// ❌ Đổi tên một phát. Biên dịch được, migrate được, vỡ ngay trong cửa sổ.</span>
 model User {
   fullName String <span class="tok-comment">// trước là: fullName</span>
 }</code></pre>
@@ -761,7 +761,7 @@ ALTER TABLE "User" ADD COLUMN "fullName" TEXT NOT NULL;
 </div>
 
 <h3>Những migration KHOÁ cả bảng</h3>
-<pre><code><span class="tok-comment">-- Trông có vẻ tức thì. Không phải.</span>
+<pre><code class="language-sql"><span class="tok-comment">-- Trông có vẻ tức thì. Không phải.</span>
 ALTER TABLE "SocialPost" ADD COLUMN "score" INTEGER NOT NULL DEFAULT 0;</code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k">Thêm cột kèm default là HẰNG</span><span class="v">Tức thì từ PostgreSQL 11 — default nằm trong catalogue, không viết lại bảng. An toàn ở mọi kích cỡ.</span></div>
@@ -769,7 +769,7 @@ ALTER TABLE "SocialPost" ADD COLUMN "score" INTEGER NOT NULL DEFAULT 0;</code></
   <div class="kv"><span class="k">Đổi KIỂU của một cột</span><span class="v">Viết lại cả bảng và giữ <code>ACCESS EXCLUSIVE</code> suốt thời gian đó. Trên một triệu hàng, đó là một cú chết toàn phần đo bằng phút. Hãy thêm cột MỚI rồi mở-rộng-thu-hẹp.</span></div>
   <div class="kv"><span class="k">Thêm ràng buộc duy nhất</span><span class="v">Dựng một chỉ mục duy nhất trên dữ liệu đang có, chặn ghi, và hỏng hẳn nếu có trùng. Hãy kiểm trùng TRƯỚC bằng một câu truy vấn, trước khi viết migration.</span></div>
 </div>
-<pre><code><span class="tok-comment">-- Hai dòng đầu của MỌI migration đụng vào một bảng lớn</span>
+<pre><code class="language-sql"><span class="tok-comment">-- Hai dòng đầu của MỌI migration đụng vào một bảng lớn</span>
 SET lock_timeout = '3s';
 SET statement_timeout = '30s';
 
@@ -788,7 +788,7 @@ ERROR: canceling statement due to lock timeout
 </div>
 
 <h3><code>CREATE INDEX CONCURRENTLY</code> và cái giao dịch</h3>
-<pre><code><span class="tok-comment">-- prisma/migrations/…/migration.sql</span>
+<pre><code class="language-sql"><span class="tok-comment">-- prisma/migrations/…/migration.sql</span>
 CREATE INDEX CONCURRENTLY "socialpost_author_created_idx"
   ON "SocialPost" ("authorId", "createdAt" DESC);</code></pre>
 <div class="out">Error: ERROR: CREATE INDEX CONCURRENTLY cannot run inside a transaction block
@@ -846,11 +846,11 @@ CREATE INDEX CONCURRENTLY "socialpost_author_created_idx"
 </div>
 
 <h3>The seed: <code>upsert</code>, and nothing else</h3>
-<pre><code><span class="tok-comment">// package.json — this is where Prisma looks</span>
+<pre><code class="language-typescript"><span class="tok-comment">// package.json — this is where Prisma looks</span>
 "prisma": {
   "seed": "tsx prisma/seed.ts"
 }</code></pre>
-<pre><code><span class="tok-comment">// ❌ Runs once. The second run is a P2002 or a duplicate row.</span>
+<pre><code class="language-typescript"><span class="tok-comment">// ❌ Runs once. The second run is a P2002 or a duplicate row.</span>
 await prisma.category.create({ data: { slug: 'databases', name: 'Cơ sở dữ liệu' } });
 
 <span class="tok-comment">// ✅ Runs any number of times, converging on the same state</span>
@@ -867,7 +867,7 @@ await prisma.category.upsert({
 </div>
 
 <h3>Why <code>tsc --noEmit</code> does not check your seed</h3>
-<pre><code><span class="tok-comment">// tsconfig.json</span>
+<pre><code class="language-typescript"><span class="tok-comment">// tsconfig.json</span>
 {
   "compilerOptions": { "rootDir": "./src", "outDir": "./dist" },
   "include": ["src/**/*"],
@@ -876,7 +876,7 @@ await prisma.category.upsert({
 <div class="out">$ npx tsc --noEmit
 $ echo $?
 0                    ← prisma/seed.ts was never looked at</div>
-<pre><code><span class="tok-comment">// prisma/seed.ts — the shape of the 08/08/2026 failure</span>
+<pre><code class="language-typescript"><span class="tok-comment">// prisma/seed.ts — the shape of the 08/08/2026 failure</span>
 type ContentType = 'VLOG' | 'TUTORIAL' | 'CODE' | 'NEWS';   <span class="tok-comment">// hand-copied</span>
 
 <span class="tok-comment">// The schema renamed CODE → CODE_REVIEW. This file type-checks</span>
@@ -885,11 +885,11 @@ type ContentType = 'VLOG' | 'TUTORIAL' | 'CODE' | 'NEWS';   <span class="tok-com
 <div class="out">PrismaClientKnownRequestError:
 Invalid value for argument &#96;type&#96;. Expected ContentType.
   → invalid enum value: CODE</div>
-<pre><code><span class="tok-comment">// ✅ Import the type. Then a schema rename is a compile error.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// ✅ Import the type. Then a schema rename is a compile error.</span>
 import { ContentType } from '@prisma/client';
 
 const kind: ContentType = ContentType.CODE_REVIEW;</code></pre>
-<pre><code><span class="tok-comment">// tsconfig.seed.json — a second config for the excluded directory</span>
+<pre><code class="language-typescript"><span class="tok-comment">// tsconfig.seed.json — a second config for the excluded directory</span>
 {
   "extends": "./tsconfig.json",
   "compilerOptions": { "rootDir": ".", "noEmit": true },
@@ -906,7 +906,7 @@ const kind: ContentType = ContentType.CODE_REVIEW;</code></pre>
 </div>
 
 <h3>The data migration: once, and recorded</h3>
-<pre><code><span class="tok-comment">-- prisma/migrations/20260823130000_chuan_hoa_email/migration.sql</span>
+<pre><code class="language-sql"><span class="tok-comment">-- prisma/migrations/20260823130000_chuan_hoa_email/migration.sql</span>
 SET lock_timeout = '3s';
 
 <span class="tok-comment">-- Schema change and data change, one migration, one transaction</span>
@@ -921,7 +921,7 @@ CREATE UNIQUE INDEX "user_email_chuan_hoa_key" ON "User" ("emailChuanHoa");</cod
 </div>
 
 <h3>The backfill: chunked, resumable, dry-runnable</h3>
-<pre><code><span class="tok-comment">// scripts/nap-bu-ho-ten.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// scripts/nap-bu-ho-ten.ts</span>
 const LO = 1000;
 const KHO = process.argv.includes('--that');   <span class="tok-comment">// default is a dry run</span>
 
@@ -1002,11 +1002,11 @@ $ npx tsx scripts/nap-bu-ho-name.ts --that
 </div>
 
 <h3>Seed: <code>upsert</code>, và không gì khác</h3>
-<pre><code><span class="tok-comment">// package.json — đây là chỗ Prisma tìm</span>
+<pre><code class="language-typescript"><span class="tok-comment">// package.json — đây là chỗ Prisma tìm</span>
 "prisma": {
   "seed": "tsx prisma/seed.ts"
 }</code></pre>
-<pre><code><span class="tok-comment">// ❌ Chạy được MỘT lần. Lần hai là P2002 hoặc một hàng trùng.</span>
+<pre><code class="language-typescript"><span class="tok-comment">// ❌ Chạy được MỘT lần. Lần hai là P2002 hoặc một hàng trùng.</span>
 await prisma.category.create({ data: { slug: 'databases', name: 'Cơ sở dữ liệu' } });
 
 <span class="tok-comment">// ✅ Chạy bao nhiêu lần cũng được, đều hội tụ về cùng một trạng thái</span>
@@ -1023,7 +1023,7 @@ await prisma.category.upsert({
 </div>
 
 <h3>Vì sao <code>tsc --noEmit</code> KHÔNG kiểm cái seed của bạn</h3>
-<pre><code><span class="tok-comment">// tsconfig.json</span>
+<pre><code class="language-typescript"><span class="tok-comment">// tsconfig.json</span>
 {
   "compilerOptions": { "rootDir": "./src", "outDir": "./dist" },
   "include": ["src/**/*"],
@@ -1032,7 +1032,7 @@ await prisma.category.upsert({
 <div class="out">$ npx tsc --noEmit
 $ echo $?
 0                    ← prisma/seed.ts chua he duoc nhin toi</div>
-<pre><code><span class="tok-comment">// prisma/seed.ts — hình dạng của cú hỏng ngày 08/08/2026</span>
+<pre><code class="language-typescript"><span class="tok-comment">// prisma/seed.ts — hình dạng của cú hỏng ngày 08/08/2026</span>
 type ContentType = 'VLOG' | 'TUTORIAL' | 'CODE' | 'NEWS';   <span class="tok-comment">// chép tay</span>
 
 <span class="tok-comment">// Lược đồ đã đổi CODE → CODE_REVIEW. File này tự kiểm kiểu</span>
@@ -1041,11 +1041,11 @@ type ContentType = 'VLOG' | 'TUTORIAL' | 'CODE' | 'NEWS';   <span class="tok-com
 <div class="out">PrismaClientKnownRequestError:
 Invalid value for argument &#96;type&#96;. Expected ContentType.
   → invalid enum value: CODE</div>
-<pre><code><span class="tok-comment">// ✅ Import cái kiểu vào. Khi đó đổi tên trong lược đồ là LỖI BIÊN DỊCH.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// ✅ Import cái kiểu vào. Khi đó đổi tên trong lược đồ là LỖI BIÊN DỊCH.</span>
 import { ContentType } from '@prisma/client';
 
 const kind: ContentType = ContentType.CODE_REVIEW;</code></pre>
-<pre><code><span class="tok-comment">// tsconfig.seed.json — một cấu hình thứ hai cho thư mục bị loại trừ</span>
+<pre><code class="language-typescript"><span class="tok-comment">// tsconfig.seed.json — một cấu hình thứ hai cho thư mục bị loại trừ</span>
 {
   "extends": "./tsconfig.json",
   "compilerOptions": { "rootDir": ".", "noEmit": true },
@@ -1062,7 +1062,7 @@ const kind: ContentType = ContentType.CODE_REVIEW;</code></pre>
 </div>
 
 <h3>Data migration: một lần, và có ghi lại</h3>
-<pre><code><span class="tok-comment">-- prisma/migrations/20260823130000_chuan_hoa_email/migration.sql</span>
+<pre><code class="language-sql"><span class="tok-comment">-- prisma/migrations/20260823130000_chuan_hoa_email/migration.sql</span>
 SET lock_timeout = '3s';
 
 <span class="tok-comment">-- Đổi lược đồ và đổi dữ liệu, một migration, một giao dịch</span>
@@ -1077,7 +1077,7 @@ CREATE UNIQUE INDEX "user_email_chuan_hoa_key" ON "User" ("emailChuanHoa");</cod
 </div>
 
 <h3>Nạp bù: chia lô, nối lại được, chạy thử được</h3>
-<pre><code><span class="tok-comment">// scripts/nap-bu-ho-ten.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// scripts/nap-bu-ho-ten.ts</span>
 const LO = 1000;
 const KHO = process.argv.includes('--that');   <span class="tok-comment">// mặc định là chạy THỬ</span>
 
@@ -1148,7 +1148,7 @@ $ npx tsx scripts/nap-bu-ho-name.ts --that
 <p class="lead">A <code>PrismaClient</code> owns a connection pool, and a pool is a resource that outlives the code that created it. Two questions decide whether a deployment is stable: how many clients exist, and what happens to the in-flight queries when the container is told to stop. Both have short answers and both are wrong in most codebases.</p>
 
 <h3>One client per process</h3>
-<pre><code><span class="tok-comment">// ❌ A client per request. Each one opens its own pool.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// ❌ A client per request. Each one opens its own pool.</span>
 app.get('/post-viet', async (req, res) =&gt; {
   const prisma = new PrismaClient();
   res.json(await prisma.socialPost.findMany({ take: 20 }));
@@ -1157,7 +1157,7 @@ app.get('/post-viet', async (req, res) =&gt; {
 actively running.
 
 FATAL: sorry, too many clients already</div>
-<pre><code><span class="tok-comment">// ✅ src/lib/prisma.ts — created once, imported everywhere</span>
+<pre><code class="language-javascript"><span class="tok-comment">// ✅ src/lib/prisma.ts — created once, imported everywhere</span>
 import { PrismaClient } from '@prisma/client';
 
 const tao = () =&gt; new PrismaClient({
@@ -1179,12 +1179,12 @@ if (process.env.NODE_ENV !== 'production') g.prisma = prisma;</code></pre>
 </div>
 
 <h3>Shutting down: the ten seconds Docker gives you</h3>
-<pre><code><span class="tok-comment"># What actually happens on a deploy</span>
+<pre><code class="language-bash"><span class="tok-comment"># What actually happens on a deploy</span>
 docker compose up -d --no-build backend</code></pre>
 <div class="out">1. SIGTERM → the container's PID 1
 2. …10 giay…
 3. SIGKILL → khong the bat, khong the tri hoan</div>
-<pre><code><span class="tok-comment">// src/index.ts — use all ten seconds, then stop</span>
+<pre><code class="language-javascript"><span class="tok-comment">// src/index.ts — use all ten seconds, then stop</span>
 const server = app.listen(3000);
 
 let disabled = false;
@@ -1224,7 +1224,7 @@ exit 0                       ← khong co request nao bi cat giua chung</div>
 </div>
 
 <h3>Health checks: alive is not the same as ready</h3>
-<pre><code><span class="tok-comment">// Liveness — is the process wedged? Never touch the database here.</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Liveness — is the process wedged? Never touch the database here.</span>
 app.get('/health', (_req, res) =&gt; res.json({ ok: true }));
 
 <span class="tok-comment">// Readiness — should this instance receive traffic?</span>
@@ -1245,14 +1245,14 @@ app.get('/ready', async (_req, res) =&gt; {
 </div>
 
 <h3>Logging: the query log is full of user data</h3>
-<pre><code><span class="tok-comment">// Innocent-looking, and a data-protection incident on production</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Innocent-looking, and a data-protection incident on production</span>
 new PrismaClient({ log: ['query'] });</code></pre>
 <div class="out">prisma:query SELECT "User"."passwordHash" FROM "User" WHERE "email" = $1
 prisma:query params: ["an@vidu.com"]
 
 prisma:query INSERT INTO "Message" ("content","threadId") VALUES ($1,$2)
 prisma:query params: ["count tai khoan cua minh la 0123456789", "clx7…"]</div>
-<pre><code><span class="tok-comment">// Structured, sampled, and without the parameters</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Structured, sampled, and without the parameters</span>
 prisma.$on('query', (e) =&gt; {
   if (e.duration &lt; 100) return;                <span class="tok-comment">// only the slow ones</span>
   logger.warn({
@@ -1288,7 +1288,7 @@ prisma.$on('error', (e) =&gt; logger.error({ msg: e.message }, 'prisma error'));
 <p class="lead">Một <code>PrismaClient</code> SỞ HỮU một connection pool, và pool là một tài nguyên sống lâu hơn đoạn mã tạo ra nó. Hai câu hỏi quyết định một bản triển khai có ổn định hay không: có BAO NHIÊU client tồn tại, và chuyện gì xảy ra với những truy vấn đang bay khi container bị bảo dừng. Cả hai đều có câu trả lời ngắn, và cả hai đều đang sai trong phần lớn kho mã.</p>
 
 <h3>Mỗi tiến trình MỘT client</h3>
-<pre><code><span class="tok-comment">// ❌ Mỗi request một client. Mỗi cái mở một pool riêng.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// ❌ Mỗi request một client. Mỗi cái mở một pool riêng.</span>
 app.get('/post-viet', async (req, res) =&gt; {
   const prisma = new PrismaClient();
   res.json(await prisma.socialPost.findMany({ take: 20 }));
@@ -1297,7 +1297,7 @@ app.get('/post-viet', async (req, res) =&gt; {
 actively running.
 
 FATAL: sorry, too many clients already</div>
-<pre><code><span class="tok-comment">// ✅ src/lib/prisma.ts — tạo một lần, import ở mọi nơi</span>
+<pre><code class="language-javascript"><span class="tok-comment">// ✅ src/lib/prisma.ts — tạo một lần, import ở mọi nơi</span>
 import { PrismaClient } from '@prisma/client';
 
 const tao = () =&gt; new PrismaClient({
@@ -1319,12 +1319,12 @@ if (process.env.NODE_ENV !== 'production') g.prisma = prisma;</code></pre>
 </div>
 
 <h3>Tắt máy: mười giây Docker cho bạn</h3>
-<pre><code><span class="tok-comment"># Chuyện THẬT SỰ xảy ra khi deploy</span>
+<pre><code class="language-bash"><span class="tok-comment"># Chuyện THẬT SỰ xảy ra khi deploy</span>
 docker compose up -d --no-build backend</code></pre>
 <div class="out">1. SIGTERM → PID 1 cua container
 2. …10 giay…
 3. SIGKILL → khong the bat, khong the tri hoan</div>
-<pre><code><span class="tok-comment">// src/index.ts — dùng hết mười giây đó, rồi hãy dừng</span>
+<pre><code class="language-javascript"><span class="tok-comment">// src/index.ts — dùng hết mười giây đó, rồi hãy dừng</span>
 const server = app.listen(3000);
 
 let disabled = false;
@@ -1364,7 +1364,7 @@ exit 0                       ← khong co request nao bi cat giua chung</div>
 </div>
 
 <h3>Health check: SỐNG không đồng nghĩa với SẴN SÀNG</h3>
-<pre><code><span class="tok-comment">// Sống — tiến trình có bị kẹt không? ĐỪNG BAO GIỜ chạm cơ sở dữ liệu ở đây.</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Sống — tiến trình có bị kẹt không? ĐỪNG BAO GIỜ chạm cơ sở dữ liệu ở đây.</span>
 app.get('/health', (_req, res) =&gt; res.json({ ok: true }));
 
 <span class="tok-comment">// Sẵn sàng — instance này có nên nhận lưu lượng không?</span>
@@ -1385,14 +1385,14 @@ app.get('/ready', async (_req, res) =&gt; {
 </div>
 
 <h3>Nhật ký: log truy vấn ĐẦY dữ liệu người dùng</h3>
-<pre><code><span class="tok-comment">// Trông vô hại, và là một sự cố lộ dữ liệu trên production</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Trông vô hại, và là một sự cố lộ dữ liệu trên production</span>
 new PrismaClient({ log: ['query'] });</code></pre>
 <div class="out">prisma:query SELECT "User"."passwordHash" FROM "User" WHERE "email" = $1
 prisma:query params: ["an@vidu.com"]
 
 prisma:query INSERT INTO "Message" ("content","threadId") VALUES ($1,$2)
 prisma:query params: ["count tai khoan cua minh la 0123456789", "clx7…"]</div>
-<pre><code><span class="tok-comment">// Có cấu trúc, lấy mẫu, và KHÔNG kèm tham số</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Có cấu trúc, lấy mẫu, và KHÔNG kèm tham số</span>
 prisma.$on('query', (e) =&gt; {
   if (e.duration &lt; 100) return;                <span class="tok-comment">// chỉ những câu chậm</span>
   logger.warn({

@@ -248,7 +248,7 @@ db0:keys=1842033,expires=1799210,avg_ttl=241833</div>
 <p class="lead">Sooner or later Redis reaches its memory limit. What happens next is a single configuration value, it has eight possible answers, and the default is the one that makes your application start failing rather than start losing data. Both of those are sometimes correct.</p>
 
 <h3>Reaching the limit</h3>
-<pre><code>redis-cli CONFIG SET maxmemory 100mb
+<pre><code class="language-python">redis-cli CONFIG SET maxmemory 100mb
 redis-cli CONFIG GET maxmemory-policy
 python3 -c "
 for i in range(400_000): print(f'SET big:{i} {\\"x\\"*300}')
@@ -350,7 +350,7 @@ redis-cli OBJECT FREQ cold</code></pre>
 <p class="lead">Sớm hay muộn Redis cũng chạm trần bộ nhớ. Chuyện xảy ra tiếp theo nằm gọn trong một giá trị cấu hình, nó có tám câu trả lời khả dĩ, và mặc định là cái làm ứng dụng của bạn bắt đầu hỏng chứ không phải bắt đầu mất dữ liệu. Cả hai điều đó đôi khi đều đúng.</p>
 
 <h3>Chạm trần</h3>
-<pre><code>redis-cli CONFIG SET maxmemory 100mb
+<pre><code class="language-python">redis-cli CONFIG SET maxmemory 100mb
 redis-cli CONFIG GET maxmemory-policy
 python3 -c "
 for i in range(400_000): print(f'SET big:{i} {\\"x\\"*300}')
@@ -515,7 +515,7 @@ aof_rewrite_in_progress:0</div>
 <div class="callout warn"><strong>RSS went from 1.61 GB to 2.28 GB and back — 718 MB of copy-on-write for a 1.2 GB dataset, during two seconds.</strong> Nothing in <code>used_memory</code> moved, because from Redis's point of view nothing was allocated: the kernel duplicated pages behind its back. This is why sizing an instance at 90% of machine RAM is a trap (Lesson 9.1). If the machine cannot supply that transient spike, the kernel's OOM killer picks the biggest process — the Redis parent — and your instance dies during a routine backup. <code>rdb_last_cow_size</code> is the number to watch; if it is a large fraction of your dataset, either lower the write rate during saves or accept that you need the headroom.</div>
 
 <h3>Two host settings that are not optional</h3>
-<pre><code>cat /proc/sys/vm/overcommit_memory
+<pre><code class="language-bash">cat /proc/sys/vm/overcommit_memory
 sudo sysctl vm.overcommit_memory=1
 cat /sys/kernel/mm/transparent_hugepage/enabled
 echo never | sudo tee /sys/kernel/mm/transparent_hugepage/enabled
@@ -537,7 +537,7 @@ latest_fork_usec:41882
 </div>
 
 <h3>When a save fails</h3>
-<pre><code>redis-cli CONFIG GET stop-writes-on-bgsave-error
+<pre><code class="language-bash">redis-cli CONFIG GET stop-writes-on-bgsave-error
 <span class="tok-comment"># Simulate: make the data directory unwritable</span>
 sudo chmod 500 /var/lib/redis
 redis-cli BGSAVE; sleep 1
@@ -630,7 +630,7 @@ aof_rewrite_in_progress:0</div>
 <div class="callout warn"><strong>RSS đi từ 1,61 GB lên 2,28 GB rồi quay lại — 718 MB sao-chép-khi-ghi cho một tập dữ liệu 1,2 GB, trong vòng hai giây.</strong> Không có gì trong <code>used_memory</code> nhúc nhích cả, vì đứng từ góc nhìn của Redis thì chẳng có gì được cấp phát: nhân đã nhân đôi các trang sau lưng nó. Đó là lý do chọn cỡ máy ở mức 90% RAM là một cái bẫy (Bài 9.1). Nếu cái máy không cấp nổi cái đỉnh tạm thời ấy thì kẻ giết-vì-hết-bộ-nhớ của nhân sẽ chọn tiến trình lớn nhất — tiến trình cha của Redis — và máy của bạn chết trong lúc đang sao lưu định kỳ. <code>rdb_last_cow_size</code> là con số cần theo dõi; nếu nó chiếm một phần lớn tập dữ liệu thì hoặc hãy giảm tốc độ ghi trong lúc lưu, hoặc chấp nhận rằng bạn cần chỗ trống ấy.</div>
 
 <h3>Hai thiết lập của máy chủ, không phải tuỳ chọn</h3>
-<pre><code>cat /proc/sys/vm/overcommit_memory
+<pre><code class="language-bash">cat /proc/sys/vm/overcommit_memory
 sudo sysctl vm.overcommit_memory=1
 cat /sys/kernel/mm/transparent_hugepage/enabled
 echo never | sudo tee /sys/kernel/mm/transparent_hugepage/enabled
@@ -652,7 +652,7 @@ latest_fork_usec:41882
 </div>
 
 <h3>Khi một lần lưu thất bại</h3>
-<pre><code>redis-cli CONFIG GET stop-writes-on-bgsave-error
+<pre><code class="language-bash">redis-cli CONFIG GET stop-writes-on-bgsave-error
 <span class="tok-comment"># Giả lập: làm cho thư mục dữ liệu không ghi được</span>
 sudo chmod 500 /var/lib/redis
 redis-cli BGSAVE; sleep 1
@@ -700,7 +700,7 @@ OK</div>
 <p class="lead">Where RDB takes a photograph every few minutes, AOF writes down every command that modified the dataset, in order, as it happens. Replaying that log rebuilds the data exactly. The interesting question is not whether it is more durable — it obviously is — but how much you pay for each additional nine.</p>
 
 <h3>Turning it on and looking inside</h3>
-<pre><code>redis-cli CONFIG SET appendonly yes
+<pre><code class="language-bash">redis-cli CONFIG SET appendonly yes
 redis-cli CONFIG GET appendfsync appenddirname auto-aof-rewrite-percentage auto-aof-rewrite-min-size
 redis-cli SET user:1 alice &gt;/dev/null
 redis-cli INCR counter &gt;/dev/null
@@ -767,7 +767,7 @@ SET: 102249.49 requests per second, p50=0.255 msec</div>
 </div>
 
 <h3>Rewriting: keeping the log from growing forever</h3>
-<pre><code>redis-cli INFO persistence | grep -E "aof_enabled|aof_rewrite_in_progress|aof_last_rewrite_time_sec|aof_current_size|aof_base_size|aof_last_bgrewrite_status|aof_pending_rewrite"
+<pre><code class="language-bash">redis-cli INFO persistence | grep -E "aof_enabled|aof_rewrite_in_progress|aof_last_rewrite_time_sec|aof_current_size|aof_base_size|aof_last_bgrewrite_status|aof_pending_rewrite"
 redis-cli BGREWRITEAOF
 sleep 3
 redis-cli INFO persistence | grep -E "aof_current_size|aof_base_size|aof_last_bgrewrite_status"
@@ -794,7 +794,7 @@ appendonly.aof.manifest</div>
 </div>
 
 <h3>Startup: the cost you only notice during an incident</h3>
-<pre><code>redis-cli DEBUG SLEEP 0 &gt;/dev/null
+<pre><code class="language-bash">redis-cli DEBUG SLEEP 0 &gt;/dev/null
 sudo systemctl restart redis-server
 time redis-cli --no-raw PING
 redis-cli INFO persistence | grep -E "loading:|async_loading"
@@ -831,7 +831,7 @@ async_loading:0
 <p class="lead">Trong khi RDB chụp một tấm ảnh vài phút một lần, AOF ghi lại mọi lệnh đã làm thay đổi tập dữ liệu, đúng thứ tự, ngay khi nó xảy ra. Phát lại cuốn nhật ký đó là dựng lại dữ liệu y hệt. Câu hỏi thú vị không phải là nó có bền hơn không — hiển nhiên là có — mà là bạn trả bao nhiêu cho từng số 9 thêm vào.</p>
 
 <h3>Bật nó lên và nhìn vào bên trong</h3>
-<pre><code>redis-cli CONFIG SET appendonly yes
+<pre><code class="language-bash">redis-cli CONFIG SET appendonly yes
 redis-cli CONFIG GET appendfsync appenddirname auto-aof-rewrite-percentage auto-aof-rewrite-min-size
 redis-cli SET user:1 alice &gt;/dev/null
 redis-cli INCR counter &gt;/dev/null
@@ -898,7 +898,7 @@ SET: 102249.49 requests per second, p50=0.255 msec</div>
 </div>
 
 <h3>Ghi lại: giữ cho cuốn nhật ký khỏi phình mãi</h3>
-<pre><code>redis-cli INFO persistence | grep -E "aof_enabled|aof_rewrite_in_progress|aof_last_rewrite_time_sec|aof_current_size|aof_base_size|aof_last_bgrewrite_status|aof_pending_rewrite"
+<pre><code class="language-bash">redis-cli INFO persistence | grep -E "aof_enabled|aof_rewrite_in_progress|aof_last_rewrite_time_sec|aof_current_size|aof_base_size|aof_last_bgrewrite_status|aof_pending_rewrite"
 redis-cli BGREWRITEAOF
 sleep 3
 redis-cli INFO persistence | grep -E "aof_current_size|aof_base_size|aof_last_bgrewrite_status"
@@ -925,7 +925,7 @@ appendonly.aof.manifest</div>
 </div>
 
 <h3>Khởi động: cái giá bạn chỉ để ý tới lúc có sự cố</h3>
-<pre><code>redis-cli DEBUG SLEEP 0 &gt;/dev/null
+<pre><code class="language-bash">redis-cli DEBUG SLEEP 0 &gt;/dev/null
 sudo systemctl restart redis-server
 time redis-cli --no-raw PING
 redis-cli INFO persistence | grep -E "loading:|async_loading"
@@ -1022,7 +1022,7 @@ rdb_last_bgsave_status:ok
 </div>
 
 <h3>Restoring, step by step</h3>
-<pre><code><span class="tok-comment"># 1 · Stop Redis. A running server will overwrite the file you are placing.</span>
+<pre><code class="language-bash"><span class="tok-comment"># 1 · Stop Redis. A running server will overwrite the file you are placing.</span>
 sudo systemctl stop redis-server
 
 <span class="tok-comment"># 2 · Put the file where &#96;dir&#96; + &#96;dbfilename&#96; say, with the right owner</span>
@@ -1132,7 +1132,7 @@ rdb_last_bgsave_status:ok
 </div>
 
 <h3>Khôi phục, từng bước</h3>
-<pre><code><span class="tok-comment"># 1 · Dừng Redis. Một máy chủ đang chạy sẽ ghi đè lên cái tệp bạn đang đặt vào.</span>
+<pre><code class="language-bash"><span class="tok-comment"># 1 · Dừng Redis. Một máy chủ đang chạy sẽ ghi đè lên cái tệp bạn đang đặt vào.</span>
 sudo systemctl stop redis-server
 
 <span class="tok-comment"># 2 · Đặt tệp vào đúng chỗ mà &#96;dir&#96; + &#96;dbfilename&#96; chỉ, với đúng chủ sở hữu</span>

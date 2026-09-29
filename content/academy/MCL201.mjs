@@ -193,7 +193,7 @@ const c2 = doc('mcl201-2-1-workflow-data-prep', '2.1 — The ML workflow & data 
 <p>A model can only be as good as the data it learns from. Common real-world problems: <strong>missing values</strong> (a customer's income field is blank), <strong>inconsistent formats</strong> (dates as "01/02/2026" vs "2026-02-01"), and <strong>duplicate or outdated records</strong>. Most real ML projects spend far more time cleaning data than tuning the model itself.</p>
 <h3>Why split the data</h3>
 <p>If you test a model on the same data it was trained on, it looks perfect but tells you nothing — it may have simply memorized the answers. Splitting into a <strong>training set</strong> (learn from) and a <strong>test set</strong> (never seen during training) is how you honestly check whether the model generalizes to new customers.</p>
-<pre><code>from sklearn.model_selection import train_test_split
+<pre><code class="language-python">from sklearn.model_selection import train_test_split
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=42)   # 80% train, 20% test
 </code></pre>
@@ -212,7 +212,7 @@ X_train, X_test, y_train, y_test = train_test_split(
 <p>Mô hình chỉ tốt bằng dữ liệu nó học từ. Các vấn đề thường gặp thật: <strong>thiếu giá trị</strong> (ô thu nhập của khách để trống), <strong>định dạng không đồng nhất</strong> (ngày ghi "01/02/2026" so với "2026-02-01"), và <strong>bản ghi trùng lặp hoặc lỗi thời</strong>. Hầu hết dự án ML thật dành nhiều thời gian làm sạch dữ liệu hơn là tinh chỉnh mô hình.</p>
 <h3>Vì sao phải chia dữ liệu</h3>
 <p>Nếu kiểm tra mô hình trên đúng dữ liệu nó đã học, kết quả sẽ trông hoàn hảo nhưng không nói lên điều gì — mô hình có thể chỉ đang "học vẹt" đáp án. Chia thành <strong>tập huấn luyện</strong> (để học) và <strong>tập kiểm tra</strong> (chưa từng thấy khi huấn luyện) là cách kiểm tra trung thực xem mô hình có tổng quát hoá được cho khách hàng mới hay không.</p>
-<pre><code>from sklearn.model_selection import train_test_split
+<pre><code class="language-python">from sklearn.model_selection import train_test_split
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=42)   # 80% huan luyen, 20% kiem tra
 </code></pre>
@@ -232,7 +232,7 @@ const c3 = doc('mcl201-3-1-regression', '3.1 — Supervised learning: regression
 <h2>Supervised learning: regression</h2>
 <h3>The idea: draw the best line through the data</h3>
 <p><strong>Regression</strong> predicts a continuous number. Give a model past examples of (marketing spend, price, season) paired with the actual sales that resulted, and it learns a formula connecting the inputs to the number you want to predict.</p>
-<pre><code>from sklearn.linear_model import LinearRegression
+<pre><code class="language-python">from sklearn.linear_model import LinearRegression
 model = LinearRegression()
 model.fit(X_train, y_train)     # X: marketing spend, price ; y: sales
 model.predict([[5000, 199000]]) # forecast sales for a new plan
@@ -246,7 +246,7 @@ model.predict([[5000, 199000]]) # forecast sales for a new plan
 <h2>Học có giám sát: hồi quy</h2>
 <h3>Ý tưởng: vẽ đường phù hợp nhất qua dữ liệu</h3>
 <p><strong>Hồi quy (regression)</strong> dự đoán một con số liên tục. Đưa cho mô hình các ví dụ quá khứ (chi phí marketing, giá bán, mùa vụ) đi kèm doanh số thực tế đã xảy ra, mô hình sẽ học ra một công thức nối các đầu vào với con số cần dự đoán.</p>
-<pre><code>from sklearn.linear_model import LinearRegression
+<pre><code class="language-python">from sklearn.linear_model import LinearRegression
 model = LinearRegression()
 model.fit(X_train, y_train)     # X: chi phi marketing, gia ; y: doanh so
 model.predict([[5000, 199000]]) # du bao doanh so cho ke hoach moi
@@ -271,7 +271,7 @@ const c4 = doc('mcl201-4-1-classification', '4.1 — Supervised learning: classi
 <h2>Supervised learning: classification</h2>
 <h3>The idea: sort things into categories</h3>
 <p><strong>Classification</strong> predicts a category rather than a number: will this customer churn (yes/no)? Should this loan applicant be approved (yes/no)? Is this transaction fraudulent (yes/no)?</p>
-<pre><code>from sklearn.linear_model import LogisticRegression
+<pre><code class="language-python">from sklearn.linear_model import LogisticRegression
 clf = LogisticRegression()
 clf.fit(X_train, y_train)          # y: 1 = churned, 0 = stayed
 clf.predict_proba(X_new)[:, 1]     # probability each customer churns
@@ -290,7 +290,7 @@ clf.predict_proba(X_new)[:, 1]     # probability each customer churns
 <h2>Học có giám sát: phân lớp</h2>
 <h3>Ý tưởng: xếp mọi thứ vào các nhóm</h3>
 <p><strong>Phân lớp (classification)</strong> dự đoán một nhóm/nhãn thay vì một con số: khách này có rời bỏ không (có/không)? Người vay này có nên được duyệt không (có/không)? Giao dịch này có phải gian lận không (có/không)?</p>
-<pre><code>from sklearn.linear_model import LogisticRegression
+<pre><code class="language-python">from sklearn.linear_model import LogisticRegression
 clf = LogisticRegression()
 clf.fit(X_train, y_train)          # y: 1 = da roi bo, 0 = con lai
 clf.predict_proba(X_new)[:, 1]     # xac suat moi khach hang roi bo
@@ -322,7 +322,7 @@ const c5 = doc('mcl201-5-1-clustering', '5.1 — Unsupervised learning: customer
 <p>Regression and classification both need a known outcome to learn from (past sales, past churn). <strong>Clustering</strong> is different: there is no "right answer" given in advance. The algorithm simply groups customers who look similar to each other, and it is up to you to interpret what each group means.</p>
 <h3>A classic business recipe: RFM</h3>
 <p>A common way to describe a customer numerically before clustering: <strong>Recency</strong> (how long since their last purchase), <strong>Frequency</strong> (how often they buy), <strong>Monetary</strong> (how much they spend). Feed these three numbers per customer into a clustering algorithm.</p>
-<pre><code>from sklearn.cluster import KMeans
+<pre><code class="language-python">from sklearn.cluster import KMeans
 km = KMeans(n_clusters=4, random_state=42)
 km.fit(X)          # X: [recency, frequency, monetary] per customer
 km.labels_         # each customer's segment: 0, 1, 2 or 3
@@ -336,7 +336,7 @@ km.labels_         # each customer's segment: 0, 1, 2 or 3
 <p>Cả hồi quy và phân lớp đều cần một kết quả đã biết để học (doanh số cũ, churn cũ). <strong>Phân cụm (clustering)</strong> khác: không có "đáp án đúng" cho trước. Thuật toán chỉ nhóm những khách hàng trông giống nhau lại với nhau, và việc diễn giải ý nghĩa từng nhóm là của bạn.</p>
 <h3>Công thức kinh điển trong kinh doanh: RFM</h3>
 <p>Một cách phổ biến để mô tả khách hàng bằng số trước khi phân cụm: <strong>Recency</strong> (bao lâu từ lần mua gần nhất), <strong>Frequency</strong> (mua thường xuyên thế nào), <strong>Monetary</strong> (chi tiêu bao nhiêu). Đưa ba con số này của mỗi khách vào thuật toán phân cụm.</p>
-<pre><code>from sklearn.cluster import KMeans
+<pre><code class="language-python">from sklearn.cluster import KMeans
 km = KMeans(n_clusters=4, random_state=42)
 km.fit(X)          # X: [recency, frequency, monetary] cua moi khach
 km.labels_         # phan khuc cua moi khach: 0, 1, 2 hoac 3
@@ -359,7 +359,7 @@ const c6 = doc('mcl201-6-1-evaluation-overfitting', '6.1 — Model evaluation & 
 <h2>Model evaluation &amp; overfitting</h2>
 <h3>Accuracy can lie to you</h3>
 <p>Imagine only 2% of transactions are fraudulent. A model that always predicts "not fraud" is <strong>98% accurate</strong> — and completely useless. This is why, for imbalanced business problems (churn, fraud, default), a single accuracy number is dangerous; you also need to check how many of the actual fraud cases were actually caught.</p>
-<pre><code>from sklearn.metrics import confusion_matrix
+<pre><code class="language-python">from sklearn.metrics import confusion_matrix
 confusion_matrix(y_test, y_pred)
 # rows: actual (fraud / not fraud)
 # columns: predicted (fraud / not fraud)
@@ -378,7 +378,7 @@ Test accuracy:      61%   -- the real, honest number
 <h2>Đánh giá mô hình & overfitting</h2>
 <h3>Độ chính xác (accuracy) có thể lừa bạn</h3>
 <p>Giả sử chỉ 2% giao dịch là gian lận. Một mô hình luôn dự đoán "không gian lận" đạt <strong>98% chính xác</strong> — và hoàn toàn vô dụng. Đây là lý do với các bài toán kinh doanh mất cân bằng (churn, gian lận, vỡ nợ), một con số accuracy duy nhất rất nguy hiểm; bạn cần kiểm tra thêm bao nhiêu trường hợp gian lận thật đã thực sự bị bắt được.</p>
-<pre><code>from sklearn.metrics import confusion_matrix
+<pre><code class="language-python">from sklearn.metrics import confusion_matrix
 confusion_matrix(y_test, y_pred)
 # hang: thuc te (gian lan / khong gian lan)
 # cot: du doan (gian lan / khong gian lan)
@@ -416,7 +416,7 @@ const c7 = doc('mcl201-7-1-trees-forests-ensembles', '7.1 — Decision trees, ra
 </code></pre>
 <h3>The catch: a single tree overfits easily</h3>
 <p>One tree tends to memorize quirks of its training data (Chapter 6's overfitting problem). The fix, and the real workhorse of business ML today, is a <strong>random forest</strong>: train hundreds of slightly different trees, each on a random slice of the data, and average their votes.</p>
-<pre><code>from sklearn.ensemble import RandomForestClassifier
+<pre><code class="language-python">from sklearn.ensemble import RandomForestClassifier
 rf = RandomForestClassifier(n_estimators=200, max_depth=5)
 rf.fit(X_train, y_train)
 rf.feature_importances_    # which factors matter most to the prediction
@@ -436,7 +436,7 @@ rf.feature_importances_    # which factors matter most to the prediction
 </code></pre>
 <h3>Vấn đề: một cây đơn dễ bị overfitting</h3>
 <p>Một cây đơn có xu hướng học vẹt các đặc điểm riêng của dữ liệu huấn luyện (vấn đề overfitting ở Chương 6). Cách giải quyết, cũng là công cụ chủ lực thật của ML kinh doanh hiện nay, là <strong>random forest</strong>: huấn luyện hàng trăm cây hơi khác nhau, mỗi cây trên một lát cắt ngẫu nhiên của dữ liệu, rồi lấy trung bình phiếu bầu của chúng.</p>
-<pre><code>from sklearn.ensemble import RandomForestClassifier
+<pre><code class="language-python">from sklearn.ensemble import RandomForestClassifier
 rf = RandomForestClassifier(n_estimators=200, max_depth=5)
 rf.fit(X_train, y_train)
 rf.feature_importances_    # yeu to nao anh huong nhat toi du doan

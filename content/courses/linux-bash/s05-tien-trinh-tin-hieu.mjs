@@ -203,7 +203,7 @@ ps -eo stat | grep -c ^Z</code></pre>
 <h3>/proc: the kernel as a filesystem</h3>
 ${slide('lx-05', 8, '/proc/PID: hồ sơ sống của tiến trình')}
 <p>Everything <code>ps</code> and <code>top</code> report comes from <code>/proc</code>, a virtual filesystem where each process is a directory named after its PID. You can read it directly:</p>
-<pre><code>ls /proc/812/
+<pre><code class="language-bash">ls /proc/812/
 cat /proc/812/cmdline | tr '\\0' ' '; echo    <span class="tok-comment"># NUL-separated arguments</span>
 cat /proc/812/status | head -12
 ls -l /proc/812/cwd                          <span class="tok-comment"># its working directory</span>
@@ -455,7 +455,7 @@ ps -eo stat | grep -c ^Z</code></pre>
 <h3>/proc: nhân dưới dạng một hệ thống file</h3>
 ${slide('lx-05', 8, '/proc/PID: hồ sơ sống của tiến trình')}
 <p>Mọi thứ <code>ps</code> và <code>top</code> báo cáo đều đến từ <code>/proc</code>, một hệ thống file ảo nơi mỗi tiến trình là một thư mục đặt tên theo PID của nó. Bạn đọc thẳng nó được:</p>
-<pre><code>ls /proc/812/
+<pre><code class="language-bash">ls /proc/812/
 cat /proc/812/cmdline | tr '\\0' ' '; echo    <span class="tok-comment"># tham số phân cách bằng NUL</span>
 cat /proc/812/status | head -12
 ls -l /proc/812/cwd                          <span class="tok-comment"># thư mục làm việc của nó</span>
@@ -598,7 +598,7 @@ MiB Swap:   2048.0 total,   2048.0 free,      0.0 used.   5488.1 avail Mem
 
 <h3>Load average: not a percentage</h3>
 ${slide('lx-05', 10, 'Load average là hàng đợi — chia cho nproc')}
-<pre><code>uptime
+<pre><code class="language-bash">uptime
 cat /proc/loadavg
 nproc</code></pre>
 <div class="out"> 12:41:03 up 41 days,  3:12,  2 users,  load average: 0.94, 1.20, 1.31
@@ -663,7 +663,7 @@ procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
 
 <h3>The OOM killer</h3>
 ${slide('lx-05', 13, 'OOM killer: SIGKILL và mã 137, dựng thật')}
-<pre><code>sudo dmesg -T | grep -i 'killed process'
+<pre><code class="language-bash">sudo dmesg -T | grep -i 'killed process'
 sudo journalctl -k | grep -i oom | tail -5</code></pre>
 <div class="out">[Fri Aug 22 03:14:52 2026] Out of memory: Killed process 5012 (node)
   total-vm:4210488kB, anon-rss:3841204kB, file-rss:0kB, oom_score_adj:0</div>
@@ -672,7 +672,7 @@ sudo journalctl -k | grep -i oom | tail -5</code></pre>
 
 <h3>Reproducing an OOM kill in 64 MB</h3>
 <p>You can watch the kernel do this safely inside a container with a memory ceiling. <code>tail -n 1</code> keeps the whole current line in memory until it sees a newline, and <code>/dev/zero</code> never sends one — so it grows until the cgroup limit is hit:</p>
-<pre><code>docker run --name lx05-oom --memory 64m --memory-swap 64m ubuntu:24.04 bash -c \\
+<pre><code class="language-bash">docker run --name lx05-oom --memory 64m --memory-swap 64m ubuntu:24.04 bash -c \\
   'echo "bắt đầu ăn RAM"; head -c 300M /dev/zero | tail -n 1 &gt;/dev/null'
 echo \$?
 docker inspect -f '{{.State.OOMKilled}}' lx05-oom</code></pre>
@@ -715,7 +715,7 @@ bash: line 1: ulimit: open files: cannot modify limit: Operation not permitted</
 <tr><td><code>-S</code> / <code>-H</code></td><td>act on the soft / hard value</td><td><code>ulimit -Hn</code></td></tr>
 </table>
 <p>A running process keeps the limits it started with, so <code>ulimit</code> in your shell does nothing for a server that is already up. Read its real limits in <code>/proc/PID/limits</code>, and change them live with <code>prlimit</code>:</p>
-<pre><code>grep "open files" /proc/2966/limits
+<pre><code class="language-bash">grep "open files" /proc/2966/limits
 prlimit --pid 2966 --nofile=2048:1048576
 prlimit --pid 2966 --nofile
 ls /proc/2966/fd | wc -l            <span class="tok-comment"># how many it has open right now</span></code></pre>
@@ -727,7 +727,7 @@ NOFILE   max number of open files 2048 1048576 files
 
 <h3>Try it step by step</h3>
 <p>Six read-only commands, in the order you would use them on a server you have never seen. Inside a container the numbers describe Docker's virtual machine, not the container, which is itself a useful lesson.</p>
-<pre><code>nproc
+<pre><code class="language-bash">nproc
 cat /proc/loadavg
 free -h
 vmstat 1 3
@@ -834,7 +834,7 @@ MiB Swap:   2048.0 total,   2048.0 free,      0.0 used.   5488.1 avail Mem
 
 <h3>Tải trung bình: KHÔNG phải phần trăm</h3>
 ${slide('lx-05', 10, 'Load average là hàng đợi — chia cho nproc')}
-<pre><code>uptime
+<pre><code class="language-bash">uptime
 cat /proc/loadavg
 nproc</code></pre>
 <div class="out"> 12:41:03 up 41 days,  3:12,  2 users,  load average: 0.94, 1.20, 1.31
@@ -899,7 +899,7 @@ procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
 
 <h3>OOM killer</h3>
 ${slide('lx-05', 13, 'OOM killer: SIGKILL và mã 137, dựng thật')}
-<pre><code>sudo dmesg -T | grep -i 'killed process'
+<pre><code class="language-bash">sudo dmesg -T | grep -i 'killed process'
 sudo journalctl -k | grep -i oom | tail -5</code></pre>
 <div class="out">[Fri Aug 22 03:14:52 2026] Out of memory: Killed process 5012 (node)
   total-vm:4210488kB, anon-rss:3841204kB, file-rss:0kB, oom_score_adj:0</div>
@@ -908,7 +908,7 @@ sudo journalctl -k | grep -i oom | tail -5</code></pre>
 
 <h3>Dựng lại một vụ OOM trong 64 MB</h3>
 <p>Bạn có thể xem nhân làm việc này một cách an toàn bên trong một container có trần bộ nhớ. <code>tail -n 1</code> giữ nguyên dòng hiện tại trong bộ nhớ cho tới khi gặp ký tự xuống dòng, mà <code>/dev/zero</code> thì không bao giờ gửi ký tự đó — nên nó phình mãi cho tới khi chạm trần của cgroup (nhóm kiểm soát tài nguyên):</p>
-<pre><code>docker run --name lx05-oom --memory 64m --memory-swap 64m ubuntu:24.04 bash -c \\
+<pre><code class="language-bash">docker run --name lx05-oom --memory 64m --memory-swap 64m ubuntu:24.04 bash -c \\
   'echo "bắt đầu ăn RAM"; head -c 300M /dev/zero | tail -n 1 &gt;/dev/null'
 echo \$?
 docker inspect -f '{{.State.OOMKilled}}' lx05-oom</code></pre>
@@ -951,7 +951,7 @@ bash: line 1: ulimit: open files: cannot modify limit: Operation not permitted</
 <tr><td><code>-S</code> / <code>-H</code></td><td>tác động lên trần mềm / cứng</td><td><code>ulimit -Hn</code></td></tr>
 </table>
 <p>Một tiến trình đang chạy giữ nguyên giới hạn nó mang theo lúc khởi động, nên gõ <code>ulimit</code> trong shell của bạn chẳng làm gì cho một server đã chạy sẵn. Đọc giới hạn thật của nó trong <code>/proc/PID/limits</code>, và đổi nóng bằng <code>prlimit</code>:</p>
-<pre><code>grep "open files" /proc/2966/limits
+<pre><code class="language-bash">grep "open files" /proc/2966/limits
 prlimit --pid 2966 --nofile=2048:1048576
 prlimit --pid 2966 --nofile
 ls /proc/2966/fd | wc -l            <span class="tok-comment"># ngay lúc này nó đang mở bao nhiêu</span></code></pre>
@@ -963,7 +963,7 @@ NOFILE   max number of open files 2048 1048576 files
 
 <h3>Chạy thử từng bước</h3>
 <p>Sáu lệnh chỉ đọc, theo đúng thứ tự bạn sẽ dùng trên một máy chủ lạ. Trong container, các con số mô tả máy ảo của Docker chứ không phải riêng container — tự điều đó đã là một bài học.</p>
-<pre><code>nproc
+<pre><code class="language-bash">nproc
 cat /proc/loadavg
 free -h
 vmstat 1 3
@@ -1090,7 +1090,7 @@ echo \$?</code></pre>
 
 <h3>Measured: 128 + N for six signals — and a trap inside scripts</h3>
 <p>The rule is easy to check. This loop starts a <code>sleep</code>, sends it one signal, and prints the status <code>wait</code> collects:</p>
-<pre><code>set -m
+<pre><code class="language-bash">set -m
 for s in INT TERM KILL HUP QUIT SEGV; do
   sleep 100 &amp; p=\$!; sleep 0.2; kill -\$s \$p; wait \$p
   echo "SIG\$s → \\\$? = \$?"
@@ -1103,7 +1103,7 @@ SIGQUIT → $? = 131
 SIGSEGV → $? = 139</div>
 <p>Why the <code>set -m</code>? Run the same loop in a script <em>without</em> it and the first line becomes <code>SIGINT → \$? = 0</code>, one hundred seconds later. In a non-interactive shell, bash starts background jobs with <strong>SIGINT and SIGQUIT ignored</strong> — so that a <code>Ctrl-C</code> meant for the script's foreground command does not also kill its helpers. You can see it in the kernel's own bookkeeping: a background <code>python3</code> started from a script showed <code>SigIgn: 0000000001001006</code>, whose bits 1 and 2 are signals 2 (INT) and 3 (QUIT). <code>set -m</code> turns job control on and restores normal behaviour. Remember this the day a script's background worker "refuses" to die on <code>kill -INT</code>; <code>kill -TERM</code> still works. And <code>kill -l 143</code> prints <code>TERM</code>: bash's <code>kill -l</code> understands exit codes, so you never need to do the subtraction by hand.</p>
 <h3>Why some programs ignore Ctrl-C</h3>
-<pre><code>vim                <span class="tok-comment"># catches SIGINT — you must :q to leave</span>
+<pre><code class="language-bash">vim                <span class="tok-comment"># catches SIGINT — you must :q to leave</span>
 sudo apt upgrade   <span class="tok-comment"># blocks it during unpacking, to avoid a half-installed system</span>
 sleep 100          <span class="tok-comment"># uses the default action — dies immediately</span></code></pre>
 <p>Both catching and ignoring are legitimate. A text editor with unsaved changes should not vanish because you fumbled a key; a package manager mid-unpack should not leave a broken system. When Ctrl-C does nothing, escalate deliberately rather than mashing it — Ctrl-Z to suspend and investigate (Lesson 5.4), then <code>kill</code>, and only then <code>kill -9</code>.</p>
@@ -1142,7 +1142,7 @@ echo \$?</code></pre>
 <h3>When the name lies: find it by port</h3>
 ${slide('lx-05', 20, 'Tiến trình đổi tên thì pkill hụt — diệt theo cổng')}
 <p>Programs may rename themselves. Node exposes <code>process.title</code>, and Next.js sets it to <code>next-server (vX.Y.Z)</code>, which rewrites what <code>ps</code> shows — so the pattern you would naturally type matches nothing. The same thing, reproduced on a Mac with a three-line <code>start.js</code> that sets that title and listens on port 19051:</p>
-<pre><code>node start.js --port 19051 &amp;
+<pre><code class="language-bash">node start.js --port 19051 &amp;
 pkill -f "next start"; echo "rc=\$?"
 ps -o pid,comm,args -p \$(lsof -ti:19051)
 lsof -ti:19051 | xargs kill; lsof -ti:19051 || echo "cổng trống"</code></pre>
@@ -1189,7 +1189,7 @@ ${slide('lx-05', 18, 'trap và mặt nạ SigIgn/SigCgt')}
 <pre><code><span class="tok-comment"># In bash — Chapter 7 covers trap properly</span>
 trap 'echo "cleaning up"; rm -f /tmp/work.lock; exit 0' TERM INT
 trap 'rm -rf "\$TMPDIR"' EXIT     <span class="tok-comment"># EXIT runs on ANY exit, signal or not</span></code></pre>
-<pre><code><span class="tok-comment"># In Node.js — the same idea, and why docker stop needs it</span>
+<pre><code class="language-bash"><span class="tok-comment"># In Node.js — the same idea, and why docker stop needs it</span>
 process.on('SIGTERM', async () =&gt; {
   server.close();                 <span class="tok-comment"># stop accepting new connections</span>
   await pool.end();               <span class="tok-comment"># finish in-flight queries</span>
@@ -1199,7 +1199,7 @@ process.on('SIGTERM', async () =&gt; {
 <div class="callout ok">A subtlety worth knowing: in a container, your app often runs as PID 1, and <strong>PID 1 does not get default signal actions</strong> — the kernel protects it, so a process with no explicit SIGTERM handler will simply not die from <code>docker stop</code>. Combined with the zombie-reaping duty from Lesson 5.1, that is the whole reason for <code>docker run --init</code> and <code>tini</code>. If your container takes exactly ten seconds to stop every time, this is why.</div>
 
 <h3>Reload versus restart</h3>
-<pre><code>sudo nginx -t                        <span class="tok-comment"># ALWAYS test the config first</span>
+<pre><code class="language-bash">sudo nginx -t                        <span class="tok-comment"># ALWAYS test the config first</span>
 sudo systemctl reload nginx          <span class="tok-comment"># SIGHUP — re-read config, keep serving</span>
 sudo systemctl restart nginx         <span class="tok-comment"># stop and start — brief downtime</span>
 sudo kill -HUP \$(cat /run/nginx.pid) <span class="tok-comment"># the same reload, by hand</span>
@@ -1208,7 +1208,7 @@ sudo kill -USR1 \$(cat /run/nginx.pid) <span class="tok-comment"># nginx: reopen
 <div class="callout warn">Test before you reload. <code>nginx -t</code> validates the config file; skipping it and reloading a broken config leaves the old workers running but means the <em>next</em> restart — possibly at 3am, triggered by something else — fails to start at all. The failure surfaces long after the change, which is the worst kind.</div>
 
 <h3>Seeing what a process does with signals</h3>
-<pre><code>grep -E 'SigCgt|SigIgn|SigBlk' /proc/812/status
+<pre><code class="language-bash">grep -E 'SigCgt|SigIgn|SigBlk' /proc/812/status
 sudo strace -p 5012 -e trace=signal      <span class="tok-comment"># watch signals arrive, live</span></code></pre>
 <div class="out">SigBlk: 0000000000000000
 SigIgn: 0000000000001000
@@ -1217,7 +1217,7 @@ SigCgt: 0000000180014a03</div>
 
 <h3>Try it step by step</h3>
 <p>A ten-line script that cleans up after itself, and four commands that prove each <code>trap</code> line does what it says. Save it as <code>don.sh</code> in <code>~/thu-linux/ch5</code> and <code>chmod +x</code> it.</p>
-<pre><code>#!/bin/bash
+<pre><code class="language-bash">#!/bin/bash
 lock=/tmp/deploy.lock
 don_dep() {
   echo "nhận tín hiệu — dọn dẹp"
@@ -1227,7 +1227,7 @@ trap don_dep EXIT
 trap 'exit 143' TERM INT
 trap '' HUP
 touch "\$lock"; sleep 300 &amp; wait</code></pre>
-<pre><code>./don.sh &amp; p=\$!
+<pre><code class="language-bash">./don.sh &amp; p=\$!
 kill -HUP \$p; sleep 0.3; kill -0 \$p &amp;&amp; echo "HUP: vẫn sống"
 kill \$p; wait \$p; echo "mã thoát: \$?"
 ls /tmp/deploy.lock</code></pre>
@@ -1334,7 +1334,7 @@ echo \$?</code></pre>
 
 <h3>Đo thật: 128 + N cho sáu tín hiệu — và một cái bẫy trong script</h3>
 <p>Luật này kiểm được rất dễ. Vòng lặp dưới đây khởi động một <code>sleep</code>, gửi cho nó một tín hiệu, rồi in trạng thái mà <code>wait</code> thu về:</p>
-<pre><code>set -m
+<pre><code class="language-bash">set -m
 for s in INT TERM KILL HUP QUIT SEGV; do
   sleep 100 &amp; p=\$!; sleep 0.2; kill -\$s \$p; wait \$p
   echo "SIG\$s → \\\$? = \$?"
@@ -1347,7 +1347,7 @@ SIGQUIT → $? = 131
 SIGSEGV → $? = 139</div>
 <p>Vì sao cần <code>set -m</code>? Chạy đúng vòng lặp đó trong một script mà KHÔNG có nó thì dòng đầu thành <code>SIGINT → \$? = 0</code>, sau một trăm giây. Trong một shell không tương tác, bash khởi động job nền với <strong>SIGINT và SIGQUIT bị LỜ ĐI</strong> — để một cú <code>Ctrl-C</code> nhắm vào lệnh tiền cảnh của script không giết lây sang các tiến trình phụ của nó. Bạn thấy được điều đó ngay trong sổ sách của nhân: một <code>python3</code> chạy nền khởi động từ script hiện <code>SigIgn: 0000000001001006</code>, với bit 1 và bit 2 là tín hiệu 2 (INT) và 3 (QUIT). <code>set -m</code> bật điều khiển job (job control) và trả lại hành vi bình thường. Hãy nhớ điều này vào cái ngày một tiến trình phụ chạy nền của script "không chịu" chết vì <code>kill -INT</code>; <code>kill -TERM</code> thì vẫn ăn. Và <code>kill -l 143</code> in ra <code>TERM</code>: <code>kill -l</code> của bash hiểu cả mã thoát, nên bạn chẳng bao giờ cần tự làm phép trừ.</p>
 <h3>Vì sao vài chương trình lờ Ctrl-C đi</h3>
-<pre><code>vim                <span class="tok-comment"># bắt SIGINT — bạn phải :q mới ra được</span>
+<pre><code class="language-bash">vim                <span class="tok-comment"># bắt SIGINT — bạn phải :q mới ra được</span>
 sudo apt upgrade   <span class="tok-comment"># chặn nó trong lúc bung gói, để khỏi có hệ thống cài dở</span>
 sleep 100          <span class="tok-comment"># dùng hành động mặc định — chết ngay</span></code></pre>
 <p>Cả bắt lẫn lờ đều chính đáng. Một trình soạn thảo có thay đổi chưa lưu không nên biến mất chỉ vì bạn bấm nhầm phím; một trình quản lý gói đang bung dở không nên để lại một hệ thống hỏng. Khi Ctrl-C không có tác dụng, hãy leo thang một cách CÓ CHỦ Ý thay vì bấm loạn lên — Ctrl-Z để treo lại và đi điều tra (Bài 5.4), rồi <code>kill</code>, và chỉ sau đó mới tới <code>kill -9</code>.</p>
@@ -1386,7 +1386,7 @@ echo \$?</code></pre>
 <h3>Khi cái tên nói dối: tìm theo cổng</h3>
 ${slide('lx-05', 20, 'Tiến trình đổi tên thì pkill hụt — diệt theo cổng')}
 <p>Chương trình có thể tự đổi tên. Node cho phép đặt <code>process.title</code>, và Next.js đặt nó thành <code>next-server (vX.Y.Z)</code>, thứ viết lại những gì <code>ps</code> hiện ra — nên cái mẫu bạn gõ một cách tự nhiên khớp trúng con số không. Dựng lại đúng chuyện đó trên Mac với một file <code>start.js</code> ba dòng đặt tên như vậy rồi nghe cổng 19051:</p>
-<pre><code>node start.js --port 19051 &amp;
+<pre><code class="language-bash">node start.js --port 19051 &amp;
 pkill -f "next start"; echo "rc=\$?"
 ps -o pid,comm,args -p \$(lsof -ti:19051)
 lsof -ti:19051 | xargs kill; lsof -ti:19051 || echo "cổng trống"</code></pre>
@@ -1433,7 +1433,7 @@ ${slide('lx-05', 18, 'trap và mặt nạ SigIgn/SigCgt')}
 <pre><code><span class="tok-comment"># Trong bash — Chương 7 nói về trap tử tế</span>
 trap 'echo "đang dọn dẹp"; rm -f /tmp/work.lock; exit 0' TERM INT
 trap 'rm -rf "\$TMPDIR"' EXIT     <span class="tok-comment"># EXIT chạy khi thoát theo BẤT KỲ đường nào</span></code></pre>
-<pre><code><span class="tok-comment"># Trong Node.js — cùng một ý tưởng, và là lý do docker stop cần tới nó</span>
+<pre><code class="language-bash"><span class="tok-comment"># Trong Node.js — cùng một ý tưởng, và là lý do docker stop cần tới nó</span>
 process.on('SIGTERM', async () =&gt; {
   server.close();                 <span class="tok-comment"># ngừng nhận kết nối mới</span>
   await pool.end();               <span class="tok-comment"># chạy nốt các truy vấn đang dở</span>
@@ -1443,7 +1443,7 @@ process.on('SIGTERM', async () =&gt; {
 <div class="callout ok">Một điểm tinh tế đáng biết: trong một container, ứng dụng của bạn thường chạy ở vị trí PID 1, mà <strong>PID 1 KHÔNG nhận hành động tín hiệu mặc định</strong> — nhân bảo vệ nó, nên một tiến trình không có bộ xử lý SIGTERM tường minh sẽ đơn giản là không chết vì <code>docker stop</code>. Ghép với nghĩa vụ thu dọn xác sống ở Bài 5.1, đó là toàn bộ lý do <code>docker run --init</code> và <code>tini</code> tồn tại. Nếu container của bạn lần nào cũng mất đúng mười giây để dừng, lý do là đây.</div>
 
 <h3>Nạp lại so với khởi động lại</h3>
-<pre><code>sudo nginx -t                        <span class="tok-comment"># LUÔN kiểm cấu hình trước</span>
+<pre><code class="language-bash">sudo nginx -t                        <span class="tok-comment"># LUÔN kiểm cấu hình trước</span>
 sudo systemctl reload nginx          <span class="tok-comment"># SIGHUP — đọc lại cấu hình, vẫn phục vụ</span>
 sudo systemctl restart nginx         <span class="tok-comment"># dừng rồi chạy lại — có gián đoạn ngắn</span>
 sudo kill -HUP \$(cat /run/nginx.pid) <span class="tok-comment"># cũng chính là nạp lại đó, làm bằng tay</span>
@@ -1452,7 +1452,7 @@ sudo kill -USR1 \$(cat /run/nginx.pid) <span class="tok-comment"># nginx: mở l
 <div class="callout warn">Hãy kiểm trước khi nạp lại. <code>nginx -t</code> xác thực file cấu hình; bỏ qua nó rồi nạp lại một cấu hình hỏng sẽ để các tiến trình thợ cũ chạy tiếp nhưng đồng nghĩa với việc lần khởi động <em>KẾ TIẾP</em> — có thể là 3 giờ sáng, do một chuyện khác kích hoạt — sẽ không lên nổi. Chỗ hỏng lộ ra rất lâu sau thay đổi, và đó là kiểu tệ nhất.</div>
 
 <h3>Xem một tiến trình làm gì với tín hiệu</h3>
-<pre><code>grep -E 'SigCgt|SigIgn|SigBlk' /proc/812/status
+<pre><code class="language-bash">grep -E 'SigCgt|SigIgn|SigBlk' /proc/812/status
 sudo strace -p 5012 -e trace=signal      <span class="tok-comment"># xem tín hiệu tới, ngay lúc đó</span></code></pre>
 <div class="out">SigBlk: 0000000000000000
 SigIgn: 0000000000001000
@@ -1461,7 +1461,7 @@ SigCgt: 0000000180014a03</div>
 
 <h3>Chạy thử từng bước</h3>
 <p>Một script mười dòng tự dọn dẹp sau khi chết, và bốn lệnh chứng minh từng dòng <code>trap</code> làm đúng điều nó nói. Lưu thành <code>don.sh</code> trong <code>~/thu-linux/ch5</code> rồi <code>chmod +x</code>.</p>
-<pre><code>#!/bin/bash
+<pre><code class="language-bash">#!/bin/bash
 lock=/tmp/deploy.lock
 don_dep() {
   echo "nhận tín hiệu — dọn dẹp"
@@ -1471,7 +1471,7 @@ trap don_dep EXIT
 trap 'exit 143' TERM INT
 trap '' HUP
 touch "\$lock"; sleep 300 &amp; wait</code></pre>
-<pre><code>./don.sh &amp; p=\$!
+<pre><code class="language-bash">./don.sh &amp; p=\$!
 kill -HUP \$p; sleep 0.3; kill -0 \$p &amp;&amp; echo "HUP: vẫn sống"
 kill \$p; wait \$p; echo "mã thoát: \$?"
 ls /tmp/deploy.lock</code></pre>
@@ -1578,7 +1578,7 @@ kill %1                      <span class="tok-comment"># signal a JOB rather tha
 
 <h3>Starting in the background, and \$!</h3>
 ${slide('lx-05', 22, '&, $! và wait từng PID')}
-<pre><code>./build.sh &amp;                       <span class="tok-comment"># start in the background</span>
+<pre><code class="language-bash">./build.sh &amp;                       <span class="tok-comment"># start in the background</span>
 echo \$!                            <span class="tok-comment"># PID of the most recent background job</span>
 wait \$!                            <span class="tok-comment"># block until it finishes</span>
 echo \$?                            <span class="tok-comment"># and get its exit code</span>
@@ -1596,7 +1596,7 @@ all three finished</div>
 
 <h3>The bare-wait trap, measured</h3>
 <p>The warning above is worth seeing once, because the failure is silent. Three jobs, one of which fails with status 3:</p>
-<pre><code>( sleep 1; echo "build-api xong" )    &amp; p1=\$!
+<pre><code class="language-bash">( sleep 1; echo "build-api xong" )    &amp; p1=\$!
 ( sleep 2; echo "build-web xong" )    &amp; p2=\$!
 ( sleep 1; echo "test hỏng"; exit 3 ) &amp; p3=\$!
 loi=0
@@ -1678,7 +1678,7 @@ tmux kill-session -t deploy  <span class="tok-comment"># when done</span></code>
 
 <h3>When none of these is right</h3>
 <p>If a program should keep running <em>across reboots</em>, none of these tools is the answer — they all die when the machine restarts. That is what a service manager is for:</p>
-<pre><code>sudo systemctl enable --now myapp     <span class="tok-comment"># starts at boot, restarts on crash</span>
+<pre><code class="language-bash">sudo systemctl enable --now myapp     <span class="tok-comment"># starts at boot, restarts on crash</span>
 systemctl status myapp
 journalctl -u myapp -f</code></pre>
 <div class="kv-grid">
@@ -1800,7 +1800,7 @@ kill %1                      <span class="tok-comment"># gửi tín hiệu cho m
 
 <h3>Khởi động thẳng ở hậu cảnh, và \$!</h3>
 ${slide('lx-05', 22, '&, $! và wait từng PID')}
-<pre><code>./build.sh &amp;                       <span class="tok-comment"># khởi động ở hậu cảnh</span>
+<pre><code class="language-bash">./build.sh &amp;                       <span class="tok-comment"># khởi động ở hậu cảnh</span>
 echo \$!                            <span class="tok-comment"># PID của job nền gần nhất</span>
 wait \$!                            <span class="tok-comment"># chặn lại cho tới khi nó xong</span>
 echo \$?                            <span class="tok-comment"># và lấy mã thoát của nó</span>
@@ -1818,7 +1818,7 @@ cả ba đã xong</div>
 
 <h3>Cái bẫy wait trần, đo thật</h3>
 <p>Lời cảnh báo ở trên đáng được nhìn tận mắt một lần, vì cú hỏng này im lặng. Ba job, một cái hỏng với trạng thái 3:</p>
-<pre><code>( sleep 1; echo "build-api xong" )    &amp; p1=\$!
+<pre><code class="language-bash">( sleep 1; echo "build-api xong" )    &amp; p1=\$!
 ( sleep 2; echo "build-web xong" )    &amp; p2=\$!
 ( sleep 1; echo "test hỏng"; exit 3 ) &amp; p3=\$!
 loi=0
@@ -1900,7 +1900,7 @@ tmux kill-session -t deploy  <span class="tok-comment"># khi xong việc</span><
 
 <h3>Khi không cái nào trong số này là đúng</h3>
 <p>Nếu một chương trình phải chạy tiếp <em>QUA CẢ NHỮNG LẦN KHỞI ĐỘNG LẠI MÁY</em>, không công cụ nào ở trên là câu trả lời — tất cả đều chết khi máy khởi động lại. Đó là việc của một trình quản lý dịch vụ:</p>
-<pre><code>sudo systemctl enable --now myapp     <span class="tok-comment"># chạy lúc khởi động, tự bật lại khi sập</span>
+<pre><code class="language-bash">sudo systemctl enable --now myapp     <span class="tok-comment"># chạy lúc khởi động, tự bật lại khi sập</span>
 systemctl status myapp
 journalctl -u myapp -f</code></pre>
 <div class="kv-grid">

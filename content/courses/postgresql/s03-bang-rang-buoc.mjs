@@ -27,7 +27,7 @@ export default {
 
 <h3>What a PRIMARY KEY actually guarantees</h3>
 <p>Declaring <code>PRIMARY KEY</code> bundles two promises the database enforces on every insert and update: the value is <strong>UNIQUE</strong> (no two rows share it) and <strong>NOT NULL</strong> (every row has one). It also silently builds an index on that column, so lookups by key are fast. Watch both promises being enforced:</p>
-<pre><code>CREATE TABLE tag (
+<pre><code class="language-sql">CREATE TABLE tag (
   slug  text PRIMARY KEY,
   label text NOT NULL
 );
@@ -51,7 +51,7 @@ DETAIL:  Failing row contains (null, No slug).</div>
 
 <h3>Composite primary keys — one key from several columns</h3>
 <p>Sometimes the identity of a row is a <em>combination</em>. The classic case is a join table linking two things — say, which tags are on which notes. Neither column alone is unique (a note has many tags, a tag is on many notes), but the <em>pair</em> is:</p>
-<pre><code>CREATE TABLE note_tag (
+<pre><code class="language-sql">CREATE TABLE note_tag (
   note_id  bigint,
   tag_slug text,
   PRIMARY KEY (note_id, tag_slug)   <span class="tok-comment">-- the pair must be unique</span>
@@ -84,7 +84,7 @@ DETAIL:  Key (note_id, tag_slug)=(1, sql) already exists.</div>
 
 <h3>PRIMARY KEY thật sự bảo đảm điều gì</h3>
 <p>Khai báo <code>PRIMARY KEY</code> gói lại hai lời hứa mà cơ sở dữ liệu cưỡng chế trên mọi lần chèn và cập nhật: giá trị là <strong>UNIQUE</strong> (không hai dòng nào trùng nó) và <strong>NOT NULL</strong> (mọi dòng đều có). Nó cũng âm thầm dựng một chỉ mục trên cột đó, nên tra cứu theo khoá rất nhanh. Xem cả hai lời hứa được cưỡng chế:</p>
-<pre><code>CREATE TABLE tag (
+<pre><code class="language-sql">CREATE TABLE tag (
   slug  text PRIMARY KEY,
   label text NOT NULL
 );
@@ -108,7 +108,7 @@ DETAIL:  Failing row contains (null, No slug).</div>
 
 <h3>Khoá chính tổ hợp — một khoá từ nhiều cột</h3>
 <p>Đôi khi danh tính của một dòng là một <em>tổ hợp</em>. Trường hợp kinh điển là một bảng nối liên kết hai thứ — ví dụ tag nào nằm trên note nào. Không cột nào một mình là duy nhất (một note có nhiều tag, một tag nằm trên nhiều note), nhưng <em>cặp</em> thì duy nhất:</p>
-<pre><code>CREATE TABLE note_tag (
+<pre><code class="language-sql">CREATE TABLE note_tag (
   note_id  bigint,
   tag_slug text,
   PRIMARY KEY (note_id, tag_slug)   <span class="tok-comment">-- cặp phải duy nhất</span>
@@ -151,7 +151,7 @@ DETAIL:  Key (note_id, tag_slug)=(1, sql) already exists.</div>
 
 <h3>The orphan it prevents</h3>
 <p>Set up a parent <code>u_r</code> (users) and a child <code>n_r</code> (notes) whose <code>user_id</code> references it. The <code>REFERENCES</code> clause is the foreign key:</p>
-<pre><code>CREATE TABLE u_r (id int PRIMARY KEY, name text NOT NULL);
+<pre><code class="language-sql">CREATE TABLE u_r (id int PRIMARY KEY, name text NOT NULL);
 INSERT INTO u_r VALUES (1,'Cuong'),(2,'Lan');
 
 CREATE TABLE n_r (
@@ -170,14 +170,14 @@ DETAIL:  Key (user_id)=(999) is not present in table "u_r".</div>
 
 <h4>1. RESTRICT / NO ACTION — the safe default</h4>
 <p>If you write no <code>ON DELETE</code> clause (as in <code>n_r</code> above), the default is to <strong>refuse</strong> the delete while children still reference the parent:</p>
-<pre><code>DELETE FROM u_r WHERE id=1;   <span class="tok-comment">-- user 1 still has notes 1 and 2</span></code></pre>
+<pre><code class="language-sql">DELETE FROM u_r WHERE id=1;   <span class="tok-comment">-- user 1 still has notes 1 and 2</span></code></pre>
 <div class="out">ERROR:  update or delete on table "u_r" violates foreign key constraint "n_r_user_id_fkey" on table "n_r"
 DETAIL:  Key (id)=(1) is still referenced from table "n_r".</div>
 <p>This protects you: you can't accidentally delete a user and leave their notes dangling. To delete the user you must first deal with the notes. Safe, explicit, and the right default for most relationships.</p>
 
 <h4>2. CASCADE — delete the children too</h4>
 <p>Sometimes children have no meaning without the parent — comments on a post, items in a shopping cart. <code>ON DELETE CASCADE</code> says "when the parent goes, take the children with it":</p>
-<pre><code>CREATE TABLE n_c (
+<pre><code class="language-sql">CREATE TABLE n_c (
   id      int PRIMARY KEY,
   user_id int NOT NULL REFERENCES u_c(id) ON DELETE CASCADE,
   title   text
@@ -193,7 +193,7 @@ SELECT * FROM n_c ORDER BY id;</code></pre>
 
 <h4>3. SET NULL — keep the children, forget the link</h4>
 <p>Sometimes the child should survive but lose its reference — a note whose author left, an order whose (optional) coupon was removed. <code>ON DELETE SET NULL</code> nulls the foreign key column instead (so it must be nullable):</p>
-<pre><code>CREATE TABLE n_s (
+<pre><code class="language-sql">CREATE TABLE n_s (
   id        int PRIMARY KEY,
   author_id int REFERENCES u_s(id) ON DELETE SET NULL,   <span class="tok-comment">-- nullable</span>
   title     text
@@ -231,7 +231,7 @@ SELECT * FROM n_s ORDER BY id;</code></pre>
 
 <h3>Dòng mồ côi mà nó ngăn</h3>
 <p>Dựng một bảng cha <code>u_r</code> (users) và một bảng con <code>n_r</code> (notes) có <code>user_id</code> tham chiếu nó. Mệnh đề <code>REFERENCES</code> chính là khoá ngoại:</p>
-<pre><code>CREATE TABLE u_r (id int PRIMARY KEY, name text NOT NULL);
+<pre><code class="language-sql">CREATE TABLE u_r (id int PRIMARY KEY, name text NOT NULL);
 INSERT INTO u_r VALUES (1,'Cuong'),(2,'Lan');
 
 CREATE TABLE n_r (
@@ -250,14 +250,14 @@ DETAIL:  Key (user_id)=(999) is not present in table "u_r".</div>
 
 <h4>1. RESTRICT / NO ACTION — mặc định an toàn</h4>
 <p>Nếu bạn không viết mệnh đề <code>ON DELETE</code> nào (như <code>n_r</code> ở trên), mặc định là <strong>từ chối</strong> việc xoá khi con vẫn còn tham chiếu cha:</p>
-<pre><code>DELETE FROM u_r WHERE id=1;   <span class="tok-comment">-- user 1 vẫn còn note 1 và 2</span></code></pre>
+<pre><code class="language-sql">DELETE FROM u_r WHERE id=1;   <span class="tok-comment">-- user 1 vẫn còn note 1 và 2</span></code></pre>
 <div class="out">ERROR:  update or delete on table "u_r" violates foreign key constraint "n_r_user_id_fkey" on table "n_r"
 DETAIL:  Key (id)=(1) is still referenced from table "n_r".</div>
 <p>Điều này bảo vệ bạn: bạn không thể vô tình xoá một user và để các note của họ lơ lửng. Muốn xoá user thì trước hết phải xử lý các note. An toàn, tường minh, và là mặc định đúng cho đa số quan hệ.</p>
 
 <h4>2. CASCADE — xoá cả con luôn</h4>
 <p>Đôi khi con chẳng có ý nghĩa gì khi thiếu cha — bình luận trên một bài đăng, món trong một giỏ hàng. <code>ON DELETE CASCADE</code> nói "khi cha đi, kéo con theo cùng":</p>
-<pre><code>CREATE TABLE n_c (
+<pre><code class="language-sql">CREATE TABLE n_c (
   id      int PRIMARY KEY,
   user_id int NOT NULL REFERENCES u_c(id) ON DELETE CASCADE,
   title   text
@@ -273,7 +273,7 @@ SELECT * FROM n_c ORDER BY id;</code></pre>
 
 <h4>3. SET NULL — giữ con, quên liên kết</h4>
 <p>Đôi khi con nên sống sót nhưng mất tham chiếu — một note mà tác giả đã rời đi, một đơn hàng mà mã giảm giá (tuỳ chọn) bị gỡ. <code>ON DELETE SET NULL</code> đặt cột khoá ngoại thành null thay vì xoá (nên cột phải cho phép null):</p>
-<pre><code>CREATE TABLE n_s (
+<pre><code class="language-sql">CREATE TABLE n_s (
   id        int PRIMARY KEY,
   author_id int REFERENCES u_s(id) ON DELETE SET NULL,   <span class="tok-comment">-- cho phép null</span>
   title     text
@@ -321,7 +321,7 @@ SELECT * FROM n_s ORDER BY id;</code></pre>
 
 <h3>NOT NULL and DEFAULT — required, and pre-filled</h3>
 <p><code>NOT NULL</code> means the column must have a value; <code>DEFAULT</code> supplies one when the insert doesn't. Together they make "every product has a price, and a new one starts at 0% discount" a database fact, not an app hope. Here's a table that uses every constraint at once — read it, then we'll break it deliberately:</p>
-<pre><code>CREATE TABLE product (
+<pre><code class="language-sql">CREATE TABLE product (
   id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   sku          text NOT NULL UNIQUE,
   name         text NOT NULL,
@@ -342,7 +342,7 @@ SELECT sku, name, price, discount_pct, final_price FROM product ORDER BY id;</co
 
 <h3>UNIQUE and CHECK — the rules enforced on every write</h3>
 <p>Now watch each constraint reject a bad row. <code>UNIQUE</code> stops a duplicate <code>sku</code>; <code>CHECK</code> stops values outside an allowed range; <code>NOT NULL</code> stops a missing required field:</p>
-<pre><code>INSERT INTO product (sku, name, price) VALUES ('A1','Dup SKU',10);          <span class="tok-comment">-- UNIQUE</span>
+<pre><code class="language-sql">INSERT INTO product (sku, name, price) VALUES ('A1','Dup SKU',10);          <span class="tok-comment">-- UNIQUE</span>
 INSERT INTO product (sku, name, price) VALUES ('A3','Bad price',-5);         <span class="tok-comment">-- CHECK price</span>
 INSERT INTO product (sku, name, price, discount_pct) VALUES ('A4','x',10,150); <span class="tok-comment">-- CHECK range</span>
 INSERT INTO product (sku, name) VALUES ('A5','No price');                    <span class="tok-comment">-- NOT NULL</span></code></pre>
@@ -355,14 +355,14 @@ ERROR:  null value in column "price" of relation "product" violates not-null con
 
 <h3>Generated columns — computed, never out of sync</h3>
 <p><code>final_price</code> above is <code>GENERATED ALWAYS AS (...) STORED</code>. The database computes it from <code>price</code> and <code>discount_pct</code> and keeps it current automatically — you can't write to it, and it can never drift from its inputs:</p>
-<pre><code>INSERT INTO product (sku, name, price, final_price) VALUES ('A6','x',10,5);</code></pre>
+<pre><code class="language-sql">INSERT INTO product (sku, name, price, final_price) VALUES ('A6','x',10,5);</code></pre>
 <div class="out">ERROR:  cannot insert a non-DEFAULT value into column "final_price"
 DETAIL:  Column "final_price" is a generated column.</div>
 <p>That rejection is the feature. If <code>final_price</code> were an ordinary column you set by hand, someone would eventually update <code>price</code> and forget to recompute it — and now your data lies. A generated column makes that impossible: change <code>price</code> or <code>discount_pct</code> and <code>final_price</code> updates itself.</p>
 
 <h3>Composite UNIQUE — and why the name matters</h3>
 <p>Like a primary key, <code>UNIQUE</code> can span several columns: the <em>combination</em> must be unique even if each column repeats. Give it an explicit name so you can refer to it later:</p>
-<pre><code>CREATE TABLE enrollment (
+<pre><code class="language-sql">CREATE TABLE enrollment (
   student_id  int NOT NULL,
   course_id   int NOT NULL,
   enrolled_at timestamptz NOT NULL DEFAULT now(),
@@ -396,7 +396,7 @@ DETAIL:  Key (student_id, course_id)=(1, 10) already exists.</div>
 
 <h3>NOT NULL và DEFAULT — bắt buộc, và điền sẵn</h3>
 <p><code>NOT NULL</code> nghĩa là cột phải có giá trị; <code>DEFAULT</code> cấp một giá trị khi lệnh chèn không đưa. Cùng nhau, chúng biến "mọi sản phẩm đều có giá, và một sản phẩm mới bắt đầu với giảm giá 0%" thành một sự thật của cơ sở dữ liệu, không phải một hy vọng của app. Đây là một bảng dùng mọi ràng buộc cùng lúc — đọc nó, rồi ta sẽ cố tình phá:</p>
-<pre><code>CREATE TABLE product (
+<pre><code class="language-sql">CREATE TABLE product (
   id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   sku          text NOT NULL UNIQUE,
   name         text NOT NULL,
@@ -417,7 +417,7 @@ SELECT sku, name, price, discount_pct, final_price FROM product ORDER BY id;</co
 
 <h3>UNIQUE và CHECK — luật được cưỡng chế trên mọi lần ghi</h3>
 <p>Giờ xem từng ràng buộc từ chối một dòng xấu. <code>UNIQUE</code> chặn một <code>sku</code> trùng; <code>CHECK</code> chặn giá trị ngoài khoảng cho phép; <code>NOT NULL</code> chặn một trường bắt buộc bị thiếu:</p>
-<pre><code>INSERT INTO product (sku, name, price) VALUES ('A1','Dup SKU',10);          <span class="tok-comment">-- UNIQUE</span>
+<pre><code class="language-sql">INSERT INTO product (sku, name, price) VALUES ('A1','Dup SKU',10);          <span class="tok-comment">-- UNIQUE</span>
 INSERT INTO product (sku, name, price) VALUES ('A3','Bad price',-5);         <span class="tok-comment">-- CHECK giá</span>
 INSERT INTO product (sku, name, price, discount_pct) VALUES ('A4','x',10,150); <span class="tok-comment">-- CHECK khoảng</span>
 INSERT INTO product (sku, name) VALUES ('A5','No price');                    <span class="tok-comment">-- NOT NULL</span></code></pre>
@@ -430,14 +430,14 @@ ERROR:  null value in column "price" of relation "product" violates not-null con
 
 <h3>Cột sinh — tính tự động, không bao giờ lệch</h3>
 <p><code>final_price</code> ở trên là <code>GENERATED ALWAYS AS (...) STORED</code>. Cơ sở dữ liệu tính nó từ <code>price</code> và <code>discount_pct</code> và tự giữ nó luôn đúng — bạn không thể ghi vào nó, và nó không bao giờ lệch khỏi đầu vào:</p>
-<pre><code>INSERT INTO product (sku, name, price, final_price) VALUES ('A6','x',10,5);</code></pre>
+<pre><code class="language-sql">INSERT INTO product (sku, name, price, final_price) VALUES ('A6','x',10,5);</code></pre>
 <div class="out">ERROR:  cannot insert a non-DEFAULT value into column "final_price"
 DETAIL:  Column "final_price" is a generated column.</div>
 <p>Sự từ chối đó chính là tính năng. Nếu <code>final_price</code> là một cột thường bạn tự đặt bằng tay, rốt cuộc sẽ có người cập nhật <code>price</code> mà quên tính lại nó — và giờ dữ liệu của bạn nói dối. Cột sinh khiến điều đó thành bất khả: đổi <code>price</code> hay <code>discount_pct</code> thì <code>final_price</code> tự cập nhật.</p>
 
 <h3>UNIQUE tổ hợp — và vì sao cái tên quan trọng</h3>
 <p>Như khoá chính, <code>UNIQUE</code> có thể trải nhiều cột: <em>tổ hợp</em> phải duy nhất kể cả khi từng cột lặp lại. Hãy đặt cho nó một cái tên tường minh để bạn có thể tham chiếu sau này:</p>
-<pre><code>CREATE TABLE enrollment (
+<pre><code class="language-sql">CREATE TABLE enrollment (
   student_id  int NOT NULL,
   course_id   int NOT NULL,
   enrolled_at timestamptz NOT NULL DEFAULT now(),
@@ -481,7 +481,7 @@ DETAIL:  Key (student_id, course_id)=(1, 10) already exists.</div>
 
 <h3>ALTER TABLE — changing a table that already has rows</h3>
 <p>You rarely design a table once and never touch it. <code>ALTER TABLE</code> adds columns, tightens rules, and adds constraints — but on a table with existing rows, some changes need care. Adding a nullable column is free; adding a <code>NOT NULL</code> column needs a <code>DEFAULT</code> to fill the rows already there:</p>
-<pre><code>CREATE TABLE contact (id int PRIMARY KEY, name text);
+<pre><code class="language-sql">CREATE TABLE contact (id int PRIMARY KEY, name text);
 INSERT INTO contact VALUES (1,'Cuong'),(2,'Lan');
 
 ALTER TABLE contact ADD COLUMN email text;                          <span class="tok-comment">-- ok: nullable</span>
@@ -489,7 +489,7 @@ ALTER TABLE contact ADD COLUMN status text NOT NULL DEFAULT 'active'; <span clas
 ALTER TABLE contact ADD COLUMN phone text NOT NULL;                  <span class="tok-comment">-- no default → fails</span></code></pre>
 <div class="out">ERROR:  column "phone" of relation "contact" contains null values</div>
 <p>The third one fails because the two existing rows would have a <code>NULL</code> phone, which the new <code>NOT NULL</code> rule forbids. The fix in a real migration: add it nullable, backfill values, <em>then</em> tighten to <code>NOT NULL</code>. The other alters succeeded — and you can also tighten an existing column and add constraints after the fact:</p>
-<pre><code>ALTER TABLE contact ALTER COLUMN name SET NOT NULL;
+<pre><code class="language-sql">ALTER TABLE contact ALTER COLUMN name SET NOT NULL;
 ALTER TABLE contact ADD CONSTRAINT contact_status_chk CHECK (status IN ('active','archived'));
 SELECT * FROM contact ORDER BY id;</code></pre>
 <div class="out"> id | name  | email | status
@@ -501,7 +501,7 @@ SELECT * FROM contact ORDER BY id;</code></pre>
 
 <h3>Normalization — one fact, one place</h3>
 <p>Here's the design idea that prevents a whole category of bugs. Suppose you store orders like this, repeating the customer's city on every order line:</p>
-<pre><code>CREATE TABLE orders_bad (
+<pre><code class="language-sql">CREATE TABLE orders_bad (
   order_id      int PRIMARY KEY,
   customer_name text,
   customer_city text,
@@ -513,7 +513,7 @@ INSERT INTO orders_bad VALUES
  (2,'Cuong','Hanoi','Mouse',50),
  (3,'Lan','Danang','Monitor',300);</code></pre>
 <p>Cuong's city ("Hanoi") is now stored twice. When he moves, you must update <em>every</em> row — and the day someone updates only one is the day your data starts lying:</p>
-<pre><code>UPDATE orders_bad SET customer_city='Saigon' WHERE order_id=1;   <span class="tok-comment">-- forgot order 2!</span>
+<pre><code class="language-sql">UPDATE orders_bad SET customer_city='Saigon' WHERE order_id=1;   <span class="tok-comment">-- forgot order 2!</span>
 SELECT * FROM orders_bad WHERE customer_name='Cuong' ORDER BY order_id;</code></pre>
 <div class="out"> order_id | customer_name | customer_city | product  | amount
 ----------+---------------+---------------+----------+--------
@@ -521,7 +521,7 @@ SELECT * FROM orders_bad WHERE customer_name='Cuong' ORDER BY order_id;</code></
         2 | Cuong         | Hanoi         | Mouse    |  50.00
 (2 rows)</div>
 <p>The same person now lives in two cities. This is an <strong>update anomaly</strong>, and it's the direct result of storing one fact (Cuong's city) in many places. The fix is <strong>normalization</strong>: give each fact exactly one home. Customer facts go in a <code>customer</code> table; orders just <em>reference</em> the customer by a foreign key:</p>
-<pre><code>CREATE TABLE customer (
+<pre><code class="language-sql">CREATE TABLE customer (
   id   int PRIMARY KEY,
   name text NOT NULL,
   city text
@@ -569,7 +569,7 @@ ORDER BY o.id;</code></pre>
 
 <h3>ALTER TABLE — đổi một bảng đã có dòng</h3>
 <p>Bạn hiếm khi thiết kế một bảng một lần rồi không đụng tới nữa. <code>ALTER TABLE</code> thêm cột, siết luật, và thêm ràng buộc — nhưng trên một bảng đã có dòng, vài thay đổi cần cẩn thận. Thêm một cột cho phép null thì miễn phí; thêm một cột <code>NOT NULL</code> cần một <code>DEFAULT</code> để điền cho các dòng đã có:</p>
-<pre><code>CREATE TABLE contact (id int PRIMARY KEY, name text);
+<pre><code class="language-sql">CREATE TABLE contact (id int PRIMARY KEY, name text);
 INSERT INTO contact VALUES (1,'Cuong'),(2,'Lan');
 
 ALTER TABLE contact ADD COLUMN email text;                          <span class="tok-comment">-- ổn: cho phép null</span>
@@ -577,7 +577,7 @@ ALTER TABLE contact ADD COLUMN status text NOT NULL DEFAULT 'active'; <span clas
 ALTER TABLE contact ADD COLUMN phone text NOT NULL;                  <span class="tok-comment">-- không default → lỗi</span></code></pre>
 <div class="out">ERROR:  column "phone" of relation "contact" contains null values</div>
 <p>Cái thứ ba lỗi vì hai dòng đang có sẽ có <code>phone</code> là <code>NULL</code>, điều mà luật <code>NOT NULL</code> mới cấm. Cách sửa trong một migration thật: thêm nó cho phép null, đổ dữ liệu vào, <em>rồi mới</em> siết thành <code>NOT NULL</code>. Các lệnh alter khác thành công — và bạn cũng có thể siết một cột đang có và thêm ràng buộc về sau:</p>
-<pre><code>ALTER TABLE contact ALTER COLUMN name SET NOT NULL;
+<pre><code class="language-sql">ALTER TABLE contact ALTER COLUMN name SET NOT NULL;
 ALTER TABLE contact ADD CONSTRAINT contact_status_chk CHECK (status IN ('active','archived'));
 SELECT * FROM contact ORDER BY id;</code></pre>
 <div class="out"> id | name  | email | status
@@ -589,7 +589,7 @@ SELECT * FROM contact ORDER BY id;</code></pre>
 
 <h3>Chuẩn hoá — một sự thật, một chỗ</h3>
 <p>Đây là ý tưởng thiết kế ngăn cả một loại bug. Giả sử bạn lưu đơn hàng thế này, lặp lại thành phố của khách trên mọi dòng đơn:</p>
-<pre><code>CREATE TABLE orders_bad (
+<pre><code class="language-sql">CREATE TABLE orders_bad (
   order_id      int PRIMARY KEY,
   customer_name text,
   customer_city text,
@@ -601,7 +601,7 @@ INSERT INTO orders_bad VALUES
  (2,'Cuong','Hanoi','Mouse',50),
  (3,'Lan','Danang','Monitor',300);</code></pre>
 <p>Thành phố của Cuong ("Hanoi") giờ được lưu hai lần. Khi anh ấy chuyển đi, bạn phải cập nhật <em>mọi</em> dòng — và cái ngày ai đó chỉ cập nhật một dòng là cái ngày dữ liệu của bạn bắt đầu nói dối:</p>
-<pre><code>UPDATE orders_bad SET customer_city='Saigon' WHERE order_id=1;   <span class="tok-comment">-- quên đơn 2!</span>
+<pre><code class="language-sql">UPDATE orders_bad SET customer_city='Saigon' WHERE order_id=1;   <span class="tok-comment">-- quên đơn 2!</span>
 SELECT * FROM orders_bad WHERE customer_name='Cuong' ORDER BY order_id;</code></pre>
 <div class="out"> order_id | customer_name | customer_city | product  | amount
 ----------+---------------+---------------+----------+--------
@@ -609,7 +609,7 @@ SELECT * FROM orders_bad WHERE customer_name='Cuong' ORDER BY order_id;</code></
         2 | Cuong         | Hanoi         | Mouse    |  50.00
 (2 rows)</div>
 <p>Cùng một người giờ sống ở hai thành phố. Đây là một <strong>dị thường cập nhật (update anomaly)</strong>, và nó là hệ quả trực tiếp của việc lưu một sự thật (thành phố của Cuong) ở nhiều nơi. Cách sửa là <strong>chuẩn hoá</strong>: cho mỗi sự thật đúng một mái nhà. Sự thật về khách hàng vào một bảng <code>customer</code>; đơn hàng chỉ <em>tham chiếu</em> khách qua một khoá ngoại:</p>
-<pre><code>CREATE TABLE customer (
+<pre><code class="language-sql">CREATE TABLE customer (
   id   int PRIMARY KEY,
   name text NOT NULL,
   city text

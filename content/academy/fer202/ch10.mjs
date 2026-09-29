@@ -63,7 +63,7 @@ const EX23 = {
     `<span class="eyebrow">Chapter 10 · Exercise 23 · Slot 15 slide 21</span>
 <h2>Lazy-load User &amp; Post features</h2>
 <p class="lead"><b>Goal:</b> split two features into their own bundles that download only when shown, each fetching data, all behind a Suspense fallback.</p>
-<pre><span class="hljs-comment">// App.js</span>
+<pre><code class="language-javascript"><span class="hljs-comment">// App.js</span>
 <span class="hljs-keyword">import</span> <span class="hljs-title class_">React</span>, { <span class="hljs-title class_">Suspense</span>, lazy, useState } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
 
 <span class="hljs-keyword">const</span> <span class="hljs-title class_">User</span> = <span class="hljs-title function_">lazy</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-keyword">import</span>(<span class="hljs-string">&#x27;./User&#x27;</span>));
@@ -82,14 +82,14 @@ const EX23 = {
     <span class="hljs-tag">&lt;/&gt;</span></span>
   );
 }
-<span class="hljs-comment">// User.js / Post.js — default export, fetch inside useEffect</span></pre>
+<span class="hljs-comment">// User.js / Post.js — default export, fetch inside useEffect</span></code></pre>
 <div class="out"><b>Result:</b> open the Network tab — the User bundle only downloads the first time you click "Users"; the Post bundle only when you click "Posts". The fallback shows during each first load.</div>
 <div class="pitfall"><b>Trap:</b> <code>React.lazy</code> needs a <strong>default export</strong> from <code>User.js</code>/<code>Post.js</code>. A named export (<code>export function User</code>) will not load — use <code>export default</code>.</div>
 <div class="di-toi"><a class="link-card codelab" href="${CODELAB}" target="_blank" rel="noopener"><span class="lc-ico">⌨️</span><span class="lc-body"><span class="lc-title">Split the bundles</span><span class="lc-sub">lazy + Suspense — Code Lab.</span></span><span class="lc-cta">PRACTICE →</span></a></div>`,
     `<span class="eyebrow">Chương 10 · Exercise 23 · Slot 15 slide 21</span>
 <h2>Lazy-load tính năng User &amp; Post</h2>
 <p class="lead"><b>Mục tiêu:</b> tách hai tính năng thành bundle riêng chỉ tải khi hiện, mỗi cái fetch dữ liệu, tất cả sau một fallback Suspense.</p>
-<pre><span class="hljs-comment">// App.js</span>
+<pre><code class="language-javascript"><span class="hljs-comment">// App.js</span>
 <span class="hljs-keyword">import</span> <span class="hljs-title class_">React</span>, { <span class="hljs-title class_">Suspense</span>, lazy, useState } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
 
 <span class="hljs-keyword">const</span> <span class="hljs-title class_">User</span> = <span class="hljs-title function_">lazy</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-keyword">import</span>(<span class="hljs-string">&#x27;./User&#x27;</span>));
@@ -108,7 +108,7 @@ const EX23 = {
     <span class="hljs-tag">&lt;/&gt;</span></span>
   );
 }
-<span class="hljs-comment">// User.js / Post.js — default export, fetch trong useEffect</span></pre>
+<span class="hljs-comment">// User.js / Post.js — default export, fetch trong useEffect</span></code></pre>
 <div class="out"><b>Kết quả:</b> mở tab Network — bundle User chỉ tải lần đầu bạn bấm "Users"; bundle Post chỉ khi bấm "Posts". Fallback hiện trong mỗi lần tải đầu.</div>
 <div class="pitfall"><b>Bẫy:</b> <code>React.lazy</code> cần <strong>default export</strong> từ <code>User.js</code>/<code>Post.js</code>. Named export (<code>export function User</code>) sẽ không nạp — dùng <code>export default</code>.</div>
 <div class="di-toi"><a class="link-card codelab" href="${CODELAB}" target="_blank" rel="noopener"><span class="lc-ico">⌨️</span><span class="lc-body"><span class="lc-title">Chia bundle</span><span class="lc-sub">lazy + Suspense — Code Lab.</span></span><span class="lc-cta">LUYỆN TẬP →</span></a></div>`,

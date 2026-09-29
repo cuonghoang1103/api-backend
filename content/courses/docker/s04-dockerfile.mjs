@@ -70,7 +70,7 @@ ${gallery('dk-04', [
 
 <h3>A real application</h3>
 ${slide('dk-04', 3, 'Dockerfile đầu tiên — mỗi dòng một bước, ghi chú bên lề từng dòng')}
-<pre><code>mkdir -p demo/src &amp;&amp; cd demo
+<pre><code class="language-javascript">mkdir -p demo/src &amp;&amp; cd demo
 cat &gt; package.json &lt;&lt;'EOF'
 { "name": "demo", "version": "1.0.0", "type": "module",
   "scripts": { "start": "node src/server.js" },
@@ -86,7 +86,7 @@ npm install --package-lock-only --silent
 ls</code></pre>
 <div class="out">package-lock.json  package.json  src</div>
 <p class="note-ct">Real output on the course's Mac (npm 10.9). An earlier version of this lesson showed a <code>node_modules</code> folder in this listing — but <code>--package-lock-only</code> writes the lockfile and installs <em>nothing</em>, which is exactly why it is used here: the image installs its own dependencies with <code>npm ci</code>. If you also run the app outside Docker with <code>npm install</code>, you will have a <code>node_modules</code> as well, and the build-context section below is about what that costs.</p>
-<pre><code>cat &gt; Dockerfile &lt;&lt;'EOF'
+<pre><code class="language-bash">cat &gt; Dockerfile &lt;&lt;'EOF'
 FROM node:22-alpine
 
 WORKDIR /app
@@ -114,7 +114,7 @@ docker build -t demo:1.0 .</code></pre>
  =&gt; [5/5] COPY src ./src                                                   0.0s
  =&gt; exporting to image                                                     0.4s
  =&gt; =&gt; naming to docker.io/library/demo:1.0                                0.0s</div>
-<pre><code>docker run -d --name demo -p 3000:3000 demo:1.0
+<pre><code class="language-bash">docker run -d --name demo -p 3000:3000 demo:1.0
 curl -s localhost:3000/health; echo
 docker images demo --format '{{.Repository}}:{{.Tag}} {{.Size}}'</code></pre>
 <div class="out">{"ok":true,"node":"v22.11.0"}
@@ -158,17 +158,17 @@ demo:1.0        b2e6c98cd711        240MB         60.1MB</div>
 
 <h3>The dot at the end: the build context</h3>
 ${slide('dk-04', 4, 'Dấu chấm cuối lệnh là ngữ cảnh — không phải Dockerfile')}
-<pre><code><span class="tok-comment"># These are three different things, and only one is the Dockerfile</span>
+<pre><code class="language-bash"><span class="tok-comment"># These are three different things, and only one is the Dockerfile</span>
 docker build -t demo:1.0 .
 <span class="tok-comment">#                        ^ the BUILD CONTEXT — a directory that gets uploaded</span>
 
 docker build -t demo:1.0 -f docker/Dockerfile.api .
 <span class="tok-comment">#                        ^^^^^^^^^^^^^^^^^^^^^^^ the Dockerfile   ^ still the context</span></code></pre>
 <p>Before any instruction runs, the CLI packages up that directory and sends it to the daemon — because the daemon might be on another machine and cannot read your disk. Every <code>COPY</code> and <code>ADD</code> then reads from that uploaded copy, which is why <code>COPY ../shared /app</code> fails: the parent directory is not in the context, and no path outside it can ever be.</p>
-<pre><code><span class="tok-comment"># Watch the cost when node_modules is sitting in the directory</span>
+<pre><code class="language-bash"><span class="tok-comment"># Watch the cost when node_modules is sitting in the directory</span>
 du -sh node_modules
 docker build -t demo:1.0 . 2&gt;&amp;1 | grep -E 'transferring context|FINISHED'</code></pre>
-<pre><code>docker build -t demo:1.0 .</code></pre>
+<pre><code class="language-bash">docker build -t demo:1.0 .</code></pre>
 <div class="out">3.9M	node_modules
  =&gt; =&gt; transferring context: 29.59kB                                       0.0s
 [+] Building 0.2s (10/10) FINISHED                         docker:desktop-linux</div>
@@ -214,7 +214,7 @@ public</div>
 
 <h3>.dockerignore fixes it</h3>
 ${slide('dk-04', 6, '.dockerignore — danh sách những thứ không được lên xe')}
-<pre><code>cat &gt; .dockerignore &lt;&lt;'EOF'
+<pre><code class="language-bash">cat &gt; .dockerignore &lt;&lt;'EOF'
 # Never send these to the daemon
 node_modules
 .git
@@ -245,7 +245,7 @@ docker build -t demo:1.0 . 2&gt;&amp;1 | grep -E 'transferring context|FINISHED'
 <div class="callout ok"><strong>Write <code>.dockerignore</code> before you write the Dockerfile.</strong> It is a two-minute file that speeds up every build you will ever run in that repository and closes the most common accidental-secret leak. Start from your <code>.gitignore</code> and add <code>.git</code> itself — which <code>.gitignore</code> obviously never mentions and which is often the biggest single directory in the context.</div>
 
 <h3>Reading the build output</h3>
-<pre><code>docker build -t demo:1.1 --progress=plain . 2&gt;&amp;1 | head -14</code></pre>
+<pre><code class="language-bash">docker build -t demo:1.1 --progress=plain . 2&gt;&amp;1 | head -14</code></pre>
 <div class="out">#1 [internal] load build definition from Dockerfile
 #1 transferring dockerfile: 231B done
 #2 [internal] load metadata for docker.io/library/node:22-alpine
@@ -267,7 +267,7 @@ docker build -t demo:1.0 . 2&gt;&amp;1 | grep -E 'transferring context|FINISHED'
   <div class="kv"><span class="k">--pull</span><span class="v">Re-check the registry for a newer base image even if you have one locally. Belongs in scheduled CI builds so security patches actually arrive.</span></div>
   <div class="kv"><span class="k">-f path/to/Dockerfile</span><span class="v">A Dockerfile anywhere, with the context still chosen separately. This is how a monorepo keeps <code>docker/api.Dockerfile</code> and <code>docker/web.Dockerfile</code> next to each other.</span></div>
 </div>
-<pre><code>docker rm -f demo &gt;/dev/null; cd ..; rm -rf demo</code></pre>
+<pre><code class="language-bash">docker rm -f demo &gt;/dev/null; cd ..; rm -rf demo</code></pre>
 
 <h3>🧪 Practice (15–20 min)</h3>
 <div class="callout ok"><p><strong>Situation:</strong> your SWP391 team's API image takes a minute to build in GitHub Actions, and someone noticed a teammate's <code>.env</code> with the database password inside the published image. You are asked to find out what the build is sending and fix it — measured, not guessed.</p><ol>
@@ -333,7 +333,7 @@ src</div>
 
 <h3>Một ứng dụng thật</h3>
 ${slide('dk-04', 3, 'Dockerfile đầu tiên — mỗi dòng một bước, ghi chú bên lề từng dòng')}
-<pre><code>mkdir -p demo/src &amp;&amp; cd demo
+<pre><code class="language-javascript">mkdir -p demo/src &amp;&amp; cd demo
 cat &gt; package.json &lt;&lt;'EOF'
 { "name": "demo", "version": "1.0.0", "type": "module",
   "scripts": { "start": "node src/server.js" },
@@ -349,7 +349,7 @@ npm install --package-lock-only --silent
 ls</code></pre>
 <div class="out">package-lock.json  package.json  src</div>
 <p class="note-ct">Output thật trên máy Mac của khoá (npm 10.9). Bản cũ của bài in ra thêm một thư mục <code>node_modules</code> ở đây — nhưng <code>--package-lock-only</code> chỉ ghi file khoá và KHÔNG cài gì cả, và đó chính là lý do dùng nó: cái ảnh tự cài thư viện của nó bằng <code>npm ci</code>. Nếu bạn còn chạy app ngoài Docker bằng <code>npm install</code> thì máy bạn sẽ có thêm <code>node_modules</code>, và mục ngữ cảnh dựng bên dưới nói về cái giá của nó.</p>
-<pre><code>cat &gt; Dockerfile &lt;&lt;'EOF'
+<pre><code class="language-bash">cat &gt; Dockerfile &lt;&lt;'EOF'
 FROM node:22-alpine
 
 WORKDIR /app
@@ -377,7 +377,7 @@ docker build -t demo:1.0 .</code></pre>
  =&gt; [5/5] COPY src ./src                                                   0.0s
  =&gt; exporting to image                                                     0.4s
  =&gt; =&gt; naming to docker.io/library/demo:1.0                                0.0s</div>
-<pre><code>docker run -d --name demo -p 3000:3000 demo:1.0
+<pre><code class="language-bash">docker run -d --name demo -p 3000:3000 demo:1.0
 curl -s localhost:3000/health; echo
 docker images demo --format '{{.Repository}}:{{.Tag}} {{.Size}}'</code></pre>
 <div class="out">{"ok":true,"node":"v22.11.0"}
@@ -421,17 +421,17 @@ demo:1.0        b2e6c98cd711        240MB         60.1MB</div>
 
 <h3>Dấu chấm ở cuối: ngữ cảnh dựng</h3>
 ${slide('dk-04', 4, 'Dấu chấm cuối lệnh là ngữ cảnh — không phải Dockerfile')}
-<pre><code><span class="tok-comment"># Đây là ba thứ khác nhau, và chỉ MỘT trong số đó là Dockerfile</span>
+<pre><code class="language-bash"><span class="tok-comment"># Đây là ba thứ khác nhau, và chỉ MỘT trong số đó là Dockerfile</span>
 docker build -t demo:1.0 .
 <span class="tok-comment">#                        ^ NGỮ CẢNH DỰNG — một thư mục sẽ được TẢI LÊN</span>
 
 docker build -t demo:1.0 -f docker/Dockerfile.api .
 <span class="tok-comment">#                        ^^^^^^^^^^^^^^^^^^^^^^^ cái Dockerfile   ^ vẫn là ngữ cảnh</span></code></pre>
 <p>Trước khi bất kỳ chỉ thị nào chạy, CLI đóng gói cái thư mục đó lại và gửi nó cho tiến trình nền — vì tiến trình nền có thể nằm trên một cái máy khác và không đọc được đĩa của bạn. Mọi <code>COPY</code> và <code>ADD</code> sau đó đọc từ bản đã tải lên ấy, và đó là lý do <code>COPY ../shared /app</code> hỏng: thư mục cha không nằm trong ngữ cảnh, và không đường dẫn nào ngoài nó có thể tới được.</p>
-<pre><code><span class="tok-comment"># Nhìn cái giá khi node_modules đang nằm trong thư mục</span>
+<pre><code class="language-bash"><span class="tok-comment"># Nhìn cái giá khi node_modules đang nằm trong thư mục</span>
 du -sh node_modules
 docker build -t demo:1.0 . 2&gt;&amp;1 | grep -E 'transferring context|FINISHED'</code></pre>
-<pre><code>docker build -t demo:1.0 .</code></pre>
+<pre><code class="language-bash">docker build -t demo:1.0 .</code></pre>
 <div class="out">3.9M	node_modules
  =&gt; =&gt; transferring context: 29.59kB                                       0.0s
 [+] Building 0.2s (10/10) FINISHED                         docker:desktop-linux</div>
@@ -477,7 +477,7 @@ public</div>
 
 <h3>.dockerignore chữa được</h3>
 ${slide('dk-04', 6, '.dockerignore — danh sách những thứ không được lên xe')}
-<pre><code>cat &gt; .dockerignore &lt;&lt;'EOF'
+<pre><code class="language-bash">cat &gt; .dockerignore &lt;&lt;'EOF'
 # Đừng bao giờ gửi mấy thứ này cho tiến trình nền
 node_modules
 .git
@@ -508,7 +508,7 @@ docker build -t demo:1.0 . 2&gt;&amp;1 | grep -E 'transferring context|FINISHED'
 <div class="callout ok"><strong>Hãy viết <code>.dockerignore</code> TRƯỚC khi viết Dockerfile.</strong> Nó là một cái file hai phút, làm nhanh mọi lượt dựng bạn sẽ chạy trong kho mã đó và bịt lại chỗ rò bí mật vô tình phổ biến nhất. Hãy bắt đầu từ <code>.gitignore</code> của bạn rồi thêm chính <code>.git</code> vào — thứ mà <code>.gitignore</code> hiển nhiên không bao giờ nhắc tới và thường là thư mục đơn lẻ lớn nhất trong ngữ cảnh.</div>
 
 <h3>Đọc output lúc dựng</h3>
-<pre><code>docker build -t demo:1.1 --progress=plain . 2&gt;&amp;1 | head -14</code></pre>
+<pre><code class="language-bash">docker build -t demo:1.1 --progress=plain . 2&gt;&amp;1 | head -14</code></pre>
 <div class="out">#1 [internal] load build definition from Dockerfile
 #1 transferring dockerfile: 231B done
 #2 [internal] load metadata for docker.io/library/node:22-alpine
@@ -530,7 +530,7 @@ docker build -t demo:1.0 . 2&gt;&amp;1 | grep -E 'transferring context|FINISHED'
   <div class="kv"><span class="k">--pull</span><span class="v">Kiểm lại registry xem có ảnh nền mới hơn không, kể cả khi bạn đã có một bản ở máy. Nó thuộc về những lượt dựng CI theo lịch để bản vá an ninh thật sự tới nơi.</span></div>
   <div class="kv"><span class="k">-f đường/dẫn/tới/Dockerfile</span><span class="v">Một Dockerfile nằm ở đâu cũng được, với ngữ cảnh vẫn chọn riêng. Đây là cách một monorepo giữ <code>docker/api.Dockerfile</code> và <code>docker/web.Dockerfile</code> cạnh nhau.</span></div>
 </div>
-<pre><code>docker rm -f demo &gt;/dev/null; cd ..; rm -rf demo</code></pre>
+<pre><code class="language-bash">docker rm -f demo &gt;/dev/null; cd ..; rm -rf demo</code></pre>
 
 <h3>🧪 Thực hành (15–20 phút)</h3>
 <div class="callout ok"><p><strong>Tình huống:</strong> ảnh API của nhóm SWP391 mất cả phút để dựng trong GitHub Actions, và có người phát hiện file <code>.env</code> chứa mật khẩu CSDL của một bạn nằm trong cái ảnh đã công bố. Bạn được giao tìm xem lượt dựng đang gửi đi những gì và sửa nó — bằng số đo, không phải đoán.</p><ol>
@@ -779,7 +779,7 @@ chown:b    a15c96f73d3e        433MB          103MB</div>
 
 <h3>VOLUME — usually a mistake in your own image</h3>
 ${slide('dk-04', 12, 'VOLUME trong ảnh: mỗi lần run đẻ một volume vô danh')}
-<pre><code>docker build -t voltest - &lt;&lt;'EOF'
+<pre><code class="language-bash">docker build -t voltest - &lt;&lt;'EOF'
 FROM alpine
 VOLUME /data
 RUN echo hello &gt; /data/file.txt
@@ -788,7 +788,7 @@ EOF</code></pre>
 <div class="out">#5 0.075 /bin/sh: can't create /data/file.txt: nonexistent directory
 ERROR: failed to build: failed to solve: process "/bin/sh -c echo hello &gt; /data/file.txt" did not complete successfully: exit code: 1</div>
 <p>First surprise, on Docker 29 with BuildKit (Mac and Linux alike): <code>VOLUME</code> does not even create the directory during the build, so the <code>RUN</code> fails. Create it yourself and run the result <em>without</em> <code>--rm</code>, so we can look at the container afterwards:</p>
-<pre><code>docker build -q -t voltest - &lt;&lt;'EOF'
+<pre><code class="language-bash">docker build -q -t voltest - &lt;&lt;'EOF'
 FROM alpine
 VOLUME /data
 RUN mkdir -p /data &amp;&amp; echo hello &gt; /data/file.txt
@@ -811,7 +811,7 @@ volume 6fb8fab50e078a21308a967271fab7ecd6813b625a9eddaece85168e52345b60 -&gt; /d
   <div class="kv"><span class="k">MAINTAINER</span><span class="v">Deprecated. Use <code>LABEL org.opencontainers.image.authors="…"</code>.</span></div>
   <div class="kv"><span class="k">CMD / ENTRYPOINT</span><span class="v">The two that decide what actually runs, and the pair people get wrong most often. That is the whole of Lesson 4.3.</span></div>
 </div>
-<pre><code>docker rm -v vt1 &gt;/dev/null 2&gt;&amp;1; docker rmi voltest &gt;/dev/null 2&gt;&amp;1</code></pre>
+<pre><code class="language-bash">docker rm -v vt1 &gt;/dev/null 2&gt;&amp;1; docker rmi voltest &gt;/dev/null 2&gt;&amp;1</code></pre>
 
 <h3>The instructions, grouped by what they cost</h3>
 <div class="lz-map">
@@ -1051,7 +1051,7 @@ chown:b    a15c96f73d3e        433MB          103MB</div>
 
 <h3>VOLUME — thường là một sai lầm trong ảnh của chính bạn</h3>
 ${slide('dk-04', 12, 'VOLUME trong ảnh: mỗi lần run đẻ một volume vô danh')}
-<pre><code>docker build -t voltest - &lt;&lt;'EOF'
+<pre><code class="language-bash">docker build -t voltest - &lt;&lt;'EOF'
 FROM alpine
 VOLUME /data
 RUN echo hello &gt; /data/file.txt
@@ -1060,7 +1060,7 @@ EOF</code></pre>
 <div class="out">#5 0.075 /bin/sh: can't create /data/file.txt: nonexistent directory
 ERROR: failed to build: failed to solve: process "/bin/sh -c echo hello &gt; /data/file.txt" did not complete successfully: exit code: 1</div>
 <p>Bất ngờ thứ nhất, trên Docker 29 với BuildKit (Mac và Linux như nhau): <code>VOLUME</code> thậm chí KHÔNG tạo thư mục lúc dựng, nên lệnh <code>RUN</code> hỏng. Tự tạo nó, rồi chạy kết quả mà KHÔNG có <code>--rm</code> để còn nhìn lại container sau đó:</p>
-<pre><code>docker build -q -t voltest - &lt;&lt;'EOF'
+<pre><code class="language-bash">docker build -q -t voltest - &lt;&lt;'EOF'
 FROM alpine
 VOLUME /data
 RUN mkdir -p /data &amp;&amp; echo hello &gt; /data/file.txt
@@ -1083,7 +1083,7 @@ volume 6fb8fab50e078a21308a967271fab7ecd6813b625a9eddaece85168e52345b60 -&gt; /d
   <div class="kv"><span class="k">MAINTAINER</span><span class="v">Đã ngừng dùng. Hãy dùng <code>LABEL org.opencontainers.image.authors="…"</code>.</span></div>
   <div class="kv"><span class="k">CMD / ENTRYPOINT</span><span class="v">Hai chỉ thị quyết định thứ THẬT SỰ chạy, và là cặp mà người ta hiểu sai nhiều nhất. Đó là toàn bộ Bài 4.3.</span></div>
 </div>
-<pre><code>docker rm -v vt1 &gt;/dev/null 2&gt;&amp;1; docker rmi voltest &gt;/dev/null 2&gt;&amp;1</code></pre>
+<pre><code class="language-bash">docker rm -v vt1 &gt;/dev/null 2&gt;&amp;1; docker rmi voltest &gt;/dev/null 2&gt;&amp;1</code></pre>
 
 <h3>Các chỉ thị, nhóm theo thứ chúng tốn</h3>
 <div class="lz-map">
@@ -1158,7 +1158,7 @@ volume 6fb8fab50e078a21308a967271fab7ecd6813b625a9eddaece85168e52345b60 -&gt; /d
 
 <h3>The truth table</h3>
 ${slide('dk-04', 14, 'Lệnh cuối = ENTRYPOINT + CMD — tham số gõ thêm thay CMD')}
-<pre><code>demo() { docker build -q -t tt - &gt;/dev/null; docker run --rm tt \$@; }
+<pre><code class="language-bash">demo() { docker build -q -t tt - &gt;/dev/null; docker run --rm tt \$@; }
 
 <span class="tok-comment"># 1. CMD alone, exec form</span>
 printf 'FROM alpine\\nCMD ["echo","hello"]\\n' | demo
@@ -1221,7 +1221,7 @@ E=["echo","E:"] C=null</div>
 
 <h3>Shell form versus exec form, again</h3>
 ${slide('dk-04', 16, 'Dạng shell: Alpine tự exec giùm — Debian thì KHÔNG')}
-<pre><code>docker build -q -t sf - &lt;&lt;'EOF' &gt;/dev/null
+<pre><code class="language-bash">docker build -q -t sf - &lt;&lt;'EOF' &gt;/dev/null
 FROM alpine
 CMD sleep 600
 EOF
@@ -1253,7 +1253,7 @@ real	0m10.17s</div>
 1 /bin/sh -c node server.js
 8 node server.js</div>
 <p>So the same <code>CMD</code> line stops in a tenth of a second on Alpine and in ten seconds on Debian, and adding a harmless-looking <code>; echo</code> breaks Alpine too. In shell form, whether your process is PID 1 is an accident of which shell the base image ships. <strong>Always write <code>CMD</code> in exec form</strong> — as a JSON array, with double quotes, because single quotes are not valid JSON and Docker will treat the whole thing as shell form.</p>
-<pre><code><span class="tok-comment"># The one thing exec form cannot do: expand variables</span>
+<pre><code class="language-bash"><span class="tok-comment"># The one thing exec form cannot do: expand variables</span>
 docker run --rm -e NAME=cuong alpine sh -c 'echo hi \$NAME'   <span class="tok-comment"># works</span>
 docker build -q -t noexp - &lt;&lt;'EOF' &gt;/dev/null
 FROM alpine
@@ -1278,7 +1278,7 @@ exit=127
 
 <h3>The entrypoint script pattern</h3>
 ${slide('dk-04', 18, 'Entrypoint: chuẩn bị xong, exec "$@" — app thành PID 1')}
-<pre><code>cat &gt; entrypoint.sh &lt;&lt;'EOF'
+<pre><code class="language-bash">cat &gt; entrypoint.sh &lt;&lt;'EOF'
 #!/bin/sh
 set -e
 
@@ -1317,7 +1317,7 @@ CMD ["node", "src/server.js"]</code></pre>
   <div class="lz-step"><span class="lz-k">set -e at the top</span><span class="lz-t">so a failed migration stops the container</span><span class="lz-d">Without it the script carries on and starts an application against a half-migrated database — much worse than not starting at all.</span></div>
   <div class="lz-step"><span class="lz-k">Log to stderr</span><span class="lz-t">echo "…" &gt;&amp;2</span><span class="lz-d">Keeps the setup chatter out of your application's stdout, which matters when something downstream is parsing it (Lesson 2.2).</span></div>
 </div>
-<pre><code><span class="tok-comment"># Prove exec did its job</span>
+<pre><code class="language-bash"><span class="tok-comment"># Prove exec did its job</span>
 docker build -q -t ep . &gt;/dev/null
 docker run -d --name ep -e RUN_MIGRATIONS=false ep sleep 600 &gt;/dev/null
 docker exec ep ps -o pid,args | head -3</code></pre>
@@ -1379,7 +1379,7 @@ CMD ["node", "src/server.js"]</code></pre>
   <div class="kv"><span class="k">It hides the real command</span><span class="v"><code>docker ps</code> shows <code>npm start</code>, and finding out what actually runs means reading <code>package.json</code> inside the image.</span></div>
   <div class="kv"><span class="k">The same applies to yarn, pnpm, and to python -m</span><span class="v">Any wrapper that forks rather than execs. If you must use one, check that it forwards signals, or add <code>--init</code> (Lesson 1.3).</span></div>
 </div>
-<pre><code>docker rm -f sf ef ep &gt;/dev/null 2&gt;&amp;1
+<pre><code class="language-bash">docker rm -f sf ef ep &gt;/dev/null 2&gt;&amp;1
 docker rmi sf ef ep noexp tt &gt;/dev/null 2&gt;&amp;1; rm -f entrypoint.sh</code></pre>
 
 <h3>🧪 Practice (15–20 min)</h3>
@@ -1439,7 +1439,7 @@ docker rmi sf ef ep noexp tt &gt;/dev/null 2&gt;&amp;1; rm -f entrypoint.sh</cod
 
 <h3>Bảng chân trị</h3>
 ${slide('dk-04', 14, 'Lệnh cuối = ENTRYPOINT + CMD — tham số gõ thêm thay CMD')}
-<pre><code>demo() { docker build -q -t tt - &gt;/dev/null; docker run --rm tt \$@; }
+<pre><code class="language-bash">demo() { docker build -q -t tt - &gt;/dev/null; docker run --rm tt \$@; }
 
 <span class="tok-comment"># 1. Chỉ CMD, dạng exec</span>
 printf 'FROM alpine\\nCMD ["echo","hello"]\\n' | demo
@@ -1502,7 +1502,7 @@ E=["echo","E:"] C=null</div>
 
 <h3>Dạng shell so với dạng exec, một lần nữa</h3>
 ${slide('dk-04', 16, 'Dạng shell: Alpine tự exec giùm — Debian thì KHÔNG')}
-<pre><code>docker build -q -t sf - &lt;&lt;'EOF' &gt;/dev/null
+<pre><code class="language-bash">docker build -q -t sf - &lt;&lt;'EOF' &gt;/dev/null
 FROM alpine
 CMD sleep 600
 EOF
@@ -1534,7 +1534,7 @@ real	0m10.17s</div>
 1 /bin/sh -c node server.js
 8 node server.js</div>
 <p>Vậy là cùng MỘT dòng <code>CMD</code> dừng trong một phần mười giây trên Alpine và mười giây trên Debian, còn thêm một <code>; echo</code> trông vô hại là làm hỏng luôn cả Alpine. Ở dạng shell, tiến trình của bạn có là PID 1 hay không là chuyện TÌNH CỜ, tuỳ ảnh nền đem theo shell nào. <strong>Hãy LUÔN viết <code>CMD</code> ở dạng exec</strong> — một mảng JSON, với dấu nháy KÉP, bởi vì nháy đơn không phải JSON hợp lệ và Docker sẽ coi cả dòng là dạng shell.</p>
-<pre><code><span class="tok-comment"># Điều duy nhất dạng exec KHÔNG làm được: khai triển biến</span>
+<pre><code class="language-bash"><span class="tok-comment"># Điều duy nhất dạng exec KHÔNG làm được: khai triển biến</span>
 docker run --rm -e NAME=cuong alpine sh -c 'echo hi \$NAME'   <span class="tok-comment"># chạy được</span>
 docker build -q -t noexp - &lt;&lt;'EOF' &gt;/dev/null
 FROM alpine
@@ -1559,7 +1559,7 @@ exit=127
 
 <h3>Mẫu script entrypoint</h3>
 ${slide('dk-04', 18, 'Entrypoint: chuẩn bị xong, exec "$@" — app thành PID 1')}
-<pre><code>cat &gt; entrypoint.sh &lt;&lt;'EOF'
+<pre><code class="language-bash">cat &gt; entrypoint.sh &lt;&lt;'EOF'
 #!/bin/sh
 set -e
 
@@ -1598,7 +1598,7 @@ CMD ["node", "src/server.js"]</code></pre>
   <div class="lz-step"><span class="lz-k">set -e ở đầu</span><span class="lz-t">để một migration hỏng thì dừng luôn container</span><span class="lz-d">Không có nó thì script chạy tiếp và khởi động ứng dụng lên một cơ sở dữ liệu migration dở dang — tệ hơn hẳn việc không khởi động gì cả.</span></div>
   <div class="lz-step"><span class="lz-k">Ghi log ra stderr</span><span class="lz-t">echo "…" &gt;&amp;2</span><span class="lz-d">Giữ cho những dòng lải nhải lúc thiết lập nằm ngoài stdout của ứng dụng, và điều đó quan trọng khi có thứ gì đó phía sau đang phân tích nó (Bài 2.2).</span></div>
 </div>
-<pre><code><span class="tok-comment"># Chứng minh exec đã làm đúng việc của nó</span>
+<pre><code class="language-bash"><span class="tok-comment"># Chứng minh exec đã làm đúng việc của nó</span>
 docker build -q -t ep . &gt;/dev/null
 docker run -d --name ep -e RUN_MIGRATIONS=false ep sleep 600 &gt;/dev/null
 docker exec ep ps -o pid,args | head -3</code></pre>
@@ -1660,7 +1660,7 @@ CMD ["node", "src/server.js"]</code></pre>
   <div class="kv"><span class="k">Nó CHE MẤT câu lệnh thật</span><span class="v"><code>docker ps</code> hiện ra <code>npm start</code>, và muốn biết thứ gì thật sự chạy thì phải đi đọc <code>package.json</code> bên trong ảnh.</span></div>
   <div class="kv"><span class="k">Điều tương tự áp cho yarn, pnpm, và python -m</span><span class="v">Mọi lớp bọc rẽ nhánh thay vì exec. Nếu buộc phải dùng một cái thì hãy kiểm xem nó có chuyển tiếp tín hiệu không, hoặc thêm <code>--init</code> (Bài 1.3).</span></div>
 </div>
-<pre><code>docker rm -f sf ef ep &gt;/dev/null 2&gt;&amp;1
+<pre><code class="language-bash">docker rm -f sf ef ep &gt;/dev/null 2&gt;&amp;1
 docker rmi sf ef ep noexp tt &gt;/dev/null 2&gt;&amp;1; rm -f entrypoint.sh</code></pre>
 
 <h3>🧪 Thực hành (15–20 phút)</h3>
@@ -1729,7 +1729,7 @@ docker rmi sf ef ep noexp tt &gt;/dev/null 2&gt;&amp;1; rm -f entrypoint.sh</cod
 
 <h3>The difference, demonstrated</h3>
 ${slide('dk-04', 19, 'ARG chỉ sống lúc dựng — ENV đi theo ảnh tới mọi container')}
-<pre><code>docker build -q -t argenv - &lt;&lt;'EOF' &gt;/dev/null
+<pre><code class="language-bash">docker build -q -t argenv - &lt;&lt;'EOF' &gt;/dev/null
 FROM alpine
 ARG BUILD_ONLY=from-arg
 ENV RUNTIME_TOO=from-env
@@ -1754,7 +1754,7 @@ at run:   ARG= ENV=from-env</div>
   <div class="lz-stage">Both are visible</div>
   <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">Neither is private</span><span class="lz-nsub"><code>ARG</code> shows up in <code>docker history</code>; <code>ENV</code> shows up in <code>docker inspect</code>. Anyone with the image has both. Neither is a place for a secret.</span></div></div>
 </div>
-<pre><code>docker history argenv --no-trunc --format '{{.CreatedBy}}' | grep -i build_only | head -2
+<pre><code class="language-bash">docker history argenv --no-trunc --format '{{.CreatedBy}}' | grep -i build_only | head -2
 docker image inspect argenv --format '{{json .Config.Env}}'</code></pre>
 <div class="out">ARG BUILD_ONLY=from-arg
 ["PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","RUNTIME_TOO=from-env"]</div>
@@ -1773,7 +1773,7 @@ docker image inspect argenv --format '{{json .Config.Env}}'</code></pre>
 <div class="callout"><strong>When to use which.</strong> A value the <em>build</em> needs and that is not secret (a version to download, a base-image tag): <code>ARG</code>. A value the <em>app</em> needs at run time with a sensible default (<code>PORT</code>, <code>NODE_ENV</code>): <code>ENV</code>, overridden with <code>-e</code> per environment. Anything secret, at build time: a secret mount; at run time: an environment variable or file supplied when the container starts, never baked into the image (Chapter 11). And a value a bundler inlines into JavaScript (<code>NEXT_PUBLIC_*</code>): an <code>ARG</code> plus a rebuild per environment — see the pitfall below and the Next.js recipe in Lesson 4.5, where this was checked for real.</div>
 
 <h3>Passing values in</h3>
-<pre><code>docker build --build-arg BUILD_ONLY=from-cli -t argenv2 - &lt;&lt;'EOF' &gt;/dev/null
+<pre><code class="language-bash">docker build --build-arg BUILD_ONLY=from-cli -t argenv2 - &lt;&lt;'EOF' &gt;/dev/null
 FROM alpine
 ARG BUILD_ONLY=default-value
 RUN echo "\$BUILD_ONLY" &gt; /value
@@ -1846,7 +1846,7 @@ building on linux/arm64 for linux/amd64 (linux/amd64)</div>
 
 <h3>ARG is not a secret</h3>
 ${slide('dk-04', 21, 'Bí mật qua --build-arg ở lại trong ảnh — dùng secret mount')}
-<pre><code>docker build --build-arg NPM_TOKEN=npm_SuperSecret123 -q -t leaky - &lt;&lt;'EOF' &gt;/dev/null
+<pre><code class="language-bash">docker build --build-arg NPM_TOKEN=npm_SuperSecret123 -q -t leaky - &lt;&lt;'EOF' &gt;/dev/null
 FROM alpine
 ARG NPM_TOKEN
 RUN echo "//registry.npmjs.org/:_authToken=&#36;{NPM_TOKEN}" &gt; /root/.npmrc \\
@@ -1864,7 +1864,7 @@ COPY package*.json ./
 RUN --mount=type=secret,id=npmrc,target=/root/.npmrc npm ci --omit=dev
 COPY . .
 CMD ["node", "src/server.js"]</code></pre>
-<pre><code>docker build --secret id=npmrc,src=\$HOME/.npmrc -t safe .
+<pre><code class="language-bash">docker build --secret id=npmrc,src=\$HOME/.npmrc -t safe .
 docker history safe --no-trunc --format '{{.CreatedBy}}' | grep -ci token</code></pre>
 <div class="out">0</div></div>
 <p class="note-ct">The leak above is re-run on Docker 29 (course's Mac). An earlier version showed a single line; the full picture is worse. Build it without <code>-q</code> and BuildKit warns — <code>WARN: SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ARG "NPM_TOKEN")</code> — but still builds, and the step line of the log prints the command with the token already substituted (<code>RUN echo "//registry.npmjs.org/:_authToken=npm_SuperSecret123" …</code>), in a log CI keeps for months. And <code>docker history</code> records it twice: in the <code>ARG</code> line and in the <code>RUN |1 NPM_TOKEN=…</code> line, because BuildKit writes every build argument a <code>RUN</code> used into that step's history. With the secret mount, checked the same way: <code>grep -ci token</code> prints <code>0</code>, and <code>docker run --rm safe ls /root/.npmrc</code> answers <code>No such file or directory</code> — the file existed only during that one <code>RUN</code>.</p>
@@ -1890,7 +1890,7 @@ ERROR: process "/bin/sh -c npm run build" did not complete successfully: exit co
   <div class="kv"><span class="k">The same shape elsewhere</span><span class="v">Python's <code>PIP_NO_DEPS</code>, Ruby's <code>BUNDLE_WITHOUT</code>, and any <code>ENV</code> a package manager reads. An <code>ENV</code> line changes the behaviour of every <code>RUN</code> after it, which is easy to forget.</span></div>
   <div class="kv"><span class="k">The ENV lines worth setting early</span><span class="v"><code>PYTHONUNBUFFERED=1</code> (Lesson 2.2), <code>PYTHONDONTWRITEBYTECODE=1</code>, <code>NPM_CONFIG_UPDATE_NOTIFIER=false</code>, <code>CI=true</code>. These make builds quieter and logs work; none of them change dependency resolution.</span></div>
 </div>
-<pre><code>docker rmi argenv argenv2 argenv3 leaky safe &gt;/dev/null 2&gt;&amp;1</code></pre>
+<pre><code class="language-bash">docker rmi argenv argenv2 argenv3 leaky safe &gt;/dev/null 2&gt;&amp;1</code></pre>
 
 <h3>🧪 Practice (15–20 min)</h3>
 <div class="callout ok"><p><strong>Situation:</strong> your team's CI passes the private-registry token with <code>--build-arg NPM_TOKEN</code>, the image sets <code>ENV NODE_ENV=production</code> on its second line, and the staging build shows the wrong API URL. Take all three apart on your own machine.</p><ol>
@@ -1949,7 +1949,7 @@ ERROR: process "/bin/sh -c npm run build" did not complete successfully: exit co
 
 <h3>Khác biệt, chứng minh tận mắt</h3>
 ${slide('dk-04', 19, 'ARG chỉ sống lúc dựng — ENV đi theo ảnh tới mọi container')}
-<pre><code>docker build -q -t argenv - &lt;&lt;'EOF' &gt;/dev/null
+<pre><code class="language-bash">docker build -q -t argenv - &lt;&lt;'EOF' &gt;/dev/null
 FROM alpine
 ARG BUILD_ONLY=from-arg
 ENV RUNTIME_TOO=from-env
@@ -1974,7 +1974,7 @@ at run:   ARG= ENV=from-env</div>
   <div class="lz-stage">Cả hai đều LỘ</div>
   <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">Không cái nào riêng tư</span><span class="lz-nsub"><code>ARG</code> hiện ra trong <code>docker history</code>; <code>ENV</code> hiện ra trong <code>docker inspect</code>. Bất cứ ai có cái ảnh đều có cả hai. Không cái nào là chỗ để đặt bí mật.</span></div></div>
 </div>
-<pre><code>docker history argenv --no-trunc --format '{{.CreatedBy}}' | grep -i build_only | head -2
+<pre><code class="language-bash">docker history argenv --no-trunc --format '{{.CreatedBy}}' | grep -i build_only | head -2
 docker image inspect argenv --format '{{json .Config.Env}}'</code></pre>
 <div class="out">ARG BUILD_ONLY=from-arg
 ["PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","RUNTIME_TOO=from-env"]</div>
@@ -1993,7 +1993,7 @@ docker image inspect argenv --format '{{json .Config.Env}}'</code></pre>
 <div class="callout"><strong>Khi nào dùng cái nào.</strong> Giá trị mà LƯỢT DỰNG cần và không bí mật (phiên bản cần tải, tag của ảnh nền): <code>ARG</code>. Giá trị APP cần lúc chạy và có mặc định hợp lý (<code>PORT</code>, <code>NODE_ENV</code>): <code>ENV</code>, đè bằng <code>-e</code> theo từng môi trường. Mọi thứ bí mật, lúc dựng: secret mount; lúc chạy: biến môi trường hoặc file đưa vào khi container khởi động, KHÔNG BAO GIỜ nướng vào ảnh (Chương 11). Còn giá trị bị bộ đóng gói nhúng thẳng vào JavaScript (<code>NEXT_PUBLIC_*</code>): một <code>ARG</code> cộng dựng lại cho mỗi môi trường — xem cái bẫy bên dưới và công thức Next.js ở Bài 4.5, nơi chuyện này được kiểm thật.</div>
 
 <h3>Truyền giá trị vào</h3>
-<pre><code>docker build --build-arg BUILD_ONLY=from-cli -t argenv2 - &lt;&lt;'EOF' &gt;/dev/null
+<pre><code class="language-bash">docker build --build-arg BUILD_ONLY=from-cli -t argenv2 - &lt;&lt;'EOF' &gt;/dev/null
 FROM alpine
 ARG BUILD_ONLY=default-value
 RUN echo "\$BUILD_ONLY" &gt; /value
@@ -2066,7 +2066,7 @@ RUN echo "đang dựng trên \$BUILDPLATFORM cho \$TARGETPLATFORM (\$TARGETOS/\$
 
 <h3>ARG KHÔNG phải một bí mật</h3>
 ${slide('dk-04', 21, 'Bí mật qua --build-arg ở lại trong ảnh — dùng secret mount')}
-<pre><code>docker build --build-arg NPM_TOKEN=npm_SuperSecret123 -q -t leaky - &lt;&lt;'EOF' &gt;/dev/null
+<pre><code class="language-bash">docker build --build-arg NPM_TOKEN=npm_SuperSecret123 -q -t leaky - &lt;&lt;'EOF' &gt;/dev/null
 FROM alpine
 ARG NPM_TOKEN
 RUN echo "//registry.npmjs.org/:_authToken=&#36;{NPM_TOKEN}" &gt; /root/.npmrc \\
@@ -2084,7 +2084,7 @@ COPY package*.json ./
 RUN --mount=type=secret,id=npmrc,target=/root/.npmrc npm ci --omit=dev
 COPY . .
 CMD ["node", "src/server.js"]</code></pre>
-<pre><code>docker build --secret id=npmrc,src=\$HOME/.npmrc -t safe .
+<pre><code class="language-bash">docker build --secret id=npmrc,src=\$HOME/.npmrc -t safe .
 docker history safe --no-trunc --format '{{.CreatedBy}}' | grep -ci token</code></pre>
 <div class="out">0</div></div>
 <p class="note-ct">Vụ rò ở trên được chạy lại trên Docker 29 (máy Mac của khoá). Bản cũ in đúng một dòng; bức tranh đầy đủ còn tệ hơn. Dựng mà không có <code>-q</code> thì BuildKit cảnh báo — <code>WARN: SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ARG "NPM_TOKEN")</code> — nhưng VẪN dựng, và dòng tên bước trong log in ra câu lệnh với token đã được thay sẵn vào (<code>RUN echo "//registry.npmjs.org/:_authToken=npm_SuperSecret123" …</code>), trong một cái log mà CI giữ hàng tháng trời. Và <code>docker history</code> ghi nó HAI lần: ở dòng <code>ARG</code> và ở dòng <code>RUN |1 NPM_TOKEN=…</code>, vì BuildKit ghi mọi build arg mà một <code>RUN</code> đã dùng vào lịch sử của bước đó. Với secret mount, kiểm y như vậy: <code>grep -ci token</code> in <code>0</code>, và <code>docker run --rm safe ls /root/.npmrc</code> trả lời <code>No such file or directory</code> — file đó chỉ tồn tại trong đúng MỘT lệnh <code>RUN</code>.</p>
@@ -2110,7 +2110,7 @@ ERROR: process "/bin/sh -c npm run build" did not complete successfully: exit co
   <div class="kv"><span class="k">Hình hài tương tự ở chỗ khác</span><span class="v"><code>PIP_NO_DEPS</code> của Python, <code>BUNDLE_WITHOUT</code> của Ruby, và mọi <code>ENV</code> mà một trình quản lý gói đọc. Một dòng <code>ENV</code> đổi hành vi của MỌI <code>RUN</code> phía sau nó, và điều đó rất dễ quên.</span></div>
   <div class="kv"><span class="k">Những dòng ENV đáng đặt sớm</span><span class="v"><code>PYTHONUNBUFFERED=1</code> (Bài 2.2), <code>PYTHONDONTWRITEBYTECODE=1</code>, <code>NPM_CONFIG_UPDATE_NOTIFIER=false</code>, <code>CI=true</code>. Chúng làm bản dựng bớt ồn và log hoạt động đúng; không cái nào đổi cách giải quyết thư viện phụ thuộc.</span></div>
 </div>
-<pre><code>docker rmi argenv argenv2 argenv3 leaky safe &gt;/dev/null 2&gt;&amp;1</code></pre>
+<pre><code class="language-bash">docker rmi argenv argenv2 argenv3 leaky safe &gt;/dev/null 2&gt;&amp;1</code></pre>
 
 <h3>🧪 Thực hành (15–20 phút)</h3>
 <div class="callout ok"><p><strong>Tình huống:</strong> CI của nhóm truyền token của registry riêng bằng <code>--build-arg NPM_TOKEN</code>, ảnh đặt <code>ENV NODE_ENV=production</code> ngay dòng thứ hai, và bản dựng staging hiện sai URL API. Hãy mổ xẻ cả ba trên máy của bạn.</p><ol>
@@ -2228,9 +2228,9 @@ api Up 3 hours (healthy)</div>
 
 <h3>2 · Next.js, with standalone output</h3>
 ${slide('dk-04', 26, 'Công thức 2 · Next.js với output: standalone')}
-<pre><code><span class="tok-comment">// next.config.js — this line is what makes the image small</span>
+<pre><code class="language-javascript"><span class="tok-comment">// next.config.js — this line is what makes the image small</span>
 module.exports = { output: 'standalone' };</code></pre>
-<pre><code># syntax=docker/dockerfile:1
+<pre><code class="language-bash"># syntax=docker/dockerfile:1
 FROM node:22-alpine AS deps
 WORKDIR /app
 COPY package.json package-lock.json ./
@@ -2364,7 +2364,7 @@ COPY --from=build /out/server /server
 EXPOSE 8080
 USER nonroot:nonroot
 ENTRYPOINT ["/server"]</code></pre>
-<pre><code>docker images --format '{{.Repository}}:{{.Tag}} {{.Size}}' | head -2</code></pre>
+<pre><code class="language-bash">docker images --format '{{.Repository}}:{{.Tag}} {{.Size}}' | head -2</code></pre>
 <div class="out">IMAGE                ID             DISK USAGE   CONTENT SIZE
 goapp:1.0            7b41a95d4f74       13.6MB         2.93MB
 golang:1.23-alpine   383395b794df        365MB         75.4MB</div>
@@ -2391,7 +2391,7 @@ COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /app/dist /usr/share/nginx/html
 EXPOSE 80
 HEALTHCHECK --interval=30s CMD wget -qO- http://127.0.0.1/ &gt;/dev/null || exit 1</code></pre>
-<pre><code><span class="tok-comment"># nginx.conf — the SPA fallback everyone forgets</span>
+<pre><code class="language-bash"><span class="tok-comment"># nginx.conf — the SPA fallback everyone forgets</span>
 server {
   listen 80;
   root /usr/share/nginx/html;
@@ -2542,9 +2542,9 @@ api Up 3 hours (healthy)</div>
 
 <h3>2 · Next.js, với output standalone</h3>
 ${slide('dk-04', 26, 'Công thức 2 · Next.js với output: standalone')}
-<pre><code><span class="tok-comment">// next.config.js — dòng này mới là thứ làm cái ảnh nhỏ đi</span>
+<pre><code class="language-javascript"><span class="tok-comment">// next.config.js — dòng này mới là thứ làm cái ảnh nhỏ đi</span>
 module.exports = { output: 'standalone' };</code></pre>
-<pre><code># syntax=docker/dockerfile:1
+<pre><code class="language-bash"># syntax=docker/dockerfile:1
 FROM node:22-alpine AS deps
 WORKDIR /app
 COPY package.json package-lock.json ./
@@ -2678,7 +2678,7 @@ COPY --from=build /out/server /server
 EXPOSE 8080
 USER nonroot:nonroot
 ENTRYPOINT ["/server"]</code></pre>
-<pre><code>docker images --format '{{.Repository}}:{{.Tag}} {{.Size}}' | head -2</code></pre>
+<pre><code class="language-bash">docker images --format '{{.Repository}}:{{.Tag}} {{.Size}}' | head -2</code></pre>
 <div class="out">IMAGE                ID             DISK USAGE   CONTENT SIZE
 goapp:1.0            7b41a95d4f74       13.6MB         2.93MB
 golang:1.23-alpine   383395b794df        365MB         75.4MB</div>
@@ -2705,7 +2705,7 @@ COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /app/dist /usr/share/nginx/html
 EXPOSE 80
 HEALTHCHECK --interval=30s CMD wget -qO- http://127.0.0.1/ &gt;/dev/null || exit 1</code></pre>
-<pre><code><span class="tok-comment"># nginx.conf — cái fallback cho SPA mà ai cũng quên</span>
+<pre><code class="language-bash"><span class="tok-comment"># nginx.conf — cái fallback cho SPA mà ai cũng quên</span>
 server {
   listen 80;
   root /usr/share/nginx/html;

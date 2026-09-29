@@ -10,7 +10,7 @@
  * LUẬT (xem _HOP-DONG-NWC204.md): mọi thứ của trường có <p class="nhan">Nguồn:
  * FLM…</p>; mọi thứ web tự thêm nằm trong <div class="note-ct">. Ô trống của
  * syllabus ghi "trường không công bố" — KHÔNG đoán. title ≤255 ký tự tính CẢ
- * hai vế EN|||VI, không thực thể HTML thô trong title. Mọi <pre><code> có
+ * hai vế EN|||VI, không thực thể HTML thô trong title. Mọi <pre><code class="language-javascript"> có
  * class language-*. Không backtick lồng, không ${ } trong chuỗi → file này
  * dựng HTML bằng phép cộng chuỗi, cố ý.
  *

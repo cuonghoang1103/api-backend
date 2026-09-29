@@ -123,7 +123,7 @@ L4:     ret</code></pre>
       [21, 'Figure 15.5 — C Program for Generating Prime Numbers',
         `<p class="y-chinh">🎯 The <strong>reference</strong> half of a two-slide pair. This is the ordinary C program; slide 22 shows the same algorithm hand-written in NASM assembly. Keep both on screen — the pair is the single best "high-level versus assembly" exercise in the whole course.</p>
 <p class="nhan">📐 The program exactly as printed on the slide:</p>
-<pre><code>unsigned guess;            /* current guess for prime */
+<pre><code class="language-c">unsigned guess;            /* current guess for prime */
 unsigned factor ;          /* possible factor of guess */
 unsigned limit ;           /* find primes up to this value */
 
@@ -148,14 +148,14 @@ while ( guess &lt;= limit ) {  /* look for a factor of guess */
 <li><strong>Connect to PRF192.</strong> Everything here is first-semester C: <code>while</code>, <code>%</code>, <code>scanf</code>. The only thing CEA201 adds is the question "what does the machine actually do with it" — which is exactly slide 22.</li>
 </ul>
 <p class="nhan">📐 <strong>Compiled and run, not just read.</strong> Typed in verbatim, compiled with <code>cc -O1 primes.c -o primes</code> (Apple clang 17, arm64) and run with input 50:</p>
-<pre><code>$ echo 50 | ./primes
+<pre><code class="language-bash">$ echo 50 | ./primes
 Find primes up to : 2 3 5 7 11 13 17 19 23 29 31 37 41 43 47</code></pre>
 <p class="dap-an">✅ That is exactly the 15 primes ≤ 50, cross-checked against an independent python3 sieve: <code>[2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47]</code>. The algorithm on the slide is correct as printed. Spot-check the two cases that usually break such loops: <strong>9</strong> → <code>factor = 3</code>, <code>3*3 &lt; 9</code> is false so the inner loop never runs, then <code>9 % 3 == 0</code> → not printed, correct. <strong>25</strong> → <code>9 &lt; 25</code> and <code>25 % 3 != 0</code> so <code>factor</code> becomes 5, then <code>25 &lt; 25</code> is false, and <code>25 % 5 == 0</code> → not printed, correct.</p>
 <p class="pitfall">⚠️ Two cosmetic blemishes worth knowing about before an examiner points at them. First, <code>printf("%d\\n", guess)</code> prints an <code>unsigned</code> with the signed conversion <code>%d</code> — harmless for the values here, but a type mismatch. Second, the body of the inner <code>while</code> is the <em>next line</em> <code>factor += 2;</code> with no braces and no indentation; that is legal C but it is exactly the layout that hides bugs. Neither affects the output.</p>
 <p class="meo">💡 Before you read slide 22, write down by hand which C construct you expect to become which assembly shape: <code>while</code> → compare + conditional jump to an <code>end_</code> label; <code>%</code> → <code>div</code> with the remainder landing in <code>edx</code>; <code>printf</code> → a <code>call</code>. Getting three out of three right means you have understood Ch.13 and Ch.14.</p>`,
         `<p class="y-chinh">🎯 Nửa <strong>ĐỐI CHIẾU</strong> của một cặp hai slide. Đây là chương trình C bình thường; slide 22 là đúng thuật toán đó viết tay bằng NASM. Hãy mở cả hai cạnh nhau — cặp này là bài tập "bậc cao đối chiếu hợp ngữ" tốt nhất trong cả môn.</p>
 <p class="nhan">📐 Chương trình y nguyên như in trên slide:</p>
-<pre><code>unsigned guess;            /* số đang đoán là nguyên tố */
+<pre><code class="language-c">unsigned guess;            /* số đang đoán là nguyên tố */
 unsigned factor ;          /* ước có thể có của guess */
 unsigned limit ;           /* tìm nguyên tố tới giá trị này */
 
@@ -180,7 +180,7 @@ while ( guess &lt;= limit ) {  /* tìm một ước của guess */
 <li><strong>Nối sang PRF192.</strong> Ở đây toàn là C kỳ một: <code>while</code>, <code>%</code>, <code>scanf</code>. Thứ duy nhất CEA201 thêm vào là câu hỏi "vậy máy THỰC SỰ làm gì với nó" — và đó chính là slide 22.</li>
 </ul>
 <p class="nhan">📐 <strong>ĐÃ BIÊN DỊCH VÀ CHẠY, không chỉ đọc.</strong> Gõ lại nguyên văn, biên dịch bằng <code>cc -O1 primes.c -o primes</code> (Apple clang 17, arm64) rồi chạy với đầu vào 50:</p>
-<pre><code>$ echo 50 | ./primes
+<pre><code class="language-bash">$ echo 50 | ./primes
 Find primes up to : 2 3 5 7 11 13 17 19 23 29 31 37 41 43 47</code></pre>
 <p class="dap-an">✅ Đúng 15 số nguyên tố ≤ 50, đối chiếu chéo với một sàng nguyên tố viết độc lập bằng python3: <code>[2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47]</code>. Thuật toán trên slide ĐÚNG như in. Thử lại hai ca hay làm vỡ loại vòng lặp này: <strong>9</strong> → <code>factor = 3</code>, <code>3*3 &lt; 9</code> sai nên vòng trong không chạy lần nào, rồi <code>9 % 3 == 0</code> → không in, đúng. <strong>25</strong> → <code>9 &lt; 25</code> và <code>25 % 3 != 0</code> nên <code>factor</code> thành 5, rồi <code>25 &lt; 25</code> sai, và <code>25 % 5 == 0</code> → không in, đúng.</p>
 <p class="pitfall">⚠️ Hai vết xước hình thức nên biết trước khi bị giám khảo chỉ vào. Thứ nhất, <code>printf("%d\\n", guess)</code> in một biến <code>unsigned</code> bằng đặc tả có dấu <code>%d</code> — vô hại với dải giá trị này, nhưng vẫn là lệch kiểu. Thứ hai, thân vòng <code>while</code> bên trong là DÒNG KẾ TIẾP <code>factor += 2;</code>, không ngoặc nhọn và không thụt lề; hợp lệ trong C nhưng đúng là kiểu trình bày hay giấu lỗi. Cả hai đều không làm sai kết quả.</p>
@@ -678,7 +678,7 @@ One,    DEC 1</code></pre>
 <li><strong>Loading is where address binding can happen.</strong> Table 15.4 on slide 32 lists "load time" as one of four possible binding times, and slide 33 draws what the loader has to change when it picks a different starting address.</li>
 </ul>
 <p class="nhan">📐 <strong>The whole road, run on this machine</strong> (Apple M1 Max, Apple clang 17, arm64). Two tiny C files: <code>gcd.c</code> calls <code>gcd()</code>, <code>helper.c</code> defines it.</p>
-<pre><code>$ cc -S -O1 gcd.c -o gcd.s        # step 1: C  -&gt;  assembly language
+<pre><code class="language-bash">$ cc -S -O1 gcd.c -o gcd.s        # step 1: C  -&gt;  assembly language
 $ cc -c gcd.c -o gcd.o            # step 2: assembly  -&gt;  object file
 $ cc -c helper.c -o helper.o
 $ cc gcd.o helper.o -o gcd        # step 3: link  -&gt;  executable
@@ -700,7 +700,7 @@ gcd(48,18) = 6</code></pre>
         ret</code></pre>
 <p class="dap-an">✅ Sizes measured with <code>ls -l</code>: <code>gcd.o</code> = <strong>800 bytes</strong>, <code>helper.o</code> = <strong>592 bytes</strong>, and the linked executable <code>gcd</code> = <strong>33 456 bytes</strong>. The executable is far larger than the sum of its object files because linking adds the Mach-O headers, the startup code, the symbol stubs and the load commands that tell the loader how to build the process image on the right-hand side of Figure 15.10. <strong>An object file is not a small executable; it is a different kind of thing.</strong></p>
 <p class="pitfall">⚠️ Straight line to PRF192, and the most useful thing on this slide. Compiling <code>gcd.c</code> <em>alone</em> succeeds — the compiler is happy to call a function it has only seen declared:</p>
-<pre><code>$ cc -c gcd.c -o gcd.o
+<pre><code class="language-bash">$ cc -c gcd.c -o gcd.o
 (no output — exit status 0)
 
 $ cc gcd.o -o gcd_fail
@@ -725,7 +725,7 @@ clang: error: linker command failed with exit code 1</code></pre>
 <li><strong>Tải là một trong những nơi GẮN ĐỊA CHỈ có thể xảy ra.</strong> Table 15.4 ở slide 32 liệt kê "load time" là một trong bốn thời điểm gắn địa chỉ, còn slide 33 vẽ ra thứ bộ tải phải sửa khi nó chọn một địa chỉ bắt đầu khác.</li>
 </ul>
 <p class="nhan">📐 <strong>TRỌN ĐƯỜNG ĐI, chạy thật trên máy này</strong> (Apple M1 Max, Apple clang 17, arm64). Hai tệp C tí hon: <code>gcd.c</code> gọi <code>gcd()</code>, <code>helper.c</code> định nghĩa nó.</p>
-<pre><code>$ cc -S -O1 gcd.c -o gcd.s        # bước 1: C  -&gt;  hợp ngữ
+<pre><code class="language-bash">$ cc -S -O1 gcd.c -o gcd.s        # bước 1: C  -&gt;  hợp ngữ
 $ cc -c gcd.c -o gcd.o            # bước 2: hợp ngữ  -&gt;  tệp đối tượng
 $ cc -c helper.c -o helper.o
 $ cc gcd.o helper.o -o gcd        # bước 3: liên kết  -&gt;  tệp chạy được
@@ -747,7 +747,7 @@ gcd(48,18) = 6</code></pre>
         ret</code></pre>
 <p class="dap-an">✅ Kích thước đo bằng <code>ls -l</code>: <code>gcd.o</code> = <strong>800 byte</strong>, <code>helper.o</code> = <strong>592 byte</strong>, còn tệp chạy được sau liên kết <code>gcd</code> = <strong>33.456 byte</strong>. Tệp chạy được lớn hơn tổng hai tệp đối tượng rất nhiều vì liên kết còn thêm vào phần đầu Mach-O, mã khởi động, các stub ký hiệu và những lệnh tải (load command) chỉ cho bộ tải cách dựng ảnh tiến trình ở nửa phải Figure 15.10. <strong>Tệp đối tượng KHÔNG phải một tệp chạy được nhỏ; nó là một loại vật khác hẳn.</strong></p>
 <p class="pitfall">⚠️ Nối thẳng sang PRF192, và đây là điều hữu ích nhất trên slide này. Biên dịch <em>RIÊNG</em> <code>gcd.c</code> thì THÀNH CÔNG — trình biên dịch vui vẻ gọi một hàm mà nó mới chỉ thấy khai báo:</p>
-<pre><code>$ cc -c gcd.c -o gcd.o
+<pre><code class="language-bash">$ cc -c gcd.c -o gcd.o
 (không in gì — mã thoát 0)
 
 $ cc gcd.o -o gcd_fail
@@ -774,7 +774,7 @@ clang: error: linker command failed with exit code 1</code></pre>
 <li><strong>One program routinely uses all three at once.</strong> Your C code is statically linked with the pieces of libc chosen at build time, load-time-linked against the system C library, and may run-time-link a plugin you only load on demand. The picture is not three alternatives; it is three layers.</li>
 </ul>
 <p class="nhan">📐 <strong>The right-hand half made visible.</strong> <code>otool -L</code> lists the dynamic libraries an executable will ask the loader for. On the little <code>gcd</code> program built on the previous slide:</p>
-<pre><code>$ otool -L gcd
+<pre><code class="language-bash">$ otool -L gcd
 gcd:
         /usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1356.0.0)
 
@@ -800,7 +800,7 @@ $ otool -L /bin/ls
 <li><strong>Một chương trình bình thường dùng CẢ BA cùng lúc.</strong> Mã C của bạn liên kết tĩnh với những mảnh libc chọn lúc dựng, liên kết lúc tải với thư viện C của hệ thống, và có thể liên kết lúc chạy một plugin chỉ nạp khi cần. Bức hình không phải ba lựa chọn thay thế nhau; nó là ba TẦNG.</li>
 </ul>
 <p class="nhan">📐 <strong>Cho nửa bên phải hiện ra.</strong> <code>otool -L</code> liệt kê những thư viện động mà tệp chạy được sẽ đòi bộ tải cung cấp. Trên chính chương trình <code>gcd</code> bé tí dựng ở slide trước:</p>
-<pre><code>$ otool -L gcd
+<pre><code class="language-bash">$ otool -L gcd
 gcd:
         /usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1356.0.0)
 
@@ -998,7 +998,7 @@ $ otool -L /bin/ls
 <li><strong>This is the EXTERN/GLOBAL pairing of slide 18 completed.</strong> Module A declared B as EXTERN (undefined here, defined elsewhere); Module B declared itself GLOBAL. The linker is the only component that ever sees both declarations, which is why it is the only component that can fail with "undefined symbol".</li>
 </ul>
 <p class="nhan">📐 <strong>Watch the symbol turn into an address, on this machine.</strong> <code>nm</code> prints one letter per symbol: <code>T</code> means defined in the text section with a real address, <code>U</code> means <strong>undefined — the linker must find it</strong>.</p>
-<pre><code>$ nm gcd.o                    $ nm helper.o
+<pre><code class="language-bash">$ nm gcd.o                    $ nm helper.o
                  U _gcd       0000000000000000 T _gcd
 0000000000000000 T _main
                  U _printf
@@ -1009,7 +1009,7 @@ $ nm gcd
 0000000100000460 T _main
                  U _printf    &lt;- still U: resolved later, by the loader</code></pre>
 <p class="nhan">📐 And the same thing at the instruction level. <code>otool -tv</code> disassembles; look at the <code>bl</code> (branch-and-link, the ARM call) before and after:</p>
-<pre><code>$ otool -tv gcd.o             # BEFORE linking
+<pre><code class="language-bash">$ otool -tv gcd.o             # BEFORE linking
 _main:
   00000018  mov  w0, #0x30
   0000001c  mov  w1, #0x12
@@ -1026,7 +1026,7 @@ _main:
 _gcd:
   1000004ac  sub  sp, sp, #0x10              &lt;- the definition, pulled in from helper.o</code></pre>
 <p class="nhan">📐 And the to-do list the linker worked from — this is the file's relocation table, the real version of slide 28's forward-reference list:</p>
-<pre><code>$ otool -r gcd.o
+<pre><code class="language-bash">$ otool -r gcd.o
 Relocation information (__TEXT,__text) 4 entries
 address  pcrel length extern type  symbolnum
 00000038 1     2      1      2     6        &lt;- fix the call at 0x38 (_printf)
@@ -1050,7 +1050,7 @@ address  pcrel length extern type  symbolnum
 <li><strong>Đây là cặp EXTERN/GLOBAL của slide 18 được hoàn tất.</strong> Mô-đun A khai B là EXTERN (ở đây chưa định nghĩa, định nghĩa ở nơi khác); mô-đun B tự khai mình là GLOBAL. Bộ liên kết là thành phần DUY NHẤT nhìn thấy cả hai khai báo, và vì thế nó cũng là thành phần duy nhất có thể báo lỗi "undefined symbol".</li>
 </ul>
 <p class="nhan">📐 <strong>Xem cái ký hiệu biến thành địa chỉ, trên chính máy này.</strong> <code>nm</code> in một chữ cái cho mỗi ký hiệu: <code>T</code> nghĩa là đã định nghĩa trong đoạn mã và có địa chỉ thật, <code>U</code> nghĩa là <strong>chưa phân giải — bộ liên kết phải đi tìm</strong>.</p>
-<pre><code>$ nm gcd.o                    $ nm helper.o
+<pre><code class="language-bash">$ nm gcd.o                    $ nm helper.o
                  U _gcd       0000000000000000 T _gcd
 0000000000000000 T _main
                  U _printf
@@ -1061,7 +1061,7 @@ $ nm gcd
 0000000100000460 T _main
                  U _printf    &lt;- vẫn U: để bộ TẢI phân giải sau</code></pre>
 <p class="nhan">📐 Và đúng chuyện đó ở mức LỆNH. <code>otool -tv</code> dịch ngược; hãy nhìn lệnh <code>bl</code> (branch-and-link, lệnh gọi hàm của ARM) trước và sau:</p>
-<pre><code>$ otool -tv gcd.o             # TRƯỚC khi liên kết
+<pre><code class="language-bash">$ otool -tv gcd.o             # TRƯỚC khi liên kết
 _main:
   00000018  mov  w0, #0x30
   0000001c  mov  w1, #0x12
@@ -1078,7 +1078,7 @@ _main:
 _gcd:
   1000004ac  sub  sp, sp, #0x10              &lt;- phần định nghĩa, kéo về từ helper.o</code></pre>
 <p class="nhan">📐 Và đây là danh sách việc-phải-làm mà bộ liên kết dựa vào — bảng ĐỊNH VỊ LẠI của tệp, bản đời thực của danh sách tham chiếu tiến ở slide 28:</p>
-<pre><code>$ otool -r gcd.o
+<pre><code class="language-bash">$ otool -r gcd.o
 Relocation information (__TEXT,__text) 4 entries
 address  pcrel length extern type  symbolnum
 00000038 1     2      1      2     6        &lt;- vá lời gọi tại 0x38 (_printf)
@@ -1173,7 +1173,7 @@ address  pcrel length extern type  symbolnum
 <li><strong>Connect to Ch.9.</strong> Sharing one physical copy among processes requires the memory management unit: the same page frames are mapped into several address spaces, at possibly different virtual addresses. That is why shared libraries must be position-independent code — slide 33 again.</li>
 </ul>
 <p class="nhan">📐 <strong>DLL hell, reproduced in four commands.</strong> One tiny library defines <code>gcd</code>. Two executables were built from the <em>same</em> object file — one linked statically against <code>libmyg.a</code>, one dynamically against <code>libmyg.dylib</code>. Then the library was rewritten to return a wrong answer and rebuilt, <strong>without recompiling either program</strong>:</p>
-<pre><code>$ ./gcd_static ; ./gcd_dyn
+<pre><code class="language-bash">$ ./gcd_static ; ./gcd_dyn
 gcd(48,18) = 6
 gcd(48,18) = 6
 
@@ -1206,7 +1206,7 @@ gcd(48,18) = 6            &lt;- unaffected: it carries its own copy</code></pre>
 <li><strong>Nối sang Ch.9.</strong> Dùng chung MỘT bản vật lý giữa nhiều tiến trình đòi hỏi khối quản lý bộ nhớ: cùng những khung trang được ánh xạ vào nhiều không gian địa chỉ, có thể ở những địa chỉ ảo khác nhau. Đó là lý do thư viện dùng chung bắt buộc phải là mã độc lập vị trí — lại slide 33.</li>
 </ul>
 <p class="nhan">📐 <strong>DLL hell, TÁI HIỆN trong bốn câu lệnh.</strong> Một thư viện tí hon định nghĩa <code>gcd</code>. Hai tệp chạy được dựng từ <em>CÙNG MỘT</em> tệp đối tượng — một liên kết tĩnh với <code>libmyg.a</code>, một liên kết động với <code>libmyg.dylib</code>. Rồi thư viện bị viết lại cho trả về kết quả sai và dựng lại, <strong>mà KHÔNG biên dịch lại chương trình nào</strong>:</p>
-<pre><code>$ ./gcd_static ; ./gcd_dyn
+<pre><code class="language-bash">$ ./gcd_static ; ./gcd_dyn
 gcd(48,18) = 6
 gcd(48,18) = 6
 

@@ -72,7 +72,7 @@ const EX9 = {
   <li>A <strong>counter</strong> with increment/decrement buttons (use <code>useState</code>).</li>
   <li>A <strong>SimpleCard</strong> — the classic Facebook/Tweet card. Build the leaf components first, then compose:</li>
 </ol>
-<pre><span class="hljs-keyword">function</span> <span class="hljs-title function_">Title</span>(<span class="hljs-params">{ text }</span>)       { <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">h3</span>&gt;</span>{text}<span class="hljs-tag">&lt;/<span class="hljs-name">h3</span>&gt;</span></span>; }
+<pre><code class="language-javascript"><span class="hljs-keyword">function</span> <span class="hljs-title function_">Title</span>(<span class="hljs-params">{ text }</span>)       { <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">h3</span>&gt;</span>{text}<span class="hljs-tag">&lt;/<span class="hljs-name">h3</span>&gt;</span></span>; }
 <span class="hljs-keyword">function</span> <span class="hljs-title function_">Description</span>(<span class="hljs-params">{ text }</span>) { <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>{text}<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span></span>; }
 <span class="hljs-keyword">function</span> <span class="hljs-title function_">Image</span>(<span class="hljs-params">{ url }</span>)        { <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">src</span>=<span class="hljs-string">{url}</span> <span class="hljs-attr">alt</span>=<span class="hljs-string">&quot;&quot;</span> <span class="hljs-attr">width</span>=<span class="hljs-string">{120}</span> /&gt;</span></span>; }
 
@@ -85,7 +85,7 @@ const EX9 = {
     <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
   );
 }
-<span class="hljs-comment">// item = { title, description, imageUrl }</span></pre>
+<span class="hljs-comment">// item = { title, description, imageUrl }</span></code></pre>
 <div class="callout"><span class="badge">★ Technique from the brief</span> Start at the <strong>leaf nodes</strong> (Title, Description, Image) and work up to the wrapper (SimpleCard). Decide each component's props first — this "props-down" thinking is the core skill the exercise trains.</div>
 <div class="di-toi"><a class="link-card codelab" href="${CODELAB}" target="_blank" rel="noopener"><span class="lc-ico">⌨️</span><span class="lc-body"><span class="lc-title">Build these components</span><span class="lc-sub">Counter &amp; SimpleCard — Code Lab.</span></span><span class="lc-cta">PRACTICE →</span></a></div>`,
     `<span class="eyebrow">Chương 5 · Exercise 9 · Slot 6 slide 21</span>
@@ -97,7 +97,7 @@ const EX9 = {
   <li>Một <strong>counter</strong> có nút tăng/giảm (dùng <code>useState</code>).</li>
   <li>Một <strong>SimpleCard</strong> — thẻ kiểu Facebook/Tweet. Dựng component lá trước, rồi ghép:</li>
 </ol>
-<pre><span class="hljs-keyword">function</span> <span class="hljs-title function_">Title</span>(<span class="hljs-params">{ text }</span>)       { <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">h3</span>&gt;</span>{text}<span class="hljs-tag">&lt;/<span class="hljs-name">h3</span>&gt;</span></span>; }
+<pre><code class="language-javascript"><span class="hljs-keyword">function</span> <span class="hljs-title function_">Title</span>(<span class="hljs-params">{ text }</span>)       { <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">h3</span>&gt;</span>{text}<span class="hljs-tag">&lt;/<span class="hljs-name">h3</span>&gt;</span></span>; }
 <span class="hljs-keyword">function</span> <span class="hljs-title function_">Description</span>(<span class="hljs-params">{ text }</span>) { <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>{text}<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span></span>; }
 <span class="hljs-keyword">function</span> <span class="hljs-title function_">Image</span>(<span class="hljs-params">{ url }</span>)        { <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">src</span>=<span class="hljs-string">{url}</span> <span class="hljs-attr">alt</span>=<span class="hljs-string">&quot;&quot;</span> <span class="hljs-attr">width</span>=<span class="hljs-string">{120}</span> /&gt;</span></span>; }
 
@@ -110,7 +110,7 @@ const EX9 = {
     <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
   );
 }
-<span class="hljs-comment">// item = { title, description, imageUrl }</span></pre>
+<span class="hljs-comment">// item = { title, description, imageUrl }</span></code></pre>
 <div class="callout"><span class="badge">★ Kỹ thuật từ đề</span> Bắt đầu từ <strong>node lá</strong> (Title, Description, Image) rồi đi lên wrapper (SimpleCard). Xác định props của từng component trước — lối nghĩ "props chảy xuống" này là kỹ năng cốt lõi bài rèn.</div>
 <div class="di-toi"><a class="link-card codelab" href="${CODELAB}" target="_blank" rel="noopener"><span class="lc-ico">⌨️</span><span class="lc-body"><span class="lc-title">Dựng các component này</span><span class="lc-sub">Counter &amp; SimpleCard — Code Lab.</span></span><span class="lc-cta">LUYỆN TẬP →</span></a></div>`,
   ),
@@ -130,7 +130,7 @@ const EX11 = {
   <li><strong>Calculator</strong> for +, −, ×, ÷. Two number inputs + operator; compute on submit. Guard division by zero.</li>
   <li><strong>Search filter</strong> — the brief's hint spelled out:</li>
 </ol>
-<pre><span class="hljs-keyword">function</span> <span class="hljs-title function_">SearchList</span>(<span class="hljs-params">{ items }</span>) {
+<pre><code class="language-javascript"><span class="hljs-keyword">function</span> <span class="hljs-title function_">SearchList</span>(<span class="hljs-params">{ items }</span>) {
   <span class="hljs-keyword">const</span> [q, setQ] = <span class="hljs-title class_">React</span>.<span class="hljs-title function_">useState</span>(<span class="hljs-string">&#x27;&#x27;</span>);
   <span class="hljs-keyword">const</span> shown = items.<span class="hljs-title function_">filter</span>(<span class="hljs-function"><span class="hljs-params">it</span> =&gt;</span>
     it.<span class="hljs-property">name</span>.<span class="hljs-title function_">toLowerCase</span>().<span class="hljs-title function_">includes</span>(q.<span class="hljs-title function_">toLowerCase</span>()));
@@ -141,7 +141,7 @@ const EX11 = {
       <span class="hljs-tag">&lt;<span class="hljs-name">ul</span>&gt;</span>{shown.map(it =&gt; <span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">key</span>=<span class="hljs-string">{it.id}</span>&gt;</span>{it.name}<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>)}<span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span>
     <span class="hljs-tag">&lt;/&gt;</span></span>
   );
-}</pre>
+}</code></pre>
 <div class="out"><b>Result:</b> typing filters the list live — derive the filtered array during render from state + props; never store <code>shown</code> in its own state (it would go stale).</div>
 <div class="pitfall"><b>Trap:</b> for the to-do delete, filter by a stable <code>id</code>, not the array index — deleting by index breaks when the list reorders (see the key rule in Chapter 3).</div>`,
     `<span class="eyebrow">Chương 5 · Exercise 11 · nối tiếp Slot 6</span>
@@ -152,7 +152,7 @@ const EX11 = {
   <li><strong>Máy tính</strong> +, −, ×, ÷. Hai ô số + toán tử; tính khi submit. Chặn chia cho 0.</li>
   <li><strong>Search filter</strong> — gợi ý của đề viết rõ:</li>
 </ol>
-<pre><span class="hljs-keyword">function</span> <span class="hljs-title function_">SearchList</span>(<span class="hljs-params">{ items }</span>) {
+<pre><code class="language-javascript"><span class="hljs-keyword">function</span> <span class="hljs-title function_">SearchList</span>(<span class="hljs-params">{ items }</span>) {
   <span class="hljs-keyword">const</span> [q, setQ] = <span class="hljs-title class_">React</span>.<span class="hljs-title function_">useState</span>(<span class="hljs-string">&#x27;&#x27;</span>);
   <span class="hljs-keyword">const</span> shown = items.<span class="hljs-title function_">filter</span>(<span class="hljs-function"><span class="hljs-params">it</span> =&gt;</span>
     it.<span class="hljs-property">name</span>.<span class="hljs-title function_">toLowerCase</span>().<span class="hljs-title function_">includes</span>(q.<span class="hljs-title function_">toLowerCase</span>()));
@@ -163,7 +163,7 @@ const EX11 = {
       <span class="hljs-tag">&lt;<span class="hljs-name">ul</span>&gt;</span>{shown.map(it =&gt; <span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">key</span>=<span class="hljs-string">{it.id}</span>&gt;</span>{it.name}<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>)}<span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span>
     <span class="hljs-tag">&lt;/&gt;</span></span>
   );
-}</pre>
+}</code></pre>
 <div class="out"><b>Kết quả:</b> gõ tới đâu lọc tới đó — suy ra mảng đã lọc ngay lúc render từ state + props; đừng lưu <code>shown</code> vào state riêng (sẽ bị cũ).</div>
 <div class="pitfall"><b>Bẫy:</b> khi xoá to-do, lọc theo <code>id</code> ổn định, không theo chỉ số mảng — xoá theo index sẽ sai khi danh sách sắp lại (xem quy tắc key ở Chương 3).</div>`,
   ),
@@ -224,13 +224,13 @@ const EX19 = {
 <h2>PropTypes — validate an Animal component</h2>
 <p class="lead"><b>Goal:</b> build a component with several typed props, then reuse it over an array of data — declaring PropTypes for every prop.</p>
 <h3>The data</h3>
-<pre>export default [
+<pre><code class="language-javascript">export default [
   { name: 'Lion',    scientificName: 'Panthera leo',       size: 140, diet: ['meat'] },
   { name: 'Gorilla', scientificName: 'Gorilla beringei',   size: 205, diet: ['plants','insects'],
     additional: { notes: 'endangered' } },
-];</pre>
+];</code></pre>
 <h3>The component with PropTypes</h3>
-<pre><span class="hljs-keyword">import</span> <span class="hljs-title class_">PropTypes</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;prop-types&#x27;</span>;
+<pre><code class="language-javascript"><span class="hljs-keyword">import</span> <span class="hljs-title class_">PropTypes</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;prop-types&#x27;</span>;
 
 <span class="hljs-keyword">function</span> <span class="hljs-title function_">Animal</span>(<span class="hljs-params">{ name, scientificName, size, diet, additional }</span>) {
   <span class="hljs-keyword">return</span> (
@@ -249,9 +249,9 @@ const EX19 = {
   <span class="hljs-attr">size</span>:           <span class="hljs-title class_">PropTypes</span>.<span class="hljs-property">number</span>.<span class="hljs-property">isRequired</span>,
   <span class="hljs-attr">diet</span>:           <span class="hljs-title class_">PropTypes</span>.<span class="hljs-title function_">arrayOf</span>(<span class="hljs-title class_">PropTypes</span>.<span class="hljs-property">string</span>).<span class="hljs-property">isRequired</span>,
   <span class="hljs-attr">additional</span>:     <span class="hljs-title class_">PropTypes</span>.<span class="hljs-title function_">shape</span>({ <span class="hljs-attr">notes</span>: <span class="hljs-title class_">PropTypes</span>.<span class="hljs-property">string</span> }),
-};</pre>
+};</code></pre>
 <h3>Reuse over the array</h3>
-<pre>{animals.<span class="hljs-title function_">map</span>(<span class="hljs-function">(<span class="hljs-params">a, i</span>) =&gt;</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Animal</span> <span class="hljs-attr">key</span>=<span class="hljs-string">{i}</span> {<span class="hljs-attr">...a</span>} /&gt;</span></span>)}</pre>
+<pre><code class="language-javascript">{animals.<span class="hljs-title function_">map</span>(<span class="hljs-function">(<span class="hljs-params">a, i</span>) =&gt;</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Animal</span> <span class="hljs-attr">key</span>=<span class="hljs-string">{i}</span> {<span class="hljs-attr">...a</span>} /&gt;</span></span>)}</code></pre>
 <div class="out"><b>Result:</b> pass <code>size: "140"</code> (a string) and the console warns <em>Invalid prop <code>size</code> of type <code>string</code>… expected <code>number</code></em>. <code>arrayOf</code> validates the diet elements; <code>shape</code> validates the optional <code>additional</code> object.</div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> PropTypes checks at <em>runtime</em>, in development only. <strong>TypeScript</strong> (Advanced chapter) checks the same at <em>compile time</em> across your whole app — most new React projects use TypeScript instead of PropTypes.</div>
 <div class="di-toi"><a class="link-card codelab" href="${CODELAB}" target="_blank" rel="noopener"><span class="lc-ico">⌨️</span><span class="lc-body"><span class="lc-title">Try the validators</span><span class="lc-sub">Break a prop, watch the warning — Code Lab.</span></span><span class="lc-cta">PRACTICE →</span></a></div>`,
@@ -259,13 +259,13 @@ const EX19 = {
 <h2>PropTypes — kiểm component Animal</h2>
 <p class="lead"><b>Mục tiêu:</b> dựng component có nhiều prop kiểu khác nhau, rồi tái dùng trên một mảng dữ liệu — khai PropTypes cho mọi prop.</p>
 <h3>Dữ liệu</h3>
-<pre>export default [
+<pre><code class="language-javascript">export default [
   { name: 'Lion',    scientificName: 'Panthera leo',       size: 140, diet: ['meat'] },
   { name: 'Gorilla', scientificName: 'Gorilla beringei',   size: 205, diet: ['plants','insects'],
     additional: { notes: 'endangered' } },
-];</pre>
+];</code></pre>
 <h3>Component kèm PropTypes</h3>
-<pre><span class="hljs-keyword">import</span> <span class="hljs-title class_">PropTypes</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;prop-types&#x27;</span>;
+<pre><code class="language-javascript"><span class="hljs-keyword">import</span> <span class="hljs-title class_">PropTypes</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;prop-types&#x27;</span>;
 
 <span class="hljs-keyword">function</span> <span class="hljs-title function_">Animal</span>(<span class="hljs-params">{ name, scientificName, size, diet, additional }</span>) {
   <span class="hljs-keyword">return</span> (
@@ -284,9 +284,9 @@ const EX19 = {
   <span class="hljs-attr">size</span>:           <span class="hljs-title class_">PropTypes</span>.<span class="hljs-property">number</span>.<span class="hljs-property">isRequired</span>,
   <span class="hljs-attr">diet</span>:           <span class="hljs-title class_">PropTypes</span>.<span class="hljs-title function_">arrayOf</span>(<span class="hljs-title class_">PropTypes</span>.<span class="hljs-property">string</span>).<span class="hljs-property">isRequired</span>,
   <span class="hljs-attr">additional</span>:     <span class="hljs-title class_">PropTypes</span>.<span class="hljs-title function_">shape</span>({ <span class="hljs-attr">notes</span>: <span class="hljs-title class_">PropTypes</span>.<span class="hljs-property">string</span> }),
-};</pre>
+};</code></pre>
 <h3>Tái dùng trên mảng</h3>
-<pre>{animals.<span class="hljs-title function_">map</span>(<span class="hljs-function">(<span class="hljs-params">a, i</span>) =&gt;</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Animal</span> <span class="hljs-attr">key</span>=<span class="hljs-string">{i}</span> {<span class="hljs-attr">...a</span>} /&gt;</span></span>)}</pre>
+<pre><code class="language-javascript">{animals.<span class="hljs-title function_">map</span>(<span class="hljs-function">(<span class="hljs-params">a, i</span>) =&gt;</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Animal</span> <span class="hljs-attr">key</span>=<span class="hljs-string">{i}</span> {<span class="hljs-attr">...a</span>} /&gt;</span></span>)}</code></pre>
 <div class="out"><b>Kết quả:</b> truyền <code>size: "140"</code> (chuỗi) là console cảnh báo <em>Invalid prop <code>size</code> of type <code>string</code>… expected <code>number</code></em>. <code>arrayOf</code> kiểm phần tử của diet; <code>shape</code> kiểm object <code>additional</code> tuỳ chọn.</div>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> PropTypes kiểm lúc <em>chạy</em>, chỉ ở development. <strong>TypeScript</strong> (chương Nâng cao) kiểm điều tương tự lúc <em>biên dịch</em> trên toàn app — hầu hết dự án React mới dùng TypeScript thay PropTypes.</div>
 <div class="di-toi"><a class="link-card codelab" href="${CODELAB}" target="_blank" rel="noopener"><span class="lc-ico">⌨️</span><span class="lc-body"><span class="lc-title">Thử các validator</span><span class="lc-sub">Phá một prop, xem cảnh báo — Code Lab.</span></span><span class="lc-cta">LUYỆN TẬP →</span></a></div>`,

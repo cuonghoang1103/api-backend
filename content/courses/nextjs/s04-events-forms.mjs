@@ -25,18 +25,18 @@ export default {
 <p class="lead">State from Chapter 3 changes in response to something the user does — a click, a keystroke, a form submit. You wire those up with event handlers: functions you pass to props like <code>onClick</code> and <code>onChange</code>. There are two mistakes everyone makes once, and then never again.</p>
 
 <h3>Pass a function — don't call it</h3>
-<pre><code><span class="tok-comment">// ✅ pass the function; React calls it on click</span>
+<pre><code class="language-html"><span class="tok-comment">// ✅ pass the function; React calls it on click</span>
 &lt;button onClick={handleClick}&gt;Save&lt;/button&gt;
 
 <span class="tok-comment">// ❌ calls handleClick immediately during render, passes its return value</span>
 &lt;button onClick={handleClick()}&gt;Save&lt;/button&gt;</code></pre>
 <p>The second line runs <code>handleClick</code> the moment the component renders — not on click — because <code>()</code> means "call it now". Whatever it returns (usually <code>undefined</code>) becomes the handler. If <code>handleClick</code> calls <code>setState</code>, you get an infinite render loop. When you need to pass arguments, wrap it in an arrow function so the call is <em>deferred</em> until the event:</p>
-<pre><code>&lt;button onClick={() =&gt; handleDelete(item.id)}&gt;Delete&lt;/button&gt;</code></pre>
+<pre><code class="language-html">&lt;button onClick={() =&gt; handleDelete(item.id)}&gt;Delete&lt;/button&gt;</code></pre>
 <p>Now <code>onClick</code> receives a function <code>() =&gt; handleDelete(item.id)</code>, and <code>handleDelete</code> runs only when clicked. Also note handlers are camelCase and take a real function, never a string — <code>onClick={...}</code>, not the HTML <code>onclick="..."</code>.</p>
 
 <h3>The event object</h3>
 <p>React calls your handler with an event object describing what happened. It is a <em>SyntheticEvent</em> — React's cross-browser wrapper around the native event, with the same API you know (<code>e.target</code>, <code>e.preventDefault()</code>, <code>e.key</code>):</p>
-<pre><code>function handleChange(e) {
+<pre><code class="language-javascript">function handleChange(e) {
   console.log(e.target.value);   <span class="tok-comment">// the input's current text</span>
 }
 
@@ -47,7 +47,7 @@ function handleKeyDown(e) {
 
 <h3><code>preventDefault</code>: stop the browser's built-in behaviour</h3>
 <p>Some elements do something by default: a form submit reloads the page, a link navigates, a checkbox toggles. When you handle the event yourself, call <code>e.preventDefault()</code> to cancel the default:</p>
-<pre><code>function handleSubmit(e) {
+<pre><code class="language-typescript">function handleSubmit(e) {
   e.preventDefault();          <span class="tok-comment">// stop the full-page reload</span>
   <span class="tok-comment">// …do your own submit (call an API, update state)…</span>
 }
@@ -84,18 +84,18 @@ function handleKeyDown(e) {
 <p class="lead">State ở Chương 3 thay đổi để đáp lại việc người dùng làm — một cú click, một phím gõ, một form gửi đi. Bạn nối chúng bằng handler sự kiện: những hàm bạn truyền cho các prop như <code>onClick</code> và <code>onChange</code>. Có hai lỗi ai cũng mắc một lần, rồi không bao giờ mắc lại.</p>
 
 <h3>Truyền một hàm — đừng gọi nó</h3>
-<pre><code><span class="tok-comment">// ✅ truyền hàm; React gọi nó khi click</span>
+<pre><code class="language-html"><span class="tok-comment">// ✅ truyền hàm; React gọi nó khi click</span>
 &lt;button onClick={handleClick}&gt;Save&lt;/button&gt;
 
 <span class="tok-comment">// ❌ gọi handleClick NGAY trong lúc render, truyền giá trị trả về của nó</span>
 &lt;button onClick={handleClick()}&gt;Save&lt;/button&gt;</code></pre>
 <p>Dòng thứ hai chạy <code>handleClick</code> ngay lúc component render — không phải lúc click — vì <code>()</code> nghĩa là "gọi ngay". Bất kể nó trả về gì (thường là <code>undefined</code>) đều trở thành handler. Nếu <code>handleClick</code> gọi <code>setState</code>, bạn được một vòng render vô tận. Khi cần truyền đối số, hãy bọc trong một arrow function để lời gọi được <em>hoãn</em> tới lúc có sự kiện:</p>
-<pre><code>&lt;button onClick={() =&gt; handleDelete(item.id)}&gt;Delete&lt;/button&gt;</code></pre>
+<pre><code class="language-html">&lt;button onClick={() =&gt; handleDelete(item.id)}&gt;Delete&lt;/button&gt;</code></pre>
 <p>Giờ <code>onClick</code> nhận một hàm <code>() =&gt; handleDelete(item.id)</code>, và <code>handleDelete</code> chỉ chạy khi được click. Cũng lưu ý handler viết camelCase và nhận một hàm thật, không bao giờ là chuỗi — <code>onClick={...}</code>, không phải <code>onclick="..."</code> của HTML.</p>
 
 <h3>Object sự kiện</h3>
 <p>React gọi handler của bạn với một object sự kiện mô tả chuyện đã xảy ra. Nó là một <em>SyntheticEvent</em> — lớp bọc đa trình duyệt của React quanh sự kiện gốc, với cùng API bạn đã biết (<code>e.target</code>, <code>e.preventDefault()</code>, <code>e.key</code>):</p>
-<pre><code>function handleChange(e) {
+<pre><code class="language-javascript">function handleChange(e) {
   console.log(e.target.value);   <span class="tok-comment">// chữ hiện tại của input</span>
 }
 
@@ -106,7 +106,7 @@ function handleKeyDown(e) {
 
 <h3><code>preventDefault</code>: chặn hành vi mặc định của trình duyệt</h3>
 <p>Một số phần tử làm gì đó theo mặc định: form submit tải lại trang, một link điều hướng, một checkbox bật/tắt. Khi bạn tự xử lý sự kiện, gọi <code>e.preventDefault()</code> để huỷ mặc định:</p>
-<pre><code>function handleSubmit(e) {
+<pre><code class="language-typescript">function handleSubmit(e) {
   e.preventDefault();          <span class="tok-comment">// chặn việc tải lại cả trang</span>
   <span class="tok-comment">// …làm submit của riêng bạn (gọi API, cập nhật state)…</span>
 }
@@ -152,7 +152,7 @@ function handleKeyDown(e) {
 <p class="lead">A <strong>controlled input</strong> is the central pattern of every React form: React state holds the value, the input displays that state, and every keystroke updates the state, which re-renders the input. The DOM stops being the source of truth — your state is.</p>
 
 <h3>The two-way wire that is really one-way</h3>
-<pre><code>function NameField() {
+<pre><code class="language-typescript">function NameField() {
   const [name, setName] = useState('');
   return (
     &lt;input
@@ -204,7 +204,7 @@ function handleKeyDown(e) {
 <p class="lead">Một <strong>input có kiểm soát</strong> là khuôn mẫu trung tâm của mọi form React: state React giữ giá trị, input hiển thị state đó, và mỗi phím gõ cập nhật state, việc này render lại input. DOM thôi làm nguồn sự thật — state của bạn mới là.</p>
 
 <h3>Sợi dây hai chiều thật ra là một chiều</h3>
-<pre><code>function NameField() {
+<pre><code class="language-typescript">function NameField() {
   const [name, setName] = useState('');
   return (
     &lt;input
@@ -266,7 +266,7 @@ function handleKeyDown(e) {
 <p class="lead">A real form has many fields. Rather than a <code>useState</code> per field, most forms keep one object in state and one handler that updates the right key by the input's <code>name</code>. This is the pattern you'll type hundreds of times.</p>
 
 <h3>The many-fields pattern</h3>
-<pre><code>function SignupForm() {
+<pre><code class="language-typescript">function SignupForm() {
   const [form, setForm] = useState({ email: '', password: '', lang: 'vi' });
 
   function handleChange(e) {
@@ -329,7 +329,7 @@ function handleKeyDown(e) {
 <p class="lead">Một form thật có nhiều trường. Thay vì một <code>useState</code> cho mỗi trường, phần lớn form giữ một object trong state và một handler cập nhật đúng khoá theo <code>name</code> của input. Đây là khuôn mẫu bạn sẽ gõ hàng trăm lần.</p>
 
 <h3>Khuôn mẫu nhiều trường</h3>
-<pre><code>function SignupForm() {
+<pre><code class="language-typescript">function SignupForm() {
   const [form, setForm] = useState({ email: '', password: '', lang: 'vi' });
 
   function handleChange(e) {
@@ -403,7 +403,7 @@ function handleKeyDown(e) {
 
 <h3>Uncontrolled: let the DOM hold the value</h3>
 <p>An uncontrolled input has no <code>value</code> prop and no <code>onChange</code>. It manages its own text, exactly like a plain HTML input; you grab the value at submit time with a ref:</p>
-<pre><code>function SearchForm() {
+<pre><code class="language-typescript">function SearchForm() {
   const inputRef = useRef(null);
 
   function handleSubmit(e) {
@@ -465,7 +465,7 @@ function handleKeyDown(e) {
 
 <h3>Không kiểm soát: để DOM giữ giá trị</h3>
 <p>Một input không kiểm soát không có prop <code>value</code> và không có <code>onChange</code>. Nó tự quản chữ của mình, y như một input HTML thường; bạn lấy giá trị lúc submit bằng một ref:</p>
-<pre><code>function SearchForm() {
+<pre><code class="language-typescript">function SearchForm() {
   const inputRef = useRef(null);
 
   function handleSubmit(e) {

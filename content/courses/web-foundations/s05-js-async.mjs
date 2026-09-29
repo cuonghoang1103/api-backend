@@ -60,7 +60,7 @@ ${gallery('wf-js2', [
 <p class="lead">JavaScript is <strong>single-threaded</strong>: it runs one line at a time. So how does a page stay responsive while waiting two seconds for a server? The answer is the <strong>event loop</strong> — the mechanism that lets slow work happen "in the background" and run its follow-up code later.</p>
 
 <h3>Synchronous code blocks; asynchronous code does not</h3>
-<pre><code>// synchronous — runs top to bottom, each line waits for the previous
+<pre><code class="language-javascript">// synchronous — runs top to bottom, each line waits for the previous
 console.log("1");
 console.log("2");   // 1, then 2
 
@@ -68,7 +68,7 @@ console.log("2");   // 1, then 2
 <p>If fetching data were synchronous, the entire browser tab would freeze — no scrolling, no clicks — until the server replied. Unacceptable. So slow operations are made <strong>asynchronous</strong>: you start them, and JavaScript keeps going.</p>
 
 <h3>The classic surprise: setTimeout runs last</h3>
-<pre><code>console.log("start");
+<pre><code class="language-javascript">console.log("start");
 setTimeout(() =&gt; console.log("timeout"), 0);   // even with 0 ms!
 console.log("end");
 
@@ -92,7 +92,7 @@ console.log("end");
 <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Finished work queues a callback</span><span class="lz-d">When the response arrives, your callback goes into a queue. It does not interrupt anything — it waits its turn.</span></div>
 <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">The loop runs it when the stack is empty</span><span class="lz-d">Only when your current code has finished completely. This is why the order of <code>console.log</code>s often surprises people.</span></div>
 </div>
-<pre><code>console.log('first');
+<pre><code class="language-javascript">console.log('first');
 setTimeout(() =&gt; console.log('third'), 0);
 Promise.resolve().then(() =&gt; console.log('second'));
 console.log('done sync');</code></pre>
@@ -110,7 +110,7 @@ third</div>
 <p class="lead">JavaScript <strong>đơn luồng (single-threaded)</strong>: nó chạy một dòng mỗi lúc. Vậy làm sao trang vẫn mượt khi chờ server hai giây? Câu trả lời là <strong>event loop</strong> — cơ chế cho việc chậm diễn ra "ở nền" và chạy đoạn code tiếp nối sau đó.</p>
 
 <h3>Code đồng bộ thì chặn; code bất đồng bộ thì không</h3>
-<pre><code>// đồng bộ — chạy từ trên xuống, mỗi dòng chờ dòng trước
+<pre><code class="language-javascript">// đồng bộ — chạy từ trên xuống, mỗi dòng chờ dòng trước
 console.log("1");
 console.log("2");   // 1, rồi 2
 
@@ -118,7 +118,7 @@ console.log("2");   // 1, rồi 2
 <p>Nếu tải dữ liệu là đồng bộ, cả tab trình duyệt sẽ đóng băng — không cuộn, không bấm — cho tới khi server trả lời. Không chấp nhận được. Nên các thao tác chậm được làm <strong>bất đồng bộ (asynchronous)</strong>: bạn khởi động chúng, và JavaScript đi tiếp.</p>
 
 <h3>Bất ngờ kinh điển: setTimeout chạy cuối cùng</h3>
-<pre><code>console.log("start");
+<pre><code class="language-javascript">console.log("start");
 setTimeout(() =&gt; console.log("timeout"), 0);   // dù là 0 mili-giây!
 console.log("end");
 
@@ -142,7 +142,7 @@ console.log("end");
 <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Việc xong thì xếp một callback vào hàng</span><span class="lz-d">Khi phản hồi về, callback của bạn vào một hàng đợi. Nó không ngắt bất cứ thứ gì — nó chờ tới lượt.</span></div>
 <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Vòng lặp chạy nó khi ngăn xếp rỗng</span><span class="lz-d">Chỉ khi mã hiện tại của bạn đã xong hoàn toàn. Đó là lý do thứ tự các <code>console.log</code> hay làm người ta ngạc nhiên.</span></div>
 </div>
-<pre><code>console.log('first');
+<pre><code class="language-javascript">console.log('first');
 setTimeout(() =&gt; console.log('third'), 0);
 Promise.resolve().then(() =&gt; console.log('second'));
 console.log('done sync');</code></pre>
@@ -179,7 +179,7 @@ third</div>
 <p>A Promise settles <strong>once</strong>: from pending to either fulfilled or rejected, and then never changes again.</p>
 
 <h3>Consuming a Promise</h3>
-<pre><code>somePromise
+<pre><code class="language-javascript">somePromise
   .then(result =&gt; {
     console.log("got:", result);   // runs if fulfilled
   })
@@ -192,14 +192,14 @@ third</div>
 
 <h3>Chaining — flatten the pyramid</h3>
 <p>Each <code>.then</code> returns a new Promise, so you can line steps up vertically instead of nesting them. If any step rejects, control jumps straight to the nearest <code>.catch</code>:</p>
-<pre><code>fetchUser(1)
+<pre><code class="language-javascript">fetchUser(1)
   .then(user =&gt; fetchPosts(user.id))   // return another Promise
   .then(posts =&gt; console.log(posts.length))
   .catch(err =&gt; console.log("something failed:", err));</code></pre>
 
 <h3>Where Promises come from</h3>
 <p>You rarely build them by hand — most async APIs already return one. <code>fetch()</code> (next lesson) returns a Promise; so do many Node.js and browser functions. You mostly <em>consume</em> Promises. This is what you will meet:</p>
-<pre><code>// creating one (for illustration)
+<pre><code class="language-javascript">// creating one (for illustration)
 const wait = ms =&gt; new Promise(resolve =&gt; setTimeout(resolve, ms));
 wait(1000).then(() =&gt; console.log("one second later"));</code></pre>
 <p class="note-ct"><strong>Promises are the foundation, async/await is the comfort.</strong> The next lesson shows a cleaner syntax for exactly these Promises — but it is still Promises underneath, so understanding <code>.then</code>/<code>.catch</code> here makes async/await obvious rather than magical.</p>
@@ -228,7 +228,7 @@ wait(1000).then(() =&gt; console.log("one second later"));</code></pre>
 <p>Một Promise "chốt" <strong>một lần</strong>: từ pending sang fulfilled hoặc rejected, rồi không đổi nữa.</p>
 
 <h3>Tiêu thụ một Promise</h3>
-<pre><code>somePromise
+<pre><code class="language-javascript">somePromise
   .then(result =&gt; {
     console.log("nhận:", result);  // chạy nếu fulfilled
   })
@@ -241,14 +241,14 @@ wait(1000).then(() =&gt; console.log("one second later"));</code></pre>
 
 <h3>Nối chuỗi — làm phẳng kim tự tháp</h3>
 <p>Mỗi <code>.then</code> trả về một Promise mới, nên bạn xếp các bước thẳng đứng thay vì lồng nhau. Nếu bất kỳ bước nào rejected, quyền điều khiển nhảy thẳng tới <code>.catch</code> gần nhất:</p>
-<pre><code>fetchUser(1)
+<pre><code class="language-javascript">fetchUser(1)
   .then(user =&gt; fetchPosts(user.id))   // trả về một Promise khác
   .then(posts =&gt; console.log(posts.length))
   .catch(err =&gt; console.log("có gì đó hỏng:", err));</code></pre>
 
 <h3>Promise đến từ đâu</h3>
 <p>Bạn hiếm khi tự tạo tay — phần lớn API bất đồng bộ đã trả về sẵn một cái. <code>fetch()</code> (bài kế) trả về một Promise; nhiều hàm của Node.js và trình duyệt cũng vậy. Bạn chủ yếu <em>tiêu thụ</em> Promise. Đây là thứ bạn sẽ gặp:</p>
-<pre><code>// tạo một cái (để minh hoạ)
+<pre><code class="language-javascript">// tạo một cái (để minh hoạ)
 const wait = ms =&gt; new Promise(resolve =&gt; setTimeout(resolve, ms));
 wait(1000).then(() =&gt; console.log("một giây sau"));</code></pre>
 <p class="note-ct"><strong>Promise là nền tảng, async/await là sự dễ chịu.</strong> Bài kế cho một cú pháp gọn hơn cho đúng những Promise này — nhưng bên dưới vẫn là Promise, nên hiểu <code>.then</code>/<code>.catch</code> ở đây khiến async/await trở nên hiển nhiên thay vì huyền bí.</p>
@@ -280,7 +280,7 @@ wait(1000).then(() =&gt; console.log("một giây sau"));</code></pre>
 <p class="lead"><strong>async/await</strong> is syntactic sugar over Promises that lets you write asynchronous code in a straight, top-to-bottom style — no <code>.then</code> chains. It is the style you will use almost all the time in Node.js and React.</p>
 
 <h3>The same task, two ways</h3>
-<pre><code>// with .then
+<pre><code class="language-javascript">// with .then
 function load() {
   return fetchUser(1).then(user =&gt; console.log(user.name));
 }
@@ -297,7 +297,7 @@ async function load() {
 
 <h3>Handling errors with try/catch</h3>
 <p>Instead of <code>.catch</code>, you wrap awaited calls in the ordinary <code>try/catch</code> you already know:</p>
-<pre><code>async function load() {
+<pre><code class="language-javascript">async function load() {
   try {
     const user = await fetchUser(1);
     const posts = await fetchPosts(user.id);
@@ -308,7 +308,7 @@ async function load() {
 }</code></pre>
 
 <h3>Sequential vs parallel — a real performance trap</h3>
-<pre><code>// SEQUENTIAL: waits for A to finish before starting B (slow if independent)
+<pre><code class="language-javascript">// SEQUENTIAL: waits for A to finish before starting B (slow if independent)
 const a = await fetchA();
 const b = await fetchB();
 
@@ -324,7 +324,7 @@ const [a, b] = await Promise.all([fetchA(), fetchB()]);</code></pre>
 <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">try/catch works again</span><span class="lz-d">A rejected promise becomes a thrown error, so ordinary <code>try { } catch { }</code> handles it. This is the main reason to prefer <code>await</code> over <code>.then</code>.</span></div>
 <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Sequential unless you say otherwise</span><span class="lz-d">Two <code>await</code>s in a row wait one after the other. Independent work belongs in <code>Promise.all</code>.</span></div>
 </div>
-<pre><code>// Sequential: 2 seconds total
+<pre><code class="language-javascript">// Sequential: 2 seconds total
 const a = await slow();   // 1s
 const b = await slow();   // 1s
 
@@ -340,7 +340,7 @@ const [a, b] = await Promise.all([slow(), slow()]);</code></pre>
 <p class="lead"><strong>async/await</strong> là "đường cú pháp" đặt trên Promise, cho bạn viết code bất đồng bộ theo lối thẳng, trên-xuống — không chuỗi <code>.then</code>. Đây là lối bạn sẽ dùng gần như luôn luôn trong Node.js và React.</p>
 
 <h3>Cùng một việc, hai cách</h3>
-<pre><code>// với .then
+<pre><code class="language-javascript">// với .then
 function load() {
   return fetchUser(1).then(user =&gt; console.log(user.name));
 }
@@ -357,7 +357,7 @@ async function load() {
 
 <h3>Xử lý lỗi bằng try/catch</h3>
 <p>Thay cho <code>.catch</code>, bạn bọc các lời gọi có await trong <code>try/catch</code> quen thuộc:</p>
-<pre><code>async function load() {
+<pre><code class="language-javascript">async function load() {
   try {
     const user = await fetchUser(1);
     const posts = await fetchPosts(user.id);
@@ -368,7 +368,7 @@ async function load() {
 }</code></pre>
 
 <h3>Tuần tự vs song song — một cái bẫy hiệu năng thật</h3>
-<pre><code>// TUẦN TỰ: chờ A xong mới bắt đầu B (chậm nếu chúng độc lập)
+<pre><code class="language-javascript">// TUẦN TỰ: chờ A xong mới bắt đầu B (chậm nếu chúng độc lập)
 const a = await fetchA();
 const b = await fetchB();
 
@@ -384,7 +384,7 @@ const [a, b] = await Promise.all([fetchA(), fetchB()]);</code></pre>
 <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">try/catch lại dùng được</span><span class="lz-d">Một promise bị từ chối trở thành một lỗi được ném ra, nên <code>try { } catch { }</code> thông thường xử được. Đây là lý do chính để chọn <code>await</code> thay vì <code>.then</code>.</span></div>
 <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Tuần tự, trừ khi bạn nói khác</span><span class="lz-d">Hai <code>await</code> liền nhau sẽ chờ cái này rồi tới cái kia. Việc độc lập với nhau thì thuộc về <code>Promise.all</code>.</span></div>
 </div>
-<pre><code>// Tuần tự: tổng 2 giây
+<pre><code class="language-javascript">// Tuần tự: tổng 2 giây
 const a = await slow();   // 1s
 const b = await slow();   // 1s
 
@@ -411,7 +411,7 @@ const [a, b] = await Promise.all([slow(), slow()]);</code></pre>
 <p class="lead">This lesson is where async pays off. <strong>fetch()</strong> makes an HTTP request from JavaScript and returns a Promise. It is the exact tool your frontend will use to call the Node.js backend you build later — the whole point of learning async.</p>
 
 <h3>A GET request, with async/await</h3>
-<pre><code>async function loadUser() {
+<pre><code class="language-javascript">async function loadUser() {
   const response = await fetch("https://api.example.com/users/1");
   const user = await response.json();   // parse the JSON body (also a Promise)
   console.log(user.name);
@@ -420,7 +420,7 @@ const [a, b] = await Promise.all([slow(), slow()]);</code></pre>
 
 <h3>Always check the status</h3>
 <p class="pitfall"><strong>fetch does NOT reject on 404 or 500.</strong> A Promise from fetch only rejects on a network failure — a <code>404 Not Found</code> or <code>500 Server Error</code> still fulfils. You must check <code>response.ok</code> yourself:</p>
-<pre><code>async function loadUser() {
+<pre><code class="language-javascript">async function loadUser() {
   try {
     const response = await fetch("https://api.example.com/users/1");
     if (!response.ok) {
@@ -453,7 +453,7 @@ const [a, b] = await Promise.all([slow(), slow()]);</code></pre>
 <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">await res.json()</span><span class="lz-d">Reads and parses the body. It throws if the body is not valid JSON — an HTML error page, for instance.</span></div>
 <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Wrap it in try/catch</span><span class="lz-d">Only network-level failures reject: no connection, DNS failure, CORS block. Those are different from a 500, and both need handling.</span></div>
 </div>
-<pre><code>const res = await fetch('/api/v1/notes');
+<pre><code class="language-javascript">const res = await fetch('/api/v1/notes');
 if (!res.ok) throw new Error(&#96;HTTP \${res.status}&#96;);
 const data = await res.json();</code></pre>
 <div class="pitfall"><p><strong>Trap — <code>fetch</code> does not reject on 404 or 500.</strong> An HTTP error is still a successful round trip as far as <code>fetch</code> is concerned, so the promise fulfils and your <code>catch</code> never runs. What happens next depends on the server: if it returned an HTML error page, <code>res.json()</code> throws "Unexpected token &lt;" — an error about JSON parsing that tells you nothing about the 500 that caused it. If it returned JSON, you happily render an error object as if it were data. Always check <code>res.ok</code> before reading the body; it is one line, and it turns a mystifying parse error into the real status code.</p></div>
@@ -465,7 +465,7 @@ const data = await res.json();</code></pre>
 <p class="lead">Bài này là nơi bất đồng bộ đơm hoa kết trái. <strong>fetch()</strong> tạo một yêu cầu HTTP từ JavaScript và trả về một Promise. Đây đúng là công cụ frontend của bạn sẽ dùng để gọi backend Node.js bạn dựng về sau — chính là lý do học bất đồng bộ.</p>
 
 <h3>Một yêu cầu GET, với async/await</h3>
-<pre><code>async function loadUser() {
+<pre><code class="language-javascript">async function loadUser() {
   const response = await fetch("https://api.example.com/users/1");
   const user = await response.json();   // phân tích phần thân JSON (cũng là Promise)
   console.log(user.name);
@@ -474,7 +474,7 @@ const data = await res.json();</code></pre>
 
 <h3>Luôn kiểm tra trạng thái</h3>
 <p class="pitfall"><strong>fetch KHÔNG reject khi 404 hay 500.</strong> Promise từ fetch chỉ reject khi lỗi mạng — một <code>404 Not Found</code> hay <code>500 Server Error</code> vẫn fulfilled. Bạn phải tự kiểm <code>response.ok</code>:</p>
-<pre><code>async function loadUser() {
+<pre><code class="language-javascript">async function loadUser() {
   try {
     const response = await fetch("https://api.example.com/users/1");
     if (!response.ok) {
@@ -507,7 +507,7 @@ const data = await res.json();</code></pre>
 <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">await res.json()</span><span class="lz-d">Đọc và phân tích phần thân. Nó ném lỗi nếu thân không phải JSON hợp lệ — chẳng hạn một trang lỗi HTML.</span></div>
 <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Bọc nó trong try/catch</span><span class="lz-d">Chỉ những sự cố ở mức mạng mới bị từ chối: mất kết nối, hỏng DNS, bị CORS chặn. Chúng khác với một cú 500, và cả hai đều cần xử lý.</span></div>
 </div>
-<pre><code>const res = await fetch('/api/v1/notes');
+<pre><code class="language-javascript">const res = await fetch('/api/v1/notes');
 if (!res.ok) throw new Error(&#96;HTTP \${res.status}&#96;);
 const data = await res.json();</code></pre>
 <div class="pitfall"><p><strong>Bẫy — <code>fetch</code> KHÔNG từ chối khi gặp 404 hay 500.</strong> Với <code>fetch</code> thì một lỗi HTTP vẫn là một lượt đi về thành công, nên promise hoàn tất và cái <code>catch</code> của bạn chẳng bao giờ chạy. Chuyện tiếp theo tuỳ máy chủ: nếu nó trả về một trang lỗi HTML thì <code>res.json()</code> ném ra "Unexpected token &lt;" — một lỗi về phân tích JSON chẳng nói gì với bạn về cú 500 đã gây ra nó. Nếu nó trả về JSON thì bạn vui vẻ vẽ một object lỗi ra như thể đó là dữ liệu. Hãy luôn kiểm <code>res.ok</code> trước khi đọc thân; chỉ một dòng, và nó biến một lỗi phân tích khó hiểu thành đúng cái mã trạng thái thật.</p></div>
@@ -530,22 +530,22 @@ const data = await res.json();</code></pre>
 <p class="lead">You cannot put a whole app in one file. <strong>ES modules</strong> let each file <code>export</code> the pieces it wants to share and <code>import</code> what it needs from others. Every Node.js and React project is organised this way — it is how code stays navigable as it grows.</p>
 
 <h3>Named exports — share several things</h3>
-<pre><code>// file: math.js
+<pre><code class="language-javascript">// file: math.js
 export function add(a, b) { return a + b; }
 export function multiply(a, b) { return a * b; }
 export const PI = 3.14159;</code></pre>
-<pre><code>// file: app.js
+<pre><code class="language-javascript">// file: app.js
 import { add, PI } from "./math.js";   // pick exactly what you need
 console.log(add(2, 3));                // 5
 console.log(PI);                       // 3.14159</code></pre>
 <p>Note the relative path <code>./math.js</code> — the very same relative-path idea from Lesson 1.1, now connecting your own files.</p>
 
 <h3>Default export — one main thing per file</h3>
-<pre><code>// file: User.js
+<pre><code class="language-javascript">// file: User.js
 export default function User(name) {
   return { name };
 }</code></pre>
-<pre><code>// file: app.js
+<pre><code class="language-javascript">// file: app.js
 import User from "./User.js";   // no braces; you choose the name
 const u = User("Lan");</code></pre>
 <div class="kv-grid">
@@ -555,7 +555,7 @@ const u = User("Lan");</code></pre>
 
 <h3>Modules and npm connect</h3>
 <p>When you <code>npm install</code> a library (Lesson 1.5) and then <code>import</code> it, you are using this same system — just importing from a package name instead of a relative path:</p>
-<pre><code>import express from "express";      // a library installed via npm
+<pre><code class="language-javascript">import express from "express";      // a library installed via npm
 import { useState } from "react";  // a named export from React</code></pre>
 <p class="note-ct"><strong>This is the last foundational JavaScript idea before the specialised chapters.</strong> Node.js code is modules importing modules; a React component imports React and other components. You now have the whole JavaScript vocabulary those courses assume — variables, functions, arrays, async, and modules. Chapters 6–8 turn to the server side: HTTP, auth, and data.</p>
 
@@ -575,22 +575,22 @@ import { useState } from "react";  // a named export from React</code></pre>
 <p class="lead">Bạn không thể nhét cả app vào một file. <strong>ES modules</strong> cho mỗi file <code>export</code> những mảnh nó muốn chia sẻ và <code>import</code> thứ nó cần từ file khác. Mọi dự án Node.js và React đều tổ chức thế này — đó là cách code vẫn dò được khi lớn lên.</p>
 
 <h3>Xuất có tên (named export) — chia sẻ nhiều thứ</h3>
-<pre><code>// file: math.js
+<pre><code class="language-javascript">// file: math.js
 export function add(a, b) { return a + b; }
 export function multiply(a, b) { return a * b; }
 export const PI = 3.14159;</code></pre>
-<pre><code>// file: app.js
+<pre><code class="language-javascript">// file: app.js
 import { add, PI } from "./math.js";   // lấy đúng thứ bạn cần
 console.log(add(2, 3));                // 5
 console.log(PI);                       // 3.14159</code></pre>
 <p>Để ý đường dẫn tương đối <code>./math.js</code> — đúng ý tưởng đường dẫn tương đối ở Bài 1.1, giờ nối các file của chính bạn.</p>
 
 <h3>Xuất mặc định (default export) — một thứ chính mỗi file</h3>
-<pre><code>// file: User.js
+<pre><code class="language-javascript">// file: User.js
 export default function User(name) {
   return { name };
 }</code></pre>
-<pre><code>// file: app.js
+<pre><code class="language-javascript">// file: app.js
 import User from "./User.js";   // không ngoặc; bạn tự chọn tên
 const u = User("Lan");</code></pre>
 <div class="kv-grid">
@@ -600,7 +600,7 @@ const u = User("Lan");</code></pre>
 
 <h3>Module và npm gặp nhau</h3>
 <p>Khi bạn <code>npm install</code> một thư viện (Bài 1.5) rồi <code>import</code> nó, bạn đang dùng đúng hệ này — chỉ là import từ một tên gói thay vì một đường dẫn tương đối:</p>
-<pre><code>import express from "express";      // một thư viện cài qua npm
+<pre><code class="language-javascript">import express from "express";      // một thư viện cài qua npm
 import { useState } from "react";  // một named export từ React</code></pre>
 <p class="note-ct"><strong>Đây là ý tưởng JavaScript nền tảng cuối cùng trước các chương chuyên sâu.</strong> Code Node.js là các module import module; một component React import React và các component khác. Giờ bạn đã có trọn vốn từ JavaScript mà các khoá đó mặc định — biến, hàm, mảng, bất đồng bộ, và module. Chương 6–8 chuyển sang phía server: HTTP, xác thực, và dữ liệu.</p>
 

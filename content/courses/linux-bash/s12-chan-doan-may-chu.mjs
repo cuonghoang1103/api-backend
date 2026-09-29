@@ -81,7 +81,7 @@ ${slide('lx-12', 4, 'Vòng lặp chẩn đoán 6 bước')}
 <h3>The first sixty seconds</h3>
 ${slide('lx-12', 5, 'Cuộc quét 60 giây: script + output thật')}
 <p>One paste, no arguments, safe on any machine — it reads and changes nothing. Run it before you form any opinion at all.</p>
-<pre><code>{
+<pre><code class="language-bash">{
   echo "=== who and when ==="; uptime; who; last reboot | head -3
   echo "=== failed units ==="; systemctl --failed --no-legend
   echo "=== errors this boot ==="; journalctl -p err -b --no-pager | tail -15
@@ -149,7 +149,7 @@ ${slide('lx-12', 3, 'Cây quyết định: chết · chậm · lạ')}
     <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">Is it everyone, or just you?</span><span class="lz-nsub">Test from the server itself with <code>curl localhost</code> (Lesson 9.2). Working locally but not from outside puts the fault in DNS, TLS, the firewall or the proxy — none of which are the app.</span></div></div>
   </div>
 </div>
-<pre><code><span class="tok-comment"># Question 3, as three commands — each rules out one layer</span>
+<pre><code class="language-bash"><span class="tok-comment"># Question 3, as three commands — each rules out one layer</span>
 curl -sS -o /dev/null -w '%{http_code}\\n' http://127.0.0.1:3000/health   <span class="tok-comment"># the app itself</span>
 curl -sS -o /dev/null -w '%{http_code}\\n' http://127.0.0.1/health        <span class="tok-comment"># through nginx</span>
 curl -sS -o /dev/null -w '%{http_code}\\n' https://example.com/health     <span class="tok-comment"># through DNS + TLS + firewall</span></code></pre>
@@ -161,7 +161,7 @@ curl -sS -o /dev/null -w '%{http_code}\\n' https://example.com/health     <span 
 <h3>Build the timeline</h3>
 ${slide('lx-12', 7, 'Mốc thời gian: cái gì đã đổi')}
 <p>Almost every outage has a "just before". Finding it is usually faster than understanding the failure, and it frequently makes understanding the failure unnecessary.</p>
-<pre><code><span class="tok-comment"># When did the machine last change?</span>
+<pre><code class="language-bash"><span class="tok-comment"># When did the machine last change?</span>
 journalctl --since '2 hours ago' -p warning --no-pager | head -30
 grep -E ' (install|upgrade|remove) ' /var/log/dpkg.log | tail -10   <span class="tok-comment"># packages</span>
 ls -lt /etc | head -10                                             <span class="tok-comment"># recently edited config</span>
@@ -179,7 +179,7 @@ Aug 22 14:07:02 vps-1 sudo[38844]: deploy : TTY=pts/1 ; PWD=/etc/nginx ; USER=ro
 <h3>The rule about restarting</h3>
 ${slide('lx-12', 8, 'Thu bằng chứng 15 giây + nhật ký sự cố')}
 <p>"Have you tried restarting it?" fixes a real percentage of problems, and that is exactly why it is dangerous: it converts a diagnosable failure into an undiagnosable one that will return, usually at a worse hour, with no evidence left behind.</p>
-<pre><code><span class="tok-comment"># If you MUST restart, spend fifteen seconds capturing state first</span>
+<pre><code class="language-bash"><span class="tok-comment"># If you MUST restart, spend fifteen seconds capturing state first</span>
 T=/tmp/evidence-\$(date +%H%M%S); mkdir -p "\$T"
 ps auxww                     &gt; "\$T/ps.txt"
 ss -tanp                     &gt; "\$T/sockets.txt" 2&gt;/dev/null
@@ -239,7 +239,7 @@ ${slide('lx-12', 30, 'Bảng tra: triệu chứng → lệnh đầu tiên → đ
 
 <h3>Try it step by step: the sweep in a container, and on a real systemd machine</h3>
 <p>You can rehearse the sweep safely in a throwaway container. Do it once — not for the output, but to learn which lines of the sweep are <em>missing</em> or <em>misleading</em> inside a container, because that is exactly what you will meet when you <code>docker exec</code> into a production container during an incident.</p>
-<pre><code>docker run --rm -it --memory 512m ubuntu:24.04 bash
+<pre><code class="language-bash">docker run --rm -it --memory 512m ubuntu:24.04 bash
 <span class="tok-comment"># inside the container:</span>
 uptime; systemctl --failed; free -h; ss -tlnp
 cat /sys/fs/cgroup/memory.max            <span class="tok-comment"># the limit THIS container really has</span></code></pre>
@@ -344,7 +344,7 @@ ${slide('lx-12', 4, 'Vòng lặp chẩn đoán 6 bước')}
 <h3>Sáu mươi giây đầu tiên</h3>
 ${slide('lx-12', 5, 'Cuộc quét 60 giây: script + output thật')}
 <p>Dán một phát, không tham số, an toàn trên mọi máy — nó chỉ đọc và không đổi gì. Hãy chạy nó TRƯỚC khi bạn hình thành bất kỳ ý kiến nào.</p>
-<pre><code>{
+<pre><code class="language-bash">{
   echo "=== ai và khi nào ==="; uptime; who; last reboot | head -3
   echo "=== unit hỏng ==="; systemctl --failed --no-legend
   echo "=== lỗi từ lúc khởi động ==="; journalctl -p err -b --no-pager | tail -15
@@ -412,7 +412,7 @@ ${slide('lx-12', 3, 'Cây quyết định: chết · chậm · lạ')}
     <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">Là tất cả mọi người, hay chỉ mình bạn?</span><span class="lz-nsub">Hãy thử từ chính máy chủ bằng <code>curl localhost</code> (Bài 9.2). Chạy được ở trong mà không được từ ngoài thì lỗi nằm ở DNS, TLS, tường lửa hoặc proxy — không cái nào là ứng dụng cả.</span></div></div>
   </div>
 </div>
-<pre><code><span class="tok-comment"># Câu hỏi 3, dưới dạng ba câu lệnh — mỗi câu loại một tầng</span>
+<pre><code class="language-bash"><span class="tok-comment"># Câu hỏi 3, dưới dạng ba câu lệnh — mỗi câu loại một tầng</span>
 curl -sS -o /dev/null -w '%{http_code}\\n' http://127.0.0.1:3000/health   <span class="tok-comment"># chính ứng dụng</span>
 curl -sS -o /dev/null -w '%{http_code}\\n' http://127.0.0.1/health        <span class="tok-comment"># qua nginx</span>
 curl -sS -o /dev/null -w '%{http_code}\\n' https://example.com/health     <span class="tok-comment"># qua DNS + TLS + tường lửa</span></code></pre>
@@ -424,7 +424,7 @@ curl -sS -o /dev/null -w '%{http_code}\\n' https://example.com/health     <span 
 <h3>Dựng lại mốc thời gian</h3>
 ${slide('lx-12', 7, 'Mốc thời gian: cái gì đã đổi')}
 <p>Gần như mọi sự cố đều có một cái "ngay trước đó". Tìm ra nó thường nhanh hơn hiểu cú hỏng, và rất hay khiến việc hiểu cú hỏng trở nên không cần thiết.</p>
-<pre><code><span class="tok-comment"># Cái máy đổi lần cuối lúc nào?</span>
+<pre><code class="language-bash"><span class="tok-comment"># Cái máy đổi lần cuối lúc nào?</span>
 journalctl --since '2 hours ago' -p warning --no-pager | head -30
 grep -E ' (install|upgrade|remove) ' /var/log/dpkg.log | tail -10   <span class="tok-comment"># gói phần mềm</span>
 ls -lt /etc | head -10                                             <span class="tok-comment"># cấu hình vừa bị sửa</span>
@@ -442,7 +442,7 @@ Aug 22 14:07:02 vps-1 sudo[38844]: deploy : TTY=pts/1 ; PWD=/etc/nginx ; USER=ro
 <h3>Luật về chuyện khởi động lại</h3>
 ${slide('lx-12', 8, 'Thu bằng chứng 15 giây + nhật ký sự cố')}
 <p>"Thử khởi động lại xem?" quả thật chữa được một tỷ lệ vấn đề có thật, và chính vì thế nó nguy hiểm: nó biến một cú hỏng CHẨN ĐOÁN ĐƯỢC thành một cú hỏng KHÔNG CHẨN ĐOÁN ĐƯỢC, mà lại sẽ quay lại, thường vào một giờ tệ hơn, và không còn bằng chứng nào.</p>
-<pre><code><span class="tok-comment"># Nếu BUỘC PHẢI khởi động lại, hãy bỏ mười lăm giây thu giữ hiện trạng trước</span>
+<pre><code class="language-bash"><span class="tok-comment"># Nếu BUỘC PHẢI khởi động lại, hãy bỏ mười lăm giây thu giữ hiện trạng trước</span>
 T=/tmp/evidence-\$(date +%H%M%S); mkdir -p "\$T"
 ps auxww                     &gt; "\$T/ps.txt"
 ss -tanp                     &gt; "\$T/sockets.txt" 2&gt;/dev/null
@@ -502,7 +502,7 @@ ${slide('lx-12', 30, 'Bảng tra: triệu chứng → lệnh đầu tiên → đ
 
 <h3>Chạy thử từng bước: cuộc quét trong container, và trên một máy có systemd thật</h3>
 <p>Bạn có thể tập cuộc quét một cách an toàn trong một container vứt đi. Hãy làm một lần — không phải vì output, mà để biết dòng nào của cuộc quét sẽ <em>thiếu</em> hoặc <em>đánh lừa</em> bạn khi ở trong container, vì đó đúng là thứ bạn sẽ gặp khi <code>docker exec</code> vào một container production giữa lúc sự cố.</p>
-<pre><code>docker run --rm -it --memory 512m ubuntu:24.04 bash
+<pre><code class="language-bash">docker run --rm -it --memory 512m ubuntu:24.04 bash
 <span class="tok-comment"># bên trong container:</span>
 uptime; systemctl --failed; free -h; ss -tlnp
 cat /sys/fs/cgroup/memory.max            <span class="tok-comment"># trần THẬT của container này</span></code></pre>
@@ -603,7 +603,7 @@ real	0m0.031s</div>
 
 <h3>Recipe 1 — the service will not start</h3>
 ${slide('lx-12', 9, 'Mã thoát systemd: 203 thì log rỗng')}
-<pre><code>systemctl status backend --no-pager -l        <span class="tok-comment"># the headline and the last few log lines</span>
+<pre><code class="language-bash">systemctl status backend --no-pager -l        <span class="tok-comment"># the headline and the last few log lines</span>
 journalctl -u backend -n 50 --no-pager        <span class="tok-comment"># the real story</span>
 systemctl cat backend                         <span class="tok-comment"># the unit AS LOADED, drop-ins included</span></code></pre>
 <div class="out">× backend.service - Node API
@@ -665,7 +665,7 @@ ${slide('lx-12', 11, 'Refused · timeout · reset · tên: gói tin dừng ở �
     <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">You never got an IP</span><span class="lz-nsub">Pure DNS (Lesson 9.1). Nothing was attempted; check <code>dig +short name</code> and <code>/etc/resolv.conf</code> before touching anything else.</span></div></div>
   </div>
 </div>
-<pre><code><span class="tok-comment"># Which one is it? -m 5 so a timeout does not make you wait 2 minutes</span>
+<pre><code class="language-bash"><span class="tok-comment"># Which one is it? -m 5 so a timeout does not make you wait 2 minutes</span>
 curl -sS -m 5 -o /dev/null -w '%{http_code} %{time_total}s\\n' http://10.0.0.9:3000/health
 nc -vz -w 3 10.0.0.9 3000            <span class="tok-comment"># TCP only, no HTTP — isolates the layer; -w 3 = give up after 3 s</span></code></pre>
 <div class="out">$ nc -vz -w 3 10.0.0.9 3000
@@ -678,7 +678,7 @@ nc: connect to 10.0.0.9 port 5432 (tcp) timed out: Operation now in progress</di
 <h3>Recipe 4 — nginx returns 502 Bad Gateway</h3>
 ${slide('lx-12', 12, '502 so với 504, và bẫy localhost/IPv6')}
 <p>502 means nginx could not get a valid response from the thing behind it. nginx is working — that is what makes 502 useful. Its error log names the reason precisely:</p>
-<pre><code>sudo tail -20 /var/log/nginx/error.log
+<pre><code class="language-bash">sudo tail -20 /var/log/nginx/error.log
 sudo ss -tlnp | grep -E ':(3000|8080)'
 curl -sS -o /dev/null -w '%{http_code}\\n' http://127.0.0.1:3000/health
 sudo nginx -T | grep -A3 proxy_pass          <span class="tok-comment"># what nginx REALLY has loaded</span></code></pre>
@@ -697,7 +697,7 @@ sudo nginx -T | grep -A3 proxy_pass          <span class="tok-comment"># what ng
 
 <h3>Recipe 5 — the container restarts forever</h3>
 ${slide('lx-12', 13, 'Container quay vòng: ExitCode + OOMKilled')}
-<pre><code>docker ps -a --format 'table {{.Names}}\\t{{.Status}}\\t{{.Image}}'
+<pre><code class="language-bash">docker ps -a --format 'table {{.Names}}\\t{{.Status}}\\t{{.Image}}'
 docker logs --tail 50 --timestamps cuonghoangdev_backend
 docker inspect cuonghoangdev_backend --format '{{.State.ExitCode}} {{.State.OOMKilled}} {{.RestartCount}}'</code></pre>
 <div class="out">NAMES                     STATUS                          IMAGE
@@ -711,13 +711,13 @@ $ docker inspect cuonghoangdev_backend --format '{{.State.ExitCode}} {{.State.OO
   <div class="kv"><span class="k">Exit 126</span><span class="v">Found but not executable: a missing <code>+x</code> on an entrypoint script, or a filesystem mounted <code>noexec</code>. (A script with CRLF line endings is a different failure: the kernel looks for an interpreter named <code>/bin/sh\\r</code>, does not find it, and reports "no such file or directory" — exit 127 in a shell, not 126. An earlier version of this card lumped the two together. On Docker 29 both of these entrypoint mistakes show up as exit <strong>255</strong>; see the measured table below.)</span></div>
   <div class="kv"><span class="k">Starts, then dies with no log</span><span class="v">The wrong architecture or libc. This project's own history: an image built from the wrong <code>Dockerfile</code> put glibc Prisma engines on a musl Alpine base — green build, green push, endless restarts, API down for seven minutes.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Get a shell in the image WITHOUT the entrypoint — the fastest way to look around</span>
+<pre><code class="language-bash"><span class="tok-comment"># Get a shell in the image WITHOUT the entrypoint — the fastest way to look around</span>
 docker run --rm -it --entrypoint sh cuonghoangdev-backend:latest
 <span class="tok-comment"># inside: ls -l /app/dist, node -v, ldd \$(which node) | head</span></code></pre>
 
 <h3>Measured: what each container failure looks like</h3>
 <p>Four containers broken on purpose on Docker 29.8, each read the same way — <code>docker ps</code> for the status, <code>docker logs</code> for the last words, <code>docker inspect</code> for the three numbers that matter:</p>
-<pre><code><span class="tok-comment"># 1. the app exits at startup, with a restart policy</span>
+<pre><code class="language-bash"><span class="tok-comment"># 1. the app exits at startup, with a restart policy</span>
 docker run -d --name lx12-loop --memory 64m --restart on-failure:5 ubuntu:24.04 \\
   bash -c 'echo "\$(date +%T) backend starting"; [ -n "\$DATABASE_URL" ] || { echo "Error: DATABASE_URL is not set" &gt;&amp;2; exit 1; }'
 docker ps -a --format 'table {{.Names}}\\t{{.Status}}'
@@ -746,7 +746,7 @@ ${slide('lx-12', 14, 'Không SSH được: phía máy chủ nói rõ')}
   <div class="lz-step"><span class="lz-k">4 · Permission denied (publickey)</span><span class="lz-t">check modes on the SERVER, via the console</span><span class="lz-d">Almost always <code>~/.ssh</code> or <code>authorized_keys</code> permissions (Lesson 11.3), a wrong <code>AllowUsers</code>, or a key added to the wrong user's file.</span></div>
   <div class="lz-step"><span class="lz-k">5 · Use the provider's console</span><span class="lz-t">the web VNC / serial console</span><span class="lz-d">This is what it is for. Log in there, run <code>systemctl status ssh</code> and <code>sshd -T</code>, fix, and get out. If the console needs a password you never set, reset it from the provider's panel first.</span></div>
 </div>
-<pre><code><span class="tok-comment"># The server side of a rejected key — the message you cannot see from the client</span>
+<pre><code class="language-bash"><span class="tok-comment"># The server side of a rejected key — the message you cannot see from the client</span>
 sudo journalctl -u ssh -n 20 --no-pager | grep -iE 'refused|invalid|denied'</code></pre>
 <div class="out">Aug 22 19:22:31 vps-1 sshd[45012]: Authentication refused: bad ownership or modes for directory /home/deploy/.ssh
 Aug 22 19:22:31 vps-1 sshd[45012]: Connection closed by authenticating user deploy 203.0.113.55 port 51992 [preauth]</div>
@@ -761,7 +761,7 @@ Description=Node API (be-exec)
 User=deploy
 WorkingDirectory=/srv/app
 ExecStart=/usr/local/bin/node dist/index.js   <span class="tok-comment"># node is really /usr/bin/node</span></code></pre>
-<pre><code>systemctl daemon-reload
+<pre><code class="language-bash">systemctl daemon-reload
 for u in be-exec be-chdir be-user be-fail backend; do systemctl start \$u; done
 for u in be-exec be-chdir be-user be-fail backend; do
   echo "\$u: \$(systemctl show \$u -p ExecMainStatus -p ActiveState -p Result --value | tr '\\n' ' ')"
@@ -789,7 +789,7 @@ exit=143</div>
 <p>When a process dies from a signal, the shell, systemd and Docker all report <strong>128 + the signal number</strong>: 137 = 128 + 9 (SIGKILL), 143 = 128 + 15 (SIGTERM), 130 = 128 + 2 (Ctrl-C). So 143 after a deploy is a normal shutdown; 137 that nobody asked for is the OOM killer or a stop timeout (systemd sends SIGKILL after <code>TimeoutStopSec</code>, 90 s by default). And note who printed <code>Killed</code>: the shell, on behalf of a program that never got the chance to say anything.</p>
 
 <h3>Measured: four ways to fail to connect</h3>
-<pre><code>nc -vz -w 3 127.0.0.1 19121             <span class="tok-comment"># nothing listening</span>
+<pre><code class="language-bash">nc -vz -w 3 127.0.0.1 19121             <span class="tok-comment"># nothing listening</span>
 nc -vz -w 3 10.255.255.1 5432           <span class="tok-comment"># an address that drops packets</span>
 nc -vz -w 3 127.0.0.1 19122             <span class="tok-comment"># a server that accepts, then resets</span>
 nc -vz -w 3 db.khong-ton-tai.example 5432
@@ -876,7 +876,7 @@ ControlCe  1307 admin   11u  IPv4 0x38e6a7466b04f758      0t0  TCP *:5000 (LISTE
 
 <h3>Công thức 1 — dịch vụ không chịu lên</h3>
 ${slide('lx-12', 9, 'Mã thoát systemd: 203 thì log rỗng')}
-<pre><code>systemctl status backend --no-pager -l        <span class="tok-comment"># dòng tiêu đề và vài dòng log cuối</span>
+<pre><code class="language-bash">systemctl status backend --no-pager -l        <span class="tok-comment"># dòng tiêu đề và vài dòng log cuối</span>
 journalctl -u backend -n 50 --no-pager        <span class="tok-comment"># câu chuyện thật</span>
 systemctl cat backend                         <span class="tok-comment"># unit NHƯ ĐÃ NẠP, gồm cả drop-in</span></code></pre>
 <div class="out">× backend.service - Node API
@@ -938,7 +938,7 @@ ${slide('lx-12', 11, 'Refused · timeout · reset · tên: gói tin dừng ở �
     <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">Bạn chưa từng lấy được một địa chỉ IP</span><span class="lz-nsub">Thuần DNS (Bài 9.1). Chưa có gì được thử cả; hãy kiểm <code>dig +short tên</code> và <code>/etc/resolv.conf</code> trước khi đụng vào bất cứ thứ gì khác.</span></div></div>
   </div>
 </div>
-<pre><code><span class="tok-comment"># Là cái nào? -m 5 để một cú timeout không bắt bạn chờ 2 phút</span>
+<pre><code class="language-bash"><span class="tok-comment"># Là cái nào? -m 5 để một cú timeout không bắt bạn chờ 2 phút</span>
 curl -sS -m 5 -o /dev/null -w '%{http_code} %{time_total}s\\n' http://10.0.0.9:3000/health
 nc -vz -w 3 10.0.0.9 3000            <span class="tok-comment"># chỉ TCP, không HTTP — cô lập đúng tầng; -w 3 = bỏ cuộc sau 3 giây</span></code></pre>
 <div class="out">$ nc -vz -w 3 10.0.0.9 3000
@@ -951,7 +951,7 @@ nc: connect to 10.0.0.9 port 5432 (tcp) timed out: Operation now in progress</di
 <h3>Công thức 4 — nginx trả về 502 Bad Gateway</h3>
 ${slide('lx-12', 12, '502 so với 504, và bẫy localhost/IPv6')}
 <p>502 nghĩa là nginx không lấy được một phản hồi hợp lệ từ cái nằm sau nó. nginx VẪN CHẠY — chính điều đó làm cho 502 hữu ích. Log lỗi của nó gọi tên lý do rất chính xác:</p>
-<pre><code>sudo tail -20 /var/log/nginx/error.log
+<pre><code class="language-bash">sudo tail -20 /var/log/nginx/error.log
 sudo ss -tlnp | grep -E ':(3000|8080)'
 curl -sS -o /dev/null -w '%{http_code}\\n' http://127.0.0.1:3000/health
 sudo nginx -T | grep -A3 proxy_pass          <span class="tok-comment"># thứ nginx THẬT SỰ đã nạp</span></code></pre>
@@ -970,7 +970,7 @@ sudo nginx -T | grep -A3 proxy_pass          <span class="tok-comment"># thứ n
 
 <h3>Công thức 5 — container khởi động lại mãi không thôi</h3>
 ${slide('lx-12', 13, 'Container quay vòng: ExitCode + OOMKilled')}
-<pre><code>docker ps -a --format 'table {{.Names}}\\t{{.Status}}\\t{{.Image}}'
+<pre><code class="language-bash">docker ps -a --format 'table {{.Names}}\\t{{.Status}}\\t{{.Image}}'
 docker logs --tail 50 --timestamps cuonghoangdev_backend
 docker inspect cuonghoangdev_backend --format '{{.State.ExitCode}} {{.State.OOMKilled}} {{.RestartCount}}'</code></pre>
 <div class="out">NAMES                     STATUS                          IMAGE
@@ -984,13 +984,13 @@ $ docker inspect cuonghoangdev_backend --format '{{.State.ExitCode}} {{.State.OO
   <div class="kv"><span class="k">Thoát 126</span><span class="v">Tìm thấy nhưng không chạy được: thiếu <code>+x</code> trên script entrypoint, hoặc hệ thống file được gắn <code>noexec</code>. (Script có ký tự xuống dòng CRLF là một cú hỏng KHÁC: nhân đi tìm trình thông dịch tên là <code>/bin/sh\\r</code>, không thấy, và báo "no such file or directory" — trong shell là mã 127, không phải 126. Bản trước của ô này gộp hai thứ làm một. Trên Docker 29 cả hai lỗi entrypoint này đều hiện ra thành mã <strong>255</strong>; xem bảng đo thật ở dưới.)</span></div>
   <div class="kv"><span class="k">Lên rồi chết mà không có log</span><span class="v">Sai kiến trúc hoặc sai libc. Chính lịch sử của dự án này: một ảnh dựng từ nhầm <code>Dockerfile</code> đã đặt engine Prisma bản glibc lên nền Alpine musl — build xanh, đẩy xanh, restart vô tận, và API chết bảy phút.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Mở một shell trong ảnh mà KHÔNG chạy entrypoint — cách nhanh nhất để ngó quanh</span>
+<pre><code class="language-bash"><span class="tok-comment"># Mở một shell trong ảnh mà KHÔNG chạy entrypoint — cách nhanh nhất để ngó quanh</span>
 docker run --rm -it --entrypoint sh cuonghoangdev-backend:latest
 <span class="tok-comment"># bên trong: ls -l /app/dist, node -v, ldd \$(which node) | head</span></code></pre>
 
 <h3>Đo thật: mỗi kiểu hỏng container trông ra sao</h3>
 <p>Bốn container được cố tình làm hỏng trên Docker 29.8, mỗi cái đọc theo cùng một cách — <code>docker ps</code> xem trạng thái, <code>docker logs</code> xem lời trăng trối, <code>docker inspect</code> lấy ba con số quan trọng:</p>
-<pre><code><span class="tok-comment"># 1. app thoát ngay lúc khởi động, có chính sách restart</span>
+<pre><code class="language-bash"><span class="tok-comment"># 1. app thoát ngay lúc khởi động, có chính sách restart</span>
 docker run -d --name lx12-loop --memory 64m --restart on-failure:5 ubuntu:24.04 \\
   bash -c 'echo "\$(date +%T) backend starting"; [ -n "\$DATABASE_URL" ] || { echo "Error: DATABASE_URL is not set" &gt;&amp;2; exit 1; }'
 docker ps -a --format 'table {{.Names}}\\t{{.Status}}'
@@ -1019,7 +1019,7 @@ ${slide('lx-12', 14, 'Không SSH được: phía máy chủ nói rõ')}
   <div class="lz-step"><span class="lz-k">4 · Permission denied (publickey)</span><span class="lz-t">kiểm quyền trên MÁY CHỦ, qua console</span><span class="lz-d">Gần như luôn là quyền của <code>~/.ssh</code> hay <code>authorized_keys</code> (Bài 11.3), một <code>AllowUsers</code> sai, hoặc khoá thêm nhầm vào file của người dùng khác.</span></div>
   <div class="lz-step"><span class="lz-k">5 · Dùng console của nhà cung cấp</span><span class="lz-t">console VNC / nối tiếp trên web</span><span class="lz-d">Nó sinh ra để dùng cho đúng lúc này. Đăng nhập ở đó, chạy <code>systemctl status ssh</code> và <code>sshd -T</code>, sửa, rồi thoát. Nếu console đòi một mật khẩu bạn chưa từng đặt thì hãy đặt lại nó từ bảng điều khiển của nhà cung cấp trước.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Phía máy chủ của một cái khoá bị từ chối — thông báo mà máy khách không thấy được</span>
+<pre><code class="language-bash"><span class="tok-comment"># Phía máy chủ của một cái khoá bị từ chối — thông báo mà máy khách không thấy được</span>
 sudo journalctl -u ssh -n 20 --no-pager | grep -iE 'refused|invalid|denied'</code></pre>
 <div class="out">Aug 22 19:22:31 vps-1 sshd[45012]: Authentication refused: bad ownership or modes for directory /home/deploy/.ssh
 Aug 22 19:22:31 vps-1 sshd[45012]: Connection closed by authenticating user deploy 203.0.113.55 port 51992 [preauth]</div>
@@ -1034,7 +1034,7 @@ Description=Node API (be-exec)
 User=deploy
 WorkingDirectory=/srv/app
 ExecStart=/usr/local/bin/node dist/index.js   <span class="tok-comment"># node thật ra ở /usr/bin/node</span></code></pre>
-<pre><code>systemctl daemon-reload
+<pre><code class="language-bash">systemctl daemon-reload
 for u in be-exec be-chdir be-user be-fail backend; do systemctl start \$u; done
 for u in be-exec be-chdir be-user be-fail backend; do
   echo "\$u: \$(systemctl show \$u -p ExecMainStatus -p ActiveState -p Result --value | tr '\\n' ' ')"
@@ -1062,7 +1062,7 @@ exit=143</div>
 <p>Khi một tiến trình chết vì tín hiệu, shell, systemd và Docker đều báo <strong>128 + số hiệu tín hiệu</strong>: 137 = 128 + 9 (SIGKILL), 143 = 128 + 15 (SIGTERM), 130 = 128 + 2 (Ctrl-C). Vậy 143 sau khi deploy là tắt bình thường; còn 137 mà không ai yêu cầu là kẻ giết OOM hoặc một cú hết giờ khi dừng (systemd gửi SIGKILL sau <code>TimeoutStopSec</code>, mặc định 90 giây). Và để ý ai in ra chữ <code>Killed</code>: là SHELL, thay cho một chương trình chưa kịp nói gì.</p>
 
 <h3>Đo thật: bốn cách không kết nối được</h3>
-<pre><code>nc -vz -w 3 127.0.0.1 19121             <span class="tok-comment"># không ai nghe</span>
+<pre><code class="language-bash">nc -vz -w 3 127.0.0.1 19121             <span class="tok-comment"># không ai nghe</span>
 nc -vz -w 3 10.255.255.1 5432           <span class="tok-comment"># địa chỉ vứt mọi gói</span>
 nc -vz -w 3 127.0.0.1 19122             <span class="tok-comment"># server nhận rồi reset</span>
 nc -vz -w 3 db.khong-ton-tai.example 5432
@@ -1158,7 +1158,7 @@ ControlCe  1307 admin   11u  IPv4 0x38e6a7466b04f758      0t0  TCP *:5000 (LISTE
 
 <h3>Recipe 1 — what "load" actually means</h3>
 ${slide('lx-12', 15, 'Load = hàng chạy + hàng chờ D')}
-<pre><code>uptime; nproc
+<pre><code class="language-bash">uptime; nproc
 cat /proc/pressure/cpu /proc/pressure/io /proc/pressure/memory   <span class="tok-comment"># PSI, kernel 4.20+</span></code></pre>
 <div class="out">$ uptime
  19:31:44 up 12 days, 4:12, 1 user, load average: 8.21, 7.94, 6.02
@@ -1249,7 +1249,7 @@ done | sort -k2 -rn | head -5</code></pre>
 <div class="pitfall co-tieu-de"><strong>Two bugs this lesson used to have, and why they matter at 3am.</strong> The "who is writing?" loop above used to be <code>sudo find /proc … | while read f</code> with <code>tr -d '\\0'</code>. Measured in the lab with a process that wrote 60 MB, that version printed <code>python3/root/w.py 60MB</code>: <code>sudo</code> applied only to <code>find</code>, so the loop itself could not read other users' <code>/proc/PID/io</code>; deleting the NUL bytes glued the arguments together; and no PID was printed, so you could not act on the result. The corrected loop prints <code>4303 60MB python3 /root/w.py</code> — PID first, the number you sort by second, the command last. The same kind of slip hid in the RSS one-liner below: without <code>--no-headers</code>, <code>awk</code> turns the header into <code>PID 0MB ELAPSED CMD</code>. A diagnostic command that prints the wrong thing is worse than none, so test yours on a machine you control before you need it.</div>
 <h3>Recipe 4 — memory pressure</h3>
 ${slide('lx-12', 18, 'Bộ nhớ: available, và OOM giết im lặng')}
-<pre><code>free -h
+<pre><code class="language-bash">free -h
 vmstat 1 5                    <span class="tok-comment"># si/so columns = swap in/out</span>
 ps aux --sort=-%mem | head -6
 cat /sys/fs/cgroup/memory.pressure 2&gt;/dev/null
@@ -1290,7 +1290,7 @@ node    41288 deploy 9w REG  253,1  44023414784     0  918 /var/log/app/debug.lo
 <h3>Recipe 6 — slow, but nothing is busy</h3>
 ${slide('lx-12', 20, 'Chậm mà rảnh: curl -w và hàng chờ accept')}
 <p>The hardest and most common case: requests take eight seconds, CPU is 4%, disk is idle, memory is fine. Nothing is busy because nothing is <em>working</em> — everything is waiting on something else.</p>
-<pre><code><span class="tok-comment"># Break one request into its phases — this is the whole diagnosis</span>
+<pre><code class="language-bash"><span class="tok-comment"># Break one request into its phases — this is the whole diagnosis</span>
 curl -sS -o /dev/null -w 'dns=%{time_namelookup} connect=%{time_connect} tls=%{time_appconnect} ttfb=%{time_starttransfer} total=%{time_total}\\n' \\
   https://example.com/api/v1/posts</code></pre>
 <div class="out">dns=0.004 connect=0.021 tls=0.061 ttfb=8.402 total=8.409</div>
@@ -1344,7 +1344,7 @@ LISTEN 0      511          0.0.0.0:80</div>
 
 <h3>Try it step by step: a full disk, a disk that only looks full, and an idle machine that is slow</h3>
 <p>All three were reproduced in an Ubuntu 24.04 container started with two small RAM disks, so that "full" takes seconds and nothing real is at risk:</p>
-<pre><code>docker run -d --name lx12-u --memory 512m \\
+<pre><code class="language-bash">docker run -d --name lx12-u --memory 512m \\
   --tmpfs /day:size=40m --tmpfs /inode:size=40m,nr_inodes=2000 ubuntu:24.04 sleep infinity</code></pre>
 <p><strong>1 · Deleted but still open.</strong> A Python process appends 64 KB blocks to <code>/day/logs/app.log</code> and keeps the file open, like a Node app with a log stream:</p>
 <div class="out">$ df -h /day
@@ -1464,7 +1464,7 @@ connect=7.199762 ttfb=24.818435 total=24.818498</div>
 
 <h3>Công thức 1 — "load" thật ra nghĩa là gì</h3>
 ${slide('lx-12', 15, 'Load = hàng chạy + hàng chờ D')}
-<pre><code>uptime; nproc
+<pre><code class="language-bash">uptime; nproc
 cat /proc/pressure/cpu /proc/pressure/io /proc/pressure/memory   <span class="tok-comment"># PSI, nhân 4.20 trở lên</span></code></pre>
 <div class="out">$ uptime
  19:31:44 up 12 days, 4:12, 1 user, load average: 8.21, 7.94, 6.02
@@ -1555,7 +1555,7 @@ done | sort -k2 -rn | head -5</code></pre>
 <div class="pitfall co-tieu-de"><strong>Hai con bọ bài này từng có, và vì sao chúng quan trọng lúc 3 giờ sáng.</strong> Vòng "ai đang ghi?" ở trên trước đây là <code>sudo find /proc … | while read f</code> với <code>tr -d '\\0'</code>. Đo thật trong phòng thí nghiệm với một tiến trình ghi 60 MB, bản đó in ra <code>python3/root/w.py 60MB</code>: <code>sudo</code> chỉ áp cho <code>find</code>, nên chính vòng lặp không đọc được <code>/proc/PID/io</code> của người dùng khác; xoá byte NUL làm các tham số dính liền vào nhau; và không có PID nào được in, nên bạn chẳng làm gì được với kết quả. Vòng đã sửa in <code>4303 60MB python3 /root/w.py</code> — PID trước, con số để sắp xếp ở giữa, câu lệnh ở cuối. Cùng kiểu sơ suất nấp trong câu lệnh RSS ở dưới: thiếu <code>--no-headers</code> thì <code>awk</code> biến dòng tiêu đề thành <code>PID 0MB ELAPSED CMD</code>. Một lệnh chẩn đoán in sai còn tệ hơn không có lệnh nào, nên hãy thử lệnh của bạn trên một máy bạn làm chủ TRƯỚC khi cần tới nó.</div>
 <h3>Công thức 4 — sức ép bộ nhớ</h3>
 ${slide('lx-12', 18, 'Bộ nhớ: available, và OOM giết im lặng')}
-<pre><code>free -h
+<pre><code class="language-bash">free -h
 vmstat 1 5                    <span class="tok-comment"># cột si/so = swap vào/ra</span>
 ps aux --sort=-%mem | head -6
 cat /sys/fs/cgroup/memory.pressure 2&gt;/dev/null
@@ -1596,7 +1596,7 @@ node    41288 deploy 9w REG  253,1  44023414784     0  918 /var/log/app/debug.lo
 <h3>Công thức 6 — chậm, mà chẳng có gì bận</h3>
 ${slide('lx-12', 20, 'Chậm mà rảnh: curl -w và hàng chờ accept')}
 <p>Trường hợp khó nhất và phổ biến nhất: request mất tám giây, CPU 4%, đĩa rảnh, bộ nhớ ổn. Không có gì bận bởi vì không có gì đang <em>LÀM VIỆC</em> — tất cả đều đang chờ một thứ khác.</p>
-<pre><code><span class="tok-comment"># Chẻ một request ra thành các pha — đây chính là toàn bộ phần chẩn đoán</span>
+<pre><code class="language-bash"><span class="tok-comment"># Chẻ một request ra thành các pha — đây chính là toàn bộ phần chẩn đoán</span>
 curl -sS -o /dev/null -w 'dns=%{time_namelookup} connect=%{time_connect} tls=%{time_appconnect} ttfb=%{time_starttransfer} total=%{time_total}\\n' \\
   https://example.com/api/v1/posts</code></pre>
 <div class="out">dns=0.004 connect=0.021 tls=0.061 ttfb=8.402 total=8.409</div>
@@ -1650,7 +1650,7 @@ LISTEN 0      511          0.0.0.0:80</div>
 
 <h3>Chạy thử từng bước: đĩa đầy, đĩa chỉ TRÔNG đầy, và một cái máy rảnh mà chậm</h3>
 <p>Cả ba được dựng lại trong một container Ubuntu 24.04 khởi động với hai ổ RAM nhỏ, để "đầy" chỉ tốn vài giây và không có gì thật bị đe doạ:</p>
-<pre><code>docker run -d --name lx12-u --memory 512m \\
+<pre><code class="language-bash">docker run -d --name lx12-u --memory 512m \\
   --tmpfs /day:size=40m --tmpfs /inode:size=40m,nr_inodes=2000 ubuntu:24.04 sleep infinity</code></pre>
 <p><strong>1 · Đã xoá mà vẫn mở.</strong> Một tiến trình Python nối các khối 64 KB vào <code>/day/logs/app.log</code> và giữ file mở, giống một app Node có luồng ghi log:</p>
 <div class="out">$ df -h /day
@@ -1779,7 +1779,7 @@ connect=7.199762 ttfb=24.818435 total=24.818498</div>
 
 <h3>Recipe 1 — "Permission denied" with correct permissions</h3>
 ${slide('lx-12', 21, 'namei -l: thủ phạm ở thư mục cha')}
-<pre><code>ls -l /srv/app/run.sh
+<pre><code class="language-bash">ls -l /srv/app/run.sh
 namei -l /srv/app/run.sh          <span class="tok-comment"># EVERY component of the path, with modes</span>
 findmnt -T /srv/app               <span class="tok-comment"># mount options for this path</span>
 sudo dmesg -T | grep -iE 'apparmor|audit|denied' | tail -5</code></pre>
@@ -1803,7 +1803,7 @@ drwxr-xr-x deploy deploy app
 
 <h3>Recipe 2 — "command not found" for a file that exists</h3>
 ${slide('lx-12', 22, 'CRLF trong shebang và mã 126/127')}
-<pre><code>ls -l ./deploy.sh &amp;&amp; ./deploy.sh
+<pre><code class="language-bash">ls -l ./deploy.sh &amp;&amp; ./deploy.sh
 file ./deploy.sh
 head -c 40 ./deploy.sh | cat -A | head -2       <span class="tok-comment"># -A shows \\r as ^M</span>
 ldd \$(command -v node) | grep 'not found'</code></pre>
@@ -1812,7 +1812,7 @@ bash: ./deploy.sh: cannot execute: required file not found
 $ head -c 40 ./deploy.sh | cat -A | head -1
 #!/bin/bash^M\$</div>
 <p>The shebang line ends in <code>^M</code> — a carriage return, from a file edited on Windows or checked out with the wrong git line-ending setting. The kernel dutifully looks for an interpreter literally named <code>/bin/bash\\r</code>, does not find it, and reports "required file not found" while pointing at your script. The error names the script; the missing file is the interpreter.</p>
-<pre><code>sed -i 's/\\r\$//' ./deploy.sh          <span class="tok-comment"># or: dos2unix ./deploy.sh</span>
+<pre><code class="language-bash">sed -i 's/\\r\$//' ./deploy.sh          <span class="tok-comment"># or: dos2unix ./deploy.sh</span>
 file ./deploy.sh</code></pre>
 <div class="out">./deploy.sh: Bourne-Again shell script, ASCII text executable</div>
 <div class="kv-grid">
@@ -1826,7 +1826,7 @@ file ./deploy.sh</code></pre>
 <h3>Recipe 3 — the code is deployed and the old behaviour persists</h3>
 ${slide('lx-12', 23, 'Tiến trình vẫn đứng trong bản cũ')}
 <p>A route returns 404 after you added it; a fix does not appear; a bug you deleted still happens. In every case, the question is not "is the code right" but <strong>"is this process running the code I think it is?"</strong></p>
-<pre><code><span class="tok-comment"># Is the route mounted at all? 401/200 = live, 404 = stale build</span>
+<pre><code class="language-bash"><span class="tok-comment"># Is the route mounted at all? 401/200 = live, 404 = stale build</span>
 curl -s -o /dev/null -w '%{http_code}\\n' https://example.com/api/v1/reports
 
 <span class="tok-comment"># What is the running process actually executing?</span>
@@ -1845,7 +1845,7 @@ Mon Aug 19 09:12:44 2026</div>
 
 <h3>Recipe 4 — TLS and the clock</h3>
 ${slide('lx-12', 24, 'Lỗi chứng chỉ = lỗi đồng hồ máy khách')}
-<pre><code>curl -vI https://example.com 2&gt;&amp;1 | grep -E 'expire|subject|issuer|SSL'
+<pre><code class="language-bash">curl -vI https://example.com 2&gt;&amp;1 | grep -E 'expire|subject|issuer|SSL'
 echo | openssl s_client -connect example.com:443 -servername example.com 2&gt;/dev/null \\
   | openssl x509 -noout -dates -subject -issuer
 timedatectl | head -4</code></pre>
@@ -1861,14 +1861,14 @@ issuer=C = US, O = Let's Encrypt, CN = R11</div>
   <div class="kv"><span class="k">Works with curl, fails in the app</span><span class="v">Different trust store. Node has its own CA bundle; a container may have none installed at all (<code>ca-certificates</code>). The system trusting a certificate does not mean your runtime does.</span></div>
   <div class="kv"><span class="k">JWTs "expired" immediately</span><span class="v">Clock skew again. A machine minutes ahead issues tokens that another machine considers already dead. Fix NTP (Lesson 11.3), not the token lifetime.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Days until expiry, as one number — worth putting in a monitor</span>
+<pre><code class="language-bash"><span class="tok-comment"># Days until expiry, as one number — worth putting in a monitor</span>
 echo | openssl s_client -connect example.com:443 -servername example.com 2&gt;/dev/null \\
   | openssl x509 -noout -enddate | cut -d= -f2 \\
   | { read d; echo \$(( (\$(date -d "\$d" +%s) - \$(date +%s)) / 86400 )) days; }</code></pre>
 <div class="out">77 days</div>
 
 <h3>Recipe 5 — works by IP, not by name</h3>
-<pre><code>dig +short api.example.com
+<pre><code class="language-bash">dig +short api.example.com
 dig +short api.example.com @1.1.1.1        <span class="tok-comment"># bypass the local resolver</span>
 cat /etc/resolv.conf; cat /etc/hosts
 getent hosts api.example.com               <span class="tok-comment"># what the SYSTEM resolves, not just DNS</span>
@@ -1892,7 +1892,7 @@ ${slide('lx-12', 26, 'Sáu thứ khác nhau giữa hai máy')}
   <div class="lz-layer"><span class="lz-lname">Version drift</span><span class="lz-lnote">Node 22 locally, Node 18 in the image; a different OpenSSL; a different libc. <code>node -v</code>, <code>openssl version</code> and <code>ldd --version</code> in BOTH places, side by side.</span></div>
   <div class="lz-layer"><span class="lz-lname">Files git does not carry</span><span class="lz-lnote"><code>.env</code>, generated clients, symlinks, an <code>uploads/</code> directory that exists only on your disk. <code>git status --ignored</code> shows what your working copy has that a fresh clone would not.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Run this on both machines and diff the output — twenty seconds, ends most arguments</span>
+<pre><code class="language-bash"><span class="tok-comment"># Run this on both machines and diff the output — twenty seconds, ends most arguments</span>
 { uname -srm; . /etc/os-release 2&gt;/dev/null &amp;&amp; echo "\$PRETTY_NAME"
   node -v 2&gt;/dev/null; npm -v 2&gt;/dev/null; openssl version
   echo "TZ=\$(timedatectl show -p Timezone --value 2&gt;/dev/null)"
@@ -1912,7 +1912,7 @@ case-sensitive: YES</div>
 <h3>Recipe 7 — a pile of &lt;defunct&gt; processes that <code>kill -9</code> cannot remove</h3>
 ${slide('lx-12', 25, 'Zombie: sửa ở tiến trình cha, hoặc --init')}
 <p>Chapter 5 explained what a zombie is: a process that has exited but whose parent has not yet collected its exit code with <code>wait()</code>. The diagnostic question is different — you meet them as a symptom. While this chapter's lab was being built, zombies appeared on their own, which makes them a perfect real example:</p>
-<pre><code>ps -eo stat,pid,ppid,etime,cmd | awk 'NR==1 || \$1 ~ /^Z/'
+<pre><code class="language-bash">ps -eo stat,pid,ppid,etime,cmd | awk 'NR==1 || \$1 ~ /^Z/'
 ps -o pid,cmd -p 1
 kill -9 3630; ps -o stat,pid,cmd -p 3630
 grep -E '^(State|PPid)' /proc/3630/status</code></pre>
@@ -1946,7 +1946,7 @@ STAT     PID    PPID CMD</div>
 
 <h3>Try it step by step: three impossible bugs in five minutes</h3>
 <p>All three were reproduced in the lab container (Ubuntu 24.04, util-linux 2.39.3, bash 5.2.21). As root inside a throwaway container:</p>
-<pre><code>apt-get install -y file; useradd -m -s /bin/bash deploy; mkdir -p /srv/app
+<pre><code class="language-bash">apt-get install -y file; useradd -m -s /bin/bash deploy; mkdir -p /srv/app
 printf '#!/bin/bash\\necho "app ok"\\n' &gt; /srv/app/run.sh
 chown -R deploy:deploy /srv/app; chmod 755 /srv/app/run.sh; chmod 750 /srv
 su deploy -c /srv/app/run.sh; namei -l /srv/app/run.sh</code></pre>
@@ -1985,7 +1985,7 @@ $ ps -o pid,lstart,etime,cmd -p 4004
 <p>The symlink says v2, the process's working directory says v1, and its start time is earlier than the new file's <code>mtime</code> (<code>15:28:31</code>). A process resolves its paths when it starts; changing a symlink later changes nothing for it.</p>
 
 <h3>Measured: the clock breaks TLS in both directions</h3>
-<pre><code>apt-get install -y faketime            <span class="tok-comment"># fakes the time for ONE command</span>
+<pre><code class="language-bash">apt-get install -y faketime            <span class="tok-comment"># fakes the time for ONE command</span>
 faketime '2020-01-01' curl -sS -o /dev/null https://example.com/
 faketime '2030-01-01' curl -sS -o /dev/null https://example.com/
 echo | openssl s_client -connect example.com:443 -servername example.com 2&gt;/dev/null \\
@@ -2070,7 +2070,7 @@ exit=0</div>
 
 <h3>Công thức 1 — "Permission denied" trong khi quyền vẫn đúng</h3>
 ${slide('lx-12', 21, 'namei -l: thủ phạm ở thư mục cha')}
-<pre><code>ls -l /srv/app/run.sh
+<pre><code class="language-bash">ls -l /srv/app/run.sh
 namei -l /srv/app/run.sh          <span class="tok-comment"># MỌI thành phần của đường dẫn, kèm quyền</span>
 findmnt -T /srv/app               <span class="tok-comment"># tuỳ chọn gắn cho đường dẫn này</span>
 sudo dmesg -T | grep -iE 'apparmor|audit|denied' | tail -5</code></pre>
@@ -2094,7 +2094,7 @@ drwxr-xr-x deploy deploy app
 
 <h3>Công thức 2 — "command not found" với một file CÓ THẬT</h3>
 ${slide('lx-12', 22, 'CRLF trong shebang và mã 126/127')}
-<pre><code>ls -l ./deploy.sh &amp;&amp; ./deploy.sh
+<pre><code class="language-bash">ls -l ./deploy.sh &amp;&amp; ./deploy.sh
 file ./deploy.sh
 head -c 40 ./deploy.sh | cat -A | head -2       <span class="tok-comment"># -A hiện \\r thành ^M</span>
 ldd \$(command -v node) | grep 'not found'</code></pre>
@@ -2103,7 +2103,7 @@ bash: ./deploy.sh: cannot execute: required file not found
 $ head -c 40 ./deploy.sh | cat -A | head -1
 #!/bin/bash^M\$</div>
 <p>Dòng shebang kết thúc bằng <code>^M</code> — một ký tự xuống dòng kiểu Windows, từ một file soạn trên Windows hoặc lấy về với cấu hình xuống dòng sai của git. Nhân ngoan ngoãn đi tìm một trình thông dịch có tên đúng nghĩa đen là <code>/bin/bash\\r</code>, không thấy, rồi báo "required file not found" trong khi chỉ tay vào script của bạn. Thông báo gọi tên cái script; cái file thiếu là TRÌNH THÔNG DỊCH.</p>
-<pre><code>sed -i 's/\\r\$//' ./deploy.sh          <span class="tok-comment"># hoặc: dos2unix ./deploy.sh</span>
+<pre><code class="language-bash">sed -i 's/\\r\$//' ./deploy.sh          <span class="tok-comment"># hoặc: dos2unix ./deploy.sh</span>
 file ./deploy.sh</code></pre>
 <div class="out">./deploy.sh: Bourne-Again shell script, ASCII text executable</div>
 <div class="kv-grid">
@@ -2117,7 +2117,7 @@ file ./deploy.sh</code></pre>
 <h3>Công thức 3 — mã đã deploy mà hành vi cũ vẫn còn</h3>
 ${slide('lx-12', 23, 'Tiến trình vẫn đứng trong bản cũ')}
 <p>Một route trả 404 sau khi bạn vừa thêm nó; một bản vá không hiện ra; một con bọ bạn đã xoá vẫn xảy ra. Trong mọi trường hợp, câu hỏi không phải "mã có đúng không" mà là <strong>"tiến trình này có đang chạy đúng cái mã tôi nghĩ không?"</strong></p>
-<pre><code><span class="tok-comment"># Route đã được gắn chưa? 401/200 = còn sống, 404 = bản dựng cũ</span>
+<pre><code class="language-bash"><span class="tok-comment"># Route đã được gắn chưa? 401/200 = còn sống, 404 = bản dựng cũ</span>
 curl -s -o /dev/null -w '%{http_code}\\n' https://example.com/api/v1/reports
 
 <span class="tok-comment"># Tiến trình đang chạy thật ra đang thực thi cái gì?</span>
@@ -2136,7 +2136,7 @@ Mon Aug 19 09:12:44 2026</div>
 
 <h3>Công thức 4 — TLS và cái đồng hồ</h3>
 ${slide('lx-12', 24, 'Lỗi chứng chỉ = lỗi đồng hồ máy khách')}
-<pre><code>curl -vI https://example.com 2&gt;&amp;1 | grep -E 'expire|subject|issuer|SSL'
+<pre><code class="language-bash">curl -vI https://example.com 2&gt;&amp;1 | grep -E 'expire|subject|issuer|SSL'
 echo | openssl s_client -connect example.com:443 -servername example.com 2&gt;/dev/null \\
   | openssl x509 -noout -dates -subject -issuer
 timedatectl | head -4</code></pre>
@@ -2152,14 +2152,14 @@ issuer=C = US, O = Let's Encrypt, CN = R11</div>
   <div class="kv"><span class="k">curl chạy được, ứng dụng thì không</span><span class="v">Kho tin cậy khác nhau. Node có bộ CA riêng của nó; một container có thể chẳng cài cái nào (<code>ca-certificates</code>). Hệ thống tin một chứng chỉ không có nghĩa là môi trường chạy của bạn cũng tin.</span></div>
   <div class="kv"><span class="k">JWT "hết hạn" ngay lập tức</span><span class="v">Lại là lệch đồng hồ. Một cái máy chạy nhanh vài phút phát ra token mà máy khác coi là đã chết. Hãy sửa NTP (Bài 11.3), đừng sửa thời hạn của token.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Còn bao nhiêu ngày nữa hết hạn, dưới dạng một con số — đáng đưa vào hệ giám sát</span>
+<pre><code class="language-bash"><span class="tok-comment"># Còn bao nhiêu ngày nữa hết hạn, dưới dạng một con số — đáng đưa vào hệ giám sát</span>
 echo | openssl s_client -connect example.com:443 -servername example.com 2&gt;/dev/null \\
   | openssl x509 -noout -enddate | cut -d= -f2 \\
   | { read d; echo \$(( (\$(date -d "\$d" +%s) - \$(date +%s)) / 86400 )) ngày; }</code></pre>
 <div class="out">77 ngày</div>
 
 <h3>Công thức 5 — chạy bằng IP, không chạy bằng tên</h3>
-<pre><code>dig +short api.example.com
+<pre><code class="language-bash">dig +short api.example.com
 dig +short api.example.com @1.1.1.1        <span class="tok-comment"># đi vòng qua trình phân giải cục bộ</span>
 cat /etc/resolv.conf; cat /etc/hosts
 getent hosts api.example.com               <span class="tok-comment"># thứ HỆ THỐNG phân giải ra, không chỉ DNS</span>
@@ -2183,7 +2183,7 @@ ${slide('lx-12', 26, 'Sáu thứ khác nhau giữa hai máy')}
   <div class="lz-layer"><span class="lz-lname">Lệch phiên bản</span><span class="lz-lnote">Node 22 ở máy bạn, Node 18 trong ảnh; một OpenSSL khác; một libc khác. Hãy chạy <code>node -v</code>, <code>openssl version</code> và <code>ldd --version</code> ở CẢ HAI nơi, đặt cạnh nhau.</span></div>
   <div class="lz-layer"><span class="lz-lname">Những file git không mang theo</span><span class="lz-lnote"><code>.env</code>, client được sinh ra, liên kết mềm, một thư mục <code>uploads/</code> chỉ tồn tại trên đĩa của bạn. <code>git status --ignored</code> cho thấy bản làm việc của bạn có gì mà một bản clone mới thì không.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Chạy cái này ở CẢ HAI máy rồi so output — hai mươi giây, kết thúc phần lớn cuộc tranh cãi</span>
+<pre><code class="language-bash"><span class="tok-comment"># Chạy cái này ở CẢ HAI máy rồi so output — hai mươi giây, kết thúc phần lớn cuộc tranh cãi</span>
 { uname -srm; . /etc/os-release 2&gt;/dev/null &amp;&amp; echo "\$PRETTY_NAME"
   node -v 2&gt;/dev/null; npm -v 2&gt;/dev/null; openssl version
   echo "TZ=\$(timedatectl show -p Timezone --value 2&gt;/dev/null)"
@@ -2203,7 +2203,7 @@ phan biet hoa thuong: CO</div>
 <h3>Công thức 7 — một đống tiến trình &lt;defunct&gt; mà <code>kill -9</code> không xoá được</h3>
 ${slide('lx-12', 25, 'Zombie: sửa ở tiến trình cha, hoặc --init')}
 <p>Chương 5 đã giải thích zombie là gì: một tiến trình đã thoát nhưng tiến trình cha chưa "nhận" mã thoát của nó bằng <code>wait()</code>. Câu hỏi chẩn đoán thì khác — bạn gặp chúng như một TRIỆU CHỨNG. Trong lúc dựng phòng thí nghiệm của chương này, zombie tự xuất hiện, nên chúng là một ví dụ thật hoàn hảo:</p>
-<pre><code>ps -eo stat,pid,ppid,etime,cmd | awk 'NR==1 || \$1 ~ /^Z/'
+<pre><code class="language-bash">ps -eo stat,pid,ppid,etime,cmd | awk 'NR==1 || \$1 ~ /^Z/'
 ps -o pid,cmd -p 1
 kill -9 3630; ps -o stat,pid,cmd -p 3630
 grep -E '^(State|PPid)' /proc/3630/status</code></pre>
@@ -2237,7 +2237,7 @@ STAT     PID    PPID CMD</div>
 
 <h3>Chạy thử từng bước: ba con bọ "không thể nào" trong năm phút</h3>
 <p>Cả ba được dựng lại trong container thí nghiệm (Ubuntu 24.04, util-linux 2.39.3, bash 5.2.21). Với quyền root trong một container vứt đi:</p>
-<pre><code>apt-get install -y file; useradd -m -s /bin/bash deploy; mkdir -p /srv/app
+<pre><code class="language-bash">apt-get install -y file; useradd -m -s /bin/bash deploy; mkdir -p /srv/app
 printf '#!/bin/bash\\necho "app ok"\\n' &gt; /srv/app/run.sh
 chown -R deploy:deploy /srv/app; chmod 755 /srv/app/run.sh; chmod 750 /srv
 su deploy -c /srv/app/run.sh; namei -l /srv/app/run.sh</code></pre>
@@ -2276,7 +2276,7 @@ $ ps -o pid,lstart,etime,cmd -p 4004
 <p>Symlink nói v2, thư mục làm việc của tiến trình nói v1, và giờ khởi động của nó sớm hơn <code>mtime</code> của file mới (<code>15:28:31</code>). Một tiến trình phân giải đường dẫn lúc nó KHỞI ĐỘNG; đổi symlink về sau chẳng thay đổi gì với nó.</p>
 
 <h3>Đo thật: đồng hồ làm hỏng TLS theo cả hai chiều</h3>
-<pre><code>apt-get install -y faketime            <span class="tok-comment"># làm giả giờ cho MỘT câu lệnh</span>
+<pre><code class="language-bash">apt-get install -y faketime            <span class="tok-comment"># làm giả giờ cho MỘT câu lệnh</span>
 faketime '2020-01-01' curl -sS -o /dev/null https://example.com/
 faketime '2030-01-01' curl -sS -o /dev/null https://example.com/
 echo | openssl s_client -connect example.com:443 -servername example.com 2&gt;/dev/null \\

@@ -834,7 +834,7 @@ lib/
   grading.ts              ← the grading service (Section 4)</div>
 
 <h3>A Route Handler — GET and POST in one file</h3>
-<pre><span class="tok-comment">// app/api/courses/route.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// app/api/courses/route.ts</span>
 <span class="tok-keyword">import</span> { NextResponse } <span class="tok-keyword">from</span> <span class="tok-string">"next/server"</span>;
 <span class="tok-keyword">import</span> { prisma } <span class="tok-keyword">from</span> <span class="tok-string">"@/lib/db"</span>;
 <span class="tok-keyword">import</span> { z } <span class="tok-keyword">from</span> <span class="tok-string">"zod"</span>;
@@ -865,14 +865,14 @@ lib/
     data: { ...parsed.data, instructorId: session.user.id },
   });
   <span class="tok-keyword">return</span> NextResponse.json(course, { status: <span class="tok-number">201</span> });
-}</pre>
+}</code></pre>
 
 <h3>The Prisma client — one instance, reused</h3>
-<pre><span class="tok-comment">// lib/db.ts — avoid exhausting connections in dev hot-reload</span>
+<pre><code class="language-javascript"><span class="tok-comment">// lib/db.ts — avoid exhausting connections in dev hot-reload</span>
 <span class="tok-keyword">import</span> { PrismaClient } <span class="tok-keyword">from</span> <span class="tok-string">"@prisma/client"</span>;
 <span class="tok-keyword">const</span> g = globalThis <span class="tok-keyword">as</span> <span class="tok-keyword">unknown as</span> { prisma?: PrismaClient };
 <span class="tok-keyword">export const</span> prisma = g.prisma ?? <span class="tok-keyword">new</span> PrismaClient();
-<span class="tok-keyword">if</span> (process.env.NODE_ENV !== <span class="tok-string">"production"</span>) g.prisma = prisma;</pre>
+<span class="tok-keyword">if</span> (process.env.NODE_ENV !== <span class="tok-string">"production"</span>) g.prisma = prisma;</code></pre>
 
 <div class="callout ok">Why colocate the API? Because the same TypeScript types flow from Prisma → Route Handler → page. There is no "API contract drift" between a separate backend and frontend — they are one codebase, one deploy.</div>
 
@@ -908,7 +908,7 @@ lib/
   grading.ts              ← service chấm điểm (Mục 4)</div>
 
 <h3>Một Route Handler — GET và POST trong một file</h3>
-<pre><span class="tok-comment">// app/api/courses/route.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// app/api/courses/route.ts</span>
 <span class="tok-keyword">import</span> { NextResponse } <span class="tok-keyword">from</span> <span class="tok-string">"next/server"</span>;
 <span class="tok-keyword">import</span> { prisma } <span class="tok-keyword">from</span> <span class="tok-string">"@/lib/db"</span>;
 <span class="tok-keyword">import</span> { z } <span class="tok-keyword">from</span> <span class="tok-string">"zod"</span>;
@@ -939,14 +939,14 @@ lib/
     data: { ...parsed.data, instructorId: session.user.id },
   });
   <span class="tok-keyword">return</span> NextResponse.json(course, { status: <span class="tok-number">201</span> });
-}</pre>
+}</code></pre>
 
 <h3>Prisma client — một instance, dùng lại</h3>
-<pre><span class="tok-comment">// lib/db.ts — tránh cạn kết nối khi hot-reload lúc dev</span>
+<pre><code class="language-javascript"><span class="tok-comment">// lib/db.ts — tránh cạn kết nối khi hot-reload lúc dev</span>
 <span class="tok-keyword">import</span> { PrismaClient } <span class="tok-keyword">from</span> <span class="tok-string">"@prisma/client"</span>;
 <span class="tok-keyword">const</span> g = globalThis <span class="tok-keyword">as</span> <span class="tok-keyword">unknown as</span> { prisma?: PrismaClient };
 <span class="tok-keyword">export const</span> prisma = g.prisma ?? <span class="tok-keyword">new</span> PrismaClient();
-<span class="tok-keyword">if</span> (process.env.NODE_ENV !== <span class="tok-string">"production"</span>) g.prisma = prisma;</pre>
+<span class="tok-keyword">if</span> (process.env.NODE_ENV !== <span class="tok-string">"production"</span>) g.prisma = prisma;</code></pre>
 
 <div class="callout ok">Vì sao đặt API cạnh nhau? Vì cùng một kiểu TypeScript chảy từ Prisma → Route Handler → trang. Không có "API contract drift" giữa backend và frontend tách rời — chúng là một codebase, một lần deploy.</div>
 
@@ -974,7 +974,7 @@ lib/
 <p class="lead">In the App Router, a page is a <strong>Server Component by default</strong>. It runs on the server, can be <code>async</code>, and can call Prisma <em>directly</em> — no <code>fetch</code>, no API round-trip, and zero JavaScript shipped for that data. You only opt into the client (with <code>"use client"</code>) where you need interactivity.</p>
 
 <h3>A data page — Prisma inside the component</h3>
-<pre><span class="tok-comment">// app/courses/page.tsx  — a Server Component (no "use client")</span>
+<pre><code class="language-javascript"><span class="tok-comment">// app/courses/page.tsx  — a Server Component (no "use client")</span>
 <span class="tok-keyword">import</span> { prisma } <span class="tok-keyword">from</span> <span class="tok-string">"@/lib/db"</span>;
 <span class="tok-keyword">import</span> Link <span class="tok-keyword">from</span> <span class="tok-string">"next/link"</span>;
 
@@ -995,7 +995,7 @@ lib/
       ))}
     &lt;/ul&gt;
   );
-}</pre>
+}</code></pre>
 
 <h3>Server vs Client — who runs where</h3>
 <div class="lz-stack">
@@ -1032,7 +1032,7 @@ lib/
 <p class="lead">Trong App Router, một trang <strong>mặc định là Server Component</strong>. Nó chạy trên server, có thể <code>async</code>, và có thể gọi Prisma <em>trực tiếp</em> — không <code>fetch</code>, không round-trip API, và không ship JavaScript nào cho dữ liệu đó. Bạn chỉ chọn client (bằng <code>"use client"</code>) ở nơi cần tương tác.</p>
 
 <h3>Một trang dữ liệu — Prisma ngay trong component</h3>
-<pre><span class="tok-comment">// app/courses/page.tsx  — một Server Component (không "use client")</span>
+<pre><code class="language-javascript"><span class="tok-comment">// app/courses/page.tsx  — một Server Component (không "use client")</span>
 <span class="tok-keyword">import</span> { prisma } <span class="tok-keyword">from</span> <span class="tok-string">"@/lib/db"</span>;
 <span class="tok-keyword">import</span> Link <span class="tok-keyword">from</span> <span class="tok-string">"next/link"</span>;
 
@@ -1053,7 +1053,7 @@ lib/
       ))}
     &lt;/ul&gt;
   );
-}</pre>
+}</code></pre>
 
 <h3>Server vs Client — ai chạy ở đâu</h3>
 <div class="lz-stack">
@@ -1098,7 +1098,7 @@ lib/
 <p class="lead">Let us ship the first end-to-end slice: a page that shows the logged-in student the courses they enrolled in. It combines everything so far — the session, a Prisma query with a relation filter, and a Server Component — with no separate API needed.</p>
 
 <h3>Step 1 — the page reads the session on the server</h3>
-<pre><span class="tok-comment">// app/my-courses/page.tsx  (Server Component)</span>
+<pre><code class="language-javascript"><span class="tok-comment">// app/my-courses/page.tsx  (Server Component)</span>
 <span class="tok-keyword">import</span> { prisma } <span class="tok-keyword">from</span> <span class="tok-string">"@/lib/db"</span>;
 <span class="tok-keyword">import</span> { auth } <span class="tok-keyword">from</span> <span class="tok-string">"@/lib/auth"</span>;
 <span class="tok-keyword">import</span> { redirect } <span class="tok-keyword">from</span> <span class="tok-string">"next/navigation"</span>;
@@ -1126,10 +1126,10 @@ lib/
       &lt;/ul&gt;
     &lt;/section&gt;
   );
-}</pre>
+}</code></pre>
 
 <h3>Step 2 — the enrol action (Route Handler, UNIQUE-safe)</h3>
-<pre><span class="tok-comment">// app/api/courses/[id]/enroll/route.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// app/api/courses/[id]/enroll/route.ts</span>
 <span class="tok-keyword">export async function</span> <span class="tok-function">POST</span>(_req: <span class="tok-type">Request</span>, { params }: { params: { id: <span class="tok-type">string</span> } }) {
   <span class="tok-keyword">const</span> session = <span class="tok-keyword">await</span> auth();
   <span class="tok-keyword">if</span> (!session) <span class="tok-keyword">return</span> NextResponse.json({ error: <span class="tok-string">"Unauthorized"</span> }, { status: <span class="tok-number">401</span> });
@@ -1143,7 +1143,7 @@ lib/
     <span class="tok-keyword">throw</span> e;
   }
   <span class="tok-keyword">return</span> NextResponse.json({ ok: <span class="tok-keyword">true</span> }, { status: <span class="tok-number">201</span> });
-}</pre>
+}</code></pre>
 
 <h3>Worked example — the flow end to end</h3>
 <div class="out"><b>1.</b> An logs in → session.user.id = "u_an".
@@ -1164,7 +1164,7 @@ lib/
 <p class="lead">Hãy ship lát cắt đầu tiên từ đầu đến cuối: một trang cho sinh viên đang đăng nhập thấy các khoá họ đã ghi danh. Nó gộp mọi thứ tới giờ — session, một truy vấn Prisma lọc theo quan hệ, và một Server Component — không cần API riêng.</p>
 
 <h3>Bước 1 — trang đọc session trên server</h3>
-<pre><span class="tok-comment">// app/my-courses/page.tsx  (Server Component)</span>
+<pre><code class="language-javascript"><span class="tok-comment">// app/my-courses/page.tsx  (Server Component)</span>
 <span class="tok-keyword">import</span> { prisma } <span class="tok-keyword">from</span> <span class="tok-string">"@/lib/db"</span>;
 <span class="tok-keyword">import</span> { auth } <span class="tok-keyword">from</span> <span class="tok-string">"@/lib/auth"</span>;
 <span class="tok-keyword">import</span> { redirect } <span class="tok-keyword">from</span> <span class="tok-string">"next/navigation"</span>;
@@ -1192,10 +1192,10 @@ lib/
       &lt;/ul&gt;
     &lt;/section&gt;
   );
-}</pre>
+}</code></pre>
 
 <h3>Bước 2 — hành động ghi danh (Route Handler, an toàn UNIQUE)</h3>
-<pre><span class="tok-comment">// app/api/courses/[id]/enroll/route.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// app/api/courses/[id]/enroll/route.ts</span>
 <span class="tok-keyword">export async function</span> <span class="tok-function">POST</span>(_req: <span class="tok-type">Request</span>, { params }: { params: { id: <span class="tok-type">string</span> } }) {
   <span class="tok-keyword">const</span> session = <span class="tok-keyword">await</span> auth();
   <span class="tok-keyword">if</span> (!session) <span class="tok-keyword">return</span> NextResponse.json({ error: <span class="tok-string">"Unauthorized"</span> }, { status: <span class="tok-number">401</span> });
@@ -1209,7 +1209,7 @@ lib/
     <span class="tok-keyword">throw</span> e;
   }
   <span class="tok-keyword">return</span> NextResponse.json({ ok: <span class="tok-keyword">true</span> }, { status: <span class="tok-number">201</span> });
-}</pre>
+}</code></pre>
 
 <h3>Ví dụ có lời giải — luồng từ đầu tới cuối</h3>
 <div class="out"><b>1.</b> An đăng nhập → session.user.id = "u_an".
@@ -1242,25 +1242,25 @@ lib/
 <p class="lead">A learner enrols and takes quizzes; an instructor creates courses. NextAuth (Auth.js) issues the session; the server reads it in every Server Component, Route Handler and Server Action — the client is never trusted for authorization.</p>
 
 <h3>Read the session on the server</h3>
-<pre><span class="tok-comment">// any Server Component or Route Handler</span>
+<pre><code class="language-javascript"><span class="tok-comment">// any Server Component or Route Handler</span>
 <span class="tok-keyword">import</span> { auth } <span class="tok-keyword">from</span> <span class="tok-string">"@/auth"</span>;
 
 <span class="tok-keyword">const</span> session = <span class="tok-keyword">await</span> <span class="tok-function">auth</span>();
 <span class="tok-keyword">if</span> (!session) <span class="tok-function">redirect</span>(<span class="tok-string">"/login"</span>);       <span class="tok-comment">// not signed in</span>
-<span class="tok-keyword">const</span> { id, role } = session.user;       <span class="tok-comment">// role: LEARNER | INSTRUCTOR</span></pre>
+<span class="tok-keyword">const</span> { id, role } = session.user;       <span class="tok-comment">// role: LEARNER | INSTRUCTOR</span></code></pre>
 
 <h3>Guard whole route groups with middleware</h3>
-<pre><span class="tok-comment">// middleware.ts — runs before matched routes</span>
+<pre><code class="language-javascript"><span class="tok-comment">// middleware.ts — runs before matched routes</span>
 <span class="tok-keyword">export</span> { auth <span class="tok-keyword">as</span> middleware } <span class="tok-keyword">from</span> <span class="tok-string">"@/auth"</span>;
-<span class="tok-keyword">export const</span> config = { matcher: [<span class="tok-string">"/dashboard/:path*"</span>, <span class="tok-string">"/api/attempts/:path*"</span>] };</pre>
+<span class="tok-keyword">export const</span> config = { matcher: [<span class="tok-string">"/dashboard/:path*"</span>, <span class="tok-string">"/api/attempts/:path*"</span>] };</code></pre>
 
 <h3>Role check where it matters</h3>
-<pre><span class="tok-keyword">export async function</span> <span class="tok-function">POST</span>(req: Request) {
+<pre><code class="language-javascript"><span class="tok-keyword">export async function</span> <span class="tok-function">POST</span>(req: Request) {
   <span class="tok-keyword">const</span> session = <span class="tok-keyword">await</span> <span class="tok-function">auth</span>();
   <span class="tok-keyword">if</span> (session?.user.role !== <span class="tok-string">"INSTRUCTOR"</span>)
     <span class="tok-keyword">return</span> Response.<span class="tok-function">json</span>({ message: <span class="tok-string">"Forbidden"</span> }, { status: <span class="tok-number">403</span> });
   <span class="tok-comment">// ... create the course</span>
-}</pre>
+}</code></pre>
 
 <div class="pitfall"><strong>Trap:</strong> checking the role only in the client component that renders the "Create course" button. Hiding a button is UX, not security — the Route Handler must re-check the role, because anyone can POST to your API directly with curl.</div>
 
@@ -1278,25 +1278,25 @@ lib/
 <p class="lead">Học viên ghi danh và làm quiz; giảng viên tạo khoá học. NextAuth (Auth.js) phát phiên; server đọc nó ở mọi Server Component, Route Handler và Server Action — client không bao giờ được tin để phân quyền.</p>
 
 <h3>Đọc phiên ở server</h3>
-<pre><span class="tok-comment">// bất kỳ Server Component hay Route Handler nào</span>
+<pre><code class="language-javascript"><span class="tok-comment">// bất kỳ Server Component hay Route Handler nào</span>
 <span class="tok-keyword">import</span> { auth } <span class="tok-keyword">from</span> <span class="tok-string">"@/auth"</span>;
 
 <span class="tok-keyword">const</span> session = <span class="tok-keyword">await</span> <span class="tok-function">auth</span>();
 <span class="tok-keyword">if</span> (!session) <span class="tok-function">redirect</span>(<span class="tok-string">"/login"</span>);       <span class="tok-comment">// chưa đăng nhập</span>
-<span class="tok-keyword">const</span> { id, role } = session.user;       <span class="tok-comment">// role: LEARNER | INSTRUCTOR</span></pre>
+<span class="tok-keyword">const</span> { id, role } = session.user;       <span class="tok-comment">// role: LEARNER | INSTRUCTOR</span></code></pre>
 
 <h3>Bảo vệ cả nhóm route bằng middleware</h3>
-<pre><span class="tok-comment">// middleware.ts — chạy trước các route khớp</span>
+<pre><code class="language-javascript"><span class="tok-comment">// middleware.ts — chạy trước các route khớp</span>
 <span class="tok-keyword">export</span> { auth <span class="tok-keyword">as</span> middleware } <span class="tok-keyword">from</span> <span class="tok-string">"@/auth"</span>;
-<span class="tok-keyword">export const</span> config = { matcher: [<span class="tok-string">"/dashboard/:path*"</span>, <span class="tok-string">"/api/attempts/:path*"</span>] };</pre>
+<span class="tok-keyword">export const</span> config = { matcher: [<span class="tok-string">"/dashboard/:path*"</span>, <span class="tok-string">"/api/attempts/:path*"</span>] };</code></pre>
 
 <h3>Kiểm role ở nơi quan trọng</h3>
-<pre><span class="tok-keyword">export async function</span> <span class="tok-function">POST</span>(req: Request) {
+<pre><code class="language-javascript"><span class="tok-keyword">export async function</span> <span class="tok-function">POST</span>(req: Request) {
   <span class="tok-keyword">const</span> session = <span class="tok-keyword">await</span> <span class="tok-function">auth</span>();
   <span class="tok-keyword">if</span> (session?.user.role !== <span class="tok-string">"INSTRUCTOR"</span>)
     <span class="tok-keyword">return</span> Response.<span class="tok-function">json</span>({ message: <span class="tok-string">"Forbidden"</span> }, { status: <span class="tok-number">403</span> });
   <span class="tok-comment">// ... tạo khoá học</span>
-}</pre>
+}</code></pre>
 
 <div class="pitfall"><strong>Bẫy:</strong> chỉ kiểm role trong client component render nút "Tạo khoá học". Ẩn nút là UX, không phải bảo mật — Route Handler phải kiểm lại role, vì ai cũng có thể POST thẳng tới API bằng curl.</div>
 
@@ -1326,17 +1326,17 @@ lib/
 <p class="lead">This is the feature graders remember. The tempting design — send the quiz <em>with</em> its correct answers and grade in JavaScript — is a security disaster: anyone opens DevTools and reads every answer. The fix is a strict boundary: questions go to the client <strong>without</strong> the key; grading happens on the server.</p>
 
 <h3>The vulnerable design — answers leak to the client</h3>
-<pre><span class="tok-comment">// ❌ NEVER: the correct index rides along to the browser</span>
+<pre><code class="language-javascript"><span class="tok-comment">// ❌ NEVER: the correct index rides along to the browser</span>
 <span class="tok-keyword">const</span> quiz = <span class="tok-keyword">await</span> prisma.quiz.<span class="tok-function">findUnique</span>({
   where: { id }, include: { questions: <span class="tok-keyword">true</span> },   <span class="tok-comment">// questions.correctIndex included!</span>
 });
-<span class="tok-keyword">return</span> Response.<span class="tok-function">json</span>(quiz);   <span class="tok-comment">// open DevTools → every answer is right there</span></pre>
+<span class="tok-keyword">return</span> Response.<span class="tok-function">json</span>(quiz);   <span class="tok-comment">// open DevTools → every answer is right there</span></code></pre>
 <div class="out">Network tab → /api/quiz/5 response:
   { "questions": [ { "text": "2+2?", "options": ["3","4","5"], "correctIndex": 1 }, ... ] }
                                                               ^^^^^^^^^^^^^^^ the answer, handed to the cheater</div>
 
 <h3>The safe design — strip the key on the way out</h3>
-<pre><span class="tok-comment">// ✅ send questions WITHOUT correctIndex</span>
+<pre><code class="language-javascript"><span class="tok-comment">// ✅ send questions WITHOUT correctIndex</span>
 <span class="tok-keyword">const</span> quiz = <span class="tok-keyword">await</span> prisma.quiz.<span class="tok-function">findUnique</span>({
   where: { id },
   select: {
@@ -1344,10 +1344,10 @@ lib/
     questions: { select: { id: <span class="tok-keyword">true</span>, text: <span class="tok-keyword">true</span>, options: <span class="tok-keyword">true</span> } },  <span class="tok-comment">// NO correctIndex</span>
   },
 });
-<span class="tok-keyword">return</span> Response.<span class="tok-function">json</span>(quiz);   <span class="tok-comment">// the client physically cannot know the answers</span></pre>
+<span class="tok-keyword">return</span> Response.<span class="tok-function">json</span>(quiz);   <span class="tok-comment">// the client physically cannot know the answers</span></code></pre>
 
 <h3>Grading — a Server Action the client can't tamper with</h3>
-<pre><span class="tok-string">"use server"</span>;
+<pre><code class="language-javascript"><span class="tok-string">"use server"</span>;
 <span class="tok-keyword">export async function</span> <span class="tok-function">submitAttempt</span>(quizId: number, answers: Record&lt;number, number&gt;) {
   <span class="tok-keyword">const</span> session = <span class="tok-keyword">await</span> <span class="tok-function">auth</span>();
   <span class="tok-keyword">if</span> (!session) <span class="tok-keyword">throw new</span> <span class="tok-type">Error</span>(<span class="tok-string">"Unauthorized"</span>);
@@ -1365,7 +1365,7 @@ lib/
   <span class="tok-comment">// store the attempt (next lesson: enforce one attempt)</span>
   <span class="tok-keyword">await</span> prisma.attempt.<span class="tok-function">create</span>({ data: { quizId, userId: session.user.id, score: pct, answers } });
   <span class="tok-keyword">return</span> { score, total: questions.length, pct };
-}</pre>
+}</code></pre>
 
 <h3>Worked example — a cheater's failed attempt</h3>
 <div class="out">Attacker inspects /api/quiz/5   → sees only { text, options }, NO correctIndex ✅
@@ -1390,17 +1390,17 @@ The only way to score 100% is to actually know the answers.</div>
 <p class="lead">Đây là tính năng giám khảo nhớ nhất. Thiết kế hấp dẫn — gửi quiz <em>kèm</em> đáp án đúng rồi chấm trong JavaScript — là thảm hoạ bảo mật: ai cũng mở DevTools và đọc mọi đáp án. Cách sửa là một ranh giới chặt: câu hỏi gửi cho client <strong>không kèm</strong> đáp án; chấm điểm diễn ra ở server.</p>
 
 <h3>Thiết kế lỗ hổng — đáp án rò ra client</h3>
-<pre><span class="tok-comment">// ❌ ĐỪNG BAO GIỜ: correctIndex đi kèm xuống trình duyệt</span>
+<pre><code class="language-javascript"><span class="tok-comment">// ❌ ĐỪNG BAO GIỜ: correctIndex đi kèm xuống trình duyệt</span>
 <span class="tok-keyword">const</span> quiz = <span class="tok-keyword">await</span> prisma.quiz.<span class="tok-function">findUnique</span>({
   where: { id }, include: { questions: <span class="tok-keyword">true</span> },   <span class="tok-comment">// gồm cả questions.correctIndex!</span>
 });
-<span class="tok-keyword">return</span> Response.<span class="tok-function">json</span>(quiz);   <span class="tok-comment">// mở DevTools → mọi đáp án ngay đó</span></pre>
+<span class="tok-keyword">return</span> Response.<span class="tok-function">json</span>(quiz);   <span class="tok-comment">// mở DevTools → mọi đáp án ngay đó</span></code></pre>
 <div class="out">Tab Network → phản hồi /api/quiz/5:
   { "questions": [ { "text": "2+2?", "options": ["3","4","5"], "correctIndex": 1 }, ... ] }
                                                               ^^^^^^^^^^^^^^^ đáp án, trao tận tay kẻ gian</div>
 
 <h3>Thiết kế an toàn — bỏ đáp án khi gửi ra</h3>
-<pre><span class="tok-comment">// ✅ gửi câu hỏi KHÔNG kèm correctIndex</span>
+<pre><code class="language-javascript"><span class="tok-comment">// ✅ gửi câu hỏi KHÔNG kèm correctIndex</span>
 <span class="tok-keyword">const</span> quiz = <span class="tok-keyword">await</span> prisma.quiz.<span class="tok-function">findUnique</span>({
   where: { id },
   select: {
@@ -1408,10 +1408,10 @@ The only way to score 100% is to actually know the answers.</div>
     questions: { select: { id: <span class="tok-keyword">true</span>, text: <span class="tok-keyword">true</span>, options: <span class="tok-keyword">true</span> } },  <span class="tok-comment">// KHÔNG correctIndex</span>
   },
 });
-<span class="tok-keyword">return</span> Response.<span class="tok-function">json</span>(quiz);   <span class="tok-comment">// client về mặt vật lý không thể biết đáp án</span></pre>
+<span class="tok-keyword">return</span> Response.<span class="tok-function">json</span>(quiz);   <span class="tok-comment">// client về mặt vật lý không thể biết đáp án</span></code></pre>
 
 <h3>Chấm điểm — một Server Action client không can thiệp được</h3>
-<pre><span class="tok-string">"use server"</span>;
+<pre><code class="language-javascript"><span class="tok-string">"use server"</span>;
 <span class="tok-keyword">export async function</span> <span class="tok-function">submitAttempt</span>(quizId: number, answers: Record&lt;number, number&gt;) {
   <span class="tok-keyword">const</span> session = <span class="tok-keyword">await</span> <span class="tok-function">auth</span>();
   <span class="tok-keyword">if</span> (!session) <span class="tok-keyword">throw new</span> <span class="tok-type">Error</span>(<span class="tok-string">"Unauthorized"</span>);
@@ -1429,7 +1429,7 @@ The only way to score 100% is to actually know the answers.</div>
   <span class="tok-comment">// lưu lượt làm (bài sau: cưỡng chế một lượt)</span>
   <span class="tok-keyword">await</span> prisma.attempt.<span class="tok-function">create</span>({ data: { quizId, userId: session.user.id, score: pct, answers } });
   <span class="tok-keyword">return</span> { score, total: questions.length, pct };
-}</pre>
+}</code></pre>
 
 <h3>Ví dụ có lời giải — cú gian lận thất bại</h3>
 <div class="out">Kẻ tấn công soi /api/quiz/5   → chỉ thấy { text, options }, KHÔNG correctIndex ✅
@@ -1474,7 +1474,7 @@ model Attempt {
 }</pre>
 
 <h3>The guarded submit</h3>
-<pre><span class="tok-string">"use server"</span>;
+<pre><code class="language-javascript"><span class="tok-string">"use server"</span>;
 <span class="tok-keyword">export async function</span> <span class="tok-function">submitAttempt</span>(quizId, answers) {
   <span class="tok-keyword">const</span> session = <span class="tok-keyword">await</span> <span class="tok-function">auth</span>();
   <span class="tok-comment">// ... grade on the server (previous lesson) → pct</span>
@@ -1488,7 +1488,7 @@ model Attempt {
     <span class="tok-keyword">throw</span> e;
   }
   <span class="tok-keyword">return</span> { pct };
-}</pre>
+}</code></pre>
 
 <h3>Worked example — the double-submit</h3>
 <div class="out">Learner submits attempt        → 201, score stored, @@unique now holds (quiz 5, user 12)
@@ -1526,7 +1526,7 @@ model Attempt {
 }</pre>
 
 <h3>Submit có canh</h3>
-<pre><span class="tok-string">"use server"</span>;
+<pre><code class="language-javascript"><span class="tok-string">"use server"</span>;
 <span class="tok-keyword">export async function</span> <span class="tok-function">submitAttempt</span>(quizId, answers) {
   <span class="tok-keyword">const</span> session = <span class="tok-keyword">await</span> <span class="tok-function">auth</span>();
   <span class="tok-comment">// ... chấm ở server (bài trước) → pct</span>
@@ -1540,7 +1540,7 @@ model Attempt {
     <span class="tok-keyword">throw</span> e;
   }
   <span class="tok-keyword">return</span> { pct };
-}</pre>
+}</code></pre>
 
 <h3>Ví dụ có lời giải — nộp hai lần</h3>
 <div class="out">Học viên nộp lượt          → 201, điểm được lưu, @@unique giờ giữ (quiz 5, user 12)
@@ -1646,14 +1646,14 @@ Có đúng MỘT lượt được chấm mỗi học viên. ✅</div>
 <p class="lead">The quiz page splits along the trust boundary: a Server Component fetches the questions (without answers), a Client Component handles selection and the timer, and the Server Action grades. This is the App Router at its best.</p>
 
 <h3>Server Component — fetch the safe payload</h3>
-<pre><span class="tok-comment">// app/quiz/[id]/page.tsx — runs on the server</span>
+<pre><code class="language-javascript"><span class="tok-comment">// app/quiz/[id]/page.tsx — runs on the server</span>
 <span class="tok-keyword">export default async function</span> <span class="tok-function">QuizPage</span>({ params }) {
   <span class="tok-keyword">const</span> quiz = <span class="tok-keyword">await</span> <span class="tok-function">getQuizForClient</span>(params.id);   <span class="tok-comment">// NO correctIndex</span>
   <span class="tok-keyword">return</span> &lt;QuizForm quiz={quiz} /&gt;;                        <span class="tok-comment">// hand to a client component</span>
-}</pre>
+}</code></pre>
 
 <h3>Client Component — selection &amp; submit</h3>
-<pre><span class="tok-string">"use client"</span>;
+<pre><code class="language-javascript"><span class="tok-string">"use client"</span>;
 <span class="tok-keyword">export function</span> <span class="tok-function">QuizForm</span>({ quiz }) {
   <span class="tok-keyword">const</span> [answers, setAnswers] = <span class="tok-function">useState</span>({});
   <span class="tok-keyword">const</span> [result, setResult] = <span class="tok-function">useState</span>(<span class="tok-keyword">null</span>);
@@ -1673,7 +1673,7 @@ Có đúng MỘT lượt được chấm mỗi học viên. ✅</div>
 
   <span class="tok-keyword">if</span> (result) <span class="tok-keyword">return</span> &lt;p&gt;Your score: {result.pct}%&lt;/p&gt;;
   <span class="tok-keyword">return</span> ( <span class="tok-comment">/* render questions + options; disabled={busy} submit */</span> );
-}</pre>
+}</code></pre>
 
 <div class="pitfall"><strong>Trap:</strong> marking the whole page <code>"use client"</code>. Then the data fetch and any secrets run in the browser too, and you lose the server boundary that protects the answer key. Keep the page a Server Component; push only the interactive island to the client.</div>
 
@@ -1692,14 +1692,14 @@ Có đúng MỘT lượt được chấm mỗi học viên. ✅</div>
 <p class="lead">Trang quiz tách theo ranh giới tin cậy: một Server Component lấy câu hỏi (không đáp án), một Client Component xử lý chọn và bộ đếm giờ, và Server Action chấm. Đây là App Router ở dạng đẹp nhất.</p>
 
 <h3>Server Component — lấy payload an toàn</h3>
-<pre><span class="tok-comment">// app/quiz/[id]/page.tsx — chạy ở server</span>
+<pre><code class="language-javascript"><span class="tok-comment">// app/quiz/[id]/page.tsx — chạy ở server</span>
 <span class="tok-keyword">export default async function</span> <span class="tok-function">QuizPage</span>({ params }) {
   <span class="tok-keyword">const</span> quiz = <span class="tok-keyword">await</span> <span class="tok-function">getQuizForClient</span>(params.id);   <span class="tok-comment">// KHÔNG correctIndex</span>
   <span class="tok-keyword">return</span> &lt;QuizForm quiz={quiz} /&gt;;                        <span class="tok-comment">// chuyển cho client component</span>
-}</pre>
+}</code></pre>
 
 <h3>Client Component — chọn &amp; nộp</h3>
-<pre><span class="tok-string">"use client"</span>;
+<pre><code class="language-javascript"><span class="tok-string">"use client"</span>;
 <span class="tok-keyword">export function</span> <span class="tok-function">QuizForm</span>({ quiz }) {
   <span class="tok-keyword">const</span> [answers, setAnswers] = <span class="tok-function">useState</span>({});
   <span class="tok-keyword">const</span> [result, setResult] = <span class="tok-function">useState</span>(<span class="tok-keyword">null</span>);
@@ -1719,7 +1719,7 @@ Có đúng MỘT lượt được chấm mỗi học viên. ✅</div>
 
   <span class="tok-keyword">if</span> (result) <span class="tok-keyword">return</span> &lt;p&gt;Điểm của bạn: {result.pct}%&lt;/p&gt;;
   <span class="tok-keyword">return</span> ( <span class="tok-comment">/* render câu hỏi + lựa chọn; nút submit disabled={busy} */</span> );
-}</pre>
+}</code></pre>
 
 <div class="pitfall"><strong>Bẫy:</strong> đánh dấu cả trang <code>"use client"</code>. Khi đó việc lấy dữ liệu và mọi bí mật cũng chạy ở trình duyệt, và bạn mất ranh giới server bảo vệ đáp án. Giữ trang là Server Component; chỉ đẩy hòn đảo tương tác xuống client.</div>
 
@@ -1755,8 +1755,8 @@ Có đúng MỘT lượt được chấm mỗi học viên. ✅</div>
 </div>
 
 <h3>Enable standalone output</h3>
-<pre><span class="tok-comment">// next.config.js</span>
-module.exports = { output: <span class="tok-string">"standalone"</span> };   <span class="tok-comment">// bundles only what the server needs</span></pre>
+<pre><code class="language-javascript"><span class="tok-comment">// next.config.js</span>
+module.exports = { output: <span class="tok-string">"standalone"</span> };   <span class="tok-comment">// bundles only what the server needs</span></code></pre>
 
 <h3>docker-compose.yml</h3>
 <pre><span class="tok-keyword">services</span>:
@@ -1816,8 +1816,8 @@ module.exports = { output: <span class="tok-string">"standalone"</span> };   <sp
 </div>
 
 <h3>Bật output standalone</h3>
-<pre><span class="tok-comment">// next.config.js</span>
-module.exports = { output: <span class="tok-string">"standalone"</span> };   <span class="tok-comment">// chỉ đóng gói cái server cần</span></pre>
+<pre><code class="language-javascript"><span class="tok-comment">// next.config.js</span>
+module.exports = { output: <span class="tok-string">"standalone"</span> };   <span class="tok-comment">// chỉ đóng gói cái server cần</span></code></pre>
 
 <h3>docker-compose.yml</h3>
 <pre><span class="tok-keyword">services</span>:
@@ -1882,36 +1882,36 @@ module.exports = { output: <span class="tok-string">"standalone"</span> };   <sp
 <p class="lead">The grading core is secure. These four additions are what a reviewer of an e-learning app notices — each a small, self-contained ★ beyond the syllabus.</p>
 
 <h3>1) Timed quizzes — enforce the deadline on the server</h3>
-<pre><span class="tok-comment">// when the learner starts, record the server clock</span>
+<pre><code class="language-javascript"><span class="tok-comment">// when the learner starts, record the server clock</span>
 <span class="tok-keyword">const</span> attempt = <span class="tok-keyword">await</span> prisma.attempt.<span class="tok-function">create</span>({
   data: { quizId, userId, startedAt: <span class="tok-keyword">new</span> Date(), status: <span class="tok-string">"IN_PROGRESS"</span> },
 });
 <span class="tok-comment">// on submit, the SERVER checks elapsed time — the client countdown is only cosmetic</span>
 <span class="tok-keyword">const</span> elapsedSec = (Date.now() - attempt.startedAt.getTime()) / <span class="tok-number">1000</span>;
 <span class="tok-keyword">if</span> (elapsedSec &gt; quiz.timeLimitSec + <span class="tok-number">5</span>)   <span class="tok-comment">// small grace for latency</span>
-  <span class="tok-keyword">throw new</span> <span class="tok-type">ConflictError</span>(<span class="tok-string">"Time is up"</span>);</pre>
+  <span class="tok-keyword">throw new</span> <span class="tok-type">ConflictError</span>(<span class="tok-string">"Time is up"</span>);</code></pre>
 <p>A client-side timer can be paused in DevTools — so the authoritative deadline check lives on the server, compared against <code>startedAt</code>.</p>
 
 <h3>2) Shuffle questions &amp; options — blunt shoulder-surfing</h3>
-<pre><span class="tok-comment">// deterministic per-attempt shuffle so reload keeps the same order</span>
+<pre><code class="language-javascript"><span class="tok-comment">// deterministic per-attempt shuffle so reload keeps the same order</span>
 <span class="tok-keyword">const</span> ordered = <span class="tok-function">seededShuffle</span>(questions, attempt.id);   <span class="tok-comment">// same seed → same order</span>
-<span class="tok-comment">// grading still matches by question.id, so order never affects correctness</span></pre>
+<span class="tok-comment">// grading still matches by question.id, so order never affects correctness</span></code></pre>
 
 <h3>3) Progress tracking — completion at a glance</h3>
-<pre><span class="tok-comment">-- percent of a course's quizzes each learner has completed</span>
+<pre><code class="language-sql"><span class="tok-comment">-- percent of a course's quizzes each learner has completed</span>
 <span class="tok-keyword">SELECT</span> u.id,
   <span class="tok-function">ROUND</span>(<span class="tok-number">100.0</span> * <span class="tok-function">COUNT</span>(a.id) / <span class="tok-function">NULLIF</span>((<span class="tok-keyword">SELECT</span> <span class="tok-function">COUNT</span>(*) <span class="tok-keyword">FROM</span> quizzes <span class="tok-keyword">WHERE</span> course_id = :c), <span class="tok-number">0</span>)) <span class="tok-keyword">AS</span> pct
 <span class="tok-keyword">FROM</span> users u
 <span class="tok-keyword">LEFT JOIN</span> attempts a <span class="tok-keyword">ON</span> a.user_id = u.id
   <span class="tok-keyword">AND</span> a.quiz_id <span class="tok-keyword">IN</span> (<span class="tok-keyword">SELECT</span> id <span class="tok-keyword">FROM</span> quizzes <span class="tok-keyword">WHERE</span> course_id = :c)
-<span class="tok-keyword">GROUP BY</span> u.id;</pre>
+<span class="tok-keyword">GROUP BY</span> u.id;</code></pre>
 
 <h3>4) Cache &amp; revalidation — fast pages, fresh data</h3>
-<pre><span class="tok-string">"use server"</span>;
+<pre><code class="language-javascript"><span class="tok-string">"use server"</span>;
 <span class="tok-keyword">export async function</span> <span class="tok-function">publishCourse</span>(id) {
   <span class="tok-keyword">await</span> prisma.course.<span class="tok-function">update</span>({ where: { id }, data: { published: <span class="tok-keyword">true</span> } });
   <span class="tok-function">revalidatePath</span>(<span class="tok-string">"/courses"</span>);   <span class="tok-comment">// drop the cached course list so it re-renders fresh</span>
-}</pre>
+}</code></pre>
 <p>Static-render the course catalogue for speed, then <code>revalidatePath</code> after a mutation so the change appears without making every visitor pay for a live query.</p>
 
 <div class="pitfall"><strong>Trap:</strong> trusting the client-side countdown as the real deadline. It is display-only; a determined user pauses it. Always compare submit time to the server-recorded <code>startedAt</code>.</div>
@@ -1931,36 +1931,36 @@ module.exports = { output: <span class="tok-string">"standalone"</span> };   <sp
 <p class="lead">Lõi chấm điểm đã an toàn. Bốn bổ sung này là thứ người chấm một app e-learning để ý — mỗi cái một ★ nhỏ, độc lập, vượt giáo trình.</p>
 
 <h3>1) Quiz có giờ — cưỡng chế hạn ở server</h3>
-<pre><span class="tok-comment">// khi học viên bắt đầu, ghi đồng hồ server</span>
+<pre><code class="language-javascript"><span class="tok-comment">// khi học viên bắt đầu, ghi đồng hồ server</span>
 <span class="tok-keyword">const</span> attempt = <span class="tok-keyword">await</span> prisma.attempt.<span class="tok-function">create</span>({
   data: { quizId, userId, startedAt: <span class="tok-keyword">new</span> Date(), status: <span class="tok-string">"IN_PROGRESS"</span> },
 });
 <span class="tok-comment">// khi nộp, SERVER kiểm thời gian trôi — bộ đếm client chỉ để trang trí</span>
 <span class="tok-keyword">const</span> elapsedSec = (Date.now() - attempt.startedAt.getTime()) / <span class="tok-number">1000</span>;
 <span class="tok-keyword">if</span> (elapsedSec &gt; quiz.timeLimitSec + <span class="tok-number">5</span>)   <span class="tok-comment">// nới nhẹ cho độ trễ</span>
-  <span class="tok-keyword">throw new</span> <span class="tok-type">ConflictError</span>(<span class="tok-string">"Hết giờ"</span>);</pre>
+  <span class="tok-keyword">throw new</span> <span class="tok-type">ConflictError</span>(<span class="tok-string">"Hết giờ"</span>);</code></pre>
 <p>Bộ đếm phía client có thể bị tạm dừng trong DevTools — nên kiểm hạn chính thức sống ở server, so với <code>startedAt</code>.</p>
 
 <h3>2) Xáo câu hỏi &amp; lựa chọn — cản nhìn trộm bài</h3>
-<pre><span class="tok-comment">// xáo tất định theo từng lượt để reload giữ nguyên thứ tự</span>
+<pre><code class="language-javascript"><span class="tok-comment">// xáo tất định theo từng lượt để reload giữ nguyên thứ tự</span>
 <span class="tok-keyword">const</span> ordered = <span class="tok-function">seededShuffle</span>(questions, attempt.id);   <span class="tok-comment">// cùng seed → cùng thứ tự</span>
-<span class="tok-comment">// chấm vẫn khớp theo question.id, nên thứ tự không bao giờ ảnh hưởng đúng/sai</span></pre>
+<span class="tok-comment">// chấm vẫn khớp theo question.id, nên thứ tự không bao giờ ảnh hưởng đúng/sai</span></code></pre>
 
 <h3>3) Theo dõi tiến độ — hoàn thành trong nháy mắt</h3>
-<pre><span class="tok-comment">-- phần trăm quiz của một khoá mỗi học viên đã hoàn thành</span>
+<pre><code class="language-sql"><span class="tok-comment">-- phần trăm quiz của một khoá mỗi học viên đã hoàn thành</span>
 <span class="tok-keyword">SELECT</span> u.id,
   <span class="tok-function">ROUND</span>(<span class="tok-number">100.0</span> * <span class="tok-function">COUNT</span>(a.id) / <span class="tok-function">NULLIF</span>((<span class="tok-keyword">SELECT</span> <span class="tok-function">COUNT</span>(*) <span class="tok-keyword">FROM</span> quizzes <span class="tok-keyword">WHERE</span> course_id = :c), <span class="tok-number">0</span>)) <span class="tok-keyword">AS</span> pct
 <span class="tok-keyword">FROM</span> users u
 <span class="tok-keyword">LEFT JOIN</span> attempts a <span class="tok-keyword">ON</span> a.user_id = u.id
   <span class="tok-keyword">AND</span> a.quiz_id <span class="tok-keyword">IN</span> (<span class="tok-keyword">SELECT</span> id <span class="tok-keyword">FROM</span> quizzes <span class="tok-keyword">WHERE</span> course_id = :c)
-<span class="tok-keyword">GROUP BY</span> u.id;</pre>
+<span class="tok-keyword">GROUP BY</span> u.id;</code></pre>
 
 <h3>4) Cache &amp; revalidate — trang nhanh, dữ liệu mới</h3>
-<pre><span class="tok-string">"use server"</span>;
+<pre><code class="language-javascript"><span class="tok-string">"use server"</span>;
 <span class="tok-keyword">export async function</span> <span class="tok-function">publishCourse</span>(id) {
   <span class="tok-keyword">await</span> prisma.course.<span class="tok-function">update</span>({ where: { id }, data: { published: <span class="tok-keyword">true</span> } });
   <span class="tok-function">revalidatePath</span>(<span class="tok-string">"/courses"</span>);   <span class="tok-comment">// bỏ cache danh sách khoá để render lại mới</span>
-}</pre>
+}</code></pre>
 <p>Render tĩnh danh mục khoá học cho nhanh, rồi <code>revalidatePath</code> sau một mutation để thay đổi xuất hiện mà không bắt mỗi khách trả giá cho một query trực tiếp.</p>
 
 <div class="pitfall"><strong>Bẫy:</strong> tin bộ đếm phía client là hạn thật. Nó chỉ để hiển thị; một user quyết tâm sẽ tạm dừng nó. Luôn so thời điểm nộp với <code>startedAt</code> ghi ở server.</div>

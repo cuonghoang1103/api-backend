@@ -368,7 +368,7 @@ const c6 = doc('mcp201-6-1-serial', '6.1 — Serial communication: UART, SPI, I2
 <li><strong>SPI</strong> — fast, synchronous, full-duplex; a clock line plus a <strong>chip-select (CS)</strong> per device. For displays, SD cards, fast sensors.</li>
 <li><strong>I2C</strong> — only two wires (<strong>SDA</strong> data, <strong>SCL</strong> clock) shared by many devices, each with an address. For lots of slow sensors on one bus.</li>
 </ul>
-<pre><code>// UART: send one byte on AVR
+<pre><code class="language-java">// UART: send one byte on AVR
 void uart_send(uint8_t c) {
   while (!(UCSR0A &amp; (1 &lt;&lt; UDRE0))) ;  // wait for the buffer to empty
   UDR0 = c;                            // load the byte to transmit
@@ -384,7 +384,7 @@ void uart_send(uint8_t c) {
 <li><strong>SPI</strong> — nhanh, đồng bộ, song công; có dây clock cộng một <strong>chip-select (CS)</strong> cho mỗi thiết bị. Dùng cho màn hình, thẻ SD, cảm biến tốc độ cao.</li>
 <li><strong>I2C</strong> — chỉ hai dây (<strong>SDA</strong> dữ liệu, <strong>SCL</strong> clock) chung cho nhiều thiết bị, mỗi thiết bị một địa chỉ. Hợp khi có nhiều cảm biến chậm trên cùng một bus.</li>
 </ul>
-<pre><code>// UART: gửi một byte trên AVR
+<pre><code class="language-java">// UART: gửi một byte trên AVR
 void uart_send(uint8_t c) {
   while (!(UCSR0A &amp; (1 &lt;&lt; UDRE0))) ;  // chờ bộ đệm trống
   UDR0 = c;                            // nạp byte cần truyền

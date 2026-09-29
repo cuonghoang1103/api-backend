@@ -3,7 +3,7 @@
  * Ngôn ngữ Hàn, kỳ 5. Trích dẫn giáo trình (KHÔNG upload PDF): "한국
  * 기업문화의 이해"; "Korean Business Etiquette" (Boye De Mente); tài liệu
  * KOTRA. Giảng tiếng Việt + thuật ngữ Anh, kèm thuật ngữ &amp; cụm giao tiếp
- * tiếng Hàn (한글 + romaja + nghĩa Việt) trong bảng <pre><code>.
+ * tiếng Hàn (한글 + romaja + nghĩa Việt) trong bảng <pre><code class="language-javascript">.
  * Giữ NGUYÊN slug/semester/thumb. ⚠️ KHÔNG backtick/${; "\n"→\\n.
  */
 const bi = (en, vi) => `<div class="ml-en">${en}</div>\n<div class="ml-vi">${vi}</div>`;

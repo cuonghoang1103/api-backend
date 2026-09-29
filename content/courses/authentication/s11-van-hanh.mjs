@@ -52,7 +52,7 @@ export default {
 </div>
 
 <h3>Fail at boot, not at 3am</h3>
-<pre><code><span class="tok-comment">// Checked ONCE at startup. A missing secret ⇒ the process does NOT run.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Checked ONCE at startup. A missing secret ⇒ the process does NOT run.</span>
 const Required = z.object({
   DATABASE_URL:   z.string().url(),
   JWT_SECRET:     z.string().min(32),        <span class="tok-comment">// NO default value</span>
@@ -84,7 +84,7 @@ doc ma KHONG duoc khai       :  84
 # chung deu co gia tri mac dinh hop ly. Nhung: mot nguoi moi vao khong
 # biet co the chinh nhung gi, va nguoi di XOAY mot khoa khong co danh
 # sach nao de doi chieu. Danh sach do phai SINH RA TU MA, khong go tay.</div>
-<pre><code><span class="tok-comment">// Generate .env.example FROM THE CODE, and let CI fail when it drifts.</span>
+<pre><code class="language-bash"><span class="tok-comment">// Generate .env.example FROM THE CODE, and let CI fail when it drifts.</span>
 grep -rhoE 'process\\.env\\.[A-Z0-9_]+' src/ | sed 's/process\\.env\\.//' | sort -u &gt; /tmp/dang-doc
 grep -oE '^[A-Z0-9_]+' .env.example | sort -u &gt; /tmp/dang-khai
 diff /tmp/dang-doc /tmp/dang-khai || exit 1        <span class="tok-comment">// drift turns CI red</span></code></pre>
@@ -146,7 +146,7 @@ diff /tmp/dang-doc /tmp/dang-khai || exit 1        <span class="tok-comment">// 
 </div>
 
 <h3>Hỏng ngay lúc khởi động, đừng hỏng lúc ba giờ sáng</h3>
-<pre><code><span class="tok-comment">// Kiểm MỘT lần lúc khởi động. Thiếu bí mật ⇒ tiến trình KHÔNG chạy.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Kiểm MỘT lần lúc khởi động. Thiếu bí mật ⇒ tiến trình KHÔNG chạy.</span>
 const Required = z.object({
   DATABASE_URL:   z.string().url(),
   JWT_SECRET:     z.string().min(32),        <span class="tok-comment">// KHÔNG có giá trị mặc định</span>
@@ -178,7 +178,7 @@ doc ma KHONG duoc khai       :  84
 # chung deu co gia tri mac dinh hop ly. Nhung: mot nguoi moi vao khong
 # biet co the chinh nhung gi, va nguoi di XOAY mot khoa khong co danh
 # sach nao de doi chieu. Danh sach do phai SINH RA TU MA, khong go tay.</div>
-<pre><code><span class="tok-comment">// Sinh .env.example TỪ MÃ, rồi để CI báo hỏng khi nó lệch.</span>
+<pre><code class="language-bash"><span class="tok-comment">// Sinh .env.example TỪ MÃ, rồi để CI báo hỏng khi nó lệch.</span>
 grep -rhoE 'process\\.env\\.[A-Z0-9_]+' src/ | sed 's/process\\.env\\.//' | sort -u &gt; /tmp/dang-doc
 grep -oE '^[A-Z0-9_]+' .env.example | sort -u &gt; /tmp/dang-khai
 diff /tmp/dang-doc /tmp/dang-khai || exit 1        <span class="tok-comment">// lệch là CI đỏ</span></code></pre>
@@ -249,7 +249,7 @@ diff /tmp/dang-doc /tmp/dang-khai || exit 1        <span class="tok-comment">// 
 <div class="pitfall">
 <p><strong>Trap — signing with a key before every verifier knows about it is an instant, total outage.</strong> The last line of the measurement above is that mistake: a perfectly valid token, signed with a real key, rejected because the verifying side has never heard of <code>kid: k2</code>. It happens most often during a rolling deploy, where new instances sign with the new key while old instances are still verifying with only the old set — so half your requests fail and the half that works depends on which pod answered. Publish first, wait for the rollout to complete, and only then flip. And keep the two settings genuinely separate: a list of keys that verify, and one key id that signs.</p>
 </div>
-<pre><code><span class="tok-comment">// Two SEPARATE configurations. That is the entire mechanism.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Two SEPARATE configurations. That is the entire mechanism.</span>
 KHOA_KY_HIEN_TAI = 'k2'                    <span class="tok-comment">// exactly ONE signing key</span>
 CHUM_KHOA = { k1: '…', k2: '…' }           <span class="tok-comment">// MANY verification keys</span>
 
@@ -324,7 +324,7 @@ jwt.verify(token, key, { algorithms: ['HS256'] });</code></pre>
 <div class="pitfall">
 <p><strong>Bẫy — KÝ bằng một khoá trước khi mọi bên xác minh biết tới nó là một cú gián đoạn TỨC THÌ và TOÀN DIỆN.</strong> Dòng cuối trong phép đo ở trên chính là cái sai đó: một token hoàn toàn hợp lệ, ký bằng một khoá THẬT, bị từ chối vì phía xác minh chưa bao giờ nghe nói tới <code>kid: k2</code>. Nó hay xảy ra nhất trong một lần deploy cuốn chiếu, nơi các bản chạy MỚI ký bằng khoá mới trong khi các bản chạy CŨ vẫn chỉ xác minh bằng tập cũ — thế là một nửa số request hỏng, và nửa còn lại chạy được phụ thuộc vào việc pod nào trả lời. Hãy CÔNG BỐ trước, đợi cho đợt triển khai hoàn tất, rồi mới lật. Và hãy giữ hai cấu hình đó THẬT SỰ tách rời: một DANH SÁCH khoá để xác minh, và MỘT id khoá để ký.</p>
 </div>
-<pre><code><span class="tok-comment">// Hai cấu hình RIÊNG BIỆT. Đây là toàn bộ cơ chế.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Hai cấu hình RIÊNG BIỆT. Đây là toàn bộ cơ chế.</span>
 KHOA_KY_HIEN_TAI = 'k2'                    <span class="tok-comment">// đúng MỘT khoá ký</span>
 CHUM_KHOA = { k1: '…', k2: '…' }           <span class="tok-comment">// NHIỀU khoá xác minh</span>
 
@@ -420,7 +420,7 @@ rai deu 20 req / 120s
 </div>
 
 <h3>Answering, without helping</h3>
-<pre><code><span class="tok-comment">// Answer enough for a well-behaved client, not enough for an attacker to map the cap.</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Answer enough for a well-behaved client, not enough for an attacker to map the cap.</span>
 res.status(429)
    .set('Retry-After', String(cho))        <span class="tok-comment">// seconds — a polite client will wait</span>
    .json({ error: 'Quá nhiều yêu cầu. Hãy thử lại sau.' });
@@ -493,7 +493,7 @@ rai deu 20 req / 120s
 </div>
 
 <h3>Trả lời, mà không giúp gì cho kẻ tấn công</h3>
-<pre><code><span class="tok-comment">// Trả lời đủ để client cư xử đúng, không đủ để kẻ tấn công dò ra trần.</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Trả lời đủ để client cư xử đúng, không đủ để kẻ tấn công dò ra trần.</span>
 res.status(429)
    .set('Retry-After', String(cho))        <span class="tok-comment">// giây — client tử tế sẽ chờ</span>
    .json({ error: 'Quá nhiều yêu cầu. Hãy thử lại sau.' });
@@ -555,7 +555,7 @@ res.status(429)
     <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">And who really did them</span><span class="lz-nsub">Admin impersonation, bulk export, account deletion, MFA reset by support · record the operator, not the victim</span></div></div>
   </div>
 </div>
-<pre><code>model AuditEvent {
+<pre><code class="language-typescript">model AuditEvent {
   id        BigInt   @id @default(autoincrement())
   luc       DateTime @default(now())
   loai      String   <span class="tok-comment">// 'vai_tro.cap', 'mat_khau.dat_lai'</span>
@@ -584,7 +584,7 @@ res.status(429)
 <div class="pitfall">
 <p><strong>Trap — an audit log that captures credentials is a credential file with better indexing.</strong> Never write: passwords, even wrong ones, even hashed; tokens, session ids, refresh tokens, reset tokens or authorization codes; TOTP secrets or codes; full card numbers; API keys. And never log a whole request or response body on an authentication route — that is how all of the above end up there without anyone deciding to put them there. Store identifiers and hashes: the last four characters of a token, or its SHA-256, is enough to correlate two log lines without the log becoming the thing an attacker wants. The same rule covers your error reporter and your APM tracer, which capture request bodies by default and are usually the ones that actually leak.</p>
 </div>
-<pre><code><span class="tok-comment">// WRONG — and this is how a log becomes the MOST STEALABLE thing you own:</span>
+<pre><code class="language-typescript"><span class="tok-comment">// WRONG — and this is how a log becomes the MOST STEALABLE thing you own:</span>
 log.info('dang nhap that bai', { email, password, body: req.body });
 
 <span class="tok-comment">// RIGHT — enough to correlate, not enough to replay:</span>
@@ -604,7 +604,7 @@ log.info('dang nhap that bai', {
 Kiem lai: chuoi NGUYEN VEN
 Sau khi SUA ban ghi #2 (giau viec tu cap admin): HONG o ban ghi #1
 Sau khi XOA HAN ban ghi #2: HONG o ban ghi #1</div>
-<pre><code><span class="tok-comment">// Each record hashes BOTH its own content AND the previous record's hash.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Each record hashes BOTH its own content AND the previous record's hash.</span>
 const prevHash = (await lastRecord())?.bam ?? '0'.repeat(64);
 const bam = sha256(JSON.stringify(event) + prevHash);
 await prisma.auditEvent.create({ data: { ...event, prevHash, bam } });</code></pre>
@@ -658,7 +658,7 @@ await prisma.auditEvent.create({ data: { ...event, prevHash, bam } });</code></p
     <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">Và AI THẬT SỰ đã làm chúng</span><span class="lz-nsub">Quản trị viên đóng vai người dùng, xuất dữ liệu hàng loạt, xoá tài khoản, hỗ trợ đặt lại MFA · hãy ghi NGƯỜI VẬN HÀNH, không ghi nạn nhân</span></div></div>
   </div>
 </div>
-<pre><code>model AuditEvent {
+<pre><code class="language-typescript">model AuditEvent {
   id        BigInt   @id @default(autoincrement())
   luc       DateTime @default(now())
   loai      String   <span class="tok-comment">// 'vai_tro.cap', 'mat_khau.dat_lai'</span>
@@ -687,7 +687,7 @@ await prisma.auditEvent.create({ data: { ...event, prevHash, bam } });</code></p
 <div class="pitfall">
 <p><strong>Bẫy — một nhật ký kiểm toán có chứa tín vật là một tệp tín vật được đánh chỉ mục ĐẸP HƠN.</strong> Đừng bao giờ ghi: mật khẩu, kể cả mật khẩu SAI, kể cả dạng băm; token, id phiên, refresh token, token đặt lại hay mã uỷ quyền; bí mật hay mã TOTP; số thẻ đầy đủ; khoá API. Và đừng bao giờ ghi cả một thân request hay response trên một tuyến xác thực — đó chính là cách tất cả những thứ trên rơi vào đó mà chẳng ai từng quyết định đặt chúng vào. Hãy lưu ĐỊNH DANH và BĂM: bốn ký tự cuối của một token, hoặc SHA-256 của nó, là đủ để đối chiếu hai dòng log mà không biến nhật ký thành thứ kẻ tấn công thèm muốn. Cùng luật đó áp cho bộ báo lỗi và bộ theo dấu APM của bạn, vốn thu thân request theo MẶC ĐỊNH và thường mới là những thứ thật sự làm rò rỉ.</p>
 </div>
-<pre><code><span class="tok-comment">// SAI — và đây là cách một nhật ký trở thành thứ ĐÁNG CẮP NHẤT bạn có:</span>
+<pre><code class="language-typescript"><span class="tok-comment">// SAI — và đây là cách một nhật ký trở thành thứ ĐÁNG CẮP NHẤT bạn có:</span>
 log.info('dang nhap that bai', { email, password, body: req.body });
 
 <span class="tok-comment">// ĐÚNG — đủ để đối chiếu, không đủ để dùng lại:</span>
@@ -707,7 +707,7 @@ log.info('dang nhap that bai', {
 Kiem lai: chuoi NGUYEN VEN
 Sau khi SUA ban ghi #2 (giau viec tu cap admin): HONG o ban ghi #1
 Sau khi XOA HAN ban ghi #2: HONG o ban ghi #1</div>
-<pre><code><span class="tok-comment">// Mỗi bản ghi băm CẢ nội dung của nó LẪN băm của bản ghi trước.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Mỗi bản ghi băm CẢ nội dung của nó LẪN băm của bản ghi trước.</span>
 const prevHash = (await lastRecord())?.bam ?? '0'.repeat(64);
 const bam = sha256(JSON.stringify(event) + prevHash);
 await prisma.auditEvent.create({ data: { ...event, prevHash, bam } });</code></pre>
@@ -784,7 +784,7 @@ await prisma.auditEvent.create({ data: { ...event, prevHash, bam } });</code></p
   <div class="lz-step"><span class="lz-k">Dashboard only</span><span class="lz-t">Context, not alerts</span><span class="lz-d">Logins per hour, sessions created, MFA enrolment percentage, passkey adoption, password-reset volume. You look at these <em>after</em> an alert, and their value is that they tell you what normal looks like.</span></div>
   <div class="lz-step"><span class="lz-k">Never alert on a single user's behaviour</span><span class="lz-t">Except reuse detection</span><span class="lz-d">One person failing five logins is a typo. Alerting per user produces thousands of pages and finds nothing — aggregate first, and let the per-user events live in the audit log where an investigation can find them.</span></div>
 </div>
-<pre><code><span class="tok-comment">// Record every auth event as ONE labelled metric. Alerts are built on it.</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Record every auth event as ONE labelled metric. Alerts are built on it.</span>
 requireAuthTong.inc({ kiu: 'dang_nhap', result: khop ? 'thanh_cong' : 'that_bai' });
 
 <span class="tok-comment">// PromQL: the failure RATE over 15 minutes, NOT a raw count.</span>
@@ -851,7 +851,7 @@ requireAuthTong.inc({ kiu: 'dang_nhap', result: khop ? 'thanh_cong' : 'that_bai'
   <div class="lz-step"><span class="lz-k">Chỉ để trên BẢNG ĐIỀU KHIỂN</span><span class="lz-t">Bối cảnh, không phải cảnh báo</span><span class="lz-d">Số lần đăng nhập mỗi giờ, số phiên được tạo, tỉ lệ phần trăm đã đăng ký MFA, tỉ lệ dùng passkey, khối lượng đặt lại mật khẩu. Bạn nhìn những cái này <em>SAU</em> một cảnh báo, và giá trị của chúng là cho bạn biết BÌNH THƯỜNG trông ra sao.</span></div>
   <div class="lz-step"><span class="lz-k">Đừng bao giờ cảnh báo theo hành vi của MỘT người dùng</span><span class="lz-t">Trừ phát hiện tái dùng</span><span class="lz-d">Một người đăng nhập hỏng năm lần là một cú gõ nhầm. Cảnh báo theo từng người dùng sẽ sinh ra hàng nghìn cuộc gọi và chẳng tìm ra gì — hãy TỔNG HỢP trước đã, và để các sự kiện theo từng người sống trong nhật ký kiểm toán, nơi một cuộc điều tra tìm ra được chúng.</span></div>
 </div>
-<pre><code><span class="tok-comment">// Ghi mọi sự kiện xác thực thành MỘT chỉ số có nhãn. Cảnh báo dựng trên nó.</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Ghi mọi sự kiện xác thực thành MỘT chỉ số có nhãn. Cảnh báo dựng trên nó.</span>
 requireAuthTong.inc({ kiu: 'dang_nhap', result: khop ? 'thanh_cong' : 'that_bai' });
 
 <span class="tok-comment">// PromQL: tỉ lệ hỏng trong 15 phút, KHÔNG phải số đếm.</span>

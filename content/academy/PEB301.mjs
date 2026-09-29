@@ -178,7 +178,7 @@ while (1) {
 }
 </code></pre>
 <h3>Code — Arduino</h3>
-<pre><code>void setup() {
+<pre><code class="language-java">void setup() {
     pinMode(LED_BUILTIN, OUTPUT);   // D13 on Uno
 }
 void loop() {
@@ -227,7 +227,7 @@ while (1) {
 }
 </code></pre>
 <h3>Code — Arduino</h3>
-<pre><code>void setup() {
+<pre><code class="language-java">void setup() {
     pinMode(LED_BUILTIN, OUTPUT);   // D13 trên Uno
 }
 void loop() {
@@ -271,7 +271,7 @@ Button pin 2 -----&gt; GND
 <li>Add <strong>debounce</strong>: ignore further edges for about 20–50 ms after a press.</li>
 </ol>
 <h3>Code — STM32 HAL (interrupt)</h3>
-<pre><code>/* Called by HAL when an EXTI line fires */
+<pre><code class="language-java">/* Called by HAL when an EXTI line fires */
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
     if (GPIO_Pin == GPIO_PIN_13) {
         uint32_t now = HAL_GetTick();
@@ -284,7 +284,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
 }
 </code></pre>
 <h3>Code — Arduino (interrupt)</h3>
-<pre><code>volatile bool toggled = false;
+<pre><code class="language-java">volatile bool toggled = false;
 volatile uint32_t last = 0;
 void onPress() {
     uint32_t now = millis();
@@ -320,7 +320,7 @@ Chân nút 2 -----&gt; GND
 <li>Thêm <strong>chống dội</strong>: bỏ qua các sườn kế tiếp trong khoảng 20–50 ms sau một lần nhấn.</li>
 </ol>
 <h3>Code — STM32 HAL (ngắt)</h3>
-<pre><code>/* HAL gọi khi một đường EXTI kích hoạt */
+<pre><code class="language-java">/* HAL gọi khi một đường EXTI kích hoạt */
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
     if (GPIO_Pin == GPIO_PIN_13) {
         uint32_t now = HAL_GetTick();
@@ -333,7 +333,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
 }
 </code></pre>
 <h3>Code — Arduino (ngắt)</h3>
-<pre><code>volatile bool toggled = false;
+<pre><code class="language-java">volatile bool toggled = false;
 volatile uint32_t last = 0;
 void onPress() {
     uint32_t now = millis();
@@ -381,7 +381,7 @@ Both sides set to 115200 baud, 8N1
 <li>Receive a byte; echo it back or act on a simple command (e.g. 'L' toggles the LED).</li>
 </ol>
 <h3>Code — STM32 HAL</h3>
-<pre><code>char msg[] = "PEB301 UART ready\r\n";
+<pre><code class="language-c">char msg[] = "PEB301 UART ready\r\n";
 HAL_UART_Transmit(&amp;huart2, (uint8_t*)msg, sizeof(msg)-1, 100);
 
 uint8_t rx;
@@ -397,7 +397,7 @@ int _write(int file, char *ptr, int len) {
 }
 </code></pre>
 <h3>Code — Arduino</h3>
-<pre><code>void setup() { Serial.begin(115200); Serial.println("PEB301 UART ready"); }
+<pre><code class="language-java">void setup() { Serial.begin(115200); Serial.println("PEB301 UART ready"); }
 void loop() {
     if (Serial.available()) {
         char c = Serial.read();
@@ -430,7 +430,7 @@ Hai bên đặt 115200 baud, 8N1
 <li>Nhận một byte; dội lại hoặc xử một lệnh đơn giản (vd 'L' để đảo LED).</li>
 </ol>
 <h3>Code — STM32 HAL</h3>
-<pre><code>char msg[] = "PEB301 UART ready\r\n";
+<pre><code class="language-c">char msg[] = "PEB301 UART ready\r\n";
 HAL_UART_Transmit(&amp;huart2, (uint8_t*)msg, sizeof(msg)-1, 100);
 
 uint8_t rx;
@@ -446,7 +446,7 @@ int _write(int file, char *ptr, int len) {
 }
 </code></pre>
 <h3>Code — Arduino</h3>
-<pre><code>void setup() { Serial.begin(115200); Serial.println("PEB301 UART ready"); }
+<pre><code class="language-java">void setup() { Serial.begin(115200); Serial.println("PEB301 UART ready"); }
 void loop() {
     if (Serial.available()) {
         char c = Serial.read();
@@ -499,7 +499,7 @@ for (int duty = 0; duty &lt;= 999; duty += 10) {
 }
 </code></pre>
 <h3>Code — Arduino</h3>
-<pre><code>const int pwmPin = 9;               // PWM-capable
+<pre><code class="language-java">const int pwmPin = 9;               // PWM-capable
 void setup() { pinMode(pwmPin, OUTPUT); }
 void loop() {
     for (int duty = 0; duty &lt;= 255; duty++) { analogWrite(pwmPin, duty); delay(5); }
@@ -539,7 +539,7 @@ for (int duty = 0; duty &lt;= 999; duty += 10) {
 }
 </code></pre>
 <h3>Code — Arduino</h3>
-<pre><code>const int pwmPin = 9;               // chân có PWM
+<pre><code class="language-java">const int pwmPin = 9;               // chân có PWM
 void setup() { pinMode(pwmPin, OUTPUT); }
 void loop() {
     for (int duty = 0; duty &lt;= 255; duty++) { analogWrite(pwmPin, duty); delay(5); }
@@ -582,7 +582,7 @@ Pot wiper  --&gt; ADC input pin (e.g. PA0 / A0)
 <li>Turn the pot and watch the numbers span 0 to Vref.</li>
 </ol>
 <h3>Code — STM32 HAL</h3>
-<pre><code>HAL_ADC_Start(&amp;hadc1);
+<pre><code class="language-c">HAL_ADC_Start(&amp;hadc1);
 if (HAL_ADC_PollForConversion(&amp;hadc1, 10) == HAL_OK) {
     uint32_t raw = HAL_ADC_GetValue(&amp;hadc1);   /* 0..4095 */
     float volts = raw * 3.3f / 4095.0f;
@@ -591,7 +591,7 @@ if (HAL_ADC_PollForConversion(&amp;hadc1, 10) == HAL_OK) {
 HAL_ADC_Stop(&amp;hadc1);
 </code></pre>
 <h3>Code — Arduino</h3>
-<pre><code>void setup() { Serial.begin(115200); }
+<pre><code class="language-java">void setup() { Serial.begin(115200); }
 void loop() {
     int raw = analogRead(A0);            // Uno: 0..1023 (10-bit)
     float volts = raw * 5.0 / 1023.0;
@@ -625,7 +625,7 @@ Chân giữa (wiper) --&gt; chân input ADC (vd PA0 / A0)
 <li>Xoay biến trở và xem số chạy từ 0 đến Vref.</li>
 </ol>
 <h3>Code — STM32 HAL</h3>
-<pre><code>HAL_ADC_Start(&amp;hadc1);
+<pre><code class="language-c">HAL_ADC_Start(&amp;hadc1);
 if (HAL_ADC_PollForConversion(&amp;hadc1, 10) == HAL_OK) {
     uint32_t raw = HAL_ADC_GetValue(&amp;hadc1);   /* 0..4095 */
     float volts = raw * 3.3f / 4095.0f;
@@ -634,7 +634,7 @@ if (HAL_ADC_PollForConversion(&amp;hadc1, 10) == HAL_OK) {
 HAL_ADC_Stop(&amp;hadc1);
 </code></pre>
 <h3>Code — Arduino</h3>
-<pre><code>void setup() { Serial.begin(115200); }
+<pre><code class="language-java">void setup() { Serial.begin(115200); }
 void loop() {
     int raw = analogRead(A0);            // Uno: 0..1023 (10-bit)
     float volts = raw * 5.0 / 1023.0;
@@ -682,7 +682,7 @@ Pull-ups 4.7k ohm from SDA and SCL to 3V3 (if not on the module)
 <li>Write data (e.g. a byte to the OLED, or a config register).</li>
 </ol>
 <h3>Code — STM32 HAL (I2C scan + read)</h3>
-<pre><code>for (uint8_t addr = 1; addr &lt; 128; addr++) {
+<pre><code class="language-c">for (uint8_t addr = 1; addr &lt; 128; addr++) {
     if (HAL_I2C_IsDeviceReady(&amp;hi2c1, addr &lt;&lt; 1, 2, 5) == HAL_OK)
         printf("Found device at 0x%02X\r\n", addr);
 }
@@ -692,7 +692,7 @@ HAL_I2C_Master_Receive(&amp;hi2c1, 0x76 &lt;&lt; 1, &amp;id, 1, 10);
 printf("chip id = 0x%02X\r\n", id);
 </code></pre>
 <h3>Code — Arduino (I2C scan)</h3>
-<pre><code>#include &lt;Wire.h&gt;
+<pre><code class="language-c">#include &lt;Wire.h&gt;
 void setup() {
     Wire.begin(); Serial.begin(115200);
     for (byte a = 1; a &lt; 127; a++) {
@@ -730,7 +730,7 @@ Kéo 4.7k ohm từ SDA và SCL lên 3V3 (nếu module chưa có)
 <li>Ghi dữ liệu (vd một byte ra OLED, hoặc một thanh ghi cấu hình).</li>
 </ol>
 <h3>Code — STM32 HAL (quét I2C + đọc)</h3>
-<pre><code>for (uint8_t addr = 1; addr &lt; 128; addr++) {
+<pre><code class="language-c">for (uint8_t addr = 1; addr &lt; 128; addr++) {
     if (HAL_I2C_IsDeviceReady(&amp;hi2c1, addr &lt;&lt; 1, 2, 5) == HAL_OK)
         printf("Tim thay thiet bi tai 0x%02X\r\n", addr);
 }
@@ -740,7 +740,7 @@ HAL_I2C_Master_Receive(&amp;hi2c1, 0x76 &lt;&lt; 1, &amp;id, 1, 10);
 printf("chip id = 0x%02X\r\n", id);
 </code></pre>
 <h3>Code — Arduino (quét I2C)</h3>
-<pre><code>#include &lt;Wire.h&gt;
+<pre><code class="language-c">#include &lt;Wire.h&gt;
 void setup() {
     Wire.begin(); Serial.begin(115200);
     for (byte a = 1; a &lt; 127; a++) {
@@ -781,7 +781,7 @@ const c7 = doc('peb301-7-1-freertos', 'Lab 7 — FreeRTOS: multitasking with tas
 <li>Give the tasks different priorities and observe scheduling.</li>
 </ol>
 <h3>Code — FreeRTOS (CMSIS-RTOS / native API)</h3>
-<pre><code>QueueHandle_t q;
+<pre><code class="language-c">QueueHandle_t q;
 
 void BlinkTask(void *arg) {
     bool state = false;
@@ -828,7 +828,7 @@ int main(void) {
 <li>Đặt độ ưu tiên khác nhau cho các task và quan sát lập lịch.</li>
 </ol>
 <h3>Code — FreeRTOS (CMSIS-RTOS / API gốc)</h3>
-<pre><code>QueueHandle_t q;
+<pre><code class="language-c">QueueHandle_t q;
 
 void BlinkTask(void *arg) {
     bool state = false;
@@ -913,7 +913,7 @@ tx.DLC   = 2;                            /* 2 data bytes */
 HAL_CAN_AddTxMessage(&amp;hcan, &amp;tx, data, &amp;mailbox);
 </code></pre>
 <h3>Code — STM32 HAL (CAN receive on Node B)</h3>
-<pre><code>CAN_RxHeaderTypeDef rx;
+<pre><code class="language-c">CAN_RxHeaderTypeDef rx;
 uint8_t data[8];
 if (HAL_CAN_GetRxMessage(&amp;hcan, CAN_RX_FIFO0, &amp;rx, data) == HAL_OK) {
     if (rx.StdId == 0x123) {
@@ -971,7 +971,7 @@ tx.DLC   = 2;                            /* 2 byte dữ liệu */
 HAL_CAN_AddTxMessage(&amp;hcan, &amp;tx, data, &amp;mailbox);
 </code></pre>
 <h3>Code — STM32 HAL (nhận CAN ở Node B)</h3>
-<pre><code>CAN_RxHeaderTypeDef rx;
+<pre><code class="language-c">CAN_RxHeaderTypeDef rx;
 uint8_t data[8];
 if (HAL_CAN_GetRxMessage(&amp;hcan, CAN_RX_FIFO0, &amp;rx, data) == HAL_OK) {
     if (rx.StdId == 0x123) {

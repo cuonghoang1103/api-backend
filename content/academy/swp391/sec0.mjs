@@ -1233,11 +1233,11 @@ const L04 = {
     ]),
     bi(`<h3>Worked example — a real conflict in a team project</h3>
 <p>Two members of the Job Board team both edit the shared menu <code>header.jsp</code> on <code>main</code>. Member A adds "Post a job", pushes first. Member B adds "My applications" on the same line and pushes second:</p>
-<pre>$ git push origin main
+<pre><code class="language-bash">$ git push origin main
  ! [rejected]        main -&gt; main (fetch first)
 $ git pull origin main
 CONFLICT (content): Merge conflict in web/common/header.jsp
-Automatic merge failed; fix conflicts and then commit the result.</pre>
+Automatic merge failed; fix conflicts and then commit the result.</code></pre>
 <p>The file now contains both versions:</p>
 <pre>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
 &lt;li&gt;&lt;a href="my-applications"&gt;My applications&lt;/a&gt;&lt;/li&gt;
@@ -1260,11 +1260,11 @@ Automatic merge failed; fix conflicts and then commit the result.</pre>
 <div class="callout"><strong>★ Beyond the syllabus — branches and merge requests.</strong> The slides push straight to <code>main</code>. Most teams work more safely with a short branch per screen (<code>feature/post-job</code>) and a GitLab <em>merge request</em> reviewed by one teammate before it enters <code>main</code>. The conflict then appears in the merge request, not in the leader's build the night before submission. The GitLab chapter shows this flow.</div>`,
     `<h3>Ví dụ — một xung đột thật trong đồ án nhóm</h3>
 <p>Hai thành viên nhóm Job Board cùng sửa menu dùng chung <code>header.jsp</code> trên <code>main</code>. Thành viên A thêm "Post a job", push trước. Thành viên B thêm "My applications" đúng dòng đó và push sau:</p>
-<pre>$ git push origin main
+<pre><code class="language-bash">$ git push origin main
  ! [rejected]        main -&gt; main (fetch first)
 $ git pull origin main
 CONFLICT (content): Merge conflict in web/common/header.jsp
-Automatic merge failed; fix conflicts and then commit the result.</pre>
+Automatic merge failed; fix conflicts and then commit the result.</code></pre>
 <p>File lúc này chứa cả hai phiên bản:</p>
 <pre>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
 &lt;li&gt;&lt;a href="my-applications"&gt;My applications&lt;/a&gt;&lt;/li&gt;

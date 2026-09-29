@@ -109,7 +109,7 @@ ${slide('lx-07', 6, 'set -e KHÔNG dừng ở những chỗ này — đo từng 
   <div class="lz-step"><span class="lz-k">2 · Not the last in a pipeline</span><span class="lz-t">failing-cmd | tee log</span><span class="lz-d">Only the last stage's status counts, unless you add pipefail. This is exactly why the third flag exists.</span></div>
   <div class="lz-step"><span class="lz-k">3 · In a command substitution used as an assignment</span><span class="lz-t">local x=\$(failing-cmd)</span><span class="lz-d">The assignment's own status wins, and <code>local</code> always succeeds. Declare and assign on separate lines (Lesson 6.1).</span></div>
 </div>
-<pre><code><span class="tok-comment"># Trap 1 in the wild — this does NOT exit; count is now EMPTY (the assignment did run: tested, count=[] for a missing file, count=[0] for a file with no match)</span>
+<pre><code class="language-bash"><span class="tok-comment"># Trap 1 in the wild — this does NOT exit; count is now EMPTY (the assignment did run: tested, count=[] for a missing file, count=[0] for a file with no match)</span>
 set -e
 if ! count=\$(grep -c ERROR missing.log); then
   count=0                  <span class="tok-comment"># correct: handle it explicitly</span>
@@ -124,7 +124,7 @@ process() {
 <div class="callout ok">The practical consequence: use <code>set -euo pipefail</code> <em>and</em> keep checking exit codes explicitly where it matters. Treat strict mode as a net that catches the failures you did not think about, not as a replacement for handling the ones you did. That framing is what makes it genuinely useful rather than a false sense of safety.</div>
 
 <h3>Commands that are allowed to fail</h3>
-<pre><code><span class="tok-comment"># These would abort under -e. Say so explicitly.</span>
+<pre><code class="language-bash"><span class="tok-comment"># These would abort under -e. Say so explicitly.</span>
 grep -q pattern file || true          <span class="tok-comment"># "no match" is a valid outcome</span>
 rm -f "\$tmpfile" || true              <span class="tok-comment"># cleanup should never fail the script</span>
 
@@ -137,7 +137,7 @@ count=\$(grep -c pattern file || true) <span class="tok-comment"># capture, tole
 
 <h3>The skeleton to copy</h3>
 ${slide('lx-07', 3, 'Bộ khung chuẩn: mỗi dòng đầu chặn một kiểu hỏng')}
-<pre><code>#!/usr/bin/env bash
+<pre><code class="language-bash">#!/usr/bin/env bash
 #
 # deploy.sh — build and deploy the application
 # Usage: ./deploy.sh &lt;staging|production&gt; [--dry-run]
@@ -208,7 +208,7 @@ sudo mv deploy.sh /usr/local/bin/      <span class="tok-comment"># system-wide (
 <tr><td><code>f(){ false; echo inside; }; if f; then …</code></td><td>prints "inside", continues</td><td>-e is switched off for the WHOLE function body while it runs in a condition</td></tr>
 <tr><td><code>echo "\$(false; echo hi)"</code></td><td>prints "hi", continues</td><td>subshells of <code>\$( )</code> do not inherit -e unless <code>shopt -s inherit_errexit</code></td></tr>
 </table>
-<pre><code><span class="tok-comment"># The trap nobody expects: an &amp;&amp; test as the LAST line of a function</span>
+<pre><code class="language-bash"><span class="tok-comment"># The trap nobody expects: an &amp;&amp; test as the LAST line of a function</span>
 bash -c 'set -e
   f() { [[ -n "" ]] &amp;&amp; echo x; }     <span class="tok-comment"># the test is false, so f RETURNS 1</span>
   f; echo AFTER-f'; echo "exit=\$?"</code></pre>
@@ -219,7 +219,7 @@ bash -c 'set -e
 <h3>A real story: cd fails, the whole &amp;&amp; chain is skipped — and the script reports success</h3>
 ${slide('lx-07', 7, 'cd hỏng trong chuỗi &&: cả chuỗi bị bỏ, script vẫn báo xong')}
 <p>A student project deploys with one line, <code>cd /srv/app &amp;&amp; git pull &amp;&amp; docker compose up -d</code>. One day someone renames the folder (or types <code>/srv/ap</code>). This is the script, with strict mode switched on, run for real:</p>
-<pre><code>#!/usr/bin/env bash
+<pre><code class="language-bash">#!/usr/bin/env bash
 set -euo pipefail
 cd /srv/ap &amp;&amp; git pull &amp;&amp; docker compose up -d
 echo "Deploy xong ✔"</code></pre>
@@ -228,7 +228,7 @@ echo "Deploy xong ✔"</code></pre>
 Deploy xong ✔
 exit: 0</div>
 <p>Read it slowly. <code>cd</code> failed, so <code>&amp;&amp;</code> skipped <code>git pull</code> and <code>docker compose</code> — nothing was deployed. But the failing command sat <em>inside</em> an <code>&amp;&amp;</code> list, which is exempt from -e, so the script carried on to the next line, printed "Deploy xong ✔" and exited 0. CI shows green; production still runs last week's code. The version with <code>;</code> instead of <code>&amp;&amp;</code> is worse: <code>cd /srv/ap/tmp; rm -rf ./*</code> runs the <code>rm</code> in whatever directory you were already in. Reproduced in a container inside a project folder: everything was deleted except <code>.env</code>, and only because the glob <code>*</code> skips dotfiles.</p>
-<pre><code>cd /srv/ap || { echo "cannot enter /srv/ap" &gt;&amp;2; exit 1; }   <span class="tok-comment"># stop AT the cd</span>
+<pre><code class="language-bash">cd /srv/ap || { echo "cannot enter /srv/ap" &gt;&amp;2; exit 1; }   <span class="tok-comment"># stop AT the cd</span>
 git pull                                                     <span class="tok-comment"># one step per line:</span>
 docker compose up -d                                         <span class="tok-comment"># now -e sees each one</span></code></pre>
 <div class="out">$ ./deploy-moi.sh; echo "exit: \$?"
@@ -240,7 +240,7 @@ exit: 1</div>
 <h3>Scripts from Windows: <code>\$'\\r': command not found</code></h3>
 ${slide('lx-07', 8, 'Script từ Windows: $\'\\r\': command not found')}
 <p>A teammate on Windows edits <code>deploy.sh</code> in an editor set to Windows line endings and pushes it. Windows ends every line with two characters, <code>\\r\\n</code> (carriage return + newline); Linux uses only <code>\\n</code>. bash therefore sees an invisible <code>\\r</code> glued to the last word of every line. Rebuilt in a container:</p>
-<pre><code>printf 'cd /tmp\\r\\npwd\\r\\n' &gt; crlf.sh
+<pre><code class="language-bash">printf 'cd /tmp\\r\\npwd\\r\\n' &gt; crlf.sh
 bash crlf.sh; echo "exit=\$?"
 file crlf.sh
 sed -i 's/\\r\$//' crlf.sh &amp;&amp; bash crlf.sh
@@ -274,7 +274,7 @@ readlink -f:  /home/an/app</div>
 
 <h3>Run it step by step</h3>
 <p>Five small experiments in the course sandbox. Type them; predict each output before pressing Enter.</p>
-<pre><code>mkdir -p ~/thu-linux/ch7 &amp;&amp; cd ~/thu-linux/ch7
+<pre><code class="language-bash">mkdir -p ~/thu-linux/ch7 &amp;&amp; cd ~/thu-linux/ch7
 printf '#!/bin/sh\\nten=an\\necho "\${ten^^}"\\n' &gt; sai.sh &amp;&amp; chmod +x sai.sh
 ./sai.sh; echo "exit=\$?"                  <span class="tok-comment"># 1. dash runs it</span>
 bash sai.sh                                <span class="tok-comment"># 2. bash runs the same file</span>
@@ -400,7 +400,7 @@ ${slide('lx-07', 6, 'set -e KHÔNG dừng ở những chỗ này — đo từng 
   <div class="lz-step"><span class="lz-k">2 · Không phải khâu cuối của chuỗi ống</span><span class="lz-t">lệnh-hỏng | tee log</span><span class="lz-d">Chỉ trạng thái của khâu cuối được tính, trừ khi bạn thêm pipefail. Đó chính xác là lý do cái cờ thứ ba tồn tại.</span></div>
   <div class="lz-step"><span class="lz-k">3 · Trong phép thay thế lệnh dùng làm phép gán</span><span class="lz-t">local x=\$(lệnh-hỏng)</span><span class="lz-d">Trạng thái của chính phép gán thắng, mà <code>local</code> thì luôn thành công. Hãy khai báo và gán trên hai dòng riêng (Bài 6.1).</span></div>
 </div>
-<pre><code><span class="tok-comment"># Bẫy 1 ngoài đời — cái này KHÔNG thoát; count giờ là chuỗi RỖNG (phép gán vẫn chạy: đã thử, file không tồn tại ⇒ count=[], file không khớp dòng nào ⇒ count=[0])</span>
+<pre><code class="language-bash"><span class="tok-comment"># Bẫy 1 ngoài đời — cái này KHÔNG thoát; count giờ là chuỗi RỖNG (phép gán vẫn chạy: đã thử, file không tồn tại ⇒ count=[], file không khớp dòng nào ⇒ count=[0])</span>
 set -e
 if ! count=\$(grep -c ERROR missing.log); then
   count=0                  <span class="tok-comment"># đúng: xử lý nó một cách tường minh</span>
@@ -415,7 +415,7 @@ process() {
 <div class="callout ok">Hệ quả thực tế: hãy dùng <code>set -euo pipefail</code> <em>VÀ</em> vẫn kiểm mã thoát một cách tường minh ở những chỗ quan trọng. Hãy coi chế độ nghiêm ngặt là một cái lưới hứng những thất bại bạn KHÔNG nghĩ tới, không phải thứ thay cho việc xử lý những thất bại bạn ĐÃ nghĩ tới. Chính cách đóng khung đó làm nó thật sự hữu ích thay vì thành một cảm giác an toàn giả.</div>
 
 <h3>Những lệnh ĐƯỢC PHÉP thất bại</h3>
-<pre><code><span class="tok-comment"># Mấy lệnh này sẽ làm script chết dưới -e. Hãy nói rõ ra.</span>
+<pre><code class="language-bash"><span class="tok-comment"># Mấy lệnh này sẽ làm script chết dưới -e. Hãy nói rõ ra.</span>
 grep -q pattern file || true          <span class="tok-comment"># "không khớp" là một kết quả hợp lệ</span>
 rm -f "\$tmpfile" || true              <span class="tok-comment"># việc dọn dẹp không bao giờ nên làm hỏng script</span>
 
@@ -428,7 +428,7 @@ count=\$(grep -c pattern file || true) <span class="tok-comment"># hứng lấy,
 
 <h3>Bộ khung để chép về</h3>
 ${slide('lx-07', 3, 'Bộ khung chuẩn: mỗi dòng đầu chặn một kiểu hỏng')}
-<pre><code>#!/usr/bin/env bash
+<pre><code class="language-bash">#!/usr/bin/env bash
 #
 # deploy.sh — dựng và triển khai ứng dụng
 # Cách dùng: ./deploy.sh &lt;staging|production&gt; [--dry-run]
@@ -499,7 +499,7 @@ sudo mv deploy.sh /usr/local/bin/      <span class="tok-comment"># cho toàn h�
 <tr><td><code>f(){ false; echo trong; }; if f; then …</code></td><td>in "trong", chạy tiếp</td><td>-e bị TẮT cho CẢ thân hàm khi hàm được gọi trong một điều kiện</td></tr>
 <tr><td><code>echo "\$(false; echo hi)"</code></td><td>in "hi", chạy tiếp</td><td>shell con của <code>\$( )</code> không thừa hưởng -e, trừ khi bật <code>shopt -s inherit_errexit</code></td></tr>
 </table>
-<pre><code><span class="tok-comment"># Cái bẫy không ai ngờ: một phép kiểm &amp;&amp; nằm ở dòng CUỐI của hàm</span>
+<pre><code class="language-bash"><span class="tok-comment"># Cái bẫy không ai ngờ: một phép kiểm &amp;&amp; nằm ở dòng CUỐI của hàm</span>
 bash -c 'set -e
   f() { [[ -n "" ]] &amp;&amp; echo x; }     <span class="tok-comment"># phép kiểm sai, nên f TRẢ VỀ 1</span>
   f; echo SAU-f'; echo "mã=\$?"</code></pre>
@@ -510,7 +510,7 @@ bash -c 'set -e
 <h3>Chuyện thật: cd hỏng, cả chuỗi &amp;&amp; bị bỏ qua — mà script vẫn báo thành công</h3>
 ${slide('lx-07', 7, 'cd hỏng trong chuỗi &&: cả chuỗi bị bỏ, script vẫn báo xong')}
 <p>Một dự án sinh viên deploy bằng đúng một dòng, <code>cd /srv/app &amp;&amp; git pull &amp;&amp; docker compose up -d</code>. Một hôm có người đổi tên thư mục (hoặc gõ nhầm thành <code>/srv/ap</code>). Đây là script, đã bật chế độ nghiêm ngặt, chạy thật:</p>
-<pre><code>#!/usr/bin/env bash
+<pre><code class="language-bash">#!/usr/bin/env bash
 set -euo pipefail
 cd /srv/ap &amp;&amp; git pull &amp;&amp; docker compose up -d
 echo "Deploy xong ✔"</code></pre>
@@ -519,7 +519,7 @@ echo "Deploy xong ✔"</code></pre>
 Deploy xong ✔
 mã thoát: 0</div>
 <p>Đọc chậm từng dòng. <code>cd</code> hỏng, nên <code>&amp;&amp;</code> bỏ qua <code>git pull</code> và <code>docker compose</code> — không có gì được deploy. Nhưng lệnh hỏng lại nằm <em>BÊN TRONG</em> một danh sách <code>&amp;&amp;</code>, thứ được miễn khỏi -e, nên script đi tiếp xuống dòng sau, in "Deploy xong ✔" và thoát với mã 0. CI báo xanh; production vẫn chạy mã của tuần trước. Bản dùng <code>;</code> thay cho <code>&amp;&amp;</code> còn tệ hơn: <code>cd /srv/ap/tmp; rm -rf ./*</code> chạy lệnh <code>rm</code> ở chính thư mục bạn ĐANG đứng. Dựng lại trong container, đứng trong một thư mục dự án: mọi thứ bị xoá sạch trừ <code>.env</code>, và chỉ vì glob <code>*</code> bỏ qua file bắt đầu bằng dấu chấm.</p>
-<pre><code>cd /srv/ap || { echo "không vào được /srv/ap" &gt;&amp;2; exit 1; }   <span class="tok-comment"># dừng NGAY tại cd</span>
+<pre><code class="language-bash">cd /srv/ap || { echo "không vào được /srv/ap" &gt;&amp;2; exit 1; }   <span class="tok-comment"># dừng NGAY tại cd</span>
 git pull                                                        <span class="tok-comment"># mỗi bước một dòng:</span>
 docker compose up -d                                            <span class="tok-comment"># giờ -e thấy từng bước</span></code></pre>
 <div class="out">$ ./deploy-moi.sh; echo "mã thoát: \$?"
@@ -531,7 +531,7 @@ mã thoát: 1</div>
 <h3>Script từ Windows: <code>\$'\\r': command not found</code></h3>
 ${slide('lx-07', 8, 'Script từ Windows: $\'\\r\': command not found')}
 <p>Một bạn cùng nhóm dùng Windows sửa <code>deploy.sh</code> trong một trình soạn thảo đang đặt kiểu xuống dòng của Windows rồi đẩy lên. Windows kết thúc mỗi dòng bằng HAI ký tự, <code>\\r\\n</code> (carriage return — về đầu dòng, và newline — xuống dòng); Linux chỉ dùng <code>\\n</code>. Vì vậy bash thấy một ký tự <code>\\r</code> vô hình dính vào từ cuối cùng của mọi dòng. Dựng lại trong container:</p>
-<pre><code>printf 'cd /tmp\\r\\npwd\\r\\n' &gt; crlf.sh
+<pre><code class="language-bash">printf 'cd /tmp\\r\\npwd\\r\\n' &gt; crlf.sh
 bash crlf.sh; echo "mã=\$?"
 file crlf.sh
 sed -i 's/\\r\$//' crlf.sh &amp;&amp; bash crlf.sh
@@ -565,7 +565,7 @@ readlink -f:  /home/an/app</div>
 
 <h3>Chạy thử từng bước</h3>
 <p>Năm thí nghiệm nhỏ trong thư mục sân tập của khoá. Hãy tự gõ; đoán output trước khi nhấn Enter.</p>
-<pre><code>mkdir -p ~/thu-linux/ch7 &amp;&amp; cd ~/thu-linux/ch7
+<pre><code class="language-bash">mkdir -p ~/thu-linux/ch7 &amp;&amp; cd ~/thu-linux/ch7
 printf '#!/bin/sh\\nten=an\\necho "\${ten^^}"\\n' &gt; sai.sh &amp;&amp; chmod +x sai.sh
 ./sai.sh; echo "mã=\$?"                    <span class="tok-comment"># 1. dash chạy nó</span>
 bash sai.sh                                <span class="tok-comment"># 2. bash chạy cùng file đó</span>
@@ -667,7 +667,7 @@ ${slide('lx-07', 28, 'Trên Mac: bash 3.2, mktemp và sed kiểu BSD, không có
 </div>
 <h3>Positional arguments</h3>
 ${slide('lx-07', 9, '"$@" giữ nguyên từng tham số — $@ trần chẻ tên có dấu cách')}
-<pre><code>#!/usr/bin/env bash
+<pre><code class="language-bash">#!/usr/bin/env bash
 set -euo pipefail
 
 echo "script:    \$0"
@@ -689,7 +689,7 @@ after shift: --dry-run</div>
 
 <h3>getopts: short flags, POSIX, built in</h3>
 ${slide('lx-07', 10, 'getopts ":vo:fh": mỗi ký tự trong chuỗi là một luật')}
-<pre><code>#!/usr/bin/env bash
+<pre><code class="language-bash">#!/usr/bin/env bash
 set -euo pipefail
 
 verbose=0
@@ -725,7 +725,7 @@ unknown option: -z</div>
 
 <h3>Long options: a while/case loop</h3>
 ${slide('lx-07', 11, 'Cờ dài: vòng while/case + shift, và -- để kết thúc cờ')}
-<pre><code>dry_run=0
+<pre><code class="language-bash">dry_run=0
 env=""
 tag="latest"
 
@@ -752,7 +752,7 @@ $ ./deploy.sh --tag
 <p>The <code>--</code> case matters more than it looks. It marks the end of options, so everything after it is a positional argument even if it starts with a dash — which is how you pass a filename literally called <code>-rf</code> (Lesson 2.2). Supporting it costs one line and is what every standard tool does.</p>
 
 <h3>A usage function that cannot go stale</h3>
-<pre><code>usage() {
+<pre><code class="language-bash">usage() {
   cat &lt;&lt;EOF
 \${SCRIPT_NAME} — build and deploy the application
 
@@ -773,7 +773,7 @@ EOF
 
 <h3>Preconditions: check everything before doing anything</h3>
 ${slide('lx-07', 12, 'Bốn cửa: phân tích → kiểm giá trị → tiền kiểm → mới làm')}
-<pre><code>require_cmd() {
+<pre><code class="language-bash">require_cmd() {
   command -v "\$1" &gt;/dev/null || die "\$1 is required but not installed"
 }
 
@@ -799,7 +799,7 @@ preflight() {
 <p>Note <code>command -v</code> rather than <code>which</code>: it is a shell builtin, works everywhere, and correctly reports builtins and functions as well as files on <code>PATH</code>. <code>which</code> is an external program that does not exist on every system and has inconsistent exit codes.</p>
 
 <h3>Validating the values themselves</h3>
-<pre><code><span class="tok-comment"># Enumeration — a case is clearer than a chain of comparisons</span>
+<pre><code class="language-bash"><span class="tok-comment"># Enumeration — a case is clearer than a chain of comparisons</span>
 case \$env in
   staging|production) ;;
   *) die "environment must be staging or production, got: \$env" ;;
@@ -820,7 +820,7 @@ esac</code></pre>
 
 <h3>A dry-run mode worth having</h3>
 ${slide('lx-07', 13, 'run() + --dry-run: in ra đúng thứ SẼ chạy')}
-<pre><code>run() {
+<pre><code class="language-bash">run() {
   if (( dry_run )); then
     printf '[dry-run] %s\\n' "\$*" &gt;&amp;2
   else
@@ -891,7 +891,7 @@ còn lại (2): a.log -v</div>
 
 <h3>Run it step by step</h3>
 <p>Save this 14-line version of the long-option loop as <code>~/thu-linux/ch7/dai.sh</code> and <code>chmod +x</code> it (the messages are in Vietnamese exactly as in the recorded run):</p>
-<pre><code>#!/usr/bin/env bash
+<pre><code class="language-bash">#!/usr/bin/env bash
 set -euo pipefail
 dry_run=0; env=""; tag="latest"
 while [[ \$# -gt 0 ]]; do
@@ -991,7 +991,7 @@ exit=2</div>
 </div>
 <h3>Tham số vị trí</h3>
 ${slide('lx-07', 9, '"$@" giữ nguyên từng tham số — $@ trần chẻ tên có dấu cách')}
-<pre><code>#!/usr/bin/env bash
+<pre><code class="language-bash">#!/usr/bin/env bash
 set -euo pipefail
 
 echo "script:    \$0"
@@ -1013,7 +1013,7 @@ sau shift: --dry-run</div>
 
 <h3>getopts: cờ ngắn, chuẩn POSIX, dựng sẵn</h3>
 ${slide('lx-07', 10, 'getopts ":vo:fh": mỗi ký tự trong chuỗi là một luật')}
-<pre><code>#!/usr/bin/env bash
+<pre><code class="language-bash">#!/usr/bin/env bash
 set -euo pipefail
 
 verbose=0
@@ -1049,7 +1049,7 @@ tuỳ chọn không rõ: -z</div>
 
 <h3>Tuỳ chọn dài: một vòng lặp while/case</h3>
 ${slide('lx-07', 11, 'Cờ dài: vòng while/case + shift, và -- để kết thúc cờ')}
-<pre><code>dry_run=0
+<pre><code class="language-bash">dry_run=0
 env=""
 tag="latest"
 
@@ -1076,7 +1076,7 @@ $ ./deploy.sh --tag
 <p>Nhánh <code>--</code> quan trọng hơn vẻ ngoài của nó. Nó đánh dấu chỗ kết thúc phần tuỳ chọn, nên mọi thứ sau nó là tham số vị trí kể cả khi bắt đầu bằng dấu gạch ngang — và đó là cách bạn truyền vào một tên file đúng nghĩa đen là <code>-rf</code> (Bài 2.2). Hỗ trợ nó tốn một dòng, và đó là điều mọi công cụ chuẩn đều làm.</p>
 
 <h3>Một hàm usage không thể lỗi thời</h3>
-<pre><code>usage() {
+<pre><code class="language-bash">usage() {
   cat &lt;&lt;EOF
 \${SCRIPT_NAME} — dựng và triển khai ứng dụng
 
@@ -1097,7 +1097,7 @@ EOF
 
 <h3>Điều kiện tiên quyết: kiểm hết trước khi làm bất cứ gì</h3>
 ${slide('lx-07', 12, 'Bốn cửa: phân tích → kiểm giá trị → tiền kiểm → mới làm')}
-<pre><code>require_cmd() {
+<pre><code class="language-bash">require_cmd() {
   command -v "\$1" &gt;/dev/null || die "cần có \$1 nhưng chưa được cài"
 }
 
@@ -1123,7 +1123,7 @@ preflight() {
 <p>Để ý <code>command -v</code> chứ không phải <code>which</code>: nó là lệnh dựng sẵn của shell, chạy ở mọi nơi, và báo cáo đúng cả lệnh dựng sẵn lẫn hàm chứ không chỉ file nằm trên <code>PATH</code>. <code>which</code> là một chương trình ngoài, không có trên mọi hệ thống và có mã thoát không nhất quán.</p>
 
 <h3>Kiểm chính các giá trị</h3>
-<pre><code><span class="tok-comment"># Liệt kê — một case rõ hơn một chuỗi phép so sánh</span>
+<pre><code class="language-bash"><span class="tok-comment"># Liệt kê — một case rõ hơn một chuỗi phép so sánh</span>
 case \$env in
   staging|production) ;;
   *) die "môi trường phải là staging hoặc production, nhận được: \$env" ;;
@@ -1144,7 +1144,7 @@ esac</code></pre>
 
 <h3>Một chế độ chạy thử đáng có</h3>
 ${slide('lx-07', 13, 'run() + --dry-run: in ra đúng thứ SẼ chạy')}
-<pre><code>run() {
+<pre><code class="language-bash">run() {
   if (( dry_run )); then
     printf '[chạy thử] %s\\n' "\$*" &gt;&amp;2
   else
@@ -1215,7 +1215,7 @@ còn lại (2): a.log -v</div>
 
 <h3>Chạy thử từng bước</h3>
 <p>Lưu bản 14 dòng này của vòng lặp cờ dài thành <code>~/thu-linux/ch7/dai.sh</code> rồi <code>chmod +x</code> nó:</p>
-<pre><code>#!/usr/bin/env bash
+<pre><code class="language-bash">#!/usr/bin/env bash
 set -euo pipefail
 dry_run=0; env=""; tag="latest"
 while [[ \$# -gt 0 ]]; do
@@ -1318,7 +1318,7 @@ mã=2</div>
 
 <h3>trap EXIT: the one that always runs</h3>
 ${slide('lx-07', 14, 'Script chết giữa chừng: bẫy nào chạy, mã thoát bao nhiêu?')}
-<pre><code>#!/usr/bin/env bash
+<pre><code class="language-bash">#!/usr/bin/env bash
 set -euo pipefail
 
 tmpdir=\$(mktemp -d)
@@ -1348,7 +1348,7 @@ trap 'rm -f "\$tmpfile"' EXIT</code></pre>
 
 <h3>Cleaning up more than one thing</h3>
 ${slide('lx-07', 15, 'Bẫy INT mà quên exit: Ctrl-C xong script CHẠY TIẾP')}
-<pre><code>cleanup() {
+<pre><code class="language-bash">cleanup() {
   local rc=\$?                          <span class="tok-comment"># capture the exit code FIRST</span>
   rm -rf "\${tmpdir:-}"
   [[ -n \${container:-} ]] &amp;&amp; docker rm -f "\$container" &gt;/dev/null 2&gt;&amp;1
@@ -1365,7 +1365,7 @@ trap cleanup EXIT</code></pre>
 
 <h3>trap ERR: report where it broke</h3>
 ${slide('lx-07', 17, 'trap ERR chỉ vào được trong hàm khi có set -E')}
-<pre><code>set -euo pipefail
+<pre><code class="language-bash">set -euo pipefail
 
 on_error() {
   local rc=\$? line=\$1
@@ -1379,7 +1379,7 @@ trap 'on_error \$LINENO' ERR</code></pre>
 
 <h3>flock: stop two copies running at once</h3>
 ${slide('lx-07', 18, 'flock: khoá nằm ở fd đang mở — kể cả của tiến trình con')}
-<pre><code>#!/usr/bin/env bash
+<pre><code class="language-bash">#!/usr/bin/env bash
 set -euo pipefail
 
 readonly LOCKFILE=/var/lock/backup.lock
@@ -1401,7 +1401,7 @@ already running</div>
 
 <h3>Idempotency: safe to run twice</h3>
 ${slide('lx-07', 19, 'Chạy hai lần không hỏng: kiểm rồi mới làm')}
-<pre><code><span class="tok-comment"># Not idempotent — a second run fails or duplicates</span>
+<pre><code class="language-bash"><span class="tok-comment"># Not idempotent — a second run fails or duplicates</span>
 mkdir /srv/app/data
 echo "PATH=/opt/bin:\$PATH" &gt;&gt; ~/.bashrc
 useradd deploy
@@ -1414,7 +1414,7 @@ id -u deploy &amp;&gt;/dev/null || useradd -r -s /usr/sbin/nologin deploy</code>
 <div class="callout warn">The <code>&gt;&gt; ~/.bashrc</code> example is not hypothetical. A setup script run three times leaves three copies of the same <code>PATH</code> line, each prepending again, so <code>PATH</code> grows on every shell start. <code>grep -qxF</code> — quiet, whole-line, fixed-string — is the guard, and <code>-F</code> matters because the line contains <code>\$</code> and <code>/</code> which would otherwise be regex.</div>
 
 <h3>Putting it together</h3>
-<pre><code>#!/usr/bin/env bash
+<pre><code class="language-bash">#!/usr/bin/env bash
 set -euo pipefail
 IFS=\$'\\n\\t'
 
@@ -1450,7 +1450,7 @@ backup already running</div>
 
 <h3>Six ways a script dies — measured</h3>
 <p>The flow at the top of this lesson is a claim; here is the measurement. <code>tr.sh</code> creates a directory with <code>mktemp -d</code>, registers an EXIT trap that reports and deletes it, then either finishes, exits, fails under <code>set -e</code>, or sleeps so it can be killed. Ctrl-C was simulated the way a terminal does it: <code>SIGINT</code> sent to the whole process group (<code>kill -INT -- -PGID</code>).</p>
-<pre><code>#!/usr/bin/env bash
+<pre><code class="language-bash">#!/usr/bin/env bash
 set -euo pipefail
 tmpdir=\$(mktemp -d)
 trap 'echo "EXIT ran (code \$?) — removing \$tmpdir" &gt;&amp;2; rm -rf "\$tmpdir"' EXIT
@@ -1473,7 +1473,7 @@ esac</code></pre>
 
 <h3>A trap on INT must end with exit</h3>
 <p>Trapping <code>INT</code> replaces bash's default reaction ("die"). If the handler does not exit, the script <em>continues</em> after Ctrl-C — the interrupted command dies, the next line runs. Measured with two scripts that differ in one word:</p>
-<pre><code>trap 'echo "INT: đã bắt Ctrl-C" &gt;&amp;2' INT                      <span class="tok-comment"># int.sh  — no exit</span>
+<pre><code class="language-bash">trap 'echo "INT: đã bắt Ctrl-C" &gt;&amp;2' INT                      <span class="tok-comment"># int.sh  — no exit</span>
 trap 'echo "INT: đã bắt Ctrl-C, thoát 130" &gt;&amp;2; exit 130' INT   <span class="tok-comment"># int2.sh — exits</span>
 trap 'echo "EXIT: dọn dẹp" &gt;&amp;2' EXIT
 sleep 30
@@ -1491,7 +1491,7 @@ EXIT: dọn dẹp
 
 <h3>trap ERR is silent inside functions without <code>set -E</code></h3>
 <p>The ERR trap in this lesson works at the top level. Most real scripts (Lesson 7.5) run everything inside <code>main()</code>, and the bash manual is explicit: the ERR trap is <em>not</em> inherited by functions, command substitutions or subshells unless <code>errtrace</code> is on. Same script, run twice — the failure is a <code>curl</code> inside a function:</p>
-<pre><code>#!/usr/bin/env bash
+<pre><code class="language-bash">#!/usr/bin/env bash
 set -\${CO:-e}uo pipefail
 trap 'echo "ERR: dòng \$LINENO, mã \$?: \$BASH_COMMAND" &gt;&amp;2' ERR   <span class="tok-comment"># message kept exactly as recorded</span>
 tai_ve() {
@@ -1549,7 +1549,7 @@ backup failed (1)</div>
 
 <h3>Run it step by step</h3>
 <p>In an <code>ubuntu:24.04</code> container (or <code>~/thu-linux/ch7</code>), save <code>tr.sh</code> from "Six ways a script dies" and make it executable. Then:</p>
-<pre><code>./tr.sh het;   echo "exit=\$?"          <span class="tok-comment"># normal end</span>
+<pre><code class="language-bash">./tr.sh het;   echo "exit=\$?"          <span class="tok-comment"># normal end</span>
 ./tr.sh loi;   echo "exit=\$?"          <span class="tok-comment"># set -e abort</span>
 ./tr.sh cho                             <span class="tok-comment"># press Ctrl-C after a second</span>
 echo "exit=\$?"
@@ -1632,7 +1632,7 @@ exit=130
 
 <h3>trap EXIT: cái luôn luôn chạy</h3>
 ${slide('lx-07', 14, 'Script chết giữa chừng: bẫy nào chạy, mã thoát bao nhiêu?')}
-<pre><code>#!/usr/bin/env bash
+<pre><code class="language-bash">#!/usr/bin/env bash
 set -euo pipefail
 
 tmpdir=\$(mktemp -d)
@@ -1662,7 +1662,7 @@ trap 'rm -f "\$tmpfile"' EXIT</code></pre>
 
 <h3>Dọn dẹp nhiều hơn một thứ</h3>
 ${slide('lx-07', 15, 'Bẫy INT mà quên exit: Ctrl-C xong script CHẠY TIẾP')}
-<pre><code>cleanup() {
+<pre><code class="language-bash">cleanup() {
   local rc=\$?                          <span class="tok-comment"># bắt lấy mã thoát TRƯỚC TIÊN</span>
   rm -rf "\${tmpdir:-}"
   [[ -n \${container:-} ]] &amp;&amp; docker rm -f "\$container" &gt;/dev/null 2&gt;&amp;1
@@ -1679,7 +1679,7 @@ trap cleanup EXIT</code></pre>
 
 <h3>trap ERR: báo chỗ nó vỡ</h3>
 ${slide('lx-07', 17, 'trap ERR chỉ vào được trong hàm khi có set -E')}
-<pre><code>set -euo pipefail
+<pre><code class="language-bash">set -euo pipefail
 
 on_error() {
   local rc=\$? line=\$1
@@ -1693,7 +1693,7 @@ trap 'on_error \$LINENO' ERR</code></pre>
 
 <h3>flock: chặn hai bản cùng chạy</h3>
 ${slide('lx-07', 18, 'flock: khoá nằm ở fd đang mở — kể cả của tiến trình con')}
-<pre><code>#!/usr/bin/env bash
+<pre><code class="language-bash">#!/usr/bin/env bash
 set -euo pipefail
 
 readonly LOCKFILE=/var/lock/backup.lock
@@ -1715,7 +1715,7 @@ flock -n 9 || { echo "đang chạy rồi" &gt;&amp;2; exit 1; }
 
 <h3>Tính bền vững khi chạy lại</h3>
 ${slide('lx-07', 19, 'Chạy hai lần không hỏng: kiểm rồi mới làm')}
-<pre><code><span class="tok-comment"># Không bền — lần chạy thứ hai hỏng hoặc nhân đôi</span>
+<pre><code class="language-bash"><span class="tok-comment"># Không bền — lần chạy thứ hai hỏng hoặc nhân đôi</span>
 mkdir /srv/app/data
 echo "PATH=/opt/bin:\$PATH" &gt;&gt; ~/.bashrc
 useradd deploy
@@ -1728,7 +1728,7 @@ id -u deploy &amp;&gt;/dev/null || useradd -r -s /usr/sbin/nologin deploy</code>
 <div class="callout warn">Ví dụ <code>&gt;&gt; ~/.bashrc</code> không phải chuyện giả định. Một script cài đặt chạy ba lần sẽ để lại ba bản của cùng một dòng <code>PATH</code>, mỗi bản lại thêm vào đầu một lần nữa, nên <code>PATH</code> phình ra ở mỗi lần mở shell. <code>grep -qxF</code> — im lặng, khớp nguyên dòng, chuỗi cố định — chính là cái chốt, và chữ <code>-F</code> quan trọng vì cái dòng đó có chứa <code>\$</code> và <code>/</code>, những thứ nếu không sẽ bị hiểu thành regex.</div>
 
 <h3>Ghép lại với nhau</h3>
-<pre><code>#!/usr/bin/env bash
+<pre><code class="language-bash">#!/usr/bin/env bash
 set -euo pipefail
 IFS=\$'\\n\\t'
 
@@ -1764,7 +1764,7 @@ sao lưu đang chạy rồi</div>
 
 <h3>Sáu cách một script chết — đo thật</h3>
 <p>Sơ đồ ở đầu bài là một lời khẳng định; đây là phép đo. <code>tr.sh</code> tạo một thư mục bằng <code>mktemp -d</code>, đặt bẫy EXIT báo cáo rồi xoá nó, sau đó hoặc chạy xong, hoặc tự thoát, hoặc hỏng dưới <code>set -e</code>, hoặc ngủ để bị giết. Ctrl-C được giả lập đúng như terminal làm: gửi <code>SIGINT</code> tới cả nhóm tiến trình (<code>kill -INT -- -PGID</code>).</p>
-<pre><code>#!/usr/bin/env bash
+<pre><code class="language-bash">#!/usr/bin/env bash
 set -euo pipefail
 tmpdir=\$(mktemp -d)
 trap 'echo "EXIT chạy (mã \$?) — xoá \$tmpdir" &gt;&amp;2; rm -rf "\$tmpdir"' EXIT
@@ -1787,7 +1787,7 @@ esac</code></pre>
 
 <h3>Bẫy INT phải kết thúc bằng exit</h3>
 <p>Bẫy <code>INT</code> thay thế phản ứng mặc định của bash ("chết"). Nếu bộ xử lý không exit, script <em>CHẠY TIẾP</em> sau Ctrl-C — lệnh đang chạy chết, dòng kế tiếp vẫn chạy. Đo bằng hai script chỉ khác nhau một từ:</p>
-<pre><code>trap 'echo "INT: đã bắt Ctrl-C" &gt;&amp;2' INT              <span class="tok-comment"># int.sh  — không exit</span>
+<pre><code class="language-bash">trap 'echo "INT: đã bắt Ctrl-C" &gt;&amp;2' INT              <span class="tok-comment"># int.sh  — không exit</span>
 trap 'echo "INT: đã bắt Ctrl-C, thoát 130" &gt;&amp;2; exit 130' INT   <span class="tok-comment"># int2.sh — có exit</span>
 trap 'echo "EXIT: dọn dẹp" &gt;&amp;2' EXIT
 sleep 30
@@ -1805,7 +1805,7 @@ EXIT: dọn dẹp
 
 <h3>trap ERR câm trong hàm nếu thiếu <code>set -E</code></h3>
 <p>Bẫy ERR trong bài chạy được ở cấp ngoài cùng. Phần lớn script thật (Bài 7.5) chạy mọi thứ bên trong <code>main()</code>, mà tài liệu bash nói rõ: bẫy ERR <em>KHÔNG</em> được hàm, phép thay thế lệnh hay shell con thừa hưởng, trừ khi bật <code>errtrace</code>. Cùng một script, chạy hai lần — lỗi là một lệnh <code>curl</code> nằm trong hàm:</p>
-<pre><code>#!/usr/bin/env bash
+<pre><code class="language-bash">#!/usr/bin/env bash
 set -\${CO:-e}uo pipefail
 trap 'echo "ERR: dòng \$LINENO, mã \$?: \$BASH_COMMAND" &gt;&amp;2' ERR
 tai_ve() {
@@ -1863,7 +1863,7 @@ backup failed (1)</div>
 
 <h3>Chạy thử từng bước</h3>
 <p>Trong một container <code>ubuntu:24.04</code> (hoặc <code>~/thu-linux/ch7</code>), lưu <code>tr.sh</code> ở mục "Sáu cách một script chết" và cho nó quyền chạy. Rồi:</p>
-<pre><code>./tr.sh het;   echo "mã=\$?"            <span class="tok-comment"># kết thúc bình thường</span>
+<pre><code class="language-bash">./tr.sh het;   echo "mã=\$?"            <span class="tok-comment"># kết thúc bình thường</span>
 ./tr.sh loi;   echo "mã=\$?"            <span class="tok-comment"># set -e dừng</span>
 ./tr.sh cho                             <span class="tok-comment"># nhấn Ctrl-C sau một giây</span>
 echo "mã=\$?"
@@ -1955,7 +1955,7 @@ mã=130
 
 <h3>set -x: trace execution</h3>
 ${slide('lx-07', 20, 'set -x in lệnh SAU khai triển; PS4 thêm file:dòng:hàm')}
-<pre><code>#!/usr/bin/env bash
+<pre><code class="language-bash">#!/usr/bin/env bash
 set -x                      <span class="tok-comment"># trace from here on</span>
 name="Binh"
 greet="Hello, \$name"
@@ -1971,7 +1971,7 @@ Hello, Binh
 ./deploy.sh 2&gt; trace.log           <span class="tok-comment"># trace goes to stderr — capture it separately</span></code></pre>
 
 <h3>PS4: make the trace readable</h3>
-<pre><code>export PS4='+ \${BASH_SOURCE##*/}:\${LINENO}:\${FUNCNAME[0]:-main}: '
+<pre><code class="language-bash">export PS4='+ \${BASH_SOURCE##*/}:\${LINENO}:\${FUNCNAME[0]:-main}: '
 set -x
 deploy staging</code></pre>
 <div class="out">+ deploy.sh:41:main: deploy staging
@@ -1982,7 +1982,7 @@ deploy staging</code></pre>
 <div class="callout ok">Add <code>+\$(date +%s.%N)</code> to <code>PS4</code> and the trace becomes a crude profiler — the timestamps show which command consumed the wall-clock time. It is not <code>perf</code>, but for "why does this deploy script take four minutes" it usually answers the question in one run.</div>
 
 <h3>Tracing just the interesting part</h3>
-<pre><code><span class="tok-comment"># Around a suspect section</span>
+<pre><code class="language-bash"><span class="tok-comment"># Around a suspect section</span>
 set -x
 problematic_function "\$arg"
 set +x
@@ -2031,7 +2031,7 @@ In deploy.sh line 31:
 for f in \$(ls *.log); do
          ^---------^ SC2045: Iterating over ls output is fragile. Use globs.</div>
 <p>Those three findings are Lessons 6.2, 6.1 and 6.5 respectively — the exact traps this course spent a chapter on, found automatically in under a second. Every warning has a wiki page explaining the failure with a reproduction, so it teaches rather than just complains.</p>
-<pre><code><span class="tok-comment"># Install it</span>
+<pre><code class="language-bash"><span class="tok-comment"># Install it</span>
 sudo apt install shellcheck
 
 <span class="tok-comment"># In CI — fail the build on any finding</span>
@@ -2043,7 +2043,7 @@ command \$args</code></pre>
 <div class="callout ok"><strong>Run ShellCheck on every script you write.</strong> It catches the unquoted-variable class of bug reliably, which is the one that only fails on unusual input and therefore survives testing. When you do disable a rule, put the reason in the comment — a bare <code>disable=</code> line is indistinguishable from silencing something you did not understand.</div>
 
 <h3>Logging with levels</h3>
-<pre><code>readonly LOG_LEVEL=\${LOG_LEVEL:-info}
+<pre><code class="language-bash">readonly LOG_LEVEL=\${LOG_LEVEL:-info}
 
 _log() {
   local level=\$1; shift
@@ -2081,7 +2081,7 @@ env -i HOME="\$HOME" PATH=/usr/bin:/bin bash -x ./script.sh</code></pre>
 <p><code>env -i</code> starts with an <em>empty</em> environment and adds back only what you name. If the script works normally but fails under that command, the cause is an environment variable you did not know you depended on — which is exactly the difference between your shell and cron's.</p>
 
 <h3>Testing a script</h3>
-<pre><code><span class="tok-comment"># bats — a test framework for bash</span>
+<pre><code class="language-bash"><span class="tok-comment"># bats — a test framework for bash</span>
 sudo apt install bats
 
 <span class="tok-comment"># test/deploy.bats</span>
@@ -2105,7 +2105,7 @@ sudo apt install bats
 
 <h3>Reading a trace line by line</h3>
 <p>The traces in this lesson were short. Here is a real one from a nine-line script, first with the default <code>PS4</code>, then with the file:line:function version — so you can see what each piece buys you.</p>
-<pre><code>#!/usr/bin/env bash
+<pre><code class="language-bash">#!/usr/bin/env bash
 set -euo pipefail
 deploy() {
   local env=\$1
@@ -2146,7 +2146,7 @@ thiếu .env.production
 </table>
 
 <h3>bash -n: the error is often above the line it names</h3>
-<pre><code>$ cat -n n.sh
+<pre><code class="language-bash">$ cat -n n.sh
      1  #!/usr/bin/env bash
      2  if [[ -n "\$1" ]]; then
      3    echo "co tham so"
@@ -2160,7 +2160,7 @@ exit=2</div>
 
 <h3>ShellCheck, run for real</h3>
 <p>A small script with five classic bugs, checked with ShellCheck 0.9.0 (the version in Ubuntu 24.04):</p>
-<pre><code>#!/usr/bin/env bash
+<pre><code class="language-bash">#!/usr/bin/env bash
 tmpdir=/tmp/build
 rm -rf \$tmpdir/*
 process() {
@@ -2203,7 +2203,7 @@ if [ \$count &gt; 5 ]; then echo nhieu; fi
 <p>The token appears in full, because the trace shows values <em>after</em> expansion. In a systemd service that line goes to the journal; in cron, into an email. If you must trace a script that handles credentials, switch tracing off around that block (<code>set +x</code> … <code>set -x</code>) and never enable it by default.</p>
 
 <h3>"Works by hand, fails in cron": reproduce it with env -i</h3>
-<pre><code>#!/usr/bin/env bash
+<pre><code class="language-bash">#!/usr/bin/env bash
 set -euo pipefail
 echo "HOME=\${HOME:-&lt;rỗng&gt;} PATH=\$PATH"
 pg_dump app &gt; /dev/null            <span class="tok-comment"># pg_dump lives in /usr/local/bin here</span>
@@ -2222,7 +2222,7 @@ OK</div>
 
 <h3>Run it step by step</h3>
 <p>In an <code>ubuntu:24.04</code> container (<code>apt-get install -y shellcheck</code> first), save <code>n.sh</code>, <code>dbg.sh</code> and <code>sc.sh</code> from above, then:</p>
-<pre><code>bash -n n.sh; echo "exit=\$?"                           <span class="tok-comment"># 1. syntax: which line is really wrong?</span>
+<pre><code class="language-bash">bash -n n.sh; echo "exit=\$?"                           <span class="tok-comment"># 1. syntax: which line is really wrong?</span>
 touch .env.staging &amp;&amp; bash -x dbg.sh staging           <span class="tok-comment"># 2. plain trace</span>
 export PS4='+ \${BASH_SOURCE##*/}:\${LINENO}:\${FUNCNAME[0]:-main}: '
 bash -x dbg.sh production; echo "exit=\$?"             <span class="tok-comment"># 3. trace with positions</span>
@@ -2295,7 +2295,7 @@ shellcheck -S warning sc.sh | grep -c '^In'            <span class="tok-comment"
 
 <h3>set -x: lần theo từng lệnh</h3>
 ${slide('lx-07', 20, 'set -x in lệnh SAU khai triển; PS4 thêm file:dòng:hàm')}
-<pre><code>#!/usr/bin/env bash
+<pre><code class="language-bash">#!/usr/bin/env bash
 set -x                      <span class="tok-comment"># lần theo từ đây trở đi</span>
 name="Binh"
 greet="Hello, \$name"
@@ -2311,7 +2311,7 @@ Hello, Binh
 ./deploy.sh 2&gt; trace.log           <span class="tok-comment"># vệt lần theo ra stderr — hứng riêng nó</span></code></pre>
 
 <h3>PS4: làm vệt lần theo đọc được</h3>
-<pre><code>export PS4='+ \${BASH_SOURCE##*/}:\${LINENO}:\${FUNCNAME[0]:-main}: '
+<pre><code class="language-bash">export PS4='+ \${BASH_SOURCE##*/}:\${LINENO}:\${FUNCNAME[0]:-main}: '
 set -x
 deploy staging</code></pre>
 <div class="out">+ deploy.sh:41:main: deploy staging
@@ -2322,7 +2322,7 @@ deploy staging</code></pre>
 <div class="callout ok">Thêm <code>+\$(date +%s.%N)</code> vào <code>PS4</code> thì vệt lần theo trở thành một bộ đo hiệu năng thô sơ — các dấu thời gian cho thấy lệnh nào ngốn hết thời gian thực. Nó không phải <code>perf</code>, nhưng với câu "vì sao cái script deploy này mất bốn phút" thì nó thường trả lời xong chỉ trong một lần chạy.</div>
 
 <h3>Chỉ lần theo đúng đoạn đáng quan tâm</h3>
-<pre><code><span class="tok-comment"># Quanh một đoạn khả nghi</span>
+<pre><code class="language-bash"><span class="tok-comment"># Quanh một đoạn khả nghi</span>
 set -x
 problematic_function "\$arg"
 set +x
@@ -2371,7 +2371,7 @@ In deploy.sh line 31:
 for f in \$(ls *.log); do
          ^---------^ SC2045: Iterating over ls output is fragile. Use globs.</div>
 <p>Ba phát hiện đó lần lượt là Bài 6.2, 6.1 và 6.5 — đúng những cái bẫy mà khoá này đã dành cả một chương để nói, và được tìm ra tự động trong chưa tới một giây. Mỗi cảnh báo đều có một trang wiki giải thích chỗ hỏng kèm cách dựng lại, nên nó DẠY chứ không chỉ than phiền.</p>
-<pre><code><span class="tok-comment"># Cài nó</span>
+<pre><code class="language-bash"><span class="tok-comment"># Cài nó</span>
 sudo apt install shellcheck
 
 <span class="tok-comment"># Trong CI — cho bản dựng hỏng nếu có bất kỳ phát hiện nào</span>
@@ -2383,7 +2383,7 @@ command \$args</code></pre>
 <div class="callout ok"><strong>Hãy chạy ShellCheck với mọi script bạn viết.</strong> Nó bắt được lớp lỗi biến-thiếu-nháy một cách đáng tin, mà đó lại đúng là lớp lỗi chỉ hỏng với đầu vào bất thường nên sống sót qua mọi lần thử. Khi bạn có tắt một luật, hãy ghi lý do vào chú thích — một dòng <code>disable=</code> trần thì không phân biệt được với việc dập tiếng một thứ mà bạn không hiểu.</div>
 
 <h3>Ghi log có phân mức</h3>
-<pre><code>readonly LOG_LEVEL=\${LOG_LEVEL:-info}
+<pre><code class="language-bash">readonly LOG_LEVEL=\${LOG_LEVEL:-info}
 
 _log() {
   local level=\$1; shift
@@ -2421,7 +2421,7 @@ env -i HOME="\$HOME" PATH=/usr/bin:/bin bash -x ./script.sh</code></pre>
 <p><code>env -i</code> khởi động với một môi trường <em>RỖNG</em> rồi chỉ thêm lại đúng những gì bạn nêu tên. Nếu script chạy bình thường thì được mà chạy dưới lệnh đó thì hỏng, nguyên nhân là một biến môi trường mà bạn không biết là mình đang phụ thuộc vào — và đó chính xác là khác biệt giữa shell của bạn và của cron.</p>
 
 <h3>Kiểm thử một script</h3>
-<pre><code><span class="tok-comment"># bats — một khung kiểm thử cho bash</span>
+<pre><code class="language-bash"><span class="tok-comment"># bats — một khung kiểm thử cho bash</span>
 sudo apt install bats
 
 <span class="tok-comment"># test/deploy.bats</span>
@@ -2445,7 +2445,7 @@ sudo apt install bats
 
 <h3>Đọc một vệt trace từng dòng</h3>
 <p>Các vệt trace trong bài còn ngắn. Đây là một vệt thật từ một script chín dòng, lần đầu với <code>PS4</code> mặc định, lần sau với bản file:dòng:hàm — để bạn thấy mỗi mẩu mang lại gì.</p>
-<pre><code>#!/usr/bin/env bash
+<pre><code class="language-bash">#!/usr/bin/env bash
 set -euo pipefail
 deploy() {
   local env=\$1
@@ -2486,7 +2486,7 @@ thiếu .env.production
 </table>
 
 <h3>bash -n: lỗi thường nằm TRÊN dòng mà nó báo</h3>
-<pre><code>$ cat -n n.sh
+<pre><code class="language-bash">$ cat -n n.sh
      1  #!/usr/bin/env bash
      2  if [[ -n "\$1" ]]; then
      3    echo "co tham so"
@@ -2500,7 +2500,7 @@ mã=2</div>
 
 <h3>ShellCheck, chạy thật</h3>
 <p>Một script nhỏ mang năm lỗi kinh điển, kiểm bằng ShellCheck 0.9.0 (bản có trong Ubuntu 24.04):</p>
-<pre><code>#!/usr/bin/env bash
+<pre><code class="language-bash">#!/usr/bin/env bash
 tmpdir=/tmp/build
 rm -rf \$tmpdir/*
 process() {
@@ -2543,7 +2543,7 @@ if [ \$count &gt; 5 ]; then echo nhieu; fi
 <p>Token hiện ra nguyên vẹn, vì vệt trace in giá trị <em>SAU</em> khai triển. Trong một dịch vụ systemd dòng đó đi vào journal; trong cron, nó thành một email. Nếu buộc phải trace một script có xử lý thông tin đăng nhập, hãy tắt trace quanh khối đó (<code>set +x</code> … <code>set -x</code>) và đừng bao giờ bật mặc định.</p>
 
 <h3>"Tay chạy được, cron hỏng": tái hiện bằng env -i</h3>
-<pre><code>#!/usr/bin/env bash
+<pre><code class="language-bash">#!/usr/bin/env bash
 set -euo pipefail
 echo "HOME=\${HOME:-&lt;rỗng&gt;} PATH=\$PATH"
 pg_dump app &gt; /dev/null            <span class="tok-comment"># ở máy này pg_dump nằm trong /usr/local/bin</span>
@@ -2562,7 +2562,7 @@ OK</div>
 
 <h3>Chạy thử từng bước</h3>
 <p>Trong một container <code>ubuntu:24.04</code> (chạy <code>apt-get install -y shellcheck</code> trước), lưu <code>n.sh</code>, <code>dbg.sh</code> và <code>sc.sh</code> ở trên, rồi:</p>
-<pre><code>bash -n n.sh; echo "mã=\$?"                             <span class="tok-comment"># 1. cú pháp: dòng nào thật sự sai?</span>
+<pre><code class="language-bash">bash -n n.sh; echo "mã=\$?"                             <span class="tok-comment"># 1. cú pháp: dòng nào thật sự sai?</span>
 touch .env.staging &amp;&amp; bash -x dbg.sh staging           <span class="tok-comment"># 2. trace trơn</span>
 export PS4='+ \${BASH_SOURCE##*/}:\${LINENO}:\${FUNCNAME[0]:-main}: '
 bash -x dbg.sh production; echo "mã=\$?"               <span class="tok-comment"># 3. trace có vị trí</span>
@@ -2644,7 +2644,7 @@ shellcheck -S warning sc.sh | grep -c '^In'            <span class="tok-comment"
 
 <h3>The whole thing</h3>
 ${slide('lx-07', 24, 'Script hoàn chỉnh = 9 khối, mỗi khối là một bài đã học')}
-<pre><code>#!/usr/bin/env bash
+<pre><code class="language-bash">#!/usr/bin/env bash
 #
 # deploy.sh — build, push and release the application
 # Usage: deploy.sh [options] &lt;staging|production&gt;
@@ -2905,7 +2905,7 @@ ${slide('lx-07', 29, 'Sai lầm hay gặp ở Chương 7')}
 
 <h3>Run it step by step</h3>
 <p>Reproduce the dry run yourself in a throwaway container — no real Docker, registry or server needed:</p>
-<pre><code>docker run --rm -it ubuntu:24.04 bash
+<pre><code class="language-bash">docker run --rm -it ubuntu:24.04 bash
 apt-get update &amp;&amp; apt-get install -y git curl util-linux
 mkdir -p /srv/app &amp;&amp; cd /srv/app
 <span class="tok-comment"># paste the complete script into deploy.sh, then:</span>
@@ -2986,7 +2986,7 @@ ${slide('lx-07', 32, 'Thực hành Chương 7 (45 phút): gia cố backup.sh c�
 
 <h3>Toàn bộ script</h3>
 ${slide('lx-07', 24, 'Script hoàn chỉnh = 9 khối, mỗi khối là một bài đã học')}
-<pre><code>#!/usr/bin/env bash
+<pre><code class="language-bash">#!/usr/bin/env bash
 #
 # deploy.sh — dựng, đẩy và phát hành ứng dụng
 # Cách dùng: deploy.sh [tuỳ chọn] &lt;staging|production&gt;
@@ -3247,7 +3247,7 @@ ${slide('lx-07', 29, 'Sai lầm hay gặp ở Chương 7')}
 
 <h3>Chạy thử từng bước</h3>
 <p>Tự tái hiện lần chạy thử trong một container vứt đi — không cần Docker thật, registry hay máy chủ:</p>
-<pre><code>docker run --rm -it ubuntu:24.04 bash
+<pre><code class="language-bash">docker run --rm -it ubuntu:24.04 bash
 apt-get update &amp;&amp; apt-get install -y git curl util-linux
 mkdir -p /srv/app &amp;&amp; cd /srv/app
 <span class="tok-comment"># dán script hoàn chỉnh vào deploy.sh, rồi:</span>

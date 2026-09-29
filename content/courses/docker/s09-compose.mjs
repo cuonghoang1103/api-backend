@@ -70,7 +70,7 @@ ${gallery('dk-09', [
 <p class="lead">Everything in the last three chapters was one <code>docker run</code> at a time: a network here, a volume there, five flags to remember. Compose is the file that holds all of it — the services, their networks, their volumes, their environment — so that starting the whole stack is one command, and so that the command is the same on your machine, on a colleague's, and on the server.</p>
 
 <h3>The problem, stated honestly</h3>
-<pre><code><span class="tok-comment"># What a three-service stack costs without compose</span>
+<pre><code class="language-bash"><span class="tok-comment"># What a three-service stack costs without compose</span>
 docker network create --internal private
 docker network create public
 docker volume create pgdata
@@ -116,7 +116,7 @@ networks:
   private:
     internal: true
   public:</code></pre>
-<pre><code>docker compose up -d</code></pre>
+<pre><code class="language-bash">docker compose up -d</code></pre>
 <div class="out">[+] Running 6/6
  ✔ Network blog_public      Created                          0.1s
  ✔ Network blog_private     Created                          0.1s
@@ -128,7 +128,7 @@ networks:
 
 <h3>The project name decides everything's name</h3>
 ${slide('dk-09', 5, 'Đổi tên thư mục ⇒ tên dự án đổi ⇒ stack thứ hai, volume rỗng')}
-<pre><code>docker compose ls
+<pre><code class="language-bash">docker compose ls
 docker compose ps --format 'table {{.Name}}\\t{{.Service}}\\t{{.Status}}'</code></pre>
 <div class="out">NAME    STATUS      CONFIG FILES
 blog    running(3)  /home/cuong/blog/compose.yaml
@@ -152,7 +152,7 @@ ${slide('dk-09', 7, 'Lệnh hằng ngày — và một chữ -v là mất cơ s�
   <div class="lz-step"><span class="lz-k">exec api sh · run --rm api npm test</span><span class="lz-t">into a running container, or a fresh throwaway one</span><span class="lz-d"><code>exec</code> needs the service up; <code>run</code> starts a new container from the same definition, which is how you run migrations and one-off tasks.</span></div>
   <div class="lz-step"><span class="lz-k">down · down -v</span><span class="lz-t">stop and remove — and the second one deletes your data</span><span class="lz-d"><code>down</code> removes containers and networks but keeps named volumes. <code>-v</code> deletes them. One character between "restart the stack" and "the development database is gone".</span></div>
 </div>
-<pre><code>docker compose logs --tail 3 db
+<pre><code class="language-bash">docker compose logs --tail 3 db
 docker compose exec db psql -U postgres -d blog -c '\\dt' | head -4</code></pre>
 <div class="out">blog-db-1  | 2026-08-22 11:03:14.882 UTC [1] LOG:  database system is ready to accept connections
 blog-db-1  | 2026-08-22 11:03:15.001 UTC [67] LOG:  checkpoint starting: time
@@ -238,7 +238,7 @@ dk09-blog-db-1                   db        Up 4 minutes (healthy)
   <div class="kv"><span class="k"><code>version: "3.8"</code></span><span class="v"><strong>Obsolete.</strong> The Compose Specification dropped it; v2 ignores it and prints a warning. Delete the line — it does nothing except make people think it does something.</span></div>
   <div class="kv"><span class="k">File name</span><span class="v"><code>compose.yaml</code> is the current preferred name. <code>docker-compose.yml</code> still works and is everywhere; both are found automatically.</span></div>
 </div>
-<pre><code>docker compose config &gt;/dev/null</code></pre>
+<pre><code class="language-bash">docker compose config &gt;/dev/null</code></pre>
 <div class="out">WARN[0000] /home/cuong/blog/compose.yaml: the attribute &#96;version&#96; is obsolete,
 it will be ignored, please remove it to avoid potential confusion</div>
 <div class="callout"><strong>What Compose v5 prints (measured, Compose v5.5.1).</strong> The warning above is the older format. The current one reads <code>time="2026-09-24T01:39:30+07:00" level=warning msg="…/compose.yaml: the attribute &#96;version&#96; is obsolete, it will be ignored, please remove it to avoid potential confusion"</code> — same message, different wrapper, and the file still works. Two more format changes you will notice if you compare with older tutorials: the progress header is now <code>[+] up 6/6</code> / <code>[+] down 3/3</code> instead of <code>[+] Running 6/6</code>, and log lines are prefixed with the short <code>db-1  |</code> rather than the full <code>blog-db-1  |</code>. Same tool, same behaviour — only the printing changed.</div>
@@ -295,7 +295,7 @@ it will be ignored, please remove it to avoid potential confusion</div>
 <p class="lead">Mọi thứ trong ba chương vừa rồi đều là từng lệnh <code>docker run</code> một: một cái mạng ở đây, một cái volume ở kia, năm cái cờ phải nhớ. Compose là cái file giữ hết chỗ đó — các dịch vụ, mạng của chúng, volume của chúng, môi trường của chúng — để dựng cả stack lên chỉ còn một câu lệnh, và để câu lệnh ấy giống hệt nhau trên máy bạn, trên máy đồng nghiệp, và trên máy chủ.</p>
 
 <h3>Vấn đề, nói cho thật</h3>
-<pre><code><span class="tok-comment"># Một stack ba dịch vụ tốn bao nhiêu khi không có compose</span>
+<pre><code class="language-bash"><span class="tok-comment"># Một stack ba dịch vụ tốn bao nhiêu khi không có compose</span>
 docker network create --internal private
 docker network create public
 docker volume create pgdata
@@ -341,7 +341,7 @@ networks:
   private:
     internal: true
   public:</code></pre>
-<pre><code>docker compose up -d</code></pre>
+<pre><code class="language-bash">docker compose up -d</code></pre>
 <div class="out">[+] Running 6/6
  ✔ Network blog_public      Created                          0.1s
  ✔ Network blog_private     Created                          0.1s
@@ -353,7 +353,7 @@ networks:
 
 <h3>Tên dự án quyết định tên của mọi thứ</h3>
 ${slide('dk-09', 5, 'Đổi tên thư mục ⇒ tên dự án đổi ⇒ stack thứ hai, volume rỗng')}
-<pre><code>docker compose ls
+<pre><code class="language-bash">docker compose ls
 docker compose ps --format 'table {{.Name}}\\t{{.Service}}\\t{{.Status}}'</code></pre>
 <div class="out">NAME    STATUS      CONFIG FILES
 blog    running(3)  /home/cuong/blog/compose.yaml
@@ -377,7 +377,7 @@ ${slide('dk-09', 7, 'Lệnh hằng ngày — và một chữ -v là mất cơ s�
   <div class="lz-step"><span class="lz-k">exec api sh · run --rm api npm test</span><span class="lz-t">vào một container đang chạy, hoặc một container mới dùng xong vứt</span><span class="lz-d"><code>exec</code> cần dịch vụ đang lên; <code>run</code> khởi động một container mới từ cùng định nghĩa, và đó là cách bạn chạy migration với các việc một lần.</span></div>
   <div class="lz-step"><span class="lz-k">down · down -v</span><span class="lz-t">dừng và xoá — và cái thứ hai xoá luôn dữ liệu của bạn</span><span class="lz-d"><code>down</code> xoá container và mạng nhưng GIỮ volume có tên. Thêm <code>-v</code> là xoá chúng. Một ký tự nằm giữa "khởi động lại stack" và "cơ sở dữ liệu phát triển đi mất rồi".</span></div>
 </div>
-<pre><code>docker compose logs --tail 3 db
+<pre><code class="language-bash">docker compose logs --tail 3 db
 docker compose exec db psql -U postgres -d blog -c '\\dt' | head -4</code></pre>
 <div class="out">blog-db-1  | 2026-08-22 11:03:14.882 UTC [1] LOG:  database system is ready to accept connections
 blog-db-1  | 2026-08-22 11:03:15.001 UTC [67] LOG:  checkpoint starting: time
@@ -463,7 +463,7 @@ dk09-blog-db-1                   db        Up 4 minutes (healthy)
   <div class="kv"><span class="k"><code>version: "3.8"</code></span><span class="v"><strong>Đã lỗi thời.</strong> Compose Specification bỏ nó rồi; v2 phớt lờ nó và in cảnh báo. Hãy xoá dòng đó — nó không làm gì ngoài việc khiến người ta tưởng nó có làm gì.</span></div>
   <div class="kv"><span class="k">Tên file</span><span class="v"><code>compose.yaml</code> là tên được ưa dùng hiện nay. <code>docker-compose.yml</code> vẫn chạy và có ở khắp nơi; cả hai đều được tìm thấy tự động.</span></div>
 </div>
-<pre><code>docker compose config &gt;/dev/null</code></pre>
+<pre><code class="language-bash">docker compose config &gt;/dev/null</code></pre>
 <div class="out">WARN[0000] /home/cuong/blog/compose.yaml: the attribute &#96;version&#96; is obsolete,
 it will be ignored, please remove it to avoid potential confusion</div>
 <div class="callout"><strong>Compose v5 in ra thế nào (đo thật, Compose v5.5.1).</strong> Cảnh báo ở trên là định dạng cũ. Bản hiện hành in <code>time="2026-09-24T01:39:30+07:00" level=warning msg="…/compose.yaml: the attribute &#96;version&#96; is obsolete, it will be ignored, please remove it to avoid potential confusion"</code> — cùng thông điệp, khác lớp vỏ, và file vẫn chạy bình thường. Thêm hai chỗ đổi định dạng bạn sẽ gặp khi so với hướng dẫn cũ: dòng tiêu đề tiến trình giờ là <code>[+] up 6/6</code> / <code>[+] down 3/3</code> thay vì <code>[+] Running 6/6</code>, và mỗi dòng log mang tiền tố ngắn <code>db-1  |</code> thay vì đầy đủ <code>blog-db-1  |</code>. Vẫn công cụ đó, vẫn hành vi đó — chỉ cách in là đổi.</div>
@@ -553,7 +553,7 @@ ${slide('dk-09', 9, 'image, build hay cả hai — và luôn ghi rõ dockerfile:
 
 <h3>Ports, environment, and the two spellings of each</h3>
 ${slide('dk-09', 10, 'YAML tự đổi kiểu dữ liệu: 0755 thành 493, 1.10 thành 1.1')}
-<pre><code>services:
+<pre><code class="language-bash">services:
   api:
     ports:
       - "3000:3000"                       <span class="tok-comment"># short: HOST:CONTAINER</span>
@@ -619,7 +619,7 @@ I_Q=012</div>
 <p>The rule that never fails: <strong>quote every value in <code>environment</code> and every port mapping</strong>. It is the same idea as quoting variables in a shell script — you are telling the parser "this is text, do not be clever". Finish with <code>docker compose down</code>.</p>
 
 <h3>Volumes, three ways</h3>
-<pre><code>services:
+<pre><code class="language-bash">services:
   api:
     volumes:
       - pgdata:/var/lib/postgresql/data   <span class="tok-comment"># named volume (Lesson 7.2)</span>
@@ -636,7 +636,7 @@ volumes:
 
 <h3>What runs, and what happens when it stops</h3>
 ${slide('dk-09', 11, 'deploy.resources và restart có hiệu lực thật với compose up')}
-<pre><code>services:
+<pre><code class="language-bash">services:
   worker:
     image: ghcr.io/me/api:1.4.2
     command: ["node", "dist/worker.js"]   <span class="tok-comment"># overrides CMD</span>
@@ -675,7 +675,7 @@ docker inspect dk09-ref-web-1 -f 'Memory={{.HostConfig.Memory}} NanoCpus={{.Host
 
 <h3>Read the file the way compose reads it</h3>
 ${slide('dk-09', 12, 'docker compose config: xem file đúng như compose sẽ làm')}
-<pre><code>docker compose config --services
+<pre><code class="language-bash">docker compose config --services
 docker compose config | head -18</code></pre>
 <div class="out">db
 api
@@ -793,7 +793,7 @@ ${slide('dk-09', 9, 'image, build hay cả hai — và luôn ghi rõ dockerfile:
 
 <h3>Cổng, môi trường, và hai cách viết cho mỗi thứ</h3>
 ${slide('dk-09', 10, 'YAML tự đổi kiểu dữ liệu: 0755 thành 493, 1.10 thành 1.1')}
-<pre><code>services:
+<pre><code class="language-bash">services:
   api:
     ports:
       - "3000:3000"                       <span class="tok-comment"># dạng ngắn: MÁYCHỦ:CONTAINER</span>
@@ -859,7 +859,7 @@ I_Q=012</div>
 <p>Luật không bao giờ sai: <strong>bọc nháy mọi giá trị trong <code>environment</code> và mọi ánh xạ cổng</strong>. Cùng ý với việc bọc nháy biến trong script shell — bạn đang bảo bộ phân tích "đây là chữ, đừng tự thông minh". Xong thì <code>docker compose down</code>.</p>
 
 <h3>Volume, ba kiểu</h3>
-<pre><code>services:
+<pre><code class="language-bash">services:
   api:
     volumes:
       - pgdata:/var/lib/postgresql/data   <span class="tok-comment"># volume có tên (Bài 7.2)</span>
@@ -876,7 +876,7 @@ volumes:
 
 <h3>Cái gì chạy, và chuyện gì xảy ra khi nó dừng</h3>
 ${slide('dk-09', 11, 'deploy.resources và restart có hiệu lực thật với compose up')}
-<pre><code>services:
+<pre><code class="language-bash">services:
   worker:
     image: ghcr.io/me/api:1.4.2
     command: ["node", "dist/worker.js"]   <span class="tok-comment"># ghi đè CMD</span>
@@ -915,7 +915,7 @@ docker inspect dk09-ref-web-1 -f 'Memory={{.HostConfig.Memory}} NanoCpus={{.Host
 
 <h3>Đọc cái file theo đúng cách compose đọc nó</h3>
 ${slide('dk-09', 12, 'docker compose config: xem file đúng như compose sẽ làm')}
-<pre><code>docker compose config --services
+<pre><code class="language-bash">docker compose config --services
 docker compose config | head -18</code></pre>
 <div class="out">db
 api
@@ -1019,14 +1019,14 @@ services:
 
 <h3>The failure, reproduced</h3>
 ${slide('dk-09', 13, 'depends_on trần: api chết trước khi Postgres sẵn sàng (đo bằng mili giây)')}
-<pre><code>services:
+<pre><code class="language-bash">services:
   db:
     image: postgres:16-alpine
     environment: { POSTGRES_PASSWORD: secret }
   api:
     build: .
     depends_on: [db]          <span class="tok-comment"># started, NOT ready</span></code></pre>
-<pre><code>docker compose up 2&gt;&amp;1 | tail -5</code></pre>
+<pre><code class="language-bash">docker compose up 2&gt;&amp;1 | tail -5</code></pre>
 <div class="out">blog-db-1   | The files belonging to this database system will be owned by "postgres".
 blog-api-1  | Error: connect ECONNREFUSED 172.19.0.2:5432
 blog-api-1  |     at TCPConnectWrap.afterConnect [as oncomplete]
@@ -1060,7 +1060,7 @@ db-1  | 2026-09-23T18:38:15.406250593Z … database system is ready to accept co
 
 <h3>A healthcheck turns "started" into "ready"</h3>
 ${slide('dk-09', 14, 'healthcheck + service_healthy: có và không có start_interval')}
-<pre><code>services:
+<pre><code class="language-bash">services:
   db:
     image: postgres:16-alpine
     environment: { POSTGRES_PASSWORD: secret, POSTGRES_DB: blog }
@@ -1075,7 +1075,7 @@ ${slide('dk-09', 14, 'healthcheck + service_healthy: có và không có start_in
     depends_on:
       db:
         condition: service_healthy      <span class="tok-comment"># wait for the CHECK, not the start</span></code></pre>
-<pre><code>docker compose up -d 2&gt;&amp;1 | tail -4
+<pre><code class="language-bash">docker compose up -d 2&gt;&amp;1 | tail -4
 docker compose ps --format 'table {{.Service}}\\t{{.Status}}'</code></pre>
 <div class="out"> ✔ Container blog-db-1   Healthy                          6.4s
  ✔ Container blog-api-1  Started                          6.6s
@@ -1117,7 +1117,7 @@ ${slide('dk-09', 15, 'Năm con số của healthcheck — hay quên nhất là s
   <div class="lz-step"><span class="lz-k">retries</span><span class="lz-t">consecutive failures before the container is marked unhealthy</span><span class="lz-d">3–10. This is your tolerance for a transient blip; one failed check should not condemn a service.</span></div>
   <div class="lz-step"><span class="lz-k">start_period</span><span class="lz-t">a grace window where failures do NOT count</span><span class="lz-d">The one people omit. During it the container can fail every check without being marked unhealthy or restarted — which is exactly what a slow-starting JVM, a database running migrations, or a Next.js server needs.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Watch the state machine directly</span>
+<pre><code class="language-bash"><span class="tok-comment"># Watch the state machine directly</span>
 docker inspect -f '{{ .State.Health.Status }}' blog-db-1
 docker inspect -f '{{ range .State.Health.Log }}{{ .ExitCode }} {{ .Output }}{{ end }}' blog-db-1 | head -2</code></pre>
 <div class="out">healthy
@@ -1172,7 +1172,7 @@ exit=0
 
 <h3>Waiting for a job to finish, not a service to be ready</h3>
 ${slide('dk-09', 17, 'Job migrate phải thoát 0 thì api mới được start')}
-<pre><code>services:
+<pre><code class="language-bash">services:
   migrate:
     image: ghcr.io/me/api:1.4.2
     command: ["npx", "prisma", "migrate", "deploy"]
@@ -1252,7 +1252,7 @@ migrate-1  | 2026-09-23T18:40:13.980091051Z CREATE TABLE</div>
 <h3>And the application still has to retry</h3>
 ${slide('dk-09', 18, 'Thứ tự khởi động chỉ đúng một lần — app vẫn phải tự thử lại')}
 <p>Healthchecks fix start-up ordering. They do not fix the database restarting at 3am, a network blip, or a failover — at which point your API has been running for three days and its connection pool suddenly fails. Compose's ordering guarantees apply once, at start; resilience is the application's job for the rest of the time.</p>
-<pre><code><span class="tok-comment"># The five lines that make ordering a convenience rather than a requirement</span>
+<pre><code class="language-javascript"><span class="tok-comment"># The five lines that make ordering a convenience rather than a requirement</span>
 async function connectWithRetry(attempt = 1) {
   try { return await prisma.\$connect(); }
   catch (err) {
@@ -1320,14 +1320,14 @@ db not ready (P1001), retry 2 in 400ms
 
 <h3>Tái hiện cái hỏng</h3>
 ${slide('dk-09', 13, 'depends_on trần: api chết trước khi Postgres sẵn sàng (đo bằng mili giây)')}
-<pre><code>services:
+<pre><code class="language-bash">services:
   db:
     image: postgres:16-alpine
     environment: { POSTGRES_PASSWORD: secret }
   api:
     build: .
     depends_on: [db]          <span class="tok-comment"># đã khởi động, CHƯA sẵn sàng</span></code></pre>
-<pre><code>docker compose up 2&gt;&amp;1 | tail -5</code></pre>
+<pre><code class="language-bash">docker compose up 2&gt;&amp;1 | tail -5</code></pre>
 <div class="out">blog-db-1   | The files belonging to this database system will be owned by "postgres".
 blog-api-1  | Error: connect ECONNREFUSED 172.19.0.2:5432
 blog-api-1  |     at TCPConnectWrap.afterConnect [as oncomplete]
@@ -1361,7 +1361,7 @@ db-1  | 2026-09-23T18:38:15.406250593Z … database system is ready to accept co
 
 <h3>Healthcheck biến "đã khởi động" thành "đã sẵn sàng"</h3>
 ${slide('dk-09', 14, 'healthcheck + service_healthy: có và không có start_interval')}
-<pre><code>services:
+<pre><code class="language-bash">services:
   db:
     image: postgres:16-alpine
     environment: { POSTGRES_PASSWORD: secret, POSTGRES_DB: blog }
@@ -1376,7 +1376,7 @@ ${slide('dk-09', 14, 'healthcheck + service_healthy: có và không có start_in
     depends_on:
       db:
         condition: service_healthy      <span class="tok-comment"># chờ PHÉP KIỂM, không chờ lúc khởi động</span></code></pre>
-<pre><code>docker compose up -d 2&gt;&amp;1 | tail -4
+<pre><code class="language-bash">docker compose up -d 2&gt;&amp;1 | tail -4
 docker compose ps --format 'table {{.Service}}\\t{{.Status}}'</code></pre>
 <div class="out"> ✔ Container blog-db-1   Healthy                          6.4s
  ✔ Container blog-api-1  Started                          6.6s
@@ -1418,7 +1418,7 @@ ${slide('dk-09', 15, 'Năm con số của healthcheck — hay quên nhất là s
   <div class="lz-step"><span class="lz-k">retries</span><span class="lz-t">bao nhiêu lần thất bại LIÊN TIẾP thì container bị đánh dấu không khoẻ</span><span class="lz-d">3–10. Đây là mức chịu đựng của bạn với một trục trặc thoáng qua; một lần kiểm hỏng không nên kết án cả dịch vụ.</span></div>
   <div class="lz-step"><span class="lz-k">start_period</span><span class="lz-t">một cửa sổ ân hạn trong đó thất bại KHÔNG bị tính</span><span class="lz-d">Cái người ta hay bỏ. Trong khoảng đó container có thể hỏng mọi lần kiểm mà không bị đánh dấu không khoẻ hay bị khởi động lại — và đó đúng là thứ một JVM khởi động chậm, một cơ sở dữ liệu đang chạy migration, hay một máy chủ Next.js cần.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Xem thẳng cái máy trạng thái</span>
+<pre><code class="language-bash"><span class="tok-comment"># Xem thẳng cái máy trạng thái</span>
 docker inspect -f '{{ .State.Health.Status }}' blog-db-1
 docker inspect -f '{{ range .State.Health.Log }}{{ .ExitCode }} {{ .Output }}{{ end }}' blog-db-1 | head -2</code></pre>
 <div class="out">healthy
@@ -1473,7 +1473,7 @@ exit=0
 
 <h3>Chờ một việc CHẠY XONG, không phải chờ một dịch vụ sẵn sàng</h3>
 ${slide('dk-09', 17, 'Job migrate phải thoát 0 thì api mới được start')}
-<pre><code>services:
+<pre><code class="language-bash">services:
   migrate:
     image: ghcr.io/me/api:1.4.2
     command: ["npx", "prisma", "migrate", "deploy"]
@@ -1553,7 +1553,7 @@ migrate-1  | 2026-09-23T18:40:13.980091051Z CREATE TABLE</div>
 <h3>Và ứng dụng thì vẫn phải tự thử lại</h3>
 ${slide('dk-09', 18, 'Thứ tự khởi động chỉ đúng một lần — app vẫn phải tự thử lại')}
 <p>Healthcheck chữa được thứ tự lúc khởi động. Nó KHÔNG chữa được chuyện cơ sở dữ liệu khởi động lại lúc 3 giờ sáng, một trục trặc mạng, hay một lần chuyển dự phòng — lúc đó API của bạn đã chạy ba ngày rồi và bể kết nối của nó đột nhiên hỏng. Bảo đảm về thứ tự của compose chỉ áp dụng MỘT lần, lúc khởi động; sức chịu đựng ở mọi thời điểm còn lại là việc của ứng dụng.</p>
-<pre><code><span class="tok-comment"># Năm dòng biến thứ tự khởi động thành một tiện lợi thay vì một đòi hỏi</span>
+<pre><code class="language-javascript"><span class="tok-comment"># Năm dòng biến thứ tự khởi động thành một tiện lợi thay vì một đòi hỏi</span>
 async function connectWithRetry(attempt = 1) {
   try { return await prisma.\$connect(); }
   catch (err) {
@@ -1638,14 +1638,14 @@ ${slide('dk-09', 19, 'Hai cái .env, hai người đọc khác nhau')}
 TAG=1.4.2
 HTTP_PORT=8080
 POSTGRES_PASSWORD=secret</code></pre>
-<pre><code>services:
+<pre><code class="language-bash">services:
   api:
     image: ghcr.io/me/api:&#36;{TAG}          <span class="tok-comment"># from the project .env</span>
     ports: ["&#36;{HTTP_PORT}:3000"]
     env_file: [./api.env]                <span class="tok-comment"># goes INTO the container</span>
     environment:
       DB_PASSWORD: &#36;{POSTGRES_PASSWORD}   <span class="tok-comment"># explicitly forwarded</span></code></pre>
-<pre><code>docker compose config | grep -E 'image:|published|DB_PASSWORD'</code></pre>
+<pre><code class="language-bash">docker compose config | grep -E 'image:|published|DB_PASSWORD'</code></pre>
 <div class="out">    image: ghcr.io/me/api:1.4.2
       published: "8080"
       DB_PASSWORD: secret</div>
@@ -1679,7 +1679,7 @@ ${slide('dk-09', 20, 'Sáu dạng nội suy — :- và - khác nhau đúng ở b
   <div class="kv"><span class="k"><code>&#36;{VAR:+alt}</code></span><span class="v">Use <code>alt</code> only if VAR <em>is</em> set. Useful for conditionally adding a flag.</span></div>
   <div class="kv"><span class="k"><code>$$</code></span><span class="v">A literal <code>$</code>. Needed whenever a command inside the file uses shell variables — <code>$$HOSTNAME</code> reaches the container as <code>$HOSTNAME</code>.</span></div>
 </div>
-<pre><code>docker compose config 2&gt;&amp;1 | tail -2</code></pre>
+<pre><code class="language-bash">docker compose config 2&gt;&amp;1 | tail -2</code></pre>
 <div class="out">error: required variable POSTGRES_PASSWORD is missing a value:
 set it in .env or export it before running compose</div>
 
@@ -1731,7 +1731,7 @@ ${slide('dk-09', 21, 'Nội suy: shell > --env-file > .env > mặc định trong
   <div class="lz-step"><span class="lz-k">3 · The project .env</span><span class="lz-t">the file next to compose.yaml</span><span class="lz-d">The default source. Commit a <code>.env.example</code> with every key and no real values; never commit <code>.env</code> itself.</span></div>
   <div class="lz-step"><span class="lz-k">4 · The default in the YAML</span><span class="lz-t">&#36;{TAG:-latest}</span><span class="lz-d">Last resort, and where sensible fallbacks live so a fresh clone runs with no setup at all.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Prove the order</span>
+<pre><code class="language-bash"><span class="tok-comment"># Prove the order</span>
 echo 'TAG=1.4.2' &gt; .env
 docker compose config | grep 'image: ghcr'
 TAG=1.5.0-rc1 docker compose config | grep 'image: ghcr'</code></pre>
@@ -1780,7 +1780,7 @@ LEVEL=1-run-e</div>
 
 <h3>Profiles: services that are off unless asked for</h3>
 ${slide('dk-09', 23, 'Profile: tắt cho tới khi được gọi — down cũng phải gọi nó')}
-<pre><code>services:
+<pre><code class="language-bash">services:
   api:   { build: ., ports: ["3000:3000"] }
   db:    { image: postgres:16-alpine }
 
@@ -1794,7 +1794,7 @@ ${slide('dk-09', 23, 'Profile: tắt cho tới khi được gọi — down cũng
     command: ["npm", "run", "seed"]
     profiles: [seed]
     restart: "no"</code></pre>
-<pre><code>docker compose up -d                       <span class="tok-comment"># api + db only</span>
+<pre><code class="language-bash">docker compose up -d                       <span class="tok-comment"># api + db only</span>
 docker compose --profile tools up -d       <span class="tok-comment"># + adminer</span>
 docker compose run --rm seed               <span class="tok-comment"># run a profiled service directly</span>
 docker compose config --profiles</code></pre>
@@ -1847,7 +1847,7 @@ ${slide('dk-09', 24, 'secrets: bí mật là file, không lộ ra docker inspect
 secrets:
   jwt_key:
     file: /opt/app/jwt.key                 <span class="tok-comment"># mode 600 on the host</span></code></pre>
-<pre><code><span class="tok-comment"># corrected: the original put "docker compose config" INSIDE the container, where there is no docker at all</span>
+<pre><code class="language-bash"><span class="tok-comment"># corrected: the original put "docker compose config" INSIDE the container, where there is no docker at all</span>
 docker compose exec api ls -l /run/secrets/
 docker inspect dk09-sec-api-1 -f '{{range .Config.Env}}{{println .}}{{end}}' | grep JWT
 docker inspect dk09-sec-api-1 -f '{{range .Mounts}}{{.Type}} {{.Destination}} RW={{.RW}}{{end}}'
@@ -1922,14 +1922,14 @@ ${slide('dk-09', 19, 'Hai cái .env, hai người đọc khác nhau')}
 TAG=1.4.2
 HTTP_PORT=8080
 POSTGRES_PASSWORD=secret</code></pre>
-<pre><code>services:
+<pre><code class="language-bash">services:
   api:
     image: ghcr.io/me/api:&#36;{TAG}          <span class="tok-comment"># lấy từ .env của dự án</span>
     ports: ["&#36;{HTTP_PORT}:3000"]
     env_file: [./api.env]                <span class="tok-comment"># đi VÀO TRONG container</span>
     environment:
       DB_PASSWORD: &#36;{POSTGRES_PASSWORD}   <span class="tok-comment"># chuyển tiếp tường minh</span></code></pre>
-<pre><code>docker compose config | grep -E 'image:|published|DB_PASSWORD'</code></pre>
+<pre><code class="language-bash">docker compose config | grep -E 'image:|published|DB_PASSWORD'</code></pre>
 <div class="out">    image: ghcr.io/me/api:1.4.2
       published: "8080"
       DB_PASSWORD: secret</div>
@@ -1963,7 +1963,7 @@ ${slide('dk-09', 20, 'Sáu dạng nội suy — :- và - khác nhau đúng ở b
   <div class="kv"><span class="k"><code>&#36;{VAR:+thaythế}</code></span><span class="v">Chỉ dùng <code>thaythế</code> nếu VAR ĐÃ được đặt. Hữu ích khi cần thêm một cái cờ có điều kiện.</span></div>
   <div class="kv"><span class="k"><code>$$</code></span><span class="v">Một dấu <code>$</code> theo nghĩa đen. Cần dùng mỗi khi một câu lệnh trong file dùng biến của shell — <code>$$HOSTNAME</code> tới container thành <code>$HOSTNAME</code>.</span></div>
 </div>
-<pre><code>docker compose config 2&gt;&amp;1 | tail -2</code></pre>
+<pre><code class="language-bash">docker compose config 2&gt;&amp;1 | tail -2</code></pre>
 <div class="out">error: required variable POSTGRES_PASSWORD is missing a value:
 set it in .env or export it before running compose</div>
 
@@ -2015,7 +2015,7 @@ ${slide('dk-09', 21, 'Nội suy: shell > --env-file > .env > mặc định trong
   <div class="lz-step"><span class="lz-k">3 · File .env của dự án</span><span class="lz-t">cái file nằm cạnh compose.yaml</span><span class="lz-d">Nguồn mặc định. Hãy commit một file <code>.env.example</code> có đủ mọi khoá và không có giá trị thật; đừng bao giờ commit chính <code>.env</code>.</span></div>
   <div class="lz-step"><span class="lz-k">4 · Giá trị mặc định trong YAML</span><span class="lz-t">&#36;{TAG:-latest}</span><span class="lz-d">Chỗ cuối cùng, và là nơi những giá trị dự phòng hợp lý nằm để một bản clone mới tinh chạy được mà không cần thiết lập gì.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Chứng minh thứ tự</span>
+<pre><code class="language-bash"><span class="tok-comment"># Chứng minh thứ tự</span>
 echo 'TAG=1.4.2' &gt; .env
 docker compose config | grep 'image: ghcr'
 TAG=1.5.0-rc1 docker compose config | grep 'image: ghcr'</code></pre>
@@ -2064,7 +2064,7 @@ LEVEL=1-run-e</div>
 
 <h3>Profile: những dịch vụ tắt cho tới khi được gọi</h3>
 ${slide('dk-09', 23, 'Profile: tắt cho tới khi được gọi — down cũng phải gọi nó')}
-<pre><code>services:
+<pre><code class="language-bash">services:
   api:   { build: ., ports: ["3000:3000"] }
   db:    { image: postgres:16-alpine }
 
@@ -2078,7 +2078,7 @@ ${slide('dk-09', 23, 'Profile: tắt cho tới khi được gọi — down cũng
     command: ["npm", "run", "seed"]
     profiles: [seed]
     restart: "no"</code></pre>
-<pre><code>docker compose up -d                       <span class="tok-comment"># chỉ api + db</span>
+<pre><code class="language-bash">docker compose up -d                       <span class="tok-comment"># chỉ api + db</span>
 docker compose --profile tools up -d       <span class="tok-comment"># thêm adminer</span>
 docker compose run --rm seed               <span class="tok-comment"># chạy thẳng một dịch vụ có profile</span>
 docker compose config --profiles</code></pre>
@@ -2131,7 +2131,7 @@ ${slide('dk-09', 24, 'secrets: bí mật là file, không lộ ra docker inspect
 secrets:
   jwt_key:
     file: /opt/app/jwt.key                 <span class="tok-comment"># quyền 600 trên máy chủ</span></code></pre>
-<pre><code><span class="tok-comment"># đã sửa: bản gốc chạy "docker compose config" BÊN TRONG container, nơi làm gì có docker</span>
+<pre><code class="language-bash"><span class="tok-comment"># đã sửa: bản gốc chạy "docker compose config" BÊN TRONG container, nơi làm gì có docker</span>
 docker compose exec api ls -l /run/secrets/
 docker inspect dk09-sec-api-1 -f '{{range .Config.Env}}{{println .}}{{end}}' | grep JWT
 docker inspect dk09-sec-api-1 -f '{{range .Mounts}}{{.Type}} {{.Destination}} RW={{.RW}}{{end}}'
@@ -2207,7 +2207,7 @@ bind /run/secrets/jwt_key RW=false
 
 <h3>The automatic override</h3>
 ${slide('dk-09', 25, 'compose.override.yaml tự nạp — viết -f là tắt nó')}
-<pre><code><span class="tok-comment"># compose.yaml — the base, and what production runs</span>
+<pre><code class="language-bash"><span class="tok-comment"># compose.yaml — the base, and what production runs</span>
 services:
   api:
     image: ghcr.io/me/api:&#36;{TAG:-latest}
@@ -2227,7 +2227,7 @@ services:
     ports:
       - "3000:3000"
       - "127.0.0.1:9229:9229"</code></pre>
-<pre><code>docker compose config | grep -E 'NODE_ENV|command|published' </code></pre>
+<pre><code class="language-bash">docker compose config | grep -E 'NODE_ENV|command|published' </code></pre>
 <div class="out">    command: [npm, run, dev]
       NODE_ENV: development
       published: "3000"
@@ -2256,7 +2256,7 @@ docker compose -f compose.yaml config | grep -E "NODE_ENV|LOG_LEVEL|published|re
 </table>
 
 <h3>Stacking files explicitly</h3>
-<pre><code><span class="tok-comment"># Order matters: later files win</span>
+<pre><code class="language-bash"><span class="tok-comment"># Order matters: later files win</span>
 docker compose -f compose.yaml -f compose.prod.yaml up -d
 docker compose -f compose.yaml -f compose.ci.yaml run --rm test
 
@@ -2274,7 +2274,7 @@ ${slide('dk-09', 27, '!reset xoá cái thừa kế, !override thay trọn')}
   <div class="lz-step"><span class="lz-k">Sequences: appended</span><span class="lz-t">ports, volumes, dns, expose</span><span class="lz-d">The lists are concatenated, <em>not</em> replaced — with an important refinement measured on Compose v5.5.1 and stated in the merge reference: <code>ports</code>, <code>volumes</code>, <code>secrets</code> and <code>configs</code> are merged by a unique key. An override repeating the exact same <code>"3000:3000"</code> produces ONE mapping (no error); a <em>different</em> host port for the same container port produces TWO; a volume with the same target path replaces the earlier one. See "Run it step by step" below.</span></div>
   <div class="lz-step"><span class="lz-k">Resetting a list</span><span class="lz-t">!reset and !override tags</span><span class="lz-d"><code>ports: !reset []</code> clears an inherited list; <code>!override</code> replaces instead of appending. The escape hatch for when appending is wrong.</span></div>
 </div>
-<pre><code><span class="tok-comment"># The append rule, demonstrated</span>
+<pre><code class="language-bash"><span class="tok-comment"># The append rule, demonstrated</span>
 docker compose config | grep -A8 '    volumes:'   <span class="tok-comment"># corrected: base + automatic override; with -f compose.prod.yaml the dev mounts would not be loaded at all</span></code></pre>
 <div class="out">    volumes:
       - type: bind
@@ -2321,13 +2321,13 @@ docker compose -f compose.yaml -f o.yaml config | grep -E "LOG_LEVEL|NODE_ENV|DB
 
 <h3>include and extends</h3>
 ${slide('dk-09', 28, 'include ghép nguyên file, extends thừa kế một dịch vụ')}
-<pre><code><span class="tok-comment"># include: pull in a whole other compose file as-is (Compose 2.20+)</span>
+<pre><code class="language-bash"><span class="tok-comment"># include: pull in a whole other compose file as-is (Compose 2.20+)</span>
 include:
   - path: ./monitoring/compose.yaml
     env_file: ./monitoring/.env
 services:
   api: { build: . }</code></pre>
-<pre><code><span class="tok-comment"># extends: inherit one service definition, from this file or another</span>
+<pre><code class="language-bash"><span class="tok-comment"># extends: inherit one service definition, from this file or another</span>
 services:
   api-base:
     image: ghcr.io/me/api:&#36;{TAG:-latest}
@@ -2384,7 +2384,7 @@ ${slide('dk-09', 29, 'Nền + dev + prod, và đọc config trước khi deploy'
 ├── compose.prod.yaml         <span class="tok-comment"># prod: restart, limits, loopback ports, log rotation</span>
 ├── .env.example              <span class="tok-comment"># committed, no real values</span>
 └── .env                      <span class="tok-comment"># gitignored, local only</span></code></pre>
-<pre><code><span class="tok-comment"># Developer</span>
+<pre><code class="language-bash"><span class="tok-comment"># Developer</span>
 docker compose up -d                                          <span class="tok-comment"># base + override</span>
 
 <span class="tok-comment"># Server, in the deploy script</span>
@@ -2468,7 +2468,7 @@ services:
 
 <h3>File ghi đè tự động</h3>
 ${slide('dk-09', 25, 'compose.override.yaml tự nạp — viết -f là tắt nó')}
-<pre><code><span class="tok-comment"># compose.yaml — phần nền, và cũng là thứ production chạy</span>
+<pre><code class="language-bash"><span class="tok-comment"># compose.yaml — phần nền, và cũng là thứ production chạy</span>
 services:
   api:
     image: ghcr.io/me/api:&#36;{TAG:-latest}
@@ -2488,7 +2488,7 @@ services:
     ports:
       - "3000:3000"
       - "127.0.0.1:9229:9229"</code></pre>
-<pre><code>docker compose config | grep -E 'NODE_ENV|command|published' </code></pre>
+<pre><code class="language-bash">docker compose config | grep -E 'NODE_ENV|command|published' </code></pre>
 <div class="out">    command: [npm, run, dev]
       NODE_ENV: development
       published: "3000"
@@ -2517,7 +2517,7 @@ docker compose -f compose.yaml config | grep -E "NODE_ENV|LOG_LEVEL|published|re
 </table>
 
 <h3>Xếp chồng file một cách tường minh</h3>
-<pre><code><span class="tok-comment"># Thứ tự có ý nghĩa: file sau thắng</span>
+<pre><code class="language-bash"><span class="tok-comment"># Thứ tự có ý nghĩa: file sau thắng</span>
 docker compose -f compose.yaml -f compose.prod.yaml up -d
 docker compose -f compose.yaml -f compose.ci.yaml run --rm test
 
@@ -2535,7 +2535,7 @@ ${slide('dk-09', 27, '!reset xoá cái thừa kế, !override thay trọn')}
   <div class="lz-step"><span class="lz-k">Danh sách: bị NỐI THÊM</span><span class="lz-t">ports, volumes, dns, expose</span><span class="lz-d">Các danh sách được ghép lại, <em>không</em> bị thay thế — kèm một chi tiết quan trọng, đo trên Compose v5.5.1 và ghi rõ trong tài liệu hợp nhất: <code>ports</code>, <code>volumes</code>, <code>secrets</code> và <code>configs</code> được gộp theo một khoá riêng. File ghi đè lặp lại y hệt <code>"3000:3000"</code> thì ra MỘT ánh xạ (không lỗi); một cổng máy chủ KHÁC cho cùng cổng container thì ra HAI; volume trùng đường dẫn đích thì cái sau thay cái trước. Xem "Chạy thử từng bước" ngay dưới.</span></div>
   <div class="lz-step"><span class="lz-k">Xoá sạch một danh sách</span><span class="lz-t">thẻ !reset và !override</span><span class="lz-d"><code>ports: !reset []</code> xoá một danh sách thừa kế; <code>!override</code> thay thế thay vì nối thêm. Cửa thoát hiểm cho lúc nối thêm là sai.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Luật nối thêm, chứng minh tận mắt</span>
+<pre><code class="language-bash"><span class="tok-comment"># Luật nối thêm, chứng minh tận mắt</span>
 docker compose config | grep -A8 '    volumes:'   <span class="tok-comment"># đã sửa: nền + override tự động; với -f compose.prod.yaml thì các phép gắn của dev đâu có được nạp</span></code></pre>
 <div class="out">    volumes:
       - type: bind
@@ -2582,13 +2582,13 @@ docker compose -f compose.yaml -f o.yaml config | grep -E "LOG_LEVEL|NODE_ENV|DB
 
 <h3>include và extends</h3>
 ${slide('dk-09', 28, 'include ghép nguyên file, extends thừa kế một dịch vụ')}
-<pre><code><span class="tok-comment"># include: kéo nguyên một file compose khác vào (Compose 2.20 trở lên)</span>
+<pre><code class="language-bash"><span class="tok-comment"># include: kéo nguyên một file compose khác vào (Compose 2.20 trở lên)</span>
 include:
   - path: ./monitoring/compose.yaml
     env_file: ./monitoring/.env
 services:
   api: { build: . }</code></pre>
-<pre><code><span class="tok-comment"># extends: thừa kế một định nghĩa dịch vụ, từ chính file này hoặc file khác</span>
+<pre><code class="language-bash"><span class="tok-comment"># extends: thừa kế một định nghĩa dịch vụ, từ chính file này hoặc file khác</span>
 services:
   api-base:
     image: ghcr.io/me/api:&#36;{TAG:-latest}
@@ -2645,7 +2645,7 @@ ${slide('dk-09', 29, 'Nền + dev + prod, và đọc config trước khi deploy'
 ├── compose.prod.yaml         <span class="tok-comment"># prod: restart, hạn mức, cổng loopback, xoay log</span>
 ├── .env.example              <span class="tok-comment"># có commit, không giá trị thật</span>
 └── .env                      <span class="tok-comment"># gitignore, chỉ nằm cục bộ</span></code></pre>
-<pre><code><span class="tok-comment"># Lập trình viên</span>
+<pre><code class="language-bash"><span class="tok-comment"># Lập trình viên</span>
 docker compose up -d                                          <span class="tok-comment"># nền + ghi đè</span>
 
 <span class="tok-comment"># Máy chủ, trong script deploy</span>

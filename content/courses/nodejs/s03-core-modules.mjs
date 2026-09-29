@@ -22,7 +22,7 @@ export default {
 <p class="lead">Node ships a standard library you never install. Two modules from it appear in almost every backend: <code>path</code> for building file paths safely, and <code>fs</code> for touching the disk. Both have traps that only show up in production.</p>
 
 <h3>Never build a path with string concatenation</h3>
-<pre><code><span class="tok-keyword">const</span> path = <span class="tok-function">require</span>(<span class="tok-string">'node:path'</span>);
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> path = <span class="tok-function">require</span>(<span class="tok-string">'node:path'</span>);
 
 <span class="tok-function">console.log</span>(<span class="tok-string">'join    :'</span>, path.<span class="tok-function">join</span>(<span class="tok-string">'/var/www'</span>, <span class="tok-string">'uploads'</span>, <span class="tok-string">'..'</span>, <span class="tok-string">'images'</span>, <span class="tok-string">'a.png'</span>));
 <span class="tok-function">console.log</span>(<span class="tok-string">'extname :'</span>, path.<span class="tok-function">extname</span>(<span class="tok-string">'bao-cao.final.pdf'</span>));
@@ -47,7 +47,7 @@ join    : /var/www/uploads</div>
 <br><br><code>const full = path.resolve(uploadDir, name);<br>if (!full.startsWith(path.resolve(uploadDir) + path.sep)) throw new Error('invalid path');</code></div>
 
 <h3>fs comes in three flavours</h3>
-<pre><code><span class="tok-comment">// 1. Promise API — what you should use</span>
+<pre><code class="language-javascript"><span class="tok-comment">// 1. Promise API — what you should use</span>
 <span class="tok-keyword">import</span> fs <span class="tok-keyword">from</span> <span class="tok-string">'node:fs/promises'</span>;
 <span class="tok-keyword">const</span> text = <span class="tok-keyword">await</span> fs.<span class="tok-function">readFile</span>(<span class="tok-string">'note.txt'</span>, <span class="tok-string">'utf8'</span>);
 
@@ -61,7 +61,7 @@ join    : /var/www/uploads</div>
 <div class="callout danger">Chapter 2 explained why the third one is dangerous: while <code>readFileSync</code> runs, the entire process serves nobody. The <strong>only</strong> acceptable use is at startup — loading config before the server begins listening. Inside a request handler it is always a bug.</div>
 
 <h3>Everyday recipes</h3>
-<pre><code><span class="tok-keyword">import</span> fs <span class="tok-keyword">from</span> <span class="tok-string">'node:fs/promises'</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> fs <span class="tok-keyword">from</span> <span class="tok-string">'node:fs/promises'</span>;
 
 <span class="tok-keyword">await</span> fs.<span class="tok-function">mkdir</span>(<span class="tok-string">'uploads/2026'</span>, { recursive: <span class="tok-keyword">true</span> });   <span class="tok-comment">// no error if it exists</span>
 <span class="tok-keyword">await</span> fs.<span class="tok-function">writeFile</span>(<span class="tok-string">'note.txt'</span>, <span class="tok-string">'hello'</span>, <span class="tok-string">'utf8'</span>);
@@ -70,7 +70,7 @@ join    : /var/www/uploads</div>
 <span class="tok-keyword">const</span> info  = <span class="tok-keyword">await</span> fs.<span class="tok-function">stat</span>(<span class="tok-string">'note.txt'</span>);        <span class="tok-comment">// size, mtime, isDirectory()</span>
 <span class="tok-keyword">await</span> fs.<span class="tok-function">rm</span>(<span class="tok-string">'tmp'</span>, { recursive: <span class="tok-keyword">true</span>, force: <span class="tok-keyword">true</span> });</code></pre>
 <h3>Checking existence: don't</h3>
-<pre><code><span class="tok-comment">// ❌ race condition: the file can vanish between the check and the read</span>
+<pre><code class="language-typescript"><span class="tok-comment">// ❌ race condition: the file can vanish between the check and the read</span>
 <span class="tok-keyword">if</span> (<span class="tok-function">existsSync</span>(p)) <span class="tok-keyword">await</span> fs.<span class="tok-function">readFile</span>(p);
 
 <span class="tok-comment">// ✅ just try it, and handle the failure</span>
@@ -109,7 +109,7 @@ join    : /var/www/uploads</div>
 <p class="lead">Node đi kèm một thư viện chuẩn mà bạn không phải cài. Hai module trong đó xuất hiện ở hầu hết mọi backend: <code>path</code> để dựng đường dẫn cho an toàn, và <code>fs</code> để đụng vào ổ đĩa. Cả hai đều có bẫy chỉ lộ ra khi lên production.</p>
 
 <h3>Đừng bao giờ dựng đường dẫn bằng cách nối chuỗi</h3>
-<pre><code><span class="tok-keyword">const</span> path = <span class="tok-function">require</span>(<span class="tok-string">'node:path'</span>);
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> path = <span class="tok-function">require</span>(<span class="tok-string">'node:path'</span>);
 
 <span class="tok-function">console.log</span>(<span class="tok-string">'join    :'</span>, path.<span class="tok-function">join</span>(<span class="tok-string">'/var/www'</span>, <span class="tok-string">'uploads'</span>, <span class="tok-string">'..'</span>, <span class="tok-string">'images'</span>, <span class="tok-string">'a.png'</span>));
 <span class="tok-function">console.log</span>(<span class="tok-string">'extname :'</span>, path.<span class="tok-function">extname</span>(<span class="tok-string">'bao-cao.final.pdf'</span>));
@@ -134,7 +134,7 @@ join    : /var/www/uploads</div>
 <br><br><code>const full = path.resolve(thuMucUpload, name);<br>if (!full.startsWith(path.resolve(thuMucUpload) + path.sep)) throw new Error('đường dẫn không hợp lệ');</code></div>
 
 <h3>fs có ba phong cách</h3>
-<pre><code><span class="tok-comment">// 1. API Promise — cái bạn nên dùng</span>
+<pre><code class="language-javascript"><span class="tok-comment">// 1. API Promise — cái bạn nên dùng</span>
 <span class="tok-keyword">import</span> fs <span class="tok-keyword">from</span> <span class="tok-string">'node:fs/promises'</span>;
 <span class="tok-keyword">const</span> text = <span class="tok-keyword">await</span> fs.<span class="tok-function">readFile</span>(<span class="tok-string">'note.txt'</span>, <span class="tok-string">'utf8'</span>);
 
@@ -148,7 +148,7 @@ join    : /var/www/uploads</div>
 <div class="callout danger">Chương 2 đã giải thích vì sao cái thứ ba nguy hiểm: trong lúc <code>readFileSync</code> chạy, cả tiến trình không phục vụ ai hết. Trường hợp chấp nhận được <strong>duy nhất</strong> là lúc khởi động — nạp cấu hình trước khi server bắt đầu lắng nghe. Nằm trong một request handler thì luôn luôn là bug.</div>
 
 <h3>Vài công thức dùng hằng ngày</h3>
-<pre><code><span class="tok-keyword">import</span> fs <span class="tok-keyword">from</span> <span class="tok-string">'node:fs/promises'</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> fs <span class="tok-keyword">from</span> <span class="tok-string">'node:fs/promises'</span>;
 
 <span class="tok-keyword">await</span> fs.<span class="tok-function">mkdir</span>(<span class="tok-string">'uploads/2026'</span>, { recursive: <span class="tok-keyword">true</span> });   <span class="tok-comment">// đã có sẵn cũng không báo lỗi</span>
 <span class="tok-keyword">await</span> fs.<span class="tok-function">writeFile</span>(<span class="tok-string">'note.txt'</span>, <span class="tok-string">'hello'</span>, <span class="tok-string">'utf8'</span>);
@@ -157,7 +157,7 @@ join    : /var/www/uploads</div>
 <span class="tok-keyword">const</span> info  = <span class="tok-keyword">await</span> fs.<span class="tok-function">stat</span>(<span class="tok-string">'note.txt'</span>);        <span class="tok-comment">// kích thước, thời gian sửa, isDirectory()</span>
 <span class="tok-keyword">await</span> fs.<span class="tok-function">rm</span>(<span class="tok-string">'tmp'</span>, { recursive: <span class="tok-keyword">true</span>, force: <span class="tok-keyword">true</span> });</code></pre>
 <h3>Kiểm tra file có tồn tại không: đừng làm</h3>
-<pre><code><span class="tok-comment">// ❌ tranh chấp: file có thể biến mất giữa lúc kiểm và lúc đọc</span>
+<pre><code class="language-typescript"><span class="tok-comment">// ❌ tranh chấp: file có thể biến mất giữa lúc kiểm và lúc đọc</span>
 <span class="tok-keyword">if</span> (<span class="tok-function">existsSync</span>(p)) <span class="tok-keyword">await</span> fs.<span class="tok-function">readFile</span>(p);
 
 <span class="tok-comment">// ✅ cứ thử làm, rồi xử lý khi thất bại</span>
@@ -212,7 +212,7 @@ join    : /var/www/uploads</div>
 <p class="lead">A <code>Buffer</code> is a fixed-length chunk of raw bytes outside V8's normal heap. Whenever Node touches the outside world — files, sockets, images, encryption — the data arrives as bytes, and Buffer is how you hold them.</p>
 
 <h3>Characters are not bytes</h3>
-<pre><code><span class="tok-keyword">const</span> s = <span class="tok-string">'Xin chào'</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> s = <span class="tok-string">'Xin chào'</span>;
 <span class="tok-keyword">const</span> b = Buffer.<span class="tok-function">from</span>(s, <span class="tok-string">'utf8'</span>);
 
 <span class="tok-function">console.log</span>(<span class="tok-string">'string length :'</span>, s.length, <span class="tok-string">'characters'</span>);
@@ -226,7 +226,7 @@ base64        : WGluIGNow6Bv</div>
 <p>Eight characters, nine bytes. The culprit is <code>à</code>: in UTF-8 an ASCII character costs 1 byte, but Vietnamese accented letters cost 2 (and emoji cost 4). <code>'à'</code> is the two bytes <code>c3 a0</code>.</p>
 
 <h3>Cut in the wrong place and the text breaks</h3>
-<pre><code><span class="tok-keyword">for</span> (<span class="tok-keyword">const</span> n <span class="tok-keyword">of</span> [<span class="tok-number">6</span>, <span class="tok-number">7</span>, <span class="tok-number">8</span>, <span class="tok-number">9</span>])
+<pre><code class="language-javascript"><span class="tok-keyword">for</span> (<span class="tok-keyword">const</span> n <span class="tok-keyword">of</span> [<span class="tok-number">6</span>, <span class="tok-number">7</span>, <span class="tok-number">8</span>, <span class="tok-number">9</span>])
   <span class="tok-function">console.log</span>(<span class="tok-string">'subarray(0,'</span> + n + <span class="tok-string">') ='</span>, JSON.<span class="tok-function">stringify</span>(b.<span class="tok-function">subarray</span>(<span class="tok-number">0</span>, n).<span class="tok-function">toString</span>(<span class="tok-string">'utf8'</span>)));</code></pre>
 <div class="out">subarray(0,6) = "Xin ch"
 subarray(0,7) = "Xin ch�"
@@ -242,7 +242,7 @@ subarray(0,9) = "Xin chào"</div>
   <div class="kv"><span class="k">Crypto &amp; hashing</span><span class="v">Hashes, HMAC signatures and encryption all work on bytes.</span></div>
   <div class="kv"><span class="k">Webhook signatures</span><span class="v">Payment webhooks must be verified against the RAW body bytes — parsing to JSON first changes the bytes and the signature no longer matches.</span></div>
 </div>
-<pre><code><span class="tok-comment">// creating buffers</span>
+<pre><code class="language-typescript"><span class="tok-comment">// creating buffers</span>
 Buffer.<span class="tok-function">from</span>(<span class="tok-string">'hello'</span>, <span class="tok-string">'utf8'</span>);        <span class="tok-comment">// from a string</span>
 Buffer.<span class="tok-function">from</span>([<span class="tok-number">0x48</span>, <span class="tok-number">0x69</span>]);            <span class="tok-comment">// from bytes</span>
 Buffer.<span class="tok-function">alloc</span>(<span class="tok-number">1024</span>);                  <span class="tok-comment">// 1 KB of zeros — SAFE</span>
@@ -273,7 +273,7 @@ Buffer.<span class="tok-function">concat</span>([a, b]);                <span cl
 <p class="lead">Một <code>Buffer</code> là khối byte thô có độ dài cố định, nằm ngoài vùng heap thường của V8. Mỗi khi Node chạm vào thế giới bên ngoài — file, socket, ảnh, mã hoá — dữ liệu về dưới dạng byte, và Buffer là thứ để giữ chúng.</p>
 
 <h3>Ký tự không phải là byte</h3>
-<pre><code><span class="tok-keyword">const</span> s = <span class="tok-string">'Xin chào'</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> s = <span class="tok-string">'Xin chào'</span>;
 <span class="tok-keyword">const</span> b = Buffer.<span class="tok-function">from</span>(s, <span class="tok-string">'utf8'</span>);
 
 <span class="tok-function">console.log</span>(<span class="tok-string">'độ dài chuỗi  :'</span>, s.length, <span class="tok-string">'ký tự'</span>);
@@ -287,7 +287,7 @@ dạng base64   : WGluIGNow6Bv</div>
 <p>Tám ký tự, chín byte. Thủ phạm là chữ <code>à</code>: trong UTF-8 một ký tự ASCII tốn 1 byte, nhưng chữ cái tiếng Việt có dấu tốn 2 byte (còn emoji tốn 4). Chữ <code>'à'</code> chính là hai byte <code>c3 a0</code>.</p>
 
 <h3>Cắt sai chỗ là hỏng chữ</h3>
-<pre><code><span class="tok-keyword">for</span> (<span class="tok-keyword">const</span> n <span class="tok-keyword">of</span> [<span class="tok-number">6</span>, <span class="tok-number">7</span>, <span class="tok-number">8</span>, <span class="tok-number">9</span>])
+<pre><code class="language-javascript"><span class="tok-keyword">for</span> (<span class="tok-keyword">const</span> n <span class="tok-keyword">of</span> [<span class="tok-number">6</span>, <span class="tok-number">7</span>, <span class="tok-number">8</span>, <span class="tok-number">9</span>])
   <span class="tok-function">console.log</span>(<span class="tok-string">'subarray(0,'</span> + n + <span class="tok-string">') ='</span>, JSON.<span class="tok-function">stringify</span>(b.<span class="tok-function">subarray</span>(<span class="tok-number">0</span>, n).<span class="tok-function">toString</span>(<span class="tok-string">'utf8'</span>)));</code></pre>
 <div class="out">subarray(0,6) = "Xin ch"
 subarray(0,7) = "Xin ch�"
@@ -303,7 +303,7 @@ subarray(0,9) = "Xin chào"</div>
   <div class="kv"><span class="k">Mã hoá &amp; băm</span><span class="v">Hàm băm, chữ ký HMAC và mã hoá đều làm việc trên byte.</span></div>
   <div class="kv"><span class="k">Chữ ký webhook</span><span class="v">Webhook thanh toán phải được xác minh trên ĐÚNG byte thô của body — phân tích thành JSON trước sẽ làm đổi byte và chữ ký không còn khớp.</span></div>
 </div>
-<pre><code><span class="tok-comment">// các cách tạo buffer</span>
+<pre><code class="language-typescript"><span class="tok-comment">// các cách tạo buffer</span>
 Buffer.<span class="tok-function">from</span>(<span class="tok-string">'hello'</span>, <span class="tok-string">'utf8'</span>);        <span class="tok-comment">// từ chuỗi</span>
 Buffer.<span class="tok-function">from</span>([<span class="tok-number">0x48</span>, <span class="tok-number">0x69</span>]);            <span class="tok-comment">// từ các byte</span>
 Buffer.<span class="tok-function">alloc</span>(<span class="tok-number">1024</span>);                  <span class="tok-comment">// 1 KB toàn số 0 — AN TOÀN</span>
@@ -351,7 +351,7 @@ Buffer.<span class="tok-function">concat</span>([a, b]);                <span cl
 
 <h3>The experiment: count lines in a 348 MB file</h3>
 <p>Same task, two approaches. First, read the whole file into memory:</p>
-<pre><code><span class="tok-keyword">const</span> mb = () =&gt; Math.<span class="tok-function">round</span>(process.<span class="tok-function">memoryUsage</span>().rss / <span class="tok-number">1024</span> / <span class="tok-number">1024</span>);
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> mb = () =&gt; Math.<span class="tok-function">round</span>(process.<span class="tok-function">memoryUsage</span>().rss / <span class="tok-number">1024</span> / <span class="tok-number">1024</span>);
 <span class="tok-function">console.log</span>(<span class="tok-string">'RAM before :'</span>, <span class="tok-function">mb</span>(), <span class="tok-string">'MB'</span>);
 
 <span class="tok-keyword">const</span> data = fs.<span class="tok-function">readFileSync</span>(file);        <span class="tok-comment">// ENTIRE file into RAM</span>
@@ -362,7 +362,7 @@ Buffer.<span class="tok-function">concat</span>([a, b]);                <span cl
 RAM after  : 395 MB
 lines: 6000000 | time: 3662 ms</div>
 <p>Now the same count with a stream, reading chunk by chunk:</p>
-<pre><code>fs.<span class="tok-function">createReadStream</span>(file)
+<pre><code class="language-javascript">fs.<span class="tok-function">createReadStream</span>(file)
   .<span class="tok-function">on</span>(<span class="tok-string">'data'</span>, (chunk) =&gt; { <span class="tok-keyword">for</span> (<span class="tok-keyword">const</span> ch <span class="tok-keyword">of</span> chunk) <span class="tok-keyword">if</span> (ch === <span class="tok-number">10</span>) lines++; })
   .<span class="tok-function">on</span>(<span class="tok-string">'end'</span>, () =&gt; <span class="tok-function">console.log</span>(<span class="tok-string">'peak RAM:'</span>, peak, <span class="tok-string">'MB'</span>));</code></pre>
 <div class="out">RAM before  : 37 MB
@@ -385,7 +385,7 @@ lines: 6000000 | time: 2544 ms</div>
 
 <h3>pipeline: connect them safely</h3>
 <p>Compress the same 348 MB file — read, gzip and write, all streaming:</p>
-<pre><code><span class="tok-keyword">import</span> { pipeline } <span class="tok-keyword">from</span> <span class="tok-string">'node:stream/promises'</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> { pipeline } <span class="tok-keyword">from</span> <span class="tok-string">'node:stream/promises'</span>;
 <span class="tok-keyword">import</span> { createGzip } <span class="tok-keyword">from</span> <span class="tok-string">'node:zlib'</span>;
 
 <span class="tok-keyword">await</span> <span class="tok-function">pipeline</span>(
@@ -410,7 +410,7 @@ compressed:  15.0 MB</div>
 <div class="pitfall">You get backpressure for free with <code>pipeline</code>. You <strong>lose</strong> it the moment you write your own loop that ignores the return value of <code>write()</code> — a classic way to reintroduce the memory blow-up you used streams to avoid.</div>
 
 <h3>Reading a huge file line by line</h3>
-<pre><code><span class="tok-keyword">import</span> readline <span class="tok-keyword">from</span> <span class="tok-string">'node:readline'</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> readline <span class="tok-keyword">from</span> <span class="tok-string">'node:readline'</span>;
 
 <span class="tok-keyword">const</span> rl = readline.<span class="tok-function">createInterface</span>({
   input: <span class="tok-function">createReadStream</span>(<span class="tok-string">'big.log'</span>),
@@ -433,7 +433,7 @@ compressed:  15.0 MB</div>
 
 <h3>Thí nghiệm: đếm số dòng trong file 348 MB</h3>
 <p>Cùng một việc, hai cách làm. Đầu tiên, đọc nguyên file vào bộ nhớ:</p>
-<pre><code><span class="tok-keyword">const</span> mb = () =&gt; Math.<span class="tok-function">round</span>(process.<span class="tok-function">memoryUsage</span>().rss / <span class="tok-number">1024</span> / <span class="tok-number">1024</span>);
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> mb = () =&gt; Math.<span class="tok-function">round</span>(process.<span class="tok-function">memoryUsage</span>().rss / <span class="tok-number">1024</span> / <span class="tok-number">1024</span>);
 <span class="tok-function">console.log</span>(<span class="tok-string">'RAM trước :'</span>, <span class="tok-function">mb</span>(), <span class="tok-string">'MB'</span>);
 
 <span class="tok-keyword">const</span> data = fs.<span class="tok-function">readFileSync</span>(file);        <span class="tok-comment">// nạp TOÀN BỘ file vào RAM</span>
@@ -444,7 +444,7 @@ compressed:  15.0 MB</div>
 RAM sau   : 395 MB
 số dòng: 6000000 | thời gian: 3662 ms</div>
 <p>Giờ vẫn phép đếm đó nhưng bằng stream, đọc theo từng khúc:</p>
-<pre><code>fs.<span class="tok-function">createReadStream</span>(file)
+<pre><code class="language-javascript">fs.<span class="tok-function">createReadStream</span>(file)
   .<span class="tok-function">on</span>(<span class="tok-string">'data'</span>, (chunk) =&gt; { <span class="tok-keyword">for</span> (<span class="tok-keyword">const</span> ch <span class="tok-keyword">of</span> chunk) <span class="tok-keyword">if</span> (ch === <span class="tok-number">10</span>) lines++; })
   .<span class="tok-function">on</span>(<span class="tok-string">'end'</span>, () =&gt; <span class="tok-function">console.log</span>(<span class="tok-string">'RAM đỉnh:'</span>, dinh, <span class="tok-string">'MB'</span>));</code></pre>
 <div class="out">RAM trước   : 37 MB
@@ -467,7 +467,7 @@ số dòng: 6000000 | thời gian: 2544 ms</div>
 
 <h3>pipeline: nối chúng lại một cách an toàn</h3>
 <p>Nén chính file 348 MB đó — đọc, gzip và ghi, tất cả đều theo dòng chảy:</p>
-<pre><code><span class="tok-keyword">import</span> { pipeline } <span class="tok-keyword">from</span> <span class="tok-string">'node:stream/promises'</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> { pipeline } <span class="tok-keyword">from</span> <span class="tok-string">'node:stream/promises'</span>;
 <span class="tok-keyword">import</span> { createGzip } <span class="tok-keyword">from</span> <span class="tok-string">'node:zlib'</span>;
 
 <span class="tok-keyword">await</span> <span class="tok-function">pipeline</span>(
@@ -492,7 +492,7 @@ nén :  15.0 MB</div>
 <div class="pitfall">Bạn được backpressure miễn phí khi dùng <code>pipeline</code>. Bạn <strong>mất</strong> nó ngay khi tự viết vòng lặp mà bỏ qua giá trị trả về của <code>write()</code> — một cách kinh điển để rước lại đúng cái hoạ nổ bộ nhớ mà bạn dùng stream để tránh.</div>
 
 <h3>Đọc file khổng lồ theo từng dòng</h3>
-<pre><code><span class="tok-keyword">import</span> readline <span class="tok-keyword">from</span> <span class="tok-string">'node:readline'</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> readline <span class="tok-keyword">from</span> <span class="tok-string">'node:readline'</span>;
 
 <span class="tok-keyword">const</span> rl = readline.<span class="tok-function">createInterface</span>({
   input: <span class="tok-function">createReadStream</span>(<span class="tok-string">'big.log'</span>),
@@ -523,7 +523,7 @@ nén :  15.0 MB</div>
 <p class="lead">Almost everything asynchronous in Node is an EventEmitter underneath: streams, HTTP servers, sockets, the process itself. It is the publish–subscribe pattern in its simplest possible form — one object emits named events, any number of listeners react.</p>
 
 <h3>Emit and listen</h3>
-<pre><code><span class="tok-keyword">const</span> { EventEmitter } = <span class="tok-function">require</span>(<span class="tok-string">'node:events'</span>);
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> { EventEmitter } = <span class="tok-function">require</span>(<span class="tok-string">'node:events'</span>);
 
 <span class="tok-keyword">class</span> <span class="tok-type">NoteStore</span> <span class="tok-keyword">extends</span> <span class="tok-type">EventEmitter</span> {
   <span class="tok-function">save</span>(name) { <span class="tok-keyword">this</span>.<span class="tok-function">emit</span>(<span class="tok-string">'saved'</span>, { name }); }
@@ -547,7 +547,7 @@ listeners on saved: 2</div>
 <div class="pitfall"><code>emit</code> being synchronous surprises people. If one listener does slow work, the emitter waits — and so does the event loop. Also, if a listener throws, the exception propagates back to whoever called <code>emit()</code>, potentially crashing an unrelated part of your code.</div>
 
 <h3>The 'error' event is special</h3>
-<pre><code><span class="tok-comment">// An EventEmitter with NO 'error' listener THROWS when it emits one</span>
+<pre><code class="language-javascript"><span class="tok-comment">// An EventEmitter with NO 'error' listener THROWS when it emits one</span>
 <span class="tok-keyword">const</span> e = <span class="tok-keyword">new</span> <span class="tok-function">EventEmitter</span>();
 e.<span class="tok-function">emit</span>(<span class="tok-string">'error'</span>, <span class="tok-keyword">new</span> <span class="tok-function">Error</span>(<span class="tok-string">'boom'</span>));   <span class="tok-comment">// → uncaught, process dies</span>
 
@@ -560,7 +560,7 @@ e.<span class="tok-function">on</span>(<span class="tok-string">'error'</span>, 
 detected. 11 saved listeners added to [NoteStore]. Use emitter.setMaxListeners()
 to increase limit</code></pre>
 <div class="callout warn">Node warns at 11 listeners on one event. This is almost never solved by raising the limit — it means you are <strong>adding listeners without removing them</strong>, typically inside a request handler or a React-style effect. Every request adds one more, memory grows, and eventually the process dies. The fix is <code>off()</code> / <code>once()</code>, not <code>setMaxListeners(100)</code>.</div>
-<pre><code><span class="tok-comment">// register and clean up</span>
+<pre><code class="language-javascript"><span class="tok-comment">// register and clean up</span>
 <span class="tok-keyword">const</span> onSaved = (n) =&gt; <span class="tok-function">handle</span>(n);
 store.<span class="tok-function">on</span>(<span class="tok-string">'saved'</span>, onSaved);
 <span class="tok-comment">// later, when the consumer goes away:</span>
@@ -595,7 +595,7 @@ store.<span class="tok-function">off</span>(<span class="tok-string">'saved'</sp
 <p class="lead">Gần như mọi thứ bất đồng bộ trong Node đều là EventEmitter ở bên dưới: stream, server HTTP, socket, và cả bản thân tiến trình. Đây là mẫu phát–đăng ký ở dạng đơn giản nhất có thể — một đối tượng phát ra sự kiện có tên, bao nhiêu người nghe cũng được.</p>
 
 <h3>Phát và nghe</h3>
-<pre><code><span class="tok-keyword">const</span> { EventEmitter } = <span class="tok-function">require</span>(<span class="tok-string">'node:events'</span>);
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> { EventEmitter } = <span class="tok-function">require</span>(<span class="tok-string">'node:events'</span>);
 
 <span class="tok-keyword">class</span> <span class="tok-type">NoteStore</span> <span class="tok-keyword">extends</span> <span class="tok-type">EventEmitter</span> {
   <span class="tok-function">save</span>(name) { <span class="tok-keyword">this</span>.<span class="tok-function">emit</span>(<span class="tok-string">'daLuu'</span>, { name }); }
@@ -619,7 +619,7 @@ số listener của daLuu: 2</div>
 <div class="pitfall">Chuyện <code>emit</code> chạy đồng bộ làm nhiều người bất ngờ. Nếu một listener làm việc chậm, bên phát phải chờ — và event loop cũng chờ theo. Ngoài ra, nếu một listener ném lỗi, ngoại lệ đó dội ngược về nơi đã gọi <code>emit()</code>, có thể làm sập một phần code chẳng liên quan gì.</div>
 
 <h3>Sự kiện 'error' là trường hợp đặc biệt</h3>
-<pre><code><span class="tok-comment">// Một EventEmitter KHÔNG có listener 'error' sẽ NÉM khi phát sự kiện đó</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Một EventEmitter KHÔNG có listener 'error' sẽ NÉM khi phát sự kiện đó</span>
 <span class="tok-keyword">const</span> e = <span class="tok-keyword">new</span> <span class="tok-function">EventEmitter</span>();
 e.<span class="tok-function">emit</span>(<span class="tok-string">'error'</span>, <span class="tok-keyword">new</span> <span class="tok-function">Error</span>(<span class="tok-string">'nổ'</span>));   <span class="tok-comment">// → không ai bắt, tiến trình chết</span>
 
@@ -632,7 +632,7 @@ e.<span class="tok-function">on</span>(<span class="tok-string">'error'</span>, 
 detected. 11 daLuu listeners added to [NoteStore]. Use emitter.setMaxListeners()
 to increase limit</code></pre>
 <div class="callout warn">Node cảnh báo khi một sự kiện có 11 listener. Chuyện này gần như không bao giờ được giải quyết bằng cách nâng giới hạn lên — nó có nghĩa bạn đang <strong>thêm listener mà không gỡ ra</strong>, thường là bên trong một request handler. Mỗi request lại thêm một cái, bộ nhớ phình dần, và cuối cùng tiến trình chết. Cách sửa là <code>off()</code> / <code>once()</code>, chứ không phải <code>setMaxListeners(100)</code>.</div>
-<pre><code><span class="tok-comment">// đăng ký rồi dọn dẹp</span>
+<pre><code class="language-javascript"><span class="tok-comment">// đăng ký rồi dọn dẹp</span>
 <span class="tok-keyword">const</span> onSaved = (n) =&gt; <span class="tok-function">xuLy</span>(n);
 store.<span class="tok-function">on</span>(<span class="tok-string">'daLuu'</span>, onSaved);
 <span class="tok-comment">// về sau, khi bên tiêu thụ không cần nữa:</span>
@@ -676,7 +676,7 @@ store.<span class="tok-function">off</span>(<span class="tok-string">'daLuu'</sp
 <p class="lead">Before we reach for Express in chapter 5, build one API by hand. Twenty minutes here will teach you more about what Express does than a week of using it — because you will feel every problem it solves.</p>
 
 <h3>The whole server</h3>
-<pre><code><span class="tok-keyword">import</span> { createServer } <span class="tok-keyword">from</span> <span class="tok-string">'node:http'</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> { createServer } <span class="tok-keyword">from</span> <span class="tok-string">'node:http'</span>;
 
 <span class="tok-keyword">const</span> notes = [{ id: <span class="tok-number">1</span>, title: <span class="tok-string">'First note'</span> }];
 
@@ -706,7 +706,7 @@ store.<span class="tok-function">off</span>(<span class="tok-string">'daLuu'</sp
 
 server.<span class="tok-function">listen</span>(<span class="tok-number">3123</span>, () =&gt; <span class="tok-function">console.log</span>(<span class="tok-string">'http://localhost:3123'</span>));</code></pre>
 <p>Run it, then call it:</p>
-<pre><code>curl -i http://localhost:3123/notes
+<pre><code class="language-bash">curl -i http://localhost:3123/notes
 curl -i -X POST http://localhost:3123/notes -d <span class="tok-string">'{"title":"Second note"}'</span>
 curl http://localhost:3123/notes</code></pre>
 <div class="out">HTTP/1.1 200 OK
@@ -729,7 +729,7 @@ Content-Type: application/json; charset=utf-8
 <div class="callout ok">Those four annoyances are, almost exactly, the four things Express gives you: body parsing, a router with parameters, an error-handling layer, and helpers like <code>res.json()</code>. Knowing this, Express will feel like an obvious convenience rather than magic.</div>
 
 <h3>Streaming a response</h3>
-<pre><code><span class="tok-comment">// serve a large file WITHOUT loading it into memory</span>
+<pre><code class="language-javascript"><span class="tok-comment">// serve a large file WITHOUT loading it into memory</span>
 <span class="tok-keyword">import</span> { pipeline } <span class="tok-keyword">from</span> <span class="tok-string">'node:stream/promises'</span>;
 
 <span class="tok-keyword">if</span> (url.pathname === <span class="tok-string">'/download'</span>) {
@@ -758,7 +758,7 @@ Content-Type: application/json; charset=utf-8
 <p class="lead">Trước khi với tay lấy Express ở chương 5, hãy tự tay dựng một API. Hai mươi phút ở đây dạy bạn về Express nhiều hơn cả một tuần dùng nó — vì bạn sẽ tự cảm nhận từng vấn đề mà nó giải quyết.</p>
 
 <h3>Toàn bộ server</h3>
-<pre><code><span class="tok-keyword">import</span> { createServer } <span class="tok-keyword">from</span> <span class="tok-string">'node:http'</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> { createServer } <span class="tok-keyword">from</span> <span class="tok-string">'node:http'</span>;
 
 <span class="tok-keyword">const</span> notes = [{ id: <span class="tok-number">1</span>, title: <span class="tok-string">'Ghi chú đầu tiên'</span> }];
 
@@ -788,7 +788,7 @@ Content-Type: application/json; charset=utf-8
 
 server.<span class="tok-function">listen</span>(<span class="tok-number">3123</span>, () =&gt; <span class="tok-function">console.log</span>(<span class="tok-string">'http://localhost:3123'</span>));</code></pre>
 <p>Chạy nó lên, rồi gọi vào:</p>
-<pre><code>curl -i http://localhost:3123/notes
+<pre><code class="language-bash">curl -i http://localhost:3123/notes
 curl -i -X POST http://localhost:3123/notes -d <span class="tok-string">'{"title":"Ghi chú thứ hai"}'</span>
 curl http://localhost:3123/notes</code></pre>
 <div class="out">HTTP/1.1 200 OK
@@ -811,7 +811,7 @@ Content-Type: application/json; charset=utf-8
 <div class="callout ok">Bốn nỗi khổ đó, gần như chính xác, là bốn thứ Express đưa cho bạn: phân tích body, một bộ định tuyến có tham số, một tầng xử lý lỗi, và các hàm tiện ích như <code>res.json()</code>. Biết điều này rồi, Express sẽ giống một tiện nghi hiển nhiên chứ không còn là phép thuật.</div>
 
 <h3>Trả phản hồi theo dòng chảy</h3>
-<pre><code><span class="tok-comment">// phục vụ file lớn mà KHÔNG nạp vào bộ nhớ</span>
+<pre><code class="language-javascript"><span class="tok-comment">// phục vụ file lớn mà KHÔNG nạp vào bộ nhớ</span>
 <span class="tok-keyword">import</span> { pipeline } <span class="tok-keyword">from</span> <span class="tok-string">'node:stream/promises'</span>;
 
 <span class="tok-keyword">if</span> (url.pathname === <span class="tok-string">'/download'</span>) {

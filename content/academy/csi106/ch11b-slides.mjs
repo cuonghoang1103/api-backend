@@ -539,12 +539,12 @@ Rồi nối ba bảng lại: <code>MuonSach join SinhVien on MSSV join Sach on M
 <li><strong>"Structure" is the word to notice</strong> — this is the same idea as the <em>schema</em> of slides 10–12. Before a single row can exist, the DBMS must know the names and types of the columns. That is the difference between a database and a text file.</li>
 <li><strong>The table designer grid</strong> — three columns to fill in per attribute: Column Name, Data Type, Allow Nulls. Those three map exactly onto what slide 19 called a relation's attributes, and onto the <code>n</code> columns of slide 30's rule ("n columns related to the n attributes").</li>
 <li><strong>The SQL underneath, run for real</strong> — the grid is one <code>create table</code>. For the library design of slide 31 this is literally all of it:
-<pre>create table SinhVien (MSSV text primary key, HoTen text, MaLop text);
+<pre><code class="language-sql">create table SinhVien (MSSV text primary key, HoTen text, MaLop text);
 create table Sach (MaSach text primary key, TenSach text);
 create table MuonSach (MSSV text, MaSach text, NgayMuon text,
   primary key (MSSV, MaSach),
   foreign key (MSSV) references SinhVien(MSSV),
-  foreign key (MaSach) references Sach(MaSach));</pre>
+  foreign key (MaSach) references Sach(MaSach));</code></pre>
 All three executed without error in sqlite3, then took 3, 4 and 6 rows respectively.</li>
 <li><strong>Choosing types is a design decision, not a formality</strong> — a student ID stored as text sorts "SE10" before "SE9"; a date stored as text cannot have a month added to it. Chapter 3 of this course (data storage) is what the Data Type column is really asking about.</li>
 <li><strong>One table per entity, one per N:M relationship</strong> — do not improvise here. You already produced the correct list on slides 30–31; the table designer is where you type it in, not where you decide it.</li>
@@ -555,12 +555,12 @@ All three executed without error in sqlite3, then took 3, 4 and 6 rows respectiv
 <li><strong>Chữ đáng để ý là "cấu trúc"</strong> — đây đúng là ý niệm <em>lược đồ</em> ở slide 10–12. Trước khi một dòng dữ liệu tồn tại được, DBMS phải biết tên và kiểu của các cột. Đó chính là khác biệt giữa một CSDL và một tệp văn bản.</li>
 <li><strong>Lưới thiết kế bảng</strong> — mỗi thuộc tính điền ba ô: Column Name, Data Type, Allow Nulls. Ba ô ấy ánh xạ đúng vào thứ slide 19 gọi là thuộc tính của quan hệ, và vào <code>n</code> cột trong quy tắc của slide 30 ("n cột ứng với n thuộc tính").</li>
 <li><strong>Câu SQL bên dưới, đã chạy thật</strong> — cả cái lưới chỉ là một lệnh <code>create table</code>. Với thiết kế thư viện ở slide 31 thì nó đúng bằng chừng này:
-<pre>create table SinhVien (MSSV text primary key, HoTen text, MaLop text);
+<pre><code class="language-sql">create table SinhVien (MSSV text primary key, HoTen text, MaLop text);
 create table Sach (MaSach text primary key, TenSach text);
 create table MuonSach (MSSV text, MaSach text, NgayMuon text,
   primary key (MSSV, MaSach),
   foreign key (MSSV) references SinhVien(MSSV),
-  foreign key (MaSach) references Sach(MaSach));</pre>
+  foreign key (MaSach) references Sach(MaSach));</code></pre>
 Cả ba chạy không lỗi trong sqlite3, rồi nhận lần lượt 3, 4 và 6 dòng dữ liệu.</li>
 <li><strong>Chọn kiểu dữ liệu là quyết định thiết kế, không phải thủ tục</strong> — mã sinh viên lưu dạng văn bản thì "SE10" đứng trước "SE9" khi sắp xếp; ngày tháng lưu dạng văn bản thì không cộng thêm một tháng được. Chương 3 của môn này (lưu trữ dữ liệu) chính là thứ mà cột Data Type đang hỏi bạn.</li>
 <li><strong>Mỗi thực thể một bảng, mỗi liên kết N:M một bảng</strong> — đừng ứng biến ở đây. Bạn đã lập xong danh sách đúng ở slide 30–31 rồi; lưới thiết kế bảng là nơi GÕ nó vào, không phải nơi nghĩ ra nó.</li>

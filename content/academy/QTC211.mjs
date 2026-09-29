@@ -233,7 +233,7 @@ const c4 = doc('qtc211-4-1-gates-circuits', '4.1 — Quantum gates & circuits|||
 <h3>Two-qubit gate: CNOT</h3>
 <p><strong>CNOT</strong> (controlled-NOT) flips the target qubit only if the control is |1>. Combined with H, it creates <strong>entanglement</strong>.</p>
 <h3>Your first Qiskit circuit</h3>
-<pre><code>from qiskit import QuantumCircuit
+<pre><code class="language-python">from qiskit import QuantumCircuit
 
 qc = QuantumCircuit(1, 1)
 qc.h(0)              # Hadamard: |0> -> (|0> + |1>)/sqrt(2)
@@ -252,7 +252,7 @@ print(qc)            # draw the circuit
 <h3>Cổng hai qubit: CNOT</h3>
 <p><strong>CNOT</strong> (controlled-NOT) lật qubit đích chỉ khi qubit điều khiển là |1>. Kết hợp với H, nó tạo ra <strong>rối lượng tử</strong>.</p>
 <h3>Mạch Qiskit đầu tiên của bạn</h3>
-<pre><code>from qiskit import QuantumCircuit
+<pre><code class="language-python">from qiskit import QuantumCircuit
 
 qc = QuantumCircuit(1, 1)
 qc.h(0)              # Hadamard: |0> -> (|0> + |1>)/sqrt(2)
@@ -275,7 +275,7 @@ const c5 = doc('qtc211-5-1-entanglement', '5.1 — Entanglement & phenomena|||5.
 <h2>Entanglement &amp; phenomena</h2>
 <h3>Entanglement &amp; Bell states</h3>
 <p>Two qubits are <strong>entangled</strong> when the state of one cannot be described independently of the other. The simplest is a <strong>Bell state</strong> (|00> + |11>)/sqrt(2): measure one qubit and you instantly know the other, however far apart.</p>
-<pre><code>from qiskit import QuantumCircuit
+<pre><code class="language-python">from qiskit import QuantumCircuit
 
 qc = QuantumCircuit(2)
 qc.h(0)              # superposition on qubit 0
@@ -291,7 +291,7 @@ qc.cx(0, 1)          # CNOT -> Bell state (|00> + |11>)/sqrt(2)
 <h2>Rối lượng tử &amp; hiện tượng</h2>
 <h3>Rối lượng tử &amp; trạng thái Bell</h3>
 <p>Hai qubit <strong>rối</strong> khi trạng thái của cái này không thể mô tả độc lập với cái kia. Đơn giản nhất là <strong>trạng thái Bell</strong> (|00> + |11>)/sqrt(2): đo một qubit là biết ngay qubit kia, dù cách xa bao nhiêu.</p>
-<pre><code>from qiskit import QuantumCircuit
+<pre><code class="language-python">from qiskit import QuantumCircuit
 
 qc = QuantumCircuit(2)
 qc.h(0)              # chồng chập trên qubit 0
@@ -393,7 +393,7 @@ const c8 = doc('qtc211-8-1-programming-future', '8.1 — Programming & the futur
 <li><strong>Qiskit</strong> (IBM) — Python, run on real hardware &amp; simulators.</li>
 <li><strong>Cirq</strong> (Google) and <strong>Q#</strong> (Microsoft) — other mature stacks.</li>
 </ul>
-<pre><code>from qiskit import QuantumCircuit
+<pre><code class="language-python">from qiskit import QuantumCircuit
 from qiskit_aer import AerSimulator
 
 qc = QuantumCircuit(2, 2)
@@ -418,7 +418,7 @@ print(result.get_counts())   # ~50% '00', ~50% '11'
 <li><strong>Qiskit</strong> (IBM) — Python, chạy trên phần cứng thật &amp; trình mô phỏng.</li>
 <li><strong>Cirq</strong> (Google) và <strong>Q#</strong> (Microsoft) — các bộ công cụ trưởng thành khác.</li>
 </ul>
-<pre><code>from qiskit import QuantumCircuit
+<pre><code class="language-python">from qiskit import QuantumCircuit
 from qiskit_aer import AerSimulator
 
 qc = QuantumCircuit(2, 2)

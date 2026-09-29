@@ -63,11 +63,11 @@ ${gallery('wf-css', [
   <div class="kv"><span class="k">Internal</span><span class="v">A &lt;style&gt; block in the &lt;head&gt;. Fine for a single tiny page.</span></div>
   <div class="kv"><span class="k">External</span><span class="v">A separate .css file linked from &lt;head&gt;. The standard — one file styles the whole site.</span></div>
 </div>
-<pre><code>&lt;!-- in the &lt;head&gt; --&gt;
+<pre><code class="language-html">&lt;!-- in the &lt;head&gt; --&gt;
 &lt;link rel="stylesheet" href="styles.css"&gt;</code></pre>
 
 <h3>The shape of a rule</h3>
-<pre><code>selector {
+<pre><code class="language-css">selector {
   property: value;
   property: value;
 }
@@ -81,7 +81,7 @@ p {
 <p>A <strong>selector</strong> chooses which elements; inside the braces are <strong>declarations</strong> (a property and its value), each ending in a semicolon.</p>
 
 <h3>The three selectors you use constantly</h3>
-<pre><code>h1        { color: navy; }      /* by tag name: every &lt;h1&gt; */
+<pre><code class="language-css">h1        { color: navy; }      /* by tag name: every &lt;h1&gt; */
 .card     { padding: 16px; }    /* by class: every element with class="card" */
 #site-nav { background: #eee; } /* by id: the one element id="site-nav" */</code></pre>
 <div class="kv-grid">
@@ -116,11 +116,11 @@ p {
   <div class="kv"><span class="k">Internal</span><span class="v">Một khối &lt;style&gt; trong &lt;head&gt;. Ổn cho một trang nhỏ xíu.</span></div>
   <div class="kv"><span class="k">External</span><span class="v">Một file .css riêng, liên kết từ &lt;head&gt;. Chuẩn mực — một file tạo kiểu cho cả site.</span></div>
 </div>
-<pre><code>&lt;!-- trong &lt;head&gt; --&gt;
+<pre><code class="language-html">&lt;!-- trong &lt;head&gt; --&gt;
 &lt;link rel="stylesheet" href="styles.css"&gt;</code></pre>
 
 <h3>Hình dạng một quy tắc</h3>
-<pre><code>bộ_chọn {
+<pre><code class="language-css">bộ_chọn {
   thuộc_tính: giá_trị;
   thuộc_tính: giá_trị;
 }
@@ -134,7 +134,7 @@ p {
 <p>Một <strong>bộ chọn (selector)</strong> chọn phần tử nào; bên trong ngoặc là các <strong>khai báo (declaration)</strong> (một thuộc tính và giá trị của nó), mỗi cái kết bằng dấu chấm phẩy.</p>
 
 <h3>Ba bộ chọn bạn dùng liên tục</h3>
-<pre><code>h1        { color: navy; }      /* theo tên thẻ: mọi &lt;h1&gt; */
+<pre><code class="language-css">h1        { color: navy; }      /* theo tên thẻ: mọi &lt;h1&gt; */
 .card     { padding: 16px; }    /* theo class: mọi phần tử có class="card" */
 #site-nav { background: #eee; } /* theo id: phần tử duy nhất id="site-nav" */</code></pre>
 <div class="kv-grid">
@@ -181,7 +181,7 @@ p {
   <div class="kv"><span class="k">Border</span><span class="v">A line around the padding. Has width, style, colour.</span></div>
   <div class="kv"><span class="k">Margin</span><span class="v">Space outside the border — the gap to neighbouring elements.</span></div>
 </div>
-<pre><code>.card {
+<pre><code class="language-css">.card {
   width: 300px;
   padding: 16px;              /* space inside */
   border: 1px solid #ccc;     /* the outline */
@@ -212,7 +212,7 @@ padding-left: 8px;            /* just one side */</code></pre>
 <div class="lz-layer"><span class="lz-k">Border</span><span class="lz-t">The line around it</span><span class="lz-d">Adds to the element's rendered size unless <code>box-sizing</code> says otherwise. A 1px border on both sides is 2px wider than you asked for.</span></div>
 <div class="lz-layer"><span class="lz-k">Margin</span><span class="lz-t">Space outside, between elements</span><span class="lz-d">Always transparent, and never part of the element's size. Vertical margins between siblings collapse into one — the larger of the two.</span></div>
 </div>
-<pre><code>* { box-sizing: border-box; }   /* put this at the top of every stylesheet */
+<pre><code class="language-css">* { box-sizing: border-box; }   /* put this at the top of every stylesheet */
 
 .card { width: 300px; padding: 20px; border: 1px solid #ddd; }
 /* with border-box:  the card is exactly 300px wide  */
@@ -232,7 +232,7 @@ padding-left: 8px;            /* just one side */</code></pre>
   <div class="kv"><span class="k">Border</span><span class="v">Một đường bao quanh padding. Có độ dày, kiểu, màu.</span></div>
   <div class="kv"><span class="k">Margin</span><span class="v">Khoảng trống bên ngoài viền — khoảng hở tới các phần tử hàng xóm.</span></div>
 </div>
-<pre><code>.card {
+<pre><code class="language-css">.card {
   width: 300px;
   padding: 16px;              /* khoảng trống bên trong */
   border: 1px solid #ccc;     /* đường bao */
@@ -263,7 +263,7 @@ padding-left: 8px;            /* chỉ một cạnh */</code></pre>
 <div class="lz-layer"><span class="lz-k">Border</span><span class="lz-t">Đường viền quanh nó</span><span class="lz-d">Cộng thêm vào kích thước hiển thị trừ khi <code>box-sizing</code> nói khác. Viền 1px hai bên là rộng hơn 2px so với con số bạn đặt.</span></div>
 <div class="lz-layer"><span class="lz-k">Margin</span><span class="lz-t">Khoảng trống bên ngoài, giữa các phần tử</span><span class="lz-d">Luôn trong suốt, và không bao giờ tính vào kích thước phần tử. Margin dọc giữa hai anh em sẽ gộp làm một — lấy cái lớn hơn.</span></div>
 </div>
-<pre><code>* { box-sizing: border-box; }   /* đặt dòng này ở đầu mọi bảng kiểu */
+<pre><code class="language-css">* { box-sizing: border-box; }   /* đặt dòng này ở đầu mọi bảng kiểu */
 
 .card { width: 300px; padding: 20px; border: 1px solid #ddd; }
 /* với border-box:  cái thẻ rộng đúng 300px       */
@@ -288,7 +288,7 @@ padding-left: 8px;            /* chỉ một cạnh */</code></pre>
 <p class="lead">For decades, centring a box or spacing a navbar evenly was painfully fiddly. <strong>Flexbox</strong> fixed that. You make a container <code>display: flex</code> and its direct children line up along one axis, with clean controls for spacing and alignment. It is the layout tool you reach for most.</p>
 
 <h3>One line of CSS to start</h3>
-<pre><code>.navbar {
+<pre><code class="language-css">.navbar {
   display: flex;          /* children now sit in a row */
   gap: 16px;              /* even space between them */
 }</code></pre>
@@ -303,7 +303,7 @@ padding-left: 8px;            /* chỉ một cạnh */</code></pre>
 </div>
 
 <h3>The properties you will use most</h3>
-<pre><code>.container {
+<pre><code class="language-css">.container {
   display: flex;
   flex-direction: row;            /* or column */
   justify-content: space-between; /* start | center | space-between | space-around */
@@ -313,7 +313,7 @@ padding-left: 8px;            /* chỉ một cạnh */</code></pre>
 }</code></pre>
 
 <h3>The famous perfect-centre</h3>
-<pre><code>.hero {
+<pre><code class="language-css">.hero {
   display: flex;
   justify-content: center;  /* centre horizontally */
   align-items: center;      /* centre vertically */
@@ -323,7 +323,7 @@ padding-left: 8px;            /* chỉ một cạnh */</code></pre>
 
 <h3>Growing and shrinking</h3>
 <p>On an item, <code>flex: 1</code> tells it to grow and share leftover space equally with its siblings. This is how you build a sidebar of fixed width next to content that fills the rest:</p>
-<pre><code>.sidebar { width: 240px; }   /* fixed */
+<pre><code class="language-css">.sidebar { width: 240px; }   /* fixed */
 .content { flex: 1; }        /* takes all remaining space */</code></pre>
 <p class="note-ct"><strong>Reach for Flexbox for one-dimensional layout:</strong> a navbar, a row of buttons, a card's inner alignment, a media object (avatar beside text). When you need a real two-dimensional grid of rows AND columns, that is the next lesson.</p>
 <h3>Flexbox in four decisions</h3>
@@ -343,7 +343,7 @@ padding-left: 8px;            /* chỉ một cạnh */</code></pre>
 <p class="lead">Suốt nhiều thập ni, căn giữa một cái hộp hay giãn đều một thanh điều hướng là chuyện vặt mà cực kỳ khó chịu. <strong>Flexbox</strong> giải quyết điều đó. Bạn cho một vùng chứa <code>display: flex</code> và các con trực tiếp của nó xếp thẳng hàng theo một trục, với các nút điều khiển gọn gàng cho khoảng cách và căn chỉnh. Đây là công cụ dàn trang bạn dùng nhiều nhất.</p>
 
 <h3>Một dòng CSS để bắt đầu</h3>
-<pre><code>.navbar {
+<pre><code class="language-css">.navbar {
   display: flex;          /* các con giờ nằm thành một hàng */
   gap: 16px;              /* khoảng cách đều giữa chúng */
 }</code></pre>
@@ -358,7 +358,7 @@ padding-left: 8px;            /* chỉ một cạnh */</code></pre>
 </div>
 
 <h3>Các thuộc tính bạn dùng nhiều nhất</h3>
-<pre><code>.container {
+<pre><code class="language-css">.container {
   display: flex;
   flex-direction: row;            /* hoặc column */
   justify-content: space-between; /* start | center | space-between | space-around */
@@ -368,7 +368,7 @@ padding-left: 8px;            /* chỉ một cạnh */</code></pre>
 }</code></pre>
 
 <h3>Cú "căn giữa hoàn hảo" trứ danh</h3>
-<pre><code>.hero {
+<pre><code class="language-css">.hero {
   display: flex;
   justify-content: center;  /* căn giữa theo chiều ngang */
   align-items: center;      /* căn giữa theo chiều dọc */
@@ -378,7 +378,7 @@ padding-left: 8px;            /* chỉ một cạnh */</code></pre>
 
 <h3>Nở ra và co lại</h3>
 <p>Trên một mục, <code>flex: 1</code> bảo nó nở ra và chia đều phần không gian còn dư với các anh em. Đây là cách bạn dựng một thanh bên rộng cố định cạnh phần nội dung lấp đầy phần còn lại:</p>
-<pre><code>.sidebar { width: 240px; }   /* cố định */
+<pre><code class="language-css">.sidebar { width: 240px; }   /* cố định */
 .content { flex: 1; }        /* lấy hết không gian còn lại */</code></pre>
 <p class="note-ct"><strong>Dùng Flexbox cho bố cục một chiều:</strong> một thanh điều hướng, một hàng nút, căn chỉnh bên trong một thẻ, một khối media (ảnh đại diện cạnh chữ). Khi bạn cần một lưới hai chiều thật sự gồm CẢ hàng VÀ cột, đó là bài kế tiếp.</p>
 <h3>Flexbox trong bốn quyết định</h3>
@@ -409,7 +409,7 @@ padding-left: 8px;            /* chỉ một cạnh */</code></pre>
 <p class="lead">Flexbox handles one line at a time. <strong>CSS Grid</strong> handles a true two-dimensional structure — you define columns and rows, and place items into that grid. It is the tool for page layouts and card galleries.</p>
 
 <h3>Columns with the fr unit</h3>
-<pre><code>.gallery {
+<pre><code class="language-css">.gallery {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;  /* three equal columns */
   gap: 16px;
@@ -422,7 +422,7 @@ grid-template-columns: 240px 1fr;             /* fixed sidebar + flexible conten
 
 <h3>The responsive grid trick worth memorising</h3>
 <p>This one line makes a card grid that automatically fits as many columns as will fit, and reflows on smaller screens — no media query needed:</p>
-<pre><code>.cards {
+<pre><code class="language-css">.cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 16px;
@@ -447,7 +447,7 @@ grid-template-columns: 240px 1fr;             /* fixed sidebar + flexible conten
 <div class="lz-node"><span class="lz-k">Content decides the size?</span><span class="lz-t">Flexbox leans that way</span><span class="lz-d">Items size themselves and the container reacts. Good when you do not know how many items there will be.</span></div>
 <div class="lz-node"><span class="lz-k">Layout decides the size?</span><span class="lz-t">Grid leans that way</span><span class="lz-d">You declare the tracks up front and items go into them. Good when the design has a fixed skeleton.</span></div>
 </div>
-<pre><code>.gallery {
+<pre><code class="language-css">.gallery {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 16px;
@@ -463,7 +463,7 @@ grid-template-columns: 240px 1fr;             /* fixed sidebar + flexible conten
 <p class="lead">Flexbox xử lý một đường tại một thời điểm. <strong>CSS Grid</strong> xử lý một cấu trúc hai chiều thật sự — bạn định nghĩa các cột và hàng, rồi đặt các mục vào lưới đó. Đây là công cụ cho bố cục trang và các phòng trưng bày thẻ.</p>
 
 <h3>Cột với đơn vị fr</h3>
-<pre><code>.gallery {
+<pre><code class="language-css">.gallery {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;  /* ba cột bằng nhau */
   gap: 16px;
@@ -476,7 +476,7 @@ grid-template-columns: 240px 1fr;             /* thanh bên cố định + nội
 
 <h3>Chiêu lưới responsive đáng học thuộc</h3>
 <p>Một dòng này tạo một lưới thẻ tự động vừa đủ nhiều cột nhất có thể, và tự sắp lại trên màn hình nhỏ hơn — không cần media query:</p>
-<pre><code>.cards {
+<pre><code class="language-css">.cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 16px;
@@ -501,7 +501,7 @@ grid-template-columns: 240px 1fr;             /* thanh bên cố định + nội
 <div class="lz-node"><span class="lz-k">Nội dung quyết định kích thước?</span><span class="lz-t">Flexbox nghiêng về phía đó</span><span class="lz-d">Phần tử tự định cỡ và vật chứa phản ứng theo. Tốt khi bạn không biết sẽ có bao nhiêu phần tử.</span></div>
 <div class="lz-node"><span class="lz-k">Bố cục quyết định kích thước?</span><span class="lz-t">Grid nghiêng về phía đó</span><span class="lz-d">Bạn khai các rãnh từ trước rồi phần tử rơi vào đó. Tốt khi thiết kế có một bộ khung cố định.</span></div>
 </div>
-<pre><code>.gallery {
+<pre><code class="language-css">.gallery {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 16px;
@@ -541,7 +541,7 @@ grid-template-columns: 240px 1fr;             /* thanh bên cố định + nội
 
 <h3>Media queries — different CSS at different widths</h3>
 <p>A <strong>media query</strong> applies a block of CSS only when a condition holds — usually a minimum screen width called a <strong>breakpoint</strong>:</p>
-<pre><code>/* base styles: written for the phone (mobile-first) */
+<pre><code class="language-css">/* base styles: written for the phone (mobile-first) */
 .container { padding: 16px; }
 .cards { display: grid; grid-template-columns: 1fr; gap: 16px; }
 
@@ -591,7 +591,7 @@ grid-template-columns: 240px 1fr;             /* thanh bên cố định + nội
 
 <h3>Media query — CSS khác nhau ở các chiều rộng khác nhau</h3>
 <p>Một <strong>media query</strong> áp một khối CSS chỉ khi một điều kiện đúng — thường là chiều rộng màn hình tối thiểu, gọi là một <strong>điểm ngắt (breakpoint)</strong>:</p>
-<pre><code>/* kiểu nền: viết cho điện thoại (mobile-first) */
+<pre><code class="language-css">/* kiểu nền: viết cho điện thoại (mobile-first) */
 .container { padding: 16px; }
 .cards { display: grid; grid-template-columns: 1fr; gap: 16px; }
 

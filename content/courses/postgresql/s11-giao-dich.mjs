@@ -27,7 +27,7 @@ export default {
 <h2>The unit of "it worked"</h2>
 <p class="lead">Chapter 1 introduced ACID with a bank transfer. This chapter is where you actually learn to control it. A <strong>transaction</strong> is a group of statements that either all take effect or none do — and once you are running a real application with more than one user, almost every bug that is genuinely hard to reproduce lives in this chapter.</p>
 <p>Everything below ran on a live PostgreSQL 16.13 with the <code>accounts</code> table from Chapter 1:</p>
-<pre><code><span class="tok-keyword">CREATE TABLE</span> accounts (
+<pre><code class="language-sql"><span class="tok-keyword">CREATE TABLE</span> accounts (
   id      text <span class="tok-keyword">PRIMARY KEY</span>,
   owner   text <span class="tok-keyword">NOT NULL</span>,
   balance numeric(12,2) <span class="tok-keyword">NOT NULL</span> <span class="tok-keyword">CHECK</span> (balance &gt;= 0)
@@ -39,7 +39,7 @@ export default {
 <p>So <code>BEGIN</code> is not what makes your work atomic. It is what lets you make <em>several</em> statements atomic together.</p>
 
 <h3>ROLLBACK: undo everything, as if it never happened</h3>
-<pre><code><span class="tok-keyword">BEGIN</span>;
+<pre><code class="language-sql"><span class="tok-keyword">BEGIN</span>;
 <span class="tok-keyword">UPDATE</span> accounts <span class="tok-keyword">SET</span> balance = balance - 100 <span class="tok-keyword">WHERE</span> id = <span class="tok-string">'A'</span>;
 <span class="tok-keyword">UPDATE</span> accounts <span class="tok-keyword">SET</span> balance = balance + 100 <span class="tok-keyword">WHERE</span> id = <span class="tok-string">'B'</span>;
 <span class="tok-keyword">SELECT</span> * <span class="tok-keyword">FROM</span> accounts <span class="tok-keyword">ORDER BY</span> id;
@@ -65,7 +65,7 @@ ROLLBACK
 
 <h3>The aborted state — the confusing one</h3>
 <p>An error inside a transaction does not just fail that statement. It poisons the whole transaction, and every subsequent statement is refused until you end it:</p>
-<pre><code><span class="tok-keyword">BEGIN</span>;
+<pre><code class="language-sql"><span class="tok-keyword">BEGIN</span>;
 <span class="tok-keyword">UPDATE</span> accounts <span class="tok-keyword">SET</span> balance = balance - 500 <span class="tok-keyword">WHERE</span> id = <span class="tok-string">'A'</span>;   <span class="tok-comment">-- vi phạm CHECK</span>
 <span class="tok-keyword">SELECT</span> <span class="tok-string">'does this run?'</span> <span class="tok-keyword">AS</span> thu;
 <span class="tok-keyword">COMMIT</span>;</code></pre>
@@ -83,7 +83,7 @@ ROLLBACK</div>
 
 <h3>SAVEPOINT: a checkpoint inside a transaction</h3>
 <p>Sometimes you want one statement to be allowed to fail without losing the rest of the transaction. A <code>SAVEPOINT</code> is a marker you can roll back <em>to</em>:</p>
-<pre><code><span class="tok-keyword">BEGIN</span>;
+<pre><code class="language-sql"><span class="tok-keyword">BEGIN</span>;
 <span class="tok-keyword">UPDATE</span> accounts <span class="tok-keyword">SET</span> balance = balance - 40 <span class="tok-keyword">WHERE</span> id = <span class="tok-string">'A'</span>;
 <span class="tok-keyword">SAVEPOINT</span> sp1;
 <span class="tok-keyword">UPDATE</span> accounts <span class="tok-keyword">SET</span> balance = balance - 500 <span class="tok-keyword">WHERE</span> id = <span class="tok-string">'A'</span>;   <span class="tok-comment">-- sẽ hỏng</span>
@@ -108,7 +108,7 @@ COMMIT
 
 <h3>DDL is transactional too — and this is rare</h3>
 <p>In PostgreSQL, <code>CREATE TABLE</code>, <code>ALTER TABLE</code>, <code>DROP TABLE</code> and friends live inside the transaction like everything else:</p>
-<pre><code><span class="tok-keyword">BEGIN</span>;
+<pre><code class="language-sql"><span class="tok-keyword">BEGIN</span>;
 <span class="tok-keyword">CREATE TABLE</span> thu_ddl (id int);
 <span class="tok-keyword">INSERT INTO</span> thu_ddl <span class="tok-keyword">VALUES</span> (1);
 <span class="tok-keyword">SELECT</span> count(*) <span class="tok-keyword">FROM</span> thu_ddl;
@@ -139,7 +139,7 @@ LINE 1: SELECT count(*) FROM thu_ddl;
 <h2>Đơn vị của "nó đã chạy xong"</h2>
 <p class="lead">Chương 1 giới thiệu ACID bằng một lệnh chuyển tiền. Chương này mới là chỗ bạn thật sự học cách điều khiển nó. Một <strong>giao dịch (transaction)</strong> là một nhóm câu lệnh mà hoặc tất cả cùng có hiệu lực, hoặc không cái nào cả — và một khi bạn chạy ứng dụng thật với nhiều hơn một người dùng, gần như mọi con bug khó tái hiện đều nằm trong chương này.</p>
 <p>Mọi thứ dưới đây chạy trên một PostgreSQL 16.13 thật, với bảng <code>accounts</code> từ Chương 1:</p>
-<pre><code><span class="tok-keyword">CREATE TABLE</span> accounts (
+<pre><code class="language-sql"><span class="tok-keyword">CREATE TABLE</span> accounts (
   id      text <span class="tok-keyword">PRIMARY KEY</span>,
   owner   text <span class="tok-keyword">NOT NULL</span>,
   balance numeric(12,2) <span class="tok-keyword">NOT NULL</span> <span class="tok-keyword">CHECK</span> (balance &gt;= 0)
@@ -151,7 +151,7 @@ LINE 1: SELECT count(*) FROM thu_ddl;
 <p>Vậy <code>BEGIN</code> không phải thứ làm cho việc của bạn thành nguyên tử. Nó là thứ cho phép bạn làm <em>nhiều</em> câu lệnh nguyên tử CÙNG NHAU.</p>
 
 <h3>ROLLBACK: hoàn tác sạch, như chưa từng xảy ra</h3>
-<pre><code><span class="tok-keyword">BEGIN</span>;
+<pre><code class="language-sql"><span class="tok-keyword">BEGIN</span>;
 <span class="tok-keyword">UPDATE</span> accounts <span class="tok-keyword">SET</span> balance = balance - 100 <span class="tok-keyword">WHERE</span> id = <span class="tok-string">'A'</span>;
 <span class="tok-keyword">UPDATE</span> accounts <span class="tok-keyword">SET</span> balance = balance + 100 <span class="tok-keyword">WHERE</span> id = <span class="tok-string">'B'</span>;
 <span class="tok-keyword">SELECT</span> * <span class="tok-keyword">FROM</span> accounts <span class="tok-keyword">ORDER BY</span> id;
@@ -177,7 +177,7 @@ ROLLBACK
 
 <h3>Trạng thái aborted — cái gây bối rối nhất</h3>
 <p>Một lỗi bên trong giao dịch không chỉ làm hỏng câu lệnh đó. Nó đầu độc CẢ giao dịch, và mọi câu lệnh sau đó đều bị từ chối cho tới khi bạn kết thúc:</p>
-<pre><code><span class="tok-keyword">BEGIN</span>;
+<pre><code class="language-sql"><span class="tok-keyword">BEGIN</span>;
 <span class="tok-keyword">UPDATE</span> accounts <span class="tok-keyword">SET</span> balance = balance - 500 <span class="tok-keyword">WHERE</span> id = <span class="tok-string">'A'</span>;   <span class="tok-comment">-- vi phạm CHECK</span>
 <span class="tok-keyword">SELECT</span> <span class="tok-string">'câu này có chạy không?'</span> <span class="tok-keyword">AS</span> thu;
 <span class="tok-keyword">COMMIT</span>;</code></pre>
@@ -195,7 +195,7 @@ ROLLBACK</div>
 
 <h3>SAVEPOINT: một cột mốc bên trong giao dịch</h3>
 <p>Đôi khi bạn muốn cho phép MỘT câu lệnh được hỏng mà không mất phần còn lại của giao dịch. <code>SAVEPOINT</code> là một cái mốc bạn có thể lùi <em>về</em>:</p>
-<pre><code><span class="tok-keyword">BEGIN</span>;
+<pre><code class="language-sql"><span class="tok-keyword">BEGIN</span>;
 <span class="tok-keyword">UPDATE</span> accounts <span class="tok-keyword">SET</span> balance = balance - 40 <span class="tok-keyword">WHERE</span> id = <span class="tok-string">'A'</span>;
 <span class="tok-keyword">SAVEPOINT</span> sp1;
 <span class="tok-keyword">UPDATE</span> accounts <span class="tok-keyword">SET</span> balance = balance - 500 <span class="tok-keyword">WHERE</span> id = <span class="tok-string">'A'</span>;   <span class="tok-comment">-- sẽ hỏng</span>
@@ -220,7 +220,7 @@ COMMIT
 
 <h3>DDL cũng nằm trong giao dịch — và điều này hiếm</h3>
 <p>Ở PostgreSQL, <code>CREATE TABLE</code>, <code>ALTER TABLE</code>, <code>DROP TABLE</code> và anh em đều sống trong giao dịch như mọi thứ khác:</p>
-<pre><code><span class="tok-keyword">BEGIN</span>;
+<pre><code class="language-sql"><span class="tok-keyword">BEGIN</span>;
 <span class="tok-keyword">CREATE TABLE</span> thu_ddl (id int);
 <span class="tok-keyword">INSERT INTO</span> thu_ddl <span class="tok-keyword">VALUES</span> (1);
 <span class="tok-keyword">SELECT</span> count(*) <span class="tok-keyword">FROM</span> thu_ddl;
@@ -262,7 +262,7 @@ LINE 1: SELECT count(*) FROM thu_ddl;
 
 <h3>See it with your own eyes: xmin, xmax, ctid</h3>
 <p>Every table has hidden system columns. <code>xmin</code> is the transaction that created this row version; <code>ctid</code> is its physical location as <code>(page, slot)</code>:</p>
-<pre><code><span class="tok-keyword">CREATE TABLE</span> mvcc_demo (id int <span class="tok-keyword">PRIMARY KEY</span>, val text);
+<pre><code class="language-sql"><span class="tok-keyword">CREATE TABLE</span> mvcc_demo (id int <span class="tok-keyword">PRIMARY KEY</span>, val text);
 <span class="tok-keyword">INSERT INTO</span> mvcc_demo <span class="tok-keyword">VALUES</span> (1,<span class="tok-string">'first'</span>);
 <span class="tok-keyword">SELECT</span> ctid, xmin, xmax, * <span class="tok-keyword">FROM</span> mvcc_demo;</code></pre>
 <div class="out"> ctid  | xmin | xmax | id |  val
@@ -270,7 +270,7 @@ LINE 1: SELECT count(*) FROM thu_ddl;
  (0,1) |  741 |    0 |  1 | first
 (1 row)</div>
 <p>Now update it and look again:</p>
-<pre><code><span class="tok-keyword">UPDATE</span> mvcc_demo <span class="tok-keyword">SET</span> val = <span class="tok-string">'second'</span> <span class="tok-keyword">WHERE</span> id = 1;
+<pre><code class="language-sql"><span class="tok-keyword">UPDATE</span> mvcc_demo <span class="tok-keyword">SET</span> val = <span class="tok-string">'second'</span> <span class="tok-keyword">WHERE</span> id = 1;
 <span class="tok-keyword">SELECT</span> ctid, xmin, xmax, * <span class="tok-keyword">FROM</span> mvcc_demo;</code></pre>
 <div class="out"> ctid  | xmin | xmax | id |  val
 -------+------+------+----+--------
@@ -310,7 +310,7 @@ B│ (1 row)</div>
 
 <h3>The price: dead tuples and bloat</h3>
 <p>Nothing is free. Every superseded row version stays on disk until something cleans it up. Measured on a real 100,000-row table:</p>
-<pre><code><span class="tok-keyword">CREATE TABLE</span> bloat_demo <span class="tok-keyword">AS</span> <span class="tok-keyword">SELECT</span> g <span class="tok-keyword">AS</span> id, <span class="tok-string">'row '</span>||g <span class="tok-keyword">AS</span> val <span class="tok-keyword">FROM</span> generate_series(1,100000) g;
+<pre><code class="language-sql"><span class="tok-keyword">CREATE TABLE</span> bloat_demo <span class="tok-keyword">AS</span> <span class="tok-keyword">SELECT</span> g <span class="tok-keyword">AS</span> id, <span class="tok-string">'row '</span>||g <span class="tok-keyword">AS</span> val <span class="tok-keyword">FROM</span> generate_series(1,100000) g;
 <span class="tok-keyword">SELECT</span> pg_size_pretty(pg_relation_size(<span class="tok-string">'bloat_demo'</span>));
 <span class="tok-keyword">UPDATE</span> bloat_demo <span class="tok-keyword">SET</span> val = val || <span class="tok-string">'!'</span>;    <span class="tok-comment">-- lượt 1</span>
 <span class="tok-keyword">UPDATE</span> bloat_demo <span class="tok-keyword">SET</span> val = val || <span class="tok-string">'!'</span>;    <span class="tok-comment">-- lượt 2</span></code></pre>
@@ -321,13 +321,13 @@ B│ (1 row)</div>
 -- sau UPDATE lượt 2
  13 MB</div>
 <p>The table still holds exactly 100,000 live rows, and it has nearly <strong>tripled</strong> on disk. Ask Postgres how many corpses are in there:</p>
-<pre><code><span class="tok-keyword">SELECT</span> n_live_tup, n_dead_tup <span class="tok-keyword">FROM</span> pg_stat_user_tables <span class="tok-keyword">WHERE</span> relname=<span class="tok-string">'bloat_demo'</span>;</code></pre>
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> n_live_tup, n_dead_tup <span class="tok-keyword">FROM</span> pg_stat_user_tables <span class="tok-keyword">WHERE</span> relname=<span class="tok-string">'bloat_demo'</span>;</code></pre>
 <div class="out"> n_live_tup | n_dead_tup
 ------------+------------
      100000 |     199915
 (1 row)</div>
 <p>199,915 dead tuples — two full rounds of updates, minus a few the system already tidied. This is what <code>VACUUM</code> exists for:</p>
-<pre><code><span class="tok-keyword">VACUUM</span> bloat_demo;
+<pre><code class="language-sql"><span class="tok-keyword">VACUUM</span> bloat_demo;
 <span class="tok-keyword">SELECT</span> n_live_tup, n_dead_tup <span class="tok-keyword">FROM</span> pg_stat_user_tables <span class="tok-keyword">WHERE</span> relname=<span class="tok-string">'bloat_demo'</span>;
 <span class="tok-keyword">SELECT</span> pg_size_pretty(pg_relation_size(<span class="tok-string">'bloat_demo'</span>));</code></pre>
 <div class="out"> n_live_tup | n_dead_tup
@@ -351,7 +351,7 @@ B│ (1 row)</div>
 
 <h3>Nhìn tận mắt: xmin, xmax, ctid</h3>
 <p>Mọi bảng đều có các cột hệ thống ẩn. <code>xmin</code> là giao dịch đã tạo ra phiên bản dòng này; <code>ctid</code> là vị trí vật lý của nó dạng <code>(trang, ô)</code>:</p>
-<pre><code><span class="tok-keyword">CREATE TABLE</span> mvcc_demo (id int <span class="tok-keyword">PRIMARY KEY</span>, val text);
+<pre><code class="language-sql"><span class="tok-keyword">CREATE TABLE</span> mvcc_demo (id int <span class="tok-keyword">PRIMARY KEY</span>, val text);
 <span class="tok-keyword">INSERT INTO</span> mvcc_demo <span class="tok-keyword">VALUES</span> (1,<span class="tok-string">'first'</span>);
 <span class="tok-keyword">SELECT</span> ctid, xmin, xmax, * <span class="tok-keyword">FROM</span> mvcc_demo;</code></pre>
 <div class="out"> ctid  | xmin | xmax | id |  val
@@ -359,7 +359,7 @@ B│ (1 row)</div>
  (0,1) |  741 |    0 |  1 | first
 (1 row)</div>
 <p>Giờ cập nhật nó rồi nhìn lại:</p>
-<pre><code><span class="tok-keyword">UPDATE</span> mvcc_demo <span class="tok-keyword">SET</span> val = <span class="tok-string">'second'</span> <span class="tok-keyword">WHERE</span> id = 1;
+<pre><code class="language-sql"><span class="tok-keyword">UPDATE</span> mvcc_demo <span class="tok-keyword">SET</span> val = <span class="tok-string">'second'</span> <span class="tok-keyword">WHERE</span> id = 1;
 <span class="tok-keyword">SELECT</span> ctid, xmin, xmax, * <span class="tok-keyword">FROM</span> mvcc_demo;</code></pre>
 <div class="out"> ctid  | xmin | xmax | id |  val
 -------+------+------+----+--------
@@ -399,7 +399,7 @@ B│ (1 row)</div>
 
 <h3>Cái giá: dead tuple và bloat</h3>
 <p>Không có gì miễn phí. Mọi phiên bản dòng đã bị thay thế vẫn nằm trên đĩa cho tới khi có thứ gì đó dọn nó. Đo thật trên một bảng 100.000 dòng:</p>
-<pre><code><span class="tok-keyword">CREATE TABLE</span> bloat_demo <span class="tok-keyword">AS</span> <span class="tok-keyword">SELECT</span> g <span class="tok-keyword">AS</span> id, <span class="tok-string">'row '</span>||g <span class="tok-keyword">AS</span> val <span class="tok-keyword">FROM</span> generate_series(1,100000) g;
+<pre><code class="language-sql"><span class="tok-keyword">CREATE TABLE</span> bloat_demo <span class="tok-keyword">AS</span> <span class="tok-keyword">SELECT</span> g <span class="tok-keyword">AS</span> id, <span class="tok-string">'row '</span>||g <span class="tok-keyword">AS</span> val <span class="tok-keyword">FROM</span> generate_series(1,100000) g;
 <span class="tok-keyword">SELECT</span> pg_size_pretty(pg_relation_size(<span class="tok-string">'bloat_demo'</span>));
 <span class="tok-keyword">UPDATE</span> bloat_demo <span class="tok-keyword">SET</span> val = val || <span class="tok-string">'!'</span>;    <span class="tok-comment">-- lượt 1</span>
 <span class="tok-keyword">UPDATE</span> bloat_demo <span class="tok-keyword">SET</span> val = val || <span class="tok-string">'!'</span>;    <span class="tok-comment">-- lượt 2</span></code></pre>
@@ -410,13 +410,13 @@ B│ (1 row)</div>
 -- sau UPDATE lượt 2
  13 MB</div>
 <p>Bảng vẫn chứa đúng 100.000 dòng sống, và nó đã <strong>gần GẤP BA</strong> trên đĩa. Hỏi Postgres xem trong đó có bao nhiêu xác:</p>
-<pre><code><span class="tok-keyword">SELECT</span> n_live_tup, n_dead_tup <span class="tok-keyword">FROM</span> pg_stat_user_tables <span class="tok-keyword">WHERE</span> relname=<span class="tok-string">'bloat_demo'</span>;</code></pre>
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> n_live_tup, n_dead_tup <span class="tok-keyword">FROM</span> pg_stat_user_tables <span class="tok-keyword">WHERE</span> relname=<span class="tok-string">'bloat_demo'</span>;</code></pre>
 <div class="out"> n_live_tup | n_dead_tup
 ------------+------------
      100000 |     199915
 (1 row)</div>
 <p>199.915 dead tuple — hai lượt cập nhật toàn bảng, trừ đi vài cái hệ thống đã kịp dọn. Đây chính là việc mà <code>VACUUM</code> sinh ra để làm:</p>
-<pre><code><span class="tok-keyword">VACUUM</span> bloat_demo;
+<pre><code class="language-sql"><span class="tok-keyword">VACUUM</span> bloat_demo;
 <span class="tok-keyword">SELECT</span> n_live_tup, n_dead_tup <span class="tok-keyword">FROM</span> pg_stat_user_tables <span class="tok-keyword">WHERE</span> relname=<span class="tok-string">'bloat_demo'</span>;
 <span class="tok-keyword">SELECT</span> pg_size_pretty(pg_relation_size(<span class="tok-string">'bloat_demo'</span>));</code></pre>
 <div class="out"> n_live_tup | n_dead_tup
@@ -493,7 +493,7 @@ A│ (1 row)</div>
 
 <h3>Serializable — as if the transactions ran one at a time</h3>
 <p>Repeatable Read is still not enough for every invariant, and the classic proof is <strong>write skew</strong>. Two engineers are on call. Each checks "is anyone else on call?", sees yes, and takes themselves off. Both checks were correct when they ran:</p>
-<pre><code><span class="tok-keyword">CREATE TABLE</span> oncall (name text <span class="tok-keyword">PRIMARY KEY</span>, on_call boolean <span class="tok-keyword">NOT NULL</span>);
+<pre><code class="language-sql"><span class="tok-keyword">CREATE TABLE</span> oncall (name text <span class="tok-keyword">PRIMARY KEY</span>, on_call boolean <span class="tok-keyword">NOT NULL</span>);
 <span class="tok-keyword">INSERT INTO</span> oncall <span class="tok-keyword">VALUES</span> (<span class="tok-string">'Cuong'</span>, true), (<span class="tok-string">'Mai'</span>, true);</code></pre>
 <div class="out">A│ BEGIN ISOLATION LEVEL REPEATABLE READ;
 B│ BEGIN ISOLATION LEVEL REPEATABLE READ;
@@ -604,7 +604,7 @@ A│ (1 row)</div>
 
 <h3>Serializable — như thể các giao dịch chạy lần lượt từng cái</h3>
 <p>Repeatable Read vẫn chưa đủ cho mọi bất biến, và bằng chứng kinh điển là <strong>write skew</strong>. Hai kỹ sư đang trực. Mỗi người kiểm "còn ai trực nữa không?", thấy còn, rồi tự cho mình nghỉ. Cả hai phép kiểm đều ĐÚNG vào lúc chúng chạy:</p>
-<pre><code><span class="tok-keyword">CREATE TABLE</span> oncall (name text <span class="tok-keyword">PRIMARY KEY</span>, on_call boolean <span class="tok-keyword">NOT NULL</span>);
+<pre><code class="language-sql"><span class="tok-keyword">CREATE TABLE</span> oncall (name text <span class="tok-keyword">PRIMARY KEY</span>, on_call boolean <span class="tok-keyword">NOT NULL</span>);
 <span class="tok-keyword">INSERT INTO</span> oncall <span class="tok-keyword">VALUES</span> (<span class="tok-string">'Cuong'</span>, true), (<span class="tok-string">'Mai'</span>, true);</code></pre>
 <div class="out">A│ BEGIN ISOLATION LEVEL REPEATABLE READ;
 B│ BEGIN ISOLATION LEVEL REPEATABLE READ;
@@ -753,7 +753,7 @@ B│ CONTEXT:  while locking tuple (0,24) in relation "accounts"</div>
 
 <h3>SKIP LOCKED — a job queue in one query</h3>
 <p><code>FOR UPDATE SKIP LOCKED</code> takes what it can and steps over locked rows instead of waiting. That single clause is a correct multi-worker queue:</p>
-<pre><code><span class="tok-keyword">SELECT</span> id, payload <span class="tok-keyword">FROM</span> job
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> id, payload <span class="tok-keyword">FROM</span> job
  <span class="tok-keyword">WHERE</span> state=<span class="tok-string">'queued'</span>
  <span class="tok-keyword">ORDER BY</span> id
  <span class="tok-keyword">FOR UPDATE SKIP LOCKED</span> <span class="tok-keyword">LIMIT</span> 2;</code></pre>
@@ -885,7 +885,7 @@ B│ CONTEXT:  while locking tuple (0,24) in relation "accounts"</div>
 
 <h3>SKIP LOCKED — một hàng đợi việc gói trong một truy vấn</h3>
 <p><code>FOR UPDATE SKIP LOCKED</code> lấy cái nào lấy được và BƯỚC QUA những dòng đang bị khoá thay vì chờ. Đúng một mệnh đề đó là một hàng đợi nhiều worker chạy đúng:</p>
-<pre><code><span class="tok-keyword">SELECT</span> id, payload <span class="tok-keyword">FROM</span> job
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> id, payload <span class="tok-keyword">FROM</span> job
  <span class="tok-keyword">WHERE</span> state=<span class="tok-string">'queued'</span>
  <span class="tok-keyword">ORDER BY</span> id
  <span class="tok-keyword">FOR UPDATE SKIP LOCKED</span> <span class="tok-keyword">LIMIT</span> 2;</code></pre>

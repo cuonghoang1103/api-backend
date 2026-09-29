@@ -407,7 +407,7 @@ const c6 = doc('ita301-6-1-system-design', '6.1 — System design: architecture,
 <li><strong>Usability</strong> — consistency, clear feedback, and forgiving error handling.</li>
 </ul>
 <h3>Database design</h3>
-<pre><code>ERD (logical) -> tables (physical)
+<pre><code class="language-sql">ERD (logical) -> tables (physical)
   entity   -> table
   attribute-> column
   1:N      -> foreign key on the "many" side

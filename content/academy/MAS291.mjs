@@ -2161,12 +2161,12 @@ CI 95% cho mức giảm trung bình: 3 ± 2.776 × 0.5477 = 3 ± 1.52 = <b>(1.48
     <tr><td>Regression (r, slope, R²)</td><td>Regression tool</td><td>stats.linregress</td></tr>
   </tbody>
 </table>
-<pre><span class="tok-keyword">import</span> numpy <span class="tok-keyword">as</span> np
+<pre><code class="language-python"><span class="tok-keyword">import</span> numpy <span class="tok-keyword">as</span> np
 <span class="tok-keyword">from</span> scipy <span class="tok-keyword">import</span> stats
 data = [2, 4, 4, 6, 9]
 np.<span class="tok-function">mean</span>(data)          <span class="tok-comment"># 5.0</span>
 np.<span class="tok-function">std</span>(data, ddof=1)   <span class="tok-comment"># 2.65 (ddof=1 → the n-1 sample std)</span>
-stats.<span class="tok-function">ttest_1samp</span>(data, 5)  <span class="tok-comment"># one-sample t-test vs μ₀=5</span></pre>
+stats.<span class="tok-function">ttest_1samp</span>(data, 5)  <span class="tok-comment"># one-sample t-test vs μ₀=5</span></code></pre>
 <div class="note-ct">Computer project recipe: import a real dataset → describe it (mean, std, a chart) → check outliers (1.5·IQR) → run one inference (a CI or a test) → if fitting a line, plot the residuals. That structure earns full marks and mirrors real analysis.</div>
 </div>
 <div class="ml-vi">
@@ -2191,12 +2191,12 @@ stats.<span class="tok-function">ttest_1samp</span>(data, 5)  <span class="tok-c
     <tr><td>Hồi quy (r, hệ số góc, R²)</td><td>Công cụ Regression</td><td>stats.linregress</td></tr>
   </tbody>
 </table>
-<pre><span class="tok-keyword">import</span> numpy <span class="tok-keyword">as</span> np
+<pre><code class="language-python"><span class="tok-keyword">import</span> numpy <span class="tok-keyword">as</span> np
 <span class="tok-keyword">from</span> scipy <span class="tok-keyword">import</span> stats
 data = [2, 4, 4, 6, 9]
 np.<span class="tok-function">mean</span>(data)          <span class="tok-comment"># 5.0</span>
 np.<span class="tok-function">std</span>(data, ddof=1)   <span class="tok-comment"># 2.65 (ddof=1 → độ lệch chuẩn mẫu n-1)</span>
-stats.<span class="tok-function">ttest_1samp</span>(data, 5)  <span class="tok-comment"># kiểm định t một mẫu vs μ₀=5</span></pre>
+stats.<span class="tok-function">ttest_1samp</span>(data, 5)  <span class="tok-comment"># kiểm định t một mẫu vs μ₀=5</span></code></pre>
 <div class="note-ct">Công thức computer project: nạp một dữ liệu thật → mô tả (trung bình, độ lệch, một biểu đồ) → kiểm ngoại lai (1.5·IQR) → chạy một suy diễn (một CI hoặc một kiểm định) → nếu khớp đường, vẽ phần dư. Cấu trúc đó ăn điểm tối đa và phản ánh phân tích thật.</div>
 </div>
 `,

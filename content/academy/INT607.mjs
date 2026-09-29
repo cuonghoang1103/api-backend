@@ -582,7 +582,7 @@ Hội viên 1—* Booking        : một hội viên có nhiều booking</div>
 <p class="lead">Đây là toàn bộ CSDL. Chú ý hai dòng — <code>CHECK (seats_left &gt;= 0)</code> trên <code>gym_classes</code>, và <code>UNIQUE</code> từng phần chặn một hội viên đặt cùng lớp hai lần. Cùng một câu <code>UPDATE</code> nguyên tử (Mục 4), chính CSDL từ chối để một lớp vượt sức chứa.</p>
 
 <h3>DDL (PostgreSQL)</h3>
-<pre><span class="tok-keyword">CREATE TABLE</span> users (
+<pre><code class="language-sql"><span class="tok-keyword">CREATE TABLE</span> users (
   id          <span class="tok-type">BIGSERIAL</span> <span class="tok-keyword">PRIMARY KEY</span>,
   email       <span class="tok-type">VARCHAR</span>(255) <span class="tok-keyword">UNIQUE NOT NULL</span>,
   password    <span class="tok-type">VARCHAR</span>(255) <span class="tok-keyword">NOT NULL</span>,      <span class="tok-comment">-- hash bcrypt</span>
@@ -619,7 +619,7 @@ Hội viên 1—* Booking        : một hội viên có nhiều booking</div>
   member_id   <span class="tok-type">BIGINT</span> <span class="tok-keyword">NOT NULL REFERENCES</span> users(id),
   created_at  <span class="tok-type">TIMESTAMP</span> <span class="tok-keyword">NOT NULL DEFAULT</span> now(),
   <span class="tok-keyword">UNIQUE</span> (class_id, member_id)                <span class="tok-comment">-- mỗi hội viên một chỗ xếp hàng mỗi lớp</span>
-);</pre>
+);</code></pre>
 
 <h3>Ví dụ có lời giải — vì sao UPDATE nguyên tử mới là người gác thật</h3>
 <div class="out"><b>Tình huống:</b> "HIIT 18:00" có seats_left = 1; hai lượt đặt tới cùng một mili-giây.
@@ -716,7 +716,7 @@ Hội viên 1—* Booking        : một hội viên có nhiều booking</div>
 <p class="lead">Scaffold a tiny Express API: <code>npm init -y</code>, then <code>npm i express pg jsonwebtoken bcryptjs zod</code> and <code>npm i -D nodemon</code>. Connect to your Postgres container through a single <code>pg.Pool</code>, and split the code into three layers so each has one job.</p>
 
 <h3>The pool &amp; config (one place reads env)</h3>
-<pre><span class="tok-comment">// src/db.js — one shared connection pool</span>
+<pre><code class="language-javascript"><span class="tok-comment">// src/db.js — one shared connection pool</span>
 <span class="tok-keyword">import</span> pg <span class="tok-keyword">from</span> <span class="tok-string">'pg'</span>;
 <span class="tok-keyword">export const</span> pool = <span class="tok-keyword">new</span> pg.Pool({
   connectionString: process.env.DATABASE_URL
@@ -736,7 +736,7 @@ Hội viên 1—* Booking        : một hội viên có nhiều booking</div>
   } <span class="tok-keyword">finally</span> {
     client.release();
   }
-}</pre>
+}</code></pre>
 <p>The <code>DATABASE_URL</code> comes from the environment — the same value will come from Docker in Section 7, with no code change. The <code>tx()</code> helper is what makes the booking core (Section 4) all-or-nothing.</p>
 
 <h3>The three layers — one responsibility each</h3>
@@ -768,7 +768,7 @@ Route ──dto──▶ Service ──params──▶ Repository ──SQL─�
 <p class="lead">Dựng một API Express nhỏ: <code>npm init -y</code>, rồi <code>npm i express pg jsonwebtoken bcryptjs zod</code> và <code>npm i -D nodemon</code>. Nối tới container Postgres qua một <code>pg.Pool</code> duy nhất, và chia code thành ba lớp để mỗi lớp một việc.</p>
 
 <h3>Pool &amp; cấu hình (một chỗ đọc env)</h3>
-<pre><span class="tok-comment">// src/db.js — một connection pool dùng chung</span>
+<pre><code class="language-javascript"><span class="tok-comment">// src/db.js — một connection pool dùng chung</span>
 <span class="tok-keyword">import</span> pg <span class="tok-keyword">from</span> <span class="tok-string">'pg'</span>;
 <span class="tok-keyword">export const</span> pool = <span class="tok-keyword">new</span> pg.Pool({
   connectionString: process.env.DATABASE_URL
@@ -788,7 +788,7 @@ Route ──dto──▶ Service ──params──▶ Repository ──SQL─�
   } <span class="tok-keyword">finally</span> {
     client.release();
   }
-}</pre>
+}</code></pre>
 <p><code>DATABASE_URL</code> đến từ môi trường — chính giá trị đó sẽ đến từ Docker ở Mục 7, không cần đổi code. Helper <code>tx()</code> chính là thứ khiến lõi đặt lớp (Mục 4) tất-cả-hoặc-không.</p>
 
 <h3>Ba lớp — mỗi lớp một trách nhiệm</h3>
@@ -828,7 +828,7 @@ Route ──dto──▶ Service ──tham số──▶ Repository ──SQL�
 <p class="lead">Every SQL string lives in a repository — one module per table. Services call repository functions and never see SQL. Always use <strong>parameterised queries</strong> (<code>$1, $2</code>) so user input can never become SQL.</p>
 
 <h3>The class repository</h3>
-<pre><span class="tok-comment">// src/repos/classRepo.js</span>
+<pre><code class="language-sql"><span class="tok-comment">// src/repos/classRepo.js</span>
 <span class="tok-keyword">import</span> { pool } <span class="tok-keyword">from</span> <span class="tok-string">'../db.js'</span>;
 
 <span class="tok-keyword">export function</span> <span class="tok-function">listUpcoming</span>(db = pool) {
@@ -858,10 +858,10 @@ Route ──dto──▶ Service ──tham số──▶ Repository ──SQL�
       WHERE id = $1 AND seats_left &lt; capacity&#96;,
     [classId]
   );
-}</pre>
+}</code></pre>
 
 <h3>The booking &amp; waitlist repository</h3>
-<pre><span class="tok-comment">// src/repos/bookingRepo.js</span>
+<pre><code class="language-sql"><span class="tok-comment">// src/repos/bookingRepo.js</span>
 <span class="tok-keyword">export function</span> <span class="tok-function">insertBooking</span>(db, classId, memberId) {
   <span class="tok-keyword">return</span> db.query(
     &#96;INSERT INTO bookings (class_id, member_id, status)
@@ -877,7 +877,7 @@ Route ──dto──▶ Service ──tham số──▶ Repository ──SQL�
      ON CONFLICT (class_id, member_id) DO NOTHING&#96;,
     [classId, memberId]
   );
-}</pre>
+}</code></pre>
 <p>Notice <code>claimSeat</code> takes <code>db</code> as an argument — the service passes the transaction client so the seat decrement, the booking insert, and (on cancel) the waitlist promotion all commit together or not at all.</p>
 
 <div class="pitfall"><strong>Trap:</strong> string-concatenating user input into SQL — <code>&#96;... WHERE id = \${classId}&#96;</code>. That is the classic <em>SQL injection</em> hole. Always pass values as the parameter array (<code>[classId]</code>) so the driver escapes them; the query text never changes shape.</div>
@@ -890,7 +890,7 @@ Route ──dto──▶ Service ──tham số──▶ Repository ──SQL�
 <p class="lead">Mọi chuỗi SQL nằm trong một repository — mỗi bảng một module. Service gọi hàm repository và không bao giờ thấy SQL. Luôn dùng <strong>câu lệnh tham số hoá</strong> (<code>$1, $2</code>) để input người dùng không bao giờ biến thành SQL.</p>
 
 <h3>Repository của lớp học</h3>
-<pre><span class="tok-comment">// src/repos/classRepo.js</span>
+<pre><code class="language-sql"><span class="tok-comment">// src/repos/classRepo.js</span>
 <span class="tok-keyword">import</span> { pool } <span class="tok-keyword">from</span> <span class="tok-string">'../db.js'</span>;
 
 <span class="tok-keyword">export function</span> <span class="tok-function">listUpcoming</span>(db = pool) {
@@ -920,10 +920,10 @@ Route ──dto──▶ Service ──tham số──▶ Repository ──SQL�
       WHERE id = $1 AND seats_left &lt; capacity&#96;,
     [classId]
   );
-}</pre>
+}</code></pre>
 
 <h3>Repository của booking &amp; waitlist</h3>
-<pre><span class="tok-comment">// src/repos/bookingRepo.js</span>
+<pre><code class="language-sql"><span class="tok-comment">// src/repos/bookingRepo.js</span>
 <span class="tok-keyword">export function</span> <span class="tok-function">insertBooking</span>(db, classId, memberId) {
   <span class="tok-keyword">return</span> db.query(
     &#96;INSERT INTO bookings (class_id, member_id, status)
@@ -939,7 +939,7 @@ Route ──dto──▶ Service ──tham số──▶ Repository ──SQL�
      ON CONFLICT (class_id, member_id) DO NOTHING&#96;,
     [classId, memberId]
   );
-}</pre>
+}</code></pre>
 <p>Chú ý <code>claimSeat</code> nhận <code>db</code> làm tham số — service truyền client của transaction vào để việc giảm chỗ, insert booking, và (khi huỷ) đôn waitlist cùng commit hoặc cùng không.</p>
 
 <div class="pitfall"><strong>Bẫy:</strong> nối chuỗi input người dùng vào SQL — <code>&#96;... WHERE id = \${classId}&#96;</code>. Đó là lỗ <em>SQL injection</em> kinh điển. Luôn truyền giá trị qua mảng tham số (<code>[classId]</code>) để driver escape chúng; văn bản truy vấn không bao giờ đổi hình.</div>
@@ -960,7 +960,7 @@ Route ──dto──▶ Service ──tham số──▶ Repository ──SQL�
 <p class="lead">Let\\'s ship the first vertical slice end-to-end: an endpoint that returns upcoming classes with their remaining seats as clean JSON. This is the template every other read endpoint copies.</p>
 
 <h3>Step 1 — the Service (business intent, no HTTP)</h3>
-<pre><span class="tok-comment">// src/services/classService.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// src/services/classService.js</span>
 <span class="tok-keyword">import</span> * <span class="tok-keyword">as</span> classRepo <span class="tok-keyword">from</span> <span class="tok-string">'../repos/classRepo.js'</span>;
 
 <span class="tok-keyword">export async function</span> <span class="tok-function">listClasses</span>() {
@@ -974,10 +974,10 @@ Route ──dto──▶ Service ──tham số──▶ Repository ──SQL�
     seatsLeft: c.seats_left,
     isFull: c.seats_left === <span class="tok-number">0</span>,   <span class="tok-comment">// a computed field the app can use directly</span>
   }));
-}</pre>
+}</code></pre>
 
 <h3>Step 2 — the Route (HTTP only)</h3>
-<pre><span class="tok-comment">// src/routes/classes.routes.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// src/routes/classes.routes.js</span>
 <span class="tok-keyword">import</span> { Router } <span class="tok-keyword">from</span> <span class="tok-string">'express'</span>;
 <span class="tok-keyword">import</span> * <span class="tok-keyword">as</span> classService <span class="tok-keyword">from</span> <span class="tok-string">'../services/classService.js'</span>;
 
@@ -987,16 +987,16 @@ classes.get(<span class="tok-string">'/'</span>, <span class="tok-keyword">async
   <span class="tok-keyword">try</span> {
     res.json(<span class="tok-keyword">await</span> classService.listClasses());
   } <span class="tok-keyword">catch</span> (e) { next(e); }   <span class="tok-comment">// hand errors to the central handler</span>
-});</pre>
+});</code></pre>
 
 <h3>Step 3 — mount it in the app</h3>
-<pre><span class="tok-comment">// src/app.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// src/app.js</span>
 <span class="tok-keyword">import</span> express <span class="tok-keyword">from</span> <span class="tok-string">'express'</span>;
 <span class="tok-keyword">import</span> { classes } <span class="tok-keyword">from</span> <span class="tok-string">'./routes/classes.routes.js'</span>;
 
 <span class="tok-keyword">export const</span> app = express();
 app.use(express.json());
-app.use(<span class="tok-string">'/classes'</span>, classes);      <span class="tok-comment">// GET /classes is now live</span></pre>
+app.use(<span class="tok-string">'/classes'</span>, classes);      <span class="tok-comment">// GET /classes is now live</span></code></pre>
 
 <h3>Step 4 — test it (real output)</h3>
 <div class="out"><b>Request:</b>  curl http://localhost:4000/classes
@@ -1019,7 +1019,7 @@ app.use(<span class="tok-string">'/classes'</span>, classes);      <span class="
 <p class="lead">Hãy ship lát cắt dọc đầu tiên từ đầu đến cuối: một endpoint trả về các lớp sắp tới kèm số chỗ còn lại dưới dạng JSON sạch. Đây là khuôn mà mọi endpoint đọc khác sao chép lại.</p>
 
 <h3>Bước 1 — Service (ý định nghiệp vụ, không HTTP)</h3>
-<pre><span class="tok-comment">// src/services/classService.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// src/services/classService.js</span>
 <span class="tok-keyword">import</span> * <span class="tok-keyword">as</span> classRepo <span class="tok-keyword">from</span> <span class="tok-string">'../repos/classRepo.js'</span>;
 
 <span class="tok-keyword">export async function</span> <span class="tok-function">listClasses</span>() {
@@ -1033,10 +1033,10 @@ app.use(<span class="tok-string">'/classes'</span>, classes);      <span class="
     seatsLeft: c.seats_left,
     isFull: c.seats_left === <span class="tok-number">0</span>,   <span class="tok-comment">// một trường tính sẵn app dùng trực tiếp</span>
   }));
-}</pre>
+}</code></pre>
 
 <h3>Bước 2 — Route (chỉ HTTP)</h3>
-<pre><span class="tok-comment">// src/routes/classes.routes.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// src/routes/classes.routes.js</span>
 <span class="tok-keyword">import</span> { Router } <span class="tok-keyword">from</span> <span class="tok-string">'express'</span>;
 <span class="tok-keyword">import</span> * <span class="tok-keyword">as</span> classService <span class="tok-keyword">from</span> <span class="tok-string">'../services/classService.js'</span>;
 
@@ -1046,16 +1046,16 @@ classes.get(<span class="tok-string">'/'</span>, <span class="tok-keyword">async
   <span class="tok-keyword">try</span> {
     res.json(<span class="tok-keyword">await</span> classService.listClasses());
   } <span class="tok-keyword">catch</span> (e) { next(e); }   <span class="tok-comment">// đẩy lỗi cho handler trung tâm</span>
-});</pre>
+});</code></pre>
 
 <h3>Bước 3 — mount vào app</h3>
-<pre><span class="tok-comment">// src/app.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// src/app.js</span>
 <span class="tok-keyword">import</span> express <span class="tok-keyword">from</span> <span class="tok-string">'express'</span>;
 <span class="tok-keyword">import</span> { classes } <span class="tok-keyword">from</span> <span class="tok-string">'./routes/classes.routes.js'</span>;
 
 <span class="tok-keyword">export const</span> app = express();
 app.use(express.json());
-app.use(<span class="tok-string">'/classes'</span>, classes);      <span class="tok-comment">// GET /classes giờ đã sống</span></pre>
+app.use(<span class="tok-string">'/classes'</span>, classes);      <span class="tok-comment">// GET /classes giờ đã sống</span></code></pre>
 
 <h3>Bước 4 — thử nó (kết quả thật)</h3>
 <div class="out"><b>Request:</b>  curl http://localhost:4000/classes
@@ -1100,7 +1100,7 @@ app.use(<span class="tok-string">'/classes'</span>, classes);      <span class="
 <p>The server does not store sessions. It trusts the token because only the server knows the SECRET used to sign it — tamper with one byte and the signature check fails.</p>
 
 <h3>Register &amp; login — the service</h3>
-<pre><span class="tok-comment">// src/services/authService.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// src/services/authService.js</span>
 <span class="tok-keyword">import</span> bcrypt <span class="tok-keyword">from</span> <span class="tok-string">'bcryptjs'</span>;
 <span class="tok-keyword">import</span> jwt <span class="tok-keyword">from</span> <span class="tok-string">'jsonwebtoken'</span>;
 <span class="tok-keyword">import</span> * <span class="tok-keyword">as</span> userRepo <span class="tok-keyword">from</span> <span class="tok-string">'../repos/userRepo.js'</span>;
@@ -1121,7 +1121,7 @@ app.use(<span class="tok-string">'/classes'</span>, classes);      <span class="
     <span class="tok-keyword">throw new</span> UnauthorizedError(<span class="tok-string">'Bad credentials'</span>);   <span class="tok-comment">// same message for both</span>
   <span class="tok-keyword">const</span> token = jwt.sign({ sub: u.id, role: u.role }, SECRET, { expiresIn: <span class="tok-string">'7d'</span> });
   <span class="tok-keyword">return</span> { token, role: u.role };
-}</pre>
+}</code></pre>
 
 <h3>Worked example — the login round-trip</h3>
 <div class="out"><b>1.</b> POST /auth/register { "email":"an@mail.com", "password":"Secret123", "fullName":"An" }
@@ -1155,7 +1155,7 @@ app.use(<span class="tok-string">'/classes'</span>, classes);      <span class="
 <p>Server không lưu session. Nó tin token vì chỉ server biết SECRET dùng để ký — sửa một byte là chữ ký sai.</p>
 
 <h3>Đăng ký &amp; đăng nhập — service</h3>
-<pre><span class="tok-comment">// src/services/authService.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// src/services/authService.js</span>
 <span class="tok-keyword">import</span> bcrypt <span class="tok-keyword">from</span> <span class="tok-string">'bcryptjs'</span>;
 <span class="tok-keyword">import</span> jwt <span class="tok-keyword">from</span> <span class="tok-string">'jsonwebtoken'</span>;
 <span class="tok-keyword">import</span> * <span class="tok-keyword">as</span> userRepo <span class="tok-keyword">from</span> <span class="tok-string">'../repos/userRepo.js'</span>;
@@ -1176,7 +1176,7 @@ app.use(<span class="tok-string">'/classes'</span>, classes);      <span class="
     <span class="tok-keyword">throw new</span> UnauthorizedError(<span class="tok-string">'Sai thông tin đăng nhập'</span>);   <span class="tok-comment">// cùng một thông báo</span>
   <span class="tok-keyword">const</span> token = jwt.sign({ sub: u.id, role: u.role }, SECRET, { expiresIn: <span class="tok-string">'7d'</span> });
   <span class="tok-keyword">return</span> { token, role: u.role };
-}</pre>
+}</code></pre>
 
 <h3>Ví dụ có lời giải — vòng đăng nhập</h3>
 <div class="out"><b>1.</b> POST /auth/register { "email":"an@mail.com", "password":"Secret123", "fullName":"An" }
@@ -1211,7 +1211,7 @@ app.use(<span class="tok-string">'/classes'</span>, classes);      <span class="
 <p class="lead">Authentication proved <em>who</em> you are; authorization decides <em>what</em> you may do. Two checks: <strong>role</strong> (only a trainer creates classes) and <strong>ownership</strong> (a member cancels only their own booking). And on mobile, one storage rule: the token belongs in the secure enclave.</p>
 
 <h3>The auth middleware — verify once, reuse everywhere</h3>
-<pre><span class="tok-comment">// src/middleware/auth.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// src/middleware/auth.js</span>
 <span class="tok-keyword">import</span> jwt <span class="tok-keyword">from</span> <span class="tok-string">'jsonwebtoken'</span>;
 <span class="tok-keyword">const</span> SECRET = process.env.JWT_SECRET ?? <span class="tok-string">'dev-secret-change-me'</span>;
 
@@ -1233,10 +1233,10 @@ app.use(<span class="tok-string">'/classes'</span>, classes);      <span class="
     req.user?.role === role
       ? next()
       : res.status(<span class="tok-number">403</span>).json({ status: <span class="tok-number">403</span>, message: <span class="tok-string">'Forbidden'</span> });
-}</pre>
+}</code></pre>
 
 <h3>Lock endpoints by role &amp; ownership</h3>
-<pre><span class="tok-comment">// only a trainer may create a class or view attendance</span>
+<pre><code class="language-sql"><span class="tok-comment">// only a trainer may create a class or view attendance</span>
 classes.post(<span class="tok-string">'/'</span>, requireAuth, requireRole(<span class="tok-string">'TRAINER'</span>), createClassHandler);
 
 <span class="tok-comment">// ownership: a member cancels only their OWN booking (checked in the service)</span>
@@ -1248,7 +1248,7 @@ classes.post(<span class="tok-string">'/'</span>, requireAuth, requireRole(<span
   );
   <span class="tok-keyword">if</span> (rowCount === <span class="tok-number">0</span>) <span class="tok-keyword">throw new</span> ForbiddenError(<span class="tok-string">'Not your active booking'</span>); <span class="tok-comment">// → 403</span>
   <span class="tok-comment">// (Section 4 adds the seat release + waitlist promotion here)</span>
-}</pre>
+}</code></pre>
 
 <h3>Worked example — the permission matrix</h3>
 <table>
@@ -1278,7 +1278,7 @@ classes.post(<span class="tok-string">'/'</span>, requireAuth, requireRole(<span
 <p class="lead">Xác thực chứng minh <em>bạn là ai</em>; phân quyền quyết định <em>bạn được làm gì</em>. Hai kiểm tra: <strong>vai trò</strong> (chỉ HLV tạo lớp) và <strong>quyền sở hữu</strong> (hội viên chỉ huỷ booking của chính mình). Và trên di động, một quy tắc lưu trữ: token thuộc về secure enclave.</p>
 
 <h3>Middleware xác thực — kiểm một lần, dùng mọi nơi</h3>
-<pre><span class="tok-comment">// src/middleware/auth.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// src/middleware/auth.js</span>
 <span class="tok-keyword">import</span> jwt <span class="tok-keyword">from</span> <span class="tok-string">'jsonwebtoken'</span>;
 <span class="tok-keyword">const</span> SECRET = process.env.JWT_SECRET ?? <span class="tok-string">'dev-secret-change-me'</span>;
 
@@ -1300,10 +1300,10 @@ classes.post(<span class="tok-string">'/'</span>, requireAuth, requireRole(<span
     req.user?.role === role
       ? next()
       : res.status(<span class="tok-number">403</span>).json({ status: <span class="tok-number">403</span>, message: <span class="tok-string">'Forbidden'</span> });
-}</pre>
+}</code></pre>
 
 <h3>Khoá endpoint theo vai trò &amp; quyền sở hữu</h3>
-<pre><span class="tok-comment">// chỉ HLV được tạo lớp hay xem điểm danh</span>
+<pre><code class="language-sql"><span class="tok-comment">// chỉ HLV được tạo lớp hay xem điểm danh</span>
 classes.post(<span class="tok-string">'/'</span>, requireAuth, requireRole(<span class="tok-string">'TRAINER'</span>), createClassHandler);
 
 <span class="tok-comment">// quyền sở hữu: hội viên chỉ huỷ booking CỦA MÌNH (kiểm trong service)</span>
@@ -1315,7 +1315,7 @@ classes.post(<span class="tok-string">'/'</span>, requireAuth, requireRole(<span
   );
   <span class="tok-keyword">if</span> (rowCount === <span class="tok-number">0</span>) <span class="tok-keyword">throw new</span> ForbiddenError(<span class="tok-string">'Không phải booking của bạn'</span>); <span class="tok-comment">// → 403</span>
   <span class="tok-comment">// (Mục 4 thêm trả chỗ + đôn waitlist ở đây)</span>
-}</pre>
+}</code></pre>
 
 <h3>Ví dụ có lời giải — ma trận quyền</h3>
 <table>
@@ -1357,12 +1357,12 @@ classes.post(<span class="tok-string">'/'</span>, requireAuth, requireRole(<span
 <p class="lead">This is the feature graders remember. When a popular class opens, dozens of members tap "Book" within the same second. A naive "count bookings, if &lt; capacity insert" over-books. The fix is a single atomic counter decrement — plus a waitlist for the unlucky.</p>
 
 <h3>The naive service — has a race</h3>
-<pre><span class="tok-comment">// (A) READ how many are booked</span>
+<pre><code class="language-javascript"><span class="tok-comment">// (A) READ how many are booked</span>
 <span class="tok-keyword">const</span> count = <span class="tok-keyword">await</span> prisma.booking.<span class="tok-function">count</span>({ where: { classId, status: <span class="tok-string">"BOOKED"</span> } });
 <span class="tok-keyword">if</span> (count &gt;= gymClass.capacity)               <span class="tok-comment">// (A)</span>
   <span class="tok-keyword">throw new</span> <span class="tok-type">ConflictError</span>(<span class="tok-string">"Class is full"</span>);
 <span class="tok-comment">// (B) WRITE — but 20 requests all read count=19 before any insert!</span>
-<span class="tok-keyword">await</span> prisma.booking.<span class="tok-function">create</span>({ data: { classId, memberId, status: <span class="tok-string">"BOOKED"</span> } });</pre>
+<span class="tok-keyword">await</span> prisma.booking.<span class="tok-function">create</span>({ data: { classId, memberId, status: <span class="tok-string">"BOOKED"</span> } });</code></pre>
 
 <h3>Why it breaks — everyone reads the stale count</h3>
 <div class="out"><b>Time →</b>   20 members tap Book at 06:00:00 for a class with 1 seat left
@@ -1372,7 +1372,7 @@ classes.post(<span class="tok-string">'/'</span>, requireAuth, requireRole(<span
 
 <h3>The fix — an atomic guarded decrement</h3>
 <p>Keep a <code>seats_left</code> counter on the class and decrement it in one conditional UPDATE. Only requests that find a seat left can succeed:</p>
-<pre><span class="tok-comment">// raw SQL — atomic: the DB evaluates the WHERE and the decrement together</span>
+<pre><code class="language-javascript"><span class="tok-comment">// raw SQL — atomic: the DB evaluates the WHERE and the decrement together</span>
 <span class="tok-keyword">const</span> updated = <span class="tok-keyword">await</span> prisma.$executeRaw&#96;
   UPDATE "Class" SET seats_left = seats_left - 1
   WHERE id = \${classId} AND seats_left &gt; 0&#96;;   <span class="tok-comment">// returns rows affected</span>
@@ -1383,7 +1383,7 @@ classes.post(<span class="tok-string">'/'</span>, requireAuth, requireRole(<span
 } <span class="tok-keyword">else</span> {
   <span class="tok-comment">// seats_left was 0 → no row updated → offer the waitlist (next section)</span>
   <span class="tok-keyword">return</span> <span class="tok-function">joinWaitlist</span>(classId, memberId);   <span class="tok-comment">// → 202 Accepted, position N</span>
-}</pre>
+}</code></pre>
 
 <h3>How the atomic UPDATE stays correct — the SQL</h3>
 <div class="out">Class 7 has seats_left = 1. Twenty members race:
@@ -1410,12 +1410,12 @@ The DB serialises row-level writes, so exactly ONE update finds seats_left = 1 &
 <p class="lead">Đây là tính năng giám khảo nhớ nhất. Khi một lớp hot mở, hàng chục hội viên chạm "Đặt" trong cùng một giây. Kiểu "đếm booking, nếu &lt; sức chứa thì chèn" ngây thơ sẽ quá chỗ. Cách sửa là một lần giảm bộ đếm nguyên tử — cộng một waitlist cho người kém may.</p>
 
 <h3>Service ngây thơ — có race</h3>
-<pre><span class="tok-comment">// (A) ĐỌC đã đặt bao nhiêu</span>
+<pre><code class="language-javascript"><span class="tok-comment">// (A) ĐỌC đã đặt bao nhiêu</span>
 <span class="tok-keyword">const</span> count = <span class="tok-keyword">await</span> prisma.booking.<span class="tok-function">count</span>({ where: { classId, status: <span class="tok-string">"BOOKED"</span> } });
 <span class="tok-keyword">if</span> (count &gt;= gymClass.capacity)               <span class="tok-comment">// (A)</span>
   <span class="tok-keyword">throw new</span> <span class="tok-type">ConflictError</span>(<span class="tok-string">"Lớp đã đầy"</span>);
 <span class="tok-comment">// (B) GHI — nhưng 20 request đều đọc count=19 trước khi ai chèn!</span>
-<span class="tok-keyword">await</span> prisma.booking.<span class="tok-function">create</span>({ data: { classId, memberId, status: <span class="tok-string">"BOOKED"</span> } });</pre>
+<span class="tok-keyword">await</span> prisma.booking.<span class="tok-function">create</span>({ data: { classId, memberId, status: <span class="tok-string">"BOOKED"</span> } });</code></pre>
 
 <h3>Vì sao nó hỏng — ai cũng đọc số đếm cũ</h3>
 <div class="out"><b>Thời gian →</b>   20 hội viên chạm Đặt lúc 06:00:00 cho lớp còn 1 chỗ
@@ -1425,7 +1425,7 @@ The DB serialises row-level writes, so exactly ONE update finds seats_left = 1 &
 
 <h3>Cách sửa — giảm có canh nguyên tử</h3>
 <p>Giữ một bộ đếm <code>seats_left</code> trên lớp và giảm nó trong một UPDATE có điều kiện. Chỉ request tìm thấy còn chỗ mới thành công:</p>
-<pre><span class="tok-comment">// SQL thô — nguyên tử: DB tính WHERE và phép giảm cùng nhau</span>
+<pre><code class="language-javascript"><span class="tok-comment">// SQL thô — nguyên tử: DB tính WHERE và phép giảm cùng nhau</span>
 <span class="tok-keyword">const</span> updated = <span class="tok-keyword">await</span> prisma.$executeRaw&#96;
   UPDATE "Class" SET seats_left = seats_left - 1
   WHERE id = \${classId} AND seats_left &gt; 0&#96;;   <span class="tok-comment">// trả số dòng bị ảnh hưởng</span>
@@ -1436,7 +1436,7 @@ The DB serialises row-level writes, so exactly ONE update finds seats_left = 1 &
 } <span class="tok-keyword">else</span> {
   <span class="tok-comment">// seats_left đã là 0 → không dòng nào update → mời vào waitlist (mục sau)</span>
   <span class="tok-keyword">return</span> <span class="tok-function">joinWaitlist</span>(classId, memberId);   <span class="tok-comment">// → 202 Accepted, vị trí N</span>
-}</pre>
+}</code></pre>
 
 <h3>Atomic UPDATE giữ đúng thế nào — SQL</h3>
 <div class="out">Lớp 7 có seats_left = 1. Hai mươi hội viên đua:
@@ -1469,7 +1469,7 @@ DB tuần tự hoá ghi ở mức dòng, nên đúng MỘT update tìm thấy se
 <p class="lead">A full class isn't the end. Members who miss out join a FIFO waitlist; when someone cancels, the first waitlisted member is promoted to a real booking in the <em>same transaction</em> that frees the seat — so a seat is never lost or double-given.</p>
 
 <h3>The cancel + promote, atomically</h3>
-<pre><span class="tok-keyword">await</span> prisma.$transaction(<span class="tok-keyword">async</span> (tx) =&gt; {
+<pre><code class="language-javascript"><span class="tok-keyword">await</span> prisma.$transaction(<span class="tok-keyword">async</span> (tx) =&gt; {
   <span class="tok-comment">// 1) cancel this member's booking</span>
   <span class="tok-keyword">await</span> tx.booking.<span class="tok-function">update</span>({ where: { id: bookingId }, data: { status: <span class="tok-string">"CANCELLED"</span> } });
 
@@ -1487,7 +1487,7 @@ DB tuần tự hoá ghi ở mức dòng, nên đúng MỘT update tìm thấy se
     <span class="tok-comment">// 3b) nobody waiting → return the seat to the pool</span>
     <span class="tok-keyword">await</span> tx.$executeRaw&#96;UPDATE "Class" SET seats_left = seats_left + 1 WHERE id = \${classId}&#96;;
   }
-});</pre>
+});</code></pre>
 
 <h3>Worked example — a seat's journey</h3>
 <div class="out">Class 7: capacity 20, seats_left 0, waitlist = [Mai, Nam]
@@ -1515,7 +1515,7 @@ If a booked member now cancels and nobody waits → seats_left becomes 1 (open a
 <p class="lead">Lớp đầy không phải là hết. Hội viên lỡ chỗ vào một waitlist FIFO; khi ai đó huỷ, hội viên đầu waitlist được đôn thành booking thật trong <em>cùng transaction</em> giải phóng chỗ — nên một chỗ không bao giờ bị mất hay trao đôi.</p>
 
 <h3>Huỷ + đôn, nguyên tử</h3>
-<pre><span class="tok-keyword">await</span> prisma.$transaction(<span class="tok-keyword">async</span> (tx) =&gt; {
+<pre><code class="language-javascript"><span class="tok-keyword">await</span> prisma.$transaction(<span class="tok-keyword">async</span> (tx) =&gt; {
   <span class="tok-comment">// 1) huỷ booking của hội viên này</span>
   <span class="tok-keyword">await</span> tx.booking.<span class="tok-function">update</span>({ where: { id: bookingId }, data: { status: <span class="tok-string">"CANCELLED"</span> } });
 
@@ -1533,7 +1533,7 @@ If a booked member now cancels and nobody waits → seats_left becomes 1 (open a
     <span class="tok-comment">// 3b) không ai đợi → trả chỗ về bể</span>
     <span class="tok-keyword">await</span> tx.$executeRaw&#96;UPDATE "Class" SET seats_left = seats_left + 1 WHERE id = \${classId}&#96;;
   }
-});</pre>
+});</code></pre>
 
 <h3>Ví dụ có lời giải — hành trình một chỗ</h3>
 <div class="out">Lớp 7: sức chứa 20, seats_left 0, waitlist = [Mai, Nam]
@@ -1642,7 +1642,7 @@ Nếu giờ một hội viên đã đặt huỷ và không ai đợi → seats_l
 <p class="lead">The mobile client talks to the same REST API. Two mobile-specific concerns matter: storing the JWT <em>securely</em> (not in plain AsyncStorage) and giving clear feedback for the three outcomes — booked, waitlisted, or full.</p>
 
 <h3>Store the token in the device keychain</h3>
-<pre><span class="tok-keyword">import</span> * <span class="tok-keyword">as</span> SecureStore <span class="tok-keyword">from</span> <span class="tok-string">"expo-secure-store"</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> * <span class="tok-keyword">as</span> SecureStore <span class="tok-keyword">from</span> <span class="tok-string">"expo-secure-store"</span>;
 
 <span class="tok-comment">// after login — encrypted, OS-backed keychain, NOT plain AsyncStorage</span>
 <span class="tok-keyword">await</span> SecureStore.<span class="tok-function">setItemAsync</span>(<span class="tok-string">"token"</span>, data.token);
@@ -1656,10 +1656,10 @@ Nếu giờ một hội viên đã đặt huỷ và không ai đợi → seats_l
   });
   <span class="tok-keyword">if</span> (res.status === <span class="tok-number">401</span>) { <span class="tok-keyword">await</span> <span class="tok-function">signOut</span>(); <span class="tok-keyword">throw new</span> <span class="tok-type">Error</span>(<span class="tok-string">"Session expired"</span>); }
   <span class="tok-keyword">return</span> res;
-}</pre>
+}</code></pre>
 
 <h3>The Book button — three outcomes</h3>
-<pre><span class="tok-keyword">function</span> <span class="tok-function">BookButton</span>({ classId, onDone }) {
+<pre><code class="language-javascript"><span class="tok-keyword">function</span> <span class="tok-function">BookButton</span>({ classId, onDone }) {
   <span class="tok-keyword">const</span> [busy, setBusy] = <span class="tok-function">useState</span>(<span class="tok-keyword">false</span>);
 
   <span class="tok-keyword">async function</span> <span class="tok-function">book</span>() {
@@ -1676,7 +1676,7 @@ Nếu giờ một hội viên đã đặt huỷ và không ai đợi → seats_l
   }
 
   <span class="tok-keyword">return</span> &lt;Pressable disabled={busy} onPress={book}&gt;&lt;Text&gt;{busy ? <span class="tok-string">"…"</span> : <span class="tok-string">"Book"</span>}&lt;/Text&gt;&lt;/Pressable&gt;;
-}</pre>
+}</code></pre>
 
 <div class="pitfall"><strong>Trap:</strong> keeping the JWT in <code>AsyncStorage</code>. AsyncStorage is unencrypted plain text on the device — any backup or rooted phone exposes it. Use <code>expo-secure-store</code>, which is backed by the iOS Keychain / Android Keystore.</div>
 
@@ -1695,7 +1695,7 @@ Nếu giờ một hội viên đã đặt huỷ và không ai đợi → seats_l
 <p class="lead">Client di động nói chuyện với cùng REST API. Hai mối quan tâm riêng của mobile: lưu JWT <em>an toàn</em> (không phải AsyncStorage thường) và phản hồi rõ ràng cho ba kết cục — đã đặt, vào waitlist, hoặc đầy.</p>
 
 <h3>Lưu token trong keychain thiết bị</h3>
-<pre><span class="tok-keyword">import</span> * <span class="tok-keyword">as</span> SecureStore <span class="tok-keyword">from</span> <span class="tok-string">"expo-secure-store"</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> * <span class="tok-keyword">as</span> SecureStore <span class="tok-keyword">from</span> <span class="tok-string">"expo-secure-store"</span>;
 
 <span class="tok-comment">// sau đăng nhập — keychain mã hoá, do OS bảo vệ, KHÔNG phải AsyncStorage thường</span>
 <span class="tok-keyword">await</span> SecureStore.<span class="tok-function">setItemAsync</span>(<span class="tok-string">"token"</span>, data.token);
@@ -1709,10 +1709,10 @@ Nếu giờ một hội viên đã đặt huỷ và không ai đợi → seats_l
   });
   <span class="tok-keyword">if</span> (res.status === <span class="tok-number">401</span>) { <span class="tok-keyword">await</span> <span class="tok-function">signOut</span>(); <span class="tok-keyword">throw new</span> <span class="tok-type">Error</span>(<span class="tok-string">"Phiên hết hạn"</span>); }
   <span class="tok-keyword">return</span> res;
-}</pre>
+}</code></pre>
 
 <h3>Nút Đặt — ba kết cục</h3>
-<pre><span class="tok-keyword">function</span> <span class="tok-function">BookButton</span>({ classId, onDone }) {
+<pre><code class="language-javascript"><span class="tok-keyword">function</span> <span class="tok-function">BookButton</span>({ classId, onDone }) {
   <span class="tok-keyword">const</span> [busy, setBusy] = <span class="tok-function">useState</span>(<span class="tok-keyword">false</span>);
 
   <span class="tok-keyword">async function</span> <span class="tok-function">book</span>() {
@@ -1729,7 +1729,7 @@ Nếu giờ một hội viên đã đặt huỷ và không ai đợi → seats_l
   }
 
   <span class="tok-keyword">return</span> &lt;Pressable disabled={busy} onPress={book}&gt;&lt;Text&gt;{busy ? <span class="tok-string">"…"</span> : <span class="tok-string">"Đặt"</span>}&lt;/Text&gt;&lt;/Pressable&gt;;
-}</pre>
+}</code></pre>
 
 <div class="pitfall"><strong>Bẫy:</strong> giữ JWT trong <code>AsyncStorage</code>. AsyncStorage là văn bản thường không mã hoá trên thiết bị — bất kỳ bản sao lưu hay điện thoại đã root nào cũng lộ nó. Dùng <code>expo-secure-store</code>, được bảo vệ bởi iOS Keychain / Android Keystore.</div>
 
@@ -1782,11 +1782,11 @@ Nếu giờ một hội viên đã đặt huỷ và không ai đợi → seats_l
 <span class="tok-keyword">volumes</span>: { pgdata: {} }</pre>
 
 <h3>The app side — point it at the deployed API, then build</h3>
-<pre><span class="tok-comment"># app.json / .env — the app must call the PUBLIC url, not localhost</span>
+<pre><code class="language-bash"><span class="tok-comment"># app.json / .env — the app must call the PUBLIC url, not localhost</span>
 EXPO_PUBLIC_API_URL=https://api.yourgym.com
 
 <span class="tok-comment"># build an installable binary with EAS (Expo Application Services)</span>
-npx eas build --profile preview --platform android   <span class="tok-comment"># → an .apk to install &amp; demo</span></pre>
+npx eas build --profile preview --platform android   <span class="tok-comment"># → an .apk to install &amp; demo</span></code></pre>
 
 <div class="pitfall"><strong>Trap:</strong> leaving <code>API_URL</code> as <code>http://localhost:3000</code> in the built app. On a phone, <code>localhost</code> is the <em>phone itself</em>, not your dev machine — every request fails. The app must point at the API's real LAN IP (in dev) or its public URL (in the build).</div>
 
@@ -1828,11 +1828,11 @@ npx eas build --profile preview --platform android   <span class="tok-comment">#
 <span class="tok-keyword">volumes</span>: { pgdata: {} }</pre>
 
 <h3>Phía app — trỏ tới API đã deploy, rồi build</h3>
-<pre><span class="tok-comment"># app.json / .env — app phải gọi url CÔNG KHAI, không phải localhost</span>
+<pre><code class="language-bash"><span class="tok-comment"># app.json / .env — app phải gọi url CÔNG KHAI, không phải localhost</span>
 EXPO_PUBLIC_API_URL=https://api.yourgym.com
 
 <span class="tok-comment"># build một binary cài được bằng EAS (Expo Application Services)</span>
-npx eas build --profile preview --platform android   <span class="tok-comment"># → một .apk để cài &amp; demo</span></pre>
+npx eas build --profile preview --platform android   <span class="tok-comment"># → một .apk để cài &amp; demo</span></code></pre>
 
 <div class="pitfall"><strong>Bẫy:</strong> để <code>API_URL</code> là <code>http://localhost:3000</code> trong app đã build. Trên điện thoại, <code>localhost</code> là <em>chính điện thoại</em>, không phải máy dev của bạn — mọi request fail. App phải trỏ tới IP LAN thật của API (lúc dev) hoặc URL công khai của nó (lúc build).</div>
 
@@ -1870,9 +1870,9 @@ npx eas build --profile preview --platform android   <span class="tok-comment">#
 <p>The seat that opened is worthless if the member never learns about it — a push closes the loop from Section 4's waitlist.</p>
 
 <h3>2) QR check-in — prove attendance at the door</h3>
-<pre><span class="tok-comment">// the app shows a QR encoding a short-lived signed token</span>
+<pre><code class="language-javascript"><span class="tok-comment">// the app shows a QR encoding a short-lived signed token</span>
 <span class="tok-keyword">const</span> qr = jwt.<span class="tok-function">sign</span>({ bookingId, exp: nowSec + <span class="tok-number">90</span> }, CHECKIN_SECRET);   <span class="tok-comment">// valid 90s</span>
-<span class="tok-comment">// the front-desk scanner POSTs it → backend verifies + marks ATTENDED (once)</span></pre>
+<span class="tok-comment">// the front-desk scanner POSTs it → backend verifies + marks ATTENDED (once)</span></code></pre>
 <p>The 90-second expiry stops a member screenshotting a QR and sharing it — the token is stale seconds later.</p>
 
 <h3>3) Membership expiry — a nightly job</h3>
@@ -1913,9 +1913,9 @@ setLocal(<span class="tok-string">"BOOKED"</span>);                       <span 
 <p>Chỗ vừa trống vô nghĩa nếu hội viên không bao giờ biết — một push đóng vòng lặp từ waitlist ở Mục 4.</p>
 
 <h3>2) Check-in QR — chứng minh có mặt ở cửa</h3>
-<pre><span class="tok-comment">// app hiện một QR mã hoá một token đã ký đời ngắn</span>
+<pre><code class="language-javascript"><span class="tok-comment">// app hiện một QR mã hoá một token đã ký đời ngắn</span>
 <span class="tok-keyword">const</span> qr = jwt.<span class="tok-function">sign</span>({ bookingId, exp: nowSec + <span class="tok-number">90</span> }, CHECKIN_SECRET);   <span class="tok-comment">// hợp lệ 90s</span>
-<span class="tok-comment">// máy quét ở quầy POST nó → backend xác minh + đánh dấu ATTENDED (một lần)</span></pre>
+<span class="tok-comment">// máy quét ở quầy POST nó → backend xác minh + đánh dấu ATTENDED (một lần)</span></code></pre>
 <p>Hạn 90 giây chặn hội viên chụp màn hình một QR rồi chia sẻ — token đã cũ vài giây sau.</p>
 
 <h3>3) Hết hạn thẻ — một job hằng đêm</h3>

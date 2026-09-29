@@ -40,7 +40,7 @@ ERROR:  integer out of range</div>
 
 <h3>Auto-incrementing keys: IDENTITY (not serial)</h3>
 <p>You've been using <code>GENERATED ALWAYS AS IDENTITY</code> for auto-numbered primary keys. You'll also see the older <code>serial</code> type in tutorials — it works, but the SQL-standard IDENTITY is now preferred (Postgres's own docs recommend it). <code>GENERATED ALWAYS</code> means the database owns that column — it even stops <em>you</em> from forcing a value in by accident:</p>
-<pre><code>CREATE TABLE t_id (id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY, x text);
+<pre><code class="language-sql">CREATE TABLE t_id (id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY, x text);
 INSERT INTO t_id (x) VALUES ('a'), ('b');       <span class="tok-comment">-- fine: id auto-fills 1, 2</span>
 INSERT INTO t_id (id, x) VALUES (99, 'c');       <span class="tok-comment">-- forcing id → rejected</span></code></pre>
 <div class="out">ERROR:  cannot insert a non-DEFAULT value into column "id"
@@ -50,7 +50,7 @@ HINT:  Use OVERRIDING SYSTEM VALUE to override.</div>
 
 <h3>Decimals: numeric vs float — the money rule</h3>
 <p>Here is the mistake. Floating-point types (<code>real</code>, <code>double precision</code>/<code>float8</code>) store numbers in binary and <strong>cannot represent most decimal fractions exactly</strong>. Watch 0.1 + 0.2:</p>
-<pre><code>SELECT 0.1::float8 + 0.2::float8         AS float_sum,
+<pre><code class="language-sql">SELECT 0.1::float8 + 0.2::float8         AS float_sum,
        0.1::numeric + 0.2::numeric      AS numeric_sum,
        (0.1::float8 + 0.2::float8 = 0.3) AS float_eq_03;</code></pre>
 <div class="out">      float_sum      | numeric_sum | float_eq_03
@@ -58,7 +58,7 @@ HINT:  Use OVERRIDING SYSTEM VALUE to override.</div>
  0.30000000000000004 |         0.3 | f
 (1 row)</div>
 <p>In floating point, <code>0.1 + 0.2</code> is <strong>not</strong> 0.3 — it's 0.30000000000000004, and comparing it to 0.3 returns false. Store a price as <code>float</code> and your totals will drift by fractions of a cent, invoices won't reconcile, and <code>WHERE price = 9.99</code> will mysteriously match nothing. The fix is <strong>numeric(precision, scale)</strong> — exact decimal arithmetic:</p>
-<pre><code>SELECT 123.456::numeric(12,2) AS money;</code></pre>
+<pre><code class="language-sql">SELECT 123.456::numeric(12,2) AS money;</code></pre>
 <div class="out">  money
 --------
  123.46
@@ -101,7 +101,7 @@ ERROR:  integer out of range</div>
 
 <h3>Khoá tự tăng: IDENTITY (không phải serial)</h3>
 <p>Bạn đã dùng <code>GENERATED ALWAYS AS IDENTITY</code> cho khoá chính tự đánh số. Bạn cũng sẽ thấy kiểu <code>serial</code> cũ hơn trong các tutorial — nó chạy được, nhưng IDENTITY theo chuẩn SQL nay được ưa hơn (chính tài liệu Postgres khuyên dùng). <code>GENERATED ALWAYS</code> nghĩa là cơ sở dữ liệu sở hữu cột đó — nó thậm chí ngăn <em>chính bạn</em> ép một giá trị vào do sơ ý:</p>
-<pre><code>CREATE TABLE t_id (id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY, x text);
+<pre><code class="language-sql">CREATE TABLE t_id (id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY, x text);
 INSERT INTO t_id (x) VALUES ('a'), ('b');       <span class="tok-comment">-- ổn: id tự điền 1, 2</span>
 INSERT INTO t_id (id, x) VALUES (99, 'c');       <span class="tok-comment">-- ép id → bị từ chối</span></code></pre>
 <div class="out">ERROR:  cannot insert a non-DEFAULT value into column "id"
@@ -111,7 +111,7 @@ HINT:  Use OVERRIDING SYSTEM VALUE to override.</div>
 
 <h3>Số thập phân: numeric vs float — luật tiền bạc</h3>
 <p>Đây là sai lầm. Các kiểu dấu phẩy động (<code>real</code>, <code>double precision</code>/<code>float8</code>) lưu số ở dạng nhị phân và <strong>không thể biểu diễn chính xác đa số phân số thập phân</strong>. Xem 0.1 + 0.2:</p>
-<pre><code>SELECT 0.1::float8 + 0.2::float8         AS float_sum,
+<pre><code class="language-sql">SELECT 0.1::float8 + 0.2::float8         AS float_sum,
        0.1::numeric + 0.2::numeric      AS numeric_sum,
        (0.1::float8 + 0.2::float8 = 0.3) AS float_eq_03;</code></pre>
 <div class="out">      float_sum      | numeric_sum | float_eq_03
@@ -119,7 +119,7 @@ HINT:  Use OVERRIDING SYSTEM VALUE to override.</div>
  0.30000000000000004 |         0.3 | f
 (1 row)</div>
 <p>Trong dấu phẩy động, <code>0.1 + 0.2</code> <strong>không</strong> phải 0.3 — nó là 0.30000000000000004, và so nó với 0.3 trả về false. Lưu một mức giá dưới dạng <code>float</code> và các tổng của bạn sẽ trôi lệch từng phần lẻ của xu, hoá đơn không khớp, và <code>WHERE price = 9.99</code> sẽ khớp chẳng-gì-cả một cách bí ẩn. Cách sửa là <strong>numeric(precision, scale)</strong> — số học thập phân chính xác:</p>
-<pre><code>SELECT 123.456::numeric(12,2) AS money;</code></pre>
+<pre><code class="language-sql">SELECT 123.456::numeric(12,2) AS money;</code></pre>
 <div class="out">  money
 --------
  123.46
@@ -166,11 +166,11 @@ HINT:  Use OVERRIDING SYSTEM VALUE to override.</div>
 
 <h3>Trap 1: a length limit rejects, but a cast truncates</h3>
 <p>A <code>varchar(3)</code> <em>column</em> will refuse an over-long value — it never silently cuts it:</p>
-<pre><code>CREATE TABLE t_vc (code varchar(3));
+<pre><code class="language-sql">CREATE TABLE t_vc (code varchar(3));
 INSERT INTO t_vc VALUES ('abcdef');</code></pre>
 <div class="out">ERROR:  value too long for type character varying(3)</div>
 <p>But an explicit <em>cast</em> to <code>varchar(3)</code> silently truncates instead of erroring — a subtle difference worth knowing:</p>
-<pre><code>SELECT 'abcdef'::varchar(3);</code></pre>
+<pre><code class="language-sql">SELECT 'abcdef'::varchar(3);</code></pre>
 <div class="out"> varchar
 ---------
  abc
@@ -179,7 +179,7 @@ INSERT INTO t_vc VALUES ('abcdef');</code></pre>
 
 <h3>Trap 2: char(n) pads with spaces</h3>
 <p><code>char(5)</code> always stores exactly 5 characters, padding short values with trailing spaces. This bites you constantly — stored codes come back with invisible spaces, comparisons behave oddly:</p>
-<pre><code>SELECT ('hi'::char(5)) || '|'    AS char_padded,
+<pre><code class="language-sql">SELECT ('hi'::char(5)) || '|'    AS char_padded,
        length('hi'::char(5))     AS char_len,
        ('hi'::varchar(5)) || '|' AS varchar_nopad;</code></pre>
 <div class="out"> char_padded | char_len | varchar_nopad
@@ -190,7 +190,7 @@ INSERT INTO t_vc VALUES ('abcdef');</code></pre>
 
 <h3>Bonus: length in characters vs bytes (Unicode)</h3>
 <p>Postgres text is Unicode (UTF-8). A character is not always one byte — accented and non-Latin characters take more:</p>
-<pre><code>SELECT length('café')       AS len_chars,
+<pre><code class="language-sql">SELECT length('café')       AS len_chars,
        octet_length('café') AS len_bytes;</code></pre>
 <div class="out"> len_chars | len_bytes
 -----------+-----------
@@ -228,11 +228,11 @@ INSERT INTO t_vc VALUES ('abcdef');</code></pre>
 
 <h3>Bẫy 1: giới hạn độ dài thì TỪ CHỐI, nhưng cast thì CẮT</h3>
 <p>Một <em>cột</em> <code>varchar(3)</code> sẽ từ chối một giá trị dài quá — nó không bao giờ âm thầm cắt:</p>
-<pre><code>CREATE TABLE t_vc (code varchar(3));
+<pre><code class="language-sql">CREATE TABLE t_vc (code varchar(3));
 INSERT INTO t_vc VALUES ('abcdef');</code></pre>
 <div class="out">ERROR:  value too long for type character varying(3)</div>
 <p>Nhưng một <em>cast</em> tường minh sang <code>varchar(3)</code> lại âm thầm cắt thay vì báo lỗi — một khác biệt tinh tế đáng biết:</p>
-<pre><code>SELECT 'abcdef'::varchar(3);</code></pre>
+<pre><code class="language-sql">SELECT 'abcdef'::varchar(3);</code></pre>
 <div class="out"> varchar
 ---------
  abc
@@ -241,7 +241,7 @@ INSERT INTO t_vc VALUES ('abcdef');</code></pre>
 
 <h3>Bẫy 2: char(n) đệm khoảng trắng</h3>
 <p><code>char(5)</code> luôn lưu đúng 5 ký tự, đệm giá trị ngắn bằng khoảng trắng phía sau. Điều này cắn bạn liên tục — mã đã lưu quay về kèm khoảng trắng vô hình, so sánh hành xử kỳ lạ:</p>
-<pre><code>SELECT ('hi'::char(5)) || '|'    AS char_padded,
+<pre><code class="language-sql">SELECT ('hi'::char(5)) || '|'    AS char_padded,
        length('hi'::char(5))     AS char_len,
        ('hi'::varchar(5)) || '|' AS varchar_nopad;</code></pre>
 <div class="out"> char_padded | char_len | varchar_nopad
@@ -252,7 +252,7 @@ INSERT INTO t_vc VALUES ('abcdef');</code></pre>
 
 <h3>Thêm: độ dài theo ký tự vs byte (Unicode)</h3>
 <p>Chữ trong Postgres là Unicode (UTF-8). Một ký tự không phải luôn là một byte — ký tự có dấu và ngoài Latin chiếm nhiều hơn:</p>
-<pre><code>SELECT length('café')       AS len_chars,
+<pre><code class="language-sql">SELECT length('café')       AS len_chars,
        octet_length('café') AS len_bytes;</code></pre>
 <div class="out"> len_chars | len_bytes
 -----------+-----------
@@ -304,7 +304,7 @@ INSERT INTO t_vc VALUES ('abcdef');</code></pre>
 
 <h3>The big one: timestamp vs timestamptz</h3>
 <p>This is the trap. <code>timestamp</code> (without time zone) stores the literal numbers you gave it and forgets any zone. <code>timestamptz</code> stores an <em>absolute instant</em> (internally UTC) and converts to/from your session's timezone on the way in and out. Watch the difference with the session set to Vietnam time:</p>
-<pre><code>SET timezone = 'Asia/Ho_Chi_Minh';
+<pre><code class="language-sql">SET timezone = 'Asia/Ho_Chi_Minh';
 SELECT '2026-08-10 09:00:00'::timestamp      AS ts_no_zone,
        '2026-08-10 09:00:00+00'::timestamptz AS tstz;</code></pre>
 <div class="out">     ts_no_zone      |          tstz
@@ -312,7 +312,7 @@ SELECT '2026-08-10 09:00:00'::timestamp      AS ts_no_zone,
  2026-08-10 09:00:00 | 2026-08-10 16:00:00+07
 (1 row)</div>
 <p>Both were given "09:00". The plain <code>timestamp</code> kept "09:00" literally, meaningless without knowing whose clock. The <code>timestamptz</code> understood "09:00 UTC" and correctly displayed it as <strong>16:00 +07</strong> — the same instant, in Vietnam's local time. The same value viewed from a UTC session shows the reverse conversion:</p>
-<pre><code>SET timezone = 'UTC';
+<pre><code class="language-sql">SET timezone = 'UTC';
 SELECT '2026-08-10 09:00:00+07'::timestamptz;</code></pre>
 <div class="out">      timestamptz
 ------------------------
@@ -323,7 +323,7 @@ SELECT '2026-08-10 09:00:00+07'::timestamptz;</code></pre>
 
 <h3>Arithmetic: now(), age(), and intervals</h3>
 <p>Times do math. Subtracting two timestamps gives an <code>interval</code>; <code>age()</code> gives it in human years/months/days; adding an interval shifts a time:</p>
-<pre><code>SELECT now()::date                            AS today,
+<pre><code class="language-sql">SELECT now()::date                            AS today,
        '90 minutes'::interval                 AS span,
        age('2026-08-10'::date, '2000-01-01'::date) AS elapsed;</code></pre>
 <div class="out">   today    |   span   |        elapsed
@@ -365,7 +365,7 @@ SELECT '2026-08-10 09:00:00+07'::timestamptz;</code></pre>
 
 <h3>Cái quan trọng: timestamp vs timestamptz</h3>
 <p>Đây là cái bẫy. <code>timestamp</code> (không múi giờ) lưu đúng các con số bạn đưa và quên mọi múi giờ. <code>timestamptz</code> lưu một <em>khoảnh khắc tuyệt đối</em> (bên trong là UTC) và chuyển đổi sang/từ múi giờ của phiên khi vào và ra. Xem khác biệt với phiên đặt về giờ Việt Nam:</p>
-<pre><code>SET timezone = 'Asia/Ho_Chi_Minh';
+<pre><code class="language-sql">SET timezone = 'Asia/Ho_Chi_Minh';
 SELECT '2026-08-10 09:00:00'::timestamp      AS ts_no_zone,
        '2026-08-10 09:00:00+00'::timestamptz AS tstz;</code></pre>
 <div class="out">     ts_no_zone      |          tstz
@@ -373,7 +373,7 @@ SELECT '2026-08-10 09:00:00'::timestamp      AS ts_no_zone,
  2026-08-10 09:00:00 | 2026-08-10 16:00:00+07
 (1 row)</div>
 <p>Cả hai đều được đưa "09:00". <code>timestamp</code> trơn giữ "09:00" y nguyên, vô nghĩa nếu không biết đồng hồ của ai. <code>timestamptz</code> hiểu "09:00 UTC" và hiển thị đúng thành <strong>16:00 +07</strong> — cùng một khoảnh khắc, theo giờ địa phương Việt Nam. Cùng giá trị đó nhìn từ một phiên UTC cho phép chuyển đổi ngược lại:</p>
-<pre><code>SET timezone = 'UTC';
+<pre><code class="language-sql">SET timezone = 'UTC';
 SELECT '2026-08-10 09:00:00+07'::timestamptz;</code></pre>
 <div class="out">      timestamptz
 ------------------------
@@ -384,7 +384,7 @@ SELECT '2026-08-10 09:00:00+07'::timestamptz;</code></pre>
 
 <h3>Số học: now(), age(), và interval</h3>
 <p>Thời gian làm toán được. Trừ hai mốc thời gian cho ra một <code>interval</code>; <code>age()</code> cho nó dạng năm/tháng/ngày dễ đọc; cộng một interval dời một thời điểm:</p>
-<pre><code>SELECT now()::date                            AS today,
+<pre><code class="language-sql">SELECT now()::date                            AS today,
        '90 minutes'::interval                 AS span,
        age('2026-08-10'::date, '2000-01-01'::date) AS elapsed;</code></pre>
 <div class="out">   today    |   span   |        elapsed
@@ -424,7 +424,7 @@ SELECT '2026-08-10 09:00:00+07'::timestamptz;</code></pre>
 
 <h3>uuid — a globally unique id</h3>
 <p>A <code>uuid</code> is a 128-bit random identifier like <code>5f5f2183-eb91-4c39-882f-11f49c700508</code>. Unlike a serial <code>id</code> (1, 2, 3…), a UUID can be generated anywhere — in your app, on the client, on two servers at once — without coordinating, and they won't collide. Generate one with <code>gen_random_uuid()</code>:</p>
-<pre><code>SELECT gen_random_uuid() AS id;</code></pre>
+<pre><code class="language-sql">SELECT gen_random_uuid() AS id;</code></pre>
 <div class="out">                  id
 --------------------------------------
  5f5f2183-eb91-4c39-882f-11f49c700508
@@ -436,7 +436,7 @@ SELECT '2026-08-10 09:00:00+07'::timestamptz;</code></pre>
 
 <h3>enum — a fixed set of named values</h3>
 <p>An <code>enum</code> type restricts a column to a defined list. It's stored compactly and — importantly — it sorts in <strong>declaration order</strong>, not alphabetically:</p>
-<pre><code>CREATE TYPE mood AS ENUM ('low', 'medium', 'high');
+<pre><code class="language-sql">CREATE TYPE mood AS ENUM ('low', 'medium', 'high');
 CREATE TABLE tasks (id int, priority mood);
 INSERT INTO tasks VALUES (1,'high'), (2,'low'), (3,'medium');
 SELECT id, priority FROM tasks ORDER BY priority;</code></pre>
@@ -447,7 +447,7 @@ SELECT id, priority FROM tasks ORDER BY priority;</code></pre>
   1 | high
 (3 rows)</div>
 <p>They sorted low → medium → high (the order you declared them), not alphabetically — that's the whole point, and it's very handy for severities and statuses. And any value outside the set is rejected:</p>
-<pre><code>INSERT INTO tasks VALUES (4, 'urgent');</code></pre>
+<pre><code class="language-sql">INSERT INTO tasks VALUES (4, 'urgent');</code></pre>
 <div class="out">ERROR:  invalid input value for enum mood: "urgent"</div>
 <div class="pitfall">
 <p><strong>The enum trade-off:</strong> enums are great for truly fixed sets (a mood, a weekday). But <em>adding</em> a value later requires <code>ALTER TYPE ... ADD VALUE</code>, and <em>removing</em> one is genuinely hard. If your set of values will change often, a plain <code>text</code> column with a <code>CHECK</code> constraint, or a small lookup table with a foreign key, is more flexible. This site once renamed an enum value in the schema, passed every check, and still broke production — because a seed file had a hand-written copy of the enum. Enums are rigid on purpose; respect that rigidity.</p>
@@ -455,7 +455,7 @@ SELECT id, priority FROM tasks ORDER BY priority;</code></pre>
 
 <h3>array — many values in one column</h3>
 <p>Any type can be an array: <code>int[]</code>, <code>text[]</code>. Handy for a short list of tags or role names without a separate table:</p>
-<pre><code>SELECT array[10,20,30]                 AS arr,
+<pre><code class="language-sql">SELECT array[10,20,30]                 AS arr,
        (array[10,20,30])[2]            AS element_2,
        array_length(array[10,20,30],1) AS len,
        30 = ANY(array[10,20,30])       AS contains_30;</code></pre>
@@ -467,7 +467,7 @@ SELECT id, priority FROM tasks ORDER BY priority;</code></pre>
 
 <h3>jsonb — structured, schemaless data</h3>
 <p><code>jsonb</code> stores JSON in a binary form you can query <em>into</em>. This is Postgres's answer to "I need some flexible, schemaless fields" — you get NoSQL flexibility without leaving your relational database. The operators: <code>-&gt;</code> gets a field as JSON, <code>-&gt;&gt;</code> gets it as text, and <code>@&gt;</code> tests containment:</p>
-<pre><code>SELECT '{"name":"Cuong","tags":["db","sql"],"age":25}'::jsonb -&gt;&gt; 'name'        AS name,
+<pre><code class="language-sql">SELECT '{"name":"Cuong","tags":["db","sql"],"age":25}'::jsonb -&gt;&gt; 'name'        AS name,
        '{"name":"Cuong","tags":["db","sql"],"age":25}'::jsonb -&gt; 'tags' -&gt; 0   AS tag0,
        '{"a":1}'::jsonb @&gt; '{"a":1}'::jsonb                                     AS contains;</code></pre>
 <div class="out">  name | tag0 | contains
@@ -506,7 +506,7 @@ SELECT id, priority FROM tasks ORDER BY priority;</code></pre>
 
 <h3>uuid — một id duy nhất toàn cục</h3>
 <p>Một <code>uuid</code> là một định danh ngẫu nhiên 128-bit như <code>5f5f2183-eb91-4c39-882f-11f49c700508</code>. Khác một <code>id</code> tuần tự (1, 2, 3…), một UUID có thể sinh ở bất cứ đâu — trong app, trên client, trên hai máy chủ cùng lúc — mà không cần phối hợp, và chúng không đụng nhau. Sinh một cái bằng <code>gen_random_uuid()</code>:</p>
-<pre><code>SELECT gen_random_uuid() AS id;</code></pre>
+<pre><code class="language-sql">SELECT gen_random_uuid() AS id;</code></pre>
 <div class="out">                  id
 --------------------------------------
  5f5f2183-eb91-4c39-882f-11f49c700508
@@ -518,7 +518,7 @@ SELECT id, priority FROM tasks ORDER BY priority;</code></pre>
 
 <h3>enum — một tập giá trị có tên cố định</h3>
 <p>Một kiểu <code>enum</code> giới hạn một cột về một danh sách đã định. Nó được lưu gọn và — quan trọng — nó sắp theo <strong>thứ tự khai báo</strong>, không phải theo bảng chữ cái:</p>
-<pre><code>CREATE TYPE mood AS ENUM ('low', 'medium', 'high');
+<pre><code class="language-sql">CREATE TYPE mood AS ENUM ('low', 'medium', 'high');
 CREATE TABLE tasks (id int, priority mood);
 INSERT INTO tasks VALUES (1,'high'), (2,'low'), (3,'medium');
 SELECT id, priority FROM tasks ORDER BY priority;</code></pre>
@@ -529,7 +529,7 @@ SELECT id, priority FROM tasks ORDER BY priority;</code></pre>
   1 | high
 (3 rows)</div>
 <p>Chúng sắp low → medium → high (thứ tự bạn khai báo), không theo bảng chữ cái — đó chính là điểm mấu chốt, và rất tiện cho mức độ nghiêm trọng và trạng thái. Và mọi giá trị ngoài tập bị từ chối:</p>
-<pre><code>INSERT INTO tasks VALUES (4, 'urgent');</code></pre>
+<pre><code class="language-sql">INSERT INTO tasks VALUES (4, 'urgent');</code></pre>
 <div class="out">ERROR:  invalid input value for enum mood: "urgent"</div>
 <div class="pitfall">
 <p><strong>Đánh đổi của enum:</strong> enum tuyệt cho các tập thật sự cố định (một tâm trạng, một thứ trong tuần). Nhưng <em>thêm</em> một giá trị sau này cần <code>ALTER TYPE ... ADD VALUE</code>, và <em>bỏ</em> một giá trị thì thật sự khó. Nếu tập giá trị của bạn sẽ đổi thường xuyên, một cột <code>text</code> trơn với ràng buộc <code>CHECK</code>, hoặc một bảng tra cứu nhỏ với khoá ngoại, sẽ linh hoạt hơn. Trang này từng đổi tên một giá trị enum trong lược đồ, qua sạch mọi phép kiểm, mà vẫn vỡ production — vì một file seed có bản chép tay của enum. Enum cứng nhắc có chủ đích; hãy tôn trọng sự cứng nhắc đó.</p>
@@ -537,7 +537,7 @@ SELECT id, priority FROM tasks ORDER BY priority;</code></pre>
 
 <h3>array — nhiều giá trị trong một cột</h3>
 <p>Kiểu nào cũng có thể thành mảng: <code>int[]</code>, <code>text[]</code>. Tiện cho một danh sách ngắn các tag hay tên vai trò mà không cần một bảng riêng:</p>
-<pre><code>SELECT array[10,20,30]                 AS arr,
+<pre><code class="language-sql">SELECT array[10,20,30]                 AS arr,
        (array[10,20,30])[2]            AS element_2,
        array_length(array[10,20,30],1) AS len,
        30 = ANY(array[10,20,30])       AS contains_30;</code></pre>
@@ -549,7 +549,7 @@ SELECT id, priority FROM tasks ORDER BY priority;</code></pre>
 
 <h3>jsonb — dữ liệu có cấu trúc, không lược đồ</h3>
 <p><code>jsonb</code> lưu JSON dưới dạng nhị phân mà bạn có thể truy vấn <em>vào trong</em>. Đây là câu trả lời của Postgres cho "tôi cần vài trường linh hoạt, không lược đồ" — bạn có sự linh hoạt NoSQL mà không rời khỏi cơ sở dữ liệu quan hệ. Các toán tử: <code>-&gt;</code> lấy một trường dạng JSON, <code>-&gt;&gt;</code> lấy dạng text, và <code>@&gt;</code> kiểm chứa:</p>
-<pre><code>SELECT '{"name":"Cuong","tags":["db","sql"],"age":25}'::jsonb -&gt;&gt; 'name'        AS name,
+<pre><code class="language-sql">SELECT '{"name":"Cuong","tags":["db","sql"],"age":25}'::jsonb -&gt;&gt; 'name'        AS name,
        '{"name":"Cuong","tags":["db","sql"],"age":25}'::jsonb -&gt; 'tags' -&gt; 0   AS tag0,
        '{"a":1}'::jsonb @&gt; '{"a":1}'::jsonb                                     AS contains;</code></pre>
 <div class="out">  name | tag0 | contains

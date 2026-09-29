@@ -94,7 +94,7 @@ ${slide('git-11', 5, 'Projects: bảng kanban tự chạy theo PR')}
 </div>
 
 <h3>Issue templates</h3>
-<pre><code><span class="tok-comment"># .github/ISSUE_TEMPLATE/bug.yml</span>
+<pre><code class="language-bash"><span class="tok-comment"># .github/ISSUE_TEMPLATE/bug.yml</span>
 name: Bug report
 description: Something is broken
 labels: [<span class="tok-string">"type:bug"</span>]
@@ -114,7 +114,7 @@ body:
 
 <h3>Linking issues to code</h3>
 ${slide('git-11', 3, 'Issue → nhánh → PR “Closes #12” → tự đóng')}
-<pre><code>git commit -m <span class="tok-string">"fix(feed): render a placeholder when a post has no author
+<pre><code class="language-bash">git commit -m <span class="tok-string">"fix(feed): render a placeholder when a post has no author
 
 Closes #412"</span></code></pre>
 <div class="kv-grid">
@@ -126,7 +126,7 @@ Closes #412"</span></code></pre>
 
 <h3>The gh CLI — the whole platform without a browser</h3>
 ${slide('git-11', 6, 'CLI gh: những lệnh dùng hằng ngày')}
-<pre><code>gh auth login                         <span class="tok-comment"># once</span>
+<pre><code class="language-bash">gh auth login                         <span class="tok-comment"># once</span>
 
 gh issue list --label type:bug --state open
 gh issue create --title <span class="tok-string">"Feed 500 on null author"</span> --body-file /tmp/report.md
@@ -144,7 +144,7 @@ gh release create v1.5.0 --generate-notes</code></pre>
 <div class="callout ok"><code>gh run view --log-failed</code> is worth the install on its own: it prints only the failed step's output, instead of scrolling a browser through 4,000 lines of green. Combined with <code>gh pr checkout</code>, most of a review can happen without leaving the terminal.</div>
 
 <h3>Querying with the API</h3>
-<pre><code><span class="tok-comment"># Anything the UI can show, gh api can print:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Anything the UI can show, gh api can print:</span>
 gh api repos/cuonghoang1103/api-backend --jq <span class="tok-string">'.size, .default_branch'</span>
 gh api repos/cuonghoang1103/api-backend/issues --paginate \\
   --jq <span class="tok-string">'.[] | select(.pull_request == null) | "\\(.number)\\t\\(.title)"'</span></code></pre>
@@ -233,7 +233,7 @@ ${slide('git-11', 5, 'Projects: bảng kanban tự chạy theo PR')}
 </div>
 
 <h3>Mẫu issue</h3>
-<pre><code><span class="tok-comment"># .github/ISSUE_TEMPLATE/bug.yml</span>
+<pre><code class="language-bash"><span class="tok-comment"># .github/ISSUE_TEMPLATE/bug.yml</span>
 name: Báo lỗi
 description: Có thứ gì đó hỏng
 labels: [<span class="tok-string">"type:bug"</span>]
@@ -253,7 +253,7 @@ body:
 
 <h3>Nối issue với mã nguồn</h3>
 ${slide('git-11', 3, 'Issue → nhánh → PR “Closes #12” → tự đóng')}
-<pre><code>git commit -m <span class="tok-string">"fix(feed): hien tac gia giu cho khi bai khong co tac gia
+<pre><code class="language-bash">git commit -m <span class="tok-string">"fix(feed): hien tac gia giu cho khi bai khong co tac gia
 
 Closes #412"</span></code></pre>
 <div class="kv-grid">
@@ -265,7 +265,7 @@ Closes #412"</span></code></pre>
 
 <h3>CLI gh — cả nền tảng mà không cần trình duyệt</h3>
 ${slide('git-11', 6, 'CLI gh: những lệnh dùng hằng ngày')}
-<pre><code>gh auth login                         <span class="tok-comment"># một lần</span>
+<pre><code class="language-bash">gh auth login                         <span class="tok-comment"># một lần</span>
 
 gh issue list --label type:bug --state open
 gh issue create --title <span class="tok-string">"Feed 500 khi tac gia null"</span> --body-file /tmp/report.md
@@ -283,7 +283,7 @@ gh release create v1.5.0 --generate-notes</code></pre>
 <div class="callout ok">Riêng <code>gh run view --log-failed</code> đã đáng để cài: nó chỉ in ra output của bước bị hỏng, thay vì cuộn trình duyệt qua 4.000 dòng màu xanh. Ghép với <code>gh pr checkout</code>, phần lớn một lượt review diễn ra được mà không rời terminal.</div>
 
 <h3>Truy vấn bằng API</h3>
-<pre><code><span class="tok-comment"># Bất cứ thứ gì giao diện hiện được, gh api cũng in được:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Bất cứ thứ gì giao diện hiện được, gh api cũng in được:</span>
 gh api repos/cuonghoang1103/api-backend --jq <span class="tok-string">'.size, .default_branch'</span>
 gh api repos/cuonghoang1103/api-backend/issues --paginate \\
   --jq <span class="tok-string">'.[] | select(.pull_request == null) | "\\(.number)\\t\\(.title)"'</span></code></pre>
@@ -356,7 +356,7 @@ Closes #12        <span class="tok-comment"># output thật trong kho thử củ
 <h3>A workflow that earns its keep</h3>
 ${slide('git-11', 7, 'Actions: sự kiện → workflow → job → step')}
 ${slide('git-11', 8, 'Giải phẫu một workflow ci.yml')}
-<pre><code><span class="tok-comment"># .github/workflows/ci.yml</span>
+<pre><code class="language-bash"><span class="tok-comment"># .github/workflows/ci.yml</span>
 name: CI
 on:
   pull_request:
@@ -405,7 +405,7 @@ jobs:
 
 <h3>Making it fast</h3>
 ${slide('git-11', 11, 'Cache: key, restore-keys, giới hạn')}
-<pre><code>      - uses: actions/setup-node@v4
+<pre><code class="language-bash">      - uses: actions/setup-node@v4
         with: { node-version: 22, cache: npm }      <span class="tok-comment"># dependency cache, one line</span>
 
       - uses: actions/cache@v4                       <span class="tok-comment"># anything else</span>
@@ -423,7 +423,7 @@ ${slide('git-11', 11, 'Cache: key, restore-keys, giới hạn')}
 
 <h3>Matrix builds</h3>
 ${slide('git-11', 10, 'Matrix: nhiều job song song')}
-<pre><code>  test:
+<pre><code class="language-bash">  test:
     strategy:
       fail-fast: false          <span class="tok-comment"># do not cancel the others on the first failure</span>
       matrix:
@@ -434,7 +434,7 @@ ${slide('git-11', 10, 'Matrix: nhiều job song song')}
 
 <h3>Secrets and permissions</h3>
 ${slide('git-11', 12, 'Secrets và quyền')}
-<pre><code>      - run: ./deploy.sh
+<pre><code class="language-bash">      - run: ./deploy.sh
         env:
           SSH_KEY: &#36;{{ secrets.VPS_SSH_PRIVATE_KEY }}
           HOST:    &#36;{{ secrets.VPS_HOST }}</code></pre>
@@ -449,7 +449,7 @@ jobs:
 
 <h3>Reading a failure</h3>
 ${slide('git-11', 9, 'Kiểm trên máy trước khi push: actionlint và npm test')}
-<pre><code>gh run list --limit 5
+<pre><code class="language-bash">gh run list --limit 5
 gh run view --log-failed        <span class="tok-comment"># only the failing step</span>
 gh run rerun 1234567 --failed   <span class="tok-comment"># re-run just the failed jobs</span>
 gh run watch                    <span class="tok-comment"># live, in the terminal</span></code></pre>
@@ -514,7 +514,7 @@ ${slide('git-11', 13, 'CI chặn merge qua ruleset')}
 <h3>Một workflow đáng đồng tiền</h3>
 ${slide('git-11', 7, 'Actions: sự kiện → workflow → job → step')}
 ${slide('git-11', 8, 'Giải phẫu một workflow ci.yml')}
-<pre><code><span class="tok-comment"># .github/workflows/ci.yml</span>
+<pre><code class="language-bash"><span class="tok-comment"># .github/workflows/ci.yml</span>
 name: CI
 on:
   pull_request:
@@ -563,7 +563,7 @@ jobs:
 
 <h3>Làm cho nó nhanh</h3>
 ${slide('git-11', 11, 'Cache: key, restore-keys, giới hạn')}
-<pre><code>      - uses: actions/setup-node@v4
+<pre><code class="language-bash">      - uses: actions/setup-node@v4
         with: { node-version: 22, cache: npm }      <span class="tok-comment"># cache thư viện, một dòng</span>
 
       - uses: actions/cache@v4                       <span class="tok-comment"># mọi thứ khác</span>
@@ -581,7 +581,7 @@ ${slide('git-11', 11, 'Cache: key, restore-keys, giới hạn')}
 
 <h3>Bản dựng theo ma trận</h3>
 ${slide('git-11', 10, 'Matrix: nhiều job song song')}
-<pre><code>  test:
+<pre><code class="language-bash">  test:
     strategy:
       fail-fast: false          <span class="tok-comment"># đừng huỷ các job khác khi cái đầu tiên hỏng</span>
       matrix:
@@ -592,7 +592,7 @@ ${slide('git-11', 10, 'Matrix: nhiều job song song')}
 
 <h3>Secret và quyền</h3>
 ${slide('git-11', 12, 'Secrets và quyền')}
-<pre><code>      - run: ./deploy.sh
+<pre><code class="language-bash">      - run: ./deploy.sh
         env:
           SSH_KEY: &#36;{{ secrets.VPS_SSH_PRIVATE_KEY }}
           HOST:    &#36;{{ secrets.VPS_HOST }}</code></pre>
@@ -607,7 +607,7 @@ jobs:
 
 <h3>Đọc một lần hỏng</h3>
 ${slide('git-11', 9, 'Kiểm trên máy trước khi push: actionlint và npm test')}
-<pre><code>gh run list --limit 5
+<pre><code class="language-bash">gh run list --limit 5
 gh run view --log-failed        <span class="tok-comment"># chỉ bước bị hỏng</span>
 gh run rerun 1234567 --failed   <span class="tok-comment"># chạy lại đúng những job đã hỏng</span>
 gh run watch                    <span class="tok-comment"># theo dõi trực tiếp, trong terminal</span></code></pre>
@@ -735,7 +735,7 @@ remote:        path: README.md:4</code></pre>
 
 <h3>Layer 5 — a front door for bad news: SECURITY.md</h3>
 <p>If someone finds a hole in your project — say, the booking API lets any logged-in user cancel anyone's appointment — the worst place for them to report it is a public issue. <code>SECURITY.md</code> tells them where to go instead. GitHub looks for it in the repository root, in <code>docs/</code>, or in <code>.github/</code>, and links it from the <strong>Security and quality</strong> tab (→ <strong>Security policy</strong> → <strong>Start setup</strong> creates it for you):</p>
-<pre><code>cat SECURITY.md
+<pre><code class="language-bash">cat SECURITY.md
 # Chính sách bảo mật
 
 ## Báo lỗ hổng
@@ -856,7 +856,7 @@ remote:        path: README.md:4</code></pre>
 
 <h3>Lớp 5 — cửa riêng cho tin xấu: SECURITY.md</h3>
 <p>Nếu ai đó tìm ra một lỗ hổng trong dự án của bạn — chẳng hạn API đặt lịch cho phép bất kỳ người dùng đã đăng nhập nào huỷ lịch hẹn của người khác — thì chỗ tệ nhất để họ báo là một issue công khai. <code>SECURITY.md</code> chỉ cho họ nên đi đâu. GitHub tìm file này ở gốc kho, trong <code>docs/</code>, hoặc trong <code>.github/</code>, và gắn liên kết tới nó ở tab <strong>Security and quality</strong> (→ <strong>Security policy</strong> → <strong>Start setup</strong> sẽ tạo file giúp bạn):</p>
-<pre><code>cat SECURITY.md
+<pre><code class="language-bash">cat SECURITY.md
 # Chính sách bảo mật
 
 ## Báo lỗ hổng

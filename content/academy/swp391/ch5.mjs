@@ -560,7 +560,7 @@ const L53 = {
 <p class="ghi-chu">JUnit itself (annotations, assertions, test runners) is taught hands-on in <a href="${SWT}" target="_blank" rel="noopener">SWT301 Chapter 8 — "JUnit hands-on"</a>. Here we apply it to the SWP391 architecture.</p>
 <h3>Set-up in NetBeans 13+</h3>
 <p class="nhan">Maven web project (recommended) — add to pom.xml</p>
-<pre>&lt;dependency&gt;
+<pre><code class="language-xml">&lt;dependency&gt;
   &lt;groupId&gt;org.junit.jupiter&lt;/groupId&gt;
   &lt;artifactId&gt;junit-jupiter&lt;/artifactId&gt;
   &lt;version&gt;5.10.2&lt;/version&gt;
@@ -572,7 +572,7 @@ const L53 = {
   &lt;version&gt;5.11.0&lt;/version&gt;
   &lt;scope&gt;test&lt;/scope&gt;
 &lt;/dependency&gt;
-&lt;!-- in &lt;build&gt;&lt;plugins&gt;: maven-surefire-plugin 3.2.5 so "mvn test" finds JUnit 5 --&gt;</pre>
+&lt;!-- in &lt;build&gt;&lt;plugins&gt;: maven-surefire-plugin 3.2.5 so "mvn test" finds JUnit 5 --&gt;</code></pre>
 <p class="nhan">Ant web project (the NetBeans default "Java with Ant")</p>
 <ol>
 <li>Right-click the class (e.g. <code>JobApplyService</code>) › <strong>Tools › Create/Update Tests</strong> (Ctrl+Shift+U) › framework <strong>JUnit 5</strong>. NetBeans creates <code>test/…/JobApplyServiceTest.java</code> and adds the library.</li>
@@ -593,7 +593,7 @@ const L53 = {
 <p class="ghi-chu">Bản thân JUnit (annotation, assertion, test runner) được dạy thực hành ở <a href="${SWT}" target="_blank" rel="noopener">SWT301 Chương 8 — "JUnit hands-on"</a>. Ở đây ta áp nó vào kiến trúc của SWP391.</p>
 <h3>Cài đặt trên NetBeans 13+</h3>
 <p class="nhan">Project web Maven (khuyên dùng) — thêm vào pom.xml</p>
-<pre>&lt;dependency&gt;
+<pre><code class="language-xml">&lt;dependency&gt;
   &lt;groupId&gt;org.junit.jupiter&lt;/groupId&gt;
   &lt;artifactId&gt;junit-jupiter&lt;/artifactId&gt;
   &lt;version&gt;5.10.2&lt;/version&gt;
@@ -605,7 +605,7 @@ const L53 = {
   &lt;version&gt;5.11.0&lt;/version&gt;
   &lt;scope&gt;test&lt;/scope&gt;
 &lt;/dependency&gt;
-&lt;!-- trong &lt;build&gt;&lt;plugins&gt;: maven-surefire-plugin 3.2.5 để "mvn test" nhận JUnit 5 --&gt;</pre>
+&lt;!-- trong &lt;build&gt;&lt;plugins&gt;: maven-surefire-plugin 3.2.5 để "mvn test" nhận JUnit 5 --&gt;</code></pre>
 <p class="nhan">Project web Ant (mặc định "Java with Ant" của NetBeans)</p>
 <ol>
 <li>Chuột phải vào lớp (vd <code>JobApplyService</code>) › <strong>Tools › Create/Update Tests</strong> (Ctrl+Shift+U) › framework <strong>JUnit 5</strong>. NetBeans tạo <code>test/…/JobApplyServiceTest.java</code> và thêm thư viện.</li>
@@ -615,7 +615,7 @@ const L53 = {
 <div class="pitfall co-tieu-de"><strong>Commit cả test, không chỉ code.</strong> Thư mục <code>test/</code> (Ant) hoặc <code>src/test/java</code> (Maven) phải nằm trong source đã gắn tag. Test chỉ nằm trên laptop của bạn thì giáo viên không thấy và bạn cùng nhóm cũng không chạy regression được.</div>`),
     bi(`<h3>The code under test — JobApplyService</h3>
 <p>The servlet of the Apply Job screen should stay thin: read the request, call the service, forward to the JSP. All four rules of Template3 cases AJ-05…AJ-09 sit in one method that has <strong>no HTTP and no SQL inside</strong> — which is what makes it unit-testable.</p>
-<pre>public class JobApplyService {
+<pre><code class="language-java">public class JobApplyService {
     static final long MAX_CV = 5L * 1024 * 1024;              // 5 MB, agreed with the teacher
     private final JobApplyDAO applyDao;
     private final PostDAO postDao;
@@ -636,7 +636,7 @@ const L53 = {
         applyDao.insert(new JobApply(freelancerId, postId, "Pending", today, cvName));
         return null;
     }
-}</pre>
+}</code></pre>
 <ul>
 <li><strong>Constructor injection</strong> — the servlet builds it with the real DAOs; the test builds it with mocks.</li>
 <li><strong>today is a parameter</strong> — a rule that calls <code>LocalDate.now()</code> inside gives a test that passes today and fails next month.</li>
@@ -644,7 +644,7 @@ const L53 = {
 </ul>`,
     `<h3>Code được test — JobApplyService</h3>
 <p>Servlet của màn hình Apply Job nên thật mỏng: đọc request, gọi service, forward sang JSP. Cả bốn luật của các case AJ-05…AJ-09 trong Template3 nằm trong một method <strong>không có HTTP, không có SQL bên trong</strong> — chính điều đó làm nó unit-test được.</p>
-<pre>public class JobApplyService {
+<pre><code class="language-java">public class JobApplyService {
     static final long MAX_CV = 5L * 1024 * 1024;              // 5 MB, agreed with the teacher
     private final JobApplyDAO applyDao;
     private final PostDAO postDao;
@@ -665,14 +665,14 @@ const L53 = {
         applyDao.insert(new JobApply(freelancerId, postId, "Pending", today, cvName));
         return null;
     }
-}</pre>
+}</code></pre>
 <ul>
 <li><strong>Constructor injection</strong> — servlet dựng nó bằng DAO thật; test dựng nó bằng mock.</li>
 <li><strong>today là tham số</strong> — luật gọi <code>LocalDate.now()</code> bên trong sẽ cho ra test pass hôm nay và fail tháng sau.</li>
 <li><strong>Mã message</strong> — JSP đổi MSG21… thành chữ, nên test kiểm luật chứ không kiểm câu chữ.</li>
 </ul>`),
     bi(`<h3>Service test — one test per rule, DAO mocked</h3>
-<pre>@ExtendWith(MockitoExtension.class)
+<pre><code class="language-java">@ExtendWith(MockitoExtension.class)
 class JobApplyServiceTest {
     static final LocalDate TODAY = LocalDate.of(2026, 3, 10);
     @Mock JobApplyDAO applyDao;
@@ -721,7 +721,7 @@ class JobApplyServiceTest {
         assertEquals("MSG24", service.apply(5, 12, "cv.pdf", 1000, TODAY));
         verify(applyDao, never()).insert(any());
     }
-}</pre>
+}</code></pre>
 <ul>
 <li><strong>Name = method_situation_result</strong> — "apply_expiredYesterday_returnsMsg23" failing needs no explanation.</li>
 <li><strong>Arrange · Act · Assert</strong> — set up the mocks, call once, assert the result <em>and</em> the side effect (<code>verify … never()</code>: nothing saved).</li>
@@ -729,7 +729,7 @@ class JobApplyServiceTest {
 <li><strong>A missing test</strong> — "expired = today" is still open (BR-05 says <em>within</em> the period). Add it; that is how a unit test finds a gap in the requirement, which becomes a <strong>Q&amp;A</strong> issue for the teacher.</li>
 </ul>`,
     `<h3>Test service — mỗi luật một test, DAO được mock</h3>
-<pre>@ExtendWith(MockitoExtension.class)
+<pre><code class="language-java">@ExtendWith(MockitoExtension.class)
 class JobApplyServiceTest {
     static final LocalDate TODAY = LocalDate.of(2026, 3, 10);
     @Mock JobApplyDAO applyDao;
@@ -778,7 +778,7 @@ class JobApplyServiceTest {
         assertEquals("MSG24", service.apply(5, 12, "cv.pdf", 1000, TODAY));
         verify(applyDao, never()).insert(any());
     }
-}</pre>
+}</code></pre>
 <ul>
 <li><strong>Tên = method_tình-huống_kết-quả</strong> — "apply_expiredYesterday_returnsMsg23" đỏ lên là hiểu ngay, khỏi giải thích.</li>
 <li><strong>Arrange · Act · Assert</strong> — dựng mock, gọi đúng một lần, khẳng định kết quả <em>và</em> tác dụng phụ (<code>verify … never()</code>: không lưu gì).</li>
@@ -787,7 +787,7 @@ class JobApplyServiceTest {
 </ul>`),
     bi(`<h3>DAO test — real SQL on a separate test schema</h3>
 <p>A mock cannot tell you that your SQL has a typo or a wrong column. For the DAO, run the real query on a <strong>test schema</strong> (<code>jobit_test</code>, created from the same DB script you tag) and reset its rows before every test.</p>
-<pre>class JobApplyDAOTest {
+<pre><code class="language-sql">class JobApplyDAOTest {
     static Connection con;
     JobApplyDAO dao;
 
@@ -817,7 +817,7 @@ class JobApplyServiceTest {
     }
 
     @AfterAll static void close() throws SQLException { con.close(); }
-}</pre>
+}</code></pre>
 <ul>
 <li><strong>The last test needs a constraint</strong> — <code>ALTER TABLE JobApply ADD CONSTRAINT uq_apply UNIQUE (freelanceID, postID);</code>. The G5 script has no such key, so a double click on Submit could save two rows even with the service check. The test found a design gap.</li>
 <li><strong>Order independence</strong> — no test may rely on another having run first; <code>@BeforeEach</code> makes that true.</li>
@@ -839,7 +839,7 @@ class JobApplyServiceTest {
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <strong>Measure, then stop.</strong> The JaCoCo Maven plugin writes a coverage report (<code>target/site/jacoco/index.html</code>) after <code>mvn test</code>. Aim for every branch of your <em>service</em> classes, not 100% of the project — getters, JSPs and servlets that only forward are better covered by Template3.</div>`,
     `<h3>Test DAO — SQL thật trên một schema test riêng</h3>
 <p>Mock không thể báo cho bạn biết câu SQL gõ sai hay sai tên cột. Với DAO, hãy chạy câu truy vấn thật trên một <strong>schema test</strong> (<code>jobit_test</code>, tạo từ đúng DB script bạn gắn tag) và làm sạch dữ liệu trước mỗi test.</p>
-<pre>class JobApplyDAOTest {
+<pre><code class="language-sql">class JobApplyDAOTest {
     static Connection con;
     JobApplyDAO dao;
 
@@ -869,7 +869,7 @@ class JobApplyServiceTest {
     }
 
     @AfterAll static void close() throws SQLException { con.close(); }
-}</pre>
+}</code></pre>
 <ul>
 <li><strong>Test cuối cần một ràng buộc</strong> — <code>ALTER TABLE JobApply ADD CONSTRAINT uq_apply UNIQUE (freelanceID, postID);</code>. Script của G5 không có khoá này, nên bấm đúp Submit vẫn có thể lưu hai dòng dù service đã kiểm. Test đã tìm ra một lỗ hổng thiết kế.</li>
 <li><strong>Không phụ thuộc thứ tự</strong> — không test nào được dựa vào việc test khác đã chạy trước; <code>@BeforeEach</code> bảo đảm điều đó.</li>

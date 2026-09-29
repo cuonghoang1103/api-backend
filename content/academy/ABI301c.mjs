@@ -156,7 +156,7 @@ const c2 = doc('abi301c-2-1-data-prep-ai', '2.1 — Data prep & understanding wi
 <h2>Data prep &amp; understanding with AI assistance</h2>
 <h3>Data profiling — know your data before you trust it</h3>
 <p>Before any chart or model, an analyst checks: what type is each column, how many values are missing, are there outliers or duplicates? This is called <strong>data profiling</strong>. Doing it by eye on a wide table is slow; AI-assisted tools (in Power BI, or a quick Python script) do it in seconds.</p>
-<pre><code>Python (pandas) — quick profiling:
+<pre><code class="language-python">Python (pandas) — quick profiling:
 
 import pandas as pd
 df = pd.read_csv("sales.csv")
@@ -178,7 +178,7 @@ print(df["region"].value_counts())   # category balance
 <h2>Chuẩn bị &amp; hiểu dữ liệu với hỗ trợ AI</h2>
 <h3>Data profiling — hiểu dữ liệu trước khi tin nó</h3>
 <p>Trước khi vẽ bất kỳ biểu đồ hay mô hình nào, analyst phải kiểm: mỗi cột kiểu gì, thiếu bao nhiêu giá trị, có outlier hay bản ghi trùng không? Đây gọi là <strong>data profiling</strong>. Nhìn bằng mắt trên một bảng rộng thì chậm; công cụ có AI hỗ trợ (trong Power BI, hoặc một script Python nhanh) làm việc này trong vài giây.</p>
-<pre><code>Python (pandas) — profiling nhanh:
+<pre><code class="language-python">Python (pandas) — profiling nhanh:
 
 import pandas as pd
 df = pd.read_csv("sales.csv")
@@ -268,7 +268,7 @@ const c4 = doc('abi301c-4-1-nlp-qa', '4.1 — NLP & natural-language Q&A over da
 <h2>NLP &amp; natural-language Q&amp;A over data</h2>
 <h3>Ask data a question, in plain language</h3>
 <p><strong>Natural Language Processing (NLP)</strong> lets a BI tool understand a typed question and turn it into a query. Power BI's <strong>Q&amp;A visual</strong> does exactly this: type "total sales by region last quarter" and it builds the chart — no SQL, no drag-and-drop required. Under the hood, a "text-to-SQL" model maps your words to columns, filters and aggregations.</p>
-<pre><code>Câu hỏi (ngôn ngữ tự nhiên):
+<pre><code class="language-sql">Câu hỏi (ngôn ngữ tự nhiên):
 "Tổng doanh thu quý 3 theo khu vực là bao nhiêu?"
 
 SQL được AI sinh ra:
@@ -289,7 +289,7 @@ ORDER BY total_revenue DESC;
 <h2>NLP &amp; hỏi đáp ngôn ngữ tự nhiên trên dữ liệu</h2>
 <h3>Hỏi dữ liệu bằng ngôn ngữ thường</h3>
 <p><strong>Xử lý ngôn ngữ tự nhiên (NLP)</strong> giúp công cụ BI hiểu một câu hỏi gõ tay và biến nó thành truy vấn. Tính năng <strong>Q&amp;A visual</strong> của Power BI làm đúng việc này: gõ "tổng doanh thu theo khu vực quý trước" là nó tự dựng biểu đồ — không cần SQL, không cần kéo thả. Bên dưới, một mô hình "text-to-SQL" ánh xạ chữ của bạn sang cột, điều kiện lọc và phép tổng hợp.</p>
-<pre><code>Câu hỏi (ngôn ngữ tự nhiên):
+<pre><code class="language-sql">Câu hỏi (ngôn ngữ tự nhiên):
 "Tổng doanh thu quý 3 theo khu vực là bao nhiêu?"
 
 SQL được AI sinh ra:

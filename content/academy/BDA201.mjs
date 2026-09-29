@@ -236,7 +236,7 @@ const c5 = doc('bda201-5-1-sql-queries', '5.1 — Querying business data with SQ
     `<span class="eyebrow">BDA201 · Chapter 5 · Lesson 5.1</span>
 <h2>Querying business data with SQL</h2>
 <h3>The core pattern</h3>
-<pre><code>SELECT region, SUM(revenue) AS total_revenue
+<pre><code class="language-sql">SELECT region, SUM(revenue) AS total_revenue
 FROM sales
 WHERE year = 2026
 GROUP BY region
@@ -246,7 +246,7 @@ ORDER BY total_revenue DESC;
 <h3>Aggregate functions</h3>
 <p><code>SUM()</code>, <code>COUNT()</code>, <code>AVG()</code>, <code>MIN()</code>, <code>MAX()</code> — the same summaries a PivotTable does, but on any size of data and fully reproducible.</p>
 <h3>JOIN — combining tables</h3>
-<pre><code>SELECT c.customer_name, o.order_date, o.amount
+<pre><code class="language-sql">SELECT c.customer_name, o.order_date, o.amount
 FROM orders o
 JOIN customers c ON o.customer_id = c.customer_id
 WHERE o.amount &gt; 500;
@@ -256,7 +256,7 @@ WHERE o.amount &gt; 500;
     `<span class="eyebrow">BDA201 · Chương 5 · Bài 5.1</span>
 <h2>Truy vấn dữ liệu kinh doanh bằng SQL</h2>
 <h3>Cấu trúc cốt lõi</h3>
-<pre><code>SELECT region, SUM(revenue) AS total_revenue
+<pre><code class="language-sql">SELECT region, SUM(revenue) AS total_revenue
 FROM sales
 WHERE year = 2026
 GROUP BY region
@@ -266,7 +266,7 @@ ORDER BY total_revenue DESC;
 <h3>Hàm tổng hợp</h3>
 <p><code>SUM()</code>, <code>COUNT()</code>, <code>AVG()</code>, <code>MIN()</code>, <code>MAX()</code> — cùng loại tóm tắt mà PivotTable làm, nhưng chạy trên dữ liệu cỡ nào cũng được và luôn tái tạo được y hệt.</p>
 <h3>JOIN — nối các bảng</h3>
-<pre><code>SELECT c.customer_name, o.order_date, o.amount
+<pre><code class="language-sql">SELECT c.customer_name, o.order_date, o.amount
 FROM orders o
 JOIN customers c ON o.customer_id = c.customer_id
 WHERE o.amount &gt; 500;

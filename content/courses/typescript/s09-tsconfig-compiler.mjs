@@ -24,7 +24,7 @@ export default {
 
 <h3>Types are erased — see it</h3>
 <p>Take a tiny typed file and compile it targeting ES5. The output is plain JavaScript with every type gone and the modern syntax lowered:</p>
-<pre><code><span class="tok-comment">// app.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// app.ts</span>
 <span class="tok-keyword">const</span> msg: <span class="tok-keyword">string</span> = <span class="tok-string">'hello'</span>;
 <span class="tok-keyword">const</span> shout = (s: <span class="tok-keyword">string</span>): <span class="tok-keyword">string</span> =&gt; s.<span class="tok-function">toUpperCase</span>();
 console.<span class="tok-function">log</span>(<span class="tok-function">shout</span>(msg));</code></pre>
@@ -36,7 +36,7 @@ console.log(shout(msg));</div>
 
 <h3>tsconfig.json: the control panel</h3>
 <p>Rather than passing flags every time, you put them in <code>tsconfig.json</code> at the project root. A sane starting point:</p>
-<pre><code>{
+<pre><code class="language-typescript">{
   "compilerOptions": {
     "target": "ES2022",
     "module": "NodeNext",
@@ -75,7 +75,7 @@ console.log(shout(msg));</div>
 
 <h3>Kiểu bị xoá — hãy nhìn tận mắt</h3>
 <p>Lấy một file có kiểu nhỏ xíu và biên dịch nhắm ES5. Kết quả là JavaScript thuần với mọi kiểu biến mất và cú pháp hiện đại bị hạ xuống:</p>
-<pre><code><span class="tok-comment">// app.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// app.ts</span>
 <span class="tok-keyword">const</span> msg: <span class="tok-keyword">string</span> = <span class="tok-string">'hello'</span>;
 <span class="tok-keyword">const</span> shout = (s: <span class="tok-keyword">string</span>): <span class="tok-keyword">string</span> =&gt; s.<span class="tok-function">toUpperCase</span>();
 console.<span class="tok-function">log</span>(<span class="tok-function">shout</span>(msg));</code></pre>
@@ -87,7 +87,7 @@ console.log(shout(msg));</div>
 
 <h3>tsconfig.json: bảng điều khiển</h3>
 <p>Thay vì truyền cờ mỗi lần, bạn đặt chúng vào <code>tsconfig.json</code> ở gốc dự án. Một điểm khởi đầu hợp lý:</p>
-<pre><code>{
+<pre><code class="language-typescript">{
   "compilerOptions": {
     "target": "ES2022",
     "module": "NodeNext",
@@ -136,14 +136,14 @@ console.log(shout(msg));</div>
 
 <h3>noImplicitAny: no silent <code>any</code></h3>
 <p>Part of strict. When TypeScript can't infer a type and you didn't annotate one, it would otherwise fall back to <code>any</code> silently. <code>noImplicitAny</code> makes that an error:</p>
-<pre><code><span class="tok-comment">// implicit.ts   (compiled with noImplicitAny)</span>
+<pre><code class="language-javascript"><span class="tok-comment">// implicit.ts   (compiled with noImplicitAny)</span>
 <span class="tok-keyword">function</span> <span class="tok-function">greet</span>(name) { <span class="tok-keyword">return</span> <span class="tok-string">'hi '</span> + name; }</code></pre>
 <div class="out">implicit.ts(2,16): error TS7006: Parameter 'name' implicitly has an 'any' type.</div>
 <p>Without strict this compiles, and <code>name</code> is <code>any</code> — no checking anywhere it's used. With it, you're forced to say what <code>name</code> is. This one flag closes the most common way types silently disappear from a codebase.</p>
 
 <h3>strictNullChecks: null is its own type</h3>
 <p>The highest-value flag in the bundle. With it on, <code>null</code> and <code>undefined</code> are not assignable to other types — you must handle them explicitly:</p>
-<pre><code><span class="tok-comment">// nullcheck.ts   (compiled with strictNullChecks)</span>
+<pre><code class="language-typescript"><span class="tok-comment">// nullcheck.ts   (compiled with strictNullChecks)</span>
 <span class="tok-keyword">function</span> <span class="tok-function">len</span>(s: <span class="tok-keyword">string</span> | <span class="tok-keyword">null</span>): <span class="tok-keyword">number</span> { <span class="tok-keyword">return</span> s.length; }</code></pre>
 <div class="out">nullcheck.ts(2,49): error TS18047: 's' is possibly 'null'.</div>
 <p>Reading <code>.length</code> on something that might be <code>null</code> is exactly the "cannot read property of null" crash, caught at compile time. The fix is to narrow first (<code>if (s === null) return 0;</code>) — the narrowing from chapter 5. Turn this off and every optional value becomes a runtime landmine again.</p>
@@ -174,14 +174,14 @@ console.log(shout(msg));</div>
 
 <h3>noImplicitAny: không <code>any</code> âm thầm</h3>
 <p>Một phần của strict. Khi TypeScript không suy được kiểu mà bạn cũng không chú thích, mặc định nó rơi về <code>any</code> âm thầm. <code>noImplicitAny</code> biến điều đó thành lỗi:</p>
-<pre><code><span class="tok-comment">// implicit.ts   (biên dịch với noImplicitAny)</span>
+<pre><code class="language-javascript"><span class="tok-comment">// implicit.ts   (biên dịch với noImplicitAny)</span>
 <span class="tok-keyword">function</span> <span class="tok-function">greet</span>(name) { <span class="tok-keyword">return</span> <span class="tok-string">'hi '</span> + name; }</code></pre>
 <div class="out">implicit.ts(2,16): error TS7006: Parameter 'name' implicitly has an 'any' type.</div>
 <p>Không có strict thì cái này biên dịch được, và <code>name</code> là <code>any</code> — không kiểm ở bất cứ đâu nó được dùng. Có nó, bạn buộc phải nói <code>name</code> là gì. Riêng cờ này bịt con đường phổ biến nhất khiến kiểu âm thầm biến mất khỏi một codebase.</p>
 
 <h3>strictNullChecks: null là một kiểu riêng</h3>
 <p>Cờ giá trị cao nhất trong bó. Bật nó, <code>null</code> và <code>undefined</code> không gán được cho các kiểu khác — bạn phải xử lý chúng tường minh:</p>
-<pre><code><span class="tok-comment">// nullcheck.ts   (biên dịch với strictNullChecks)</span>
+<pre><code class="language-typescript"><span class="tok-comment">// nullcheck.ts   (biên dịch với strictNullChecks)</span>
 <span class="tok-keyword">function</span> <span class="tok-function">len</span>(s: <span class="tok-keyword">string</span> | <span class="tok-keyword">null</span>): <span class="tok-keyword">number</span> { <span class="tok-keyword">return</span> s.length; }</code></pre>
 <div class="out">nullcheck.ts(2,49): error TS18047: 's' is possibly 'null'.</div>
 <p>Đọc <code>.length</code> trên thứ có thể là <code>null</code> đúng là cú sập "cannot read property of null", bị bắt lúc biên dịch. Cách sửa là thu hẹp trước (<code>if (s === null) return 0;</code>) — thu hẹp kiểu ở chương 5. Tắt cái này đi và mọi giá trị tuỳ chọn lại thành một quả mìn lúc chạy.</p>
@@ -222,7 +222,7 @@ console.log(shout(msg));</div>
 
 <h3>noUncheckedIndexedAccess: array access might miss</h3>
 <p>By default, <code>arr[i]</code> is typed as the element type even if the index is out of range — a lie, since it could be <code>undefined</code>. This flag tells the truth:</p>
-<pre><code><span class="tok-comment">// indexed.ts   (compiled with noUncheckedIndexedAccess)</span>
+<pre><code class="language-javascript"><span class="tok-comment">// indexed.ts   (compiled with noUncheckedIndexedAccess)</span>
 <span class="tok-keyword">const</span> arr = [<span class="tok-number">1</span>, <span class="tok-number">2</span>, <span class="tok-number">3</span>];
 <span class="tok-keyword">const</span> x = arr[<span class="tok-number">10</span>];   <span class="tok-comment">// number normally, number | undefined here</span>
 x.<span class="tok-function">toFixed</span>(<span class="tok-number">2</span>);</code></pre>
@@ -231,7 +231,7 @@ x.<span class="tok-function">toFixed</span>(<span class="tok-number">2</span>);<
 
 <h3>noImplicitReturns: every path must return</h3>
 <p>If a function declares a return type, this flag insists every code path actually returns:</p>
-<pre><code><span class="tok-comment">// returns.ts   (compiled with noImplicitReturns)</span>
+<pre><code class="language-typescript"><span class="tok-comment">// returns.ts   (compiled with noImplicitReturns)</span>
 <span class="tok-keyword">function</span> <span class="tok-function">classify</span>(x: <span class="tok-keyword">number</span>): <span class="tok-keyword">string</span> {
   <span class="tok-keyword">if</span> (x &gt; <span class="tok-number">0</span>) <span class="tok-keyword">return</span> <span class="tok-string">'positive'</span>;
 }</code></pre>
@@ -240,7 +240,7 @@ x.<span class="tok-function">toFixed</span>(<span class="tok-number">2</span>);<
 
 <h3>noUnusedLocals: dead code is an error</h3>
 <p>Flags variables you declare and never read — usually a leftover or a typo:</p>
-<pre><code><span class="tok-comment">// unused.ts   (compiled with noUnusedLocals)</span>
+<pre><code class="language-javascript"><span class="tok-comment">// unused.ts   (compiled with noUnusedLocals)</span>
 <span class="tok-keyword">function</span> <span class="tok-function">total</span>(): <span class="tok-keyword">number</span> {
   <span class="tok-keyword">const</span> scratch = <span class="tok-number">42</span>;
   <span class="tok-keyword">return</span> <span class="tok-number">1</span>;
@@ -271,7 +271,7 @@ x.<span class="tok-function">toFixed</span>(<span class="tok-number">2</span>);<
 
 <h3>noUncheckedIndexedAccess: truy cập mảng có thể hụt</h3>
 <p>Mặc định, <code>arr[i]</code> có kiểu là kiểu phần tử ngay cả khi chỉ mục vượt phạm vi — một lời nói dối, vì nó có thể là <code>undefined</code>. Cờ này nói thật:</p>
-<pre><code><span class="tok-comment">// indexed.ts   (biên dịch với noUncheckedIndexedAccess)</span>
+<pre><code class="language-javascript"><span class="tok-comment">// indexed.ts   (biên dịch với noUncheckedIndexedAccess)</span>
 <span class="tok-keyword">const</span> arr = [<span class="tok-number">1</span>, <span class="tok-number">2</span>, <span class="tok-number">3</span>];
 <span class="tok-keyword">const</span> x = arr[<span class="tok-number">10</span>];   <span class="tok-comment">// bình thường là number, ở đây number | undefined</span>
 x.<span class="tok-function">toFixed</span>(<span class="tok-number">2</span>);</code></pre>
@@ -280,7 +280,7 @@ x.<span class="tok-function">toFixed</span>(<span class="tok-number">2</span>);<
 
 <h3>noImplicitReturns: mọi nhánh phải trả về</h3>
 <p>Nếu một hàm khai báo kiểu trả về, cờ này nhất quyết mọi nhánh code phải thật sự trả về:</p>
-<pre><code><span class="tok-comment">// returns.ts   (biên dịch với noImplicitReturns)</span>
+<pre><code class="language-typescript"><span class="tok-comment">// returns.ts   (biên dịch với noImplicitReturns)</span>
 <span class="tok-keyword">function</span> <span class="tok-function">classify</span>(x: <span class="tok-keyword">number</span>): <span class="tok-keyword">string</span> {
   <span class="tok-keyword">if</span> (x &gt; <span class="tok-number">0</span>) <span class="tok-keyword">return</span> <span class="tok-string">'positive'</span>;
 }</code></pre>
@@ -289,7 +289,7 @@ x.<span class="tok-function">toFixed</span>(<span class="tok-number">2</span>);<
 
 <h3>noUnusedLocals: code chết là lỗi</h3>
 <p>Đánh dấu các biến bạn khai nhưng không bao giờ đọc — thường là đồ thừa hoặc một lỗi gõ:</p>
-<pre><code><span class="tok-comment">// unused.ts   (biên dịch với noUnusedLocals)</span>
+<pre><code class="language-javascript"><span class="tok-comment">// unused.ts   (biên dịch với noUnusedLocals)</span>
 <span class="tok-keyword">function</span> <span class="tok-function">total</span>(): <span class="tok-keyword">number</span> {
   <span class="tok-keyword">const</span> scratch = <span class="tok-number">42</span>;
   <span class="tok-keyword">return</span> <span class="tok-number">1</span>;
@@ -330,7 +330,7 @@ x.<span class="tok-function">toFixed</span>(<span class="tok-number">2</span>);<
 
 <h3>target vs lib: syntax vs APIs</h3>
 <p><code>target</code> controls which JS <em>syntax</em> is emitted (you saw ES5 turn <code>const</code> into <code>var</code>). <code>lib</code> is separate: it declares which runtime <em>APIs</em> TypeScript believes exist. Set a low target without the right lib and modern methods vanish:</p>
-<pre><code><span class="tok-comment">// libtarget.ts   (compiled with target ES5)</span>
+<pre><code class="language-javascript"><span class="tok-comment">// libtarget.ts   (compiled with target ES5)</span>
 <span class="tok-keyword">const</span> nums = [<span class="tok-number">1</span>, <span class="tok-number">2</span>, <span class="tok-number">3</span>];
 <span class="tok-keyword">const</span> found = nums.<span class="tok-function">includes</span>(<span class="tok-number">2</span>);   <span class="tok-comment">// Array.includes needs ES2016+</span></code></pre>
 <div class="out">libtarget.ts(3,20): error TS2550: Property 'includes' does not exist on type 'number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2016' or later.</div>
@@ -341,7 +341,7 @@ x.<span class="tok-function">toFixed</span>(<span class="tok-number">2</span>);<
 
 <h3>noEmit: type-check without producing files</h3>
 <p><code>noEmit: true</code> — or <code>tsc --noEmit</code> — runs the full type-check and writes <em>nothing</em>. It's how you use TypeScript purely as a checker when another tool (a bundler, <code>ts-node</code>, Next.js) does the actual compiling:</p>
-<pre><code><span class="tok-comment"># type-check only — no .js written, exit code says pass/fail</span>
+<pre><code class="language-bash"><span class="tok-comment"># type-check only — no .js written, exit code says pass/fail</span>
 npx tsc --noEmit</code></pre>
 <p>This is the exact command in a CI gate: it fails the build if any type is wrong, without cluttering the tree with output. Emit is someone else's job; correctness is tsc's.</p>
 
@@ -368,7 +368,7 @@ npx tsc --noEmit</code></pre>
 
 <h3>target so với lib: cú pháp so với API</h3>
 <p><code>target</code> điều khiển <em>cú pháp</em> JS nào được xuất (bạn đã thấy ES5 biến <code>const</code> thành <code>var</code>). <code>lib</code> thì riêng: nó khai báo những <em>API</em> runtime mà TypeScript tin là tồn tại. Đặt target thấp mà thiếu lib đúng thì các phương thức hiện đại biến mất:</p>
-<pre><code><span class="tok-comment">// libtarget.ts   (biên dịch với target ES5)</span>
+<pre><code class="language-javascript"><span class="tok-comment">// libtarget.ts   (biên dịch với target ES5)</span>
 <span class="tok-keyword">const</span> nums = [<span class="tok-number">1</span>, <span class="tok-number">2</span>, <span class="tok-number">3</span>];
 <span class="tok-keyword">const</span> found = nums.<span class="tok-function">includes</span>(<span class="tok-number">2</span>);   <span class="tok-comment">// Array.includes cần ES2016+</span></code></pre>
 <div class="out">libtarget.ts(3,20): error TS2550: Property 'includes' does not exist on type 'number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2016' or later.</div>
@@ -379,7 +379,7 @@ npx tsc --noEmit</code></pre>
 
 <h3>noEmit: kiểm kiểu mà không sinh file</h3>
 <p><code>noEmit: true</code> — hay <code>tsc --noEmit</code> — chạy trọn phép kiểm kiểu và <em>không</em> ghi gì. Đó là cách dùng TypeScript thuần như một bộ kiểm khi một công cụ khác (bundler, <code>ts-node</code>, Next.js) mới thật sự biên dịch:</p>
-<pre><code><span class="tok-comment"># chỉ kiểm kiểu — không ghi .js, mã thoát cho biết qua/trượt</span>
+<pre><code class="language-bash"><span class="tok-comment"># chỉ kiểm kiểu — không ghi .js, mã thoát cho biết qua/trượt</span>
 npx tsc --noEmit</code></pre>
 <p>Đây đúng là lệnh trong một cổng CI: nó làm build thất bại nếu có kiểu nào sai, mà không bừa bộn cây thư mục bằng file xuất. Xuất file là việc của người khác; tính đúng đắn là việc của tsc.</p>
 

@@ -296,7 +296,7 @@ throw new AppError('Note not found', 404, { noteId, userId });
 // the message identifies WHAT happened; the fields say WHICH one.</code></pre>
 
 <h3>Failure 2: over-merging — many bugs, one row</h3>
-<pre><code>A shared error path collapses unrelated failures:
+<pre><code class="language-javascript">A shared error path collapses unrelated failures:
 
   async function handleRequest(fn) {
     try { return await fn(); }
@@ -435,7 +435,7 @@ throw new AppError('Note not found', 404, { noteId, userId });
 // thông điệp định danh chuyện GÌ đã xảy ra; các trường nói CÁI NÀO.</code></pre>
 
 <h3>Hỏng kiểu 2: gộp quá to — nhiều lỗi, một dòng</h3>
-<pre><code>Một đường xử lỗi dùng chung gộp phăng những cú hỏng chẳng liên quan:
+<pre><code class="language-javascript">Một đường xử lỗi dùng chung gộp phăng những cú hỏng chẳng liên quan:
 
   async function handleRequest(fn) {
     try { return await fn(); }

@@ -159,7 +159,7 @@ cuongthai.com.    300  IN  A  203.0.113.42
 ;; Query time: 12 msec
 ;; SERVER: 127.0.0.53#53(127.0.0.53)</div>
 <div class="callout"><code>@1.1.1.1</code> is the flag that resolves DNS arguments. If <code>dig +short example.com</code> gives an old address but <code>dig @1.1.1.1 +short example.com</code> gives the new one, the record has propagated and <em>your</em> resolver is serving a cached copy — so the fix is waiting or flushing, not editing DNS again. The <code>SERVER:</code> line at the bottom tells you which resolver actually answered.</div>
-<pre><code>resolvectl status | head -20         <span class="tok-comment"># systemd-resolved: the real config</span>
+<pre><code class="language-bash">resolvectl status | head -20         <span class="tok-comment"># systemd-resolved: the real config</span>
 cat /etc/resolv.conf                 <span class="tok-comment"># often just points at 127.0.0.53</span>
 resolvectl flush-caches              <span class="tok-comment"># clear the local cache</span>
 getent hosts cuongthai.com           <span class="tok-comment"># resolve the way APPLICATIONS do</span></code></pre>
@@ -199,7 +199,7 @@ host: 1
 getent: 2</div>
 <div class="callout warn"><strong><code>dig</code> exits 0 even when the name does not exist</strong> (measured on Ubuntu 24.04, BIND 9.18.39): for <code>dig</code>, getting <em>an answer</em> is success, and "no such name" is an answer. A script that checks DNS with <code>dig +short "\$host" &gt;/dev/null &amp;&amp; echo ok</code> prints ok for every typo. Test that the output is non-empty, or use <code>getent</code>/<code>host</code>, whose exit status means what you expect.</div>
 <p>And the case that sends people in circles — a leftover line in <code>/etc/hosts</code>, reproduced in a container:</p>
-<pre><code>echo "10.9.9.9 example.com" &gt;&gt; /etc/hosts
+<pre><code class="language-bash">echo "10.9.9.9 example.com" &gt;&gt; /etc/hosts
 getent hosts example.com
 dig +short example.com
 curl -sS -m 3 -o /dev/null http://example.com</code></pre>
@@ -212,7 +212,7 @@ curl: (28) Connection timed out after 3002 milliseconds</div>
 
 <h3>Testing connectivity, layer by layer</h3>
 ${slide('lx-09', 3, 'Thang 4 bậc: bậc đầu tiên hỏng gọi tên tầng')}
-<pre><code>ping -c3 1.1.1.1                     <span class="tok-comment"># 1. is the network up at all?</span>
+<pre><code class="language-bash">ping -c3 1.1.1.1                     <span class="tok-comment"># 1. is the network up at all?</span>
 ping -c3 cuongthai.com               <span class="tok-comment"># 2. does DNS work?</span>
 nc -zv cuongthai.com 443             <span class="tok-comment"># 3. is the PORT open?</span>
 curl -sS -o /dev/null -w '%{http_code}\\n' https://cuongthai.com   <span class="tok-comment"># 4. does the app answer?</span></code></pre>
@@ -230,7 +230,7 @@ ping: cuongthai.com: Temporary failure in name resolution
 <div class="callout">A measured caveat for rung 1, from a university network on 28/09/2026: every packet to <code>1.1.1.1</code> was blocked — <code>ping -c2 1.1.1.1</code> lost 100%, <code>dig @1.1.1.1 example.com</code> ended with <code>connection timed out; no servers could be reached</code> (exit 9) — while <code>ping -c2 example.com</code> got replies in ~58 ms and every website opened. A failing first rung on a managed network (school, company, café) often means "this destination is filtered", not "the network is down". Try a second target — the default gateway from <code>ip route</code>, or the site itself — before concluding anything.</div>
 
 <h3>A few more tools worth having</h3>
-<pre><code>nc -zv host 22                       <span class="tok-comment"># port check, no data sent</span>
+<pre><code class="language-bash">nc -zv host 22                       <span class="tok-comment"># port check, no data sent</span>
 nc -zv host 20-25                    <span class="tok-comment"># a small range</span>
 timeout 3 bash -c 'echo &gt; /dev/tcp/host/443' &amp;&amp; echo open   <span class="tok-comment"># no nc needed</span>
 
@@ -250,7 +250,7 @@ sudo tcpdump -i any -n -c 20 'tcp[tcpflags] &amp; tcp-syn != 0'   <span class="t
 
 <h3>Try it step by step</h3>
 <p>Two throw-away Ubuntu containers on a private Docker network are enough to reproduce the most common "it is running but I cannot reach it" in five minutes. Run these on your own machine (Docker Desktop on Mac/Windows, or Docker on Linux):</p>
-<pre><code>docker network create lx09-net
+<pre><code class="language-bash">docker network create lx09-net
 docker run -d --name lx09-srv --network lx09-net ubuntu:24.04 sleep infinity
 docker run -d --name lx09-cli --network lx09-net ubuntu:24.04 sleep infinity
 docker exec lx09-srv bash -c 'apt-get update -qq &amp;&amp; apt-get install -y -qq python3 iproute2 &gt;/dev/null 2&gt;&amp;1'
@@ -432,7 +432,7 @@ cuongthai.com.    300  IN  A  203.0.113.42
 ;; Query time: 12 msec
 ;; SERVER: 127.0.0.53#53(127.0.0.53)</div>
 <div class="callout"><code>@1.1.1.1</code> là cái cờ kết thúc mọi tranh cãi về DNS. Nếu <code>dig +short example.com</code> cho ra địa chỉ cũ mà <code>dig @1.1.1.1 +short example.com</code> lại cho ra địa chỉ mới, thì bản ghi ĐÃ lan truyền và chính bộ phân giải <em>CỦA BẠN</em> đang phục vụ một bản đã lưu tạm — nên cách chữa là chờ hoặc xả bộ đệm, chứ không phải đi sửa DNS lần nữa. Dòng <code>SERVER:</code> ở cuối cho bạn biết bộ phân giải nào thật sự đã trả lời.</div>
-<pre><code>resolvectl status | head -20         <span class="tok-comment"># systemd-resolved: cấu hình thật</span>
+<pre><code class="language-bash">resolvectl status | head -20         <span class="tok-comment"># systemd-resolved: cấu hình thật</span>
 cat /etc/resolv.conf                 <span class="tok-comment"># thường chỉ trỏ vào 127.0.0.53</span>
 resolvectl flush-caches              <span class="tok-comment"># xoá bộ đệm cục bộ</span>
 getent hosts cuongthai.com           <span class="tok-comment"># phân giải theo đúng cách ỨNG DỤNG làm</span></code></pre>
@@ -472,7 +472,7 @@ host: 1
 getent: 2</div>
 <div class="callout warn"><strong><code>dig</code> thoát 0 cả khi tên KHÔNG tồn tại</strong> (đo trên Ubuntu 24.04, BIND 9.18.39): với <code>dig</code>, nhận được <em>một câu trả lời</em> là thành công, mà "không có tên đó" cũng là một câu trả lời. Một script kiểm DNS kiểu <code>dig +short "\$host" &gt;/dev/null &amp;&amp; echo ok</code> sẽ in ok với mọi lỗi gõ nhầm. Hãy kiểm output có rỗng không, hoặc dùng <code>getent</code>/<code>host</code> — mã thoát của chúng mang đúng nghĩa bạn nghĩ.</div>
 <p>Và trường hợp làm người ta chạy vòng vòng — một dòng sót trong <code>/etc/hosts</code>, dựng lại trong container:</p>
-<pre><code>echo "10.9.9.9 example.com" &gt;&gt; /etc/hosts
+<pre><code class="language-bash">echo "10.9.9.9 example.com" &gt;&gt; /etc/hosts
 getent hosts example.com
 dig +short example.com
 curl -sS -m 3 -o /dev/null http://example.com</code></pre>
@@ -485,7 +485,7 @@ curl: (28) Connection timed out after 3002 milliseconds</div>
 
 <h3>Kiểm kết nối, theo từng tầng</h3>
 ${slide('lx-09', 3, 'Thang 4 bậc: bậc đầu tiên hỏng gọi tên tầng')}
-<pre><code>ping -c3 1.1.1.1                     <span class="tok-comment"># 1. mạng có lên không đã?</span>
+<pre><code class="language-bash">ping -c3 1.1.1.1                     <span class="tok-comment"># 1. mạng có lên không đã?</span>
 ping -c3 cuongthai.com               <span class="tok-comment"># 2. DNS có chạy không?</span>
 nc -zv cuongthai.com 443             <span class="tok-comment"># 3. CỔNG có mở không?</span>
 curl -sS -o /dev/null -w '%{http_code}\\n' https://cuongthai.com   <span class="tok-comment"># 4. ứng dụng có trả lời không?</span></code></pre>
@@ -503,7 +503,7 @@ ping: cuongthai.com: Temporary failure in name resolution
 <div class="callout">Một lưu ý ĐO THẬT cho bậc 1, ở mạng trường đại học ngày 28/09/2026: mọi gói tin tới <code>1.1.1.1</code> đều bị chặn — <code>ping -c2 1.1.1.1</code> mất 100%, <code>dig @1.1.1.1 example.com</code> kết thúc bằng <code>connection timed out; no servers could be reached</code> (mã 9) — trong khi <code>ping -c2 example.com</code> vẫn có hồi đáp ~58 ms và web nào cũng mở được. Bậc 1 hỏng trên một mạng có quản lý (trường, công ty, quán cà phê) thường nghĩa là "đích này bị lọc", chứ không phải "mạng chết". Hãy thử một đích thứ hai — cổng mặc định lấy từ <code>ip route</code>, hoặc chính trang web đó — trước khi kết luận.</div>
 
 <h3>Vài công cụ nữa đáng có</h3>
-<pre><code>nc -zv host 22                       <span class="tok-comment"># kiểm cổng, không gửi dữ liệu nào</span>
+<pre><code class="language-bash">nc -zv host 22                       <span class="tok-comment"># kiểm cổng, không gửi dữ liệu nào</span>
 nc -zv host 20-25                    <span class="tok-comment"># một khoảng nhỏ</span>
 timeout 3 bash -c 'echo &gt; /dev/tcp/host/443' &amp;&amp; echo mở   <span class="tok-comment"># không cần nc</span>
 
@@ -523,7 +523,7 @@ sudo tcpdump -i any -n -c 20 'tcp[tcpflags] &amp; tcp-syn != 0'   <span class="t
 
 <h3>Chạy thử từng bước</h3>
 <p>Hai container Ubuntu vứt đi trên một mạng Docker riêng là đủ để dựng lại ca "chạy rồi mà không với tới được" phổ biến nhất trong năm phút. Chạy trên máy bạn (Docker Desktop trên Mac/Windows, hoặc Docker trên Linux):</p>
-<pre><code>docker network create lx09-net
+<pre><code class="language-bash">docker network create lx09-net
 docker run -d --name lx09-srv --network lx09-net ubuntu:24.04 sleep infinity
 docker run -d --name lx09-cli --network lx09-net ubuntu:24.04 sleep infinity
 docker exec lx09-srv bash -c 'apt-get update -qq &amp;&amp; apt-get install -y -qq python3 iproute2 &gt;/dev/null 2&gt;&amp;1'
@@ -622,7 +622,7 @@ Connection to lx09-srv (172.21.0.6) 19091 port [tcp/*] succeeded!
 <p class="lead"><code>curl</code> has over two hundred flags and you need about ten. The important thing is not the list — it is that <strong>curl's default behaviour is wrong for scripts</strong>: it prints a progress bar to stderr, follows no redirects, and exits 0 on an HTTP 500. Three flags fix all of that, and everything else in this lesson builds on them.</p>
 
 <h3>The defaults you should almost always change</h3>
-<pre><code>curl https://api.example.com/data              <span class="tok-comment"># progress bar, no redirects, exit 0 on 500</span>
+<pre><code class="language-bash">curl https://api.example.com/data              <span class="tok-comment"># progress bar, no redirects, exit 0 on 500</span>
 curl -sSf https://api.example.com/data         <span class="tok-comment"># the script default</span>
 curl -sSfL https://api.example.com/data        <span class="tok-comment"># …and follow redirects</span></code></pre>
 <div class="kv-grid">
@@ -631,7 +631,7 @@ curl -sSfL https://api.example.com/data        <span class="tok-comment"># …an
   <div class="kv"><span class="k"><code>-f</code> fail</span><span class="v"><strong>Exit non-zero on HTTP 4xx/5xx.</strong> Without it curl considers a 404 a successful transfer of an error page, and your script continues with the error page as its data.</span></div>
   <div class="kv"><span class="k"><code>-L</code> location</span><span class="v">Follow redirects. Many APIs and every <code>http://</code> URL on a modern site returns a 301 first, and without <code>-L</code> you get the redirect page instead of the content.</span></div>
 </div>
-<pre><code>curl -s https://example.com/missing &gt; data.json
+<pre><code class="language-bash">curl -s https://example.com/missing &gt; data.json
 echo \$?                                    <span class="tok-comment"># 0 — "success"</span>
 cat data.json                              <span class="tok-comment"># an HTML 404 page</span>
 
@@ -644,7 +644,7 @@ curl: (22) The requested URL returned error: 404
 <div class="callout ok"><strong><code>-sSf</code> is the muscle memory to build.</strong> Without <code>-f</code>, a pipeline like <code>curl … | jq '.items'</code> receives an HTML error page, <code>jq</code> fails with a confusing parse error, and — because of the pipeline exit-status rule from Lesson 3.2 — the script may not even notice. <code>-f</code> plus <code>set -o pipefail</code> turns that into a clean, early failure that names the URL.</div>
 
 <h3>Saving output</h3>
-<pre><code>curl -sSfL -o page.html https://example.com       <span class="tok-comment"># -o: a name you choose</span>
+<pre><code class="language-bash">curl -sSfL -o page.html https://example.com       <span class="tok-comment"># -o: a name you choose</span>
 curl -sSfLO https://example.com/file.tar.gz       <span class="tok-comment"># -O: keep the remote name</span>
 curl -sSfL https://example.com &gt; page.html        <span class="tok-comment"># redirection works too</span>
 curl -sSfL --create-dirs -o out/a/b.json "\$url"   <span class="tok-comment"># make the directories</span>
@@ -653,14 +653,14 @@ curl -sSfL -C - -O https://example.com/big.iso    <span class="tok-comment"># -C
 
 <h3>-w: extracting exactly one number</h3>
 ${slide('lx-09', 9, 'Một request HTTPS: DNS → TCP → TLS → chờ máy chủ')}
-<pre><code>curl -s -o /dev/null -w '%{http_code}\\n' https://cuongthai.com
+<pre><code class="language-bash">curl -s -o /dev/null -w '%{http_code}\\n' https://cuongthai.com
 curl -s -o /dev/null -w '%{time_total}\\n' https://cuongthai.com
 curl -s -o /dev/null -w 'code=%{http_code} time=%{time_total}s size=%{size_download}\\n' "\$url"</code></pre>
 <div class="out">200
 0.184
 code=200 time=0.184s size=48213</div>
 <p>That first line is the smoke test from Chapter 7: discard the body, print only the status code, and branch on it. It is the difference between "the deploy script finished" and "the route actually answers".</p>
-<pre><code><span class="tok-comment"># Where the time actually goes — each number is cumulative</span>
+<pre><code class="language-bash"><span class="tok-comment"># Where the time actually goes — each number is cumulative</span>
 curl -s -o /dev/null -w '
   dns:      %{time_namelookup}s
   connect:  %{time_connect}s
@@ -677,7 +677,7 @@ curl -s -o /dev/null -w '
 
 <h3>Measured: one request, four stages</h3>
 <p>The same variables, measured for real against <code>https://example.com/</code> on 28/09/2026 from a Fedora 44 machine on a home connection:</p>
-<pre><code>curl -s -o /dev/null -w "dns=%{time_namelookup} tcp=%{time_connect} tls=%{time_appconnect} pre=%{time_pretransfer} ttfb=%{time_starttransfer} total=%{time_total} code=%{http_code} ip=%{remote_ip}\\n" https://example.com/</code></pre>
+<pre><code class="language-bash">curl -s -o /dev/null -w "dns=%{time_namelookup} tcp=%{time_connect} tls=%{time_appconnect} pre=%{time_pretransfer} ttfb=%{time_starttransfer} total=%{time_total} code=%{http_code} ip=%{remote_ip}\\n" https://example.com/</code></pre>
 <div class="out">dns=0.007746 tcp=0.034237 tls=0.072264 pre=0.072377 ttfb=0.101615 total=0.101866 code=200 ip=172.66.147.243</div>
 <p>…and with the five-line format above from an Ubuntu 24.04 container on a Mac on a university Wi-Fi:</p>
 <div class="out">  dns:      0.004923s
@@ -696,7 +696,7 @@ curl -s -o /dev/null -w '
 
 
 <h3>Methods, headers and JSON</h3>
-<pre><code>curl -sSf -X POST https://api.example.com/items \\
+<pre><code class="language-bash">curl -sSf -X POST https://api.example.com/items \\
   -H 'Content-Type: application/json' \\
   -d '{"name":"test","qty":3}'
 
@@ -707,7 +707,7 @@ curl -sSf -X DELETE "\$url/items/42"
 curl -sSf -H "Authorization: Bearer \$TOKEN" "\$url/me"
 curl -sSfI "\$url"                     <span class="tok-comment"># -I: HEAD — headers only, no body</span></code></pre>
 <div class="callout warn">Using <code>-d</code> implies <code>-X POST</code>, so writing both is harmless but redundant — and mixing <code>-X GET</code> with <code>-d</code> produces a GET with a body, which many servers silently ignore. If a request "does nothing", check that the method and the data flag agree.</div>
-<pre><code><span class="tok-comment"># Read a token from a file, so it never appears in ps or in history (Lesson 8.3)</span>
+<pre><code class="language-bash"><span class="tok-comment"># Read a token from a file, so it never appears in ps or in history (Lesson 8.3)</span>
 curl -sSf -H @auth-header.txt "\$url/me"
 curl -sSf --config curlrc.txt "\$url"
 
@@ -717,7 +717,7 @@ Authorization: Bearer sk-live-...</code></pre>
 
 <h3>-v: reading the whole exchange</h3>
 ${slide('lx-09', 10, 'curl -v: * ghi chú · > gửi · < nhận')}
-<pre><code>curl -v https://cuongthai.com 2&gt;&amp;1 | head -30</code></pre>
+<pre><code class="language-bash">curl -v https://cuongthai.com 2&gt;&amp;1 | head -30</code></pre>
 <div class="out">*   Trying 203.0.113.42:443...
 * Connected to cuongthai.com (203.0.113.42) port 443
 * ALPN: server accepted h2
@@ -737,14 +737,14 @@ ${slide('lx-09', 10, 'curl -v: * ghi chú · > gửi · < nhận')}
   <div class="kv"><span class="k"><code>&lt;</code></span><span class="v">What the server replied. The status line and every response header.</span></div>
 </div>
 <p>Note the <code>expire date</code> line — <code>curl -v</code> is the fastest certificate check there is, and "the certificate expired at midnight" explains a large share of sites that broke overnight with no deploy. <code>-v</code> writes to stderr, which is why the <code>2&gt;&amp;1</code> is needed to pipe it.</p>
-<pre><code>curl -sSf --resolve cuongthai.com:443:203.0.113.99 https://cuongthai.com/   <span class="tok-comment"># test a server before DNS points at it</span>
+<pre><code class="language-bash">curl -sSf --resolve cuongthai.com:443:203.0.113.99 https://cuongthai.com/   <span class="tok-comment"># test a server before DNS points at it</span>
 curl -sSfI -H 'Host: cuongthai.com' http://203.0.113.42/                    <span class="tok-comment"># test a vhost by IP</span>
 curl -sSf --http1.1 "\$url"                                                  <span class="tok-comment"># force HTTP/1.1</span>
 curl -sSf --max-time 10 --connect-timeout 3 "\$url"                          <span class="tok-comment"># always in a script</span></code></pre>
 <div class="callout ok"><code>--resolve</code> is the flag for testing a migration. It sends the request to an IP you name while still using the real hostname for TLS and the <code>Host</code> header — so you can verify the new server serves the site correctly <em>before</em> switching DNS, rather than switching and finding out. It beats editing <code>/etc/hosts</code>, because it affects one command instead of your whole machine.</div>
 
 <h3>Timeouts belong in every script</h3>
-<pre><code>curl -sSfL --connect-timeout 5 --max-time 30 --retry 3 --retry-delay 2 "\$url"</code></pre>
+<pre><code class="language-bash">curl -sSfL --connect-timeout 5 --max-time 30 --retry 3 --retry-delay 2 "\$url"</code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k"><code>--connect-timeout</code></span><span class="v">Give up if the TCP connection is not established in N seconds. Without it, a dead host can hang for over two minutes.</span></div>
   <div class="kv"><span class="k"><code>--max-time</code></span><span class="v">A ceiling for the whole request. This is the one that stops a cron job from running until the next one starts.</span></div>
@@ -754,7 +754,7 @@ curl -sSf --max-time 10 --connect-timeout 3 "\$url"                          <sp
 
 <h3>Telling a network failure from an application failure</h3>
 ${slide('lx-09', 11, 'Mã thoát của curl nói tầng nào hỏng')}
-<pre><code>curl -sSf "\$url"; echo "exit=\$?"</code></pre>
+<pre><code class="language-bash">curl -sSf "\$url"; echo "exit=\$?"</code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k">6</span><span class="v">Could not resolve host — DNS, not the application (Lesson 9.1).</span></div>
   <div class="kv"><span class="k">7</span><span class="v">Failed to connect — nothing listening, or a firewall.</span></div>
@@ -762,7 +762,7 @@ ${slide('lx-09', 11, 'Mã thoát của curl nói tầng nào hỏng')}
   <div class="kv"><span class="k">28</span><span class="v">Timeout. It connected and then stalled — usually the server, sometimes the network.</span></div>
   <div class="kv"><span class="k">35 · 60</span><span class="v">TLS handshake failed · certificate could not be verified. Check <code>curl -v</code> for the expiry and the issuer.</span></div>
 </div>
-<pre><code><span class="tok-comment"># In a script: branch on the class of failure, not just on "it failed"</span>
+<pre><code class="language-bash"><span class="tok-comment"># In a script: branch on the class of failure, not just on "it failed"</span>
 body=\$(curl -sSf --max-time 10 "\$url") || {
   rc=\$?                          <span class="tok-comment"># capture it NOW — see "The if ! trap" below</span>
   case \$rc in
@@ -776,7 +776,7 @@ body=\$(curl -sSf --max-time 10 "\$url") || {
 <div class="callout ok">Those five exit codes map exactly onto the four layers from Lesson 9.1, which means a health-check script can report <em>which layer</em> broke rather than "the check failed". That distinction is what makes an alert actionable at 3am.</div>
 
 <h3>Measured: four failures, four exit codes</h3>
-<pre><code>curl -sSf --max-time 5 -o /dev/null https://khong-ton-tai-lx09.example; echo \$?
+<pre><code class="language-bash">curl -sSf --max-time 5 -o /dev/null https://khong-ton-tai-lx09.example; echo \$?
 curl -sSf --max-time 5 -o /dev/null http://172.21.0.4:19090; echo \$?     <span class="tok-comment"># server bound to 127.0.0.1</span>
 curl -sSf --max-time 5 -o /dev/null https://example.com/khong-co; echo \$?
 curl -sSf --max-time 2 -o /dev/null http://10.255.255.1; echo \$?          <span class="tok-comment"># nobody answers at all</span></code></pre>
@@ -800,7 +800,7 @@ DIE: DNS failure for https://khong-ton-tai-lx09.example           <span class="t
 
 
 <h3>A real health check</h3>
-<pre><code>check() {
+<pre><code class="language-bash">check() {
   local url=\$1 expect=\${2:-200} code
   code=\$(curl -s -o /dev/null -w '%{http_code}' \\
          --connect-timeout 3 --max-time 10 "\$url") || true
@@ -852,7 +852,7 @@ exit \$rc</code></pre>
 
 <h3>Try it step by step</h3>
 <p>The health check from this lesson, with the <code>\$?</code> fix and the <code>|| true</code> fix, run against a local server so nothing depends on the internet. Inside an Ubuntu container (<code>apt-get install -y curl python3</code>):</p>
-<pre><code>python3 -m http.server 19090 --bind 127.0.0.1 &gt;/dev/null 2&gt;&amp;1 &amp;
+<pre><code class="language-bash">python3 -m http.server 19090 --bind 127.0.0.1 &gt;/dev/null 2&gt;&amp;1 &amp;
 cat &gt; check.sh &lt;&lt;'EOF'
 #!/bin/bash
 set -uo pipefail
@@ -944,7 +944,7 @@ exit=1</div>
 <p class="lead"><code>curl</code> có hơn hai trăm cờ và bạn cần chừng mười cái. Điều quan trọng không nằm ở cái danh sách — nó nằm ở chỗ <strong>hành vi MẶC ĐỊNH của curl là sai với script</strong>: nó in một thanh tiến độ ra stderr, không đi theo chuyển hướng nào, và thoát ra với mã 0 khi gặp HTTP 500. Ba cái cờ chữa hết chỗ đó, và mọi thứ còn lại trong bài này đều dựng trên chúng.</p>
 
 <h3>Những mặc định bạn gần như luôn phải đổi</h3>
-<pre><code>curl https://api.example.com/data              <span class="tok-comment"># thanh tiến độ, không theo chuyển hướng, thoát 0 khi gặp 500</span>
+<pre><code class="language-bash">curl https://api.example.com/data              <span class="tok-comment"># thanh tiến độ, không theo chuyển hướng, thoát 0 khi gặp 500</span>
 curl -sSf https://api.example.com/data         <span class="tok-comment"># bộ mặc định cho script</span>
 curl -sSfL https://api.example.com/data        <span class="tok-comment"># …và đi theo chuyển hướng</span></code></pre>
 <div class="kv-grid">
@@ -953,7 +953,7 @@ curl -sSfL https://api.example.com/data        <span class="tok-comment"># …v�
   <div class="kv"><span class="k"><code>-f</code> fail</span><span class="v"><strong>Thoát khác 0 khi gặp HTTP 4xx/5xx.</strong> Không có nó, curl coi một mã 404 là một lần truyền THÀNH CÔNG một trang lỗi, và script của bạn chạy tiếp với cái trang lỗi đó làm dữ liệu.</span></div>
   <div class="kv"><span class="k"><code>-L</code> location</span><span class="v">Đi theo chuyển hướng. Nhiều API và mọi URL <code>http://</code> trên một trang đời mới đều trả về 301 trước, và không có <code>-L</code> thì bạn nhận được trang chuyển hướng thay vì nội dung.</span></div>
 </div>
-<pre><code>curl -s https://example.com/missing &gt; data.json
+<pre><code class="language-bash">curl -s https://example.com/missing &gt; data.json
 echo \$?                                    <span class="tok-comment"># 0 — "thành công"</span>
 cat data.json                              <span class="tok-comment"># một trang 404 dạng HTML</span>
 
@@ -966,7 +966,7 @@ curl: (22) The requested URL returned error: 404
 <div class="callout ok"><strong><code>-sSf</code> là phản xạ cần xây.</strong> Không có <code>-f</code>, một chuỗi ống như <code>curl … | jq '.items'</code> sẽ nhận về một trang lỗi HTML, <code>jq</code> hỏng với một thông báo phân tích khó hiểu, và — vì luật mã thoát của chuỗi ống ở Bài 3.2 — script thậm chí có thể không nhận ra. <code>-f</code> cộng với <code>set -o pipefail</code> biến chuyện đó thành một thất bại sạch sẽ, sớm, và gọi tên đúng cái URL.</div>
 
 <h3>Lưu output</h3>
-<pre><code>curl -sSfL -o page.html https://example.com       <span class="tok-comment"># -o: cái tên do BẠN chọn</span>
+<pre><code class="language-bash">curl -sSfL -o page.html https://example.com       <span class="tok-comment"># -o: cái tên do BẠN chọn</span>
 curl -sSfLO https://example.com/file.tar.gz       <span class="tok-comment"># -O: giữ tên ở đầu xa</span>
 curl -sSfL https://example.com &gt; page.html        <span class="tok-comment"># chuyển hướng cũng được</span>
 curl -sSfL --create-dirs -o out/a/b.json "\$url"   <span class="tok-comment"># tự tạo các thư mục</span>
@@ -975,14 +975,14 @@ curl -sSfL -C - -O https://example.com/big.iso    <span class="tok-comment"># -C
 
 <h3>-w: rút ra đúng một con số</h3>
 ${slide('lx-09', 9, 'Một request HTTPS: DNS → TCP → TLS → chờ máy chủ')}
-<pre><code>curl -s -o /dev/null -w '%{http_code}\\n' https://cuongthai.com
+<pre><code class="language-bash">curl -s -o /dev/null -w '%{http_code}\\n' https://cuongthai.com
 curl -s -o /dev/null -w '%{time_total}\\n' https://cuongthai.com
 curl -s -o /dev/null -w 'code=%{http_code} time=%{time_total}s size=%{size_download}\\n' "\$url"</code></pre>
 <div class="out">200
 0.184
 code=200 time=0.184s size=48213</div>
 <p>Dòng đầu tiên đó chính là chốt kiểm ở Chương 7: vứt phần thân đi, chỉ in mã trạng thái, rồi rẽ nhánh theo nó. Đó là khác biệt giữa "script deploy đã chạy xong" và "cái tuyến đó THẬT SỰ có trả lời".</p>
-<pre><code><span class="tok-comment"># Thời gian thật ra đổ đi đâu — mỗi con số là mốc cộng dồn</span>
+<pre><code class="language-bash"><span class="tok-comment"># Thời gian thật ra đổ đi đâu — mỗi con số là mốc cộng dồn</span>
 curl -s -o /dev/null -w '
   dns:      %{time_namelookup}s
   connect:  %{time_connect}s
@@ -999,7 +999,7 @@ curl -s -o /dev/null -w '
 
 <h3>Đo thật: một request, bốn chặng</h3>
 <p>Cùng những biến đó, đo thật tới <code>https://example.com/</code> ngày 28/09/2026 từ một máy Fedora 44 dùng mạng nhà:</p>
-<pre><code>curl -s -o /dev/null -w "dns=%{time_namelookup} tcp=%{time_connect} tls=%{time_appconnect} pre=%{time_pretransfer} ttfb=%{time_starttransfer} total=%{time_total} code=%{http_code} ip=%{remote_ip}\\n" https://example.com/</code></pre>
+<pre><code class="language-bash">curl -s -o /dev/null -w "dns=%{time_namelookup} tcp=%{time_connect} tls=%{time_appconnect} pre=%{time_pretransfer} ttfb=%{time_starttransfer} total=%{time_total} code=%{http_code} ip=%{remote_ip}\\n" https://example.com/</code></pre>
 <div class="out">dns=0.007746 tcp=0.034237 tls=0.072264 pre=0.072377 ttfb=0.101615 total=0.101866 code=200 ip=172.66.147.243</div>
 <p>…và với khuôn năm dòng ở trên, từ một container Ubuntu 24.04 trên Mac dùng Wi-Fi trường:</p>
 <div class="out">  dns:      0.004923s
@@ -1018,7 +1018,7 @@ curl -s -o /dev/null -w '
 
 
 <h3>Phương thức, header và JSON</h3>
-<pre><code>curl -sSf -X POST https://api.example.com/items \\
+<pre><code class="language-bash">curl -sSf -X POST https://api.example.com/items \\
   -H 'Content-Type: application/json' \\
   -d '{"name":"test","qty":3}'
 
@@ -1029,7 +1029,7 @@ curl -sSf -X DELETE "\$url/items/42"
 curl -sSf -H "Authorization: Bearer \$TOKEN" "\$url/me"
 curl -sSfI "\$url"                     <span class="tok-comment"># -I: HEAD — chỉ header, không lấy thân</span></code></pre>
 <div class="callout warn">Dùng <code>-d</code> đã ngầm bao hàm <code>-X POST</code>, nên viết cả hai thì vô hại nhưng thừa — còn trộn <code>-X GET</code> với <code>-d</code> thì sinh ra một yêu cầu GET có phần thân, thứ mà nhiều máy chủ âm thầm bỏ qua. Nếu một yêu cầu "chẳng làm gì cả", hãy kiểm xem phương thức và cờ dữ liệu có ăn khớp với nhau không.</div>
-<pre><code><span class="tok-comment"># Đọc token từ một file, để nó không bao giờ hiện trong ps hay trong lịch sử (Bài 8.3)</span>
+<pre><code class="language-bash"><span class="tok-comment"># Đọc token từ một file, để nó không bao giờ hiện trong ps hay trong lịch sử (Bài 8.3)</span>
 curl -sSf -H @auth-header.txt "\$url/me"
 curl -sSf --config curlrc.txt "\$url"
 
@@ -1039,7 +1039,7 @@ Authorization: Bearer sk-live-...</code></pre>
 
 <h3>-v: đọc trọn một cuộc trao đổi</h3>
 ${slide('lx-09', 10, 'curl -v: * ghi chú · > gửi · < nhận')}
-<pre><code>curl -v https://cuongthai.com 2&gt;&amp;1 | head -30</code></pre>
+<pre><code class="language-bash">curl -v https://cuongthai.com 2&gt;&amp;1 | head -30</code></pre>
 <div class="out">*   Trying 203.0.113.42:443...
 * Connected to cuongthai.com (203.0.113.42) port 443
 * ALPN: server accepted h2
@@ -1059,14 +1059,14 @@ ${slide('lx-09', 10, 'curl -v: * ghi chú · > gửi · < nhận')}
   <div class="kv"><span class="k"><code>&lt;</code></span><span class="v">Thứ máy chủ đã TRẢ LỜI. Dòng trạng thái và mọi header hồi đáp.</span></div>
 </div>
 <p>Hãy để ý dòng <code>expire date</code> — <code>curl -v</code> là phép kiểm chứng chỉ nhanh nhất từng có, và câu "chứng chỉ hết hạn lúc nửa đêm" giải thích một phần lớn những trang vỡ qua đêm mà chẳng có lần deploy nào. <code>-v</code> ghi ra stderr, và đó là lý do cần <code>2&gt;&amp;1</code> mới đưa qua ống được.</p>
-<pre><code>curl -sSf --resolve cuongthai.com:443:203.0.113.99 https://cuongthai.com/   <span class="tok-comment"># kiểm một máy chủ TRƯỚC khi DNS trỏ vào nó</span>
+<pre><code class="language-bash">curl -sSf --resolve cuongthai.com:443:203.0.113.99 https://cuongthai.com/   <span class="tok-comment"># kiểm một máy chủ TRƯỚC khi DNS trỏ vào nó</span>
 curl -sSfI -H 'Host: cuongthai.com' http://203.0.113.42/                    <span class="tok-comment"># kiểm một vhost bằng IP</span>
 curl -sSf --http1.1 "\$url"                                                  <span class="tok-comment"># ép dùng HTTP/1.1</span>
 curl -sSf --max-time 10 --connect-timeout 3 "\$url"                          <span class="tok-comment"># luôn có trong script</span></code></pre>
 <div class="callout ok"><code>--resolve</code> là cái cờ dành cho việc kiểm một lần chuyển máy. Nó gửi yêu cầu tới một IP do bạn nêu tên trong khi vẫn dùng tên máy thật cho TLS và cho header <code>Host</code> — nên bạn xác minh được rằng máy chủ mới phục vụ trang đúng đắn <em>TRƯỚC KHI</em> đổi DNS, thay vì đổi xong rồi mới biết. Nó hơn việc sửa <code>/etc/hosts</code>, vì nó chỉ ảnh hưởng một lệnh chứ không ảnh hưởng cả cái máy của bạn.</div>
 
 <h3>Thời gian chờ thuộc về mọi script</h3>
-<pre><code>curl -sSfL --connect-timeout 5 --max-time 30 --retry 3 --retry-delay 2 "\$url"</code></pre>
+<pre><code class="language-bash">curl -sSfL --connect-timeout 5 --max-time 30 --retry 3 --retry-delay 2 "\$url"</code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k"><code>--connect-timeout</code></span><span class="v">Bỏ cuộc nếu kết nối TCP không thiết lập được trong N giây. Không có nó, một máy đã chết có thể treo bạn hơn hai phút.</span></div>
   <div class="kv"><span class="k"><code>--max-time</code></span><span class="v">Trần cho cả yêu cầu. Đây là cái ngăn một công việc cron chạy dài tới tận lúc bản kế tiếp khởi động.</span></div>
@@ -1076,7 +1076,7 @@ curl -sSf --max-time 10 --connect-timeout 3 "\$url"                          <sp
 
 <h3>Phân biệt lỗi mạng với lỗi ứng dụng</h3>
 ${slide('lx-09', 11, 'Mã thoát của curl nói tầng nào hỏng')}
-<pre><code>curl -sSf "\$url"; echo "exit=\$?"</code></pre>
+<pre><code class="language-bash">curl -sSf "\$url"; echo "exit=\$?"</code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k">6</span><span class="v">Không phân giải được tên máy — DNS, không phải ứng dụng (Bài 9.1).</span></div>
   <div class="kv"><span class="k">7</span><span class="v">Không kết nối được — không có gì lắng nghe, hoặc có tường lửa.</span></div>
@@ -1084,7 +1084,7 @@ ${slide('lx-09', 11, 'Mã thoát của curl nói tầng nào hỏng')}
   <div class="kv"><span class="k">28</span><span class="v">Hết giờ chờ. Nó kết nối được rồi đứng im — thường là do máy chủ, đôi khi do mạng.</span></div>
   <div class="kv"><span class="k">35 · 60</span><span class="v">Bắt tay TLS hỏng · không xác minh được chứng chỉ. Hãy xem <code>curl -v</code> để biết hạn dùng và nơi cấp.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Trong script: rẽ nhánh theo LOẠI thất bại, không chỉ theo "nó hỏng"</span>
+<pre><code class="language-bash"><span class="tok-comment"># Trong script: rẽ nhánh theo LOẠI thất bại, không chỉ theo "nó hỏng"</span>
 body=\$(curl -sSf --max-time 10 "\$url") || {
   rc=\$?                          <span class="tok-comment"># chụp NGAY — xem "Cái bẫy của if !" bên dưới</span>
   case \$rc in
@@ -1098,7 +1098,7 @@ body=\$(curl -sSf --max-time 10 "\$url") || {
 <div class="callout ok">Năm mã thoát đó ánh xạ chính xác vào bốn tầng ở Bài 9.1, nghĩa là một script kiểm sức khoẻ báo cáo được <em>TẦNG NÀO</em> vỡ thay vì chỉ nói "phép kiểm thất bại". Chính chỗ phân biệt đó làm một cảnh báo lúc 3 giờ sáng trở nên hành động được.</div>
 
 <h3>Đo thật: bốn kiểu hỏng, bốn mã thoát</h3>
-<pre><code>curl -sSf --max-time 5 -o /dev/null https://khong-ton-tai-lx09.example; echo \$?
+<pre><code class="language-bash">curl -sSf --max-time 5 -o /dev/null https://khong-ton-tai-lx09.example; echo \$?
 curl -sSf --max-time 5 -o /dev/null http://172.21.0.4:19090; echo \$?     <span class="tok-comment"># server gắn vào 127.0.0.1</span>
 curl -sSf --max-time 5 -o /dev/null https://example.com/khong-co; echo \$?
 curl -sSf --max-time 2 -o /dev/null http://10.255.255.1; echo \$?          <span class="tok-comment"># chẳng ai trả lời cả</span></code></pre>
@@ -1122,7 +1122,7 @@ DIE: DNS hỏng với https://khong-ton-tai-lx09.example                 <span c
 
 
 <h3>Một phép kiểm sức khoẻ thật</h3>
-<pre><code>check() {
+<pre><code class="language-bash">check() {
   local url=\$1 expect=\${2:-200} code
   code=\$(curl -s -o /dev/null -w '%{http_code}' \\
          --connect-timeout 3 --max-time 10 "\$url") || true
@@ -1174,7 +1174,7 @@ exit \$rc</code></pre>
 
 <h3>Chạy thử từng bước</h3>
 <p>Hàm kiểm sức khoẻ của bài này, đã có bản sửa <code>\$?</code> và bản sửa <code>|| true</code>, chạy với một server cục bộ để không phụ thuộc internet. Trong một container Ubuntu (<code>apt-get install -y curl python3</code>):</p>
-<pre><code>python3 -m http.server 19090 --bind 127.0.0.1 &gt;/dev/null 2&gt;&amp;1 &amp;
+<pre><code class="language-bash">python3 -m http.server 19090 --bind 127.0.0.1 &gt;/dev/null 2&gt;&amp;1 &amp;
 cat &gt; check.sh &lt;&lt;'EOF'
 #!/bin/bash
 set -uo pipefail
@@ -1277,7 +1277,7 @@ exit=1</div>
 <h3>Keys, not passwords</h3>
 ${slide('lx-09', 13, 'Khoá công khai / khoá bí mật và khoá máy chủ')}
 ${slide('lx-09', 14, 'ssh-keygen, ssh-copy-id và quyền 700/600')}
-<pre><code>ssh-keygen -t ed25519 -C "deploy@laptop"          <span class="tok-comment"># the modern default</span>
+<pre><code class="language-bash">ssh-keygen -t ed25519 -C "deploy@laptop"          <span class="tok-comment"># the modern default</span>
 ssh-keygen -t ed25519 -f ~/.ssh/id_vps -C "vps"   <span class="tok-comment"># a key per purpose</span>
 
 ls -l ~/.ssh/</code></pre>
@@ -1290,7 +1290,7 @@ ls -l ~/.ssh/</code></pre>
   <div class="kv"><span class="k">Passphrase</span><span class="v">Say yes. A stolen laptop otherwise means stolen servers. The agent below means you type it once per session, not once per connection.</span></div>
   <div class="kv"><span class="k">One key per purpose</span><span class="v">A key for your VPS, another for GitHub, another for work. Revoking one then does not lock you out of everything else.</span></div>
 </div>
-<pre><code>ssh-copy-id -i ~/.ssh/id_vps.pub deploy@vps       <span class="tok-comment"># installs it correctly</span>
+<pre><code class="language-bash">ssh-copy-id -i ~/.ssh/id_vps.pub deploy@vps       <span class="tok-comment"># installs it correctly</span>
 
 <span class="tok-comment"># What it does, by hand — note the permissions (Chapter 4)</span>
 cat ~/.ssh/id_vps.pub | ssh deploy@vps \\
@@ -1324,18 +1324,18 @@ Host *
     ControlMaster auto           <span class="tok-comment"># reuse one connection for all sessions</span>
     ControlPath ~/.ssh/cm-%r@%h:%p
     ControlPersist 10m</code></pre>
-<pre><code>ssh -p 2222 -i ~/.ssh/id_vps deploy@203.0.113.42     <span class="tok-comment"># before</span>
+<pre><code class="language-bash">ssh -p 2222 -i ~/.ssh/id_vps deploy@203.0.113.42     <span class="tok-comment"># before</span>
 ssh vps                                              <span class="tok-comment"># after</span>
 scp file.txt vps:/srv/app/                           <span class="tok-comment"># scp, rsync and git use it too</span></code></pre>
 <div class="callout ok">Three settings earn their place immediately. <strong><code>ProxyJump</code></strong> reaches a machine with no public address through one that has one — a single hop, no manual tunnel, and <code>scp</code> and <code>rsync</code> understand it as well. <strong><code>ControlMaster</code></strong> reuses one TCP connection for every subsequent session to the same host, so the second <code>ssh vps</code> is instant and a script making twenty calls pays the handshake once. <strong><code>IdentitiesOnly yes</code></strong> stops SSH offering every key in your agent to every server; without it a host with several keys can hit <code>Too many authentication failures</code> before reaching the right one.</div>
-<pre><code>ssh -O check vps        <span class="tok-comment"># is a shared connection alive?</span>
+<pre><code class="language-bash">ssh -O check vps        <span class="tok-comment"># is a shared connection alive?</span>
 ssh -O exit vps         <span class="tok-comment"># close it (needed after changing config)</span>
 ssh -G vps | head -20   <span class="tok-comment"># the FULLY resolved settings for this host</span></code></pre>
 <p><code>ssh -G</code> is the debugging command: it prints exactly which options apply after all the <code>Host</code> blocks have been merged, which settles any question about why a connection used the wrong key or the wrong port.</p>
 
 <h3>Measured: what the config file buys you</h3>
 <p>The lab behind every SSH output in this chapter: three Ubuntu 24.04 containers on two private Docker networks — <code>laptop</code> (user <code>an</code>, 172.21.0.3), <code>vps</code> (user <code>deploy</code>, 172.21.0.2, also on the internal network as 172.22.0.3) and <code>db</code> (user <code>admin</code>, 172.22.0.2, reachable <em>only</em> from vps). The key was made with <code>ssh-keygen -t ed25519</code> and installed with <code>ssh-copy-id</code>; the laptop's config has <code>Host vps</code>, <code>Host db</code> with <code>ProxyJump vps</code>, and a <code>Host *</code> block like the one above, with the lab's addresses and port 22.</p>
-<pre><code>ssh -G vps | grep -E "^(hostname|user|port) "
+<pre><code class="language-bash">ssh -G vps | grep -E "^(hostname|user|port) "
 ssh db "hostname; hostname -I"                          <span class="tok-comment"># through vps, thanks to ProxyJump</span>
 ssh -o ProxyJump=none -o ControlPath=none admin@172.22.0.2 true   <span class="tok-comment"># straight there: impossible</span></code></pre>
 <div class="out">user deploy
@@ -1365,7 +1365,7 @@ Host vps
 <tr><td><code>ipconfig getifaddr en0</code></td><td>the Mac's Wi-Fi IPv4 address (the school hands out 10.x addresses); on Linux use <code>ip -4 -br addr show wlan0</code></td></tr>
 </table>
 <p>Why must <code>Match</code> come first? Because <strong><code>ssh_config</code> uses the first value it obtains for each keyword</strong> (ssh_config(5): "the first obtained value will be used"). Measured in the lab, with the condition faked by <code>test -f /tmp/o-truong</code>:</p>
-<pre><code>touch /tmp/o-truong                      <span class="tok-comment"># pretend we are at school</span>
+<pre><code class="language-bash">touch /tmp/o-truong                      <span class="tok-comment"># pretend we are at school</span>
 ssh -G vps | grep ^port                  <span class="tok-comment"># Match placed BEFORE Host vps</span>
 ssh -v vps true 2&gt;&amp;1 | grep Connecting
 ssh -F cfg-sai -G vps | grep ^port       <span class="tok-comment"># same Match block placed AFTER Host vps</span></code></pre>
@@ -1386,7 +1386,7 @@ ssh-add -D                      <span class="tok-comment"># forget everything no
 
 <h3>Port forwarding</h3>
 ${slide('lx-09', 17, 'Đường hầm -L, -R, -D và ProxyJump')}
-<pre><code><span class="tok-comment"># LOCAL: bring a remote port to your machine</span>
+<pre><code class="language-bash"><span class="tok-comment"># LOCAL: bring a remote port to your machine</span>
 ssh -L 5432:localhost:5432 vps</code></pre>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">You connect to</span><span class="lz-t">localhost:5432 on your laptop</span><span class="lz-d">A normal client — psql, TablePlus, your app — connects to your own machine.</span></div>
@@ -1394,7 +1394,7 @@ ssh -L 5432:localhost:5432 vps</code></pre>
   <div class="lz-step"><span class="lz-k">The VPS connects to</span><span class="lz-t">localhost:5432 — from ITS point of view</span><span class="lz-d">Which is the database bound to 127.0.0.1 and deliberately unreachable from outside (Lesson 9.1).</span></div>
   <div class="lz-step"><span class="lz-k">Result</span><span class="lz-t">a private database, reachable only by people with SSH access</span><span class="lz-d">Strictly better than exposing 5432 to the internet with a password on it.</span></div>
 </div>
-<pre><code>ssh -L 5432:localhost:5432 vps           <span class="tok-comment"># database</span>
+<pre><code class="language-bash">ssh -L 5432:localhost:5432 vps           <span class="tok-comment"># database</span>
 ssh -L 8080:localhost:3000 vps           <span class="tok-comment"># an app not exposed publicly</span>
 ssh -L 9000:10.0.1.15:5432 vps           <span class="tok-comment"># a THIRD host, reached via the VPS</span>
 ssh -fNL 5432:localhost:5432 vps         <span class="tok-comment"># -f background, -N no shell: just the tunnel</span>
@@ -1408,7 +1408,7 @@ ssh -D 1080 vps                          <span class="tok-comment"># point a bro
 
 <h3>Measured: three tunnels between containers</h3>
 <p>In the lab, <code>vps</code> runs a small web server bound to <code>127.0.0.1:19092</code> (standing in for Postgres), <code>db</code> runs one on port 19093, and the laptop runs a dev server on <code>127.0.0.1:19096</code>:</p>
-<pre><code>curl -sS http://172.21.0.2:19092/                   <span class="tok-comment"># before: loopback-only, unreachable</span>
+<pre><code class="language-bash">curl -sS http://172.21.0.2:19092/                   <span class="tok-comment"># before: loopback-only, unreachable</span>
 ssh -fN -L 19094:localhost:19092 vps
 ssh -fN -L 19095:172.22.0.2:19093 vps              <span class="tok-comment"># a THIRD machine, via vps</span>
 ssh -fN -R 19097:localhost:19096 vps
@@ -1440,7 +1440,7 @@ tu DB: may rieng 172.22.0.2</div>
 
 
 <h3>Running commands and scripts remotely</h3>
-<pre><code>ssh vps 'uptime'
+<pre><code class="language-bash">ssh vps 'uptime'
 ssh vps 'df -h /'
 ssh vps 'systemctl status myapp' &lt; /dev/null      <span class="tok-comment"># do not let it eat stdin</span>
 
@@ -1459,13 +1459,13 @@ ssh vps 'tmux new -d -s deploy /srv/app/deploy.sh'</code></pre>
 
 <h3>When the connection drops: three tmux commands</h3>
 <p>Lesson 5.4 covers tmux in depth; for SSH work three commands are enough. Make the first one a habit every time you log in to a server:</p>
-<pre><code>ssh -t vps tmux new -A -s main     <span class="tok-comment"># attach to "main", or create it if it does not exist</span>
+<pre><code class="language-bash">ssh -t vps tmux new -A -s main     <span class="tok-comment"># attach to "main", or create it if it does not exist</span>
 <span class="tok-comment"># … work … the Wi-Fi drops … reconnect:</span>
 ssh -t vps tmux new -A -s main     <span class="tok-comment"># same command: you are back where you were</span>
 tmux ls                            <span class="tok-comment"># on the server: which sessions exist</span></code></pre>
 <p><code>-t</code> gives tmux the terminal it needs; <code>-A</code> means "attach if it exists". Inside tmux, <code>Ctrl-B</code> then <code>d</code> detaches on purpose. <code>ServerAliveInterval 60</code> in <code>~/.ssh/config</code> makes a dead connection fail within a few minutes instead of hanging forever — tmux makes sure that failure costs you nothing.</p>
 
-<pre><code><span class="tok-comment"># The quoting question: which machine expands the variable?</span>
+<pre><code class="language-bash"><span class="tok-comment"># The quoting question: which machine expands the variable?</span>
 ssh vps "echo \$HOSTNAME"      <span class="tok-comment"># double quotes → YOUR hostname, expanded locally</span>
 ssh vps 'echo \$HOSTNAME'      <span class="tok-comment"># single quotes → the SERVER's hostname</span></code></pre>
 <div class="out">laptop
@@ -1483,10 +1483,10 @@ AllowUsers deploy
 MaxAuthTries 3
 ClientAliveInterval 300
 ClientAliveCountMax 2</code></pre>
-<pre><code>sudo sshd -t                          <span class="tok-comment"># TEST the config — always, first</span>
+<pre><code class="language-bash">sudo sshd -t                          <span class="tok-comment"># TEST the config — always, first</span>
 sudo systemctl reload ssh             <span class="tok-comment"># reload, do not restart</span></code></pre>
 <div class="callout warn"><strong>Keep your current session open while you do this, and test with a second terminal.</strong> A config error plus a restart is how people lock themselves out of a machine with no console access. <code>sshd -t</code> validates the file, <code>reload</code> leaves existing connections alive, and the new terminal proves you can still get in. Only then close the first one. This is the same discipline as <code>visudo</code> in Lesson 4.4, for the same reason.</div>
-<pre><code><span class="tok-comment"># Modern Ubuntu: drop-in files, do not edit the main config</span>
+<pre><code class="language-bash"><span class="tok-comment"># Modern Ubuntu: drop-in files, do not edit the main config</span>
 ls /etc/ssh/sshd_config.d/
 
 <span class="tok-comment"># What is actually in effect after all includes</span>
@@ -1499,7 +1499,7 @@ allowusers deploy</div>
 
 <h3>First value wins: why 99-hardening.conf changes nothing</h3>
 <p>This lesson used to name the example file <code>99-hardening.conf</code>, and on a cloud image that name silently does nothing. Many Ubuntu cloud images contain <code>/etc/ssh/sshd_config.d/50-cloud-init.conf</code> with the single line <code>PasswordAuthentication yes</code>. The main config pulls the directory in with <code>Include /etc/ssh/sshd_config.d/*.conf</code> near its top, the glob is read in alphabetical order, and — exactly like <code>ssh_config</code> — <strong>sshd keeps the first value it reads for each keyword</strong> (sshd_config(5)). So <code>50-</code> beats <code>99-</code>. Reproduced on Ubuntu 24.04 with OpenSSH 9.6:</p>
-<pre><code>ls /etc/ssh/sshd_config.d/
+<pre><code class="language-bash">ls /etc/ssh/sshd_config.d/
 sshd -t &amp;&amp; echo OK
 sshd -T | grep -E "^(passwordauthentication|permitrootlogin) "
 <span class="tok-comment"># from the laptop, password only:</span>
@@ -1511,7 +1511,7 @@ permitrootlogin no
 passwordauthentication yes
 logged in with a PASSWORD</div>
 <p><code>PermitRootLogin no</code> from the same file <em>did</em> apply — nobody else set it — which is the tell-tale sign of an ordering collision rather than a syntax error. Rename and reload:</p>
-<pre><code>mv /etc/ssh/sshd_config.d/99-hardening.conf /etc/ssh/sshd_config.d/01-hardening.conf
+<pre><code class="language-bash">mv /etc/ssh/sshd_config.d/99-hardening.conf /etc/ssh/sshd_config.d/01-hardening.conf
 kill -HUP \$(ss -tlnpH "sport = :22" | grep -o 'pid=[0-9]*' | head -1 | cut -d= -f2)   <span class="tok-comment"># = systemctl reload ssh</span>
 sshd -T | grep ^passwordauthentication
 ssh -o PubkeyAuthentication=no -o PreferredAuthentications=password vps true</code></pre>
@@ -1522,7 +1522,7 @@ deploy@172.21.0.2: Permission denied (publickey).</div>
 
 <h3>When it will not connect</h3>
 ${slide('lx-09', 19, 'Đọc đúng câu lỗi SSH, và đừng để việc chết theo phiên')}
-<pre><code>ssh -v vps                     <span class="tok-comment"># -v, -vv, -vvv: increasing detail</span>
+<pre><code class="language-bash">ssh -v vps                     <span class="tok-comment"># -v, -vv, -vvv: increasing detail</span>
 ssh -v vps 2&gt;&amp;1 | grep -E 'Offering|Authentications|Permission'
 sudo tail -f /var/log/auth.log <span class="tok-comment"># on the SERVER — says WHY it refused</span></code></pre>
 <div class="out">debug1: Offering public key: /home/you/.ssh/id_vps ED25519
@@ -1559,7 +1559,7 @@ Permission denied (publickey).</div>
 
 <h3>Try it step by step</h3>
 <p>The whole lab fits on one laptop with Docker, and never touches your real <code>~/.ssh</code>: the keys live inside the "laptop" container.</p>
-<pre><code>docker network create lx09-lab
+<pre><code class="language-bash">docker network create lx09-lab
 docker run -d --name lx09-vps --hostname vps --network lx09-lab ubuntu:24.04 sleep infinity
 docker run -d --name lx09-laptop --hostname laptop --network lx09-lab ubuntu:24.04 sleep infinity
 docker exec lx09-vps bash -c 'apt-get update -qq &amp;&amp; apt-get install -y -qq openssh-server &gt;/dev/null
@@ -1644,7 +1644,7 @@ port 22</div>
 <h3>Khoá, không phải mật khẩu</h3>
 ${slide('lx-09', 13, 'Khoá công khai / khoá bí mật và khoá máy chủ')}
 ${slide('lx-09', 14, 'ssh-keygen, ssh-copy-id và quyền 700/600')}
-<pre><code>ssh-keygen -t ed25519 -C "deploy@laptop"          <span class="tok-comment"># mặc định đời mới</span>
+<pre><code class="language-bash">ssh-keygen -t ed25519 -C "deploy@laptop"          <span class="tok-comment"># mặc định đời mới</span>
 ssh-keygen -t ed25519 -f ~/.ssh/id_vps -C "vps"   <span class="tok-comment"># mỗi mục đích một khoá</span>
 
 ls -l ~/.ssh/</code></pre>
@@ -1657,7 +1657,7 @@ ls -l ~/.ssh/</code></pre>
   <div class="kv"><span class="k">Mật khẩu khoá</span><span class="v">Hãy đặt. Nếu không thì một cái laptop bị lấy mất đồng nghĩa với những máy chủ bị lấy mất. Cái agent bên dưới nghĩa là bạn gõ nó mỗi phiên một lần, không phải mỗi kết nối một lần.</span></div>
   <div class="kv"><span class="k">Mỗi mục đích một khoá</span><span class="v">Một khoá cho VPS, một cho GitHub, một cho công việc. Thu hồi một cái thì không khoá bạn ra khỏi mọi thứ còn lại.</span></div>
 </div>
-<pre><code>ssh-copy-id -i ~/.ssh/id_vps.pub deploy@vps       <span class="tok-comment"># cài đặt cho đúng cách</span>
+<pre><code class="language-bash">ssh-copy-id -i ~/.ssh/id_vps.pub deploy@vps       <span class="tok-comment"># cài đặt cho đúng cách</span>
 
 <span class="tok-comment"># Nó làm gì, nếu làm tay — để ý các quyền (Chương 4)</span>
 cat ~/.ssh/id_vps.pub | ssh deploy@vps \\
@@ -1691,18 +1691,18 @@ Host *
     ControlMaster auto           <span class="tok-comment"># dùng lại một kết nối cho mọi phiên</span>
     ControlPath ~/.ssh/cm-%r@%h:%p
     ControlPersist 10m</code></pre>
-<pre><code>ssh -p 2222 -i ~/.ssh/id_vps deploy@203.0.113.42     <span class="tok-comment"># trước</span>
+<pre><code class="language-bash">ssh -p 2222 -i ~/.ssh/id_vps deploy@203.0.113.42     <span class="tok-comment"># trước</span>
 ssh vps                                              <span class="tok-comment"># sau</span>
 scp file.txt vps:/srv/app/                           <span class="tok-comment"># scp, rsync và git cũng dùng nó</span></code></pre>
 <div class="callout ok">Ba thiết lập xứng đáng có mặt ngay lập tức. <strong><code>ProxyJump</code></strong> với tới một máy không có địa chỉ công khai thông qua một máy có — một chặng duy nhất, không phải dựng đường hầm bằng tay, và <code>scp</code> cùng <code>rsync</code> cũng hiểu nó. <strong><code>ControlMaster</code></strong> dùng lại một kết nối TCP cho mọi phiên tiếp theo tới cùng một máy, nên lệnh <code>ssh vps</code> thứ hai là tức thì và một script gọi hai mươi lần chỉ trả giá bắt tay đúng một lần. <strong><code>IdentitiesOnly yes</code></strong> ngăn SSH chào mọi khoá trong agent của bạn với mọi máy chủ; không có nó, một máy có nhiều khoá có thể dính <code>Too many authentication failures</code> trước khi tới được cái khoá đúng.</div>
-<pre><code>ssh -O check vps        <span class="tok-comment"># kết nối dùng chung còn sống không?</span>
+<pre><code class="language-bash">ssh -O check vps        <span class="tok-comment"># kết nối dùng chung còn sống không?</span>
 ssh -O exit vps         <span class="tok-comment"># đóng nó (cần làm sau khi đổi cấu hình)</span>
 ssh -G vps | head -20   <span class="tok-comment"># các thiết lập ĐÃ GIẢI HẾT cho máy này</span></code></pre>
 <p><code>ssh -G</code> là lệnh dùng để gỡ lỗi: nó in ra chính xác những tuỳ chọn nào có hiệu lực sau khi mọi khối <code>Host</code> đã được trộn lại, và điều đó kết thúc mọi tranh cãi về việc vì sao một kết nối lại dùng nhầm khoá hay nhầm cổng.</p>
 
 <h3>Đo thật: file cấu hình mua được cho bạn những gì</h3>
 <p>Phòng thí nghiệm đứng sau mọi output SSH trong chương này: ba container Ubuntu 24.04 trên hai mạng Docker riêng — <code>laptop</code> (người dùng <code>an</code>, 172.21.0.3), <code>vps</code> (người dùng <code>deploy</code>, 172.21.0.2, đồng thời nằm trong mạng nội bộ với địa chỉ 172.22.0.3) và <code>db</code> (người dùng <code>admin</code>, 172.22.0.2, CHỈ với tới được từ vps). Khoá tạo bằng <code>ssh-keygen -t ed25519</code> và cài bằng <code>ssh-copy-id</code>; file cấu hình của laptop có <code>Host vps</code>, <code>Host db</code> với <code>ProxyJump vps</code>, và một khối <code>Host *</code> như ở trên, dùng địa chỉ của phòng thí nghiệm và cổng 22.</p>
-<pre><code>ssh -G vps | grep -E "^(hostname|user|port) "
+<pre><code class="language-bash">ssh -G vps | grep -E "^(hostname|user|port) "
 ssh db "hostname; hostname -I"                          <span class="tok-comment"># đi qua vps, nhờ ProxyJump</span>
 ssh -o ProxyJump=none -o ControlPath=none admin@172.22.0.2 true   <span class="tok-comment"># đi thẳng: không thể</span></code></pre>
 <div class="out">user deploy
@@ -1732,7 +1732,7 @@ Host vps
 <tr><td><code>ipconfig getifaddr en0</code></td><td>địa chỉ IPv4 Wi-Fi của Mac (trường cấp địa chỉ 10.x); trên Linux dùng <code>ip -4 -br addr show wlan0</code></td></tr>
 </table>
 <p>Vì sao <code>Match</code> phải đứng trước? Vì <strong><code>ssh_config</code> dùng giá trị ĐẦU TIÊN nó lấy được cho mỗi từ khoá</strong> (ssh_config(5): "the first obtained value will be used"). Đo trong phòng thí nghiệm, với điều kiện giả lập bằng <code>test -f /tmp/o-truong</code>:</p>
-<pre><code>touch /tmp/o-truong                      <span class="tok-comment"># giả vờ đang ở trường</span>
+<pre><code class="language-bash">touch /tmp/o-truong                      <span class="tok-comment"># giả vờ đang ở trường</span>
 ssh -G vps | grep ^port                  <span class="tok-comment"># Match đặt TRƯỚC Host vps</span>
 ssh -v vps true 2&gt;&amp;1 | grep Connecting
 ssh -F cfg-sai -G vps | grep ^port       <span class="tok-comment"># cùng khối Match nhưng đặt SAU Host vps</span></code></pre>
@@ -1753,7 +1753,7 @@ ssh-add -D                      <span class="tok-comment"># quên mọi thứ ng
 
 <h3>Chuyển tiếp cổng</h3>
 ${slide('lx-09', 17, 'Đường hầm -L, -R, -D và ProxyJump')}
-<pre><code><span class="tok-comment"># CỤC BỘ: kéo một cổng ở đầu xa về máy bạn</span>
+<pre><code class="language-bash"><span class="tok-comment"># CỤC BỘ: kéo một cổng ở đầu xa về máy bạn</span>
 ssh -L 5432:localhost:5432 vps</code></pre>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">Bạn kết nối tới</span><span class="lz-t">localhost:5432 trên laptop của bạn</span><span class="lz-d">Một trình khách bình thường — psql, TablePlus, ứng dụng của bạn — kết nối tới chính máy của bạn.</span></div>
@@ -1761,7 +1761,7 @@ ssh -L 5432:localhost:5432 vps</code></pre>
   <div class="lz-step"><span class="lz-k">VPS kết nối tới</span><span class="lz-t">localhost:5432 — theo góc nhìn CỦA NÓ</span><span class="lz-d">Chính là cơ sở dữ liệu đang gắn vào 127.0.0.1 và cố ý không với tới được từ bên ngoài (Bài 9.1).</span></div>
   <div class="lz-step"><span class="lz-k">Kết quả</span><span class="lz-t">một cơ sở dữ liệu riêng tư, chỉ người có quyền SSH mới với tới</span><span class="lz-d">Tốt hơn hẳn việc phơi cổng 5432 ra internet rồi đặt một cái mật khẩu lên nó.</span></div>
 </div>
-<pre><code>ssh -L 5432:localhost:5432 vps           <span class="tok-comment"># cơ sở dữ liệu</span>
+<pre><code class="language-bash">ssh -L 5432:localhost:5432 vps           <span class="tok-comment"># cơ sở dữ liệu</span>
 ssh -L 8080:localhost:3000 vps           <span class="tok-comment"># một ứng dụng không công khai</span>
 ssh -L 9000:10.0.1.15:5432 vps           <span class="tok-comment"># một máy THỨ BA, với tới qua VPS</span>
 ssh -fNL 5432:localhost:5432 vps         <span class="tok-comment"># -f chạy nền, -N không mở shell: chỉ đường hầm</span>
@@ -1775,7 +1775,7 @@ ssh -D 1080 vps                          <span class="tok-comment"># chĩa trìn
 
 <h3>Đo thật: ba đường hầm giữa các container</h3>
 <p>Trong phòng thí nghiệm, <code>vps</code> chạy một web server nhỏ gắn vào <code>127.0.0.1:19092</code> (đóng vai Postgres), <code>db</code> chạy một cái ở cổng 19093, còn laptop chạy một server dev ở <code>127.0.0.1:19096</code>:</p>
-<pre><code>curl -sS http://172.21.0.2:19092/                   <span class="tok-comment"># trước: chỉ loopback, không với tới</span>
+<pre><code class="language-bash">curl -sS http://172.21.0.2:19092/                   <span class="tok-comment"># trước: chỉ loopback, không với tới</span>
 ssh -fN -L 19094:localhost:19092 vps
 ssh -fN -L 19095:172.22.0.2:19093 vps              <span class="tok-comment"># một máy THỨ BA, qua vps</span>
 ssh -fN -R 19097:localhost:19096 vps
@@ -1807,7 +1807,7 @@ tu DB: may rieng 172.22.0.2</div>
 
 
 <h3>Chạy lệnh và script ở đầu xa</h3>
-<pre><code>ssh vps 'uptime'
+<pre><code class="language-bash">ssh vps 'uptime'
 ssh vps 'df -h /'
 ssh vps 'systemctl status myapp' &lt; /dev/null      <span class="tok-comment"># đừng để nó nuốt mất stdin</span>
 
@@ -1826,13 +1826,13 @@ ssh vps 'tmux new -d -s deploy /srv/app/deploy.sh'</code></pre>
 
 <h3>Khi kết nối rớt: ba lệnh tmux</h3>
 <p>Bài 5.4 dạy tmux kỹ; với việc làm qua SSH thì ba lệnh là đủ. Hãy biến lệnh đầu tiên thành thói quen mỗi lần đăng nhập vào máy chủ:</p>
-<pre><code>ssh -t vps tmux new -A -s main     <span class="tok-comment"># gắn vào phiên "main", chưa có thì tạo</span>
+<pre><code class="language-bash">ssh -t vps tmux new -A -s main     <span class="tok-comment"># gắn vào phiên "main", chưa có thì tạo</span>
 <span class="tok-comment"># … làm việc … Wi-Fi rớt … kết nối lại:</span>
 ssh -t vps tmux new -A -s main     <span class="tok-comment"># đúng lệnh cũ: bạn quay về đúng chỗ đang dở</span>
 tmux ls                            <span class="tok-comment"># trên máy chủ: đang có những phiên nào</span></code></pre>
 <p><code>-t</code> cấp cho tmux cái terminal nó cần; <code>-A</code> nghĩa là "có rồi thì gắn vào". Trong tmux, <code>Ctrl-B</code> rồi <code>d</code> là tách ra có chủ ý. <code>ServerAliveInterval 60</code> trong <code>~/.ssh/config</code> làm một kết nối đã chết báo hỏng sau vài phút thay vì treo mãi — còn tmux bảo đảm cú hỏng đó không làm bạn mất gì.</p>
 
-<pre><code><span class="tok-comment"># Câu hỏi về dấu nháy: MÁY NÀO khai triển cái biến?</span>
+<pre><code class="language-bash"><span class="tok-comment"># Câu hỏi về dấu nháy: MÁY NÀO khai triển cái biến?</span>
 ssh vps "echo \$HOSTNAME"      <span class="tok-comment"># nháy kép → tên máy CỦA BẠN, khai triển tại chỗ</span>
 ssh vps 'echo \$HOSTNAME'      <span class="tok-comment"># nháy đơn → tên máy CỦA MÁY CHỦ</span></code></pre>
 <div class="out">laptop
@@ -1850,10 +1850,10 @@ AllowUsers deploy
 MaxAuthTries 3
 ClientAliveInterval 300
 ClientAliveCountMax 2</code></pre>
-<pre><code>sudo sshd -t                          <span class="tok-comment"># KIỂM cấu hình — luôn luôn, và làm đầu tiên</span>
+<pre><code class="language-bash">sudo sshd -t                          <span class="tok-comment"># KIỂM cấu hình — luôn luôn, và làm đầu tiên</span>
 sudo systemctl reload ssh             <span class="tok-comment"># nạp lại, đừng khởi động lại</span></code></pre>
 <div class="callout warn"><strong>Hãy giữ phiên hiện tại của bạn MỞ trong lúc làm việc này, và kiểm bằng một terminal thứ hai.</strong> Một lỗi cấu hình cộng với một lần khởi động lại chính là cách người ta tự khoá mình ra khỏi một cái máy không có console. <code>sshd -t</code> xác thực file, <code>reload</code> để những kết nối đang có sống tiếp, và cái terminal mới chứng minh rằng bạn vẫn vào được. Chỉ tới lúc đó mới đóng cái đầu tiên. Đây là cùng một kỷ luật với <code>visudo</code> ở Bài 4.4, và vì cùng một lý do.</div>
-<pre><code><span class="tok-comment"># Ubuntu đời mới: dùng file thả vào, đừng sửa file cấu hình chính</span>
+<pre><code class="language-bash"><span class="tok-comment"># Ubuntu đời mới: dùng file thả vào, đừng sửa file cấu hình chính</span>
 ls /etc/ssh/sshd_config.d/
 
 <span class="tok-comment"># Cái gì THẬT SỰ đang có hiệu lực sau mọi lệnh include</span>
@@ -1866,7 +1866,7 @@ allowusers deploy</div>
 
 <h3>Giá trị đầu tiên thắng: vì sao 99-hardening.conf chẳng đổi được gì</h3>
 <p>Bài này trước đây đặt tên file mẫu là <code>99-hardening.conf</code>, và trên một ảnh máy đám mây thì cái tên đó âm thầm vô tác dụng. Nhiều ảnh Ubuntu cho đám mây có sẵn <code>/etc/ssh/sshd_config.d/50-cloud-init.conf</code> với đúng một dòng <code>PasswordAuthentication yes</code>. File cấu hình chính kéo cả thư mục vào bằng <code>Include /etc/ssh/sshd_config.d/*.conf</code> gần đầu file, mẫu <code>*.conf</code> được đọc theo thứ tự chữ cái, và — y hệt <code>ssh_config</code> — <strong>sshd giữ giá trị ĐẦU TIÊN nó đọc được cho mỗi từ khoá</strong> (sshd_config(5)). Nên <code>50-</code> thắng <code>99-</code>. Dựng lại trên Ubuntu 24.04 với OpenSSH 9.6:</p>
-<pre><code>ls /etc/ssh/sshd_config.d/
+<pre><code class="language-bash">ls /etc/ssh/sshd_config.d/
 sshd -t &amp;&amp; echo OK
 sshd -T | grep -E "^(passwordauthentication|permitrootlogin) "
 <span class="tok-comment"># từ laptop, chỉ dùng mật khẩu:</span>
@@ -1878,7 +1878,7 @@ permitrootlogin no
 passwordauthentication yes
 vào được bằng MẬT KHẨU</div>
 <p><code>PermitRootLogin no</code> trong cùng file đó thì <em>CÓ</em> ăn — vì không ai khác đặt nó — và đó chính là dấu hiệu của một vụ va chạm thứ tự chứ không phải lỗi cú pháp. Đổi tên rồi nạp lại:</p>
-<pre><code>mv /etc/ssh/sshd_config.d/99-hardening.conf /etc/ssh/sshd_config.d/01-hardening.conf
+<pre><code class="language-bash">mv /etc/ssh/sshd_config.d/99-hardening.conf /etc/ssh/sshd_config.d/01-hardening.conf
 kill -HUP \$(ss -tlnpH "sport = :22" | grep -o 'pid=[0-9]*' | head -1 | cut -d= -f2)   <span class="tok-comment"># = systemctl reload ssh</span>
 sshd -T | grep ^passwordauthentication
 ssh -o PubkeyAuthentication=no -o PreferredAuthentications=password vps true</code></pre>
@@ -1889,7 +1889,7 @@ deploy@172.21.0.2: Permission denied (publickey).</div>
 
 <h3>Khi không kết nối được</h3>
 ${slide('lx-09', 19, 'Đọc đúng câu lỗi SSH, và đừng để việc chết theo phiên')}
-<pre><code>ssh -v vps                     <span class="tok-comment"># -v, -vv, -vvv: chi tiết tăng dần</span>
+<pre><code class="language-bash">ssh -v vps                     <span class="tok-comment"># -v, -vv, -vvv: chi tiết tăng dần</span>
 ssh -v vps 2&gt;&amp;1 | grep -E 'Offering|Authentications|Permission'
 sudo tail -f /var/log/auth.log <span class="tok-comment"># trên MÁY CHỦ — nó nói VÌ SAO nó từ chối</span></code></pre>
 <div class="out">debug1: Offering public key: /home/you/.ssh/id_vps ED25519
@@ -1926,7 +1926,7 @@ Permission denied (publickey).</div>
 
 <h3>Chạy thử từng bước</h3>
 <p>Cả phòng thí nghiệm nằm gọn trên một laptop có Docker, và không bao giờ đụng tới <code>~/.ssh</code> thật của bạn: khoá sống bên trong container "laptop".</p>
-<pre><code>docker network create lx09-lab
+<pre><code class="language-bash">docker network create lx09-lab
 docker run -d --name lx09-vps --hostname vps --network lx09-lab ubuntu:24.04 sleep infinity
 docker run -d --name lx09-laptop --hostname laptop --network lx09-lab ubuntu:24.04 sleep infinity
 docker exec lx09-vps bash -c 'apt-get update -qq &amp;&amp; apt-get install -y -qq openssh-server &gt;/dev/null
@@ -2018,7 +2018,7 @@ port 22</div>
 <p class="lead">Two tools, one rule, and one flag that deletes things. <code>scp</code> copies a file; <code>rsync</code> copies the <em>difference</em> between two trees, which makes a second run almost free. The rule is about a single trailing slash, and it is the most common mistake in this entire chapter.</p>
 
 <h3>scp: fine for one file</h3>
-<pre><code>scp file.txt vps:/srv/app/                  <span class="tok-comment"># up</span>
+<pre><code class="language-bash">scp file.txt vps:/srv/app/                  <span class="tok-comment"># up</span>
 scp vps:/var/log/app.log ./                 <span class="tok-comment"># down</span>
 scp -r ./dist vps:/srv/app/                 <span class="tok-comment"># -r for a directory</span>
 scp -P 2222 file.txt vps:/srv/             <span class="tok-comment"># capital -P for the port, unlike ssh</span>
@@ -2031,14 +2031,14 @@ scp vps1:/tmp/a.txt vps2:/tmp/              <span class="tok-comment"># between 
 <div class="callout warn"><code>scp</code> is <strong>deprecated as a protocol</strong>. OpenSSH 9 switched it to use SFTP underneath, and the OpenSSH developers describe the original protocol as outdated and hard to secure. It still works and is fine for a quick one-off, but for anything scripted or repeated, <code>rsync</code> is both faster and better maintained. If <code>scp</code> behaves oddly with wildcards or unusual filenames on a modern system, that protocol switch is why.</div>
 
 <h3>rsync: the shape of the command</h3>
-<pre><code>rsync -avz --progress ./dist/ vps:/srv/app/dist/</code></pre>
+<pre><code class="language-bash">rsync -avz --progress ./dist/ vps:/srv/app/dist/</code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k"><code>-a</code> archive</span><span class="v">Recursive, and preserves permissions, timestamps, symlinks and ownership. Almost always what you want — it is <code>-rlptgoD</code> in one letter.</span></div>
   <div class="kv"><span class="k"><code>-v</code> verbose</span><span class="v">List what is transferred. Add a second <code>-v</code> to also see what is skipped and why.</span></div>
   <div class="kv"><span class="k"><code>-z</code> compress</span><span class="v">Compress in transit. Worth it over the internet, pointless over a fast LAN or on already-compressed files.</span></div>
   <div class="kv"><span class="k"><code>--progress</code></span><span class="v">Per-file progress. <code>--info=progress2</code> gives one overall bar instead, which is nicer for many small files.</span></div>
 </div>
-<pre><code>rsync -av --dry-run ./dist/ vps:/srv/app/dist/   <span class="tok-comment"># show, change nothing</span>
+<pre><code class="language-bash">rsync -av --dry-run ./dist/ vps:/srv/app/dist/   <span class="tok-comment"># show, change nothing</span>
 rsync -avz --partial --append-verify big.iso vps:/srv/   <span class="tok-comment"># resume a broken transfer</span>
 rsync -avz -e 'ssh -p 2222' ./dist/ vps:/srv/    <span class="tok-comment"># a non-default port</span>
 rsync -avz --rsync-path='sudo rsync' ./ vps:/opt/app/    <span class="tok-comment"># write as root remotely</span></code></pre>
@@ -2051,7 +2051,7 @@ ${slide('lx-09', 20, 'rsync: dấu / cuối nguồn')}
   <div class="lz-step"><span class="lz-k">Run it twice, both ways</span><span class="lz-t">dst/src/src/file1 never happens</span><span class="lz-d">rsync is idempotent, so the wrong form is stable rather than compounding — which is exactly why the mistake goes unnoticed for a while.</span></div>
   <div class="lz-step"><span class="lz-k">The destination slash</span><span class="lz-t">irrelevant</span><span class="lz-d">Only the SOURCE slash changes behaviour. Adding one to the destination for symmetry is harmless and makes the intent read clearly.</span></div>
 </div>
-<pre><code>rsync -av ./dist/ vps:/srv/app/     <span class="tok-comment"># → /srv/app/index.html  ✓</span>
+<pre><code class="language-bash">rsync -av ./dist/ vps:/srv/app/     <span class="tok-comment"># → /srv/app/index.html  ✓</span>
 rsync -av ./dist  vps:/srv/app/     <span class="tok-comment"># → /srv/app/dist/index.html</span></code></pre>
 <div class="out">sending incremental file list
 index.html
@@ -2063,10 +2063,10 @@ sent 48,213 bytes  received 88 bytes  32,200.67 bytes/sec</div>
 
 <h3>--delete: the flag that makes a mirror</h3>
 ${slide('lx-09', 22, '--delete + nguồn rỗng; --max-delete')}
-<pre><code>rsync -avz --delete ./dist/ vps:/srv/app/dist/</code></pre>
+<pre><code class="language-bash">rsync -avz --delete ./dist/ vps:/srv/app/dist/</code></pre>
 <p>Without <code>--delete</code>, rsync only ever adds and updates — a file you removed locally stays on the server forever. With it, the destination becomes an exact mirror of the source, which is what a deploy usually wants: stale assets from three releases ago actually go away.</p>
 <div class="callout warn"><strong><code>--delete</code> plus a wrong source path is how people erase a server directory.</strong> If the source is empty — a build that failed, a variable that expanded to nothing, a path that does not exist — rsync faithfully makes the destination empty too. Three defences, all cheap: run <code>--dry-run</code> first and read the <code>deleting</code> lines; add <code>--delete-after</code> so deletions happen only once the transfer succeeded; and use <code>--max-delete=50</code> so an unexpected mass deletion aborts instead of proceeding.</div>
-<pre><code>rsync -avz --delete --dry-run ./dist/ vps:/srv/app/dist/ | grep '^deleting'
+<pre><code class="language-bash">rsync -avz --delete --dry-run ./dist/ vps:/srv/app/dist/ | grep '^deleting'
 rsync -avz --delete --delete-after --max-delete=50 ./dist/ vps:/srv/app/dist/</code></pre>
 <div class="out">deleting assets/old-hero.jpg
 deleting assets/legacy.css
@@ -2074,7 +2074,7 @@ deleting vendor/jquery.min.js</div>
 
 <h3>Measured: what --delete, --max-delete and a missing source really do</h3>
 <p>Three runs from the lab laptop to the lab vps (rsync 3.2.7 on both ends), against an <code>app/</code> directory holding four entries:</p>
-<pre><code>mkdir build                                                 <span class="tok-comment"># a failed build: empty</span>
+<pre><code class="language-bash">mkdir build                                                 <span class="tok-comment"># a failed build: empty</span>
 rsync -av --delete --max-delete=2 --dry-run build/ vps:app/; echo "exit=\$?"
 rsync -av --delete build/ vps:app/; echo "exit=\$?"
 rsync -av --delete ./biuld/ vps:app/; echo "exit=\$?"        <span class="tok-comment"># a typo in the source</span></code></pre>
@@ -2107,7 +2107,7 @@ exit=23</div>
 
 
 <h3>Excluding things</h3>
-<pre><code>rsync -avz --delete \\
+<pre><code class="language-bash">rsync -avz --delete \\
   --exclude='.git/' \\
   --exclude='node_modules/' \\
   --exclude='.env*' \\
@@ -2120,7 +2120,7 @@ rsync -avz --filter=':- .gitignore' ./ vps:/srv/app/   <span class="tok-comment"
 
 <h3>Useful flags for real deploys</h3>
 ${slide('lx-09', 21, 'Bảng cờ rsync và cách đọc --itemize-changes')}
-<pre><code>rsync -avz --bwlimit=2000 ./big/ vps:/srv/      <span class="tok-comment"># cap at ~2 MB/s</span>
+<pre><code class="language-bash">rsync -avz --bwlimit=2000 ./big/ vps:/srv/      <span class="tok-comment"># cap at ~2 MB/s</span>
 rsync -avz --checksum ./dist/ vps:/srv/app/     <span class="tok-comment"># compare content, not mtime+size</span>
 rsync -avz --backup --backup-dir=/srv/backups/\$(date +%F) ./dist/ vps:/srv/app/
 rsync -avzn --itemize-changes ./dist/ vps:/srv/app/   <span class="tok-comment"># -n dry run, itemised</span></code></pre>
@@ -2139,7 +2139,7 @@ rsync -avzn --itemize-changes ./dist/ vps:/srv/app/   <span class="tok-comment">
 <div class="callout"><code>--checksum</code> matters more than it looks in CI. rsync's default heuristic is "same size and same modification time means unchanged" — but a fresh <code>git clone</code> or a container build gives every file today's timestamp, so nothing looks unchanged and the whole tree transfers. <code>--checksum</code> compares content instead: slower to compute, far less to send. And in the opposite case — a file edited to exactly the same size within the same second — the default would skip a real change, which <code>--checksum</code> catches.</div>
 
 <h3>A deploy function</h3>
-<pre><code>deploy_assets() {
+<pre><code class="language-bash">deploy_assets() {
   local host=\$1 src=\$2 dst=\$3
 
   [[ -d \$src ]] || die "source does not exist: \$src"
@@ -2195,7 +2195,7 @@ ${slide('lx-09', 23, 'scp · rsync · tar qua ssh · sftp; rsync trên Mac')}
 
 <h3>Try it step by step</h3>
 <p>Everything here runs locally — two folders, no server — so you can repeat it until the trailing-slash rule and the itemize codes feel obvious. In <code>~/thu-linux</code> (or any container with rsync):</p>
-<pre><code>mkdir -p thu &amp;&amp; cd thu
+<pre><code class="language-bash">mkdir -p thu &amp;&amp; cd thu
 mkdir -p build/assets deploy/uploads
 echo "&lt;h1&gt;v2&lt;/h1&gt;" &gt; build/index.html; echo "body{}" &gt; build/assets/app.css
 echo "SECRET=that" &gt; deploy/.env; echo anh &gt; deploy/uploads/a.jpg; echo cu &gt; deploy/old.html
@@ -2291,7 +2291,7 @@ deploy/uploads/a.jpg</div>
 <p class="lead">Hai công cụ, một cái luật, và một cái cờ biết xoá đồ. <code>scp</code> chép một file; <code>rsync</code> chép <em>PHẦN KHÁC BIỆT</em> giữa hai cây thư mục, và điều đó làm lần chạy thứ hai gần như miễn phí. Cái luật kia nói về đúng một dấu gạch chéo ở cuối, và nó là lỗi phổ biến nhất trong cả chương này.</p>
 
 <h3>scp: ổn với một file</h3>
-<pre><code>scp file.txt vps:/srv/app/                  <span class="tok-comment"># đẩy lên</span>
+<pre><code class="language-bash">scp file.txt vps:/srv/app/                  <span class="tok-comment"># đẩy lên</span>
 scp vps:/var/log/app.log ./                 <span class="tok-comment"># tải về</span>
 scp -r ./dist vps:/srv/app/                 <span class="tok-comment"># -r cho thư mục</span>
 scp -P 2222 file.txt vps:/srv/             <span class="tok-comment"># chữ -P HOA cho cổng, khác với ssh</span>
@@ -2304,14 +2304,14 @@ scp vps1:/tmp/a.txt vps2:/tmp/              <span class="tok-comment"># giữa h
 <div class="callout warn"><code>scp</code> đã <strong>bị khai tử ở mức giao thức</strong>. OpenSSH 9 chuyển nó sang dùng SFTP ở bên dưới, và những người phát triển OpenSSH mô tả giao thức gốc là lỗi thời và khó làm cho an toàn. Nó vẫn chạy và vẫn ổn cho một lần dùng nhanh, nhưng với mọi thứ nằm trong script hoặc lặp đi lặp lại thì <code>rsync</code> vừa nhanh hơn vừa được bảo trì tốt hơn. Nếu <code>scp</code> cư xử kỳ quặc với ký tự đại diện hay với những tên file khác thường trên một hệ đời mới, lý do là chính lần đổi giao thức đó.</div>
 
 <h3>rsync: hình dạng của cái lệnh</h3>
-<pre><code>rsync -avz --progress ./dist/ vps:/srv/app/dist/</code></pre>
+<pre><code class="language-bash">rsync -avz --progress ./dist/ vps:/srv/app/dist/</code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k"><code>-a</code> archive</span><span class="v">Đệ quy, và giữ nguyên quyền, dấu thời gian, liên kết tượng trưng cùng quyền sở hữu. Gần như luôn là thứ bạn muốn — nó là <code>-rlptgoD</code> gói trong một chữ.</span></div>
   <div class="kv"><span class="k"><code>-v</code> verbose</span><span class="v">Liệt kê những gì được truyền. Thêm một chữ <code>-v</code> nữa để thấy cả những gì bị bỏ qua và vì sao.</span></div>
   <div class="kv"><span class="k"><code>-z</code> compress</span><span class="v">Nén trên đường truyền. Đáng dùng khi đi qua internet, vô nghĩa trên một mạng LAN nhanh hoặc với file vốn đã nén.</span></div>
   <div class="kv"><span class="k"><code>--progress</code></span><span class="v">Tiến độ theo từng file. <code>--info=progress2</code> cho một thanh tổng thể duy nhất, dễ chịu hơn với nhiều file nhỏ.</span></div>
 </div>
-<pre><code>rsync -av --dry-run ./dist/ vps:/srv/app/dist/   <span class="tok-comment"># hiện ra, không đổi gì</span>
+<pre><code class="language-bash">rsync -av --dry-run ./dist/ vps:/srv/app/dist/   <span class="tok-comment"># hiện ra, không đổi gì</span>
 rsync -avz --partial --append-verify big.iso vps:/srv/   <span class="tok-comment"># nối tiếp một lần truyền đứt</span>
 rsync -avz -e 'ssh -p 2222' ./dist/ vps:/srv/    <span class="tok-comment"># cổng không mặc định</span>
 rsync -avz --rsync-path='sudo rsync' ./ vps:/opt/app/    <span class="tok-comment"># ghi với quyền root ở đầu xa</span></code></pre>
@@ -2324,7 +2324,7 @@ ${slide('lx-09', 20, 'rsync: dấu / cuối nguồn')}
   <div class="lz-step"><span class="lz-k">Chạy hai lần, cả hai kiểu</span><span class="lz-t">dst/src/src/file1 không bao giờ xảy ra</span><span class="lz-d">rsync bền vững khi chạy lại, nên dạng sai thì ỔN ĐỊNH chứ không chồng chất — và đó chính là lý do sai lầm này không bị phát hiện trong một thời gian.</span></div>
   <div class="lz-step"><span class="lz-k">Gạch chéo ở ĐÍCH</span><span class="lz-t">không liên quan</span><span class="lz-d">Chỉ gạch chéo ở NGUỒN mới làm đổi hành vi. Thêm một cái vào đích cho cân đối thì vô hại và làm ý định đọc ra rõ hơn.</span></div>
 </div>
-<pre><code>rsync -av ./dist/ vps:/srv/app/     <span class="tok-comment"># → /srv/app/index.html  ✓</span>
+<pre><code class="language-bash">rsync -av ./dist/ vps:/srv/app/     <span class="tok-comment"># → /srv/app/index.html  ✓</span>
 rsync -av ./dist  vps:/srv/app/     <span class="tok-comment"># → /srv/app/dist/index.html</span></code></pre>
 <div class="out">sending incremental file list
 index.html
@@ -2336,10 +2336,10 @@ sent 48,213 bytes  received 88 bytes  32,200.67 bytes/sec</div>
 
 <h3>--delete: cái cờ tạo ra một bản sao gương</h3>
 ${slide('lx-09', 22, '--delete + nguồn rỗng; --max-delete')}
-<pre><code>rsync -avz --delete ./dist/ vps:/srv/app/dist/</code></pre>
+<pre><code class="language-bash">rsync -avz --delete ./dist/ vps:/srv/app/dist/</code></pre>
 <p>Không có <code>--delete</code>, rsync chỉ thêm vào và cập nhật — một file bạn đã xoá ở máy mình thì nằm lại trên máy chủ mãi mãi. Có nó, đích trở thành bản gương chính xác của nguồn, và đó thường là thứ một lần deploy muốn: những tệp tài nguyên cũ từ ba bản phát hành trước thật sự biến mất.</p>
 <div class="callout warn"><strong><code>--delete</code> cộng với một đường dẫn nguồn sai chính là cách người ta xoá sạch một thư mục trên máy chủ.</strong> Nếu nguồn rỗng — một bản dựng thất bại, một biến khai triển thành rỗng, một đường dẫn không tồn tại — rsync trung thành làm cho đích cũng rỗng theo. Ba lớp phòng thủ, đều rẻ: chạy <code>--dry-run</code> trước rồi đọc các dòng <code>deleting</code>; thêm <code>--delete-after</code> để việc xoá chỉ xảy ra sau khi truyền thành công; và dùng <code>--max-delete=50</code> để một lần xoá hàng loạt ngoài dự kiến sẽ DỪNG LẠI thay vì cứ thế làm.</div>
-<pre><code>rsync -avz --delete --dry-run ./dist/ vps:/srv/app/dist/ | grep '^deleting'
+<pre><code class="language-bash">rsync -avz --delete --dry-run ./dist/ vps:/srv/app/dist/ | grep '^deleting'
 rsync -avz --delete --delete-after --max-delete=50 ./dist/ vps:/srv/app/dist/</code></pre>
 <div class="out">deleting assets/old-hero.jpg
 deleting assets/legacy.css
@@ -2347,7 +2347,7 @@ deleting vendor/jquery.min.js</div>
 
 <h3>Đo thật: --delete, --max-delete và một nguồn không tồn tại thật ra làm gì</h3>
 <p>Ba lần chạy từ laptop tới vps của phòng thí nghiệm (rsync 3.2.7 ở cả hai đầu), vào một thư mục <code>app/</code> đang có bốn mục:</p>
-<pre><code>mkdir build                                                 <span class="tok-comment"># bản dựng hỏng: rỗng</span>
+<pre><code class="language-bash">mkdir build                                                 <span class="tok-comment"># bản dựng hỏng: rỗng</span>
 rsync -av --delete --max-delete=2 --dry-run build/ vps:app/; echo "exit=\$?"
 rsync -av --delete build/ vps:app/; echo "exit=\$?"
 rsync -av --delete ./biuld/ vps:app/; echo "exit=\$?"        <span class="tok-comment"># gõ nhầm tên nguồn</span></code></pre>
@@ -2380,7 +2380,7 @@ exit=23</div>
 
 
 <h3>Loại trừ những thứ không nên đi theo</h3>
-<pre><code>rsync -avz --delete \\
+<pre><code class="language-bash">rsync -avz --delete \\
   --exclude='.git/' \\
   --exclude='node_modules/' \\
   --exclude='.env*' \\
@@ -2393,7 +2393,7 @@ rsync -avz --filter=':- .gitignore' ./ vps:/srv/app/   <span class="tok-comment"
 
 <h3>Những cờ hữu ích cho việc deploy thật</h3>
 ${slide('lx-09', 21, 'Bảng cờ rsync và cách đọc --itemize-changes')}
-<pre><code>rsync -avz --bwlimit=2000 ./big/ vps:/srv/      <span class="tok-comment"># chặn trần ở khoảng 2 MB/s</span>
+<pre><code class="language-bash">rsync -avz --bwlimit=2000 ./big/ vps:/srv/      <span class="tok-comment"># chặn trần ở khoảng 2 MB/s</span>
 rsync -avz --checksum ./dist/ vps:/srv/app/     <span class="tok-comment"># so NỘI DUNG, không so mtime+kích thước</span>
 rsync -avz --backup --backup-dir=/srv/backups/\$(date +%F) ./dist/ vps:/srv/app/
 rsync -avzn --itemize-changes ./dist/ vps:/srv/app/   <span class="tok-comment"># -n chạy thử, liệt kê từng mục</span></code></pre>
@@ -2412,7 +2412,7 @@ rsync -avzn --itemize-changes ./dist/ vps:/srv/app/   <span class="tok-comment">
 <div class="callout"><code>--checksum</code> quan trọng hơn vẻ ngoài của nó trong CI. Phép suy đoán mặc định của rsync là "cùng kích thước và cùng thời gian sửa nghĩa là không đổi" — nhưng một lần <code>git clone</code> mới hay một lần dựng container gán cho MỌI file dấu thời gian của hôm nay, nên chẳng cái nào trông như không đổi và cả cây thư mục được truyền lại. <code>--checksum</code> so nội dung thay vào: tính lâu hơn, gửi ít hơn rất nhiều. Và ở chiều ngược lại — một file được sửa thành đúng cùng kích thước trong cùng một giây — thì mặc định sẽ bỏ qua một thay đổi CÓ THẬT, còn <code>--checksum</code> thì bắt được.</div>
 
 <h3>Một hàm deploy</h3>
-<pre><code>deploy_assets() {
+<pre><code class="language-bash">deploy_assets() {
   local host=\$1 src=\$2 dst=\$3
 
   [[ -d \$src ]] || die "nguồn không tồn tại: \$src"
@@ -2468,7 +2468,7 @@ ${slide('lx-09', 23, 'scp · rsync · tar qua ssh · sftp; rsync trên Mac')}
 
 <h3>Chạy thử từng bước</h3>
 <p>Mọi thứ ở đây chạy cục bộ — hai thư mục, không cần máy chủ — nên bạn lặp lại được tới khi luật dấu gạch chéo và mã itemize trở nên hiển nhiên. Trong <code>~/thu-linux</code> (hoặc một container có rsync):</p>
-<pre><code>mkdir -p thu &amp;&amp; cd thu
+<pre><code class="language-bash">mkdir -p thu &amp;&amp; cd thu
 mkdir -p build/assets deploy/uploads
 echo "&lt;h1&gt;v2&lt;/h1&gt;" &gt; build/index.html; echo "body{}" &gt; build/assets/app.css
 echo "SECRET=that" &gt; deploy/.env; echo anh &gt; deploy/uploads/a.jpg; echo cu &gt; deploy/old.html
@@ -2579,7 +2579,7 @@ ${slide('lx-09', 24, 'tcpdump: gói tin CÓ tới máy không?')}
   <div class="lz-layer"><span class="lz-lname">2 · Host firewall</span><span class="lz-lnote">On the machine: <code>ufw</code>, <code>firewalld</code>, or raw <code>nftables</code>. The packet arrives, the kernel drops it. <code>tcpdump</code> sees the SYN; nothing replies.</span></div>
   <div class="lz-layer"><span class="lz-lname">3 · Bind address</span><span class="lz-lnote">Not a firewall at all: the service is listening on <code>127.0.0.1</code> only (Lesson 9.1). No firewall rule can fix this, and it is the most common cause.</span></div>
 </div>
-<pre><code><span class="tok-comment"># One test each, in this order</span>
+<pre><code class="language-bash"><span class="tok-comment"># One test each, in this order</span>
 sudo tcpdump -i any -n port 3000        <span class="tok-comment"># layer 1: does the packet arrive?</span>
 sudo ufw status verbose                 <span class="tok-comment"># layer 2: would the host drop it?</span>
 sudo ss -tulpn | grep :3000             <span class="tok-comment"># layer 3: what is it bound to?</span></code></pre>
@@ -2608,7 +2608,7 @@ sudo ss -tulpn | grep :3000             <span class="tok-comment"># layer 3: wha
 
 
 <h3>ufw: the everyday interface</h3>
-<pre><code>sudo ufw status verbose
+<pre><code class="language-bash">sudo ufw status verbose
 sudo ufw allow 22/tcp                   <span class="tok-comment"># ALWAYS this one first</span>
 sudo ufw allow 80,443/tcp
 sudo ufw allow from 203.0.113.9 to any port 5432   <span class="tok-comment"># one source only</span>
@@ -2627,7 +2627,7 @@ To                Action      From
 80,443/tcp        ALLOW IN    Anywhere
 5432/tcp          ALLOW IN    203.0.113.9</div>
 <div class="callout warn"><strong>Allow SSH before enabling the firewall.</strong> <code>ufw enable</code> with a default-deny policy and no rule for port 22 disconnects you immediately and permanently — the session dies mid-command and you cannot reconnect. Cloud providers offer a web console for exactly this; a self-hosted machine may offer nothing. The order is always: <code>allow 22</code>, verify with <code>ufw status</code>, <em>then</em> <code>enable</code>. Same discipline as Lesson 9.3's password-authentication trap.</div>
-<pre><code>sudo ufw status numbered                <span class="tok-comment"># rules with index numbers</span>
+<pre><code class="language-bash">sudo ufw status numbered                <span class="tok-comment"># rules with index numbers</span>
 sudo ufw delete 3                       <span class="tok-comment"># remove by number</span>
 sudo ufw --dry-run allow 8080/tcp       <span class="tok-comment"># show what it would do</span>
 sudo ufw reset                          <span class="tok-comment"># start over (disables it too)</span>
@@ -2653,7 +2653,7 @@ sudo iptables -t nat -L -n               <span class="tok-comment"># NAT — whe
 <tr><td>Survives reboot</td><td>yes</td><td>only with <code>--permanent</code></td><td>only if saved to <code>/etc/nftables.conf</code></td></tr>
 </table>
 <p>What ufw actually writes, measured in an Ubuntu 24.04 container:</p>
-<pre><code>sudo ufw allow 22/tcp
+<pre><code class="language-bash">sudo ufw allow 22/tcp
 sudo ufw allow from 172.21.0.3 to any port 19090 proto tcp
 sudo ufw default deny incoming &amp;&amp; sudo ufw --force enable
 sudo nft list chain ip filter ufw-user-input</code></pre>
@@ -2677,7 +2677,7 @@ sudo nft list chain ip filter ufw-user-input</code></pre>
 <h3>DROP versus REJECT, measured</h3>
 
 ${slide('lx-09', 26, 'DROP (28) và REJECT (7); Docker vượt mặt ufw')}
-<pre><code>sudo nft add table inet lx09
+<pre><code class="language-bash">sudo nft add table inet lx09
 sudo nft add chain inet lx09 input '{ type filter hook input priority 0; policy accept; }'
 sudo nft add rule inet lx09 input tcp dport 19091 counter drop
 sudo nft add rule inet lx09 input ip saddr 172.21.0.4 tcp dport 19090 counter reject
@@ -2694,12 +2694,12 @@ exit=7
 <p>Three packets were dropped for one curl — the client's SYN plus its retries — and the client waited the full three seconds. The rejected client got its answer in 0 ms. <strong>DROP</strong> hides that anything is there and makes clients wait; <strong>REJECT</strong> answers "no" at once. ufw uses DROP for its default policy; a <code>ufw reject</code> rule sends a refusal. When you are the one debugging, a timeout means something is silently discarding packets (a firewall or the path to the machine), while an instant "refused" means the machine itself answered — either nobody listens on the port, or a firewall is set to REJECT.</p>
 
 <h3>Docker and ufw do not agree</h3>
-<pre><code>sudo ufw default deny incoming
+<pre><code class="language-bash">sudo ufw default deny incoming
 sudo ufw enable
 docker run -d -p 3306:3306 mysql        <span class="tok-comment"># now reachable from the internet</span>
 curl -sv telnet://203.0.113.42:3306     <span class="tok-comment"># from another machine: it connects</span></code></pre>
 <div class="callout warn"><strong>Docker inserts its own rules ahead of ufw's.</strong> Publishing a port with <code>-p 3306:3306</code> writes a <code>DOCKER</code> chain rule in the <code>nat</code> table that is evaluated <em>before</em> the <code>filter</code> chain ufw manages — so <code>ufw status</code> shows the port as blocked while the world can reach it. This surprises people badly, and it has exposed a great many development databases.</div>
-<pre><code><span class="tok-comment"># The fix: publish to loopback only, and let a reverse proxy handle the internet</span>
+<pre><code class="language-bash"><span class="tok-comment"># The fix: publish to loopback only, and let a reverse proxy handle the internet</span>
 docker run -d -p 127.0.0.1:3306:3306 mysql
 docker run -d -p 127.0.0.1:5432:5432 postgres
 
@@ -2714,7 +2714,7 @@ services:
 <div class="callout ok">The rule to adopt: <strong>publish nothing to <code>0.0.0.0</code> except the reverse proxy's 80 and 443.</strong> Everything else gets <code>127.0.0.1:</code> in front of the port, or uses <code>expose</code> so only other containers on the network can reach it. Then <code>ufw</code>'s view and reality agree again, and the audit from Lesson 9.1 — <code>sudo ss -tulpn | grep '0.0.0.0'</code> — shows only what you intended.</div>
 
 <h3>fail2ban: for what a firewall cannot express</h3>
-<pre><code>sudo apt install fail2ban
+<pre><code class="language-bash">sudo apt install fail2ban
 sudo systemctl enable --now fail2ban
 sudo fail2ban-client status
 sudo fail2ban-client status sshd
@@ -2742,7 +2742,7 @@ enabled = true</code></pre>
   <div class="lz-step"><span class="lz-k">5 · On the server</span><span class="lz-t">sudo ufw status · sudo tail -f /var/log/ufw.log</span><span class="lz-d">Now, and only now, is the host firewall a suspect. The log names the source and port it dropped.</span></div>
   <div class="lz-step"><span class="lz-k">6 · Provider console</span><span class="lz-t">security groups, cloud firewall, network ACLs</span><span class="lz-d">If step 4 saw nothing arrive, this is where the packet died — and it is invisible from inside the machine.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Compressed into one script you can paste onto a server</span>
+<pre><code class="language-bash"><span class="tok-comment"># Compressed into one script you can paste onto a server</span>
 port=\${1:?usage: check-port PORT}
 echo "== listening =="   ; sudo ss -tulpn | grep ":\$port" || echo "  nothing on :\$port"
 echo "== local =="       ; curl -s -o /dev/null -w '  %{http_code}\\n' "localhost:\$port" || echo "  no answer"
@@ -2761,7 +2761,7 @@ Status: active
 
 ${slide('lx-09', 27, 'Ubuntu 24.04: ssh.socket giữ cổng SSH')}
 <p>The checklist's first step — "what is listening, on which port?" — has one more twist on current Ubuntu. Since 22.10, <code>sshd</code> is <strong>socket-activated</strong>: systemd itself listens on port 22 (<code>ssh.socket</code>) and starts <code>sshd</code> when a connection arrives. The real story from this course's project: <code>Port 993</code> was added to <code>sshd_config</code>, sshd was restarted, and port 993 stayed closed. Reproduced in an Ubuntu 24.04 container running real systemd:</p>
-<pre><code>systemctl is-enabled ssh.socket ssh.service
+<pre><code class="language-bash">systemctl is-enabled ssh.socket ssh.service
 ss -tlnp | grep :22
 echo "Port 993" &gt;&gt; /etc/ssh/sshd_config
 systemctl restart ssh
@@ -2773,7 +2773,7 @@ LISTEN 0      4096         0.0.0.0:22         0.0.0.0:*    users:(("systemd",pid
 port 993
 LISTEN 0      4096         0.0.0.0:22         0.0.0.0:*    users:(("sshd",pid=665,fd=3),("systemd",pid=1,fd=50))</div>
 <p>The configuration says 993; reality says 22, and the socket belongs to <code>systemd</code> (PID 1). sshd did read the new port — it simply never opens sockets itself. Ubuntu 24.04 ships a <em>generator</em> that turns <code>Port</code>/<code>ListenAddress</code> into the socket's settings, but only when systemd reloads its units:</p>
-<pre><code>systemctl daemon-reload
+<pre><code class="language-bash">systemctl daemon-reload
 systemctl restart ssh.socket
 ss -tlnp | grep -E ":22 |:993 "
 cat /run/systemd/generator/ssh.socket.d/*.conf</code></pre>
@@ -2787,7 +2787,7 @@ ListenStream=[::]:993</div>
 <p>Read the last output carefully: the empty <code>ListenStream=</code> clears the default, so a lone <code>Port 993</code> <strong>replaces</strong> port 22 instead of adding to it. On a remote server that is a lock-out waiting to happen — you want <code>Port 22</code> <em>and</em> <code>Port 993</code>. On the project's production VPS the operators chose a third option: a separate, independent listener service on 993, so the socket that guards every login never had to be restarted. Three layers, three different checks: <code>sshd -T</code> for configuration, <code>ss -tlnp</code> for what really listens, and a login from another machine for "can I get in".</p>
 
 <h3>Outbound matters too</h3>
-<pre><code>sudo ufw default deny outgoing          <span class="tok-comment"># strict; now allow what you need</span>
+<pre><code class="language-bash">sudo ufw default deny outgoing          <span class="tok-comment"># strict; now allow what you need</span>
 sudo ufw allow out 53                   <span class="tok-comment"># DNS</span>
 sudo ufw allow out 80,443/tcp           <span class="tok-comment"># package updates, APIs</span>
 sudo ufw allow out 25,587/tcp           <span class="tok-comment"># mail, if this host sends it</span></code></pre>
@@ -2795,7 +2795,7 @@ sudo ufw allow out 25,587/tcp           <span class="tok-comment"># mail, if thi
 
 <h3>Try it step by step</h3>
 <p>ufw and nftables need the <code>NET_ADMIN</code> capability, which a normal container does not have. Give it one — the rules then apply to the container's own network namespace, never to your laptop:</p>
-<pre><code>docker network create lx09-net      <span class="tok-comment"># if it does not exist yet</span>
+<pre><code class="language-bash">docker network create lx09-net      <span class="tok-comment"># if it does not exist yet</span>
 docker run --rm -it --cap-add NET_ADMIN --network lx09-net --name lx09-fw ubuntu:24.04 bash
 <span class="tok-comment"># inside:</span>
 apt-get update -qq &amp;&amp; apt-get install -y -qq ufw nftables python3 &gt;/dev/null
@@ -2874,7 +2874,7 @@ ${slide('lx-09', 24, 'tcpdump: gói tin CÓ tới máy không?')}
   <div class="lz-layer"><span class="lz-lname">2 · Tường lửa của máy</span><span class="lz-lnote">Trên chính cái máy: <code>ufw</code>, <code>firewalld</code>, hoặc <code>nftables</code> thô. Gói tin TỚI NƠI, rồi nhân vứt nó đi. <code>tcpdump</code> thấy gói SYN; không có gì trả lời.</span></div>
   <div class="lz-layer"><span class="lz-lname">3 · Địa chỉ gắn</span><span class="lz-lnote">Hoàn toàn không phải tường lửa: dịch vụ chỉ đang lắng nghe trên <code>127.0.0.1</code> (Bài 9.1). Không luật tường lửa nào chữa được, và đây là nguyên nhân phổ biến nhất.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Mỗi tầng một phép thử, theo đúng thứ tự này</span>
+<pre><code class="language-bash"><span class="tok-comment"># Mỗi tầng một phép thử, theo đúng thứ tự này</span>
 sudo tcpdump -i any -n port 3000        <span class="tok-comment"># tầng 1: gói tin có tới không?</span>
 sudo ufw status verbose                 <span class="tok-comment"># tầng 2: máy này có vứt nó không?</span>
 sudo ss -tulpn | grep :3000             <span class="tok-comment"># tầng 3: nó đang gắn vào đâu?</span></code></pre>
@@ -2903,7 +2903,7 @@ sudo ss -tulpn | grep :3000             <span class="tok-comment"># tầng 3: n�
 
 
 <h3>ufw: giao diện dùng hằng ngày</h3>
-<pre><code>sudo ufw status verbose
+<pre><code class="language-bash">sudo ufw status verbose
 sudo ufw allow 22/tcp                   <span class="tok-comment"># LUÔN là cái này trước tiên</span>
 sudo ufw allow 80,443/tcp
 sudo ufw allow from 203.0.113.9 to any port 5432   <span class="tok-comment"># chỉ một nguồn</span>
@@ -2922,7 +2922,7 @@ To                Action      From
 80,443/tcp        ALLOW IN    Anywhere
 5432/tcp          ALLOW IN    203.0.113.9</div>
 <div class="callout warn"><strong>Hãy cho phép SSH TRƯỚC KHI bật tường lửa.</strong> Chạy <code>ufw enable</code> với chính sách mặc định là từ chối mà không có luật nào cho cổng 22 sẽ ngắt kết nối của bạn ngay lập tức và vĩnh viễn — phiên đang chạy chết giữa lệnh và bạn không kết nối lại được. Các nhà cung cấp đám mây có sẵn console trên web đúng cho tình huống này; một cái máy tự dựng thì có thể chẳng có gì. Thứ tự luôn là: <code>allow 22</code>, xác nhận bằng <code>ufw status</code>, <em>RỒI MỚI</em> <code>enable</code>. Cùng một kỷ luật với cái bẫy tắt xác thực mật khẩu ở Bài 9.3.</div>
-<pre><code>sudo ufw status numbered                <span class="tok-comment"># các luật kèm số thứ tự</span>
+<pre><code class="language-bash">sudo ufw status numbered                <span class="tok-comment"># các luật kèm số thứ tự</span>
 sudo ufw delete 3                       <span class="tok-comment"># gỡ theo số</span>
 sudo ufw --dry-run allow 8080/tcp       <span class="tok-comment"># hiện ra thứ nó sẽ làm</span>
 sudo ufw reset                          <span class="tok-comment"># làm lại từ đầu (tắt luôn nó)</span>
@@ -2948,7 +2948,7 @@ sudo iptables -t nat -L -n               <span class="tok-comment"># NAT — ch�
 <tr><td>Sống qua khởi động lại</td><td>có</td><td>chỉ khi có <code>--permanent</code></td><td>chỉ khi lưu vào <code>/etc/nftables.conf</code></td></tr>
 </table>
 <p>Thứ mà ufw thật sự viết ra, đo trong container Ubuntu 24.04:</p>
-<pre><code>sudo ufw allow 22/tcp
+<pre><code class="language-bash">sudo ufw allow 22/tcp
 sudo ufw allow from 172.21.0.3 to any port 19090 proto tcp
 sudo ufw default deny incoming &amp;&amp; sudo ufw --force enable
 sudo nft list chain ip filter ufw-user-input</code></pre>
@@ -2972,7 +2972,7 @@ sudo nft list chain ip filter ufw-user-input</code></pre>
 <h3>DROP so với REJECT, đo thật</h3>
 
 ${slide('lx-09', 26, 'DROP (28) và REJECT (7); Docker vượt mặt ufw')}
-<pre><code>sudo nft add table inet lx09
+<pre><code class="language-bash">sudo nft add table inet lx09
 sudo nft add chain inet lx09 input '{ type filter hook input priority 0; policy accept; }'
 sudo nft add rule inet lx09 input tcp dport 19091 counter drop
 sudo nft add rule inet lx09 input ip saddr 172.21.0.4 tcp dport 19090 counter reject
@@ -2989,12 +2989,12 @@ exit=7
 <p>Ba gói bị vứt cho một lệnh curl — gói SYN của trình khách cộng các lần gửi lại — và trình khách chờ đủ ba giây. Trình khách bị từ chối thì nhận câu trả lời sau 0 ms. <strong>DROP</strong> giấu việc có thứ gì ở đó và bắt trình khách chờ; <strong>REJECT</strong> trả lời "không" ngay lập tức. ufw dùng DROP cho chính sách mặc định; một luật <code>ufw reject</code> thì gửi lời từ chối. Khi chính bạn là người gỡ lỗi: hết giờ nghĩa là có thứ gì đó đang âm thầm vứt gói tin (một tường lửa hoặc đường tới máy), còn "refused" tức thì nghĩa là chính cái máy đã trả lời — hoặc không ai nghe cổng đó, hoặc tường lửa đặt REJECT.</p>
 
 <h3>Docker và ufw không đồng thuận với nhau</h3>
-<pre><code>sudo ufw default deny incoming
+<pre><code class="language-bash">sudo ufw default deny incoming
 sudo ufw enable
 docker run -d -p 3306:3306 mysql        <span class="tok-comment"># giờ với tới được từ internet</span>
 curl -sv telnet://203.0.113.42:3306     <span class="tok-comment"># từ một máy khác: nó kết nối được</span></code></pre>
 <div class="callout warn"><strong>Docker chèn luật của riêng nó vào TRƯỚC luật của ufw.</strong> Công bố một cổng bằng <code>-p 3306:3306</code> sẽ ghi một luật vào chuỗi <code>DOCKER</code> trong bảng <code>nat</code>, và bảng đó được xét <em>TRƯỚC</em> cái chuỗi <code>filter</code> mà ufw quản lý — nên <code>ufw status</code> hiện ra rằng cổng đang bị chặn trong khi cả thế giới với tới được. Chuyện này làm người ta bất ngờ rất mạnh, và nó đã phơi ra vô số cơ sở dữ liệu dùng để phát triển.</div>
-<pre><code><span class="tok-comment"># Cách chữa: chỉ công bố ra loopback, rồi để một proxy ngược lo phần internet</span>
+<pre><code class="language-bash"><span class="tok-comment"># Cách chữa: chỉ công bố ra loopback, rồi để một proxy ngược lo phần internet</span>
 docker run -d -p 127.0.0.1:3306:3306 mysql
 docker run -d -p 127.0.0.1:5432:5432 postgres
 
@@ -3009,7 +3009,7 @@ services:
 <div class="callout ok">Quy tắc nên nhận: <strong>đừng công bố thứ gì ra <code>0.0.0.0</code> ngoài cổng 80 và 443 của proxy ngược.</strong> Mọi thứ khác đều được thêm <code>127.0.0.1:</code> trước số cổng, hoặc dùng <code>expose</code> để chỉ các container khác trên cùng mạng với tới được. Khi đó khung nhìn của <code>ufw</code> và thực tế lại khớp nhau, và phép rà soát ở Bài 9.1 — <code>sudo ss -tulpn | grep '0.0.0.0'</code> — chỉ còn hiện ra đúng những gì bạn định.</div>
 
 <h3>fail2ban: cho thứ mà một tường lửa không diễn đạt được</h3>
-<pre><code>sudo apt install fail2ban
+<pre><code class="language-bash">sudo apt install fail2ban
 sudo systemctl enable --now fail2ban
 sudo fail2ban-client status
 sudo fail2ban-client status sshd
@@ -3037,7 +3037,7 @@ enabled = true</code></pre>
   <div class="lz-step"><span class="lz-k">5 · Trên máy chủ</span><span class="lz-t">sudo ufw status · sudo tail -f /var/log/ufw.log</span><span class="lz-d">Bây giờ, và chỉ bây giờ, tường lửa của máy mới là nghi phạm. File log gọi tên nguồn và cổng mà nó đã vứt.</span></div>
   <div class="lz-step"><span class="lz-k">6 · Console của nhà cung cấp</span><span class="lz-t">security group, cloud firewall, network ACL</span><span class="lz-d">Nếu bước 4 chẳng thấy gì tới nơi thì đây là chỗ gói tin chết — và nó vô hình từ bên trong cái máy.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Nén lại thành một script dán được lên máy chủ</span>
+<pre><code class="language-bash"><span class="tok-comment"># Nén lại thành một script dán được lên máy chủ</span>
 port=\${1:?cách dùng: check-port CỔNG}
 echo "== đang lắng nghe ==" ; sudo ss -tulpn | grep ":\$port" || echo "  không có gì trên :\$port"
 echo "== cục bộ =="         ; curl -s -o /dev/null -w '  %{http_code}\\n' "localhost:\$port" || echo "  không trả lời"
@@ -3056,7 +3056,7 @@ Status: active
 
 ${slide('lx-09', 27, 'Ubuntu 24.04: ssh.socket giữ cổng SSH')}
 <p>Bước đầu tiên của bảng kiểm — "cái gì đang nghe, trên cổng nào?" — còn một khúc quanh nữa trên Ubuntu đời mới. Từ 22.10, <code>sshd</code> được <strong>kích hoạt theo socket</strong> (socket activation): chính systemd nghe cổng 22 (<code>ssh.socket</code>) và khởi động <code>sshd</code> khi có kết nối tới. Câu chuyện thật từ dự án của khoá học này: thêm <code>Port 993</code> vào <code>sshd_config</code>, khởi động lại sshd, và cổng 993 vẫn đóng. Dựng lại trong container Ubuntu 24.04 chạy systemd thật:</p>
-<pre><code>systemctl is-enabled ssh.socket ssh.service
+<pre><code class="language-bash">systemctl is-enabled ssh.socket ssh.service
 ss -tlnp | grep :22
 echo "Port 993" &gt;&gt; /etc/ssh/sshd_config
 systemctl restart ssh
@@ -3068,7 +3068,7 @@ LISTEN 0      4096         0.0.0.0:22         0.0.0.0:*    users:(("systemd",pid
 port 993
 LISTEN 0      4096         0.0.0.0:22         0.0.0.0:*    users:(("sshd",pid=665,fd=3),("systemd",pid=1,fd=50))</div>
 <p>Cấu hình nói 993; thực tế nói 22, và socket thuộc về <code>systemd</code> (PID 1). sshd có đọc cổng mới — chỉ là nó không bao giờ tự mở socket. Ubuntu 24.04 có kèm một <em>generator</em> (bộ sinh cấu hình) biến <code>Port</code>/<code>ListenAddress</code> thành thiết lập của socket, nhưng chỉ khi systemd nạp lại các unit:</p>
-<pre><code>systemctl daemon-reload
+<pre><code class="language-bash">systemctl daemon-reload
 systemctl restart ssh.socket
 ss -tlnp | grep -E ":22 |:993 "
 cat /run/systemd/generator/ssh.socket.d/*.conf</code></pre>
@@ -3082,7 +3082,7 @@ ListenStream=[::]:993</div>
 <p>Đọc kỹ output cuối: dòng <code>ListenStream=</code> rỗng xoá giá trị mặc định, nên một dòng <code>Port 993</code> đứng một mình sẽ <strong>THAY THẾ</strong> cổng 22 chứ không thêm vào. Trên một máy chủ ở xa, đó là một vụ tự khoá mình ngoài cửa đang chờ xảy ra — thứ bạn muốn là <code>Port 22</code> <em>VÀ</em> <code>Port 993</code>. Trên VPS production của dự án, người vận hành chọn cách thứ ba: một dịch vụ nghe riêng, độc lập ở cổng 993, để cái socket đang canh mọi lần đăng nhập không bao giờ phải khởi động lại. Ba tầng, ba phép kiểm khác nhau: <code>sshd -T</code> cho cấu hình, <code>ss -tlnp</code> cho thứ thật sự đang nghe, và một lần đăng nhập từ máy khác cho câu "tôi có vào được không".</p>
 
 <h3>Chiều đi ra cũng quan trọng</h3>
-<pre><code>sudo ufw default deny outgoing          <span class="tok-comment"># chặt chẽ; giờ mở đúng thứ bạn cần</span>
+<pre><code class="language-bash">sudo ufw default deny outgoing          <span class="tok-comment"># chặt chẽ; giờ mở đúng thứ bạn cần</span>
 sudo ufw allow out 53                   <span class="tok-comment"># DNS</span>
 sudo ufw allow out 80,443/tcp           <span class="tok-comment"># cập nhật gói, gọi API</span>
 sudo ufw allow out 25,587/tcp           <span class="tok-comment"># thư, nếu máy này có gửi</span></code></pre>
@@ -3090,7 +3090,7 @@ sudo ufw allow out 25,587/tcp           <span class="tok-comment"># thư, nếu 
 
 <h3>Chạy thử từng bước</h3>
 <p>ufw và nftables cần quyền <code>NET_ADMIN</code>, thứ mà một container thường không có. Hãy cấp cho nó — luật khi đó áp lên không gian mạng riêng của container, không bao giờ lên laptop của bạn:</p>
-<pre><code>docker network create lx09-net      <span class="tok-comment"># nếu chưa có</span>
+<pre><code class="language-bash">docker network create lx09-net      <span class="tok-comment"># nếu chưa có</span>
 docker run --rm -it --cap-add NET_ADMIN --network lx09-net --name lx09-fw ubuntu:24.04 bash
 <span class="tok-comment"># bên trong:</span>
 apt-get update -qq &amp;&amp; apt-get install -y -qq ufw nftables python3 &gt;/dev/null

@@ -148,7 +148,7 @@ const L2 = {
 <p>Ten services: authentication, books, physical copies, loans, fees, users, reservations, reviews, notifications and audit logging. Two roles: <strong>MEMBER</strong> (borrows) and <strong>LIBRARIAN</strong> (administers).</p>
 <p class="y-chinh">🎯 Why this domain is good for finding defects: its rules are <strong>countable</strong> — how many books may be borrowed at once, how many days until due, how much the fine is per overdue day. Rules with numbers in them are exactly where boundary defects hide, and exactly what Chapter 4 will teach you to attack.</p>
 <h3>Running it</h3>
-<pre><code># 1 · get the source
+<pre><code class="language-bash"># 1 · get the source
 git clone ${GH}.git
 cd Library-Management-System
 
@@ -200,7 +200,7 @@ mvn test</code></pre>
 <p>Mười service: xác thực, đầu sách, bản sao vật lý, phiếu mượn, phí phạt, người dùng, đặt trước, đánh giá, thông báo và nhật ký kiểm toán. Hai vai trò: <strong>MEMBER</strong> (mượn sách) và <strong>LIBRARIAN</strong> (quản trị).</p>
 <p class="y-chinh">🎯 Vì sao nghiệp vụ này dễ ra defect: quy tắc của nó <strong>đếm được</strong> — mượn tối đa mấy cuốn, hạn trả bao nhiêu ngày, quá hạn phạt bao nhiêu một ngày. Quy tắc có con số chính là nơi defect biên ẩn nấp, và cũng đúng là thứ Chương 4 sắp dạy bạn cách tấn công.</p>
 <h3>Cách chạy</h3>
-<pre><code># 1 · lấy source
+<pre><code class="language-bash"># 1 · lấy source
 git clone ${GH}.git
 cd Library-Management-System
 
@@ -253,7 +253,7 @@ const L3 = {
 <p class="y-chinh">🎯 The assignment leans towards <strong>static</strong> testing, because the form demands "the line of the defect" — and only a tool that reads code can point at a line.</p>
 <h3>SonarQube in sixty seconds</h3>
 <div class="lz-flow"><span>Your code</span><span>SonarQube checks it against ~600 rules</span><span>A list of issues, each with a file, a line and a severity</span></div>
-<pre><code># 1 · start the server (Docker)
+<pre><code class="language-bash"># 1 · start the server (Docker)
 docker run -d --name sonarqube -p 9000:9000 sonarqube:lts-community
 #    open http://localhost:9000  ·  first login admin / admin
 
@@ -278,7 +278,7 @@ mvn clean verify sonar:sonar \\
 </table></div>
 <div class="pitfall co-tieu-de"><strong>Not every issue is a defect.</strong> SonarQube sorts findings into three kinds, and they are not equal. 🐛 <strong>Bug</strong> — the code behaves incorrectly: this is what the assignment wants. 🔒 <strong>Vulnerability</strong> — a security hole: also excellent material. 💨 <strong>Code Smell</strong> — ugly but correct code. Submit three code smells such as "this method is too long" and the first question you will be asked is "so what does it compute wrongly?" — and you will have no answer. Take Bugs and Vulnerabilities.</div>
 <h3>The command line as a dynamic tool</h3>
-<pre><code>cd backend
+<pre><code class="language-bash">cd backend
 export JAVA_HOME=$(/usr/libexec/java_home -v 21)
 mvn test                    # runs all 112 tests
 mvn test -Dtest=LoanServiceTest   # one class, when you are hunting
@@ -304,7 +304,7 @@ mvn test -Dtest=LoanServiceTest   # one class, when you are hunting
 <p class="y-chinh">🎯 Đề bài nghiêng hẳn về kiểm thử <strong>tĩnh</strong>, vì form đòi "dòng của bug lỗi" — mà chỉ công cụ đọc code mới chỉ được vào đúng dòng.</p>
 <h3>SonarQube trong sáu mươi giây</h3>
 <div class="lz-flow"><span>Code của bạn</span><span>SonarQube đối chiếu với ~600 quy tắc</span><span>Danh sách issue, mỗi cái có file, số dòng và mức độ</span></div>
-<pre><code># 1 · dựng server (Docker)
+<pre><code class="language-bash"># 1 · dựng server (Docker)
 docker run -d --name sonarqube -p 9000:9000 sonarqube:lts-community
 #    mở http://localhost:9000  ·  đăng nhập lần đầu admin / admin
 
@@ -329,7 +329,7 @@ mvn clean verify sonar:sonar \\
 </table></div>
 <div class="pitfall co-tieu-de"><strong>Không phải issue nào cũng là defect.</strong> SonarQube chia kết quả làm ba loại, và chúng không ngang nhau. 🐛 <strong>Bug</strong> — code chạy sai: đây mới là thứ đề bài cần. 🔒 <strong>Vulnerability</strong> — lỗ hổng bảo mật: cũng rất đáng giá. 💨 <strong>Code Smell</strong> — code xấu nhưng vẫn đúng. Nộp ba code smell kiểu "hàm này dài quá" thì câu đầu tiên bạn bị hỏi sẽ là "thế nó tính sai chỗ nào?" — và bạn sẽ không trả lời được. Hãy lấy Bug và Vulnerability.</div>
 <h3>Dòng lệnh với vai trò công cụ động</h3>
-<pre><code>cd backend
+<pre><code class="language-bash">cd backend
 export JAVA_HOME=$(/usr/libexec/java_home -v 21)
 mvn test                          # chạy cả 112 test
 mvn test -Dtest=LoanServiceTest   # một class, khi đang truy lỗi

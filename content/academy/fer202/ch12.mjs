@@ -79,7 +79,7 @@ const EX24 = {
     `<span class="eyebrow">Chapter 12 · Exercise 24 · Slot 16–17 slide 24</span>
 <h2>Install &amp; configure Redux (Toolkit)</h2>
 <p class="lead"><b>Goal:</b> wire a counter through a real Redux store using Redux Toolkit — the modern, minimal setup.</p>
-<pre><span class="hljs-comment">// counterSlice.js</span>
+<pre><code class="language-javascript"><span class="hljs-comment">// counterSlice.js</span>
 <span class="hljs-keyword">import</span> { createSlice } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@reduxjs/toolkit&#x27;</span>;
 <span class="hljs-keyword">const</span> counterSlice = <span class="hljs-title function_">createSlice</span>({
   <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;counter&#x27;</span>,
@@ -100,13 +100,13 @@ const EX24 = {
 <span class="hljs-comment">// Counter.js</span>
 <span class="hljs-keyword">const</span> count = <span class="hljs-title function_">useSelector</span>(<span class="hljs-function"><span class="hljs-params">s</span> =&gt;</span> s.<span class="hljs-property">counter</span>);
 <span class="hljs-keyword">const</span> dispatch = <span class="hljs-title function_">useDispatch</span>();
-<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{()</span> =&gt;</span> dispatch(increment())}&gt;+ {count}<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></span></pre>
+<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{()</span> =&gt;</span> dispatch(increment())}&gt;+ {count}<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></span></code></pre>
 <div class="out"><b>Result:</b> the counter state lives in the Redux store; any component can read it with <code>useSelector</code> and change it with <code>dispatch</code>.</div>
 <div class="di-toi"><a class="link-card codelab" href="${CODELAB}" target="_blank" rel="noopener"><span class="lc-ico">⌨️</span><span class="lc-body"><span class="lc-title">Wire the store</span><span class="lc-sub">createSlice + Provider — Code Lab.</span></span><span class="lc-cta">PRACTICE →</span></a></div>`,
     `<span class="eyebrow">Chương 12 · Exercise 24 · Slot 16–17 slide 24</span>
 <h2>Cài &amp; cấu hình Redux (Toolkit)</h2>
 <p class="lead"><b>Mục tiêu:</b> nối một counter qua store Redux thật bằng Redux Toolkit — cách hiện đại, tối giản.</p>
-<pre><span class="hljs-comment">// counterSlice.js</span>
+<pre><code class="language-javascript"><span class="hljs-comment">// counterSlice.js</span>
 <span class="hljs-keyword">import</span> { createSlice } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@reduxjs/toolkit&#x27;</span>;
 <span class="hljs-keyword">const</span> counterSlice = <span class="hljs-title function_">createSlice</span>({
   <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;counter&#x27;</span>,
@@ -127,7 +127,7 @@ const EX24 = {
 <span class="hljs-comment">// Counter.js</span>
 <span class="hljs-keyword">const</span> count = <span class="hljs-title function_">useSelector</span>(<span class="hljs-function"><span class="hljs-params">s</span> =&gt;</span> s.<span class="hljs-property">counter</span>);
 <span class="hljs-keyword">const</span> dispatch = <span class="hljs-title function_">useDispatch</span>();
-<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{()</span> =&gt;</span> dispatch(increment())}&gt;+ {count}<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></span></pre>
+<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{()</span> =&gt;</span> dispatch(increment())}&gt;+ {count}<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></span></code></pre>
 <div class="out"><b>Kết quả:</b> state counter nằm trong store Redux; bất kỳ component nào cũng đọc bằng <code>useSelector</code> và đổi bằng <code>dispatch</code>.</div>
 <div class="di-toi"><a class="link-card codelab" href="${CODELAB}" target="_blank" rel="noopener"><span class="lc-ico">⌨️</span><span class="lc-body"><span class="lc-title">Nối store</span><span class="lc-sub">createSlice + Provider — Code Lab.</span></span><span class="lc-cta">LUYỆN TẬP →</span></a></div>`,
   ),
@@ -142,7 +142,7 @@ const EX25 = {
     `<span class="eyebrow">Chapter 12 · Exercise 25 · Slot 16–17 slide 34</span>
 <h2>Redux Thunk — async actions &amp; a logger</h2>
 <p class="lead"><b>Goal:</b> use Thunk to return a function that fetches data, and add a logger middleware.</p>
-<pre><span class="hljs-comment">// a thunk: returns a function (dispatch) =&gt; { ... }</span>
+<pre><code class="language-javascript"><span class="hljs-comment">// a thunk: returns a function (dispatch) =&gt; { ... }</span>
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-title function_">fetchPosts</span> = (<span class="hljs-params"></span>) =&gt; <span class="hljs-title function_">async</span> (dispatch) =&gt; {
   <span class="hljs-title function_">dispatch</span>({ <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;posts/loading&#x27;</span> });
   <span class="hljs-keyword">try</span> {
@@ -165,14 +165,14 @@ const EX25 = {
 <span class="hljs-title function_">configureStore</span>({
   reducer,
   <span class="hljs-attr">middleware</span>: <span class="hljs-function">(<span class="hljs-params">getDefault</span>) =&gt;</span> <span class="hljs-title function_">getDefault</span>().<span class="hljs-title function_">concat</span>(logger),
-});</pre>
+});</code></pre>
 <div class="out"><b>Result:</b> dispatching <code>fetchPosts()</code> runs the async flow (loading → success/error); the logger prints every action and the resulting state — Redux DevTools shows the same "time-travel" history.</div>
 <div class="pitfall"><b>Trap:</b> a thunk is an action <em>creator that returns a function</em> — dispatch it as <code>dispatch(fetchPosts())</code>, not <code>dispatch(fetchPosts)</code>. Thunk middleware must be enabled (Redux Toolkit enables it by default).</div>
 <div class="di-toi"><a class="link-card codelab" href="${CODELAB}" target="_blank" rel="noopener"><span class="lc-ico">⌨️</span><span class="lc-body"><span class="lc-title">Write a thunk</span><span class="lc-sub">async + logger — Code Lab.</span></span><span class="lc-cta">PRACTICE →</span></a></div>`,
     `<span class="eyebrow">Chương 12 · Exercise 25 · Slot 16–17 slide 34</span>
 <h2>Redux Thunk — action async &amp; logger</h2>
 <p class="lead"><b>Mục tiêu:</b> dùng Thunk trả về một hàm fetch dữ liệu, và thêm logger middleware.</p>
-<pre><span class="hljs-comment">// một thunk: trả về một hàm (dispatch) =&gt; { ... }</span>
+<pre><code class="language-javascript"><span class="hljs-comment">// một thunk: trả về một hàm (dispatch) =&gt; { ... }</span>
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-title function_">fetchPosts</span> = (<span class="hljs-params"></span>) =&gt; <span class="hljs-title function_">async</span> (dispatch) =&gt; {
   <span class="hljs-title function_">dispatch</span>({ <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;posts/loading&#x27;</span> });
   <span class="hljs-keyword">try</span> {
@@ -195,7 +195,7 @@ const EX25 = {
 <span class="hljs-title function_">configureStore</span>({
   reducer,
   <span class="hljs-attr">middleware</span>: <span class="hljs-function">(<span class="hljs-params">getDefault</span>) =&gt;</span> <span class="hljs-title function_">getDefault</span>().<span class="hljs-title function_">concat</span>(logger),
-});</pre>
+});</code></pre>
 <div class="out"><b>Kết quả:</b> dispatch <code>fetchPosts()</code> chạy luồng async (loading → success/error); logger in mọi action và state kết quả — Redux DevTools cho thấy lịch sử "time-travel" tương tự.</div>
 <div class="pitfall"><b>Bẫy:</b> thunk là một action creator <em>trả về một hàm</em> — dispatch bằng <code>dispatch(fetchPosts())</code>, không phải <code>dispatch(fetchPosts)</code>. Middleware thunk phải được bật (Redux Toolkit bật mặc định).</div>
 <div class="di-toi"><a class="link-card codelab" href="${CODELAB}" target="_blank" rel="noopener"><span class="lc-ico">⌨️</span><span class="lc-body"><span class="lc-title">Viết một thunk</span><span class="lc-sub">async + logger — Code Lab.</span></span><span class="lc-cta">LUYỆN TẬP →</span></a></div>`,

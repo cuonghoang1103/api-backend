@@ -24,12 +24,12 @@ export default {
 
 <h3>The shape</h3>
 <p>The syntax is <code>{ [K in keyof T]: … }</code>. Read it as "for each key <code>K</code> in the keys of <code>T</code>, produce a property". Here it copies a type unchanged — the identity mapping — which is the skeleton everything else builds on:</p>
-<pre><code><span class="tok-keyword">type</span> Identity&lt;T&gt; = { [K <span class="tok-keyword">in</span> <span class="tok-keyword">keyof</span> T]: T[K] };</code></pre>
+<pre><code class="language-typescript"><span class="tok-keyword">type</span> Identity&lt;T&gt; = { [K <span class="tok-keyword">in</span> <span class="tok-keyword">keyof</span> T]: T[K] };</code></pre>
 <p><code>keyof T</code> gives the union of key names (chapter 6); <code>K in …</code> iterates it; <code>T[K]</code> is the value type at that key. Change what's on the right of the colon and you have a transformation.</p>
 
 <h3>Make everything readonly</h3>
 <p>Add the <code>readonly</code> modifier in front and every key comes out read-only:</p>
-<pre><code><span class="tok-comment">// map-basic.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// map-basic.ts</span>
 <span class="tok-keyword">type</span> Flags = { darkMode: <span class="tok-keyword">boolean</span>; sidebar: <span class="tok-keyword">boolean</span> };
 <span class="tok-keyword">type</span> ReadonlyFlags = { <span class="tok-keyword">readonly</span> [K <span class="tok-keyword">in</span> <span class="tok-keyword">keyof</span> Flags]: Flags[K] };
 <span class="tok-keyword">const</span> f: ReadonlyFlags = { darkMode: <span class="tok-keyword">true</span>, sidebar: <span class="tok-keyword">false</span> };
@@ -39,7 +39,7 @@ f.darkMode = <span class="tok-keyword">false</span>;   <span class="tok-comment"
 
 <h3>Make everything optional — rebuild Partial</h3>
 <p>Add a <code>?</code> after the key and every property becomes optional. That single line is the entire definition of <code>Partial&lt;T&gt;</code>:</p>
-<pre><code><span class="tok-comment">// my-partial.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// my-partial.ts</span>
 <span class="tok-keyword">type</span> MyPartial&lt;T&gt; = { [K <span class="tok-keyword">in</span> <span class="tok-keyword">keyof</span> T]?: T[K] };
 <span class="tok-keyword">interface</span> User { id: <span class="tok-keyword">number</span>; name: <span class="tok-keyword">string</span>; }
 <span class="tok-keyword">const</span> patch: MyPartial&lt;User&gt; = { name: <span class="tok-string">'Ada'</span> };   <span class="tok-comment">// ok — id now optional</span>
@@ -70,12 +70,12 @@ f.darkMode = <span class="tok-keyword">false</span>;   <span class="tok-comment"
 
 <h3>Hình dạng</h3>
 <p>Cú pháp là <code>{ [K in keyof T]: … }</code>. Đọc là "với mỗi key <code>K</code> trong các key của <code>T</code>, sinh ra một thuộc tính". Ở đây nó chép một kiểu nguyên vẹn — phép ánh xạ đồng nhất — bộ khung mà mọi thứ khác dựng lên trên:</p>
-<pre><code><span class="tok-keyword">type</span> Identity&lt;T&gt; = { [K <span class="tok-keyword">in</span> <span class="tok-keyword">keyof</span> T]: T[K] };</code></pre>
+<pre><code class="language-typescript"><span class="tok-keyword">type</span> Identity&lt;T&gt; = { [K <span class="tok-keyword">in</span> <span class="tok-keyword">keyof</span> T]: T[K] };</code></pre>
 <p><code>keyof T</code> cho union các tên key (chương 6); <code>K in …</code> lặp qua nó; <code>T[K]</code> là kiểu giá trị tại key đó. Đổi thứ nằm bên phải dấu hai chấm là bạn có một phép biến đổi.</p>
 
 <h3>Cho mọi thứ thành readonly</h3>
 <p>Thêm modifier <code>readonly</code> ở phía trước và mọi key ra đời ở dạng chỉ-đọc:</p>
-<pre><code><span class="tok-comment">// map-basic.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// map-basic.ts</span>
 <span class="tok-keyword">type</span> Flags = { darkMode: <span class="tok-keyword">boolean</span>; sidebar: <span class="tok-keyword">boolean</span> };
 <span class="tok-keyword">type</span> ReadonlyFlags = { <span class="tok-keyword">readonly</span> [K <span class="tok-keyword">in</span> <span class="tok-keyword">keyof</span> Flags]: Flags[K] };
 <span class="tok-keyword">const</span> f: ReadonlyFlags = { darkMode: <span class="tok-keyword">true</span>, sidebar: <span class="tok-keyword">false</span> };
@@ -85,7 +85,7 @@ f.darkMode = <span class="tok-keyword">false</span>;   <span class="tok-comment"
 
 <h3>Cho mọi thứ thành tuỳ chọn — dựng lại Partial</h3>
 <p>Thêm một <code>?</code> sau key và mọi thuộc tính thành tuỳ chọn. Dòng duy nhất đó là toàn bộ định nghĩa của <code>Partial&lt;T&gt;</code>:</p>
-<pre><code><span class="tok-comment">// my-partial.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// my-partial.ts</span>
 <span class="tok-keyword">type</span> MyPartial&lt;T&gt; = { [K <span class="tok-keyword">in</span> <span class="tok-keyword">keyof</span> T]?: T[K] };
 <span class="tok-keyword">interface</span> User { id: <span class="tok-keyword">number</span>; name: <span class="tok-keyword">string</span>; }
 <span class="tok-keyword">const</span> patch: MyPartial&lt;User&gt; = { name: <span class="tok-string">'Ada'</span> };   <span class="tok-comment">// ok — id giờ tuỳ chọn</span>
@@ -126,7 +126,7 @@ f.darkMode = <span class="tok-keyword">false</span>;   <span class="tok-comment"
 
 <h3>Remove readonly with <code>-readonly</code></h3>
 <p>Prefix the modifier with a minus to subtract it. <code>Mutable&lt;T&gt;</code> takes a type whose fields are read-only and gives back one you can assign to:</p>
-<pre><code><span class="tok-comment">// mutable.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// mutable.ts</span>
 <span class="tok-keyword">interface</span> Config { <span class="tok-keyword">readonly</span> host: <span class="tok-keyword">string</span>; <span class="tok-keyword">readonly</span> port: <span class="tok-keyword">number</span>; }
 <span class="tok-keyword">type</span> Mutable&lt;T&gt; = { -<span class="tok-keyword">readonly</span> [K <span class="tok-keyword">in</span> <span class="tok-keyword">keyof</span> T]: T[K] };
 <span class="tok-keyword">const</span> c: Mutable&lt;Config&gt; = { host: <span class="tok-string">'localhost'</span>, port: <span class="tok-number">5432</span> };
@@ -138,7 +138,7 @@ orig.port = <span class="tok-number">2</span>;   <span class="tok-comment">// or
 
 <h3>Remove optional with <code>-?</code></h3>
 <p>Symmetrically, <code>-?</code> makes every optional field required. That's the built-in <code>Required&lt;T&gt;</code>:</p>
-<pre><code><span class="tok-comment">// required.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// required.ts</span>
 <span class="tok-keyword">interface</span> Draft { title?: <span class="tok-keyword">string</span>; body?: <span class="tok-keyword">string</span>; }
 <span class="tok-keyword">type</span> Complete&lt;T&gt; = { [K <span class="tok-keyword">in</span> <span class="tok-keyword">keyof</span> T]-?: T[K] };
 <span class="tok-keyword">const</span> d: Complete&lt;Draft&gt; = { title: <span class="tok-string">'Hi'</span> };   <span class="tok-comment">// body is now required</span></code></pre>
@@ -171,7 +171,7 @@ orig.port = <span class="tok-number">2</span>;   <span class="tok-comment">// or
 
 <h3>Gỡ readonly bằng <code>-readonly</code></h3>
 <p>Thêm dấu trừ trước modifier để trừ nó đi. <code>Mutable&lt;T&gt;</code> nhận một kiểu có các field chỉ-đọc và trả lại một kiểu bạn gán được:</p>
-<pre><code><span class="tok-comment">// mutable.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// mutable.ts</span>
 <span class="tok-keyword">interface</span> Config { <span class="tok-keyword">readonly</span> host: <span class="tok-keyword">string</span>; <span class="tok-keyword">readonly</span> port: <span class="tok-keyword">number</span>; }
 <span class="tok-keyword">type</span> Mutable&lt;T&gt; = { -<span class="tok-keyword">readonly</span> [K <span class="tok-keyword">in</span> <span class="tok-keyword">keyof</span> T]: T[K] };
 <span class="tok-keyword">const</span> c: Mutable&lt;Config&gt; = { host: <span class="tok-string">'localhost'</span>, port: <span class="tok-number">5432</span> };
@@ -183,7 +183,7 @@ orig.port = <span class="tok-number">2</span>;   <span class="tok-comment">// b�
 
 <h3>Gỡ tuỳ chọn bằng <code>-?</code></h3>
 <p>Đối xứng, <code>-?</code> làm mọi field tuỳ chọn thành bắt buộc. Đó là <code>Required&lt;T&gt;</code> có sẵn:</p>
-<pre><code><span class="tok-comment">// required.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// required.ts</span>
 <span class="tok-keyword">interface</span> Draft { title?: <span class="tok-keyword">string</span>; body?: <span class="tok-keyword">string</span>; }
 <span class="tok-keyword">type</span> Complete&lt;T&gt; = { [K <span class="tok-keyword">in</span> <span class="tok-keyword">keyof</span> T]-?: T[K] };
 <span class="tok-keyword">const</span> d: Complete&lt;Draft&gt; = { title: <span class="tok-string">'Hi'</span> };   <span class="tok-comment">// body giờ bắt buộc</span></code></pre>
@@ -226,7 +226,7 @@ orig.port = <span class="tok-number">2</span>;   <span class="tok-comment">// b�
 
 <h3>The ternary, for types</h3>
 <p><code>T extends U ? X : Y</code> reads "if <code>T</code> is assignable to <code>U</code>, the result is <code>X</code>, otherwise <code>Y</code>". It's the same shape as a value ternary, resolved by the compiler:</p>
-<pre><code><span class="tok-comment">// cond.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// cond.ts</span>
 <span class="tok-keyword">type</span> IsString&lt;T&gt; = T <span class="tok-keyword">extends</span> <span class="tok-keyword">string</span> ? <span class="tok-string">'yes'</span> : <span class="tok-string">'no'</span>;
 <span class="tok-keyword">type</span> X = IsString&lt;<span class="tok-keyword">string</span>&gt;;   <span class="tok-comment">// 'yes'</span>
 <span class="tok-keyword">const</span> x: IsString&lt;<span class="tok-keyword">number</span>&gt; = <span class="tok-string">'yes'</span>;   <span class="tok-comment">// IsString&lt;number&gt; is 'no'</span></code></pre>
@@ -235,7 +235,7 @@ orig.port = <span class="tok-number">2</span>;   <span class="tok-comment">// b�
 
 <h3><code>infer</code>: capture a type from inside</h3>
 <p><code>infer R</code> introduces a fresh type variable inside the <code>extends</code> clause and binds it to whatever fills that slot. "If <code>T</code> is an array of something, call that something <code>U</code> and return it":</p>
-<pre><code><span class="tok-comment">// infer.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// infer.ts</span>
 <span class="tok-keyword">type</span> ElementType&lt;T&gt; = T <span class="tok-keyword">extends</span> (<span class="tok-keyword">infer</span> U)[] ? U : T;
 <span class="tok-keyword">type</span> A = ElementType&lt;<span class="tok-keyword">string</span>[]&gt;;   <span class="tok-comment">// string</span>
 <span class="tok-keyword">type</span> B = ElementType&lt;<span class="tok-keyword">number</span>&gt;;     <span class="tok-comment">// number (not an array — falls through)</span></code></pre>
@@ -243,7 +243,7 @@ orig.port = <span class="tok-number">2</span>;   <span class="tok-comment">// b�
 
 <h3>Rebuild ReturnType with infer</h3>
 <p>The classic. Match a function signature and infer its return type — this is exactly how the built-in <code>ReturnType&lt;T&gt;</code> works:</p>
-<pre><code><span class="tok-keyword">type</span> MyReturnType&lt;T&gt; = T <span class="tok-keyword">extends</span> (...args: <span class="tok-keyword">any</span>[]) =&gt; <span class="tok-keyword">infer</span> R ? R : <span class="tok-keyword">never</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">type</span> MyReturnType&lt;T&gt; = T <span class="tok-keyword">extends</span> (...args: <span class="tok-keyword">any</span>[]) =&gt; <span class="tok-keyword">infer</span> R ? R : <span class="tok-keyword">never</span>;
 <span class="tok-keyword">function</span> <span class="tok-function">makeUser</span>() { <span class="tok-keyword">return</span> { id: <span class="tok-number">1</span>, name: <span class="tok-string">'Ada'</span> }; }
 <span class="tok-keyword">type</span> U = MyReturnType&lt;<span class="tok-keyword">typeof</span> makeUser&gt;;   <span class="tok-comment">// { id: number; name: string }</span>
 <span class="tok-keyword">const</span> u: U = { id: <span class="tok-number">1</span>, name: <span class="tok-string">'x'</span> };
@@ -274,7 +274,7 @@ u.id.<span class="tok-function">toUpperCase</span>();   <span class="tok-comment
 
 <h3>Toán tử ba ngôi, cho kiểu</h3>
 <p><code>T extends U ? X : Y</code> đọc là "nếu <code>T</code> gán được cho <code>U</code>, kết quả là <code>X</code>, ngược lại <code>Y</code>". Cùng hình dạng với ternary giá trị, được trình biên dịch giải:</p>
-<pre><code><span class="tok-comment">// cond.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// cond.ts</span>
 <span class="tok-keyword">type</span> IsString&lt;T&gt; = T <span class="tok-keyword">extends</span> <span class="tok-keyword">string</span> ? <span class="tok-string">'yes'</span> : <span class="tok-string">'no'</span>;
 <span class="tok-keyword">type</span> X = IsString&lt;<span class="tok-keyword">string</span>&gt;;   <span class="tok-comment">// 'yes'</span>
 <span class="tok-keyword">const</span> x: IsString&lt;<span class="tok-keyword">number</span>&gt; = <span class="tok-string">'yes'</span>;   <span class="tok-comment">// IsString&lt;number&gt; là 'no'</span></code></pre>
@@ -283,7 +283,7 @@ u.id.<span class="tok-function">toUpperCase</span>();   <span class="tok-comment
 
 <h3><code>infer</code>: bắt một kiểu từ bên trong</h3>
 <p><code>infer R</code> giới thiệu một biến kiểu mới bên trong mệnh đề <code>extends</code> và buộc nó vào bất cứ thứ gì lấp vào chỗ đó. "Nếu <code>T</code> là một mảng của thứ gì đó, gọi thứ đó là <code>U</code> và trả nó về":</p>
-<pre><code><span class="tok-comment">// infer.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// infer.ts</span>
 <span class="tok-keyword">type</span> ElementType&lt;T&gt; = T <span class="tok-keyword">extends</span> (<span class="tok-keyword">infer</span> U)[] ? U : T;
 <span class="tok-keyword">type</span> A = ElementType&lt;<span class="tok-keyword">string</span>[]&gt;;   <span class="tok-comment">// string</span>
 <span class="tok-keyword">type</span> B = ElementType&lt;<span class="tok-keyword">number</span>&gt;;     <span class="tok-comment">// number (không phải mảng — rơi xuống else)</span></code></pre>
@@ -291,7 +291,7 @@ u.id.<span class="tok-function">toUpperCase</span>();   <span class="tok-comment
 
 <h3>Dựng lại ReturnType bằng infer</h3>
 <p>Ví dụ kinh điển. Khớp một chữ ký hàm và suy ra kiểu trả về của nó — đây đúng là cách <code>ReturnType&lt;T&gt;</code> có sẵn hoạt động:</p>
-<pre><code><span class="tok-keyword">type</span> MyReturnType&lt;T&gt; = T <span class="tok-keyword">extends</span> (...args: <span class="tok-keyword">any</span>[]) =&gt; <span class="tok-keyword">infer</span> R ? R : <span class="tok-keyword">never</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">type</span> MyReturnType&lt;T&gt; = T <span class="tok-keyword">extends</span> (...args: <span class="tok-keyword">any</span>[]) =&gt; <span class="tok-keyword">infer</span> R ? R : <span class="tok-keyword">never</span>;
 <span class="tok-keyword">function</span> <span class="tok-function">makeUser</span>() { <span class="tok-keyword">return</span> { id: <span class="tok-number">1</span>, name: <span class="tok-string">'Ada'</span> }; }
 <span class="tok-keyword">type</span> U = MyReturnType&lt;<span class="tok-keyword">typeof</span> makeUser&gt;;   <span class="tok-comment">// { id: number; name: string }</span>
 <span class="tok-keyword">const</span> u: U = { id: <span class="tok-number">1</span>, name: <span class="tok-string">'x'</span> };
@@ -332,7 +332,7 @@ u.id.<span class="tok-function">toUpperCase</span>();   <span class="tok-comment
 
 <h3>Building strings in the type system</h3>
 <p>Use the same backtick-and-<code>\${…}</code> syntax you know from values, but with types inside the slots. When a slot is a union, the result is the union of every combination:</p>
-<pre><code><span class="tok-comment">// tpl.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// tpl.ts</span>
 <span class="tok-keyword">type</span> Lang = <span class="tok-string">'en'</span> | <span class="tok-string">'vi'</span>;
 <span class="tok-keyword">type</span> Route = <span class="tok-string">&#96;/\${Lang}/home&#96;</span>;   <span class="tok-comment">// '/en/home' | '/vi/home'</span>
 <span class="tok-keyword">const</span> r: Route = <span class="tok-string">'/en/home'</span>;    <span class="tok-comment">// ok</span>
@@ -345,7 +345,7 @@ u.id.<span class="tok-function">toUpperCase</span>();   <span class="tok-comment
 
 <h3>Key remapping: generate getters</h3>
 <p>Combine a mapped type's <code>as</code> clause (remap each key to a new name) with a template literal and <code>Capitalize</code>. This derives a getter interface from any object type:</p>
-<pre><code><span class="tok-comment">// getters.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// getters.ts</span>
 <span class="tok-keyword">type</span> Getters&lt;T&gt; = { [K <span class="tok-keyword">in</span> <span class="tok-keyword">keyof</span> T <span class="tok-keyword">as</span> <span class="tok-string">&#96;get\${Capitalize&lt;<span class="tok-keyword">string</span> &amp; K&gt;}&#96;</span>]: () =&gt; T[K] };
 <span class="tok-keyword">interface</span> Person { name: <span class="tok-keyword">string</span>; age: <span class="tok-keyword">number</span>; }
 <span class="tok-keyword">const</span> p: Getters&lt;Person&gt; = { getName: () =&gt; <span class="tok-string">'Ada'</span>, getAge: () =&gt; <span class="tok-number">3</span> };
@@ -376,7 +376,7 @@ p.<span class="tok-function">getAge</span>().<span class="tok-function">toUpperC
 
 <h3>Ghép chuỗi trong hệ thống kiểu</h3>
 <p>Dùng đúng cú pháp backtick-và-<code>\${…}</code> bạn đã biết từ giá trị, nhưng đặt kiểu trong các khe. Khi một khe là một union, kết quả là union của mọi tổ hợp:</p>
-<pre><code><span class="tok-comment">// tpl.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// tpl.ts</span>
 <span class="tok-keyword">type</span> Lang = <span class="tok-string">'en'</span> | <span class="tok-string">'vi'</span>;
 <span class="tok-keyword">type</span> Route = <span class="tok-string">&#96;/\${Lang}/home&#96;</span>;   <span class="tok-comment">// '/en/home' | '/vi/home'</span>
 <span class="tok-keyword">const</span> r: Route = <span class="tok-string">'/en/home'</span>;    <span class="tok-comment">// ok</span>
@@ -389,7 +389,7 @@ p.<span class="tok-function">getAge</span>().<span class="tok-function">toUpperC
 
 <h3>Key remapping: sinh getter</h3>
 <p>Kết hợp mệnh đề <code>as</code> của mapped type (ánh xạ lại mỗi key thành một tên mới) với một template literal và <code>Capitalize</code>. Cái này suy ra một interface getter từ bất cứ kiểu object nào:</p>
-<pre><code><span class="tok-comment">// getters.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// getters.ts</span>
 <span class="tok-keyword">type</span> Getters&lt;T&gt; = { [K <span class="tok-keyword">in</span> <span class="tok-keyword">keyof</span> T <span class="tok-keyword">as</span> <span class="tok-string">&#96;get\${Capitalize&lt;<span class="tok-keyword">string</span> &amp; K&gt;}&#96;</span>]: () =&gt; T[K] };
 <span class="tok-keyword">interface</span> Person { name: <span class="tok-keyword">string</span>; age: <span class="tok-keyword">number</span>; }
 <span class="tok-keyword">const</span> p: Getters&lt;Person&gt; = { getName: () =&gt; <span class="tok-string">'Ada'</span>, getAge: () =&gt; <span class="tok-number">3</span> };

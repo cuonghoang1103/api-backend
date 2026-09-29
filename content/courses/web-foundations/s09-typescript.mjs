@@ -57,7 +57,7 @@ ${gallery('wf-ts', [
 <p class="lead">Everything you learned about JavaScript in Chapters 4 and 5 — variables, functions, arrays, objects, <code>fetch</code> — still applies exactly as-is. <strong>TypeScript</strong> adds optional <strong>type annotations</strong> on top: labels that say "this is a string," "this function returns a number." A separate step called <strong>compiling</strong> checks those labels and then strips them away, leaving plain JavaScript for the browser or Node.js to run.</p>
 
 <h3>The same function, two ways</h3>
-<pre><code>// JavaScript — no types, runs "however"
+<pre><code class="language-javascript">// JavaScript — no types, runs "however"
 function add(a, b) {
   return a + b;
 }
@@ -103,7 +103,7 @@ add("2", 3);    // ❌ compiler error, BEFORE the code ever runs:
 <p class="lead">Mọi thứ bạn học về JavaScript ở Chương 4 và 5 — biến, hàm, mảng, đối tượng, <code>fetch</code> — vẫn áp dụng y hệt. <strong>TypeScript</strong> thêm <strong>type annotation</strong> (chú thích kiểu) tuỳ chọn lên trên: nhãn nói "cái này là string," "hàm này trả về number." Một bước riêng gọi là <strong>biên dịch (compile)</strong> kiểm các nhãn đó rồi bóc chúng đi, để lại JavaScript thuần cho trình duyệt hay Node.js chạy.</p>
 
 <h3>Cùng một hàm, hai cách</h3>
-<pre><code>// JavaScript — không có type, chạy "sao cũng được"
+<pre><code class="language-javascript">// JavaScript — không có type, chạy "sao cũng được"
 function add(a, b) {
   return a + b;
 }
@@ -169,7 +169,7 @@ let scores: number[] = [95, 88, 76];</code></pre>
 
 <h3>Type inference — you often don't need to write the type</h3>
 <p>When a variable is declared with an initial value, TypeScript infers (guesses) its type from that value — no annotation required.</p>
-<pre><code>let city = "Hanoi";       // inferred as string, no annotation written
+<pre><code class="language-javascript">let city = "Hanoi";       // inferred as string, no annotation written
 city = "Da Nang";         // ok — still a string
 city = 42;                 // ❌ error: Type 'number' is not assignable to type 'string'</code></pre>
 <p class="note-ct"><strong>Rule of thumb:</strong> write the annotation when TypeScript cannot guess on its own — function parameters (Lesson 9.4), an empty array, a value that starts as <code>null</code>. Let inference handle the rest; typing every single variable by hand is noisy and rarely helps.</p>
@@ -211,7 +211,7 @@ let scores: number[] = [95, 88, 76];</code></pre>
 
 <h3>Type inference — thường bạn không cần viết kiểu</h3>
 <p>Khi một biến được khai báo với giá trị khởi tạo, TypeScript suy luận (đoán) kiểu của nó từ giá trị đó — không cần annotation.</p>
-<pre><code>let city = "Hanoi";       // suy luận là string, không viết annotation
+<pre><code class="language-javascript">let city = "Hanoi";       // suy luận là string, không viết annotation
 city = "Da Nang";         // ổn — vẫn là string
 city = 42;                 // ❌ lỗi: Type 'number' is not assignable to type 'string'</code></pre>
 <p class="note-ct"><strong>Quy tắc bỏ túi:</strong> viết annotation khi TypeScript không tự đoán được — tham số hàm (Bài 9.4), một mảng rỗng, một giá trị bắt đầu là <code>null</code>. Để suy luận lo phần còn lại; gõ kiểu cho từng biến một là ồn ào và hiếm khi giúp ích.</p>
@@ -255,7 +255,7 @@ data.whatever.you.want();  // không bao giờ lỗi — TypeScript ngừng ki�
 <p class="lead">Chapter 6 showed API responses as JSON: fixed sets of keys with specific value types. An <strong>interface</strong> writes that shape down as a reusable, named type — so every object that claims to be a <code>User</code> is checked against it.</p>
 
 <h3>Defining and using an interface</h3>
-<pre><code>interface User {
+<pre><code class="language-javascript">interface User {
   id: number;
   name: string;
   isAdmin: boolean;
@@ -281,7 +281,7 @@ user.naem;   // ❌ error: Property 'naem' does not exist on type 'User'.
 <p>For a beginner: reach for <code>interface</code> when describing an object (a <code>User</code>, a <code>Post</code>), and <code>type</code> when naming a union. Both are checked the same way; the distinction matters more in larger codebases than in this chapter.</p>
 
 <h3>Why this matches Chapter 6's JSON exactly</h3>
-<pre><code>// The API response shape from Chapter 6:
+<pre><code class="language-javascript">// The API response shape from Chapter 6:
 // { "id": 42, "name": "Lan", "isAdmin": false }
 
 interface User {
@@ -312,7 +312,7 @@ async function getUser(id: number): Promise&lt;User&gt; {
 <p class="lead">Chương 6 cho thấy phản hồi API dưới dạng JSON: tập khoá cố định với kiểu giá trị cụ thể. Một <strong>interface</strong> viết hình dạng đó thành một kiểu có tên, tái dùng được — để mọi đối tượng tự nhận là <code>User</code> đều bị kiểm theo nó.</p>
 
 <h3>Định nghĩa và dùng một interface</h3>
-<pre><code>interface User {
+<pre><code class="language-javascript">interface User {
   id: number;
   name: string;
   isAdmin: boolean;
@@ -338,7 +338,7 @@ user.naem;   // ❌ lỗi: Property 'naem' does not exist on type 'User'.
 <p>Với người mới: dùng <code>interface</code> khi mô tả một đối tượng (một <code>User</code>, một <code>Post</code>), và <code>type</code> khi đặt tên một union. Cả hai được kiểm như nhau; sự khác biệt quan trọng hơn ở codebase lớn hơn là trong chương này.</p>
 
 <h3>Vì sao điều này khớp đúng với JSON ở Chương 6</h3>
-<pre><code>// Hình dạng phản hồi API từ Chương 6:
+<pre><code class="language-javascript">// Hình dạng phản hồi API từ Chương 6:
 // { "id": 42, "name": "Lan", "isAdmin": false }
 
 interface User {
@@ -380,7 +380,7 @@ async function getUser(id: number): Promise&lt;User&gt; {
 <p class="lead">A function's type annotations are its contract: what it needs, and what it promises back. Every parameter can be annotated, and so can the return value, right after the closing parenthesis.</p>
 
 <h3>Parameters and return type</h3>
-<pre><code>function greet(name: string): string {
+<pre><code class="language-javascript">function greet(name: string): string {
   return &#96;Hello, \${name}!&#96;;
 }
 
@@ -428,7 +428,7 @@ first(["a", "b", "c"]);     // T = string, returns a string</code></pre>
 <p class="lead">Annotation của một hàm là hợp đồng của nó: nó cần gì, và nó hứa trả lại gì. Mọi tham số có thể được annotate, và giá trị trả về cũng vậy, ngay sau dấu ngoặc đóng.</p>
 
 <h3>Tham số và kiểu trả về</h3>
-<pre><code>function greet(name: string): string {
+<pre><code class="language-javascript">function greet(name: string): string {
   return &#96;Hello, \${name}!&#96;;
 }
 
@@ -490,7 +490,7 @@ first(["a", "b", "c"]);     // T = string, trả về string</code></pre>
 <p>A project's <strong>tsconfig.json</strong> file tells the TypeScript compiler how strict to be, which JavaScript version to target, and which files to include — things like requiring every variable to have a known type ("strict mode"), or which folder the compiled <code>.js</code> output should land in. You will not write one from scratch as a beginner; every starter template (Node.js, React, Next.js) ships with a sensible default, and you mostly just read it to understand a project's rules.</p>
 
 <h3>tsc — the compiler, at the command line</h3>
-<pre><code>npx tsc --noEmit    // check types only — reports errors, writes no files
+<pre><code class="language-bash">npx tsc --noEmit    // check types only — reports errors, writes no files
 npx tsc              // compile every .ts file to .js, following tsconfig.json</code></pre>
 <p><code>--noEmit</code> is what you will run constantly during development: it is purely a type-checker, fast feedback with zero risk of overwriting anything.</p>
 
@@ -522,7 +522,7 @@ npx tsc              // compile every .ts file to .js, following tsconfig.json</
 <p>File <strong>tsconfig.json</strong> của một dự án nói cho trình biên dịch TypeScript biết nên nghiêm khắc tới đâu, nhắm phiên bản JavaScript nào, và gồm những file nào — những thứ như bắt mọi biến phải có kiểu đã biết ("strict mode"), hay thư mục nào output <code>.js</code> đã biên dịch sẽ nằm vào. Là người mới, bạn sẽ không viết nó từ đầu; mọi template khởi động (Node.js, React, Next.js) đều có sẵn cấu hình mặc định hợp lý, và bạn phần lớn chỉ đọc nó để hiểu luật của một dự án.</p>
 
 <h3>tsc — trình biên dịch, ở dòng lệnh</h3>
-<pre><code>npx tsc --noEmit    // chỉ kiểm kiểu — báo lỗi, không ghi file nào
+<pre><code class="language-bash">npx tsc --noEmit    // chỉ kiểm kiểu — báo lỗi, không ghi file nào
 npx tsc              // biên dịch mọi file .ts sang .js, theo tsconfig.json</code></pre>
 <p><code>--noEmit</code> là thứ bạn sẽ chạy liên tục trong lúc phát triển: nó thuần là một trình kiểm kiểu, phản hồi nhanh và không rủi ro ghi đè gì cả.</p>
 

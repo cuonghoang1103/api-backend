@@ -264,7 +264,7 @@ min: 0, max: 31, avg: 4.18 (412 samples)</div>
 <p class="lead">Counting is the operation most likely to be quietly wrong in a distributed system, and the one Redis makes trivially correct. The reason is Lesson 1.1: one thread executing one command at a time means read-modify-write is a single indivisible step, with no locks, no transactions and no possibility of a lost update.</p>
 
 <h3>The bug INCR does not have</h3>
-<pre><code><span class="tok-comment">// ❌ Read-modify-write in the application: two processes, one lost increment</span>
+<pre><code class="language-javascript"><span class="tok-comment">// ❌ Read-modify-write in the application: two processes, one lost increment</span>
 const n = Number(await redis.get('views')) || 0;   <span class="tok-comment">// both read 100</span>
 await redis.set('views', n + 1);                   <span class="tok-comment">// both write 101</span>
 
@@ -341,7 +341,7 @@ redis-cli MGET "views:m:$((minute-2))" "views:m:$((minute-1))" "views:m:$minute"
   <div class="lz-step"><span class="lz-k">Read many buckets with MGET</span><span class="lz-t">one round trip for an hour of minutes</span><span class="lz-d">Sixty keys in one command (Lesson 1.4). Missing buckets come back as <code>nil</code>, which is correctly zero.</span></div>
   <div class="lz-step"><span class="lz-k">Or one hash per day</span><span class="lz-t">HINCRBY views:2026-08-22 &lt;minute&gt; 1</span><span class="lz-d">1,440 fields in one key instead of 1,440 keys — dramatically less overhead, one TTL to manage, and <code>HGETALL</code> returns the whole day (Chapter 5).</span></div>
 </div>
-<pre><code><span class="tok-comment">// The two-command version, pipelined so it costs one round trip</span>
+<pre><code class="language-javascript"><span class="tok-comment">// The two-command version, pipelined so it costs one round trip</span>
 export async function bump(metric, ttl = 3600) {
   const bucket = Math.floor(Date.now() / 60000);
   const key = &#96;views:\${metric}:m:\${bucket}&#96;;
@@ -387,7 +387,7 @@ db0:keys=142811,expires=14417,avg_ttl=1841203</div>
 <p class="lead">Đếm là thao tác dễ bị sai một cách âm thầm nhất trong một hệ phân tán, và cũng là thao tác mà Redis làm cho đúng một cách hiển nhiên. Lý do nằm ở Bài 1.1: một luồng thực thi một câu lệnh tại một thời điểm nghĩa là đọc-sửa-ghi trở thành MỘT bước không chia cắt được, không khoá, không giao dịch, và không có khả năng mất cập nhật.</p>
 
 <h3>Cái lỗi mà INCR không có</h3>
-<pre><code><span class="tok-comment">// ❌ Đọc-sửa-ghi trong ứng dụng: hai tiến trình, mất một lượt tăng</span>
+<pre><code class="language-javascript"><span class="tok-comment">// ❌ Đọc-sửa-ghi trong ứng dụng: hai tiến trình, mất một lượt tăng</span>
 const n = Number(await redis.get('views')) || 0;   <span class="tok-comment">// cả hai cùng đọc ra 100</span>
 await redis.set('views', n + 1);                   <span class="tok-comment">// cả hai cùng ghi 101</span>
 
@@ -464,7 +464,7 @@ redis-cli MGET "views:m:$((minute-2))" "views:m:$((minute-1))" "views:m:$minute"
   <div class="lz-step"><span class="lz-k">Đọc nhiều ô bằng MGET</span><span class="lz-t">một vòng mạng cho cả một giờ tính theo phút</span><span class="lz-d">Sáu mươi khoá trong một câu lệnh (Bài 1.4). Những ô thiếu về dưới dạng <code>nil</code>, và đó đúng là số không.</span></div>
   <div class="lz-step"><span class="lz-k">Hoặc mỗi ngày một hash</span><span class="lz-t">HINCRBY views:2026-08-22 &lt;phút&gt; 1</span><span class="lz-d">1.440 trường trong một khoá thay vì 1.440 khoá — chi phí phụ ít hơn hẳn, chỉ một TTL phải quản, và <code>HGETALL</code> trả về cả ngày (Chương 5).</span></div>
 </div>
-<pre><code><span class="tok-comment">// Bản hai câu lệnh, đóng pipeline nên chỉ tốn một vòng mạng</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Bản hai câu lệnh, đóng pipeline nên chỉ tốn một vòng mạng</span>
 export async function bump(metric, ttl = 3600) {
   const bucket = Math.floor(Date.now() / 60000);
   const key = &#96;views:\${metric}:m:\${bucket}&#96;;
@@ -536,7 +536,7 @@ redis-cli STRLEN active:2026-08-22</code></pre>
 <div class="callout"><strong>262 bytes to record that three specific users were active, because the highest bit set was 2091.</strong> The string is allocated up to the largest offset you touch — setting bit 2091 allocates ⌈2092/8⌉ = 262 bytes, all zero except three bits. That is the whole cost model: <em>memory is proportional to the largest ID, not to the number of set bits</em>, which is the fact that decides whether a bitmap fits your problem.</div>
 
 <h3>The real measurement</h3>
-<pre><code><span class="tok-comment"># One million users, every one of them active</span>
+<pre><code class="language-python"><span class="tok-comment"># One million users, every one of them active</span>
 python3 -c "
 for i in range(1_000_000):
     print(f'SETBIT active:full {i} 1')
@@ -547,7 +547,7 @@ redis-cli BITCOUNT active:full</code></pre>
 <div class="out">(integer) 125000
 (integer) 125080
 (integer) 1000000</div>
-<pre><code><span class="tok-comment"># The same information as a set, for comparison</span>
+<pre><code class="language-python"><span class="tok-comment"># The same information as a set, for comparison</span>
 python3 -c "
 for i in range(1_000_000):
     print(f'SADD active:set {i}')
@@ -601,7 +601,7 @@ redis-cli BITCOUNT churn</code></pre>
   <div class="lz-step"><span class="lz-k">XOR · change</span><span class="lz-t">"active on exactly one of these two days"</span><span class="lz-d">Combined with <code>AND</code> and <code>NOT</code> this gives you arrived-today and left-today without touching a database.</span></div>
   <div class="lz-step"><span class="lz-k">The cost</span><span class="lz-t">O(N) on the longest input, and it BLOCKS</span><span class="lz-d">Thirty <code>OR</code>s of a 125KB bitmap is fast; thirty <code>OR</code>s of a 100MB bitmap is a stall (Lesson 1.1). Store the result and compute it on a schedule, not per request.</span></div>
 </div>
-<pre><code><span class="tok-comment">// Daily active, retention and a rolling 30-day, in eight lines</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Daily active, retention and a rolling 30-day, in eight lines</span>
 export const markActive = (userId) =&gt;
   redis.setBit(&#96;active:\${today()}&#96;, userId, 1);
 
@@ -660,7 +660,7 @@ redis-cli STRLEN active:2026-08-22</code></pre>
 <div class="callout"><strong>262 byte để ghi lại rằng BA người dùng cụ thể đã hoạt động, bởi vì bit cao nhất được bật là 2091.</strong> Chuỗi được cấp phát tới tận vị trí lớn nhất bạn chạm vào — đặt bit 2091 sẽ cấp phát ⌈2092/8⌉ = 262 byte, toàn số 0 trừ ba bit. Đó là toàn bộ mô hình chi phí: <em>bộ nhớ tỷ lệ với ID LỚN NHẤT, không tỷ lệ với số bit được bật</em>, và đó là sự thật quyết định xem bitmap có hợp với bài toán của bạn không.</div>
 
 <h3>Con số đo thật</h3>
-<pre><code><span class="tok-comment"># Một triệu người dùng, tất cả đều hoạt động</span>
+<pre><code class="language-python"><span class="tok-comment"># Một triệu người dùng, tất cả đều hoạt động</span>
 python3 -c "
 for i in range(1_000_000):
     print(f'SETBIT active:full {i} 1')
@@ -671,7 +671,7 @@ redis-cli BITCOUNT active:full</code></pre>
 <div class="out">(integer) 125000
 (integer) 125080
 (integer) 1000000</div>
-<pre><code><span class="tok-comment"># Cũng thông tin đó nhưng lưu bằng một cái set, để so sánh</span>
+<pre><code class="language-python"><span class="tok-comment"># Cũng thông tin đó nhưng lưu bằng một cái set, để so sánh</span>
 python3 -c "
 for i in range(1_000_000):
     print(f'SADD active:set {i}')
@@ -725,7 +725,7 @@ redis-cli BITCOUNT churn</code></pre>
   <div class="lz-step"><span class="lz-k">XOR · thay đổi</span><span class="lz-t">"hoạt động ĐÚNG một trong hai ngày này"</span><span class="lz-d">Ghép với <code>AND</code> và <code>NOT</code> là bạn có được ai mới đến hôm nay và ai vừa rời đi mà không phải chạm vào cơ sở dữ liệu.</span></div>
   <div class="lz-step"><span class="lz-k">Cái giá</span><span class="lz-t">O(N) theo đầu vào dài nhất, và nó CHẶN</span><span class="lz-d">Ba mươi phép <code>OR</code> trên bitmap 125KB thì nhanh; ba mươi phép <code>OR</code> trên bitmap 100MB là một cú đứng hình (Bài 1.1). Hãy lưu kết quả lại và tính theo lịch, đừng tính theo từng request.</span></div>
 </div>
-<pre><code><span class="tok-comment">// Hoạt động theo ngày, giữ chân và cửa sổ trượt 30 ngày, trong tám dòng</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Hoạt động theo ngày, giữ chân và cửa sổ trượt 30 ngày, trong tám dòng</span>
 export const markActive = (userId) =&gt;
   redis.setBit(&#96;active:\${today()}&#96;, userId, 1);
 
@@ -799,7 +799,7 @@ OK
 <div class="callout ok"><strong><code>user:1042</code> was added on both days and counted once in the union.</strong> That is the property that makes HyperLogLog worth having: unions deduplicate correctly across any number of sets, which is exactly the operation that is expensive with real sets and impossible with plain counters. <code>PFCOUNT</code> with several keys computes the union without storing it.</div>
 
 <h3>The measurement: how wrong is it?</h3>
-<pre><code>redis-cli DEL hll s &gt;/dev/null
+<pre><code class="language-python">redis-cli DEL hll s &gt;/dev/null
 python3 -c "
 for i in range(1_000_000):
     print(f'PFADD hll u:{i}')
@@ -840,7 +840,7 @@ redis-cli CONFIG GET hll-sparse-max-bytes</code></pre>
 <p>A HyperLogLog with three items is 26 bytes, not 12KB. Redis starts with a sparse run-length encoding and converts to the dense 12,304-byte form once the sparse representation exceeds <code>hll-sparse-max-bytes</code>. So a million <em>separate</em> HyperLogLogs, most of them nearly empty, is not a million × 12KB — which makes per-page or per-article unique counters entirely practical.</p>
 
 <h3>The pattern it is built for</h3>
-<pre><code><span class="tok-comment">// Unique visitors per page per day, then any rollup you like</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Unique visitors per page per day, then any rollup you like</span>
 export const seen = (page, userId) =&gt;
   redis.pfAdd(&#96;uv:\${page}:\${today()}&#96;, userId);
 
@@ -910,7 +910,7 @@ OK
 <div class="callout ok"><strong><code>user:1042</code> được thêm ở cả hai ngày và chỉ được đếm MỘT lần trong phép hợp.</strong> Đó chính là tính chất khiến HyperLogLog đáng có: phép hợp khử trùng lặp ĐÚNG qua bao nhiêu tập hợp cũng được, và đó đúng là thao tác tốn kém với set thật và bất khả với bộ đếm thường. <code>PFCOUNT</code> với nhiều khoá tính phép hợp mà không phải lưu nó lại.</div>
 
 <h3>Đo thật: nó sai bao nhiêu?</h3>
-<pre><code>redis-cli DEL hll s &gt;/dev/null
+<pre><code class="language-python">redis-cli DEL hll s &gt;/dev/null
 python3 -c "
 for i in range(1_000_000):
     print(f'PFADD hll u:{i}')
@@ -951,7 +951,7 @@ redis-cli CONFIG GET hll-sparse-max-bytes</code></pre>
 <p>Một HyperLogLog chứa ba mục là 26 byte, không phải 12KB. Redis khởi đầu bằng một cách mã hoá thưa theo độ dài lặp rồi chuyển sang dạng dày 12.304 byte một khi biểu diễn thưa vượt <code>hll-sparse-max-bytes</code>. Nên một triệu HyperLogLog RIÊNG BIỆT, phần lớn gần như rỗng, KHÔNG phải là một triệu × 12KB — và điều đó khiến bộ đếm duy nhất theo từng trang hay từng bài viết hoàn toàn khả thi.</p>
 
 <h3>Cái mẫu mà nó được sinh ra để phục vụ</h3>
-<pre><code><span class="tok-comment">// Khách truy cập duy nhất theo trang theo ngày, rồi gộp kiểu gì tuỳ bạn</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Khách truy cập duy nhất theo trang theo ngày, rồi gộp kiểu gì tuỳ bạn</span>
 export const seen = (page, userId) =&gt;
   redis.pfAdd(&#96;uv:\${page}:\${today()}&#96;, userId);
 
@@ -1007,7 +1007,7 @@ sitewide uniques today:    412884  (union of 1,284 page HLLs, 41ms)</div>
 <p class="lead">Rate limiting is the archetypal Redis problem: it needs to be atomic, fast, shared across every instance of your application, and it needs to forget old data on its own. Four algorithms are worth knowing, and they trade accuracy against cost in a way that makes the choice genuinely situational.</p>
 
 <h3>1 · Fixed window — two commands, one flaw</h3>
-<pre><code><span class="tok-comment">// Simplest possible: a counter per window, with a TTL</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Simplest possible: a counter per window, with a TTL</span>
 export async function fixedWindow(id, limit = 100, windowSec = 60) {
   const bucket = Math.floor(Date.now() / (windowSec * 1000));
   const key = &#96;rl:\${id}:\${bucket}&#96;;
@@ -1028,7 +1028,7 @@ redis-cli TTL "rl:ip1:29783364"</code></pre>
 <div class="callout warn"><strong>The boundary problem: a limit of 100 per minute allows 200 requests in two seconds.</strong> A client sends 100 at 11:59:59 and 100 more at 12:00:01 — two different windows, both within their limit, and your backend just took twice the intended peak. Every fixed-window limiter has this, and whether it matters depends entirely on what you are protecting: for an API quota it is fine, for a login endpoint or an expensive AI call it is not.</div>
 
 <h3>2 · Sliding window, approximated — the practical default</h3>
-<pre><code><span class="tok-comment">// Weight the previous window by how much of it is still in view</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Weight the previous window by how much of it is still in view</span>
 export async function slidingApprox(id, limit = 100, windowMs = 60_000) {
   const now = Date.now();
   const cur = Math.floor(now / windowMs);
@@ -1060,7 +1060,7 @@ redis-cli EXPIRE rl:log:ip1 60</code></pre>
 (integer) 0
 (integer) 2
 (integer) 1</div>
-<pre><code><span class="tok-comment">// One Lua script so the trim, count and add are one atomic step (Chapter 7)</span>
+<pre><code class="language-javascript"><span class="tok-comment">// One Lua script so the trim, count and add are one atomic step (Chapter 7)</span>
 const SLIDING_LOG = &#96;
   local now, window, limit = tonumber(ARGV[1]), tonumber(ARGV[2]), tonumber(ARGV[3])
   redis.call('ZREMRANGEBYSCORE', KEYS[1], 0, now - window)
@@ -1081,7 +1081,7 @@ const SLIDING_LOG = &#96;
 </div>
 
 <h3>4 · Token bucket — the one that allows bursts on purpose</h3>
-<pre><code><span class="tok-comment">// Refill continuously, spend one token per request. Bursts are a feature here.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Refill continuously, spend one token per request. Bursts are a feature here.</span>
 const TOKEN_BUCKET = &#96;
   local rate, cap, now, cost = tonumber(ARGV[1]), tonumber(ARGV[2]),
                                tonumber(ARGV[3]), tonumber(ARGV[4])
@@ -1115,7 +1115,7 @@ after 2s idle:           allowed=10  tokens_left=0   (refilled at 5/s)</div>
   <div class="kv"><span class="k">By endpoint, too</span><span class="v"><code>rl:\${userId}:\${route}</code>. A limit of 100/min across every endpoint means a cheap poll can starve an expensive one. Separate the buckets that have different costs.</span></div>
   <div class="kv"><span class="k">Trust the proxy header correctly</span><span class="v"><code>X-Forwarded-For</code> is client-supplied unless your proxy overwrites it. Take the correct hop, and set <code>trust proxy</code> deliberately (Docker course, Lesson 10.5) — otherwise every attacker gets an unlimited number of buckets.</span></div>
 </div>
-<pre><code><span class="tok-comment">// The response headers that make a limiter usable by clients</span>
+<pre><code class="language-typescript"><span class="tok-comment">// The response headers that make a limiter usable by clients</span>
 res.set({
   'RateLimit-Limit':     String(limit),
   'RateLimit-Remaining': String(Math.max(0, limit - used)),
@@ -1151,7 +1151,7 @@ if (!allowed) return res.status(429).set('Retry-After', String(retryAfter)).json
 <p class="lead">Giới hạn tần suất là bài toán Redis mẫu mực: nó cần nguyên tử, nhanh, dùng chung qua mọi instance của ứng dụng, và nó cần tự quên dữ liệu cũ. Có bốn thuật toán đáng biết, và chúng đánh đổi độ chính xác với chi phí theo cách khiến lựa chọn thật sự phụ thuộc tình huống.</p>
 
 <h3>1 · Cửa sổ cố định — hai câu lệnh, một khiếm khuyết</h3>
-<pre><code><span class="tok-comment">// Đơn giản nhất có thể: mỗi cửa sổ một bộ đếm, kèm TTL</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Đơn giản nhất có thể: mỗi cửa sổ một bộ đếm, kèm TTL</span>
 export async function fixedWindow(id, limit = 100, windowSec = 60) {
   const bucket = Math.floor(Date.now() / (windowSec * 1000));
   const key = &#96;rl:\${id}:\${bucket}&#96;;
@@ -1172,7 +1172,7 @@ redis-cli TTL "rl:ip1:29783364"</code></pre>
 <div class="callout warn"><strong>Vấn đề ranh giới: một giới hạn 100 mỗi phút cho phép 200 yêu cầu trong hai giây.</strong> Một client gửi 100 lúc 11:59:59 và 100 nữa lúc 12:00:01 — hai cửa sổ khác nhau, cả hai đều trong giới hạn, và backend của bạn vừa nhận gấp đôi đỉnh dự kiến. MỌI bộ giới hạn cửa sổ cố định đều có chuyện này, và nó có quan trọng hay không phụ thuộc hoàn toàn vào việc bạn đang bảo vệ cái gì: với một hạn ngạch API thì ổn, với một điểm cuối đăng nhập hay một lời gọi AI đắt tiền thì không.</div>
 
 <h3>2 · Cửa sổ trượt, xấp xỉ — mặc định thực dụng</h3>
-<pre><code><span class="tok-comment">// Đánh trọng số cho cửa sổ trước theo phần còn nằm trong tầm nhìn</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Đánh trọng số cho cửa sổ trước theo phần còn nằm trong tầm nhìn</span>
 export async function slidingApprox(id, limit = 100, windowMs = 60_000) {
   const now = Date.now();
   const cur = Math.floor(now / windowMs);
@@ -1204,7 +1204,7 @@ redis-cli EXPIRE rl:log:ip1 60</code></pre>
 (integer) 0
 (integer) 2
 (integer) 1</div>
-<pre><code><span class="tok-comment">// Một script Lua để việc cắt, đếm và thêm thành MỘT bước nguyên tử (Chương 7)</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Một script Lua để việc cắt, đếm và thêm thành MỘT bước nguyên tử (Chương 7)</span>
 const SLIDING_LOG = &#96;
   local now, window, limit = tonumber(ARGV[1]), tonumber(ARGV[2]), tonumber(ARGV[3])
   redis.call('ZREMRANGEBYSCORE', KEYS[1], 0, now - window)
@@ -1225,7 +1225,7 @@ const SLIDING_LOG = &#96;
 </div>
 
 <h3>4 · Gáo token — cái CỐ Ý cho phép bùng nổ</h3>
-<pre><code><span class="tok-comment">// Đổ đầy liên tục, tiêu một token cho mỗi yêu cầu. Bùng nổ ở đây là TÍNH NĂNG.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Đổ đầy liên tục, tiêu một token cho mỗi yêu cầu. Bùng nổ ở đây là TÍNH NĂNG.</span>
 const TOKEN_BUCKET = &#96;
   local rate, cap, now, cost = tonumber(ARGV[1]), tonumber(ARGV[2]),
                                tonumber(ARGV[3]), tonumber(ARGV[4])
@@ -1259,7 +1259,7 @@ after 2s idle:           allowed=10  tokens_left=0   (refilled at 5/s)</div>
   <div class="kv"><span class="k">Theo cả ĐIỂM CUỐI nữa</span><span class="v"><code>rl:\${userId}:\${route}</code>. Một giới hạn 100/phút dùng chung cho mọi điểm cuối nghĩa là một lời gọi thăm dò rẻ tiền có thể bỏ đói một lời gọi đắt tiền. Hãy tách các gáo có chi phí khác nhau.</span></div>
   <div class="kv"><span class="k">Tin header của proxy cho đúng</span><span class="v"><code>X-Forwarded-For</code> là do client cung cấp, trừ khi proxy của bạn ghi đè nó. Hãy lấy đúng chặng, và đặt <code>trust proxy</code> một cách có chủ đích (khoá Docker, Bài 10.5) — không thì mọi kẻ tấn công đều có vô hạn số gáo.</span></div>
 </div>
-<pre><code><span class="tok-comment">// Những header phản hồi khiến một bộ giới hạn dùng được với client</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Những header phản hồi khiến một bộ giới hạn dùng được với client</span>
 res.set({
   'RateLimit-Limit':     String(limit),
   'RateLimit-Remaining': String(Math.max(0, limit - used)),

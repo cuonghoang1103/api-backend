@@ -61,7 +61,7 @@ export default {
 <li><strong>The four headings preview the next six slides</strong> — Naming → 43 · Indentation → 44 · Comments → 45 · General Guidelines → 46, 47, 48. Nothing else is in the style section, so this slide is a complete table of contents.</li>
 <li><strong>Why now and not later</strong> — the deck placed style right after the loops (slides 28–40) on purpose. Loops are the first construct where bad indentation genuinely hides bugs: a misplaced brace can move a statement in or out of a loop body and the program still compiles.</li>
 </ul>
-<pre><code>/* Same program, two styles. Both compile. Only one is readable. */
+<pre><code class="language-c">/* Same program, two styles. Both compile. Only one is readable. */
 
 /* --- unreadable --- */
 #include &lt;stdio.h&gt;
@@ -93,7 +93,7 @@ int main(void) {
 <li><strong>Bốn đề mục chính là mục lục của sáu slide sau</strong> — Naming → 43 · Indentation → 44 · Comments → 45 · General Guidelines → 46, 47, 48. Phần phong cách không còn gì khác, nên slide này là mục lục đầy đủ.</li>
 <li><strong>Vì sao đặt ở đây chứ không để sau</strong> — deck cố ý xếp phần phong cách ngay sau phần vòng lặp (slide 28–40). Vòng lặp là cấu trúc đầu tiên mà thụt lề sai thật sự giấu được lỗi: một dấu ngoặc nhọn đặt lệch có thể đẩy một câu lệnh vào trong hay ra ngoài thân vòng lặp mà chương trình vẫn biên dịch trót lọt.</li>
 </ul>
-<pre><code>/* Cung mot chuong trinh, hai phong cach. Ca hai deu bien dich duoc. */
+<pre><code class="language-c">/* Cung mot chuong trinh, hai phong cach. Ca hai deu bien dich duoc. */
 
 /* --- kho doc --- */
 #include &lt;stdio.h&gt;
@@ -127,7 +127,7 @@ int main(void) {
 <li><strong>"Keep names short — studentName rather than theNameOfAStudent (camel case rule)"</strong> — the slide's own example. camelCase = first word lowercase, each following word capitalised, no underscores. Aim for one to three words.</li>
 <li><strong>"Keep the names of indices VERY short — treat them as mathematical notation"</strong> — the one place where <code>i</code>, <code>j</code>, <code>k</code>, <code>n</code> are not only allowed but preferred. Nobody writes <code>for (loopCounterForRows = 0; ...)</code>; mathematicians have used i and j for centuries and every programmer reads them instantly.</li>
 </ul>
-<pre><code>/* cryptic - legal C, unreadable */
+<pre><code class="language-c">/* cryptic - legal C, unreadable */
 int d, s, n2;
 double t;
 
@@ -152,7 +152,7 @@ for (i = 0; i &lt; numberOfStudents; i++)
 <li><strong>"Giữ tên ngắn — studentName chứ đừng theNameOfAStudent (quy tắc camel case)"</strong> — chính ví dụ của slide. camelCase = từ đầu viết thường, mỗi từ sau viết hoa chữ cái đầu, không gạch dưới. Nhắm tới một đến ba từ.</li>
 <li><strong>"Tên chỉ số thì phải RẤT ngắn — coi chúng như ký hiệu toán học"</strong> — đây là chỗ duy nhất mà <code>i</code>, <code>j</code>, <code>k</code>, <code>n</code> không chỉ được phép mà còn được ưu tiên. Chẳng ai viết <code>for (loopCounterForRows = 0; ...)</code>; nhà toán học đã dùng i và j hàng thế kỷ và mọi lập trình viên đọc ra ngay lập tức.</li>
 </ul>
-<pre><code>/* bi hiem - hop le nhung kho doc */
+<pre><code class="language-c">/* bi hiem - hop le nhung kho doc */
 int d, s, n2;
 double t;
 
@@ -179,7 +179,7 @@ for (i = 0; i &lt; numberOfStudents; i++)
 <li><strong>Why mixing is banned</strong> — the eye learns one pattern and then stops re-reading. Halfway through a mixed file you will misread a brace as belonging to the wrong construct, and that is exactly the bug class that indentation was supposed to prevent.</li>
 <li><strong>One step = 4 spaces (or one tab, not both)</strong> — the slide does not fix a number, but mixing tabs and spaces is the classic way a file looks aligned on your machine and ragged on your lecturer's.</li>
 </ul>
-<pre><code>/* the slide's nested example, indentation carrying the structure */
+<pre><code class="language-c">/* the slide's nested example, indentation carrying the structure */
 for ( i = 0; i &lt; n; i++ ) {
     for ( j = 0; j &lt; n; j++ ) {
         for ( k = 0; k &lt; n; k++ ) {
@@ -203,7 +203,7 @@ printf("That's all folks!!!\\n");</code></pre>
 <li><strong>Vì sao cấm trộn</strong> — mắt học thuộc một mẫu rồi thôi không đọc kỹ nữa. Đi được nửa file trộn kiểu, bạn sẽ đọc nhầm một dấu ngoặc thành của cấu trúc khác — đúng cái loại lỗi mà thụt lề sinh ra để ngăn.</li>
 <li><strong>Một nấc = 4 dấu cách (hoặc một tab, đừng cả hai)</strong> — slide không chốt con số, nhưng trộn tab với dấu cách là cách kinh điển khiến file thẳng hàng trên máy bạn mà so le trên máy thầy.</li>
 </ul>
-<pre><code>/* vi du long nhau cua slide, thut le ganh phan cau truc */
+<pre><code class="language-c">/* vi du long nhau cua slide, thut le ganh phan cau truc */
 for ( i = 0; i &lt; n; i++ ) {
     for ( j = 0; j &lt; n; j++ ) {
         for ( k = 0; k &lt; n; k++ ) {
@@ -229,7 +229,7 @@ printf("That's all folks!!!\\n");</code></pre>
 <li><strong>The two comment syntaxes in C</strong> — <code>/* … */</code> spans any number of lines and is valid in every C standard, including the C89 this course targets; <code>// …</code> runs to the end of the line and was standardised in C99. Dev-C++ accepts both; for portability in exam answers <code>/* … */</code> is always safe.</li>
 <li><strong>The one comment that never rots</strong> — the file header: what the program does, who wrote it, when. Slide 51's own example starts with exactly that: <code>/*Walkthrough1.c*/</code>.</li>
 </ul>
-<pre><code>/* BAD - describes HOW, and decorates */
+<pre><code class="language-c">/* BAD - describes HOW, and decorates */
 /**********************************/
 /*  s = s + i;  add i into s      */
 /**********************************/
@@ -252,7 +252,7 @@ for (i = 1; i &lt;= n; i++)
 <li><strong>Hai cú pháp chú thích của C</strong> — <code>/* … */</code> trải bao nhiêu dòng cũng được và hợp lệ ở mọi chuẩn C, kể cả chuẩn C89 mà môn này bám theo; <code>// …</code> chạy tới hết dòng và mới được chuẩn hoá từ C99. Dev-C++ nhận cả hai; để an toàn khi làm bài thi thì <code>/* … */</code> luôn chắc ăn.</li>
 <li><strong>Chú thích duy nhất không bao giờ hỏng</strong> — phần đầu file: chương trình làm gì, ai viết, viết khi nào. Ví dụ ở slide 51 mở đầu đúng bằng thứ đó: <code>/*Walkthrough1.c*/</code>.</li>
 </ul>
-<pre><code>/* DO - mo ta LAM NHU THE NAO, lai con trang tri */
+<pre><code class="language-c">/* DO - mo ta LAM NHU THE NAO, lai con trang tri */
 /**********************************/
 /*  s = s + i;  cong i vao s      */
 /**********************************/
@@ -279,7 +279,7 @@ for (i = 1; i &lt;= n; i++)
 <li><strong>"Avoid using the character encodings for a particular machine"</strong> — write <code>'A'</code>, never <code>65</code>; write <code>c &gt;= 'a' &amp;&amp; c &lt;= 'z'</code>, never <code>c &gt;= 97 &amp;&amp; c &lt;= 122</code>. ASCII is not the only encoding in the world, and <code>'A'</code> is readable on every machine.</li>
 <li><strong>"Use a single space or no spaces either side of an operator"</strong> — <code>a + b</code> or <code>a+b</code>, consistently. Never <code>a +b</code>, which reads as "a" followed by "positive b".</li>
 </ul>
-<pre><code>/* violates 4 guidelines at once */
+<pre><code class="language-c">/* violates 4 guidelines at once */
 int total;                    /* global - suspect list = the whole file */
 int main(void) {
     int i = 1;                /* algorithmic init, far from its loop    */
@@ -310,7 +310,7 @@ int main(void) {
 <li><strong>"Tránh dùng mã ký tự riêng của một máy cụ thể"</strong> — viết <code>'A'</code>, đừng viết <code>65</code>; viết <code>c &gt;= 'a' &amp;&amp; c &lt;= 'z'</code>, đừng viết <code>c &gt;= 97 &amp;&amp; c &lt;= 122</code>. ASCII không phải bảng mã duy nhất trên đời, còn <code>'A'</code> thì đọc được trên mọi máy.</li>
 <li><strong>"Dùng một dấu cách hoặc không dấu cách nào ở hai bên toán tử"</strong> — <code>a + b</code> hoặc <code>a+b</code>, nhất quán. Đừng bao giờ <code>a +b</code>, vì nó đọc thành "a" rồi "b dương".</li>
 </ul>
-<pre><code>/* pham 4 guideline cung luc */
+<pre><code class="language-c">/* pham 4 guideline cung luc */
 int total;                    /* toan cuc - nghi pham la ca file      */
 int main(void) {
     int i = 1;                /* khoi tao thuat toan, xa vong lap cua no */
@@ -342,7 +342,7 @@ int main(void) {
 <li><strong>"Limit the initialization and iteration clauses of a for statement to the iteration variables"</strong> — <code>for (i = 0, sum = 0; i &lt; n; i++, sum += i)</code> is legal and unreadable. The <code>for</code> header is about <em>counting</em>; the accumulation belongs in the body.</li>
 <li><strong>"Distribute and nest complexity"</strong> — do not build one monstrous condition. Split a hard test into a nested <code>if</code> or into named intermediate variables, so each line asks one simple question.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 int main(void) {
     int i, n = 5, sum = 0;
 
@@ -367,7 +367,7 @@ int main(void) {
 <li><strong>"Giới hạn mệnh đề khởi tạo và mệnh đề lặp của for trong phạm vi các biến lặp"</strong> — <code>for (i = 0, sum = 0; i &lt; n; i++, sum += i)</code> hợp lệ nhưng không đọc nổi. Phần đầu <code>for</code> là chuyện <em>đếm</em>; phần cộng dồn thuộc về thân vòng lặp.</li>
 <li><strong>"Phân tán và lồng độ phức tạp"</strong> — đừng dựng một điều kiện khổng lồ. Hãy chẻ một phép kiểm khó thành <code>if</code> lồng nhau hoặc thành các biến trung gian có tên, để mỗi dòng chỉ hỏi một câu đơn giản.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 int main(void) {
     int i, n = 5, sum = 0;
 
@@ -393,7 +393,7 @@ int main(void) {
 <li><strong>"Remove unreferenced variables"</strong> — a declared-but-never-used variable is a leftover from a deleted idea. It costs a reader real time ("where is this used? … nowhere?") and hides typos, because the variable you <em>meant</em> to update may be the unused one.</li>
 <li><strong>"Remove all commented code and debugging statements from release and production code"</strong> — the <code>printf("here 1\\n")</code> lines you sprinkled while hunting a bug, and the blocks you commented out instead of deleting. Version control remembers deleted code; your reader does not need to.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 int main(void) {
     int x = 3;
     int unused;                     /* rule 4: unreferenced - delete it */
@@ -416,7 +416,7 @@ int main(void) {
 <li><strong>"Xoá các biến không được tham chiếu"</strong> — một biến khai báo mà chẳng bao giờ dùng là tàn dư của một ý tưởng đã bỏ. Nó ngốn thời gian thật của người đọc ("chỗ nào dùng nhỉ… không chỗ nào à?") và còn che lỗi gõ, vì cái biến bạn <em>định</em> cập nhật rất có thể chính là cái đang bị bỏ không.</li>
 <li><strong>"Xoá hết mã bị comment và các câu lệnh gỡ lỗi khỏi bản phát hành"</strong> — mấy dòng <code>printf("here 1\\n")</code> bạn rắc ra lúc truy lỗi, và những khối bạn comment lại thay vì xoá. Hệ quản lý phiên bản nhớ giùm mã đã xoá; người đọc của bạn thì không cần nhớ.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 int main(void) {
     int x = 3;
     int unused;                     /* quy tac 4: khong dung - xoa di */
@@ -490,7 +490,7 @@ int main(void) {
 
       [51, 'Walkthroughs (cont.) — Example 1: Walkthrough1.c',
         `<p class="y-chinh">🎯 The first worked walkthrough. The program on the slide is short but every one of its five lines matters, and the table beside it is the model answer you are expected to reproduce in the exam.</p>
-<pre><code>/*Walkthrough1.c*/
+<pre><code class="language-c">/*Walkthrough1.c*/
 #include &lt;stdio.h&gt;
 int main()
 {   int a=5, b=2, c=1;
@@ -524,7 +524,7 @@ int main()
 <p class="dap-an">✅ Output: <code>41</code> — exactly what the slide's Output box shows, and confirmed by compiling and running the program. <strong>One correction to the slide, however:</strong> in the printed table the row with <code>a = 8, b = 8</code> gives <code>a+b = 18</code>. That is a typo — 8 + 8 = <strong>16</strong>. The final answer is unaffected, because 16 is still less than 20, so the loop continues either way and c still ends at 41. Write 16 in your own table; if a marker's answer key repeats 18, the value is still under 20 and the conclusion stands.</p>
 <p class="pitfall">⚠️ <code>getchar()</code> on the second-to-last line is not part of the algorithm. It is there so the console window stays open on Windows until you press Enter — the same job as <code>system("pause")</code> in the debug program on slide 55. Never let it into your walkthrough table as a step that changes a value.</p>`,
         `<p class="y-chinh">🎯 Bài walkthrough mẫu đầu tiên. Chương trình trên slide ngắn nhưng cả năm dòng đều có vai trò, và cái bảng bên cạnh chính là bài giải mẫu mà bạn được chờ đợi sẽ dựng lại trong phòng thi.</p>
-<pre><code>/*Walkthrough1.c*/
+<pre><code class="language-c">/*Walkthrough1.c*/
 #include &lt;stdio.h&gt;
 int main()
 {   int a=5, b=2, c=1;
@@ -560,7 +560,7 @@ int main()
 
       [52, 'Walkthroughs (cont.) — Example 2: for + if, input 15',
         `<p class="y-chinh">🎯 A harder trace, because now three things vary at once: the loop counter jumps by 3, an <code>if</code> filters which values are used, and the accumulator only sometimes changes. The question is fixed: <em>what is the output if the input is 15?</em></p>
-<pre><code>int n, i, S=0;
+<pre><code class="language-c">int n, i, S=0;
 scanf("%d", &amp;n);
 for (i=1; i&lt;=n; i+=3)
     if (i%2!=0 &amp;&amp; i%3!=0) S+=i;
@@ -586,7 +586,7 @@ printf("%d", S);</code></pre>
 <p class="dap-an">✅ Output: <code>21</code>. This matches the slide's own table (<code>0+1→1</code>, <code>1+7→8</code>, <code>8+13→21</code>, <code>S=21</code>), and was confirmed by compiling the program and feeding it 15 on standard input. Notice the printed value is 21, <em>not</em> the value of i (16) and <em>not</em> the count of matches (3) — the second half of the walkthrough definition on slide 50 is what keeps you honest here.</p>
 <p class="meo">💡 Sanity check without the table: with step 3 starting from 1, every i is ≡ 1 (mod 3), so <code>i%3</code> can never be 0 and the second test is <em>always</em> true. The condition therefore reduces to "i is odd", and the odd members of 1, 4, 7, 10, 13 are 1, 7, 13 → 21. If your table and your shortcut disagree, trust the table.</p>`,
         `<p class="y-chinh">🎯 Một bài chạy tay khó hơn, vì giờ ba thứ cùng biến thiên: biến đếm nhảy 3 đơn vị, một lệnh <code>if</code> lọc xem giá trị nào được dùng, và biến tích luỹ chỉ đôi khi mới đổi. Câu hỏi thì cố định: <em>in ra gì nếu nhập 15?</em></p>
-<pre><code>int n, i, S=0;
+<pre><code class="language-c">int n, i, S=0;
 scanf("%d", &amp;n);
 for (i=1; i&lt;=n; i+=3)
     if (i%2!=0 &amp;&amp; i%3!=0) S+=i;
@@ -614,7 +614,7 @@ printf("%d", S);</code></pre>
 
       [53, 'Walkthroughs — Exercise (scanf order and format matching)',
         `<p class="y-chinh">🎯 The exercise looks like another sum, but the real subject is <strong>scanf</strong>: which variable receives which number, and what happens when the format string contains literal characters.</p>
-<pre><code>int m, n, i, S=0;
+<pre><code class="language-c">int m, n, i, S=0;
 scanf("%d%d", &amp;n, &amp;m);          /* note the ORDER: n first, then m */
 for (i=m; i&lt;=n; i++) S+=i;
 printf("%d", S);</code></pre>
@@ -639,7 +639,7 @@ printf("%d", S);</code></pre>
 <p class="dap-an">✅ Answers, all verified by compiling and running: input <code>8 12</code> → <strong>0</strong>; input <code>8a12</code> with <code>"%da%d"</code> → <strong>0</strong>; every row of the Test table → <strong>50</strong> (8+9+10+11+12 = 50). The lesson the table is teaching: <code>%d</code> itself already skips leading whitespace, so <code>"%d%d"</code> and <code>"%d %d"</code> behave identically, and a newline between the two numbers is just more whitespace. A <em>non</em>-whitespace literal such as <code>-</code> or <code>a</code>, however, must appear in the input exactly where the format says.</p>
 <p class="pitfall">⚠️ Measured trap: <code>scanf("%d-%d", &amp;n, &amp;m)</code> with the input <code>12 -8</code> (a space before the minus) returns <strong>1</strong>, not 2 — the literal <code>-</code> does not skip the space, so the second conversion never happens and <code>m</code> keeps whatever garbage was in its memory. Running it printed a nonsense sum. Always check the <em>return value</em> of <code>scanf</code>: it is the number of items successfully read.</p>`,
         `<p class="y-chinh">🎯 Bài tập trông như lại một bài tính tổng, nhưng chủ đề thật của nó là <strong>scanf</strong>: biến nào nhận số nào, và chuyện gì xảy ra khi chuỗi định dạng chứa ký tự nguyên văn.</p>
-<pre><code>int m, n, i, S=0;
+<pre><code class="language-c">int m, n, i, S=0;
 scanf("%d%d", &amp;n, &amp;m);          /* chu y THU TU: n truoc, roi moi m */
 for (i=m; i&lt;=n; i++) S+=i;
 printf("%d", S);</code></pre>
@@ -704,7 +704,7 @@ printf("%d", S);</code></pre>
 
       [55, 'How to debug (Dev-C++) — Step 1: Write Your Code',
         `<p class="y-chinh">🎯 Step 1 of four. The screenshot shows Embarcadero Dev-C++ 6.3 with the file <code>debug_demo.c</code> open — a deliberately tiny program, because a debugging lesson must not also be a reading lesson.</p>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 
 int main(){
@@ -732,7 +732,7 @@ int main(){
 <p class="dap-an">✅ Compiled with <code>cc -Wall</code> (minus the Windows-only <code>system("pause")</code>) and run, the program prints exactly four lines: <code>The odd number is: 1</code> · <code>The odd number is: 3</code> · <code>The odd number is: 5</code> · <code>Sum the odd numbers is: 9</code>. Keep that expected output in mind — the whole point of Steps 2–4 is to watch <em>how</em> those four lines come to exist.</p>
 <p class="meo">💡 On macOS or Linux the equivalent of Step 1 is the same file plus one compile flag: <code>gcc -Wall -g debug_demo.c -o debug_demo</code>. The <code>-g</code> is the whole of Step 2 in a single character.</p>`,
         `<p class="y-chinh">🎯 Bước 1 trong bốn bước. Ảnh chụp là Embarcadero Dev-C++ 6.3 đang mở file <code>debug_demo.c</code> — một chương trình cố ý làm thật nhỏ, vì một bài học gỡ lỗi không nên kiêm luôn bài học đọc hiểu.</p>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 
 int main(){
@@ -769,7 +769,7 @@ int main(){
 <li><strong>Why a separate Debug profile instead of always using -g</strong> — debug builds are bigger and skip optimisation. You debug with <code>-g</code>, you ship without it. Keeping two profiles means one dropdown switch instead of editing flags twice a day.</li>
 <li><strong>How to check it worked</strong> — rebuild (F9) and look at the Compile Log tab: the gcc command line shown there must contain <code>-g</code>. If it does not, the option was typed into the wrong compiler set — a very common slip, because the dialog configures <em>the set selected in ①</em>, not the one currently active.</li>
 </ul>
-<pre><code># the same two settings, on the command line
+<pre><code class="language-bash"># the same two settings, on the command line
 
 gcc -Wall -g  debug_demo.c -o debug_demo      # -g = keep debug symbols
 gcc -Wall -O2 debug_demo.c -o debug_demo      # release: optimised, no symbols
@@ -787,7 +787,7 @@ gcc -Wall -O2 debug_demo.c -o debug_demo      # release: optimised, no symbols
 <li><strong>Vì sao phải có hồ sơ Debug riêng thay vì luôn bật -g</strong> — bản debug nặng hơn và bỏ tối ưu. Bạn gỡ lỗi với <code>-g</code>, bạn giao hàng thì không. Giữ hai hồ sơ nghĩa là chỉ cần đổi một ô chọn thay vì sửa cờ hai lần mỗi ngày.</li>
 <li><strong>Kiểm xem đã ăn chưa</strong> — dựng lại (F9) rồi nhìn tab Compile Log: dòng lệnh gcc hiện ở đó phải có <code>-g</code>. Nếu không có thì tuỳ chọn đã bị gõ vào nhầm bộ biên dịch — cú trượt rất hay gặp, vì hộp thoại cấu hình cho <em>bộ được chọn ở ô ①</em>, chứ không phải bộ đang hoạt động.</li>
 </ul>
-<pre><code># dung hai thiet lap do, nhung tren dong lenh
+<pre><code class="language-bash"># dung hai thiet lap do, nhung tren dong lenh
 
 gcc -Wall -g  debug_demo.c -o debug_demo      # -g = giu ky hieu go loi
 gcc -Wall -O2 debug_demo.c -o debug_demo      # ban phat hanh: toi uu, khong ky hieu
@@ -807,7 +807,7 @@ gcc -Wall -O2 debug_demo.c -o debug_demo      # ban phat hanh: toi uu, khong ky 
 <li><strong>Reading the Debug panel before you run</strong> — on the left it shows <code>i = Execute to evaluate</code> and <code>sum = Execute to evaluate</code>. That is not an error: the watches exist but the program has not started, so the variables have no storage yet. On slide 58 the same panel will read <code>i = 1</code> and <code>sum = 0</code>.</li>
 <li><strong>The watch list IS the walkthrough table</strong> — this is the sentence to remember from the whole debugging section. Columns of the paper table on slide 51 = rows of the Watch panel. The debugger does not replace the skill, it automates it.</li>
 </ul>
-<pre><code># the same two instruments in VS Code + gdb (macOS / Linux)
+<pre><code class="language-bash"># the same two instruments in VS Code + gdb (macOS / Linux)
 
 gcc -Wall -g debug_demo.c -o debug_demo
 gdb ./debug_demo
@@ -828,7 +828,7 @@ gdb ./debug_demo
 <li><strong>Đọc bảng Debug trước khi chạy</strong> — bên trái hiện <code>i = Execute to evaluate</code> và <code>sum = Execute to evaluate</code>. Đó không phải lỗi: watch đã có nhưng chương trình chưa khởi động nên biến chưa có ô nhớ nào. Sang slide 58, đúng bảng ấy sẽ hiện <code>i = 1</code> và <code>sum = 0</code>.</li>
 <li><strong>Danh sách watch CHÍNH LÀ bảng vết</strong> — đây là câu đáng nhớ nhất của cả phần gỡ lỗi. Các cột của bảng giấy ở slide 51 = các dòng của bảng Watch. Trình gỡ lỗi không thay thế kỹ năng, nó chỉ tự động hoá kỹ năng ấy.</li>
 </ul>
-<pre><code># dung hai nhac cu do trong VS Code + gdb (macOS / Linux)
+<pre><code class="language-bash"># dung hai nhac cu do trong VS Code + gdb (macOS / Linux)
 
 gcc -Wall -g debug_demo.c -o debug_demo
 gdb ./debug_demo
@@ -893,7 +893,7 @@ gdb ./debug_demo
 <li><strong>Semantic errors — it builds, it runs, the answer is "right" but answers the wrong question</strong> — computing an average with integer division, or summing marks when the requirement said average of marks. The code is faultless; your reading of the problem was not.</li>
 <li><strong>How to do part (b)</strong> — write the program with all four planted deliberately. Fix the syntax error first (nothing runs until you do), then run under the debugger with a watch on every variable, and compare what you see against a walkthrough table you wrote <em>before</em> running. Wherever the two diverge is the logical error.</li>
 </ul>
-<pre><code>/* Planted bugs - can you name each type before reading the fix? */
+<pre><code class="language-c">/* Planted bugs - can you name each type before reading the fix? */
 #include &lt;stdio.h&gt;
 int main(void) {
     int i, sum = 0, n = 5, zero = 0;
@@ -929,7 +929,7 @@ int main(void) {
 <li><strong>Lỗi ngữ nghĩa — dựng được, chạy được, đáp số "đúng" nhưng trả lời sai câu hỏi</strong> — tính trung bình bằng phép chia số nguyên, hoặc cộng tổng điểm trong khi đề bài đòi điểm trung bình. Mã thì không sai một chữ; chỗ sai là cách bạn đọc đề.</li>
 <li><strong>Làm phần (b) thế nào</strong> — viết chương trình có cố ý cài đủ bốn loại. Sửa lỗi cú pháp trước (chưa sửa thì chưa chạy được gì), rồi chạy dưới trình gỡ lỗi với watch đặt lên mọi biến, và đối chiếu với một bảng vết bạn đã viết ra <em>trước khi</em> chạy. Chỗ nào hai bên lệch nhau chính là lỗi logic.</li>
 </ul>
-<pre><code>/* Loi cai san - ban goi ten duoc tung loai truoc khi doc phan sua khong? */
+<pre><code class="language-c">/* Loi cai san - ban goi ten duoc tung loai truoc khi doc phan sua khong? */
 #include &lt;stdio.h&gt;
 int main(void) {
     int i, sum = 0, n = 5, zero = 0;

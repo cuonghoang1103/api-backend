@@ -274,7 +274,7 @@ export default {
 </ul>
 <h3>Create your first React app (Vite)</h3>
 <p>Modern React apps use <strong>Vite</strong> for a fast dev server. In a terminal:</p>
-<pre><span class="tok-comment"># 1) Check Node is installed (need v18+)</span>
+<pre><code class="language-bash"><span class="tok-comment"># 1) Check Node is installed (need v18+)</span>
 node -v
 npm -v
 <span class="tok-comment"># 2) Create a React app with Vite</span>
@@ -282,7 +282,7 @@ npm create vite@latest my-app -- --template react
 <span class="tok-comment"># 3) Install dependencies and start the dev server</span>
 cd my-app
 npm install
-npm run dev</pre>
+npm run dev</code></pre>
 <div class="out"><b>Terminal:</b> VITE ready in 300 ms — Local: http://localhost:5173/</div>
 <p>Open the URL in a browser — edit <code>src/App.jsx</code>, save, and the page updates instantly (Hot Module Replacement).</p>
 <div class="pitfall">If <code>node -v</code> fails ("command not found"), Node isn't installed or not on the PATH — install the LTS from nodejs.org and reopen the terminal. If <code>npm run dev</code> errors on a missing module, you skipped <code>npm install</code> after cloning.</div>
@@ -320,7 +320,7 @@ npm run dev</pre>
 </ul>
 <h3>Tạo app React đầu tiên (Vite)</h3>
 <p>App React hiện đại dùng <strong>Vite</strong> để có dev server nhanh. Trong terminal:</p>
-<pre><span class="tok-comment"># 1) Kiểm tra Node đã cài (cần v18+)</span>
+<pre><code class="language-bash"><span class="tok-comment"># 1) Kiểm tra Node đã cài (cần v18+)</span>
 node -v
 npm -v
 <span class="tok-comment"># 2) Tạo app React bằng Vite</span>
@@ -328,7 +328,7 @@ npm create vite@latest my-app -- --template react
 <span class="tok-comment"># 3) Cài dependencies và chạy dev server</span>
 cd my-app
 npm install
-npm run dev</pre>
+npm run dev</code></pre>
 <div class="out"><b>Terminal:</b> VITE ready in 300 ms — Local: http://localhost:5173/</div>
 <p>Mở URL trên trình duyệt — sửa <code>src/App.jsx</code>, lưu, trang cập nhật ngay lập tức (Hot Module Replacement).</p>
 <div class="pitfall">Nếu <code>node -v</code> lỗi ("command not found"), Node chưa cài hoặc chưa vào PATH — cài bản LTS từ nodejs.org rồi mở lại terminal. Nếu <code>npm run dev</code> báo thiếu module, bạn đã quên <code>npm install</code> sau khi clone.</div>
@@ -376,17 +376,17 @@ npm run dev</pre>
 </div>
 <h3>The problem React solves</h3>
 <p>With plain JavaScript you manually find DOM nodes and update them — <code>document.getElementById(...).textContent = ...</code>. For a big app this becomes a tangle of "which line updates which pixel". React flips it: you write a <strong>component</strong> that returns the UI <em>for the current data</em>, and when the data changes React re-runs it and patches the DOM for you.</p>
-<pre><span class="tok-comment">// Plain JS: imperative — you command each step</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Plain JS: imperative — you command each step</span>
 <span class="tok-keyword">const</span> btn = document.<span class="tok-function">getElementById</span>(<span class="tok-string">"like"</span>);
 btn.<span class="tok-function">addEventListener</span>(<span class="tok-string">"click"</span>, () =&gt; {
   count++;
   document.<span class="tok-function">getElementById</span>(<span class="tok-string">"n"</span>).textContent = count;
-});</pre>
-<pre><span class="tok-comment">// React: declarative — describe UI as a function of state</span>
+});</code></pre>
+<pre><code class="language-javascript"><span class="tok-comment">// React: declarative — describe UI as a function of state</span>
 <span class="tok-keyword">function</span> <span class="tok-function">Like</span>() {
   <span class="tok-keyword">const</span> [count, setCount] = <span class="tok-function">useState</span>(0);
   <span class="tok-keyword">return</span> &lt;button onClick={() =&gt; setCount(count + 1)}&gt;Likes: {count}&lt;/button&gt;;
-}</pre>
+}</code></pre>
 <div class="out"><b>Result:</b> click → "Likes: 1" → "Likes: 2" … React updates the number, you never touch the DOM.</div>
 <h3>React 19 in one line</h3>
 <p>React is a <strong>library</strong> (not a full framework) for building UI from components. Version 19 adds a smarter compiler, Actions and improved Suspense — but the core mental model you learn here is unchanged.</p>
@@ -410,17 +410,17 @@ btn.<span class="tok-function">addEventListener</span>(<span class="tok-string">
 </div>
 <h3>Vấn đề React giải quyết</h3>
 <p>Với JavaScript thuần, bạn tự tìm node DOM và cập nhật thủ công — <code>document.getElementById(...).textContent = ...</code>. Với app lớn điều này thành mớ bòng bong "dòng nào sửa pixel nào". React lật ngược: bạn viết một <strong>component</strong> trả về UI <em>cho dữ liệu hiện tại</em>, khi dữ liệu đổi React chạy lại và vá DOM giúp bạn.</p>
-<pre><span class="tok-comment">// JS thuần: mệnh lệnh — bạn ra lệnh từng bước</span>
+<pre><code class="language-javascript"><span class="tok-comment">// JS thuần: mệnh lệnh — bạn ra lệnh từng bước</span>
 <span class="tok-keyword">const</span> btn = document.<span class="tok-function">getElementById</span>(<span class="tok-string">"like"</span>);
 btn.<span class="tok-function">addEventListener</span>(<span class="tok-string">"click"</span>, () =&gt; {
   count++;
   document.<span class="tok-function">getElementById</span>(<span class="tok-string">"n"</span>).textContent = count;
-});</pre>
-<pre><span class="tok-comment">// React: khai báo — mô tả UI như một hàm của state</span>
+});</code></pre>
+<pre><code class="language-javascript"><span class="tok-comment">// React: khai báo — mô tả UI như một hàm của state</span>
 <span class="tok-keyword">function</span> <span class="tok-function">Like</span>() {
   <span class="tok-keyword">const</span> [count, setCount] = <span class="tok-function">useState</span>(0);
   <span class="tok-keyword">return</span> &lt;button onClick={() =&gt; setCount(count + 1)}&gt;Likes: {count}&lt;/button&gt;;
-}</pre>
+}</code></pre>
 <div class="out"><b>Kết quả:</b> bấm → "Likes: 1" → "Likes: 2" … React cập nhật con số, bạn không bao giờ chạm DOM.</div>
 <h3>React 19 trong một dòng</h3>
 <p>React là một <strong>thư viện</strong> (không phải framework đầy đủ) để dựng UI từ component. Bản 19 thêm compiler thông minh hơn, Actions và Suspense cải tiến — nhưng mô hình tư duy cốt lõi bạn học ở đây không đổi.</p>
@@ -446,30 +446,30 @@ btn.<span class="tok-function">addEventListener</span>(<span class="tok-string">
 <h2>Git, Node.js &amp; npm — the tooling under React</h2>
 <p class="lead">React itself is small, but it lives inside an ecosystem. Two tools you use every single day: <strong>Git</strong> (save and share your code history) and <strong>Node.js/npm</strong> (run tooling and install packages).</p>
 <h3>Git — version control basics</h3>
-<pre><span class="tok-comment"># Start tracking a project</span>
+<pre><code class="language-bash"><span class="tok-comment"># Start tracking a project</span>
 git init
 git add .
 git commit -m <span class="tok-string">"Initial commit"</span>
 <span class="tok-comment"># Connect to a remote (GitHub) and push</span>
 git remote add origin https://github.com/you/my-app.git
-git push -u origin main</pre>
+git push -u origin main</code></pre>
 <div class="out"><b>Result:</b> your lab is safely on GitHub — the instructor grades from your repo, and you can roll back any mistake.</div>
 <p>Everyday cycle: <code>git status</code> → <code>git add</code> → <code>git commit -m "..."</code> → <code>git push</code>. Use branches (<code>git checkout -b feature</code>) to work without breaking <code>main</code>.</p>
 <h3>Node.js &amp; npm</h3>
 <p><strong>Node.js</strong> runs JavaScript outside the browser — that's how the React dev server and build tools run. <strong>npm</strong> is its package manager; every dependency is listed in <code>package.json</code>.</p>
-<pre><span class="tok-comment"># Install a package (adds it to package.json)</span>
+<pre><code class="language-bash"><span class="tok-comment"># Install a package (adds it to package.json)</span>
 npm install axios
 <span class="tok-comment"># Install everything listed in package.json (after cloning)</span>
 npm install
 <span class="tok-comment"># Run a script defined in package.json</span>
-npm run dev</pre>
+npm run dev</code></pre>
 <div class="pitfall">Never commit the <code>node_modules/</code> folder to Git — it's huge and regenerable. Add it to <code>.gitignore</code>. Anyone who clones just runs <code>npm install</code> to rebuild it from <code>package.json</code>.</div>
 <h3>Ví dụ có lời giải · Worked example (reading package.json)</h3>
-<pre><span class="tok-comment">// package.json (excerpt)</span>
+<pre><code class="language-javascript"><span class="tok-comment">// package.json (excerpt)</span>
 {
   <span class="tok-string">"scripts"</span>: { <span class="tok-string">"dev"</span>: <span class="tok-string">"vite"</span>, <span class="tok-string">"build"</span>: <span class="tok-string">"vite build"</span> },
   <span class="tok-string">"dependencies"</span>: { <span class="tok-string">"react"</span>: <span class="tok-string">"^19.0.0"</span>, <span class="tok-string">"react-dom"</span>: <span class="tok-string">"^19.0.0"</span> }
-}</pre>
+}</code></pre>
 <p><code>scripts</code> defines the commands you can <code>npm run</code>. <code>dependencies</code> lists packages your app needs at runtime. The <code>^</code> in <code>^19.0.0</code> means "compatible with 19.x" — npm may install 19.1, 19.2… but not 20.</p>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Semantic versioning (semver).</b> A version is <code>MAJOR.MINOR.PATCH</code>. <b>Patch</b> = bug fixes (safe), <b>minor</b> = new features backward-compatible, <b>major</b> = breaking changes. The <code>^</code> caret allows minor+patch updates; <code>~</code> tilde allows only patch. The <code>package-lock.json</code> pins the <em>exact</em> versions installed so every teammate gets an identical tree — always commit the lock file.</div>
 <a class="link-card exphub" href="/exp-hub?ref=%2Fcourses%2Ffront-end-web-development-with-react%2Flearn&reflabel=FER202" target="_blank" rel="noopener">
@@ -483,30 +483,30 @@ npm run dev</pre>
 <h2>Git, Node.js &amp; npm — công cụ nền dưới React</h2>
 <p class="lead">React tự thân nhỏ, nhưng sống trong một hệ sinh thái. Hai công cụ bạn dùng mỗi ngày: <strong>Git</strong> (lưu và chia sẻ lịch sử code) và <strong>Node.js/npm</strong> (chạy công cụ và cài package).</p>
 <h3>Git — căn bản quản lý phiên bản</h3>
-<pre><span class="tok-comment"># Bắt đầu theo dõi một dự án</span>
+<pre><code class="language-bash"><span class="tok-comment"># Bắt đầu theo dõi một dự án</span>
 git init
 git add .
 git commit -m <span class="tok-string">"Initial commit"</span>
 <span class="tok-comment"># Kết nối remote (GitHub) và đẩy lên</span>
 git remote add origin https://github.com/you/my-app.git
-git push -u origin main</pre>
+git push -u origin main</code></pre>
 <div class="out"><b>Kết quả:</b> lab của bạn an toàn trên GitHub — giảng viên chấm từ repo, và bạn có thể lùi lại mọi sai sót.</div>
 <p>Vòng lặp hằng ngày: <code>git status</code> → <code>git add</code> → <code>git commit -m "..."</code> → <code>git push</code>. Dùng nhánh (<code>git checkout -b feature</code>) để làm mà không phá <code>main</code>.</p>
 <h3>Node.js &amp; npm</h3>
 <p><strong>Node.js</strong> chạy JavaScript ngoài trình duyệt — nhờ đó dev server và công cụ build của React chạy được. <strong>npm</strong> là trình quản lý package; mọi dependency ghi trong <code>package.json</code>.</p>
-<pre><span class="tok-comment"># Cài một package (thêm vào package.json)</span>
+<pre><code class="language-bash"><span class="tok-comment"># Cài một package (thêm vào package.json)</span>
 npm install axios
 <span class="tok-comment"># Cài mọi thứ ghi trong package.json (sau khi clone)</span>
 npm install
 <span class="tok-comment"># Chạy một script định nghĩa trong package.json</span>
-npm run dev</pre>
+npm run dev</code></pre>
 <div class="pitfall">Đừng bao giờ commit thư mục <code>node_modules/</code> lên Git — nó rất nặng và tái tạo được. Thêm vào <code>.gitignore</code>. Ai clone về chỉ cần <code>npm install</code> để dựng lại từ <code>package.json</code>.</div>
 <h3>Ví dụ có lời giải · Đọc package.json</h3>
-<pre><span class="tok-comment">// package.json (trích)</span>
+<pre><code class="language-javascript"><span class="tok-comment">// package.json (trích)</span>
 {
   <span class="tok-string">"scripts"</span>: { <span class="tok-string">"dev"</span>: <span class="tok-string">"vite"</span>, <span class="tok-string">"build"</span>: <span class="tok-string">"vite build"</span> },
   <span class="tok-string">"dependencies"</span>: { <span class="tok-string">"react"</span>: <span class="tok-string">"^19.0.0"</span>, <span class="tok-string">"react-dom"</span>: <span class="tok-string">"^19.0.0"</span> }
-}</pre>
+}</code></pre>
 <p><code>scripts</code> định nghĩa lệnh bạn có thể <code>npm run</code>. <code>dependencies</code> liệt kê package app cần lúc chạy. Dấu <code>^</code> trong <code>^19.0.0</code> nghĩa "tương thích với 19.x" — npm có thể cài 19.1, 19.2… nhưng không phải 20.</p>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Semantic versioning (semver).</b> Một phiên bản là <code>MAJOR.MINOR.PATCH</code>. <b>Patch</b> = sửa lỗi (an toàn), <b>minor</b> = tính năng mới tương thích ngược, <b>major</b> = thay đổi phá vỡ. Dấu <code>^</code> cho cập nhật minor+patch; <code>~</code> chỉ cho patch. File <code>package-lock.json</code> ghim <em>chính xác</em> phiên bản đã cài để mọi thành viên có cây giống hệt — luôn commit file lock.</div>
 <a class="link-card exphub" href="/exp-hub?ref=%2Fcourses%2Ffront-end-web-development-with-react%2Flearn&reflabel=FER202" target="_blank" rel="noopener">
@@ -553,30 +553,30 @@ npm run dev</pre>
 <h2>Modern JavaScript (ES6) essentials</h2>
 <p class="lead">React code is written in ES6+ JavaScript. Before components make sense, you must be fluent in a handful of ES6 features that appear in every single React file.</p>
 <h3>let &amp; const — block scope</h3>
-<pre><span class="tok-keyword">const</span> name = <span class="tok-string">"React"</span>;   <span class="tok-comment">// cannot be reassigned</span>
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> name = <span class="tok-string">"React"</span>;   <span class="tok-comment">// cannot be reassigned</span>
 <span class="tok-keyword">let</span> count = 0;         <span class="tok-comment">// can be reassigned</span>
 count = 1;              <span class="tok-comment">// ok</span>
-<span class="tok-comment">// name = "Vue";       // TypeError: Assignment to constant</span></pre>
+<span class="tok-comment">// name = "Vue";       // TypeError: Assignment to constant</span></code></pre>
 <p>Use <code>const</code> by default; switch to <code>let</code> only when you must reassign. Never use the old <code>var</code> in React — it has confusing function scope.</p>
 <h3>Arrow functions</h3>
-<pre><span class="tok-comment">// classic function</span>
+<pre><code class="language-javascript"><span class="tok-comment">// classic function</span>
 <span class="tok-keyword">function</span> <span class="tok-function">double</span>(x) { <span class="tok-keyword">return</span> x * 2; }
 <span class="tok-comment">// arrow — shorter, implicit return</span>
 <span class="tok-keyword">const</span> double = (x) =&gt; x * 2;
-<span class="tok-keyword">const</span> greet = () =&gt; <span class="tok-function">console</span>.log(<span class="tok-string">"hi"</span>);</pre>
+<span class="tok-keyword">const</span> greet = () =&gt; <span class="tok-function">console</span>.log(<span class="tok-string">"hi"</span>);</code></pre>
 <div class="out"><b>double(5)</b> → 10</div>
 <h3>Template literals</h3>
 <p>Backtick strings let you embed variables with <code>&#96;\${...}&#96;</code>:</p>
-<pre><span class="tok-keyword">const</span> user = <span class="tok-string">"An"</span>;
-<span class="tok-keyword">const</span> msg = <span class="tok-string">&#96;Hello \${user}, welcome!&#96;</span>;</pre>
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> user = <span class="tok-string">"An"</span>;
+<span class="tok-keyword">const</span> msg = <span class="tok-string">&#96;Hello \${user}, welcome!&#96;</span>;</code></pre>
 <div class="out"><b>msg</b> → "Hello An, welcome!"</div>
 <div class="pitfall">Arrow functions don't have their own <code>this</code> — they inherit it from the surrounding scope. In class components this is exactly why arrow handlers "just work" without <code>.bind(this)</code>. In function components (what you'll write) there's no <code>this</code> at all, which removes a whole class of bugs.</div>
 <h3>Ví dụ có lời giải · Worked example (default &amp; rest params)</h3>
-<pre><span class="tok-comment">// default parameter + rest parameter</span>
+<pre><code class="language-javascript"><span class="tok-comment">// default parameter + rest parameter</span>
 <span class="tok-keyword">const</span> sum = (start = 0, ...nums) =&gt;
   nums.<span class="tok-function">reduce</span>((a, n) =&gt; a + n, start);
 <span class="tok-function">console</span>.log(<span class="tok-function">sum</span>());          <span class="tok-comment">// 0</span>
-<span class="tok-function">console</span>.log(<span class="tok-function">sum</span>(10, 1, 2, 3)); <span class="tok-comment">// 16</span></pre>
+<span class="tok-function">console</span>.log(<span class="tok-function">sum</span>(10, 1, 2, 3)); <span class="tok-comment">// 16</span></code></pre>
 <p><code>start = 0</code> is a default value used when no argument is passed. <code>...nums</code> gathers all remaining arguments into an array — the same <code>...</code> you'll use for props spreading.</p>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Truthy/falsy &amp; short-circuit rendering.</b> In JSX you'll constantly write <code>{isLoggedIn &amp;&amp; &lt;Profile /&gt;}</code>. This uses JavaScript's short-circuit: <code>A &amp;&amp; B</code> returns <code>B</code> only when <code>A</code> is truthy. Watch the trap: <code>{items.length &amp;&amp; &lt;List /&gt;}</code> renders a stray <b>0</b> when the array is empty, because <code>0</code> is falsy <em>and is a valid React child</em>. Fix it with <code>{items.length &gt; 0 &amp;&amp; ...}</code> or a ternary.</div>
 <a class="link-card codelab" href="/code-lab/javascript?ref=%2Fcourses%2Ffront-end-web-development-with-react%2Flearn&reflabel=FER202" target="_blank" rel="noopener">
@@ -590,30 +590,30 @@ count = 1;              <span class="tok-comment">// ok</span>
 <h2>JavaScript hiện đại (ES6) cốt lõi</h2>
 <p class="lead">Code React viết bằng JavaScript ES6+. Trước khi hiểu component, bạn phải thành thạo vài tính năng ES6 xuất hiện trong mọi file React.</p>
 <h3>let &amp; const — phạm vi khối</h3>
-<pre><span class="tok-keyword">const</span> name = <span class="tok-string">"React"</span>;   <span class="tok-comment">// không gán lại được</span>
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> name = <span class="tok-string">"React"</span>;   <span class="tok-comment">// không gán lại được</span>
 <span class="tok-keyword">let</span> count = 0;         <span class="tok-comment">// gán lại được</span>
 count = 1;              <span class="tok-comment">// ok</span>
-<span class="tok-comment">// name = "Vue";       // TypeError: gán vào hằng</span></pre>
+<span class="tok-comment">// name = "Vue";       // TypeError: gán vào hằng</span></code></pre>
 <p>Mặc định dùng <code>const</code>; chỉ chuyển sang <code>let</code> khi buộc phải gán lại. Đừng dùng <code>var</code> cũ trong React — nó có phạm vi hàm gây rối.</p>
 <h3>Arrow function (hàm mũi tên)</h3>
-<pre><span class="tok-comment">// hàm cổ điển</span>
+<pre><code class="language-javascript"><span class="tok-comment">// hàm cổ điển</span>
 <span class="tok-keyword">function</span> <span class="tok-function">double</span>(x) { <span class="tok-keyword">return</span> x * 2; }
 <span class="tok-comment">// mũi tên — ngắn hơn, trả về ngầm</span>
 <span class="tok-keyword">const</span> double = (x) =&gt; x * 2;
-<span class="tok-keyword">const</span> greet = () =&gt; <span class="tok-function">console</span>.log(<span class="tok-string">"hi"</span>);</pre>
+<span class="tok-keyword">const</span> greet = () =&gt; <span class="tok-function">console</span>.log(<span class="tok-string">"hi"</span>);</code></pre>
 <div class="out"><b>double(5)</b> → 10</div>
 <h3>Template literal (chuỗi mẫu)</h3>
 <p>Chuỗi backtick cho phép nhúng biến bằng <code>&#96;\${...}&#96;</code>:</p>
-<pre><span class="tok-keyword">const</span> user = <span class="tok-string">"An"</span>;
-<span class="tok-keyword">const</span> msg = <span class="tok-string">&#96;Hello \${user}, welcome!&#96;</span>;</pre>
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> user = <span class="tok-string">"An"</span>;
+<span class="tok-keyword">const</span> msg = <span class="tok-string">&#96;Hello \${user}, welcome!&#96;</span>;</code></pre>
 <div class="out"><b>msg</b> → "Hello An, welcome!"</div>
 <div class="pitfall">Arrow function không có <code>this</code> riêng — nó thừa hưởng từ phạm vi bao quanh. Trong class component đây chính là lý do handler mũi tên "chạy ngay" mà không cần <code>.bind(this)</code>. Trong function component (thứ bạn sẽ viết) hoàn toàn không có <code>this</code>, loại bỏ cả một lớp lỗi.</div>
 <h3>Ví dụ có lời giải · Tham số mặc định &amp; rest</h3>
-<pre><span class="tok-comment">// tham số mặc định + tham số rest</span>
+<pre><code class="language-javascript"><span class="tok-comment">// tham số mặc định + tham số rest</span>
 <span class="tok-keyword">const</span> sum = (start = 0, ...nums) =&gt;
   nums.<span class="tok-function">reduce</span>((a, n) =&gt; a + n, start);
 <span class="tok-function">console</span>.log(<span class="tok-function">sum</span>());          <span class="tok-comment">// 0</span>
-<span class="tok-function">console</span>.log(<span class="tok-function">sum</span>(10, 1, 2, 3)); <span class="tok-comment">// 16</span></pre>
+<span class="tok-function">console</span>.log(<span class="tok-function">sum</span>(10, 1, 2, 3)); <span class="tok-comment">// 16</span></code></pre>
 <p><code>start = 0</code> là giá trị mặc định dùng khi không truyền tham số. <code>...nums</code> gom mọi tham số còn lại thành mảng — chính là <code>...</code> bạn sẽ dùng để spread props.</p>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Truthy/falsy &amp; render ngắn mạch.</b> Trong JSX bạn sẽ liên tục viết <code>{isLoggedIn &amp;&amp; &lt;Profile /&gt;}</code>. Nó dùng ngắn mạch của JavaScript: <code>A &amp;&amp; B</code> trả về <code>B</code> chỉ khi <code>A</code> truthy. Coi chừng bẫy: <code>{items.length &amp;&amp; &lt;List /&gt;}</code> render ra số <b>0</b> lạc khi mảng rỗng, vì <code>0</code> là falsy <em>và là con hợp lệ của React</em>. Sửa bằng <code>{items.length &gt; 0 &amp;&amp; ...}</code> hoặc ternary.</div>
 <a class="link-card codelab" href="/code-lab/javascript?ref=%2Fcourses%2Ffront-end-web-development-with-react%2Flearn&reflabel=FER202" target="_blank" rel="noopener">
@@ -635,34 +635,34 @@ count = 1;              <span class="tok-comment">// ok</span>
 <h2>Destructuring, spread &amp; ES modules</h2>
 <p class="lead">These three features are the DNA of React code. You'll destructure props, spread state, and import/export components in literally every file.</p>
 <h3>Destructuring</h3>
-<pre><span class="tok-comment">// object destructuring — pull fields into variables</span>
+<pre><code class="language-javascript"><span class="tok-comment">// object destructuring — pull fields into variables</span>
 <span class="tok-keyword">const</span> user = { name: <span class="tok-string">"An"</span>, age: 20 };
 <span class="tok-keyword">const</span> { name, age } = user;
 <span class="tok-comment">// array destructuring — by position (useState uses this!)</span>
-<span class="tok-keyword">const</span> [first, second] = [<span class="tok-string">"a"</span>, <span class="tok-string">"b"</span>];</pre>
+<span class="tok-keyword">const</span> [first, second] = [<span class="tok-string">"a"</span>, <span class="tok-string">"b"</span>];</code></pre>
 <div class="out"><b>name</b> → "An" · <b>first</b> → "a"</div>
 <p>This is exactly why <code>const [count, setCount] = useState(0)</code> works — <code>useState</code> returns a 2-element array and you destructure it by position.</p>
 <h3>Spread &amp; rest</h3>
-<pre><span class="tok-keyword">const</span> a = [1, 2], b = [3, 4];
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> a = [1, 2], b = [3, 4];
 <span class="tok-keyword">const</span> merged = [...a, ...b];        <span class="tok-comment">// [1,2,3,4]</span>
 <span class="tok-keyword">const</span> base = { theme: <span class="tok-string">"dark"</span> };
-<span class="tok-keyword">const</span> next = { ...base, size: <span class="tok-string">"lg"</span> }; <span class="tok-comment">// copy + add</span></pre>
+<span class="tok-keyword">const</span> next = { ...base, size: <span class="tok-string">"lg"</span> }; <span class="tok-comment">// copy + add</span></code></pre>
 <div class="out"><b>next</b> → { theme: "dark", size: "lg" }</div>
 <p>Spread creates a <strong>new</strong> array/object — the key to updating React state immutably (never mutate; always create a copy).</p>
 <h3>ES modules — import / export</h3>
-<pre><span class="tok-comment">// Button.jsx</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Button.jsx</span>
 <span class="tok-keyword">export default function</span> <span class="tok-function">Button</span>() { <span class="tok-comment">/* ... */</span> }
 <span class="tok-keyword">export const</span> SIZE = 16;   <span class="tok-comment">// named export</span>
 
 <span class="tok-comment">// App.jsx</span>
-<span class="tok-keyword">import</span> Button, { SIZE } <span class="tok-keyword">from</span> <span class="tok-string">"./Button.jsx"</span>;</pre>
+<span class="tok-keyword">import</span> Button, { SIZE } <span class="tok-keyword">from</span> <span class="tok-string">"./Button.jsx"</span>;</code></pre>
 <div class="pitfall">A file can have <strong>one</strong> <code>default</code> export but many <strong>named</strong> exports. Default imports pick any name (<code>import Btn from ...</code>); named imports must match the exact name in <code>{ }</code>. Mixing them up ("X is not exported") is the most common beginner import error.</div>
 <h3>Ví dụ có lời giải · Worked example (immutable update)</h3>
-<pre><span class="tok-keyword">const</span> todos = [{ id: 1, done: <span class="tok-keyword">false</span> }];
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> todos = [{ id: 1, done: <span class="tok-keyword">false</span> }];
 <span class="tok-comment">// mark id 1 as done — WITHOUT mutating the original</span>
 <span class="tok-keyword">const</span> updated = todos.<span class="tok-function">map</span>(t =&gt;
   t.id === 1 ? { ...t, done: <span class="tok-keyword">true</span> } : t
-);</pre>
+);</code></pre>
 <p><code>map</code> returns a new array; for the matching item we spread the old fields and override <code>done</code>. The original <code>todos</code> is untouched — React needs this to detect the change.</p>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Why immutability matters for React.</b> React decides whether to re-render by comparing references (<code>oldState === newState</code>), not by deep-inspecting objects. If you <em>mutate</em> an array in place (<code>todos.push(...)</code>) the reference is unchanged, so React thinks nothing happened and skips the update. Always produce a <b>new</b> reference with <code>map</code>, <code>filter</code> or spread. This single rule prevents most "my UI won't update" bugs.</div>
 <a class="link-card codelab" href="/code-lab/javascript?ref=%2Fcourses%2Ffront-end-web-development-with-react%2Flearn&reflabel=FER202" target="_blank" rel="noopener">
@@ -676,34 +676,34 @@ count = 1;              <span class="tok-comment">// ok</span>
 <h2>Destructuring, spread &amp; ES module</h2>
 <p class="lead">Ba tính năng này là DNA của code React. Bạn sẽ destructure props, spread state, và import/export component trong đúng nghĩa mọi file.</p>
 <h3>Destructuring (bóc tách)</h3>
-<pre><span class="tok-comment">// bóc tách object — rút field ra biến</span>
+<pre><code class="language-javascript"><span class="tok-comment">// bóc tách object — rút field ra biến</span>
 <span class="tok-keyword">const</span> user = { name: <span class="tok-string">"An"</span>, age: 20 };
 <span class="tok-keyword">const</span> { name, age } = user;
 <span class="tok-comment">// bóc tách mảng — theo vị trí (useState dùng cái này!)</span>
-<span class="tok-keyword">const</span> [first, second] = [<span class="tok-string">"a"</span>, <span class="tok-string">"b"</span>];</pre>
+<span class="tok-keyword">const</span> [first, second] = [<span class="tok-string">"a"</span>, <span class="tok-string">"b"</span>];</code></pre>
 <div class="out"><b>name</b> → "An" · <b>first</b> → "a"</div>
 <p>Đây chính là lý do <code>const [count, setCount] = useState(0)</code> chạy được — <code>useState</code> trả về mảng 2 phần tử và bạn bóc tách theo vị trí.</p>
 <h3>Spread &amp; rest (trải &amp; gom)</h3>
-<pre><span class="tok-keyword">const</span> a = [1, 2], b = [3, 4];
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> a = [1, 2], b = [3, 4];
 <span class="tok-keyword">const</span> merged = [...a, ...b];        <span class="tok-comment">// [1,2,3,4]</span>
 <span class="tok-keyword">const</span> base = { theme: <span class="tok-string">"dark"</span> };
-<span class="tok-keyword">const</span> next = { ...base, size: <span class="tok-string">"lg"</span> }; <span class="tok-comment">// sao chép + thêm</span></pre>
+<span class="tok-keyword">const</span> next = { ...base, size: <span class="tok-string">"lg"</span> }; <span class="tok-comment">// sao chép + thêm</span></code></pre>
 <div class="out"><b>next</b> → { theme: "dark", size: "lg" }</div>
 <p>Spread tạo ra mảng/object <strong>mới</strong> — chìa khoá để cập nhật state React bất biến (không sửa tại chỗ; luôn tạo bản sao).</p>
 <h3>ES module — import / export</h3>
-<pre><span class="tok-comment">// Button.jsx</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Button.jsx</span>
 <span class="tok-keyword">export default function</span> <span class="tok-function">Button</span>() { <span class="tok-comment">/* ... */</span> }
 <span class="tok-keyword">export const</span> SIZE = 16;   <span class="tok-comment">// named export</span>
 
 <span class="tok-comment">// App.jsx</span>
-<span class="tok-keyword">import</span> Button, { SIZE } <span class="tok-keyword">from</span> <span class="tok-string">"./Button.jsx"</span>;</pre>
+<span class="tok-keyword">import</span> Button, { SIZE } <span class="tok-keyword">from</span> <span class="tok-string">"./Button.jsx"</span>;</code></pre>
 <div class="pitfall">Một file có <strong>một</strong> export <code>default</code> nhưng nhiều export <strong>named</strong>. Default import đặt tên tuỳ ý (<code>import Btn from ...</code>); named import phải khớp đúng tên trong <code>{ }</code>. Nhầm hai loại ("X is not exported") là lỗi import phổ biến nhất của người mới.</div>
 <h3>Ví dụ có lời giải · Cập nhật bất biến</h3>
-<pre><span class="tok-keyword">const</span> todos = [{ id: 1, done: <span class="tok-keyword">false</span> }];
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> todos = [{ id: 1, done: <span class="tok-keyword">false</span> }];
 <span class="tok-comment">// đánh dấu id 1 done — KHÔNG sửa bản gốc</span>
 <span class="tok-keyword">const</span> updated = todos.<span class="tok-function">map</span>(t =&gt;
   t.id === 1 ? { ...t, done: <span class="tok-keyword">true</span> } : t
-);</pre>
+);</code></pre>
 <p><code>map</code> trả về mảng mới; với item khớp ta spread field cũ rồi ghi đè <code>done</code>. Mảng <code>todos</code> gốc không đổi — React cần điều này để phát hiện thay đổi.</p>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Vì sao bất biến quan trọng với React.</b> React quyết định render lại bằng cách so sánh tham chiếu (<code>oldState === newState</code>), không xét sâu bên trong object. Nếu bạn <em>sửa tại chỗ</em> một mảng (<code>todos.push(...)</code>) thì tham chiếu không đổi, React tưởng không có gì xảy ra và bỏ qua cập nhật. Luôn tạo tham chiếu <b>mới</b> bằng <code>map</code>, <code>filter</code> hoặc spread. Chỉ một quy tắc này ngăn được phần lớn lỗi "UI không cập nhật".</div>
 <a class="link-card codelab" href="/code-lab/javascript?ref=%2Fcourses%2Ffront-end-web-development-with-react%2Flearn&reflabel=FER202" target="_blank" rel="noopener">
@@ -749,18 +749,18 @@ count = 1;              <span class="tok-comment">// ok</span>
 <span class="eyebrow">Chapter 3 · Lesson 3.1</span>
 <h2>JSX — HTML-like syntax inside JavaScript</h2>
 <p class="lead"><strong>JSX</strong> lets you write markup that looks like HTML directly in JavaScript. It is not HTML and not a string — it compiles to <code>React.createElement(...)</code> calls that produce the virtual DOM.</p>
-<pre><span class="tok-keyword">function</span> <span class="tok-function">Welcome</span>() {
+<pre><code class="language-javascript"><span class="tok-keyword">function</span> <span class="tok-function">Welcome</span>() {
   <span class="tok-keyword">return</span> (
     &lt;div className=<span class="tok-string">"card"</span>&gt;
       &lt;h1&gt;Hello React&lt;/h1&gt;
       &lt;p&gt;This is JSX.&lt;/p&gt;
     &lt;/div&gt;
   );
-}</pre>
+}</code></pre>
 <div class="out"><b>Renders:</b> a card with an h1 and a paragraph.</div>
 <h3>Embedding JavaScript with { }</h3>
 <p>Curly braces drop any JavaScript <strong>expression</strong> into JSX:</p>
-<pre><span class="tok-keyword">function</span> <span class="tok-function">Greeting</span>() {
+<pre><code class="language-javascript"><span class="tok-keyword">function</span> <span class="tok-function">Greeting</span>() {
   <span class="tok-keyword">const</span> user = <span class="tok-string">"An"</span>;
   <span class="tok-keyword">const</span> hour = 9;
   <span class="tok-keyword">return</span> (
@@ -768,7 +768,7 @@ count = 1;              <span class="tok-comment">// ok</span>
       {hour &lt; 12 ? <span class="tok-string">" Good morning!"</span> : <span class="tok-string">" Good day!"</span>}
     &lt;/p&gt;
   );
-}</pre>
+}</code></pre>
 <div class="out"><b>Renders:</b> "Hi An, it is 9 o'clock. Good morning!"</div>
 <h3>JSX differs from HTML</h3>
 <ul>
@@ -779,7 +779,7 @@ count = 1;              <span class="tok-comment">// ok</span>
 </ul>
 <div class="pitfall">Only <strong>expressions</strong> go inside <code>{ }</code> — not statements. <code>{if (x) ...}</code> is a syntax error; use a ternary <code>{x ? a : b}</code> or compute the value before the <code>return</code>. Also: <code>{ }</code> renders numbers and strings, but an object <code>{ {a:1} }</code> throws "Objects are not valid as a React child".</div>
 <h3>Ví dụ có lời giải · Worked example (rendering a list)</h3>
-<pre><span class="tok-keyword">function</span> <span class="tok-function">Fruits</span>() {
+<pre><code class="language-javascript"><span class="tok-keyword">function</span> <span class="tok-function">Fruits</span>() {
   <span class="tok-keyword">const</span> fruits = [<span class="tok-string">"Apple"</span>, <span class="tok-string">"Mango"</span>, <span class="tok-string">"Kiwi"</span>];
   <span class="tok-keyword">return</span> (
     &lt;ul&gt;
@@ -788,7 +788,7 @@ count = 1;              <span class="tok-comment">// ok</span>
       )}
     &lt;/ul&gt;
   );
-}</pre>
+}</code></pre>
 <div class="out"><b>Renders:</b> • Apple • Mango • Kiwi</div>
 <p>We turn a data array into an array of <code>&lt;li&gt;</code> with <code>map</code>. Each item needs a <code>key</code> — a stable identity React uses to track list items.</p>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Why keys matter — list diffing.</b> During reconciliation React matches old and new list items by their <code>key</code>, not by position. A stable key (an id) lets React move/keep DOM nodes instead of recreating them — preserving input focus and state. Using the array <b>index</b> as key breaks this the moment items are inserted, removed or reordered: React mis-matches items and you get subtle bugs (wrong checkbox checked, wrong input value). Rule: use a real unique id as key, never the index for dynamic lists.</div>
@@ -802,18 +802,18 @@ count = 1;              <span class="tok-comment">// ok</span>
 <span class="eyebrow">Chương 3 · Bài 3.1</span>
 <h2>JSX — cú pháp giống HTML bên trong JavaScript</h2>
 <p class="lead"><strong>JSX</strong> cho phép viết markup trông như HTML ngay trong JavaScript. Nó không phải HTML và không phải chuỗi — nó biên dịch thành các lệnh <code>React.createElement(...)</code> tạo ra virtual DOM.</p>
-<pre><span class="tok-keyword">function</span> <span class="tok-function">Welcome</span>() {
+<pre><code class="language-javascript"><span class="tok-keyword">function</span> <span class="tok-function">Welcome</span>() {
   <span class="tok-keyword">return</span> (
     &lt;div className=<span class="tok-string">"card"</span>&gt;
       &lt;h1&gt;Hello React&lt;/h1&gt;
       &lt;p&gt;This is JSX.&lt;/p&gt;
     &lt;/div&gt;
   );
-}</pre>
+}</code></pre>
 <div class="out"><b>Render ra:</b> một card có h1 và một đoạn văn.</div>
 <h3>Nhúng JavaScript bằng { }</h3>
 <p>Dấu ngoặc nhọn đưa bất kỳ <strong>biểu thức</strong> JavaScript nào vào JSX:</p>
-<pre><span class="tok-keyword">function</span> <span class="tok-function">Greeting</span>() {
+<pre><code class="language-javascript"><span class="tok-keyword">function</span> <span class="tok-function">Greeting</span>() {
   <span class="tok-keyword">const</span> user = <span class="tok-string">"An"</span>;
   <span class="tok-keyword">const</span> hour = 9;
   <span class="tok-keyword">return</span> (
@@ -821,7 +821,7 @@ count = 1;              <span class="tok-comment">// ok</span>
       {hour &lt; 12 ? <span class="tok-string">" Good morning!"</span> : <span class="tok-string">" Good day!"</span>}
     &lt;/p&gt;
   );
-}</pre>
+}</code></pre>
 <div class="out"><b>Render ra:</b> "Hi An, it is 9 o'clock. Good morning!"</div>
 <h3>JSX khác HTML</h3>
 <ul>
@@ -832,7 +832,7 @@ count = 1;              <span class="tok-comment">// ok</span>
 </ul>
 <div class="pitfall">Chỉ <strong>biểu thức</strong> mới vào được <code>{ }</code> — không phải câu lệnh. <code>{if (x) ...}</code> là lỗi cú pháp; dùng ternary <code>{x ? a : b}</code> hoặc tính giá trị trước <code>return</code>. Ngoài ra: <code>{ }</code> render được số và chuỗi, nhưng object <code>{ {a:1} }</code> ném lỗi "Objects are not valid as a React child".</div>
 <h3>Ví dụ có lời giải · Render danh sách</h3>
-<pre><span class="tok-keyword">function</span> <span class="tok-function">Fruits</span>() {
+<pre><code class="language-javascript"><span class="tok-keyword">function</span> <span class="tok-function">Fruits</span>() {
   <span class="tok-keyword">const</span> fruits = [<span class="tok-string">"Apple"</span>, <span class="tok-string">"Mango"</span>, <span class="tok-string">"Kiwi"</span>];
   <span class="tok-keyword">return</span> (
     &lt;ul&gt;
@@ -841,7 +841,7 @@ count = 1;              <span class="tok-comment">// ok</span>
       )}
     &lt;/ul&gt;
   );
-}</pre>
+}</code></pre>
 <div class="out"><b>Render ra:</b> • Apple • Mango • Kiwi</div>
 <p>Ta biến mảng dữ liệu thành mảng <code>&lt;li&gt;</code> bằng <code>map</code>. Mỗi item cần một <code>key</code> — danh tính ổn định để React theo dõi phần tử danh sách.</p>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Vì sao key quan trọng — diff danh sách.</b> Khi reconciliation, React khớp item cũ và mới theo <code>key</code>, không theo vị trí. Key ổn định (một id) cho React di chuyển/giữ node DOM thay vì tạo lại — bảo toàn focus ô nhập và state. Dùng <b>index</b> mảng làm key sẽ hỏng ngay khi item được chèn, xoá hay sắp lại: React khớp nhầm item và bạn gặp lỗi tinh vi (tick nhầm checkbox, sai giá trị ô nhập). Quy tắc: dùng id thật duy nhất làm key, đừng bao giờ dùng index cho danh sách động.</div>
@@ -864,7 +864,7 @@ count = 1;              <span class="tok-comment">// ok</span>
 <h2>Fragments &amp; conditional rendering</h2>
 <p class="lead">A component must return a single root. When you don't want an extra wrapper <code>&lt;div&gt;</code> in the DOM, use a <strong>Fragment</strong>. And to show different UI for different data, you render <strong>conditionally</strong>.</p>
 <h3>Fragments</h3>
-<pre><span class="tok-comment">// Without a wrapper div — use &lt;&gt;...&lt;/&gt;</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Without a wrapper div — use &lt;&gt;...&lt;/&gt;</span>
 <span class="tok-keyword">function</span> <span class="tok-function">Info</span>() {
   <span class="tok-keyword">return</span> (
     &lt;&gt;
@@ -872,25 +872,25 @@ count = 1;              <span class="tok-comment">// ok</span>
       &lt;p&gt;Body&lt;/p&gt;
     &lt;/&gt;
   );
-}</pre>
+}</code></pre>
 <div class="out"><b>DOM:</b> just an h2 and p — no extra div wrapper.</div>
 <p><code>&lt;&gt;...&lt;/&gt;</code> is shorthand for <code>&lt;React.Fragment&gt;</code>. Use the full form when you need a <code>key</code> (in lists).</p>
 <h3>Conditional rendering — three patterns</h3>
-<pre><span class="tok-comment">// 1) Ternary — choose between two</span>
+<pre><code class="language-html"><span class="tok-comment">// 1) Ternary — choose between two</span>
 {isLoggedIn ? &lt;Logout /&gt; : &lt;Login /&gt;}
 
 <span class="tok-comment">// 2) &amp;&amp; — render or nothing</span>
 {hasError &amp;&amp; &lt;p className=<span class="tok-string">"err"</span>&gt;Failed&lt;/p&gt;}
 
 <span class="tok-comment">// 3) early return in the component</span>
-<span class="tok-keyword">if</span> (loading) <span class="tok-keyword">return</span> &lt;Spinner /&gt;;</pre>
+<span class="tok-keyword">if</span> (loading) <span class="tok-keyword">return</span> &lt;Spinner /&gt;;</code></pre>
 <div class="pitfall">JSX conditional blocks are the #1 source of broken layouts: a missing <code>)</code> or an unbalanced tag inside <code>{cond &amp;&amp; (...)}</code> silently breaks the build. Always keep the parentheses and closing tags matched — this exact class of bug has broken real production builds.</div>
 <h3>Ví dụ có lời giải · Worked example (loading / error / data)</h3>
-<pre><span class="tok-keyword">function</span> <span class="tok-function">UserCard</span>({ loading, error, user }) {
+<pre><code class="language-javascript"><span class="tok-keyword">function</span> <span class="tok-function">UserCard</span>({ loading, error, user }) {
   <span class="tok-keyword">if</span> (loading) <span class="tok-keyword">return</span> &lt;p&gt;Loading…&lt;/p&gt;;
   <span class="tok-keyword">if</span> (error)   <span class="tok-keyword">return</span> &lt;p className=<span class="tok-string">"err"</span>&gt;{error}&lt;/p&gt;;
   <span class="tok-keyword">return</span> &lt;h3&gt;{user.name}&lt;/h3&gt;;
-}</pre>
+}</code></pre>
 <p>The "early return" pattern reads top-to-bottom like a guard checklist: handle loading, then error, then the happy path. This is the standard shape for any component that fetches data (Chapter 11).</p>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Fragments &amp; the wrapper-div problem.</b> Before fragments, developers wrapped multiple elements in a <code>&lt;div&gt;</code> just to satisfy "one root". Those extra divs polluted the DOM and broke CSS layouts like flex or grid (an unwanted node between flex parent and children). Fragments return multiple siblings with <em>zero</em> DOM output — essential for building clean table rows (<code>&lt;tr&gt;</code> groups) and flex/grid children where an intermediate wrapper would break the layout.</div>
 </div>
@@ -899,7 +899,7 @@ count = 1;              <span class="tok-comment">// ok</span>
 <h2>Fragment &amp; render có điều kiện</h2>
 <p class="lead">Một component phải trả về một gốc duy nhất. Khi không muốn thêm <code>&lt;div&gt;</code> bọc dư trong DOM, dùng <strong>Fragment</strong>. Và để hiển thị UI khác nhau cho dữ liệu khác nhau, ta render <strong>có điều kiện</strong>.</p>
 <h3>Fragment</h3>
-<pre><span class="tok-comment">// Không cần div bọc — dùng &lt;&gt;...&lt;/&gt;</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Không cần div bọc — dùng &lt;&gt;...&lt;/&gt;</span>
 <span class="tok-keyword">function</span> <span class="tok-function">Info</span>() {
   <span class="tok-keyword">return</span> (
     &lt;&gt;
@@ -907,25 +907,25 @@ count = 1;              <span class="tok-comment">// ok</span>
       &lt;p&gt;Body&lt;/p&gt;
     &lt;/&gt;
   );
-}</pre>
+}</code></pre>
 <div class="out"><b>DOM:</b> chỉ h2 và p — không có div bọc dư.</div>
 <p><code>&lt;&gt;...&lt;/&gt;</code> là viết tắt của <code>&lt;React.Fragment&gt;</code>. Dùng dạng đầy đủ khi cần <code>key</code> (trong danh sách).</p>
 <h3>Render có điều kiện — ba mẫu</h3>
-<pre><span class="tok-comment">// 1) Ternary — chọn giữa hai</span>
+<pre><code class="language-html"><span class="tok-comment">// 1) Ternary — chọn giữa hai</span>
 {isLoggedIn ? &lt;Logout /&gt; : &lt;Login /&gt;}
 
 <span class="tok-comment">// 2) &amp;&amp; — render hoặc không gì</span>
 {hasError &amp;&amp; &lt;p className=<span class="tok-string">"err"</span>&gt;Failed&lt;/p&gt;}
 
 <span class="tok-comment">// 3) return sớm trong component</span>
-<span class="tok-keyword">if</span> (loading) <span class="tok-keyword">return</span> &lt;Spinner /&gt;;</pre>
+<span class="tok-keyword">if</span> (loading) <span class="tok-keyword">return</span> &lt;Spinner /&gt;;</code></pre>
 <div class="pitfall">Khối điều kiện JSX là nguồn số 1 gây vỡ layout: thiếu một <code>)</code> hoặc thẻ không cân trong <code>{cond &amp;&amp; (...)}</code> làm hỏng build âm thầm. Luôn giữ cân bằng dấu ngoặc và thẻ đóng — đúng loại lỗi này từng làm vỡ build production thật.</div>
 <h3>Ví dụ có lời giải · loading / error / data</h3>
-<pre><span class="tok-keyword">function</span> <span class="tok-function">UserCard</span>({ loading, error, user }) {
+<pre><code class="language-javascript"><span class="tok-keyword">function</span> <span class="tok-function">UserCard</span>({ loading, error, user }) {
   <span class="tok-keyword">if</span> (loading) <span class="tok-keyword">return</span> &lt;p&gt;Loading…&lt;/p&gt;;
   <span class="tok-keyword">if</span> (error)   <span class="tok-keyword">return</span> &lt;p className=<span class="tok-string">"err"</span>&gt;{error}&lt;/p&gt;;
   <span class="tok-keyword">return</span> &lt;h3&gt;{user.name}&lt;/h3&gt;;
-}</pre>
+}</code></pre>
 <p>Mẫu "return sớm" đọc từ trên xuống như một checklist canh cửa: xử lý loading, rồi error, rồi trường hợp thành công. Đây là hình dạng chuẩn cho mọi component fetch dữ liệu (Chương 11).</p>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Fragment &amp; vấn đề div bọc.</b> Trước khi có fragment, lập trình viên bọc nhiều phần tử trong một <code>&lt;div&gt;</code> chỉ để thoả "một gốc". Những div dư đó làm bẩn DOM và phá layout CSS như flex/grid (một node thừa giữa cha flex và con). Fragment trả về nhiều anh em với <em>không</em> đầu ra DOM nào — thiết yếu để dựng hàng bảng (<code>&lt;tr&gt;</code>) và con flex/grid gọn gàng, nơi một wrapper trung gian sẽ phá layout.</div>
 </div>
@@ -968,14 +968,14 @@ count = 1;              <span class="tok-comment">// ok</span>
 <p class="lead"><strong>Bootstrap</strong> is the most popular CSS framework — a ready-made set of responsive styles and components (grid, buttons, navbars, forms). <strong>React-Bootstrap</strong> wraps them as proper React components so you never touch raw class strings.</p>
 <h3>The 12-column grid</h3>
 <p>Bootstrap divides each row into 12 columns. You compose layouts by choosing how many columns each block spans at each screen size.</p>
-<pre><span class="tok-comment">// Plain Bootstrap classes</span>
+<pre><code class="language-html"><span class="tok-comment">// Plain Bootstrap classes</span>
 &lt;div className=<span class="tok-string">"row"</span>&gt;
   &lt;div className=<span class="tok-string">"col-12 col-md-8"</span>&gt;Main&lt;/div&gt;
   &lt;div className=<span class="tok-string">"col-12 col-md-4"</span>&gt;Sidebar&lt;/div&gt;
-&lt;/div&gt;</pre>
+&lt;/div&gt;</code></pre>
 <div class="out"><b>Result:</b> stacked on mobile (12+12), side-by-side 8/4 on medium screens and up.</div>
 <h3>React-Bootstrap — components, not classes</h3>
-<pre><span class="tok-keyword">import</span> { Container, Row, Col, Button } <span class="tok-keyword">from</span> <span class="tok-string">"react-bootstrap"</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> { Container, Row, Col, Button } <span class="tok-keyword">from</span> <span class="tok-string">"react-bootstrap"</span>;
 
 <span class="tok-keyword">function</span> <span class="tok-function">Layout</span>() {
   <span class="tok-keyword">return</span> (
@@ -987,12 +987,12 @@ count = 1;              <span class="tok-comment">// ok</span>
       &lt;Button variant=<span class="tok-string">"primary"</span>&gt;Save&lt;/Button&gt;
     &lt;/Container&gt;
   );
-}</pre>
+}</code></pre>
 <div class="out"><b>Result:</b> the same responsive layout plus a styled primary button.</div>
 <p>Setup: <code>npm install react-bootstrap bootstrap</code>, then import the CSS once in <code>main.jsx</code>: <code>import "bootstrap/dist/css/bootstrap.min.css";</code></p>
 <div class="pitfall">Forgetting to import the Bootstrap CSS is the classic "why is nothing styled?" bug — React-Bootstrap ships the components but <strong>not</strong> the stylesheet. Import <code>bootstrap.min.css</code> exactly once at the app entry, not in every component.</div>
 <h3>Ví dụ có lời giải · Worked example (a card + navbar)</h3>
-<pre><span class="tok-keyword">import</span> { Navbar, Nav, Card } <span class="tok-keyword">from</span> <span class="tok-string">"react-bootstrap"</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> { Navbar, Nav, Card } <span class="tok-keyword">from</span> <span class="tok-string">"react-bootstrap"</span>;
 
 &lt;Navbar bg=<span class="tok-string">"dark"</span> variant=<span class="tok-string">"dark"</span>&gt;
   &lt;Navbar.Brand&gt;MyApp&lt;/Navbar.Brand&gt;
@@ -1004,7 +1004,7 @@ count = 1;              <span class="tok-comment">// ok</span>
     &lt;Card.Title&gt;React&lt;/Card.Title&gt;
     &lt;Card.Text&gt;A UI library.&lt;/Card.Text&gt;
   &lt;/Card.Body&gt;
-&lt;/Card&gt;</pre>
+&lt;/Card&gt;</code></pre>
 <p>Notice the compound-component pattern: <code>Card.Body</code>, <code>Card.Title</code> are sub-components of <code>Card</code>. Props like <code>variant</code> and <code>bg</code> map to Bootstrap's theme classes — you get consistent styling with zero CSS.</p>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Bootstrap vs utility-first (Tailwind) vs CSS-in-JS.</b> Bootstrap gives ready-made <em>components</em> (fast to start, but every Bootstrap site looks similar). Tailwind gives <em>utility classes</em> (<code>flex p-4 rounded</code>) — maximum control, no opinionated look. CSS-in-JS (styled-components, emotion) scopes styles to components. There's no "best" — Bootstrap wins for speed and prototypes; know that the industry has largely moved toward Tailwind for new projects, so learning the grid concept (which all of them share) matters more than memorising class names.</div>
 <a class="link-card exphub" href="/exp-hub?ref=%2Fcourses%2Ffront-end-web-development-with-react%2Flearn&reflabel=FER202" target="_blank" rel="noopener">
@@ -1019,14 +1019,14 @@ count = 1;              <span class="tok-comment">// ok</span>
 <p class="lead"><strong>Bootstrap</strong> là framework CSS phổ biến nhất — bộ style và component responsive dựng sẵn (grid, button, navbar, form). <strong>React-Bootstrap</strong> bọc chúng thành component React đúng nghĩa để bạn không phải chạm chuỗi class thô.</p>
 <h3>Grid 12 cột</h3>
 <p>Bootstrap chia mỗi hàng thành 12 cột. Bạn dựng layout bằng cách chọn mỗi khối chiếm bao nhiêu cột ở mỗi kích thước màn hình.</p>
-<pre><span class="tok-comment">// Class Bootstrap thuần</span>
+<pre><code class="language-html"><span class="tok-comment">// Class Bootstrap thuần</span>
 &lt;div className=<span class="tok-string">"row"</span>&gt;
   &lt;div className=<span class="tok-string">"col-12 col-md-8"</span>&gt;Main&lt;/div&gt;
   &lt;div className=<span class="tok-string">"col-12 col-md-4"</span>&gt;Sidebar&lt;/div&gt;
-&lt;/div&gt;</pre>
+&lt;/div&gt;</code></pre>
 <div class="out"><b>Kết quả:</b> xếp chồng trên mobile (12+12), cạnh nhau 8/4 từ màn hình medium trở lên.</div>
 <h3>React-Bootstrap — component, không phải class</h3>
-<pre><span class="tok-keyword">import</span> { Container, Row, Col, Button } <span class="tok-keyword">from</span> <span class="tok-string">"react-bootstrap"</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> { Container, Row, Col, Button } <span class="tok-keyword">from</span> <span class="tok-string">"react-bootstrap"</span>;
 
 <span class="tok-keyword">function</span> <span class="tok-function">Layout</span>() {
   <span class="tok-keyword">return</span> (
@@ -1038,12 +1038,12 @@ count = 1;              <span class="tok-comment">// ok</span>
       &lt;Button variant=<span class="tok-string">"primary"</span>&gt;Save&lt;/Button&gt;
     &lt;/Container&gt;
   );
-}</pre>
+}</code></pre>
 <div class="out"><b>Kết quả:</b> cùng layout responsive cộng một nút primary đã có style.</div>
 <p>Cài đặt: <code>npm install react-bootstrap bootstrap</code>, rồi import CSS một lần trong <code>main.jsx</code>: <code>import "bootstrap/dist/css/bootstrap.min.css";</code></p>
 <div class="pitfall">Quên import CSS Bootstrap là lỗi kinh điển "sao không có style gì?" — React-Bootstrap giao component nhưng <strong>không</strong> kèm stylesheet. Import <code>bootstrap.min.css</code> đúng một lần ở entry app, đừng import trong mọi component.</div>
 <h3>Ví dụ có lời giải · Card + navbar</h3>
-<pre><span class="tok-keyword">import</span> { Navbar, Nav, Card } <span class="tok-keyword">from</span> <span class="tok-string">"react-bootstrap"</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> { Navbar, Nav, Card } <span class="tok-keyword">from</span> <span class="tok-string">"react-bootstrap"</span>;
 
 &lt;Navbar bg=<span class="tok-string">"dark"</span> variant=<span class="tok-string">"dark"</span>&gt;
   &lt;Navbar.Brand&gt;MyApp&lt;/Navbar.Brand&gt;
@@ -1055,7 +1055,7 @@ count = 1;              <span class="tok-comment">// ok</span>
     &lt;Card.Title&gt;React&lt;/Card.Title&gt;
     &lt;Card.Text&gt;A UI library.&lt;/Card.Text&gt;
   &lt;/Card.Body&gt;
-&lt;/Card&gt;</pre>
+&lt;/Card&gt;</code></pre>
 <p>Chú ý mẫu compound-component: <code>Card.Body</code>, <code>Card.Title</code> là component con của <code>Card</code>. Props như <code>variant</code> và <code>bg</code> ánh xạ tới class theme của Bootstrap — bạn có style nhất quán với zero CSS.</p>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Bootstrap vs utility-first (Tailwind) vs CSS-in-JS.</b> Bootstrap cho <em>component</em> dựng sẵn (bắt đầu nhanh, nhưng site Bootstrap nào cũng na ná). Tailwind cho <em>class tiện ích</em> (<code>flex p-4 rounded</code>) — kiểm soát tối đa, không áp đặt phong cách. CSS-in-JS (styled-components, emotion) khoanh vùng style theo component. Không có "tốt nhất" — Bootstrap thắng về tốc độ và prototype; nên biết ngành đã dịch chuyển phần lớn sang Tailwind cho dự án mới, nên hiểu khái niệm grid (mà cả ba đều dùng chung) quan trọng hơn học thuộc tên class.</div>
 <a class="link-card exphub" href="/exp-hub?ref=%2Fcourses%2Ffront-end-web-development-with-react%2Flearn&reflabel=FER202" target="_blank" rel="noopener">
@@ -1102,26 +1102,26 @@ count = 1;              <span class="tok-comment">// ok</span>
 <h2>Components &amp; props</h2>
 <p class="lead">A <strong>component</strong> is a JavaScript function that returns JSX. Components are the LEGO bricks of React — you build a big UI by composing small components. <strong>Props</strong> are the inputs you pass to a component, like function arguments.</p>
 <h3>A function component</h3>
-<pre><span class="tok-comment">// Defines a reusable Greeting component</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Defines a reusable Greeting component</span>
 <span class="tok-keyword">function</span> <span class="tok-function">Greeting</span>({ name, role }) {  <span class="tok-comment">// props destructured</span>
   <span class="tok-keyword">return</span> &lt;h2&gt;Hi {name} — {role}&lt;/h2&gt;;
 }
 
 <span class="tok-comment">// Using it, passing props</span>
 &lt;Greeting name=<span class="tok-string">"An"</span> role=<span class="tok-string">"Student"</span> /&gt;
-&lt;Greeting name=<span class="tok-string">"Binh"</span> role=<span class="tok-string">"Admin"</span> /&gt;</pre>
+&lt;Greeting name=<span class="tok-string">"Binh"</span> role=<span class="tok-string">"Admin"</span> /&gt;</code></pre>
 <div class="out"><b>Renders:</b> "Hi An — Student" and "Hi Binh — Admin"</div>
 <p>Component names must start with a <strong>capital letter</strong> (<code>Greeting</code>, not <code>greeting</code>) — that's how JSX tells your components apart from HTML tags.</p>
 <h3>Props are read-only</h3>
 <p>A component must <strong>never</strong> modify its own props. Data flows <strong>one way</strong>: parent → child. If a child needs to change something, the parent passes a callback (you'll see this in event handling).</p>
-<pre><span class="tok-comment">// children prop — content between the tags</span>
+<pre><code class="language-javascript"><span class="tok-comment">// children prop — content between the tags</span>
 <span class="tok-keyword">function</span> <span class="tok-function">Panel</span>({ children }) {
   <span class="tok-keyword">return</span> &lt;div className=<span class="tok-string">"panel"</span>&gt;{children}&lt;/div&gt;;
 }
-&lt;Panel&gt;&lt;p&gt;Anything here&lt;/p&gt;&lt;/Panel&gt;</pre>
+&lt;Panel&gt;&lt;p&gt;Anything here&lt;/p&gt;&lt;/Panel&gt;</code></pre>
 <div class="pitfall">Props are read-only: writing <code>props.name = "x"</code> throws in strict mode and is always a design error. If you feel the urge to change a prop, you actually need <strong>state</strong> (next lesson) or to lift the change up to the parent.</div>
 <h3>Ví dụ có lời giải · Worked example (composition)</h3>
-<pre><span class="tok-keyword">function</span> <span class="tok-function">Avatar</span>({ url }) { <span class="tok-keyword">return</span> &lt;img src={url} className=<span class="tok-string">"av"</span> /&gt;; }
+<pre><code class="language-javascript"><span class="tok-keyword">function</span> <span class="tok-function">Avatar</span>({ url }) { <span class="tok-keyword">return</span> &lt;img src={url} className=<span class="tok-string">"av"</span> /&gt;; }
 <span class="tok-keyword">function</span> <span class="tok-function">UserRow</span>({ user }) {
   <span class="tok-keyword">return</span> (
     &lt;div className=<span class="tok-string">"row"</span>&gt;
@@ -1129,7 +1129,7 @@ count = 1;              <span class="tok-comment">// ok</span>
       &lt;span&gt;{user.name}&lt;/span&gt;
     &lt;/div&gt;
   );
-}</pre>
+}</code></pre>
 <p><code>UserRow</code> reuses <code>Avatar</code> by passing it a prop. This is <strong>composition</strong>: small components combine into bigger ones, each doing one job. It's the core skill FER202 grades.</p>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Presentational vs container components.</b> A useful design split: <em>presentational</em> components only take props and render UI (no data logic) — easy to reuse and test. <em>Container</em> components fetch/hold data and pass it down. This separation (popularised by Dan Abramov) keeps UI dumb and logic centralised. With hooks the line has blurred — today we often extract logic into <b>custom hooks</b> instead of container components — but the instinct "keep rendering separate from data" still guides clean React.</div>
 <a class="link-card codelab" href="/code-lab/react?ref=%2Fcourses%2Ffront-end-web-development-with-react%2Flearn&reflabel=FER202" target="_blank" rel="noopener">
@@ -1143,26 +1143,26 @@ count = 1;              <span class="tok-comment">// ok</span>
 <h2>Component &amp; props</h2>
 <p class="lead">Một <strong>component</strong> là hàm JavaScript trả về JSX. Component là những viên LEGO của React — bạn dựng UI lớn bằng cách ghép các component nhỏ. <strong>Props</strong> là đầu vào bạn truyền cho component, như tham số hàm.</p>
 <h3>Function component</h3>
-<pre><span class="tok-comment">// Định nghĩa component Greeting tái dùng</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Định nghĩa component Greeting tái dùng</span>
 <span class="tok-keyword">function</span> <span class="tok-function">Greeting</span>({ name, role }) {  <span class="tok-comment">// props được bóc tách</span>
   <span class="tok-keyword">return</span> &lt;h2&gt;Hi {name} — {role}&lt;/h2&gt;;
 }
 
 <span class="tok-comment">// Dùng nó, truyền props</span>
 &lt;Greeting name=<span class="tok-string">"An"</span> role=<span class="tok-string">"Student"</span> /&gt;
-&lt;Greeting name=<span class="tok-string">"Binh"</span> role=<span class="tok-string">"Admin"</span> /&gt;</pre>
+&lt;Greeting name=<span class="tok-string">"Binh"</span> role=<span class="tok-string">"Admin"</span> /&gt;</code></pre>
 <div class="out"><b>Render ra:</b> "Hi An — Student" và "Hi Binh — Admin"</div>
 <p>Tên component phải bắt đầu bằng <strong>chữ hoa</strong> (<code>Greeting</code>, không phải <code>greeting</code>) — nhờ đó JSX phân biệt component của bạn với thẻ HTML.</p>
 <h3>Props chỉ đọc</h3>
 <p>Component <strong>không bao giờ</strong> được sửa props của chính nó. Dữ liệu chảy <strong>một chiều</strong>: cha → con. Nếu con cần thay đổi gì, cha truyền một callback (bạn sẽ thấy ở phần xử lý sự kiện).</p>
-<pre><span class="tok-comment">// prop children — nội dung giữa hai thẻ</span>
+<pre><code class="language-javascript"><span class="tok-comment">// prop children — nội dung giữa hai thẻ</span>
 <span class="tok-keyword">function</span> <span class="tok-function">Panel</span>({ children }) {
   <span class="tok-keyword">return</span> &lt;div className=<span class="tok-string">"panel"</span>&gt;{children}&lt;/div&gt;;
 }
-&lt;Panel&gt;&lt;p&gt;Anything here&lt;/p&gt;&lt;/Panel&gt;</pre>
+&lt;Panel&gt;&lt;p&gt;Anything here&lt;/p&gt;&lt;/Panel&gt;</code></pre>
 <div class="pitfall">Props chỉ đọc: viết <code>props.name = "x"</code> ném lỗi trong strict mode và luôn là lỗi thiết kế. Nếu thấy muốn sửa một prop, thực chất bạn cần <strong>state</strong> (bài sau) hoặc đẩy thay đổi lên cha.</div>
 <h3>Ví dụ có lời giải · Ghép component (composition)</h3>
-<pre><span class="tok-keyword">function</span> <span class="tok-function">Avatar</span>({ url }) { <span class="tok-keyword">return</span> &lt;img src={url} className=<span class="tok-string">"av"</span> /&gt;; }
+<pre><code class="language-javascript"><span class="tok-keyword">function</span> <span class="tok-function">Avatar</span>({ url }) { <span class="tok-keyword">return</span> &lt;img src={url} className=<span class="tok-string">"av"</span> /&gt;; }
 <span class="tok-keyword">function</span> <span class="tok-function">UserRow</span>({ user }) {
   <span class="tok-keyword">return</span> (
     &lt;div className=<span class="tok-string">"row"</span>&gt;
@@ -1170,7 +1170,7 @@ count = 1;              <span class="tok-comment">// ok</span>
       &lt;span&gt;{user.name}&lt;/span&gt;
     &lt;/div&gt;
   );
-}</pre>
+}</code></pre>
 <p><code>UserRow</code> tái dùng <code>Avatar</code> bằng cách truyền prop. Đây là <strong>composition</strong>: component nhỏ kết hợp thành lớn, mỗi cái làm một việc. Đó là kỹ năng cốt lõi FER202 chấm điểm.</p>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Presentational vs container component.</b> Một cách chia thiết kế hữu ích: component <em>presentational</em> chỉ nhận props và render UI (không logic dữ liệu) — dễ tái dùng và test. Component <em>container</em> fetch/giữ dữ liệu và truyền xuống. Sự phân tách này (Dan Abramov phổ biến) giữ UI "ngốc" và logic tập trung. Với hooks ranh giới đã mờ — ngày nay ta thường tách logic vào <b>custom hook</b> thay vì container component — nhưng bản năng "tách render khỏi dữ liệu" vẫn dẫn lối React sạch.</div>
 <a class="link-card codelab" href="/code-lab/react?ref=%2Fcourses%2Ffront-end-web-development-with-react%2Flearn&reflabel=FER202" target="_blank" rel="noopener">
@@ -1192,7 +1192,7 @@ count = 1;              <span class="tok-comment">// ok</span>
 <h2>State — a component's memory</h2>
 <p class="lead"><strong>State</strong> is data a component owns and can change over time. When state changes, React re-renders the component. Props come from outside; state lives inside.</p>
 <h3>Function component with useState (the modern way)</h3>
-<pre><span class="tok-keyword">import</span> { useState } <span class="tok-keyword">from</span> <span class="tok-string">"react"</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> { useState } <span class="tok-keyword">from</span> <span class="tok-string">"react"</span>;
 
 <span class="tok-keyword">function</span> <span class="tok-function">Counter</span>() {
   <span class="tok-keyword">const</span> [count, setCount] = <span class="tok-function">useState</span>(0);
@@ -1201,11 +1201,11 @@ count = 1;              <span class="tok-comment">// ok</span>
       Clicked {count} times
     &lt;/button&gt;
   );
-}</pre>
+}</code></pre>
 <div class="out"><b>Result:</b> each click bumps count and the button text re-renders.</div>
 <p><code>useState(0)</code> returns <code>[value, setter]</code>. You <strong>never</strong> assign <code>count = 5</code> directly — you call <code>setCount(5)</code> so React knows to re-render.</p>
 <h3>The old class equivalent</h3>
-<pre><span class="tok-keyword">class</span> <span class="tok-function">Counter</span> <span class="tok-keyword">extends</span> React.Component {
+<pre><code class="language-html"><span class="tok-keyword">class</span> <span class="tok-function">Counter</span> <span class="tok-keyword">extends</span> React.Component {
   state = { count: 0 };
   <span class="tok-keyword">render</span>() {
     <span class="tok-keyword">return</span> &lt;button onClick={() =&gt;
@@ -1213,17 +1213,17 @@ count = 1;              <span class="tok-comment">// ok</span>
       {<span class="tok-keyword">this</span>.state.count}
     &lt;/button&gt;;
   }
-}</pre>
+}</code></pre>
 <p>Both work, but function components + hooks are the standard today — less boilerplate, no <code>this</code>, easier to reuse logic.</p>
 <div class="pitfall">State updates are <strong>asynchronous</strong> and batched. Right after <code>setCount(count + 1)</code>, reading <code>count</code> still shows the old value — the new value appears on the next render. To update based on the previous value safely, use the functional form: <code>setCount(c =&gt; c + 1)</code>.</div>
 <h3>Ví dụ có lời giải · Worked example (the +2 trap)</h3>
-<pre><span class="tok-comment">// BUG: both read the same stale count</span>
+<pre><code class="language-javascript"><span class="tok-comment">// BUG: both read the same stale count</span>
 <span class="tok-function">setCount</span>(count + 1);
 <span class="tok-function">setCount</span>(count + 1); <span class="tok-comment">// count only goes up by 1!</span>
 
 <span class="tok-comment">// FIX: functional updater — each sees the latest</span>
 <span class="tok-function">setCount</span>(c =&gt; c + 1);
-<span class="tok-function">setCount</span>(c =&gt; c + 1); <span class="tok-comment">// now +2</span></pre>
+<span class="tok-function">setCount</span>(c =&gt; c + 1); <span class="tok-comment">// now +2</span></code></pre>
 <p>Because <code>count</code> is captured at render time, calling <code>setCount(count + 1)</code> twice uses the same old number. The functional form <code>c =&gt; c + 1</code> always receives the latest queued value.</p>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>State is a snapshot, not a live variable.</b> A common mental-model fix: on each render, all the variables (including <code>count</code>) are <em>frozen</em> for that render — a snapshot. Event handlers "remember" the values from the render they were created in. This is why <code>setCount(count + 1)</code> twice adds one, and why an interval created in <code>useEffect</code> can log a stale count. Once you internalise "each render has its own props and state", the weirdest React bugs become predictable.</div>
 <a class="link-card codelab" href="/code-lab/react?ref=%2Fcourses%2Ffront-end-web-development-with-react%2Flearn&reflabel=FER202" target="_blank" rel="noopener">
@@ -1237,7 +1237,7 @@ count = 1;              <span class="tok-comment">// ok</span>
 <h2>State — bộ nhớ của component</h2>
 <p class="lead"><strong>State</strong> là dữ liệu component sở hữu và có thể đổi theo thời gian. Khi state đổi, React render lại component. Props đến từ bên ngoài; state sống bên trong.</p>
 <h3>Function component với useState (cách hiện đại)</h3>
-<pre><span class="tok-keyword">import</span> { useState } <span class="tok-keyword">from</span> <span class="tok-string">"react"</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> { useState } <span class="tok-keyword">from</span> <span class="tok-string">"react"</span>;
 
 <span class="tok-keyword">function</span> <span class="tok-function">Counter</span>() {
   <span class="tok-keyword">const</span> [count, setCount] = <span class="tok-function">useState</span>(0);
@@ -1246,11 +1246,11 @@ count = 1;              <span class="tok-comment">// ok</span>
       Clicked {count} times
     &lt;/button&gt;
   );
-}</pre>
+}</code></pre>
 <div class="out"><b>Kết quả:</b> mỗi lần bấm tăng count và chữ trên nút render lại.</div>
 <p><code>useState(0)</code> trả về <code>[value, setter]</code>. Bạn <strong>không bao giờ</strong> gán <code>count = 5</code> trực tiếp — hãy gọi <code>setCount(5)</code> để React biết cần render lại.</p>
 <h3>Bản class cũ tương đương</h3>
-<pre><span class="tok-keyword">class</span> <span class="tok-function">Counter</span> <span class="tok-keyword">extends</span> React.Component {
+<pre><code class="language-html"><span class="tok-keyword">class</span> <span class="tok-function">Counter</span> <span class="tok-keyword">extends</span> React.Component {
   state = { count: 0 };
   <span class="tok-keyword">render</span>() {
     <span class="tok-keyword">return</span> &lt;button onClick={() =&gt;
@@ -1258,17 +1258,17 @@ count = 1;              <span class="tok-comment">// ok</span>
       {<span class="tok-keyword">this</span>.state.count}
     &lt;/button&gt;;
   }
-}</pre>
+}</code></pre>
 <p>Cả hai đều chạy, nhưng function component + hooks là chuẩn hiện nay — ít lặp, không <code>this</code>, dễ tái dùng logic.</p>
 <div class="pitfall">Cập nhật state là <strong>bất đồng bộ</strong> và gộp lô. Ngay sau <code>setCount(count + 1)</code>, đọc <code>count</code> vẫn thấy giá trị cũ — giá trị mới xuất hiện ở render kế tiếp. Để cập nhật dựa trên giá trị trước một cách an toàn, dùng dạng hàm: <code>setCount(c =&gt; c + 1)</code>.</div>
 <h3>Ví dụ có lời giải · Bẫy +2</h3>
-<pre><span class="tok-comment">// LỖI: cả hai đọc cùng count cũ</span>
+<pre><code class="language-javascript"><span class="tok-comment">// LỖI: cả hai đọc cùng count cũ</span>
 <span class="tok-function">setCount</span>(count + 1);
 <span class="tok-function">setCount</span>(count + 1); <span class="tok-comment">// count chỉ tăng 1!</span>
 
 <span class="tok-comment">// SỬA: dạng hàm cập nhật — mỗi cái thấy giá trị mới nhất</span>
 <span class="tok-function">setCount</span>(c =&gt; c + 1);
-<span class="tok-function">setCount</span>(c =&gt; c + 1); <span class="tok-comment">// giờ +2</span></pre>
+<span class="tok-function">setCount</span>(c =&gt; c + 1); <span class="tok-comment">// giờ +2</span></code></pre>
 <p>Vì <code>count</code> được chốt tại thời điểm render, gọi <code>setCount(count + 1)</code> hai lần dùng cùng số cũ. Dạng hàm <code>c =&gt; c + 1</code> luôn nhận giá trị mới nhất trong hàng đợi.</p>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>State là ảnh chụp, không phải biến sống.</b> Một cách sửa mô hình tư duy: ở mỗi render, mọi biến (kể cả <code>count</code>) bị <em>đóng băng</em> cho render đó — một ảnh chụp. Event handler "nhớ" giá trị từ render tạo ra nó. Vì thế <code>setCount(count + 1)</code> hai lần chỉ cộng một, và một interval tạo trong <code>useEffect</code> có thể log count cũ. Khi đã thấm "mỗi render có props và state riêng", những lỗi React kỳ lạ nhất trở nên đoán được.</div>
 <a class="link-card codelab" href="/code-lab/react?ref=%2Fcourses%2Ffront-end-web-development-with-react%2Flearn&reflabel=FER202" target="_blank" rel="noopener">
@@ -1314,18 +1314,18 @@ count = 1;              <span class="tok-comment">// ok</span>
 <span class="eyebrow">Chapter 6 · Lesson 6.1</span>
 <h2>Handling events in React</h2>
 <p class="lead">You respond to user actions with event handlers: <code>onClick</code>, <code>onChange</code>, <code>onSubmit</code>. In JSX you pass a <strong>function</strong> (not a string) to these camelCase props.</p>
-<pre><span class="tok-keyword">function</span> <span class="tok-function">Toggle</span>() {
+<pre><code class="language-javascript"><span class="tok-keyword">function</span> <span class="tok-function">Toggle</span>() {
   <span class="tok-keyword">const</span> [on, setOn] = <span class="tok-function">useState</span>(<span class="tok-keyword">false</span>);
   <span class="tok-comment">// pass the function reference, don't call it</span>
   <span class="tok-keyword">return</span> &lt;button onClick={() =&gt; setOn(!on)}&gt;
     {on ? <span class="tok-string">"ON"</span> : <span class="tok-string">"OFF"</span>}
   &lt;/button&gt;;
-}</pre>
+}</code></pre>
 <div class="out"><b>Result:</b> the button flips between ON and OFF on each click.</div>
 <div class="pitfall">Pass the function, don't call it: <code>onClick={handleClick}</code> — <strong>not</strong> <code>onClick={handleClick()}</code>. The second form runs the handler <em>during render</em> and passes its return value, a classic beginner bug (the button "fires on load" or triggers an infinite loop).</div>
 <h3>Synthetic events &amp; passing parameters</h3>
 <p>React wraps the native event in a <strong>SyntheticEvent</strong> — a cross-browser consistent object. To pass extra arguments, wrap the handler in an arrow function:</p>
-<pre><span class="tok-keyword">function</span> <span class="tok-function">List</span>({ items }) {
+<pre><code class="language-javascript"><span class="tok-keyword">function</span> <span class="tok-function">List</span>({ items }) {
   <span class="tok-keyword">const</span> <span class="tok-function">remove</span> = (id, e) =&gt; {
     e.<span class="tok-function">stopPropagation</span>();  <span class="tok-comment">// the synthetic event</span>
     <span class="tok-function">console</span>.log(<span class="tok-string">"remove"</span>, id);
@@ -1333,10 +1333,10 @@ count = 1;              <span class="tok-comment">// ok</span>
   <span class="tok-keyword">return</span> items.<span class="tok-function">map</span>(it =&gt;
     &lt;li key={it.id} onClick={(e) =&gt; <span class="tok-function">remove</span>(it.id, e)}&gt;{it.name}&lt;/li&gt;
   );
-}</pre>
+}</code></pre>
 <h3>Controlled form inputs</h3>
 <p>A <strong>controlled</strong> input has its value driven by state — React is the single source of truth:</p>
-<pre><span class="tok-keyword">function</span> <span class="tok-function">NameForm</span>() {
+<pre><code class="language-javascript"><span class="tok-keyword">function</span> <span class="tok-function">NameForm</span>() {
   <span class="tok-keyword">const</span> [name, setName] = <span class="tok-function">useState</span>(<span class="tok-string">""</span>);
   <span class="tok-keyword">return</span> (
     &lt;form onSubmit={(e) =&gt; { e.<span class="tok-function">preventDefault</span>(); <span class="tok-function">alert</span>(name); }}&gt;
@@ -1344,7 +1344,7 @@ count = 1;              <span class="tok-comment">// ok</span>
       &lt;button&gt;Submit&lt;/button&gt;
     &lt;/form&gt;
   );
-}</pre>
+}</code></pre>
 <div class="out"><b>Result:</b> typing updates state; Submit shows the current name (no page reload).</div>
 <h3>Ví dụ có lời giải · Worked example (preventDefault)</h3>
 <p>By default an HTML form <code>submit</code> reloads the page. In a SPA that wipes your state. <code>e.preventDefault()</code> stops the browser's default and lets your JavaScript handle the submit — you'll do this in every React form.</p>
@@ -1359,18 +1359,18 @@ count = 1;              <span class="tok-comment">// ok</span>
 <span class="eyebrow">Chương 6 · Bài 6.1</span>
 <h2>Xử lý sự kiện trong React</h2>
 <p class="lead">Bạn phản hồi hành động người dùng bằng event handler: <code>onClick</code>, <code>onChange</code>, <code>onSubmit</code>. Trong JSX bạn truyền một <strong>hàm</strong> (không phải chuỗi) cho các prop camelCase này.</p>
-<pre><span class="tok-keyword">function</span> <span class="tok-function">Toggle</span>() {
+<pre><code class="language-javascript"><span class="tok-keyword">function</span> <span class="tok-function">Toggle</span>() {
   <span class="tok-keyword">const</span> [on, setOn] = <span class="tok-function">useState</span>(<span class="tok-keyword">false</span>);
   <span class="tok-comment">// truyền tham chiếu hàm, đừng gọi nó</span>
   <span class="tok-keyword">return</span> &lt;button onClick={() =&gt; setOn(!on)}&gt;
     {on ? <span class="tok-string">"ON"</span> : <span class="tok-string">"OFF"</span>}
   &lt;/button&gt;;
-}</pre>
+}</code></pre>
 <div class="out"><b>Kết quả:</b> nút đảo giữa ON và OFF mỗi lần bấm.</div>
 <div class="pitfall">Truyền hàm, đừng gọi nó: <code>onClick={handleClick}</code> — <strong>không phải</strong> <code>onClick={handleClick()}</code>. Dạng thứ hai chạy handler <em>ngay lúc render</em> và truyền giá trị trả về, một lỗi kinh điển của người mới (nút "kích hoạt lúc tải" hoặc gây vòng lặp vô hạn).</div>
 <h3>Synthetic event &amp; truyền tham số</h3>
 <p>React bọc sự kiện gốc trong một <strong>SyntheticEvent</strong> — object nhất quán đa trình duyệt. Để truyền thêm tham số, bọc handler trong arrow function:</p>
-<pre><span class="tok-keyword">function</span> <span class="tok-function">List</span>({ items }) {
+<pre><code class="language-javascript"><span class="tok-keyword">function</span> <span class="tok-function">List</span>({ items }) {
   <span class="tok-keyword">const</span> <span class="tok-function">remove</span> = (id, e) =&gt; {
     e.<span class="tok-function">stopPropagation</span>();  <span class="tok-comment">// synthetic event</span>
     <span class="tok-function">console</span>.log(<span class="tok-string">"remove"</span>, id);
@@ -1378,10 +1378,10 @@ count = 1;              <span class="tok-comment">// ok</span>
   <span class="tok-keyword">return</span> items.<span class="tok-function">map</span>(it =&gt;
     &lt;li key={it.id} onClick={(e) =&gt; <span class="tok-function">remove</span>(it.id, e)}&gt;{it.name}&lt;/li&gt;
   );
-}</pre>
+}</code></pre>
 <h3>Controlled form input</h3>
 <p>Một input <strong>controlled</strong> có value do state điều khiển — React là nguồn sự thật duy nhất:</p>
-<pre><span class="tok-keyword">function</span> <span class="tok-function">NameForm</span>() {
+<pre><code class="language-javascript"><span class="tok-keyword">function</span> <span class="tok-function">NameForm</span>() {
   <span class="tok-keyword">const</span> [name, setName] = <span class="tok-function">useState</span>(<span class="tok-string">""</span>);
   <span class="tok-keyword">return</span> (
     &lt;form onSubmit={(e) =&gt; { e.<span class="tok-function">preventDefault</span>(); <span class="tok-function">alert</span>(name); }}&gt;
@@ -1389,7 +1389,7 @@ count = 1;              <span class="tok-comment">// ok</span>
       &lt;button&gt;Submit&lt;/button&gt;
     &lt;/form&gt;
   );
-}</pre>
+}</code></pre>
 <div class="out"><b>Kết quả:</b> gõ cập nhật state; Submit hiện tên hiện tại (không reload trang).</div>
 <h3>Ví dụ có lời giải · preventDefault</h3>
 <p>Mặc định form HTML khi <code>submit</code> sẽ reload trang. Trong SPA điều đó xoá sạch state. <code>e.preventDefault()</code> chặn hành vi mặc định của trình duyệt và để JavaScript của bạn xử lý submit — bạn sẽ làm điều này trong mọi form React.</p>
@@ -1438,11 +1438,11 @@ count = 1;              <span class="tok-comment">// ok</span>
 <h2>Prop drilling &amp; the Context API</h2>
 <p class="lead">Data flows parent → child through props. But when a deeply nested component needs data from far above, you'd have to pass it through every level in between — the "<strong>prop drilling</strong>" problem. <strong>Context</strong> lets you broadcast a value to any depth without threading props.</p>
 <h3>The prop-drilling pain</h3>
-<pre><span class="tok-comment">// theme has to pass through Layout and Header just to reach Button</span>
-&lt;App theme=...&gt; → &lt;Layout theme&gt; → &lt;Header theme&gt; → &lt;Button theme&gt;</pre>
+<pre><code class="language-html"><span class="tok-comment">// theme has to pass through Layout and Header just to reach Button</span>
+&lt;App theme=...&gt; → &lt;Layout theme&gt; → &lt;Header theme&gt; → &lt;Button theme&gt;</code></pre>
 <p>The middle components don't use <code>theme</code> at all — they just forward it. Tedious and fragile.</p>
 <h3>Context — three steps</h3>
-<pre><span class="tok-keyword">import</span> { createContext, useContext } <span class="tok-keyword">from</span> <span class="tok-string">"react"</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> { createContext, useContext } <span class="tok-keyword">from</span> <span class="tok-string">"react"</span>;
 
 <span class="tok-comment">// 1) create a context</span>
 <span class="tok-keyword">const</span> ThemeContext = <span class="tok-function">createContext</span>(<span class="tok-string">"light"</span>);
@@ -1460,15 +1460,15 @@ count = 1;              <span class="tok-comment">// ok</span>
 <span class="tok-keyword">function</span> <span class="tok-function">Button</span>() {
   <span class="tok-keyword">const</span> theme = <span class="tok-function">useContext</span>(ThemeContext);
   <span class="tok-keyword">return</span> &lt;button className={theme}&gt;Click&lt;/button&gt;;
-}</pre>
+}</code></pre>
 <div class="out"><b>Result:</b> Button reads "dark" directly — Layout and Header never touch theme.</div>
 <div class="pitfall">Don't reach for Context too early. For 1-2 levels, plain props are clearer. Context shines for truly global data: current user, theme, language. Overusing it makes components hard to reuse (they now depend on a provider being present).</div>
 <h3>Ví dụ có lời giải · Worked example (auth context)</h3>
-<pre><span class="tok-keyword">const</span> AuthContext = <span class="tok-function">createContext</span>(<span class="tok-keyword">null</span>);
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> AuthContext = <span class="tok-function">createContext</span>(<span class="tok-keyword">null</span>);
 <span class="tok-keyword">function</span> <span class="tok-function">Navbar</span>() {
   <span class="tok-keyword">const</span> user = <span class="tok-function">useContext</span>(AuthContext);
   <span class="tok-keyword">return</span> &lt;span&gt;{user ? user.name : <span class="tok-string">"Guest"</span>}&lt;/span&gt;;
-}</pre>
+}</code></pre>
 <p>Any component in the tree calls <code>useContext(AuthContext)</code> to get the logged-in user — no matter how deep. This is the standard pattern for user/session data.</p>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Context is not a state manager — and re-render cost.</b> Context <em>distributes</em> a value; it doesn't manage updates efficiently. When a provider's <code>value</code> changes, <b>every</b> consumer re-renders, even ones using an unchanged part of the object. For large, frequently-updated global state this is why teams reach for Redux/Zustand instead. Common fix: split contexts (a stable "dispatch" context + a changing "state" context), or memoise the <code>value</code> object so it only changes when it must.</div>
 </div>
@@ -1477,11 +1477,11 @@ count = 1;              <span class="tok-comment">// ok</span>
 <h2>Prop drilling &amp; Context API</h2>
 <p class="lead">Dữ liệu chảy cha → con qua props. Nhưng khi một component lồng sâu cần dữ liệu từ tít trên cao, bạn phải truyền qua mọi tầng ở giữa — vấn đề "<strong>prop drilling</strong>". <strong>Context</strong> cho phép phát một giá trị tới mọi độ sâu mà không phải xâu chuỗi props.</p>
 <h3>Nỗi đau prop drilling</h3>
-<pre><span class="tok-comment">// theme phải đi qua Layout và Header chỉ để tới Button</span>
-&lt;App theme=...&gt; → &lt;Layout theme&gt; → &lt;Header theme&gt; → &lt;Button theme&gt;</pre>
+<pre><code class="language-html"><span class="tok-comment">// theme phải đi qua Layout và Header chỉ để tới Button</span>
+&lt;App theme=...&gt; → &lt;Layout theme&gt; → &lt;Header theme&gt; → &lt;Button theme&gt;</code></pre>
 <p>Các component ở giữa chẳng dùng <code>theme</code> — chỉ chuyển tiếp. Nhàm chán và dễ vỡ.</p>
 <h3>Context — ba bước</h3>
-<pre><span class="tok-keyword">import</span> { createContext, useContext } <span class="tok-keyword">from</span> <span class="tok-string">"react"</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> { createContext, useContext } <span class="tok-keyword">from</span> <span class="tok-string">"react"</span>;
 
 <span class="tok-comment">// 1) tạo context</span>
 <span class="tok-keyword">const</span> ThemeContext = <span class="tok-function">createContext</span>(<span class="tok-string">"light"</span>);
@@ -1499,15 +1499,15 @@ count = 1;              <span class="tok-comment">// ok</span>
 <span class="tok-keyword">function</span> <span class="tok-function">Button</span>() {
   <span class="tok-keyword">const</span> theme = <span class="tok-function">useContext</span>(ThemeContext);
   <span class="tok-keyword">return</span> &lt;button className={theme}&gt;Click&lt;/button&gt;;
-}</pre>
+}</code></pre>
 <div class="out"><b>Kết quả:</b> Button đọc "dark" trực tiếp — Layout và Header không chạm theme.</div>
 <div class="pitfall">Đừng vội dùng Context. Với 1-2 tầng, props thuần rõ ràng hơn. Context toả sáng với dữ liệu thật sự toàn cục: người dùng hiện tại, theme, ngôn ngữ. Lạm dụng làm component khó tái dùng (giờ chúng phụ thuộc vào việc có một provider tồn tại).</div>
 <h3>Ví dụ có lời giải · Auth context</h3>
-<pre><span class="tok-keyword">const</span> AuthContext = <span class="tok-function">createContext</span>(<span class="tok-keyword">null</span>);
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> AuthContext = <span class="tok-function">createContext</span>(<span class="tok-keyword">null</span>);
 <span class="tok-keyword">function</span> <span class="tok-function">Navbar</span>() {
   <span class="tok-keyword">const</span> user = <span class="tok-function">useContext</span>(AuthContext);
   <span class="tok-keyword">return</span> &lt;span&gt;{user ? user.name : <span class="tok-string">"Guest"</span>}&lt;/span&gt;;
-}</pre>
+}</code></pre>
 <p>Bất kỳ component nào trong cây gọi <code>useContext(AuthContext)</code> để lấy người dùng đã đăng nhập — dù sâu tới đâu. Đây là mẫu chuẩn cho dữ liệu người dùng/phiên.</p>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Context không phải trình quản lý state — và chi phí render lại.</b> Context <em>phân phối</em> một giá trị; nó không quản lý cập nhật hiệu quả. Khi <code>value</code> của provider đổi, <b>mọi</b> consumer render lại, kể cả cái dùng phần không đổi của object. Với state toàn cục lớn, cập nhật thường xuyên, đây là lý do các đội chọn Redux/Zustand. Cách sửa phổ biến: tách context (một context "dispatch" ổn định + một context "state" thay đổi), hoặc memo hoá object <code>value</code> để nó chỉ đổi khi cần.</div>
 </div>
@@ -1524,7 +1524,7 @@ count = 1;              <span class="tok-comment">// ok</span>
 <h2>Crafting reusable components</h2>
 <p class="lead">Beyond passing data, React has patterns for sharing <strong>behaviour</strong> and <strong>layout</strong> between components: the <code>children</code> prop, and <strong>render props</strong>.</p>
 <h3>children — flexible layout</h3>
-<pre><span class="tok-keyword">function</span> <span class="tok-function">Modal</span>({ title, children }) {
+<pre><code class="language-javascript"><span class="tok-keyword">function</span> <span class="tok-function">Modal</span>({ title, children }) {
   <span class="tok-keyword">return</span> (
     &lt;div className=<span class="tok-string">"modal"</span>&gt;
       &lt;h3&gt;{title}&lt;/h3&gt;
@@ -1532,27 +1532,27 @@ count = 1;              <span class="tok-comment">// ok</span>
     &lt;/div&gt;
   );
 }
-&lt;Modal title=<span class="tok-string">"Hi"</span>&gt;&lt;p&gt;Any content&lt;/p&gt;&lt;/Modal&gt;</pre>
+&lt;Modal title=<span class="tok-string">"Hi"</span>&gt;&lt;p&gt;Any content&lt;/p&gt;&lt;/Modal&gt;</code></pre>
 <p><code>Modal</code> supplies the frame; the caller supplies the inside via <code>children</code>. One <code>Modal</code>, infinite contents.</p>
 <h3>Render props — sharing logic</h3>
 <p>A <strong>render prop</strong> is a prop whose value is a function returning JSX. The component runs logic and calls that function with the result:</p>
-<pre><span class="tok-keyword">function</span> <span class="tok-function">MouseTracker</span>({ render }) {
+<pre><code class="language-javascript"><span class="tok-keyword">function</span> <span class="tok-function">MouseTracker</span>({ render }) {
   <span class="tok-keyword">const</span> [pos, setPos] = <span class="tok-function">useState</span>({ x: 0, y: 0 });
   <span class="tok-keyword">return</span> &lt;div onMouseMove={(e) =&gt; setPos({ x: e.clientX, y: e.clientY })}&gt;
     {render(pos)}
   &lt;/div&gt;;
 }
-&lt;MouseTracker render={(p) =&gt; &lt;span&gt;{p.x}, {p.y}&lt;/span&gt;} /&gt;</pre>
+&lt;MouseTracker render={(p) =&gt; &lt;span&gt;{p.x}, {p.y}&lt;/span&gt;} /&gt;</code></pre>
 <div class="out"><b>Result:</b> the tracker owns the mouse logic; the caller decides how to display it.</div>
 <div class="pitfall">Render props were the pre-hooks way to share stateful logic. They work but create "wrapper hell" (deeply nested render callbacks). Today the same reuse is done more cleanly with <strong>custom hooks</strong> — you'll see this once you know hooks (Chapter 8).</div>
 <h3>Ví dụ có lời giải · Worked example (custom hook preview)</h3>
-<pre><span class="tok-comment">// The modern replacement for the render-prop tracker</span>
+<pre><code class="language-javascript"><span class="tok-comment">// The modern replacement for the render-prop tracker</span>
 <span class="tok-keyword">function</span> <span class="tok-function">useMousePosition</span>() {
   <span class="tok-keyword">const</span> [pos, setPos] = <span class="tok-function">useState</span>({ x: 0, y: 0 });
   <span class="tok-comment">// (attach a listener in useEffect — Ch8)</span>
   <span class="tok-keyword">return</span> pos;
 }
-<span class="tok-comment">// Any component: const pos = useMousePosition();</span></pre>
+<span class="tok-comment">// Any component: const pos = useMousePosition();</span></code></pre>
 <p>A custom hook is just a function starting with <code>use</code> that calls other hooks. It shares logic without any wrapper components — cleaner than render props for most cases.</p>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The evolution of code reuse in React.</b> React's history is a story of reusing logic: mixins (deprecated) → Higher-Order Components (HOCs, functions wrapping components) → render props → <b>custom hooks</b> (today's answer). Each solved the previous one's pain. You may still meet HOCs like <code>connect()</code> in older Redux code, but for new code the rule is simple: <em>share logic with a custom hook, share layout with children/composition.</em></div>
 <a class="link-card codelab" href="/code-lab/react?ref=%2Fcourses%2Ffront-end-web-development-with-react%2Flearn&reflabel=FER202" target="_blank" rel="noopener">
@@ -1566,7 +1566,7 @@ count = 1;              <span class="tok-comment">// ok</span>
 <h2>Tạo component tái dùng</h2>
 <p class="lead">Ngoài truyền dữ liệu, React có các mẫu chia sẻ <strong>hành vi</strong> và <strong>layout</strong> giữa các component: prop <code>children</code>, và <strong>render props</strong>.</p>
 <h3>children — layout linh hoạt</h3>
-<pre><span class="tok-keyword">function</span> <span class="tok-function">Modal</span>({ title, children }) {
+<pre><code class="language-javascript"><span class="tok-keyword">function</span> <span class="tok-function">Modal</span>({ title, children }) {
   <span class="tok-keyword">return</span> (
     &lt;div className=<span class="tok-string">"modal"</span>&gt;
       &lt;h3&gt;{title}&lt;/h3&gt;
@@ -1574,27 +1574,27 @@ count = 1;              <span class="tok-comment">// ok</span>
     &lt;/div&gt;
   );
 }
-&lt;Modal title=<span class="tok-string">"Hi"</span>&gt;&lt;p&gt;Any content&lt;/p&gt;&lt;/Modal&gt;</pre>
+&lt;Modal title=<span class="tok-string">"Hi"</span>&gt;&lt;p&gt;Any content&lt;/p&gt;&lt;/Modal&gt;</code></pre>
 <p><code>Modal</code> cung cấp khung; người gọi cung cấp phần bên trong qua <code>children</code>. Một <code>Modal</code>, vô số nội dung.</p>
 <h3>Render props — chia sẻ logic</h3>
 <p>Một <strong>render prop</strong> là prop có giá trị là hàm trả về JSX. Component chạy logic rồi gọi hàm đó với kết quả:</p>
-<pre><span class="tok-keyword">function</span> <span class="tok-function">MouseTracker</span>({ render }) {
+<pre><code class="language-javascript"><span class="tok-keyword">function</span> <span class="tok-function">MouseTracker</span>({ render }) {
   <span class="tok-keyword">const</span> [pos, setPos] = <span class="tok-function">useState</span>({ x: 0, y: 0 });
   <span class="tok-keyword">return</span> &lt;div onMouseMove={(e) =&gt; setPos({ x: e.clientX, y: e.clientY })}&gt;
     {render(pos)}
   &lt;/div&gt;;
 }
-&lt;MouseTracker render={(p) =&gt; &lt;span&gt;{p.x}, {p.y}&lt;/span&gt;} /&gt;</pre>
+&lt;MouseTracker render={(p) =&gt; &lt;span&gt;{p.x}, {p.y}&lt;/span&gt;} /&gt;</code></pre>
 <div class="out"><b>Kết quả:</b> tracker sở hữu logic chuột; người gọi quyết định hiển thị.</div>
 <div class="pitfall">Render props là cách chia sẻ logic có state thời trước hooks. Chúng chạy được nhưng tạo "wrapper hell" (callback render lồng sâu). Ngày nay việc tái dùng đó làm gọn hơn bằng <strong>custom hook</strong> — bạn sẽ thấy khi đã biết hooks (Chương 8).</div>
 <h3>Ví dụ có lời giải · Xem trước custom hook</h3>
-<pre><span class="tok-comment">// Bản thay thế hiện đại cho tracker render-prop</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Bản thay thế hiện đại cho tracker render-prop</span>
 <span class="tok-keyword">function</span> <span class="tok-function">useMousePosition</span>() {
   <span class="tok-keyword">const</span> [pos, setPos] = <span class="tok-function">useState</span>({ x: 0, y: 0 });
   <span class="tok-comment">// (gắn listener trong useEffect — Ch8)</span>
   <span class="tok-keyword">return</span> pos;
 }
-<span class="tok-comment">// Component bất kỳ: const pos = useMousePosition();</span></pre>
+<span class="tok-comment">// Component bất kỳ: const pos = useMousePosition();</span></code></pre>
 <p>Custom hook chỉ là một hàm bắt đầu bằng <code>use</code> gọi các hook khác. Nó chia sẻ logic mà không cần component bọc — sạch hơn render props trong hầu hết trường hợp.</p>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Tiến hoá của tái dùng code trong React.</b> Lịch sử React là câu chuyện tái dùng logic: mixin (bỏ) → Higher-Order Component (HOC, hàm bọc component) → render props → <b>custom hook</b> (đáp án hiện nay). Mỗi cái giải quyết nỗi đau của cái trước. Bạn vẫn có thể gặp HOC như <code>connect()</code> trong code Redux cũ, nhưng với code mới quy tắc đơn giản: <em>chia sẻ logic bằng custom hook, chia sẻ layout bằng children/composition.</em></div>
 <a class="link-card codelab" href="/code-lab/react?ref=%2Fcourses%2Ffront-end-web-development-with-react%2Flearn&reflabel=FER202" target="_blank" rel="noopener">
@@ -1642,7 +1642,7 @@ count = 1;              <span class="tok-comment">// ok</span>
 <p class="lead"><strong>Hooks</strong> are functions (named <code>use...</code>) that let function components "hook into" React features — state, lifecycle, context. You already met <code>useState</code>; now meet the second essential: <code>useEffect</code>.</p>
 <h3>useEffect — side effects</h3>
 <p>A <strong>side effect</strong> is anything outside rendering: fetching data, subscriptions, timers, manual DOM changes. <code>useEffect</code> runs code <em>after</em> render.</p>
-<pre><span class="tok-keyword">import</span> { useState, useEffect } <span class="tok-keyword">from</span> <span class="tok-string">"react"</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> { useState, useEffect } <span class="tok-keyword">from</span> <span class="tok-string">"react"</span>;
 
 <span class="tok-keyword">function</span> <span class="tok-function">Clock</span>() {
   <span class="tok-keyword">const</span> [now, setNow] = <span class="tok-function">useState</span>(<span class="tok-keyword">new</span> <span class="tok-function">Date</span>());
@@ -1651,7 +1651,7 @@ count = 1;              <span class="tok-comment">// ok</span>
     <span class="tok-keyword">return</span> () =&gt; <span class="tok-function">clearInterval</span>(id); <span class="tok-comment">// cleanup on unmount</span>
   }, []); <span class="tok-comment">// [] = run once after first render</span>
   <span class="tok-keyword">return</span> &lt;p&gt;{now.<span class="tok-function">toLocaleTimeString</span>()}&lt;/p&gt;;
-}</pre>
+}</code></pre>
 <div class="out"><b>Result:</b> a ticking clock; the interval is cleaned up when the component leaves.</div>
 <h3>The dependency array</h3>
 <ul>
@@ -1661,7 +1661,7 @@ count = 1;              <span class="tok-comment">// ok</span>
 </ul>
 <div class="pitfall">Forgetting to <strong>clean up</strong> (return a function) leaks intervals, listeners and subscriptions — they pile up on every re-render. Also: an empty <code>[]</code> when the effect actually uses a prop/state creates a <strong>stale closure</strong> (it keeps the first value forever). List every value the effect reads in the dependency array.</div>
 <h3>Ví dụ có lời giải · Worked example (fetch on mount)</h3>
-<pre><span class="tok-keyword">function</span> <span class="tok-function">Users</span>() {
+<pre><code class="language-javascript"><span class="tok-keyword">function</span> <span class="tok-function">Users</span>() {
   <span class="tok-keyword">const</span> [users, setUsers] = <span class="tok-function">useState</span>([]);
   <span class="tok-function">useEffect</span>(() =&gt; {
     <span class="tok-function">fetch</span>(<span class="tok-string">"/api/users"</span>)
@@ -1669,7 +1669,7 @@ count = 1;              <span class="tok-comment">// ok</span>
       .<span class="tok-function">then</span>(setUsers);
   }, []); <span class="tok-comment">// fetch once</span>
   <span class="tok-keyword">return</span> &lt;ul&gt;{users.<span class="tok-function">map</span>(u =&gt; &lt;li key={u.id}&gt;{u.name}&lt;/li&gt;)}&lt;/ul&gt;;
-}</pre>
+}</code></pre>
 <p>Fetch in <code>useEffect</code> (not during render — render must be pure). Store the result in state; React re-renders with the data. This is the canonical data-loading pattern (full version in Chapter 11).</p>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Stale closures — the #1 useEffect bug.</b> Because each render captures its own variables, an effect with <code>[]</code> "remembers" the state from the first render forever. A <code>setInterval</code> that logs <code>count</code> will keep logging <code>0</code> even as the UI shows 10. Fixes: add the value to the deps (effect re-subscribes), or use the functional updater <code>setCount(c =&gt; c + 1)</code> which doesn't need to read <code>count</code>. The ESLint rule <code>react-hooks/exhaustive-deps</code> exists precisely to catch this — never blindly silence it.</div>
 <a class="link-card codelab" href="/code-lab/react?ref=%2Fcourses%2Ffront-end-web-development-with-react%2Flearn&reflabel=FER202" target="_blank" rel="noopener">
@@ -1684,7 +1684,7 @@ count = 1;              <span class="tok-comment">// ok</span>
 <p class="lead"><strong>Hooks</strong> là các hàm (tên <code>use...</code>) cho phép function component "móc vào" tính năng React — state, vòng đời, context. Bạn đã gặp <code>useState</code>; giờ gặp cái thiết yếu thứ hai: <code>useEffect</code>.</p>
 <h3>useEffect — side effect</h3>
 <p>Một <strong>side effect</strong> là bất cứ thứ gì ngoài việc render: fetch dữ liệu, subscription, timer, chỉnh DOM thủ công. <code>useEffect</code> chạy code <em>sau</em> khi render.</p>
-<pre><span class="tok-keyword">import</span> { useState, useEffect } <span class="tok-keyword">from</span> <span class="tok-string">"react"</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> { useState, useEffect } <span class="tok-keyword">from</span> <span class="tok-string">"react"</span>;
 
 <span class="tok-keyword">function</span> <span class="tok-function">Clock</span>() {
   <span class="tok-keyword">const</span> [now, setNow] = <span class="tok-function">useState</span>(<span class="tok-keyword">new</span> <span class="tok-function">Date</span>());
@@ -1693,7 +1693,7 @@ count = 1;              <span class="tok-comment">// ok</span>
     <span class="tok-keyword">return</span> () =&gt; <span class="tok-function">clearInterval</span>(id); <span class="tok-comment">// dọn dẹp khi unmount</span>
   }, []); <span class="tok-comment">// [] = chạy một lần sau render đầu</span>
   <span class="tok-keyword">return</span> &lt;p&gt;{now.<span class="tok-function">toLocaleTimeString</span>()}&lt;/p&gt;;
-}</pre>
+}</code></pre>
 <div class="out"><b>Kết quả:</b> đồng hồ chạy; interval được dọn khi component rời đi.</div>
 <h3>Mảng phụ thuộc (dependency array)</h3>
 <ul>
@@ -1703,7 +1703,7 @@ count = 1;              <span class="tok-comment">// ok</span>
 </ul>
 <div class="pitfall">Quên <strong>dọn dẹp</strong> (return một hàm) làm rò rỉ interval, listener và subscription — chúng chồng lên mỗi lần render lại. Ngoài ra: để <code>[]</code> rỗng trong khi effect thực sự dùng một prop/state tạo ra <strong>stale closure</strong> (nó giữ giá trị đầu mãi mãi). Liệt kê mọi giá trị effect đọc vào mảng phụ thuộc.</div>
 <h3>Ví dụ có lời giải · Fetch khi mount</h3>
-<pre><span class="tok-keyword">function</span> <span class="tok-function">Users</span>() {
+<pre><code class="language-javascript"><span class="tok-keyword">function</span> <span class="tok-function">Users</span>() {
   <span class="tok-keyword">const</span> [users, setUsers] = <span class="tok-function">useState</span>([]);
   <span class="tok-function">useEffect</span>(() =&gt; {
     <span class="tok-function">fetch</span>(<span class="tok-string">"/api/users"</span>)
@@ -1711,7 +1711,7 @@ count = 1;              <span class="tok-comment">// ok</span>
       .<span class="tok-function">then</span>(setUsers);
   }, []); <span class="tok-comment">// fetch một lần</span>
   <span class="tok-keyword">return</span> &lt;ul&gt;{users.<span class="tok-function">map</span>(u =&gt; &lt;li key={u.id}&gt;{u.name}&lt;/li&gt;)}&lt;/ul&gt;;
-}</pre>
+}</code></pre>
 <p>Fetch trong <code>useEffect</code> (không phải lúc render — render phải thuần khiết). Lưu kết quả vào state; React render lại với dữ liệu. Đây là mẫu tải dữ liệu kinh điển (bản đầy đủ ở Chương 11).</p>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Stale closure — lỗi useEffect số 1.</b> Vì mỗi render chốt biến riêng, một effect với <code>[]</code> "nhớ" state của render đầu mãi mãi. Một <code>setInterval</code> log <code>count</code> sẽ cứ log <code>0</code> dù UI hiện 10. Cách sửa: thêm giá trị vào deps (effect đăng ký lại), hoặc dùng dạng hàm <code>setCount(c =&gt; c + 1)</code> vốn không cần đọc <code>count</code>. Luật ESLint <code>react-hooks/exhaustive-deps</code> tồn tại chính để bắt lỗi này — đừng bao giờ tắt nó một cách mù quáng.</div>
 <a class="link-card codelab" href="/code-lab/react?ref=%2Fcourses%2Ffront-end-web-development-with-react%2Flearn&reflabel=FER202" target="_blank" rel="noopener">
@@ -1734,7 +1734,7 @@ count = 1;              <span class="tok-comment">// ok</span>
 <p class="lead">Two more essential hooks: <code>useContext</code> reads shared data (you saw it in Chapter 7), and <code>useReducer</code> manages complex state with a predictable update function — the same idea Redux uses.</p>
 <h3>useReducer — state via a reducer</h3>
 <p>When state has many related fields or complex transitions, <code>useReducer</code> centralises the "how to update" logic in one <strong>reducer</strong> function:</p>
-<pre><span class="tok-keyword">import</span> { useReducer } <span class="tok-keyword">from</span> <span class="tok-string">"react"</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> { useReducer } <span class="tok-keyword">from</span> <span class="tok-string">"react"</span>;
 
 <span class="tok-comment">// (state, action) =&gt; newState</span>
 <span class="tok-keyword">function</span> <span class="tok-function">reducer</span>(state, action) {
@@ -1754,7 +1754,7 @@ count = 1;              <span class="tok-comment">// ok</span>
       &lt;button onClick={() =&gt; dispatch({ type: <span class="tok-string">"inc"</span> })}&gt;+&lt;/button&gt;
     &lt;/&gt;
   );
-}</pre>
+}</code></pre>
 <div class="out"><b>Result:</b> +/- buttons update count through dispatched actions.</div>
 <p>You <strong>dispatch</strong> an action (a plain object describing what happened); the reducer computes the next state. This makes updates traceable and testable.</p>
 <div class="pitfall">A reducer must be a <strong>pure</strong> function: given the same state and action it always returns the same new state, with no side effects (no fetch, no mutation of the old state). Return a <em>new</em> object; never write <code>state.count++</code> and return <code>state</code>.</div>
@@ -1775,7 +1775,7 @@ count = 1;              <span class="tok-comment">// ok</span>
 <p class="lead">Hai hook thiết yếu nữa: <code>useContext</code> đọc dữ liệu chia sẻ (bạn đã thấy ở Chương 7), và <code>useReducer</code> quản lý state phức tạp bằng một hàm cập nhật đoán được — chính ý tưởng Redux dùng.</p>
 <h3>useReducer — state qua reducer</h3>
 <p>Khi state có nhiều field liên quan hoặc chuyển đổi phức tạp, <code>useReducer</code> gom logic "cập nhật thế nào" vào một hàm <strong>reducer</strong>:</p>
-<pre><span class="tok-keyword">import</span> { useReducer } <span class="tok-keyword">from</span> <span class="tok-string">"react"</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> { useReducer } <span class="tok-keyword">from</span> <span class="tok-string">"react"</span>;
 
 <span class="tok-comment">// (state, action) =&gt; newState</span>
 <span class="tok-keyword">function</span> <span class="tok-function">reducer</span>(state, action) {
@@ -1795,7 +1795,7 @@ count = 1;              <span class="tok-comment">// ok</span>
       &lt;button onClick={() =&gt; dispatch({ type: <span class="tok-string">"inc"</span> })}&gt;+&lt;/button&gt;
     &lt;/&gt;
   );
-}</pre>
+}</code></pre>
 <div class="out"><b>Kết quả:</b> nút +/- cập nhật count qua các action được dispatch.</div>
 <p>Bạn <strong>dispatch</strong> một action (object thuần mô tả điều gì xảy ra); reducer tính state kế tiếp. Điều này khiến cập nhật lần theo được và test được.</p>
 <div class="pitfall">Reducer phải là hàm <strong>thuần khiết</strong>: cùng state và action luôn trả về cùng state mới, không side effect (không fetch, không sửa state cũ). Trả về object <em>mới</em>; đừng bao giờ viết <code>state.count++</code> rồi trả về <code>state</code>.</div>
@@ -1875,7 +1875,7 @@ count = 1;              <span class="tok-comment">// ok</span>
 <h2>Client-side routing with React Router</h2>
 <p class="lead">A SPA has "pages" but never reloads. <strong>React Router</strong> maps the URL to which component to show, and swaps content instantly when you navigate — no server round-trip, no white flash.</p>
 <h3>Declaring routes</h3>
-<pre><span class="tok-keyword">import</span> { BrowserRouter, Routes, Route, Link } <span class="tok-keyword">from</span> <span class="tok-string">"react-router-dom"</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> { BrowserRouter, Routes, Route, Link } <span class="tok-keyword">from</span> <span class="tok-string">"react-router-dom"</span>;
 
 <span class="tok-keyword">function</span> <span class="tok-function">App</span>() {
   <span class="tok-keyword">return</span> (
@@ -1891,24 +1891,24 @@ count = 1;              <span class="tok-comment">// ok</span>
       &lt;/Routes&gt;
     &lt;/BrowserRouter&gt;
   );
-}</pre>
+}</code></pre>
 <div class="out"><b>Result:</b> clicking a Link changes the URL and shows the matching component — instantly.</div>
 <h3>Route parameters</h3>
 <p>The <code>:id</code> in <code>/users/:id</code> is a dynamic segment. Read it with the <code>useParams</code> hook:</p>
-<pre><span class="tok-keyword">import</span> { useParams } <span class="tok-keyword">from</span> <span class="tok-string">"react-router-dom"</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> { useParams } <span class="tok-keyword">from</span> <span class="tok-string">"react-router-dom"</span>;
 <span class="tok-keyword">function</span> <span class="tok-function">User</span>() {
   <span class="tok-keyword">const</span> { id } = <span class="tok-function">useParams</span>();
   <span class="tok-keyword">return</span> &lt;h2&gt;User #{id}&lt;/h2&gt;;
-}</pre>
+}</code></pre>
 <div class="out"><b>/users/42</b> → renders "User #42"</div>
 <div class="pitfall">Always use <code>&lt;Link to="/about"&gt;</code>, never a plain <code>&lt;a href="/about"&gt;</code> for internal navigation. A raw <code>&lt;a&gt;</code> triggers a <strong>full page reload</strong>, throwing away all your React state and defeating the SPA. Use <code>&lt;a&gt;</code> only for external URLs.</div>
 <h3>Ví dụ có lời giải · Worked example (programmatic navigation)</h3>
-<pre><span class="tok-keyword">import</span> { useNavigate } <span class="tok-keyword">from</span> <span class="tok-string">"react-router-dom"</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> { useNavigate } <span class="tok-keyword">from</span> <span class="tok-string">"react-router-dom"</span>;
 <span class="tok-keyword">function</span> <span class="tok-function">LoginButton</span>() {
   <span class="tok-keyword">const</span> navigate = <span class="tok-function">useNavigate</span>();
   <span class="tok-comment">// after login, go to dashboard in code</span>
   <span class="tok-keyword">return</span> &lt;button onClick={() =&gt; navigate(<span class="tok-string">"/dashboard"</span>)}&gt;Login&lt;/button&gt;;
-}</pre>
+}</code></pre>
 <p>Sometimes you navigate from code, not a click — after a form submit or login. <code>useNavigate</code> returns a function you call with the target path.</p>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>How does the URL change without a reload? The History API.</b> React Router uses the browser's <code>history.pushState()</code> to change the address bar without a request, and listens to the <code>popstate</code> event for the Back/Forward buttons. <code>BrowserRouter</code> gives clean URLs (<code>/about</code>) but needs the <em>server</em> to return <code>index.html</code> for every path (else refreshing <code>/about</code> 404s) — a real deployment gotcha. <code>HashRouter</code> (<code>/#/about</code>) avoids that by keeping routing entirely client-side.</div>
 <a class="link-card codelab" href="/code-lab/react?ref=%2Fcourses%2Ffront-end-web-development-with-react%2Flearn&reflabel=FER202" target="_blank" rel="noopener">
@@ -1922,7 +1922,7 @@ count = 1;              <span class="tok-comment">// ok</span>
 <h2>Routing phía client với React Router</h2>
 <p class="lead">SPA có "các trang" nhưng không bao giờ reload. <strong>React Router</strong> ánh xạ URL tới component cần hiển thị, và thay nội dung ngay khi bạn điều hướng — không round-trip server, không chớp trắng.</p>
 <h3>Khai báo route</h3>
-<pre><span class="tok-keyword">import</span> { BrowserRouter, Routes, Route, Link } <span class="tok-keyword">from</span> <span class="tok-string">"react-router-dom"</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> { BrowserRouter, Routes, Route, Link } <span class="tok-keyword">from</span> <span class="tok-string">"react-router-dom"</span>;
 
 <span class="tok-keyword">function</span> <span class="tok-function">App</span>() {
   <span class="tok-keyword">return</span> (
@@ -1938,24 +1938,24 @@ count = 1;              <span class="tok-comment">// ok</span>
       &lt;/Routes&gt;
     &lt;/BrowserRouter&gt;
   );
-}</pre>
+}</code></pre>
 <div class="out"><b>Kết quả:</b> bấm một Link đổi URL và hiện component khớp — tức thì.</div>
 <h3>Tham số route</h3>
 <p><code>:id</code> trong <code>/users/:id</code> là đoạn động. Đọc nó bằng hook <code>useParams</code>:</p>
-<pre><span class="tok-keyword">import</span> { useParams } <span class="tok-keyword">from</span> <span class="tok-string">"react-router-dom"</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> { useParams } <span class="tok-keyword">from</span> <span class="tok-string">"react-router-dom"</span>;
 <span class="tok-keyword">function</span> <span class="tok-function">User</span>() {
   <span class="tok-keyword">const</span> { id } = <span class="tok-function">useParams</span>();
   <span class="tok-keyword">return</span> &lt;h2&gt;User #{id}&lt;/h2&gt;;
-}</pre>
+}</code></pre>
 <div class="out"><b>/users/42</b> → render "User #42"</div>
 <div class="pitfall">Luôn dùng <code>&lt;Link to="/about"&gt;</code>, không bao giờ dùng <code>&lt;a href="/about"&gt;</code> thuần cho điều hướng nội bộ. Thẻ <code>&lt;a&gt;</code> thô gây <strong>reload toàn trang</strong>, vứt hết state React và phá SPA. Chỉ dùng <code>&lt;a&gt;</code> cho URL ngoài.</div>
 <h3>Ví dụ có lời giải · Điều hướng bằng code</h3>
-<pre><span class="tok-keyword">import</span> { useNavigate } <span class="tok-keyword">from</span> <span class="tok-string">"react-router-dom"</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> { useNavigate } <span class="tok-keyword">from</span> <span class="tok-string">"react-router-dom"</span>;
 <span class="tok-keyword">function</span> <span class="tok-function">LoginButton</span>() {
   <span class="tok-keyword">const</span> navigate = <span class="tok-function">useNavigate</span>();
   <span class="tok-comment">// sau khi đăng nhập, đi tới dashboard trong code</span>
   <span class="tok-keyword">return</span> &lt;button onClick={() =&gt; navigate(<span class="tok-string">"/dashboard"</span>)}&gt;Login&lt;/button&gt;;
-}</pre>
+}</code></pre>
 <p>Đôi khi bạn điều hướng từ code, không phải cú bấm — sau khi submit form hay đăng nhập. <code>useNavigate</code> trả về một hàm bạn gọi với đường dẫn đích.</p>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>URL đổi mà không reload nhờ đâu? History API.</b> React Router dùng <code>history.pushState()</code> của trình duyệt để đổi thanh địa chỉ mà không gửi request, và lắng nghe sự kiện <code>popstate</code> cho nút Back/Forward. <code>BrowserRouter</code> cho URL sạch (<code>/about</code>) nhưng cần <em>server</em> trả <code>index.html</code> cho mọi đường dẫn (nếu không, refresh <code>/about</code> sẽ 404) — một cái bẫy deploy thực tế. <code>HashRouter</code> (<code>/#/about</code>) tránh điều đó bằng cách giữ routing hoàn toàn phía client.</div>
 <a class="link-card codelab" href="/code-lab/react?ref=%2Fcourses%2Ffront-end-web-development-with-react%2Flearn&reflabel=FER202" target="_blank" rel="noopener">
@@ -2002,7 +2002,7 @@ count = 1;              <span class="tok-comment">// ok</span>
 <h2>Code splitting with lazy &amp; Suspense</h2>
 <p class="lead">By default a React app bundles all your code into one big JavaScript file — the user downloads everything before seeing anything. <strong>Code splitting</strong> breaks the bundle into chunks loaded <em>on demand</em>, so the first page appears faster.</p>
 <h3>React.lazy — load a component when needed</h3>
-<pre><span class="tok-keyword">import</span> { lazy, Suspense } <span class="tok-keyword">from</span> <span class="tok-string">"react"</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> { lazy, Suspense } <span class="tok-keyword">from</span> <span class="tok-string">"react"</span>;
 
 <span class="tok-comment">// This component's code loads only when it first renders</span>
 <span class="tok-keyword">const</span> Dashboard = <span class="tok-function">lazy</span>(() =&gt; <span class="tok-function">import</span>(<span class="tok-string">"./Dashboard.jsx"</span>));
@@ -2013,16 +2013,16 @@ count = 1;              <span class="tok-comment">// ok</span>
       &lt;Dashboard /&gt;
     &lt;/Suspense&gt;
   );
-}</pre>
+}</code></pre>
 <div class="out"><b>Result:</b> Dashboard's JS downloads only when shown; until then the fallback "Loading…" appears.</div>
 <p><code>lazy()</code> takes a function that does a dynamic <code>import()</code>. <code>Suspense</code> wraps lazy components and shows a <code>fallback</code> while their code is being fetched.</p>
 <h3>Where it matters most: routes</h3>
-<pre><span class="tok-keyword">const</span> About = <span class="tok-function">lazy</span>(() =&gt; <span class="tok-function">import</span>(<span class="tok-string">"./About.jsx"</span>));
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> About = <span class="tok-function">lazy</span>(() =&gt; <span class="tok-function">import</span>(<span class="tok-string">"./About.jsx"</span>));
 &lt;Routes&gt;
   &lt;Route path=<span class="tok-string">"/about"</span> element={
     &lt;Suspense fallback={&lt;Spinner /&gt;}&gt;&lt;About /&gt;&lt;/Suspense&gt;
   } /&gt;
-&lt;/Routes&gt;</pre>
+&lt;/Routes&gt;</code></pre>
 <p>Lazy-loading per route means users only download the code for pages they actually visit — the biggest real-world win.</p>
 <div class="pitfall">Don't lazy-load <strong>everything</strong>. Splitting a tiny component adds a network round-trip and a loading flash that costs more than it saves. Lazy-load big, rarely-visited chunks: heavy pages, charts, editors, admin sections. A lazy component <strong>must</strong> be a <code>default</code> export.</div>
 <h3>Ví dụ có lời giải · Worked example (simulating latency)</h3>
@@ -2039,7 +2039,7 @@ count = 1;              <span class="tok-comment">// ok</span>
 <h2>Code splitting với lazy &amp; Suspense</h2>
 <p class="lead">Mặc định app React gói toàn bộ code vào một file JavaScript lớn — người dùng tải hết trước khi thấy bất cứ gì. <strong>Code splitting</strong> chia bundle thành các chunk tải <em>theo nhu cầu</em>, để trang đầu hiện nhanh hơn.</p>
 <h3>React.lazy — tải component khi cần</h3>
-<pre><span class="tok-keyword">import</span> { lazy, Suspense } <span class="tok-keyword">from</span> <span class="tok-string">"react"</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> { lazy, Suspense } <span class="tok-keyword">from</span> <span class="tok-string">"react"</span>;
 
 <span class="tok-comment">// Code của component này chỉ tải khi nó render lần đầu</span>
 <span class="tok-keyword">const</span> Dashboard = <span class="tok-function">lazy</span>(() =&gt; <span class="tok-function">import</span>(<span class="tok-string">"./Dashboard.jsx"</span>));
@@ -2050,16 +2050,16 @@ count = 1;              <span class="tok-comment">// ok</span>
       &lt;Dashboard /&gt;
     &lt;/Suspense&gt;
   );
-}</pre>
+}</code></pre>
 <div class="out"><b>Kết quả:</b> JS của Dashboard chỉ tải khi được hiển thị; tới lúc đó fallback "Loading…" xuất hiện.</div>
 <p><code>lazy()</code> nhận một hàm làm <code>import()</code> động. <code>Suspense</code> bọc component lazy và hiện <code>fallback</code> trong lúc code đang được tải.</p>
 <h3>Nơi quan trọng nhất: route</h3>
-<pre><span class="tok-keyword">const</span> About = <span class="tok-function">lazy</span>(() =&gt; <span class="tok-function">import</span>(<span class="tok-string">"./About.jsx"</span>));
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> About = <span class="tok-function">lazy</span>(() =&gt; <span class="tok-function">import</span>(<span class="tok-string">"./About.jsx"</span>));
 &lt;Routes&gt;
   &lt;Route path=<span class="tok-string">"/about"</span> element={
     &lt;Suspense fallback={&lt;Spinner /&gt;}&gt;&lt;About /&gt;&lt;/Suspense&gt;
   } /&gt;
-&lt;/Routes&gt;</pre>
+&lt;/Routes&gt;</code></pre>
 <p>Lazy-load theo route nghĩa là người dùng chỉ tải code cho trang họ thật sự vào — lợi ích lớn nhất trong thực tế.</p>
 <div class="pitfall">Đừng lazy-load <strong>mọi thứ</strong>. Chia một component nhỏ xíu thêm một round-trip mạng và một cú chớp loading tốn hơn phần tiết kiệm. Hãy lazy-load các chunk lớn, ít vào: trang nặng, biểu đồ, editor, khu admin. Component lazy <strong>phải</strong> là export <code>default</code>.</div>
 <h3>Ví dụ có lời giải · Mô phỏng độ trễ</h3>
@@ -2110,14 +2110,14 @@ count = 1;              <span class="tok-comment">// ok</span>
 <p class="lead">React apps get their data from a server over HTTP. The browser's built-in <code>fetch</code> makes the request; because the network takes time, it returns a <strong>Promise</strong> — a placeholder for a value that arrives later.</p>
 <h3>What is a promise?</h3>
 <p>A Promise is an object representing an operation that hasn't finished. It ends in one of two states: <strong>fulfilled</strong> (got a value) or <strong>rejected</strong> (an error). You react to it with <code>.then()</code> and <code>.catch()</code>.</p>
-<pre><span class="tok-function">fetch</span>(<span class="tok-string">"https://api.example.com/users"</span>)
+<pre><code class="language-javascript"><span class="tok-function">fetch</span>(<span class="tok-string">"https://api.example.com/users"</span>)
   .<span class="tok-function">then</span>(res =&gt; res.<span class="tok-function">json</span>())      <span class="tok-comment">// parse JSON (also a promise)</span>
   .<span class="tok-function">then</span>(data =&gt; <span class="tok-function">console</span>.log(data))
-  .<span class="tok-function">catch</span>(err =&gt; <span class="tok-function">console</span>.<span class="tok-function">error</span>(err));</pre>
+  .<span class="tok-function">catch</span>(err =&gt; <span class="tok-function">console</span>.<span class="tok-function">error</span>(err));</code></pre>
 <div class="out"><b>Result:</b> logs the users array once the request completes, or logs an error.</div>
 <h3>async/await — cleaner syntax</h3>
 <p><code>async/await</code> is syntax sugar over promises that reads like synchronous code:</p>
-<pre><span class="tok-keyword">async function</span> <span class="tok-function">loadUsers</span>() {
+<pre><code class="language-javascript"><span class="tok-keyword">async function</span> <span class="tok-function">loadUsers</span>() {
   <span class="tok-keyword">try</span> {
     <span class="tok-keyword">const</span> res = <span class="tok-keyword">await</span> <span class="tok-function">fetch</span>(<span class="tok-string">"/api/users"</span>);
     <span class="tok-keyword">if</span> (!res.ok) <span class="tok-keyword">throw</span> <span class="tok-keyword">new</span> <span class="tok-function">Error</span>(<span class="tok-string">"HTTP "</span> + res.status);
@@ -2126,11 +2126,11 @@ count = 1;              <span class="tok-comment">// ok</span>
   } <span class="tok-keyword">catch</span> (err) {
     <span class="tok-function">console</span>.<span class="tok-function">error</span>(err);
   }
-}</pre>
+}</code></pre>
 <p><code>await</code> pauses the async function until the promise settles, then gives you the value. Wrap it in <code>try/catch</code> for errors.</p>
 <div class="pitfall">A big gotcha: <code>fetch</code> does <strong>not</strong> reject on HTTP errors like 404 or 500 — the promise fulfills. You must check <code>res.ok</code> (or <code>res.status</code>) yourself. <code>fetch</code> only rejects on a <em>network</em> failure. Forgetting this ships bugs where a 500 is treated as success.</div>
 <h3>Ví dụ có lời giải · Worked example (fetch in a component)</h3>
-<pre><span class="tok-keyword">function</span> <span class="tok-function">UserList</span>() {
+<pre><code class="language-javascript"><span class="tok-keyword">function</span> <span class="tok-function">UserList</span>() {
   <span class="tok-keyword">const</span> [users, setUsers] = <span class="tok-function">useState</span>([]);
   <span class="tok-keyword">const</span> [error, setError] = <span class="tok-function">useState</span>(<span class="tok-keyword">null</span>);
   <span class="tok-function">useEffect</span>(() =&gt; {
@@ -2142,7 +2142,7 @@ count = 1;              <span class="tok-comment">// ok</span>
   }, []);
   <span class="tok-keyword">if</span> (error) <span class="tok-keyword">return</span> &lt;p&gt;{error}&lt;/p&gt;;
   <span class="tok-keyword">return</span> &lt;ul&gt;{users.<span class="tok-function">map</span>(u =&gt; &lt;li key={u.id}&gt;{u.name}&lt;/li&gt;)}&lt;/ul&gt;;
-}</pre>
+}</code></pre>
 <p>The <code>active</code> flag prevents calling <code>setUsers</code> after the component unmounts (a common React warning). This loading + error + cleanup shape is the production standard.</p>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Race conditions when props change.</b> If a component fetches based on a prop (e.g. a user id) and the id changes quickly, an <em>earlier</em>, slower request can resolve <em>after</em> a later one — overwriting fresh data with stale data. The fix is the cleanup flag above (or an <code>AbortController</code> to cancel the old request). In real teams this is why data libraries like React Query / SWR exist: they handle caching, deduping and race conditions so you don't hand-roll every fetch.</div>
 <a class="link-card codelab" href="/code-lab/javascript?ref=%2Fcourses%2Ffront-end-web-development-with-react%2Flearn&reflabel=FER202" target="_blank" rel="noopener">
@@ -2157,14 +2157,14 @@ count = 1;              <span class="tok-comment">// ok</span>
 <p class="lead">App React lấy dữ liệu từ server qua HTTP. Hàm <code>fetch</code> sẵn có của trình duyệt gửi request; vì mạng mất thời gian, nó trả về một <strong>Promise</strong> — chỗ giữ chỗ cho giá trị đến sau.</p>
 <h3>Promise là gì?</h3>
 <p>Promise là object đại diện cho một thao tác chưa xong. Nó kết thúc ở một trong hai trạng thái: <strong>fulfilled</strong> (có giá trị) hoặc <strong>rejected</strong> (lỗi). Bạn phản hồi bằng <code>.then()</code> và <code>.catch()</code>.</p>
-<pre><span class="tok-function">fetch</span>(<span class="tok-string">"https://api.example.com/users"</span>)
+<pre><code class="language-javascript"><span class="tok-function">fetch</span>(<span class="tok-string">"https://api.example.com/users"</span>)
   .<span class="tok-function">then</span>(res =&gt; res.<span class="tok-function">json</span>())      <span class="tok-comment">// parse JSON (cũng là promise)</span>
   .<span class="tok-function">then</span>(data =&gt; <span class="tok-function">console</span>.log(data))
-  .<span class="tok-function">catch</span>(err =&gt; <span class="tok-function">console</span>.<span class="tok-function">error</span>(err));</pre>
+  .<span class="tok-function">catch</span>(err =&gt; <span class="tok-function">console</span>.<span class="tok-function">error</span>(err));</code></pre>
 <div class="out"><b>Kết quả:</b> log mảng users khi request xong, hoặc log lỗi.</div>
 <h3>async/await — cú pháp gọn hơn</h3>
 <p><code>async/await</code> là "đường ngọt" trên promise, đọc như code đồng bộ:</p>
-<pre><span class="tok-keyword">async function</span> <span class="tok-function">loadUsers</span>() {
+<pre><code class="language-javascript"><span class="tok-keyword">async function</span> <span class="tok-function">loadUsers</span>() {
   <span class="tok-keyword">try</span> {
     <span class="tok-keyword">const</span> res = <span class="tok-keyword">await</span> <span class="tok-function">fetch</span>(<span class="tok-string">"/api/users"</span>);
     <span class="tok-keyword">if</span> (!res.ok) <span class="tok-keyword">throw</span> <span class="tok-keyword">new</span> <span class="tok-function">Error</span>(<span class="tok-string">"HTTP "</span> + res.status);
@@ -2173,11 +2173,11 @@ count = 1;              <span class="tok-comment">// ok</span>
   } <span class="tok-keyword">catch</span> (err) {
     <span class="tok-function">console</span>.<span class="tok-function">error</span>(err);
   }
-}</pre>
+}</code></pre>
 <p><code>await</code> tạm dừng hàm async tới khi promise xong, rồi trả giá trị cho bạn. Bọc trong <code>try/catch</code> để bắt lỗi.</p>
 <div class="pitfall">Một cái bẫy lớn: <code>fetch</code> <strong>không</strong> reject với lỗi HTTP như 404 hay 500 — promise vẫn fulfill. Bạn phải tự kiểm <code>res.ok</code> (hoặc <code>res.status</code>). <code>fetch</code> chỉ reject khi lỗi <em>mạng</em>. Quên điều này sẽ ship lỗi coi 500 là thành công.</div>
 <h3>Ví dụ có lời giải · Fetch trong component</h3>
-<pre><span class="tok-keyword">function</span> <span class="tok-function">UserList</span>() {
+<pre><code class="language-javascript"><span class="tok-keyword">function</span> <span class="tok-function">UserList</span>() {
   <span class="tok-keyword">const</span> [users, setUsers] = <span class="tok-function">useState</span>([]);
   <span class="tok-keyword">const</span> [error, setError] = <span class="tok-function">useState</span>(<span class="tok-keyword">null</span>);
   <span class="tok-function">useEffect</span>(() =&gt; {
@@ -2189,7 +2189,7 @@ count = 1;              <span class="tok-comment">// ok</span>
   }, []);
   <span class="tok-keyword">if</span> (error) <span class="tok-keyword">return</span> &lt;p&gt;{error}&lt;/p&gt;;
   <span class="tok-keyword">return</span> &lt;ul&gt;{users.<span class="tok-function">map</span>(u =&gt; &lt;li key={u.id}&gt;{u.name}&lt;/li&gt;)}&lt;/ul&gt;;
-}</pre>
+}</code></pre>
 <p>Cờ <code>active</code> ngăn gọi <code>setUsers</code> sau khi component unmount (một cảnh báo React thường gặp). Hình dạng loading + error + cleanup này là chuẩn production.</p>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Race condition khi props đổi.</b> Nếu component fetch dựa trên một prop (vd user id) và id đổi nhanh, một request <em>trước</em> nhưng chậm có thể xong <em>sau</em> request mới — ghi đè dữ liệu mới bằng dữ liệu cũ. Cách sửa là cờ cleanup ở trên (hoặc <code>AbortController</code> để huỷ request cũ). Trong đội thực tế đây là lý do các thư viện dữ liệu như React Query / SWR tồn tại: chúng lo caching, dedupe và race condition để bạn không phải tự viết từng fetch.</div>
 <a class="link-card codelab" href="/code-lab/javascript?ref=%2Fcourses%2Ffront-end-web-development-with-react%2Flearn&reflabel=FER202" target="_blank" rel="noopener">
@@ -2211,14 +2211,14 @@ count = 1;              <span class="tok-comment">// ok</span>
 <h2>Axios &amp; a mock server (json-server)</h2>
 <p class="lead"><strong>Axios</strong> is a popular HTTP library that simplifies requests: automatic JSON parsing, better error handling, and interceptors. <strong>json-server</strong> spins up a fake REST API from a JSON file so you can build the front-end before the real back-end exists.</p>
 <h3>Axios vs fetch</h3>
-<pre><span class="tok-keyword">import</span> axios <span class="tok-keyword">from</span> <span class="tok-string">"axios"</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> axios <span class="tok-keyword">from</span> <span class="tok-string">"axios"</span>;
 
 <span class="tok-comment">// GET — data is already parsed as res.data</span>
 <span class="tok-keyword">const</span> res = <span class="tok-keyword">await</span> axios.<span class="tok-function">get</span>(<span class="tok-string">"/api/users"</span>);
 <span class="tok-function">console</span>.log(res.data);
 
 <span class="tok-comment">// POST — send a body</span>
-<span class="tok-keyword">await</span> axios.<span class="tok-function">post</span>(<span class="tok-string">"/api/users"</span>, { name: <span class="tok-string">"An"</span> });</pre>
+<span class="tok-keyword">await</span> axios.<span class="tok-function">post</span>(<span class="tok-string">"/api/users"</span>, { name: <span class="tok-string">"An"</span> });</code></pre>
 <div class="out"><b>Result:</b> axios returns parsed JSON in <code>res.data</code> and rejects automatically on 4xx/5xx.</div>
 <table>
   <thead><tr><th></th><th>fetch</th><th>axios</th></tr></thead>
@@ -2229,19 +2229,19 @@ count = 1;              <span class="tok-comment">// ok</span>
   </tbody>
 </table>
 <h3>json-server — a fake API in seconds</h3>
-<pre><span class="tok-comment"># db.json holds your data</span>
+<pre><code class="language-bash"><span class="tok-comment"># db.json holds your data</span>
 { <span class="tok-string">"users"</span>: [{ <span class="tok-string">"id"</span>: 1, <span class="tok-string">"name"</span>: <span class="tok-string">"An"</span> }] }
 
 <span class="tok-comment"># start a REST API on port 3001</span>
-npx json-server --watch db.json --port 3001</pre>
+npx json-server --watch db.json --port 3001</code></pre>
 <div class="out"><b>Result:</b> GET/POST/PUT/DELETE on http://localhost:3001/users work instantly — no back-end code.</div>
 <div class="pitfall">CORS: when your React dev server (5173) calls a different origin (3001), the browser may block it unless the server sends CORS headers. json-server allows CORS by default; a real back-end must be configured. In dev you can also use Vite's proxy to route <code>/api</code> to the server and avoid CORS entirely.</div>
 <h3>Ví dụ có lời giải · Worked example (axios interceptor)</h3>
-<pre><span class="tok-comment">// Attach an auth token to every request, once</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Attach an auth token to every request, once</span>
 axios.interceptors.request.<span class="tok-function">use</span>(config =&gt; {
   config.headers.Authorization = <span class="tok-string">&#96;Bearer \${token}&#96;</span>;
   <span class="tok-keyword">return</span> config;
-});</pre>
+});</code></pre>
 <p>An <strong>interceptor</strong> runs before every request (or after every response) — perfect for adding auth headers or handling 401s globally, instead of repeating it in every call.</p>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>REST verbs &amp; idempotency.</b> A REST API maps HTTP methods to actions: <b>GET</b> (read), <b>POST</b> (create), <b>PUT/PATCH</b> (update), <b>DELETE</b> (remove). GET, PUT and DELETE are <em>idempotent</em> — doing them twice has the same effect as once; POST is not (two POSTs create two records). This matters for retries: it's safe to auto-retry a failed GET, dangerous to auto-retry a POST (you might double-charge a payment). Knowing this shapes how you build resilient front-ends.</div>
 <a class="link-card exphub" href="/exp-hub?ref=%2Fcourses%2Ffront-end-web-development-with-react%2Flearn&reflabel=FER202" target="_blank" rel="noopener">
@@ -2255,14 +2255,14 @@ axios.interceptors.request.<span class="tok-function">use</span>(config =&gt; {
 <h2>Axios &amp; server giả (json-server)</h2>
 <p class="lead"><strong>Axios</strong> là thư viện HTTP phổ biến giúp đơn giản hoá request: tự parse JSON, xử lý lỗi tốt hơn, và có interceptor. <strong>json-server</strong> dựng một REST API giả từ file JSON để bạn làm front-end trước khi back-end thật tồn tại.</p>
 <h3>Axios vs fetch</h3>
-<pre><span class="tok-keyword">import</span> axios <span class="tok-keyword">from</span> <span class="tok-string">"axios"</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> axios <span class="tok-keyword">from</span> <span class="tok-string">"axios"</span>;
 
 <span class="tok-comment">// GET — dữ liệu đã parse sẵn ở res.data</span>
 <span class="tok-keyword">const</span> res = <span class="tok-keyword">await</span> axios.<span class="tok-function">get</span>(<span class="tok-string">"/api/users"</span>);
 <span class="tok-function">console</span>.log(res.data);
 
 <span class="tok-comment">// POST — gửi body</span>
-<span class="tok-keyword">await</span> axios.<span class="tok-function">post</span>(<span class="tok-string">"/api/users"</span>, { name: <span class="tok-string">"An"</span> });</pre>
+<span class="tok-keyword">await</span> axios.<span class="tok-function">post</span>(<span class="tok-string">"/api/users"</span>, { name: <span class="tok-string">"An"</span> });</code></pre>
 <div class="out"><b>Kết quả:</b> axios trả JSON đã parse ở <code>res.data</code> và tự reject khi 4xx/5xx.</div>
 <table>
   <thead><tr><th></th><th>fetch</th><th>axios</th></tr></thead>
@@ -2273,19 +2273,19 @@ axios.interceptors.request.<span class="tok-function">use</span>(config =&gt; {
   </tbody>
 </table>
 <h3>json-server — API giả trong vài giây</h3>
-<pre><span class="tok-comment"># db.json chứa dữ liệu của bạn</span>
+<pre><code class="language-bash"><span class="tok-comment"># db.json chứa dữ liệu của bạn</span>
 { <span class="tok-string">"users"</span>: [{ <span class="tok-string">"id"</span>: 1, <span class="tok-string">"name"</span>: <span class="tok-string">"An"</span> }] }
 
 <span class="tok-comment"># chạy REST API ở cổng 3001</span>
-npx json-server --watch db.json --port 3001</pre>
+npx json-server --watch db.json --port 3001</code></pre>
 <div class="out"><b>Kết quả:</b> GET/POST/PUT/DELETE trên http://localhost:3001/users chạy ngay — không cần code back-end.</div>
 <div class="pitfall">CORS: khi dev server React (5173) gọi một origin khác (3001), trình duyệt có thể chặn trừ khi server gửi header CORS. json-server cho phép CORS mặc định; back-end thật phải được cấu hình. Khi dev bạn cũng có thể dùng proxy của Vite để route <code>/api</code> tới server và tránh CORS hoàn toàn.</div>
 <h3>Ví dụ có lời giải · Interceptor của axios</h3>
-<pre><span class="tok-comment">// Gắn token auth vào mọi request, một lần</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Gắn token auth vào mọi request, một lần</span>
 axios.interceptors.request.<span class="tok-function">use</span>(config =&gt; {
   config.headers.Authorization = <span class="tok-string">&#96;Bearer \${token}&#96;</span>;
   <span class="tok-keyword">return</span> config;
-});</pre>
+});</code></pre>
 <p>Một <strong>interceptor</strong> chạy trước mọi request (hoặc sau mọi response) — hoàn hảo để thêm header auth hoặc xử lý 401 toàn cục, thay vì lặp lại trong từng lời gọi.</p>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Các động từ REST &amp; tính idempotent.</b> REST API ánh xạ phương thức HTTP tới hành động: <b>GET</b> (đọc), <b>POST</b> (tạo), <b>PUT/PATCH</b> (cập nhật), <b>DELETE</b> (xoá). GET, PUT và DELETE là <em>idempotent</em> — làm hai lần có tác dụng như một lần; POST thì không (hai POST tạo hai bản ghi). Điều này quan trọng khi retry: an toàn để tự retry một GET lỗi, nguy hiểm khi tự retry một POST (có thể trừ tiền hai lần). Biết điều này định hình cách bạn xây front-end bền bỉ.</div>
 <a class="link-card exphub" href="/exp-hub?ref=%2Fcourses%2Ffront-end-web-development-with-react%2Flearn&reflabel=FER202" target="_blank" rel="noopener">
@@ -2339,7 +2339,7 @@ axios.interceptors.request.<span class="tok-function">use</span>(config =&gt; {
 </div>
 <h3>Redux Toolkit — the modern way</h3>
 <p>Classic Redux was verbose. <strong>Redux Toolkit (RTK)</strong> is the official, batteries-included approach — far less boilerplate. A <code>slice</code> bundles state + reducers + actions:</p>
-<pre><span class="tok-keyword">import</span> { createSlice, configureStore } <span class="tok-keyword">from</span> <span class="tok-string">"@reduxjs/toolkit"</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> { createSlice, configureStore } <span class="tok-keyword">from</span> <span class="tok-string">"@reduxjs/toolkit"</span>;
 
 <span class="tok-keyword">const</span> counter = <span class="tok-function">createSlice</span>({
   name: <span class="tok-string">"counter"</span>,
@@ -2350,15 +2350,15 @@ axios.interceptors.request.<span class="tok-function">use</span>(config =&gt; {
   },
 });
 <span class="tok-keyword">export const</span> { inc, addBy } = counter.actions;
-<span class="tok-keyword">export const</span> store = <span class="tok-function">configureStore</span>({ reducer: { counter: counter.reducer } });</pre>
+<span class="tok-keyword">export const</span> store = <span class="tok-function">configureStore</span>({ reducer: { counter: counter.reducer } });</code></pre>
 <h3>Using the store in components</h3>
-<pre><span class="tok-keyword">import</span> { useSelector, useDispatch } <span class="tok-keyword">from</span> <span class="tok-string">"react-redux"</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> { useSelector, useDispatch } <span class="tok-keyword">from</span> <span class="tok-string">"react-redux"</span>;
 
 <span class="tok-keyword">function</span> <span class="tok-function">Counter</span>() {
   <span class="tok-keyword">const</span> value = <span class="tok-function">useSelector</span>(s =&gt; s.counter.value);
   <span class="tok-keyword">const</span> dispatch = <span class="tok-function">useDispatch</span>();
   <span class="tok-keyword">return</span> &lt;button onClick={() =&gt; dispatch(<span class="tok-function">inc</span>())}&gt;{value}&lt;/button&gt;;
-}</pre>
+}</code></pre>
 <div class="out"><b>Result:</b> any component can read <code>value</code> and dispatch <code>inc()</code> — shared, predictable state.</div>
 <p>Wrap the app in <code>&lt;Provider store={store}&gt;</code> once at the root so all components can reach the store.</p>
 <div class="pitfall">RTK's <code>createSlice</code> lets you write "mutating" code (<code>state.value += 1</code>) because it uses <strong>Immer</strong> under the hood to produce an immutable update. But this only works <em>inside</em> <code>createSlice</code> reducers. Anywhere else (a plain reducer, component state) you must still update immutably.</div>
@@ -2383,7 +2383,7 @@ axios.interceptors.request.<span class="tok-function">use</span>(config =&gt; {
 </div>
 <h3>Redux Toolkit — cách hiện đại</h3>
 <p>Redux cổ điển dài dòng. <strong>Redux Toolkit (RTK)</strong> là cách chính thức, "kèm sẵn pin" — ít lặp hơn nhiều. Một <code>slice</code> gói state + reducer + action:</p>
-<pre><span class="tok-keyword">import</span> { createSlice, configureStore } <span class="tok-keyword">from</span> <span class="tok-string">"@reduxjs/toolkit"</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> { createSlice, configureStore } <span class="tok-keyword">from</span> <span class="tok-string">"@reduxjs/toolkit"</span>;
 
 <span class="tok-keyword">const</span> counter = <span class="tok-function">createSlice</span>({
   name: <span class="tok-string">"counter"</span>,
@@ -2394,15 +2394,15 @@ axios.interceptors.request.<span class="tok-function">use</span>(config =&gt; {
   },
 });
 <span class="tok-keyword">export const</span> { inc, addBy } = counter.actions;
-<span class="tok-keyword">export const</span> store = <span class="tok-function">configureStore</span>({ reducer: { counter: counter.reducer } });</pre>
+<span class="tok-keyword">export const</span> store = <span class="tok-function">configureStore</span>({ reducer: { counter: counter.reducer } });</code></pre>
 <h3>Dùng store trong component</h3>
-<pre><span class="tok-keyword">import</span> { useSelector, useDispatch } <span class="tok-keyword">from</span> <span class="tok-string">"react-redux"</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> { useSelector, useDispatch } <span class="tok-keyword">from</span> <span class="tok-string">"react-redux"</span>;
 
 <span class="tok-keyword">function</span> <span class="tok-function">Counter</span>() {
   <span class="tok-keyword">const</span> value = <span class="tok-function">useSelector</span>(s =&gt; s.counter.value);
   <span class="tok-keyword">const</span> dispatch = <span class="tok-function">useDispatch</span>();
   <span class="tok-keyword">return</span> &lt;button onClick={() =&gt; dispatch(<span class="tok-function">inc</span>())}&gt;{value}&lt;/button&gt;;
-}</pre>
+}</code></pre>
 <div class="out"><b>Kết quả:</b> mọi component có thể đọc <code>value</code> và dispatch <code>inc()</code> — state chia sẻ, đoán được.</div>
 <p>Bọc app trong <code>&lt;Provider store={store}&gt;</code> một lần ở gốc để mọi component chạm được store.</p>
 <div class="pitfall">RTK <code>createSlice</code> cho bạn viết code "sửa" (<code>state.value += 1</code>) vì nó dùng <strong>Immer</strong> bên dưới để tạo cập nhật bất biến. Nhưng điều này chỉ đúng <em>bên trong</em> reducer của <code>createSlice</code>. Ở mọi nơi khác (reducer thường, state component) bạn vẫn phải cập nhật bất biến.</div>
@@ -2428,18 +2428,18 @@ axios.interceptors.request.<span class="tok-function">use</span>(config =&gt; {
 <h2>Combining reducers &amp; async with thunks</h2>
 <p class="lead">Real apps have many slices of state (auth, cart, products). You <strong>combine</strong> their reducers into one store. And because reducers must be pure, async work (API calls) goes through <strong>middleware</strong> — the standard is <strong>thunk</strong>.</p>
 <h3>Combining reducers</h3>
-<pre><span class="tok-keyword">const</span> store = <span class="tok-function">configureStore</span>({
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> store = <span class="tok-function">configureStore</span>({
   reducer: {
     counter: counterReducer,
     auth: authReducer,
     cart: cartReducer,     <span class="tok-comment">// each slice owns a branch of state</span>
   },
 });
-<span class="tok-comment">// state shape: { counter: {...}, auth: {...}, cart: {...} }</span></pre>
+<span class="tok-comment">// state shape: { counter: {...}, auth: {...}, cart: {...} }</span></code></pre>
 <p>Each slice manages its own branch; selectors read the branch they need (<code>s =&gt; s.cart.items</code>).</p>
 <h3>Thunk — async actions</h3>
 <p>A <strong>thunk</strong> is an action that is a <em>function</em> (not a plain object). Middleware lets it run async code and dispatch real actions when done. RTK's <code>createAsyncThunk</code> wires this up:</p>
-<pre><span class="tok-keyword">import</span> { createAsyncThunk } <span class="tok-keyword">from</span> <span class="tok-string">"@reduxjs/toolkit"</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> { createAsyncThunk } <span class="tok-keyword">from</span> <span class="tok-string">"@reduxjs/toolkit"</span>;
 
 <span class="tok-keyword">const</span> fetchUsers = <span class="tok-function">createAsyncThunk</span>(
   <span class="tok-string">"users/fetch"</span>,
@@ -2448,17 +2448,17 @@ axios.interceptors.request.<span class="tok-function">use</span>(config =&gt; {
     <span class="tok-keyword">return</span> res.data; <span class="tok-comment">// becomes action.payload on success</span>
   }
 );
-<span class="tok-comment">// component: dispatch(fetchUsers());</span></pre>
+<span class="tok-comment">// component: dispatch(fetchUsers());</span></code></pre>
 <p>It auto-dispatches <code>pending</code>, <code>fulfilled</code>, and <code>rejected</code> actions you handle in <code>extraReducers</code> — perfect for loading/success/error state.</p>
 <div class="pitfall">Never put async calls or side effects <strong>inside a reducer</strong> — reducers must be pure and synchronous. All async (fetch, timers) belongs in thunks/middleware. Breaking this makes state updates unpredictable and dev-tools time-travel impossible.</div>
 <h3>Ví dụ có lời giải · Worked example (a logger middleware)</h3>
-<pre><span class="tok-comment">// Custom middleware: log every action &amp; the next state</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Custom middleware: log every action &amp; the next state</span>
 <span class="tok-keyword">const</span> logger = (store) =&gt; (next) =&gt; (action) =&gt; {
   <span class="tok-function">console</span>.log(<span class="tok-string">"dispatch"</span>, action);
   <span class="tok-keyword">const</span> result = <span class="tok-function">next</span>(action); <span class="tok-comment">// pass to the next middleware/reducer</span>
   <span class="tok-function">console</span>.log(<span class="tok-string">"next state"</span>, store.<span class="tok-function">getState</span>());
   <span class="tok-keyword">return</span> result;
-};</pre>
+};</code></pre>
 <p>Middleware sits between <code>dispatch</code> and the reducer — a chain where each link can inspect, log, delay, or transform actions. This "onion" is how thunk, logging and dev-tools all plug in.</p>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Why the middleware signature is triple-curried.</b> The <code>store =&gt; next =&gt; action =&gt;</code> shape lets Redux <em>compose</em> middleware into a pipeline at store-creation time (it gives each middleware the store and the next link), then run a fast per-action function. It's the same functional pattern behind Express middleware and Koa. Understanding it demystifies how thunk can "pause" a dispatch to await a fetch: thunk simply checks <code>if (typeof action === "function") return action(dispatch, getState)</code> instead of passing it on.</div>
 <a class="link-card codelab" href="/code-lab/react?ref=%2Fcourses%2Ffront-end-web-development-with-react%2Flearn&reflabel=FER202" target="_blank" rel="noopener">
@@ -2472,18 +2472,18 @@ axios.interceptors.request.<span class="tok-function">use</span>(config =&gt; {
 <h2>Kết hợp reducer &amp; async với thunk</h2>
 <p class="lead">App thật có nhiều slice state (auth, cart, products). Bạn <strong>kết hợp</strong> reducer của chúng vào một store. Và vì reducer phải thuần khiết, việc async (gọi API) đi qua <strong>middleware</strong> — chuẩn là <strong>thunk</strong>.</p>
 <h3>Kết hợp reducer</h3>
-<pre><span class="tok-keyword">const</span> store = <span class="tok-function">configureStore</span>({
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> store = <span class="tok-function">configureStore</span>({
   reducer: {
     counter: counterReducer,
     auth: authReducer,
     cart: cartReducer,     <span class="tok-comment">// mỗi slice sở hữu một nhánh state</span>
   },
 });
-<span class="tok-comment">// hình dạng state: { counter: {...}, auth: {...}, cart: {...} }</span></pre>
+<span class="tok-comment">// hình dạng state: { counter: {...}, auth: {...}, cart: {...} }</span></code></pre>
 <p>Mỗi slice quản một nhánh; selector đọc nhánh nó cần (<code>s =&gt; s.cart.items</code>).</p>
 <h3>Thunk — action bất đồng bộ</h3>
 <p>Một <strong>thunk</strong> là action mà thực chất là một <em>hàm</em> (không phải object thuần). Middleware cho nó chạy code async và dispatch action thật khi xong. <code>createAsyncThunk</code> của RTK nối sẵn:</p>
-<pre><span class="tok-keyword">import</span> { createAsyncThunk } <span class="tok-keyword">from</span> <span class="tok-string">"@reduxjs/toolkit"</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> { createAsyncThunk } <span class="tok-keyword">from</span> <span class="tok-string">"@reduxjs/toolkit"</span>;
 
 <span class="tok-keyword">const</span> fetchUsers = <span class="tok-function">createAsyncThunk</span>(
   <span class="tok-string">"users/fetch"</span>,
@@ -2492,17 +2492,17 @@ axios.interceptors.request.<span class="tok-function">use</span>(config =&gt; {
     <span class="tok-keyword">return</span> res.data; <span class="tok-comment">// thành action.payload khi thành công</span>
   }
 );
-<span class="tok-comment">// component: dispatch(fetchUsers());</span></pre>
+<span class="tok-comment">// component: dispatch(fetchUsers());</span></code></pre>
 <p>Nó tự dispatch action <code>pending</code>, <code>fulfilled</code>, và <code>rejected</code> mà bạn xử lý trong <code>extraReducers</code> — hoàn hảo cho state loading/success/error.</p>
 <div class="pitfall">Đừng bao giờ đặt lời gọi async hay side effect <strong>bên trong reducer</strong> — reducer phải thuần khiết và đồng bộ. Mọi async (fetch, timer) thuộc về thunk/middleware. Phá quy tắc này làm cập nhật state khó đoán và dev-tools tua thời gian bất khả thi.</div>
 <h3>Ví dụ có lời giải · Middleware logger</h3>
-<pre><span class="tok-comment">// Middleware tự viết: log mọi action &amp; state kế tiếp</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Middleware tự viết: log mọi action &amp; state kế tiếp</span>
 <span class="tok-keyword">const</span> logger = (store) =&gt; (next) =&gt; (action) =&gt; {
   <span class="tok-function">console</span>.log(<span class="tok-string">"dispatch"</span>, action);
   <span class="tok-keyword">const</span> result = <span class="tok-function">next</span>(action); <span class="tok-comment">// chuyển tới middleware/reducer kế tiếp</span>
   <span class="tok-function">console</span>.log(<span class="tok-string">"next state"</span>, store.<span class="tok-function">getState</span>());
   <span class="tok-keyword">return</span> result;
-};</pre>
+};</code></pre>
 <p>Middleware nằm giữa <code>dispatch</code> và reducer — một chuỗi nơi mỗi mắt xích có thể xem, log, trì hoãn, hoặc biến đổi action. "Củ hành" này là cách thunk, logging và dev-tools cắm vào.</p>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Vì sao chữ ký middleware có ba lớp hàm.</b> Dạng <code>store =&gt; next =&gt; action =&gt;</code> cho Redux <em>ghép</em> middleware thành một pipeline lúc tạo store (trao cho mỗi middleware store và mắt xích kế), rồi chạy một hàm nhanh cho mỗi action. Đây cũng là mẫu hàm đứng sau middleware của Express và Koa. Hiểu nó làm sáng tỏ cách thunk có thể "dừng" một dispatch để await fetch: thunk chỉ kiểm <code>if (typeof action === "function") return action(dispatch, getState)</code> thay vì chuyển tiếp.</div>
 <a class="link-card codelab" href="/code-lab/react?ref=%2Fcourses%2Ffront-end-web-development-with-react%2Flearn&reflabel=FER202" target="_blank" rel="noopener">
@@ -2576,23 +2576,23 @@ axios.interceptors.request.<span class="tok-function">use</span>(config =&gt; {
 <h2>React performance: memo, useMemo, useCallback</h2>
 <p class="lead">React re-renders a component whenever its state or props change — and a parent re-render re-renders all children by default. Usually that's fast enough. When it isn't, three tools skip unnecessary work: <code>React.memo</code>, <code>useMemo</code>, <code>useCallback</code>.</p>
 <h3>React.memo — skip re-render if props are unchanged</h3>
-<pre><span class="tok-comment">// Only re-renders when its props actually change</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Only re-renders when its props actually change</span>
 <span class="tok-keyword">const</span> Row = React.<span class="tok-function">memo</span>(<span class="tok-keyword">function</span> <span class="tok-function">Row</span>({ label }) {
   <span class="tok-keyword">return</span> &lt;li&gt;{label}&lt;/li&gt;;
-});</pre>
+});</code></pre>
 <p><code>memo</code> does a shallow compare of props; if they're equal to last time, it reuses the previous render.</p>
 <h3>useMemo — cache an expensive computation</h3>
-<pre><span class="tok-keyword">const</span> sorted = <span class="tok-function">useMemo</span>(
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> sorted = <span class="tok-function">useMemo</span>(
   () =&gt; items.<span class="tok-function">slice</span>().<span class="tok-function">sort</span>(compare), <span class="tok-comment">// only re-sorts when items change</span>
   [items]
-);</pre>
+);</code></pre>
 <h3>useCallback — keep a function reference stable</h3>
-<pre><span class="tok-comment">// Same function identity across renders (unless deps change)</span>
-<span class="tok-keyword">const</span> handleClick = <span class="tok-function">useCallback</span>(() =&gt; <span class="tok-function">doThing</span>(id), [id]);</pre>
+<pre><code class="language-javascript"><span class="tok-comment">// Same function identity across renders (unless deps change)</span>
+<span class="tok-keyword">const</span> handleClick = <span class="tok-function">useCallback</span>(() =&gt; <span class="tok-function">doThing</span>(id), [id]);</code></pre>
 <div class="out"><b>Why:</b> a memoized child compares props by reference; a fresh function each render would break its memoization. <code>useCallback</code> keeps the reference stable.</div>
 <div class="pitfall">Don't sprinkle <code>useMemo</code>/<code>useCallback</code> everywhere — they have a cost (memory + a dependency check) and often save nothing. Measure first with the React DevTools Profiler. Premature memoization makes code harder to read for no real gain. Optimize the proven-slow spots, not every line.</div>
 <h3>Ví dụ có lời giải · Worked example (stable callback + memo child)</h3>
-<pre><span class="tok-keyword">const</span> Child = React.<span class="tok-function">memo</span>(({ onClick }) =&gt; {
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> Child = React.<span class="tok-function">memo</span>(({ onClick }) =&gt; {
   <span class="tok-function">console</span>.log(<span class="tok-string">"Child render"</span>);
   <span class="tok-keyword">return</span> &lt;button onClick={onClick}&gt;Go&lt;/button&gt;;
 });
@@ -2600,7 +2600,7 @@ axios.interceptors.request.<span class="tok-function">use</span>(config =&gt; {
   <span class="tok-keyword">const</span> [n, setN] = <span class="tok-function">useState</span>(0);
   <span class="tok-keyword">const</span> onClick = <span class="tok-function">useCallback</span>(() =&gt; <span class="tok-function">alert</span>(<span class="tok-string">"hi"</span>), []);
   <span class="tok-keyword">return</span> &lt;&gt;&lt;button onClick={() =&gt; setN(n+1)}&gt;{n}&lt;/button&gt;&lt;Child onClick={onClick} /&gt;&lt;/&gt;;
-}</pre>
+}</code></pre>
 <p>Clicking the parent button bumps <code>n</code> and re-renders Parent, but <code>Child</code> does <strong>not</strong> re-render ("Child render" logs once) because <code>onClick</code> is stable via <code>useCallback</code> and <code>Child</code> is wrapped in <code>memo</code>. Remove either one and Child re-renders every time.</p>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The React Compiler is changing this.</b> React 19 introduces an optional compiler that auto-memoizes components and values at build time — potentially making manual <code>useMemo</code>/<code>useCallback</code> unnecessary for most code. The mental model still matters (you must understand <em>why</em> re-renders happen to debug), but the industry direction is "write simple code, let the compiler optimize". Learn the manual tools to understand the machinery; expect to reach for them less over time.</div>
 <a class="link-card codelab" href="/code-lab/react?ref=%2Fcourses%2Ffront-end-web-development-with-react%2Flearn&reflabel=FER202" target="_blank" rel="noopener">
@@ -2614,23 +2614,23 @@ axios.interceptors.request.<span class="tok-function">use</span>(config =&gt; {
 <h2>Hiệu năng React: memo, useMemo, useCallback</h2>
 <p class="lead">React render lại một component mỗi khi state hoặc props của nó đổi — và cha render lại thì mặc định render lại mọi con. Thường thế là đủ nhanh. Khi không, ba công cụ bỏ qua việc thừa: <code>React.memo</code>, <code>useMemo</code>, <code>useCallback</code>.</p>
 <h3>React.memo — bỏ render lại nếu props không đổi</h3>
-<pre><span class="tok-comment">// Chỉ render lại khi props thực sự đổi</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Chỉ render lại khi props thực sự đổi</span>
 <span class="tok-keyword">const</span> Row = React.<span class="tok-function">memo</span>(<span class="tok-keyword">function</span> <span class="tok-function">Row</span>({ label }) {
   <span class="tok-keyword">return</span> &lt;li&gt;{label}&lt;/li&gt;;
-});</pre>
+});</code></pre>
 <p><code>memo</code> so sánh nông props; nếu bằng lần trước, nó tái dùng render cũ.</p>
 <h3>useMemo — cache một tính toán tốn kém</h3>
-<pre><span class="tok-keyword">const</span> sorted = <span class="tok-function">useMemo</span>(
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> sorted = <span class="tok-function">useMemo</span>(
   () =&gt; items.<span class="tok-function">slice</span>().<span class="tok-function">sort</span>(compare), <span class="tok-comment">// chỉ sort lại khi items đổi</span>
   [items]
-);</pre>
+);</code></pre>
 <h3>useCallback — giữ tham chiếu hàm ổn định</h3>
-<pre><span class="tok-comment">// Cùng danh tính hàm qua các render (trừ khi deps đổi)</span>
-<span class="tok-keyword">const</span> handleClick = <span class="tok-function">useCallback</span>(() =&gt; <span class="tok-function">doThing</span>(id), [id]);</pre>
+<pre><code class="language-javascript"><span class="tok-comment">// Cùng danh tính hàm qua các render (trừ khi deps đổi)</span>
+<span class="tok-keyword">const</span> handleClick = <span class="tok-function">useCallback</span>(() =&gt; <span class="tok-function">doThing</span>(id), [id]);</code></pre>
 <div class="out"><b>Vì sao:</b> một con đã memo so sánh props theo tham chiếu; một hàm mới mỗi render sẽ phá memo hoá của nó. <code>useCallback</code> giữ tham chiếu ổn định.</div>
 <div class="pitfall">Đừng rải <code>useMemo</code>/<code>useCallback</code> khắp nơi — chúng có chi phí (bộ nhớ + kiểm phụ thuộc) và thường chẳng tiết kiệm gì. Hãy đo trước bằng React DevTools Profiler. Memo hoá non làm code khó đọc mà không lợi thật. Tối ưu chỗ đã chứng minh là chậm, không phải mọi dòng.</div>
 <h3>Ví dụ có lời giải · Callback ổn định + con memo</h3>
-<pre><span class="tok-keyword">const</span> Child = React.<span class="tok-function">memo</span>(({ onClick }) =&gt; {
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> Child = React.<span class="tok-function">memo</span>(({ onClick }) =&gt; {
   <span class="tok-function">console</span>.log(<span class="tok-string">"Child render"</span>);
   <span class="tok-keyword">return</span> &lt;button onClick={onClick}&gt;Go&lt;/button&gt;;
 });
@@ -2638,7 +2638,7 @@ axios.interceptors.request.<span class="tok-function">use</span>(config =&gt; {
   <span class="tok-keyword">const</span> [n, setN] = <span class="tok-function">useState</span>(0);
   <span class="tok-keyword">const</span> onClick = <span class="tok-function">useCallback</span>(() =&gt; <span class="tok-function">alert</span>(<span class="tok-string">"hi"</span>), []);
   <span class="tok-keyword">return</span> &lt;&gt;&lt;button onClick={() =&gt; setN(n+1)}&gt;{n}&lt;/button&gt;&lt;Child onClick={onClick} /&gt;&lt;/&gt;;
-}</pre>
+}</code></pre>
 <p>Bấm nút của cha tăng <code>n</code> và render lại Parent, nhưng <code>Child</code> <strong>không</strong> render lại ("Child render" chỉ log một lần) vì <code>onClick</code> ổn định qua <code>useCallback</code> và <code>Child</code> được bọc <code>memo</code>. Bỏ một trong hai thì Child render lại mỗi lần.</p>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>React Compiler đang thay đổi điều này.</b> React 19 giới thiệu một compiler tuỳ chọn tự memo hoá component và giá trị lúc build — có thể khiến <code>useMemo</code>/<code>useCallback</code> thủ công không cần thiết cho phần lớn code. Mô hình tư duy vẫn quan trọng (phải hiểu <em>vì sao</em> render lại xảy ra để debug), nhưng hướng đi của ngành là "viết code đơn giản, để compiler tối ưu". Học công cụ thủ công để hiểu bộ máy; chờ đợi sẽ dùng chúng ít dần theo thời gian.</div>
 <a class="link-card codelab" href="/code-lab/react?ref=%2Fcourses%2Ffront-end-web-development-with-react%2Flearn&reflabel=FER202" target="_blank" rel="noopener">
@@ -2684,23 +2684,23 @@ axios.interceptors.request.<span class="tok-function">use</span>(config =&gt; {
 <h2>Testing React with Jest &amp; React Testing Library</h2>
 <p class="lead">Tests catch bugs before users do and let you refactor fearlessly. <strong>Jest</strong> is the test runner; <strong>React Testing Library (RTL)</strong> renders components and queries them the way a user would — by text, role and label, not by internal implementation.</p>
 <h3>A first component test</h3>
-<pre><span class="tok-keyword">import</span> { render, screen } <span class="tok-keyword">from</span> <span class="tok-string">"@testing-library/react"</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> { render, screen } <span class="tok-keyword">from</span> <span class="tok-string">"@testing-library/react"</span>;
 <span class="tok-keyword">import</span> Greeting <span class="tok-keyword">from</span> <span class="tok-string">"./Greeting"</span>;
 
 <span class="tok-function">test</span>(<span class="tok-string">"shows the name"</span>, () =&gt; {
   <span class="tok-function">render</span>(&lt;Greeting name=<span class="tok-string">"An"</span> /&gt;);
   <span class="tok-function">expect</span>(screen.<span class="tok-function">getByText</span>(<span class="tok-string">"Hi An"</span>)).<span class="tok-function">toBeInTheDocument</span>();
-});</pre>
+});</code></pre>
 <div class="out"><b>Result:</b> PASS — the test renders the component and asserts the text is present.</div>
 <h3>Testing interaction</h3>
-<pre><span class="tok-keyword">import</span> userEvent <span class="tok-keyword">from</span> <span class="tok-string">"@testing-library/user-event"</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> userEvent <span class="tok-keyword">from</span> <span class="tok-string">"@testing-library/user-event"</span>;
 
 <span class="tok-function">test</span>(<span class="tok-string">"counts clicks"</span>, <span class="tok-keyword">async</span> () =&gt; {
   <span class="tok-function">render</span>(&lt;Counter /&gt;);
   <span class="tok-keyword">const</span> btn = screen.<span class="tok-function">getByRole</span>(<span class="tok-string">"button"</span>);
   <span class="tok-keyword">await</span> userEvent.<span class="tok-function">click</span>(btn);
   <span class="tok-function">expect</span>(btn).<span class="tok-function">toHaveTextContent</span>(<span class="tok-string">"1"</span>);
-});</pre>
+});</code></pre>
 <p>You simulate a real click with <code>userEvent</code>, then assert the visible result — exactly what a user experiences.</p>
 <div class="pitfall">RTL's guiding principle: test <strong>behaviour, not implementation</strong>. Don't reach into state or call internal methods — query the rendered output by what the user sees (<code>getByRole</code>, <code>getByText</code>, <code>getByLabelText</code>). Tests tied to internal details break on every refactor even when the UI still works.</div>
 <h3>Ví dụ có lời giải · Worked example (query priority)</h3>
@@ -2717,23 +2717,23 @@ axios.interceptors.request.<span class="tok-function">use</span>(config =&gt; {
 <h2>Kiểm thử React với Jest &amp; React Testing Library</h2>
 <p class="lead">Test bắt lỗi trước người dùng và cho bạn refactor không sợ hãi. <strong>Jest</strong> là trình chạy test; <strong>React Testing Library (RTL)</strong> render component và truy vấn chúng như một người dùng — theo text, role và label, không theo chi tiết cài đặt bên trong.</p>
 <h3>Test component đầu tiên</h3>
-<pre><span class="tok-keyword">import</span> { render, screen } <span class="tok-keyword">from</span> <span class="tok-string">"@testing-library/react"</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> { render, screen } <span class="tok-keyword">from</span> <span class="tok-string">"@testing-library/react"</span>;
 <span class="tok-keyword">import</span> Greeting <span class="tok-keyword">from</span> <span class="tok-string">"./Greeting"</span>;
 
 <span class="tok-function">test</span>(<span class="tok-string">"shows the name"</span>, () =&gt; {
   <span class="tok-function">render</span>(&lt;Greeting name=<span class="tok-string">"An"</span> /&gt;);
   <span class="tok-function">expect</span>(screen.<span class="tok-function">getByText</span>(<span class="tok-string">"Hi An"</span>)).<span class="tok-function">toBeInTheDocument</span>();
-});</pre>
+});</code></pre>
 <div class="out"><b>Kết quả:</b> PASS — test render component và khẳng định text có mặt.</div>
 <h3>Test tương tác</h3>
-<pre><span class="tok-keyword">import</span> userEvent <span class="tok-keyword">from</span> <span class="tok-string">"@testing-library/user-event"</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> userEvent <span class="tok-keyword">from</span> <span class="tok-string">"@testing-library/user-event"</span>;
 
 <span class="tok-function">test</span>(<span class="tok-string">"counts clicks"</span>, <span class="tok-keyword">async</span> () =&gt; {
   <span class="tok-function">render</span>(&lt;Counter /&gt;);
   <span class="tok-keyword">const</span> btn = screen.<span class="tok-function">getByRole</span>(<span class="tok-string">"button"</span>);
   <span class="tok-keyword">await</span> userEvent.<span class="tok-function">click</span>(btn);
   <span class="tok-function">expect</span>(btn).<span class="tok-function">toHaveTextContent</span>(<span class="tok-string">"1"</span>);
-});</pre>
+});</code></pre>
 <p>Bạn mô phỏng cú click thật bằng <code>userEvent</code>, rồi khẳng định kết quả nhìn thấy — đúng những gì người dùng trải nghiệm.</p>
 <div class="pitfall">Nguyên tắc dẫn lối của RTL: test <strong>hành vi, không phải cài đặt</strong>. Đừng thò vào state hay gọi phương thức nội bộ — truy vấn đầu ra render theo những gì người dùng thấy (<code>getByRole</code>, <code>getByText</code>, <code>getByLabelText</code>). Test gắn với chi tiết nội bộ sẽ vỡ mỗi lần refactor dù UI vẫn chạy.</div>
 <h3>Ví dụ có lời giải · Ưu tiên truy vấn</h3>
@@ -2782,19 +2782,19 @@ axios.interceptors.request.<span class="tok-function">use</span>(config =&gt; {
 <h2>TypeScript with React &amp; a Next.js intro</h2>
 <p class="lead">Two things every professional React team uses. <strong>TypeScript</strong> adds static types to JavaScript, catching whole classes of bugs before you run. <strong>Next.js</strong> is the leading React <em>framework</em> — it adds routing, server rendering and a build system on top of React.</p>
 <h3>Typing a component's props</h3>
-<pre><span class="tok-comment">// Greeting.tsx — props are typed</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Greeting.tsx — props are typed</span>
 <span class="tok-keyword">type</span> Props = { name: <span class="tok-type">string</span>; age?: <span class="tok-type">number</span> };
 
 <span class="tok-keyword">function</span> <span class="tok-function">Greeting</span>({ name, age }: Props) {
   <span class="tok-keyword">return</span> &lt;h2&gt;{name} {age ?? <span class="tok-string">"?"</span>}&lt;/h2&gt;;
 }
-<span class="tok-comment">// &lt;Greeting name={5} /&gt;  ❌ compile error: number not assignable to string</span></pre>
+<span class="tok-comment">// &lt;Greeting name={5} /&gt;  ❌ compile error: number not assignable to string</span></code></pre>
 <div class="out"><b>Result:</b> passing the wrong prop type is caught at compile time, not in production.</div>
 <p>Typed state: <code>useState&lt;number&gt;(0)</code>, typed events: <code>(e: React.ChangeEvent&lt;HTMLInputElement&gt;)</code>. The editor now autocompletes props and flags mistakes as you type.</p>
 <h3>Next.js in one screen</h3>
-<pre><span class="tok-comment"># create a Next.js app</span>
+<pre><code class="language-bash"><span class="tok-comment"># create a Next.js app</span>
 npx create-next-app@latest my-app
-<span class="tok-comment"># file-based routing: app/about/page.tsx → /about</span></pre>
+<span class="tok-comment"># file-based routing: app/about/page.tsx → /about</span></code></pre>
 <ul>
   <li><strong>File-based routing</strong> — a file's path is its URL (no React Router config).</li>
   <li><strong>Server Components &amp; SSR</strong> — render on the server for speed and SEO.</li>
@@ -2815,19 +2815,19 @@ npx create-next-app@latest my-app
 <h2>TypeScript với React &amp; giới thiệu Next.js</h2>
 <p class="lead">Hai thứ mọi đội React chuyên nghiệp đều dùng. <strong>TypeScript</strong> thêm kiểu tĩnh cho JavaScript, bắt cả lớp lỗi trước khi chạy. <strong>Next.js</strong> là <em>framework</em> React dẫn đầu — thêm routing, render phía server và hệ build lên trên React.</p>
 <h3>Gõ kiểu props của component</h3>
-<pre><span class="tok-comment">// Greeting.tsx — props có kiểu</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Greeting.tsx — props có kiểu</span>
 <span class="tok-keyword">type</span> Props = { name: <span class="tok-type">string</span>; age?: <span class="tok-type">number</span> };
 
 <span class="tok-keyword">function</span> <span class="tok-function">Greeting</span>({ name, age }: Props) {
   <span class="tok-keyword">return</span> &lt;h2&gt;{name} {age ?? <span class="tok-string">"?"</span>}&lt;/h2&gt;;
 }
-<span class="tok-comment">// &lt;Greeting name={5} /&gt;  ❌ lỗi biên dịch: number không gán được cho string</span></pre>
+<span class="tok-comment">// &lt;Greeting name={5} /&gt;  ❌ lỗi biên dịch: number không gán được cho string</span></code></pre>
 <div class="out"><b>Kết quả:</b> truyền sai kiểu prop bị bắt lúc biên dịch, không phải ở production.</div>
 <p>State có kiểu: <code>useState&lt;number&gt;(0)</code>, sự kiện có kiểu: <code>(e: React.ChangeEvent&lt;HTMLInputElement&gt;)</code>. Trình soạn thảo giờ tự hoàn thành props và báo lỗi ngay khi gõ.</p>
 <h3>Next.js trong một màn hình</h3>
-<pre><span class="tok-comment"># tạo app Next.js</span>
+<pre><code class="language-bash"><span class="tok-comment"># tạo app Next.js</span>
 npx create-next-app@latest my-app
-<span class="tok-comment"># routing theo file: app/about/page.tsx → /about</span></pre>
+<span class="tok-comment"># routing theo file: app/about/page.tsx → /about</span></code></pre>
 <ul>
   <li><strong>Routing theo file</strong> — đường dẫn file chính là URL (không cần cấu hình React Router).</li>
   <li><strong>Server Component &amp; SSR</strong> — render trên server cho tốc độ và SEO.</li>

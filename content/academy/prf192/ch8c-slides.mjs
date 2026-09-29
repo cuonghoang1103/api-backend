@@ -158,7 +158,7 @@ export default {
 <li><strong>"Field" vs "member" vs "component"</strong> — the deck uses all three (slide 55 "fields or members", slide 58 "component selection operator", slide 63 "all its component values"). They are synonyms. In exam answers, use "field" or "member" and be consistent.</li>
 <li><strong>"…" in the student record is a hint</strong> — real records grow. That is an argument <em>for</em> structs: adding a field changes the type in one place, whereas adding a parallel array changes every function signature that walks the data.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
 
 /* Ban ghi 2 cua slide, giu nguyen phan long nhau */
@@ -197,7 +197,7 @@ int main(void) {
 <li><strong>"Field" – "member" – "component"</strong> — deck dùng cả ba (slide 55 "fields or members", slide 58 "component selection operator", slide 63 "all its component values"). Chúng đồng nghĩa. Khi làm bài, chọn một chữ ("trường" chẳng hạn) và dùng nhất quán.</li>
 <li><strong>Dấu "…" trong bản ghi sinh viên là một gợi ý</strong> — bản ghi thật sẽ phình ra. Đó chính là lý lẽ ỦNG HỘ struct: thêm một trường thì kiểu chỉ đổi ở một chỗ, trong khi thêm một mảng song song thì mọi chữ ký hàm đi qua dữ liệu đều phải sửa.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
 
 /* Ban ghi 2 cua slide, giu nguyen phan long nhau */
@@ -238,7 +238,7 @@ int main(void) {
 <li><strong>Where to put the definition</strong> — above <code>main</code>, at file scope, so every function in the file can use the type. The Case Study on slide 66 does exactly that: lines 5–10, before <code>clear()</code> and before <code>main</code>.</li>
 <li><strong>The rule for the exam</strong> — a struct definition is a <em>statement</em>, and every statement in C ends with a semicolon. The closing brace of a function is followed by nothing; the closing brace of a struct is followed by <code>;</code>. That asymmetry is exactly what the trap on this slide is about.</li>
 </ul>
-<pre><code>/* CACH 1 — struct thuan */
+<pre><code class="language-c">/* CACH 1 — struct thuan */
 struct telephone {
     char name[30];
     int  number;
@@ -265,7 +265,7 @@ eventDate        ev;    /* cach 2: ten kieu la MOT chu */</code></pre>
 <li><strong>Đặt định nghĩa ở đâu</strong> — phía trên <code>main</code>, ở mức tệp, để mọi hàm trong tệp dùng được kiểu đó. Case Study ở slide 66 làm đúng như vậy: dòng 5–10, trước <code>clear()</code> và trước <code>main</code>.</li>
 <li><strong>Luật để nhớ đi thi</strong> — định nghĩa struct là một <em>câu lệnh</em>, mà mọi câu lệnh trong C đều kết thúc bằng dấu chấm phẩy. Ngoặc nhọn đóng của một HÀM thì không có gì theo sau; ngoặc nhọn đóng của một STRUCT thì có <code>;</code> theo sau. Chính sự bất đối xứng ấy là cái bẫy của slide này.</li>
 </ul>
-<pre><code>/* CACH 1 — struct thuan */
+<pre><code class="language-c">/* CACH 1 — struct thuan */
 struct telephone {
     char name[30];
     int  number;
@@ -330,7 +330,7 @@ eventDate        ev;    /* cach 2: ten kieu la MOT chu */</code></pre>
 <li><strong>What is NOT on the slide, and is examined anyway</strong> — comparison. There is no <code>==</code> for structs. <code>if (a == b)</code> gives <code>error: invalid operands to binary expression ('eventDate' and 'eventDate')</code>. You must compare field by field.</li>
 <li><strong>Why C refuses</strong> — because of the padding bytes from slide 57. The compiler could not say what "equal" means for bytes nobody wrote. It supports <code>=</code> (copying rubbish is harmless) and refuses <code>==</code> (comparing rubbish is not).</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
 
 typedef struct { char name[20]; int age; } person;
@@ -363,7 +363,7 @@ int main(void) {
 <li><strong>Thứ KHÔNG có trên slide mà vẫn ra thi</strong> — phép so sánh. Struct không có <code>==</code>. <code>if (a == b)</code> cho <code>error: invalid operands to binary expression ('eventDate' and 'eventDate')</code>. Phải so từng trường.</li>
 <li><strong>Vì sao C từ chối</strong> — vì những byte đệm ở slide 57. Trình biên dịch không thể định nghĩa "bằng nhau" cho những byte chẳng ai ghi vào. Nó cho phép <code>=</code> (chép rác thì vô hại) và cấm <code>==</code> (so rác thì không vô hại).</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
 
 typedef struct { char name[20]; int age; } person;
@@ -398,7 +398,7 @@ int main(void) {
 <li><strong>Lines 21–22 print with <code>%d-%d-%d</code></strong> — three format specifiers, three arguments, each an <code>int</code> field. Notice you cannot print a struct with one specifier; <code>printf</code> has no idea what an <code>eventDate</code> is.</li>
 <li><strong>The console on the slide</strong> shows exactly two lines: <code>Day of the first event: 6-1-2025</code> and <code>Day of the second event: 13-5-2025</code>.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 typedef struct{
     int day;
@@ -434,7 +434,7 @@ int main(){
 <li><strong>Dòng 21–22 in bằng <code>%d-%d-%d</code></strong> — ba định dạng, ba đối số, mỗi cái là một trường <code>int</code>. Để ý là bạn KHÔNG in được cả struct bằng một định dạng; <code>printf</code> chẳng biết <code>eventDate</code> là cái gì.</li>
 <li><strong>Khung console trên slide</strong> hiện đúng hai dòng: <code>Day of the first event: 6-1-2025</code> và <code>Day of the second event: 13-5-2025</code>.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 typedef struct{
     int day;
@@ -472,7 +472,7 @@ int main(){
 <li><strong><code>strcpy</code> copies characters until it copies the <code>'\\0'</code></strong> — that is why the destination must be big enough. <code>"Paul"</code> is 4 characters + terminator = 5 bytes into a 20-byte field: fine. A 25-character name would run past the field and corrupt <code>age</code>, silently. Slot 16–18 covers <code>strncpy</code> and the safe version.</li>
 <li><strong>Printing uses <code>%s</code> for the array and <code>%d</code> for the int</strong> — <code>printf("First person -&gt; Name: %s, Age: %d\\n", p1.name, p1.age);</code>. <code>p1.name</code> decays to a pointer to its first character, which is exactly what <code>%s</code> wants.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
 
 struct person{
@@ -503,7 +503,7 @@ int main(){
 <li><strong><code>strcpy</code> chép ký tự cho tới khi chép xong dấu <code>'\\0'</code></strong> — vì thế đích phải đủ lớn. <code>"Paul"</code> là 4 ký tự + dấu kết = 5 byte đổ vào trường 20 byte: thoải mái. Một cái tên 25 ký tự sẽ tràn qua khỏi trường và đè chết <code>age</code>, âm thầm. Slot 16–18 sẽ dạy <code>strncpy</code> và bản an toàn.</li>
 <li><strong>In ra dùng <code>%s</code> cho mảng và <code>%d</code> cho số nguyên</strong> — <code>printf("First person -&gt; Name: %s, Age: %d\\n", p1.name, p1.age);</code>. <code>p1.name</code> tự suy biến thành con trỏ tới ký tự đầu, đúng thứ mà <code>%s</code> cần.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
 
 struct person{
@@ -536,7 +536,7 @@ int main(){
 <li><strong>The exercise on the slide</strong> — <em>"organize information, includes: name and age of three family members. Print out the information for all members on each line."</em> Three records, so <code>person family[3];</code> and three output lines. Slide 62 is the answer.</li>
 <li><strong>Why this replaces parallel arrays for good</strong> — sorting the family by age moves whole <code>person</code> values with one temporary <code>person tmp;</code> and three assignments. With parallel arrays you would need to swap two arrays in lockstep and the first forgotten swap corrupts the data set silently.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
 
 typedef struct { char name[20]; int age; } person;
@@ -573,7 +573,7 @@ int main(void) {
 <li><strong>Bài tập trên slide</strong> — <em>"tổ chức thông tin gồm tên và tuổi của ba thành viên gia đình. In thông tin của tất cả thành viên, mỗi người một dòng."</em> Ba bản ghi, nên <code>person family[3];</code> và ba dòng kết quả. Slide 62 chính là lời giải.</li>
 <li><strong>Vì sao nó thay thế hẳn các mảng song song</strong> — sắp xếp gia đình theo tuổi chỉ cần một biến tạm <code>person tmp;</code> và ba phép gán để dời nguyên cả bản ghi. Với mảng song song thì phải hoán vị hai mảng đồng bộ, và chỉ một lần quên là cả tập dữ liệu hỏng âm thầm.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
 
 typedef struct { char name[20]; int age; } person;
@@ -612,7 +612,7 @@ int main(void) {
 <li><strong>The console on the slide</strong> reads <code>Father -&gt; Name: John, Age: 30</code>, <code>Mother -&gt; Name: Sara, Age: 28</code>, <code>Son -&gt; Name: David, Age: 3</code>.</li>
 <li><strong>The arrows in the table are worth copying into your notes</strong> — they name the two selectors separately. Many exam questions give you a table exactly like this one and ask "write the expression that reads the highlighted cell".</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
 typedef struct{
     char name[20];
@@ -644,7 +644,7 @@ int main(){
 <li><strong>Khung console trên slide</strong> ghi <code>Father -&gt; Name: John, Age: 30</code>, <code>Mother -&gt; Name: Sara, Age: 28</code>, <code>Son -&gt; Name: David, Age: 3</code>.</li>
 <li><strong>Hai mũi tên trong bảng đáng chép vào vở</strong> — chúng gọi tên riêng hai bộ chọn. Rất nhiều câu hỏi thi đưa ra đúng một bảng như vậy rồi hỏi "viết biểu thức đọc ô được tô màu".</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
 typedef struct{
     char name[20];
@@ -678,7 +678,7 @@ int main(){
 <li><strong>The word "input" in the title is doing work</strong> — a by-value struct parameter is an <em>input only</em>. If the function must give a record back, either <code>return</code> a struct (legal in C — unlike returning an array) or take a pointer.</li>
 <li><strong>The exercise stated on this slide</strong> — <em>"print a student's information including: id, name, age. Use a structure … and use a function with a parameter of type structure"</em>. Slide 64 is the answer.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
 
 typedef struct { char name[20]; int age; } person;
@@ -706,7 +706,7 @@ int main(void) {
 <li><strong>Chữ "input" trong tiêu đề đang gánh việc</strong> — tham số struct theo giá trị chỉ là ĐẦU VÀO. Nếu hàm phải trả một bản ghi ra, thì hoặc <code>return</code> một struct (hợp lệ trong C — khác với trả về mảng), hoặc nhận một con trỏ.</li>
 <li><strong>Đề bài ghi trên slide này</strong> — <em>"in thông tin sinh viên gồm: id, name, age. Dùng một struct … và dùng một hàm có tham số kiểu struct"</em>. Slide 64 là lời giải.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
 
 typedef struct { char name[20]; int age; } person;
@@ -814,7 +814,7 @@ int main(void) {
 <li><strong>Lines 27–31 — main is only five calls</strong> — print a prompt, <code>scanf</code> the count, then <code>inputInfo</code> / <code>printInfo</code> / <code>searchAccountCustomers</code>, each receiving <code>(accountCustomers, n)</code>. That is the slide-13 signature "array + count" with a struct element type; the array is passed as a pointer, so the three functions all see the same 100 records.</li>
 <li><strong>Note the asymmetry with slide 63</strong> — the <em>array</em> parameter <code>accountCustomer accounts[]</code> is a pointer, so <code>inputInfo</code> really can fill the caller's data. Only <code>printAccount(accountCustomer acc)</code> on slide 67 takes a struct <em>by value</em> and gets a copy.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
 #include &lt;stdlib.h&gt;
 
@@ -858,7 +858,7 @@ int main(){
 <li><strong>Dòng 27–31 — main chỉ gồm năm lời gọi</strong> — in lời nhắc, <code>scanf</code> lấy số lượng, rồi <code>inputInfo</code> / <code>printInfo</code> / <code>searchAccountCustomers</code>, mỗi hàm nhận <code>(accountCustomers, n)</code>. Đó chính là chữ ký "mảng + số phần tử" của slide 13 với kiểu phần tử là struct; mảng được truyền dưới dạng con trỏ nên cả ba hàm cùng nhìn vào một bộ 100 bản ghi.</li>
 <li><strong>Để ý chỗ bất đối xứng với slide 63</strong> — tham số <em>mảng</em> <code>accountCustomer accounts[]</code> là con trỏ, nên <code>inputInfo</code> thật sự điền được dữ liệu cho hàm gọi. Chỉ có <code>printAccount(accountCustomer acc)</code> ở slide 67 là nhận struct <em>theo giá trị</em> và nhận một bản sao.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
 #include &lt;stdlib.h&gt;
 
@@ -904,7 +904,7 @@ int main(){
 <li><strong>The <code>clear()</code> calls are placed with care</strong> — after the number (line 41), after the type (line 43) and after the balance (line 46), but <em>not</em> between the type and the holder name, because <code>%[^\\n]</code> stops <em>before</em> the newline and leaves it for the following <code>clear()</code>. Move or delete one of these three calls and the input silently desynchronises.</li>
 <li><strong>Lines 50–52 — <code>printAccount</code></strong> — <code>printf("%d\\t%s\\t%s\\t%.2lf\\n", …)</code>: four fields, four specifiers, tabs between. It takes <code>accountCustomer acc</code> <strong>by value</strong> (slide 63), so each call copies 72 bytes; that is why the columns in the slide-69 output line up raggedly — tabs, not fixed widths.</li>
 </ul>
-<pre><code>void inputInfo(accountCustomer accounts[], int n){
+<pre><code class="language-c">void inputInfo(accountCustomer accounts[], int n){
     int i;
     for(i=0; i&lt;n; i++){
         printf("# %d\\n", i+1);
@@ -933,7 +933,7 @@ void printAccount(accountCustomer acc){
 <li><strong>Các lời gọi <code>clear()</code> được đặt rất có tính toán</strong> — sau số tài khoản (dòng 41), sau loại tài khoản (dòng 43) và sau số dư (dòng 46), nhưng KHÔNG đặt giữa loại tài khoản và tên chủ, vì <code>%[^\\n]</code> dừng lại TRƯỚC dấu xuống dòng và để nó lại cho lệnh <code>clear()</code> kế tiếp. Dời hoặc xoá một trong ba lời gọi ấy là phần nhập lệch pha âm thầm.</li>
 <li><strong>Dòng 50–52 — <code>printAccount</code></strong> — <code>printf("%d\\t%s\\t%s\\t%.2lf\\n", …)</code>: bốn trường, bốn định dạng, ngăn nhau bằng tab. Nó nhận <code>accountCustomer acc</code> <strong>theo giá trị</strong> (slide 63) nên mỗi lời gọi chép 72 byte; và cũng vì dùng tab chứ không phải bề rộng cố định mà các cột trong kết quả ở slide 69 so le nhau.</li>
 </ul>
-<pre><code>void inputInfo(accountCustomer accounts[], int n){
+<pre><code class="language-c">void inputInfo(accountCustomer accounts[], int n){
     int i;
     for(i=0; i&lt;n; i++){
         printf("# %d\\n", i+1);
@@ -964,7 +964,7 @@ void printAccount(accountCustomer acc){
 <li><strong><code>&gt;</code> is strict, and it shows</strong> — I ran the finished program with two accounts, one holding exactly 1000.00 and one holding 1000.01. The list printed both; the search result printed <strong>only</strong> the 1000.01 one. An account with exactly $1000 is not "greater than $1000".</li>
 <li><strong>Nothing is returned, and nothing is modified</strong> — both functions are <code>void</code> and both only read. They could take <code>const accountCustomer accounts[]</code>, which would make the compiler enforce that promise; the slide keeps it simple.</li>
 </ul>
-<pre><code>void printInfo(accountCustomer accounts[], int n){
+<pre><code class="language-c">void printInfo(accountCustomer accounts[], int n){
     int i;
     printf("\\nList of the Customer account:\\n");
     for(i=0; i&lt;n; i++){
@@ -992,7 +992,7 @@ void searchAccountCustomers(accountCustomer accounts[], int n){
 <li><strong><code>&gt;</code> là ngặt, và điều đó lộ ra thật</strong> — tôi đã chạy chương trình hoàn chỉnh với hai tài khoản, một cái đúng 1000,00 và một cái 1000,01. Danh sách in cả hai; phần kết quả tìm kiếm chỉ in <strong>duy nhất</strong> cái 1000,01. Một tài khoản có đúng 1000 đô thì không phải là "lớn hơn 1000 đô".</li>
 <li><strong>Không trả về gì và không sửa gì</strong> — cả hai hàm đều <code>void</code> và đều chỉ đọc. Chúng hoàn toàn có thể nhận <code>const accountCustomer accounts[]</code> để trình biên dịch giám sát lời hứa ấy; slide thì giữ cho đơn giản.</li>
 </ul>
-<pre><code>void printInfo(accountCustomer accounts[], int n){
+<pre><code class="language-c">void printInfo(accountCustomer accounts[], int n){
     int i;
     printf("\\nList of the Customer account:\\n");
     for(i=0; i&lt;n; i++){

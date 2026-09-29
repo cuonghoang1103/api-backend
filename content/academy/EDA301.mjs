@@ -425,7 +425,7 @@ const c5 = doc('eda301-5-1-inferential-hypothesis', '5.1 — Inferential statist
 </ul>
 <h3>Worked example: two-sample t-test</h3>
 <p>Question: did average order value differ between customers who saw the promo banner and those who didn't? A <strong>t-test</strong> compares the two group means, accounting for sample size and variance, and returns a p-value.</p>
-<pre><code># Python (scipy)
+<pre><code class="language-python"># Python (scipy)
 from scipy import stats
 t_stat, p_value = stats.ttest_ind(group_promo, group_control)
 # p_value &lt; 0.05 -&gt; the difference is unlikely to be random chance
@@ -455,7 +455,7 @@ t_stat, p_value = stats.ttest_ind(group_promo, group_control)
 </ul>
 <h3>Ví dụ: t-test hai mẫu</h3>
 <p>Câu hỏi: giá trị đơn hàng trung bình có khác nhau giữa khách thấy banner khuyến mãi và khách không thấy? <strong>t-test</strong> so sánh trung bình hai nhóm, có tính đến cỡ mẫu và phương sai, và trả về một p-value.</p>
-<pre><code># Python (scipy)
+<pre><code class="language-python"># Python (scipy)
 from scipy import stats
 t_stat, p_value = stats.ttest_ind(group_promo, group_control)
 # p_value &lt; 0.05 -&gt; sự khác biệt khó là do ngẫu nhiên

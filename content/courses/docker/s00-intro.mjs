@@ -1277,7 +1277,7 @@ ${slide('dk-00', 26, 'Linux chạy Docker thẳng; Mac và Windows có một má
 <h3>Ubuntu / Debian: the official repository</h3>
 ${slide('dk-00', 27, 'Bạn cài năm gói — và lệnh docker chỉ là MÁY KHÁCH')}
 <p>Use the apt repository, not <code>apt install docker.io</code> (Ubuntu's own package lags by a lot) and not the <code>get.docker.com</code> script (convenient, but it pipes a remote script into your shell as root and gives you no upgrade path).</p>
-<pre><code><span class="tok-comment"># 1. Remove anything old and conflicting</span>
+<pre><code class="language-bash"><span class="tok-comment"># 1. Remove anything old and conflicting</span>
 for p in docker.io docker-doc docker-compose podman-docker containerd runc; do
   sudo apt remove -y \$p 2&gt;/dev/null
 done
@@ -1338,7 +1338,7 @@ Client 29.6.2 linux/amd64 · Server 29.6.2 linux/amd64</div>
 
 <h3>Running without sudo — and what it costs</h3>
 ${slide('dk-00', 29, 'Vào nhóm docker = có quyền root, không cần mật khẩu')}
-<pre><code>sudo usermod -aG docker \$USER      <span class="tok-comment"># -aG: append, never plain -G</span>
+<pre><code class="language-bash">sudo usermod -aG docker \$USER      <span class="tok-comment"># -aG: append, never plain -G</span>
 newgrp docker                      <span class="tok-comment"># or log out and back in</span>
 docker run hello-world             <span class="tok-comment"># no sudo now</span>
 id -nG</code></pre>
@@ -1354,7 +1354,7 @@ uid=0(root) gid=0(root) groups=0(root),0(root),1(bin),2(daemon),3(sys),4(adm),6(
 
 <h3>macOS</h3>
 ${slide('dk-00', 30, 'Trên Mac: máy ảo có RAM riêng, và file phải vượt biên')}
-<pre><code><span class="tok-comment"># Option A — Docker Desktop (GUI, easiest)</span>
+<pre><code class="language-bash"><span class="tok-comment"># Option A — Docker Desktop (GUI, easiest)</span>
 brew install --cask docker         <span class="tok-comment"># then launch it once from Applications</span>
 
 <span class="tok-comment"># Option B — Colima (no Desktop licence, CLI only)</span>
@@ -1375,7 +1375,7 @@ wsl --install -d Ubuntu-24.04
 wsl --set-default-version 2
 <span class="tok-comment"># Then install Docker Desktop and enable "Use the WSL 2 based engine"</span>
 <span class="tok-comment"># Settings → Resources → WSL Integration → enable your distro</span></code></pre>
-<pre><code><span class="tok-comment"># Inside the Ubuntu terminal, verify you are on the Linux filesystem</span>
+<pre><code class="language-bash"><span class="tok-comment"># Inside the Ubuntu terminal, verify you are on the Linux filesystem</span>
 pwd
 docker run --rm alpine echo ok</code></pre>
 <div class="out">/home/cuong/projects/app
@@ -1384,7 +1384,7 @@ ok</div>
 
 <h3>Verify, and read what it tells you</h3>
 ${slide('dk-00', 28, 'docker version in HAI phần vì có HAI chương trình')}
-<pre><code>docker version
+<pre><code class="language-bash">docker version
 docker info | head -25
 docker compose version
 docker buildx version</code></pre>
@@ -1426,7 +1426,7 @@ Server: Docker Desktop 4.91.0 (239619)
 <tr><td><code>containerd</code> / <code>runc</code></td><td>The lower layers that actually supervise and start containers (Chapter 1.5).</td></tr>
 </table>
 <p>On the same Mac, <code>docker compose version</code> printed <code>Docker Compose version v5.5.1</code> and <code>docker buildx version</code> printed <code>v0.37.0</code> — Compose moved on from v2 to newer major versions; what matters is the space in <code>docker compose</code>, not the number.</p>
-<pre><code>docker info --format '{{.OperatingSystem}} · {{.Architecture}} · {{.NCPU}} CPU · {{.MemTotal}}'
+<pre><code class="language-bash">docker info --format '{{.OperatingSystem}} · {{.Architecture}} · {{.NCPU}} CPU · {{.MemTotal}}'
 docker info --format '{{.DockerRootDir}}'      <span class="tok-comment"># where images and volumes live</span>
 docker system df                               <span class="tok-comment"># how much space that is using</span></code></pre>
 <div class="out">Ubuntu 24.04.1 LTS · x86_64 · 8 CPU · 16606552064
@@ -1448,7 +1448,7 @@ ${slide('dk-00', 31, 'hello-world: năm bước gói trong một lệnh')}
   <div class="lz-step"><span class="lz-k">4 · Digest: sha256:d211f485…</span><span class="lz-t">the content-addressable identity</span><span class="lz-d">This hash IS the image. Tags like <code>:latest</code> move; a digest never does. Chapter 3 explains why production should pin one.</span></div>
   <div class="lz-step"><span class="lz-k">5 · Hello from Docker!</span><span class="lz-t">a container ran, printed, and exited</span><span class="lz-d">It still exists in a stopped state — <code>docker ps -a</code> shows it. Chapter 1 covers that lifecycle, and why stopped containers pile up if you never pass <code>--rm</code>.</span></div>
 </div>
-<pre><code>docker ps -a --format 'table {{.Names}}\\t{{.Image}}\\t{{.Status}}'
+<pre><code class="language-bash">docker ps -a --format 'table {{.Names}}\\t{{.Image}}\\t{{.Status}}'
 docker images
 docker rm \$(docker ps -aq --filter ancestor=hello-world)    <span class="tok-comment"># clean up</span></code></pre>
 <div class="out">NAMES              IMAGE         STATUS
@@ -1544,7 +1544,7 @@ ${slide('dk-00', 26, 'Linux chạy Docker thẳng; Mac và Windows có một má
 <h3>Ubuntu / Debian: kho apt chính thức</h3>
 ${slide('dk-00', 27, 'Bạn cài năm gói — và lệnh docker chỉ là MÁY KHÁCH')}
 <p>Hãy dùng kho apt, đừng dùng <code>apt install docker.io</code> (gói của chính Ubuntu tụt hậu rất xa) và cũng đừng dùng script <code>get.docker.com</code> (tiện, nhưng nó đổ một script từ xa vào shell của bạn dưới quyền root và không cho bạn đường nâng cấp nào).</p>
-<pre><code><span class="tok-comment"># 1. Gỡ mọi thứ cũ và xung đột</span>
+<pre><code class="language-bash"><span class="tok-comment"># 1. Gỡ mọi thứ cũ và xung đột</span>
 for p in docker.io docker-doc docker-compose podman-docker containerd runc; do
   sudo apt remove -y \$p 2&gt;/dev/null
 done
@@ -1605,7 +1605,7 @@ Client 29.6.2 linux/amd64 · Server 29.6.2 linux/amd64</div>
 
 <h3>Chạy không cần sudo — và cái giá của nó</h3>
 ${slide('dk-00', 29, 'Vào nhóm docker = có quyền root, không cần mật khẩu')}
-<pre><code>sudo usermod -aG docker \$USER      <span class="tok-comment"># -aG: nối thêm, đừng bao giờ -G trần</span>
+<pre><code class="language-bash">sudo usermod -aG docker \$USER      <span class="tok-comment"># -aG: nối thêm, đừng bao giờ -G trần</span>
 newgrp docker                      <span class="tok-comment"># hoặc đăng xuất rồi vào lại</span>
 docker run hello-world             <span class="tok-comment"># giờ khỏi sudo</span>
 id -nG</code></pre>
@@ -1621,7 +1621,7 @@ uid=0(root) gid=0(root) groups=0(root),0(root),1(bin),2(daemon),3(sys),4(adm),6(
 
 <h3>macOS</h3>
 ${slide('dk-00', 30, 'Trên Mac: máy ảo có RAM riêng, và file phải vượt biên')}
-<pre><code><span class="tok-comment"># Cách A — Docker Desktop (có giao diện, dễ nhất)</span>
+<pre><code class="language-bash"><span class="tok-comment"># Cách A — Docker Desktop (có giao diện, dễ nhất)</span>
 brew install --cask docker         <span class="tok-comment"># rồi mở nó một lần từ Applications</span>
 
 <span class="tok-comment"># Cách B — Colima (không cần giấy phép Desktop, chỉ dòng lệnh)</span>
@@ -1642,7 +1642,7 @@ wsl --install -d Ubuntu-24.04
 wsl --set-default-version 2
 <span class="tok-comment"># Rồi cài Docker Desktop và bật "Use the WSL 2 based engine"</span>
 <span class="tok-comment"># Settings → Resources → WSL Integration → bật bản phân phối của bạn</span></code></pre>
-<pre><code><span class="tok-comment"># Trong terminal Ubuntu, kiểm rằng bạn đang ở hệ thống file Linux</span>
+<pre><code class="language-bash"><span class="tok-comment"># Trong terminal Ubuntu, kiểm rằng bạn đang ở hệ thống file Linux</span>
 pwd
 docker run --rm alpine echo ok</code></pre>
 <div class="out">/home/cuong/projects/app
@@ -1651,7 +1651,7 @@ ok</div>
 
 <h3>Kiểm tra, và đọc xem nó nói gì</h3>
 ${slide('dk-00', 28, 'docker version in HAI phần vì có HAI chương trình')}
-<pre><code>docker version
+<pre><code class="language-bash">docker version
 docker info | head -25
 docker compose version
 docker buildx version</code></pre>
@@ -1693,7 +1693,7 @@ Server: Docker Desktop 4.91.0 (239619)
 <tr><td><code>containerd</code> / <code>runc</code></td><td>Các tầng thấp hơn thật sự giám sát và khởi động container (Chương 1.5).</td></tr>
 </table>
 <p>Trên cùng máy Mac đó, <code>docker compose version</code> in ra <code>Docker Compose version v5.5.1</code> và <code>docker buildx version</code> in ra <code>v0.37.0</code> — Compose đã đi tiếp từ v2 lên các bản lớn mới hơn; điều quan trọng là dấu cách trong <code>docker compose</code>, không phải con số.</p>
-<pre><code>docker info --format '{{.OperatingSystem}} · {{.Architecture}} · {{.NCPU}} CPU · {{.MemTotal}}'
+<pre><code class="language-bash">docker info --format '{{.OperatingSystem}} · {{.Architecture}} · {{.NCPU}} CPU · {{.MemTotal}}'
 docker info --format '{{.DockerRootDir}}'      <span class="tok-comment"># nơi image và volume nằm</span>
 docker system df                               <span class="tok-comment"># chỗ đó đang ngốn bao nhiêu</span></code></pre>
 <div class="out">Ubuntu 24.04.1 LTS · x86_64 · 8 CPU · 16606552064
@@ -1715,7 +1715,7 @@ ${slide('dk-00', 31, 'hello-world: năm bước gói trong một lệnh')}
   <div class="lz-step"><span class="lz-k">4 · Digest: sha256:d211f485…</span><span class="lz-t">danh tính theo nội dung</span><span class="lz-d">Cái mã băm này CHÍNH LÀ cái ảnh. Những tag như <code>:latest</code> thì DI CHUYỂN; một digest thì không bao giờ. Chương 3 giải thích vì sao production nên ghim một cái.</span></div>
   <div class="lz-step"><span class="lz-k">5 · Hello from Docker!</span><span class="lz-t">một container đã chạy, in ra, rồi thoát</span><span class="lz-d">Nó vẫn còn tồn tại ở trạng thái đã dừng — <code>docker ps -a</code> cho thấy nó. Chương 1 nói về vòng đời đó, và vì sao container đã dừng chất đống nếu bạn không bao giờ truyền <code>--rm</code>.</span></div>
 </div>
-<pre><code>docker ps -a --format 'table {{.Names}}\\t{{.Image}}\\t{{.Status}}'
+<pre><code class="language-bash">docker ps -a --format 'table {{.Names}}\\t{{.Image}}\\t{{.Status}}'
 docker images
 docker rm \$(docker ps -aq --filter ancestor=hello-world)    <span class="tok-comment"># dọn dẹp</span></code></pre>
 <div class="out">NAMES              IMAGE         STATUS
@@ -1809,7 +1809,7 @@ hello-world:latest   5e2309035332       22.6kB         10.3kB   U</div>
 
 <h3>A web server, in one command</h3>
 ${slide('dk-00', 32, 'Giải phẫu một lệnh docker run')}
-<pre><code>docker run -d --name web -p 8080:80 nginx:1.27-alpine
+<pre><code class="language-bash">docker run -d --name web -p 8080:80 nginx:1.27-alpine
 curl -s localhost:8080 | head -5</code></pre>
 <div class="out">Unable to find image 'nginx:1.27-alpine' locally
 1.27-alpine: Pulling from library/nginx
@@ -1852,7 +1852,7 @@ docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' web
 </table>
 
 <h3>Look at what is running</h3>
-<pre><code>docker ps
+<pre><code class="language-bash">docker ps
 docker logs web | tail -3
 docker stats --no-stream web</code></pre>
 <div class="out">CONTAINER ID   IMAGE               COMMAND                  STATUS         PORTS                                   NAMES
@@ -1885,7 +1885,7 @@ d9c3098effe2   web    0.00%     8.336MiB / 7.748GiB   0.11%     1.3kB / 1.36kB  
 
 <h3>Go inside</h3>
 ${slide('dk-00', 34, 'Bên trong chỉ có vài tiến trình — và chúng hiện ra ở máy chủ')}
-<pre><code>docker exec -it web sh</code></pre>
+<pre><code class="language-bash">docker exec -it web sh</code></pre>
 <div class="out">/ # ls /
 bin  dev  docker-entrypoint.d  etc  home  lib  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
 / # cat /etc/os-release | head -2
@@ -1910,7 +1910,7 @@ $ docker exec web ps -o pid,args | head -2
 PID   COMMAND
     1 nginx: master process nginx -g daemon off;</div>
 <p>One process, two numbers: <code>388192</code> in the host's process table, <code>1</code> in the container's. (On the Mac, <code>docker top</code> shows the worker processes owned by a user called <code>statd</code>: nginx's user inside the container has UID 101, and the VM's own <code>/etc/passwd</code> happens to call UID 101 <code>statd</code>. Same number, different name book — Chapter 7 returns to UIDs.)</p>
-<pre><code><span class="tok-comment"># From the HOST, the same process is visible — with a different PID</span>
+<pre><code class="language-bash"><span class="tok-comment"># From the HOST, the same process is visible — with a different PID</span>
 ps -eo pid,comm,args | grep 'nginx: master' | head -2
 docker top web</code></pre>
 <div class="out">  40122 nginx           nginx: master process nginx -g daemon off;
@@ -1920,7 +1920,7 @@ root    40122  40100  0   20:12   ?     00:00:00   nginx: master process nginx -
 
 <h3>Change what it serves</h3>
 ${slide('dk-00', 35, 'Bind mount: gắn cả THƯ MỤC, đừng gắn một file lẻ')}
-<pre><code>echo '&lt;h1&gt;Hello from a container&lt;/h1&gt;' &gt; index.html
+<pre><code class="language-bash">echo '&lt;h1&gt;Hello from a container&lt;/h1&gt;' &gt; index.html
 docker rm -f web
 docker run -d --name web -p 8080:80 \\
   -v "\$PWD/index.html:/usr/share/nginx/html/index.html:ro" \\
@@ -1948,7 +1948,7 @@ sh: can't create /usr/share/nginx/html/a.html: Read-only file system</div>
 
 <h3>A database, also in one command</h3>
 ${slide('dk-00', 36, 'Postgres một lệnh — nhưng dữ liệu nằm ở volume vô danh')}
-<pre><code>docker run -d --name db \\
+<pre><code class="language-bash">docker run -d --name db \\
   -e POSTGRES_PASSWORD=devpass \\
   -e POSTGRES_DB=app_dev \\
   -p 5432:5432 \\
@@ -1975,7 +1975,7 @@ local     429a8358ea06b94dc4721786dc772ddce88600f80cc9e45cbe6f60bc60919518</div>
 
 <h3>Containers as disposable tools</h3>
 <p>You do not need to install a language to use one. <code>--rm</code> deletes the container the moment it exits, so these leave nothing behind at all:</p>
-<pre><code><span class="tok-comment"># Run a Node one-liner without Node installed</span>
+<pre><code class="language-javascript"><span class="tok-comment"># Run a Node one-liner without Node installed</span>
 docker run --rm node:22-alpine node -e 'console.log(process.version, 2**32)'
 
 <span class="tok-comment"># A Python REPL, gone when you exit</span>
@@ -1994,7 +1994,7 @@ docker run --rm -it alpine sh</code></pre>
 
 <h3>Clean up completely</h3>
 ${slide('dk-00', 37, 'Container dùng một lần — rồi dọn sạch thật sự')}
-<pre><code>docker rm -f web db                  <span class="tok-comment"># -f stops them first</span>
+<pre><code class="language-bash">docker rm -f web db                  <span class="tok-comment"># -f stops them first</span>
 docker ps -a
 docker images
 docker system df</code></pre>
@@ -2074,7 +2074,7 @@ hello-world   latest       d2c94e258dcb   14 months ago 13.3kB</div>
 
 <h3>Một web server, bằng một câu lệnh</h3>
 ${slide('dk-00', 32, 'Giải phẫu một lệnh docker run')}
-<pre><code>docker run -d --name web -p 8080:80 nginx:1.27-alpine
+<pre><code class="language-bash">docker run -d --name web -p 8080:80 nginx:1.27-alpine
 curl -s localhost:8080 | head -5</code></pre>
 <div class="out">Unable to find image 'nginx:1.27-alpine' locally
 1.27-alpine: Pulling from library/nginx
@@ -2117,7 +2117,7 @@ docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' web
 </table>
 
 <h3>Nhìn xem cái gì đang chạy</h3>
-<pre><code>docker ps
+<pre><code class="language-bash">docker ps
 docker logs web | tail -3
 docker stats --no-stream web</code></pre>
 <div class="out">CONTAINER ID   IMAGE               COMMAND                  STATUS         PORTS                                   NAMES
@@ -2150,7 +2150,7 @@ d9c3098effe2   web    0.00%     8.336MiB / 7.748GiB   0.11%     1.3kB / 1.36kB  
 
 <h3>Đi vào bên trong</h3>
 ${slide('dk-00', 34, 'Bên trong chỉ có vài tiến trình — và chúng hiện ra ở máy chủ')}
-<pre><code>docker exec -it web sh</code></pre>
+<pre><code class="language-bash">docker exec -it web sh</code></pre>
 <div class="out">/ # ls /
 bin  dev  docker-entrypoint.d  etc  home  lib  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
 / # cat /etc/os-release | head -2
@@ -2175,7 +2175,7 @@ $ docker exec web ps -o pid,args | head -2
 PID   COMMAND
     1 nginx: master process nginx -g daemon off;</div>
 <p>Một tiến trình, hai con số: <code>388192</code> trong bảng tiến trình của máy chủ, <code>1</code> trong bảng của container. (Trên Mac, <code>docker top</code> hiện các worker thuộc một người dùng tên <code>statd</code>: người dùng của nginx trong container có UID 101, và file <code>/etc/passwd</code> của máy ảo tình cờ gọi UID 101 là <code>statd</code>. Cùng một con số, khác cuốn sổ tên — Chương 7 quay lại chuyện UID.)</p>
-<pre><code><span class="tok-comment"># Từ MÁY CHỦ, vẫn thấy đúng cái tiến trình đó — với một PID khác</span>
+<pre><code class="language-bash"><span class="tok-comment"># Từ MÁY CHỦ, vẫn thấy đúng cái tiến trình đó — với một PID khác</span>
 ps -eo pid,comm,args | grep 'nginx: master' | head -2
 docker top web</code></pre>
 <div class="out">  40122 nginx           nginx: master process nginx -g daemon off;
@@ -2185,7 +2185,7 @@ root    40122  40100  0   20:12   ?     00:00:00   nginx: master process nginx -
 
 <h3>Đổi thứ nó phục vụ</h3>
 ${slide('dk-00', 35, 'Bind mount: gắn cả THƯ MỤC, đừng gắn một file lẻ')}
-<pre><code>echo '&lt;h1&gt;Xin chào từ một container&lt;/h1&gt;' &gt; index.html
+<pre><code class="language-bash">echo '&lt;h1&gt;Xin chào từ một container&lt;/h1&gt;' &gt; index.html
 docker rm -f web
 docker run -d --name web -p 8080:80 \\
   -v "\$PWD/index.html:/usr/share/nginx/html/index.html:ro" \\
@@ -2213,7 +2213,7 @@ sh: can't create /usr/share/nginx/html/a.html: Read-only file system</div>
 
 <h3>Một cơ sở dữ liệu, cũng bằng một câu lệnh</h3>
 ${slide('dk-00', 36, 'Postgres một lệnh — nhưng dữ liệu nằm ở volume vô danh')}
-<pre><code>docker run -d --name db \\
+<pre><code class="language-bash">docker run -d --name db \\
   -e POSTGRES_PASSWORD=devpass \\
   -e POSTGRES_DB=app_dev \\
   -p 5432:5432 \\
@@ -2240,7 +2240,7 @@ local     429a8358ea06b94dc4721786dc772ddce88600f80cc9e45cbe6f60bc60919518</div>
 
 <h3>Container như những công cụ vứt đi</h3>
 <p>Bạn không cần cài một ngôn ngữ để dùng nó. <code>--rm</code> xoá container ngay khoảnh khắc nó thoát, nên mấy lệnh này không để lại gì cả:</p>
-<pre><code><span class="tok-comment"># Chạy một dòng Node mà không cài Node</span>
+<pre><code class="language-javascript"><span class="tok-comment"># Chạy một dòng Node mà không cài Node</span>
 docker run --rm node:22-alpine node -e 'console.log(process.version, 2**32)'
 
 <span class="tok-comment"># Một REPL Python, biến mất khi bạn thoát</span>
@@ -2259,7 +2259,7 @@ docker run --rm -it alpine sh</code></pre>
 
 <h3>Dọn sạch hoàn toàn</h3>
 ${slide('dk-00', 37, 'Container dùng một lần — rồi dọn sạch thật sự')}
-<pre><code>docker rm -f web db                  <span class="tok-comment"># -f dừng chúng trước</span>
+<pre><code class="language-bash">docker rm -f web db                  <span class="tok-comment"># -f dừng chúng trước</span>
 docker ps -a
 docker images
 docker system df</code></pre>

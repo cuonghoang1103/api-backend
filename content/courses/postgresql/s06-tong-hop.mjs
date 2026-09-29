@@ -26,7 +26,7 @@ export default {
 
 <h3>The five you'll use constantly</h3>
 <p>Run over the whole <code>note</code> table (7 rows, one with a <code>NULL</code> views), all five at once:</p>
-<pre><code>SELECT count(*)                AS total_notes,
+<pre><code class="language-sql">SELECT count(*)                AS total_notes,
        count(views)            AS notes_with_views,
        count(DISTINCT user_id) AS authors,
        sum(views)              AS total_views,
@@ -72,7 +72,7 @@ FROM note;</code></pre>
 
 <h3>Năm hàm bạn dùng liên tục</h3>
 <p>Chạy trên cả bảng <code>note</code> (7 dòng, một dòng views <code>NULL</code>), cả năm cùng lúc:</p>
-<pre><code>SELECT count(*)                AS total_notes,
+<pre><code class="language-sql">SELECT count(*)                AS total_notes,
        count(views)            AS notes_with_views,
        count(DISTINCT user_id) AS authors,
        sum(views)              AS total_views,
@@ -128,7 +128,7 @@ FROM note;</code></pre>
 
 <h3>GROUP BY in action</h3>
 <p>Add <code>GROUP BY u.name</code> and the aggregates compute separately for each author:</p>
-<pre><code>SELECT u.name AS author, count(*) AS notes, sum(n.views) AS total_views
+<pre><code class="language-sql">SELECT u.name AS author, count(*) AS notes, sum(n.views) AS total_views
 FROM note n JOIN app_user u ON u.id = n.user_id
 GROUP BY u.name
 ORDER BY total_views DESC NULLS LAST;</code></pre>
@@ -139,7 +139,7 @@ ORDER BY total_views DESC NULLS LAST;</code></pre>
  Minh   |     2 |          42
 (3 rows)</div>
 <p>Instead of one grand total, we get one row per author, each with that author's own count and sum. Group by a different column and you slice the same data another way — here by <code>tag</code>:</p>
-<pre><code>SELECT tag, count(*) AS notes, round(avg(views),1) AS avg_views
+<pre><code class="language-sql">SELECT tag, count(*) AS notes, round(avg(views),1) AS avg_views
 FROM note GROUP BY tag ORDER BY notes DESC, tag;</code></pre>
 <div class="out"> tag  | notes | avg_views
 ------+-------+-----------
@@ -150,7 +150,7 @@ FROM note GROUP BY tag ORDER BY notes DESC, tag;</code></pre>
 
 <h3>The rule everyone hits: every selected column must be grouped or aggregated</h3>
 <p>This error is a rite of passage. Once you <code>GROUP BY</code>, every column in <code>SELECT</code> must <em>either</em> appear in the <code>GROUP BY</code> <em>or</em> be inside an aggregate. Why? A group of many rows has one <code>tag</code> but many different <code>views</code> — so "which views?" has no single answer:</p>
-<pre><code>SELECT tag, views FROM note GROUP BY tag;</code></pre>
+<pre><code class="language-sql">SELECT tag, views FROM note GROUP BY tag;</code></pre>
 <div class="out">ERROR:  column "note.views" must appear in the GROUP BY clause or be used in an aggregate function
 LINE 1: SELECT tag, views FROM note GROUP BY tag;
                     ^</div>
@@ -158,7 +158,7 @@ LINE 1: SELECT tag, views FROM note GROUP BY tag;
 
 <h3>Grouping by more than one column</h3>
 <p>List several columns and you get one row per <em>combination</em> — city × tag:</p>
-<pre><code>SELECT u.city, n.tag, count(*) AS notes
+<pre><code class="language-sql">SELECT u.city, n.tag, count(*) AS notes
 FROM note n JOIN app_user u ON u.id = n.user_id
 GROUP BY u.city, n.tag
 ORDER BY u.city, n.tag;</code></pre>
@@ -192,7 +192,7 @@ ORDER BY u.city, n.tag;</code></pre>
 
 <h3>GROUP BY trong hành động</h3>
 <p>Thêm <code>GROUP BY u.name</code> và các hàm tổng hợp tính riêng cho từng tác giả:</p>
-<pre><code>SELECT u.name AS author, count(*) AS notes, sum(n.views) AS total_views
+<pre><code class="language-sql">SELECT u.name AS author, count(*) AS notes, sum(n.views) AS total_views
 FROM note n JOIN app_user u ON u.id = n.user_id
 GROUP BY u.name
 ORDER BY total_views DESC NULLS LAST;</code></pre>
@@ -203,7 +203,7 @@ ORDER BY total_views DESC NULLS LAST;</code></pre>
  Minh   |     2 |          42
 (3 rows)</div>
 <p>Thay vì một tổng lớn, ta có một dòng cho mỗi tác giả, mỗi dòng kèm số đếm và tổng của riêng tác giả đó. Gom theo một cột khác là bạn cắt lát cùng dữ liệu theo cách khác — ở đây theo <code>tag</code>:</p>
-<pre><code>SELECT tag, count(*) AS notes, round(avg(views),1) AS avg_views
+<pre><code class="language-sql">SELECT tag, count(*) AS notes, round(avg(views),1) AS avg_views
 FROM note GROUP BY tag ORDER BY notes DESC, tag;</code></pre>
 <div class="out"> tag  | notes | avg_views
 ------+-------+-----------
@@ -214,7 +214,7 @@ FROM note GROUP BY tag ORDER BY notes DESC, tag;</code></pre>
 
 <h3>Luật ai cũng dính: mọi cột được chọn phải được gom hoặc tổng hợp</h3>
 <p>Lỗi này là một lễ trưởng thành. Khi đã <code>GROUP BY</code>, mọi cột trong <code>SELECT</code> phải <em>hoặc</em> xuất hiện trong <code>GROUP BY</code> <em>hoặc</em> nằm trong một hàm tổng hợp. Vì sao? Một nhóm nhiều dòng có một <code>tag</code> nhưng nhiều <code>views</code> khác nhau — nên "views nào?" không có câu trả lời duy nhất:</p>
-<pre><code>SELECT tag, views FROM note GROUP BY tag;</code></pre>
+<pre><code class="language-sql">SELECT tag, views FROM note GROUP BY tag;</code></pre>
 <div class="out">ERROR:  column "note.views" must appear in the GROUP BY clause or be used in an aggregate function
 LINE 1: SELECT tag, views FROM note GROUP BY tag;
                     ^</div>
@@ -222,7 +222,7 @@ LINE 1: SELECT tag, views FROM note GROUP BY tag;
 
 <h3>Gom theo nhiều hơn một cột</h3>
 <p>Liệt kê vài cột là bạn có một dòng cho mỗi <em>tổ hợp</em> — thành phố × tag:</p>
-<pre><code>SELECT u.city, n.tag, count(*) AS notes
+<pre><code class="language-sql">SELECT u.city, n.tag, count(*) AS notes
 FROM note n JOIN app_user u ON u.id = n.user_id
 GROUP BY u.city, n.tag
 ORDER BY u.city, n.tag;</code></pre>
@@ -266,7 +266,7 @@ ORDER BY u.city, n.tag;</code></pre>
 
 <h3>HAVING — a WHERE for groups</h3>
 <p>You can't filter on an aggregate in <code>WHERE</code> (the aggregate doesn't exist yet at that stage). <code>HAVING</code> runs <em>after</em> grouping, so it can. "Authors with at least 3 notes":</p>
-<pre><code>SELECT u.name AS author, count(*) AS notes
+<pre><code class="language-sql">SELECT u.name AS author, count(*) AS notes
 FROM note n JOIN app_user u ON u.id = n.user_id
 GROUP BY u.name
 HAVING count(*) &gt;= 3
@@ -288,7 +288,7 @@ ORDER BY notes DESC;</code></pre>
   <div class="lz-step"><strong>ORDER BY / LIMIT</strong><span>sort &amp; trim</span></div>
 </div>
 <p>So <code>WHERE</code> filters raw rows (it can't see aggregates), then grouping happens, then <code>HAVING</code> filters the resulting groups (it can see aggregates). Use both together — <code>WHERE</code> to drop rows you never want counted, <code>HAVING</code> to drop groups by their totals:</p>
-<pre><code>SELECT tag, count(*) AS notes, sum(views) AS total_views
+<pre><code class="language-sql">SELECT tag, count(*) AS notes, sum(views) AS total_views
 FROM note
 WHERE views IS NOT NULL       <span class="tok-comment">-- drop rows first</span>
 GROUP BY tag
@@ -302,7 +302,7 @@ ORDER BY tag;</code></pre>
 
 <h3>FILTER — several conditional totals in one pass</h3>
 <p>Often you want a total <em>and</em> a few sub-totals in the same row: total notes, sql notes, pinned notes. Rather than three queries, attach a <code>FILTER (WHERE ...)</code> to each aggregate:</p>
-<pre><code>SELECT count(*)                            AS total,
+<pre><code class="language-sql">SELECT count(*)                            AS total,
        count(*) FILTER (WHERE tag='sql')   AS sql_notes,
        count(*) FILTER (WHERE pinned)      AS pinned_notes,
        sum(views) FILTER (WHERE tag='sql') AS sql_views
@@ -328,7 +328,7 @@ FROM note;</code></pre>
 
 <h3>HAVING — một WHERE cho nhóm</h3>
 <p>Bạn không thể lọc theo một hàm tổng hợp trong <code>WHERE</code> (ở giai đoạn đó hàm tổng hợp chưa tồn tại). <code>HAVING</code> chạy <em>sau</em> khi gom, nên nó làm được. "Tác giả có ít nhất 3 note":</p>
-<pre><code>SELECT u.name AS author, count(*) AS notes
+<pre><code class="language-sql">SELECT u.name AS author, count(*) AS notes
 FROM note n JOIN app_user u ON u.id = n.user_id
 GROUP BY u.name
 HAVING count(*) &gt;= 3
@@ -350,7 +350,7 @@ ORDER BY notes DESC;</code></pre>
   <div class="lz-step"><strong>ORDER BY / LIMIT</strong><span>sắp &amp; cắt</span></div>
 </div>
 <p>Nên <code>WHERE</code> lọc dòng thô (nó không thấy hàm tổng hợp), rồi gom xảy ra, rồi <code>HAVING</code> lọc các nhóm kết quả (nó thấy hàm tổng hợp). Dùng cả hai cùng nhau — <code>WHERE</code> để bỏ dòng bạn không bao giờ muốn đếm, <code>HAVING</code> để bỏ nhóm theo tổng của chúng:</p>
-<pre><code>SELECT tag, count(*) AS notes, sum(views) AS total_views
+<pre><code class="language-sql">SELECT tag, count(*) AS notes, sum(views) AS total_views
 FROM note
 WHERE views IS NOT NULL       <span class="tok-comment">-- bỏ dòng trước</span>
 GROUP BY tag
@@ -364,7 +364,7 @@ ORDER BY tag;</code></pre>
 
 <h3>FILTER — nhiều tổng có điều kiện trong một lượt</h3>
 <p>Thường bạn muốn một tổng <em>và</em> vài tổng con trong cùng một dòng: tổng note, note sql, note ghim. Thay vì ba truy vấn, gắn một <code>FILTER (WHERE ...)</code> vào mỗi hàm tổng hợp:</p>
-<pre><code>SELECT count(*)                            AS total,
+<pre><code class="language-sql">SELECT count(*)                            AS total,
        count(*) FILTER (WHERE tag='sql')   AS sql_notes,
        count(*) FILTER (WHERE pinned)      AS pinned_notes,
        sum(views) FILTER (WHERE tag='sql') AS sql_views
@@ -400,7 +400,7 @@ FROM note;</code></pre>
 
 <h3>The bug: counting over a fan-out join</h3>
 <p>"How many notes does each author have?" — tempting to join notes to their comments and <code>count(*)</code>. But that counts note-comment <em>pairs</em>, not notes:</p>
-<pre><code>SELECT u.name, count(*) AS wrong_count
+<pre><code class="language-sql">SELECT u.name, count(*) AS wrong_count
 FROM app_user u
 JOIN note n    ON n.user_id = u.id
 JOIN comment c ON c.note_id = n.id
@@ -414,7 +414,7 @@ GROUP BY u.name ORDER BY u.name;</code></pre>
 
 <h3>Fix 1: COUNT(DISTINCT) + LEFT JOIN</h3>
 <p>Count <em>distinct notes</em> so duplicates from the fan-out collapse, and use <code>LEFT JOIN</code> so authors whose notes have no comments still appear:</p>
-<pre><code>SELECT u.name,
+<pre><code class="language-sql">SELECT u.name,
        count(DISTINCT n.id) AS notes,
        count(c.id)          AS comments
 FROM app_user u
@@ -431,7 +431,7 @@ GROUP BY u.name ORDER BY u.name;</code></pre>
 
 <h3>Fix 2: count(col), not count(*), when a LEFT JOIN can produce NULLs</h3>
 <p>One more subtlety. To count notes per user <em>including</em> users with zero, a LEFT JOIN is right — but <code>count(*)</code> would count the placeholder row and report 1 for a user with no notes. <code>count(n.id)</code> counts only real notes:</p>
-<pre><code>SELECT u.name, count(n.id) AS notes, count(*) AS rows_star
+<pre><code class="language-sql">SELECT u.name, count(n.id) AS notes, count(*) AS rows_star
 FROM app_user u LEFT JOIN note n ON n.user_id = u.id
 GROUP BY u.name ORDER BY notes DESC, u.name;</code></pre>
 <div class="out"> name  | notes | rows_star
@@ -473,7 +473,7 @@ GROUP BY u.name ORDER BY notes DESC, u.name;</code></pre>
 
 <h3>Bug: đếm trên một join fan-out</h3>
 <p>"Mỗi tác giả có bao nhiêu note?" — dễ bị cám dỗ join note với bình luận của chúng rồi <code>count(*)</code>. Nhưng cái đó đếm <em>cặp</em> note-bình-luận, không phải note:</p>
-<pre><code>SELECT u.name, count(*) AS wrong_count
+<pre><code class="language-sql">SELECT u.name, count(*) AS wrong_count
 FROM app_user u
 JOIN note n    ON n.user_id = u.id
 JOIN comment c ON c.note_id = n.id
@@ -487,7 +487,7 @@ GROUP BY u.name ORDER BY u.name;</code></pre>
 
 <h3>Sửa 1: COUNT(DISTINCT) + LEFT JOIN</h3>
 <p>Đếm <em>note khác nhau</em> để các bản trùng từ fan-out gộp lại, và dùng <code>LEFT JOIN</code> để các tác giả có note không bình luận vẫn xuất hiện:</p>
-<pre><code>SELECT u.name,
+<pre><code class="language-sql">SELECT u.name,
        count(DISTINCT n.id) AS notes,
        count(c.id)          AS comments
 FROM app_user u
@@ -504,7 +504,7 @@ GROUP BY u.name ORDER BY u.name;</code></pre>
 
 <h3>Sửa 2: count(cột), không phải count(*), khi một LEFT JOIN có thể sinh NULL</h3>
 <p>Thêm một điểm tinh tế. Để đếm note mỗi user <em>kể cả</em> user bằng không, một LEFT JOIN là đúng — nhưng <code>count(*)</code> sẽ đếm dòng giữ chỗ và báo 1 cho một user không có note. <code>count(n.id)</code> chỉ đếm note thật:</p>
-<pre><code>SELECT u.name, count(n.id) AS notes, count(*) AS rows_star
+<pre><code class="language-sql">SELECT u.name, count(n.id) AS notes, count(*) AS rows_star
 FROM app_user u LEFT JOIN note n ON n.user_id = u.id
 GROUP BY u.name ORDER BY notes DESC, u.name;</code></pre>
 <div class="out"> name  | notes | rows_star

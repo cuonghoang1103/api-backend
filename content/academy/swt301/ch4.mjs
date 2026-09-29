@@ -1495,7 +1495,7 @@ tests 1-19 cover 45 of 45 missing: []</code></pre>
 </tbody>
 </table>
 <h3>Bonus — BVA catches an off-by-one that EP misses (Java, compiled and run)</h3>
-<pre><code>public class GradeBva {
+<pre><code class="language-c">public class GradeBva {
     // Spec: 0..100 accepted; 0-49 -&gt; "Fail"; 50-100 -&gt; "Pass"; otherwise "Invalid"
     static String gradeBuggy(int s) {            // off-by-one: &gt; instead of &gt;=
         if (s &lt; 0 || s &gt; 100) return "Invalid";
@@ -1627,7 +1627,7 @@ tests 1-19 cover 45 of 45 missing: []</code></pre>
 </tbody>
 </table>
 <h3>Thêm — BVA bắt được lỗi off-by-one mà EP bỏ lọt (Java, đã biên dịch và chạy)</h3>
-<pre><code>public class GradeBva {
+<pre><code class="language-c">public class GradeBva {
     // Spec: 0..100 accepted; 0-49 -&gt; "Fail"; 50-100 -&gt; "Pass"; otherwise "Invalid"
     static String gradeBuggy(int s) {            // off-by-one: &gt; instead of &gt;=
         if (s &lt; 0 || s &gt; 100) return "Invalid";
@@ -2107,7 +2107,7 @@ ${AV(`C — DT2, DT4`, `DT2 phủ R3 và DT4 phủ R2.`)}`],
 </tbody>
 </table>
 <p>Script check that the five rules are sound — each "–" column contains only combinations with the same action, and together they cover the 8 combinations exactly once:</p>
-<pre><code>('T', 'T', '-') covers 2 combos -&gt; {'ERROR (impossible: student &amp; employed)'}
+<pre><code class="language-java">('T', 'T', '-') covers 2 combos -&gt; {'ERROR (impossible: student &amp; employed)'}
 ('-', 'F', 'T') covers 2 combos -&gt; {'Adv 20%'}
 ('-', 'F', 'F') covers 2 combos -&gt; {'Basics 20%'}
 ('F', 'T', 'T') covers 1 combos -&gt; {'Adv 0%'}
@@ -2172,7 +2172,7 @@ ${AV(`C — DT2, DT4`, `DT2 phủ R3 và DT4 phủ R2.`)}`],
 </tbody>
 </table>
 <p>Script kiểm năm rule là đúng — mỗi cột có "–" chỉ gồm các tổ hợp cùng hành động, và gộp lại phủ đúng 8 tổ hợp, mỗi tổ hợp một lần:</p>
-<pre><code>('T', 'T', '-') covers 2 combos -&gt; {'ERROR (impossible: student &amp; employed)'}
+<pre><code class="language-java">('T', 'T', '-') covers 2 combos -&gt; {'ERROR (impossible: student &amp; employed)'}
 ('-', 'F', 'T') covers 2 combos -&gt; {'Adv 20%'}
 ('-', 'F', 'F') covers 2 combos -&gt; {'Basics 20%'}
 ('F', 'T', 'T') covers 1 combos -&gt; {'Adv 0%'}

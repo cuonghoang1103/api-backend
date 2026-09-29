@@ -34,7 +34,7 @@ export default {
 </div>
 
 <h3>The classic mistake: server data in useState</h3>
-<pre><code>'use client';
+<pre><code class="language-javascript">'use client';
 const [posts, setPosts] = useState([]);
 useEffect(() =&gt; { fetch('/api/posts').then(r =&gt; r.json()).then(setPosts); }, []);</code></pre>
 <p>This treats a copy of server data as if it were local UI state. You now hand-manage loading, errors, caching, refetching, deduping, and staleness — and you rebuild that in every component that needs the data. It works for one screen and collapses across a real app. Server state deserves a tool that understands it <em>is</em> a cache of something remote.</p>
@@ -85,7 +85,7 @@ useEffect(() =&gt; { fetch('/api/posts').then(r =&gt; r.json()).then(setPosts); 
 </div>
 
 <h3>Cái sai kinh điển: dữ liệu server trong useState</h3>
-<pre><code>'use client';
+<pre><code class="language-javascript">'use client';
 const [posts, setPosts] = useState([]);
 useEffect(() =&gt; { fetch('/api/posts').then(r =&gt; r.json()).then(setPosts); }, []);</code></pre>
 <p>Cách này coi một bản sao dữ liệu server như thể là state UI cục bộ. Giờ bạn tự tay quản loading, lỗi, cache, refetch, dedupe, và độ cũ — và dựng lại tất cả ở mọi component cần dữ liệu. Nó chạy được cho một màn và sụp đổ khắp một app thật. State server xứng đáng một công cụ hiểu rằng nó <em>là</em> cache của một thứ ở xa.</p>
@@ -139,7 +139,7 @@ useEffect(() =&gt; { fetch('/api/posts').then(r =&gt; r.json()).then(setPosts); 
 <h2>A tiny global store without the boilerplate</h2>
 <p class="lead">When client UI state must be shared across distant components — a cart, a sidebar's open/closed, a multi-step wizard — prop-drilling is painful and Context re-renders too broadly. Zustand gives you a small global store with almost no ceremony.</p>
 
-<pre><code>import { create } from 'zustand';
+<pre><code class="language-javascript">import { create } from 'zustand';
 
 const useCart = create((set) =&gt; ({
   items: [],
@@ -196,7 +196,7 @@ const add   = useCart((s) =&gt; s.add);</code></pre>
 <h2>Một store toàn cục bé xíu, không rườm rà</h2>
 <p class="lead">Khi state UI client phải chia sẻ giữa các component xa nhau — một giỏ hàng, đóng/mở sidebar, một wizard nhiều bước — prop-drilling thì mệt còn Context render lại quá rộng. Zustand cho bạn một store toàn cục nhỏ gần như không nghi thức.</p>
 
-<pre><code>import { create } from 'zustand';
+<pre><code class="language-javascript">import { create } from 'zustand';
 
 const useCart = create((set) =&gt; ({
   items: [],
@@ -263,7 +263,7 @@ const add   = useCart((s) =&gt; s.add);</code></pre>
 <h2>The right tool for client-side server data</h2>
 <p class="lead">A page's initial data belongs in a Server Component (Chapter 10). But some server data must be fetched <em>on the client</em>: results that depend on user interaction, infinite scroll, polling, anything after the first paint. That is TanStack Query's job — it turns the manual <code>useEffect</code>+<code>useState</code> dance into one hook.</p>
 
-<pre><code>'use client';
+<pre><code class="language-typescript">'use client';
 import { useQuery } from '@tanstack/react-query';
 
 function Posts() {
@@ -318,7 +318,7 @@ function Posts() {
 <h2>Đúng công cụ cho dữ liệu server phía client</h2>
 <p class="lead">Dữ liệu ban đầu của trang thuộc về Server Component (Chương 10). Nhưng vài dữ liệu server phải fetch <em>ở client</em>: kết quả phụ thuộc tương tác, cuộn vô hạn, polling, bất cứ gì sau lần paint đầu. Đó là việc của TanStack Query — nó biến điệu nhảy <code>useEffect</code>+<code>useState</code> thủ công thành một hook.</p>
 
-<pre><code>'use client';
+<pre><code class="language-typescript">'use client';
 import { useQuery } from '@tanstack/react-query';
 
 function Posts() {
@@ -383,7 +383,7 @@ function Posts() {
 <h2>Writing on the client: useMutation, then invalidate</h2>
 <p class="lead"><code>useQuery</code> reads; <code>useMutation</code> writes. The important half is what happens after a successful write — you invalidate the queries whose data just changed, and TanStack Query refetches them so the UI reflects the new truth.</p>
 
-<pre><code>'use client';
+<pre><code class="language-javascript">'use client';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 function useAddPost() {
@@ -437,7 +437,7 @@ function useAddPost() {
 <h2>Ghi ở client: useMutation, rồi vô hiệu hoá</h2>
 <p class="lead"><code>useQuery</code> đọc; <code>useMutation</code> ghi. Nửa quan trọng là điều xảy ra sau một cú ghi thành công — bạn vô hiệu hoá các query có dữ liệu vừa đổi, và TanStack Query fetch lại chúng để UI phản ánh sự thật mới.</p>
 
-<pre><code>'use client';
+<pre><code class="language-javascript">'use client';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 function useAddPost() {

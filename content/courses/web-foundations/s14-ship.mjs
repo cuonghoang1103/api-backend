@@ -74,7 +74,7 @@ ${gallery('wf-ship', [
 </div>
 
 <h3>Serve the build locally before you trust it</h3>
-<pre><code>npm run build
+<pre><code class="language-bash">npm run build
 npx serve -s build          # or: python3 -m http.server -d build 3000</code></pre>
 <div class="pitfall"><strong>"It works on my machine" is not evidence.</strong> The dev server is forgiving in ways production is not: it resolves some paths differently, it does not minify (so a name-mangling bug never appears), and it skips the environment variables baked in at build time. Always open the built version once before deploying.</div>
 </div>
@@ -104,7 +104,7 @@ npx serve -s build          # or: python3 -m http.server -d build 3000</code></p
 </div>
 
 <h3>Chạy thử bản build ở máy trước khi tin nó</h3>
-<pre><code>npm run build
+<pre><code class="language-bash">npm run build
 npx serve -s build          # hoặc: python3 -m http.server -d build 3000</code></pre>
 <div class="pitfall"><strong>"Máy em chạy được" không phải bằng chứng.</strong> Dev server dễ tính ở những chỗ production thì không: nó phân giải vài đường dẫn khác đi, nó không rút gọn (nên lỗi do đổi tên biến không bao giờ lộ ra), và nó bỏ qua các biến môi trường vốn được nướng vào lúc build. Luôn mở bản đã build một lần trước khi deploy.</div>
 </div>

@@ -78,7 +78,7 @@ ${slide('git-01', 3, 'Ba cái cây và lệnh chuyển giữa chúng')}
 <h3>Reading git status as a map</h3>
 ${slide('git-01', 4, 'git status là tấm bản đồ ba cây')}
 <p>Make three different kinds of change in the playground repo from 0.4 and look at the result:</p>
-<pre><code>cd ~/git-lab
+<pre><code class="language-bash">cd ~/git-lab
 <span class="tok-keyword">echo</span> <span class="tok-string">"staged change"</span> &gt;&gt; a.txt   &amp;&amp; git add a.txt   <span class="tok-comment"># edited AND staged</span>
 <span class="tok-keyword">echo</span> <span class="tok-string">"unstaged change"</span> &gt;&gt; a.txt                   <span class="tok-comment"># edited again, NOT staged</span>
 <span class="tok-keyword">echo</span> <span class="tok-string">"hello"</span> &gt; b.txt                              <span class="tok-comment"># brand-new file</span>
@@ -114,7 +114,7 @@ Untracked files:
 <div class="callout warn">This is why <code>git commit -a</code> ("commit all changes") does <em>not</em> include new files. The <code>-a</code> flag means "stage every modification to <strong>tracked</strong> files", and a brand-new file is not tracked yet. It is one of the most common "but I committed it!" surprises — and 1.3 shows how to catch it before you push.</div>
 
 <h3>The short form you will actually use</h3>
-<pre><code>git status --short</code></pre>
+<pre><code class="language-bash">git status --short</code></pre>
 <div class="out">MM a.txt
 ?? b.txt</div>
 <p>Two columns, and once you see the pattern you will never go back to the long form. The <strong>left</strong> column is the index (HEAD → index), the <strong>right</strong> column is the working directory (index → working dir):</p>
@@ -182,7 +182,7 @@ ${slide('git-01', 3, 'Ba cái cây và lệnh chuyển giữa chúng')}
 <h3>Đọc git status như một tấm bản đồ</h3>
 ${slide('git-01', 4, 'git status là tấm bản đồ ba cây')}
 <p>Tạo ba loại thay đổi khác nhau trong kho nháp từ bài 0.4 rồi nhìn kết quả:</p>
-<pre><code>cd ~/git-lab
+<pre><code class="language-bash">cd ~/git-lab
 <span class="tok-keyword">echo</span> <span class="tok-string">"staged change"</span> &gt;&gt; a.txt   &amp;&amp; git add a.txt   <span class="tok-comment"># đã sửa VÀ đã staging</span>
 <span class="tok-keyword">echo</span> <span class="tok-string">"unstaged change"</span> &gt;&gt; a.txt                   <span class="tok-comment"># sửa tiếp, CHƯA staging</span>
 <span class="tok-keyword">echo</span> <span class="tok-string">"hello"</span> &gt; b.txt                              <span class="tok-comment"># file hoàn toàn mới</span>
@@ -218,7 +218,7 @@ Untracked files:
 <div class="callout warn">Đây là lý do <code>git commit -a</code> ("commit mọi thay đổi") <em>không</em> gồm file mới. Cờ <code>-a</code> nghĩa là "đưa vào staging mọi sửa đổi của các file <strong>đã được theo dõi</strong>", mà một file vừa tạo thì chưa được theo dõi. Đây là một trong những cú bất ngờ "nhưng tôi đã commit rồi mà!" phổ biến nhất — và bài 1.3 chỉ cách bắt nó trước khi push.</div>
 
 <h3>Dạng ngắn mà bạn sẽ thật sự dùng</h3>
-<pre><code>git status --short</code></pre>
+<pre><code class="language-bash">git status --short</code></pre>
 <div class="out">MM a.txt
 ?? b.txt</div>
 <p>Hai cột, và khi đã nhận ra quy luật bạn sẽ không quay lại dạng dài. Cột <strong>trái</strong> là index (HEAD → index), cột <strong>phải</strong> là thư mục làm việc (index → thư mục làm việc):</p>
@@ -282,7 +282,7 @@ ${slide('git-01', 5, 'Một commit là một tấm ảnh trọn dự án')}
   <div class="lz-layer"><span class="lz-k">message</span><span class="lz-v">Your explanation of why. The only part Git cannot generate for you — and the part your future self will read.</span></div>
 </div>
 <p>You can see all of it with plumbing commands. This is real output from the playground repository:</p>
-<pre><code>git cat-file -p HEAD</code></pre>
+<pre><code class="language-bash">git cat-file -p HEAD</code></pre>
 <div class="out">tree 4b825dc642cb6eb9a060e54bf8d69288fbee4904
 parent 8f3c1a2d9e0b4f6a1c3d5e7f9a0b2c4d6e8f0a12
 author Nguyen Van An &lt;an@example.com&gt; 1755820800 +0700
@@ -298,7 +298,7 @@ commit number 10</div>
 <h3>Where the hash comes from</h3>
 ${slide('git-01', 6, 'Đổi một byte là đổi cả tên')}
 <p>Every object in Git — file content, directory listing, commit — is stored under the SHA-1 hash of its own bytes. Anything you can name in Git, you name by content:</p>
-<pre><code><span class="tok-comment"># The hash of a piece of content, computed the way Git computes it:</span>
+<pre><code class="language-bash"><span class="tok-comment"># The hash of a piece of content, computed the way Git computes it:</span>
 <span class="tok-keyword">echo</span> <span class="tok-string">"hello"</span> | git hash-object --stdin</code></pre>
 <div class="out">ce013625030ba8dba906f756967f9e9ca394464a</div>
 <p>Run that on any machine on earth and you get the same 40 characters, because the hash is a pure function of the content. Two consequences follow, and both matter:</p>
@@ -320,7 +320,7 @@ ${slide('git-01', 7, 'Lịch sử là chuỗi con trỏ cha')}
 
 <h3>Naming commits without typing 40 characters</h3>
 ${slide('git-01', 8, 'Các cách gọi tên commit')}
-<pre><code>git show 1a2b3c4          <span class="tok-comment"># a unique prefix is enough — usually 7 characters</span>
+<pre><code class="language-bash">git show 1a2b3c4          <span class="tok-comment"># a unique prefix is enough — usually 7 characters</span>
 git show HEAD             <span class="tok-comment"># where you are now</span>
 git show HEAD~1           <span class="tok-comment"># one commit back (parent)</span>
 git show HEAD~3           <span class="tok-comment"># three commits back</span>
@@ -379,7 +379,7 @@ ${slide('git-01', 5, 'Một commit là một tấm ảnh trọn dự án')}
   <div class="lz-layer"><span class="lz-k">message</span><span class="lz-v">Lời giải thích VÌ SAO của bạn. Phần duy nhất Git không sinh hộ được — và là phần chính bạn trong tương lai sẽ đọc.</span></div>
 </div>
 <p>Bạn xem được tất cả bằng các lệnh cấp thấp. Đây là output thật từ kho nháp:</p>
-<pre><code>git cat-file -p HEAD</code></pre>
+<pre><code class="language-bash">git cat-file -p HEAD</code></pre>
 <div class="out">tree 4b825dc642cb6eb9a060e54bf8d69288fbee4904
 parent 8f3c1a2d9e0b4f6a1c3d5e7f9a0b2c4d6e8f0a12
 author Nguyen Van An &lt;an@example.com&gt; 1755820800 +0700
@@ -395,7 +395,7 @@ commit number 10</div>
 <h3>Mã băm đến từ đâu</h3>
 ${slide('git-01', 6, 'Đổi một byte là đổi cả tên')}
 <p>Mọi đối tượng trong Git — nội dung file, danh sách thư mục, commit — đều được lưu dưới mã băm SHA-1 của chính các byte của nó. Bất cứ thứ gì bạn gọi tên được trong Git, bạn gọi tên nó bằng nội dung:</p>
-<pre><code><span class="tok-comment"># Mã băm của một mẩu nội dung, tính đúng cách Git tính:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Mã băm của một mẩu nội dung, tính đúng cách Git tính:</span>
 <span class="tok-keyword">echo</span> <span class="tok-string">"hello"</span> | git hash-object --stdin</code></pre>
 <div class="out">ce013625030ba8dba906f756967f9e9ca394464a</div>
 <p>Chạy nó trên bất kỳ máy nào trên trái đất bạn cũng nhận đúng 40 ký tự đó, vì mã băm là một hàm thuần tuý của nội dung. Hai hệ quả theo sau, và cả hai đều quan trọng:</p>
@@ -417,7 +417,7 @@ ${slide('git-01', 7, 'Lịch sử là chuỗi con trỏ cha')}
 
 <h3>Gọi tên commit mà không phải gõ 40 ký tự</h3>
 ${slide('git-01', 8, 'Các cách gọi tên commit')}
-<pre><code>git show 1a2b3c4          <span class="tok-comment"># một tiền tố duy nhất là đủ — thường 7 ký tự</span>
+<pre><code class="language-bash">git show 1a2b3c4          <span class="tok-comment"># một tiền tố duy nhất là đủ — thường 7 ký tự</span>
 git show HEAD             <span class="tok-comment"># chỗ bạn đang đứng</span>
 git show HEAD~1           <span class="tok-comment"># lùi một commit (cha)</span>
 git show HEAD~3           <span class="tok-comment"># lùi ba commit</span>
@@ -475,7 +475,7 @@ git show HEAD^2           <span class="tok-comment"># cha THỨ HAI — chỉ c�
 <span class="eyebrow">Chapter 1 · Lesson 1.3</span>
 <h2>The loop you will run ten thousand times</h2>
 <p class="lead">Four commands make up ninety per cent of daily Git. What separates a tidy repository from a messy one is not knowing more commands — it is using these four <em>deliberately</em>.</p>
-<pre><code>git status            <span class="tok-comment"># where am I, what changed</span>
+<pre><code class="language-bash">git status            <span class="tok-comment"># where am I, what changed</span>
 git diff              <span class="tok-comment"># what exactly changed, in the working directory</span>
 git add &lt;paths&gt;       <span class="tok-comment"># choose what belongs in the next commit</span>
 git commit -m <span class="tok-string">"…"</span>     <span class="tok-comment"># seal it, with an explanation</span></code></pre>
@@ -492,7 +492,7 @@ ${slide('git-01', 9, 'Vòng lặp hằng ngày và ba kiểu git diff')}
 
 <h3>Reading a diff</h3>
 ${slide('git-01', 10, 'Đọc một diff trong 10 giây')}
-<pre><code>git diff</code></pre>
+<pre><code class="language-bash">git diff</code></pre>
 <div class="out">diff --git a/src/auth.js b/src/auth.js
 index 7c4a1b2..9e8f3d1 100644
 --- a/src/auth.js
@@ -511,14 +511,14 @@ index 7c4a1b2..9e8f3d1 100644
   <div class="kv"><span class="k">Unprefixed lines</span><span class="v">Context, shown so you can read the change in place. Three lines each side by default; <code>-U10</code> gives you ten.</span></div>
 </div>
 <p>Two flags worth knowing on the day a diff is unreadable:</p>
-<pre><code>git diff --word-diff       <span class="tok-comment"># highlight changed WORDS — for prose and long lines</span>
+<pre><code class="language-bash">git diff --word-diff       <span class="tok-comment"># highlight changed WORDS — for prose and long lines</span>
 git diff --stat            <span class="tok-comment"># just the summary: which files, how many lines</span></code></pre>
 <div class="out"> src/auth.js      | 2 +-
  src/routes.js    | 14 ++++++++++++--
  2 files changed, 14 insertions(+), 2 deletions(-)</div>
 
 <h3>Choosing what to stage</h3>
-<pre><code>git add src/auth.js          <span class="tok-comment"># one file</span>
+<pre><code class="language-bash">git add src/auth.js          <span class="tok-comment"># one file</span>
 git add src/                 <span class="tok-comment"># a whole directory</span>
 git add .                    <span class="tok-comment"># everything below the current directory</span>
 git add -u                   <span class="tok-comment"># only files ALREADY tracked (no new files)</span>
@@ -528,7 +528,7 @@ git add -A                   <span class="tok-comment"># everything, including d
 <h3>git add -p: the feature that justifies the staging area</h3>
 ${slide('git-01', 11, 'add -p: một file, hai commit gọn')}
 <p>When one file contains two unrelated changes, stage them separately. <code>-p</code> (patch) walks you through hunk by hunk:</p>
-<pre><code>git add -p src/auth.js</code></pre>
+<pre><code class="language-bash">git add -p src/auth.js</code></pre>
 <div class="out">@@ -12,7 +12,7 @@ function login(email, password) {
 -  if (user.password === password) {
 +  if (await bcrypt.compare(password, user.passwordHash)) {
@@ -542,7 +542,7 @@ ${slide('git-01', 11, 'add -p: một file, hai commit gọn')}
 <p>The result is a commit containing only the security fix, and a second containing only the rename — reviewable separately, revertable separately.</p>
 
 <h3>Committing</h3>
-<pre><code>git commit -m <span class="tok-string">"fix: hash passwords with bcrypt instead of comparing plaintext"</span>
+<pre><code class="language-bash">git commit -m <span class="tok-string">"fix: hash passwords with bcrypt instead of comparing plaintext"</span>
 git commit                       <span class="tok-comment"># opens your editor for a full message (see 1.4)</span>
 git commit -a -m <span class="tok-string">"…"</span>            <span class="tok-comment"># stage all tracked modifications, then commit</span>
 git commit --amend               <span class="tok-comment"># replace the LAST commit (Chapter 8)</span></code></pre>
@@ -551,7 +551,7 @@ git commit --amend               <span class="tok-comment"># replace the LAST co
 <p>Read that confirmation line: branch, new short hash, subject, and the file/line counts. If the counts surprise you, you staged something you did not mean to — <code>git reset --soft HEAD~1</code> puts it all back in the index, unharmed, so you can redo it.</p>
 
 <h3>Unstaging without losing work</h3>
-<pre><code>git restore --staged src/auth.js   <span class="tok-comment"># index ← HEAD. Your edits stay in the working dir.</span>
+<pre><code class="language-bash">git restore --staged src/auth.js   <span class="tok-comment"># index ← HEAD. Your edits stay in the working dir.</span>
 git restore src/auth.js            <span class="tok-comment"># working dir ← index. DESTROYS your unstaged edits.</span></code></pre>
 <div class="callout danger">Those two lines differ by one flag and one is destructive. <code>git restore --staged</code> only rewinds the index — completely safe. <code>git restore</code> without the flag overwrites the file on disk, and uncommitted content is the one thing Git genuinely cannot bring back. Read the flag twice.</div>
 <p>Modern Git splits these deliberately: <code>git switch</code> for branches, <code>git restore</code> for file content. The old <code>git checkout</code> did both jobs, which is exactly why it confused everybody for fifteen years.</p>
@@ -587,7 +587,7 @@ git restore src/auth.js            <span class="tok-comment"># working dir ← i
 <span class="eyebrow">Chương 1 · Bài 1.3</span>
 <h2>Vòng lặp bạn sẽ chạy mười nghìn lần</h2>
 <p class="lead">Bốn lệnh chiếm chín mươi phần trăm việc dùng Git hằng ngày. Thứ phân biệt một kho mã gọn gàng với một kho bừa bộn không phải là biết nhiều lệnh hơn — mà là dùng bốn lệnh này một cách <em>có chủ ý</em>.</p>
-<pre><code>git status            <span class="tok-comment"># tôi đang ở đâu, cái gì đã đổi</span>
+<pre><code class="language-bash">git status            <span class="tok-comment"># tôi đang ở đâu, cái gì đã đổi</span>
 git diff              <span class="tok-comment"># chính xác cái gì đã đổi, ở thư mục làm việc</span>
 git add &lt;đường dẫn&gt;   <span class="tok-comment"># chọn thứ thuộc về commit kế tiếp</span>
 git commit -m <span class="tok-string">"…"</span>     <span class="tok-comment"># niêm phong lại, kèm lời giải thích</span></code></pre>
@@ -604,7 +604,7 @@ ${slide('git-01', 9, 'Vòng lặp hằng ngày và ba kiểu git diff')}
 
 <h3>Đọc một diff</h3>
 ${slide('git-01', 10, 'Đọc một diff trong 10 giây')}
-<pre><code>git diff</code></pre>
+<pre><code class="language-bash">git diff</code></pre>
 <div class="out">diff --git a/src/auth.js b/src/auth.js
 index 7c4a1b2..9e8f3d1 100644
 --- a/src/auth.js
@@ -623,14 +623,14 @@ index 7c4a1b2..9e8f3d1 100644
   <div class="kv"><span class="k">Dòng không có tiền tố</span><span class="v">Ngữ cảnh, hiện ra để bạn đọc thay đổi tại chỗ. Mặc định ba dòng mỗi phía; <code>-U10</code> cho bạn mười.</span></div>
 </div>
 <p>Hai cờ đáng biết cho ngày mà một diff không đọc nổi:</p>
-<pre><code>git diff --word-diff       <span class="tok-comment"># tô đậm TỪ đã đổi — hợp với văn xuôi và dòng dài</span>
+<pre><code class="language-bash">git diff --word-diff       <span class="tok-comment"># tô đậm TỪ đã đổi — hợp với văn xuôi và dòng dài</span>
 git diff --stat            <span class="tok-comment"># chỉ phần tóm tắt: file nào, bao nhiêu dòng</span></code></pre>
 <div class="out"> src/auth.js      | 2 +-
  src/routes.js    | 14 ++++++++++++--
  2 files changed, 14 insertions(+), 2 deletions(-)</div>
 
 <h3>Chọn thứ đưa vào staging</h3>
-<pre><code>git add src/auth.js          <span class="tok-comment"># một file</span>
+<pre><code class="language-bash">git add src/auth.js          <span class="tok-comment"># một file</span>
 git add src/                 <span class="tok-comment"># cả một thư mục</span>
 git add .                    <span class="tok-comment"># mọi thứ dưới thư mục hiện tại</span>
 git add -u                   <span class="tok-comment"># chỉ những file ĐÃ được theo dõi (không có file mới)</span>
@@ -640,7 +640,7 @@ git add -A                   <span class="tok-comment"># mọi thứ, kể cả 
 <h3>git add -p: tính năng biện minh cho sự tồn tại của vùng staging</h3>
 ${slide('git-01', 11, 'add -p: một file, hai commit gọn')}
 <p>Khi một file chứa hai thay đổi không liên quan, hãy đưa chúng vào staging riêng. <code>-p</code> (patch) dắt bạn đi qua từng đoạn:</p>
-<pre><code>git add -p src/auth.js</code></pre>
+<pre><code class="language-bash">git add -p src/auth.js</code></pre>
 <div class="out">@@ -12,7 +12,7 @@ function login(email, password) {
 -  if (user.password === password) {
 +  if (await bcrypt.compare(password, user.passwordHash)) {
@@ -654,7 +654,7 @@ ${slide('git-01', 11, 'add -p: một file, hai commit gọn')}
 <p>Kết quả là một commit chỉ chứa bản vá bảo mật, và một commit thứ hai chỉ chứa việc đổi tên — review riêng được, hoàn tác riêng được.</p>
 
 <h3>Commit</h3>
-<pre><code>git commit -m <span class="tok-string">"fix: băm mật khẩu bằng bcrypt thay vì so sánh chữ thô"</span>
+<pre><code class="language-bash">git commit -m <span class="tok-string">"fix: băm mật khẩu bằng bcrypt thay vì so sánh chữ thô"</span>
 git commit                       <span class="tok-comment"># mở trình soạn thảo cho lời nhắn đầy đủ (xem 1.4)</span>
 git commit -a -m <span class="tok-string">"…"</span>            <span class="tok-comment"># staging mọi sửa đổi của file đã theo dõi, rồi commit</span>
 git commit --amend               <span class="tok-comment"># thay thế commit CUỐI CÙNG (Chương 8)</span></code></pre>
@@ -663,7 +663,7 @@ git commit --amend               <span class="tok-comment"># thay thế commit C
 <p>Hãy đọc dòng xác nhận đó: nhánh, mã băm ngắn mới, tiêu đề, và số file/số dòng. Nếu con số làm bạn ngạc nhiên thì bạn đã staging thứ không định — <code>git reset --soft HEAD~1</code> trả tất cả về index, nguyên vẹn, để bạn làm lại.</p>
 
 <h3>Gỡ khỏi staging mà không mất công</h3>
-<pre><code>git restore --staged src/auth.js   <span class="tok-comment"># index ← HEAD. Sửa đổi của bạn vẫn ở thư mục làm việc.</span>
+<pre><code class="language-bash">git restore --staged src/auth.js   <span class="tok-comment"># index ← HEAD. Sửa đổi của bạn vẫn ở thư mục làm việc.</span>
 git restore src/auth.js            <span class="tok-comment"># thư mục làm việc ← index. XOÁ sửa đổi chưa staging.</span></code></pre>
 <div class="callout danger">Hai dòng đó khác nhau một cái cờ và một trong hai có tính phá huỷ. <code>git restore --staged</code> chỉ tua lại index — hoàn toàn an toàn. <code>git restore</code> không có cờ thì ghi đè file trên đĩa, mà nội dung chưa commit là thứ duy nhất Git thật sự không mang về được. Hãy đọc cái cờ hai lần.</div>
 <p>Git đời mới tách hai việc này có chủ ý: <code>git switch</code> cho nhánh, <code>git restore</code> cho nội dung file. <code>git checkout</code> cũ làm cả hai việc, và đó chính là lý do nó làm mọi người rối suốt mười lăm năm.</p>
@@ -771,7 +771,7 @@ perf(feed): batch the author lookup into one query</code></pre>
 
 <h3>Writing longer messages comfortably</h3>
 <p>Running plain <code>git commit</code> opens your editor with a template. Give it a better one — a checklist you see every time:</p>
-<pre><code><span class="tok-comment"># ~/.gitmessage.txt</span>
+<pre><code class="language-bash"><span class="tok-comment"># ~/.gitmessage.txt</span>
 <span class="tok-comment"># &lt;type&gt;(&lt;scope&gt;): &lt;subject &lt;= 50 chars, imperative&gt;</span>
 <span class="tok-comment">#</span>
 <span class="tok-comment"># Why is this change needed? What was the behaviour before?</span>
@@ -783,7 +783,7 @@ git config --global commit.template ~/.gitmessage.txt</code></pre>
 <p>Lines starting with <code>#</code> are stripped, so the template is pure prompting and never ends up in history.</p>
 
 <h3>Reading your own history back</h3>
-<pre><code>git log --oneline -10</code></pre>
+<pre><code class="language-bash">git log --oneline -10</code></pre>
 <div class="out">3f8a1c9 fix: reject expired refresh tokens on /auth/refresh
 9e2d4b7 feat(auth): add refresh token rotation
 1c5f8a3 test(auth): cover the expired-token path
@@ -887,7 +887,7 @@ perf(feed): gộp việc tra tác giả thành một truy vấn</code></pre>
 
 <h3>Viết lời nhắn dài một cách dễ chịu</h3>
 <p>Chạy <code>git commit</code> trơn sẽ mở trình soạn thảo kèm một mẫu. Hãy cho nó một mẫu tốt hơn — một danh sách kiểm mà bạn thấy mỗi lần:</p>
-<pre><code><span class="tok-comment"># ~/.gitmessage.txt</span>
+<pre><code class="language-bash"><span class="tok-comment"># ~/.gitmessage.txt</span>
 <span class="tok-comment"># &lt;loại&gt;(&lt;phạm vi&gt;): &lt;tiêu đề &lt;= 50 ký tự, thể mệnh lệnh&gt;</span>
 <span class="tok-comment">#</span>
 <span class="tok-comment"># Vì sao cần thay đổi này? Trước đó hành vi ra sao?</span>
@@ -899,7 +899,7 @@ git config --global commit.template ~/.gitmessage.txt</code></pre>
 <p>Dòng bắt đầu bằng <code>#</code> bị lược bỏ, nên cái mẫu thuần tuý là lời nhắc và không bao giờ lọt vào lịch sử.</p>
 
 <h3>Đọc lại lịch sử của chính mình</h3>
-<pre><code>git log --oneline -10</code></pre>
+<pre><code class="language-bash">git log --oneline -10</code></pre>
 <div class="out">3f8a1c9 fix: tu choi refresh token da het han o /auth/refresh
 9e2d4b7 feat(auth): them xoay vong refresh token
 1c5f8a3 test(auth): phu duong token het han
@@ -980,7 +980,7 @@ docs/**/draft.md       <span class="tok-comment"># ** = any number of directorie
 
 <h3>The rule that trips everyone: ignore only affects untracked files</h3>
 <p><code>.gitignore</code> is a filter on files Git is <em>not yet tracking</em>. Once a file has been committed, Git keeps tracking it forever, and adding it to <code>.gitignore</code> changes nothing:</p>
-<pre><code><span class="tok-comment"># The mistake, played out:</span>
+<pre><code class="language-bash"><span class="tok-comment"># The mistake, played out:</span>
 git add .env &amp;&amp; git commit -m <span class="tok-string">"wip"</span>       <span class="tok-comment"># oops</span>
 <span class="tok-keyword">echo</span> <span class="tok-string">".env"</span> &gt;&gt; .gitignore                     <span class="tok-comment"># does NOT help</span>
 <span class="tok-keyword">echo</span> <span class="tok-string">"SECRET=xyz"</span> &gt;&gt; .env
@@ -988,7 +988,7 @@ git status</code></pre>
 <div class="out">Changes not staged for commit:
         modified:   .env</div>
 <p>Still tracked, still reported, still going into the next commit. The fix is to stop tracking it — while keeping the file on your disk:</p>
-<pre><code>git rm --cached .env          <span class="tok-comment"># untrack, KEEP the local file</span>
+<pre><code class="language-bash">git rm --cached .env          <span class="tok-comment"># untrack, KEEP the local file</span>
 git rm --cached -r node_modules/   <span class="tok-comment"># same, for a directory</span>
 git commit -m <span class="tok-string">"chore: stop tracking .env, it is now ignored"</span></code></pre>
 <div class="callout danger"><code>git rm --cached</code> untracks. <code>git rm</code> without the flag <strong>deletes the file from your disk as well</strong>. For a <code>.env</code> holding the only copy of your local database password, that difference is your evening.</div>
@@ -1000,16 +1000,16 @@ git commit -m <span class="tok-string">"chore: stop tracking .env, it is now ign
   <div class="kv"><span class="k">.git/info/exclude</span><span class="v">Your personal rules for <em>this</em> repository, not shared. Same syntax, never committed. Good for a scratch folder only you have.</span></div>
   <div class="kv"><span class="k">core.excludesFile (global)</span><span class="v">Rules for <em>you on every project</em>: <code>.DS_Store</code>, <code>.idea/</code>, <code>*.swp</code>. Your editor's droppings are your problem, not the project's.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Set up the global one once — and stop asking teams to ignore your editor.</span>
+<pre><code class="language-bash"><span class="tok-comment"># Set up the global one once — and stop asking teams to ignore your editor.</span>
 git config --global core.excludesFile ~/.gitignore_global
 printf <span class="tok-string">'.DS_Store\\n.idea/\\n*.swp\\n.vscode/\\n'</span> &gt; ~/.gitignore_global</code></pre>
 
 <h3>Debugging "why is this file (not) ignored?"</h3>
 <p>With several files of patterns, work it out instead of guessing:</p>
-<pre><code>git check-ignore -v dist/app.js</code></pre>
+<pre><code class="language-bash">git check-ignore -v dist/app.js</code></pre>
 <div class="out">.gitignore:7:dist/    dist/app.js</div>
 <p>File, line number, and the exact pattern that matched. No output at all means the file is <em>not</em> ignored. To see everything Git is currently ignoring:</p>
-<pre><code>git status --ignored --short</code></pre>
+<pre><code class="language-bash">git status --ignored --short</code></pre>
 
 <h3>A realistic starting point for a Node + Next.js project</h3>
 <pre><code><span class="tok-comment"># dependencies</span>
@@ -1114,7 +1114,7 @@ docs/**/draft.md       <span class="tok-comment"># ** = bao nhiêu cấp thư m�
 
 <h3>Luật làm ai cũng vấp: ignore chỉ tác dụng với file CHƯA theo dõi</h3>
 <p><code>.gitignore</code> là bộ lọc trên những file Git <em>chưa theo dõi</em>. Khi một file đã được commit, Git theo dõi nó mãi mãi, và thêm nó vào <code>.gitignore</code> chẳng thay đổi gì:</p>
-<pre><code><span class="tok-comment"># Sai lầm, diễn ra từng bước:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Sai lầm, diễn ra từng bước:</span>
 git add .env &amp;&amp; git commit -m <span class="tok-string">"wip"</span>       <span class="tok-comment"># lỡ tay</span>
 <span class="tok-keyword">echo</span> <span class="tok-string">".env"</span> &gt;&gt; .gitignore                     <span class="tok-comment"># KHÔNG giúp được gì</span>
 <span class="tok-keyword">echo</span> <span class="tok-string">"SECRET=xyz"</span> &gt;&gt; .env
@@ -1122,7 +1122,7 @@ git status</code></pre>
 <div class="out">Changes not staged for commit:
         modified:   .env</div>
 <p>Vẫn được theo dõi, vẫn bị báo cáo, vẫn sẽ vào commit kế tiếp. Cách sửa là ngừng theo dõi nó — trong khi vẫn giữ file trên đĩa:</p>
-<pre><code>git rm --cached .env          <span class="tok-comment"># bỏ theo dõi, GIỮ file cục bộ</span>
+<pre><code class="language-bash">git rm --cached .env          <span class="tok-comment"># bỏ theo dõi, GIỮ file cục bộ</span>
 git rm --cached -r node_modules/   <span class="tok-comment"># tương tự, cho một thư mục</span>
 git commit -m <span class="tok-string">"chore: ngừng theo dõi .env, nay đã ignore"</span></code></pre>
 <div class="callout danger"><code>git rm --cached</code> bỏ theo dõi. <code>git rm</code> không có cờ thì <strong>xoá luôn file khỏi đĩa của bạn</strong>. Với một <code>.env</code> giữ bản sao duy nhất mật khẩu database cục bộ, khác biệt đó là cả buổi tối của bạn.</div>
@@ -1134,16 +1134,16 @@ git commit -m <span class="tok-string">"chore: ngừng theo dõi .env, nay đã 
   <div class="kv"><span class="k">.git/info/exclude</span><span class="v">Luật riêng của bạn cho <em>kho này</em>, không chia sẻ. Cùng cú pháp, không bao giờ được commit. Hợp cho một thư mục nháp chỉ mình bạn có.</span></div>
   <div class="kv"><span class="k">core.excludesFile (toàn cục)</span><span class="v">Luật cho <em>bạn ở mọi dự án</em>: <code>.DS_Store</code>, <code>.idea/</code>, <code>*.swp</code>. Rác của trình soạn thảo là vấn đề của bạn, không phải của dự án.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Đặt cái toàn cục một lần — và thôi bắt cả nhóm phải ignore trình soạn thảo của bạn.</span>
+<pre><code class="language-bash"><span class="tok-comment"># Đặt cái toàn cục một lần — và thôi bắt cả nhóm phải ignore trình soạn thảo của bạn.</span>
 git config --global core.excludesFile ~/.gitignore_global
 printf <span class="tok-string">'.DS_Store\\n.idea/\\n*.swp\\n.vscode/\\n'</span> &gt; ~/.gitignore_global</code></pre>
 
 <h3>Gỡ rối "vì sao file này (không) bị ignore?"</h3>
 <p>Khi đã có vài file mẫu, hãy tra ra thay vì đoán:</p>
-<pre><code>git check-ignore -v dist/app.js</code></pre>
+<pre><code class="language-bash">git check-ignore -v dist/app.js</code></pre>
 <div class="out">.gitignore:7:dist/    dist/app.js</div>
 <p>File, số dòng, và chính xác mẫu nào đã khớp. Không có output nào nghĩa là file <em>không</em> bị ignore. Muốn xem mọi thứ Git đang bỏ qua:</p>
-<pre><code>git status --ignored --short</code></pre>
+<pre><code class="language-bash">git status --ignored --short</code></pre>
 
 <h3>Một điểm khởi đầu thực tế cho dự án Node + Next.js</h3>
 <pre><code><span class="tok-comment"># thư viện phụ thuộc</span>

@@ -113,7 +113,7 @@ const c2 = doc('mlo401-2-1-data-and-features', '2.1 — Data & feature engineeri
 <h3>Feature store</h3>
 <p>A <strong>feature store</strong> is a central place to compute, store and serve features. It solves two hard problems: <strong>reuse</strong> (teams share features instead of rebuilding them) and <strong>training-serving skew</strong> (the same code computes features for training and for live inference, so they cannot drift apart).</p>
 <h3>Data versioning with DVC</h3>
-<pre><code>dvc init
+<pre><code class="language-bash">dvc init
 dvc add data/train.csv        # track a big file, store a hash
 git add data/train.csv.dvc .gitignore
 git commit -m "data v1"
@@ -138,7 +138,7 @@ def validate(df: pd.DataFrame) -&gt; None:
 <h3>Feature store</h3>
 <p><strong>Feature store</strong> là nơi trung tâm để tính, lưu và phục vụ feature. Nó giải hai bài toán khó: <strong>tái dùng</strong> (các nhóm chia sẻ feature thay vì dựng lại) và <strong>training-serving skew</strong> (cùng một mã tính feature cho huấn luyện và cho suy luận trực tiếp, nên chúng không thể lệch nhau).</p>
 <h3>Versioning dữ liệu bằng DVC</h3>
-<pre><code>dvc init
+<pre><code class="language-bash">dvc init
 dvc add data/train.csv        # theo dõi file lớn, lưu mã băm
 git add data/train.csv.dvc .gitignore
 git commit -m "data v1"
@@ -172,7 +172,7 @@ const c3 = doc('mlo401-3-1-training-experiments', '3.1 — Training & experiment
 <h3>Why track experiments</h3>
 <p>You will run hundreds of training jobs with different data, features and hyperparameters. Without tracking, you cannot answer "which run was best, and how do I reproduce it?". An <strong>experiment tracker</strong> like <strong>MLflow</strong> records every run: parameters, metrics, and output artifacts (the model file).</p>
 <h3>Tracking a run with MLflow</h3>
-<pre><code>import mlflow
+<pre><code class="language-python">import mlflow
 from sklearn.ensemble import RandomForestClassifier
 
 mlflow.set_experiment("churn-model")
@@ -200,7 +200,7 @@ with mlflow.start_run():
 <h3>Vì sao phải theo dõi thí nghiệm</h3>
 <p>Bạn sẽ chạy hàng trăm lần huấn luyện với dữ liệu, feature và siêu tham số khác nhau. Không theo dõi thì bạn không trả lời được "lần chạy nào tốt nhất, và tái lập nó thế nào?". Một <strong>trình theo dõi thí nghiệm</strong> như <strong>MLflow</strong> ghi lại mọi lần chạy: tham số, chỉ số, và artifact đầu ra (file mô hình).</p>
 <h3>Theo dõi một lần chạy với MLflow</h3>
-<pre><code>import mlflow
+<pre><code class="language-python">import mlflow
 from sklearn.ensemble import RandomForestClassifier
 
 mlflow.set_experiment("churn-model")
@@ -238,7 +238,7 @@ const c4 = doc('mlo401-4-1-packaging-versioning', '4.1 — Model packaging & ver
 <h2>Model packaging &amp; versioning</h2>
 <h3>The model registry</h3>
 <p>A <strong>model registry</strong> is a versioned catalog of trained models. Each model has versions, a <strong>stage</strong> (Staging → Production → Archived), and <strong>lineage</strong> (which run, data and code produced it). It is the single source of truth for "what is live right now?".</p>
-<pre><code>import mlflow
+<pre><code class="language-python">import mlflow
 
 # register the best run's model
 mlflow.register_model("runs:/&lt;run_id&gt;/model", "churn-model")
@@ -268,7 +268,7 @@ CMD ["python", "serve.py"]
 <h2>Đóng gói &amp; versioning mô hình</h2>
 <h3>Model registry</h3>
 <p><strong>Model registry</strong> là danh mục có phiên bản của các mô hình đã huấn luyện. Mỗi mô hình có nhiều version, một <strong>giai đoạn</strong> (Staging → Production → Archived), và <strong>lineage</strong> (lần chạy, dữ liệu và mã nào sinh ra nó). Đây là nguồn sự thật duy nhất cho câu "bản nào đang chạy?".</p>
-<pre><code>import mlflow
+<pre><code class="language-python">import mlflow
 
 # đăng ký mô hình của lần chạy tốt nhất
 mlflow.register_model("runs:/&lt;run_id&gt;/model", "churn-model")
@@ -314,7 +314,7 @@ const c5 = doc('mlo401-5-1-deployment', '5.1 — Model deployment & serving|||5.
 <li><strong>Streaming</strong> — score events as they arrive from a stream (Kafka), for continuous low-latency scoring.</li>
 </ul>
 <h3>A REST prediction API</h3>
-<pre><code>from fastapi import FastAPI
+<pre><code class="language-python">from fastapi import FastAPI
 from pydantic import BaseModel
 import joblib
 
@@ -348,7 +348,7 @@ def predict(f: Features):
 <li><strong>Streaming</strong> — chấm sự kiện ngay khi tới từ luồng (Kafka), để chấm liên tục độ trễ thấp.</li>
 </ul>
 <h3>Một REST API dự đoán</h3>
-<pre><code>from fastapi import FastAPI
+<pre><code class="language-python">from fastapi import FastAPI
 from pydantic import BaseModel
 import joblib
 
@@ -472,7 +472,7 @@ const c7 = doc('mlo401-7-1-monitoring', '7.1 — Monitoring & operations|||7.1 �
 <li><strong>Concept drift</strong> — the relationship between input and output changes (what predicted fraud last year no longer does). Accuracy decays even if inputs look stable.</li>
 </ul>
 <h3>Detecting drift</h3>
-<pre><code>from scipy.stats import ks_2samp
+<pre><code class="language-python">from scipy.stats import ks_2samp
 
 # compare a live feature vs the training reference
 stat, p_value = ks_2samp(train_feature, live_feature)
@@ -496,7 +496,7 @@ if p_value &lt; 0.05:
 <li><strong>Concept drift</strong> — quan hệ giữa đầu vào và đầu ra đổi (thứ từng báo hiệu gian lận năm ngoái nay không còn). Độ chính xác tụt dù đầu vào trông ổn định.</li>
 </ul>
 <h3>Phát hiện drift</h3>
-<pre><code>from scipy.stats import ks_2samp
+<pre><code class="language-python">from scipy.stats import ks_2samp
 
 # so feature trực tiếp với dữ liệu tham chiếu lúc huấn luyện
 stat, p_value = ks_2samp(train_feature, live_feature)

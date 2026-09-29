@@ -29,7 +29,7 @@ export default {
 <p class="lead">Chapters 8–11 were about reading data and routing. This chapter is about <em>writing</em> — creating, updating, deleting. The classic way is: build an API endpoint, then <code>fetch</code> it from the client with the right method, headers and body. Server Actions collapse all of that into a single server function you call directly.</p>
 
 <h3>The 'use server' directive</h3>
-<pre><code><span class="tok-comment">// A Server Action — note the directive INSIDE the function</span>
+<pre><code class="language-javascript"><span class="tok-comment">// A Server Action — note the directive INSIDE the function</span>
 async function createPost(formData) {
   'use server';
   const title = formData.get('title');
@@ -84,7 +84,7 @@ async function createPost(formData) {
 <p class="lead">Chương 8–11 nói về đọc dữ liệu và định tuyến. Chương này nói về <em>ghi</em> — tạo, cập nhật, xoá. Cách kinh điển là: dựng một endpoint API, rồi <code>fetch</code> tới nó từ client với đúng method, header và body. Server Action gộp tất cả thành một hàm server bạn gọi thẳng.</p>
 
 <h3>Chỉ thị 'use server'</h3>
-<pre><code><span class="tok-comment">// Một Server Action — để ý chỉ thị BÊN TRONG hàm</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Một Server Action — để ý chỉ thị BÊN TRONG hàm</span>
 async function createPost(formData) {
   'use server';
   const title = formData.get('title');
@@ -148,7 +148,7 @@ async function createPost(formData) {
 <h2>Wire a form straight to the server</h2>
 <p class="lead">The cleanest way to use a Server Action is through a form. Pass the action to the form's <code>action</code> prop; on submit, the browser packages the fields into a <code>FormData</code> and the action receives it on the server. No <code>onSubmit</code>, no state, no fetch.</p>
 
-<pre><code><span class="tok-comment">// app/posts/new/page.tsx — a Server Component</span>
+<pre><code class="language-typescript"><span class="tok-comment">// app/posts/new/page.tsx — a Server Component</span>
 export default function NewPost() {
   async function createPost(formData) {
     'use server';
@@ -204,7 +204,7 @@ export default function NewPost() {
 <h2>Nối một form thẳng tới server</h2>
 <p class="lead">Cách gọn nhất để dùng một Server Action là qua một form. Truyền action cho prop <code>action</code> của form; khi submit, trình duyệt gói các trường thành một <code>FormData</code> và action nhận nó trên server. Không <code>onSubmit</code>, không state, không fetch.</p>
 
-<pre><code><span class="tok-comment">// app/posts/new/page.tsx — một Server Component</span>
+<pre><code class="language-typescript"><span class="tok-comment">// app/posts/new/page.tsx — một Server Component</span>
 export default function NewPost() {
   async function createPost(formData) {
     'use server';
@@ -270,7 +270,7 @@ export default function NewPost() {
 <h2>A write is only half done until the cache knows</h2>
 <p class="lead">You create a post in a Server Action, redirect to the list — and the new post is missing. Nothing failed: the list was cached (Chapter 10), and your write did not tell the cache to let go. The mutation and the revalidation are two halves of one cycle.</p>
 
-<pre><code>import { revalidatePath, revalidateTag } from 'next/cache';
+<pre><code class="language-javascript">import { revalidatePath, revalidateTag } from 'next/cache';
 
 async function createPost(formData) {
   'use server';
@@ -325,7 +325,7 @@ async function createPost(formData) {
 <h2>Một cú ghi chỉ xong một nửa cho tới khi cache biết</h2>
 <p class="lead">Bạn tạo một bài trong một Server Action, redirect sang danh sách — và bài mới không thấy đâu. Không có gì hỏng: danh sách đã được cache (Chương 10), và cú ghi của bạn không bảo cache buông ra. Mutation và revalidate là hai nửa của một vòng.</p>
 
-<pre><code>import { revalidatePath, revalidateTag } from 'next/cache';
+<pre><code class="language-javascript">import { revalidatePath, revalidateTag } from 'next/cache';
 
 async function createPost(formData) {
   'use server';
@@ -395,7 +395,7 @@ async function createPost(formData) {
 </div>
 
 <h3>useActionState — carry the action's result and a pending flag</h3>
-<pre><code>'use client';
+<pre><code class="language-typescript">'use client';
 import { useActionState } from 'react';
 
 function SignupForm() {
@@ -411,7 +411,7 @@ function SignupForm() {
 <p>The action receives the previous state as its first argument and returns the next state — so it can <code>return { error: 'Email is required' }</code> instead of throwing, and the form re-renders with that message. The third value, <code>pending</code>, is true while the action runs.</p>
 
 <h3>useFormStatus — for a child button</h3>
-<pre><code>'use client';
+<pre><code class="language-typescript">'use client';
 import { useFormStatus } from 'react-dom';
 
 function SubmitButton() {
@@ -463,7 +463,7 @@ function SubmitButton() {
 </div>
 
 <h3>useActionState — mang kết quả action và một cờ pending</h3>
-<pre><code>'use client';
+<pre><code class="language-typescript">'use client';
 import { useActionState } from 'react';
 
 function SignupForm() {
@@ -479,7 +479,7 @@ function SignupForm() {
 <p>Action nhận state trước làm tham số đầu và trả về state kế — nên nó có thể <code>return { error: 'Email là bắt buộc' }</code> thay vì ném lỗi, và form render lại với thông báo đó. Giá trị thứ ba, <code>pending</code>, là true trong lúc action chạy.</p>
 
 <h3>useFormStatus — cho một nút con</h3>
-<pre><code>'use client';
+<pre><code class="language-typescript">'use client';
 import { useFormStatus } from 'react-dom';
 
 function SubmitButton() {
@@ -546,7 +546,7 @@ function SubmitButton() {
   <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Validate & sanitise input.</b> Parse the arguments/FormData against a schema (e.g. Zod). Do not trust types, sizes, or shapes coming from the client.</div></div>
 </div>
 
-<pre><code>async function deletePost(postId) {
+<pre><code class="language-javascript">async function deletePost(postId) {
   'use server';
   const user = await getCurrentUser();
   if (!user) throw new Error('Not authenticated');            <span class="tok-comment">// authn</span>
@@ -604,7 +604,7 @@ function SubmitButton() {
   <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Validate &amp; làm sạch input.</b> Phân tích tham số/FormData theo một schema (ví dụ Zod). Đừng tin kiểu, kích thước, hay hình dạng đến từ client.</div></div>
 </div>
 
-<pre><code>async function deletePost(postId) {
+<pre><code class="language-javascript">async function deletePost(postId) {
   'use server';
   const user = await getCurrentUser();
   if (!user) throw new Error('Chưa xác thực');                 <span class="tok-comment">// authn</span>

@@ -40,7 +40,7 @@ export default {
 <li><strong>The three C keywords</strong> — <code>while</code>, <code>do while</code>, <code>for</code>. They are equally powerful: anything one can do, the other two can do. The choice is about <em>readability</em>, not ability.</li>
 <li><strong>Rule of thumb for the choice</strong> — counting a known number of times → <code>for</code>; repeating while a condition holds and possibly zero times → <code>while</code>; must run at least once (menus, re-entering bad input) → <code>do…while</code>.</li>
 <li><strong>How the three parts map onto <code>for</code></strong> — the header <code>for (init; condition; step)</code> literally puts all three in one line, which is why beginners are taught <code>for</code> first even though <code>while</code> is simpler:
-<pre><code>for (i = 1; i &lt;= 100; i++)   /* init · condition · step */
+<pre><code class="language-c">for (i = 1; i &lt;= 100; i++)   /* init · condition · step */
     sum += i;                 /* the real work */</code></pre></li>
 </ul>
 <p class="meo">💡 Before writing any loop, say the three parts out loud in Vietnamese first: "bắt đầu từ đâu — lặp khi nào còn đúng — mỗi lượt làm gì". If you cannot say all three, you do not yet understand the problem, and no amount of syntax will rescue you.</p>`,
@@ -53,7 +53,7 @@ export default {
 <li><strong>Ba từ khoá của C</strong> — <code>while</code>, <code>do while</code>, <code>for</code>. Chúng mạnh ngang nhau: cái nào làm được thì hai cái kia cũng làm được. Chọn là chọn cho <em>dễ đọc</em>, không phải vì khả năng.</li>
 <li><strong>Mẹo chọn nhanh</strong> — đếm đúng số lần đã biết → <code>for</code>; lặp trong khi điều kiện còn đúng và có thể lặp không lần nào → <code>while</code>; bắt buộc chạy ít nhất một lần (menu, nhập lại dữ liệu sai) → <code>do…while</code>.</li>
 <li><strong>Ba phần đó ánh xạ vào <code>for</code> ra sao</strong> — dòng đầu <code>for (khởi tạo; điều kiện; bước)</code> gói cả ba vào một dòng, và đó là lý do người mới học được dạy <code>for</code> trước dù <code>while</code> đơn giản hơn:
-<pre><code>for (i = 1; i &lt;= 100; i++)   /* khởi tạo · điều kiện · bước */
+<pre><code class="language-c">for (i = 1; i &lt;= 100; i++)   /* khởi tạo · điều kiện · bước */
     sum += i;                 /* phần việc thật */</code></pre></li>
 </ul>
 <p class="meo">💡 Trước khi viết bất kỳ vòng lặp nào, hãy nói ba phần đó ra miệng bằng tiếng Việt trước: "bắt đầu từ đâu — lặp khi nào còn đúng — mỗi lượt làm gì". Nếu chưa nói được đủ ba, nghĩa là bạn chưa hiểu bài toán, và không cú pháp nào cứu được.</p>`],
@@ -66,12 +66,12 @@ export default {
 <li><strong>The two examples are deliberately different kinds</strong> — Example 1 is a <strong>fixed</strong> loop (exactly 100 repetitions, known in advance). Example 2 is a <strong>variable</strong> loop (you cannot know how many numbers the user will type). That is slide 24's "fixed loops, variable loops" made concrete.</li>
 <li><strong>Why never unroll by hand</strong> — writing <code>S = 1+2+3+…</code> as a hundred terms is possible but it does not scale: change 100 to 1000 and you rewrite everything. A loop turns "how many" into <em>data</em> instead of <em>code</em>.</li>
 <li><strong>Example 1 in C — the counted form</strong>:
-<pre><code>int i, S = 0;
+<pre><code class="language-c">int i, S = 0;
 for (i = 1; i &lt;= 100; i++) S += i;
 printf("%d\\n", S);        /* prints 5050 */</code></pre>
 Checked by running: 5050, which matches 100 × 101 / 2.</li>
 <li><strong>Example 2 in C — the sentinel form</strong>:
-<pre><code>int x, S = 0;
+<pre><code class="language-c">int x, S = 0;
 do { scanf("%d", &amp;x); S += x; } while (x != 0);
 printf("%d\\n", S);</code></pre>
 The value 0 here is called a <strong>sentinel</strong>: a data value that means "stop", not "add this". Adding it is harmless only because 0 is the neutral element of addition — for a product you would need <code>if (x != 0) P *= x;</code>.</li>
@@ -85,12 +85,12 @@ The value 0 here is called a <strong>sentinel</strong>: a data value that means 
 <li><strong>Hai ví dụ được chọn khác loại có chủ ý</strong> — Ví dụ 1 là lặp <strong>cố định</strong> (đúng 100 lượt, biết trước). Ví dụ 2 là lặp <strong>biến thiên</strong> (không thể biết người dùng sẽ gõ bao nhiêu số). Đó chính là "fixed loops, variable loops" của slide 24 được cụ thể hoá.</li>
 <li><strong>Vì sao không bao giờ viết trải ra bằng tay</strong> — viết <code>S = 1+2+3+…</code> thành một trăm số hạng thì vẫn được, nhưng không mở rộng được: đổi 100 thành 1000 là phải viết lại hết. Vòng lặp biến "bao nhiêu lần" từ <em>mã nguồn</em> thành <em>dữ liệu</em>.</li>
 <li><strong>Ví dụ 1 bằng C — dạng đếm</strong>:
-<pre><code>int i, S = 0;
+<pre><code class="language-c">int i, S = 0;
 for (i = 1; i &lt;= 100; i++) S += i;
 printf("%d\\n", S);        /* in ra 5050 */</code></pre>
 Đã chạy thật: 5050, khớp công thức 100 × 101 / 2.</li>
 <li><strong>Ví dụ 2 bằng C — dạng có giá trị canh</strong>:
-<pre><code>int x, S = 0;
+<pre><code class="language-c">int x, S = 0;
 do { scanf("%d", &amp;x); S += x; } while (x != 0);
 printf("%d\\n", S);</code></pre>
 Số 0 ở đây gọi là <strong>sentinel</strong> (giá trị canh): nó mang nghĩa "dừng", không phải "cộng cái này vào". Cộng nó vào vô hại chỉ vì 0 là phần tử trung hoà của phép cộng — nếu là phép nhân thì phải viết <code>if (x != 0) P *= x;</code>.</li>
@@ -107,7 +107,7 @@ Số 0 ở đây gọi là <strong>sentinel</strong> (giá trị canh): nó mang
 <li><strong>Why order of the two tasks matters</strong> — swap them and you compute a different sum. Verified by running: with <code>S += i; i++;</code> over i = 1..100 you get 5050; with <code>i++; S += i;</code> you get 5150, because the first term added becomes 2 and the last becomes 101.</li>
 <li><strong>Neutral element, stated once</strong> — accumulating with <code>+</code> starts at 0; accumulating with <code>*</code> starts at 1; accumulating a maximum starts at the first element (never at 0 — that breaks for all-negative data).</li>
 <li><strong>Both forms in code, side by side</strong>:
-<pre><code>int i, S = 0, P = 1;
+<pre><code class="language-c">int i, S = 0, P = 1;
 for (i = 1; i &lt;= 100; i++) S += i;   /* 5050 */
 for (i = 1; i &lt;= 10;  i++) P *= i;   /* 10! = 3628800 */</code></pre></li>
 <li><strong>Where the recipe pays off</strong> — in the exam you are rarely asked "write a loop". You are asked "compute S = …". The three-line recipe is how you get from the second question to the first without guessing.</li>
@@ -121,7 +121,7 @@ for (i = 1; i &lt;= 10;  i++) P *= i;   /* 10! = 3628800 */</code></pre></li>
 <li><strong>Vì sao thứ tự hai việc lại quan trọng</strong> — đảo lại là ra tổng khác. Đã chạy kiểm: với <code>S += i; i++;</code> chạy i = 1..100 được 5050; với <code>i++; S += i;</code> được 5150, vì số hạng đầu cộng vào thành 2 còn số hạng cuối thành 101.</li>
 <li><strong>Phần tử trung hoà, nói một lần cho nhớ</strong> — cộng dồn bằng <code>+</code> thì bắt đầu từ 0; cộng dồn bằng <code>*</code> thì bắt đầu từ 1; tìm giá trị lớn nhất thì bắt đầu từ phần tử đầu tiên (không bao giờ từ 0 — dữ liệu toàn số âm là sai ngay).</li>
 <li><strong>Hai dạng đặt cạnh nhau trong code</strong>:
-<pre><code>int i, S = 0, P = 1;
+<pre><code class="language-c">int i, S = 0, P = 1;
 for (i = 1; i &lt;= 100; i++) S += i;   /* 5050 */
 for (i = 1; i &lt;= 10;  i++) P *= i;   /* 10! = 3628800 */</code></pre></li>
 <li><strong>Công thức này có giá ở đâu</strong> — trong đề thi người ta hiếm khi bảo "hãy viết một vòng lặp". Người ta bảo "tính S = …". Ba dòng công thức là đường đi từ câu hỏi thứ hai về câu hỏi thứ nhất mà không phải đoán.</li>
@@ -138,7 +138,7 @@ for (i = 1; i &lt;= 10;  i++) P *= i;   /* 10! = 3628800 */</code></pre></li>
 <li><strong>Expression 3</strong> — S = 1 + 1/1⁰ + 1/2¹ + 1/3² + … + 1/n<sup>n-1</sup>. The slide's answer: <code>S = 1.0; i = 1;</code> · condition <code>i &lt;= n</code> · tasks <code>S += 1.0/pow(i, i-1); i = i + 1;</code>, with the note <em>math.h</em> because <code>pow</code> lives there.</li>
 <li><strong>Checked by running</strong> — for n = 3 this gives 1 + 1 + 0.5 + 0.111… = <strong>2.611111</strong>, which is exactly the written expression (the leading 1 is a separate constant term, and the i = 1 term 1/1⁰ is also 1). Had you started from <code>S = 0.0</code> you would get 1.611111 — a different value, so read the leading constant carefully.</li>
 <li><strong>The three programs, compiled and run</strong>:
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;math.h&gt;        /* for pow(), link with -lm on gcc/clang */
 
 int main(void) {
@@ -166,7 +166,7 @@ int main(void) {
 <li><strong>Biểu thức 3</strong> — S = 1 + 1/1⁰ + 1/2¹ + 1/3² + … + 1/n<sup>n-1</sup>. Đáp án của slide: <code>S = 1.0; i = 1;</code> · điều kiện <code>i &lt;= n</code> · việc làm <code>S += 1.0/pow(i, i-1); i = i + 1;</code>, kèm ghi chú <em>math.h</em> vì <code>pow</code> nằm ở đó.</li>
 <li><strong>Đã chạy kiểm</strong> — với n = 3 ra 1 + 1 + 0,5 + 0,111… = <strong>2,611111</strong>, đúng bằng biểu thức đã viết (số 1 đứng đầu là một hằng số riêng, còn số hạng i = 1 là 1/1⁰ cũng bằng 1). Nếu khởi tạo <code>S = 0.0</code> thì ra 1,611111 — một giá trị khác hẳn, nên phải đọc kỹ hằng số đứng đầu dãy.</li>
 <li><strong>Ba chương trình, đã biên dịch và chạy</strong>:
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;math.h&gt;        /* cho pow(), gcc/clang phải thêm -lm */
 
 int main(void) {
@@ -194,10 +194,10 @@ int main(void) {
 <li><strong>Form 3 — empty init</strong>: <code>InitBlock;</code> written above, then <code>for ( ; Condition ; Task2) Task1;</code>. Useful when the starting value is computed by a longer piece of code.</li>
 <li><strong>Form 4 — empty init and empty step</strong>: <code>InitBlock;</code> then <code>for ( ; Condition ; ) { Task1; Task2; }</code>. At this point the <code>for</code> has become a <code>while</code> — which is exactly the lesson: the three loop keywords are interchangeable.</li>
 <li><strong>Taking it one step further</strong> — <code>for (;;)</code> with all three parts empty is an <strong>infinite loop</strong>, identical to <code>while (1)</code>. An empty condition counts as <em>true</em>. It is legal and sometimes idiomatic, but then the exit must come from a <code>break</code> inside:
-<pre><code>int k = 0;
+<pre><code class="language-c">int k = 0;
 for (;;) { k++; if (k == 4) break; }   /* verified: exits with k = 4 */</code></pre></li>
 <li><strong>The single most damaging typo in C</strong> — a stray semicolon right after the header:
-<pre><code>for (i = 1; i &lt;= n; i++);   /* &lt;-- this ';' IS the whole body */
+<pre><code class="language-c">for (i = 1; i &lt;= n; i++);   /* &lt;-- this ';' IS the whole body */
     sum += i;                /* runs ONCE, after the loop */</code></pre>
 Measured with n = 5: <code>sum</code> ends at <strong>6</strong> and <code>i</code> at <strong>6</strong> — not 15. It compiles cleanly; <code>cc -Wall</code> does give <em>"for loop has empty body"</em>, which is one more reason to always compile with warnings on.</li>
 <li><strong>The indentation lies</strong> — in that example <code>sum += i;</code> is indented as if it were inside the loop. C does not care about indentation; only the braces and semicolons decide. This is why slide 47 says "Avoid iterations with empty bodies".</li>
@@ -210,10 +210,10 @@ Measured with n = 5: <code>sum</code> ends at <strong>6</strong> and <code>i</co
 <li><strong>Dạng 3 — bỏ trống phần khởi tạo</strong>: viết <code>InitBlock;</code> ở dòng trên, rồi <code>for ( ; điều kiện ; Task2) Task1;</code>. Hữu ích khi giá trị bắt đầu phải tính bằng một đoạn code dài hơn.</li>
 <li><strong>Dạng 4 — bỏ trống cả khởi tạo lẫn bước</strong>: <code>InitBlock;</code> rồi <code>for ( ; điều kiện ; ) { Task1; Task2; }</code>. Đến đây thì <code>for</code> đã trở thành <code>while</code> — và đó chính là bài học: ba từ khoá lặp thay thế được cho nhau.</li>
 <li><strong>Đi thêm một bước nữa</strong> — <code>for (;;)</code> bỏ trống cả ba phần là <strong>vòng lặp vô hạn</strong>, y hệt <code>while (1)</code>. Điều kiện để trống được coi là <em>đúng</em>. Nó hợp lệ và đôi khi là cách viết quen thuộc, nhưng khi đó lối thoát phải là một lệnh <code>break</code> bên trong:
-<pre><code>int k = 0;
+<pre><code class="language-c">int k = 0;
 for (;;) { k++; if (k == 4) break; }   /* đã kiểm: thoát với k = 4 */</code></pre></li>
 <li><strong>Lỗi gõ thừa tai hại nhất trong C</strong> — một dấu chấm phẩy lạc ngay sau ngoặc:
-<pre><code>for (i = 1; i &lt;= n; i++);   /* &lt;-- dấu ';' này CHÍNH LÀ toàn bộ thân */
+<pre><code class="language-c">for (i = 1; i &lt;= n; i++);   /* &lt;-- dấu ';' này CHÍNH LÀ toàn bộ thân */
     sum += i;                /* chạy MỘT lần, sau vòng lặp */</code></pre>
 Đo thật với n = 5: <code>sum</code> kết thúc bằng <strong>6</strong> và <code>i</code> bằng <strong>6</strong> — không phải 15. Nó biên dịch sạch; <code>cc -Wall</code> có báo <em>"for loop has empty body"</em>, thêm một lý do để luôn bật cảnh báo khi biên dịch.</li>
 <li><strong>Cách thụt lề nói dối</strong> — trong ví dụ trên, dòng <code>sum += i;</code> được thụt vào như thể nó nằm trong vòng lặp. C không quan tâm thụt lề; chỉ dấu ngoặc nhọn và dấu chấm phẩy quyết định. Đây là lý do slide 47 viết "Avoid iterations with empty bodies".</li>
@@ -226,7 +226,7 @@ for (;;) { k++; if (k == 4) break; }   /* đã kiểm: thoát với k = 4 */</co
 <li><strong>Analysis, as written on the slide</strong> — Accepted variable: <code>int n</code> · Sum 1..N: <code>int sum</code> · Algorithm: accept n → Loop (Initialize i = 1, sum = 0 · Condition i &lt;= n · Tasks: sum += i; i++) → print out sum.</li>
 <li><strong>Naming, straight from the style rules</strong> — <code>n</code> and <code>i</code> are deliberately one letter: slide 43 says "Keep the names of indices very short — treat them as mathematical notation". <code>sum</code> is a noun, as slide 43 also asks.</li>
 <li><strong>The program</strong>:
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     int n, i, sum = 0;
@@ -258,7 +258,7 @@ int main(void) {
 <li><strong>Phân tích, nguyên văn trên slide</strong> — Biến nhận vào: <code>int n</code> · Tổng 1..N: <code>int sum</code> · Giải thuật: nhận n → Vòng lặp (Khởi tạo i = 1, sum = 0 · Điều kiện i &lt;= n · Việc làm: sum += i; i++) → in sum.</li>
 <li><strong>Cách đặt tên, lấy thẳng từ quy tắc văn phong</strong> — <code>n</code> và <code>i</code> để một chữ cái là có chủ ý: slide 43 viết "Keep the names of indices very short — treat them as mathematical notation". Còn <code>sum</code> là danh từ, cũng đúng yêu cầu của slide 43.</li>
 <li><strong>Chương trình</strong>:
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     int n, i, sum = 0;
@@ -293,7 +293,7 @@ int main(void) {
 <li><strong>Why the type must be <code>int</code>, not <code>char</code></strong> — this is the whole hidden point of the exercise. An <code>unsigned char</code> holds 0..255, so <code>code &lt; 256</code> is <em>always true</em>: the counter wraps 255 → 0 and the loop never ends. Measured: with <code>unsigned char</code> the loop was still running after 1000 steps and had to be cut off by hand. <code>cc -Wall</code> warns <em>"comparison … is always true"</em>.</li>
 <li><strong>The four conversion specifiers</strong> — <code>%c</code> the character itself · <code>%d</code> decimal · <code>%o</code> octal · <code>%X</code> uppercase hexadecimal. Same value, four notations — an echo of slide 5's "data versus information": the bits are identical, the reading differs.</li>
 <li><strong>The program</strong>:
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     int code;
@@ -321,7 +321,7 @@ Note 65 in octal is 101, which is <em>not</em> "one hundred and one" — a favou
 <li><strong>Vì sao kiểu phải là <code>int</code>, không phải <code>char</code></strong> — đây mới là điểm giấu kín của bài tập. Một <code>unsigned char</code> chỉ chứa 0..255, nên <code>code &lt; 256</code> <em>luôn luôn đúng</em>: bộ đếm quay vòng 255 → 0 và vòng lặp không bao giờ dừng. Đo thật: dùng <code>unsigned char</code> thì sau 1000 bước vòng lặp vẫn chạy, phải chặn bằng tay. <code>cc -Wall</code> có cảnh báo <em>"comparison … is always true"</em>.</li>
 <li><strong>Bốn ký hiệu định dạng</strong> — <code>%c</code> chính ký tự · <code>%d</code> hệ mười · <code>%o</code> hệ tám · <code>%X</code> hệ mười sáu chữ hoa. Cùng một giá trị, bốn cách viết — đúng là tiếng vọng của slide 5 "dữ liệu với thông tin": các bit y hệt nhau, chỉ cách đọc khác.</li>
 <li><strong>Chương trình</strong>:
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     int code;
@@ -348,21 +348,21 @@ Chú ý 65 ở hệ tám là 101, <em>không phải</em> "một trăm lẻ một
         `<p class="y-chinh">🎯 Two more loop keywords, and one difference that matters: <code>while</code> tests <strong>before</strong> the body, <code>do … while</code> tests <strong>after</strong> — so <code>do…while</code> always runs <strong>at least once</strong>.</p>
 <ul>
 <li><strong>Syntax side by side</strong>:
-<pre><code>while (condition) {          do {
+<pre><code class="language-c">while (condition) {          do {
     statements;                  statements;
 }                            } while (condition);</code></pre>
 Note the semicolon after <code>while (condition)</code> in the <code>do</code> form — it is required there, and forbidden in the plain <code>while</code> form. That asymmetry catches everybody once.</li>
 <li><strong>Zero versus one, measured</strong> — with n = 0: <code>i = 1; while (i &lt;= n) { print; i++; }</code> printed nothing (0 repetitions); <code>i = 1; do { print; i++; } while (i &lt;= n);</code> printed <code>1</code> (1 repetition). Same condition, same data, different output.</li>
 <li><strong>When <code>do…while</code> is the right choice</strong> — (a) a menu: you must show it once before asking whether to show it again; (b) re-reading invalid input: you must read once before knowing it is invalid; (c) any "repeat until" phrasing in the requirement.</li>
 <li><strong>Menu pattern — the canonical <code>do…while</code></strong>:
-<pre><code>int choice;
+<pre><code class="language-c">int choice;
 do {
     printf("1. Add  2. List  0. Quit\\nChoice: ");
     scanf("%d", &amp;choice);
     /* handle choice here */
 } while (choice != 0);</code></pre></li>
 <li><strong>Input validation pattern</strong>:
-<pre><code>int age;
+<pre><code class="language-c">int age;
 do {
     printf("Age (1..120): ");
     scanf("%d", &amp;age);
@@ -374,21 +374,21 @@ do {
         `<p class="y-chinh">🎯 Thêm hai từ khoá lặp, và một khác biệt có ý nghĩa: <code>while</code> kiểm tra <strong>trước</strong> thân, <code>do … while</code> kiểm tra <strong>sau</strong> — nên <code>do…while</code> luôn chạy <strong>ít nhất một lần</strong>.</p>
 <ul>
 <li><strong>Cú pháp đặt cạnh nhau</strong>:
-<pre><code>while (điều kiện) {          do {
+<pre><code class="language-c">while (điều kiện) {          do {
     các câu lệnh;                các câu lệnh;
 }                            } while (điều kiện);</code></pre>
 Chú ý dấu chấm phẩy sau <code>while (điều kiện)</code> ở dạng <code>do</code> — ở đó là bắt buộc, còn ở dạng <code>while</code> trơn thì lại cấm. Chỗ bất đối xứng này ai cũng vấp một lần.</li>
 <li><strong>Không lần nào so với một lần, đo thật</strong> — với n = 0: <code>i = 1; while (i &lt;= n) { in; i++; }</code> không in gì (0 lượt); <code>i = 1; do { in; i++; } while (i &lt;= n);</code> in ra <code>1</code> (1 lượt). Cùng điều kiện, cùng dữ liệu, khác kết quả.</li>
 <li><strong>Khi nào <code>do…while</code> là lựa chọn đúng</strong> — (a) menu: phải hiện một lần rồi mới hỏi có hiện tiếp không; (b) nhập lại dữ liệu sai: phải đọc một lần mới biết là sai; (c) mọi yêu cầu có chữ "lặp cho tới khi".</li>
 <li><strong>Khuôn menu — dạng kinh điển của <code>do…while</code></strong>:
-<pre><code>int chon;
+<pre><code class="language-c">int chon;
 do {
     printf("1. Them  2. Liet ke  0. Thoat\\nChon: ");
     scanf("%d", &amp;chon);
     /* xử lý lựa chọn ở đây */
 } while (chon != 0);</code></pre></li>
 <li><strong>Khuôn kiểm tra dữ liệu vào</strong>:
-<pre><code>int tuoi;
+<pre><code class="language-c">int tuoi;
 do {
     printf("Tuoi (1..120): ");
     scanf("%d", &amp;tuoi);
@@ -403,13 +403,13 @@ do {
 <ul>
 <li><strong>Same analysis as slide 30</strong> — ASCII code: 0 → 255 · Initialize: <code>int code = 0</code> · Condition: <code>code &lt; 256</code> · Task: print the code in 4 formats, then <code>code = code + 1</code>. The lecturer repeats the slide deliberately: identical problem, different keyword.</li>
 <li><strong>The <code>while</code> version — the step moves into the body</strong>:
-<pre><code>int code = 0;                         /* init block */
+<pre><code class="language-c">int code = 0;                         /* init block */
 while (code &lt; 256) {                  /* condition  */
     printf("%c\\t%d\\t%o\\t%X\\n", code, code, code, code);
     code = code + 1;                  /* &lt;-- the step, now inside */
 }</code></pre></li>
 <li><strong>The <code>do … while</code> version — the test moves to the bottom</strong>:
-<pre><code>int code = 0;
+<pre><code class="language-c">int code = 0;
 do {
     printf("%c\\t%d\\t%o\\t%X\\n", code, code, code, code);
     code = code + 1;
@@ -424,13 +424,13 @@ do {
 <ul>
 <li><strong>Phân tích y hệt slide 30</strong> — ASCII code: 0 → 255 · Khởi tạo: <code>int code = 0</code> · Điều kiện: <code>code &lt; 256</code> · Việc làm: in mã ở 4 định dạng, rồi <code>code = code + 1</code>. Giảng viên lặp lại slide có chủ ý: bài toán giống hệt, từ khoá khác.</li>
 <li><strong>Bản <code>while</code> — bước nhảy chui vào trong thân</strong>:
-<pre><code>int code = 0;                         /* khối khởi tạo */
+<pre><code class="language-c">int code = 0;                         /* khối khởi tạo */
 while (code &lt; 256) {                  /* điều kiện     */
     printf("%c\\t%d\\t%o\\t%X\\n", code, code, code, code);
     code = code + 1;                  /* &lt;-- bước nhảy, giờ nằm trong */
 }</code></pre></li>
 <li><strong>Bản <code>do … while</code> — phép kiểm tra tụt xuống dưới cùng</strong>:
-<pre><code>int code = 0;
+<pre><code class="language-c">int code = 0;
 do {
     printf("%c\\t%d\\t%o\\t%X\\n", code, code, code, code);
     code = code + 1;
@@ -448,7 +448,7 @@ do {
 <li><strong>Nouns, from the slide</strong> — inputted integer → <code>int x</code> · sum of integers → <code>int sum</code>. Two variables, no more. Naming follows slide 43: nouns for data.</li>
 <li><strong>Algorithm, verbatim from the slide</strong> — Begin · <code>sum = 0</code> · <code>do { accept x; sum += x; } while (x != 0);</code> · print out sum · End. Note the choice of <code>do…while</code>: you must read at least one number before you can know whether it is the terminator.</li>
 <li><strong>Full program</strong>:
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     int x, sum = 0;
@@ -489,7 +489,7 @@ Output measured: <code>Sum = 4</code>. Negative inputs are accepted — the requ
 <li><strong>Danh từ, lấy từ slide</strong> — số nguyên nhập vào → <code>int x</code> · tổng các số → <code>int sum</code>. Hai biến, không hơn. Cách đặt tên theo slide 43: dữ liệu thì dùng danh từ.</li>
 <li><strong>Giải thuật, nguyên văn trên slide</strong> — Begin · <code>sum = 0</code> · <code>do { accept x; sum += x; } while (x != 0);</code> · in sum · End. Chú ý lựa chọn <code>do…while</code>: phải đọc ít nhất một số thì mới biết nó có phải số kết thúc hay không.</li>
 <li><strong>Chương trình đầy đủ</strong>:
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     int x, sum = 0;
@@ -533,7 +533,7 @@ Kết quả đo được: <code>Tong = 4</code>. Số âm vẫn được nhận 
 <li><strong>Algorithm, verbatim from the slide</strong> — <code>noDigits = noLetters = noOthers = c = 0</code> · print "Enter a string:" · <code>while (c != ENTER) { accept c; if (c &gt;= '0' &amp;&amp; c &lt;= '9') noDigits++; else if ((c &gt;= 'a' &amp;&amp; c &lt;= 'z') || (c &gt;= 'A' &amp;&amp; c &lt;= 'Z')) noLetters++; else noOthers++; }</code> · print the three counters.</li>
 <li><strong>The slide explains its own trick</strong> — "The while statement is intentionally used. So, c = 0 is assigned and the condition c != ENTER is evaluated to TRUE". Initialising <code>c = 0</code> is what lets a pre-test loop run its first repetition; it is a hand-made substitute for <code>do…while</code>.</li>
 <li><strong>Full program, exactly as the slide specifies</strong>:
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #define ENTER 10
 
 int main(void) {
@@ -561,7 +561,7 @@ int main(void) {
 </table></li>
 <li><strong>What the program actually prints (measured, not assumed)</strong> — <code>Digits = 4, Letters = 6, Others = 6</strong></code>. Two more data sets confirm the pattern: <code>a1+</code> + ENTER → 1, 1, <strong>2</strong>; pressing ENTER alone → 0, 0, <strong>1</strong>.</li>
 <li><strong>The slide's algorithm counts the ENTER key itself as an "other key"</strong> — because the classification runs <em>before</em> the condition is re-tested. Strictly, the user pressed five other keys (+ - * / ?), so the expected answer is 5 and the program reports 6. This is a real flaw in the slide, not a typo in this lesson; the slide is reproduced as it is. The minimal fix keeps the same structure:
-<pre><code>while (c != ENTER) {
+<pre><code class="language-c">while (c != ENTER) {
     c = getchar();
     if (c == ENTER) continue;        /* do not classify the terminator */
     if (c &gt;= '0' &amp;&amp; c &lt;= '9') noDigits++;
@@ -578,7 +578,7 @@ Measured with the fix: <code>Digits = 4, Letters = 6, Others = 5</code>.</li>
 <li><strong>Giải thuật, nguyên văn trên slide</strong> — <code>noDigits = noLetters = noOthers = c = 0</code> · in "Enter a string:" · <code>while (c != ENTER) { accept c; if (c &gt;= '0' &amp;&amp; c &lt;= '9') noDigits++; else if ((c &gt;= 'a' &amp;&amp; c &lt;= 'z') || (c &gt;= 'A' &amp;&amp; c &lt;= 'Z')) noLetters++; else noOthers++; }</code> · in ba bộ đếm.</li>
 <li><strong>Slide tự giải thích mẹo của nó</strong> — "The while statement is intentionally used. So, c = 0 is assigned and the condition c != ENTER is evaluated to TRUE". Gán <code>c = 0</code> là cách để một vòng lặp kiểm-tra-trước chạy được lượt đầu tiên; đó là bản thay thế thủ công cho <code>do…while</code>.</li>
 <li><strong>Chương trình đầy đủ, đúng như slide đặc tả</strong>:
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #define ENTER 10
 
 int main(void) {
@@ -606,7 +606,7 @@ int main(void) {
 </table></li>
 <li><strong>Chương trình in ra thật cái gì (đo, không phải đoán)</strong> — <code>So chu so = 4, So chu cai = 6, So phim khac = 6</code>. Hai bộ dữ liệu nữa xác nhận đúng quy luật: <code>a1+</code> + ENTER → 1, 1, <strong>2</strong>; bấm ENTER không gõ gì → 0, 0, <strong>1</strong>.</li>
 <li><strong>Giải thuật của slide đếm luôn phím ENTER vào nhóm "phím khác"</strong> — vì việc phân loại chạy <em>trước</em> khi điều kiện được kiểm lại. Nói chặt chẽ thì người dùng bấm năm phím khác (+ - * / ?), nên đáp số mong đợi là 5 còn chương trình báo 6. Đây là một lỗi thật của slide, không phải lỗi gõ trong bài học này; slide được chép lại đúng nguyên trạng. Cách vá tối thiểu giữ nguyên cấu trúc:
-<pre><code>while (c != ENTER) {
+<pre><code class="language-c">while (c != ENTER) {
     c = getchar();
     if (c == ENTER) continue;        /* không phân loại ký tự kết thúc */
     if (c &gt;= '0' &amp;&amp; c &lt;= '9') noDigits++;
@@ -623,19 +623,19 @@ int main(void) {
 <ul>
 <li><strong>What the slide shows</strong> — two small examples, labelled "Example: break" and "Example: continue", each with the output row <code>0 1 2 3 4 5</code>. The point of the pairing is that <em>identical output can come from two different mechanisms</em>, so you cannot tell them apart from the result alone.</li>
 <li><strong>The canonical pair that produces exactly those two lines</strong> (compiled and run — both printed <code>0 1 2 3 4 5</code>):
-<pre><code>int i;
+<pre><code class="language-c">int i;
 for (i = 0; i &lt; 10; i++) { if (i == 6) break;    printf("%d ", i); }
 for (i = 0; i &lt; 10; i++) { if (i &gt; 5)  continue; printf("%d ", i); }</code></pre></li>
 <li><strong>The difference you cannot see in the output</strong> — the <code>break</code> version performs <strong>7</strong> repetitions and then stops for good; the <code>continue</code> version performs all <strong>10</strong> and simply prints nothing in the last four. Same paper, different amount of work.</li>
 <li><strong><code>break</code> leaves exactly ONE loop</strong> — the innermost one containing it. In a nested loop, <code>break</code> in the inner loop returns you to the outer loop, it does not leave both:
-<pre><code>for (i = 0; i &lt; 3; i++)
+<pre><code class="language-c">for (i = 0; i &lt; 3; i++)
     for (j = 0; j &lt; 3; j++)
         if (j == 1) break;      /* leaves the j loop only; i keeps going */</code></pre>
 This is the single most common misunderstanding about <code>break</code>, and it is exactly the problem that flags (slides 36–40) solve.</li>
 <li><strong><code>break</code> also belongs to <code>switch</code></strong> — you already met it on slide 21, where a missing <code>break</code> makes execution fall through to the next case. Inside a <code>switch</code> nested in a loop, <code>break</code> leaves the <em>switch</em>, not the loop — another silent trap.</li>
 <li><strong>Where <code>continue</code> jumps to, precisely</strong> — in a <code>for</code>, it jumps to the <em>step</em> part (<code>i++</code>), so counting continues normally. In a <code>while</code> or <code>do…while</code>, it jumps straight to the <em>condition</em>, skipping everything after it in the body — including your increment.</li>
 <li><strong>That asymmetry causes real infinite loops</strong> — measured:
-<pre><code>i = 0;
+<pre><code class="language-c">i = 0;
 while (i &lt; 5) {
     if (i == 2) continue;   /* i++ below is skipped -&gt; stuck at 2 forever */
     printf("%d ", i);
@@ -649,19 +649,19 @@ Running this printed <code>0 1</code> and then hung; it had to be cut off by a c
 <ul>
 <li><strong>Slide cho thấy cái gì</strong> — hai ví dụ nhỏ, ghi nhãn "Example: break" và "Example: continue", mỗi cái kèm dòng kết quả <code>0 1 2 3 4 5</code>. Ý của việc đặt cặp là <em>kết quả giống hệt nhau vẫn có thể đến từ hai cơ chế khác nhau</em>, nên nhìn kết quả không phân biệt được.</li>
 <li><strong>Cặp chuẩn tạo ra đúng hai dòng đó</strong> (đã biên dịch và chạy — cả hai in <code>0 1 2 3 4 5</code>):
-<pre><code>int i;
+<pre><code class="language-c">int i;
 for (i = 0; i &lt; 10; i++) { if (i == 6) break;    printf("%d ", i); }
 for (i = 0; i &lt; 10; i++) { if (i &gt; 5)  continue; printf("%d ", i); }</code></pre></li>
 <li><strong>Khác biệt mà kết quả không cho thấy</strong> — bản <code>break</code> chạy <strong>7</strong> lượt rồi dừng hẳn; bản <code>continue</code> chạy đủ <strong>10</strong> lượt và chỉ đơn giản là bốn lượt cuối không in gì. Cùng một tờ giấy, khác nhau lượng công làm.</li>
 <li><strong><code>break</code> chỉ thoát ĐÚNG MỘT vòng lặp</strong> — vòng gần nhất bao quanh nó. Trong vòng lặp lồng nhau, <code>break</code> ở vòng trong trả bạn về vòng ngoài, chứ không thoát cả hai:
-<pre><code>for (i = 0; i &lt; 3; i++)
+<pre><code class="language-c">for (i = 0; i &lt; 3; i++)
     for (j = 0; j &lt; 3; j++)
         if (j == 1) break;      /* chỉ thoát vòng j; vòng i vẫn chạy tiếp */</code></pre>
 Đây là hiểu lầm phổ biến nhất về <code>break</code>, và cũng chính là bài toán mà biến cờ (slide 36–40) sinh ra để giải.</li>
 <li><strong><code>break</code> còn thuộc về <code>switch</code></strong> — bạn đã gặp ở slide 21, nơi thiếu <code>break</code> thì lệnh rơi xuống case kế tiếp. Trong một <code>switch</code> nằm trong vòng lặp, <code>break</code> thoát khỏi <em>switch</em>, không thoát khỏi vòng lặp — thêm một cái bẫy im lặng.</li>
 <li><strong><code>continue</code> nhảy chính xác tới đâu</strong> — trong <code>for</code>, nó nhảy tới phần <em>bước nhảy</em> (<code>i++</code>), nên việc đếm vẫn diễn ra bình thường. Trong <code>while</code> hay <code>do…while</code>, nó nhảy thẳng tới <em>điều kiện</em>, bỏ qua mọi thứ nằm sau nó trong thân — kể cả lệnh tăng biến đếm của bạn.</li>
 <li><strong>Chỗ bất đối xứng đó gây ra vòng lặp vô hạn thật</strong> — đã đo:
-<pre><code>i = 0;
+<pre><code class="language-c">i = 0;
 while (i &lt; 5) {
     if (i == 2) continue;   /* i++ bên dưới bị bỏ qua -&gt; kẹt mãi ở 2 */
     printf("%d ", i);
@@ -705,7 +705,7 @@ Chạy đoạn này in ra <code>0 1</code> rồi treo; phải chặn bằng mộ
 <li><strong>Naming rule — use a noun phrase or an "is/has" question</strong> — <code>isValid</code> asks a yes/no question, so a yes/no variable is the right answer to it. <code>valid</code>, <code>flag</code>, <code>ok</code>, <code>t</code> are all worse; <code>flag</code> is the worst because it names the mechanism instead of the meaning.</li>
 <li><strong>The three-step pattern, always the same</strong> — (1) initialise the flag to the answer you would give if nothing happened: <code>int found = 0;</code> (2) set it inside the loop when the event occurs: <code>found = 1;</code> (3) put it in the loop condition and/or test it after the loop: <code>while (i &lt; n &amp;&amp; !found)</code>, then <code>if (found) …</code>.</li>
 <li><strong>Why a flag beats <code>break</code> in nested loops</strong> — <code>break</code> exits only the innermost loop (slide 35), so escaping two levels needs two <code>break</code>s and an extra test. One flag in both conditions does it once:
-<pre><code>int found = 0;
+<pre><code class="language-c">int found = 0;
 for (i = 0; i &lt; rows &amp;&amp; !found; i++)
     for (j = 0; j &lt; cols &amp;&amp; !found; j++)
         if (a[i][j] == key) found = 1;</code></pre></li>
@@ -720,7 +720,7 @@ for (i = 0; i &lt; rows &amp;&amp; !found; i++)
 <li><strong>Quy tắc đặt tên — dùng cụm danh từ hoặc câu hỏi "is/has"</strong> — <code>isValid</code> là một câu hỏi có/không, nên một biến có/không là câu trả lời đúng cho nó. <code>valid</code>, <code>flag</code>, <code>ok</code>, <code>t</code> đều tệ hơn; <code>flag</code> tệ nhất vì nó gọi tên cơ chế thay vì gọi tên ý nghĩa.</li>
 <li><strong>Khuôn ba bước, lúc nào cũng vậy</strong> — (1) khởi tạo cờ bằng câu trả lời nếu không có gì xảy ra: <code>int found = 0;</code> (2) đặt cờ bên trong vòng lặp khi sự kiện xảy ra: <code>found = 1;</code> (3) đưa cờ vào điều kiện lặp và/hoặc kiểm nó sau vòng lặp: <code>while (i &lt; n &amp;&amp; !found)</code>, rồi <code>if (found) …</code>.</li>
 <li><strong>Vì sao cờ hơn <code>break</code> trong vòng lặp lồng nhau</strong> — <code>break</code> chỉ thoát vòng trong cùng (slide 35), nên thoát hai tầng thì cần hai lệnh <code>break</code> cộng một phép kiểm phụ. Một biến cờ đặt ở cả hai điều kiện thì làm xong trong một lần:
-<pre><code>int found = 0;
+<pre><code class="language-c">int found = 0;
 for (i = 0; i &lt; rows &amp;&amp; !found; i++)
     for (j = 0; j &lt; cols &amp;&amp; !found; j++)
         if (a[i][j] == key) found = 1;</code></pre></li>
@@ -733,13 +733,13 @@ for (i = 0; i &lt; rows &amp;&amp; !found; i++)
 <ul>
 <li><strong>The mechanical rule</strong> — <code>if (C) continue; REST;</code> becomes <code>if (!C) { REST; }</code>. Nothing else changes. No new variable is needed, which is why this is the transformation you should always try first.</li>
 <li><strong>Worked example — sum the odd numbers from 1 to 10</strong>. Version with <code>continue</code>:
-<pre><code>int i, s = 0;
+<pre><code class="language-c">int i, s = 0;
 for (i = 1; i &lt;= 10; i++) {
     if (i % 2 == 0) continue;     /* skip the even ones */
     s += i;
 }</code></pre>
 Version with <code>if</code>:
-<pre><code>int i, s = 0;
+<pre><code class="language-c">int i, s = 0;
 for (i = 1; i &lt;= 10; i++) {
     if (i % 2 != 0) s += i;       /* keep the odd ones */
 }</code></pre>
@@ -755,13 +755,13 @@ Both compiled and run: both print <strong>25</strong> (1+3+5+7+9).</li>
 <ul>
 <li><strong>Quy tắc máy móc</strong> — <code>if (C) continue; PHẦN_CÒN_LẠI;</code> thành <code>if (!C) { PHẦN_CÒN_LẠI; }</code>. Không đổi gì khác. Không cần thêm biến nào, và đó là lý do đây luôn là phép biến đổi nên thử trước nhất.</li>
 <li><strong>Ví dụ đã giải — tính tổng các số lẻ từ 1 đến 10</strong>. Bản dùng <code>continue</code>:
-<pre><code>int i, s = 0;
+<pre><code class="language-c">int i, s = 0;
 for (i = 1; i &lt;= 10; i++) {
     if (i % 2 == 0) continue;     /* bỏ qua số chẵn */
     s += i;
 }</code></pre>
 Bản dùng <code>if</code>:
-<pre><code>int i, s = 0;
+<pre><code class="language-c">int i, s = 0;
 for (i = 1; i &lt;= 10; i++) {
     if (i % 2 != 0) s += i;       /* giữ lại số lẻ */
 }</code></pre>
@@ -779,7 +779,7 @@ Cả hai đã biên dịch và chạy: cả hai in <strong>25</strong> (1+3+5+7+
 <ul>
 <li><strong>How <code>goto</code> works in C</strong> — you write a <em>label</em> (an identifier followed by a colon) somewhere in the function, and <code>goto label;</code> jumps there. Jumping backwards makes a loop; jumping forwards makes an escape.</li>
 <li><strong>A backward <code>goto</code> is a loop</strong> — compiled and run:
-<pre><code>int i = 0;
+<pre><code class="language-c">int i = 0;
 again:
     i++;
     if (i &lt; 3) goto again;
@@ -797,7 +797,7 @@ Written as <code>while</code> it is simply <code>i = 0; while (i &lt; 3) i++;</c
 <ul>
 <li><strong><code>goto</code> hoạt động thế nào trong C</strong> — bạn viết một <em>nhãn</em> (một định danh theo sau bởi dấu hai chấm) ở đâu đó trong hàm, và <code>goto nhãn;</code> sẽ nhảy tới đó. Nhảy lùi thì tạo ra vòng lặp; nhảy tới thì tạo ra lối thoát.</li>
 <li><strong>Một cú <code>goto</code> nhảy lùi chính là vòng lặp</strong> — đã biên dịch và chạy:
-<pre><code>int i = 0;
+<pre><code class="language-c">int i = 0;
 again:
     i++;
     if (i &lt; 3) goto again;
@@ -818,13 +818,13 @@ Viết bằng <code>while</code> thì chỉ là <code>i = 0; while (i &lt; 3) i+
 <li><strong>The transformation rule</strong> — <code>while (C) { … if (E) break; … }</code> becomes <code>flag = 0; while (C &amp;&amp; !flag) { … if (E) flag = 1; … }</code>. The event that used to jump now records itself, and the loop's own condition does the leaving.</li>
 <li><strong>The task used here</strong> — search the array <code>{4, 9, 15, 7, 15, 2}</code> for the value 15 and report the position of the first match.</li>
 <li><strong>"No flag is used" — the <code>break</code> version</strong>:
-<pre><code>for (i = 0; i &lt; N; i++)
+<pre><code class="language-c">for (i = 0; i &lt; N; i++)
     if (a[i] == key) break;
 if (i &lt; N) printf("found %d at index %d\\n", key, i);
 else       printf("%d not found\\n", key);</code></pre>
 Note it needs the extra test <code>i &lt; N</code> afterwards: the value of <code>i</code> is the only record of <em>why</em> the loop ended.</li>
 <li><strong>"A flag is used" — the flag version</strong>:
-<pre><code>int found = 0, pos = -1;
+<pre><code class="language-c">int found = 0, pos = -1;
 for (i = 0; i &lt; N &amp;&amp; !found; i++)
     if (a[i] == key) { found = 1; pos = i; }
 if (found) printf("found %d at index %d\\n", key, pos);
@@ -846,13 +846,13 @@ Both versions stop at the <strong>first</strong> match (index 2), not the second
 <li><strong>Quy tắc biến đổi</strong> — <code>while (C) { … if (E) break; … }</code> thành <code>flag = 0; while (C &amp;&amp; !flag) { … if (E) flag = 1; … }</code>. Sự kiện trước đây gây ra cú nhảy thì nay tự ghi lại mình, còn việc rời vòng lặp trả về cho chính điều kiện của vòng lặp.</li>
 <li><strong>Bài toán dùng ở đây</strong> — tìm giá trị 15 trong mảng <code>{4, 9, 15, 7, 15, 2}</code> và báo vị trí lần khớp đầu tiên.</li>
 <li><strong>"No flag is used" — bản dùng <code>break</code></strong>:
-<pre><code>for (i = 0; i &lt; N; i++)
+<pre><code class="language-c">for (i = 0; i &lt; N; i++)
     if (a[i] == key) break;
 if (i &lt; N) printf("tim thay %d tai chi so %d\\n", key, i);
 else       printf("khong tim thay %d\\n", key);</code></pre>
 Chú ý nó cần thêm phép kiểm <code>i &lt; N</code> ở sau: giá trị của <code>i</code> là dấu vết duy nhất cho biết <em>vì sao</em> vòng lặp kết thúc.</li>
 <li><strong>"A flag is used" — bản dùng biến cờ</strong>:
-<pre><code>int found = 0, pos = -1;
+<pre><code class="language-c">int found = 0, pos = -1;
 for (i = 0; i &lt; N &amp;&amp; !found; i++)
     if (a[i] == key) { found = 1; pos = i; }
 if (found) printf("tim thay %d tai chi so %d\\n", key, pos);

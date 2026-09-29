@@ -51,7 +51,7 @@ redis-cli LPOP q 2          <span class="tok-comment"># 6.2+: pop several at onc
   <div class="kv"><span class="k">No random access, ever</span><span class="v">There is no index. If you need "element number 40,000", a list is the wrong structure — that is what a sorted set does in O(log N).</span></div>
   <div class="kv"><span class="k">Encoding: <code>listpack</code> then <code>quicklist</code></span><span class="v">Small lists are one flat allocation; past <code>list-max-listpack-size</code> (128) they become a linked list of listpacks. Both are O(1) at the ends.</span></div>
 </div>
-<pre><code>redis-cli DEL big &gt;/dev/null
+<pre><code class="language-python">redis-cli DEL big &gt;/dev/null
 python3 -c "
 for i in range(1_000_000): print(f'RPUSH big item:{i}')
 " | redis-cli --pipe &gt;/dev/null
@@ -180,7 +180,7 @@ redis-cli LPOP q 2          <span class="tok-comment"># 6.2+: lấy ra nhiều p
   <div class="kv"><span class="k">Không bao giờ có truy cập ngẫu nhiên</span><span class="v">Không có chỉ mục. Cần "phần tử thứ 40.000" thì list là cấu trúc sai — đó là việc của sorted set, O(log N).</span></div>
   <div class="kv"><span class="k">Mã hoá: <code>listpack</code> rồi <code>quicklist</code></span><span class="v">List nhỏ là một khối cấp phát phẳng; vượt <code>list-max-listpack-size</code> (128) nó thành danh sách liên kết của các listpack. Cả hai đều O(1) ở hai đầu.</span></div>
 </div>
-<pre><code>redis-cli DEL big &gt;/dev/null
+<pre><code class="language-python">redis-cli DEL big &gt;/dev/null
 python3 -c "
 for i in range(1_000_000): print(f'RPUSH big item:{i}')
 " | redis-cli --pipe &gt;/dev/null
@@ -343,7 +343,7 @@ redis-cli MEMORY USAGE s3</code></pre>
 <div class="callout warn"><strong>The conversion is one-way and permanent.</strong> Push a set past its threshold and it becomes a hashtable; delete members back down to three and it <em>stays</em> a hashtable, because Redis never converts back. If you have a million sets that each briefly held 200 members, you are paying hashtable overhead on all of them forever. The fix is not tuning the thresholds up (that makes lookups linear on big sets) — it is <code>DEL</code> plus rebuild if a set genuinely shrank for good, or accepting the cost.</div>
 
 <h3>SMEMBERS is the trap; SSCAN is the way out</h3>
-<pre><code>redis-cli DEL huge &gt;/dev/null
+<pre><code class="language-python">redis-cli DEL huge &gt;/dev/null
 python3 -c "
 for i in range(2_000_000): print(f'SADD huge user:{i}')
 " | redis-cli --pipe &gt;/dev/null
@@ -515,7 +515,7 @@ redis-cli MEMORY USAGE s3</code></pre>
 <div class="callout warn"><strong>Việc chuyển kiểu là một chiều và vĩnh viễn.</strong> Đẩy một set vượt ngưỡng thì nó thành hashtable; xoá bớt phần tử xuống còn ba thì nó <em>vẫn</em> là hashtable, vì Redis không bao giờ chuyển ngược. Nếu bạn có một triệu set mà mỗi cái từng thoáng chứa 200 phần tử, bạn đang trả chi phí hashtable cho tất cả chúng mãi mãi. Cách chữa không phải nâng ngưỡng lên (làm vậy khiến tra cứu trên set lớn thành tuyến tính) — mà là <code>DEL</code> rồi dựng lại nếu set thật sự đã co lại lâu dài, hoặc chấp nhận cái giá.</div>
 
 <h3>SMEMBERS là cái bẫy; SSCAN là lối ra</h3>
-<pre><code>redis-cli DEL huge &gt;/dev/null
+<pre><code class="language-python">redis-cli DEL huge &gt;/dev/null
 python3 -c "
 for i in range(2_000_000): print(f'SADD huge user:{i}')
 " | redis-cli --pipe &gt;/dev/null
@@ -982,7 +982,7 @@ redis-cli ZINTERCARD 2 s1 s2</code></pre>
 <p class="lead">Lesson 4.3 was the commands. This one is what people actually build with them. Five patterns, all in production somewhere, all the same structure — and each one has a detail that only shows up once real traffic arrives.</p>
 
 <h3>Pattern 1 — A leaderboard that can answer "what rank am I?"</h3>
-<pre><code>redis-cli DEL lb &gt;/dev/null
+<pre><code class="language-python">redis-cli DEL lb &gt;/dev/null
 python3 -c "
 import random
 random.seed(7)
@@ -1003,7 +1003,7 @@ time redis-cli ZREVRANK lb player:99999 &gt;/dev/null</code></pre>
 2) "39091"
 real	0m0.003s</div>
 <div class="callout ok"><strong>"What rank am I?" is the query relational databases are worst at and sorted sets are best at.</strong> In SQL it is <code>SELECT COUNT(*) FROM scores WHERE score &gt; ?</code> — a full index scan that gets slower as the table grows, or a window function over the whole table. In Redis it is <code>ZREVRANK</code>: 3 milliseconds on a hundred thousand players, O(log N), because the skip list keeps a span count on every node and walking down the tower sums those spans. Ten million players would take about 23 steps instead of 17.</div>
-<pre><code><span class="tok-comment">// The three queries a leaderboard screen actually needs</span>
+<pre><code class="language-javascript"><span class="tok-comment">// The three queries a leaderboard screen actually needs</span>
 const [top, myRank, myScore] = await redis
   .multi()
   .zRange('lb', 0, 9, { REV: true, BY: 'RANK' })
@@ -1035,7 +1035,7 @@ redis-cli ZRANGE jobs:scheduled "-inf" 1755955000000 BYSCORE LIMIT 0 10</code></
   <div class="lz-step"><span class="lz-k">3 · Claim it atomically</span><span class="lz-t">ZREM returns 1 for exactly one worker</span><span class="lz-d">This is the whole trick. Twenty workers can read the same due job, but only one <code>ZREM</code> returns 1 — the rest return 0 and skip. No lock, no leader election, no coordination.</span></div>
   <div class="lz-step"><span class="lz-k">4 · Then hand it to a real queue</span><span class="lz-t">RPUSH queue:jobs &lt;jobId&gt;</span><span class="lz-d">The sorted set answers "when", the list or stream answers "who runs it and what if it fails". Keeping the two jobs separate is what stops this from turning into a half-built queue (Lesson 4.1).</span></div>
 </div>
-<pre><code><span class="tok-comment">// The worker loop, in full</span>
+<pre><code class="language-javascript"><span class="tok-comment">// The worker loop, in full</span>
 setInterval(async () =&gt; {
   const due = await redis.zRange('jobs:scheduled', '-inf', Date.now(),
     { BY: 'SCORE', LIMIT: { offset: 0, count: 50 } });
@@ -1123,7 +1123,7 @@ redis-cli ZLEXCOUNT ac "[ha" "[ha\\xff"</code></pre>
 <p class="lead">Bài 4.3 là các lệnh. Bài này là những thứ người ta thật sự dựng bằng chúng. Năm khuôn mẫu, cái nào cũng đang chạy ở production đâu đó, cái nào cũng trên cùng một cấu trúc — và mỗi cái đều có một chi tiết chỉ lộ ra khi lưu lượng thật ập tới.</p>
 
 <h3>Khuôn 1 — Bảng xếp hạng trả lời được "tôi hạng mấy?"</h3>
-<pre><code>redis-cli DEL lb &gt;/dev/null
+<pre><code class="language-python">redis-cli DEL lb &gt;/dev/null
 python3 -c "
 import random
 random.seed(7)
@@ -1144,7 +1144,7 @@ time redis-cli ZREVRANK lb player:99999 &gt;/dev/null</code></pre>
 2) "39091"
 real	0m0.003s</div>
 <div class="callout ok"><strong>"Tôi hạng mấy?" là câu truy vấn mà cơ sở dữ liệu quan hệ dở nhất còn sorted set giỏi nhất.</strong> Bằng SQL nó là <code>SELECT COUNT(*) FROM scores WHERE score &gt; ?</code> — một lượt quét chỉ mục toàn phần, càng nhiều dòng càng chậm, hoặc một hàm cửa sổ chạy trên cả bảng. Trong Redis nó là <code>ZREVRANK</code>: 3 mili giây trên một trăm nghìn người chơi, O(log N), vì skip list giữ sẵn số nhịp nhảy trên mỗi nút và việc đi xuống theo tháp chỉ là cộng những nhịp ấy lại. Mười triệu người chơi sẽ tốn khoảng 23 bước thay vì 17.</div>
-<pre><code><span class="tok-comment">// Ba truy vấn mà một màn hình bảng xếp hạng thật sự cần</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Ba truy vấn mà một màn hình bảng xếp hạng thật sự cần</span>
 const [top, myRank, myScore] = await redis
   .multi()
   .zRange('lb', 0, 9, { REV: true, BY: 'RANK' })
@@ -1176,7 +1176,7 @@ redis-cli ZRANGE jobs:scheduled "-inf" 1755955000000 BYSCORE LIMIT 0 10</code></
   <div class="lz-step"><span class="lz-k">3 · Nhận việc một cách nguyên tử</span><span class="lz-t">ZREM trả về 1 cho đúng một worker</span><span class="lz-d">Đây là toàn bộ mẹo. Hai chục worker có thể cùng đọc ra một việc tới hạn, nhưng chỉ một <code>ZREM</code> trả về 1 — số còn lại trả 0 và bỏ qua. Không khoá, không bầu chủ, không phải phối hợp gì.</span></div>
   <div class="lz-step"><span class="lz-k">4 · Rồi giao cho một hàng đợi thật</span><span class="lz-t">RPUSH queue:jobs &lt;jobId&gt;</span><span class="lz-d">Sorted set trả lời "khi nào", còn list hay stream trả lời "ai chạy và hỏng thì sao". Tách bạch hai việc đó chính là thứ ngăn khuôn này biến thành một hàng đợi dựng dở (Bài 4.1).</span></div>
 </div>
-<pre><code><span class="tok-comment">// Vòng lặp của worker, đầy đủ</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Vòng lặp của worker, đầy đủ</span>
 setInterval(async () =&gt; {
   const due = await redis.zRange('jobs:scheduled', '-inf', Date.now(),
     { BY: 'SCORE', LIMIT: { offset: 0, count: 50 } });
@@ -1273,7 +1273,7 @@ redis-cli ZLEXCOUNT ac "[ha" "[ha\\xff"</code></pre>
 <p class="lead">Lists, sets and sorted sets overlap enough that almost any collection problem can be forced into any of them. The question is never "can it work" — it is what the wrong choice costs, and the cost is usually invisible until the data gets big. So here is the same problem built three ways, measured.</p>
 
 <h3>One problem, three structures, real numbers</h3>
-<pre><code><span class="tok-comment"># "the last 50,000 events for a user" — built three ways, same data</span>
+<pre><code class="language-python"><span class="tok-comment"># "the last 50,000 events for a user" — built three ways, same data</span>
 redis-cli DEL ev:list ev:set ev:zset &gt;/dev/null
 python3 -c "
 for i in range(50_000):
@@ -1371,7 +1371,7 @@ zset
 <p class="lead">List, set và sorted set giẫm lên nhau đủ nhiều để gần như bài toán tập hợp nào cũng có thể nhét vừa vào bất cứ cái nào. Câu hỏi không bao giờ là "có chạy được không" — mà là chọn sai thì tốn gì, và cái tốn ấy thường vô hình cho tới khi dữ liệu lớn lên. Nên đây là cùng một bài toán dựng ba kiểu, có đo đạc.</p>
 
 <h3>Một bài toán, ba cấu trúc, số liệu thật</h3>
-<pre><code><span class="tok-comment"># "50.000 sự kiện gần nhất của một người dùng" — dựng ba kiểu, cùng dữ liệu</span>
+<pre><code class="language-python"><span class="tok-comment"># "50.000 sự kiện gần nhất của một người dùng" — dựng ba kiểu, cùng dữ liệu</span>
 redis-cli DEL ev:list ev:set ev:zset &gt;/dev/null
 python3 -c "
 for i in range(50_000):

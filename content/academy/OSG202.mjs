@@ -787,7 +787,7 @@ strace -c ls</pre>
 <p>A <b>context switch</b> is exactly this: save the CPU state into the old PCB, load it from the new one, swap the page table. That is why it costs microseconds, and why doing it too often ("thrashing the scheduler") wastes the CPU you were trying to share.</p>
 
 <h3>fork() — one call, two returns</h3>
-<pre><span class="tok-keyword">#include</span> &lt;stdio.h&gt;
+<pre><code class="language-c"><span class="tok-keyword">#include</span> &lt;stdio.h&gt;
 <span class="tok-keyword">#include</span> &lt;unistd.h&gt;
 <span class="tok-keyword">#include</span> &lt;sys/wait.h&gt;
 
@@ -806,7 +806,7 @@ strace -c ls</pre>
     <span class="tok-function">wait</span>(&amp;status);                     <span class="tok-comment">// block until the child finishes</span>
     <span class="tok-function">printf</span>(<span class="tok-string">"parent: child %d exited with %d\\n"</span>, pid, <span class="tok-function">WEXITSTATUS</span>(status));
     <span class="tok-keyword">return</span> 0;
-}</pre>
+}</code></pre>
 <div class="out"><b>Trace it.</b> Before <span class="badge">fork()</span> there is one process. After it there are two, both sitting on the next line, with identical memory contents. They are told apart only by the return value: <b>0 in the child, the child's PID in the parent</b>, −1 on failure.<br>
 <b>Then <span class="badge">exec</span> does something different from fork:</b> it does not create a process — it <em>replaces</em> the current program image (code, data, stack) with a new one, keeping the same PID and open file descriptors. That is why the shell can redirect: fork, adjust the descriptors in the child, then exec.<br>
 <b>Output order is not deterministic:</b> parent and child are two independent processes and the scheduler decides. If your run always prints in the same order, that is luck, not a guarantee.</div>
@@ -846,7 +846,7 @@ strace -c ls</pre>
 <p><b>Chuyển ngữ cảnh</b> đúng là việc này: lưu trạng thái CPU vào PCB cũ, nạp lại từ PCB mới, tráo bảng trang. Vì thế nó tốn micro-giây, và vì thế làm việc đó quá thường xuyên ("quần bộ lập lịch") lại đốt chính cái CPU mà bạn định chia sẻ.</p>
 
 <h3>fork() — một lời gọi, hai lần trả về</h3>
-<pre><span class="tok-keyword">#include</span> &lt;stdio.h&gt;
+<pre><code class="language-c"><span class="tok-keyword">#include</span> &lt;stdio.h&gt;
 <span class="tok-keyword">#include</span> &lt;unistd.h&gt;
 <span class="tok-keyword">#include</span> &lt;sys/wait.h&gt;
 
@@ -865,7 +865,7 @@ strace -c ls</pre>
     <span class="tok-function">wait</span>(&amp;status);                     <span class="tok-comment">// chặn lại tới khi con kết thúc</span>
     <span class="tok-function">printf</span>(<span class="tok-string">"cha: con %d thoát với mã %d\\n"</span>, pid, <span class="tok-function">WEXITSTATUS</span>(status));
     <span class="tok-keyword">return</span> 0;
-}</pre>
+}</code></pre>
 <div class="out"><b>Chạy tay.</b> Trước <span class="badge">fork()</span> có một tiến trình. Sau nó có hai, cả hai đều đứng ở dòng kế tiếp, với nội dung bộ nhớ giống hệt nhau. Chúng chỉ phân biệt được nhờ giá trị trả về: <b>0 ở tiến trình con, PID của con ở tiến trình cha</b>, −1 nếu thất bại.<br>
 <b>Rồi <span class="badge">exec</span> làm một việc khác hẳn fork:</b> nó không tạo tiến trình — nó <em>thay thế</em> ảnh chương trình hiện tại (mã, dữ liệu, ngăn xếp) bằng chương trình mới, giữ nguyên PID và các mô tả tệp đang mở. Nhờ vậy shell chuyển hướng được: fork, chỉnh mô tả tệp trong con, rồi exec.<br>
 <b>Thứ tự in ra không tất định:</b> cha và con là hai tiến trình độc lập và bộ lập lịch quyết định. Nếu lần nào bạn chạy cũng ra cùng thứ tự thì đó là may mắn, không phải đảm bảo.</div>
@@ -2238,22 +2238,22 @@ Kiểm: P1 Need (0,2,0) ≤ (2,3,0) ✓ → Work (5,3,2) · P3 (0,1,1) ≤ (5,3,
 <h2>Driving the OS from the command line</h2>
 <p class="lead">The <strong>shell</strong> (CLO7–10) is a text interface to the OS — you type commands, it runs them. Fluency here is a lab-graded skill and a genuine career superpower, since almost all servers are Linux.</p>
 <h3>Navigating &amp; viewing</h3>
-<pre><span class="tok-function">pwd</span>            <span class="tok-comment"># print working directory (where am I?)</span>
+<pre><code class="language-bash"><span class="tok-function">pwd</span>            <span class="tok-comment"># print working directory (where am I?)</span>
 <span class="tok-function">ls</span> -l          <span class="tok-comment"># list files with details</span>
 <span class="tok-function">cd</span> /home/an    <span class="tok-comment"># change directory</span>
-<span class="tok-function">cat</span> file.txt   <span class="tok-comment"># show a file's contents</span></pre>
+<span class="tok-function">cat</span> file.txt   <span class="tok-comment"># show a file's contents</span></code></pre>
 <h3>Creating &amp; managing files</h3>
-<pre><span class="tok-function">mkdir</span> project   <span class="tok-comment"># make a directory</span>
+<pre><code class="language-bash"><span class="tok-function">mkdir</span> project   <span class="tok-comment"># make a directory</span>
 <span class="tok-function">touch</span> notes.txt <span class="tok-comment"># create an empty file</span>
 <span class="tok-function">cp</span> a.txt b.txt  <span class="tok-comment"># copy</span>
 <span class="tok-function">mv</span> b.txt docs/  <span class="tok-comment"># move / rename</span>
-<span class="tok-function">rm</span> notes.txt   <span class="tok-comment"># remove (careful — no recycle bin!)</span></pre>
+<span class="tok-function">rm</span> notes.txt   <span class="tok-comment"># remove (careful — no recycle bin!)</span></code></pre>
 <h3>Permissions &amp; processes — theory made real</h3>
-<pre><span class="tok-function">chmod</span> 755 script.sh   <span class="tok-comment"># set read/write/execute permissions</span>
+<pre><code class="language-bash"><span class="tok-function">chmod</span> 755 script.sh   <span class="tok-comment"># set read/write/execute permissions</span>
 <span class="tok-function">ps</span> aux              <span class="tok-comment"># see all processes (Chapter 2!)</span>
 <span class="tok-function">top</span>                 <span class="tok-comment"># live process & memory monitor (Ch 2 & 3)</span>
 <span class="tok-function">kill</span> 1234           <span class="tok-comment"># terminate a process by its PID</span>
-<span class="tok-function">free</span> -h            <span class="tok-comment"># memory usage (Chapter 3)</span></pre>
+<span class="tok-function">free</span> -h            <span class="tok-comment"># memory usage (Chapter 3)</span></code></pre>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>ps and top are not magic — they read /proc.</b> Commands like <code>ps</code>, <code>top</code> and <code>free</code> simply read text files under <strong>/proc</strong>, a virtual file system the kernel generates on the fly. Try <code>cat /proc/cpuinfo</code> or <code>cat /proc/1/status</code> and you are reading live kernel data as plain text. <em>This is the "everything is a file" Unix design taken to its limit — even the process table is a folder — which the command list alone never reveals.</em></div>
 <div class="callout ok">Notice how the commands make the theory tangible: <code>ps</code> and <code>top</code> show the processes and states from Chapter 2; <code>free</code> shows the memory of Chapter 3; <code>ls -l</code> shows the file metadata of Chapter 4. Linux is the OS course you can touch.</div>
 <a class="link-card codelab" href="/code-lab/linux-bash?ref=%2Fcourses%2Foperating-systems%2Flearn&reflabel=OSG202%20%E2%80%94%20Operating%20Systems#module-479" target="_blank" rel="noopener">
@@ -2267,22 +2267,22 @@ Kiểm: P1 Need (0,2,0) ≤ (2,3,0) ✓ → Work (5,3,2) · P3 (0,1,1) ≤ (5,3,
 <h2>Điều khiển OS từ dòng lệnh</h2>
 <p class="lead"><strong>Shell</strong> (CLO7–10) là một giao diện văn bản tới OS — bạn gõ lệnh, nó chạy. Thành thạo ở đây là kỹ năng được chấm qua lab và một siêu năng lực nghề nghiệp thật, vì gần như mọi máy chủ là Linux.</p>
 <h3>Di chuyển &amp; xem</h3>
-<pre><span class="tok-function">pwd</span>            <span class="tok-comment"># in thư mục hiện tại (tôi đang ở đâu?)</span>
+<pre><code class="language-bash"><span class="tok-function">pwd</span>            <span class="tok-comment"># in thư mục hiện tại (tôi đang ở đâu?)</span>
 <span class="tok-function">ls</span> -l          <span class="tok-comment"># liệt kê tệp kèm chi tiết</span>
 <span class="tok-function">cd</span> /home/an    <span class="tok-comment"># đổi thư mục</span>
-<span class="tok-function">cat</span> file.txt   <span class="tok-comment"># hiện nội dung một tệp</span></pre>
+<span class="tok-function">cat</span> file.txt   <span class="tok-comment"># hiện nội dung một tệp</span></code></pre>
 <h3>Tạo &amp; quản lý tệp</h3>
-<pre><span class="tok-function">mkdir</span> project   <span class="tok-comment"># tạo một thư mục</span>
+<pre><code class="language-bash"><span class="tok-function">mkdir</span> project   <span class="tok-comment"># tạo một thư mục</span>
 <span class="tok-function">touch</span> notes.txt <span class="tok-comment"># tạo một tệp rỗng</span>
 <span class="tok-function">cp</span> a.txt b.txt  <span class="tok-comment"># sao chép</span>
 <span class="tok-function">mv</span> b.txt docs/  <span class="tok-comment"># di chuyển / đổi tên</span>
-<span class="tok-function">rm</span> notes.txt   <span class="tok-comment"># xoá (cẩn thận — không có thùng rác!)</span></pre>
+<span class="tok-function">rm</span> notes.txt   <span class="tok-comment"># xoá (cẩn thận — không có thùng rác!)</span></code></pre>
 <h3>Quyền &amp; tiến trình — lý thuyết thành hiện thực</h3>
-<pre><span class="tok-function">chmod</span> 755 script.sh   <span class="tok-comment"># đặt quyền đọc/ghi/thực thi</span>
+<pre><code class="language-bash"><span class="tok-function">chmod</span> 755 script.sh   <span class="tok-comment"># đặt quyền đọc/ghi/thực thi</span>
 <span class="tok-function">ps</span> aux              <span class="tok-comment"># xem mọi tiến trình (Chương 2!)</span>
 <span class="tok-function">top</span>                 <span class="tok-comment"># giám sát tiến trình & bộ nhớ trực tiếp (Ch 2 & 3)</span>
 <span class="tok-function">kill</span> 1234           <span class="tok-comment"># kết thúc một tiến trình theo PID</span>
-<span class="tok-function">free</span> -h            <span class="tok-comment"># dùng bộ nhớ (Chương 3)</span></pre>
+<span class="tok-function">free</span> -h            <span class="tok-comment"># dùng bộ nhớ (Chương 3)</span></code></pre>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>ps và top không phải phép màu — chúng đọc /proc.</b> Các lệnh như <code>ps</code>, <code>top</code> và <code>free</code> chỉ đọc các tệp văn bản dưới <strong>/proc</strong>, một hệ thống tệp ảo mà kernel sinh ra tức thời. Thử <code>cat /proc/cpuinfo</code> hoặc <code>cat /proc/1/status</code> và bạn đang đọc dữ liệu kernel sống dưới dạng văn bản thuần. <em>Đây là triết lý "mọi thứ là một tệp" của Unix đẩy tới cực hạn — ngay cả bảng tiến trình cũng là một thư mục — điều mà chỉ nhìn danh sách lệnh không bao giờ hé lộ.</em></div>
 <div class="callout ok">Để ý các lệnh làm lý thuyết hữu hình: <code>ps</code> và <code>top</code> hiện tiến trình và trạng thái từ Chương 2; <code>free</code> hiện bộ nhớ Chương 3; <code>ls -l</code> hiện metadata tệp Chương 4. Linux là môn OS bạn chạm được.</div>
 <a class="link-card codelab" href="/code-lab/linux-bash?ref=%2Fcourses%2Foperating-systems%2Flearn&reflabel=OSG202%20%E2%80%94%20Operating%20Systems#module-479" target="_blank" rel="noopener">
@@ -2303,7 +2303,7 @@ Kiểm: P1 Need (0,2,0) ≤ (2,3,0) ✓ → Work (5,3,2) · P3 (0,1,1) ≤ (5,3,
 <span class="eyebrow">Chapter 7 · Lesson 7.2</span>
 <h2>Automating with shell scripts</h2>
 <p class="lead">A <strong>shell script</strong> (CLO9) is a file of shell commands run in sequence — turning repetitive tasks into one command. It is a real programming language, with variables, conditions and loops (your PRF192 skills apply).</p>
-<pre><span class="tok-comment">#!/bin/bash</span>
+<pre><code class="language-bash"><span class="tok-comment">#!/bin/bash</span>
 name=<span class="tok-string">"OSG202"</span>              <span class="tok-comment"># a variable</span>
 <span class="tok-function">echo</span> <span class="tok-string">"Hello, $name!"</span>       <span class="tok-comment"># use it with $</span>
 
@@ -2313,7 +2313,7 @@ name=<span class="tok-string">"OSG202"</span>              <span class="tok-comm
 
 <span class="tok-keyword">for</span> i <span class="tok-keyword">in</span> 1 2 3; <span class="tok-keyword">do</span>          <span class="tok-comment"># a loop</span>
     <span class="tok-function">echo</span> <span class="tok-string">"Count $i"</span>
-<span class="tok-keyword">done</span></pre>
+<span class="tok-keyword">done</span></code></pre>
 <div class="out"><b>Output:</b><br>Hello, OSG202!<br>File found<br>Count 1<br>Count 2<br>Count 3</div>
 <h3>The power of pipes</h3>
 <p>The shell&#39;s superpower is <strong>combining small commands</strong> with the pipe <code>|</code>, feeding one command&#39;s output into the next:</p>
@@ -2326,7 +2326,7 @@ name=<span class="tok-string">"OSG202"</span>              <span class="tok-comm
 <span class="eyebrow">Chương 7 · Bài 7.2</span>
 <h2>Tự động hoá bằng shell script</h2>
 <p class="lead">Một <strong>shell script</strong> (CLO9) là một tệp các lệnh shell chạy tuần tự — biến tác vụ lặp lại thành một lệnh. Nó là một ngôn ngữ lập trình thật, có biến, điều kiện và vòng lặp (kỹ năng PRF192 của bạn áp dụng được).</p>
-<pre><span class="tok-comment">#!/bin/bash</span>
+<pre><code class="language-bash"><span class="tok-comment">#!/bin/bash</span>
 name=<span class="tok-string">"OSG202"</span>              <span class="tok-comment"># một biến</span>
 <span class="tok-function">echo</span> <span class="tok-string">"Hello, $name!"</span>       <span class="tok-comment"># dùng nó với $</span>
 
@@ -2336,7 +2336,7 @@ name=<span class="tok-string">"OSG202"</span>              <span class="tok-comm
 
 <span class="tok-keyword">for</span> i <span class="tok-keyword">in</span> 1 2 3; <span class="tok-keyword">do</span>          <span class="tok-comment"># một vòng lặp</span>
     <span class="tok-function">echo</span> <span class="tok-string">"Count $i"</span>
-<span class="tok-keyword">done</span></pre>
+<span class="tok-keyword">done</span></code></pre>
 <div class="out"><b>Kết quả:</b><br>Hello, OSG202!<br>File found<br>Count 1<br>Count 2<br>Count 3</div>
 <h3>Sức mạnh của pipe</h3>
 <p>Siêu năng lực của shell là <strong>kết hợp các lệnh nhỏ</strong> bằng ống pipe <code>|</code>, đưa đầu ra của lệnh này vào lệnh kế:</p>

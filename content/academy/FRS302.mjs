@@ -421,7 +421,7 @@ const c7 = doc('frs302-7-1-wireless-devices-logs', '7.1 — Wireless & network-d
 <p>Each line records an allow/deny decision with the <strong>5-tuple</strong> (src IP, src port, dst IP, dst port, protocol) and a timestamp. A burst of denies to many ports from one source is a scan; an allow to a rare destination may be the C2 you traced in packets.</p>
 <h3>IDS/IPS alerts</h3>
 <p><strong>Snort</strong> and <strong>Suricata</strong> match traffic against signatures and raise alerts. Treat an alert as a <em>lead, not a verdict</em> — confirm it against the packets/flows before concluding.</p>
-<pre><code># Suricata: run rules against a saved pcap, then read the alerts
+<pre><code class="language-bash"># Suricata: run rules against a saved pcap, then read the alerts
 suricata -r case42.pcap -l ./out
 cat ./out/fast.log
 </code></pre>
@@ -436,7 +436,7 @@ cat ./out/fast.log
 <p>Mỗi dòng ghi một quyết định cho phép/chặn kèm <strong>5-tuple</strong> (IP nguồn, cổng nguồn, IP đích, cổng đích, giao thức) và mốc thời gian. Một loạt "chặn" tới nhiều cổng từ một nguồn là dấu hiệu quét; một "cho phép" tới đích hiếm gặp có thể chính là C2 bạn đã lần theo trong gói.</p>
 <h3>Cảnh báo IDS/IPS</h3>
 <p><strong>Snort</strong> và <strong>Suricata</strong> so lưu lượng với signature và phát cảnh báo. Hãy coi cảnh báo là <em>manh mối, không phải phán quyết</em> — xác nhận lại với gói/luồng trước khi kết luận.</p>
-<pre><code># Suricata: chạy luật trên một pcap đã lưu, rồi đọc cảnh báo
+<pre><code class="language-bash"># Suricata: chạy luật trên một pcap đã lưu, rồi đọc cảnh báo
 suricata -r case42.pcap -l ./out
 cat ./out/fast.log
 </code></pre>

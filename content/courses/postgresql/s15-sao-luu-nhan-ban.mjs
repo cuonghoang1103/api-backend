@@ -30,7 +30,7 @@ export default {
 <p class="lead">There are two families of PostgreSQL backup and they solve different problems. A <strong>logical</strong> backup describes the data as SQL — portable, selective, version-flexible. A <strong>physical</strong> backup copies the files — fast, exact, and the only route to point-in-time recovery (lesson 15.2). This lesson is the logical one, and its most important content is where it stops being enough.</p>
 
 <h3>Three formats, measured</h3>
-<pre><code>pg_dump -d ch15 -f plain.sql            <span class="tok-comment"># SQL thuần</span>
+<pre><code class="language-bash">pg_dump -d ch15 -f plain.sql            <span class="tok-comment"># SQL thuần</span>
 pg_dump -d ch15 -Fc -f custom.dump      <span class="tok-comment"># custom, nén</span>
 pg_dump -d ch15 -Fd -j 2 -f dir/        <span class="tok-comment"># thư mục, dump song song</span></code></pre>
 <div class="out">-rw-r--r-- 1  23383  plain.sql
@@ -80,7 +80,7 @@ pg_restore -d db --data-only custom.dump     <span class="tok-comment"># chỉ d
 <p class="lead">PostgreSQL có hai HỌ sao lưu và chúng giải hai bài toán khác nhau. Sao lưu <strong>LOGIC</strong> mô tả dữ liệu dưới dạng SQL — khả chuyển, chọn lọc được, linh hoạt giữa các phiên bản. Sao lưu <strong>VẬT LÝ</strong> chép chính các file — nhanh, chính xác, và là con đường DUY NHẤT tới khôi phục theo thời điểm (bài 15.2). Bài này nói về loại logic, và phần quan trọng nhất của nó là chỗ nó THÔI đủ.</p>
 
 <h3>Ba định dạng, đo thật</h3>
-<pre><code>pg_dump -d ch15 -f plain.sql            <span class="tok-comment"># SQL thuần</span>
+<pre><code class="language-bash">pg_dump -d ch15 -f plain.sql            <span class="tok-comment"># SQL thuần</span>
 pg_dump -d ch15 -Fc -f custom.dump      <span class="tok-comment"># custom, nén</span>
 pg_dump -d ch15 -Fd -j 2 -f dir/        <span class="tok-comment"># thư mục, dump song song</span></code></pre>
 <div class="out">-rw-r--r-- 1  23383  plain.sql
@@ -139,7 +139,7 @@ pg_restore -d db --data-only custom.dump     <span class="tok-comment"># chỉ d
 <p class="lead">Before PostgreSQL changes a data page, it writes a record describing the change to the <strong>Write-Ahead Log</strong> and flushes that to disk. Only then may the page itself be modified, and the page can be written back lazily. That ordering — log first, data later — is what makes <code>COMMIT</code> mean something after a power cut, and it is also the raw material for replication and point-in-time recovery.</p>
 
 <h3>Look at it</h3>
-<pre><code><span class="tok-keyword">SHOW</span> wal_level;
+<pre><code class="language-sql"><span class="tok-keyword">SHOW</span> wal_level;
 <span class="tok-keyword">SHOW</span> wal_segment_size;
 <span class="tok-keyword">SELECT</span> pg_current_wal_lsn();</code></pre>
 <div class="out"> wal_level | wal_segment_size | pg_current_wal_lsn
@@ -188,7 +188,7 @@ archive_command = <span class="tok-string">'test ! -f /mnt/wal/%f &amp;&amp; cp 
 <p class="lead">Trước khi PostgreSQL đổi một trang dữ liệu, nó ghi một bản ghi mô tả thay đổi đó vào <strong>Write-Ahead Log</strong> rồi ĐẨY XUỐNG ĐĨA. Chỉ sau đó trang dữ liệu mới được phép sửa, và trang đó có thể được ghi lại một cách thong thả. Chính cái THỨ TỰ ấy — log trước, dữ liệu sau — làm cho <code>COMMIT</code> có ý nghĩa sau một cú mất điện, và nó cũng là nguyên liệu thô cho nhân bản và khôi phục theo thời điểm.</p>
 
 <h3>Nhìn nó</h3>
-<pre><code><span class="tok-keyword">SHOW</span> wal_level;
+<pre><code class="language-sql"><span class="tok-keyword">SHOW</span> wal_level;
 <span class="tok-keyword">SHOW</span> wal_segment_size;
 <span class="tok-keyword">SELECT</span> pg_current_wal_lsn();</code></pre>
 <div class="out"> wal_level | wal_segment_size | pg_current_wal_lsn
@@ -247,7 +247,7 @@ archive_command = <span class="tok-string">'test ! -f /mnt/wal/%f &amp;&amp; cp 
 
 <h3>Build it</h3>
 <p>First a replication slot on the primary, so it retains WAL the replica has not consumed yet:</p>
-<pre><code><span class="tok-keyword">SELECT</span> * <span class="tok-keyword">FROM</span> pg_create_physical_replication_slot(<span class="tok-string">'ban_sao_1'</span>);</code></pre>
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> * <span class="tok-keyword">FROM</span> pg_create_physical_replication_slot(<span class="tok-string">'ban_sao_1'</span>);</code></pre>
 <p>Then copy the whole data directory:</p>
 <pre><code>pg_basebackup -h /tmp -p 5433 -U postgres \\
   -D ./replica -S ban_sao_1 -R -P -X stream</code></pre>
@@ -259,7 +259,7 @@ primary_conninfo  = 'user=postgres host=''/tmp'' port=5433 …'
 primary_slot_name = 'ban_sao_1'</div>
 
 <h3>Start it and confirm what it is</h3>
-<pre><code>pg_ctl -D ./replica -o <span class="tok-string">"-p 5434"</span> start
+<pre><code class="language-bash">pg_ctl -D ./replica -o <span class="tok-string">"-p 5434"</span> start
 psql -p 5434 -c <span class="tok-string">"SELECT pg_is_in_recovery();"</span></code></pre>
 <div class="out"> la_ban_sao
 ------------
@@ -268,18 +268,18 @@ psql -p 5434 -c <span class="tok-string">"SELECT pg_is_in_recovery();"</span></c
 <p><code>pg_is_in_recovery() = t</code> is the definitive test. A replica is permanently "in recovery": replaying WAL is not a startup phase for it, it is the job.</p>
 
 <h3>Write on one, read on the other</h3>
-<pre><code><span class="tok-comment">-- primary (5433)</span>
+<pre><code class="language-sql"><span class="tok-comment">-- primary (5433)</span>
 <span class="tok-keyword">INSERT INTO</span> note (title, body) <span class="tok-keyword">VALUES</span> (<span class="tok-string">'Từ primary'</span>, …);</code></pre>
 <div class="out">primary:  1001 dòng · mới nhất: Từ primary
 bản sao:  1001 dòng · mới nhất: Từ primary</div>
 <p>The row appeared on the replica within a second, with no application involvement. Now try to write to the replica:</p>
-<pre><code><span class="tok-comment">-- bản sao (5434)</span>
+<pre><code class="language-sql"><span class="tok-comment">-- bản sao (5434)</span>
 <span class="tok-keyword">INSERT INTO</span> note (title, body) <span class="tok-keyword">VALUES</span> (<span class="tok-string">'thử ghi'</span>, <span class="tok-string">'x'</span>);</code></pre>
 <div class="out">ERROR:  cannot execute INSERT in a read-only transaction</div>
 <p>A physical replica is byte-identical to its primary, so it cannot accept independent writes — the restriction is structural, not a policy you can relax.</p>
 
 <h3>Measuring lag — the number that matters</h3>
-<pre><code><span class="tok-comment">-- trên primary</span>
+<pre><code class="language-sql"><span class="tok-comment">-- trên primary</span>
 <span class="tok-keyword">SELECT</span> application_name, state, sync_state, sent_lsn, replay_lsn,
        pg_wal_lsn_diff(sent_lsn, replay_lsn) <span class="tok-keyword">AS</span> byte_tre
 <span class="tok-keyword">FROM</span> pg_stat_replication;</code></pre>
@@ -312,7 +312,7 @@ byte_tre         | 0</div>
 
 <h3>Dựng nó</h3>
 <p>Trước hết là một replication slot trên primary, để nó GIỮ LẠI phần WAL mà bản sao chưa tiêu thụ:</p>
-<pre><code><span class="tok-keyword">SELECT</span> * <span class="tok-keyword">FROM</span> pg_create_physical_replication_slot(<span class="tok-string">'ban_sao_1'</span>);</code></pre>
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> * <span class="tok-keyword">FROM</span> pg_create_physical_replication_slot(<span class="tok-string">'ban_sao_1'</span>);</code></pre>
 <p>Rồi chép toàn bộ thư mục dữ liệu:</p>
 <pre><code>pg_basebackup -h /tmp -p 5433 -U postgres \\
   -D ./replica -S ban_sao_1 -R -P -X stream</code></pre>
@@ -324,7 +324,7 @@ primary_conninfo  = 'user=postgres host=''/tmp'' port=5433 …'
 primary_slot_name = 'ban_sao_1'</div>
 
 <h3>Khởi động nó và xác nhận nó là cái gì</h3>
-<pre><code>pg_ctl -D ./replica -o <span class="tok-string">"-p 5434"</span> start
+<pre><code class="language-bash">pg_ctl -D ./replica -o <span class="tok-string">"-p 5434"</span> start
 psql -p 5434 -c <span class="tok-string">"SELECT pg_is_in_recovery();"</span></code></pre>
 <div class="out"> la_ban_sao
 ------------
@@ -333,18 +333,18 @@ psql -p 5434 -c <span class="tok-string">"SELECT pg_is_in_recovery();"</span></c
 <p><code>pg_is_in_recovery() = t</code> là phép thử dứt khoát. Một bản sao thì VĨNH VIỄN "đang phục hồi": phát lại WAL không phải một giai đoạn khởi động của nó, đó là CÔNG VIỆC của nó.</p>
 
 <h3>Ghi ở một bên, đọc ở bên kia</h3>
-<pre><code><span class="tok-comment">-- primary (5433)</span>
+<pre><code class="language-sql"><span class="tok-comment">-- primary (5433)</span>
 <span class="tok-keyword">INSERT INTO</span> note (title, body) <span class="tok-keyword">VALUES</span> (<span class="tok-string">'Từ primary'</span>, …);</code></pre>
 <div class="out">primary:  1001 dòng · mới nhất: Từ primary
 bản sao:  1001 dòng · mới nhất: Từ primary</div>
 <p>Dòng đó xuất hiện ở bản sao trong vòng một giây, không cần ứng dụng làm gì cả. Giờ thử GHI vào bản sao:</p>
-<pre><code><span class="tok-comment">-- bản sao (5434)</span>
+<pre><code class="language-sql"><span class="tok-comment">-- bản sao (5434)</span>
 <span class="tok-keyword">INSERT INTO</span> note (title, body) <span class="tok-keyword">VALUES</span> (<span class="tok-string">'thử ghi'</span>, <span class="tok-string">'x'</span>);</code></pre>
 <div class="out">ERROR:  cannot execute INSERT in a read-only transaction</div>
 <p>Một bản sao vật lý giống primary tới từng byte, nên nó KHÔNG THỂ nhận lệnh ghi độc lập — hạn chế này thuộc về CẤU TRÚC, không phải một chính sách bạn nới ra được.</p>
 
 <h3>Đo độ trễ — con số quan trọng</h3>
-<pre><code><span class="tok-comment">-- trên primary</span>
+<pre><code class="language-sql"><span class="tok-comment">-- trên primary</span>
 <span class="tok-keyword">SELECT</span> application_name, state, sync_state, sent_lsn, replay_lsn,
        pg_wal_lsn_diff(sent_lsn, replay_lsn) <span class="tok-keyword">AS</span> byte_tre
 <span class="tok-keyword">FROM</span> pg_stat_replication;</code></pre>
@@ -385,7 +385,7 @@ byte_tre         | 0</div>
 <p class="lead">Partitioning divides one logical table into several physical ones, transparently. Queries still address a single table name; PostgreSQL routes rows on insert and skips irrelevant partitions on read. It is presented as a performance feature, and it is — but as you will measure, its biggest win is somewhere else entirely.</p>
 
 <h3>Declaring it</h3>
-<pre><code><span class="tok-keyword">CREATE TABLE</span> event_p (
+<pre><code class="language-sql"><span class="tok-keyword">CREATE TABLE</span> event_p (
   id      bigint <span class="tok-keyword">GENERATED ALWAYS AS IDENTITY</span>,
   luc     timestamptz <span class="tok-keyword">NOT NULL</span>,
   payload text <span class="tok-keyword">NOT NULL</span>
@@ -398,7 +398,7 @@ byte_tre         | 0</div>
 <span class="tok-keyword">CREATE TABLE</span> event_p_2026_08 <span class="tok-keyword">PARTITION OF</span> event_p
   <span class="tok-keyword">FOR VALUES FROM</span> (<span class="tok-string">'2026-08-01'</span>) <span class="tok-keyword">TO</span> (<span class="tok-string">'2026-09-01'</span>);</code></pre>
 <p>Insert 300,000 rows spread over three months into <code>event_p</code>, then ask where each row actually landed. <code>tableoid</code> is the hidden column naming the physical table a row came from:</p>
-<pre><code><span class="tok-keyword">SELECT</span> tableoid::regclass <span class="tok-keyword">AS</span> phan_manh, count(*),
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> tableoid::regclass <span class="tok-keyword">AS</span> phan_manh, count(*),
        min(luc)::date <span class="tok-keyword">AS</span> tu, max(luc)::date <span class="tok-keyword">AS</span> den
 <span class="tok-keyword">FROM</span> event_p <span class="tok-keyword">GROUP BY</span> 1 <span class="tok-keyword">ORDER BY</span> 1;</code></pre>
 <div class="out">    phan_manh    | count  |     tu     |    den
@@ -410,7 +410,7 @@ byte_tre         | 0</div>
 <p>The <code>INSERT</code> named only <code>event_p</code>; PostgreSQL routed every row by its <code>luc</code> value.</p>
 
 <h3>Partition pruning</h3>
-<pre><code><span class="tok-keyword">EXPLAIN</span> (<span class="tok-keyword">ANALYZE</span>, <span class="tok-keyword">COSTS OFF</span>)
+<pre><code class="language-sql"><span class="tok-keyword">EXPLAIN</span> (<span class="tok-keyword">ANALYZE</span>, <span class="tok-keyword">COSTS OFF</span>)
 <span class="tok-keyword">SELECT</span> count(*) <span class="tok-keyword">FROM</span> event_p
 <span class="tok-keyword">WHERE</span> luc &gt;= <span class="tok-string">'2026-08-01'</span> <span class="tok-keyword">AND</span> luc &lt; <span class="tok-string">'2026-09-01'</span>;</code></pre>
 <div class="out"> Aggregate (actual time=15.861..15.862 rows=1 loops=1)
@@ -423,7 +423,7 @@ byte_tre         | 0</div>
 
 <h3>The real reason to partition</h3>
 <p>Now the measurement that decides it. Delete June's data two ways — from a flat table and by dropping a partition:</p>
-<pre><code><span class="tok-keyword">DELETE FROM</span> event_flat <span class="tok-keyword">WHERE</span> luc &lt; <span class="tok-string">'2026-07-01'</span>;   <span class="tok-comment">-- bảng phẳng</span>
+<pre><code class="language-sql"><span class="tok-keyword">DELETE FROM</span> event_flat <span class="tok-keyword">WHERE</span> luc &lt; <span class="tok-string">'2026-07-01'</span>;   <span class="tok-comment">-- bảng phẳng</span>
 <span class="tok-keyword">DROP TABLE</span> event_p_2026_06;                          <span class="tok-comment">-- một mảnh</span></code></pre>
 <div class="out">DELETE 100019
 Time: 67.751 ms
@@ -459,7 +459,7 @@ Time: 3.500 ms</div>
 <p class="lead">Phân mảnh chia MỘT bảng logic thành nhiều bảng vật lý, một cách trong suốt. Truy vấn vẫn gọi một cái tên bảng duy nhất; PostgreSQL định tuyến dòng khi chèn và bỏ qua các mảnh không liên quan khi đọc. Nó được giới thiệu như một tính năng hiệu năng, và đúng là vậy — nhưng như bạn sắp ĐO được, chiến thắng lớn nhất của nó nằm ở một chỗ hoàn toàn khác.</p>
 
 <h3>Khai báo nó</h3>
-<pre><code><span class="tok-keyword">CREATE TABLE</span> event_p (
+<pre><code class="language-sql"><span class="tok-keyword">CREATE TABLE</span> event_p (
   id      bigint <span class="tok-keyword">GENERATED ALWAYS AS IDENTITY</span>,
   luc     timestamptz <span class="tok-keyword">NOT NULL</span>,
   payload text <span class="tok-keyword">NOT NULL</span>
@@ -472,7 +472,7 @@ Time: 3.500 ms</div>
 <span class="tok-keyword">CREATE TABLE</span> event_p_2026_08 <span class="tok-keyword">PARTITION OF</span> event_p
   <span class="tok-keyword">FOR VALUES FROM</span> (<span class="tok-string">'2026-08-01'</span>) <span class="tok-keyword">TO</span> (<span class="tok-string">'2026-09-01'</span>);</code></pre>
 <p>Chèn 300.000 dòng trải trên ba tháng vào <code>event_p</code>, rồi hỏi xem từng dòng THẬT SỰ rơi vào đâu. <code>tableoid</code> là cột ẩn nêu tên bảng vật lý mà một dòng đến từ đó:</p>
-<pre><code><span class="tok-keyword">SELECT</span> tableoid::regclass <span class="tok-keyword">AS</span> phan_manh, count(*),
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> tableoid::regclass <span class="tok-keyword">AS</span> phan_manh, count(*),
        min(luc)::date <span class="tok-keyword">AS</span> tu, max(luc)::date <span class="tok-keyword">AS</span> den
 <span class="tok-keyword">FROM</span> event_p <span class="tok-keyword">GROUP BY</span> 1 <span class="tok-keyword">ORDER BY</span> 1;</code></pre>
 <div class="out">    phan_manh    | count  |     tu     |    den
@@ -484,7 +484,7 @@ Time: 3.500 ms</div>
 <p>Lệnh <code>INSERT</code> chỉ nêu tên <code>event_p</code>; PostgreSQL định tuyến từng dòng theo giá trị <code>luc</code> của nó.</p>
 
 <h3>Partition pruning (cắt tỉa mảnh)</h3>
-<pre><code><span class="tok-keyword">EXPLAIN</span> (<span class="tok-keyword">ANALYZE</span>, <span class="tok-keyword">COSTS OFF</span>)
+<pre><code class="language-sql"><span class="tok-keyword">EXPLAIN</span> (<span class="tok-keyword">ANALYZE</span>, <span class="tok-keyword">COSTS OFF</span>)
 <span class="tok-keyword">SELECT</span> count(*) <span class="tok-keyword">FROM</span> event_p
 <span class="tok-keyword">WHERE</span> luc &gt;= <span class="tok-string">'2026-08-01'</span> <span class="tok-keyword">AND</span> luc &lt; <span class="tok-string">'2026-09-01'</span>;</code></pre>
 <div class="out"> Aggregate (actual time=15.861..15.862 rows=1 loops=1)
@@ -497,7 +497,7 @@ Time: 3.500 ms</div>
 
 <h3>Lý do THẬT SỰ để phân mảnh</h3>
 <p>Giờ tới phép đo quyết định tất cả. Xoá dữ liệu tháng 6 theo hai cách — từ một bảng phẳng, và bằng cách drop một mảnh:</p>
-<pre><code><span class="tok-keyword">DELETE FROM</span> event_flat <span class="tok-keyword">WHERE</span> luc &lt; <span class="tok-string">'2026-07-01'</span>;   <span class="tok-comment">-- bảng phẳng</span>
+<pre><code class="language-sql"><span class="tok-keyword">DELETE FROM</span> event_flat <span class="tok-keyword">WHERE</span> luc &lt; <span class="tok-string">'2026-07-01'</span>;   <span class="tok-comment">-- bảng phẳng</span>
 <span class="tok-keyword">DROP TABLE</span> event_p_2026_06;                          <span class="tok-comment">-- một mảnh</span></code></pre>
 <div class="out">DELETE 100019
 Time: 67,751 ms

@@ -56,7 +56,7 @@ ${gallery('git-09', [
 <h2>Everything Git knows is in one folder</h2>
 <p class="lead">Eight chapters of commands, and all of it reads and writes a single directory. Open it once and the abstractions stop being abstract: branches become files, commits become files, and "Git lost my work" becomes a claim you can check.</p>
 
-<pre><code>cd ~/git-lab
+<pre><code class="language-bash">cd ~/git-lab
 ls -F .git/</code></pre>
 <div class="out">HEAD          config        hooks/        index         logs/
 COMMIT_EDITMSG description   info/         objects/      refs/</div>
@@ -71,12 +71,12 @@ ${slide('git-09', 3, 'Tham quan thư mục .git — thứ gì nằm ở đâu')}
 
 <h3>HEAD — where you are</h3>
 ${slide('git-09', 4, 'HEAD và nhánh chỉ là file chữ một dòng')}
-<pre><code>cat .git/HEAD</code></pre>
+<pre><code class="language-bash">cat .git/HEAD</code></pre>
 <div class="out">ref: refs/heads/main</div>
 <p>One line. It names the branch you are on (3.1). During a detached HEAD it holds a raw hash instead, which is the entire difference between the two states.</p>
 
 <h3>refs/ — the branches</h3>
-<pre><code>find .git/refs -type f | head
+<pre><code class="language-bash">find .git/refs -type f | head
 cat .git/refs/heads/main</code></pre>
 <div class="out">.git/refs/heads/main
 .git/refs/heads/feature/login
@@ -85,7 +85,7 @@ cat .git/refs/heads/main</code></pre>
 
 3f8a1c9d2e5b7a4c6f8e0a2b4d6c8e0f2a4b6c8d</div>
 <p>Each branch is a 41-byte file. Note that <code>feature/login</code> created a real subdirectory — which is why you cannot have both a branch <code>feature</code> and a branch <code>feature/login</code> (3.1): one would have to be a file and a directory at once.</p>
-<pre><code>cat .git/packed-refs | head -3</code></pre>
+<pre><code class="language-bash">cat .git/packed-refs | head -3</code></pre>
 <div class="out"># pack-refs with: peeled fully-peeled sorted
 3f8a1c9d2e5b7a4c6f8e0a2b4d6c8e0f2a4b6c8d refs/heads/main
 9e2d4b70c1a3f5e7b9d0c2a4f6e8b0d2c4a6f8e0 refs/tags/v1.5.0</div>
@@ -93,13 +93,13 @@ cat .git/refs/heads/main</code></pre>
 
 <h3>objects/ — the database</h3>
 ${slide('git-09', 5, 'objects/: mỗi đối tượng rời là một file')}
-<pre><code>ls .git/objects/ | head
+<pre><code class="language-bash">ls .git/objects/ | head
 ls .git/objects/3f/</code></pre>
 <div class="out">3f  7b  9e  a7  info  pack
 
 8a1c9d2e5b7a4c6f8e0a2b4d6c8e0f2a4b6c8d</div>
 <p>Each object's 40-character hash is split: the first two characters become a directory name, the remaining 38 the file name. That split exists purely to stop one directory holding a million entries, which most filesystems handle badly.</p>
-<pre><code>cat .git/objects/3f/8a1c9d2e5b…       <span class="tok-comment"># binary — zlib-compressed</span>
+<pre><code class="language-bash">cat .git/objects/3f/8a1c9d2e5b…       <span class="tok-comment"># binary — zlib-compressed</span>
 git cat-file -t 3f8a1c9               <span class="tok-comment"># type</span>
 git cat-file -p 3f8a1c9               <span class="tok-comment"># pretty-print the content</span>
 git cat-file -s 3f8a1c9               <span class="tok-comment"># size in bytes</span></code></pre>
@@ -108,7 +108,7 @@ git cat-file -s 3f8a1c9               <span class="tok-comment"># size in bytes<
 
 <h3>index — the staging area, as a real file</h3>
 ${slide('git-09', 10, 'index — vùng staging là một file thật')}
-<pre><code>ls -la .git/index
+<pre><code class="language-bash">ls -la .git/index
 git ls-files --stage | head -3</code></pre>
 <div class="out">-rw-r--r-- 1 an an 8394 Aug 21 14:20 .git/index
 
@@ -133,7 +133,7 @@ git ls-files --stage | head -3</code></pre>
 </div>
 
 <h3>Proving the model</h3>
-<pre><code><span class="tok-comment"># A branch really is just a file. Create one with echo:</span>
+<pre><code class="language-bash"><span class="tok-comment"># A branch really is just a file. Create one with echo:</span>
 <span class="tok-keyword">echo</span> \$(git rev-parse HEAD) &gt; .git/refs/heads/handmade
 git branch | grep handmade</code></pre>
 <div class="out">  handmade</div>
@@ -182,7 +182,7 @@ HEAD is now at 6a952eb feat: doi loi chao
 <h2>Mọi thứ Git biết đều nằm trong một thư mục</h2>
 <p class="lead">Tám chương lệnh, và tất cả chỉ đọc và ghi vào một thư mục duy nhất. Mở nó ra một lần thì các trừu tượng hết trừu tượng: nhánh thành file, commit thành file, và câu "Git làm mất việc của tôi" thành một khẳng định kiểm chứng được.</p>
 
-<pre><code>cd ~/git-lab
+<pre><code class="language-bash">cd ~/git-lab
 ls -F .git/</code></pre>
 <div class="out">HEAD          config        hooks/        index         logs/
 COMMIT_EDITMSG description   info/         objects/      refs/</div>
@@ -197,12 +197,12 @@ ${slide('git-09', 3, 'Tham quan thư mục .git — thứ gì nằm ở đâu')}
 
 <h3>HEAD — bạn đang ở đâu</h3>
 ${slide('git-09', 4, 'HEAD và nhánh chỉ là file chữ một dòng')}
-<pre><code>cat .git/HEAD</code></pre>
+<pre><code class="language-bash">cat .git/HEAD</code></pre>
 <div class="out">ref: refs/heads/main</div>
 <p>Một dòng. Nó gọi tên cái nhánh bạn đang đứng (bài 3.1). Khi HEAD lìa cành, nó giữ thẳng một mã băm thay vì tên nhánh, và đó là toàn bộ khác biệt giữa hai trạng thái.</p>
 
 <h3>refs/ — các nhánh</h3>
-<pre><code>find .git/refs -type f | head
+<pre><code class="language-bash">find .git/refs -type f | head
 cat .git/refs/heads/main</code></pre>
 <div class="out">.git/refs/heads/main
 .git/refs/heads/feature/login
@@ -211,7 +211,7 @@ cat .git/refs/heads/main</code></pre>
 
 3f8a1c9d2e5b7a4c6f8e0a2b4d6c8e0f2a4b6c8d</div>
 <p>Mỗi nhánh là một file 41 byte. Hãy để ý <code>feature/login</code> đã tạo ra một thư mục con thật — và đó là lý do bạn không thể có đồng thời một nhánh <code>feature</code> và một nhánh <code>feature/login</code> (bài 3.1): một thứ sẽ phải vừa là file vừa là thư mục.</p>
-<pre><code>cat .git/packed-refs | head -3</code></pre>
+<pre><code class="language-bash">cat .git/packed-refs | head -3</code></pre>
 <div class="out"># pack-refs with: peeled fully-peeled sorted
 3f8a1c9d2e5b7a4c6f8e0a2b4d6c8e0f2a4b6c8d refs/heads/main
 9e2d4b70c1a3f5e7b9d0c2a4f6e8b0d2c4a6f8e0 refs/tags/v1.5.0</div>
@@ -219,13 +219,13 @@ cat .git/refs/heads/main</code></pre>
 
 <h3>objects/ — cơ sở dữ liệu</h3>
 ${slide('git-09', 5, 'objects/: mỗi đối tượng rời là một file')}
-<pre><code>ls .git/objects/ | head
+<pre><code class="language-bash">ls .git/objects/ | head
 ls .git/objects/3f/</code></pre>
 <div class="out">3f  7b  9e  a7  info  pack
 
 8a1c9d2e5b7a4c6f8e0a2b4d6c8e0f2a4b6c8d</div>
 <p>Mã băm 40 ký tự của mỗi đối tượng bị chẻ ra: hai ký tự đầu thành tên thư mục, 38 ký tự còn lại thành tên file. Việc chẻ đó tồn tại thuần tuý để một thư mục không phải chứa cả triệu mục, thứ mà đa số hệ thống file xử lý rất tệ.</p>
-<pre><code>cat .git/objects/3f/8a1c9d2e5b…       <span class="tok-comment"># nhị phân — nén zlib</span>
+<pre><code class="language-bash">cat .git/objects/3f/8a1c9d2e5b…       <span class="tok-comment"># nhị phân — nén zlib</span>
 git cat-file -t 3f8a1c9               <span class="tok-comment"># loại</span>
 git cat-file -p 3f8a1c9               <span class="tok-comment"># in nội dung ra cho người đọc</span>
 git cat-file -s 3f8a1c9               <span class="tok-comment"># kích thước theo byte</span></code></pre>
@@ -234,7 +234,7 @@ git cat-file -s 3f8a1c9               <span class="tok-comment"># kích thước
 
 <h3>index — vùng staging, dưới dạng một file thật</h3>
 ${slide('git-09', 10, 'index — vùng staging là một file thật')}
-<pre><code>ls -la .git/index
+<pre><code class="language-bash">ls -la .git/index
 git ls-files --stage | head -3</code></pre>
 <div class="out">-rw-r--r-- 1 an an 8394 Aug 21 14:20 .git/index
 
@@ -259,7 +259,7 @@ git ls-files --stage | head -3</code></pre>
 </div>
 
 <h3>Chứng minh mô hình</h3>
-<pre><code><span class="tok-comment"># Một nhánh thật sự chỉ là một file. Hãy tạo một cái bằng echo:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Một nhánh thật sự chỉ là một file. Hãy tạo một cái bằng echo:</span>
 <span class="tok-keyword">echo</span> \$(git rev-parse HEAD) &gt; .git/refs/heads/handmade
 git branch | grep handmade</code></pre>
 <div class="out">  handmade</div>
@@ -326,18 +326,18 @@ HEAD is now at 6a952eb feat: doi loi chao
 
 <h3>Reading each one</h3>
 ${slide('git-09', 7, 'Một commit mở bung ra: commit → tree → blob')}
-<pre><code>git cat-file -p HEAD</code></pre>
+<pre><code class="language-bash">git cat-file -p HEAD</code></pre>
 <div class="out">tree 8b7c4a2e1f9d0c3b5a7e9f1d3c5b7a9e1f3d5c7b
 parent 9e2d4b70c1a3f5e7b9d0c2a4f6e8b0d2c4a6f8e0
 author Nguyen Van An &lt;an@example.com&gt; 1755820800 +0700
 committer Nguyen Van An &lt;an@example.com&gt; 1755820800 +0700
 
 feat(auth): add refresh token rotation</div>
-<pre><code>git cat-file -p 8b7c4a2</code></pre>
+<pre><code class="language-bash">git cat-file -p 8b7c4a2</code></pre>
 <div class="out">100644 blob a7c2f91d8e0b2c4a6f8e0d2b4c6a8e0f2d4b6c8e	package.json
 040000 tree 3f8a1c9d2e5b7a4c6f8e0a2b4d6c8e0f2a4b6c8d	src
 100644 blob 5f7a9c2b8d0e2f4a6c8e0b2d4f6a8c0e2b4d6f8e	README.md</div>
-<pre><code>git cat-file -p a7c2f91 | head -3</code></pre>
+<pre><code class="language-bash">git cat-file -p a7c2f91 | head -3</code></pre>
 <div class="out">{
   "name": "api-backend",
   "version": "1.5.0",</div>
@@ -358,27 +358,27 @@ ${slide('git-09', 8, 'Hai commit dùng chung blob — file không đổi, không
 <h3>Building a commit by hand</h3>
 ${slide('git-09', 12, 'Dựng một commit bằng năm lệnh tầng thấp')}
 <p>The most convincing way to believe all this is to make a commit without <code>git add</code> or <code>git commit</code>. Every command below is real:</p>
-<pre><code>mkdir -p /tmp/by-hand &amp;&amp; cd /tmp/by-hand &amp;&amp; git init -q
+<pre><code class="language-bash">mkdir -p /tmp/by-hand &amp;&amp; cd /tmp/by-hand &amp;&amp; git init -q
 
 <span class="tok-comment"># 1. Store some content as a blob. -w means "write it to the database".</span>
 <span class="tok-keyword">echo</span> <span class="tok-string">"hello world"</span> | git hash-object -w --stdin</code></pre>
 <div class="out">3b18e512dba79e4c8300dd08aeb37f8e728b8dad</div>
-<pre><code><span class="tok-comment"># 2. Put that blob into the index under a name.</span>
+<pre><code class="language-bash"><span class="tok-comment"># 2. Put that blob into the index under a name.</span>
 git update-index --add --cacheinfo 100644,3b18e512dba79e4c8300dd08aeb37f8e728b8dad,hello.txt
 
 <span class="tok-comment"># 3. Turn the index into a tree object.</span>
 git write-tree</code></pre>
 <div class="out">68aba62e560c0ebc3396e8ae9335232cd93a3f60</div>
-<pre><code><span class="tok-comment"># 4. Wrap the tree in a commit.</span>
+<pre><code class="language-bash"><span class="tok-comment"># 4. Wrap the tree in a commit.</span>
 <span class="tok-keyword">echo</span> <span class="tok-string">"first commit, made by hand"</span> | git commit-tree 68aba62</code></pre>
 <div class="out">826b62edec33ae69e4f04a1ba2c40744ec4938c8</div>
-<pre><code><span class="tok-comment"># 5. Point a branch at it. THIS is what "committing" means.</span>
+<pre><code class="language-bash"><span class="tok-comment"># 5. Point a branch at it. THIS is what "committing" means.</span>
 git update-ref refs/heads/main 826b62e
 git log --oneline</code></pre>
 <div class="out">826b62e first commit, made by hand</div>
 <div class="callout ok">A real commit, in a real repository, built from five plumbing commands. <code>git commit</code> is those five steps plus conveniences: reading your config for the author, opening an editor, running hooks, writing the reflog. Nothing magical was removed.</div>
 <p>Two honest details from running this for real (git 2.51). First, <strong>your commit hash will differ</strong>: a commit object contains the author name, email and the second it was made, so only the blob <code>3b18e51</code> and the tree <code>68aba62</code> are identical on every machine. Second, the working directory was never touched, so Git reports the file as deleted until you check it out. (Step 5 assumes <code>init.defaultBranch = main</code> from 0.3; if your new repository started on <code>master</code>, create it with <code>git init -b main</code> instead.)</p>
-<pre><code>git status -s
+<pre><code class="language-bash">git status -s
 git restore hello.txt   <span class="tok-comment"># write the committed blob out to disk</span></code></pre>
 <div class="out"> D hello.txt</div>
 
@@ -390,17 +390,17 @@ printf <span class="tok-string">'blob 12\\0hello world\\n'</span> | sha1sum</cod
 <p>On Linux and in Git Bash on Windows <code>sha1sum</code> is always there; on a Mac use <code>shasum</code> (recent macOS also ships <code>sha1sum</code>). Same 40 characters either way.</p>
 
 <h3>Inspecting the whole database</h3>
-<pre><code>git cat-file --batch-all-objects --batch-check | head -8</code></pre>
+<pre><code class="language-bash">git cat-file --batch-all-objects --batch-check | head -8</code></pre>
 <div class="out">3b18e512dba79e4c8300dd08aeb37f8e728b8dad blob 12
 68aba62e560c0ebc3396e8ae9335232cd93a3f60 tree 37
 826b62edec33ae69e4f04a1ba2c40744ec4938c8 commit 177</div>
-<pre><code><span class="tok-comment"># Every object, sorted by size — how you find the 400 MB video (8.3):</span>
+<pre><code class="language-bash"><span class="tok-comment"># Every object, sorted by size — how you find the 400 MB video (8.3):</span>
 git cat-file --batch-all-objects --batch-check=<span class="tok-string">'%(objectsize) %(objectname) %(objecttype)'</span> \\
   | sort -rn | head -5</code></pre>
 
 <h3>Annotated tags are objects too</h3>
 ${slide('git-09', 13, 'Tag có chú thích là một đối tượng; tag nhẹ chỉ là file')}
-<pre><code>git tag -a v1.0 -m <span class="tok-string">"first release"</span>
+<pre><code class="language-bash">git tag -a v1.0 -m <span class="tok-string">"first release"</span>
 git cat-file -t v1.0
 git cat-file -p v1.0</code></pre>
 <div class="out">tag
@@ -467,18 +467,18 @@ git status -s
 
 <h3>Đọc từng loại</h3>
 ${slide('git-09', 7, 'Một commit mở bung ra: commit → tree → blob')}
-<pre><code>git cat-file -p HEAD</code></pre>
+<pre><code class="language-bash">git cat-file -p HEAD</code></pre>
 <div class="out">tree 8b7c4a2e1f9d0c3b5a7e9f1d3c5b7a9e1f3d5c7b
 parent 9e2d4b70c1a3f5e7b9d0c2a4f6e8b0d2c4a6f8e0
 author Nguyen Van An &lt;an@example.com&gt; 1755820800 +0700
 committer Nguyen Van An &lt;an@example.com&gt; 1755820800 +0700
 
 feat(auth): add refresh token rotation</div>
-<pre><code>git cat-file -p 8b7c4a2</code></pre>
+<pre><code class="language-bash">git cat-file -p 8b7c4a2</code></pre>
 <div class="out">100644 blob a7c2f91d8e0b2c4a6f8e0d2b4c6a8e0f2d4b6c8e	package.json
 040000 tree 3f8a1c9d2e5b7a4c6f8e0a2b4d6c8e0f2a4b6c8d	src
 100644 blob 5f7a9c2b8d0e2f4a6c8e0b2d4f6a8c0e2b4d6f8e	README.md</div>
-<pre><code>git cat-file -p a7c2f91 | head -3</code></pre>
+<pre><code class="language-bash">git cat-file -p a7c2f91 | head -3</code></pre>
 <div class="out">{
   "name": "api-backend",
   "version": "1.5.0",</div>
@@ -499,27 +499,27 @@ ${slide('git-09', 8, 'Hai commit dùng chung blob — file không đổi, không
 <h3>Dựng một commit bằng tay</h3>
 ${slide('git-09', 12, 'Dựng một commit bằng năm lệnh tầng thấp')}
 <p>Cách thuyết phục nhất để tin toàn bộ chuyện này là tạo một commit mà không dùng <code>git add</code> hay <code>git commit</code>. Mọi lệnh dưới đây đều là thật:</p>
-<pre><code>mkdir -p /tmp/by-hand &amp;&amp; cd /tmp/by-hand &amp;&amp; git init -q
+<pre><code class="language-bash">mkdir -p /tmp/by-hand &amp;&amp; cd /tmp/by-hand &amp;&amp; git init -q
 
 <span class="tok-comment"># 1. Lưu một mẩu nội dung thành blob. -w nghĩa là "ghi nó vào cơ sở dữ liệu".</span>
 <span class="tok-keyword">echo</span> <span class="tok-string">"hello world"</span> | git hash-object -w --stdin</code></pre>
 <div class="out">3b18e512dba79e4c8300dd08aeb37f8e728b8dad</div>
-<pre><code><span class="tok-comment"># 2. Đưa blob đó vào index dưới một cái tên.</span>
+<pre><code class="language-bash"><span class="tok-comment"># 2. Đưa blob đó vào index dưới một cái tên.</span>
 git update-index --add --cacheinfo 100644,3b18e512dba79e4c8300dd08aeb37f8e728b8dad,hello.txt
 
 <span class="tok-comment"># 3. Biến index thành một đối tượng tree.</span>
 git write-tree</code></pre>
 <div class="out">68aba62e560c0ebc3396e8ae9335232cd93a3f60</div>
-<pre><code><span class="tok-comment"># 4. Bọc cái tree đó trong một commit.</span>
+<pre><code class="language-bash"><span class="tok-comment"># 4. Bọc cái tree đó trong một commit.</span>
 <span class="tok-keyword">echo</span> <span class="tok-string">"first commit, made by hand"</span> | git commit-tree 68aba62</code></pre>
 <div class="out">826b62edec33ae69e4f04a1ba2c40744ec4938c8</div>
-<pre><code><span class="tok-comment"># 5. Cho một nhánh trỏ vào nó. ĐÂY mới là ý nghĩa của việc "commit".</span>
+<pre><code class="language-bash"><span class="tok-comment"># 5. Cho một nhánh trỏ vào nó. ĐÂY mới là ý nghĩa của việc "commit".</span>
 git update-ref refs/heads/main 826b62e
 git log --oneline</code></pre>
 <div class="out">826b62e first commit, made by hand</div>
 <div class="callout ok">Một commit thật, trong một kho mã thật, dựng từ năm lệnh cấp thấp. <code>git commit</code> là đúng năm bước đó cộng các tiện ích: đọc cấu hình để lấy tác giả, mở trình soạn thảo, chạy hook, ghi reflog. Không có phép màu nào bị lược bỏ cả.</div>
 <p>Hai chi tiết thật khi chạy chuyện này (git 2.51). Một, <strong>mã băm commit của bạn sẽ KHÁC</strong>: đối tượng commit chứa tên tác giả, email và đúng giây nó được tạo, nên chỉ blob <code>3b18e51</code> và tree <code>68aba62</code> là giống hệt trên mọi máy. Hai, thư mục làm việc chưa hề bị đụng tới, nên Git báo file đã bị xoá cho tới khi bạn lấy nó ra. (Bước 5 giả định <code>init.defaultBranch = main</code> đã đặt ở bài 0.3; nếu kho mới của bạn bắt đầu trên <code>master</code> thì tạo nó bằng <code>git init -b main</code>.)</p>
-<pre><code>git status -s
+<pre><code class="language-bash">git status -s
 git restore hello.txt   <span class="tok-comment"># ghi blob đã commit ra đĩa</span></code></pre>
 <div class="out"> D hello.txt</div>
 
@@ -531,17 +531,17 @@ printf <span class="tok-string">'blob 12\\0hello world\\n'</span> | sha1sum</cod
 <p>Trên Linux và Git Bash của Windows luôn có <code>sha1sum</code>; trên Mac dùng <code>shasum</code> (macOS đời mới cũng có sẵn <code>sha1sum</code>). Cách nào cũng ra đúng 40 ký tự đó.</p>
 
 <h3>Soi cả cơ sở dữ liệu</h3>
-<pre><code>git cat-file --batch-all-objects --batch-check | head -8</code></pre>
+<pre><code class="language-bash">git cat-file --batch-all-objects --batch-check | head -8</code></pre>
 <div class="out">3b18e512dba79e4c8300dd08aeb37f8e728b8dad blob 12
 68aba62e560c0ebc3396e8ae9335232cd93a3f60 tree 37
 826b62edec33ae69e4f04a1ba2c40744ec4938c8 commit 177</div>
-<pre><code><span class="tok-comment"># Mọi đối tượng, sắp theo kích thước — cách bạn tìm ra cái video 400 MB (bài 8.3):</span>
+<pre><code class="language-bash"><span class="tok-comment"># Mọi đối tượng, sắp theo kích thước — cách bạn tìm ra cái video 400 MB (bài 8.3):</span>
 git cat-file --batch-all-objects --batch-check=<span class="tok-string">'%(objectsize) %(objectname) %(objecttype)'</span> \\
   | sort -rn | head -5</code></pre>
 
 <h3>Tag có chú thích cũng là đối tượng</h3>
 ${slide('git-09', 13, 'Tag có chú thích là một đối tượng; tag nhẹ chỉ là file')}
-<pre><code>git tag -a v1.0 -m <span class="tok-string">"first release"</span>
+<pre><code class="language-bash">git tag -a v1.0 -m <span class="tok-string">"first release"</span>
 git cat-file -t v1.0
 git cat-file -p v1.0</code></pre>
 <div class="out">tag
@@ -610,10 +610,10 @@ git status -s
 
 <h3>Loose objects, then packs</h3>
 ${slide('git-09', 14, 'Đối tượng rời → packfile: git gc gói lại')}
-<pre><code>ls .git/objects/</code></pre>
+<pre><code class="language-bash">ls .git/objects/</code></pre>
 <div class="out">3f  7b  9e  a7  b2  c4  d8  e0  info  pack</div>
 <p>Two-character directories are <strong>loose objects</strong> — one file each, zlib-compressed, written as you work. Every so often Git packs them:</p>
-<pre><code>git gc
+<pre><code class="language-bash">git gc
 ls .git/objects/
 ls -lh .git/objects/pack/</code></pre>
 <div class="out">info  pack
@@ -629,7 +629,7 @@ ls -lh .git/objects/pack/</code></pre>
 ${slide('git-09', 15, 'Delta: bản cũ chỉ còn là phần khác')}
 <p>Inside a pack, Git stores some objects as a <strong>delta</strong> against a similar one: "take object X and apply these changes". Version 200 of a 500 KB file is stored as a few bytes of difference from version 199.</p>
 <div class="callout ok">This is where the "snapshots vs diffs" question resolves. Git's <em>model</em> is snapshots — every commit names a complete tree, which is what makes checkout fast and history immutable. Git's <em>storage</em> uses deltas inside packfiles, which is what makes it small. The two are independent: the model stays simple while the storage stays cheap.</div>
-<pre><code>git verify-pack -v .git/objects/pack/pack-*.idx | head -6</code></pre>
+<pre><code class="language-bash">git verify-pack -v .git/objects/pack/pack-*.idx | head -6</code></pre>
 <div class="out">3f8a1c9d2e5b7a4c6f8e0a2b4d6c8e0f2a4b6c8d commit 168 119 12
 a7c2f91d8e0b2c4a6f8e0d2b4c6a8e0f2d4b6c8e blob   4823 1904 131
 5f7a9c2b8d0e2f4a6c8e0b2d4f6a8c0e2b4d6f8e blob   4901 62 2035 1 a7c2f91d…</div>
@@ -643,14 +643,14 @@ ${slide('git-09', 16, 'gc --prune=now không xoá thứ reflog còn nhắc tới
   <div class="lz-step"><div class="lz-k">3</div><div class="lz-t">Expire the reflog</div><div class="lz-d">Entries older than 90 days (30 for unreachable ones) are dropped.</div></div>
   <div class="lz-step"><div class="lz-k">4</div><div class="lz-t">Delete unreachable objects</div><div class="lz-d">Objects no ref and no reflog entry can reach are removed — <strong>this</strong> is when a "deleted" commit truly disappears (4.4).</div></div>
 </div>
-<pre><code>git gc                 <span class="tok-comment"># normal; Git also runs this automatically</span>
+<pre><code class="language-bash">git gc                 <span class="tok-comment"># normal; Git also runs this automatically</span>
 git gc --aggressive     <span class="tok-comment"># recompute deltas from scratch — slow, occasionally worth it</span>
 git gc --prune=now      <span class="tok-comment"># DELETE unreachable objects immediately, no grace period</span></code></pre>
 <div class="callout danger"><code>--prune=now</code> removes the safety net from 4.4. Anything not reachable from a ref or a reflog entry is gone permanently — including the commits you were about to recover. Never run it while you are trying to rescue something; that is exactly backwards.</div>
 <div class="callout warn"><strong>What the reflog still protects — tested, not assumed.</strong> In a copy of our test repository, <code>git reset --hard HEAD~1</code> followed by <code>git gc --prune=now</code> did <em>not</em> delete the abandoned commit: <code>git cat-file -t 4098f32</code> still answered <code>commit</code>, because <code>HEAD@{1}</code> in the reflog still named it. Only after <code>git reflog expire --expire=now --all</code> did a second <code>gc --prune=now</code> make it <code>fatal: Not a valid object name</code>. So the objects <code>--prune=now</code> really destroys are the ones <em>no</em> reflog line names: a dropped stash, a blob you staged and then replaced, commits whose reflog entries already expired — exactly the things <code>git fsck --lost-found</code> (Chapter 13) is used to find. Guides for purging secrets tell you to run <code>reflog expire</code> first for this very reason.</div>
 
 <h3>Measuring a repository</h3>
-<pre><code>git count-objects -vH</code></pre>
+<pre><code class="language-bash">git count-objects -vH</code></pre>
 <div class="out">count: 143
 size: 1.21 MiB
 in-pack: 24817
@@ -665,7 +665,7 @@ garbage: 0</div>
 </div>
 
 <h3>Finding what made it big</h3>
-<pre><code><span class="tok-comment"># The ten largest objects in history, with their path names:</span>
+<pre><code class="language-bash"><span class="tok-comment"># The ten largest objects in history, with their path names:</span>
 git rev-list --objects --all \\
   | git cat-file --batch-check=<span class="tok-string">'%(objecttype) %(objectname) %(objectsize) %(rest)'</span> \\
   | awk <span class="tok-string">'\$1=="blob"'</span> | sort -k3 -rn | head -10</code></pre>
@@ -675,7 +675,7 @@ blob 9e2d4b70… 8388608 package-lock.json</div>
 <p>A 400 MB video that was deleted two years ago is still in every clone forever, because history is immutable. Removing it means rewriting history (8.3) — <code>git filter-repo --strip-blobs-bigger-than 10M</code> — with the full coordination cost that implies.</p>
 
 <h3>Making clones cheaper without rewriting</h3>
-<pre><code>git clone --depth 1 &lt;url&gt;                     <span class="tok-comment"># shallow: latest commit only</span>
+<pre><code class="language-bash">git clone --depth 1 &lt;url&gt;                     <span class="tok-comment"># shallow: latest commit only</span>
 git clone --filter=blob:none &lt;url&gt;            <span class="tok-comment"># blobless: fetch file contents on demand</span>
 git clone --filter=blob:limit=1m &lt;url&gt;        <span class="tok-comment"># skip blobs over 1 MB until needed</span>
 git clone --single-branch --branch main &lt;url&gt; <span class="tok-comment"># one branch only</span></code></pre>
@@ -683,10 +683,10 @@ git clone --single-branch --branch main &lt;url&gt; <span class="tok-comment"># 
   <div class="kv"><span class="k">--depth 1</span><span class="v">The classic CI clone. No history at all, so <code>git log</code>, <code>blame</code> and <code>describe</code> do not work — which breaks version stamping (7.2) if you rely on it.</span></div>
   <div class="kv"><span class="k">--filter=blob:none</span><span class="v">A <em>partial clone</em>: full commit and tree history, file contents fetched lazily over the network. History commands work; the first <code>checkout</code> of an old commit is slower.</span></div>
 </div>
-<pre><code>git fetch --unshallow          <span class="tok-comment"># turn a shallow clone into a full one</span></code></pre>
+<pre><code class="language-bash">git fetch --unshallow          <span class="tok-comment"># turn a shallow clone into a full one</span></code></pre>
 
 <h3>Maintenance, the modern way</h3>
-<pre><code>git maintenance start           <span class="tok-comment"># register scheduled background upkeep</span>
+<pre><code class="language-bash">git maintenance start           <span class="tok-comment"># register scheduled background upkeep</span>
 git maintenance run --task=gc</code></pre>
 <p>On a large repository this beats waiting for automatic <code>gc</code> to trigger mid-command. It also enables the commit-graph file, which makes <code>git log --graph</code> and merge-base calculations dramatically faster on repositories with tens of thousands of commits.</p>
 
@@ -737,10 +737,10 @@ fatal: Not a valid object name 4098f32</code></pre>
 
 <h3>Đối tượng rời, rồi tới pack</h3>
 ${slide('git-09', 14, 'Đối tượng rời → packfile: git gc gói lại')}
-<pre><code>ls .git/objects/</code></pre>
+<pre><code class="language-bash">ls .git/objects/</code></pre>
 <div class="out">3f  7b  9e  a7  b2  c4  d8  e0  info  pack</div>
 <p>Các thư mục hai ký tự là <strong>đối tượng rời</strong> — mỗi cái một file, nén zlib, được ghi ra trong lúc bạn làm việc. Thỉnh thoảng Git gói chúng lại:</p>
-<pre><code>git gc
+<pre><code class="language-bash">git gc
 ls .git/objects/
 ls -lh .git/objects/pack/</code></pre>
 <div class="out">info  pack
@@ -756,7 +756,7 @@ ls -lh .git/objects/pack/</code></pre>
 ${slide('git-09', 15, 'Delta: bản cũ chỉ còn là phần khác')}
 <p>Bên trong một pack, Git lưu một số đối tượng dưới dạng <strong>delta</strong> so với một đối tượng tương tự: "lấy đối tượng X rồi áp những thay đổi này". Phiên bản thứ 200 của một file 500 KB được lưu bằng vài byte khác biệt so với phiên bản 199.</p>
 <div class="callout ok">Đây là chỗ câu hỏi "ảnh chụp hay bản khác biệt" được giải quyết. <em>MÔ HÌNH</em> của Git là ảnh chụp — mọi commit gọi tên một tree hoàn chỉnh, và đó là thứ làm cho checkout nhanh và lịch sử bất biến. <em>CÁCH LƯU TRỮ</em> của Git dùng delta bên trong packfile, và đó là thứ làm cho nó nhỏ. Hai thứ độc lập với nhau: mô hình vẫn đơn giản trong khi lưu trữ vẫn rẻ.</div>
-<pre><code>git verify-pack -v .git/objects/pack/pack-*.idx | head -6</code></pre>
+<pre><code class="language-bash">git verify-pack -v .git/objects/pack/pack-*.idx | head -6</code></pre>
 <div class="out">3f8a1c9d2e5b7a4c6f8e0a2b4d6c8e0f2a4b6c8d commit 168 119 12
 a7c2f91d8e0b2c4a6f8e0d2b4c6a8e0f2d4b6c8e blob   4823 1904 131
 5f7a9c2b8d0e2f4a6c8e0b2d4f6a8c0e2b4d6f8e blob   4901 62 2035 1 a7c2f91d…</div>
@@ -770,14 +770,14 @@ ${slide('git-09', 16, 'gc --prune=now không xoá thứ reflog còn nhắc tới
   <div class="lz-step"><div class="lz-k">3</div><div class="lz-t">Hết hạn reflog</div><div class="lz-d">Các dòng cũ hơn 90 ngày (30 ngày với những dòng không với tới được) bị bỏ đi.</div></div>
   <div class="lz-step"><div class="lz-k">4</div><div class="lz-t">Xoá đối tượng không với tới được</div><div class="lz-d">Đối tượng mà không ref nào và không dòng reflog nào với tới được sẽ bị gỡ — <strong>ĐÂY</strong> mới là lúc một commit "đã xoá" thật sự biến mất (bài 4.4).</div></div>
 </div>
-<pre><code>git gc                 <span class="tok-comment"># bình thường; Git cũng tự chạy cái này</span>
+<pre><code class="language-bash">git gc                 <span class="tok-comment"># bình thường; Git cũng tự chạy cái này</span>
 git gc --aggressive     <span class="tok-comment"># tính lại delta từ đầu — chậm, thỉnh thoảng đáng làm</span>
 git gc --prune=now      <span class="tok-comment"># XOÁ ngay các đối tượng không với tới được, không có thời gian ân hạn</span></code></pre>
 <div class="callout danger"><code>--prune=now</code> gỡ bỏ lưới an toàn của bài 4.4. Mọi thứ không với tới được từ một ref hay một dòng reflog đều mất vĩnh viễn — kể cả những commit bạn đang định cứu. Đừng bao giờ chạy nó trong lúc đang cố cứu thứ gì đó; như thế là làm ngược hoàn toàn.</div>
 <div class="callout warn"><strong>Reflog vẫn che chắn được gì — đã chạy thử, không đoán.</strong> Trên một bản sao của kho thử, <code>git reset --hard HEAD~1</code> rồi <code>git gc --prune=now</code> KHÔNG xoá commit bị bỏ rơi: <code>git cat-file -t 4098f32</code> vẫn trả lời <code>commit</code>, vì dòng <code>HEAD@{1}</code> trong reflog còn nhắc tên nó. Phải sau <code>git reflog expire --expire=now --all</code> thì lần <code>gc --prune=now</code> thứ hai mới biến nó thành <code>fatal: Not a valid object name</code>. Vậy thứ <code>--prune=now</code> thật sự huỷ là những đối tượng KHÔNG dòng reflog nào nhắc tới: một stash đã drop, một blob bạn từng add rồi thay bằng bản khác, những commit mà dòng reflog đã hết hạn — đúng những thứ người ta dùng <code>git fsck --lost-found</code> (Chương 13) để tìm lại. Các hướng dẫn xoá bí mật khỏi lịch sử bảo bạn chạy <code>reflog expire</code> trước cũng vì lẽ đó.</div>
 
 <h3>Đo một kho mã</h3>
-<pre><code>git count-objects -vH</code></pre>
+<pre><code class="language-bash">git count-objects -vH</code></pre>
 <div class="out">count: 143
 size: 1.21 MiB
 in-pack: 24817
@@ -792,7 +792,7 @@ garbage: 0</div>
 </div>
 
 <h3>Tìm ra thứ làm nó phình to</h3>
-<pre><code><span class="tok-comment"># Mười đối tượng lớn nhất trong lịch sử, kèm tên đường dẫn:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Mười đối tượng lớn nhất trong lịch sử, kèm tên đường dẫn:</span>
 git rev-list --objects --all \\
   | git cat-file --batch-check=<span class="tok-string">'%(objecttype) %(objectname) %(objectsize) %(rest)'</span> \\
   | awk <span class="tok-string">'\$1=="blob"'</span> | sort -k3 -rn | head -10</code></pre>
@@ -802,7 +802,7 @@ blob 9e2d4b70… 8388608 package-lock.json</div>
 <p>Một video 400 MB bị xoá từ hai năm trước vẫn nằm trong mọi bản clone mãi mãi, vì lịch sử là bất biến. Gỡ nó ra nghĩa là viết lại lịch sử (bài 8.3) — <code>git filter-repo --strip-blobs-bigger-than 10M</code> — kèm toàn bộ chi phí phối hợp mà điều đó kéo theo.</p>
 
 <h3>Làm cho việc clone rẻ hơn mà không cần viết lại</h3>
-<pre><code>git clone --depth 1 &lt;url&gt;                     <span class="tok-comment"># nông: chỉ commit mới nhất</span>
+<pre><code class="language-bash">git clone --depth 1 &lt;url&gt;                     <span class="tok-comment"># nông: chỉ commit mới nhất</span>
 git clone --filter=blob:none &lt;url&gt;            <span class="tok-comment"># lấy nội dung file khi cần</span>
 git clone --filter=blob:limit=1m &lt;url&gt;        <span class="tok-comment"># bỏ qua blob trên 1 MB cho tới khi cần</span>
 git clone --single-branch --branch main &lt;url&gt; <span class="tok-comment"># chỉ một nhánh</span></code></pre>
@@ -810,10 +810,10 @@ git clone --single-branch --branch main &lt;url&gt; <span class="tok-comment"># 
   <div class="kv"><span class="k">--depth 1</span><span class="v">Bản clone kinh điển cho CI. Hoàn toàn không có lịch sử, nên <code>git log</code>, <code>blame</code> và <code>describe</code> không chạy — thứ làm hỏng việc đóng dấu phiên bản (bài 7.2) nếu bạn dựa vào nó.</span></div>
   <div class="kv"><span class="k">--filter=blob:none</span><span class="v">Một <em>partial clone</em>: đầy đủ lịch sử commit và tree, nội dung file được lấy về từ từ qua mạng. Các lệnh lịch sử chạy được; lần <code>checkout</code> đầu tiên một commit cũ thì chậm hơn.</span></div>
 </div>
-<pre><code>git fetch --unshallow          <span class="tok-comment"># biến một bản clone nông thành đầy đủ</span></code></pre>
+<pre><code class="language-bash">git fetch --unshallow          <span class="tok-comment"># biến một bản clone nông thành đầy đủ</span></code></pre>
 
 <h3>Bảo trì, theo cách đời mới</h3>
-<pre><code>git maintenance start           <span class="tok-comment"># đăng ký bảo trì nền theo lịch</span>
+<pre><code class="language-bash">git maintenance start           <span class="tok-comment"># đăng ký bảo trì nền theo lịch</span>
 git maintenance run --task=gc</code></pre>
 <p>Trên một kho mã lớn, cách này hơn hẳn việc ngồi chờ <code>gc</code> tự động kích hoạt giữa một lệnh khác. Nó cũng bật file commit-graph, thứ làm cho <code>git log --graph</code> và các phép tính tổ tiên chung nhanh lên rõ rệt trên những kho có hàng chục nghìn commit.</p>
 

@@ -74,7 +74,7 @@ ${slide('dk-12', 3, 'Bốn tầng có thể hỏng — gọi tên tầng trướ
 
 <h3>The three commands to run first</h3>
 ${slide('dk-12', 4, 'Ba lệnh đầu tiên trả lời “tầng nào” — output thật')}
-<pre><code>docker ps -a --format 'table {{.Names}}\\t{{.Status}}\\t{{.Image}}' | head -6
+<pre><code class="language-bash">docker ps -a --format 'table {{.Names}}\\t{{.Status}}\\t{{.Image}}' | head -6
 docker inspect -f '{{ .State.ExitCode }} oom={{ .State.OOMKilled }} restarts={{ .RestartCount }}' blog-api-1
 docker logs --tail 30 blog-api-1</code></pre>
 <div class="out">NAMES        STATUS                        IMAGE
@@ -121,7 +121,7 @@ ${slide('dk-12', 5, 'Bảng mã thoát: mỗi mã được gây ra thật trên 
   <div class="kv"><span class="k"><code>127</code></span><span class="v"><strong>Command not found</strong> inside the container. A typo, a binary that is not in that image, or a shell that does not exist (distroless has no <code>sh</code>).</span></div>
   <div class="kv"><span class="k"><code>137</code> / <code>143</code></span><span class="v">SIGKILL (128+9) and SIGTERM (128+15). 137 is usually OOM — confirm with <code>OOMKilled</code>. 143 is a normal stop, and on a crash loop it means something stopped it deliberately.</span></div>
 </div>
-<pre><code>docker run --rm alpine:3.20 nosuchcommand; echo "127? → $?"
+<pre><code class="language-bash">docker run --rm alpine:3.20 nosuchcommand; echo "127? → $?"
 docker run --rm --badflag alpine:3.20 true 2&gt;&amp;1 | tail -1; echo "125? → &#36;{PIPESTATUS[0]}"
 docker run --rm -v "$PWD/notexec.sh:/s.sh" alpine:3.20 /s.sh; echo "126? → $?"</code></pre>
 <div class="out">docker: Error response from daemon: failed to create task: exec: "nosuchcommand": executable file not found in $PATH
@@ -197,7 +197,7 @@ exit=126
 
 <h3>Look inside, even when there is no shell</h3>
 ${slide('dk-12', 7, 'Không có shell vẫn soi được: cp, create, mượn namespace')}
-<pre><code><span class="tok-comment"># Is the file even in the image? (no container needed)</span>
+<pre><code class="language-bash"><span class="tok-comment"># Is the file even in the image? (no container needed)</span>
 docker run --rm --entrypoint sh ghcr.io/me/api:9f2ac1e -c 'ls -l dist/ | head -3'
 
 <span class="tok-comment"># Distroless or scratch — no shell at all. Copy it out instead.</span>
@@ -297,7 +297,7 @@ ${slide('dk-12', 3, 'Bốn tầng có thể hỏng — gọi tên tầng trướ
 
 <h3>Ba câu lệnh chạy trước tiên</h3>
 ${slide('dk-12', 4, 'Ba lệnh đầu tiên trả lời “tầng nào” — output thật')}
-<pre><code>docker ps -a --format 'table {{.Names}}\\t{{.Status}}\\t{{.Image}}' | head -6
+<pre><code class="language-bash">docker ps -a --format 'table {{.Names}}\\t{{.Status}}\\t{{.Image}}' | head -6
 docker inspect -f '{{ .State.ExitCode }} oom={{ .State.OOMKilled }} restarts={{ .RestartCount }}' blog-api-1
 docker logs --tail 30 blog-api-1</code></pre>
 <div class="out">NAMES        STATUS                        IMAGE
@@ -344,7 +344,7 @@ ${slide('dk-12', 5, 'Bảng mã thoát: mỗi mã được gây ra thật trên 
   <div class="kv"><span class="k"><code>127</code></span><span class="v"><strong>Không tìm thấy câu lệnh</strong> bên trong container. Một lỗi gõ, một tệp nhị phân không có trong cái ảnh đó, hoặc một shell không tồn tại (distroless không có <code>sh</code>).</span></div>
   <div class="kv"><span class="k"><code>137</code> / <code>143</code></span><span class="v">SIGKILL (128+9) và SIGTERM (128+15). 137 thường là OOM — hãy xác nhận bằng <code>OOMKilled</code>. 143 là một lần dừng bình thường, và trong một vòng lặp sập thì nó nghĩa là có thứ gì đó cố tình dừng nó.</span></div>
 </div>
-<pre><code>docker run --rm alpine:3.20 nosuchcommand; echo "127? → $?"
+<pre><code class="language-bash">docker run --rm alpine:3.20 nosuchcommand; echo "127? → $?"
 docker run --rm --badflag alpine:3.20 true 2&gt;&amp;1 | tail -1; echo "125? → &#36;{PIPESTATUS[0]}"
 docker run --rm -v "$PWD/notexec.sh:/s.sh" alpine:3.20 /s.sh; echo "126? → $?"</code></pre>
 <div class="out">docker: Error response from daemon: failed to create task: exec: "nosuchcommand": executable file not found in $PATH
@@ -420,7 +420,7 @@ exit=126
 
 <h3>Nhìn vào bên trong, kể cả khi không có shell</h3>
 ${slide('dk-12', 7, 'Không có shell vẫn soi được: cp, create, mượn namespace')}
-<pre><code><span class="tok-comment"># File đó có trong ảnh không? (không cần container nào)</span>
+<pre><code class="language-bash"><span class="tok-comment"># File đó có trong ảnh không? (không cần container nào)</span>
 docker run --rm --entrypoint sh ghcr.io/me/api:9f2ac1e -c 'ls -l dist/ | head -3'
 
 <span class="tok-comment"># Distroless hay scratch — không có shell nào cả. Chép nó RA ngoài.</span>
@@ -519,7 +519,7 @@ Error: ENOTFOUND getaddrinfo ENOTFOUND cache
 
 <h3>The image cannot be pulled</h3>
 ${slide('dk-12', 8, 'Container không lên: đọc từ khoá trong dòng lỗi rồi rẽ nhánh')}
-<pre><code>docker pull ghcr.io/me/api:9f2ac1e</code></pre>
+<pre><code class="language-bash">docker pull ghcr.io/me/api:9f2ac1e</code></pre>
 <div class="out">Error response from daemon: denied: denied
 Error response from daemon: manifest unknown: manifest unknown</div>
 <div class="kv-grid">
@@ -540,9 +540,9 @@ Error response from daemon: failed to resolve reference "registry.khong-co.inval
 
 <h3>exec format error</h3>
 ${slide('dk-12', 11, 'exec format error: ảnh arm64 từ Mac chạy trên máy amd64 — output thật')}
-<pre><code>docker run --rm ghcr.io/me/api:9f2ac1e</code></pre>
+<pre><code class="language-bash">docker run --rm ghcr.io/me/api:9f2ac1e</code></pre>
 <div class="out">exec /usr/local/bin/node: exec format error</div>
-<pre><code>docker image inspect ghcr.io/me/api:9f2ac1e -f '{{ .Os }}/{{ .Architecture }}'
+<pre><code class="language-bash">docker image inspect ghcr.io/me/api:9f2ac1e -f '{{ .Os }}/{{ .Architecture }}'
 uname -m
 docker buildx imagetools inspect ghcr.io/me/api:9f2ac1e | grep -A1 Platform | head -4</code></pre>
 <div class="out">linux/arm64
@@ -575,7 +575,7 @@ x64</div>
 <h3>executable file not found, and permission denied</h3>
 ${slide('dk-12', 9, '127 “không có lệnh” khác 126 “có mà không chạy được”')}
 ${slide('dk-12', 10, 'Shebang CRLF: file nằm đó mà vẫn “no such file or directory”')}
-<pre><code>docker run --rm alpine:3.20 python
+<pre><code class="language-bash">docker run --rm alpine:3.20 python
 docker run --rm -v "$PWD/entrypoint.sh:/e.sh" alpine:3.20 /e.sh
 docker run --rm gcr.io/distroless/nodejs22-debian12 sh</code></pre>
 <div class="out">exec: "python": executable file not found in $PATH
@@ -620,12 +620,12 @@ api starting</div>
 </table>
 <h3>Port and name conflicts</h3>
 ${slide('dk-12', 12, 'Cổng bận: hai câu báo lỗi, hai thủ phạm khác nhau')}
-<pre><code>docker run -d -p 8080:80 --name web nginx:alpine</code></pre>
+<pre><code class="language-bash">docker run -d -p 8080:80 --name web nginx:alpine</code></pre>
 <div class="out">docker: Error response from daemon: driver failed programming external connectivity:
 failed to bind host port for 0.0.0.0:8080: address already in use
 docker: Error response from daemon: Conflict. The container name "/web" is already in use
 by container "a91c4e7b2f60". You have to remove (or rename) that container.</div>
-<pre><code>ss -lntp 'sport = :8080' | tail -1
+<pre><code class="language-bash">ss -lntp 'sport = :8080' | tail -1
 docker ps -a --filter name='^/web$' --format '{{.ID}} {{.Status}}'
 docker rm -f web  &amp;&amp;  docker run -d -p 8080:80 --name web nginx:alpine &gt;/dev/null &amp;&amp; echo ok</code></pre>
 <div class="out">LISTEN 0 4096 0.0.0.0:8080 0.0.0.0:* users:(("docker-proxy",pid=4471,fd=4))
@@ -662,7 +662,7 @@ LISTEN 0      5          127.0.0.1:18122      0.0.0.0:*    users:(("python3",pid
 </table>
 <h3>Mounts that fail, or silently do nothing</h3>
 ${slide('dk-12', 13, 'Hai kiểu hỏng im lặng: -v tạo thư mục rỗng, biến env thành chuỗi rỗng')}
-<pre><code>docker run --rm --mount type=bind,src=/no/such/path,dst=/app alpine:3.20 true
+<pre><code class="language-bash">docker run --rm --mount type=bind,src=/no/such/path,dst=/app alpine:3.20 true
 docker run --rm -v /no/such/path:/app alpine:3.20 ls -la /app</code></pre>
 <div class="out">docker: Error response from daemon: invalid mount config for type "bind":
 bind source path does not exist: /no/such/path
@@ -671,7 +671,7 @@ drwxr-xr-x 2 root root 40 Aug 22 14:02 .</div>
 <div class="callout warn"><strong>The two syntaxes behave differently, and the quiet one is worse.</strong> <code>--mount type=bind</code> refuses to start when the source is missing; <code>-v</code> silently creates an empty directory and carries on. A typo in a config path therefore gives you a container that starts perfectly and behaves as if the config file were empty — with no error anywhere. Use <code>--mount</code> in anything committed to a repository, and <code>-v</code> only when typing interactively.</div>
 
 <h3>Environment that is not there</h3>
-<pre><code>docker compose config | grep -E 'DATABASE_URL|image:' | head -3
+<pre><code class="language-bash">docker compose config | grep -E 'DATABASE_URL|image:' | head -3
 docker compose up -d 2&gt;&amp;1 | tail -2</code></pre>
 <div class="out">WARN[0000] The "POSTGRES_PASSWORD" variable is not set. Defaulting to a blank string.
     image: ghcr.io/me/api:
@@ -760,7 +760,7 @@ error while interpolating services.api.image: required variable NODE_TAG is miss
 
 <h3>Không kéo được ảnh</h3>
 ${slide('dk-12', 8, 'Container không lên: đọc từ khoá trong dòng lỗi rồi rẽ nhánh')}
-<pre><code>docker pull ghcr.io/me/api:9f2ac1e</code></pre>
+<pre><code class="language-bash">docker pull ghcr.io/me/api:9f2ac1e</code></pre>
 <div class="out">Error response from daemon: denied: denied
 Error response from daemon: manifest unknown: manifest unknown</div>
 <div class="kv-grid">
@@ -781,9 +781,9 @@ Error response from daemon: failed to resolve reference "registry.khong-co.inval
 
 <h3>exec format error</h3>
 ${slide('dk-12', 11, 'exec format error: ảnh arm64 từ Mac chạy trên máy amd64 — output thật')}
-<pre><code>docker run --rm ghcr.io/me/api:9f2ac1e</code></pre>
+<pre><code class="language-bash">docker run --rm ghcr.io/me/api:9f2ac1e</code></pre>
 <div class="out">exec /usr/local/bin/node: exec format error</div>
-<pre><code>docker image inspect ghcr.io/me/api:9f2ac1e -f '{{ .Os }}/{{ .Architecture }}'
+<pre><code class="language-bash">docker image inspect ghcr.io/me/api:9f2ac1e -f '{{ .Os }}/{{ .Architecture }}'
 uname -m
 docker buildx imagetools inspect ghcr.io/me/api:9f2ac1e | grep -A1 Platform | head -4</code></pre>
 <div class="out">linux/arm64
@@ -816,7 +816,7 @@ x64</div>
 <h3>executable file not found, và permission denied</h3>
 ${slide('dk-12', 9, '127 “không có lệnh” khác 126 “có mà không chạy được”')}
 ${slide('dk-12', 10, 'Shebang CRLF: file nằm đó mà vẫn “no such file or directory”')}
-<pre><code>docker run --rm alpine:3.20 python
+<pre><code class="language-bash">docker run --rm alpine:3.20 python
 docker run --rm -v "$PWD/entrypoint.sh:/e.sh" alpine:3.20 /e.sh
 docker run --rm gcr.io/distroless/nodejs22-debian12 sh</code></pre>
 <div class="out">exec: "python": executable file not found in $PATH
@@ -861,12 +861,12 @@ api starting</div>
 </table>
 <h3>Trùng cổng và trùng tên</h3>
 ${slide('dk-12', 12, 'Cổng bận: hai câu báo lỗi, hai thủ phạm khác nhau')}
-<pre><code>docker run -d -p 8080:80 --name web nginx:alpine</code></pre>
+<pre><code class="language-bash">docker run -d -p 8080:80 --name web nginx:alpine</code></pre>
 <div class="out">docker: Error response from daemon: driver failed programming external connectivity:
 failed to bind host port for 0.0.0.0:8080: address already in use
 docker: Error response from daemon: Conflict. The container name "/web" is already in use
 by container "a91c4e7b2f60". You have to remove (or rename) that container.</div>
-<pre><code>ss -lntp 'sport = :8080' | tail -1
+<pre><code class="language-bash">ss -lntp 'sport = :8080' | tail -1
 docker ps -a --filter name='^/web$' --format '{{.ID}} {{.Status}}'
 docker rm -f web  &amp;&amp;  docker run -d -p 8080:80 --name web nginx:alpine &gt;/dev/null &amp;&amp; echo ok</code></pre>
 <div class="out">LISTEN 0 4096 0.0.0.0:8080 0.0.0.0:* users:(("docker-proxy",pid=4471,fd=4))
@@ -903,7 +903,7 @@ LISTEN 0      5          127.0.0.1:18122      0.0.0.0:*    users:(("python3",pid
 </table>
 <h3>Phép gắn hỏng, hoặc lặng lẽ không làm gì</h3>
 ${slide('dk-12', 13, 'Hai kiểu hỏng im lặng: -v tạo thư mục rỗng, biến env thành chuỗi rỗng')}
-<pre><code>docker run --rm --mount type=bind,src=/no/such/path,dst=/app alpine:3.20 true
+<pre><code class="language-bash">docker run --rm --mount type=bind,src=/no/such/path,dst=/app alpine:3.20 true
 docker run --rm -v /no/such/path:/app alpine:3.20 ls -la /app</code></pre>
 <div class="out">docker: Error response from daemon: invalid mount config for type "bind":
 bind source path does not exist: /no/such/path
@@ -912,7 +912,7 @@ drwxr-xr-x 2 root root 40 Aug 22 14:02 .</div>
 <div class="callout warn"><strong>Hai cú pháp hành xử khác nhau, và cái im lặng mới là cái tệ hơn.</strong> <code>--mount type=bind</code> từ chối khởi động khi nguồn không tồn tại; <code>-v</code> lặng lẽ tạo một thư mục rỗng rồi đi tiếp. Nên một lỗi gõ trong đường dẫn cấu hình cho bạn một container khởi động hoàn hảo và hành xử y như thể file cấu hình rỗng — mà không có lỗi ở đâu cả. Hãy dùng <code>--mount</code> trong mọi thứ commit vào kho, và chỉ dùng <code>-v</code> khi gõ tay.</div>
 
 <h3>Môi trường không có ở đó</h3>
-<pre><code>docker compose config | grep -E 'DATABASE_URL|image:' | head -3
+<pre><code class="language-bash">docker compose config | grep -E 'DATABASE_URL|image:' | head -3
 docker compose up -d 2&gt;&amp;1 | tail -2</code></pre>
 <div class="out">WARN[0000] The "POSTGRES_PASSWORD" variable is not set. Defaulting to a blank string.
     image: ghcr.io/me/api:
@@ -1011,7 +1011,7 @@ error while interpolating services.api.image: required variable NODE_TAG is miss
 <h3>Reading a crash loop</h3>
 ${slide('dk-12', 14, 'Lên rồi chết: hỏi mã thoát trước, đọc log sau')}
 ${slide('dk-12', 15, 'Vòng lặp restart: Docker chờ gấp đôi mỗi lần (đo thật)')}
-<pre><code>docker compose ps --format 'table {{.Service}}\\t{{.Status}}'
+<pre><code class="language-bash">docker compose ps --format 'table {{.Service}}\\t{{.Status}}'
 docker inspect -f 'exit={{ .State.ExitCode }} oom={{ .State.OOMKilled }} n={{ .RestartCount }} since={{ .State.StartedAt }}' blog-api-1
 docker logs --tail 20 --timestamps blog-api-1 | tail -6</code></pre>
 <div class="out">SERVICE   STATUS
@@ -1080,7 +1080,7 @@ api-1  | redis ok, listening on 3000</div>
 
 <h3>The container exits 0 immediately</h3>
 ${slide('dk-12', 16, 'Exit 0 ngay lập tức: tiến trình đã tự chạy nền')}
-<pre><code>docker run -d --name quiet nginx:alpine nginx
+<pre><code class="language-bash">docker run -d --name quiet nginx:alpine nginx
 docker ps -a --filter name=quiet --format '{{.Status}}'
 docker logs quiet</code></pre>
 <div class="out">Exited (0) 2 seconds ago</div>
@@ -1098,7 +1098,7 @@ docker logs quiet</code></pre>
   <div class="lz-step"><span class="lz-k">No TTY and it wanted one</span><span class="lz-t">an interactive shell with no -it</span><span class="lz-d"><code>docker run -d alpine sh</code> exits instantly because stdin is closed. Add <code>-it</code>, or give it something to do.</span></div>
   <div class="lz-step"><span class="lz-k">A wrapper swallowed the real command</span><span class="lz-t">ENTRYPOINT plus CMD combining wrongly</span><span class="lz-d"><code>docker inspect -f '{{ .Config.Entrypoint }} {{ .Config.Cmd }}'</code> shows exactly what was executed (Lesson 4.3). Frequently not what the Dockerfile appears to say.</span></div>
 </div>
-<pre><code>docker inspect -f '{{ .Config.Entrypoint }} + {{ .Config.Cmd }}' quiet
+<pre><code class="language-bash">docker inspect -f '{{ .Config.Entrypoint }} + {{ .Config.Cmd }}' quiet
 docker run -d --name loud nginx:alpine nginx -g 'daemon off;' &gt;/dev/null
 docker ps --filter name=loud --format '{{.Status}}'</code></pre>
 <div class="out">[/docker-entrypoint.sh] + [nginx]
@@ -1106,7 +1106,7 @@ Up 4 seconds</div>
 
 <h3>Killed, not crashed</h3>
 ${slide('dk-12', 17, '137 có hai nghĩa — OOMKilled phân xử; 143/130/139 là tín hiệu')}
-<pre><code>docker inspect -f '{{ .State.ExitCode }} {{ .State.OOMKilled }}' blog-worker-1
+<pre><code class="language-bash">docker inspect -f '{{ .State.ExitCode }} {{ .State.OOMKilled }}' blog-worker-1
 sudo dmesg -T | grep -i -m1 'killed process'
 docker stats --no-stream --format '{{.Name}} {{.MemUsage}}' | grep worker</code></pre>
 <div class="out">137 true
@@ -1122,7 +1122,7 @@ blog-worker-1 0B / 256MiB</div>
 
 <h3>Marked unhealthy while working perfectly</h3>
 ${slide('dk-12', 18, 'unhealthy mà app vẫn trả lời: bộ kiểm hỏng')}
-<pre><code>docker inspect -f '{{ .State.Health.Status }}' blog-web-1
+<pre><code class="language-bash">docker inspect -f '{{ .State.Health.Status }}' blog-web-1
 docker inspect -f '{{ range .State.Health.Log }}{{ .ExitCode }}: {{ .Output }}{{ end }}' blog-web-1 | head -2
 docker compose exec web sh -c 'wget -qO- http://localhost:3000/ | head -c 20'</code></pre>
 <div class="out">unhealthy
@@ -1173,7 +1173,7 @@ web       Up 3 seconds (healthy)</div>
 </table>
 <h3>Keeping a dying container open long enough to look</h3>
 ${slide('dk-12', 19, 'compose run: đúng cấu hình service, thêm một cái shell')}
-<pre><code><span class="tok-comment"># Replace the entrypoint with a shell and poke around by hand</span>
+<pre><code class="language-bash"><span class="tok-comment"># Replace the entrypoint with a shell and poke around by hand</span>
 docker run --rm -it --entrypoint sh ghcr.io/me/api:9f2ac1e
 <span class="tok-comment"># Same image and env as the failing service, but a shell instead of the command</span>
 docker compose run --rm --entrypoint sh api
@@ -1246,7 +1246,7 @@ real	0m10.312s</div>
 <h3>Đọc một vòng lặp sập</h3>
 ${slide('dk-12', 14, 'Lên rồi chết: hỏi mã thoát trước, đọc log sau')}
 ${slide('dk-12', 15, 'Vòng lặp restart: Docker chờ gấp đôi mỗi lần (đo thật)')}
-<pre><code>docker compose ps --format 'table {{.Service}}\\t{{.Status}}'
+<pre><code class="language-bash">docker compose ps --format 'table {{.Service}}\\t{{.Status}}'
 docker inspect -f 'exit={{ .State.ExitCode }} oom={{ .State.OOMKilled }} n={{ .RestartCount }} since={{ .State.StartedAt }}' blog-api-1
 docker logs --tail 20 --timestamps blog-api-1 | tail -6</code></pre>
 <div class="out">SERVICE   STATUS
@@ -1315,7 +1315,7 @@ api-1  | redis ok, listening on 3000</div>
 
 <h3>Container thoát 0 ngay lập tức</h3>
 ${slide('dk-12', 16, 'Exit 0 ngay lập tức: tiến trình đã tự chạy nền')}
-<pre><code>docker run -d --name quiet nginx:alpine nginx
+<pre><code class="language-bash">docker run -d --name quiet nginx:alpine nginx
 docker ps -a --filter name=quiet --format '{{.Status}}'
 docker logs quiet</code></pre>
 <div class="out">Exited (0) 2 seconds ago</div>
@@ -1333,7 +1333,7 @@ docker logs quiet</code></pre>
   <div class="lz-step"><span class="lz-k">Không có TTY mà nó lại cần</span><span class="lz-t">một shell tương tác không có -it</span><span class="lz-d"><code>docker run -d alpine sh</code> thoát ngay tức khắc vì stdin đã đóng. Hãy thêm <code>-it</code>, hoặc giao cho nó việc gì đó để làm.</span></div>
   <div class="lz-step"><span class="lz-k">Một lớp bọc nuốt mất câu lệnh thật</span><span class="lz-t">ENTRYPOINT cộng CMD ghép sai</span><span class="lz-d"><code>docker inspect -f '{{ .Config.Entrypoint }} {{ .Config.Cmd }}'</code> hiện ra chính xác cái gì đã được chạy (Bài 4.3). Rất hay là không phải thứ Dockerfile trông như đang nói.</span></div>
 </div>
-<pre><code>docker inspect -f '{{ .Config.Entrypoint }} + {{ .Config.Cmd }}' quiet
+<pre><code class="language-bash">docker inspect -f '{{ .Config.Entrypoint }} + {{ .Config.Cmd }}' quiet
 docker run -d --name loud nginx:alpine nginx -g 'daemon off;' &gt;/dev/null
 docker ps --filter name=loud --format '{{.Status}}'</code></pre>
 <div class="out">[/docker-entrypoint.sh] + [nginx]
@@ -1341,7 +1341,7 @@ Up 4 seconds</div>
 
 <h3>Bị GIẾT, không phải bị sập</h3>
 ${slide('dk-12', 17, '137 có hai nghĩa — OOMKilled phân xử; 143/130/139 là tín hiệu')}
-<pre><code>docker inspect -f '{{ .State.ExitCode }} {{ .State.OOMKilled }}' blog-worker-1
+<pre><code class="language-bash">docker inspect -f '{{ .State.ExitCode }} {{ .State.OOMKilled }}' blog-worker-1
 sudo dmesg -T | grep -i -m1 'killed process'
 docker stats --no-stream --format '{{.Name}} {{.MemUsage}}' | grep worker</code></pre>
 <div class="out">137 true
@@ -1357,7 +1357,7 @@ blog-worker-1 0B / 256MiB</div>
 
 <h3>Bị đánh dấu không khoẻ trong khi vẫn chạy hoàn hảo</h3>
 ${slide('dk-12', 18, 'unhealthy mà app vẫn trả lời: bộ kiểm hỏng')}
-<pre><code>docker inspect -f '{{ .State.Health.Status }}' blog-web-1
+<pre><code class="language-bash">docker inspect -f '{{ .State.Health.Status }}' blog-web-1
 docker inspect -f '{{ range .State.Health.Log }}{{ .ExitCode }}: {{ .Output }}{{ end }}' blog-web-1 | head -2
 docker compose exec web sh -c 'wget -qO- http://localhost:3000/ | head -c 20'</code></pre>
 <div class="out">unhealthy
@@ -1408,7 +1408,7 @@ web       Up 3 seconds (healthy)</div>
 </table>
 <h3>Giữ một container đang chết lại đủ lâu để nhìn</h3>
 ${slide('dk-12', 19, 'compose run: đúng cấu hình service, thêm một cái shell')}
-<pre><code><span class="tok-comment"># Thay entrypoint bằng một cái shell rồi tự tay ngó nghiêng</span>
+<pre><code class="language-bash"><span class="tok-comment"># Thay entrypoint bằng một cái shell rồi tự tay ngó nghiêng</span>
 docker run --rm -it --entrypoint sh ghcr.io/me/api:9f2ac1e
 <span class="tok-comment"># Cùng ảnh và cùng môi trường với dịch vụ đang hỏng, nhưng có shell thay cho câu lệnh</span>
 docker compose run --rm --entrypoint sh api
@@ -1490,7 +1490,7 @@ real	0m10.312s</div>
 <h3>Reading what BuildKit tells you</h3>
 ${slide('dk-12', 20, 'Build hỏng: hỏng ở đâu, và chỉ hỏng ở CI hay cả máy bạn?')}
 ${slide('dk-12', 21, 'BuildKit: đọc từ dưới lên — dòng lỗi thật nằm phía trên')}
-<pre><code>docker build -f Dockerfile.backend -t api:test . 2&gt;&amp;1 | tail -12</code></pre>
+<pre><code class="language-bash">docker build -f Dockerfile.backend -t api:test . 2&gt;&amp;1 | tail -12</code></pre>
 <div class="out"> =&gt; ERROR [build 5/6] RUN npm run build                                     18.2s
 ------
  &gt; [build 5/6] RUN npm run build:
@@ -1507,7 +1507,7 @@ Dockerfile.backend:18
 --------------------
 ERROR: failed to solve: process "/bin/sh -c npm run build" did not exit with code 0</div>
 <div class="callout ok"><strong>BuildKit output is dense but complete: read it bottom-up.</strong> The last line names the failing command, the block above it points at the exact Dockerfile line with two lines of context, and the block above <em>that</em> is the command's own output with elapsed-second prefixes. <code>[build 5/6]</code> tells you the stage and the step. That is everything you need without scrolling, once you know where to look.</div>
-<pre><code><span class="tok-comment"># When the interleaved progress output hides things</span>
+<pre><code class="language-bash"><span class="tok-comment"># When the interleaved progress output hides things</span>
 docker build --progress=plain -f Dockerfile.backend -t api:test . 2&gt;&amp;1 | tail -20
 <span class="tok-comment"># Stop just before the failing stage and get a shell there</span>
 docker build --target build -t api:dbg -f Dockerfile.backend .
@@ -1562,7 +1562,7 @@ ${slide('dk-12', 23, 'Hoa-thường: Mac chạy được, Docker build (và CI) 
   <div class="lz-step"><span class="lz-k">6 · Memory</span><span class="lz-t">exit 137 on a runner with less RAM than your machine</span><span class="lz-d">A build is not a container: the limit is the runner's. Reduce parallelism, or split the build — this project builds frontend and backend sequentially on its 6GB server for exactly this.</span></div>
   <div class="lz-step"><span class="lz-k">7 · Secrets and network</span><span class="lz-t">a private registry token you have locally and CI does not</span><span class="lz-d">Or the reverse — CI has egress restrictions you do not. A <code>npm ci</code> that hangs is usually this.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Reproduce a CI build locally, in one command</span>
+<pre><code class="language-bash"><span class="tok-comment"># Reproduce a CI build locally, in one command</span>
 git stash -u
 docker build --no-cache --pull --platform linux/amd64 -f Dockerfile.backend -t api:ci . 2&gt;&amp;1 | tail -5
 git stash pop</code></pre>
@@ -1604,7 +1604,7 @@ build ok
 <p>The surprise is the middle line. The container is Linux, yet the build passes — because a bind mount on Docker Desktop is still your Mac's filesystem underneath, and APFS does not distinguish <code>Auth</code> from <code>auth</code>. Only <code>docker build</code>, which copies files into a real Linux filesystem, fails the way a CI runner does. So "I tested it in a container" is not enough; "I tested it with <code>docker build</code>" is.</p>
 <h3>When the cache is the liar</h3>
 ${slide('dk-12', 24, 'Cache khoá theo chuỗi lệnh, không theo thế giới bên ngoài')}
-<pre><code>docker build -t api:test . 2&gt;&amp;1 | grep -c CACHED
+<pre><code class="language-bash">docker build -t api:test . 2&gt;&amp;1 | grep -c CACHED
 docker build --no-cache -t api:test . 2&gt;&amp;1 | tail -3</code></pre>
 <div class="out">6
  =&gt; ERROR [deps 3/4] RUN npm ci                                              9.1s
@@ -1638,7 +1638,7 @@ RUN wget -qO- https://dl-cdn.alpinelinux.org/alpine/latest-stable/releases/aarch
 
 <h3>The build is slow, or the context is enormous</h3>
 ${slide('dk-12', 25, 'Ngữ cảnh 220 MB → 446 B: .dockerignore phải đặt đúng chỗ')}
-<pre><code>docker build -t api:test . 2&gt;&amp;1 | head -3
+<pre><code class="language-bash">docker build -t api:test . 2&gt;&amp;1 | head -3
 du -sh .git node_modules .next 2&gt;/dev/null
 cat .dockerignore</code></pre>
 <div class="out"> =&gt; [internal] load build context                                            41.3s
@@ -1665,7 +1665,7 @@ dist
 
 <h3>Green build, dead image</h3>
 ${slide('dk-12', 26, 'Build xanh, ảnh chết: glibc trong ảnh musl')}
-<pre><code>docker build -t ghcr.io/me/api:1.4.3 . &amp;&amp; echo "build ✓"
+<pre><code class="language-javascript">docker build -t ghcr.io/me/api:1.4.3 . &amp;&amp; echo "build ✓"
 docker push ghcr.io/me/api:1.4.3 &gt;/dev/null &amp;&amp; echo "push ✓"
 docker run --rm ghcr.io/me/api:1.4.3 node -e 'require("@prisma/client")' 2&gt;&amp;1 | tail -2</code></pre>
 <div class="out">build ✓
@@ -1673,7 +1673,7 @@ push ✓
 Error: Query engine library for current platform "linux-musl-openssl-3.0.x" could not be found.
        Files in query engine directory: libquery_engine-debian-openssl-3.0.x.so.node</div>
 <div class="callout warn"><strong>This is the most expensive lesson in the course, and it cost this project seven minutes of 502s.</strong> A deploy script ran <code>docker build .</code> — picking up the default <code>Dockerfile</code> instead of the <code>Dockerfile.backend</code> that compose uses — so an Alpine (musl) base received a glibc Prisma engine. Build green, push green, swap green, and then the backend restarted in an endless loop with the API returning 502. The rule that came out of it: <strong>a green build does not mean a runnable image.</strong> Always pass <code>-f</code> with the exact Dockerfile compose uses, and add one smoke run before the push:</div>
-<pre><code><span class="tok-comment"># The check that would have caught it, in one line</span>
+<pre><code class="language-javascript"><span class="tok-comment"># The check that would have caught it, in one line</span>
 docker run --rm ghcr.io/me/api:1.4.3 node -e 'require("@prisma/client"); console.log("ok")' \\
   || { echo "image does not start — refusing to push"; exit 1; }</code></pre>
 <div class="out">ok</div>
@@ -1765,7 +1765,7 @@ exit=255
 <h3>Đọc thứ BuildKit nói với bạn</h3>
 ${slide('dk-12', 20, 'Build hỏng: hỏng ở đâu, và chỉ hỏng ở CI hay cả máy bạn?')}
 ${slide('dk-12', 21, 'BuildKit: đọc từ dưới lên — dòng lỗi thật nằm phía trên')}
-<pre><code>docker build -f Dockerfile.backend -t api:test . 2&gt;&amp;1 | tail -12</code></pre>
+<pre><code class="language-bash">docker build -f Dockerfile.backend -t api:test . 2&gt;&amp;1 | tail -12</code></pre>
 <div class="out"> =&gt; ERROR [build 5/6] RUN npm run build                                     18.2s
 ------
  &gt; [build 5/6] RUN npm run build:
@@ -1782,7 +1782,7 @@ Dockerfile.backend:18
 --------------------
 ERROR: failed to solve: process "/bin/sh -c npm run build" did not exit with code 0</div>
 <div class="callout ok"><strong>Kết quả của BuildKit đặc nhưng đầy đủ: hãy đọc TỪ DƯỚI LÊN.</strong> Dòng cuối gọi tên câu lệnh hỏng, khối ngay trên nó chỉ vào đúng dòng trong Dockerfile kèm hai dòng ngữ cảnh, và khối trên nữa là kết quả của chính câu lệnh đó với tiền tố số giây đã trôi. Dòng <code>[build 5/6]</code> cho bạn biết tầng nào và bước nào. Chừng đó là tất cả những gì bạn cần mà không phải cuộn màn hình, một khi bạn biết nhìn vào đâu.</div>
-<pre><code><span class="tok-comment"># Khi kết quả tiến trình đan xen che mất mọi thứ</span>
+<pre><code class="language-bash"><span class="tok-comment"># Khi kết quả tiến trình đan xen che mất mọi thứ</span>
 docker build --progress=plain -f Dockerfile.backend -t api:test . 2&gt;&amp;1 | tail -20
 <span class="tok-comment"># Dừng ngay TRƯỚC cái tầng đang hỏng rồi lấy một cái shell ở đó</span>
 docker build --target build -t api:dbg -f Dockerfile.backend .
@@ -1837,7 +1837,7 @@ ${slide('dk-12', 23, 'Hoa-thường: Mac chạy được, Docker build (và CI) 
   <div class="lz-step"><span class="lz-k">6 · Bộ nhớ</span><span class="lz-t">exit 137 trên một runner ít RAM hơn máy bạn</span><span class="lz-d">Một lượt dựng không phải một container: hạn mức ở đây là của runner. Hãy giảm mức song song, hoặc tách lượt dựng ra — dự án này dựng frontend với backend tuần tự trên con máy chủ 6GB đúng vì chuyện này.</span></div>
   <div class="lz-step"><span class="lz-k">7 · Bí mật và mạng</span><span class="lz-t">một token registry riêng mà bạn có còn CI thì không</span><span class="lz-d">Hoặc ngược lại — CI có hạn chế lối ra mà bạn không có. Một lệnh <code>npm ci</code> treo thì thường là chuyện này.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Tái hiện một lượt dựng CI ngay tại máy, trong một câu lệnh</span>
+<pre><code class="language-bash"><span class="tok-comment"># Tái hiện một lượt dựng CI ngay tại máy, trong một câu lệnh</span>
 git stash -u
 docker build --no-cache --pull --platform linux/amd64 -f Dockerfile.backend -t api:ci . 2&gt;&amp;1 | tail -5
 git stash pop</code></pre>
@@ -1879,7 +1879,7 @@ build ok
 <p>Bất ngờ nằm ở dòng giữa. Container là Linux, vậy mà build vẫn qua — vì bind mount trên Docker Desktop bên dưới vẫn là hệ thống file của Mac, và APFS không phân biệt <code>Auth</code> với <code>auth</code>. Chỉ <code>docker build</code>, thứ chép file vào một hệ thống file Linux thật, mới hỏng giống runner CI. Nên "tôi đã thử trong container" là chưa đủ; "tôi đã thử bằng <code>docker build</code>" mới đủ.</p>
 <h3>Khi cache mới là kẻ nói dối</h3>
 ${slide('dk-12', 24, 'Cache khoá theo chuỗi lệnh, không theo thế giới bên ngoài')}
-<pre><code>docker build -t api:test . 2&gt;&amp;1 | grep -c CACHED
+<pre><code class="language-bash">docker build -t api:test . 2&gt;&amp;1 | grep -c CACHED
 docker build --no-cache -t api:test . 2&gt;&amp;1 | tail -3</code></pre>
 <div class="out">6
  =&gt; ERROR [deps 3/4] RUN npm ci                                              9.1s
@@ -1913,7 +1913,7 @@ RUN wget -qO- https://dl-cdn.alpinelinux.org/alpine/latest-stable/releases/aarch
 
 <h3>Dựng chậm, hoặc ngữ cảnh khổng lồ</h3>
 ${slide('dk-12', 25, 'Ngữ cảnh 220 MB → 446 B: .dockerignore phải đặt đúng chỗ')}
-<pre><code>docker build -t api:test . 2&gt;&amp;1 | head -3
+<pre><code class="language-bash">docker build -t api:test . 2&gt;&amp;1 | head -3
 du -sh .git node_modules .next 2&gt;/dev/null
 cat .dockerignore</code></pre>
 <div class="out"> =&gt; [internal] load build context                                            41.3s
@@ -1940,7 +1940,7 @@ dist
 
 <h3>Dựng xanh, ảnh chết</h3>
 ${slide('dk-12', 26, 'Build xanh, ảnh chết: glibc trong ảnh musl')}
-<pre><code>docker build -t ghcr.io/me/api:1.4.3 . &amp;&amp; echo "build ✓"
+<pre><code class="language-javascript">docker build -t ghcr.io/me/api:1.4.3 . &amp;&amp; echo "build ✓"
 docker push ghcr.io/me/api:1.4.3 &gt;/dev/null &amp;&amp; echo "push ✓"
 docker run --rm ghcr.io/me/api:1.4.3 node -e 'require("@prisma/client")' 2&gt;&amp;1 | tail -2</code></pre>
 <div class="out">build ✓
@@ -1948,7 +1948,7 @@ push ✓
 Error: Query engine library for current platform "linux-musl-openssl-3.0.x" could not be found.
        Files in query engine directory: libquery_engine-debian-openssl-3.0.x.so.node</div>
 <div class="callout warn"><strong>Đây là bài học đắt nhất trong cả khoá, và nó khiến dự án này trả giá bảy phút trả 502.</strong> Một script deploy chạy <code>docker build .</code> — lấy trúng <code>Dockerfile</code> mặc định thay vì <code>Dockerfile.backend</code> mà compose dùng — nên một cái nền Alpine (musl) nhận được engine Prisma bản glibc. Dựng xanh, đẩy xanh, tráo xanh, rồi backend restart thành vòng lặp vô tận với API trả 502. Cái luật rút ra: <strong>build xanh KHÔNG có nghĩa là ảnh chạy được.</strong> Hãy luôn truyền <code>-f</code> trỏ đúng cái Dockerfile mà compose dùng, và thêm một lượt chạy thử trước khi đẩy:</div>
-<pre><code><span class="tok-comment"># Phép kiểm lẽ ra đã bắt được nó, gói trong một dòng</span>
+<pre><code class="language-javascript"><span class="tok-comment"># Phép kiểm lẽ ra đã bắt được nó, gói trong một dòng</span>
 docker run --rm ghcr.io/me/api:1.4.3 node -e 'require("@prisma/client"); console.log("ok")' \\
   || { echo "image does not start — refusing to push"; exit 1; }</code></pre>
 <div class="out">ok</div>
@@ -2113,7 +2113,7 @@ ${slide('dk-12', 29, 'Sự cố thật: xanh ở mọi cửa → một phép ki�
 
 <p>One more incident belongs on that list, because it is the purest example of "green and wrong": the nginx configuration was a <strong>single-file bind mount</strong>, and a deploy script replaced the file on the host with <code>mv</code>. Docker binds a single file by its inode at container start, so the container kept reading the <em>old</em> inode — <code>nginx -t</code> passed (it tested the old, valid config), <code>reload</code> passed, and nothing changed for two deploys. The check that came out of it compares the <code>sha256</code> of the file on the host with <code>docker exec … sha256sum</code> inside the container (Chapter 7). "Written" is not "in effect" until you have checked from inside.</p>
 <h3>A checklist for your next project</h3>
-<pre><code><span class="tok-comment"># Before the first deploy — thirty minutes, once</span>
+<pre><code class="language-bash"><span class="tok-comment"># Before the first deploy — thirty minutes, once</span>
 [ ] Dockerfile is multi-stage, non-root, pinned minor version
 [ ] .dockerignore excludes .git, node_modules, .next, *.log
 [ ] compose.yaml: one public network, one internal, only the proxy publishes ports
@@ -2257,7 +2257,7 @@ ${slide('dk-12', 29, 'Sự cố thật: xanh ở mọi cửa → một phép ki�
 
 <p>Còn một sự cố nữa đáng nằm trong danh sách đó, vì nó là ví dụ thuần tuý nhất của "xanh mà sai": cấu hình nginx là một <strong>bind mount file đơn</strong>, và một script deploy thay file đó trên máy chủ bằng <code>mv</code>. Docker gắn file đơn theo inode lúc container khởi động, nên container cứ đọc inode <em>CŨ</em> — <code>nginx -t</code> qua (nó kiểm cấu hình cũ, vốn hợp lệ), <code>reload</code> qua, và chẳng có gì thay đổi suốt hai lượt deploy. Phép kiểm sinh ra từ đó so <code>sha256</code> của file trên máy chủ với <code>docker exec … sha256sum</code> bên trong container (Chương 7). "Đã ghi" chưa phải là "đã có hiệu lực" cho tới khi bạn kiểm từ BÊN TRONG.</p>
 <h3>Bảng kiểm cho dự án tiếp theo của bạn</h3>
-<pre><code><span class="tok-comment"># Trước lượt deploy đầu tiên — ba mươi phút, làm một lần</span>
+<pre><code class="language-bash"><span class="tok-comment"># Trước lượt deploy đầu tiên — ba mươi phút, làm một lần</span>
 [ ] Dockerfile nhiều tầng, không chạy root, ghim số hiệu phụ
 [ ] .dockerignore loại .git, node_modules, .next, *.log
 [ ] compose.yaml: một mạng công khai, một mạng nội bộ, chỉ proxy công bố cổng

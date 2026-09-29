@@ -177,7 +177,7 @@ ${slide('dv-04', 8, 'Cái gì là cấu hình — và ai thắng khi trùng')}
 </div>
 <p>When the same variable is set in more than one place, the question "which value wins?" has a documented answer for Compose (docs.docker.com, as of 09/2026), from highest to lowest: <code>docker compose run -e</code> on the command line; then an <code>environment:</code> or <code>env_file:</code> entry whose value is interpolated from your shell or the project's <code>.env</code> file (<code>\${X}</code>); then a literal value under <code>environment:</code>; then <code>env_file:</code>; and last, <code>ENV</code> in the Dockerfile. When a container shows a value nobody remembers setting, walk that list from the top instead of guessing — a stale <code>ENV</code> baked into the image months ago is the usual culprit, and it only shows through when every layer above it is empty.</p>
 <div class="callout warn"><strong>An environment variable that is missing should stop the process, not default.</strong> The failure in Lesson 0.3 — a healthy-looking process returning 500 to everything — happens when code reads <code>process.env.DATABASE_URL</code>, gets <code>undefined</code>, and carries on. Validate at startup and exit non-zero if something required is absent: then the service manager reports a failed start, the deploy's readiness check never passes, and the swap in Chapter 3 never happens. A missing variable becomes a failed deploy instead of a broken site.</div>
-<pre><code><span class="tok-comment">// dau vao cua ung dung, truoc khi lang nghe cong</span>
+<pre><code class="language-javascript"><span class="tok-comment">// dau vao cua ung dung, truoc khi lang nghe cong</span>
 const BAT_BUOC = ['DATABASE_URL', 'JWT_SECRET', 'R2_BUCKET'];
 const thieu = BAT_BUOC.filter(k =&gt; !process.env[k]);
 if (thieu.length) {
@@ -360,7 +360,7 @@ ${slide('dv-04', 8, 'Cái gì là cấu hình — và ai thắng khi trùng')}
 </div>
 <p>Khi cùng một biến được đặt ở hơn một chỗ, câu hỏi "giá trị nào thắng?" có đáp án được ghi trong tài liệu của Compose (docs.docker.com, tính đến 09/2026), từ cao xuống thấp: <code>docker compose run -e</code> trên dòng lệnh; rồi một mục <code>environment:</code> hoặc <code>env_file:</code> có giá trị được nội suy (interpolate) từ shell của bạn hoặc từ tệp <code>.env</code> của dự án (<code>\${X}</code>); rồi một giá trị viết thẳng dưới <code>environment:</code>; rồi <code>env_file:</code>; và cuối cùng là <code>ENV</code> trong Dockerfile. Khi một container hiện ra một giá trị mà chẳng ai nhớ đã đặt, hãy đi dọc danh sách đó từ trên xuống thay vì đoán — thủ phạm quen thuộc là một <code>ENV</code> cũ nướng vào ảnh từ mấy tháng trước, và nó chỉ lộ ra khi mọi tầng phía trên đều trống.</p>
 <div class="callout warn"><strong>Một biến môi trường bị THIẾU thì phải làm DỪNG tiến trình, đừng lấy giá trị mặc định.</strong> Kiểu hỏng ở Bài 0.3 — một tiến trình trông khoẻ mạnh trả 500 cho tất cả — xảy ra khi mã đọc <code>process.env.DATABASE_URL</code>, nhận về <code>undefined</code>, rồi cứ thế đi tiếp. Hãy kiểm ngay lúc khởi động và thoát ra KHÁC 0 nếu thiếu thứ bắt buộc: khi đó trình quản lý dịch vụ báo một lần khởi động thất bại, phép kiểm sẵn sàng của lần deploy không bao giờ qua, và bước tráo ở Chương 3 không bao giờ xảy ra. Một biến bị thiếu trở thành một LẦN DEPLOY HỎNG thay vì một WEBSITE HỎNG.</div>
-<pre><code><span class="tok-comment">// dau vao cua ung dung, truoc khi lang nghe cong</span>
+<pre><code class="language-javascript"><span class="tok-comment">// dau vao cua ung dung, truoc khi lang nghe cong</span>
 const BAT_BUOC = ['DATABASE_URL', 'JWT_SECRET', 'R2_BUCKET'];
 const thieu = BAT_BUOC.filter(k =&gt; !process.env[k]);
 if (thieu.length) {
@@ -446,7 +446,7 @@ OLD_SMTP_PASS</div>
 
 <h3>Two variables, one file, measured</h3>
 ${slide('dv-04', 9, 'Hai thời điểm: lúc DỰNG và lúc CHẠY')}
-<pre><code><span class="tok-comment">// gia tri nay duoc DOC luc CHAY</span>
+<pre><code class="language-javascript"><span class="tok-comment">// gia tri nay duoc DOC luc CHAY</span>
 const luc_chay = process.env.API_URL;
 
 <span class="tok-comment">// gia tri nay duoc THAY luc DUNG (bundler lam dung viec nay)</span>
@@ -510,7 +510,7 @@ khoa-MOI-12345</div>
 <div class="callout warn"><strong>On Windows the build command itself differs.</strong> <code>NEXT_PUBLIC_X=abc npm run build</code> is shell syntax: it works in bash, zsh and WSL, and fails in PowerShell and <code>cmd.exe</code>. PowerShell needs <code>$env:NEXT_PUBLIC_X="abc"; npm run build</code>; many projects use the <code>cross-env</code> package so one <code>package.json</code> script works everywhere. A teammate who builds on Windows without setting it produces a bundle with <code>undefined</code> in it — no error, just a broken feature.</div>
 <h3>Telling them apart</h3>
 ${slide('dv-04', 13, '/proc/PID/environ: tiến trình thật sự thấy gì')}
-<pre><code><span class="tok-comment"># gia tri co nam TRONG goi da dung khong? (⇒ luc DUNG, va CONG KHAI)</span>
+<pre><code class="language-bash"><span class="tok-comment"># gia tri co nam TRONG goi da dung khong? (⇒ luc DUNG, va CONG KHAI)</span>
 grep -r "api.cu.com" dist/ .next/ build/ 2&gt;/dev/null
 
 <span class="tok-comment"># tien trinh dang chay THAT SU thay nhung bien nao? (⇒ luc CHAY)</span>
@@ -608,7 +608,7 @@ ls: /run/secrets: No such file or directory</div>
 
 <h3>Hai biến, một tệp, đo thật</h3>
 ${slide('dv-04', 9, 'Hai thời điểm: lúc DỰNG và lúc CHẠY')}
-<pre><code><span class="tok-comment">// gia tri nay duoc DOC luc CHAY</span>
+<pre><code class="language-javascript"><span class="tok-comment">// gia tri nay duoc DOC luc CHAY</span>
 const luc_chay = process.env.API_URL;
 
 <span class="tok-comment">// gia tri nay duoc THAY luc DUNG (bundler lam dung viec nay)</span>
@@ -672,7 +672,7 @@ khoa-MOI-12345</div>
 <div class="callout warn"><strong>Trên Windows, chính lệnh dựng đã khác.</strong> <code>NEXT_PUBLIC_X=abc npm run build</code> là cú pháp shell: chạy trong bash, zsh và WSL, và HỎNG trong PowerShell lẫn <code>cmd.exe</code>. PowerShell cần <code>$env:NEXT_PUBLIC_X="abc"; npm run build</code>; nhiều dự án dùng gói <code>cross-env</code> để một script trong <code>package.json</code> chạy được ở mọi nơi. Một bạn cùng nhóm dựng trên Windows mà không đặt biến sẽ sinh ra một gói có chữ <code>undefined</code> bên trong — không lỗi, chỉ một tính năng hỏng.</div>
 <h3>Phân biệt chúng</h3>
 ${slide('dv-04', 13, '/proc/PID/environ: tiến trình thật sự thấy gì')}
-<pre><code><span class="tok-comment"># gia tri co nam TRONG goi da dung khong? (⇒ luc DUNG, va CONG KHAI)</span>
+<pre><code class="language-bash"><span class="tok-comment"># gia tri co nam TRONG goi da dung khong? (⇒ luc DUNG, va CONG KHAI)</span>
 grep -r "api.cu.com" dist/ .next/ build/ 2&gt;/dev/null
 
 <span class="tok-comment"># tien trinh dang chay THAT SU thay nhung bien nao? (⇒ luc CHAY)</span>
@@ -937,7 +937,7 @@ CO_BANG="key=value=extra"</code></pre>
 
 <div class="pitfall co-tieu-de"><strong>Trap — rule 1 has one exception, and it is a common one.</strong> "Quote every value" is right for bash, systemd, Compose and Node, and <em>wrong</em> for <code>docker run --env-file</code>, which keeps the quotes as part of the value (measured above: <code>["co  hai khoang"]</code>). If a file must also be read by <code>docker run --env-file</code>, the only format all five agree on is the boring one: no quotes, no spaces, no <code>#</code>, no <code>$</code>, no <code>export</code>, LF endings — which is precisely what <code>openssl rand -hex 32</code> produces for secrets. Otherwise, pick one loader for production and write the file for that loader.</div>
 <h3>Verify rather than assume</h3>
-<pre><code><span class="tok-comment"># cach DUY NHAT dang tin: hoi chinh tien trinh dang chay</span>
+<pre><code class="language-javascript"><span class="tok-comment"># cach DUY NHAT dang tin: hoi chinh tien trinh dang chay</span>
 tr '\\0' '\\n' &lt; /proc/\$(pgrep -f 'node src/server.js')/environ | grep DATABASE_URL
 
 <span class="tok-comment"># do dai co dung khong? (bat cat cut ma khong lo bi mat ra man hinh)</span>
@@ -1176,7 +1176,7 @@ CO_BANG="key=value=extra"</code></pre>
 
 <div class="pitfall co-tieu-de"><strong>Bẫy — luật 1 có MỘT ngoại lệ, và nó hay gặp.</strong> "Bọc nháy mọi giá trị" đúng với bash, systemd, Compose và Node, và <em>SAI</em> với <code>docker run --env-file</code>, bộ nạp giữ dấu nháy như một phần của giá trị (đo ở trên: <code>["co  hai khoang"]</code>). Nếu một tệp còn phải được <code>docker run --env-file</code> đọc, thì định dạng DUY NHẤT cả năm bộ đồng ý là cái định dạng nhàm chán: không nháy, không dấu cách, không <code>#</code>, không <code>$</code>, không <code>export</code>, xuống dòng LF — đúng thứ mà <code>openssl rand -hex 32</code> sinh ra cho bí mật. Còn không thì hãy chọn MỘT bộ nạp cho production và viết tệp cho đúng bộ nạp đó.</div>
 <h3>Hãy KIỂM thay vì đoán</h3>
-<pre><code><span class="tok-comment"># cach DUY NHAT dang tin: hoi chinh tien trinh dang chay</span>
+<pre><code class="language-javascript"><span class="tok-comment"># cach DUY NHAT dang tin: hoi chinh tien trinh dang chay</span>
 tr '\\0' '\\n' &lt; /proc/\$(pgrep -f 'node src/server.js')/environ | grep DATABASE_URL
 
 <span class="tok-comment"># do dai co dung khong? (bat cat cut ma khong lo bi mat ra man hinh)</span>
@@ -1331,7 +1331,7 @@ ${slide('dv-04', 21, 'Lộ khoá: XOAY trước, dọn lịch sử sau')}
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Then clean the history</span><span class="lz-d"><code>git filter-repo</code> — the maintained tool; <code>filter-branch</code> is deprecated and slow. It rewrites every commit, so every hash changes, so everyone must re-clone. Coordinate it, and expect open pull requests to break.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Add the guard that stops the next one</span><span class="lz-d">A pre-commit hook or a CI scan. The mistake is not carelessness — it is that <code>git add -A</code> does exactly what it is told, and nothing between your keyboard and the remote is looking.</span></div>
 </div>
-<pre><code><span class="tok-comment"># co bi mat nao trong lich su khong? (chay tren kho ban vua tiep quan)</span>
+<pre><code class="language-bash"><span class="tok-comment"># co bi mat nao trong lich su khong? (chay tren kho ban vua tiep quan)</span>
 git rev-list --all | while read c; do
   git grep -lE '(sk_live_|AKIA[0-9A-Z]{16}|-----BEGIN [A-Z ]*PRIVATE KEY)' "\$c" 2&gt;/dev/null
 done | sort -u
@@ -1358,7 +1358,7 @@ DATABASE_URL=postgres://app:MatKhauThatSu123@db:5432/prod</div>
 
 <h3>Stopping it before it happens</h3>
 ${slide('dv-04', 22, 'Ba lớp chặn: máy bạn, GitHub, CI')}
-<pre><code><span class="tok-comment"># .git/hooks/pre-commit — chan truoc khi no thanh lich su</span>
+<pre><code class="language-bash"><span class="tok-comment"># .git/hooks/pre-commit — chan truoc khi no thanh lich su</span>
 #!/bin/bash
 if git diff --cached --name-only | grep -qE '(^|/)\\.env(\\.|\$)'; then
   echo "TU CHOI: dang commit mot tep .env" &gt;&amp;2; exit 1
@@ -1519,7 +1519,7 @@ ${slide('dv-04', 21, 'Lộ khoá: XOAY trước, dọn lịch sử sau')}
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">RỒI mới dọn lịch sử</span><span class="lz-d"><code>git filter-repo</code> — công cụ đang được bảo trì; <code>filter-branch</code> đã bị khai tử và chậm. Nó viết lại MỌI commit, nên mọi mã băm đổi, nên mọi người phải clone lại. Hãy phối hợp trước, và lường trước rằng các pull request đang mở sẽ vỡ.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Thêm cái chốt chặn lần sau</span><span class="lz-d">Một hook pre-commit hoặc một bước quét trong CI. Cái sai không phải do bất cẩn — mà do <code>git add -A</code> làm ĐÚNG những gì nó được bảo, và giữa bàn phím bạn với máy chủ từ xa thì chẳng có gì đang nhìn cả.</span></div>
 </div>
-<pre><code><span class="tok-comment"># co bi mat nao trong lich su khong? (chay tren kho ban vua tiep quan)</span>
+<pre><code class="language-bash"><span class="tok-comment"># co bi mat nao trong lich su khong? (chay tren kho ban vua tiep quan)</span>
 git rev-list --all | while read c; do
   git grep -lE '(sk_live_|AKIA[0-9A-Z]{16}|-----BEGIN [A-Z ]*PRIVATE KEY)' "\$c" 2&gt;/dev/null
 done | sort -u
@@ -1546,7 +1546,7 @@ DATABASE_URL=postgres://app:MatKhauThatSu123@db:5432/prod</div>
 
 <h3>Chặn nó trước khi nó xảy ra</h3>
 ${slide('dv-04', 22, 'Ba lớp chặn: máy bạn, GitHub, CI')}
-<pre><code><span class="tok-comment"># .git/hooks/pre-commit — chan truoc khi no thanh lich su</span>
+<pre><code class="language-bash"><span class="tok-comment"># .git/hooks/pre-commit — chan truoc khi no thanh lich su</span>
 #!/bin/bash
 if git diff --cached --name-only | grep -qE '(^|/)\\.env(\\.|\$)'; then
   echo "TU CHOI: dang commit mot tep .env" &gt;&amp;2; exit 1
@@ -1661,7 +1661,7 @@ ${slide('dv-04', 24, 'Xoay khoá ký bốn giai đoạn, không ai bị đá ra'
 <h3>Two keys at once</h3>
 ${slide('dv-04', 25, 'Ký bằng khoá đầu, kiểm theo kid')}
 <p>The mechanism is one line of design: <strong>sign with one key, accept a list</strong>.</p>
-<pre><code><span class="tok-comment">// KY bang khoa dau tien; CHAP NHAN bat ky khoa nao trong danh sach</span>
+<pre><code class="language-javascript"><span class="tok-comment">// KY bang khoa dau tien; CHAP NHAN bat ky khoa nao trong danh sach</span>
 const KHOA = (process.env.SIGNING_KEYS || '').split(',').filter(Boolean);
 
 const tao  = d =&gt; &#96;\${d}.\${ky(d, KHOA[0])}&#96;;            <span class="tok-comment">// luon la khoa dau</span>
@@ -1760,7 +1760,7 @@ ${slide('dv-04', 26, 'Mật khẩu CSDL: thêm user mới, đừng đổi user c
 </div>
 <h3>A rotation is a deploy, so it is measurable</h3>
 ${slide('dv-04', 27, 'Kiểm lần xoay: token cũ PHẢI ra 401')}
-<pre><code><span class="tok-comment"># tien trinh dang chay CO THAT SU nhan khoa moi khong? (Bai 4.2)</span>
+<pre><code class="language-bash"><span class="tok-comment"># tien trinh dang chay CO THAT SU nhan khoa moi khong? (Bai 4.2)</span>
 tr '\\0' '\\n' &lt; /proc/\$(pgrep -f 'node src/server.js')/environ \\
   | awk -F= '/^SIGNING_KEYS/{print "so khoa dang chap nhan:", split(\$2, a, ",")}'
 
@@ -1858,7 +1858,7 @@ ${slide('dv-04', 24, 'Xoay khoá ký bốn giai đoạn, không ai bị đá ra'
 <h3>Hai khoá cùng lúc</h3>
 ${slide('dv-04', 25, 'Ký bằng khoá đầu, kiểm theo kid')}
 <p>Cơ chế gói trong một dòng thiết kế: <strong>KÝ bằng một khoá, CHẤP NHẬN cả một danh sách</strong>.</p>
-<pre><code><span class="tok-comment">// KY bang khoa dau tien; CHAP NHAN bat ky khoa nao trong danh sach</span>
+<pre><code class="language-javascript"><span class="tok-comment">// KY bang khoa dau tien; CHAP NHAN bat ky khoa nao trong danh sach</span>
 const KHOA = (process.env.SIGNING_KEYS || '').split(',').filter(Boolean);
 
 const tao  = d =&gt; &#96;\${d}.\${ky(d, KHOA[0])}&#96;;            <span class="tok-comment">// luon la khoa dau</span>
@@ -1957,7 +1957,7 @@ ${slide('dv-04', 26, 'Mật khẩu CSDL: thêm user mới, đừng đổi user c
 </div>
 <h3>Một lần xoay khoá cũng là một lần deploy, nên nó ĐO ĐƯỢC</h3>
 ${slide('dv-04', 27, 'Kiểm lần xoay: token cũ PHẢI ra 401')}
-<pre><code><span class="tok-comment"># tien trinh dang chay CO THAT SU nhan khoa moi khong? (Bai 4.2)</span>
+<pre><code class="language-bash"><span class="tok-comment"># tien trinh dang chay CO THAT SU nhan khoa moi khong? (Bai 4.2)</span>
 tr '\\0' '\\n' &lt; /proc/\$(pgrep -f 'node src/server.js')/environ \\
   | awk -F= '/^SIGNING_KEYS/{print "so khoa dang chap nhan:", split(\$2, a, ",")}'
 

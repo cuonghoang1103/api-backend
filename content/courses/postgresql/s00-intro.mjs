@@ -295,7 +295,7 @@ export default {
 
 <h3>Option A — Docker (recommended for this course)</h3>
 <p>If you have Docker, one command gives you a fully working PostgreSQL 15 server. It listens on port 5432 inside the container; we map it to a host port so <code>psql</code> can reach it:</p>
-<pre><code><span class="tok-comment"># Start a throwaway PostgreSQL 15 server</span>
+<pre><code class="language-bash"><span class="tok-comment"># Start a throwaway PostgreSQL 15 server</span>
 docker run -d --name pg15 \\
   -e POSTGRES_PASSWORD=123456 \\
   -p 5433:5432 \\
@@ -314,7 +314,7 @@ docker ps</code></pre>
 
 <h3>Connecting with psql</h3>
 <p><code>psql</code> is the official terminal client — a REPL where you type SQL and meta-commands. Connect to the Docker server above like this (it will prompt for the password, <code>123456</code>):</p>
-<pre><code>psql -h localhost -p 5433 -U postgres</code></pre>
+<pre><code class="language-bash">psql -h localhost -p 5433 -U postgres</code></pre>
 <p>Once connected, <code>\\conninfo</code> confirms exactly where you are — a good habit before running anything destructive:</p>
 <div class="out">You are connected to database "pgcourse" as user "postgres" on host "localhost" (address "::1") at port "5433".</div>
 <p>And <code>SELECT version();</code> shows the exact server build. This is the real output from the server this course runs on:</p>
@@ -325,14 +325,14 @@ docker ps</code></pre>
 
 <h3>Server, database, table — the three levels</h3>
 <p>One PostgreSQL <strong>server</strong> holds many <strong>databases</strong>; each database holds many <strong>tables</strong>. When you connect you're always inside exactly one database. Let's create one for this course and switch into it:</p>
-<pre><code><span class="tok-comment">-- run while connected to the default 'postgres' database</span>
+<pre><code class="language-sql"><span class="tok-comment">-- run while connected to the default 'postgres' database</span>
 CREATE DATABASE pgcourse;
 <span class="tok-comment">-- then in psql, switch into it:</span>
 \\c pgcourse</code></pre>
 
 <h3>Your first table and query</h3>
 <p>Here is the running example we'll use across early chapters — a simple <code>notes</code> table. Type this in and run it:</p>
-<pre><code>CREATE TABLE notes (
+<pre><code class="language-sql">CREATE TABLE notes (
   id         bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   title      varchar(200) NOT NULL,
   body       text,
@@ -408,7 +408,7 @@ Indexes:
 
 <h3>Cách A — Docker (khuyên dùng cho khoá này)</h3>
 <p>Nếu bạn có Docker, một lệnh cho bạn một máy chủ PostgreSQL 15 chạy đầy đủ. Nó lắng nghe cổng 5432 bên trong container; ta ánh xạ ra một cổng của máy để <code>psql</code> với tới:</p>
-<pre><code><span class="tok-comment"># Khởi động một máy chủ PostgreSQL 15 dùng xong bỏ</span>
+<pre><code class="language-bash"><span class="tok-comment"># Khởi động một máy chủ PostgreSQL 15 dùng xong bỏ</span>
 docker run -d --name pg15 \\
   -e POSTGRES_PASSWORD=123456 \\
   -p 5433:5432 \\
@@ -427,7 +427,7 @@ docker ps</code></pre>
 
 <h3>Kết nối bằng psql</h3>
 <p><code>psql</code> là client terminal chính thức — một REPL nơi bạn gõ SQL và các lệnh meta. Kết nối tới máy chủ Docker phía trên như sau (nó sẽ hỏi mật khẩu, <code>123456</code>):</p>
-<pre><code>psql -h localhost -p 5433 -U postgres</code></pre>
+<pre><code class="language-bash">psql -h localhost -p 5433 -U postgres</code></pre>
 <p>Khi đã kết nối, <code>\\conninfo</code> xác nhận chính xác bạn đang ở đâu — một thói quen tốt trước khi chạy bất cứ thứ gì có thể phá dữ liệu:</p>
 <div class="out">You are connected to database "pgcourse" as user "postgres" on host "localhost" (address "::1") at port "5433".</div>
 <p>Và <code>SELECT version();</code> hiện đúng bản build của máy chủ. Đây là output thật từ chính máy chủ khoá này chạy trên đó:</p>
@@ -438,14 +438,14 @@ docker ps</code></pre>
 
 <h3>Máy chủ, cơ sở dữ liệu, bảng — ba cấp</h3>
 <p>Một <strong>máy chủ</strong> PostgreSQL chứa nhiều <strong>cơ sở dữ liệu</strong>; mỗi cơ sở dữ liệu chứa nhiều <strong>bảng</strong>. Khi kết nối, bạn luôn ở bên trong đúng một cơ sở dữ liệu. Hãy tạo một cái cho khoá này rồi chuyển vào:</p>
-<pre><code><span class="tok-comment">-- chạy khi đang kết nối tới cơ sở dữ liệu mặc định 'postgres'</span>
+<pre><code class="language-sql"><span class="tok-comment">-- chạy khi đang kết nối tới cơ sở dữ liệu mặc định 'postgres'</span>
 CREATE DATABASE pgcourse;
 <span class="tok-comment">-- rồi trong psql, chuyển vào nó:</span>
 \\c pgcourse</code></pre>
 
 <h3>Bảng đầu tiên và truy vấn đầu tiên</h3>
 <p>Đây là ví dụ xuyên suốt ta sẽ dùng qua các chương đầu — một bảng <code>notes</code> đơn giản. Gõ vào và chạy:</p>
-<pre><code>CREATE TABLE notes (
+<pre><code class="language-sql">CREATE TABLE notes (
   id         bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   title      varchar(200) NOT NULL,
   body       text,
@@ -546,13 +546,13 @@ Indexes:
 
 <h3>SQL is declarative — you say what, not how</h3>
 <p>This is the second big idea. In most programming you write <em>how</em> to do something: loop over the array, check each item, collect matches. In SQL you write <em>what</em> you want and the database figures out how:</p>
-<pre><code>SELECT title FROM notes WHERE pinned = true ORDER BY created_at DESC;</code></pre>
+<pre><code class="language-sql">SELECT title FROM notes WHERE pinned = true ORDER BY created_at DESC;</code></pre>
 <p>You never told PostgreSQL to "loop over rows" or "use the index on <code>created_at</code>". You described the result you want; the <strong>query planner</strong> decides the actual strategy — and it might choose a sequential scan, an index scan, a sort, or skip the sort entirely if an index already provides the order. That gap between <em>what you asked</em> and <em>how it ran</em> is the entire subject of Chapter 10, and it's why the same query can be fast or catastrophically slow depending on indexes and data size.</p>
 <div class="callout ok">Because SQL is declarative, the way to make a query faster is usually <strong>not</strong> to rewrite the query — it's to give the planner a better option (an index) or better information (up-to-date statistics). You change the <em>how</em> without touching the <em>what</em>.</div>
 
 <h3>A glimpse of why PostgreSQL, specifically</h3>
 <p>Postgres isn't just "tables of numbers and text". Its type system is unusually rich — you can store structured JSON, arrays, UUIDs, precise timestamps and time intervals as first-class values, and query into them. Here's one query touching several at once (real output):</p>
-<pre><code>SELECT
+<pre><code class="language-sql">SELECT
   '{"lang":"vi","tags":["db","sql"]}'::jsonb  AS data,
   array[1,2,3]                                 AS nums,
   gen_random_uuid()                            AS id,
@@ -563,7 +563,7 @@ Indexes:
  {"lang": "vi", "tags": ["db", "sql"]} | {1,2,3} | de9ac9ba-a4e4-4dd0-84cd-2efa8255cd4a | 2026-08-09 | 3 days
 (1 row)</div>
 <p>And you can reach <em>into</em> the JSON with operators — <code>-&gt;&gt;</code> extracts a field as text:</p>
-<pre><code>SELECT ('{"lang":"vi","tags":["db","sql"]}'::jsonb) -&gt;&gt; 'lang' AS lang;</code></pre>
+<pre><code class="language-sql">SELECT ('{"lang":"vi","tags":["db","sql"]}'::jsonb) -&gt;&gt; 'lang' AS lang;</code></pre>
 <div class="out"> lang
 ------
  vi
@@ -608,13 +608,13 @@ Indexes:
 
 <h3>SQL là khai báo — bạn nói CÁI GÌ, không nói LÀM SAO</h3>
 <p>Đây là ý tưởng lớn thứ hai. Trong đa số lập trình bạn viết <em>làm sao</em> để làm một việc: lặp qua mảng, kiểm từng phần tử, gom những cái khớp. Trong SQL bạn viết <em>cái gì</em> bạn muốn và cơ sở dữ liệu tự tìm cách:</p>
-<pre><code>SELECT title FROM notes WHERE pinned = true ORDER BY created_at DESC;</code></pre>
+<pre><code class="language-sql">SELECT title FROM notes WHERE pinned = true ORDER BY created_at DESC;</code></pre>
 <p>Bạn không hề bảo PostgreSQL "lặp qua các dòng" hay "dùng chỉ mục trên <code>created_at</code>". Bạn mô tả kết quả mình muốn; <strong>bộ lập kế hoạch truy vấn</strong> quyết định chiến lược thật sự — và nó có thể chọn quét tuần tự, quét chỉ mục, sắp xếp, hay bỏ luôn bước sắp xếp nếu một chỉ mục đã cung cấp sẵn thứ tự. Khoảng cách giữa <em>cái bạn hỏi</em> và <em>cách nó chạy</em> chính là toàn bộ nội dung Chương 10, và là lý do cùng một truy vấn có thể nhanh hoặc chậm thảm hoạ tuỳ chỉ mục và cỡ dữ liệu.</p>
 <div class="callout ok">Vì SQL là khai báo, cách làm một truy vấn nhanh hơn thường <strong>không</strong> phải viết lại truy vấn — mà là cho bộ lập kế hoạch một lựa chọn tốt hơn (một chỉ mục) hoặc thông tin tốt hơn (thống kê cập nhật). Bạn đổi <em>cách làm</em> mà không đụng tới <em>cái gì</em>.</div>
 
 <h3>Thoáng nhìn vì sao lại chọn PostgreSQL</h3>
 <p>Postgres không chỉ là "các bảng số và chữ". Hệ thống kiểu của nó phong phú khác thường — bạn có thể lưu JSON có cấu trúc, mảng, UUID, mốc thời gian chính xác và khoảng thời gian như những giá trị hạng nhất, và truy vấn vào bên trong chúng. Đây là một truy vấn chạm tới vài kiểu cùng lúc (output thật):</p>
-<pre><code>SELECT
+<pre><code class="language-sql">SELECT
   '{"lang":"vi","tags":["db","sql"]}'::jsonb  AS data,
   array[1,2,3]                                 AS nums,
   gen_random_uuid()                            AS id,
@@ -625,7 +625,7 @@ Indexes:
  {"lang": "vi", "tags": ["db", "sql"]} | {1,2,3} | de9ac9ba-a4e4-4dd0-84cd-2efa8255cd4a | 2026-08-09 | 3 days
 (1 row)</div>
 <p>Và bạn có thể với <em>vào trong</em> JSON bằng toán tử — <code>-&gt;&gt;</code> trích một trường ra dạng text:</p>
-<pre><code>SELECT ('{"lang":"vi","tags":["db","sql"]}'::jsonb) -&gt;&gt; 'lang' AS lang;</code></pre>
+<pre><code class="language-sql">SELECT ('{"lang":"vi","tags":["db","sql"]}'::jsonb) -&gt;&gt; 'lang' AS lang;</code></pre>
 <div class="out"> lang
 ------
  vi

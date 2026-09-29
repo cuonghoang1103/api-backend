@@ -24,7 +24,7 @@ export default {
 
 <h3>Typed route params</h3>
 <p>The first type argument types <code>req.params</code>. One catch worth internalising: URL params are <em>always strings</em>, even <code>/users/42</code> — the <code>42</code> arrives as <code>"42"</code>:</p>
-<pre><code><span class="tok-comment">// params.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// params.ts</span>
 <span class="tok-keyword">import</span> { Request, Response } <span class="tok-keyword">from</span> <span class="tok-string">'express'</span>;
 <span class="tok-keyword">interface</span> UserParams { id: <span class="tok-keyword">string</span>; }
 <span class="tok-keyword">function</span> <span class="tok-function">getUser</span>(req: Request&lt;UserParams&gt;, res: Response) {
@@ -37,7 +37,7 @@ export default {
 
 <h3>Typed request body</h3>
 <p>The <em>third</em> type argument types <code>req.body</code> (the second is the response body). Skip the ones you don't need with <code>{}</code>:</p>
-<pre><code><span class="tok-comment">// body.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// body.ts</span>
 <span class="tok-keyword">import</span> { Request, Response } <span class="tok-keyword">from</span> <span class="tok-string">'express'</span>;
 <span class="tok-keyword">interface</span> CreateUserBody { name: <span class="tok-keyword">string</span>; email: <span class="tok-keyword">string</span>; }
 <span class="tok-keyword">function</span> <span class="tok-function">createUser</span>(req: Request&lt;{}, {}, CreateUserBody&gt;, res: Response) {
@@ -71,7 +71,7 @@ export default {
 
 <h3>Params route có kiểu</h3>
 <p>Đối số kiểu thứ nhất gõ kiểu cho <code>req.params</code>. Một điều cần khắc cốt: params trên URL <em>luôn là chuỗi</em>, kể cả <code>/users/42</code> — số <code>42</code> đến dưới dạng <code>"42"</code>:</p>
-<pre><code><span class="tok-comment">// params.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// params.ts</span>
 <span class="tok-keyword">import</span> { Request, Response } <span class="tok-keyword">from</span> <span class="tok-string">'express'</span>;
 <span class="tok-keyword">interface</span> UserParams { id: <span class="tok-keyword">string</span>; }
 <span class="tok-keyword">function</span> <span class="tok-function">getUser</span>(req: Request&lt;UserParams&gt;, res: Response) {
@@ -84,7 +84,7 @@ export default {
 
 <h3>Body của request có kiểu</h3>
 <p>Đối số kiểu <em>thứ ba</em> gõ kiểu cho <code>req.body</code> (thứ hai là body của response). Bỏ qua các cái không cần bằng <code>{}</code>:</p>
-<pre><code><span class="tok-comment">// body.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// body.ts</span>
 <span class="tok-keyword">import</span> { Request, Response } <span class="tok-keyword">from</span> <span class="tok-string">'express'</span>;
 <span class="tok-keyword">interface</span> CreateUserBody { name: <span class="tok-keyword">string</span>; email: <span class="tok-keyword">string</span>; }
 <span class="tok-keyword">function</span> <span class="tok-function">createUser</span>(req: Request&lt;{}, {}, CreateUserBody&gt;, res: Response) {
@@ -128,7 +128,7 @@ export default {
 
 <h3>Response&lt;T&gt;: constrain res.json</h3>
 <p>Give <code>Response</code> a type argument and <code>res.json</code> will only accept that shape:</p>
-<pre><code><span class="tok-comment">// resbody.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// resbody.ts</span>
 <span class="tok-keyword">import</span> { Request, Response } <span class="tok-keyword">from</span> <span class="tok-string">'express'</span>;
 <span class="tok-keyword">interface</span> User { id: <span class="tok-keyword">number</span>; name: <span class="tok-keyword">string</span>; }
 <span class="tok-keyword">function</span> <span class="tok-function">getUser</span>(req: Request, res: Response&lt;User&gt;) {
@@ -140,7 +140,7 @@ export default {
 
 <h3>RequestHandler: type the whole handler</h3>
 <p>Instead of annotating <code>req</code> and <code>res</code> separately, type the function as a <code>RequestHandler</code> — its generics fill in <code>req</code> and <code>res</code> for you, and it's the same type Express middleware uses:</p>
-<pre><code><span class="tok-comment">// handler.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// handler.ts</span>
 <span class="tok-keyword">import</span> { RequestHandler } <span class="tok-keyword">from</span> <span class="tok-string">'express'</span>;
 <span class="tok-keyword">interface</span> Params { id: <span class="tok-keyword">string</span>; }
 <span class="tok-keyword">interface</span> User { id: <span class="tok-keyword">number</span>; name: <span class="tok-keyword">string</span>; }
@@ -173,7 +173,7 @@ export default {
 
 <h3>Response&lt;T&gt;: ràng buộc res.json</h3>
 <p>Cho <code>Response</code> một đối số kiểu và <code>res.json</code> sẽ chỉ nhận hình dạng đó:</p>
-<pre><code><span class="tok-comment">// resbody.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// resbody.ts</span>
 <span class="tok-keyword">import</span> { Request, Response } <span class="tok-keyword">from</span> <span class="tok-string">'express'</span>;
 <span class="tok-keyword">interface</span> User { id: <span class="tok-keyword">number</span>; name: <span class="tok-keyword">string</span>; }
 <span class="tok-keyword">function</span> <span class="tok-function">getUser</span>(req: Request, res: Response&lt;User&gt;) {
@@ -185,7 +185,7 @@ export default {
 
 <h3>RequestHandler: gõ kiểu cả handler</h3>
 <p>Thay vì chú thích <code>req</code> và <code>res</code> riêng lẻ, gõ kiểu hàm là một <code>RequestHandler</code> — generic của nó điền <code>req</code> và <code>res</code> cho bạn, và đó cũng là kiểu middleware của Express dùng:</p>
-<pre><code><span class="tok-comment">// handler.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// handler.ts</span>
 <span class="tok-keyword">import</span> { RequestHandler } <span class="tok-keyword">from</span> <span class="tok-string">'express'</span>;
 <span class="tok-keyword">interface</span> Params { id: <span class="tok-keyword">string</span>; }
 <span class="tok-keyword">interface</span> User { id: <span class="tok-keyword">number</span>; name: <span class="tok-keyword">string</span>; }
@@ -228,7 +228,7 @@ export default {
 
 <h3>ApiResponse&lt;T&gt;: success or failure</h3>
 <p>Two variants sharing an <code>ok</code> literal. You can only read <code>data</code> after narrowing to the success branch:</p>
-<pre><code><span class="tok-comment">// envelope.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// envelope.ts</span>
 <span class="tok-keyword">type</span> ApiResponse&lt;T&gt; =
   | { ok: <span class="tok-keyword">true</span>; data: T }
   | { ok: <span class="tok-keyword">false</span>; error: <span class="tok-keyword">string</span> };
@@ -244,7 +244,7 @@ export default {
 
 <h3>Typed errors with a class</h3>
 <p>A custom <code>Error</code> subclass carries typed extra fields — a status code your error handler can read without guessing:</p>
-<pre><code><span class="tok-comment">// apperror.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// apperror.ts</span>
 <span class="tok-keyword">class</span> AppError <span class="tok-keyword">extends</span> Error {
   <span class="tok-keyword">constructor</span>(<span class="tok-keyword">public</span> statusCode: <span class="tok-keyword">number</span>, message: <span class="tok-keyword">string</span>) {
     <span class="tok-keyword">super</span>(message);
@@ -278,7 +278,7 @@ export default {
 
 <h3>ApiResponse&lt;T&gt;: thành công hay thất bại</h3>
 <p>Hai biến thể chia sẻ một literal <code>ok</code>. Bạn chỉ đọc được <code>data</code> sau khi thu hẹp về nhánh thành công:</p>
-<pre><code><span class="tok-comment">// envelope.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// envelope.ts</span>
 <span class="tok-keyword">type</span> ApiResponse&lt;T&gt; =
   | { ok: <span class="tok-keyword">true</span>; data: T }
   | { ok: <span class="tok-keyword">false</span>; error: <span class="tok-keyword">string</span> };
@@ -294,7 +294,7 @@ export default {
 
 <h3>Lỗi có kiểu bằng một class</h3>
 <p>Một lớp con của <code>Error</code> mang các field phụ có kiểu — một mã trạng thái mà error handler của bạn đọc được không cần đoán:</p>
-<pre><code><span class="tok-comment">// apperror.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// apperror.ts</span>
 <span class="tok-keyword">class</span> AppError <span class="tok-keyword">extends</span> Error {
   <span class="tok-keyword">constructor</span>(<span class="tok-keyword">public</span> statusCode: <span class="tok-keyword">number</span>, message: <span class="tok-keyword">string</span>) {
     <span class="tok-keyword">super</span>(message);
@@ -338,7 +338,7 @@ export default {
 
 <h3>Async services return honest types</h3>
 <p>A lookup that might not find a row should say so — <code>Promise&lt;User | null&gt;</code>. The <code>| null</code> then forces every caller to handle the miss:</p>
-<pre><code><span class="tok-comment">// service.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// service.ts</span>
 <span class="tok-keyword">interface</span> User { id: <span class="tok-keyword">number</span>; name: <span class="tok-keyword">string</span>; }
 <span class="tok-keyword">async</span> <span class="tok-keyword">function</span> <span class="tok-function">findUser</span>(id: <span class="tok-keyword">number</span>): <span class="tok-keyword">Promise</span>&lt;User | <span class="tok-keyword">null</span>&gt; {
   <span class="tok-keyword">return</span> id === <span class="tok-number">1</span> ? { id, name: <span class="tok-string">'Ada'</span> } : <span class="tok-keyword">null</span>;
@@ -352,7 +352,7 @@ export default {
 
 <h3>process.env is <code>string | undefined</code></h3>
 <p>Every environment variable is a string that might not be set. TypeScript types <code>process.env.X</code> as <code>string | undefined</code>, so you can't feed it straight into a number:</p>
-<pre><code><span class="tok-comment">// env.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// env.ts</span>
 <span class="tok-keyword">const</span> port: <span class="tok-keyword">number</span> = process.env.PORT;   <span class="tok-comment">// env values are string | undefined</span></code></pre>
 <div class="out">env.ts(2,7): error TS2322: Type 'string | undefined' is not assignable to type 'number'.
   Type 'undefined' is not assignable to type 'number'.</div>
@@ -381,7 +381,7 @@ export default {
 
 <h3>Service async trả kiểu thành thật</h3>
 <p>Một truy vấn có thể không tìm thấy hàng nào thì nên nói vậy — <code>Promise&lt;User | null&gt;</code>. Phần <code>| null</code> khi đó ép mọi bên gọi xử lý trường hợp hụt:</p>
-<pre><code><span class="tok-comment">// service.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// service.ts</span>
 <span class="tok-keyword">interface</span> User { id: <span class="tok-keyword">number</span>; name: <span class="tok-keyword">string</span>; }
 <span class="tok-keyword">async</span> <span class="tok-keyword">function</span> <span class="tok-function">findUser</span>(id: <span class="tok-keyword">number</span>): <span class="tok-keyword">Promise</span>&lt;User | <span class="tok-keyword">null</span>&gt; {
   <span class="tok-keyword">return</span> id === <span class="tok-number">1</span> ? { id, name: <span class="tok-string">'Ada'</span> } : <span class="tok-keyword">null</span>;
@@ -395,7 +395,7 @@ export default {
 
 <h3>process.env là <code>string | undefined</code></h3>
 <p>Mọi biến môi trường là một chuỗi có thể chưa được đặt. TypeScript gõ kiểu <code>process.env.X</code> là <code>string | undefined</code>, nên bạn không thể đưa thẳng nó vào một số:</p>
-<pre><code><span class="tok-comment">// env.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// env.ts</span>
 <span class="tok-keyword">const</span> port: <span class="tok-keyword">number</span> = process.env.PORT;   <span class="tok-comment">// giá trị env là string | undefined</span></code></pre>
 <div class="out">env.ts(2,7): error TS2322: Type 'string | undefined' is not assignable to type 'number'.
   Type 'undefined' is not assignable to type 'number'.</div>

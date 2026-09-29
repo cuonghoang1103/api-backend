@@ -285,7 +285,7 @@ const c3 = doc('dmd301-3-1-relational-mapping', '3.1 — Relational model & mapp
 </code></pre>
 <h3>Worked example</h3>
 <p>ER: <em>Student</em> M:N <em>Course</em> (via "enrolls_in", with a Grade). Mapping:</p>
-<pre><code>STUDENT(student_id PK, name, email)
+<pre><code class="language-sql">STUDENT(student_id PK, name, email)
 COURSE(course_id PK, title, credits)
 ENROLLMENT(student_id FK, course_id FK, grade, PRIMARY KEY(student_id, course_id))
 </code></pre>
@@ -320,7 +320,7 @@ ENROLLMENT(student_id FK, course_id FK, grade, PRIMARY KEY(student_id, course_id
 </code></pre>
 <h3>Ví dụ minh hoạ</h3>
 <p>ER: <em>Sinh viên</em> M:N <em>Môn học</em> (qua "đăng ký", có Điểm). Chuyển đổi:</p>
-<pre><code>STUDENT(student_id PK, name, email)
+<pre><code class="language-sql">STUDENT(student_id PK, name, email)
 COURSE(course_id PK, title, credits)
 ENROLLMENT(student_id FK, course_id FK, grade, PRIMARY KEY(student_id, course_id))
 </code></pre>
@@ -349,7 +349,7 @@ const c4 = doc('dmd301-4-1-normalization', '4.1 — Normalization (1NF–3NF, BC
 <h3>Functional dependency</h3>
 <p>Attribute B is <strong>functionally dependent</strong> on A (written A → B) if each value of A is associated with exactly one value of B. Normalization is built entirely on reasoning about these dependencies.</p>
 <h3>The normal forms</h3>
-<pre><code>1NF — every column holds a single, atomic value; no repeating groups.
+<pre><code class="language-sql">1NF — every column holds a single, atomic value; no repeating groups.
 2NF — 1NF + no partial dependency (a non-key attribute must depend on the
       WHOLE primary key, not just part of a composite key).
 3NF — 2NF + no transitive dependency (a non-key attribute must depend
@@ -365,7 +365,7 @@ BCNF — for every functional dependency X -&gt; Y, X must be a candidate key
 -- customer_name depends on customer_id, not directly on order_id -&gt; a
 -- transitive dependency once customer_id is in the table -&gt; violates 3NF.</code></pre>
 <p>Normalized into 3NF:</p>
-<pre><code>CUSTOMER(customer_id PK, customer_name)
+<pre><code class="language-sql">CUSTOMER(customer_id PK, customer_name)
 PRODUCT(product_id PK, product_name)
 ORDERS(order_id PK, customer_id FK)
 ORDER_ITEM(order_id FK, product_id FK, qty, PRIMARY KEY(order_id, product_id))
@@ -399,7 +399,7 @@ BCNF — với mọi phụ thuộc hàm X -&gt; Y, X phải là khoá dự tuy�
 -- customer_name phụ thuộc customer_id, không phụ thuộc trực tiếp order_id
 -- -&gt; phụ thuộc bắc cầu khi đã có customer_id trong bảng -&gt; vi phạm 3NF.</code></pre>
 <p>Chuẩn hoá về 3NF:</p>
-<pre><code>CUSTOMER(customer_id PK, customer_name)
+<pre><code class="language-sql">CUSTOMER(customer_id PK, customer_name)
 PRODUCT(product_id PK, product_name)
 ORDERS(order_id PK, customer_id FK)
 ORDER_ITEM(order_id FK, product_id FK, qty, PRIMARY KEY(order_id, product_id))
@@ -419,7 +419,7 @@ const c5 = doc('dmd301-5-1-sql-basics', '5.1 — SQL basics: DDL & DML|||5.1 —
     `<span class="eyebrow">DMD301 · Chapter 5 · Lesson 5.1</span>
 <h2>SQL basics: DDL &amp; DML</h2>
 <h3>DDL — Data Definition Language</h3>
-<pre><code>CREATE TABLE customer (
+<pre><code class="language-sql">CREATE TABLE customer (
   customer_id  INT PRIMARY KEY,
   full_name    VARCHAR(100) NOT NULL,
   email        VARCHAR(100) UNIQUE,
@@ -430,7 +430,7 @@ ALTER TABLE customer ADD COLUMN phone VARCHAR(20);
 DROP TABLE customer;   -- removes the table (and its data) entirely
 </code></pre>
 <h3>DML — Data Manipulation Language</h3>
-<pre><code>INSERT INTO customer (customer_id, full_name, email)
+<pre><code class="language-sql">INSERT INTO customer (customer_id, full_name, email)
 VALUES (1, 'Nguyen Van A', 'a@example.com');
 
 UPDATE customer SET phone = '0900000000' WHERE customer_id = 1;
@@ -438,7 +438,7 @@ UPDATE customer SET phone = '0900000000' WHERE customer_id = 1;
 DELETE FROM customer WHERE customer_id = 1;
 </code></pre>
 <h3>Basic SELECT queries</h3>
-<pre><code>SELECT full_name, email FROM customer;
+<pre><code class="language-sql">SELECT full_name, email FROM customer;
 
 SELECT DISTINCT city FROM customer;
 
@@ -458,7 +458,7 @@ SELECT * FROM product WHERE price &gt; 100000 AND price &lt; 500000;
     `<span class="eyebrow">DMD301 · Chương 5 · Bài 5.1</span>
 <h2>SQL cơ bản: DDL &amp; DML</h2>
 <h3>DDL — Ngôn ngữ định nghĩa dữ liệu</h3>
-<pre><code>CREATE TABLE customer (
+<pre><code class="language-sql">CREATE TABLE customer (
   customer_id  INT PRIMARY KEY,
   full_name    VARCHAR(100) NOT NULL,
   email        VARCHAR(100) UNIQUE,
@@ -469,7 +469,7 @@ ALTER TABLE customer ADD COLUMN phone VARCHAR(20);
 DROP TABLE customer;   -- xoá hẳn bảng (và dữ liệu trong đó)
 </code></pre>
 <h3>DML — Ngôn ngữ thao tác dữ liệu</h3>
-<pre><code>INSERT INTO customer (customer_id, full_name, email)
+<pre><code class="language-sql">INSERT INTO customer (customer_id, full_name, email)
 VALUES (1, 'Nguyen Van A', 'a@example.com');
 
 UPDATE customer SET phone = '0900000000' WHERE customer_id = 1;
@@ -477,7 +477,7 @@ UPDATE customer SET phone = '0900000000' WHERE customer_id = 1;
 DELETE FROM customer WHERE customer_id = 1;
 </code></pre>
 <h3>Câu SELECT cơ bản</h3>
-<pre><code>SELECT full_name, email FROM customer;
+<pre><code class="language-sql">SELECT full_name, email FROM customer;
 
 SELECT DISTINCT city FROM customer;
 
@@ -508,7 +508,7 @@ const c6 = doc('dmd301-6-1-sql-advanced', '6.1 — Advanced SQL: joins, GROUP BY
     `<span class="eyebrow">DMD301 · Chapter 6 · Lesson 6.1</span>
 <h2>Advanced SQL: joins, GROUP BY, subqueries</h2>
 <h3>Joins — combining tables</h3>
-<pre><code>-- INNER JOIN: only rows that match in both tables
+<pre><code class="language-sql">-- INNER JOIN: only rows that match in both tables
 SELECT o.order_id, c.full_name
 FROM orders o
 INNER JOIN customer c ON o.customer_id = c.customer_id;
@@ -519,7 +519,7 @@ FROM customer c
 LEFT JOIN orders o ON o.customer_id = c.customer_id;
 </code></pre>
 <h3>Aggregation: GROUP BY + HAVING</h3>
-<pre><code>SELECT customer_id, COUNT(*) AS order_count, SUM(total) AS total_spent
+<pre><code class="language-sql">SELECT customer_id, COUNT(*) AS order_count, SUM(total) AS total_spent
 FROM orders
 GROUP BY customer_id
 HAVING COUNT(*) &gt; 3          -- filters GROUPS, not rows
@@ -527,7 +527,7 @@ ORDER BY total_spent DESC;
 </code></pre>
 <p>Aggregate functions: <code>COUNT</code>, <code>SUM</code>, <code>AVG</code>, <code>MAX</code>, <code>MIN</code>. Key rule: <strong>WHERE filters rows before grouping; HAVING filters groups after grouping.</strong></p>
 <h3>Subqueries</h3>
-<pre><code>-- Scalar subquery in WHERE
+<pre><code class="language-sql">-- Scalar subquery in WHERE
 SELECT * FROM product
 WHERE price &gt; (SELECT AVG(price) FROM product);
 
@@ -540,7 +540,7 @@ SELECT c.full_name FROM customer c
 WHERE EXISTS (SELECT 1 FROM orders o WHERE o.customer_id = c.customer_id);
 </code></pre>
 <h3>Set operations</h3>
-<pre><code>SELECT city FROM customer
+<pre><code class="language-sql">SELECT city FROM customer
 UNION
 SELECT city FROM supplier;   -- combines rows, removes duplicates
 </code></pre>
@@ -548,7 +548,7 @@ SELECT city FROM supplier;   -- combines rows, removes duplicates
     `<span class="eyebrow">DMD301 · Chương 6 · Bài 6.1</span>
 <h2>SQL nâng cao: join, GROUP BY, subquery</h2>
 <h3>Join — kết hợp nhiều bảng</h3>
-<pre><code>-- INNER JOIN: chỉ lấy dòng khớp ở CẢ HAI bảng
+<pre><code class="language-sql">-- INNER JOIN: chỉ lấy dòng khớp ở CẢ HAI bảng
 SELECT o.order_id, c.full_name
 FROM orders o
 INNER JOIN customer c ON o.customer_id = c.customer_id;
@@ -559,7 +559,7 @@ FROM customer c
 LEFT JOIN orders o ON o.customer_id = c.customer_id;
 </code></pre>
 <h3>Tổng hợp: GROUP BY + HAVING</h3>
-<pre><code>SELECT customer_id, COUNT(*) AS order_count, SUM(total) AS total_spent
+<pre><code class="language-sql">SELECT customer_id, COUNT(*) AS order_count, SUM(total) AS total_spent
 FROM orders
 GROUP BY customer_id
 HAVING COUNT(*) &gt; 3          -- lọc NHÓM, không phải lọc dòng
@@ -567,7 +567,7 @@ ORDER BY total_spent DESC;
 </code></pre>
 <p>Hàm tổng hợp: <code>COUNT</code>, <code>SUM</code>, <code>AVG</code>, <code>MAX</code>, <code>MIN</code>. Quy tắc chính: <strong>WHERE lọc dòng TRƯỚC khi nhóm; HAVING lọc nhóm SAU khi nhóm.</strong></p>
 <h3>Subquery (truy vấn con)</h3>
-<pre><code>-- Subquery vô hướng trong WHERE
+<pre><code class="language-sql">-- Subquery vô hướng trong WHERE
 SELECT * FROM product
 WHERE price &gt; (SELECT AVG(price) FROM product);
 
@@ -580,7 +580,7 @@ SELECT c.full_name FROM customer c
 WHERE EXISTS (SELECT 1 FROM orders o WHERE o.customer_id = c.customer_id);
 </code></pre>
 <h3>Phép toán tập hợp</h3>
-<pre><code>SELECT city FROM customer
+<pre><code class="language-sql">SELECT city FROM customer
 UNION
 SELECT city FROM supplier;   -- gộp dòng, loại trùng
 </code></pre>
@@ -599,7 +599,7 @@ const c7 = doc('dmd301-7-1-integrity-constraints', '7.1 — Data integrity, keys
     `<span class="eyebrow">DMD301 · Chapter 7 · Lesson 7.1</span>
 <h2>Data integrity, keys &amp; constraints</h2>
 <h3>Constraint types</h3>
-<pre><code>CREATE TABLE order_item (
+<pre><code class="language-sql">CREATE TABLE order_item (
   order_id    INT NOT NULL,
   product_id  INT NOT NULL,
   quantity    INT CHECK (quantity &gt; 0),
@@ -633,7 +633,7 @@ ON DELETE RESTRICT  -&gt; blocks the delete while matching child rows still exis
     `<span class="eyebrow">DMD301 · Chương 7 · Bài 7.1</span>
 <h2>Toàn vẹn dữ liệu, khoá &amp; ràng buộc</h2>
 <h3>Các loại ràng buộc</h3>
-<pre><code>CREATE TABLE order_item (
+<pre><code class="language-sql">CREATE TABLE order_item (
   order_id    INT NOT NULL,
   product_id  INT NOT NULL,
   quantity    INT CHECK (quantity &gt; 0),

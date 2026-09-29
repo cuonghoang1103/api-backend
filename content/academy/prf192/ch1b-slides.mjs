@@ -34,7 +34,7 @@ export default {
 <li><strong>F11 = two actions, not one</strong> — Compile (source → executable) then Run. If compilation reports an error, the Run half never happens and the console never opens.</li>
 <li><strong>The minimum program</strong> — three ingredients: one <code>#include</code> line to get <code>printf</code>, one <code>main</code> function as the entry point, one <code>return 0;</code> to report success.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void)
 {
@@ -53,7 +53,7 @@ int main(void)
 <li><strong>F11 là hai việc, không phải một</strong> — Compile (nguồn → file thực thi) rồi mới Run. Nếu khâu dịch báo lỗi thì nửa Run không bao giờ xảy ra và cửa sổ console không hiện ra.</li>
 <li><strong>Chương trình tối thiểu</strong> — ba thành phần: một dòng <code>#include</code> để có <code>printf</code>, một hàm <code>main</code> làm điểm vào, một <code>return 0;</code> để báo chạy thành công.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void)
 {
@@ -74,7 +74,7 @@ int main(void)
 <li><strong>Expansion ratio</strong> — a single C line such as <code>c = a + b;</code> becomes roughly three or four machine instructions: load <code>a</code>, load <code>b</code>, add, store into <code>c</code>. This ratio is why high-level languages exist (slide 27).</li>
 <li><strong>Why you must know this in PRF192</strong> — it explains later mysteries: why an uninitialised variable holds garbage (the store step never ran), and why a pointer is "just an address" (slot 10) — addresses are literally what operands hold.</li>
 </ul>
-<pre><code>/* One C statement ... */
+<pre><code class="language-c">/* One C statement ... */
 c = a + b;
 
 /* ... becomes roughly this sequence of instructions */
@@ -93,7 +93,7 @@ STORE [addr_of_c], R1
 <li><strong>Tỉ lệ nở ra</strong> — một dòng C như <code>c = a + b;</code> biến thành khoảng ba bốn lệnh máy: nạp <code>a</code>, nạp <code>b</code>, cộng, ghi vào <code>c</code>. Chính tỉ lệ này là lý do ngôn ngữ bậc cao ra đời (slide 27).</li>
 <li><strong>Vì sao PRF192 cần biết điều này</strong> — nó giải thích các bí ẩn về sau: vì sao biến chưa khởi tạo chứa rác (bước ghi chưa hề chạy), và vì sao con trỏ "chỉ là một địa chỉ" (slot 10) — địa chỉ đúng là thứ mà operand chứa.</li>
 </ul>
-<pre><code>/* Một câu lệnh C ... */
+<pre><code class="language-c">/* Một câu lệnh C ... */
 c = a + b;
 
 /* ... trở thành đại khái dãy lệnh sau */
@@ -137,7 +137,7 @@ STORE [dia_chi_cua_c], R1
 <li><strong>High-level languages</strong> — one statement expresses an <em>idea</em> (a loop, a condition, a function call) and the compiler expands it into however many instructions the target CPU needs. This is where portability is born (slide 10's "Portability" issue).</li>
 <li><strong>The trade you are making</strong> — you give up absolute control over each instruction; you gain shorter code, fewer bugs, and the ability to recompile for a different machine instead of rewriting.</li>
 </ul>
-<pre><code>/* High-level C: one readable statement */
+<pre><code class="language-c">/* High-level C: one readable statement */
 sum = 0;
 for (i = 1; i &lt;= 10; i++) sum = sum + i;
 
@@ -156,7 +156,7 @@ for (i = 1; i &lt;= 10; i++) sum = sum + i;
 <li><strong>Ngôn ngữ bậc cao</strong> — một câu lệnh diễn đạt một <em>ý tưởng</em> (vòng lặp, điều kiện, lời gọi hàm) và trình biên dịch nở nó ra thành bao nhiêu lệnh máy tuỳ CPU đích. Tính khả chuyển (Portability ở slide 10) ra đời từ đây.</li>
 <li><strong>Cái giá của sự đánh đổi</strong> — bạn từ bỏ quyền kiểm soát tuyệt đối từng lệnh; đổi lại được code ngắn hơn, ít lỗi hơn, và chỉ cần dịch lại cho máy khác thay vì viết lại từ đầu.</li>
 </ul>
-<pre><code>/* Bậc cao, viết bằng C: một câu lệnh dễ đọc */
+<pre><code class="language-c">/* Bậc cao, viết bằng C: một câu lệnh dễ đọc */
 sum = 0;
 for (i = 1; i &lt;= 10; i++) sum = sum + i;
 
@@ -177,7 +177,7 @@ for (i = 1; i &lt;= 10; i++) sum = sum + i;
 <li><strong>4GL — describe WHAT is to be done, not how</strong> — <strong>SQL</strong>. You write <code>SELECT name FROM student WHERE gpa &gt; 8</code> and never say how to scan the table; the engine decides the how.</li>
 <li><strong>5GL — closest to human language</strong> — Prolog, Matlab, used for artificial intelligence, fuzzy sets and neural networks. You state facts and rules; the system searches for the answer.</li>
 </ul>
-<pre><code>/* 3GL (C) — you spell out HOW: loop, test, keep */
+<pre><code class="language-sql">/* 3GL (C) — you spell out HOW: loop, test, keep */
 for (i = 0; i &lt; n; i++)
     if (gpa[i] &gt; 8.0)
         printf("%s\\n", name[i]);
@@ -196,7 +196,7 @@ for (i = 0; i &lt; n; i++)
 <li><strong>4GL — mô tả CẦN LÀM GÌ, không nói làm thế nào</strong> — <strong>SQL</strong>. Bạn viết <code>SELECT name FROM student WHERE gpa &gt; 8</code> mà chẳng hề nói cách duyệt bảng; cỗ máy tự quyết cách làm.</li>
 <li><strong>5GL — gần ngôn ngữ người nhất</strong> — Prolog, Matlab, dùng cho trí tuệ nhân tạo, tập mờ và mạng nơ-ron. Bạn khai báo sự kiện và luật; hệ thống tự đi tìm đáp án.</li>
 </ul>
-<pre><code>/* 3GL (C) — bạn nói rõ LÀM THẾ NÀO: lặp, kiểm tra, giữ lại */
+<pre><code class="language-sql">/* 3GL (C) — bạn nói rõ LÀM THẾ NÀO: lặp, kiểm tra, giữ lại */
 for (i = 0; i &lt; n; i++)
     if (gpa[i] &gt; 8.0)
         printf("%s\\n", name[i]);
@@ -239,7 +239,7 @@ for (i = 0; i &lt; n; i++)
 <li><strong>Consequences of compiling</strong> — faster execution (translation already paid for), all syntax errors reported before any code runs, and a standalone <code>.exe</code> you can ship to someone who has no compiler.</li>
 <li><strong>Consequences of interpreting</strong> — slower execution, but instant feedback and easy line-by-line testing; the target machine needs the interpreter installed.</li>
 </ul>
-<pre><code>/* Compiled (C): two phases, clearly separated */
+<pre><code class="language-bash">/* Compiled (C): two phases, clearly separated */
 gcc Hello.c -o Hello.exe    /* phase 1: translate, once      */
 Hello.exe                   /* phase 2: run, as many times as you like */
 </code></pre>
@@ -254,7 +254,7 @@ Hello.exe                   /* phase 2: run, as many times as you like */
 <li><strong>Hệ quả của biên dịch</strong> — chạy nhanh hơn (tiền dịch đã trả trước), mọi lỗi cú pháp được báo trước khi có dòng nào chạy, và có một file <code>.exe</code> độc lập để gửi cho người không hề cài trình biên dịch.</li>
 <li><strong>Hệ quả của thông dịch</strong> — chạy chậm hơn, nhưng phản hồi tức thì và dễ thử từng dòng; máy đích bắt buộc phải cài sẵn interpreter.</li>
 </ul>
-<pre><code>/* Biên dịch (C): hai pha tách bạch */
+<pre><code class="language-bash">/* Biên dịch (C): hai pha tách bạch */
 gcc Hello.c -o Hello.exe    /* pha 1: dịch, một lần            */
 Hello.exe                   /* pha 2: chạy, bao nhiêu lần tuỳ ý */
 </code></pre>
@@ -273,7 +273,7 @@ Hello.exe                   /* pha 2: chạy, bao nhiêu lần tuỳ ý */
 <li><strong>Step 3 Assembling</strong> — translate assembly into machine code, producing an object file.</li>
 <li><strong>Step 4 Linking</strong> — join your object file with library object code to resolve the names you used but did not define, producing the executable.</li>
 </ul>
-<pre><code>/* Syntax error: missing semicolon -&gt; step 2 stops, no .exe */
+<pre><code class="language-c">/* Syntax error: missing semicolon -&gt; step 2 stops, no .exe */
 printf("Hi")
 return 0;
 
@@ -293,7 +293,7 @@ return 0;
 <li><strong>Bước 3 Assembling</strong> — dịch assembly sang mã máy, sinh ra file đối tượng (object file).</li>
 <li><strong>Bước 4 Linking</strong> — ghép file đối tượng của bạn với mã đối tượng của thư viện để giải quyết những cái tên bạn dùng mà không định nghĩa, sinh ra file thực thi.</li>
 </ul>
-<pre><code>/* Lỗi cú pháp: thiếu dấu chấm phẩy -&gt; dừng ở bước 2, không có .exe */
+<pre><code class="language-c">/* Lỗi cú pháp: thiếu dấu chấm phẩy -&gt; dừng ở bước 2, không có .exe */
 printf("Hi")
 return 0;
 
@@ -349,7 +349,7 @@ hello.o + thư viện --[linker]--&gt;  hello.exe
 <li><strong>Step 4 — Linking</strong> — the linker links library files with the object file "to define the unknown statements", producing <strong><code>hello.exe</code></strong> (Windows) or <strong><code>hello.out</code></strong> / <code>a.out</code> (Linux).</li>
 <li><strong>Then you run it</strong> — executing <code>hello.exe</code> prints <code>Hello World!</code> in the output window. Note that running is <em>outside</em> the four steps; compilation has already finished.</li>
 </ul>
-<pre><code>gcc -E hello.c -o hello.i     /* step 1: preprocess (headers pasted, comments gone) */
+<pre><code class="language-bash">gcc -E hello.c -o hello.i     /* step 1: preprocess (headers pasted, comments gone) */
 gcc -S hello.i -o hello.s     /* step 2: compile   (assembly text)                  */
 gcc -c hello.s -o hello.o     /* step 3: assemble  (binary object)                  */
 gcc    hello.o -o hello.exe   /* step 4: link      (executable)                     */
@@ -366,7 +366,7 @@ gcc    hello.o -o hello.exe   /* step 4: link      (executable)                 
 <li><strong>Bước 4 — Linking</strong> — linker liên kết các file thư viện với file đối tượng "để định nghĩa những câu lệnh chưa biết", sinh ra <strong><code>hello.exe</code></strong> (Windows) hoặc <strong><code>hello.out</code></strong> / <code>a.out</code> (Linux).</li>
 <li><strong>Rồi mới chạy</strong> — thực thi <code>hello.exe</code> sẽ in <code>Hello World!</code> ra cửa sổ kết quả. Lưu ý việc chạy nằm <em>ngoài</em> bốn bước; khâu biên dịch đã xong từ trước.</li>
 </ul>
-<pre><code>gcc -E hello.c -o hello.i     /* bước 1: tiền xử lý (dán header, bỏ comment) */
+<pre><code class="language-bash">gcc -E hello.c -o hello.i     /* bước 1: tiền xử lý (dán header, bỏ comment) */
 gcc -S hello.i -o hello.s     /* bước 2: biên dịch  (văn bản assembly)       */
 gcc -c hello.s -o hello.o     /* bước 3: assembling (đối tượng nhị phân)     */
 gcc    hello.o -o hello.exe   /* bước 4: liên kết   (file thực thi)          */
@@ -471,7 +471,7 @@ gcc    hello.o -o hello.exe   /* bước 4: liên kết   (file thực thi)     
 <li><strong>Case sensitivity</strong> — "C language is case sensitive. C compilers treat the character 'A' as different from the character 'a'." So <code>Total</code>, <code>total</code> and <code>TOTAL</code> are three different variables, and <code>Main</code> is not an entry point.</li>
 <li><strong>Where case bites hardest</strong> — keywords are all lowercase (<code>int</code>, <code>return</code>, <code>while</code>). <code>Int x;</code> does not declare an integer; the compiler reads <code>Int</code> as an unknown type name.</li>
 </ul>
-<pre><code>/* This whole line vanishes before compiling */
+<pre><code class="language-c">/* This whole line vanishes before compiling */
 int main(void)
 {
     int Total = 5;      /* Total and total are DIFFERENT variables */
@@ -491,7 +491,7 @@ int main(void)
 <li><strong>Phân biệt hoa thường</strong> — "Ngôn ngữ C phân biệt chữ hoa chữ thường. Trình biên dịch C coi ký tự 'A' khác với ký tự 'a'." Vậy <code>Total</code>, <code>total</code> và <code>TOTAL</code> là ba biến khác nhau, còn <code>Main</code> không phải điểm vào.</li>
 <li><strong>Chỗ hoa thường cắn đau nhất</strong> — từ khoá đều viết thường (<code>int</code>, <code>return</code>, <code>while</code>). <code>Int x;</code> không khai báo số nguyên; trình biên dịch đọc <code>Int</code> như một tên kiểu lạ hoắc.</li>
 </ul>
-<pre><code>/* Cả dòng này biến mất trước khi dịch */
+<pre><code class="language-c">/* Cả dòng này biến mất trước khi dịch */
 int main(void)
 {
     int Total = 5;      /* Total và total là HAI biến KHÁC nhau */
@@ -512,7 +512,7 @@ int main(void)
 <li><strong>Why "structure" is taught explicitly</strong> — C has no framework generating boilerplate for you. Every file you create in the labs starts from this shape typed by hand, so it must be automatic.</li>
 <li><strong>Connection to what you just learned</strong> — the <code>#include</code> line is consumed at step 1 (preprocessing), <code>main</code> is what the linker at step 4 makes the program's starting point, and the comment disappears before compiling.</li>
 </ul>
-<pre><code>/* Program: description of what this program does */
+<pre><code class="language-c">/* Program: description of what this program does */
 #include &lt;stdio.h&gt;      /* declaration for library using */
 
 int main(void)           /* entry point of C program      */
@@ -531,7 +531,7 @@ int main(void)           /* entry point of C program      */
 <li><strong>Vì sao phải dạy "cấu trúc" tường minh</strong> — C không có framework nào sinh sẵn khung cho bạn. Mọi file bạn tạo trong lab đều bắt đầu từ hình dạng này, gõ bằng tay, nên nó phải thành phản xạ.</li>
 <li><strong>Nối với thứ vừa học</strong> — dòng <code>#include</code> bị tiêu thụ ở bước 1 (tiền xử lý), <code>main</code> là thứ mà linker ở bước 4 chọn làm điểm khởi động, còn comment thì biến mất trước khi dịch.</li>
 </ul>
-<pre><code>/* Chương trình: mô tả chương trình này làm gì */
+<pre><code class="language-c">/* Chương trình: mô tả chương trình này làm gì */
 #include &lt;stdio.h&gt;      /* khai báo thư viện sử dụng */
 
 int main(void)           /* điểm vào của chương trình C */
@@ -554,7 +554,7 @@ int main(void)           /* điểm vào của chương trình C */
 <li><strong>Label 5 — exit point of C program</strong> — <code>return 0;</code> hands a status code back to the operating system. <strong>0 means success</strong>; a non-zero value conventionally means an error.</li>
 <li><strong>The braces</strong> — <code>{</code> and <code>}</code> delimit the function body. They are a matched pair, and every block you meet later (<code>if</code>, <code>for</code>) uses the same pair.</li>
 </ul>
-<pre><code>/* Program : Hello
+<pre><code class="language-c">/* Program : Hello
    Author  : student
    Purpose : print a greeting                */
 
@@ -578,7 +578,7 @@ int main(void)                     /* entry    */
 <li><strong>Nhãn 5 — điểm ra của chương trình C</strong> — <code>return 0;</code> trả một mã trạng thái về cho hệ điều hành. <strong>0 nghĩa là thành công</strong>; giá trị khác 0 theo quy ước là có lỗi.</li>
 <li><strong>Cặp ngoặc nhọn</strong> — <code>{</code> và <code>}</code> bao lấy thân hàm. Chúng luôn đi thành cặp, và mọi khối lệnh bạn gặp về sau (<code>if</code>, <code>for</code>) đều dùng đúng cặp này.</li>
 </ul>
-<pre><code>/* Chuong trinh : Hello
+<pre><code class="language-c">/* Chuong trinh : Hello
    Tac gia      : sinh vien
    Muc dich     : in ra loi chao               */
 
@@ -673,7 +673,7 @@ gcc (MinGW.org GCC-6.3.0-1) 6.3.0
 <li><strong>The three numbered marks on the slide</strong> — they point at the three parts you already know from slide 39: the <code>#include</code> line, the <code>main</code> header, and the body between the braces.</li>
 <li><strong>Save before compiling, every time</strong> — the compiler reads the file on disk, not the text on your screen. An unsaved edit is invisible to it.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;      /* (1) library declaration */
+<pre><code class="language-c">#include &lt;stdio.h&gt;      /* (1) library declaration */
 
 int main(void)           /* (2) entry point         */
 {
@@ -692,7 +692,7 @@ int main(void)           /* (2) entry point         */
 <li><strong>Ba con số đánh dấu trên slide</strong> — chúng chỉ vào đúng ba phần bạn đã biết ở slide 39: dòng <code>#include</code>, dòng tiêu đề của <code>main</code>, và phần thân giữa cặp ngoặc nhọn.</li>
 <li><strong>Lưu trước khi dịch, lần nào cũng vậy</strong> — trình biên dịch đọc file trên đĩa, không đọc chữ trên màn hình bạn. Sửa mà chưa lưu thì với nó là vô hình.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;      /* (1) khai báo thư viện */
+<pre><code class="language-c">#include &lt;stdio.h&gt;      /* (1) khai báo thư viện */
 
 int main(void)           /* (2) điểm vào          */
 {
@@ -752,7 +752,7 @@ Hello World!                             REM (3) kết quả
 <li><strong><code>void</code> in the parentheses</strong> — means "this function takes no arguments". Writing <code>main()</code> with empty parentheses is accepted but means something looser in C; <code>main(void)</code> states the intent exactly.</li>
 <li><strong>The braces and the statements</strong> — <code>{ }</code> delimit the body; statements inside run in order, top to bottom.</li>
 </ul>
-<pre><code>int main(void)          /* the recommended form */
+<pre><code class="language-c">int main(void)          /* the recommended form */
 {
     printf("Hi\\n");
     return 0;           /* 0 = success */
@@ -776,7 +776,7 @@ main()
 <li><strong><code>void</code> trong ngoặc tròn</strong> — nghĩa là "hàm này không nhận tham số nào". Viết <code>main()</code> với ngoặc rỗng thì vẫn được chấp nhận nhưng trong C nó mang nghĩa lỏng hơn; <code>main(void)</code> nói đúng ý định.</li>
 <li><strong>Cặp ngoặc nhọn và các câu lệnh</strong> — <code>{ }</code> bao lấy phần thân; các câu lệnh bên trong chạy theo thứ tự từ trên xuống.</li>
 </ul>
-<pre><code>int main(void)          /* dạng nên dùng */
+<pre><code class="language-c">int main(void)          /* dạng nên dùng */
 {
     printf("Hi\\n");
     return 0;           /* 0 = thành công */

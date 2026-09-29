@@ -280,7 +280,7 @@ const c4 = doc('tpg302-4-1-grid', '4.1 — Grid systems & page layout|||4.1 — 
 </ul>
 <h3>The 12-column web grid</h3>
 <p>The web standardized on a <strong>12-column</strong> grid because 12 divides evenly into 2, 3, 4 and 6 — so you can make halves, thirds and quarters from one system.</p>
-<pre><code>CSS grid, 12 columns:
+<pre><code class="language-css">CSS grid, 12 columns:
   .page {
     display: grid;
     grid-template-columns: repeat(12, 1fr);
@@ -303,7 +303,7 @@ const c4 = doc('tpg302-4-1-grid', '4.1 — Grid systems & page layout|||4.1 — 
 </ul>
 <h3>Lưới 12 cột trên web</h3>
 <p>Web chuẩn hoá theo lưới <strong>12 cột</strong> vì 12 chia hết cho 2, 3, 4 và 6 — nên từ một hệ ta tạo được nửa, một phần ba và một phần tư.</p>
-<pre><code>CSS grid, 12 cột:
+<pre><code class="language-css">CSS grid, 12 cột:
   .page {
     display: grid;
     grid-template-columns: repeat(12, 1fr);
@@ -424,7 +424,7 @@ const c7 = doc('tpg302-7-1-screen-web', '7.1 — Typography for screen & web|||7
 <p>Screens render type from font files loaded over the network. Use <strong>WOFF2</strong> (smallest, modern) via <code>@font-face</code> or a host like Google Fonts. Watch loading behavior — <strong>FOUT</strong> (flash of unstyled text) is usually better than <strong>FOIT</strong> (invisible text); control it with <code>font-display: swap;</code>.</p>
 <h3>Relative units</h3>
 <p>Prefer <strong>rem/em</strong> over fixed <code>px</code> so text respects the user's chosen size and scales cleanly.</p>
-<pre><code>@font-face {
+<pre><code class="language-css">@font-face {
   font-family: "Inter";
   src: url("/fonts/inter.woff2") format("woff2");
   font-display: swap;
@@ -434,7 +434,7 @@ body { font-family: "Inter", system-ui, sans-serif; }
 </code></pre>
 <h3>Responsive &amp; fluid type</h3>
 <p>Type should adapt to viewport width. <code>clamp()</code> sets a min, a fluid preferred value, and a max in one line:</p>
-<pre><code>h1 {
+<pre><code class="language-css">h1 {
   font-size: clamp(1.75rem, 4vw + 1rem, 3rem);
   line-height: 1.15;
 }
@@ -446,7 +446,7 @@ body { font-family: "Inter", system-ui, sans-serif; }
 <p>Màn hình dựng chữ từ các tệp font tải qua mạng. Dùng <strong>WOFF2</strong> (nhỏ nhất, hiện đại) qua <code>@font-face</code> hoặc một dịch vụ như Google Fonts. Chú ý cách nạp — <strong>FOUT</strong> (chớp chữ chưa định kiểu) thường tốt hơn <strong>FOIT</strong> (chữ tàng hình); kiểm soát bằng <code>font-display: swap;</code>.</p>
 <h3>Đơn vị tương đối</h3>
 <p>Ưu tiên <strong>rem/em</strong> thay vì <code>px</code> cố định để chữ tôn trọng cỡ người dùng chọn và co giãn gọn gàng.</p>
-<pre><code>@font-face {
+<pre><code class="language-css">@font-face {
   font-family: "Inter";
   src: url("/fonts/inter.woff2") format("woff2");
   font-display: swap;
@@ -456,7 +456,7 @@ body { font-family: "Inter", system-ui, sans-serif; }
 </code></pre>
 <h3>Responsive &amp; fluid type</h3>
 <p>Chữ nên thích ứng theo bề rộng khung nhìn. <code>clamp()</code> đặt giá trị nhỏ nhất, giá trị co giãn mong muốn, và lớn nhất trong một dòng:</p>
-<pre><code>h1 {
+<pre><code class="language-css">h1 {
   font-size: clamp(1.75rem, 4vw + 1rem, 3rem);
   line-height: 1.15;
 }

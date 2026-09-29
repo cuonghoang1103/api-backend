@@ -126,7 +126,7 @@ const c1 = doc('rel301m-1-1-what-is-rl', '1.1 — What is Reinforcement Learning
 <li><strong>Delayed reward (credit assignment)</strong> — a reward now may be the payoff of an action many steps ago.</li>
 <li><strong>Exploration vs exploitation</strong> — the agent must try new actions to learn, yet also use what it already knows.</li>
 </ul>
-<pre><code>import gymnasium as gym
+<pre><code class="language-python">import gymnasium as gym
 env = gym.make("CartPole-v1")
 state, info = env.reset(seed=0)
 total = 0.0
@@ -154,7 +154,7 @@ print("episode return:", total)
 <li><strong>Phần thưởng trễ (gán công trạng)</strong> — phần thưởng bây giờ có thể là kết quả của hành động nhiều bước trước.</li>
 <li><strong>Khám phá &amp; khai thác</strong> — tác nhân phải thử hành động mới để học, nhưng cũng phải dùng điều đã biết.</li>
 </ul>
-<pre><code>import gymnasium as gym
+<pre><code class="language-python">import gymnasium as gym
 env = gym.make("CartPole-v1")
 state, info = env.reset(seed=0)
 total = 0.0
@@ -266,7 +266,7 @@ Bellman optimality (value of the best policy):
 <li><strong>Policy iteration</strong> — alternate <em>policy evaluation</em> (compute V for the current pi) and <em>policy improvement</em> (make pi greedy w.r.t. V) until pi stops changing.</li>
 <li><strong>Value iteration</strong> — apply the Bellman optimality update directly until V converges, then read off the greedy policy.</li>
 </ul>
-<pre><code>def value_iteration(S, A, P, R, gamma=0.9, theta=1e-6):
+<pre><code class="language-python">def value_iteration(S, A, P, R, gamma=0.9, theta=1e-6):
     V = {s: 0.0 for s in S}
     while True:
         delta = 0.0
@@ -295,7 +295,7 @@ Bellman tối ưu (giá trị của chính sách tốt nhất):
 <li><strong>Policy iteration</strong> — xen kẽ <em>đánh giá chính sách</em> (tính V cho pi hiện tại) và <em>cải thiện chính sách</em> (làm pi tham lam theo V) đến khi pi ngừng đổi.</li>
 <li><strong>Value iteration</strong> — áp dụng thẳng cập nhật Bellman tối ưu đến khi V hội tụ, rồi đọc ra chính sách tham lam.</li>
 </ul>
-<pre><code>def value_iteration(S, A, P, R, gamma=0.9, theta=1e-6):
+<pre><code class="language-python">def value_iteration(S, A, P, R, gamma=0.9, theta=1e-6):
     V = {s: 0.0 for s in S}
     while True:
         delta = 0.0
@@ -379,7 +379,7 @@ SARSA (on-policy, uses the action ACTUALLY taken next, a'):
 </code></pre>
 <h3>Exploration: epsilon-greedy</h3>
 <p>To balance <strong>exploration vs exploitation</strong>, act greedily most of the time but pick a random action with probability epsilon (usually decayed over training).</p>
-<pre><code>import numpy as np
+<pre><code class="language-python">import numpy as np
 
 def epsilon_greedy(Q, s, n_actions, epsilon):
     if np.random.random() &lt; epsilon:
@@ -412,7 +412,7 @@ SARSA (on-policy, dùng hành động THẬT SỰ chọn kế tiếp, a'):
 </code></pre>
 <h3>Khám phá: epsilon-greedy</h3>
 <p>Để cân bằng <strong>khám phá &amp; khai thác</strong>, phần lớn thời gian chọn tham lam nhưng với xác suất epsilon thì chọn ngẫu nhiên (thường giảm dần qua huấn luyện).</p>
-<pre><code>import numpy as np
+<pre><code class="language-python">import numpy as np
 
 def epsilon_greedy(Q, s, n_actions, epsilon):
     if np.random.random() &lt; epsilon:
@@ -458,7 +458,7 @@ const c6 = doc('rel301m-6-1-deep-rl', '6.1 — Deep Reinforcement Learning|||6.1
 
 # every C steps: theta_minus &lt;- theta   (refresh the target network)
 </code></pre>
-<pre><code># In practice you rarely hand-roll DQN:
+<pre><code class="language-python"># In practice you rarely hand-roll DQN:
 from stable_baselines3 import DQN
 model = DQN("MlpPolicy", "CartPole-v1", buffer_size=50000, verbose=0)
 model.learn(total_timesteps=50000)
@@ -478,7 +478,7 @@ model.learn(total_timesteps=50000)
 
 # moi C buoc: theta_minus &lt;- theta   (lam moi target network)
 </code></pre>
-<pre><code># Thuc te hiem khi tu viet DQN:
+<pre><code class="language-python"># Thuc te hiem khi tu viet DQN:
 from stable_baselines3 import DQN
 model = DQN("MlpPolicy", "CartPole-v1", buffer_size=50000, verbose=0)
 model.learn(total_timesteps=50000)
@@ -509,7 +509,7 @@ const c7 = doc('rel301m-7-1-policy-gradient', '7.1 — Policy Gradient|||7.1 —
 <li><strong>A2C</strong> — Advantage Actor-Critic; a synchronous, batched actor-critic.</li>
 <li><strong>PPO</strong> — Proximal Policy Optimization; clips each update so the new policy stays close to the old one. Stable, robust, and the default choice for most modern RL work.</li>
 </ul>
-<pre><code>from stable_baselines3 import PPO
+<pre><code class="language-python">from stable_baselines3 import PPO
 model = PPO("MlpPolicy", "CartPole-v1", verbose=0)
 model.learn(total_timesteps=50000)
 obs, _ = model.get_env().reset()
@@ -530,7 +530,7 @@ action, _ = model.predict(obs, deterministic=True)
 <li><strong>A2C</strong> — Advantage Actor-Critic; actor-critic đồng bộ, theo lô.</li>
 <li><strong>PPO</strong> — Proximal Policy Optimization; cắt (clip) mỗi lần cập nhật để chính sách mới không đi quá xa chính sách cũ. Ổn định, bền bỉ, và là lựa chọn mặc định cho phần lớn công việc RL hiện đại.</li>
 </ul>
-<pre><code>from stable_baselines3 import PPO
+<pre><code class="language-python">from stable_baselines3 import PPO
 model = PPO("MlpPolicy", "CartPole-v1", verbose=0)
 model.learn(total_timesteps=50000)
 obs, _ = model.get_env().reset()
@@ -562,7 +562,7 @@ const c8 = doc('rel301m-8-1-applications-challenges', '8.1 — Applications & ch
 <li><strong>Sample efficiency</strong> — RL can need millions of interactions. On real robots that is slow and costly, driving the use of simulators and model-based RL.</li>
 <li><strong>Safe RL</strong> — exploration on real hardware can break things or harm people; safety constraints and cautious exploration matter.</li>
 </ul>
-<pre><code># Sim-to-real in spirit: train cheaply in simulation, deploy carefully
+<pre><code class="language-python"># Sim-to-real in spirit: train cheaply in simulation, deploy carefully
 from stable_baselines3 import PPO
 model = PPO("MlpPolicy", "Pendulum-v1", verbose=0)
 model.learn(total_timesteps=200000)   # millions of cheap simulated steps
@@ -583,7 +583,7 @@ model.save("pendulum_ppo")            # then evaluate under safety limits
 <li><strong>Hiệu quả mẫu</strong> — RL có thể cần hàng triệu lần tương tác. Trên robot thật điều đó chậm và tốn kém, thúc đẩy dùng mô phỏng và RL dựa trên mô hình.</li>
 <li><strong>An toàn RL</strong> — khám phá trên phần cứng thật có thể làm hỏng máy hoặc gây hại người; ràng buộc an toàn và khám phá thận trọng rất quan trọng.</li>
 </ul>
-<pre><code># Tinh than sim-to-real: huan luyen re trong mo phong, trien khai than trong
+<pre><code class="language-python"># Tinh than sim-to-real: huan luyen re trong mo phong, trien khai than trong
 from stable_baselines3 import PPO
 model = PPO("MlpPolicy", "Pendulum-v1", verbose=0)
 model.learn(total_timesteps=200000)   # hang trieu buoc mo phong gia re

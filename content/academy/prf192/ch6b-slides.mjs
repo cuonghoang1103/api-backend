@@ -49,7 +49,7 @@ export default {
 <li><strong>Increment and decrement are the same rule</strong> — the tail of the program does <code>pI++;</code> then <code>pI--;</code> and prints the address each time: it goes up by 4 and comes back down by 4. Slide 16 stated this in words; this slide is the measurement.</li>
 <li><strong>Link forward</strong> — this is exactly the machinery that will make <code>arr[i]</code> work in Slot 13–15. <code>arr[i]</code> is defined in C as <code>*(arr + i)</code>, and "+ i" here is the scaled addition you are reading about.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main() {
     double x = 0.5;
@@ -82,7 +82,7 @@ int main() {
 <li><strong>Tăng và giảm cũng cùng một luật</strong> — cuối chương trình có <code>pI++;</code> rồi <code>pI--;</code> và in địa chỉ mỗi lần: nó lên 4 rồi tụt về đúng 4. Slide 16 nói bằng lời, slide này là phép đo.</li>
 <li><strong>Nối về sau</strong> — đây chính là bộ máy sẽ làm <code>arr[i]</code> chạy được ở Slot 13–15. Trong C, <code>arr[i]</code> được định nghĩa là <code>*(arr + i)</code>, và dấu "+ i" ấy chính là phép cộng có nhân hệ số bạn đang đọc.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main() {
     double x = 0.5;
@@ -116,7 +116,7 @@ int main() {
 <li><strong>Why this is a teaching exercise and not a technique</strong> — it works, but the C standard does not promise it. Nothing requires a compiler to put local variables next to each other, in that order, with no padding. Change the optimisation level, add a variable, switch compilers, and the neighbour may move. This is called <em>undefined behaviour</em>.</li>
 <li><strong>What it does prove</strong> — that a pointer is just a number, that <code>++</code> on it moves by <code>sizeof(int)</code>, and that C will happily let you write outside the variable you aimed at. Slot 13–15 gives you the legitimate version of exactly this trick: inside a real array, neighbours <em>are</em> guaranteed to be adjacent.</li>
 </ul>
-<pre><code>/* file pointer_demo.c */
+<pre><code class="language-c">/* file pointer_demo.c */
 #include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 
@@ -148,7 +148,7 @@ int main()
 <li><strong>Vì sao đây là bài học chứ không phải kỹ thuật</strong> — nó chạy được, nhưng chuẩn C không hề hứa như vậy. Không có điều luật nào bắt trình biên dịch phải đặt biến cục bộ sát nhau, theo thứ tự đó, không chèn byte đệm. Đổi mức tối ưu, thêm một biến, đổi trình biên dịch — hàng xóm có thể dọn đi chỗ khác. Đó gọi là <em>hành vi không xác định</em> (undefined behaviour).</li>
 <li><strong>Nhưng nó chứng minh được điều gì</strong> — rằng con trỏ chỉ là một con số, rằng <code>++</code> trên nó dịch đúng <code>sizeof(int)</code>, và rằng C sẵn lòng cho bạn ghi ra ngoài biến mình nhắm tới. Slot 13–15 sẽ cho bạn phiên bản hợp pháp của đúng mẹo này: bên trong một mảng thật, các phần tử kề nhau <em>được bảo đảm</em> là sát nhau.</li>
 </ul>
-<pre><code>/* file pointer_demo.c */
+<pre><code class="language-c">/* file pointer_demo.c */
 #include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 
@@ -182,7 +182,7 @@ int main()
 <li><strong>The hidden part of <code>p++</code></strong> — the exercise asks for "the result of the expression", and for post-increment the <em>expression</em> evaluates to the OLD value while the <em>variable</em> ends up holding the new one. I measured both: <code>p++</code> returns 1000 and afterwards <code>p</code> is 1004. Examiners love this distinction, so state both halves in your answer.</li>
 <li><strong>"Suppose that a long occupies 4 bytes"</strong> — that sentence is doing real work. On 64-bit Linux and macOS <code>long</code> is actually 8 bytes, so the same expression would give 1000 + 64 = 1064. Never answer a pointer-arithmetic question without first writing down the <code>sizeof</code> you are assuming.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 /* mo phong dung gia dinh cua de: mot "long" chiem 4 byte */
 typedef int long4;
@@ -212,7 +212,7 @@ int main(void) {
 <li><strong>Phần khuất của <code>p++</code></strong> — đề hỏi "kết quả của biểu thức", mà với phép tăng sau thì <em>biểu thức</em> cho giá trị CŨ còn <em>biến</em> thì kết thúc với giá trị mới. Tôi đã đo cả hai: <code>p++</code> trả về 1000 và sau đó <code>p</code> bằng 1004. Người ra đề rất thích chỗ phân biệt này, nên hãy ghi cả hai nửa vào bài làm.</li>
 <li><strong>Câu "Giả sử một long chiếm 4 byte"</strong> — câu ấy đang gánh việc thật. Trên Linux và macOS 64-bit, <code>long</code> chiếm tới 8 byte, nên cùng biểu thức ấy sẽ cho 1000 + 64 = 1064. Đừng bao giờ trả lời một câu hỏi số học con trỏ mà chưa ghi ra <code>sizeof</code> mình đang giả định.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 /* mo phong dung gia dinh cua de: mot "long" chiem 4 byte */
 typedef int long4;
@@ -245,7 +245,7 @@ int main(void) {
 <li><strong>Why this matters beyond swapping</strong> — this is the limitation you already met in Slot 08–09. A C function can return <em>one</em> value with <code>return</code>. Any function that must hand back two or more results, or must edit the caller's variable in place, is blocked by this rule. Slide 9 listed it as the very first reason pointers exist: <em>"to modify outside arguments of a function"</em>.</li>
 <li><strong>Do not blame the algorithm</strong> — students often "fix" this by adding a third temporary or reordering the three assignments. No arrangement of assignments to <code>x</code> and <code>y</code> can ever reach <code>a</code> and <code>b</code>, because the function was never told where <code>a</code> and <code>b</code> live.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 
 /* swap 2 integers */
@@ -273,7 +273,7 @@ int main() {
 <li><strong>Vì sao chuyện này lớn hơn bài hoán đổi</strong> — đây chính là giới hạn bạn đã gặp ở Slot 08–09. Một hàm C chỉ trả về được <em>một</em> giá trị bằng <code>return</code>. Mọi hàm cần trả lại hai kết quả trở lên, hoặc cần sửa thẳng biến của người gọi, đều bị luật này chặn. Slide 9 đã liệt kê nó là lý do đầu tiên khiến con trỏ tồn tại: <em>"để sửa các đối số bên ngoài của hàm"</em>.</li>
 <li><strong>Đừng đổ tại thuật toán</strong> — sinh viên hay "sửa" bằng cách thêm biến tạm thứ ba hoặc đảo thứ tự ba phép gán. Không cách sắp xếp phép gán nào lên <code>x</code> và <code>y</code> chạm được tới <code>a</code> và <code>b</code>, vì hàm chưa bao giờ được cho biết <code>a</code> và <code>b</code> nằm ở đâu.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 
 /* swap 2 integers */
@@ -303,7 +303,7 @@ int main() {
 <li><strong>This is "pass by reference", emulated</strong> — C has no reference parameters (C++ and Java do, in their own ways). C gives you exactly one mechanism to reach outside a function: pass an address and dereference it. Every C API that "returns" something through a parameter — <code>scanf("%d", &amp;n)</code> is the one you have used a hundred times already — is this same pattern.</li>
 <li><strong><code>scanf</code> finally makes sense</strong> — you have been writing <code>&amp;n</code> since Slot 02 without being told why. Now you know: <code>scanf</code> must write into <em>your</em> variable, so it needs the address of <code>n</code>, not the value of <code>n</code>. That is also why <code>scanf("%s", str)</code> has no <code>&amp;</code> — a string name is already an address (Slot 16–18).</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 
 /* swap 2 integers */
@@ -331,7 +331,7 @@ int main() {
 <li><strong>Đây chính là "truyền theo tham chiếu", mô phỏng lại</strong> — C không có tham số tham chiếu (C++ và Java có, theo cách riêng của chúng). C cho bạn đúng một cơ chế để với ra ngoài hàm: truyền địa chỉ rồi lấy giá trị qua nó. Mọi API C "trả về" thứ gì đó qua tham số — <code>scanf("%d", &amp;n)</code> là cái bạn đã gõ cả trăm lần — đều là đúng khuôn mẫu này.</li>
 <li><strong>Giờ thì <code>scanf</code> mới có nghĩa</strong> — bạn đã viết <code>&amp;n</code> từ Slot 02 mà chưa ai giải thích vì sao. Bây giờ thì rõ: <code>scanf</code> phải ghi vào biến <em>của bạn</em>, nên nó cần địa chỉ của <code>n</code> chứ không cần giá trị của <code>n</code>. Đó cũng là lý do <code>scanf("%s", str)</code> không có dấu <code>&amp;</code> — tên một chuỗi vốn đã là một địa chỉ rồi (Slot 16–18).</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 
 /* swap 2 integers */
@@ -397,7 +397,7 @@ int main() {
 <li><strong>Stack versus Heap, the distinction the exam asks for</strong> — a local variable is created by the compiler, destroyed automatically when the function completes, and sized at compile time. A heap block is created by <em>your</em> call, destroyed only by <em>your</em> <code>free</code>, and can be sized at run time. Automatic versus manual.</li>
 <li><strong><code>free(p)</code> does not erase <code>p</code></strong> — it returns the <em>block</em> to the system. The variable <code>p</code> still holds the same number afterwards, now pointing at memory you no longer own. Slide 29 and slide 33 come back to this; the cure is one extra line, <code>p = NULL;</code>.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 
 int main(void) {
@@ -426,7 +426,7 @@ int main(void) {
 <li><strong>Stack với Heap, đúng chỗ đề thi hay hỏi</strong> — biến cục bộ do trình biên dịch tạo ra, tự huỷ khi hàm kết thúc, và được định cỡ lúc biên dịch. Khối heap do <em>lời gọi của bạn</em> tạo ra, chỉ bị huỷ bởi <em>lệnh <code>free</code> của bạn</em>, và có thể định cỡ lúc chạy. Tự động đối lại thủ công.</li>
 <li><strong><code>free(p)</code> KHÔNG xoá <code>p</code></strong> — nó trả <em>khối nhớ</em> về cho hệ thống. Biến <code>p</code> sau đó vẫn giữ nguyên con số cũ, giờ trỏ vào vùng nhớ bạn không còn sở hữu. Slide 29 và slide 33 sẽ quay lại chuyện này; thuốc chữa là thêm một dòng: <code>p = NULL;</code>.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 
 int main(void) {
@@ -457,7 +457,7 @@ int main(void) {
 <li><strong><code>sizeof(arr)</code> would not help</strong> — <code>arr</code> is a pointer, so <code>sizeof(arr)</code> gives you the size of the pointer (8 bytes on 64-bit), not of the 20-byte block. This is one of the most common misunderstandings in the whole course.</li>
 <li><strong>Why cast the result</strong> — <code>(int *)</code>. In C the cast is optional (a <code>void*</code> converts implicitly), but this course, this deck, and every C++ compiler require it, so write it. It also documents what the block is for.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 
 int main() {
@@ -485,7 +485,7 @@ int main() {
 <li><strong><code>sizeof(arr)</code> không cứu được</strong> — <code>arr</code> là con trỏ, nên <code>sizeof(arr)</code> cho ra kích thước của con trỏ (8 byte trên máy 64-bit), chứ không phải 20 byte của khối. Đây là một trong những hiểu nhầm phổ biến nhất của cả môn học.</li>
 <li><strong>Vì sao phải ép kiểu kết quả</strong> — <code>(int *)</code>. Trong C thì ép kiểu là tuỳ chọn (một <code>void*</code> tự chuyển ngầm được), nhưng môn này, bộ slide này, và mọi trình biên dịch C++ đều đòi, nên cứ viết. Nó còn tự ghi chú giùm bạn rằng khối nhớ ấy dùng cho kiểu gì.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 
 int main() {
@@ -515,7 +515,7 @@ int main() {
 <li><strong>The cost</strong> — zeroing 20 bytes is free; zeroing 200 MB is not. When you are about to overwrite every byte anyway, <code>malloc</code> is the honest choice. In this course either is fine; in a large program that distinction becomes real.</li>
 <li><strong>Which to pick, as a rule</strong> — need a clean array of counters or a struct with sensible defaults → <code>calloc</code>. Need raw space you will fill immediately → <code>malloc</code>. Both are freed with the same <code>free</code>.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 
 int main() {
@@ -544,7 +544,7 @@ int main() {
 <li><strong>Cái giá</strong> — xoá trắng 20 byte thì miễn phí; xoá trắng 200 MB thì không. Khi bạn sắp ghi đè lên từng byte rồi thì <code>malloc</code> mới là lựa chọn trung thực. Trong môn này dùng cái nào cũng được; trong một chương trình lớn thì khác biệt ấy là có thật.</li>
 <li><strong>Chọn cái nào, thành quy tắc</strong> — cần một mảng biến đếm sạch hoặc một cấu trúc có giá trị mặc định hợp lý → <code>calloc</code>. Cần chỗ trống thô để ghi đè ngay → <code>malloc</code>. Cả hai đều thu hồi bằng cùng một lệnh <code>free</code>.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 
 int main() {
@@ -575,7 +575,7 @@ int main() {
 <li><strong>But the slide's own line has a leak</strong> — <code>arr = (int *)realloc(arr, 10 * sizeof(int));</code> assigns straight back onto <code>arr</code>. If <code>realloc</code> fails it returns <code>NULL</code>, the original block is <em>not</em> freed, and you have just overwritten the only pointer to it: a guaranteed memory leak plus a <code>NULL</code> dereference waiting downstream. The safe form uses a temporary.</li>
 <li><strong>What the new bytes contain</strong> — when expanding, the part beyond the old size is uninitialised, like <code>malloc</code>. When shrinking, the data beyond the new size is gone. And <code>realloc(NULL, n)</code> behaves exactly like <code>malloc(n)</code>, which is handy for growing loops.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 
 int main() {
@@ -611,7 +611,7 @@ int main() {
 <li><strong>Nhưng chính dòng của slide lại có rò rỉ</strong> — <code>arr = (int *)realloc(arr, 10 * sizeof(int));</code> gán thẳng đè lên <code>arr</code>. Nếu <code>realloc</code> thất bại, nó trả <code>NULL</code>, khối gốc <em>không</em> bị giải phóng, mà bạn vừa ghi đè mất con trỏ duy nhất tới nó: chắc chắn rò rỉ bộ nhớ, cộng thêm một lần dereference <code>NULL</code> đang chờ ở dưới. Cách an toàn là qua một biến tạm.</li>
 <li><strong>Mấy byte mới chứa gì</strong> — khi nới rộng, phần vượt quá kích thước cũ là chưa khởi tạo, giống <code>malloc</code>. Khi thu nhỏ, dữ liệu nằm ngoài kích thước mới mất luôn. Và <code>realloc(NULL, n)</code> hành xử y hệt <code>malloc(n)</code>, rất tiện cho các vòng lặp nới dần.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 
 int main() {
@@ -649,7 +649,7 @@ int main() {
 <li><strong>Only free what the heap gave you</strong> — slide 33 spells it out: <em>"Avoid using free on pointers that were not dynamically allocated."</em> <code>int n; free(&amp;n);</code> is undefined behaviour; so is freeing a pointer that has been moved with <code>p++</code>. <code>free</code> must receive the exact address that <code>malloc</code>/<code>calloc</code>/<code>realloc</code> returned.</li>
 <li><strong>Every allocation needs exactly one free</strong> — one, no more, no fewer. In this course the operating system reclaims everything when the program ends, so a leak is invisible; in a service that runs for months, it is fatal.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 
 int main() {
@@ -678,7 +678,7 @@ int main() {
 <li><strong>Chỉ giải phóng thứ heap đã cấp cho bạn</strong> — slide 33 nói thẳng: <em>"Tránh dùng free trên các con trỏ không được cấp phát động."</em> <code>int n; free(&amp;n);</code> là hành vi không xác định; giải phóng một con trỏ đã bị dịch bằng <code>p++</code> cũng vậy. <code>free</code> phải nhận đúng cái địa chỉ mà <code>malloc</code>/<code>calloc</code>/<code>realloc</code> đã trả về.</li>
 <li><strong>Mỗi lần cấp phát cần đúng một lần free</strong> — một, không hơn không kém. Trong môn học này, hệ điều hành thu hồi tất cả khi chương trình kết thúc nên rò rỉ không nhìn thấy được; còn trong một dịch vụ chạy liên tục nhiều tháng thì nó là chí mạng.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 
 int main() {
@@ -709,7 +709,7 @@ int main() {
 <li><strong>Why 16 bytes apart and not 4</strong> — you asked for 4 bytes, the allocator reserved a larger rounded chunk (alignment plus its own bookkeeping header). This is why you can never assume two allocations are adjacent, and why the neighbour trick of Exercise 3 does not transfer to the heap.</li>
 <li><strong>The leak hiding in plain sight</strong> — the program frees <code>p1</code> and <code>p2</code> and never frees <code>p3</code>. Four bytes, harmless here because the process exits immediately, but it is the exact shape of a real leak: an allocation whose <code>free</code> was simply forgotten.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 
 const int MAXN = 100;
@@ -747,7 +747,7 @@ int main()
 <li><strong>Vì sao cách nhau 16 byte chứ không phải 4</strong> — bạn xin 4 byte, bộ cấp phát giữ một mẩu lớn hơn đã làm tròn (căn lề cộng với phần đầu mục ghi sổ của chính nó). Đó là lý do không bao giờ được giả định hai lần cấp phát nằm kề nhau, và cũng là lý do mẹo "hàng xóm" của Exercise 3 không mang sang heap được.</li>
 <li><strong>Chỗ rò rỉ nằm ngay trước mắt</strong> — chương trình giải phóng <code>p1</code> và <code>p2</code> mà không bao giờ giải phóng <code>p3</code>. Bốn byte, ở đây vô hại vì tiến trình kết thúc ngay sau đó, nhưng nó đúng hình dạng của một vụ rò rỉ thật: một lần cấp phát mà lệnh <code>free</code> đơn giản là bị quên.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 
 const int MAXN = 100;
@@ -787,7 +787,7 @@ int main()
 <li><strong>What the map looks like</strong> — I measured: <code>&amp;p1 = 0x16fac63c0</code>, <code>&amp;p2 = 0x16fac63b8</code> (Stack, 8 bytes apart, descending) and <code>p1 = 0x100976070</code>, <code>p2 = 0x100976080</code> (Heap, 16 bytes apart, ascending). Two boxes on the stack, each holding an arrow into a separate 8-byte box on the heap.</li>
 <li><strong>What the slide's skeleton is missing</strong> — no <code>NULL</code> check and no <code>free</code>. Add both when you write it up: this is a "Do yourself" slide and those two lines are what the marker is looking for.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 
 int main() {
@@ -825,7 +825,7 @@ int main() {
 <li><strong>Bản đồ nhìn ra sao</strong> — tôi đo được: <code>&amp;p1 = 0x16fac63c0</code>, <code>&amp;p2 = 0x16fac63b8</code> (Stack, cách nhau 8 byte, giảm dần) và <code>p1 = 0x100976070</code>, <code>p2 = 0x100976080</code> (Heap, cách nhau 16 byte, tăng dần). Hai ô trên stack, mỗi ô giữ một mũi tên chỉ sang một ô 8 byte riêng trên heap.</li>
 <li><strong>Bộ khung của slide thiếu gì</strong> — thiếu phép kiểm <code>NULL</code> và thiếu <code>free</code>. Hãy bổ sung cả hai khi làm bài: đây là slide "tự làm" và hai dòng ấy chính là thứ người chấm đang tìm.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 
 int main() {
@@ -865,7 +865,7 @@ int main() {
 <li><strong>Line 30: <code>free(arr);</code></strong> — one allocation, one free, placed at the end of the function it was allocated in. That is the pattern to copy.</li>
 <li><strong>What is still missing</strong> — nobody checks that <code>n</code> is positive. Enter <code>0</code> and <code>malloc(0)</code> may return either <code>NULL</code> or a valid pointer to zero bytes; enter a negative number and <code>n * sizeof(int)</code> converts to a colossal unsigned value and the allocation fails. Validate input before allocating.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 
 int main() {
@@ -908,7 +908,7 @@ int main() {
 <li><strong>Dòng 30: <code>free(arr);</code></strong> — một lần cấp phát, một lần giải phóng, đặt ở cuối chính cái hàm đã cấp phát nó. Đó là khuôn mẫu để chép theo.</li>
 <li><strong>Vẫn còn thiếu gì</strong> — không ai kiểm tra rằng <code>n</code> là số dương. Nhập <code>0</code> thì <code>malloc(0)</code> có thể trả <code>NULL</code> hoặc trả một con trỏ hợp lệ tới không byte nào; nhập số âm thì <code>n * sizeof(int)</code> chuyển thành một số không dấu khổng lồ và cấp phát thất bại. Hãy kiểm tra đầu vào trước khi cấp phát.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 
 int main() {
@@ -953,7 +953,7 @@ int main() {
 <li><strong>The rule the slide leaves out</strong> — after <code>free(p)</code>, write <code>p = NULL;</code>. Slide 29's own example does it in a comment (<em>"Avoids dangling pointer"</em>) but this Note page omits it. It is the cheapest safety line in C: it makes a double free harmless and a use-after-free crash loudly instead of corrupting silently.</li>
 <li><strong>Why the compiler cannot help you here</strong> — none of these four is a syntax error. <code>cc -Wall</code> will not warn about a missing <code>free</code> or an unchecked <code>malloc</code>. Tools like <code>valgrind</code> or <code>-fsanitize=address</code> exist precisely because this whole page is invisible to the compiler.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 
 int main(void) {
@@ -983,7 +983,7 @@ int main(void) {
 <li><strong>Quy tắc mà slide bỏ sót</strong> — sau <code>free(p)</code>, hãy viết <code>p = NULL;</code>. Chính ví dụ ở slide 29 có làm chuyện đó kèm chú thích (<em>"Avoids dangling pointer"</em>) nhưng trang Note này lại bỏ quên. Đó là dòng an toàn rẻ nhất trong C: nó khiến một vụ double free thành vô hại, và khiến việc dùng vùng nhớ đã giải phóng sập thật to thay vì phá hoại âm thầm.</li>
 <li><strong>Vì sao trình biên dịch không giúp được ở đây</strong> — không cái nào trong bốn điều trên là lỗi cú pháp. <code>cc -Wall</code> sẽ không cảnh báo về một lệnh <code>free</code> bị thiếu hay một lần <code>malloc</code> không kiểm tra. Những công cụ như <code>valgrind</code> hay <code>-fsanitize=address</code> tồn tại đúng là vì cả trang này vô hình với trình biên dịch.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 
 int main(void) {
@@ -1015,7 +1015,7 @@ int main(void) {
 <li><strong>Reading the output table</strong> — four columns: the character, then its code in three different bases. For 'A': decimal <strong>65</strong>, then the middle column, then hexadecimal <strong>41</strong>. The middle column is meant to be octal.</li>
 <li><strong>The memory map to draw</strong> — Stack: <code>pFirst</code>, <code>pSecond</code>, <code>pList</code>, <code>lo</code>, <code>hi</code>, <code>n</code>, <code>i</code>. Heap: one 1-byte block per input character plus one <code>n</code>-byte block for the list. Three arrows from stack to heap, and three matching <code>free</code> calls at the end.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 
 int main(void) {
@@ -1067,7 +1067,7 @@ int main(void) {
 <li><strong>Đọc bảng kết quả</strong> — bốn cột: ký tự, rồi mã của nó trong ba hệ cơ số. Với 'A': hệ 10 là <strong>65</strong>, rồi tới cột giữa, rồi hệ 16 là <strong>41</strong>. Cột giữa đáng lẽ phải là hệ 8.</li>
 <li><strong>Bản đồ bộ nhớ cần vẽ</strong> — Stack: <code>pFirst</code>, <code>pSecond</code>, <code>pList</code>, <code>lo</code>, <code>hi</code>, <code>n</code>, <code>i</code>. Heap: mỗi ký tự nhập vào một khối 1 byte, cộng một khối <code>n</code> byte cho danh sách. Ba mũi tên từ stack sang heap, và ba lệnh <code>free</code> tương ứng ở cuối.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 
 int main(void) {

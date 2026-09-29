@@ -520,7 +520,7 @@ subject to  y_i (w^T x_i + b) &gt;= 1   for every training point i
 <h3>Path planning &amp; control</h3>
 <p>A robot trajectory is chosen to minimize length or energy subject to dynamics and obstacle/joint limits — a constrained problem solved by QP or nonlinear methods (model predictive control re-solves one every timestep).</p>
 <h3>Solving with scipy</h3>
-<pre><code>from scipy.optimize import minimize
+<pre><code class="language-python">from scipy.optimize import minimize
 def f(x):  return (x[0]-1)**2 + (x[1]-2.5)**2
 cons = [{'type':'ineq','fun': lambda x: x[0] + x[1] - 2}]   # x0+x1 &gt;= 2
 res = minimize(f, x0=[0,0], constraints=cons, method='SLSQP')
@@ -544,7 +544,7 @@ subject to  y_i (w^T x_i + b) &gt;= 1   với mọi điểm huấn luyện i
 <h3>Lập đường đi &amp; điều khiển</h3>
 <p>Quỹ đạo robot được chọn để tối thiểu quãng đường hoặc năng lượng dưới ràng buộc động học và giới hạn vật cản/khớp — một bài có ràng buộc, giải bằng QP hoặc phương pháp phi tuyến (điều khiển dự báo mô hình giải lại một bài mỗi bước thời gian).</p>
 <h3>Giải bằng scipy</h3>
-<pre><code>from scipy.optimize import minimize
+<pre><code class="language-python">from scipy.optimize import minimize
 def f(x):  return (x[0]-1)**2 + (x[1]-2.5)**2
 cons = [{'type':'ineq','fun': lambda x: x[0] + x[1] - 2}]   # x0+x1 &gt;= 2
 res = minimize(f, x0=[0,0], constraints=cons, method='SLSQP')

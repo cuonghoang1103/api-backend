@@ -326,7 +326,7 @@ dist</code></pre>
 <h3>Building for a machine that is not yours</h3>
 <p>An image built on an Apple Silicon Mac is <code>linux/arm64</code>. A typical VPS is <code>linux/amd64</code>. Docker will happily run the wrong one through emulation and it will be several times slower, or simply refuse:</p>
 
-<pre><code># build đúng kiến trúc của máy đích
+<pre><code class="language-bash"># build đúng kiến trúc của máy đích
 docker build --platform linux/amd64 -t app:1.4.2 .
 
 # or build for both and push straight to the registry
@@ -424,7 +424,7 @@ dist</code></pre>
 <h3>Build cho một cái máy không phải máy của bạn</h3>
 <p>Ảnh build trên Mac chip Apple là <code>linux/arm64</code>. Một VPS điển hình là <code>linux/amd64</code>. Docker sẽ vui vẻ chạy cái sai qua giả lập và nó chậm gấp nhiều lần, hoặc đơn giản là từ chối:</p>
 
-<pre><code># build đúng kiến trúc của máy đích
+<pre><code class="language-bash"># build đúng kiến trúc của máy đích
 docker build --platform linux/amd64 -t app:1.4.2 .
 
 # hoặc build cho cả hai, đẩy thẳng lên registry
@@ -527,7 +527,7 @@ services:
 <h3>When you genuinely need <code>npm start</code></h3>
 <p>Sometimes the entrypoint must run a script — migrations before boot, for instance. Two correct ways:</p>
 
-<pre><code># cách 1: exec — thay thế shell bằng node, giữ nguyên PID 1
+<pre><code class="language-bash"># cách 1: exec — thay thế shell bằng node, giữ nguyên PID 1
 #!/bin/sh
 npx prisma migrate deploy
 exec node dist/index.js        # ← 'exec' là từ khoá quan trọng nhất ở đây
@@ -625,7 +625,7 @@ services:
 <h3>Khi bạn thật sự cần <code>npm start</code></h3>
 <p>Đôi khi entrypoint phải chạy một script — ví dụ chạy migration trước khi khởi động. Có hai cách đúng:</p>
 
-<pre><code># cách 1: exec — thay thế shell bằng node, giữ nguyên PID 1
+<pre><code class="language-bash"># cách 1: exec — thay thế shell bằng node, giữ nguyên PID 1
 #!/bin/sh
 npx prisma migrate deploy
 exec node dist/index.js        # ← 'exec' là từ khoá quan trọng nhất ở đây
@@ -705,7 +705,7 @@ RUN --mount=type=secret,id=npmrc,target=/root/.npmrc npm ci --omit=dev
 COPY src ./src
 CMD ["node", "src/index.js"]</code></pre>
 
-<pre><code>docker build --secret id=npmrc,src=$HOME/.npmrc -t app .</code></pre>
+<pre><code class="language-bash">docker build --secret id=npmrc,src=$HOME/.npmrc -t app .</code></pre>
 
 <div class="out">docker history: 0 lần khớp
 (cùng cái token đó, cùng cái ảnh đó, không còn dấu vết nào)</div>
@@ -737,7 +737,7 @@ CMD ["node", "src/index.js"]</code></pre>
 <p><strong>A real trap:</strong> the single most common deploy failure caused by configuration is a new environment variable added to the local <code>.env</code>, added to <code>.env.example</code>, and then never added to the server. Local CI passes, the build passes, the container starts, and the feature fails at the first request with a message about an undefined value. The habit that prevents it: <strong>validate every required variable at boot and refuse to start without it</strong> — a container that fails immediately and loudly is far better than one that runs and is quietly broken.</p>
 </div>
 
-<pre><code>// config/env.ts — thà chết lúc khởi động còn hơn hỏng lúc chạy
+<pre><code class="language-javascript">// config/env.ts — thà chết lúc khởi động còn hơn hỏng lúc chạy
 const required = ['DATABASE_URL', 'JWT_SECRET', 'R2_ACCESS_KEY_ID'];
 const missing = required.filter(k =&gt; !process.env[k]);
 if (missing.length) {
@@ -800,7 +800,7 @@ RUN --mount=type=secret,id=npmrc,target=/root/.npmrc npm ci --omit=dev
 COPY src ./src
 CMD ["node", "src/index.js"]</code></pre>
 
-<pre><code>docker build --secret id=npmrc,src=$HOME/.npmrc -t app .</code></pre>
+<pre><code class="language-bash">docker build --secret id=npmrc,src=$HOME/.npmrc -t app .</code></pre>
 
 <div class="out">docker history: 0 lần khớp
 (cùng cái token đó, cùng cái ảnh đó, không còn dấu vết nào)</div>
@@ -832,7 +832,7 @@ CMD ["node", "src/index.js"]</code></pre>
 <p><strong>Bẫy thật:</strong> lỗi deploy do cấu hình phổ biến nhất là một biến môi trường mới được thêm vào <code>.env</code> ở máy local, thêm vào <code>.env.example</code>, rồi không bao giờ được thêm lên máy chủ. CI ở local đậu, build đậu, container khởi động được, và tính năng hỏng ở request đầu tiên với một thông điệp về giá trị undefined. Thói quen ngăn được nó: <strong>kiểm mọi biến bắt buộc lúc khởi động và từ chối chạy nếu thiếu</strong> — một container chết ngay lập tức và ầm ĩ tốt hơn hẳn một cái chạy được mà hỏng trong im lặng.</p>
 </div>
 
-<pre><code>// config/env.ts — thà chết lúc khởi động còn hơn hỏng lúc chạy
+<pre><code class="language-javascript">// config/env.ts — thà chết lúc khởi động còn hơn hỏng lúc chạy
 const required = ['DATABASE_URL', 'JWT_SECRET', 'R2_ACCESS_KEY_ID'];
 const missing = required.filter(k =&gt; !process.env[k]);
 if (missing.length) {
@@ -926,7 +926,7 @@ request: 327 tổng, 327 thành công, 0 HỎNG   (0% mất)</div>
 <h3>Why the health check must be the gate</h3>
 <p>"Container started" and "application ready" are separated by however long your app takes to connect to its database, warm its cache and mount its routes. Deploying on the first signal instead of the second produces the most confusing kind of outage: <code>docker ps</code> says everything is up, and every request 502s. The gate must be a real HTTP response from a real route:</p>
 
-<pre><code># ĐÚNG: chờ đúng cái mà người dùng sẽ gọi
+<pre><code class="language-bash"># ĐÚNG: chờ đúng cái mà người dùng sẽ gọi
 until curl -sf http://127.0.0.1:3741/health/live &gt;/dev/null; do sleep 0.05; done
 
 # WRONG: 'docker ps' saying it is running ≠ it is ready to take work
@@ -1007,7 +1007,7 @@ request: 327 tổng, 327 thành công, 0 HỎNG   (0% mất)</div>
 <h3>Vì sao health check phải là cái chốt</h3>
 <p>"Container đã khởi động" và "ứng dụng đã sẵn sàng" cách nhau đúng bằng khoảng thời gian app của bạn cần để kết nối cơ sở dữ liệu, làm ấm cache và gắn xong các route. Deploy dựa vào tín hiệu thứ nhất thay vì tín hiệu thứ hai sinh ra kiểu sập khó hiểu nhất: <code>docker ps</code> nói mọi thứ đang chạy, và mọi request đều 502. Cái chốt phải là một phản hồi HTTP thật từ một route thật:</p>
 
-<pre><code># ĐÚNG: chờ đúng cái mà người dùng sẽ gọi
+<pre><code class="language-bash"># ĐÚNG: chờ đúng cái mà người dùng sẽ gọi
 until curl -sf http://127.0.0.1:3741/health/live &gt;/dev/null; do sleep 0.05; done
 
 # SAI: 'docker ps' nói nó chạy rồi ≠ nó nhận việc được rồi
@@ -1108,7 +1108,7 @@ $ curl -s -o /dev/null -w "%{http_code}" https://cuongthai.com/api/v1/messages/t
 <h3>The guard: smoke-test that routes are mounted</h3>
 <p>A health check that hits one route proves one route works. The fix is a smoke test that asserts every major module is actually mounted, run automatically at the end of every deploy, failing the deploy loudly if anything returns 404:</p>
 
-<pre><code>for route in gifs messages/threads profile social/posts feed/posts \\
+<pre><code class="language-bash">for route in gifs messages/threads profile social/posts feed/posts \\
              friends notes courses snippets my-language interview/tracks; do
   code=$(curl -s -o /dev/null -w "%{http_code}" "http://127.0.0.1:5000/api/v1/$route")
   if [ "$code" = "404" ]; then
@@ -1134,7 +1134,7 @@ done</code></pre>
 <h3>Rollback</h3>
 <p>The fastest rollback is starting the previous image, which takes seconds and requires only that the image still exists and has a name:</p>
 
-<pre><code># quay lui bằng ẢNH — nhanh nhất, vài giây
+<pre><code class="language-bash"># quay lui bằng ẢNH — nhanh nhất, vài giây
 docker compose up -d --no-build backend    # với ảnh đã ghim ở tag trước
 
 # roll back through CODE — slower, but the git history stays straight
@@ -1206,7 +1206,7 @@ $ curl -s -o /dev/null -w "%{http_code}" https://cuongthai.com/api/v1/messages/t
 <h3>Chốt chặn: smoke-test xem route có được gắn không</h3>
 <p>Một health check gọi một route thì chứng minh được một route chạy. Phép sửa là một smoke test khẳng định mọi mô-đun lớn thật sự đã được gắn, chạy tự động ở cuối mỗi lần deploy, và làm hỏng cả lần deploy một cách ầm ĩ nếu có cái nào trả 404:</p>
 
-<pre><code>for route in gifs messages/threads profile social/posts feed/posts \\
+<pre><code class="language-bash">for route in gifs messages/threads profile social/posts feed/posts \\
              friends notes courses snippets my-language interview/tracks; do
   code=$(curl -s -o /dev/null -w "%{http_code}" "http://127.0.0.1:5000/api/v1/$route")
   if [ "$code" = "404" ]; then
@@ -1232,7 +1232,7 @@ done</code></pre>
 <h3>Quay lui</h3>
 <p>Cách quay lui nhanh nhất là khởi động lại cái ảnh trước đó, mất vài giây và chỉ đòi hỏi cái ảnh ấy còn tồn tại và có tên:</p>
 
-<pre><code># quay lui bằng ẢNH — nhanh nhất, vài giây
+<pre><code class="language-bash"># quay lui bằng ẢNH — nhanh nhất, vài giây
 docker compose up -d --no-build backend    # với ảnh đã ghim ở tag trước
 
 # quay lui bằng CODE — chậm hơn, nhưng lịch sử git thẳng thớm

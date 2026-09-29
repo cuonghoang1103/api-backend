@@ -166,7 +166,7 @@ const c2 = doc('dsi201-2-1-python-numpy-pandas', '2.1 — Python for DS (numpy &
 <h2>Python for Data Science</h2>
 <h3>NumPy — fast numeric arrays</h3>
 <p>A NumPy <code>ndarray</code> stores numbers in a compact block and applies operations to the whole array at once (<strong>vectorization</strong>) — far faster than Python loops.</p>
-<pre><code>import numpy as np
+<pre><code class="language-python">import numpy as np
 
 a = np.array([1, 2, 3, 4])
 print(a * 2)        # [2 4 6 8]  -- element-wise, no loop
@@ -175,7 +175,7 @@ print(a[a &gt; 2])     # [3 4]      -- boolean mask
 </code></pre>
 <h3>pandas — labeled tables</h3>
 <p>A <code>DataFrame</code> is a table with named columns; a <code>Series</code> is one column.</p>
-<pre><code>import pandas as pd
+<pre><code class="language-python">import pandas as pd
 
 df = pd.read_csv("students.csv")   # read data in
 print(df.head())                   # first 5 rows
@@ -188,7 +188,7 @@ df.to_csv("clean.csv", index=False)  # write data out
 <h2>Python cho Khoa học dữ liệu</h2>
 <h3>NumPy — mảng số nhanh</h3>
 <p>Một <code>ndarray</code> của NumPy lưu các số trong một khối gọn và áp phép toán lên cả mảng cùng lúc (<strong>vector hoá</strong>) — nhanh hơn nhiều vòng lặp Python.</p>
-<pre><code>import numpy as np
+<pre><code class="language-python">import numpy as np
 
 a = np.array([1, 2, 3, 4])
 print(a * 2)        # [2 4 6 8]  -- theo từng phần tử, không cần vòng lặp
@@ -197,7 +197,7 @@ print(a[a &gt; 2])     # [3 4]      -- mặt nạ boolean
 </code></pre>
 <h3>pandas — bảng có nhãn</h3>
 <p>Một <code>DataFrame</code> là bảng có cột đặt tên; một <code>Series</code> là một cột.</p>
-<pre><code>import pandas as pd
+<pre><code class="language-python">import pandas as pd
 
 df = pd.read_csv("students.csv")   # đọc dữ liệu vào
 print(df.head())                   # 5 dòng đầu
@@ -360,7 +360,7 @@ const c6 = doc('dsi201-6-1-statistics', '6.1 — Statistics for Data Science|||6
 <p>A <strong>distribution</strong> describes how values are spread. The <strong>normal (bell) curve</strong> appears everywhere; it is summarized by its <strong>mean</strong> (center) and <strong>standard deviation</strong> (spread).</p>
 <h3>Hypothesis testing</h3>
 <p>We ask: is an observed difference <strong>real</strong>, or just chance? A <strong>test</strong> gives a <strong>p-value</strong> — the probability of seeing this result if there were no real effect. Small p (e.g. &lt; 0.05) = evidence against the "no effect" hypothesis.</p>
-<pre><code>from scipy import stats
+<pre><code class="language-python">from scipy import stats
 
 group_a = df[df["group"] == "A"]["score"]
 group_b = df[df["group"] == "B"]["score"]
@@ -376,7 +376,7 @@ print(p)     # p &lt; 0.05 -&gt; difference is unlikely to be pure chance
 <p>Một <strong>phân phối</strong> mô tả các giá trị trải ra thế nào. <strong>Phân phối chuẩn (hình chuông)</strong> xuất hiện khắp nơi; nó được tóm tắt bởi <strong>trung bình</strong> (tâm) và <strong>độ lệch chuẩn</strong> (độ trải).</p>
 <h3>Kiểm định giả thuyết</h3>
 <p>Ta hỏi: khác biệt quan sát được là <strong>thật</strong>, hay chỉ do ngẫu nhiên? Một <strong>phép kiểm</strong> cho ra <strong>p-value</strong> — xác suất thấy kết quả này nếu KHÔNG có hiệu ứng thật. p nhỏ (vd &lt; 0.05) = bằng chứng chống lại giả thuyết "không có hiệu ứng".</p>
-<pre><code>from scipy import stats
+<pre><code class="language-python">from scipy import stats
 
 group_a = df[df["group"] == "A"]["score"]
 group_b = df[df["group"] == "B"]["score"]
@@ -407,7 +407,7 @@ const c7 = doc('dsi201-7-1-ml-intro', '7.1 — Intro to Machine Learning|||7.1 �
 </ul>
 <h3>Train / test split</h3>
 <p>Fit the model on a <strong>training set</strong>, then measure it on unseen <strong>test data</strong> — so you know it generalizes, not just memorizes.</p>
-<pre><code>from sklearn.model_selection import train_test_split
+<pre><code class="language-python">from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 
 X = df[["hours", "attendance"]]
@@ -429,7 +429,7 @@ pred = model.predict(X_test)     # predict on unseen data
 </ul>
 <h3>Chia train / test</h3>
 <p>Khớp mô hình trên <strong>tập huấn luyện</strong>, rồi đo trên <strong>dữ liệu kiểm tra</strong> chưa từng thấy — để biết nó tổng quát hoá, chứ không phải học vẹt.</p>
-<pre><code>from sklearn.model_selection import train_test_split
+<pre><code class="language-python">from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 
 X = df[["hours", "attendance"]]
@@ -464,7 +464,7 @@ const c8 = doc('dsi201-8-1-evaluation-ethics', '8.1 — Model evaluation & ethic
 </ul>
 <h3>Metrics — regression</h3>
 <p><strong>RMSE</strong> (root mean squared error) — average size of the prediction error, in the same units as <code>y</code>.</p>
-<pre><code>from sklearn.metrics import accuracy_score, precision_score, recall_score
+<pre><code class="language-python">from sklearn.metrics import accuracy_score, precision_score, recall_score
 print(accuracy_score(y_test, pred))
 print(precision_score(y_test, pred))
 print(recall_score(y_test, pred))
@@ -484,7 +484,7 @@ print(recall_score(y_test, pred))
 </ul>
 <h3>Metrics — hồi quy</h3>
 <p><strong>RMSE</strong> (căn trung bình bình phương sai số) — độ lớn trung bình của sai số dự đoán, cùng đơn vị với <code>y</code>.</p>
-<pre><code>from sklearn.metrics import accuracy_score, precision_score, recall_score
+<pre><code class="language-python">from sklearn.metrics import accuracy_score, precision_score, recall_score
 print(accuracy_score(y_test, pred))
 print(precision_score(y_test, pred))
 print(recall_score(y_test, pred))

@@ -83,7 +83,7 @@ sec-websocket-accept: Upm+pYUvMCSMenoyLWVjZht5jas=</div>
 </div>
 
 <h3>The smallest useful server</h3>
-<pre><code><span class="tok-kw">import</span> { WebSocketServer } <span class="tok-kw">from</span> <span class="tok-str">'ws'</span>;
+<pre><code class="language-javascript"><span class="tok-kw">import</span> { WebSocketServer } <span class="tok-kw">from</span> <span class="tok-str">'ws'</span>;
 <span class="tok-kw">const</span> server = http.createServer(app);        <span class="tok-cmt">// the SAME HTTP server as Express</span>
 <span class="tok-kw">const</span> wss = <span class="tok-kw">new</span> WebSocketServer({ server });
 
@@ -177,7 +177,7 @@ sec-websocket-accept: Upm+pYUvMCSMenoyLWVjZht5jas=</div>
 </div>
 
 <h3>Máy chủ nhỏ nhất còn dùng được</h3>
-<pre><code><span class="tok-kw">import</span> { WebSocketServer } <span class="tok-kw">from</span> <span class="tok-str">'ws'</span>;
+<pre><code class="language-javascript"><span class="tok-kw">import</span> { WebSocketServer } <span class="tok-kw">from</span> <span class="tok-str">'ws'</span>;
 <span class="tok-kw">const</span> server = http.createServer(app);        <span class="tok-cmt">// CÙNG server HTTP với Express</span>
 <span class="tok-kw">const</span> wss = <span class="tok-kw">new</span> WebSocketServer({ server });
 
@@ -260,7 +260,7 @@ thời gian mở 5.000 kết nối:  ws 1.107ms  |  socket.io 1.769ms</div>
   <div class="lz-node"><span class="lz-t">post:&lt;id&gt;</span><span class="lz-d">the sockets currently LOOKING at this post. Scoped to what is on screen, not to who the user is</span></div>
   <div class="lz-node"><span class="lz-t">socket.id</span><span class="lz-d">every socket is automatically in a room named after itself — that is how a direct reply to one tab works</span></div>
 </div>
-<pre><code>io.on(<span class="tok-str">'connection'</span>, (socket) =&gt; {
+<pre><code class="language-typescript">io.on(<span class="tok-str">'connection'</span>, (socket) =&gt; {
   socket.join(<span class="tok-str">&#96;user:\${userId}&#96;</span>);                 <span class="tok-cmt">// every device belonging to this person</span>
   socket.on(<span class="tok-str">'thread:join'</span>, (id) =&gt; socket.join(<span class="tok-str">&#96;thread:\${id}&#96;</span>));
 });
@@ -272,7 +272,7 @@ io.to(<span class="tok-str">&#96;user:\${receiverId}&#96;</span>).emit(<span cla
 
 <h3>Acknowledgements: when you need to know it arrived</h3>
 <p>An <code>emit</code> is fire-and-forget. Socket.IO's ack turns one into a request/response:</p>
-<pre><code><span class="tok-cmt">// client</span>
+<pre><code class="language-javascript"><span class="tok-cmt">// client</span>
 socket.emit(<span class="tok-str">'thread:join'</span>, <span class="tok-num">42</span>, (res) =&gt; {
   <span class="tok-kw">if</span> (!res.ok) showError(res.reason);
 });
@@ -349,7 +349,7 @@ thời gian mở 5.000 kết nối:  ws 1.107ms  |  socket.io 1.769ms</div>
   <div class="lz-node"><span class="lz-t">post:&lt;id&gt;</span><span class="lz-d">những socket đang NHÌN bài viết này. Phạm vi theo thứ đang hiện trên màn hình, không theo người dùng là ai</span></div>
   <div class="lz-node"><span class="lz-t">socket.id</span><span class="lz-d">mỗi socket tự động nằm trong một room mang tên chính nó — đó là cách trả lời riêng cho đúng một cái tab</span></div>
 </div>
-<pre><code>io.on(<span class="tok-str">'connection'</span>, (socket) =&gt; {
+<pre><code class="language-typescript">io.on(<span class="tok-str">'connection'</span>, (socket) =&gt; {
   socket.join(<span class="tok-str">&#96;user:\${userId}&#96;</span>);                 <span class="tok-cmt">// mọi thiết bị của người này</span>
   socket.on(<span class="tok-str">'thread:join'</span>, (id) =&gt; socket.join(<span class="tok-str">&#96;thread:\${id}&#96;</span>));
 });
@@ -361,7 +361,7 @@ io.to(<span class="tok-str">&#96;user:\${receiverId}&#96;</span>).emit(<span cla
 
 <h3>Ack: khi bạn cần biết tin đã tới</h3>
 <p>Một lệnh <code>emit</code> là bắn-rồi-quên. Cơ chế ack của Socket.IO biến nó thành một cặp hỏi/đáp:</p>
-<pre><code><span class="tok-cmt">// client</span>
+<pre><code class="language-javascript"><span class="tok-cmt">// client</span>
 socket.emit(<span class="tok-str">'thread:join'</span>, <span class="tok-num">42</span>, (res) =&gt; {
   <span class="tok-kw">if</span> (!res.ok) showError(res.reason);
 });
@@ -422,7 +422,7 @@ socket.on(<span class="tok-str">'thread:join'</span>, (id, ack) =&gt; {
 
 <h3>Where the credential comes from</h3>
 <p>The handshake is HTTP, so all three of the usual places work — and the third is the one you want in a browser:</p>
-<pre><code>io.use(<span class="tok-kw">async</span> (socket, next) =&gt; {
+<pre><code class="language-javascript">io.use(<span class="tok-kw">async</span> (socket, next) =&gt; {
   <span class="tok-cmt">// 1. socket.handshake.auth.token  — passed by the client (JS must read it ⇒ cannot be httpOnly)</span>
   <span class="tok-cmt">// 2. the Authorization header     — usable by non-browser clients</span>
   <span class="tok-cmt">// 3. an httpOnly cookie           — the browser sends it on the handshake ⇒ SAFEST</span>
@@ -445,7 +445,7 @@ token tự ký khoá sai     → BỊ TỪ CHỐI: invalid signature</div>
 
 <h3>Measurement 2 — the hole: authenticated is not authorized</h3>
 <p>User 7 is a participant in thread 42 and nothing else. They connect with a perfectly valid token — every check above passes — and then emit one event. Two server implementations, side by side:</p>
-<pre><code><span class="tok-cmt">// ❌ THE WRONG WAY — precisely the line that once ran in this site's production</span>
+<pre><code class="language-typescript"><span class="tok-cmt">// ❌ THE WRONG WAY — precisely the line that once ran in this site's production</span>
 socket.on(<span class="tok-str">'join:unsafe'</span>, (room) =&gt; { socket.join(room); });
 
 <span class="tok-cmt">// ✅ THE RIGHT WAY — authorise EVERY event</span>
@@ -507,7 +507,7 @@ tự kết nối lại sau 1.053ms | id MỚI: eUE1ya (cũ: JBrWhg)
 
 <h3>Thông tin xác thực đến từ đâu</h3>
 <p>Cái bắt tay là HTTP, nên cả ba chỗ quen thuộc đều dùng được — và chỗ thứ ba mới là thứ bạn muốn trên trình duyệt:</p>
-<pre><code>io.use(<span class="tok-kw">async</span> (socket, next) =&gt; {
+<pre><code class="language-javascript">io.use(<span class="tok-kw">async</span> (socket, next) =&gt; {
   <span class="tok-cmt">// 1. socket.handshake.auth.token  — client tự truyền (phải lấy từ JS ⇒ không httpOnly được)</span>
   <span class="tok-cmt">// 2. header Authorization         — dùng được cho client không phải trình duyệt</span>
   <span class="tok-cmt">// 3. cookie httpOnly              — trình duyệt tự gửi khi bắt tay ⇒ AN TOÀN NHẤT</span>
@@ -530,7 +530,7 @@ token tự ký khoá sai     → BỊ TỪ CHỐI: invalid signature</div>
 
 <h3>Phép đo 2 — cái lỗ: đã xác thực KHÔNG có nghĩa là có quyền</h3>
 <p>Người dùng 7 là người trong cuộc của thread 42 và không của gì khác. Họ kết nối bằng một token hoàn toàn hợp lệ — mọi lớp kiểm ở trên đều qua — rồi emit đúng một sự kiện. Hai cách cài đặt phía máy chủ, đặt cạnh nhau:</p>
-<pre><code><span class="tok-cmt">// ❌ CÁCH SAI — chính xác là dòng từng nằm trong production của site này</span>
+<pre><code class="language-typescript"><span class="tok-cmt">// ❌ CÁCH SAI — chính xác là dòng từng nằm trong production của site này</span>
 socket.on(<span class="tok-str">'join:unsafe'</span>, (room) =&gt; { socket.join(room); });
 
 <span class="tok-cmt">// ✅ CÁCH ĐÚNG — kiểm quyền cho TỪNG sự kiện</span>
@@ -618,7 +618,7 @@ tự kết nối lại sau 1.053ms | id MỚI: eUE1ya (cũ: JBrWhg)
 
 <h3>Measurement 2 — the adapter</h3>
 <p>Same test, with <code>@socket.io/redis-adapter</code> attached on both processes. The adapter publishes every broadcast to a Redis channel and each process replays it to its own local sockets:</p>
-<pre><code><span class="tok-kw">import</span> { createAdapter } <span class="tok-kw">from</span> <span class="tok-str">'@socket.io/redis-adapter'</span>;
+<pre><code class="language-javascript"><span class="tok-kw">import</span> { createAdapter } <span class="tok-kw">from</span> <span class="tok-str">'@socket.io/redis-adapter'</span>;
 <span class="tok-kw">const</span> pub = <span class="tok-kw">new</span> Redis(REDIS_URL);
 <span class="tok-kw">const</span> sub = pub.duplicate();          <span class="tok-cmt">// MUST be its own connection: a client in SUBSCRIBE mode cannot run other commands</span>
 io.adapter(createAdapter(pub, sub));</code></pre>
@@ -647,7 +647,7 @@ transport=websocket  qua LB luân phiên → OK</div>
   RSS 65,1MB → 257,5MB (+192,4MB)
   readyState = 1 (1 = OPEN) → send() KHÔNG hề báo lỗi</div>
 <p>The socket still reports <code>OPEN</code>. <code>send()</code> returns normally. One client cost 192MB and there is no error anywhere. The guard is to look before you write:</p>
-<pre><code><span class="tok-kw">const</span> LIMIT = <span class="tok-num">1</span> * <span class="tok-num">1024</span> * <span class="tok-num">1024</span>;               <span class="tok-cmt">// a 1MB queue per socket</span>
+<pre><code class="language-javascript"><span class="tok-kw">const</span> LIMIT = <span class="tok-num">1</span> * <span class="tok-num">1024</span> * <span class="tok-num">1024</span>;               <span class="tok-cmt">// a 1MB queue per socket</span>
 <span class="tok-kw">if</span> (ws.bufferedAmount &gt; LIMIT) {
   <span class="tok-cmt">// this client cannot keep up: drop the message, or close and make them refetch over REST</span>
   <span class="tok-kw">return</span>;
@@ -696,7 +696,7 @@ ws.send(payload);</code></pre>
 
 <h3>Phép đo 2 — adapter</h3>
 <p>Vẫn phép thử đó, gắn thêm <code>@socket.io/redis-adapter</code> ở cả hai tiến trình. Adapter công bố mọi lệnh phát tin lên một kênh Redis và mỗi tiến trình phát lại nó cho đám socket cục bộ của mình:</p>
-<pre><code><span class="tok-kw">import</span> { createAdapter } <span class="tok-kw">from</span> <span class="tok-str">'@socket.io/redis-adapter'</span>;
+<pre><code class="language-javascript"><span class="tok-kw">import</span> { createAdapter } <span class="tok-kw">from</span> <span class="tok-str">'@socket.io/redis-adapter'</span>;
 <span class="tok-kw">const</span> pub = <span class="tok-kw">new</span> Redis(REDIS_URL);
 <span class="tok-kw">const</span> sub = pub.duplicate();          <span class="tok-cmt">// PHẢI là kết nối riêng: một client đang SUBSCRIBE không chạy lệnh khác được</span>
 io.adapter(createAdapter(pub, sub));</code></pre>
@@ -725,7 +725,7 @@ transport=websocket  qua LB luân phiên → OK</div>
   RSS 65,1MB → 257,5MB (+192,4MB)
   readyState = 1 (1 = OPEN) → send() KHÔNG hề báo lỗi</div>
 <p>Socket vẫn báo <code>OPEN</code>. <code>send()</code> vẫn trả về bình thường. Một client tốn 192MB và không có lỗi nào ở đâu cả. Cách chặn là nhìn trước khi ghi:</p>
-<pre><code><span class="tok-kw">const</span> LIMIT = <span class="tok-num">1</span> * <span class="tok-num">1024</span> * <span class="tok-num">1024</span>;               <span class="tok-cmt">// 1MB hàng đợi cho mỗi socket</span>
+<pre><code class="language-javascript"><span class="tok-kw">const</span> LIMIT = <span class="tok-num">1</span> * <span class="tok-num">1024</span> * <span class="tok-num">1024</span>;               <span class="tok-cmt">// 1MB hàng đợi cho mỗi socket</span>
 <span class="tok-kw">if</span> (ws.bufferedAmount &gt; LIMIT) {
   <span class="tok-cmt">// khách này không theo kịp: bỏ tin, hoặc đóng và bắt họ tải lại từ REST</span>
   <span class="tok-kw">return</span>;

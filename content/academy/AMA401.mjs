@@ -136,7 +136,7 @@ const c1 = doc('ama401-1-1-foundations-bias-variance', '1.1 — Foundations, bia
 <li><strong>Hold-out split</strong> — train / validation / test, so the number you report is measured on data the model never saw.</li>
 <li><strong>Information criteria</strong> — <code>AIC = 2k - 2·logL</code> and <code>BIC = k·ln(n) - 2·logL</code> reward fit but penalise the parameter count k; lower is better.</li>
 </ul>
-<pre><code>from sklearn.model_selection import train_test_split
+<pre><code class="language-python">from sklearn.model_selection import train_test_split
 
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=42)
@@ -160,7 +160,7 @@ X_train, X_test, y_train, y_test = train_test_split(
 <li><strong>Chia hold-out</strong> — train / validation / test, để con số bạn báo cáo được đo trên dữ liệu mô hình chưa từng thấy.</li>
 <li><strong>Tiêu chí thông tin</strong> — <code>AIC = 2k - 2·logL</code> và <code>BIC = k·ln(n) - 2·logL</code> thưởng cho độ khớp nhưng phạt số tham số k; nhỏ hơn là tốt hơn.</li>
 </ul>
-<pre><code>from sklearn.model_selection import train_test_split
+<pre><code class="language-python">from sklearn.model_selection import train_test_split
 
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=42)
@@ -193,7 +193,7 @@ Lasso (L1): minimise  RSS + alpha * sum(|beta_j|)
 <p>Ridge shrinks all coefficients smoothly; Lasso zeroes out weak ones, giving a sparse, interpretable model.</p>
 <h3>Generalized linear models (GLM)</h3>
 <p>When the target is not continuous, a <strong>GLM</strong> keeps a linear predictor but passes it through a <em>link function</em>: logistic for a probability, Poisson (log link) for counts. It generalises linear regression to the exponential family.</p>
-<pre><code>from sklearn.linear_model import Ridge, Lasso
+<pre><code class="language-python">from sklearn.linear_model import Ridge, Lasso
 
 ridge = Ridge(alpha=1.0).fit(X_train, y_train)
 lasso = Lasso(alpha=0.1).fit(X_train, y_train)
@@ -215,7 +215,7 @@ Lasso (L1): tối thiểu  RSS + alpha * sum(|beta_j|)
 <p>Ridge co mọi hệ số một cách mượt; Lasso đưa các hệ số yếu về 0, cho mô hình thưa và dễ diễn giải.</p>
 <h3>Mô hình tuyến tính tổng quát (GLM)</h3>
 <p>Khi mục tiêu không liên tục, một <strong>GLM</strong> giữ bộ dự báo tuyến tính nhưng truyền nó qua một <em>hàm liên kết</em>: logistic cho xác suất, Poisson (liên kết log) cho số đếm. Nó tổng quát hoá hồi quy tuyến tính sang họ mũ.</p>
-<pre><code>from sklearn.linear_model import Ridge, Lasso
+<pre><code class="language-python">from sklearn.linear_model import Ridge, Lasso
 
 ridge = Ridge(alpha=1.0).fit(X_train, y_train)
 lasso = Lasso(alpha=0.1).fit(X_train, y_train)
@@ -250,7 +250,7 @@ Recall    = TP / (TP + FN)   # of actual positives, how many are caught
 F1        = 2 * P * R / (P + R)
 ROC-AUC   : ranking quality across all thresholds (0.5 = random, 1.0 = perfect)
 </code></pre>
-<pre><code>from sklearn.linear_model import LogisticRegression
+<pre><code class="language-python">from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import classification_report, roc_auc_score
 
 clf = LogisticRegression(max_iter=1000).fit(X_train, y_train)
@@ -275,7 +275,7 @@ Recall    = TP / (TP + FN)   # trong số dương thật, bắt được bao nhi
 F1        = 2 * P * R / (P + R)
 ROC-AUC   : chất lượng xếp hạng qua mọi ngưỡng (0.5 = ngẫu nhiên, 1.0 = hoàn hảo)
 </code></pre>
-<pre><code>from sklearn.linear_model import LogisticRegression
+<pre><code class="language-python">from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import classification_report, roc_auc_score
 
 clf = LogisticRegression(max_iter=1000).fit(X_train, y_train)
@@ -308,7 +308,7 @@ Report the mean (and std) of the k scores.
 <p>Every row is used for both training and testing, so the estimate uses all the data without ever testing on what it trained on.</p>
 <h3>The bootstrap</h3>
 <p>To measure the <strong>uncertainty</strong> of a statistic (a mean, a coefficient), resample the data <em>with replacement</em> B times, recompute the statistic each time, and read the spread of the B values.</p>
-<pre><code>from sklearn.model_selection import cross_val_score
+<pre><code class="language-python">from sklearn.model_selection import cross_val_score
 
 scores = cross_val_score(clf, X, y, cv=5, scoring="accuracy")
 print(scores.mean(), "+/-", scores.std())
@@ -328,7 +328,7 @@ Báo cáo trung bình (và độ lệch chuẩn) của k điểm.
 <p>Mọi dòng đều được dùng cho cả huấn luyện và kiểm tra, nên ước lượng dùng hết dữ liệu mà không bao giờ kiểm tra trên chính thứ nó đã học.</p>
 <h3>Bootstrap</h3>
 <p>Để đo <strong>độ bất định</strong> của một thống kê (trung bình, một hệ số), lấy mẫu lại dữ liệu <em>có hoàn lại</em> B lần, tính lại thống kê mỗi lần, rồi đọc độ trải của B giá trị.</p>
-<pre><code>from sklearn.model_selection import cross_val_score
+<pre><code class="language-python">from sklearn.model_selection import cross_val_score
 
 scores = cross_val_score(clf, X, y, cv=5, scoring="accuracy")
 print(scores.mean(), "+/-", scores.std())
@@ -363,7 +363,7 @@ const c5 = doc('ama401-5-1-unsupervised', '5.1 — Unsupervised learning: PCA, c
 </ul>
 <h3>Nonlinear embeddings</h3>
 <p><strong>t-SNE</strong> and <strong>UMAP</strong> map high-dimensional data to 2D for <em>visualisation</em>, preserving local neighbourhoods. They are for seeing structure, not for feeding downstream models.</p>
-<pre><code>from sklearn.decomposition import PCA
+<pre><code class="language-python">from sklearn.decomposition import PCA
 from sklearn.cluster import KMeans
 
 Z = PCA(n_components=2).fit_transform(X)
@@ -388,7 +388,7 @@ labels = KMeans(n_clusters=3, n_init=10).fit_predict(Z)
 </ul>
 <h3>Giảm chiều phi tuyến</h3>
 <p><strong>t-SNE</strong> và <strong>UMAP</strong> ánh xạ dữ liệu nhiều chiều xuống 2D để <em>trực quan hoá</em>, giữ lân cận cục bộ. Chúng để nhìn cấu trúc, không phải để nạp vào mô hình phía sau.</p>
-<pre><code>from sklearn.decomposition import PCA
+<pre><code class="language-python">from sklearn.decomposition import PCA
 from sklearn.cluster import KMeans
 
 Z = PCA(n_components=2).fit_transform(X)
@@ -423,7 +423,7 @@ const c6 = doc('ama401-6-1-time-series', '6.1 — Time series: decomposition, AR
 I(d)  : difference d times to make it stationary
 MA(q) : regress on q past forecast errors
 </code></pre>
-<pre><code>from statsmodels.tsa.arima.model import ARIMA
+<pre><code class="language-python">from statsmodels.tsa.arima.model import ARIMA
 
 model = ARIMA(y, order=(1, 1, 1)).fit()
 forecast = model.forecast(steps=12)
@@ -446,7 +446,7 @@ forecast = model.forecast(steps=12)
 I(d)  : sai phân d lần để chuỗi trở nên dừng
 MA(q) : hồi quy trên q sai số dự báo quá khứ
 </code></pre>
-<pre><code>from statsmodels.tsa.arima.model import ARIMA
+<pre><code class="language-python">from statsmodels.tsa.arima.model import ARIMA
 
 model = ARIMA(y, order=(1, 1, 1)).fit()
 forecast = model.forecast(steps=12)
@@ -524,7 +524,7 @@ const c8 = doc('ama401-8-1-trees-ensembles', '8.1 — Tree models & advanced ens
 <p>A single <strong>decision tree</strong> splits the feature space into regions. It is easy to read but high-variance: a small data change gives a very different tree. Ensembles fix this by combining many trees.</p>
 <h3>Random Forest (bagging)</h3>
 <p>Train many trees, each on a <em>bootstrap</em> sample and on a random subset of features at each split, then average (or vote). Averaging <strong>de-correlated</strong> trees cuts variance without raising bias much.</p>
-<pre><code>from sklearn.ensemble import RandomForestClassifier
+<pre><code class="language-python">from sklearn.ensemble import RandomForestClassifier
 
 rf = RandomForestClassifier(n_estimators=300, max_features="sqrt")
 rf.fit(X_train, y_train)
@@ -544,7 +544,7 @@ Boosting : sequential trees, fix residuals -> lowers bias
 <p>Một <strong>cây quyết định</strong> đơn chia không gian đặc trưng thành các vùng. Nó dễ đọc nhưng variance cao: một thay đổi nhỏ trong dữ liệu cho một cây rất khác. Ensemble sửa điều này bằng cách kết hợp nhiều cây.</p>
 <h3>Random Forest (bagging)</h3>
 <p>Huấn luyện nhiều cây, mỗi cây trên một mẫu <em>bootstrap</em> và trên một tập con ngẫu nhiên các đặc trưng ở mỗi lần chia, rồi lấy trung bình (hoặc bỏ phiếu). Trung bình hoá các cây đã <strong>khử tương quan</strong> cắt giảm variance mà không tăng bias nhiều.</p>
-<pre><code>from sklearn.ensemble import RandomForestClassifier
+<pre><code class="language-python">from sklearn.ensemble import RandomForestClassifier
 
 rf = RandomForestClassifier(n_estimators=300, max_features="sqrt")
 rf.fit(X_train, y_train)

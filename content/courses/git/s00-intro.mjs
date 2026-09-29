@@ -1181,17 +1181,17 @@ ${slide('git-00', 10, 'Cài Git trên ba hệ điều hành')}
 <div class="callout ok"><strong>Checked against git-scm.com (as of 09/2026):</strong> the latest Git is <strong>2.55.0</strong>; Git for Windows is <strong>2.55.0(5)</strong>, released 20/08/2026, with separate installers for x64 and ARM64 plus a portable edition. On Windows you can also install from the terminal with <code>winget install --id Git.Git -e --source winget</code>. On macOS without Homebrew, <code>xcode-select --install</code> gives you Apple's build (older, but fine for this course); the old standalone macOS installer on git-scm.com is no longer maintained. On Ubuntu, <code>sudo add-apt-repository ppa:git-core/ppa</code> gets you the newest release instead of the distribution's one.</div>
 <p>If your teammates are on Windows: during the Git for Windows installer, keep the defaults for line endings and the terminal — they match what this course assumes (Git Bash, <code>core.autocrlf true</code>). The one screen worth changing is the default editor: the installer suggests Vim, and picking VS Code or Nano there saves beginners from being stuck inside Vim on their first commit message.</p>
 <p>Verify — anything from 2.30 upwards is fine for everything in this course:</p>
-<pre><code>git --version</code></pre>
+<pre><code class="language-bash">git --version</code></pre>
 <div class="out">git version 2.43.0</div>
 
 <h3>2. Identity — who is making these commits</h3>
 <p>Every commit permanently records a name and an email. Set them once, globally:</p>
-<pre><code>git config --global user.name <span class="tok-string">"Nguyen Van An"</span>
+<pre><code class="language-bash">git config --global user.name <span class="tok-string">"Nguyen Van An"</span>
 git config --global user.email <span class="tok-string">"an@example.com"</span></code></pre>
 <div class="callout warn">Use the same email that is registered on your GitHub account, or GitHub will not link your commits to your profile and they will not appear in your contribution graph. If you want to keep your real address private, GitHub gives you a <code>noreply</code> address (Settings → Emails → "Keep my email addresses private") — use that one here instead.</div>
 
 <h3>3. The settings that actually prevent bugs</h3>
-<pre><code><span class="tok-comment"># The name of the first branch in a new repo. GitHub uses "main"; Git's</span>
+<pre><code class="language-bash"><span class="tok-comment"># The name of the first branch in a new repo. GitHub uses "main"; Git's</span>
 <span class="tok-comment"># historical default was "master". Setting this avoids a mismatch on day one.</span>
 git config --global init.defaultBranch main
 
@@ -1226,7 +1226,7 @@ git config --global core.editor <span class="tok-string">"nano"</span>          
 
 <h3>4. Read your configuration back</h3>
 ${slide('git-00', 11, 'git config tối thiểu và ba mức cấu hình')}
-<pre><code>git config --list --show-origin</code></pre>
+<pre><code class="language-bash">git config --list --show-origin</code></pre>
 <div class="out">file:/home/an/.gitconfig        user.name=Nguyen Van An
 file:/home/an/.gitconfig        user.email=an@example.com
 file:/home/an/.gitconfig        init.defaultbranch=main
@@ -1247,7 +1247,7 @@ cuong.nv@fpt.edu.vn</div>
 <h3>5. An SSH key for GitHub</h3>
 ${slide('git-00', 12, 'Khoá SSH: một cặp, hai nửa')}
 <p>You can talk to GitHub over HTTPS with a personal access token, but SSH is nicer: no token to paste, no expiry to chase. Generate a modern <code>ed25519</code> key:</p>
-<pre><code>ssh-keygen -t ed25519 -C <span class="tok-string">"an@example.com"</span>
+<pre><code class="language-bash">ssh-keygen -t ed25519 -C <span class="tok-string">"an@example.com"</span>
 <span class="tok-comment"># Press Enter to accept ~/.ssh/id_ed25519.</span>
 <span class="tok-comment"># A passphrase is optional but recommended — the agent will remember it.</span>
 
@@ -1258,7 +1258,7 @@ ssh-add ~/.ssh/id_ed25519
 <span class="tok-comment"># Copy the PUBLIC half (.pub — never the other file) to your clipboard.</span>
 cat ~/.ssh/id_ed25519.pub</code></pre>
 <p>Paste it into GitHub → Settings → <strong>SSH and GPG keys</strong> → New SSH key. Then prove it works:</p>
-<pre><code>ssh -T git@github.com</code></pre>
+<pre><code class="language-bash">ssh -T git@github.com</code></pre>
 <div class="out">Hi an-nguyen! You've successfully authenticated, but GitHub does not provide shell access.</div>
 <p>That message is a success, despite how it reads. GitHub deliberately refuses you a shell; the authentication is what we were testing.</p>
 ${slide('git-00', 13, 'Khoá SSH — output thật')}
@@ -1322,17 +1322,17 @@ ${slide('git-00', 10, 'Cài Git trên ba hệ điều hành')}
 <div class="callout ok"><strong>Đã đối chiếu với git-scm.com (tính đến 09/2026):</strong> Git mới nhất là <strong>2.55.0</strong>; Git for Windows là <strong>2.55.0(5)</strong>, phát hành 20/08/2026, có bộ cài riêng cho x64 và ARM64 cùng một bản portable (chạy không cần cài). Trên Windows bạn cũng cài được từ terminal bằng <code>winget install --id Git.Git -e --source winget</code>. Trên macOS không có Homebrew, <code>xcode-select --install</code> cho bạn bản của Apple (cũ hơn, nhưng đủ cho khoá này); bộ cài macOS riêng trên git-scm.com đã ngừng được bảo trì. Trên Ubuntu, <code>sudo add-apt-repository ppa:git-core/ppa</code> cho bạn bản mới nhất thay vì bản của bản phân phối.</div>
 <p>Nếu bạn cùng nhóm dùng Windows: trong trình cài Git for Windows, cứ giữ mặc định ở phần ký tự xuống dòng và terminal — chúng khớp với những gì khoá này giả định (Git Bash, <code>core.autocrlf true</code>). Màn hình duy nhất nên đổi là trình soạn thảo mặc định: trình cài gợi ý Vim, và chọn VS Code hoặc Nano ở đó giúp người mới khỏi bị kẹt trong Vim ngay lời nhắn commit đầu tiên.</p>
 <p>Kiểm chứng — từ 2.30 trở lên là đủ cho mọi thứ trong khoá này:</p>
-<pre><code>git --version</code></pre>
+<pre><code class="language-bash">git --version</code></pre>
 <div class="out">git version 2.43.0</div>
 
 <h3>2. Danh tính — ai đang tạo ra những commit này</h3>
 <p>Mọi commit đều ghi vĩnh viễn một cái tên và một email. Đặt một lần, ở mức toàn cục:</p>
-<pre><code>git config --global user.name <span class="tok-string">"Nguyen Van An"</span>
+<pre><code class="language-bash">git config --global user.name <span class="tok-string">"Nguyen Van An"</span>
 git config --global user.email <span class="tok-string">"an@example.com"</span></code></pre>
 <div class="callout warn">Dùng đúng email đã đăng ký trên tài khoản GitHub, nếu không GitHub sẽ không nối commit của bạn với hồ sơ và chúng không hiện trong biểu đồ đóng góp. Nếu muốn giữ kín địa chỉ thật, GitHub cấp cho bạn một địa chỉ <code>noreply</code> (Settings → Emails → "Keep my email addresses private") — dùng địa chỉ đó ở đây.</div>
 
 <h3>3. Những thiết lập thật sự ngăn được lỗi</h3>
-<pre><code><span class="tok-comment"># Tên nhánh đầu tiên trong một kho mới. GitHub dùng "main"; mặc định lịch sử</span>
+<pre><code class="language-bash"><span class="tok-comment"># Tên nhánh đầu tiên trong một kho mới. GitHub dùng "main"; mặc định lịch sử</span>
 <span class="tok-comment"># của Git là "master". Đặt cái này để khỏi lệch nhau ngay ngày đầu.</span>
 git config --global init.defaultBranch main
 
@@ -1367,7 +1367,7 @@ git config --global core.editor <span class="tok-string">"nano"</span>          
 
 <h3>4. Đọc lại cấu hình của bạn</h3>
 ${slide('git-00', 11, 'git config tối thiểu và ba mức cấu hình')}
-<pre><code>git config --list --show-origin</code></pre>
+<pre><code class="language-bash">git config --list --show-origin</code></pre>
 <div class="out">file:/home/an/.gitconfig        user.name=Nguyen Van An
 file:/home/an/.gitconfig        user.email=an@example.com
 file:/home/an/.gitconfig        init.defaultbranch=main
@@ -1388,7 +1388,7 @@ cuong.nv@fpt.edu.vn</div>
 <h3>5. Một khoá SSH cho GitHub</h3>
 ${slide('git-00', 12, 'Khoá SSH: một cặp, hai nửa')}
 <p>Bạn nói chuyện với GitHub qua HTTPS bằng personal access token cũng được, nhưng SSH dễ chịu hơn: không phải dán token, không phải chạy theo hạn dùng. Tạo một khoá <code>ed25519</code> đời mới:</p>
-<pre><code>ssh-keygen -t ed25519 -C <span class="tok-string">"an@example.com"</span>
+<pre><code class="language-bash">ssh-keygen -t ed25519 -C <span class="tok-string">"an@example.com"</span>
 <span class="tok-comment"># Nhấn Enter để nhận ~/.ssh/id_ed25519.</span>
 <span class="tok-comment"># Mật khẩu bảo vệ là tuỳ chọn nhưng nên có — agent sẽ nhớ hộ bạn.</span>
 
@@ -1399,7 +1399,7 @@ ssh-add ~/.ssh/id_ed25519
 <span class="tok-comment"># Chép nửa CÔNG KHAI (.pub — tuyệt đối không phải file kia) vào clipboard.</span>
 cat ~/.ssh/id_ed25519.pub</code></pre>
 <p>Dán nó vào GitHub → Settings → <strong>SSH and GPG keys</strong> → New SSH key. Rồi chứng minh nó chạy:</p>
-<pre><code>ssh -T git@github.com</code></pre>
+<pre><code class="language-bash">ssh -T git@github.com</code></pre>
 <div class="out">Hi an-nguyen! You've successfully authenticated, but GitHub does not provide shell access.</div>
 <p>Thông báo đó là THÀNH CÔNG, dù đọc lên nghe như thất bại. GitHub cố tình không cho bạn một shell; thứ ta đang kiểm là việc xác thực.</p>
 ${slide('git-00', 13, 'Khoá SSH — output thật')}
@@ -1464,7 +1464,7 @@ local	cuong.nv@fpt.edu.vn
 
 <h3>The scratch repository</h3>
 ${slide('git-00', 14, 'Sân tập thu-git: phá thoải mái, cứu được hết')}
-<pre><code>mkdir -p ~/git-lab &amp;&amp; cd ~/git-lab
+<pre><code class="language-bash">mkdir -p ~/git-lab &amp;&amp; cd ~/git-lab
 git init
 printf <span class="tok-string">'line one\\n'</span> &gt; a.txt
 git add a.txt
@@ -1479,7 +1479,7 @@ git commit -m <span class="tok-string">"first commit"</span></code></pre>
 
 <h3>A generator for interesting history</h3>
 <p>Several chapters need a repository with a real history to search. This loop builds one with ten commits in a couple of seconds:</p>
-<pre><code>cd ~/git-lab
+<pre><code class="language-bash">cd ~/git-lab
 <span class="tok-keyword">for</span> i <span class="tok-keyword">in</span> \$(seq 1 10); <span class="tok-keyword">do</span>
   <span class="tok-keyword">echo</span> <span class="tok-string">"change \$i"</span> &gt;&gt; a.txt
   git commit -am <span class="tok-string">"commit number \$i"</span> &gt;/dev/null
@@ -1507,11 +1507,11 @@ ${slide('git-00', 15, 'Ba câu hỏi trước khi bấm Enter + bộ ba chẩn �
 
 <h3>When you get lost — the diagnostic trio</h3>
 <p>Three commands answer "where am I and what is going on?". Run them whenever a lesson leaves you unsure:</p>
-<pre><code>git status                        <span class="tok-comment"># which branch, what is staged, what is modified</span>
+<pre><code class="language-bash">git status                        <span class="tok-comment"># which branch, what is staged, what is modified</span>
 git log --oneline --graph --all -20   <span class="tok-comment"># the shape of history, all branches</span>
 git reflog -10                    <span class="tok-comment"># where HEAD has been recently</span></code></pre>
 <p>Make the middle one an alias — you will type it hundreds of times:</p>
-<pre><code>git config --global alias.lg <span class="tok-string">"log --oneline --graph --all --decorate -20"</span>
+<pre><code class="language-bash">git config --global alias.lg <span class="tok-string">"log --oneline --graph --all --decorate -20"</span>
 git lg</code></pre>
 <div class="out">* 1a2b3c4 (HEAD -&gt; main) commit number 10
 * 5d6e7f8 commit number 9
@@ -1576,7 +1576,7 @@ ${slide('git-00', 16, 'Bảng tra nhanh Mục 0')}
 
 <h3>Kho mã nháp</h3>
 ${slide('git-00', 14, 'Sân tập thu-git: phá thoải mái, cứu được hết')}
-<pre><code>mkdir -p ~/git-lab &amp;&amp; cd ~/git-lab
+<pre><code class="language-bash">mkdir -p ~/git-lab &amp;&amp; cd ~/git-lab
 git init
 printf <span class="tok-string">'line one\\n'</span> &gt; a.txt
 git add a.txt
@@ -1591,7 +1591,7 @@ git commit -m <span class="tok-string">"first commit"</span></code></pre>
 
 <h3>Một bộ sinh lịch sử để nghịch</h3>
 <p>Vài chương cần một kho có lịch sử thật để tìm kiếm. Vòng lặp này dựng một cái với mười commit trong vài giây:</p>
-<pre><code>cd ~/git-lab
+<pre><code class="language-bash">cd ~/git-lab
 <span class="tok-keyword">for</span> i <span class="tok-keyword">in</span> \$(seq 1 10); <span class="tok-keyword">do</span>
   <span class="tok-keyword">echo</span> <span class="tok-string">"change \$i"</span> &gt;&gt; a.txt
   git commit -am <span class="tok-string">"commit number \$i"</span> &gt;/dev/null
@@ -1619,11 +1619,11 @@ ${slide('git-00', 15, 'Ba câu hỏi trước khi bấm Enter + bộ ba chẩn �
 
 <h3>Khi bạn lạc — bộ ba chẩn đoán</h3>
 <p>Ba lệnh trả lời câu "tôi đang ở đâu và chuyện gì đang xảy ra?". Chạy chúng bất cứ lúc nào một bài làm bạn phân vân:</p>
-<pre><code>git status                        <span class="tok-comment"># đang ở nhánh nào, gì đã staging, gì đã sửa</span>
+<pre><code class="language-bash">git status                        <span class="tok-comment"># đang ở nhánh nào, gì đã staging, gì đã sửa</span>
 git log --oneline --graph --all -20   <span class="tok-comment"># hình dạng lịch sử, mọi nhánh</span>
 git reflog -10                    <span class="tok-comment"># HEAD vừa đi qua những đâu</span></code></pre>
 <p>Hãy đặt lệnh giữa thành một alias — bạn sẽ gõ nó hàng trăm lần:</p>
-<pre><code>git config --global alias.lg <span class="tok-string">"log --oneline --graph --all --decorate -20"</span>
+<pre><code class="language-bash">git config --global alias.lg <span class="tok-string">"log --oneline --graph --all --decorate -20"</span>
 git lg</code></pre>
 <div class="out">* 1a2b3c4 (HEAD -&gt; main) commit number 10
 * 5d6e7f8 commit number 9

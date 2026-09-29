@@ -734,7 +734,7 @@ Congratulations, all simulated renewals succeeded:
 
 <h3>certbot or Caddy</h3>
 ${slide('dv-12', 16, 'certbot so với Caddy: Caddy tự xin, tự gia hạn, tự chuyển hướng')}
-<pre><code>{
+<pre><code class="language-bash">{
     acme_ca https://pebble:14000/dir
     acme_ca_root /etc/pebble-minica.pem
     email admin@vidu.test
@@ -1050,7 +1050,7 @@ Congratulations, all simulated renewals succeeded:
 
 <h3>certbot hay Caddy</h3>
 ${slide('dv-12', 16, 'certbot so với Caddy: Caddy tự xin, tự gia hạn, tự chuyển hướng')}
-<pre><code>{
+<pre><code class="language-bash">{
     acme_ca https://pebble:14000/dir
     acme_ca_root /etc/pebble-minica.pem
     email admin@vidu.test

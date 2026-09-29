@@ -133,7 +133,7 @@ export default {
 <li><strong>"EOF typically has the value −1"</strong> — I checked the actual constant: <code>printf("%d", EOF)</code> prints <code>-1</code>. Note carefully that it is <code>int</code>, not <code>char</code>: that is why <code>fgetc</code> returns <code>int</code> and why <code>char c = fgetc(f);</code> is a classic bug — a <code>char</code> cannot hold −1 distinctly from the byte <code>0xFF</code>.</li>
 <li><strong>Measured: is EOF a byte inside the file?</strong> — I wrote exactly two characters "AB" to a file: <code>ls -l</code> reports <strong>2</strong> bytes and <code>xxd</code> shows <code>41 42</code> and nothing else. So on Linux/macOS the end-of-file is <em>a condition</em> the OS reports when you read past the last byte, not a marker stored on disk. (Old MS-DOS really did store <code>0x1A</code>, which is where the "mark" wording comes from.)</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 int main(void) {
     printf("EOF = %d\\n", EOF);           /* EOF = -1 */
     printf("FOPEN_MAX = %d\\n", FOPEN_MAX);   /* 20 on this machine */
@@ -150,7 +150,7 @@ int main(void) {
 <li><strong>"EOF thường có giá trị −1"</strong> — tôi đã kiểm hằng số thật: <code>printf("%d", EOF)</code> in ra <code>-1</code>. Để ý kỹ nó là <code>int</code> chứ không phải <code>char</code>: đó là lý do <code>fgetc</code> trả về <code>int</code>, và là lý do <code>char c = fgetc(f);</code> là lỗi kinh điển — một <code>char</code> không thể phân biệt −1 với byte <code>0xFF</code>.</li>
 <li><strong>Đo thật: EOF có phải một byte nằm trong tệp không?</strong> — tôi ghi đúng hai ký tự "AB" vào tệp: <code>ls -l</code> báo <strong>2</strong> byte và <code>xxd</code> hiện <code>41 42</code>, hết. Vậy trên Linux/macOS, kết thúc tệp là <em>một tình trạng</em> mà hệ điều hành báo khi bạn đọc vượt quá byte cuối, chứ không phải một dấu ghi trên đĩa. (MS-DOS ngày xưa thì có ghi thật byte <code>0x1A</code>, chữ "mark" sinh ra từ đó.)</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 int main(void) {
     printf("EOF = %d\\n", EOF);           /* EOF = -1 */
     printf("FOPEN_MAX = %d\\n", FOPEN_MAX);   /* 20 tren may nay */
@@ -188,7 +188,7 @@ int main(void) {
 <li><strong>Files are not the only answer, just the first one</strong> — later courses replace them with databases (DBI202) and network services. But a database is, underneath, files plus an index, so this slot is a genuine prerequisite rather than a detour.</li>
 <li><strong>Redirection is a half-answer</strong> — from a terminal you can type <code>./prog &gt; out.txt</code> to capture output without changing the code. Useful, but the program still cannot <em>read back</em> what it wrote, cannot choose different files for different data, and cannot append to yesterday's results. That is why <code>fopen</code> exists.</li>
 </ul>
-<pre><code>/* A: mat het khi tat chuong trinh */
+<pre><code class="language-c">/* A: mat het khi tat chuong trinh */
 #include &lt;stdio.h&gt;
 int main(void) {
     int total = 0;
@@ -218,7 +218,7 @@ int main(void) {
 <li><strong>Tệp không phải câu trả lời duy nhất, chỉ là câu đầu tiên</strong> — các môn sau thay nó bằng cơ sở dữ liệu (DBI202) và dịch vụ mạng. Nhưng cơ sở dữ liệu, bóc ra bên dưới, chính là tệp cộng chỉ mục — nên slot này là môn tiên quyết thật chứ không phải đường vòng.</li>
 <li><strong>Chuyển hướng đầu ra chỉ là nửa câu trả lời</strong> — ở terminal bạn gõ được <code>./prog &gt; out.txt</code> để hứng kết quả mà không sửa mã. Tiện, nhưng chương trình vẫn không <em>đọc lại</em> được thứ nó vừa ghi, không chọn được tệp khác nhau cho dữ liệu khác nhau, và không nối thêm vào kết quả hôm qua được. Vì thế mới có <code>fopen</code>.</li>
 </ul>
-<pre><code>/* A: mat het khi tat chuong trinh */
+<pre><code class="language-c">/* A: mat het khi tat chuong trinh */
 #include &lt;stdio.h&gt;
 int main(void) {
     int total = 0;
@@ -306,7 +306,7 @@ int main(void) {
 <li><strong>Which one do your labs use?</strong> — text, almost always: <code>fprintf</code> / <code>fscanf</code> / <code>fgets</code>. Binary appears when you save whole structs at once with <code>fwrite</code> (slide 26's last row), which the Case Study in slides 31–42 uses.</li>
 <li><strong>Measured side by side</strong> — I wrote the value 12345 both ways to two files and looked at every byte. See the table and the proof below; that measurement is the answer to the exam question "which is smaller and why".</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 int main(void) {
     FILE *ft = fopen("num_text.txt", "w");
     fprintf(ft, "%d", 12345);        /* chuyen so -&gt; ky tu */
@@ -328,7 +328,7 @@ int main(void) {
 <li><strong>Bài lab của bạn dùng loại nào?</strong> — văn bản, gần như luôn luôn: <code>fprintf</code> / <code>fscanf</code> / <code>fgets</code>. Nhị phân xuất hiện khi bạn lưu nguyên cả struct một phát bằng <code>fwrite</code> (dòng cuối bảng slide 26), đúng thứ Case Study ở slide 31–42 dùng.</li>
 <li><strong>Đo thật, đặt cạnh nhau</strong> — tôi ghi giá trị 12345 theo cả hai cách ra hai tệp rồi soi từng byte. Xem bảng và bằng chứng bên dưới; số đo ấy chính là đáp án cho câu hỏi thi "cái nào nhỏ hơn và vì sao".</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 int main(void) {
     FILE *ft = fopen("num_text.txt", "w");
     fprintf(ft, "%d", 12345);        /* chuyen so -&gt; ky tu */
@@ -352,7 +352,7 @@ int main(void) {
 <li><strong>"Text files can also be used to store the source code"</strong> — your <code>.c</code> file is a text file. So is a <code>.html</code>, a <code>.json</code>, a <code>.csv</code>. It is worth saying out loud, because it kills the idea that "text file" means "<code>.txt</code>".</li>
 <li><strong>What C does extra in text mode</strong> — on Windows the library translates <code>'\\n'</code> into the two bytes <code>\\r\\n</code> when writing and back when reading. On Linux/macOS it does nothing. I measured it below: on this Mac, <code>"w"</code> and <code>"wb"</code> produce byte-identical files.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 int main(void) {
     FILE *a = fopen("nl_text.txt", "w");   /* che do van ban */
     fprintf(a, "A\\nB\\n");
@@ -372,7 +372,7 @@ int main(void) {
 <li><strong>"Tệp văn bản còn dùng để lưu mã nguồn"</strong> — tệp <code>.c</code> của bạn là tệp văn bản. <code>.html</code>, <code>.json</code>, <code>.csv</code> cũng vậy. Đáng nói to lên, vì nó giết chết ý nghĩ "tệp văn bản nghĩa là <code>.txt</code>".</li>
 <li><strong>C làm thêm gì ở chế độ văn bản</strong> — trên Windows, thư viện đổi <code>'\\n'</code> thành hai byte <code>\\r\\n</code> khi ghi và đổi ngược lại khi đọc. Trên Linux/macOS nó không làm gì. Tôi đã đo bên dưới: trên chiếc Mac này, <code>"w"</code> và <code>"wb"</code> cho hai tệp giống nhau từng byte.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 int main(void) {
     FILE *a = fopen("nl_text.txt", "w");   /* che do van ban */
     fprintf(a, "A\\nB\\n");
@@ -440,7 +440,7 @@ int main(void) {
 <li><strong>Why text is more portable</strong> — the character <code>'2'</code> is 50 on every machine ever built. The two bytes of a binary 260 depend on how wide the machine's integers are and in which order it stores them, so a binary file can be misread on a different computer.</li>
 <li><strong>⚠️ The slide's byte order does not match a real PC</strong> — the diagram writes 260 as <code>00000001 00000100</code>, i.e. high byte first (big-endian, 0x01 0x04). I measured the real thing.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 int main(void) {
     short s = 260;                      /* 260 = 0x0104 */
     FILE *f = fopen("num260.bin", "wb");
@@ -458,7 +458,7 @@ int main(void) {
 <li><strong>Vì sao văn bản di động hơn</strong> — ký tự <code>'2'</code> là 50 trên mọi cỗ máy từng được chế tạo. Còn hai byte của số 260 kiểu nhị phân phụ thuộc vào máy dùng số nguyên rộng bao nhiêu và xếp byte theo thứ tự nào, nên tệp nhị phân có thể bị đọc sai ở máy khác.</li>
 <li><strong>⚠️ Thứ tự byte trên slide KHÔNG khớp máy PC thật</strong> — sơ đồ viết 260 là <code>00000001 00000100</code>, tức byte cao trước (big-endian, 0x01 0x04). Tôi đã đo thứ thật.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 int main(void) {
     short s = 260;                      /* 260 = 0x0104 */
     FILE *f = fopen("num260.bin", "wb");
@@ -498,7 +498,7 @@ int main(void) {
 <li><strong>Closing is not optional</strong> — and it is the operation students forget most. The data you "wrote" is still in a buffer in RAM until <code>fclose</code> (or <code>fflush</code>) pushes it out. I measured exactly how much you lose below.</li>
 <li><strong>Why there is a limit on open files</strong> — every open file costs the OS a table entry. On this machine <code>FOPEN_MAX</code> is 20, which is the minimum the library guarantees; leak handles in a loop and <code>fopen</code> eventually returns <code>NULL</code> for a file that exists perfectly well.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 int main(void) {
     FILE *f = fopen("buffer_demo.txt", "w");
     fprintf(f, "1000 ky tu quan trong cua toi\\n");   /* 30 byte */
@@ -515,7 +515,7 @@ int main(void) {
 <li><strong>Đóng tệp không phải tuỳ chọn</strong> — và đây là thao tác sinh viên quên nhiều nhất. Dữ liệu bạn "đã ghi" vẫn còn nằm trong bộ đệm ở RAM cho tới khi <code>fclose</code> (hoặc <code>fflush</code>) đẩy nó ra. Tôi đã đo chính xác mất bao nhiêu, ngay bên dưới.</li>
 <li><strong>Vì sao có giới hạn số tệp mở</strong> — mỗi tệp đang mở tốn của hệ điều hành một ô trong bảng. Trên máy này <code>FOPEN_MAX</code> là 20, đó là mức tối thiểu thư viện bảo đảm; rò rỉ tay nắm trong vòng lặp thì rồi <code>fopen</code> sẽ trả <code>NULL</code> cho một tệp hoàn toàn tồn tại.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 int main(void) {
     FILE *f = fopen("buffer_demo.txt", "w");
     fprintf(f, "1000 ky tu quan trong cua toi\\n");   /* 30 byte */
@@ -534,7 +534,7 @@ int main(void) {
 <li><strong>Measured — what is actually behind the pointer</strong> — on this machine <code>sizeof(FILE)</code> is <strong>152 bytes</strong> and <code>sizeof(FILE *)</code> is <strong>8 bytes</strong>. Passing the pointer to a function copies 8 bytes; passing the structure would copy 152 and break everything.</li>
 <li><strong>You already have three file pointers</strong> — <code>stdin</code>, <code>stdout</code>, <code>stderr</code> are all <code>FILE *</code>, opened for you before <code>main</code> starts. That is why <code>fprintf(stdout, "hi")</code> compiles and does the same as <code>printf("hi")</code>.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 int main(void) {
     printf("sizeof(FILE)  = %zu\\n", sizeof(FILE));
     printf("sizeof(FILE*) = %zu\\n", sizeof(FILE *));
@@ -554,7 +554,7 @@ int main(void) {
 <li><strong>Đo thật — phía sau con trỏ là cái gì</strong> — trên máy này <code>sizeof(FILE)</code> là <strong>152 byte</strong> còn <code>sizeof(FILE *)</code> là <strong>8 byte</strong>. Truyền con trỏ vào hàm là chép 8 byte; truyền cả cấu trúc sẽ chép 152 byte và hỏng hết mọi thứ.</li>
 <li><strong>Bạn đã có sẵn ba con trỏ tệp</strong> — <code>stdin</code>, <code>stdout</code>, <code>stderr</code> đều là <code>FILE *</code>, được mở giúp bạn trước cả khi <code>main</code> chạy. Vì thế <code>fprintf(stdout, "hi")</code> biên dịch được và làm đúng việc của <code>printf("hi")</code>.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 int main(void) {
     printf("sizeof(FILE)  = %zu\\n", sizeof(FILE));
     printf("sizeof(FILE*) = %zu\\n", sizeof(FILE *));
@@ -577,7 +577,7 @@ int main(void) {
 <li><strong>Why the slide initialises to <code>NULL</code></strong> — <code>FILE *fp = NULL;</code> makes the uninitialised state <em>detectable</em>: a wild pointer crashes unpredictably, a <code>NULL</code> one fails the <code>if (fp == NULL)</code> test you were going to write anyway. Good habit, and free.</li>
 <li><strong>⚠️ The code image on this slide is missing its semicolon</strong> — it reads <code>FILE *fp = NULL</code> with no <code>;</code>. Copy it verbatim into a source file and it will not compile.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 int main(void) {
     FILE *fp = NULL;      /* DUNG: co dau cham phay */
     if (fp == NULL) printf("chua mo tep nao ca\\n");
@@ -594,7 +594,7 @@ int main(void) {
 <li><strong>Vì sao slide khởi tạo bằng <code>NULL</code></strong> — <code>FILE *fp = NULL;</code> làm cho trạng thái "chưa khởi tạo" trở nên <em>phát hiện được</em>: con trỏ hoang thì sập một cách khó đoán, còn con trỏ <code>NULL</code> thì rớt đúng vào phép kiểm <code>if (fp == NULL)</code> mà đằng nào bạn cũng phải viết. Thói quen tốt, lại miễn phí.</li>
 <li><strong>⚠️ Ảnh mã trên slide này THIẾU dấu chấm phẩy</strong> — nó ghi <code>FILE *fp = NULL</code> không có <code>;</code>. Chép y nguyên vào tệp mã nguồn là không biên dịch được.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 int main(void) {
     FILE *fp = NULL;      /* DUNG: co dau cham phay */
     if (fp == NULL) printf("chua mo tep nao ca\\n");
@@ -613,7 +613,7 @@ int main(void) {
 <li><strong>Measured — why it failed</strong> — the return value only says "it failed". <code>errno</code> plus <code>perror</code>/<code>strerror</code> say why, and that turns 20 minutes of guessing into one line of output.</li>
 <li><strong>Measured — the working-directory trap</strong> — I compiled one program that does <code>fopen("data.txt", "r")</code> and put it in a folder next to <code>data.txt</code>. Run from <em>inside</em> that folder it prints OK; run from <em>outside</em> the folder it prints NULL, although neither the program nor the data moved.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
 #include &lt;errno.h&gt;
 int main(void) {
@@ -636,7 +636,7 @@ int main(void) {
 <li><strong>Đo thật — thất bại vì cái gì</strong> — giá trị trả về chỉ nói "thất bại". Biến <code>errno</code> cộng <code>perror</code>/<code>strerror</code> mới nói vì sao, và nó biến 20 phút đoán mò thành một dòng kết quả.</li>
 <li><strong>Đo thật — cái bẫy thư mục làm việc</strong> — tôi biên dịch một chương trình chỉ làm <code>fopen("data.txt", "r")</code> rồi đặt nó vào một thư mục cạnh <code>data.txt</code>. Chạy <em>từ trong</em> thư mục ấy thì in OK; chạy <em>từ ngoài</em> thì in NULL, dù cả chương trình lẫn dữ liệu đều không hề di chuyển.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
 #include &lt;errno.h&gt;
 int main(void) {
@@ -660,7 +660,7 @@ int main(void) {
 <li><strong><code>"r"</code> is the only mode here that refuses to create</strong> — <code>fopen("new.txt", "r")</code> on a non-existent file returns <code>NULL</code> (errno 2). <code>"w"</code>, <code>"a"</code>, <code>"w+"</code> all create it happily. So "the file was not found" is reported only in the <code>r</code> family.</li>
 <li><strong><code>r+</code> vs <code>w+</code> — both read <em>and</em> write, and that is where the exam question lives</strong> — <code>r+</code> requires the file to exist and keeps everything; <code>w+</code> creates or truncates. Measured on a file containing "HELLO": <code>r+</code> writing one byte at position 0 leaves <strong>"JELLO" (5 bytes)</strong>; <code>w+</code> leaves only what you wrote.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 int main(void) {
     /* tep p.txt dang chua "HELLO" (5 byte) */
     FILE *f = fopen("p.txt", "r+");
@@ -679,7 +679,7 @@ int main(void) {
 <li><strong><code>"r"</code> là chế độ duy nhất ở đây từ chối tạo tệp</strong> — <code>fopen("new.txt", "r")</code> trên tệp không tồn tại trả <code>NULL</code> (errno 2). Còn <code>"w"</code>, <code>"a"</code>, <code>"w+"</code> đều vui vẻ tạo mới. Nên lỗi "không tìm thấy tệp" chỉ được báo ở họ <code>r</code>.</li>
 <li><strong><code>r+</code> so với <code>w+</code> — cả hai vừa đọc vừa ghi, và đó chính là chỗ đề thi nằm</strong> — <code>r+</code> đòi tệp phải tồn tại và giữ nguyên mọi thứ; <code>w+</code> tạo mới hoặc cắt sạch. Đo trên tệp chứa "HELLO": <code>r+</code> ghi một byte tại vị trí 0 để lại <strong>"JELLO" (5 byte)</strong>; <code>w+</code> chỉ để lại đúng thứ bạn vừa ghi.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 int main(void) {
     /* tep p.txt dang chua "HELLO" (5 byte) */
     FILE *f = fopen("p.txt", "r+");
@@ -753,7 +753,7 @@ int main(void) {
 <li><strong>What the program is missing</strong> — a <code>fclose(fptr)</code> on the success path. It happens not to matter here because nothing is read and <code>return 0</code> from <code>main</code> cleans up, but copying this skeleton into a program that reads a file and then forgetting the close is exactly the bug from slide 15.</li>
 <li><strong>Two lines that would double its usefulness</strong> — <code>perror("fopen")</code> instead of the plain <code>printf</code> prints the reason (<em>No such file or directory</em>), and <code>%s</code> with the filename tells you <em>which</em> path it tried. Debugging turns from guessing into reading.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 int main()
 {
@@ -780,7 +780,7 @@ int main()
 <li><strong>Chương trình thiếu gì</strong> — thiếu <code>fclose(fptr)</code> ở nhánh thành công. Ở đây tình cờ không sao vì chẳng đọc gì và <code>return 0</code> từ <code>main</code> dọn dẹp giúp, nhưng chép bộ xương này vào một chương trình có đọc tệp rồi quên đóng thì đúng là con lỗi ở slide 15.</li>
 <li><strong>Hai dòng làm nó hữu ích gấp đôi</strong> — dùng <code>perror("fopen")</code> thay cho <code>printf</code> trơn sẽ in ra lý do (<em>No such file or directory</em>), và in kèm <code>%s</code> tên tệp cho biết nó đã thử <em>đường dẫn nào</em>. Gỡ lỗi từ chỗ đoán mò thành chỗ đọc là ra.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 int main()
 {

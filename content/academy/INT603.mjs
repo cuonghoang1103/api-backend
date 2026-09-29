@@ -572,7 +572,7 @@ User(GUEST) 1—* Booking : một khách tạo nhiều lượt đặt</div>
 
 <h3>The exclusion constraint — hand-added in the migration SQL</h3>
 <p>After <code>npx prisma migrate dev</code> creates the migration, open its <code>migration.sql</code> and append these statements (Prisma keeps them on the next <code>migrate deploy</code>):</p>
-<pre><span class="tok-comment">-- btree_gist lets a GiST index mix a scalar (=) with a range (&amp;&amp;)</span>
+<pre><code class="language-sql"><span class="tok-comment">-- btree_gist lets a GiST index mix a scalar (=) with a range (&amp;&amp;)</span>
 <span class="tok-keyword">CREATE EXTENSION IF NOT EXISTS</span> btree_gist;
 
 <span class="tok-comment">-- ★ THE CROWN JEWEL: no two ACTIVE bookings of one room may overlap</span>
@@ -583,7 +583,7 @@ User(GUEST) 1—* Booking : một khách tạo nhiều lượt đặt</div>
   ) <span class="tok-keyword">WHERE</span> (status <span class="tok-keyword">IN</span> (<span class="tok-string">'PENDING'</span>, <span class="tok-string">'CONFIRMED'</span>));
 
 <span class="tok-comment">-- also forbid a zero/negative stay at the DB level</span>
-<span class="tok-keyword">ALTER TABLE</span> <span class="tok-string">"Booking"</span> <span class="tok-keyword">ADD CONSTRAINT</span> valid_range <span class="tok-keyword">CHECK</span> (<span class="tok-string">"checkOut"</span> &gt; <span class="tok-string">"checkIn"</span>);</pre>
+<span class="tok-keyword">ALTER TABLE</span> <span class="tok-string">"Booking"</span> <span class="tok-keyword">ADD CONSTRAINT</span> valid_range <span class="tok-keyword">CHECK</span> (<span class="tok-string">"checkOut"</span> &gt; <span class="tok-string">"checkIn"</span>);</code></pre>
 <p>Read the <code>EXCLUDE</code> as: "reject any new row where <em>another</em> row has the <b>same roomId</b> AND a <b>daterange that overlaps (&amp;&amp;)</b> — but only among PENDING/CONFIRMED rows." The <code>WHERE</code> makes it a <em>partial</em> constraint so a CANCELLED range can be re-booked.</p>
 
 <h3>Worked example — why the EXCLUDE is the real guard</h3>
@@ -659,7 +659,7 @@ User(GUEST) 1—* Booking : một khách tạo nhiều lượt đặt</div>
 
 <h3>Ràng buộc exclusion — thêm tay trong SQL migration</h3>
 <p>Sau khi <code>npx prisma migrate dev</code> tạo migration, mở <code>migration.sql</code> của nó và thêm các câu lệnh này (Prisma sẽ giữ chúng ở lần <code>migrate deploy</code> kế):</p>
-<pre><span class="tok-comment">-- btree_gist cho phép một index GiST trộn scalar (=) với range (&amp;&amp;)</span>
+<pre><code class="language-sql"><span class="tok-comment">-- btree_gist cho phép một index GiST trộn scalar (=) với range (&amp;&amp;)</span>
 <span class="tok-keyword">CREATE EXTENSION IF NOT EXISTS</span> btree_gist;
 
 <span class="tok-comment">-- ★ VIÊN NGỌC: không hai lượt đặt ĐANG HOẠT ĐỘNG của một phòng được chồng lấn</span>
@@ -670,7 +670,7 @@ User(GUEST) 1—* Booking : một khách tạo nhiều lượt đặt</div>
   ) <span class="tok-keyword">WHERE</span> (status <span class="tok-keyword">IN</span> (<span class="tok-string">'PENDING'</span>, <span class="tok-string">'CONFIRMED'</span>));
 
 <span class="tok-comment">-- đồng thời cấm một kỳ lưu trú 0/âm ngày ở tầng DB</span>
-<span class="tok-keyword">ALTER TABLE</span> <span class="tok-string">"Booking"</span> <span class="tok-keyword">ADD CONSTRAINT</span> valid_range <span class="tok-keyword">CHECK</span> (<span class="tok-string">"checkOut"</span> &gt; <span class="tok-string">"checkIn"</span>);</pre>
+<span class="tok-keyword">ALTER TABLE</span> <span class="tok-string">"Booking"</span> <span class="tok-keyword">ADD CONSTRAINT</span> valid_range <span class="tok-keyword">CHECK</span> (<span class="tok-string">"checkOut"</span> &gt; <span class="tok-string">"checkIn"</span>);</code></pre>
 <p>Đọc <code>EXCLUDE</code> là: "từ chối mọi dòng mới mà một dòng <em>khác</em> có <b>cùng roomId</b> VÀ một <b>daterange chồng lấn (&amp;&amp;)</b> — nhưng chỉ giữa các dòng PENDING/CONFIRMED." Mệnh đề <code>WHERE</code> khiến nó là ràng buộc <em>một phần</em> nên một khoảng CANCELLED có thể được đặt lại.</p>
 
 <h3>Ví dụ có lời giải — vì sao EXCLUDE mới là người gác thật</h3>
@@ -783,12 +783,12 @@ User(GUEST) 1—* Booking : một khách tạo nhiều lượt đặt</div>
 <p class="lead">Scaffold the API with a handful of commands, then impose a shape on it. A flat "everything in one file" Express app works for a demo and collapses on the second feature. Four thin layers keep each concern in its own place.</p>
 
 <h3>Bootstrap the project</h3>
-<pre><span class="tok-comment"># create the project &amp; install the stack</span>
+<pre><code class="language-bash"><span class="tok-comment"># create the project &amp; install the stack</span>
 mkdir homestay-api &amp;&amp; cd homestay-api
 npm init -y
 npm install express @prisma/client jsonwebtoken bcrypt zod
 npm install -D prisma nodemon
-npx prisma init            <span class="tok-comment"># creates prisma/schema.prisma + .env with DATABASE_URL</span></pre>
+npx prisma init            <span class="tok-comment"># creates prisma/schema.prisma + .env with DATABASE_URL</span></code></pre>
 <p>Set the connection string in <code>.env</code> (never commit it):</p>
 <pre><span class="tok-comment"># .env</span>
 DATABASE_URL=<span class="tok-string">"postgresql://postgres:homestay@localhost:5432/homestay?schema=public"</span>
@@ -813,7 +813,7 @@ JWT_SECRET=<span class="tok-string">"change-me-in-production-use-32-bytes-min"</
 </div>
 
 <h3>server.js — the composition root</h3>
-<pre><span class="tok-keyword">import</span> express <span class="tok-keyword">from</span> <span class="tok-string">'express'</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> express <span class="tok-keyword">from</span> <span class="tok-string">'express'</span>;
 <span class="tok-keyword">import</span> authRoutes <span class="tok-keyword">from</span> <span class="tok-string">'./routes/auth.routes.js'</span>;
 <span class="tok-keyword">import</span> roomRoutes <span class="tok-keyword">from</span> <span class="tok-string">'./routes/room.routes.js'</span>;
 <span class="tok-keyword">import</span> bookingRoutes <span class="tok-keyword">from</span> <span class="tok-string">'./routes/booking.routes.js'</span>;
@@ -826,7 +826,7 @@ app.use(<span class="tok-string">'/api/rooms'</span>, roomRoutes);
 app.use(<span class="tok-string">'/api/bookings'</span>, bookingRoutes);
 app.use(errorHandler);                        <span class="tok-comment">// LAST: central error shape</span>
 
-app.listen(<span class="tok-number">3000</span>, () =&gt; console.log(<span class="tok-string">'API on :3000'</span>));</pre>
+app.listen(<span class="tok-number">3000</span>, () =&gt; console.log(<span class="tok-string">'API on :3000'</span>));</code></pre>
 
 <div class="callout ok">Why layer at all? Because you can then <strong>test a service without HTTP</strong> and <strong>swap Express for Fastify without touching business rules</strong>. Each layer depends only on the one below it.</div>
 
@@ -844,12 +844,12 @@ app.listen(<span class="tok-number">3000</span>, () =&gt; console.log(<span clas
 <p class="lead">Tạo khung API bằng vài lệnh, rồi áp một hình dạng lên nó. Một app Express "nhét hết vào một file" chạy được cho demo và sụp ở tính năng thứ hai. Bốn lớp mỏng giữ mỗi mối bận tâm ở đúng chỗ.</p>
 
 <h3>Dựng dự án</h3>
-<pre><span class="tok-comment"># tạo dự án &amp; cài stack</span>
+<pre><code class="language-bash"><span class="tok-comment"># tạo dự án &amp; cài stack</span>
 mkdir homestay-api &amp;&amp; cd homestay-api
 npm init -y
 npm install express @prisma/client jsonwebtoken bcrypt zod
 npm install -D prisma nodemon
-npx prisma init            <span class="tok-comment"># tạo prisma/schema.prisma + .env với DATABASE_URL</span></pre>
+npx prisma init            <span class="tok-comment"># tạo prisma/schema.prisma + .env với DATABASE_URL</span></code></pre>
 <p>Đặt chuỗi kết nối trong <code>.env</code> (đừng bao giờ commit):</p>
 <pre><span class="tok-comment"># .env</span>
 DATABASE_URL=<span class="tok-string">"postgresql://postgres:homestay@localhost:5432/homestay?schema=public"</span>
@@ -874,7 +874,7 @@ JWT_SECRET=<span class="tok-string">"change-me-in-production-use-32-bytes-min"</
 </div>
 
 <h3>server.js — gốc lắp ráp</h3>
-<pre><span class="tok-keyword">import</span> express <span class="tok-keyword">from</span> <span class="tok-string">'express'</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> express <span class="tok-keyword">from</span> <span class="tok-string">'express'</span>;
 <span class="tok-keyword">import</span> authRoutes <span class="tok-keyword">from</span> <span class="tok-string">'./routes/auth.routes.js'</span>;
 <span class="tok-keyword">import</span> roomRoutes <span class="tok-keyword">from</span> <span class="tok-string">'./routes/room.routes.js'</span>;
 <span class="tok-keyword">import</span> bookingRoutes <span class="tok-keyword">from</span> <span class="tok-string">'./routes/booking.routes.js'</span>;
@@ -887,7 +887,7 @@ app.use(<span class="tok-string">'/api/rooms'</span>, roomRoutes);
 app.use(<span class="tok-string">'/api/bookings'</span>, bookingRoutes);
 app.use(errorHandler);                        <span class="tok-comment">// CUỐI CÙNG: hình dạng lỗi tập trung</span>
 
-app.listen(<span class="tok-number">3000</span>, () =&gt; console.log(<span class="tok-string">'API on :3000'</span>));</pre>
+app.listen(<span class="tok-number">3000</span>, () =&gt; console.log(<span class="tok-string">'API on :3000'</span>));</code></pre>
 
 <div class="callout ok">Vì sao phải phân lớp? Vì khi đó bạn có thể <strong>test một service không cần HTTP</strong> và <strong>thay Express bằng Fastify mà không đụng quy tắc nghiệp vụ</strong>. Mỗi lớp chỉ phụ thuộc vào lớp ngay dưới.</div>
 
@@ -913,12 +913,12 @@ app.listen(<span class="tok-number">3000</span>, () =&gt; console.log(<span clas
 <p class="lead">Prisma turns your schema (Section 1) into two things: real database tables (via a <em>migration</em>) and a <em>type-safe client</em> you call from services. You write the schema once; Prisma generates the SQL and the TypeScript types.</p>
 
 <h3>Migrate &amp; generate</h3>
-<pre><span class="tok-comment"># create the SQL migration from the schema, apply it, and generate the client</span>
+<pre><code class="language-bash"><span class="tok-comment"># create the SQL migration from the schema, apply it, and generate the client</span>
 npx prisma migrate dev --name init
 <span class="tok-comment"># after editing migration.sql to add the EXCLUDE (Section 1.2), re-apply:</span>
 npx prisma migrate dev
 <span class="tok-comment"># any time you only changed generator output:</span>
-npx prisma generate</pre>
+npx prisma generate</code></pre>
 <div class="out"><b>Output:</b>
   Applying migration &#96;20260801_init&#96;
   The following migration(s) have been applied:
@@ -926,12 +926,12 @@ npx prisma generate</pre>
   ✔ Generated Prisma Client to ./node_modules/@prisma/client</div>
 
 <h3>The shared client — one instance</h3>
-<pre><span class="tok-comment">// src/prisma.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// src/prisma.js</span>
 <span class="tok-keyword">import</span> { PrismaClient } <span class="tok-keyword">from</span> <span class="tok-string">'@prisma/client'</span>;
-<span class="tok-keyword">export const</span> prisma = <span class="tok-keyword">new</span> PrismaClient();</pre>
+<span class="tok-keyword">export const</span> prisma = <span class="tok-keyword">new</span> PrismaClient();</code></pre>
 
 <h3>Reads &amp; writes are typed method calls</h3>
-<pre><span class="tok-keyword">import</span> { prisma } <span class="tok-keyword">from</span> <span class="tok-string">'../prisma.js'</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> { prisma } <span class="tok-keyword">from</span> <span class="tok-string">'../prisma.js'</span>;
 
 <span class="tok-comment">// create a room (host feature)</span>
 <span class="tok-keyword">await</span> prisma.room.create({
@@ -944,7 +944,7 @@ npx prisma generate</pre>
   where:   { guestId: <span class="tok-number">7</span> },
   include: { room: <span class="tok-keyword">true</span> },
   orderBy: { createdAt: <span class="tok-string">'desc'</span> },
-});</pre>
+});</code></pre>
 <p><code>include: { room: true }</code> is a JOIN — Prisma fetches the related Room in the same query. The result is fully typed: your editor autocompletes <code>booking.room.title</code>.</p>
 
 <h3>Worked example — migration then a first row</h3>
@@ -975,12 +975,12 @@ npx prisma generate</pre>
 <p class="lead">Prisma biến schema của bạn (Mục 1) thành hai thứ: bảng CSDL thật (qua một <em>migration</em>) và một <em>client an toàn kiểu</em> bạn gọi từ service. Bạn viết schema một lần; Prisma sinh SQL và các type TypeScript.</p>
 
 <h3>Migrate &amp; generate</h3>
-<pre><span class="tok-comment"># tạo migration SQL từ schema, áp nó, và sinh client</span>
+<pre><code class="language-bash"><span class="tok-comment"># tạo migration SQL từ schema, áp nó, và sinh client</span>
 npx prisma migrate dev --name init
 <span class="tok-comment"># sau khi sửa migration.sql thêm EXCLUDE (Mục 1.2), áp lại:</span>
 npx prisma migrate dev
 <span class="tok-comment"># bất kỳ lúc nào chỉ đổi output của generator:</span>
-npx prisma generate</pre>
+npx prisma generate</code></pre>
 <div class="out"><b>Kết quả:</b>
   Applying migration &#96;20260801_init&#96;
   The following migration(s) have been applied:
@@ -988,12 +988,12 @@ npx prisma generate</pre>
   ✔ Generated Prisma Client to ./node_modules/@prisma/client</div>
 
 <h3>Client dùng chung — một instance</h3>
-<pre><span class="tok-comment">// src/prisma.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// src/prisma.js</span>
 <span class="tok-keyword">import</span> { PrismaClient } <span class="tok-keyword">from</span> <span class="tok-string">'@prisma/client'</span>;
-<span class="tok-keyword">export const</span> prisma = <span class="tok-keyword">new</span> PrismaClient();</pre>
+<span class="tok-keyword">export const</span> prisma = <span class="tok-keyword">new</span> PrismaClient();</code></pre>
 
 <h3>Đọc &amp; ghi là các lời gọi method có kiểu</h3>
-<pre><span class="tok-keyword">import</span> { prisma } <span class="tok-keyword">from</span> <span class="tok-string">'../prisma.js'</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> { prisma } <span class="tok-keyword">from</span> <span class="tok-string">'../prisma.js'</span>;
 
 <span class="tok-comment">// tạo một phòng (tính năng chủ nhà)</span>
 <span class="tok-keyword">await</span> prisma.room.create({
@@ -1006,7 +1006,7 @@ npx prisma generate</pre>
   where:   { guestId: <span class="tok-number">7</span> },
   include: { room: <span class="tok-keyword">true</span> },
   orderBy: { createdAt: <span class="tok-string">'desc'</span> },
-});</pre>
+});</code></pre>
 <p><code>include: { room: true }</code> là một JOIN — Prisma nạp Room liên quan trong cùng truy vấn. Kết quả có kiểu đầy đủ: editor gợi ý <code>booking.room.title</code>.</p>
 
 <h3>Ví dụ có lời giải — migration rồi dòng đầu tiên</h3>
@@ -1045,7 +1045,7 @@ npx prisma generate</pre>
 <p class="lead">Let's ship the first vertical slice end-to-end: <code>GET /api/rooms?location=Da Nang&amp;checkIn=2026-08-01&amp;checkOut=2026-08-04</code> returns only rooms with <em>no active booking overlapping those dates</em>. It reuses the exact overlap test from Section 1 — this time as a Prisma relation filter.</p>
 
 <h3>Step 1 — the service (business intent, no HTTP)</h3>
-<pre><span class="tok-comment">// src/services/room.service.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// src/services/room.service.js</span>
 <span class="tok-keyword">import</span> { prisma } <span class="tok-keyword">from</span> <span class="tok-string">'../prisma.js'</span>;
 
 <span class="tok-keyword">export async function</span> <span class="tok-function">searchRooms</span>({ location, checkIn, checkOut }) {
@@ -1063,10 +1063,10 @@ npx prisma generate</pre>
     },
     orderBy: { pricePerNight: <span class="tok-string">'asc'</span> },
   });
-}</pre>
+}</code></pre>
 
 <h3>Step 2 — the controller (HTTP only)</h3>
-<pre><span class="tok-comment">// src/controllers/room.controller.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// src/controllers/room.controller.js</span>
 <span class="tok-keyword">import</span> { searchRooms } <span class="tok-keyword">from</span> <span class="tok-string">'../services/room.service.js'</span>;
 <span class="tok-keyword">import</span> { searchSchema } <span class="tok-keyword">from</span> <span class="tok-string">'../schemas/room.schema.js'</span>;
 
@@ -1075,16 +1075,16 @@ npx prisma generate</pre>
     <span class="tok-keyword">const</span> q = searchSchema.parse(req.query);   <span class="tok-comment">// coerce &amp; validate the query string</span>
     res.json(<span class="tok-keyword">await</span> searchRooms(q));
   } <span class="tok-keyword">catch</span> (e) { next(e); }             <span class="tok-comment">// hand any error to the central handler</span>
-}</pre>
+}</code></pre>
 
 <h3>Step 3 — the route</h3>
-<pre><span class="tok-comment">// src/routes/room.routes.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// src/routes/room.routes.js</span>
 <span class="tok-keyword">import</span> { Router } <span class="tok-keyword">from</span> <span class="tok-string">'express'</span>;
 <span class="tok-keyword">import</span> { list } <span class="tok-keyword">from</span> <span class="tok-string">'../controllers/room.controller.js'</span>;
 
 <span class="tok-keyword">const</span> r = Router();
 r.get(<span class="tok-string">'/'</span>, list);        <span class="tok-comment">// GET /api/rooms — public search</span>
-<span class="tok-keyword">export default</span> r;</pre>
+<span class="tok-keyword">export default</span> r;</code></pre>
 
 <h3>Step 4 — test it (real output)</h3>
 <div class="out"><b>Request:</b>  curl <span class="tok-string">"http://localhost:3000/api/rooms?location=Da%20Nang&amp;checkIn=2026-08-01&amp;checkOut=2026-08-04"</span>
@@ -1112,7 +1112,7 @@ r.get(<span class="tok-string">'/'</span>, list);        <span class="tok-commen
 <p class="lead">Hãy ship lát cắt dọc đầu tiên từ đầu đến cuối: <code>GET /api/rooms?location=Da Nang&amp;checkIn=2026-08-01&amp;checkOut=2026-08-04</code> chỉ trả các phòng <em>không có lượt đặt hoạt động nào chồng lấn các ngày đó</em>. Nó tái dùng đúng kiểm chồng lấn ở Mục 1 — lần này là một relation filter của Prisma.</p>
 
 <h3>Bước 1 — service (ý định nghiệp vụ, không HTTP)</h3>
-<pre><span class="tok-comment">// src/services/room.service.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// src/services/room.service.js</span>
 <span class="tok-keyword">import</span> { prisma } <span class="tok-keyword">from</span> <span class="tok-string">'../prisma.js'</span>;
 
 <span class="tok-keyword">export async function</span> <span class="tok-function">searchRooms</span>({ location, checkIn, checkOut }) {
@@ -1130,10 +1130,10 @@ r.get(<span class="tok-string">'/'</span>, list);        <span class="tok-commen
     },
     orderBy: { pricePerNight: <span class="tok-string">'asc'</span> },
   });
-}</pre>
+}</code></pre>
 
 <h3>Bước 2 — controller (chỉ HTTP)</h3>
-<pre><span class="tok-comment">// src/controllers/room.controller.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// src/controllers/room.controller.js</span>
 <span class="tok-keyword">import</span> { searchRooms } <span class="tok-keyword">from</span> <span class="tok-string">'../services/room.service.js'</span>;
 <span class="tok-keyword">import</span> { searchSchema } <span class="tok-keyword">from</span> <span class="tok-string">'../schemas/room.schema.js'</span>;
 
@@ -1142,16 +1142,16 @@ r.get(<span class="tok-string">'/'</span>, list);        <span class="tok-commen
     <span class="tok-keyword">const</span> q = searchSchema.parse(req.query);   <span class="tok-comment">// ép kiểu &amp; validate query string</span>
     res.json(<span class="tok-keyword">await</span> searchRooms(q));
   } <span class="tok-keyword">catch</span> (e) { next(e); }             <span class="tok-comment">// chuyển mọi lỗi cho handler tập trung</span>
-}</pre>
+}</code></pre>
 
 <h3>Bước 3 — route</h3>
-<pre><span class="tok-comment">// src/routes/room.routes.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// src/routes/room.routes.js</span>
 <span class="tok-keyword">import</span> { Router } <span class="tok-keyword">from</span> <span class="tok-string">'express'</span>;
 <span class="tok-keyword">import</span> { list } <span class="tok-keyword">from</span> <span class="tok-string">'../controllers/room.controller.js'</span>;
 
 <span class="tok-keyword">const</span> r = Router();
 r.get(<span class="tok-string">'/'</span>, list);        <span class="tok-comment">// GET /api/rooms — tìm kiếm công khai</span>
-<span class="tok-keyword">export default</span> r;</pre>
+<span class="tok-keyword">export default</span> r;</code></pre>
 
 <h3>Bước 4 — thử nó (kết quả thật)</h3>
 <div class="out"><b>Request:</b>  curl <span class="tok-string">"http://localhost:3000/api/rooms?location=Da%20Nang&amp;checkIn=2026-08-01&amp;checkOut=2026-08-04"</span>
@@ -1201,7 +1201,7 @@ r.get(<span class="tok-string">'/'</span>, list);        <span class="tok-commen
 <p>The server stores no session. It trusts the token because only the server knows the SECRET used to sign it — tamper with one byte and the signature check fails.</p>
 
 <h3>Register &amp; login — the service</h3>
-<pre><span class="tok-comment">// src/services/auth.service.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// src/services/auth.service.js</span>
 <span class="tok-keyword">import</span> bcrypt <span class="tok-keyword">from</span> <span class="tok-string">'bcrypt'</span>;
 <span class="tok-keyword">import</span> jwt <span class="tok-keyword">from</span> <span class="tok-string">'jsonwebtoken'</span>;
 <span class="tok-keyword">import</span> { prisma } <span class="tok-keyword">from</span> <span class="tok-string">'../prisma.js'</span>;
@@ -1227,10 +1227,10 @@ r.get(<span class="tok-string">'/'</span>, list);        <span class="tok-commen
     { expiresIn: <span class="tok-string">'1d'</span> },
   );
   <span class="tok-keyword">return</span> { token, role: user.role };
-}</pre>
+}</code></pre>
 
 <h3>The auth middleware — decode the token into req.user</h3>
-<pre><span class="tok-comment">// src/middleware/auth.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// src/middleware/auth.js</span>
 <span class="tok-keyword">import</span> jwt <span class="tok-keyword">from</span> <span class="tok-string">'jsonwebtoken'</span>;
 <span class="tok-keyword">import</span> { UnauthorizedError } <span class="tok-keyword">from</span> <span class="tok-string">'../errors.js'</span>;
 
@@ -1244,7 +1244,7 @@ r.get(<span class="tok-string">'/'</span>, list);        <span class="tok-commen
   } <span class="tok-keyword">catch</span> {
     next(<span class="tok-keyword">new</span> UnauthorizedError(<span class="tok-string">'Invalid or expired token'</span>));
   }
-}</pre>
+}</code></pre>
 
 <h3>Worked example — the login round-trip</h3>
 <div class="out"><b>1.</b> POST /api/auth/register { "email":"an@mail.com", "password":"Secret123", "name":"An" }
@@ -1283,7 +1283,7 @@ r.get(<span class="tok-string">'/'</span>, list);        <span class="tok-commen
 <p>Server không lưu session. Nó tin token vì chỉ server biết SECRET dùng để ký — sửa một byte là chữ ký sai.</p>
 
 <h3>Đăng ký &amp; đăng nhập — service</h3>
-<pre><span class="tok-comment">// src/services/auth.service.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// src/services/auth.service.js</span>
 <span class="tok-keyword">import</span> bcrypt <span class="tok-keyword">from</span> <span class="tok-string">'bcrypt'</span>;
 <span class="tok-keyword">import</span> jwt <span class="tok-keyword">from</span> <span class="tok-string">'jsonwebtoken'</span>;
 <span class="tok-keyword">import</span> { prisma } <span class="tok-keyword">from</span> <span class="tok-string">'../prisma.js'</span>;
@@ -1309,10 +1309,10 @@ r.get(<span class="tok-string">'/'</span>, list);        <span class="tok-commen
     { expiresIn: <span class="tok-string">'1d'</span> },
   );
   <span class="tok-keyword">return</span> { token, role: user.role };
-}</pre>
+}</code></pre>
 
 <h3>Middleware auth — giải mã token vào req.user</h3>
-<pre><span class="tok-comment">// src/middleware/auth.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// src/middleware/auth.js</span>
 <span class="tok-keyword">import</span> jwt <span class="tok-keyword">from</span> <span class="tok-string">'jsonwebtoken'</span>;
 <span class="tok-keyword">import</span> { UnauthorizedError } <span class="tok-keyword">from</span> <span class="tok-string">'../errors.js'</span>;
 
@@ -1326,7 +1326,7 @@ r.get(<span class="tok-string">'/'</span>, list);        <span class="tok-commen
   } <span class="tok-keyword">catch</span> {
     next(<span class="tok-keyword">new</span> UnauthorizedError(<span class="tok-string">'Token sai hoặc hết hạn'</span>));
   }
-}</pre>
+}</code></pre>
 
 <h3>Ví dụ có lời giải — vòng đăng nhập</h3>
 <div class="out"><b>1.</b> POST /api/auth/register { "email":"an@mail.com", "password":"Secret123", "name":"An" }
@@ -1366,14 +1366,14 @@ r.get(<span class="tok-string">'/'</span>, list);        <span class="tok-commen
 <p class="lead">Authentication proved <em>who</em> you are; authorization decides <em>what</em> you may do. Two checks: <strong>role</strong> (only a host confirms) and <strong>ownership</strong> (a guest cancels only their own booking; a host manages only their own rooms).</p>
 
 <h3>A tiny role middleware</h3>
-<pre><span class="tok-comment">// src/middleware/roles.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// src/middleware/roles.js</span>
 <span class="tok-keyword">import</span> { ForbiddenError } <span class="tok-keyword">from</span> <span class="tok-string">'../errors.js'</span>;
 
 <span class="tok-keyword">export const</span> <span class="tok-function">requireRole</span> = (role) =&gt; (req, res, next) =&gt;
-  req.user?.role === role ? next() : next(<span class="tok-keyword">new</span> ForbiddenError(<span class="tok-string">'Insufficient role'</span>));</pre>
+  req.user?.role === role ? next() : next(<span class="tok-keyword">new</span> ForbiddenError(<span class="tok-string">'Insufficient role'</span>));</code></pre>
 
 <h3>Lock endpoints in the route</h3>
-<pre><span class="tok-comment">// src/routes/booking.routes.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// src/routes/booking.routes.js</span>
 <span class="tok-keyword">import</span> { Router } <span class="tok-keyword">from</span> <span class="tok-string">'express'</span>;
 <span class="tok-keyword">import</span> { auth } <span class="tok-keyword">from</span> <span class="tok-string">'../middleware/auth.js'</span>;
 <span class="tok-keyword">import</span> { requireRole } <span class="tok-keyword">from</span> <span class="tok-string">'../middleware/roles.js'</span>;
@@ -1384,10 +1384,10 @@ r.post(<span class="tok-string">'/'</span>,             auth, requireRole(<span 
 r.get(<span class="tok-string">'/mine'</span>,        auth, requireRole(<span class="tok-string">'GUEST'</span>), c.mine);     <span class="tok-comment">// own bookings</span>
 r.patch(<span class="tok-string">'/:id/cancel'</span>, auth, requireRole(<span class="tok-string">'GUEST'</span>), c.cancel);   <span class="tok-comment">// own only (checked in service)</span>
 r.patch(<span class="tok-string">'/:id/confirm'</span>, auth, requireRole(<span class="tok-string">'HOST'</span>),  c.confirm);  <span class="tok-comment">// host of that room only</span>
-<span class="tok-keyword">export default</span> r;</pre>
+<span class="tok-keyword">export default</span> r;</code></pre>
 
 <h3>Ownership check — role is not enough</h3>
-<pre><span class="tok-comment">// src/services/booking.service.js  (cancel)</span>
+<pre><code class="language-javascript"><span class="tok-comment">// src/services/booking.service.js  (cancel)</span>
 <span class="tok-keyword">export async function</span> <span class="tok-function">cancel</span>(bookingId, currentUserId) {
   <span class="tok-keyword">const</span> b = <span class="tok-keyword">await</span> prisma.booking.findUnique({ where: { id: bookingId } });
   <span class="tok-keyword">if</span> (!b) <span class="tok-keyword">throw new</span> NotFoundError(<span class="tok-string">'Booking not found'</span>);
@@ -1409,7 +1409,7 @@ r.patch(<span class="tok-string">'/:id/confirm'</span>, auth, requireRole(<span 
   <span class="tok-keyword">return</span> prisma.booking.update({
     where: { id: bookingId }, data: { status: <span class="tok-string">'CONFIRMED'</span> },
   });
-}</pre>
+}</code></pre>
 
 <h3>Worked example — the permission matrix</h3>
 <table>
@@ -1439,14 +1439,14 @@ r.patch(<span class="tok-string">'/:id/confirm'</span>, auth, requireRole(<span 
 <p class="lead">Xác thực chứng minh <em>bạn là ai</em>; phân quyền quyết định <em>bạn được làm gì</em>. Hai kiểm tra: <strong>vai trò</strong> (chỉ chủ nhà xác nhận) và <strong>quyền sở hữu</strong> (khách chỉ huỷ lượt đặt của mình; chủ nhà chỉ quản phòng của mình).</p>
 
 <h3>Một middleware role nhỏ xíu</h3>
-<pre><span class="tok-comment">// src/middleware/roles.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// src/middleware/roles.js</span>
 <span class="tok-keyword">import</span> { ForbiddenError } <span class="tok-keyword">from</span> <span class="tok-string">'../errors.js'</span>;
 
 <span class="tok-keyword">export const</span> <span class="tok-function">requireRole</span> = (role) =&gt; (req, res, next) =&gt;
-  req.user?.role === role ? next() : next(<span class="tok-keyword">new</span> ForbiddenError(<span class="tok-string">'Không đủ quyền'</span>));</pre>
+  req.user?.role === role ? next() : next(<span class="tok-keyword">new</span> ForbiddenError(<span class="tok-string">'Không đủ quyền'</span>));</code></pre>
 
 <h3>Khoá endpoint trong route</h3>
-<pre><span class="tok-comment">// src/routes/booking.routes.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// src/routes/booking.routes.js</span>
 <span class="tok-keyword">import</span> { Router } <span class="tok-keyword">from</span> <span class="tok-string">'express'</span>;
 <span class="tok-keyword">import</span> { auth } <span class="tok-keyword">from</span> <span class="tok-string">'../middleware/auth.js'</span>;
 <span class="tok-keyword">import</span> { requireRole } <span class="tok-keyword">from</span> <span class="tok-string">'../middleware/roles.js'</span>;
@@ -1457,10 +1457,10 @@ r.post(<span class="tok-string">'/'</span>,             auth, requireRole(<span 
 r.get(<span class="tok-string">'/mine'</span>,        auth, requireRole(<span class="tok-string">'GUEST'</span>), c.mine);     <span class="tok-comment">// lượt đặt của mình</span>
 r.patch(<span class="tok-string">'/:id/cancel'</span>, auth, requireRole(<span class="tok-string">'GUEST'</span>), c.cancel);   <span class="tok-comment">// chỉ của mình (kiểm trong service)</span>
 r.patch(<span class="tok-string">'/:id/confirm'</span>, auth, requireRole(<span class="tok-string">'HOST'</span>),  c.confirm);  <span class="tok-comment">// chỉ chủ nhà của phòng đó</span>
-<span class="tok-keyword">export default</span> r;</pre>
+<span class="tok-keyword">export default</span> r;</code></pre>
 
 <h3>Kiểm quyền sở hữu — chỉ role là chưa đủ</h3>
-<pre><span class="tok-comment">// src/services/booking.service.js  (cancel)</span>
+<pre><code class="language-javascript"><span class="tok-comment">// src/services/booking.service.js  (cancel)</span>
 <span class="tok-keyword">export async function</span> <span class="tok-function">cancel</span>(bookingId, currentUserId) {
   <span class="tok-keyword">const</span> b = <span class="tok-keyword">await</span> prisma.booking.findUnique({ where: { id: bookingId } });
   <span class="tok-keyword">if</span> (!b) <span class="tok-keyword">throw new</span> NotFoundError(<span class="tok-string">'Không tìm thấy lượt đặt'</span>);
@@ -1482,7 +1482,7 @@ r.patch(<span class="tok-string">'/:id/confirm'</span>, auth, requireRole(<span 
   <span class="tok-keyword">return</span> prisma.booking.update({
     where: { id: bookingId }, data: { status: <span class="tok-string">'CONFIRMED'</span> },
   });
-}</pre>
+}</code></pre>
 
 <h3>Ví dụ có lời giải — ma trận quyền</h3>
 <table>
@@ -1535,7 +1535,7 @@ r.patch(<span class="tok-string">'/:id/confirm'</span>, auth, requireRole(<span 
 <p>The <strong>half-open</strong> interval <code>[check_in, check_out)</code> is the trick: the checkout morning is free for the next guest's check-in. Model nights, not days.</p>
 
 <h3>The naive service — has a race condition</h3>
-<pre><span class="tok-comment">// (A) READ: is the room free for these dates?</span>
+<pre><code class="language-javascript"><span class="tok-comment">// (A) READ: is the room free for these dates?</span>
 <span class="tok-keyword">const</span> clash = <span class="tok-keyword">await</span> prisma.booking.<span class="tok-function">findFirst</span>({
   where: {
     roomId, status: <span class="tok-string">"CONFIRMED"</span>,
@@ -1545,7 +1545,7 @@ r.patch(<span class="tok-string">'/:id/confirm'</span>, auth, requireRole(<span 
 });
 <span class="tok-keyword">if</span> (clash) <span class="tok-keyword">throw new</span> <span class="tok-type">ConflictError</span>(<span class="tok-string">"Room not available for those dates"</span>);
 <span class="tok-comment">// (B) WRITE — but another request may have inserted between (A) and (B)!</span>
-<span class="tok-keyword">await</span> prisma.booking.<span class="tok-function">create</span>({ data: { roomId, checkIn: <span class="tok-keyword">in_</span>, checkOut: out, guestId, status: <span class="tok-string">"CONFIRMED"</span> } });</pre>
+<span class="tok-keyword">await</span> prisma.booking.<span class="tok-function">create</span>({ data: { roomId, checkIn: <span class="tok-keyword">in_</span>, checkOut: out, guestId, status: <span class="tok-string">"CONFIRMED"</span> } });</code></pre>
 
 <h3>Why it breaks — two threads interleave</h3>
 <div class="out"><b>Time →</b>   Guest An                       Guest Binh
@@ -1557,7 +1557,7 @@ r.patch(<span class="tok-string">'/:id/confirm'</span>, auth, requireRole(<span 
 
 <h3>The database enforces it — an EXCLUSION constraint</h3>
 <p>Postgres can guarantee "no two CONFIRMED bookings for the same room overlap" at the storage level — no application code can violate it. Prisma has no native syntax for this, so add it in a raw-SQL migration:</p>
-<pre><span class="tok-comment">-- migration.sql — enables range operators on scalar columns</span>
+<pre><code class="language-sql"><span class="tok-comment">-- migration.sql — enables range operators on scalar columns</span>
 <span class="tok-keyword">CREATE EXTENSION IF NOT EXISTS</span> btree_gist;
 
 <span class="tok-keyword">ALTER TABLE</span> "Booking"
@@ -1566,7 +1566,7 @@ r.patch(<span class="tok-string">'/:id/confirm'</span>, auth, requireRole(<span 
     "roomId" <span class="tok-keyword">WITH</span> =,
     daterange("checkIn", "checkOut", <span class="tok-string">'[)'</span>) <span class="tok-keyword">WITH</span> &amp;&amp;
   )
-  <span class="tok-keyword">WHERE</span> (status = <span class="tok-string">'CONFIRMED'</span>);</pre>
+  <span class="tok-keyword">WHERE</span> (status = <span class="tok-string">'CONFIRMED'</span>);</code></pre>
 <div class="lz-map">
   <div class="lz-node"><div class="lz-badge">=</div><div class="lz-nbody"><div class="lz-ntitle">roomId WITH =</div><div class="lz-nsub">only rows for the SAME room are compared.</div></div></div>
   <div class="lz-node"><div class="lz-badge">&amp;&amp;</div><div class="lz-nbody"><div class="lz-ntitle">daterange(...) WITH &amp;&amp;</div><div class="lz-nsub">the range-overlap operator. If two same-room ranges overlap, the INSERT is rejected.</div></div></div>
@@ -1613,7 +1613,7 @@ r.patch(<span class="tok-string">'/:id/confirm'</span>, auth, requireRole(<span 
 <p>Mẹo là khoảng <strong>nửa mở</strong> <code>[check_in, check_out)</code>: sáng ngày trả phòng vẫn rảnh cho khách sau nhận phòng. Mô hình theo đêm, không theo ngày.</p>
 
 <h3>Service ngây thơ — có race condition</h3>
-<pre><span class="tok-comment">// (A) ĐỌC: phòng có rảnh cho những ngày này không?</span>
+<pre><code class="language-javascript"><span class="tok-comment">// (A) ĐỌC: phòng có rảnh cho những ngày này không?</span>
 <span class="tok-keyword">const</span> clash = <span class="tok-keyword">await</span> prisma.booking.<span class="tok-function">findFirst</span>({
   where: {
     roomId, status: <span class="tok-string">"CONFIRMED"</span>,
@@ -1623,7 +1623,7 @@ r.patch(<span class="tok-string">'/:id/confirm'</span>, auth, requireRole(<span 
 });
 <span class="tok-keyword">if</span> (clash) <span class="tok-keyword">throw new</span> <span class="tok-type">ConflictError</span>(<span class="tok-string">"Phòng không còn trống cho những ngày đó"</span>);
 <span class="tok-comment">// (B) GHI — nhưng request khác có thể đã chèn giữa (A) và (B)!</span>
-<span class="tok-keyword">await</span> prisma.booking.<span class="tok-function">create</span>({ data: { roomId, checkIn: <span class="tok-keyword">in_</span>, checkOut: out, guestId, status: <span class="tok-string">"CONFIRMED"</span> } });</pre>
+<span class="tok-keyword">await</span> prisma.booking.<span class="tok-function">create</span>({ data: { roomId, checkIn: <span class="tok-keyword">in_</span>, checkOut: out, guestId, status: <span class="tok-string">"CONFIRMED"</span> } });</code></pre>
 
 <h3>Vì sao nó hỏng — hai luồng đan xen</h3>
 <div class="out"><b>Thời gian →</b>   Khách An                     Khách Bình
@@ -1635,7 +1635,7 @@ r.patch(<span class="tok-string">'/:id/confirm'</span>, auth, requireRole(<span 
 
 <h3>Để cơ sở dữ liệu cưỡng chế — ràng buộc EXCLUSION</h3>
 <p>Postgres bảo đảm được "không hai booking CONFIRMED cùng phòng chồng nhau" ngay ở tầng lưu trữ — không code ứng dụng nào vi phạm được. Prisma không có cú pháp gốc cho việc này, nên thêm bằng migration SQL thô:</p>
-<pre><span class="tok-comment">-- migration.sql — bật toán tử range trên cột vô hướng</span>
+<pre><code class="language-sql"><span class="tok-comment">-- migration.sql — bật toán tử range trên cột vô hướng</span>
 <span class="tok-keyword">CREATE EXTENSION IF NOT EXISTS</span> btree_gist;
 
 <span class="tok-keyword">ALTER TABLE</span> "Booking"
@@ -1644,7 +1644,7 @@ r.patch(<span class="tok-string">'/:id/confirm'</span>, auth, requireRole(<span 
     "roomId" <span class="tok-keyword">WITH</span> =,
     daterange("checkIn", "checkOut", <span class="tok-string">'[)'</span>) <span class="tok-keyword">WITH</span> &amp;&amp;
   )
-  <span class="tok-keyword">WHERE</span> (status = <span class="tok-string">'CONFIRMED'</span>);</pre>
+  <span class="tok-keyword">WHERE</span> (status = <span class="tok-string">'CONFIRMED'</span>);</code></pre>
 <div class="lz-map">
   <div class="lz-node"><div class="lz-badge">=</div><div class="lz-nbody"><div class="lz-ntitle">roomId WITH =</div><div class="lz-nsub">chỉ các dòng cùng phòng mới đem so.</div></div></div>
   <div class="lz-node"><div class="lz-badge">&amp;&amp;</div><div class="lz-nbody"><div class="lz-ntitle">daterange(...) WITH &amp;&amp;</div><div class="lz-nsub">toán tử chồng-khoảng. Nếu hai khoảng cùng phòng chồng nhau, INSERT bị từ chối.</div></div></div>
@@ -1687,23 +1687,23 @@ r.patch(<span class="tok-string">'/:id/confirm'</span>, auth, requireRole(<span 
 <p class="lead">In an Express REST API you validate the body, call the service, and translate its typed errors into clean HTTP through one central error middleware — so every client (mobile, web, Postman) sees the same predictable JSON.</p>
 
 <h3>Validate the body first (zod)</h3>
-<pre><span class="tok-keyword">const</span> BookingBody = z.<span class="tok-function">object</span>({
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> BookingBody = z.<span class="tok-function">object</span>({
   roomId:   z.<span class="tok-function">number</span>().<span class="tok-function">int</span>().<span class="tok-function">positive</span>(),
   checkIn:  z.<span class="tok-function">coerce</span>.<span class="tok-function">date</span>(),
   checkOut: z.<span class="tok-function">coerce</span>.<span class="tok-function">date</span>(),
-}).<span class="tok-function">refine</span>(b =&gt; b.checkOut &gt; b.checkIn, { message: <span class="tok-string">"checkOut must be after checkIn"</span> });</pre>
+}).<span class="tok-function">refine</span>(b =&gt; b.checkOut &gt; b.checkIn, { message: <span class="tok-string">"checkOut must be after checkIn"</span> });</code></pre>
 
 <h3>The route handler</h3>
-<pre>router.<span class="tok-function">post</span>(<span class="tok-string">"/api/bookings"</span>, requireAuth, <span class="tok-keyword">async</span> (req, res, next) =&gt; {
+<pre><code class="language-javascript">router.<span class="tok-function">post</span>(<span class="tok-string">"/api/bookings"</span>, requireAuth, <span class="tok-keyword">async</span> (req, res, next) =&gt; {
   <span class="tok-keyword">try</span> {
     <span class="tok-keyword">const</span> body = BookingBody.<span class="tok-function">parse</span>(req.body);          <span class="tok-comment">// 400 if invalid</span>
     <span class="tok-keyword">const</span> booking = <span class="tok-keyword">await</span> bookingService.<span class="tok-function">create</span>(body, req.user.id);
     res.<span class="tok-function">status</span>(<span class="tok-number">201</span>).<span class="tok-function">json</span>(booking);                    <span class="tok-comment">// 201 Created</span>
   } <span class="tok-keyword">catch</span> (e) { next(e); }                            <span class="tok-comment">// hand to error middleware</span>
-});</pre>
+});</code></pre>
 
 <h3>One error middleware for the whole API</h3>
-<pre><span class="tok-keyword">function</span> <span class="tok-function">errorHandler</span>(err, req, res, next) {
+<pre><code class="language-javascript"><span class="tok-keyword">function</span> <span class="tok-function">errorHandler</span>(err, req, res, next) {
   <span class="tok-keyword">if</span> (err <span class="tok-keyword">instanceof</span> z.ZodError)
     <span class="tok-keyword">return</span> res.<span class="tok-function">status</span>(<span class="tok-number">400</span>).<span class="tok-function">json</span>({ status: <span class="tok-number">400</span>, message: <span class="tok-string">"Validation failed"</span>, issues: err.issues });
   <span class="tok-keyword">if</span> (err <span class="tok-keyword">instanceof</span> ConflictError)
@@ -1713,7 +1713,7 @@ r.patch(<span class="tok-string">'/:id/confirm'</span>, auth, requireRole(<span 
   console.<span class="tok-function">error</span>(err);
   res.<span class="tok-function">status</span>(<span class="tok-number">500</span>).<span class="tok-function">json</span>({ status: <span class="tok-number">500</span>, message: <span class="tok-string">"Internal error"</span> });   <span class="tok-comment">// never leak the stack</span>
 }
-app.<span class="tok-function">use</span>(errorHandler);   <span class="tok-comment">// mounted LAST, after all routes</span></pre>
+app.<span class="tok-function">use</span>(errorHandler);   <span class="tok-comment">// mounted LAST, after all routes</span></code></pre>
 
 <h3>Worked example — the status-code contract</h3>
 <table>
@@ -1743,23 +1743,23 @@ app.<span class="tok-function">use</span>(errorHandler);   <span class="tok-comm
 <p class="lead">Trong REST API Express bạn validate thân, gọi service, và dịch lỗi có kiểu của nó thành HTTP sạch qua một middleware lỗi trung tâm — để mọi client (mobile, web, Postman) thấy cùng một JSON đoán trước được.</p>
 
 <h3>Validate thân trước (zod)</h3>
-<pre><span class="tok-keyword">const</span> BookingBody = z.<span class="tok-function">object</span>({
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> BookingBody = z.<span class="tok-function">object</span>({
   roomId:   z.<span class="tok-function">number</span>().<span class="tok-function">int</span>().<span class="tok-function">positive</span>(),
   checkIn:  z.<span class="tok-function">coerce</span>.<span class="tok-function">date</span>(),
   checkOut: z.<span class="tok-function">coerce</span>.<span class="tok-function">date</span>(),
-}).<span class="tok-function">refine</span>(b =&gt; b.checkOut &gt; b.checkIn, { message: <span class="tok-string">"checkOut phải sau checkIn"</span> });</pre>
+}).<span class="tok-function">refine</span>(b =&gt; b.checkOut &gt; b.checkIn, { message: <span class="tok-string">"checkOut phải sau checkIn"</span> });</code></pre>
 
 <h3>Route handler</h3>
-<pre>router.<span class="tok-function">post</span>(<span class="tok-string">"/api/bookings"</span>, requireAuth, <span class="tok-keyword">async</span> (req, res, next) =&gt; {
+<pre><code class="language-javascript">router.<span class="tok-function">post</span>(<span class="tok-string">"/api/bookings"</span>, requireAuth, <span class="tok-keyword">async</span> (req, res, next) =&gt; {
   <span class="tok-keyword">try</span> {
     <span class="tok-keyword">const</span> body = BookingBody.<span class="tok-function">parse</span>(req.body);          <span class="tok-comment">// 400 nếu sai</span>
     <span class="tok-keyword">const</span> booking = <span class="tok-keyword">await</span> bookingService.<span class="tok-function">create</span>(body, req.user.id);
     res.<span class="tok-function">status</span>(<span class="tok-number">201</span>).<span class="tok-function">json</span>(booking);                    <span class="tok-comment">// 201 Created</span>
   } <span class="tok-keyword">catch</span> (e) { next(e); }                            <span class="tok-comment">// chuyển cho middleware lỗi</span>
-});</pre>
+});</code></pre>
 
 <h3>Một middleware lỗi cho cả API</h3>
-<pre><span class="tok-keyword">function</span> <span class="tok-function">errorHandler</span>(err, req, res, next) {
+<pre><code class="language-javascript"><span class="tok-keyword">function</span> <span class="tok-function">errorHandler</span>(err, req, res, next) {
   <span class="tok-keyword">if</span> (err <span class="tok-keyword">instanceof</span> z.ZodError)
     <span class="tok-keyword">return</span> res.<span class="tok-function">status</span>(<span class="tok-number">400</span>).<span class="tok-function">json</span>({ status: <span class="tok-number">400</span>, message: <span class="tok-string">"Validation failed"</span>, issues: err.issues });
   <span class="tok-keyword">if</span> (err <span class="tok-keyword">instanceof</span> ConflictError)
@@ -1769,7 +1769,7 @@ app.<span class="tok-function">use</span>(errorHandler);   <span class="tok-comm
   console.<span class="tok-function">error</span>(err);
   res.<span class="tok-function">status</span>(<span class="tok-number">500</span>).<span class="tok-function">json</span>({ status: <span class="tok-number">500</span>, message: <span class="tok-string">"Internal error"</span> });   <span class="tok-comment">// không bao giờ lộ stack</span>
 }
-app.<span class="tok-function">use</span>(errorHandler);   <span class="tok-comment">// gắn CUỐI cùng, sau mọi route</span></pre>
+app.<span class="tok-function">use</span>(errorHandler);   <span class="tok-comment">// gắn CUỐI cùng, sau mọi route</span></code></pre>
 
 <h3>Ví dụ có lời giải — hợp đồng mã trạng thái</h3>
 <table>
@@ -1881,17 +1881,17 @@ app.<span class="tok-function">use</span>(errorHandler);   <span class="tok-comm
 <p class="lead">No frontend to click, so your tests <em>are</em> the demo. Three layers: a unit test for the overlap rule, a supertest for the HTTP contract, and a <strong>concurrency test</strong> that fires many bookings at the same room and dates and asserts exactly one wins.</p>
 
 <h3>1) Unit test — the overlap rule in isolation</h3>
-<pre><span class="tok-keyword">import</span> { overlaps } <span class="tok-keyword">from</span> <span class="tok-string">"../src/dates.js"</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> { overlaps } <span class="tok-keyword">from</span> <span class="tok-string">"../src/dates.js"</span>;
 
 test(<span class="tok-string">"back-to-back stays do not overlap"</span>, () =&gt; {
   expect(overlaps([<span class="tok-string">"2026-08-10"</span>,<span class="tok-string">"2026-08-13"</span>], [<span class="tok-string">"2026-08-13"</span>,<span class="tok-string">"2026-08-15"</span>])).<span class="tok-function">toBe</span>(<span class="tok-keyword">false</span>);
 });
 test(<span class="tok-string">"partial overlap is detected"</span>, () =&gt; {
   expect(overlaps([<span class="tok-string">"2026-08-10"</span>,<span class="tok-string">"2026-08-13"</span>], [<span class="tok-string">"2026-08-12"</span>,<span class="tok-string">"2026-08-14"</span>])).<span class="tok-function">toBe</span>(<span class="tok-keyword">true</span>);
-});</pre>
+});</code></pre>
 
 <h3>2) supertest — the HTTP contract</h3>
-<pre><span class="tok-keyword">import</span> request <span class="tok-keyword">from</span> <span class="tok-string">"supertest"</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> request <span class="tok-keyword">from</span> <span class="tok-string">"supertest"</span>;
 <span class="tok-keyword">import</span> app <span class="tok-keyword">from</span> <span class="tok-string">"../src/app.js"</span>;
 
 test(<span class="tok-string">"first booking 201, overlapping booking 409"</span>, <span class="tok-keyword">async</span> () =&gt; {
@@ -1902,10 +1902,10 @@ test(<span class="tok-string">"first booking 201, overlapping booking 409"</span
   <span class="tok-keyword">await</span> request(app).<span class="tok-function">post</span>(<span class="tok-string">"/api/bookings"</span>).<span class="tok-function">set</span>(auth(binh))
     .<span class="tok-function">send</span>({ roomId: <span class="tok-number">7</span>, checkIn: <span class="tok-string">"2026-08-12"</span>, checkOut: <span class="tok-string">"2026-08-14"</span> })
     .<span class="tok-function">expect</span>(<span class="tok-number">409</span>);   <span class="tok-comment">// overlaps → rejected</span>
-});</pre>
+});</code></pre>
 
 <h3>3) The concurrency test — the star of the demo</h3>
-<pre>test(<span class="tok-string">"20 requests race for the same room+dates, only one wins"</span>, <span class="tok-keyword">async</span> () =&gt; {
+<pre><code class="language-javascript">test(<span class="tok-string">"20 requests race for the same room+dates, only one wins"</span>, <span class="tok-keyword">async</span> () =&gt; {
   <span class="tok-keyword">const</span> payload = { roomId: <span class="tok-number">7</span>, checkIn: <span class="tok-string">"2026-09-01"</span>, checkOut: <span class="tok-string">"2026-09-05"</span> };
 
   <span class="tok-comment">// fire all 20 at once — Promise.all starts them together, no awaiting between</span>
@@ -1923,7 +1923,7 @@ test(<span class="tok-string">"first booking 201, overlapping booking 409"</span
 
   <span class="tok-keyword">const</span> rows = <span class="tok-keyword">await</span> prisma.booking.<span class="tok-function">count</span>({ where: { roomId: <span class="tok-number">7</span>, status: <span class="tok-string">"CONFIRMED"</span> } });
   expect(rows).<span class="tok-function">toBe</span>(<span class="tok-number">1</span>);              <span class="tok-comment">// the DB really holds one</span>
-});</pre>
+});</code></pre>
 
 <h3>Why Promise.all forces the real race</h3>
 <div class="out">A sequential for-loop with await would run request 1 to completion before request 2 starts —
@@ -1948,17 +1948,17 @@ Against the naive service, this test FAILS with created &gt; 1 — which is exac
 <p class="lead">Không có frontend để bấm, nên các test <em>chính là</em> bản demo. Ba lớp: unit test cho luật chồng ngày, supertest cho hợp đồng HTTP, và <strong>test đồng thời</strong> bắn nhiều booking vào cùng phòng+ngày và khẳng định đúng một kẻ thắng.</p>
 
 <h3>1) Unit test — luật chồng ngày đứng riêng</h3>
-<pre><span class="tok-keyword">import</span> { overlaps } <span class="tok-keyword">from</span> <span class="tok-string">"../src/dates.js"</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> { overlaps } <span class="tok-keyword">from</span> <span class="tok-string">"../src/dates.js"</span>;
 
 test(<span class="tok-string">"lượt ở nối tiếp không chồng"</span>, () =&gt; {
   expect(overlaps([<span class="tok-string">"2026-08-10"</span>,<span class="tok-string">"2026-08-13"</span>], [<span class="tok-string">"2026-08-13"</span>,<span class="tok-string">"2026-08-15"</span>])).<span class="tok-function">toBe</span>(<span class="tok-keyword">false</span>);
 });
 test(<span class="tok-string">"chồng một phần được phát hiện"</span>, () =&gt; {
   expect(overlaps([<span class="tok-string">"2026-08-10"</span>,<span class="tok-string">"2026-08-13"</span>], [<span class="tok-string">"2026-08-12"</span>,<span class="tok-string">"2026-08-14"</span>])).<span class="tok-function">toBe</span>(<span class="tok-keyword">true</span>);
-});</pre>
+});</code></pre>
 
 <h3>2) supertest — hợp đồng HTTP</h3>
-<pre><span class="tok-keyword">import</span> request <span class="tok-keyword">from</span> <span class="tok-string">"supertest"</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> request <span class="tok-keyword">from</span> <span class="tok-string">"supertest"</span>;
 <span class="tok-keyword">import</span> app <span class="tok-keyword">from</span> <span class="tok-string">"../src/app.js"</span>;
 
 test(<span class="tok-string">"booking đầu 201, booking chồng ngày 409"</span>, <span class="tok-keyword">async</span> () =&gt; {
@@ -1969,10 +1969,10 @@ test(<span class="tok-string">"booking đầu 201, booking chồng ngày 409"</s
   <span class="tok-keyword">await</span> request(app).<span class="tok-function">post</span>(<span class="tok-string">"/api/bookings"</span>).<span class="tok-function">set</span>(auth(binh))
     .<span class="tok-function">send</span>({ roomId: <span class="tok-number">7</span>, checkIn: <span class="tok-string">"2026-08-12"</span>, checkOut: <span class="tok-string">"2026-08-14"</span> })
     .<span class="tok-function">expect</span>(<span class="tok-number">409</span>);   <span class="tok-comment">// chồng → từ chối</span>
-});</pre>
+});</code></pre>
 
 <h3>3) Test đồng thời — ngôi sao của buổi demo</h3>
-<pre>test(<span class="tok-string">"20 request giành cùng phòng+ngày, chỉ một thắng"</span>, <span class="tok-keyword">async</span> () =&gt; {
+<pre><code class="language-javascript">test(<span class="tok-string">"20 request giành cùng phòng+ngày, chỉ một thắng"</span>, <span class="tok-keyword">async</span> () =&gt; {
   <span class="tok-keyword">const</span> payload = { roomId: <span class="tok-number">7</span>, checkIn: <span class="tok-string">"2026-09-01"</span>, checkOut: <span class="tok-string">"2026-09-05"</span> };
 
   <span class="tok-comment">// bắn cả 20 cùng lúc — Promise.all khởi động chúng cùng nhau, không await xen giữa</span>
@@ -1990,7 +1990,7 @@ test(<span class="tok-string">"booking đầu 201, booking chồng ngày 409"</s
 
   <span class="tok-keyword">const</span> rows = <span class="tok-keyword">await</span> prisma.booking.<span class="tok-function">count</span>({ where: { roomId: <span class="tok-number">7</span>, status: <span class="tok-string">"CONFIRMED"</span> } });
   expect(rows).<span class="tok-function">toBe</span>(<span class="tok-number">1</span>);              <span class="tok-comment">// CSDL thật sự giữ đúng một</span>
-});</pre>
+});</code></pre>
 
 <h3>Vì sao Promise.all ép race thật</h3>
 <div class="out">Vòng for tuần tự có await sẽ chạy request 1 xong hẳn trước khi request 2 bắt đầu —
@@ -2075,12 +2075,12 @@ Với service ngây thơ, test này FAIL với created &gt; 1 — đó chính l�
 <span class="tok-keyword">CMD</span> ["node","src/server.js"]</pre>
 
 <h3>The exclusion constraint lives in a migration</h3>
-<pre><span class="tok-comment"># prisma/migrations/xxxx_no_overlap/migration.sql</span>
+<pre><code class="language-sql"><span class="tok-comment"># prisma/migrations/xxxx_no_overlap/migration.sql</span>
 <span class="tok-comment"># Prisma runs this automatically on &#96;prisma migrate deploy&#96;</span>
 CREATE EXTENSION IF NOT EXISTS btree_gist;
 ALTER TABLE "Booking" ADD CONSTRAINT no_overlap
   EXCLUDE USING gist ("roomId" WITH =, daterange("checkIn","checkOut",'[)') WITH &amp;&amp;)
-  WHERE (status = 'CONFIRMED');</pre>
+  WHERE (status = 'CONFIRMED');</code></pre>
 
 <h3>Worked example — bring it up</h3>
 <div class="out">$ printf "DB_PASSWORD=secret\\nJWT_SECRET=change-me\\n" &gt; .env
@@ -2156,12 +2156,12 @@ $ curl -X POST localhost:3000/api/bookings -H "Authorization: Bearer $T" \\
 <span class="tok-keyword">CMD</span> ["node","src/server.js"]</pre>
 
 <h3>Ràng buộc loại trừ nằm trong một migration</h3>
-<pre><span class="tok-comment"># prisma/migrations/xxxx_no_overlap/migration.sql</span>
+<pre><code class="language-sql"><span class="tok-comment"># prisma/migrations/xxxx_no_overlap/migration.sql</span>
 <span class="tok-comment"># Prisma tự chạy khi &#96;prisma migrate deploy&#96;</span>
 CREATE EXTENSION IF NOT EXISTS btree_gist;
 ALTER TABLE "Booking" ADD CONSTRAINT no_overlap
   EXCLUDE USING gist ("roomId" WITH =, daterange("checkIn","checkOut",'[)') WITH &amp;&amp;)
-  WHERE (status = 'CONFIRMED');</pre>
+  WHERE (status = 'CONFIRMED');</code></pre>
 
 <h3>Ví dụ có lời giải — dựng lên</h3>
 <div class="out">$ printf "DB_PASSWORD=secret\\nJWT_SECRET=change-me\\n" &gt; .env
@@ -2202,37 +2202,37 @@ $ curl -X POST localhost:3000/api/bookings -H "Authorization: Bearer $T" \\
 
 <h3>1) Idempotency keys — the double-submit problem</h3>
 <p>A guest taps "Book" twice, or the network retries the POST. Without protection you create two bookings (or one 201 + one 409). Let the client send an <code>Idempotency-Key</code> header; store it and return the same result for repeats:</p>
-<pre><span class="tok-comment">// a table: idempotency_keys(key PK, response_json, created_at)</span>
+<pre><code class="language-javascript"><span class="tok-comment">// a table: idempotency_keys(key PK, response_json, created_at)</span>
 <span class="tok-keyword">const</span> key = req.<span class="tok-function">get</span>(<span class="tok-string">"Idempotency-Key"</span>);
 <span class="tok-keyword">const</span> seen = <span class="tok-keyword">await</span> prisma.idempotencyKey.<span class="tok-function">findUnique</span>({ where: { key } });
 <span class="tok-keyword">if</span> (seen) <span class="tok-keyword">return</span> res.<span class="tok-function">status</span>(seen.status).<span class="tok-function">json</span>(seen.body);   <span class="tok-comment">// replay the first answer</span>
-<span class="tok-comment">// ... create booking, then store {key, status, body} in the SAME transaction</span></pre>
+<span class="tok-comment">// ... create booking, then store {key, status, body} in the SAME transaction</span></code></pre>
 
 <h3>2) Availability calendar — one query, not N</h3>
-<pre><span class="tok-comment">-- which rooms are FREE for a date window? anti-join against overlaps</span>
+<pre><code class="language-sql"><span class="tok-comment">-- which rooms are FREE for a date window? anti-join against overlaps</span>
 <span class="tok-keyword">SELECT</span> r.* <span class="tok-keyword">FROM</span> "Room" r
 <span class="tok-keyword">WHERE NOT EXISTS</span> (
   <span class="tok-keyword">SELECT</span> <span class="tok-number">1</span> <span class="tok-keyword">FROM</span> "Booking" b
   <span class="tok-keyword">WHERE</span> b."roomId" = r.id
     <span class="tok-keyword">AND</span> b.status = <span class="tok-string">'CONFIRMED'</span>
     <span class="tok-keyword">AND</span> daterange(b."checkIn", b."checkOut", <span class="tok-string">'[)'</span>) &amp;&amp; daterange(:in, :out, <span class="tok-string">'[)'</span>)
-);</pre>
+);</code></pre>
 <p>The same <code>&amp;&amp;</code> operator that powers the constraint also answers "what's free?" — and a GiST index on the range makes it fast.</p>
 
 <h3>3) Keyset pagination — stable under inserts</h3>
-<pre><span class="tok-comment">// page 1: no cursor. later pages: pass the last id you saw</span>
+<pre><code class="language-javascript"><span class="tok-comment">// page 1: no cursor. later pages: pass the last id you saw</span>
 <span class="tok-keyword">const</span> rooms = <span class="tok-keyword">await</span> prisma.room.<span class="tok-function">findMany</span>({
   take: <span class="tok-number">20</span>,
   ...(cursor &amp;&amp; { skip: <span class="tok-number">1</span>, cursor: { id: cursor } }),
   orderBy: { id: <span class="tok-string">"asc"</span> },
 });
-<span class="tok-comment">// returns items + the next cursor (last item's id)</span></pre>
+<span class="tok-comment">// returns items + the next cursor (last item's id)</span></code></pre>
 <p>Unlike <code>OFFSET</code>, keyset (cursor) paging doesn't skip or repeat rows when new bookings arrive mid-scroll, and stays fast on deep pages.</p>
 
 <h3>4) Rate limiting — protect the booking endpoint</h3>
-<pre><span class="tok-keyword">import</span> rateLimit <span class="tok-keyword">from</span> <span class="tok-string">"express-rate-limit"</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> rateLimit <span class="tok-keyword">from</span> <span class="tok-string">"express-rate-limit"</span>;
 <span class="tok-keyword">const</span> bookingLimiter = <span class="tok-function">rateLimit</span>({ windowMs: <span class="tok-number">60_000</span>, max: <span class="tok-number">10</span> });  <span class="tok-comment">// 10 / min / IP</span>
-app.<span class="tok-function">post</span>(<span class="tok-string">"/api/bookings"</span>, bookingLimiter, requireAuth, handler);   <span class="tok-comment">// 429 when exceeded</span></pre>
+app.<span class="tok-function">post</span>(<span class="tok-string">"/api/bookings"</span>, bookingLimiter, requireAuth, handler);   <span class="tok-comment">// 429 when exceeded</span></code></pre>
 
 <div class="pitfall"><strong>Trap:</strong> the N+1 query in the room list. Loading each room's bookings lazily fires one query per room. Use a single anti-join (above) or Prisma <code>include</code> with a filtered relation so the DB does the work once.</div>
 
@@ -2252,37 +2252,37 @@ app.<span class="tok-function">post</span>(<span class="tok-string">"/api/bookin
 
 <h3>1) Khoá idempotency — vấn đề gửi hai lần</h3>
 <p>Khách chạm "Đặt" hai lần, hoặc mạng retry POST. Không bảo vệ thì bạn tạo hai booking (hoặc một 201 + một 409). Cho client gửi header <code>Idempotency-Key</code>; lưu nó và trả cùng kết quả cho lần lặp:</p>
-<pre><span class="tok-comment">// bảng: idempotency_keys(key PK, response_json, created_at)</span>
+<pre><code class="language-javascript"><span class="tok-comment">// bảng: idempotency_keys(key PK, response_json, created_at)</span>
 <span class="tok-keyword">const</span> key = req.<span class="tok-function">get</span>(<span class="tok-string">"Idempotency-Key"</span>);
 <span class="tok-keyword">const</span> seen = <span class="tok-keyword">await</span> prisma.idempotencyKey.<span class="tok-function">findUnique</span>({ where: { key } });
 <span class="tok-keyword">if</span> (seen) <span class="tok-keyword">return</span> res.<span class="tok-function">status</span>(seen.status).<span class="tok-function">json</span>(seen.body);   <span class="tok-comment">// phát lại câu trả lời đầu</span>
-<span class="tok-comment">// ... tạo booking, rồi lưu {key, status, body} trong CÙNG transaction</span></pre>
+<span class="tok-comment">// ... tạo booking, rồi lưu {key, status, body} trong CÙNG transaction</span></code></pre>
 
 <h3>2) Lịch phòng trống — một query, không phải N</h3>
-<pre><span class="tok-comment">-- phòng nào TRỐNG cho một cửa sổ ngày? anti-join với các lượt chồng</span>
+<pre><code class="language-sql"><span class="tok-comment">-- phòng nào TRỐNG cho một cửa sổ ngày? anti-join với các lượt chồng</span>
 <span class="tok-keyword">SELECT</span> r.* <span class="tok-keyword">FROM</span> "Room" r
 <span class="tok-keyword">WHERE NOT EXISTS</span> (
   <span class="tok-keyword">SELECT</span> <span class="tok-number">1</span> <span class="tok-keyword">FROM</span> "Booking" b
   <span class="tok-keyword">WHERE</span> b."roomId" = r.id
     <span class="tok-keyword">AND</span> b.status = <span class="tok-string">'CONFIRMED'</span>
     <span class="tok-keyword">AND</span> daterange(b."checkIn", b."checkOut", <span class="tok-string">'[)'</span>) &amp;&amp; daterange(:in, :out, <span class="tok-string">'[)'</span>)
-);</pre>
+);</code></pre>
 <p>Cùng toán tử <code>&amp;&amp;</code> làm nên ràng buộc cũng trả lời "cái gì trống?" — và một index GiST trên range làm nó nhanh.</p>
 
 <h3>3) Phân trang keyset — ổn định khi có chèn</h3>
-<pre><span class="tok-comment">// trang 1: không cursor. trang sau: truyền id cuối bạn thấy</span>
+<pre><code class="language-javascript"><span class="tok-comment">// trang 1: không cursor. trang sau: truyền id cuối bạn thấy</span>
 <span class="tok-keyword">const</span> rooms = <span class="tok-keyword">await</span> prisma.room.<span class="tok-function">findMany</span>({
   take: <span class="tok-number">20</span>,
   ...(cursor &amp;&amp; { skip: <span class="tok-number">1</span>, cursor: { id: cursor } }),
   orderBy: { id: <span class="tok-string">"asc"</span> },
 });
-<span class="tok-comment">// trả items + cursor kế (id của item cuối)</span></pre>
+<span class="tok-comment">// trả items + cursor kế (id của item cuối)</span></code></pre>
 <p>Khác <code>OFFSET</code>, phân trang keyset (cursor) không bỏ sót hay lặp dòng khi có booking mới tới giữa lúc cuộn, và vẫn nhanh ở trang sâu.</p>
 
 <h3>4) Giới hạn tần suất — bảo vệ endpoint đặt phòng</h3>
-<pre><span class="tok-keyword">import</span> rateLimit <span class="tok-keyword">from</span> <span class="tok-string">"express-rate-limit"</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> rateLimit <span class="tok-keyword">from</span> <span class="tok-string">"express-rate-limit"</span>;
 <span class="tok-keyword">const</span> bookingLimiter = <span class="tok-function">rateLimit</span>({ windowMs: <span class="tok-number">60_000</span>, max: <span class="tok-number">10</span> });  <span class="tok-comment">// 10 / phút / IP</span>
-app.<span class="tok-function">post</span>(<span class="tok-string">"/api/bookings"</span>, bookingLimiter, requireAuth, handler);   <span class="tok-comment">// 429 khi vượt</span></pre>
+app.<span class="tok-function">post</span>(<span class="tok-string">"/api/bookings"</span>, bookingLimiter, requireAuth, handler);   <span class="tok-comment">// 429 khi vượt</span></code></pre>
 
 <div class="pitfall"><strong>Bẫy:</strong> query N+1 trong danh sách phòng. Nạp booking của từng phòng theo kiểu lazy bắn một query mỗi phòng. Dùng một anti-join (ở trên) hoặc Prisma <code>include</code> với quan hệ có lọc để DB làm một lần.</div>
 

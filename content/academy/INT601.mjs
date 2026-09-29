@@ -568,7 +568,7 @@ Now a slot can have one CANCELLED row plus one active row. <em>Why beyond syllab
 <p class="lead">Đây là toàn bộ CSDL. Chú ý một dòng — <code>UNIQUE</code> trên <code>appointments.slot_id</code>. Ràng buộc đơn lẻ đó là <strong>hàng rào cuối cùng</strong>: kể cả khi hai request lọt qua mọi kiểm tra trong code Java, chính CSDL từ chối ghi hai lịch hoạt động cho một khung.</p>
 
 <h3>DDL (PostgreSQL)</h3>
-<pre><span class="tok-keyword">CREATE TABLE</span> users (
+<pre><code class="language-sql"><span class="tok-keyword">CREATE TABLE</span> users (
   id          <span class="tok-type">BIGSERIAL</span> <span class="tok-keyword">PRIMARY KEY</span>,
   email       <span class="tok-type">VARCHAR</span>(255) <span class="tok-keyword">UNIQUE NOT NULL</span>,
   password    <span class="tok-type">VARCHAR</span>(255) <span class="tok-keyword">NOT NULL</span>,      <span class="tok-comment">-- hash bcrypt</span>
@@ -598,7 +598,7 @@ Now a slot can have one CANCELLED row plus one active row. <em>Why beyond syllab
   status      <span class="tok-type">VARCHAR</span>(12) <span class="tok-keyword">NOT NULL DEFAULT</span> <span class="tok-string">'PENDING'</span>, <span class="tok-comment">-- PENDING|CONFIRMED|REJECTED|CANCELLED</span>
   created_at  <span class="tok-type">TIMESTAMP</span> <span class="tok-keyword">NOT NULL DEFAULT</span> now(),
   <span class="tok-keyword">CONSTRAINT</span> uq_active_slot <span class="tok-keyword">UNIQUE</span> (slot_id)      <span class="tok-comment">-- ★ một lịch mỗi khung</span>
-);</pre>
+);</code></pre>
 
 <h3>Ví dụ có lời giải — vì sao UNIQUE mới là người gác thật</h3>
 <div class="out"><b>Tình huống:</b> hai INSERT cho slot_id = 42 tới cùng một mili-giây.
@@ -798,7 +798,7 @@ Controller ──DTO──▶ Service ──entity──▶ Repository ──SQL
 <p class="lead">Each table becomes a Java class annotated with JPA. Relationships become object references. Then a one-line interface per table gives you full CRUD — no SQL to write.</p>
 
 <h3>The Slot entity</h3>
-<pre><span class="tok-keyword">@Entity</span> <span class="tok-keyword">@Table</span>(name = <span class="tok-string">"slots"</span>,
+<pre><code class="language-java"><span class="tok-keyword">@Entity</span> <span class="tok-keyword">@Table</span>(name = <span class="tok-string">"slots"</span>,
   uniqueConstraints = <span class="tok-keyword">@UniqueConstraint</span>(columnNames = {<span class="tok-string">"doctor_id"</span>, <span class="tok-string">"start_time"</span>}))
 <span class="tok-keyword">@Getter</span> <span class="tok-keyword">@Setter</span>  <span class="tok-comment">// Lombok</span>
 <span class="tok-keyword">public class</span> <span class="tok-type">Slot</span> {
@@ -815,10 +815,10 @@ Controller ──DTO──▶ Service ──entity──▶ Repository ──SQL
 
   <span class="tok-keyword">@Version</span>                        <span class="tok-comment">// ★ optimistic lock — Section 4 uses this</span>
   <span class="tok-keyword">private</span> <span class="tok-type">Long</span> version;
-}</pre>
+}</code></pre>
 
 <h3>The Appointment entity — note the UNIQUE</h3>
-<pre><span class="tok-keyword">@Entity</span> <span class="tok-keyword">@Table</span>(name = <span class="tok-string">"appointments"</span>,
+<pre><code class="language-java"><span class="tok-keyword">@Entity</span> <span class="tok-keyword">@Table</span>(name = <span class="tok-string">"appointments"</span>,
   uniqueConstraints = <span class="tok-keyword">@UniqueConstraint</span>(name = <span class="tok-string">"uq_active_slot"</span>, columnNames = <span class="tok-string">"slot_id"</span>))
 <span class="tok-keyword">@Getter</span> <span class="tok-keyword">@Setter</span>
 <span class="tok-keyword">public class</span> <span class="tok-type">Appointment</span> {
@@ -835,10 +835,10 @@ Controller ──DTO──▶ Service ──entity──▶ Repository ──SQL
   <span class="tok-keyword">private</span> <span class="tok-type">AppointmentStatus</span> status = AppointmentStatus.PENDING;
 
   <span class="tok-keyword">private</span> <span class="tok-type">LocalDateTime</span> createdAt = LocalDateTime.now();
-}</pre>
+}</code></pre>
 
 <h3>Repositories — declare, don't implement</h3>
-<pre><span class="tok-keyword">public interface</span> <span class="tok-type">SlotRepository</span> <span class="tok-keyword">extends</span> <span class="tok-type">JpaRepository</span>&lt;Slot, Long&gt; {
+<pre><code class="language-java"><span class="tok-keyword">public interface</span> <span class="tok-type">SlotRepository</span> <span class="tok-keyword">extends</span> <span class="tok-type">JpaRepository</span>&lt;Slot, Long&gt; {
   <span class="tok-comment">// Spring turns the method name into SQL automatically:</span>
   <span class="tok-type">List</span>&lt;Slot&gt; <span class="tok-function">findByDoctorIdAndStatus</span>(<span class="tok-type">Long</span> doctorId, <span class="tok-type">SlotStatus</span> status);
 }
@@ -846,7 +846,7 @@ Controller ──DTO──▶ Service ──entity──▶ Repository ──SQL
 <span class="tok-keyword">public interface</span> <span class="tok-type">AppointmentRepository</span> <span class="tok-keyword">extends</span> <span class="tok-type">JpaRepository</span>&lt;Appointment, Long&gt; {
   <span class="tok-type">List</span>&lt;Appointment&gt; <span class="tok-function">findByPatientId</span>(<span class="tok-type">Long</span> patientId);
   <span class="tok-keyword">boolean</span> <span class="tok-function">existsBySlotId</span>(<span class="tok-type">Long</span> slotId);
-}</pre>
+}</code></pre>
 <p><code>findByDoctorIdAndStatus</code> becomes <code>SELECT * FROM slots WHERE doctor_id=? AND status=?</code>. You wrote zero SQL.</p>
 
 <div class="pitfall"><strong>Trap:</strong> <code>FetchType.EAGER</code> on <code>@ManyToOne</code> everywhere. It looks convenient but silently loads whole object graphs on every query — the classic N+1 performance bug. Default to <code>LAZY</code> and fetch what you need explicitly.</div>
@@ -859,7 +859,7 @@ Controller ──DTO──▶ Service ──entity──▶ Repository ──SQL
 <p class="lead">Mỗi bảng thành một lớp Java được annotate JPA. Quan hệ thành tham chiếu đối tượng. Rồi một interface một dòng cho mỗi bảng cho bạn CRUD đầy đủ — không phải viết SQL.</p>
 
 <h3>Entity Slot</h3>
-<pre><span class="tok-keyword">@Entity</span> <span class="tok-keyword">@Table</span>(name = <span class="tok-string">"slots"</span>,
+<pre><code class="language-java"><span class="tok-keyword">@Entity</span> <span class="tok-keyword">@Table</span>(name = <span class="tok-string">"slots"</span>,
   uniqueConstraints = <span class="tok-keyword">@UniqueConstraint</span>(columnNames = {<span class="tok-string">"doctor_id"</span>, <span class="tok-string">"start_time"</span>}))
 <span class="tok-keyword">@Getter</span> <span class="tok-keyword">@Setter</span>  <span class="tok-comment">// Lombok</span>
 <span class="tok-keyword">public class</span> <span class="tok-type">Slot</span> {
@@ -876,10 +876,10 @@ Controller ──DTO──▶ Service ──entity──▶ Repository ──SQL
 
   <span class="tok-keyword">@Version</span>                        <span class="tok-comment">// ★ optimistic lock — Mục 4 dùng cái này</span>
   <span class="tok-keyword">private</span> <span class="tok-type">Long</span> version;
-}</pre>
+}</code></pre>
 
 <h3>Entity Appointment — chú ý UNIQUE</h3>
-<pre><span class="tok-keyword">@Entity</span> <span class="tok-keyword">@Table</span>(name = <span class="tok-string">"appointments"</span>,
+<pre><code class="language-java"><span class="tok-keyword">@Entity</span> <span class="tok-keyword">@Table</span>(name = <span class="tok-string">"appointments"</span>,
   uniqueConstraints = <span class="tok-keyword">@UniqueConstraint</span>(name = <span class="tok-string">"uq_active_slot"</span>, columnNames = <span class="tok-string">"slot_id"</span>))
 <span class="tok-keyword">@Getter</span> <span class="tok-keyword">@Setter</span>
 <span class="tok-keyword">public class</span> <span class="tok-type">Appointment</span> {
@@ -896,10 +896,10 @@ Controller ──DTO──▶ Service ──entity──▶ Repository ──SQL
   <span class="tok-keyword">private</span> <span class="tok-type">AppointmentStatus</span> status = AppointmentStatus.PENDING;
 
   <span class="tok-keyword">private</span> <span class="tok-type">LocalDateTime</span> createdAt = LocalDateTime.now();
-}</pre>
+}</code></pre>
 
 <h3>Repository — khai báo, không hiện thực</h3>
-<pre><span class="tok-keyword">public interface</span> <span class="tok-type">SlotRepository</span> <span class="tok-keyword">extends</span> <span class="tok-type">JpaRepository</span>&lt;Slot, Long&gt; {
+<pre><code class="language-java"><span class="tok-keyword">public interface</span> <span class="tok-type">SlotRepository</span> <span class="tok-keyword">extends</span> <span class="tok-type">JpaRepository</span>&lt;Slot, Long&gt; {
   <span class="tok-comment">// Spring biến tên method thành SQL tự động:</span>
   <span class="tok-type">List</span>&lt;Slot&gt; <span class="tok-function">findByDoctorIdAndStatus</span>(<span class="tok-type">Long</span> doctorId, <span class="tok-type">SlotStatus</span> status);
 }
@@ -907,7 +907,7 @@ Controller ──DTO──▶ Service ──entity──▶ Repository ──SQL
 <span class="tok-keyword">public interface</span> <span class="tok-type">AppointmentRepository</span> <span class="tok-keyword">extends</span> <span class="tok-type">JpaRepository</span>&lt;Appointment, Long&gt; {
   <span class="tok-type">List</span>&lt;Appointment&gt; <span class="tok-function">findByPatientId</span>(<span class="tok-type">Long</span> patientId);
   <span class="tok-keyword">boolean</span> <span class="tok-function">existsBySlotId</span>(<span class="tok-type">Long</span> slotId);
-}</pre>
+}</code></pre>
 <p><code>findByDoctorIdAndStatus</code> thành <code>SELECT * FROM slots WHERE doctor_id=? AND status=?</code>. Bạn viết không dòng SQL nào.</p>
 
 <div class="pitfall"><strong>Bẫy:</strong> <code>FetchType.EAGER</code> trên mọi <code>@ManyToOne</code>. Nhìn tiện nhưng lặng lẽ nạp cả đồ thị đối tượng ở mỗi truy vấn — lỗi hiệu năng N+1 kinh điển. Mặc định <code>LAZY</code> và nạp thứ cần một cách tường minh.</div>
@@ -938,7 +938,7 @@ Controller ──DTO──▶ Service ──entity──▶ Repository ──SQL
 }</pre>
 
 <h3>Step 2 — the Service (business intent, no HTTP)</h3>
-<pre><span class="tok-keyword">@Service</span> <span class="tok-keyword">@RequiredArgsConstructor</span>
+<pre><code class="language-java"><span class="tok-keyword">@Service</span> <span class="tok-keyword">@RequiredArgsConstructor</span>
 <span class="tok-keyword">public class</span> <span class="tok-type">SlotService</span> {
   <span class="tok-keyword">private final</span> <span class="tok-type">SlotRepository</span> slotRepo;
 
@@ -946,10 +946,10 @@ Controller ──DTO──▶ Service ──entity──▶ Repository ──SQL
     <span class="tok-keyword">return</span> slotRepo.findByDoctorIdAndStatus(doctorId, SlotStatus.FREE)
         .stream().map(SlotDto::from).toList();
   }
-}</pre>
+}</code></pre>
 
 <h3>Step 3 — the Controller (HTTP only)</h3>
-<pre><span class="tok-keyword">@RestController</span> <span class="tok-keyword">@RequestMapping</span>(<span class="tok-string">"/api/doctors"</span>) <span class="tok-keyword">@RequiredArgsConstructor</span>
+<pre><code class="language-java"><span class="tok-keyword">@RestController</span> <span class="tok-keyword">@RequestMapping</span>(<span class="tok-string">"/api/doctors"</span>) <span class="tok-keyword">@RequiredArgsConstructor</span>
 <span class="tok-keyword">public class</span> <span class="tok-type">DoctorController</span> {
   <span class="tok-keyword">private final</span> <span class="tok-type">SlotService</span> slotService;
 
@@ -957,7 +957,7 @@ Controller ──DTO──▶ Service ──entity──▶ Repository ──SQL
   <span class="tok-keyword">public</span> <span class="tok-type">List</span>&lt;SlotDto&gt; <span class="tok-function">freeSlots</span>(<span class="tok-keyword">@PathVariable</span> <span class="tok-type">Long</span> id) {
     <span class="tok-keyword">return</span> slotService.freeSlotsOf(id);
   }
-}</pre>
+}</code></pre>
 
 <h3>Step 4 — test it (real output)</h3>
 <div class="out"><b>Request:</b>  curl http://localhost:8080/api/doctors/1/slots
@@ -990,7 +990,7 @@ Controller ──DTO──▶ Service ──entity──▶ Repository ──SQL
 }</pre>
 
 <h3>Bước 2 — Service (ý định nghiệp vụ, không HTTP)</h3>
-<pre><span class="tok-keyword">@Service</span> <span class="tok-keyword">@RequiredArgsConstructor</span>
+<pre><code class="language-java"><span class="tok-keyword">@Service</span> <span class="tok-keyword">@RequiredArgsConstructor</span>
 <span class="tok-keyword">public class</span> <span class="tok-type">SlotService</span> {
   <span class="tok-keyword">private final</span> <span class="tok-type">SlotRepository</span> slotRepo;
 
@@ -998,10 +998,10 @@ Controller ──DTO──▶ Service ──entity──▶ Repository ──SQL
     <span class="tok-keyword">return</span> slotRepo.findByDoctorIdAndStatus(doctorId, SlotStatus.FREE)
         .stream().map(SlotDto::from).toList();
   }
-}</pre>
+}</code></pre>
 
 <h3>Bước 3 — Controller (chỉ HTTP)</h3>
-<pre><span class="tok-keyword">@RestController</span> <span class="tok-keyword">@RequestMapping</span>(<span class="tok-string">"/api/doctors"</span>) <span class="tok-keyword">@RequiredArgsConstructor</span>
+<pre><code class="language-java"><span class="tok-keyword">@RestController</span> <span class="tok-keyword">@RequestMapping</span>(<span class="tok-string">"/api/doctors"</span>) <span class="tok-keyword">@RequiredArgsConstructor</span>
 <span class="tok-keyword">public class</span> <span class="tok-type">DoctorController</span> {
   <span class="tok-keyword">private final</span> <span class="tok-type">SlotService</span> slotService;
 
@@ -1009,7 +1009,7 @@ Controller ──DTO──▶ Service ──entity──▶ Repository ──SQL
   <span class="tok-keyword">public</span> <span class="tok-type">List</span>&lt;SlotDto&gt; <span class="tok-function">freeSlots</span>(<span class="tok-keyword">@PathVariable</span> <span class="tok-type">Long</span> id) {
     <span class="tok-keyword">return</span> slotService.freeSlotsOf(id);
   }
-}</pre>
+}</code></pre>
 
 <h3>Bước 4 — thử nó (kết quả thật)</h3>
 <div class="out"><b>Request:</b>  curl http://localhost:8080/api/doctors/1/slots
@@ -1054,7 +1054,7 @@ Controller ──DTO──▶ Service ──entity──▶ Repository ──SQL
 <p>The server does not store sessions. It trusts the token because only the server knows the SECRET used to sign it — tamper with one byte and the signature check fails.</p>
 
 <h3>Register &amp; login — the service</h3>
-<pre><span class="tok-keyword">@Service</span> <span class="tok-keyword">@RequiredArgsConstructor</span>
+<pre><code class="language-java"><span class="tok-keyword">@Service</span> <span class="tok-keyword">@RequiredArgsConstructor</span>
 <span class="tok-keyword">public class</span> <span class="tok-type">AuthService</span> {
   <span class="tok-keyword">private final</span> <span class="tok-type">UserRepository</span> users;
   <span class="tok-keyword">private final</span> <span class="tok-type">PasswordEncoder</span> encoder;   <span class="tok-comment">// BCryptPasswordEncoder bean</span>
@@ -1078,7 +1078,7 @@ Controller ──DTO──▶ Service ──entity──▶ Repository ──SQL
       <span class="tok-keyword">throw new</span> <span class="tok-type">UnauthorizedException</span>(<span class="tok-string">"Bad credentials"</span>);
     <span class="tok-keyword">return</span> jwt.issue(u);   <span class="tok-comment">// signs { sub: email, role, exp }</span>
   }
-}</pre>
+}</code></pre>
 
 <h3>Worked example — the login round-trip</h3>
 <div class="out"><b>1.</b> POST /api/auth/register { "email":"an@mail.com", "password":"Secret123", "fullName":"An" }
@@ -1112,7 +1112,7 @@ Controller ──DTO──▶ Service ──entity──▶ Repository ──SQL
 <p>Server không lưu session. Nó tin token vì chỉ server biết SECRET dùng để ký — sửa một byte là chữ ký sai.</p>
 
 <h3>Đăng ký &amp; đăng nhập — service</h3>
-<pre><span class="tok-keyword">@Service</span> <span class="tok-keyword">@RequiredArgsConstructor</span>
+<pre><code class="language-java"><span class="tok-keyword">@Service</span> <span class="tok-keyword">@RequiredArgsConstructor</span>
 <span class="tok-keyword">public class</span> <span class="tok-type">AuthService</span> {
   <span class="tok-keyword">private final</span> <span class="tok-type">UserRepository</span> users;
   <span class="tok-keyword">private final</span> <span class="tok-type">PasswordEncoder</span> encoder;   <span class="tok-comment">// bean BCryptPasswordEncoder</span>
@@ -1136,7 +1136,7 @@ Controller ──DTO──▶ Service ──entity──▶ Repository ──SQL
       <span class="tok-keyword">throw new</span> <span class="tok-type">UnauthorizedException</span>(<span class="tok-string">"Sai thông tin đăng nhập"</span>);
     <span class="tok-keyword">return</span> jwt.issue(u);   <span class="tok-comment">// ký { sub: email, role, exp }</span>
   }
-}</pre>
+}</code></pre>
 
 <h3>Ví dụ có lời giải — vòng đăng nhập</h3>
 <div class="out"><b>1.</b> POST /api/auth/register { "email":"an@mail.com", "password":"Secret123", "fullName":"An" }
@@ -1186,13 +1186,13 @@ Controller ──DTO──▶ Service ──entity──▶ Repository ──SQL
 <p>The <code>jwtFilter</code> reads the <code>Authorization</code> header, validates the token, and puts the user + role into the security context so these rules can fire.</p>
 
 <h3>Ownership check — role is not enough</h3>
-<pre><span class="tok-keyword">public void</span> <span class="tok-function">cancel</span>(<span class="tok-type">Long</span> apptId, <span class="tok-type">Long</span> currentUserId) {
+<pre><code class="language-java"><span class="tok-keyword">public void</span> <span class="tok-function">cancel</span>(<span class="tok-type">Long</span> apptId, <span class="tok-type">Long</span> currentUserId) {
   <span class="tok-type">Appointment</span> a = appts.findById(apptId).orElseThrow(NotFoundException::new);
   <span class="tok-keyword">if</span> (!a.getPatient().getId().equals(currentUserId))   <span class="tok-comment">// ★ own it?</span>
     <span class="tok-keyword">throw new</span> <span class="tok-type">ForbiddenException</span>(<span class="tok-string">"Not your appointment"</span>);   <span class="tok-comment">// → 403</span>
   a.setStatus(AppointmentStatus.CANCELLED);
   a.getSlot().setStatus(SlotStatus.FREE);              <span class="tok-comment">// release the slot</span>
-}</pre>
+}</code></pre>
 
 <h3>Worked example — the permission matrix</h3>
 <table>
@@ -1231,13 +1231,13 @@ Controller ──DTO──▶ Service ──entity──▶ Repository ──SQL
 <p><code>jwtFilter</code> đọc header <code>Authorization</code>, kiểm token, và đặt user + role vào security context để các quy tắc này kích hoạt.</p>
 
 <h3>Kiểm quyền sở hữu — chỉ role là chưa đủ</h3>
-<pre><span class="tok-keyword">public void</span> <span class="tok-function">cancel</span>(<span class="tok-type">Long</span> apptId, <span class="tok-type">Long</span> currentUserId) {
+<pre><code class="language-java"><span class="tok-keyword">public void</span> <span class="tok-function">cancel</span>(<span class="tok-type">Long</span> apptId, <span class="tok-type">Long</span> currentUserId) {
   <span class="tok-type">Appointment</span> a = appts.findById(apptId).orElseThrow(NotFoundException::new);
   <span class="tok-keyword">if</span> (!a.getPatient().getId().equals(currentUserId))   <span class="tok-comment">// ★ có phải của mình?</span>
     <span class="tok-keyword">throw new</span> <span class="tok-type">ForbiddenException</span>(<span class="tok-string">"Không phải lịch của bạn"</span>);   <span class="tok-comment">// → 403</span>
   a.setStatus(AppointmentStatus.CANCELLED);
   a.getSlot().setStatus(SlotStatus.FREE);              <span class="tok-comment">// trả lại khung</span>
-}</pre>
+}</code></pre>
 
 <h3>Ví dụ có lời giải — ma trận quyền</h3>
 <table>
@@ -1438,7 +1438,7 @@ Trạng thái cuối: đúng MỘT lịch cho khung 42.</div>
 <span class="tok-keyword">public record</span> <span class="tok-type">BookRequest</span>(<span class="tok-keyword">@NotNull</span> <span class="tok-type">Long</span> slotId) {}</pre>
 
 <h3>One error shape for the whole API</h3>
-<pre><span class="tok-keyword">@RestControllerAdvice</span>
+<pre><code class="language-java"><span class="tok-keyword">@RestControllerAdvice</span>
 <span class="tok-keyword">public class</span> <span class="tok-type">ApiExceptionHandler</span> {
 
   <span class="tok-keyword">@ExceptionHandler</span>(ConflictException.class)
@@ -1457,7 +1457,7 @@ Trạng thái cuối: đúng MỘT lịch cho khung 42.</div>
     <span class="tok-keyword">return</span> ResponseEntity.status(s).body(<span class="tok-keyword">new</span> <span class="tok-type">ApiError</span>(s.value(), msg));
   }
 }
-<span class="tok-keyword">public record</span> <span class="tok-type">ApiError</span>(<span class="tok-keyword">int</span> status, <span class="tok-type">String</span> message) {}</pre>
+<span class="tok-keyword">public record</span> <span class="tok-type">ApiError</span>(<span class="tok-keyword">int</span> status, <span class="tok-type">String</span> message) {}</code></pre>
 
 <h3>Worked example — the status-code contract</h3>
 <table>
@@ -1493,7 +1493,7 @@ Trạng thái cuối: đúng MỘT lịch cho khung 42.</div>
 <span class="tok-keyword">public record</span> <span class="tok-type">BookRequest</span>(<span class="tok-keyword">@NotNull</span> <span class="tok-type">Long</span> slotId) {}</pre>
 
 <h3>Một hình dạng lỗi cho cả API</h3>
-<pre><span class="tok-keyword">@RestControllerAdvice</span>
+<pre><code class="language-java"><span class="tok-keyword">@RestControllerAdvice</span>
 <span class="tok-keyword">public class</span> <span class="tok-type">ApiExceptionHandler</span> {
 
   <span class="tok-keyword">@ExceptionHandler</span>(ConflictException.class)
@@ -1512,7 +1512,7 @@ Trạng thái cuối: đúng MỘT lịch cho khung 42.</div>
     <span class="tok-keyword">return</span> ResponseEntity.status(s).body(<span class="tok-keyword">new</span> <span class="tok-type">ApiError</span>(s.value(), msg));
   }
 }
-<span class="tok-keyword">public record</span> <span class="tok-type">ApiError</span>(<span class="tok-keyword">int</span> status, <span class="tok-type">String</span> message) {}</pre>
+<span class="tok-keyword">public record</span> <span class="tok-type">ApiError</span>(<span class="tok-keyword">int</span> status, <span class="tok-type">String</span> message) {}</code></pre>
 
 <h3>Ví dụ có lời giải — hợp đồng status-code</h3>
 <table>
@@ -1618,7 +1618,7 @@ Trạng thái cuối: đúng MỘT lịch cho khung 42.</div>
 <p class="lead">Scaffold with <code>npm create vite@latest web -- --template react</code>, add <code>axios</code> and <code>react-router-dom</code>. Two pieces make the whole frontend simple: a single <strong>axios instance</strong> that attaches the JWT automatically, and an <strong>AuthContext</strong> that remembers who is logged in.</p>
 
 <h3>One axios client for the whole app</h3>
-<pre><span class="tok-comment">// src/api/client.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// src/api/client.js</span>
 <span class="tok-keyword">import</span> axios <span class="tok-keyword">from</span> <span class="tok-string">'axios'</span>;
 
 <span class="tok-keyword">export const</span> api = axios.create({ baseURL: <span class="tok-string">'/api'</span> });
@@ -1640,10 +1640,10 @@ api.interceptors.response.use(
     }
     <span class="tok-keyword">return</span> Promise.reject(err);
   }
-);</pre>
+);</code></pre>
 
 <h3>AuthContext — remember the user</h3>
-<pre><span class="tok-comment">// src/auth/AuthContext.jsx</span>
+<pre><code class="language-javascript"><span class="tok-comment">// src/auth/AuthContext.jsx</span>
 <span class="tok-keyword">import</span> { createContext, useContext, useState } <span class="tok-keyword">from</span> <span class="tok-string">'react'</span>;
 <span class="tok-keyword">import</span> { api } <span class="tok-keyword">from</span> <span class="tok-string">'../api/client'</span>;
 
@@ -1666,7 +1666,7 @@ api.interceptors.response.use(
   }
   <span class="tok-keyword">return</span> &lt;AuthContext.Provider value={{ user, login, logout }}&gt;{children}&lt;/AuthContext.Provider&gt;;
 }
-<span class="tok-keyword">export const</span> useAuth = () =&gt; useContext(AuthContext);</pre>
+<span class="tok-keyword">export const</span> useAuth = () =&gt; useContext(AuthContext);</code></pre>
 
 <div class="callout ok">Now any component calls <code>const { user, login } = useAuth()</code> to read the session, and every <code>api.get/post</code> is already authenticated. You wrote the token logic once.</div>
 
@@ -1686,7 +1686,7 @@ api.interceptors.response.use(
 <p class="lead">Tạo khung bằng <code>npm create vite@latest web -- --template react</code>, thêm <code>axios</code> và <code>react-router-dom</code>. Hai mảnh làm cả frontend đơn giản: một <strong>instance axios</strong> tự gắn JWT, và một <strong>AuthContext</strong> nhớ ai đang đăng nhập.</p>
 
 <h3>Một client axios cho cả app</h3>
-<pre><span class="tok-comment">// src/api/client.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// src/api/client.js</span>
 <span class="tok-keyword">import</span> axios <span class="tok-keyword">from</span> <span class="tok-string">'axios'</span>;
 
 <span class="tok-keyword">export const</span> api = axios.create({ baseURL: <span class="tok-string">'/api'</span> });
@@ -1708,10 +1708,10 @@ api.interceptors.response.use(
     }
     <span class="tok-keyword">return</span> Promise.reject(err);
   }
-);</pre>
+);</code></pre>
 
 <h3>AuthContext — nhớ user</h3>
-<pre><span class="tok-comment">// src/auth/AuthContext.jsx</span>
+<pre><code class="language-javascript"><span class="tok-comment">// src/auth/AuthContext.jsx</span>
 <span class="tok-keyword">import</span> { createContext, useContext, useState } <span class="tok-keyword">from</span> <span class="tok-string">'react'</span>;
 <span class="tok-keyword">import</span> { api } <span class="tok-keyword">from</span> <span class="tok-string">'../api/client'</span>;
 
@@ -1734,7 +1734,7 @@ api.interceptors.response.use(
   }
   <span class="tok-keyword">return</span> &lt;AuthContext.Provider value={{ user, login, logout }}&gt;{children}&lt;/AuthContext.Provider&gt;;
 }
-<span class="tok-keyword">export const</span> useAuth = () =&gt; useContext(AuthContext);</pre>
+<span class="tok-keyword">export const</span> useAuth = () =&gt; useContext(AuthContext);</code></pre>
 
 <div class="callout ok">Giờ bất kỳ component nào gọi <code>const { user, login } = useAuth()</code> để đọc session, và mọi <code>api.get/post</code> đã được xác thực sẵn. Bạn viết logic token đúng một lần.</div>
 
@@ -1762,7 +1762,7 @@ api.interceptors.response.use(
 <p class="lead">The patient's core screen: list a doctor's free slots, click one, book it. The interesting part is <strong>handling the 409</strong> — when someone else grabbed the slot first, the UI must say so clearly and refresh, not crash.</p>
 
 <h3>The component</h3>
-<pre><span class="tok-keyword">import</span> { useEffect, useState } <span class="tok-keyword">from</span> <span class="tok-string">'react'</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> { useEffect, useState } <span class="tok-keyword">from</span> <span class="tok-string">'react'</span>;
 <span class="tok-keyword">import</span> { api } <span class="tok-keyword">from</span> <span class="tok-string">'../api/client'</span>;
 
 <span class="tok-keyword">export default function</span> <span class="tok-function">SlotPicker</span>({ doctorId }) {
@@ -1802,7 +1802,7 @@ api.interceptors.response.use(
       &lt;/ul&gt;
     &lt;/div&gt;
   );
-}</pre>
+}</code></pre>
 
 <h3>Worked example — the two-patient flow on screen</h3>
 <div class="out"><b>1.</b> An opens the page → sees 09:00, 10:00 free.
@@ -1820,7 +1820,7 @@ api.interceptors.response.use(
 <p class="lead">Màn hình lõi của bệnh nhân: liệt kê khung trống của bác sĩ, bấm một cái, đặt nó. Phần thú vị là <strong>xử lý 409</strong> — khi ai đó giành khung trước, UI phải nói rõ và làm mới, không sập.</p>
 
 <h3>Component</h3>
-<pre><span class="tok-keyword">import</span> { useEffect, useState } <span class="tok-keyword">from</span> <span class="tok-string">'react'</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> { useEffect, useState } <span class="tok-keyword">from</span> <span class="tok-string">'react'</span>;
 <span class="tok-keyword">import</span> { api } <span class="tok-keyword">from</span> <span class="tok-string">'../api/client'</span>;
 
 <span class="tok-keyword">export default function</span> <span class="tok-function">SlotPicker</span>({ doctorId }) {
@@ -1860,7 +1860,7 @@ api.interceptors.response.use(
       &lt;/ul&gt;
     &lt;/div&gt;
   );
-}</pre>
+}</code></pre>
 
 <h3>Ví dụ có lời giải — luồng hai bệnh nhân trên màn hình</h3>
 <div class="out"><b>1.</b> An mở trang → thấy 09:00, 10:00 trống.
@@ -1893,7 +1893,7 @@ api.interceptors.response.use(
 <p class="lead">Your acceptance criteria from Lesson 0.2 become tests here. Three levels: a fast <strong>unit test</strong> of the service, an <strong>integration test</strong> hitting the real endpoint, and the crown — a <strong>concurrency test</strong> that fires two bookings at the same slot simultaneously and proves exactly one wins.</p>
 
 <h3>Unit test — the service in isolation (Mockito)</h3>
-<pre><span class="tok-keyword">@Test</span> <span class="tok-keyword">void</span> <span class="tok-function">bookingAFreeSlotCreatesPendingAppointment</span>() {
+<pre><code class="language-java"><span class="tok-keyword">@Test</span> <span class="tok-keyword">void</span> <span class="tok-function">bookingAFreeSlotCreatesPendingAppointment</span>() {
   <span class="tok-type">Slot</span> free = slotWithStatus(SlotStatus.FREE);
   when(slots.findById(<span class="tok-number">42L</span>)).thenReturn(Optional.of(free));
   when(appts.saveAndFlush(any())).thenAnswer(inv -&gt; inv.getArgument(<span class="tok-number">0</span>));
@@ -1907,10 +1907,10 @@ api.interceptors.response.use(
 <span class="tok-keyword">@Test</span> <span class="tok-keyword">void</span> <span class="tok-function">bookingABookedSlotThrowsConflict</span>() {
   when(slots.findById(<span class="tok-number">42L</span>)).thenReturn(Optional.of(slotWithStatus(SlotStatus.BOOKED)));
   assertThrows(ConflictException.class, () -&gt; service.book(<span class="tok-number">42L</span>, <span class="tok-number">7L</span>));
-}</pre>
+}</code></pre>
 
 <h3>Integration test — the real endpoint (MockMvc + a test DB)</h3>
-<pre><span class="tok-keyword">@SpringBootTest</span> <span class="tok-keyword">@AutoConfigureMockMvc</span>
+<pre><code class="language-java"><span class="tok-keyword">@SpringBootTest</span> <span class="tok-keyword">@AutoConfigureMockMvc</span>
 <span class="tok-keyword">class</span> <span class="tok-type">AppointmentApiTest</span> {
   <span class="tok-keyword">@Autowired</span> <span class="tok-type">MockMvc</span> mvc;
 
@@ -1931,10 +1931,10 @@ api.interceptors.response.use(
         .contentType(APPLICATION_JSON).content(<span class="tok-string">"{\\"slotId\\": 43}"</span>))
       .andExpect(status().isForbidden());
   }
-}</pre>
+}</code></pre>
 
 <h3>★ The concurrency test — proof there is no double-booking</h3>
-<pre><span class="tok-keyword">@Test</span> <span class="tok-keyword">void</span> <span class="tok-function">twoPatientsBookSameSlot_onlyOneSucceeds</span>() <span class="tok-keyword">throws</span> Exception {
+<pre><code class="language-java"><span class="tok-keyword">@Test</span> <span class="tok-keyword">void</span> <span class="tok-function">twoPatientsBookSameSlot_onlyOneSucceeds</span>() <span class="tok-keyword">throws</span> Exception {
   <span class="tok-type">Long</span> slotId = seedFreeSlot();
   <span class="tok-keyword">var</span> pool = Executors.newFixedThreadPool(<span class="tok-number">2</span>);
   <span class="tok-keyword">var</span> start = <span class="tok-keyword">new</span> CountDownLatch(<span class="tok-number">1</span>);
@@ -1954,7 +1954,7 @@ api.interceptors.response.use(
   assertEquals(<span class="tok-number">1</span>, ok.get());              <span class="tok-comment">// exactly one booked</span>
   assertEquals(<span class="tok-number">1</span>, conflict.get());        <span class="tok-comment">// exactly one rejected</span>
   assertEquals(<span class="tok-number">1</span>, appts.countBySlotId(slotId)); <span class="tok-comment">// one row in the DB</span>
-}</pre>
+}</code></pre>
 
 <h3>Worked example — reading the result</h3>
 <div class="out"><b>Run:</b>  mvn test
@@ -1981,7 +1981,7 @@ api.interceptors.response.use(
 <p class="lead">Tiêu chí nghiệm thu ở Bài 0.2 trở thành test ở đây. Ba mức: một <strong>unit test</strong> nhanh cho service, một <strong>integration test</strong> gọi endpoint thật, và viên ngọc — một <strong>test đồng thời</strong> bắn hai lượt đặt cùng một khung cùng lúc và chứng minh đúng một cái thắng.</p>
 
 <h3>Unit test — service tách biệt (Mockito)</h3>
-<pre><span class="tok-keyword">@Test</span> <span class="tok-keyword">void</span> <span class="tok-function">bookingAFreeSlotCreatesPendingAppointment</span>() {
+<pre><code class="language-java"><span class="tok-keyword">@Test</span> <span class="tok-keyword">void</span> <span class="tok-function">bookingAFreeSlotCreatesPendingAppointment</span>() {
   <span class="tok-type">Slot</span> free = slotWithStatus(SlotStatus.FREE);
   when(slots.findById(<span class="tok-number">42L</span>)).thenReturn(Optional.of(free));
   when(appts.saveAndFlush(any())).thenAnswer(inv -&gt; inv.getArgument(<span class="tok-number">0</span>));
@@ -1995,10 +1995,10 @@ api.interceptors.response.use(
 <span class="tok-keyword">@Test</span> <span class="tok-keyword">void</span> <span class="tok-function">bookingABookedSlotThrowsConflict</span>() {
   when(slots.findById(<span class="tok-number">42L</span>)).thenReturn(Optional.of(slotWithStatus(SlotStatus.BOOKED)));
   assertThrows(ConflictException.class, () -&gt; service.book(<span class="tok-number">42L</span>, <span class="tok-number">7L</span>));
-}</pre>
+}</code></pre>
 
 <h3>Integration test — endpoint thật (MockMvc + DB test)</h3>
-<pre><span class="tok-keyword">@SpringBootTest</span> <span class="tok-keyword">@AutoConfigureMockMvc</span>
+<pre><code class="language-java"><span class="tok-keyword">@SpringBootTest</span> <span class="tok-keyword">@AutoConfigureMockMvc</span>
 <span class="tok-keyword">class</span> <span class="tok-type">AppointmentApiTest</span> {
   <span class="tok-keyword">@Autowired</span> <span class="tok-type">MockMvc</span> mvc;
 
@@ -2019,10 +2019,10 @@ api.interceptors.response.use(
         .contentType(APPLICATION_JSON).content(<span class="tok-string">"{\\"slotId\\": 43}"</span>))
       .andExpect(status().isForbidden());
   }
-}</pre>
+}</code></pre>
 
 <h3>★ Test đồng thời — bằng chứng không đặt trùng</h3>
-<pre><span class="tok-keyword">@Test</span> <span class="tok-keyword">void</span> <span class="tok-function">twoPatientsBookSameSlot_onlyOneSucceeds</span>() <span class="tok-keyword">throws</span> Exception {
+<pre><code class="language-java"><span class="tok-keyword">@Test</span> <span class="tok-keyword">void</span> <span class="tok-function">twoPatientsBookSameSlot_onlyOneSucceeds</span>() <span class="tok-keyword">throws</span> Exception {
   <span class="tok-type">Long</span> slotId = seedFreeSlot();
   <span class="tok-keyword">var</span> pool = Executors.newFixedThreadPool(<span class="tok-number">2</span>);
   <span class="tok-keyword">var</span> start = <span class="tok-keyword">new</span> CountDownLatch(<span class="tok-number">1</span>);
@@ -2042,7 +2042,7 @@ api.interceptors.response.use(
   assertEquals(<span class="tok-number">1</span>, ok.get());              <span class="tok-comment">// đúng một cái đặt được</span>
   assertEquals(<span class="tok-number">1</span>, conflict.get());        <span class="tok-comment">// đúng một cái bị từ chối</span>
   assertEquals(<span class="tok-number">1</span>, appts.countBySlotId(slotId)); <span class="tok-comment">// một dòng trong DB</span>
-}</pre>
+}</code></pre>
 
 <h3>Ví dụ có lời giải — đọc kết quả</h3>
 <div class="out"><b>Chạy:</b>  mvn test
@@ -2264,14 +2264,14 @@ api.interceptors.response.use(
 
 <h3>1) Pessimistic lock — the alternative concurrency strategy</h3>
 <p>Section 4 used optimistic locking. For comparison — and to show you understand both — here is the pessimistic version. The DB physically locks the slot row until the transaction ends, so a second booker <em>waits</em> instead of failing:</p>
-<pre><span class="tok-keyword">@Lock</span>(LockModeType.PESSIMISTIC_WRITE)
+<pre><code class="language-sql"><span class="tok-keyword">@Lock</span>(LockModeType.PESSIMISTIC_WRITE)
 <span class="tok-keyword">@Query</span>(<span class="tok-string">"select s from Slot s where s.id = :id"</span>)
 <span class="tok-type">Optional</span>&lt;Slot&gt; <span class="tok-function">findByIdForUpdate</span>(<span class="tok-keyword">@Param</span>(<span class="tok-string">"id"</span>) <span class="tok-type">Long</span> id);
-<span class="tok-comment">// generates: SELECT ... FROM slots WHERE id=? FOR UPDATE</span></pre>
+<span class="tok-comment">// generates: SELECT ... FROM slots WHERE id=? FOR UPDATE</span></code></pre>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Trade-off to state in your defence:</b> optimistic scales better under low contention (no waiting, occasional retry); pessimistic guarantees the second caller waits rather than retries, but holds a lock and can deadlock if misused. For clinic booking either is correct — knowing <em>why</em> you chose one is the mark. <em>Beyond syllabus: comparative concurrency design.</em></div>
 
 <h3>2) Appointment reminders — a scheduled job (mocked)</h3>
-<pre><span class="tok-keyword">@Component</span> <span class="tok-keyword">@RequiredArgsConstructor</span>
+<pre><code class="language-java"><span class="tok-keyword">@Component</span> <span class="tok-keyword">@RequiredArgsConstructor</span>
 <span class="tok-keyword">public class</span> <span class="tok-type">ReminderJob</span> {
   <span class="tok-keyword">private final</span> <span class="tok-type">AppointmentRepository</span> appts;
 
@@ -2282,7 +2282,7 @@ api.interceptors.response.use(
              + <span class="tok-string">" you have an appointment at "</span> + a.getSlot().getStartTime()));
     <span class="tok-comment">// ★ mock: log instead of real email/SMS — same shape, zero cost, no scope creep</span>
   }
-}</pre>
+}</code></pre>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Mock the expensive edge.</b> A real email/SMS gateway is a scope killer (Lesson 0.2). A logged reminder proves the <em>design</em> — the scheduler, the query, the message — without an external dependency. Swapping the log line for a real provider later is a one-method change. <em>Beyond syllabus: designing a seam for a future integration.</em></div>
 
 <h3>3) A reporting endpoint — the receptionist's daily schedule</h3>
@@ -2322,14 +2322,14 @@ api.interceptors.response.use(
 
 <h3>1) Khoá bi quan — chiến lược tương tranh thay thế</h3>
 <p>Mục 4 dùng optimistic locking. Để so sánh — và cho thấy bạn hiểu cả hai — đây là bản pessimistic. DB khoá vật lý dòng slot tới khi transaction kết thúc, nên người đặt thứ hai <em>đợi</em> thay vì lỗi:</p>
-<pre><span class="tok-keyword">@Lock</span>(LockModeType.PESSIMISTIC_WRITE)
+<pre><code class="language-sql"><span class="tok-keyword">@Lock</span>(LockModeType.PESSIMISTIC_WRITE)
 <span class="tok-keyword">@Query</span>(<span class="tok-string">"select s from Slot s where s.id = :id"</span>)
 <span class="tok-type">Optional</span>&lt;Slot&gt; <span class="tok-function">findByIdForUpdate</span>(<span class="tok-keyword">@Param</span>(<span class="tok-string">"id"</span>) <span class="tok-type">Long</span> id);
-<span class="tok-comment">// sinh ra: SELECT ... FROM slots WHERE id=? FOR UPDATE</span></pre>
+<span class="tok-comment">// sinh ra: SELECT ... FROM slots WHERE id=? FOR UPDATE</span></code></pre>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Đánh đổi để nói khi bảo vệ:</b> optimistic mở rộng tốt hơn khi tranh chấp thấp (không đợi, thỉnh thoảng thử lại); pessimistic bảo đảm người gọi thứ hai đợi thay vì thử lại, nhưng giữ khoá và có thể deadlock nếu dùng sai. Với đặt lịch phòng khám, cái nào cũng đúng — biết <em>vì sao</em> bạn chọn một cái mới là điểm. <em>Ngoài giáo trình: thiết kế tương tranh so sánh.</em></div>
 
 <h3>2) Nhắc lịch — một job theo lịch (mock)</h3>
-<pre><span class="tok-keyword">@Component</span> <span class="tok-keyword">@RequiredArgsConstructor</span>
+<pre><code class="language-java"><span class="tok-keyword">@Component</span> <span class="tok-keyword">@RequiredArgsConstructor</span>
 <span class="tok-keyword">public class</span> <span class="tok-type">ReminderJob</span> {
   <span class="tok-keyword">private final</span> <span class="tok-type">AppointmentRepository</span> appts;
 
@@ -2340,7 +2340,7 @@ api.interceptors.response.use(
              + <span class="tok-string">" bạn có lịch lúc "</span> + a.getSlot().getStartTime()));
     <span class="tok-comment">// ★ mock: log thay vì email/SMS thật — cùng hình dạng, không tốn kém, không phình scope</span>
   }
-}</pre>
+}</code></pre>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Mock phần đắt đỏ ở rìa.</b> Một gateway email/SMS thật là thứ giết scope (Bài 0.2). Một nhắc lịch được log chứng minh <em>thiết kế</em> — bộ lịch, truy vấn, thông điệp — mà không phụ thuộc bên ngoài. Đổi dòng log lấy một provider thật sau này là thay đổi một method. <em>Ngoài giáo trình: thiết kế "đường nối" cho tích hợp tương lai.</em></div>
 
 <h3>3) Endpoint báo cáo — lịch trong ngày của lễ tân</h3>

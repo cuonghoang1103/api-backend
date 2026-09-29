@@ -392,7 +392,7 @@ Rồi <code>echo "7 35" | ./add</code> in ra <code>42</code>. Hãy nhìn bước
 <li><strong>The crucial structural fact</strong> — the procedures sit <em>between</em> the program and the data, in their own column. Data has no behaviour of its own. Compare that layout with Figure 7.6 on the next slide, where the middle column has moved <em>inside</em> the right column. That single move is the whole difference between slides 14 and 15.</li>
 <li><strong>"Or imperative paradigm"</strong> — the slide gives both names, and the exam may use either. <em>Imperative</em> because the code is a sequence of commands in the imperative mood: load this, add that, store there. It is the paradigm closest to how the von Neumann machine of Chapter 1 actually works, which is why it came first historically.</li>
 <li><strong>In C, the whole paradigm in one snippet</strong> — a <code>struct</code> holds data with no behaviour, and a separate function acts on it:
-<pre><code>typedef struct { char ten[20]; int diem; } SinhVien;   /* passive */
+<pre><code class="language-c">typedef struct { char ten[20]; int diem; } SinhVien;   /* passive */
 void inSV(SinhVien s) { printf("%s: %d\\n", s.ten, s.diem); }   /* the action, outside */
 ...
 inSV(s);   /* the program is the active agent */</code></pre>
@@ -406,7 +406,7 @@ Compiled and run, it prints <code>Cuong: 9</code>. Notice the call reads <code>i
 <li><strong>Sự kiện cấu trúc then chốt</strong> — các thủ tục nằm <em>GIỮA</em> chương trình và dữ liệu, ở một cột riêng của chúng. Dữ liệu không có hành vi của riêng nó. Hãy so bố cục ấy với Hình 7.6 ở slide sau, nơi cột giữa đã dời <em>VÀO BÊN TRONG</em> cột phải. Đúng một cú dời ấy là toàn bộ khác biệt giữa slide 14 và 15.</li>
 <li><strong>"Hay paradigm mệnh lệnh"</strong> — slide cho cả hai tên, và đề thi có thể dùng tên nào cũng được. Gọi là <em>mệnh lệnh</em> vì mã là một dãy câu ra lệnh ở thể mệnh lệnh: nạp cái này, cộng cái kia, cất chỗ nọ. Đây là paradigm gần nhất với cách cỗ máy von Neumann ở Chương 1 thật sự vận hành, và vì thế nó ra đời trước về mặt lịch sử.</li>
 <li><strong>Trong C, cả paradigm gói trong một đoạn</strong> — một <code>struct</code> giữ dữ liệu mà không có hành vi, và một hàm riêng tác động lên nó:
-<pre><code>typedef struct { char ten[20]; int diem; } SinhVien;   /* thụ động */
+<pre><code class="language-c">typedef struct { char ten[20]; int diem; } SinhVien;   /* thụ động */
 void inSV(SinhVien s) { printf("%s: %d\\n", s.ten, s.diem); }   /* hành động, nằm NGOÀI */
 ...
 inSV(s);   /* chương trình là tác nhân chủ động */</code></pre>
@@ -422,7 +422,7 @@ Biên dịch và chạy, nó in <code>Cuong: 9</code>. Để ý lời gọi đ�
 <li><strong>Two words changed, and they are exam keywords</strong> — <em>procedure</em> became <strong>method</strong>, and the arrow label became <strong>stimulus</strong> (elsewhere: "message"). If a question asks what an object-oriented program sends to an object, the slide's word is <em>stimulus</em>.</li>
 <li><strong>The name for what the figure draws</strong> — the deck never says it, but the concept is <strong>encapsulation</strong>: data and the operations on it bundled into one unit. Its companions are inheritance and polymorphism. Forouzan covers all three; this deck shows only the first, so do not expect the other two to be examined from these slides.</li>
 <li><strong>The same C example, made object-oriented</strong> — the behaviour moves inside:
-<pre><code>class SinhVien:
+<pre><code class="language-python">class SinhVien:
     def __init__(self, ten, diem): self.ten, self.diem = ten, diem
     def inRa(self): print(f"{self.ten}: {self.diem}")   # the method lives IN the object
 
@@ -438,7 +438,7 @@ Run, it prints <code>Cuong: 9</code> — byte for byte the same output as the pr
 <li><strong>Hai chữ đã đổi, và đó là từ khoá thi</strong> — <em>procedure</em> (thủ tục) thành <strong>method</strong> (phương thức), còn nhãn mũi tên thành <strong>stimulus</strong> (kích thích; sách khác gọi là "thông điệp"). Nếu đề hỏi chương trình hướng đối tượng GỬI cái gì tới đối tượng, chữ của slide là <em>stimulus</em>.</li>
 <li><strong>Tên gọi của thứ mà hình vẽ</strong> — deck không hề nói ra, nhưng khái niệm đó là <strong>đóng gói (encapsulation)</strong>: dữ liệu và các thao tác trên nó gói vào một khối. Hai người bạn đồng hành của nó là kế thừa và đa hình. Forouzan có đủ ba; deck này chỉ trình bày cái đầu, nên đừng chờ hai cái kia bị hỏi từ bộ slide này.</li>
 <li><strong>Chính ví dụ C ở trên, viết lại theo hướng đối tượng</strong> — hành vi dọn vào trong:
-<pre><code>class SinhVien:
+<pre><code class="language-python">class SinhVien:
     def __init__(self, ten, diem): self.ten, self.diem = ten, diem
     def inRa(self): print(f"{self.ten}: {self.diem}")   # phương thức NẰM TRONG đối tượng
 

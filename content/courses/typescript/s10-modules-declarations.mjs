@@ -24,7 +24,7 @@ export default {
 
 <h3>Exporting: named, default, and types</h3>
 <p>You can export values and types side by side. <code>export</code> in front of a declaration is a named export; <code>export default</code> marks the one main export:</p>
-<pre><code><span class="tok-comment">// math.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// math.ts</span>
 <span class="tok-keyword">export</span> <span class="tok-keyword">function</span> <span class="tok-function">add</span>(a: <span class="tok-keyword">number</span>, b: <span class="tok-keyword">number</span>): <span class="tok-keyword">number</span> { <span class="tok-keyword">return</span> a + b; }
 <span class="tok-keyword">export</span> <span class="tok-keyword">const</span> PI = <span class="tok-number">3.14159</span>;
 <span class="tok-keyword">export</span> <span class="tok-keyword">type</span> Vec2 = { x: <span class="tok-keyword">number</span>; y: <span class="tok-keyword">number</span> };
@@ -32,7 +32,7 @@ export default {
 
 <h3>Importing — and <code>import type</code></h3>
 <p>The default import needs no braces; named imports go in braces. A type-only import uses <code>import type</code> (or the inline <code>type</code> keyword), which the compiler erases entirely — it never becomes a runtime <code>require</code>:</p>
-<pre><code><span class="tok-comment">// app.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// app.ts</span>
 <span class="tok-keyword">import</span> identity, { add, PI, <span class="tok-keyword">type</span> Vec2 } <span class="tok-keyword">from</span> <span class="tok-string">'./math.js'</span>;
 <span class="tok-keyword">const</span> v: Vec2 = { x: <span class="tok-number">1</span>, y: <span class="tok-number">2</span> };
 <span class="tok-keyword">const</span> sum: <span class="tok-keyword">number</span> = <span class="tok-function">add</span>(v.x, v.y);
@@ -64,7 +64,7 @@ export default {
 
 <h3>Export: named, default, và kiểu</h3>
 <p>Bạn export cả giá trị lẫn kiểu song song. <code>export</code> trước một khai báo là named export; <code>export default</code> đánh dấu export chính duy nhất:</p>
-<pre><code><span class="tok-comment">// math.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// math.ts</span>
 <span class="tok-keyword">export</span> <span class="tok-keyword">function</span> <span class="tok-function">add</span>(a: <span class="tok-keyword">number</span>, b: <span class="tok-keyword">number</span>): <span class="tok-keyword">number</span> { <span class="tok-keyword">return</span> a + b; }
 <span class="tok-keyword">export</span> <span class="tok-keyword">const</span> PI = <span class="tok-number">3.14159</span>;
 <span class="tok-keyword">export</span> <span class="tok-keyword">type</span> Vec2 = { x: <span class="tok-keyword">number</span>; y: <span class="tok-keyword">number</span> };
@@ -72,7 +72,7 @@ export default {
 
 <h3>Import — và <code>import type</code></h3>
 <p>Import default không cần ngoặc nhọn; import named đặt trong ngoặc nhọn. Một import chỉ-kiểu dùng <code>import type</code> (hoặc từ khoá <code>type</code> nội dòng), thứ mà trình biên dịch xoá hoàn toàn — nó không bao giờ thành một <code>require</code> lúc chạy:</p>
-<pre><code><span class="tok-comment">// app.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// app.ts</span>
 <span class="tok-keyword">import</span> identity, { add, PI, <span class="tok-keyword">type</span> Vec2 } <span class="tok-keyword">from</span> <span class="tok-string">'./math.js'</span>;
 <span class="tok-keyword">const</span> v: Vec2 = { x: <span class="tok-number">1</span>, y: <span class="tok-number">2</span> };
 <span class="tok-keyword">const</span> sum: <span class="tok-keyword">number</span> = <span class="tok-function">add</span>(v.x, v.y);
@@ -114,7 +114,7 @@ export default {
 
 <h3>The problem: an untyped import is <code>any</code></h3>
 <p>Import from a JavaScript package that ships no types and, under strict settings, TypeScript refuses rather than silently giving you <code>any</code>:</p>
-<pre><code><span class="tok-comment">// use.ts — importing a JS package with no bundled types</span>
+<pre><code class="language-javascript"><span class="tok-comment">// use.ts — importing a JS package with no bundled types</span>
 <span class="tok-keyword">import</span> { fire } <span class="tok-keyword">from</span> <span class="tok-string">'confetti-cannon'</span>;
 <span class="tok-function">fire</span>(<span class="tok-number">100</span>);</code></pre>
 <div class="out">error TS7016: Could not find a declaration file for module 'confetti-cannon'. … implicitly has an 'any' type.</div>
@@ -122,18 +122,18 @@ export default {
 
 <h3>declare module: type an untyped package</h3>
 <p>An ambient declaration names a module and lists its exports. Put this in a <code>.d.ts</code> anywhere the compiler includes:</p>
-<pre><code><span class="tok-comment">// shims.d.ts — hand-written types for an untyped package</span>
+<pre><code class="language-javascript"><span class="tok-comment">// shims.d.ts — hand-written types for an untyped package</span>
 <span class="tok-keyword">declare</span> <span class="tok-keyword">module</span> <span class="tok-string">'confetti-cannon'</span> {
   <span class="tok-keyword">export</span> <span class="tok-keyword">function</span> <span class="tok-function">fire</span>(count: <span class="tok-keyword">number</span>): <span class="tok-keyword">void</span>;
 }</code></pre>
 <p>Now the import resolves and, crucially, is <em>checked</em>: the wrong argument type is caught just like any typed function.</p>
-<pre><code><span class="tok-function">fire</span>(<span class="tok-number">100</span>);        <span class="tok-comment">// ok — matches the ambient declaration</span>
+<pre><code class="language-typescript"><span class="tok-function">fire</span>(<span class="tok-number">100</span>);        <span class="tok-comment">// ok — matches the ambient declaration</span>
 <span class="tok-function">fire</span>(<span class="tok-string">'lots'</span>);     <span class="tok-comment">// wrong arg type, still checked</span></code></pre>
 <div class="out">use.ts(4,6): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.</div>
 
 <h3>Sidecar .d.ts for a relative JS file</h3>
 <p>For a local <code>.js</code> file you're gradually typing, don't use <code>declare module</code> (it can't name a relative path). Instead put a <code>.d.ts</code> with the <em>same basename</em> next to it — <code>legacy.js</code> gets a <code>legacy.d.ts</code> — and export the types directly:</p>
-<pre><code><span class="tok-comment">// legacy.d.ts — sits next to legacy.js, same basename</span>
+<pre><code class="language-javascript"><span class="tok-comment">// legacy.d.ts — sits next to legacy.js, same basename</span>
 <span class="tok-keyword">export</span> <span class="tok-keyword">function</span> <span class="tok-function">shout</span>(s: <span class="tok-keyword">string</span>): <span class="tok-keyword">string</span>;</code></pre>
 <div class="out">use.ts(2,7): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.</div>
 <p>TypeScript pairs <code>legacy.d.ts</code> with <code>legacy.js</code> automatically, and now <code>shout(42)</code> is a compile error. The <code>.d.ts</code> is the bridge between untyped JS and your typed code.</p>
@@ -161,7 +161,7 @@ export default {
 
 <h3>Vấn đề: import không kiểu là <code>any</code></h3>
 <p>Import từ một package JavaScript không kèm kiểu, và dưới thiết lập strict, TypeScript từ chối thay vì âm thầm cho bạn <code>any</code>:</p>
-<pre><code><span class="tok-comment">// use.ts — import một package JS không đóng gói kiểu</span>
+<pre><code class="language-javascript"><span class="tok-comment">// use.ts — import một package JS không đóng gói kiểu</span>
 <span class="tok-keyword">import</span> { fire } <span class="tok-keyword">from</span> <span class="tok-string">'confetti-cannon'</span>;
 <span class="tok-function">fire</span>(<span class="tok-number">100</span>);</code></pre>
 <div class="out">error TS7016: Could not find a declaration file for module 'confetti-cannon'. … implicitly has an 'any' type.</div>
@@ -169,18 +169,18 @@ export default {
 
 <h3>declare module: gõ kiểu một package không kiểu</h3>
 <p>Một khai báo ambient đặt tên một module và liệt kê các export của nó. Đặt cái này vào một <code>.d.ts</code> ở bất cứ đâu trình biên dịch có bao gồm:</p>
-<pre><code><span class="tok-comment">// shims.d.ts — kiểu viết tay cho một package không kiểu</span>
+<pre><code class="language-javascript"><span class="tok-comment">// shims.d.ts — kiểu viết tay cho một package không kiểu</span>
 <span class="tok-keyword">declare</span> <span class="tok-keyword">module</span> <span class="tok-string">'confetti-cannon'</span> {
   <span class="tok-keyword">export</span> <span class="tok-keyword">function</span> <span class="tok-function">fire</span>(count: <span class="tok-keyword">number</span>): <span class="tok-keyword">void</span>;
 }</code></pre>
 <p>Giờ import phân giải được và, quan trọng nhất, được <em>kiểm</em>: đối số sai kiểu bị bắt y như bất kỳ hàm có kiểu nào.</p>
-<pre><code><span class="tok-function">fire</span>(<span class="tok-number">100</span>);        <span class="tok-comment">// ok — khớp khai báo ambient</span>
+<pre><code class="language-typescript"><span class="tok-function">fire</span>(<span class="tok-number">100</span>);        <span class="tok-comment">// ok — khớp khai báo ambient</span>
 <span class="tok-function">fire</span>(<span class="tok-string">'lots'</span>);     <span class="tok-comment">// đối số sai kiểu, vẫn bị kiểm</span></code></pre>
 <div class="out">use.ts(4,6): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.</div>
 
 <h3>.d.ts đặt cạnh cho một file JS tương đối</h3>
 <p>Với một file <code>.js</code> cục bộ bạn đang dần gõ kiểu, đừng dùng <code>declare module</code> (nó không đặt tên được đường dẫn tương đối). Thay vào đó đặt một <code>.d.ts</code> <em>cùng basename</em> bên cạnh nó — <code>legacy.js</code> có một <code>legacy.d.ts</code> — và export kiểu trực tiếp:</p>
-<pre><code><span class="tok-comment">// legacy.d.ts — nằm cạnh legacy.js, cùng basename</span>
+<pre><code class="language-javascript"><span class="tok-comment">// legacy.d.ts — nằm cạnh legacy.js, cùng basename</span>
 <span class="tok-keyword">export</span> <span class="tok-keyword">function</span> <span class="tok-function">shout</span>(s: <span class="tok-keyword">string</span>): <span class="tok-keyword">string</span>;</code></pre>
 <div class="out">use.ts(2,7): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.</div>
 <p>TypeScript tự ghép <code>legacy.d.ts</code> với <code>legacy.js</code>, và giờ <code>shout(42)</code> là lỗi biên dịch. File <code>.d.ts</code> là cây cầu giữa JS không kiểu và code có kiểu của bạn.</p>
@@ -218,7 +218,7 @@ export default {
 
 <h3>declare global: extend a global type</h3>
 <p>Inside a module (a file with an <code>import</code>/<code>export</code>), a <code>declare global</code> block reopens a global interface and adds to it. Here we tell TypeScript that <code>window</code> has an <code>appVersion</code>:</p>
-<pre><code><span class="tok-comment">// global-aug.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// global-aug.ts</span>
 <span class="tok-keyword">export</span> {};   <span class="tok-comment">// makes this a module so &#96;declare global&#96; is allowed</span>
 <span class="tok-keyword">declare</span> <span class="tok-keyword">global</span> {
   <span class="tok-keyword">interface</span> Window {
@@ -232,7 +232,7 @@ console.<span class="tok-function">log</span>(window.appVresion);   <span class=
 
 <h3>Module augmentation: extend a library's type</h3>
 <p>The same merging works on a package. Reopen one of its interfaces with <code>declare module 'pkg'</code> and add fields. The canonical backend example is attaching the authenticated user to Express's <code>Request</code>:</p>
-<pre><code><span class="tok-comment">// express-augment.d.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// express-augment.d.ts</span>
 <span class="tok-keyword">import</span> <span class="tok-string">'express'</span>;
 <span class="tok-keyword">declare</span> <span class="tok-keyword">module</span> <span class="tok-string">'express'</span> {
   <span class="tok-keyword">interface</span> Request {
@@ -264,7 +264,7 @@ console.<span class="tok-function">log</span>(window.appVresion);   <span class=
 
 <h3>declare global: mở rộng một kiểu toàn cục</h3>
 <p>Bên trong một module (một file có <code>import</code>/<code>export</code>), một khối <code>declare global</code> mở lại một interface toàn cục và thêm vào nó. Ở đây ta báo cho TypeScript rằng <code>window</code> có một <code>appVersion</code>:</p>
-<pre><code><span class="tok-comment">// global-aug.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// global-aug.ts</span>
 <span class="tok-keyword">export</span> {};   <span class="tok-comment">// biến file này thành module để cho phép declare global</span>
 <span class="tok-keyword">declare</span> <span class="tok-keyword">global</span> {
   <span class="tok-keyword">interface</span> Window {
@@ -278,7 +278,7 @@ console.<span class="tok-function">log</span>(window.appVresion);   <span class=
 
 <h3>Module augmentation: mở rộng kiểu của một thư viện</h3>
 <p>Cùng cơ chế gộp hoạt động trên một package. Mở lại một interface của nó bằng <code>declare module 'pkg'</code> và thêm field. Ví dụ backend kinh điển là gắn người dùng đã xác thực vào <code>Request</code> của Express:</p>
-<pre><code><span class="tok-comment">// express-augment.d.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// express-augment.d.ts</span>
 <span class="tok-keyword">import</span> <span class="tok-string">'express'</span>;
 <span class="tok-keyword">declare</span> <span class="tok-keyword">module</span> <span class="tok-string">'express'</span> {
   <span class="tok-keyword">interface</span> Request {
@@ -320,12 +320,12 @@ console.<span class="tok-function">log</span>(window.appVresion);   <span class=
 
 <h3>Bundled types vs @types</h3>
 <p>Modern packages ship a <code>.d.ts</code> inside the package (its <code>package.json</code> points at it via <code>"types"</code>) — install and the types are just there. Older or plain-JS packages don't, so DefinitelyTyped provides types under the <code>@types</code> scope. When neither exists, the import fails:</p>
-<pre><code><span class="tok-comment">// notypes.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// notypes.ts</span>
 <span class="tok-keyword">import</span> leftpad <span class="tok-keyword">from</span> <span class="tok-string">'left-pad'</span>;   <span class="tok-comment">// installed, but ships no types</span>
 console.<span class="tok-function">log</span>(<span class="tok-function">leftpad</span>(<span class="tok-string">'7'</span>, <span class="tok-number">3</span>));</code></pre>
 <div class="out">notypes.ts(2,21): error TS2307: Cannot find module 'left-pad' or its corresponding type declarations.</div>
 <p>The fix is almost always to install the community types alongside the package:</p>
-<pre><code>npm install --save-dev @types/left-pad</code></pre>
+<pre><code class="language-bash">npm install --save-dev @types/left-pad</code></pre>
 <p>TypeScript automatically looks in <code>node_modules/@types</code>, so once installed the import resolves and <code>leftpad</code> is fully typed — no config needed. (If truly no types exist anywhere, fall back to the <code>declare module</code> shim from 10.2.)</p>
 
 <h3>How TypeScript finds types</h3>
@@ -354,12 +354,12 @@ console.<span class="tok-function">log</span>(<span class="tok-function">leftpad
 
 <h3>Kiểu đóng gói sẵn so với @types</h3>
 <p>Các package hiện đại kèm một <code>.d.ts</code> bên trong package (<code>package.json</code> của nó trỏ tới qua <code>"types"</code>) — cài xong là kiểu đã ở đó. Các package cũ hay JS thuần thì không, nên DefinitelyTyped cung cấp kiểu dưới scope <code>@types</code>. Khi không cái nào tồn tại, import thất bại:</p>
-<pre><code><span class="tok-comment">// notypes.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// notypes.ts</span>
 <span class="tok-keyword">import</span> leftpad <span class="tok-keyword">from</span> <span class="tok-string">'left-pad'</span>;   <span class="tok-comment">// đã cài, nhưng không kèm kiểu</span>
 console.<span class="tok-function">log</span>(<span class="tok-function">leftpad</span>(<span class="tok-string">'7'</span>, <span class="tok-number">3</span>));</code></pre>
 <div class="out">notypes.ts(2,21): error TS2307: Cannot find module 'left-pad' or its corresponding type declarations.</div>
 <p>Cách sửa gần như luôn là cài kiểu cộng đồng cùng với package:</p>
-<pre><code>npm install --save-dev @types/left-pad</code></pre>
+<pre><code class="language-bash">npm install --save-dev @types/left-pad</code></pre>
 <p>TypeScript tự động tìm trong <code>node_modules/@types</code>, nên cài xong là import phân giải được và <code>leftpad</code> có kiểu đầy đủ — không cần cấu hình. (Nếu thật sự không có kiểu ở đâu cả, quay về shim <code>declare module</code> ở bài 10.2.)</p>
 
 <h3>TypeScript tìm kiểu ra sao</h3>

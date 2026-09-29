@@ -308,7 +308,7 @@ const L1_DEEP = [
 <p class="nhan">Step 4 — a primary key for each table (slide 7)</p>
 <p>Surrogate <code>INT AUTO_INCREMENT</code> ids everywhere; natural unique values (username, e-mail) become <code>UNIQUE</code> columns.</p>
 <p class="nhan">Step 5 — associations to foreign keys (slide 8)</p>
-<pre>User       (<u>user_id</u>, username, email, password_hash, <em>role_id</em>, status, created_at)
+<pre><code class="language-sql">User       (<u>user_id</u>, username, email, password_hash, <em>role_id</em>, status, created_at)
 Recruiter  (<u>recruiter_id</u>, <em>user_id</em> UNIQUE, first_name, last_name, phone)
 Company    (<u>company_id</u>, <em>recruiter_id</em> UNIQUE, name, website, <em>team_size_id</em>)
 Category   (<u>category_id</u>, name)
@@ -318,7 +318,7 @@ Freelancer (<u>freelancer_id</u>, <em>user_id</em> UNIQUE, first_name, last_name
 JobApply   (<u>apply_id</u>, <em>freelancer_id</em>, <em>post_id</em>, cv_url, applied_at, status)
            -- UNIQUE (freelancer_id, post_id): one application per post
 
-<u>underline</u> = primary key     <em>italic</em> = foreign key   (the deck's notation, slide 10)</pre>
+<u>underline</u> = primary key     <em>italic</em> = foreign key   (the deck's notation, slide 10)</code></pre>
 <p class="ghi-chu">This is the <em>logical</em> design. Lessons 3.7 and 3.8 explain each mapping choice (why the FK of 1:1 goes into Freelancer, why JobApply is an associative table); lesson 3.9 turns it into MySQL 8 DDL.</p>`,
   `<h2>🛠️ Ví dụ làm từng bước — từ use case tới bảng (Job IT for Freelancer)</h2>
 <p>Ví dụ xuyên suốt chương là hệ thống mẫu của nhóm G5: freelancer tạo hồ sơ và ứng tuyển việc IT; recruiter đăng tin cho công ty của mình; admin duyệt bài đăng và viết blog. Làm theo năm bước dưới đây cho các màn hình <em>của bạn</em> ở mỗi iteration.</p>
@@ -565,14 +565,14 @@ const L2_ROWS = [
 </ol>
 <p class="nhan">The detail the slide leaves out</p>
 <p>An FK alone allows many cards per customer — that is 1:N, not 0..1. To really enforce "at most one card", add <code>UNIQUE</code> on the FK column.</p>
-<pre>CREATE TABLE debit_card (
+<pre><code class="language-sql">CREATE TABLE debit_card (
   card_id     INT PRIMARY KEY AUTO_INCREMENT,
   pin_hash    VARCHAR(100) NOT NULL,
   expires_on  DATE NOT NULL,
   status      TINYINT NOT NULL,
   customer_id INT NOT NULL UNIQUE,            -- UNIQUE = "0..1", without it = "many"
   FOREIGN KEY (customer_id) REFERENCES customer(customer_id)
-);</pre>
+);</code></pre>
 <p class="nhan">Same pattern in G5</p>
 <p><code>Freelancer.userID</code>, <code>Recruiter.userID</code> and <code>Admin.userID</code> are FKs to User, each with a UNIQUE index (<code>IX_Freelancer</code> …) — exactly this rule. ✅ One of the things the sample does right.</p>`,
     `<p class="y-chinh">🎯 Kết quả: <code>Debit Card (<u>Card Id</u>, PIN, Expiration date, Status, <em>Customer Id</em>)</code>.</p>
@@ -583,14 +583,14 @@ const L2_ROWS = [
 </ol>
 <p class="nhan">Chi tiết slide bỏ qua</p>
 <p>Chỉ có FK thì một khách vẫn có nhiều thẻ — đó là 1:N, không phải 0..1. Muốn thật sự ép "tối đa một thẻ", thêm <code>UNIQUE</code> trên cột FK.</p>
-<pre>CREATE TABLE debit_card (
+<pre><code class="language-sql">CREATE TABLE debit_card (
   card_id     INT PRIMARY KEY AUTO_INCREMENT,
   pin_hash    VARCHAR(100) NOT NULL,
   expires_on  DATE NOT NULL,
   status      TINYINT NOT NULL,
   customer_id INT NOT NULL UNIQUE,            -- UNIQUE = "0..1", không có = "nhiều"
   FOREIGN KEY (customer_id) REFERENCES customer(customer_id)
-);</pre>
+);</code></pre>
 <p class="nhan">Cùng mẫu trong G5</p>
 <p><code>Freelancer.userID</code>, <code>Recruiter.userID</code> và <code>Admin.userID</code> là FK tới User, mỗi cột có index UNIQUE (<code>IX_Freelancer</code> …) — đúng quy tắc này. ✅ Một điểm mẫu làm đúng.</p>`],
   [11, 'Association mapping — one-to-many (1/2)',
@@ -715,7 +715,7 @@ const L2_ROWS = [
 <li><strong>Also foreign keys</strong> — each part points back to its table (underlined <em>and</em> italic on the slide)</li>
 </ol>
 <p class="nhan">MySQL 8 — JobApply the "deck way"</p>
-<pre>CREATE TABLE job_apply (
+<pre><code class="language-sql">CREATE TABLE job_apply (
   freelancer_id INT NOT NULL,
   post_id       INT NOT NULL,
   cv_url        VARCHAR(500) NOT NULL,
@@ -724,7 +724,7 @@ const L2_ROWS = [
   PRIMARY KEY (freelancer_id, post_id),                 -- concatenated key
   FOREIGN KEY (freelancer_id) REFERENCES freelancer(freelancer_id),
   FOREIGN KEY (post_id)       REFERENCES post(post_id)
-);</pre>
+);</code></pre>
 <p class="nhan">Surrogate id variant (what G5 did — and what is missing)</p>
 <p>G5 gives JobApply its own <code>applyID</code> PK. That is acceptable (simpler URLs, simpler Java), <strong>but only with <code>UNIQUE (freelanceID, postID)</code></strong>. G5 has no such constraint, so the same freelancer can apply to the same post twice — the same gap exists in <code>FreelancerFavorites</code> and <code>Skills</code>.</p>`,
     `<p class="y-chinh">🎯 Kết quả: <code>Hours (<u><em>Project id</em></u>, <u><em>Employee id</em></u>, Hours worked)</code> — hai id vừa là PK vừa là FK.</p>
@@ -734,7 +734,7 @@ const L2_ROWS = [
 <li><strong>Đồng thời là khoá ngoại</strong> — mỗi phần trỏ về bảng của nó (trên slide vừa gạch chân <em>vừa</em> in nghiêng)</li>
 </ol>
 <p class="nhan">MySQL 8 — JobApply "theo đúng slide"</p>
-<pre>CREATE TABLE job_apply (
+<pre><code class="language-sql">CREATE TABLE job_apply (
   freelancer_id INT NOT NULL,
   post_id       INT NOT NULL,
   cv_url        VARCHAR(500) NOT NULL,
@@ -743,7 +743,7 @@ const L2_ROWS = [
   PRIMARY KEY (freelancer_id, post_id),                 -- khoá ghép
   FOREIGN KEY (freelancer_id) REFERENCES freelancer(freelancer_id),
   FOREIGN KEY (post_id)       REFERENCES post(post_id)
-);</pre>
+);</code></pre>
 <p class="nhan">Biến thể id thay thế (G5 làm — và còn thiếu gì)</p>
 <p>G5 cho JobApply một PK riêng <code>applyID</code>. Chấp nhận được (URL gọn, code Java gọn), <strong>nhưng chỉ khi có <code>UNIQUE (freelanceID, postID)</code></strong>. G5 không có ràng buộc đó, nên một freelancer có thể ứng tuyển cùng một bài hai lần — lỗ hổng tương tự ở <code>FreelancerFavorites</code> và <code>Skills</code>.</p>`],
   [16, 'Aggregation / composition hierarchy — the rules',
@@ -819,7 +819,7 @@ const L2_DEEP = [
 <li><strong>Degree 1 — * Education</strong> (a lookup) → FK + <code>ON DELETE RESTRICT</code>: you may not delete a degree still in use.</li>
 <li><strong>Freelancer * — * Skill</strong> with attribute <code>level</code> → associative table, concatenated PK (slides 13–15).</li>
 </ol>
-<pre>CREATE TABLE freelancer (
+<pre><code class="language-sql">CREATE TABLE freelancer (
   freelancer_id INT PRIMARY KEY AUTO_INCREMENT,
   user_id       INT NOT NULL,
   first_name    VARCHAR(50) NOT NULL,
@@ -847,7 +847,7 @@ CREATE TABLE freelancer_skill (
   PRIMARY KEY (freelancer_id, skill_id),                                -- concatenated key
   FOREIGN KEY (freelancer_id) REFERENCES freelancer(freelancer_id) ON DELETE CASCADE,
   FOREIGN KEY (skill_id)      REFERENCES skill(skill_id)
-);</pre>
+);</code></pre>
 <p class="ghi-chu"><code>CHECK</code> constraints are enforced from MySQL 8.0.16. On older versions they are parsed and silently ignored — say which version your team uses in the RDS.</p>`,
   `<h2>🛠️ Ví dụ làm từng bước — mọi quan hệ của hồ sơ freelancer, viết thành DDL MySQL 8</h2>
 <p>Màn "View / Update profile" của G5 hiển thị một freelancer cùng học vấn, kinh nghiệm và kỹ năng. Ánh xạ từng đường nối của phần class diagram đó bằng các quy tắc ở trên.</p>
@@ -857,7 +857,7 @@ CREATE TABLE freelancer_skill (
 <li><strong>Degree 1 — * Education</strong> (bảng tra cứu) → FK + <code>ON DELETE RESTRICT</code>: không được xoá một bằng cấp đang được dùng.</li>
 <li><strong>Freelancer * — * Skill</strong> có thuộc tính <code>level</code> → bảng liên kết, PK ghép (slide 13–15).</li>
 </ol>
-<pre>CREATE TABLE freelancer (
+<pre><code class="language-sql">CREATE TABLE freelancer (
   freelancer_id INT PRIMARY KEY AUTO_INCREMENT,
   user_id       INT NOT NULL,
   first_name    VARCHAR(50) NOT NULL,
@@ -885,7 +885,7 @@ CREATE TABLE freelancer_skill (
   PRIMARY KEY (freelancer_id, skill_id),                                -- khoá ghép
   FOREIGN KEY (freelancer_id) REFERENCES freelancer(freelancer_id) ON DELETE CASCADE,
   FOREIGN KEY (skill_id)      REFERENCES skill(skill_id)
-);</pre>
+);</code></pre>
 <p class="ghi-chu">Ràng buộc <code>CHECK</code> chỉ được thực thi từ MySQL 8.0.16. Bản cũ hơn đọc cú pháp rồi âm thầm bỏ qua — ghi rõ phiên bản nhóm dùng trong RDS.</p>`),
   bi(`<h2>🎯 Practice — decide the mapping (answers below each)</h2>
 <ol>
@@ -1032,7 +1032,7 @@ const L3_ROWS = [
 Checking Account (<u>Account Number</u>, Last Deposit Amount)
 Savings Account  (<u>Account Number</u>, Interest)</pre>
 <p class="nhan">In MySQL 8</p>
-<pre>CREATE TABLE account (
+<pre><code class="language-sql">CREATE TABLE account (
   account_number INT PRIMARY KEY,
   account_type   ENUM('CHECKING','SAVINGS') NOT NULL,     -- discriminator
   balance        DECIMAL(15,2) NOT NULL DEFAULT 0
@@ -1041,7 +1041,7 @@ CREATE TABLE savings_account (
   account_number INT PRIMARY KEY,                         -- shared id
   interest       DECIMAL(5,2) NOT NULL,
   FOREIGN KEY (account_number) REFERENCES account(account_number) ON DELETE CASCADE
-);</pre>`,
+);</code></pre>`,
     `<p class="y-chinh">🎯 Account tách thành Checking và Savings; <code>Account Number</code> là PK của cả ba bảng và <code>Account Type</code> là discriminator.</p>
 <p class="nhan">Static model</p>
 <ul>
@@ -1053,7 +1053,7 @@ CREATE TABLE savings_account (
 Checking Account (<u>Account Number</u>, Last Deposit Amount)
 Savings Account  (<u>Account Number</u>, Interest)</pre>
 <p class="nhan">Viết bằng MySQL 8</p>
-<pre>CREATE TABLE account (
+<pre><code class="language-sql">CREATE TABLE account (
   account_number INT PRIMARY KEY,
   account_type   ENUM('CHECKING','SAVINGS') NOT NULL,     -- discriminator
   balance        DECIMAL(15,2) NOT NULL DEFAULT 0
@@ -1062,7 +1062,7 @@ CREATE TABLE savings_account (
   account_number INT PRIMARY KEY,                         -- id dùng chung
   interest       DECIMAL(5,2) NOT NULL,
   FOREIGN KEY (account_number) REFERENCES account(account_number) ON DELETE CASCADE
-);</pre>`],
+);</code></pre>`],
   [21, 'Generalisation — subclasses only mapped to relations (3/4)',
     `<p class="y-chinh">🎯 Option 2: no superclass table — each subclass table repeats the superclass attributes.</p>
 <div class="pitfall co-tieu-de"><strong>Typo on the slide.</strong> Its heading says "Superclass only mapped to relations", but the content (and slide 18) describe <em>subclasses only</em>. The real "superclass only" option is slide 22. Quote the content, not the heading, in the exam.</div>
@@ -1112,7 +1112,7 @@ Savings Account  (<u>Account Number</u>, Balance, Interest)</pre>
 <li><strong>Only two or three subclasses</strong></li>
 </ul>
 <p class="nhan">Result and a safety net</p>
-<pre>CREATE TABLE account (
+<pre><code class="language-sql">CREATE TABLE account (
   account_number      INT PRIMARY KEY,
   account_type        ENUM('CHECKING','SAVINGS') NOT NULL,
   balance             DECIMAL(15,2) NOT NULL,
@@ -1120,7 +1120,7 @@ Savings Account  (<u>Account Number</u>, Balance, Interest)</pre>
   interest            DECIMAL(5,2)  NULL,     -- SAVINGS only
   CHECK ((account_type = 'SAVINGS'  AND interest IS NOT NULL)
       OR (account_type = 'CHECKING' AND interest IS NULL))
-);</pre>
+);</code></pre>
 <p class="ghi-chu">Fastest to query (no JOIN), and the choice many teams make for small trees — but write the CHECK, otherwise nothing stops a checking account with an interest rate.</p>`,
     `<p class="y-chinh">🎯 Cách 3: một bảng cho cả cây — mọi thuộc tính của class con được kéo lên, và discriminator cho biết dòng đó dùng những cột nào.</p>
 <p class="nhan">Quy tắc</p>
@@ -1135,7 +1135,7 @@ Savings Account  (<u>Account Number</u>, Balance, Interest)</pre>
 <li><strong>Chỉ có hai hoặc ba class con</strong></li>
 </ul>
 <p class="nhan">Kết quả và một lưới an toàn</p>
-<pre>CREATE TABLE account (
+<pre><code class="language-sql">CREATE TABLE account (
   account_number      INT PRIMARY KEY,
   account_type        ENUM('CHECKING','SAVINGS') NOT NULL,
   balance             DECIMAL(15,2) NOT NULL,
@@ -1143,7 +1143,7 @@ Savings Account  (<u>Account Number</u>, Balance, Interest)</pre>
   interest            DECIMAL(5,2)  NULL,     -- chỉ SAVINGS
   CHECK ((account_type = 'SAVINGS'  AND interest IS NOT NULL)
       OR (account_type = 'CHECKING' AND interest IS NULL))
-);</pre>
+);</code></pre>
 <p class="ghi-chu">Truy vấn nhanh nhất (không JOIN), và là lựa chọn của nhiều nhóm với cây nhỏ — nhưng hãy viết CHECK, nếu không thì chẳng gì ngăn một tài khoản thanh toán có lãi suất.</p>`],
   [23, 'Example relational DB design (1/2) — the Banking System static model',
     `<p class="y-chinh">🎯 One diagram that uses every rule of the deck — read it as a map of which rule applies to which line.</p>
@@ -1261,7 +1261,7 @@ const L3_DEEP = [
 <p class="ghi-chu">Cả hai biến thể đều qua môn. Điều được điểm là nói được nhóm chọn cách nào, dẫn điều kiện của slide, và chỉ ra ràng buộc giữ cho nó nhất quán.</p>`),
   bi(`<h2>🏦 The Banking example rebuilt with option 1 — MySQL 8</h2>
 <p>Slide 24 chose "subclasses only" and paid with the assumption about account numbers. With option 1 every link table gets a real FK. Compare the two and be ready to defend either.</p>
-<pre>CREATE TABLE bank     (bank_id INT PRIMARY KEY, bank_name VARCHAR(100) NOT NULL, address VARCHAR(255));
+<pre><code class="language-sql">CREATE TABLE bank     (bank_id INT PRIMARY KEY, bank_name VARCHAR(100) NOT NULL, address VARCHAR(255));
 CREATE TABLE atm_info (bank_id INT, atm_id INT, location VARCHAR(100), address VARCHAR(255),
                        PRIMARY KEY (bank_id, atm_id),                          -- 1-n part (slide 16)
                        FOREIGN KEY (bank_id) REFERENCES bank(bank_id));
@@ -1288,13 +1288,13 @@ CREATE TABLE card_account (card_id INT, account_number INT,
 CREATE TABLE customer_account (customer_id INT, account_number INT,
                        PRIMARY KEY (customer_id, account_number),               -- M:N
                        FOREIGN KEY (customer_id) REFERENCES customer(customer_id),
-                       FOREIGN KEY (account_number) REFERENCES account(account_number));</pre>
+                       FOREIGN KEY (account_number) REFERENCES account(account_number));</code></pre>
 <p class="ghi-chu">The PIN is stored as a hash (<code>pin_hash</code>), never as the digits — the slide's "PIN" is an analysis attribute, not a storage format.</p>
 <div class="pitfall co-tieu-de"><strong>Mistakes seen in team projects.</strong> (1) Option 1 without the shared id — two ids per person (G5's variant). (2) Option 3 with no CHECK — a Freelancer row carrying a company name. (3) The discriminator stored twice — <code>user.role_id</code> and a <code>user_type</code> string that drift apart. (4) Choosing option 2 and then writing a report screen that lists "all users".</div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <strong>The same three options in JPA / Hibernate.</strong> <code>@Inheritance(strategy = JOINED)</code> = option 1 (with <code>@DiscriminatorColumn</code> optional), <code>TABLE_PER_CLASS</code> = option 2, <code>SINGLE_TABLE</code> = option 3 (discriminator required). If your Java team later moves from JDBC/DAO to Spring Data JPA, the database design you chose here maps one-to-one onto an annotation. <em>Outside the syllabus because the recommended stack is plain JDBC with NetBeans.</em></div>`,
   `<h2>🏦 Ví dụ Banking dựng lại theo cách 1 — MySQL 8</h2>
 <p>Slide 24 chọn "chỉ bảng con" và phải trả giá bằng giả định về số tài khoản. Với cách 1, mọi bảng nối đều có FK thật. Hãy so sánh hai bản và sẵn sàng bảo vệ bản nào cũng được.</p>
-<pre>CREATE TABLE bank     (bank_id INT PRIMARY KEY, bank_name VARCHAR(100) NOT NULL, address VARCHAR(255));
+<pre><code class="language-sql">CREATE TABLE bank     (bank_id INT PRIMARY KEY, bank_name VARCHAR(100) NOT NULL, address VARCHAR(255));
 CREATE TABLE atm_info (bank_id INT, atm_id INT, location VARCHAR(100), address VARCHAR(255),
                        PRIMARY KEY (bank_id, atm_id),                          -- bộ phận 1-n (slide 16)
                        FOREIGN KEY (bank_id) REFERENCES bank(bank_id));
@@ -1321,7 +1321,7 @@ CREATE TABLE card_account (card_id INT, account_number INT,
 CREATE TABLE customer_account (customer_id INT, account_number INT,
                        PRIMARY KEY (customer_id, account_number),               -- M:N
                        FOREIGN KEY (customer_id) REFERENCES customer(customer_id),
-                       FOREIGN KEY (account_number) REFERENCES account(account_number));</pre>
+                       FOREIGN KEY (account_number) REFERENCES account(account_number));</code></pre>
 <p class="ghi-chu">PIN được lưu dạng băm (<code>pin_hash</code>), không bao giờ lưu nguyên các chữ số — "PIN" trên slide là thuộc tính ở mức phân tích, không phải định dạng lưu trữ.</p>
 <div class="pitfall co-tieu-de"><strong>Lỗi hay gặp trong đồ án nhóm.</strong> (1) Cách 1 mà không có id dùng chung — một người hai id (biến thể của G5). (2) Cách 3 mà không có CHECK — một dòng Freelancer mang tên công ty. (3) Discriminator lưu hai lần — <code>user.role_id</code> và chuỗi <code>user_type</code>, rồi lệch nhau. (4) Chọn cách 2 rồi lại làm màn báo cáo liệt kê "mọi user".</div>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <strong>Cùng ba cách ấy trong JPA / Hibernate.</strong> <code>@Inheritance(strategy = JOINED)</code> = cách 1 (có thể thêm <code>@DiscriminatorColumn</code>), <code>TABLE_PER_CLASS</code> = cách 2, <code>SINGLE_TABLE</code> = cách 3 (bắt buộc discriminator). Nếu sau này nhóm Java chuyển từ JDBC/DAO sang Spring Data JPA, thiết kế CSDL bạn chọn ở đây ánh xạ một-một thành một annotation. <em>Ngoài giáo trình vì stack được khuyến nghị là JDBC thuần với NetBeans.</em></div>`),
@@ -1538,7 +1538,7 @@ ${g5Table('vi')}`),
 </ol>`),
   bi(`<h2>🛠️ Step 4 — the corrected core in MySQL 8 (part 1: accounts and profiles)</h2>
 <p>Conventions: <code>snake_case</code>, singular table names, <code>&lt;table&gt;_id</code> keys, InnoDB + <code>utf8mb4</code> (Vietnamese text and emoji), generalisation option 1 with a <strong>shared id</strong>, statuses as ENUM.</p>
-<pre>CREATE DATABASE job_it CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+<pre><code class="language-sql">CREATE DATABASE job_it CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
 USE job_it;
 
 CREATE TABLE role (
@@ -1590,11 +1590,11 @@ CREATE TABLE company (
   description    TEXT NULL,
   CONSTRAINT fk_company_recruiter FOREIGN KEY (recruiter_id) REFERENCES recruiter(user_id) ON DELETE CASCADE,
   CONSTRAINT fk_company_size FOREIGN KEY (team_size_id) REFERENCES team_size(team_size_id)
-) ENGINE = InnoDB;</pre>
+) ENGINE = InnoDB;</code></pre>
 <p class="ghi-chu">Admin needs no extra table here: it has no fields beyond User. Add one (with the shared id) only when an admin screen needs admin-only data.</p>`,
   `<h2>🛠️ Bước 4 — phần lõi đã sửa bằng MySQL 8 (phần 1: tài khoản và hồ sơ)</h2>
 <p>Quy ước: <code>snake_case</code>, tên bảng số ít, khoá <code>&lt;bảng&gt;_id</code>, InnoDB + <code>utf8mb4</code> (tiếng Việt và emoji), generalisation cách 1 với <strong>id dùng chung</strong>, trạng thái là ENUM.</p>
-<pre>CREATE DATABASE job_it CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+<pre><code class="language-sql">CREATE DATABASE job_it CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
 USE job_it;
 
 CREATE TABLE role (
@@ -1646,10 +1646,10 @@ CREATE TABLE company (
   description    TEXT NULL,
   CONSTRAINT fk_company_recruiter FOREIGN KEY (recruiter_id) REFERENCES recruiter(user_id) ON DELETE CASCADE,
   CONSTRAINT fk_company_size FOREIGN KEY (team_size_id) REFERENCES team_size(team_size_id)
-) ENGINE = InnoDB;</pre>
+) ENGINE = InnoDB;</code></pre>
 <p class="ghi-chu">Admin không cần bảng riêng ở đây: nó không có trường nào ngoài User. Chỉ thêm bảng (với id dùng chung) khi một màn admin cần dữ liệu riêng của admin.</p>`),
   bi(`<h2>🛠️ Step 4 — the corrected core in MySQL 8 (part 2: posts and the M:N tables)</h2>
-<pre>CREATE TABLE category (category_id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(80) NOT NULL UNIQUE,
+<pre><code class="language-sql">CREATE TABLE category (category_id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(80) NOT NULL UNIQUE,
                        is_active BOOLEAN NOT NULL DEFAULT TRUE);
 CREATE TABLE job_level (job_level_id TINYINT PRIMARY KEY, name VARCHAR(30) NOT NULL UNIQUE);     -- was JobType
 CREATE TABLE work_type (work_type_id TINYINT PRIMARY KEY, name VARCHAR(30) NOT NULL UNIQUE);     -- was Duration
@@ -1722,10 +1722,10 @@ CREATE TABLE post_report (
   status        ENUM('OPEN','RESOLVED','DISMISSED') NOT NULL DEFAULT 'OPEN',   -- was missing
   FOREIGN KEY (freelancer_id) REFERENCES freelancer(user_id) ON DELETE CASCADE,
   FOREIGN KEY (post_id)       REFERENCES post(post_id) ON DELETE CASCADE
-) ENGINE = InnoDB;</pre>
+) ENGINE = InnoDB;</code></pre>
 <p class="ghi-chu">Education, experience and freelancer_skill follow the DDL of lesson 3.7 with <code>freelancer(user_id)</code> as the parent key; blog follows the same pattern with an FK to <code>user_account</code>. That is 18 tables instead of 22, with every finding above resolved.</p>`,
   `<h2>🛠️ Bước 4 — phần lõi đã sửa bằng MySQL 8 (phần 2: bài đăng và các bảng M:N)</h2>
-<pre>CREATE TABLE category (category_id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(80) NOT NULL UNIQUE,
+<pre><code class="language-sql">CREATE TABLE category (category_id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(80) NOT NULL UNIQUE,
                        is_active BOOLEAN NOT NULL DEFAULT TRUE);
 CREATE TABLE job_level (job_level_id TINYINT PRIMARY KEY, name VARCHAR(30) NOT NULL UNIQUE);     -- trước là JobType
 CREATE TABLE work_type (work_type_id TINYINT PRIMARY KEY, name VARCHAR(30) NOT NULL UNIQUE);     -- trước là Duration
@@ -1798,7 +1798,7 @@ CREATE TABLE post_report (
   status        ENUM('OPEN','RESOLVED','DISMISSED') NOT NULL DEFAULT 'OPEN',   -- trước đây thiếu
   FOREIGN KEY (freelancer_id) REFERENCES freelancer(user_id) ON DELETE CASCADE,
   FOREIGN KEY (post_id)       REFERENCES post(post_id) ON DELETE CASCADE
-) ENGINE = InnoDB;</pre>
+) ENGINE = InnoDB;</code></pre>
 <p class="ghi-chu">Education, experience và freelancer_skill theo DDL của bài 3.7 với khoá cha là <code>freelancer(user_id)</code>; blog cùng mẫu với FK tới <code>user_account</code>. Tổng cộng 18 bảng thay vì 22, và mọi phát hiện ở trên đều đã được xử lý.</p>`),
   bi(`<h2>🔁 SQL Server → MySQL 8 — the conversion table</h2>
 <table>
@@ -1897,7 +1897,7 @@ const L5_BODY = [
 <li><strong>Commit</strong> the reviewed scripts under <code>db/</code> and log the session in the AI Usage Report.</li>
 </ol>
 <p class="nhan">Improved wording (keep the teacher's three files, add the rules of this chapter)</p>
-<pre>You are a database designer. From the attached ERD (entities, attributes, relationships)
+<pre><code class="language-sql">You are a database designer. From the attached ERD (entities, attributes, relationships)
 and use-case list, design a MySQL 8 database for our SWP391 project
 (Java JDBC, NetBeans). Produce 3 files:
 1. DB.md       - one section per table: purpose, then a table Field | Type | PK | FK | UN | NN |
@@ -1913,7 +1913,7 @@ and use-case list, design a MySQL 8 database for our SWP391 project
                  every status value of every ENUM used at least once, edge cases
                  (expired post, rejected application, locked account); BCrypt hash of the
                  demo password "Demo@123" for all accounts; inserts in dependency order.
-Before writing SQL, list any ERD ambiguity as a question instead of guessing.</pre>
+Before writing SQL, list any ERD ambiguity as a question instead of guessing.</code></pre>
 <p class="ghi-chu">The prompt is in English because the table/column names and script comments will be English; you can still discuss with the AI in Vietnamese.</p>`,
   `<h2>🛠️ Chạy prompt cho đồ án của nhóm — từng bước</h2>
 <ol>
@@ -1925,7 +1925,7 @@ Before writing SQL, list any ERD ambiguity as a question instead of guessing.</p
 <li><strong>Commit</strong> các script đã review vào <code>db/</code> và ghi phiên làm việc vào AI Usage Report.</li>
 </ol>
 <p class="nhan">Bản viết cải tiến (giữ ba file của thầy/cô, thêm các quy tắc của chương này)</p>
-<pre>You are a database designer. From the attached ERD (entities, attributes, relationships)
+<pre><code class="language-sql">You are a database designer. From the attached ERD (entities, attributes, relationships)
 and use-case list, design a MySQL 8 database for our SWP391 project
 (Java JDBC, NetBeans). Produce 3 files:
 1. DB.md       - one section per table: purpose, then a table Field | Type | PK | FK | UN | NN |
@@ -1941,7 +1941,7 @@ and use-case list, design a MySQL 8 database for our SWP391 project
                  every status value of every ENUM used at least once, edge cases
                  (expired post, rejected application, locked account); BCrypt hash of the
                  demo password "Demo@123" for all accounts; inserts in dependency order.
-Before writing SQL, list any ERD ambiguity as a question instead of guessing.</pre>
+Before writing SQL, list any ERD ambiguity as a question instead of guessing.</code></pre>
 <p class="ghi-chu">Prompt để bằng tiếng Anh vì tên bảng/cột và chú thích trong script sẽ là tiếng Anh; bạn vẫn có thể hỏi-đáp với AI bằng tiếng Việt.</p>`),
   bi(`<h2>🔍 Verifying the output — checklist and queries</h2>
 <p class="nhan">Read the files (10 minutes)</p>
@@ -1952,7 +1952,7 @@ Before writing SQL, list any ERD ambiguity as a question instead of guessing.</p
 <li><strong>Demo data</strong> — fake people only; every status appears; passwords are hashes; nothing copied from a real sample.</li>
 </ol>
 <p class="nhan">Ask the database (run after Database.sql + DemoData.sql)</p>
-<pre>-- 1. Tables without a primary key (must return nothing)
+<pre><code class="language-sql">-- 1. Tables without a primary key (must return nothing)
 SELECT t.table_name FROM information_schema.tables t
 LEFT JOIN information_schema.table_constraints c
   ON c.table_schema = t.table_schema AND c.table_name = t.table_name
@@ -1972,12 +1972,12 @@ FROM information_schema.key_column_usage
 WHERE table_schema = DATABASE() AND referenced_table_name IS NOT NULL ORDER BY table_name;
 
 -- 4. Demo data covers every status (example for job_apply)
-SELECT status, COUNT(*) FROM job_apply GROUP BY status;</pre>
+SELECT status, COUNT(*) FROM job_apply GROUP BY status;</code></pre>
 <p class="nhan">Try to break it (each must FAIL)</p>
-<pre>INSERT INTO job_apply (freelancer_id, post_id, cv_url) VALUES (999999, 1, 'x');  -- FK
+<pre><code class="language-sql">INSERT INTO job_apply (freelancer_id, post_id, cv_url) VALUES (999999, 1, 'x');  -- FK
 INSERT INTO job_apply (freelancer_id, post_id, cv_url)
   SELECT freelancer_id, post_id, cv_url FROM job_apply LIMIT 1;                  -- UNIQUE pair
-UPDATE post SET quantity = 0 WHERE post_id = 1;                                  -- CHECK</pre>`,
+UPDATE post SET quantity = 0 WHERE post_id = 1;                                  -- CHECK</code></pre>`,
   `<h2>🔍 Kiểm chứng đầu ra — checklist và câu truy vấn</h2>
 <p class="nhan">Đọc các file (10 phút)</p>
 <ol>
@@ -1987,7 +1987,7 @@ UPDATE post SET quantity = 0 WHERE post_id = 1;                                 
 <li><strong>Demo data</strong> — chỉ người giả; mọi trạng thái đều xuất hiện; mật khẩu là chuỗi băm; không chép gì từ bản mẫu thật.</li>
 </ol>
 <p class="nhan">Hỏi chính CSDL (chạy sau Database.sql + DemoData.sql)</p>
-<pre>-- 1. Bảng không có khoá chính (phải trả về rỗng)
+<pre><code class="language-sql">-- 1. Bảng không có khoá chính (phải trả về rỗng)
 SELECT t.table_name FROM information_schema.tables t
 LEFT JOIN information_schema.table_constraints c
   ON c.table_schema = t.table_schema AND c.table_name = t.table_name
@@ -2007,12 +2007,12 @@ FROM information_schema.key_column_usage
 WHERE table_schema = DATABASE() AND referenced_table_name IS NOT NULL ORDER BY table_name;
 
 -- 4. Demo data phủ mọi trạng thái (ví dụ với job_apply)
-SELECT status, COUNT(*) FROM job_apply GROUP BY status;</pre>
+SELECT status, COUNT(*) FROM job_apply GROUP BY status;</code></pre>
 <p class="nhan">Thử phá nó (mỗi lệnh phải THẤT BẠI)</p>
-<pre>INSERT INTO job_apply (freelancer_id, post_id, cv_url) VALUES (999999, 1, 'x');  -- FK
+<pre><code class="language-sql">INSERT INTO job_apply (freelancer_id, post_id, cv_url) VALUES (999999, 1, 'x');  -- FK
 INSERT INTO job_apply (freelancer_id, post_id, cv_url)
   SELECT freelancer_id, post_id, cv_url FROM job_apply LIMIT 1;                  -- cặp UNIQUE
-UPDATE post SET quantity = 0 WHERE post_id = 1;                                  -- CHECK</pre>`),
+UPDATE post SET quantity = 0 WHERE post_id = 1;                                  -- CHECK</code></pre>`),
   bi(`<h2>🧾 Logging it — the AI Usage Report (Template5)</h2>
 <p>Record one row per AI session, so the teacher sees what was generated and what the team decided.</p>
 <ul>

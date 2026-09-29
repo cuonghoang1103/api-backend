@@ -38,7 +38,7 @@ export default {
 </div>
 
 <h3>A format worth using</h3>
-<pre><code>log_format huu_dung
+<pre><code class="language-bash">log_format huu_dung
   '\$remote_addr \$status \$request_time \$upstream_response_time '
   '\$upstream_addr \$upstream_status '
   '"\$request_method \$request_uri" -> "\$uri" '
@@ -101,7 +101,7 @@ access_log /var/log/nginx/access.log huu_dung;</code></pre>
 </div>
 
 <h3>Một định dạng đáng dùng</h3>
-<pre><code>log_format huu_dung
+<pre><code class="language-bash">log_format huu_dung
   '\$remote_addr \$status \$request_time \$upstream_response_time '
   '\$upstream_addr \$upstream_status '
   '"\$request_method \$request_uri" -> "\$uri" '
@@ -180,7 +180,7 @@ ngoac "kep" va \\ backslash</div>
 
 <h3>The pitfall: a number without quotes</h3>
 <p>The natural way to write a JSON log format is to quote the strings and leave the numbers bare, so that a parser gives you numbers rather than text you must convert:</p>
-<pre><code><span class="tok-comment"># dinh dang JSON — trong nhin RAT hop ly</span>
+<pre><code class="language-bash"><span class="tok-comment"># dinh dang JSON — trong nhin RAT hop ly</span>
 log_format json_sai escape=json '{"ma":\$status,"tgian_up":\$upstream_response_time,'
     '"ref":"\$http_referer","rong":"\$http_x_khong_co"}';</code></pre>
 <p>That passes <code>nginx -t</code>. It produces valid JSON for every request that goes through a proxy. Here it is against two requests — one proxied, one answered by Nginx itself with a <code>return</code>:</p>
@@ -196,7 +196,7 @@ json.decoder.JSONDecodeError: Expecting value: line 1 column 22 (char 21)
 <p>The first line is <code>"tgian_up":,</code> — a key with no value at all. When there is no upstream, <code>\$upstream_response_time</code> is empty, and an empty variable between a colon and a comma is not a JSON value. The line is syntactically broken.</p>
 <div class="pitfall"><strong>Trap — the broken lines are exactly the ones you do not test.</strong> Every request you send through the proxy while building this produces valid JSON. The lines that break are the health checks, the redirects, the static files, the <code>return 404</code>s — everything Nginx answers by itself. Those arrive in production, at a low rate, forever, and depending on the shipper they are dropped silently or they stop the pipeline.</div>
 <p>The fix is one character on each side, and it costs nothing: quote it, and convert to a number at query time.</p>
-<pre><code><span class="tok-comment"># \$status luon la so — de tran. \$upstream_response_time CO THE rong — phai boc.</span>
+<pre><code class="language-bash"><span class="tok-comment"># \$status luon la so — de tran. \$upstream_response_time CO THE rong — phai boc.</span>
 log_format json escape=json '{"tg":"\$time_iso8601","ip":"\$remote_addr","ma":\$status,'
     '"tgian":\$request_time,"tgian_up":"\$upstream_response_time","uri":"\$request_uri",'
     '"ua":"\$http_user_agent","byte":\$body_bytes_sent}';</code></pre>
@@ -286,7 +286,7 @@ ngoac "kep" va \\ backslash</div>
 
 <h3>Cái bẫy: một con số không đặt trong ngoặc kép</h3>
 <p>Cách tự nhiên để viết một định dạng log JSON là bọc ngoặc cho chuỗi và để số trần, sao cho trình phân tích trả về SỐ chứ không phải chữ mà bạn phải tự chuyển đổi:</p>
-<pre><code><span class="tok-comment"># dinh dang JSON — trong nhin RAT hop ly</span>
+<pre><code class="language-bash"><span class="tok-comment"># dinh dang JSON — trong nhin RAT hop ly</span>
 log_format json_sai escape=json '{"ma":\$status,"tgian_up":\$upstream_response_time,'
     '"ref":"\$http_referer","rong":"\$http_x_khong_co"}';</code></pre>
 <p>Nó qua được <code>nginx -t</code>. Nó sinh ra JSON hợp lệ cho MỌI request đi qua proxy. Đây là nó chạy với hai request — một cái đi qua proxy, một cái do chính Nginx trả lời bằng <code>return</code>:</p>
@@ -302,7 +302,7 @@ json.decoder.JSONDecodeError: Expecting value: line 1 column 22 (char 21)
 <p>Dòng đầu là <code>"tgian_up":,</code> — một cái khoá chẳng có giá trị nào theo sau. Khi không có upstream, <code>\$upstream_response_time</code> rỗng, và một biến rỗng nằm giữa dấu hai chấm với dấu phẩy thì không phải một giá trị JSON. Dòng đó hỏng cú pháp.</p>
 <div class="pitfall"><strong>Bẫy — những dòng hỏng chính là những dòng bạn KHÔNG thử.</strong> Mọi request bạn bắn qua proxy trong lúc dựng cái này đều sinh JSON hợp lệ. Những dòng hỏng là health check, là redirect, là tệp tĩnh, là mấy cái <code>return 404</code> — tất cả những gì Nginx tự trả lời. Chúng tới trên production, với tần suất thấp, mãi mãi, và tuỳ công cụ thu gom mà chúng bị vứt lặng lẽ hoặc làm dừng cả đường ống.</div>
 <p>Cách sửa là một ký tự mỗi bên, và nó chẳng tốn gì: bọc ngoặc lại, rồi chuyển sang số lúc truy vấn.</p>
-<pre><code><span class="tok-comment"># \$status luon la so — de tran. \$upstream_response_time CO THE rong — phai boc.</span>
+<pre><code class="language-bash"><span class="tok-comment"># \$status luon la so — de tran. \$upstream_response_time CO THE rong — phai boc.</span>
 log_format json escape=json '{"tg":"\$time_iso8601","ip":"\$remote_addr","ma":\$status,'
     '"tgian":\$request_time,"tgian_up":"\$upstream_response_time","uri":"\$request_uri",'
     '"ua":"\$http_user_agent","byte":\$body_bytes_sent}';</code></pre>
@@ -375,7 +375,7 @@ json      161.3 byte/dong tho  →  nen con  6.1%  (  9.8 byte/dong)</div>
 <p class="lead">Every Nginx tuning guide tells you to turn off the access log for speed. This lesson measures that claim two ways — by counting the syscalls it removes, and by timing the requests. The two measurements disagree, and the disagreement is the point.</p>
 
 <h3>Three ways to write less</h3>
-<pre><code><span class="tok-comment"># 1. Tat han cho mot location</span>
+<pre><code class="language-bash"><span class="tok-comment"># 1. Tat han cho mot location</span>
 location /health { access_log off; return 200 "ok"; }
 
 <span class="tok-comment"># 2. Chi ghi khi mot bien khac rong va khac "0"</span>
@@ -469,7 +469,7 @@ access_log /var/log/nginx/access.log huu_dung buffer=64k flush=5s;</code></pre>
 <p class="lead">Mọi hướng dẫn tối ưu Nginx đều bảo bạn tắt access log đi cho nhanh. Bài này đo lời khuyên đó theo hai cách — đếm số syscall mà nó bỏ đi, và bấm giờ các request. Hai phép đo cho kết quả ngược nhau, và chính chỗ ngược nhau đó mới là bài học.</p>
 
 <h3>Ba cách ghi ít đi</h3>
-<pre><code><span class="tok-comment"># 1. Tat han cho mot location</span>
+<pre><code class="language-bash"><span class="tok-comment"># 1. Tat han cho mot location</span>
 location /health { access_log off; return 200 "ok"; }
 
 <span class="tok-comment"># 2. Chi ghi khi mot bien khac rong va khac "0"</span>
@@ -634,7 +634,7 @@ info    18 dong,  1618 byte</div>
 error_log info  + debug_connection 10.99.99.99  → 1 request sinh   1 dong /    88 byte
 error_log info  + debug_connection 127.0.0.1    → 1 request sinh  72 dong /  5005 byte</div>
 <p>With the base level already at <code>debug</code>, adding <code>debug_connection</code> changed nothing — 86 lines per request, exactly as before. The directive does not subtract. It <em>raises</em> matching connections to debug from whatever the base level is, so it only does anything when the base is <em>not</em> debug.</p>
-<pre><code><span class="tok-comment"># DUNG: nen la warn, chi IP cua ban duoc nang len debug</span>
+<pre><code class="language-bash"><span class="tok-comment"># DUNG: nen la warn, chi IP cua ban duoc nang len debug</span>
 error_log /var/log/nginx/error.log warn;
 events {
     worker_connections 1024;
@@ -651,7 +651,7 @@ server: a.vidu, request: "GET /x HTTP/1.1"
 server: b.vidu, request: "GET /y HTTP/1.1"</div>
 <p>Server A's failure went to the inherited main-level log. Server B's went to its own file <em>and nowhere else</em> — it is absent from <code>goc.log</code>. Declaring <code>error_log</code> in a context discards the inherited one for everything in that context.</p>
 <p>Since 1.5.2 you can list several <code>error_log</code> directives in the same context and every one of them receives the messages, each at its own level. That is how you keep a full <code>warn</code> file alongside a small <code>crit</code>-only file, or ship to syslog while keeping a local copy:</p>
-<pre><code>error_log /var/log/nginx/error.log warn;
+<pre><code class="language-bash">error_log /var/log/nginx/error.log warn;
 error_log /var/log/nginx/nghiem-trong.log crit;
 error_log syslog:server=10.0.0.9,tag=nginx warn;
 error_log stderr warn;   <span class="tok-comment"># quan trong trong container — xem duoi</span></code></pre>
@@ -732,7 +732,7 @@ info    18 dong,  1618 byte</div>
 error_log info  + debug_connection 10.99.99.99  → 1 request sinh   1 dong /    88 byte
 error_log info  + debug_connection 127.0.0.1    → 1 request sinh  72 dong /  5005 byte</div>
 <p>Với mức nền đã là <code>debug</code>, thêm <code>debug_connection</code> vào chẳng đổi gì — vẫn 86 dòng mỗi request, y như trước. Chỉ thị này không TRỪ đi. Nó NÂNG những kết nối khớp lên mức debug từ bất kỳ mức nền nào đang có, nên nó chỉ làm được việc gì khi mức nền KHÔNG phải debug.</p>
-<pre><code><span class="tok-comment"># DUNG: nen la warn, chi IP cua ban duoc nang len debug</span>
+<pre><code class="language-bash"><span class="tok-comment"># DUNG: nen la warn, chi IP cua ban duoc nang len debug</span>
 error_log /var/log/nginx/error.log warn;
 events {
     worker_connections 1024;
@@ -749,7 +749,7 @@ server: a.vidu, request: "GET /x HTTP/1.1"
 server: b.vidu, request: "GET /y HTTP/1.1"</div>
 <p>Sự cố của server A đi vào cái log mức chính mà nó kế thừa. Sự cố của server B đi vào tệp riêng của nó <em>và không đi đâu khác nữa</em> — nó vắng mặt trong <code>goc.log</code>. Khai <code>error_log</code> trong một ngữ cảnh là vứt bỏ cái đã kế thừa, cho mọi thứ thuộc ngữ cảnh đó.</p>
 <p>Từ bản 1.5.2 bạn được liệt kê nhiều chỉ thị <code>error_log</code> trong CÙNG một ngữ cảnh và tất cả đều nhận thông báo, mỗi cái ở mức riêng của nó. Đó là cách giữ một tệp <code>warn</code> đầy đủ song song với một tệp nhỏ chỉ chứa <code>crit</code>, hoặc gửi sang syslog mà vẫn giữ một bản cục bộ:</p>
-<pre><code>error_log /var/log/nginx/error.log warn;
+<pre><code class="language-bash">error_log /var/log/nginx/error.log warn;
 error_log /var/log/nginx/nghiem-trong.log crit;
 error_log syslog:server=10.0.0.9,tag=nginx warn;
 error_log stderr warn;   <span class="tok-comment"># quan trong trong container — xem duoi</span></code></pre>
@@ -779,7 +779,7 @@ error_log stderr warn;   <span class="tok-comment"># quan trong trong container 
 <p class="lead">Logs tell you about requests that finished. They cannot tell you how many connections are open right now, or that Nginx just refused one. <code>stub_status</code> is the built-in answer: seven integers, no dependencies, and one of them is the difference between a server that is busy and a server that is failing.</p>
 
 <h3>Turning it on</h3>
-<pre><code>location = /trang-thai {
+<pre><code class="language-bash">location = /trang-thai {
     stub_status;
     access_log off;              <span class="tok-comment"># bo giam sat hoi moi vai giay — dung ghi log</span>
     allow 10.0.0.0/8;            <span class="tok-comment"># chi mang noi bo</span>
@@ -891,7 +891,7 @@ server accepts handled requests
 <p class="lead">Log kể cho bạn về những request ĐÃ xong. Nó không nói được ngay lúc này có bao nhiêu kết nối đang mở, hay chuyện Nginx vừa từ chối một cái. <code>stub_status</code> là câu trả lời có sẵn: bảy số nguyên, không phụ thuộc gì, và một trong số đó chính là ranh giới giữa một máy chủ đang BẬN và một máy chủ đang HỎNG.</p>
 
 <h3>Bật nó lên</h3>
-<pre><code>location = /trang-thai {
+<pre><code class="language-bash">location = /trang-thai {
     stub_status;
     access_log off;              <span class="tok-comment"># bo giam sat hoi moi vai giay — dung ghi log</span>
     allow 10.0.0.0/8;            <span class="tok-comment"># chi mang noi bo</span>

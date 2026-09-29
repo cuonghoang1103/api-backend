@@ -432,7 +432,7 @@ const L51 = {
     ]),
     bi(`<h3>Ví dụ có lời giải · Worked example — measure it, do not guess it</h3>
 <p>The discount rule "orders over 100 get 10 off" in Java — the same shape as slide 87 (an IF without ELSE):</p>
-<pre><code>public static int discount(int total) {   // line 3
+<pre><code class="language-java">public static int discount(int total) {   // line 3
     int d = 0;                            // line 4
     if (total &gt; 100) {                    // line 5  — the only decision
         d = 10;                           // line 6
@@ -470,7 +470,7 @@ disc-2   Coverage.discount  lines 4/4  branches 2/2 (100%)</code></pre>
 <p><em>Outside the syllabus because CTFL 2018 limits white-box testing to statement and decision coverage; the rest is Advanced Technical Test Analyst material.</em></p></div>`,
     `<h3>Ví dụ có lời giải · Đo, đừng đoán</h3>
 <p>Quy tắc giảm giá "đơn trên 100 được giảm 10" viết bằng Java — cùng dạng với slide 87 (IF không có ELSE):</p>
-<pre><code>public static int discount(int total) {   // dòng 3
+<pre><code class="language-java">public static int discount(int total) {   // dòng 3
     int d = 0;                            // dòng 4
     if (total &gt; 100) {                    // dòng 5  — quyết định duy nhất
         d = 10;                           // dòng 6
@@ -1024,7 +1024,7 @@ const L52 = {
 </table></div>`),
     bi(`<h3>Ví dụ có lời giải A · PE FA23 Question 2 — countCharacters(String)</h3>
 <p><em>"Assuming you are assigned to conduct the component test for the method below, please design and create the minimum component test cases (Unit Test case) needed to achieve 100% statement coverage and 100% decision coverage."</em> The method, exactly as in the paper (line numbers as in the paper):</p>
-<pre><code> 3  public static HashMap&lt;String, Integer&gt; countCharacters(String input) {
+<pre><code class="language-java"> 3  public static HashMap&lt;String, Integer&gt; countCharacters(String input) {
  4      int upperCaseCount = 0;
  5      int lowerCaseCount = 0;
  6      int numericCount = 0;
@@ -1085,7 +1085,7 @@ const L52 = {
 </tbody>
 </table></div>
 <p>The JUnit 5 test class (UTCID02 and UTCID03 are <em>extra</em> boundary/abnormal cases, labelled as such — the coverage question does not need them, but they show you know the method's weak spots):</p>
-<pre><code>class CharacterCounterTest {
+<pre><code class="language-java">class CharacterCounterTest {
     @Test @DisplayName("UTCID01 (N) \\"Ab1@\\" -&gt; U1 L1 N1 S1  [the whole minimum set]")
     void allFourKinds() {
         HashMap&lt;String, Integer&gt; r = CharacterCounter.countCharacters("Ab1@");
@@ -1112,7 +1112,7 @@ cc-3     CharacterCounter.countCharacters  lines 17/18  branches 7/8 (88%)      
          missed: L14(1 branch missed) L17(not run)</code></pre>`,
     `<h3>Ví dụ có lời giải A · PE FA23 câu 2 — countCharacters(String)</h3>
 <p><em>"Giả sử bạn được giao component test cho phương thức dưới đây, hãy thiết kế và tạo số component test case (Unit Test case) tối thiểu cần để đạt 100% statement coverage và 100% decision coverage."</em> Phương thức, đúng như trong đề (số dòng như trong đề):</p>
-<pre><code> 3  public static HashMap&lt;String, Integer&gt; countCharacters(String input) {
+<pre><code class="language-java"> 3  public static HashMap&lt;String, Integer&gt; countCharacters(String input) {
  4      int upperCaseCount = 0;
  5      int lowerCaseCount = 0;
  6      int numericCount = 0;
@@ -1173,7 +1173,7 @@ cc-3     CharacterCounter.countCharacters  lines 17/18  branches 7/8 (88%)      
 </tbody>
 </table></div>
 <p>Class test JUnit 5 (UTCID02 và UTCID03 là các ca biên/bất thường <em>thêm</em>, có ghi rõ — câu hỏi coverage không cần chúng, nhưng chúng cho thấy bạn biết điểm yếu của hàm):</p>
-<pre><code>class CharacterCounterTest {
+<pre><code class="language-java">class CharacterCounterTest {
     @Test @DisplayName("UTCID01 (N) \\"Ab1@\\" -&gt; U1 L1 N1 S1  [the whole minimum set]")
     void allFourKinds() {
         HashMap&lt;String, Integer&gt; r = CharacterCounter.countCharacters("Ab1@");
@@ -1199,7 +1199,7 @@ PASS  UTCID01 (N) "Ab1@" -&gt; U1 L1 N1 S1  [the whole minimum set]
 cc-3     CharacterCounter.countCharacters  lines 17/18  branches 7/8 (88%)       &lt;- "A", "b", "1"
          missed: L14(1 branch missed) L17(not run)</code></pre>`),
     bi(`<h3>Ví dụ có lời giải B · PE SP25 Question 3 — calculateRewardPoints (a discount-style method)</h3>
-<pre><code>public int calculateRewardPoints(double bookingAmount, String customerType) {
+<pre><code class="language-java">public int calculateRewardPoints(double bookingAmount, String customerType) {
     if (bookingAmount &lt; 0) {                         // D1
         return -1;
     } else if (customerType.equals("VIP")) {         // D2
@@ -1255,7 +1255,7 @@ PASS  UTCID06 (B) -0.01, "Regular" -&gt; -1 (just below the boundary)
 book-4   Booking.calculateRewardPoints  lines 7/7  branches 6/6 (100%)</code></pre>
 <p>Notice what "all tests pass" means here: UTCID08 and UTCID09 pass because they record what the code <em>does</em>. Whether a lower-case "vip" customer should get 0 points, and whether a null type should crash, is a question for the spec owner — raise them as issues in your answer.</p>`,
     `<h3>Ví dụ có lời giải B · PE SP25 câu 3 — calculateRewardPoints (dạng hàm giảm giá/tích điểm)</h3>
-<pre><code>public int calculateRewardPoints(double bookingAmount, String customerType) {
+<pre><code class="language-java">public int calculateRewardPoints(double bookingAmount, String customerType) {
     if (bookingAmount &lt; 0) {                         // D1
         return -1;
     } else if (customerType.equals("VIP")) {         // D2

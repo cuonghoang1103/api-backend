@@ -158,9 +158,9 @@ export default {
 <li><strong>Confidentiality</strong> — centralised storage means one place to apply permissions and views. Slide 12 shows the view mechanism concretely.</li>
 </ul>
 <p class="nhan">Bằng chứng đã chạy thật — tệp phẳng, sửa tên ở MỘT dòng:</p>
-<pre>UPDATE MuonSach_Phang SET ho_ten='Nguyen Van An Khang'
+<pre><code class="language-sql">UPDATE MuonSach_Phang SET ho_ten='Nguyen Van An Khang'
  WHERE mssv='HE180001' AND isbn='978-0132145374';
-SELECT mssv, ho_ten FROM MuonSach_Phang WHERE mssv='HE180001';</pre>
+SELECT mssv, ho_ten FROM MuonSach_Phang WHERE mssv='HE180001';</code></pre>
 <table><tr><th>mssv</th><th>ho_ten</th></tr>
 <tr><td>HE180001</td><td>Nguyen Van An Khang</td></tr>
 <tr><td>HE180001</td><td>Nguyen Van An</td></tr></table>
@@ -176,9 +176,9 @@ SELECT mssv, ho_ten FROM MuonSach_Phang WHERE mssv='HE180001';</pre>
 <li><strong>Bảo mật</strong> — lưu tập trung nghĩa là chỉ một chỗ để đặt quyền và khung nhìn. Slide 12 cho thấy cơ chế khung nhìn một cách cụ thể.</li>
 </ul>
 <p class="nhan">Bằng chứng đã chạy thật — tệp phẳng, sửa tên ở MỘT dòng:</p>
-<pre>UPDATE MuonSach_Phang SET ho_ten='Nguyen Van An Khang'
+<pre><code class="language-sql">UPDATE MuonSach_Phang SET ho_ten='Nguyen Van An Khang'
  WHERE mssv='HE180001' AND isbn='978-0132145374';
-SELECT mssv, ho_ten FROM MuonSach_Phang WHERE mssv='HE180001';</pre>
+SELECT mssv, ho_ten FROM MuonSach_Phang WHERE mssv='HE180001';</code></pre>
 <table><tr><th>mssv</th><th>ho_ten</th></tr>
 <tr><td>HE180001</td><td>Nguyen Van An Khang</td></tr>
 <tr><td>HE180001</td><td>Nguyen Van An</td></tr></table>
@@ -266,7 +266,7 @@ SELECT mssv, ho_ten FROM MuonSach_Phang WHERE mssv='HE180001';</pre>
 <li><strong>The price you pay</strong> — an index is extra data on disk, and every <code>INSERT</code>, <code>UPDATE</code> and <code>DELETE</code> must update it too. Indexing every column is a classic beginner mistake: reads get faster, writes get slower, and the database doubles in size.</li>
 </ul>
 <p class="nhan">Đã chạy thật — cùng một câu truy vấn, trước và sau khi tạo chỉ mục:</p>
-<pre>EXPLAIN QUERY PLAN SELECT * FROM MuonSach WHERE isbn='978-0132145374';
+<pre><code class="language-sql">EXPLAIN QUERY PLAN SELECT * FROM MuonSach WHERE isbn='978-0132145374';
 --&gt; QUERY PLAN
 --&gt; \`--SCAN MuonSach
 
@@ -274,7 +274,7 @@ CREATE INDEX idx_muon_isbn ON MuonSach(isbn);
 
 EXPLAIN QUERY PLAN SELECT * FROM MuonSach WHERE isbn='978-0132145374';
 --&gt; QUERY PLAN
---&gt; \`--SEARCH MuonSach USING INDEX idx_muon_isbn (isbn=?)</pre>
+--&gt; \`--SEARCH MuonSach USING INDEX idx_muon_isbn (isbn=?)</code></pre>
 <p class="nhan">And the answer the user sees, before and after, is byte-for-byte the same:</p>
 <table><tr><th>mssv</th><th>isbn</th><th>ngay_muon</th><th>ngay_tra</th></tr>
 <tr><td>HE180001</td><td>978-0132145374</td><td>2026-09-01</td><td>2026-09-10</td></tr>
@@ -290,7 +290,7 @@ EXPLAIN QUERY PLAN SELECT * FROM MuonSach WHERE isbn='978-0132145374';
 <li><strong>Cái giá phải trả</strong> — chỉ mục là dữ liệu thêm trên đĩa, và mọi lệnh <code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code> đều phải cập nhật nó nữa. Đánh chỉ mục cho mọi cột là sai lầm kinh điển của người mới: đọc nhanh lên, ghi chậm đi, và CSDL phình gấp đôi.</li>
 </ul>
 <p class="nhan">Đã chạy thật — cùng một câu truy vấn, trước và sau khi tạo chỉ mục:</p>
-<pre>EXPLAIN QUERY PLAN SELECT * FROM MuonSach WHERE isbn='978-0132145374';
+<pre><code class="language-sql">EXPLAIN QUERY PLAN SELECT * FROM MuonSach WHERE isbn='978-0132145374';
 --&gt; QUERY PLAN
 --&gt; \`--SCAN MuonSach
 
@@ -298,7 +298,7 @@ CREATE INDEX idx_muon_isbn ON MuonSach(isbn);
 
 EXPLAIN QUERY PLAN SELECT * FROM MuonSach WHERE isbn='978-0132145374';
 --&gt; QUERY PLAN
---&gt; \`--SEARCH MuonSach USING INDEX idx_muon_isbn (isbn=?)</pre>
+--&gt; \`--SEARCH MuonSach USING INDEX idx_muon_isbn (isbn=?)</code></pre>
 <p class="nhan">Còn câu trả lời mà người dùng nhận, trước và sau, giống nhau từng byte:</p>
 <table><tr><th>mssv</th><th>isbn</th><th>ngay_muon</th><th>ngay_tra</th></tr>
 <tr><td>HE180001</td><td>978-0132145374</td><td>2026-09-01</td><td>2026-09-10</td></tr>
@@ -314,13 +314,13 @@ EXPLAIN QUERY PLAN SELECT * FROM MuonSach WHERE isbn='978-0132145374';
 <li><strong>"Independent of any storage consideration"</strong> — this phrase from the slide is the definition of the boundary with slide 10. Whether <code>SinhVien</code> is stored as a B-tree, a heap or a compressed column store is not a conceptual question.</li>
 <li><strong>Where you actually write it</strong> — in SQL, the conceptual schema is your <code>CREATE TABLE</code> statements plus their keys and constraints. The library database's conceptual schema for students is exactly this, and it was really executed:</li>
 </ul>
-<pre>CREATE TABLE SinhVien (
+<pre><code class="language-sql">CREATE TABLE SinhVien (
   mssv     TEXT    PRIMARY KEY,
   ho_ten   TEXT    NOT NULL,
   lop      TEXT    NOT NULL,
   nam_sinh INTEGER,
   email    TEXT    UNIQUE
-);</pre>
+);</code></pre>
 <p class="nhan">Every clause on those six lines is conceptual, not physical: <code>PRIMARY KEY</code> states identity, <code>NOT NULL</code> states a business rule, <code>UNIQUE</code> states a candidate key, <code>TEXT</code>/<code>INTEGER</code> state domains. Nothing there says where a single byte lives.</p>
 <p class="dap-an">✅ Đáp án — a constraint really is enforced at this level, not by the application. Running <code>INSERT INTO SinhVien (mssv,ho_ten,lop) VALUES ('HE180005', NULL, 'SE1803');</code> returned <code>Error: NOT NULL constraint failed: SinhVien.ho_ten (19)</code>, and inserting a second student with an existing email returned <code>Error: UNIQUE constraint failed: SinhVien.email (19)</code>. No application code was involved in either refusal — which is the whole point of putting rules in the schema.</p>
 <p class="pitfall">⚠️ Logical data independence is the <em>weaker</em> of the two. Adding a column to <code>SinhVien</code> leaves every existing view working — but splitting <code>SinhVien</code> into two tables will break a view unless the DBA redefines it as a join. That is why exam answers should say physical data independence is "easier to achieve" than logical data independence; saying both are equally easy is a classic wrong option.</p>`,
@@ -331,13 +331,13 @@ EXPLAIN QUERY PLAN SELECT * FROM MuonSach WHERE isbn='978-0132145374';
 <li><strong>"Độc lập với mọi cân nhắc về lưu trữ"</strong> — cụm này trên slide chính là định nghĩa ranh giới với slide 10. Chuyện <code>SinhVien</code> được lưu dạng cây B, dạng đống hay dạng cột nén, không phải câu hỏi của mức khái niệm.</li>
 <li><strong>Bạn thật sự viết nó ở đâu</strong> — trong SQL, lược đồ khái niệm chính là các câu <code>CREATE TABLE</code> cộng với khoá và ràng buộc của chúng. Lược đồ khái niệm phần sinh viên của CSDL thư viện đúng là thế này, và nó đã được chạy thật:</li>
 </ul>
-<pre>CREATE TABLE SinhVien (
+<pre><code class="language-sql">CREATE TABLE SinhVien (
   mssv     TEXT    PRIMARY KEY,
   ho_ten   TEXT    NOT NULL,
   lop      TEXT    NOT NULL,
   nam_sinh INTEGER,
   email    TEXT    UNIQUE
-);</pre>
+);</code></pre>
 <p class="nhan">Mọi mệnh đề trong sáu dòng ấy đều thuộc mức khái niệm, không mức vật lý: <code>PRIMARY KEY</code> khai định danh, <code>NOT NULL</code> khai một luật nghiệp vụ, <code>UNIQUE</code> khai một khoá dự tuyển, <code>TEXT</code>/<code>INTEGER</code> khai miền giá trị. Không dòng nào nói một byte nằm ở đâu.</p>
 <p class="dap-an">✅ Đáp án — ràng buộc thật sự được thi hành tại mức này, không phải bởi ứng dụng. Chạy <code>INSERT INTO SinhVien (mssv,ho_ten,lop) VALUES ('HE180005', NULL, 'SE1803');</code> trả về <code>Error: NOT NULL constraint failed: SinhVien.ho_ten (19)</code>, và chèn một sinh viên thứ hai với email đã tồn tại trả về <code>Error: UNIQUE constraint failed: SinhVien.email (19)</code>. Không một dòng mã ứng dụng nào tham gia vào hai lần từ chối ấy — và đó chính là toàn bộ lý do người ta đặt luật vào lược đồ.</p>
 <p class="pitfall">⚠️ Độc lập dữ liệu logic là loại YẾU hơn trong hai loại. Thêm một cột vào <code>SinhVien</code> thì mọi khung nhìn đang có vẫn chạy — nhưng TÁCH <code>SinhVien</code> thành hai bảng sẽ làm vỡ khung nhìn, trừ khi DBA định nghĩa lại nó thành một phép kết nối. Vì thế bài thi nên trả lời rằng độc lập vật lý "dễ đạt được hơn" độc lập logic; nói hai cái dễ như nhau là một phương án sai kinh điển.</p>`],
@@ -352,17 +352,17 @@ EXPLAIN QUERY PLAN SELECT * FROM MuonSach WHERE isbn='978-0132145374';
 <li><strong>How it is written in SQL</strong> — <code>CREATE VIEW</code>. Both of the slide's motivations were implemented and really run below.</li>
 </ul>
 <p class="nhan">Đã chạy thật — khung nhìn cho quầy thủ thư, KHÔNG có email, KHÔNG có năm sinh:</p>
-<pre>CREATE VIEW v_TheThuVien AS SELECT mssv, ho_ten, lop FROM SinhVien;
-SELECT * FROM v_TheThuVien;</pre>
+<pre><code class="language-sql">CREATE VIEW v_TheThuVien AS SELECT mssv, ho_ten, lop FROM SinhVien;
+SELECT * FROM v_TheThuVien;</code></pre>
 <table><tr><th>mssv</th><th>ho_ten</th><th>lop</th></tr>
 <tr><td>HE180001</td><td>Nguyen Van An</td><td>SE1801</td></tr>
 <tr><td>HE180002</td><td>Tran Thi Binh</td><td>SE1801</td></tr>
 <tr><td>HE180003</td><td>Le Van Cuong</td><td>SE1802</td></tr>
 <tr><td>HE180004</td><td>Pham Thi Dung</td><td>SE1802</td></tr></table>
 <p class="nhan">Và đúng ví dụ ĐỊNH DẠNG NGÀY của slide, cho nhóm người dùng quen dd/mm/yyyy:</p>
-<pre>CREATE VIEW v_MuonVN AS
+<pre><code class="language-sql">CREATE VIEW v_MuonVN AS
   SELECT mssv, isbn, strftime('%d/%m/%Y', ngay_muon) AS ngay_muon_vn
-  FROM MuonSach;</pre>
+  FROM MuonSach;</code></pre>
 <table><tr><th>mssv</th><th>isbn</th><th>ngay_muon_vn</th></tr>
 <tr><td>HE180001</td><td>978-0132145374</td><td>01/09/2026</td></tr>
 <tr><td>HE180001</td><td>978-0262033848</td><td>05/09/2026</td></tr>
@@ -378,17 +378,17 @@ SELECT * FROM v_TheThuVien;</pre>
 <li><strong>Viết bằng SQL thế nào</strong> — <code>CREATE VIEW</code>. Cả hai động cơ mà slide nêu đều đã được hiện thực và chạy thật ở dưới.</li>
 </ul>
 <p class="nhan">Đã chạy thật — khung nhìn cho quầy thủ thư, KHÔNG có email, KHÔNG có năm sinh:</p>
-<pre>CREATE VIEW v_TheThuVien AS SELECT mssv, ho_ten, lop FROM SinhVien;
-SELECT * FROM v_TheThuVien;</pre>
+<pre><code class="language-sql">CREATE VIEW v_TheThuVien AS SELECT mssv, ho_ten, lop FROM SinhVien;
+SELECT * FROM v_TheThuVien;</code></pre>
 <table><tr><th>mssv</th><th>ho_ten</th><th>lop</th></tr>
 <tr><td>HE180001</td><td>Nguyen Van An</td><td>SE1801</td></tr>
 <tr><td>HE180002</td><td>Tran Thi Binh</td><td>SE1801</td></tr>
 <tr><td>HE180003</td><td>Le Van Cuong</td><td>SE1802</td></tr>
 <tr><td>HE180004</td><td>Pham Thi Dung</td><td>SE1802</td></tr></table>
 <p class="nhan">Và đúng ví dụ ĐỊNH DẠNG NGÀY của slide, cho nhóm người dùng quen dd/mm/yyyy:</p>
-<pre>CREATE VIEW v_MuonVN AS
+<pre><code class="language-sql">CREATE VIEW v_MuonVN AS
   SELECT mssv, isbn, strftime('%d/%m/%Y', ngay_muon) AS ngay_muon_vn
-  FROM MuonSach;</pre>
+  FROM MuonSach;</code></pre>
 <table><tr><th>mssv</th><th>isbn</th><th>ngay_muon_vn</th></tr>
 <tr><td>HE180001</td><td>978-0132145374</td><td>01/09/2026</td></tr>
 <tr><td>HE180001</td><td>978-0262033848</td><td>05/09/2026</td></tr>
@@ -510,11 +510,11 @@ SELECT * FROM v_TheThuVien;</pre>
 <li><strong>A caution about the figure's design</strong> — see the pitfall. Two of its columns would fail the normalisation test the same deck applies on slide 33.</li>
 </ul>
 <p class="nhan">Đã chạy thật — liên kết bằng GIÁ TRỊ, kết nối ba bảng của CSDL thư viện:</p>
-<pre>SELECT sv.ho_ten, s.tua_sach, m.ngay_muon
+<pre><code class="language-sql">SELECT sv.ho_ten, s.tua_sach, m.ngay_muon
 FROM MuonSach m
 JOIN SinhVien sv ON m.mssv = sv.mssv
 JOIN Sach     s  ON m.isbn = s.isbn
-ORDER BY m.ngay_muon;</pre>
+ORDER BY m.ngay_muon;</code></pre>
 <table><tr><th>ho_ten</th><th>tua_sach</th><th>ngay_muon</th></tr>
 <tr><td>Nguyen Van An</td><td>Foundations of Computer Science</td><td>2026-09-01</td></tr>
 <tr><td>Tran Thi Binh</td><td>Foundations of Computer Science</td><td>2026-09-03</td></tr>
@@ -531,11 +531,11 @@ ORDER BY m.ngay_muon;</pre>
 <li><strong>Một lời cảnh báo về thiết kế của bức hình</strong> — xem phần bẫy. Hai cột của nó sẽ trượt đúng phép kiểm chuẩn hoá mà chính deck này áp dụng ở slide 33.</li>
 </ul>
 <p class="nhan">Đã chạy thật — liên kết bằng GIÁ TRỊ, kết nối ba bảng của CSDL thư viện:</p>
-<pre>SELECT sv.ho_ten, s.tua_sach, m.ngay_muon
+<pre><code class="language-sql">SELECT sv.ho_ten, s.tua_sach, m.ngay_muon
 FROM MuonSach m
 JOIN SinhVien sv ON m.mssv = sv.mssv
 JOIN Sach     s  ON m.isbn = s.isbn
-ORDER BY m.ngay_muon;</pre>
+ORDER BY m.ngay_muon;</code></pre>
 <table><tr><th>ho_ten</th><th>tua_sach</th><th>ngay_muon</th></tr>
 <tr><td>Nguyen Van An</td><td>Foundations of Computer Science</td><td>2026-09-01</td></tr>
 <tr><td>Tran Thi Binh</td><td>Foundations of Computer Science</td><td>2026-09-03</td></tr>
@@ -574,9 +574,9 @@ ORDER BY m.ngay_muon;</pre>
 <li><strong>Why "not stored as tables" matters</strong> — it is slide 10 again. The table is the <em>conceptual</em> picture; on disk it may be a B-tree, a heap, compressed, encrypted or split across machines. Never answer "a relation is a file".</li>
 </ul>
 <p class="nhan">Đã chạy thật — dựng đúng quan hệ COURSES của hình, rồi ĐO bậc và lực lượng:</p>
-<pre>CREATE TABLE COURSES (No TEXT PRIMARY KEY, "Course-Name" TEXT, Unit INTEGER);
+<pre><code class="language-sql">CREATE TABLE COURSES (No TEXT PRIMARY KEY, "Course-Name" TEXT, Unit INTEGER);
 SELECT COUNT(*) FROM pragma_table_info('COURSES');  -- bậc   --&gt; 3
-SELECT COUNT(*) FROM COURSES;                       -- lực lượng --&gt; 4</pre>
+SELECT COUNT(*) FROM COURSES;                       -- lực lượng --&gt; 4</code></pre>
 <table><tr><th>No</th><th>Course-Name</th><th>Unit</th></tr>
 <tr><td>CIS15</td><td>Intro to C</td><td>5</td></tr>
 <tr><td>CIS17</td><td>Intro to Java</td><td>5</td></tr>
@@ -593,9 +593,9 @@ SELECT COUNT(*) FROM COURSES;                       -- lực lượng --&gt; 4</
 <li><strong>Vì sao câu "không lưu dưới dạng bảng" lại quan trọng</strong> — nó lại là slide 10. Cái bảng là bức tranh <em>khái niệm</em>; trên đĩa nó có thể là cây B, là đống, bị nén, bị mã hoá, hoặc bị chia ra nhiều máy. Đừng bao giờ trả lời "quan hệ là một tệp".</li>
 </ul>
 <p class="nhan">Đã chạy thật — dựng đúng quan hệ COURSES của hình, rồi ĐO bậc và lực lượng:</p>
-<pre>CREATE TABLE COURSES (No TEXT PRIMARY KEY, "Course-Name" TEXT, Unit INTEGER);
+<pre><code class="language-sql">CREATE TABLE COURSES (No TEXT PRIMARY KEY, "Course-Name" TEXT, Unit INTEGER);
 SELECT COUNT(*) FROM pragma_table_info('COURSES');  -- bậc      --&gt; 3
-SELECT COUNT(*) FROM COURSES;                       -- lực lượng --&gt; 4</pre>
+SELECT COUNT(*) FROM COURSES;                       -- lực lượng --&gt; 4</code></pre>
 <table><tr><th>No</th><th>Course-Name</th><th>Unit</th></tr>
 <tr><td>CIS15</td><td>Intro to C</td><td>5</td></tr>
 <tr><td>CIS17</td><td>Intro to Java</td><td>5</td></tr>
@@ -652,8 +652,8 @@ SELECT COUNT(*) FROM COURSES;                       -- lực lượng --&gt; 4</
 <li><strong>The habit to build now</strong> — write the column names: <code>insert into COURSES (No, "Course-Name", Unit) values (…)</code>. The slide's positional form breaks silently the day someone adds a column in the middle of the table; the named form keeps working. This was verified: the named form inserted CIS60/Compiler/3 correctly even with the values given out of column order.</li>
 </ul>
 <p class="nhan">Đã chạy thật — đúng câu lệnh của slide, trên đúng bảng COURSES của slide 19:</p>
-<pre>insert into COURSES values ('CIS52','TCP/IP', 6);
-SELECT * FROM COURSES;</pre>
+<pre><code class="language-sql">insert into COURSES values ('CIS52','TCP/IP', 6);
+SELECT * FROM COURSES;</code></pre>
 <table><tr><th>No</th><th>Course-Name</th><th>Unit</th></tr>
 <tr><td>CIS15</td><td>Intro to C</td><td>5</td></tr>
 <tr><td>CIS17</td><td>Intro to Java</td><td>5</td></tr>
@@ -671,8 +671,8 @@ SELECT * FROM COURSES;</pre>
 <li><strong>Thói quen cần rèn ngay</strong> — hãy viết tên cột ra: <code>insert into COURSES (No, "Course-Name", Unit) values (…)</code>. Dạng theo vị trí của slide sẽ hỏng CÂM vào cái ngày có người chèn thêm một cột vào giữa bảng; dạng nêu tên thì vẫn chạy. Đã kiểm: dạng nêu tên chèn đúng CIS60/Compiler/3 ngay cả khi các giá trị được đưa vào lệch thứ tự cột.</li>
 </ul>
 <p class="nhan">Đã chạy thật — đúng câu lệnh của slide, trên đúng bảng COURSES của slide 19:</p>
-<pre>insert into COURSES values ('CIS52','TCP/IP', 6);
-SELECT * FROM COURSES;</pre>
+<pre><code class="language-sql">insert into COURSES values ('CIS52','TCP/IP', 6);
+SELECT * FROM COURSES;</code></pre>
 <table><tr><th>No</th><th>Course-Name</th><th>Unit</th></tr>
 <tr><td>CIS15</td><td>Intro to C</td><td>5</td></tr>
 <tr><td>CIS17</td><td>Intro to Java</td><td>5</td></tr>

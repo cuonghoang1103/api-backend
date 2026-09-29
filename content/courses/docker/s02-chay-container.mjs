@@ -71,13 +71,13 @@ ${gallery('dk-02', [
 
 <h3>The shape of the command</h3>
 ${slide('dk-02', 4, 'Mọi thứ sau tên ảnh thuộc về container — kể cả “-it”')}
-<pre><code>docker run [OPTIONS] IMAGE [COMMAND] [ARG...]
+<pre><code class="language-bash">docker run [OPTIONS] IMAGE [COMMAND] [ARG...]
 <span class="tok-comment">#          ^^^^^^^^^ ^^^^^ ^^^^^^^^^^^^^^^^^^</span>
 <span class="tok-comment">#          for Docker | the image | for the process INSIDE</span>
 
 docker run -d -p 8080:80 nginx:1.27-alpine nginx -g 'daemon off;'</code></pre>
 <div class="callout warn"><strong>Everything after the image name belongs to the container, not to Docker.</strong> This is the rule that explains the whole command. <code>docker run alpine -it</code> does not open a terminal — it runs <code>alpine</code> with the arguments <code>-it</code>, and fails with <code>exec: "-it": executable file not found</code>. Flags go BEFORE the image name, always. When a flag "does nothing", check which side of the image name it is on.</div>
-<pre><code>docker run --rm alpine echo hello          <span class="tok-comment"># overrides the image's CMD</span>
+<pre><code class="language-bash">docker run --rm alpine echo hello          <span class="tok-comment"># overrides the image's CMD</span>
 docker run --rm alpine -it 2&gt;&amp;1 | head -1  <span class="tok-comment"># WRONG: -it is an argument now</span>
 docker run --rm -it alpine sh -c 'echo ok' <span class="tok-comment"># right</span></code></pre>
 <div class="out">hello
@@ -142,7 +142,7 @@ ${slide('dk-02', 5, 'Bảng cờ (1/2): chạy · mạng · dữ liệu')}
 
 <h3>Group 2 — networking</h3>
 ${slide('dk-02', 7, '-p mở cho cả LAN — thêm 127.0.0.1: là chỉ mình bạn')}
-<pre><code>docker run -d --name a -p 8080:80 nginx:1.27-alpine            <span class="tok-comment"># host:container</span>
+<pre><code class="language-bash">docker run -d --name a -p 8080:80 nginx:1.27-alpine            <span class="tok-comment"># host:container</span>
 docker run -d --name b -p 127.0.0.1:8081:80 nginx:1.27-alpine  <span class="tok-comment"># localhost only</span>
 docker run -d --name c -P nginx:1.27-alpine                    <span class="tok-comment"># random high port</span>
 docker port c</code></pre>
@@ -171,7 +171,7 @@ curl exit 7</div>
 <p>Real output from the course Mac. <code>000</code> with curl exit 7 means "could not connect at all": <code>b</code> simply is not listening on the LAN card. Both answer <code>200</code> on <code>localhost</code>. Also notice <code>-P</code> on Docker Desktop picked port <code>55000</code> in our run rather than the <code>32768</code> shown above — the random range differs by platform, which is why <code>docker port</code> exists.</p>
 
 <h3>Group 3 — data</h3>
-<pre><code>docker volume create pgdata
+<pre><code class="language-bash">docker volume create pgdata
 docker run -d --name db -v pgdata:/var/lib/postgresql/data \\
   -e POSTGRES_PASSWORD=x postgres:16-alpine
 
@@ -205,7 +205,7 @@ drwxr-xr-x  2 admin  wheel  64 Sep 23 21:01 khong-co</div>
 
 <h3>Group 4 — configuration</h3>
 ${slide('dk-02', 6, 'Bảng cờ (2/2): cấu hình · giới hạn · ghi đè ảnh')}
-<pre><code>docker run --rm -e GREETING=hello -e NAME alpine env | grep -E '^(GREETING|NAME)='
+<pre><code class="language-bash">docker run --rm -e GREETING=hello -e NAME alpine env | grep -E '^(GREETING|NAME)='
 printf 'DB_HOST=db\\nDB_PORT=5432\\n' &gt; app.env
 docker run --rm --env-file app.env alpine env | grep DB_
 docker run --rm -w /etc alpine pwd
@@ -219,7 +219,7 @@ uid=1000 gid=1000 groups=1000</div>
 <p><code>-e NAME</code> with no value passes through the variable of the same name from your shell — handy, and a trap in CI where that variable may not exist. Lesson 2.4 covers precedence, and why environment variables are the wrong place for real secrets.</p>
 
 <h3>Group 5 — limits</h3>
-<pre><code>docker run -d --name l --memory 256m --memory-swap 256m \\
+<pre><code class="language-bash">docker run -d --name l --memory 256m --memory-swap 256m \\
   --cpus 0.5 --pids-limit 100 nginx:1.27-alpine
 docker inspect l --format '{{.HostConfig.Memory}} {{.HostConfig.NanoCpus}} {{.HostConfig.PidsLimit}}'
 docker stats --no-stream l --format '{{.Name}} {{.MemUsage}} {{.CPUPerc}}'</code></pre>
@@ -229,7 +229,7 @@ l 3.586MiB / 256MiB 0.00%</div>
 
 <h3>Group 6 — overriding the image</h3>
 ${slide('dk-02', 8, 'ENTRYPOINT + CMD = lệnh thật chạy; tham số chỉ thay CMD')}
-<pre><code>docker image inspect nginx:1.27-alpine --format 'ENTRYPOINT={{.Config.Entrypoint}} CMD={{.Config.Cmd}}'
+<pre><code class="language-bash">docker image inspect nginx:1.27-alpine --format 'ENTRYPOINT={{.Config.Entrypoint}} CMD={{.Config.Cmd}}'
 docker run --rm nginx:1.27-alpine nginx -v                 <span class="tok-comment"># replaces CMD</span>
 docker run --rm --entrypoint sh nginx:1.27-alpine -c 'echo replaced entrypoint'
 docker run --rm --entrypoint "" nginx:1.27-alpine ls /docker-entrypoint.d</code></pre>
@@ -269,7 +269,7 @@ replaced entrypoint
 </table>
 
 <h3>Read a running container back as a command</h3>
-<pre><code>docker inspect db --format '{{json .Config.Env}}' | tr ',' '\\n' | head -3
+<pre><code class="language-bash">docker inspect db --format '{{json .Config.Env}}' | tr ',' '\\n' | head -3
 docker inspect db --format '{{range \$p, \$v := .NetworkSettings.Ports}}{{\$p}} {{end}}'
 docker inspect db --format '{{.HostConfig.RestartPolicy.Name}} {{.Config.Image}}'
 docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \\
@@ -281,7 +281,7 @@ docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \\
 no postgres:16-alpine</div>
 <p>Being able to reconstruct the command from a running container is a real operational skill: it answers "what exactly is production running?" without trusting a wiki. <code>docker inspect</code> with a <code>--format</code> template does it precisely; tools like <code>rekcod</code> do it approximately but instantly. Once a stack is more than two containers, this is what Compose replaces (Chapter 9).</p>
 <div class="callout warn"><strong>Correction (re-checked September 2026).</strong> An earlier version of this lesson pulled rekcod from <code>ghcr.io/nexdrew/rekcod</code>; that image does not exist (<code>error from registry: denied</code>). The image is on Docker Hub as <code>nexdrew/rekcod</code>, and it is built for <code>linux/amd64</code> only — on an M1 Mac it still runs, through emulation, with a platform warning. On Docker 29 it printed, for the <code>db</code> container above: <code>docker run --name db --runtime runc -v pgdata:/var/lib/postgresql/data --net bridge --restart no … -e 'POSTGRES_PASSWORD=x' … -d --entrypoint "docker-entrypoint.sh" postgres:16-alpine 'postgres'</code> — note that it lists every variable the IMAGE set too, so its output is longer than the command you actually typed.</div>
-<pre><code>docker rm -f a b c l db &gt;/dev/null; docker volume rm pgdata; rm -f app.env</code></pre>
+<pre><code class="language-bash">docker rm -f a b c l db &gt;/dev/null; docker volume rm pgdata; rm -f app.env</code></pre>
 
 <h3>🧪 Practice (15–20 min)</h3>
 <div class="callout ok"><p><strong>Scenario:</strong> your SWP391 team keeps the landing page in a <code>web/</code> folder. A teammate pastes <code>docker run -d nginx:1.27-alpine -p 8080:80 -v web:/usr/share/nginx/html</code> into the group chat and says "it prints an ID, so it worked — but the browser can't open anything". Fix it, and serve the page only to your own machine.</p><ol>
@@ -338,13 +338,13 @@ no postgres:16-alpine</div>
 
 <h3>Hình hài của câu lệnh</h3>
 ${slide('dk-02', 4, 'Mọi thứ sau tên ảnh thuộc về container — kể cả “-it”')}
-<pre><code>docker run [TUỲ CHỌN] ẢNH [CÂU LỆNH] [THAM SỐ...]
+<pre><code class="language-bash">docker run [TUỲ CHỌN] ẢNH [CÂU LỆNH] [THAM SỐ...]
 <span class="tok-comment">#          ^^^^^^^^^^ ^^^ ^^^^^^^^^^^^^^^^^^^^^^</span>
 <span class="tok-comment">#          cho Docker | ảnh | cho tiến trình BÊN TRONG</span>
 
 docker run -d -p 8080:80 nginx:1.27-alpine nginx -g 'daemon off;'</code></pre>
 <div class="callout warn"><strong>Mọi thứ đứng SAU tên ảnh đều thuộc về container, không thuộc về Docker.</strong> Đây là cái luật giải thích cả câu lệnh. <code>docker run alpine -it</code> KHÔNG mở terminal nào — nó chạy <code>alpine</code> với tham số <code>-it</code>, và hỏng với <code>exec: "-it": executable file not found</code>. Cờ luôn đứng TRƯỚC tên ảnh. Khi một cái cờ "chẳng làm gì", hãy kiểm xem nó đang nằm ở phía nào của tên ảnh.</div>
-<pre><code>docker run --rm alpine echo hello          <span class="tok-comment"># ghi đè CMD của ảnh</span>
+<pre><code class="language-bash">docker run --rm alpine echo hello          <span class="tok-comment"># ghi đè CMD của ảnh</span>
 docker run --rm alpine -it 2&gt;&amp;1 | head -1  <span class="tok-comment"># SAI: -it giờ là một tham số</span>
 docker run --rm -it alpine sh -c 'echo ok' <span class="tok-comment"># đúng</span></code></pre>
 <div class="out">hello
@@ -409,7 +409,7 @@ ${slide('dk-02', 5, 'Bảng cờ (1/2): chạy · mạng · dữ liệu')}
 
 <h3>Nhóm 2 — mạng</h3>
 ${slide('dk-02', 7, '-p mở cho cả LAN — thêm 127.0.0.1: là chỉ mình bạn')}
-<pre><code>docker run -d --name a -p 8080:80 nginx:1.27-alpine            <span class="tok-comment"># máy chủ:container</span>
+<pre><code class="language-bash">docker run -d --name a -p 8080:80 nginx:1.27-alpine            <span class="tok-comment"># máy chủ:container</span>
 docker run -d --name b -p 127.0.0.1:8081:80 nginx:1.27-alpine  <span class="tok-comment"># chỉ localhost</span>
 docker run -d --name c -P nginx:1.27-alpine                    <span class="tok-comment"># cổng cao ngẫu nhiên</span>
 docker port c</code></pre>
@@ -438,7 +438,7 @@ curl exit 7</div>
 <p>Output thật trên máy Mac của khoá. <code>000</code> kèm curl exit 7 nghĩa là "không kết nối được chút nào": <code>b</code> đơn giản là không nghe trên card LAN. Cả hai đều trả <code>200</code> ở <code>localhost</code>. Để ý thêm: <code>-P</code> trên Docker Desktop lần chạy của khoá chọn cổng <code>55000</code> chứ không phải <code>32768</code> như output ở trên — dải cổng ngẫu nhiên khác nhau theo nền tảng, và đó là lý do có lệnh <code>docker port</code>.</p>
 
 <h3>Nhóm 3 — dữ liệu</h3>
-<pre><code>docker volume create pgdata
+<pre><code class="language-bash">docker volume create pgdata
 docker run -d --name db -v pgdata:/var/lib/postgresql/data \\
   -e POSTGRES_PASSWORD=x postgres:16-alpine
 
@@ -472,7 +472,7 @@ drwxr-xr-x  2 admin  wheel  64 Sep 23 21:01 khong-co</div>
 
 <h3>Nhóm 4 — cấu hình</h3>
 ${slide('dk-02', 6, 'Bảng cờ (2/2): cấu hình · giới hạn · ghi đè ảnh')}
-<pre><code>docker run --rm -e GREETING=hello -e NAME alpine env | grep -E '^(GREETING|NAME)='
+<pre><code class="language-bash">docker run --rm -e GREETING=hello -e NAME alpine env | grep -E '^(GREETING|NAME)='
 printf 'DB_HOST=db\\nDB_PORT=5432\\n' &gt; app.env
 docker run --rm --env-file app.env alpine env | grep DB_
 docker run --rm -w /etc alpine pwd
@@ -486,7 +486,7 @@ uid=1000 gid=1000 groups=1000</div>
 <p><code>-e NAME</code> không kèm giá trị thì truyền xuyên qua biến CÙNG TÊN từ shell của bạn — tiện, và là một cái bẫy trong CI nơi biến đó có thể không tồn tại. Bài 2.4 nói về thứ tự ưu tiên, và vì sao biến môi trường là chỗ SAI để đặt bí mật thật.</p>
 
 <h3>Nhóm 5 — giới hạn</h3>
-<pre><code>docker run -d --name l --memory 256m --memory-swap 256m \\
+<pre><code class="language-bash">docker run -d --name l --memory 256m --memory-swap 256m \\
   --cpus 0.5 --pids-limit 100 nginx:1.27-alpine
 docker inspect l --format '{{.HostConfig.Memory}} {{.HostConfig.NanoCpus}} {{.HostConfig.PidsLimit}}'
 docker stats --no-stream l --format '{{.Name}} {{.MemUsage}} {{.CPUPerc}}'</code></pre>
@@ -496,7 +496,7 @@ l 3.586MiB / 256MiB 0.00%</div>
 
 <h3>Nhóm 6 — ghi đè cái ảnh</h3>
 ${slide('dk-02', 8, 'ENTRYPOINT + CMD = lệnh thật chạy; tham số chỉ thay CMD')}
-<pre><code>docker image inspect nginx:1.27-alpine --format 'ENTRYPOINT={{.Config.Entrypoint}} CMD={{.Config.Cmd}}'
+<pre><code class="language-bash">docker image inspect nginx:1.27-alpine --format 'ENTRYPOINT={{.Config.Entrypoint}} CMD={{.Config.Cmd}}'
 docker run --rm nginx:1.27-alpine nginx -v                 <span class="tok-comment"># thay thế CMD</span>
 docker run --rm --entrypoint sh nginx:1.27-alpine -c 'echo đã thay entrypoint'
 docker run --rm --entrypoint "" nginx:1.27-alpine ls /docker-entrypoint.d</code></pre>
@@ -536,7 +536,7 @@ nginx version: nginx/1.27.2
 </table>
 
 <h3>Đọc ngược một container đang chạy thành câu lệnh</h3>
-<pre><code>docker inspect db --format '{{json .Config.Env}}' | tr ',' '\\n' | head -3
+<pre><code class="language-bash">docker inspect db --format '{{json .Config.Env}}' | tr ',' '\\n' | head -3
 docker inspect db --format '{{range \$p, \$v := .NetworkSettings.Ports}}{{\$p}} {{end}}'
 docker inspect db --format '{{.HostConfig.RestartPolicy.Name}} {{.Config.Image}}'
 docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \\
@@ -548,7 +548,7 @@ docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \\
 no postgres:16-alpine</div>
 <p>Dựng lại được câu lệnh từ một container đang chạy là một kỹ năng vận hành có thật: nó trả lời "production đang chạy CHÍNH XÁC cái gì?" mà không phải tin vào một trang wiki. <code>docker inspect</code> với khuôn <code>--format</code> làm chuyện đó một cách chính xác; những công cụ như <code>rekcod</code> làm gần đúng nhưng tức thì. Một khi hệ thống có hơn hai container thì đây chính là thứ mà Compose thay thế (Chương 9).</p>
 <div class="callout warn"><strong>Đính chính (kiểm lại tháng 9/2026).</strong> Bản trước của bài này kéo rekcod từ <code>ghcr.io/nexdrew/rekcod</code>; ảnh đó không tồn tại (<code>error from registry: denied</code>). Ảnh nằm trên Docker Hub với tên <code>nexdrew/rekcod</code>, và chỉ được dựng cho <code>linux/amd64</code> — trên Mac M1 nó vẫn chạy, qua giả lập, kèm một cảnh báo nền tảng. Trên Docker 29 nó in ra cho container <code>db</code> ở trên: <code>docker run --name db --runtime runc -v pgdata:/var/lib/postgresql/data --net bridge --restart no … -e 'POSTGRES_PASSWORD=x' … -d --entrypoint "docker-entrypoint.sh" postgres:16-alpine 'postgres'</code> — để ý nó liệt kê cả mọi biến mà CÁI ẢNH đặt, nên output dài hơn câu lệnh bạn thật sự đã gõ.</div>
-<pre><code>docker rm -f a b c l db &gt;/dev/null; docker volume rm pgdata; rm -f app.env</code></pre>
+<pre><code class="language-bash">docker rm -f a b c l db &gt;/dev/null; docker volume rm pgdata; rm -f app.env</code></pre>
 
 <h3>🧪 Thực hành (15–20 phút)</h3>
 <div class="callout ok"><p><strong>Tình huống:</strong> nhóm SWP391 của bạn để trang giới thiệu trong thư mục <code>web/</code>. Một bạn dán vào nhóm chat <code>docker run -d nginx:1.27-alpine -p 8080:80 -v web:/usr/share/nginx/html</code> rồi nói "nó in ra ID rồi, tức là chạy được — mà trình duyệt không mở được gì". Sửa nó, và chỉ phục vụ trang cho máy của chính bạn.</p><ol>
@@ -624,7 +624,7 @@ ${slide('dk-02', 9, 'Sáu câu hỏi khi container có vấn đề — mỗi câ
 </div>
 <h3>docker logs, and where the logs actually are</h3>
 ${slide('dk-02', 10, 'docker logs = stdout + stderr của PID 1, cất trong file JSON')}
-<pre><code>docker run -d --name web -p 8080:80 nginx:1.27-alpine
+<pre><code class="language-bash">docker run -d --name web -p 8080:80 nginx:1.27-alpine
 curl -s localhost:8080 &gt;/dev/null; curl -s localhost:8080/missing &gt;/dev/null
 
 docker logs web                      <span class="tok-comment"># everything so far</span>
@@ -640,7 +640,7 @@ docker logs --since 2026-08-22T21:00 --until 2026-08-22T21:05 web</code></pre>
   <div class="kv"><span class="k">-f, --follow</span><span class="v">Live tail. Combine with <code>--tail 0</code> to see only what happens from now on — much clearer when reproducing a bug.</span></div>
   <div class="kv"><span class="k">2&gt;/dev/null or 1&gt;/dev/null</span><span class="v"><code>docker logs</code> writes the container's stdout to your stdout and its stderr to your stderr, so you can separate them: <code>docker logs web 2&gt;/dev/null</code> shows only stdout.</span></div>
 </div>
-<pre><code>CID=\$(docker inspect -f '{{.Id}}' web)
+<pre><code class="language-bash">CID=\$(docker inspect -f '{{.Id}}' web)
 sudo ls -lh /var/lib/docker/containers/\$CID/\$CID-json.log
 sudo head -c 220 /var/lib/docker/containers/\$CID/\$CID-json.log</code></pre>
 <div class="out">-rw-r----- 1 root root 1.4K Aug 22 21:31 /var/lib/docker/containers/8c40e93b…/8c40e93b…-json.log
@@ -675,14 +675,14 @@ docker run --rm -v /var/lib/docker/containers/\$CID:/c:ro alpine \\
 
 <h3>stdout is the contract</h3>
 ${slide('dk-02', 11, 'File log và bộ đệm làm docker logs trống trơn')}
-<pre><code>docker run -d --name filelog alpine sh -c \\
+<pre><code class="language-bash">docker run -d --name filelog alpine sh -c \\
   'while true; do echo "to a file" &gt;&gt; /var/log/app.log; sleep 2; done'
 docker logs filelog                     <span class="tok-comment"># nothing — it never wrote to stdout</span>
 docker exec filelog tail -2 /var/log/app.log</code></pre>
 <div class="out">to a file
 to a file</div>
 <p>An application that writes to a log file inside the container is invisible to <code>docker logs</code>, to your log aggregator, and to everything Chapter 11 sets up — and its output dies with the container. <strong>Containerised applications log to stdout and stderr.</strong> If a framework insists on a file path, the standard trick is to point it at <code>/dev/stdout</code>; that is exactly what the official nginx image does.</p>
-<pre><code>docker exec web ls -l /var/log/nginx/</code></pre>
+<pre><code class="language-bash">docker exec web ls -l /var/log/nginx/</code></pre>
 <div class="out">lrwxrwxrwx 1 root root 11 Aug  1 12:04 access.log -&gt; /dev/stdout
 lrwxrwxrwx 1 root root 11 Aug  1 12:04 error.log -&gt; /dev/stderr</div>
 <p><strong>The other way to get an empty <code>docker logs</code>: buffering, measured.</strong> The same tiny Python loop, once as-is and once with <code>PYTHONUNBUFFERED=1</code>, counted after four seconds:</p>
@@ -698,7 +698,7 @@ py2:        5 lines</div>
 
 <h3>docker inspect: everything, in JSON</h3>
 ${slide('dk-02', 12, 'docker inspect: một dòng phân loại mọi container')}
-<pre><code>docker inspect web | head -12
+<pre><code class="language-bash">docker inspect web | head -12
 docker inspect web --format '{{.State.Status}} · pid {{.State.Pid}} · started {{.State.StartedAt}}'
 docker inspect web --format '{{range \$n, \$c := .NetworkSettings.Networks}}{{\$n}} {{\$c.IPAddress}}{{end}}'
 docker inspect web --format '{{range .Mounts}}{{.Type}} {{.Source}} -&gt; {{.Destination}}{{"\\n"}}{{end}}'
@@ -713,7 +713,7 @@ bridge 172.17.0.2
   <div class="kv"><span class="k">It works on images and volumes too</span><span class="v"><code>docker inspect nginx:1.27-alpine</code>, <code>docker volume inspect pgdata</code>, <code>docker network inspect bridge</code>. Same command, same template syntax.</span></div>
   <div class="kv"><span class="k">The fields worth memorising</span><span class="v"><code>.State.ExitCode</code>, <code>.State.OOMKilled</code>, <code>.State.Health.Status</code>, <code>.RestartCount</code>, <code>.Config.Env</code>, <code>.Mounts</code>, <code>.HostConfig.Memory</code>, <code>.NetworkSettings.Networks</code>. Between them they answer most incident questions.</span></div>
 </div>
-<pre><code><span class="tok-comment"># A one-line health summary across every container</span>
+<pre><code class="language-bash"><span class="tok-comment"># A one-line health summary across every container</span>
 docker inspect \$(docker ps -aq) --format \\
   '{{.Name}} {{.State.Status}} exit={{.State.ExitCode}} oom={{.State.OOMKilled}} restarts={{.RestartCount}}'</code></pre>
 <div class="out">/web running exit=0 oom=false restarts=0
@@ -737,7 +737,7 @@ die</div>
 
 <h3>stats, top, port, diff</h3>
 ${slide('dk-02', 13, 'stats · top · port · diff: đọc output từng cột')}
-<pre><code>docker stats --no-stream --format 'table {{.Name}}\\t{{.CPUPerc}}\\t{{.MemUsage}}\\t{{.NetIO}}\\t{{.PIDs}}'
+<pre><code class="language-bash">docker stats --no-stream --format 'table {{.Name}}\\t{{.CPUPerc}}\\t{{.MemUsage}}\\t{{.NetIO}}\\t{{.PIDs}}'
 docker top web -o pid,user,args
 docker port web
 docker diff web | head -4</code></pre>
@@ -779,7 +779,7 @@ PID                 USER                COMMAND
 
 <h3>A thirty-second sweep</h3>
 ${slide('dk-02', 14, 'Cuộc quét 30 giây — và bẫy: hai --filter khác loại là “VÀ”')}
-<pre><code>{
+<pre><code class="language-bash">{
   echo "=== running ==="; docker ps --format 'table {{.Names}}\\t{{.Status}}\\t{{.Ports}}'
   echo "=== exited ==="; docker ps -a --filter 'status=exited' --format '{{.Names}} {{.Status}}'
   echo "=== unhealthy ==="; docker ps --filter 'health=unhealthy' --format '{{.Names}} {{.Status}}'
@@ -806,7 +806,7 @@ docker ps -a --filter health=unhealthy --format '{{.Names}}'
 docker ps -a --filter status=exited --format '{{.Names}}'</code></pre>
 <div class="out">hc
 api</div>
-<pre><code>docker rm -f web filelog &gt;/dev/null</code></pre>
+<pre><code class="language-bash">docker rm -f web filelog &gt;/dev/null</code></pre>
 
 <h3>🧪 Practice (15–20 min)</h3>
 <div class="callout ok"><p><strong>Scenario:</strong> ten minutes before your SWP391 demo the API container "keeps dying" and <code>docker logs</code> shows nothing. You have five minutes to say WHY, with evidence, before anyone touches the code.</p><ol>
@@ -876,7 +876,7 @@ ${slide('dk-02', 9, 'Sáu câu hỏi khi container có vấn đề — mỗi câ
 </div>
 <h3>docker logs, và log thật sự nằm ở đâu</h3>
 ${slide('dk-02', 10, 'docker logs = stdout + stderr của PID 1, cất trong file JSON')}
-<pre><code>docker run -d --name web -p 8080:80 nginx:1.27-alpine
+<pre><code class="language-bash">docker run -d --name web -p 8080:80 nginx:1.27-alpine
 curl -s localhost:8080 &gt;/dev/null; curl -s localhost:8080/missing &gt;/dev/null
 
 docker logs web                      <span class="tok-comment"># tất cả từ đầu tới giờ</span>
@@ -892,7 +892,7 @@ docker logs --since 2026-08-22T21:00 --until 2026-08-22T21:05 web</code></pre>
   <div class="kv"><span class="k">-f, --follow</span><span class="v">Bám theo thời gian thực. Ghép với <code>--tail 0</code> để chỉ thấy những gì xảy ra TỪ BÂY GIỜ — rõ ràng hơn hẳn khi đang tái hiện một con bọ.</span></div>
   <div class="kv"><span class="k">2&gt;/dev/null hoặc 1&gt;/dev/null</span><span class="v"><code>docker logs</code> đẩy stdout của container vào stdout của bạn và stderr vào stderr của bạn, nên bạn tách được chúng: <code>docker logs web 2&gt;/dev/null</code> chỉ hiện stdout.</span></div>
 </div>
-<pre><code>CID=\$(docker inspect -f '{{.Id}}' web)
+<pre><code class="language-bash">CID=\$(docker inspect -f '{{.Id}}' web)
 sudo ls -lh /var/lib/docker/containers/\$CID/\$CID-json.log
 sudo head -c 220 /var/lib/docker/containers/\$CID/\$CID-json.log</code></pre>
 <div class="out">-rw-r----- 1 root root 1.4K Aug 22 21:31 /var/lib/docker/containers/8c40e93b…/8c40e93b…-json.log
@@ -927,14 +927,14 @@ docker run --rm -v /var/lib/docker/containers/\$CID:/c:ro alpine \\
 
 <h3>stdout là bản hợp đồng</h3>
 ${slide('dk-02', 11, 'File log và bộ đệm làm docker logs trống trơn')}
-<pre><code>docker run -d --name filelog alpine sh -c \\
+<pre><code class="language-bash">docker run -d --name filelog alpine sh -c \\
   'while true; do echo "ghi vào một file" &gt;&gt; /var/log/app.log; sleep 2; done'
 docker logs filelog                     <span class="tok-comment"># không có gì — nó chưa từng ghi ra stdout</span>
 docker exec filelog tail -2 /var/log/app.log</code></pre>
 <div class="out">ghi vào một file
 ghi vào một file</div>
 <p>Một ứng dụng ghi vào file log BÊN TRONG container thì vô hình với <code>docker logs</code>, với bộ gom log của bạn, và với mọi thứ Chương 11 dựng lên — và output của nó chết cùng container. <strong>Ứng dụng chạy trong container thì ghi log ra stdout và stderr.</strong> Nếu một framework nhất định đòi một đường dẫn file thì mẹo tiêu chuẩn là trỏ nó vào <code>/dev/stdout</code>; đó chính xác là điều ảnh nginx chính thức làm.</p>
-<pre><code>docker exec web ls -l /var/log/nginx/</code></pre>
+<pre><code class="language-bash">docker exec web ls -l /var/log/nginx/</code></pre>
 <div class="out">lrwxrwxrwx 1 root root 11 Aug  1 12:04 access.log -&gt; /dev/stdout
 lrwxrwxrwx 1 root root 11 Aug  1 12:04 error.log -&gt; /dev/stderr</div>
 <p><strong>Đường thứ hai dẫn tới <code>docker logs</code> trống: bộ đệm, đo thật.</strong> Cùng một vòng lặp Python nhỏ, một lần để nguyên và một lần có <code>PYTHONUNBUFFERED=1</code>, đếm sau bốn giây:</p>
@@ -950,7 +950,7 @@ py2:        5 dòng</div>
 
 <h3>docker inspect: mọi thứ, dưới dạng JSON</h3>
 ${slide('dk-02', 12, 'docker inspect: một dòng phân loại mọi container')}
-<pre><code>docker inspect web | head -12
+<pre><code class="language-bash">docker inspect web | head -12
 docker inspect web --format '{{.State.Status}} · pid {{.State.Pid}} · bắt đầu {{.State.StartedAt}}'
 docker inspect web --format '{{range \$n, \$c := .NetworkSettings.Networks}}{{\$n}} {{\$c.IPAddress}}{{end}}'
 docker inspect web --format '{{range .Mounts}}{{.Type}} {{.Source}} -&gt; {{.Destination}}{{"\\n"}}{{end}}'
@@ -965,7 +965,7 @@ bridge 172.17.0.2
   <div class="kv"><span class="k">Nó chạy được cả với ảnh và volume</span><span class="v"><code>docker inspect nginx:1.27-alpine</code>, <code>docker volume inspect pgdata</code>, <code>docker network inspect bridge</code>. Cùng câu lệnh, cùng cú pháp khuôn.</span></div>
   <div class="kv"><span class="k">Những trường đáng thuộc lòng</span><span class="v"><code>.State.ExitCode</code>, <code>.State.OOMKilled</code>, <code>.State.Health.Status</code>, <code>.RestartCount</code>, <code>.Config.Env</code>, <code>.Mounts</code>, <code>.HostConfig.Memory</code>, <code>.NetworkSettings.Networks</code>. Cộng lại chúng trả lời phần lớn câu hỏi lúc có sự cố.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Một dòng tóm tắt sức khoẻ cho MỌI container</span>
+<pre><code class="language-bash"><span class="tok-comment"># Một dòng tóm tắt sức khoẻ cho MỌI container</span>
 docker inspect \$(docker ps -aq) --format \\
   '{{.Name}} {{.State.Status}} exit={{.State.ExitCode}} oom={{.State.OOMKilled}} restarts={{.RestartCount}}'</code></pre>
 <div class="out">/web running exit=0 oom=false restarts=0
@@ -989,7 +989,7 @@ die</div>
 
 <h3>stats, top, port, diff</h3>
 ${slide('dk-02', 13, 'stats · top · port · diff: đọc output từng cột')}
-<pre><code>docker stats --no-stream --format 'table {{.Name}}\\t{{.CPUPerc}}\\t{{.MemUsage}}\\t{{.NetIO}}\\t{{.PIDs}}'
+<pre><code class="language-bash">docker stats --no-stream --format 'table {{.Name}}\\t{{.CPUPerc}}\\t{{.MemUsage}}\\t{{.NetIO}}\\t{{.PIDs}}'
 docker top web -o pid,user,args
 docker port web
 docker diff web | head -4</code></pre>
@@ -1031,7 +1031,7 @@ PID                 USER                COMMAND
 
 <h3>Một cuộc quét ba mươi giây</h3>
 ${slide('dk-02', 14, 'Cuộc quét 30 giây — và bẫy: hai --filter khác loại là “VÀ”')}
-<pre><code>{
+<pre><code class="language-bash">{
   echo "=== đang chạy ==="; docker ps --format 'table {{.Names}}\\t{{.Status}}\\t{{.Ports}}'
   echo "=== đã thoát ==="; docker ps -a --filter 'status=exited' --format '{{.Names}} {{.Status}}'
   echo "=== không khoẻ ==="; docker ps --filter 'health=unhealthy' --format '{{.Names}} {{.Status}}'
@@ -1058,7 +1058,7 @@ docker ps -a --filter health=unhealthy --format '{{.Names}}'
 docker ps -a --filter status=exited --format '{{.Names}}'</code></pre>
 <div class="out">hc
 api</div>
-<pre><code>docker rm -f web filelog &gt;/dev/null</code></pre>
+<pre><code class="language-bash">docker rm -f web filelog &gt;/dev/null</code></pre>
 
 <h3>🧪 Thực hành (15–20 phút)</h3>
 <div class="callout ok"><p><strong>Tình huống:</strong> mười phút trước buổi demo SWP391, container API "cứ chết hoài" mà <code>docker logs</code> chẳng hiện gì. Bạn có năm phút để nói ra VÌ SAO, kèm bằng chứng, trước khi ai đó đụng vào mã.</p><ol>
@@ -1127,7 +1127,7 @@ api</div>
 
 <h3>exec: a new process in the same namespaces</h3>
 ${slide('dk-02', 15, 'exec mở tiến trình MỚI — attach nối vào chính PID 1')}
-<pre><code>docker run -d --name web -p 8080:80 nginx:1.27-alpine
+<pre><code class="language-bash">docker run -d --name web -p 8080:80 nginx:1.27-alpine
 docker exec -it web sh -c 'ls /etc/nginx; echo; id; echo; hostname'
 docker exec web cat /etc/nginx/conf.d/default.conf | head -5
 docker exec web env | grep NGINX</code></pre>
@@ -1149,7 +1149,7 @@ NGINX_VERSION=1.27.2</div>
   <div class="kv"><span class="k">-e VAR=value</span><span class="v">Add environment variables for this command only. Useful for <code>-e PGPASSWORD=…</code> so a password does not end up in your shell history on the host.</span></div>
   <div class="kv"><span class="k">--privileged</span><span class="v">Grants the exec'd process full capabilities. Occasionally needed to run <code>tcpdump</code> or <code>strace</code> inside; treat it as a loaded weapon.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Which shell does the image actually have?</span>
+<pre><code class="language-bash"><span class="tok-comment"># Which shell does the image actually have?</span>
 docker exec web sh -c 'ls -l /bin/sh; command -v bash || echo "no bash"'
 docker run --rm ubuntu:24.04 bash -c 'echo ubuntu has bash'</code></pre>
 <div class="out">lrwxrwxrwx 1 root root 12 Aug  1 12:03 /bin/sh -&gt; /bin/busybox
@@ -1170,7 +1170,7 @@ ubuntu has bash</div>
 
 <h3>attach: connecting to PID 1's own terminal</h3>
 ${slide('dk-02', 16, 'Đo thật: tín hiệu gửi vào docker attach đi thẳng tới app')}
-<pre><code>docker run -d --name t alpine sh -c 'while true; do date; sleep 2; done'
+<pre><code class="language-bash">docker run -d --name t alpine sh -c 'while true; do date; sleep 2; done'
 timeout -k 3 4 docker attach t              <span class="tok-comment"># SIGTERM after 4 s, SIGKILL 3 s later</span>
 docker ps --filter name=t --format '{{.Names}} {{.Status}}'
 timeout -s INT 3 docker attach t            <span class="tok-comment"># SIGINT = what Ctrl-C sends</span>
@@ -1185,7 +1185,7 @@ Wed Sep 23 14:34:48 UTC 2026
 t Exited (130) 1 second ago</div>
 <div class="callout warn"><strong><code>docker attach</code> connects your terminal to PID 1's stdin/stdout — so Ctrl-C sends SIGINT to the application and usually stops the container.</strong> This surprises people who reach for attach expecting something like <code>tail -f</code>. If you attached and want out without killing anything, the detach sequence is <strong>Ctrl-P Ctrl-Q</strong>. To watch output safely, use <code>docker logs -f</code>; to get a prompt, use <code>docker exec</code>. Attach is genuinely useful only when you need to <em>send input</em> to PID 1 — an interactive REPL you started with <code>-d</code>, for instance.</div>
 <p><strong>What the measurement above shows (Linux, Docker 29.6).</strong> An earlier version of this lesson claimed <code>timeout 5 docker attach t</code> returns after five seconds with the container still up. It does not: <code>docker attach</code> <em>forwards</em> the signals it receives to PID 1 (<code>--sig-proxy</code>, on by default), the shell loop running as PID 1 ignores SIGTERM (Lesson 1.3), and the attach command simply keeps printing — <code>timeout</code> had to SIGKILL it. The second call sends SIGINT, exactly what Ctrl-C sends, and the <em>application</em> dies: <code>Exited (130)</code>, 128 + 2. We repeated it on nginx: <code>signal 2 (SIGINT) received, exiting</code>, container <code>Exited (0)</code>. Ctrl-P Ctrl-Q only works when the container was started with <code>-it</code>; for a <code>-d</code> container without a TTY there is no safe detach key — close the terminal, or never attach. macOS has no <code>timeout</code> command, which is why this was measured on Linux.</p>
-<pre><code>docker rm -f t &gt;/dev/null
+<pre><code class="language-bash">docker rm -f t &gt;/dev/null
 docker run -d --name repl -it node:22-alpine node        <span class="tok-comment"># -it, but detached</span>
 docker attach repl                                        <span class="tok-comment"># now you have the REPL</span>
 <span class="tok-comment"># type: 2 ** 32   then Ctrl-P Ctrl-Q to leave it running</span></code></pre>
@@ -1202,7 +1202,7 @@ ${slide('dk-02', 17, '-i giữ stdin, -t cấp terminal — dùng sai là hỏng
   <div class="lz-stage">-i alone</div>
   <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">For pipes and scripts</span><span class="lz-nsub">The correct form in CI and in shell pipelines: no TTY means no control characters mixed into the output.</span></div></div>
 </div>
-<pre><code>echo '{"b":2,"a":1}' | docker run --rm -i ghcr.io/jqlang/jq -S .   <span class="tok-comment"># correct</span>
+<pre><code class="language-bash">echo '{"b":2,"a":1}' | docker run --rm -i ghcr.io/jqlang/jq -S .   <span class="tok-comment"># correct</span>
 echo '{"b":2,"a":1}' | docker run --rm    ghcr.io/jqlang/jq -S .; echo "exit=\$?"   <span class="tok-comment"># stdin closed</span>
 docker run --rm -t alpine echo hi | cat -v
 docker run --rm -t alpine ls /etc | head -1 | cat -v</code></pre>
@@ -1217,7 +1217,7 @@ hi^M
 
 <h3>When the image has no shell</h3>
 ${slide('dk-02', 18, 'Ảnh không có shell? Cho một container phụ ngồi cạnh')}
-<pre><code>docker run -d --name api -p 18023:80 traefik/whoami   <span class="tok-comment"># a real web server built FROM scratch</span>
+<pre><code class="language-bash">docker run -d --name api -p 18023:80 traefik/whoami   <span class="tok-comment"># a real web server built FROM scratch</span>
 docker exec api sh; echo "exit=\$?"
 docker exec api ls; echo "exit=\$?"
 docker images traefik/whoami</code></pre>
@@ -1235,7 +1235,7 @@ traefik/whoami:latest   c4717a8d1f01         18MB         4.73MB   U</div>
   <div class="lz-step"><span class="lz-k">3 · Pull the evidence out instead</span><span class="lz-t">docker cp api:/app/config.json - | tar -xO</span><span class="lz-d">Works on stopped containers too (Lesson 1.4). Often you do not need a shell — you need one file, or the exit code, or the environment, and <code>cp</code> plus <code>inspect</code> give you all three.</span></div>
   <div class="lz-step"><span class="lz-k">4 · Or a debug build tag</span><span class="lz-t">a second Dockerfile stage FROM alpine with the same binary</span><span class="lz-d">The disciplined answer: ship distroless, keep a <code>:debug</code> tag from the same build with a shell in it. Chapter 6 shows the two-line multi-stage change that produces both.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Approach 1 in full — read the target's filesystem through /proc</span>
+<pre><code class="language-bash"><span class="tok-comment"># Approach 1 in full — read the target's filesystem through /proc</span>
 docker run --rm --pid=container:api --net=container:api \\
   nicolaka/netshoot sh -c 'ps -o pid,args; ls /proc/1/root; ss -tlnp'</code></pre>
 <div class="out">PID   COMMAND
@@ -1275,7 +1275,7 @@ tcp        0      0 :::80                   :::*                    LISTEN
 1: lo    inet 127.0.0.1/8 scope host lo\\       valid_lft forever preferred_lft forever
 2: eth0    inet 172.17.0.3/16 brd 172.17.255.255 scope global eth0\\       valid_lft forever preferred_lft forever</div>
 <p><code>-n</code> enters only the network namespace, so <code>netstat</code> and <code>ip</code> are alpine's tools looking at the container's network: nginx on port 80 and the container's own <code>172.17.0.3</code>. On a Mac, <code>--pid=host</code> means the Docker Desktop VM, and the same trick works there.</p>
-<pre><code>docker rm -f web api repl &gt;/dev/null 2&gt;&amp;1</code></pre>
+<pre><code class="language-bash">docker rm -f web api repl &gt;/dev/null 2&gt;&amp;1</code></pre>
 
 <h3>🧪 Practice (15–20 min)</h3>
 <div class="callout ok"><p><strong>Scenario:</strong> the team's new API image is distroless. It "runs" — <code>docker ps</code> says Up — but <code>curl</code> gets an empty reply, and <code>docker exec … sh</code> fails. Find out what port it really listens on without adding anything to the image.</p><ol>
@@ -1338,7 +1338,7 @@ Hostname: f91e522a2e37</div>
 
 <h3>exec: một tiến trình MỚI trong cùng những namespace</h3>
 ${slide('dk-02', 15, 'exec mở tiến trình MỚI — attach nối vào chính PID 1')}
-<pre><code>docker run -d --name web -p 8080:80 nginx:1.27-alpine
+<pre><code class="language-bash">docker run -d --name web -p 8080:80 nginx:1.27-alpine
 docker exec -it web sh -c 'ls /etc/nginx; echo; id; echo; hostname'
 docker exec web cat /etc/nginx/conf.d/default.conf | head -5
 docker exec web env | grep NGINX</code></pre>
@@ -1360,7 +1360,7 @@ NGINX_VERSION=1.27.2</div>
   <div class="kv"><span class="k">-e BIẾN=giá trị</span><span class="v">Thêm biến môi trường chỉ cho câu lệnh này. Hữu ích với <code>-e PGPASSWORD=…</code> để một mật khẩu không rơi vào lịch sử shell trên máy chủ.</span></div>
   <div class="kv"><span class="k">--privileged</span><span class="v">Cấp cho tiến trình exec đầy đủ capability. Thỉnh thoảng cần để chạy <code>tcpdump</code> hay <code>strace</code> bên trong; hãy coi nó như một khẩu súng đã lên đạn.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Cái ảnh này THẬT SỰ có shell nào?</span>
+<pre><code class="language-bash"><span class="tok-comment"># Cái ảnh này THẬT SỰ có shell nào?</span>
 docker exec web sh -c 'ls -l /bin/sh; command -v bash || echo "không có bash"'
 docker run --rm ubuntu:24.04 bash -c 'echo ubuntu có bash'</code></pre>
 <div class="out">lrwxrwxrwx 1 root root 12 Aug  1 12:03 /bin/sh -&gt; /bin/busybox
@@ -1381,7 +1381,7 @@ ubuntu có bash</div>
 
 <h3>attach: nối vào chính cái terminal của PID 1</h3>
 ${slide('dk-02', 16, 'Đo thật: tín hiệu gửi vào docker attach đi thẳng tới app')}
-<pre><code>docker run -d --name t alpine sh -c 'while true; do date; sleep 2; done'
+<pre><code class="language-bash">docker run -d --name t alpine sh -c 'while true; do date; sleep 2; done'
 timeout -k 3 4 docker attach t              <span class="tok-comment"># SIGTERM sau 4 s, SIGKILL thêm 3 s sau</span>
 docker ps --filter name=t --format '{{.Names}} {{.Status}}'
 timeout -s INT 3 docker attach t            <span class="tok-comment"># SIGINT = đúng thứ Ctrl-C gửi</span>
@@ -1396,7 +1396,7 @@ Wed Sep 23 14:34:48 UTC 2026
 t Exited (130) 1 second ago</div>
 <div class="callout warn"><strong><code>docker attach</code> nối terminal của bạn vào stdin/stdout của PID 1 — nên Ctrl-C gửi SIGINT cho ỨNG DỤNG và thường là dừng container.</strong> Điều này làm bất ngờ những người với tay tới attach mà chờ đợi một thứ kiểu <code>tail -f</code>. Nếu bạn đã attach và muốn thoát ra mà không giết gì thì tổ hợp tách rời là <strong>Ctrl-P Ctrl-Q</strong>. Muốn xem output an toàn thì dùng <code>docker logs -f</code>; muốn có dấu nhắc thì dùng <code>docker exec</code>. Attach chỉ thật sự hữu ích khi bạn cần <em>GỬI ĐẦU VÀO</em> cho PID 1 — chẳng hạn một REPL tương tác mà bạn đã khởi chạy với <code>-d</code>.</div>
 <p><strong>Phép đo ở trên cho thấy gì (Linux, Docker 29.6).</strong> Bản trước của bài này nói <code>timeout 5 docker attach t</code> sẽ trả về sau năm giây và container vẫn chạy. Không phải vậy: <code>docker attach</code> <em>CHUYỂN TIẾP</em> tín hiệu nó nhận được tới PID 1 (<code>--sig-proxy</code>, mặc định bật), vòng lặp shell làm PID 1 thì lờ SIGTERM đi (Bài 1.3), và lệnh attach cứ thế in tiếp — <code>timeout</code> phải SIGKILL nó. Lần gọi thứ hai gửi SIGINT, đúng thứ Ctrl-C gửi, và <em>ỨNG DỤNG</em> chết: <code>Exited (130)</code>, tức 128 + 2. Chúng tôi làm lại với nginx: <code>signal 2 (SIGINT) received, exiting</code>, container <code>Exited (0)</code>. Ctrl-P Ctrl-Q chỉ dùng được khi container chạy với <code>-it</code>; với một container <code>-d</code> không có TTY thì không có phím tách an toàn nào — đóng terminal, hoặc đừng bao giờ attach. macOS không có lệnh <code>timeout</code>, nên phép đo này làm trên Linux.</p>
-<pre><code>docker rm -f t &gt;/dev/null
+<pre><code class="language-bash">docker rm -f t &gt;/dev/null
 docker run -d --name repl -it node:22-alpine node        <span class="tok-comment"># -it, nhưng chạy nền</span>
 docker attach repl                                        <span class="tok-comment"># giờ bạn có cái REPL</span>
 <span class="tok-comment"># gõ: 2 ** 32   rồi Ctrl-P Ctrl-Q để rời đi mà vẫn để nó chạy</span></code></pre>
@@ -1413,7 +1413,7 @@ ${slide('dk-02', 17, '-i giữ stdin, -t cấp terminal — dùng sai là hỏng
   <div class="lz-stage">chỉ -i</div>
   <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">Cho ống dẫn và script</span><span class="lz-nsub">Dạng ĐÚNG trong CI và trong đường ống shell: không có TTY nghĩa là không có ký tự điều khiển lẫn vào output.</span></div></div>
 </div>
-<pre><code>echo '{"b":2,"a":1}' | docker run --rm -i ghcr.io/jqlang/jq -S .   <span class="tok-comment"># đúng</span>
+<pre><code class="language-bash">echo '{"b":2,"a":1}' | docker run --rm -i ghcr.io/jqlang/jq -S .   <span class="tok-comment"># đúng</span>
 echo '{"b":2,"a":1}' | docker run --rm    ghcr.io/jqlang/jq -S .; echo "exit=\$?"   <span class="tok-comment"># stdin bị đóng</span>
 docker run --rm -t alpine echo hi | cat -v
 docker run --rm -t alpine ls /etc | head -1 | cat -v</code></pre>
@@ -1428,7 +1428,7 @@ hi^M
 
 <h3>Khi cái ảnh không có shell nào</h3>
 ${slide('dk-02', 18, 'Ảnh không có shell? Cho một container phụ ngồi cạnh')}
-<pre><code>docker run -d --name api -p 18023:80 traefik/whoami   <span class="tok-comment"># một web server thật, dựng FROM scratch</span>
+<pre><code class="language-bash">docker run -d --name api -p 18023:80 traefik/whoami   <span class="tok-comment"># một web server thật, dựng FROM scratch</span>
 docker exec api sh; echo "exit=\$?"
 docker exec api ls; echo "exit=\$?"
 docker images traefik/whoami</code></pre>
@@ -1446,7 +1446,7 @@ traefik/whoami:latest   c4717a8d1f01         18MB         4.73MB   U</div>
   <div class="lz-step"><span class="lz-k">3 · Hoặc lôi bằng chứng ra thay vì chui vào</span><span class="lz-t">docker cp api:/app/config.json - | tar -xO</span><span class="lz-d">Chạy được cả với container đã dừng (Bài 1.4). Rất thường là bạn KHÔNG cần một cái shell — bạn cần MỘT file, hoặc mã thoát, hoặc môi trường, và <code>cp</code> cộng <code>inspect</code> cho bạn cả ba.</span></div>
   <div class="lz-step"><span class="lz-k">4 · Hoặc một tag dựng riêng để gỡ lỗi</span><span class="lz-t">một stage thứ hai FROM alpine với cùng cái chương trình</span><span class="lz-d">Câu trả lời có kỷ luật: đem đi bản distroless, giữ một tag <code>:debug</code> từ cùng lượt dựng có shell bên trong. Chương 6 chỉ ra thay đổi hai dòng trong dựng nhiều tầng để có cả hai.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Cách 1 đầy đủ — đọc hệ thống file của mục tiêu qua /proc</span>
+<pre><code class="language-bash"><span class="tok-comment"># Cách 1 đầy đủ — đọc hệ thống file của mục tiêu qua /proc</span>
 docker run --rm --pid=container:api --net=container:api \\
   nicolaka/netshoot sh -c 'ps -o pid,args; ls /proc/1/root; ss -tlnp'</code></pre>
 <div class="out">PID   COMMAND
@@ -1486,7 +1486,7 @@ tcp        0      0 :::80                   :::*                    LISTEN
 1: lo    inet 127.0.0.1/8 scope host lo\\       valid_lft forever preferred_lft forever
 2: eth0    inet 172.17.0.3/16 brd 172.17.255.255 scope global eth0\\       valid_lft forever preferred_lft forever</div>
 <p><code>-n</code> chỉ vào namespace mạng, nên <code>netstat</code> và <code>ip</code> là công cụ của alpine đang nhìn vào mạng của container: nginx ở cổng 80 và địa chỉ <code>172.17.0.3</code> của chính container. Trên Mac, <code>--pid=host</code> nghĩa là máy ảo Docker Desktop, và mẹo này cũng chạy được ở đó.</p>
-<pre><code>docker rm -f web api repl &gt;/dev/null 2&gt;&amp;1</code></pre>
+<pre><code class="language-bash">docker rm -f web api repl &gt;/dev/null 2&gt;&amp;1</code></pre>
 
 <h3>🧪 Thực hành (15–20 phút)</h3>
 <div class="callout ok"><p><strong>Tình huống:</strong> ảnh API mới của nhóm là distroless. Nó "chạy" — <code>docker ps</code> báo Up — nhưng <code>curl</code> nhận về một câu trả lời rỗng, còn <code>docker exec … sh</code> thì hỏng. Tìm xem nó thật sự nghe cổng nào mà không thêm gì vào cái ảnh.</p><ol>
@@ -1564,7 +1564,7 @@ ${slide('dk-02', 20, 'Bốn nguồn biến môi trường — nguồn sau đè n
   <div class="lz-layer"><span class="lz-lname">3. -e / --env on the command line</span><span class="lz-lnote">Beats both of the above. <code>-e NAME</code> with no <code>=</code> copies the value from your current shell — convenient locally, and in CI, where that variable does not exist, the container silently gets no such variable at all — not even an empty string.</span></div>
   <div class="lz-layer"><span class="lz-lname">4. Anything the entrypoint script sets</span><span class="lz-lnote">Runs last, inside the container, so it wins over everything. This is how official images derive values — <code>POSTGRES_USER</code> defaulting to <code>postgres</code>, for example.</span></div>
 </div>
-<pre><code>printf 'MODE=file\\nSHARED=from-file\\n' &gt; a.env
+<pre><code class="language-bash">printf 'MODE=file\\nSHARED=from-file\\n' &gt; a.env
 printf 'SHARED=from-second-file\\n'      &gt; b.env
 docker run --rm --env-file a.env --env-file b.env -e MODE=flag alpine \\
   sh -c 'echo "MODE=\$MODE SHARED=\$SHARED"'</code></pre>
@@ -1608,7 +1608,7 @@ X=[1 # not a comment]</div>
 
 <h3>Environment variables are not secret</h3>
 ${slide('dk-02', 22, 'Biến môi trường KHÔNG bí mật: ai gõ docker cũng đọc được')}
-<pre><code>docker run -d --name db -e POSTGRES_PASSWORD=hunter2 postgres:16-alpine
+<pre><code class="language-bash">docker run -d --name db -e POSTGRES_PASSWORD=hunter2 postgres:16-alpine
 docker inspect db --format '{{json .Config.Env}}' | tr ',' '\\n' | grep -i pass
 docker exec db env | grep -i pass</code></pre>
 <div class="out">["POSTGRES_PASSWORD=hunter2"
@@ -1621,7 +1621,7 @@ POSTGRES_PASSWORD=hunter2</div>
   <div class="kv"><span class="k">Inherited by every child process</span><span class="v">Including anything a build script or a dependency shells out to.</span></div>
   <div class="kv"><span class="k">Better: a file, mounted read-only</span><span class="v"><code>-e DB_PASSWORD_FILE=/run/secrets/db</code> plus a mounted file. Most official images already support the <code>_FILE</code> convention — <code>POSTGRES_PASSWORD_FILE</code> works today. Chapter 10 covers Compose secrets, and Chapter 6 covers keeping them out of the image entirely.</span></div>
 </div>
-<pre><code><span class="tok-comment"># The _FILE convention, which official images support</span>
+<pre><code class="language-bash"><span class="tok-comment"># The _FILE convention, which official images support</span>
 echo -n 'hunter2' &gt; ./pgpass
 docker rm -f db &gt;/dev/null
 docker run -d --name db \\
@@ -1633,12 +1633,12 @@ sleep 5; docker inspect db --format '{{json .Config.Env}}' | tr ',' '\\n' | grep
 
 <h3>Users, and the bind-mount ownership problem</h3>
 ${slide('dk-02', 23, 'root trong container ghi file ⇒ trên Linux file thuộc root thật')}
-<pre><code>mkdir -p out
+<pre><code class="language-bash">mkdir -p out
 docker run --rm -v "\$PWD/out:/out" alpine sh -c 'echo hi &gt; /out/root-made.txt'
 ls -l out/</code></pre>
 <div class="out">-rw-r--r-- 1 root root 3 Aug 22 22:04 root-made.txt</div>
 <p>The container ran as root, and there is no user namespace by default (Lesson 1.1), so UID 0 inside is UID 0 outside. The file on <em>your</em> directory is owned by root: you cannot edit it without <code>sudo</code>, and if the container created a <em>directory</em>, you cannot delete what is inside it either (deleting the top-level file itself works, because the folder it sits in is yours). Every developer meets this on day one with a generated file — a build output, a migration, a lockfile.</p>
-<pre><code>docker run --rm -u "\$(id -u):\$(id -g)" -v "\$PWD/out:/out" alpine \\
+<pre><code class="language-bash">docker run --rm -u "\$(id -u):\$(id -g)" -v "\$PWD/out:/out" alpine \\
   sh -c 'echo hi &gt; /out/me-made.txt'
 ls -l out/
 sudo rm -f out/root-made.txt</code></pre>
@@ -1663,7 +1663,7 @@ rm: cannot remove 'out/build/app.js': Permission denied</div>
 <p>On the Mac, the same root container wrote a file that <code>ls -l</code> shows as owned by <code>admin</code> (your macOS user): Docker Desktop's file sharing maps ownership to you, so the problem simply never appears on your laptop — and then appears on the Linux VPS, in CI, or on a teammate's WSL2 checkout. That asymmetry is why "it works on my Mac" is not evidence here; test file-writing containers on Linux or WSL2 as well.</p>
 
 <h3>ENTRYPOINT + CMD: who gets the arguments</h3>
-<pre><code>docker image inspect alpine --format 'ENTRYPOINT={{.Config.Entrypoint}} CMD={{.Config.Cmd}}'
+<pre><code class="language-bash">docker image inspect alpine --format 'ENTRYPOINT={{.Config.Entrypoint}} CMD={{.Config.Cmd}}'
 docker image inspect postgres:16-alpine --format 'ENTRYPOINT={{.Config.Entrypoint}} CMD={{.Config.Cmd}}'</code></pre>
 <div class="out">ENTRYPOINT=[] CMD=[/bin/sh]
 ENTRYPOINT=[docker-entrypoint.sh] CMD=[postgres]</div>
@@ -1674,7 +1674,7 @@ ENTRYPOINT=[docker-entrypoint.sh] CMD=[postgres]</div>
   <div class="kv"><span class="k">--entrypoint replaces the entrypoint</span><span class="v">And note the argument order changes: <code>docker run --entrypoint sh IMAGE -c 'echo hi'</code> — the <code>-c 'echo hi'</code> goes after the image, because it is now the CMD.</span></div>
   <div class="kv"><span class="k">--entrypoint "" clears it</span><span class="v">The escape hatch for getting a raw shell in an image whose entrypoint script is in the way.</span></div>
 </div>
-<pre><code>docker run --rm postgres:16-alpine postgres --version
+<pre><code class="language-bash">docker run --rm postgres:16-alpine postgres --version
 docker run --rm --entrypoint sh postgres:16-alpine -c 'echo entrypoint replaced'
 docker run --rm --entrypoint "" postgres:16-alpine ls /docker-entrypoint-initdb.d</code></pre>
 <div class="out">postgres (PostgreSQL) 16.4
@@ -1700,7 +1700,7 @@ node:22-slim: Wed Sep 23 21:23:12 +07 2026
 postgres:16-alpine: Wed Sep 23 21:23:12 +07 2026
 python:3.12-alpine: Wed Sep 23 21:23:13 +07 2026</div>
 <p>Read it carefully: plain <code>alpine</code> and <code>node:22-alpine</code> ignore <code>TZ</code> silently; <code>ubuntu:24.04</code> is worse — it prints the wrong time labelled "Asia"; images that ship tzdata (nginx and postgres on alpine, python, <code>node:22-slim</code>) get it right. Mounting the host's <code>/etc/localtime</code> works without tzdata. For your own images, <code>RUN apk add --no-cache tzdata</code> (alpine) or <code>apt-get install -y tzdata</code> (debian/ubuntu) in the Dockerfile. A good rule for a backend: keep the database and logs in UTC, and convert to Vietnam time only when showing it to a person.</p>
-<pre><code>docker rm -f db &gt;/dev/null; rm -rf out a.env b.env pgpass</code></pre>
+<pre><code class="language-bash">docker rm -f db &gt;/dev/null; rm -rf out a.env b.env pgpass</code></pre>
 
 <h3>🧪 Practice (15–20 min)</h3>
 <div class="callout ok"><p><strong>Scenario:</strong> the SWP391 backend cannot log in to Postgres: "password authentication failed". Everyone swears the password in <code>db.env</code> is <code>swp391</code>. Find the real value the container received, fix it the safe way, and make generated files belong to you.</p><ol>
@@ -1767,7 +1767,7 @@ ${slide('dk-02', 20, 'Bốn nguồn biến môi trường — nguồn sau đè n
   <div class="lz-layer"><span class="lz-lname">3. -e / --env trên dòng lệnh</span><span class="lz-lnote">Thắng cả hai cái trên. <code>-e TÊN</code> không kèm <code>=</code> thì chép giá trị từ shell hiện tại của bạn — tiện khi làm cục bộ, còn trong CI, nơi biến đó không tồn tại, container âm thầm KHÔNG có biến đó luôn — chứ không phải một chuỗi rỗng.</span></div>
   <div class="lz-layer"><span class="lz-lname">4. Bất cứ thứ gì script entrypoint đặt</span><span class="lz-lnote">Chạy sau cùng, bên trong container, nên nó thắng tất cả. Đây là cách các ảnh chính thức suy ra giá trị — ví dụ <code>POSTGRES_USER</code> mặc định thành <code>postgres</code>.</span></div>
 </div>
-<pre><code>printf 'MODE=file\\nSHARED=from-file\\n' &gt; a.env
+<pre><code class="language-bash">printf 'MODE=file\\nSHARED=from-file\\n' &gt; a.env
 printf 'SHARED=from-second-file\\n'      &gt; b.env
 docker run --rm --env-file a.env --env-file b.env -e MODE=flag alpine \\
   sh -c 'echo "MODE=\$MODE SHARED=\$SHARED"'</code></pre>
@@ -1811,7 +1811,7 @@ X=[1 # not a comment]</div>
 
 <h3>Biến môi trường KHÔNG bí mật</h3>
 ${slide('dk-02', 22, 'Biến môi trường KHÔNG bí mật: ai gõ docker cũng đọc được')}
-<pre><code>docker run -d --name db -e POSTGRES_PASSWORD=hunter2 postgres:16-alpine
+<pre><code class="language-bash">docker run -d --name db -e POSTGRES_PASSWORD=hunter2 postgres:16-alpine
 docker inspect db --format '{{json .Config.Env}}' | tr ',' '\\n' | grep -i pass
 docker exec db env | grep -i pass</code></pre>
 <div class="out">["POSTGRES_PASSWORD=hunter2"
@@ -1824,7 +1824,7 @@ POSTGRES_PASSWORD=hunter2</div>
   <div class="kv"><span class="k">Thừa kế cho MỌI tiến trình con</span><span class="v">Bao gồm bất cứ thứ gì mà một script dựng hay một thư viện phụ thuộc gọi ra shell.</span></div>
   <div class="kv"><span class="k">Tốt hơn: một FILE, gắn ở chế độ chỉ đọc</span><span class="v"><code>-e DB_PASSWORD_FILE=/run/secrets/db</code> cộng một file được gắn vào. Phần lớn ảnh chính thức đã hỗ trợ sẵn quy ước <code>_FILE</code> — <code>POSTGRES_PASSWORD_FILE</code> dùng được ngay hôm nay. Chương 10 nói về secret của Compose, còn Chương 6 nói về việc giữ chúng nằm ngoài cái ảnh hoàn toàn.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Quy ước _FILE mà các ảnh chính thức hỗ trợ</span>
+<pre><code class="language-bash"><span class="tok-comment"># Quy ước _FILE mà các ảnh chính thức hỗ trợ</span>
 echo -n 'hunter2' &gt; ./pgpass
 docker rm -f db &gt;/dev/null
 docker run -d --name db \\
@@ -1836,12 +1836,12 @@ sleep 5; docker inspect db --format '{{json .Config.Env}}' | tr ',' '\\n' | grep
 
 <h3>Người dùng, và bài toán quyền sở hữu của bind mount</h3>
 ${slide('dk-02', 23, 'root trong container ghi file ⇒ trên Linux file thuộc root thật')}
-<pre><code>mkdir -p out
+<pre><code class="language-bash">mkdir -p out
 docker run --rm -v "\$PWD/out:/out" alpine sh -c 'echo hi &gt; /out/root-made.txt'
 ls -l out/</code></pre>
 <div class="out">-rw-r--r-- 1 root root 3 Aug 22 22:04 root-made.txt</div>
 <p>Container chạy dưới quyền root, và mặc định không có user namespace nào (Bài 1.1), nên UID 0 bên trong là UID 0 bên ngoài. Cái file trên thư mục của <em>BẠN</em> thuộc sở hữu root: bạn không sửa được nó nếu không có <code>sudo</code>, và nếu container tạo ra một <em>THƯ MỤC</em> thì bạn cũng không xoá được thứ nằm bên trong (còn xoá chính cái file ở tầng trên cùng thì được, vì thư mục chứa nó là của bạn). Mọi lập trình viên đều gặp chuyện này ngay ngày đầu tiên với một file được sinh ra — một kết quả build, một migration, một file khoá phiên bản.</p>
-<pre><code>docker run --rm -u "\$(id -u):\$(id -g)" -v "\$PWD/out:/out" alpine \\
+<pre><code class="language-bash">docker run --rm -u "\$(id -u):\$(id -g)" -v "\$PWD/out:/out" alpine \\
   sh -c 'echo hi &gt; /out/me-made.txt'
 ls -l out/
 sudo rm -f out/root-made.txt</code></pre>
@@ -1866,7 +1866,7 @@ rm: cannot remove 'out/build/app.js': Permission denied</div>
 <p>Trên Mac, cùng container chạy root đó ghi ra một file mà <code>ls -l</code> báo thuộc <code>admin</code> (người dùng macOS của bạn): tính năng chia sẻ file của Docker Desktop đổi chủ sở hữu thành bạn, nên vấn đề KHÔNG BAO GIỜ xuất hiện trên laptop của bạn — rồi xuất hiện trên VPS Linux, trong CI, hay trong bản checkout WSL2 của bạn cùng nhóm. Chính sự lệch đó là lý do "máy Mac tôi chạy được" không phải là bằng chứng ở đây; hãy thử các container ghi file trên Linux hoặc WSL2 nữa.</p>
 
 <h3>ENTRYPOINT + CMD: ai nhận được tham số</h3>
-<pre><code>docker image inspect alpine --format 'ENTRYPOINT={{.Config.Entrypoint}} CMD={{.Config.Cmd}}'
+<pre><code class="language-bash">docker image inspect alpine --format 'ENTRYPOINT={{.Config.Entrypoint}} CMD={{.Config.Cmd}}'
 docker image inspect postgres:16-alpine --format 'ENTRYPOINT={{.Config.Entrypoint}} CMD={{.Config.Cmd}}'</code></pre>
 <div class="out">ENTRYPOINT=[] CMD=[/bin/sh]
 ENTRYPOINT=[docker-entrypoint.sh] CMD=[postgres]</div>
@@ -1877,7 +1877,7 @@ ENTRYPOINT=[docker-entrypoint.sh] CMD=[postgres]</div>
   <div class="kv"><span class="k">--entrypoint thay thế entrypoint</span><span class="v">Và chú ý thứ tự tham số đổi theo: <code>docker run --entrypoint sh IMAGE -c 'echo hi'</code> — cái <code>-c 'echo hi'</code> nằm SAU tên ảnh, vì giờ nó là CMD.</span></div>
   <div class="kv"><span class="k">--entrypoint "" xoá trắng nó</span><span class="v">Lối thoát để lấy một cái shell trần trong một ảnh mà script entrypoint đang chắn đường.</span></div>
 </div>
-<pre><code>docker run --rm postgres:16-alpine postgres --version
+<pre><code class="language-bash">docker run --rm postgres:16-alpine postgres --version
 docker run --rm --entrypoint sh postgres:16-alpine -c 'echo đã thay entrypoint'
 docker run --rm --entrypoint "" postgres:16-alpine ls /docker-entrypoint-initdb.d</code></pre>
 <div class="out">postgres (PostgreSQL) 16.4
@@ -1903,7 +1903,7 @@ node:22-slim: Wed Sep 23 21:23:12 +07 2026
 postgres:16-alpine: Wed Sep 23 21:23:12 +07 2026
 python:3.12-alpine: Wed Sep 23 21:23:13 +07 2026</div>
 <p>Đọc cho kỹ: <code>alpine</code> trần và <code>node:22-alpine</code> âm thầm lờ <code>TZ</code> đi; <code>ubuntu:24.04</code> còn tệ hơn — in giờ sai kèm nhãn "Asia"; những ảnh có sẵn tzdata (nginx và postgres bản alpine, python, <code>node:22-slim</code>) thì ra đúng. Gắn <code>/etc/localtime</code> của máy chủ vào thì chạy được mà không cần tzdata. Với ảnh của chính bạn: <code>RUN apk add --no-cache tzdata</code> (alpine) hoặc <code>apt-get install -y tzdata</code> (debian/ubuntu) trong Dockerfile. Một luật tốt cho backend: giữ cơ sở dữ liệu và log ở UTC, chỉ đổi sang giờ Việt Nam lúc hiển thị cho con người.</p>
-<pre><code>docker rm -f db &gt;/dev/null; rm -rf out a.env b.env pgpass</code></pre>
+<pre><code class="language-bash">docker rm -f db &gt;/dev/null; rm -rf out a.env b.env pgpass</code></pre>
 
 <h3>🧪 Thực hành (15–20 phút)</h3>
 <div class="callout ok"><p><strong>Tình huống:</strong> backend SWP391 không đăng nhập được vào Postgres: "password authentication failed". Ai cũng thề mật khẩu trong <code>db.env</code> là <code>swp391</code>. Hãy tìm giá trị THẬT mà container nhận được, sửa theo cách an toàn, và làm cho file sinh ra thuộc về bạn.</p><ol>
@@ -1973,7 +1973,7 @@ python:3.12-alpine: Wed Sep 23 21:23:13 +07 2026</div>
 
 <h3>Memory</h3>
 ${slide('dk-02', 25, 'Không có --memory = container được lấy cả cái máy')}
-<pre><code>docker run -d --name unbounded nginx:1.27-alpine
+<pre><code class="language-bash">docker run -d --name unbounded nginx:1.27-alpine
 docker stats --no-stream unbounded --format '{{.Name}} {{.MemUsage}}'
 
 docker run -d --name bounded --memory 256m --memory-reservation 128m nginx:1.27-alpine
@@ -1988,7 +1988,7 @@ bounded 3.598MiB / 256MiB</div>
 </div>
 <h3>Hit the wall on purpose</h3>
 ${slide('dk-02', 26, 'Thử chạm trần: phải cấp phát thật và tắt swap mới thấy OOM')}
-<pre><code><span class="tok-comment"># Hit the wall on purpose and read the aftermath</span>
+<pre><code class="language-bash"><span class="tok-comment"># Hit the wall on purpose and read the aftermath</span>
 docker run --name oomtest --memory 128m --memory-swap 128m alpine \\
   dd if=/dev/zero of=/dev/null bs=200M count=1 2&gt;/dev/null
 docker inspect oomtest --format 'exit={{.State.ExitCode}} oom={{.State.OOMKilled}}'
@@ -2007,7 +2007,7 @@ docker run --rm --privileged alpine dmesg | grep -i 'killed process' | tail -1</
 
 <h3>CPU</h3>
 ${slide('dk-02', 27, '--cpus là hạn ngạch cứng — và app tự đo lại chính nó')}
-<pre><code>docker run -d --name half --cpus 0.5 alpine sh -c 'while :; do :; done'
+<pre><code class="language-bash">docker run -d --name half --cpus 0.5 alpine sh -c 'while :; do :; done'
 docker run -d --name full alpine sh -c 'while :; do :; done'
 sleep 3; docker stats --no-stream --format '{{.Name}} {{.CPUPerc}}' half full
 docker rm -f half full &gt;/dev/null</code></pre>
@@ -2037,7 +2037,7 @@ sh: can't fork: Resource temporarily unavailable</div>
 
 <h3>Restart policies</h3>
 ${slide('dk-02', 28, 'restart lùi dần 0,1 → 0,2 → 0,4 s — và chỉ nhìn mã thoát')}
-<pre><code>docker run -d --name flapping --restart on-failure:3 alpine sh -c 'sleep 2; exit 1'
+<pre><code class="language-bash">docker run -d --name flapping --restart on-failure:3 alpine sh -c 'sleep 2; exit 1'
 sleep 20
 docker inspect flapping --format 'status={{.State.Status}} exit={{.State.ExitCode}} restarts={{.RestartCount}}'
 docker rm -f flapping &gt;/dev/null</code></pre>
@@ -2083,7 +2083,7 @@ docker events --since 30s --until 0s --filter container=flapping --format '{{.Ti
 
 <h3>Healthchecks — and what they do NOT do</h3>
 ${slide('dk-02', 29, 'Healthcheck chỉ BÁO — unhealthy mà vẫn Up')}
-<pre><code>docker run -d --name api -p 8080:80 \\
+<pre><code class="language-bash">docker run -d --name api -p 8080:80 \\
   --health-cmd 'wget -qO- http://localhost/ &gt;/dev/null || exit 1' \\
   --health-interval 5s --health-timeout 2s --health-retries 3 --health-start-period 10s \\
   nginx:1.27-alpine
@@ -2091,7 +2091,7 @@ sleep 12; docker ps --format '{{.Names}} {{.Status}}'
 docker inspect api --format '{{.State.Health.Status}} · {{len .State.Health.Log}} checks'</code></pre>
 <div class="out">api Up 12 seconds (healthy)
 healthy · 3 checks</div>
-<pre><code><span class="tok-comment"># Break it and watch the state change — but NOT the container</span>
+<pre><code class="language-bash"><span class="tok-comment"># Break it and watch the state change — but NOT the container</span>
 docker exec api rm /usr/share/nginx/html/index.html
 sleep 25
 docker ps --format '{{.Names}} {{.Status}}'
@@ -2123,7 +2123,7 @@ unhealthy · restarts=0
 <tr><td><code>--health-start-period</code></td><td>Grace period at boot</td><td><code>10s</code>, <code>60s</code> for a JVM</td><td>Slow starters: databases, Java</td></tr>
 <tr><td><code>--no-healthcheck</code></td><td>Disable the image's HEALTHCHECK</td><td>—</td><td>Debugging a container whose check is noisy</td></tr>
 </table>
-<pre><code>docker rm -f api unbounded bounded oomtest &gt;/dev/null 2&gt;&amp;1</code></pre>
+<pre><code class="language-bash">docker rm -f api unbounded bounded oomtest &gt;/dev/null 2&gt;&amp;1</code></pre>
 
 <h3>🧪 Practice (15–20 min)</h3>
 <div class="callout ok"><p><strong>Scenario:</strong> the team VPS has 6 GB and runs Postgres, the API and sometimes a <code>next build</code>. Last week one container ate all the RAM and the database died with it. Start the web container "the production way" and prove each guard works.</p><ol>
@@ -2185,7 +2185,7 @@ unhealthy restarts=0 policy=unless-stopped</div>
 
 <h3>Bộ nhớ</h3>
 ${slide('dk-02', 25, 'Không có --memory = container được lấy cả cái máy')}
-<pre><code>docker run -d --name unbounded nginx:1.27-alpine
+<pre><code class="language-bash">docker run -d --name unbounded nginx:1.27-alpine
 docker stats --no-stream unbounded --format '{{.Name}} {{.MemUsage}}'
 
 docker run -d --name bounded --memory 256m --memory-reservation 128m nginx:1.27-alpine
@@ -2200,7 +2200,7 @@ bounded 3.598MiB / 256MiB</div>
 </div>
 <h3>Đâm vào tường một cách có chủ ý</h3>
 ${slide('dk-02', 26, 'Thử chạm trần: phải cấp phát thật và tắt swap mới thấy OOM')}
-<pre><code><span class="tok-comment"># Đâm vào tường một cách có chủ ý rồi đọc hậu quả</span>
+<pre><code class="language-bash"><span class="tok-comment"># Đâm vào tường một cách có chủ ý rồi đọc hậu quả</span>
 docker run --name oomtest --memory 128m --memory-swap 128m alpine \\
   dd if=/dev/zero of=/dev/null bs=200M count=1 2&gt;/dev/null
 docker inspect oomtest --format 'exit={{.State.ExitCode}} oom={{.State.OOMKilled}}'
@@ -2219,7 +2219,7 @@ docker run --rm --privileged alpine dmesg | grep -i 'killed process' | tail -1</
 
 <h3>CPU</h3>
 ${slide('dk-02', 27, '--cpus là hạn ngạch cứng — và app tự đo lại chính nó')}
-<pre><code>docker run -d --name half --cpus 0.5 alpine sh -c 'while :; do :; done'
+<pre><code class="language-bash">docker run -d --name half --cpus 0.5 alpine sh -c 'while :; do :; done'
 docker run -d --name full alpine sh -c 'while :; do :; done'
 sleep 3; docker stats --no-stream --format '{{.Name}} {{.CPUPerc}}' half full
 docker rm -f half full &gt;/dev/null</code></pre>
@@ -2249,7 +2249,7 @@ sh: can't fork: Resource temporarily unavailable</div>
 
 <h3>Chính sách khởi động lại</h3>
 ${slide('dk-02', 28, 'restart lùi dần 0,1 → 0,2 → 0,4 s — và chỉ nhìn mã thoát')}
-<pre><code>docker run -d --name flapping --restart on-failure:3 alpine sh -c 'sleep 2; exit 1'
+<pre><code class="language-bash">docker run -d --name flapping --restart on-failure:3 alpine sh -c 'sleep 2; exit 1'
 sleep 20
 docker inspect flapping --format 'status={{.State.Status}} exit={{.State.ExitCode}} restarts={{.RestartCount}}'
 docker rm -f flapping &gt;/dev/null</code></pre>
@@ -2295,7 +2295,7 @@ docker events --since 30s --until 0s --filter container=flapping --format '{{.Ti
 
 <h3>Healthcheck — và thứ nó KHÔNG làm</h3>
 ${slide('dk-02', 29, 'Healthcheck chỉ BÁO — unhealthy mà vẫn Up')}
-<pre><code>docker run -d --name api -p 8080:80 \\
+<pre><code class="language-bash">docker run -d --name api -p 8080:80 \\
   --health-cmd 'wget -qO- http://localhost/ &gt;/dev/null || exit 1' \\
   --health-interval 5s --health-timeout 2s --health-retries 3 --health-start-period 10s \\
   nginx:1.27-alpine
@@ -2303,7 +2303,7 @@ sleep 12; docker ps --format '{{.Names}} {{.Status}}'
 docker inspect api --format '{{.State.Health.Status}} · {{len .State.Health.Log}} lượt kiểm'</code></pre>
 <div class="out">api Up 12 seconds (healthy)
 healthy · 3 lượt kiểm</div>
-<pre><code><span class="tok-comment"># Phá nó rồi nhìn trạng thái đổi — nhưng container thì KHÔNG</span>
+<pre><code class="language-bash"><span class="tok-comment"># Phá nó rồi nhìn trạng thái đổi — nhưng container thì KHÔNG</span>
 docker exec api rm /usr/share/nginx/html/index.html
 sleep 25
 docker ps --format '{{.Names}} {{.Status}}'
@@ -2335,7 +2335,7 @@ unhealthy · restarts=0
 <tr><td><code>--health-start-period</code></td><td>Khoảng ân hạn lúc khởi động</td><td><code>10s</code>, <code>60s</code> cho JVM</td><td>Thứ khởi động chậm: CSDL, Java</td></tr>
 <tr><td><code>--no-healthcheck</code></td><td>Tắt HEALTHCHECK của ảnh</td><td>—</td><td>Gỡ lỗi một container có lượt kiểm ồn ào</td></tr>
 </table>
-<pre><code>docker rm -f api unbounded bounded oomtest &gt;/dev/null 2&gt;&amp;1</code></pre>
+<pre><code class="language-bash">docker rm -f api unbounded bounded oomtest &gt;/dev/null 2&gt;&amp;1</code></pre>
 
 <h3>🧪 Thực hành (15–20 phút)</h3>
 <div class="callout ok"><p><strong>Tình huống:</strong> VPS của nhóm có 6 GB và chạy Postgres, API và thỉnh thoảng một lượt <code>next build</code>. Tuần trước một container ăn hết RAM và cơ sở dữ liệu chết theo. Hãy chạy container web "theo kiểu production" và chứng minh từng lớp bảo vệ hoạt động.</p><ol>

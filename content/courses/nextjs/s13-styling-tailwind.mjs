@@ -36,7 +36,7 @@ export default {
 <h3>Why Tailwind wins for app work</h3>
 <p>The hard part of CSS at scale is not writing rules — it is <em>naming</em> and the fear of editing a shared class. Tailwind sidesteps both: you apply small, single-purpose utilities inline, so a component's styles are visible where the component is, and deleting a component deletes its styles with it. It also ships a consistent design system out of the box — a spacing scale, a colour palette, type sizes — so a team's UI stays coherent without a separate design-tokens effort.</p>
 
-<pre><code><span class="tok-comment">// the same button, Tailwind way</span>
+<pre><code class="language-html"><span class="tok-comment">// the same button, Tailwind way</span>
 &lt;button class="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"&gt;
   Save
 &lt;/button&gt;</code></pre>
@@ -91,7 +91,7 @@ export default {
 <h3>Vì sao Tailwind thắng cho việc làm app</h3>
 <p>Phần khó của CSS ở quy mô lớn không phải viết luật — mà là <em>đặt tên</em> và nỗi sợ sửa một class dùng chung. Tailwind né cả hai: bạn áp các utility nhỏ, một-mục-đích, ngay tại chỗ, nên style của một component hiện ngay nơi component ở đó, và xoá một component là xoá luôn style của nó. Nó cũng kèm sẵn một hệ thiết kế nhất quán — thang khoảng cách, bảng màu, cỡ chữ — nên UI của cả nhóm giữ mạch lạc mà không cần một nỗ lực design-tokens riêng.</p>
 
-<pre><code><span class="tok-comment">// cùng cái nút, kiểu Tailwind</span>
+<pre><code class="language-html"><span class="tok-comment">// cùng cái nút, kiểu Tailwind</span>
 &lt;button class="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"&gt;
   Lưu
 &lt;/button&gt;</code></pre>
@@ -148,11 +148,11 @@ export default {
 <p class="lead">A Tailwind class does one thing: <code>p-4</code> is padding, <code>text-lg</code> is font size, <code>flex</code> is display. You build a design by composing many of them. Two families of prefixes make them conditional.</p>
 
 <h3>Responsive: mobile-first breakpoints</h3>
-<pre><code>&lt;div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3"&gt;</code></pre>
+<pre><code class="language-html">&lt;div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3"&gt;</code></pre>
 <p>An unprefixed utility applies at all sizes; a prefixed one applies from that breakpoint <em>up</em>. So <code>grid-cols-1</code> is the base (mobile), <code>md:grid-cols-2</code> kicks in on medium screens, <code>lg:grid-cols-3</code> on large. Design the small screen first, then layer widths on top — the opposite of desktop-first CSS.</p>
 
 <h3>States: hover, focus, disabled, and more</h3>
-<pre><code>&lt;button class="bg-blue-600 hover:bg-blue-700 focus:ring-2 disabled:opacity-50"&gt;</code></pre>
+<pre><code class="language-html">&lt;button class="bg-blue-600 hover:bg-blue-700 focus:ring-2 disabled:opacity-50"&gt;</code></pre>
 <p>State prefixes apply a utility only in that state. <code>hover:</code>, <code>focus:</code>, <code>active:</code>, <code>disabled:</code>, and the group/peer variants for reacting to a parent or sibling. No separate <code>:hover</code> rule to write elsewhere — the interaction lives on the element.</p>
 
 <h3>The design system is the point</h3>
@@ -160,7 +160,7 @@ export default {
 
 <h3>Conditional classes without string soup</h3>
 <p>You often toggle classes by state. Building the string by hand gets ugly fast; a tiny helper (commonly named <code>cn</code>, wrapping <code>clsx</code> + <code>tailwind-merge</code>) keeps it clean and resolves conflicts:</p>
-<pre><code>&lt;button class={cn('rounded px-4 py-2', isActive &amp;&amp; 'bg-blue-600 text-white')}&gt;</code></pre>
+<pre><code class="language-html">&lt;button class={cn('rounded px-4 py-2', isActive &amp;&amp; 'bg-blue-600 text-white')}&gt;</code></pre>
 <p><code>tailwind-merge</code> also fixes the "last one wins" problem: <code>cn('p-2', 'p-4')</code> yields <code>p-4</code>, not both. You will use this <code>cn</code> pattern in almost every component.</p>
 
 <h3>Reading a Tailwind class string</h3>
@@ -193,11 +193,11 @@ export default {
 <p class="lead">Một class Tailwind làm một việc: <code>p-4</code> là padding, <code>text-lg</code> là cỡ chữ, <code>flex</code> là display. Bạn dựng một thiết kế bằng cách ghép nhiều cái lại. Hai họ tiền tố làm chúng có điều kiện.</p>
 
 <h3>Responsive: breakpoint mobile-first</h3>
-<pre><code>&lt;div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3"&gt;</code></pre>
+<pre><code class="language-html">&lt;div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3"&gt;</code></pre>
 <p>Một utility không tiền tố áp ở mọi kích thước; một cái có tiền tố áp từ breakpoint đó <em>trở lên</em>. Nên <code>grid-cols-1</code> là nền (mobile), <code>md:grid-cols-2</code> bật ở màn trung, <code>lg:grid-cols-3</code> ở màn lớn. Thiết kế màn nhỏ trước, rồi đắp bề rộng lên trên — ngược với CSS desktop-first.</p>
 
 <h3>Trạng thái: hover, focus, disabled, và hơn nữa</h3>
-<pre><code>&lt;button class="bg-blue-600 hover:bg-blue-700 focus:ring-2 disabled:opacity-50"&gt;</code></pre>
+<pre><code class="language-html">&lt;button class="bg-blue-600 hover:bg-blue-700 focus:ring-2 disabled:opacity-50"&gt;</code></pre>
 <p>Tiền tố trạng thái áp một utility chỉ trong trạng thái đó. <code>hover:</code>, <code>focus:</code>, <code>active:</code>, <code>disabled:</code>, và các biến group/peer để phản ứng theo cha hoặc anh em. Không phải viết một luật <code>:hover</code> riêng ở chỗ khác — tương tác nằm ngay trên phần tử.</p>
 
 <h3>Hệ thiết kế mới là điểm chính</h3>
@@ -205,7 +205,7 @@ export default {
 
 <h3>Class có điều kiện mà không phải nấu súp chuỗi</h3>
 <p>Bạn thường bật/tắt class theo state. Ghép chuỗi bằng tay xấu đi rất nhanh; một hàm nhỏ (thường tên <code>cn</code>, bọc <code>clsx</code> + <code>tailwind-merge</code>) giữ gọn và xử lý xung đột:</p>
-<pre><code>&lt;button class={cn('rounded px-4 py-2', isActive &amp;&amp; 'bg-blue-600 text-white')}&gt;</code></pre>
+<pre><code class="language-html">&lt;button class={cn('rounded px-4 py-2', isActive &amp;&amp; 'bg-blue-600 text-white')}&gt;</code></pre>
 <p><code>tailwind-merge</code> còn sửa vấn đề "cái cuối thắng": <code>cn('p-2', 'p-4')</code> ra <code>p-4</code>, không phải cả hai. Bạn sẽ dùng mẫu <code>cn</code> này ở gần như mọi component.</p>
 
 <h3>Đọc một chuỗi class Tailwind</h3>
@@ -247,7 +247,7 @@ export default {
 <h2>Dark mode is one variant and one class on &lt;html&gt;</h2>
 <p class="lead">Tailwind's <code>dark:</code> prefix applies a utility only in dark mode. The common setup is the <em>class</em> strategy: dark styles activate whenever a chosen class is present on the <code>&lt;html&gt;</code> element, so a toggle just adds or removes that class.</p>
 
-<pre><code>&lt;div class="bg-white text-gray-900 dark:bg-gray-900 dark:text-white"&gt;
+<pre><code class="language-html">&lt;div class="bg-white text-gray-900 dark:bg-gray-900 dark:text-white"&gt;
   Adapts to the theme
 &lt;/div&gt;</code></pre>
 <p>With the class strategy, these <code>dark:</code> utilities take effect only when the toggle class is on <code>&lt;html&gt;</code>. Toggling the theme is then just toggling one class high in the tree — every <code>dark:</code> utility responds at once.</p>
@@ -298,7 +298,7 @@ export default {
 <h2>Dark mode là một biến và một class trên &lt;html&gt;</h2>
 <p class="lead">Tiền tố <code>dark:</code> của Tailwind áp một utility chỉ trong dark mode. Cách phổ biến là chiến lược <em>class</em>: style tối kích hoạt bất cứ khi nào một class đã chọn có mặt trên phần tử <code>&lt;html&gt;</code>, nên một toggle chỉ việc thêm hoặc bỏ class đó.</p>
 
-<pre><code>&lt;div class="bg-white text-gray-900 dark:bg-gray-900 dark:text-white"&gt;
+<pre><code class="language-html">&lt;div class="bg-white text-gray-900 dark:bg-gray-900 dark:text-white"&gt;
   Thích ứng theo theme
 &lt;/div&gt;</code></pre>
 <p>Với chiến lược class, các utility <code>dark:</code> này chỉ có tác dụng khi class toggle nằm trên <code>&lt;html&gt;</code>. Đổi theme khi đó chỉ là bật/tắt một class cao trong cây — mọi utility <code>dark:</code> phản hồi cùng lúc.</p>
@@ -359,7 +359,7 @@ export default {
 <h2>For real theming, drive colours through CSS variables</h2>
 <p class="lead">Writing <code>dark:</code> on every element works for two themes. But when you have several themes, or want one source of truth for "the primary text colour," CSS custom properties are cleaner: define semantic variables, and switch a theme by changing the variables' values in one place.</p>
 
-<pre><code><span class="tok-comment">/* globals.css */</span>
+<pre><code class="language-css"><span class="tok-comment">/* globals.css */</span>
 :root            { --text-primary: #111; --surface: #fff; }
 html.theme-dark  { --text-primary: #eee; --surface: #0b0b0b; }
 html.theme-brown { --text-primary: #f3e9d8; --surface: #2b211a; }
@@ -404,7 +404,7 @@ html.theme-brown { --text-primary: #f3e9d8; --surface: #2b211a; }
 <h2>Muốn theme thật sự, hãy điều khiển màu qua CSS variables</h2>
 <p class="lead">Viết <code>dark:</code> lên mỗi phần tử thì ổn cho hai theme. Nhưng khi bạn có nhiều theme, hoặc muốn một nguồn sự thật cho "màu chữ chính", CSS custom property gọn hơn: định nghĩa các biến ngữ nghĩa, và đổi theme bằng cách đổi giá trị biến ở một chỗ.</p>
 
-<pre><code><span class="tok-comment">/* globals.css */</span>
+<pre><code class="language-css"><span class="tok-comment">/* globals.css */</span>
 :root            { --text-primary: #111; --surface: #fff; }
 html.theme-dark  { --text-primary: #eee; --surface: #0b0b0b; }
 html.theme-brown { --text-primary: #f3e9d8; --surface: #2b211a; }
@@ -461,7 +461,7 @@ html.theme-brown { --text-primary: #f3e9d8; --surface: #2b211a; }
 
 <h3>Variants over copy-paste</h3>
 <p>When a component has variations — a button that is primary/secondary/danger, small/large — don't scatter conditional strings. Define the variants once (a lookup object, or a helper like <code>class-variance-authority</code>) and pick by prop:</p>
-<pre><code>const button = cva('rounded font-medium', {
+<pre><code class="language-typescript">const button = cva('rounded font-medium', {
   variants: {
     intent: { primary: 'bg-blue-600 text-white', ghost: 'bg-transparent' },
     size:   { sm: 'px-2 py-1 text-sm', lg: 'px-5 py-3 text-lg' },
@@ -510,7 +510,7 @@ html.theme-brown { --text-primary: #f3e9d8; --surface: #2b211a; }
 
 <h3>Biến thể thay vì copy-paste</h3>
 <p>Khi một component có biến thể — nút primary/secondary/danger, nhỏ/lớn — đừng rải chuỗi điều kiện. Định nghĩa biến thể một lần (một object tra cứu, hoặc một hàm như <code>class-variance-authority</code>) và chọn theo prop:</p>
-<pre><code>const button = cva('rounded font-medium', {
+<pre><code class="language-typescript">const button = cva('rounded font-medium', {
   variants: {
     intent: { primary: 'bg-blue-600 text-white', ghost: 'bg-transparent' },
     size:   { sm: 'px-2 py-1 text-sm', lg: 'px-5 py-3 text-lg' },

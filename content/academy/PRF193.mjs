@@ -1499,14 +1499,14 @@ const l14 = doc('prf193-1-4-bien',
 
 <h3>A variable is a named box</h3>
 <p>Think of memory as a wall of lockers. <code>int diem;</code> asks for a locker big enough for an integer and puts the label <code>diem</code> on it. <code>diem = 8;</code> puts the value 8 inside. The label never changes; the content can change as often as you like — that is what "variable" means.</p>
-<div class="diagram"><pre>  int diem = 8;
+<div class="diagram"><pre><code class="language-c">  int diem = 8;
 
    ten:   diem
         +--------+
         |   8    |   &lt;- gia tri (thay doi duoc)
         +--------+
    dia chi: 0x7ffd... (may tu chon)
-   kieu:   int  -&gt; 4 byte, so nguyen</pre></div>
+   kieu:   int  -&gt; 4 byte, so nguyen</code></pre></div>
 <p><b>Declaration</b> creates the box: <code>int diem;</code>. <b>Initialisation</b> fills it at the moment of creation: <code>int diem = 8;</code>. <b>Assignment</b> fills it later: <code>diem = 9;</code>. Always prefer initialising — the next section shows what happens when you do not.</p>
 
 <h3>Naming rules, and the words you may not use</h3>
@@ -1658,14 +1658,14 @@ int main() {
 
 <h3>Biến là một cái hộp có tên</h3>
 <p>Hãy hình dung bộ nhớ như một bức tường đầy ngăn tủ. <code>int diem;</code> là xin một ngăn đủ chứa một số nguyên rồi dán nhãn <code>diem</code> lên. <code>diem = 8;</code> là bỏ giá trị 8 vào trong. Cái nhãn không đổi; nội dung thì đổi bao nhiêu lần tuỳ bạn — đó chính là nghĩa của chữ "biến".</p>
-<div class="diagram"><pre>  int diem = 8;
+<div class="diagram"><pre><code class="language-c">  int diem = 8;
 
    ten:   diem
         +--------+
         |   8    |   &lt;- gia tri (thay doi duoc)
         +--------+
    dia chi: 0x7ffd... (may tu chon)
-   kieu:   int  -&gt; 4 byte, so nguyen</pre></div>
+   kieu:   int  -&gt; 4 byte, so nguyen</code></pre></div>
 <p><b>Khai báo (declaration)</b> tạo ra cái hộp: <code>int diem;</code>. <b>Khởi tạo (initialisation)</b> đổ giá trị vào ngay lúc tạo: <code>int diem = 8;</code>. <b>Gán (assignment)</b> đổ vào sau đó: <code>diem = 9;</code>. Luôn ưu tiên khởi tạo ngay — phần dưới cho thấy không khởi tạo thì chuyện gì xảy ra.</p>
 
 <h3>Quy tắc đặt tên, và những từ bạn không được dùng</h3>
@@ -5281,7 +5281,7 @@ const l41 = doc('prf193-3-1-array-pointer',
 
 <h3>One name, many boxes</h3>
 <p>Storing five scores in <code>diem1 ... diem5</code> works. Storing fifty in <code>diem1 ... diem50</code> does not — and worse, you cannot write a loop over them, because a loop can change a number but cannot change a variable's <em>name</em>. An array solves exactly that: one name, a numbered box for each value.</p>
-<div class="diagram"><pre>  int a[6] = {7, 3, 9, 1, 9, 4};
+<div class="diagram"><pre><code class="language-c">  int a[6] = {7, 3, 9, 1, 9, 4};
 
   index :    0     1     2     3     4     5
           +-----+-----+-----+-----+-----+-----+
@@ -5289,7 +5289,7 @@ const l41 = doc('prf193-3-1-array-pointer',
           +-----+-----+-----+-----+-----+-----+
           |&lt;-- 6 x 4 bytes = 24 bytes, lien tiep --&gt;|
 
-  a[0] is the FIRST, a[5] is the LAST. There is no a[6].</pre></div>
+  a[0] is the FIRST, a[5] is the LAST. There is no a[6].</code></pre></div>
 <p>The boxes sit next to each other in memory, all the same size, which is why <code>a[i]</code> is instant for any <code>i</code>: the machine computes the address instead of searching. Indices start at <b>0</b>, so an array of <code>n</code> elements is indexed <code>0 .. n-1</code>. Almost every array bug in this course is a disagreement with that sentence.</p>
 
 <pre><code class="language-cpp">#include &lt;iostream&gt;
@@ -5362,14 +5362,14 @@ int main() {
 
 <h3>Strings, style 1: the C string</h3>
 <p>A C string is just an array of <code>char</code> with one rule: the real text ends at the first <code>'\\0'</code> character (the null terminator). Every library function relies on that marker, which is why the array must always be at least one slot longer than the text.</p>
-<div class="diagram"><pre>  char s[20] = "Hello";
+<div class="diagram"><pre><code class="language-c">  char s[20] = "Hello";
 
    index:   0    1    2    3    4     5       6..19
           +----+----+----+----+----+------+------------+
      s =  | H  | e  | l  | l  | o  | '\\0' |  rac       |
           +----+----+----+----+----+------+------------+
           |&lt;- strlen(s) = 5 -&gt;|   ket thuc
-          |&lt;----------- sizeof(s) = 20 ------------&gt;|</pre></div>
+          |&lt;----------- sizeof(s) = 20 ------------&gt;|</code></pre></div>
 <pre><code class="language-cpp">#include &lt;cstring&gt;
 #include &lt;iostream&gt;
 using namespace std;
@@ -5525,7 +5525,7 @@ int main() {
 
 <h3>Một cái tên, nhiều cái ô</h3>
 <p>Cất năm điểm vào <code>diem1 ... diem5</code> thì được. Cất năm mươi điểm vào <code>diem1 ... diem50</code> thì không — và tệ hơn, bạn không viết được vòng lặp chạy qua chúng, vì vòng lặp đổi được con số chứ không đổi được <em>tên biến</em>. Mảng (array) giải đúng chuyện đó: một cái tên, mỗi giá trị một cái ô có số thứ tự.</p>
-<div class="diagram"><pre>  int a[6] = {7, 3, 9, 1, 9, 4};
+<div class="diagram"><pre><code class="language-c">  int a[6] = {7, 3, 9, 1, 9, 4};
 
   chi so:    0     1     2     3     4     5
           +-----+-----+-----+-----+-----+-----+
@@ -5533,7 +5533,7 @@ int main() {
           +-----+-----+-----+-----+-----+-----+
           |&lt;-- 6 x 4 byte = 24 byte, lien tiep --&gt;|
 
-  a[0] la phan tu DAU, a[5] la phan tu CUOI. Khong he co a[6].</pre></div>
+  a[0] la phan tu DAU, a[5] la phan tu CUOI. Khong he co a[6].</code></pre></div>
 <p>Các ô nằm sát nhau trong bộ nhớ, cùng kích thước, nên <code>a[i]</code> lấy ra tức thì với mọi <code>i</code>: máy TÍNH ra địa chỉ chứ không đi tìm. Chỉ số bắt đầu từ <b>0</b>, nên mảng <code>n</code> phần tử có chỉ số <code>0 .. n-1</code>. Gần như mọi lỗi mảng trong môn này đều là sự bất đồng với câu vừa rồi.</p>
 
 <pre><code class="language-cpp">#include &lt;iostream&gt;
@@ -5606,14 +5606,14 @@ int main() {
 
 <h3>Chuỗi, kiểu 1: chuỗi C</h3>
 <p>Chuỗi C chỉ là một mảng <code>char</code> kèm một quy ước: nội dung thật kết thúc ở ký tự <code>'\\0'</code> đầu tiên (ký tự kết thúc, null terminator). Mọi hàm thư viện đều dựa vào cái mốc đó, nên mảng luôn phải dài hơn phần chữ ít nhất một ô.</p>
-<div class="diagram"><pre>  char s[20] = "Hello";
+<div class="diagram"><pre><code class="language-c">  char s[20] = "Hello";
 
    chi so:  0    1    2    3    4     5       6..19
           +----+----+----+----+----+------+------------+
      s =  | H  | e  | l  | l  | o  | '\\0' |  rac       |
           +----+----+----+----+----+------+------------+
           |&lt;- strlen(s) = 5 -&gt;|   ket thuc
-          |&lt;----------- sizeof(s) = 20 ------------&gt;|</pre></div>
+          |&lt;----------- sizeof(s) = 20 ------------&gt;|</code></pre></div>
 <pre><code class="language-cpp">#include &lt;cstring&gt;
 #include &lt;iostream&gt;
 using namespace std;
@@ -5776,12 +5776,12 @@ const l42 = doc('prf193-4-2-struct',
 <h3>An array is not enough</h3>
 <p>An array holds many values of <b>one</b> type. A student is not one type: an ID (text), a name (text), a birth year (<code>int</code>), an average mark (<code>double</code>). Three parallel arrays would work and would be a trap — nothing keeps <code>maSV[3]</code>, <code>hoTen[3]</code> and <code>diem[3]</code> describing the same person, and one sort would scramble them forever.</p>
 <p>A <code>struct</code> glues the fields together instead, so they travel as one value. It is the same instinct as a paper form: one sheet with several boxes, and you move the sheet, not the boxes.</p>
-<div class="diagram"><pre>  struct SinhVien { char maSV[10]; char hoTen[40]; int namSinh; double diemTB; };
+<div class="diagram"><pre><code class="language-c">  struct SinhVien { char maSV[10]; char hoTen[40]; int namSinh; double diemTB; };
 
   +---------------------------------------------------------------+
   |  maSV[10]   |   hoTen[40]      | namSinh | (chen) |  diemTB   |
   +---------------------------------------------------------------+
-  |&lt;-------------- mot bien SinhVien, mot khoi lien tiep --------&gt;|</pre></div>
+  |&lt;-------------- mot bien SinhVien, mot khoi lien tiep --------&gt;|</code></pre></div>
 
 <pre><code class="language-cpp">#include &lt;iostream&gt;
 using namespace std;
@@ -6030,12 +6030,12 @@ int main() {
 <h3>Mảng không đủ nữa</h3>
 <p>Mảng chứa nhiều giá trị của <b>một</b> kiểu. Mà một sinh viên thì không phải một kiểu: mã SV (chữ), họ tên (chữ), năm sinh (<code>int</code>), điểm trung bình (<code>double</code>). Ba mảng song song thì vẫn chạy được, và chính là một cái bẫy — không có gì bảo đảm <code>maSV[3]</code>, <code>hoTen[3]</code> và <code>diem[3]</code> đang nói về cùng một người, và chỉ cần sắp xếp một lần là chúng lệch nhau mãi mãi.</p>
 <p><code>struct</code> dán các trường lại với nhau để chúng đi thành một giá trị. Cùng một bản năng với tờ đơn giấy: một tờ có nhiều ô, và bạn di chuyển cả tờ chứ không di chuyển từng ô.</p>
-<div class="diagram"><pre>  struct SinhVien { char maSV[10]; char hoTen[40]; int namSinh; double diemTB; };
+<div class="diagram"><pre><code class="language-c">  struct SinhVien { char maSV[10]; char hoTen[40]; int namSinh; double diemTB; };
 
   +---------------------------------------------------------------+
   |  maSV[10]   |   hoTen[40]      | namSinh | (chen) |  diemTB   |
   +---------------------------------------------------------------+
-  |&lt;-------------- mot bien SinhVien, mot khoi lien tiep --------&gt;|</pre></div>
+  |&lt;-------------- mot bien SinhVien, mot khoi lien tiep --------&gt;|</code></pre></div>
 
 <pre><code class="language-cpp">#include &lt;iostream&gt;
 using namespace std;
@@ -7653,9 +7653,9 @@ int main() {
 
 <h3>Why the return type does not count</h3>
 <p>This pair does not compile:</p>
-<div class="diagram"><pre>int    tinh(int a, int b);
+<div class="diagram"><pre><code class="language-c">int    tinh(int a, int b);
 double tinh(int a, int b);   // only the return type differs   &lt;-- REJECTED
-</pre></div>
+</code></pre></div>
 <p>The reason is mechanical, not a matter of taste. At the call site <code>tinh(2, 3);</code> the compiler sees only the arguments — and both candidates accept <code>(int, int)</code> equally well. The value you eventually assign it to is not part of the decision, so there would be nothing to choose by. <code>g++ -std=c++17 -Wall -Wextra</code> rejects it with the message <b>"functions that differ only in their return type cannot be overloaded"</b>, pointing at the second declaration and noting the first as the previous definition. Remember the message: it is exactly what you will see in your exam room.</p>
 
 <h3>How the compiler chooses (overload resolution)</h3>
@@ -7684,10 +7684,10 @@ int main() {
 </code></pre>
 <div class="out">chay ban f(int),    x = 97<br>chay ban f(double), x = 1<br><b>chay ban f(int),    x = 1</b></div>
 <p>So <code>f('a')</code> is <em>not</em> ambiguous: <code>char</code> promotes to <code>int</code>, which beats converting to <code>double</code>, and the 97 you see is the character code of <code>'a'</code>. Likewise <code>f(1.0f)</code> promotes to <code>double</code>. A genuine ambiguity needs two candidates on the <em>same</em> rank:</p>
-<div class="diagram"><pre>void f(long x);
+<div class="diagram"><pre><code class="language-c">void f(long x);
 void f(double x);
 f(1);   // int-&gt;long and int-&gt;double are both rank-3 conversions  &lt;-- AMBIGUOUS
-</pre></div>
+</code></pre></div>
 <p>That one fails to compile with <b>"call to 'f' is ambiguous"</b> and then lists both candidates. The cure is to say what you mean: <code>f(1L)</code> or <code>f(1.0)</code> or <code>f((double)1)</code>.</p>
 
 <h3>Operator overloading: teaching <code>+</code> about your own type</h3>
@@ -7813,9 +7813,9 @@ int main() {
 
 <h3>Vì sao kiểu trả về không được tính</h3>
 <p>Cặp này không biên dịch được:</p>
-<div class="diagram"><pre>int    tinh(int a, int b);
+<div class="diagram"><pre><code class="language-c">int    tinh(int a, int b);
 double tinh(int a, int b);   // chi khac kieu tra ve   &lt;-- BỊ TỪ CHỐI
-</pre></div>
+</code></pre></div>
 <p>Lý do mang tính máy móc, không phải chuyện thẩm mỹ. Tại chỗ gọi <code>tinh(2, 3);</code> trình biên dịch chỉ thấy các đối số — mà cả hai ứng viên đều nhận <code>(int, int)</code> hay như nhau. Cái giá trị bạn gán kết quả vào sau đó không tham gia quyết định, nên sẽ chẳng còn gì để chọn. <code>g++ -std=c++17 -Wall -Wextra</code> từ chối với thông báo <b>"functions that differ only in their return type cannot be overloaded"</b>, trỏ vào dòng khai báo thứ hai và ghi chú dòng thứ nhất là định nghĩa trước đó. Hãy nhớ nguyên câu ấy: đúng là câu bạn sẽ gặp trong phòng thi.</p>
 
 <h3>Trình biên dịch chọn bản nào (overload resolution)</h3>
@@ -7844,10 +7844,10 @@ int main() {
 </code></pre>
 <div class="out">chay ban f(int),    x = 97<br>chay ban f(double), x = 1<br><b>chay ban f(int),    x = 1</b></div>
 <p>Vậy <code>f('a')</code> <em>không</em> nhập nhằng: <code>char</code> thăng cấp lên <code>int</code>, thắng việc chuyển sang <code>double</code>, và số 97 bạn thấy là mã ký tự của <code>'a'</code>. Tương tự <code>f(1.0f)</code> thăng cấp lên <code>double</code>. Muốn nhập nhằng thật thì cần hai ứng viên nằm <em>cùng</em> một hạng:</p>
-<div class="diagram"><pre>void f(long x);
+<div class="diagram"><pre><code class="language-c">void f(long x);
 void f(double x);
 f(1);   // int-&gt;long va int-&gt;double deu la chuyen doi hang 3  &lt;-- NHẬP NHẰNG
-</pre></div>
+</code></pre></div>
 <p>Dòng đó trượt biên dịch với <b>"call to 'f' is ambiguous"</b> rồi liệt kê cả hai ứng viên. Cách chữa là nói rõ ý mình: <code>f(1L)</code> hoặc <code>f(1.0)</code> hoặc <code>f((double)1)</code>.</p>
 
 <h3>Nạp chồng toán tử: dạy <code>+</code> hiểu kiểu của bạn</h3>
@@ -7952,9 +7952,9 @@ const l53 = doc('prf193-5-3-function-template',
 <h3>The problem overloading leaves behind</h3>
 <p>In lesson 5.2 you wrote <code>lonHon</code> for <code>int</code> and again for <code>double</code>. Look at the two bodies: they are <b>character for character identical</b>. Only the type names differ. Write it a third time for <code>char</code>, a fourth for <code>string</code>, and now a bug fix means four edits.</p>
 <p>A template is a way of saying: here is the shape of the function, with the type left as a blank to be filled in later. The compiler fills the blank in for you, once per type you actually use.</p>
-<div class="diagram"><pre>template &lt;typename T&gt;
+<div class="diagram"><pre><code class="language-c">template &lt;typename T&gt;
 T myMax(T a, T b) { return a &gt; b ? a : b; }
-</pre></div>
+</code></pre></div>
 <p>Read it as: "for any type you like, call it <code>T</code> — here is a function taking two <code>T</code> and giving back a <code>T</code>". <code>typename</code> and <code>class</code> are interchangeable here; <code>typename</code> says more clearly what you mean.</p>
 
 <h3>Type deduction: you usually write nothing extra</h3>
@@ -8059,7 +8059,7 @@ int main() {
 
 <h3>What the compiler actually does — and why template errors are ugly</h3>
 <p>A template is not a function. It is a <b>recipe for making functions</b>. Nothing is compiled until you call it; at that moment the compiler <em>instantiates</em> the recipe, producing one real function per distinct type used.</p>
-<div class="diagram"><pre>  source                        after instantiation (in the object file)
+<div class="diagram"><pre><code class="language-c">  source                        after instantiation (in the object file)
 
   template &lt;typename T&gt;         int    myMax(int    a, int    b) { ... }
   T myMax(T a, T b)      ---&gt;   double myMax(double a, double b) { ... }
@@ -8067,7 +8067,7 @@ int main() {
                                 string myMax(string a, string b) { ... }
 
   you wrote it ONCE            the binary contains FOUR copies
-</pre></div>
+</code></pre></div>
 <p>Two consequences you will meet in this course:</p>
 <ul>
   <li><b>Error messages are long.</b> A mistake is reported at the instantiation, with the whole chain of "while substituting T = ..." attached. Read the <em>first</em> error and the <em>last</em> line; the middle is bookkeeping.</li>
@@ -8129,9 +8129,9 @@ int main() {
 <h3>Vấn đề mà nạp chồng bỏ lại</h3>
 <p>Ở bài 5.2 bạn đã viết <code>lonHon</code> cho <code>int</code> rồi viết lại cho <code>double</code>. Hãy nhìn hai cái thân hàm: chúng giống nhau <b>từng ký tự một</b>. Chỉ có tên kiểu là khác. Viết thêm lần thứ ba cho <code>char</code>, lần thứ tư cho <code>string</code>, và giờ sửa một lỗi nghĩa là sửa bốn chỗ.</p>
 <p>Template là cách nói: đây là hình dáng của hàm, còn chỗ ghi kiểu thì để trống, điền sau. Trình biên dịch sẽ điền hộ bạn, mỗi kiểu bạn thật sự dùng thì điền một lần.</p>
-<div class="diagram"><pre>template &lt;typename T&gt;
+<div class="diagram"><pre><code class="language-c">template &lt;typename T&gt;
 T myMax(T a, T b) { return a &gt; b ? a : b; }
-</pre></div>
+</code></pre></div>
 <p>Đọc là: "với một kiểu bất kỳ, tạm gọi là <code>T</code> — đây là hàm nhận hai <code>T</code> và trả về một <code>T</code>". Ở chỗ này <code>typename</code> và <code>class</code> thay nhau được; <code>typename</code> nói rõ ý hơn.</p>
 
 <h3>Suy luận kiểu: thường bạn chẳng phải viết thêm gì</h3>
@@ -8236,7 +8236,7 @@ int main() {
 
 <h3>Trình biên dịch thật ra làm gì — và vì sao lỗi template xấu xí</h3>
 <p>Template không phải là một hàm. Nó là <b>công thức để sinh ra hàm</b>. Chưa có gì được biên dịch cho tới khi bạn gọi nó; đúng lúc đó trình biên dịch mới <em>hiện thực hoá (instantiate)</em> công thức, sinh ra một hàm thật cho mỗi kiểu khác nhau được dùng.</p>
-<div class="diagram"><pre>  mã nguồn                      sau khi hiện thực hoá (trong file object)
+<div class="diagram"><pre><code class="language-c">  mã nguồn                      sau khi hiện thực hoá (trong file object)
 
   template &lt;typename T&gt;         int    myMax(int    a, int    b) { ... }
   T myMax(T a, T b)      ---&gt;   double myMax(double a, double b) { ... }
@@ -8244,7 +8244,7 @@ int main() {
                                 string myMax(string a, string b) { ... }
 
   bạn viết MỘT lần             file chạy chứa BỐN bản
-</pre></div>
+</code></pre></div>
 <p>Hai hệ quả bạn sẽ gặp ngay trong môn này:</p>
 <ul>
   <li><b>Thông báo lỗi rất dài.</b> Lỗi được báo tại chỗ hiện thực hoá, kèm theo cả chuỗi "while substituting T = ...". Hãy đọc dòng lỗi <em>đầu tiên</em> và dòng <em>cuối cùng</em>; phần ở giữa chỉ là sổ sách.</li>
@@ -8869,7 +8869,7 @@ int main() {
 
 <h3>An array is already an address</h3>
 <p>Here is the fact that ties this session's two halves together: the name of an array, used in almost any expression, <b>decays into the address of its first element</b>. So <code>a</code> and <code>&amp;a[0]</code> are the same thing, and indexing is defined in terms of pointer arithmetic: <code>a[i]</code> means exactly <code>*(a + i)</code>.</p>
-<div class="diagram"><pre>   int a[5] = {10, 20, 30, 40, 50};
+<div class="diagram"><pre><code class="language-c">   int a[5] = {10, 20, 30, 40, 50};
 
     a[0]    a[1]    a[2]    a[3]    a[4]
   +-------+-------+-------+-------+-------+
@@ -8881,7 +8881,7 @@ int main() {
  (= &amp;a[0])
 
   *(a+2)  ==  a[2]  ==  30
-</pre></div>
+</code></pre></div>
 <p>The step size is the key. <code>p + 1</code> does not add 1 byte, it adds <code>sizeof(*p)</code> bytes — whatever is needed to land on the next element. That is why pointer arithmetic needs a type.</p>
 <pre><code class="language-cpp">#include &lt;iostream&gt;
 using namespace std;
@@ -9098,7 +9098,7 @@ int main() {
 
 <h3>Bản thân mảng đã là một địa chỉ</h3>
 <p>Đây là sự thật buộc hai nửa của buổi học này lại với nhau: tên của một mảng, khi nằm trong hầu hết mọi biểu thức, <b>suy biến thành địa chỉ của phần tử đầu tiên</b>. Vậy <code>a</code> và <code>&amp;a[0]</code> là một, và phép lấy chỉ số được định nghĩa bằng chính số học con trỏ: <code>a[i]</code> nghĩa đúng là <code>*(a + i)</code>.</p>
-<div class="diagram"><pre>   int a[5] = {10, 20, 30, 40, 50};
+<div class="diagram"><pre><code class="language-c">   int a[5] = {10, 20, 30, 40, 50};
 
     a[0]    a[1]    a[2]    a[3]    a[4]
   +-------+-------+-------+-------+-------+
@@ -9110,7 +9110,7 @@ int main() {
  (= &amp;a[0])
 
   *(a+2)  ==  a[2]  ==  30
-</pre></div>
+</code></pre></div>
 <p>Độ dài mỗi bước nhảy mới là mấu chốt. <code>p + 1</code> không cộng 1 byte, nó cộng <code>sizeof(*p)</code> byte — vừa đủ để đáp xuống phần tử kế tiếp. Chính vì thế số học con trỏ mới cần có kiểu.</p>
 <pre><code class="language-cpp">#include &lt;iostream&gt;
 using namespace std;
@@ -10150,7 +10150,7 @@ const l64 = doc('prf193-6-4-lab03',
 
 <h3>Splitting into files</h3>
 <p>Once you have more than about 150 lines, one file becomes painful. The standard C++ split for a lab this size:</p>
-<div class="diagram"><pre>  sinhvien.h     &lt;- WHAT exists: the struct, and function PROTOTYPES
+<div class="diagram"><pre><code class="language-c">  sinhvien.h     &lt;- WHAT exists: the struct, and function PROTOTYPES
                     (plus #pragma once at the top)
 
   sinhvien.cpp   &lt;- HOW it works: the function definitions
@@ -10160,7 +10160,7 @@ const l64 = doc('prf193-6-4-lab03',
                     #include "sinhvien.h"
 
   build:  g++ -std=c++17 -Wall -Wextra main.cpp sinhvien.cpp -o chuongtrinh
-</pre></div>
+</code></pre></div>
 <p>Two rules that save an hour of confusion. Put <code>#pragma once</code> as the first line of every <code>.h</code>, so including it twice is harmless. And never <code>#include</code> a <code>.cpp</code> file — you compile both <code>.cpp</code> files on one command line instead, as shown above.</p>
 <div class="note-ct"><b>CuongThai's note (not an FLM requirement):</b> if your lecturer wants a single file, keep the same <em>order</em> inside it — struct, then prototypes, then definitions, then <code>main</code> at the bottom. You get the same readability, and splitting it later becomes a copy-paste.</div>
 
@@ -10370,7 +10370,7 @@ int main() {
 
 <h3>Tách file</h3>
 <p>Khi đã hơn khoảng 150 dòng, một file duy nhất trở nên khổ. Cách tách C++ chuẩn cho một lab cỡ này:</p>
-<div class="diagram"><pre>  sinhvien.h     &lt;- CÓ GÌ: struct, và các PROTOTYPE hàm
+<div class="diagram"><pre><code class="language-c">  sinhvien.h     &lt;- CÓ GÌ: struct, và các PROTOTYPE hàm
                     (cộng dòng #pragma once trên đầu)
 
   sinhvien.cpp   &lt;- LÀM THẾ NÀO: phần định nghĩa các hàm
@@ -10380,7 +10380,7 @@ int main() {
                     #include "sinhvien.h"
 
   dịch:  g++ -std=c++17 -Wall -Wextra main.cpp sinhvien.cpp -o chuongtrinh
-</pre></div>
+</code></pre></div>
 <p>Hai luật tiết kiệm cho bạn một giờ loay hoay. Đặt <code>#pragma once</code> làm dòng đầu tiên của mọi file <code>.h</code>, để có include hai lần cũng vô hại. Và tuyệt đối không <code>#include</code> một file <code>.cpp</code> — thay vào đó bạn dịch cả hai file <code>.cpp</code> trên cùng một dòng lệnh, như ở trên.</p>
 <div class="note-ct"><b>Ghi chú của CuongThai (không phải yêu cầu của FLM):</b> nếu giảng viên của bạn muốn một file duy nhất, hãy giữ đúng <em>thứ tự</em> đó bên trong file — struct, rồi prototype, rồi định nghĩa, rồi <code>main</code> ở dưới cùng. Bạn vẫn có được sự dễ đọc như nhau, và về sau muốn tách ra thì chỉ còn là chuyện copy-paste.</div>
 
@@ -10667,11 +10667,11 @@ int main() {
 <h3>Self-test — 3 short answer</h3>
 <p><b>S1.</b> Explain in two or three sentences why a function that takes <code>int x</code> cannot change the caller's variable, and name two ways to make it able to.</p>
 <p><b>S2.</b> What does this print, and why?</p>
-<div class="diagram"><pre>int a[3] = {5, 6, 7};
+<div class="diagram"><pre><code class="language-cpp">int a[3] = {5, 6, 7};
 int* p = a;
 int v = (*p)++;
 std::cout &lt;&lt; v &lt;&lt; " " &lt;&lt; *p &lt;&lt; " " &lt;&lt; a[0];
-</pre></div>
+</code></pre></div>
 <p><b>S3.</b> Write a function that returns the sum and the count of the even numbers in an array, using reference parameters.</p>
 <div class="dap-an">
 <p><b>S1.</b> The parameter is a separate variable initialised with a <em>copy</em> of the argument's value, so assignments inside the function write to that copy and the original is untouched. To let the function change the caller's variable, pass by reference (<code>int&amp; x</code>, session 29) or pass the address and work through the pointer (<code>int* x</code>, then <code>*x = ...</code>, session 28).</p>
@@ -10816,11 +10816,11 @@ int main() {
 <h3>Tự kiểm — 3 câu trả lời ngắn</h3>
 <p><b>N1.</b> Giải thích trong hai ba câu vì sao một hàm nhận <code>int x</code> lại không sửa được biến của người gọi, và nêu hai cách làm cho nó sửa được.</p>
 <p><b>N2.</b> Đoạn này in ra gì, và vì sao?</p>
-<div class="diagram"><pre>int a[3] = {5, 6, 7};
+<div class="diagram"><pre><code class="language-cpp">int a[3] = {5, 6, 7};
 int* p = a;
 int v = (*p)++;
 std::cout &lt;&lt; v &lt;&lt; " " &lt;&lt; *p &lt;&lt; " " &lt;&lt; a[0];
-</pre></div>
+</code></pre></div>
 <p><b>N3.</b> Viết một hàm trả về cả tổng lẫn số lượng các số chẵn trong một mảng, dùng tham số tham chiếu.</p>
 <div class="dap-an">
 <p><b>N1.</b> Tham số là một biến riêng, được khởi tạo bằng một <em>bản sao</em> giá trị của đối số, nên mọi phép gán trong hàm ghi vào bản sao đó và biến gốc không bị chạm tới. Muốn hàm sửa được biến của người gọi thì truyền theo tham chiếu (<code>int&amp; x</code>, buổi 29) hoặc truyền địa chỉ rồi làm việc qua con trỏ (<code>int* x</code>, sau đó <code>*x = ...</code>, buổi 28).</p>
@@ -12200,7 +12200,7 @@ int main() {
 
 <h3>Splitting a class into files (session 37's student task)</h3>
 <p>A real project does not keep everything in <code>main.cpp</code>. The convention is two files per class:</p>
-<div class="diagram"><pre>
+<div class="diagram"><pre><code class="language-c">
   Student.h    &lt;-- WHAT the class offers: declarations only
      |             (field list + function signatures)
      |  #include "Student.h"
@@ -12212,7 +12212,7 @@ int main() {
 
   g++ -std=c++17 main.cpp Student.cpp -o app
          both .cpp files, the .h is never compiled alone
-</pre></div>
+</code></pre></div>
 <p><code>#pragma once</code> at the top of the header stops the file being pasted twice into the same compilation when two different <code>.cpp</code> files include it. The older, fully portable spelling of the same idea is the include guard <code>#ifndef STUDENT_H</code> / <code>#define STUDENT_H</code> / <code>#endif</code>; both appear in FLM material.</p>
 <pre><code class="language-cpp">// ===== Student.h =====
 #pragma once
@@ -12404,7 +12404,7 @@ int main() {
 
 <h3>Tách class ra file riêng (đúng nhiệm vụ SV buổi 37)</h3>
 <p>Dự án thật không nhét mọi thứ vào <code>main.cpp</code>. Quy ước là hai file cho mỗi class:</p>
-<div class="diagram"><pre>
+<div class="diagram"><pre><code class="language-c">
   Student.h    &lt;-- class CÓ GÌ: chỉ khai báo
      |             (danh sách field + chữ ký hàm)
      |  #include "Student.h"
@@ -12416,7 +12416,7 @@ int main() {
 
   g++ -std=c++17 main.cpp Student.cpp -o app
          cả hai file .cpp, file .h không bao giờ dịch một mình
-</pre></div>
+</code></pre></div>
 <p><code>#pragma once</code> ở đầu header chặn việc file bị dán hai lần vào cùng một lượt biên dịch khi hai file <code>.cpp</code> khác nhau cùng include nó. Cách viết cũ hơn, di động tuyệt đối cho cùng ý tưởng, là include guard <code>#ifndef STUDENT_H</code> / <code>#define STUDENT_H</code> / <code>#endif</code>; tài liệu FLM có cả hai.</p>
 <pre><code class="language-cpp">// ===== Student.h =====
 #pragma once
@@ -13198,7 +13198,7 @@ int main() {
 <p><code>f()</code> is virtual in every one of those six lines. Yet two of them printed <code>A::f</code> — the two that made a <em>copy</em> of type <code>A</code>. A sliced copy is genuinely an <code>A</code>; there is no <code>B</code> left in it to dispatch to. Pointers and references, which do not copy, keep the real object intact.</p>
 
 <h3>How the machine knows: the vtable</h3>
-<div class="diagram"><pre>
+<div class="diagram"><pre><code class="language-c">
   each object of a class with virtual functions carries one hidden pointer:
 
    B b;                      vtable of B (one table per CLASS)
@@ -13212,7 +13212,7 @@ int main() {
    2. read __vptr  (still points at B's table, p's type is irrelevant)
    3. look up slot "f" -&gt; B::f
    4. call it
-</pre></div>
+</code></pre></div>
 <p>That is the whole mechanism, and it explains the cost: one extra pointer per object, one extra indirection per virtual call. It also explains slicing — copying into an <code>A</code> builds a new object whose <code>__vptr</code> points at <code>A</code>'s table.</p>
 
 <h3>Abstract classes: a promise with no implementation</h3>
@@ -13445,7 +13445,7 @@ int main() {
 <p><code>f()</code> là virtual ở cả sáu dòng đó. Vậy mà hai dòng in ra <code>A::f</code> — đúng hai dòng tạo một <em>bản sao</em> kiểu <code>A</code>. Bản sao bị cắt thì thật sự là một <code>A</code>; trong nó không còn <code>B</code> nào để mà điều phối tới. Con trỏ và tham chiếu, vì không sao chép, giữ nguyên object thật.</p>
 
 <h3>Máy biết bằng cách nào: bảng ảo (vtable)</h3>
-<div class="diagram"><pre>
+<div class="diagram"><pre><code class="language-c">
   mỗi object của class có hàm ảo mang theo một con trỏ ẩn:
 
    B b;                      vtable của B (một bảng cho mỗi CLASS)
@@ -13459,7 +13459,7 @@ int main() {
    2. đọc __vptr  (vẫn trỏ vào bảng của B, kiểu của p không liên quan)
    3. tra ô "f" -&gt; B::f
    4. gọi nó
-</pre></div>
+</code></pre></div>
 <p>Toàn bộ cơ chế là thế, và nó giải thích cái giá phải trả: thêm một con trỏ cho mỗi object, thêm một lần gián tiếp cho mỗi lời gọi ảo. Nó cũng giải thích slicing — chép vào một <code>A</code> là dựng object mới có <code>__vptr</code> trỏ vào bảng của <code>A</code>.</p>
 
 <h3>Lớp trừu tượng: lời hứa không kèm phần thực hiện</h3>
@@ -13655,7 +13655,7 @@ const l78 = doc('prf193-7-8-exception',
 <h3>Why not just return -1?</h3>
 <p>Consider a function that divides two numbers. What should it return when the divisor is 0? Any number you pick is a lie: <code>-1</code> is a perfectly good quotient. You could print a message and return anyway, but then the caller carries on with a wrong value. You could return a <code>bool</code> and pass the result through a reference parameter — workable, but now every call site is three lines, and a caller who forgets to check the <code>bool</code> gets garbage with no complaint.</p>
 <p>An <strong>exception</strong> takes the other road: the function refuses to return at all. It <code>throw</code>s, and control jumps straight out of the function — past the rest of the caller, and the caller's caller — until it reaches a <code>catch</code> that handles that type. Nothing downstream gets a chance to use a value that does not exist.</p>
-<div class="diagram"><pre>
+<div class="diagram"><pre><code class="language-cpp">
    main
     |  try {
     |      ...
@@ -13666,7 +13666,7 @@ const l78 = doc('prf193-7-8-exception',
     |      ...e.what()...
     |  }
     v  program continues normally after the catch block
-</pre></div>
+</code></pre></div>
 <p>Three keywords, and that is the whole shape. <code>throw</code> raises it. <code>try { }</code> marks the region you are willing to guard. <code>catch (Type&amp; e) { }</code> handles one kind of failure.</p>
 
 <h3>The standard exception family</h3>
@@ -13849,7 +13849,7 @@ int main() {
 <h3>Sao không trả về -1 cho xong?</h3>
 <p>Xét một hàm chia hai số. Nó nên trả về gì khi số chia bằng 0? Bất cứ con số nào bạn chọn cũng là một lời nói dối: <code>-1</code> là một thương hoàn toàn hợp lệ. Bạn có thể in thông báo rồi vẫn trả về, nhưng rồi người gọi tiếp tục chạy với một giá trị sai. Bạn có thể trả về <code>bool</code> và đưa kết quả ra qua tham số tham chiếu — làm được, nhưng giờ mỗi chỗ gọi dài ba dòng, và người gọi quên kiểm cái <code>bool</code> thì nhận rác mà không ai phàn nàn.</p>
 <p><strong>Exception</strong> chọn con đường khác: hàm từ chối trả về, hẳn. Nó <code>throw</code>, và luồng điều khiển nhảy thẳng ra khỏi hàm — vượt qua phần còn lại của người gọi, và của người gọi người gọi — tới khi gặp một <code>catch</code> xử lý được kiểu đó. Không có đoạn nào phía dưới có cơ hội dùng một giá trị không tồn tại.</p>
-<div class="diagram"><pre>
+<div class="diagram"><pre><code class="language-cpp">
    main
     |  try {
     |      ...
@@ -13860,7 +13860,7 @@ int main() {
     |      ...e.what()...
     |  }
     v  chương trình tiếp tục bình thường sau khối catch
-</pre></div>
+</code></pre></div>
 <p>Ba từ khoá, và đó là toàn bộ hình dạng. <code>throw</code> phát ra. <code>try { }</code> đánh dấu vùng bạn chịu canh. <code>catch (Type&amp; e) { }</code> xử lý một loại thất bại.</p>
 
 <h3>Họ exception chuẩn</h3>
@@ -16261,7 +16261,7 @@ const l82 = doc('prf193-8-2-xu-ly-file',
 
 <h3>Real data is a table, so a file is a list of records</h3>
 <p>Lesson 8.1 wrote loose words and numbers. Real programs store <em>records</em>: one student, one product, one task — each with several fields. The simplest and most common format on disk is <strong>CSV</strong>: one record per line, fields separated by commas.</p>
-<div class="diagram"><pre>
+<div class="diagram"><pre><code class="language-c">
   sv.csv (text)                     memory
   +----------------------------+    vector&lt;SinhVien&gt;
   | SV001,Nguyen Van An,8.5    | -&gt; [0] {"SV001","Nguyen Van An",8.5}
@@ -16269,7 +16269,7 @@ const l82 = doc('prf193-8-2-xu-ly-file',
   | SV003,Le Van Chi,9.25      | -&gt; [2] {"SV003","Le Van Chi",9.25}
   +----------------------------+
       read: getline + split            write: fields joined by ','
-</pre></div>
+</code></pre></div>
 <p>The reading pattern never changes: <code>getline</code> gives you one whole line, then a <code>stringstream</code> cuts that line into fields with <code>getline(ss, field, ',')</code>. The third argument of <code>getline</code> is the separator — that is the whole trick. Lesson 8.3 goes deeper into <code>stringstream</code>; here we just use it.</p>
 <pre><code class="language-cpp">#include &lt;iostream&gt;
 #include &lt;fstream&gt;
@@ -16631,7 +16631,7 @@ int main() {
 
 <h3>Dữ liệu thật là một bảng, nên file là một danh sách bản ghi</h3>
 <p>Bài 8.1 ghi những từ và số rời. Chương trình thật lưu <em>bản ghi (record)</em>: một sinh viên, một mặt hàng, một đầu việc — mỗi cái vài trường. Định dạng đơn giản và phổ biến nhất trên đĩa là <strong>CSV</strong>: mỗi dòng một bản ghi, các trường ngăn bằng dấu phẩy.</p>
-<div class="diagram"><pre>
+<div class="diagram"><pre><code class="language-c">
   sv.csv (text)                     bo nho
   +----------------------------+    vector&lt;SinhVien&gt;
   | SV001,Nguyen Van An,8.5    | -&gt; [0] {"SV001","Nguyen Van An",8.5}
@@ -16639,7 +16639,7 @@ int main() {
   | SV003,Le Van Chi,9.25      | -&gt; [2] {"SV003","Le Van Chi",9.25}
   +----------------------------+
       doc: getline + tach truong       ghi: noi truong bang ','
-</pre></div>
+</code></pre></div>
 <p>Khuôn đọc không bao giờ đổi: <code>getline</code> lấy trọn một dòng, rồi một <code>stringstream</code> cắt dòng đó thành từng trường bằng <code>getline(ss, truong, ',')</code>. Tham số thứ ba của <code>getline</code> là ký tự ngăn cách — mẹo chỉ nằm ở đó. Bài 8.3 đào sâu <code>stringstream</code>; ở đây ta dùng trước.</p>
 <pre><code class="language-cpp">#include &lt;iostream&gt;
 #include &lt;fstream&gt;

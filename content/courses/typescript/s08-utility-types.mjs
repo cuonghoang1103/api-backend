@@ -24,7 +24,7 @@ export default {
 
 <h3>Partial: everything optional</h3>
 <p><code>Partial&lt;T&gt;</code> makes every field of <code>T</code> optional. Its home is the "update" or "patch" shape — a caller sends only the fields they want to change:</p>
-<pre><code><span class="tok-comment">// partial.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// partial.ts</span>
 <span class="tok-keyword">interface</span> User { id: <span class="tok-keyword">number</span>; name: <span class="tok-keyword">string</span>; email: <span class="tok-keyword">string</span>; }
 <span class="tok-keyword">function</span> <span class="tok-function">updateUser</span>(id: <span class="tok-keyword">number</span>, patch: Partial&lt;User&gt;) { <span class="tok-comment">/* ... */</span> }
 <span class="tok-function">updateUser</span>(<span class="tok-number">1</span>, { name: <span class="tok-string">'Ada'</span> });               <span class="tok-comment">// ok — only some fields</span>
@@ -37,7 +37,7 @@ export default {
 
 <h3>Readonly: everything frozen</h3>
 <p><code>Readonly&lt;T&gt;</code> makes every field read-only — assignable at creation, immutable after:</p>
-<pre><code><span class="tok-comment">// readonly.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// readonly.ts</span>
 <span class="tok-keyword">interface</span> Point { x: <span class="tok-keyword">number</span>; y: <span class="tok-keyword">number</span>; }
 <span class="tok-keyword">const</span> p: Readonly&lt;Point&gt; = { x: <span class="tok-number">1</span>, y: <span class="tok-number">2</span> };
 p.x = <span class="tok-number">5</span>;   <span class="tok-comment">// Readonly froze every field</span></code></pre>
@@ -67,7 +67,7 @@ p.x = <span class="tok-number">5</span>;   <span class="tok-comment">// Readonly
 
 <h3>Partial: mọi thứ tuỳ chọn</h3>
 <p><code>Partial&lt;T&gt;</code> làm mọi field của <code>T</code> thành tuỳ chọn. Nhà của nó là hình dạng "cập nhật" hay "vá" — bên gọi chỉ gửi những field họ muốn đổi:</p>
-<pre><code><span class="tok-comment">// partial.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// partial.ts</span>
 <span class="tok-keyword">interface</span> User { id: <span class="tok-keyword">number</span>; name: <span class="tok-keyword">string</span>; email: <span class="tok-keyword">string</span>; }
 <span class="tok-keyword">function</span> <span class="tok-function">updateUser</span>(id: <span class="tok-keyword">number</span>, patch: Partial&lt;User&gt;) { <span class="tok-comment">/* ... */</span> }
 <span class="tok-function">updateUser</span>(<span class="tok-number">1</span>, { name: <span class="tok-string">'Ada'</span> });               <span class="tok-comment">// ok — chỉ vài field</span>
@@ -80,7 +80,7 @@ p.x = <span class="tok-number">5</span>;   <span class="tok-comment">// Readonly
 
 <h3>Readonly: mọi thứ đóng băng</h3>
 <p><code>Readonly&lt;T&gt;</code> làm mọi field thành chỉ-đọc — gán được lúc tạo, bất biến sau đó:</p>
-<pre><code><span class="tok-comment">// readonly.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// readonly.ts</span>
 <span class="tok-keyword">interface</span> Point { x: <span class="tok-keyword">number</span>; y: <span class="tok-keyword">number</span>; }
 <span class="tok-keyword">const</span> p: Readonly&lt;Point&gt; = { x: <span class="tok-number">1</span>, y: <span class="tok-number">2</span> };
 p.x = <span class="tok-number">5</span>;   <span class="tok-comment">// Readonly đã đóng băng mọi field</span></code></pre>
@@ -120,7 +120,7 @@ p.x = <span class="tok-number">5</span>;   <span class="tok-comment">// Readonly
 
 <h3>Omit: a type minus some keys</h3>
 <p>The classic use: strip a secret field before sending a user to the client. <code>Omit&lt;User, 'passwordHash'&gt;</code> is <code>User</code> with that one key removed:</p>
-<pre><code><span class="tok-comment">// pickomit.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// pickomit.ts</span>
 <span class="tok-keyword">interface</span> User { id: <span class="tok-keyword">number</span>; name: <span class="tok-keyword">string</span>; email: <span class="tok-keyword">string</span>; passwordHash: <span class="tok-keyword">string</span>; }
 <span class="tok-keyword">type</span> PublicUser = Omit&lt;User, <span class="tok-string">'passwordHash'</span>&gt;;
 <span class="tok-keyword">type</span> Credentials = Pick&lt;User, <span class="tok-string">'email'</span> | <span class="tok-string">'passwordHash'</span>&gt;;
@@ -158,7 +158,7 @@ p.x = <span class="tok-number">5</span>;   <span class="tok-comment">// Readonly
 
 <h3>Omit: một kiểu trừ đi vài key</h3>
 <p>Dùng kinh điển: bóc một field bí mật trước khi gửi user về client. <code>Omit&lt;User, 'passwordHash'&gt;</code> là <code>User</code> với một key đó bị gỡ:</p>
-<pre><code><span class="tok-comment">// pickomit.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// pickomit.ts</span>
 <span class="tok-keyword">interface</span> User { id: <span class="tok-keyword">number</span>; name: <span class="tok-keyword">string</span>; email: <span class="tok-keyword">string</span>; passwordHash: <span class="tok-keyword">string</span>; }
 <span class="tok-keyword">type</span> PublicUser = Omit&lt;User, <span class="tok-string">'passwordHash'</span>&gt;;
 <span class="tok-keyword">type</span> Credentials = Pick&lt;User, <span class="tok-string">'email'</span> | <span class="tok-string">'passwordHash'</span>&gt;;
@@ -206,7 +206,7 @@ p.x = <span class="tok-number">5</span>;   <span class="tok-comment">// Readonly
 
 <h3>A lookup table that must be complete</h3>
 <p>Map each role to its permissions. Because <code>K</code> is the literal union <code>Role</code>, leaving one out is a compile error — the exhaustiveness of chapter 5, applied to an object:</p>
-<pre><code><span class="tok-comment">// record.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// record.ts</span>
 <span class="tok-keyword">type</span> Role = <span class="tok-string">'admin'</span> | <span class="tok-string">'editor'</span> | <span class="tok-string">'viewer'</span>;
 <span class="tok-keyword">const</span> permissions: Record&lt;Role, <span class="tok-keyword">string</span>[]&gt; = {
   admin: [<span class="tok-string">'read'</span>, <span class="tok-string">'write'</span>, <span class="tok-string">'delete'</span>],
@@ -217,7 +217,7 @@ p.x = <span class="tok-number">5</span>;   <span class="tok-comment">// Readonly
 
 <h3>An open dictionary with <code>string</code> keys</h3>
 <p>When keys aren't known ahead of time, use <code>Record&lt;string, V&gt;</code> — an arbitrary set of string keys, all mapping to <code>V</code>:</p>
-<pre><code><span class="tok-comment">// record2.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// record2.ts</span>
 <span class="tok-keyword">const</span> scores: Record&lt;<span class="tok-keyword">string</span>, <span class="tok-keyword">number</span>&gt; = {};
 scores[<span class="tok-string">'ada'</span>] = <span class="tok-number">3</span>;
 scores[<span class="tok-string">'bob'</span>] = <span class="tok-string">'x'</span>;   <span class="tok-comment">// values must be number</span></code></pre>
@@ -247,7 +247,7 @@ scores[<span class="tok-string">'bob'</span>] = <span class="tok-string">'x'</sp
 
 <h3>Một bảng tra phải đầy đủ</h3>
 <p>Ánh xạ mỗi vai trò tới quyền của nó. Vì <code>K</code> là union literal <code>Role</code>, bỏ sót một cái là lỗi biên dịch — tính đầy đủ (exhaustiveness) của chương 5, áp lên một object:</p>
-<pre><code><span class="tok-comment">// record.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// record.ts</span>
 <span class="tok-keyword">type</span> Role = <span class="tok-string">'admin'</span> | <span class="tok-string">'editor'</span> | <span class="tok-string">'viewer'</span>;
 <span class="tok-keyword">const</span> permissions: Record&lt;Role, <span class="tok-keyword">string</span>[]&gt; = {
   admin: [<span class="tok-string">'read'</span>, <span class="tok-string">'write'</span>, <span class="tok-string">'delete'</span>],
@@ -258,7 +258,7 @@ scores[<span class="tok-string">'bob'</span>] = <span class="tok-string">'x'</sp
 
 <h3>Một từ điển mở với key kiểu <code>string</code></h3>
 <p>Khi các key chưa biết trước, dùng <code>Record&lt;string, V&gt;</code> — một tập tuỳ ý các key chuỗi, đều ánh xạ tới <code>V</code>:</p>
-<pre><code><span class="tok-comment">// record2.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// record2.ts</span>
 <span class="tok-keyword">const</span> scores: Record&lt;<span class="tok-keyword">string</span>, <span class="tok-keyword">number</span>&gt; = {};
 scores[<span class="tok-string">'ada'</span>] = <span class="tok-number">3</span>;
 scores[<span class="tok-string">'bob'</span>] = <span class="tok-string">'x'</span>;   <span class="tok-comment">// giá trị phải là number</span></code></pre>
@@ -298,7 +298,7 @@ scores[<span class="tok-string">'bob'</span>] = <span class="tok-string">'x'</sp
 
 <h3>Exclude: remove members from a union</h3>
 <p><code>Exclude&lt;U, M&gt;</code> removes from union <code>U</code> everything assignable to <code>M</code>:</p>
-<pre><code><span class="tok-comment">// exclude.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// exclude.ts</span>
 <span class="tok-keyword">type</span> Status = <span class="tok-string">'draft'</span> | <span class="tok-string">'published'</span> | <span class="tok-string">'archived'</span>;
 <span class="tok-keyword">type</span> Active = Exclude&lt;Status, <span class="tok-string">'archived'</span>&gt;;   <span class="tok-comment">// 'draft' | 'published'</span>
 <span class="tok-keyword">const</span> s: Active = <span class="tok-string">'archived'</span>;   <span class="tok-comment">// archived was excluded</span></code></pre>
@@ -307,7 +307,7 @@ scores[<span class="tok-string">'bob'</span>] = <span class="tok-string">'x'</sp
 
 <h3>NonNullable: drop null and undefined</h3>
 <p><code>NonNullable&lt;T&gt;</code> is <code>Exclude&lt;T, null | undefined&gt;</code> with a friendly name — it removes the two "empty" types from a union:</p>
-<pre><code><span class="tok-comment">// nonnull.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// nonnull.ts</span>
 <span class="tok-keyword">type</span> MaybeName = <span class="tok-keyword">string</span> | <span class="tok-keyword">null</span> | <span class="tok-keyword">undefined</span>;
 <span class="tok-keyword">type</span> Name = NonNullable&lt;MaybeName&gt;;   <span class="tok-comment">// string</span>
 <span class="tok-keyword">const</span> n: Name = <span class="tok-keyword">null</span>;   <span class="tok-comment">// null was removed</span></code></pre>
@@ -316,7 +316,7 @@ scores[<span class="tok-string">'bob'</span>] = <span class="tok-string">'x'</sp
 
 <h3>ReturnType, Parameters &amp; Awaited: read types from code</h3>
 <p>These reach into a function's signature so you never re-declare a type that already exists. <code>Awaited</code> unwraps a <code>Promise</code>; nest it on <code>ReturnType</code> to get what an async function resolves to:</p>
-<pre><code><span class="tok-comment">// awaited.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// awaited.ts</span>
 <span class="tok-keyword">async</span> <span class="tok-keyword">function</span> <span class="tok-function">load</span>() { <span class="tok-keyword">return</span> <span class="tok-number">42</span>; }
 <span class="tok-keyword">type</span> Loaded = Awaited&lt;ReturnType&lt;<span class="tok-keyword">typeof</span> load&gt;&gt;;   <span class="tok-comment">// number</span>
 <span class="tok-keyword">const</span> x: Loaded = <span class="tok-string">'no'</span>;   <span class="tok-comment">// Loaded is number</span></code></pre>
@@ -346,7 +346,7 @@ scores[<span class="tok-string">'bob'</span>] = <span class="tok-string">'x'</sp
 
 <h3>Exclude: bỏ thành viên khỏi một union</h3>
 <p><code>Exclude&lt;U, M&gt;</code> bỏ khỏi union <code>U</code> mọi thứ gán được cho <code>M</code>:</p>
-<pre><code><span class="tok-comment">// exclude.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// exclude.ts</span>
 <span class="tok-keyword">type</span> Status = <span class="tok-string">'draft'</span> | <span class="tok-string">'published'</span> | <span class="tok-string">'archived'</span>;
 <span class="tok-keyword">type</span> Active = Exclude&lt;Status, <span class="tok-string">'archived'</span>&gt;;   <span class="tok-comment">// 'draft' | 'published'</span>
 <span class="tok-keyword">const</span> s: Active = <span class="tok-string">'archived'</span>;   <span class="tok-comment">// archived đã bị loại</span></code></pre>
@@ -355,7 +355,7 @@ scores[<span class="tok-string">'bob'</span>] = <span class="tok-string">'x'</sp
 
 <h3>NonNullable: bỏ null và undefined</h3>
 <p><code>NonNullable&lt;T&gt;</code> là <code>Exclude&lt;T, null | undefined&gt;</code> với một cái tên thân thiện — nó bỏ hai kiểu "rỗng" khỏi một union:</p>
-<pre><code><span class="tok-comment">// nonnull.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// nonnull.ts</span>
 <span class="tok-keyword">type</span> MaybeName = <span class="tok-keyword">string</span> | <span class="tok-keyword">null</span> | <span class="tok-keyword">undefined</span>;
 <span class="tok-keyword">type</span> Name = NonNullable&lt;MaybeName&gt;;   <span class="tok-comment">// string</span>
 <span class="tok-keyword">const</span> n: Name = <span class="tok-keyword">null</span>;   <span class="tok-comment">// null đã bị bỏ</span></code></pre>
@@ -364,7 +364,7 @@ scores[<span class="tok-string">'bob'</span>] = <span class="tok-string">'x'</sp
 
 <h3>ReturnType, Parameters &amp; Awaited: đọc kiểu từ code</h3>
 <p>Những cái này thò vào chữ ký của một hàm để bạn không bao giờ khai lại một kiểu đã có sẵn. <code>Awaited</code> bóc một <code>Promise</code>; lồng nó lên <code>ReturnType</code> để lấy thứ một hàm async giải ra:</p>
-<pre><code><span class="tok-comment">// awaited.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// awaited.ts</span>
 <span class="tok-keyword">async</span> <span class="tok-keyword">function</span> <span class="tok-function">load</span>() { <span class="tok-keyword">return</span> <span class="tok-number">42</span>; }
 <span class="tok-keyword">type</span> Loaded = Awaited&lt;ReturnType&lt;<span class="tok-keyword">typeof</span> load&gt;&gt;;   <span class="tok-comment">// number</span>
 <span class="tok-keyword">const</span> x: Loaded = <span class="tok-string">'no'</span>;   <span class="tok-comment">// Loaded là number</span></code></pre>

@@ -30,7 +30,7 @@ export default {
   <div class="lz-layer"><span class="lz-lname">Operating system</span><span class="lz-lnote">files, network, processes</span></div>
 </div>
 <p>You can see both engines from inside your own program:</p>
-<pre><code>node -p <span class="tok-string">"process.versions.v8"</span>
+<pre><code class="language-bash">node -p <span class="tok-string">"process.versions.v8"</span>
 node -p <span class="tok-string">"process.versions.uv"</span></code></pre>
 <div class="out">12.4.254.21-node.33
 1.51.0</div>
@@ -88,7 +88,7 @@ node -p <span class="tok-string">"process.versions.uv"</span></code></pre>
   <div class="lz-layer"><span class="lz-lname">Hệ điều hành</span><span class="lz-lnote">file, mạng, tiến trình</span></div>
 </div>
 <p>Bạn nhìn thấy được cả hai động cơ này ngay từ trong chương trình của mình:</p>
-<pre><code>node -p <span class="tok-string">"process.versions.v8"</span>
+<pre><code class="language-bash">node -p <span class="tok-string">"process.versions.v8"</span>
 node -p <span class="tok-string">"process.versions.uv"</span></code></pre>
 <div class="out">12.4.254.21-node.33
 1.51.0</div>
@@ -165,7 +165,7 @@ node -p <span class="tok-string">"process.versions.uv"</span></code></pre>
 <p>Between <em>every</em> phase Node empties two extra queues first: <code>process.nextTick</code>, then the microtask queue (Promises). Those are not phases — they are jumped to at every opportunity, which is why they always feel "instant".</p>
 
 <h3>Prove the order yourself</h3>
-<pre><code><span class="tok-function">console.log</span>(<span class="tok-string">'[1] sync: first line'</span>);
+<pre><code class="language-javascript"><span class="tok-function">console.log</span>(<span class="tok-string">'[1] sync: first line'</span>);
 <span class="tok-function">setTimeout</span>(()  =&gt; <span class="tok-function">console.log</span>(<span class="tok-string">'[5] setTimeout 0   — timers phase'</span>), <span class="tok-number">0</span>);
 <span class="tok-function">setImmediate</span>(() =&gt; <span class="tok-function">console.log</span>(<span class="tok-string">'[6] setImmediate   — check phase'</span>));
 Promise.<span class="tok-function">resolve</span>().<span class="tok-function">then</span>(() =&gt; <span class="tok-function">console.log</span>(<span class="tok-string">'[4] Promise.then   — microtask'</span>));
@@ -181,12 +181,12 @@ process.<span class="tok-function">nextTick</span>(() =&gt; <span class="tok-fun
 
 <h3>setTimeout(0) vs setImmediate: genuinely unpredictable</h3>
 <p>Running the same two lines five times in a row gives different answers:</p>
-<pre><code><span class="tok-function">setTimeout</span>(() =&gt; process.stdout.<span class="tok-function">write</span>(<span class="tok-string">'timeout '</span>), <span class="tok-number">0</span>);
+<pre><code class="language-typescript"><span class="tok-function">setTimeout</span>(() =&gt; process.stdout.<span class="tok-function">write</span>(<span class="tok-string">'timeout '</span>), <span class="tok-number">0</span>);
 <span class="tok-function">setImmediate</span>(() =&gt; process.stdout.<span class="tok-function">write</span>(<span class="tok-string">'immediate '</span>));</code></pre>
 <div class="out">immediate timeout timeout immediate immediate timeout immediate timeout timeout immediate</div>
 <p>Why? <code>setTimeout(fn, 0)</code> really means "after <em>at least</em> 0 ms". Whether that deadline has already passed when the loop reaches the timers phase depends on how long the process took to start — microseconds of luck. So the order flips randomly.</p>
 <p>But inside an I/O callback the answer is <strong>always the same</strong>, because there we are already past the poll phase, and <code>check</code> comes immediately after it:</p>
-<pre><code>fs.<span class="tok-function">readFile</span>(__filename, () =&gt; {
+<pre><code class="language-typescript">fs.<span class="tok-function">readFile</span>(__filename, () =&gt; {
   <span class="tok-function">setTimeout</span>(() =&gt; process.stdout.<span class="tok-function">write</span>(<span class="tok-string">'timeout '</span>), <span class="tok-number">0</span>);
   <span class="tok-function">setImmediate</span>(() =&gt; process.stdout.<span class="tok-function">write</span>(<span class="tok-string">'immediate '</span>));
 });</code></pre>
@@ -225,7 +225,7 @@ process.<span class="tok-function">nextTick</span>(() =&gt; <span class="tok-fun
 <p>Giữa <em>mỗi</em> pha, Node xả cạn hai hàng đợi phụ trước: <code>process.nextTick</code>, rồi tới hàng đợi microtask (Promise). Chúng không phải là pha — chúng được nhảy vào ở mọi cơ hội, nên lúc nào cũng có cảm giác "tức thì".</p>
 
 <h3>Tự chứng minh thứ tự</h3>
-<pre><code><span class="tok-function">console.log</span>(<span class="tok-string">'[1] đồng bộ: dòng đầu'</span>);
+<pre><code class="language-javascript"><span class="tok-function">console.log</span>(<span class="tok-string">'[1] đồng bộ: dòng đầu'</span>);
 <span class="tok-function">setTimeout</span>(()  =&gt; <span class="tok-function">console.log</span>(<span class="tok-string">'[5] setTimeout 0   — pha timers'</span>), <span class="tok-number">0</span>);
 <span class="tok-function">setImmediate</span>(() =&gt; <span class="tok-function">console.log</span>(<span class="tok-string">'[6] setImmediate   — pha check'</span>));
 Promise.<span class="tok-function">resolve</span>().<span class="tok-function">then</span>(() =&gt; <span class="tok-function">console.log</span>(<span class="tok-string">'[4] Promise.then   — microtask'</span>));
@@ -241,12 +241,12 @@ process.<span class="tok-function">nextTick</span>(() =&gt; <span class="tok-fun
 
 <h3>setTimeout(0) vs setImmediate: thật sự không đoán được</h3>
 <p>Chạy đúng hai dòng đó năm lần liên tiếp cho ra kết quả khác nhau:</p>
-<pre><code><span class="tok-function">setTimeout</span>(() =&gt; process.stdout.<span class="tok-function">write</span>(<span class="tok-string">'timeout '</span>), <span class="tok-number">0</span>);
+<pre><code class="language-typescript"><span class="tok-function">setTimeout</span>(() =&gt; process.stdout.<span class="tok-function">write</span>(<span class="tok-string">'timeout '</span>), <span class="tok-number">0</span>);
 <span class="tok-function">setImmediate</span>(() =&gt; process.stdout.<span class="tok-function">write</span>(<span class="tok-string">'immediate '</span>));</code></pre>
 <div class="out">immediate timeout timeout immediate immediate timeout immediate timeout timeout immediate</div>
 <p>Vì sao? <code>setTimeout(fn, 0)</code> thật ra nghĩa là "sau <em>ít nhất</em> 0 mili giây". Việc cái hạn đó đã trôi qua hay chưa vào lúc vòng lặp chạm pha timers phụ thuộc vào tiến trình khởi động mất bao lâu — vài micro giây may rủi. Nên thứ tự đảo lung tung.</p>
 <p>Nhưng bên trong một callback I/O thì câu trả lời <strong>luôn luôn như nhau</strong>, vì ở đó ta đã đi qua pha poll rồi, mà <code>check</code> nằm ngay sau nó:</p>
-<pre><code>fs.<span class="tok-function">readFile</span>(__filename, () =&gt; {
+<pre><code class="language-typescript">fs.<span class="tok-function">readFile</span>(__filename, () =&gt; {
   <span class="tok-function">setTimeout</span>(() =&gt; process.stdout.<span class="tok-function">write</span>(<span class="tok-string">'timeout '</span>), <span class="tok-number">0</span>);
   <span class="tok-function">setImmediate</span>(() =&gt; process.stdout.<span class="tok-function">write</span>(<span class="tok-string">'immediate '</span>));
 });</code></pre>
@@ -298,7 +298,7 @@ process.<span class="tok-function">nextTick</span>(() =&gt; <span class="tok-fun
 <p>The word that matters is <strong>completely</strong>. Node does not run "a few" nextTicks and move on — it empties the queue, including anything added while it was emptying. Same for microtasks.</p>
 
 <h3>Both queues drain before any timer</h3>
-<pre><code><span class="tok-keyword">let</span> n = <span class="tok-number">0</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">let</span> n = <span class="tok-number">0</span>;
 <span class="tok-function">setTimeout</span>(() =&gt; <span class="tok-function">console.log</span>(<span class="tok-string">'does setTimeout still get to run?'</span>), <span class="tok-number">0</span>);
 
 <span class="tok-keyword">function</span> <span class="tok-function">recurse</span>() { <span class="tok-keyword">if</span> (++n &lt; <span class="tok-number">1e6</span>) process.<span class="tok-function">nextTick</span>(recurse); }
@@ -345,7 +345,7 @@ nextTick ran: 1000000 times</div>
 <p>Từ khoá quan trọng là <strong>cạn hoàn toàn</strong>. Node không chạy "vài cái" nextTick rồi đi tiếp — nó xả sạch hàng đợi, kể cả những cái được thêm vào trong lúc đang xả. Microtask cũng vậy.</p>
 
 <h3>Cả hai hàng đợi đều xả xong trước mọi timer</h3>
-<pre><code><span class="tok-keyword">let</span> n = <span class="tok-number">0</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">let</span> n = <span class="tok-number">0</span>;
 <span class="tok-function">setTimeout</span>(() =&gt; <span class="tok-function">console.log</span>(<span class="tok-string">'setTimeout còn chạy được không?'</span>), <span class="tok-number">0</span>);
 
 <span class="tok-keyword">function</span> <span class="tok-function">recurse</span>() { <span class="tok-keyword">if</span> (++n &lt; <span class="tok-number">1e6</span>) process.<span class="tok-function">nextTick</span>(recurse); }
@@ -399,7 +399,7 @@ nextTick đã chạy: 1000000 lần</div>
 <p class="lead">Everything so far has been theory. Now we measure it. The technique: run a heartbeat timer every 100 ms and record how late it actually arrives. That number — <strong>event loop lag</strong> — is the single most important health metric a Node service has.</p>
 
 <h3>The experiment</h3>
-<pre><code><span class="tok-keyword">let</span> prev = Date.<span class="tok-function">now</span>(), max = <span class="tok-number">0</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">let</span> prev = Date.<span class="tok-function">now</span>(), max = <span class="tok-number">0</span>;
 <span class="tok-keyword">const</span> beat = <span class="tok-function">setInterval</span>(() =&gt; {
   <span class="tok-keyword">const</span> late = Date.<span class="tok-function">now</span>() - prev - <span class="tok-number">100</span>;   <span class="tok-comment">// should be ~0</span>
   <span class="tok-keyword">if</span> (late &gt; max) max = late;
@@ -425,7 +425,7 @@ nextTick đã chạy: 1000000 lần</div>
 
 <h3>The hidden thread pool</h3>
 <p>Earlier we said Node uses more threads underneath. Here is the proof. <code>crypto.pbkdf2</code> is asynchronous but genuinely CPU-heavy, so libuv runs it on its thread pool — 4 threads by default. Fire eight of them at once:</p>
-<pre><code><span class="tok-keyword">const</span> t = Date.<span class="tok-function">now</span>();
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> t = Date.<span class="tok-function">now</span>();
 <span class="tok-keyword">for</span> (<span class="tok-keyword">let</span> i = <span class="tok-number">1</span>; i &lt;= <span class="tok-number">8</span>; i++) {
   crypto.<span class="tok-function">pbkdf2</span>(<span class="tok-string">'pw'</span>, <span class="tok-string">'salt'</span>, <span class="tok-number">200000</span>, <span class="tok-number">64</span>, <span class="tok-string">'sha512'</span>, () =&gt;
     <span class="tok-function">console.log</span>(<span class="tok-string">'  task'</span>, i, <span class="tok-string">'done after'</span>, Date.<span class="tok-function">now</span>() - t, <span class="tok-string">'ms'</span>));
@@ -451,7 +451,7 @@ nextTick đã chạy: 1000000 lần</div>
 <div class="pitfall">Do not raise <code>UV_THREADPOOL_SIZE</code> above your CPU core count and expect magic — the threads then just compete for the same cores. And note what the pool does <strong>not</strong> cover: your own JavaScript loops never go to the pool. Only file I/O, DNS lookups, zlib and crypto do.</div>
 
 <h3>Measure it in your own service</h3>
-<pre><code><span class="tok-keyword">import</span> { monitorEventLoopDelay } <span class="tok-keyword">from</span> <span class="tok-string">'node:perf_hooks'</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> { monitorEventLoopDelay } <span class="tok-keyword">from</span> <span class="tok-string">'node:perf_hooks'</span>;
 <span class="tok-keyword">const</span> h = <span class="tok-function">monitorEventLoopDelay</span>({ resolution: <span class="tok-number">20</span> });
 h.<span class="tok-function">enable</span>();
 
@@ -489,7 +489,7 @@ h.<span class="tok-function">enable</span>();
 <p class="lead">Từ đầu tới giờ toàn lý thuyết. Giờ ta đo. Kỹ thuật: cho một timer "nhịp tim" chạy mỗi 100 ms rồi ghi lại nó thực sự tới trễ bao nhiêu. Con số đó — <strong>độ trễ event loop</strong> — là chỉ số sức khoẻ quan trọng bậc nhất của một dịch vụ Node.</p>
 
 <h3>Thí nghiệm</h3>
-<pre><code><span class="tok-keyword">let</span> prev = Date.<span class="tok-function">now</span>(), max = <span class="tok-number">0</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">let</span> prev = Date.<span class="tok-function">now</span>(), max = <span class="tok-number">0</span>;
 <span class="tok-keyword">const</span> nhip = <span class="tok-function">setInterval</span>(() =&gt; {
   <span class="tok-keyword">const</span> late = Date.<span class="tok-function">now</span>() - prev - <span class="tok-number">100</span>;   <span class="tok-comment">// lẽ ra phải ~0</span>
   <span class="tok-keyword">if</span> (late &gt; max) max = late;
@@ -515,7 +515,7 @@ h.<span class="tok-function">enable</span>();
 
 <h3>Thread pool ẩn</h3>
 <p>Ở trên ta có nói Node dùng nhiều luồng bên dưới. Đây là bằng chứng. <code>crypto.pbkdf2</code> là bất đồng bộ nhưng thực sự nặng CPU, nên libuv chạy nó trên thread pool — mặc định 4 luồng. Bắn tám cái cùng lúc:</p>
-<pre><code><span class="tok-keyword">const</span> t = Date.<span class="tok-function">now</span>();
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> t = Date.<span class="tok-function">now</span>();
 <span class="tok-keyword">for</span> (<span class="tok-keyword">let</span> i = <span class="tok-number">1</span>; i &lt;= <span class="tok-number">8</span>; i++) {
   crypto.<span class="tok-function">pbkdf2</span>(<span class="tok-string">'mk'</span>, <span class="tok-string">'muoi'</span>, <span class="tok-number">200000</span>, <span class="tok-number">64</span>, <span class="tok-string">'sha512'</span>, () =&gt;
     <span class="tok-function">console.log</span>(<span class="tok-string">'  tác vụ'</span>, i, <span class="tok-string">'xong sau'</span>, Date.<span class="tok-function">now</span>() - t, <span class="tok-string">'ms'</span>));
@@ -541,7 +541,7 @@ h.<span class="tok-function">enable</span>();
 <div class="pitfall">Đừng nâng <code>UV_THREADPOOL_SIZE</code> vượt số nhân CPU rồi mong phép màu — lúc đó các luồng chỉ giành nhau đúng mấy cái nhân ấy. Và để ý cái mà pool <strong>không</strong> gánh: vòng lặp JavaScript của chính bạn không bao giờ được đưa vào pool. Chỉ I/O file, tra cứu DNS, zlib và crypto mới vào.</div>
 
 <h3>Đo ngay trong dịch vụ của bạn</h3>
-<pre><code><span class="tok-keyword">import</span> { monitorEventLoopDelay } <span class="tok-keyword">from</span> <span class="tok-string">'node:perf_hooks'</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> { monitorEventLoopDelay } <span class="tok-keyword">from</span> <span class="tok-string">'node:perf_hooks'</span>;
 <span class="tok-keyword">const</span> h = <span class="tok-function">monitorEventLoopDelay</span>({ resolution: <span class="tok-number">20</span> });
 h.<span class="tok-function">enable</span>();
 
@@ -596,7 +596,7 @@ h.<span class="tok-function">enable</span>();
 
 <h3>Cure 1 — worker threads (the real fix)</h3>
 <p>A worker thread is a separate JavaScript thread with its own V8 instance and its own event loop. Same computation, moved off the main thread:</p>
-<pre><code><span class="tok-comment">// worker.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// worker.js</span>
 <span class="tok-keyword">const</span> { parentPort } = <span class="tok-function">require</span>(<span class="tok-string">'node:worker_threads'</span>);
 <span class="tok-keyword">let</span> s = <span class="tok-number">0</span>;
 <span class="tok-keyword">for</span> (<span class="tok-keyword">let</span> i = <span class="tok-number">0</span>; i &lt; <span class="tok-number">3e9</span>; i++) s += i;
@@ -617,7 +617,7 @@ w.<span class="tok-function">on</span>(<span class="tok-string">'message'</span>
 
 <h3>Cure 2 — split the work into chunks</h3>
 <p>If you cannot move the work, you can slice it and let the loop breathe between slices using <code>setImmediate</code>:</p>
-<pre><code><span class="tok-keyword">const</span> TOTAL = <span class="tok-number">3e9</span>, CHUNK = <span class="tok-number">3e7</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> TOTAL = <span class="tok-number">3e9</span>, CHUNK = <span class="tok-number">3e7</span>;
 <span class="tok-keyword">let</span> i = <span class="tok-number">0</span>, s = <span class="tok-number">0</span>;
 <span class="tok-keyword">function</span> <span class="tok-function">runChunk</span>() {
   <span class="tok-keyword">const</span> end = Math.<span class="tok-function">min</span>(i + CHUNK, TOTAL);
@@ -630,7 +630,7 @@ w.<span class="tok-function">on</span>(<span class="tok-string">'message'</span>
 
 <h3>Cure 3 — more processes (cluster)</h3>
 <p>One Node process uses one core. A machine with 4 cores can run 4 processes sharing the same port, each with its own event loop:</p>
-<pre><code><span class="tok-keyword">import</span> cluster <span class="tok-keyword">from</span> <span class="tok-string">'node:cluster'</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> cluster <span class="tok-keyword">from</span> <span class="tok-string">'node:cluster'</span>;
 <span class="tok-keyword">import</span> os <span class="tok-keyword">from</span> <span class="tok-string">'node:os'</span>;
 
 <span class="tok-keyword">if</span> (cluster.isPrimary) {
@@ -669,7 +669,7 @@ w.<span class="tok-function">on</span>(<span class="tok-string">'message'</span>
 
 <h3>Thuốc 1 — worker threads (cách chữa thật sự)</h3>
 <p>Worker thread là một luồng JavaScript riêng biệt, có bản V8 riêng và event loop riêng. Vẫn phép tính đó, nhưng dời ra khỏi luồng chính:</p>
-<pre><code><span class="tok-comment">// worker.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// worker.js</span>
 <span class="tok-keyword">const</span> { parentPort } = <span class="tok-function">require</span>(<span class="tok-string">'node:worker_threads'</span>);
 <span class="tok-keyword">let</span> s = <span class="tok-number">0</span>;
 <span class="tok-keyword">for</span> (<span class="tok-keyword">let</span> i = <span class="tok-number">0</span>; i &lt; <span class="tok-number">3e9</span>; i++) s += i;
@@ -690,7 +690,7 @@ w.<span class="tok-function">on</span>(<span class="tok-string">'message'</span>
 
 <h3>Thuốc 2 — chia việc thành từng lô</h3>
 <p>Nếu không dời việc đi được, bạn có thể xắt nhỏ nó ra và để vòng lặp thở giữa các lát bằng <code>setImmediate</code>:</p>
-<pre><code><span class="tok-keyword">const</span> TOTAL = <span class="tok-number">3e9</span>, CHUNK = <span class="tok-number">3e7</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> TOTAL = <span class="tok-number">3e9</span>, CHUNK = <span class="tok-number">3e7</span>;
 <span class="tok-keyword">let</span> i = <span class="tok-number">0</span>, s = <span class="tok-number">0</span>;
 <span class="tok-keyword">function</span> <span class="tok-function">runChunk</span>() {
   <span class="tok-keyword">const</span> end = Math.<span class="tok-function">min</span>(i + CHUNK, TOTAL);
@@ -703,7 +703,7 @@ w.<span class="tok-function">on</span>(<span class="tok-string">'message'</span>
 
 <h3>Thuốc 3 — nhiều tiến trình (cluster)</h3>
 <p>Một tiến trình Node dùng một nhân CPU. Máy 4 nhân có thể chạy 4 tiến trình cùng chia nhau một cổng, mỗi tiến trình có event loop riêng:</p>
-<pre><code><span class="tok-keyword">import</span> cluster <span class="tok-keyword">from</span> <span class="tok-string">'node:cluster'</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> cluster <span class="tok-keyword">from</span> <span class="tok-string">'node:cluster'</span>;
 <span class="tok-keyword">import</span> os <span class="tok-keyword">from</span> <span class="tok-string">'node:os'</span>;
 
 <span class="tok-keyword">if</span> (cluster.isPrimary) {

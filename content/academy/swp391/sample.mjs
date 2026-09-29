@@ -1516,11 +1516,11 @@ const L4 = {
 </tbody>
 </table>
 <p class="nhan">SQL — the DAO's statements, with owner and status in the filter</p>
-<pre>SELECT status, checking, expired FROM Post WHERE postID = ?;
+<pre><code class="language-sql">SELECT status, checking, expired FROM Post WHERE postID = ?;
 SELECT COUNT(*) FROM JobApply WHERE postID = ? AND freelanceID = ?;
 INSERT INTO JobApply (freelanceID, postID, status, dateApply, Resume)
 SELECT f.freelanceID, ?, N'0', CAST(GETDATE() AS date), ?
-FROM Freelancer f WHERE f.userID = ?;</pre>
+FROM Freelancer f WHERE f.userID = ?;</code></pre>
 <div class="callout"><strong>★ Beyond the syllabus — let the database enforce the rule too.</strong> Add <code>UNIQUE (freelanceID, postID)</code> to JobApply. The COUNT check gives a friendly message; the constraint still stops a double click that sends two requests at the same moment.</div>`,
     `<h3>Làm tốt hơn — một khối màn hình viết đúng cách</h3>
 <p>Bản mẫu viết lại pop-up <strong>2.6 Apply Job</strong> của G5 (dòng UC_47 của sheet Product, cùng tính năng đã đặc tả ở bài S.3). Hình sẽ là pop-up thật với dữ liệu demo; dưới đây là ba phần mà G5 viết còn mỏng.</p>
@@ -1544,11 +1544,11 @@ FROM Freelancer f WHERE f.userID = ?;</pre>
 </tbody>
 </table>
 <p class="nhan">SQL — đúng các câu của DAO, có chủ sở hữu và trạng thái trong điều kiện lọc</p>
-<pre>SELECT status, checking, expired FROM Post WHERE postID = ?;
+<pre><code class="language-sql">SELECT status, checking, expired FROM Post WHERE postID = ?;
 SELECT COUNT(*) FROM JobApply WHERE postID = ? AND freelanceID = ?;
 INSERT INTO JobApply (freelanceID, postID, status, dateApply, Resume)
 SELECT f.freelanceID, ?, N'0', CAST(GETDATE() AS date), ?
-FROM Freelancer f WHERE f.userID = ?;</pre>
+FROM Freelancer f WHERE f.userID = ?;</code></pre>
 <div class="callout"><strong>★ Ngoài giáo trình — để CSDL cùng thực thi rule.</strong> Thêm <code>UNIQUE (freelanceID, postID)</code> vào JobApply. Câu COUNT cho thông báo thân thiện; còn ràng buộc vẫn chặn được cú bấm đúp gửi hai request cùng một lúc.</div>`),
     bi(`<h3>Checklist for every screen block</h3>
 <ol>
@@ -2344,7 +2344,7 @@ const L7 = {
 </tbody>
 </table>
 <p class="nhan">Three fixes to G5's schema</p>
-<pre>CREATE TABLE PostSkill (
+<pre><code class="language-sql">CREATE TABLE PostSkill (
   postID       int NOT NULL REFERENCES Post(postID),
   skill_set_ID int NOT NULL REFERENCES Skill_Set(skill_set_ID),
   CONSTRAINT PK_PostSkill PRIMARY KEY (postID, skill_set_ID)
@@ -2352,7 +2352,7 @@ const L7 = {
 ALTER TABLE JobApply ADD CONSTRAINT UQ_JobApply UNIQUE (freelanceID, postID);
 ALTER TABLE [User] ADD CONSTRAINT UQ_User_username UNIQUE (username);
 ALTER TABLE [User] ALTER COLUMN password varchar(60) NOT NULL;  -- BCrypt hash
-ALTER TABLE JobApply ADD CONSTRAINT CK_JobApply_status CHECK (status IN ('0','1','2'));</pre>
+ALTER TABLE JobApply ADD CONSTRAINT CK_JobApply_status CHECK (status IN ('0','1','2'));</code></pre>
 <p class="ghi-chu">Remove existing duplicates before adding a UNIQUE constraint, or the ALTER fails.</p>
 <div class="callout"><strong>★ Beyond the syllabus — let a query find the defects.</strong> Before every submission run checks such as
 <code>SELECT skill_set_name, COUNT(*) FROM Skill_Set GROUP BY skill_set_name HAVING COUNT(*) &gt; 1</code> and
@@ -2371,7 +2371,7 @@ An empty result is your proof; a non-empty one is a defect to log before the tea
 </tbody>
 </table>
 <p class="nhan">Ba chỗ sửa cho schema của G5</p>
-<pre>CREATE TABLE PostSkill (
+<pre><code class="language-sql">CREATE TABLE PostSkill (
   postID       int NOT NULL REFERENCES Post(postID),
   skill_set_ID int NOT NULL REFERENCES Skill_Set(skill_set_ID),
   CONSTRAINT PK_PostSkill PRIMARY KEY (postID, skill_set_ID)
@@ -2379,7 +2379,7 @@ An empty result is your proof; a non-empty one is a defect to log before the tea
 ALTER TABLE JobApply ADD CONSTRAINT UQ_JobApply UNIQUE (freelanceID, postID);
 ALTER TABLE [User] ADD CONSTRAINT UQ_User_username UNIQUE (username);
 ALTER TABLE [User] ALTER COLUMN password varchar(60) NOT NULL;  -- BCrypt hash
-ALTER TABLE JobApply ADD CONSTRAINT CK_JobApply_status CHECK (status IN ('0','1','2'));</pre>
+ALTER TABLE JobApply ADD CONSTRAINT CK_JobApply_status CHECK (status IN ('0','1','2'));</code></pre>
 <p class="ghi-chu">Xoá các dòng trùng hiện có trước khi thêm ràng buộc UNIQUE, nếu không lệnh ALTER sẽ lỗi.</p>
 <div class="callout"><strong>★ Ngoài giáo trình — để câu truy vấn tự tìm lỗi.</strong> Trước mỗi lần nộp hãy chạy các phép kiểm như
 <code>SELECT skill_set_name, COUNT(*) FROM Skill_Set GROUP BY skill_set_name HAVING COUNT(*) &gt; 1</code> và

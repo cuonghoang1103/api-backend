@@ -26,7 +26,7 @@ export default {
 <p class="lead">A session cookie, a JWT, an API key and a password reset link have one property in common that decides almost everything else about how you must treat them: presenting the value <em>is</em> the proof. There is no second check, no signature from your device, no question the thief cannot answer. Understanding that sentence properly is what makes the rest of this course follow rather than feel arbitrary.</p>
 
 <h3>What "bearer" means, precisely</h3>
-<pre><code><span class="tok-comment"># The same request, from two different machines, in two different countries</span>
+<pre><code class="language-bash"><span class="tok-comment"># The same request, from two different machines, in two different countries</span>
 curl -s https://api.vidu.com/toi -H "Authorization: Bearer eyJhbGciOi…"
 curl -s https://api.vidu.com/toi -H "Authorization: Bearer eyJhbGciOi…"</code></pre>
 <div class="out">{"id":"clx7…","email":"an@vidu.com","role":"USER"}
@@ -125,7 +125,7 @@ DPoP: eyJ0eXAiOiJkcG9wK2p3dCIsImFsZyI6…    <span class="tok-comment">// a fres
 <p class="lead">Một cookie phiên, một JWT, một API key và một liên kết đặt lại mật khẩu có chung MỘT tính chất quyết định gần như mọi thứ khác trong cách bạn phải đối xử với chúng: trình cái giá trị đó ra <em>CHÍNH LÀ</em> bằng chứng. Không có phép kiểm thứ hai, không có chữ ký từ thiết bị của bạn, không có câu hỏi nào mà kẻ cắp không trả lời được. Hiểu câu đó cho đúng là thứ làm cho phần còn lại của khoá này TỰ SUY RA thay vì có vẻ tuỳ tiện.</p>
 
 <h3>"Mang theo" nghĩa là gì, nói cho chính xác</h3>
-<pre><code><span class="tok-comment"># Cũng một request đó, từ hai máy khác nhau, ở hai nước khác nhau</span>
+<pre><code class="language-bash"><span class="tok-comment"># Cũng một request đó, từ hai máy khác nhau, ở hai nước khác nhau</span>
 curl -s https://api.vidu.com/toi -H "Authorization: Bearer eyJhbGciOi…"
 curl -s https://api.vidu.com/toi -H "Authorization: Bearer eyJhbGciOi…"</code></pre>
 <div class="out">{"id":"clx7…","email":"an@vidu.com","role":"USER"}
@@ -232,7 +232,7 @@ DPoP: eyJ0eXAiOiJkcG9wK2p3dCIsImFsZyI6…    <span class="tok-comment">// một 
 <p class="lead">Half of the credentials in a typical application are "a random string" — session ids, reset tokens, CSRF tokens, API keys. Two questions decide whether they are secure, and both have exact answers: is the source cryptographic, and how many bits does it produce? Almost every mistake in this area is confusing the <em>length of the string</em> with the <em>number of bits</em>.</p>
 
 <h3><code>Math.random()</code> is not a coin flip</h3>
-<pre><code><span class="tok-comment">// Looks random. Is not.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Looks random. Is not.</span>
 const code = Math.random().toString(36).slice(2);
 console.log(code);</code></pre>
 <div class="out">k3f9a1x7bqz2
@@ -250,7 +250,7 @@ console.log(code);</code></pre>
 <div class="callout warn">
 <p><strong>This is not a theoretical concern with a theoretical fix.</strong> Session ids built from <code>Math.random()</code> have been broken in real applications: an attacker registers an account, collects a handful of ids issued to themselves, recovers the generator state, and then computes the ids issued to everyone else in the same window. No cryptography is broken, because none was used. The fix is one import and costs nothing.</p>
 </div>
-<pre><code><span class="tok-comment">// The correct source, in Node</span>
+<pre><code class="language-javascript"><span class="tok-comment">// The correct source, in Node</span>
 import { randomBytes, randomUUID, timingSafeEqual } from 'node:crypto';
 
 randomBytes(32).toString('base64url');   <span class="tok-comment">// 256 bits, 43 characters</span>
@@ -295,7 +295,7 @@ $ node -e "console.log(require('crypto').randomUUID())"
 </div>
 
 <h3>The lookup table</h3>
-<pre><code><span class="tok-comment">// src/lib/ngau-nhien.ts — one file, used everywhere</span>
+<pre><code class="language-javascript"><span class="tok-comment">// src/lib/ngau-nhien.ts — one file, used everywhere</span>
 import { randomBytes } from 'node:crypto';
 
 export const sessionCode   = () =&gt; randomBytes(32).toString('base64url'); <span class="tok-comment">// 256 bit</span>
@@ -333,7 +333,7 @@ export const recoveryCode = () =&gt;                                        <spa
 <p class="lead">Một nửa số tín vật trong một ứng dụng điển hình là "một chuỗi ngẫu nhiên" — mã phiên, token đặt lại, token CSRF, API key. Hai câu hỏi quyết định chúng có an toàn hay không, và cả hai đều có câu trả lời CHÍNH XÁC: nguồn có phải nguồn mật mã không, và nó sinh ra bao nhiêu BIT? Gần như mọi sai lầm ở mảng này đều là lẫn lộn giữa <em>ĐỘ DÀI CHUỖI</em> với <em>SỐ BIT</em>.</p>
 
 <h3><code>Math.random()</code> không phải một cú tung đồng xu</h3>
-<pre><code><span class="tok-comment">// Trông ngẫu nhiên. Không phải.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Trông ngẫu nhiên. Không phải.</span>
 const code = Math.random().toString(36).slice(2);
 console.log(code);</code></pre>
 <div class="out">k3f9a1x7bqz2
@@ -351,7 +351,7 @@ console.log(code);</code></pre>
 <div class="callout warn">
 <p><strong>Đây không phải một mối lo lý thuyết với một cách vá lý thuyết.</strong> Mã phiên dựng từ <code>Math.random()</code> đã bị phá trong những ứng dụng THẬT: kẻ tấn công đăng ký một tài khoản, thu thập một nhúm mã được cấp cho chính họ, khôi phục trạng thái bộ sinh, rồi TÍNH RA những mã đã cấp cho mọi người khác trong cùng khoảng thời gian. Chẳng có mật mã nào bị phá cả, vì có dùng đâu. Cách vá là một dòng import và không tốn gì.</p>
 </div>
-<pre><code><span class="tok-comment">// Nguồn đúng, trong Node</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Nguồn đúng, trong Node</span>
 import { randomBytes, randomUUID, timingSafeEqual } from 'node:crypto';
 
 randomBytes(32).toString('base64url');   <span class="tok-comment">// 256 bit, 43 ký tự</span>
@@ -396,7 +396,7 @@ $ node -e "console.log(require('crypto').randomUUID())"
 </div>
 
 <h3>Bảng tra</h3>
-<pre><code><span class="tok-comment">// src/lib/ngau-nhien.ts — một file, dùng ở mọi nơi</span>
+<pre><code class="language-javascript"><span class="tok-comment">// src/lib/ngau-nhien.ts — một file, dùng ở mọi nơi</span>
 import { randomBytes } from 'node:crypto';
 
 export const sessionCode   = () =&gt; randomBytes(32).toString('base64url'); <span class="tok-comment">// 256 bit</span>
@@ -442,12 +442,12 @@ export const recoveryCode = () =&gt;                                        <spa
 <p class="lead">String equality in every language stops at the first byte that differs. That is the correct behaviour for ordinary data and a side channel for secrets: the time the comparison takes is a function of how many leading bytes the attacker guessed right, which turns an impossible search over the whole value into a feasible one, byte by byte.</p>
 
 <h3>See the leak</h3>
-<pre><code><span class="tok-comment">// The comparison everyone writes first</span>
+<pre><code class="language-typescript"><span class="tok-comment">// The comparison everyone writes first</span>
 if (tokenGuiLen === tokenThat) { … }
 
 <span class="tok-comment">// What the CPU does: compare byte 0. Differ? Return false, now.</span>
 <span class="tok-comment">//                    Same? Compare byte 1. And so on.</span></code></pre>
-<pre><code><span class="tok-comment">// Measure it: 2 million comparisons per bucket, 64-char token</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Measure it: 2 million comparisons per bucket, 64-char token</span>
 const real = 'a'.repeat(64);
 for (const trung of [0, 1, 8, 32, 63, 64]) {
   const segment = 'a'.repeat(trung) + 'b'.repeat(64 - trung);
@@ -476,7 +476,7 @@ trung 64 ky tu → 26.31 ns      ← trung het
 </div>
 
 <h3>The fix, and the trap inside it</h3>
-<pre><code>import { timingSafeEqual } from 'node:crypto';
+<pre><code class="language-javascript">import { timingSafeEqual } from 'node:crypto';
 
 <span class="tok-comment">// Constant time: always compares every byte, never returns early.</span>
 const a = Buffer.from(tokenGuiLen);
@@ -488,7 +488,7 @@ RangeError [ERR_CRYPTO_TIMING_SAFE_EQUAL_LENGTH]:
 <div class="pitfall">
 <p><strong>Trap — <code>timingSafeEqual</code> throws on a length mismatch, so a naive wrapper leaks the length instead.</strong> If your code returns a different error, or returns much faster, when the lengths differ, you have replaced a byte-level leak with a length-level one. Length is usually not secret — every session id you issue is the same length — so an explicit length check first is fine. When length <em>is</em> secret, hash both sides to a fixed size first and compare the hashes, which is the pattern below.</p>
 </div>
-<pre><code><span class="tok-comment">// The double-HMAC pattern: safe for any lengths, no branch on length</span>
+<pre><code class="language-javascript"><span class="tok-comment">// The double-HMAC pattern: safe for any lengths, no branch on length</span>
 import { createHmac, timingSafeEqual, randomBytes } from 'node:crypto';
 
 const sessionKey = randomBytes(32);        <span class="tok-comment">// per-process, not persisted</span>
@@ -503,7 +503,7 @@ export function equalsCT(a: string, b: string) {
 </div>
 
 <h3>The better answer: do not compare, look up</h3>
-<pre><code><span class="tok-comment">// ❌ Fetch every session, compare in application code</span>
+<pre><code class="language-javascript"><span class="tok-comment">// ❌ Fetch every session, compare in application code</span>
 const session = await prisma.session.findFirst({ where: { id: submittedCode } });
 
 <span class="tok-comment">// ✅ Store a hash of the token; look up BY the hash.</span>
@@ -511,7 +511,7 @@ const session = await prisma.session.findFirst({ where: { id: submittedCode } })
 <span class="tok-comment">//    contain the token at all.</span>
 const hash = createHash('sha256').update(submittedCode).digest('hex');
 const session = await prisma.session.findUnique({ where: { tokenHash: bam } });</code></pre>
-<pre><code><span class="tok-comment">// prisma/schema.prisma</span>
+<pre><code class="language-typescript"><span class="tok-comment">// prisma/schema.prisma</span>
 model Session {
   id        String   @id @default(cuid())
   tokenHash String   @unique          <span class="tok-comment">// sha256 OF the token, NOT the token</span>
@@ -526,7 +526,7 @@ model Session {
 </div>
 
 <h3>The place this bug actually appears: webhook signatures</h3>
-<pre><code><span class="tok-comment">// ❌ Real code, from more than one production codebase</span>
+<pre><code class="language-javascript"><span class="tok-comment">// ❌ Real code, from more than one production codebase</span>
 const signature = createHmac('sha256', SECRET).update(req.rawBody).digest('hex');
 if (signature !== req.headers['x-signature']) return res.status(401).end();
 
@@ -560,12 +560,12 @@ if (upload.length !== signature.length || !timingSafeEqual(signature, upload)) {
 <p class="lead">Phép so sánh chuỗi trong MỌI ngôn ngữ đều dừng ở byte đầu tiên khác nhau. Đó là hành vi ĐÚNG với dữ liệu thường và là một KÊNH PHỤ với bí mật: thời gian phép so sánh chạy là một hàm của việc kẻ tấn công đoán trúng bao nhiêu byte đầu, thứ biến một cuộc tìm kiếm bất khả thi trên toàn bộ giá trị thành một cuộc tìm kiếm khả thi, từng byte một.</p>
 
 <h3>Nhìn thấy chỗ rò</h3>
-<pre><code><span class="tok-comment">// Phép so sánh ai cũng viết đầu tiên</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Phép so sánh ai cũng viết đầu tiên</span>
 if (tokenGuiLen === tokenThat) { … }
 
 <span class="tok-comment">// Cái CPU làm: so byte 0. Khác? Trả về false, NGAY.</span>
 <span class="tok-comment">//              Giống? So byte 1. Và cứ thế.</span></code></pre>
-<pre><code><span class="tok-comment">// Đo nó: 2 triệu phép so mỗi ô, token 64 ký tự</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Đo nó: 2 triệu phép so mỗi ô, token 64 ký tự</span>
 const real = 'a'.repeat(64);
 for (const trung of [0, 1, 8, 32, 63, 64]) {
   const segment = 'a'.repeat(trung) + 'b'.repeat(64 - trung);
@@ -594,7 +594,7 @@ trung 64 ky tu → 26.31 ns      ← trung het
 </div>
 
 <h3>Cách vá, và cái bẫy nằm bên trong nó</h3>
-<pre><code>import { timingSafeEqual } from 'node:crypto';
+<pre><code class="language-javascript">import { timingSafeEqual } from 'node:crypto';
 
 <span class="tok-comment">// Thời gian hằng: LUÔN so hết mọi byte, không bao giờ trả về sớm.</span>
 const a = Buffer.from(tokenGuiLen);
@@ -606,7 +606,7 @@ RangeError [ERR_CRYPTO_TIMING_SAFE_EQUAL_LENGTH]:
 <div class="pitfall">
 <p><strong>Bẫy — <code>timingSafeEqual</code> NÉM LỖI khi độ dài lệch, nên một hàm bọc ngây thơ sẽ rò rỉ ĐỘ DÀI thay vì rò byte.</strong> Nếu mã của bạn trả về một lỗi khác, hoặc trả về nhanh hơn hẳn, khi độ dài lệch, thì bạn vừa thay một chỗ rò mức byte bằng một chỗ rò mức độ dài. Độ dài thường KHÔNG phải bí mật — mọi mã phiên bạn cấp ra đều dài như nhau — nên kiểm độ dài tường minh trước là ổn. Khi độ dài <em>THỰC SỰ</em> là bí mật thì hãy băm cả hai vế xuống một kích thước cố định rồi so các chuỗi băm, tức là mẫu ngay bên dưới.</p>
 </div>
-<pre><code><span class="tok-comment">// Mẫu HMAC kép: an toàn với mọi độ dài, không rẽ nhánh theo độ dài</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Mẫu HMAC kép: an toàn với mọi độ dài, không rẽ nhánh theo độ dài</span>
 import { createHmac, timingSafeEqual, randomBytes } from 'node:crypto';
 
 const sessionKey = randomBytes(32);        <span class="tok-comment">// theo tiến trình, không lưu lại</span>
@@ -621,7 +621,7 @@ export function equalsCT(a: string, b: string) {
 </div>
 
 <h3>Câu trả lời TỐT HƠN: đừng so sánh, hãy TRA CỨU</h3>
-<pre><code><span class="tok-comment">// ❌ Lấy phiên về rồi so sánh trong mã ứng dụng</span>
+<pre><code class="language-javascript"><span class="tok-comment">// ❌ Lấy phiên về rồi so sánh trong mã ứng dụng</span>
 const session = await prisma.session.findFirst({ where: { id: submittedCode } });
 
 <span class="tok-comment">// ✅ Cất một chuỗi BĂM của token; tra cứu THEO chuỗi băm đó.</span>
@@ -629,7 +629,7 @@ const session = await prisma.session.findFirst({ where: { id: submittedCode } })
 <span class="tok-comment">//    chứa token chút nào.</span>
 const hash = createHash('sha256').update(submittedCode).digest('hex');
 const session = await prisma.session.findUnique({ where: { tokenHash: bam } });</code></pre>
-<pre><code><span class="tok-comment">// prisma/schema.prisma</span>
+<pre><code class="language-typescript"><span class="tok-comment">// prisma/schema.prisma</span>
 model Session {
   id        String   @id @default(cuid())
   tokenHash String   @unique          <span class="tok-comment">// sha256 của token, KHÔNG phải token</span>
@@ -644,7 +644,7 @@ model Session {
 </div>
 
 <h3>Chỗ con bug này THẬT SỰ xuất hiện: chữ ký webhook</h3>
-<pre><code><span class="tok-comment">// ❌ Mã thật, lấy từ hơn một kho mã production</span>
+<pre><code class="language-javascript"><span class="tok-comment">// ❌ Mã thật, lấy từ hơn một kho mã production</span>
 const signature = createHmac('sha256', SECRET).update(req.rawBody).digest('hex');
 if (signature !== req.headers['x-signature']) return res.status(401).end();
 
@@ -700,7 +700,7 @@ if (upload.length !== signature.length || !timingSafeEqual(signature, upload)) {
     <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">"Did the holder of THIS private key send this?"</span><span class="lz-nsub">Private key makes, public key checks. Anyone can verify.</span></div></div>
   </div>
 </div>
-<pre><code>import { createHash, createHmac, generateKeyPairSync, sign, verify } from 'node:crypto';
+<pre><code class="language-javascript">import { createHash, createHmac, generateKeyPairSync, sign, verify } from 'node:crypto';
 
 <span class="tok-comment">// 1. Hash — no key, deterministic, anyone can reproduce it</span>
 createHash('sha256').update('xin chao').digest('hex');
@@ -726,7 +726,7 @@ verify(null, Buffer.from('xin chao'), publicKey, signature);</code></pre>
 <div class="pitfall">
 <p><strong>Trap — <code>sha256(bimat + tinNhan)</code> is a broken MAC with a name: length extension.</strong> SHA-256's internal construction lets an attacker who knows the digest and the length of the secret — without knowing the secret itself — compute a valid digest for <code>tinNhan + padding + themVao</code>. Their forged message keeps your original payload and appends their own, and the tag verifies. This has broken real APIs. HMAC's nested construction exists precisely to prevent it, and it is one function call away.</p>
 </div>
-<pre><code><span class="tok-comment">// ❌ Homemade MAC — vulnerable to length extension</span>
+<pre><code class="language-javascript"><span class="tok-comment">// ❌ Homemade MAC — vulnerable to length extension</span>
 const tag = createHash('sha256').update(BIMAT + duLieu).digest('hex');
 
 <span class="tok-comment">// ✅ HMAC — the construction that fixes it, same cost</span>
@@ -759,7 +759,7 @@ const tag = createHmac('sha256', BIMAT).update(duLieu).digest('hex');
 </div>
 
 <h3>Encryption is a fourth thing, and not a substitute</h3>
-<pre><code><span class="tok-comment">// ❌ Encrypting without authenticating: the ciphertext can be tampered with</span>
+<pre><code class="language-javascript"><span class="tok-comment">// ❌ Encrypting without authenticating: the ciphertext can be tampered with</span>
 const cipher = createCipheriv('aes-256-ctr', key, iv);   <span class="tok-comment">// no tag</span>
 
 <span class="tok-comment">// ✅ AEAD: encrypt AND authenticate in one construction</span>
@@ -807,7 +807,7 @@ const tag = cipher.getAuthTag();       <span class="tok-comment">// ← decrypti
     <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">"Có phải người nắm CÁI khoá riêng NÀY gửi không?"</span><span class="lz-nsub">Khoá riêng TẠO, khoá công KIỂM. Ai cũng xác minh được.</span></div></div>
   </div>
 </div>
-<pre><code>import { createHash, createHmac, generateKeyPairSync, sign, verify } from 'node:crypto';
+<pre><code class="language-javascript">import { createHash, createHmac, generateKeyPairSync, sign, verify } from 'node:crypto';
 
 <span class="tok-comment">// 1. Băm — không khoá, tất định, ai cũng tái tạo lại được</span>
 createHash('sha256').update('xin chao').digest('hex');
@@ -833,7 +833,7 @@ verify(null, Buffer.from('xin chao'), publicKey, signature);</code></pre>
 <div class="pitfall">
 <p><strong>Bẫy — <code>sha256(bimat + tinNhan)</code> là một MAC HỎNG có tên hẳn hoi: tấn công nối dài.</strong> Cấu trúc bên trong của SHA-256 cho phép một kẻ tấn công BIẾT chuỗi băm và biết ĐỘ DÀI của bí mật — mà không cần biết bí mật — tính ra một chuỗi băm HỢP LỆ cho <code>tinNhan + phần đệm + themVao</code>. Thông điệp giả mạo của họ GIỮ NGUYÊN phần payload gốc của bạn và nối thêm phần của họ, mà cái tag vẫn xác minh trót lọt. Chuyện này đã phá những API có thật. Cấu trúc lồng nhau của HMAC tồn tại CHÍNH XÁC để ngăn điều đó, và nó chỉ cách bạn một lời gọi hàm.</p>
 </div>
-<pre><code><span class="tok-comment">// ❌ MAC tự chế — dính tấn công nối dài</span>
+<pre><code class="language-javascript"><span class="tok-comment">// ❌ MAC tự chế — dính tấn công nối dài</span>
 const tag = createHash('sha256').update(BIMAT + duLieu).digest('hex');
 
 <span class="tok-comment">// ✅ HMAC — cấu trúc vá được điều đó, cùng một chi phí</span>
@@ -866,7 +866,7 @@ const tag = createHmac('sha256', BIMAT).update(duLieu).digest('hex');
 </div>
 
 <h3>Mã hoá là thứ THỨ TƯ, và không thay thế được ba cái kia</h3>
-<pre><code><span class="tok-comment">// ❌ Mã hoá mà không xác thực: bản mã bị can thiệp được</span>
+<pre><code class="language-javascript"><span class="tok-comment">// ❌ Mã hoá mà không xác thực: bản mã bị can thiệp được</span>
 const cipher = createCipheriv('aes-256-ctr', key, iv);   <span class="tok-comment">// không có tag</span>
 
 <span class="tok-comment">// ✅ AEAD: mã hoá VÀ xác thực trong cùng một cấu trúc</span>
@@ -928,7 +928,7 @@ const tag = cipher.getAuthTag();       <span class="tok-comment">// ← thiếu 
 </div>
 
 <h3>Logs: the leak that needs no attacker</h3>
-<pre><code><span class="tok-comment">// Four lines that each print a credential, from real codebases</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Four lines that each print a credential, from real codebases</span>
 console.log('req headers:', req.headers);          <span class="tok-comment">// → cookie, authorization</span>
 console.log('login body:', req.body);              <span class="tok-comment">// → the password, in the clear</span>
 logger.error({ err }, 'that bai');                 <span class="tok-comment">// → err.config.headers in axios</span>
@@ -941,7 +941,7 @@ logger.info({ req }, 'request');                   <span class="tok-comment">// 
 # Dong nay gio nam trong: file log tren dia, cong cu gom log,
 # he thong luu tru dai han, ban sao luu cua no, va man hinh
 # cua bat ky ai co permission doc dashboard.</div>
-<pre><code><span class="tok-comment">// The fix: redact at the logger, not at each call site</span>
+<pre><code class="language-javascript"><span class="tok-comment">// The fix: redact at the logger, not at each call site</span>
 import pino from 'pino';
 
 export const logger = pino({
@@ -971,7 +971,7 @@ export const logger = pino({
 </div>
 
 <h3>Git: a committed secret is committed forever</h3>
-<pre><code><span class="tok-comment"># The instinct, and why it does not work</span>
+<pre><code class="language-bash"><span class="tok-comment"># The instinct, and why it does not work</span>
 git rm --cached .env
 git commit -m "xoa .env"</code></pre>
 <div class="out">$ git log --all --oneline -S"sk_live_" -- .env
@@ -1000,7 +1000,7 @@ sk_live_51Nx8QpRt4mZvL0…
 </div>
 
 <h3>Memory, and where env vars are visible</h3>
-<pre><code><span class="tok-comment"># Anything running as the same user can read the process environment</span>
+<pre><code class="language-bash"><span class="tok-comment"># Anything running as the same user can read the process environment</span>
 cat /proc/$(pgrep -f "node dist/index.js")/environ | tr '\\0' '\\n' | grep -i secret</code></pre>
 <div class="out">JWT_SECRET=8f2a91c4e7b3d05a6f8e1029d4b7c3e5
 LLM_GATEWAY_API_KEY=sk-…
@@ -1050,7 +1050,7 @@ DATABASE_URL=postgresql://postgres:…@postgres:5432/cuongthai</div>
 </div>
 
 <h3>Nhật ký: cú rò không cần kẻ tấn công nào</h3>
-<pre><code><span class="tok-comment">// Bốn dòng, mỗi dòng in ra một tín vật, lấy từ kho mã thật</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Bốn dòng, mỗi dòng in ra một tín vật, lấy từ kho mã thật</span>
 console.log('req headers:', req.headers);          <span class="tok-comment">// → cookie, authorization</span>
 console.log('login body:', req.body);              <span class="tok-comment">// → mật khẩu, dạng thô</span>
 logger.error({ err }, 'that bai');                 <span class="tok-comment">// → err.config.headers ở axios</span>
@@ -1063,7 +1063,7 @@ logger.info({ req }, 'request');                   <span class="tok-comment">// 
 # Dong nay gio nam trong: file log tren dia, cong cu gom log,
 # he thong luu tru dai han, ban sao luu cua no, va man hinh
 # cua bat ky ai co permission doc dashboard.</div>
-<pre><code><span class="tok-comment">// Cách vá: che ngay tại LOGGER, đừng che ở từng chỗ gọi</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Cách vá: che ngay tại LOGGER, đừng che ở từng chỗ gọi</span>
 import pino from 'pino';
 
 export const logger = pino({
@@ -1093,7 +1093,7 @@ export const logger = pino({
 </div>
 
 <h3>Git: một bí mật đã commit là đã commit VĨNH VIỄN</h3>
-<pre><code><span class="tok-comment"># Phản xạ đầu tiên, và vì sao nó không ăn thua</span>
+<pre><code class="language-bash"><span class="tok-comment"># Phản xạ đầu tiên, và vì sao nó không ăn thua</span>
 git rm --cached .env
 git commit -m "xoa .env"</code></pre>
 <div class="out">$ git log --all --oneline -S"sk_live_" -- .env
@@ -1122,7 +1122,7 @@ sk_live_51Nx8QpRt4mZvL0…
 </div>
 
 <h3>Bộ nhớ, và chỗ biến môi trường nhìn thấy được</h3>
-<pre><code><span class="tok-comment"># Mọi thứ chạy dưới cùng người dùng đều đọc được môi trường tiến trình</span>
+<pre><code class="language-bash"><span class="tok-comment"># Mọi thứ chạy dưới cùng người dùng đều đọc được môi trường tiến trình</span>
 cat /proc/$(pgrep -f "node dist/index.js")/environ | tr '\\0' '\\n' | grep -i secret</code></pre>
 <div class="out">JWT_SECRET=8f2a91c4e7b3d05a6f8e1029d4b7c3e5
 LLM_GATEWAY_API_KEY=sk-…

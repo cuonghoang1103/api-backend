@@ -72,7 +72,7 @@ export default {
 <li><strong>The two functions, and the division of labour</strong> — <code>putchar(int)</code> takes <em>one character</em> and nothing else: no format, no conversion, no padding. <code>printf(format_string, varList)</code> takes any number of values of any type and renders them under the control of a format string. There is no third option in this deck.</li>
 <li><strong>Note the parameter type of <code>putchar</code></strong> — the slide writes <code>putchar(int)</code>, not <code>putchar(char)</code>. That is deliberate and is explained on the next slide; it is the mirror of <code>getchar</code> returning <code>int</code> so it can also return <code>EOF</code>.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void)
 {
@@ -92,7 +92,7 @@ int main(void)
 <li><strong>Hai hàm và sự phân công</strong> — <code>putchar(int)</code> nhận <em>một ký tự</em> và chỉ thế thôi: không định dạng, không chuyển đổi, không đệm. <code>printf(format_string, varList)</code> nhận bao nhiêu giá trị kiểu gì cũng được và vẽ chúng ra theo điều khiển của chuỗi định dạng. Trong bộ slide này không có lựa chọn thứ ba.</li>
 <li><strong>Để ý kiểu tham số của <code>putchar</code></strong> — slide viết <code>putchar(int)</code> chứ không phải <code>putchar(char)</code>. Đó là cố ý và sẽ được giải thích ở slide sau; nó soi gương với chuyện <code>getchar</code> trả về <code>int</code> để còn trả được <code>EOF</code>.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void)
 {
@@ -114,7 +114,7 @@ int main(void)
 <li><strong>Where you will really use it</strong> — printing a triangle of stars, a progress bar, a separator line, or echoing a file character by character in the <code>while ((c = getchar()) != EOF) putchar(c);</code> loop. Anywhere the output is naturally one character at a time.</li>
 <li><strong>Its hard limit</strong> — one character. It cannot print a number, a string, or anything with width or padding. The moment you need <code>%5d</code>, <code>putchar</code> is out of the picture.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void)
 {
@@ -139,7 +139,7 @@ int main(void)
 <li><strong>Chỗ bạn sẽ dùng nó thật</strong> — in tam giác dấu sao, thanh tiến trình, dòng kẻ ngăn cách, hoặc chép một file ra màn hình từng ký tự bằng vòng <code>while ((c = getchar()) != EOF) putchar(c);</code>. Bất cứ chỗ nào mà đầu ra vốn dĩ đi từng ký tự một.</li>
 <li><strong>Giới hạn cứng của nó</strong> — một ký tự. Nó không in được số, không in được chuỗi, không có độ rộng hay đệm. Hễ bạn cần tới <code>%5d</code> là <code>putchar</code> hết vai trò.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void)
 {
@@ -166,7 +166,7 @@ int main(void)
 <li><strong>Consequence: count your specifiers and your values</strong> — there must be exactly as many values after the format string as there are specifiers inside it (a <code>%%</code> is not a specifier; it consumes nothing). Too few values and <code>printf</code> reads whatever garbage sits next in memory.</li>
 <li><strong>Escape sequences are <em>not</em> specifiers</strong> — <code>\\n</code>, <code>\\t</code>, <code>\\\\</code>, <code>\\"</code> are handled by the <strong>compiler</strong> when it builds the string literal; <code>%d</code> is handled by <code>printf</code> at <strong>run time</strong>. That is why a wrong <code>\\q</code> is a compile-time warning while a wrong <code>%d</code> is only a run-time disaster.</li>
 </ul>
-<pre><code>int k;
+<pre><code class="language-c">int k;
 k = printf("Hello, %d!\\n", 42);   /* prints, then reports the length */
 printf("k = %d\\n", k);
 
@@ -182,7 +182,7 @@ printf("%10d", 7);                 /* padding counts toward the total */</code><
 <li><strong>Hệ quả: hãy đếm specifier và đếm giá trị</strong> — sau chuỗi định dạng phải có đúng bằng ấy giá trị so với số specifier bên trong nó (riêng <code>%%</code> không phải specifier, nó không tiêu thụ đối số nào). Thiếu giá trị thì <code>printf</code> đọc đúng đống rác nằm kế tiếp trong bộ nhớ.</li>
 <li><strong>Escape sequence <em>không phải</em> specifier</strong> — <code>\\n</code>, <code>\\t</code>, <code>\\\\</code>, <code>\\"</code> do <strong>trình biên dịch</strong> xử lý lúc dựng hằng chuỗi; còn <code>%d</code> do <code>printf</code> xử lý lúc <strong>chạy</strong>. Vì thế gõ nhầm <code>\\q</code> thì bị cảnh báo lúc dịch, còn gõ nhầm <code>%d</code> thì chỉ vỡ lúc chạy.</li>
 </ul>
-<pre><code>int k;
+<pre><code class="language-c">int k;
 k = printf("Hello, %d!\\n", 42);   /* in ra, roi bao do dai */
 printf("k = %d\\n", k);
 
@@ -330,7 +330,7 @@ printf("%10d", 7);                 /* phan dem CO tinh vao tong */</code></pre>
 <li><strong>The three formatted doubles</strong> — <code>%10.3lf</code> gives <code>  4321.988</code>; <code>%010.3lf</code> gives <code>004321.988</code>; <code>%-10.3lf</code> gives <code>4321.988  </code>. The rounding to three decimals happens first, then the padding fills the field to 10 columns.</li>
 <li><strong>The character block is the real lesson</strong> — the same value <code>'d'</code> is printed three ways: <code>%c</code> gives <code>d</code>, <code>%d</code> gives <code>100</code>, <code>%o</code> gives <code>144</code>. A <code>char</code> in C <em>is</em> a small integer; the specifier decides whether you see the glyph, its decimal code, or its octal code. Exercise 4 on slide 64 is built entirely on this idea.</li>
 </ul>
-<pre><code>printf("%d|&lt;--        %%d\\n", 4321);
+<pre><code class="language-c">printf("%d|&lt;--        %%d\\n", 4321);
 printf("%10d|&lt;--   %%10d\\n", 4321);
 printf("%010d|&lt;--  %%010d\\n", 4321);
 printf("%-10d|&lt;--  %%-10d\\n", 4321);
@@ -355,7 +355,7 @@ printf("%o|&lt;--  %%o\\n", 'd');</code></pre>
 <li><strong>Ba dòng double có định dạng</strong> — <code>%10.3lf</code> cho <code>  4321.988</code>; <code>%010.3lf</code> cho <code>004321.988</code>; <code>%-10.3lf</code> cho <code>4321.988  </code>. Việc làm tròn về ba số lẻ xảy ra trước, rồi phần đệm mới lấp cho đủ 10 cột.</li>
 <li><strong>Khối ký tự mới là bài học thật</strong> — cùng một giá trị <code>'d'</code> được in ba kiểu: <code>%c</code> cho <code>d</code>, <code>%d</code> cho <code>100</code>, <code>%o</code> cho <code>144</code>. Trong C, một <code>char</code> <em>chính là</em> một số nguyên nhỏ; specifier mới là thứ quyết định bạn thấy hình chữ, thấy mã thập phân hay thấy mã bát phân. Exercise 4 ở slide 64 dựng hoàn toàn trên ý này.</li>
 </ul>
-<pre><code>printf("%d|&lt;--        %%d\\n", 4321);
+<pre><code class="language-c">printf("%d|&lt;--        %%d\\n", 4321);
 printf("%10d|&lt;--   %%10d\\n", 4321);
 printf("%010d|&lt;--  %%010d\\n", 4321);
 printf("%-10d|&lt;--  %%-10d\\n", 4321);
@@ -382,7 +382,7 @@ printf("%o|&lt;--  %%o\\n", 'd');</code></pre>
 <li><strong>"Size=12 including the dot" is the sentence to remember</strong> — the width counts <strong>all</strong> the printed characters: the integer digits, the decimal point, the fraction digits, and the sign. <code>45.230000</code> is 9 characters, so <code>%12.6lf</code> adds 3 spaces in front. Students who assume the width counts only the digits before the point misalign every money column they ever print.</li>
 <li><strong>The <code>scanf</code> line is a lesson of its own</strong> — <code>%lf</code> for the <code>double</code> (compulsory, see slide 60), <code>%ld</code> for the <code>long</code>, and a <code>%c</code> that would swallow the space before <code>A</code> if the format string did not have a blank in front of it. The prompt even tells the user "(use blank)" because the spaces in the format string are what separate the fields.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void)
 {   int n; long lo; char ch; double d;
@@ -402,7 +402,7 @@ int main(void)
 <li><strong>"Size=12 kể cả dấu chấm" là câu phải nhớ</strong> — độ rộng đếm <strong>tất cả</strong> ký tự được in ra: phần nguyên, dấu chấm thập phân, phần lẻ và cả dấu âm. <code>45.230000</code> dài 9 ký tự, nên <code>%12.6lf</code> thêm 3 dấu cách ở trước. Sinh viên nào tưởng độ rộng chỉ đếm phần trước dấu chấm thì mọi cột tiền in ra đều lệch.</li>
 <li><strong>Dòng <code>scanf</code> là một bài học riêng</strong> — <code>%lf</code> cho <code>double</code> (bắt buộc, xem slide 60), <code>%ld</code> cho <code>long</code>, và một <code>%c</code> mà nếu chuỗi định dạng không có dấu cách đứng trước thì nó sẽ nuốt luôn dấu cách trước chữ <code>A</code>. Câu nhắc còn dặn người dùng "(use blank)" vì chính các dấu cách trong chuỗi định dạng là thứ tách các ô ra.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void)
 {   int n; long lo; char ch; double d;
@@ -468,7 +468,7 @@ int main(void)
 <li><strong>Use a lookup array, not a chain of ifs</strong> — <code>int t[13] = {0,31,28,31,30,31,30,31,31,30,31,30,31};</code> indexes directly by month number (index 0 is unused so the numbers line up). Twelve <code>if</code> branches do the same thing with twelve chances to make a typo.</li>
 <li><strong>The menu structure</strong> — a <code>do … while (choice != 3)</code> with a <code>switch</code> inside is the standard shape for every menu exercise in PRF192. Add a <code>default:</code> branch: an exam marker will type <code>9</code> to see whether your program survives it.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int isLeap(int y)
 {
@@ -532,7 +532,7 @@ int main(void)
 <li><strong>Dùng mảng tra cứu, đừng dùng dãy if</strong> — <code>int t[13] = {0,31,28,31,30,31,30,31,31,30,31,30,31};</code> tra thẳng theo số tháng (ô 0 bỏ trống để các số khớp chỉ số). Mười hai nhánh <code>if</code> làm đúng việc đó nhưng cho bạn mười hai cơ hội gõ nhầm.</li>
 <li><strong>Bộ khung của menu</strong> — một <code>do … while (choice != 3)</code> có <code>switch</code> bên trong là dáng chuẩn cho mọi bài menu của PRF192. Nhớ thêm nhánh <code>default:</code>: người chấm thi sẽ gõ <code>9</code> để xem chương trình bạn có sống nổi không.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int isLeap(int y)
 {
@@ -598,7 +598,7 @@ int main(void)
 <li><strong>Precision, honestly</strong> — <code>%.2lf</code> rounds the display only. The stored <code>double</code> still carries its full binary value, so do not add up rounded strings; keep the <code>double</code>s, add them, and round once at the end. Serious money software uses integer cents for this reason.</li>
 <li><strong>Link back with <code>-lm</code></strong> — on macOS and Linux a program that calls <code>sqrt</code> or <code>pow</code> may need <code>cc -Wall prog.c -lm</code>. Forgetting it produces an "undefined symbol" error at link time, not a compile error — a classic five-minute panic in the lab.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;math.h&gt;
 
 void quadratic(void)
@@ -664,7 +664,7 @@ int main(void)
 <li><strong>Nói thật về độ chính xác</strong> — <code>%.2lf</code> chỉ làm tròn phần hiển thị. Biến <code>double</code> vẫn giữ nguyên giá trị nhị phân đầy đủ, nên đừng cộng các chuỗi đã làm tròn; hãy giữ các <code>double</code>, cộng chúng lại, rồi mới làm tròn đúng một lần ở cuối. Phần mềm tài chính nghiêm túc dùng số nguyên đơn vị xu chính vì lý do này.</li>
 <li><strong>Nhớ liên kết với <code>-lm</code></strong> — trên macOS và Linux, chương trình gọi <code>sqrt</code> hay <code>pow</code> có thể cần <code>cc -Wall prog.c -lm</code>. Quên nó thì gặp lỗi "undefined symbol" ở khâu liên kết chứ không phải lỗi biên dịch — một cơn hoảng loạn năm phút rất kinh điển trong phòng lab.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;math.h&gt;
 
 void quadratic(void)

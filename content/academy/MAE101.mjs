@@ -1552,12 +1552,12 @@ diff(sin(x)*x, x);            <span class="tok-comment">/* derivative → sin(x)
 integrate(x^2, x, 0, 2);     <span class="tok-comment">/* → 8/3 */</span>
 determinant(matrix([1,2],[3,4]));  <span class="tok-comment">/* → -2 */</span></pre>
 <h3>Python (NumPy) — matrices &amp; transformations</h3>
-<pre><span class="tok-keyword">import</span> numpy <span class="tok-keyword">as</span> np
+<pre><code class="language-python"><span class="tok-keyword">import</span> numpy <span class="tok-keyword">as</span> np
 A = np.array([[0, -1], [1, 0]])   <span class="tok-comment"># 90° rotation</span>
 v = np.array([1, 0])
 <span class="tok-function">print</span>(A @ v)                       <span class="tok-comment"># → [0 1]</span>
 <span class="tok-function">print</span>(np.linalg.det(A))           <span class="tok-comment"># → 1.0</span>
-<span class="tok-function">print</span>(np.linalg.eig(A))           <span class="tok-comment"># eigenvalues &amp; eigenvectors</span></pre>
+<span class="tok-function">print</span>(np.linalg.eig(A))           <span class="tok-comment"># eigenvalues &amp; eigenvectors</span></code></pre>
 <div class="callout ok">These are the same tools working data scientists and engineers use every day — NumPy is the foundation of essentially all Python machine learning. Doing MAE101&#39;s matrix work in NumPy is a direct preview of your future toolkit.</div>
 <a class="link-card codelab" href="/code-lab/python?ref=%2Fcourses%2Fmathematics-for-engineering%2Flearn&reflabel=MAE101%20%E2%80%94%20Mathematics%20for%20Engineering#module-254" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
@@ -1576,12 +1576,12 @@ diff(sin(x)*x, x);            <span class="tok-comment">/* đạo hàm → sin(x
 integrate(x^2, x, 0, 2);     <span class="tok-comment">/* → 8/3 */</span>
 determinant(matrix([1,2],[3,4]));  <span class="tok-comment">/* → -2 */</span></pre>
 <h3>Python (NumPy) — ma trận &amp; biến đổi</h3>
-<pre><span class="tok-keyword">import</span> numpy <span class="tok-keyword">as</span> np
+<pre><code class="language-python"><span class="tok-keyword">import</span> numpy <span class="tok-keyword">as</span> np
 A = np.array([[0, -1], [1, 0]])   <span class="tok-comment"># xoay 90°</span>
 v = np.array([1, 0])
 <span class="tok-function">print</span>(A @ v)                       <span class="tok-comment"># → [0 1]</span>
 <span class="tok-function">print</span>(np.linalg.det(A))           <span class="tok-comment"># → 1.0</span>
-<span class="tok-function">print</span>(np.linalg.eig(A))           <span class="tok-comment"># giá trị riêng &amp; vector riêng</span></pre>
+<span class="tok-function">print</span>(np.linalg.eig(A))           <span class="tok-comment"># giá trị riêng &amp; vector riêng</span></code></pre>
 <div class="callout ok">Đây đúng là các công cụ mà nhà khoa học dữ liệu và kỹ sư dùng hằng ngày — NumPy là nền của gần như mọi machine learning bằng Python. Làm phần ma trận của MAE101 bằng NumPy là bản xem trước trực tiếp của bộ công cụ tương lai của bạn.</div>
 <a class="link-card codelab" href="/code-lab/python?ref=%2Fcourses%2Fmathematics-for-engineering%2Flearn&reflabel=MAE101%20%E2%80%94%20Mathematics%20for%20Engineering#module-254" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>

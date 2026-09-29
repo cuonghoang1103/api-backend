@@ -166,7 +166,7 @@ const c2 = doc('qtm321-2-1-gates-circuits', '2.1 — Quantum gates & circuits|||
 <p><strong>CNOT</strong> (controlled-NOT) flips the target qubit only when the control is 1. It is how circuits create entanglement.</p>
 <h3>Circuits are unitary &amp; reversible</h3>
 <p>Every gate is a <strong>unitary</strong> operation, so quantum circuits are <strong>reversible</strong> (except measurement). A circuit is read left to right; each wire is a qubit.</p>
-<pre><code># Qiskit: build a Bell state
+<pre><code class="language-python"># Qiskit: build a Bell state
 from qiskit import QuantumCircuit
 
 qc = QuantumCircuit(2)
@@ -188,7 +188,7 @@ qc.measure_all()
 <p><strong>CNOT</strong> (NOT có điều khiển) lật qubit đích chỉ khi qubit điều khiển bằng 1. Đây là cách mạch tạo ra rối lượng tử.</p>
 <h3>Mạch là unitary &amp; thuận nghịch</h3>
 <p>Mọi cổng là phép <strong>unitary</strong>, nên mạch lượng tử <strong>thuận nghịch</strong> (trừ phép đo). Mạch đọc từ trái sang phải; mỗi dây là một qubit.</p>
-<pre><code># Qiskit: dung trang thai Bell
+<pre><code class="language-python"># Qiskit: dung trang thai Bell
 from qiskit import QuantumCircuit
 
 qc = QuantumCircuit(2)
@@ -263,7 +263,7 @@ const c4 = doc('qtm321-4-1-data-encoding', '4.1 — Encoding data into quantum s
 <li><strong>Amplitude encoding</strong> — pack a normalized vector of 2 to the power n numbers into the amplitudes of n qubits. Very compact, but hard to prepare.</li>
 <li><strong>Angle encoding</strong> — feed each feature as a rotation angle "theta". Practical on near-term hardware.</li>
 </ul>
-<pre><code># PennyLane: angle encoding of a feature vector x
+<pre><code class="language-python"># PennyLane: angle encoding of a feature vector x
 import pennylane as qml
 
 def feature_map(x):
@@ -282,7 +282,7 @@ def feature_map(x):
 <li><strong>Amplitude encoding</strong> — nhồi một vector chuẩn hoá gồm 2 mũ n số vào biên độ của n qubit. Rất gọn, nhưng khó chuẩn bị.</li>
 <li><strong>Angle encoding</strong> — đưa mỗi đặc trưng làm góc xoay "theta". Thực tế trên phần cứng ngắn hạn.</li>
 </ul>
-<pre><code># PennyLane: angle encoding cho vector dac trung x
+<pre><code class="language-python"># PennyLane: angle encoding cho vector dac trung x
 import pennylane as qml
 
 def feature_map(x):
@@ -439,7 +439,7 @@ const c8 = doc('qtm321-8-1-tools-nisq', '8.1 — Tools (Qiskit/PennyLane), NISQ 
 <li><strong>Qiskit</strong> (IBM) — circuit-centric; strong access to real IBM Quantum hardware.</li>
 <li><strong>PennyLane</strong> (Xanadu) — differentiable; integrates with PyTorch/TensorFlow, ideal for training QML models.</li>
 </ul>
-<pre><code># PennyLane: a tiny trainable QNode
+<pre><code class="language-python"># PennyLane: a tiny trainable QNode
 import pennylane as qml
 
 dev = qml.device("default.qubit", wires=1)
@@ -466,7 +466,7 @@ def model(x, theta):
 <li><strong>Qiskit</strong> (IBM) — xoay quanh mạch; truy cập tốt phần cứng IBM Quantum thật.</li>
 <li><strong>PennyLane</strong> (Xanadu) — khả vi; tích hợp PyTorch/TensorFlow, lý tưởng để huấn luyện mô hình QML.</li>
 </ul>
-<pre><code># PennyLane: mot QNode nho huan luyen duoc
+<pre><code class="language-python"># PennyLane: mot QNode nho huan luyen duoc
 import pennylane as qml
 
 dev = qml.device("default.qubit", wires=1)

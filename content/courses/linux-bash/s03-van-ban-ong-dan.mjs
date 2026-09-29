@@ -84,7 +84,7 @@ ${slide('lx-03', 3, 'Mỗi tiến trình sinh ra với sẵn 3 “dây”: fd 0,
 
 <h3>Seeing the wires for yourself: /proc/self/fd</h3>
 <p>This is not a metaphor. On Linux every process has a directory <code>/proc/&lt;PID&gt;/fd</code> with one entry per open file descriptor (fd, a small number standing for one open file), and <code>/proc/self</code> is a shortcut meaning "the process that is reading this path". So <code>ls</code> can show you its own wiring — and how the shell rewired it before it started:</p>
-<pre><code>ls -l /proc/self/fd
+<pre><code class="language-bash">ls -l /proc/self/fd
 ls -l /proc/self/fd &gt;out.txt 2&gt;/dev/null; cat out.txt
 ls -l /proc/self/fd | cat</code></pre>
 <div class="out">lrwx------ 1 an an 64 Sep 28 09:22 0 -&gt; /dev/pts/0
@@ -99,7 +99,7 @@ l-wx------ 1 an an 64 Sep 28 09:22 1 -&gt; pipe:[2972559]</div>
 <p>Three runs of the same program, three different wirings, and <code>ls</code> did nothing differently. <code>/dev/pts/0</code> is your terminal window; <code>l-wx</code> means the descriptor is open for writing only; <code>pipe:[2972559]</code> is a kernel pipe identified by that number. The extra <code>3 -&gt; /proc/…/fd</code> line in each listing (cut here as <code>…</code>) is <code>ls</code> reading the directory itself. Recorded in Ubuntu 24.04; macOS has no <code>/proc</code>, but <code>ls -l /dev/fd/</code> shows the same idea.</p>
 
 <h3>Sending stdout to a file</h3>
-<pre><code>ls -l &gt; listing.txt        <span class="tok-comment"># truncate: existing content is destroyed</span>
+<pre><code class="language-bash">ls -l &gt; listing.txt        <span class="tok-comment"># truncate: existing content is destroyed</span>
 date &gt;&gt; listing.txt        <span class="tok-comment"># append: add to the end</span>
 echo "start" &gt; run.log     <span class="tok-comment"># the usual way to begin a fresh log</span></code></pre>
 <div class="callout warn"><code>&gt;</code> truncates the target to zero bytes <strong>before the command runs</strong>, and it does so even if the command then fails or does not exist. <code>badcommand &gt; important.txt</code> leaves you with an empty <code>important.txt</code> and a "command not found". The file was emptied by the shell, not by the command.</div>
@@ -110,7 +110,7 @@ ${slide('lx-03', 4, '> làm rỗng file TRƯỚC khi lệnh chạy — sort f > 
 <div class="out">$ wc -l names.txt
 0 names.txt</div>
 <p>The file is now empty, and this catches experienced people. The reason is the ordering above: the shell sets up every redirection <em>first</em>, which truncates <code>names.txt</code> to zero bytes, and only <em>then</em> starts <code>sort</code> — which dutifully reads an empty file and writes nothing. Use a temporary file, or a tool with an explicit in-place flag:</p>
-<pre><code>sort names.txt &gt; names.sorted &amp;&amp; mv names.sorted names.txt
+<pre><code class="language-bash">sort names.txt &gt; names.sorted &amp;&amp; mv names.sorted names.txt
 sort -o names.txt names.txt      <span class="tok-comment"># sort's own -o handles this correctly</span>
 sed -i 's/a/b/' file.txt         <span class="tok-comment"># sed -i edits in place</span>
 sort names.txt | sponge names.txt <span class="tok-comment"># from moreutils: absorbs ALL input, then writes the file</span></code></pre>
@@ -118,7 +118,7 @@ sort names.txt | sponge names.txt <span class="tok-comment"># from moreutils: ab
 
 <h3>Redirecting stderr, and why order matters</h3>
 ${slide('lx-03', 5, '2>&1 chép địa chỉ fd 1 ngay lúc đó — thứ tự quyết định')}
-<pre><code>find / -name "*.conf" 2&gt; errors.txt      <span class="tok-comment"># errors to a file, results to screen</span>
+<pre><code class="language-bash">find / -name "*.conf" 2&gt; errors.txt      <span class="tok-comment"># errors to a file, results to screen</span>
 find / -name "*.conf" 2&gt; /dev/null       <span class="tok-comment"># discard the permission-denied noise</span>
 make &gt; build.log 2&gt;&amp;1                    <span class="tok-comment"># BOTH into one file</span>
 make &amp;&gt; build.log                        <span class="tok-comment"># bash shorthand for the same thing</span></code></pre>
@@ -129,7 +129,7 @@ make &amp;&gt; build.log                        <span class="tok-comment"># bash
 </div>
 <div class="callout ok">Both commands run, neither warns, and the difference only shows up when something fails — usually in CI, at the exact moment you needed the error message. Rule: <strong><code>2&gt;&amp;1</code> goes last.</strong> Or sidestep it entirely with <code>&amp;&gt;</code>, which cannot be written in the wrong order.</div>
 <p>Here is the difference on a real command that writes to both streams — <code>ls</code> of one file that exists and one that does not:</p>
-<pre><code>ls /etc/hostname /nope &gt; a.log 2&gt;&amp;1
+<pre><code class="language-bash">ls /etc/hostname /nope &gt; a.log 2&gt;&amp;1
 cat a.log
 ls /etc/hostname /nope 2&gt;&amp;1 &gt; b.log
 cat b.log</code></pre>
@@ -163,7 +163,7 @@ wc -l &lt; access.log            <span class="tok-comment"># prints only a numbe
 
 <h3>Heredocs: multi-line input inline</h3>
 ${slide('lx-03', 6, 'Heredoc: nháy quanh EOF quyết định có khai triển — và sudo không nâng quyền cho >')}
-<pre><code>cat &lt;&lt;EOF &gt; config.yml
+<pre><code class="language-bash">cat &lt;&lt;EOF &gt; config.yml
 host: localhost
 port: \${PORT}
 EOF</code></pre>
@@ -173,7 +173,7 @@ EOF</code></pre>
   <div class="kv"><span class="k"><code>&lt;&lt;'EOF'</code></span><span class="v">Quoted delimiter: nothing is expanded, the text is passed through byte for byte. Use for scripts, JSON, anything containing a <code>\$</code>.</span></div>
   <div class="kv"><span class="k"><code>&lt;&lt;-EOF</code></span><span class="v">Strips leading TAB characters (not spaces), so the heredoc can be indented inside a function.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Writing a script from a script — MUST be quoted, or \$1 expands now</span>
+<pre><code class="language-bash"><span class="tok-comment"># Writing a script from a script — MUST be quoted, or \$1 expands now</span>
 cat &lt;&lt;'EOF' &gt; deploy.sh
 #!/usr/bin/env bash
 echo "deploying \$1"
@@ -184,20 +184,20 @@ grep -c ERROR &lt;&lt;&lt; "\$log_text"</code></pre>
 <div class="callout">Heredocs are how you write a config file, an SQL statement or a remote command block inside a script without a separate file and without fighting quotes. <code>ssh vps 'bash -s' &lt;&lt;'EOF'</code> sends a whole script to a remote machine to execute — Chapter 9 uses this.</div>
 
 <h3>tee: write to a file AND keep going</h3>
-<pre><code>make 2&gt;&amp;1 | tee build.log              <span class="tok-comment"># watch it live, and keep a copy</span>
+<pre><code class="language-bash">make 2&gt;&amp;1 | tee build.log              <span class="tok-comment"># watch it live, and keep a copy</span>
 make 2&gt;&amp;1 | tee -a build.log           <span class="tok-comment"># -a appends instead of truncating</span>
 echo 'net.ipv4.ip_forward=1' | sudo tee -a /etc/sysctl.conf</code></pre>
 <div class="callout ok">That third line solves a problem people hit constantly: <code>sudo echo x &gt;&gt; /etc/file</code> fails with "Permission denied", because <code>sudo</code> elevates <code>echo</code> but the <em>redirection</em> is performed by your unprivileged shell. <code>tee</code> is a program, so <code>sudo</code> can elevate it, and it does the writing. This is the standard fix.</div>
 
 <h3>Beyond 0, 1 and 2</h3>
 <p>File descriptors are just small integers. You can open your own:</p>
-<pre><code>exec 3&gt; audit.log            <span class="tok-comment"># open fd 3 pointing at a file</span>
+<pre><code class="language-bash">exec 3&gt; audit.log            <span class="tok-comment"># open fd 3 pointing at a file</span>
 echo "step 1 done" &gt;&amp;3       <span class="tok-comment"># write to it, without touching stdout</span>
 exec 3&gt;&amp;-                    <span class="tok-comment"># close it</span></code></pre>
 <p>This is how a script keeps a structured audit trail separate from its human-readable output — the log survives even when stdout is piped elsewhere. You will not need it often, but when you do, nothing else does the job.</p>
 
 <h3>noclobber: a seatbelt for &gt;</h3>
-<pre><code>set -o noclobber
+<pre><code class="language-bash">set -o noclobber
 echo hi &gt; existing.txt</code></pre>
 <div class="out">bash: existing.txt: cannot overwrite existing file</div>
 <p>With <code>noclobber</code> set, <code>&gt;</code> refuses to truncate a file that already exists; <code>&gt;|</code> forces it when you really mean to. Some people put this in their <code>~/.bashrc</code> permanently. It is a reasonable trade: it costs one extra character on the rare intentional overwrite, and it prevents the accidental one.</p>
@@ -222,7 +222,7 @@ echo hi &gt; existing.txt</code></pre>
 
 <h3>Try it step by step</h3>
 <p>Nine commands, in order, in the course sandbox. Type them rather than pasting, and say the output out loud before you press Enter.</p>
-<pre><code>mkdir -p ~/thu-linux/ch3 &amp;&amp; cd ~/thu-linux/ch3
+<pre><code class="language-bash">mkdir -p ~/thu-linux/ch3 &amp;&amp; cd ~/thu-linux/ch3
 printf 'chuoi\\nan\\nbinh\\n' &gt; names.txt
 sort names.txt &gt; names.txt; wc -l names.txt
 printf 'chuoi\\nan\\nbinh\\n' &gt; names.txt
@@ -255,7 +255,7 @@ bash: a.log: cannot overwrite existing file
 <h3>🧪 Practice (15–20 min)</h3>
 <div class="callout ok"><p><strong>Scenario:</strong> your SWP391 team's CI log shows "build done" but nobody can find the warning that the compiler definitely printed. Reproduce the problem with a fake build script, then capture the output properly.</p><ol>
 <li>Make the fake build (the quoted <code>'EOF'</code> keeps the script exactly as written):
-<pre><code>mkdir -p ~/thu-linux/ch3/bt31 &amp;&amp; cd ~/thu-linux/ch3/bt31
+<pre><code class="language-bash">mkdir -p ~/thu-linux/ch3/bt31 &amp;&amp; cd ~/thu-linux/ch3/bt31
 cat &lt;&lt;'EOF' &gt; build.sh
 #!/usr/bin/env bash
 echo "compile ok"
@@ -334,7 +334,7 @@ ${slide('lx-03', 3, 'Mỗi tiến trình sinh ra với sẵn 3 “dây”: fd 0,
 
 <h3>Tận mắt nhìn các dây: /proc/self/fd</h3>
 <p>Đây không phải phép ẩn dụ. Trên Linux, mỗi tiến trình có một thư mục <code>/proc/&lt;PID&gt;/fd</code> với mỗi mục là một bộ mô tả file (file descriptor — fd, một con số nhỏ đại diện cho một file đang mở), và <code>/proc/self</code> là lối tắt nghĩa là "chính tiến trình đang đọc đường dẫn này". Vậy nên <code>ls</code> tự cho bạn xem được dây nối của chính nó — và cách shell đã đấu lại dây trước khi nó chạy:</p>
-<pre><code>ls -l /proc/self/fd
+<pre><code class="language-bash">ls -l /proc/self/fd
 ls -l /proc/self/fd &gt;out.txt 2&gt;/dev/null; cat out.txt
 ls -l /proc/self/fd | cat</code></pre>
 <div class="out">lrwx------ 1 an an 64 Sep 28 09:22 0 -&gt; /dev/pts/0
@@ -349,7 +349,7 @@ l-wx------ 1 an an 64 Sep 28 09:22 1 -&gt; pipe:[2972559]</div>
 <p>Ba lần chạy cùng một chương trình, ba kiểu đấu dây khác nhau, và <code>ls</code> không hề làm gì khác đi. <code>/dev/pts/0</code> là cửa sổ terminal của bạn; <code>l-wx</code> nghĩa là bộ mô tả chỉ mở để GHI; <code>pipe:[2972559]</code> là một ống dẫn của nhân mang con số định danh đó. Dòng <code>3 -&gt; /proc/…/fd</code> thừa ra ở mỗi lần (đã cắt thành <code>…</code>) là chính <code>ls</code> đang đọc thư mục. Ghi trên Ubuntu 24.04; macOS không có <code>/proc</code>, nhưng <code>ls -l /dev/fd/</code> cho thấy cùng ý tưởng.</p>
 
 <h3>Đưa stdout vào một file</h3>
-<pre><code>ls -l &gt; listing.txt        <span class="tok-comment"># cắt trắng: nội dung cũ bị huỷ</span>
+<pre><code class="language-bash">ls -l &gt; listing.txt        <span class="tok-comment"># cắt trắng: nội dung cũ bị huỷ</span>
 date &gt;&gt; listing.txt        <span class="tok-comment"># nối thêm: ghi vào cuối</span>
 echo "start" &gt; run.log     <span class="tok-comment"># cách thường dùng để mở một log mới</span></code></pre>
 <div class="callout warn"><code>&gt;</code> cắt file đích về 0 byte <strong>TRƯỚC KHI lệnh chạy</strong>, và nó làm vậy kể cả khi lệnh sau đó thất bại hoặc không hề tồn tại. <code>badcommand &gt; important.txt</code> để lại cho bạn một <code>important.txt</code> rỗng cùng dòng "command not found". File bị làm rỗng bởi SHELL, không phải bởi lệnh.</div>
@@ -360,7 +360,7 @@ ${slide('lx-03', 4, '> làm rỗng file TRƯỚC khi lệnh chạy — sort f > 
 <div class="out">$ wc -l names.txt
 0 names.txt</div>
 <p>File giờ rỗng, và chuyện này bẫy cả người có kinh nghiệm. Lý do chính là thứ tự vừa nói ở trên: shell dựng mọi chuyển hướng <em>TRƯỚC</em>, tức là cắt <code>names.txt</code> về 0 byte, rồi <em>SAU ĐÓ</em> mới khởi động <code>sort</code> — và <code>sort</code> ngoan ngoãn đọc một file rỗng rồi ghi ra không gì cả. Hãy dùng file tạm, hoặc một công cụ có cờ sửa tại chỗ tường minh:</p>
-<pre><code>sort names.txt &gt; names.sorted &amp;&amp; mv names.sorted names.txt
+<pre><code class="language-bash">sort names.txt &gt; names.sorted &amp;&amp; mv names.sorted names.txt
 sort -o names.txt names.txt      <span class="tok-comment"># cờ -o của chính sort xử lý đúng chuyện này</span>
 sed -i 's/a/b/' file.txt         <span class="tok-comment"># sed -i sửa tại chỗ</span>
 sort names.txt | sponge names.txt <span class="tok-comment"># của moreutils: hút HẾT đầu vào rồi mới ghi file</span></code></pre>
@@ -368,7 +368,7 @@ sort names.txt | sponge names.txt <span class="tok-comment"># của moreutils: h
 
 <h3>Chuyển hướng stderr, và vì sao thứ tự quyết định</h3>
 ${slide('lx-03', 5, '2>&1 chép địa chỉ fd 1 ngay lúc đó — thứ tự quyết định')}
-<pre><code>find / -name "*.conf" 2&gt; errors.txt      <span class="tok-comment"># lỗi vào file, kết quả ra màn hình</span>
+<pre><code class="language-bash">find / -name "*.conf" 2&gt; errors.txt      <span class="tok-comment"># lỗi vào file, kết quả ra màn hình</span>
 find / -name "*.conf" 2&gt; /dev/null       <span class="tok-comment"># vứt bỏ đám nhiễu permission-denied</span>
 make &gt; build.log 2&gt;&amp;1                    <span class="tok-comment"># CẢ HAI vào chung một file</span>
 make &amp;&gt; build.log                        <span class="tok-comment"># cách viết tắt của bash cho đúng việc đó</span></code></pre>
@@ -379,7 +379,7 @@ make &amp;&gt; build.log                        <span class="tok-comment"># các
 </div>
 <div class="callout ok">Cả hai lệnh đều chạy, chẳng lệnh nào cảnh báo, và khác biệt chỉ lộ ra khi có gì đó hỏng — thường là trong CI, đúng vào lúc bạn cần thông báo lỗi nhất. Quy tắc: <strong><code>2&gt;&amp;1</code> đứng CUỐI CÙNG.</strong> Hoặc tránh hẳn bằng <code>&amp;&gt;</code>, thứ không thể viết sai thứ tự được.</div>
 <p>Đây là khác biệt đó trên một lệnh thật ghi ra cả hai dòng — <code>ls</code> một file có thật và một file không tồn tại:</p>
-<pre><code>ls /etc/hostname /nope &gt; a.log 2&gt;&amp;1
+<pre><code class="language-bash">ls /etc/hostname /nope &gt; a.log 2&gt;&amp;1
 cat a.log
 ls /etc/hostname /nope 2&gt;&amp;1 &gt; b.log
 cat b.log</code></pre>
@@ -413,7 +413,7 @@ wc -l &lt; access.log            <span class="tok-comment"># chỉ in con số, 
 
 <h3>Heredoc: đầu vào nhiều dòng viết ngay tại chỗ</h3>
 ${slide('lx-03', 6, 'Heredoc: nháy quanh EOF quyết định có khai triển — và sudo không nâng quyền cho >')}
-<pre><code>cat &lt;&lt;EOF &gt; config.yml
+<pre><code class="language-bash">cat &lt;&lt;EOF &gt; config.yml
 host: localhost
 port: \${PORT}
 EOF</code></pre>
@@ -423,7 +423,7 @@ EOF</code></pre>
   <div class="kv"><span class="k"><code>&lt;&lt;'EOF'</code></span><span class="v">Dấu kết thúc đặt trong nháy: KHÔNG khai triển gì cả, văn bản đi qua nguyên từng byte. Dùng cho script, JSON, mọi thứ có chứa <code>\$</code>.</span></div>
   <div class="kv"><span class="k"><code>&lt;&lt;-EOF</code></span><span class="v">Cắt các ký tự TAB đứng đầu (không cắt dấu cách), để heredoc thụt vào được bên trong một hàm.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Viết một script từ trong một script — BẮT BUỘC đặt nháy, không thì \$1 khai triển ngay bây giờ</span>
+<pre><code class="language-bash"><span class="tok-comment"># Viết một script từ trong một script — BẮT BUỘC đặt nháy, không thì \$1 khai triển ngay bây giờ</span>
 cat &lt;&lt;'EOF' &gt; deploy.sh
 #!/usr/bin/env bash
 echo "đang deploy \$1"
@@ -434,20 +434,20 @@ grep -c ERROR &lt;&lt;&lt; "\$log_text"</code></pre>
 <div class="callout">Heredoc là cách bạn viết một file cấu hình, một câu lệnh SQL hay một khối lệnh chạy từ xa ngay bên trong script mà không cần file riêng và không phải vật lộn với dấu nháy. <code>ssh vps 'bash -s' &lt;&lt;'EOF'</code> gửi nguyên một script sang máy từ xa để chạy — Chương 9 dùng đúng cách này.</div>
 
 <h3>tee: vừa ghi ra file VỪA chảy tiếp</h3>
-<pre><code>make 2&gt;&amp;1 | tee build.log              <span class="tok-comment"># xem trực tiếp, và giữ lại một bản</span>
+<pre><code class="language-bash">make 2&gt;&amp;1 | tee build.log              <span class="tok-comment"># xem trực tiếp, và giữ lại một bản</span>
 make 2&gt;&amp;1 | tee -a build.log           <span class="tok-comment"># -a nối thêm thay vì cắt trắng</span>
 echo 'net.ipv4.ip_forward=1' | sudo tee -a /etc/sysctl.conf</code></pre>
 <div class="callout ok">Dòng thứ ba giải quyết một vấn đề người ta gặp suốt: <code>sudo echo x &gt;&gt; /etc/file</code> thất bại với "Permission denied", vì <code>sudo</code> nâng quyền cho <code>echo</code> nhưng CHÍNH VIỆC CHUYỂN HƯỚNG lại do shell không có quyền của bạn thực hiện. <code>tee</code> là một CHƯƠNG TRÌNH, nên <code>sudo</code> nâng quyền được cho nó, và nó mới là thứ đi ghi file. Đây là cách sửa chuẩn.</div>
 
 <h3>Vượt ra ngoài 0, 1 và 2</h3>
 <p>Bộ mô tả file chỉ là những số nguyên nhỏ. Bạn tự mở thêm được:</p>
-<pre><code>exec 3&gt; audit.log            <span class="tok-comment"># mở fd 3 trỏ vào một file</span>
+<pre><code class="language-bash">exec 3&gt; audit.log            <span class="tok-comment"># mở fd 3 trỏ vào một file</span>
 echo "xong bước 1" &gt;&amp;3       <span class="tok-comment"># ghi vào đó mà không đụng tới stdout</span>
 exec 3&gt;&amp;-                    <span class="tok-comment"># đóng nó lại</span></code></pre>
 <p>Đây là cách một script giữ một vệt kiểm toán có cấu trúc tách khỏi phần output cho người đọc — vệt log đó sống sót ngay cả khi stdout bị đưa qua ống đi chỗ khác. Bạn sẽ không cần nó thường xuyên, nhưng khi cần thì không có thứ gì khác làm thay được.</p>
 
 <h3>noclobber: dây an toàn cho dấu &gt;</h3>
-<pre><code>set -o noclobber
+<pre><code class="language-bash">set -o noclobber
 echo hi &gt; existing.txt</code></pre>
 <div class="out">bash: existing.txt: cannot overwrite existing file</div>
 <p>Khi bật <code>noclobber</code>, <code>&gt;</code> từ chối cắt trắng một file đã tồn tại; còn <code>&gt;|</code> ép nó làm khi bạn thật sự muốn thế. Có người đặt hẳn dòng này vào <code>~/.bashrc</code> vĩnh viễn. Đó là một đánh đổi hợp lý: tốn thêm đúng một ký tự cho những lần ghi đè CÓ CHỦ Ý hiếm hoi, và ngăn được lần ghi đè do vô ý.</p>
@@ -472,7 +472,7 @@ echo hi &gt; existing.txt</code></pre>
 
 <h3>Chạy thử từng bước</h3>
 <p>Chín lệnh, theo đúng thứ tự, trong sân tập của khoá. Hãy gõ chứ đừng dán, và nói to output ra trước khi nhấn Enter.</p>
-<pre><code>mkdir -p ~/thu-linux/ch3 &amp;&amp; cd ~/thu-linux/ch3
+<pre><code class="language-bash">mkdir -p ~/thu-linux/ch3 &amp;&amp; cd ~/thu-linux/ch3
 printf 'chuoi\\nan\\nbinh\\n' &gt; names.txt
 sort names.txt &gt; names.txt; wc -l names.txt
 printf 'chuoi\\nan\\nbinh\\n' &gt; names.txt
@@ -505,7 +505,7 @@ bash: a.log: cannot overwrite existing file
 <h3>🧪 Thực hành (15–20 phút)</h3>
 <div class="callout ok"><p><strong>Tình huống:</strong> log CI của nhóm SWP391 ghi "build done" nhưng không ai tìm thấy dòng cảnh báo mà trình biên dịch chắc chắn đã in ra. Hãy dựng lại vấn đề bằng một script build giả, rồi hứng output cho đúng.</p><ol>
 <li>Tạo bản build giả (dấu nháy quanh <code>'EOF'</code> giữ script nguyên như lúc viết):
-<pre><code>mkdir -p ~/thu-linux/ch3/bt31 &amp;&amp; cd ~/thu-linux/ch3/bt31
+<pre><code class="language-bash">mkdir -p ~/thu-linux/ch3/bt31 &amp;&amp; cd ~/thu-linux/ch3/bt31
 cat &lt;&lt;'EOF' &gt; build.sh
 #!/usr/bin/env bash
 echo "compile ok"
@@ -615,7 +615,7 @@ ${slide('lx-03', 8, 'Chuỗi ống chỉ báo mã của khâu CUỐI — pipefai
 echo \$?</code></pre>
 <div class="out">0</div>
 <p>By default a pipeline reports only the <strong>last</strong> command's exit status. The failure of <code>false</code> vanishes. In a script that checks errors, this means a broken first stage passes silently:</p>
-<pre><code><span class="tok-comment"># Looks safe. Is not. curl can 404 and this still "succeeds".</span>
+<pre><code class="language-bash"><span class="tok-comment"># Looks safe. Is not. curl can 404 and this still "succeeds".</span>
 curl -s https://api.example.com/data | jq '.items' &gt; out.json
 
 set -o pipefail          <span class="tok-comment"># now the pipeline fails if ANY stage fails</span>
@@ -624,7 +624,7 @@ echo \$?</code></pre>
 <div class="out">22</div>
 <p>Two details make this work, and both were checked on Ubuntu 24.04. First, the <code>-f</code>: plain <code>curl -s</code> exits <strong>0</strong> on an HTTP 404 — it successfully fetched a page, the page just said "not found" — so even <code>pipefail</code> has nothing to catch. <code>curl -f</code> turns any HTTP status of 400 or more into exit code 22. Second, <code>jq</code> given empty input also exits 0, so without <code>pipefail</code> the whole line reports success. (A host name that does not resolve at all makes curl exit 6 instead.)</p>
 <p>Or inspect every stage individually — bash keeps them in an array:</p>
-<pre><code>curl -s bad-url | jq '.' | wc -l
+<pre><code class="language-bash">curl -s bad-url | jq '.' | wc -l
 echo "\${PIPESTATUS[@]}"</code></pre>
 <div class="out">6 0 0</div>
 <p>Read it left to right: <code>curl</code> exited 6 (could not resolve the host <code>bad-url</code>), <code>jq</code> exited 0 because an empty input is not an error to it, and <code>wc -l</code> exited 0 after printing <code>0</code>. Only the first number tells the truth.</p>
@@ -660,7 +660,7 @@ second 3: ERROR 2</div>
 
 <h3>The subshell trap</h3>
 ${slide('lx-03', 10, 'Khâu ống chạy trong shell con — biến của while biến mất')}
-<pre><code>count=0
+<pre><code class="language-bash">count=0
 cat access.log | while read -r line; do
   count=\$((count + 1))
 done
@@ -688,7 +688,7 @@ tee &gt;(gzip &gt; log.gz) &gt; log.txt           <span class="tok-comment"># wr
 <h3>xargs: turning input into arguments</h3>
 ${slide('lx-03', 11, 'xargs biến từng dòng thành THAM SỐ cho lệnh không đọc stdin')}
 <p>Pipes connect stdout to <em>stdin</em>. But many commands — <code>rm</code>, <code>mkdir</code>, <code>git add</code> — take filenames as <em>arguments</em>, not on stdin. <code>xargs</code> is the adapter between the two:</p>
-<pre><code>find . -name "*.tmp" -print0 | xargs -0 rm          <span class="tok-comment"># NUL-safe (Lesson 2.3)</span>
+<pre><code class="language-bash">find . -name "*.tmp" -print0 | xargs -0 rm          <span class="tok-comment"># NUL-safe (Lesson 2.3)</span>
 cat urls.txt | xargs -n1 curl -sO                   <span class="tok-comment"># -n1: one argument per invocation</span>
 cat urls.txt | xargs -P 8 -n1 curl -sO              <span class="tok-comment"># -P 8: EIGHT at a time, in parallel</span>
 ls *.jpg | xargs -I{} convert {} {}.webp            <span class="tok-comment"># -I{}: placeholder anywhere in the command</span>
@@ -701,7 +701,7 @@ find . -name "*.log" | xargs -r gzip                <span class="tok-comment"># 
 </div>
 
 <h3>Reading a real pipeline</h3>
-<pre><code>awk '{print \$1}' access.log | sort | uniq -c | sort -rn | head -10</code></pre>
+<pre><code class="language-bash">awk '{print \$1}' access.log | sort | uniq -c | sort -rn | head -10</code></pre>
 <div class="out">  4821 203.0.113.45
   1109 198.51.100.7
    847 192.0.2.19
@@ -731,7 +731,7 @@ find . -name "*.log" | xargs -r gzip                <span class="tok-comment"># 
 
 <h3>Try it step by step</h3>
 <p>Ten commands in <code>~/thu-linux/ch3</code>. Each one demonstrates one idea from this lesson; predict before you run.</p>
-<pre><code>cd ~/thu-linux/ch3
+<pre><code class="language-bash">cd ~/thu-linux/ch3
 yes | head -3; echo "\${PIPESTATUS[@]}"
 false | true; echo \$?
 set -o pipefail; false | true; echo \$?; set +o pipefail
@@ -868,7 +868,7 @@ ${slide('lx-03', 8, 'Chuỗi ống chỉ báo mã của khâu CUỐI — pipefai
 echo \$?</code></pre>
 <div class="out">0</div>
 <p>Mặc định, một chuỗi ống chỉ báo cáo mã thoát của lệnh <strong>CUỐI CÙNG</strong>. Thất bại của <code>false</code> biến mất. Trong một script có kiểm lỗi, điều này nghĩa là một khâu đầu tiên bị hỏng vẫn lọt qua trong im lặng:</p>
-<pre><code><span class="tok-comment"># Trông có vẻ an toàn. Không hề. curl có thể 404 mà cái này vẫn "thành công".</span>
+<pre><code class="language-bash"><span class="tok-comment"># Trông có vẻ an toàn. Không hề. curl có thể 404 mà cái này vẫn "thành công".</span>
 curl -s https://api.example.com/data | jq '.items' &gt; out.json
 
 set -o pipefail          <span class="tok-comment"># giờ chuỗi ống thất bại nếu BẤT KỲ khâu nào thất bại</span>
@@ -877,7 +877,7 @@ echo \$?</code></pre>
 <div class="out">22</div>
 <p>Có hai chi tiết làm việc này chạy được, và cả hai đều đã kiểm trên Ubuntu 24.04. Thứ nhất là chữ <code>-f</code>: <code>curl -s</code> trơn thoát với mã <strong>0</strong> khi gặp HTTP 404 — nó đã lấy về một trang thành công, chỉ là trang đó nói "không tìm thấy" — nên kể cả <code>pipefail</code> cũng chẳng có gì để bắt. <code>curl -f</code> biến mọi mã HTTP từ 400 trở lên thành mã thoát 22. Thứ hai, <code>jq</code> nhận đầu vào rỗng cũng thoát 0, nên thiếu <code>pipefail</code> thì cả dòng báo thành công. (Một tên máy không phân giải được thì curl thoát mã 6.)</p>
 <p>Hoặc soi từng khâu một — bash giữ chúng trong một mảng:</p>
-<pre><code>curl -s bad-url | jq '.' | wc -l
+<pre><code class="language-bash">curl -s bad-url | jq '.' | wc -l
 echo "\${PIPESTATUS[@]}"</code></pre>
 <div class="out">6 0 0</div>
 <p>Đọc từ trái sang phải: <code>curl</code> thoát 6 (không phân giải được tên máy <code>bad-url</code>), <code>jq</code> thoát 0 vì với nó đầu vào rỗng không phải lỗi, và <code>wc -l</code> thoát 0 sau khi in <code>0</code>. Chỉ con số đầu tiên nói thật.</p>
@@ -913,7 +913,7 @@ giây 3: ERROR 2</div>
 
 <h3>Cái bẫy shell con</h3>
 ${slide('lx-03', 10, 'Khâu ống chạy trong shell con — biến của while biến mất')}
-<pre><code>count=0
+<pre><code class="language-bash">count=0
 cat access.log | while read -r line; do
   count=\$((count + 1))
 done
@@ -941,7 +941,7 @@ tee &gt;(gzip &gt; log.gz) &gt; log.txt           <span class="tok-comment"># gh
 <h3>xargs: biến đầu vào thành tham số</h3>
 ${slide('lx-03', 11, 'xargs biến từng dòng thành THAM SỐ cho lệnh không đọc stdin')}
 <p>Ống dẫn nối stdout với <em>STDIN</em>. Nhưng nhiều lệnh — <code>rm</code>, <code>mkdir</code>, <code>git add</code> — lại nhận tên file dưới dạng <em>THAM SỐ</em>, chứ không đọc từ stdin. <code>xargs</code> chính là bộ chuyển đổi giữa hai thứ đó:</p>
-<pre><code>find . -name "*.tmp" -print0 | xargs -0 rm          <span class="tok-comment"># an toàn với NUL (Bài 2.3)</span>
+<pre><code class="language-bash">find . -name "*.tmp" -print0 | xargs -0 rm          <span class="tok-comment"># an toàn với NUL (Bài 2.3)</span>
 cat urls.txt | xargs -n1 curl -sO                   <span class="tok-comment"># -n1: mỗi lượt gọi một tham số</span>
 cat urls.txt | xargs -P 8 -n1 curl -sO              <span class="tok-comment"># -P 8: TÁM lượt cùng lúc, song song</span>
 ls *.jpg | xargs -I{} convert {} {}.webp            <span class="tok-comment"># -I{}: chỗ trống đặt ở bất cứ đâu trong lệnh</span>
@@ -954,7 +954,7 @@ find . -name "*.log" | xargs -r gzip                <span class="tok-comment"># 
 </div>
 
 <h3>Đọc một chuỗi ống thật</h3>
-<pre><code>awk '{print \$1}' access.log | sort | uniq -c | sort -rn | head -10</code></pre>
+<pre><code class="language-bash">awk '{print \$1}' access.log | sort | uniq -c | sort -rn | head -10</code></pre>
 <div class="out">  4821 203.0.113.45
   1109 198.51.100.7
    847 192.0.2.19
@@ -984,7 +984,7 @@ find . -name "*.log" | xargs -r gzip                <span class="tok-comment"># 
 
 <h3>Chạy thử từng bước</h3>
 <p>Mười lệnh trong <code>~/thu-linux/ch3</code>. Mỗi lệnh minh hoạ đúng một ý của bài; đoán trước rồi mới chạy.</p>
-<pre><code>cd ~/thu-linux/ch3
+<pre><code class="language-bash">cd ~/thu-linux/ch3
 yes | head -3; echo "\${PIPESTATUS[@]}"
 false | true; echo \$?
 set -o pipefail; false | true; echo \$?; set +o pipefail
@@ -1094,7 +1094,7 @@ ${slide('lx-03', 12, 'Ba phương ngữ regex: cùng một ý, khác số dấu 
   <div class="lz-layer"><span class="lz-lname">PCRE — Perl-compatible</span><span class="lz-lnote"><code>grep -P</code>. Adds <code>\\d</code>, <code>\\w</code>, <code>\\s</code>, non-greedy <code>*?</code>, lookahead <code>(?=…)</code>. Not on every system (macOS's grep lacks it), but on Linux it is there.</span></div>
 </div>
 
-<pre><code>grep    "colou\\?r" notes.txt      <span class="tok-comment"># BRE: ? must be escaped to mean "optional"</span>
+<pre><code class="language-bash">grep    "colou\\?r" notes.txt      <span class="tok-comment"># BRE: ? must be escaped to mean "optional"</span>
 grep -E "colou?r"   notes.txt      <span class="tok-comment"># ERE: reads like every other language</span>
 grep -P "\\d{3}-\\d{4}"  notes.txt   <span class="tok-comment"># PCRE: \\d works, {3} works</span>
 grep -F "1.2.3"     notes.txt      <span class="tok-comment"># FIXED string: no regex at all, dots are dots</span></code></pre>
@@ -1115,7 +1115,7 @@ ${slide('lx-03', 13, 'Đọc một regex từ trái sang phải: mỗi mảnh m�
 
 <h3>The flags worth memorising</h3>
 ${slide('lx-03', 14, 'grep trả mã 0 · 1 · 2 — và các cờ dùng hằng ngày')}
-<pre><code>grep -i error app.log            <span class="tok-comment"># case-insensitive</span>
+<pre><code class="language-bash">grep -i error app.log            <span class="tok-comment"># case-insensitive</span>
 grep -v DEBUG app.log            <span class="tok-comment"># inVert: lines that do NOT match</span>
 grep -n TODO src/index.ts        <span class="tok-comment"># show line numbers</span>
 grep -c ERROR app.log            <span class="tok-comment"># count matching LINES (not matches)</span>
@@ -1127,7 +1127,7 @@ grep -r "apiKey" src/            <span class="tok-comment"># recurse into direct
 src/lib/client.ts:8:  apiKey: apiKey,</div>
 
 <h3>Context: the three flags that make grep readable</h3>
-<pre><code>grep -A3 "Exception" app.log     <span class="tok-comment"># the match + 3 lines AFTER</span>
+<pre><code class="language-bash">grep -A3 "Exception" app.log     <span class="tok-comment"># the match + 3 lines AFTER</span>
 grep -B2 "Exception" app.log     <span class="tok-comment"># the match + 2 lines BEFORE</span>
 grep -C3 "Exception" app.log     <span class="tok-comment"># 3 lines of Context on both sides</span></code></pre>
 <div class="out">2026-08-22 10:14:02 INFO  handling POST /api/v1/orders
@@ -1138,21 +1138,21 @@ grep -C3 "Exception" app.log     <span class="tok-comment"># 3 lines of Context 
 <p>A stack trace is useless without the lines around it, and this is the difference between "there was an error" and knowing which request caused it. <code>-C3</code> should be your default when reading logs.</p>
 
 <h3>Searching a codebase</h3>
-<pre><code>grep -rn "TODO" .                                     <span class="tok-comment"># everything, including node_modules — slow</span>
+<pre><code class="language-bash">grep -rn "TODO" .                                     <span class="tok-comment"># everything, including node_modules — slow</span>
 grep -rn --include="*.ts" "TODO" src/                 <span class="tok-comment"># only .ts files</span>
 grep -rn --exclude-dir={node_modules,.git,dist} "TODO" .
 grep -rln "console.log" src/ | xargs -r wc -l         <span class="tok-comment"># which files, and how big</span></code></pre>
 <div class="callout"><code>--exclude-dir</code> takes brace expansion (Lesson 2.2), so the third line is one shell word per directory. Without it, a <code>grep -rn</code> at the root of a Node project spends most of its time reading dependencies you did not write — often 95% of the wall-clock time.</div>
 
 <h3>Multiple patterns</h3>
-<pre><code>grep -E "ERROR|FATAL|panic" app.log      <span class="tok-comment"># alternation</span>
+<pre><code class="language-bash">grep -E "ERROR|FATAL|panic" app.log      <span class="tok-comment"># alternation</span>
 grep -e ERROR -e FATAL app.log           <span class="tok-comment"># repeated -e, no regex needed</span>
 grep -f patterns.txt app.log             <span class="tok-comment"># one pattern per line, from a file</span>
 grep -Fxf known-ids.txt all-ids.txt      <span class="tok-comment"># fixed, whole-line, from file — a fast set intersection</span></code></pre>
 <p>That last line is a genuinely useful trick: <code>-F</code> (literal) <code>-x</code> (match the whole line) <code>-f</code> (patterns from a file) turns <code>grep</code> into a set-intersection tool that handles millions of lines far faster than a scripting language would.</p>
 
 <h3>Exit status: grep as a test</h3>
-<pre><code>if grep -q "ERROR" app.log; then
+<pre><code class="language-bash">if grep -q "ERROR" app.log; then
   echo "errors found"
 fi</code></pre>
 <p><code>-q</code> (quiet) prints nothing and exits as soon as the first match is found — so it is both silent and fast. The exit status is <strong>0 if anything matched, 1 if nothing did, 2 on an actual error</strong> such as an unreadable file. That three-way distinction matters: <code>grep -q x missing.txt</code> returns 2, not 1, so a script that treats "non-zero means no match" will misreport a missing file as an empty result.</p>
@@ -1178,7 +1178,7 @@ src/lib/client.ts
 
 <h3>Try it step by step on a real log</h3>
 <p>The rest of this chapter uses two small files: ten lines of an application log and ten lines of an nginx access log. Create them once with quoted heredocs (Lesson 3.1), exactly as written:</p>
-<pre><code>mkdir -p ~/thu-linux/ch3/log &amp;&amp; cd ~/thu-linux/ch3/log
+<pre><code class="language-bash">mkdir -p ~/thu-linux/ch3/log &amp;&amp; cd ~/thu-linux/ch3/log
 cat &lt;&lt;'EOF' &gt; app.log
 2026-09-28 10:14:01 INFO  server listening on :3000
 2026-09-28 10:14:02 INFO  handling POST /api/v1/orders
@@ -1208,7 +1208,7 @@ wc -l app.log access.log</code></pre>
   10 access.log
   20 total</div>
 <p>Now run these ten searches in order and compare each result with your prediction:</p>
-<pre><code>grep -c ERROR app.log
+<pre><code class="language-bash">grep -c ERROR app.log
 grep -ci error app.log
 grep -nE "ERROR|FATAL" app.log
 grep -oE "[0-9]+ms" app.log
@@ -1348,7 +1348,7 @@ ${slide('lx-03', 12, 'Ba phương ngữ regex: cùng một ý, khác số dấu 
   <div class="lz-layer"><span class="lz-lname">PCRE — tương thích Perl</span><span class="lz-lnote"><code>grep -P</code>. Thêm <code>\\d</code>, <code>\\w</code>, <code>\\s</code>, dạng không tham <code>*?</code>, nhìn trước <code>(?=…)</code>. Không có trên mọi hệ (grep của macOS thiếu nó), nhưng trên Linux thì có.</span></div>
 </div>
 
-<pre><code>grep    "colou\\?r" notes.txt      <span class="tok-comment"># BRE: ? phải thoát mới mang nghĩa "có cũng được"</span>
+<pre><code class="language-bash">grep    "colou\\?r" notes.txt      <span class="tok-comment"># BRE: ? phải thoát mới mang nghĩa "có cũng được"</span>
 grep -E "colou?r"   notes.txt      <span class="tok-comment"># ERE: đọc y như mọi ngôn ngữ khác</span>
 grep -P "\\d{3}-\\d{4}"  notes.txt   <span class="tok-comment"># PCRE: \\d chạy, {3} chạy</span>
 grep -F "1.2.3"     notes.txt      <span class="tok-comment"># chuỗi CỐ ĐỊNH: không regex gì cả, dấu chấm là dấu chấm</span></code></pre>
@@ -1369,7 +1369,7 @@ ${slide('lx-03', 13, 'Đọc một regex từ trái sang phải: mỗi mảnh m�
 
 <h3>Những cờ đáng thuộc lòng</h3>
 ${slide('lx-03', 14, 'grep trả mã 0 · 1 · 2 — và các cờ dùng hằng ngày')}
-<pre><code>grep -i error app.log            <span class="tok-comment"># không phân biệt hoa thường</span>
+<pre><code class="language-bash">grep -i error app.log            <span class="tok-comment"># không phân biệt hoa thường</span>
 grep -v DEBUG app.log            <span class="tok-comment"># đảo lại: những dòng KHÔNG khớp</span>
 grep -n TODO src/index.ts        <span class="tok-comment"># hiện số dòng</span>
 grep -c ERROR app.log            <span class="tok-comment"># đếm số DÒNG khớp (không phải số lần khớp)</span>
@@ -1381,7 +1381,7 @@ grep -r "apiKey" src/            <span class="tok-comment"># đệ quy vào các
 src/lib/client.ts:8:  apiKey: apiKey,</div>
 
 <h3>Ngữ cảnh: ba cờ làm grep trở nên đọc được</h3>
-<pre><code>grep -A3 "Exception" app.log     <span class="tok-comment"># dòng khớp + 3 dòng SAU</span>
+<pre><code class="language-bash">grep -A3 "Exception" app.log     <span class="tok-comment"># dòng khớp + 3 dòng SAU</span>
 grep -B2 "Exception" app.log     <span class="tok-comment"># dòng khớp + 2 dòng TRƯỚC</span>
 grep -C3 "Exception" app.log     <span class="tok-comment"># 3 dòng ngữ cảnh ở cả hai phía</span></code></pre>
 <div class="out">2026-08-22 10:14:02 INFO  handling POST /api/v1/orders
@@ -1392,21 +1392,21 @@ grep -C3 "Exception" app.log     <span class="tok-comment"># 3 dòng ngữ cản
 <p>Một vệt gọi hàm lỗi thì vô dụng nếu thiếu các dòng xung quanh, và đây chính là khác biệt giữa "có lỗi xảy ra" với việc biết được yêu cầu nào gây ra lỗi đó. <code>-C3</code> nên là mặc định của bạn khi đọc log.</p>
 
 <h3>Tìm trong một kho mã</h3>
-<pre><code>grep -rn "TODO" .                                     <span class="tok-comment"># mọi thứ, kể cả node_modules — chậm</span>
+<pre><code class="language-bash">grep -rn "TODO" .                                     <span class="tok-comment"># mọi thứ, kể cả node_modules — chậm</span>
 grep -rn --include="*.ts" "TODO" src/                 <span class="tok-comment"># chỉ file .ts</span>
 grep -rn --exclude-dir={node_modules,.git,dist} "TODO" .
 grep -rln "console.log" src/ | xargs -r wc -l         <span class="tok-comment"># những file nào, và lớn cỡ nào</span></code></pre>
 <div class="callout"><code>--exclude-dir</code> nhận khai triển ngoặc nhọn (Bài 2.2), nên dòng thứ ba biến thành mỗi thư mục một từ shell. Không có nó, một lệnh <code>grep -rn</code> ở gốc một dự án Node dành phần lớn thời gian đi đọc những thư viện không phải bạn viết — thường là 95% tổng thời gian chạy.</div>
 
 <h3>Nhiều mẫu cùng lúc</h3>
-<pre><code>grep -E "ERROR|FATAL|panic" app.log      <span class="tok-comment"># phép hoặc</span>
+<pre><code class="language-bash">grep -E "ERROR|FATAL|panic" app.log      <span class="tok-comment"># phép hoặc</span>
 grep -e ERROR -e FATAL app.log           <span class="tok-comment"># lặp lại -e, không cần regex</span>
 grep -f patterns.txt app.log             <span class="tok-comment"># mỗi dòng một mẫu, đọc từ file</span>
 grep -Fxf known-ids.txt all-ids.txt      <span class="tok-comment"># cố định, khớp nguyên dòng, từ file — một phép giao tập hợp nhanh</span></code></pre>
 <p>Dòng cuối là một mẹo thật sự hữu ích: <code>-F</code> (nguyên văn) <code>-x</code> (khớp nguyên dòng) <code>-f</code> (mẫu lấy từ file) biến <code>grep</code> thành một công cụ giao tập hợp, xử lý hàng triệu dòng nhanh hơn nhiều so với một ngôn ngữ script.</p>
 
 <h3>Mã thoát: dùng grep như một phép kiểm</h3>
-<pre><code>if grep -q "ERROR" app.log; then
+<pre><code class="language-bash">if grep -q "ERROR" app.log; then
   echo "có lỗi"
 fi</code></pre>
 <p><code>-q</code> (quiet) không in gì và thoát ngay khi tìm thấy lần khớp đầu tiên — nên nó vừa im lặng vừa nhanh. Mã thoát là <strong>0 nếu có khớp, 1 nếu không khớp gì, 2 khi có lỗi thật sự</strong> chẳng hạn file không đọc được. Sự phân biệt ba mức đó quan trọng: <code>grep -q x missing.txt</code> trả về 2 chứ không phải 1, nên một script coi "khác 0 nghĩa là không khớp" sẽ báo nhầm một file thiếu thành một kết quả rỗng.</p>
@@ -1432,7 +1432,7 @@ src/lib/client.ts
 
 <h3>Chạy thử từng bước trên một file log thật</h3>
 <p>Phần còn lại của chương dùng hai file nhỏ: mười dòng log ứng dụng và mười dòng access log của nginx. Tạo chúng một lần bằng heredoc có nháy (Bài 3.1), đúng y như viết dưới đây:</p>
-<pre><code>mkdir -p ~/thu-linux/ch3/log &amp;&amp; cd ~/thu-linux/ch3/log
+<pre><code class="language-bash">mkdir -p ~/thu-linux/ch3/log &amp;&amp; cd ~/thu-linux/ch3/log
 cat &lt;&lt;'EOF' &gt; app.log
 2026-09-28 10:14:01 INFO  server listening on :3000
 2026-09-28 10:14:02 INFO  handling POST /api/v1/orders
@@ -1462,7 +1462,7 @@ wc -l app.log access.log</code></pre>
   10 access.log
   20 total</div>
 <p>Giờ chạy mười phép tìm này theo thứ tự và so từng kết quả với dự đoán của bạn:</p>
-<pre><code>grep -c ERROR app.log
+<pre><code class="language-bash">grep -c ERROR app.log
 grep -ci error app.log
 grep -nE "ERROR|FATAL" app.log
 grep -oE "[0-9]+ms" app.log
@@ -1686,7 +1686,7 @@ apple,banana,cherry</div>
 
 <h3>comm, paste, join and column in depth</h3>
 <p>These four answer the questions you otherwise solve with a spreadsheet: "what is in list A but not list B?", "put these two columns side by side", "match orders to users by ID", "make this readable". Start with two lists — the packages your project needs, and what is actually installed on the VPS:</p>
-<pre><code>mkdir -p ~/thu-linux/ch3/so &amp;&amp; cd ~/thu-linux/ch3/so
+<pre><code class="language-bash">mkdir -p ~/thu-linux/ch3/so &amp;&amp; cd ~/thu-linux/ch3/so
 printf 'curl\\ngit\\njq\\nnginx\\npostgresql\\n' &gt; can.txt
 printf 'git\\nnginx\\ncurl\\nhtop\\n' &gt; da-cai.txt
 comm &lt;(sort can.txt) &lt;(sort da-cai.txt)</code></pre>
@@ -1768,7 +1768,7 @@ deploy x  1001  1001         /home/deploy /bin/bash</div>
 <h3>diff and cmp: what exactly changed between two files</h3>
 ${slide('lx-03', 20, 'diff -u đọc như git diff: @@ vị trí, “-” dòng cũ, “+” dòng mới')}
 <p>Every time you change a config on a server, the honest question afterwards is "what did I actually change?". <code>diff</code> answers it line by line. Two versions of an SSH configuration:</p>
-<pre><code>mkdir -p ~/thu-linux/ch3/cfg &amp;&amp; cd ~/thu-linux/ch3/cfg
+<pre><code class="language-bash">mkdir -p ~/thu-linux/ch3/cfg &amp;&amp; cd ~/thu-linux/ch3/cfg
 printf 'Port 22\\nPermitRootLogin yes\\nPasswordAuthentication yes\\nX11Forwarding yes\\nUsePAM yes\\n' &gt; sshd.cu
 printf 'Port 22\\nPermitRootLogin no\\nPasswordAuthentication no\\nX11Forwarding yes\\nUsePAM yes\\nMaxAuthTries 3\\n' &gt; sshd.moi
 diff sshd.cu sshd.moi; echo "exit=\$?"</code></pre>
@@ -1815,7 +1815,7 @@ PasswordAuthentication yes   |	PasswordAuthentication no
 X11Forwarding yes		X11Forwarding yes
 UsePAM yes			UsePAM yes
 			     &gt;	MaxAuthTries 3</div>
-<pre><code>mkdir -p d1 d2; echo x &gt; d1/a; echo x &gt; d2/a; echo y &gt; d1/b; echo z &gt; d2/b; echo only &gt; d2/c
+<pre><code class="language-bash">mkdir -p d1 d2; echo x &gt; d1/a; echo x &gt; d2/a; echo y &gt; d1/b; echo z &gt; d2/b; echo only &gt; d2/c
 diff -rq d1 d2
 diff -u sshd.cu sshd.moi &gt; sua.patch
 cp sshd.cu thu.conf; patch thu.conf &lt; sua.patch
@@ -1837,7 +1837,7 @@ da giong ban moi</div>
 <div class="callout warn"><strong>Exit status is the trap here.</strong> For <code>diff</code> and <code>cmp</code>, <strong>1 means "the files differ"</strong>, not "something went wrong"; only 2 is an error. A script running under <code>set -e</code> will stop dead at a <code>diff</code> that merely found differences. Write <code>if diff -q a b &gt;/dev/null; then …</code> or <code>diff … || true</code> when a difference is an expected outcome.</div>
 
 <h3>Putting it together</h3>
-<pre><code><span class="tok-comment"># Top 10 URLs by request count, from an nginx access log</span>
+<pre><code class="language-bash"><span class="tok-comment"># Top 10 URLs by request count, from an nginx access log</span>
 awk '{print \$7}' access.log | sort | uniq -c | sort -rn | head -10
 
 <span class="tok-comment"># Every user with a real login shell</span>
@@ -1877,7 +1877,7 @@ deploy /bin/bash
 
 <h3>Try it step by step</h3>
 <p>In the log directory from Lesson 3.3. The first line adds a small third file, <code>blocked.txt</code> (exactly 20 bytes) — its short size is what exposes <code>cut</code>'s weakness. Predict each block of output first:</p>
-<pre><code>cd ~/thu-linux/ch3/log
+<pre><code class="language-bash">cd ~/thu-linux/ch3/log
 printf '192.0.2.19\\n10.9.9.9\\n' &gt; blocked.txt
 ls -l | tail -n +2 | cut -d' ' -f5
 ls -l | tail -n +2 | awk '{print \$5}'
@@ -2063,7 +2063,7 @@ apple,banana,cherry</div>
 
 <h3>Đào sâu comm, paste, join và column</h3>
 <p>Bốn lệnh này trả lời những câu hỏi mà bình thường bạn phải mở bảng tính: "cái gì có trong danh sách A mà không có trong B?", "đặt hai cột này cạnh nhau", "ghép đơn hàng với người dùng theo ID", "làm cho cái này dễ đọc". Bắt đầu bằng hai danh sách — những gói mà dự án cần, và những gói thật sự đã cài trên VPS:</p>
-<pre><code>mkdir -p ~/thu-linux/ch3/so &amp;&amp; cd ~/thu-linux/ch3/so
+<pre><code class="language-bash">mkdir -p ~/thu-linux/ch3/so &amp;&amp; cd ~/thu-linux/ch3/so
 printf 'curl\\ngit\\njq\\nnginx\\npostgresql\\n' &gt; can.txt
 printf 'git\\nnginx\\ncurl\\nhtop\\n' &gt; da-cai.txt
 comm &lt;(sort can.txt) &lt;(sort da-cai.txt)</code></pre>
@@ -2145,7 +2145,7 @@ deploy x  1001  1001         /home/deploy /bin/bash</div>
 <h3>diff và cmp: chính xác cái gì đã đổi giữa hai file</h3>
 ${slide('lx-03', 20, 'diff -u đọc như git diff: @@ vị trí, “-” dòng cũ, “+” dòng mới')}
 <p>Mỗi lần bạn sửa cấu hình trên máy chủ, câu hỏi trung thực sau đó là "mình thật sự đã đổi gì?". <code>diff</code> trả lời từng dòng một. Hai phiên bản cấu hình SSH:</p>
-<pre><code>mkdir -p ~/thu-linux/ch3/cfg &amp;&amp; cd ~/thu-linux/ch3/cfg
+<pre><code class="language-bash">mkdir -p ~/thu-linux/ch3/cfg &amp;&amp; cd ~/thu-linux/ch3/cfg
 printf 'Port 22\\nPermitRootLogin yes\\nPasswordAuthentication yes\\nX11Forwarding yes\\nUsePAM yes\\n' &gt; sshd.cu
 printf 'Port 22\\nPermitRootLogin no\\nPasswordAuthentication no\\nX11Forwarding yes\\nUsePAM yes\\nMaxAuthTries 3\\n' &gt; sshd.moi
 diff sshd.cu sshd.moi; echo "exit=\$?"</code></pre>
@@ -2192,7 +2192,7 @@ PasswordAuthentication yes   |	PasswordAuthentication no
 X11Forwarding yes		X11Forwarding yes
 UsePAM yes			UsePAM yes
 			     &gt;	MaxAuthTries 3</div>
-<pre><code>mkdir -p d1 d2; echo x &gt; d1/a; echo x &gt; d2/a; echo y &gt; d1/b; echo z &gt; d2/b; echo only &gt; d2/c
+<pre><code class="language-bash">mkdir -p d1 d2; echo x &gt; d1/a; echo x &gt; d2/a; echo y &gt; d1/b; echo z &gt; d2/b; echo only &gt; d2/c
 diff -rq d1 d2
 diff -u sshd.cu sshd.moi &gt; sua.patch
 cp sshd.cu thu.conf; patch thu.conf &lt; sua.patch
@@ -2214,7 +2214,7 @@ da giong ban moi</div>
 <div class="callout warn"><strong>Mã thoát là cái bẫy ở đây.</strong> Với <code>diff</code> và <code>cmp</code>, <strong>1 nghĩa là "hai file khác nhau"</strong>, không phải "có gì đó hỏng"; chỉ 2 mới là lỗi. Một script chạy dưới <code>set -e</code> sẽ dừng phắt ở một lệnh <code>diff</code> chỉ vì nó tìm thấy khác biệt. Hãy viết <code>if diff -q a b &gt;/dev/null; then …</code> hoặc <code>diff … || true</code> khi khác biệt là một kết quả được trông đợi.</div>
 
 <h3>Ghép tất cả lại</h3>
-<pre><code><span class="tok-comment"># 10 URL nhiều lượt gọi nhất, từ một access log của nginx</span>
+<pre><code class="language-bash"><span class="tok-comment"># 10 URL nhiều lượt gọi nhất, từ một access log của nginx</span>
 awk '{print \$7}' access.log | sort | uniq -c | sort -rn | head -10
 
 <span class="tok-comment"># Mọi người dùng có shell đăng nhập thật</span>
@@ -2254,7 +2254,7 @@ deploy /bin/bash
 
 <h3>Chạy thử từng bước</h3>
 <p>Trong thư mục log của Bài 3.3. Dòng đầu thêm một file thứ ba nhỏ, <code>blocked.txt</code> (đúng 20 byte) — chính cái cỡ ngắn của nó lột trần điểm yếu của <code>cut</code>. Đoán trước từng khối output:</p>
-<pre><code>cd ~/thu-linux/ch3/log
+<pre><code class="language-bash">cd ~/thu-linux/ch3/log
 printf '192.0.2.19\\n10.9.9.9\\n' &gt; blocked.txt
 ls -l | tail -n +2 | cut -d' ' -f5
 ls -l | tail -n +2 | awk '{print \$5}'
@@ -2369,7 +2369,7 @@ v1.2 v1.9 v1.10
 ${slide('lx-03', 21, 'Một lệnh sed = địa chỉ + chữ cái lệnh + đối số')}
 
 <h3>The substitute command</h3>
-<pre><code>sed 's/old/new/' file.txt          <span class="tok-comment"># first match ON EACH LINE</span>
+<pre><code class="language-bash">sed 's/old/new/' file.txt          <span class="tok-comment"># first match ON EACH LINE</span>
 sed 's/old/new/g' file.txt         <span class="tok-comment"># g = global: every match on each line</span>
 sed 's/old/new/2' file.txt         <span class="tok-comment"># only the 2nd match on each line</span>
 sed 's/old/new/gi' file.txt        <span class="tok-comment"># g + case-Insensitive</span>
@@ -2381,14 +2381,14 @@ dog dog dog</div>
 <div class="callout">Without <code>g</code>, <code>sed</code> replaces the <strong>first match per line</strong>, not the first match in the file. That is the single most common surprise, and it is the reason a "sed did not replace everything" bug is almost always a missing <code>g</code>.</div>
 
 <h3>The delimiter is not always a slash</h3>
-<pre><code>sed 's/\\/usr\\/local/\\/opt/g' paths.txt      <span class="tok-comment"># unreadable</span>
+<pre><code class="language-bash">sed 's/\\/usr\\/local/\\/opt/g' paths.txt      <span class="tok-comment"># unreadable</span>
 sed 's|/usr/local|/opt|g' paths.txt        <span class="tok-comment"># same thing, legible</span>
 sed 's#http://#https://#g' urls.txt        <span class="tok-comment"># # works too</span></code></pre>
 <p>Any character can be the delimiter — <code>sed</code> takes whatever follows the <code>s</code>. When your pattern contains slashes (paths, URLs), switch to <code>|</code> or <code>#</code>. This is not a style preference; escaped-slash patterns are where sed bugs hide.</p>
 
 <h3>Addresses: which lines to act on</h3>
 ${slide('lx-03', 23, 'Địa chỉ chọn dòng, chữ cái chọn việc: p d i a c q')}
-<pre><code>sed '3s/old/new/' file            <span class="tok-comment"># only line 3</span>
+<pre><code class="language-bash">sed '3s/old/new/' file            <span class="tok-comment"># only line 3</span>
 sed '2,5s/old/new/' file          <span class="tok-comment"># lines 2 through 5</span>
 sed '\$s/old/new/' file            <span class="tok-comment"># the last line</span>
 sed '2,\$s/old/new/' file          <span class="tok-comment"># line 2 to the end</span>
@@ -2398,7 +2398,7 @@ sed '/^#/!s/old/new/' file        <span class="tok-comment"># ! inverts: lines N
 <p>An address before a command restricts it. That composability is what makes <code>sed</code> more than search-and-replace: "change this word, but only inside the <code>[database]</code> section of the config" is one expression.</p>
 
 <h3>Commands other than s</h3>
-<pre><code>sed -n '5p' file                  <span class="tok-comment"># -n suppresses output, p prints → just line 5</span>
+<pre><code class="language-bash">sed -n '5p' file                  <span class="tok-comment"># -n suppresses output, p prints → just line 5</span>
 sed -n '10,20p' file              <span class="tok-comment"># a line range, like head+tail combined</span>
 sed -n '/ERROR/p' file            <span class="tok-comment"># behaves like grep</span>
 sed '/^\$/d' file                  <span class="tok-comment"># d: delete blank lines</span>
@@ -2411,9 +2411,9 @@ sed 'y/abc/xyz/' file             <span class="tok-comment"># y: transliterate, 
 
 <h3>Capture groups: reusing parts of the match</h3>
 ${slide('lx-03', 22, 's/// thay chỗ khớp ĐẦU mỗi dòng; \\1 và & dùng lại phần đã khớp')}
-<pre><code>echo "2026-08-22" | sed -E 's/([0-9]{4})-([0-9]{2})-([0-9]{2})/\\3\\/\\2\\/\\1/'</code></pre>
+<pre><code class="language-bash">echo "2026-08-22" | sed -E 's/([0-9]{4})-([0-9]{2})-([0-9]{2})/\\3\\/\\2\\/\\1/'</code></pre>
 <div class="out">22/08/2026</div>
-<pre><code><span class="tok-comment"># &amp; is the WHOLE match — wrap every number in brackets</span>
+<pre><code class="language-bash"><span class="tok-comment"># &amp; is the WHOLE match — wrap every number in brackets</span>
 echo "port 8080" | sed -E 's/[0-9]+/[&amp;]/'
 
 <span class="tok-comment"># swap two comma-separated fields</span>
@@ -2427,13 +2427,13 @@ sed -nE 's/^version = "(.*)"\$/\\1/p' Cargo.toml</code></pre>
 
 <h3>Editing files in place</h3>
 ${slide('lx-03', 24, 'sed -i khác nhau giữa GNU và macOS — và nó đổi inode')}
-<pre><code>sed 's/old/new/g' file.txt              <span class="tok-comment"># prints to stdout, file untouched</span>
+<pre><code class="language-bash">sed 's/old/new/g' file.txt              <span class="tok-comment"># prints to stdout, file untouched</span>
 sed -i 's/old/new/g' file.txt           <span class="tok-comment"># edits the file, NO backup</span>
 sed -i.bak 's/old/new/g' file.txt       <span class="tok-comment"># keeps file.txt.bak</span></code></pre>
 <div class="callout warn"><strong>macOS and BSD sed differ here</strong>, and it bites everyone who writes a script on a Mac that runs on a Linux server, or the reverse. BSD <code>sed -i</code> <em>requires</em> a suffix argument: <code>sed -i '' 's/a/b/' f</code> on macOS, <code>sed -i 's/a/b/' f</code> on Linux. Neither form works on the other platform. In a script that must run on both, use <code>perl -pi -e 's/a/b/'</code>, which behaves identically everywhere.</div>
 <p>There is one spelling that both accept: <strong><code>sed -i.bak 's/a/b/' f</code></strong> — the suffix glued to <code>-i</code> — which works on GNU and on macOS alike (checked on both) and leaves you a backup. Delete the <code>.bak</code> once you have checked the result.</p>
 <div class="callout warn"><strong><code>-i</code> does not edit the file you think it edits.</strong> It writes the result to a new temporary file and then renames that over the original, so the path now points to a brand-new inode:
-<pre><code>cp sshd.cu t3.conf; ls -i t3.conf | cut -d' ' -f1
+<pre><code class="language-bash">cp sshd.cu t3.conf; ls -i t3.conf | cut -d' ' -f1
 sed -i 's/yes/no/' t3.conf
 ls -i t3.conf | cut -d' ' -f1</code></pre>
 <div class="out">31365
@@ -2441,7 +2441,7 @@ ls -i t3.conf | cut -d' ' -f1</code></pre>
 Usually harmless. But a Docker container that bind-mounts <em>one single file</em> is attached to the old inode and keeps reading the old content — exactly how an nginx config "deployed successfully" on a student project and changed nothing. Hard links to the file are broken the same way. When a single-file bind mount is involved, rewrite the content in place instead: <code>sed 's/a/b/' f &gt; /tmp/f.new &amp;&amp; cat /tmp/f.new &gt; f</code>.</div>
 
 <h3>Across many files</h3>
-<pre><code><span class="tok-comment"># LOOK FIRST — no -i, so nothing changes</span>
+<pre><code class="language-bash"><span class="tok-comment"># LOOK FIRST — no -i, so nothing changes</span>
 grep -rl "oldApiUrl" src/ | xargs -r sed -n 's/oldApiUrl/newApiUrl/gp'
 
 <span class="tok-comment"># then do it</span>
@@ -2452,7 +2452,7 @@ find src -name "*.ts" -print0 | xargs -0 sed -i 's/oldApiUrl/newApiUrl/g'</code>
 <p>The <code>-n …p</code> form on the first line prints only the lines that <em>would</em> change, with the change applied. That is the dry run, and running it before the real command costs three seconds.</p>
 
 <h3>Recipes worth keeping</h3>
-<pre><code><span class="tok-comment"># Strip comments and blank lines from a config — see what is actually set</span>
+<pre><code class="language-bash"><span class="tok-comment"># Strip comments and blank lines from a config — see what is actually set</span>
 sed -E '/^\\s*#/d; /^\\s*\$/d' /etc/ssh/sshd_config
 
 <span class="tok-comment"># Trim leading and trailing whitespace on every line</span>
@@ -2502,7 +2502,7 @@ X11Forwarding no</div>
 
 <h3>Try it step by step</h3>
 <p>In <code>~/thu-linux/ch3/cfg</code>, where Lesson 3.4 left <code>sshd.cu</code> (five lines: Port, PermitRootLogin, PasswordAuthentication, X11Forwarding, UsePAM). Predict every output first:</p>
-<pre><code>cd ~/thu-linux/ch3/cfg
+<pre><code class="language-bash">cd ~/thu-linux/ch3/cfg
 echo "cat cat cat" | sed 's/cat/dog/'
 echo "cat cat cat" | sed 's/cat/dog/g'
 echo "cat cat cat" | sed 's/cat/dog/2'
@@ -2552,12 +2552,12 @@ uuid width valid id_x hidden</div>
 <h3>🧪 Practice (15–20 min)</h3>
 <div class="callout ok"><p><strong>Scenario:</strong> the team's VPS must stop accepting root and password logins, and allow at most 3 authentication attempts. Before touching the real <code>/etc/ssh/sshd_config</code>, rehearse the exact edit on a copy in your sandbox — with a dry run, a backup and a diff you can show the team.</p><ol>
 <li>Create the copy:
-<pre><code>mkdir -p ~/thu-linux/ch3/bt35 &amp;&amp; cd ~/thu-linux/ch3/bt35
+<pre><code class="language-bash">mkdir -p ~/thu-linux/ch3/bt35 &amp;&amp; cd ~/thu-linux/ch3/bt35
 printf '%s\\n' '# SSH cua nhom' 'Port 22' '' 'PermitRootLogin yes' '#PasswordAuthentication no' 'PasswordAuthentication yes' 'UsePAM yes' &gt; sshd.test</code></pre></li>
 <li>Dry run — print only what WOULD change: <code>sed -n -E 's/^(PermitRootLogin|PasswordAuthentication) yes/\\1 no/p' sshd.test</code>. Note that the commented <code>#PasswordAuthentication</code> line is left alone because of <code>^</code>.</li>
 <li>Apply it with a backup: the same expression with <code>sed -i.bak -E '…'</code> instead of <code>-n … p</code>.</li>
 <li>Add <code>MaxAuthTries 3</code> after the <code>Port</code> line, in the form that works on Linux and Mac alike:
-<pre><code>sed -i.bak2 '/^Port /a\\
+<pre><code class="language-bash">sed -i.bak2 '/^Port /a\\
 MaxAuthTries 3' sshd.test</code></pre></li>
 <li>Show only the settings in effect: <code>sed -E '/^[[:space:]]*#/d; /^[[:space:]]*\$/d' sshd.test</code>, then count the changed lines against the original: <code>diff -u sshd.test.bak sshd.test | grep -c '^[-+][^-+]'</code>.</li></ol>
 <p><strong>Done when:</strong> the dry run prints exactly 2 lines; the effective config is 5 lines (<code>Port 22</code>, <code>MaxAuthTries 3</code>, <code>PermitRootLogin no</code>, <code>PasswordAuthentication no</code>, <code>UsePAM yes</code>); the diff count is <code>5</code>; and <code>sshd.test.bak</code> still contains <code>PermitRootLogin yes</code>. (Checked on Ubuntu 24.04 and on macOS 27.)</p></div>
@@ -2612,7 +2612,7 @@ MaxAuthTries 3' sshd.test</code></pre></li>
 ${slide('lx-03', 21, 'Một lệnh sed = địa chỉ + chữ cái lệnh + đối số')}
 
 <h3>Lệnh thay thế</h3>
-<pre><code>sed 's/old/new/' file.txt          <span class="tok-comment"># lần khớp đầu tiên TRÊN MỖI DÒNG</span>
+<pre><code class="language-bash">sed 's/old/new/' file.txt          <span class="tok-comment"># lần khớp đầu tiên TRÊN MỖI DÒNG</span>
 sed 's/old/new/g' file.txt         <span class="tok-comment"># g = toàn cục: mọi lần khớp trên mỗi dòng</span>
 sed 's/old/new/2' file.txt         <span class="tok-comment"># chỉ lần khớp thứ 2 trên mỗi dòng</span>
 sed 's/old/new/gi' file.txt        <span class="tok-comment"># g + không phân biệt hoa thường</span>
@@ -2624,14 +2624,14 @@ dog dog dog</div>
 <div class="callout">Không có <code>g</code>, <code>sed</code> thay <strong>lần khớp đầu tiên MỖI DÒNG</strong>, chứ không phải lần khớp đầu tiên trong cả file. Đó là điều bất ngờ phổ biến nhất, và là lý do lỗi "sed không thay hết" gần như luôn là do thiếu <code>g</code>.</div>
 
 <h3>Dấu phân cách không nhất thiết là gạch chéo</h3>
-<pre><code>sed 's/\\/usr\\/local/\\/opt/g' paths.txt      <span class="tok-comment"># không đọc nổi</span>
+<pre><code class="language-bash">sed 's/\\/usr\\/local/\\/opt/g' paths.txt      <span class="tok-comment"># không đọc nổi</span>
 sed 's|/usr/local|/opt|g' paths.txt        <span class="tok-comment"># y hệt, mà đọc được</span>
 sed 's#http://#https://#g' urls.txt        <span class="tok-comment"># dấu # cũng chạy</span></code></pre>
 <p>Ký tự nào cũng làm dấu phân cách được — <code>sed</code> lấy bất cứ thứ gì đứng ngay sau chữ <code>s</code>. Khi mẫu của bạn có chứa gạch chéo (đường dẫn, URL), hãy đổi sang <code>|</code> hoặc <code>#</code>. Đây không phải sở thích hình thức; những mẫu đầy gạch-chéo-đã-thoát chính là nơi lỗi sed ẩn mình.</p>
 
 <h3>Địa chỉ: tác động lên những dòng nào</h3>
 ${slide('lx-03', 23, 'Địa chỉ chọn dòng, chữ cái chọn việc: p d i a c q')}
-<pre><code>sed '3s/old/new/' file            <span class="tok-comment"># chỉ dòng 3</span>
+<pre><code class="language-bash">sed '3s/old/new/' file            <span class="tok-comment"># chỉ dòng 3</span>
 sed '2,5s/old/new/' file          <span class="tok-comment"># dòng 2 tới 5</span>
 sed '\$s/old/new/' file            <span class="tok-comment"># dòng cuối cùng</span>
 sed '2,\$s/old/new/' file          <span class="tok-comment"># từ dòng 2 tới hết</span>
@@ -2641,7 +2641,7 @@ sed '/^#/!s/old/new/' file        <span class="tok-comment"># ! đảo lại: nh
 <p>Một địa chỉ đặt trước một lệnh sẽ giới hạn lệnh đó. Chính khả năng ghép nối ấy làm cho <code>sed</code> vượt xa phép tìm-và-thay: câu "đổi từ này, nhưng chỉ bên trong mục <code>[database]</code> của file cấu hình" gói lại thành đúng một biểu thức.</p>
 
 <h3>Những lệnh khác ngoài s</h3>
-<pre><code>sed -n '5p' file                  <span class="tok-comment"># -n tắt output, p in ra → chỉ dòng 5</span>
+<pre><code class="language-bash">sed -n '5p' file                  <span class="tok-comment"># -n tắt output, p in ra → chỉ dòng 5</span>
 sed -n '10,20p' file              <span class="tok-comment"># một khoảng dòng, như head+tail gộp lại</span>
 sed -n '/ERROR/p' file            <span class="tok-comment"># hành xử như grep</span>
 sed '/^\$/d' file                  <span class="tok-comment"># d: xoá những dòng trống</span>
@@ -2654,9 +2654,9 @@ sed 'y/abc/xyz/' file             <span class="tok-comment"># y: chuyển tự, 
 
 <h3>Nhóm bắt giữ: dùng lại từng phần của chỗ khớp</h3>
 ${slide('lx-03', 22, 's/// thay chỗ khớp ĐẦU mỗi dòng; \\1 và & dùng lại phần đã khớp')}
-<pre><code>echo "2026-08-22" | sed -E 's/([0-9]{4})-([0-9]{2})-([0-9]{2})/\\3\\/\\2\\/\\1/'</code></pre>
+<pre><code class="language-bash">echo "2026-08-22" | sed -E 's/([0-9]{4})-([0-9]{2})-([0-9]{2})/\\3\\/\\2\\/\\1/'</code></pre>
 <div class="out">22/08/2026</div>
-<pre><code><span class="tok-comment"># &amp; là TOÀN BỘ chỗ khớp — bọc mọi con số vào ngoặc vuông</span>
+<pre><code class="language-bash"><span class="tok-comment"># &amp; là TOÀN BỘ chỗ khớp — bọc mọi con số vào ngoặc vuông</span>
 echo "port 8080" | sed -E 's/[0-9]+/[&amp;]/'
 
 <span class="tok-comment"># đổi chỗ hai trường cách nhau bằng dấu phẩy</span>
@@ -2670,13 +2670,13 @@ sed -nE 's/^version = "(.*)"\$/\\1/p' Cargo.toml</code></pre>
 
 <h3>Sửa file tại chỗ</h3>
 ${slide('lx-03', 24, 'sed -i khác nhau giữa GNU và macOS — và nó đổi inode')}
-<pre><code>sed 's/old/new/g' file.txt              <span class="tok-comment"># in ra stdout, file không bị đụng</span>
+<pre><code class="language-bash">sed 's/old/new/g' file.txt              <span class="tok-comment"># in ra stdout, file không bị đụng</span>
 sed -i 's/old/new/g' file.txt           <span class="tok-comment"># sửa thẳng file, KHÔNG sao lưu</span>
 sed -i.bak 's/old/new/g' file.txt       <span class="tok-comment"># giữ lại file.txt.bak</span></code></pre>
 <div class="callout warn"><strong>sed của macOS và BSD khác ở chỗ này</strong>, và nó cắn mọi người viết script trên Mac rồi chạy trên máy chủ Linux, hoặc ngược lại. <code>sed -i</code> của BSD <em>BẮT BUỘC</em> phải có một tham số hậu tố: <code>sed -i '' 's/a/b/' f</code> trên macOS, còn <code>sed -i 's/a/b/' f</code> trên Linux. Không dạng nào chạy được trên nền còn lại. Trong một script phải chạy cả hai nơi, hãy dùng <code>perl -pi -e 's/a/b/'</code>, thứ hành xử y hệt ở mọi nơi.</div>
 <p>Có đúng một cách viết mà cả hai đều nhận: <strong><code>sed -i.bak 's/a/b/' f</code></strong> — hậu tố viết dính liền vào <code>-i</code> — chạy được trên GNU lẫn macOS (đã kiểm cả hai) và để lại cho bạn một bản sao lưu. Xoá file <code>.bak</code> sau khi đã kiểm kết quả.</p>
 <div class="callout warn"><strong><code>-i</code> không sửa cái file mà bạn nghĩ nó sửa.</strong> Nó ghi kết quả ra một file tạm MỚI rồi đổi tên file đó đè lên bản gốc, nên đường dẫn giờ trỏ vào một inode hoàn toàn mới:
-<pre><code>cp sshd.cu t3.conf; ls -i t3.conf | cut -d' ' -f1
+<pre><code class="language-bash">cp sshd.cu t3.conf; ls -i t3.conf | cut -d' ' -f1
 sed -i 's/yes/no/' t3.conf
 ls -i t3.conf | cut -d' ' -f1</code></pre>
 <div class="out">31365
@@ -2684,7 +2684,7 @@ ls -i t3.conf | cut -d' ' -f1</code></pre>
 Thường thì vô hại. Nhưng một container Docker bind-mount <em>ĐÚNG MỘT file</em> thì gắn vào inode cũ và cứ đọc nội dung cũ — đúng cách một file cấu hình nginx của một dự án sinh viên "deploy thành công" mà không đổi được gì. Liên kết cứng (hard link) tới file cũng đứt theo cùng kiểu. Khi có bind-mount một file đơn, hãy ghi đè nội dung TẠI CHỖ: <code>sed 's/a/b/' f &gt; /tmp/f.new &amp;&amp; cat /tmp/f.new &gt; f</code>.</div>
 
 <h3>Trên nhiều file cùng lúc</h3>
-<pre><code><span class="tok-comment"># NHÌN TRƯỚC ĐÃ — không có -i, nên không có gì thay đổi</span>
+<pre><code class="language-bash"><span class="tok-comment"># NHÌN TRƯỚC ĐÃ — không có -i, nên không có gì thay đổi</span>
 grep -rl "oldApiUrl" src/ | xargs -r sed -n 's/oldApiUrl/newApiUrl/gp'
 
 <span class="tok-comment"># rồi mới làm thật</span>
@@ -2695,7 +2695,7 @@ find src -name "*.ts" -print0 | xargs -0 sed -i 's/oldApiUrl/newApiUrl/g'</code>
 <p>Dạng <code>-n …p</code> ở dòng đầu chỉ in ra những dòng <em>SẼ</em> thay đổi, với thay đổi đã được áp vào. Đó chính là lần chạy thử, và chạy nó trước lệnh thật tốn ba giây.</p>
 
 <h3>Những công thức đáng giữ</h3>
-<pre><code><span class="tok-comment"># Bóc chú thích và dòng trống khỏi một file cấu hình — xem cái gì THẬT SỰ đang đặt</span>
+<pre><code class="language-bash"><span class="tok-comment"># Bóc chú thích và dòng trống khỏi một file cấu hình — xem cái gì THẬT SỰ đang đặt</span>
 sed -E '/^\\s*#/d; /^\\s*\$/d' /etc/ssh/sshd_config
 
 <span class="tok-comment"># Cắt khoảng trắng đầu và cuối mọi dòng</span>
@@ -2745,7 +2745,7 @@ X11Forwarding no</div>
 
 <h3>Chạy thử từng bước</h3>
 <p>Trong <code>~/thu-linux/ch3/cfg</code>, nơi Bài 3.4 để lại <code>sshd.cu</code> (năm dòng: Port, PermitRootLogin, PasswordAuthentication, X11Forwarding, UsePAM). Đoán trước mọi output:</p>
-<pre><code>cd ~/thu-linux/ch3/cfg
+<pre><code class="language-bash">cd ~/thu-linux/ch3/cfg
 echo "cat cat cat" | sed 's/cat/dog/'
 echo "cat cat cat" | sed 's/cat/dog/g'
 echo "cat cat cat" | sed 's/cat/dog/2'
@@ -2795,12 +2795,12 @@ uuid width valid id_x hidden</div>
 <h3>🧪 Thực hành (15–20 phút)</h3>
 <div class="callout ok"><p><strong>Tình huống:</strong> VPS của nhóm phải thôi nhận đăng nhập bằng root và bằng mật khẩu, và chỉ cho tối đa 3 lần thử xác thực. Trước khi đụng vào <code>/etc/ssh/sshd_config</code> thật, hãy tập đúng phép sửa đó trên một bản chép trong sân tập — có chạy thử, có sao lưu và có một bản diff để đưa cả nhóm xem.</p><ol>
 <li>Tạo bản chép:
-<pre><code>mkdir -p ~/thu-linux/ch3/bt35 &amp;&amp; cd ~/thu-linux/ch3/bt35
+<pre><code class="language-bash">mkdir -p ~/thu-linux/ch3/bt35 &amp;&amp; cd ~/thu-linux/ch3/bt35
 printf '%s\\n' '# SSH cua nhom' 'Port 22' '' 'PermitRootLogin yes' '#PasswordAuthentication no' 'PasswordAuthentication yes' 'UsePAM yes' &gt; sshd.test</code></pre></li>
 <li>Chạy thử — chỉ in thứ SẼ đổi: <code>sed -n -E 's/^(PermitRootLogin|PasswordAuthentication) yes/\\1 no/p' sshd.test</code>. Để ý dòng <code>#PasswordAuthentication</code> đang bị chú thích được để yên nhờ dấu <code>^</code>.</li>
 <li>Áp dụng có sao lưu: cùng biểu thức đó với <code>sed -i.bak -E '…'</code> thay cho <code>-n … p</code>.</li>
 <li>Thêm <code>MaxAuthTries 3</code> sau dòng <code>Port</code>, bằng dạng viết chạy được cả trên Linux lẫn Mac:
-<pre><code>sed -i.bak2 '/^Port /a\\
+<pre><code class="language-bash">sed -i.bak2 '/^Port /a\\
 MaxAuthTries 3' sshd.test</code></pre></li>
 <li>Chỉ hiện những thiết lập đang có hiệu lực: <code>sed -E '/^[[:space:]]*#/d; /^[[:space:]]*\$/d' sshd.test</code>, rồi đếm số dòng đã đổi so với bản gốc: <code>diff -u sshd.test.bak sshd.test | grep -c '^[-+][^-+]'</code>.</li></ol>
 <p><strong>Đạt khi:</strong> lần chạy thử in đúng 2 dòng; cấu hình hiệu lực có 5 dòng (<code>Port 22</code>, <code>MaxAuthTries 3</code>, <code>PermitRootLogin no</code>, <code>PasswordAuthentication no</code>, <code>UsePAM yes</code>); con số diff là <code>5</code>; và <code>sshd.test.bak</code> vẫn còn <code>PermitRootLogin yes</code>. (Đã kiểm trên Ubuntu 24.04 và macOS 27.)</p></div>
@@ -2863,7 +2863,7 @@ MaxAuthTries 3' sshd.test</code></pre></li>
 
 <h3>The model: pattern { action }</h3>
 ${slide('lx-03', 25, 'awk cắt sẵn mỗi dòng thành $1…$NF — đọc một dòng log nginx')}
-<pre><code>awk 'PATTERN { ACTION }' file</code></pre>
+<pre><code class="language-bash">awk 'PATTERN { ACTION }' file</code></pre>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">Read</span><span class="lz-t">one line, split into fields</span><span class="lz-d">Split on runs of whitespace by default. \$1 is the first field, \$2 the second, \$0 the whole line.</span></div>
   <div class="lz-step"><span class="lz-k">Test</span><span class="lz-t">does the line match PATTERN?</span><span class="lz-d">A regex, a comparison, or nothing at all — an empty pattern matches every line.</span></div>
@@ -2871,7 +2871,7 @@ ${slide('lx-03', 25, 'awk cắt sẵn mỗi dòng thành $1…$NF — đọc m�
   <div class="lz-step"><span class="lz-k">Repeat</span><span class="lz-t">next line, until EOF</span><span class="lz-d">Then run the END block, if there is one. Variables persist across lines — this is what makes totals possible.</span></div>
 </div>
 
-<pre><code>awk '{print \$1}' access.log         <span class="tok-comment"># no pattern: every line</span>
+<pre><code class="language-bash">awk '{print \$1}' access.log         <span class="tok-comment"># no pattern: every line</span>
 awk '/ERROR/' app.log               <span class="tok-comment"># no action: prints matching lines, like grep</span>
 awk '/ERROR/ {print \$5}' app.log    <span class="tok-comment"># both</span>
 awk '\$3 &gt; 100 {print \$1, \$3}' d.txt <span class="tok-comment"># a numeric comparison as the pattern</span></code></pre>
@@ -2887,7 +2887,7 @@ awk '\$3 &gt; 100 {print \$1, \$3}' d.txt <span class="tok-comment"># a numeric 
   <div class="kv"><span class="k"><code>FS</code> <code>OFS</code></span><span class="v">Input and output field separators. <code>-F,</code> is shorthand for setting FS.</span></div>
   <div class="kv"><span class="k"><code>FILENAME</code></span><span class="v">The file currently being read. Useful when processing many at once.</span></div>
 </div>
-<pre><code>awk '{print NR, \$0}' file.txt           <span class="tok-comment"># number every line</span>
+<pre><code class="language-bash">awk '{print NR, \$0}' file.txt           <span class="tok-comment"># number every line</span>
 awk '{print \$NF}' access.log            <span class="tok-comment"># the last field, whatever its position</span>
 awk 'NF' file.txt                       <span class="tok-comment"># NF is 0 on blank lines → deletes them</span>
 awk 'NR &gt; 1' data.csv                   <span class="tok-comment"># skip the header row</span>
@@ -2895,7 +2895,7 @@ awk 'NR % 10 == 0' huge.log             <span class="tok-comment"># sample every
 <div class="callout ok"><code>awk 'NF'</code> is a small masterpiece: the pattern is just the field count, awk treats 0 as false, so blank lines are dropped and everything else is printed by the implicit action. Three characters that replace <code>grep -v '^\$'</code>.</div>
 
 <h3>Separators</h3>
-<pre><code>awk -F, '{print \$2}' data.csv           <span class="tok-comment"># comma-separated</span>
+<pre><code class="language-bash">awk -F, '{print \$2}' data.csv           <span class="tok-comment"># comma-separated</span>
 awk -F: '{print \$1, \$7}' /etc/passwd    <span class="tok-comment"># colon</span>
 awk -F'\\t' '{print \$3}' data.tsv        <span class="tok-comment"># tab</span>
 awk -F'[,;]' '{print \$2}' mixed.txt      <span class="tok-comment"># FS is a REGEX: comma or semicolon</span>
@@ -2906,11 +2906,11 @@ deploy | /bin/bash</div>
 
 <h3>BEGIN and END</h3>
 ${slide('lx-03', 26, 'BEGIN chạy trước, END chạy sau — biến tự nhớ qua mọi dòng')}
-<pre><code>awk 'BEGIN {print "starting"} {n++} END {print n, "lines"}' file.txt</code></pre>
+<pre><code class="language-bash">awk 'BEGIN {print "starting"} {n++} END {print n, "lines"}' file.txt</code></pre>
 <div class="out">starting
 4213 lines</div>
 <p><code>BEGIN</code> runs once before any input, <code>END</code> once after the last line. Variables survive between lines and are initialised to zero or empty, so <code>n++</code> needs no declaration. That is the whole basis of aggregation:</p>
-<pre><code><span class="tok-comment"># Sum a column</span>
+<pre><code class="language-bash"><span class="tok-comment"># Sum a column</span>
 awk '{sum += \$3} END {print sum}' sales.txt
 
 <span class="tok-comment"># Average, with a guard against dividing by zero</span>
@@ -2925,7 +2925,7 @@ awk 'NR==1 {min=max=\$1} {if (\$1&lt;min) min=\$1; if (\$1&gt;max) max=\$1} END 
 <h3>Associative arrays: grouping without a database</h3>
 ${slide('lx-03', 27, 'Mảng liên kết: nhóm và cộng dồn trong MỘT lượt đọc')}
 <p>This is the feature that makes <code>awk</code> worth learning. Arrays are indexed by <em>strings</em>, created on first use:</p>
-<pre><code><span class="tok-comment"># Count requests per IP — the sort|uniq -c pipeline, in one pass and unsorted input</span>
+<pre><code class="language-bash"><span class="tok-comment"># Count requests per IP — the sort|uniq -c pipeline, in one pass and unsorted input</span>
 awk '{count[\$1]++} END {for (ip in count) print count[ip], ip}' access.log | sort -rn | head
 
 <span class="tok-comment"># Total bytes per status code</span>
@@ -2942,7 +2942,7 @@ awk -F'[:[]' '{hits[\$3]++} END {for (h in hits) print h, hits[h]}' access.log |
 <div class="callout"><code>sort | uniq -c</code> must sort the whole input first — on a 4 GB log that means spilling to disk. The awk version keeps a hash table of only the distinct keys and reads the file exactly once. Measured on a 2.1 GB access log: 41 s for the sort pipeline, 9 s for awk. When the number of distinct keys is small and the input is large, awk wins by a wide margin.</div>
 
 <h3>printf: controlling the output</h3>
-<pre><code>awk '{printf "%-20s %8.2f\\n", \$1, \$2}' data.txt   <span class="tok-comment"># left-pad, right-align, 2 decimals</span>
+<pre><code class="language-bash">awk '{printf "%-20s %8.2f\\n", \$1, \$2}' data.txt   <span class="tok-comment"># left-pad, right-align, 2 decimals</span>
 awk '{printf "%5d %s\\n", NR, \$0}' file.txt         <span class="tok-comment"># numbered, aligned</span></code></pre>
 <div class="out">deploy                 142.50
 postgres              1841.09
@@ -2950,7 +2950,7 @@ redis                   12.75</div>
 <p><code>print</code> adds a newline; <code>printf</code> does not, so you write <code>\\n</code> yourself. The format codes are C's: <code>%s</code> string, <code>%d</code> integer, <code>%f</code> float, <code>%-20s</code> left-justified in 20 columns, <code>%8.2f</code> eight wide with two decimals.</p>
 
 <h3>Conditions and multiple rules</h3>
-<pre><code>awk '\$3 &gt; 100 &amp;&amp; \$1 ~ /^203\\./ {print}' access.log     <span class="tok-comment"># ~ is "matches regex"</span>
+<pre><code class="language-bash">awk '\$3 &gt; 100 &amp;&amp; \$1 ~ /^203\\./ {print}' access.log     <span class="tok-comment"># ~ is "matches regex"</span>
 awk '\$1 !~ /^#/ {print}' config.ini                    <span class="tok-comment"># !~ is "does not match"</span>
 
 <span class="tok-comment"># Several rules run in order against every line</span>
@@ -2963,7 +2963,7 @@ awk '
 <p>The <code>+0</code> is a small idiom worth stealing: if no line matched, <code>errors</code> is the empty string and would print as blank. Adding zero forces it into a number, so you get <code>0</code> instead of nothing.</p>
 
 <h3>Recipes worth keeping</h3>
-<pre><code><span class="tok-comment"># Print a specific column range</span>
+<pre><code class="language-bash"><span class="tok-comment"># Print a specific column range</span>
 awk '{for(i=3;i&lt;=NF;i++) printf "%s ", \$i; print ""}' file.txt
 
 <span class="tok-comment"># Deduplicate WITHOUT sorting — and preserve the original order</span>
@@ -3015,14 +3015,14 @@ ${slide('lx-03', 28, 'Chương trình awk nằm trong nháy ĐƠN — biến she
 <tr><td><code>-f prog.awk</code></td><td>read the program from a file once it outgrows one line</td></tr>
 <tr><td><code>NR==FNR { …; next }</code></td><td>"while reading the FIRST file": the classic two-file lookup</td></tr>
 </table>
-<pre><code>awk 'NR==FNR {ten[\$1]=\$2; next} {print \$1, ten[\$1], \$2}' \\
+<pre><code class="language-bash">awk 'NR==FNR {ten[\$1]=\$2; next} {print \$1, ten[\$1], \$2}' \\
     &lt;(printf 'u1 an\\nu3 chi\\n') &lt;(printf 'u1 ORD-9\\nu3 ORD-7\\n')</code></pre>
 <div class="out">u1 an ORD-9
 u3 chi ORD-7</div>
 
 <h3>Try it step by step</h3>
 <p>Six one-liners on the <code>access.log</code> from Lesson 3.3 — each one answers a question someone on your team would actually ask:</p>
-<pre><code>cd ~/thu-linux/ch3/log
+<pre><code class="language-bash">cd ~/thu-linux/ch3/log
 head -1 access.log | awk '{print NF, \$1, \$7, \$9, \$NF}'
 awk '\$9 &gt;= 400 {print \$9, \$7}' access.log
 awk '{s += \$10} END {print s, NR}' access.log
@@ -3112,7 +3112,7 @@ awk '!seen[\$7]++ {print \$7}' access.log</code></pre>
 
 <h3>Mô hình: mẫu { hành động }</h3>
 ${slide('lx-03', 25, 'awk cắt sẵn mỗi dòng thành $1…$NF — đọc một dòng log nginx')}
-<pre><code>awk 'MẪU { HÀNH ĐỘNG }' file</code></pre>
+<pre><code class="language-bash">awk 'MẪU { HÀNH ĐỘNG }' file</code></pre>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">Đọc</span><span class="lz-t">một dòng, cắt thành các trường</span><span class="lz-d">Mặc định cắt theo chuỗi khoảng trắng. \$1 là trường đầu, \$2 là trường hai, \$0 là cả dòng.</span></div>
   <div class="lz-step"><span class="lz-k">Thử</span><span class="lz-t">dòng này có khớp MẪU không?</span><span class="lz-d">Một regex, một phép so sánh, hoặc không gì cả — mẫu rỗng khớp mọi dòng.</span></div>
@@ -3120,7 +3120,7 @@ ${slide('lx-03', 25, 'awk cắt sẵn mỗi dòng thành $1…$NF — đọc m�
   <div class="lz-step"><span class="lz-k">Lặp</span><span class="lz-t">dòng kế, cho tới hết file</span><span class="lz-d">Rồi chạy khối END nếu có. Biến sống sót qua các dòng — chính điều này làm cho việc cộng dồn khả thi.</span></div>
 </div>
 
-<pre><code>awk '{print \$1}' access.log         <span class="tok-comment"># không có mẫu: mọi dòng</span>
+<pre><code class="language-bash">awk '{print \$1}' access.log         <span class="tok-comment"># không có mẫu: mọi dòng</span>
 awk '/ERROR/' app.log               <span class="tok-comment"># không có hành động: in dòng khớp, như grep</span>
 awk '/ERROR/ {print \$5}' app.log    <span class="tok-comment"># có cả hai</span>
 awk '\$3 &gt; 100 {print \$1, \$3}' d.txt <span class="tok-comment"># một phép so sánh số dùng làm mẫu</span></code></pre>
@@ -3136,7 +3136,7 @@ awk '\$3 &gt; 100 {print \$1, \$3}' d.txt <span class="tok-comment"># một phé
   <div class="kv"><span class="k"><code>FS</code> <code>OFS</code></span><span class="v">Dấu phân cách trường đầu vào và đầu ra. <code>-F,</code> là cách viết tắt để đặt FS.</span></div>
   <div class="kv"><span class="k"><code>FILENAME</code></span><span class="v">File đang được đọc. Hữu ích khi xử lý nhiều file một lượt.</span></div>
 </div>
-<pre><code>awk '{print NR, \$0}' file.txt           <span class="tok-comment"># đánh số mọi dòng</span>
+<pre><code class="language-bash">awk '{print NR, \$0}' file.txt           <span class="tok-comment"># đánh số mọi dòng</span>
 awk '{print \$NF}' access.log            <span class="tok-comment"># trường cuối, bất kể nó ở vị trí nào</span>
 awk 'NF' file.txt                       <span class="tok-comment"># NF bằng 0 trên dòng trống → xoá chúng đi</span>
 awk 'NR &gt; 1' data.csv                   <span class="tok-comment"># bỏ qua dòng tiêu đề</span>
@@ -3144,7 +3144,7 @@ awk 'NR % 10 == 0' huge.log             <span class="tok-comment"># lấy mẫu 
 <div class="callout ok"><code>awk 'NF'</code> là một kiệt tác nhỏ: cái mẫu chính là số trường, awk coi 0 là sai, nên dòng trống bị loại còn mọi dòng khác được in ra bởi hành động ngầm định. Ba ký tự thay cho cả <code>grep -v '^\$'</code>.</div>
 
 <h3>Dấu phân cách</h3>
-<pre><code>awk -F, '{print \$2}' data.csv           <span class="tok-comment"># phân cách bằng dấu phẩy</span>
+<pre><code class="language-bash">awk -F, '{print \$2}' data.csv           <span class="tok-comment"># phân cách bằng dấu phẩy</span>
 awk -F: '{print \$1, \$7}' /etc/passwd    <span class="tok-comment"># dấu hai chấm</span>
 awk -F'\\t' '{print \$3}' data.tsv        <span class="tok-comment"># tab</span>
 awk -F'[,;]' '{print \$2}' mixed.txt      <span class="tok-comment"># FS là một REGEX: dấu phẩy hoặc chấm phẩy</span>
@@ -3155,11 +3155,11 @@ deploy | /bin/bash</div>
 
 <h3>BEGIN và END</h3>
 ${slide('lx-03', 26, 'BEGIN chạy trước, END chạy sau — biến tự nhớ qua mọi dòng')}
-<pre><code>awk 'BEGIN {print "bắt đầu"} {n++} END {print n, "dòng"}' file.txt</code></pre>
+<pre><code class="language-bash">awk 'BEGIN {print "bắt đầu"} {n++} END {print n, "dòng"}' file.txt</code></pre>
 <div class="out">bắt đầu
 4213 dòng</div>
 <p><code>BEGIN</code> chạy một lần trước khi có đầu vào nào, <code>END</code> chạy một lần sau dòng cuối cùng. Biến sống sót giữa các dòng và được khởi tạo bằng 0 hoặc chuỗi rỗng, nên <code>n++</code> chẳng cần khai báo gì. Đó là toàn bộ nền tảng của việc cộng dồn:</p>
-<pre><code><span class="tok-comment"># Cộng một cột</span>
+<pre><code class="language-bash"><span class="tok-comment"># Cộng một cột</span>
 awk '{sum += \$3} END {print sum}' sales.txt
 
 <span class="tok-comment"># Trung bình, có chốt chặn phép chia cho 0</span>
@@ -3174,7 +3174,7 @@ awk 'NR==1 {min=max=\$1} {if (\$1&lt;min) min=\$1; if (\$1&gt;max) max=\$1} END 
 <h3>Mảng liên kết: nhóm dữ liệu mà không cần cơ sở dữ liệu</h3>
 ${slide('lx-03', 27, 'Mảng liên kết: nhóm và cộng dồn trong MỘT lượt đọc')}
 <p>Đây là tính năng làm cho <code>awk</code> đáng học. Mảng được đánh chỉ số bằng <em>CHUỖI</em>, và được tạo ra ngay lần dùng đầu tiên:</p>
-<pre><code><span class="tok-comment"># Đếm lượt gọi theo IP — chính chuỗi sort|uniq -c, nhưng một lượt đọc và không cần sắp xếp đầu vào</span>
+<pre><code class="language-bash"><span class="tok-comment"># Đếm lượt gọi theo IP — chính chuỗi sort|uniq -c, nhưng một lượt đọc và không cần sắp xếp đầu vào</span>
 awk '{count[\$1]++} END {for (ip in count) print count[ip], ip}' access.log | sort -rn | head
 
 <span class="tok-comment"># Tổng số byte theo mã trạng thái</span>
@@ -3191,7 +3191,7 @@ awk -F'[:[]' '{hits[\$3]++} END {for (h in hits) print h, hits[h]}' access.log |
 <div class="callout"><code>sort | uniq -c</code> phải sắp xếp toàn bộ đầu vào trước — trên một file log 4 GB nghĩa là phải tràn ra đĩa. Bản awk chỉ giữ một bảng băm gồm những khoá khác nhau và đọc file đúng một lần. Đo trên một access log 2,1 GB: 41 giây cho chuỗi ống có sort, 9 giây cho awk. Khi số khoá khác nhau ít mà đầu vào lớn, awk thắng cách biệt rất xa.</div>
 
 <h3>printf: điều khiển cách in ra</h3>
-<pre><code>awk '{printf "%-20s %8.2f\\n", \$1, \$2}' data.txt   <span class="tok-comment"># đệm trái, căn phải, 2 số lẻ</span>
+<pre><code class="language-bash">awk '{printf "%-20s %8.2f\\n", \$1, \$2}' data.txt   <span class="tok-comment"># đệm trái, căn phải, 2 số lẻ</span>
 awk '{printf "%5d %s\\n", NR, \$0}' file.txt         <span class="tok-comment"># đánh số, căn thẳng hàng</span></code></pre>
 <div class="out">deploy                 142.50
 postgres              1841.09
@@ -3199,7 +3199,7 @@ redis                   12.75</div>
 <p><code>print</code> tự thêm ký tự xuống dòng; <code>printf</code> thì không, nên bạn tự viết <code>\\n</code>. Các mã định dạng là của C: <code>%s</code> chuỗi, <code>%d</code> số nguyên, <code>%f</code> số thực, <code>%-20s</code> căn trái trong 20 cột, <code>%8.2f</code> rộng tám cột với hai số lẻ.</p>
 
 <h3>Điều kiện và nhiều luật cùng lúc</h3>
-<pre><code>awk '\$3 &gt; 100 &amp;&amp; \$1 ~ /^203\\./ {print}' access.log     <span class="tok-comment"># ~ nghĩa là "khớp regex"</span>
+<pre><code class="language-bash">awk '\$3 &gt; 100 &amp;&amp; \$1 ~ /^203\\./ {print}' access.log     <span class="tok-comment"># ~ nghĩa là "khớp regex"</span>
 awk '\$1 !~ /^#/ {print}' config.ini                    <span class="tok-comment"># !~ nghĩa là "không khớp"</span>
 
 <span class="tok-comment"># Nhiều luật chạy lần lượt trên MỌI dòng</span>
@@ -3212,7 +3212,7 @@ awk '
 <p>Cái <code>+0</code> là một lối viết nhỏ đáng lấy về dùng: nếu không dòng nào khớp thì <code>errors</code> là chuỗi rỗng và sẽ in ra khoảng trắng. Cộng thêm 0 ép nó thành một con số, nên bạn nhận được <code>0</code> thay vì không gì cả.</p>
 
 <h3>Những công thức đáng giữ</h3>
-<pre><code><span class="tok-comment"># In một khoảng cột</span>
+<pre><code class="language-bash"><span class="tok-comment"># In một khoảng cột</span>
 awk '{for(i=3;i&lt;=NF;i++) printf "%s ", \$i; print ""}' file.txt
 
 <span class="tok-comment"># Khử trùng mà KHÔNG sắp xếp — và giữ nguyên thứ tự gốc</span>
@@ -3264,14 +3264,14 @@ ${slide('lx-03', 28, 'Chương trình awk nằm trong nháy ĐƠN — biến she
 <tr><td><code>-f prog.awk</code></td><td>đọc chương trình từ file khi nó đã dài quá một dòng</td></tr>
 <tr><td><code>NR==FNR { …; next }</code></td><td>"trong lúc đọc file THỨ NHẤT": lối tra cứu hai file kinh điển</td></tr>
 </table>
-<pre><code>awk 'NR==FNR {ten[\$1]=\$2; next} {print \$1, ten[\$1], \$2}' \\
+<pre><code class="language-bash">awk 'NR==FNR {ten[\$1]=\$2; next} {print \$1, ten[\$1], \$2}' \\
     &lt;(printf 'u1 an\\nu3 chi\\n') &lt;(printf 'u1 ORD-9\\nu3 ORD-7\\n')</code></pre>
 <div class="out">u1 an ORD-9
 u3 chi ORD-7</div>
 
 <h3>Chạy thử từng bước</h3>
 <p>Sáu dòng lệnh trên file <code>access.log</code> của Bài 3.3 — mỗi dòng trả lời một câu mà người trong nhóm bạn thật sự sẽ hỏi:</p>
-<pre><code>cd ~/thu-linux/ch3/log
+<pre><code class="language-bash">cd ~/thu-linux/ch3/log
 head -1 access.log | awk '{print NF, \$1, \$7, \$9, \$NF}'
 awk '\$9 &gt;= 400 {print \$9, \$7}' access.log
 awk '{s += \$10} END {print s, NR}' access.log

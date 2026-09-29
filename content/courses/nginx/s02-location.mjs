@@ -18,7 +18,7 @@ export default {
 <p class="lead">Almost everyone starts with the same wrong model: Nginx reads the <code>location</code> blocks top to bottom and uses the first one that matches. It does not. Understanding what it actually does takes about ten minutes and removes an entire category of confusion permanently.</p>
 
 <h3>Seven blocks, deliberately overlapping</h3>
-<pre><code>server {
+<pre><code class="language-bash">server {
   location = /a            { ... }   <span class="tok-comment"># 1 — EXACT match</span>
   location ^~ /a/tinh      { ... }   <span class="tok-comment"># 2 — PRIORITY prefix</span>
   location ~ \\.php         { ... }   <span class="tok-comment"># 3 — regex, case-sensitive</span>
@@ -97,7 +97,7 @@ export default {
 <p class="lead">Gần như ai cũng bắt đầu bằng cùng một mô hình SAI: Nginx đọc các khối <code>location</code> từ trên xuống rồi lấy cái khớp đầu tiên. Nó KHÔNG làm vậy. Hiểu ra nó thật sự làm gì tốn chừng mười phút và xoá vĩnh viễn cả một loại rối rắm.</p>
 
 <h3>Bảy khối, cố tình chồng lấn nhau</h3>
-<pre><code>server {
+<pre><code class="language-bash">server {
   location = /a            { ... }   <span class="tok-comment"># 1 — khớp CHÍNH XÁC</span>
   location ^~ /a/tinh      { ... }   <span class="tok-comment"># 2 — tiền tố ƯU TIÊN</span>
   location ~ \\.php         { ... }   <span class="tok-comment"># 3 — regex, phân biệt hoa thường</span>
@@ -185,7 +185,7 @@ export default {
 <p class="lead">Lesson 2.1 gave you the algorithm. It runs against <code>$uri</code> — a normalised path — and not against the raw bytes in the request line. Knowing exactly what the normaliser does is what separates "my location does not match" from a security incident.</p>
 
 <h3>Eight spellings of one path, measured</h3>
-<pre><code>location /quan-tri { return 200 "TRUNG /quan-tri   uri=[\$uri]"; }
+<pre><code class="language-bash">location /quan-tri { return 200 "TRUNG /quan-tri   uri=[\$uri]"; }
 location ~ \\.php   { return 200 "TRUNG regex .php  uri=[\$uri]"; }
 location /         { return 200 "cong khai         uri=[\$uri]"; }</code></pre>
 <div class="out">$ curl --path-as-is ...        (--path-as-is: curl KHONG tu don duong dan)
@@ -249,7 +249,7 @@ location /         { return 200 "cong khai         uri=[\$uri]"; }</code></pre>
 <p class="lead">Bài 2.1 đưa cho bạn cái thuật toán. Nó chạy trên <code>$uri</code> — một đường dẫn ĐÃ CHUẨN HOÁ — chứ không chạy trên đám byte thô trong dòng request. Biết chính xác bộ chuẩn hoá đó làm gì là thứ phân tách giữa "location của tôi không khớp" và một sự cố an ninh.</p>
 
 <h3>Tám cách viết của cùng một đường dẫn, đo thật</h3>
-<pre><code>location /quan-tri { return 200 "TRUNG /quan-tri   uri=[\$uri]"; }
+<pre><code class="language-bash">location /quan-tri { return 200 "TRUNG /quan-tri   uri=[\$uri]"; }
 location ~ \\.php   { return 200 "TRUNG regex .php  uri=[\$uri]"; }
 location /         { return 200 "cong khai         uri=[\$uri]"; }</code></pre>
 <div class="out">$ curl --path-as-is ...        (--path-as-is: curl KHONG tu don duong dan)
@@ -322,7 +322,7 @@ location /         { return 200 "cong khai         uri=[\$uri]"; }</code></pre>
 <p class="lead">Picking a <code>location</code> is not only picking a handler. It picks a point in the configuration tree, and everything that applies to the request is resolved from there. The rule for how that resolution works has one exception that quietly deletes security headers, so this lesson measures it on a real server.</p>
 
 <h3>One server, three URLs, three different header sets</h3>
-<pre><code>server {
+<pre><code class="language-bash">server {
   root /tmp/nxloc/site;
   add_header X-Tang-Server "co-o-tang-server" always;
 
@@ -359,7 +359,7 @@ X-Rieng: chi-cua-khoi-nay                      &lt;- ca hai cai kia deu bay</div
 <div class="pitfall">
 <p><strong>Trap — this is how sites lose their security headers on exactly one path.</strong> Put <code>Strict-Transport-Security</code>, <code>X-Content-Type-Options</code>, <code>X-Frame-Options</code> and a <code>Content-Security-Policy</code> at the <code>server</code> level, then add one <code>add_header Cache-Control ...</code> inside <code>location /static/</code>, and every static asset is now served with no security headers at all. It is a one-line change that passes review because the reviewer is reading the line you added, not the four you deleted. Two fixes work: repeat the full set inside every block that adds anything, or — much better — put the shared set in a small file and <code>include</code> it in each block, so "repeat them all" is one line and cannot drift.</p>
 </div>
-<pre><code><span class="tok-comment"># /etc/nginx/snippets/header-bao-mat.conf</span>
+<pre><code class="language-bash"><span class="tok-comment"># /etc/nginx/snippets/header-bao-mat.conf</span>
 add_header Strict-Transport-Security "max-age=31536000" always;
 add_header X-Content-Type-Options    "nosniff" always;
 add_header X-Frame-Options           "SAMEORIGIN" always;
@@ -417,7 +417,7 @@ location /               F
 <p class="lead">Chọn một <code>location</code> không chỉ là chọn ai xử lý. Nó chọn một ĐIỂM trên cây cấu hình, và mọi thứ áp dụng cho request đều được giải ra từ chỗ đó. Cái luật giải ra ấy có một ngoại lệ lặng lẽ xoá sạch header bảo mật, nên bài này đem nó ra đo trên một máy chủ thật.</p>
 
 <h3>Một server, ba URL, ba bộ header khác nhau</h3>
-<pre><code>server {
+<pre><code class="language-bash">server {
   root /tmp/nxloc/site;
   add_header X-Tang-Server "co-o-tang-server" always;
 
@@ -454,7 +454,7 @@ X-Rieng: chi-cua-khoi-nay                      &lt;- ca hai cai kia deu bay</div
 <div class="pitfall">
 <p><strong>Bẫy — đây chính là cách các site mất header bảo mật trên ĐÚNG một đường dẫn.</strong> Đặt <code>Strict-Transport-Security</code>, <code>X-Content-Type-Options</code>, <code>X-Frame-Options</code> và một <code>Content-Security-Policy</code> ở tầng <code>server</code>, rồi thêm một dòng <code>add_header Cache-Control ...</code> vào trong <code>location /static/</code>, thế là mọi tệp tĩnh giờ được phục vụ mà KHÔNG còn header bảo mật nào. Nó là một thay đổi một dòng và nó qua được rà soát, vì người rà soát đang đọc cái dòng bạn THÊM chứ không đọc bốn dòng bạn XOÁ. Hai cách chữa đều được: chép lại đủ bộ vào mọi khối nào có thêm bất cứ thứ gì, hoặc — hay hơn nhiều — bỏ bộ dùng chung vào một file nhỏ rồi <code>include</code> nó ở từng khối, để "chép lại đủ bộ" chỉ còn một dòng và không thể trôi dạt.</p>
 </div>
-<pre><code><span class="tok-comment"># /etc/nginx/snippets/header-bao-mat.conf</span>
+<pre><code class="language-bash"><span class="tok-comment"># /etc/nginx/snippets/header-bao-mat.conf</span>
 add_header Strict-Transport-Security "max-age=31536000" always;
 add_header X-Content-Type-Options    "nosniff" always;
 add_header X-Frame-Options           "SAMEORIGIN" always;
@@ -561,7 +561,7 @@ do that — duong dan Nginx dung len:
 </div>
 
 <h3>The missing slash, and what it leaks</h3>
-<pre><code><span class="tok-comment"># WRONG — the location is missing its trailing /</span>
+<pre><code class="language-bash"><span class="tok-comment"># WRONG — the location is missing its trailing /</span>
 location /tep { alias /tmp/nxloc/kho/cong-khai/; }
 
 <span class="tok-comment"># The directory tree:</span>
@@ -578,7 +578,7 @@ location /tep { alias /tmp/nxloc/kho/cong-khai/; }
 <div class="pitfall">
 <p><strong>Trap — this is the best-known Nginx misconfiguration, and it is one character wide.</strong> <code>location /tep</code> is a prefix, and prefixes do not stop at a separator (Lesson 2.1), so it matches <code>/tep../bi-mat.txt</code>. <code>alias</code> then removes the matched <code>/tep</code> and prepends the alias, giving <code>/tmp/nxloc/kho/cong-khai/../bi-mat.txt</code> — which the filesystem resolves to the parent directory. The <code>..</code> survived normalisation because <code>tep..</code> is not a path segment, so Lesson 2.2's cleanup never applied to it. Writing <code>location /tep/</code> closes it, measured above: the crafted request no longer matches the block at all. <strong>The rule: when a location is paired with <code>alias</code>, both the location and the alias must end in <code>/</code>, or neither may.</strong> The mixed spelling is the vulnerable one.</p>
 </div>
-<pre><code><span class="tok-comment"># RIGHT — both carry the trailing /</span>
+<pre><code class="language-bash"><span class="tok-comment"># RIGHT — both carry the trailing /</span>
 location /tep/ { alias /tmp/nxloc/kho/cong-khai/; }
 
 <span class="tok-comment"># Also correct, and usually better: rename the directory to match and use root</span>
@@ -650,7 +650,7 @@ do that — duong dan Nginx dung len:
 </div>
 
 <h3>Cái dấu gạch chéo thiếu, và nó làm rò rỉ cái gì</h3>
-<pre><code><span class="tok-comment"># SAI — location thiếu dấu / ở cuối</span>
+<pre><code class="language-bash"><span class="tok-comment"># SAI — location thiếu dấu / ở cuối</span>
 location /tep { alias /tmp/nxloc/kho/cong-khai/; }
 
 <span class="tok-comment"># Cây thư mục:</span>
@@ -667,7 +667,7 @@ location /tep { alias /tmp/nxloc/kho/cong-khai/; }
 <div class="pitfall">
 <p><strong>Bẫy — đây là cấu hình sai NỔI TIẾNG NHẤT của Nginx, và nó rộng đúng một ký tự.</strong> <code>location /tep</code> là một tiền tố, và tiền tố không dừng ở dấu gạch chéo (Bài 2.1), nên nó khớp luôn <code>/tep../bi-mat.txt</code>. <code>alias</code> sau đó bỏ đi phần <code>/tep</code> đã khớp rồi ghép alias vào đầu, ra <code>/tmp/nxloc/kho/cong-khai/../bi-mat.txt</code> — mà hệ tệp rút gọn thành thư mục CHA. Cái <code>..</code> sống sót qua bộ chuẩn hoá vì <code>tep..</code> không phải một ĐOẠN đường dẫn, nên phép dọn dẹp ở Bài 2.2 chưa từng đụng tới nó. Viết <code>location /tep/</code> là bịt được, đã đo ở trên: cái request bịa ra kia không còn khớp cái khối đó nữa. <strong>Luật: khi một location đi cùng <code>alias</code> thì CẢ location LẪN alias phải cùng kết thúc bằng <code>/</code>, hoặc cùng không.</strong> Cách viết lẫn lộn mới là cách có lỗ.</p>
 </div>
-<pre><code><span class="tok-comment"># ĐÚNG — cả hai cùng có dấu / ở cuối</span>
+<pre><code class="language-bash"><span class="tok-comment"># ĐÚNG — cả hai cùng có dấu / ở cuối</span>
 location /tep/ { alias /tmp/nxloc/kho/cong-khai/; }
 
 <span class="tok-comment"># Cũng đúng, và thường tốt hơn: đổi tên thư mục cho khớp rồi dùng root</span>
@@ -708,7 +708,7 @@ location /tep/ { root /tmp/nxloc/kho/cong-khai-goc; }
 <p class="lead">Everything so far treated location selection as a single decision. It is not always: three ordinary directives can rewrite <code>$uri</code> mid-request and send the whole matching algorithm back to step one. Once you can see that happening, a large class of "impossible" Nginx behaviour becomes obvious.</p>
 
 <h3>try_files, in the order it tries</h3>
-<pre><code>location /spa/  { try_files \$uri \$uri/ /index.html; }   <span class="tok-comment"># the fallback is a URI</span>
+<pre><code class="language-bash">location /spa/  { try_files \$uri \$uri/ /index.html; }   <span class="tok-comment"># the fallback is a URI</span>
 location /chat/ { try_files \$uri =404; }                <span class="tok-comment"># the fallback is a CODE</span>
 location /di-vong/ { try_files \$uri /dich-cuoi; }
 location /dich-cuoi { return 200 "DA CHAY LAI KHOP LOCATION: uri=[\$uri]"; }</code></pre>
@@ -745,7 +745,7 @@ location /dich-cuoi { return 200 "DA CHAY LAI KHOP LOCATION: uri=[\$uri]"; }</co
 </div>
 
 <h3>Building the loop on purpose</h3>
-<pre><code><span class="tok-comment"># The fallback points at a file that does NOT exist, and that path lands</span>
+<pre><code class="language-bash"><span class="tok-comment"># The fallback points at a file that does NOT exist, and that path lands</span>
 <span class="tok-comment"># back in THIS SAME block — so it retries, and retries, and retries</span>
 location /vong-lap/ { try_files \$uri /vong-lap/khong-bao-gio-co.html; }</code></pre>
 <div class="out">/vong-lap/x              -> 500
@@ -756,7 +756,7 @@ rewrite or internal redirection cycle while internally redirecting to
 <div class="pitfall">
 <p><strong>Trap — a <code>500</code> with no application involved, and the config that causes it looks completely reasonable.</strong> The fallback URI has to be servable by a block that does <em>not</em> send it back through the same <code>try_files</code>. Here <code>/vong-lap/khong-bao-gio-co.html</code> re-matched <code>location /vong-lap/</code>, the file still did not exist, and the fallback fired again — ten times, then <code>500</code>. The classic production version is an SPA config where <code>/index.html</code> is genuinely missing after a bad deploy: every URL on the site returns <code>500</code> instead of a <code>404</code>, and the error log line above is the only thing that says why. Two habits prevent it: make the fallback a path that a <code>location =</code> block handles directly, and make sure the file exists as part of the deploy check rather than assuming it.</p>
 </div>
-<pre><code><span class="tok-comment"># Safe: the fallback goes into a block that CANNOT return to try_files</span>
+<pre><code class="language-bash"><span class="tok-comment"># Safe: the fallback goes into a block that CANNOT return to try_files</span>
 location /spa/ { try_files \$uri \$uri/ /spa-index; }
 location = /spa-index {
   root /srv/spa;
@@ -788,7 +788,7 @@ location = /spa-index {
 <p class="lead">Từ đầu tới giờ ta coi việc chọn location là MỘT quyết định. Không phải lúc nào cũng thế: ba chỉ thị rất bình thường có thể viết lại <code>$uri</code> ngay giữa request và đẩy cả thuật toán khớp quay về bước một. Nhìn thấy được chuyện đó là cả một lớp hành vi "không thể nào" của Nginx trở nên hiển nhiên.</p>
 
 <h3>try_files, theo đúng thứ tự nó thử</h3>
-<pre><code>location /spa/  { try_files \$uri \$uri/ /index.html; }   <span class="tok-comment"># dự phòng là một URI</span>
+<pre><code class="language-bash">location /spa/  { try_files \$uri \$uri/ /index.html; }   <span class="tok-comment"># dự phòng là một URI</span>
 location /chat/ { try_files \$uri =404; }                <span class="tok-comment"># dự phòng là một MÃ</span>
 location /di-vong/ { try_files \$uri /dich-cuoi; }
 location /dich-cuoi { return 200 "DA CHAY LAI KHOP LOCATION: uri=[\$uri]"; }</code></pre>
@@ -825,7 +825,7 @@ location /dich-cuoi { return 200 "DA CHAY LAI KHOP LOCATION: uri=[\$uri]"; }</co
 </div>
 
 <h3>Dựng cái vòng lặp một cách cố ý</h3>
-<pre><code><span class="tok-comment"># Dự phòng trỏ tới một tệp KHÔNG tồn tại, mà đường dẫn đó lại rơi</span>
+<pre><code class="language-bash"><span class="tok-comment"># Dự phòng trỏ tới một tệp KHÔNG tồn tại, mà đường dẫn đó lại rơi</span>
 <span class="tok-comment"># đúng vào CHÍNH khối này — nên nó thử lại, và lại, và lại</span>
 location /vong-lap/ { try_files \$uri /vong-lap/khong-bao-gio-co.html; }</code></pre>
 <div class="out">/vong-lap/x              -> 500
@@ -836,7 +836,7 @@ rewrite or internal redirection cycle while internally redirecting to
 <div class="pitfall">
 <p><strong>Bẫy — một cú <code>500</code> mà chẳng có ứng dụng nào tham gia, và cái cấu hình gây ra nó trông hoàn toàn hợp lý.</strong> Cái URI dự phòng BẮT BUỘC phải phục vụ được bởi một khối KHÔNG đẩy nó quay lại chính cái <code>try_files</code> ấy. Ở đây <code>/vong-lap/khong-bao-gio-co.html</code> khớp lại <code>location /vong-lap/</code>, tệp vẫn không tồn tại, và cái dự phòng lại nổ — mười lần, rồi <code>500</code>. Bản kinh điển ngoài production là một cấu hình SPA mà <code>/index.html</code> thật sự biến mất sau một lần deploy hỏng: MỌI URL trên site trả <code>500</code> thay vì <code>404</code>, và cái dòng error log ở trên là thứ duy nhất nói vì sao. Hai thói quen chặn được nó: cho dự phòng trỏ tới một đường dẫn mà một khối <code>location =</code> xử lý TRỰC TIẾP, và kiểm tệp đó có tồn tại như một phần của bước kiểm deploy chứ đừng cho là nhiên.</p>
 </div>
-<pre><code><span class="tok-comment"># An toàn: dự phòng đi vào một khối KHÔNG thể quay lại try_files</span>
+<pre><code class="language-bash"><span class="tok-comment"># An toàn: dự phòng đi vào một khối KHÔNG thể quay lại try_files</span>
 location /spa/ { try_files \$uri \$uri/ /spa-index; }
 location = /spa-index {
   root /srv/spa;

@@ -134,7 +134,7 @@ export default {
 <tr><th>Ký tự</th><td>M</td><td>y</td><td>(dấu cách)</td><td>n</td><td>a</td><td>m</td><td>e</td><td>(dấu cách)</td><td>i</td><td>s</td><td>(dấu cách)</td><td>A</td><td>r</td><td>n</td><td>o</td><td>l</td><td>d</td><td><strong>\\0</strong></td><td>?</td></tr>
 <tr><th>Mã ASCII</th><td>77</td><td>121</td><td>32</td><td>110</td><td>97</td><td>109</td><td>101</td><td>32</td><td>105</td><td>115</td><td>32</td><td>65</td><td>114</td><td>110</td><td>111</td><td>108</td><td>100</td><td><strong>0</strong></td><td>0</td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
 
 int main(void) {
@@ -162,7 +162,7 @@ int main(void) {
 <tr><th>Ký tự</th><td>M</td><td>y</td><td>(dấu cách)</td><td>n</td><td>a</td><td>m</td><td>e</td><td>(dấu cách)</td><td>i</td><td>s</td><td>(dấu cách)</td><td>A</td><td>r</td><td>n</td><td>o</td><td>l</td><td>d</td><td><strong>\\0</strong></td><td>?</td></tr>
 <tr><th>Mã ASCII</th><td>77</td><td>121</td><td>32</td><td>110</td><td>97</td><td>109</td><td>101</td><td>32</td><td>105</td><td>115</td><td>32</td><td>65</td><td>114</td><td>110</td><td>111</td><td>108</td><td>100</td><td><strong>0</strong></td><td>0</td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
 
 int main(void) {
@@ -186,7 +186,7 @@ int main(void) {
 <li><strong>"data segment or stack segment"</strong> — a local <code>char s[31]</code> inside a function lives on the <strong>stack</strong> and disappears when the function returns; a <code>char s[31]</code> outside all functions, or marked <code>static</code>, lives in the <strong>data segment</strong> for the whole run. Both are "static strings" in the slide's sense because the compiler picks the address.</li>
 <li><strong>The dangerous cousin the slide does not show</strong> — <code>char *p = "abc";</code> also looks like a static string, but it puts the text in a <em>read-only</em> area and only stores its address in <code>p</code>. Writing through <code>p</code> crashes; writing into an array does not. See the measurement below.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
 
 int main(void) {
@@ -219,7 +219,7 @@ int main(void) {
 <li><strong>"vùng data hoặc vùng stack"</strong> — một <code>char s[31]</code> cục bộ trong hàm nằm trên <strong>stack</strong> và biến mất khi hàm kết thúc; một <code>char s[31]</code> đặt ngoài mọi hàm, hoặc có từ khoá <code>static</code>, nằm ở <strong>vùng data</strong> suốt cả lần chạy. Cả hai đều là "chuỗi tĩnh" theo nghĩa của slide, vì trình biên dịch chọn địa chỉ.</li>
 <li><strong>Người anh em nguy hiểm mà slide không vẽ</strong> — <code>char *p = "abc";</code> trông cũng như chuỗi tĩnh, nhưng nó đặt phần chữ vào vùng <em>chỉ đọc</em> và chỉ cất địa chỉ vào <code>p</code>. Ghi qua <code>p</code> là sập; ghi vào mảng thì không. Xem phép đo bên dưới.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
 
 int main(void) {
@@ -254,7 +254,7 @@ int main(void) {
 <li><strong>The console on the slide</strong> — two lines, <code>Hoa Lac Hi-tech Park</code> and <code>VietNam</code>, then Dev-C++'s <em>"Press any key to continue"</em> from <code>system("pause")</code>.</li>
 <li><strong>What happens if the terminator is missing</strong> — the loop does not stop at the end of the array. It keeps reading whatever bytes follow, printing junk, until it happens to hit a zero. That is a read past the end of an array, and C will not warn you.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 
 int main() {
@@ -280,7 +280,7 @@ int main() {
 <li><strong>Cửa sổ console trên slide</strong> — hai dòng, <code>Hoa Lac Hi-tech Park</code> và <code>VietNam</code>, rồi câu <em>"Press any key to continue"</em> của Dev-C++ do <code>system("pause")</code> sinh ra.</li>
 <li><strong>Thiếu byte kết thúc thì sao</strong> — vòng lặp không dừng ở cuối mảng. Nó đọc tiếp mọi byte phía sau, in ra rác, cho tới khi tình cờ gặp một số 0. Đó là đọc vượt biên mảng, và C sẽ không cảnh báo gì cho bạn.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 
 int main() {
@@ -309,7 +309,7 @@ int main() {
 <li><strong>The n+1 rule comes along too</strong> — <code>malloc(10)</code> gives room for a 9-character string plus its terminator, not a 10-character one. This is the same arithmetic as slide 4, just on the heap.</li>
 <li><strong>What the heap buys you</strong> — a size computed at run time (<code>malloc(n + 1)</code> where <code>n</code> came from the user), and a block that survives after the function that created it returns. A local array can do neither.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 #include &lt;string.h&gt;
 
@@ -340,7 +340,7 @@ int main(void) {
 <li><strong>Quy tắc n+1 vẫn đi theo</strong> — <code>malloc(10)</code> cho chỗ chứa chuỗi 9 ký tự kèm byte kết thúc, chứ không phải 10 ký tự. Vẫn là phép tính của slide 4, chỉ là làm trên heap.</li>
 <li><strong>Heap mua cho bạn cái gì</strong> — một kích thước tính lúc chạy (<code>malloc(n + 1)</code> với <code>n</code> lấy từ người dùng), và một khối sống sót cả sau khi hàm tạo ra nó đã kết thúc. Mảng cục bộ không làm được việc nào trong hai việc đó.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 #include &lt;string.h&gt;
 
@@ -373,7 +373,7 @@ int main(void) {
 <li><strong>When the choice does matter</strong> — if you plan to append with <code>strcat</code> before writing anything, <code>calloc</code> gives you a valid empty string to append to, while a <code>malloc</code> block is garbage and <code>strcat</code> will append after some random byte far away. Then <code>calloc</code> (or <code>str[0] = '\\0';</code>) is required.</li>
 <li><strong><code>free</code> is not optional</strong> — every <code>malloc</code>/<code>calloc</code> needs exactly one <code>free</code>. In a 10-line program the OS cleans up anyway; in a loop that allocates per record, forgetting <code>free</code> is how a server dies after six hours.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 #include &lt;string.h&gt;
 
@@ -399,7 +399,7 @@ int main() {
 <li><strong>Khi nào lựa chọn ấy mới quan trọng</strong> — nếu bạn định <code>strcat</code> nối thêm trước khi ghi gì cả, <code>calloc</code> cho bạn một chuỗi rỗng hợp lệ để nối vào, còn khối <code>malloc</code> là rác nên <code>strcat</code> sẽ nối vào sau một byte ngẫu nhiên nào đó ở tít đâu. Lúc ấy <code>calloc</code> (hoặc <code>str[0] = '\\0';</code>) là bắt buộc.</li>
 <li><strong><code>free</code> không phải tuỳ chọn</strong> — mỗi <code>malloc</code>/<code>calloc</code> cần đúng một <code>free</code>. Trong chương trình 10 dòng thì hệ điều hành dọn hộ; trong một vòng lặp cấp phát cho từng bản ghi, quên <code>free</code> chính là cách một máy chủ chết sau sáu tiếng.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 #include &lt;string.h&gt;
 
@@ -435,7 +435,7 @@ int main() {
 <tr><th><code>s2</code> — ký tự</th><td>a</td><td>b</td><td>c</td><td><strong>\\0</strong></td><td>\\0</td><td>…</td><td>\\0</td></tr>
 <tr><th><code>s2</code> — mã ASCII</th><td>97</td><td>98</td><td>99</td><td><strong>0</strong></td><td>0</td><td>…</td><td>0</td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 
 int main() {
@@ -468,7 +468,7 @@ int main() {
 <tr><th><code>s2</code> — ký tự</th><td>a</td><td>b</td><td>c</td><td><strong>\\0</strong></td><td>\\0</td><td>…</td><td>\\0</td></tr>
 <tr><th><code>s2</code> — mã ASCII</th><td>97</td><td>98</td><td>99</td><td><strong>0</strong></td><td>0</td><td>…</td><td>0</td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 
 int main() {
@@ -494,7 +494,7 @@ int main() {
 <li><strong>Do not write <code>&amp;name</code></strong> — for <code>%d</code> you write <code>&amp;n</code> in <code>scanf</code>, so students copy the habit. For an array you do not: <code>name</code> already <em>is</em> the address. (For <code>char</code> arrays <code>&amp;name</code> happens to be the same number with a different type, so it often works by accident — do not rely on it.)</li>
 <li><strong>A consequence worth having in your pocket</strong> — since <code>%s</code> takes any address inside the array, <code>printf("%s", name + 11)</code> prints from character 11 onward. I measured it on this exact string: it prints <code>Arnold</code>. No copying, no substring function — just a different starting address.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void)
 {
@@ -515,7 +515,7 @@ int main(void)
 <li><strong>Đừng viết <code>&amp;name</code></strong> — với <code>%d</code> thì trong <code>scanf</code> bạn viết <code>&amp;n</code>, nên sinh viên bê nguyên thói quen sang. Với mảng thì không: <code>name</code> ĐÃ là địa chỉ rồi. (Với mảng <code>char</code> thì <code>&amp;name</code> tình cờ cũng là con số ấy nhưng kiểu khác, nên nó hay chạy được do may mắn — đừng dựa vào đó.)</li>
 <li><strong>Một hệ quả đáng bỏ túi</strong> — vì <code>%s</code> nhận bất kỳ địa chỉ nào bên trong mảng, nên <code>printf("%s", name + 11)</code> in từ ký tự thứ 11 trở đi. Tôi đã đo trên đúng chuỗi này: nó in ra <code>Arnold</code>. Không sao chép, không cần hàm cắt chuỗi — chỉ là một địa chỉ bắt đầu khác.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void)
 {
@@ -548,7 +548,7 @@ int main(void)
 <tr><td><code>printf("|%20.10s|", name)</code></td><td><code>|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;My name is|</code></td><td>20 (10 dấu cách + 10 ký tự)</td></tr>
 <tr><td><code>printf("|%-20.10s|", name)</code></td><td><code>|My name is&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</code></td><td>20</td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     char name[31] = "My name is Arnold";
@@ -578,7 +578,7 @@ int main(void) {
 <tr><td><code>printf("|%20.10s|", name)</code></td><td><code>|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;My name is|</code></td><td>20 (10 dấu cách + 10 ký tự)</td></tr>
 <tr><td><code>printf("|%-20.10s|", name)</code></td><td><code>|My name is&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</code></td><td>20</td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     char name[31] = "My name is Arnold";
@@ -600,7 +600,7 @@ int main(void) {
 <li><strong>The return value</strong> — the standard only promises "a non-negative number on success, <code>EOF</code> on failure". It is not specified to be the character count, and implementations differ, so do not build logic on it.</li>
 <li><strong>The input twin comes later</strong> — <code>puts</code> pairs with <code>gets</code> on slide 21. One of them is still perfectly fine; the other was removed from the C standard. Guess which.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void)
 {
@@ -621,7 +621,7 @@ int main(void)
 <li><strong>Giá trị trả về</strong> — chuẩn chỉ hứa "một số không âm nếu thành công, <code>EOF</code> nếu hỏng". Nó không được quy định là số ký tự, và các bản cài đặt trả về khác nhau, nên đừng xây logic dựa trên nó.</li>
 <li><strong>Người anh em bên nhập sẽ tới sau</strong> — <code>puts</code> đi cặp với <code>gets</code> ở slide 21. Một trong hai vẫn hoàn toàn ổn; cái kia thì đã bị xoá khỏi chuẩn C. Đoán xem cái nào.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void)
 {
@@ -649,7 +649,7 @@ int main(void)
 <tr><th>Gõ vào</th><th>Biến <code>str</code> nhận</th><th>Còn lại trong bộ đệm</th></tr>
 <tr><td><code>Hello⏎</code></td><td><code>Hello</code> (5 ký tự + <code>\\0</code> ở ô 5)</td><td><code>\\n</code></td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void)
 {
@@ -675,7 +675,7 @@ int main(void)
 <tr><th>Gõ gì</th><th>Biến <code>str</code> nhận gì</th><th>Còn gì trong bộ đệm</th></tr>
 <tr><td><code>Hello⏎</code></td><td><code>Hello</code> (5 ký tự + <code>\\0</code> ở ô 5)</td><td><code>\\n</code></td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void)
 {
@@ -706,7 +706,7 @@ int main(void)
 <tr><td><code>My name is Arnold⏎</code></td><td><code>My</code></td><td><code>&nbsp;name is Arnold\\n</code></td></tr>
 <tr><td><code>&nbsp;&nbsp;&nbsp;FPT⏎</code></td><td><code>FPT</code></td><td><code>\\n</code> (3 dấu cách đầu bị bỏ qua)</td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
 
 int main(void) {
@@ -738,7 +738,7 @@ int main(void) {
 <tr><td><code>My name is Arnold⏎</code></td><td><code>My</code></td><td><code>&nbsp;name is Arnold\\n</code></td></tr>
 <tr><td><code>&nbsp;&nbsp;&nbsp;FPT⏎</code></td><td><code>FPT</code></td><td><code>\\n</code> (3 dấu cách đầu bị bỏ qua)</td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
 
 int main(void) {
@@ -774,7 +774,7 @@ int main(void) {
 <tr><th>Gõ gì</th><th>Biến nhận gì</th><th>Còn gì trong bộ đệm</th></tr>
 <tr><td><code>My name is Arnold⏎</code></td><td><code>My</code> — <code>strlen</code> = 2</td><td><code>&nbsp;name is Arnold\\n</code> (16 ký tự)</td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void)
 {
@@ -803,7 +803,7 @@ int main(void)
 <tr><th>Gõ gì</th><th>Biến nhận gì</th><th>Còn gì trong bộ đệm</th></tr>
 <tr><td><code>My name is Arnold⏎</code></td><td><code>My</code> — <code>strlen</code> = 2</td><td><code>&nbsp;name is Arnold\\n</code> (16 ký tự)</td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void)
 {
@@ -831,7 +831,7 @@ int main(void)
 <tr><td><code>FPT⏎</code></td><td><code>FPT</code> (3 ký tự, không đệm)</td><td><code>\\n</code></td></tr>
 <tr><td><code>My name is Arnold⏎</code></td><td><code>My</code> (dấu cách thắng độ rộng)</td><td><code>&nbsp;name is Arnold\\n</code></td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
 
 int main(void)
@@ -863,7 +863,7 @@ int main(void)
 <tr><td><code>FPT⏎</code></td><td><code>FPT</code> (3 ký tự, không đệm)</td><td><code>\\n</code></td></tr>
 <tr><td><code>My name is Arnold⏎</code></td><td><code>My</code> (dấu cách thắng độ rộng)</td><td><code>&nbsp;name is Arnold\\n</code></td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
 
 int main(void)
@@ -898,7 +898,7 @@ int main(void)
 <tr><td>hai lần <code>%[^\\n]</code>, KHÔNG dọn</td><td><code>dong mot⏎dong hai⏎</code></td><td>a = <code>dong mot</code>; b = <strong>không đổi</strong>, scanf trả về <strong>0</strong></td><td><code>\\ndong hai\\n</code></td></tr>
 <tr><td>hai lần, CÓ <code>while (getchar() != '\\n');</code></td><td><code>dong mot⏎dong hai⏎</code></td><td>a = <code>dong mot</code>; b = <code>dong hai</code></td><td><code>\\n</code></td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     char a[31], b[31];
@@ -928,7 +928,7 @@ int main(void) {
 <tr><td>hai lần <code>%[^\\n]</code>, KHÔNG dọn</td><td><code>dong mot⏎dong hai⏎</code></td><td>a = <code>dong mot</code>; b = <strong>không đổi</strong>, scanf trả về <strong>0</strong></td><td><code>\\ndong hai\\n</code></td></tr>
 <tr><td>hai lần, CÓ <code>while (getchar() != '\\n');</code></td><td><code>dong mot⏎dong hai⏎</code></td><td>a = <code>dong mot</code>; b = <code>dong hai</code></td><td><code>\\n</code></td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     char a[31], b[31];
@@ -959,7 +959,7 @@ int main(void) {
 <tr><td><code>%10[^\\n]</code></td><td><code>My name is Arnold⏎</code></td><td><code>My name is</code> (10 ký tự)</td><td>10</td><td><code>&nbsp;Arnold\\n</code></td></tr>
 <tr><td><code>%s</code> (so sánh, slide 15)</td><td><code>My name is Arnold⏎</code></td><td><code>My</code> (2 ký tự)</td><td>2</td><td><code>&nbsp;name is Arnold\\n</code></td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
 
 int main(void)
@@ -993,7 +993,7 @@ int main(void)
 <tr><td><code>%10[^\\n]</code></td><td><code>My name is Arnold⏎</code></td><td><code>My name is</code> (10 ký tự)</td><td>10</td><td><code>&nbsp;Arnold\\n</code></td></tr>
 <tr><td><code>%s</code> (so sánh, slide 15)</td><td><code>My name is Arnold⏎</code></td><td><code>My</code> (2 ký tự)</td><td>2</td><td><code>&nbsp;name is Arnold\\n</code></td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
 
 int main(void)
@@ -1023,7 +1023,7 @@ int main(void)
 <li><strong>"Replace and Re-run: <code>scanf("%s", S)</code> → <code>scanf("%10[^\\n]", S)</code>"</strong> — the exercise's own fix, and it repairs both faults at once: <code>10</code> caps the write at 11 bytes so nothing overflows, and <code>[^\\n]</code> lets blanks through so <code>FPT Uni</code> arrives whole.</li>
 <li><strong>Why the width must be 10 and not 11</strong> — <code>char s[11]</code> holds 10 characters plus the terminator. <code>%11[^\\n]</code> would write 12 bytes. The exercise chose the number carefully.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void)
 {
@@ -1047,7 +1047,7 @@ int main(void)
 <li><strong>"Thay và chạy lại: <code>scanf("%s", S)</code> → <code>scanf("%10[^\\n]", S)</code>"</strong> — cách sửa do chính đề bài đưa ra, và nó chữa cả hai lỗi cùng lúc: số <code>10</code> chặn lệnh ghi ở 11 byte nên không tràn được, còn <code>[^\\n]</code> cho dấu cách đi qua nên <code>FPT Uni</code> vào trọn vẹn.</li>
 <li><strong>Vì sao độ rộng phải là 10 chứ không phải 11</strong> — <code>char s[11]</code> chứa 10 ký tự cộng byte kết thúc. <code>%11[^\\n]</code> sẽ ghi 12 byte. Đề bài đã chọn con số ấy rất cẩn thận.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void)
 {
@@ -1082,7 +1082,7 @@ int main(void)
 <tr><td>3</td><td><code>%[^,]</code></td><td><code>uni</code></td><td><code>,abcdxyz\\n</code></td></tr>
 <tr><td>4</td><td><code>%[abcd]</code> (sau khi ăn dấu phẩy)</td><td><code>abcd</code></td><td><code>xyz\\n</code></td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     char a[40], b[40], c[40], d[40];
@@ -1116,7 +1116,7 @@ int main(void) {
 <tr><td>3</td><td><code>%[^,]</code></td><td><code>uni</code></td><td><code>,abcdxyz\\n</code></td></tr>
 <tr><td>4</td><td><code>%[abcd]</code> (sau khi ăn dấu phẩy)</td><td><code>abcd</code></td><td><code>xyz\\n</code></td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     char a[40], b[40], c[40], d[40];
@@ -1150,7 +1150,7 @@ int main(void) {
 <tr><td><code>gets(str)</code></td><td>40 ký tự <code>A</code></td><td>— (ghi tràn ra ngoài)</td><td><strong>sập, mã thoát 134</strong></td></tr>
 <tr><td><code>fgets(str, sizeof str, stdin)</code></td><td>40 ký tự <code>A</code></td><td><code>AAAAAAAAA</code> (9 ký tự + <code>\\0</code>)</td><td>chạy tiếp, 31 ký tự còn trong bộ đệm</td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
 
 int main(void) {
@@ -1181,7 +1181,7 @@ int main(void) {
 <tr><td><code>gets(str)</code></td><td>40 ký tự <code>A</code></td><td>— (ghi tràn ra ngoài)</td><td><strong>sập, mã thoát 134</strong></td></tr>
 <tr><td><code>fgets(str, sizeof str, stdin)</code></td><td>40 ký tự <code>A</code></td><td><code>AAAAAAAAA</code> (9 ký tự + <code>\\0</code>)</td><td>chạy tiếp, 31 ký tự còn trong bộ đệm</td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
 
 int main(void) {
@@ -1214,7 +1214,7 @@ int main(void) {
 <tr><td><code>fgets</code> không cắt</td><td><code>Hello World⏎</code></td><td><code>Hello World\\n</code> (12 ký tự)</td><td>rỗng</td></tr>
 <tr><td><code>fgets</code> + <code>strcspn</code></td><td><code>Hello World⏎</code></td><td><code>Hello World</code> (11 ký tự)</td><td>rỗng</td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
 
 int main() {
@@ -1247,7 +1247,7 @@ int main() {
 <tr><td><code>fgets</code> không cắt</td><td><code>Hello World⏎</code></td><td><code>Hello World\\n</code> (12 ký tự)</td><td>rỗng</td></tr>
 <tr><td><code>fgets</code> + <code>strcspn</code></td><td><code>Hello World⏎</code></td><td><code>Hello World</code> (11 ký tự)</td><td>rỗng</td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
 
 int main() {
@@ -1275,7 +1275,7 @@ int main() {
 <li><strong><code>s[i] = '\\0';</code> after the loop</strong> — and note it is outside the <code>if</code>, so it always runs. That is why the caller must pass <code>max</code> as <strong>one less</strong> than the array size: with <code>char s[31]</code> you call <code>getstr(s, 30)</code>, leaving index 30 for the terminator.</li>
 <li><strong>"Accepts an empty string"</strong> — press Enter immediately and the loop body never runs, <code>i</code> stays 0, and <code>s[0] = '\\0'</code> makes a valid empty string. Same behaviour as <code>gets</code>, bullet 1 of slide 21.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 /* getstr accepts a newline terminated string s of up to max characters,
  * appends a null byte and throws away the terminating character
@@ -1308,7 +1308,7 @@ int main(void) {
 <li><strong><code>s[i] = '\\0';</code> sau vòng lặp</strong> — và để ý nó nằm NGOÀI chữ <code>if</code>, nên nó luôn chạy. Đó là lý do người gọi phải truyền <code>max</code> <strong>nhỏ hơn một</strong> so với kích thước mảng: với <code>char s[31]</code> bạn gọi <code>getstr(s, 30)</code>, chừa ô 30 cho byte kết thúc.</li>
 <li><strong>"Chấp nhận chuỗi rỗng"</strong> — bấm Enter ngay thì thân vòng lặp không chạy lần nào, <code>i</code> vẫn bằng 0, và <code>s[0] = '\\0'</code> tạo ra một chuỗi rỗng hợp lệ. Cùng hành vi với <code>gets</code>, gạch đầu dòng 1 của slide 21.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 /* getstr accepts a newline terminated string s of up to max characters,
  * appends a null byte and throws away the terminating character
@@ -1343,7 +1343,7 @@ int main(void) {
 <li><strong>Beware of <code>strcmp</code>'s return value</strong> — it is <strong>0 when the strings are EQUAL</strong>. So <code>if (strcmp(a, b))</code> means "if they differ", which reads backwards to everyone. Write the comparison out: <code>if (strcmp(a, b) == 0)</code>.</li>
 <li><strong>One exception worth knowing</strong> — pointers are primitive, so <code>char *p; p = "abc";</code> <em>is</em> legal. It does not copy any characters; it just points <code>p</code> somewhere else. Students who "fix" the slide's error by changing <code>char a2[5]</code> into <code>char *a2</code> get code that compiles and copies nothing.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
 
 int main(void) {
@@ -1370,7 +1370,7 @@ int main(void) {
 <li><strong>Coi chừng giá trị trả về của <code>strcmp</code></strong> — nó bằng <strong>0 khi hai chuỗi BẰNG NHAU</strong>. Nên <code>if (strcmp(a, b))</code> có nghĩa là "nếu chúng khác nhau", đọc lên thì ai cũng hiểu ngược. Hãy viết đầy đủ: <code>if (strcmp(a, b) == 0)</code>.</li>
 <li><strong>Một ngoại lệ đáng biết</strong> — con trỏ là kiểu nguyên thuỷ, nên <code>char *p; p = "abc";</code> thì LẠI hợp lệ. Nó không sao chép ký tự nào; nó chỉ cho <code>p</code> trỏ sang chỗ khác. Sinh viên nào "sửa" lỗi của slide bằng cách đổi <code>char a2[5]</code> thành <code>char *a2</code> sẽ được một đoạn mã biên dịch trơn tru mà không sao chép gì cả.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
 
 int main(void) {

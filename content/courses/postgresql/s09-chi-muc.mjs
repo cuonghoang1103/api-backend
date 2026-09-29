@@ -27,7 +27,7 @@ export default {
 <h2>The book index, for your table</h2>
 <p class="lead">Everything so far was about getting the <em>right</em> answer. Phase 3 is about getting it <em>fast</em>. The single most important tool is the <strong>index</strong>: a separate, sorted structure that lets Postgres jump straight to the rows you asked for instead of reading the whole table. Like the index at the back of a book — you don't read all 900 pages to find "MVCC", you look it up and turn to page 412.</p>
 <p>All measurements in this chapter run on a real 500,000-row table called <code>event</code> (62 MB on disk):</p>
-<pre><code><span class="tok-keyword">CREATE TABLE</span> event (
+<pre><code class="language-sql"><span class="tok-keyword">CREATE TABLE</span> event (
   id         bigint <span class="tok-keyword">GENERATED ALWAYS AS IDENTITY PRIMARY KEY</span>,
   user_id    int           <span class="tok-keyword">NOT NULL</span>,
   status     text          <span class="tok-keyword">NOT NULL</span>,   <span class="tok-comment">-- 'active' | 'done' | 'pending'</span>
@@ -39,7 +39,7 @@ export default {
 
 <h3>Without an index: a Sequential Scan</h3>
 <p>Find one row by email. There's no index on <code>email</code> yet, so Postgres has no choice but to read every row and check it. <code>EXPLAIN ANALYZE</code> runs the query and reports what actually happened:</p>
-<pre><code><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> * <span class="tok-keyword">FROM</span> event <span class="tok-keyword">WHERE</span> email = <span class="tok-string">'user250000@example.com'</span>;</code></pre>
+<pre><code class="language-sql"><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> * <span class="tok-keyword">FROM</span> event <span class="tok-keyword">WHERE</span> email = <span class="tok-string">'user250000@example.com'</span>;</code></pre>
 <div class="out"> Seq Scan on event  (cost=0.00..14138.00 rows=1 width=87) (actual time=17.460..34.613 rows=1 loops=1)
    Filter: (email = 'user250000@example.com'::text)
    Rows Removed by Filter: 499999
@@ -55,7 +55,7 @@ export default {
 
 <h3>Add an index: an Index Scan</h3>
 <p>Now build a B-tree index on <code>email</code> and run the exact same query:</p>
-<pre><code><span class="tok-keyword">CREATE INDEX</span> idx_event_email <span class="tok-keyword">ON</span> event(email);   <span class="tok-comment">-- builds a sorted B-tree (19 MB)</span>
+<pre><code class="language-sql"><span class="tok-keyword">CREATE INDEX</span> idx_event_email <span class="tok-keyword">ON</span> event(email);   <span class="tok-comment">-- builds a sorted B-tree (19 MB)</span>
 
 <span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> * <span class="tok-keyword">FROM</span> event <span class="tok-keyword">WHERE</span> email = <span class="tok-string">'user250000@example.com'</span>;</code></pre>
 <div class="out"> Index Scan using idx_event_email on event  (cost=0.42..8.44 rows=1 width=87) (actual time=0.023..0.024 rows=1 loops=1)
@@ -85,7 +85,7 @@ export default {
 <h2>Mục lục sách, cho bảng của bạn</h2>
 <p class="lead">Mọi thứ tới giờ là về lấy <em>đúng</em> câu trả lời. Giai đoạn 3 là về lấy nó <em>nhanh</em>. Công cụ quan trọng nhất là <strong>chỉ mục (index)</strong>: một cấu trúc riêng, đã sắp xếp, cho Postgres nhảy thẳng tới các dòng bạn hỏi thay vì đọc cả bảng. Như mục lục cuối sách — bạn không đọc hết 900 trang để tìm "MVCC", bạn tra nó rồi giở tới trang 412.</p>
 <p>Mọi phép đo trong chương này chạy trên một bảng <code>event</code> thật 500.000 dòng (62 MB trên đĩa):</p>
-<pre><code><span class="tok-keyword">CREATE TABLE</span> event (
+<pre><code class="language-sql"><span class="tok-keyword">CREATE TABLE</span> event (
   id         bigint <span class="tok-keyword">GENERATED ALWAYS AS IDENTITY PRIMARY KEY</span>,
   user_id    int           <span class="tok-keyword">NOT NULL</span>,
   status     text          <span class="tok-keyword">NOT NULL</span>,   <span class="tok-comment">-- 'active' | 'done' | 'pending'</span>
@@ -97,7 +97,7 @@ export default {
 
 <h3>Không có chỉ mục: một Sequential Scan</h3>
 <p>Tìm một dòng theo email. Chưa có chỉ mục trên <code>email</code>, nên Postgres không còn cách nào ngoài đọc mọi dòng và kiểm tra. <code>EXPLAIN ANALYZE</code> chạy truy vấn và báo cáo điều thực sự xảy ra:</p>
-<pre><code><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> * <span class="tok-keyword">FROM</span> event <span class="tok-keyword">WHERE</span> email = <span class="tok-string">'user250000@example.com'</span>;</code></pre>
+<pre><code class="language-sql"><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> * <span class="tok-keyword">FROM</span> event <span class="tok-keyword">WHERE</span> email = <span class="tok-string">'user250000@example.com'</span>;</code></pre>
 <div class="out"> Seq Scan on event  (cost=0.00..14138.00 rows=1 width=87) (actual time=17.460..34.613 rows=1 loops=1)
    Filter: (email = 'user250000@example.com'::text)
    Rows Removed by Filter: 499999
@@ -113,7 +113,7 @@ export default {
 
 <h3>Thêm chỉ mục: một Index Scan</h3>
 <p>Giờ dựng một chỉ mục B-tree trên <code>email</code> rồi chạy đúng truy vấn đó:</p>
-<pre><code><span class="tok-keyword">CREATE INDEX</span> idx_event_email <span class="tok-keyword">ON</span> event(email);   <span class="tok-comment">-- dựng một B-tree đã sắp (19 MB)</span>
+<pre><code class="language-sql"><span class="tok-keyword">CREATE INDEX</span> idx_event_email <span class="tok-keyword">ON</span> event(email);   <span class="tok-comment">-- dựng một B-tree đã sắp (19 MB)</span>
 
 <span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> * <span class="tok-keyword">FROM</span> event <span class="tok-keyword">WHERE</span> email = <span class="tok-string">'user250000@example.com'</span>;</code></pre>
 <div class="out"> Index Scan using idx_event_email on event  (cost=0.42..8.44 rows=1 width=87) (actual time=0.023..0.024 rows=1 loops=1)
@@ -155,7 +155,7 @@ export default {
 
 <h3>A composite index serves filter + sort at once</h3>
 <p>"The 5 most recent events for user 42" filters on <code>user_id</code> and sorts by <code>created_at</code>. With no helpful index, Postgres scans the table and sorts the matches:</p>
-<pre><code><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> id, created_at, amount <span class="tok-keyword">FROM</span> event
+<pre><code class="language-sql"><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> id, created_at, amount <span class="tok-keyword">FROM</span> event
 <span class="tok-keyword">WHERE</span> user_id = 42 <span class="tok-keyword">ORDER BY</span> created_at <span class="tok-keyword">DESC</span> <span class="tok-keyword">LIMIT</span> 5;</code></pre>
 <div class="out"> Limit  (cost=14146.24..14146.25 rows=5 width=22) (actual time=28.015..28.017 rows=5 loops=1)
    -&gt;  Sort  (cost=14146.24..14147.48 rows=496 width=22) (actual time=28.013..28.013 rows=5 loops=1)
@@ -166,7 +166,7 @@ export default {
                Rows Removed by Filter: 499500
  Execution Time: 28.050 ms</div>
 <p>Two costs: a Seq Scan (throwing away 499,500 rows), then a Sort. Now a <strong>composite index on both columns, in the order (filter, then sort)</strong>:</p>
-<pre><code><span class="tok-keyword">CREATE INDEX</span> idx_event_user_created <span class="tok-keyword">ON</span> event(user_id, created_at);</code></pre>
+<pre><code class="language-sql"><span class="tok-keyword">CREATE INDEX</span> idx_event_user_created <span class="tok-keyword">ON</span> event(user_id, created_at);</code></pre>
 <div class="out"> Limit  (cost=0.42..19.99 rows=5 width=22) (actual time=0.036..0.042 rows=5 loops=1)
    -&gt;  Index Scan Backward using idx_event_user_created on event  (cost=0.42..1941.03 rows=496 width=22) (actual time=0.035..0.040 rows=5 loops=1)
          Index Cond: (user_id = 42)
@@ -175,7 +175,7 @@ export default {
 
 <h3>Column order is everything</h3>
 <p>An index on <code>(user_id, created_at)</code> is like a phone book sorted by (last name, first name). It's great for "everyone named Nguyen", useless for "everyone whose first name is An" — the first name only helps <em>after</em> you've fixed the last name. Query the <strong>second</strong> column alone and the composite index can't seek:</p>
-<pre><code><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> id, user_id <span class="tok-keyword">FROM</span> event
+<pre><code class="language-sql"><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> id, user_id <span class="tok-keyword">FROM</span> event
 <span class="tok-keyword">WHERE</span> created_at = <span class="tok-string">'2024-06-22 14:40:00+00'</span>;   <span class="tok-comment">-- leading column user_id absent</span></code></pre>
 <div class="out"> Seq Scan on event  (cost=0.00..14137.74 rows=1 width=12) (actual time=13.487..37.894 rows=1 loops=1)
    Filter: (created_at = '2024-06-22 14:40:00+00'::timestamp with time zone)
@@ -185,7 +185,7 @@ export default {
 
 <h3>Covering index — INCLUDE, and the Index Only Scan</h3>
 <p>If an index contains <em>every column a query needs</em>, Postgres can answer from the index alone and never touch the table — an <strong>Index Only Scan</strong>. Add non-key columns with <code>INCLUDE</code>:</p>
-<pre><code><span class="tok-keyword">CREATE INDEX</span> idx_event_user_incl <span class="tok-keyword">ON</span> event(user_id) <span class="tok-keyword">INCLUDE</span> (amount);
+<pre><code class="language-sql"><span class="tok-keyword">CREATE INDEX</span> idx_event_user_incl <span class="tok-keyword">ON</span> event(user_id) <span class="tok-keyword">INCLUDE</span> (amount);
 
 <span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> user_id, sum(amount) <span class="tok-keyword">FROM</span> event
 <span class="tok-keyword">WHERE</span> user_id = 42 <span class="tok-keyword">GROUP BY</span> user_id;</code></pre>
@@ -219,7 +219,7 @@ export default {
 
 <h3>Một chỉ mục tổ hợp phục vụ lọc + sắp cùng lúc</h3>
 <p>"5 event mới nhất của user 42" lọc theo <code>user_id</code> và sắp theo <code>created_at</code>. Không có chỉ mục hữu ích, Postgres quét bảng rồi sắp các dòng khớp:</p>
-<pre><code><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> id, created_at, amount <span class="tok-keyword">FROM</span> event
+<pre><code class="language-sql"><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> id, created_at, amount <span class="tok-keyword">FROM</span> event
 <span class="tok-keyword">WHERE</span> user_id = 42 <span class="tok-keyword">ORDER BY</span> created_at <span class="tok-keyword">DESC</span> <span class="tok-keyword">LIMIT</span> 5;</code></pre>
 <div class="out"> Limit  (cost=14146.24..14146.25 rows=5 width=22) (actual time=28.015..28.017 rows=5 loops=1)
    -&gt;  Sort  (cost=14146.24..14147.48 rows=496 width=22) (actual time=28.013..28.013 rows=5 loops=1)
@@ -230,7 +230,7 @@ export default {
                Rows Removed by Filter: 499500
  Execution Time: 28.050 ms</div>
 <p>Hai chi phí: một Seq Scan (vứt đi 499.500 dòng), rồi một Sort. Giờ một <strong>chỉ mục tổ hợp trên cả hai cột, theo thứ tự (lọc, rồi sắp)</strong>:</p>
-<pre><code><span class="tok-keyword">CREATE INDEX</span> idx_event_user_created <span class="tok-keyword">ON</span> event(user_id, created_at);</code></pre>
+<pre><code class="language-sql"><span class="tok-keyword">CREATE INDEX</span> idx_event_user_created <span class="tok-keyword">ON</span> event(user_id, created_at);</code></pre>
 <div class="out"> Limit  (cost=0.42..19.99 rows=5 width=22) (actual time=0.036..0.042 rows=5 loops=1)
    -&gt;  Index Scan Backward using idx_event_user_created on event  (cost=0.42..1941.03 rows=496 width=22) (actual time=0.035..0.040 rows=5 loops=1)
          Index Cond: (user_id = 42)
@@ -239,7 +239,7 @@ export default {
 
 <h3>Thứ tự cột là tất cả</h3>
 <p>Một chỉ mục trên <code>(user_id, created_at)</code> giống danh bạ sắp theo (họ, tên). Nó tuyệt cho "mọi người họ Nguyễn", vô dụng cho "mọi người tên An" — tên chỉ giúp <em>sau khi</em> bạn đã cố định họ. Hỏi cột <strong>thứ hai</strong> một mình và chỉ mục tổ hợp không thể nhảy tìm (seek):</p>
-<pre><code><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> id, user_id <span class="tok-keyword">FROM</span> event
+<pre><code class="language-sql"><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> id, user_id <span class="tok-keyword">FROM</span> event
 <span class="tok-keyword">WHERE</span> created_at = <span class="tok-string">'2024-06-22 14:40:00+00'</span>;   <span class="tok-comment">-- vắng cột đầu user_id</span></code></pre>
 <div class="out"> Seq Scan on event  (cost=0.00..14137.74 rows=1 width=12) (actual time=13.487..37.894 rows=1 loops=1)
    Filter: (created_at = '2024-06-22 14:40:00+00'::timestamp with time zone)
@@ -249,7 +249,7 @@ export default {
 
 <h3>Covering index — INCLUDE, và Index Only Scan</h3>
 <p>Nếu một chỉ mục chứa <em>mọi cột một truy vấn cần</em>, Postgres có thể trả lời từ riêng chỉ mục và không bao giờ chạm bảng — một <strong>Index Only Scan</strong>. Thêm các cột không-khoá bằng <code>INCLUDE</code>:</p>
-<pre><code><span class="tok-keyword">CREATE INDEX</span> idx_event_user_incl <span class="tok-keyword">ON</span> event(user_id) <span class="tok-keyword">INCLUDE</span> (amount);
+<pre><code class="language-sql"><span class="tok-keyword">CREATE INDEX</span> idx_event_user_incl <span class="tok-keyword">ON</span> event(user_id) <span class="tok-keyword">INCLUDE</span> (amount);
 
 <span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> user_id, sum(amount) <span class="tok-keyword">FROM</span> event
 <span class="tok-keyword">WHERE</span> user_id = 42 <span class="tok-keyword">GROUP BY</span> user_id;</code></pre>
@@ -293,13 +293,13 @@ export default {
 
 <h3>A function on the column defeats a plain index</h3>
 <p>There's an index on <code>email</code>, but wrap the column in <code>lower()</code> and Postgres can't use it — the index stores <code>email</code>, not <code>lower(email)</code>:</p>
-<pre><code><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> id <span class="tok-keyword">FROM</span> event <span class="tok-keyword">WHERE</span> lower(email) = <span class="tok-string">'user250000@example.com'</span>;</code></pre>
+<pre><code class="language-sql"><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> id <span class="tok-keyword">FROM</span> event <span class="tok-keyword">WHERE</span> lower(email) = <span class="tok-string">'user250000@example.com'</span>;</code></pre>
 <div class="out"> Seq Scan on event  (cost=0.00..15388.00 rows=2500 width=8) (actual time=87.565..163.337 rows=1 loops=1)
    Filter: (lower(email) = 'user250000@example.com'::text)
    Rows Removed by Filter: 499999
  Execution Time: 163.373 ms</div>
 <p>163 ms — back to reading everything. The fix is an <strong>expression index</strong>: index the expression the query actually uses.</p>
-<pre><code><span class="tok-keyword">CREATE INDEX</span> idx_event_lower_email <span class="tok-keyword">ON</span> event(lower(email));</code></pre>
+<pre><code class="language-sql"><span class="tok-keyword">CREATE INDEX</span> idx_event_lower_email <span class="tok-keyword">ON</span> event(lower(email));</code></pre>
 <div class="out"> Bitmap Heap Scan on event  (cost=115.80..5400.73 rows=2500 width=8) (actual time=0.053..0.054 rows=1 loops=1)
    Recheck Cond: (lower(email) = 'user250000@example.com'::text)
    Heap Blocks: exact=1
@@ -310,7 +310,7 @@ export default {
 
 <h3>Selectivity: the planner is right to skip an index</h3>
 <p>Sometimes a Seq Scan is <em>correct</em>. Our <code>status</code> column is 66% <code>'active'</code>, 1% <code>'pending'</code>. With an index on <code>status</code>, watch the planner choose differently for each. First the common value:</p>
-<pre><code><span class="tok-keyword">CREATE INDEX</span> idx_event_status <span class="tok-keyword">ON</span> event(status);
+<pre><code class="language-sql"><span class="tok-keyword">CREATE INDEX</span> idx_event_status <span class="tok-keyword">ON</span> event(status);
 <span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> avg(amount) <span class="tok-keyword">FROM</span> event <span class="tok-keyword">WHERE</span> status = <span class="tok-string">'active'</span>;   <span class="tok-comment">-- 330,000 rows</span></code></pre>
 <div class="out"> Aggregate  (cost=14963.84..14963.85 rows=1 width=32) (actual time=78.718..78.718 rows=1 loops=1)
    -&gt;  Seq Scan on event  (cost=0.00..14138.00 rows=330333 width=6) (actual time=0.049..51.347 rows=330000 loops=1)
@@ -318,7 +318,7 @@ export default {
          Rows Removed by Filter: 170000
  Execution Time: 78.820 ms</div>
 <p>It <em>ignored</em> the index — and rightly so. When a query returns most of the table, hopping through an index to 330,000 scattered rows is <em>slower</em> than reading the table straight through. Now the rare value:</p>
-<pre><code><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> avg(amount) <span class="tok-keyword">FROM</span> event <span class="tok-keyword">WHERE</span> status = <span class="tok-string">'pending'</span>;   <span class="tok-comment">-- 5,000 rows</span></code></pre>
+<pre><code class="language-sql"><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> avg(amount) <span class="tok-keyword">FROM</span> event <span class="tok-keyword">WHERE</span> status = <span class="tok-string">'pending'</span>;   <span class="tok-comment">-- 5,000 rows</span></code></pre>
 <div class="out"> Aggregate  (cost=114.76..114.77 rows=1 width=8) (actual time=0.541..0.541 rows=1 loops=1)
    -&gt;  Bitmap Heap Scan on event  (cost=55.80..102.97 rows=4717 width=6) (actual time=0.201..0.420 rows=5000 loops=1)
          Recheck Cond: (status = 'pending'::text)
@@ -330,7 +330,7 @@ export default {
 
 <h3>Partial index — index only the rows you query</h3>
 <p>If you only ever query <code>status = 'pending'</code>, index <em>just those rows</em> with a <code>WHERE</code> clause on the index. It's tiny and stays out of the way of the other 99%:</p>
-<pre><code><span class="tok-keyword">CREATE INDEX</span> idx_event_pending <span class="tok-keyword">ON</span> event(created_at) <span class="tok-keyword">WHERE</span> status = <span class="tok-string">'pending'</span>;</code></pre>
+<pre><code class="language-sql"><span class="tok-keyword">CREATE INDEX</span> idx_event_pending <span class="tok-keyword">ON</span> event(created_at) <span class="tok-keyword">WHERE</span> status = <span class="tok-string">'pending'</span>;</code></pre>
 <div class="out">   full  index on status  | 3408 kB
    partial idx_event_pending | 128 kB</div>
 <p>128 kB versus 3.4 MB — a <strong>27× smaller</strong> index, because it holds 5,000 rows instead of 500,000. It's used for any query whose <code>WHERE</code> implies the partial condition, e.g. "oldest pending jobs". Partial indexes are the standard tool for "hot subset" columns — unprocessed rows, soft-deleted flags, active sessions.</p>
@@ -362,13 +362,13 @@ export default {
 
 <h3>Một hàm trên cột vô hiệu hoá chỉ mục thường</h3>
 <p>Có một chỉ mục trên <code>email</code>, nhưng bọc cột trong <code>lower()</code> là Postgres không dùng được nó — chỉ mục lưu <code>email</code>, không phải <code>lower(email)</code>:</p>
-<pre><code><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> id <span class="tok-keyword">FROM</span> event <span class="tok-keyword">WHERE</span> lower(email) = <span class="tok-string">'user250000@example.com'</span>;</code></pre>
+<pre><code class="language-sql"><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> id <span class="tok-keyword">FROM</span> event <span class="tok-keyword">WHERE</span> lower(email) = <span class="tok-string">'user250000@example.com'</span>;</code></pre>
 <div class="out"> Seq Scan on event  (cost=0.00..15388.00 rows=2500 width=8) (actual time=87.565..163.337 rows=1 loops=1)
    Filter: (lower(email) = 'user250000@example.com'::text)
    Rows Removed by Filter: 499999
  Execution Time: 163.373 ms</div>
 <p>163 ms — lại đọc mọi thứ. Cách sửa là một <strong>expression index (chỉ mục biểu thức)</strong>: index chính biểu thức mà truy vấn dùng.</p>
-<pre><code><span class="tok-keyword">CREATE INDEX</span> idx_event_lower_email <span class="tok-keyword">ON</span> event(lower(email));</code></pre>
+<pre><code class="language-sql"><span class="tok-keyword">CREATE INDEX</span> idx_event_lower_email <span class="tok-keyword">ON</span> event(lower(email));</code></pre>
 <div class="out"> Bitmap Heap Scan on event  (cost=115.80..5400.73 rows=2500 width=8) (actual time=0.053..0.054 rows=1 loops=1)
    Recheck Cond: (lower(email) = 'user250000@example.com'::text)
    Heap Blocks: exact=1
@@ -379,7 +379,7 @@ export default {
 
 <h3>Độ chọn lọc: bộ lập kế hoạch bỏ qua chỉ mục là đúng</h3>
 <p>Đôi khi một Seq Scan là <em>đúng</em>. Cột <code>status</code> của ta 66% là <code>'active'</code>, 1% là <code>'pending'</code>. Với một chỉ mục trên <code>status</code>, xem bộ lập kế hoạch chọn khác nhau cho mỗi giá trị. Trước hết giá trị phổ biến:</p>
-<pre><code><span class="tok-keyword">CREATE INDEX</span> idx_event_status <span class="tok-keyword">ON</span> event(status);
+<pre><code class="language-sql"><span class="tok-keyword">CREATE INDEX</span> idx_event_status <span class="tok-keyword">ON</span> event(status);
 <span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> avg(amount) <span class="tok-keyword">FROM</span> event <span class="tok-keyword">WHERE</span> status = <span class="tok-string">'active'</span>;   <span class="tok-comment">-- 330.000 dòng</span></code></pre>
 <div class="out"> Aggregate  (cost=14963.84..14963.85 rows=1 width=32) (actual time=78.718..78.718 rows=1 loops=1)
    -&gt;  Seq Scan on event  (cost=0.00..14138.00 rows=330333 width=6) (actual time=0.049..51.347 rows=330000 loops=1)
@@ -387,7 +387,7 @@ export default {
          Rows Removed by Filter: 170000
  Execution Time: 78.820 ms</div>
 <p>Nó <em>bỏ qua</em> chỉ mục — và đúng đắn. Khi một truy vấn trả về phần lớn bảng, nhảy qua chỉ mục tới 330.000 dòng rải rác <em>chậm hơn</em> đọc bảng thẳng một mạch. Giờ giá trị hiếm:</p>
-<pre><code><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> avg(amount) <span class="tok-keyword">FROM</span> event <span class="tok-keyword">WHERE</span> status = <span class="tok-string">'pending'</span>;   <span class="tok-comment">-- 5.000 dòng</span></code></pre>
+<pre><code class="language-sql"><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> avg(amount) <span class="tok-keyword">FROM</span> event <span class="tok-keyword">WHERE</span> status = <span class="tok-string">'pending'</span>;   <span class="tok-comment">-- 5.000 dòng</span></code></pre>
 <div class="out"> Aggregate  (cost=114.76..114.77 rows=1 width=8) (actual time=0.541..0.541 rows=1 loops=1)
    -&gt;  Bitmap Heap Scan on event  (cost=55.80..102.97 rows=4717 width=6) (actual time=0.201..0.420 rows=5000 loops=1)
          Recheck Cond: (status = 'pending'::text)
@@ -399,7 +399,7 @@ export default {
 
 <h3>Partial index — chỉ index các dòng bạn hỏi</h3>
 <p>Nếu bạn chỉ bao giờ hỏi <code>status = 'pending'</code>, hãy index <em>chỉ các dòng đó</em> bằng một mệnh đề <code>WHERE</code> trên chỉ mục. Nó tí hon và không cản đường 99% còn lại:</p>
-<pre><code><span class="tok-keyword">CREATE INDEX</span> idx_event_pending <span class="tok-keyword">ON</span> event(created_at) <span class="tok-keyword">WHERE</span> status = <span class="tok-string">'pending'</span>;</code></pre>
+<pre><code class="language-sql"><span class="tok-keyword">CREATE INDEX</span> idx_event_pending <span class="tok-keyword">ON</span> event(created_at) <span class="tok-keyword">WHERE</span> status = <span class="tok-string">'pending'</span>;</code></pre>
 <div class="out">   chỉ mục đầy đủ trên status  | 3408 kB
    partial idx_event_pending    | 128 kB</div>
 <p>128 kB so với 3,4 MB — một chỉ mục <strong>nhỏ hơn 27×</strong>, vì nó giữ 5.000 dòng thay vì 500.000. Nó được dùng cho bất kỳ truy vấn nào có <code>WHERE</code> ngụ ý điều kiện partial, ví dụ "job pending cũ nhất". Partial index là công cụ chuẩn cho các cột "tập con nóng" — dòng chưa xử lý, cờ xoá-mềm, phiên đang hoạt động.</p>
@@ -441,12 +441,12 @@ export default {
 
 <h3>GIN — for jsonb, arrays, and full-text</h3>
 <p>A B-tree indexes a whole value; <strong>GIN</strong> (Generalized Inverted iNdex) indexes the <em>elements inside</em> a value — every key in a jsonb, every element of an array, every word (lexeme) of a document. It powers the containment operator <code>@&gt;</code>. Our <code>props</code> column holds <code>{"tags": [...]}</code>; find events tagged <code>t15</code> — first with no GIN index:</p>
-<pre><code><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> count(*) <span class="tok-keyword">FROM</span> event <span class="tok-keyword">WHERE</span> props @&gt; <span class="tok-string">'{"tags": ["t15"]}'</span>;</code></pre>
+<pre><code class="language-sql"><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> count(*) <span class="tok-keyword">FROM</span> event <span class="tok-keyword">WHERE</span> props @&gt; <span class="tok-string">'{"tags": ["t15"]}'</span>;</code></pre>
 <div class="out">   -&gt;  Seq Scan on event  (cost=0.00..14138.00 rows=24617 width=0) (actual time=0.021..97.380 rows=25000 loops=1)
          Filter: (props @&gt; '{"tags": ["t15"]}'::jsonb)
          Rows Removed by Filter: 475000
  Execution Time: 98.711 ms</div>
-<pre><code><span class="tok-keyword">CREATE INDEX</span> idx_event_props <span class="tok-keyword">ON</span> event <span class="tok-keyword">USING GIN</span> (props);</code></pre>
+<pre><code class="language-sql"><span class="tok-keyword">CREATE INDEX</span> idx_event_props <span class="tok-keyword">ON</span> event <span class="tok-keyword">USING GIN</span> (props);</code></pre>
 <div class="out">   -&gt;  Bitmap Heap Scan on event  (cost=294.78..8490.49 rows=24617 width=0) (actual time=4.041..17.519 rows=25000 loops=1)
          Recheck Cond: (props @&gt; '{"tags": ["t15"]}'::jsonb)
          -&gt;  Bitmap Index Scan on idx_event_props  (cost=0.00..288.63 rows=24617 width=0) (actual time=3.217..3.217 rows=25000 loops=1)
@@ -459,7 +459,7 @@ export default {
 <div class="out">   B-tree(created_at) | 11 MB
    BRIN(created_at)   | 24 kB</div>
 <p><strong>24 kB versus 11 MB</strong> — roughly 450× smaller, for the same 500,000 rows. A range query still flies:</p>
-<pre><code><span class="tok-keyword">CREATE INDEX</span> idx_event_created_brin <span class="tok-keyword">ON</span> event <span class="tok-keyword">USING BRIN</span> (created_at);
+<pre><code class="language-sql"><span class="tok-keyword">CREATE INDEX</span> idx_event_created_brin <span class="tok-keyword">ON</span> event <span class="tok-keyword">USING BRIN</span> (created_at);
 <span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> count(*) <span class="tok-keyword">FROM</span> event
 <span class="tok-keyword">WHERE</span> created_at <span class="tok-keyword">BETWEEN</span> <span class="tok-string">'2024-03-01'</span> <span class="tok-keyword">AND</span> <span class="tok-string">'2024-03-08'</span>;</code></pre>
 <div class="out">   -&gt;  Bitmap Heap Scan on event  (cost=14.65..8144.59 rows=10351 width=0) (actual time=0.519..2.623 rows=10081 loops=1)
@@ -512,12 +512,12 @@ export default {
 
 <h3>GIN — cho jsonb, mảng, và full-text</h3>
 <p>Một B-tree index cả một giá trị; <strong>GIN</strong> (Generalized Inverted iNdex) index các <em>phần tử bên trong</em> một giá trị — mỗi khoá trong một jsonb, mỗi phần tử của một mảng, mỗi từ (lexeme) của một tài liệu. Nó cấp sức cho toán tử chứa <code>@&gt;</code>. Cột <code>props</code> của ta giữ <code>{"tags": [...]}</code>; tìm event gắn thẻ <code>t15</code> — trước hết không có chỉ mục GIN:</p>
-<pre><code><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> count(*) <span class="tok-keyword">FROM</span> event <span class="tok-keyword">WHERE</span> props @&gt; <span class="tok-string">'{"tags": ["t15"]}'</span>;</code></pre>
+<pre><code class="language-sql"><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> count(*) <span class="tok-keyword">FROM</span> event <span class="tok-keyword">WHERE</span> props @&gt; <span class="tok-string">'{"tags": ["t15"]}'</span>;</code></pre>
 <div class="out">   -&gt;  Seq Scan on event  (cost=0.00..14138.00 rows=24617 width=0) (actual time=0.021..97.380 rows=25000 loops=1)
          Filter: (props @&gt; '{"tags": ["t15"]}'::jsonb)
          Rows Removed by Filter: 475000
  Execution Time: 98.711 ms</div>
-<pre><code><span class="tok-keyword">CREATE INDEX</span> idx_event_props <span class="tok-keyword">ON</span> event <span class="tok-keyword">USING GIN</span> (props);</code></pre>
+<pre><code class="language-sql"><span class="tok-keyword">CREATE INDEX</span> idx_event_props <span class="tok-keyword">ON</span> event <span class="tok-keyword">USING GIN</span> (props);</code></pre>
 <div class="out">   -&gt;  Bitmap Heap Scan on event  (cost=294.78..8490.49 rows=24617 width=0) (actual time=4.041..17.519 rows=25000 loops=1)
          Recheck Cond: (props @&gt; '{"tags": ["t15"]}'::jsonb)
          -&gt;  Bitmap Index Scan on idx_event_props  (cost=0.00..288.63 rows=24617 width=0) (actual time=3.217..3.217 rows=25000 loops=1)
@@ -530,7 +530,7 @@ export default {
 <div class="out">   B-tree(created_at) | 11 MB
    BRIN(created_at)   | 24 kB</div>
 <p><strong>24 kB so với 11 MB</strong> — nhỏ hơn khoảng 450×, cho cùng 500.000 dòng. Một truy vấn khoảng vẫn bay:</p>
-<pre><code><span class="tok-keyword">CREATE INDEX</span> idx_event_created_brin <span class="tok-keyword">ON</span> event <span class="tok-keyword">USING BRIN</span> (created_at);
+<pre><code class="language-sql"><span class="tok-keyword">CREATE INDEX</span> idx_event_created_brin <span class="tok-keyword">ON</span> event <span class="tok-keyword">USING BRIN</span> (created_at);
 <span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> count(*) <span class="tok-keyword">FROM</span> event
 <span class="tok-keyword">WHERE</span> created_at <span class="tok-keyword">BETWEEN</span> <span class="tok-string">'2024-03-01'</span> <span class="tok-keyword">AND</span> <span class="tok-string">'2024-03-08'</span>;</code></pre>
 <div class="out">   -&gt;  Bitmap Heap Scan on event  (cost=14.65..8144.59 rows=10351 width=0) (actual time=0.519..2.623 rows=10081 loops=1)

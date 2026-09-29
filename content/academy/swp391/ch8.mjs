@@ -339,8 +339,8 @@ Strong: "Java 17, Jakarta Servlet, JDBC, MySQL 8. Table job(id, title,
  newest first, LIMIT/OFFSET paging, PreparedStatement only.
  Explain every security assumption. No framework."</pre>
 <p class="nhan">Step 2 — the model's first draft (typical)</p>
-<pre>String sql = "SELECT * FROM job WHERE title LIKE '%" + keyword + "%'"
-           + " LIMIT " + size + " OFFSET " + (page * size);</pre>
+<pre><code class="language-sql">String sql = "SELECT * FROM job WHERE title LIKE '%" + keyword + "%'"
+           + " LIMIT " + size + " OFFSET " + (page * size);</code></pre>
 <p class="nhan">Step 3 — review like a teammate's merge request</p>
 <ol>
 <li><strong>String concatenation</strong> → SQL injection, although the prompt said PreparedStatement.</li>
@@ -349,12 +349,12 @@ Strong: "Java 17, Jakarta Servlet, JDBC, MySQL 8. Table job(id, title,
 <li><strong>Off-by-one</strong> → is page 0- or 1-based? The UI spec says pages start at 1.</li>
 </ol>
 <p class="nhan">Step 4 — the version you commit</p>
-<pre>String sql = "SELECT id, title, location, posted_at FROM job "
+<pre><code class="language-sql">String sql = "SELECT id, title, location, posted_at FROM job "
            + "WHERE status = 'OPEN' AND title LIKE ? "
            + "ORDER BY posted_at DESC LIMIT ? OFFSET ?";
 ps.setString(1, "%" + keyword + "%");
 ps.setInt(2, size);
-ps.setInt(3, (page - 1) * size);   // pages start at 1 (UI spec)</pre>
+ps.setInt(3, (page - 1) * size);   // pages start at 1 (UI spec)</code></pre>
 <p class="dap-an">✅ Log it in the AI Usage Report: output "JobDAO.search draft", modification "rewrote with PreparedStatement, added status filter and ordering, fixed paging", risk "ignored the security constraint in the prompt".</p>
 <h2>⚠️ The four traps and their antidotes</h2>
 <table>
@@ -377,8 +377,8 @@ Mạnh:  "Java 17, Jakarta Servlet, JDBC, MySQL 8. Bảng job(id, title,
  mới nhất trước, phân trang LIMIT/OFFSET, chỉ dùng PreparedStatement.
  Giải thích mọi giả định bảo mật. Không dùng framework."</pre>
 <p class="nhan">Bước 2 — bản nháp đầu của model (điển hình)</p>
-<pre>String sql = "SELECT * FROM job WHERE title LIKE '%" + keyword + "%'"
-           + " LIMIT " + size + " OFFSET " + (page * size);</pre>
+<pre><code class="language-sql">String sql = "SELECT * FROM job WHERE title LIKE '%" + keyword + "%'"
+           + " LIMIT " + size + " OFFSET " + (page * size);</code></pre>
 <p class="nhan">Bước 3 — review như merge request của đồng đội</p>
 <ol>
 <li><strong>Nối chuỗi</strong> → SQL injection, dù prompt đã nói PreparedStatement.</li>
@@ -387,12 +387,12 @@ Mạnh:  "Java 17, Jakarta Servlet, JDBC, MySQL 8. Bảng job(id, title,
 <li><strong>Lệch một</strong> → trang bắt đầu từ 0 hay 1? UI spec nói trang bắt đầu từ 1.</li>
 </ol>
 <p class="nhan">Bước 4 — bản bạn commit</p>
-<pre>String sql = "SELECT id, title, location, posted_at FROM job "
+<pre><code class="language-sql">String sql = "SELECT id, title, location, posted_at FROM job "
            + "WHERE status = 'OPEN' AND title LIKE ? "
            + "ORDER BY posted_at DESC LIMIT ? OFFSET ?";
 ps.setString(1, "%" + keyword + "%");
 ps.setInt(2, size);
-ps.setInt(3, (page - 1) * size);   // trang bắt đầu từ 1 (UI spec)</pre>
+ps.setInt(3, (page - 1) * size);   // trang bắt đầu từ 1 (UI spec)</code></pre>
 <p class="dap-an">✅ Ghi vào AI Usage Report: output "bản nháp JobDAO.search", chỉnh sửa "viết lại bằng PreparedStatement, thêm lọc status và sắp xếp, sửa phân trang", rủi ro "bỏ qua ràng buộc bảo mật trong prompt".</p>
 <h2>⚠️ Bốn cái bẫy và cách giải</h2>
 <table>

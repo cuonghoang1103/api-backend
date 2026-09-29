@@ -23,7 +23,7 @@ export default {
 
 <h3>The classic loop trap</h3>
 <p>Run this and predict the output before you look:</p>
-<pre><code><span class="tok-keyword">for</span> (<span class="tok-keyword">var</span> i = <span class="tok-number">0</span>; i &lt; <span class="tok-number">3</span>; i++) { <span class="tok-function">setTimeout</span>(() =&gt; <span class="tok-function">console.log</span>(<span class="tok-string">'var  i ='</span>, i), <span class="tok-number">0</span>); }
+<pre><code class="language-javascript"><span class="tok-keyword">for</span> (<span class="tok-keyword">var</span> i = <span class="tok-number">0</span>; i &lt; <span class="tok-number">3</span>; i++) { <span class="tok-function">setTimeout</span>(() =&gt; <span class="tok-function">console.log</span>(<span class="tok-string">'var  i ='</span>, i), <span class="tok-number">0</span>); }
 <span class="tok-keyword">for</span> (<span class="tok-keyword">let</span> j = <span class="tok-number">0</span>; j &lt; <span class="tok-number">3</span>; j++) { <span class="tok-function">setTimeout</span>(() =&gt; <span class="tok-function">console.log</span>(<span class="tok-string">'let  j ='</span>, j), <span class="tok-number">0</span>); }</code></pre>
 <div class="out">var  i = 3
 var  i = 3
@@ -36,7 +36,7 @@ let  j = 2</div>
 
 <h3>Hoisting and the Temporal Dead Zone</h3>
 <p><code>var</code> declarations are hoisted and pre-initialised to <code>undefined</code>. <code>let</code> and <code>const</code> are hoisted too, but stay in a <strong>Temporal Dead Zone</strong> (TDZ) until the declaration line runs — touching them there throws:</p>
-<pre><code><span class="tok-function">console.log</span>(<span class="tok-string">'var before declaration:'</span>, <span class="tok-keyword">typeof</span> a, a);
+<pre><code class="language-javascript"><span class="tok-function">console.log</span>(<span class="tok-string">'var before declaration:'</span>, <span class="tok-keyword">typeof</span> a, a);
 <span class="tok-keyword">var</span> a = <span class="tok-number">1</span>;
 
 <span class="tok-keyword">try</span> { <span class="tok-function">console.log</span>(b); <span class="tok-keyword">let</span> b = <span class="tok-number">2</span>; }
@@ -47,7 +47,7 @@ let before declaration: ReferenceError: Cannot access 'b' before initialization<
 
 <h3>const does not mean immutable</h3>
 <p>This trips up almost everyone. <code>const</code> freezes the <strong>binding</strong>, not the value. You cannot reassign the variable, but you can still mutate the object it points to:</p>
-<pre><code><span class="tok-keyword">const</span> user = { name: <span class="tok-string">'An'</span> };
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> user = { name: <span class="tok-string">'An'</span> };
 user.name = <span class="tok-string">'Bình'</span>;                <span class="tok-comment">// allowed — we mutated the object</span>
 <span class="tok-function">console.log</span>(<span class="tok-string">'mutate property:'</span>, user);
 
@@ -89,7 +89,7 @@ after freeze: { name: 'An' }</div>
 
 <h3>Cái bẫy kinh điển trong vòng lặp</h3>
 <p>Chạy đoạn này và tự đoán kết quả trước khi nhìn xuống:</p>
-<pre><code><span class="tok-keyword">for</span> (<span class="tok-keyword">var</span> i = <span class="tok-number">0</span>; i &lt; <span class="tok-number">3</span>; i++) { <span class="tok-function">setTimeout</span>(() =&gt; <span class="tok-function">console.log</span>(<span class="tok-string">'var  i ='</span>, i), <span class="tok-number">0</span>); }
+<pre><code class="language-javascript"><span class="tok-keyword">for</span> (<span class="tok-keyword">var</span> i = <span class="tok-number">0</span>; i &lt; <span class="tok-number">3</span>; i++) { <span class="tok-function">setTimeout</span>(() =&gt; <span class="tok-function">console.log</span>(<span class="tok-string">'var  i ='</span>, i), <span class="tok-number">0</span>); }
 <span class="tok-keyword">for</span> (<span class="tok-keyword">let</span> j = <span class="tok-number">0</span>; j &lt; <span class="tok-number">3</span>; j++) { <span class="tok-function">setTimeout</span>(() =&gt; <span class="tok-function">console.log</span>(<span class="tok-string">'let  j ='</span>, j), <span class="tok-number">0</span>); }</code></pre>
 <div class="out">var  i = 3
 var  i = 3
@@ -102,7 +102,7 @@ let  j = 2</div>
 
 <h3>Hoisting và Vùng chết tạm thời (TDZ)</h3>
 <p>Khai báo bằng <code>var</code> được kéo lên đầu và gán sẵn <code>undefined</code>. <code>let</code> và <code>const</code> cũng được kéo lên, nhưng nằm trong <strong>Vùng chết tạm thời</strong> (Temporal Dead Zone) cho tới khi dòng khai báo thực sự chạy — chạm vào đó là ném lỗi:</p>
-<pre><code><span class="tok-function">console.log</span>(<span class="tok-string">'var trước khai báo:'</span>, <span class="tok-keyword">typeof</span> a, a);
+<pre><code class="language-javascript"><span class="tok-function">console.log</span>(<span class="tok-string">'var trước khai báo:'</span>, <span class="tok-keyword">typeof</span> a, a);
 <span class="tok-keyword">var</span> a = <span class="tok-number">1</span>;
 
 <span class="tok-keyword">try</span> { <span class="tok-function">console.log</span>(b); <span class="tok-keyword">let</span> b = <span class="tok-number">2</span>; }
@@ -113,7 +113,7 @@ let trước khai báo: ReferenceError: Cannot access 'b' before initialization<
 
 <h3>const KHÔNG có nghĩa là bất biến</h3>
 <p>Chỗ này gần như ai cũng vấp. <code>const</code> khoá cái <strong>ràng buộc</strong>, không khoá giá trị. Bạn không gán lại biến được, nhưng vẫn sửa được nội dung object mà nó trỏ tới:</p>
-<pre><code><span class="tok-keyword">const</span> user = { name: <span class="tok-string">'An'</span> };
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> user = { name: <span class="tok-string">'An'</span> };
 user.name = <span class="tok-string">'Bình'</span>;                <span class="tok-comment">// được — ta sửa nội dung object</span>
 <span class="tok-function">console.log</span>(<span class="tok-string">'sửa thuộc tính:'</span>, user);
 
@@ -163,7 +163,7 @@ sau freeze: { name: 'An' }</div>
 <p class="lead">A closure is a function that remembers the variables around it, even after the code that created them has finished. That one sentence explains database connection pools, rate limiters, caches and middleware factories — all of which you will write later in this course.</p>
 
 <h3>Closure: private state without a class</h3>
-<pre><code><span class="tok-keyword">function</span> <span class="tok-function">createCounter</span>() {
+<pre><code class="language-javascript"><span class="tok-keyword">function</span> <span class="tok-function">createCounter</span>() {
   <span class="tok-keyword">let</span> count = <span class="tok-number">0</span>;              <span class="tok-comment">// private — nothing outside can touch it</span>
   <span class="tok-keyword">return</span> <span class="tok-keyword">function</span> () { count++; <span class="tok-keyword">return</span> count; };
 }
@@ -180,7 +180,7 @@ is count visible outside? undefined</div>
 
 <h3><code>this</code>: the part everyone gets wrong</h3>
 <p>In a regular function, <code>this</code> depends on <strong>how the function is called</strong>, not where it was written. In an arrow function, <code>this</code> is taken from the surrounding scope at definition time and can never be changed:</p>
-<pre><code><span class="tok-keyword">const</span> service = {
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> service = {
   name: <span class="tok-string">'NotesAPI'</span>,
   greetNormal: <span class="tok-keyword">function</span> () { <span class="tok-keyword">return</span> <span class="tok-string">'Hello from '</span> + <span class="tok-keyword">this</span>.name; },
   greetArrow: () =&gt; <span class="tok-string">'Hello from '</span> + <span class="tok-keyword">this</span>.name,
@@ -196,7 +196,7 @@ Hello from (undefined)
 Hello from undefined
 rebound with bind: Hello from NotesAPI</div>
 <p>The third line is the dangerous one: pulling a method off its object <strong>silently</strong> loses <code>this</code>. In a CommonJS file (non-strict) <code>this</code> falls back to the global object, so you get <code>undefined</code> instead of a crash. In an ES module, which is always strict, the same code throws:</p>
-<pre><code><span class="tok-comment">// same code, but in a .mjs file (ES module = always strict)</span>
+<pre><code class="language-javascript"><span class="tok-comment">// same code, but in a .mjs file (ES module = always strict)</span>
 <span class="tok-keyword">const</span> detached = service.greet;
 <span class="tok-function">detached</span>();</code></pre>
 <div class="out">TypeError: Cannot read properties of undefined (reading 'name')</div>
@@ -233,7 +233,7 @@ rebound with bind: Hello from NotesAPI</div>
 <p class="lead">Closure là một hàm nhớ được những biến quanh nó, kể cả khi đoạn code tạo ra chúng đã chạy xong từ lâu. Chỉ một câu đó thôi đã giải thích được connection pool, bộ giới hạn tần suất, cache và các nhà máy sinh middleware — tất cả đều là thứ bạn sẽ tự viết ở phần sau của khoá.</p>
 
 <h3>Closure: trạng thái riêng tư mà không cần class</h3>
-<pre><code><span class="tok-keyword">function</span> <span class="tok-function">createCounter</span>() {
+<pre><code class="language-javascript"><span class="tok-keyword">function</span> <span class="tok-function">createCounter</span>() {
   <span class="tok-keyword">let</span> count = <span class="tok-number">0</span>;            <span class="tok-comment">// riêng tư — bên ngoài không chạm được</span>
   <span class="tok-keyword">return</span> <span class="tok-keyword">function</span> () { count++; <span class="tok-keyword">return</span> count; };
 }
@@ -250,7 +250,7 @@ count có lộ ra ngoài không? undefined</div>
 
 <h3><code>this</code>: chỗ ai cũng hiểu sai</h3>
 <p>Trong hàm thường, <code>this</code> phụ thuộc vào <strong>cách hàm được gọi</strong>, không phải nơi hàm được viết. Trong arrow function, <code>this</code> được lấy từ phạm vi bao quanh ngay lúc định nghĩa và không bao giờ đổi được:</p>
-<pre><code><span class="tok-keyword">const</span> service = {
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> service = {
   name: <span class="tok-string">'NotesAPI'</span>,
   greetNormal: <span class="tok-keyword">function</span> () { <span class="tok-keyword">return</span> <span class="tok-string">'Xin chào từ '</span> + <span class="tok-keyword">this</span>.name; },
   greetArrow: () =&gt; <span class="tok-string">'Xin chào từ '</span> + <span class="tok-keyword">this</span>.name,
@@ -266,7 +266,7 @@ Xin chào từ (undefined)
 Xin chào từ undefined
 buộc lại bằng bind: Xin chào từ NotesAPI</div>
 <p>Dòng thứ ba mới là dòng nguy hiểm: tách một method ra khỏi object sẽ <strong>âm thầm</strong> làm mất <code>this</code>. Trong file CommonJS (không strict), <code>this</code> rơi về đối tượng toàn cục nên bạn nhận <code>undefined</code> thay vì một tiếng nổ. Trong ES module — vốn luôn strict — cùng đoạn code đó ném lỗi:</p>
-<pre><code><span class="tok-comment">// vẫn code đó, nhưng đặt trong file .mjs (ES module = luôn strict)</span>
+<pre><code class="language-javascript"><span class="tok-comment">// vẫn code đó, nhưng đặt trong file .mjs (ES module = luôn strict)</span>
 <span class="tok-keyword">const</span> detached = service.chao;
 <span class="tok-function">detached</span>();</code></pre>
 <div class="out">TypeError: Cannot read properties of undefined (reading 'name')</div>
@@ -312,7 +312,7 @@ buộc lại bằng bind: Xin chào từ NotesAPI</div>
 <p class="lead">Primitives are copied by value. Objects and arrays are copied <strong>by reference</strong> — the variable holds an address, not the data. Nearly every "why did my original change?" bug in a backend comes from this one fact.</p>
 
 <h3>Shallow copy is only one level deep</h3>
-<pre><code><span class="tok-keyword">const</span> original = { name: <span class="tok-string">'An'</span>, address: { city: <span class="tok-string">'Hà Nội'</span> }, tags: [<span class="tok-string">'a'</span>] };
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> original = { name: <span class="tok-string">'An'</span>, address: { city: <span class="tok-string">'Hà Nội'</span> }, tags: [<span class="tok-string">'a'</span>] };
 
 <span class="tok-keyword">const</span> shallow = { ...original };     <span class="tok-comment">// spread = ONE level copied</span>
 shallow.name = <span class="tok-string">'Bình'</span>;              <span class="tok-comment">// top level → original safe</span>
@@ -330,14 +330,14 @@ the deep copy                      : {"name":"An","address":{"city":"Huế"},"ta
 <div class="callout warn">Old tutorials suggest <code>JSON.parse(JSON.stringify(obj))</code> for deep copies. It works for plain data but <strong>destroys</strong> <code>Date</code> (becomes a string), <code>undefined</code>, <code>Map</code>, <code>Set</code>, <code>BigInt</code> (throws) and functions. Use <code>structuredClone</code> — it handles Date, Map and Set correctly.</div>
 
 <h3>Destructuring — how you read request data</h3>
-<pre><code><span class="tok-comment">// this exact shape appears in every route handler you will write</span>
+<pre><code class="language-typescript"><span class="tok-comment">// this exact shape appears in every route handler you will write</span>
 <span class="tok-keyword">const</span> { title, body = <span class="tok-string">''</span>, tags = [] } = req.body;    <span class="tok-comment">// defaults for missing fields</span>
 <span class="tok-keyword">const</span> { page = <span class="tok-number">1</span>, limit = <span class="tok-number">20</span> } = req.query;
 <span class="tok-keyword">const</span> { id: noteId } = req.params;                <span class="tok-comment">// rename while extracting</span></code></pre>
 <p>Defaults only fire on <code>undefined</code>, not on <code>null</code> or <code>''</code>. That distinction matters when a client sends <code>{"body": null}</code> — you get <code>null</code>, not the default.</p>
 
 <h3>Spread: update without mutating</h3>
-<pre><code><span class="tok-comment">// merge an update onto an existing record — original untouched</span>
+<pre><code class="language-javascript"><span class="tok-comment">// merge an update onto an existing record — original untouched</span>
 <span class="tok-keyword">const</span> updated = { ...note, title: <span class="tok-string">'New title'</span>, updatedAt: <span class="tok-keyword">new</span> <span class="tok-function">Date</span>() };
 
 <span class="tok-comment">// remove a field safely (never send passwordHash to the client)</span>
@@ -345,7 +345,7 @@ the deep copy                      : {"name":"An","address":{"city":"Huế"},"ta
 <div class="callout ok">That second line is a security habit worth building now: strip secrets by destructuring them <em>out</em>, rather than trusting yourself to remember which fields to include.</div>
 
 <h3>Optional chaining and nullish coalescing</h3>
-<pre><code><span class="tok-keyword">const</span> city = user?.address?.city ?? <span class="tok-string">'unknown'</span>;   <span class="tok-comment">// no crash if address is missing</span>
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> city = user?.address?.city ?? <span class="tok-string">'unknown'</span>;   <span class="tok-comment">// no crash if address is missing</span>
 <span class="tok-keyword">const</span> limit = req.query.limit ?? <span class="tok-number">20</span>;             <span class="tok-comment">// ?? only falls back on null/undefined</span>
 <span class="tok-keyword">const</span> limitBad = req.query.limit || <span class="tok-number">20</span>;          <span class="tok-comment">// || also replaces 0 and '' — usually a bug</span></code></pre>
 <div class="pitfall">Use <code>??</code>, not <code>||</code>, for defaults on numbers. With <code>||</code>, a legitimate <code>limit=0</code> or <code>page=0</code> silently becomes 20 — because <code>0</code> is falsy. This is a real and very annoying pagination bug.</div>
@@ -374,7 +374,7 @@ the deep copy                      : {"name":"An","address":{"city":"Huế"},"ta
 <p class="lead">Kiểu nguyên thuỷ được sao chép theo giá trị. Object và mảng thì sao chép <strong>theo tham chiếu</strong> — biến giữ một địa chỉ, không giữ dữ liệu. Gần như mọi con bug "sao bản gốc lại đổi?" trong backend đều sinh ra từ đúng sự thật này.</p>
 
 <h3>Sao chép nông chỉ đi được một tầng</h3>
-<pre><code><span class="tok-keyword">const</span> original = { name: <span class="tok-string">'An'</span>, address: { city: <span class="tok-string">'Hà Nội'</span> }, tags: [<span class="tok-string">'a'</span>] };
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> original = { name: <span class="tok-string">'An'</span>, address: { city: <span class="tok-string">'Hà Nội'</span> }, tags: [<span class="tok-string">'a'</span>] };
 
 <span class="tok-keyword">const</span> shallow = { ...original };          <span class="tok-comment">// spread = chỉ chép MỘT tầng</span>
 shallow.name = <span class="tok-string">'Bình'</span>;               <span class="tok-comment">// tầng ngoài → bản gốc an toàn</span>
@@ -392,14 +392,14 @@ bản sao sâu                 : {"name":"An","address":{"city":"Huế"},"tags":
 <div class="callout warn">Tutorial cũ hay bảo dùng <code>JSON.parse(JSON.stringify(obj))</code> để chép sâu. Nó chạy được với dữ liệu thuần, nhưng <strong>phá hỏng</strong> <code>Date</code> (biến thành chuỗi), <code>undefined</code>, <code>Map</code>, <code>Set</code>, <code>BigInt</code> (ném lỗi) và hàm. Hãy dùng <code>structuredClone</code> — nó xử lý đúng cả Date, Map và Set.</div>
 
 <h3>Destructuring — cách bạn đọc dữ liệu từ request</h3>
-<pre><code><span class="tok-comment">// hình dạng này xuất hiện trong mọi route handler bạn sẽ viết</span>
+<pre><code class="language-typescript"><span class="tok-comment">// hình dạng này xuất hiện trong mọi route handler bạn sẽ viết</span>
 <span class="tok-keyword">const</span> { title, body = <span class="tok-string">''</span>, tags = [] } = req.body;    <span class="tok-comment">// giá trị mặc định cho trường thiếu</span>
 <span class="tok-keyword">const</span> { page = <span class="tok-number">1</span>, limit = <span class="tok-number">20</span> } = req.query;
 <span class="tok-keyword">const</span> { id: noteId } = req.params;                <span class="tok-comment">// đổi tên ngay khi lấy ra</span></code></pre>
 <p>Giá trị mặc định CHỈ kích hoạt khi gặp <code>undefined</code>, không kích hoạt với <code>null</code> hay <code>''</code>. Khác biệt này quan trọng khi client gửi lên <code>{"body": null}</code> — bạn nhận <code>null</code>, không phải giá trị mặc định.</p>
 
 <h3>Spread: cập nhật mà không sửa bản gốc</h3>
-<pre><code><span class="tok-comment">// ghép bản cập nhật lên bản ghi cũ — bản gốc không bị đụng</span>
+<pre><code class="language-javascript"><span class="tok-comment">// ghép bản cập nhật lên bản ghi cũ — bản gốc không bị đụng</span>
 <span class="tok-keyword">const</span> updated = { ...note, title: <span class="tok-string">'Tiêu đề mới'</span>, updatedAt: <span class="tok-keyword">new</span> <span class="tok-function">Date</span>() };
 
 <span class="tok-comment">// loại bỏ một trường an toàn (đừng bao giờ gửi passwordHash cho client)</span>
@@ -407,7 +407,7 @@ bản sao sâu                 : {"name":"An","address":{"city":"Huế"},"tags":
 <div class="callout ok">Dòng thứ hai là một thói quen bảo mật nên xây ngay từ bây giờ: bóc bí mật ra bằng destructuring, thay vì tin vào trí nhớ của mình về việc "được phép trả những trường nào".</div>
 
 <h3>Optional chaining và toán tử nullish</h3>
-<pre><code><span class="tok-keyword">const</span> city = user?.address?.city ?? <span class="tok-string">'không rõ'</span>;  <span class="tok-comment">// không nổ nếu thiếu diaChi</span>
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> city = user?.address?.city ?? <span class="tok-string">'không rõ'</span>;  <span class="tok-comment">// không nổ nếu thiếu diaChi</span>
 <span class="tok-keyword">const</span> limit = req.query.limit ?? <span class="tok-number">20</span>;              <span class="tok-comment">// ?? chỉ thay khi null/undefined</span>
 <span class="tok-keyword">const</span> limitSai = req.query.limit || <span class="tok-number">20</span>;           <span class="tok-comment">// || thay cả 0 và '' — thường là bug</span></code></pre>
 <div class="pitfall">Hãy dùng <code>??</code> chứ đừng dùng <code>||</code> để đặt giá trị mặc định cho số. Với <code>||</code>, một giá trị hợp lệ như <code>limit=0</code> hay <code>page=0</code> sẽ âm thầm biến thành 20 — vì <code>0</code> bị coi là "giá trị giả". Đây là một con bug phân trang có thật và rất khó chịu.</div>
@@ -450,7 +450,7 @@ bản sao sâu                 : {"name":"An","address":{"city":"Huế"},"tags":
   <div class="lz-step"><div class="lz-k">2015</div><div class="lz-t">Promises</div><div class="lz-d">An object representing a future value. Chainable.</div></div>
   <div class="lz-step"><div class="lz-k">2017</div><div class="lz-t">async / await</div><div class="lz-d">Promises that read like ordinary code. Use this.</div></div>
 </div>
-<pre><code><span class="tok-comment">// callback style — error first, the Node convention</span>
+<pre><code class="language-javascript"><span class="tok-comment">// callback style — error first, the Node convention</span>
 fs.<span class="tok-function">readFile</span>(<span class="tok-string">'note.txt'</span>, <span class="tok-string">'utf8'</span>, (err, data) =&gt; {
   <span class="tok-keyword">if</span> (err) <span class="tok-keyword">return</span> <span class="tok-function">handle</span>(err);
   <span class="tok-function">console.log</span>(data);
@@ -461,7 +461,7 @@ fs.<span class="tok-function">readFile</span>(<span class="tok-string">'note.txt
 <span class="tok-function">console.log</span>(data);</code></pre>
 
 <h3>Mistake 1 — forgetting await</h3>
-<pre><code><span class="tok-keyword">async</span> <span class="tok-keyword">function</span> <span class="tok-function">getName</span>() { <span class="tok-keyword">await</span> <span class="tok-function">sleep</span>(<span class="tok-number">50</span>); <span class="tok-keyword">return</span> <span class="tok-string">'An'</span>; }
+<pre><code class="language-javascript"><span class="tok-keyword">async</span> <span class="tok-keyword">function</span> <span class="tok-function">getName</span>() { <span class="tok-keyword">await</span> <span class="tok-function">sleep</span>(<span class="tok-number">50</span>); <span class="tok-keyword">return</span> <span class="tok-string">'An'</span>; }
 
 <span class="tok-keyword">const</span> missing = <span class="tok-function">getName</span>();          <span class="tok-comment">// no await</span>
 <span class="tok-function">console.log</span>(<span class="tok-string">'without await:'</span>, missing);
@@ -471,7 +471,7 @@ with await   : An</div>
 <p>An <code>async</code> function <strong>always</strong> returns a Promise. Forget <code>await</code> and you send the client a Promise object, which serialises to <code>{}</code> — the classic "my API returns an empty object" bug.</p>
 
 <h3>Mistake 2 — awaiting things that could run together</h3>
-<pre><code><span class="tok-comment">// sequential: each await blocks the next</span>
+<pre><code class="language-typescript"><span class="tok-comment">// sequential: each await blocks the next</span>
 <span class="tok-keyword">await</span> <span class="tok-function">sleep</span>(<span class="tok-number">300</span>); <span class="tok-keyword">await</span> <span class="tok-function">sleep</span>(<span class="tok-number">300</span>); <span class="tok-keyword">await</span> <span class="tok-function">sleep</span>(<span class="tok-number">300</span>);
 
 <span class="tok-comment">// parallel: start all three, then wait for the slowest</span>
@@ -482,7 +482,7 @@ parallel  : 302 ms</div>
 <div class="callout warn">The opposite mistake also exists: firing 5,000 database queries in one <code>Promise.all</code> will exhaust your connection pool and take the database down. Parallel means "a handful at once", not "everything at once". Chapter 16 covers batching.</div>
 
 <h3>Mistake 3 — assuming all-or-nothing</h3>
-<pre><code><span class="tok-keyword">try</span> { <span class="tok-keyword">await</span> Promise.<span class="tok-function">all</span>([<span class="tok-function">sleep</span>(<span class="tok-number">10</span>), <span class="tok-function">failing</span>()]); }
+<pre><code class="language-javascript"><span class="tok-keyword">try</span> { <span class="tok-keyword">await</span> Promise.<span class="tok-function">all</span>([<span class="tok-function">sleep</span>(<span class="tok-number">10</span>), <span class="tok-function">failing</span>()]); }
 <span class="tok-keyword">catch</span> (e) { <span class="tok-function">console.log</span>(<span class="tok-string">'Promise.all   → throws immediately:'</span>, e.message); }
 
 <span class="tok-keyword">const</span> results = <span class="tok-keyword">await</span> Promise.<span class="tok-function">allSettled</span>([<span class="tok-function">sleep</span>(<span class="tok-number">10</span>), <span class="tok-function">failing</span>()]);
@@ -498,14 +498,14 @@ allSettled    → [ 'fulfilled', 'rejected' ]</div>
 
 <h3>Mistake 4 — the one that kills the process</h3>
 <p>try/catch only catches what happens <em>inside</em> its block, synchronously. A throw inside a callback escapes it entirely:</p>
-<pre><code><span class="tok-keyword">try</span> {
+<pre><code class="language-javascript"><span class="tok-keyword">try</span> {
   <span class="tok-function">setTimeout</span>(() =&gt; { <span class="tok-keyword">throw</span> <span class="tok-keyword">new</span> <span class="tok-function">Error</span>(<span class="tok-string">'boom in callback'</span>); }, <span class="tok-number">0</span>);
   <span class="tok-function">console.log</span>(<span class="tok-string">'try/catch finished, feeling safe'</span>);
 } <span class="tok-keyword">catch</span> (e) { <span class="tok-function">console.log</span>(<span class="tok-string">'caught?'</span>, e.message); }</code></pre>
 <div class="out">try/catch finished, feeling safe
 → escapes to uncaughtException: boom in callback</div>
 <p>And an unhandled rejected Promise <strong>terminates the process</strong> in modern Node:</p>
-<pre><code>Promise.<span class="tok-function">reject</span>(<span class="tok-keyword">new</span> <span class="tok-function">Error</span>(<span class="tok-string">'nobody catches me'</span>));
+<pre><code class="language-javascript">Promise.<span class="tok-function">reject</span>(<span class="tok-keyword">new</span> <span class="tok-function">Error</span>(<span class="tok-string">'nobody catches me'</span>));
 <span class="tok-function">setTimeout</span>(() =&gt; <span class="tok-function">console.log</span>(<span class="tok-string">'does this line run?'</span>), <span class="tok-number">100</span>);</code></pre>
 <div class="out">Error: nobody catches me
     at Object.&lt;anonymous&gt; …
@@ -539,7 +539,7 @@ Node.js v22.21.0
   <div class="lz-step"><div class="lz-k">2015</div><div class="lz-t">Promise</div><div class="lz-d">Một object đại diện cho giá trị tương lai. Nối chuỗi được.</div></div>
   <div class="lz-step"><div class="lz-k">2017</div><div class="lz-t">async / await</div><div class="lz-d">Promise nhưng đọc như code thường. Hãy dùng cái này.</div></div>
 </div>
-<pre><code><span class="tok-comment">// kiểu callback — lỗi đứng trước, quy ước của Node</span>
+<pre><code class="language-javascript"><span class="tok-comment">// kiểu callback — lỗi đứng trước, quy ước của Node</span>
 fs.<span class="tok-function">readFile</span>(<span class="tok-string">'note.txt'</span>, <span class="tok-string">'utf8'</span>, (err, data) =&gt; {
   <span class="tok-keyword">if</span> (err) <span class="tok-keyword">return</span> <span class="tok-function">xuLyLoi</span>(err);
   <span class="tok-function">console.log</span>(data);
@@ -550,7 +550,7 @@ fs.<span class="tok-function">readFile</span>(<span class="tok-string">'note.txt
 <span class="tok-function">console.log</span>(data);</code></pre>
 
 <h3>Lỗi 1 — quên await</h3>
-<pre><code><span class="tok-keyword">async</span> <span class="tok-keyword">function</span> <span class="tok-function">getName</span>() { <span class="tok-keyword">await</span> <span class="tok-function">sleep</span>(<span class="tok-number">50</span>); <span class="tok-keyword">return</span> <span class="tok-string">'An'</span>; }
+<pre><code class="language-javascript"><span class="tok-keyword">async</span> <span class="tok-keyword">function</span> <span class="tok-function">getName</span>() { <span class="tok-keyword">await</span> <span class="tok-function">sleep</span>(<span class="tok-number">50</span>); <span class="tok-keyword">return</span> <span class="tok-string">'An'</span>; }
 
 <span class="tok-keyword">const</span> missing = <span class="tok-function">getName</span>();        <span class="tok-comment">// không await</span>
 <span class="tok-function">console.log</span>(<span class="tok-string">'không await:'</span>, missing);
@@ -560,7 +560,7 @@ có await   : An</div>
 <p>Hàm <code>async</code> <strong>luôn luôn</strong> trả về một Promise. Quên <code>await</code> là bạn gửi cho client một object Promise, và nó được chuyển thành <code>{}</code> — đúng con bug kinh điển "API của tôi trả về object rỗng".</p>
 
 <h3>Lỗi 2 — chờ tuần tự những việc chạy song song được</h3>
-<pre><code><span class="tok-comment">// tuần tự: mỗi await chặn cái kế tiếp</span>
+<pre><code class="language-typescript"><span class="tok-comment">// tuần tự: mỗi await chặn cái kế tiếp</span>
 <span class="tok-keyword">await</span> <span class="tok-function">sleep</span>(<span class="tok-number">300</span>); <span class="tok-keyword">await</span> <span class="tok-function">sleep</span>(<span class="tok-number">300</span>); <span class="tok-keyword">await</span> <span class="tok-function">sleep</span>(<span class="tok-number">300</span>);
 
 <span class="tok-comment">// song song: khởi động cả ba, rồi chờ cái chậm nhất</span>
@@ -571,7 +571,7 @@ song song: 302 ms</div>
 <div class="callout warn">Có cả lỗi ngược lại: bắn 5.000 truy vấn trong một <code>Promise.all</code> sẽ vắt kiệt connection pool và làm sập cơ sở dữ liệu. Song song nghĩa là "vài cái một lúc", không phải "tất cả cùng lúc". Chương 16 sẽ nói về chia lô.</div>
 
 <h3>Lỗi 3 — tưởng cứ được ăn cả ngã về không</h3>
-<pre><code><span class="tok-keyword">try</span> { <span class="tok-keyword">await</span> Promise.<span class="tok-function">all</span>([<span class="tok-function">sleep</span>(<span class="tok-number">10</span>), <span class="tok-function">failing</span>()]); }
+<pre><code class="language-javascript"><span class="tok-keyword">try</span> { <span class="tok-keyword">await</span> Promise.<span class="tok-function">all</span>([<span class="tok-function">sleep</span>(<span class="tok-number">10</span>), <span class="tok-function">failing</span>()]); }
 <span class="tok-keyword">catch</span> (e) { <span class="tok-function">console.log</span>(<span class="tok-string">'Promise.all   → ném ngay:'</span>, e.message); }
 
 <span class="tok-keyword">const</span> result = <span class="tok-keyword">await</span> Promise.<span class="tok-function">allSettled</span>([<span class="tok-function">sleep</span>(<span class="tok-number">10</span>), <span class="tok-function">failing</span>()]);
@@ -587,14 +587,14 @@ allSettled    → [ 'fulfilled', 'rejected' ]</div>
 
 <h3>Lỗi 4 — con lỗi giết cả tiến trình</h3>
 <p>try/catch chỉ bắt được những gì xảy ra <em>bên trong</em> khối của nó, theo kiểu đồng bộ. Một lệnh throw nằm trong callback sẽ thoát ra ngoài hoàn toàn:</p>
-<pre><code><span class="tok-keyword">try</span> {
+<pre><code class="language-javascript"><span class="tok-keyword">try</span> {
   <span class="tok-function">setTimeout</span>(() =&gt; { <span class="tok-keyword">throw</span> <span class="tok-keyword">new</span> <span class="tok-function">Error</span>(<span class="tok-string">'nổ trong callback'</span>); }, <span class="tok-number">0</span>);
   <span class="tok-function">console.log</span>(<span class="tok-string">'try/catch chạy xong, tưởng an toàn'</span>);
 } <span class="tok-keyword">catch</span> (e) { <span class="tok-function">console.log</span>(<span class="tok-string">'bắt được?'</span>, e.message); }</code></pre>
 <div class="out">try/catch chạy xong, tưởng an toàn
 → rơi vào uncaughtException: nổ trong callback</div>
 <p>Và một Promise bị từ chối mà không ai bắt sẽ <strong>chấm dứt cả tiến trình</strong> trong Node hiện đại:</p>
-<pre><code>Promise.<span class="tok-function">reject</span>(<span class="tok-keyword">new</span> <span class="tok-function">Error</span>(<span class="tok-string">'không ai bắt'</span>));
+<pre><code class="language-javascript">Promise.<span class="tok-function">reject</span>(<span class="tok-keyword">new</span> <span class="tok-function">Error</span>(<span class="tok-string">'không ai bắt'</span>));
 <span class="tok-function">setTimeout</span>(() =&gt; <span class="tok-function">console.log</span>(<span class="tok-string">'dòng này có chạy không?'</span>), <span class="tok-number">100</span>);</code></pre>
 <div class="out">Error: không ai bắt
     at Object.&lt;anonymous&gt; …
@@ -632,7 +632,7 @@ Node.js v22.21.0
 <p class="lead">Node has <strong>two</strong> module systems. CommonJS (<code>require</code>) is the original; ES Modules (<code>import</code>) is the standard the whole JavaScript world converged on. You will meet both — most tutorials use one, most new projects the other — so you need to recognise which file you are in.</p>
 
 <h3>Side by side</h3>
-<pre><code><span class="tok-comment">// ─── CommonJS ─── math.cjs</span>
+<pre><code class="language-javascript"><span class="tok-comment">// ─── CommonJS ─── math.cjs</span>
 <span class="tok-keyword">function</span> <span class="tok-function">add</span>(a, b) { <span class="tok-keyword">return</span> a + b; }
 module.exports = { add };
 
@@ -640,7 +640,7 @@ module.exports = { add };
 <span class="tok-keyword">const</span> { add } = <span class="tok-function">require</span>(<span class="tok-string">'./math.cjs'</span>);
 <span class="tok-function">console.log</span>(<span class="tok-string">'CJS  :'</span>, <span class="tok-function">add</span>(<span class="tok-number">2</span>, <span class="tok-number">3</span>), <span class="tok-string">'| __dirname available:'</span>, <span class="tok-keyword">typeof</span> __dirname);</code></pre>
 <div class="out">CJS  : 5 | __dirname available: string</div>
-<pre><code><span class="tok-comment">// ─── ES Modules ─── math.mjs</span>
+<pre><code class="language-javascript"><span class="tok-comment">// ─── ES Modules ─── math.mjs</span>
 <span class="tok-keyword">export</span> <span class="tok-keyword">function</span> <span class="tok-function">add</span>(a, b) { <span class="tok-keyword">return</span> a + b; }
 
 <span class="tok-comment">// use.mjs</span>
@@ -651,12 +651,12 @@ module.exports = { add };
 <div class="out">ESM  : 5 | __dirname: undefined
 ESM  : top-level await works</div>
 <p>Two differences already visible: ESM has <strong>no <code>__dirname</code></strong>, and ESM allows <code>await</code> at the top level of a file. CommonJS does not:</p>
-<pre><code><span class="tok-comment">// tla.cjs</span>
+<pre><code class="language-javascript"><span class="tok-comment">// tla.cjs</span>
 <span class="tok-keyword">const</span> x = <span class="tok-keyword">await</span> Promise.<span class="tok-function">resolve</span>(<span class="tok-string">'ok'</span>);</code></pre>
 <div class="out">SyntaxError: await is only valid in async functions and the top level bodies of modules</div>
 
 <h3>Getting <code>__dirname</code> back in ESM</h3>
-<pre><code><span class="tok-keyword">import</span> { fileURLToPath } <span class="tok-keyword">from</span> <span class="tok-string">'node:url'</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> { fileURLToPath } <span class="tok-keyword">from</span> <span class="tok-string">'node:url'</span>;
 <span class="tok-keyword">import</span> path <span class="tok-keyword">from</span> <span class="tok-string">'node:path'</span>;
 
 <span class="tok-keyword">const</span> __dirname = path.<span class="tok-function">dirname</span>(<span class="tok-function">fileURLToPath</span>(<span class="tok-keyword">import</span>.meta.url));</code></pre>
@@ -701,7 +701,7 @@ ESM  : top-level await works</div>
 <p class="lead">Node có <strong>hai</strong> hệ module. CommonJS (<code>require</code>) là hệ nguyên bản; ES Modules (<code>import</code>) là chuẩn mà cả thế giới JavaScript đã hội tụ về. Bạn sẽ gặp cả hai — phần lớn tutorial dùng hệ này, phần lớn dự án mới dùng hệ kia — nên cần nhận ra mình đang ở trong loại file nào.</p>
 
 <h3>Đặt cạnh nhau</h3>
-<pre><code><span class="tok-comment">// ─── CommonJS ─── math.cjs</span>
+<pre><code class="language-javascript"><span class="tok-comment">// ─── CommonJS ─── math.cjs</span>
 <span class="tok-keyword">function</span> <span class="tok-function">add</span>(a, b) { <span class="tok-keyword">return</span> a + b; }
 module.exports = { add };
 
@@ -709,7 +709,7 @@ module.exports = { add };
 <span class="tok-keyword">const</span> { add } = <span class="tok-function">require</span>(<span class="tok-string">'./math.cjs'</span>);
 <span class="tok-function">console.log</span>(<span class="tok-string">'CJS  :'</span>, <span class="tok-function">add</span>(<span class="tok-number">2</span>, <span class="tok-number">3</span>), <span class="tok-string">'| __dirname có sẵn:'</span>, <span class="tok-keyword">typeof</span> __dirname);</code></pre>
 <div class="out">CJS  : 5 | __dirname có sẵn: string</div>
-<pre><code><span class="tok-comment">// ─── ES Modules ─── math.mjs</span>
+<pre><code class="language-javascript"><span class="tok-comment">// ─── ES Modules ─── math.mjs</span>
 <span class="tok-keyword">export</span> <span class="tok-keyword">function</span> <span class="tok-function">add</span>(a, b) { <span class="tok-keyword">return</span> a + b; }
 
 <span class="tok-comment">// dung.mjs</span>
@@ -720,12 +720,12 @@ module.exports = { add };
 <div class="out">ESM  : 5 | __dirname: undefined
 ESM  : top-level await chạy được</div>
 <p>Đã thấy ngay hai khác biệt: ESM <strong>không có <code>__dirname</code></strong>, và ESM cho phép dùng <code>await</code> ngay ở cấp cao nhất của file. CommonJS thì không:</p>
-<pre><code><span class="tok-comment">// tla.cjs</span>
+<pre><code class="language-javascript"><span class="tok-comment">// tla.cjs</span>
 <span class="tok-keyword">const</span> x = <span class="tok-keyword">await</span> Promise.<span class="tok-function">resolve</span>(<span class="tok-string">'ok'</span>);</code></pre>
 <div class="out">SyntaxError: await is only valid in async functions and the top level bodies of modules</div>
 
 <h3>Lấy lại <code>__dirname</code> trong ESM</h3>
-<pre><code><span class="tok-keyword">import</span> { fileURLToPath } <span class="tok-keyword">from</span> <span class="tok-string">'node:url'</span>;
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> { fileURLToPath } <span class="tok-keyword">from</span> <span class="tok-string">'node:url'</span>;
 <span class="tok-keyword">import</span> path <span class="tok-keyword">from</span> <span class="tok-string">'node:path'</span>;
 
 <span class="tok-keyword">const</span> __dirname = path.<span class="tok-function">dirname</span>(<span class="tok-function">fileURLToPath</span>(<span class="tok-keyword">import</span>.meta.url));</code></pre>

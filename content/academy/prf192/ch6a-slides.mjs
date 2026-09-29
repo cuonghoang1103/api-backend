@@ -112,7 +112,7 @@ export default {
 <li><strong>Heap</strong> — drawn but empty, because this program never calls <code>malloc</code>. Slide 30 will fill it.</li>
 <li><strong>The direction that matters</strong> — the stack addresses fall as you go deeper (main's a at 6684188, average's a at 6684144). The stack grows <em>downwards</em>; the heap grows upwards to meet it.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int myVar = 10;                  /* data segment */
 
@@ -148,7 +148,7 @@ int main(void) {
 <li><strong>Heap</strong> — có vẽ nhưng trống rỗng, vì chương trình này không gọi <code>malloc</code> lần nào. Slide 30 sẽ lấp đầy nó.</li>
 <li><strong>Chiều đáng nhớ</strong> — địa chỉ trên stack GIẢM dần khi đi sâu vào (a của main ở 6684188, a của average ở 6684144). Stack mọc <em>xuống</em>; heap mọc lên phía đón nó.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int myVar = 10;                  /* data segment */
 
@@ -185,7 +185,7 @@ int main(void) {
 <li><strong>Two questions, two answers, one mechanism</strong> — the same <code>&amp;</code> that gives <code>&amp;a = 6684188</code> also gives <code>&amp;main = 4200002</code>. C does not have a separate "address of function" operator.</li>
 <li><strong>Why "access through the NEW variable" is the interesting half</strong> — storing a number is trivial. The magic is the second step: taking a number back and treating it as a place. That step is what <code>*</code> does, and it is the subject of slide 10.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     int a = 5;
@@ -209,7 +209,7 @@ int main(void) {
 <li><strong>Hai câu hỏi, hai câu trả lời, một cơ chế</strong> — vẫn dấu <code>&amp;</code> cho ra <code>&amp;a = 6684188</code> ấy cũng cho ra <code>&amp;main = 4200002</code>. C không có toán tử "lấy địa chỉ hàm" riêng.</li>
 <li><strong>Vì sao nửa "truy cập qua biến MỚI" mới là phần thú vị</strong> — cất một con số thì quá tầm thường. Phép màu nằm ở bước hai: cầm con số ấy về rồi coi nó như một CHỖ. Bước đó chính là việc của <code>*</code>, và là nội dung slide 10.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     int a = 5;
@@ -235,7 +235,7 @@ int main(void) {
 <li><strong>Code Segment gets no arrow</strong> — because it holds instructions, not data. Slide 4 showed it does have addresses (<code>&amp;main</code>), but you never store <em>data</em> there.</li>
 <li><strong>How this connects to pointers</strong> — a pointer can point into any of the three data areas. The pointer variable itself is usually a local (so it lives on the stack) while the thing it points at may be global, local or heap. Keeping those two lifetimes apart in your head prevents most pointer bugs.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 
 int globalVar = 100;                 /* DATA segment: lives the whole program */
@@ -268,7 +268,7 @@ int main(void) {
 <li><strong>Code Segment không có mũi tên nào trỏ vào</strong> — vì nó chứa lệnh, không chứa dữ liệu. Slide 4 cho thấy nó vẫn có địa chỉ (<code>&amp;main</code>), nhưng bạn không bao giờ cất <em>dữ liệu</em> ở đó.</li>
 <li><strong>Nối với con trỏ thế nào</strong> — một con trỏ có thể trỏ vào bất kỳ vùng nào trong ba vùng dữ liệu. Bản thân biến con trỏ thường là biến cục bộ (nên nó nằm trên stack) còn thứ nó trỏ tới có thể là toàn cục, cục bộ hoặc heap. Tách rạch ròi hai vòng đời đó trong đầu là ngăn được phần lớn lỗi con trỏ.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 
 int globalVar = 100;                 /* DATA: song suot ca chuong trinh */
@@ -303,7 +303,7 @@ int main(void) {
 <li><strong>"A pointer provides an INDIRECT method of accessing the value of a data item"</strong> — direct: <code>n = 100</code>. Indirect: <code>*pn = 100</code>. Both write 100 into the same box; the second one goes via a number. The whole value of pointers comes from that number being changeable at run time.</li>
 <li><strong>"Pointers can point to variables of other fundamental data types like int, char, or double or data aggregates like arrays or structures"</strong> — a pointer type is built <em>from</em> a type. There is no generic "pointer"; there is <code>int*</code>, <code>char*</code>, <code>double*</code>, and each behaves differently under <code>*</code> and under arithmetic (slides 14 and 16).</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     int    n = 7;
@@ -331,7 +331,7 @@ int main(void) {
 <li><strong>"Con trỏ cho một cách truy cập GIÁN TIẾP tới giá trị của một mục dữ liệu"</strong> — trực tiếp: <code>n = 100</code>. Gián tiếp: <code>*pn = 100</code>. Cả hai đều ghi 100 vào cùng cái hộp; cách thứ hai đi vòng qua một con số. Toàn bộ giá trị của con trỏ nằm ở chỗ con số ấy đổi được lúc đang chạy.</li>
 <li><strong>"Con trỏ trỏ được tới biến của các kiểu cơ bản như int, char, double, hoặc tới dữ liệu gộp như mảng, cấu trúc"</strong> — kiểu con trỏ được dựng <em>TỪ</em> một kiểu. Không có "con trỏ" chung chung; chỉ có <code>int*</code>, <code>char*</code>, <code>double*</code>, và mỗi loại cư xử khác nhau dưới <code>*</code> và dưới phép số học (slide 14 và 16).</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     int    n = 7;
@@ -362,7 +362,7 @@ int main(void) {
 <li><strong>Every pointer is the same size</strong> — <code>sizeof(int*) == sizeof(double*) == sizeof(char*)</code>, because they all hold an address. Do not confuse that with <code>sizeof(*p)</code>, which is the size of the pointed-to type and differs.</li>
 <li><strong>Declared is not initialised</strong> — <code>int *pI;</code> creates a pointer containing garbage. Dereferencing it is undefined behaviour; give it <code>NULL</code> or a real address immediately.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     int x = 5;
@@ -390,7 +390,7 @@ int main(void) {
 <li><strong>Mọi con trỏ đều cùng kích thước</strong> — <code>sizeof(int*) == sizeof(double*) == sizeof(char*)</code>, vì tất cả đều chỉ đựng một địa chỉ. Đừng nhầm với <code>sizeof(*p)</code> — đó là kích thước của kiểu được trỏ tới, và nó khác nhau.</li>
 <li><strong>Khai báo không phải là khởi tạo</strong> — <code>int *pI;</code> tạo ra một con trỏ chứa rác. Giải tham chiếu nó là hành vi không xác định; hãy gán ngay <code>NULL</code> hoặc một địa chỉ thật.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     int x = 5;
@@ -420,7 +420,7 @@ int main(void) {
 <li><strong>"To allocate memory and access it (direct memory allocation)"</strong> — a heap block has no name, only an address, so a pointer is the <em>only</em> way to reach it. Slides 24–33.</li>
 <li><strong>The reason not listed but implied</strong> — efficiency. Passing a 400-byte structure copies 400 bytes; passing its address copies 8. In a loop that runs a million times, that is the difference between fast and slow.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 /* reason 2: returning TWO values through pointers */
 void divide(int a, int b, int *quotient, int *remainder) {
@@ -459,7 +459,7 @@ int main(void) {
 <li><strong>"Để cấp phát bộ nhớ và truy cập nó"</strong> — một khối trên heap không có tên, chỉ có địa chỉ, nên con trỏ là cách <em>duy nhất</em> chạm tới nó. Slide 24–33.</li>
 <li><strong>Lý do không ghi nhưng ngầm hiểu</strong> — hiệu năng. Truyền một struct 400 byte là chép 400 byte; truyền địa chỉ của nó là chép 8 byte. Trong vòng lặp chạy một triệu lần, đó là khác biệt giữa nhanh và chậm.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 /* ly do 2: tra ve HAI gia tri qua con tro */
 void divide(int a, int b, int *quotient, int *remainder) {
@@ -506,7 +506,7 @@ int main(void) {
 <tr><td>after <code>*pn = 100;</code></td><td>6684188</td><td><code>n</code></td><td><code>100</code> ← written indirectly</td></tr>
 <tr><td>after <code>*pn = 100;</code></td><td>6684176</td><td><code>pn</code></td><td><code>6684188</code> — <strong>unchanged</strong></td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     int n = 7;
@@ -539,7 +539,7 @@ int main(void) {
 <tr><td>sau <code>*pn = 100;</code></td><td>6684188</td><td><code>n</code></td><td><code>100</code> ← ghi gián tiếp</td></tr>
 <tr><td>sau <code>*pn = 100;</code></td><td>6684176</td><td><code>pn</code></td><td><code>6684188</code> — <strong>KHÔNG đổi</strong></td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     int n = 7;
@@ -574,7 +574,7 @@ int main(void) {
 <tr><td><code>pn</code> (<code>int*</code>)</td><td>6684176</td><td>6684188</td><td><code>n</code></td></tr>
 <tr><td><code>ppn</code> (<code>int**</code>)</td><td>6684168</td><td>6684176</td><td><code>pn</code></td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 void printHeader(void) {
     printf("%-10s %-20s %-15s\\n", "Variable", "Address", "Value");
@@ -622,7 +622,7 @@ int main(void) {
 <tr><td><code>pn</code> (<code>int*</code>)</td><td>6684176</td><td>6684188</td><td><code>n</code></td></tr>
 <tr><td><code>ppn</code> (<code>int**</code>)</td><td>6684168</td><td>6684176</td><td><code>pn</code></td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 void printHeader(void) {
     printf("%-10s %-20s %-15s\\n", "Variable", "Address", "Value");
@@ -673,7 +673,7 @@ int main(void) {
 <tr><td>② <code>*pm += 3*m - (*pn)</code> → 18 − 54 = −36</td><td>writes @96</td><td>54</td><td><strong>−30</strong></td><td>100</td><td>96</td></tr>
 <tr><td><code>printf("m = %d, n = %d", m, n)</code></td><td>—</td><td>54</td><td>−30</td><td>100</td><td>96</td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     int n = 7, m = 6;
@@ -705,7 +705,7 @@ int main(void) {
 <tr><td>② <code>*pm += 3*m - (*pn)</code> → 18 − 54 = −36</td><td>ghi vào @96</td><td>54</td><td><strong>−30</strong></td><td>100</td><td>96</td></tr>
 <tr><td><code>printf("m = %d, n = %d", m, n)</code></td><td>—</td><td>54</td><td>−30</td><td>100</td><td>96</td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     int n = 7, m = 6;
@@ -741,7 +741,7 @@ int main(void) {
 <tr><td><code>*p1 += 5 + 3*(*p2) - n</code></td><td>n += 5 + 24 − 7 = 22</td><td><strong>29</strong></td><td>8</td></tr>
 <tr><td><code>*p2 = 5*(*p1) - 4*m + 2*n</code></td><td>m = 145 − 32 + 58 = 171</td><td>29</td><td><strong>171</strong></td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     {   /* Exercise 1 */
@@ -780,7 +780,7 @@ int main(void) {
 <tr><td><code>*p1 += 5 + 3*(*p2) - n</code></td><td>n += 5 + 24 − 7 = 22</td><td><strong>29</strong></td><td>8</td></tr>
 <tr><td><code>*p2 = 5*(*p1) - 4*m + 2*n</code></td><td>m = 145 − 32 + 58 = 171</td><td>29</td><td><strong>171</strong></td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     {   /* Bai 1 */
@@ -812,7 +812,7 @@ int main(void) {
 <li><strong>"If needed, you must explicitly cast"</strong> — <code>p = (int*)q;</code> compiles. The cast does not convert anything; it only silences the compiler. You are now responsible for the consequences, which is why casts between unrelated pointer types are rare in correct code.</li>
 <li><strong>The one exception you will use constantly</strong> — <code>void*</code>. <code>malloc</code> returns <code>void*</code> and slide 24 notes it explicitly: <em>"user must give an explicit casting when it is used"</em>, hence <code>(int*)malloc(sizeof(int))</code>.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     int   n  = 0x41424344;      /* 4 bytes: 41 42 43 44 */
@@ -838,7 +838,7 @@ int main(void) {
 <li><strong>"Nếu cần thì phải ép kiểu tường minh"</strong> — <code>p = (int*)q;</code> thì biên dịch được. Phép ép kiểu không chuyển đổi gì cả; nó chỉ làm trình biên dịch im lặng. Từ đó bạn tự chịu trách nhiệm về hậu quả, và vì thế ép kiểu giữa hai loại con trỏ không liên quan là chuyện hiếm trong mã đúng.</li>
 <li><strong>Ngoại lệ duy nhất bạn sẽ dùng liên tục</strong> — <code>void*</code>. Hàm <code>malloc</code> trả về <code>void*</code> và slide 24 ghi rõ: <em>"người dùng phải ép kiểu tường minh khi dùng nó"</em>, nên mới có <code>(int*)malloc(sizeof(int))</code>.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     int   n  = 0x41424344;      /* 4 byte: 41 42 43 44 */
@@ -873,7 +873,7 @@ int main(void) {
 <tr><td><code>char *pp = (char*)p;</code></td><td>pp = 500 (the same number)</td><td>unchanged — pp views 1 byte</td><td>260</td></tr>
 <tr><td><code>*pp = 0;</code></td><td>writes @500 only</td><td><code><strong>0000 0000</strong> · 0000 0001 · 0000 0000 · 0000 0000</code></td><td><strong>256</strong></td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     int n = 260, *p = &amp;n;
@@ -905,7 +905,7 @@ int main(void) {
 <tr><td><code>char *pp = (char*)p;</code></td><td>pp = 500 (cùng một con số)</td><td>không đổi — pp nhìn 1 byte</td><td>260</td></tr>
 <tr><td><code>*pp = 0;</code></td><td>chỉ ghi vào @500</td><td><code><strong>0000 0000</strong> · 0000 0001 · 0000 0000 · 0000 0000</code></td><td><strong>256</strong></td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     int n = 260, *p = &amp;n;
@@ -932,7 +932,7 @@ int main(void) {
 <li><strong>What is NOT allowed</strong> — you cannot multiply or divide pointers, and you cannot add two pointers. Only: pointer ± integer, and pointer − pointer (which gives a count of elements, not of bytes).</li>
 <li><strong>Where it becomes indispensable</strong> — Slot 13–18. Walking a string with <code>while (*p) p++;</code> is pointer arithmetic doing the work of an index variable.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     int  a[5] = {10, 20, 30, 40, 50};
@@ -964,7 +964,7 @@ int main(void) {
 <li><strong>Thứ KHÔNG được phép</strong> — không nhân, không chia con trỏ, và không cộng hai con trỏ với nhau. Chỉ có: con trỏ ± số nguyên, và con trỏ − con trỏ (cho ra số PHẦN TỬ, không phải số byte).</li>
 <li><strong>Nơi nó trở nên không thể thiếu</strong> — Slot 13–18. Duyệt một chuỗi bằng <code>while (*p) p++;</code> chính là số học con trỏ làm thay việc của biến chỉ số.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     int  a[5] = {10, 20, 30, 40, 50};
@@ -998,7 +998,7 @@ int main(void) {
 <li><strong><code>== NULL</code> is the row you will use most</strong> — it is the standard check after <code>malloc</code> (slide 33: <em>"Always check if the pointer returned by malloc, calloc or realloc is NULL"</em>) and the standard way to mark "this pointer points at nothing yet".</li>
 <li><strong>Typical use</strong> — the classic array loop <code>for (p = a; p &lt; a + n; p++)</code> compares two pointers into the same array, which is exactly the legal case.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     int  arr[5] = {10, 20, 30, 40, 50};
@@ -1032,7 +1032,7 @@ int main(void) {
 <li><strong><code>== NULL</code> là dòng bạn dùng nhiều nhất</strong> — nó là phép kiểm chuẩn sau <code>malloc</code> (slide 33: <em>"Luôn kiểm tra xem con trỏ do malloc, calloc hay realloc trả về có NULL không"</em>) và là cách chuẩn để đánh dấu "con trỏ này chưa trỏ vào đâu cả".</li>
 <li><strong>Cách dùng điển hình</strong> — vòng lặp mảng kinh điển <code>for (p = a; p &lt; a + n; p++)</code> so hai con trỏ trong cùng một mảng, tức đúng trường hợp hợp lệ.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     int  arr[5] = {10, 20, 30, 40, 50};
@@ -1074,7 +1074,7 @@ int main(void) {
 <tr><td><code>pn</code></td><td><code>int</code></td><td>4</td><td>6487552</td><td>6487556</td><td>6487560</td><td><strong>+4 bytes</strong></td></tr>
 <tr><td><code>pd</code></td><td><code>double</code></td><td>8</td><td>6487544</td><td>6487552</td><td>6487560</td><td><strong>+8 bytes</strong></td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     char    c = 'a';
@@ -1114,7 +1114,7 @@ int main(void) {
 <tr><td><code>pn</code></td><td><code>int</code></td><td>4</td><td>6487552</td><td>6487556</td><td>6487560</td><td><strong>+4 byte</strong></td></tr>
 <tr><td><code>pd</code></td><td><code>double</code></td><td>8</td><td>6487544</td><td>6487552</td><td>6487560</td><td><strong>+8 byte</strong></td></tr>
 </table>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     char    c = 'a';

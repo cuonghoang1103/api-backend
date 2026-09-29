@@ -2572,7 +2572,7 @@ const GHERKIN = `<pre><code>Feature: Free shipping from 500,000 VND (US-17)
     Then the amount payable before shipping is 470,000 VND
     And the shipping fee shown is 30,000 VND</code></pre>`;
 
-const TDD_TEST1 = `<pre><code>// ShippingCalculatorTest.java — written BEFORE ShippingCalculator exists
+const TDD_TEST1 = `<pre><code class="language-java">// ShippingCalculatorTest.java — written BEFORE ShippingCalculator exists
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -2585,7 +2585,7 @@ class ShippingCalculatorTest {
     }
 }</code></pre>
 <p class="chu-thich">$ javac -cp "$JUNIT" -d out *.java</p>
-<pre><code>ShippingCalculatorTest.java:5: error: cannot find symbol
+<pre><code class="language-java">ShippingCalculatorTest.java:5: error: cannot find symbol
     private final ShippingCalculator calc = new ShippingCalculator();
                   ^
   symbol:   class ShippingCalculator
@@ -2597,7 +2597,7 @@ ShippingCalculatorTest.java:5: error: cannot find symbol
   location: class ShippingCalculatorTest
 2 errors</code></pre>`;
 
-const TDD_GREEN1 = `<pre><code>public class ShippingCalculator {
+const TDD_GREEN1 = `<pre><code class="language-java">public class ShippingCalculator {
     public long fee(long cartTotal) {
         return 30_000;              // "fake it": the simplest thing that passes
     }
@@ -2606,7 +2606,7 @@ const TDD_GREEN1 = `<pre><code>public class ShippingCalculator {
 <pre><code>PASS  chargesStandardFeeJustBelowThreshold()
 1 passed, 0 failed</code></pre>`;
 
-const TDD_RED2 = `<pre><code>    @Test
+const TDD_RED2 = `<pre><code class="language-java">    @Test
     void shipsFreeAtThreshold() {
         assertEquals(0, calc.fee(500_000));
     }</code></pre>
@@ -2614,7 +2614,7 @@ const TDD_RED2 = `<pre><code>    @Test
 FAIL  shipsFreeAtThreshold()  -&gt;  expected: &lt;0&gt; but was: &lt;30000&gt;
 1 passed, 1 failed</code></pre>`;
 
-const TDD_GREEN2 = `<pre><code>    public long fee(long cartTotal) {
+const TDD_GREEN2 = `<pre><code class="language-java">    public long fee(long cartTotal) {
         if (cartTotal &gt;= 500_000) return 0;
         return 30_000;
     }</code></pre>
@@ -2622,7 +2622,7 @@ const TDD_GREEN2 = `<pre><code>    public long fee(long cartTotal) {
 PASS  shipsFreeAtThreshold()
 2 passed, 0 failed</code></pre>`;
 
-const TDD_REFACTOR = `<pre><code>/** Shipping fee rule of user story US-17 (free shipping from 500,000 VND). */
+const TDD_REFACTOR = `<pre><code class="language-java">/** Shipping fee rule of user story US-17 (free shipping from 500,000 VND). */
 public class ShippingCalculator {
     static final long FREE_SHIPPING_THRESHOLD = 500_000;   // VND
     static final long STANDARD_FEE = 30_000;               // VND
@@ -2639,7 +2639,7 @@ public class ShippingCalculator {
 PASS  shipsFreeAtThreshold()
 2 passed, 0 failed</code></pre>`;
 
-const TDD_CYCLE3 = `<pre><code>    @Test
+const TDD_CYCLE3 = `<pre><code class="language-java">    @Test
     void rejectsNegativeTotal() {
         assertThrows(IllegalArgumentException.class, () -&gt; calc.fee(-1));
     }</code></pre>
@@ -2647,7 +2647,7 @@ const TDD_CYCLE3 = `<pre><code>    @Test
 PASS  shipsFreeAtThreshold()
 FAIL  rejectsNegativeTotal()  -&gt;  Expected java.lang.IllegalArgumentException to be thrown, but nothing was thrown.
 2 passed, 1 failed</code></pre>
-<pre><code>    public long fee(long cartTotal) {
+<pre><code class="language-java">    public long fee(long cartTotal) {
         if (cartTotal &lt; 0) throw new IllegalArgumentException("cart total must be &gt;= 0");
         return qualifiesForFreeShipping(cartTotal) ? 0 : STANDARD_FEE;
     }</code></pre>

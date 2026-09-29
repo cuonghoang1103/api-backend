@@ -57,16 +57,16 @@ ${gallery('git-08', [
 <h2>The smallest history rewrite there is</h2>
 <p class="lead">You commit, and half a second later notice the typo in the message, or the file you forgot to stage. <code>git commit --amend</code> fixes it — and understanding exactly what it does is the gentlest possible introduction to everything else in this chapter.</p>
 
-<pre><code>git commit -m <span class="tok-string">"feat(auth): add refresh tokn rotation"</span>   <span class="tok-comment"># typo</span>
+<pre><code class="language-bash">git commit -m <span class="tok-string">"feat(auth): add refresh tokn rotation"</span>   <span class="tok-comment"># typo</span>
 git commit --amend -m <span class="tok-string">"feat(auth): add refresh token rotation"</span></code></pre>
-<pre><code>git log --oneline -1</code></pre>
+<pre><code class="language-bash">git log --oneline -1</code></pre>
 <div class="out">e8b4d92 feat(auth): add refresh token rotation</div>
 <div class="callout warn"><strong>Amend does not edit the commit.</strong> Commits are immutable (1.2). Git builds a <em>new</em> commit with the same parent and the corrected content, then moves the branch to it. The old commit still exists, unreferenced, findable in the reflog for 30 days — and its hash was <code>3f8a1c9</code> while the new one is <code>e8b4d92</code>. That hash change is the entire risk profile of this command.</div>
 
 <h3>The three everyday uses</h3>
 ${slide('git-08', 3, 'amend thay commit bằng commit mới — commit cũ thành bóng ma')}
 ${slide('git-08', 4, 'amend --no-edit: thêm file quên, giữ lời nhắn')}
-<pre><code><span class="tok-comment"># 1. Fix the message.</span>
+<pre><code class="language-bash"><span class="tok-comment"># 1. Fix the message.</span>
 git commit --amend -m <span class="tok-string">"fix(auth): reject expired refresh tokens"</span>
 
 <span class="tok-comment"># 2. Add a file you forgot, keeping the message exactly as it was.</span>
@@ -80,7 +80,7 @@ git commit --amend --no-edit</code></pre>
 <p><code>--no-edit</code> is the flag you will use most: it amends the content and leaves the message untouched, with no editor opening.</p>
 
 <h3>Amend also updates the author date — sometimes</h3>
-<pre><code>git commit --amend --no-edit --date=now        <span class="tok-comment"># set the author date to now</span>
+<pre><code class="language-bash">git commit --amend --no-edit --date=now        <span class="tok-comment"># set the author date to now</span>
 git commit --amend --author=<span class="tok-string">"An &lt;an@example.com&gt;"</span>  <span class="tok-comment"># fix a wrong author</span>
 git commit --amend --reset-author               <span class="tok-comment"># use your current config identity</span></code></pre>
 <p>By default an amend keeps the original <em>author</em> date and updates the <em>committer</em> date — the two-timestamp design from 1.2. <code>--reset-author</code> is the fix for a commit made before you set <code>user.email</code> correctly (0.3), though only for the most recent one.</p>
@@ -91,11 +91,11 @@ git commit --amend --reset-author               <span class="tok-comment"># use 
   <div class="lz-step"><div class="lz-k">pushed, your branch</div><div class="lz-t">Amend, then force-with-lease</div><div class="lz-d">Fine on a personal feature branch. Lesson 8.2.</div></div>
   <div class="lz-step"><div class="lz-k">pushed and shared</div><div class="lz-t">Do not amend</div><div class="lz-d">Make a new commit instead. The old hash is in other people's clones.</div></div>
 </div>
-<pre><code>git log --oneline @{u}..HEAD    <span class="tok-comment"># is the commit still local? empty = already pushed</span></code></pre>
+<pre><code class="language-bash">git log --oneline @{u}..HEAD    <span class="tok-comment"># is the commit still local? empty = already pushed</span></code></pre>
 
 <h3>What happens if you amend a pushed commit anyway</h3>
 ${slide('git-08', 5, 'Amend một commit đã push: hai lịch sử phân nhánh')}
-<pre><code>git commit --amend --no-edit
+<pre><code class="language-bash">git commit --amend --no-edit
 git push</code></pre>
 <div class="out">! [rejected]        main -&gt; main (non-fast-forward)
 error: failed to push some refs
@@ -105,14 +105,14 @@ hint: its remote counterpart.</div>
 
 <h3>Amending an older commit</h3>
 <p><code>--amend</code> only ever touches <code>HEAD</code>. For something three commits back, mark it and let interactive rebase (3.5) put you there:</p>
-<pre><code>git rebase -i HEAD~3
+<pre><code class="language-bash">git rebase -i HEAD~3
 <span class="tok-comment"># change "pick" to "edit" on the commit you want, save, close</span>
 <span class="tok-comment"># …make your changes…</span>
 git add .
 git commit --amend --no-edit
 git rebase --continue</code></pre>
 <p>Or, for a fix you already know belongs to an earlier commit, use the <code>--fixup</code> workflow from 3.5, which is less error-prone:</p>
-<pre><code>git commit --fixup 3f8a1c9
+<pre><code class="language-bash">git commit --fixup 3f8a1c9
 git rebase -i --autosquash HEAD~5</code></pre>
 
 <h3>Amend vs the alternatives</h3>
@@ -160,16 +160,16 @@ b9e574e HEAD@{1}: commit: feat(auth): add refresh tokn rotation
 <h2>Lần viết lại lịch sử nhỏ nhất có thể</h2>
 <p class="lead">Bạn commit, và nửa giây sau nhận ra lỗi chính tả trong lời nhắn, hoặc file bạn quên đưa vào staging. <code>git commit --amend</code> sửa được — và hiểu chính xác nó làm gì là lời giới thiệu nhẹ nhàng nhất cho mọi thứ còn lại của chương này.</p>
 
-<pre><code>git commit -m <span class="tok-string">"feat(auth): add refresh tokn rotation"</span>   <span class="tok-comment"># gõ sai</span>
+<pre><code class="language-bash">git commit -m <span class="tok-string">"feat(auth): add refresh tokn rotation"</span>   <span class="tok-comment"># gõ sai</span>
 git commit --amend -m <span class="tok-string">"feat(auth): add refresh token rotation"</span></code></pre>
-<pre><code>git log --oneline -1</code></pre>
+<pre><code class="language-bash">git log --oneline -1</code></pre>
 <div class="out">e8b4d92 feat(auth): add refresh token rotation</div>
 <div class="callout warn"><strong>Amend KHÔNG sửa cái commit.</strong> Commit là bất biến (bài 1.2). Git dựng một commit <em>MỚI</em> cùng cha và nội dung đã sửa, rồi dời nhánh sang nó. Commit cũ vẫn tồn tại, không ai trỏ tới, tìm được trong reflog suốt 30 ngày — và mã băm của nó là <code>3f8a1c9</code> còn cái mới là <code>e8b4d92</code>. Chính sự đổi mã băm đó là toàn bộ hồ sơ rủi ro của lệnh này.</div>
 
 <h3>Ba cách dùng hằng ngày</h3>
 ${slide('git-08', 3, 'amend thay commit bằng commit mới — commit cũ thành bóng ma')}
 ${slide('git-08', 4, 'amend --no-edit: thêm file quên, giữ lời nhắn')}
-<pre><code><span class="tok-comment"># 1. Sửa lời nhắn.</span>
+<pre><code class="language-bash"><span class="tok-comment"># 1. Sửa lời nhắn.</span>
 git commit --amend -m <span class="tok-string">"fix(auth): tu choi refresh token het han"</span>
 
 <span class="tok-comment"># 2. Thêm một file bạn quên, giữ nguyên lời nhắn.</span>
@@ -183,7 +183,7 @@ git commit --amend --no-edit</code></pre>
 <p><code>--no-edit</code> là cái cờ bạn dùng nhiều nhất: nó amend phần nội dung và để yên lời nhắn, không mở trình soạn thảo nào.</p>
 
 <h3>Amend cũng cập nhật ngày tác giả — đôi khi</h3>
-<pre><code>git commit --amend --no-edit --date=now        <span class="tok-comment"># đặt ngày tác giả thành bây giờ</span>
+<pre><code class="language-bash">git commit --amend --no-edit --date=now        <span class="tok-comment"># đặt ngày tác giả thành bây giờ</span>
 git commit --amend --author=<span class="tok-string">"An &lt;an@example.com&gt;"</span>  <span class="tok-comment"># sửa một tác giả sai</span>
 git commit --amend --reset-author               <span class="tok-comment"># dùng danh tính trong cấu hình hiện tại</span></code></pre>
 <p>Theo mặc định, một lần amend giữ nguyên ngày <em>tác giả</em> gốc và cập nhật ngày <em>người commit</em> — thiết kế hai dấu thời gian ở bài 1.2. <code>--reset-author</code> là cách sửa cho một commit tạo ra trước khi bạn đặt đúng <code>user.email</code> (bài 0.3), dù chỉ cho commit gần nhất.</p>
@@ -194,11 +194,11 @@ git commit --amend --reset-author               <span class="tok-comment"># dùn
   <div class="lz-step"><div class="lz-k">đã push, nhánh của bạn</div><div class="lz-t">Amend, rồi force-with-lease</div><div class="lz-d">Ổn trên nhánh tính năng cá nhân. Bài 8.2.</div></div>
   <div class="lz-step"><div class="lz-k">đã push và đã chia sẻ</div><div class="lz-t">Đừng amend</div><div class="lz-d">Hãy tạo một commit mới. Mã băm cũ đang nằm trong bản clone của người khác.</div></div>
 </div>
-<pre><code>git log --oneline @{u}..HEAD    <span class="tok-comment"># commit còn ở cục bộ không? trống = đã push rồi</span></code></pre>
+<pre><code class="language-bash">git log --oneline @{u}..HEAD    <span class="tok-comment"># commit còn ở cục bộ không? trống = đã push rồi</span></code></pre>
 
 <h3>Nếu cứ amend một commit đã push thì sao</h3>
 ${slide('git-08', 5, 'Amend một commit đã push: hai lịch sử phân nhánh')}
-<pre><code>git commit --amend --no-edit
+<pre><code class="language-bash">git commit --amend --no-edit
 git push</code></pre>
 <div class="out">! [rejected]        main -&gt; main (non-fast-forward)
 error: failed to push some refs
@@ -208,14 +208,14 @@ hint: its remote counterpart.</div>
 
 <h3>Amend một commit cũ hơn</h3>
 <p><code>--amend</code> chỉ bao giờ đụng vào <code>HEAD</code>. Với thứ nằm lùi ba commit, hãy đánh dấu nó và để rebase tương tác (bài 3.5) đưa bạn tới đó:</p>
-<pre><code>git rebase -i HEAD~3
+<pre><code class="language-bash">git rebase -i HEAD~3
 <span class="tok-comment"># đổi "pick" thành "edit" ở commit bạn muốn, lưu, đóng</span>
 <span class="tok-comment"># …sửa những gì cần sửa…</span>
 git add .
 git commit --amend --no-edit
 git rebase --continue</code></pre>
 <p>Hoặc, với một bản vá mà bạn đã biết thuộc về commit nào trước đó, hãy dùng quy trình <code>--fixup</code> ở bài 3.5, ít sai sót hơn:</p>
-<pre><code>git commit --fixup 3f8a1c9
+<pre><code class="language-bash">git commit --fixup 3f8a1c9
 git rebase -i --autosquash HEAD~5</code></pre>
 
 <h3>Amend so với các lựa chọn khác</h3>
@@ -274,37 +274,37 @@ b9e574e HEAD@{1}: commit: feat(auth): add refresh tokn rotation
 
 <h3>What --force actually says</h3>
 ${slide('git-08', 7, '--force ghi đè mù, --force-with-lease hỏi trước')}
-<pre><code>git push --force origin feature/login</code></pre>
+<pre><code class="language-bash">git push --force origin feature/login</code></pre>
 <p>Translated: <em>"Whatever <code>feature/login</code> points at on the server, discard it and make it point at my commit."</em> Git does not compare, does not warn, does not care what was there. If a colleague pushed three commits while you were rebasing, those commits are no longer reachable from any branch on the server.</p>
 <div class="callout danger">Their work is not <em>deleted</em> — the objects survive on the server until garbage collection — but nothing points at them, nobody can find them without a reflog on the server side, and if their laptop no longer has them, the practical answer is that the work is gone. This is the single most destructive thing an ordinary Git user can do.</div>
 
 <h3>What --force-with-lease adds</h3>
 ${slide('git-08', 10, 'Bị từ chối: đọc, tích hợp, push lại')}
-<pre><code>git push --force-with-lease origin feature/login</code></pre>
+<pre><code class="language-bash">git push --force-with-lease origin feature/login</code></pre>
 <div class="lz-flow">
   <div class="lz-step"><div class="lz-k">1</div><div class="lz-t">Git remembers</div><div class="lz-d">Your <code>origin/feature/login</code> — where the branch was at your last fetch.</div></div>
   <div class="lz-step"><div class="lz-k">2</div><div class="lz-t">It asks the server</div><div class="lz-d">"Is the branch still exactly there?"</div></div>
   <div class="lz-step"><div class="lz-k">3a</div><div class="lz-t">Yes → push</div><div class="lz-d">Nobody pushed since you last looked. Your rewrite is safe.</div></div>
   <div class="lz-step"><div class="lz-k">3b</div><div class="lz-t">No → refuse</div><div class="lz-d">Someone pushed. Git stops instead of overwriting them.</div></div>
 </div>
-<pre><code>git push --force-with-lease</code></pre>
+<pre><code class="language-bash">git push --force-with-lease</code></pre>
 <div class="out">! [rejected]        feature/login -&gt; feature/login (stale info)
 error: failed to push some refs to 'github.com:cuonghoang1103/api-backend.git'</div>
 <p>"stale info" means: <em>your picture of the remote is out of date, so I will not let you overwrite it.</em> That message has saved a great many afternoons. The response is to fetch, look at what arrived, integrate it, and try again:</p>
-<pre><code>git fetch
+<pre><code class="language-bash">git fetch
 git log --oneline HEAD..origin/feature/login    <span class="tok-comment"># what did they add?</span>
 git rebase origin/feature/login                 <span class="tok-comment"># put your work on top of theirs</span>
 git push --force-with-lease</code></pre>
 
 <h3>Make it the default</h3>
-<pre><code>git config --global alias.pushf <span class="tok-string">"push --force-with-lease"</span></code></pre>
+<pre><code class="language-bash">git config --global alias.pushf <span class="tok-string">"push --force-with-lease"</span></code></pre>
 <p>There is no config setting that turns plain <code>--force</code> into the safe version, so an alias is the practical answer. Type <code>git pushf</code> and never type <code>--force</code> again.</p>
 
 <h3>The trap that breaks the lease</h3>
 ${slide('git-08', 8, 'Bẫy: IDE tự fetch nền làm chốt an toàn gật đầu')}
 ${slide('git-08', 9, '--force-if-includes bịt lỗ hổng')}
 <div class="callout warn"><code>--force-with-lease</code> compares against your <strong>remote-tracking ref</strong>, not against the server directly. Anything that silently runs <code>git fetch</code> for you — an IDE that polls, a <code>git fetch</code> in a shell prompt, a background sync — updates that ref <em>without you having seen the new commits</em>. The lease then compares "current server state" against "current server state", passes, and overwrites your colleague's work exactly as <code>--force</code> would.</div>
-<pre><code><span class="tok-comment"># Git 2.30+ closes the hole: also require that your local branch</span>
+<pre><code class="language-bash"><span class="tok-comment"># Git 2.30+ closes the hole: also require that your local branch</span>
 <span class="tok-comment"># actually CONTAINS everything you have fetched.</span>
 git push --force-with-lease --force-if-includes</code></pre>
 <p>Use both flags together. <code>--force-if-includes</code> is what makes the lease meaningful again when something else is fetching behind your back.</p>
@@ -332,12 +332,12 @@ git config --global alias.pushf <span class="tok-string">"push --force-with-leas
 
 <h3>Recovering when someone force-pushed over you</h3>
 ${slide('git-08', 11, 'Bị force-push đè: commit vẫn còn, tìm và đặt lại')}
-<pre><code><span class="tok-comment"># Your commits vanished from the server. If you still have them locally:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Your commits vanished from the server. If you still have them locally:</span>
 git reflog                              <span class="tok-comment"># find your last good commit</span>
 git switch -c rescue e8b4d92            <span class="tok-comment"># park them on a branch</span>
 git rebase origin/feature/login rescue  <span class="tok-comment"># replay onto the new history</span>
 git push origin rescue</code></pre>
-<pre><code><span class="tok-comment"># If your clone no longer has them, ask GitHub. Unreferenced commits</span>
+<pre><code class="language-bash"><span class="tok-comment"># If your clone no longer has them, ask GitHub. Unreferenced commits</span>
 <span class="tok-comment"># stay reachable by hash for a while; the Events API records the old SHA.</span>
 gh api repos/cuonghoang1103/api-backend/events \\
   --jq <span class="tok-string">'.[] | select(.type=="PushEvent") | {before: .payload.before, head: .payload.head, ref: .payload.ref}'</span></code></pre>
@@ -390,37 +390,37 @@ Updating 4b0bee8..9150435</code></pre>
 
 <h3>--force thật ra nói gì</h3>
 ${slide('git-08', 7, '--force ghi đè mù, --force-with-lease hỏi trước')}
-<pre><code>git push --force origin feature/login</code></pre>
+<pre><code class="language-bash">git push --force origin feature/login</code></pre>
 <p>Dịch ra: <em>"Dù <code>feature/login</code> trên máy chủ đang trỏ vào cái gì, hãy vứt nó đi và cho nó trỏ vào commit của tôi."</em> Git không so sánh, không cảnh báo, không quan tâm ở đó từng có gì. Nếu một đồng nghiệp đã push ba commit trong lúc bạn rebase thì ba commit đó không còn với tới được từ bất kỳ nhánh nào trên máy chủ.</p>
 <div class="callout danger">Việc của họ không bị <em>xoá</em> — các đối tượng vẫn sống trên máy chủ cho tới lần thu gom rác — nhưng không gì trỏ vào chúng, không ai tìm ra chúng nếu không có reflog phía máy chủ, và nếu laptop của họ không còn giữ nữa thì câu trả lời thực tế là công sức đó đã mất. Đây là thứ có sức phá huỷ lớn nhất mà một người dùng Git bình thường làm được.</div>
 
 <h3>--force-with-lease thêm vào cái gì</h3>
 ${slide('git-08', 10, 'Bị từ chối: đọc, tích hợp, push lại')}
-<pre><code>git push --force-with-lease origin feature/login</code></pre>
+<pre><code class="language-bash">git push --force-with-lease origin feature/login</code></pre>
 <div class="lz-flow">
   <div class="lz-step"><div class="lz-k">1</div><div class="lz-t">Git nhớ</div><div class="lz-d"><code>origin/feature/login</code> của bạn — chỗ nhánh đó đứng ở lần fetch gần nhất.</div></div>
   <div class="lz-step"><div class="lz-k">2</div><div class="lz-t">Nó hỏi máy chủ</div><div class="lz-d">"Nhánh đó có còn đúng ở chỗ ấy không?"</div></div>
   <div class="lz-step"><div class="lz-k">3a</div><div class="lz-t">Còn → push</div><div class="lz-d">Không ai push kể từ lần bạn nhìn. Lần viết lại của bạn là an toàn.</div></div>
   <div class="lz-step"><div class="lz-k">3b</div><div class="lz-t">Không → từ chối</div><div class="lz-d">Có người đã push. Git dừng lại thay vì ghi đè lên họ.</div></div>
 </div>
-<pre><code>git push --force-with-lease</code></pre>
+<pre><code class="language-bash">git push --force-with-lease</code></pre>
 <div class="out">! [rejected]        feature/login -&gt; feature/login (stale info)
 error: failed to push some refs to 'github.com:cuonghoang1103/api-backend.git'</div>
 <p>"stale info" nghĩa là: <em>bức tranh của bạn về remote đã cũ, nên tôi không cho bạn ghi đè lên nó.</em> Thông báo đó đã cứu rất nhiều buổi chiều. Cách đáp là fetch, nhìn xem có gì tới, tích hợp nó, rồi thử lại:</p>
-<pre><code>git fetch
+<pre><code class="language-bash">git fetch
 git log --oneline HEAD..origin/feature/login    <span class="tok-comment"># họ đã thêm gì?</span>
 git rebase origin/feature/login                 <span class="tok-comment"># đặt việc của bạn lên trên việc của họ</span>
 git push --force-with-lease</code></pre>
 
 <h3>Biến nó thành mặc định</h3>
-<pre><code>git config --global alias.pushf <span class="tok-string">"push --force-with-lease"</span></code></pre>
+<pre><code class="language-bash">git config --global alias.pushf <span class="tok-string">"push --force-with-lease"</span></code></pre>
 <p>Không có thiết lập cấu hình nào biến <code>--force</code> trần thành bản an toàn, nên một alias là câu trả lời thực dụng. Gõ <code>git pushf</code> và đừng bao giờ gõ <code>--force</code> nữa.</p>
 
 <h3>Cái bẫy phá vỡ chốt an toàn</h3>
 ${slide('git-08', 8, 'Bẫy: IDE tự fetch nền làm chốt an toàn gật đầu')}
 ${slide('git-08', 9, '--force-if-includes bịt lỗ hổng')}
 <div class="callout warn"><code>--force-with-lease</code> so với <strong>ref theo dõi remote</strong> của bạn, không so trực tiếp với máy chủ. Bất cứ thứ gì âm thầm chạy <code>git fetch</code> hộ bạn — một IDE đang thăm dò, một lệnh <code>git fetch</code> trong dấu nhắc shell, một tiến trình đồng bộ nền — đều cập nhật cái ref đó <em>mà bạn chưa hề nhìn thấy các commit mới</em>. Chốt an toàn khi đó so "trạng thái máy chủ hiện tại" với "trạng thái máy chủ hiện tại", đi qua trót lọt, và ghi đè lên công sức của đồng nghiệp y hệt như <code>--force</code>.</div>
-<pre><code><span class="tok-comment"># Git 2.30+ bịt lỗ hổng: đòi hỏi thêm rằng nhánh cục bộ của bạn</span>
+<pre><code class="language-bash"><span class="tok-comment"># Git 2.30+ bịt lỗ hổng: đòi hỏi thêm rằng nhánh cục bộ của bạn</span>
 <span class="tok-comment"># thật sự CHỨA mọi thứ bạn đã fetch về.</span>
 git push --force-with-lease --force-if-includes</code></pre>
 <p>Hãy dùng cả hai cờ cùng nhau. <code>--force-if-includes</code> là thứ làm cho chốt an toàn có ý nghĩa trở lại khi có thứ khác đang fetch sau lưng bạn.</p>
@@ -448,12 +448,12 @@ git config --global alias.pushf <span class="tok-string">"push --force-with-leas
 
 <h3>Cứu hộ khi có người force-push đè lên bạn</h3>
 ${slide('git-08', 11, 'Bị force-push đè: commit vẫn còn, tìm và đặt lại')}
-<pre><code><span class="tok-comment"># Commit của bạn biến khỏi máy chủ. Nếu bạn vẫn còn chúng ở cục bộ:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Commit của bạn biến khỏi máy chủ. Nếu bạn vẫn còn chúng ở cục bộ:</span>
 git reflog                              <span class="tok-comment"># tìm commit tốt cuối cùng của bạn</span>
 git switch -c rescue e8b4d92            <span class="tok-comment"># cất chúng lên một nhánh</span>
 git rebase origin/feature/login rescue  <span class="tok-comment"># phát lại lên lịch sử mới</span>
 git push origin rescue</code></pre>
-<pre><code><span class="tok-comment"># Nếu bản clone của bạn không còn chúng, hãy hỏi GitHub. Commit không ai</span>
+<pre><code class="language-bash"><span class="tok-comment"># Nếu bản clone của bạn không còn chúng, hãy hỏi GitHub. Commit không ai</span>
 <span class="tok-comment"># trỏ tới vẫn với tới được bằng mã băm một thời gian; API Events ghi lại SHA cũ.</span>
 gh api repos/cuonghoang1103/api-backend/events \\
   --jq <span class="tok-string">'.[] | select(.type=="PushEvent") | {before: .payload.before, head: .payload.head, ref: .payload.ref}'</span></code></pre>
@@ -529,7 +529,7 @@ ${slide('git-08', 12, 'Khoá bị lộ: sáu bước, đổi khoá trước')}
 
 <h3>Finding what is actually in there</h3>
 ${slide('git-08', 13, 'Xoá dòng rồi commit không xoá được gì; git grep cần -E')}
-<pre><code>git log -S<span class="tok-string">"sk_live_"</span> --oneline --all      <span class="tok-comment"># the pickaxe from 2.3</span>
+<pre><code class="language-bash">git log -S<span class="tok-string">"sk_live_"</span> --oneline --all      <span class="tok-comment"># the pickaxe from 2.3</span>
 git log --all --full-history -- .env      <span class="tok-comment"># every commit that touched the file</span>
 git grep -nE <span class="tok-string">"AKIA[0-9A-Z]{16}"</span> \$(git rev-list --all) 2&gt;/dev/null | head</code></pre>
 <p>The last one searches <em>every commit</em> for an AWS key pattern. It is slow on a large repository and it is the only way to be sure you found all of them — a leak is often several commits, not one.</p>
@@ -538,9 +538,9 @@ git grep -nE <span class="tok-string">"AKIA[0-9A-Z]{16}"</span> \$(git rev-list 
 <h3>git filter-repo</h3>
 ${slide('git-08', 14, 'git filter-repo: mọi commit từ chỗ bẩn trở đi đổi mã băm')}
 ${slide('git-08', 15, 'Quy trình --sensitive-data-removal mà GitHub khuyên dùng')}
-<pre><code>pip install git-filter-repo        <span class="tok-comment"># or: brew install git-filter-repo</span></code></pre>
+<pre><code class="language-bash">pip install git-filter-repo        <span class="tok-comment"># or: brew install git-filter-repo</span></code></pre>
 <div class="callout warn">Use <code>git filter-repo</code>, not <code>git filter-branch</code>. The Git project itself now recommends against <code>filter-branch</code>: it is orders of magnitude slower, and it has documented failure modes that silently corrupt history. Any tutorial still recommending it predates 2019.</div>
-<pre><code><span class="tok-comment"># Work on a FRESH clone — filter-repo refuses to run on a repo with</span>
+<pre><code class="language-bash"><span class="tok-comment"># Work on a FRESH clone — filter-repo refuses to run on a repo with</span>
 <span class="tok-comment"># extra state, and a fresh clone means a mistake costs nothing.</span>
 git clone --mirror git@github.com:cuonghoang1103/api-backend.git
 cd api-backend.git
@@ -554,7 +554,7 @@ git filter-repo --replace-text /tmp/rules.txt</code></pre>
 <div class="out">Parsed 2413 commits
 New history written in 4.21 seconds; now repacking/cleaning...
 Completely finished after 11.87 seconds.</div>
-<pre><code><span class="tok-comment"># filter-repo removes the remote on purpose, so you cannot push by reflex.</span>
+<pre><code class="language-bash"><span class="tok-comment"># filter-repo removes the remote on purpose, so you cannot push by reflex.</span>
 git remote add origin git@github.com:cuonghoang1103/api-backend.git
 git push --force --all
 git push --force --tags</code></pre>
@@ -574,7 +574,7 @@ NOTE: First Changed Commit(s) is/are:
 
 <h3>What this costs everyone else</h3>
 <div class="callout danger">Every commit after the earliest rewritten one gets a <strong>new hash</strong> (1.2). The entire team's clones are now incompatible with the server. Pulling will not fix it — it produces a duplicated, conflicting history. Everyone must <strong>re-clone</strong>, and any local branch not yet pushed has to be rescued by hand.</div>
-<pre><code><span class="tok-comment"># What each colleague does, and the order matters:</span>
+<pre><code class="language-bash"><span class="tok-comment"># What each colleague does, and the order matters:</span>
 git bundle create ~/my-unpushed-work.bundle --all   <span class="tok-comment"># 1. save local work FIRST</span>
 cd .. &amp;&amp; rm -rf api-backend                          <span class="tok-comment"># 2. delete the old clone</span>
 git clone git@github.com:cuonghoang1103/api-backend.git   <span class="tok-comment"># 3. fresh</span>
@@ -595,7 +595,7 @@ ${slide('git-08', 16, 'Force-push xong vẫn còn sót ở ba chỗ')}
 </div>
 
 <h3>Other things filter-repo is good for</h3>
-<pre><code><span class="tok-comment"># Extract a subdirectory into its own repository, keeping its history:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Extract a subdirectory into its own repository, keeping its history:</span>
 git filter-repo --path frontend/ --path-rename frontend/:
 
 <span class="tok-comment"># Fix an author email across all commits (the 0.3 mistake, at scale):</span>
@@ -659,7 +659,7 @@ ${slide('git-08', 12, 'Khoá bị lộ: sáu bước, đổi khoá trước')}
 
 <h3>Tìm xem thật sự có gì trong đó</h3>
 ${slide('git-08', 13, 'Xoá dòng rồi commit không xoá được gì; git grep cần -E')}
-<pre><code>git log -S<span class="tok-string">"sk_live_"</span> --oneline --all      <span class="tok-comment"># cái cuốc chim ở bài 2.3</span>
+<pre><code class="language-bash">git log -S<span class="tok-string">"sk_live_"</span> --oneline --all      <span class="tok-comment"># cái cuốc chim ở bài 2.3</span>
 git log --all --full-history -- .env      <span class="tok-comment"># mọi commit từng chạm vào file</span>
 git grep -nE <span class="tok-string">"AKIA[0-9A-Z]{16}"</span> \$(git rev-list --all) 2&gt;/dev/null | head</code></pre>
 <p>Lệnh cuối tìm mẫu khoá AWS trong <em>mọi commit</em>. Nó chậm trên kho lớn và là cách duy nhất để chắc chắn bạn đã tìm ra hết — một vụ lộ thường nằm ở vài commit, không phải một.</p>
@@ -668,9 +668,9 @@ git grep -nE <span class="tok-string">"AKIA[0-9A-Z]{16}"</span> \$(git rev-list 
 <h3>git filter-repo</h3>
 ${slide('git-08', 14, 'git filter-repo: mọi commit từ chỗ bẩn trở đi đổi mã băm')}
 ${slide('git-08', 15, 'Quy trình --sensitive-data-removal mà GitHub khuyên dùng')}
-<pre><code>pip install git-filter-repo        <span class="tok-comment"># hoặc: brew install git-filter-repo</span></code></pre>
+<pre><code class="language-bash">pip install git-filter-repo        <span class="tok-comment"># hoặc: brew install git-filter-repo</span></code></pre>
 <div class="callout warn">Hãy dùng <code>git filter-repo</code>, đừng dùng <code>git filter-branch</code>. Chính dự án Git nay khuyến cáo không dùng <code>filter-branch</code>: nó chậm hơn nhiều bậc, và có những kiểu hỏng đã được ghi nhận làm lịch sử sai lệch trong im lặng. Mọi hướng dẫn còn đề xuất nó đều có từ trước 2019.</div>
-<pre><code><span class="tok-comment"># Hãy làm trên một bản clone MỚI — filter-repo từ chối chạy trên kho có</span>
+<pre><code class="language-bash"><span class="tok-comment"># Hãy làm trên một bản clone MỚI — filter-repo từ chối chạy trên kho có</span>
 <span class="tok-comment"># trạng thái thừa, và một bản clone mới nghĩa là lỡ tay cũng không tốn gì.</span>
 git clone --mirror git@github.com:cuonghoang1103/api-backend.git
 cd api-backend.git
@@ -684,7 +684,7 @@ git filter-repo --replace-text /tmp/rules.txt</code></pre>
 <div class="out">Parsed 2413 commits
 New history written in 4.21 seconds; now repacking/cleaning...
 Completely finished after 11.87 seconds.</div>
-<pre><code><span class="tok-comment"># filter-repo cố tình gỡ remote đi, để bạn không push theo phản xạ.</span>
+<pre><code class="language-bash"><span class="tok-comment"># filter-repo cố tình gỡ remote đi, để bạn không push theo phản xạ.</span>
 git remote add origin git@github.com:cuonghoang1103/api-backend.git
 git push --force --all
 git push --force --tags</code></pre>
@@ -704,7 +704,7 @@ NOTE: First Changed Commit(s) is/are:
 
 <h3>Việc này tốn của mọi người khác cái gì</h3>
 <div class="callout danger">Mọi commit sau cái commit bị viết lại sớm nhất đều nhận một <strong>mã băm MỚI</strong> (bài 1.2). Bản clone của cả nhóm giờ không tương thích với máy chủ. Pull không sửa được — nó sinh ra một lịch sử trùng lặp và xung đột. Mọi người phải <strong>CLONE LẠI</strong>, và mọi nhánh cục bộ chưa push phải được cứu bằng tay.</div>
-<pre><code><span class="tok-comment"># Việc từng đồng nghiệp phải làm, và thứ tự thì quan trọng:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Việc từng đồng nghiệp phải làm, và thứ tự thì quan trọng:</span>
 git bundle create ~/viec-chua-push.bundle --all      <span class="tok-comment"># 1. cứu việc cục bộ TRƯỚC</span>
 cd .. &amp;&amp; rm -rf api-backend                          <span class="tok-comment"># 2. xoá bản clone cũ</span>
 git clone git@github.com:cuonghoang1103/api-backend.git   <span class="tok-comment"># 3. clone mới</span>
@@ -725,7 +725,7 @@ ${slide('git-08', 16, 'Force-push xong vẫn còn sót ở ba chỗ')}
 </div>
 
 <h3>Những việc khác filter-repo làm tốt</h3>
-<pre><code><span class="tok-comment"># Tách một thư mục con ra thành kho riêng, giữ nguyên lịch sử của nó:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Tách một thư mục con ra thành kho riêng, giữ nguyên lịch sử của nó:</span>
 git filter-repo --path frontend/ --path-rename frontend/:
 
 <span class="tok-comment"># Sửa email tác giả trên mọi commit (sai lầm ở bài 0.3, ở quy mô lớn):</span>

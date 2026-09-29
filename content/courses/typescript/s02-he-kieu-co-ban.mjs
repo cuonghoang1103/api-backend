@@ -24,7 +24,7 @@ export default {
 
 <h3>The primitive types</h3>
 <p>There are seven primitive value types. You rarely annotate them by hand — inference handles it — but you must recognise them:</p>
-<pre><code><span class="tok-comment">// prim.ts — what tsc infers (via a declaration dump)</span>
+<pre><code class="language-javascript"><span class="tok-comment">// prim.ts — what tsc infers (via a declaration dump)</span>
 <span class="tok-keyword">const</span> title = <span class="tok-string">'Notes'</span>;                  <span class="tok-comment">// "Notes"  (string literal)</span>
 <span class="tok-keyword">const</span> count = <span class="tok-number">42</span>;                        <span class="tok-comment">// 42       (number literal)</span>
 <span class="tok-keyword">const</span> done = <span class="tok-keyword">false</span>;                      <span class="tok-comment">// false    (boolean literal)</span>
@@ -41,19 +41,19 @@ export default {
 
 <h3>Annotation syntax: name : Type</h3>
 <p>When you do annotate — mainly on function parameters, per chapter 1 — the syntax is a colon after the name:</p>
-<pre><code><span class="tok-keyword">let</span> username: <span class="tok-keyword">string</span>;
+<pre><code class="language-typescript"><span class="tok-keyword">let</span> username: <span class="tok-keyword">string</span>;
 <span class="tok-keyword">let</span> age: <span class="tok-keyword">number</span> = <span class="tok-number">30</span>;
 <span class="tok-keyword">function</span> <span class="tok-function">setAge</span>(value: <span class="tok-keyword">number</span>): <span class="tok-keyword">void</span> { age = value; }</code></pre>
 <p>The lowercase names matter: it's <code>string</code>, not <code>String</code>. <code>String</code> (capital) is the wrapper object and is almost always a mistake — one of the first things a linter will flag.</p>
 
 <h3>The rule that pays for TypeScript: strict null checks</h3>
 <p>In plain JavaScript, <code>null</code> and <code>undefined</code> can appear anywhere, and dereferencing them (<code>x.foo</code> when <code>x</code> is null) is the single most common runtime crash — the billion-dollar mistake. Under strict mode, TypeScript treats them as their own types that are <em>not</em> automatically part of <code>string</code>, <code>number</code>, etc.:</p>
-<pre><code><span class="tok-comment">// null3.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// null3.ts</span>
 <span class="tok-keyword">let</span> title: <span class="tok-keyword">string</span> = <span class="tok-string">'An'</span>;
 title = <span class="tok-keyword">null</span>;</code></pre>
 <div class="out">null3.ts(2,1): error TS2322: Type 'null' is not assignable to type 'string'.</div>
 <p>A <code>string</code> variable simply cannot hold <code>null</code>. If a value legitimately might be missing, you say so explicitly with a union (chapter 5): <code>string | null</code>. And once you do, TypeScript forces you to check before you use it:</p>
-<pre><code><span class="tok-keyword">function</span> <span class="tok-function">firstChar</span>(s: <span class="tok-keyword">string</span> | <span class="tok-keyword">null</span>): <span class="tok-keyword">string</span> {
+<pre><code class="language-typescript"><span class="tok-keyword">function</span> <span class="tok-function">firstChar</span>(s: <span class="tok-keyword">string</span> | <span class="tok-keyword">null</span>): <span class="tok-keyword">string</span> {
   <span class="tok-keyword">return</span> s[<span class="tok-number">0</span>];   <span class="tok-comment">// s could be null here!</span>
 }</code></pre>
 <div class="out">null2.ts(2,10): error TS18047: 's' is possibly 'null'.</div>
@@ -81,7 +81,7 @@ title = <span class="tok-keyword">null</span>;</code></pre>
 
 <h3>Các kiểu primitive</h3>
 <p>Có bảy kiểu giá trị primitive. Bạn hiếm khi chú thích chúng bằng tay — suy luận lo hết — nhưng phải nhận ra chúng:</p>
-<pre><code><span class="tok-comment">// prim.ts — tsc suy ra gì (qua bản dump khai báo)</span>
+<pre><code class="language-javascript"><span class="tok-comment">// prim.ts — tsc suy ra gì (qua bản dump khai báo)</span>
 <span class="tok-keyword">const</span> title = <span class="tok-string">'Notes'</span>;                  <span class="tok-comment">// "Notes"  (literal chuỗi)</span>
 <span class="tok-keyword">const</span> count = <span class="tok-number">42</span>;                        <span class="tok-comment">// 42       (literal số)</span>
 <span class="tok-keyword">const</span> done = <span class="tok-keyword">false</span>;                      <span class="tok-comment">// false    (literal boolean)</span>
@@ -98,19 +98,19 @@ title = <span class="tok-keyword">null</span>;</code></pre>
 
 <h3>Cú pháp chú thích: tên : Kiểu</h3>
 <p>Khi bạn có chú thích — chủ yếu trên tham số hàm, theo chương 1 — cú pháp là một dấu hai chấm sau tên:</p>
-<pre><code><span class="tok-keyword">let</span> username: <span class="tok-keyword">string</span>;
+<pre><code class="language-typescript"><span class="tok-keyword">let</span> username: <span class="tok-keyword">string</span>;
 <span class="tok-keyword">let</span> age: <span class="tok-keyword">number</span> = <span class="tok-number">30</span>;
 <span class="tok-keyword">function</span> <span class="tok-function">setAge</span>(value: <span class="tok-keyword">number</span>): <span class="tok-keyword">void</span> { age = value; }</code></pre>
 <p>Tên viết thường rất quan trọng: là <code>string</code>, không phải <code>String</code>. <code>String</code> (viết hoa) là object bao bọc và gần như luôn là một lỗi — một trong những thứ đầu tiên mà linter sẽ tô đỏ.</p>
 
 <h3>Quy tắc khiến TypeScript đáng đồng tiền: strict null checks</h3>
 <p>Trong JavaScript thuần, <code>null</code> và <code>undefined</code> có thể xuất hiện ở bất cứ đâu, và truy cập chúng (<code>x.foo</code> khi <code>x</code> là null) là cú sập lúc chạy phổ biến nhất — "sai lầm tỷ đô". Dưới chế độ strict, TypeScript coi chúng là kiểu riêng <em>không</em> tự động thuộc về <code>string</code>, <code>number</code>… :</p>
-<pre><code><span class="tok-comment">// null3.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// null3.ts</span>
 <span class="tok-keyword">let</span> title: <span class="tok-keyword">string</span> = <span class="tok-string">'An'</span>;
 title = <span class="tok-keyword">null</span>;</code></pre>
 <div class="out">null3.ts(2,1): error TS2322: Type 'null' is not assignable to type 'string'.</div>
 <p>Một biến <code>string</code> đơn giản là không thể chứa <code>null</code>. Nếu một giá trị thật sự có thể vắng mặt, bạn nói rõ điều đó bằng một union (chương 5): <code>string | null</code>. Và một khi bạn làm vậy, TypeScript ép bạn kiểm tra trước khi dùng:</p>
-<pre><code><span class="tok-keyword">function</span> <span class="tok-function">firstChar</span>(s: <span class="tok-keyword">string</span> | <span class="tok-keyword">null</span>): <span class="tok-keyword">string</span> {
+<pre><code class="language-typescript"><span class="tok-keyword">function</span> <span class="tok-function">firstChar</span>(s: <span class="tok-keyword">string</span> | <span class="tok-keyword">null</span>): <span class="tok-keyword">string</span> {
   <span class="tok-keyword">return</span> s[<span class="tok-number">0</span>];   <span class="tok-comment">// s có thể là null ở đây!</span>
 }</code></pre>
 <div class="out">null2.ts(2,10): error TS18047: 's' is possibly 'null'.</div>
@@ -147,14 +147,14 @@ title = <span class="tok-keyword">null</span>;</code></pre>
 <p class="lead">Arrays are the workhorse collection. TypeScript gives you three refinements over "an array": the element type, immutability, and — for fixed-shape data — tuples, where each position has its own type.</p>
 
 <h3>Typed arrays: two spellings, one meaning</h3>
-<pre><code><span class="tok-keyword">const</span> scores: <span class="tok-keyword">number</span>[] = [<span class="tok-number">10</span>, <span class="tok-number">20</span>, <span class="tok-number">30</span>];
+<pre><code class="language-typescript"><span class="tok-keyword">const</span> scores: <span class="tok-keyword">number</span>[] = [<span class="tok-number">10</span>, <span class="tok-number">20</span>, <span class="tok-number">30</span>];
 <span class="tok-keyword">const</span> names: <span class="tok-keyword">Array</span>&lt;<span class="tok-keyword">string</span>&gt; = [<span class="tok-string">'An'</span>, <span class="tok-string">'Bình'</span>];   <span class="tok-comment">// identical to string[]</span></code></pre>
 <p><code>number[]</code> and <code>Array&lt;number&gt;</code> are exactly the same type — the second is the "generic" spelling you'll understand fully in chapter 6. An array's type says "every element is a number", so the compiler stops you putting a string in:</p>
-<pre><code>scores.<span class="tok-function">push</span>(<span class="tok-string">'oops'</span>);   <span class="tok-comment">// error: 'oops' is not assignable to 'number'</span></code></pre>
+<pre><code class="language-typescript">scores.<span class="tok-function">push</span>(<span class="tok-string">'oops'</span>);   <span class="tok-comment">// error: 'oops' is not assignable to 'number'</span></code></pre>
 
 <h3>readonly arrays — freeze at the type level</h3>
 <p>Prefix with <code>readonly</code> and the array can be read but never mutated. Every method that would change it is removed from the type:</p>
-<pre><code><span class="tok-comment">// roarr.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// roarr.ts</span>
 <span class="tok-keyword">const</span> ids: <span class="tok-keyword">readonly</span> <span class="tok-keyword">number</span>[] = [<span class="tok-number">1</span>, <span class="tok-number">2</span>, <span class="tok-number">3</span>];
 ids.<span class="tok-function">push</span>(<span class="tok-number">4</span>);</code></pre>
 <div class="out">roarr.ts(2,5): error TS2339: Property 'push' does not exist on type 'readonly number[]'.</div>
@@ -162,10 +162,10 @@ ids.<span class="tok-function">push</span>(<span class="tok-number">4</span>);</
 
 <h3>Tuples — fixed length, position-typed</h3>
 <p>A tuple is an array whose length is fixed and whose <em>each position</em> has its own type. Perfect for a coordinate, an RGB colour, or a "return two things" pair:</p>
-<pre><code><span class="tok-keyword">let</span> point: [<span class="tok-keyword">number</span>, <span class="tok-keyword">number</span>] = [<span class="tok-number">10</span>, <span class="tok-number">20</span>];
+<pre><code class="language-typescript"><span class="tok-keyword">let</span> point: [<span class="tok-keyword">number</span>, <span class="tok-keyword">number</span>] = [<span class="tok-number">10</span>, <span class="tok-number">20</span>];
 <span class="tok-keyword">let</span> row: [<span class="tok-keyword">string</span>, <span class="tok-keyword">number</span>, <span class="tok-keyword">boolean</span>] = [<span class="tok-string">'An'</span>, <span class="tok-number">30</span>, <span class="tok-keyword">true</span>];</code></pre>
 <p>The tuple type enforces both the length and the type at each slot:</p>
-<pre><code><span class="tok-comment">// tuple.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// tuple.ts</span>
 <span class="tok-keyword">let</span> point: [<span class="tok-keyword">number</span>, <span class="tok-keyword">number</span>] = [<span class="tok-number">10</span>, <span class="tok-number">20</span>];
 point = [<span class="tok-number">1</span>, <span class="tok-number">2</span>, <span class="tok-number">3</span>];</code></pre>
 <div class="out">tuple.ts(2,1): error TS2322: Type '[number, number, number]' is not assignable to type '[number, number]'.
@@ -204,14 +204,14 @@ point = [<span class="tok-number">1</span>, <span class="tok-number">2</span>, <
 <p class="lead">Mảng là bộ sưu tập chủ lực. TypeScript cho bạn ba tinh chỉnh so với "một mảng": kiểu phần tử, tính bất biến, và — cho dữ liệu dáng cố định — tuple, nơi mỗi vị trí có kiểu riêng.</p>
 
 <h3>Mảng có kiểu: hai cách viết, một ý nghĩa</h3>
-<pre><code><span class="tok-keyword">const</span> scores: <span class="tok-keyword">number</span>[] = [<span class="tok-number">10</span>, <span class="tok-number">20</span>, <span class="tok-number">30</span>];
+<pre><code class="language-typescript"><span class="tok-keyword">const</span> scores: <span class="tok-keyword">number</span>[] = [<span class="tok-number">10</span>, <span class="tok-number">20</span>, <span class="tok-number">30</span>];
 <span class="tok-keyword">const</span> names: <span class="tok-keyword">Array</span>&lt;<span class="tok-keyword">string</span>&gt; = [<span class="tok-string">'An'</span>, <span class="tok-string">'Bình'</span>];   <span class="tok-comment">// giống hệt string[]</span></code></pre>
 <p><code>number[]</code> và <code>Array&lt;number&gt;</code> là đúng cùng một kiểu — cách viết thứ hai là dạng "generic" mà bạn sẽ hiểu trọn ở chương 6. Kiểu của mảng nói "mọi phần tử là số", nên trình biên dịch chặn bạn bỏ một chuỗi vào:</p>
-<pre><code>scores.<span class="tok-function">push</span>(<span class="tok-string">'oops'</span>);   <span class="tok-comment">// lỗi: 'oops' không gán được cho 'number'</span></code></pre>
+<pre><code class="language-typescript">scores.<span class="tok-function">push</span>(<span class="tok-string">'oops'</span>);   <span class="tok-comment">// lỗi: 'oops' không gán được cho 'number'</span></code></pre>
 
 <h3>Mảng readonly — đóng băng ở tầng kiểu</h3>
 <p>Thêm tiền tố <code>readonly</code> và mảng đọc được nhưng không bao giờ sửa được. Mọi method có thể làm thay đổi nó đều bị gỡ khỏi kiểu:</p>
-<pre><code><span class="tok-comment">// roarr.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// roarr.ts</span>
 <span class="tok-keyword">const</span> ids: <span class="tok-keyword">readonly</span> <span class="tok-keyword">number</span>[] = [<span class="tok-number">1</span>, <span class="tok-number">2</span>, <span class="tok-number">3</span>];
 ids.<span class="tok-function">push</span>(<span class="tok-number">4</span>);</code></pre>
 <div class="out">roarr.ts(2,5): error TS2339: Property 'push' does not exist on type 'readonly number[]'.</div>
@@ -219,10 +219,10 @@ ids.<span class="tok-function">push</span>(<span class="tok-number">4</span>);</
 
 <h3>Tuple — độ dài cố định, kiểu theo vị trí</h3>
 <p>Tuple là một mảng có độ dài cố định và <em>mỗi vị trí</em> mang kiểu riêng. Hoàn hảo cho một toạ độ, một màu RGB, hay một cặp "trả về hai thứ":</p>
-<pre><code><span class="tok-keyword">let</span> point: [<span class="tok-keyword">number</span>, <span class="tok-keyword">number</span>] = [<span class="tok-number">10</span>, <span class="tok-number">20</span>];
+<pre><code class="language-typescript"><span class="tok-keyword">let</span> point: [<span class="tok-keyword">number</span>, <span class="tok-keyword">number</span>] = [<span class="tok-number">10</span>, <span class="tok-number">20</span>];
 <span class="tok-keyword">let</span> row: [<span class="tok-keyword">string</span>, <span class="tok-keyword">number</span>, <span class="tok-keyword">boolean</span>] = [<span class="tok-string">'An'</span>, <span class="tok-number">30</span>, <span class="tok-keyword">true</span>];</code></pre>
 <p>Kiểu tuple ép cả độ dài lẫn kiểu ở từng ô:</p>
-<pre><code><span class="tok-comment">// tuple.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// tuple.ts</span>
 <span class="tok-keyword">let</span> point: [<span class="tok-keyword">number</span>, <span class="tok-keyword">number</span>] = [<span class="tok-number">10</span>, <span class="tok-number">20</span>];
 point = [<span class="tok-number">1</span>, <span class="tok-number">2</span>, <span class="tok-number">3</span>];</code></pre>
 <div class="out">tuple.ts(2,1): error TS2322: Type '[number, number, number]' is not assignable to type '[number, number]'.
@@ -272,7 +272,7 @@ point = [<span class="tok-number">1</span>, <span class="tok-number">2</span>, <
 
 <h3>unknown — the safe top type</h3>
 <p><code>unknown</code> is the type of "could be anything". You can assign anything to it, but you can't <em>use</em> it until you prove what it is:</p>
-<pre><code><span class="tok-comment">// unk.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// unk.ts</span>
 <span class="tok-keyword">const</span> data: <span class="tok-keyword">unknown</span> = <span class="tok-string">'hello'</span>;
 data.<span class="tok-function">toUpperCase</span>();</code></pre>
 <div class="out">unk.ts(2,1): error TS18046: 'data' is of type 'unknown'.</div>
@@ -280,13 +280,13 @@ data.<span class="tok-function">toUpperCase</span>();</code></pre>
 
 <h3>any — the unsafe escape hatch (recap)</h3>
 <p>Contrast: <code>any</code> is "stop checking". The same call is allowed, and so is nonsense:</p>
-<pre><code><span class="tok-keyword">const</span> x: <span class="tok-keyword">any</span> = <span class="tok-string">'hello'</span>;
+<pre><code class="language-typescript"><span class="tok-keyword">const</span> x: <span class="tok-keyword">any</span> = <span class="tok-string">'hello'</span>;
 x.foo.bar.<span class="tok-function">baz</span>();     <span class="tok-comment">// no error — checking is off</span></code></pre>
 <div class="callout warn"><code>unknown</code> and <code>any</code> both mean "I don't know the type". <code>unknown</code> keeps you safe by forcing a check; <code>any</code> abandons safety. Prefer <code>unknown</code> every time you're tempted by <code>any</code>.</div>
 
 <h3>void — "this function returns nothing useful"</h3>
 <p><code>void</code> is the return type of a function that doesn't return a value — it runs for its side effect (logging, saving) and gives you nothing back:</p>
-<pre><code><span class="tok-comment">// voidret.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// voidret.ts</span>
 <span class="tok-keyword">function</span> <span class="tok-function">log</span>(m: <span class="tok-keyword">string</span>): <span class="tok-keyword">void</span> {
   <span class="tok-function">console.log</span>(m);
 }
@@ -296,7 +296,7 @@ x.foo.bar.<span class="tok-function">baz</span>();     <span class="tok-comment"
 
 <h3>never — the bottom type, "this cannot happen"</h3>
 <p><code>never</code> is the type of a value that can <em>never</em> exist. A function that always throws, or loops forever, never actually returns a value — so its return type is <code>never</code>:</p>
-<pre><code><span class="tok-comment">// never1.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// never1.ts</span>
 <span class="tok-keyword">function</span> <span class="tok-function">fail</span>(msg: <span class="tok-keyword">string</span>): <span class="tok-keyword">never</span> {
   <span class="tok-keyword">throw</span> <span class="tok-keyword">new</span> <span class="tok-function">Error</span>(msg);
 }
@@ -336,7 +336,7 @@ x.foo.bar.<span class="tok-function">baz</span>();     <span class="tok-comment"
 
 <h3>unknown — kiểu đỉnh an toàn</h3>
 <p><code>unknown</code> là kiểu của "có thể là bất cứ gì". Bạn gán được mọi thứ vào nó, nhưng không <em>dùng</em> được nó cho tới khi chứng minh nó là gì:</p>
-<pre><code><span class="tok-comment">// unk.ts</span>
+<pre><code class="language-typescript"><span class="tok-comment">// unk.ts</span>
 <span class="tok-keyword">const</span> data: <span class="tok-keyword">unknown</span> = <span class="tok-string">'hello'</span>;
 data.<span class="tok-function">toUpperCase</span>();</code></pre>
 <div class="out">unk.ts(2,1): error TS18046: 'data' is of type 'unknown'.</div>
@@ -344,13 +344,13 @@ data.<span class="tok-function">toUpperCase</span>();</code></pre>
 
 <h3>any — lối thoát hiểm không an toàn (nhắc lại)</h3>
 <p>Đối lại: <code>any</code> là "ngừng kiểm tra". Cùng lời gọi đó được cho qua, và cả những thứ vô nghĩa cũng vậy:</p>
-<pre><code><span class="tok-keyword">const</span> x: <span class="tok-keyword">any</span> = <span class="tok-string">'hello'</span>;
+<pre><code class="language-typescript"><span class="tok-keyword">const</span> x: <span class="tok-keyword">any</span> = <span class="tok-string">'hello'</span>;
 x.foo.bar.<span class="tok-function">baz</span>();     <span class="tok-comment">// không lỗi — kiểm tra bị tắt</span></code></pre>
 <div class="callout warn"><code>unknown</code> và <code>any</code> đều nghĩa là "tôi không biết kiểu". <code>unknown</code> giữ bạn an toàn bằng cách ép một phép kiểm; <code>any</code> vứt bỏ an toàn. Hãy chọn <code>unknown</code> mỗi khi bị <code>any</code> cám dỗ.</div>
 
 <h3>void — "hàm này không trả về gì hữu ích"</h3>
 <p><code>void</code> là kiểu trả về của một hàm không trả về giá trị — nó chạy vì tác dụng phụ (ghi log, lưu) và không đưa lại gì cho bạn:</p>
-<pre><code><span class="tok-comment">// voidret.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// voidret.ts</span>
 <span class="tok-keyword">function</span> <span class="tok-function">log</span>(m: <span class="tok-keyword">string</span>): <span class="tok-keyword">void</span> {
   <span class="tok-function">console.log</span>(m);
 }
@@ -360,7 +360,7 @@ x.foo.bar.<span class="tok-function">baz</span>();     <span class="tok-comment"
 
 <h3>never — kiểu đáy, "điều này không thể xảy ra"</h3>
 <p><code>never</code> là kiểu của một giá trị <em>không bao giờ</em> tồn tại được. Một hàm luôn ném lỗi, hoặc lặp vô tận, không bao giờ thật sự trả về một giá trị — nên kiểu trả về của nó là <code>never</code>:</p>
-<pre><code><span class="tok-comment">// never1.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// never1.ts</span>
 <span class="tok-keyword">function</span> <span class="tok-function">fail</span>(msg: <span class="tok-keyword">string</span>): <span class="tok-keyword">never</span> {
   <span class="tok-keyword">throw</span> <span class="tok-keyword">new</span> <span class="tok-function">Error</span>(msg);
 }
@@ -410,17 +410,17 @@ x.foo.bar.<span class="tok-function">baz</span>();     <span class="tok-comment"
 
 <h3>A single-value type</h3>
 <p>You saw in chapter 1 that <code>const b = 'CuongThai'</code> is inferred as the literal type <code>"CuongThai"</code>, not <code>string</code>. You can also write literal types by hand:</p>
-<pre><code><span class="tok-keyword">let</span> mode: <span class="tok-string">'dark'</span>;
+<pre><code class="language-typescript"><span class="tok-keyword">let</span> mode: <span class="tok-string">'dark'</span>;
 mode = <span class="tok-string">'dark'</span>;    <span class="tok-comment">// OK</span>
 mode = <span class="tok-string">'light'</span>;   <span class="tok-comment">// error: '"light"' is not assignable to type '"dark"'</span></code></pre>
 <p>A variable of type <code>'dark'</code> can only ever be the string <code>'dark'</code>. Useless alone — but now preview where this goes:</p>
-<pre><code><span class="tok-keyword">type</span> Mode = <span class="tok-string">'dark'</span> | <span class="tok-string">'light'</span>;   <span class="tok-comment">// a union of literals (chapter 5)</span>
+<pre><code class="language-typescript"><span class="tok-keyword">type</span> Mode = <span class="tok-string">'dark'</span> | <span class="tok-string">'light'</span>;   <span class="tok-comment">// a union of literals (chapter 5)</span>
 <span class="tok-keyword">let</span> theme: Mode = <span class="tok-string">'dark'</span>;         <span class="tok-comment">// only 'dark' or 'light', nothing else</span></code></pre>
 <p>That single line replaces a comment ("mode should be 'dark' or 'light'") with a rule the compiler enforces. Typos like <code>'drak'</code> become errors. This is how TypeScript models the finite sets that fill real apps — statuses, roles, sizes, directions.</p>
 
 <h3>as const — freeze a whole value into literals</h3>
 <p>By default, TypeScript widens object properties to general types (<code>{ mode: string }</code>), because objects are usually mutable. Add <code>as const</code> and it does the opposite: every property becomes a <code>readonly</code> literal.</p>
-<pre><code><span class="tok-comment">// asconst.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// asconst.ts</span>
 <span class="tok-keyword">const</span> config = { mode: <span class="tok-string">'dark'</span>, retries: <span class="tok-number">3</span> } <span class="tok-keyword">as const</span>;
 <span class="tok-keyword">const</span> tags = [<span class="tok-string">'a'</span>, <span class="tok-string">'b'</span>] <span class="tok-keyword">as const</span>;</code></pre>
 <p>The inferred types (from a declaration dump):</p>
@@ -457,17 +457,17 @@ declare const tags: readonly ['a', 'b'];</div>
 
 <h3>Một kiểu chỉ-một-giá-trị</h3>
 <p>Chương 1 bạn đã thấy <code>const b = 'CuongThai'</code> được suy ra là kiểu literal <code>"CuongThai"</code>, không phải <code>string</code>. Bạn cũng viết kiểu literal bằng tay được:</p>
-<pre><code><span class="tok-keyword">let</span> mode: <span class="tok-string">'dark'</span>;
+<pre><code class="language-typescript"><span class="tok-keyword">let</span> mode: <span class="tok-string">'dark'</span>;
 mode = <span class="tok-string">'dark'</span>;    <span class="tok-comment">// OK</span>
 mode = <span class="tok-string">'light'</span>;   <span class="tok-comment">// lỗi: '"light"' không gán được cho kiểu '"dark"'</span></code></pre>
 <p>Một biến kiểu <code>'dark'</code> chỉ có thể mãi là chuỗi <code>'dark'</code>. Vô dụng nếu đứng một mình — nhưng giờ xem trước nó đi tới đâu:</p>
-<pre><code><span class="tok-keyword">type</span> Mode = <span class="tok-string">'dark'</span> | <span class="tok-string">'light'</span>;   <span class="tok-comment">// một union của literal (chương 5)</span>
+<pre><code class="language-typescript"><span class="tok-keyword">type</span> Mode = <span class="tok-string">'dark'</span> | <span class="tok-string">'light'</span>;   <span class="tok-comment">// một union của literal (chương 5)</span>
 <span class="tok-keyword">let</span> theme: Mode = <span class="tok-string">'dark'</span>;         <span class="tok-comment">// chỉ 'dark' hoặc 'light', không gì khác</span></code></pre>
 <p>Đúng một dòng đó thay một câu chú thích ("mode nên là 'dark' hoặc 'light'") bằng một quy tắc trình biên dịch ép tuân. Gõ sai như <code>'drak'</code> trở thành lỗi. Đây là cách TypeScript mô hình hoá những tập hữu hạn đầy rẫy trong app thật — trạng thái, vai trò, kích cỡ, hướng.</p>
 
 <h3>as const — khoá cả một giá trị thành literal</h3>
 <p>Mặc định, TypeScript nới rộng thuộc tính object thành kiểu chung (<code>{ mode: string }</code>), vì object thường thay đổi được. Thêm <code>as const</code> và nó làm ngược lại: mọi thuộc tính trở thành một literal <code>readonly</code>.</p>
-<pre><code><span class="tok-comment">// asconst.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// asconst.ts</span>
 <span class="tok-keyword">const</span> config = { mode: <span class="tok-string">'dark'</span>, retries: <span class="tok-number">3</span> } <span class="tok-keyword">as const</span>;
 <span class="tok-keyword">const</span> tags = [<span class="tok-string">'a'</span>, <span class="tok-string">'b'</span>] <span class="tok-keyword">as const</span>;</code></pre>
 <p>Kiểu suy ra (từ bản dump khai báo):</p>

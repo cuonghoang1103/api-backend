@@ -138,7 +138,7 @@ export default {
 <h2>Swap &lt;img&gt; for &lt;Image&gt; and pictures optimise themselves</h2>
 <p class="lead">Images are usually the heaviest thing on a page. Next.js ships an <code>&lt;Image&gt;</code> component that does the optimisation work for you — you write one tag and get several wins automatically.</p>
 
-<pre><code>import Image from 'next/image';
+<pre><code class="language-javascript">import Image from 'next/image';
 
 &lt;Image src="/hero.jpg" alt="Course hero" width={1200} height={630} /&gt;</code></pre>
 
@@ -189,7 +189,7 @@ export default {
 <h2>Đổi &lt;img&gt; sang &lt;Image&gt; và ảnh tự tối ưu</h2>
 <p class="lead">Ảnh thường là thứ nặng nhất trên một trang. Next.js kèm một component <code>&lt;Image&gt;</code> làm việc tối ưu giúp bạn — bạn viết một thẻ và nhận nhiều thắng lợi tự động.</p>
 
-<pre><code>import Image from 'next/image';
+<pre><code class="language-javascript">import Image from 'next/image';
 
 &lt;Image src="/hero.jpg" alt="Ảnh bìa khoá" width={1200} height={630} /&gt;</code></pre>
 
@@ -255,7 +255,7 @@ export default {
 
 <h3>2 · Dynamic import: load heavy parts only when needed</h3>
 <p>Some client components are big and not needed immediately — a chart library, a rich text editor, a map, a modal that opens on click. <strong>Code splitting</strong> means breaking the bundle into pieces so the browser downloads a piece only when it is actually needed. Next does this per route automatically, and you can do it per component with <code>next/dynamic</code>:</p>
-<pre><code>import dynamic from 'next/dynamic';
+<pre><code class="language-typescript">import dynamic from 'next/dynamic';
 
 <span class="tok-comment">// HeavyChart's code is NOT in the initial bundle;</span>
 <span class="tok-comment">// it downloads only when this component renders</span>
@@ -305,7 +305,7 @@ const HeavyChart = dynamic(() =&gt; import('./HeavyChart'), {
 
 <h3>2 · Tải động: chỉ tải phần nặng khi cần</h3>
 <p>Vài client component to và không cần ngay — một thư viện biểu đồ, một trình soạn văn bản, một bản đồ, một modal mở khi bấm. <strong>Code splitting</strong> nghĩa là chẻ bundle thành nhiều mảnh để trình duyệt chỉ tải một mảnh khi nó thật sự cần. Next làm việc này theo route tự động, và bạn làm được theo component với <code>next/dynamic</code>:</p>
-<pre><code>import dynamic from 'next/dynamic';
+<pre><code class="language-typescript">import dynamic from 'next/dynamic';
 
 <span class="tok-comment">// Code của HeavyChart KHÔNG nằm trong bundle ban đầu;</span>
 <span class="tok-comment">// nó chỉ tải khi component này render</span>
@@ -360,7 +360,7 @@ const HeavyChart = dynamic(() =&gt; import('./HeavyChart'), {
 <h2>Fonts: a small thing that quietly hurts performance</h2>
 <p class="lead">Custom web fonts are lovely but easy to get wrong. Loaded naively, they add a network request to a third party, and cause text to flash — first in a fallback font, then jumping to the real one (a layout shift, hurting CLS). Next.js solves this with <code>next/font</code>.</p>
 
-<pre><code>import { Inter } from 'next/font/google';
+<pre><code class="language-typescript">import { Inter } from 'next/font/google';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -412,7 +412,7 @@ export default function RootLayout({ children }) {
 <h2>Font: một thứ nhỏ âm thầm hại hiệu năng</h2>
 <p class="lead">Font web tuỳ chỉnh thì đẹp nhưng dễ làm sai. Tải ngây thơ, chúng thêm một request tới một bên thứ ba, và làm chữ nháy — đầu tiên ở font dự phòng, rồi nhảy sang font thật (một layout shift, hại CLS). Next.js giải điều này bằng <code>next/font</code>.</p>
 
-<pre><code>import { Inter } from 'next/font/google';
+<pre><code class="language-typescript">import { Inter } from 'next/font/google';
 
 const inter = Inter({ subsets: ['latin'] });
 

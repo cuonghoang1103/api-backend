@@ -36,7 +36,7 @@ export default {
 </div>
 
 <h3>A Server Component can do things a browser component cannot</h3>
-<pre><code><span class="tok-comment">// app/courses/page.tsx — a Server Component (no 'use client')</span>
+<pre><code class="language-typescript"><span class="tok-comment">// app/courses/page.tsx — a Server Component (no 'use client')</span>
 export default async function CoursesPage() {
   const courses = await db.course.findMany();   <span class="tok-comment">// talk to the DB directly</span>
   return (
@@ -98,7 +98,7 @@ export default async function CoursesPage() {
 </div>
 
 <h3>Server Component làm được thứ component trình duyệt không làm được</h3>
-<pre><code><span class="tok-comment">// app/courses/page.tsx — một Server Component (không 'use client')</span>
+<pre><code class="language-typescript"><span class="tok-comment">// app/courses/page.tsx — một Server Component (không 'use client')</span>
 export default async function CoursesPage() {
   const courses = await db.course.findMany();   <span class="tok-comment">// nói chuyện thẳng với DB</span>
   return (
@@ -161,7 +161,7 @@ export default async function CoursesPage() {
 <h2>When you need interactivity, opt into the client</h2>
 <p class="lead">To get state, effects, and event handlers back, you mark a component as a <strong>Client Component</strong> with a single line at the very top of the file: <code>'use client'</code>. That component (and the code it pulls in) is then bundled and run in the browser, exactly like classic React.</p>
 
-<pre><code><span class="tok-comment">// components/Counter.tsx</span>
+<pre><code class="language-typescript"><span class="tok-comment">// components/Counter.tsx</span>
 'use client';
 import { useState } from 'react';
 
@@ -216,7 +216,7 @@ export default function Counter() {
 <h2>Khi cần tương tác, hãy chọn ra client</h2>
 <p class="lead">Để lấy lại state, effect và handler sự kiện, bạn đánh dấu một component là <strong>Client Component</strong> bằng một dòng duy nhất ở ngay đầu file: <code>'use client'</code>. Component đó (và code nó kéo theo) khi ấy được đóng gói và chạy trong trình duyệt, y như React kinh điển.</p>
 
-<pre><code><span class="tok-comment">// components/Counter.tsx</span>
+<pre><code class="language-typescript"><span class="tok-comment">// components/Counter.tsx</span>
 'use client';
 import { useState } from 'react';
 
@@ -281,7 +281,7 @@ export default function Counter() {
 <h2>'use client' marks a boundary, not just one file</h2>
 <p class="lead">Here is the rule that catches everyone: <code>'use client'</code> is not local to one component. It is a <strong>boundary</strong>. Every module a Client Component <em>imports</em> is pulled into the client bundle too. So the moment you import a component into a client file, that component becomes client as well — whether or not it has its own directive.</p>
 
-<pre><code>'use client';
+<pre><code class="language-javascript">'use client';
 import Chart from './Chart';   <span class="tok-comment">// Chart is now a CLIENT component too,</span>
                                <span class="tok-comment">// even without its own 'use client'</span></code></pre>
 
@@ -290,7 +290,7 @@ import Chart from './Chart';   <span class="tok-comment">// Chart is now a CLIEN
 
 <h3>The slot pattern: pass Server Components as children</h3>
 <p>A Client Component can <em>receive</em> a Server Component through <code>children</code> (or any prop), because it receives the already-rendered output, not the code. The Server Component is rendered on the server; the client wrapper just places it in a slot.</p>
-<pre><code><span class="tok-comment">// Tabs.tsx — Client: holds the active-tab state</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Tabs.tsx — Client: holds the active-tab state</span>
 'use client';
 export default function Tabs({ children }) {
   const [open, setOpen] = useState(true);
@@ -342,7 +342,7 @@ export default async function Page() {
 <h2>'use client' đánh dấu một ranh giới, không chỉ một file</h2>
 <p class="lead">Đây là luật khiến ai cũng vấp: <code>'use client'</code> không chỉ cục bộ ở một component. Nó là một <strong>ranh giới</strong>. Mọi module mà một Client Component <em>import</em> đều bị kéo vào client bundle luôn. Nên ngay khi bạn import một component vào một file client, component đó cũng thành client — dù nó có chỉ thị riêng hay không.</p>
 
-<pre><code>'use client';
+<pre><code class="language-javascript">'use client';
 import Chart from './Chart';   <span class="tok-comment">// Chart giờ cũng là component CLIENT,</span>
                                <span class="tok-comment">// dù không có 'use client' riêng</span></code></pre>
 
@@ -351,7 +351,7 @@ import Chart from './Chart';   <span class="tok-comment">// Chart giờ cũng l�
 
 <h3>Mẫu khe cắm: truyền Server Component làm children</h3>
 <p>Một Client Component có thể <em>nhận</em> một Server Component qua <code>children</code> (hay prop bất kỳ), vì nó nhận phần output đã render, không phải code. Server Component được render trên server; lớp bọc client chỉ đặt nó vào một khe.</p>
-<pre><code><span class="tok-comment">// Tabs.tsx — Client: giữ state tab đang mở</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Tabs.tsx — Client: giữ state tab đang mở</span>
 'use client';
 export default function Tabs({ children }) {
   const [open, setOpen] = useState(true);
@@ -535,7 +535,7 @@ export default async function Page() {
 <h2>Push the client boundary down to the leaves</h2>
 <p class="lead">The whole game is: keep as much as possible on the server, and make only the genuinely interactive bits client. The pattern that achieves this is simple and worth memorising — a Server Component page that fetches, rendering small Client Component leaves for the interactive parts.</p>
 
-<pre><code><span class="tok-comment">// app/feed/page.tsx — SERVER: fetches, renders markup</span>
+<pre><code class="language-typescript"><span class="tok-comment">// app/feed/page.tsx — SERVER: fetches, renders markup</span>
 export default async function FeedPage() {
   const posts = await getPosts();
   return (
@@ -601,7 +601,7 @@ export default async function FeedPage() {
 <h2>Đẩy ranh giới client xuống các lá</h2>
 <p class="lead">Cả cuộc chơi là: giữ càng nhiều càng tốt trên server, và chỉ làm client những mảnh thật sự tương tác. Mẫu đạt được điều đó rất đơn giản và đáng thuộc lòng — một trang Server Component fetch dữ liệu, render các lá Client Component nhỏ cho phần tương tác.</p>
 
-<pre><code><span class="tok-comment">// app/feed/page.tsx — SERVER: fetch, render markup</span>
+<pre><code class="language-typescript"><span class="tok-comment">// app/feed/page.tsx — SERVER: fetch, render markup</span>
 export default async function FeedPage() {
   const posts = await getPosts();
   return (

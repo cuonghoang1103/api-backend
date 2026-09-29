@@ -130,7 +130,7 @@ squares = [n * n for n in nums if n &gt; 1]   # [4, 9, 9]
 </code></pre>
 <h3>Functions &amp; flexible arguments</h3>
 <p><code>*args</code> collects extra positional arguments into a tuple; <code>**kwargs</code> collects extra keyword arguments into a dict.</p>
-<pre><code>def report(title, *args, **kwargs):
+<pre><code class="language-python">def report(title, *args, **kwargs):
     print(title)
     for a in args:
         print("item:", a)
@@ -160,7 +160,7 @@ squares = [n * n for n in nums if n &gt; 1]   # [4, 9, 9]
 </code></pre>
 <h3>Hàm &amp; tham số linh hoạt</h3>
 <p><code>*args</code> gom các đối vị trí dư vào một tuple; <code>**kwargs</code> gom các đối từ khoá dư vào một dict.</p>
-<pre><code>def report(title, *args, **kwargs):
+<pre><code class="language-python">def report(title, *args, **kwargs):
     print(title)
     for a in args:
         print("item:", a)
@@ -184,7 +184,7 @@ const c2 = doc('apo201c-2-1-classes', '2.1 — Classes & objects|||2.1 — Lớp
     `<span class="eyebrow">APO201c · Chapter 2 · Lesson 2.1</span>
 <h2>Classes &amp; objects</h2>
 <p>A <strong>class</strong> is a blueprint; an <strong>object</strong> (instance) is a concrete thing built from it. <code>__init__</code> runs when you create an instance, and <code>self</code> refers to that instance.</p>
-<pre><code>class Dog:
+<pre><code class="language-python">class Dog:
     species = "Canis familiaris"   # class attribute (shared by all)
 
     def __init__(self, name, age):
@@ -208,7 +208,7 @@ print(d2.species)       # Canis familiaris (shared)
     `<span class="eyebrow">APO201c · Chương 2 · Bài 2.1</span>
 <h2>Lớp &amp; đối tượng</h2>
 <p>Một <strong>lớp (class)</strong> là bản thiết kế; một <strong>đối tượng (instance)</strong> là thực thể cụ thể dựng từ nó. <code>__init__</code> chạy khi bạn tạo một instance, và <code>self</code> trỏ tới chính instance đó.</p>
-<pre><code>class Dog:
+<pre><code class="language-python">class Dog:
     species = "Canis familiaris"   # class attribute (mọi con dùng chung)
 
     def __init__(self, name, age):
@@ -248,7 +248,7 @@ const c3 = doc('apo201c-3-1-four-pillars', '3.1 — The four pillars of OOP|||3.
 <li><strong>Polymorphism</strong> — different classes offer the same method name; the caller does not care which class it is.</li>
 <li><strong>Abstraction</strong> — hide details behind a simple contract (an abstract base class defines what, not how).</li>
 </ul>
-<pre><code>class Animal:
+<pre><code class="language-python">class Animal:
     def __init__(self, name):
         self.name = name
     def speak(self):
@@ -275,7 +275,7 @@ for a in [Cat("Tom"), Kitten("Mi")]:
 <li><strong>Đa hình (polymorphism)</strong> — nhiều lớp cùng tên method; người gọi không cần biết đó là lớp nào.</li>
 <li><strong>Trừu tượng (abstraction)</strong> — giấu chi tiết sau một hợp đồng đơn giản (abstract base class định nghĩa cái gì, không phải làm thế nào).</li>
 </ul>
-<pre><code>class Animal:
+<pre><code class="language-python">class Animal:
     def __init__(self, name):
         self.name = name
     def speak(self):
@@ -314,7 +314,7 @@ const c4 = doc('apo201c-4-1-dunder', '4.1 — Magic (dunder) methods|||4.1 — M
 <li><code>__eq__</code> — defines what <code>==</code> means.</li>
 <li><code>__len__</code> — makes <code>len(obj)</code> work.</li>
 </ul>
-<pre><code>class Money:
+<pre><code class="language-python">class Money:
     def __init__(self, amount):
         self.amount = amount
     def __repr__(self):
@@ -339,7 +339,7 @@ print(a == Money(10)) # True
 <li><code>__eq__</code> — định nghĩa <code>==</code> nghĩa là gì.</li>
 <li><code>__len__</code> — làm <code>len(obj)</code> chạy được.</li>
 </ul>
-<pre><code>class Money:
+<pre><code class="language-python">class Money:
     def __init__(self, amount):
         self.amount = amount
     def __repr__(self):
@@ -370,7 +370,7 @@ const c5 = doc('apo201c-5-1-exceptions-files', '5.1 — Exceptions & files|||5.1
 <h2>Exceptions &amp; files</h2>
 <h3>try / except / finally</h3>
 <p>Catch errors so the program does not crash. <code>finally</code> always runs — even after a return or an error — so it is where cleanup goes.</p>
-<pre><code>class InvalidAgeError(Exception):    # custom exception
+<pre><code class="language-python">class InvalidAgeError(Exception):    # custom exception
     pass
 
 def set_age(age):
@@ -387,7 +387,7 @@ finally:
 </code></pre>
 <h3>Files with <code>with</code></h3>
 <p>The <code>with</code> statement (a context manager) closes the file automatically, even if an error is raised inside the block.</p>
-<pre><code>with open("notes.txt", "w", encoding="utf-8") as f:
+<pre><code class="language-python">with open("notes.txt", "w", encoding="utf-8") as f:
     f.write("hello\\n")
 
 with open("notes.txt", "r", encoding="utf-8") as f:
@@ -399,7 +399,7 @@ with open("notes.txt", "r", encoding="utf-8") as f:
 <h2>Ngoại lệ &amp; file</h2>
 <h3>try / except / finally</h3>
 <p>Bắt lỗi để chương trình không sập. <code>finally</code> luôn chạy — kể cả sau return hay sau lỗi — nên đó là chỗ dọn dẹp tài nguyên.</p>
-<pre><code>class InvalidAgeError(Exception):    # ngoại lệ tự định nghĩa
+<pre><code class="language-python">class InvalidAgeError(Exception):    # ngoại lệ tự định nghĩa
     pass
 
 def set_age(age):
@@ -416,7 +416,7 @@ finally:
 </code></pre>
 <h3>File với <code>with</code></h3>
 <p>Câu lệnh <code>with</code> (một context manager) tự đóng file, kể cả khi có lỗi phát sinh bên trong khối.</p>
-<pre><code>with open("notes.txt", "w", encoding="utf-8") as f:
+<pre><code class="language-python">with open("notes.txt", "w", encoding="utf-8") as f:
     f.write("hello\\n")
 
 with open("notes.txt", "r", encoding="utf-8") as f:
@@ -442,7 +442,7 @@ const c6 = doc('apo201c-6-1-modules-venv', '6.1 — Modules, packages & virtual 
 <li>A <strong>module</strong> is a single <code>.py</code> file you can <code>import</code>.</li>
 <li>A <strong>package</strong> is a folder of modules (traditionally with an <code>__init__.py</code>).</li>
 </ul>
-<pre><code># mathx.py  (a module)
+<pre><code class="language-python"># mathx.py  (a module)
 def area(r):
     return 3.14159 * r * r
 
@@ -453,7 +453,7 @@ print(area(2))          # 12.56636
 </code></pre>
 <h3>pip &amp; virtual environments</h3>
 <p><code>pip</code> installs third-party libraries. A <strong>virtual environment</strong> (venv) gives each project its own isolated set of packages, so versions do not clash between projects.</p>
-<pre><code>python -m venv .venv          # create an isolated environment
+<pre><code class="language-bash">python -m venv .venv          # create an isolated environment
 source .venv/bin/activate     # activate it (macOS/Linux)
 pip install requests          # install into THIS project only
 pip freeze &gt; requirements.txt # record exact versions
@@ -466,7 +466,7 @@ pip freeze &gt; requirements.txt # record exact versions
 <li>Một <strong>module</strong> là một file <code>.py</code> đơn mà bạn có thể <code>import</code>.</li>
 <li>Một <strong>package</strong> là một thư mục chứa nhiều module (thường có <code>__init__.py</code>).</li>
 </ul>
-<pre><code># mathx.py  (một module)
+<pre><code class="language-python"># mathx.py  (một module)
 def area(r):
     return 3.14159 * r * r
 
@@ -477,7 +477,7 @@ print(area(2))          # 12.56636
 </code></pre>
 <h3>pip &amp; môi trường ảo</h3>
 <p><code>pip</code> cài các thư viện bên thứ ba. Một <strong>môi trường ảo</strong> (venv) cho mỗi dự án một bộ package cô lập riêng, nên phiên bản không xung đột giữa các dự án.</p>
-<pre><code>python -m venv .venv          # tạo môi trường cô lập
+<pre><code class="language-bash">python -m venv .venv          # tạo môi trường cô lập
 source .venv/bin/activate     # kích hoạt (macOS/Linux)
 pip install requests          # cài CHỈ cho dự án này
 pip freeze &gt; requirements.txt # ghi lại phiên bản chính xác
@@ -503,7 +503,7 @@ evens = list(filter(lambda x: x % 2 == 0, nums))  # [2, 4]
 </code></pre>
 <h3>Decorators</h3>
 <p>A <strong>decorator</strong> is a function that wraps another function to add behavior (logging, timing, auth) without changing its body.</p>
-<pre><code>def log(fn):
+<pre><code class="language-python">def log(fn):
     def wrapper(*args, **kwargs):
         print("calling", fn.__name__)
         return fn(*args, **kwargs)
@@ -517,7 +517,7 @@ greet("An")     # prints: calling greet
 </code></pre>
 <h3>Generators &amp; iterators</h3>
 <p>A <strong>generator</strong> uses <code>yield</code> to produce values lazily, one at a time — huge or infinite sequences without holding them all in memory.</p>
-<pre><code>def countdown(n):
+<pre><code class="language-python">def countdown(n):
     while n &gt; 0:
         yield n
         n = n - 1
@@ -535,7 +535,7 @@ evens = list(filter(lambda x: x % 2 == 0, nums))  # [2, 4]
 </code></pre>
 <h3>Decorator</h3>
 <p>Một <strong>decorator</strong> là một hàm bọc quanh hàm khác để thêm hành vi (ghi log, đo thời gian, xác thực) mà không sửa thân hàm gốc.</p>
-<pre><code>def log(fn):
+<pre><code class="language-python">def log(fn):
     def wrapper(*args, **kwargs):
         print("calling", fn.__name__)
         return fn(*args, **kwargs)
@@ -549,7 +549,7 @@ greet("An")     # in ra: calling greet
 </code></pre>
 <h3>Generator &amp; iterator</h3>
 <p>Một <strong>generator</strong> dùng <code>yield</code> để sinh giá trị lười biếng, từng cái một — xử lý dãy khổng lồ hoặc vô hạn mà không giữ tất cả trong bộ nhớ.</p>
-<pre><code>def countdown(n):
+<pre><code class="language-python">def countdown(n):
     while n &gt; 0:
         yield n
         n = n - 1
@@ -573,7 +573,7 @@ const c8 = doc('apo201c-8-1-testing-best-practices', '8.1 — Testing & best pra
 <h2>Testing &amp; best practices</h2>
 <h3>Testing with pytest</h3>
 <p>Automated tests prove your code works and keep it working as it changes. <strong>pytest</strong> keeps tests short: just plain functions and <code>assert</code>.</p>
-<pre><code># mathx.py
+<pre><code class="language-python"># mathx.py
 def add(a, b):
     return a + b
 
@@ -603,7 +603,7 @@ def test_add():
 <h2>Kiểm thử &amp; thực hành tốt</h2>
 <h3>Kiểm thử với pytest</h3>
 <p>Test tự động chứng minh code chạy đúng và giữ nó đúng khi thay đổi. <strong>pytest</strong> giữ test ngắn gọn: chỉ là hàm thường và <code>assert</code>.</p>
-<pre><code># mathx.py
+<pre><code class="language-python"># mathx.py
 def add(a, b):
     return a + b
 

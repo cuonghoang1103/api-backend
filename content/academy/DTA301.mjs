@@ -188,7 +188,7 @@ const c2 = doc('dta301-2-1-collect-clean', '2.1 — Collecting & cleaning data||
 </ul>
 <h3>Standardise (normalise)</h3>
 <p>Make it consistent: one date format, trimmed whitespace, unified units, and one label per category ("VN" vs "Vietnam"). Aim for <strong>tidy data</strong>: one row per observation, one column per variable.</p>
-<pre><code>import pandas as pd
+<pre><code class="language-python">import pandas as pd
 
 df = pd.read_csv("sales.csv")
 df = df.drop_duplicates()               # remove exact duplicates
@@ -211,7 +211,7 @@ print(df.isna().sum())                  # count remaining missing per column
 </ul>
 <h3>Chuẩn hoá (normalise)</h3>
 <p>Làm cho nhất quán: một định dạng ngày, cắt khoảng trắng thừa, thống nhất đơn vị, và một nhãn cho mỗi nhóm ("VN" và "Vietnam" phải gộp). Hướng tới <strong>tidy data</strong>: mỗi dòng một quan sát, mỗi cột một biến.</p>
-<pre><code>import pandas as pd
+<pre><code class="language-python">import pandas as pd
 
 df = pd.read_csv("sales.csv")
 df = df.drop_duplicates()               # bỏ bản ghi trùng
@@ -248,7 +248,7 @@ IQR           Q3 - Q1   (the middle 50%, robust to outliers)
 </code></pre>
 <h3>Distribution &amp; shape</h3>
 <p>The <strong>distribution</strong> shows how values are spread. A <strong>normal</strong> distribution is the bell curve; a <strong>skewed</strong> one has a long tail. Shape decides which statistics are fair: for skewed data prefer the median over the mean.</p>
-<pre><code>import pandas as pd
+<pre><code class="language-python">import pandas as pd
 df = pd.read_csv("sales.csv")
 print(df["amount"].describe())     # count, mean, std, min, quartiles, max
 print(df["amount"].median())
@@ -272,7 +272,7 @@ IQR              Q3 - Q1   (50% giua, vung truoc outlier)
 </code></pre>
 <h3>Phân phối &amp; hình dạng</h3>
 <p><strong>Phân phối</strong> cho thấy các giá trị trải ra sao. Phân phối <strong>chuẩn</strong> là đường cong hình chuông; phân phối <strong>lệch (skewed)</strong> có đuôi dài. Hình dạng quyết định thống kê nào là công bằng: dữ liệu lệch thì ưu tiên trung vị hơn trung bình.</p>
-<pre><code>import pandas as pd
+<pre><code class="language-python">import pandas as pd
 df = pd.read_csv("sales.csv")
 print(df["amount"].describe())     # count, mean, std, min, tu phan vi, max
 print(df["amount"].median())
@@ -362,7 +362,7 @@ const c5 = doc('dta301-5-1-hypothesis-testing', '5.1 — Hypothesis testing|||5.
 <li><strong>Chi-square</strong> — test association between two <em>categorical</em> variables.</li>
 <li><strong>ANOVA</strong> — compare means across <em>three or more</em> groups at once.</li>
 </ul>
-<pre><code>from scipy import stats
+<pre><code class="language-python">from scipy import stats
 
 # Do groups A and B differ in mean spend?
 t, p = stats.ttest_ind(group_a, group_b)
@@ -388,7 +388,7 @@ f, p = stats.f_oneway(north, central, south)
 <li><strong>Chi-square</strong> — kiểm liên hệ giữa hai biến <em>phân loại</em>.</li>
 <li><strong>ANOVA</strong> — so trung bình của <em>ba nhóm trở lên</em> cùng lúc.</li>
 </ul>
-<pre><code>from scipy import stats
+<pre><code class="language-python">from scipy import stats
 
 # Nhom A va B co khac nhau ve chi tieu trung binh?
 t, p = stats.ttest_ind(group_a, group_b)
@@ -423,7 +423,7 @@ Multiple: y = b0 + b1*x1 + b2*x2 + ... + bk*xk
 <li><strong>RMSE</strong> — typical prediction error, in the unit of y (lower is better).</li>
 <li><strong>Train/test split</strong> — score on data the model has not seen, to catch <strong>overfitting</strong> (fits the noise, fails on new data).</li>
 </ul>
-<pre><code>from sklearn.linear_model import LinearRegression
+<pre><code class="language-python">from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import r2_score
 
@@ -447,7 +447,7 @@ Bội:  y = b0 + b1*x1 + b2*x2 + ... + bk*xk
 <li><strong>RMSE</strong> — sai số dự báo điển hình, cùng đơn vị với y (thấp hơn là tốt hơn).</li>
 <li><strong>Chia train/test</strong> — chấm điểm trên dữ liệu mô hình chưa thấy, để bắt <strong>overfitting</strong> (khớp cả nhiễu, hỏng trên dữ liệu mới).</li>
 </ul>
-<pre><code>from sklearn.linear_model import LinearRegression
+<pre><code class="language-python">from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import r2_score
 

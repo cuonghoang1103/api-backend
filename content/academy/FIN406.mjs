@@ -5,7 +5,7 @@
  * trường & VaR → rủi ro tín dụng → rủi ro thanh khoản & vận hành → phòng ngừa
  * bằng phái sinh → rủi ro danh mục & đa dạng hoá → khung Basel → stress
  * testing/ERM. Giữ NGUYÊN slug/semester/thumb(v3). ⚠️ KHÔNG backtick/${; số ví
- * dụ trong <pre><code> là GIẢ ĐỊNH, ký hiệu chữ Latin (VaR, SD, PD, LGD, EAD,
+ * dụ trong <pre><code class="language-javascript"> là GIẢ ĐỊNH, ký hiệu chữ Latin (VaR, SD, PD, LGD, EAD,
  * CAR, RWA, LCR, NSFR...).
  */
 const bi = (en, vi) => `<div class="ml-en">${en}</div>\n<div class="ml-vi">${vi}</div>`;

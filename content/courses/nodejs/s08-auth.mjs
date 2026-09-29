@@ -43,7 +43,7 @@ export default {
 
 <h3>Measurement 1 — how fast is "fast"?</h3>
 <p>Same machine, same Node process, hashing the same string:</p>
-<pre><code>timeSync(<span class="tok-str">'sha256'</span>, (i) =&gt; crypto.createHash(<span class="tok-str">'sha256'</span>).update(PW + i).digest(<span class="tok-str">'hex'</span>), <span class="tok-num">200000</span>);
+<pre><code class="language-typescript">timeSync(<span class="tok-str">'sha256'</span>, (i) =&gt; crypto.createHash(<span class="tok-str">'sha256'</span>).update(PW + i).digest(<span class="tok-str">'hex'</span>), <span class="tok-num">200000</span>);
 <span class="tok-kw">for</span> (<span class="tok-kw">const</span> cost <span class="tok-kw">of</span> [<span class="tok-num">8</span>, <span class="tok-num">10</span>, <span class="tok-num">12</span>, <span class="tok-num">14</span>]) bcrypt.hashSync(PW, cost);
 <span class="tok-kw">await</span> argon2.hash(PW, { memoryCost: <span class="tok-num">19456</span>, timeCost: <span class="tok-num">2</span>, parallelism: <span class="tok-num">1</span> });</code></pre>
 <div class="out">md5                        200000 lần = 153.2ms  →     1305689 lần/giây
@@ -60,7 +60,7 @@ argon2id (OWASP 19MiB,t=2) 33.0ms/lần  →        30.3 lần/giây</div>
 
 <h3>Measurement 2 — a rainbow table, built live</h3>
 <p>"Nobody can reverse SHA-256" is true and irrelevant. The attacker does not reverse it; they hash every candidate and look the result up. Here is the whole 6-digit password space — the PIN-style password millions of people actually use:</p>
-<pre><code><span class="tok-kw">const</span> table = <span class="tok-kw">new</span> Map();
+<pre><code class="language-javascript"><span class="tok-kw">const</span> table = <span class="tok-kw">new</span> Map();
 <span class="tok-kw">for</span> (<span class="tok-kw">let</span> i = <span class="tok-num">0</span>; i &lt; <span class="tok-num">1_000_000</span>; i++) {
   <span class="tok-kw">const</span> guess = String(i).padStart(<span class="tok-num">6</span>, <span class="tok-str">'0'</span>);
   table.set(crypto.createHash(<span class="tok-str">'sha256'</span>).update(guess).digest(<span class="tok-str">'hex'</span>), guess);
@@ -119,7 +119,7 @@ băm  (31 ký tự): x4Y05t1q0YIRcs.YQcb4WEtp1sivisK</div>
 
 <h3>Measurement 4 — the sync variant freezes the entire server</h3>
 <p>Both APIs exist and the names differ by four characters. The difference is not stylistic:</p>
-<pre><code><span class="tok-comment">// heartbeat: a 50ms setInterval running alongside, measuring the lag</span>
+<pre><code class="language-javascript"><span class="tok-comment">// heartbeat: a 50ms setInterval running alongside, measuring the lag</span>
 <span class="tok-kw">for</span> (<span class="tok-kw">let</span> i = <span class="tok-num">0</span>; i &lt; <span class="tok-num">10</span>; i++) bcrypt.hashSync(<span class="tok-str">'pw'</span>, <span class="tok-num">12</span>);        <span class="tok-comment">// synchronous</span>
 <span class="tok-kw">await</span> Promise.all(Array.from({ length: <span class="tok-num">10</span> }, () =&gt; bcrypt.hash(<span class="tok-str">'pw'</span>, <span class="tok-num">12</span>)));  <span class="tok-comment">// asynchronous</span></code></pre>
 <div class="out">bcrypt.hashSync ×10 (đồng bộ)      xong sau  3009ms | nhịp tim 50ms trễ tối đa 2959ms
@@ -129,7 +129,7 @@ argon2.hash ×10 (bất đồng bộ)      xong sau    94ms | nhịp tim 50ms tr
 
 <h3>The trap that lets a wrong password log in</h3>
 <p>bcrypt only reads the first 72 <em>bytes</em> of its input. Everything after that is silently discarded:</p>
-<pre><code><span class="tok-kw">const</span> base = <span class="tok-str">'A'</span>.repeat(<span class="tok-num">72</span>);
+<pre><code class="language-javascript"><span class="tok-kw">const</span> base = <span class="tok-str">'A'</span>.repeat(<span class="tok-num">72</span>);
 <span class="tok-kw">const</span> pwA = base + <span class="tok-str">'-mat-khau-that-cua-toi'</span>;
 <span class="tok-kw">const</span> pwB = base + <span class="tok-str">'-KE-TAN-CONG-DOAN-BUA'</span>;
 bcrypt.compareSync(pwB, bcrypt.hashSync(pwA, <span class="tok-num">10</span>));</code></pre>
@@ -141,7 +141,7 @@ argon2.verify (không giới hạn 72 byte) = false</div>
 <div class="callout warn">A 70-character Vietnamese passphrase is 99 bytes — bcrypt throws away the last 27 of them. If you stay on bcrypt, either cap the password length at 72 bytes with an explicit error, or pre-hash with SHA-256 and base64 the result before calling bcrypt. Do not leave it silent.</div>
 
 <h3>The module, in full</h3>
-<pre><code><span class="tok-comment">// src/auth/password.mjs</span>
+<pre><code class="language-javascript"><span class="tok-comment">// src/auth/password.mjs</span>
 <span class="tok-kw">import</span> argon2 <span class="tok-kw">from</span> <span class="tok-str">'argon2'</span>;
 
 <span class="tok-comment">// OWASP 2024 parameters for argon2id: 19 MiB of memory, 2 passes, 1 lane.</span>
@@ -163,7 +163,7 @@ argon2.verify (không giới hạn 72 byte) = false</div>
 
 <h3>Measurement 5 — your login endpoint answers "does this email exist?"</h3>
 <p>The obvious implementation returns early when the email is unknown. That early return is a side channel: it skips the expensive hash, so it answers faster. Thirty logins each way, median:</p>
-<pre><code><span class="tok-comment">// BẢN LỖI</span>
+<pre><code class="language-javascript"><span class="tok-comment">// BẢN LỖI</span>
 <span class="tok-kw">const</span> user = <span class="tok-kw">await</span> prisma.user.findUnique({ where: { email } });
 <span class="tok-kw">if</span> (!user) <span class="tok-kw">return</span> { ok: <span class="tok-kw">false</span> };            <span class="tok-comment">// ← hashes nothing at all</span>
 <span class="tok-kw">return</span> { ok: <span class="tok-kw">await</span> verifyPassword(user.passwordHash, password) };
@@ -179,7 +179,7 @@ loginAnToan  : email KHÔNG tồn tại = 34.73ms | email CÓ tồn tại = 36.6
 
 <h3>Upgrading cost without asking anyone to change their password</h3>
 <p>You picked <code>t=2</code> in 2026; in 2029 the machines are faster and you want <code>t=3</code>. Because the parameters live inside every stored string, you can migrate one user at a time, at the only moment you ever hold their plain password — the instant they log in:</p>
-<pre><code><span class="tok-kw">if</span> (needsRehash(user.passwordHash)) {
+<pre><code class="language-typescript"><span class="tok-kw">if</span> (needsRehash(user.passwordHash)) {
   <span class="tok-kw">await</span> prisma.user.update({
     where: { id: user.id },
     data: { passwordHash: <span class="tok-kw">await</span> hashPassword(password) },
@@ -234,7 +234,7 @@ loginAnToan  : email KHÔNG tồn tại = 34.73ms | email CÓ tồn tại = 36.6
 
 <h3>Phép đo 1 — "nhanh" là nhanh cỡ nào?</h3>
 <p>Cùng một máy, cùng một tiến trình Node, băm cùng một chuỗi:</p>
-<pre><code>timeSync(<span class="tok-str">'sha256'</span>, (i) =&gt; crypto.createHash(<span class="tok-str">'sha256'</span>).update(PW + i).digest(<span class="tok-str">'hex'</span>), <span class="tok-num">200000</span>);
+<pre><code class="language-typescript">timeSync(<span class="tok-str">'sha256'</span>, (i) =&gt; crypto.createHash(<span class="tok-str">'sha256'</span>).update(PW + i).digest(<span class="tok-str">'hex'</span>), <span class="tok-num">200000</span>);
 <span class="tok-kw">for</span> (<span class="tok-kw">const</span> cost <span class="tok-kw">of</span> [<span class="tok-num">8</span>, <span class="tok-num">10</span>, <span class="tok-num">12</span>, <span class="tok-num">14</span>]) bcrypt.hashSync(PW, cost);
 <span class="tok-kw">await</span> argon2.hash(PW, { memoryCost: <span class="tok-num">19456</span>, timeCost: <span class="tok-num">2</span>, parallelism: <span class="tok-num">1</span> });</code></pre>
 <div class="out">md5                        200000 lần = 153.2ms  →     1305689 lần/giây
@@ -251,7 +251,7 @@ argon2id (OWASP 19MiB,t=2) 33.0ms/lần  →        30.3 lần/giây</div>
 
 <h3>Phép đo 2 — dựng một bảng cầu vồng ngay tại chỗ</h3>
 <p>"Không ai giải ngược được SHA-256" là câu đúng nhưng không liên quan. Kẻ tấn công không giải ngược; họ băm mọi ứng viên rồi tra bảng. Đây là toàn bộ không gian mật khẩu 6 chữ số — kiểu mật khẩu như mã PIN mà hàng triệu người đang dùng thật:</p>
-<pre><code><span class="tok-kw">const</span> table = <span class="tok-kw">new</span> Map();
+<pre><code class="language-javascript"><span class="tok-kw">const</span> table = <span class="tok-kw">new</span> Map();
 <span class="tok-kw">for</span> (<span class="tok-kw">let</span> i = <span class="tok-num">0</span>; i &lt; <span class="tok-num">1_000_000</span>; i++) {
   <span class="tok-kw">const</span> guess = String(i).padStart(<span class="tok-num">6</span>, <span class="tok-str">'0'</span>);
   table.set(crypto.createHash(<span class="tok-str">'sha256'</span>).update(guess).digest(<span class="tok-str">'hex'</span>), guess);
@@ -310,7 +310,7 @@ băm  (31 ký tự): x4Y05t1q0YIRcs.YQcb4WEtp1sivisK</div>
 
 <h3>Phép đo 4 — bản đồng bộ đóng băng cả máy chủ</h3>
 <p>Cả hai API đều tồn tại và tên chỉ khác nhau bốn ký tự. Khác biệt thì không hề mang tính thẩm mỹ:</p>
-<pre><code><span class="tok-comment">// nhịp tim: một setInterval 50ms chạy song song, đo độ trễ</span>
+<pre><code class="language-javascript"><span class="tok-comment">// nhịp tim: một setInterval 50ms chạy song song, đo độ trễ</span>
 <span class="tok-kw">for</span> (<span class="tok-kw">let</span> i = <span class="tok-num">0</span>; i &lt; <span class="tok-num">10</span>; i++) bcrypt.hashSync(<span class="tok-str">'pw'</span>, <span class="tok-num">12</span>);        <span class="tok-comment">// đồng bộ</span>
 <span class="tok-kw">await</span> Promise.all(Array.from({ length: <span class="tok-num">10</span> }, () =&gt; bcrypt.hash(<span class="tok-str">'pw'</span>, <span class="tok-num">12</span>)));  <span class="tok-comment">// bất đồng bộ</span></code></pre>
 <div class="out">bcrypt.hashSync ×10 (đồng bộ)      xong sau  3009ms | nhịp tim 50ms trễ tối đa 2959ms
@@ -320,7 +320,7 @@ argon2.hash ×10 (bất đồng bộ)      xong sau    94ms | nhịp tim 50ms tr
 
 <h3>Cái bẫy cho phép mật khẩu SAI đăng nhập được</h3>
 <p>bcrypt chỉ đọc 72 <em>byte</em> đầu của đầu vào. Mọi thứ sau đó bị vứt đi trong im lặng:</p>
-<pre><code><span class="tok-kw">const</span> base = <span class="tok-str">'A'</span>.repeat(<span class="tok-num">72</span>);
+<pre><code class="language-javascript"><span class="tok-kw">const</span> base = <span class="tok-str">'A'</span>.repeat(<span class="tok-num">72</span>);
 <span class="tok-kw">const</span> pwA = base + <span class="tok-str">'-mat-khau-that-cua-toi'</span>;
 <span class="tok-kw">const</span> pwB = base + <span class="tok-str">'-KE-TAN-CONG-DOAN-BUA'</span>;
 bcrypt.compareSync(pwB, bcrypt.hashSync(pwA, <span class="tok-num">10</span>));</code></pre>
@@ -332,7 +332,7 @@ argon2.verify (không giới hạn 72 byte) = false</div>
 <div class="callout warn">Một cụm mật khẩu tiếng Việt 70 ký tự là 99 byte — bcrypt vứt đi 27 byte cuối. Nếu bạn ở lại với bcrypt, hoặc chặn độ dài mật khẩu ở 72 byte kèm thông báo lỗi rõ ràng, hoặc băm trước bằng SHA-256 rồi base64 kết quả trước khi gọi bcrypt. Đừng để nó im lặng.</div>
 
 <h3>Cả module, đầy đủ</h3>
-<pre><code><span class="tok-comment">// src/auth/password.mjs</span>
+<pre><code class="language-javascript"><span class="tok-comment">// src/auth/password.mjs</span>
 <span class="tok-kw">import</span> argon2 <span class="tok-kw">from</span> <span class="tok-str">'argon2'</span>;
 
 <span class="tok-comment">// Tham số OWASP 2024 cho argon2id: 19 MiB bộ nhớ, 2 vòng, 1 luồng.</span>
@@ -354,7 +354,7 @@ argon2.verify (không giới hạn 72 byte) = false</div>
 
 <h3>Phép đo 5 — endpoint đăng nhập của bạn đang trả lời "email này có tồn tại không?"</h3>
 <p>Cách viết hiển nhiên là thoát sớm khi email không tồn tại. Chính cái thoát sớm đó là một kênh phụ: nó bỏ qua bước băm đắt tiền nên trả lời nhanh hơn. Ba mươi lượt đăng nhập mỗi kiểu, lấy trung vị:</p>
-<pre><code><span class="tok-comment">// BẢN LỖI</span>
+<pre><code class="language-javascript"><span class="tok-comment">// BẢN LỖI</span>
 <span class="tok-kw">const</span> user = <span class="tok-kw">await</span> prisma.user.findUnique({ where: { email } });
 <span class="tok-kw">if</span> (!user) <span class="tok-kw">return</span> { ok: <span class="tok-kw">false</span> };            <span class="tok-comment">// ← không băm gì cả</span>
 <span class="tok-kw">return</span> { ok: <span class="tok-kw">await</span> verifyPassword(user.passwordHash, password) };
@@ -370,7 +370,7 @@ loginAnToan  : email KHÔNG tồn tại = 34.73ms | email CÓ tồn tại = 36.6
 
 <h3>Nâng chi phí mà không phải bảo ai đổi mật khẩu</h3>
 <p>Bạn chọn <code>t=2</code> vào năm 2026; tới 2029 máy móc nhanh hơn và bạn muốn <code>t=3</code>. Vì tham số nằm ngay trong mỗi chuỗi đã lưu, bạn có thể chuyển đổi từng người một, đúng vào khoảnh khắc duy nhất bạn cầm được mật khẩu gốc của họ — lúc họ đăng nhập:</p>
-<pre><code><span class="tok-kw">if</span> (needsRehash(user.passwordHash)) {
+<pre><code class="language-typescript"><span class="tok-kw">if</span> (needsRehash(user.passwordHash)) {
   <span class="tok-kw">await</span> prisma.user.update({
     where: { id: user.id },
     data: { passwordHash: <span class="tok-kw">await</span> hashPassword(password) },
@@ -433,7 +433,7 @@ loginAnToan  : email KHÔNG tồn tại = 34.73ms | email CÓ tồn tại = 36.6
 <p>Neither is "the modern one". They trade the same thing in opposite directions, and the design in this lesson deliberately uses <em>both</em>: a stateless short-lived access token for speed, and a stateful long-lived refresh token for control.</p>
 
 <h3>A JWT, taken apart by hand</h3>
-<pre><code><span class="tok-kw">const</span> token = jwt.sign({ sub: <span class="tok-str">'1'</span>, role: <span class="tok-str">'USER'</span>, tv: <span class="tok-num">0</span> }, SECRET,
+<pre><code class="language-javascript"><span class="tok-kw">const</span> token = jwt.sign({ sub: <span class="tok-str">'1'</span>, role: <span class="tok-str">'USER'</span>, tv: <span class="tok-num">0</span> }, SECRET,
   { expiresIn: <span class="tok-str">'15m'</span>, issuer: <span class="tok-str">'cuongthai-api'</span>, audience: <span class="tok-str">'cuongthai-web'</span> });
 <span class="tok-kw">const</span> [h, p, s] = token.split(<span class="tok-str">'.'</span>);</code></pre>
 <div class="out">header   : eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
@@ -448,7 +448,7 @@ signature: bSTHNBX71bo7BNN7cx7Rcc7C-nXU5WuI_8Vr-cZld2g
 
 <h3>The single most misunderstood fact about JWT</h3>
 <p>Base64url is an <em>encoding</em>, not encryption. Anyone holding the token — including the browser, including whoever reads your logs — can read every claim:</p>
-<pre><code><span class="tok-kw">const</span> dec = (x) =&gt; Buffer.from(x, <span class="tok-str">'base64url'</span>).toString(<span class="tok-str">'utf8'</span>);</code></pre>
+<pre><code class="language-javascript"><span class="tok-kw">const</span> dec = (x) =&gt; Buffer.from(x, <span class="tok-str">'base64url'</span>).toString(<span class="tok-str">'utf8'</span>);</code></pre>
 <div class="out">header  → {"alg":"HS256","typ":"JWT"}
 payload → {"sub":"1","role":"USER","tv":0,"iat":1785172416,"exp":1785173316,"aud":"cuongthai-web","iss":"cuongthai-api"}
 iat = 1785172416 → 2026-07-27T17:13:36.000Z
@@ -475,7 +475,7 @@ jwt.verify → JsonWebTokenError: invalid signature</div>
 
 <h3>Attack 3 — lie about the algorithm</h3>
 <p>Two classic variants. <code>alg: "none"</code> claims the token needs no signature. Algorithm confusion is nastier: a server that verifies RS256 with a <em>public</em> key can be handed an HS256 token signed <em>with that same public key</em> — which the attacker has, because it is public.</p>
-<pre><code><span class="tok-comment">// the attacker has ONLY the public key</span>
+<pre><code class="language-javascript"><span class="tok-comment">// the attacker has ONLY the public key</span>
 <span class="tok-kw">const</span> forged = jwt.sign({ sub: <span class="tok-str">'1'</span>, role: <span class="tok-str">'ADMIN'</span> }, publicKey, { algorithm: <span class="tok-str">'HS256'</span> });</code></pre>
 <div class="out">--- Server KHÔNG chốt algorithms ---
 jwt.verify → JsonWebTokenError: invalid algorithm
@@ -483,7 +483,7 @@ jwt.verify → JsonWebTokenError: invalid algorithm
 --- Server CÓ chốt algorithms: ["RS256"] ---
 jwt.verify → JsonWebTokenError: invalid algorithm</div>
 <p>Both rejected — jsonwebtoken 9 infers the permitted algorithms from the key type, so the library already closes this. Report it honestly: on this version, with this library, the attack fails either way. But the rule stands, and here is why. This is a hand-rolled verifier of the kind people write when they "don't want another dependency":</p>
-<pre><code><span class="tok-kw">function</span> verifyNgayTho(token, key) {
+<pre><code class="language-javascript"><span class="tok-kw">function</span> verifyNgayTho(token, key) {
   <span class="tok-kw">const</span> [h, p, s] = token.split(<span class="tok-str">'.'</span>);
   <span class="tok-kw">const</span> { alg } = JSON.parse(Buffer.from(h, <span class="tok-str">'base64url'</span>));
   <span class="tok-kw">if</span> (alg === <span class="tok-str">'none'</span>) <span class="tok-kw">return</span> JSON.parse(Buffer.from(p, <span class="tok-str">'base64url'</span>));    <span class="tok-comment">// hole 1</span>
@@ -494,7 +494,7 @@ jwt.verify → JsonWebTokenError: invalid algorithm</div>
 token giả HS256 → { sub: '1', role: 'ADMIN', iat: 1785172455, exp: 1785173355 }
 token alg=none  → { sub: '1', role: 'ADMIN' }</div>
 <p>Full admin, twice, in eleven lines of "obvious" code. The lesson is not "jsonwebtoken is safe" — it is that <strong>the algorithm must be decided by the server, never read from the token</strong>. Pin it and the class of bug disappears regardless of library version:</p>
-<pre><code>jwt.verify(token, SECRET, {
+<pre><code class="language-typescript">jwt.verify(token, SECRET, {
   algorithms: [<span class="tok-str">'HS256'</span>],             <span class="tok-comment">// the server decides; it does not read this from the token</span>
   issuer: <span class="tok-str">'cuongthai-api'</span>,
   audience: <span class="tok-str">'cuongthai-web'</span>,
@@ -529,7 +529,7 @@ jwt.verify 10.000 lần = 383ms → 26113 lần/giây</div>
 
 <h3>The refresh token is not a JWT</h3>
 <p>It is checked against the database on every use, so signing it buys nothing — and a signed token you cannot revoke is exactly the problem you were escaping. Use 256 random bits, and store only its hash:</p>
-<pre><code><span class="tok-kw">export const</span> newRefreshToken = () =&gt; crypto.randomBytes(<span class="tok-num">32</span>).toString(<span class="tok-str">'base64url'</span>);
+<pre><code class="language-javascript"><span class="tok-kw">export const</span> newRefreshToken = () =&gt; crypto.randomBytes(<span class="tok-num">32</span>).toString(<span class="tok-str">'base64url'</span>);
 <span class="tok-kw">export const</span> hashRefreshToken = (t) =&gt; crypto.createHash(<span class="tok-str">'sha256'</span>).update(t).digest(<span class="tok-str">'hex'</span>);</code></pre>
 <div class="out">refresh token : svg1QpxPSTGleXXIJzHFCebQ0070YJkG90MVFjBuaA0 (43 ký tự, 256 bit ngẫu nhiên)
 lưu vào CSDL  : 826e2f5a6db95a52a065561fec18ada271cf62cda2ca6070509f6a7e19c41b0c
@@ -537,7 +537,7 @@ lưu vào CSDL  : 826e2f5a6db95a52a065561fec18ada271cf62cda2ca6070509f6a7e19c41b
 <p>Plain SHA-256 is correct here, and it is not a contradiction of lesson 8.1. That lesson needed slowness because passwords are human-chosen and guessable. This value is 256 bits of <code>randomBytes</code> — there is nothing to guess, so all you need is a one-way function.</p>
 
 <h3>The table</h3>
-<pre><code><span class="tok-kw">model</span> RefreshSession {
+<pre><code class="language-typescript"><span class="tok-kw">model</span> RefreshSession {
   id        String    @id @default(uuid())
   userId    Int
   familyId  String                                <span class="tok-comment">// the whole rotation chain of ONE sign-in</span>
@@ -557,7 +557,7 @@ lưu vào CSDL  : 826e2f5a6db95a52a065561fec18ada271cf62cda2ca6070509f6a7e19c41b
 
 <h3>Rotation, and why reuse means theft</h3>
 <p>Each refresh token is single-use. Redeem it and it is marked <code>usedAt</code>; you get a new one in the same family. Now suppose an attacker copies a refresh token. Two parties hold it, and whoever refreshes second presents a token that is already used — which cannot happen in honest operation:</p>
-<pre><code><span class="tok-kw">if</span> (session.usedAt || session.revokedAt) {
+<pre><code class="language-javascript"><span class="tok-kw">if</span> (session.usedAt || session.revokedAt) {
   <span class="tok-kw">const</span> killed = <span class="tok-kw">await</span> prisma.refreshSession.updateMany({
     where: { familyId: session.familyId, revokedAt: <span class="tok-kw">null</span> },
     data: { revokedAt: <span class="tok-kw">new</span> Date() },
@@ -584,7 +584,7 @@ HTTP 401  {"error":{"code":"REFRESH_REUSE_DETECTED","message":"Phát hiện tái
 <div class="callout ok">Read row two and three together: the token the thief replayed (<code>used=t</code>) and the legitimate new token the victim was holding (<code>used=f</code>) both end up <code>revoked=t</code>. That is the design working — the victim's inconvenience is one extra login, and the thief gets nothing.</div>
 
 <h3>Issuing a session, in full</h3>
-<pre><code><span class="tok-kw">async function</span> issueSession(user, { familyId = crypto.randomUUID(), userAgent } = {}) {
+<pre><code class="language-javascript"><span class="tok-kw">async function</span> issueSession(user, { familyId = crypto.randomUUID(), userAgent } = {}) {
   <span class="tok-kw">const</span> refresh = newRefreshToken();
   <span class="tok-kw">await</span> prisma.refreshSession.create({
     data: {
@@ -662,7 +662,7 @@ thử lại với token mới: HTTP 200  {"items":[{"id":1,"title":"Ghi chu cua 
 <p>Không cái nào là "cái hiện đại" cả. Chúng đánh đổi cùng một thứ theo hai chiều ngược nhau, và thiết kế trong bài này cố tình dùng <em>cả hai</em>: một access token không trạng thái, sống ngắn, để nhanh; và một refresh token có trạng thái, sống dài, để kiểm soát.</p>
 
 <h3>Mổ một JWT bằng tay</h3>
-<pre><code><span class="tok-kw">const</span> token = jwt.sign({ sub: <span class="tok-str">'1'</span>, role: <span class="tok-str">'USER'</span>, tv: <span class="tok-num">0</span> }, SECRET,
+<pre><code class="language-javascript"><span class="tok-kw">const</span> token = jwt.sign({ sub: <span class="tok-str">'1'</span>, role: <span class="tok-str">'USER'</span>, tv: <span class="tok-num">0</span> }, SECRET,
   { expiresIn: <span class="tok-str">'15m'</span>, issuer: <span class="tok-str">'cuongthai-api'</span>, audience: <span class="tok-str">'cuongthai-web'</span> });
 <span class="tok-kw">const</span> [h, p, s] = token.split(<span class="tok-str">'.'</span>);</code></pre>
 <div class="out">header   : eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
@@ -677,7 +677,7 @@ signature: bSTHNBX71bo7BNN7cx7Rcc7C-nXU5WuI_8Vr-cZld2g
 
 <h3>Điều bị hiểu nhầm nhiều nhất về JWT</h3>
 <p>Base64url là một <em>cách mã hoá ký tự</em>, không phải mã hoá bảo mật. Bất kỳ ai cầm token — kể cả trình duyệt, kể cả người đọc log của bạn — đều đọc được mọi claim:</p>
-<pre><code><span class="tok-kw">const</span> dec = (x) =&gt; Buffer.from(x, <span class="tok-str">'base64url'</span>).toString(<span class="tok-str">'utf8'</span>);</code></pre>
+<pre><code class="language-javascript"><span class="tok-kw">const</span> dec = (x) =&gt; Buffer.from(x, <span class="tok-str">'base64url'</span>).toString(<span class="tok-str">'utf8'</span>);</code></pre>
 <div class="out">header  → {"alg":"HS256","typ":"JWT"}
 payload → {"sub":"1","role":"USER","tv":0,"iat":1785172416,"exp":1785173316,"aud":"cuongthai-web","iss":"cuongthai-api"}
 iat = 1785172416 → 2026-07-27T17:13:36.000Z
@@ -704,7 +704,7 @@ jwt.verify → JsonWebTokenError: invalid signature</div>
 
 <h3>Đòn tấn công 3 — nói dối về thuật toán</h3>
 <p>Hai biến thể kinh điển. <code>alg: "none"</code> tuyên bố token này không cần chữ ký. Nhầm lẫn thuật toán thì hiểm hơn: một máy chủ kiểm RS256 bằng khoá <em>công khai</em> có thể bị đưa cho một token HS256 được ký <em>bằng chính khoá công khai đó</em> — mà kẻ tấn công có, vì nó công khai.</p>
-<pre><code><span class="tok-comment">// kẻ tấn công CHỈ có khoá công khai</span>
+<pre><code class="language-javascript"><span class="tok-comment">// kẻ tấn công CHỈ có khoá công khai</span>
 <span class="tok-kw">const</span> forged = jwt.sign({ sub: <span class="tok-str">'1'</span>, role: <span class="tok-str">'ADMIN'</span> }, publicKey, { algorithm: <span class="tok-str">'HS256'</span> });</code></pre>
 <div class="out">--- Server KHÔNG chốt algorithms ---
 jwt.verify → JsonWebTokenError: invalid algorithm
@@ -712,7 +712,7 @@ jwt.verify → JsonWebTokenError: invalid algorithm
 --- Server CÓ chốt algorithms: ["RS256"] ---
 jwt.verify → JsonWebTokenError: invalid algorithm</div>
 <p>Cả hai đều bị từ chối — jsonwebtoken 9 tự suy ra tập thuật toán được phép từ loại khoá, nên thư viện đã bịt sẵn lỗ này. Xin báo cáo trung thực: trên phiên bản này, với thư viện này, đòn tấn công thất bại theo cả hai đường. Nhưng quy tắc vẫn còn nguyên giá trị, và đây là lý do. Dưới đây là bộ kiểm tự viết kiểu mà người ta hay viết khi "không muốn thêm thư viện nữa":</p>
-<pre><code><span class="tok-kw">function</span> verifyNgayTho(token, key) {
+<pre><code class="language-javascript"><span class="tok-kw">function</span> verifyNgayTho(token, key) {
   <span class="tok-kw">const</span> [h, p, s] = token.split(<span class="tok-str">'.'</span>);
   <span class="tok-kw">const</span> { alg } = JSON.parse(Buffer.from(h, <span class="tok-str">'base64url'</span>));
   <span class="tok-kw">if</span> (alg === <span class="tok-str">'none'</span>) <span class="tok-kw">return</span> JSON.parse(Buffer.from(p, <span class="tok-str">'base64url'</span>));    <span class="tok-comment">// lỗ 1</span>
@@ -723,7 +723,7 @@ jwt.verify → JsonWebTokenError: invalid algorithm</div>
 token giả HS256 → { sub: '1', role: 'ADMIN', iat: 1785172455, exp: 1785173355 }
 token alg=none  → { sub: '1', role: 'ADMIN' }</div>
 <p>Quyền admin đầy đủ, hai lần, trong mười một dòng code "hiển nhiên". Bài học không phải là "jsonwebtoken an toàn" — mà là <strong>thuật toán phải do máy chủ quyết định, không bao giờ đọc từ token</strong>. Chốt nó lại thì cả lớp lỗi này biến mất bất kể phiên bản thư viện:</p>
-<pre><code>jwt.verify(token, SECRET, {
+<pre><code class="language-typescript">jwt.verify(token, SECRET, {
   algorithms: [<span class="tok-str">'HS256'</span>],             <span class="tok-comment">// máy chủ quyết định, không đọc từ token</span>
   issuer: <span class="tok-str">'cuongthai-api'</span>,
   audience: <span class="tok-str">'cuongthai-web'</span>,
@@ -758,7 +758,7 @@ jwt.verify 10.000 lần = 383ms → 26113 lần/giây</div>
 
 <h3>Refresh token KHÔNG phải là JWT</h3>
 <p>Nó bị đối chiếu với cơ sở dữ liệu ở mỗi lần dùng, nên ký nó chẳng mua được gì — mà một token có chữ ký lại không thu hồi được thì chính là vấn đề bạn đang chạy trốn. Hãy dùng 256 bit ngẫu nhiên, và chỉ lưu chuỗi băm của nó:</p>
-<pre><code><span class="tok-kw">export const</span> newRefreshToken = () =&gt; crypto.randomBytes(<span class="tok-num">32</span>).toString(<span class="tok-str">'base64url'</span>);
+<pre><code class="language-javascript"><span class="tok-kw">export const</span> newRefreshToken = () =&gt; crypto.randomBytes(<span class="tok-num">32</span>).toString(<span class="tok-str">'base64url'</span>);
 <span class="tok-kw">export const</span> hashRefreshToken = (t) =&gt; crypto.createHash(<span class="tok-str">'sha256'</span>).update(t).digest(<span class="tok-str">'hex'</span>);</code></pre>
 <div class="out">refresh token : svg1QpxPSTGleXXIJzHFCebQ0070YJkG90MVFjBuaA0 (43 ký tự, 256 bit ngẫu nhiên)
 lưu vào CSDL  : 826e2f5a6db95a52a065561fec18ada271cf62cda2ca6070509f6a7e19c41b0c
@@ -766,7 +766,7 @@ lưu vào CSDL  : 826e2f5a6db95a52a065561fec18ada271cf62cda2ca6070509f6a7e19c41b
 <p>SHA-256 trần là đúng ở đây, và nó không mâu thuẫn với bài 8.1. Bài đó cần chậm vì mật khẩu do con người chọn nên đoán được. Giá trị này là 256 bit từ <code>randomBytes</code> — chẳng có gì để đoán, nên bạn chỉ cần một hàm một chiều.</p>
 
 <h3>Cái bảng</h3>
-<pre><code><span class="tok-kw">model</span> RefreshSession {
+<pre><code class="language-typescript"><span class="tok-kw">model</span> RefreshSession {
   id        String    @id @default(uuid())
   userId    Int
   familyId  String                                <span class="tok-comment">// cả chuỗi xoay vòng của MỘT lần đăng nhập</span>
@@ -786,7 +786,7 @@ lưu vào CSDL  : 826e2f5a6db95a52a065561fec18ada271cf62cda2ca6070509f6a7e19c41b
 
 <h3>Xoay vòng, và vì sao "dùng lại" nghĩa là bị trộm</h3>
 <p>Mỗi refresh token chỉ dùng được một lần. Đổi nó xong là nó bị đánh dấu <code>usedAt</code>; bạn nhận về một cái mới trong cùng họ. Giờ giả sử kẻ tấn công sao chép được một refresh token. Hai bên cùng cầm nó, và bên nào refresh sau sẽ trình ra một token đã dùng rồi — chuyện không thể xảy ra trong vận hành trung thực:</p>
-<pre><code><span class="tok-kw">if</span> (session.usedAt || session.revokedAt) {
+<pre><code class="language-javascript"><span class="tok-kw">if</span> (session.usedAt || session.revokedAt) {
   <span class="tok-kw">const</span> killed = <span class="tok-kw">await</span> prisma.refreshSession.updateMany({
     where: { familyId: session.familyId, revokedAt: <span class="tok-kw">null</span> },
     data: { revokedAt: <span class="tok-kw">new</span> Date() },
@@ -813,7 +813,7 @@ HTTP 401  {"error":{"code":"REFRESH_REUSE_DETECTED","message":"Phát hiện tái
 <div class="callout ok">Đọc dòng hai và dòng ba cùng nhau: token mà kẻ trộm dùng lại (<code>used=t</code>) và token mới hợp lệ mà nạn nhân đang cầm (<code>used=f</code>) đều kết thúc ở <code>revoked=t</code>. Đó là thiết kế đang chạy đúng — phiền toái của nạn nhân là đăng nhập lại một lần, còn kẻ trộm không được gì.</div>
 
 <h3>Cấp một phiên, đầy đủ</h3>
-<pre><code><span class="tok-kw">async function</span> issueSession(user, { familyId = crypto.randomUUID(), userAgent } = {}) {
+<pre><code class="language-javascript"><span class="tok-kw">async function</span> issueSession(user, { familyId = crypto.randomUUID(), userAgent } = {}) {
   <span class="tok-kw">const</span> refresh = newRefreshToken();
   <span class="tok-kw">await</span> prisma.refreshSession.create({
     data: {
@@ -906,7 +906,7 @@ thử lại với token mới: HTTP 200  {"items":[{"id":1,"title":"Ghi chu cua 
 <p>Mixing them up produces the two most common bugs in this area: a 403 for an expired token (so the client logs the user out instead of refreshing), and a 401 for a permission problem (so the client refreshes forever against a wall).</p>
 
 <h3>Where the token comes from</h3>
-<pre><code><span class="tok-kw">function</span> readToken(req) {
+<pre><code class="language-javascript"><span class="tok-kw">function</span> readToken(req) {
   <span class="tok-kw">const</span> h = req.get(<span class="tok-str">'authorization'</span>);
   <span class="tok-kw">if</span> (h?.startsWith(<span class="tok-str">'Bearer '</span>)) <span class="tok-kw">return</span> h.slice(<span class="tok-num">7</span>);
   <span class="tok-kw">return</span> req.cookies?.access_token ?? <span class="tok-kw">null</span>;
@@ -914,7 +914,7 @@ thử lại với token mới: HTTP 200  {"items":[{"id":1,"title":"Ghi chu cua 
 <p>Header first, cookie as a fallback. Both are supported for a practical reason covered in 8.4: a mobile app or a server-to-server caller has no cookie jar, while a browser app is safer with an <code>HttpOnly</code> cookie. Accepting both costs three lines.</p>
 
 <h3>The middleware, and every way it says no</h3>
-<pre><code><span class="tok-kw">export async function</span> requireAuth(req, res, next) {
+<pre><code class="language-javascript"><span class="tok-kw">export async function</span> requireAuth(req, res, next) {
   <span class="tok-kw">const</span> token = readToken(req);
   <span class="tok-kw">if</span> (!token) <span class="tok-kw">return</span> next(<span class="tok-kw">new</span> AppError(<span class="tok-num">401</span>, <span class="tok-str">'NO_TOKEN'</span>, <span class="tok-str">'Thiếu access token'</span>));
 
@@ -961,7 +961,7 @@ HTTP 401  {"error":{"code":"TOKEN_INVALID","message":"invalid signature"}}</div>
 <p>The second one is the important test, and it is worth being explicit about what it proves. That token was minted with the correct payload — <code>sub: '1'</code>, <code>role: 'ADMIN'</code>, correct issuer and audience, not expired. Everything about it is right except that it was signed with a different secret. That is the whole security boundary, and it holds.</p>
 
 <h3>Mounting order decides whether any of this runs</h3>
-<pre><code><span class="tok-kw">const</span> router = Router();
+<pre><code class="language-javascript"><span class="tok-kw">const</span> router = Router();
 router.use(requireAuth);        <span class="tok-comment">// EVERY notes route requires a signed-in user</span>
 
 router.get(<span class="tok-str">'/'</span>, …);
@@ -969,7 +969,7 @@ router.post(<span class="tok-str">'/'</span>, …);</code></pre>
 <div class="pitfall"><strong><code>router.use(requireAuth)</code> only protects routes declared <em>after</em> it.</strong> Express walks the stack in declaration order (chapter 5). Put the line at the bottom of the file and every route above it is public, with no error, no warning, and a test suite that still passes because the tests send a token anyway. Protect at the router level, at the top, and let individual routes opt <em>out</em> — the failure mode of forgetting is then a locked door, not an open one.</div>
 
 <h3>Roles</h3>
-<pre><code><span class="tok-kw">export const</span> requireRole = (...roles) =&gt; (req, res, next) =&gt;
+<pre><code class="language-javascript"><span class="tok-kw">export const</span> requireRole = (...roles) =&gt; (req, res, next) =&gt;
   roles.includes(req.user?.role)
     ? next()
     : next(<span class="tok-kw">new</span> AppError(<span class="tok-num">403</span>, <span class="tok-str">'FORBIDDEN'</span>, <span class="tok-str">'Cần quyền '</span> + roles.join(<span class="tok-str">' hoặc '</span>)));
@@ -980,7 +980,7 @@ router.delete(<span class="tok-str">'/users/:id'</span>, requireAuth, requireRol
 <p>Two roles is enough for most applications and this course stays there. When it stops being enough, the next step is permissions rather than more roles: <code>requirePermission('note:delete:any')</code>, with roles mapping to permission sets. Adding a role to a system built on role checks means editing every route; adding one to a system built on permissions means editing one table.</p>
 
 <h3>Now delete the lie</h3>
-<pre><code><span class="tok-comment">// BEFORE — chapter 7</span>
+<pre><code class="language-javascript"><span class="tok-comment">// BEFORE — chapter 7</span>
 <span class="tok-kw">const</span> AUTHOR_ID = <span class="tok-num">1</span>;
 <span class="tok-kw">export async function</span> list({ page, limit, q }) {
   <span class="tok-kw">const</span> where = { authorId: AUTHOR_ID, … };
@@ -993,7 +993,7 @@ router.delete(<span class="tok-str">'/users/:id'</span>, requireAuth, requireRol
 <p>Making <code>actor</code> the first parameter of every service function is a deliberate irritation. You cannot call the function without answering "on whose behalf?", so forgetting the ownership check becomes a syntax-level mistake instead of a silent security hole. The alternative — reading a global "current user" from somewhere — is exactly how those holes appear.</p>
 
 <h3>One rule, one place</h3>
-<pre><code><span class="tok-comment">// The permission rule lives in EXACTLY ONE PLACE: the owner, or an ADMIN</span>
+<pre><code class="language-javascript"><span class="tok-comment">// The permission rule lives in EXACTLY ONE PLACE: the owner, or an ADMIN</span>
 <span class="tok-kw">const</span> canTouch = (note, actor) =&gt; note.authorId === actor.id || actor.role === <span class="tok-str">'ADMIN'</span>;
 
 <span class="tok-kw">export async function</span> get(actor, id) {
@@ -1040,7 +1040,7 @@ authorId sau PATCH = 2 (vẫn là Bình id=2)</div>
 <p>Second, and easier to forget because nothing looks wrong: the list query. If <code>where</code> loses its <code>authorId</code> — during a refactor, while adding a search filter — every user sees every note. No error, no failing test unless you wrote one for it. That single clause is the only thing standing between "my notes" and "everyone's notes", which is why it belongs in the service where <code>actor</code> is a required parameter, and never in the route.</p>
 
 <h3>What the route layer looks like now</h3>
-<pre><code>router.get(<span class="tok-str">'/:id'</span>, <span class="tok-kw">async</span> (req, res) =&gt; {
+<pre><code class="language-javascript">router.get(<span class="tok-str">'/:id'</span>, <span class="tok-kw">async</span> (req, res) =&gt; {
   <span class="tok-kw">const</span> note = <span class="tok-kw">await</span> service.get(req.user, Number(req.params.id));
   <span class="tok-kw">if</span> (!note) <span class="tok-kw">throw new</span> AppError(<span class="tok-num">404</span>, <span class="tok-str">'NOTE_NOT_FOUND'</span>, …);
   res.json(note);
@@ -1086,7 +1086,7 @@ authorId sau PATCH = 2 (vẫn là Bình id=2)</div>
 <p>Lẫn lộn hai cái này đẻ ra hai lỗi phổ biến nhất trong mảng này: trả 403 cho một token hết hạn (khiến client đăng xuất người dùng thay vì gọi refresh), và trả 401 cho một vấn đề quyền hạn (khiến client refresh mãi mãi vào một bức tường).</p>
 
 <h3>Token đến từ đâu</h3>
-<pre><code><span class="tok-kw">function</span> readToken(req) {
+<pre><code class="language-javascript"><span class="tok-kw">function</span> readToken(req) {
   <span class="tok-kw">const</span> h = req.get(<span class="tok-str">'authorization'</span>);
   <span class="tok-kw">if</span> (h?.startsWith(<span class="tok-str">'Bearer '</span>)) <span class="tok-kw">return</span> h.slice(<span class="tok-num">7</span>);
   <span class="tok-kw">return</span> req.cookies?.access_token ?? <span class="tok-kw">null</span>;
@@ -1094,7 +1094,7 @@ authorId sau PATCH = 2 (vẫn là Bình id=2)</div>
 <p>Header trước, cookie là phương án dự phòng. Cả hai được hỗ trợ vì một lý do thực tế mà bài 8.4 sẽ nói: một ứng dụng di động hay một lời gọi server-to-server không có hũ cookie nào, trong khi một ứng dụng chạy trên trình duyệt thì an toàn hơn với cookie <code>HttpOnly</code>. Nhận cả hai chỉ tốn ba dòng.</p>
 
 <h3>Middleware, và mọi cách nó nói không</h3>
-<pre><code><span class="tok-kw">export async function</span> requireAuth(req, res, next) {
+<pre><code class="language-javascript"><span class="tok-kw">export async function</span> requireAuth(req, res, next) {
   <span class="tok-kw">const</span> token = readToken(req);
   <span class="tok-kw">if</span> (!token) <span class="tok-kw">return</span> next(<span class="tok-kw">new</span> AppError(<span class="tok-num">401</span>, <span class="tok-str">'NO_TOKEN'</span>, <span class="tok-str">'Thiếu access token'</span>));
 
@@ -1141,7 +1141,7 @@ HTTP 401  {"error":{"code":"TOKEN_INVALID","message":"invalid signature"}}</div>
 <p>Cái thứ hai mới là phép thử quan trọng, và cần nói rõ nó chứng minh điều gì. Token đó được nặn ra với payload hoàn toàn đúng — <code>sub: '1'</code>, <code>role: 'ADMIN'</code>, đúng issuer và audience, chưa hết hạn. Mọi thứ ở nó đều đúng, trừ việc nó được ký bằng một khoá bí mật khác. Đó chính là toàn bộ ranh giới an toàn, và nó đứng vững.</p>
 
 <h3>Thứ tự gắn quyết định việc này có chạy hay không</h3>
-<pre><code><span class="tok-kw">const</span> router = Router();
+<pre><code class="language-javascript"><span class="tok-kw">const</span> router = Router();
 router.use(requireAuth);        <span class="tok-comment">// MỌI route ghi chú đều cần đăng nhập</span>
 
 router.get(<span class="tok-str">'/'</span>, …);
@@ -1149,7 +1149,7 @@ router.post(<span class="tok-str">'/'</span>, …);</code></pre>
 <div class="pitfall"><strong><code>router.use(requireAuth)</code> chỉ bảo vệ những route khai báo <em>sau</em> nó.</strong> Express duyệt chồng theo đúng thứ tự khai báo (chương 5). Đặt dòng đó ở cuối file thì mọi route phía trên là công khai, không lỗi, không cảnh báo, và bộ test vẫn xanh vì test nào cũng gửi kèm token. Hãy bảo vệ ở mức router, đặt trên cùng, rồi cho từng route <em>xin miễn</em> — như vậy hậu quả của việc quên là một cánh cửa khoá, chứ không phải một cánh cửa mở.</div>
 
 <h3>Vai trò</h3>
-<pre><code><span class="tok-kw">export const</span> requireRole = (...roles) =&gt; (req, res, next) =&gt;
+<pre><code class="language-javascript"><span class="tok-kw">export const</span> requireRole = (...roles) =&gt; (req, res, next) =&gt;
   roles.includes(req.user?.role)
     ? next()
     : next(<span class="tok-kw">new</span> AppError(<span class="tok-num">403</span>, <span class="tok-str">'FORBIDDEN'</span>, <span class="tok-str">'Cần quyền '</span> + roles.join(<span class="tok-str">' hoặc '</span>)));
@@ -1160,7 +1160,7 @@ router.delete(<span class="tok-str">'/users/:id'</span>, requireAuth, requireRol
 <p>Hai vai trò là đủ cho phần lớn ứng dụng và khoá học này dừng ở đó. Khi nó không còn đủ, bước tiếp theo là quyền chi tiết chứ không phải thêm vai trò: <code>requirePermission('note:delete:any')</code>, với vai trò ánh xạ sang tập quyền. Thêm một vai trò vào hệ thống xây trên kiểm-vai-trò nghĩa là sửa mọi route; thêm vai trò vào hệ thống xây trên quyền nghĩa là sửa một bảng.</p>
 
 <h3>Giờ thì xoá lời nói dối</h3>
-<pre><code><span class="tok-comment">// TRƯỚC — chương 7</span>
+<pre><code class="language-javascript"><span class="tok-comment">// TRƯỚC — chương 7</span>
 <span class="tok-kw">const</span> AUTHOR_ID = <span class="tok-num">1</span>;
 <span class="tok-kw">export async function</span> list({ page, limit, q }) {
   <span class="tok-kw">const</span> where = { authorId: AUTHOR_ID, … };
@@ -1173,7 +1173,7 @@ router.delete(<span class="tok-str">'/users/:id'</span>, requireAuth, requireRol
 <p>Đặt <code>actor</code> làm tham số đầu tiên của mọi hàm service là một sự khó chịu có chủ ý. Bạn không gọi được hàm mà không trả lời "thay mặt cho ai?", nên quên kiểm quyền sở hữu trở thành một lỗi ở mức cú pháp thay vì một lỗ hổng im lặng. Phương án còn lại — đọc một "người dùng hiện tại" toàn cục từ đâu đó — chính là cách những lỗ hổng ấy xuất hiện.</p>
 
 <h3>Một quy tắc, một chỗ</h3>
-<pre><code><span class="tok-comment">// Quy tắc quyền nằm ĐÚNG MỘT CHỖ: chủ sở hữu, hoặc ADMIN</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Quy tắc quyền nằm ĐÚNG MỘT CHỖ: chủ sở hữu, hoặc ADMIN</span>
 <span class="tok-kw">const</span> canTouch = (note, actor) =&gt; note.authorId === actor.id || actor.role === <span class="tok-str">'ADMIN'</span>;
 
 <span class="tok-kw">export async function</span> get(actor, id) {
@@ -1220,7 +1220,7 @@ authorId sau PATCH = 2 (vẫn là Bình id=2)</div>
 <p>Thứ hai, và dễ quên hơn vì nhìn chẳng có gì sai: câu truy vấn danh sách. Nếu <code>where</code> đánh rơi <code>authorId</code> — trong một lần tái cấu trúc, hay khi thêm bộ lọc tìm kiếm — mọi người dùng sẽ thấy mọi ghi chú. Không lỗi, không test nào đỏ trừ khi bạn từng viết test cho đúng việc đó. Đúng một mệnh đề ấy là thứ duy nhất đứng giữa "ghi chú của tôi" và "ghi chú của tất cả mọi người", nên nó phải nằm trong service nơi <code>actor</code> là tham số bắt buộc, chứ không bao giờ nằm ở route.</p>
 
 <h3>Tầng route giờ trông thế nào</h3>
-<pre><code>router.get(<span class="tok-str">'/:id'</span>, <span class="tok-kw">async</span> (req, res) =&gt; {
+<pre><code class="language-javascript">router.get(<span class="tok-str">'/:id'</span>, <span class="tok-kw">async</span> (req, res) =&gt; {
   <span class="tok-kw">const</span> note = <span class="tok-kw">await</span> service.get(req.user, Number(req.params.id));
   <span class="tok-kw">if</span> (!note) <span class="tok-kw">throw new</span> AppError(<span class="tok-num">404</span>, <span class="tok-str">'NOTE_NOT_FOUND'</span>, …);
   res.json(note);
@@ -1305,7 +1305,7 @@ Set-Cookie: csrf_token=5866ee2352054a7d4323e097c541f0bb; Path=/; SameSite=Lax</d
    bank    → /chuyen-tien-csrf       HTTP 200  {"ok":true,"soTien":"50000"}
    bank    → /chuyen-tien-bearer     HTTP 200  {"ok":true,"soTien":"50000"}</div>
 <p>Three defences, in the order you should adopt them:</p>
-<pre><code><span class="tok-comment">// 1) Check Origin/Referer — two lines, stops the majority</span>
+<pre><code class="language-javascript"><span class="tok-comment">// 1) Check Origin/Referer — two lines, stops the majority</span>
 <span class="tok-kw">const</span> o = req.get(<span class="tok-str">'origin'</span>) ?? (req.get(<span class="tok-str">'referer'</span>) ? <span class="tok-kw">new</span> URL(req.get(<span class="tok-str">'referer'</span>)).origin : <span class="tok-kw">null</span>);
 <span class="tok-kw">if</span> (o &amp;&amp; !ORIGINS.includes(o)) <span class="tok-kw">return</span> res.status(<span class="tok-num">403</span>).json({ error: <span class="tok-str">'CROSS_SITE'</span> });
 
@@ -1325,7 +1325,7 @@ Set-Cookie: csrf_token=5866ee2352054a7d4323e097c541f0bb; Path=/; SameSite=Lax</d
   <div class="kv"><span class="k">Everywhere, now</span><span class="v">Password changed, or the user suspects theft. Every access token must die <em>immediately</em>, not in 15 minutes.</span></div>
 </div>
 <p>The last one needs something the token cannot provide by itself. The trick is a counter on the user, copied into every token as <code>tv</code> and compared on every request:</p>
-<pre><code><span class="tok-kw">export async function</span> logoutEverywhere(userId) {
+<pre><code class="language-javascript"><span class="tok-kw">export async function</span> logoutEverywhere(userId) {
   <span class="tok-kw">const</span> [, user] = <span class="tok-kw">await</span> prisma.$transaction([
     prisma.refreshSession.updateMany({ where: { userId, revokedAt: <span class="tok-kw">null</span> }, data: { revokedAt: <span class="tok-kw">new</span> Date() } }),
     prisma.user.update({ where: { id: userId }, data: { tokenVersion: { increment: <span class="tok-num">1</span> } } }),
@@ -1347,7 +1347,7 @@ máy 2 (kẻ gọi) SAU đó : HTTP 401  {"error":{"code":"TOKEN_REVOKED","messa
 
 <h3>Rate limiting the one endpoint that deserves it</h3>
 <p><code>/auth/login</code> is special twice over: it is where credentials are guessed, and it is where 33 ms of argon2 is spent per attempt. Both reasons point the same way.</p>
-<pre><code><span class="tok-kw">const</span> buckets = <span class="tok-kw">new</span> Map();
+<pre><code class="language-javascript"><span class="tok-kw">const</span> buckets = <span class="tok-kw">new</span> Map();
 <span class="tok-kw">const</span> WINDOW_MS = <span class="tok-num">60_000</span>, MAX = <span class="tok-num">5</span>;
 
 <span class="tok-kw">export function</span> loginLimit(req, res, next) {
@@ -1447,7 +1447,7 @@ Set-Cookie: csrf_token=5866ee2352054a7d4323e097c541f0bb; Path=/; SameSite=Lax</d
    bank    → /chuyen-tien-csrf       HTTP 200  {"ok":true,"soTien":"50000"}
    bank    → /chuyen-tien-bearer     HTTP 200  {"ok":true,"soTien":"50000"}</div>
 <p>Ba lớp phòng thủ, theo đúng thứ tự nên áp dụng:</p>
-<pre><code><span class="tok-comment">// 1) Kiểm Origin/Referer — hai dòng, chặn được đa số</span>
+<pre><code class="language-javascript"><span class="tok-comment">// 1) Kiểm Origin/Referer — hai dòng, chặn được đa số</span>
 <span class="tok-kw">const</span> o = req.get(<span class="tok-str">'origin'</span>) ?? (req.get(<span class="tok-str">'referer'</span>) ? <span class="tok-kw">new</span> URL(req.get(<span class="tok-str">'referer'</span>)).origin : <span class="tok-kw">null</span>);
 <span class="tok-kw">if</span> (o &amp;&amp; !ORIGINS.includes(o)) <span class="tok-kw">return</span> res.status(<span class="tok-num">403</span>).json({ error: <span class="tok-str">'CROSS_SITE'</span> });
 
@@ -1467,7 +1467,7 @@ Set-Cookie: csrf_token=5866ee2352054a7d4323e097c541f0bb; Path=/; SameSite=Lax</d
   <div class="kv"><span class="k">Mọi nơi, ngay lập tức</span><span class="v">Vừa đổi mật khẩu, hoặc người dùng nghi bị đánh cắp. Mọi access token phải chết <em>ngay</em>, không phải sau 15 phút.</span></div>
 </div>
 <p>Cái cuối cần một thứ mà bản thân token không cung cấp được. Mẹo là một bộ đếm gắn trên người dùng, chép vào mọi token dưới tên <code>tv</code>, và đối chiếu ở mọi request:</p>
-<pre><code><span class="tok-kw">export async function</span> logoutEverywhere(userId) {
+<pre><code class="language-javascript"><span class="tok-kw">export async function</span> logoutEverywhere(userId) {
   <span class="tok-kw">const</span> [, user] = <span class="tok-kw">await</span> prisma.$transaction([
     prisma.refreshSession.updateMany({ where: { userId, revokedAt: <span class="tok-kw">null</span> }, data: { revokedAt: <span class="tok-kw">new</span> Date() } }),
     prisma.user.update({ where: { id: userId }, data: { tokenVersion: { increment: <span class="tok-num">1</span> } } }),
@@ -1489,7 +1489,7 @@ máy 2 (kẻ gọi) SAU đó : HTTP 401  {"error":{"code":"TOKEN_REVOKED","messa
 
 <h3>Chặn tần suất ở đúng cái endpoint xứng đáng</h3>
 <p><code>/auth/login</code> đặc biệt vì hai lẽ: đó là nơi thông tin đăng nhập bị đoán, và cũng là nơi mỗi lần thử tiêu 33 ms argon2. Cả hai lý do đều chỉ về một hướng.</p>
-<pre><code><span class="tok-kw">const</span> buckets = <span class="tok-kw">new</span> Map();
+<pre><code class="language-javascript"><span class="tok-kw">const</span> buckets = <span class="tok-kw">new</span> Map();
 <span class="tok-kw">const</span> WINDOW_MS = <span class="tok-num">60_000</span>, MAX = <span class="tok-num">5</span>;
 
 <span class="tok-kw">export function</span> loginLimit(req, res, next) {

@@ -527,7 +527,7 @@ export default {
 </div>
 
 <h3>Worked example — a route → controller → service → model chain</h3>
-<pre><code><span class="tok-comment">// routes/appointment.routes.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// routes/appointment.routes.js</span>
 <span class="tok-keyword">import</span> { Router } <span class="tok-keyword">from</span> <span class="tok-string">'express'</span>;
 <span class="tok-keyword">import</span> * <span class="tok-keyword">as</span> ctrl <span class="tok-keyword">from</span> <span class="tok-string">'../controllers/appointment.controller.js'</span>;
 <span class="tok-keyword">const</span> r = Router();
@@ -581,7 +581,7 @@ r.post(<span class="tok-string">'/'</span>, ctrl.create);        <span class="to
 </div>
 
 <h3>Ví dụ có lời giải — chuỗi route → controller → service → model</h3>
-<pre><code><span class="tok-comment">// routes/appointment.routes.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// routes/appointment.routes.js</span>
 <span class="tok-keyword">import</span> { Router } <span class="tok-keyword">from</span> <span class="tok-string">'express'</span>;
 <span class="tok-keyword">import</span> * <span class="tok-keyword">as</span> ctrl <span class="tok-keyword">from</span> <span class="tok-string">'../controllers/appointment.controller.js'</span>;
 <span class="tok-keyword">const</span> r = Router();
@@ -672,7 +672,7 @@ r.post(<span class="tok-string">'/'</span>, ctrl.create);        <span class="to
 <p class="lead">The backend exposes your data as JSON over HTTP. Here's the minimal skeleton: an Express app, a MongoDB connection, a Mongoose model, and a CRUD controller — the pattern you'll repeat for every entity.</p>
 
 <h3>The Express entry point</h3>
-<pre><code><span class="tok-comment">// server/src/app.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// server/src/app.js</span>
 <span class="tok-keyword">import</span> express <span class="tok-keyword">from</span> <span class="tok-string">'express'</span>;
 <span class="tok-keyword">import</span> mongoose <span class="tok-keyword">from</span> <span class="tok-string">'mongoose'</span>;
 <span class="tok-keyword">import</span> appointmentRoutes <span class="tok-keyword">from</span> <span class="tok-string">'./routes/appointment.routes.js'</span>;
@@ -685,7 +685,7 @@ app.use(<span class="tok-string">'/api/appointments'</span>, appointmentRoutes);
 app.listen(<span class="tok-number">5000</span>, () => console.log(<span class="tok-string">'API on :5000'</span>));</code></pre>
 
 <h3>A Mongoose model</h3>
-<pre><code><span class="tok-comment">// server/src/models/appointment.model.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// server/src/models/appointment.model.js</span>
 <span class="tok-keyword">import</span> mongoose <span class="tok-keyword">from</span> <span class="tok-string">'mongoose'</span>;
 <span class="tok-keyword">const</span> schema = <span class="tok-keyword">new</span> mongoose.Schema({
   patientId: { type: mongoose.Schema.Types.ObjectId, ref: <span class="tok-string">'User'</span>, required: <span class="tok-keyword">true</span> },
@@ -697,7 +697,7 @@ schema.index({ slotId: <span class="tok-number">1</span> }, { unique: <span clas
 <span class="tok-keyword">export</span> <span class="tok-keyword">default</span> mongoose.model(<span class="tok-string">'Appointment'</span>, schema);</code></pre>
 
 <h3>The service (business logic) & controller</h3>
-<pre><code><span class="tok-comment">// services/appointment.service.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// services/appointment.service.js</span>
 <span class="tok-keyword">import</span> Appointment <span class="tok-keyword">from</span> <span class="tok-string">'../models/appointment.model.js'</span>;
 <span class="tok-keyword">export</span> <span class="tok-keyword">const</span> findAll = () => Appointment.find().populate(<span class="tok-string">'doctorId'</span>);
 <span class="tok-keyword">export</span> <span class="tok-keyword">const</span> create  = (data) => Appointment.create(data);</code></pre>
@@ -718,7 +718,7 @@ schema.index({ slotId: <span class="tok-number">1</span> }, { unique: <span clas
 <p class="lead">Backend phơi dữ liệu của bạn dưới dạng JSON qua HTTP. Đây là khung tối thiểu: một Express app, một kết nối MongoDB, một model Mongoose, và một controller CRUD — mẫu bạn lặp cho mọi thực thể.</p>
 
 <h3>Điểm vào Express</h3>
-<pre><code><span class="tok-comment">// server/src/app.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// server/src/app.js</span>
 <span class="tok-keyword">import</span> express <span class="tok-keyword">from</span> <span class="tok-string">'express'</span>;
 <span class="tok-keyword">import</span> mongoose <span class="tok-keyword">from</span> <span class="tok-string">'mongoose'</span>;
 <span class="tok-keyword">import</span> appointmentRoutes <span class="tok-keyword">from</span> <span class="tok-string">'./routes/appointment.routes.js'</span>;
@@ -731,7 +731,7 @@ app.use(<span class="tok-string">'/api/appointments'</span>, appointmentRoutes);
 app.listen(<span class="tok-number">5000</span>, () => console.log(<span class="tok-string">'API on :5000'</span>));</code></pre>
 
 <h3>Một model Mongoose</h3>
-<pre><code><span class="tok-comment">// server/src/models/appointment.model.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// server/src/models/appointment.model.js</span>
 <span class="tok-keyword">import</span> mongoose <span class="tok-keyword">from</span> <span class="tok-string">'mongoose'</span>;
 <span class="tok-keyword">const</span> schema = <span class="tok-keyword">new</span> mongoose.Schema({
   patientId: { type: mongoose.Schema.Types.ObjectId, ref: <span class="tok-string">'User'</span>, required: <span class="tok-keyword">true</span> },
@@ -743,7 +743,7 @@ schema.index({ slotId: <span class="tok-number">1</span> }, { unique: <span clas
 <span class="tok-keyword">export</span> <span class="tok-keyword">default</span> mongoose.model(<span class="tok-string">'Appointment'</span>, schema);</code></pre>
 
 <h3>Service (logic nghiệp vụ) & controller</h3>
-<pre><code><span class="tok-comment">// services/appointment.service.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// services/appointment.service.js</span>
 <span class="tok-keyword">import</span> Appointment <span class="tok-keyword">from</span> <span class="tok-string">'../models/appointment.model.js'</span>;
 <span class="tok-keyword">export</span> <span class="tok-keyword">const</span> findAll = () => Appointment.find().populate(<span class="tok-string">'doctorId'</span>);
 <span class="tok-keyword">export</span> <span class="tok-keyword">const</span> create  = (data) => Appointment.create(data);</code></pre>
@@ -824,7 +824,7 @@ schema.index({ slotId: <span class="tok-number">1</span> }, { unique: <span clas
 <p class="lead">Almost every project needs users, login, and roles. The standard MERN approach: hash passwords with <strong>bcrypt</strong>, issue a <strong>JWT</strong> on login, verify it in a middleware, and check the user's <strong>role</strong> for protected actions.</p>
 
 <h3>Register & login</h3>
-<pre><code><span class="tok-comment">// services/auth.service.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// services/auth.service.js</span>
 <span class="tok-keyword">import</span> bcrypt <span class="tok-keyword">from</span> <span class="tok-string">'bcryptjs'</span>;
 <span class="tok-keyword">import</span> jwt <span class="tok-keyword">from</span> <span class="tok-string">'jsonwebtoken'</span>;
 <span class="tok-keyword">import</span> User <span class="tok-keyword">from</span> <span class="tok-string">'../models/user.model.js'</span>;
@@ -843,7 +843,7 @@ schema.index({ slotId: <span class="tok-number">1</span> }, { unique: <span clas
 }</code></pre>
 
 <h3>Auth middleware & role guard</h3>
-<pre><code><span class="tok-comment">// middlewares/auth.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// middlewares/auth.js</span>
 <span class="tok-keyword">import</span> jwt <span class="tok-keyword">from</span> <span class="tok-string">'jsonwebtoken'</span>;
 <span class="tok-keyword">export</span> <span class="tok-keyword">function</span> <span class="tok-function">auth</span>(req, res, next) {
   <span class="tok-keyword">const</span> token = (req.headers.authorization || <span class="tok-string">''</span>).replace(<span class="tok-string">'Bearer '</span>, <span class="tok-string">''</span>);
@@ -871,7 +871,7 @@ r.patch(<span class="tok-string">'/:id/confirm'</span>, auth, requireRole(<span 
 <p class="lead">Hầu như dự án nào cũng cần user, đăng nhập, và role. Cách MERN chuẩn: băm mật khẩu bằng <strong>bcrypt</strong>, phát một <strong>JWT</strong> khi đăng nhập, xác minh nó trong một middleware, và kiểm tra <strong>role</strong> của user cho các hành động được bảo vệ.</p>
 
 <h3>Đăng ký & đăng nhập</h3>
-<pre><code><span class="tok-comment">// services/auth.service.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// services/auth.service.js</span>
 <span class="tok-keyword">import</span> bcrypt <span class="tok-keyword">from</span> <span class="tok-string">'bcryptjs'</span>;
 <span class="tok-keyword">import</span> jwt <span class="tok-keyword">from</span> <span class="tok-string">'jsonwebtoken'</span>;
 <span class="tok-keyword">import</span> User <span class="tok-keyword">from</span> <span class="tok-string">'../models/user.model.js'</span>;
@@ -890,7 +890,7 @@ r.patch(<span class="tok-string">'/:id/confirm'</span>, auth, requireRole(<span 
 }</code></pre>
 
 <h3>Middleware auth & guard role</h3>
-<pre><code><span class="tok-comment">// middlewares/auth.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// middlewares/auth.js</span>
 <span class="tok-keyword">import</span> jwt <span class="tok-keyword">from</span> <span class="tok-string">'jsonwebtoken'</span>;
 <span class="tok-keyword">export</span> <span class="tok-keyword">function</span> <span class="tok-function">auth</span>(req, res, next) {
   <span class="tok-keyword">const</span> token = (req.headers.authorization || <span class="tok-string">''</span>).replace(<span class="tok-string">'Bearer '</span>, <span class="tok-string">''</span>);
@@ -978,7 +978,7 @@ r.patch(<span class="tok-string">'/:id/confirm'</span>, auth, requireRole(<span 
 <p class="lead">The frontend is a React Single-Page App that talks to your Express API over HTTP using <strong>axios</strong>. The key pieces: a central API client that attaches the JWT, components that fetch and render data, and forms that handle errors gracefully.</p>
 
 <h3>A central axios client with an auth interceptor</h3>
-<pre><code><span class="tok-comment">// client/src/api.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// client/src/api.js</span>
 <span class="tok-keyword">import</span> axios <span class="tok-keyword">from</span> <span class="tok-string">'axios'</span>;
 <span class="tok-keyword">const</span> api = axios.create({ baseURL: <span class="tok-string">'/api'</span> });
 api.interceptors.request.use((cfg) => {
@@ -989,7 +989,7 @@ api.interceptors.request.use((cfg) => {
 <span class="tok-keyword">export</span> <span class="tok-keyword">default</span> api;</code></pre>
 
 <h3>A component that fetches & renders</h3>
-<pre><code><span class="tok-comment">// client/src/pages/Appointments.jsx</span>
+<pre><code class="language-javascript"><span class="tok-comment">// client/src/pages/Appointments.jsx</span>
 <span class="tok-keyword">import</span> { useEffect, useState } <span class="tok-keyword">from</span> <span class="tok-string">'react'</span>;
 <span class="tok-keyword">import</span> api <span class="tok-keyword">from</span> <span class="tok-string">'../api'</span>;
 
@@ -1028,7 +1028,7 @@ api.interceptors.request.use((cfg) => {
 <p class="lead">Frontend là một React Single-Page App nói chuyện với Express API qua HTTP bằng <strong>axios</strong>. Các mảnh then chốt: một API client trung tâm gắn JWT, các component fetch và render dữ liệu, và form xử lý lỗi mượt mà.</p>
 
 <h3>Một axios client trung tâm với interceptor auth</h3>
-<pre><code><span class="tok-comment">// client/src/api.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// client/src/api.js</span>
 <span class="tok-keyword">import</span> axios <span class="tok-keyword">from</span> <span class="tok-string">'axios'</span>;
 <span class="tok-keyword">const</span> api = axios.create({ baseURL: <span class="tok-string">'/api'</span> });
 api.interceptors.request.use((cfg) => {
@@ -1039,7 +1039,7 @@ api.interceptors.request.use((cfg) => {
 <span class="tok-keyword">export</span> <span class="tok-keyword">default</span> api;</code></pre>
 
 <h3>Một component fetch & render</h3>
-<pre><code><span class="tok-comment">// client/src/pages/Appointments.jsx</span>
+<pre><code class="language-javascript"><span class="tok-comment">// client/src/pages/Appointments.jsx</span>
 <span class="tok-keyword">import</span> { useEffect, useState } <span class="tok-keyword">from</span> <span class="tok-string">'react'</span>;
 <span class="tok-keyword">import</span> api <span class="tok-keyword">from</span> <span class="tok-string">'../api'</span>;
 
@@ -1145,7 +1145,7 @@ api.interceptors.request.use((cfg) => {
 </div>
 
 <h3>Worked example — book a slot, block duplicates</h3>
-<pre><code><span class="tok-comment">// services/appointment.service.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// services/appointment.service.js</span>
 <span class="tok-keyword">export</span> <span class="tok-keyword">async</span> <span class="tok-keyword">function</span> <span class="tok-function">book</span>({ patientId, doctorId, slotId }) {
   <span class="tok-keyword">const</span> slot = <span class="tok-keyword">await</span> Slot.findById(slotId);
   <span class="tok-keyword">if</span> (!slot || slot.startsAt &lt; Date.now())
@@ -1164,7 +1164,7 @@ api.interceptors.request.use((cfg) => {
 
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Two requests at once — the concurrency case.</b> The truly rigorous version proves it under <em>simultaneous</em> requests (e.g. fire two bookings with Promise.all in a test and assert only one succeeds). The unique index makes this correct at the database level, not just in app code. Demonstrating this is a standout move. <em>Beyond the syllabus, but the difference between "it usually works" and "it is correct."</em></div>
 <h3>Worked example · proving it with a real concurrency test</h3>
-<pre><code><span class="tok-comment">// tests/concurrency.test.js — fire the SAME booking twice, at once</span>
+<pre><code class="language-javascript"><span class="tok-comment">// tests/concurrency.test.js — fire the SAME booking twice, at once</span>
 <span class="tok-keyword">const</span> sameBooking = { patientId: <span class="tok-string">'p1'</span>, doctorId: <span class="tok-string">'d1'</span>, slotId: <span class="tok-string">'slot-9am'</span> };
 
 <span class="tok-keyword">const</span> results = <span class="tok-keyword">await</span> Promise.allSettled([
@@ -1191,7 +1191,7 @@ console.log(fulfilled.length, rejected.length);</code></pre>
 </div>
 
 <h3>Ví dụ có lời giải — đặt một khung giờ, chặn trùng</h3>
-<pre><code><span class="tok-comment">// services/appointment.service.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// services/appointment.service.js</span>
 <span class="tok-keyword">export</span> <span class="tok-keyword">async</span> <span class="tok-keyword">function</span> <span class="tok-function">book</span>({ patientId, doctorId, slotId }) {
   <span class="tok-keyword">const</span> slot = <span class="tok-keyword">await</span> Slot.findById(slotId);
   <span class="tok-keyword">if</span> (!slot || slot.startsAt &lt; Date.now())
@@ -1210,7 +1210,7 @@ console.log(fulfilled.length, rejected.length);</code></pre>
 
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Hai request cùng lúc — ca tương tranh.</b> Phiên bản thật sự chặt chẽ chứng minh nó dưới request <em>đồng thời</em> (vd bắn hai booking bằng Promise.all trong một test và khẳng định chỉ một thành công). Unique index làm điều này đúng ở tầng CSDL, không chỉ trong code app. Trưng điều này là một nước đi nổi bật. <em>Ngoài syllabus, nhưng là khác biệt giữa "thường thì chạy" và "nó đúng".</em></div>
 <h3>Ví dụ có lời giải · chứng minh bằng test tương tranh thật</h3>
-<pre><code><span class="tok-comment">// tests/concurrency.test.js — bắn CÙNG một booking hai lần, cùng lúc</span>
+<pre><code class="language-javascript"><span class="tok-comment">// tests/concurrency.test.js — bắn CÙNG một booking hai lần, cùng lúc</span>
 <span class="tok-keyword">const</span> sameBooking = { patientId: <span class="tok-string">'p1'</span>, doctorId: <span class="tok-string">'d1'</span>, slotId: <span class="tok-string">'slot-9am'</span> };
 
 <span class="tok-keyword">const</span> results = <span class="tok-keyword">await</span> Promise.allSettled([
@@ -1249,7 +1249,7 @@ console.log(fulfilled.length, rejected.length);</code></pre>
         \\     / \\     /
 feature  ●──●   ●──●        each feature on its own branch
        "auth"  "booking"    → Pull Request → review → merge</div>
-<pre><code><span class="tok-comment"># each member, per feature</span>
+<pre><code class="language-bash"><span class="tok-comment"># each member, per feature</span>
 git checkout -b feature/booking-core
 <span class="tok-comment"># ...commit small, meaningful changes...</span>
 git push -u origin feature/booking-core
@@ -1286,7 +1286,7 @@ git push -u origin feature/booking-core
         \\     / \\     /
 feature  ●──●   ●──●        mỗi tính năng một branch riêng
        "auth"  "booking"    → Pull Request → review → merge</div>
-<pre><code><span class="tok-comment"># mỗi thành viên, theo tính năng</span>
+<pre><code class="language-bash"><span class="tok-comment"># mỗi thành viên, theo tính năng</span>
 git checkout -b feature/booking-core
 <span class="tok-comment"># ...commit thay đổi nhỏ, có ý nghĩa...</span>
 git push -u origin feature/booking-core
@@ -1538,7 +1538,7 @@ git push -u origin feature/booking-core
 
 <h3>1 · Testing — <em>self-test is on the syllabus</em></h3>
 <div class="callout warn"><strong>Testing is not optional here.</strong> The syllabus puts <strong>"self-test"</strong> in the title of most Construction-phase practice sessions ("Practice: design, code, self-test, integrate"), so checking your own screens and functions before integrating is expected work, graded through the on-going assessments. What is beyond the syllabus is only the <em>automated</em> form of it (Jest/supertest) shown below — a faster way to do a duty you already have.</div>
-<pre><code><span class="tok-comment">// a supertest API test proving the gem</span>
+<pre><code class="language-javascript"><span class="tok-comment">// a supertest API test proving the gem</span>
 <span class="tok-keyword">import</span> request <span class="tok-keyword">from</span> <span class="tok-string">'supertest'</span>;
 test(<span class="tok-string">'blocks double-booking a slot'</span>, <span class="tok-keyword">async</span> () => {
   <span class="tok-keyword">await</span> request(app).post(<span class="tok-string">'/api/appointments'</span>).send(booking).expect(<span class="tok-number">201</span>);
@@ -1574,7 +1574,7 @@ services:
 
 <h3>1 · Kiểm thử — <em>self-test NẰM TRONG giáo trình</em></h3>
 <div class="callout warn"><strong>Kiểm thử ở đây không phải tuỳ chọn.</strong> Syllabus ghi <strong>"self-test"</strong> ngay trong tiêu đề hầu hết các buổi thực hành giai đoạn Construction ("Practice: design, code, self-test, integrate"), nên tự kiểm màn hình/chức năng của mình TRƯỚC khi tích hợp là phần việc bắt buộc, được chấm qua các On-going Assessment. Thứ nằm ngoài giáo trình chỉ là dạng <em>tự động</em> của nó (Jest/supertest) trình bày dưới đây — một cách nhanh hơn để làm đúng bổn phận bạn đã có.</div>
-<pre><code><span class="tok-comment">// một test API supertest chứng minh viên ngọc</span>
+<pre><code class="language-javascript"><span class="tok-comment">// một test API supertest chứng minh viên ngọc</span>
 <span class="tok-keyword">import</span> request <span class="tok-keyword">from</span> <span class="tok-string">'supertest'</span>;
 test(<span class="tok-string">'chặn đặt trùng một khung giờ'</span>, <span class="tok-keyword">async</span> () => {
   <span class="tok-keyword">await</span> request(app).post(<span class="tok-string">'/api/appointments'</span>).send(booking).expect(<span class="tok-number">201</span>);

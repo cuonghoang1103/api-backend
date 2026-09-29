@@ -63,7 +63,7 @@ redis-cli HSTRLEN user:1042 name</code></pre>
 </div>
 
 <h3>Why this beats a JSON string</h3>
-<pre><code><span class="tok-comment">// The JSON-in-a-string approach — read, modify, write</span>
+<pre><code class="language-javascript"><span class="tok-comment">// The JSON-in-a-string approach — read, modify, write</span>
 const raw  = await redis.get('user:1042');
 const user = JSON.parse(raw);
 user.plan  = 'pro';
@@ -80,7 +80,7 @@ await redis.hSet('user:1042', 'plan', 'pro');</code></pre>
 <div class="callout ok"><strong>The atomic-field property is the whole point.</strong> A shopping cart where two tabs add different items, a user record where a background job updates <code>last_seen</code> while the profile page updates <code>bio</code>, a counter that increments while a config field changes — all of these are correct by construction with a hash, and all of them are a race with read-modify-write on a JSON string. You can fix the JSON version with <code>WATCH</code> and a retry loop (Chapter 7), but the hash version does not need fixing.</div>
 
 <h3>HGETALL is a loaded gun on a big hash</h3>
-<pre><code>redis-cli DEL bighash &gt;/dev/null
+<pre><code class="language-python">redis-cli DEL bighash &gt;/dev/null
 python3 -c "
 for i in range(500_000): print(f'HSET bighash field:{i} value:{i}')
 " | redis-cli --pipe &gt;/dev/null
@@ -183,7 +183,7 @@ redis-cli HSTRLEN user:1042 name</code></pre>
 </div>
 
 <h3>Vì sao cách này hơn một chuỗi JSON</h3>
-<pre><code><span class="tok-comment">// Cách nhét JSON vào chuỗi — đọc, sửa, ghi</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Cách nhét JSON vào chuỗi — đọc, sửa, ghi</span>
 const raw  = await redis.get('user:1042');
 const user = JSON.parse(raw);
 user.plan  = 'pro';
@@ -200,7 +200,7 @@ await redis.hSet('user:1042', 'plan', 'pro');</code></pre>
 <div class="callout ok"><strong>Tính nguyên tử theo từng trường chính là toàn bộ vấn đề.</strong> Một giỏ hàng mà hai tab thêm hai món khác nhau, một bản ghi người dùng mà một việc chạy nền cập nhật <code>last_seen</code> trong lúc trang hồ sơ cập nhật <code>bio</code>, một bộ đếm tăng lên trong lúc một trường cấu hình đổi giá trị — tất cả những cái đó đều đúng ngay từ cách dựng khi dùng hash, và tất cả đều là một cuộc đua khi dùng đọc-sửa-ghi trên chuỗi JSON. Bạn có thể vá bản JSON bằng <code>WATCH</code> và một vòng lặp thử lại (Chương 7), nhưng bản hash thì không cần vá.</div>
 
 <h3>HGETALL là khẩu súng đã lên đạn trên một hash lớn</h3>
-<pre><code>redis-cli DEL bighash &gt;/dev/null
+<pre><code class="language-python">redis-cli DEL bighash &gt;/dev/null
 python3 -c "
 for i in range(500_000): print(f'HSET bighash field:{i} value:{i}')
 " | redis-cli --pipe &gt;/dev/null
@@ -274,7 +274,7 @@ redis-cli HEXISTS cfg nothing</code></pre>
 <p class="lead">Redis stores a small hash completely differently from a large one, and the gap between the two is the single largest memory optimisation available to you. It is also the one that people find by accident, three months in, when the instance runs out of RAM.</p>
 
 <h3>Two encodings, two thresholds</h3>
-<pre><code>redis-cli DEL h1 h2 h3 &gt;/dev/null
+<pre><code class="language-python">redis-cli DEL h1 h2 h3 &gt;/dev/null
 redis-cli HSET h1 a 1 b 2 c 3 &gt;/dev/null
 python3 -c "
 for i in range(200): print(f'HSET h2 f{i} {i}')
@@ -299,7 +299,7 @@ h3   hashtable  200
 </div>
 
 <h3>The measurement that changes how you model things</h3>
-<pre><code><span class="tok-comment"># A million objects, stored as a million top-level keys</span>
+<pre><code class="language-python"><span class="tok-comment"># A million objects, stored as a million top-level keys</span>
 redis-cli FLUSHDB &gt;/dev/null
 python3 -c "
 for i in range(1_000_000): print(f'SET obj:{i} value:{i}')
@@ -319,7 +319,7 @@ used_memory_human:26.44M
 (integer) 10000
 "listpack"</div>
 <div class="callout ok"><strong>3.4× less memory for exactly the same data.</strong> This is the trick Instagram published in 2011 and it still works, for the same reason it worked then: a top-level key costs you a <code>dictEntry</code> in the global keyspace dict, an <code>robj</code>, an SDS header, an expires-dict slot and an allocator rounding — around 90 bytes before the value. A field inside a listpack hash costs a length prefix. Ten thousand keys instead of a million means ten thousand of that overhead instead of a million. The bigger your objects, the smaller the relative win; the tinier your values, the more of your RAM is pure bookkeeping and the more this matters.</div>
-<pre><code><span class="tok-comment">// The bucketing is two lines, and it is the whole implementation</span>
+<pre><code class="language-javascript"><span class="tok-comment">// The bucketing is two lines, and it is the whole implementation</span>
 const BUCKET = 100;
 const keyFor   = (id) =&gt; &#96;obj:\${Math.floor(id / BUCKET)}&#96;;
 const fieldFor = (id) =&gt; String(id % BUCKET);
@@ -390,7 +390,7 @@ mem_fragmentation_ratio:1.53</div>
 <p class="lead">Redis lưu một hash nhỏ theo cách hoàn toàn khác với một hash lớn, và khoảng cách giữa hai cách ấy là phép tối ưu bộ nhớ lớn nhất mà bạn có trong tay. Nó cũng là thứ người ta tình cờ tìm ra, sau ba tháng, đúng lúc máy hết RAM.</p>
 
 <h3>Hai kiểu mã hoá, hai cái ngưỡng</h3>
-<pre><code>redis-cli DEL h1 h2 h3 &gt;/dev/null
+<pre><code class="language-python">redis-cli DEL h1 h2 h3 &gt;/dev/null
 redis-cli HSET h1 a 1 b 2 c 3 &gt;/dev/null
 python3 -c "
 for i in range(200): print(f'HSET h2 f{i} {i}')
@@ -415,7 +415,7 @@ h3   hashtable  200
 </div>
 
 <h3>Phép đo làm thay đổi cách bạn mô hình hoá mọi thứ</h3>
-<pre><code><span class="tok-comment"># Một triệu đối tượng, lưu thành một triệu khoá cấp cao nhất</span>
+<pre><code class="language-python"><span class="tok-comment"># Một triệu đối tượng, lưu thành một triệu khoá cấp cao nhất</span>
 redis-cli FLUSHDB &gt;/dev/null
 python3 -c "
 for i in range(1_000_000): print(f'SET obj:{i} value:{i}')
@@ -435,7 +435,7 @@ used_memory_human:26.44M
 (integer) 10000
 "listpack"</div>
 <div class="callout ok"><strong>Ít hơn 3,4 lần bộ nhớ cho đúng cùng một mớ dữ liệu.</strong> Đây là mẹo Instagram công bố năm 2011 và nó vẫn chạy, vì đúng lý do nó chạy khi ấy: một khoá cấp cao nhất bắt bạn trả một <code>dictEntry</code> trong dict không gian khoá toàn cục, một <code>robj</code>, một phần đầu SDS, một chỗ trong dict hạn dùng và một lần làm tròn của bộ cấp phát — khoảng 90 byte trước khi tính giá trị. Một trường nằm trong hash listpack chỉ tốn một tiền tố độ dài. Mười nghìn khoá thay vì một triệu nghĩa là mười nghìn lần chi phí ấy thay vì một triệu lần. Đối tượng của bạn càng lớn thì phần thắng tương đối càng nhỏ; giá trị của bạn càng tí hon thì càng nhiều RAM của bạn là sổ sách thuần tuý và chuyện này càng quan trọng.</div>
-<pre><code><span class="tok-comment">// Phép chia gáo gói trong hai dòng, và đó là toàn bộ phần cài đặt</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Phép chia gáo gói trong hai dòng, và đó là toàn bộ phần cài đặt</span>
 const BUCKET = 100;
 const keyFor   = (id) =&gt; &#96;obj:\${Math.floor(id / BUCKET)}&#96;;
 const fieldFor = (id) =&gt; String(id % BUCKET);
@@ -971,7 +971,7 @@ redis-cli HEXPIREAT flags 1756512000 FIELDS 1 new-editor</code></pre>
 <p class="lead">Four things almost every backend needs, all of them a hash, all of them with one detail that separates the version that works from the version that works until it doesn't. Here they are written out.</p>
 
 <h3>1 · A session store you can actually revoke</h3>
-<pre><code>const SESSION_TTL = 60 * 30;   <span class="tok-comment">// 30 minutes</span>
+<pre><code class="language-javascript">const SESSION_TTL = 60 * 30;   <span class="tok-comment">// 30 minutes</span>
 
 async function createSession(userId, meta) {
   const sid = crypto.randomUUID();
@@ -1067,7 +1067,7 @@ redis-cli OBJECT ENCODING stats:2026-08-23</code></pre>
 </div>
 
 <h3>4 · Configuration that reloads without a deploy</h3>
-<pre><code><span class="tok-comment">// Read once at boot, then keep it fresh via keyspace notifications</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Read once at boot, then keep it fresh via keyspace notifications</span>
 let config = {};
 
 async function loadConfig() {
@@ -1116,7 +1116,7 @@ await sub.pSubscribe('__keyspace@0__:config:app', () =&gt; loadConfig());</code>
 <p class="lead">Bốn thứ mà gần như backend nào cũng cần, cả bốn đều là hash, cả bốn đều có một chi tiết tách bản chạy được khỏi bản chạy được cho tới lúc không chạy nữa. Đây là chúng, viết ra đầy đủ.</p>
 
 <h3>1 · Một kho phiên mà bạn thu hồi được thật</h3>
-<pre><code>const SESSION_TTL = 60 * 30;   <span class="tok-comment">// 30 phút</span>
+<pre><code class="language-javascript">const SESSION_TTL = 60 * 30;   <span class="tok-comment">// 30 phút</span>
 
 async function createSession(userId, meta) {
   const sid = crypto.randomUUID();
@@ -1212,7 +1212,7 @@ redis-cli OBJECT ENCODING stats:2026-08-23</code></pre>
 </div>
 
 <h3>4 · Cấu hình nạp lại được mà không cần deploy</h3>
-<pre><code><span class="tok-comment">// Đọc một lần lúc khởi động, rồi giữ tươi bằng thông báo không gian khoá</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Đọc một lần lúc khởi động, rồi giữ tươi bằng thông báo không gian khoá</span>
 let config = {};
 
 async function loadConfig() {

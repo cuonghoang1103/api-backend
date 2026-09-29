@@ -86,7 +86,7 @@ const intro = doc('ais201-0-1-overview', 'Course overview: AI for Cybersecurity|
 </ul>
 <h3>Why AI, and the catch</h3>
 <p>Attacks evolve faster than hand-written rules. ML generalises to <em>unseen</em> variants — but it also brings <strong>false positives</strong>, needs clean labelled data, and can itself be attacked. Every chapter balances the power against these limits.</p>
-<pre><code># The whole course in one skeleton (scikit-learn)
+<pre><code class="language-python"># The whole course in one skeleton (scikit-learn)
 from sklearn.ensemble import RandomForestClassifier
 
 model = RandomForestClassifier(n_estimators=200)
@@ -106,7 +106,7 @@ alerts = model.predict(X_new)        # score fresh events
 </ul>
 <h3>Vì sao dùng AI, và cái giá</h3>
 <p>Tấn công tiến hoá nhanh hơn luật viết tay. ML khái quát được cho biến thể <em>chưa từng thấy</em> — nhưng cũng đem theo <strong>dương tính giả</strong>, cần dữ liệu gán nhãn sạch, và bản thân nó có thể bị tấn công. Mỗi chương cân sức mạnh với các giới hạn này.</p>
-<pre><code># Cả môn học trong một khung xương (scikit-learn)
+<pre><code class="language-python"># Cả môn học trong một khung xương (scikit-learn)
 from sklearn.ensemble import RandomForestClassifier
 
 model = RandomForestClassifier(n_estimators=200)
@@ -130,7 +130,7 @@ const c1 = doc('ais201-1-1-ai-in-security', '1.1 — AI in cybersecurity|||1.1 �
 </ul>
 <h3>The threat landscape &amp; MITRE ATT&amp;CK</h3>
 <p><strong>MITRE ATT&amp;CK</strong> is a shared catalogue of adversary <em>tactics</em> (the goal — e.g. Initial Access, Exfiltration) and <em>techniques</em> (the how). Mapping detections to ATT&amp;CK tells you which attacker behaviours you can and cannot see.</p>
-<pre><code># A tiny ATT&amp;CK-style mapping of detectors to tactics
+<pre><code class="language-python"># A tiny ATT&amp;CK-style mapping of detectors to tactics
 coverage = {
     "Initial Access":  "phishing classifier",
     "Execution":       "malware classifier",
@@ -152,7 +152,7 @@ for tactic, detector in coverage.items():
 </ul>
 <h3>Bối cảnh đe doạ &amp; MITRE ATT&amp;CK</h3>
 <p><strong>MITRE ATT&amp;CK</strong> là danh mục chung về <em>chiến thuật</em> của kẻ tấn công (mục tiêu — vd Truy cập ban đầu, Rút dữ liệu) và <em>kỹ thuật</em> (cách làm). Ánh xạ phép phát hiện vào ATT&amp;CK cho biết bạn thấy và không thấy được hành vi tấn công nào.</p>
-<pre><code># Ánh xạ kiểu ATT&amp;CK: bộ phát hiện ứng với chiến thuật
+<pre><code class="language-python"># Ánh xạ kiểu ATT&amp;CK: bộ phát hiện ứng với chiến thuật
 coverage = {
     "Initial Access":  "bo phan loai lua dao",
     "Execution":       "bo phan loai ma doc",
@@ -184,7 +184,7 @@ const c2 = doc('ais201-2-1-data-features', '2.1 — Security data & features|||2
 </ul>
 <h3>Feature engineering</h3>
 <p>A model reads numbers, not raw text. <strong>Feature engineering</strong> turns an event into a vector: counts, rates, ratios, and encodings of categorical fields. Good features are the single biggest lever on accuracy — far more than the choice of algorithm.</p>
-<pre><code>import pandas as pd
+<pre><code class="language-python">import pandas as pd
 from sklearn.preprocessing import StandardScaler
 
 # One row per network flow
@@ -210,7 +210,7 @@ print(X.shape)
 </ul>
 <h3>Feature engineering</h3>
 <p>Mô hình đọc số, không đọc chữ thô. <strong>Feature engineering</strong> biến một sự kiện thành vector: số đếm, tần suất, tỉ lệ và mã hoá các trường phân loại. Đặc trưng tốt là đòn bẩy lớn nhất cho độ chính xác — hơn cả việc chọn thuật toán.</p>
-<pre><code>import pandas as pd
+<pre><code class="language-python">import pandas as pd
 from sklearn.preprocessing import StandardScaler
 
 # Mot dong moi luong mang
@@ -243,7 +243,7 @@ const c3 = doc('ais201-3-1-anomaly-detection', '3.1 — Anomaly detection & IDS|
 <p>Attacks are rare and often <em>unknown</em>, so labelled examples are scarce. <strong>Anomaly detection</strong> learns the shape of <em>normal</em> behaviour from unlabelled data, then flags whatever deviates. This is the heart of an <strong>anomaly-based IDS</strong> (Intrusion Detection System).</p>
 <h3>Isolation Forest</h3>
 <p><strong>Isolation Forest</strong> isolates points with random splits; anomalies are easier to isolate (fewer splits), so they score as outliers. It is fast, unsupervised, and scales well.</p>
-<pre><code>from sklearn.ensemble import IsolationForest
+<pre><code class="language-python">from sklearn.ensemble import IsolationForest
 
 # X = normal-ish traffic features (mostly benign)
 detector = IsolationForest(contamination=0.02, random_state=0)
@@ -265,7 +265,7 @@ print("flagged:", anomalies)
 <p>Tấn công hiếm và thường <em>chưa biết</em>, nên ví dụ có nhãn khan hiếm. <strong>Phát hiện bất thường</strong> học hình dạng hành vi <em>bình thường</em> từ dữ liệu không nhãn, rồi đánh dấu thứ nào lệch đi. Đây là trái tim của <strong>IDS dựa trên bất thường</strong> (Hệ phát hiện xâm nhập).</p>
 <h3>Isolation Forest</h3>
 <p><strong>Isolation Forest</strong> cô lập điểm bằng phép chia ngẫu nhiên; điểm bất thường dễ cô lập hơn (ít lần chia), nên bị chấm là ngoại lệ. Nó nhanh, không giám sát, và mở rộng tốt.</p>
-<pre><code>from sklearn.ensemble import IsolationForest
+<pre><code class="language-python">from sklearn.ensemble import IsolationForest
 
 # X = dac trung luu luong (phan lon lanh tinh)
 detector = IsolationForest(contamination=0.02, random_state=0)
@@ -301,7 +301,7 @@ const c4 = doc('ais201-4-1-malware-classification', '4.1 — Malware classificat
 </ul>
 <h3>Features &amp; a classifier</h3>
 <p>Both approaches yield features you can feed a supervised classifier. <strong>Random Forest</strong> and gradient boosting are strong, robust baselines for malware detection.</p>
-<pre><code>from sklearn.ensemble import RandomForestClassifier
+<pre><code class="language-python">from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report
 
 # X = static features (imported APIs, section sizes, entropy...)
@@ -321,7 +321,7 @@ print(classification_report(y_test, clf.predict(X_test)))
 </ul>
 <h3>Đặc trưng &amp; bộ phân loại</h3>
 <p>Cả hai hướng cho ra đặc trưng để đưa vào bộ phân loại có giám sát. <strong>Random Forest</strong> và gradient boosting là baseline mạnh, bền cho phát hiện mã độc.</p>
-<pre><code>from sklearn.ensemble import RandomForestClassifier
+<pre><code class="language-python">from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report
 
 # X = dac trung tinh (API nhap, kich thuoc section, entropy...)
@@ -348,7 +348,7 @@ const c5 = doc('ais201-5-1-phishing-spam', '5.1 — Phishing & spam detection|||
 <h3>NLP for security</h3>
 <p>Phishing and spam are <em>text</em> problems. <strong>Natural Language Processing (NLP)</strong> turns an email or message into features a model can score. The classic representation is <strong>TF-IDF</strong> — weighting words by how telling they are, down-weighting words common to every message.</p>
 <h3>A text classifier</h3>
-<pre><code>from sklearn.feature_extraction.text import TfidfVectorizer
+<pre><code class="language-python">from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import make_pipeline
 
@@ -371,7 +371,7 @@ print(model.predict(["verify your account now at http://bit.ly/x"]))
 <h3>NLP cho security</h3>
 <p>Lừa đảo và thư rác là bài toán <em>văn bản</em>. <strong>Xử lý ngôn ngữ tự nhiên (NLP)</strong> biến một email hay tin nhắn thành đặc trưng để mô hình chấm điểm. Biểu diễn kinh điển là <strong>TF-IDF</strong> — cân từ theo mức chỉ báo của nó, hạ trọng số những từ chung cho mọi tin.</p>
 <h3>Bộ phân loại văn bản</h3>
-<pre><code>from sklearn.feature_extraction.text import TfidfVectorizer
+<pre><code class="language-python">from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import make_pipeline
 
@@ -409,7 +409,7 @@ const c6 = doc('ais201-6-1-attack-detection', '6.1 — AI for attack detection||
 <li><strong>DDoS</strong> — a flood of traffic from many sources. Tell-tale features: a sudden spike in packets/sec, many tiny flows, one target, low variety of packet sizes.</li>
 <li><strong>Botnet</strong> — infected hosts phone home to <strong>Command &amp; Control (C2)</strong> on a regular <em>beacon</em>. The signal is periodicity — very regular inter-arrival times to the same endpoint.</li>
 </ul>
-<pre><code>from sklearn.ensemble import GradientBoostingClassifier
+<pre><code class="language-python">from sklearn.ensemble import GradientBoostingClassifier
 
 # X = flow features (packets/sec, mean size, duration, dst entropy...)
 # y = benign / dos / botnet / probe ...
@@ -429,7 +429,7 @@ print("high-confidence attacks:", (proba > 0.9).sum())
 <li><strong>DDoS</strong> — lũ lưu lượng từ nhiều nguồn. Dấu hiệu: gói/giây tăng vọt đột ngột, nhiều luồng tí hon, một mục tiêu, kích thước gói ít đa dạng.</li>
 <li><strong>Botnet</strong> — máy nhiễm gọi về <strong>Command &amp; Control (C2)</strong> theo <em>nhịp beacon</em> đều đặn. Tín hiệu là tính chu kỳ — thời gian giữa các lần đến rất đều tới cùng một điểm.</li>
 </ul>
-<pre><code>from sklearn.ensemble import GradientBoostingClassifier
+<pre><code class="language-python">from sklearn.ensemble import GradientBoostingClassifier
 
 # X = dac trung luong (goi/giay, kich thuoc TB, thoi luong, entropy dich...)
 # y = benign / dos / botnet / probe ...
@@ -461,7 +461,7 @@ const c7 = doc('ais201-7-1-adversarial-ml', '7.1 — Adversarial ML & robust AI|
 <li><strong>Model extraction / inversion</strong> — query the model to steal it or leak its training data.</li>
 </ul>
 <h3>An evasion sketch</h3>
-<pre><code>import numpy as np
+<pre><code class="language-python">import numpy as np
 
 # Nudge a malicious sample toward the benign side of the boundary
 x = X_malicious[0].copy()
@@ -485,7 +485,7 @@ print("evaded:", clf.predict([x])[0] == 0)
 <li><strong>Trích xuất / đảo ngược mô hình</strong> — truy vấn mô hình để đánh cắp nó hoặc rò rỉ dữ liệu huấn luyện.</li>
 </ul>
 <h3>Phác thảo một cuộc né tránh</h3>
-<pre><code>import numpy as np
+<pre><code class="language-python">import numpy as np
 
 # Day mau doc dan ve phia lanh tinh cua ranh gioi
 x = X_malicious[0].copy()
@@ -516,7 +516,7 @@ const c8 = doc('ais201-8-1-operations-ethics', '8.1 — Operations & ethics|||8.
 <p>A <strong>Security Operations Centre (SOC)</strong> runs on a <strong>SIEM</strong> that aggregates logs and raises alerts. ML helps by scoring and <em>prioritising</em> alerts — but analysts are the scarce resource, so a model that floods them with noise is worse than none.</p>
 <h3>The cost of false positives</h3>
 <p>Because attacks are rare, <strong>accuracy is misleading</strong>. Judge a detector by <strong>precision</strong> (of the alerts raised, how many are real) and <strong>recall</strong> (of the real attacks, how many we caught), and watch the <strong>false positive rate</strong>.</p>
-<pre><code>from sklearn.metrics import precision_recall_fscore_support
+<pre><code class="language-python">from sklearn.metrics import precision_recall_fscore_support
 
 p, r, f1, _ = precision_recall_fscore_support(
     y_true, y_pred, average="binary")
@@ -535,7 +535,7 @@ print("precision", round(p, 3), "recall", round(r, 3), "f1", round(f1, 3))
 <p>Một <strong>Trung tâm Vận hành An ninh (SOC)</strong> chạy trên <strong>SIEM</strong> — nơi gộp log và phát cảnh báo. ML giúp chấm điểm và <em>xếp ưu tiên</em> cảnh báo — nhưng chuyên viên mới là tài nguyên khan hiếm, nên mô hình dội nhiễu vào họ còn tệ hơn không có.</p>
 <h3>Cái giá của dương tính giả</h3>
 <p>Vì tấn công hiếm, <strong>độ chính xác (accuracy) gây hiểu lầm</strong>. Hãy đánh giá bằng <strong>precision</strong> (trong các cảnh báo phát ra, bao nhiêu là thật) và <strong>recall</strong> (trong các tấn công thật, bắt được bao nhiêu), và theo dõi <strong>tỉ lệ dương tính giả</strong>.</p>
-<pre><code>from sklearn.metrics import precision_recall_fscore_support
+<pre><code class="language-python">from sklearn.metrics import precision_recall_fscore_support
 
 p, r, f1, _ = precision_recall_fscore_support(
     y_true, y_pred, average="binary")

@@ -2,7 +2,7 @@
  * IOT102 — Internet of Things (Internet vạn vật). Kỳ 4.
  * Bám syllabus FPTU (sylID 12400, 13 CLO). Tiên quyết: None. Online + offline.
  * Arduino UNO (ATmega328p), Fritzing/Tinkercad, edX + Arduino docs.
- * Song ngữ EN/VN. Code Arduino (C/C++) <pre>+.tok-*. Ví dụ + ★ ngoài giáo trình.
+ * Song ngữ EN/VN. Code Arduino (C/C++) <pre><code class="language-java">+.tok-*. Ví dụ + ★ ngoài giáo trình.
  * KHÔNG có CodeLab track Arduino → luyện qua Tinkercad + Exp Hub.
  * Seed: node scripts/academy-seed-course.mjs --file ./content/academy/IOT102.mjs --apply
  */
@@ -379,7 +379,7 @@ export default {
 <span class="tok-keyword">void</span> <span class="tok-function">loop</span>() {           <span class="tok-comment">// runs FOREVER, over and over</span>
   <span class="tok-function">digitalWrite</span>(13, HIGH);  <span class="tok-function">delay</span>(1000);
   <span class="tok-function">digitalWrite</span>(13, LOW);   <span class="tok-function">delay</span>(1000);
-}</pre>
+}</code></pre>
 <div class="out"><b>Blink:</b> this is "Hello World" for hardware — the built-in LED on pin 13 turns on for 1s, off for 1s, forever. <span class="badge">setup()</span> configures; <span class="badge">loop()</span> is the endless heartbeat.</div>
 
 <div class="pitfall"><b>Trap:</b> forgetting <span class="badge">pinMode()</span> in setup, or mixing up HIGH/LOW. And remember there is no "main" and no exit — loop() never stops; that endless loop is the program.</div>
@@ -403,13 +403,13 @@ export default {
 </table>
 
 <h3>Mọi chương trình Arduino có đúng hai hàm</h3>
-<pre><span class="tok-keyword">void</span> <span class="tok-function">setup</span>() {          <span class="tok-comment">// chạy MỘT LẦN khi bật nguồn</span>
+<pre><code class="language-java"><span class="tok-keyword">void</span> <span class="tok-function">setup</span>() {          <span class="tok-comment">// chạy MỘT LẦN khi bật nguồn</span>
   <span class="tok-function">pinMode</span>(13, OUTPUT);
 }
 <span class="tok-keyword">void</span> <span class="tok-function">loop</span>() {           <span class="tok-comment">// chạy MÃI MÃI, lặp đi lặp lại</span>
   <span class="tok-function">digitalWrite</span>(13, HIGH);  <span class="tok-function">delay</span>(1000);
   <span class="tok-function">digitalWrite</span>(13, LOW);   <span class="tok-function">delay</span>(1000);
-}</pre>
+}</code></pre>
 <div class="out"><b>Blink:</b> đây là "Hello World" của phần cứng — LED tích hợp ở chân 13 bật 1s, tắt 1s, mãi mãi. <span class="badge">setup()</span> cấu hình; <span class="badge">loop()</span> là nhịp tim bất tận.</div>
 
 <div class="pitfall"><b>Bẫy:</b> quên <span class="badge">pinMode()</span> trong setup, hoặc lẫn HIGH/LOW. Và nhớ không có "main" và không có thoát — loop() không bao giờ dừng; vòng lặp bất tận đó chính là chương trình.</div>
@@ -808,7 +808,7 @@ Trong bóng tối LDR tăng lên 100kΩ: V<sub>ra</sub> = 5 × 10000 / 110000 = 
 <p class="lead">Digital pins deal in two states: HIGH (5V) or LOW (0V). You <em>write</em> to a pin to control something (an LED), and <em>read</em> a pin to sense something (a button). This is the foundation of every interactive device.</p>
 
 <h3>Output: control an LED. Input: read a button.</h3>
-<pre><span class="tok-keyword">void</span> <span class="tok-function">setup</span>() {
+<pre><code class="language-java"><span class="tok-keyword">void</span> <span class="tok-function">setup</span>() {
   <span class="tok-function">pinMode</span>(8, INPUT_PULLUP);  <span class="tok-comment">// button on pin 8</span>
   <span class="tok-function">pinMode</span>(13, OUTPUT);       <span class="tok-comment">// LED on pin 13</span>
 }
@@ -817,7 +817,7 @@ Trong bóng tối LDR tăng lên 100kΩ: V<sub>ra</sub> = 5 × 10000 / 110000 = 
     <span class="tok-function">digitalWrite</span>(13, HIGH);
   <span class="tok-keyword">else</span>
     <span class="tok-function">digitalWrite</span>(13, LOW);
-}</pre>
+}</code></pre>
 <div class="out">Press the button → LED lights. Release → LED off. Your first program that reacts to the physical world.</div>
 
 <div class="pitfall"><b>The floating pin trap.</b> A button only connects the pin when pressed. When released, the pin is connected to <em>nothing</em> — it "floats" and reads random HIGH/LOW noise. The fix is a <b>pull resistor</b> that gently ties the pin to a known state. Arduino has a built-in one: <span class="badge">INPUT_PULLUP</span> ties the pin HIGH, so a press (to GND) reads LOW. This is why the code above checks for LOW.</div>
@@ -836,7 +836,7 @@ Trong bóng tối LDR tăng lên 100kΩ: V<sub>ra</sub> = 5 × 10000 / 110000 = 
 <p class="lead">Chân số làm việc với hai trạng thái: HIGH (5V) hoặc LOW (0V). Bạn <em>ghi</em> vào một chân để điều khiển thứ gì đó (một LED), và <em>đọc</em> một chân để cảm nhận thứ gì đó (một nút). Đây là nền của mọi thiết bị tương tác.</p>
 
 <h3>Ngõ ra: điều khiển LED. Ngõ vào: đọc nút.</h3>
-<pre><span class="tok-keyword">void</span> <span class="tok-function">setup</span>() {
+<pre><code class="language-java"><span class="tok-keyword">void</span> <span class="tok-function">setup</span>() {
   <span class="tok-function">pinMode</span>(8, INPUT_PULLUP);  <span class="tok-comment">// nút ở chân 8</span>
   <span class="tok-function">pinMode</span>(13, OUTPUT);       <span class="tok-comment">// LED ở chân 13</span>
 }
@@ -845,7 +845,7 @@ Trong bóng tối LDR tăng lên 100kΩ: V<sub>ra</sub> = 5 × 10000 / 110000 = 
     <span class="tok-function">digitalWrite</span>(13, HIGH);
   <span class="tok-keyword">else</span>
     <span class="tok-function">digitalWrite</span>(13, LOW);
-}</pre>
+}</code></pre>
 <div class="out">Nhấn nút → LED sáng. Thả → LED tắt. Chương trình đầu tiên của bạn phản ứng với thế giới vật lý.</div>
 
 <div class="pitfall"><b>Bẫy chân nổi (floating).</b> Một nút chỉ nối chân khi nhấn. Khi thả, chân nối với <em>không gì cả</em> — nó "nổi" và đọc nhiễu HIGH/LOW ngẫu nhiên. Cách sửa là một <b>điện trở kéo</b> nhẹ nhàng buộc chân về một trạng thái xác định. Arduino có sẵn một cái: <span class="badge">INPUT_PULLUP</span> buộc chân lên HIGH, nên một lần nhấn (xuống GND) đọc ra LOW. Đó là lý do code trên kiểm LOW.</div>
@@ -877,7 +877,7 @@ Trong bóng tối LDR tăng lên 100kΩ: V<sub>ra</sub> = 5 × 10000 / 110000 = 
 <span class="tok-comment">// … six more times. Change the speed? Edit eight lines.</span></pre>
 
 <h3>The right way — an array of pins</h3>
-<pre><span class="tok-type">int</span> leds[] = {2, 3, 4, 5, 6, 7, 8, 9};
+<pre><code class="language-java"><span class="tok-type">int</span> leds[] = {2, 3, 4, 5, 6, 7, 8, 9};
 <span class="tok-type">int</span> n = 8;
 <span class="tok-type">int</span> wait = 100;
 
@@ -896,7 +896,7 @@ Trong bóng tối LDR tăng lên 100kΩ: V<sub>ra</sub> = 5 × 10000 / 110000 = 
     <span class="tok-function">delay</span>(wait);
     <span class="tok-function">digitalWrite</span>(leds[i], LOW);
   }
-}</pre>
+}</code></pre>
 <div class="out">Now the whole effect is controlled by three values: <span class="badge">leds[]</span>, <span class="badge">n</span>, <span class="badge">wait</span>. Change the speed in one place; add a ninth LED by adding one number.</div>
 
 <h3>Wiring eight LEDs safely</h3>
@@ -917,7 +917,7 @@ Trong bóng tối LDR tăng lên 100kΩ: V<sub>ra</sub> = 5 × 10000 / 110000 = 
 <span class="tok-comment">// … sáu lần nữa. Muốn đổi tốc độ? Sửa tám dòng.</span></pre>
 
 <h3>Cách đúng — một mảng các chân</h3>
-<pre><span class="tok-type">int</span> leds[] = {2, 3, 4, 5, 6, 7, 8, 9};
+<pre><code class="language-java"><span class="tok-type">int</span> leds[] = {2, 3, 4, 5, 6, 7, 8, 9};
 <span class="tok-type">int</span> n = 8;
 <span class="tok-type">int</span> wait = 100;
 
@@ -936,7 +936,7 @@ Trong bóng tối LDR tăng lên 100kΩ: V<sub>ra</sub> = 5 × 10000 / 110000 = 
     <span class="tok-function">delay</span>(wait);
     <span class="tok-function">digitalWrite</span>(leds[i], LOW);
   }
-}</pre>
+}</code></pre>
 <div class="out">Giờ cả hiệu ứng được điều khiển bởi ba giá trị: <span class="badge">leds[]</span>, <span class="badge">n</span>, <span class="badge">wait</span>. Đổi tốc độ ở đúng một chỗ; thêm LED thứ chín bằng cách thêm một con số.</div>
 
 <h3>Đấu tám LED an toàn</h3>
@@ -967,7 +967,7 @@ Trong bóng tối LDR tăng lên 100kΩ: V<sub>ra</sub> = 5 × 10000 / 110000 = 
 <div class="out"><b>What actually happens:</b> loop() runs thousands of times per second. Holding the button for 200 ms toggles the LED hundreds of times, and it lands on a random state. The lamp appears to flicker or ignore you.</div>
 
 <h3>The fix — remember the previous reading</h3>
-<pre><span class="tok-type">int</span> lastState = HIGH;      <span class="tok-comment">// with INPUT_PULLUP, HIGH = released</span>
+<pre><code class="language-java"><span class="tok-type">int</span> lastState = HIGH;      <span class="tok-comment">// with INPUT_PULLUP, HIGH = released</span>
 <span class="tok-type">int</span> pressCount = 0;
 <span class="tok-type">bool</span> ledOn = <span class="tok-keyword">false</span>;
 
@@ -984,7 +984,7 @@ Trong bóng tối LDR tăng lên 100kΩ: V<sub>ra</sub> = 5 × 10000 / 110000 = 
     <span class="tok-function">delay</span>(20);                      <span class="tok-comment">// crude debounce — see Lesson 4.4</span>
   }
   lastState = state;                 <span class="tok-comment">// remember for next time</span>
-}</pre>
+}</code></pre>
 <div class="out">The pattern in one sentence: <b>compare the current reading with the previous one, act only on the transition, then store the current reading.</b> This is called <em>edge detection</em> — you are reacting to the falling edge (HIGH→LOW), not the level.</div>
 
 <h3>Where you will need it</h3>
@@ -1012,7 +1012,7 @@ Trong bóng tối LDR tăng lên 100kΩ: V<sub>ra</sub> = 5 × 10000 / 110000 = 
 <div class="out"><b>Thực tế xảy ra:</b> loop() chạy hàng nghìn lần mỗi giây. Giữ nút 200 ms là đảo LED hàng trăm lần, và nó dừng ở một trạng thái ngẫu nhiên. Bóng đèn trông như nhấp nháy hoặc phớt lờ bạn.</div>
 
 <h3>Cách sửa — nhớ lại số đọc lần trước</h3>
-<pre><span class="tok-type">int</span> lastState = HIGH;      <span class="tok-comment">// với INPUT_PULLUP, HIGH = đang thả</span>
+<pre><code class="language-java"><span class="tok-type">int</span> lastState = HIGH;      <span class="tok-comment">// với INPUT_PULLUP, HIGH = đang thả</span>
 <span class="tok-type">int</span> pressCount = 0;
 <span class="tok-type">bool</span> ledOn = <span class="tok-keyword">false</span>;
 
@@ -1029,7 +1029,7 @@ Trong bóng tối LDR tăng lên 100kΩ: V<sub>ra</sub> = 5 × 10000 / 110000 = 
     <span class="tok-function">delay</span>(20);                      <span class="tok-comment">// chống dội thô sơ — xem Bài 4.4</span>
   }
   lastState = state;                 <span class="tok-comment">// nhớ lại cho lần sau</span>
-}</pre>
+}</code></pre>
 <div class="out">Mẫu hình gói trong một câu: <b>so sánh số đọc hiện tại với số đọc trước, chỉ hành động khi có chuyển tiếp, rồi lưu số đọc hiện tại.</b> Cái này gọi là <em>phát hiện sườn (edge detection)</em> — bạn phản ứng với sườn xuống (HIGH→LOW), không phải với mức.</div>
 
 <h3>Bạn sẽ cần nó ở đâu</h3>
@@ -1064,7 +1064,7 @@ Trong bóng tối LDR tăng lên 100kΩ: V<sub>ra</sub> = 5 × 10000 / 110000 = 
 Your edge detector sees three falling edges instead of one.</div>
 
 <h3>Software debounce — the standard pattern</h3>
-<pre><span class="tok-type">unsigned long</span> lastChange = 0;
+<pre><code class="language-java"><span class="tok-type">unsigned long</span> lastChange = 0;
 <span class="tok-type">unsigned long</span> debounceMs = 50;
 <span class="tok-type">int</span> lastReading = HIGH, stableState = HIGH;
 
@@ -1083,7 +1083,7 @@ Your edge detector sees three falling edges instead of one.</div>
     }
   }
   lastReading = reading;
-}</pre>
+}</code></pre>
 <div class="out">The idea: <b>ignore the input until it has held the same value for 50 ms.</b> Bounces are shorter than that, so they are filtered out; a human press is far longer, so it always gets through.</div>
 
 <h3>Why not just delay(50)?</h3>
@@ -1115,7 +1115,7 @@ Your edge detector sees three falling edges instead of one.</div>
 Bộ phát hiện sườn của bạn thấy ba sườn xuống thay vì một.</div>
 
 <h3>Chống dội bằng phần mềm — mẫu chuẩn</h3>
-<pre><span class="tok-type">unsigned long</span> lastChange = 0;
+<pre><code class="language-java"><span class="tok-type">unsigned long</span> lastChange = 0;
 <span class="tok-type">unsigned long</span> debounceMs = 50;
 <span class="tok-type">int</span> lastReading = HIGH, stableState = HIGH;
 
@@ -1134,7 +1134,7 @@ Bộ phát hiện sườn của bạn thấy ba sườn xuống thay vì một.<
     }
   }
   lastReading = reading;
-}</pre>
+}</code></pre>
 <div class="out">Ý tưởng: <b>phớt lờ ngõ vào cho tới khi nó giữ nguyên một giá trị suốt 50 ms.</b> Các cú dội ngắn hơn thế nên bị lọc bỏ; một cú nhấn của người thì dài hơn nhiều nên luôn lọt qua.</div>
 
 <h3>Sao không dùng luôn delay(50)?</h3>
@@ -1234,11 +1234,11 @@ Bộ phát hiện sườn của bạn thấy ba sườn xuống thay vì một.<
               └── A0   <span class="tok-comment">// bright light → higher reading</span></pre>
 
 <h3>Step 1: never guess the thresholds — calibrate</h3>
-<pre><span class="tok-keyword">void</span> <span class="tok-function">setup</span>() { Serial.<span class="tok-function">begin</span>(9600); }
+<pre><code class="language-java"><span class="tok-keyword">void</span> <span class="tok-function">setup</span>() { Serial.<span class="tok-function">begin</span>(9600); }
 <span class="tok-keyword">void</span> <span class="tok-function">loop</span>() {
   Serial.<span class="tok-function">println</span>(<span class="tok-function">analogRead</span>(A0));   <span class="tok-comment">// write down the value…</span>
   <span class="tok-function">delay</span>(200);                          <span class="tok-comment">// …in the dark, in room light, under a lamp</span>
-}</pre>
+}</code></pre>
 <div class="out"><b>Typical measured values</b> (yours will differ — that is the point): dark ≈ 90, room ≈ 450, torch ≈ 950. Every threshold you write must come from your own three numbers, not from a tutorial.</div>
 
 <h3>Step 2: "states of lights" — more than on/off</h3>
@@ -1269,11 +1269,11 @@ Bộ phát hiện sườn của bạn thấy ba sườn xuống thay vì một.<
               └── A0   <span class="tok-comment">// sáng hơn → số đọc lớn hơn</span></pre>
 
 <h3>Bước 1: đừng bao giờ đoán ngưỡng — hãy hiệu chuẩn</h3>
-<pre><span class="tok-keyword">void</span> <span class="tok-function">setup</span>() { Serial.<span class="tok-function">begin</span>(9600); }
+<pre><code class="language-java"><span class="tok-keyword">void</span> <span class="tok-function">setup</span>() { Serial.<span class="tok-function">begin</span>(9600); }
 <span class="tok-keyword">void</span> <span class="tok-function">loop</span>() {
   Serial.<span class="tok-function">println</span>(<span class="tok-function">analogRead</span>(A0));   <span class="tok-comment">// ghi lại giá trị…</span>
   <span class="tok-function">delay</span>(200);                          <span class="tok-comment">// …trong tối, trong phòng, dưới đèn pin</span>
-}</pre>
+}</code></pre>
 <div class="out"><b>Giá trị đo tiêu biểu</b> (của bạn sẽ khác — và đó chính là điểm mấu chốt): tối ≈ 90, ánh sáng phòng ≈ 450, đèn pin ≈ 950. Mọi ngưỡng bạn viết phải đến từ ba con số của chính bạn, không phải từ một tutorial.</div>
 
 <h3>Bước 2: "states of lights" — nhiều hơn bật/tắt</h3>
@@ -1306,7 +1306,7 @@ Bộ phát hiện sườn của bạn thấy ba sườn xuống thay vì một.<
 <p class="lead">Lesson 5.1 introduced <span class="badge">analogWrite(pin, 0..255)</span>. Sessions 9 ("Fading") and 30 ("RGB LED Color Mixing") turn that one function into two of the most satisfying labs in the course.</p>
 
 <h3>Fading — a smooth breath</h3>
-<pre><span class="tok-type">int</span> led = 9;          <span class="tok-comment">// must be a PWM (~) pin</span>
+<pre><code class="language-java"><span class="tok-type">int</span> led = 9;          <span class="tok-comment">// must be a PWM (~) pin</span>
 <span class="tok-type">int</span> level = 0, step = 5;
 
 <span class="tok-keyword">void</span> <span class="tok-function">loop</span>() {
@@ -1314,12 +1314,12 @@ Bộ phát hiện sườn của bạn thấy ba sườn xuống thay vì một.<
   level += step;
   <span class="tok-keyword">if</span> (level &lt;= 0 || level &gt;= 255) step = -step;   <span class="tok-comment">// bounce at both ends</span>
   <span class="tok-function">delay</span>(30);
-}</pre>
+}</code></pre>
 <div class="out">The LED brightens 0→255, then dims 255→0, forever. Changing <span class="badge">step</span> changes the speed; changing <span class="badge">delay</span> changes the smoothness.</div>
 
 <h3>An RGB LED is three LEDs in one shell</h3>
 <p>It has four legs: one common (cathode or anode) and one each for red, green and blue. Each colour leg needs its own 220Ω resistor and its own <b>PWM pin</b>. Setting three brightness levels mixes a colour.</p>
-<pre><span class="tok-keyword">void</span> <span class="tok-function">setColor</span>(<span class="tok-type">int</span> r, <span class="tok-type">int</span> g, <span class="tok-type">int</span> b) {
+<pre><code class="language-java"><span class="tok-keyword">void</span> <span class="tok-function">setColor</span>(<span class="tok-type">int</span> r, <span class="tok-type">int</span> g, <span class="tok-type">int</span> b) {
   <span class="tok-function">analogWrite</span>(9,  r);
   <span class="tok-function">analogWrite</span>(10, g);
   <span class="tok-function">analogWrite</span>(11, b);
@@ -1327,7 +1327,7 @@ Bộ phát hiện sườn của bạn thấy ba sườn xuống thay vì một.<
 <span class="tok-comment">// setColor(255, 0, 0)   → red</span>
 <span class="tok-comment">// setColor(255, 165, 0) → orange</span>
 <span class="tok-comment">// setColor(128, 0, 128) → purple</span>
-<span class="tok-comment">// setColor(255,255,255) → white-ish</span></pre>
+<span class="tok-comment">// setColor(255,255,255) → white-ish</span></code></pre>
 <table>
   <thead><tr><th>Type</th><th>Common leg goes to</th><th>255 means</th></tr></thead>
   <tbody>
@@ -1347,7 +1347,7 @@ Bộ phát hiện sườn của bạn thấy ba sườn xuống thay vì một.<
 <p class="lead">Bài 5.1 đã giới thiệu <span class="badge">analogWrite(pin, 0..255)</span>. Buổi 9 ("Fading") và buổi 30 ("RGB LED Color Mixing") biến đúng một hàm đó thành hai lab đã tay nhất môn học.</p>
 
 <h3>Fading — một nhịp thở mượt</h3>
-<pre><span class="tok-type">int</span> led = 9;          <span class="tok-comment">// phải là chân PWM (~)</span>
+<pre><code class="language-java"><span class="tok-type">int</span> led = 9;          <span class="tok-comment">// phải là chân PWM (~)</span>
 <span class="tok-type">int</span> level = 0, step = 5;
 
 <span class="tok-keyword">void</span> <span class="tok-function">loop</span>() {
@@ -1355,12 +1355,12 @@ Bộ phát hiện sườn của bạn thấy ba sườn xuống thay vì một.<
   level += step;
   <span class="tok-keyword">if</span> (level &lt;= 0 || level &gt;= 255) step = -step;   <span class="tok-comment">// nảy lại ở hai đầu</span>
   <span class="tok-function">delay</span>(30);
-}</pre>
+}</code></pre>
 <div class="out">LED sáng dần 0→255, rồi mờ dần 255→0, mãi mãi. Đổi <span class="badge">step</span> là đổi tốc độ; đổi <span class="badge">delay</span> là đổi độ mượt.</div>
 
 <h3>Một LED RGB là ba LED trong một vỏ</h3>
 <p>Nó có bốn chân: một chân chung (cathode hoặc anode) và mỗi chân cho đỏ, lục, lam. Mỗi chân màu cần điện trở 220Ω riêng và một <b>chân PWM</b> riêng. Đặt ba mức sáng là pha ra một màu.</p>
-<pre><span class="tok-keyword">void</span> <span class="tok-function">setColor</span>(<span class="tok-type">int</span> r, <span class="tok-type">int</span> g, <span class="tok-type">int</span> b) {
+<pre><code class="language-java"><span class="tok-keyword">void</span> <span class="tok-function">setColor</span>(<span class="tok-type">int</span> r, <span class="tok-type">int</span> g, <span class="tok-type">int</span> b) {
   <span class="tok-function">analogWrite</span>(9,  r);
   <span class="tok-function">analogWrite</span>(10, g);
   <span class="tok-function">analogWrite</span>(11, b);
@@ -1368,7 +1368,7 @@ Bộ phát hiện sườn của bạn thấy ba sườn xuống thay vì một.<
 <span class="tok-comment">// setColor(255, 0, 0)   → đỏ</span>
 <span class="tok-comment">// setColor(255, 165, 0) → cam</span>
 <span class="tok-comment">// setColor(128, 0, 128) → tím</span>
-<span class="tok-comment">// setColor(255,255,255) → trắng ngà</span></pre>
+<span class="tok-comment">// setColor(255,255,255) → trắng ngà</span></code></pre>
 <table>
   <thead><tr><th>Loại</th><th>Chân chung nối về</th><th>255 nghĩa là</th></tr></thead>
   <tbody>
@@ -1396,7 +1396,7 @@ Bộ phát hiện sườn của bạn thấy ba sườn xuống thay vì một.<
 <p class="lead">Print <span class="badge">analogRead(A0)</span> from a still sensor and the numbers still wobble: 512, 509, 514, 511… That is real electrical noise plus ADC quantisation. Session 36's "Smoothing" lab is the standard cure, and it is the analog twin of debouncing.</p>
 
 <h3>The moving average — a circular buffer</h3>
-<pre><span class="tok-keyword">const int</span> N = 10;              <span class="tok-comment">// how many samples to average</span>
+<pre><code class="language-java"><span class="tok-keyword">const int</span> N = 10;              <span class="tok-comment">// how many samples to average</span>
 <span class="tok-type">int</span> readings[N];
 <span class="tok-type">int</span> index = 0, total = 0;
 
@@ -1414,7 +1414,7 @@ Bộ phát hiện sườn của bạn thấy ba sườn xuống thay vì một.<
   <span class="tok-type">int</span> average = total / N;
   Serial.<span class="tok-function">println</span>(average);
   <span class="tok-function">delay</span>(10);
-}</pre>
+}</code></pre>
 <div class="out">Only three arithmetic operations per sample, no matter how large N is — that is why <span class="badge">total</span> is kept as a running sum instead of re-adding the whole array. The <span class="badge">%</span> makes the index wrap: 0,1,…,9,0,1,…</div>
 
 <h3>Choosing N — the trade-off nobody escapes</h3>
@@ -1430,7 +1430,7 @@ Bộ phát hiện sườn của bạn thấy ba sườn xuống thay vì một.<
 
 <h3>Sending it to a graph</h3>
 <p>The syllabus lab graphs the values in Processing; the Arduino IDE has the same thing built in — <b>Tools → Serial Plotter</b>. Print raw and smoothed values separated by a space and the plotter draws two lines, which makes the effect of N obvious at a glance:</p>
-<pre>Serial.<span class="tok-function">print</span>(raw); Serial.<span class="tok-function">print</span>(<span class="tok-string">" "</span>); Serial.<span class="tok-function">println</span>(average);</pre>
+<pre><code class="language-python">Serial.<span class="tok-function">print</span>(raw); Serial.<span class="tok-function">print</span>(<span class="tok-string">" "</span>); Serial.<span class="tok-function">println</span>(average);</code></pre>
 
 <div class="pitfall"><b>Trap:</b> <span class="badge">int total</span> overflows. Ten readings of up to 1023 fit fine, but 50 readings sum to over 51,000 — past the 32,767 limit of an <span class="badge">int</span>, and the average goes negative. Use <span class="badge">long total</span> whenever N × 1023 could exceed 32,767.</div>
 
@@ -1442,7 +1442,7 @@ Bộ phát hiện sườn của bạn thấy ba sườn xuống thay vì một.<
 <p class="lead">In <span class="badge">analogRead(A0)</span> từ một cảm biến đứng yên mà các con số vẫn dao động: 512, 509, 514, 511… Đó là nhiễu điện thật cộng với sai số lượng tử hoá của ADC. Lab "Smoothing" ở buổi 36 là bài thuốc chuẩn, và nó là anh em song sinh dạng analog của chống dội.</p>
 
 <h3>Trung bình trượt — một bộ đệm vòng</h3>
-<pre><span class="tok-keyword">const int</span> N = 10;              <span class="tok-comment">// lấy trung bình bao nhiêu mẫu</span>
+<pre><code class="language-java"><span class="tok-keyword">const int</span> N = 10;              <span class="tok-comment">// lấy trung bình bao nhiêu mẫu</span>
 <span class="tok-type">int</span> readings[N];
 <span class="tok-type">int</span> index = 0, total = 0;
 
@@ -1460,7 +1460,7 @@ Bộ phát hiện sườn của bạn thấy ba sườn xuống thay vì một.<
   <span class="tok-type">int</span> average = total / N;
   Serial.<span class="tok-function">println</span>(average);
   <span class="tok-function">delay</span>(10);
-}</pre>
+}</code></pre>
 <div class="out">Chỉ ba phép tính mỗi mẫu, dù N lớn tới đâu — đó là lý do <span class="badge">total</span> được giữ như một tổng chạy thay vì cộng lại cả mảng. Phép <span class="badge">%</span> làm chỉ số quay vòng: 0,1,…,9,0,1,…</div>
 
 <h3>Chọn N — sự đánh đổi không ai thoát được</h3>
@@ -1476,7 +1476,7 @@ Bộ phát hiện sườn của bạn thấy ba sườn xuống thay vì một.<
 
 <h3>Đưa lên đồ thị</h3>
 <p>Lab trong syllabus vẽ đồ thị bằng Processing; Arduino IDE có sẵn thứ tương đương — <b>Tools → Serial Plotter</b>. In giá trị thô và giá trị đã mượt cách nhau một dấu cách thì plotter vẽ hai đường, và tác dụng của N hiện ra rõ mồn một:</p>
-<pre>Serial.<span class="tok-function">print</span>(raw); Serial.<span class="tok-function">print</span>(<span class="tok-string">" "</span>); Serial.<span class="tok-function">println</span>(average);</pre>
+<pre><code class="language-python">Serial.<span class="tok-function">print</span>(raw); Serial.<span class="tok-function">print</span>(<span class="tok-string">" "</span>); Serial.<span class="tok-function">println</span>(average);</code></pre>
 
 <div class="pitfall"><b>Bẫy:</b> <span class="badge">int total</span> bị tràn. Mười số đọc tối đa 1023 thì vừa, nhưng 50 số đọc cộng lại hơn 51.000 — vượt giới hạn 32.767 của một <span class="badge">int</span>, và giá trị trung bình hoá âm. Hãy dùng <span class="badge">long total</span> mỗi khi N × 1023 có thể vượt 32.767.</div>
 
@@ -1564,7 +1564,7 @@ Bộ phát hiện sườn của bạn thấy ba sườn xuống thay vì một.<
   <div class="lz-layer"><b>Echo</b> — the sensor holds this pin HIGH for exactly as long as the sound took to fly out and come back.</div>
 </div>
 
-<pre><span class="tok-keyword">const int</span> TRIG = 9, ECHO = 10;
+<pre><code class="language-java"><span class="tok-keyword">const int</span> TRIG = 9, ECHO = 10;
 
 <span class="tok-keyword">void</span> <span class="tok-function">setup</span>() {
   <span class="tok-function">pinMode</span>(TRIG, OUTPUT);
@@ -1580,7 +1580,7 @@ Bộ phát hiện sườn của bạn thấy ba sườn xuống thay vì một.<
   <span class="tok-type">long</span> us = <span class="tok-function">pulseIn</span>(ECHO, HIGH, 30000);          <span class="tok-comment">// microseconds, 30ms timeout</span>
   <span class="tok-keyword">if</span> (us == 0) <span class="tok-keyword">return</span> -1;                          <span class="tok-comment">// nothing came back</span>
   <span class="tok-keyword">return</span> us / 58;                                  <span class="tok-comment">// → centimetres</span>
-}</pre>
+}</code></pre>
 
 <h3>Where 58 comes from — do the arithmetic once</h3>
 <div class="out">Sound travels ≈ <b>340 m/s</b> = 0.034 cm per microsecond. The pulse goes <em>there and back</em>, so the one-way distance is half:<br>
@@ -1614,7 +1614,7 @@ distance = (us × 0.034) / 2 = us / 58.8 ≈ <b>us / 58</b>.<br>
   <div class="lz-layer"><b>Echo</b> — cảm biến giữ chân này ở HIGH đúng bằng khoảng thời gian âm thanh bay đi và quay về.</div>
 </div>
 
-<pre><span class="tok-keyword">const int</span> TRIG = 9, ECHO = 10;
+<pre><code class="language-java"><span class="tok-keyword">const int</span> TRIG = 9, ECHO = 10;
 
 <span class="tok-keyword">void</span> <span class="tok-function">setup</span>() {
   <span class="tok-function">pinMode</span>(TRIG, OUTPUT);
@@ -1630,7 +1630,7 @@ distance = (us × 0.034) / 2 = us / 58.8 ≈ <b>us / 58</b>.<br>
   <span class="tok-type">long</span> us = <span class="tok-function">pulseIn</span>(ECHO, HIGH, 30000);          <span class="tok-comment">// micro-giây, hạn chờ 30ms</span>
   <span class="tok-keyword">if</span> (us == 0) <span class="tok-keyword">return</span> -1;                          <span class="tok-comment">// không có gì vọng về</span>
   <span class="tok-keyword">return</span> us / 58;                                  <span class="tok-comment">// → centimet</span>
-}</pre>
+}</code></pre>
 
 <h3>Số 58 ở đâu ra — tính một lần cho thuộc</h3>
 <div class="out">Âm thanh đi ≈ <b>340 m/s</b> = 0,034 cm mỗi micro-giây. Xung đi <em>cả đi lẫn về</em>, nên quãng đường một chiều là một nửa:<br>
@@ -1670,7 +1670,7 @@ khoảng cách = (us × 0,034) / 2 = us / 58,8 ≈ <b>us / 58</b>.<br>
 <div class="note-ct">The <span class="badge">Servo</span> library generates those pulses for you, so you write degrees, not microseconds. It uses Timer1, which is why <b>pins 9 and 10 lose PWM</b> while the library is in use — a genuine exam-worthy side effect.</div>
 
 <h3>Lab 1 — Sweep</h3>
-<pre><span class="tok-keyword">#include</span> <span class="tok-string">&lt;Servo.h&gt;</span>
+<pre><code class="language-c"><span class="tok-keyword">#include</span> <span class="tok-string">&lt;Servo.h&gt;</span>
 <span class="tok-type">Servo</span> gate;
 
 <span class="tok-keyword">void</span> <span class="tok-function">setup</span>() { gate.<span class="tok-function">attach</span>(9); }
@@ -1678,7 +1678,7 @@ khoảng cách = (us × 0,034) / 2 = us / 58,8 ≈ <b>us / 58</b>.<br>
 <span class="tok-keyword">void</span> <span class="tok-function">loop</span>() {
   <span class="tok-keyword">for</span> (<span class="tok-type">int</span> a = 0; a &lt;= 180; a++) { gate.<span class="tok-function">write</span>(a); <span class="tok-function">delay</span>(15); }
   <span class="tok-keyword">for</span> (<span class="tok-type">int</span> a = 180; a &gt;= 0; a--) { gate.<span class="tok-function">write</span>(a); <span class="tok-function">delay</span>(15); }
-}</pre>
+}</code></pre>
 <div class="out">The <span class="badge">delay(15)</span> is not decoration: the servo needs time to physically travel one degree. Remove it and the servo simply cannot keep up with the commands.</div>
 
 <h3>Lab 2 — Knob: an analog input driving an actuator</h3>
@@ -1702,7 +1702,7 @@ gate.<span class="tok-function">write</span>(angle);
 <div class="note-ct">Thư viện <span class="badge">Servo</span> sinh các xung đó giúp bạn, nên bạn viết bằng độ, không phải micro-giây. Nó dùng Timer1, và đó là lý do <b>chân 9 và 10 mất khả năng PWM</b> khi thư viện đang được dùng — một tác dụng phụ rất đáng vào đề thi.</div>
 
 <h3>Lab 1 — Sweep (quét qua lại)</h3>
-<pre><span class="tok-keyword">#include</span> <span class="tok-string">&lt;Servo.h&gt;</span>
+<pre><code class="language-c"><span class="tok-keyword">#include</span> <span class="tok-string">&lt;Servo.h&gt;</span>
 <span class="tok-type">Servo</span> gate;
 
 <span class="tok-keyword">void</span> <span class="tok-function">setup</span>() { gate.<span class="tok-function">attach</span>(9); }
@@ -1710,7 +1710,7 @@ gate.<span class="tok-function">write</span>(angle);
 <span class="tok-keyword">void</span> <span class="tok-function">loop</span>() {
   <span class="tok-keyword">for</span> (<span class="tok-type">int</span> a = 0; a &lt;= 180; a++) { gate.<span class="tok-function">write</span>(a); <span class="tok-function">delay</span>(15); }
   <span class="tok-keyword">for</span> (<span class="tok-type">int</span> a = 180; a &gt;= 0; a--) { gate.<span class="tok-function">write</span>(a); <span class="tok-function">delay</span>(15); }
-}</pre>
+}</code></pre>
 <div class="out">Dòng <span class="badge">delay(15)</span> không phải để trang trí: servo cần thời gian để di chuyển vật lý một độ. Bỏ nó đi thì servo đơn giản là không theo kịp lệnh.</div>
 
 <h3>Lab 2 — Knob: một ngõ vào analog lái một cơ cấu chấp hành</h3>
@@ -1738,11 +1738,11 @@ gate.<span class="tok-function">write</span>(angle);
 <p class="lead">The LM35 is the friendliest sensor in the KIT: three legs, no library, and an output voltage that is directly proportional to temperature — <b>10 mV per °C</b>. It is the perfect exercise in unit conversion, which is half of all sensor work.</p>
 
 <h3>The conversion, derived step by step</h3>
-<pre><span class="tok-type">int</span> raw = <span class="tok-function">analogRead</span>(A0);                <span class="tok-comment">// 0..1023</span>
+<pre><code class="language-python"><span class="tok-type">int</span> raw = <span class="tok-function">analogRead</span>(A0);                <span class="tok-comment">// 0..1023</span>
 <span class="tok-type">float</span> volts = raw * 5.0 / 1023.0;         <span class="tok-comment">// → volts</span>
 <span class="tok-type">float</span> celsius = volts * 100.0;            <span class="tok-comment">// 10mV per °C → ×100</span>
 
-Serial.<span class="tok-function">print</span>(celsius); Serial.<span class="tok-function">println</span>(<span class="tok-string">" C"</span>);</pre>
+Serial.<span class="tok-function">print</span>(celsius); Serial.<span class="tok-function">println</span>(<span class="tok-string">" C"</span>);</code></pre>
 <div class="out"><b>Worked example:</b> raw = 154 → volts = 154 × 5 / 1023 = 0.7527 V → 0.7527 × 100 = <b>75.3 °C</b>. That is correct arithmetic, and for an LM35 (10 mV per °C) 0.75 V really does mean 75 °C — but 75 °C is <em>not</em> room temperature, so a reading like this means the sensor is being heated, mis-wired, or you picked the wrong pin. At a room temperature of 27 °C the sensor outputs 0.27 V → raw ≈ 55. If your raw value sits near 55–60, everything is correct.</div>
 
 <h3>Resolution: the number that limits you</h3>
@@ -1770,11 +1770,11 @@ Serial.<span class="tok-function">print</span>(celsius); Serial.<span class="tok
 <p class="lead">LM35 là cảm biến dễ tính nhất trong bộ KIT: ba chân, không cần thư viện, và điện áp ra tỉ lệ thuận trực tiếp với nhiệt độ — <b>10 mV mỗi °C</b>. Nó là bài tập hoàn hảo về đổi đơn vị, thứ chiếm một nửa công việc với cảm biến.</p>
 
 <h3>Phép đổi, dẫn từng bước</h3>
-<pre><span class="tok-type">int</span> raw = <span class="tok-function">analogRead</span>(A0);                <span class="tok-comment">// 0..1023</span>
+<pre><code class="language-python"><span class="tok-type">int</span> raw = <span class="tok-function">analogRead</span>(A0);                <span class="tok-comment">// 0..1023</span>
 <span class="tok-type">float</span> volts = raw * 5.0 / 1023.0;         <span class="tok-comment">// → volt</span>
 <span class="tok-type">float</span> celsius = volts * 100.0;            <span class="tok-comment">// 10mV mỗi °C → ×100</span>
 
-Serial.<span class="tok-function">print</span>(celsius); Serial.<span class="tok-function">println</span>(<span class="tok-string">" C"</span>);</pre>
+Serial.<span class="tok-function">print</span>(celsius); Serial.<span class="tok-function">println</span>(<span class="tok-string">" C"</span>);</code></pre>
 <div class="out"><b>Ví dụ có lời giải:</b> nhiệt độ phòng 27°C ứng với 0,27 V, tức raw = 0,27 × 1023 / 5 ≈ <b>55</b>. Kiểm ngược lại: raw = 55 → volts = 55 × 5 / 1023 = 0,2688 V → × 100 = <b>26,9 °C</b>. Nếu giá trị thô của bạn nằm quanh 55–60, mọi thứ đang đúng.</div>
 
 <h3>Độ phân giải: con số giới hạn bạn</h3>
@@ -1811,7 +1811,7 @@ Serial.<span class="tok-function">print</span>(celsius); Serial.<span class="tok
 
 <h3>IR remote — receiving a code</h3>
 <p>The remote's LED flashes an invisible infrared pattern; a 3-pin receiver (e.g. VS1838B) demodulates it and hands the Arduino a stream of pulses. The library turns that into a hexadecimal code, unique to each button.</p>
-<pre><span class="tok-keyword">#include</span> <span class="tok-string">&lt;IRremote.h&gt;</span>
+<pre><code class="language-c"><span class="tok-keyword">#include</span> <span class="tok-string">&lt;IRremote.h&gt;</span>
 <span class="tok-keyword">const int</span> RECV = 11;
 
 <span class="tok-keyword">void</span> <span class="tok-function">setup</span>() {
@@ -1829,12 +1829,12 @@ Serial.<span class="tok-function">print</span>(celsius); Serial.<span class="tok
 
     <span class="tok-function">IrReceiver</span>.<span class="tok-function">resume</span>();              <span class="tok-comment">// ready for the next code</span>
   }
-}</pre>
+}</code></pre>
 <div class="out"><b>The workflow that always works:</b> first upload a sketch that only prints codes, press every button you care about, write the codes down — <em>then</em> write the <span class="badge">if</span> statements. Never copy codes from a tutorial: they differ between remotes.</div>
 
 <h3>4×4 keypad — 16 buttons on 8 pins</h3>
 <p>Wiring 16 buttons individually would need 16 pins. Instead the keys sit at the crossings of 4 rows and 4 columns. The library drives one row LOW at a time and reads which column went LOW — 8 pins, 16 keys. That is <b>matrix scanning</b>, the same idea as the LED matrix in the next lesson.</p>
-<pre><span class="tok-keyword">#include</span> <span class="tok-string">&lt;Keypad.h&gt;</span>
+<pre><code class="language-c"><span class="tok-keyword">#include</span> <span class="tok-string">&lt;Keypad.h&gt;</span>
 <span class="tok-keyword">const byte</span> ROWS = 4, COLS = 4;
 <span class="tok-type">char</span> keys[ROWS][COLS] = {
   {<span class="tok-string">'1'</span>,<span class="tok-string">'2'</span>,<span class="tok-string">'3'</span>,<span class="tok-string">'A'</span>},
@@ -1856,7 +1856,7 @@ Serial.<span class="tok-function">print</span>(celsius); Serial.<span class="tok
     } <span class="tok-keyword">else if</span> (k == <span class="tok-string">'*'</span>) entered = <span class="tok-string">""</span>;   <span class="tok-comment">// * = clear</span>
     <span class="tok-keyword">else</span> entered += k;
   }
-}</pre>
+}</code></pre>
 <div class="out">A PIN-code door lock in twenty lines — combine it with the servo from Lesson 6.3 and you have a complete, defensible project.</div>
 
 <div class="pitfall"><b>Trap:</b> the keypad library already debounces, but the IR receiver does not deduplicate. Holding a remote button sends a "repeat" code (often <span class="badge">0xFFFFFFFF</span>) many times a second, so a toggle action fires repeatedly. Either ignore the repeat code explicitly, or apply the state-change pattern from Lesson 4.3.</div>
@@ -1870,7 +1870,7 @@ Serial.<span class="tok-function">print</span>(celsius); Serial.<span class="tok
 
 <h3>Điều khiển hồng ngoại — nhận một mã lệnh</h3>
 <p>LED của remote chớp một mẫu hồng ngoại vô hình; một mắt thu 3 chân (vd VS1838B) giải điều chế nó và trao cho Arduino một chuỗi xung. Thư viện biến chuỗi đó thành một mã thập lục phân, riêng biệt cho từng nút.</p>
-<pre><span class="tok-keyword">#include</span> <span class="tok-string">&lt;IRremote.h&gt;</span>
+<pre><code class="language-c"><span class="tok-keyword">#include</span> <span class="tok-string">&lt;IRremote.h&gt;</span>
 <span class="tok-keyword">const int</span> RECV = 11;
 
 <span class="tok-keyword">void</span> <span class="tok-function">setup</span>() {
@@ -1888,12 +1888,12 @@ Serial.<span class="tok-function">print</span>(celsius); Serial.<span class="tok
 
     <span class="tok-function">IrReceiver</span>.<span class="tok-function">resume</span>();              <span class="tok-comment">// sẵn sàng cho mã kế tiếp</span>
   }
-}</pre>
+}</code></pre>
 <div class="out"><b>Quy trình luôn đúng:</b> đầu tiên nạp một sketch chỉ in mã ra, bấm mọi nút bạn quan tâm, ghi lại các mã — <em>rồi</em> mới viết các câu <span class="badge">if</span>. Đừng bao giờ chép mã từ tutorial: chúng khác nhau giữa các remote.</div>
 
 <h3>Bàn phím 4×4 — 16 nút trên 8 chân</h3>
 <p>Đấu 16 nút riêng lẻ sẽ cần 16 chân. Thay vào đó các phím nằm tại giao điểm của 4 hàng và 4 cột. Thư viện kéo từng hàng xuống LOW một lúc rồi đọc xem cột nào xuống LOW — 8 chân, 16 phím. Đó là <b>quét ma trận</b>, cùng ý tưởng với ma trận LED ở bài kế tiếp.</p>
-<pre><span class="tok-keyword">#include</span> <span class="tok-string">&lt;Keypad.h&gt;</span>
+<pre><code class="language-c"><span class="tok-keyword">#include</span> <span class="tok-string">&lt;Keypad.h&gt;</span>
 <span class="tok-keyword">const byte</span> ROWS = 4, COLS = 4;
 <span class="tok-type">char</span> keys[ROWS][COLS] = {
   {<span class="tok-string">'1'</span>,<span class="tok-string">'2'</span>,<span class="tok-string">'3'</span>,<span class="tok-string">'A'</span>},
@@ -1915,7 +1915,7 @@ Serial.<span class="tok-function">print</span>(celsius); Serial.<span class="tok
     } <span class="tok-keyword">else if</span> (k == <span class="tok-string">'*'</span>) entered = <span class="tok-string">""</span>;   <span class="tok-comment">// * = xoá</span>
     <span class="tok-keyword">else</span> entered += k;
   }
-}</pre>
+}</code></pre>
 <div class="out">Một ổ khoá cửa nhập mã PIN gói trong hai mươi dòng — ghép nó với servo ở Bài 6.3 là bạn có một đồ án hoàn chỉnh và bảo vệ được.</div>
 
 <div class="pitfall"><b>Bẫy:</b> thư viện keypad đã chống dội sẵn, nhưng mắt thu IR thì không khử trùng lặp. Giữ một nút trên remote sẽ gửi mã "lặp lại" (thường là <span class="badge">0xFFFFFFFF</span>) nhiều lần mỗi giây, nên một hành động bật/tắt sẽ nổ liên tục. Hoặc bỏ qua mã lặp một cách tường minh, hoặc áp dụng mẫu phát hiện đổi trạng thái ở Bài 4.3.</div>
@@ -1941,7 +1941,7 @@ Serial.<span class="tok-function">print</span>(celsius); Serial.<span class="tok
 
 <h3>2 · The LCD 1602 (session 38) — the practical choice</h3>
 <p>Two rows of 16 characters. Wired directly it eats 6 pins; with the <b>I2C backpack</b> module it needs just two (SDA = A4, SCL = A5) and is by far the most common choice in student projects.</p>
-<pre><span class="tok-keyword">#include</span> <span class="tok-string">&lt;LiquidCrystal_I2C.h&gt;</span>
+<pre><code class="language-c"><span class="tok-keyword">#include</span> <span class="tok-string">&lt;LiquidCrystal_I2C.h&gt;</span>
 <span class="tok-type">LiquidCrystal_I2C</span> lcd(0x27, 16, 2);   <span class="tok-comment">// address, cols, rows</span>
 
 <span class="tok-keyword">void</span> <span class="tok-function">setup</span>() {
@@ -1956,7 +1956,7 @@ Serial.<span class="tok-function">print</span>(celsius); Serial.<span class="tok
   lcd.<span class="tok-function">print</span>(<span class="tok-function">readTemperature</span>(), 1);
   lcd.<span class="tok-function">print</span>(<span class="tok-string">" C   "</span>);            <span class="tok-comment">// trailing spaces erase leftovers</span>
   <span class="tok-function">delay</span>(500);
-}</pre>
+}</code></pre>
 <div class="out"><b>Best for:</b> almost every project — labels plus values, a menu, a status message. Two lines of 16 characters is enough for "Distance: 24cm" and "Gate: OPEN".</div>
 
 <h3>3 · The 8×8 LED matrix (session 55)</h3>
@@ -1988,7 +1988,7 @@ Serial.<span class="tok-function">print</span>(celsius); Serial.<span class="tok
 
 <h3>2 · LCD 1602 (buổi 38) — lựa chọn thực dụng</h3>
 <p>Hai hàng, mỗi hàng 16 ký tự. Đấu trực tiếp thì ngốn 6 chân; với module <b>I2C backpack</b> nó chỉ cần hai (SDA = A4, SCL = A5) và là lựa chọn phổ biến nhất trong đồ án sinh viên, cách biệt rất xa.</p>
-<pre><span class="tok-keyword">#include</span> <span class="tok-string">&lt;LiquidCrystal_I2C.h&gt;</span>
+<pre><code class="language-c"><span class="tok-keyword">#include</span> <span class="tok-string">&lt;LiquidCrystal_I2C.h&gt;</span>
 <span class="tok-type">LiquidCrystal_I2C</span> lcd(0x27, 16, 2);   <span class="tok-comment">// địa chỉ, số cột, số hàng</span>
 
 <span class="tok-keyword">void</span> <span class="tok-function">setup</span>() {
@@ -2003,7 +2003,7 @@ Serial.<span class="tok-function">print</span>(celsius); Serial.<span class="tok
   lcd.<span class="tok-function">print</span>(<span class="tok-function">readTemperature</span>(), 1);
   lcd.<span class="tok-function">print</span>(<span class="tok-string">" C   "</span>);            <span class="tok-comment">// khoảng trắng cuối để xoá ký tự thừa</span>
   <span class="tok-function">delay</span>(500);
-}</pre>
+}</code></pre>
 <div class="out"><b>Hợp nhất với:</b> gần như mọi đồ án — nhãn kèm giá trị, một menu, một dòng trạng thái. Hai dòng 16 ký tự là đủ cho "Distance: 24cm" và "Gate: OPEN".</div>
 
 <h3>3 · Ma trận LED 8×8 (buổi 55)</h3>
@@ -2049,9 +2049,9 @@ Serial.<span class="tok-function">print</span>(celsius); Serial.<span class="tok
   <div class="lz-layer"><b>I2C &amp; SPI</b> — short-distance buses between chips on the same board (a display, an RTC clock, extra sensors). I2C uses just 2 wires and addresses many devices; SPI is faster with more wires.</div>
   <div class="lz-layer"><b>WiFi</b> — modules like <b>ESP8266/ESP32</b> connect the device to your network and the internet. This is what turns a local gadget into a true IoT device that reports to a cloud.</div>
 </div>
-<pre>Serial.<span class="tok-function">begin</span>(9600);            <span class="tok-comment">// in setup(), then:</span>
+<pre><code class="language-python">Serial.<span class="tok-function">begin</span>(9600);            <span class="tok-comment">// in setup(), then:</span>
 Serial.<span class="tok-function">print</span>(<span class="tok-string">"Temp = "</span>);
-Serial.<span class="tok-function">println</span>(temperature);  <span class="tok-comment">// watch it live in the Serial Monitor</span></pre>
+Serial.<span class="tok-function">println</span>(temperature);  <span class="tok-comment">// watch it live in the Serial Monitor</span></code></pre>
 
 <div class="note-ct">The networking layer is where IoT meets the web skills from your other courses: the device sends an HTTP request (or MQTT message) to a server, which stores it and shows a dashboard — the four-layer architecture from Chapter 1 in action.</div>
 
@@ -2066,9 +2066,9 @@ Serial.<span class="tok-function">println</span>(temperature);  <span class="tok
   <div class="lz-layer"><b>I2C &amp; SPI</b> — bus khoảng cách ngắn giữa các chip trên cùng board (một màn hình, một đồng hồ RTC, cảm biến thêm). I2C chỉ dùng 2 dây và địa chỉ nhiều thiết bị; SPI nhanh hơn với nhiều dây hơn.</div>
   <div class="lz-layer"><b>WiFi</b> — module như <b>ESP8266/ESP32</b> nối thiết bị vào mạng và internet. Đây là thứ biến một món đồ cục bộ thành một thiết bị IoT thật báo cáo lên cloud.</div>
 </div>
-<pre>Serial.<span class="tok-function">begin</span>(9600);            <span class="tok-comment">// trong setup(), rồi:</span>
+<pre><code class="language-python">Serial.<span class="tok-function">begin</span>(9600);            <span class="tok-comment">// trong setup(), rồi:</span>
 Serial.<span class="tok-function">print</span>(<span class="tok-string">"Temp = "</span>);
-Serial.<span class="tok-function">println</span>(temperature);  <span class="tok-comment">// xem trực tiếp trong Serial Monitor</span></pre>
+Serial.<span class="tok-function">println</span>(temperature);  <span class="tok-comment">// xem trực tiếp trong Serial Monitor</span></code></pre>
 
 <div class="note-ct">Tầng mạng là nơi IoT gặp kỹ năng web từ các môn khác: thiết bị gửi một HTTP request (hoặc thông điệp MQTT) tới server, server lưu và hiển thị dashboard — kiến trúc bốn tầng từ Chương 1 vào hành động.</div>
 
@@ -2174,14 +2174,14 @@ Serial.<span class="tok-function">println</span>(temperature);  <span class="tok
 <p class="lead">So far Serial has been an output — <span class="badge">Serial.println</span> for debugging. Four labs (sessions 35, 39, 42, 48) turn it around: the PC sends text <em>to</em> the board. This is the foundation of every command interface, and of the AT commands you will send to a WiFi module.</p>
 
 <h3>Reading one character at a time</h3>
-<pre><span class="tok-keyword">void</span> <span class="tok-function">loop</span>() {
+<pre><code class="language-java"><span class="tok-keyword">void</span> <span class="tok-function">loop</span>() {
   <span class="tok-keyword">if</span> (Serial.<span class="tok-function">available</span>() &gt; 0) {      <span class="tok-comment">// is a byte waiting?</span>
     <span class="tok-type">char</span> c = Serial.<span class="tok-function">read</span>();           <span class="tok-comment">// take it out of the buffer</span>
     <span class="tok-keyword">if</span> (c == <span class="tok-string">'r'</span>) <span class="tok-function">setColor</span>(255, 0, 0);
     <span class="tok-keyword">if</span> (c == <span class="tok-string">'g'</span>) <span class="tok-function">setColor</span>(0, 255, 0);
     <span class="tok-keyword">if</span> (c == <span class="tok-string">'b'</span>) <span class="tok-function">setColor</span>(0, 0, 255);
   }
-}</pre>
+}</code></pre>
 <div class="note-ct"><span class="badge">available()</span> returns how many bytes have arrived; <span class="badge">read()</span> removes and returns one. The incoming buffer is only <b>64 bytes</b> — read promptly or data is silently lost.</div>
 
 <h3>Reading a whole line ("Read ASCII String")</h3>
@@ -2198,7 +2198,7 @@ Serial.<span class="tok-function">println</span>(temperature);  <span class="tok
 
 <h3>serialEvent() — the "arrives on its own" version</h3>
 <p>Session 39's lab uses a function Arduino calls automatically after each <span class="badge">loop()</span> if new serial data is waiting:</p>
-<pre><span class="tok-type">String</span> input = <span class="tok-string">""</span>;
+<pre><code class="language-java"><span class="tok-type">String</span> input = <span class="tok-string">""</span>;
 <span class="tok-type">bool</span> ready = <span class="tok-keyword">false</span>;
 
 <span class="tok-keyword">void</span> <span class="tok-function">serialEvent</span>() {
@@ -2211,7 +2211,7 @@ Serial.<span class="tok-function">println</span>(temperature);  <span class="tok
 
 <span class="tok-keyword">void</span> <span class="tok-function">loop</span>() {
   <span class="tok-keyword">if</span> (ready) { <span class="tok-function">handleCommand</span>(input); input = <span class="tok-string">""</span>; ready = <span class="tok-keyword">false</span>; }
-}</pre>
+}</code></pre>
 <div class="note-ct">Despite the name, this is <b>not</b> an interrupt — it runs between loops. It is a tidy way to separate "collect the line" from "act on the line", exactly the structure a real command parser uses.</div>
 
 <h3>Why the ASCII table lab matters</h3>
@@ -2227,14 +2227,14 @@ Serial.<span class="tok-function">println</span>(temperature);  <span class="tok
 <p class="lead">Tới giờ Serial mới đóng vai ngõ ra — <span class="badge">Serial.println</span> để gỡ lỗi. Bốn lab (buổi 35, 39, 42, 48) lật ngược lại: PC gửi văn bản <em>xuống</em> board. Đây là nền của mọi giao diện lệnh, và của các lệnh AT bạn sẽ gửi cho module WiFi.</p>
 
 <h3>Đọc từng ký tự một</h3>
-<pre><span class="tok-keyword">void</span> <span class="tok-function">loop</span>() {
+<pre><code class="language-java"><span class="tok-keyword">void</span> <span class="tok-function">loop</span>() {
   <span class="tok-keyword">if</span> (Serial.<span class="tok-function">available</span>() &gt; 0) {      <span class="tok-comment">// có byte nào đang chờ không?</span>
     <span class="tok-type">char</span> c = Serial.<span class="tok-function">read</span>();           <span class="tok-comment">// lấy nó ra khỏi bộ đệm</span>
     <span class="tok-keyword">if</span> (c == <span class="tok-string">'r'</span>) <span class="tok-function">setColor</span>(255, 0, 0);
     <span class="tok-keyword">if</span> (c == <span class="tok-string">'g'</span>) <span class="tok-function">setColor</span>(0, 255, 0);
     <span class="tok-keyword">if</span> (c == <span class="tok-string">'b'</span>) <span class="tok-function">setColor</span>(0, 0, 255);
   }
-}</pre>
+}</code></pre>
 <div class="note-ct"><span class="badge">available()</span> trả về số byte đã tới; <span class="badge">read()</span> lấy ra và trả về một byte. Bộ đệm nhận chỉ <b>64 byte</b> — đọc kịp thời, không thì dữ liệu mất âm thầm.</div>
 
 <h3>Đọc trọn một dòng ("Read ASCII String")</h3>
@@ -2251,7 +2251,7 @@ Serial.<span class="tok-function">println</span>(temperature);  <span class="tok
 
 <h3>serialEvent() — bản "tự nó tới"</h3>
 <p>Lab buổi 39 dùng một hàm mà Arduino tự gọi sau mỗi <span class="badge">loop()</span> nếu có dữ liệu serial mới đang chờ:</p>
-<pre><span class="tok-type">String</span> input = <span class="tok-string">""</span>;
+<pre><code class="language-java"><span class="tok-type">String</span> input = <span class="tok-string">""</span>;
 <span class="tok-type">bool</span> ready = <span class="tok-keyword">false</span>;
 
 <span class="tok-keyword">void</span> <span class="tok-function">serialEvent</span>() {
@@ -2264,7 +2264,7 @@ Serial.<span class="tok-function">println</span>(temperature);  <span class="tok
 
 <span class="tok-keyword">void</span> <span class="tok-function">loop</span>() {
   <span class="tok-keyword">if</span> (ready) { <span class="tok-function">handleCommand</span>(input); input = <span class="tok-string">""</span>; ready = <span class="tok-keyword">false</span>; }
-}</pre>
+}</code></pre>
 <div class="note-ct">Dù mang cái tên đó, đây <b>không phải</b> một ngắt — nó chạy giữa các vòng lặp. Đó là cách gọn gàng để tách "gom cho đủ dòng" khỏi "hành động theo dòng", đúng cấu trúc mà một bộ phân tích lệnh thật sử dụng.</div>
 
 <h3>Vì sao lab bảng ASCII lại quan trọng</h3>
@@ -2303,7 +2303,7 @@ Serial.<span class="tok-function">println</span>(temperature);  <span class="tok
 <div class="out">During those two seconds the board cannot read a button, check a sensor, answer a serial command or feed a servo. A user pressing a button during the delay gets no response at all. Add a second LED that must blink at a different rate and the delay approach simply cannot express it.</div>
 
 <h3>The pattern: ask "has enough time passed?"</h3>
-<pre><span class="tok-type">unsigned long</span> prev = 0;
+<pre><code class="language-java"><span class="tok-type">unsigned long</span> prev = 0;
 <span class="tok-keyword">const long</span> interval = 1000;
 <span class="tok-type">int</span> ledState = LOW;
 
@@ -2317,11 +2317,11 @@ Serial.<span class="tok-function">println</span>(temperature);  <span class="tok
   }
 
   <span class="tok-comment">// ← the loop keeps running: read buttons, sensors, serial here</span>
-}</pre>
+}</code></pre>
 <div class="note-ct">Read it as: "every time round the loop, check the clock; if a second has gone by since the last blink, blink and note the time." The loop never stops, so everything else stays responsive.</div>
 
 <h3>Two tasks at different rates — impossible with delay, trivial with millis</h3>
-<pre><span class="tok-type">unsigned long</span> prevLed = 0, prevSensor = 0;
+<pre><code class="language-java"><span class="tok-type">unsigned long</span> prevLed = 0, prevSensor = 0;
 
 <span class="tok-keyword">void</span> <span class="tok-function">loop</span>() {
   <span class="tok-type">unsigned long</span> now = <span class="tok-function">millis</span>();
@@ -2329,7 +2329,7 @@ Serial.<span class="tok-function">println</span>(temperature);  <span class="tok
   <span class="tok-keyword">if</span> (now - prevLed &gt;= 500)    { prevLed = now;    <span class="tok-function">toggleLed</span>(); }
   <span class="tok-keyword">if</span> (now - prevSensor &gt;= 2000) { prevSensor = now; <span class="tok-function">readAndReport</span>(); }
   <span class="tok-function">checkButton</span>();                 <span class="tok-comment">// runs thousands of times a second</span>
-}</pre>
+}</code></pre>
 <div class="out">An LED blinking twice a second, a sensor read every two seconds, and a button that responds instantly — all in one <span class="badge">loop()</span> with no threads and no operating system. This is the standard structure of embedded firmware.</div>
 
 <div class="pitfall"><b>The overflow trap, and why the subtraction order matters.</b> <span class="badge">millis()</span> wraps back to 0 after about 49.7 days. Writing <span class="badge">if (now &gt;= prev + interval)</span> breaks at the wrap; writing <span class="badge">if (now - prev &gt;= interval)</span> keeps working, because unsigned arithmetic wraps correctly too. Always subtract, never add — and always use <span class="badge">unsigned long</span> for both variables.</div>
@@ -2349,7 +2349,7 @@ Serial.<span class="tok-function">println</span>(temperature);  <span class="tok
 <div class="out">Trong hai giây đó board không đọc được nút, không kiểm được cảm biến, không trả lời được lệnh serial và không nuôi được servo. Người dùng bấm nút giữa lúc delay thì chẳng nhận phản hồi nào. Thêm một LED thứ hai phải nháy ở nhịp khác thì cách dùng delay đơn giản là không diễn đạt nổi.</div>
 
 <h3>Mẫu hình: hỏi "đã đủ thời gian chưa?"</h3>
-<pre><span class="tok-type">unsigned long</span> prev = 0;
+<pre><code class="language-java"><span class="tok-type">unsigned long</span> prev = 0;
 <span class="tok-keyword">const long</span> interval = 1000;
 <span class="tok-type">int</span> ledState = LOW;
 
@@ -2363,11 +2363,11 @@ Serial.<span class="tok-function">println</span>(temperature);  <span class="tok
   }
 
   <span class="tok-comment">// ← vòng lặp vẫn chạy: đọc nút, cảm biến, serial ở đây</span>
-}</pre>
+}</code></pre>
 <div class="note-ct">Đọc nó thành: "mỗi vòng lặp, liếc đồng hồ; nếu đã trôi qua một giây kể từ lần nháy trước thì nháy và ghi lại thời điểm." Vòng lặp không bao giờ dừng, nên mọi thứ khác vẫn nhạy.</div>
 
 <h3>Hai nhiệm vụ ở hai nhịp khác nhau — bất khả với delay, dễ như bỡn với millis</h3>
-<pre><span class="tok-type">unsigned long</span> prevLed = 0, prevSensor = 0;
+<pre><code class="language-java"><span class="tok-type">unsigned long</span> prevLed = 0, prevSensor = 0;
 
 <span class="tok-keyword">void</span> <span class="tok-function">loop</span>() {
   <span class="tok-type">unsigned long</span> now = <span class="tok-function">millis</span>();
@@ -2375,7 +2375,7 @@ Serial.<span class="tok-function">println</span>(temperature);  <span class="tok
   <span class="tok-keyword">if</span> (now - prevLed &gt;= 500)    { prevLed = now;    <span class="tok-function">toggleLed</span>(); }
   <span class="tok-keyword">if</span> (now - prevSensor &gt;= 2000) { prevSensor = now; <span class="tok-function">readAndReport</span>(); }
   <span class="tok-function">checkButton</span>();                 <span class="tok-comment">// chạy hàng nghìn lần mỗi giây</span>
-}</pre>
+}</code></pre>
 <div class="out">Một LED nháy hai lần mỗi giây, một cảm biến đọc mỗi hai giây, và một cái nút phản hồi tức thì — tất cả trong một <span class="badge">loop()</span> không luồng, không hệ điều hành. Đây là cấu trúc chuẩn của firmware nhúng.</div>
 
 <div class="pitfall"><b>Bẫy tràn số, và vì sao thứ tự phép trừ lại quan trọng.</b> <span class="badge">millis()</span> quay về 0 sau khoảng 49,7 ngày. Viết <span class="badge">if (now &gt;= prev + interval)</span> sẽ hỏng đúng lúc quay vòng; viết <span class="badge">if (now - prev &gt;= interval)</span> vẫn chạy đúng, vì số học không dấu cũng quay vòng chuẩn theo. Luôn TRỪ, đừng bao giờ CỘNG — và luôn dùng <span class="badge">unsigned long</span> cho cả hai biến.</div>
@@ -2404,7 +2404,7 @@ Serial.<span class="tok-function">println</span>(temperature);  <span class="tok
   <div class="lz-step">The CPU resumes exactly where it was</div>
 </div>
 
-<pre><span class="tok-keyword">volatile</span> <span class="tok-type">unsigned long</span> pulses = 0;   <span class="tok-comment">// shared with the ISR</span>
+<pre><code class="language-java"><span class="tok-keyword">volatile</span> <span class="tok-type">unsigned long</span> pulses = 0;   <span class="tok-comment">// shared with the ISR</span>
 
 <span class="tok-keyword">void</span> <span class="tok-function">countPulse</span>() {      <span class="tok-comment">// the ISR — keep it tiny</span>
   pulses++;
@@ -2422,7 +2422,7 @@ Serial.<span class="tok-function">println</span>(temperature);  <span class="tok
   <span class="tok-function">interrupts</span>();
   Serial.<span class="tok-function">println</span>(p);
   <span class="tok-function">delay</span>(1000);
-}</pre>
+}</code></pre>
 
 <h3>The two pins and the four modes</h3>
 <p>On the UNO only <b>pin 2 (INT0)</b> and <b>pin 3 (INT1)</b> support <span class="badge">attachInterrupt</span>.</p>
@@ -2462,7 +2462,7 @@ Serial.<span class="tok-function">println</span>(temperature);  <span class="tok
   <div class="lz-step">CPU quay lại đúng chỗ đang dang dở</div>
 </div>
 
-<pre><span class="tok-keyword">volatile</span> <span class="tok-type">unsigned long</span> pulses = 0;   <span class="tok-comment">// chia sẻ với ISR</span>
+<pre><code class="language-java"><span class="tok-keyword">volatile</span> <span class="tok-type">unsigned long</span> pulses = 0;   <span class="tok-comment">// chia sẻ với ISR</span>
 
 <span class="tok-keyword">void</span> <span class="tok-function">countPulse</span>() {      <span class="tok-comment">// hàm ISR — giữ cho thật ngắn</span>
   pulses++;
@@ -2480,7 +2480,7 @@ Serial.<span class="tok-function">println</span>(temperature);  <span class="tok
   <span class="tok-function">interrupts</span>();
   Serial.<span class="tok-function">println</span>(p);
   <span class="tok-function">delay</span>(1000);
-}</pre>
+}</code></pre>
 
 <h3>Hai cái chân và bốn chế độ</h3>
 <p>Trên UNO chỉ <b>chân 2 (INT0)</b> và <b>chân 3 (INT1)</b> hỗ trợ <span class="badge">attachInterrupt</span>.</p>
@@ -2538,7 +2538,7 @@ Serial.<span class="tok-function">println</span>(temperature);  <span class="tok
 </div>
 
 <h3>The easy way — the TimerOne library</h3>
-<pre><span class="tok-keyword">#include</span> <span class="tok-string">&lt;TimerOne.h&gt;</span>
+<pre><code class="language-c"><span class="tok-keyword">#include</span> <span class="tok-string">&lt;TimerOne.h&gt;</span>
 <span class="tok-keyword">volatile</span> <span class="tok-type">bool</span> tick = <span class="tok-keyword">false</span>;
 
 <span class="tok-keyword">void</span> <span class="tok-function">onTimer</span>() { tick = <span class="tok-keyword">true</span>; }      <span class="tok-comment">// keep the ISR trivial</span>
@@ -2554,7 +2554,7 @@ Serial.<span class="tok-function">println</span>(temperature);  <span class="tok
     tick = <span class="tok-keyword">false</span>;
     <span class="tok-function">sampleSensor</span>();               <span class="tok-comment">// …the real work happens here</span>
   }
-}</pre>
+}</code></pre>
 <div class="out">This is the standard <b>flag pattern</b>: the ISR does one assignment, the loop does the work. It keeps the ISR legal (no Serial, no delay) while still giving you exact timing.</div>
 
 <h3>What it is really for</h3>
@@ -2593,7 +2593,7 @@ Serial.<span class="tok-function">println</span>(temperature);  <span class="tok
 </div>
 
 <h3>Cách dễ — thư viện TimerOne</h3>
-<pre><span class="tok-keyword">#include</span> <span class="tok-string">&lt;TimerOne.h&gt;</span>
+<pre><code class="language-c"><span class="tok-keyword">#include</span> <span class="tok-string">&lt;TimerOne.h&gt;</span>
 <span class="tok-keyword">volatile</span> <span class="tok-type">bool</span> tick = <span class="tok-keyword">false</span>;
 
 <span class="tok-keyword">void</span> <span class="tok-function">onTimer</span>() { tick = <span class="tok-keyword">true</span>; }      <span class="tok-comment">// giữ ISR đơn giản hết mức</span>
@@ -2609,7 +2609,7 @@ Serial.<span class="tok-function">println</span>(temperature);  <span class="tok
     tick = <span class="tok-keyword">false</span>;
     <span class="tok-function">sampleSensor</span>();               <span class="tok-comment">// …việc thật diễn ra ở đây</span>
   }
-}</pre>
+}</code></pre>
 <div class="out">Đây là <b>mẫu lá cờ</b> chuẩn: ISR làm đúng một phép gán, vòng lặp làm phần việc. Nó giữ cho ISR hợp lệ (không Serial, không delay) mà vẫn cho bạn định thời chính xác.</div>
 
 <h3>Nó thực sự dùng để làm gì</h3>
@@ -2665,7 +2665,7 @@ Serial.<span class="tok-function">println</span>(temperature);  <span class="tok
 <p class="lead">Session 51's lab exists to solve a real problem: your device is configured with a threshold, a PIN or a counter — and a power cut resets every variable to its starting value, because SRAM is volatile. The ATmega328's <strong>EEPROM</strong> is 1024 bytes of memory that survives.</p>
 
 <h3>The whole API is five functions</h3>
-<pre><span class="tok-keyword">#include</span> <span class="tok-string">&lt;EEPROM.h&gt;</span>
+<pre><code class="language-c"><span class="tok-keyword">#include</span> <span class="tok-string">&lt;EEPROM.h&gt;</span>
 
 EEPROM.<span class="tok-function">write</span>(0, 42);              <span class="tok-comment">// write one byte (0..255) to address 0</span>
 <span class="tok-type">byte</span> v = EEPROM.<span class="tok-function">read</span>(0);        <span class="tok-comment">// read it back</span>
@@ -2674,7 +2674,7 @@ EEPROM.<span class="tok-function">update</span>(0, 42);             <span class=
 
 <span class="tok-type">float</span> threshold = 27.5;
 EEPROM.<span class="tok-function">put</span>(10, threshold);        <span class="tok-comment">// store any type (4 bytes here)</span>
-EEPROM.<span class="tok-function">get</span>(10, threshold);        <span class="tok-comment">// read it back into the variable</span></pre>
+EEPROM.<span class="tok-function">get</span>(10, threshold);        <span class="tok-comment">// read it back into the variable</span></code></pre>
 <div class="note-ct"><span class="badge">write/read</span> handle single bytes; <span class="badge">put/get</span> handle whole variables (float, int, struct) by writing their bytes in sequence. Addresses run 0–1023 and you choose the layout yourself — there is no file system.</div>
 
 <h3>The rule that matters: 100,000 writes</h3>
@@ -2686,7 +2686,7 @@ EEPROM.<span class="tok-function">get</span>(10, threshold);        <span class=
 </div>
 
 <h3>Ví dụ có lời giải · A remembered threshold</h3>
-<pre><span class="tok-keyword">const int</span> ADDR_MAGIC = 0, ADDR_THRESHOLD = 1;
+<pre><code class="language-java"><span class="tok-keyword">const int</span> ADDR_MAGIC = 0, ADDR_THRESHOLD = 1;
 <span class="tok-keyword">const byte</span> MAGIC = 0xA5;      <span class="tok-comment">// "this EEPROM has been initialised"</span>
 <span class="tok-type">int</span> threshold;
 
@@ -2703,7 +2703,7 @@ EEPROM.<span class="tok-function">get</span>(10, threshold);        <span class=
 <span class="tok-keyword">void</span> <span class="tok-function">saveThreshold</span>(<span class="tok-type">int</span> t) {       <span class="tok-comment">// called only when the user changes it</span>
   threshold = t;
   EEPROM.<span class="tok-function">put</span>(ADDR_THRESHOLD, t);
-}</pre>
+}</code></pre>
 <div class="out">The <b>magic byte</b> solves a subtle problem: a brand-new chip's EEPROM is filled with 255, so without this check your first boot would load a nonsense threshold of 65535. Real firmware always distinguishes "never configured" from "configured".</div>
 
 <div class="pitfall"><b>Trap:</b> forgetting that <span class="badge">put</span> occupies several addresses. A <span class="badge">float</span> at address 10 uses 10, 11, 12 and 13 — putting the next value at address 11 corrupts both. Write your address map down in a comment before you write the code.</div>
@@ -2716,7 +2716,7 @@ EEPROM.<span class="tok-function">get</span>(10, threshold);        <span class=
 <p class="lead">Lab buổi 51 tồn tại để giải một vấn đề thật: thiết bị của bạn được cấu hình một ngưỡng, một mã PIN hay một bộ đếm — rồi một cú mất điện đưa mọi biến về giá trị khởi đầu, vì SRAM mất nội dung khi ngắt nguồn. <strong>EEPROM</strong> của ATmega328 là 1024 byte bộ nhớ sống sót được.</p>
 
 <h3>Toàn bộ API gói trong năm hàm</h3>
-<pre><span class="tok-keyword">#include</span> <span class="tok-string">&lt;EEPROM.h&gt;</span>
+<pre><code class="language-c"><span class="tok-keyword">#include</span> <span class="tok-string">&lt;EEPROM.h&gt;</span>
 
 EEPROM.<span class="tok-function">write</span>(0, 42);              <span class="tok-comment">// ghi một byte (0..255) vào địa chỉ 0</span>
 <span class="tok-type">byte</span> v = EEPROM.<span class="tok-function">read</span>(0);        <span class="tok-comment">// đọc lại</span>
@@ -2725,7 +2725,7 @@ EEPROM.<span class="tok-function">update</span>(0, 42);             <span class=
 
 <span class="tok-type">float</span> threshold = 27.5;
 EEPROM.<span class="tok-function">put</span>(10, threshold);        <span class="tok-comment">// lưu kiểu bất kỳ (ở đây 4 byte)</span>
-EEPROM.<span class="tok-function">get</span>(10, threshold);        <span class="tok-comment">// đọc lại vào chính biến đó</span></pre>
+EEPROM.<span class="tok-function">get</span>(10, threshold);        <span class="tok-comment">// đọc lại vào chính biến đó</span></code></pre>
 <div class="note-ct"><span class="badge">write/read</span> làm việc với từng byte; <span class="badge">put/get</span> làm việc với cả biến (float, int, struct) bằng cách ghi các byte của nó liên tiếp. Địa chỉ chạy 0–1023 và bạn tự chọn bố trí — không có hệ thống tập tin nào cả.</div>
 
 <h3>Luật quan trọng nhất: 100.000 lần ghi</h3>
@@ -2737,7 +2737,7 @@ EEPROM.<span class="tok-function">get</span>(10, threshold);        <span class=
 </div>
 
 <h3>Ví dụ có lời giải · Một ngưỡng được nhớ lại</h3>
-<pre><span class="tok-keyword">const int</span> ADDR_MAGIC = 0, ADDR_THRESHOLD = 1;
+<pre><code class="language-java"><span class="tok-keyword">const int</span> ADDR_MAGIC = 0, ADDR_THRESHOLD = 1;
 <span class="tok-keyword">const byte</span> MAGIC = 0xA5;      <span class="tok-comment">// "EEPROM này đã được khởi tạo"</span>
 <span class="tok-type">int</span> threshold;
 
@@ -2754,7 +2754,7 @@ EEPROM.<span class="tok-function">get</span>(10, threshold);        <span class=
 <span class="tok-keyword">void</span> <span class="tok-function">saveThreshold</span>(<span class="tok-type">int</span> t) {       <span class="tok-comment">// chỉ gọi khi người dùng đổi giá trị</span>
   threshold = t;
   EEPROM.<span class="tok-function">put</span>(ADDR_THRESHOLD, t);
-}</pre>
+}</code></pre>
 <div class="out"><b>Byte thần chú (magic byte)</b> giải một vấn đề tinh vi: EEPROM của chip mới tinh toàn giá trị 255, nên không có phép kiểm này thì lần khởi động đầu tiên sẽ nạp một ngưỡng vô nghĩa bằng 65535. Firmware thật luôn phân biệt "chưa từng cấu hình" với "đã cấu hình".</div>
 
 <div class="pitfall"><b>Bẫy:</b> quên rằng <span class="badge">put</span> chiếm nhiều địa chỉ. Một <span class="badge">float</span> ở địa chỉ 10 dùng hết 10, 11, 12 và 13 — đặt giá trị kế tiếp vào địa chỉ 11 là hỏng cả hai. Hãy viết bản đồ địa chỉ ra một dòng chú thích trước khi viết code.</div>

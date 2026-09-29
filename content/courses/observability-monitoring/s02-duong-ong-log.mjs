@@ -63,7 +63,7 @@ dấu ngoặc kép bị escape        28 lần (mỗi lần +1 byte)</div>
 <p>Read the second row against a 6 GB VPS disk that also holds Postgres. Fifty requests per second — modest — with five log lines each fills that disk in a bit over a day. Not eventually. In a day.</p>
 
 <h3>Why <code>docker logs</code> is not a debugging tool</h3>
-<pre><code>docker logs &lt;container&gt;
+<pre><code class="language-bash">docker logs &lt;container&gt;
     │
     └─▶ opens /var/lib/docker/containers/&lt;id&gt;/&lt;id&gt;-json.log
         reads it, unwraps the "log" field, prints it
@@ -82,7 +82,7 @@ Consequences that surprise people:
 <p>The last one is the one that catches people during an incident: you redeploy to try a fix, and the log explaining the original failure is now attached to a container that no longer exists. That is the whole argument for a shipper, which lesson 2.3 covers.</p>
 
 <h3>The other drivers, and why the default wins anyway</h3>
-<pre><code>json-file   default. Writes the file above. Supports rotation.
+<pre><code class="language-bash">json-file   default. Writes the file above. Supports rotation.
             docker logs works. → this is the right choice.
 
 local       Docker's own binary format. Smaller and faster,
@@ -159,7 +159,7 @@ dấu ngoặc kép bị escape        28 lần (mỗi lần +1 byte)</div>
 <p>Hãy đọc hàng thứ hai bên cạnh một cái đĩa VPS 6 GB đang đồng thời chứa Postgres. Năm mươi request mỗi giây — mức khiêm tốn — với năm dòng log mỗi cái sẽ lấp đầy cái đĩa đó trong hơn một ngày. Không phải &quot;rồi sẽ&quot;. Trong một ngày.</p>
 
 <h3>Vì sao <code>docker logs</code> không phải công cụ gỡ lỗi</h3>
-<pre><code>docker logs &lt;container&gt;
+<pre><code class="language-bash">docker logs &lt;container&gt;
     │
     └─▶ mở /var/lib/docker/containers/&lt;id&gt;/&lt;id&gt;-json.log
         đọc, bóc trường "log" ra, in lên
@@ -178,7 +178,7 @@ Những hệ quả làm người ta bất ngờ:
 <p>Cái cuối cùng mới là cái tóm người ta giữa lúc sự cố: bạn deploy lại để thử một cách chữa, và cái log giải thích cú hỏng ban đầu giờ đang gắn với một container không còn tồn tại. Đó chính là toàn bộ lý lẽ cho một trình thu log, thứ bài 2.3 nói tới.</p>
 
 <h3>Mấy trình khác, và vì sao mặc định vẫn thắng</h3>
-<pre><code>json-file   mặc định. Ghi cái file ở trên. Có hỗ trợ xoay vòng.
+<pre><code class="language-bash">json-file   mặc định. Ghi cái file ở trên. Có hỗ trợ xoay vòng.
             docker logs chạy được. → đây là lựa chọn đúng.
 
 local       Định dạng nhị phân riêng của Docker. Nhỏ hơn và nhanh
@@ -282,7 +282,7 @@ services:
 <p>Seven services at a 150 MB ceiling is 1.05 GB, worst case, forever. Compare that to &quot;unbounded, checked on Sundays&quot;.</p>
 
 <h3>Two things the daemon-wide setting will not do</h3>
-<pre><code>1. It does NOT apply retroactively.
+<pre><code class="language-bash">1. It does NOT apply retroactively.
    Existing containers keep the driver options they were
    created with. Only a recreate picks up the new default:
 
@@ -394,7 +394,7 @@ services:
 <p>Bảy dịch vụ với trần 150 MB là 1,05 GB, ở trường hợp tệ nhất, mãi mãi. So cái đó với &quot;không giới hạn, kiểm vào Chủ nhật&quot;.</p>
 
 <h3>Hai điều thiết lập cấp daemon sẽ KHÔNG làm</h3>
-<pre><code>1. Nó KHÔNG áp dụng ngược lại.
+<pre><code class="language-bash">1. Nó KHÔNG áp dụng ngược lại.
    Container đang tồn tại giữ nguyên tuỳ chọn trình ghi mà nó
    được tạo ra cùng. Chỉ khi tạo lại thì mới nhận mặc định mới:
 

@@ -88,7 +88,7 @@ ${slide('lx-11', 3, 'Từ SysV init tới systemd: ai trông các dịch vụ')}
 </table>
 
 <h3>What a unit is</h3>
-<pre><code>systemctl list-units --type=service --state=running | head
+<pre><code class="language-bash">systemctl list-units --type=service --state=running | head
 systemctl status nginx
 systemctl cat nginx                    <span class="tok-comment"># the unit file, including drop-ins</span>
 systemctl show nginx | head -20        <span class="tok-comment"># every resolved property</span></code></pre>
@@ -110,7 +110,7 @@ systemctl show nginx | head -20        <span class="tok-comment"># every resolve
 <div class="callout"><strong>enabled and active are independent.</strong> A service can be running now but not set to start at boot — which works perfectly until the machine reboots at 4am after a kernel update and the application simply never comes back. <code>systemctl is-enabled myapp</code> answers it in one word, and <code>--now</code> on <code>enable</code> does both at once.</div>
 
 <h3>The verbs</h3>
-<pre><code>sudo systemctl start myapp
+<pre><code class="language-bash">sudo systemctl start myapp
 sudo systemctl stop myapp
 sudo systemctl restart myapp           <span class="tok-comment"># stop then start — brief downtime</span>
 sudo systemctl reload myapp            <span class="tok-comment"># SIGHUP: re-read config, keep serving (Lesson 5.3)</span>
@@ -148,7 +148,7 @@ RestartSec=5s
 
 [Install]
 WantedBy=multi-user.target</code></pre>
-<pre><code>sudo systemctl daemon-reload           <span class="tok-comment"># REQUIRED after editing any unit file</span>
+<pre><code class="language-bash">sudo systemctl daemon-reload           <span class="tok-comment"># REQUIRED after editing any unit file</span>
 sudo systemctl enable --now myapp
 systemctl status myapp
 journalctl -u myapp -f</code></pre>
@@ -284,12 +284,12 @@ Sep 28 15:24:51 vps-1 systemd[1]: leak.service: A process of this unit has been 
 
 <h3>Drop-ins: overriding without editing</h3>
 ${slide('lx-11', 8, 'Drop-in, hộp cát và điểm systemd-analyze security')}
-<pre><code>sudo systemctl edit nginx              <span class="tok-comment"># creates a drop-in and opens it</span></code></pre>
+<pre><code class="language-bash">sudo systemctl edit nginx              <span class="tok-comment"># creates a drop-in and opens it</span></code></pre>
 <pre><code><span class="tok-comment"># /etc/systemd/system/nginx.service.d/override.conf</span>
 [Service]
 MemoryMax=1G
 Restart=always</code></pre>
-<pre><code>systemctl cat nginx                    <span class="tok-comment"># main file + every drop-in, in order</span>
+<pre><code class="language-bash">systemctl cat nginx                    <span class="tok-comment"># main file + every drop-in, in order</span>
 sudo systemctl revert nginx            <span class="tok-comment"># discard all local overrides</span></code></pre>
 <div class="callout ok">Never edit a unit file that came from a package: the next <code>apt upgrade</code> replaces it and your change vanishes. A drop-in in <code>/etc/systemd/system/&lt;unit&gt;.d/</code> survives upgrades, shows up clearly in <code>systemctl cat</code>, and can be removed with one command. The same layering as the <code>sshd_config.d</code> and <code>sudoers.d</code> directories from Chapters 4 and 9 — <code>/etc</code> is yours, <code>/usr/lib</code> belongs to the package.</div>
 <pre><code><span class="tok-comment"># To append to a list-valued directive, reset it first</span>
@@ -300,7 +300,7 @@ ExecStart=/usr/bin/node /srv/app/dist/index.js --flag</code></pre>
 
 <h3>When it will not start</h3>
 ${slide('lx-11', 7, 'status và journal: đọc mã sau dấu /')}
-<pre><code>systemctl status myapp                 <span class="tok-comment"># 1. the summary and last few log lines</span>
+<pre><code class="language-bash">systemctl status myapp                 <span class="tok-comment"># 1. the summary and last few log lines</span>
 journalctl -u myapp -n 50 --no-pager   <span class="tok-comment"># 2. the actual output (Lesson 10.3)</span>
 journalctl -u myapp -p err --since '10 min ago'
 systemd-analyze verify /etc/systemd/system/myapp.service   <span class="tok-comment"># 3. syntax</span>
@@ -389,7 +389,7 @@ ready</div>
 
 <h3>Try it step by step: a real service in a container with systemd</h3>
 <p>A normal container has no systemd (PID 1 is your command). To practise without touching a real machine, build an Ubuntu 24.04 container with systemd as PID 1 — it needs <code>--privileged</code>, so only do this on a practice machine and delete it straight after:</p>
-<pre><code><span class="tok-comment"># 1. an image with systemd (once)</span>
+<pre><code class="language-bash"><span class="tok-comment"># 1. an image with systemd (once)</span>
 docker run -d --name lab-b ubuntu:24.04 sleep infinity
 docker exec lab-b bash -c 'apt-get update -qq &amp;&amp; DEBIAN_FRONTEND=noninteractive apt-get install -y -qq systemd systemd-sysv python3 cron openssh-server &gt;/dev/null'
 docker commit lab-b lab-sd:img &amp;&amp; docker rm -f lab-b
@@ -399,7 +399,7 @@ docker run -d --name lab-sd --hostname vps-1 --privileged --cgroupns=private \\
 docker exec lab-sd systemctl is-system-running
 docker exec -it lab-sd bash</code></pre>
 <div class="out">running</div>
-<pre><code><span class="tok-comment"># 3. inside the container: a small app and its unit</span>
+<pre><code class="language-python"><span class="tok-comment"># 3. inside the container: a small app and its unit</span>
 useradd -r -s /usr/sbin/nologin appuser
 mkdir -p /srv/app &amp;&amp; cd /srv/app
 cat &gt; server.py &lt;&lt;'EOF'
@@ -440,7 +440,7 @@ systemctl status myapp --no-pager</code></pre>
 
 Sep 28 15:23:06 vps-1 systemd[1]: Started myapp.service - My app (lx11 demo).
 Sep 28 15:23:06 vps-1 python3[167]: listening on 127.0.0.1:19110</div>
-<pre><code><span class="tok-comment"># 4. kill it hard — systemd brings it back</span>
+<pre><code class="language-bash"><span class="tok-comment"># 4. kill it hard — systemd brings it back</span>
 kill -9 "$(systemctl show -p MainPID --value myapp)"
 sleep 4
 journalctl -u myapp -n 5 --no-pager
@@ -544,7 +544,7 @@ ${slide('lx-11', 3, 'Từ SysV init tới systemd: ai trông các dịch vụ')}
 </table>
 
 <h3>Một unit là gì</h3>
-<pre><code>systemctl list-units --type=service --state=running | head
+<pre><code class="language-bash">systemctl list-units --type=service --state=running | head
 systemctl status nginx
 systemctl cat nginx                    <span class="tok-comment"># file unit, kèm cả các phần chèn thêm</span>
 systemctl show nginx | head -20        <span class="tok-comment"># mọi thuộc tính đã giải xong</span></code></pre>
@@ -566,7 +566,7 @@ systemctl show nginx | head -20        <span class="tok-comment"># mọi thuộc
 <div class="callout"><strong>enabled và active là hai chuyện độc lập.</strong> Một dịch vụ có thể đang chạy ngay lúc này mà không được đặt để khởi động cùng máy — chuyện đó chạy hoàn hảo cho tới khi máy khởi động lại lúc 4 giờ sáng sau một bản vá nhân và ứng dụng đơn giản là không bao giờ quay lại. <code>systemctl is-enabled myapp</code> trả lời trong đúng một chữ, còn cờ <code>--now</code> của <code>enable</code> làm cả hai việc cùng lúc.</div>
 
 <h3>Các động từ</h3>
-<pre><code>sudo systemctl start myapp
+<pre><code class="language-bash">sudo systemctl start myapp
 sudo systemctl stop myapp
 sudo systemctl restart myapp           <span class="tok-comment"># dừng rồi chạy lại — có gián đoạn ngắn</span>
 sudo systemctl reload myapp            <span class="tok-comment"># SIGHUP: đọc lại cấu hình, vẫn phục vụ (Bài 5.3)</span>
@@ -604,7 +604,7 @@ RestartSec=5s
 
 [Install]
 WantedBy=multi-user.target</code></pre>
-<pre><code>sudo systemctl daemon-reload           <span class="tok-comment"># BẮT BUỘC sau khi sửa bất kỳ file unit nào</span>
+<pre><code class="language-bash">sudo systemctl daemon-reload           <span class="tok-comment"># BẮT BUỘC sau khi sửa bất kỳ file unit nào</span>
 sudo systemctl enable --now myapp
 systemctl status myapp
 journalctl -u myapp -f</code></pre>
@@ -740,12 +740,12 @@ Sep 28 15:24:51 vps-1 systemd[1]: leak.service: A process of this unit has been 
 
 <h3>Drop-in: ghi đè mà không phải sửa file gốc</h3>
 ${slide('lx-11', 8, 'Drop-in, hộp cát và điểm systemd-analyze security')}
-<pre><code>sudo systemctl edit nginx              <span class="tok-comment"># tạo một drop-in rồi mở nó ra</span></code></pre>
+<pre><code class="language-bash">sudo systemctl edit nginx              <span class="tok-comment"># tạo một drop-in rồi mở nó ra</span></code></pre>
 <pre><code><span class="tok-comment"># /etc/systemd/system/nginx.service.d/override.conf</span>
 [Service]
 MemoryMax=1G
 Restart=always</code></pre>
-<pre><code>systemctl cat nginx                    <span class="tok-comment"># file chính + mọi drop-in, theo thứ tự</span>
+<pre><code class="language-bash">systemctl cat nginx                    <span class="tok-comment"># file chính + mọi drop-in, theo thứ tự</span>
 sudo systemctl revert nginx            <span class="tok-comment"># bỏ hết các phần ghi đè cục bộ</span></code></pre>
 <div class="callout ok">Đừng bao giờ sửa một file unit đến từ một gói phần mềm: lần <code>apt upgrade</code> kế tiếp sẽ thay nó và thay đổi của bạn biến mất. Một drop-in trong <code>/etc/systemd/system/&lt;unit&gt;.d/</code> thì sống sót qua các lần nâng cấp, hiện ra rõ ràng trong <code>systemctl cat</code>, và gỡ đi được bằng một lệnh. Cùng một lối xếp tầng với các thư mục <code>sshd_config.d</code> và <code>sudoers.d</code> ở Chương 4 và 9 — <code>/etc</code> là của bạn, <code>/usr/lib</code> thuộc về cái gói.</div>
 <pre><code><span class="tok-comment"># Muốn nối thêm vào một chỉ thị dạng danh sách thì phải xoá nó trước</span>
@@ -756,7 +756,7 @@ ExecStart=/usr/bin/node /srv/app/dist/index.js --flag</code></pre>
 
 <h3>Khi nó không khởi động</h3>
 ${slide('lx-11', 7, 'status và journal: đọc mã sau dấu /')}
-<pre><code>systemctl status myapp                 <span class="tok-comment"># 1. bản tóm tắt và vài dòng log cuối</span>
+<pre><code class="language-bash">systemctl status myapp                 <span class="tok-comment"># 1. bản tóm tắt và vài dòng log cuối</span>
 journalctl -u myapp -n 50 --no-pager   <span class="tok-comment"># 2. output thật sự (Bài 10.3)</span>
 journalctl -u myapp -p err --since '10 min ago'
 systemd-analyze verify /etc/systemd/system/myapp.service   <span class="tok-comment"># 3. cú pháp</span>
@@ -845,7 +845,7 @@ ready</div>
 
 <h3>Chạy thử từng bước: một dịch vụ thật trong container có systemd</h3>
 <p>Container bình thường không có systemd (PID 1 là lệnh của bạn). Muốn tập mà không đụng máy thật, dựng một container Ubuntu 24.04 có systemd làm PID 1 — cần <code>--privileged</code>, nên chỉ làm trên máy tập và xoá ngay sau đó:</p>
-<pre><code><span class="tok-comment"># 1. ảnh có systemd (một lần)</span>
+<pre><code class="language-bash"><span class="tok-comment"># 1. ảnh có systemd (một lần)</span>
 docker run -d --name lab-b ubuntu:24.04 sleep infinity
 docker exec lab-b bash -c 'apt-get update -qq &amp;&amp; DEBIAN_FRONTEND=noninteractive apt-get install -y -qq systemd systemd-sysv python3 cron openssh-server &gt;/dev/null'
 docker commit lab-b lab-sd:img &amp;&amp; docker rm -f lab-b
@@ -855,7 +855,7 @@ docker run -d --name lab-sd --hostname vps-1 --privileged --cgroupns=private \\
 docker exec lab-sd systemctl is-system-running
 docker exec -it lab-sd bash</code></pre>
 <div class="out">running</div>
-<pre><code><span class="tok-comment"># 3. trong container: một app nhỏ và unit của nó</span>
+<pre><code class="language-python"><span class="tok-comment"># 3. trong container: một app nhỏ và unit của nó</span>
 useradd -r -s /usr/sbin/nologin appuser
 mkdir -p /srv/app &amp;&amp; cd /srv/app
 cat &gt; server.py &lt;&lt;'EOF'
@@ -896,7 +896,7 @@ systemctl status myapp --no-pager</code></pre>
 
 Sep 28 15:23:06 vps-1 systemd[1]: Started myapp.service - My app (lx11 demo).
 Sep 28 15:23:06 vps-1 python3[167]: listening on 127.0.0.1:19110</div>
-<pre><code><span class="tok-comment"># 4. giết nó thật mạnh — systemd dựng lại</span>
+<pre><code class="language-bash"><span class="tok-comment"># 4. giết nó thật mạnh — systemd dựng lại</span>
 kill -9 "$(systemctl show -p MainPID --value myapp)"
 sleep 4
 journalctl -u myapp -n 5 --no-pager
@@ -1065,7 +1065,7 @@ PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
   <div class="lz-layer"><span class="lz-lname">/etc/cron.{hourly,daily,weekly,monthly}/</span><span class="lz-lnote">Drop an executable script in, no schedule line at all. Run by <code>run-parts</code>. The script must be executable and — same rule as above — <strong>must not have a <code>.sh</code> extension</strong>, or run-parts silently skips it.</span></div>
   <div class="lz-layer"><span class="lz-lname">systemd timers</span><span class="lz-lnote">A different mechanism entirely, covered below. On a modern Ubuntu, <code>apt</code> updates, <code>logrotate</code>, <code>fstrim</code> and <code>man-db</code> have all already moved here — which is why <code>/etc/cron.daily</code> can look emptier than you expect.</span></div>
 </div>
-<pre><code><span class="tok-comment"># The six-field system format — note the user column</span>
+<pre><code class="language-bash"><span class="tok-comment"># The six-field system format — note the user column</span>
 cat /etc/cron.d/app-cleanup</code></pre>
 <div class="out">SHELL=/bin/bash
 PATH=/usr/local/bin:/usr/bin:/bin
@@ -1093,7 +1093,7 @@ Sep 28 15:27:01 vps-1 CRON[864]: (root) CMD (touch /tmp/khong-cham)</div>
 ${slide('lx-11', 11, 'Môi trường của cron và tên file có dấu chấm')}
 <p>This is the lesson. Nine out of ten broken cron jobs are broken here, and the symptom is always the same sentence: <em>"it works when I run it by hand"</em>.</p>
 <p>When cron runs your command it does <strong>not</strong> read <code>~/.bashrc</code>, <code>~/.profile</code>, or <code>/etc/profile</code> (Lesson 8.2). It gives you a very thin environment: <code>HOME</code>, <code>LOGNAME</code>, <code>SHELL=/bin/sh</code>, a default <code>PATH</code>, and almost nothing else. No <code>nvm</code>, no <code>pyenv</code>, no <code>rbenv</code>, no <code>~/.local/bin</code>, none of your exports. <strong>That default PATH differs between cron implementations</strong> (corrected from a real measurement on 28/09/2026 — an earlier version of this lesson said <code>PATH=/usr/bin:/bin</code> and "no <code>LANG</code>", which is WRONG on Ubuntu): Ubuntu/Debian cron loads <code>/etc/environment</code> and <code>/etc/default/locale</code> through PAM (<code>pam_env</code> in <code>/etc/pam.d/cron</code>), so PATH is as long as the system one and <code>LANG=C.UTF-8</code> is set; Fedora/RHEL cronie defaults to <code>/usr/bin:/bin:/usr/sbin:/sbin</code> (per the cronie source). None of them has the directories that <code>~/.bashrc</code>/<code>~/.profile</code> add — and that is exactly where nvm's node lives.</p>
-<pre><code><span class="tok-comment"># Prove it: dump cron's real environment for one minute</span>
+<pre><code class="language-bash"><span class="tok-comment"># Prove it: dump cron's real environment for one minute</span>
 crontab -l | { cat; echo '* * * * * env &gt; /tmp/cron-env.txt 2&gt;&amp;1'; } | crontab -
 <span class="tok-comment"># wait a minute, then</span>
 cat /tmp/cron-env.txt</code></pre>
@@ -1127,7 +1127,7 @@ PWD=/home/deploy</div>
     <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">Let a wrapper script own the environment</span><span class="lz-nsub">cron calls <code>/usr/local/bin/nightly</code>; the script sets its own PATH, <code>cd</code>s where it needs to be, and sources what it needs. cron stays one line.</span></div></div>
   </div>
 </div>
-<pre><code><span class="tok-comment"># Fix C, in full — the shape every scheduled job should have</span>
+<pre><code class="language-bash"><span class="tok-comment"># Fix C, in full — the shape every scheduled job should have</span>
 <span class="tok-comment"># /usr/local/bin/nightly</span>
 #!/usr/bin/env bash
 set -Eeuo pipefail                                   <span class="tok-comment"># Lesson 7.1</span>
@@ -1200,7 +1200,7 @@ AccuracySec=1s                   <span class="tok-comment"># default is 1min; on
 
 [Install]
 WantedBy=timers.target</code></pre>
-<pre><code>sudo systemctl daemon-reload
+<pre><code class="language-bash">sudo systemctl daemon-reload
 sudo systemctl enable --now backup.timer   <span class="tok-comment"># the TIMER, not the service</span>
 systemctl list-timers backup.timer</code></pre>
 <div class="out">NEXT                        LEFT       LAST                        PASSED  UNIT          ACTIVATES
@@ -1298,7 +1298,7 @@ ${slide('lx-11', 14, 'cron hay timer: bảng so sánh')}
   <div class="lz-step"><span class="lz-k">5 · Check the clock and the timezone</span><span class="lz-t">timedatectl</span><span class="lz-d">"It runs three hours late" is almost always UTC versus local. Timers can use <code>OnCalendar</code> with an explicit timezone on modern systemd; cron follows the system timezone and needs a restart after you change it.</span></div>
   <div class="lz-step"><span class="lz-k">6 · Look for the second copy</span><span class="lz-t">pgrep -af backup.sh</span><span class="lz-d">A job that overlaps itself can look like "it didn't run" when in fact it never finished. Lock it (below).</span></div>
 </div>
-<pre><code><span class="tok-comment"># Did cron try? This is the first command, every time.</span>
+<pre><code class="language-bash"><span class="tok-comment"># Did cron try? This is the first command, every time.</span>
 journalctl -t CRON --since today | tail -20</code></pre>
 <div class="out">Aug 22 03:30:01 vps-1 CRON[40112]: (deploy) CMD (/usr/local/bin/backup.sh &gt;&gt; /var/log/backup.log 2&gt;&amp;1)
 Aug 22 03:39:14 vps-1 CRON[40112]: (deploy) MAIL (mailed 1 byte of output; but got status 0x004b)
@@ -1332,7 +1332,7 @@ exit=75</div>
 <p><strong>One measured detail:</strong> the lock is tied to a <em>file descriptor</em>, and child processes inherit file descriptors. Run <code>flock -n /tmp/backup.lock sleep 30 &amp;</code> then <code>kill %1</code> — what gets killed is <code>flock</code>, while <code>sleep</code> (its child) lives on and still holds the lock: the next <code>flock -n</code> keeps failing until <code>sleep</code> dies. A systemd service does not have this problem because <code>systemctl stop</code> kills the whole cgroup; with cron an orphaned child can hold the lock and block every later run — check with <code>fuser -v /var/lock/backup.lock</code> or <code>lsof /var/lock/backup.lock</code>.</p>
 
 <h3>A complete example</h3>
-<pre><code><span class="tok-comment"># /usr/local/bin/backup.sh — quiet on success, loud on failure</span>
+<pre><code class="language-bash"><span class="tok-comment"># /usr/local/bin/backup.sh — quiet on success, loud on failure</span>
 #!/usr/bin/env bash
 set -Eeuo pipefail
 export PATH=/usr/local/bin:/usr/bin:/bin
@@ -1354,7 +1354,7 @@ mv "\$FILE.part" "\$FILE"                        <span class="tok-comment"># ato
 
 find "\$DEST" -name 'app-*.dump' -mtime +"\$KEEP_DAYS" -print -delete
 echo "backup: \$(du -h "\$FILE" | cut -f1) -&gt; \$FILE"</code></pre>
-<pre><code><span class="tok-comment"># Test it before you schedule it — as the user that will run it</span>
+<pre><code class="language-bash"><span class="tok-comment"># Test it before you schedule it — as the user that will run it</span>
 sudo -u deploy /usr/local/bin/backup.sh
 sudo systemctl start backup.service          <span class="tok-comment"># then, the way it will really run</span>
 journalctl -u backup.service -n 20 --no-pager</code></pre>
@@ -1367,7 +1367,7 @@ Aug 22 18:02:49 vps-1 systemd[1]: Finished backup.service - Nightly database bac
 
 <h3>Try it step by step: cron and a timer in a container with systemd</h3>
 <p>Reuse the <code>lab-sd</code> container from Lesson 11.1 (it has <code>cron</code> installed). Every output below is real, recorded on 28/09/2026:</p>
-<pre><code>useradd -m -s /bin/bash deploy
+<pre><code class="language-bash">useradd -m -s /bin/bash deploy
 echo '* * * * * env &gt; /tmp/cron-env.txt 2&gt;&amp;1' | crontab -u deploy -
 printf '* * * * * root touch /tmp/co-cham\\n'   &gt; /etc/cron.d/app.cleanup
 printf '* * * * * root touch /tmp/khong-cham\\n' &gt; /etc/cron.d/app-cleanup
@@ -1385,7 +1385,7 @@ ls: cannot access '/tmp/co-cham': No such file or directory
 Sep 28 15:26:01 vps-1 CRON[821]: (root) CMD (touch /tmp/khong-cham)
 Sep 28 15:26:01 vps-1 CRON[822]: (deploy) CMD (env &gt; /tmp/cron-env.txt 2&gt;&amp;1)</div>
 <p>Then do the same job with a timer: write <code>/usr/local/bin/backup.sh</code> (tars <code>/srv/app</code> into <code>/srv/backups</code>), <code>backup.service</code> (<code>Type=oneshot</code>, <code>User=deploy</code>) and <code>backup.timer</code> (<code>OnCalendar=*-*-* 03:30:00</code>, <code>Persistent=true</code>, <code>RandomizedDelaySec=300</code>) exactly as in the sample above, then:</p>
-<pre><code>systemctl daemon-reload
+<pre><code class="language-bash">systemctl daemon-reload
 systemctl enable --now backup.timer
 systemctl list-timers backup.timer
 systemctl start backup.service
@@ -1553,7 +1553,7 @@ PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
   <div class="lz-layer"><span class="lz-lname">/etc/cron.{hourly,daily,weekly,monthly}/</span><span class="lz-lnote">Thả một script chạy được vào, khỏi cần dòng lịch nào cả. Do <code>run-parts</code> chạy. Script phải có bit thực thi và — vẫn luật trên — <strong>KHÔNG được có đuôi <code>.sh</code></strong>, không thì run-parts lặng lẽ bỏ qua.</span></div>
   <div class="lz-layer"><span class="lz-lname">Timer của systemd</span><span class="lz-lnote">Một cơ chế hoàn toàn khác, nói ở dưới. Trên Ubuntu hiện đại, cập nhật <code>apt</code>, <code>logrotate</code>, <code>fstrim</code> và <code>man-db</code> đều đã dọn sang đây — vì thế <code>/etc/cron.daily</code> trông trống hơn bạn tưởng.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Định dạng sáu trường của hệ thống — để ý cột người dùng</span>
+<pre><code class="language-bash"><span class="tok-comment"># Định dạng sáu trường của hệ thống — để ý cột người dùng</span>
 cat /etc/cron.d/app-cleanup</code></pre>
 <div class="out">SHELL=/bin/bash
 PATH=/usr/local/bin:/usr/bin:/bin
@@ -1581,7 +1581,7 @@ Sep 28 15:27:01 vps-1 CRON[864]: (root) CMD (touch /tmp/khong-cham)</div>
 ${slide('lx-11', 11, 'Môi trường của cron và tên file có dấu chấm')}
 <p>Đây mới là bài học. Chín trên mười công việc cron hỏng là hỏng ở đây, và triệu chứng luôn là đúng một câu: <em>"chạy tay thì được mà"</em>.</p>
 <p>Khi cron chạy câu lệnh của bạn, nó <strong>KHÔNG</strong> đọc <code>~/.bashrc</code>, <code>~/.profile</code> hay <code>/etc/profile</code> (Bài 8.2). Nó đưa cho bạn một môi trường rất mỏng: <code>HOME</code>, <code>LOGNAME</code>, <code>SHELL=/bin/sh</code>, một <code>PATH</code> mặc định, và gần như không gì khác. Không <code>nvm</code>, không <code>pyenv</code>, không <code>rbenv</code>, không <code>~/.local/bin</code>, không một biến export nào của bạn. <strong>Cái PATH mặc định đó khác nhau theo bản cron</strong> (đã sửa lại theo đo thật 28/09/2026 — bản trước của bài ghi <code>PATH=/usr/bin:/bin</code> và "không có <code>LANG</code>", điều đó SAI trên Ubuntu): cron của Ubuntu/Debian nạp <code>/etc/environment</code> và <code>/etc/default/locale</code> qua PAM (<code>pam_env</code> trong <code>/etc/pam.d/cron</code>), nên PATH dài như của hệ thống và có <code>LANG=C.UTF-8</code>; cronie của Fedora/RHEL thì mặc định <code>/usr/bin:/bin:/usr/sbin:/sbin</code> (theo mã nguồn cronie). Không bản nào có những thư mục mà <code>~/.bashrc</code>/<code>~/.profile</code> thêm vào — và đó mới là chỗ node của nvm nằm.</p>
-<pre><code><span class="tok-comment"># Chứng minh: đổ ra môi trường THẬT của cron trong một phút</span>
+<pre><code class="language-bash"><span class="tok-comment"># Chứng minh: đổ ra môi trường THẬT của cron trong một phút</span>
 crontab -l | { cat; echo '* * * * * env &gt; /tmp/cron-env.txt 2&gt;&amp;1'; } | crontab -
 <span class="tok-comment"># chờ một phút, rồi</span>
 cat /tmp/cron-env.txt</code></pre>
@@ -1615,7 +1615,7 @@ PWD=/home/deploy</div>
     <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">Để một script bao ngoài tự lo môi trường</span><span class="lz-nsub">cron gọi <code>/usr/local/bin/nightly</code>; script tự đặt PATH, tự <code>cd</code> tới chỗ nó cần, tự nạp thứ nó cần. cron vẫn chỉ một dòng.</span></div></div>
   </div>
 </div>
-<pre><code><span class="tok-comment"># Cách C, đầy đủ — hình hài mà mọi công việc hẹn giờ nên có</span>
+<pre><code class="language-bash"><span class="tok-comment"># Cách C, đầy đủ — hình hài mà mọi công việc hẹn giờ nên có</span>
 <span class="tok-comment"># /usr/local/bin/nightly</span>
 #!/usr/bin/env bash
 set -Eeuo pipefail                                   <span class="tok-comment"># Bài 7.1</span>
@@ -1688,7 +1688,7 @@ AccuracySec=1s                   <span class="tok-comment"># mặc định là 1
 
 [Install]
 WantedBy=timers.target</code></pre>
-<pre><code>sudo systemctl daemon-reload
+<pre><code class="language-bash">sudo systemctl daemon-reload
 sudo systemctl enable --now backup.timer   <span class="tok-comment"># cái TIMER, không phải cái service</span>
 systemctl list-timers backup.timer</code></pre>
 <div class="out">NEXT                        LEFT       LAST                        PASSED  UNIT          ACTIVATES
@@ -1786,7 +1786,7 @@ ${slide('lx-11', 14, 'cron hay timer: bảng so sánh')}
   <div class="lz-step"><span class="lz-k">5 · Kiểm đồng hồ và múi giờ</span><span class="lz-t">timedatectl</span><span class="lz-d">"Nó chạy trễ ba tiếng" gần như luôn là chuyện UTC so với giờ địa phương. Timer trên systemd hiện đại có thể ghi múi giờ ngay trong <code>OnCalendar</code>; cron thì theo múi giờ hệ thống và cần khởi động lại sau khi bạn đổi múi giờ.</span></div>
   <div class="lz-step"><span class="lz-k">6 · Tìm bản sao thứ hai</span><span class="lz-t">pgrep -af backup.sh</span><span class="lz-d">Một công việc chồng lên chính nó trông y hệt "nó không chạy", trong khi sự thật là nó chưa bao giờ chạy XONG. Hãy khoá nó lại (ngay dưới).</span></div>
 </div>
-<pre><code><span class="tok-comment"># cron có thử không? Đây là câu lệnh đầu tiên, lần nào cũng vậy.</span>
+<pre><code class="language-bash"><span class="tok-comment"># cron có thử không? Đây là câu lệnh đầu tiên, lần nào cũng vậy.</span>
 journalctl -t CRON --since today | tail -20</code></pre>
 <div class="out">Aug 22 03:30:01 vps-1 CRON[40112]: (deploy) CMD (/usr/local/bin/backup.sh &gt;&gt; /var/log/backup.log 2&gt;&amp;1)
 Aug 22 03:39:14 vps-1 CRON[40112]: (deploy) MAIL (mailed 1 byte of output; but got status 0x004b)
@@ -1820,7 +1820,7 @@ exit=75</div>
 <p><strong>Một chi tiết đo thật:</strong> khoá gắn với <em>bộ mô tả file</em>, mà tiến trình con thừa hưởng bộ mô tả file. Chạy <code>flock -n /tmp/backup.lock sleep 30 &amp;</code> rồi <code>kill %1</code> — thứ bị giết là <code>flock</code>, còn <code>sleep</code> (con của nó) vẫn sống và vẫn giữ khoá: lần <code>flock -n</code> kế tiếp vẫn thất bại cho tới khi <code>sleep</code> chết. Với dịch vụ systemd chuyện này không xảy ra vì <code>systemctl stop</code> giết cả cgroup; với cron thì một tiến trình con mồ côi có thể giữ khoá và chặn mọi lượt sau — kiểm bằng <code>fuser -v /var/lock/backup.lock</code> hoặc <code>lsof /var/lock/backup.lock</code>.</p>
 
 <h3>Một ví dụ hoàn chỉnh</h3>
-<pre><code><span class="tok-comment"># /usr/local/bin/backup.sh — im khi thành công, ồn khi thất bại</span>
+<pre><code class="language-bash"><span class="tok-comment"># /usr/local/bin/backup.sh — im khi thành công, ồn khi thất bại</span>
 #!/usr/bin/env bash
 set -Eeuo pipefail
 export PATH=/usr/local/bin:/usr/bin:/bin
@@ -1842,7 +1842,7 @@ mv "\$FILE.part" "\$FILE"                        <span class="tok-comment"># ngu
 
 find "\$DEST" -name 'app-*.dump' -mtime +"\$KEEP_DAYS" -print -delete
 echo "backup: \$(du -h "\$FILE" | cut -f1) -&gt; \$FILE"</code></pre>
-<pre><code><span class="tok-comment"># Thử nó TRƯỚC khi hẹn giờ — dưới đúng người dùng sẽ chạy nó</span>
+<pre><code class="language-bash"><span class="tok-comment"># Thử nó TRƯỚC khi hẹn giờ — dưới đúng người dùng sẽ chạy nó</span>
 sudo -u deploy /usr/local/bin/backup.sh
 sudo systemctl start backup.service          <span class="tok-comment"># rồi tới cách nó sẽ chạy thật</span>
 journalctl -u backup.service -n 20 --no-pager</code></pre>
@@ -1855,7 +1855,7 @@ Aug 22 18:02:49 vps-1 systemd[1]: Finished backup.service - Nightly database bac
 
 <h3>Chạy thử từng bước: cron và timer trong container có systemd</h3>
 <p>Dùng lại container <code>lab-sd</code> của Bài 11.1 (đã cài <code>cron</code>). Mọi output dưới đây là thật, chạy ngày 28/09/2026:</p>
-<pre><code>useradd -m -s /bin/bash deploy
+<pre><code class="language-bash">useradd -m -s /bin/bash deploy
 echo '* * * * * env &gt; /tmp/cron-env.txt 2&gt;&amp;1' | crontab -u deploy -
 printf '* * * * * root touch /tmp/co-cham\\n'   &gt; /etc/cron.d/app.cleanup
 printf '* * * * * root touch /tmp/khong-cham\\n' &gt; /etc/cron.d/app-cleanup
@@ -1873,7 +1873,7 @@ ls: cannot access '/tmp/co-cham': No such file or directory
 Sep 28 15:26:01 vps-1 CRON[821]: (root) CMD (touch /tmp/khong-cham)
 Sep 28 15:26:01 vps-1 CRON[822]: (deploy) CMD (env &gt; /tmp/cron-env.txt 2&gt;&amp;1)</div>
 <p>Rồi cùng công việc đó làm bằng timer: viết <code>/usr/local/bin/backup.sh</code> (nén <code>/srv/app</code> vào <code>/srv/backups</code>), <code>backup.service</code> (<code>Type=oneshot</code>, <code>User=deploy</code>) và <code>backup.timer</code> (<code>OnCalendar=*-*-* 03:30:00</code>, <code>Persistent=true</code>, <code>RandomizedDelaySec=300</code>) đúng như mẫu ở trên, rồi:</p>
-<pre><code>systemctl daemon-reload
+<pre><code class="language-bash">systemctl daemon-reload
 systemctl enable --now backup.timer
 systemctl list-timers backup.timer
 systemctl start backup.service
@@ -1975,7 +1975,7 @@ Sep 28 15:25:48 vps-1 systemd[1]: Finished backup.service - Nightly backup.</div
 
 <h3>What the internet is already doing to your box</h3>
 ${slide('lx-11', 16, 'Sáu lớp phòng thủ cho một VPS công khai')}
-<pre><code><span class="tok-comment"># Failed SSH logins — on a fresh public VPS, run this after an hour</span>
+<pre><code class="language-bash"><span class="tok-comment"># Failed SSH logins — on a fresh public VPS, run this after an hour</span>
 sudo journalctl -u ssh --since '1 hour ago' | grep -c 'Failed password'
 sudo journalctl -u ssh --since '1 hour ago' | grep 'Invalid user' | tail -5
 sudo lastb | head -5              <span class="tok-comment"># the bad-login log, needs /var/log/btmp</span></code></pre>
@@ -1992,7 +1992,7 @@ Aug 22 17:14:20 vps-1 sshd[9950]: Invalid user oracle from 141.98.11.29 port 621
 <h3>Step 1 — SSH keys only, and prove it before you disconnect</h3>
 ${slide('lx-11', 17, 'sshd: giá trị ĐẦU TIÊN thắng — 01- thắng 50-cloud-init')}
 <p>Chapter 9 covered generating a key and copying it up. Now you turn passwords off. The danger is obvious: get this wrong, close your terminal, and the machine is gone — VPS providers sell you a console, but not every provider's console works well, and some don't have one at all.</p>
-<pre><code><span class="tok-comment"># On your laptop, if you have not already</span>
+<pre><code class="language-bash"><span class="tok-comment"># On your laptop, if you have not already</span>
 ssh-keygen -t ed25519 -C "you@laptop"
 ssh-copy-id deploy@203.0.113.10
 
@@ -2010,7 +2010,7 @@ X11Forwarding no
 MaxAuthTries 3
 ClientAliveInterval 300
 ClientAliveCountMax 2</code></pre>
-<pre><code>sudo sshd -t                       <span class="tok-comment"># VALIDATE. Prints nothing if the config is good.</span>
+<pre><code class="language-bash">sudo sshd -t                       <span class="tok-comment"># VALIDATE. Prints nothing if the config is good.</span>
 sudo systemctl reload ssh          <span class="tok-comment"># reload, not restart — existing sessions survive</span></code></pre>
 <div class="callout warn"><strong>Keep the old session open and test from a SECOND terminal.</strong> This is the whole safety procedure and it takes ten seconds: your current SSH session stays connected across a <code>reload</code> even if the new config is broken, so it is your lifeline. Open a new terminal, connect, and only when that works do you close the first one. Doing it the other way round is how people end up rebuilding a server because of one typo. <code>sshd -t</code> catches syntax errors; it cannot catch "you locked out your own username".</div>
 <div class="lz-map">
@@ -2088,7 +2088,7 @@ ListenStream=[::]:2222</div>
 <p>The mechanism: a <em>generator</em> reads <code>Port</code>/<code>ListenAddress</code> from <code>sshd_config</code> on every <code>daemon-reload</code> and writes a drop-in for <code>ssh.socket</code>; only <code>restart ssh.socket</code> opens the new port. Because <code>Port 2222</code> on its own REPLACES port 22 (it does not add to it), the safe order is: <code>ufw allow 2222/tcp</code> → edit <code>Port</code> (keeping <code>Port 22</code> for now) → <code>daemon-reload</code> → <code>restart ssh.socket</code> → log in on the new port from a SECOND terminal → only then drop port 22. One more measured detail: before any connection has arrived, <code>ssh.service</code> is not running, so <code>systemctl reload ssh</code> says <code>ssh.service is not active, cannot reload.</code> — on a VPS you are SSH'd into it is already running and reload works normally.</p>
 
 <h3>Step 2 — a non-root user with sudo</h3>
-<pre><code>sudo adduser deploy                       <span class="tok-comment"># interactive; sets a password and home dir</span>
+<pre><code class="language-bash">sudo adduser deploy                       <span class="tok-comment"># interactive; sets a password and home dir</span>
 sudo usermod -aG sudo deploy              <span class="tok-comment"># -aG: APPEND, never plain -G (Lesson 4.4)</span>
 sudo install -d -m 700 -o deploy -g deploy /home/deploy/.ssh
 sudo cp ~/.ssh/authorized_keys /home/deploy/.ssh/
@@ -2102,7 +2102,7 @@ deploy ALL=(root) NOPASSWD: /usr/bin/systemctl restart app, /usr/bin/systemctl r
 
 <h3>Step 3 — the firewall</h3>
 <p>Lesson 9.5 covered <code>ufw</code> in depth. The three-line version, for completeness:</p>
-<pre><code>sudo ufw default deny incoming
+<pre><code class="language-bash">sudo ufw default deny incoming
 sudo ufw default allow outgoing
 sudo ufw allow OpenSSH                    <span class="tok-comment"># do this BEFORE enabling, every time</span>
 sudo ufw allow 80,443/tcp
@@ -2121,7 +2121,7 @@ To                         Action      From
 <h3>Step 3b — fail2ban, the basics</h3>
 ${slide('lx-11', 19, 'fail2ban: đếm lần hỏng, cấm IP bằng nftables')}
 <p><strong>fail2ban</strong> reads logs, counts failed logins per IP address, and when an IP crosses a threshold within a time window it adds a firewall rule banning it for a while. It does NOT replace Step 1 (once passwords are off, those attempts could never succeed anyway — see "What is NOT worth your time" at the end), but it cuts log noise and slows down persistent probers. This lesson covers the basics; Chapter 14.4 goes deeper (nginx jails, custom filters).</p>
-<pre><code>sudo apt install -y fail2ban
+<pre><code class="language-bash">sudo apt install -y fail2ban
 cat /etc/fail2ban/jail.d/defaults-debian.conf       <span class="tok-comment"># Ubuntu's defaults</span>
 sudo tee /etc/fail2ban/jail.local &gt;/dev/null &lt;&lt;'EOF'
 [sshd]
@@ -2182,13 +2182,13 @@ $ sudo unattended-upgrade --dry-run --debug 2&gt;&amp;1 | grep 'Allowed origins'
 Allowed origins are: o=Ubuntu,a=noble, o=Ubuntu,a=noble-security, o=UbuntuESMApps,a=noble-apps-security, o=UbuntuESM,a=noble-infra-security</div>
 <p>UTC machine ⇒ "6:00" is 13:00 in Vietnam — the same time-zone shift as Lesson 11.2. And the default origin list is <code>noble</code> (the release pocket, frozen after release day) plus the <code>-security</code> pockets, NOT <code>noble-updates</code>.</p>
 <p>The most valuable twenty minutes on this list, because it keeps paying out while you are asleep. Ubuntu ships the mechanism; you only have to turn it on and decide how brave you are about reboots.</p>
-<pre><code>sudo apt install -y unattended-upgrades
+<pre><code class="language-bash">sudo apt install -y unattended-upgrades
 sudo dpkg-reconfigure --priority=low unattended-upgrades   <span class="tok-comment"># or edit the files below</span>
 systemctl status unattended-upgrades
 cat /etc/apt/apt.conf.d/20auto-upgrades</code></pre>
 <div class="out">APT::Periodic::Update-Package-Lists "1";
 APT::Periodic::Unattended-Upgrade "1";</div>
-<pre><code><span class="tok-comment"># /etc/apt/apt.conf.d/50unattended-upgrades — the lines worth changing</span>
+<pre><code class="language-bash"><span class="tok-comment"># /etc/apt/apt.conf.d/50unattended-upgrades — the lines worth changing</span>
 Unattended-Upgrade::Allowed-Origins {
         "\${distro_id}:\${distro_codename}-security";
 };
@@ -2208,7 +2208,7 @@ Writing dpkg log to /var/log/unattended-upgrades/unattended-upgrades-dpkg.log</d
   <div class="kv"><span class="k">Automatic-Reboot</span><span class="v">The real trade-off. <code>true</code> means kernel fixes actually take effect and your app has an unannounced restart at 04:00. <code>false</code> means you must reboot yourself — and most people never do, so the patched kernel sits on disk unused for months.</span></div>
   <div class="kv"><span class="k">The honest middle</span><span class="v">Leave it <code>false</code>, and put a weekly reminder in your calendar to check <code>/var/run/reboot-required</code>. If your app cannot survive an unannounced restart at 04:00, that is a resilience problem worth fixing on its own terms (Lesson 11.1: <code>Restart=always</code>).</span></div>
 </div>
-<pre><code><span class="tok-comment"># Does this machine need a reboot right now?</span>
+<pre><code class="language-bash"><span class="tok-comment"># Does this machine need a reboot right now?</span>
 [ -f /var/run/reboot-required ] &amp;&amp; cat /var/run/reboot-required{,.pkgs}</code></pre>
 <div class="out">*** System restart required ***
 linux-image-6.8.0-45-generic
@@ -2225,7 +2225,7 @@ No VM guests are running outdated hypervisor (qemu) binaries on this host.</div>
 
 <h3>Step 5 — swap, so the OOM killer is a last resort</h3>
 <p>Lesson 5.2 explained what happens when memory runs out: the kernel picks a process and kills it, and it will not be the process you would have chosen. A 1–2GB VPS with no swap hits that path far too easily — often during a <code>npm ci</code> or a <code>next build</code>, which is exactly the 2026-07-06 <code>Exited(137)</code> in this project's own history.</p>
-<pre><code>free -h                                   <span class="tok-comment"># check first — many images have none</span>
+<pre><code class="language-bash">free -h                                   <span class="tok-comment"># check first — many images have none</span>
 sudo fallocate -l 2G /swapfile
 sudo chmod 600 /swapfile                  <span class="tok-comment"># 600, or mkswap warns and you have leaked memory contents</span>
 sudo mkswap /swapfile
@@ -2235,7 +2235,7 @@ free -h</code></pre>
 <div class="out">               total        used        free      shared  buff/cache   available
 Mem:           1.9Gi       612Mi       138Mi        18Mi       1.2Gi       1.1Gi
 Swap:          2.0Gi          0B       2.0Gi</div>
-<pre><code><span class="tok-comment"># Lower the eagerness to swap: use RAM first, swap only under real pressure</span>
+<pre><code class="language-bash"><span class="tok-comment"># Lower the eagerness to swap: use RAM first, swap only under real pressure</span>
 echo 'vm.swappiness=10' | sudo tee /etc/sysctl.d/99-swap.conf
 sudo sysctl --system | grep swappiness</code></pre>
 <div class="callout"><strong>Swap is a shock absorber, not more RAM.</strong> A server that is <em>using</em> swap steadily is a server that is thrashing, and every disk read that should have been a memory read is roughly a hundred thousand times slower. What swap buys you is that a brief spike — a build, a burst of traffic, a leaky request — degrades to "slow for thirty seconds" instead of "the database got killed". Watch <code>si</code>/<code>so</code> in <code>vmstat 1</code>: nonzero for more than a moment means you need more RAM, not more swap.</div>
@@ -2266,7 +2266,7 @@ ${slide('lx-11', 21, 'Giờ đầu tiên với một VPS mới: 8 việc')}
   <div class="lz-step"><span class="lz-k">7 · Clock + hostname</span><span class="lz-t">timedatectl · hostnamectl set-hostname</span><span class="lz-d">A real hostname makes every log line and every prompt tell you which machine you are on. <code>vps-1</code> beats <code>ubuntu-2gb-sgp1-01</code>.</span></div>
   <div class="lz-step"><span class="lz-k">8 · Backups, and one restore</span><span class="lz-t">a timer (Lesson 11.2) + a test restore, today</span><span class="lz-d">The last step, and the one everyone skips. A backup you have never restored is a file, not a backup.</span></div>
 </div>
-<pre><code><span class="tok-comment"># A five-minute audit you can run on any server, any time</span>
+<pre><code class="language-bash"><span class="tok-comment"># A five-minute audit you can run on any server, any time</span>
 echo "== reboot needed? ==";   [ -f /var/run/reboot-required ] &amp;&amp; echo YES || echo no
 echo "== listening publicly ==";  sudo ss -tlnp | grep -v '127.0.0.1\\|::1'
 echo "== ssh password auth ==";   sudo sshd -T | grep -i '^passwordauthentication'
@@ -2315,7 +2315,7 @@ deploy   pts/0   203.0.113.55  Fri Aug 22 17:58   still logged in</div>
 
 <h3>Try it step by step: the first-wins rule in a container</h3>
 <p>In the <code>lab-sd</code> container (Lesson 11.1, with <code>openssh-server</code> installed; create <code>/run/sshd</code> if <code>sshd -T</code> complains it is missing):</p>
-<pre><code>mkdir -p /run/sshd
+<pre><code class="language-bash">mkdir -p /run/sshd
 cd /etc/ssh/sshd_config.d
 echo 'PasswordAuthentication yes' &gt; 50-cloud-init.conf
 printf 'PasswordAuthentication no\\nPermitRootLogin no\\n' &gt; 99-hardening.conf
@@ -2396,7 +2396,7 @@ passwordauthentication no</div>
 
 <h3>Internet đang làm gì với cái máy của bạn</h3>
 ${slide('lx-11', 16, 'Sáu lớp phòng thủ cho một VPS công khai')}
-<pre><code><span class="tok-comment"># Đăng nhập SSH thất bại — trên một VPS công khai mới, chạy cái này sau một giờ</span>
+<pre><code class="language-bash"><span class="tok-comment"># Đăng nhập SSH thất bại — trên một VPS công khai mới, chạy cái này sau một giờ</span>
 sudo journalctl -u ssh --since '1 hour ago' | grep -c 'Failed password'
 sudo journalctl -u ssh --since '1 hour ago' | grep 'Invalid user' | tail -5
 sudo lastb | head -5              <span class="tok-comment"># nhật ký đăng nhập hỏng, cần /var/log/btmp</span></code></pre>
@@ -2413,7 +2413,7 @@ Aug 22 17:14:20 vps-1 sshd[9950]: Invalid user oracle from 141.98.11.29 port 621
 <h3>Bước 1 — chỉ khoá SSH, và chứng minh trước khi ngắt kết nối</h3>
 ${slide('lx-11', 17, 'sshd: giá trị ĐẦU TIÊN thắng — 01- thắng 50-cloud-init')}
 <p>Chương 9 đã nói về việc tạo khoá và chép nó lên. Giờ bạn tắt mật khẩu đi. Nguy hiểm thì rõ rồi: làm sai, đóng cửa sổ terminal, thế là mất máy — nhà cung cấp VPS có bán cho bạn một cái console, nhưng không phải console của nhà nào cũng chạy tử tế, và có nhà còn chẳng có.</p>
-<pre><code><span class="tok-comment"># Trên laptop của bạn, nếu chưa làm</span>
+<pre><code class="language-bash"><span class="tok-comment"># Trên laptop của bạn, nếu chưa làm</span>
 ssh-keygen -t ed25519 -C "you@laptop"
 ssh-copy-id deploy@203.0.113.10
 
@@ -2431,7 +2431,7 @@ X11Forwarding no
 MaxAuthTries 3
 ClientAliveInterval 300
 ClientAliveCountMax 2</code></pre>
-<pre><code>sudo sshd -t                       <span class="tok-comment"># KIỂM. Cấu hình tốt thì nó không in gì.</span>
+<pre><code class="language-bash">sudo sshd -t                       <span class="tok-comment"># KIỂM. Cấu hình tốt thì nó không in gì.</span>
 sudo systemctl reload ssh          <span class="tok-comment"># reload, không phải restart — phiên đang mở sống sót</span></code></pre>
 <div class="callout warn"><strong>Hãy GIỮ phiên cũ mở và thử từ một terminal THỨ HAI.</strong> Đây là toàn bộ quy trình an toàn và nó tốn mười giây: phiên SSH hiện tại của bạn vẫn nối qua một lần <code>reload</code> kể cả khi cấu hình mới hỏng, nên nó là sợi dây cứu mạng. Mở một terminal mới, kết nối, và chỉ khi cái đó chạy được thì mới đóng cái đầu tiên. Làm ngược lại là cách người ta phải dựng lại cả một máy chủ vì đúng một lỗi gõ. <code>sshd -t</code> bắt lỗi cú pháp; nó KHÔNG bắt được chuyện "bạn vừa nhốt chính tên đăng nhập của mình ở ngoài".</div>
 <div class="lz-map">
@@ -2509,7 +2509,7 @@ ListenStream=[::]:2222</div>
 <p>Cơ chế: một <em>generator</em> đọc <code>Port</code>/<code>ListenAddress</code> trong <code>sshd_config</code> mỗi lần <code>daemon-reload</code> và sinh ra file drop-in cho <code>ssh.socket</code>; phải <code>restart ssh.socket</code> nó mới mở cổng mới. Vì <code>Port 2222</code> một mình THAY cổng 22 (không cộng thêm), thứ tự an toàn là: <code>ufw allow 2222/tcp</code> → sửa <code>Port</code> (tạm giữ cả <code>Port 22</code>) → <code>daemon-reload</code> → <code>restart ssh.socket</code> → đăng nhập thử cổng mới từ terminal THỨ HAI → rồi mới bỏ cổng 22. Và một chi tiết đo được luôn: khi chưa có kết nối nào, <code>ssh.service</code> chưa chạy nên <code>systemctl reload ssh</code> báo <code>ssh.service is not active, cannot reload.</code> — trên một VPS bạn đang SSH vào thì nó đã chạy, reload bình thường.</p>
 
 <h3>Bước 2 — một người dùng không phải root, có sudo</h3>
-<pre><code>sudo adduser deploy                       <span class="tok-comment"># tương tác; đặt mật khẩu và tạo thư mục nhà</span>
+<pre><code class="language-bash">sudo adduser deploy                       <span class="tok-comment"># tương tác; đặt mật khẩu và tạo thư mục nhà</span>
 sudo usermod -aG sudo deploy              <span class="tok-comment"># -aG: NỐI THÊM, đừng bao giờ -G trần (Bài 4.4)</span>
 sudo install -d -m 700 -o deploy -g deploy /home/deploy/.ssh
 sudo cp ~/.ssh/authorized_keys /home/deploy/.ssh/
@@ -2523,7 +2523,7 @@ deploy ALL=(root) NOPASSWD: /usr/bin/systemctl restart app, /usr/bin/systemctl r
 
 <h3>Bước 3 — tường lửa</h3>
 <p>Bài 9.5 đã nói kỹ về <code>ufw</code>. Bản ba dòng, cho đủ bộ:</p>
-<pre><code>sudo ufw default deny incoming
+<pre><code class="language-bash">sudo ufw default deny incoming
 sudo ufw default allow outgoing
 sudo ufw allow OpenSSH                    <span class="tok-comment"># làm cái này TRƯỚC khi enable, lần nào cũng vậy</span>
 sudo ufw allow 80,443/tcp
@@ -2542,7 +2542,7 @@ To                         Action      From
 <h3>Bước 3b — fail2ban, ở mức nền</h3>
 ${slide('lx-11', 19, 'fail2ban: đếm lần hỏng, cấm IP bằng nftables')}
 <p><strong>fail2ban</strong> đọc log, đếm số lần đăng nhập hỏng của từng địa chỉ IP, và khi một IP vượt ngưỡng trong một khoảng thời gian thì thêm một luật tường lửa cấm nó một lúc. Nó KHÔNG thay được Bước 1 (một khi mật khẩu đã tắt, những lượt dò kia vốn đã không thể thành công — xem mục "Những thứ KHÔNG đáng bỏ thời gian" cuối bài), nhưng nó cắt tiếng ồn trong log và làm chậm những kẻ dò dai. Bài này dạy mức nền; Chương 14.4 đào sâu (jail cho nginx, bộ lọc tự viết).</p>
-<pre><code>sudo apt install -y fail2ban
+<pre><code class="language-bash">sudo apt install -y fail2ban
 cat /etc/fail2ban/jail.d/defaults-debian.conf       <span class="tok-comment"># mặc định của Ubuntu</span>
 sudo tee /etc/fail2ban/jail.local &gt;/dev/null &lt;&lt;'EOF'
 [sshd]
@@ -2603,13 +2603,13 @@ $ sudo unattended-upgrade --dry-run --debug 2&gt;&amp;1 | grep 'Allowed origins'
 Allowed origins are: o=Ubuntu,a=noble, o=Ubuntu,a=noble-security, o=UbuntuESMApps,a=noble-apps-security, o=UbuntuESM,a=noble-infra-security</div>
 <p>Máy UTC ⇒ "6:00" là 13:00 giờ Việt Nam — cùng chuyện lệch múi giờ ở Bài 11.2. Và danh sách nguồn mặc định gồm <code>noble</code> (bản phát hành gốc, không đổi sau ngày phát hành) cùng các nguồn <code>-security</code>, KHÔNG có <code>noble-updates</code>.</p>
 <p>Hai mươi phút đáng giá nhất trong danh sách này, vì nó tiếp tục sinh lời trong lúc bạn ngủ. Ubuntu có sẵn cơ chế; bạn chỉ phải bật nó lên và quyết xem mình gan tới đâu với chuyện khởi động lại máy.</p>
-<pre><code>sudo apt install -y unattended-upgrades
+<pre><code class="language-bash">sudo apt install -y unattended-upgrades
 sudo dpkg-reconfigure --priority=low unattended-upgrades   <span class="tok-comment"># hoặc sửa mấy file dưới</span>
 systemctl status unattended-upgrades
 cat /etc/apt/apt.conf.d/20auto-upgrades</code></pre>
 <div class="out">APT::Periodic::Update-Package-Lists "1";
 APT::Periodic::Unattended-Upgrade "1";</div>
-<pre><code><span class="tok-comment"># /etc/apt/apt.conf.d/50unattended-upgrades — những dòng đáng đổi</span>
+<pre><code class="language-bash"><span class="tok-comment"># /etc/apt/apt.conf.d/50unattended-upgrades — những dòng đáng đổi</span>
 Unattended-Upgrade::Allowed-Origins {
         "\${distro_id}:\${distro_codename}-security";
 };
@@ -2629,7 +2629,7 @@ Writing dpkg log to /var/log/unattended-upgrades/unattended-upgrades-dpkg.log</d
   <div class="kv"><span class="k">Automatic-Reboot</span><span class="v">Đây mới là chỗ đánh đổi thật. <code>true</code> nghĩa là các bản vá nhân thật sự có hiệu lực và ứng dụng của bạn bị khởi động lại lúc 04:00 không báo trước. <code>false</code> nghĩa là bạn phải tự khởi động lại — và phần lớn người ta không bao giờ làm, nên cái nhân đã vá nằm im trên đĩa hàng tháng trời.</span></div>
   <div class="kv"><span class="k">Đường giữa trung thực</span><span class="v">Để <code>false</code>, rồi đặt một lời nhắc hằng tuần trong lịch để kiểm <code>/var/run/reboot-required</code>. Nếu ứng dụng của bạn KHÔNG sống nổi qua một cú khởi động lại không báo trước lúc 04:00 thì đó là một vấn đề về khả năng chịu đựng, đáng sửa theo cách của riêng nó (Bài 11.1: <code>Restart=always</code>).</span></div>
 </div>
-<pre><code><span class="tok-comment"># Máy này có cần khởi động lại ngay bây giờ không?</span>
+<pre><code class="language-bash"><span class="tok-comment"># Máy này có cần khởi động lại ngay bây giờ không?</span>
 [ -f /var/run/reboot-required ] &amp;&amp; cat /var/run/reboot-required{,.pkgs}</code></pre>
 <div class="out">*** System restart required ***
 linux-image-6.8.0-45-generic
@@ -2646,7 +2646,7 @@ No VM guests are running outdated hypervisor (qemu) binaries on this host.</div>
 
 <h3>Bước 5 — swap, để kẻ giết OOM chỉ là phương án cuối</h3>
 <p>Bài 5.2 đã giải thích chuyện gì xảy ra khi hết bộ nhớ: nhân chọn một tiến trình và giết nó, và nó sẽ không chọn cái tiến trình mà bạn chọn. Một VPS 1–2GB không có swap rơi vào đường đó quá dễ — thường là ngay giữa một lượt <code>npm ci</code> hay <code>next build</code>, đúng là cái <code>Exited(137)</code> ngày 06/07/2026 trong chính lịch sử của dự án này.</p>
-<pre><code>free -h                                   <span class="tok-comment"># kiểm trước — nhiều ảnh không có sẵn</span>
+<pre><code class="language-bash">free -h                                   <span class="tok-comment"># kiểm trước — nhiều ảnh không có sẵn</span>
 sudo fallocate -l 2G /swapfile
 sudo chmod 600 /swapfile                  <span class="tok-comment"># 600, không thì mkswap cảnh báo và bạn đã rò nội dung bộ nhớ</span>
 sudo mkswap /swapfile
@@ -2656,7 +2656,7 @@ free -h</code></pre>
 <div class="out">               total        used        free      shared  buff/cache   available
 Mem:           1.9Gi       612Mi       138Mi        18Mi       1.2Gi       1.1Gi
 Swap:          2.0Gi          0B       2.0Gi</div>
-<pre><code><span class="tok-comment"># Giảm độ hăng hái đẩy sang swap: dùng RAM trước, chỉ swap khi thật sự bị ép</span>
+<pre><code class="language-bash"><span class="tok-comment"># Giảm độ hăng hái đẩy sang swap: dùng RAM trước, chỉ swap khi thật sự bị ép</span>
 echo 'vm.swappiness=10' | sudo tee /etc/sysctl.d/99-swap.conf
 sudo sysctl --system | grep swappiness</code></pre>
 <div class="callout"><strong>Swap là một cái giảm xóc, không phải thêm RAM.</strong> Một máy chủ ĐANG dùng swap đều đặn là một máy chủ đang giãy giụa, và mỗi lần đọc đĩa lẽ ra phải là một lần đọc bộ nhớ thì chậm hơn cỡ một trăm nghìn lần. Thứ swap mua cho bạn là: một cơn tăng vọt ngắn — một lượt build, một đợt truy cập dồn, một request rò rỉ — thoái hoá thành "chậm ba mươi giây" thay vì "cơ sở dữ liệu bị giết". Hãy theo dõi <code>si</code>/<code>so</code> trong <code>vmstat 1</code>: khác 0 lâu hơn một khoảnh khắc nghĩa là bạn cần thêm RAM, không phải thêm swap.</div>
@@ -2687,7 +2687,7 @@ ${slide('lx-11', 21, 'Giờ đầu tiên với một VPS mới: 8 việc')}
   <div class="lz-step"><span class="lz-k">7 · Đồng hồ + tên máy</span><span class="lz-t">timedatectl · hostnamectl set-hostname</span><span class="lz-d">Một cái tên máy tử tế khiến mọi dòng log và mọi dấu nhắc nói cho bạn biết mình đang ở máy nào. <code>vps-1</code> hơn <code>ubuntu-2gb-sgp1-01</code>.</span></div>
   <div class="lz-step"><span class="lz-k">8 · Sao lưu, và một lần phục hồi</span><span class="lz-t">một timer (Bài 11.2) + một lần thử phục hồi, hôm nay</span><span class="lz-d">Bước cuối cùng, và là bước ai cũng bỏ. Một bản sao lưu bạn chưa từng phục hồi là một cái file, không phải một bản sao lưu.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Một cuộc soát năm phút, chạy được trên máy chủ nào cũng được, lúc nào cũng được</span>
+<pre><code class="language-bash"><span class="tok-comment"># Một cuộc soát năm phút, chạy được trên máy chủ nào cũng được, lúc nào cũng được</span>
 echo "== cần khởi động lại? ==";   [ -f /var/run/reboot-required ] &amp;&amp; echo CÓ || echo không
 echo "== đang lắng nghe công khai ==";  sudo ss -tlnp | grep -v '127.0.0.1\\|::1'
 echo "== ssh có nhận mật khẩu? ==";   sudo sshd -T | grep -i '^passwordauthentication'
@@ -2736,7 +2736,7 @@ deploy   pts/0   203.0.113.55  Fri Aug 22 17:58   still logged in</div>
 
 <h3>Chạy thử từng bước: luật "đầu tiên thắng" trong container</h3>
 <p>Trong container <code>lab-sd</code> (Bài 11.1, đã cài <code>openssh-server</code>; tạo <code>/run/sshd</code> nếu <code>sshd -T</code> báo thiếu):</p>
-<pre><code>mkdir -p /run/sshd
+<pre><code class="language-bash">mkdir -p /run/sshd
 cd /etc/ssh/sshd_config.d
 echo 'PasswordAuthentication yes' &gt; 50-cloud-init.conf
 printf 'PasswordAuthentication no\\nPermitRootLogin no\\n' &gt; 99-hardening.conf

@@ -189,7 +189,7 @@ ${slide('dk-16', 7, 'Engine Prisma đi theo nơi chạy prisma generate')}
 <tr><td>In <code>node:22.23-alpine3.24</code>, stage <code>deps</code></td><td><code>linux-musl-arm64-openssl-3.0.x</code></td><td>Alpine (musl)</td><td>runs, healthy</td></tr>
 </table>
 <p>The middle row deserves a second look. <code>bookworm-slim</code> has no <code>openssl</code> binary, so Prisma could not detect the OpenSSL version and silently fell back to guessing <code>1.1.x</code>. The warning it prints during postinstall is hidden by npm, so the build log is spotless. The image is doubly wrong — wrong libc and wrong OpenSSL — and nothing tells you until the first query.</p>
-<pre><code>generator client {
+<pre><code class="language-bash">generator client {
   provider      = "prisma-client-js"
   binaryTargets = ["native", "linux-musl-openssl-3.0.x", "linux-musl-arm64-openssl-3.0.x"]
 }</code></pre>
@@ -441,7 +441,7 @@ ${slide('dk-16', 7, 'Engine Prisma đi theo nơi chạy prisma generate')}
 <tr><td>Trong <code>node:22.23-alpine3.24</code>, stage <code>deps</code></td><td><code>linux-musl-arm64-openssl-3.0.x</code></td><td>Alpine (musl)</td><td>chạy, healthy</td></tr>
 </table>
 <p>Hàng giữa đáng nhìn lần thứ hai. <code>bookworm-slim</code> không có chương trình <code>openssl</code>, nên Prisma không dò được phiên bản OpenSSL và lặng lẽ đoán là <code>1.1.x</code>. Lời cảnh báo nó in ra trong lúc postinstall bị npm giấu đi, nên log build sạch bong. Cái ảnh sai hai lần — sai libc và sai OpenSSL — và không có gì báo cho bạn biết cho tới câu truy vấn đầu tiên.</p>
-<pre><code>generator client {
+<pre><code class="language-bash">generator client {
   provider      = "prisma-client-js"
   binaryTargets = ["native", "linux-musl-openssl-3.0.x", "linux-musl-arm64-openssl-3.0.x"]
 }</code></pre>
@@ -1963,7 +1963,7 @@ nginx-1  | 2026-09-24T01:30:42.089414298Z 127.0.0.1 - - [24/Sep/2026:01:30:42 +0
 nginx-1  | 2026-09-24T01:30:52.128028177Z 127.0.0.1 - - [24/Sep/2026:01:30:52 +0000] "GET /healthz HTTP/1.1" 200 3 "-" "Wget" "-"
 nginx-1  | 2026-09-24T01:31:02.167226418Z 127.0.0.1 - - [24/Sep/2026:01:31:02 +0000] "GET /healthz HTTP/1.1" 200 3 "-" "Wget" "-"</div>
 <p>The API's first line tells you which version is running — worth printing at every start. The three nginx lines are its own healthcheck, every ten seconds: 8,640 lines a day that bury the real traffic. One directive fixes it:</p>
-<pre><code>location = /healthz { access_log off; return 200 "ok\\n"; }</code></pre>
+<pre><code class="language-bash">location = /healthz { access_log off; return 200 "ok\\n"; }</code></pre>
 <p>After that change, <code>docker compose logs -t --since 15s nginx api</code> taken right after one real request shows only that request:</p>
 <div class="out">nginx-1  | 2026-09-24T01:57:57.111484971Z 172.21.0.1 - - [24/Sep/2026:01:57:57 +0000] "GET /api/slots?day=2026-10-01 HTTP/1.1" 200 248 "-" "curl/8.7.1" "-"</div>
 <p>Everything a container writes to stdout and stderr is what <code>docker logs</code> shows; the files behind it are capped by the <code>max-size</code>/<code>max-file</code> of Lesson 16.2 (Lesson 11.3 explains where they live). All timestamps are UTC — incident 8.</p>
@@ -2300,7 +2300,7 @@ nginx-1  | 2026-09-24T01:30:42.089414298Z 127.0.0.1 - - [24/Sep/2026:01:30:42 +0
 nginx-1  | 2026-09-24T01:30:52.128028177Z 127.0.0.1 - - [24/Sep/2026:01:30:52 +0000] "GET /healthz HTTP/1.1" 200 3 "-" "Wget" "-"
 nginx-1  | 2026-09-24T01:31:02.167226418Z 127.0.0.1 - - [24/Sep/2026:01:31:02 +0000] "GET /healthz HTTP/1.1" 200 3 "-" "Wget" "-"</div>
 <p>Dòng đầu của API cho biết phiên bản nào đang chạy — đáng in ra ở mỗi lần khởi động. Ba dòng nginx là healthcheck của chính nó, mười giây một lần: 8.640 dòng mỗi ngày chôn vùi lưu lượng thật. Một chỉ thị là sửa xong:</p>
-<pre><code>location = /healthz { access_log off; return 200 "ok\\n"; }</code></pre>
+<pre><code class="language-bash">location = /healthz { access_log off; return 200 "ok\\n"; }</code></pre>
 <p>Sau thay đổi đó, <code>docker compose logs -t --since 15s nginx api</code> chạy ngay sau một request thật chỉ còn đúng request đó:</p>
 <div class="out">nginx-1  | 2026-09-24T01:57:57.111484971Z 172.21.0.1 - - [24/Sep/2026:01:57:57 +0000] "GET /api/slots?day=2026-10-01 HTTP/1.1" 200 248 "-" "curl/8.7.1" "-"</div>
 <p>Mọi thứ container ghi ra stdout và stderr là thứ <code>docker logs</code> cho bạn xem; các file đứng sau nó bị giới hạn bởi <code>max-size</code>/<code>max-file</code> ở Bài 16.2 (Bài 11.3 giải thích chúng nằm ở đâu). Mọi dấu thời gian đều theo UTC — sự cố 8.</p>

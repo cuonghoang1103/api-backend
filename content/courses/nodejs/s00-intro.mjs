@@ -350,7 +350,7 @@ export default {
 </div>
 
 <h3>macOS / Linux — nvm</h3>
-<pre><code><span class="tok-comment"># 1. install nvm (the version manager itself)</span>
+<pre><code class="language-bash"><span class="tok-comment"># 1. install nvm (the version manager itself)</span>
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
 
 <span class="tok-comment"># 2. reopen the terminal, then install + activate Node 22 LTS</span>
@@ -367,14 +367,14 @@ nvm use 22.21.0</code></pre>
 
 <h3>Verify the install</h3>
 <p>Three commands. All three must answer, and the Node major must be the one you expect:</p>
-<pre><code>node -v
+<pre><code class="language-bash">node -v
 npm -v
 node -p "process.versions.v8"</code></pre>
 <div class="out">v22.21.0
 10.9.4
 12.4.254.21-node.33</div>
 <p>That third line is worth a pause: it proves Node is really a wrapper around <strong>V8</strong>, Chrome's JavaScript engine. Chapter 2 goes into what else is bundled in there — the answer is mostly <em>libuv</em>, the library that gives Node its event loop:</p>
-<pre><code>node -p "process.versions.uv"</code></pre>
+<pre><code class="language-bash">node -p "process.versions.uv"</code></pre>
 <div class="out">1.51.0</div>
 
 <h3>The editor</h3>
@@ -388,14 +388,14 @@ node -p "process.versions.v8"</code></pre>
 
 <h3>Your first Node program</h3>
 <p>Create a folder, put one file in it, run it. That is the whole ceremony:</p>
-<pre><code><span class="tok-comment">// hello.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// hello.js</span>
 <span class="tok-keyword">const</span> os = <span class="tok-function">require</span>(<span class="tok-string">'node:os'</span>);
 
 <span class="tok-function">console.log</span>(<span class="tok-string">'Node version:'</span>, process.version);
 <span class="tok-function">console.log</span>(<span class="tok-string">'Platform:'</span>, process.platform, process.arch);
 <span class="tok-function">console.log</span>(<span class="tok-string">'CPU cores:'</span>, os.<span class="tok-function">cpus</span>().length);
 <span class="tok-function">console.log</span>(<span class="tok-string">'Free memory (MB):'</span>, Math.<span class="tok-function">round</span>(os.<span class="tok-function">freemem</span>() / 1024 / 1024));</code></pre>
-<pre><code>node hello.js</code></pre>
+<pre><code class="language-bash">node hello.js</code></pre>
 <div class="out">Node version: v22.21.0
 Platform: darwin arm64
 CPU cores: 10
@@ -441,7 +441,7 @@ Type ".help" for more information.
 </div>
 
 <h3>macOS / Linux — nvm</h3>
-<pre><code><span class="tok-comment"># 1. cài nvm (bản thân trình quản lý phiên bản)</span>
+<pre><code class="language-bash"><span class="tok-comment"># 1. cài nvm (bản thân trình quản lý phiên bản)</span>
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
 
 <span class="tok-comment"># 2. mở lại terminal, rồi cài + kích hoạt Node 22 LTS</span>
@@ -458,14 +458,14 @@ nvm use 22.21.0</code></pre>
 
 <h3>Kiểm tra sau khi cài</h3>
 <p>Ba câu lệnh. Cả ba phải trả lời được, và major của Node phải đúng bản bạn muốn:</p>
-<pre><code>node -v
+<pre><code class="language-bash">node -v
 npm -v
 node -p "process.versions.v8"</code></pre>
 <div class="out">v22.21.0
 10.9.4
 12.4.254.21-node.33</div>
 <p>Dòng thứ ba đáng để dừng lại một nhịp: nó chứng minh Node thực chất là lớp vỏ bọc quanh <strong>V8</strong> — engine JavaScript của Chrome. Chương 2 sẽ đi vào những gì còn được đóng gói kèm trong đó — chủ yếu là <em>libuv</em>, thư viện tạo nên event loop của Node:</p>
-<pre><code>node -p "process.versions.uv"</code></pre>
+<pre><code class="language-bash">node -p "process.versions.uv"</code></pre>
 <div class="out">1.51.0</div>
 
 <h3>Trình soạn thảo</h3>
@@ -479,14 +479,14 @@ node -p "process.versions.v8"</code></pre>
 
 <h3>Chương trình Node đầu tiên</h3>
 <p>Tạo một thư mục, bỏ vào một file, chạy nó. Toàn bộ nghi thức chỉ có vậy:</p>
-<pre><code><span class="tok-comment">// hello.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// hello.js</span>
 <span class="tok-keyword">const</span> os = <span class="tok-function">require</span>(<span class="tok-string">'node:os'</span>);
 
 <span class="tok-function">console.log</span>(<span class="tok-string">'Phiên bản Node:'</span>, process.version);
 <span class="tok-function">console.log</span>(<span class="tok-string">'Nền tảng:'</span>, process.platform, process.arch);
 <span class="tok-function">console.log</span>(<span class="tok-string">'Số nhân CPU:'</span>, os.<span class="tok-function">cpus</span>().length);
 <span class="tok-function">console.log</span>(<span class="tok-string">'RAM trống (MB):'</span>, Math.<span class="tok-function">round</span>(os.<span class="tok-function">freemem</span>() / 1024 / 1024));</code></pre>
-<pre><code>node hello.js</code></pre>
+<pre><code class="language-bash">node hello.js</code></pre>
 <div class="out">Phiên bản Node: v22.21.0
 Nền tảng: darwin arm64
 Số nhân CPU: 10
@@ -573,7 +573,7 @@ Type ".help" for more information.
 
 <h3>Track it in Git from lesson one</h3>
 <p>Not because the course requires it, but because you will want to look back at "how did it look before I added auth?". Start now:</p>
-<pre><code>mkdir notes-api &amp;&amp; cd notes-api
+<pre><code class="language-bash">mkdir notes-api &amp;&amp; cd notes-api
 git init
 printf 'node_modules/\\n.env\\n' &gt; .gitignore
 git add . &amp;&amp; git commit -m "chore: empty project"</code></pre>
@@ -631,7 +631,7 @@ git add . &amp;&amp; git commit -m "chore: empty project"</code></pre>
 
 <h3>Đưa vào Git ngay từ bài đầu</h3>
 <p>Không phải vì khoá học bắt buộc, mà vì rồi bạn sẽ muốn ngoái lại xem "trước khi thêm xác thực thì nó trông thế nào?". Bắt đầu luôn:</p>
-<pre><code>mkdir notes-api &amp;&amp; cd notes-api
+<pre><code class="language-bash">mkdir notes-api &amp;&amp; cd notes-api
 git init
 printf 'node_modules/\\n.env\\n' &gt; .gitignore
 git add . &amp;&amp; git commit -m "chore: empty project"</code></pre>

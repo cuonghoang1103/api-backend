@@ -26,7 +26,7 @@ export default {
 
 <h3>The gap, shown in code</h3>
 <p>Here is the honest version of talking to PostgreSQL with nothing but the driver. It works. Read it and count the things that can go wrong silently.</p>
-<pre><code><span class="tok-comment">// raw-driver.js — the &#96;pg&#96; driver, no abstraction at all</span>
+<pre><code class="language-sql"><span class="tok-comment">// raw-driver.js — the &#96;pg&#96; driver, no abstraction at all</span>
 import { Pool } from 'pg';
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 
@@ -46,7 +46,7 @@ console.log(typeof user.id, typeof user.created_at);</code></pre>
 }
 number object</div>
 <p>Nothing is wrong with that output. What is wrong is everything TypeScript knows about it, which is nothing at all:</p>
-<pre><code><span class="tok-comment">// TypeScript's view of the same variable</span>
+<pre><code class="language-javascript"><span class="tok-comment">// TypeScript's view of the same variable</span>
 const user = rows[0];        <span class="tok-comment">// any</span>
 user.fullName;               <span class="tok-comment">// undefined — the column is full_name. No error.</span>
 user.emial;                  <span class="tok-comment">// undefined — typo. No error.</span>
@@ -64,7 +64,7 @@ user.deleted_at.getTime();   <span class="tok-comment">// TypeError at runtime �
 <p>Notice the bottom two layers. Prisma does not replace SQL and it does not hide your database — it sends SQL you can read, and every constraint you rely on still lives in PostgreSQL. That matters more than it sounds, and Chapter 10 is entirely about the moments you should drop through those layers on purpose.</p>
 
 <h3>The same query, with Prisma</h3>
-<pre><code><span class="tok-comment">// prisma-version.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// prisma-version.ts</span>
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
@@ -157,7 +157,7 @@ console.log(user?.fullName);</code></pre>
 
 <h3>Khoảng cách ấy, nhìn bằng mã</h3>
 <p>Đây là bản trung thực của việc nói chuyện với PostgreSQL mà không có gì ngoài trình điều khiển. Nó chạy được. Đọc và đếm xem có bao nhiêu thứ có thể hỏng trong im lặng.</p>
-<pre><code><span class="tok-comment">// raw-driver.js — trình điều khiển &#96;pg&#96;, không một lớp trừu tượng nào</span>
+<pre><code class="language-sql"><span class="tok-comment">// raw-driver.js — trình điều khiển &#96;pg&#96;, không một lớp trừu tượng nào</span>
 import { Pool } from 'pg';
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 
@@ -177,7 +177,7 @@ console.log(typeof user.id, typeof user.created_at);</code></pre>
 }
 number object</div>
 <p>Output đó không có gì sai. Cái sai nằm ở chỗ TypeScript biết gì về nó — và câu trả lời là không biết gì cả:</p>
-<pre><code><span class="tok-comment">// TypeScript nhìn thấy đúng biến ấy như sau</span>
+<pre><code class="language-javascript"><span class="tok-comment">// TypeScript nhìn thấy đúng biến ấy như sau</span>
 const user = rows[0];        <span class="tok-comment">// any</span>
 user.fullName;               <span class="tok-comment">// undefined — cột tên là full_name. Không báo lỗi.</span>
 user.emial;                  <span class="tok-comment">// undefined — gõ sai. Không báo lỗi.</span>
@@ -195,7 +195,7 @@ user.deleted_at.getTime();   <span class="tok-comment">// TypeError lúc chạy 
 <p>Để ý hai lớp dưới cùng. Prisma KHÔNG thay thế SQL và KHÔNG giấu cơ sở dữ liệu của bạn — nó gửi SQL bạn đọc được, và mọi ràng buộc bạn trông cậy vẫn sống trong PostgreSQL. Điều đó quan trọng hơn nghe có vẻ, và Chương 10 dành trọn cho những lúc bạn nên chủ động rơi xuống qua các lớp ấy.</p>
 
 <h3>Cũng câu truy vấn đó, với Prisma</h3>
-<pre><code><span class="tok-comment">// prisma-version.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// prisma-version.ts</span>
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
@@ -297,7 +297,7 @@ console.log(user?.fullName);</code></pre>
 
 <h3>Step 1 — a database to point at</h3>
 <p>You need PostgreSQL running somewhere. If you have one already, skip ahead. If not, Docker gives you one in a single command:</p>
-<pre><code><span class="tok-comment"># One throwaway PostgreSQL 16, port 5432, data in a named volume</span>
+<pre><code class="language-bash"><span class="tok-comment"># One throwaway PostgreSQL 16, port 5432, data in a named volume</span>
 docker run -d --name pg-hoc \\
   -e POSTGRES_PASSWORD=matkhau \\
   -e POSTGRES_USER=student \\
@@ -316,7 +316,7 @@ docker exec pg-hoc pg_isready -U student -d hocprisma</code></pre>
 
 <h3>Step 2 — a project and the two packages</h3>
 <p>There are exactly two, and the split matters:</p>
-<pre><code>mkdir hoc-prisma &amp;&amp; cd hoc-prisma
+<pre><code class="language-bash">mkdir hoc-prisma &amp;&amp; cd hoc-prisma
 npm init -y
 npm install prisma --save-dev
 npm install @prisma/client
@@ -340,7 +340,7 @@ Studio                  : 0.511.0</div>
 <p>Keep the two versions in lockstep. A CLI newer than the client generates output the client cannot read, and the error message when this happens ("<code>Prisma Client could not be generated due to a version mismatch</code>") is clear, but only if you know to look for it.</p>
 
 <h3>Step 3 — <code>prisma init</code></h3>
-<pre><code>npx prisma init --datasource-provider postgresql</code></pre>
+<pre><code class="language-bash">npx prisma init --datasource-provider postgresql</code></pre>
 <div class="out">✔ Your Prisma schema was created at prisma/schema.prisma
   You can now open it in your favorite editor.
 
@@ -379,7 +379,7 @@ DATABASE_URL="postgresql://student:matkhau@localhost:5432/hocprisma?schema=publi
 
 <h3>Step 4 — a first model and the generated client</h3>
 <p>Replace the contents of <code>prisma/schema.prisma</code>:</p>
-<pre><code>generator client {
+<pre><code class="language-typescript">generator client {
   provider = "prisma-client-js"
 }
 
@@ -397,7 +397,7 @@ model User {
   @@map("users")
 }</code></pre>
 <p>Two commands turn that into a real table and a real TypeScript API:</p>
-<pre><code>npx prisma migrate dev --name khoi_tao
+<pre><code class="language-bash">npx prisma migrate dev --name khoi_tao
 npx prisma generate</code></pre>
 <div class="out">Environment variables loaded from .env
 Prisma schema loaded from prisma/schema.prisma
@@ -415,7 +415,7 @@ Your database is now in sync with your schema.
 
 ✔ Generated Prisma Client (v6.7.0) to ./node_modules/@prisma/client in 84ms</div>
 <p>Look at what <code>migrate dev</code> wrote, because you will be reading these files for the rest of your career:</p>
-<pre><code>cat prisma/migrations/20260823041207_khoi_tao/migration.sql</code></pre>
+<pre><code class="language-bash">cat prisma/migrations/20260823041207_khoi_tao/migration.sql</code></pre>
 <div class="out">-- CreateTable
 CREATE TABLE "users" (
     "id" SERIAL NOT NULL,
@@ -437,7 +437,7 @@ CREATE UNIQUE INDEX "users_email_key" ON "users"("email");</div>
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t"><code>@prisma/client</code> re-exports it</span><span class="lz-d">The package you installed is a thin shim that forwards to <code>.prisma/client</code>. That indirection is why the import path never changes even though the content is regenerated constantly.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t"><code>postinstall</code> keeps it alive</span><span class="lz-d"><code>@prisma/client</code> ships a postinstall hook that reruns <code>generate</code>. This is why a fresh <code>npm ci</code> works — and why <code>--ignore-scripts</code> in a Dockerfile produces a client with no models at all.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Proof that the generated client is yours, not a library's</span>
+<pre><code class="language-bash"><span class="tok-comment"># Proof that the generated client is yours, not a library's</span>
 grep -c "findUnique" node_modules/.prisma/client/index.d.ts
 grep -o "model User" node_modules/.prisma/client/schema.prisma
 wc -l node_modules/.prisma/client/index.d.ts</code></pre>
@@ -450,7 +450,7 @@ model User
 <div class="callout ok">
 <p><strong>1 · Pin the versions.</strong> Change <code>"^6.7.0"</code> to <code>"6.7.0"</code> for both packages. A minor bump of the CLI without the client is a broken build, and it will happen on a machine that is not yours.</p>
 <p><strong>2 · Add the scripts you will type fifty times a day.</strong></p>
-<pre><code><span class="tok-comment">// package.json</span>
+<pre><code class="language-typescript"><span class="tok-comment">// package.json</span>
 "scripts": {
   "db:gen": "prisma generate",
   "db:mig": "prisma migrate dev",
@@ -461,7 +461,7 @@ model User
 <p><strong>3 · Turn on query logging now, not after the first slow page.</strong> One constructor argument buys you every SQL statement Prisma sends, and it is the single highest-value thing in this lesson.</p>
 <p><strong>4 · Check <code>.gitignore</code> yourself.</strong> It must contain <code>.env</code> and should contain <code>node_modules</code>. <code>prisma init</code> only warns when the file already exists; a warning in a wall of green output is a warning nobody reads.</p>
 </div>
-<pre><code><span class="tok-comment">// src/db.ts — the client you will import everywhere</span>
+<pre><code class="language-javascript"><span class="tok-comment">// src/db.ts — the client you will import everywhere</span>
 import { PrismaClient } from '@prisma/client';
 
 export const prisma = new PrismaClient({
@@ -479,7 +479,7 @@ prisma:query COMMIT</div>
 </div>
 
 <h3>Verify the whole chain works</h3>
-<pre><code><span class="tok-comment"># A table exists, in the right database, with the right columns</span>
+<pre><code class="language-bash"><span class="tok-comment"># A table exists, in the right database, with the right columns</span>
 docker exec -it pg-hoc psql -U student -d hocprisma -c "\\d users"</code></pre>
 <div class="out">                                     Table "public.users"
    Column   |              Type              | Nullable |              Default
@@ -507,7 +507,7 @@ Indexes:
 
 <h3>Bước 1 — một cơ sở dữ liệu để trỏ vào</h3>
 <p>Bạn cần một PostgreSQL đang chạy ở đâu đó. Có sẵn rồi thì nhảy qua. Chưa có thì Docker cho bạn một cái bằng đúng một câu lệnh:</p>
-<pre><code><span class="tok-comment"># Một PostgreSQL 16 dùng tạm, cổng 5432, dữ liệu để trong volume có tên</span>
+<pre><code class="language-bash"><span class="tok-comment"># Một PostgreSQL 16 dùng tạm, cổng 5432, dữ liệu để trong volume có tên</span>
 docker run -d --name pg-hoc \\
   -e POSTGRES_PASSWORD=matkhau \\
   -e POSTGRES_USER=student \\
@@ -526,7 +526,7 @@ docker exec pg-hoc pg_isready -U student -d hocprisma</code></pre>
 
 <h3>Bước 2 — một dự án và hai gói</h3>
 <p>Đúng hai gói, và cách chia chúng có ý nghĩa:</p>
-<pre><code>mkdir hoc-prisma &amp;&amp; cd hoc-prisma
+<pre><code class="language-bash">mkdir hoc-prisma &amp;&amp; cd hoc-prisma
 npm init -y
 npm install prisma --save-dev
 npm install @prisma/client
@@ -550,7 +550,7 @@ Studio                  : 0.511.0</div>
 <p>Giữ hai phiên bản đi cùng nhau. CLI mới hơn client sẽ sinh ra thứ client không đọc nổi, và thông báo lỗi lúc ấy ("<code>Prisma Client could not be generated due to a version mismatch</code>") thì rõ, nhưng chỉ rõ nếu bạn biết mà tìm.</p>
 
 <h3>Bước 3 — <code>prisma init</code></h3>
-<pre><code>npx prisma init --datasource-provider postgresql</code></pre>
+<pre><code class="language-bash">npx prisma init --datasource-provider postgresql</code></pre>
 <div class="out">✔ Your Prisma schema was created at prisma/schema.prisma
   You can now open it in your favorite editor.
 
@@ -589,7 +589,7 @@ DATABASE_URL="postgresql://student:matkhau@localhost:5432/hocprisma?schema=publi
 
 <h3>Bước 4 — model đầu tiên và client được sinh ra</h3>
 <p>Thay toàn bộ nội dung <code>prisma/schema.prisma</code>:</p>
-<pre><code>generator client {
+<pre><code class="language-typescript">generator client {
   provider = "prisma-client-js"
 }
 
@@ -607,7 +607,7 @@ model User {
   @@map("users")
 }</code></pre>
 <p>Hai câu lệnh biến đoạn đó thành một bảng thật và một API TypeScript thật:</p>
-<pre><code>npx prisma migrate dev --name khoi_tao
+<pre><code class="language-bash">npx prisma migrate dev --name khoi_tao
 npx prisma generate</code></pre>
 <div class="out">Environment variables loaded from .env
 Prisma schema loaded from prisma/schema.prisma
@@ -625,7 +625,7 @@ Your database is now in sync with your schema.
 
 ✔ Generated Prisma Client (v6.7.0) to ./node_modules/@prisma/client in 84ms</div>
 <p>Hãy nhìn thứ <code>migrate dev</code> vừa viết ra, vì bạn sẽ đọc loại tệp này suốt phần đời nghề nghiệp còn lại:</p>
-<pre><code>cat prisma/migrations/20260823041207_khoi_tao/migration.sql</code></pre>
+<pre><code class="language-bash">cat prisma/migrations/20260823041207_khoi_tao/migration.sql</code></pre>
 <div class="out">-- CreateTable
 CREATE TABLE "users" (
     "id" SERIAL NOT NULL,
@@ -647,7 +647,7 @@ CREATE UNIQUE INDEX "users_email_key" ON "users"("email");</div>
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t"><code>@prisma/client</code> xuất lại nó</span><span class="lz-d">Gói bạn cài chỉ là lớp vỏ mỏng chuyển tiếp tới <code>.prisma/client</code>. Chính lớp gián tiếp đó khiến đường import không bao giờ đổi dù nội dung bị sinh lại liên tục.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t"><code>postinstall</code> giữ nó sống</span><span class="lz-d"><code>@prisma/client</code> kèm một móc postinstall chạy lại <code>generate</code>. Nhờ vậy một lần <code>npm ci</code> sạch vẫn chạy — và cũng vì vậy <code>--ignore-scripts</code> trong Dockerfile sinh ra một client không có model nào.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Bằng chứng client sinh ra là của BẠN, không phải của một thư viện</span>
+<pre><code class="language-bash"><span class="tok-comment"># Bằng chứng client sinh ra là của BẠN, không phải của một thư viện</span>
 grep -c "findUnique" node_modules/.prisma/client/index.d.ts
 grep -o "model User" node_modules/.prisma/client/schema.prisma
 wc -l node_modules/.prisma/client/index.d.ts</code></pre>
@@ -660,7 +660,7 @@ model User
 <div class="callout ok">
 <p><strong>1 · Ghim phiên bản.</strong> Đổi <code>"^6.7.0"</code> thành <code>"6.7.0"</code> cho cả hai gói. Một lần nhảy minor của CLI mà client đứng yên là một bản build hỏng, và nó sẽ xảy ra trên một cái máy không phải máy bạn.</p>
 <p><strong>2 · Thêm sẵn những script bạn sẽ gõ năm mươi lần mỗi ngày.</strong></p>
-<pre><code><span class="tok-comment">// package.json</span>
+<pre><code class="language-typescript"><span class="tok-comment">// package.json</span>
 "scripts": {
   "db:gen": "prisma generate",
   "db:mig": "prisma migrate dev",
@@ -671,7 +671,7 @@ model User
 <p><strong>3 · Bật log truy vấn ngay, đừng đợi tới trang chậm đầu tiên.</strong> Một tham số của hàm dựng mua cho bạn mọi câu SQL Prisma gửi đi, và đó là thứ đáng giá nhất trong cả bài này.</p>
 <p><strong>4 · Tự kiểm <code>.gitignore</code>.</strong> Nó phải chứa <code>.env</code> và nên chứa <code>node_modules</code>. <code>prisma init</code> chỉ cảnh báo khi tệp đã tồn tại; mà một dòng cảnh báo nằm giữa bức tường chữ xanh là dòng không ai đọc.</p>
 </div>
-<pre><code><span class="tok-comment">// src/db.ts — client bạn sẽ import ở khắp nơi</span>
+<pre><code class="language-javascript"><span class="tok-comment">// src/db.ts — client bạn sẽ import ở khắp nơi</span>
 import { PrismaClient } from '@prisma/client';
 
 export const prisma = new PrismaClient({
@@ -689,7 +689,7 @@ prisma:query COMMIT</div>
 </div>
 
 <h3>Kiểm lại cả chuỗi có chạy không</h3>
-<pre><code><span class="tok-comment"># Có một bảng, đúng cơ sở dữ liệu, đúng các cột</span>
+<pre><code class="language-bash"><span class="tok-comment"># Có một bảng, đúng cơ sở dữ liệu, đúng các cột</span>
 docker exec -it pg-hoc psql -U student -d hocprisma -c "\\d users"</code></pre>
 <div class="out">                                     Table "public.users"
    Column   |              Type              | Nullable |              Default
@@ -726,7 +726,7 @@ Indexes:
 
 <h3>A schema with a relation</h3>
 <p>Replace <code>prisma/schema.prisma</code> with this. It is two models and one relation — the smallest thing that is still interesting:</p>
-<pre><code>generator client {
+<pre><code class="language-typescript">generator client {
   provider = "prisma-client-js"
 }
 
@@ -760,7 +760,7 @@ model Post {
   @@index([authorId])
   @@map("posts")
 }</code></pre>
-<pre><code>npx prisma migrate dev --name them_post</code></pre>
+<pre><code class="language-bash">npx prisma migrate dev --name them_post</code></pre>
 <div class="out">Applying migration &#96;20260823044930_them_post&#96;
 
 The following migration(s) have been created and applied from new schema changes:
@@ -781,7 +781,7 @@ Your database is now in sync with your schema.
 </div>
 
 <h3>Write: one user, two posts, one query</h3>
-<pre><code><span class="tok-comment">// src/tour.ts — run with: npx tsx src/tour.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// src/tour.ts — run with: npx tsx src/tour.ts</span>
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient({ log: ['query'] });
 
@@ -822,7 +822,7 @@ prisma:query COMMIT
 </div>
 
 <h3>Read: the six ways to ask</h3>
-<pre><code><span class="tok-comment">// 2 — by unique field. Returns T | null.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// 2 — by unique field. Returns T | null.</span>
 const u = await prisma.user.findUnique({ where: { email: 'an@example.com' } });
 
 <span class="tok-comment">// 3 — same but throws P2025 instead of returning null</span>
@@ -857,7 +857,7 @@ const fat = await prisma.user.findMany({ include: { posts: true } });</code></pr
 </div>
 
 <h3>Update, upsert, delete</h3>
-<pre><code><span class="tok-comment">// 8 — update one row by unique field</span>
+<pre><code class="language-javascript"><span class="tok-comment">// 8 — update one row by unique field</span>
 await prisma.post.update({ where: { id: 2 }, data: { published: true } });
 
 <span class="tok-comment">// 9 — atomic increment. NOT read-then-write. This matters — Chapter 7.</span>
@@ -887,7 +887,7 @@ prisma:query INSERT INTO "public"."users" ("email","full_name","created_at") VAL
 </div>
 
 <h3>Count and aggregate</h3>
-<pre><code><span class="tok-comment">// 13 — counting, including counting a relation</span>
+<pre><code class="language-javascript"><span class="tok-comment">// 13 — counting, including counting a relation</span>
 const total = await prisma.post.count({ where: { published: true } });
 
 const withCounts = await prisma.user.findMany({
@@ -911,14 +911,14 @@ console.log(stats);</code></pre>
 <p><code>_count</code> inside <code>include</code> is worth noticing early. It is how you render "12 posts" next to a username without loading twelve posts, and it is a place beginners reliably reach for <code>include: { posts: true }</code> and then call <code>.length</code> — which fetches every row to count them.</p>
 
 <h3>See it with your own eyes: Prisma Studio</h3>
-<pre><code>npx prisma studio</code></pre>
+<pre><code class="language-bash">npx prisma studio</code></pre>
 <div class="out">Environment variables loaded from .env
 Prisma Studio is up on http://localhost:5555</div>
 <p>A browsable, editable view of every table, with relations rendered as links you can click through. Two honest warnings: it connects with your <code>DATABASE_URL</code>, so pointing it at production means one careless click edits production; and it is a development tool, not an admin panel — do not ship it.</p>
 
 <h3>The other direction: an existing database</h3>
 <p>Not every project starts empty. If you have a database already, Prisma will write the schema for you:</p>
-<pre><code>npx prisma db pull</code></pre>
+<pre><code class="language-bash">npx prisma db pull</code></pre>
 <div class="out">Environment variables loaded from .env
 Prisma schema loaded from prisma/schema.prisma
 Datasource "db": PostgreSQL database "hocprisma", schema "public" at "localhost:5432"
@@ -948,7 +948,7 @@ Run prisma generate to generate Prisma Client.</div>
 
 <h3>Một lược đồ có quan hệ</h3>
 <p>Thay <code>prisma/schema.prisma</code> bằng đoạn này. Hai model và một quan hệ — thứ nhỏ nhất mà vẫn còn thú vị:</p>
-<pre><code>generator client {
+<pre><code class="language-typescript">generator client {
   provider = "prisma-client-js"
 }
 
@@ -982,7 +982,7 @@ model Post {
   @@index([authorId])
   @@map("posts")
 }</code></pre>
-<pre><code>npx prisma migrate dev --name them_post</code></pre>
+<pre><code class="language-bash">npx prisma migrate dev --name them_post</code></pre>
 <div class="out">Applying migration &#96;20260823044930_them_post&#96;
 
 The following migration(s) have been created and applied from new schema changes:
@@ -1003,7 +1003,7 @@ Your database is now in sync with your schema.
 </div>
 
 <h3>Ghi: một người dùng, hai bài viết, một lời gọi</h3>
-<pre><code><span class="tok-comment">// src/tour.ts — chạy bằng: npx tsx src/tour.ts</span>
+<pre><code class="language-javascript"><span class="tok-comment">// src/tour.ts — chạy bằng: npx tsx src/tour.ts</span>
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient({ log: ['query'] });
 
@@ -1044,7 +1044,7 @@ prisma:query COMMIT
 </div>
 
 <h3>Đọc: sáu cách để hỏi</h3>
-<pre><code><span class="tok-comment">// 2 — theo trường unique. Trả về T | null.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// 2 — theo trường unique. Trả về T | null.</span>
 const u = await prisma.user.findUnique({ where: { email: 'an@example.com' } });
 
 <span class="tok-comment">// 3 — y hệt nhưng ném P2025 thay vì trả null</span>
@@ -1079,7 +1079,7 @@ const fat = await prisma.user.findMany({ include: { posts: true } });</code></pr
 </div>
 
 <h3>Update, upsert, delete</h3>
-<pre><code><span class="tok-comment">// 8 — sửa một hàng theo trường unique</span>
+<pre><code class="language-javascript"><span class="tok-comment">// 8 — sửa một hàng theo trường unique</span>
 await prisma.post.update({ where: { id: 2 }, data: { published: true } });
 
 <span class="tok-comment">// 9 — tăng nguyên tử. KHÔNG phải đọc-rồi-ghi. Điều này quan trọng — Chương 7.</span>
@@ -1109,7 +1109,7 @@ prisma:query INSERT INTO "public"."users" ("email","full_name","created_at") VAL
 </div>
 
 <h3>Đếm và tổng hợp</h3>
-<pre><code><span class="tok-comment">// 13 — đếm, kể cả đếm một quan hệ</span>
+<pre><code class="language-javascript"><span class="tok-comment">// 13 — đếm, kể cả đếm một quan hệ</span>
 const total = await prisma.post.count({ where: { published: true } });
 
 const withCounts = await prisma.user.findMany({
@@ -1133,14 +1133,14 @@ console.log(stats);</code></pre>
 <p><code>_count</code> đặt bên trong <code>include</code> đáng để ý sớm. Đó là cách bạn hiển thị "12 bài viết" cạnh tên người dùng mà không nạp mười hai bài viết, và cũng là chỗ người mới đều đặn với tay tới <code>include: { posts: true }</code> rồi gọi <code>.length</code> — tức là kéo về mọi hàng chỉ để đếm chúng.</p>
 
 <h3>Nhìn tận mắt: Prisma Studio</h3>
-<pre><code>npx prisma studio</code></pre>
+<pre><code class="language-bash">npx prisma studio</code></pre>
 <div class="out">Environment variables loaded from .env
 Prisma Studio is up on http://localhost:5555</div>
 <p>Một giao diện duyệt và sửa được cho mọi bảng, với quan hệ vẽ thành liên kết bấm qua được. Hai lời cảnh báo trung thực: nó kết nối bằng đúng <code>DATABASE_URL</code> của bạn, nên trỏ nó vào production nghĩa là một cú bấm bất cẩn sửa thẳng production; và nó là công cụ phát triển, không phải bảng quản trị — đừng đưa nó lên chạy thật.</p>
 
 <h3>Hướng ngược lại: một cơ sở dữ liệu đã có</h3>
 <p>Không phải dự án nào cũng bắt đầu từ trống. Nếu bạn đã có cơ sở dữ liệu, Prisma sẽ viết lược đồ hộ bạn:</p>
-<pre><code>npx prisma db pull</code></pre>
+<pre><code class="language-bash">npx prisma db pull</code></pre>
 <div class="out">Environment variables loaded from .env
 Prisma schema loaded from prisma/schema.prisma
 Datasource "db": PostgreSQL database "hocprisma", schema "public" at "localhost:5432"

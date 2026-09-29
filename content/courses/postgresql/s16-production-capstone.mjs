@@ -46,7 +46,7 @@ export default {
 
 <h3>A real shadow-database failure, in this repository</h3>
 <p>The shadow database replays <em>every</em> migration from the beginning, which means a migration that was accepted once but is not replayable will break <code>migrate dev</code> forever after. That is not hypothetical here. Migration <code>20260706130000_add_music_and_profile</code>, lines 48–49:</p>
-<pre><code><span class="tok-keyword">ALTER TABLE</span> <span class="tok-string">"post_music"</span> <span class="tok-keyword">ADD CONSTRAINT</span> <span class="tok-string">"post_music_post_id_key"</span> <span class="tok-keyword">UNIQUE</span> (<span class="tok-string">"post_id"</span>);
+<pre><code class="language-sql"><span class="tok-keyword">ALTER TABLE</span> <span class="tok-string">"post_music"</span> <span class="tok-keyword">ADD CONSTRAINT</span> <span class="tok-string">"post_music_post_id_key"</span> <span class="tok-keyword">UNIQUE</span> (<span class="tok-string">"post_id"</span>);
 <span class="tok-keyword">CREATE INDEX</span> <span class="tok-string">"post_music_post_id_key"</span> <span class="tok-keyword">ON</span> <span class="tok-string">"post_music"</span>(<span class="tok-string">"post_id"</span>);</code></pre>
 <p>A <code>UNIQUE</code> constraint creates an index behind it, using the constraint's name. The next line then tries to create a <em>second</em> index with the <strong>same name</strong>. On a fresh shadow database that is a name collision and the replay fails with <code>P3006</code>.</p>
 <p>Why did it ever work? Because on the real database the two statements ran at a moment when that sequence happened to be accepted, and the migration is now <em>recorded as applied</em> — so <code>migrate deploy</code> never runs it again and production is unaffected. Only the shadow database, which always starts from zero, hits it.</p>
@@ -89,7 +89,7 @@ export default {
 
 <h3>Một sự cố shadow database CÓ THẬT, ngay trong kho mã này</h3>
 <p>Shadow database phát lại <em>MỌI</em> migration từ đầu, nghĩa là một migration từng được chấp nhận MỘT LẦN nhưng không phát lại được sẽ làm hỏng <code>migrate dev</code> mãi mãi về sau. Ở đây điều đó không hề giả định. Migration <code>20260706130000_add_music_and_profile</code>, dòng 48–49:</p>
-<pre><code><span class="tok-keyword">ALTER TABLE</span> <span class="tok-string">"post_music"</span> <span class="tok-keyword">ADD CONSTRAINT</span> <span class="tok-string">"post_music_post_id_key"</span> <span class="tok-keyword">UNIQUE</span> (<span class="tok-string">"post_id"</span>);
+<pre><code class="language-sql"><span class="tok-keyword">ALTER TABLE</span> <span class="tok-string">"post_music"</span> <span class="tok-keyword">ADD CONSTRAINT</span> <span class="tok-string">"post_music_post_id_key"</span> <span class="tok-keyword">UNIQUE</span> (<span class="tok-string">"post_id"</span>);
 <span class="tok-keyword">CREATE INDEX</span> <span class="tok-string">"post_music_post_id_key"</span> <span class="tok-keyword">ON</span> <span class="tok-string">"post_music"</span>(<span class="tok-string">"post_id"</span>);</code></pre>
 <p>Một ràng buộc <code>UNIQUE</code> tự tạo một chỉ mục phía sau nó, LẤY ĐÚNG TÊN của ràng buộc. Dòng kế tiếp sau đó lại cố tạo một chỉ mục <em>THỨ HAI</em> với <strong>CÙNG CÁI TÊN</strong>. Trên một shadow database sạch, đó là một vụ đụng tên và lượt phát lại hỏng với mã <code>P3006</code>.</p>
 <p>Vậy vì sao nó từng chạy được? Vì trên cơ sở dữ liệu thật, hai câu lệnh đó chạy vào một thời điểm mà trình tự ấy tình cờ được chấp nhận, và giờ migration đã được <em>GHI NHẬN LÀ ĐÃ ÁP</em> — nên <code>migrate deploy</code> không bao giờ chạy lại nó và production không hề bị ảnh hưởng. Chỉ có shadow database, thứ luôn bắt đầu từ số không, mới đâm vào nó.</p>
@@ -152,7 +152,7 @@ số @relation       : 441</div>
 </div>
 
 <h3>Useful queries against a live database</h3>
-<pre><code><span class="tok-comment">-- bảng lớn nhất theo dung lượng</span>
+<pre><code class="language-sql"><span class="tok-comment">-- bảng lớn nhất theo dung lượng</span>
 <span class="tok-keyword">SELECT</span> relname, pg_size_pretty(pg_total_relation_size(relid)) <span class="tok-keyword">AS</span> tong
 <span class="tok-keyword">FROM</span> pg_stat_user_tables <span class="tok-keyword">ORDER BY</span> pg_total_relation_size(relid) <span class="tok-keyword">DESC</span> <span class="tok-keyword">LIMIT</span> 10;
 
@@ -202,7 +202,7 @@ số @relation       : 441</div>
 </div>
 
 <h3>Vài truy vấn hữu ích chạy trên cơ sở dữ liệu đang sống</h3>
-<pre><code><span class="tok-comment">-- bảng lớn nhất theo dung lượng</span>
+<pre><code class="language-sql"><span class="tok-comment">-- bảng lớn nhất theo dung lượng</span>
 <span class="tok-keyword">SELECT</span> relname, pg_size_pretty(pg_total_relation_size(relid)) <span class="tok-keyword">AS</span> tong
 <span class="tok-keyword">FROM</span> pg_stat_user_tables <span class="tok-keyword">ORDER BY</span> pg_total_relation_size(relid) <span class="tok-keyword">DESC</span> <span class="tok-keyword">LIMIT</span> 10;
 
@@ -233,7 +233,7 @@ số @relation       : 441</div>
 <p class="lead">Nothing here is new. Every item is a chapter you have already read, restated as something you can verify in an afternoon. The reason to have it as a list is that these failures do not announce themselves — each one is invisible until the day it is total.</p>
 
 <h3>1 · Backups you have actually restored</h3>
-<pre><code>pg_restore -d scratch_db backup.dump &amp;&amp; psql -d scratch_db -c <span class="tok-string">"SELECT count(*) FROM users;"</span></code></pre>
+<pre><code class="language-sql">pg_restore -d scratch_db backup.dump &amp;&amp; psql -d scratch_db -c <span class="tok-string">"SELECT count(*) FROM users;"</span></code></pre>
 <div class="lz-flow">
 <div class="lz-step"><span class="lz-k">☐</span><span class="lz-t">A dump runs on a schedule, and its exit status is checked</span><span class="lz-d">A cron job writing zero-byte files reports success forever (15.1).</span></div>
 <div class="lz-step"><span class="lz-k">☐</span><span class="lz-t">Backups live on different storage from the database</span><span class="lz-d">Same disk means one failure loses both.</span></div>
@@ -242,7 +242,7 @@ số @relation       : 441</div>
 </div>
 
 <h3>2 · Connections that add up</h3>
-<pre><code><span class="tok-keyword">SELECT</span> count(*), (<span class="tok-keyword">SELECT</span> setting <span class="tok-keyword">FROM</span> pg_settings <span class="tok-keyword">WHERE</span> name=<span class="tok-string">'max_connections'</span>)
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> count(*), (<span class="tok-keyword">SELECT</span> setting <span class="tok-keyword">FROM</span> pg_settings <span class="tok-keyword">WHERE</span> name=<span class="tok-string">'max_connections'</span>)
 <span class="tok-keyword">FROM</span> pg_stat_activity;</code></pre>
 <div class="lz-flow">
 <div class="lz-step"><span class="lz-k">☐</span><span class="lz-t">(processes × pool) &lt; <code>max_connections</code>, with headroom</span><span class="lz-d">Count every process — web, workers, cron, migrations, exporters, your psql (14.1).</span></div>
@@ -293,7 +293,7 @@ số @relation       : 441</div>
 <p class="lead">Không có gì ở đây là mới. Mỗi mục đều là một chương bạn đã đọc rồi, chỉ được phát biểu lại thành thứ bạn kiểm chứng được trong một buổi chiều. Lý do phải có nó dưới dạng DANH SÁCH là vì những kiểu hỏng này KHÔNG tự thông báo — mỗi cái đều vô hình cho tới ngày nó thành toàn phần.</p>
 
 <h3>1 · Sao lưu mà bạn ĐÃ THẬT SỰ khôi phục thử</h3>
-<pre><code>pg_restore -d scratch_db backup.dump &amp;&amp; psql -d scratch_db -c <span class="tok-string">"SELECT count(*) FROM users;"</span></code></pre>
+<pre><code class="language-sql">pg_restore -d scratch_db backup.dump &amp;&amp; psql -d scratch_db -c <span class="tok-string">"SELECT count(*) FROM users;"</span></code></pre>
 <div class="lz-flow">
 <div class="lz-step"><span class="lz-k">☐</span><span class="lz-t">Có một lượt dump chạy theo lịch, và mã thoát của nó ĐƯỢC KIỂM</span><span class="lz-d">Một job cron ghi ra file 0 byte sẽ báo thành công mãi mãi (15.1).</span></div>
 <div class="lz-step"><span class="lz-k">☐</span><span class="lz-t">Bản sao lưu nằm ở chỗ lưu trữ KHÁC với cơ sở dữ liệu</span><span class="lz-d">Cùng một đĩa nghĩa là một sự cố mất cả hai.</span></div>
@@ -302,7 +302,7 @@ số @relation       : 441</div>
 </div>
 
 <h3>2 · Kết nối cộng lại phải lọt</h3>
-<pre><code><span class="tok-keyword">SELECT</span> count(*), (<span class="tok-keyword">SELECT</span> setting <span class="tok-keyword">FROM</span> pg_settings <span class="tok-keyword">WHERE</span> name=<span class="tok-string">'max_connections'</span>)
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> count(*), (<span class="tok-keyword">SELECT</span> setting <span class="tok-keyword">FROM</span> pg_settings <span class="tok-keyword">WHERE</span> name=<span class="tok-string">'max_connections'</span>)
 <span class="tok-keyword">FROM</span> pg_stat_activity;</code></pre>
 <div class="lz-flow">
 <div class="lz-step"><span class="lz-k">☐</span><span class="lz-t">(số tiến trình × pool) &lt; <code>max_connections</code>, còn dư chỗ</span><span class="lz-d">Đếm MỌI tiến trình — web, worker, cron, migration, exporter, cái psql của bạn (14.1).</span></div>
@@ -371,7 +371,7 @@ số @relation       : 441</div>
 <h3>Case 1 — "The site got slow this afternoon and nothing was deployed"</h3>
 <p><strong>Symptom.</strong> Response times tripled over about an hour. No deploy, no traffic spike, no error rate change. One table's queries are notably worse than the rest.</p>
 <p><strong>First query.</strong> Not <code>EXPLAIN</code>. Run this:</p>
-<pre><code><span class="tok-keyword">SELECT</span> pid, now()-xact_start <span class="tok-keyword">AS</span> tuoi, state, left(query,60)
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> pid, now()-xact_start <span class="tok-keyword">AS</span> tuoi, state, left(query,60)
 <span class="tok-keyword">FROM</span> pg_stat_activity <span class="tok-keyword">WHERE</span> xact_start <span class="tok-keyword">IS NOT NULL</span> <span class="tok-keyword">ORDER BY</span> tuoi <span class="tok-keyword">DESC</span>;</code></pre>
 <p><strong>What you are looking for.</strong> A session in <code>idle in transaction</code> hours old. It pins a snapshot, so <code>VACUUM</code> cannot remove any row version newer than it — <em>anywhere in the database</em> (11.1, 14.3). The hot table accumulates dead tuples, every scan reads more pages, and queries degrade gradually with no change to the code. Confirm with the dead-tuple ratio from 14.3.</p>
 <p><strong>Fix.</strong> <code>pg_cancel_backend(pid)</code>, then <code>VACUUM</code> the affected table. Then set <code>idle_in_transaction_session_timeout</code> so it cannot recur, and find the application path that opens a transaction and forgets it.</p>
@@ -380,7 +380,7 @@ số @relation       : 441</div>
 <h3>Case 2 — "Users say their balance is wrong, but no errors anywhere"</h3>
 <p><strong>Symptom.</strong> Occasional, unreproducible, always <em>less</em> than it should be. No exceptions in the logs. Every transaction reported success.</p>
 <p><strong>First move.</strong> Do not query the database. Read the code path that writes the balance, and look for this shape:</p>
-<pre><code><span class="tok-keyword">const</span> row = <span class="tok-keyword">await</span> db.query(<span class="tok-string">'SELECT balance FROM accounts WHERE id=$1'</span>, [id]);
+<pre><code class="language-sql"><span class="tok-keyword">const</span> row = <span class="tok-keyword">await</span> db.query(<span class="tok-string">'SELECT balance FROM accounts WHERE id=$1'</span>, [id]);
 <span class="tok-keyword">const</span> moi = row.balance - amount;                       <span class="tok-comment">// ← tính ở đây</span>
 <span class="tok-keyword">await</span> db.query(<span class="tok-string">'UPDATE accounts SET balance=$1 WHERE id=$2'</span>, [moi, id]);</code></pre>
 <p><strong>What it is.</strong> A lost update (11.4). Two concurrent requests both read the old value; the second overwrites the first's result. Measured in that lesson: 100 − 10 − 20 finished at <strong>80.00</strong> instead of 70.00, with both transactions reporting success. It is silent by construction, which is why the logs are clean.</p>
@@ -389,7 +389,7 @@ số @relation       : 441</div>
 <h3>Case 3 — "Deploys started failing: 'too many clients already'"</h3>
 <p><strong>Symptom.</strong> The application works, but migrations during deploy fail to connect. Later, under load, user requests start failing too.</p>
 <p><strong>First query.</strong> Count and attribute:</p>
-<pre><code><span class="tok-keyword">SELECT</span> usename, application_name, count(*)
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> usename, application_name, count(*)
 <span class="tok-keyword">FROM</span> pg_stat_activity <span class="tok-keyword">GROUP BY</span> 1,2 <span class="tok-keyword">ORDER BY</span> 3 <span class="tok-keyword">DESC</span>;</code></pre>
 <p><strong>What it is.</strong> The multiplication from 14.1. Someone added a worker container, and (processes × pool) crossed <code>max_connections</code>. Measured on a real server: connection 101 failed with exactly <code>sorry, too many clients already</code>. Migrations fail first because they connect last.</p>
 <p><strong>Fix.</strong> Shrink the pools so the product fits with headroom, or introduce PgBouncer in transaction mode <em>and</em> shrink the pools anyway (14.2). Do <strong>not</strong> raise <code>max_connections</code> — on a small VPS that trades a clean refusal for the OOM killer.</p>
@@ -397,7 +397,7 @@ số @relation       : 441</div>
 <h3>Case 4 — "A user reports a change they saved is missing, then it appears"</h3>
 <p><strong>Symptom.</strong> Intermittent. Save, redirect, the change is not there; refresh a moment later and it is. Only since read replicas were introduced.</p>
 <p><strong>First query.</strong> On the primary:</p>
-<pre><code><span class="tok-keyword">SELECT</span> state, sync_state, pg_wal_lsn_diff(sent_lsn, replay_lsn) <span class="tok-keyword">AS</span> byte_tre
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> state, sync_state, pg_wal_lsn_diff(sent_lsn, replay_lsn) <span class="tok-keyword">AS</span> byte_tre
 <span class="tok-keyword">FROM</span> pg_stat_replication;</code></pre>
 <p><strong>What it is.</strong> Async replication lag (15.3). The write went to the primary; the redirect's read was routed to a replica that had not replayed it yet. Nothing is broken — <code>sync_state = async</code> means the primary commits without waiting, which is the default and usually correct.</p>
 <p><strong>Fix.</strong> Route reads that follow a write within the same user action to the primary. Reserve replicas for genuinely independent reads — reports, dashboards, <code>pg_dump</code>.</p>
@@ -425,7 +425,7 @@ số @relation       : 441</div>
 <h3>Ca 1 — "Trang chậm hẳn từ chiều nay mà không ai deploy gì cả"</h3>
 <p><strong>Triệu chứng.</strong> Thời gian phản hồi tăng gấp ba trong khoảng một tiếng. Không deploy, không tăng lưu lượng, tỉ lệ lỗi không đổi. Truy vấn của MỘT bảng tệ hơn hẳn phần còn lại.</p>
 <p><strong>Truy vấn đầu tiên.</strong> KHÔNG phải <code>EXPLAIN</code>. Hãy chạy cái này:</p>
-<pre><code><span class="tok-keyword">SELECT</span> pid, now()-xact_start <span class="tok-keyword">AS</span> tuoi, state, left(query,60)
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> pid, now()-xact_start <span class="tok-keyword">AS</span> tuoi, state, left(query,60)
 <span class="tok-keyword">FROM</span> pg_stat_activity <span class="tok-keyword">WHERE</span> xact_start <span class="tok-keyword">IS NOT NULL</span> <span class="tok-keyword">ORDER BY</span> tuoi <span class="tok-keyword">DESC</span>;</code></pre>
 <p><strong>Bạn đang tìm gì.</strong> Một phiên ở trạng thái <code>idle in transaction</code> già hàng tiếng. Nó ghim một ảnh chụp, nên <code>VACUUM</code> không gỡ nổi bất kỳ phiên bản dòng nào mới hơn nó — <em>ở BẤT KỲ ĐÂU trong cơ sở dữ liệu</em> (11.1, 14.3). Cái bảng nóng tích dead tuple, mỗi lượt quét đọc nhiều trang hơn, và truy vấn suy giảm DẦN DẦN mà mã không hề đổi. Xác nhận bằng tỉ lệ dead tuple ở 14.3.</p>
 <p><strong>Cách sửa.</strong> <code>pg_cancel_backend(pid)</code>, rồi <code>VACUUM</code> cái bảng bị ảnh hưởng. Sau đó đặt <code>idle_in_transaction_session_timeout</code> để nó không tái diễn, và đi tìm cái nhánh mã mở một giao dịch rồi quên nó.</p>
@@ -434,7 +434,7 @@ số @relation       : 441</div>
 <h3>Ca 2 — "Người dùng báo số dư sai, mà không có lỗi ở đâu cả"</h3>
 <p><strong>Triệu chứng.</strong> Thi thoảng, không tái hiện được, và LUÔN <em>ÍT HƠN</em> mức đáng lẽ phải có. Không ngoại lệ nào trong log. Mọi giao dịch đều báo thành công.</p>
 <p><strong>Nước đi đầu tiên.</strong> ĐỪNG truy vấn cơ sở dữ liệu. Hãy đọc nhánh mã ghi số dư, và tìm cái HÌNH DẠNG này:</p>
-<pre><code><span class="tok-keyword">const</span> row = <span class="tok-keyword">await</span> db.query(<span class="tok-string">'SELECT balance FROM accounts WHERE id=$1'</span>, [id]);
+<pre><code class="language-sql"><span class="tok-keyword">const</span> row = <span class="tok-keyword">await</span> db.query(<span class="tok-string">'SELECT balance FROM accounts WHERE id=$1'</span>, [id]);
 <span class="tok-keyword">const</span> moi = row.balance - amount;                       <span class="tok-comment">// ← tính ở đây</span>
 <span class="tok-keyword">await</span> db.query(<span class="tok-string">'UPDATE accounts SET balance=$1 WHERE id=$2'</span>, [moi, id]);</code></pre>
 <p><strong>Nó là gì.</strong> Một lost update (11.4). Hai request đồng thời cùng đọc giá trị cũ; cái thứ hai ghi đè lên kết quả của cái thứ nhất. Đo trong bài đó: 100 − 10 − 20 kết thúc ở <strong>80.00</strong> thay vì 70.00, mà cả hai giao dịch đều báo thành công. Nó ÂM THẦM do chính cấu trúc của nó, và đó là lý do log sạch bong.</p>
@@ -443,7 +443,7 @@ số @relation       : 441</div>
 <h3>Ca 3 — "Deploy bắt đầu hỏng: 'too many clients already'"</h3>
 <p><strong>Triệu chứng.</strong> Ứng dụng vẫn chạy, nhưng migration lúc deploy không kết nối nổi. Về sau, khi tải cao, request của người dùng cũng bắt đầu hỏng.</p>
 <p><strong>Truy vấn đầu tiên.</strong> Đếm và quy trách nhiệm:</p>
-<pre><code><span class="tok-keyword">SELECT</span> usename, application_name, count(*)
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> usename, application_name, count(*)
 <span class="tok-keyword">FROM</span> pg_stat_activity <span class="tok-keyword">GROUP BY</span> 1,2 <span class="tok-keyword">ORDER BY</span> 3 <span class="tok-keyword">DESC</span>;</code></pre>
 <p><strong>Nó là gì.</strong> Phép nhân ở bài 14.1. Ai đó vừa thêm một container worker, và (số tiến trình × pool) đã vượt qua <code>max_connections</code>. Đo trên một máy chủ thật: kết nối thứ 101 hỏng với đúng dòng <code>sorry, too many clients already</code>. Migration hỏng trước tiên vì nó kết nối SAU CÙNG.</p>
 <p><strong>Cách sửa.</strong> Thu nhỏ các pool cho tích số lọt xuống và còn dư, hoặc đưa PgBouncer vào ở chế độ transaction <em>VÀ</em> dù sao cũng vẫn phải thu nhỏ pool (14.2). <strong>ĐỪNG</strong> tăng <code>max_connections</code> — trên một VPS nhỏ, làm thế là đổi một lời từ chối sạch sẽ lấy OOM killer.</p>
@@ -451,7 +451,7 @@ số @relation       : 441</div>
 <h3>Ca 4 — "Người dùng báo thay đổi họ vừa lưu bị mất, rồi lát sau nó hiện ra"</h3>
 <p><strong>Triệu chứng.</strong> Chập chờn. Lưu, chuyển trang, thay đổi không có; tải lại một lúc sau thì nó có. Chỉ xảy ra kể từ khi đưa read replica vào.</p>
 <p><strong>Truy vấn đầu tiên.</strong> Trên primary:</p>
-<pre><code><span class="tok-keyword">SELECT</span> state, sync_state, pg_wal_lsn_diff(sent_lsn, replay_lsn) <span class="tok-keyword">AS</span> byte_tre
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> state, sync_state, pg_wal_lsn_diff(sent_lsn, replay_lsn) <span class="tok-keyword">AS</span> byte_tre
 <span class="tok-keyword">FROM</span> pg_stat_replication;</code></pre>
 <p><strong>Nó là gì.</strong> Độ trễ nhân bản bất đồng bộ (15.3). Lệnh ghi đi vào primary; lệnh đọc của cú chuyển trang lại bị định tuyến sang một bản sao chưa kịp phát lại nó. KHÔNG có gì hỏng cả — <code>sync_state = async</code> nghĩa là primary commit mà không chờ, đó là mặc định và thường là đúng.</p>
 <p><strong>Cách sửa.</strong> Định tuyến những lệnh đọc đi SAU một lệnh ghi trong CÙNG một hành động của người dùng về primary. Để dành bản sao cho những lệnh đọc thật sự độc lập — báo cáo, bảng điều khiển, <code>pg_dump</code>.</p>

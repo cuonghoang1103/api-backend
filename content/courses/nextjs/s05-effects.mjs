@@ -34,7 +34,7 @@ export default {
 </div>
 
 <h3>The shape</h3>
-<pre><code>import { useEffect } from 'react';
+<pre><code class="language-javascript">import { useEffect } from 'react';
 
 function ChatRoom({ roomId }) {
   useEffect(() =&gt; {
@@ -101,7 +101,7 @@ function ChatRoom({ roomId }) {
 </div>
 
 <h3>Hình dạng</h3>
-<pre><code>import { useEffect } from 'react';
+<pre><code class="language-javascript">import { useEffect } from 'react';
 
 function ChatRoom({ roomId }) {
   useEffect(() =&gt; {
@@ -170,7 +170,7 @@ function ChatRoom({ roomId }) {
 <p class="lead">These two features are where useEffect is won or lost. The dependency array decides <em>when</em> the effect re-runs; the cleanup function undoes the previous run before the next one. Get them right and effects are predictable; get them wrong and you get stale data, leaks and double-subscriptions.</p>
 
 <h3>The three dependency cases</h3>
-<pre><code>useEffect(() =&gt; { /* ... */ });          <span class="tok-comment">// no array → after EVERY render</span>
+<pre><code class="language-javascript">useEffect(() =&gt; { /* ... */ });          <span class="tok-comment">// no array → after EVERY render</span>
 useEffect(() =&gt; { /* ... */ }, []);      <span class="tok-comment">// empty → once, after the first render</span>
 useEffect(() =&gt; { /* ... */ }, [a, b]); <span class="tok-comment">// listed → whenever a or b changes</span></code></pre>
 <p>React compares each dependency to its previous value with <code>Object.is</code> (like <code>===</code>). If every dependency is unchanged, it skips the effect. The rule that keeps you out of trouble: <strong>every value from component scope that the effect uses — props, state, functions — must be in the array.</strong> The ESLint rule <code>react-hooks/exhaustive-deps</code> enforces this; do not silence it by deleting a dependency, because a missing dependency is how the effect reads a <em>stale</em> value (the snapshot rule from Chapter 3, back again).</p>
@@ -216,7 +216,7 @@ unmount        → <span class="tok-comment">cleanup of 2</span></code></pre>
 <p class="lead">Hai tính năng này là nơi useEffect thắng hay thua. Mảng phụ thuộc quyết <em>khi nào</em> effect chạy lại; hàm cleanup hoàn tác lần chạy trước đó trước lần kế. Làm đúng thì effect dự đoán được; làm sai thì bạn được dữ liệu cũ, rò rỉ và subscribe nhân đôi.</p>
 
 <h3>Ba trường hợp phụ thuộc</h3>
-<pre><code>useEffect(() =&gt; { /* ... */ });          <span class="tok-comment">// không mảng → sau MỖI render</span>
+<pre><code class="language-javascript">useEffect(() =&gt; { /* ... */ });          <span class="tok-comment">// không mảng → sau MỖI render</span>
 useEffect(() =&gt; { /* ... */ }, []);      <span class="tok-comment">// rỗng → một lần, sau render đầu</span>
 useEffect(() =&gt; { /* ... */ }, [a, b]); <span class="tok-comment">// liệt kê → mỗi khi a hoặc b đổi</span></code></pre>
 <p>React so mỗi phụ thuộc với giá trị trước bằng <code>Object.is</code> (như <code>===</code>). Nếu mọi phụ thuộc không đổi, nó bỏ qua effect. Quy tắc giữ bạn khỏi rắc rối: <strong>mọi giá trị từ phạm vi component mà effect dùng — props, state, hàm — đều phải nằm trong mảng.</strong> Luật ESLint <code>react-hooks/exhaustive-deps</code> ép điều này; đừng làm nó im bằng cách xoá một phụ thuộc, vì một phụ thuộc thiếu chính là cách effect đọc một giá trị <em>cũ</em> (quy tắc ảnh chụp từ Chương 3, quay lại).</p>
@@ -278,7 +278,7 @@ unmount        → <span class="tok-comment">cleanup của 2</span></code></pre>
 
 <h3>Why on earth would React do this?</h3>
 <p>Because it is the cheapest possible way to catch the most common effect bug: <strong>a setup with no matching cleanup.</strong> If your effect opens a connection, starts an interval, or adds a listener but doesn't return a cleanup that closes it, running it twice leaves <em>two</em> connections, two intervals, two listeners — and the bug is visible immediately, on your machine, instead of as a slow leak in production. An effect that survives being run twice with no ill effect is a correct effect.</p>
-<pre><code>useEffect(() =&gt; {
+<pre><code class="language-javascript">useEffect(() =&gt; {
   const id = setInterval(tick, 1000);
   return () =&gt; clearInterval(id);   <span class="tok-comment">// ← without this, StrictMode leaves 2 intervals running</span>
 }, []);</code></pre>
@@ -327,7 +327,7 @@ unmount        → <span class="tok-comment">cleanup của 2</span></code></pre>
 
 <h3>Vì cớ gì React lại làm vậy?</h3>
 <p>Vì đó là cách rẻ nhất có thể để bắt bug effect phổ biến nhất: <strong>một setup không có cleanup khớp.</strong> Nếu effect của bạn mở một kết nối, khởi động một interval, hay thêm một listener mà không trả về cleanup để đóng nó, chạy hai lần để lại <em>hai</em> kết nối, hai interval, hai listener — và bug hiện ra ngay, trên máy bạn, thay vì rò rỉ chậm ở production. Một effect sống sót qua hai lần chạy mà không gây hại là một effect đúng.</p>
-<pre><code>useEffect(() =&gt; {
+<pre><code class="language-javascript">useEffect(() =&gt; {
   const id = setInterval(tick, 1000);
   return () =&gt; clearInterval(id);   <span class="tok-comment">// ← thiếu dòng này, StrictMode để lại 2 interval chạy</span>
 }, []);</code></pre>
@@ -380,7 +380,7 @@ unmount        → <span class="tok-comment">cleanup của 2</span></code></pre>
 <p class="lead">useEffect is powerful, so people reach for it constantly — and most of those reaches are wrong. The React team wrote a whole page called "You Might Not Need an Effect" because the overuse is that common. Here are the effects to delete, and what to do instead. An AI assistant will happily write all three; recognising them is a big part of the judgement this course is for.</p>
 
 <h3>Anti-pattern 1 — deriving state in an effect</h3>
-<pre><code><span class="tok-comment">// ❌ an effect to compute state from other state</span>
+<pre><code class="language-javascript"><span class="tok-comment">// ❌ an effect to compute state from other state</span>
 const [items, setItems] = useState([]);
 const [total, setTotal] = useState(0);
 useEffect(() =&gt; { setTotal(items.reduce((s, i) =&gt; s + i.price, 0)); }, [items]);
@@ -391,7 +391,7 @@ const total = items.reduce((s, i) =&gt; s + i.price, 0);</code></pre>
 <p>This is the derived-state rule from Chapter 3 wearing effect clothing. Computing during render is simpler, always in sync, and avoids an extra render (the effect version renders once with the old total, then again after the effect sets the new one).</p>
 
 <h3>Anti-pattern 2 — syncing props into state</h3>
-<pre><code><span class="tok-comment">// ❌ copying a prop into state and "keeping it in sync" with an effect</span>
+<pre><code class="language-javascript"><span class="tok-comment">// ❌ copying a prop into state and "keeping it in sync" with an effect</span>
 function Profile({ user }) {
   const [name, setName] = useState(user.name);
   useEffect(() =&gt; { setName(user.name); }, [user.name]);   <span class="tok-comment">// fights the prop</span>
@@ -402,7 +402,7 @@ function Profile({ user }) {
 <p>Copying props into state creates two sources of truth that you then spend effects trying to reconcile — exactly the bug React is built to prevent. Use the prop directly, or, when you truly need a local editable copy that resets when the prop changes, give the component a <code>key</code> so React remounts it (Chapter 7).</p>
 
 <h3>Anti-pattern 3 — putting event logic in an effect</h3>
-<pre><code><span class="tok-comment">// ❌ react to a state change with an effect to send an analytics event</span>
+<pre><code class="language-javascript"><span class="tok-comment">// ❌ react to a state change with an effect to send an analytics event</span>
 useEffect(() =&gt; {
   if (submitted) fetch('/api/track', { method: 'POST' });
 }, [submitted]);
@@ -448,7 +448,7 @@ function handleSubmit() {
 <p class="lead">useEffect mạnh, nên người ta với tay tới nó liên tục — và phần lớn những cú với đó là sai. Đội React viết hẳn một trang tên "You Might Not Need an Effect" vì lạm dụng phổ biến tới mức đó. Đây là những effect cần xoá, và làm gì thay thế. Một trợ lý AI sẽ vui vẻ viết cả ba; nhận ra chúng là một phần lớn cái phán đoán mà khoá này hướng tới.</p>
 
 <h3>Phản mẫu 1 — suy state trong một effect</h3>
-<pre><code><span class="tok-comment">// ❌ một effect để tính state từ state khác</span>
+<pre><code class="language-javascript"><span class="tok-comment">// ❌ một effect để tính state từ state khác</span>
 const [items, setItems] = useState([]);
 const [total, setTotal] = useState(0);
 useEffect(() =&gt; { setTotal(items.reduce((s, i) =&gt; s + i.price, 0)); }, [items]);
@@ -459,7 +459,7 @@ const total = items.reduce((s, i) =&gt; s + i.price, 0);</code></pre>
 <p>Đây là quy tắc state-suy-ra từ Chương 3 khoác áo effect. Tính trong lúc render thì đơn giản hơn, luôn đồng bộ, và tránh một lần render thừa (bản effect render một lần với total cũ, rồi render lần nữa sau khi effect set giá trị mới).</p>
 
 <h3>Phản mẫu 2 — đồng bộ props vào state</h3>
-<pre><code><span class="tok-comment">// ❌ chép một prop vào state rồi "giữ đồng bộ" bằng một effect</span>
+<pre><code class="language-javascript"><span class="tok-comment">// ❌ chép một prop vào state rồi "giữ đồng bộ" bằng một effect</span>
 function Profile({ user }) {
   const [name, setName] = useState(user.name);
   useEffect(() =&gt; { setName(user.name); }, [user.name]);   <span class="tok-comment">// đánh nhau với prop</span>
@@ -470,7 +470,7 @@ function Profile({ user }) {
 <p>Chép props vào state tạo hai nguồn sự thật mà bạn rồi phải tốn effect để hoà giải — đúng cái bug React sinh ra để ngăn. Dùng prop trực tiếp, hoặc, khi thật sự cần một bản sao cục bộ sửa được mà reset khi prop đổi, cho component một <code>key</code> để React remount nó (Chương 7).</p>
 
 <h3>Phản mẫu 3 — đặt logic sự kiện trong một effect</h3>
-<pre><code><span class="tok-comment">// ❌ phản ứng một thay đổi state bằng effect để gửi sự kiện analytics</span>
+<pre><code class="language-javascript"><span class="tok-comment">// ❌ phản ứng một thay đổi state bằng effect để gửi sự kiện analytics</span>
 useEffect(() =&gt; {
   if (submitted) fetch('/api/track', { method: 'POST' });
 }, [submitted]);
@@ -526,7 +526,7 @@ function handleSubmit() {
 <p class="lead">The most common effect people write is "fetch data when this component mounts or its id changes". It works, and it hides a race condition that only shows up when responses come back out of order. You must handle it, and then — in Next.js — you will often not write this effect at all.</p>
 
 <h3>The naive version, and why it races</h3>
-<pre><code>function Profile({ userId }) {
+<pre><code class="language-javascript">function Profile({ userId }) {
   const [user, setUser] = useState(null);
   useEffect(() =&gt; {
     fetch(&#96;/api/users/\${userId}&#96;)
@@ -537,7 +537,7 @@ function handleSubmit() {
 <p>Imagine <code>userId</code> goes 1 → 2 quickly. Two fetches are now in flight. If the response for <strong>1</strong> arrives <em>after</em> the response for 2 (networks do this), <code>setUser</code> runs last with user 1's data — and you show the wrong profile, with no error anywhere. This is a race condition, and it is invisible until it bites a real user on a slow connection.</p>
 
 <h3>The fix: an "ignore" flag in the cleanup</h3>
-<pre><code>useEffect(() =&gt; {
+<pre><code class="language-javascript">useEffect(() =&gt; {
   let ignore = false;
   fetch(&#96;/api/users/\${userId}&#96;)
     .then(r =&gt; r.json())
@@ -548,7 +548,7 @@ function handleSubmit() {
 
 <h3>In Next.js, you often skip this entirely</h3>
 <p>Everything above is client-side fetching, and it is genuinely fiddly — loading states, error states, races, caching. This is a big reason the Next.js App Router exists. In a <strong>Server Component</strong> (Chapters 9–10) you fetch data on the server, before the page is sent, with a plain <code>await</code> and no effect, no <code>useState</code>, no race:</p>
-<pre><code>// A Server Component — runs on the server
+<pre><code class="language-javascript">// A Server Component — runs on the server
 async function Profile({ userId }) {
   const user = await getUser(userId);   <span class="tok-comment">// just await; no effect, no loading state to juggle</span>
   return &lt;h1&gt;{user.name}&lt;/h1&gt;;
@@ -583,7 +583,7 @@ async function Profile({ userId }) {
 <p class="lead">Effect phổ biến nhất người ta viết là "fetch dữ liệu khi component này mount hoặc id của nó đổi". Nó chạy được, và giấu một cuộc đua chỉ lộ ra khi các phản hồi về không đúng thứ tự. Bạn phải xử lý nó, và rồi — trong Next.js — bạn sẽ thường không viết effect này chút nào.</p>
 
 <h3>Bản ngây thơ, và vì sao nó đua</h3>
-<pre><code>function Profile({ userId }) {
+<pre><code class="language-javascript">function Profile({ userId }) {
   const [user, setUser] = useState(null);
   useEffect(() =&gt; {
     fetch(&#96;/api/users/\${userId}&#96;)
@@ -594,7 +594,7 @@ async function Profile({ userId }) {
 <p>Hình dung <code>userId</code> đi 1 → 2 thật nhanh. Hai fetch giờ đang bay. Nếu phản hồi cho <strong>1</strong> về <em>sau</em> phản hồi cho 2 (mạng vẫn thế), <code>setUser</code> chạy cuối cùng với dữ liệu của user 1 — và bạn hiện sai hồ sơ, không lỗi ở đâu cả. Đây là một cuộc đua (race condition), và nó vô hình cho tới khi cắn một người dùng thật trên mạng chậm.</p>
 
 <h3>Cách vá: một cờ "bỏ qua" trong cleanup</h3>
-<pre><code>useEffect(() =&gt; {
+<pre><code class="language-javascript">useEffect(() =&gt; {
   let ignore = false;
   fetch(&#96;/api/users/\${userId}&#96;)
     .then(r =&gt; r.json())
@@ -605,7 +605,7 @@ async function Profile({ userId }) {
 
 <h3>Trong Next.js, bạn thường bỏ qua toàn bộ việc này</h3>
 <p>Mọi thứ phía trên là fetch phía client, và nó thật sự lằng nhằng — trạng thái loading, trạng thái lỗi, đua, cache. Đây là lý do lớn khiến Next.js App Router tồn tại. Trong một <strong>Server Component</strong> (Chương 9–10) bạn fetch dữ liệu trên server, trước khi trang được gửi đi, bằng một <code>await</code> thuần, không effect, không <code>useState</code>, không đua:</p>
-<pre><code>// Một Server Component — chạy trên server
+<pre><code class="language-javascript">// Một Server Component — chạy trên server
 async function Profile({ userId }) {
   const user = await getUser(userId);   <span class="tok-comment">// chỉ await; không effect, không loading state phải tung hứng</span>
   return &lt;h1&gt;{user.name}&lt;/h1&gt;;

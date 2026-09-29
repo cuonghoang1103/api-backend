@@ -67,7 +67,7 @@ redis-cli MEMORY USAGE application:cache:user:profile:data:1</code></pre>
   <div class="lz-step"><span class="lz-k">2 · Version anything whose shape can change</span><span class="lz-t">cache:v2:feed:home</span><span class="lz-d">Change the serialisation format and bump to <code>v3</code>: old keys are ignored and expire on their own, new keys are written fresh, and there is no migration and no moment where both formats are being read.</span></div>
   <div class="lz-step"><span class="lz-k">3 · Never put unbounded user input in a key</span><span class="lz-t">search:\${query} is a memory leak</span><span class="lz-d">Every distinct query creates a key that lives until it expires. Hash the input, cap the length, and always set a TTL — an attacker with a loop otherwise fills your memory for free.</span></div>
 </div>
-<pre><code><span class="tok-comment">// The versioned-prefix pattern, which makes format changes free</span>
+<pre><code class="language-javascript"><span class="tok-comment">// The versioned-prefix pattern, which makes format changes free</span>
 const CACHE_VERSION = 'v3';                    <span class="tok-comment">// bump when the shape changes</span>
 const feedKey = (userId, page) =&gt;
   &#96;cache:\${CACHE_VERSION}:feed:\${userId}:p\${page}&#96;;
@@ -175,7 +175,7 @@ redis-cli MEMORY USAGE application:cache:user:profile:data:1</code></pre>
   <div class="lz-step"><span class="lz-k">2 · Đánh phiên bản cho mọi thứ có thể đổi hình dạng</span><span class="lz-t">cache:v2:feed:home</span><span class="lz-d">Đổi định dạng tuần tự hoá rồi nâng lên <code>v3</code>: khoá cũ bị bỏ qua và tự hết hạn, khoá mới được ghi mới tinh, và không có migration nào cũng không có khoảnh khắc nào cả hai định dạng cùng bị đọc.</span></div>
   <div class="lz-step"><span class="lz-k">3 · Đừng bao giờ nhét đầu vào không giới hạn của người dùng vào khoá</span><span class="lz-t">search:\${query} là một chỗ rò bộ nhớ</span><span class="lz-d">Mỗi truy vấn khác nhau tạo một khoá sống tới khi hết hạn. Hãy băm đầu vào, chặn độ dài, và LUÔN đặt TTL — nếu không thì một kẻ tấn công với một vòng lặp sẽ làm đầy bộ nhớ của bạn miễn phí.</span></div>
 </div>
-<pre><code><span class="tok-comment">// Mẫu tiền tố có phiên bản, thứ khiến đổi định dạng thành miễn phí</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Mẫu tiền tố có phiên bản, thứ khiến đổi định dạng thành miễn phí</span>
 const CACHE_VERSION = 'v3';                    <span class="tok-comment">// nâng lên khi hình dạng đổi</span>
 const feedKey = (userId, page) =&gt;
   &#96;cache:\${CACHE_VERSION}:feed:\${userId}:p\${page}&#96;;
@@ -551,7 +551,7 @@ OK
 </div>
 
 <h3>Deleting by pattern, correctly</h3>
-<pre><code><span class="tok-comment"># ❌ The one everybody writes, and the one that freezes the server</span>
+<pre><code class="language-javascript"><span class="tok-comment"># ❌ The one everybody writes, and the one that freezes the server</span>
 redis-cli DEL $(redis-cli KEYS 'cache:v2:*')
 
 <span class="tok-comment"># ✅ Scan and unlink in batches</span>
@@ -689,7 +689,7 @@ OK
 </div>
 
 <h3>Xoá theo mẫu, cho đúng</h3>
-<pre><code><span class="tok-comment"># ❌ Cái ai cũng viết, và cũng là cái làm đông cứng máy chủ</span>
+<pre><code class="language-javascript"><span class="tok-comment"># ❌ Cái ai cũng viết, và cũng là cái làm đông cứng máy chủ</span>
 redis-cli DEL $(redis-cli KEYS 'cache:v2:*')
 
 <span class="tok-comment"># ✅ Quét rồi unlink theo từng mẻ</span>
@@ -794,7 +794,7 @@ pmessage  __key*@0__:*  __keyevent@0__:expired     user:1042</div>
   <div class="kv"><span class="k"><code>n</code> and <code>t</code>, newer</span><span class="v"><code>n</code> is new-key creation (6.2+), <code>t</code> is stream events. <code>n</code> is useful for building an index of what exists without polling.</span></div>
   <div class="kv"><span class="k"><code>A</code></span><span class="v">Shorthand for <code>g$lshzxet</code> — everything except <code>m</code> (key miss) and <code>n</code>. Convenient for exploration; never what you want in production.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Watch only expiry, from the application</span>
+<pre><code class="language-typescript"><span class="tok-comment"># Watch only expiry, from the application</span>
 await sub.pSubscribe('__keyevent@0__:expired', (key) =&gt; {
   if (key.startsWith('session:')) onSessionExpired(key.slice(8));
 });
@@ -907,7 +907,7 @@ pmessage  __key*@0__:*  __keyevent@0__:expired     user:1042</div>
   <div class="kv"><span class="k"><code>n</code> và <code>t</code>, mới hơn</span><span class="v"><code>n</code> là sự kiện tạo khoá mới (6.2+), <code>t</code> là sự kiện stream. <code>n</code> hữu ích để dựng một chỉ mục về những gì đang tồn tại mà không phải thăm dò liên tục.</span></div>
   <div class="kv"><span class="k"><code>A</code></span><span class="v">Viết tắt cho <code>g$lshzxet</code> — mọi thứ trừ <code>m</code> (khoá trượt) và <code>n</code>. Tiện để khám phá; không bao giờ là thứ bạn muốn trên production.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Chỉ theo dõi việc hết hạn, từ trong ứng dụng</span>
+<pre><code class="language-typescript"><span class="tok-comment"># Chỉ theo dõi việc hết hạn, từ trong ứng dụng</span>
 await sub.pSubscribe('__keyevent@0__:expired', (key) =&gt; {
   if (key.startsWith('session:')) onSessionExpired(key.slice(8));
 });

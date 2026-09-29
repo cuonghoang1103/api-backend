@@ -513,7 +513,7 @@ Cache hit occurred on the primary key ch05-khoa-hang, not saving cache.</div>
 ${slide('ga-05', 8, 'The key tree: exact match first, then back off by prefix')}
 <p>This repository&#39;s working cache key, from <code>deploy-ghcr.yml</code>:</p>
 
-<pre><code>key: nextjs-cache-&#36;{{ runner.os }}-frontend-lock-&#36;{{ hashFiles('frontend/package-lock.json') }}</code></pre>
+<pre><code class="language-bash">key: nextjs-cache-&#36;{{ runner.os }}-frontend-lock-&#36;{{ hashFiles('frontend/package-lock.json') }}</code></pre>
 
 <div class="kv-grid">
 <div class="kv"><span class="k">a literal prefix</span><span class="v"><code>nextjs-cache-</code> — names the contents, so the cache list is readable by a human</span></div>
@@ -529,7 +529,7 @@ ${slide('ga-05', 8, 'The key tree: exact match first, then back off by prefix')}
 <h3><code>restore-keys</code> — the partial credit</h3>
 <p>An exact key miss does not have to mean starting from nothing. <code>restore-keys</code> is a list of <em>prefixes</em>, tried in order, each matching the most recently created entry that starts with it:</p>
 
-<pre><code>key: nextjs-cache-&#36;{{ runner.os }}-frontend-lock-&#36;{{ hashFiles('frontend/package-lock.json') }}
+<pre><code class="language-bash">key: nextjs-cache-&#36;{{ runner.os }}-frontend-lock-&#36;{{ hashFiles('frontend/package-lock.json') }}
 restore-keys: |
   nextjs-cache-&#36;{{ runner.os }}-frontend-lock-
   nextjs-cache-&#36;{{ runner.os }}-frontend-</code></pre>
@@ -608,7 +608,7 @@ Cache not found for input keys: node-cache-Linux-x64-npm-d94a99a0...   &lt;- ch0
 <h3>Restore without save, and save without restore</h3>
 <p>Two variants exist and both solve real problems:</p>
 
-<pre><code><span class="tok-comment"># chi PHUC HOI, khong bao gio luu — cho cac job an theo</span>
+<pre><code class="language-css"><span class="tok-comment"># chi PHUC HOI, khong bao gio luu — cho cac job an theo</span>
 - uses: actions/cache/restore@v4
   with: { path: dist, key: build-&#36;{{ github.sha }} }
 
@@ -715,7 +715,7 @@ Cache hit occurred on the primary key ch05-khoa-hang, not saving cache.</div>
 ${slide('ga-05', 8, 'Cây khoá: khớp chính xác trước, rồi lùi dần theo tiền tố')}
 <p>Khoá cache đang hoạt động của kho này, lấy từ <code>deploy-ghcr.yml</code>:</p>
 
-<pre><code>key: nextjs-cache-&#36;{{ runner.os }}-frontend-lock-&#36;{{ hashFiles('frontend/package-lock.json') }}</code></pre>
+<pre><code class="language-bash">key: nextjs-cache-&#36;{{ runner.os }}-frontend-lock-&#36;{{ hashFiles('frontend/package-lock.json') }}</code></pre>
 
 <div class="kv-grid">
 <div class="kv"><span class="k">một tiền tố viết thật</span><span class="v"><code>nextjs-cache-</code> — gọi tên phần nội dung, để danh sách cache còn đọc được bằng mắt người</span></div>
@@ -731,7 +731,7 @@ ${slide('ga-05', 8, 'Cây khoá: khớp chính xác trước, rồi lùi dần t
 <h3><code>restore-keys</code> — phần điểm an ủi</h3>
 <p>Trượt khoá chính xác không nhất thiết nghĩa là bắt đầu từ con số không. <code>restore-keys</code> là một danh sách các <em>TIỀN TỐ</em>, thử theo thứ tự, mỗi cái khớp với mục được tạo GẦN NHẤT có phần đầu như thế:</p>
 
-<pre><code>key: nextjs-cache-&#36;{{ runner.os }}-frontend-lock-&#36;{{ hashFiles('frontend/package-lock.json') }}
+<pre><code class="language-bash">key: nextjs-cache-&#36;{{ runner.os }}-frontend-lock-&#36;{{ hashFiles('frontend/package-lock.json') }}
 restore-keys: |
   nextjs-cache-&#36;{{ runner.os }}-frontend-lock-
   nextjs-cache-&#36;{{ runner.os }}-frontend-</code></pre>
@@ -810,7 +810,7 @@ Cache not found for input keys: node-cache-Linux-x64-npm-d94a99a0...   &lt;- ch0
 <h3>Phục hồi mà không lưu, và lưu mà không phục hồi</h3>
 <p>Có hai biến thể và cả hai giải quyết vấn đề thật:</p>
 
-<pre><code><span class="tok-comment"># chi PHUC HOI, khong bao gio luu — cho cac job an theo</span>
+<pre><code class="language-css"><span class="tok-comment"># chi PHUC HOI, khong bao gio luu — cho cac job an theo</span>
 - uses: actions/cache/restore@v4
   with: { path: dist, key: build-&#36;{{ github.sha }} }
 
@@ -905,7 +905,7 @@ job conclusion: success</div>
 
 <p>Two <code>actions/cache</code> steps ran in that job. The other one printed a hit. So one of the two has a <code>path:</code> that does not exist — and the workflow says which:</p>
 
-<pre><code>- name: Restore backend build cache
+<pre><code class="language-bash">- name: Restore backend build cache
   uses: actions/cache@v4
   with:
     path: |
@@ -1105,7 +1105,7 @@ job conclusion: success</div>
 
 <p>Có hai bước <code>actions/cache</code> chạy trong job ấy. Cái kia in ra một lần trúng. Vậy một trong hai có <code>path:</code> không tồn tại — và workflow nói rõ là cái nào:</p>
 
-<pre><code>- name: Restore backend build cache
+<pre><code class="language-bash">- name: Restore backend build cache
   uses: actions/cache@v4
   with:
     path: |
@@ -1432,7 +1432,7 @@ ket qua tu nhanh windows</div>
 <p><strong>Trap — downloading a name that does not exist.</strong> A typo in <code>name:</code> produces <code>Unable to download artifact(s): Artifact not found for name: khong-co-dau</code> — measured in the same job. The error is clear; the cause is usually that the upload was skipped (an <code>if:</code> on the uploading job, or a matrix leg that failed before its upload step). Check the uploading job first, not the name.</p>
 </div>
 
-<pre><code><span class="tok-comment"># moi nhanh ma tran tai len duoi TEN RIENG</span>
+<pre><code class="language-bash"><span class="tok-comment"># moi nhanh ma tran tai len duoi TEN RIENG</span>
 - name: Luu ban cai lam artifact
   if: always()
   uses: actions/upload-artifact@v4
@@ -1661,7 +1661,7 @@ ket qua tu nhanh windows</div>
 <p><strong>Bẫy — tải một tên không tồn tại.</strong> Gõ sai <code>name:</code> đẻ ra <code>Unable to download artifact(s): Artifact not found for name: khong-co-dau</code> — đo ngay trong cùng job. Lỗi thì rõ; nguyên nhân thường là lượt tải lên đã bị bỏ qua (một <code>if:</code> trên job tải lên, hoặc một nhánh ma trận hỏng trước bước tải lên của nó). Kiểm job tải lên trước, đừng kiểm cái tên trước.</p>
 </div>
 
-<pre><code><span class="tok-comment"># moi nhanh ma tran tai len duoi TEN RIENG</span>
+<pre><code class="language-bash"><span class="tok-comment"># moi nhanh ma tran tai len duoi TEN RIENG</span>
 - name: Luu ban cai lam artifact
   if: always()
   uses: actions/upload-artifact@v4

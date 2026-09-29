@@ -77,7 +77,7 @@ ${slide('dv-11', 4, 'Lùi trước, chẩn đoán sau — trừ khi bản cũ kh
 
 <h3>Question 1 — did I cause this?</h3>
 ${slide('dv-11', 5, 'Có phải mình vừa gây ra? Symlink mới, tiến trình cũ — đo trên VPS thí nghiệm')}
-<pre><code>git log --oneline -5                          <span class="tok-comment"># co gi vua ra?</span>
+<pre><code class="language-bash">git log --oneline -5                          <span class="tok-comment"># co gi vua ra?</span>
 ls -lt /srv/vps/nt/nhat-ky/ | head -3         <span class="tok-comment"># lan deploy cuoi luc nao?</span>
 readlink -f /srv/vps/nt/hien-tai              <span class="tok-comment"># dang chay ban NAO?</span></code></pre>
 
@@ -114,7 +114,7 @@ ${slide('dv-11', 3, 'Cây quyết định: dựng → chuyển → tráo → ch�
 <h3>Question 2 — is it down, or is it slow, or is it wrong?</h3>
 <p>These are three different problems with three different investigations, and they are distinguished by one command from the front door:</p>
 
-<pre><code>curl -s -o /dev/null -w 'ma=%{http_code} tong=%{time_total}s\\n' \\
+<pre><code class="language-bash">curl -s -o /dev/null -w 'ma=%{http_code} tong=%{time_total}s\\n' \\
   --max-time 10 https://vidu.com/</code></pre>
 
 <div class="lz-flow">
@@ -130,7 +130,7 @@ ${slide('dv-11', 3, 'Cây quyết định: dựng → chuyển → tráo → ch�
 ${slide('dv-11', 6, 'Đi từ ngoài vào: tầng SÂU NHẤT còn hỏng mới là tầng của bạn — đo khi app chết')}
 <p>Chapter 9 established that a check only proves the exact path it exercises. Walking inwards separates the layers in four commands:</p>
 
-<pre><code>curl -sI https://vidu.com/            <span class="tok-comment"># DNS + TLS + tuong lua + proxy + app</span>
+<pre><code class="language-bash">curl -sI https://vidu.com/            <span class="tok-comment"># DNS + TLS + tuong lua + proxy + app</span>
 curl -sI http://127.0.0.1:3390/       <span class="tok-comment"># proxy + app   (bo DNS, TLS, tuong lua)</span>
 curl -sI http://127.0.0.1:3391/       <span class="tok-comment"># chi app       (bo proxy)</span>
 psql -d nt -c 'select 1'              <span class="tok-comment"># chi CSDL      (bo app)</span></code></pre>
@@ -397,7 +397,7 @@ ${slide('dv-11', 4, 'Lùi trước, chẩn đoán sau — trừ khi bản cũ kh
 
 <h3>Câu hỏi 1 — có phải MÌNH gây ra không?</h3>
 ${slide('dv-11', 5, 'Có phải mình vừa gây ra? Symlink mới, tiến trình cũ — đo trên VPS thí nghiệm')}
-<pre><code>git log --oneline -5                          <span class="tok-comment"># co gi vua ra?</span>
+<pre><code class="language-bash">git log --oneline -5                          <span class="tok-comment"># co gi vua ra?</span>
 ls -lt /srv/vps/nt/nhat-ky/ | head -3         <span class="tok-comment"># lan deploy cuoi luc nao?</span>
 readlink -f /srv/vps/nt/hien-tai              <span class="tok-comment"># dang chay ban NAO?</span></code></pre>
 
@@ -434,7 +434,7 @@ ${slide('dv-11', 3, 'Cây quyết định: dựng → chuyển → tráo → ch�
 <h3>Câu hỏi 2 — nó SẬP, hay CHẬM, hay SAI?</h3>
 <p>Đó là ba vấn đề khác nhau với ba cuộc điều tra khác nhau, và chúng phân biệt được bằng MỘT câu lệnh từ cửa trước:</p>
 
-<pre><code>curl -s -o /dev/null -w 'ma=%{http_code} tong=%{time_total}s\\n' \\
+<pre><code class="language-bash">curl -s -o /dev/null -w 'ma=%{http_code} tong=%{time_total}s\\n' \\
   --max-time 10 https://vidu.com/</code></pre>
 
 <div class="lz-flow">
@@ -450,7 +450,7 @@ ${slide('dv-11', 3, 'Cây quyết định: dựng → chuyển → tráo → ch�
 ${slide('dv-11', 6, 'Đi từ ngoài vào: tầng SÂU NHẤT còn hỏng mới là tầng của bạn — đo khi app chết')}
 <p>Chương 9 xác lập rằng một phép kiểm chỉ chứng minh ĐÚNG cái đường nó đi qua. Đi từ ngoài vào tách được các tầng bằng bốn câu lệnh:</p>
 
-<pre><code>curl -sI https://vidu.com/            <span class="tok-comment"># DNS + TLS + tuong lua + proxy + app</span>
+<pre><code class="language-bash">curl -sI https://vidu.com/            <span class="tok-comment"># DNS + TLS + tuong lua + proxy + app</span>
 curl -sI http://127.0.0.1:3390/       <span class="tok-comment"># proxy + app   (bo DNS, TLS, tuong lua)</span>
 curl -sI http://127.0.0.1:3391/       <span class="tok-comment"># chi app       (bo proxy)</span>
 psql -d nt -c 'select 1'              <span class="tok-comment"># chi CSDL      (bo app)</span></code></pre>
@@ -791,7 +791,7 @@ ${slide('dv-11', 11, 'errno 111 ở connect() khác errno 110 khi đọc header 
 ${slide('dv-11', 12, 'curl -w chia request thành DNS, TCP, TLS, máy chủ — và mã thoát 6/7/60')}
 <p>When <code>curl</code> returns nothing, the breakdown flags say where it stopped:</p>
 
-<pre><code>curl -s -o /dev/null --max-time 10 \\
+<pre><code class="language-bash">curl -s -o /dev/null --max-time 10 \\
   -w 'dns=%{time_namelookup} tcp=%{time_connect} tls=%{time_appconnect} chu-dau=%{time_starttransfer}\\n' \\
   https://vidu.com/</code></pre>
 
@@ -848,7 +848,7 @@ dns=0.000020 tcp=0.000179 tls=0.000000 dau=0.000000 ma=000
 <h3>The signature that is not an error</h3>
 <p>Status 200, fast, and wrong. There is no error anywhere — not in the status, not in the logs, not in the metrics. Chapter 6 measured it: after a correct 140 ms rollback, every user received the rolled-back version for five minutes because a proxy cache sat in front. The only way to see it is to compare the version served against the version deployed:</p>
 
-<pre><code>curl -s https://vidu.com/ban          <span class="tok-comment"># nguoi dung dang thay ban NAO</span>
+<pre><code class="language-bash">curl -s https://vidu.com/ban          <span class="tok-comment"># nguoi dung dang thay ban NAO</span>
 basename "\$(readlink -f /srv/vps/nt/hien-tai)"   <span class="tok-comment"># may dang chay ban NAO</span>
 <span class="tok-comment"># hai cai LECH nhau = bo dem, hoac tien trinh chua khoi dong lai (7.5)</span></code></pre>
 
@@ -977,7 +977,7 @@ ${slide('dv-11', 11, 'errno 111 ở connect() khác errno 110 khi đọc header 
 ${slide('dv-11', 12, 'curl -w chia request thành DNS, TCP, TLS, máy chủ — và mã thoát 6/7/60')}
 <p>Khi <code>curl</code> chẳng trả về gì, các cờ chia nhỏ sẽ nói nó dừng ở đâu:</p>
 
-<pre><code>curl -s -o /dev/null --max-time 10 \\
+<pre><code class="language-bash">curl -s -o /dev/null --max-time 10 \\
   -w 'dns=%{time_namelookup} tcp=%{time_connect} tls=%{time_appconnect} chu-dau=%{time_starttransfer}\\n' \\
   https://vidu.com/</code></pre>
 
@@ -1034,7 +1034,7 @@ dns=0.000020 tcp=0.000179 tls=0.000000 dau=0.000000 ma=000
 <h3>Cái chữ ký KHÔNG phải một lỗi</h3>
 <p>Mã 200, nhanh, và SAI. Chẳng có lỗi ở đâu cả — không trong mã trạng thái, không trong log, không trong số đo. Chương 6 đã đo nó: sau một cú lùi ĐÚNG trong 140 ms, mọi người dùng nhận đúng cái bản vừa lùi suốt năm phút vì có một bộ đệm proxy đứng phía trước. Cách duy nhất để thấy là ĐỐI CHIẾU phiên bản đang phục vụ với phiên bản đã deploy:</p>
 
-<pre><code>curl -s https://vidu.com/ban          <span class="tok-comment"># nguoi dung dang thay ban NAO</span>
+<pre><code class="language-bash">curl -s https://vidu.com/ban          <span class="tok-comment"># nguoi dung dang thay ban NAO</span>
 basename "\$(readlink -f /srv/vps/nt/hien-tai)"   <span class="tok-comment"># may dang chay ban NAO</span>
 <span class="tok-comment"># hai cai LECH nhau = bo dem, hoac tien trinh chua khoi dong lai (7.5)</span></code></pre>
 
@@ -1099,7 +1099,7 @@ basename "\$(readlink -f /srv/vps/nt/hien-tai)"   <span class="tok-comment"># ma
 
 <h3>1. The deploy reported success and nothing changed</h3>
 ${slide('dv-11', 13, 'Deploy báo xong mà không đổi: symlink, tiến trình, cửa trước — ba lệnh, năm hàng')}
-<pre><code>curl -s http://cua-truoc/ban                       <span class="tok-comment"># nguoi dung thay ban nao</span>
+<pre><code class="language-bash">curl -s http://cua-truoc/ban                       <span class="tok-comment"># nguoi dung thay ban nao</span>
 basename "\$(readlink -f /srv/vps/nt/hien-tai)"     <span class="tok-comment"># symlink tro dau</span>
 ss -ltnp | grep ':3391 '                            <span class="tok-comment"># tien trinh nao dang giu cong</span></code></pre>
 
@@ -1137,7 +1137,7 @@ thoat=1</div>
 
 <h3>3. Every request returns 500 but /health returns 200</h3>
 ${slide('dv-11', 15, '/health 200, API 500: đổi tên cột ten → tieu_de, đo lại trên PostgreSQL 16')}
-<pre><code>curl -s http://cua-truoc/api/v1/bai | head -c 200
+<pre><code class="language-bash">curl -s http://cua-truoc/api/v1/bai | head -c 200
 psql -d nt -c "\\d ten_bang"                        <span class="tok-comment"># cot ma ma cu doc CO khong?</span></code></pre>
 
 <p>Measured in 6.2: code rolled back onto a schema that moved on. <code>/health</code> answers before touching anything, so it cannot see a schema mismatch — that is deliberate, not a bug (9.5). Either roll the schema back too, or roll forward.</p>
@@ -1162,7 +1162,7 @@ Indexes:
 <p>Read it in the order you would meet it in an incident: the health check is green, the real route is red, the application log names the exact column, and <code>\\d</code> shows what the column is called now. Renaming it back (<code>… rename column tieu_de to ten</code>) returned the route to 200 at once — nothing needed a restart, because the code was never wrong; the schema had moved under it. On a real project the "rename back" is a new migration, not a hand edit, and it is only possible if no newer code already depends on the new name — which is why Chapter 5 renames in three deploys (expand, migrate, contract).</p>
 
 <h3>4. It worked, then died a few minutes later</h3>
-<pre><code>dmesg | grep -i 'killed process'
+<pre><code class="language-bash">dmesg | grep -i 'killed process'
 systemctl show ung-dung -p MemoryPeak -p MemoryCurrent       <span class="tok-comment"># cgroup v2 (Ubuntu 22.04+)</span>
 cat /sys/fs/cgroup/system.slice/ung-dung.service/memory.events   <span class="tok-comment"># oom_kill &gt; 0 ?</span></code></pre>
 
@@ -1185,7 +1185,7 @@ sock_throttled 0</div>
 <p><code>MemoryPeak</code> is the most the unit has used since it started; <code>oom_kill</code> counts processes of this unit the kernel killed. Above 0, "why did it die" is answered — and <code>memory.events</code> survives even when the application wrote nothing at all.</p>
 
 <h3>5. The migration will not run</h3>
-<pre><code>npx prisma migrate status
+<pre><code class="language-sql">npx prisma migrate status
 psql -d nt -c "select * from _prisma_migrations order by started_at desc limit 3;"</code></pre>
 
 <p>5.4 measured the half-applied state: a three-statement migration whose third statement failed left the table existing, the rows inserted, the constraint absent, and the ledger saying not-finished — and re-running failed at statement one. <strong>Do not auto-resolve.</strong> Inspect which statements actually applied, decide by hand, and only then mark the ledger. This is the one place in the whole course where the right move is to stop and ask somebody.</p>
@@ -1281,7 +1281,7 @@ ${slide('dv-11', 16, '"Chẳng có gì thay đổi" gần như luôn sai: chứn
 
 <h3>1. Lần deploy báo thành công và chẳng có gì thay đổi</h3>
 ${slide('dv-11', 13, 'Deploy báo xong mà không đổi: symlink, tiến trình, cửa trước — ba lệnh, năm hàng')}
-<pre><code>curl -s http://cua-truoc/ban                       <span class="tok-comment"># nguoi dung thay ban nao</span>
+<pre><code class="language-bash">curl -s http://cua-truoc/ban                       <span class="tok-comment"># nguoi dung thay ban nao</span>
 basename "\$(readlink -f /srv/vps/nt/hien-tai)"     <span class="tok-comment"># symlink tro dau</span>
 ss -ltnp | grep ':3391 '                            <span class="tok-comment"># tien trinh nao dang giu cong</span></code></pre>
 
@@ -1319,7 +1319,7 @@ thoat=1</div>
 
 <h3>3. Mọi request trả 500 mà /health trả 200</h3>
 ${slide('dv-11', 15, '/health 200, API 500: đổi tên cột ten → tieu_de, đo lại trên PostgreSQL 16')}
-<pre><code>curl -s http://cua-truoc/api/v1/bai | head -c 200
+<pre><code class="language-bash">curl -s http://cua-truoc/api/v1/bai | head -c 200
 psql -d nt -c "\\d ten_bang"                        <span class="tok-comment"># cot ma ma cu doc CO khong?</span></code></pre>
 
 <p>Đo ở bài 6.2: mã bị lùi lên một lược đồ đã đi tiếp. <code>/health</code> trả lời TRƯỚC khi đụng vào bất cứ thứ gì, nên nó không thể thấy được một cú lệch lược đồ — đó là CHỦ ĐÍCH, không phải một con bọ (9.5). Hoặc lùi cả lược đồ, hoặc đi tới.</p>
@@ -1344,7 +1344,7 @@ Indexes:
 <p>Đọc theo đúng thứ tự bạn sẽ gặp trong sự cố: phép kiểm sức khoẻ XANH, route thật ĐỎ, log ứng dụng gọi đúng tên cột, và <code>\\d</code> cho thấy giờ cột tên là gì. Đổi tên ngược lại (<code>… rename column tieu_de to ten</code>) đưa route về 200 ngay — không cần restart gì, vì mã chưa bao giờ sai; lược đồ đã dịch chuyển dưới chân nó. Ở dự án thật, "đổi ngược lại" là một migration MỚI chứ không phải sửa tay, và chỉ làm được khi chưa có mã mới nào phụ thuộc vào tên mới — đó là lý do Chương 5 đổi tên qua ba lần deploy (mở rộng, chuyển dữ liệu, thu hẹp).</p>
 
 <h3>4. Nó chạy, rồi chết sau vài phút</h3>
-<pre><code>dmesg | grep -i 'killed process'
+<pre><code class="language-bash">dmesg | grep -i 'killed process'
 systemctl show ung-dung -p MemoryPeak -p MemoryCurrent       <span class="tok-comment"># cgroup v2 (Ubuntu 22.04+)</span>
 cat /sys/fs/cgroup/system.slice/ung-dung.service/memory.events   <span class="tok-comment"># oom_kill &gt; 0 ?</span></code></pre>
 
@@ -1367,7 +1367,7 @@ sock_throttled 0</div>
 <p><code>MemoryPeak</code> là mức cao nhất unit từng dùng kể từ khi khởi động; <code>oom_kill</code> đếm số tiến trình của unit này bị nhân hệ điều hành giết. Lớn hơn 0 là câu "vì sao nó chết" đã có lời đáp — và <code>memory.events</code> vẫn còn đó ngay cả khi ứng dụng không kịp ghi gì.</p>
 
 <h3>5. Migration không chịu chạy</h3>
-<pre><code>npx prisma migrate status
+<pre><code class="language-sql">npx prisma migrate status
 psql -d nt -c "select * from _prisma_migrations order by started_at desc limit 3;"</code></pre>
 
 <p>Bài 5.4 đo trạng thái NỬA CHỪNG: một migration ba câu lệnh mà câu thứ ba hỏng đã để lại bảng TỒN TẠI, dòng ĐÃ CHÈN, ràng buộc KHÔNG CÓ, và cuốn sổ ghi là chưa-xong — còn chạy lại thì hỏng ở câu SỐ MỘT. <strong>ĐỪNG tự động resolve.</strong> Hãy SOI xem câu lệnh nào thật sự đã áp dụng, quyết định bằng tay, và CHỈ SAU ĐÓ mới đánh dấu cuốn sổ. Đây là chỗ DUY NHẤT trong cả khoá học mà nước đi đúng là DỪNG LẠI và hỏi ai đó.</p>
@@ -1512,11 +1512,11 @@ procs -----------memory---------- ---swap-- -----io---- -system-- -------cpu----
 
 <p>Then narrow by percentile, not by average — 9.2 measured a mean of 60.8 ms hiding a p95 of 900.8 ms:</p>
 
-<pre><code>awk '{print \$3}' truy-cap.log | sort -n | awk '{a[NR]=\$1}
+<pre><code class="language-bash">awk '{print \$3}' truy-cap.log | sort -n | awk '{a[NR]=\$1}
   END{printf "p50=%.0fms p95=%.0fms p99=%.0fms\\n", a[int(NR*.5)]*1000, a[int(NR*.95)]*1000, a[int(NR*.99)]*1000}'</code></pre>
 
 <h3>The database is slow</h3>
-<pre><code>psql -c "select pid, now()-query_start as lau, wait_event_type, left(query,60)
+<pre><code class="language-sql">psql -c "select pid, now()-query_start as lau, wait_event_type, left(query,60)
          from pg_stat_activity where state='active' order by lau desc limit 5;"
 psql -c "select count(*) from pg_locks where not granted;"</code></pre>
 
@@ -1569,7 +1569,7 @@ tmpfs            2000  2000     0  100% /srv/tai-len</div>
 
 <h3>It keeps restarting</h3>
 ${slide('dv-11', 21, 'Mã thoát kể chuyện: 137 OOM, 134 hết heap, 139 khi node là PID 1, 1 thiếu cấu hình')}
-<pre><code>dmesg | grep -i 'killed process' | tail -3
+<pre><code class="language-bash">dmesg | grep -i 'killed process' | tail -3
 systemctl status ung-dung | head -20
 grep oom_kill /sys/fs/cgroup/system.slice/ung-dung.service/memory.events   <span class="tok-comment"># cgroup v2</span></code></pre>
 
@@ -1702,11 +1702,11 @@ procs -----------memory---------- ---swap-- -----io---- -system-- -------cpu----
 
 <p>Rồi thu hẹp bằng PHÂN VỊ, không phải bằng trung bình — bài 9.2 đo một cái trung bình 60,8 ms giấu đi một p95 là 900,8 ms:</p>
 
-<pre><code>awk '{print \$3}' truy-cap.log | sort -n | awk '{a[NR]=\$1}
+<pre><code class="language-bash">awk '{print \$3}' truy-cap.log | sort -n | awk '{a[NR]=\$1}
   END{printf "p50=%.0fms p95=%.0fms p99=%.0fms\\n", a[int(NR*.5)]*1000, a[int(NR*.95)]*1000, a[int(NR*.99)]*1000}'</code></pre>
 
 <h3>Cơ sở dữ liệu chậm</h3>
-<pre><code>psql -c "select pid, now()-query_start as lau, wait_event_type, left(query,60)
+<pre><code class="language-sql">psql -c "select pid, now()-query_start as lau, wait_event_type, left(query,60)
          from pg_stat_activity where state='active' order by lau desc limit 5;"
 psql -c "select count(*) from pg_locks where not granted;"</code></pre>
 
@@ -1759,7 +1759,7 @@ tmpfs            2000  2000     0  100% /srv/tai-len</div>
 
 <h3>Nó cứ khởi động lại</h3>
 ${slide('dv-11', 21, 'Mã thoát kể chuyện: 137 OOM, 134 hết heap, 139 khi node là PID 1, 1 thiếu cấu hình')}
-<pre><code>dmesg | grep -i 'killed process' | tail -3
+<pre><code class="language-bash">dmesg | grep -i 'killed process' | tail -3
 systemctl status ung-dung | head -20
 grep oom_kill /sys/fs/cgroup/system.slice/ung-dung.service/memory.events   <span class="tok-comment"># cgroup v2</span></code></pre>
 
@@ -1903,7 +1903,7 @@ ${slide('dv-11', 17, 'Thứ tự kiểm: đĩa → RAM → bão hoà → CSDL, v
 
 <p>The exact version and distribution, on every response. Anybody who knows what is unpatched in 1.24.0 knows what to try first. One directive fixes it:</p>
 
-<pre><code>server_tokens off;</code></pre>
+<pre><code class="language-bash">server_tokens off;</code></pre>
 
 <div class="out">  Server gio la: Server: nginx</div>
 
@@ -1922,7 +1922,7 @@ ${slide('dv-11', 17, 'Thứ tự kiểm: đĩa → RAM → bão hoà → CSDL, v
 <p><strong>My own error handler was returning the release version to anyone who could trigger an error.</strong> Not a stack trace — check 13 was right about that — but <code>x-ban: v1</code> tells an attacker exactly which release is running, which is precisely the information Chapter 6 said you should keep for <em>yourself</em>. The fix returns a fixed message and logs the real error server-side:</p>
 </div>
 
-<pre><code><span class="tok-comment">// truoc: lo ca phien ban lan thong diep loi ra ngoai</span>
+<pre><code class="language-bash"><span class="tok-comment">// truoc: lo ca phien ban lan thong diep loi ra ngoai</span>
 catch(e){ s.writeHead(500,{"x-ban":V}); s.end(e.message+"\\n"); }
 
 <span class="tok-comment">// sau: nguoi dung nhan mot cau chung, con SU THAT di vao nhat ky</span>
@@ -2244,7 +2244,7 @@ ${slide('dv-11', 27, 'Đi tiếp: Chương 12 tên miền và HTTPS, 13 containe
 
 <p>Chính xác phiên bản và bản phân phối, trên MỌI bản trả lời. Ai biết cái gì chưa được vá trong 1.24.0 thì biết ngay nên thử gì trước. Một chỉ thị chữa được:</p>
 
-<pre><code>server_tokens off;</code></pre>
+<pre><code class="language-bash">server_tokens off;</code></pre>
 
 <div class="out">  Server gio la: Server: nginx</div>
 
@@ -2263,7 +2263,7 @@ ${slide('dv-11', 27, 'Đi tiếp: Chương 12 tên miền và HTTPS, 13 containe
 <p><strong>Cái handler lỗi của CHÍNH TÔI đang trả phiên bản bản phát hành cho bất cứ ai kích được một lỗi.</strong> Không phải vết ngăn xếp — phép kiểm 13 nói đúng về chuyện đó — nhưng <code>x-ban: v1</code> nói cho kẻ tấn công biết CHÍNH XÁC bản nào đang chạy, mà đó đúng là thông tin mà Chương 6 bảo bạn nên giữ cho <em>CHÍNH MÌNH</em>. Cách chữa là trả về một thông điệp cố định và ghi lỗi thật ở phía máy chủ:</p>
 </div>
 
-<pre><code><span class="tok-comment">// truoc: lo ca phien ban lan thong diep loi ra ngoai</span>
+<pre><code class="language-bash"><span class="tok-comment">// truoc: lo ca phien ban lan thong diep loi ra ngoai</span>
 catch(e){ s.writeHead(500,{"x-ban":V}); s.end(e.message+"\\n"); }
 
 <span class="tok-comment">// sau: nguoi dung nhan mot cau chung, con SU THAT di vao nhat ky</span>

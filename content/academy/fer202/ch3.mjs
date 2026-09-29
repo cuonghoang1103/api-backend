@@ -99,7 +99,7 @@ const EX4 = {
 <h2>JSX &amp; ES6 — the array-method lab</h2>
 <p class="lead"><b>Goal:</b> practise the ES6 array methods React uses to turn data into UI. Below is the exercise's dataset with a worked solution for each task. Try each yourself first, then check.</p>
 <h3>Part A — the <code>people</code> array</h3>
-<pre><span class="hljs-keyword">const</span> people = [
+<pre><code class="language-javascript"><span class="hljs-keyword">const</span> people = [
   { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Jack&#x27;</span>, <span class="hljs-attr">age</span>: <span class="hljs-number">50</span> }, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Michael&#x27;</span>, <span class="hljs-attr">age</span>: <span class="hljs-number">9</span> }, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;John&#x27;</span>, <span class="hljs-attr">age</span>: <span class="hljs-number">40</span> },
   { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Ann&#x27;</span>, <span class="hljs-attr">age</span>: <span class="hljs-number">19</span> }, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Elisabeth&#x27;</span>, <span class="hljs-attr">age</span>: <span class="hljs-number">16</span> }
 ];
@@ -112,16 +112,16 @@ people.<span class="hljs-title function_">filter</span>(isTeen);           <span
 <span class="hljs-comment">// 3) Are ALL teenagers? — .every returns a boolean</span>
 people.<span class="hljs-title function_">every</span>(isTeen);            <span class="hljs-comment">// false</span>
 <span class="hljs-comment">// 4) Is ANY a teenager? — .some returns a boolean</span>
-people.<span class="hljs-title function_">some</span>(isTeen);             <span class="hljs-comment">// true</span></pre>
+people.<span class="hljs-title function_">some</span>(isTeen);             <span class="hljs-comment">// true</span></code></pre>
 <h3>Part B — <code>reduce</code> on <code>[1, 2, 3, 4]</code></h3>
-<pre><span class="hljs-keyword">const</span> array = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>];
+<pre><code class="language-javascript"><span class="hljs-keyword">const</span> array = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>];
 <span class="hljs-comment">// sum: accumulator starts at 0 (2nd argument)</span>
 array.<span class="hljs-title function_">reduce</span>(<span class="hljs-function">(<span class="hljs-params">acc, n</span>) =&gt;</span> acc + n, <span class="hljs-number">0</span>);     <span class="hljs-comment">// 10</span>
 <span class="hljs-comment">// product: accumulator starts at 1</span>
-array.<span class="hljs-title function_">reduce</span>(<span class="hljs-function">(<span class="hljs-params">acc, n</span>) =&gt;</span> acc * n, <span class="hljs-number">1</span>);     <span class="hljs-comment">// 24</span></pre>
+array.<span class="hljs-title function_">reduce</span>(<span class="hljs-function">(<span class="hljs-params">acc, n</span>) =&gt;</span> acc * n, <span class="hljs-number">1</span>);     <span class="hljs-comment">// 24</span></code></pre>
 <p>The lab hints "just try arrow functions!" — <code>reduce</code> plus a one-line arrow removes all the boilerplate a manual loop would need.</p>
 <h3>Part C — the <code>companies</code> array</h3>
-<pre><span class="hljs-keyword">const</span> companies = [ <span class="hljs-comment">/* Company One…Nine with category, start, end */</span> ];
+<pre><code class="language-javascript"><span class="hljs-keyword">const</span> companies = [ <span class="hljs-comment">/* Company One…Nine with category, start, end */</span> ];
 
 <span class="hljs-comment">// print each name</span>
 companies.<span class="hljs-title function_">forEach</span>(<span class="hljs-function"><span class="hljs-params">c</span> =&gt;</span> <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(c.<span class="hljs-property">name</span>));
@@ -139,7 +139,7 @@ companies
 <span class="hljs-comment">// sort by end date ascending (copy first — sort mutates!)</span>
 [...companies].<span class="hljs-title function_">sort</span>(<span class="hljs-function">(<span class="hljs-params">a, b</span>) =&gt;</span> a.<span class="hljs-property">end</span> - b.<span class="hljs-property">end</span>);
 <span class="hljs-comment">// sort the ages array descending</span>
-[...ages].<span class="hljs-title function_">sort</span>(<span class="hljs-function">(<span class="hljs-params">a, b</span>) =&gt;</span> b - a);</pre>
+[...ages].<span class="hljs-title function_">sort</span>(<span class="hljs-function">(<span class="hljs-params">a, b</span>) =&gt;</span> b - a);</code></pre>
 <div class="pitfall"><b>Trap:</b> <code>Array.prototype.sort()</code> sorts <strong>in place</strong> and, with no comparator, sorts as <em>strings</em> (so <code>[10, 9, 2]</code> becomes <code>[10, 2, 9]</code>). Always pass a numeric comparator <code>(a, b) =&gt; a - b</code>, and copy with <code>[...arr]</code> first so you do not mutate props/state — mutating state is a classic React bug.</div>
 <h3>Part D — JSX build tasks</h3>
 <p>The exercise also asks you to build UI with JSX: design a page from a given image, a <strong>navbar</strong>, display a block of text, and render a <strong>list of courses</strong>. Use <code>.map()</code> with a <code>key</code> for the course list, and componentise the navbar (<code>&lt;NavBar /&gt;</code>).</p>
@@ -149,7 +149,7 @@ companies
 <h2>JSX &amp; ES6 — lab method mảng</h2>
 <p class="lead"><b>Mục tiêu:</b> luyện các method mảng ES6 mà React dùng để biến dữ liệu thành UI. Dưới đây là dữ liệu của bài kèm lời giải mẫu cho từng yêu cầu. Hãy tự làm trước rồi đối chiếu.</p>
 <h3>Phần A — mảng <code>people</code></h3>
-<pre><span class="hljs-keyword">const</span> people = [
+<pre><code class="language-javascript"><span class="hljs-keyword">const</span> people = [
   { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Jack&#x27;</span>, <span class="hljs-attr">age</span>: <span class="hljs-number">50</span> }, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Michael&#x27;</span>, <span class="hljs-attr">age</span>: <span class="hljs-number">9</span> }, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;John&#x27;</span>, <span class="hljs-attr">age</span>: <span class="hljs-number">40</span> },
   { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Ann&#x27;</span>, <span class="hljs-attr">age</span>: <span class="hljs-number">19</span> }, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Elisabeth&#x27;</span>, <span class="hljs-attr">age</span>: <span class="hljs-number">16</span> }
 ];
@@ -162,16 +162,16 @@ people.<span class="hljs-title function_">filter</span>(isTeen);           <span
 <span class="hljs-comment">// 3) Có phải TẤT CẢ đều teen? — .every trả về boolean</span>
 people.<span class="hljs-title function_">every</span>(isTeen);            <span class="hljs-comment">// false</span>
 <span class="hljs-comment">// 4) Có AI là teen không? — .some trả về boolean</span>
-people.<span class="hljs-title function_">some</span>(isTeen);             <span class="hljs-comment">// true</span></pre>
+people.<span class="hljs-title function_">some</span>(isTeen);             <span class="hljs-comment">// true</span></code></pre>
 <h3>Phần B — <code>reduce</code> trên <code>[1, 2, 3, 4]</code></h3>
-<pre><span class="hljs-keyword">const</span> array = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>];
+<pre><code class="language-javascript"><span class="hljs-keyword">const</span> array = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>];
 <span class="hljs-comment">// tổng: accumulator bắt đầu từ 0 (đối số thứ 2)</span>
 array.<span class="hljs-title function_">reduce</span>(<span class="hljs-function">(<span class="hljs-params">acc, n</span>) =&gt;</span> acc + n, <span class="hljs-number">0</span>);     <span class="hljs-comment">// 10</span>
 <span class="hljs-comment">// tích: accumulator bắt đầu từ 1</span>
-array.<span class="hljs-title function_">reduce</span>(<span class="hljs-function">(<span class="hljs-params">acc, n</span>) =&gt;</span> acc * n, <span class="hljs-number">1</span>);     <span class="hljs-comment">// 24</span></pre>
+array.<span class="hljs-title function_">reduce</span>(<span class="hljs-function">(<span class="hljs-params">acc, n</span>) =&gt;</span> acc * n, <span class="hljs-number">1</span>);     <span class="hljs-comment">// 24</span></code></pre>
 <p>Bài gợi ý "cứ thử arrow function!" — <code>reduce</code> cộng một arrow một dòng bỏ hết phần rườm rà mà vòng lặp thủ công cần.</p>
 <h3>Phần C — mảng <code>companies</code></h3>
-<pre><span class="hljs-keyword">const</span> companies = [ <span class="hljs-comment">/* Company One…Nine với category, start, end */</span> ];
+<pre><code class="language-javascript"><span class="hljs-keyword">const</span> companies = [ <span class="hljs-comment">/* Company One…Nine với category, start, end */</span> ];
 
 <span class="hljs-comment">// in từng tên</span>
 companies.<span class="hljs-title function_">forEach</span>(<span class="hljs-function"><span class="hljs-params">c</span> =&gt;</span> <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(c.<span class="hljs-property">name</span>));
@@ -189,7 +189,7 @@ companies
 <span class="hljs-comment">// sắp theo end tăng dần (copy trước — sort làm biến đổi mảng!)</span>
 [...companies].<span class="hljs-title function_">sort</span>(<span class="hljs-function">(<span class="hljs-params">a, b</span>) =&gt;</span> a.<span class="hljs-property">end</span> - b.<span class="hljs-property">end</span>);
 <span class="hljs-comment">// sắp mảng ages giảm dần</span>
-[...ages].<span class="hljs-title function_">sort</span>(<span class="hljs-function">(<span class="hljs-params">a, b</span>) =&gt;</span> b - a);</pre>
+[...ages].<span class="hljs-title function_">sort</span>(<span class="hljs-function">(<span class="hljs-params">a, b</span>) =&gt;</span> b - a);</code></pre>
 <div class="pitfall"><b>Bẫy:</b> <code>Array.prototype.sort()</code> sắp <strong>tại chỗ</strong> và, nếu không có comparator, sắp như <em>chuỗi</em> (nên <code>[10, 9, 2]</code> thành <code>[10, 2, 9]</code>). Luôn truyền comparator số <code>(a, b) =&gt; a - b</code>, và copy bằng <code>[...arr]</code> trước để không biến đổi props/state — biến đổi state là lỗi React kinh điển.</div>
 <h3>Phần D — bài dựng JSX</h3>
 <p>Bài còn yêu cầu dựng UI bằng JSX: thiết kế trang theo ảnh cho sẵn, một <strong>navbar</strong>, hiển thị một khối text, và render <strong>danh sách khoá học</strong>. Dùng <code>.map()</code> kèm <code>key</code> cho danh sách khoá học, và tách navbar thành component (<code>&lt;NavBar /&gt;</code>).</p>

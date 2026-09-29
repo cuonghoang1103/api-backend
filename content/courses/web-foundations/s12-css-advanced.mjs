@@ -59,13 +59,13 @@ ${gallery('wf-css2', [
   <div class="kv"><span class="k">sticky</span><span class="v">Normal until it hits a threshold, then sticks. Needs a <code>top</code> value to work.</span></div>
 </div>
 
-<pre><code>.parent { position: relative; }        /* ← the reference point */
+<pre><code class="language-css">.parent { position: relative; }        /* ← the reference point */
 .badge  { position: absolute; top: 8px; right: 8px; }
 /* Without position:relative on .parent, .badge jumps to the page corner */</code></pre>
 <p class="note-ct"><strong>The single most common position bug:</strong> an absolutely positioned element flying to the top-left of the whole page. It means no ancestor is positioned, so it fell back to the document. Add <code>position: relative</code> to the box you meant to anchor it to.</p>
 
 <h3>Why z-index sometimes does nothing</h3>
-<pre><code>/* This looks like it should work — and does not */
+<pre><code class="language-css">/* This looks like it should work — and does not */
 .modal   { z-index: 9999; }
 .overlay { z-index: 1; }</code></pre>
 <p><code>z-index</code> only compares elements <strong>inside the same stacking context</strong>. If <code>.modal</code> sits inside a parent that created its own context, its 9999 is only 9999 <em>within that parent</em> — the whole parent still stacks below <code>.overlay</code>.</p>
@@ -102,13 +102,13 @@ isolation: isolate        /* ← creates one ON PURPOSE */</code></pre>
   <div class="kv"><span class="k">sticky</span><span class="v">Bình thường cho tới khi chạm ngưỡng thì dính lại. PHẢI có <code>top</code> mới chạy.</span></div>
 </div>
 
-<pre><code>.cha  { position: relative; }        /* ← cái mốc */
+<pre><code class="language-css">.cha  { position: relative; }        /* ← cái mốc */
 .nhan { position: absolute; top: 8px; right: 8px; }
 /* Không có position:relative ở .cha thì .nhan bay ra góc TRANG */</code></pre>
 <p class="note-ct"><strong>Lỗi position hay gặp nhất:</strong> một phần tử absolute bay lên góc trên bên trái của cả trang. Nghĩa là không có tổ tiên nào được định vị, nên nó lấy mốc là cả tài liệu. Thêm <code>position: relative</code> vào đúng cái hộp bạn muốn neo vào.</p>
 
 <h3>Vì sao z-index đôi khi vô tác dụng</h3>
-<pre><code>/* Trông như phải chạy — mà không chạy */
+<pre><code class="language-css">/* Trông như phải chạy — mà không chạy */
 .modal   { z-index: 9999; }
 .lop-phu { z-index: 1; }</code></pre>
 <p><code>z-index</code> chỉ so sánh các phần tử <strong>trong CÙNG một ngữ cảnh xếp chồng</strong>. Nếu <code>.modal</code> nằm trong một cha đã tạo ngữ cảnh riêng, thì 9999 của nó chỉ là 9999 <em>bên trong cái cha đó</em> — cả cụm cha vẫn nằm dưới <code>.lop-phu</code>.</p>
@@ -146,7 +146,7 @@ isolation: isolate        /* ← tạo một cái CÓ CHỦ ĐÍCH */</code></pr
 <div class="ml-en">
 <span class="eyebrow">Chapter 12 · Lesson 12.2</span>
 <h2>Transition: animate a change you already make</h2>
-<pre><code>.btn {
+<pre><code class="language-css">.btn {
   background: #1b5fa8;
   transition: background 200ms ease, transform 200ms ease;
 }
@@ -162,7 +162,7 @@ isolation: isolate        /* ← tạo một cái CÓ CHỦ ĐÍCH */</code></pr
 </div>
 
 <h3>Keyframes: animate on your own timeline</h3>
-<pre><code>@keyframes spin  { to { transform: rotate(360deg); } }
+<pre><code class="language-css">@keyframes spin  { to { transform: rotate(360deg); } }
 @keyframes fadeIn{ from { opacity: 0; transform: translateY(8px); }
                    to   { opacity: 1; transform: none; } }
 
@@ -192,7 +192,7 @@ width  height  top  left  margin  padding  font-size</code></pre>
 <div class="ml-vi">
 <span class="eyebrow">Chương 12 · Bài 12.2</span>
 <h2>Transition: làm mượt một thay đổi bạn vốn đã tạo ra</h2>
-<pre><code>.nut {
+<pre><code class="language-css">.nut {
   background: #1b5fa8;
   transition: background 200ms ease, transform 200ms ease;
 }
@@ -208,7 +208,7 @@ width  height  top  left  margin  padding  font-size</code></pre>
 </div>
 
 <h3>Keyframes: tự định nghĩa dòng thời gian</h3>
-<pre><code>@keyframes quay   { to { transform: rotate(360deg); } }
+<pre><code class="language-css">@keyframes quay   { to { transform: rotate(360deg); } }
 @keyframes hienRa { from { opacity: 0; transform: translateY(8px); }
                     to   { opacity: 1; transform: none; } }
 
@@ -267,7 +267,7 @@ width  height  top  left  margin  padding  font-size</code></pre>
 <p>The names are long and that is the point: <code>.card__title</code> can only mean one thing, and you can grep for it. Compare with <code>.title</code>, which will collide with something within a month.</p>
 
 <h3>Keep specificity flat</h3>
-<pre><code>/* ❌ deep and fragile — now everything must be at least this specific */
+<pre><code class="language-css">/* ❌ deep and fragile — now everything must be at least this specific */
 .page .content .card .card-body h3 { font-size: 20px; }
 
 /* ✅ flat — one class, easy to override */
@@ -309,7 +309,7 @@ width  height  top  left  margin  padding  font-size</code></pre>
 <p>Tên dài, và đó chính là chủ đích: <code>.card__title</code> chỉ có thể mang đúng một nghĩa, và bạn grep ra được nó. So với <code>.title</code> — cái sẽ đụng với thứ gì đó trong vòng một tháng.</p>
 
 <h3>Giữ độ ưu tiên THẤP và phẳng</h3>
-<pre><code>/* ❌ sâu và mong manh — giờ mọi thứ khác phải đặc tả ít nhất bằng ngần này */
+<pre><code class="language-css">/* ❌ sâu và mong manh — giờ mọi thứ khác phải đặc tả ít nhất bằng ngần này */
 .page .content .card .card-body h3 { font-size: 20px; }
 
 /* ✅ phẳng — một class, dễ ghi đè */
@@ -340,7 +340,7 @@ width  height  top  left  margin  padding  font-size</code></pre>
 <div class="ml-en">
 <span class="eyebrow">Chapter 12 · Lesson 12.4</span>
 <h2>Name your values once, use the names everywhere</h2>
-<pre><code>:root {
+<pre><code class="language-css">:root {
   /* primitives — raw values, named by what they ARE */
   --blue-600: #1b5fa8;
   --gray-100: #f2f7fd;
@@ -385,7 +385,7 @@ document.documentElement.dataset.theme = 'dark';</code></pre>
 <div class="ml-vi">
 <span class="eyebrow">Chương 12 · Bài 12.4</span>
 <h2>Đặt tên cho giá trị một lần, rồi dùng cái tên ở mọi nơi</h2>
-<pre><code>:root {
+<pre><code class="language-css">:root {
   /* nguyên thuỷ — giá trị thô, đặt tên theo nó LÀ GÌ */
   --blue-600: #1b5fa8;
   --gray-100: #f2f7fd;

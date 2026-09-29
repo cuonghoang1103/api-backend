@@ -118,7 +118,7 @@ ${slide('dv-01', 5, 'Phép thử: xoá trên máy chủ thì có mất gì?')}
 <h3>Two exclusion lists that are not the same list</h3>
 ${slide('dv-01', 6, 'Bốn file loại trừ, bốn luật khác nhau')}
 <p>A common mistake is to assume <code>.gitignore</code> protects the deploy. It does not — it governs what git tracks, and a raw <code>rsync</code> or <code>tar</code> never consults it. Something ignored by git is exactly the kind of thing most dangerous to ship, because nobody has ever reviewed it.</p>
-<pre><code><span class="tok-comment"># .gitignore — cai gi KHONG vao kho ma</span>
+<pre><code class="language-bash"><span class="tok-comment"># .gitignore — cai gi KHONG vao kho ma</span>
 node_modules/
 dist/
 .env
@@ -135,7 +135,7 @@ rsync -az --delete \\
 
 <h3>A five-minute audit of your own project</h3>
 ${slide('dv-01', 7, 'Kiểm kê 5 phút: ?? chưa theo dõi, !! bị bỏ qua')}
-<pre><code><span class="tok-comment"># 1. Cai gi to nhat trong cay lam viec?</span>
+<pre><code class="language-bash"><span class="tok-comment"># 1. Cai gi to nhat trong cay lam viec?</span>
 du -sh --exclude=.git . &amp;&amp; du -sh */ | sort -rh | head -10
 
 <span class="tok-comment"># 2. Nhung tep nao KHONG duoc git theo doi? (day la danh sach dang ngo)</span>
@@ -309,7 +309,7 @@ ${slide('dv-01', 5, 'Phép thử: xoá trên máy chủ thì có mất gì?')}
 <h3>Hai danh sách loại trừ, và chúng KHÔNG phải một</h3>
 ${slide('dv-01', 6, 'Bốn file loại trừ, bốn luật khác nhau')}
 <p>Một hiểu nhầm thường gặp là tưởng <code>.gitignore</code> bảo vệ được lần deploy. Không hề — nó chi phối việc git THEO DÕI cái gì, còn một lệnh <code>rsync</code> hay <code>tar</code> thô thì chẳng bao giờ ngó tới nó. Thứ bị git bỏ qua lại đúng là loại thứ nguy hiểm nhất khi gửi đi, vì chưa từng có ai xem lại nó.</p>
-<pre><code><span class="tok-comment"># .gitignore — cai gi KHONG vao kho ma</span>
+<pre><code class="language-bash"><span class="tok-comment"># .gitignore — cai gi KHONG vao kho ma</span>
 node_modules/
 dist/
 .env
@@ -326,7 +326,7 @@ rsync -az --delete \\
 
 <h3>Một cuộc kiểm kê năm phút cho chính dự án của bạn</h3>
 ${slide('dv-01', 7, 'Kiểm kê 5 phút: ?? chưa theo dõi, !! bị bỏ qua')}
-<pre><code><span class="tok-comment"># 1. Cai gi to nhat trong cay lam viec?</span>
+<pre><code class="language-bash"><span class="tok-comment"># 1. Cai gi to nhat trong cay lam viec?</span>
 du -sh --exclude=.git . &amp;&amp; du -sh */ | sort -rh | head -10
 
 <span class="tok-comment"># 2. Nhung tep nao KHONG duoc git theo doi? (day la danh sach dang ngo)</span>
@@ -461,7 +461,7 @@ ssh -i ./khoa -o UserKnownHostsFile=./known_hosts -p 19012 deploy@127.0.0.1</cod
 <h3>Start from included, not excluded</h3>
 ${slide('dv-01', 8, 'git archive: bắt đầu từ số không')}
 <p>Lesson 1.1 ended with the argument: an exclude list is a list you forget. <code>git archive</code> inverts it — it starts from nothing and writes exactly the files at one commit:</p>
-<pre><code><span class="tok-comment"># tep nen cua DUNG mot commit — khong .git, khong thu chua commit</span>
+<pre><code class="language-bash"><span class="tok-comment"># tep nen cua DUNG mot commit — khong .git, khong thu chua commit</span>
 git archive --format=tar HEAD | gzip &gt; ban-phat-hanh.tar.gz
 
 <span class="tok-comment"># mot the, mot nhanh, hay mot commit bat ky deu duoc</span>
@@ -522,7 +522,7 @@ ${slide('dv-01', 10, 'Byte 5–8 của gzip là GIỜ — Mac luôn ghi')}
 
 <h3>The recipe</h3>
 ${slide('dv-01', 13, 'Script đóng gói từ chối cây bẩn')}
-<pre><code><span class="tok-comment">#!/bin/bash</span>
+<pre><code class="language-bash"><span class="tok-comment">#!/bin/bash</span>
 set -euo pipefail
 
 COMMIT=\$(git rev-parse --short HEAD)
@@ -678,7 +678,7 @@ $ git -c core.autocrlf=true archive --worktree-attributes --format=tar HEAD | sh
 <h3>Khởi đầu từ thứ ĐƯỢC BAO GỒM, không phải thứ bị loại trừ</h3>
 ${slide('dv-01', 8, 'git archive: bắt đầu từ số không')}
 <p>Bài 1.1 kết thúc bằng lý lẽ: danh sách loại trừ là danh sách bạn sẽ quên. <code>git archive</code> lật ngược nó lại — nó khởi đầu từ số không rồi viết ra ĐÚNG những tệp tại một commit:</p>
-<pre><code><span class="tok-comment"># tep nen cua DUNG mot commit — khong .git, khong thu chua commit</span>
+<pre><code class="language-bash"><span class="tok-comment"># tep nen cua DUNG mot commit — khong .git, khong thu chua commit</span>
 git archive --format=tar HEAD | gzip &gt; ban-phat-hanh.tar.gz
 
 <span class="tok-comment"># mot the, mot nhanh, hay mot commit bat ky deu duoc</span>
@@ -739,7 +739,7 @@ ${slide('dv-01', 10, 'Byte 5–8 của gzip là GIỜ — Mac luôn ghi')}
 
 <h3>Công thức</h3>
 ${slide('dv-01', 13, 'Script đóng gói từ chối cây bẩn')}
-<pre><code><span class="tok-comment">#!/bin/bash</span>
+<pre><code class="language-bash"><span class="tok-comment">#!/bin/bash</span>
 set -euo pipefail
 
 COMMIT=\$(git rev-parse --short HEAD)
@@ -933,7 +933,7 @@ ${slide('dv-01', 17, 'set -e tắt trong danh sách || và &&')}
      ...DI TIEP (set -e KHONG co tac dung o day)
 ── B) script THAT: set -e o dau tep, lenh dung mot minh ──
      ma thoat cua script B: 1</div>
-<pre><code><span class="tok-comment"># A — set -e bi VO HIEU o day</span>
+<pre><code class="language-bash"><span class="tok-comment"># A — set -e bi VO HIEU o day</span>
 ( set -e; npm ci; echo "di tiep" ) || echo "dung lai"
 
 <span class="tok-comment"># B — set -e co hieu luc</span>
@@ -960,7 +960,7 @@ ${slide('dv-01', 15, 'node_modules chép từ Mac chết trên Linux')}
   <div class="lz-layer"><span class="lz-lname">It does not pin your runtime</span><span class="lz-lnote">Node 20 and Node 22 install the same tree and can behave differently. Pin the runtime separately — <code>engines</code>, <code>.nvmrc</code>, a base image tag — and check it in the deploy.</span></div>
   <div class="lz-layer"><span class="lz-lname">It does not stop install scripts running</span><span class="lz-lnote"><code>postinstall</code> hooks execute arbitrary code at install time, on the server, as whoever ran the deploy. <code>npm ci --ignore-scripts</code> is worth considering, if your dependencies can live without them.</span></div>
 </div>
-<pre><code><span class="tok-comment"># buoc dung, tren may dich, dang toi thieu</span>
+<pre><code class="language-bash"><span class="tok-comment"># buoc dung, tren may dich, dang toi thieu</span>
 set -euo pipefail
 node --version | grep -q '^v22\\.' || { echo "Sai phien ban Node" &gt;&amp;2; exit 1; }
 npm ci --omit=dev --no-audit --no-fund
@@ -1110,7 +1110,7 @@ ${slide('dv-01', 17, 'set -e tắt trong danh sách || và &&')}
      ...DI TIEP (set -e KHONG co tac dung o day)
 ── B) script THAT: set -e o dau tep, lenh dung mot minh ──
      ma thoat cua script B: 1</div>
-<pre><code><span class="tok-comment"># A — set -e bi VO HIEU o day</span>
+<pre><code class="language-bash"><span class="tok-comment"># A — set -e bi VO HIEU o day</span>
 ( set -e; npm ci; echo "di tiep" ) || echo "dung lai"
 
 <span class="tok-comment"># B — set -e co hieu luc</span>
@@ -1137,7 +1137,7 @@ ${slide('dv-01', 15, 'node_modules chép từ Mac chết trên Linux')}
   <div class="lz-layer"><span class="lz-lname">Nó KHÔNG ghim runtime của bạn</span><span class="lz-lnote">Node 20 và Node 22 cài ra cùng một cây và có thể cư xử khác nhau. Hãy ghim runtime RIÊNG — bằng <code>engines</code>, <code>.nvmrc</code>, một tag ảnh nền — và kiểm nó trong lúc deploy.</span></div>
   <div class="lz-layer"><span class="lz-lname">Nó KHÔNG ngăn script cài đặt chạy</span><span class="lz-lnote">Các hook <code>postinstall</code> thực thi mã tuỳ ý ngay lúc cài, trên máy chủ, dưới quyền người chạy deploy. <code>npm ci --ignore-scripts</code> đáng cân nhắc, nếu đám phụ thuộc của bạn sống được mà không cần chúng.</span></div>
 </div>
-<pre><code><span class="tok-comment"># buoc dung, tren may dich, dang toi thieu</span>
+<pre><code class="language-bash"><span class="tok-comment"># buoc dung, tren may dich, dang toi thieu</span>
 set -euo pipefail
 node --version | grep -q '^v22\\.' || { echo "Sai phien ban Node" &gt;&amp;2; exit 1; }
 npm ci --omit=dev --no-audit --no-fund
@@ -1290,7 +1290,7 @@ ${slide('dv-01', 19, 'Tên bản: thời gian UTC + commit')}
 <h3>Now ask the running server</h3>
 ${slide('dv-01', 21, 'Đóng dấu lúc dựng, hỏi tiến trình /version')}
 <p>A name on a directory tells you what was deployed. It does not tell you what is <em>running</em> — the process could have been started from a different directory, or never restarted after the swap. The only authority is the process itself:</p>
-<pre><code>import { readFileSync } from 'fs';
+<pre><code class="language-javascript">import { readFileSync } from 'fs';
 const pb = JSON.parse(readFileSync(new URL('./phien-ban.json', import.meta.url)));
 
 <span class="tok-comment">// mot tuyen, khong dang nhap, tra ve dung mot su that</span>
@@ -1314,7 +1314,7 @@ ${slide('dv-01', 20, 'Tệp phiên bản commit vào kho gọi tên CHA')}
   4d0c4ac bo export-ignore</div>
 <div class="pitfall"><strong>Trap — a version file committed into the repository always names the previous commit.</strong> It is a chicken-and-egg problem, not a mistake you can be careful enough to avoid: writing the file requires knowing the hash, and the hash is not decided until the file is committed. So the file names its parent, forever, on every commit. Here the server reported <code>4d0c4ac</code> while running <code>962ceea</code> — and that is <em>worse</em> than reporting nothing, because it looks authoritative. Someone comparing that hash against staging would conclude the two match when they do not.</div>
 <p>The fix is to stamp the version <em>outside</em> the commit, during the build, after the artifact has been extracted:</p>
-<pre><code>set -euo pipefail
+<pre><code class="language-bash">set -euo pipefail
 COMMIT=\$(git rev-parse --short HEAD)
 THUMUC=\$(mktemp -d)
 
@@ -1337,7 +1337,7 @@ EOF</code></pre>
   <div class="lz-layer"><span class="lz-lname">branch or tag — for humans</span><span class="lz-lnote">Useful for spotting the obvious accident: production running something from a feature branch.</span></div>
   <div class="lz-layer"><span class="lz-lname">Nothing else</span><span class="lz-lnote">No dependency list, no environment variables, no framework version, no hostname. This endpoint is usually reachable — everything you add is published. Chapter 9 covers the private counterpart that can say more.</span></div>
 </div>
-<pre><code><span class="tok-comment"># cac cau hoi ma mot dong lenh giai quyet duoc</span>
+<pre><code class="language-bash"><span class="tok-comment"># cac cau hoi ma mot dong lenh giai quyet duoc</span>
 curl -s https://cuongthai.com/version | jq -r .commit
 
 <span class="tok-comment"># production va staging co khop khong?</span>
@@ -1450,7 +1450,7 @@ ${slide('dv-01', 19, 'Tên bản: thời gian UTC + commit')}
 <h3>Giờ hãy hỏi chính máy chủ đang chạy</h3>
 ${slide('dv-01', 21, 'Đóng dấu lúc dựng, hỏi tiến trình /version')}
 <p>Một cái tên trên thư mục cho bạn biết thứ gì đã được DEPLOY. Nó không cho biết thứ gì đang CHẠY — tiến trình có thể đã được khởi động từ một thư mục khác, hoặc chưa hề được khởi động lại sau bước tráo. Nguồn thẩm quyền duy nhất là chính cái tiến trình:</p>
-<pre><code>import { readFileSync } from 'fs';
+<pre><code class="language-javascript">import { readFileSync } from 'fs';
 const pb = JSON.parse(readFileSync(new URL('./phien-ban.json', import.meta.url)));
 
 <span class="tok-comment">// mot tuyen, khong dang nhap, tra ve dung mot su that</span>
@@ -1474,7 +1474,7 @@ ${slide('dv-01', 20, 'Tệp phiên bản commit vào kho gọi tên CHA')}
   4d0c4ac bo export-ignore</div>
 <div class="pitfall"><strong>Bẫy — một tệp phiên bản được commit vào kho mã thì LUÔN gọi tên commit TRƯỚC ĐÓ.</strong> Đây là bài toán con-gà-quả-trứng, không phải một lỗi mà bạn có thể cẩn thận đủ để tránh: viết cái tệp thì cần biết mã băm, mà mã băm thì chưa được quyết cho tới khi cái tệp được commit. Nên tệp đó gọi tên cha của nó, mãi mãi, ở mọi commit. Ở đây máy chủ báo <code>4d0c4ac</code> trong khi đang chạy <code>962ceea</code> — và như thế còn <em>TỆ HƠN</em> việc không báo gì cả, vì nó trông rất có thẩm quyền. Một người đem mã băm đó đi so với staging sẽ kết luận rằng hai bên khớp nhau trong khi chúng không hề.</div>
 <p>Cách sửa là đóng dấu phiên bản ở <em>NGOÀI</em> commit, trong lúc DỰNG, sau khi tạo tác đã được giải nén ra:</p>
-<pre><code>set -euo pipefail
+<pre><code class="language-bash">set -euo pipefail
 COMMIT=\$(git rev-parse --short HEAD)
 THUMUC=\$(mktemp -d)
 
@@ -1497,7 +1497,7 @@ EOF</code></pre>
   <div class="lz-layer"><span class="lz-lname">branch hoặc tag — cho con người</span><span class="lz-lnote">Hữu ích để phát hiện tai nạn hiển nhiên: production đang chạy thứ gì đó từ một nhánh tính năng.</span></div>
   <div class="lz-layer"><span class="lz-lname">Không gì khác nữa</span><span class="lz-lnote">Không danh sách phụ thuộc, không biến môi trường, không phiên bản framework, không tên máy. Cái endpoint này thường công khai — mọi thứ bạn thêm vào đều là CÔNG BỐ. Chương 9 nói về người anh em riêng tư của nó, cái được phép nói nhiều hơn.</span></div>
 </div>
-<pre><code><span class="tok-comment"># cac cau hoi ma mot dong lenh giai quyet duoc</span>
+<pre><code class="language-bash"><span class="tok-comment"># cac cau hoi ma mot dong lenh giai quyet duoc</span>
 curl -s https://cuongthai.com/version | jq -r .commit
 
 <span class="tok-comment"># production va staging co khop khong?</span>
@@ -1611,7 +1611,7 @@ ${slide('dv-01', 23, 'Liên kết cứng: 6 bản 30 MB thay vì 158 MB')}
   <div class="kv"><span class="k">Each release is still complete</span><span class="v">Not a diff, not a patch to apply. <code>v3</code> is a full directory tree you can run, delete or copy independently — the sharing is invisible to everything except <code>du</code>.</span></div>
   <div class="kv"><span class="k">The arithmetic stops working</span><span class="v">Every release reports 48 MB on its own, so they sum to 240 MB while the parent reports 49 MB. <code>du</code> counts shared blocks once per invocation, and the sum of the parts is not the whole.</span></div>
 </div>
-<pre><code><span class="tok-comment"># cp -al: chep CAY THU MUC, nhung tep thi LIEN KET CUNG</span>
+<pre><code class="language-bash"><span class="tok-comment"># cp -al: chep CAY THU MUC, nhung tep thi LIEN KET CUNG</span>
 cp -al /srv/app/phat-hanh/&lt;ban-truoc&gt; /srv/app/phat-hanh/&lt;ban-moi&gt;
 
 <span class="tok-comment"># rsync lam viec do gon hon, va no chi thay tep NAO doi</span>
@@ -1648,7 +1648,7 @@ ${slide('dv-01', 26, 'Dọn theo số lượng — chừa bản đang chạy')}
   symlink tro vao: /srv/vps/gg/thuong/v9-khong-ton-tai
   doc duoc khong:  cat: .../m1.js: No such file or directory</div>
 <div class="pitfall"><strong>Trap — deleting the release the symlink points at leaves a dangling link and a dead site.</strong> It happens when a rollback moves <code>hien-tai</code> to an older release and the pruner then deletes "the oldest N" without checking. Nothing errors at delete time; the failure arrives on the next request, or on the next restart. Any pruner must read the symlink first and refuse to remove its target.</div>
-<pre><code><span class="tok-comment">#!/bin/bash</span>
+<pre><code class="language-bash"><span class="tok-comment">#!/bin/bash</span>
 set -euo pipefail
 GOC=/srv/app/phat-hanh
 GIU=5
@@ -1811,7 +1811,7 @@ ${slide('dv-01', 23, 'Liên kết cứng: 6 bản 30 MB thay vì 158 MB')}
   <div class="kv"><span class="k">Mỗi bản vẫn ĐẦY ĐỦ</span><span class="v">Không phải một bản diff, không phải một bản vá phải áp vào. <code>v3</code> là một cây thư mục trọn vẹn mà bạn chạy được, xoá được hay chép được một cách độc lập — chuyện chia sẻ là vô hình với mọi thứ trừ <code>du</code>.</span></div>
   <div class="kv"><span class="k">Phép cộng thôi không còn đúng</span><span class="v">Mỗi bản tự báo 48 MB, nên chúng cộng lại thành 240 MB trong khi thư mục cha báo 49 MB. <code>du</code> chỉ đếm khối chia sẻ một lần cho mỗi lần chạy, và TỔNG CÁC PHẦN không bằng CÁI TOÀN THỂ.</span></div>
 </div>
-<pre><code><span class="tok-comment"># cp -al: chep CAY THU MUC, nhung tep thi LIEN KET CUNG</span>
+<pre><code class="language-bash"><span class="tok-comment"># cp -al: chep CAY THU MUC, nhung tep thi LIEN KET CUNG</span>
 cp -al /srv/app/phat-hanh/&lt;ban-truoc&gt; /srv/app/phat-hanh/&lt;ban-moi&gt;
 
 <span class="tok-comment"># rsync lam viec do gon hon, va no chi thay tep NAO doi</span>
@@ -1848,7 +1848,7 @@ ${slide('dv-01', 26, 'Dọn theo số lượng — chừa bản đang chạy')}
   symlink tro vao: /srv/vps/gg/thuong/v9-khong-ton-tai
   doc duoc khong:  cat: .../m1.js: No such file or directory</div>
 <div class="pitfall"><strong>Bẫy — xoá đúng cái bản mà symlink đang trỏ vào thì để lại một liên kết treo lơ lửng và một website chết.</strong> Chuyện này xảy ra khi một cú lùi bản chuyển <code>hien-tai</code> về một bản cũ hơn rồi bộ dọn dẹp xoá "N bản cũ nhất" mà không kiểm. Chẳng có lỗi nào lúc xoá; cái hỏng tới ở request kế tiếp, hoặc ở lần khởi động lại kế tiếp. Mọi bộ dọn dẹp đều PHẢI đọc cái symlink trước và từ chối xoá đích của nó.</div>
-<pre><code><span class="tok-comment">#!/bin/bash</span>
+<pre><code class="language-bash"><span class="tok-comment">#!/bin/bash</span>
 set -euo pipefail
 GOC=/srv/app/phat-hanh
 GIU=5

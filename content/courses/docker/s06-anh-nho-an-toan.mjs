@@ -86,7 +86,7 @@ COPY --from=build --chown=node:node /app/node_modules ./node_modules
 COPY --from=build --chown=node:node /app/dist ./dist
 USER node
 CMD ["node", "dist/index.js"]</code></pre>
-<pre><code>docker build -t app:multi .
+<pre><code class="language-bash">docker build -t app:multi .
 docker build -t app:single -f Dockerfile.single .
 docker images app --format '{{.Tag}}\\t{{.Size}}'</code></pre>
 <div class="out">multi	196MB
@@ -148,7 +148,7 @@ dk06-api:single       dd89daa3d63b       1.88GB          489MB</div>
 
 <h3>COPY --from can reach anywhere</h3>
 ${slide('dk-06', 6, 'COPY --from lấy từ stage, từ ảnh khác, từ ngữ cảnh có tên')}
-<pre><code><span class="tok-comment"># From a named stage</span>
+<pre><code class="language-bash"><span class="tok-comment"># From a named stage</span>
 COPY --from=build /app/dist ./dist
 
 <span class="tok-comment"># From a stage index (works, but fragile — prefer names)</span>
@@ -201,7 +201,7 @@ COPY --from=build /app/node_modules ./node_modules
 COPY --from=build /app/dist ./dist
 USER node
 CMD ["node", "dist/index.js"]</code></pre>
-<pre><code>docker build --target dev   -t app:dev  .
+<pre><code class="language-bash">docker build --target dev   -t app:dev  .
 docker build --target test  -t app:test .    <span class="tok-comment"># fails the build if tests fail</span>
 docker build                -t app:prod .    <span class="tok-comment"># the last stage</span>
 docker images app --format '{{.Tag}} {{.Size}}'</code></pre>
@@ -246,7 +246,7 @@ COPY --from=build /app/dist /app/dist
 COPY --from=build /app/node_modules /app/node_modules
 RUN apk add --no-cache curl jq
 CMD ["node", "/app/dist/index.js"]</code></pre>
-<pre><code>docker build --target prod       -t app:1.4.2 .
+<pre><code class="language-bash">docker build --target prod       -t app:1.4.2 .
 docker build --target prod-debug -t app:1.4.2-debug .</code></pre>
 <div class="callout"><strong>This is the answer to "distroless is great until something breaks".</strong> Ship <code>prod</code>, which has no shell and no package manager for an attacker to use. Keep <code>prod-debug</code> built from the same artifacts, and when you need to look inside, run that instead — or use the sidecar technique from Lesson 2.3. What you must not do is add a shell to the production image "just in case"; that is trading a permanent weakness for an occasional convenience you have a better answer for.</div>
 
@@ -368,7 +368,7 @@ COPY --from=build --chown=node:node /app/node_modules ./node_modules
 COPY --from=build --chown=node:node /app/dist ./dist
 USER node
 CMD ["node", "dist/index.js"]</code></pre>
-<pre><code>docker build -t app:multi .
+<pre><code class="language-bash">docker build -t app:multi .
 docker build -t app:single -f Dockerfile.single .
 docker images app --format '{{.Tag}}\\t{{.Size}}'</code></pre>
 <div class="out">multi	196MB
@@ -430,7 +430,7 @@ dk06-api:single       dd89daa3d63b       1.88GB          489MB</div>
 
 <h3>COPY --from với tới được mọi nơi</h3>
 ${slide('dk-06', 6, 'COPY --from lấy từ stage, từ ảnh khác, từ ngữ cảnh có tên')}
-<pre><code><span class="tok-comment"># Từ một stage có tên</span>
+<pre><code class="language-bash"><span class="tok-comment"># Từ một stage có tên</span>
 COPY --from=build /app/dist ./dist
 
 <span class="tok-comment"># Từ chỉ số của stage (chạy được, nhưng dễ vỡ — nên dùng TÊN)</span>
@@ -483,7 +483,7 @@ COPY --from=build /app/node_modules ./node_modules
 COPY --from=build /app/dist ./dist
 USER node
 CMD ["node", "dist/index.js"]</code></pre>
-<pre><code>docker build --target dev   -t app:dev  .
+<pre><code class="language-bash">docker build --target dev   -t app:dev  .
 docker build --target test  -t app:test .    <span class="tok-comment"># test hỏng thì lượt dựng hỏng</span>
 docker build                -t app:prod .    <span class="tok-comment"># stage cuối</span>
 docker images app --format '{{.Tag}} {{.Size}}'</code></pre>
@@ -528,7 +528,7 @@ COPY --from=build /app/dist /app/dist
 COPY --from=build /app/node_modules /app/node_modules
 RUN apk add --no-cache curl jq
 CMD ["node", "/app/dist/index.js"]</code></pre>
-<pre><code>docker build --target prod       -t app:1.4.2 .
+<pre><code class="language-bash">docker build --target prod       -t app:1.4.2 .
 docker build --target prod-debug -t app:1.4.2-debug .</code></pre>
 <div class="callout"><strong>Đây là câu trả lời cho "distroless thì tuyệt cho tới khi có thứ gì hỏng".</strong> Hãy đem đi bản <code>prod</code>, thứ không có shell và không có trình quản lý gói nào cho kẻ tấn công dùng. Giữ lại <code>prod-debug</code> dựng từ CÙNG những hiện vật đó, và khi cần nhìn vào bên trong thì chạy cái đó — hoặc dùng kỹ thuật container phụ ở Bài 2.3. Thứ bạn KHÔNG được làm là thêm một cái shell vào ảnh production "để phòng khi cần"; đó là đánh đổi một điểm yếu vĩnh viễn lấy một sự tiện lợi thi thoảng mà bạn vốn đã có câu trả lời tốt hơn.</div>
 
@@ -642,7 +642,7 @@ EOF</code></pre>
 
 <h3>The sizes, measured</h3>
 ${slide('dk-06', 8, 'Ảnh nền quyết định phần lớn kích thước — và khi nào dùng cái nào')}
-<pre><code>for t in 22 22-slim 22-alpine; do docker pull -q node:\$t &gt;/dev/null; done
+<pre><code class="language-bash">for t in 22 22-slim 22-alpine; do docker pull -q node:\$t &gt;/dev/null; done
 docker pull -q gcr.io/distroless/nodejs22-debian12 &gt;/dev/null
 docker images --format '{{.Repository}}:{{.Tag}}\\t{{.Size}}' \\
   | grep -E 'node|distroless' | sort -k2 -hr</code></pre>
@@ -677,7 +677,7 @@ v22.23.2
 
 <h3>musl versus glibc: the actual difference</h3>
 ${slide('dk-06', 9, 'musl ≠ glibc: cùng chuẩn C, không cùng nhị phân')}
-<pre><code>docker run --rm node:22-slim   sh -c 'ldd --version 2&gt;&amp;1 | head -1'
+<pre><code class="language-bash">docker run --rm node:22-slim   sh -c 'ldd --version 2&gt;&amp;1 | head -1'
 docker run --rm node:22-alpine sh -c 'ldd 2&gt;&amp;1 | head -1'
 docker run --rm node:22-slim   sh -c 'ls /lib/x86_64-linux-gnu/libc.so.6'
 docker run --rm node:22-alpine sh -c 'ls /lib/ld-musl-x86_64.so.1'</code></pre>
@@ -719,7 +719,7 @@ lrwxrwxrwx. 1 root root 42 Apr 27 20:14 /lib64/ld-linux-x86-64.so.2 -&gt; /lib/x
   <div class="kv"><span class="k">Performance</span><span class="v">musl's malloc is simpler and slower under heavy multithreaded allocation. For most web apps it is unmeasurable; for allocation-heavy workloads it has been measured at double-digit percentages.</span></div>
 </div>
 <div class="callout warn"><strong>This project's own outage was exactly this.</strong> A deploy script built with the default <code>Dockerfile</code> instead of <code>Dockerfile.backend</code>, which put a <code>debian-openssl-3.0.x</code> Prisma engine — glibc — onto a <code>node:22-alpine</code> base. The build was green, the push was green, the swap was green, and then the backend restarted forever and the API returned 502 for seven minutes. The lesson recorded afterwards was: <em>a green build does not mean a runnable image</em>. A libc-versus-engine check now runs before the push.</div>
-<pre><code><span class="tok-comment"># Detect the mismatch before it reaches production</span>
+<pre><code class="language-bash"><span class="tok-comment"># Detect the mismatch before it reaches production</span>
 docker run --rm --entrypoint sh app:latest -c '
   echo -n "libc: "; ( ldd --version 2&gt;&amp;1 | head -1 ) || true
   echo -n "prisma engines: "; ls node_modules/.prisma/client/ 2&gt;/dev/null | grep -o "engine.*" | head -2
@@ -857,7 +857,7 @@ listening on 8080</div>
 </div>
 
 <h3>Reading a base image's real cost</h3>
-<pre><code>docker scout quickview node:22-slim 2&gt;/dev/null | head -8
+<pre><code class="language-bash">docker scout quickview node:22-slim 2&gt;/dev/null | head -8
 docker scout quickview node:22-alpine 2&gt;/dev/null | head -6</code></pre>
 <div class="out">  Target             │  node:22-slim         │    0C     2H     8M    41L
     digest           │  a1b2c3d4e5f6         │
@@ -968,7 +968,7 @@ Digest:    sha256:b6f26b36c8ff49624cfdac716b8ea1138d606df02586a77d364bb5536a634f
 
 <h3>Kích thước, đo thật</h3>
 ${slide('dk-06', 8, 'Ảnh nền quyết định phần lớn kích thước — và khi nào dùng cái nào')}
-<pre><code>for t in 22 22-slim 22-alpine; do docker pull -q node:\$t &gt;/dev/null; done
+<pre><code class="language-bash">for t in 22 22-slim 22-alpine; do docker pull -q node:\$t &gt;/dev/null; done
 docker pull -q gcr.io/distroless/nodejs22-debian12 &gt;/dev/null
 docker images --format '{{.Repository}}:{{.Tag}}\\t{{.Size}}' \\
   | grep -E 'node|distroless' | sort -k2 -hr</code></pre>
@@ -1003,7 +1003,7 @@ v22.23.2
 
 <h3>musl so với glibc: khác biệt THẬT</h3>
 ${slide('dk-06', 9, 'musl ≠ glibc: cùng chuẩn C, không cùng nhị phân')}
-<pre><code>docker run --rm node:22-slim   sh -c 'ldd --version 2&gt;&amp;1 | head -1'
+<pre><code class="language-bash">docker run --rm node:22-slim   sh -c 'ldd --version 2&gt;&amp;1 | head -1'
 docker run --rm node:22-alpine sh -c 'ldd 2&gt;&amp;1 | head -1'
 docker run --rm node:22-slim   sh -c 'ls /lib/x86_64-linux-gnu/libc.so.6'
 docker run --rm node:22-alpine sh -c 'ls /lib/ld-musl-x86_64.so.1'</code></pre>
@@ -1045,7 +1045,7 @@ lrwxrwxrwx. 1 root root 42 Apr 27 20:14 /lib64/ld-linux-x86-64.so.2 -&gt; /lib/x
   <div class="kv"><span class="k">Hiệu năng</span><span class="v">malloc của musl đơn giản hơn và chậm hơn dưới áp lực cấp phát đa luồng nặng. Với phần lớn ứng dụng web thì không đo nổi; với những tải nặng về cấp phát thì đã có phép đo cho ra mức chênh hai chữ số phần trăm.</span></div>
 </div>
 <div class="callout warn"><strong>Cú sự cố của chính dự án này chính xác là chuyện đó.</strong> Một script deploy đã dựng bằng <code>Dockerfile</code> mặc định thay vì <code>Dockerfile.backend</code>, và điều đó đặt một engine Prisma <code>debian-openssl-3.0.x</code> — glibc — lên một cái nền <code>node:22-alpine</code>. Lượt dựng xanh, lượt đẩy xanh, lượt tráo xanh, rồi backend khởi động lại vô tận và API trả 502 trong bảy phút. Bài học ghi lại sau đó là: <em>một lượt dựng xanh KHÔNG có nghĩa là một cái ảnh chạy được</em>. Giờ có một chốt kiểm libc ↔ engine chạy TRƯỚC lúc đẩy.</div>
-<pre><code><span class="tok-comment"># Phát hiện chỗ lệch TRƯỚC KHI nó tới production</span>
+<pre><code class="language-bash"><span class="tok-comment"># Phát hiện chỗ lệch TRƯỚC KHI nó tới production</span>
 docker run --rm --entrypoint sh app:latest -c '
   echo -n "libc: "; ( ldd --version 2&gt;&amp;1 | head -1 ) || true
   echo -n "prisma engines: "; ls node_modules/.prisma/client/ 2&gt;/dev/null | grep -o "engine.*" | head -2
@@ -1183,7 +1183,7 @@ listening on 8080</div>
 </div>
 
 <h3>Đọc cái giá thật của một ảnh nền</h3>
-<pre><code>docker scout quickview node:22-slim 2&gt;/dev/null | head -8
+<pre><code class="language-bash">docker scout quickview node:22-slim 2&gt;/dev/null | head -8
 docker scout quickview node:22-alpine 2&gt;/dev/null | head -6</code></pre>
 <div class="out">  Target             │  node:22-slim         │    0C     2H     8M    41L
     digest           │  a1b2c3d4e5f6         │
@@ -1303,7 +1303,7 @@ Digest:    sha256:b6f26b36c8ff49624cfdac716b8ea1138d606df02586a77d364bb5536a634f
 
 <h3>Where the bytes are</h3>
 ${slide('dk-06', 14, 'Đo trước khi cắt: docker history chỉ ra byte nằm ở đâu')}
-<pre><code>docker history app:1.0 --format 'table {{.Size}}\\t{{.CreatedBy}}' --no-trunc \\
+<pre><code class="language-bash">docker history app:1.0 --format 'table {{.Size}}\\t{{.CreatedBy}}' --no-trunc \\
   | head -8 | cut -c1-110</code></pre>
 <div class="out">SIZE      CREATED BY
 0B        CMD ["node" "dist/index.js"]
@@ -1312,7 +1312,7 @@ ${slide('dk-06', 14, 'Đo trước khi cắt: docker history chỉ ra byte nằm
 0B        ENV NODE_ENV=production
 188MB     RUN /bin/sh -c apk add --no-cache python3 make g++ # buildkit
 185MB     /bin/sh -c #(nop) ADD file:… in /</div>
-<pre><code><span class="tok-comment"># dive gives the same answer with a file tree — install it once, use it forever</span>
+<pre><code class="language-bash"><span class="tok-comment"># dive gives the same answer with a file tree — install it once, use it forever</span>
 docker run --rm -it -v /var/run/docker.sock:/var/run/docker.sock \\
   wagoodman/dive:latest app:1.0 --ci 2&gt;&amp;1 | tail -8</code></pre>
 <div class="out">Analyzing image
@@ -1372,7 +1372,7 @@ Count  Wasted Space  File Path
 
 <h3>Node specifics</h3>
 ${slide('dk-06', 16, 'npm prune vẫn giữ 60 MB Prisma CLI — vì nó là devOptional')}
-<pre><code><span class="tok-comment"># What is actually in node_modules?</span>
+<pre><code class="language-bash"><span class="tok-comment"># What is actually in node_modules?</span>
 docker run --rm app:1.0 sh -c 'du -sh node_modules; du -sh node_modules/* | sort -hr | head -5'</code></pre>
 <div class="out">412M	node_modules
 118M	node_modules/@swc
@@ -1425,7 +1425,7 @@ grep -A4 '"node_modules/prisma"' package-lock.json | grep devOptional</code></pr
 <p>Measured: <code>node_modules</code> in the final image went from 93MB to 30.7MB, and the app still answered <code>{"ok":true}</code> with a real PostgreSQL next to it. The general lesson is bigger than Prisma: <strong>"I ran prune" is not a measurement</strong>. <code>du</code> is.</p>
 
 <h3>Python specifics</h3>
-<pre><code>FROM python:3.12-slim AS build
+<pre><code class="language-bash">FROM python:3.12-slim AS build
 RUN apt-get update &amp;&amp; apt-get install -y --no-install-recommends build-essential libpq-dev \\
  &amp;&amp; rm -rf /var/lib/apt/lists/*
 COPY requirements.txt ./
@@ -1451,7 +1451,7 @@ COPY . .</code></pre>
   <div class="kv"><span class="k">Alpine when it costs correctness</span><span class="v">40MB is not worth an afternoon of musl debugging, a source-compiled numpy, or an intermittent DNS failure in production (Lesson 6.2). Take the 40MB.</span></div>
   <div class="kv"><span class="k">And one thing that IS worth it</span><span class="v">Checking the number in CI. <code>docker image inspect app --format '{{.Size}}'</code> with a threshold catches the day someone adds a 300MB dependency, which is when it is cheap to fix.</span></div>
 </div>
-<pre><code><span class="tok-comment"># A size gate for CI</span>
+<pre><code class="language-bash"><span class="tok-comment"># A size gate for CI</span>
 MAX=\$((250 * 1024 * 1024))
 SIZE=\$(docker image inspect app:ci --format '{{.Size}}')
 echo "image size: \$((SIZE / 1024 / 1024))MB"
@@ -1604,7 +1604,7 @@ Count  Wasted Space  File Path
 
 <h3>Byte nằm ở đâu</h3>
 ${slide('dk-06', 14, 'Đo trước khi cắt: docker history chỉ ra byte nằm ở đâu')}
-<pre><code>docker history app:1.0 --format 'table {{.Size}}\\t{{.CreatedBy}}' --no-trunc \\
+<pre><code class="language-bash">docker history app:1.0 --format 'table {{.Size}}\\t{{.CreatedBy}}' --no-trunc \\
   | head -8 | cut -c1-110</code></pre>
 <div class="out">SIZE      CREATED BY
 0B        CMD ["node" "dist/index.js"]
@@ -1613,7 +1613,7 @@ ${slide('dk-06', 14, 'Đo trước khi cắt: docker history chỉ ra byte nằm
 0B        ENV NODE_ENV=production
 188MB     RUN /bin/sh -c apk add --no-cache python3 make g++ # buildkit
 185MB     /bin/sh -c #(nop) ADD file:… in /</div>
-<pre><code><span class="tok-comment"># dive cho cùng câu trả lời kèm một cây file — cài một lần, dùng mãi</span>
+<pre><code class="language-bash"><span class="tok-comment"># dive cho cùng câu trả lời kèm một cây file — cài một lần, dùng mãi</span>
 docker run --rm -it -v /var/run/docker.sock:/var/run/docker.sock \\
   wagoodman/dive:latest app:1.0 --ci 2&gt;&amp;1 | tail -8</code></pre>
 <div class="out">Analyzing image
@@ -1673,7 +1673,7 @@ Count  Wasted Space  File Path
 
 <h3>Những gì riêng Node</h3>
 ${slide('dk-06', 16, 'npm prune vẫn giữ 60 MB Prisma CLI — vì nó là devOptional')}
-<pre><code><span class="tok-comment"># Trong node_modules thật ra có gì?</span>
+<pre><code class="language-bash"><span class="tok-comment"># Trong node_modules thật ra có gì?</span>
 docker run --rm app:1.0 sh -c 'du -sh node_modules; du -sh node_modules/* | sort -hr | head -5'</code></pre>
 <div class="out">412M	node_modules
 118M	node_modules/@swc
@@ -1726,7 +1726,7 @@ grep -A4 '"node_modules/prisma"' package-lock.json | grep devOptional</code></pr
 <p>Đo thật: <code>node_modules</code> trong ảnh cuối từ 93MB xuống 30,7MB, và app vẫn trả <code>{"ok":true}</code> khi có một PostgreSQL thật bên cạnh. Bài học chung lớn hơn chuyện Prisma: <strong>"tôi đã chạy prune" không phải là một phép đo</strong>. <code>du</code> mới là phép đo.</p>
 
 <h3>Những gì riêng Python</h3>
-<pre><code>FROM python:3.12-slim AS build
+<pre><code class="language-bash">FROM python:3.12-slim AS build
 RUN apt-get update &amp;&amp; apt-get install -y --no-install-recommends build-essential libpq-dev \\
  &amp;&amp; rm -rf /var/lib/apt/lists/*
 COPY requirements.txt ./
@@ -1752,7 +1752,7 @@ COPY . .</code></pre>
   <div class="kv"><span class="k">Alpine khi nó đánh đổi tính đúng đắn</span><span class="v">40MB không đáng một buổi chiều gỡ lỗi musl, một cái numpy biên dịch từ mã nguồn, hay một cú hỏng DNS chập chờn trên production (Bài 6.2). Cứ lấy 40MB đó đi.</span></div>
   <div class="kv"><span class="k">Và MỘT thứ thì ĐÁNG</span><span class="v">Kiểm con số đó trong CI. <code>docker image inspect app --format '{{.Size}}'</code> kèm một ngưỡng sẽ bắt được cái ngày có người thêm một thư viện 300MB, và đó là lúc sửa còn rẻ.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Một cổng chặn kích thước cho CI</span>
+<pre><code class="language-bash"><span class="tok-comment"># Một cổng chặn kích thước cho CI</span>
 MAX=\$((250 * 1024 * 1024))
 SIZE=\$(docker image inspect app:ci --format '{{.Size}}')
 echo "kích thước ảnh: \$((SIZE / 1024 / 1024))MB"
@@ -1914,7 +1914,7 @@ Count  Wasted Space  File Path
 
 <h3>Start with the user</h3>
 ${slide('dk-06', 19, 'Năm lớp khoá quanh tiến trình — mỗi lớp chặn một bước của kẻ tấn công')}
-<pre><code>docker run --rm alpine id
+<pre><code class="language-bash">docker run --rm alpine id
 docker run --rm -u 1000:1000 alpine id
 docker run --rm node:22-alpine id node</code></pre>
 <div class="out">uid=0(root) gid=0(root) groups=0(root),1(bin),2(daemon),3(sys),4(adm),6(disk),10(wheel),11(floppy),20(dialout),26(tape),27(video)
@@ -1938,12 +1938,12 @@ USER 10001:10001</code></pre>
 </div>
 
 <h3>A read-only root filesystem</h3>
-<pre><code>docker run --rm --read-only alpine sh -c 'touch /tmp/x' 2&gt;&amp;1 | head -1
+<pre><code class="language-bash">docker run --rm --read-only alpine sh -c 'touch /tmp/x' 2&gt;&amp;1 | head -1
 docker run --rm --read-only --tmpfs /tmp:rw,noexec,nosuid,size=64m \\
   alpine sh -c 'touch /tmp/x &amp;&amp; echo writable'</code></pre>
 <div class="out">touch: /tmp/x: Read-only file system
 writable</div>
-<pre><code><span class="tok-comment"># A real service: read-only, with writable paths declared explicitly</span>
+<pre><code class="language-bash"><span class="tok-comment"># A real service: read-only, with writable paths declared explicitly</span>
 docker run -d --name web \\
   --read-only \\
   --tmpfs /tmp:rw,noexec,nosuid,size=64m \\
@@ -1987,7 +1987,7 @@ docker logs dk06-web 2&gt;&amp;1 | grep -i "read-only"</code></pre>
 
 <h3>Capabilities</h3>
 ${slide('dk-06', 21, 'Capability: mặc định 14 cái, --cap-drop=ALL còn 0')}
-<pre><code>docker run --rm alpine sh -c 'apk add -q libcap; capsh --print | head -2' 2&gt;/dev/null
+<pre><code class="language-bash">docker run --rm alpine sh -c 'apk add -q libcap; capsh --print | head -2' 2&gt;/dev/null
 docker run --rm --cap-drop=ALL alpine sh -c 'apk add -q libcap; capsh --print | head -2' 2&gt;/dev/null</code></pre>
 <div class="out">Current: cap_chown,cap_dac_override,cap_fowner,cap_fsetid,cap_kill,cap_setgid,cap_setuid,cap_setpcap,cap_net_bind_service,cap_net_raw,cap_sys_chroot,cap_mknod,cap_audit_write,cap_setfcap=ep
 Current: =</div>
@@ -2028,7 +2028,7 @@ docker run --rm --cap-drop=NET_RAW alpine sh -c 'apk add -q tcpdump &gt;/dev/nul
 
 <h3>The whole set, together</h3>
 ${slide('dk-06', 22, 'Trọn bộ cờ an toàn — và vòng lặp kiểm mọi container')}
-<pre><code>docker run -d --name hardened \\
+<pre><code class="language-bash">docker run -d --name hardened \\
   --user 10001:10001 \\
   --read-only \\
   --tmpfs /tmp:rw,noexec,nosuid,size=64m \\
@@ -2091,7 +2091,7 @@ tmp-ok</div>
 
 <h3>The two things that give everything away</h3>
 ${slide('dk-06', 23, '--privileged hay gắn docker.sock = trao chìa khoá root của máy chủ')}
-<pre><code><span class="tok-comment"># 1 · --privileged: all capabilities, all devices, no seccomp, no AppArmor</span>
+<pre><code class="language-bash"><span class="tok-comment"># 1 · --privileged: all capabilities, all devices, no seccomp, no AppArmor</span>
 docker run --rm --privileged alpine sh -c 'ls /dev | wc -l; head -c 40 /dev/sda1' 2&gt;&amp;1 | head -2
 
 <span class="tok-comment"># 2 · the Docker socket: control of the daemon is control of the host</span>
@@ -2120,7 +2120,7 @@ uid=0(root) gid=0(root) groups=0(root),1(daemon),2(bin),3(sys),4(adm),6(disk),10
 </table>
 
 <h3>A checklist you can run</h3>
-<pre><code>for c in \$(docker ps --format '{{.Names}}'); do
+<pre><code class="language-bash">for c in \$(docker ps --format '{{.Names}}'); do
   docker inspect "\$c" --format '{{.Name}}
     user:      {{if .Config.User}}{{.Config.User}}{{else}}ROOT (!){{end}}
     readonly:  {{.HostConfig.ReadonlyRootfs}}
@@ -2249,7 +2249,7 @@ done</code></pre>
 
 <h3>Bắt đầu từ người dùng</h3>
 ${slide('dk-06', 19, 'Năm lớp khoá quanh tiến trình — mỗi lớp chặn một bước của kẻ tấn công')}
-<pre><code>docker run --rm alpine id
+<pre><code class="language-bash">docker run --rm alpine id
 docker run --rm -u 1000:1000 alpine id
 docker run --rm node:22-alpine id node</code></pre>
 <div class="out">uid=0(root) gid=0(root) groups=0(root),1(bin),2(daemon),3(sys),4(adm),6(disk),10(wheel),11(floppy),20(dialout),26(tape),27(video)
@@ -2273,12 +2273,12 @@ USER 10001:10001</code></pre>
 </div>
 
 <h3>Hệ thống file gốc chỉ đọc</h3>
-<pre><code>docker run --rm --read-only alpine sh -c 'touch /tmp/x' 2&gt;&amp;1 | head -1
+<pre><code class="language-bash">docker run --rm --read-only alpine sh -c 'touch /tmp/x' 2&gt;&amp;1 | head -1
 docker run --rm --read-only --tmpfs /tmp:rw,noexec,nosuid,size=64m \\
   alpine sh -c 'touch /tmp/x &amp;&amp; echo ghi được'</code></pre>
 <div class="out">touch: /tmp/x: Read-only file system
 ghi được</div>
-<pre><code><span class="tok-comment"># Một dịch vụ thật: chỉ đọc, với những đường dẫn ghi được khai báo TƯỜNG MINH</span>
+<pre><code class="language-bash"><span class="tok-comment"># Một dịch vụ thật: chỉ đọc, với những đường dẫn ghi được khai báo TƯỜNG MINH</span>
 docker run -d --name web \\
   --read-only \\
   --tmpfs /tmp:rw,noexec,nosuid,size=64m \\
@@ -2322,7 +2322,7 @@ docker logs dk06-web 2&gt;&amp;1 | grep -i "read-only"</code></pre>
 
 <h3>Capability</h3>
 ${slide('dk-06', 21, 'Capability: mặc định 14 cái, --cap-drop=ALL còn 0')}
-<pre><code>docker run --rm alpine sh -c 'apk add -q libcap; capsh --print | head -2' 2&gt;/dev/null
+<pre><code class="language-bash">docker run --rm alpine sh -c 'apk add -q libcap; capsh --print | head -2' 2&gt;/dev/null
 docker run --rm --cap-drop=ALL alpine sh -c 'apk add -q libcap; capsh --print | head -2' 2&gt;/dev/null</code></pre>
 <div class="out">Current: cap_chown,cap_dac_override,cap_fowner,cap_fsetid,cap_kill,cap_setgid,cap_setuid,cap_setpcap,cap_net_bind_service,cap_net_raw,cap_sys_chroot,cap_mknod,cap_audit_write,cap_setfcap=ep
 Current: =</div>
@@ -2363,7 +2363,7 @@ docker run --rm --cap-drop=NET_RAW alpine sh -c 'apk add -q tcpdump &gt;/dev/nul
 
 <h3>Trọn bộ, gộp lại</h3>
 ${slide('dk-06', 22, 'Trọn bộ cờ an toàn — và vòng lặp kiểm mọi container')}
-<pre><code>docker run -d --name hardened \\
+<pre><code class="language-bash">docker run -d --name hardened \\
   --user 10001:10001 \\
   --read-only \\
   --tmpfs /tmp:rw,noexec,nosuid,size=64m \\
@@ -2426,7 +2426,7 @@ tmp-ok</div>
 
 <h3>Hai thứ trao đi TẤT CẢ</h3>
 ${slide('dk-06', 23, '--privileged hay gắn docker.sock = trao chìa khoá root của máy chủ')}
-<pre><code><span class="tok-comment"># 1 · --privileged: mọi capability, mọi thiết bị, không seccomp, không AppArmor</span>
+<pre><code class="language-bash"><span class="tok-comment"># 1 · --privileged: mọi capability, mọi thiết bị, không seccomp, không AppArmor</span>
 docker run --rm --privileged alpine sh -c 'ls /dev | wc -l; head -c 40 /dev/sda1' 2&gt;&amp;1 | head -2
 
 <span class="tok-comment"># 2 · socket của Docker: điều khiển tiến trình nền là điều khiển cả máy chủ</span>
@@ -2455,7 +2455,7 @@ uid=0(root) gid=0(root) groups=0(root),1(daemon),2(bin),3(sys),4(adm),6(disk),10
 </table>
 
 <h3>Một danh sách kiểm chạy được</h3>
-<pre><code>for c in \$(docker ps --format '{{.Names}}'); do
+<pre><code class="language-bash">for c in \$(docker ps --format '{{.Names}}'); do
   docker inspect "\$c" --format '{{.Name}}
     user:      {{if .Config.User}}{{.Config.User}}{{else}}ROOT (!){{end}}
     readonly:  {{.HostConfig.ReadonlyRootfs}}
@@ -2593,7 +2593,7 @@ done</code></pre>
 
 <h3>Scan an image</h3>
 ${slide('dk-06', 24, 'Chuỗi cung ứng: phần lớn thứ trong ảnh bạn không tự viết')}
-<pre><code>docker scout cves app:1.4.2 2&gt;/dev/null | head -14</code></pre>
+<pre><code class="language-bash">docker scout cves app:1.4.2 2&gt;/dev/null | head -14</code></pre>
 <div class="out">    ✓ Image stored for indexing
     ✓ Indexed 214 packages
     ✗ Detected 3 vulnerable packages with 5 vulnerabilities
@@ -2608,7 +2608,7 @@ ${slide('dk-06', 24, 'Chuỗi cung ứng: phần lớn thứ trong ảnh bạn k
     vulnerabilities │    0C     2H     3M     0L
     size            │ 196 MB
     packages        │ 214</div>
-<pre><code><span class="tok-comment"># trivy — the other one everyone uses; no account needed</span>
+<pre><code class="language-bash"><span class="tok-comment"># trivy — the other one everyone uses; no account needed</span>
 docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \\
   aquasec/trivy:latest image --severity HIGH,CRITICAL --ignore-unfixed app:1.4.2 2&gt;/dev/null \\
   | tail -8</code></pre>
@@ -2668,7 +2668,7 @@ ${slide('dk-06', 27, 'Cổng CI hợp lý: chỉ chặn HIGH/CRITICAL đã có b
   <div class="lz-step"><span class="lz-k">4 · Fix the cheap ones immediately</span><span class="lz-t">npm audit fix, or a base image bump</span><span class="lz-d">Most findings are fixed by a patch release that changes nothing else. Doing those routinely keeps the list short enough that the remaining ones get attention.</span></div>
   <div class="lz-step"><span class="lz-k">5 · Track what you accept</span><span class="lz-t">.trivyignore with an expiry date and a reason</span><span class="lz-d">An accepted risk with a written reason and a review date is engineering. An ignored scanner is not.</span></div>
 </div>
-<pre><code><span class="tok-comment"># What would a newer base image fix?</span>
+<pre><code class="language-bash"><span class="tok-comment"># What would a newer base image fix?</span>
 docker scout recommendations app:1.4.2 2&gt;/dev/null | head -10</code></pre>
 <div class="out">  Recommended fixes for image app:1.4.2
   Base image is  node:22-alpine3.20
@@ -2714,7 +2714,7 @@ Total: 1 (HIGH: 1, CRITICAL: 0)</div>
 
 <h3>An SBOM: what is actually in there</h3>
 ${slide('dk-06', 28, 'SBOM: danh sách thành phần — hỏi ta có đóng gói X không trong 1 giây')}
-<pre><code><span class="tok-comment"># Generate one at build time and attach it to the image</span>
+<pre><code class="language-bash"><span class="tok-comment"># Generate one at build time and attach it to the image</span>
 docker buildx build --sbom=true --provenance=mode=max \\
   -t ghcr.io/me/app:1.4.2 --push .
 
@@ -2766,7 +2766,7 @@ cosign verify \\
 <p>A signature answers "was this image built by our pipeline from our repository?" — which a tag cannot, since anyone with push access can move a tag. Keyless signing means there is no key to manage or leak: the identity is the CI workflow itself. Note that <strong>signing without verifying achieves nothing</strong>; the verification step belongs in the deploy, not in the build.</p>
 
 <h3>A sensible CI gate</h3>
-<pre><code>- name: Scan image
+<pre><code class="language-bash">- name: Scan image
   uses: aquasecurity/trivy-action@master
   with:
     image-ref: ghcr.io/&#36;{{ github.repository }}:&#36;{{ github.sha }}
@@ -2872,7 +2872,7 @@ có .trivyignore trong thư mục: exit=0</div>
 
 <h3>Quét một cái ảnh</h3>
 ${slide('dk-06', 24, 'Chuỗi cung ứng: phần lớn thứ trong ảnh bạn không tự viết')}
-<pre><code>docker scout cves app:1.4.2 2&gt;/dev/null | head -14</code></pre>
+<pre><code class="language-bash">docker scout cves app:1.4.2 2&gt;/dev/null | head -14</code></pre>
 <div class="out">    ✓ Image stored for indexing
     ✓ Indexed 214 packages
     ✗ Detected 3 vulnerable packages with 5 vulnerabilities
@@ -2887,7 +2887,7 @@ ${slide('dk-06', 24, 'Chuỗi cung ứng: phần lớn thứ trong ảnh bạn k
     vulnerabilities │    0C     2H     3M     0L
     size            │ 196 MB
     packages        │ 214</div>
-<pre><code><span class="tok-comment"># trivy — cái còn lại ai cũng dùng; không cần tài khoản</span>
+<pre><code class="language-bash"><span class="tok-comment"># trivy — cái còn lại ai cũng dùng; không cần tài khoản</span>
 docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \\
   aquasec/trivy:latest image --severity HIGH,CRITICAL --ignore-unfixed app:1.4.2 2&gt;/dev/null \\
   | tail -8</code></pre>
@@ -2947,7 +2947,7 @@ ${slide('dk-06', 27, 'Cổng CI hợp lý: chỉ chặn HIGH/CRITICAL đã có b
   <div class="lz-step"><span class="lz-k">4 · Sửa ngay những cái rẻ</span><span class="lz-t">npm audit fix, hoặc nâng ảnh nền</span><span class="lz-d">Phần lớn phát hiện được vá bằng một bản patch không đổi gì khác. Làm đều đặn việc đó giữ cho danh sách đủ ngắn để những cái còn lại được chú ý.</span></div>
   <div class="lz-step"><span class="lz-k">5 · Ghi lại cái bạn chấp nhận</span><span class="lz-t">.trivyignore kèm ngày hết hạn và lý do</span><span class="lz-d">Một rủi ro được chấp nhận có lý do viết ra và ngày xem lại là kỹ thuật. Một máy quét bị phớt lờ thì không.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Một ảnh nền mới hơn sẽ vá được những gì?</span>
+<pre><code class="language-bash"><span class="tok-comment"># Một ảnh nền mới hơn sẽ vá được những gì?</span>
 docker scout recommendations app:1.4.2 2&gt;/dev/null | head -10</code></pre>
 <div class="out">  Recommended fixes for image app:1.4.2
   Base image is  node:22-alpine3.20
@@ -2993,7 +2993,7 @@ Total: 1 (HIGH: 1, CRITICAL: 0)</div>
 
 <h3>SBOM: bên trong thật sự có gì</h3>
 ${slide('dk-06', 28, 'SBOM: danh sách thành phần — hỏi ta có đóng gói X không trong 1 giây')}
-<pre><code><span class="tok-comment"># Sinh lúc build và gắn kèm vào ảnh</span>
+<pre><code class="language-bash"><span class="tok-comment"># Sinh lúc build và gắn kèm vào ảnh</span>
 docker buildx build --sbom=true --provenance=mode=max \\
   -t ghcr.io/me/app:1.4.2 --push .
 
@@ -3045,7 +3045,7 @@ cosign verify \\
 <p>Một chữ ký trả lời câu "cái ảnh này có phải do đường ống của chúng ta dựng từ kho của chúng ta không?" — điều mà một cái nhãn không trả lời được, vì ai có quyền đẩy cũng dời được nhãn. Ký không khoá nghĩa là không có khoá nào để quản hay để lộ: danh tính chính là cái workflow CI. Nhớ rằng <strong>ký mà không kiểm thì chẳng được gì</strong>; bước kiểm thuộc về lúc triển khai, không phải lúc dựng.</p>
 
 <h3>Một cổng chặn CI hợp lý</h3>
-<pre><code>- name: Scan image
+<pre><code class="language-bash">- name: Scan image
   uses: aquasecurity/trivy-action@master
   with:
     image-ref: ghcr.io/&#36;{{ github.repository }}:&#36;{{ github.sha }}

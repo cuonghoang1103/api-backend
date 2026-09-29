@@ -230,7 +230,7 @@ const c3 = doc('idb201-3-1-relational-model', '3.1 — The relational model|||3.
 <li><strong>Domain constraint</strong> — a value must belong to the column domain (a type, a CHECK).</li>
 </ul>
 <h3>Mapping ER to relations</h3>
-<pre><code>STUDENT(StudentID PK, Name, DateOfBirth)
+<pre><code class="language-sql">STUDENT(StudentID PK, Name, DateOfBirth)
 COURSE(CourseID PK, Title, Credits)
 -- an M:N relationship becomes its own table:
 ENROLLMENT(StudentID FK, CourseID FK, Grade)
@@ -254,7 +254,7 @@ ENROLLMENT(StudentID FK, CourseID FK, Grade)
 <li><strong>Ràng buộc miền</strong> — giá trị phải thuộc miền của cột (kiểu, CHECK).</li>
 </ul>
 <h3>Chuyển ER sang quan hệ</h3>
-<pre><code>SINHVIEN(MaSV PK, HoTen, NgaySinh)
+<pre><code class="language-sql">SINHVIEN(MaSV PK, HoTen, NgaySinh)
 MONHOC(MaMon PK, TenMon, SoTinChi)
 -- liên kết M:N thành một bảng riêng:
 DANGKY(MaSV FK, MaMon FK, Diem)
@@ -325,7 +325,7 @@ const c5 = doc('idb201-5-1-sql-basics', '5.1 — SQL basics (DDL & DML)|||5.1 �
 <h2>SQL basics — DDL &amp; DML</h2>
 <p><strong>SQL</strong> is the standard language of relational databases. <strong>DDL</strong> defines structure; <strong>DML</strong> manipulates data.</p>
 <h3>DDL — define the schema</h3>
-<pre><code>CREATE TABLE Student (
+<pre><code class="language-sql">CREATE TABLE Student (
   StudentID  INT PRIMARY KEY,
   Name       VARCHAR(100) NOT NULL,
   Age        INT CHECK (Age &gt;= 0)
@@ -334,12 +334,12 @@ ALTER TABLE Student ADD Email VARCHAR(150);
 DROP TABLE Student;
 </code></pre>
 <h3>DML — change the data</h3>
-<pre><code>INSERT INTO Student (StudentID, Name, Age) VALUES (1, 'An', 20);
+<pre><code class="language-sql">INSERT INTO Student (StudentID, Name, Age) VALUES (1, 'An', 20);
 UPDATE Student SET Age = 21 WHERE StudentID = 1;
 DELETE FROM Student WHERE StudentID = 1;
 </code></pre>
 <h3>SELECT, WHERE, JOIN, GROUP BY</h3>
-<pre><code>-- filter + sort
+<pre><code class="language-sql">-- filter + sort
 SELECT Name, Age FROM Student WHERE Age &gt; 18 ORDER BY Age DESC;
 
 -- join two tables
@@ -359,7 +359,7 @@ HAVING COUNT(*) &gt; 30;
 <h2>SQL cơ bản — DDL &amp; DML</h2>
 <p><strong>SQL</strong> là ngôn ngữ chuẩn của CSDL quan hệ. <strong>DDL</strong> định nghĩa cấu trúc; <strong>DML</strong> thao tác dữ liệu.</p>
 <h3>DDL — định nghĩa lược đồ</h3>
-<pre><code>CREATE TABLE SinhVien (
+<pre><code class="language-sql">CREATE TABLE SinhVien (
   MaSV   INT PRIMARY KEY,
   HoTen  VARCHAR(100) NOT NULL,
   Tuoi   INT CHECK (Tuoi &gt;= 0)
@@ -368,12 +368,12 @@ ALTER TABLE SinhVien ADD Email VARCHAR(150);
 DROP TABLE SinhVien;
 </code></pre>
 <h3>DML — thay đổi dữ liệu</h3>
-<pre><code>INSERT INTO SinhVien (MaSV, HoTen, Tuoi) VALUES (1, 'An', 20);
+<pre><code class="language-sql">INSERT INTO SinhVien (MaSV, HoTen, Tuoi) VALUES (1, 'An', 20);
 UPDATE SinhVien SET Tuoi = 21 WHERE MaSV = 1;
 DELETE FROM SinhVien WHERE MaSV = 1;
 </code></pre>
 <h3>SELECT, WHERE, JOIN, GROUP BY</h3>
-<pre><code>-- lọc + sắp xếp
+<pre><code class="language-sql">-- lọc + sắp xếp
 SELECT HoTen, Tuoi FROM SinhVien WHERE Tuoi &gt; 18 ORDER BY Tuoi DESC;
 
 -- kết hai bảng
@@ -403,7 +403,7 @@ const c6 = doc('idb201-6-1-sql-advanced', '6.1 — Advanced SQL|||6.1 — SQL n�
     `<span class="eyebrow">IDB201 · Chapter 6 · Lesson 6.1</span>
 <h2>Advanced SQL</h2>
 <h3>Subqueries</h3>
-<pre><code>-- students older than the average age
+<pre><code class="language-sql">-- students older than the average age
 SELECT Name FROM Student
 WHERE Age &gt; (SELECT AVG(Age) FROM Student);
 
@@ -412,23 +412,23 @@ SELECT Name FROM Student s
 WHERE EXISTS (SELECT 1 FROM Enrollment e WHERE e.StudentID = s.StudentID);
 </code></pre>
 <h3>Aggregate functions</h3>
-<pre><code>SELECT COUNT(*) , AVG(Age), MIN(Age), MAX(Age), SUM(Age)
+<pre><code class="language-sql">SELECT COUNT(*) , AVG(Age), MIN(Age), MAX(Age), SUM(Age)
 FROM Student;
 </code></pre>
 <h3>Views — a saved query</h3>
-<pre><code>CREATE VIEW ActiveStudents AS
+<pre><code class="language-sql">CREATE VIEW ActiveStudents AS
   SELECT StudentID, Name FROM Student WHERE Age &gt;= 18;
 SELECT * FROM ActiveStudents;
 </code></pre>
 <h3>Indexes — speed for reads</h3>
-<pre><code>CREATE INDEX idx_student_name ON Student(Name);
+<pre><code class="language-sql">CREATE INDEX idx_student_name ON Student(Name);
 </code></pre>
 <p>An <strong>index</strong> is a sorted lookup structure (often a B-tree) that makes searches and joins fast — at the cost of extra storage and slightly slower writes. Index columns you filter or join on, not every column.</p>
 <div class="callout"><span class="badge">Trade-off</span> Views simplify complex queries and add a security layer; indexes speed reads but slow writes — measure before adding one everywhere.</div>`,
     `<span class="eyebrow">IDB201 · Chương 6 · Bài 6.1</span>
 <h2>SQL nâng cao</h2>
 <h3>Truy vấn con (subquery)</h3>
-<pre><code>-- sinh viên lớn tuổi hơn tuổi trung bình
+<pre><code class="language-sql">-- sinh viên lớn tuổi hơn tuổi trung bình
 SELECT HoTen FROM SinhVien
 WHERE Tuoi &gt; (SELECT AVG(Tuoi) FROM SinhVien);
 
@@ -437,16 +437,16 @@ SELECT HoTen FROM SinhVien s
 WHERE EXISTS (SELECT 1 FROM DangKy d WHERE d.MaSV = s.MaSV);
 </code></pre>
 <h3>Hàm tổng hợp</h3>
-<pre><code>SELECT COUNT(*) , AVG(Tuoi), MIN(Tuoi), MAX(Tuoi), SUM(Tuoi)
+<pre><code class="language-sql">SELECT COUNT(*) , AVG(Tuoi), MIN(Tuoi), MAX(Tuoi), SUM(Tuoi)
 FROM SinhVien;
 </code></pre>
 <h3>View — truy vấn được lưu</h3>
-<pre><code>CREATE VIEW SinhVienDuTuoi AS
+<pre><code class="language-sql">CREATE VIEW SinhVienDuTuoi AS
   SELECT MaSV, HoTen FROM SinhVien WHERE Tuoi &gt;= 18;
 SELECT * FROM SinhVienDuTuoi;
 </code></pre>
 <h3>Index — tăng tốc đọc</h3>
-<pre><code>CREATE INDEX idx_sv_hoten ON SinhVien(HoTen);
+<pre><code class="language-sql">CREATE INDEX idx_sv_hoten ON SinhVien(HoTen);
 </code></pre>
 <p>Một <strong>index</strong> là cấu trúc tra cứu đã sắp xếp (thường là B-tree) giúp tìm kiếm và kết nhanh — đổi lại tốn thêm lưu trữ và ghi chậm hơn chút. Hãy đánh index cột bạn hay lọc hoặc kết, không phải mọi cột.</p>
 <div class="callout"><span class="badge">Đánh đổi</span> View đơn giản hoá truy vấn phức tạp và thêm lớp bảo mật; index tăng tốc đọc nhưng làm chậm ghi — đo trước khi thêm ở khắp nơi.</div>`,
@@ -517,7 +517,7 @@ const c8 = doc('idb201-8-1-transactions', '8.1 — Transactions & integrity|||8.
     `<span class="eyebrow">IDB201 · Chapter 8 · Lesson 8.1</span>
 <h2>Transactions &amp; integrity</h2>
 <p>A <strong>transaction</strong> is a unit of work that must happen completely or not at all — the classic example is a bank transfer of two updates.</p>
-<pre><code>BEGIN;
+<pre><code class="language-sql">BEGIN;
   UPDATE Account SET balance = balance - 100 WHERE id = 1;
   UPDATE Account SET balance = balance + 100 WHERE id = 2;
 COMMIT;   -- or ROLLBACK to undo everything
@@ -537,7 +537,7 @@ COMMIT;   -- or ROLLBACK to undo everything
     `<span class="eyebrow">IDB201 · Chương 8 · Bài 8.1</span>
 <h2>Giao dịch &amp; toàn vẹn</h2>
 <p>Một <strong>giao dịch</strong> là một đơn vị công việc phải xảy ra trọn vẹn hoặc không xảy ra gì cả — ví dụ kinh điển là chuyển khoản gồm hai lệnh cập nhật.</p>
-<pre><code>BEGIN;
+<pre><code class="language-sql">BEGIN;
   UPDATE TaiKhoan SET soDu = soDu - 100 WHERE id = 1;
   UPDATE TaiKhoan SET soDu = soDu + 100 WHERE id = 2;
 COMMIT;   -- hoặc ROLLBACK để huỷ toàn bộ

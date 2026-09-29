@@ -607,7 +607,7 @@ Now a (table, slot) can have one CANCELLED row plus one active row. <em>Why beyo
 <p class="lead">Đây là toàn bộ CSDL. Chú ý một dòng — <code>UNIQUE (table_id, slot_id)</code> trên <code>reservations</code>. Ràng buộc đơn lẻ đó là <strong>hàng rào cuối cùng</strong>: kể cả khi hai request lọt qua mọi kiểm tra trong JavaScript, chính CSDL từ chối ghi hai đặt chỗ hoạt động cho một (bàn, khung).</p>
 
 <h3>DDL (PostgreSQL)</h3>
-<pre><span class="tok-keyword">CREATE TABLE</span> users (
+<pre><code class="language-sql"><span class="tok-keyword">CREATE TABLE</span> users (
   id          <span class="tok-type">BIGSERIAL</span> <span class="tok-keyword">PRIMARY KEY</span>,
   email       <span class="tok-type">VARCHAR</span>(255) <span class="tok-keyword">UNIQUE NOT NULL</span>,
   password    <span class="tok-type">VARCHAR</span>(255) <span class="tok-keyword">NOT NULL</span>,      <span class="tok-comment">-- hash bcrypt</span>
@@ -652,7 +652,7 @@ Now a (table, slot) can have one CANCELLED row plus one active row. <em>Why beyo
   dish_id     <span class="tok-type">BIGINT</span> <span class="tok-keyword">NOT NULL REFERENCES</span> dishes(id),
   quantity    <span class="tok-type">INT</span> <span class="tok-keyword">NOT NULL DEFAULT</span> <span class="tok-number">1</span>,
   <span class="tok-keyword">CONSTRAINT</span> uq_res_dish <span class="tok-keyword">UNIQUE</span> (reservation_id, dish_id) <span class="tok-comment">-- một dòng mỗi món</span>
-);</pre>
+);</code></pre>
 
 <h3>Ví dụ có lời giải — vì sao UNIQUE mới là hàng rào thật</h3>
 <div class="out"><b>Tình huống:</b> hai INSERT cho (table_id=5, slot_id=42) đến cùng một mili-giây.
@@ -757,7 +757,7 @@ Giờ một (bàn, khung) có thể có một dòng CANCELLED cộng một dòng
 </div>
 
 <h3>Wiring Express + a pg pool</h3>
-<pre><span class="tok-comment">// db.js — one shared connection pool</span>
+<pre><code class="language-javascript"><span class="tok-comment">// db.js — one shared connection pool</span>
 <span class="tok-keyword">import</span> pg <span class="tok-keyword">from</span> <span class="tok-string">'pg'</span>;
 <span class="tok-keyword">export const</span> pool = <span class="tok-keyword">new</span> pg.<span class="tok-type">Pool</span>({
   connectionString: process.env.<span class="tok-type">DATABASE_URL</span>,   <span class="tok-comment">// postgres://user:pass@db:5432/resto</span>
@@ -774,7 +774,7 @@ app.<span class="tok-function">use</span>(express.<span class="tok-function">jso
 app.<span class="tok-function">use</span>(<span class="tok-string">'/auth'</span>, authRoutes);
 app.<span class="tok-function">use</span>(<span class="tok-string">'/slots'</span>, slotRoutes);
 app.<span class="tok-function">use</span>(<span class="tok-string">'/reservations'</span>, reservationRoutes);
-app.<span class="tok-function">listen</span>(<span class="tok-number">3000</span>, () =&gt; console.<span class="tok-function">log</span>(<span class="tok-string">'API on :3000'</span>));</pre>
+app.<span class="tok-function">listen</span>(<span class="tok-number">3000</span>, () =&gt; console.<span class="tok-function">log</span>(<span class="tok-string">'API on :3000'</span>));</code></pre>
 
 <h3>Worked example — a route delegating to a service</h3>
 <div class="out"><b>Request:</b> GET /slots?date=2026-08-01
@@ -808,7 +808,7 @@ app.<span class="tok-function">listen</span>(<span class="tok-number">3000</span
 </div>
 
 <h3>Đấu nối Express + pg pool</h3>
-<pre><span class="tok-comment">// db.js — một pool kết nối dùng chung</span>
+<pre><code class="language-javascript"><span class="tok-comment">// db.js — một pool kết nối dùng chung</span>
 <span class="tok-keyword">import</span> pg <span class="tok-keyword">from</span> <span class="tok-string">'pg'</span>;
 <span class="tok-keyword">export const</span> pool = <span class="tok-keyword">new</span> pg.<span class="tok-type">Pool</span>({
   connectionString: process.env.<span class="tok-type">DATABASE_URL</span>,   <span class="tok-comment">// postgres://user:pass@db:5432/resto</span>
@@ -825,7 +825,7 @@ app.<span class="tok-function">use</span>(express.<span class="tok-function">jso
 app.<span class="tok-function">use</span>(<span class="tok-string">'/auth'</span>, authRoutes);
 app.<span class="tok-function">use</span>(<span class="tok-string">'/slots'</span>, slotRoutes);
 app.<span class="tok-function">use</span>(<span class="tok-string">'/reservations'</span>, reservationRoutes);
-app.<span class="tok-function">listen</span>(<span class="tok-number">3000</span>, () =&gt; console.<span class="tok-function">log</span>(<span class="tok-string">'API on :3000'</span>));</pre>
+app.<span class="tok-function">listen</span>(<span class="tok-number">3000</span>, () =&gt; console.<span class="tok-function">log</span>(<span class="tok-string">'API on :3000'</span>));</code></pre>
 
 <h3>Ví dụ có lời giải — một route uỷ thác cho service</h3>
 <div class="out"><b>Request:</b> GET /slots?date=2026-08-01
@@ -860,7 +860,7 @@ app.<span class="tok-function">listen</span>(<span class="tok-number">3000</span
 <p class="lead">Build one read endpoint end-to-end. It is the pattern every other read reuses, and it is what the Flutter reservation screen calls first. The interesting part is the SQL: "give me every (table, slot) that has no active reservation on this date".</p>
 
 <h3>The data layer — the availability query</h3>
-<pre><span class="tok-comment">// data/slotData.js</span>
+<pre><code class="language-sql"><span class="tok-comment">// data/slotData.js</span>
 <span class="tok-keyword">import</span> { pool } <span class="tok-keyword">from</span> <span class="tok-string">'../db.js'</span>;
 
 <span class="tok-keyword">export async function</span> <span class="tok-function">findFree</span>(date) {
@@ -878,10 +878,10 @@ app.<span class="tok-function">listen</span>(<span class="tok-number">3000</span
     [date]
   );
   <span class="tok-keyword">return</span> rows;
-}</pre>
+}</code></pre>
 
 <h3>The service &amp; the route</h3>
-<pre><span class="tok-comment">// services/slotService.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// services/slotService.js</span>
 <span class="tok-keyword">import</span> * <span class="tok-keyword">as</span> slotData <span class="tok-keyword">from</span> <span class="tok-string">'../data/slotData.js'</span>;
 <span class="tok-keyword">export const</span> freeSlots = (date) =&gt; slotData.<span class="tok-function">findFree</span>(date);
 
@@ -896,7 +896,7 @@ r.<span class="tok-function">get</span>(<span class="tok-string">'/'</span>, <sp
   <span class="tok-keyword">const</span> slots = <span class="tok-keyword">await</span> slotService.<span class="tok-function">freeSlots</span>(date);
   res.<span class="tok-function">json</span>(slots);
 });
-<span class="tok-keyword">export default</span> r;</pre>
+<span class="tok-keyword">export default</span> r;</code></pre>
 
 <h3>Worked example — running it against seed data</h3>
 <div class="out"><b>Seed:</b> tables T1,T2; slots 18:00,19:00 on 2026-08-01; one reservation T1@18:00 (PENDING).
@@ -924,7 +924,7 @@ r.<span class="tok-function">get</span>(<span class="tok-string">'/'</span>, <sp
 <p class="lead">Xây một endpoint đọc trọn vẹn từ đầu đến cuối. Đây là mẫu mọi endpoint đọc khác tái dùng, và là thứ màn đặt bàn Flutter gọi đầu tiên. Phần thú vị là SQL: "cho tôi mọi (bàn, khung) không có đặt chỗ hoạt động trong ngày này".</p>
 
 <h3>Lớp data — truy vấn khả dụng</h3>
-<pre><span class="tok-comment">// data/slotData.js</span>
+<pre><code class="language-sql"><span class="tok-comment">// data/slotData.js</span>
 <span class="tok-keyword">import</span> { pool } <span class="tok-keyword">from</span> <span class="tok-string">'../db.js'</span>;
 
 <span class="tok-keyword">export async function</span> <span class="tok-function">findFree</span>(date) {
@@ -942,10 +942,10 @@ r.<span class="tok-function">get</span>(<span class="tok-string">'/'</span>, <sp
     [date]
   );
   <span class="tok-keyword">return</span> rows;
-}</pre>
+}</code></pre>
 
 <h3>Service &amp; route</h3>
-<pre><span class="tok-comment">// services/slotService.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// services/slotService.js</span>
 <span class="tok-keyword">import</span> * <span class="tok-keyword">as</span> slotData <span class="tok-keyword">from</span> <span class="tok-string">'../data/slotData.js'</span>;
 <span class="tok-keyword">export const</span> freeSlots = (date) =&gt; slotData.<span class="tok-function">findFree</span>(date);
 
@@ -960,7 +960,7 @@ r.<span class="tok-function">get</span>(<span class="tok-string">'/'</span>, <sp
   <span class="tok-keyword">const</span> slots = <span class="tok-keyword">await</span> slotService.<span class="tok-function">freeSlots</span>(date);
   res.<span class="tok-function">json</span>(slots);
 });
-<span class="tok-keyword">export default</span> r;</pre>
+<span class="tok-keyword">export default</span> r;</code></pre>
 
 <h3>Ví dụ có lời giải — chạy với dữ liệu seed</h3>
 <div class="out"><b>Seed:</b> bàn T1,T2; khung 18:00,19:00 ngày 2026-08-01; một đặt chỗ T1@18:00 (PENDING).
@@ -1003,7 +1003,7 @@ r.<span class="tok-function">get</span>(<span class="tok-string">'/'</span>, <sp
 <p class="lead">Auth is two halves. The <strong>backend</strong> hashes passwords with bcrypt and signs a JWT on login. The <strong>app</strong> keeps that token in the OS secure store — the Keychain on iOS, EncryptedSharedPreferences on Android — never in plain <code>SharedPreferences</code>.</p>
 
 <h3>Backend — hash on register, sign on login</h3>
-<pre><span class="tok-comment">// services/authService.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// services/authService.js</span>
 <span class="tok-keyword">import</span> bcrypt <span class="tok-keyword">from</span> <span class="tok-string">'bcryptjs'</span>;
 <span class="tok-keyword">import</span> jwt <span class="tok-keyword">from</span> <span class="tok-string">'jsonwebtoken'</span>;
 
@@ -1022,10 +1022,10 @@ r.<span class="tok-function">get</span>(<span class="tok-string">'/'</span>, <sp
     { expiresIn: <span class="tok-string">'7d'</span> }
   );
   <span class="tok-keyword">return</span> { token, role: user.role, fullName: user.full_name };
-}</pre>
+}</code></pre>
 
 <h3>App — store the token in the secure store</h3>
-<pre><span class="tok-comment">// lib/services/token_store.dart</span>
+<pre><code class="language-javascript"><span class="tok-comment">// lib/services/token_store.dart</span>
 <span class="tok-keyword">import</span> <span class="tok-string">'package:flutter_secure_storage/flutter_secure_storage.dart'</span>;
 
 <span class="tok-keyword">class</span> <span class="tok-type">TokenStore</span> {
@@ -1035,7 +1035,7 @@ r.<span class="tok-function">get</span>(<span class="tok-string">'/'</span>, <sp
   <span class="tok-type">Future</span>&lt;<span class="tok-keyword">void</span>&gt; <span class="tok-function">save</span>(<span class="tok-type">String</span> token) =&gt; _storage.<span class="tok-function">write</span>(key: _key, value: token);
   <span class="tok-type">Future</span>&lt;<span class="tok-type">String</span>?&gt; <span class="tok-function">read</span>() =&gt; _storage.<span class="tok-function">read</span>(key: _key);
   <span class="tok-type">Future</span>&lt;<span class="tok-keyword">void</span>&gt; <span class="tok-function">clear</span>() =&gt; _storage.<span class="tok-function">delete</span>(key: _key);
-}</pre>
+}</code></pre>
 
 <h3>Worked example — the login round-trip</h3>
 <div class="out"><b>Step 1 —</b> App POST /auth/login { email, password }.
@@ -1061,7 +1061,7 @@ r.<span class="tok-function">get</span>(<span class="tok-string">'/'</span>, <sp
 <p class="lead">Xác thực có hai nửa. <strong>Backend</strong> hash mật khẩu bằng bcrypt và ký một JWT khi đăng nhập. <strong>App</strong> giữ token đó trong kho an toàn của HĐH — Keychain trên iOS, EncryptedSharedPreferences trên Android — không bao giờ để trong <code>SharedPreferences</code> thường.</p>
 
 <h3>Backend — hash khi đăng ký, ký khi đăng nhập</h3>
-<pre><span class="tok-comment">// services/authService.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// services/authService.js</span>
 <span class="tok-keyword">import</span> bcrypt <span class="tok-keyword">from</span> <span class="tok-string">'bcryptjs'</span>;
 <span class="tok-keyword">import</span> jwt <span class="tok-keyword">from</span> <span class="tok-string">'jsonwebtoken'</span>;
 
@@ -1080,10 +1080,10 @@ r.<span class="tok-function">get</span>(<span class="tok-string">'/'</span>, <sp
     { expiresIn: <span class="tok-string">'7d'</span> }
   );
   <span class="tok-keyword">return</span> { token, role: user.role, fullName: user.full_name };
-}</pre>
+}</code></pre>
 
 <h3>App — lưu token vào kho an toàn</h3>
-<pre><span class="tok-comment">// lib/services/token_store.dart</span>
+<pre><code class="language-javascript"><span class="tok-comment">// lib/services/token_store.dart</span>
 <span class="tok-keyword">import</span> <span class="tok-string">'package:flutter_secure_storage/flutter_secure_storage.dart'</span>;
 
 <span class="tok-keyword">class</span> <span class="tok-type">TokenStore</span> {
@@ -1093,7 +1093,7 @@ r.<span class="tok-function">get</span>(<span class="tok-string">'/'</span>, <sp
   <span class="tok-type">Future</span>&lt;<span class="tok-keyword">void</span>&gt; <span class="tok-function">save</span>(<span class="tok-type">String</span> token) =&gt; _storage.<span class="tok-function">write</span>(key: _key, value: token);
   <span class="tok-type">Future</span>&lt;<span class="tok-type">String</span>?&gt; <span class="tok-function">read</span>() =&gt; _storage.<span class="tok-function">read</span>(key: _key);
   <span class="tok-type">Future</span>&lt;<span class="tok-keyword">void</span>&gt; <span class="tok-function">clear</span>() =&gt; _storage.<span class="tok-function">delete</span>(key: _key);
-}</pre>
+}</code></pre>
 
 <h3>Ví dụ có lời giải — vòng đăng nhập</h3>
 <div class="out"><b>Bước 1 —</b> App POST /auth/login { email, password }.
@@ -1127,7 +1127,7 @@ r.<span class="tok-function">get</span>(<span class="tok-string">'/'</span>, <sp
 <p class="lead">Two roles need two gates. A JWT middleware proves <em>who</em> you are; a role check proves you are <em>allowed</em>. The app mirrors this by routing DINER and STAFF to different home screens — but the server is the real guard.</p>
 
 <h3>Backend — auth &amp; role middleware</h3>
-<pre><span class="tok-comment">// middleware/auth.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// middleware/auth.js</span>
 <span class="tok-keyword">import</span> jwt <span class="tok-keyword">from</span> <span class="tok-string">'jsonwebtoken'</span>;
 
 <span class="tok-keyword">export function</span> <span class="tok-function">auth</span>(req, res, next) {
@@ -1143,7 +1143,7 @@ r.<span class="tok-function">get</span>(<span class="tok-string">'/'</span>, <sp
 }
 
 <span class="tok-keyword">export const</span> requireRole = (role) =&gt; (req, res, next) =&gt;
-  req.user?.role === role ? <span class="tok-function">next</span>() : res.<span class="tok-function">status</span>(<span class="tok-number">403</span>).<span class="tok-function">json</span>({ error: <span class="tok-string">'Forbidden'</span> });</pre>
+  req.user?.role === role ? <span class="tok-function">next</span>() : res.<span class="tok-function">status</span>(<span class="tok-number">403</span>).<span class="tok-function">json</span>({ error: <span class="tok-string">'Forbidden'</span> });</code></pre>
 
 <h3>Applying the gates on routes</h3>
 <pre><span class="tok-comment">// routes/reservations.js</span>
@@ -1170,7 +1170,7 @@ r.<span class="tok-function">delete</span>(<span class="tok-string">'/:id'</span
 <p class="lead">Hai vai trò cần hai cửa. Middleware JWT chứng minh bạn <em>là ai</em>; kiểm role chứng minh bạn <em>được phép</em>. App phản chiếu điều này bằng cách điều hướng DINER và STAFF tới các màn hình chủ khác nhau — nhưng server mới là hàng rào thật.</p>
 
 <h3>Backend — middleware auth &amp; role</h3>
-<pre><span class="tok-comment">// middleware/auth.js</span>
+<pre><code class="language-javascript"><span class="tok-comment">// middleware/auth.js</span>
 <span class="tok-keyword">import</span> jwt <span class="tok-keyword">from</span> <span class="tok-string">'jsonwebtoken'</span>;
 
 <span class="tok-keyword">export function</span> <span class="tok-function">auth</span>(req, res, next) {
@@ -1186,7 +1186,7 @@ r.<span class="tok-function">delete</span>(<span class="tok-string">'/:id'</span
 }
 
 <span class="tok-keyword">export const</span> requireRole = (role) =&gt; (req, res, next) =&gt;
-  req.user?.role === role ? <span class="tok-function">next</span>() : res.<span class="tok-function">status</span>(<span class="tok-number">403</span>).<span class="tok-function">json</span>({ error: <span class="tok-string">'Forbidden'</span> });</pre>
+  req.user?.role === role ? <span class="tok-function">next</span>() : res.<span class="tok-function">status</span>(<span class="tok-number">403</span>).<span class="tok-function">json</span>({ error: <span class="tok-string">'Forbidden'</span> });</code></pre>
 
 <h3>Gắn cửa lên route</h3>
 <pre><span class="tok-comment">// routes/reservations.js</span>
@@ -1225,14 +1225,14 @@ r.<span class="tok-function">delete</span>(<span class="tok-string">'/:id'</span
 <p class="lead">This is the feature graders remember. A diner asks for "a table for 4 at 7pm Friday". The system must pick <em>any</em> suitable free table and reserve it — but when many requests arrive together, two must never grab the same table. The elegant answer is Postgres' <code>FOR UPDATE SKIP LOCKED</code>, backed by a compound <code>UNIQUE</code>.</p>
 
 <h3>The naive service — has a race</h3>
-<pre><span class="tok-comment">// (A) find a free table that fits</span>
+<pre><code class="language-javascript"><span class="tok-comment">// (A) find a free table that fits</span>
 <span class="tok-keyword">const</span> table = <span class="tok-keyword">await</span> prisma.table.<span class="tok-function">findFirst</span>({
   where: { seats: { gte: party }, reservations: { none: { slotId } } },
   orderBy: { seats: <span class="tok-string">"asc"</span> },    <span class="tok-comment">// smallest table that fits</span>
 });
 <span class="tok-keyword">if</span> (!table) <span class="tok-keyword">throw new</span> <span class="tok-type">ConflictError</span>(<span class="tok-string">"No table available"</span>);
 <span class="tok-comment">// (B) reserve it — but two requests both picked table 5 in step (A)!</span>
-<span class="tok-keyword">await</span> prisma.reservation.<span class="tok-function">create</span>({ data: { tableId: table.id, slotId, dinerId } });</pre>
+<span class="tok-keyword">await</span> prisma.reservation.<span class="tok-function">create</span>({ data: { tableId: table.id, slotId, dinerId } });</code></pre>
 
 <h3>Why it breaks — both pick the same free table</h3>
 <div class="out"><b>Time →</b>   Party An                     Party Binh
@@ -1244,7 +1244,7 @@ r.<span class="tok-function">delete</span>(<span class="tok-string">'/:id'</span
 
 <h3>The fix — FOR UPDATE SKIP LOCKED picks a different table per request</h3>
 <p>Lock the chosen free table inside the query. <code>SKIP LOCKED</code> tells concurrent requests to <em>ignore</em> rows already locked by someone else and grab the next free one — so ten simultaneous parties claim ten different tables, with no waiting:</p>
-<pre><span class="tok-comment">// atomic table pick — each concurrent request locks a DIFFERENT free table</span>
+<pre><code class="language-sql"><span class="tok-comment">// atomic table pick — each concurrent request locks a DIFFERENT free table</span>
 <span class="tok-keyword">const</span> [table] = <span class="tok-keyword">await</span> prisma.$queryRaw&#96;
   SELECT t.id FROM "Table" t
   WHERE t.seats &gt;= \${party}
@@ -1256,7 +1256,7 @@ r.<span class="tok-function">delete</span>(<span class="tok-string">'/:id'</span
   LIMIT 1&#96;;
 
 <span class="tok-keyword">if</span> (!table) <span class="tok-keyword">throw new</span> <span class="tok-type">ConflictError</span>(<span class="tok-string">"No table available for that time"</span>);
-<span class="tok-keyword">await</span> prisma.reservation.<span class="tok-function">create</span>({ data: { tableId: table.id, slotId, dinerId } });</pre>
+<span class="tok-keyword">await</span> prisma.reservation.<span class="tok-function">create</span>({ data: { tableId: table.id, slotId, dinerId } });</code></pre>
 
 <h3>The compound UNIQUE — the durable backstop</h3>
 <pre><span class="tok-comment">// schema.prisma — a table can hold at most one reservation per slot</span>
@@ -1290,14 +1290,14 @@ Exactly the real free capacity is booked — never a double-booked table. ✅</d
 <p class="lead">Đây là tính năng giám khảo nhớ nhất. Một thực khách xin "một bàn cho 4 người lúc 19h thứ Sáu". Hệ thống phải chọn <em>bất kỳ</em> bàn trống phù hợp và đặt nó — nhưng khi nhiều request tới cùng lúc, hai người không bao giờ được giành cùng một bàn. Câu trả lời thanh lịch là <code>FOR UPDATE SKIP LOCKED</code> của Postgres, có <code>UNIQUE</code> ghép làm chốt chặn.</p>
 
 <h3>Service ngây thơ — có race</h3>
-<pre><span class="tok-comment">// (A) tìm một bàn trống vừa đủ</span>
+<pre><code class="language-javascript"><span class="tok-comment">// (A) tìm một bàn trống vừa đủ</span>
 <span class="tok-keyword">const</span> table = <span class="tok-keyword">await</span> prisma.table.<span class="tok-function">findFirst</span>({
   where: { seats: { gte: party }, reservations: { none: { slotId } } },
   orderBy: { seats: <span class="tok-string">"asc"</span> },    <span class="tok-comment">// bàn nhỏ nhất vừa đủ</span>
 });
 <span class="tok-keyword">if</span> (!table) <span class="tok-keyword">throw new</span> <span class="tok-type">ConflictError</span>(<span class="tok-string">"Không còn bàn trống"</span>);
 <span class="tok-comment">// (B) đặt nó — nhưng hai request đều chọn bàn 5 ở bước (A)!</span>
-<span class="tok-keyword">await</span> prisma.reservation.<span class="tok-function">create</span>({ data: { tableId: table.id, slotId, dinerId } });</pre>
+<span class="tok-keyword">await</span> prisma.reservation.<span class="tok-function">create</span>({ data: { tableId: table.id, slotId, dinerId } });</code></pre>
 
 <h3>Vì sao nó hỏng — cả hai chọn cùng một bàn trống</h3>
 <div class="out"><b>Thời gian →</b>   Nhóm An                     Nhóm Bình
@@ -1309,7 +1309,7 @@ Exactly the real free capacity is booked — never a double-booked table. ✅</d
 
 <h3>Cách sửa — FOR UPDATE SKIP LOCKED chọn bàn khác cho mỗi request</h3>
 <p>Khoá bàn trống đã chọn ngay trong query. <code>SKIP LOCKED</code> bảo các request đồng thời <em>bỏ qua</em> các dòng đã bị người khác khoá và giành bàn trống kế — nên mười nhóm đồng thời nhận mười bàn khác nhau, không phải chờ:</p>
-<pre><span class="tok-comment">// chọn bàn nguyên tử — mỗi request đồng thời khoá một bàn trống KHÁC</span>
+<pre><code class="language-sql"><span class="tok-comment">// chọn bàn nguyên tử — mỗi request đồng thời khoá một bàn trống KHÁC</span>
 <span class="tok-keyword">const</span> [table] = <span class="tok-keyword">await</span> prisma.$queryRaw&#96;
   SELECT t.id FROM "Table" t
   WHERE t.seats &gt;= \${party}
@@ -1321,7 +1321,7 @@ Exactly the real free capacity is booked — never a double-booked table. ✅</d
   LIMIT 1&#96;;
 
 <span class="tok-keyword">if</span> (!table) <span class="tok-keyword">throw new</span> <span class="tok-type">ConflictError</span>(<span class="tok-string">"Không còn bàn trống cho giờ đó"</span>);
-<span class="tok-keyword">await</span> prisma.reservation.<span class="tok-function">create</span>({ data: { tableId: table.id, slotId, dinerId } });</pre>
+<span class="tok-keyword">await</span> prisma.reservation.<span class="tok-function">create</span>({ data: { tableId: table.id, slotId, dinerId } });</code></pre>
 
 <h3>UNIQUE ghép — chốt chặn bền</h3>
 <pre><span class="tok-comment">// schema.prisma — một bàn giữ nhiều nhất một đặt chỗ mỗi slot</span>
@@ -1361,23 +1361,23 @@ model Reservation {
 <p class="lead">The service picks and reserves a table atomically; the route maps its outcomes to clean HTTP. Cancelling deletes the reservation, which — thanks to the <code>NOT EXISTS</code> check — instantly makes that table bookable again.</p>
 
 <h3>The endpoint</h3>
-<pre>router.<span class="tok-function">post</span>(<span class="tok-string">"/api/reservations"</span>, requireAuth, <span class="tok-keyword">async</span> (req, res, next) =&gt; {
+<pre><code class="language-javascript">router.<span class="tok-function">post</span>(<span class="tok-string">"/api/reservations"</span>, requireAuth, <span class="tok-keyword">async</span> (req, res, next) =&gt; {
   <span class="tok-keyword">try</span> {
     <span class="tok-keyword">const</span> body = ReserveBody.<span class="tok-function">parse</span>(req.body);   <span class="tok-comment">// { party, slotId } → 400 if invalid</span>
     <span class="tok-keyword">const</span> r = <span class="tok-keyword">await</span> reservationService.<span class="tok-function">reserve</span>(body, req.user.sub);
     res.<span class="tok-function">status</span>(<span class="tok-number">201</span>).<span class="tok-function">json</span>(r);              <span class="tok-comment">// 201 — table assigned</span>
   } <span class="tok-keyword">catch</span> (e) { next(e); }              <span class="tok-comment">// ConflictError → 409</span>
-});</pre>
+});</code></pre>
 
 <h3>Cancel frees the table</h3>
-<pre>router.<span class="tok-function">delete</span>(<span class="tok-string">"/api/reservations/:id"</span>, requireAuth, <span class="tok-keyword">async</span> (req, res, next) =&gt; {
+<pre><code class="language-javascript">router.<span class="tok-function">delete</span>(<span class="tok-string">"/api/reservations/:id"</span>, requireAuth, <span class="tok-keyword">async</span> (req, res, next) =&gt; {
   <span class="tok-keyword">const</span> r = <span class="tok-keyword">await</span> prisma.reservation.<span class="tok-function">findUnique</span>({ where: { id: +req.params.id } });
   <span class="tok-keyword">if</span> (!r) <span class="tok-keyword">return</span> res.<span class="tok-function">status</span>(<span class="tok-number">404</span>).<span class="tok-function">json</span>({ message: <span class="tok-string">"Not found"</span> });
   <span class="tok-keyword">if</span> (r.dinerId !== req.user.sub)
     <span class="tok-keyword">return</span> res.<span class="tok-function">status</span>(<span class="tok-number">403</span>).<span class="tok-function">json</span>({ message: <span class="tok-string">"Not your reservation"</span> });   <span class="tok-comment">// ownership!</span>
   <span class="tok-keyword">await</span> prisma.reservation.<span class="tok-function">delete</span>({ where: { id: r.id } });   <span class="tok-comment">// table is free again instantly</span>
   res.<span class="tok-function">status</span>(<span class="tok-number">204</span>).<span class="tok-function">end</span>();
-});</pre>
+});</code></pre>
 
 <h3>Worked example — the status-code contract</h3>
 <table>
@@ -1408,23 +1408,23 @@ model Reservation {
 <p class="lead">Service chọn và đặt bàn nguyên tử; route ánh xạ kết cục thành HTTP sạch. Huỷ xoá đặt chỗ, mà — nhờ kiểm <code>NOT EXISTS</code> — làm bàn đó có thể đặt lại tức thì.</p>
 
 <h3>Endpoint</h3>
-<pre>router.<span class="tok-function">post</span>(<span class="tok-string">"/api/reservations"</span>, requireAuth, <span class="tok-keyword">async</span> (req, res, next) =&gt; {
+<pre><code class="language-javascript">router.<span class="tok-function">post</span>(<span class="tok-string">"/api/reservations"</span>, requireAuth, <span class="tok-keyword">async</span> (req, res, next) =&gt; {
   <span class="tok-keyword">try</span> {
     <span class="tok-keyword">const</span> body = ReserveBody.<span class="tok-function">parse</span>(req.body);   <span class="tok-comment">// { party, slotId } → 400 nếu sai</span>
     <span class="tok-keyword">const</span> r = <span class="tok-keyword">await</span> reservationService.<span class="tok-function">reserve</span>(body, req.user.sub);
     res.<span class="tok-function">status</span>(<span class="tok-number">201</span>).<span class="tok-function">json</span>(r);              <span class="tok-comment">// 201 — đã gán bàn</span>
   } <span class="tok-keyword">catch</span> (e) { next(e); }              <span class="tok-comment">// ConflictError → 409</span>
-});</pre>
+});</code></pre>
 
 <h3>Huỷ giải phóng bàn</h3>
-<pre>router.<span class="tok-function">delete</span>(<span class="tok-string">"/api/reservations/:id"</span>, requireAuth, <span class="tok-keyword">async</span> (req, res, next) =&gt; {
+<pre><code class="language-javascript">router.<span class="tok-function">delete</span>(<span class="tok-string">"/api/reservations/:id"</span>, requireAuth, <span class="tok-keyword">async</span> (req, res, next) =&gt; {
   <span class="tok-keyword">const</span> r = <span class="tok-keyword">await</span> prisma.reservation.<span class="tok-function">findUnique</span>({ where: { id: +req.params.id } });
   <span class="tok-keyword">if</span> (!r) <span class="tok-keyword">return</span> res.<span class="tok-function">status</span>(<span class="tok-number">404</span>).<span class="tok-function">json</span>({ message: <span class="tok-string">"Không tìm thấy"</span> });
   <span class="tok-keyword">if</span> (r.dinerId !== req.user.sub)
     <span class="tok-keyword">return</span> res.<span class="tok-function">status</span>(<span class="tok-number">403</span>).<span class="tok-function">json</span>({ message: <span class="tok-string">"Không phải đặt chỗ của bạn"</span> });   <span class="tok-comment">// sở hữu!</span>
   <span class="tok-keyword">await</span> prisma.reservation.<span class="tok-function">delete</span>({ where: { id: r.id } });   <span class="tok-comment">// bàn trống lại tức thì</span>
   res.<span class="tok-function">status</span>(<span class="tok-number">204</span>).<span class="tok-function">end</span>();
-});</pre>
+});</code></pre>
 
 <h3>Ví dụ có lời giải — hợp đồng mã trạng thái</h3>
 <table>
@@ -1662,12 +1662,12 @@ model Reservation {
 <span class="tok-keyword">volumes</span>: { pgdata: {} }</pre>
 
 <h3>The app side — configure the API url, then build</h3>
-<pre><span class="tok-comment"># pass the deployed API url in at build time (--dart-define)</span>
+<pre><code class="language-javascript"><span class="tok-comment"># pass the deployed API url in at build time (--dart-define)</span>
 flutter build apk --release \\
   --dart-define=API_URL=https://api.yourdiner.com
 
 <span class="tok-comment"># in code, read it:</span>
-<span class="tok-comment"># const apiUrl = String.fromEnvironment('API_URL');</span></pre>
+<span class="tok-comment"># const apiUrl = String.fromEnvironment('API_URL');</span></code></pre>
 
 <div class="pitfall"><strong>Trap:</strong> hard-coding <code>http://localhost:3000</code> in the Flutter app. On a device <code>localhost</code> is the phone, and on the Android emulator the host machine is <code>10.0.2.2</code>, not localhost. Pass the URL via <code>--dart-define</code> and use the LAN IP or public URL, never localhost.</div>
 
@@ -1709,12 +1709,12 @@ flutter build apk --release \\
 <span class="tok-keyword">volumes</span>: { pgdata: {} }</pre>
 
 <h3>Phía app — cấu hình url API, rồi build</h3>
-<pre><span class="tok-comment"># truyền url API đã deploy vào lúc build (--dart-define)</span>
+<pre><code class="language-javascript"><span class="tok-comment"># truyền url API đã deploy vào lúc build (--dart-define)</span>
 flutter build apk --release \\
   --dart-define=API_URL=https://api.yourdiner.com
 
 <span class="tok-comment"># trong code, đọc nó:</span>
-<span class="tok-comment"># const apiUrl = String.fromEnvironment('API_URL');</span></pre>
+<span class="tok-comment"># const apiUrl = String.fromEnvironment('API_URL');</span></code></pre>
 
 <div class="pitfall"><strong>Bẫy:</strong> hard-code <code>http://localhost:3000</code> trong app Flutter. Trên thiết bị <code>localhost</code> là điện thoại, và trên Android emulator máy host là <code>10.0.2.2</code>, không phải localhost. Truyền URL qua <code>--dart-define</code> và dùng IP LAN hoặc URL công khai, không bao giờ localhost.</div>
 
@@ -1744,11 +1744,11 @@ flutter build apk --release \\
 <p class="lead">The reservation core is correct. These four additions are what a reviewer of a real reservation app notices — each a small, self-contained ★ beyond the syllabus.</p>
 
 <h3>1) Pending holds with a timeout — don't lock a table forever</h3>
-<pre><span class="tok-comment">// a reservation starts PENDING; a scheduled job cancels unconfirmed ones</span>
+<pre><code class="language-sql"><span class="tok-comment">// a reservation starts PENDING; a scheduled job cancels unconfirmed ones</span>
 <span class="tok-keyword">await</span> prisma.$executeRaw&#96;
   DELETE FROM "Reservation"
   WHERE status = 'PENDING' AND created_at &lt; now() - interval '10 minutes'&#96;;
-<span class="tok-comment">// → the table's slot frees itself if the diner never confirms</span></pre>
+<span class="tok-comment">// → the table's slot frees itself if the diner never confirms</span></code></pre>
 <p>Same idea as a seat hold: a table tentatively held but never confirmed must free itself, or your restaurant slowly locks up.</p>
 
 <h3>2) No-show handling — a deposit + a strike counter</h3>
@@ -1760,12 +1760,12 @@ flutter build apk --release \\
 <span class="tok-comment">// 3 no-shows → require a deposit on the next booking</span></pre>
 
 <h3>3) Reminders — a nightly notification job</h3>
-<pre><span class="tok-keyword">@daily</span>  <span class="tok-comment">// cron: text everyone with a reservation tomorrow</span>
+<pre><code class="language-javascript"><span class="tok-keyword">@daily</span>  <span class="tok-comment">// cron: text everyone with a reservation tomorrow</span>
 <span class="tok-keyword">const</span> tomorrow = <span class="tok-keyword">await</span> prisma.reservation.<span class="tok-function">findMany</span>({
   where: { status: <span class="tok-string">"CONFIRMED"</span>, slot: { startsAt: { gte: startOfTomorrow, lt: endOfTomorrow } } },
   include: { diner: <span class="tok-keyword">true</span> },
 });
-tomorrow.<span class="tok-function">forEach</span>(r =&gt; <span class="tok-function">notify</span>(r.diner, &#96;See you tomorrow at \${fmt(r.slot.startsAt)}&#96;));</pre>
+tomorrow.<span class="tok-function">forEach</span>(r =&gt; <span class="tok-function">notify</span>(r.diner, &#96;See you tomorrow at \${fmt(r.slot.startsAt)}&#96;));</code></pre>
 
 <h3>4) Time zones — store UTC, display local</h3>
 <pre><span class="tok-comment">// ✅ store the slot in UTC; render in the restaurant's zone on the client</span>
@@ -1790,11 +1790,11 @@ tomorrow.<span class="tok-function">forEach</span>(r =&gt; <span class="tok-func
 <p class="lead">Lõi đặt bàn đã đúng. Bốn bổ sung này là thứ người chấm một app đặt bàn thật để ý — mỗi cái một ★ nhỏ, độc lập, vượt giáo trình.</p>
 
 <h3>1) Giữ chỗ PENDING có hạn — đừng khoá một bàn mãi mãi</h3>
-<pre><span class="tok-comment">// một đặt chỗ bắt đầu PENDING; một job định giờ huỷ cái chưa xác nhận</span>
+<pre><code class="language-sql"><span class="tok-comment">// một đặt chỗ bắt đầu PENDING; một job định giờ huỷ cái chưa xác nhận</span>
 <span class="tok-keyword">await</span> prisma.$executeRaw&#96;
   DELETE FROM "Reservation"
   WHERE status = 'PENDING' AND created_at &lt; now() - interval '10 minutes'&#96;;
-<span class="tok-comment">// → slot của bàn tự giải phóng nếu thực khách không bao giờ xác nhận</span></pre>
+<span class="tok-comment">// → slot của bàn tự giải phóng nếu thực khách không bao giờ xác nhận</span></code></pre>
 <p>Cùng ý tưởng với giữ ghế: một bàn giữ tạm mà không xác nhận phải tự giải phóng, nếu không nhà hàng của bạn từ từ tự khoá.</p>
 
 <h3>2) Xử lý no-show — đặt cọc + bộ đếm lỗi</h3>
@@ -1806,12 +1806,12 @@ tomorrow.<span class="tok-function">forEach</span>(r =&gt; <span class="tok-func
 <span class="tok-comment">// 3 lần no-show → yêu cầu đặt cọc ở lần đặt sau</span></pre>
 
 <h3>3) Nhắc lịch — một job thông báo hằng đêm</h3>
-<pre><span class="tok-keyword">@daily</span>  <span class="tok-comment">// cron: nhắn mọi người có đặt chỗ ngày mai</span>
+<pre><code class="language-javascript"><span class="tok-keyword">@daily</span>  <span class="tok-comment">// cron: nhắn mọi người có đặt chỗ ngày mai</span>
 <span class="tok-keyword">const</span> tomorrow = <span class="tok-keyword">await</span> prisma.reservation.<span class="tok-function">findMany</span>({
   where: { status: <span class="tok-string">"CONFIRMED"</span>, slot: { startsAt: { gte: startOfTomorrow, lt: endOfTomorrow } } },
   include: { diner: <span class="tok-keyword">true</span> },
 });
-tomorrow.<span class="tok-function">forEach</span>(r =&gt; <span class="tok-function">notify</span>(r.diner, &#96;Hẹn gặp ngày mai lúc \${fmt(r.slot.startsAt)}&#96;));</pre>
+tomorrow.<span class="tok-function">forEach</span>(r =&gt; <span class="tok-function">notify</span>(r.diner, &#96;Hẹn gặp ngày mai lúc \${fmt(r.slot.startsAt)}&#96;));</code></pre>
 
 <h3>4) Múi giờ — lưu UTC, hiển thị giờ địa phương</h3>
 <pre><span class="tok-comment">// ✅ lưu slot theo UTC; render theo múi giờ nhà hàng ở client</span>

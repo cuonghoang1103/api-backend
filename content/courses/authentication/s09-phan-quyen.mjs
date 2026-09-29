@@ -42,7 +42,7 @@ export default {
 </div>
 
 <h3>IDOR, in four lines</h3>
-<pre><code><span class="tok-comment">// This endpoint IS authenticated. It is still a vulnerability.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// This endpoint IS authenticated. It is still a vulnerability.</span>
 app.get('/api/invoices/:id', requireAuth, async (req, res) =&gt; {
   const invoice = await prisma.invoice.findUnique({ where: { id: req.params.id } });
   res.json(invoice);            <span class="tok-comment">// ← ANYONE'S invoice will do</span>
@@ -61,7 +61,7 @@ if (!invoice) return res.status(404).end();                    <span class="tok-
 </div>
 
 <h3>How many places can this go wrong? Measured</h3>
-<pre><code><span class="tok-comment">// Count every endpoint in this very repo, and see which guard each one has.</span>
+<pre><code class="language-bash"><span class="tok-comment">// Count every endpoint in this very repo, and see which guard each one has.</span>
 grep -c "router\\\\.(get|post|put|patch|delete)" src/routes/*.ts</code></pre>
 <div class="out">tong endpoint                         : 939
 co middleware ngay tren TUYEN         : 460
@@ -122,7 +122,7 @@ KHONG co lop nao trong hai lop tren   : 114
 </div>
 
 <h3>IDOR, trong bốn dòng</h3>
-<pre><code><span class="tok-comment">// Endpoint này CÓ xác thực. Nó vẫn là một lỗ hổng.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Endpoint này CÓ xác thực. Nó vẫn là một lỗ hổng.</span>
 app.get('/api/invoices/:id', requireAuth, async (req, res) =&gt; {
   const invoice = await prisma.invoice.findUnique({ where: { id: req.params.id } });
   res.json(invoice);            <span class="tok-comment">// ← hoá đơn CỦA AI cũng được</span>
@@ -141,7 +141,7 @@ if (!invoice) return res.status(404).end();                    <span class="tok-
 </div>
 
 <h3>Chuyện này có thể sai ở bao nhiêu chỗ? Đo thật</h3>
-<pre><code><span class="tok-comment">// Đếm mọi endpoint trong chính kho mã này, và xem cái nào có lớp chắn nào.</span>
+<pre><code class="language-bash"><span class="tok-comment">// Đếm mọi endpoint trong chính kho mã này, và xem cái nào có lớp chắn nào.</span>
 grep -c "router\\\\.(get|post|put|patch|delete)" src/routes/*.ts</code></pre>
 <div class="out">tong endpoint                         : 939
 co middleware ngay tren TUYEN         : 460
@@ -195,7 +195,7 @@ KHONG co lop nao trong hai lop tren   : 114
 <p class="lead">Role-based access control is the model almost everybody reaches for, and it deserves its popularity: it is easy to explain, easy to query and easy to show in an interface. It also has a precise breaking point, and knowing where that is saves you from either over-engineering on day one or rebuilding under pressure in year two.</p>
 
 <h3>Stage one: the boolean, and why it always spreads</h3>
-<pre><code>model User {
+<pre><code class="language-typescript">model User {
   isAdmin Boolean @default(false)      <span class="tok-comment">// week 1: perfectly reasonable</span>
 }
 
@@ -217,7 +217,7 @@ model User {
 </div>
 
 <h3>Stage two: roles, which is where most products should live</h3>
-<pre><code>model Role {
+<pre><code class="language-typescript">model Role {
   id    Int        @id @default(autoincrement())
   name  String     @unique
   users UserRole[]
@@ -250,7 +250,7 @@ ADD CONSTRAINT "user_roles_roleId_fkey" FOREIGN KEY ("roleId")
 </div>
 
 <h3>Stage three: roles grant permissions</h3>
-<pre><code><span class="tok-comment">// Roles are what PEOPLE understand. Permissions are what CODE checks.</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Roles are what PEOPLE understand. Permissions are what CODE checks.</span>
 model Permission     { id Int @id  ma String @unique  roles RolePermission[] }  <span class="tok-comment">// 'bai_viet:xoa'</span>
 model RolePermission { roleId Int  quyenId Int   @@id([roleId, quyenId]) }
 
@@ -298,7 +298,7 @@ if (u.role === 'admin' || u.role === 'kiem_duyet') { <span class="tok-comment">/
 <p class="lead">Kiểm soát truy cập theo vai trò là mô hình mà gần như ai cũng với tay lấy, và nó xứng đáng nổi tiếng: dễ giải thích, dễ truy vấn và dễ bày ra trên giao diện. Nó cũng có một ĐIỂM VỠ rất rõ, và biết điểm đó nằm ở đâu sẽ cứu bạn khỏi hoặc là làm quá phức tạp ngay ngày đầu, hoặc là phải xây lại dưới áp lực vào năm thứ hai.</p>
 
 <h3>Chặng một: cái boolean, và vì sao nó luôn lan ra</h3>
-<pre><code>model User {
+<pre><code class="language-typescript">model User {
   isAdmin Boolean @default(false)      <span class="tok-comment">// tuần 1: hoàn toàn hợp lý</span>
 }
 
@@ -320,7 +320,7 @@ model User {
 </div>
 
 <h3>Chặng hai: vai trò, chỗ mà phần lớn sản phẩm nên dừng lại</h3>
-<pre><code>model Role {
+<pre><code class="language-typescript">model Role {
   id    Int        @id @default(autoincrement())
   name  String     @unique
   users UserRole[]
@@ -353,7 +353,7 @@ ADD CONSTRAINT "user_roles_roleId_fkey" FOREIGN KEY ("roleId")
 </div>
 
 <h3>Chặng ba: vai trò CẤP quyền</h3>
-<pre><code><span class="tok-comment">// Vai trò là cái CON NGƯỜI hiểu. Quyền là cái MÃ kiểm.</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Vai trò là cái CON NGƯỜI hiểu. Quyền là cái MÃ kiểm.</span>
 model Permission     { id Int @id  ma String @unique  roles RolePermission[] }  <span class="tok-comment">// 'bai_viet:xoa'</span>
 model RolePermission { roleId Int  quyenId Int   @@id([roleId, quyenId]) }
 
@@ -410,7 +410,7 @@ if (u.role === 'admin' || u.role === 'kiem_duyet') { <span class="tok-comment">/
 <p class="lead">Roles describe a person. The questions that break them describe a <em>pair</em>: this person and this object. Sharing, ownership, workspaces, folders, delegated access — every one of those is a fact about a relationship, and no amount of role modelling encodes it without smuggling an identifier into a role name.</p>
 
 <h3>ABAC: the rule reads the attributes</h3>
-<pre><code><span class="tok-comment">// The decision is a FUNCTION of (subject, action, object, context).</span>
+<pre><code class="language-javascript"><span class="tok-comment">// The decision is a FUNCTION of (subject, action, object, context).</span>
 function allowed(u, hanhDong, dt, boiCanh) {
   if (hanhDong === 'sua' &amp;&amp; dt.loai === 'document') {
     if (dt.ownerId === u.id) return true;                    <span class="tok-comment">// ownership</span>
@@ -489,7 +489,7 @@ DOC  document:42   <- nd:lan               CHAN  khong tim thay duong nao
 <p class="lead">Vai trò mô tả một CON NGƯỜI. Còn những câu hỏi làm vỡ nó thì mô tả một CẶP: người này và đối tượng này. Chia sẻ, sở hữu, không gian làm việc, thư mục, quyền uỷ nhiệm — mỗi thứ trong số đó là một SỰ THẬT VỀ MỘT QUAN HỆ, và mô hình vai trò dù vẽ kiểu gì cũng không mã hoá nổi nó mà không lén nhét một định danh vào tên vai.</p>
 
 <h3>ABAC: luật ĐỌC các thuộc tính</h3>
-<pre><code><span class="tok-comment">// Quyết định là một HÀM của (chủ thể, hành động, đối tượng, bối cảnh).</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Quyết định là một HÀM của (chủ thể, hành động, đối tượng, bối cảnh).</span>
 function allowed(u, hanhDong, dt, boiCanh) {
   if (hanhDong === 'sua' &amp;&amp; dt.loai === 'document') {
     if (dt.ownerId === u.id) return true;                    <span class="tok-comment">// sở hữu</span>
@@ -577,7 +577,7 @@ DOC  document:42   <- nd:lan               CHAN  khong tim thay duong nao
 <p class="lead">Every authorization bug so far has been one user seeing another user's row. In a multi-tenant product the same mistake is one <em>company</em> seeing another company's data, and it is the failure that ends contracts and triggers breach notifications. It also has a distinctive property: it is caused by omission, in a query that looks completely ordinary.</p>
 
 <h3>The bug, and why it is invisible in review</h3>
-<pre><code><span class="tok-comment">// Three queries. Two are correct, one is not. Which one?</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Three queries. Two are correct, one is not. Which one?</span>
 const a = await prisma.invoice.findMany({ where: { tenantId, state: 'CHUA_TRA' } });
 const b = await prisma.invoice.findMany({ where: { tenantId, khachHangId } });
 const c = await prisma.invoice.findMany({ where: { state: 'QUA_HAN' } });
@@ -610,7 +610,7 @@ const c = await prisma.invoice.findMany({ where: { state: 'QUA_HAN' } });
     <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">"Everyone remembers the filter"</span><span class="lz-nsub">This is the state you are in right now, and it is why the bug exists</span></div></div>
   </div>
 </div>
-<pre><code><span class="tok-comment">// Layer 1 — the tenant comes FROM THE SESSION. Never from a request parameter.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Layer 1 — the tenant comes FROM THE SESSION. Never from a request parameter.</span>
 app.use((req, res, next) =&gt; {
   req.tenantId = req.u.tenantId;              <span class="tok-comment">// RIGHT: the server already knows</span>
   <span class="tok-comment">// req.tenantId = req.query.tenant;          // WRONG: the client declares it</span>
@@ -645,7 +645,7 @@ UPDATE 0
 
 === 5. Chua dat app.tenant chut nao ===
  so_dong_thay_duoc = 0          &lt;- quen dat bien = thay KHONG GI, khong phai thay TAT CA</div>
-<pre><code>ALTER TABLE hoa_don ENABLE ROW LEVEL SECURITY;
+<pre><code class="language-sql">ALTER TABLE hoa_don ENABLE ROW LEVEL SECURITY;
 CREATE POLICY chi_tenant_cua_minh ON hoa_don
   USING (tenant_id = current_setting('app.tenant', true));
 
@@ -695,7 +695,7 @@ SET LOCAL app.tenant = 'cuongthai';</code></pre>
 <p class="lead">Mọi con lỗi phân quyền tới giờ đều là chuyện một người dùng nhìn thấy bản ghi của một người dùng khác. Trong một sản phẩm nhiều tenant, đúng cái sai ấy là chuyện một <em>CÔNG TY</em> nhìn thấy dữ liệu của công ty khác, và đó là kiểu hỏng làm mất hợp đồng và kích hoạt nghĩa vụ thông báo vi phạm. Nó còn có một tính chất riêng: nó sinh ra từ SỰ THIẾU SÓT, trong một câu truy vấn trông hoàn toàn bình thường.</p>
 
 <h3>Con lỗi, và vì sao nó vô hình lúc review</h3>
-<pre><code><span class="tok-comment">// Ba truy vấn. Hai cái đúng, một cái không. Cái nào?</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Ba truy vấn. Hai cái đúng, một cái không. Cái nào?</span>
 const a = await prisma.invoice.findMany({ where: { tenantId, state: 'CHUA_TRA' } });
 const b = await prisma.invoice.findMany({ where: { tenantId, khachHangId } });
 const c = await prisma.invoice.findMany({ where: { state: 'QUA_HAN' } });
@@ -728,7 +728,7 @@ const c = await prisma.invoice.findMany({ where: { state: 'QUA_HAN' } });
     <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">"Ai cũng nhớ đặt bộ lọc mà"</span><span class="lz-nsub">Đây là trạng thái bạn đang ở NGAY BÂY GIỜ, và đó là lý do con lỗi tồn tại</span></div></div>
   </div>
 </div>
-<pre><code><span class="tok-comment">// Lớp 1 — tenant lấy TỪ PHIÊN. Không bao giờ từ tham số của request.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Lớp 1 — tenant lấy TỪ PHIÊN. Không bao giờ từ tham số của request.</span>
 app.use((req, res, next) =&gt; {
   req.tenantId = req.u.tenantId;              <span class="tok-comment">// ĐÚNG: máy chủ tự biết</span>
   <span class="tok-comment">// req.tenantId = req.query.tenant;          // SAI: khách hàng tự khai</span>
@@ -763,7 +763,7 @@ UPDATE 0
 
 === 5. Chua dat app.tenant chut nao ===
  so_dong_thay_duoc = 0          &lt;- quen dat bien = thay KHONG GI, khong phai thay TAT CA</div>
-<pre><code>ALTER TABLE hoa_don ENABLE ROW LEVEL SECURITY;
+<pre><code class="language-sql">ALTER TABLE hoa_don ENABLE ROW LEVEL SECURITY;
 CREATE POLICY chi_tenant_cua_minh ON hoa_don
   USING (tenant_id = current_setting('app.tenant', true));
 
@@ -828,7 +828,7 @@ SET LOCAL app.tenant = 'cuongthai';</code></pre>
   <div class="lz-layer"><span class="lz-lname">The service layer — the right place for object rules</span><span class="lz-lnote">Load the object, call one decision function, act. Every caller — HTTP handler, background job, GraphQL resolver, CLI script — goes through the same function, which is the property route middleware lacks.</span></div>
   <div class="lz-layer"><span class="lz-lname">The data layer — the only one that cannot be bypassed</span><span class="lz-lnote">Ownership in the <code>WHERE</code> clause and RLS in the database (Lessons 9.1 and 9.4). It cannot express "may Mai publish this", but what it does express, it enforces against every connection that ever opens.</span></div>
 </div>
-<pre><code><span class="tok-comment">// One decision function. Every call path goes through exactly it.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// One decision function. Every call path goes through exactly it.</span>
 export function canDeletePost(u: User | null, post: Post): boolean {
   if (!u) return false;
   if (post.authorId === u.id) return true;
@@ -858,7 +858,7 @@ export async function deletePost(u: User, id: string) {
 <div class="pitfall">
 <p><strong>Trap — mass assignment turns an ordinary update endpoint into privilege escalation.</strong> A handler that spreads the request body into an update lets the client write any column the model has: <code>PATCH /me { "ten": "Cường", "role": "admin" }</code> succeeds, and every authorization rule in this chapter was enforced correctly on an operation the user was genuinely allowed to perform. The fix is to allow-list fields explicitly — never <code>data: req.body</code>, always <code>data: { ten, anhDaiDien }</code> — and to validate with a schema that <em>strips</em> unknown keys rather than one that ignores them. Grep for <code>...req.body</code> across the codebase; it finds this class in one pass.</p>
 </div>
-<pre><code><span class="tok-comment">// WRONG — the client can write EVERY column the model has:</span>
+<pre><code class="language-typescript"><span class="tok-comment">// WRONG — the client can write EVERY column the model has:</span>
 await prisma.user.update({ where: { id: u.id }, data: req.body });
 
 <span class="tok-comment">// RIGHT — an explicit allow-list, and the schema STRIPS unknown keys:</span>
@@ -866,7 +866,7 @@ const { ten, anhDaiDien } = ZodHoSo.parse(req.body);   <span class="tok-comment"
 await prisma.user.update({ where: { id: u.id }, data: { ten, anhDaiDien } });</code></pre>
 
 <h3>Making forgetting a build error</h3>
-<pre><code><span class="tok-comment">// Every route MUST declare a policy. The type system enforces it.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Every route MUST declare a policy. The type system enforces it.</span>
 type Policy =
   | { kiu: 'congKhai'; reason: string }        <span class="tok-comment">// public means you must SAY WHY</span>
   | { kiu: 'daDangNhap' }
@@ -925,7 +925,7 @@ TAT CA KHOP.</div>
   <div class="lz-layer"><span class="lz-lname">Tầng dịch vụ — chỗ ĐÚNG cho luật theo đối tượng</span><span class="lz-lnote">Nạp đối tượng, gọi MỘT hàm quyết định, rồi hành động. Mọi bên gọi — bộ xử lý HTTP, công việc chạy nền, resolver GraphQL, script dòng lệnh — đều đi qua đúng cái hàm ấy, và đó là tính chất mà middleware trên tuyến không có.</span></div>
   <div class="lz-layer"><span class="lz-lname">Tầng dữ liệu — tầng DUY NHẤT không đi vòng qua được</span><span class="lz-lnote">Quyền sở hữu nằm trong mệnh đề <code>WHERE</code> và RLS nằm trong cơ sở dữ liệu (Bài 9.1 và 9.4). Nó không diễn đạt được câu "Mai có được xuất bản cái này không", nhưng cái gì nó diễn đạt được thì nó THI HÀNH với mọi kết nối từng mở ra.</span></div>
 </div>
-<pre><code><span class="tok-comment">// Một hàm quyết định. Mọi đường gọi đều đi qua đúng nó.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Một hàm quyết định. Mọi đường gọi đều đi qua đúng nó.</span>
 export function canDeletePost(u: User | null, post: Post): boolean {
   if (!u) return false;
   if (post.authorId === u.id) return true;
@@ -955,7 +955,7 @@ export async function deletePost(u: User, id: string) {
 <div class="pitfall">
 <p><strong>Bẫy — gán hàng loạt biến một endpoint cập nhật bình thường thành một cú LEO THANG ĐẶC QUYỀN.</strong> Một bộ xử lý trải thẳng thân request vào lệnh cập nhật sẽ cho client ghi vào BẤT KỲ cột nào mà model có: <code>PATCH /me { "ten": "Cường", "role": "admin" }</code> thành công, và mọi luật phân quyền trong chương này đều đã được thi hành ĐÚNG trên một thao tác mà người dùng THẬT SỰ được phép làm. Cách vá là liệt kê trắng các trường một cách tường minh — đừng bao giờ <code>data: req.body</code>, luôn luôn <code>data: { ten, anhDaiDien }</code> — và kiểm bằng một schema <em>CẮT BỎ</em> khoá lạ chứ không phải lờ chúng đi. Hãy grep <code>...req.body</code> trên toàn kho mã; nó tìm ra cả họ lỗi này trong một lượt.</p>
 </div>
-<pre><code><span class="tok-comment">// SAI — client viết được MỌI cột mà model có:</span>
+<pre><code class="language-typescript"><span class="tok-comment">// SAI — client viết được MỌI cột mà model có:</span>
 await prisma.user.update({ where: { id: u.id }, data: req.body });
 
 <span class="tok-comment">// ĐÚNG — danh sách trắng tường minh, và schema CẮT BỎ khoá lạ:</span>
@@ -963,7 +963,7 @@ const { ten, anhDaiDien } = ZodHoSo.parse(req.body);   <span class="tok-comment"
 await prisma.user.update({ where: { id: u.id }, data: { ten, anhDaiDien } });</code></pre>
 
 <h3>Biến việc QUÊN thành một lỗi lúc dựng</h3>
-<pre><code><span class="tok-comment">// Mỗi tuyến PHẢI khai một chính sách. Kiểu dữ liệu ép điều đó.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Mỗi tuyến PHẢI khai một chính sách. Kiểu dữ liệu ép điều đó.</span>
 type Policy =
   | { kiu: 'congKhai'; reason: string }        <span class="tok-comment">// công khai thì phải NÓI VÌ SAO</span>
   | { kiu: 'daDangNhap' }

@@ -61,17 +61,17 @@ POST   /api/v1/notes/42/comments  <span class="tok-comment"># create inside it</
   <div class="kv"><span class="k">Idempotent</span><span class="v">Calling it N times leaves the same state as calling it once. <code>GET</code>, <code>PUT</code>, <code>DELETE</code> — and NOT <code>POST</code>.</span></div>
 </div>
 <p>That is not a definition to memorise; it is a property you can test. Same server, three experiments:</p>
-<pre><code><span class="tok-comment"># POST twice with the same body</span>
+<pre><code class="language-bash"><span class="tok-comment"># POST twice with the same body</span>
 curl -X POST /notes -d '{"title":"A"}'
 curl -X POST /notes -d '{"title":"A"}'</code></pre>
 <div class="out">{"id":1,"title":"A","version":1}
 {"id":2,"title":"A","version":1}     ← two notes exist now</div>
-<pre><code><span class="tok-comment"># PUT twice with the same body</span>
+<pre><code class="language-bash"><span class="tok-comment"># PUT twice with the same body</span>
 curl -X PUT /settings/theme -d '{"theme":"dark"}'
 curl -X PUT /settings/theme -d '{"theme":"dark"}'</code></pre>
 <div class="out">{"theme":"dark"}
 {"theme":"dark"}                     ← same state, no duplicate</div>
-<pre><code><span class="tok-comment"># DELETE twice</span>
+<pre><code class="language-bash"><span class="tok-comment"># DELETE twice</span>
 curl -X DELETE /notes/1
 curl -X DELETE /notes/1</code></pre>
 <div class="out">first  : 204
@@ -98,13 +98,13 @@ A's change is GONE.</div>
 <div class="pitfall">This is the <strong>lost update</strong> problem, and note what did <em>not</em> happen: no error, no conflict, no log line. The server did exactly what it was told, twice. PATCH reduces the damage (B would only have sent <code>body</code>) but does not fix it — two people editing the same field still overwrite each other silently. The real fix is optimistic concurrency with <code>ETag</code> + <code>If-Match</code>, which lesson 6.5 demonstrates returning a 412.</div>
 
 <h3>Two things Express gives you for free</h3>
-<pre><code>curl -I /notes/1                       <span class="tok-comment"># HEAD</span></code></pre>
+<pre><code class="language-bash">curl -I /notes/1                       <span class="tok-comment"># HEAD</span></code></pre>
 <div class="out">HTTP/1.1 200 OK
 Content-Type: application/json; charset=utf-8
 Content-Length: 50
 (no body)</div>
 <p>You never wrote a HEAD route. Express answers HEAD from your GET route, runs the same handler, and drops the body — so <code>Content-Length</code> is correct without transferring anything. Clients use it to check existence or freshness cheaply.</p>
-<pre><code>curl -i -X OPTIONS /only-get</code></pre>
+<pre><code class="language-bash">curl -i -X OPTIONS /only-get</code></pre>
 <div class="out">HTTP/1.1 200 OK
 Allow: GET, HEAD</div>
 <div class="callout warn">What Express does <em>not</em> do for free: 405. Send <code>DELETE</code> to a path that only has a GET route and you get <strong>404</strong>, not <code>405 Method Not Allowed</code> — because Express matches on method+path together and simply finds nothing. It is technically defensible and practically confusing: a client debugging "404 on an endpoint I can see working in the browser" is almost always sending the wrong method. Worth remembering the next time a frontend developer swears the URL is right.</div>
@@ -160,17 +160,17 @@ POST   /api/v1/notes/42/comments  <span class="tok-comment"># tạo bên trong n
   <div class="kv"><span class="k">Bất biến (idempotent)</span><span class="v">Gọi N lần để lại đúng trạng thái như gọi một lần. <code>GET</code>, <code>PUT</code>, <code>DELETE</code> — và KHÔNG phải <code>POST</code>.</span></div>
 </div>
 <p>Đó không phải định nghĩa để học thuộc; đó là tính chất bạn thử được. Cùng một server, ba thí nghiệm:</p>
-<pre><code><span class="tok-comment"># POST hai lần với cùng một body</span>
+<pre><code class="language-bash"><span class="tok-comment"># POST hai lần với cùng một body</span>
 curl -X POST /notes -d '{"title":"A"}'
 curl -X POST /notes -d '{"title":"A"}'</code></pre>
 <div class="out">{"id":1,"title":"A","version":1}
 {"id":2,"title":"A","version":1}     ← giờ tồn tại hai ghi chú</div>
-<pre><code><span class="tok-comment"># PUT hai lần với cùng một body</span>
+<pre><code class="language-bash"><span class="tok-comment"># PUT hai lần với cùng một body</span>
 curl -X PUT /settings/theme -d '{"theme":"dark"}'
 curl -X PUT /settings/theme -d '{"theme":"dark"}'</code></pre>
 <div class="out">{"theme":"dark"}
 {"theme":"dark"}                     ← cùng một trạng thái, không nhân bản</div>
-<pre><code><span class="tok-comment"># DELETE hai lần</span>
+<pre><code class="language-bash"><span class="tok-comment"># DELETE hai lần</span>
 curl -X DELETE /notes/1
 curl -X DELETE /notes/1</code></pre>
 <div class="out">lần 1 : 204
@@ -197,13 +197,13 @@ Thay đổi của A đã BIẾN MẤT.</div>
 <div class="pitfall">Đây là vấn đề <strong>mất bản ghi (lost update)</strong>, và hãy để ý điều đã <em>không</em> xảy ra: không lỗi, không xung đột, không một dòng log. Server làm đúng y những gì được bảo, hai lần. PATCH làm giảm thiệt hại (B sẽ chỉ gửi mỗi <code>body</code>) nhưng không chữa được: hai người cùng sửa một trường vẫn đè lên nhau trong im lặng. Cách chữa thật sự là kiểm soát đồng thời lạc quan bằng <code>ETag</code> + <code>If-Match</code>, bài 6.5 sẽ trình diễn nó trả về mã 412.</div>
 
 <h3>Hai thứ Express tặng bạn miễn phí</h3>
-<pre><code>curl -I /notes/1                       <span class="tok-comment"># HEAD</span></code></pre>
+<pre><code class="language-bash">curl -I /notes/1                       <span class="tok-comment"># HEAD</span></code></pre>
 <div class="out">HTTP/1.1 200 OK
 Content-Type: application/json; charset=utf-8
 Content-Length: 50
 (không có body)</div>
 <p>Bạn chưa hề viết route HEAD nào. Express trả lời HEAD bằng chính route GET của bạn, chạy đúng handler đó, rồi bỏ phần body đi — nên <code>Content-Length</code> vẫn đúng mà không phải truyền gì. Client dùng nó để kiểm tra sự tồn tại hoặc độ mới với chi phí rẻ.</p>
-<pre><code>curl -i -X OPTIONS /only-get</code></pre>
+<pre><code class="language-bash">curl -i -X OPTIONS /only-get</code></pre>
 <div class="out">HTTP/1.1 200 OK
 Allow: GET, HEAD</div>
 <div class="callout warn">Còn thứ Express <em>không</em> tặng miễn phí: mã 405. Gửi <code>DELETE</code> tới một đường dẫn chỉ có route GET thì bạn nhận <strong>404</strong>, chứ không phải <code>405 Method Not Allowed</code> — vì Express khớp method và path cùng lúc, và đơn giản là không tìm thấy gì. Về lý thì bảo vệ được, về thực tế thì gây rối: một người đang gỡ lỗi "404 ở cái endpoint mà tôi mở trình duyệt thấy chạy ngon" gần như luôn là đang gửi sai phương thức. Đáng nhớ cho lần sau khi một bạn frontend thề sống thề chết là URL đúng rồi.</div>
@@ -273,7 +273,7 @@ Allow: GET, HEAD</div>
 <div class="callout ok">The practical test for 409: could this exact request have succeeded a minute ago, or succeed a minute from now? If yes, it is a conflict with state, not a validation error. Chapter 7 maps Prisma's unique-constraint error <code>P2002</code> onto 409 for precisely this reason.</div>
 
 <h3>201 done properly</h3>
-<pre><code>res.<span class="tok-fn">status</span>(<span class="tok-number">201</span>)
+<pre><code class="language-typescript">res.<span class="tok-fn">status</span>(<span class="tok-number">201</span>)
    .<span class="tok-fn">location</span>(\`/api/v1/notes/\${note.id}\`)
    .<span class="tok-fn">json</span>(note);</code></pre>
 <div class="out">HTTP/1.1 201 Created
@@ -289,7 +289,7 @@ Content-Type: application/json; charset=utf-8
 
 <h3>One response shape, decided once</h3>
 <p>Two decisions, and the only wrong answer is "different per endpoint".</p>
-<pre><code><span class="tok-comment">// Success — the resource itself, or a collection envelope</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Success — the resource itself, or a collection envelope</span>
 { "id": 1, "title": "…" }
 { "items": [ … ], "page": 1, "limit": 10, "total": 128 }
 
@@ -361,7 +361,7 @@ Content-Type: application/json; charset=utf-8
 <div class="callout ok">Phép thử thực dụng cho 409: đúng cái request này có thể đã thành công một phút trước, hoặc sẽ thành công một phút nữa không? Nếu có thì đó là xung đột với trạng thái, không phải lỗi dữ liệu. Chương 7 ánh xạ lỗi vi phạm ràng buộc duy nhất <code>P2002</code> của Prisma sang 409 chính vì lý do này.</div>
 
 <h3>Trả 201 cho đúng cách</h3>
-<pre><code>res.<span class="tok-fn">status</span>(<span class="tok-number">201</span>)
+<pre><code class="language-typescript">res.<span class="tok-fn">status</span>(<span class="tok-number">201</span>)
    .<span class="tok-fn">location</span>(\`/api/v1/notes/\${note.id}\`)
    .<span class="tok-fn">json</span>(note);</code></pre>
 <div class="out">HTTP/1.1 201 Created
@@ -377,7 +377,7 @@ Content-Type: application/json; charset=utf-8
 
 <h3>Một hình dạng phản hồi, quyết một lần</h3>
 <p>Hai quyết định, và câu trả lời sai duy nhất là "mỗi endpoint một kiểu".</p>
-<pre><code><span class="tok-comment">// Thành công — chính tài nguyên đó, hoặc một vỏ bọc cho tập hợp</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Thành công — chính tài nguyên đó, hoặc một vỏ bọc cho tập hợp</span>
 { "id": 1, "title": "…" }
 { "items": [ … ], "page": 1, "limit": 10, "total": 128 }
 
@@ -431,8 +431,8 @@ Content-Type: application/json; charset=utf-8
 <div class="callout danger"><strong>Everything from the client is hostile until proven otherwise</strong> — body, query, params, headers. Not because every user is an attacker, but because the honest majority send you malformed data by accident, and the code path is the same. The question is never "will bad input arrive?" — it is "does bad input hit my database or my validator first?"</div>
 
 <h3>A schema replaces the wall of ifs</h3>
-<pre><code>npm i zod</code></pre>
-<pre><code><span class="tok-keyword">import</span> { z } <span class="tok-keyword">from</span> <span class="tok-string">'zod'</span>;      <span class="tok-comment">// zod 4.4.3</span>
+<pre><code class="language-bash">npm i zod</code></pre>
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> { z } <span class="tok-keyword">from</span> <span class="tok-string">'zod'</span>;      <span class="tok-comment">// zod 4.4.3</span>
 
 <span class="tok-keyword">const</span> CreateNote = z.<span class="tok-fn">object</span>({
   title:  z.<span class="tok-fn">string</span>().<span class="tok-fn">min</span>(<span class="tok-number">1</span>, <span class="tok-string">'title must not be empty'</span>).<span class="tok-fn">max</span>(<span class="tok-number">200</span>),
@@ -441,7 +441,7 @@ Content-Type: application/json; charset=utf-8
   pinned: z.<span class="tok-fn">boolean</span>().<span class="tok-fn">default</span>(<span class="tok-keyword">false</span>),
 });</code></pre>
 <p>Four lines that a human can read as a specification, and that a machine can enforce. Now the route:</p>
-<pre><code>app.<span class="tok-fn">post</span>(<span class="tok-string">'/notes'</span>, (req, res) =&gt; {
+<pre><code class="language-javascript">app.<span class="tok-fn">post</span>(<span class="tok-string">'/notes'</span>, (req, res) =&gt; {
   <span class="tok-keyword">const</span> parsed = CreateNote.<span class="tok-fn">safeParse</span>(req.body);
   <span class="tok-keyword">if</span> (!parsed.success) {
     <span class="tok-keyword">return</span> res.<span class="tok-fn">status</span>(<span class="tok-number">422</span>).<span class="tok-fn">json</span>({
@@ -458,7 +458,7 @@ Content-Type: application/json; charset=utf-8
 
 <h3>What it produces — real output</h3>
 <p>One request with three different problems at once:</p>
-<pre><code>curl -X POST /v2/notes -H 'Content-Type: application/json' \\
+<pre><code class="language-bash">curl -X POST /v2/notes -H 'Content-Type: application/json' \\
   -d '{"title":"","tags":["a","b","c","d","e","f"],"pinned":"yes"}'</code></pre>
 <div class="out">{
   "error": {
@@ -473,25 +473,25 @@ Content-Type: application/json; charset=utf-8
 }</div>
 <div class="callout ok">Note <code>safeParse</code>, not <code>parse</code>. <code>parse</code> throws; <code>safeParse</code> returns <code>{success, data|error}</code>. Both are fine — throwing an <code>AppError</code> from a thrown zod error also works with lesson 5.4's handler — but <code>safeParse</code> keeps the control flow visible in the route, and it reports <strong>all</strong> the problems at once. A form that reveals its errors one per submit is a form users abandon.</div>
 <p>A valid request, showing what the schema adds:</p>
-<pre><code>curl -X POST /v2/notes -H 'Content-Type: application/json' -d '{"title":"A valid note"}'</code></pre>
+<pre><code class="language-bash">curl -X POST /v2/notes -H 'Content-Type: application/json' -d '{"title":"A valid note"}'</code></pre>
 <div class="out">{"id":3,"title":"A valid note","body":"","pinned":false,"version":1}</div>
 <p><code>body</code> and <code>pinned</code> were never sent — <code>.default()</code> filled them in. Downstream code no longer needs <code>?? ''</code> in five places, because by the time the data reaches a service it is guaranteed complete.</p>
 
 <h3>The query string problem, solved</h3>
 <p>Lesson 5.2 showed that everything in <code>req.query</code> is a string. A schema can coerce and clamp in the same breath:</p>
-<pre><code><span class="tok-keyword">const</span> ListQuery = z.<span class="tok-fn">object</span>({
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> ListQuery = z.<span class="tok-fn">object</span>({
   page:  z.coerce.<span class="tok-fn">number</span>().<span class="tok-fn">int</span>().<span class="tok-fn">min</span>(<span class="tok-number">1</span>).<span class="tok-fn">default</span>(<span class="tok-number">1</span>),
   limit: z.coerce.<span class="tok-fn">number</span>().<span class="tok-fn">int</span>().<span class="tok-fn">min</span>(<span class="tok-number">1</span>).<span class="tok-fn">max</span>(<span class="tok-number">50</span>).<span class="tok-fn">default</span>(<span class="tok-number">10</span>),
   sort:  z.<span class="tok-fn">enum</span>([<span class="tok-string">'createdAt'</span>, <span class="tok-string">'title'</span>]).<span class="tok-fn">default</span>(<span class="tok-string">'createdAt'</span>),
   order: z.<span class="tok-fn">enum</span>([<span class="tok-string">'asc'</span>, <span class="tok-string">'desc'</span>]).<span class="tok-fn">default</span>(<span class="tok-string">'desc'</span>),
 });</code></pre>
-<pre><code>curl "/v2/notes?page=3&amp;limit=25&amp;order=asc"</code></pre>
+<pre><code class="language-bash">curl "/v2/notes?page=3&amp;limit=25&amp;order=asc"</code></pre>
 <div class="out">{
   "appliedQuery": { "page": 3, "limit": 25, "sort": "createdAt", "order": "asc" },
   "types":        { "page": "number", "limit": "number", "sort": "string", "order": "string" }
 }</div>
 <p>Strings in, numbers out, missing fields defaulted. And when the client sends nonsense:</p>
-<pre><code>curl "/v2/notes?limit=500&amp;sort=colour"</code></pre>
+<pre><code class="language-bash">curl "/v2/notes?limit=500&amp;sort=colour"</code></pre>
 <div class="out">{
   "error": { "code": "INVALID_QUERY", "fields": [
     { "path": "limit", "message": "Too big: expected number to be &lt;=50" },
@@ -502,15 +502,15 @@ Content-Type: application/json; charset=utf-8
 <p>A softer alternative is to <em>clamp</em> instead of reject — <code>Math.min(50, limit)</code> — which never fails a client that asked for too much. Reject when the client should learn; clamp when the client is a browser you also wrote. Just do one of the two.</p></div>
 
 <h3>The attack a schema quietly blocks</h3>
-<pre><code><span class="tok-comment">// The lazy version — every field the client sent goes in</span>
+<pre><code class="language-javascript"><span class="tok-comment">// The lazy version — every field the client sent goes in</span>
 <span class="tok-keyword">const</span> note = <span class="tok-keyword">await</span> db.note.<span class="tok-fn">create</span>({ data: { ...req.body, authorId: user.id } });</code></pre>
-<pre><code>curl -X POST /notes -d '{"title":"hi","isAdmin":true,"authorId":1,"createdAt":"2020-01-01"}'</code></pre>
+<pre><code class="language-bash">curl -X POST /notes -d '{"title":"hi","isAdmin":true,"authorId":1,"createdAt":"2020-01-01"}'</code></pre>
 <div class="pitfall">This is <strong>mass assignment</strong>. The client sets fields you never intended to expose — a role flag, another user's id, a "verified" boolean, a price. It is not exotic: it is what happens the first time someone opens devtools and edits the request body. A schema fixes it structurally, because zod's <code>.object()</code> <strong>strips unknown keys by default</strong>: <code>parsed.data</code> contains exactly the fields you declared and nothing else. Spreading <code>req.body</code> is the bug; spreading <code>parsed.data</code> is safe.</div>
 <div class="callout">If you want unknown fields to be an explicit error rather than silently dropped, use <code>.strict()</code>. That is the right choice for an internal API where a typo in a field name should fail loudly instead of being ignored — <code>{"titel":"x"}</code> otherwise validates as "title missing" and confuses everyone.</div>
 
 <h3>Making it a middleware</h3>
 <p>The same six lines in every route is still duplication. Lesson 5.3's tool applies here:</p>
-<pre><code><span class="tok-keyword">export const</span> <span class="tok-fn">validate</span> = (schemas) =&gt; (req, res, next) =&gt; {
+<pre><code class="language-javascript"><span class="tok-keyword">export const</span> <span class="tok-fn">validate</span> = (schemas) =&gt; (req, res, next) =&gt; {
   <span class="tok-keyword">for</span> (<span class="tok-keyword">const</span> key <span class="tok-keyword">of</span> [<span class="tok-string">'body'</span>, <span class="tok-string">'query'</span>, <span class="tok-string">'params'</span>]) {
     <span class="tok-keyword">if</span> (!schemas[key]) <span class="tok-keyword">continue</span>;
     <span class="tok-keyword">const</span> r = schemas[key].<span class="tok-fn">safeParse</span>(req[key]);
@@ -520,7 +520,7 @@ Content-Type: application/json; charset=utf-8
   }
   <span class="tok-fn">next</span>();
 };</code></pre>
-<pre><code>router.<span class="tok-fn">post</span>(<span class="tok-string">'/'</span>, <span class="tok-fn">validate</span>({ body: CreateNote }), (req, res) =&gt; {
+<pre><code class="language-javascript">router.<span class="tok-fn">post</span>(<span class="tok-string">'/'</span>, <span class="tok-fn">validate</span>({ body: CreateNote }), (req, res) =&gt; {
   <span class="tok-keyword">const</span> note = service.<span class="tok-fn">create</span>(req.valid.body);      <span class="tok-comment">// always clean</span>
   res.<span class="tok-fn">status</span>(<span class="tok-number">201</span>).<span class="tok-fn">json</span>(note);
 });</code></pre>
@@ -554,8 +554,8 @@ Content-Type: application/json; charset=utf-8
 <div class="callout danger"><strong>Mọi thứ từ client đều là thù địch cho tới khi chứng minh được ngược lại</strong> — body, query, params, header. Không phải vì người dùng nào cũng là kẻ tấn công, mà vì phần đông người ngay thẳng vẫn gửi cho bạn dữ liệu hỏng một cách vô tình, và đường đi trong code thì y hệt nhau. Câu hỏi không bao giờ là "liệu dữ liệu xấu có tới không?" — mà là "dữ liệu xấu đụng vào cơ sở dữ liệu của tôi trước, hay đụng vào bộ kiểm trước?"</div>
 
 <h3>Một lược đồ thay cho cả bức tường if</h3>
-<pre><code>npm i zod</code></pre>
-<pre><code><span class="tok-keyword">import</span> { z } <span class="tok-keyword">from</span> <span class="tok-string">'zod'</span>;      <span class="tok-comment">// zod 4.4.3</span>
+<pre><code class="language-bash">npm i zod</code></pre>
+<pre><code class="language-javascript"><span class="tok-keyword">import</span> { z } <span class="tok-keyword">from</span> <span class="tok-string">'zod'</span>;      <span class="tok-comment">// zod 4.4.3</span>
 
 <span class="tok-keyword">const</span> CreateNote = z.<span class="tok-fn">object</span>({
   title:  z.<span class="tok-fn">string</span>().<span class="tok-fn">min</span>(<span class="tok-number">1</span>, <span class="tok-string">'title không được rỗng'</span>).<span class="tok-fn">max</span>(<span class="tok-number">200</span>),
@@ -564,7 +564,7 @@ Content-Type: application/json; charset=utf-8
   pinned: z.<span class="tok-fn">boolean</span>().<span class="tok-fn">default</span>(<span class="tok-keyword">false</span>),
 });</code></pre>
 <p>Bốn dòng mà người đọc lên được như một bản đặc tả, còn máy thì thi hành được. Giờ tới route:</p>
-<pre><code>app.<span class="tok-fn">post</span>(<span class="tok-string">'/notes'</span>, (req, res) =&gt; {
+<pre><code class="language-javascript">app.<span class="tok-fn">post</span>(<span class="tok-string">'/notes'</span>, (req, res) =&gt; {
   <span class="tok-keyword">const</span> parsed = CreateNote.<span class="tok-fn">safeParse</span>(req.body);
   <span class="tok-keyword">if</span> (!parsed.success) {
     <span class="tok-keyword">return</span> res.<span class="tok-fn">status</span>(<span class="tok-number">422</span>).<span class="tok-fn">json</span>({
@@ -581,7 +581,7 @@ Content-Type: application/json; charset=utf-8
 
 <h3>Nó cho ra cái gì — output thật</h3>
 <p>Một request mắc ba lỗi khác nhau cùng lúc:</p>
-<pre><code>curl -X POST /v2/notes -H 'Content-Type: application/json' \\
+<pre><code class="language-bash">curl -X POST /v2/notes -H 'Content-Type: application/json' \\
   -d '{"title":"","tags":["a","b","c","d","e","f"],"pinned":"có"}'</code></pre>
 <div class="out">{
   "error": {
@@ -596,25 +596,25 @@ Content-Type: application/json; charset=utf-8
 }</div>
 <div class="callout ok">Để ý là <code>safeParse</code> chứ không phải <code>parse</code>. <code>parse</code> thì ném lỗi; <code>safeParse</code> trả về <code>{success, data|error}</code>. Cả hai đều dùng được — ném một <code>AppError</code> từ lỗi zod cũng hoạt động ngon với handler của bài 5.4 — nhưng <code>safeParse</code> giữ cho luồng điều khiển hiện rõ ngay trong route, và nó báo <strong>TẤT CẢ</strong> vấn đề cùng một lúc. Một cái form mà mỗi lần bấm gửi chỉ lòi ra một lỗi là cái form người ta bỏ đi giữa chừng.</div>
 <p>Một request hợp lệ, để thấy lược đồ thêm vào những gì:</p>
-<pre><code>curl -X POST /v2/notes -H 'Content-Type: application/json' -d '{"title":"Ghi chú hợp lệ"}'</code></pre>
+<pre><code class="language-bash">curl -X POST /v2/notes -H 'Content-Type: application/json' -d '{"title":"Ghi chú hợp lệ"}'</code></pre>
 <div class="out">{"id":3,"title":"Ghi chú hợp lệ","body":"","pinned":false,"version":1}</div>
 <p><code>body</code> và <code>pinned</code> chưa từng được gửi lên — <code>.default()</code> đã điền vào. Code phía sau không còn phải rải <code>?? ''</code> ở năm chỗ nữa, bởi vì lúc dữ liệu tới được service thì nó đã chắc chắn đầy đủ.</p>
 
 <h3>Bài toán query string, đã có lời giải</h3>
 <p>Bài 5.2 đã cho thấy mọi thứ trong <code>req.query</code> đều là chuỗi. Một lược đồ có thể vừa ép kiểu vừa chặn trần trong cùng một hơi:</p>
-<pre><code><span class="tok-keyword">const</span> ListQuery = z.<span class="tok-fn">object</span>({
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> ListQuery = z.<span class="tok-fn">object</span>({
   page:  z.coerce.<span class="tok-fn">number</span>().<span class="tok-fn">int</span>().<span class="tok-fn">min</span>(<span class="tok-number">1</span>).<span class="tok-fn">default</span>(<span class="tok-number">1</span>),
   limit: z.coerce.<span class="tok-fn">number</span>().<span class="tok-fn">int</span>().<span class="tok-fn">min</span>(<span class="tok-number">1</span>).<span class="tok-fn">max</span>(<span class="tok-number">50</span>).<span class="tok-fn">default</span>(<span class="tok-number">10</span>),
   sort:  z.<span class="tok-fn">enum</span>([<span class="tok-string">'createdAt'</span>, <span class="tok-string">'title'</span>]).<span class="tok-fn">default</span>(<span class="tok-string">'createdAt'</span>),
   order: z.<span class="tok-fn">enum</span>([<span class="tok-string">'asc'</span>, <span class="tok-string">'desc'</span>]).<span class="tok-fn">default</span>(<span class="tok-string">'desc'</span>),
 });</code></pre>
-<pre><code>curl "/v2/notes?page=3&amp;limit=25&amp;order=asc"</code></pre>
+<pre><code class="language-bash">curl "/v2/notes?page=3&amp;limit=25&amp;order=asc"</code></pre>
 <div class="out">{
   "appliedQuery": { "page": 3, "limit": 25, "sort": "createdAt", "order": "asc" },
   "types":        { "page": "number", "limit": "number", "sort": "string", "order": "string" }
 }</div>
 <p>Chuỗi đi vào, số đi ra, trường thiếu thì được điền mặc định. Và khi client gửi thứ vô nghĩa:</p>
-<pre><code>curl "/v2/notes?limit=500&amp;sort=mau"</code></pre>
+<pre><code class="language-bash">curl "/v2/notes?limit=500&amp;sort=mau"</code></pre>
 <div class="out">{
   "error": { "code": "INVALID_QUERY", "fields": [
     { "path": "limit", "message": "Too big: expected number to be &lt;=50" },
@@ -625,15 +625,15 @@ Content-Type: application/json; charset=utf-8
 <p>Một lựa chọn mềm hơn là <em>chặn trần</em> thay vì từ chối — <code>Math.min(50, limit)</code> — cách này không bao giờ làm hỏng request của một client đòi quá nhiều. Hãy từ chối khi bạn muốn client học được điều gì đó; hãy chặn trần khi client cũng là trình duyệt do chính bạn viết. Chỉ cần làm một trong hai.</p></div>
 
 <h3>Đòn tấn công mà lược đồ lặng lẽ chặn đứng</h3>
-<pre><code><span class="tok-comment">// Bản lười — trường nào client gửi cũng vào tuốt</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Bản lười — trường nào client gửi cũng vào tuốt</span>
 <span class="tok-keyword">const</span> note = <span class="tok-keyword">await</span> db.note.<span class="tok-fn">create</span>({ data: { ...req.body, authorId: user.id } });</code></pre>
-<pre><code>curl -X POST /notes -d '{"title":"hi","isAdmin":true,"authorId":1,"createdAt":"2020-01-01"}'</code></pre>
+<pre><code class="language-bash">curl -X POST /notes -d '{"title":"hi","isAdmin":true,"authorId":1,"createdAt":"2020-01-01"}'</code></pre>
 <div class="pitfall">Đây là <strong>mass assignment</strong> (gán ồ ạt). Client tự đặt những trường mà bạn chưa bao giờ định phơi ra — một cờ phân quyền, id của người khác, một boolean "đã xác minh", một mức giá. Chuyện này không hề xa vời: nó xảy ra ngay lần đầu có người mở devtools và sửa body của request. Một lược đồ chữa được tận gốc về mặt cấu trúc, vì <code>.object()</code> của zod <strong>mặc định vứt bỏ các khoá lạ</strong>: <code>parsed.data</code> chứa đúng những trường bạn đã khai báo và không gì khác. Rải <code>req.body</code> ra là con bug; rải <code>parsed.data</code> ra thì an toàn.</div>
 <div class="callout">Nếu bạn muốn trường lạ trở thành lỗi tường minh thay vì bị âm thầm bỏ đi, hãy dùng <code>.strict()</code>. Đó là lựa chọn đúng cho một API nội bộ, nơi gõ sai tên trường phải nổ to lên thay vì bị lờ đi — vì nếu không thì <code>{"titel":"x"}</code> sẽ được báo là "thiếu title" và làm tất cả mọi người bối rối.</div>
 
 <h3>Biến nó thành middleware</h3>
 <p>Sáu dòng giống hệt nhau ở mọi route thì vẫn là lặp lại. Công cụ của bài 5.3 dùng được ngay ở đây:</p>
-<pre><code><span class="tok-keyword">export const</span> <span class="tok-fn">validate</span> = (schemas) =&gt; (req, res, next) =&gt; {
+<pre><code class="language-javascript"><span class="tok-keyword">export const</span> <span class="tok-fn">validate</span> = (schemas) =&gt; (req, res, next) =&gt; {
   <span class="tok-keyword">for</span> (<span class="tok-keyword">const</span> key <span class="tok-keyword">of</span> [<span class="tok-string">'body'</span>, <span class="tok-string">'query'</span>, <span class="tok-string">'params'</span>]) {
     <span class="tok-keyword">if</span> (!schemas[key]) <span class="tok-keyword">continue</span>;
     <span class="tok-keyword">const</span> r = schemas[key].<span class="tok-fn">safeParse</span>(req[key]);
@@ -643,7 +643,7 @@ Content-Type: application/json; charset=utf-8
   }
   <span class="tok-fn">next</span>();
 };</code></pre>
-<pre><code>router.<span class="tok-fn">post</span>(<span class="tok-string">'/'</span>, <span class="tok-fn">validate</span>({ body: CreateNote }), (req, res) =&gt; {
+<pre><code class="language-javascript">router.<span class="tok-fn">post</span>(<span class="tok-string">'/'</span>, <span class="tok-fn">validate</span>({ body: CreateNote }), (req, res) =&gt; {
   <span class="tok-keyword">const</span> note = service.<span class="tok-fn">create</span>(req.valid.body);      <span class="tok-comment">// luôn sạch</span>
   res.<span class="tok-fn">status</span>(<span class="tok-number">201</span>).<span class="tok-fn">json</span>(note);
 });</code></pre>
@@ -690,13 +690,13 @@ Content-Type: application/json; charset=utf-8
 <p class="lead">Every list endpoint starts life returning everything, because during development the table has twelve rows. This lesson is what happens at a million — measured on a real PostgreSQL table with exactly that many rows, not estimated.</p>
 
 <h3>Rule zero: a list endpoint always has a limit</h3>
-<pre><code><span class="tok-comment">// The endpoint that takes the site down at 3am</span>
+<pre><code class="language-typescript"><span class="tok-comment">// The endpoint that takes the site down at 3am</span>
 router.<span class="tok-fn">get</span>(<span class="tok-string">'/'</span>, <span class="tok-keyword">async</span> (req, res) =&gt; res.<span class="tok-fn">json</span>(<span class="tok-keyword">await</span> db.note.<span class="tok-fn">findMany</span>()));</code></pre>
 <p>It is correct, it passes review, and it works perfectly for a year. Then the table grows and one request tries to load every row into RAM, serialise it into a single JSON string, and push it through a socket — while the event loop (lesson 2.4) is blocked for the entire <code>JSON.stringify</code>. Not slow: <em>stopped</em>, for every other user at the same time.</p>
 
 <h3>Offset pagination — the obvious one</h3>
 <pre><code>GET /notes?page=3&amp;limit=20</code></pre>
-<pre><code>SELECT * FROM notes ORDER BY id LIMIT 20 OFFSET 40;</code></pre>
+<pre><code class="language-sql">SELECT * FROM notes ORDER BY id LIMIT 20 OFFSET 40;</code></pre>
 <p>Simple, gives you numbered pages and a "jump to page 57" control. Here is the cost, measured with <code>EXPLAIN ANALYZE</code> on a table of <strong>1,000,000 rows</strong> with an index on the sort column, warm cache:</p>
 <div class="out">OFFSET 0       (page 1)      →   0.048 ms    scanned 20 rows
 OFFSET 500000  (page 25001)  →  98.117 ms    scanned 500,020 rows
@@ -705,7 +705,7 @@ OFFSET 999980  (last page)   → 166.815 ms    scanned 1,000,000 rows</div>
 
 <h3>Cursor pagination — ask for what comes after</h3>
 <pre><code>GET /notes?limit=20&amp;after=999980</code></pre>
-<pre><code>SELECT * FROM notes WHERE id &gt; 999980 ORDER BY id LIMIT 20;</code></pre>
+<pre><code class="language-sql">SELECT * FROM notes WHERE id &gt; 999980 ORDER BY id LIMIT 20;</code></pre>
 <p>Same table, same index, same 20 rows returned:</p>
 <div class="out">cursor id &gt; 500000  →  0.029 ms    scanned 20 rows
 cursor id &gt; 999980  →  0.015 ms    scanned 20 rows</div>
@@ -716,10 +716,10 @@ last page        166.815 ms     0.015 ms    ~11,000×</div>
 
 <h3>The bug offset has that has nothing to do with speed</h3>
 <p>Feeds are sorted newest first, and new rows arrive while a user scrolls. Reproduced exactly:</p>
-<pre><code><span class="tok-comment">-- user reads page 1</span>
+<pre><code class="language-sql"><span class="tok-comment">-- user reads page 1</span>
 SELECT id FROM notes ORDER BY id DESC LIMIT 3 OFFSET 0;</code></pre>
 <div class="out">page 1: 1000000, 999999, 999998</div>
-<pre><code><span class="tok-comment">-- someone posts a new note (id 1000001)</span>
+<pre><code class="language-sql"><span class="tok-comment">-- someone posts a new note (id 1000001)</span>
 INSERT INTO notes … ;
 
 <span class="tok-comment">-- user scrolls: page 2</span>
@@ -727,7 +727,7 @@ SELECT id FROM notes ORDER BY id DESC LIMIT 3 OFFSET 3;</code></pre>
 <div class="out">page 2: 999998, 999997, 999996
          ↑ ALREADY SHOWN on page 1</div>
 <p>The insert pushed everything down by one, so the row at position 3 is now the row the user already saw. With cursor pagination, the same scroll:</p>
-<pre><code>SELECT id FROM notes WHERE id &lt; 999998 ORDER BY id DESC LIMIT 3;</code></pre>
+<pre><code class="language-sql">SELECT id FROM notes WHERE id &lt; 999998 ORDER BY id DESC LIMIT 3;</code></pre>
 <div class="out">page 2: 999997, 999996, 999995
          no duplicate — the cursor is anchored to a row, not a position</div>
 <div class="pitfall">This is why users report "the same post keeps appearing" and "posts disappear when I scroll" on busy feeds, and why the bug never reproduces on a test database where nothing is being written. Deletes cause the mirror image: rows shift up and an item is skipped entirely, so the user never sees it at all. Offset pagination is correct only over data that does not change while you page through it.</div>
@@ -739,7 +739,7 @@ SELECT id FROM notes ORDER BY id DESC LIMIT 3 OFFSET 3;</code></pre>
   <div class="kv"><span class="k">Cursor limitation</span><span class="v">No "jump to page 57", and no total page count — you can only go forward and back. Usually an acceptable trade for a feed; unacceptable for an admin table.</span></div>
   <div class="kv"><span class="k">Tie-breaker matters</span><span class="v">Sorting by <code>createdAt</code> alone breaks when two rows share a timestamp — the cursor may skip or repeat. Always sort by <code>(createdAt, id)</code> and put both in the cursor.</span></div>
 </div>
-<pre><code><span class="tok-comment">// A cursor is an opaque string, not a number the client can invent</span>
+<pre><code class="language-javascript"><span class="tok-comment">// A cursor is an opaque string, not a number the client can invent</span>
 <span class="tok-keyword">const</span> cursor = Buffer.<span class="tok-fn">from</span>(JSON.<span class="tok-fn">stringify</span>({ createdAt, id })).<span class="tok-fn">toString</span>(<span class="tok-string">'base64url'</span>);
 
 <span class="tok-comment">// SQL for the "next page" of a newest-first feed</span>
@@ -753,7 +753,7 @@ SELECT reltuples FROM pg_class …        →   0.025 ms   (estimate from statis
 <div class="callout warn">The count is often more expensive than the page itself — 45ms of pure overhead attached to every list request, to render a number most users never read. Three ways out, in order of preference: drop <code>total</code> and return <code>hasMore</code> (compute it by fetching <code>limit + 1</code> rows and checking whether you got the extra one); use the estimate for a "~1.2M results" display; or cache the exact count for a minute. Google itself shows you an estimate — "About 12,400,000 results" — for exactly this reason.</div>
 
 <h3>Filtering and sorting, safely</h3>
-<pre><code><span class="tok-comment">// SQL injection with extra steps</span>
+<pre><code class="language-sql"><span class="tok-comment">// SQL injection with extra steps</span>
 <span class="tok-keyword">const</span> rows = <span class="tok-keyword">await</span> db.<span class="tok-fn">$queryRawUnsafe</span>(\`SELECT * FROM notes ORDER BY \${req.query.sort}\`);</code></pre>
 <div class="pitfall">Column names cannot be passed as query parameters — a placeholder works for <em>values</em>, never for identifiers. So a sort field taken from the query string is string-concatenated into SQL, which is injection. The fix is not escaping; it is an <strong>allow-list</strong>, which is exactly what <code>z.enum(['createdAt','title'])</code> from lesson 6.3 already gives you. Anything not on the list never reaches the query.</div>
 <pre><code>GET /notes?tag=work&amp;pinned=true&amp;q=express&amp;sort=title&amp;order=asc&amp;limit=20</code></pre>
@@ -783,13 +783,13 @@ SELECT reltuples FROM pg_class …        →   0.025 ms   (estimate from statis
 <p class="lead">Mọi endpoint danh sách đều bắt đầu đời mình bằng cách trả về tất cả, vì lúc đang phát triển thì bảng có mười hai dòng. Bài này nói về chuyện gì xảy ra ở mốc một triệu — đo trên một bảng PostgreSQL thật với đúng chừng đó dòng, không phải ước lượng.</p>
 
 <h3>Quy tắc số không: endpoint danh sách luôn phải có giới hạn</h3>
-<pre><code><span class="tok-comment">// Endpoint sẽ kéo sập website lúc 3 giờ sáng</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Endpoint sẽ kéo sập website lúc 3 giờ sáng</span>
 router.<span class="tok-fn">get</span>(<span class="tok-string">'/'</span>, <span class="tok-keyword">async</span> (req, res) =&gt; res.<span class="tok-fn">json</span>(<span class="tok-keyword">await</span> db.note.<span class="tok-fn">findMany</span>()));</code></pre>
 <p>Nó đúng, nó qua được review, và nó chạy hoàn hảo suốt một năm. Rồi bảng lớn dần và một request cố nạp toàn bộ số dòng vào RAM, tuần tự hoá thành một chuỗi JSON duy nhất, rồi đẩy qua socket — trong khi event loop (bài 2.4) bị chặn suốt cả lệnh <code>JSON.stringify</code> đó. Không phải chậm: là <em>đứng hình</em>, với tất cả người dùng khác cùng lúc.</p>
 
 <h3>Phân trang bằng OFFSET — cách hiển nhiên</h3>
 <pre><code>GET /notes?page=3&amp;limit=20</code></pre>
-<pre><code>SELECT * FROM notes ORDER BY id LIMIT 20 OFFSET 40;</code></pre>
+<pre><code class="language-sql">SELECT * FROM notes ORDER BY id LIMIT 20 OFFSET 40;</code></pre>
 <p>Đơn giản, cho bạn số trang và cái nút "nhảy tới trang 57". Còn đây là cái giá của nó, đo bằng <code>EXPLAIN ANALYZE</code> trên bảng <strong>1.000.000 dòng</strong> có chỉ mục trên cột sắp xếp, cache đã nóng:</p>
 <div class="out">OFFSET 0       (trang 1)      →   0,048 ms    quét 20 dòng
 OFFSET 500000  (trang 25001)  →  98,117 ms    quét 500.020 dòng
@@ -798,7 +798,7 @@ OFFSET 999980  (trang cuối)   → 166,815 ms    quét 1.000.000 dòng</div>
 
 <h3>Phân trang bằng con trỏ — hỏi cái nằm SAU một mốc</h3>
 <pre><code>GET /notes?limit=20&amp;after=999980</code></pre>
-<pre><code>SELECT * FROM notes WHERE id &gt; 999980 ORDER BY id LIMIT 20;</code></pre>
+<pre><code class="language-sql">SELECT * FROM notes WHERE id &gt; 999980 ORDER BY id LIMIT 20;</code></pre>
 <p>Cùng bảng, cùng chỉ mục, cùng trả về 20 dòng:</p>
 <div class="out">cursor id &gt; 500000  →  0,029 ms    quét 20 dòng
 cursor id &gt; 999980  →  0,015 ms    quét 20 dòng</div>
@@ -809,10 +809,10 @@ trang cuối       166,815 ms     0,015 ms    ~11.000×</div>
 
 <h3>Con bug của OFFSET, chẳng liên quan gì tới tốc độ</h3>
 <p>Bảng tin sắp xếp mới nhất trước, và các dòng mới cứ tới trong lúc người dùng đang cuộn. Tái hiện chính xác:</p>
-<pre><code><span class="tok-comment">-- người dùng đọc trang 1</span>
+<pre><code class="language-sql"><span class="tok-comment">-- người dùng đọc trang 1</span>
 SELECT id FROM notes ORDER BY id DESC LIMIT 3 OFFSET 0;</code></pre>
 <div class="out">trang 1: 1000000, 999999, 999998</div>
-<pre><code><span class="tok-comment">-- có người đăng một ghi chú mới (id 1000001)</span>
+<pre><code class="language-sql"><span class="tok-comment">-- có người đăng một ghi chú mới (id 1000001)</span>
 INSERT INTO notes … ;
 
 <span class="tok-comment">-- người dùng cuộn tiếp: trang 2</span>
@@ -820,7 +820,7 @@ SELECT id FROM notes ORDER BY id DESC LIMIT 3 OFFSET 3;</code></pre>
 <div class="out">trang 2: 999998, 999997, 999996
           ↑ ĐÃ HIỆN ở trang 1</div>
 <p>Dòng mới chèn vào đẩy mọi thứ xuống một bậc, nên dòng ở vị trí thứ 3 giờ lại chính là dòng người dùng vừa xem. Với phân trang bằng con trỏ, cũng cú cuộn đó:</p>
-<pre><code>SELECT id FROM notes WHERE id &lt; 999998 ORDER BY id DESC LIMIT 3;</code></pre>
+<pre><code class="language-sql">SELECT id FROM notes WHERE id &lt; 999998 ORDER BY id DESC LIMIT 3;</code></pre>
 <div class="out">trang 2: 999997, 999996, 999995
           không trùng — con trỏ neo vào một DÒNG, không phải một VỊ TRÍ</div>
 <div class="pitfall">Đây là lý do người dùng báo "cùng một bài cứ hiện đi hiện lại" và "bài viết biến mất khi tôi cuộn" trên những bảng tin đông người, và cũng là lý do con bug đó không bao giờ tái hiện được trên cơ sở dữ liệu thử nghiệm nơi chẳng ai ghi gì cả. Xoá dòng gây ra hiện tượng ngược lại: các dòng dịch lên và một mục bị nhảy cóc hoàn toàn, nên người dùng không bao giờ nhìn thấy nó. Phân trang bằng OFFSET chỉ đúng trên dữ liệu không thay đổi trong lúc bạn lật trang.</div>
@@ -832,7 +832,7 @@ SELECT id FROM notes ORDER BY id DESC LIMIT 3 OFFSET 3;</code></pre>
   <div class="kv"><span class="k">Hạn chế của con trỏ</span><span class="v">Không có "nhảy tới trang 57", cũng không có tổng số trang — bạn chỉ đi tới và lui được. Thường là cái giá chấp nhận được cho bảng tin; nhưng không chấp nhận được cho bảng quản trị.</span></div>
   <div class="kv"><span class="k">Khoá phá hoà rất quan trọng</span><span class="v">Sắp xếp chỉ theo <code>createdAt</code> sẽ hỏng khi hai dòng trùng mốc thời gian — con trỏ có thể nhảy cóc hoặc lặp. Luôn sắp theo <code>(createdAt, id)</code> và đưa cả hai vào con trỏ.</span></div>
 </div>
-<pre><code><span class="tok-comment">// Con trỏ là một chuỗi mờ đục, không phải con số client tự bịa ra được</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Con trỏ là một chuỗi mờ đục, không phải con số client tự bịa ra được</span>
 <span class="tok-keyword">const</span> cursor = Buffer.<span class="tok-fn">from</span>(JSON.<span class="tok-fn">stringify</span>({ createdAt, id })).<span class="tok-fn">toString</span>(<span class="tok-string">'base64url'</span>);
 
 <span class="tok-comment">// SQL cho "trang kế tiếp" của một bảng tin mới-nhất-trước</span>
@@ -846,7 +846,7 @@ SELECT reltuples FROM pg_class …        →   0,025 ms   (ước lượng từ
 <div class="callout warn">Phép đếm thường còn đắt hơn cả trang dữ liệu — 45ms phụ trội thuần tuý gắn vào mọi request danh sách, chỉ để hiển thị một con số mà phần lớn người dùng không bao giờ đọc. Có ba lối thoát, xếp theo thứ tự ưu tiên: bỏ <code>total</code> và trả về <code>hasMore</code> (tính bằng cách lấy <code>limit + 1</code> dòng rồi xem có dư ra một dòng không); dùng con số ước lượng cho kiểu hiển thị "~1,2 triệu kết quả"; hoặc cache con số chính xác trong một phút. Chính Google cũng chỉ cho bạn xem ước lượng — "Khoảng 12.400.000 kết quả" — đúng vì lý do này.</div>
 
 <h3>Lọc và sắp xếp cho an toàn</h3>
-<pre><code><span class="tok-comment">// SQL injection, chỉ là vòng vo hơn chút</span>
+<pre><code class="language-sql"><span class="tok-comment">// SQL injection, chỉ là vòng vo hơn chút</span>
 <span class="tok-keyword">const</span> rows = <span class="tok-keyword">await</span> db.<span class="tok-fn">$queryRawUnsafe</span>(\`SELECT * FROM notes ORDER BY \${req.query.sort}\`);</code></pre>
 <div class="pitfall">Tên cột không thể truyền vào như tham số truy vấn — dấu giữ chỗ chỉ dùng được cho <em>giá trị</em>, không bao giờ cho định danh. Nên một trường sắp xếp lấy từ query string sẽ bị nối chuỗi thẳng vào SQL, và đó là injection. Cách chữa không phải là escape; mà là một <strong>danh sách trắng</strong>, đúng thứ mà <code>z.enum(['createdAt','title'])</code> ở bài 6.3 đã cho bạn sẵn. Cái gì không nằm trong danh sách thì không bao giờ tới được câu truy vấn.</div>
 <pre><code>GET /notes?tag=work&amp;pinned=true&amp;q=express&amp;sort=title&amp;order=asc&amp;limit=20</code></pre>
@@ -899,7 +899,7 @@ SELECT reltuples FROM pg_class …        →   0,025 ms   (ước lượng từ
 <div class="pitfall">The one everybody underestimates: <strong>tightening validation is a breaking change</strong>. Adding <code>.max(200)</code> to a title that used to accept anything will start rejecting requests that worked yesterday, from a client you cannot update. The same is true of making an optional field required. Loosening is safe; tightening is not — and neither shows up in a code review as "breaking".</div>
 
 <h3>Versioning</h3>
-<pre><code>app.<span class="tok-fn">use</span>(<span class="tok-string">'/api/v1/notes'</span>, notesRouterV1);
+<pre><code class="language-typescript">app.<span class="tok-fn">use</span>(<span class="tok-string">'/api/v1/notes'</span>, notesRouterV1);
 app.<span class="tok-fn">use</span>(<span class="tok-string">'/api/v2/notes'</span>, notesRouterV2);   <span class="tok-comment">// old clients keep working</span></code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k">In the URL</span><span class="v"><code>/api/v1/…</code>. Ugly to purists, trivially visible in logs, easy to route, easy to curl. This is what most APIs do, including this one.</span></div>
@@ -910,7 +910,7 @@ app.<span class="tok-fn">use</span>(<span class="tok-string">'/api/v2/notes'</sp
 
 <h3>Optimistic concurrency: <code>ETag</code> + <code>If-Match</code></h3>
 <p>Lesson 6.1 demonstrated the lost update — A's edit silently erased by B. Here is the fix, and it costs one header in each direction.</p>
-<pre><code><span class="tok-keyword">const</span> <span class="tok-fn">etagOf</span> = (note) =&gt;
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> <span class="tok-fn">etagOf</span> = (note) =&gt;
   \`"\${crypto.<span class="tok-fn">createHash</span>(<span class="tok-string">'sha1'</span>).<span class="tok-fn">update</span>(JSON.<span class="tok-fn">stringify</span>(note)).<span class="tok-fn">digest</span>(<span class="tok-string">'hex'</span>).<span class="tok-fn">slice</span>(<span class="tok-number">0</span>, <span class="tok-number">12</span>)}"\`;
 
 app.<span class="tok-fn">get</span>(<span class="tok-string">'/notes/:id'</span>, (req, res) =&gt; {
@@ -945,7 +945,7 @@ final state: {"id":1,"title":"A edited","version":2}   ← A's edit survived</di
 
 <h3>Idempotency keys — the double charge, prevented</h3>
 <p>Lesson 6.1 showed that POST is not idempotent, so a retry creates a second resource. For a note that is annoying; for a payment it is a refund request and an apology. The standard fix is a client-generated key:</p>
-<pre><code>app.<span class="tok-fn">post</span>(<span class="tok-string">'/payments'</span>, (req, res) =&gt; {
+<pre><code class="language-javascript">app.<span class="tok-fn">post</span>(<span class="tok-string">'/payments'</span>, (req, res) =&gt; {
   <span class="tok-keyword">const</span> key = req.headers[<span class="tok-string">'idempotency-key'</span>];
   <span class="tok-keyword">if</span> (!key) <span class="tok-keyword">return</span> res.<span class="tok-fn">status</span>(<span class="tok-number">400</span>).<span class="tok-fn">json</span>({ error: { code: <span class="tok-string">'IDEMPOTENCY_KEY_REQUIRED'</span> } });
 
@@ -971,7 +971,7 @@ call 3  Idempotency-Key: 91b2…  → 201  {"id":"4e7e8308","amount":250000,"cha
 <div class="callout warn">Payment providers require this header for exactly this reason. If you are writing a client for one, generate the key at the moment of user intent — not inside the retry loop, which would produce a fresh key per attempt and defeat the entire mechanism.</div>
 
 <h3>Documenting the contract</h3>
-<pre><code><span class="tok-comment"># OpenAPI — generated from the same zod schemas, never hand-written</span>
+<pre><code class="language-typescript"><span class="tok-comment"># OpenAPI — generated from the same zod schemas, never hand-written</span>
 paths:
   /api/v1/notes:
     get:  { summary: List notes,  parameters: [page, limit, sort, order] }
@@ -1009,7 +1009,7 @@ paths:
 <div class="pitfall">Cái mà ai cũng đánh giá thấp: <strong>siết chặt luật kiểm tra cũng là thay đổi phá vỡ tương thích</strong>. Thêm <code>.max(200)</code> vào một trường title vốn nhận mọi độ dài sẽ bắt đầu từ chối những request hôm qua vẫn chạy, từ một client mà bạn không cập nhật được. Chuyện tương tự với việc biến một trường tuỳ chọn thành bắt buộc. Nới lỏng thì an toàn; siết chặt thì không — mà cả hai đều không hiện lên trong buổi review code với nhãn "phá vỡ tương thích".</div>
 
 <h3>Đánh phiên bản</h3>
-<pre><code>app.<span class="tok-fn">use</span>(<span class="tok-string">'/api/v1/notes'</span>, notesRouterV1);
+<pre><code class="language-typescript">app.<span class="tok-fn">use</span>(<span class="tok-string">'/api/v1/notes'</span>, notesRouterV1);
 app.<span class="tok-fn">use</span>(<span class="tok-string">'/api/v2/notes'</span>, notesRouterV2);   <span class="tok-comment">// client cũ vẫn chạy</span></code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k">Nằm trong URL</span><span class="v"><code>/api/v1/…</code>. Xấu với người thuần khiết, nhưng nhìn thấy ngay trong log, định tuyến dễ, curl dễ. Phần lớn API làm thế, kể cả API này.</span></div>
@@ -1020,7 +1020,7 @@ app.<span class="tok-fn">use</span>(<span class="tok-string">'/api/v2/notes'</sp
 
 <h3>Kiểm soát đồng thời lạc quan: <code>ETag</code> + <code>If-Match</code></h3>
 <p>Bài 6.1 đã trình diễn cú mất bản ghi — sửa đổi của A bị B xoá sạch trong im lặng. Đây là cách chữa, và nó tốn đúng một header mỗi chiều.</p>
-<pre><code><span class="tok-keyword">const</span> <span class="tok-fn">etagOf</span> = (note) =&gt;
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> <span class="tok-fn">etagOf</span> = (note) =&gt;
   \`"\${crypto.<span class="tok-fn">createHash</span>(<span class="tok-string">'sha1'</span>).<span class="tok-fn">update</span>(JSON.<span class="tok-fn">stringify</span>(note)).<span class="tok-fn">digest</span>(<span class="tok-string">'hex'</span>).<span class="tok-fn">slice</span>(<span class="tok-number">0</span>, <span class="tok-number">12</span>)}"\`;
 
 app.<span class="tok-fn">get</span>(<span class="tok-string">'/notes/:id'</span>, (req, res) =&gt; {
@@ -1055,7 +1055,7 @@ trạng thái cuối: {"id":1,"title":"A sửa","version":2}   ← sửa đổi 
 
 <h3>Khoá idempotency — chặn đứng cú trừ tiền hai lần</h3>
 <p>Bài 6.1 đã cho thấy POST không bất biến, nên một lần thử lại sẽ tạo ra tài nguyên thứ hai. Với một ghi chú thì chỉ khó chịu; với một giao dịch thanh toán thì đó là một yêu cầu hoàn tiền kèm một lời xin lỗi. Cách chữa tiêu chuẩn là một khoá do client sinh ra:</p>
-<pre><code>app.<span class="tok-fn">post</span>(<span class="tok-string">'/payments'</span>, (req, res) =&gt; {
+<pre><code class="language-javascript">app.<span class="tok-fn">post</span>(<span class="tok-string">'/payments'</span>, (req, res) =&gt; {
   <span class="tok-keyword">const</span> key = req.headers[<span class="tok-string">'idempotency-key'</span>];
   <span class="tok-keyword">if</span> (!key) <span class="tok-keyword">return</span> res.<span class="tok-fn">status</span>(<span class="tok-number">400</span>).<span class="tok-fn">json</span>({ error: { code: <span class="tok-string">'IDEMPOTENCY_KEY_REQUIRED'</span> } });
 
@@ -1081,7 +1081,7 @@ lần 3  Idempotency-Key: 91b2…  → 201  {"id":"4e7e8308","amount":250000,"ch
 <div class="callout warn">Các nhà cung cấp thanh toán bắt buộc header này đúng vì lý do trên. Nếu bạn đang viết client cho một trong số họ, hãy sinh khoá tại thời điểm người dùng có ý định — đừng sinh bên trong vòng lặp thử lại, vì như vậy mỗi lần thử lại sẽ ra một khoá mới và vô hiệu hoá toàn bộ cơ chế.</div>
 
 <h3>Viết tài liệu cho bản hợp đồng</h3>
-<pre><code><span class="tok-comment"># OpenAPI — sinh ra từ chính các lược đồ zod, không bao giờ viết tay</span>
+<pre><code class="language-typescript"><span class="tok-comment"># OpenAPI — sinh ra từ chính các lược đồ zod, không bao giờ viết tay</span>
 paths:
   /api/v1/notes:
     get:  { summary: Liệt kê ghi chú, parameters: [page, limit, sort, order] }

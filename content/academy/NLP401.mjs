@@ -107,7 +107,7 @@ const c1 = doc('nlp401-1-1-intro', '1.1 — Introduction to NLP|||1.1 — Nhập
 </ul>
 <h3>The NLP pipeline</h3>
 <p>Most systems share a shape: <strong>raw text → preprocessing → representation (features/vectors) → model → prediction</strong>. Each chapter of this course fills in one stage of that pipeline.</p>
-<pre><code>text = "NLP turns language into data."
+<pre><code class="language-python">text = "NLP turns language into data."
 
 # 1. preprocess: split into tokens
 tokens = text.lower().replace(".", "").split()
@@ -128,7 +128,7 @@ print(len(tokens), "tokens")</code></pre>
 </ul>
 <h3>Pipeline NLP</h3>
 <p>Hầu hết hệ thống có chung một hình: <strong>văn bản thô → tiền xử lý → biểu diễn (đặc trưng/vector) → mô hình → dự đoán</strong>. Mỗi chương của môn lấp đầy một chặng trong pipeline đó.</p>
-<pre><code>text = "NLP turns language into data."
+<pre><code class="language-python">text = "NLP turns language into data."
 
 # 1. tiền xử lý: tách thành token
 tokens = text.lower().replace(".", "").split()
@@ -161,7 +161,7 @@ const c2 = doc('nlp401-2-1-preprocessing', '2.1 — Text preprocessing|||2.1 —
 </ul>
 <h3>Vietnamese is different</h3>
 <p>Vietnamese words are NOT separated by spaces at the word level — "học sinh" is one word made of two syllables. Splitting on spaces breaks meaning, so use a word segmenter (VnCoreNLP, underthesea) and keep the diacritics.</p>
-<pre><code>import nltk
+<pre><code class="language-python">import nltk
 from nltk.stem import WordNetLemmatizer
 
 text = "The studies were running fast"
@@ -182,7 +182,7 @@ print(clean)
 </ul>
 <h3>Tiếng Việt thì khác</h3>
 <p>Từ tiếng Việt KHÔNG tách bằng khoảng trắng ở mức từ — "học sinh" là một từ gồm hai âm tiết. Tách theo khoảng trắng làm hỏng nghĩa, nên dùng bộ tách từ (VnCoreNLP, underthesea) và giữ nguyên dấu.</p>
-<pre><code>import nltk
+<pre><code class="language-python">import nltk
 from nltk.stem import WordNetLemmatizer
 
 text = "The studies were running fast"
@@ -212,7 +212,7 @@ const c3 = doc('nlp401-3-1-representation', '3.1 — Text representation|||3.1 �
 <li><strong>N-grams</strong> — count short sequences ("new york") to keep some order.</li>
 <li><strong>TF-IDF</strong> — weight each word by term frequency times inverse document frequency, so rare-but-telling words score higher than common ones.</li>
 </ul>
-<pre><code>from sklearn.feature_extraction.text import TfidfVectorizer
+<pre><code class="language-python">from sklearn.feature_extraction.text import TfidfVectorizer
 
 docs = ["nlp is fun", "nlp is hard", "cats are fun"]
 vec = TfidfVectorizer()
@@ -230,7 +230,7 @@ print(X.shape)   # (3 docs, 6 terms)</code></pre>
 <li><strong>N-gram</strong> — đếm các cụm ngắn ("new york") để giữ một phần trật tự.</li>
 <li><strong>TF-IDF</strong> — cân mỗi từ bằng tần suất từ nhân nghịch tần suất tài liệu, nên từ hiếm mà giàu thông tin có điểm cao hơn từ phổ biến.</li>
 </ul>
-<pre><code>from sklearn.feature_extraction.text import TfidfVectorizer
+<pre><code class="language-python">from sklearn.feature_extraction.text import TfidfVectorizer
 
 docs = ["nlp is fun", "nlp is hard", "cats are fun"]
 vec = TfidfVectorizer()
@@ -258,7 +258,7 @@ const c4 = doc('nlp401-4-1-embeddings', '4.1 — Word embeddings|||4.1 — Word 
 <li><strong>GloVe</strong> — factorizes a global word co-occurrence matrix.</li>
 <li><strong>Similarity</strong> — measured by cosine of the angle between two vectors (1 = identical direction).</li>
 </ul>
-<pre><code>import numpy as np
+<pre><code class="language-python">import numpy as np
 
 def cosine(a, b):
     return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
@@ -277,7 +277,7 @@ print(round(cosine(king, car), 2))    # ~0.30  (far)</code></pre>
 <li><strong>GloVe</strong> — phân rã ma trận đồng xuất hiện toàn cục của từ.</li>
 <li><strong>Độ tương tự</strong> — đo bằng cosine của góc giữa hai vector (1 = cùng hướng).</li>
 </ul>
-<pre><code>import numpy as np
+<pre><code class="language-python">import numpy as np
 
 def cosine(a, b):
     return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
@@ -305,7 +305,7 @@ const c5 = doc('nlp401-5-1-lm-classification', '5.1 — Language models & text c
 <p>A <strong>language model</strong> assigns a probability to the next word given the previous ones. An <strong>n-gram</strong> model approximates this with the last n−1 words: P(word | previous n−1 words). It powers autocomplete and old-school translation.</p>
 <h3>Text classification with Naive Bayes</h3>
 <p>Naive Bayes applies Bayes rule assuming words are independent given the class. Despite the naive assumption it is a strong, fast baseline for spam detection and <strong>sentiment analysis</strong>.</p>
-<pre><code>from sklearn.feature_extraction.text import CountVectorizer
+<pre><code class="language-python">from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.naive_bayes import MultinomialNB
 
 texts  = ["I love this", "great movie", "I hate it", "awful film"]
@@ -320,7 +320,7 @@ print(clf.predict(X)[:2])   # -> ['pos' 'pos']</code></pre>
 <p>Một <strong>mô hình ngôn ngữ</strong> gán xác suất cho từ kế tiếp dựa trên các từ trước. Mô hình <strong>n-gram</strong> xấp xỉ bằng n−1 từ gần nhất: P(từ | n−1 từ trước). Nó chạy autocomplete và dịch máy kiểu cũ.</p>
 <h3>Phân loại văn bản với Naive Bayes</h3>
 <p>Naive Bayes áp dụng quy tắc Bayes với giả định các từ độc lập khi biết lớp. Dù giả định ngây thơ, nó là baseline mạnh và nhanh cho lọc thư rác và <strong>phân tích cảm xúc</strong>.</p>
-<pre><code>from sklearn.feature_extraction.text import CountVectorizer
+<pre><code class="language-python">from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.naive_bayes import MultinomialNB
 
 texts  = ["I love this", "great movie", "I hate it", "awful film"]
@@ -348,7 +348,7 @@ const c6 = doc('nlp401-6-1-sequence-models', '6.1 — Sequence models (RNN/LSTM)
 <li><strong>LSTM</strong> — adds input/forget/output gates and a cell memory that keeps information over long spans.</li>
 <li><strong>Sequence labeling</strong> — output one label per token: DET, NOUN, VERB (POS) or PERSON, LOC, ORG (NER).</li>
 </ul>
-<pre><code>import torch
+<pre><code class="language-python">import torch
 import torch.nn as nn
 
 lstm = nn.LSTM(input_size=8, hidden_size=16, batch_first=True)
@@ -366,7 +366,7 @@ print(out.shape)   # (1, 5, 16) -> a vector per token
 <li><strong>LSTM</strong> — thêm cổng vào/quên/ra và một ô nhớ giữ thông tin qua đoạn dài.</li>
 <li><strong>Gán nhãn chuỗi</strong> — xuất một nhãn cho mỗi token: DET, NOUN, VERB (POS) hoặc PERSON, LOC, ORG (NER).</li>
 </ul>
-<pre><code>import torch
+<pre><code class="language-python">import torch
 import torch.nn as nn
 
 lstm = nn.LSTM(input_size=8, hidden_size=16, batch_first=True)
@@ -398,7 +398,7 @@ const c7 = doc('nlp401-7-1-transformers', '7.1 — Transformers & large models||
 </ul>
 <h3>Pretraining then fine-tuning</h3>
 <p>Train once on huge unlabeled text (pretraining), then adapt cheaply to your task on a small labeled set (fine-tuning) — the workflow behind almost every modern NLP system.</p>
-<pre><code>from transformers import pipeline
+<pre><code class="language-python">from transformers import pipeline
 
 clf = pipeline("sentiment-analysis")   # loads a pretrained model
 print(clf("This course is amazing!"))
@@ -415,7 +415,7 @@ print(clf("This course is amazing!"))
 </ul>
 <h3>Pretraining rồi fine-tuning</h3>
 <p>Huấn luyện một lần trên khối văn bản khổng lồ không nhãn (pretraining), rồi thích nghi rẻ cho nhiệm vụ của bạn trên tập nhỏ có nhãn (fine-tuning) — quy trình sau gần như mọi hệ NLP hiện đại.</p>
-<pre><code>from transformers import pipeline
+<pre><code class="language-python">from transformers import pipeline
 
 clf = pipeline("sentiment-analysis")   # nạp mô hình tiền huấn luyện
 print(clf("This course is amazing!"))
@@ -446,7 +446,7 @@ const c8 = doc('nlp401-8-1-applications-ethics', '8.1 — Applications & ethics|
 <li><strong>Hallucination</strong> — LLMs can state false facts fluently and confidently.</li>
 <li><strong>Privacy</strong> — training text may leak personal data; be careful what you send.</li>
 </ul>
-<pre><code>from transformers import pipeline
+<pre><code class="language-python">from transformers import pipeline
 
 summarize = pipeline("summarization")
 article = "NLP lets computers process human language. " * 5
@@ -467,7 +467,7 @@ print(summarize(article, max_length=20, min_length=5))
 <li><strong>Ảo giác (hallucination)</strong> — LLM có thể nói sai sự thật một cách trôi chảy, tự tin.</li>
 <li><strong>Quyền riêng tư</strong> — văn bản huấn luyện có thể rò rỉ dữ liệu cá nhân; cẩn thận với thứ bạn gửi.</li>
 </ul>
-<pre><code>from transformers import pipeline
+<pre><code class="language-python">from transformers import pipeline
 
 summarize = pipeline("summarization")
 article = "NLP lets computers process human language. " * 5

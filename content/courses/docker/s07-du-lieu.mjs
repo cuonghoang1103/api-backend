@@ -70,7 +70,7 @@ ${gallery('dk-07', [
 
 <h3>Watch a container forget</h3>
 ${slide('dk-07', 4, 'Container quên: tầng ghi chết theo docker rm')}
-<pre><code>docker run --name forgetful -d alpine:3.20 sleep 300
+<pre><code class="language-bash">docker run --name forgetful -d alpine:3.20 sleep 300
 docker exec forgetful sh -c 'echo "important" &gt; /data.txt; cat /data.txt'
 docker rm -f forgetful &gt;/dev/null
 docker run --rm alpine:3.20 cat /data.txt</code></pre>
@@ -86,7 +86,7 @@ ${slide('dk-07', 3, 'Ba kiểu gắn = ba chỗ lưu khác nhau trên máy chủ
   <div class="lz-layer"><span class="lz-lname">bind mount</span><span class="lz-lnote">A specific host directory appears inside the container. You choose the exact path on both sides. The right tool for source code during development, for config files, and for the Docker socket — and the wrong tool for a database.</span></div>
   <div class="lz-layer"><span class="lz-lname">tmpfs</span><span class="lz-lnote">Memory, never disk. Vanishes when the container stops. For scratch space, and for anything sensitive that must not be written to a disk you may later forget to wipe.</span></div>
 </div>
-<pre><code><span class="tok-comment"># The same mount, in the two syntaxes you will meet</span>
+<pre><code class="language-bash"><span class="tok-comment"># The same mount, in the two syntaxes you will meet</span>
 docker run -v mydata:/var/lib/postgresql/data postgres:16          <span class="tok-comment"># short form</span>
 docker run --mount type=volume,src=mydata,dst=/var/lib/postgresql/data postgres:16
 
@@ -145,7 +145,7 @@ drwxr-xr-x  2 admin  wheel  64 Sep 24 01:19 app.conf</div>
 
 <h3>Named, anonymous, and the difference that matters</h3>
 ${slide('dk-07', 7, 'Đặt tên volume: volume vô danh = dữ liệu mồ côi')}
-<pre><code>docker volume create app-uploads
+<pre><code class="language-bash">docker volume create app-uploads
 docker run -d --name a1 -v app-uploads:/uploads alpine:3.20 sleep 60   <span class="tok-comment"># named</span>
 docker run -d --name a2 -v /uploads alpine:3.20 sleep 60               <span class="tok-comment"># anonymous</span>
 docker volume ls</code></pre>
@@ -173,7 +173,7 @@ ${slide('dk-07', 6, 'Volume RỖNG được chép nội dung ảnh — bind moun
   <div class="lz-step"><span class="lz-k">Non-empty volume over an image directory</span><span class="lz-t">the volume wins; the image's files are hidden</span><span class="lz-d">Not deleted — still in the image layer, just shadowed by the mount. Restarting without the mount reveals them again, unchanged.</span></div>
   <div class="lz-step"><span class="lz-k">Bind mount over an image directory</span><span class="lz-t">the host wins, always, even if the host directory is empty</span><span class="lz-d">No copying, ever. This is the single most common source of "it worked in the image and broke when I mounted it" — see the node_modules trap in Lesson 7.3.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Prove the copy-on-first-use behaviour</span>
+<pre><code class="language-bash"><span class="tok-comment"># Prove the copy-on-first-use behaviour</span>
 docker run --rm -v demo-etc:/etc/nginx nginx:alpine ls /etc/nginx | head -4
 docker run --rm -v demo-etc:/mnt alpine:3.20 ls /mnt | head -4</code></pre>
 <div class="out">conf.d
@@ -297,7 +297,7 @@ docker run --rm -v thu-data:/data alpine:3.20 cat /data/note.txt   <span class="
 
 <h3>Nhìn một container quên</h3>
 ${slide('dk-07', 4, 'Container quên: tầng ghi chết theo docker rm')}
-<pre><code>docker run --name forgetful -d alpine:3.20 sleep 300
+<pre><code class="language-bash">docker run --name forgetful -d alpine:3.20 sleep 300
 docker exec forgetful sh -c 'echo "important" &gt; /data.txt; cat /data.txt'
 docker rm -f forgetful &gt;/dev/null
 docker run --rm alpine:3.20 cat /data.txt</code></pre>
@@ -313,7 +313,7 @@ ${slide('dk-07', 3, 'Ba kiểu gắn = ba chỗ lưu khác nhau trên máy chủ
   <div class="lz-layer"><span class="lz-lname">bind mount</span><span class="lz-lnote">Một thư mục cụ thể trên máy chủ hiện ra bên trong container. Bạn tự chọn đường dẫn chính xác ở cả hai phía. Đúng cho mã nguồn lúc phát triển, cho file cấu hình, và cho socket Docker — và SAI cho một cơ sở dữ liệu.</span></div>
   <div class="lz-layer"><span class="lz-lname">tmpfs</span><span class="lz-lnote">Bộ nhớ, không bao giờ chạm đĩa. Biến mất khi container dừng. Dành cho chỗ nháp, và cho mọi thứ nhạy cảm không được phép ghi xuống một cái đĩa mà sau này bạn có thể quên xoá.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Cùng một phép gắn, viết bằng hai cú pháp bạn sẽ gặp</span>
+<pre><code class="language-bash"><span class="tok-comment"># Cùng một phép gắn, viết bằng hai cú pháp bạn sẽ gặp</span>
 docker run -v mydata:/var/lib/postgresql/data postgres:16          <span class="tok-comment"># dạng ngắn</span>
 docker run --mount type=volume,src=mydata,dst=/var/lib/postgresql/data postgres:16
 
@@ -372,7 +372,7 @@ drwxr-xr-x  2 admin  wheel  64 Sep 24 01:19 app.conf</div>
 
 <h3>Có tên, vô danh, và khác biệt thật sự quan trọng</h3>
 ${slide('dk-07', 7, 'Đặt tên volume: volume vô danh = dữ liệu mồ côi')}
-<pre><code>docker volume create app-uploads
+<pre><code class="language-bash">docker volume create app-uploads
 docker run -d --name a1 -v app-uploads:/uploads alpine:3.20 sleep 60   <span class="tok-comment"># có tên</span>
 docker run -d --name a2 -v /uploads alpine:3.20 sleep 60               <span class="tok-comment"># vô danh</span>
 docker volume ls</code></pre>
@@ -400,7 +400,7 @@ ${slide('dk-07', 6, 'Volume RỖNG được chép nội dung ảnh — bind moun
   <div class="lz-step"><span class="lz-k">Volume KHÔNG rỗng đè lên thư mục của ảnh</span><span class="lz-t">volume thắng; file của ảnh bị che</span><span class="lz-d">Không bị xoá — vẫn nằm trong lớp ảnh, chỉ bị phép gắn che khuất. Khởi động lại mà không gắn thì chúng hiện ra nguyên vẹn.</span></div>
   <div class="lz-step"><span class="lz-k">Bind mount đè lên thư mục của ảnh</span><span class="lz-t">phía máy chủ thắng, luôn luôn, kể cả khi thư mục đó rỗng</span><span class="lz-d">Không bao giờ có chuyện chép. Đây là nguồn gốc phổ biến nhất của câu "trong ảnh chạy được, gắn vào là hỏng" — xem bẫy node_modules ở Bài 7.3.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Chứng minh hành vi chép-ở-lần-dùng-đầu</span>
+<pre><code class="language-bash"><span class="tok-comment"># Chứng minh hành vi chép-ở-lần-dùng-đầu</span>
 docker run --rm -v demo-etc:/etc/nginx nginx:alpine ls /etc/nginx | head -4
 docker run --rm -v demo-etc:/mnt alpine:3.20 ls /mnt | head -4</code></pre>
 <div class="out">conf.d
@@ -533,7 +533,7 @@ docker run --rm -v thu-data:/data alpine:3.20 cat /data/note.txt   <span class="
 
 <h3>Create, inspect, find on disk</h3>
 ${slide('dk-07', 8, 'Volume chỉ là một thư mục — trên Mac nó nằm trong máy ảo')}
-<pre><code>docker volume create --label app=blog --label env=prod blog-uploads
+<pre><code class="language-bash">docker volume create --label app=blog --label env=prod blog-uploads
 docker volume inspect blog-uploads</code></pre>
 <div class="out">[
     {
@@ -546,7 +546,7 @@ docker volume inspect blog-uploads</code></pre>
         "Scope": "local"
     }
 ]</div>
-<pre><code><span class="tok-comment"># Mountpoint is a real directory — but it is root-owned and Docker-owned</span>
+<pre><code class="language-bash"><span class="tok-comment"># Mountpoint is a real directory — but it is root-owned and Docker-owned</span>
 sudo ls -la /var/lib/docker/volumes/blog-uploads/_data | head -3
 docker volume inspect -f '{{ .Mountpoint }}' blog-uploads</code></pre>
 <div class="out">total 8
@@ -589,7 +589,7 @@ drwx-----x    1 root     root            10 Sep 23 18:20 ..
 
 <h3>Labels are how you stay sane at 40 volumes</h3>
 ${slide('dk-07', 9, 'Nhãn giúp tìm lại — dangling không có nghĩa là rác')}
-<pre><code>docker volume ls --filter label=env=prod
+<pre><code class="language-bash">docker volume ls --filter label=env=prod
 docker volume ls --filter dangling=true --format '{{ .Name }}' | head -3
 docker volume ls --format 'table {{ .Name }}\\t{{ .Labels }}' | head -4</code></pre>
 <div class="out">DRIVER    VOLUME NAME
@@ -626,7 +626,7 @@ f23d3ceff2ac…      com.docker.volume.anonymous=,dkhoc=07</div>
 
 <h3>Which volume is eating the disk</h3>
 ${slide('dk-07', 12, 'system df -v chỉ ra volume 0 LINKS')}
-<pre><code>docker system df -v 2&gt;/dev/null | sed -n '/Local Volumes space usage/,+6p'</code></pre>
+<pre><code class="language-bash">docker system df -v 2&gt;/dev/null | sed -n '/Local Volumes space usage/,+6p'</code></pre>
 <div class="out">Local Volumes space usage:
 
 VOLUME NAME                                          LINKS     SIZE
@@ -662,13 +662,13 @@ d6ca5185fd050830fdb750794b8e025d0e714ac01ca7e339f9eae4a423933e58   0         1.7
 
 <h3>Sharing one volume between containers</h3>
 ${slide('dk-07', 11, 'Chia sẻ một volume: một bên ghi, bên kia đọc :ro')}
-<pre><code><span class="tok-comment"># A writer and a reader on the same volume</span>
+<pre><code class="language-bash"><span class="tok-comment"># A writer and a reader on the same volume</span>
 docker run -d --name writer -v shared:/data alpine:3.20 \\
   sh -c 'while true; do date &gt;&gt; /data/log.txt; sleep 2; done'
 docker run --rm -v shared:/data:ro alpine:3.20 sh -c 'sleep 5; tail -2 /data/log.txt'</code></pre>
 <div class="out">Fri Aug 22 09:22:11 UTC 2026
 Fri Aug 22 09:22:13 UTC 2026</div>
-<pre><code><span class="tok-comment"># The reader really is read-only</span>
+<pre><code class="language-bash"><span class="tok-comment"># The reader really is read-only</span>
 docker run --rm -v shared:/data:ro alpine:3.20 touch /data/nope</code></pre>
 <div class="out">touch: /data/nope: Read-only file system</div>
 <div class="kv-grid">
@@ -680,7 +680,7 @@ docker run --rm -v shared:/data:ro alpine:3.20 touch /data/nope</code></pre>
 <p class="note-ct">Re-run on the course's Mac, Docker 29.8 (09/2026): the reader printed <code>Wed Sep 23 18:21:31 UTC 2026</code> and <code>Wed Sep 23 18:21:33 UTC 2026</code> — two lines two seconds apart, and the <code>touch</code> failed with the same <code>Read-only file system</code>. The times are UTC because alpine has no time zone configured, whatever your laptop says.</p>
 
 <h3>The local driver does more than local</h3>
-<pre><code><span class="tok-comment"># An NFS share, as a volume, using only the built-in local driver</span>
+<pre><code class="language-bash"><span class="tok-comment"># An NFS share, as a volume, using only the built-in local driver</span>
 docker volume create --driver local \\
   --opt type=nfs \\
   --opt o=addr=10.0.0.7,rw,nfsvers=4 \\
@@ -802,7 +802,7 @@ docker rm thu-anon            <span class="tok-comment"># its anonymous volume i
 
 <h3>Tạo, xem, tìm trên đĩa</h3>
 ${slide('dk-07', 8, 'Volume chỉ là một thư mục — trên Mac nó nằm trong máy ảo')}
-<pre><code>docker volume create --label app=blog --label env=prod blog-uploads
+<pre><code class="language-bash">docker volume create --label app=blog --label env=prod blog-uploads
 docker volume inspect blog-uploads</code></pre>
 <div class="out">[
     {
@@ -815,7 +815,7 @@ docker volume inspect blog-uploads</code></pre>
         "Scope": "local"
     }
 ]</div>
-<pre><code><span class="tok-comment"># Mountpoint là một thư mục thật — nhưng root sở hữu, và Docker sở hữu</span>
+<pre><code class="language-bash"><span class="tok-comment"># Mountpoint là một thư mục thật — nhưng root sở hữu, và Docker sở hữu</span>
 sudo ls -la /var/lib/docker/volumes/blog-uploads/_data | head -3
 docker volume inspect -f '{{ .Mountpoint }}' blog-uploads</code></pre>
 <div class="out">total 8
@@ -858,7 +858,7 @@ drwx-----x    1 root     root            10 Sep 23 18:20 ..
 
 <h3>Nhãn là cách bạn còn tỉnh táo khi có 40 volume</h3>
 ${slide('dk-07', 9, 'Nhãn giúp tìm lại — dangling không có nghĩa là rác')}
-<pre><code>docker volume ls --filter label=env=prod
+<pre><code class="language-bash">docker volume ls --filter label=env=prod
 docker volume ls --filter dangling=true --format '{{ .Name }}' | head -3
 docker volume ls --format 'table {{ .Name }}\\t{{ .Labels }}' | head -4</code></pre>
 <div class="out">DRIVER    VOLUME NAME
@@ -895,7 +895,7 @@ f23d3ceff2ac…      com.docker.volume.anonymous=,dkhoc=07</div>
 
 <h3>Volume nào đang ăn hết đĩa</h3>
 ${slide('dk-07', 12, 'system df -v chỉ ra volume 0 LINKS')}
-<pre><code>docker system df -v 2&gt;/dev/null | sed -n '/Local Volumes space usage/,+6p'</code></pre>
+<pre><code class="language-bash">docker system df -v 2&gt;/dev/null | sed -n '/Local Volumes space usage/,+6p'</code></pre>
 <div class="out">Local Volumes space usage:
 
 VOLUME NAME                                          LINKS     SIZE
@@ -931,13 +931,13 @@ d6ca5185fd050830fdb750794b8e025d0e714ac01ca7e339f9eae4a423933e58   0         1.7
 
 <h3>Chia sẻ một volume giữa nhiều container</h3>
 ${slide('dk-07', 11, 'Chia sẻ một volume: một bên ghi, bên kia đọc :ro')}
-<pre><code><span class="tok-comment"># Một bên ghi và một bên đọc trên cùng volume</span>
+<pre><code class="language-bash"><span class="tok-comment"># Một bên ghi và một bên đọc trên cùng volume</span>
 docker run -d --name writer -v shared:/data alpine:3.20 \\
   sh -c 'while true; do date &gt;&gt; /data/log.txt; sleep 2; done'
 docker run --rm -v shared:/data:ro alpine:3.20 sh -c 'sleep 5; tail -2 /data/log.txt'</code></pre>
 <div class="out">Fri Aug 22 09:22:11 UTC 2026
 Fri Aug 22 09:22:13 UTC 2026</div>
-<pre><code><span class="tok-comment"># Bên đọc đúng là chỉ đọc thật</span>
+<pre><code class="language-bash"><span class="tok-comment"># Bên đọc đúng là chỉ đọc thật</span>
 docker run --rm -v shared:/data:ro alpine:3.20 touch /data/nope</code></pre>
 <div class="out">touch: /data/nope: Read-only file system</div>
 <div class="kv-grid">
@@ -949,7 +949,7 @@ docker run --rm -v shared:/data:ro alpine:3.20 touch /data/nope</code></pre>
 <p class="note-ct">Chạy lại trên máy Mac của khoá, Docker 29.8 (09/2026): bên đọc in <code>Wed Sep 23 18:21:31 UTC 2026</code> và <code>Wed Sep 23 18:21:33 UTC 2026</code> — hai dòng cách nhau hai giây, và <code>touch</code> thất bại với đúng <code>Read-only file system</code>. Giờ in theo UTC vì ảnh alpine không cài múi giờ, bất kể laptop của bạn đang ở múi nào.</p>
 
 <h3>Driver local làm được nhiều hơn chữ "local"</h3>
-<pre><code><span class="tok-comment"># Một chia sẻ NFS, dưới dạng volume, chỉ bằng driver local có sẵn</span>
+<pre><code class="language-bash"><span class="tok-comment"># Một chia sẻ NFS, dưới dạng volume, chỉ bằng driver local có sẵn</span>
 docker volume create --driver local \\
   --opt type=nfs \\
   --opt o=addr=10.0.0.7,rw,nfsvers=4 \\
@@ -1080,7 +1080,7 @@ docker rm thu-anon            <span class="tok-comment"># volume vô danh của 
 
 <h3>The development loop it enables</h3>
 ${slide('dk-07', 13, 'Bind mount: sửa trên máy, container thấy ngay')}
-<pre><code>docker run --rm -it \\
+<pre><code class="language-bash">docker run --rm -it \\
   -v "$PWD:/app" -w /app \\
   -p 3000:3000 \\
   node:22-alpine sh -c 'npm run dev'</code></pre>
@@ -1123,14 +1123,14 @@ nghe o cong 3000</div>
 </ul>
 
 <h3>Trap 1 — node_modules disappears</h3>
-<pre><code><span class="tok-comment"># The image installed dependencies at build time…</span>
+<pre><code class="language-bash"><span class="tok-comment"># The image installed dependencies at build time…</span>
 docker build -q -t app-dev . &amp;&amp; docker run --rm app-dev ls node_modules | wc -l
 <span class="tok-comment"># …and the bind mount hides them</span>
 docker run --rm -v "$PWD:/app" app-dev ls /app/node_modules 2&gt;&amp;1 | head -1</code></pre>
 <div class="out">312
 ls: /app/node_modules: No such file or directory</div>
 <p>Nothing was deleted. <code>/app</code> now shows the host directory, and your host directory has no <code>node_modules</code> (or worse: it has one built for macOS while the container is Linux). Remember the rule from Lesson 7.1 — a bind mount never copies, and the host always wins.</p>
-<pre><code><span class="tok-comment"># The fix: mount an anonymous volume OVER the subdirectory</span>
+<pre><code class="language-bash"><span class="tok-comment"># The fix: mount an anonymous volume OVER the subdirectory</span>
 docker run --rm -v "$PWD:/app" -v /app/node_modules app-dev ls /app/node_modules | wc -l</code></pre>
 <div class="out">312</div>
 <div class="callout ok"><strong>Why that works.</strong> Mounts are applied in order of path depth: <code>/app</code> gets the bind mount, then the deeper <code>/app/node_modules</code> gets its own volume mount layered on top, which — being a <em>volume</em>, not a bind — receives a copy of the image's contents on first use. In compose the same trick reads much better:
@@ -1175,13 +1175,13 @@ xin chao 24/09/2026</div>
 <p>The image was rebuilt with <code>dayjs</code>, but the container kept the previous anonymous volume, which was populated from the <em>previous</em> image. <code>-V</code> throws that volume away and populates a fresh one from the new image. One more real detail: the replaced volume is <em>not</em> deleted — <code>docker events</code> showed it created and never destroyed — so after a few rounds <code>docker volume ls -f dangling=true</code> is worth a look (Lesson 7.2).</p>
 
 <h3>Trap 2 — files owned by root appear on your host</h3>
-<pre><code>docker run --rm -v "$PWD/out:/out" alpine:3.20 sh -c 'echo hi &gt; /out/made-in-container.txt'
+<pre><code class="language-bash">docker run --rm -v "$PWD/out:/out" alpine:3.20 sh -c 'echo hi &gt; /out/made-in-container.txt'
 ls -la out/</code></pre>
 <div class="out">total 12
 drwxr-xr-x 2 cuong cuong 4096 Aug 22 09:41 .
 -rw-r--r-- 1 root  root     3 Aug 22 09:41 made-in-container.txt</div>
 <p>The container ran as root (uid 0), and a bind mount carries numeric IDs straight through — there is no translation layer. The file is genuinely owned by root on your host, and now your editor cannot save over it.</p>
-<pre><code><span class="tok-comment"># Fix: run as your own uid/gid</span>
+<pre><code class="language-bash"><span class="tok-comment"># Fix: run as your own uid/gid</span>
 docker run --rm -u "$(id -u):$(id -g)" -v "$PWD/out:/out" alpine:3.20 \\
   sh -c 'echo hi &gt; /out/mine.txt'
 ls -l out/mine.txt</code></pre>
@@ -1221,10 +1221,10 @@ drwxr-xr-x@ 10 admin  wheel  320 Sep 24 01:29 ..
 <p>Inside, the file belongs to uid 0; on the Mac it belongs to you. Docker Desktop's file sharing maps ownership, so a Mac user never sees this trap — and then a teammate on Linux, or the CI runner, does. Windows with the project inside WSL2 behaves like Linux here, because it <em>is</em> a Linux filesystem.</p>
 
 <h3>Trap 3 — SELinux says permission denied on a correct mount</h3>
-<pre><code><span class="tok-comment"># On a host whose dockerd runs with --selinux-enabled (RHEL/CentOS builds, Podman) and SELinux enforcing</span>
+<pre><code class="language-bash"><span class="tok-comment"># On a host whose dockerd runs with --selinux-enabled (RHEL/CentOS builds, Podman) and SELinux enforcing</span>
 docker run --rm -v "$PWD/conf:/etc/app" alpine:3.20 cat /etc/app/app.conf</code></pre>
 <div class="out">cat: can't open '/etc/app/app.conf': Permission denied</div>
-<pre><code><span class="tok-comment"># :z relabels shared (multiple containers), :Z private (this container only)</span>
+<pre><code class="language-bash"><span class="tok-comment"># :z relabels shared (multiple containers), :Z private (this container only)</span>
 docker run --rm -v "$PWD/conf:/etc/app:ro,z" alpine:3.20 cat /etc/app/app.conf</code></pre>
 <div class="out">listen = 0.0.0.0:8080</div>
 <div class="callout"><strong>Measured: on a Fedora machine this trap did NOT happen.</strong> The course's Linux box runs Fedora 44 with SELinux <code>Enforcing</code>, yet the mount above works without <code>:z</code>:
@@ -1368,7 +1368,7 @@ console.log('ghi ' + w + ' ms · stat ' + s + ' ms · doc ' + r + ' ms · xoa ' 
 
 <h3>Vòng lặp phát triển mà nó mở ra</h3>
 ${slide('dk-07', 13, 'Bind mount: sửa trên máy, container thấy ngay')}
-<pre><code>docker run --rm -it \\
+<pre><code class="language-bash">docker run --rm -it \\
   -v "$PWD:/app" -w /app \\
   -p 3000:3000 \\
   node:22-alpine sh -c 'npm run dev'</code></pre>
@@ -1411,14 +1411,14 @@ nghe o cong 3000</div>
 </ul>
 
 <h3>Bẫy 1 — node_modules biến mất</h3>
-<pre><code><span class="tok-comment"># Cái ảnh đã cài gói phụ thuộc lúc dựng…</span>
+<pre><code class="language-bash"><span class="tok-comment"># Cái ảnh đã cài gói phụ thuộc lúc dựng…</span>
 docker build -q -t app-dev . &amp;&amp; docker run --rm app-dev ls node_modules | wc -l
 <span class="tok-comment"># …và bind mount che chúng đi</span>
 docker run --rm -v "$PWD:/app" app-dev ls /app/node_modules 2&gt;&amp;1 | head -1</code></pre>
 <div class="out">312
 ls: /app/node_modules: No such file or directory</div>
 <p>Chẳng có gì bị xoá. <code>/app</code> giờ hiện thư mục của máy chủ, và thư mục máy chủ của bạn không có <code>node_modules</code> (hoặc tệ hơn: có một cái dựng cho macOS trong khi container là Linux). Nhớ lại luật ở Bài 7.1 — bind mount không bao giờ chép, và phía máy chủ luôn thắng.</p>
-<pre><code><span class="tok-comment"># Cách vá: gắn một volume vô danh ĐÈ LÊN thư mục con</span>
+<pre><code class="language-bash"><span class="tok-comment"># Cách vá: gắn một volume vô danh ĐÈ LÊN thư mục con</span>
 docker run --rm -v "$PWD:/app" -v /app/node_modules app-dev ls /app/node_modules | wc -l</code></pre>
 <div class="out">312</div>
 <div class="callout ok"><strong>Vì sao cách đó chạy.</strong> Các phép gắn được áp theo độ sâu đường dẫn: <code>/app</code> nhận bind mount, rồi <code>/app/node_modules</code> sâu hơn nhận phép gắn volume riêng chồng lên trên, mà — vì là <em>volume</em> chứ không phải bind — nó được chép nội dung của ảnh vào ở lần dùng đầu. Viết trong compose thì dễ đọc hơn hẳn:
@@ -1463,13 +1463,13 @@ xin chao 24/09/2026</div>
 <p>Ảnh đã được build lại có <code>dayjs</code>, nhưng container giữ volume vô danh cũ, vốn được chép từ ảnh <em>trước</em>. <code>-V</code> vứt volume đó đi và chép một volume mới từ ảnh mới. Thêm một chi tiết thật: volume bị thay KHÔNG bị xoá — <code>docker events</code> cho thấy nó được tạo ra và không bao giờ bị huỷ — nên sau vài lượt, <code>docker volume ls -f dangling=true</code> đáng được nhìn qua (Bài 7.2).</p>
 
 <h3>Bẫy 2 — file thuộc quyền root xuất hiện trên máy bạn</h3>
-<pre><code>docker run --rm -v "$PWD/out:/out" alpine:3.20 sh -c 'echo hi &gt; /out/made-in-container.txt'
+<pre><code class="language-bash">docker run --rm -v "$PWD/out:/out" alpine:3.20 sh -c 'echo hi &gt; /out/made-in-container.txt'
 ls -la out/</code></pre>
 <div class="out">total 12
 drwxr-xr-x 2 cuong cuong 4096 Aug 22 09:41 .
 -rw-r--r-- 1 root  root     3 Aug 22 09:41 made-in-container.txt</div>
 <p>Container chạy bằng root (uid 0), và bind mount đưa thẳng ID dạng số đi qua — không có tầng dịch nào cả. File đúng là thuộc quyền root trên máy bạn, và giờ trình soạn thảo của bạn không lưu đè lên nó được.</p>
-<pre><code><span class="tok-comment"># Vá: chạy bằng đúng uid/gid của bạn</span>
+<pre><code class="language-bash"><span class="tok-comment"># Vá: chạy bằng đúng uid/gid của bạn</span>
 docker run --rm -u "$(id -u):$(id -g)" -v "$PWD/out:/out" alpine:3.20 \\
   sh -c 'echo hi &gt; /out/mine.txt'
 ls -l out/mine.txt</code></pre>
@@ -1509,10 +1509,10 @@ drwxr-xr-x@ 10 admin  wheel  320 Sep 24 01:29 ..
 <p>Bên trong, file thuộc uid 0; trên máy Mac nó thuộc về bạn. Cơ chế chia sẻ file của Docker Desktop đổi chủ sở hữu hộ bạn, nên người dùng Mac không bao giờ thấy cái bẫy này — rồi một bạn cùng nhóm dùng Linux, hoặc runner CI, thấy. Windows với dự án nằm trong WSL2 cư xử giống Linux ở điểm này, vì đó THẬT SỰ là một hệ thống file Linux.</p>
 
 <h3>Bẫy 3 — SELinux báo permission denied trên một phép gắn đúng</h3>
-<pre><code><span class="tok-comment"># Trên máy mà dockerd chạy với --selinux-enabled (bản RHEL/CentOS, Podman) và SELinux enforcing</span>
+<pre><code class="language-bash"><span class="tok-comment"># Trên máy mà dockerd chạy với --selinux-enabled (bản RHEL/CentOS, Podman) và SELinux enforcing</span>
 docker run --rm -v "$PWD/conf:/etc/app" alpine:3.20 cat /etc/app/app.conf</code></pre>
 <div class="out">cat: can't open '/etc/app/app.conf': Permission denied</div>
-<pre><code><span class="tok-comment"># :z gán nhãn dùng chung (nhiều container), :Z riêng cho container này</span>
+<pre><code class="language-bash"><span class="tok-comment"># :z gán nhãn dùng chung (nhiều container), :Z riêng cho container này</span>
 docker run --rm -v "$PWD/conf:/etc/app:ro,z" alpine:3.20 cat /etc/app/app.conf</code></pre>
 <div class="out">listen = 0.0.0.0:8080</div>
 <div class="callout"><strong>Đo thật: trên máy Fedora, cái bẫy này KHÔNG xảy ra.</strong> Máy Linux của khoá chạy Fedora 44 với SELinux <code>Enforcing</code>, vậy mà phép gắn ở trên chạy được không cần <code>:z</code>:
@@ -1665,14 +1665,14 @@ console.log('ghi ' + w + ' ms · stat ' + s + ' ms · doc ' + r + ' ms · xoa ' 
 
 <h3>A tmpfs mount is memory pretending to be a directory</h3>
 ${slide('dk-07', 19, 'tmpfs là RAM — không đặt size thì trần = nửa RAM máy')}
-<pre><code>docker run --rm --tmpfs /scratch:rw,size=64m,mode=1777 alpine:3.20 \\
+<pre><code class="language-bash">docker run --rm --tmpfs /scratch:rw,size=64m,mode=1777 alpine:3.20 \\
   sh -c 'df -h /scratch; dd if=/dev/zero of=/scratch/f bs=1M count=8 2&gt;&amp;1 | tail -1'</code></pre>
 <div class="out">Filesystem                Size      Used Available Use% Mounted on
 tmpfs                    64.0M         0     64.0M   0% /scratch
 8+0 records in
 8+0 records out
 8388608 bytes (8.0MB) copied, 0.004291 seconds, 1.8GB/s</div>
-<pre><code><span class="tok-comment"># The size cap is real — and it counts against the container's memory limit</span>
+<pre><code class="language-bash"><span class="tok-comment"># The size cap is real — and it counts against the container's memory limit</span>
 docker run --rm --tmpfs /scratch:size=8m alpine:3.20 \\
   dd if=/dev/zero of=/scratch/big bs=1M count=16 2&gt;&amp;1 | tail -2</code></pre>
 <div class="out">dd: writing '/scratch/big': No space left on device
@@ -1729,9 +1729,9 @@ shell van song</div>
 
 <h3>Read-only root plus writable holes</h3>
 ${slide('dk-07', 21, '--read-only: bật lên, để nó chết, đọc lỗi, khoét đúng lỗ')}
-<pre><code>docker run --rm --read-only alpine:3.20 sh -c 'touch /tmp/x'</code></pre>
+<pre><code class="language-bash">docker run --rm --read-only alpine:3.20 sh -c 'touch /tmp/x'</code></pre>
 <div class="out">touch: /tmp/x: Read-only file system</div>
-<pre><code><span class="tok-comment"># Give it back exactly what it needs, and nothing more</span>
+<pre><code class="language-bash"><span class="tok-comment"># Give it back exactly what it needs, and nothing more</span>
 docker run --rm --read-only \\
   --tmpfs /tmp:rw,size=32m \\
   --tmpfs /run:rw,size=8m \\
@@ -1769,7 +1769,7 @@ sh: can't create /usr/share/nginx/html/index.html: Read-only file system</div>
 <p>The site answers 200. The one info line comes from an entrypoint script that wants to edit the default config to add IPv6 — harmless here, and a nice example of why you read the logs rather than trust "it started". The last command is the security benefit in one line: someone who gets a shell in this container cannot change the config or deface the page.</p>
 
 <h3>/dev/shm, the mount you forget until Chrome crashes</h3>
-<pre><code>docker run --rm alpine:3.20 df -h /dev/shm
+<pre><code class="language-bash">docker run --rm alpine:3.20 df -h /dev/shm
 docker run --rm --shm-size=1g alpine:3.20 df -h /dev/shm</code></pre>
 <div class="out">Filesystem                Size      Used Available Use% Mounted on
 shm                      64.0M         0     64.0M   0% /dev/shm
@@ -1789,7 +1789,7 @@ docker run -d --name api -e DB_PASSWORD=matkhau-that-123 alpine:3.20 sleep 600
 docker inspect -f '{{json .Config.Env}}' api</code></pre>
 <div class="out">["DB_PASSWORD=matkhau-that-123","PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"]</div>
 <p>No privilege beyond "can talk to the Docker socket" is needed, and <code>--env-file</code> ends up in exactly the same field. A note on the second row of the ladder: with <code>docker run -d</code> the CLI exits at once, so the command line is only briefly visible in the host's <code>ps</code>; the lasting leaks are <code>inspect</code> and your shell history (<code>~/.zsh_history</code>).</p>
-<pre><code><span class="tok-comment"># The tmpfs-file pattern, without any extra infrastructure</span>
+<pre><code class="language-bash"><span class="tok-comment"># The tmpfs-file pattern, without any extra infrastructure</span>
 docker run -d --name api \\
   --tmpfs /run/secrets:rw,size=1m,mode=0700 \\
   --env-file /opt/app/.env \\
@@ -1883,14 +1883,14 @@ A /run/secrets</div>
 
 <h3>tmpfs là bộ nhớ đóng vai một thư mục</h3>
 ${slide('dk-07', 19, 'tmpfs là RAM — không đặt size thì trần = nửa RAM máy')}
-<pre><code>docker run --rm --tmpfs /scratch:rw,size=64m,mode=1777 alpine:3.20 \\
+<pre><code class="language-bash">docker run --rm --tmpfs /scratch:rw,size=64m,mode=1777 alpine:3.20 \\
   sh -c 'df -h /scratch; dd if=/dev/zero of=/scratch/f bs=1M count=8 2&gt;&amp;1 | tail -1'</code></pre>
 <div class="out">Filesystem                Size      Used Available Use% Mounted on
 tmpfs                    64.0M         0     64.0M   0% /scratch
 8+0 records in
 8+0 records out
 8388608 bytes (8.0MB) copied, 0.004291 seconds, 1.8GB/s</div>
-<pre><code><span class="tok-comment"># Trần dung lượng là thật — và nó tính vào hạn mức bộ nhớ của container</span>
+<pre><code class="language-bash"><span class="tok-comment"># Trần dung lượng là thật — và nó tính vào hạn mức bộ nhớ của container</span>
 docker run --rm --tmpfs /scratch:size=8m alpine:3.20 \\
   dd if=/dev/zero of=/scratch/big bs=1M count=16 2&gt;&amp;1 | tail -2</code></pre>
 <div class="out">dd: writing '/scratch/big': No space left on device
@@ -1947,9 +1947,9 @@ shell van song</div>
 
 <h3>Gốc chỉ đọc cộng những lỗ ghi được</h3>
 ${slide('dk-07', 21, '--read-only: bật lên, để nó chết, đọc lỗi, khoét đúng lỗ')}
-<pre><code>docker run --rm --read-only alpine:3.20 sh -c 'touch /tmp/x'</code></pre>
+<pre><code class="language-bash">docker run --rm --read-only alpine:3.20 sh -c 'touch /tmp/x'</code></pre>
 <div class="out">touch: /tmp/x: Read-only file system</div>
-<pre><code><span class="tok-comment"># Trả lại đúng thứ nó cần, không hơn</span>
+<pre><code class="language-bash"><span class="tok-comment"># Trả lại đúng thứ nó cần, không hơn</span>
 docker run --rm --read-only \\
   --tmpfs /tmp:rw,size=32m \\
   --tmpfs /run:rw,size=8m \\
@@ -1987,7 +1987,7 @@ sh: can't create /usr/share/nginx/html/index.html: Read-only file system</div>
 <p>Trang trả 200. Dòng info duy nhất đến từ một script entrypoint muốn sửa cấu hình mặc định để thêm IPv6 — ở đây vô hại, và là một ví dụ đẹp cho việc phải đọc log thay vì tin chữ "đã khởi động". Lệnh cuối là lợi ích bảo mật gói trong một dòng: ai chiếm được shell trong container này cũng không sửa được cấu hình hay bôi bẩn trang web.</p>
 
 <h3>/dev/shm, phép gắn bạn quên cho tới khi Chrome chết</h3>
-<pre><code>docker run --rm alpine:3.20 df -h /dev/shm
+<pre><code class="language-bash">docker run --rm alpine:3.20 df -h /dev/shm
 docker run --rm --shm-size=1g alpine:3.20 df -h /dev/shm</code></pre>
 <div class="out">Filesystem                Size      Used Available Use% Mounted on
 shm                      64.0M         0     64.0M   0% /dev/shm
@@ -2007,7 +2007,7 @@ docker run -d --name api -e DB_PASSWORD=matkhau-that-123 alpine:3.20 sleep 600
 docker inspect -f '{{json .Config.Env}}' api</code></pre>
 <div class="out">["DB_PASSWORD=matkhau-that-123","PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"]</div>
 <p>Không cần quyền gì hơn "nói chuyện được với socket Docker", và <code>--env-file</code> rốt cuộc nằm đúng trong trường đó. Một ghi chú cho bậc thứ hai của cái thang: với <code>docker run -d</code> thì CLI thoát ngay, nên dòng lệnh chỉ thoáng hiện trong <code>ps</code> của máy chủ; chỗ rò lâu dài là <code>inspect</code> và lịch sử shell của bạn (<code>~/.zsh_history</code>).</p>
-<pre><code><span class="tok-comment"># Mẫu file-trên-tmpfs, không cần thêm hạ tầng nào</span>
+<pre><code class="language-bash"><span class="tok-comment"># Mẫu file-trên-tmpfs, không cần thêm hạ tầng nào</span>
 docker run -d --name api \\
   --tmpfs /run/secrets:rw,size=1m,mode=0700 \\
   --env-file /opt/app/.env \\
@@ -2110,7 +2110,7 @@ A /run/secrets</div>
 
 <h3>The helper-container pattern</h3>
 ${slide('dk-07', 24, 'Mẫu container phụ: volume :ro + thư mục máy + tar')}
-<pre><code><span class="tok-comment"># Back a volume up to a tar file in the current directory</span>
+<pre><code class="language-bash"><span class="tok-comment"># Back a volume up to a tar file in the current directory</span>
 docker run --rm \\
   -v blog-uploads:/from:ro \\
   -v "$PWD:/to" \\
@@ -2118,7 +2118,7 @@ docker run --rm \\
 ls -lh uploads-2026-08-22.tgz</code></pre>
 <div class="out">-rw-r--r-- 1 root root 611M Aug 22 10:02 uploads-2026-08-22.tgz</div>
 <p>Nothing special is happening: a throwaway container mounts the volume read-only and a host directory read-write, and <code>tar</code> does the rest. This works for any volume, on any host, with no tooling beyond Docker — and because the source is <code>:ro</code>, a mistake in the command cannot damage the original.</p>
-<pre><code><span class="tok-comment"># Restore into a NEW volume — never over the live one on the first attempt</span>
+<pre><code class="language-bash"><span class="tok-comment"># Restore into a NEW volume — never over the live one on the first attempt</span>
 docker volume create blog-uploads-restored
 docker run --rm \\
   -v blog-uploads-restored:/to \\
@@ -2159,13 +2159,13 @@ pgdata3
   <div class="kv"><span class="k"><code>pg_dump</code> / <code>mysqldump</code></span><span class="v"><strong>Valid on a live database</strong>, because the engine gives you a consistent transactional snapshot. Portable across versions and even across machines with different architectures. Slower to restore on a large database.</span></div>
   <div class="kv"><span class="k">Filesystem snapshot (LVM/ZFS/cloud)</span><span class="v"><strong>Valid and instant</strong>, if the snapshot is atomic and the engine is crash-safe. This is what managed database backups actually do. Requires the storage layer to support it.</span></div>
 </div>
-<pre><code><span class="tok-comment"># The right way for Postgres — logical dump, from a container, live</span>
+<pre><code class="language-bash"><span class="tok-comment"># The right way for Postgres — logical dump, from a container, live</span>
 docker exec cuonghoangdev_postgres \\
   pg_dump -U "$POSTGRES_USER" -d "$POSTGRES_DB" --format=custom --compress=9 \\
   &gt; "db-$(date +%F).dump"
 ls -lh db-*.dump</code></pre>
 <div class="out">-rw-r--r-- 1 cuong cuong 84M Aug 22 10:11 db-2026-08-22.dump</div>
-<pre><code><span class="tok-comment"># Restore it into a scratch database first, and count something you recognise</span>
+<pre><code class="language-sql"><span class="tok-comment"># Restore it into a scratch database first, and count something you recognise</span>
 docker exec -i cuonghoangdev_postgres createdb -U "$POSTGRES_USER" restore_check
 docker exec -i cuonghoangdev_postgres \\
   pg_restore -U "$POSTGRES_USER" -d restore_check --no-owner &lt; db-2026-08-22.dump
@@ -2251,7 +2251,7 @@ pg_restore: error: could not read from input file: end of file</div>
   <div class="lz-step"><span class="lz-k">3 · Create the target volume first</span><span class="lz-t">docker volume create, explicitly</span><span class="lz-d">So it exists with the name and labels you meant, rather than being auto-created by the first container that references it.</span></div>
   <div class="lz-step"><span class="lz-k">4 · Verify before you delete anything</span><span class="lz-t">file counts, sizes, a checksum of a sample</span><span class="lz-d">Then keep the source volume for a week. Disk is cheaper than the conversation about where the uploads went.</span></div>
 </div>
-<pre><code><span class="tok-comment"># One command, no intermediate file, source host → target host</span>
+<pre><code class="language-bash"><span class="tok-comment"># One command, no intermediate file, source host → target host</span>
 docker run --rm -v blog-uploads:/from:ro alpine:3.20 tar -C /from -cf - . \\
   | ssh deploy@newhost 'docker volume create blog-uploads &gt;/dev/null; \\
       docker run --rm -i -v blog-uploads:/to alpine:3.20 tar -C /to -xf -'
@@ -2289,7 +2289,7 @@ DETAIL:  The data directory was initialized by PostgreSQL version 16, which is n
 
 <h3>A nightly backup that actually runs</h3>
 ${slide('dk-07', 29, 'Script sao lưu hằng đêm: set -e + .part là thứ cứu bạn')}
-<pre><code><span class="tok-comment"># /opt/backup/nightly.sh — kept deliberately boring</span>
+<pre><code class="language-bash"><span class="tok-comment"># /opt/backup/nightly.sh — kept deliberately boring</span>
 #!/usr/bin/env bash
 set -Eeuo pipefail
 STAMP=$(date +%F)
@@ -2402,7 +2402,7 @@ exit=0
 
 <h3>Mẫu container phụ</h3>
 ${slide('dk-07', 24, 'Mẫu container phụ: volume :ro + thư mục máy + tar')}
-<pre><code><span class="tok-comment"># Sao lưu một volume thành file tar trong thư mục hiện tại</span>
+<pre><code class="language-bash"><span class="tok-comment"># Sao lưu một volume thành file tar trong thư mục hiện tại</span>
 docker run --rm \\
   -v blog-uploads:/from:ro \\
   -v "$PWD:/to" \\
@@ -2410,7 +2410,7 @@ docker run --rm \\
 ls -lh uploads-2026-08-22.tgz</code></pre>
 <div class="out">-rw-r--r-- 1 root root 611M Aug 22 10:02 uploads-2026-08-22.tgz</div>
 <p>Không có gì đặc biệt xảy ra cả: một container dùng xong vứt gắn volume ở chế độ chỉ đọc và một thư mục máy chủ ở chế độ đọc-ghi, rồi <code>tar</code> làm phần còn lại. Cách này chạy với mọi volume, trên mọi máy chủ, không cần công cụ nào ngoài Docker — và vì nguồn là <code>:ro</code>, gõ sai lệnh cũng không làm hỏng được bản gốc.</p>
-<pre><code><span class="tok-comment"># Khôi phục vào một volume MỚI — đừng bao giờ đè lên cái đang sống ở lần thử đầu</span>
+<pre><code class="language-bash"><span class="tok-comment"># Khôi phục vào một volume MỚI — đừng bao giờ đè lên cái đang sống ở lần thử đầu</span>
 docker volume create blog-uploads-restored
 docker run --rm \\
   -v blog-uploads-restored:/to \\
@@ -2451,13 +2451,13 @@ pgdata3
   <div class="kv"><span class="k"><code>pg_dump</code> / <code>mysqldump</code></span><span class="v"><strong>Hợp lệ trên cơ sở dữ liệu đang sống</strong>, vì engine cho bạn một ảnh chụp nhất quán ở mức giao dịch. Mang đi được qua các phiên bản và thậm chí qua các máy khác kiến trúc. Khôi phục chậm hơn với cơ sở dữ liệu lớn.</span></div>
   <div class="kv"><span class="k">Ảnh chụp hệ thống file (LVM/ZFS/đám mây)</span><span class="v"><strong>Hợp lệ và tức thì</strong>, nếu ảnh chụp là nguyên tử và engine an toàn khi sập. Đây là thứ các dịch vụ cơ sở dữ liệu có quản thật sự làm. Đòi tầng lưu trữ hỗ trợ.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Cách đúng cho Postgres — xuất logic, từ container, khi đang sống</span>
+<pre><code class="language-bash"><span class="tok-comment"># Cách đúng cho Postgres — xuất logic, từ container, khi đang sống</span>
 docker exec cuonghoangdev_postgres \\
   pg_dump -U "$POSTGRES_USER" -d "$POSTGRES_DB" --format=custom --compress=9 \\
   &gt; "db-$(date +%F).dump"
 ls -lh db-*.dump</code></pre>
 <div class="out">-rw-r--r-- 1 cuong cuong 84M Aug 22 10:11 db-2026-08-22.dump</div>
-<pre><code><span class="tok-comment"># Khôi phục vào một cơ sở dữ liệu nháp trước, rồi đếm thứ bạn nhận ra</span>
+<pre><code class="language-sql"><span class="tok-comment"># Khôi phục vào một cơ sở dữ liệu nháp trước, rồi đếm thứ bạn nhận ra</span>
 docker exec -i cuonghoangdev_postgres createdb -U "$POSTGRES_USER" restore_check
 docker exec -i cuonghoangdev_postgres \\
   pg_restore -U "$POSTGRES_USER" -d restore_check --no-owner &lt; db-2026-08-22.dump
@@ -2543,7 +2543,7 @@ pg_restore: error: could not read from input file: end of file</div>
   <div class="lz-step"><span class="lz-k">3 · Tạo volume đích trước</span><span class="lz-t">docker volume create, một cách tường minh</span><span class="lz-d">Để nó tồn tại với đúng cái tên và nhãn bạn muốn, thay vì được tự tạo bởi container đầu tiên tham chiếu tới nó.</span></div>
   <div class="lz-step"><span class="lz-k">4 · Kiểm trước khi xoá bất cứ thứ gì</span><span class="lz-t">số file, kích thước, checksum một mẫu</span><span class="lz-d">Rồi giữ volume nguồn thêm một tuần. Đĩa rẻ hơn cuộc trao đổi về việc đám file tải lên đi đâu mất.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Một lệnh, không file trung gian, máy nguồn → máy đích</span>
+<pre><code class="language-bash"><span class="tok-comment"># Một lệnh, không file trung gian, máy nguồn → máy đích</span>
 docker run --rm -v blog-uploads:/from:ro alpine:3.20 tar -C /from -cf - . \\
   | ssh deploy@newhost 'docker volume create blog-uploads &gt;/dev/null; \\
       docker run --rm -i -v blog-uploads:/to alpine:3.20 tar -C /to -xf -'
@@ -2581,7 +2581,7 @@ DETAIL:  The data directory was initialized by PostgreSQL version 16, which is n
 
 <h3>Một việc sao lưu hằng đêm thật sự chạy</h3>
 ${slide('dk-07', 29, 'Script sao lưu hằng đêm: set -e + .part là thứ cứu bạn')}
-<pre><code><span class="tok-comment"># /opt/backup/nightly.sh — cố ý viết cho nhàm chán</span>
+<pre><code class="language-bash"><span class="tok-comment"># /opt/backup/nightly.sh — cố ý viết cho nhàm chán</span>
 #!/usr/bin/env bash
 set -Eeuo pipefail
 STAMP=$(date +%F)

@@ -58,7 +58,7 @@ ${gallery('git-10', [
 <h2>One repository, several working directories</h2>
 <p class="lead">A production bug arrives while your feature branch is half-built, <code>node_modules</code> is installed for that branch, and the dev server is running. <code>git stash</code> (4.5) handles the files — and it does not stop your build from being invalidated, your dev server from restarting, or your editor from losing every open tab. <code>git worktree</code> avoids all of it.</p>
 
-<pre><code>cd ~/projects/api-backend
+<pre><code class="language-bash">cd ~/projects/api-backend
 git worktree add ../api-hotfix main</code></pre>
 <div class="out">Preparing worktree (checking out 'main')
 HEAD is now at 3f8a1c9 refactor(api): extract pagination</div>
@@ -72,10 +72,10 @@ HEAD is now at 3f8a1c9 refactor(api): extract pagination</div>
 
 <h3>Managing them</h3>
 ${slide('git-10', 4, 'Vá gấp trong worktree thứ hai, nhánh đang dở đứng yên')}
-<pre><code>git worktree list</code></pre>
+<pre><code class="language-bash">git worktree list</code></pre>
 <div class="out">/home/an/projects/api-backend  3f8a1c9 [feature/login]
 /home/an/projects/api-hotfix   9e2d4b7 [main]</div>
-<pre><code>git worktree add ../api-review pr-431      <span class="tok-comment"># existing branch</span>
+<pre><code class="language-bash">git worktree add ../api-review pr-431      <span class="tok-comment"># existing branch</span>
 git worktree add -b fix/urgent ../api-fix  <span class="tok-comment"># create the branch too</span>
 git worktree add --detach ../api-v14 v1.4.0 <span class="tok-comment"># a tag, detached (3.1)</span>
 
@@ -94,7 +94,7 @@ git worktree prune                          <span class="tok-comment"># clean up
 
 <h3>What lives where</h3>
 ${slide('git-10', 3, 'Một .git dùng chung, mỗi worktree một HEAD và index')}
-<pre><code>cat ../api-hotfix/.git</code></pre>
+<pre><code class="language-bash">cat ../api-hotfix/.git</code></pre>
 <div class="out">gitdir: /home/an/projects/api-backend/.git/worktrees/api-hotfix</div>
 <p>A linked worktree has a <code>.git</code> <em>file</em>, not a directory — it points back at the main repository. Per-worktree state (HEAD, index, reflog) lives under <code>.git/worktrees/&lt;name&gt;/</code>; objects and refs stay shared. That is exactly the design that makes them cheap.</p>
 
@@ -112,7 +112,7 @@ ${slide('git-10', 5, 'Luật của worktree: ba lỗi hay gặp')}
   api-backend/          <span class="tok-comment"># main worktree — your current feature</span>
   api-main/             <span class="tok-comment"># always on main, for quick checks and hotfixes</span>
   api-review/           <span class="tok-comment"># scratch, re-pointed at whichever PR you are reviewing</span></code></pre>
-<pre><code><span class="tok-comment"># Re-point the review worktree at a different pull request:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Re-point the review worktree at a different pull request:</span>
 cd ~/projects/api-review
 git fetch origin pull/431/head:pr-431 &amp;&amp; git switch pr-431</code></pre>
 
@@ -155,7 +155,7 @@ git fetch origin pull/431/head:pr-431 &amp;&amp; git switch pr-431</code></pre>
 <h2>Một kho mã, nhiều thư mục làm việc</h2>
 <p class="lead">Một lỗi production ập tới trong lúc nhánh tính năng của bạn đang dở dang, <code>node_modules</code> đã cài cho đúng nhánh đó, và dev server đang chạy. <code>git stash</code> (bài 4.5) lo được phần file — và nó không ngăn được bản dựng của bạn bị vô hiệu, dev server phải khởi động lại, hay trình soạn thảo mất sạch các tab đang mở. <code>git worktree</code> tránh được tất cả.</p>
 
-<pre><code>cd ~/projects/api-backend
+<pre><code class="language-bash">cd ~/projects/api-backend
 git worktree add ../api-hotfix main</code></pre>
 <div class="out">Preparing worktree (checking out 'main')
 HEAD is now at 3f8a1c9 refactor(api): extract pagination</div>
@@ -169,10 +169,10 @@ HEAD is now at 3f8a1c9 refactor(api): extract pagination</div>
 
 <h3>Quản lý chúng</h3>
 ${slide('git-10', 4, 'Vá gấp trong worktree thứ hai, nhánh đang dở đứng yên')}
-<pre><code>git worktree list</code></pre>
+<pre><code class="language-bash">git worktree list</code></pre>
 <div class="out">/home/an/projects/api-backend  3f8a1c9 [feature/login]
 /home/an/projects/api-hotfix   9e2d4b7 [main]</div>
-<pre><code>git worktree add ../api-review pr-431      <span class="tok-comment"># nhánh đã có</span>
+<pre><code class="language-bash">git worktree add ../api-review pr-431      <span class="tok-comment"># nhánh đã có</span>
 git worktree add -b fix/urgent ../api-fix  <span class="tok-comment"># tạo luôn cả nhánh</span>
 git worktree add --detach ../api-v14 v1.4.0 <span class="tok-comment"># một tag, ở dạng lìa cành (bài 3.1)</span>
 
@@ -191,7 +191,7 @@ git worktree prune                          <span class="tok-comment"># dọn sa
 
 <h3>Cái gì nằm ở đâu</h3>
 ${slide('git-10', 3, 'Một .git dùng chung, mỗi worktree một HEAD và index')}
-<pre><code>cat ../api-hotfix/.git</code></pre>
+<pre><code class="language-bash">cat ../api-hotfix/.git</code></pre>
 <div class="out">gitdir: /home/an/projects/api-backend/.git/worktrees/api-hotfix</div>
 <p>Một worktree liên kết có <code>.git</code> là một <em>FILE</em>, không phải thư mục — nó trỏ ngược về kho chính. Trạng thái riêng của từng worktree (HEAD, index, reflog) nằm dưới <code>.git/worktrees/&lt;tên&gt;/</code>; còn đối tượng và ref thì dùng chung. Đó chính là thiết kế làm cho chúng rẻ.</p>
 
@@ -209,7 +209,7 @@ ${slide('git-10', 5, 'Luật của worktree: ba lỗi hay gặp')}
   api-backend/          <span class="tok-comment"># worktree chính — tính năng bạn đang làm</span>
   api-main/             <span class="tok-comment"># luôn ở main, để kiểm nhanh và vá gấp</span>
   api-review/           <span class="tok-comment"># chỗ nháp, trỏ lại sang PR nào bạn đang review</span></code></pre>
-<pre><code><span class="tok-comment"># Trỏ worktree review sang một pull request khác:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Trỏ worktree review sang một pull request khác:</span>
 cd ~/projects/api-review
 git fetch origin pull/431/head:pr-431 &amp;&amp; git switch pr-431</code></pre>
 
@@ -263,19 +263,19 @@ git fetch origin pull/431/head:pr-431 &amp;&amp; git switch pr-431</code></pre>
 
 <h3>Submodule — a pinned pointer</h3>
 ${slide('git-10', 6, 'submodule là con trỏ gitlink (mode 160000)')}
-<pre><code>git submodule add https://github.com/cuonghoang1103/ui-kit.git vendor/ui-kit
+<pre><code class="language-bash">git submodule add https://github.com/cuonghoang1103/ui-kit.git vendor/ui-kit
 git commit -m <span class="tok-string">"chore: add ui-kit as a submodule"</span></code></pre>
-<pre><code>cat .gitmodules</code></pre>
+<pre><code class="language-bash">cat .gitmodules</code></pre>
 <div class="out">[submodule "vendor/ui-kit"]
 	path = vendor/ui-kit
 	url = https://github.com/cuonghoang1103/ui-kit.git</div>
-<pre><code>git ls-files --stage vendor/ui-kit</code></pre>
+<pre><code class="language-bash">git ls-files --stage vendor/ui-kit</code></pre>
 <div class="out">160000 a7c2f91d8e0b2c4a6f8e0d2b4c6a8e0f2d4b6c8e 0	vendor/ui-kit</div>
 <div class="callout ok">Mode <strong>160000</strong> is the giveaway: it is not a blob and not a tree, it is a <em>gitlink</em> — a pointer to one specific commit in another repository. Your repository stores forty characters, not the library's code. That is the whole design, and every quirk below follows from it.</div>
 
 <h3>The commands you must remember</h3>
 ${slide('git-10', 7, 'Vòng đời submodule: dấu -, dấu cách, dấu +')}
-<pre><code>git clone --recurse-submodules &lt;url&gt;        <span class="tok-comment"># clone and fill them in</span>
+<pre><code class="language-bash">git clone --recurse-submodules &lt;url&gt;        <span class="tok-comment"># clone and fill them in</span>
 git submodule update --init --recursive      <span class="tok-comment"># after a normal clone</span>
 git submodule update --remote                <span class="tok-comment"># move the pin to the submodule's latest</span>
 git submodule status</code></pre>
@@ -285,7 +285,7 @@ git submodule status</code></pre>
   <div class="kv"><span class="k">&nbsp;hash</span><span class="v">Checked out at the pinned commit. Correct state.</span></div>
   <div class="kv"><span class="k">+hash</span><span class="v">Checked out at a <em>different</em> commit than pinned — someone worked inside it, or ran <code>--remote</code>. Commit the new pin or reset.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Make recursion automatic and stop half the problems:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Make recursion automatic and stop half the problems:</span>
 git config --global submodule.recurse true</code></pre>
 
 <h3>Why submodules have their reputation</h3>
@@ -300,10 +300,10 @@ ${slide('git-10', 8, 'Bẫy: push kho cha trước kho con')}
 
 <h3>Subtree — the code, merged in</h3>
 ${slide('git-10', 9, 'subtree chép mã và lịch sử vào kho')}
-<pre><code>git subtree add --prefix vendor/ui-kit \\
+<pre><code class="language-bash">git subtree add --prefix vendor/ui-kit \\
   https://github.com/cuonghoang1103/ui-kit.git main --squash</code></pre>
 <p>This copies the library's files into <code>vendor/ui-kit/</code> as <strong>real files in your repository</strong>. Clone works normally, no extra commands, no empty folders, and someone who has never heard of subtree can work in the repository without noticing.</p>
-<pre><code><span class="tok-comment"># Pull upstream changes in:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Pull upstream changes in:</span>
 git subtree pull --prefix vendor/ui-kit &lt;url&gt; main --squash
 
 <span class="tok-comment"># Push your local changes back to the library:</span>
@@ -321,7 +321,7 @@ ${slide('git-10', 10, 'Submodule, subtree, gói npm hay monorepo')}
 <div class="callout ok">Before reaching for either mechanism, ask whether a package registry solves it. Publishing <code>@cuongthai/ui-kit</code> to npm — or to a private registry — gives you versioning, caching, dependency resolution and a lockfile, none of which submodules or subtrees provide. Reach for Git-level embedding when the dependency is not publishable: a private repository you cannot host a registry for, a config repository, or a vendored fork you patch locally.</div>
 
 <h3>Removing a submodule</h3>
-<pre><code>git submodule deinit -f vendor/ui-kit
+<pre><code class="language-bash">git submodule deinit -f vendor/ui-kit
 git rm -f vendor/ui-kit
 rm -rf .git/modules/vendor/ui-kit
 git commit -m <span class="tok-string">"chore: drop the ui-kit submodule"</span></code></pre>
@@ -372,19 +372,19 @@ git ls-files --stage vendor/ui-kit                <span class="tok-comment"># in
 
 <h3>Submodule — một con trỏ được ghim</h3>
 ${slide('git-10', 6, 'submodule là con trỏ gitlink (mode 160000)')}
-<pre><code>git submodule add https://github.com/cuonghoang1103/ui-kit.git vendor/ui-kit
+<pre><code class="language-bash">git submodule add https://github.com/cuonghoang1103/ui-kit.git vendor/ui-kit
 git commit -m <span class="tok-string">"chore: them ui-kit lam submodule"</span></code></pre>
-<pre><code>cat .gitmodules</code></pre>
+<pre><code class="language-bash">cat .gitmodules</code></pre>
 <div class="out">[submodule "vendor/ui-kit"]
 	path = vendor/ui-kit
 	url = https://github.com/cuonghoang1103/ui-kit.git</div>
-<pre><code>git ls-files --stage vendor/ui-kit</code></pre>
+<pre><code class="language-bash">git ls-files --stage vendor/ui-kit</code></pre>
 <div class="out">160000 a7c2f91d8e0b2c4a6f8e0d2b4c6a8e0f2d4b6c8e 0	vendor/ui-kit</div>
 <div class="callout ok">Chế độ <strong>160000</strong> là dấu hiệu tố cáo: nó không phải blob và không phải tree, nó là một <em>gitlink</em> — con trỏ tới đúng một commit trong một kho mã khác. Kho của bạn lưu bốn mươi ký tự, không lưu mã của thư viện. Đó là toàn bộ thiết kế, và mọi điểm kỳ quặc dưới đây đều suy ra từ nó.</div>
 
 <h3>Những lệnh bạn buộc phải nhớ</h3>
 ${slide('git-10', 7, 'Vòng đời submodule: dấu -, dấu cách, dấu +')}
-<pre><code>git clone --recurse-submodules &lt;url&gt;        <span class="tok-comment"># clone và điền luôn vào</span>
+<pre><code class="language-bash">git clone --recurse-submodules &lt;url&gt;        <span class="tok-comment"># clone và điền luôn vào</span>
 git submodule update --init --recursive      <span class="tok-comment"># sau một lần clone thường</span>
 git submodule update --remote                <span class="tok-comment"># dời cái ghim sang commit mới nhất của submodule</span>
 git submodule status</code></pre>
@@ -394,7 +394,7 @@ git submodule status</code></pre>
   <div class="kv"><span class="k">&nbsp;mã băm</span><span class="v">Đang ở đúng commit được ghim. Trạng thái đúng.</span></div>
   <div class="kv"><span class="k">+mã băm</span><span class="v">Đang ở một commit <em>KHÁC</em> với commit được ghim — có người đã làm việc bên trong nó, hoặc đã chạy <code>--remote</code>. Hãy commit cái ghim mới hoặc reset.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Bật đệ quy tự động và dẹp được một nửa số vấn đề:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Bật đệ quy tự động và dẹp được một nửa số vấn đề:</span>
 git config --global submodule.recurse true</code></pre>
 
 <h3>Vì sao submodule mang tiếng xấu</h3>
@@ -409,10 +409,10 @@ ${slide('git-10', 8, 'Bẫy: push kho cha trước kho con')}
 
 <h3>Subtree — mã nguồn, được hợp nhất thẳng vào</h3>
 ${slide('git-10', 9, 'subtree chép mã và lịch sử vào kho')}
-<pre><code>git subtree add --prefix vendor/ui-kit \\
+<pre><code class="language-bash">git subtree add --prefix vendor/ui-kit \\
   https://github.com/cuonghoang1103/ui-kit.git main --squash</code></pre>
 <p>Lệnh này chép file của thư viện vào <code>vendor/ui-kit/</code> dưới dạng <strong>file THẬT trong kho của bạn</strong>. Clone chạy bình thường, không lệnh thêm, không thư mục trống, và một người chưa từng nghe tới subtree vẫn làm việc trong kho mà không nhận ra gì.</p>
-<pre><code><span class="tok-comment"># Kéo thay đổi từ thượng nguồn về:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Kéo thay đổi từ thượng nguồn về:</span>
 git subtree pull --prefix vendor/ui-kit &lt;url&gt; main --squash
 
 <span class="tok-comment"># Đẩy thay đổi cục bộ của bạn ngược lên thư viện:</span>
@@ -430,7 +430,7 @@ ${slide('git-10', 10, 'Submodule, subtree, gói npm hay monorepo')}
 <div class="callout ok">Trước khi vớ lấy một trong hai cơ chế, hãy hỏi xem một registry gói có giải quyết được không. Công bố <code>@cuongthai/ui-kit</code> lên npm — hoặc lên một registry riêng tư — cho bạn phiên bản, cache, phân giải phụ thuộc và một lockfile, không thứ nào trong đó submodule hay subtree cung cấp. Hãy dùng cách nhúng ở tầng Git khi cái phụ thuộc không công bố được: một kho riêng tư mà bạn không dựng nổi registry cho nó, một kho cấu hình, hay một bản fork bạn vá cục bộ.</div>
 
 <h3>Gỡ một submodule</h3>
-<pre><code>git submodule deinit -f vendor/ui-kit
+<pre><code class="language-bash">git submodule deinit -f vendor/ui-kit
 git rm -f vendor/ui-kit
 rm -rf .git/modules/vendor/ui-kit
 git commit -m <span class="tok-string">"chore: bo submodule ui-kit"</span></code></pre>
@@ -491,15 +491,15 @@ git ls-files --stage vendor/ui-kit                <span class="tok-comment"># tr
 <h3>sparse-checkout — fewer files in the working directory</h3>
 ${slide('git-10', 11, 'partial clone và sparse-checkout bằng số đo thật')}
 ${slide('git-10', 12, 'sparse-checkout trong thực tế (cone mode)')}
-<pre><code>git clone --filter=blob:none --sparse &lt;url&gt;    <span class="tok-comment"># partial clone (9.3) + sparse</span>
+<pre><code class="language-bash">git clone --filter=blob:none --sparse &lt;url&gt;    <span class="tok-comment"># partial clone (9.3) + sparse</span>
 cd monorepo
 git sparse-checkout set apps/web packages/ui</code></pre>
 <pre><code>ls</code></pre>
 <div class="out">apps/  packages/  package.json  turbo.json</div>
-<pre><code>ls apps/</code></pre>
+<pre><code class="language-bash">ls apps/</code></pre>
 <div class="out">web/</div>
 <p>The other eleven applications are still in history and still fetchable — they are simply not written to disk. On a large monorepo this turns a 40,000-file checkout into 2,000, which makes every editor index, file watcher and test runner dramatically faster.</p>
-<pre><code>git sparse-checkout list                 <span class="tok-comment"># what is currently included</span>
+<pre><code class="language-bash">git sparse-checkout list                 <span class="tok-comment"># what is currently included</span>
 git sparse-checkout add packages/api     <span class="tok-comment"># widen the set</span>
 git sparse-checkout reapply              <span class="tok-comment"># after changing patterns</span>
 git sparse-checkout disable              <span class="tok-comment"># back to a full checkout</span></code></pre>
@@ -507,7 +507,7 @@ git sparse-checkout disable              <span class="tok-comment"># back to a f
 
 <h3>Running CI only on what changed</h3>
 ${slide('git-10', 13, 'Monorepo: CI chỉ chạy phần đã đổi')}
-<pre><code><span class="tok-comment"># Which top-level packages did this branch touch?</span>
+<pre><code class="language-bash"><span class="tok-comment"># Which top-level packages did this branch touch?</span>
 git diff --name-only origin/main...HEAD | cut -d/ -f1-2 | sort -u</code></pre>
 <div class="out">apps/web
 packages/ui</div>
@@ -520,19 +520,19 @@ on:
 <h3>Git LFS — large binaries, stored elsewhere</h3>
 ${slide('git-10', 14, 'Git LFS: con trỏ trong Git, file thật ở kho LFS')}
 <p>Git is built for text: it diffs it, delta-compresses it, and merges it. A 200 MB video does none of that. Every version is stored whole, in every clone, forever (9.3). <strong>Git LFS</strong> replaces the file in the repository with a small pointer and keeps the bytes on a separate server.</p>
-<pre><code>git lfs install
+<pre><code class="language-bash">git lfs install
 git lfs track <span class="tok-string">"*.psd"</span> <span class="tok-string">"*.mp4"</span> <span class="tok-string">"*.zip"</span>
 git add .gitattributes
 git add design/hero.psd &amp;&amp; git commit -m <span class="tok-string">"design: add the hero mockup"</span></code></pre>
-<pre><code>cat .gitattributes</code></pre>
+<pre><code class="language-bash">cat .gitattributes</code></pre>
 <div class="out">*.psd filter=lfs diff=lfs merge=lfs -text
 *.mp4 filter=lfs diff=lfs merge=lfs -text</div>
-<pre><code>git show HEAD:design/hero.psd</code></pre>
+<pre><code class="language-bash">git show HEAD:design/hero.psd</code></pre>
 <div class="out">version https://git-lfs.github.com/spec/v1
 oid sha256:4d7a1e8f9c2b5a6e0d3f7b1c4a8e2d6f0b9c3a5e7d1f4b8c2a6e0d3f7b1c4a8e
 size 52428800</div>
 <p>Three lines in the repository; 50 MB on the LFS server. Clone downloads pointers, then fetches only the binaries for the commit you check out.</p>
-<pre><code>git lfs ls-files                 <span class="tok-comment"># which files are LFS-tracked</span>
+<pre><code class="language-bash">git lfs ls-files                 <span class="tok-comment"># which files are LFS-tracked</span>
 git lfs pull                     <span class="tok-comment"># fetch the real content</span>
 GIT_LFS_SKIP_SMUDGE=1 git clone  <span class="tok-comment"># clone pointers only — fast, for CI that does not need assets</span></code></pre>
 
@@ -552,7 +552,7 @@ ${slide('git-10', 15, 'LFS không có hiệu lực ngược')}
   <div class="lz-layer"><span class="lz-k">The cost: scale</span><span class="lz-v">Checkout size, CI time and code ownership all need active management — hence sparse-checkout, path filters and CODEOWNERS (6.4).</span></div>
   <div class="lz-layer"><span class="lz-k">The tooling</span><span class="lz-v">Turborepo, Nx, Bazel and pnpm workspaces exist to cache builds per package and run only what changed. Git gives you the repository; they give you the build graph.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Make history readable per package — the monorepo version of "what shipped":</span>
+<pre><code class="language-bash"><span class="tok-comment"># Make history readable per package — the monorepo version of "what shipped":</span>
 git log --oneline v1.4.0..HEAD -- packages/ui/
 git shortlog -sn --since=<span class="tok-string">"3 months ago"</span> -- apps/web/</code></pre>
 
@@ -601,15 +601,15 @@ find . -type f -not -path <span class="tok-string">"./.git/*"</span></code></pre
 <h3>sparse-checkout — ít file hơn trong thư mục làm việc</h3>
 ${slide('git-10', 11, 'partial clone và sparse-checkout bằng số đo thật')}
 ${slide('git-10', 12, 'sparse-checkout trong thực tế (cone mode)')}
-<pre><code>git clone --filter=blob:none --sparse &lt;url&gt;    <span class="tok-comment"># partial clone (bài 9.3) + sparse</span>
+<pre><code class="language-bash">git clone --filter=blob:none --sparse &lt;url&gt;    <span class="tok-comment"># partial clone (bài 9.3) + sparse</span>
 cd monorepo
 git sparse-checkout set apps/web packages/ui</code></pre>
 <pre><code>ls</code></pre>
 <div class="out">apps/  packages/  package.json  turbo.json</div>
-<pre><code>ls apps/</code></pre>
+<pre><code class="language-bash">ls apps/</code></pre>
 <div class="out">web/</div>
 <p>Mười một ứng dụng kia vẫn nằm trong lịch sử và vẫn lấy về được — chúng chỉ không được ghi ra đĩa. Trên một monorepo lớn, việc này biến một lần checkout 40.000 file thành 2.000, làm cho mọi trình đánh chỉ mục của editor, mọi bộ theo dõi file và mọi bộ chạy test nhanh lên rõ rệt.</p>
-<pre><code>git sparse-checkout list                 <span class="tok-comment"># hiện đang gồm những gì</span>
+<pre><code class="language-bash">git sparse-checkout list                 <span class="tok-comment"># hiện đang gồm những gì</span>
 git sparse-checkout add packages/api     <span class="tok-comment"># mở rộng tập</span>
 git sparse-checkout reapply              <span class="tok-comment"># sau khi đổi các mẫu</span>
 git sparse-checkout disable              <span class="tok-comment"># quay lại checkout đầy đủ</span></code></pre>
@@ -617,7 +617,7 @@ git sparse-checkout disable              <span class="tok-comment"># quay lại 
 
 <h3>Chạy CI chỉ trên phần đã đổi</h3>
 ${slide('git-10', 13, 'Monorepo: CI chỉ chạy phần đã đổi')}
-<pre><code><span class="tok-comment"># Nhánh này đã chạm vào những gói cấp cao nào?</span>
+<pre><code class="language-bash"><span class="tok-comment"># Nhánh này đã chạm vào những gói cấp cao nào?</span>
 git diff --name-only origin/main...HEAD | cut -d/ -f1-2 | sort -u</code></pre>
 <div class="out">apps/web
 packages/ui</div>
@@ -630,19 +630,19 @@ on:
 <h3>Git LFS — file nhị phân lớn, lưu ở chỗ khác</h3>
 ${slide('git-10', 14, 'Git LFS: con trỏ trong Git, file thật ở kho LFS')}
 <p>Git được dựng cho văn bản: nó so sánh được, nén delta được, hợp nhất được. Một video 200 MB thì không làm được thứ nào trong đó. Mọi phiên bản đều được lưu nguyên vẹn, trong mọi bản clone, mãi mãi (bài 9.3). <strong>Git LFS</strong> thay file trong kho bằng một con trỏ nhỏ và giữ các byte trên một máy chủ riêng.</p>
-<pre><code>git lfs install
+<pre><code class="language-bash">git lfs install
 git lfs track <span class="tok-string">"*.psd"</span> <span class="tok-string">"*.mp4"</span> <span class="tok-string">"*.zip"</span>
 git add .gitattributes
 git add design/hero.psd &amp;&amp; git commit -m <span class="tok-string">"design: them mockup hero"</span></code></pre>
-<pre><code>cat .gitattributes</code></pre>
+<pre><code class="language-bash">cat .gitattributes</code></pre>
 <div class="out">*.psd filter=lfs diff=lfs merge=lfs -text
 *.mp4 filter=lfs diff=lfs merge=lfs -text</div>
-<pre><code>git show HEAD:design/hero.psd</code></pre>
+<pre><code class="language-bash">git show HEAD:design/hero.psd</code></pre>
 <div class="out">version https://git-lfs.github.com/spec/v1
 oid sha256:4d7a1e8f9c2b5a6e0d3f7b1c4a8e2d6f0b9c3a5e7d1f4b8c2a6e0d3f7b1c4a8e
 size 52428800</div>
 <p>Ba dòng trong kho mã; 50 MB trên máy chủ LFS. Clone tải về các con trỏ, rồi chỉ lấy phần nhị phân cho commit bạn checkout.</p>
-<pre><code>git lfs ls-files                 <span class="tok-comment"># những file nào được LFS theo dõi</span>
+<pre><code class="language-bash">git lfs ls-files                 <span class="tok-comment"># những file nào được LFS theo dõi</span>
 git lfs pull                     <span class="tok-comment"># lấy nội dung thật về</span>
 GIT_LFS_SKIP_SMUDGE=1 git clone  <span class="tok-comment"># chỉ clone con trỏ — nhanh, cho CI không cần tài sản</span></code></pre>
 
@@ -662,7 +662,7 @@ ${slide('git-10', 15, 'LFS không có hiệu lực ngược')}
   <div class="lz-layer"><span class="lz-k">Cái giá: quy mô</span><span class="lz-v">Kích thước checkout, thời gian CI và quyền sở hữu mã đều cần quản lý chủ động — nên mới có sparse-checkout, bộ lọc đường dẫn và CODEOWNERS (bài 6.4).</span></div>
   <div class="lz-layer"><span class="lz-k">Bộ công cụ</span><span class="lz-v">Turborepo, Nx, Bazel và pnpm workspaces tồn tại để cache bản dựng theo từng gói và chỉ chạy phần đã đổi. Git cho bạn kho mã; chúng cho bạn đồ thị build.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Làm lịch sử đọc được theo từng gói — phiên bản monorepo của câu "đã ra những gì":</span>
+<pre><code class="language-bash"><span class="tok-comment"># Làm lịch sử đọc được theo từng gói — phiên bản monorepo của câu "đã ra những gì":</span>
 git log --oneline v1.4.0..HEAD -- packages/ui/
 git shortlog -sn --since=<span class="tok-string">"3 months ago"</span> -- apps/web/</code></pre>
 

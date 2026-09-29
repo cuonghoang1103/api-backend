@@ -251,11 +251,11 @@ npx expo start
   <div class="lz-layer"><b>Android Studio / Xcode (tuỳ chọn)</b> — emulator/simulator nếu không có điện thoại.</div>
 </div>
 <div class="out"><b>Tạo và chạy app đầu tiên:</b>
-<pre><span class="tok-comment"># Tao mot app Expo moi</span>
+<pre><code class="language-bash"><span class="tok-comment"># Tao mot app Expo moi</span>
 npx create-expo-app@latest myapp
 cd myapp
 npx expo start
-<span class="tok-comment"># roi quet QR code bang Expo Go tren dien thoai</span></pre></div>
+<span class="tok-comment"># roi quet QR code bang Expo Go tren dien thoai</span></code></pre></div>
 <a class="link-card exphub" href="/exp-hub/mma301-cai-dat-moi-truong?ref=%2Fcourses%2Fmultiplatform-mobile-app-development%2Flearn&reflabel=MMA301" target="_blank" rel="noopener">
   <span class="lc-ico">🛠️</span>
   <span class="lc-body"><span class="lc-title">Cài Expo + Expo Go + emulator — từng bước</span><span class="lc-sub">Cài mọi thứ và chạy app đầu tiên, kèm link, trên Exp Hub.</span></span>
@@ -427,7 +427,7 @@ npx expo start
   </tbody>
 </table>
 <h3>Worked example — a simple screen</h3>
-<div class="out"><pre><span class="tok-keyword">import</span> { View, Text, Image } <span class="tok-keyword">from</span> <span class="tok-string">'react-native'</span>;
+<div class="out"><pre><code class="language-javascript"><span class="tok-keyword">import</span> { View, Text, Image } <span class="tok-keyword">from</span> <span class="tok-string">'react-native'</span>;
 
 <span class="tok-keyword">export default function</span> <span class="tok-function">HomeScreen</span>() {
   <span class="tok-keyword">return</span> (
@@ -436,7 +436,7 @@ npx expo start
       &lt;Text&gt;Build once, run on iOS and Android.&lt;/Text&gt;
     &lt;/View&gt;
   );
-}</pre>
+}</code></pre>
 <em>Notice the raw string "Welcome" is inside <code>&lt;Text&gt;</code>. Put text directly in a <code>&lt;View&gt;</code> and React Native throws an error.</em></div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Use &lt;SafeAreaView&gt; and platform-safe touchables.</b> Phones have notches and rounded corners; <code>&lt;SafeAreaView&gt;</code> keeps your UI out of them. And for taps, prefer <code>&lt;Pressable&gt;</code> (the modern, flexible touchable) over the older <code>TouchableOpacity</code>. Small component choices like these are the difference between an app that looks like a class exercise and one that feels professionally built — details the syllabus lists components for but does not rank.</div>
 <div class="pitfall">The #1 beginner error: <strong>"Text strings must be rendered within a &lt;Text&gt; component"</strong>. Any literal text — even a stray space or a variable — must be wrapped in <code>&lt;Text&gt;</code>.</div>
@@ -456,7 +456,7 @@ npx expo start
   </tbody>
 </table>
 <h3>Ví dụ có lời giải — một màn hình đơn giản</h3>
-<div class="out"><pre><span class="tok-keyword">import</span> { View, Text, Image } <span class="tok-keyword">from</span> <span class="tok-string">'react-native'</span>;
+<div class="out"><pre><code class="language-javascript"><span class="tok-keyword">import</span> { View, Text, Image } <span class="tok-keyword">from</span> <span class="tok-string">'react-native'</span>;
 
 <span class="tok-keyword">export default function</span> <span class="tok-function">HomeScreen</span>() {
   <span class="tok-keyword">return</span> (
@@ -465,7 +465,7 @@ npx expo start
       &lt;Text&gt;Build once, run on iOS and Android.&lt;/Text&gt;
     &lt;/View&gt;
   );
-}</pre>
+}</code></pre>
 <em>Để ý chuỗi "Welcome" nằm trong <code>&lt;Text&gt;</code>. Đặt chữ trực tiếp trong <code>&lt;View&gt;</code> là React Native ném lỗi.</em></div>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Dùng &lt;SafeAreaView&gt; và touchable an toàn nền tảng.</b> Điện thoại có tai thỏ và góc bo; <code>&lt;SafeAreaView&gt;</code> giữ UI của bạn khỏi chúng. Và cho thao tác chạm, ưu tiên <code>&lt;Pressable&gt;</code> (touchable hiện đại, linh hoạt) hơn <code>TouchableOpacity</code> cũ. Những lựa chọn component nhỏ như vậy là khác biệt giữa một app trông như bài tập lớp và một app cảm giác được xây chuyên nghiệp — chi tiết mà giáo trình liệt kê component nhưng không xếp hạng.</div>
 <div class="pitfall">Lỗi số 1 của người mới: <strong>"Text strings must be rendered within a &lt;Text&gt; component"</strong>. Mọi chữ literal — kể cả một dấu cách lạc hay một biến — phải bọc trong <code>&lt;Text&gt;</code>.</div>
@@ -482,7 +482,7 @@ npx expo start
 <h2>Styling: JS objects &amp; Flexbox (CLO5)</h2>
 <p class="lead">There is no CSS file. Styles are JavaScript objects, and layout is done with Flexbox — but with one key difference from the web: the default <code>flexDirection</code> is <strong>column</strong>, not row.</p>
 <h3>StyleSheet.create</h3>
-<div class="out"><pre><span class="tok-keyword">import</span> { StyleSheet, View, Text } <span class="tok-keyword">from</span> <span class="tok-string">'react-native'</span>;
+<div class="out"><pre><code class="language-javascript"><span class="tok-keyword">import</span> { StyleSheet, View, Text } <span class="tok-keyword">from</span> <span class="tok-string">'react-native'</span>;
 
 <span class="tok-keyword">const</span> styles = StyleSheet.<span class="tok-function">create</span>({
   card: { padding: <span class="tok-number">16</span>, backgroundColor: <span class="tok-string">'#fff'</span>, borderRadius: <span class="tok-number">8</span> },
@@ -491,7 +491,7 @@ npx expo start
 
 &lt;View style={styles.card}&gt;
   &lt;Text style={styles.title}&gt;Hello&lt;/Text&gt;
-&lt;/View&gt;</pre>
+&lt;/View&gt;</code></pre>
 <em>Numbers are density-independent pixels (no "px"). <code>StyleSheet.create</code> validates keys and lets you reuse styles.</em></div>
 <h3>Flexbox — the layout engine</h3>
 <table>
@@ -504,7 +504,7 @@ npx expo start
   </tbody>
 </table>
 <div class="out"><b>Worked example — a centered box:</b>
-<pre>container: { flex: <span class="tok-number">1</span>, justifyContent: <span class="tok-string">'center'</span>, alignItems: <span class="tok-string">'center'</span> }</pre>
+<pre><code class="language-javascript">container: { flex: <span class="tok-number">1</span>, justifyContent: <span class="tok-string">'center'</span>, alignItems: <span class="tok-string">'center'</span> }</code></pre>
 <em><code>flex: 1</code> makes the container fill the screen, then justify+align center the child on both axes — the RN way to center anything.</em></div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Handle multiple screen sizes with flex, not fixed widths.</b> Hard-coding <code>width: 350</code> breaks on small phones and wastes space on tablets. Use <code>flex</code>, percentages, and the <code>Dimensions</code> / <code>useWindowDimensions</code> API for responsive layouts. Building for many screen sizes is a mobile-specific discipline that the styling lesson introduces but real apps live or die by.</div>
 <div class="pitfall">Web CSS habits break here: there is no <code>display: block</code>, no <code>float</code>, no <code>%</code> on everything, and margins do not collapse. Think in Flexbox from the start rather than porting CSS mental models.</div>
@@ -514,7 +514,7 @@ npx expo start
 <h2>Styling: object JS &amp; Flexbox (CLO5)</h2>
 <p class="lead">Không có file CSS. Style là object JavaScript, và layout làm bằng Flexbox — nhưng có một khác biệt then chốt với web: <code>flexDirection</code> mặc định là <strong>column</strong>, không phải row.</p>
 <h3>StyleSheet.create</h3>
-<div class="out"><pre><span class="tok-keyword">import</span> { StyleSheet, View, Text } <span class="tok-keyword">from</span> <span class="tok-string">'react-native'</span>;
+<div class="out"><pre><code class="language-javascript"><span class="tok-keyword">import</span> { StyleSheet, View, Text } <span class="tok-keyword">from</span> <span class="tok-string">'react-native'</span>;
 
 <span class="tok-keyword">const</span> styles = StyleSheet.<span class="tok-function">create</span>({
   card: { padding: <span class="tok-number">16</span>, backgroundColor: <span class="tok-string">'#fff'</span>, borderRadius: <span class="tok-number">8</span> },
@@ -523,7 +523,7 @@ npx expo start
 
 &lt;View style={styles.card}&gt;
   &lt;Text style={styles.title}&gt;Hello&lt;/Text&gt;
-&lt;/View&gt;</pre>
+&lt;/View&gt;</code></pre>
 <em>Số là pixel độc lập mật độ (không "px"). <code>StyleSheet.create</code> kiểm key và cho bạn tái dùng style.</em></div>
 <h3>Flexbox — engine layout</h3>
 <table>
@@ -536,7 +536,7 @@ npx expo start
   </tbody>
 </table>
 <div class="out"><b>Ví dụ có lời giải — một hộp căn giữa:</b>
-<pre>container: { flex: <span class="tok-number">1</span>, justifyContent: <span class="tok-string">'center'</span>, alignItems: <span class="tok-string">'center'</span> }</pre>
+<pre><code class="language-javascript">container: { flex: <span class="tok-number">1</span>, justifyContent: <span class="tok-string">'center'</span>, alignItems: <span class="tok-string">'center'</span> }</code></pre>
 <em><code>flex: 1</code> làm container lấp đầy màn hình, rồi justify+align căn con ở cả hai trục — cách RN để căn giữa bất cứ thứ gì.</em></div>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Xử lý nhiều cỡ màn hình bằng flex, không phải width cố định.</b> Hard-code <code>width: 350</code> hỏng trên điện thoại nhỏ và phí chỗ trên tablet. Dùng <code>flex</code>, phần trăm, và API <code>Dimensions</code> / <code>useWindowDimensions</code> cho layout responsive. Xây cho nhiều cỡ màn là một kỷ luật riêng của mobile mà bài styling giới thiệu nhưng app thật sống chết vì nó.</div>
 <div class="pitfall">Thói quen CSS web hỏng ở đây: không có <code>display: block</code>, không <code>float</code>, không <code>%</code> khắp nơi, và margin không collapse. Nghĩ theo Flexbox từ đầu thay vì port mô hình tư duy CSS.</div>
@@ -578,20 +578,20 @@ npx expo start
 <h2>Navigation between screens</h2>
 <p class="lead">Mobile apps are many screens linked by navigation. <strong>React Navigation</strong> is the standard library: a <em>stack</em> navigator pushes screens (Home → Detail), a <em>tab</em> navigator switches between top-level sections.</p>
 <h3>A stack navigator</h3>
-<div class="out"><pre><span class="tok-keyword">const</span> Stack = <span class="tok-function">createNativeStackNavigator</span>();
+<div class="out"><pre><code class="language-javascript"><span class="tok-keyword">const</span> Stack = <span class="tok-function">createNativeStackNavigator</span>();
 
 &lt;NavigationContainer&gt;
   &lt;Stack.Navigator&gt;
     &lt;Stack.Screen name=<span class="tok-string">"Home"</span> component={HomeScreen} /&gt;
     &lt;Stack.Screen name=<span class="tok-string">"Detail"</span> component={DetailScreen} /&gt;
   &lt;/Stack.Navigator&gt;
-&lt;/NavigationContainer&gt;</pre></div>
+&lt;/NavigationContainer&gt;</code></pre></div>
 <h3>Navigating &amp; passing params</h3>
-<div class="out"><pre><span class="tok-comment">// from HomeScreen — go to Detail with data</span>
+<div class="out"><pre><code class="language-html"><span class="tok-comment">// from HomeScreen — go to Detail with data</span>
 &lt;Button title=<span class="tok-string">"Open"</span> onPress={() =&gt; navigation.<span class="tok-function">navigate</span>(<span class="tok-string">'Detail'</span>, { id: <span class="tok-number">42</span> })} /&gt;
 
 <span class="tok-comment">// in DetailScreen — read the param</span>
-<span class="tok-keyword">const</span> { id } = route.params;</pre>
+<span class="tok-keyword">const</span> { id } = route.params;</code></pre>
 <em>Each screen receives <code>navigation</code> (to move) and <code>route</code> (to read params) as props. This is how a list screen opens a detail screen for the tapped item.</em></div>
 <a class="link-card codelab" href="/code-lab/react-native?ref=%2Fcourses%2Fmultiplatform-mobile-app-development%2Flearn&reflabel=MMA301#module-457" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
@@ -606,20 +606,20 @@ npx expo start
 <h2>Điều hướng giữa các màn hình</h2>
 <p class="lead">App mobile là nhiều màn hình nối bằng điều hướng. <strong>React Navigation</strong> là thư viện chuẩn: navigator <em>stack</em> đẩy màn hình (Home → Detail), navigator <em>tab</em> chuyển giữa các mục cấp cao.</p>
 <h3>Một stack navigator</h3>
-<div class="out"><pre><span class="tok-keyword">const</span> Stack = <span class="tok-function">createNativeStackNavigator</span>();
+<div class="out"><pre><code class="language-javascript"><span class="tok-keyword">const</span> Stack = <span class="tok-function">createNativeStackNavigator</span>();
 
 &lt;NavigationContainer&gt;
   &lt;Stack.Navigator&gt;
     &lt;Stack.Screen name=<span class="tok-string">"Home"</span> component={HomeScreen} /&gt;
     &lt;Stack.Screen name=<span class="tok-string">"Detail"</span> component={DetailScreen} /&gt;
   &lt;/Stack.Navigator&gt;
-&lt;/NavigationContainer&gt;</pre></div>
+&lt;/NavigationContainer&gt;</code></pre></div>
 <h3>Điều hướng &amp; truyền params</h3>
-<div class="out"><pre><span class="tok-comment">// tu HomeScreen — sang Detail voi du lieu</span>
+<div class="out"><pre><code class="language-html"><span class="tok-comment">// tu HomeScreen — sang Detail voi du lieu</span>
 &lt;Button title=<span class="tok-string">"Open"</span> onPress={() =&gt; navigation.<span class="tok-function">navigate</span>(<span class="tok-string">'Detail'</span>, { id: <span class="tok-number">42</span> })} /&gt;
 
 <span class="tok-comment">// trong DetailScreen — doc param</span>
-<span class="tok-keyword">const</span> { id } = route.params;</pre>
+<span class="tok-keyword">const</span> { id } = route.params;</code></pre>
 <em>Mỗi màn nhận <code>navigation</code> (để di chuyển) và <code>route</code> (để đọc params) làm props. Đây là cách một màn danh sách mở màn chi tiết cho mục được chạm.</em></div>
 <a class="link-card codelab" href="/code-lab/react-native?ref=%2Fcourses%2Fmultiplatform-mobile-app-development%2Flearn&reflabel=MMA301#module-457" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
@@ -641,7 +641,7 @@ npx expo start
 <h2>Handling input &amp; touch</h2>
 <p class="lead">Apps react to taps and typing. <code>TextInput</code> captures text into state; <code>Pressable</code>/<code>Button</code> capture taps. The controlled-input pattern from React applies directly.</p>
 <h3>A controlled text input</h3>
-<div class="out"><pre><span class="tok-keyword">const</span> [name, setName] = <span class="tok-function">useState</span>(<span class="tok-string">''</span>);
+<div class="out"><pre><code class="language-javascript"><span class="tok-keyword">const</span> [name, setName] = <span class="tok-function">useState</span>(<span class="tok-string">''</span>);
 
 &lt;TextInput
   value={name}
@@ -649,7 +649,7 @@ npx expo start
   placeholder=<span class="tok-string">"Your name"</span>
   style={{ borderWidth: <span class="tok-number">1</span>, padding: <span class="tok-number">8</span> }}
 /&gt;
-&lt;Text&gt;Hello {name}&lt;/Text&gt;</pre>
+&lt;Text&gt;Hello {name}&lt;/Text&gt;</code></pre>
 <em><code>onChangeText</code> gives you the string directly (not an event) — a small mobile convenience over web inputs.</em></div>
 <h3>Touchables</h3>
 <div class="out"><pre>&lt;Pressable onPress={handleSave} style={{ padding: <span class="tok-number">12</span> }}&gt;
@@ -657,13 +657,13 @@ npx expo start
 &lt;/Pressable&gt;</pre>
 <em><code>Pressable</code> is the flexible modern touchable — it can style differently while pressed, unlike a plain Button.</em></div>
 <h3>Simple form validation</h3>
-<div class="out"><pre><span class="tok-keyword">function</span> <span class="tok-function">handleSave</span>() {
+<div class="out"><pre><code class="language-javascript"><span class="tok-keyword">function</span> <span class="tok-function">handleSave</span>() {
   <span class="tok-keyword">if</span> (!name.<span class="tok-function">trim</span>()) {
     Alert.<span class="tok-function">alert</span>(<span class="tok-string">'Please enter a name'</span>);
     <span class="tok-keyword">return</span>;
   }
   <span class="tok-comment">// save…</span>
-}</pre></div>
+}</code></pre></div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Handle the keyboard so it does not cover inputs.</b> On mobile, the on-screen keyboard can hide the field being typed in. Wrap forms in <code>&lt;KeyboardAvoidingView&gt;</code> and use <code>keyboardType</code> / <code>autoCapitalize</code> / <code>secureTextEntry</code> props for the right keyboard per field. These keyboard details are a hallmark of a polished mobile app — invisible when done right, glaring when ignored — and the syllabus assumes but does not drill them.</div>
 <div class="pitfall">An uncontrolled <code>TextInput</code> (no <code>value</code>/<code>onChangeText</code>) will not let you read or reset its text programmatically. Always bind it to state for a controlled input you can validate and clear.</div>
 </div>
@@ -672,7 +672,7 @@ npx expo start
 <h2>Xử lý nhập liệu &amp; touch</h2>
 <p class="lead">App phản ứng với chạm và gõ. <code>TextInput</code> bắt chữ vào state; <code>Pressable</code>/<code>Button</code> bắt chạm. Khuôn controlled-input từ React áp dụng trực tiếp.</p>
 <h3>Một text input được kiểm soát</h3>
-<div class="out"><pre><span class="tok-keyword">const</span> [name, setName] = <span class="tok-function">useState</span>(<span class="tok-string">''</span>);
+<div class="out"><pre><code class="language-javascript"><span class="tok-keyword">const</span> [name, setName] = <span class="tok-function">useState</span>(<span class="tok-string">''</span>);
 
 &lt;TextInput
   value={name}
@@ -680,7 +680,7 @@ npx expo start
   placeholder=<span class="tok-string">"Your name"</span>
   style={{ borderWidth: <span class="tok-number">1</span>, padding: <span class="tok-number">8</span> }}
 /&gt;
-&lt;Text&gt;Hello {name}&lt;/Text&gt;</pre>
+&lt;Text&gt;Hello {name}&lt;/Text&gt;</code></pre>
 <em><code>onChangeText</code> cho bạn chuỗi trực tiếp (không phải event) — một tiện lợi nhỏ của mobile so với input web.</em></div>
 <h3>Touchable</h3>
 <div class="out"><pre>&lt;Pressable onPress={handleSave} style={{ padding: <span class="tok-number">12</span> }}&gt;
@@ -688,13 +688,13 @@ npx expo start
 &lt;/Pressable&gt;</pre>
 <em><code>Pressable</code> là touchable hiện đại linh hoạt — nó có thể style khác khi đang nhấn, khác một Button thường.</em></div>
 <h3>Validation form đơn giản</h3>
-<div class="out"><pre><span class="tok-keyword">function</span> <span class="tok-function">handleSave</span>() {
+<div class="out"><pre><code class="language-javascript"><span class="tok-keyword">function</span> <span class="tok-function">handleSave</span>() {
   <span class="tok-keyword">if</span> (!name.<span class="tok-function">trim</span>()) {
     Alert.<span class="tok-function">alert</span>(<span class="tok-string">'Please enter a name'</span>);
     <span class="tok-keyword">return</span>;
   }
   <span class="tok-comment">// luu…</span>
-}</pre></div>
+}</code></pre></div>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Xử lý bàn phím để nó không che input.</b> Trên mobile, bàn phím trên màn có thể che field đang gõ. Bọc form trong <code>&lt;KeyboardAvoidingView&gt;</code> và dùng props <code>keyboardType</code> / <code>autoCapitalize</code> / <code>secureTextEntry</code> cho bàn phím đúng theo từng field. Những chi tiết bàn phím này là dấu ấn của một app mobile chỉn chu — vô hình khi làm đúng, chói mắt khi bỏ qua — và giáo trình mặc định nhưng không luyện.</div>
 <div class="pitfall">Một <code>TextInput</code> không kiểm soát (không <code>value</code>/<code>onChangeText</code>) sẽ không cho bạn đọc hay reset chữ bằng code. Luôn bind nó với state cho một input được kiểm soát bạn có thể validate và xoá.</div>
 </div>`,
@@ -735,14 +735,14 @@ npx expo start
 <h2>Local state vs global state (CLO6)</h2>
 <p class="lead">Use <strong>hooks</strong> for state that lives in one screen; reach for <strong>Redux</strong> when many screens share the same data (a logged-in user, a cart). Do not over-engineer — most apps need Redux for only a slice of their state.</p>
 <h3>Local state with hooks</h3>
-<div class="out"><pre><span class="tok-keyword">const</span> [count, setCount] = <span class="tok-function">useState</span>(<span class="tok-number">0</span>);
+<div class="out"><pre><code class="language-javascript"><span class="tok-keyword">const</span> [count, setCount] = <span class="tok-function">useState</span>(<span class="tok-number">0</span>);
 
 <span class="tok-function">useEffect</span>(() =&gt; {
   <span class="tok-comment">// runs after render — good for fetching</span>
   <span class="tok-function">loadData</span>();
-}, []); <span class="tok-comment">// [] = run once on mount</span></pre></div>
+}, []); <span class="tok-comment">// [] = run once on mount</span></code></pre></div>
 <h3>Global state with Redux Toolkit</h3>
-<div class="out"><pre><span class="tok-comment">// a slice = state + reducers</span>
+<div class="out"><pre><code class="language-javascript"><span class="tok-comment">// a slice = state + reducers</span>
 <span class="tok-keyword">const</span> cartSlice = <span class="tok-function">createSlice</span>({
   name: <span class="tok-string">'cart'</span>,
   initialState: { items: [] },
@@ -754,7 +754,7 @@ npx expo start
 <span class="tok-comment">// in a component</span>
 <span class="tok-keyword">const</span> items = <span class="tok-function">useSelector</span>(s =&gt; s.cart.items);
 <span class="tok-keyword">const</span> dispatch = <span class="tok-function">useDispatch</span>();
-dispatch(<span class="tok-function">addItem</span>({ id: <span class="tok-number">1</span> }));</pre>
+dispatch(<span class="tok-function">addItem</span>({ id: <span class="tok-number">1</span> }));</code></pre>
 <em>Redux Toolkit lets you "mutate" state in reducers (it uses Immer under the hood) — far less boilerplate than classic Redux.</em></div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Lift state only as high as it needs to go.</b> Not everything belongs in Redux. Screen-local UI (a toggle, a text input) stays in <code>useState</code>; truly shared domain data (user, cart) goes in Redux. Over-globalising state makes every change ripple through the whole app and slows it down. Knowing <em>where</em> a piece of state belongs is a design judgement the "use Redux" lesson does not teach — but graders and code reviewers notice.</div>
 <div class="pitfall">A <code>useEffect</code> with a missing or wrong dependency array causes bugs: <code>[]</code> runs once, no array runs every render (often an infinite loop when it sets state). Always think about what the effect depends on.</div>
@@ -764,14 +764,14 @@ dispatch(<span class="tok-function">addItem</span>({ id: <span class="tok-number
 <h2>State cục bộ vs state toàn cục (CLO6)</h2>
 <p class="lead">Dùng <strong>hooks</strong> cho state sống trong một màn; dùng <strong>Redux</strong> khi nhiều màn chia sẻ cùng dữ liệu (user đã đăng nhập, giỏ hàng). Đừng over-engineer — hầu hết app chỉ cần Redux cho một phần state.</p>
 <h3>State cục bộ với hooks</h3>
-<div class="out"><pre><span class="tok-keyword">const</span> [count, setCount] = <span class="tok-function">useState</span>(<span class="tok-number">0</span>);
+<div class="out"><pre><code class="language-javascript"><span class="tok-keyword">const</span> [count, setCount] = <span class="tok-function">useState</span>(<span class="tok-number">0</span>);
 
 <span class="tok-function">useEffect</span>(() =&gt; {
   <span class="tok-comment">// chay sau render — tot cho fetch</span>
   <span class="tok-function">loadData</span>();
-}, []); <span class="tok-comment">// [] = chay mot lan khi mount</span></pre></div>
+}, []); <span class="tok-comment">// [] = chay mot lan khi mount</span></code></pre></div>
 <h3>State toàn cục với Redux Toolkit</h3>
-<div class="out"><pre><span class="tok-comment">// mot slice = state + reducer</span>
+<div class="out"><pre><code class="language-javascript"><span class="tok-comment">// mot slice = state + reducer</span>
 <span class="tok-keyword">const</span> cartSlice = <span class="tok-function">createSlice</span>({
   name: <span class="tok-string">'cart'</span>,
   initialState: { items: [] },
@@ -783,7 +783,7 @@ dispatch(<span class="tok-function">addItem</span>({ id: <span class="tok-number
 <span class="tok-comment">// trong mot component</span>
 <span class="tok-keyword">const</span> items = <span class="tok-function">useSelector</span>(s =&gt; s.cart.items);
 <span class="tok-keyword">const</span> dispatch = <span class="tok-function">useDispatch</span>();
-dispatch(<span class="tok-function">addItem</span>({ id: <span class="tok-number">1</span> }));</pre>
+dispatch(<span class="tok-function">addItem</span>({ id: <span class="tok-number">1</span> }));</code></pre>
 <em>Redux Toolkit cho bạn "mutate" state trong reducer (nó dùng Immer bên dưới) — ít boilerplate hơn nhiều so với Redux cổ điển.</em></div>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Nâng state chỉ cao đúng mức cần.</b> Không phải mọi thứ thuộc về Redux. UI cục bộ của màn (một toggle, một text input) ở lại <code>useState</code>; dữ liệu domain thật sự dùng chung (user, cart) vào Redux. Toàn-cục-hoá quá mức làm mọi thay đổi lan qua cả app và làm chậm. Biết một mảnh state thuộc <em>ở đâu</em> là một phán đoán thiết kế mà bài "dùng Redux" không dạy — nhưng giám khảo và code reviewer để ý.</div>
 <div class="pitfall">Một <code>useEffect</code> thiếu hoặc sai mảng phụ thuộc gây bug: <code>[]</code> chạy một lần, không có mảng chạy mỗi render (thường vòng lặp vô hạn khi nó set state). Luôn nghĩ effect phụ thuộc vào cái gì.</div>
@@ -800,7 +800,7 @@ dispatch(<span class="tok-function">addItem</span>({ id: <span class="tok-number
 <h2>Efficient lists with FlatList (CLO7)</h2>
 <p class="lead">Never render a long list by mapping inside a ScrollView — it builds every row at once and janks. <strong>FlatList</strong> renders only the visible rows and recycles them, staying smooth with thousands of items.</p>
 <h3>FlatList basics</h3>
-<div class="out"><pre>&lt;FlatList
+<div class="out"><pre><code class="language-javascript">&lt;FlatList
   data={products}
   keyExtractor={(item) =&gt; item.id.<span class="tok-function">toString</span>()}
   renderItem={({ item }) =&gt; (
@@ -808,17 +808,17 @@ dispatch(<span class="tok-function">addItem</span>({ id: <span class="tok-number
       &lt;Text&gt;{item.name}&lt;/Text&gt;
     &lt;/View&gt;
   )}
-/&gt;</pre>
+/&gt;</code></pre>
 <em>Three key props: <code>data</code> (the array), <code>keyExtractor</code> (a unique id per row), and <code>renderItem</code> (how to draw one row).</em></div>
 <h3>SectionList — grouped data</h3>
-<div class="out"><pre>&lt;SectionList
+<div class="out"><pre><code class="language-javascript">&lt;SectionList
   sections={[
     { title: <span class="tok-string">'Fruit'</span>, data: [<span class="tok-string">'Apple'</span>, <span class="tok-string">'Mango'</span>] },
     { title: <span class="tok-string">'Veg'</span>, data: [<span class="tok-string">'Carrot'</span>] },
   ]}
   renderItem={({ item }) =&gt; &lt;Text&gt;{item}&lt;/Text&gt;}
   renderSectionHeader={({ section }) =&gt; &lt;Text&gt;{section.title}&lt;/Text&gt;}
-/&gt;</pre>
+/&gt;</code></pre>
 <em>SectionList is FlatList with headers — perfect for grouped data (contacts by letter, items by category).</em></div>
 <div class="callout ok"><b>On the syllabus — session 21, "Implement Infinite Scrolling".</b> Paging a long list is examinable list work, not an extra: <code>onEndReached</code> fires when the user nears the bottom, <code>onEndReachedThreshold</code> decides how near, <code>ListFooterComponent</code> shows the spinner while the next page loads, and an <code>isLoading</code> guard stops one scroll from firing three fetches. Append the new page to <code>data</code> rather than replacing it. <code>ListEmptyComponent</code> (the friendly empty state) belongs to the same session's list skills.</div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>FlatList has performance props most students never touch.</b> <code>initialNumToRender</code>, <code>windowSize</code>, <code>getItemLayout</code> and a memoised <code>renderItem</code> keep long lists at 60fps. Knowing these turns a laggy list into a native-smooth one — the exact polish that impresses at the project defense.</div>
@@ -829,7 +829,7 @@ dispatch(<span class="tok-function">addItem</span>({ id: <span class="tok-number
 <h2>Danh sách hiệu quả với FlatList (CLO7)</h2>
 <p class="lead">Đừng bao giờ render một danh sách dài bằng cách map trong ScrollView — nó dựng mọi hàng cùng lúc và giật. <strong>FlatList</strong> chỉ render hàng đang thấy và tái dùng chúng, mượt với hàng nghìn mục.</p>
 <h3>FlatList cơ bản</h3>
-<div class="out"><pre>&lt;FlatList
+<div class="out"><pre><code class="language-javascript">&lt;FlatList
   data={products}
   keyExtractor={(item) =&gt; item.id.<span class="tok-function">toString</span>()}
   renderItem={({ item }) =&gt; (
@@ -837,17 +837,17 @@ dispatch(<span class="tok-function">addItem</span>({ id: <span class="tok-number
       &lt;Text&gt;{item.name}&lt;/Text&gt;
     &lt;/View&gt;
   )}
-/&gt;</pre>
+/&gt;</code></pre>
 <em>Ba props then chốt: <code>data</code> (mảng), <code>keyExtractor</code> (id duy nhất mỗi hàng), và <code>renderItem</code> (cách vẽ một hàng).</em></div>
 <h3>SectionList — dữ liệu nhóm</h3>
-<div class="out"><pre>&lt;SectionList
+<div class="out"><pre><code class="language-javascript">&lt;SectionList
   sections={[
     { title: <span class="tok-string">'Fruit'</span>, data: [<span class="tok-string">'Apple'</span>, <span class="tok-string">'Mango'</span>] },
     { title: <span class="tok-string">'Veg'</span>, data: [<span class="tok-string">'Carrot'</span>] },
   ]}
   renderItem={({ item }) =&gt; &lt;Text&gt;{item}&lt;/Text&gt;}
   renderSectionHeader={({ section }) =&gt; &lt;Text&gt;{section.title}&lt;/Text&gt;}
-/&gt;</pre>
+/&gt;</code></pre>
 <em>SectionList là FlatList có header — hoàn hảo cho dữ liệu nhóm (danh bạ theo chữ cái, mục theo danh mục).</em></div>
 <div class="callout ok"><b>CÓ trong giáo trình — buổi 21, "Implement Infinite Scrolling".</b> Phân trang danh sách dài là kỹ năng có thể ra thi, không phải phần thêm: <code>onEndReached</code> kích hoạt khi người dùng gần chạm đáy, <code>onEndReachedThreshold</code> quyết định "gần" là bao nhiêu, <code>ListFooterComponent</code> hiện vòng xoay trong lúc tải trang kế, và một cờ <code>isLoading</code> chặn một cú cuộn bắn ba lần tải. Hãy NỐI trang mới vào <code>data</code> thay vì thay thế. <code>ListEmptyComponent</code> (trạng thái rỗng thân thiện) thuộc cùng nhóm kỹ năng danh sách của buổi này.</div>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>FlatList có các props hiệu năng hầu hết sinh viên không chạm.</b> <code>initialNumToRender</code>, <code>windowSize</code>, <code>getItemLayout</code> và một <code>renderItem</code> đã memo giữ danh sách dài ở 60fps. Biết những cái này biến một danh sách giật thành mượt native — đúng sự chỉn chu gây ấn tượng ở buổi vấn đáp project.</div>
@@ -898,18 +898,18 @@ dispatch(<span class="tok-function">addItem</span>({ id: <span class="tok-number
   </tbody>
 </table>
 <h3>AsyncStorage — the simplest</h3>
-<div class="out"><pre><span class="tok-keyword">import</span> AsyncStorage <span class="tok-keyword">from</span> <span class="tok-string">'@react-native-async-storage/async-storage'</span>;
+<div class="out"><pre><code class="language-javascript"><span class="tok-keyword">import</span> AsyncStorage <span class="tok-keyword">from</span> <span class="tok-string">'@react-native-async-storage/async-storage'</span>;
 
 <span class="tok-comment">// save (values are strings — JSON.stringify objects)</span>
 <span class="tok-keyword">await</span> AsyncStorage.<span class="tok-function">setItem</span>(<span class="tok-string">'notes'</span>, JSON.<span class="tok-function">stringify</span>(notes));
 <span class="tok-comment">// load</span>
 <span class="tok-keyword">const</span> raw = <span class="tok-keyword">await</span> AsyncStorage.<span class="tok-function">getItem</span>(<span class="tok-string">'notes'</span>);
-<span class="tok-keyword">const</span> notes = raw ? JSON.<span class="tok-function">parse</span>(raw) : [];</pre></div>
+<span class="tok-keyword">const</span> notes = raw ? JSON.<span class="tok-function">parse</span>(raw) : [];</code></pre></div>
 <h3>Firebase Realtime Database — cloud &amp; synced</h3>
-<div class="out"><pre><span class="tok-comment">// write</span>
+<div class="out"><pre><code class="language-javascript"><span class="tok-comment">// write</span>
 <span class="tok-keyword">await</span> <span class="tok-function">set</span>(<span class="tok-function">ref</span>(db, <span class="tok-string">'notes/1'</span>), { text: <span class="tok-string">'Buy milk'</span> });
 <span class="tok-comment">// listen in realtime</span>
-<span class="tok-function">onValue</span>(<span class="tok-function">ref</span>(db, <span class="tok-string">'notes'</span>), (snap) =&gt; setNotes(snap.<span class="tok-function">val</span>()));</pre>
+<span class="tok-function">onValue</span>(<span class="tok-function">ref</span>(db, <span class="tok-string">'notes'</span>), (snap) =&gt; setNotes(snap.<span class="tok-function">val</span>()));</code></pre>
 <em>Firebase syncs data live across all devices — the same note appears on every logged-in phone instantly.</em></div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Match the storage to the data, not the hype.</b> A settings toggle does not need Firebase; a shared, multi-user list does not fit AsyncStorage. Rule of thumb: key-value → AsyncStorage; structured/offline queries → SQLite; multi-device/realtime → Firebase. Choosing the lightest tool that fits is an engineering judgement — using Firebase for a single-user notes app is over-engineering the syllabus lists options for but does not rank.</div>
 <div class="pitfall">AsyncStorage only stores <strong>strings</strong>. Forgetting <code>JSON.stringify</code> on save (and <code>JSON.parse</code> on load) stores <code>[object Object]</code> and loses your data silently.</div>
@@ -927,18 +927,18 @@ dispatch(<span class="tok-function">addItem</span>({ id: <span class="tok-number
   </tbody>
 </table>
 <h3>AsyncStorage — đơn giản nhất</h3>
-<div class="out"><pre><span class="tok-keyword">import</span> AsyncStorage <span class="tok-keyword">from</span> <span class="tok-string">'@react-native-async-storage/async-storage'</span>;
+<div class="out"><pre><code class="language-javascript"><span class="tok-keyword">import</span> AsyncStorage <span class="tok-keyword">from</span> <span class="tok-string">'@react-native-async-storage/async-storage'</span>;
 
 <span class="tok-comment">// luu (gia tri la chuoi — JSON.stringify object)</span>
 <span class="tok-keyword">await</span> AsyncStorage.<span class="tok-function">setItem</span>(<span class="tok-string">'notes'</span>, JSON.<span class="tok-function">stringify</span>(notes));
 <span class="tok-comment">// doc</span>
 <span class="tok-keyword">const</span> raw = <span class="tok-keyword">await</span> AsyncStorage.<span class="tok-function">getItem</span>(<span class="tok-string">'notes'</span>);
-<span class="tok-keyword">const</span> notes = raw ? JSON.<span class="tok-function">parse</span>(raw) : [];</pre></div>
+<span class="tok-keyword">const</span> notes = raw ? JSON.<span class="tok-function">parse</span>(raw) : [];</code></pre></div>
 <h3>Firebase Realtime Database — cloud &amp; đồng bộ</h3>
-<div class="out"><pre><span class="tok-comment">// ghi</span>
+<div class="out"><pre><code class="language-javascript"><span class="tok-comment">// ghi</span>
 <span class="tok-keyword">await</span> <span class="tok-function">set</span>(<span class="tok-function">ref</span>(db, <span class="tok-string">'notes/1'</span>), { text: <span class="tok-string">'Buy milk'</span> });
 <span class="tok-comment">// nghe realtime</span>
-<span class="tok-function">onValue</span>(<span class="tok-function">ref</span>(db, <span class="tok-string">'notes'</span>), (snap) =&gt; setNotes(snap.<span class="tok-function">val</span>()));</pre>
+<span class="tok-function">onValue</span>(<span class="tok-function">ref</span>(db, <span class="tok-string">'notes'</span>), (snap) =&gt; setNotes(snap.<span class="tok-function">val</span>()));</code></pre>
 <em>Firebase đồng bộ dữ liệu trực tiếp qua mọi thiết bị — cùng một note hiện trên mọi điện thoại đã đăng nhập tức thì.</em></div>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Khớp lưu trữ với dữ liệu, không theo trend.</b> Một toggle cài đặt không cần Firebase; một danh sách chia sẻ nhiều người dùng không hợp AsyncStorage. Kinh nghiệm: key-value → AsyncStorage; truy vấn có cấu trúc/offline → SQLite; nhiều thiết bị/realtime → Firebase. Chọn công cụ nhẹ nhất vừa vặn là một phán đoán kỹ thuật — dùng Firebase cho một app ghi chú một-người-dùng là over-engineer mà giáo trình liệt kê lựa chọn nhưng không xếp hạng.</div>
 <div class="pitfall">AsyncStorage chỉ lưu <strong>chuỗi</strong>. Quên <code>JSON.stringify</code> khi lưu (và <code>JSON.parse</code> khi đọc) sẽ lưu <code>[object Object]</code> và mất dữ liệu âm thầm.</div>
@@ -962,7 +962,7 @@ dispatch(<span class="tok-function">addItem</span>({ id: <span class="tok-number
   <div class="lz-step"><b>Receive</b><span>the app shows the notification, handles the tap</span></div>
 </div>
 <h3>A local notification (Expo)</h3>
-<div class="out"><pre><span class="tok-keyword">import</span> * <span class="tok-keyword">as</span> Notifications <span class="tok-keyword">from</span> <span class="tok-string">'expo-notifications'</span>;
+<div class="out"><pre><code class="language-javascript"><span class="tok-keyword">import</span> * <span class="tok-keyword">as</span> Notifications <span class="tok-keyword">from</span> <span class="tok-string">'expo-notifications'</span>;
 
 <span class="tok-comment">// ask permission first</span>
 <span class="tok-keyword">await</span> Notifications.<span class="tok-function">requestPermissionsAsync</span>();
@@ -971,7 +971,7 @@ dispatch(<span class="tok-function">addItem</span>({ id: <span class="tok-number
 <span class="tok-keyword">await</span> Notifications.<span class="tok-function">scheduleNotificationAsync</span>({
   content: { title: <span class="tok-string">'Reminder'</span>, body: <span class="tok-string">'Time to study!'</span> },
   trigger: { seconds: <span class="tok-number">60</span> },
-});</pre></div>
+});</code></pre></div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Always request permission at the right moment, and handle refusal.</b> Asking for notification permission on the very first launch (before the user sees value) gets a "No" that is hard to reverse. Ask <em>after</em> the user does something that would benefit (creates a reminder). And your app must work when permission is denied — never crash or block. This permission UX is a real mobile skill the "add notifications" instruction glosses over.</div>
 <div class="pitfall">Push notifications require a real device and real credentials (FCM key / Expo project) — they do <strong>not</strong> work in a plain iOS simulator. Test local notifications on the simulator, but push on a physical device.</div>
 </div>
@@ -987,7 +987,7 @@ dispatch(<span class="tok-function">addItem</span>({ id: <span class="tok-number
   <div class="lz-step"><b>Nhận</b><span>app hiện thông báo, xử lý cú chạm</span></div>
 </div>
 <h3>Một local notification (Expo)</h3>
-<div class="out"><pre><span class="tok-keyword">import</span> * <span class="tok-keyword">as</span> Notifications <span class="tok-keyword">from</span> <span class="tok-string">'expo-notifications'</span>;
+<div class="out"><pre><code class="language-javascript"><span class="tok-keyword">import</span> * <span class="tok-keyword">as</span> Notifications <span class="tok-keyword">from</span> <span class="tok-string">'expo-notifications'</span>;
 
 <span class="tok-comment">// xin quyen truoc</span>
 <span class="tok-keyword">await</span> Notifications.<span class="tok-function">requestPermissionsAsync</span>();
@@ -996,7 +996,7 @@ dispatch(<span class="tok-function">addItem</span>({ id: <span class="tok-number
 <span class="tok-keyword">await</span> Notifications.<span class="tok-function">scheduleNotificationAsync</span>({
   content: { title: <span class="tok-string">'Reminder'</span>, body: <span class="tok-string">'Time to study!'</span> },
   trigger: { seconds: <span class="tok-number">60</span> },
-});</pre></div>
+});</code></pre></div>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Luôn xin quyền đúng thời điểm, và xử lý khi bị từ chối.</b> Hỏi quyền thông báo ngay lần mở đầu tiên (trước khi người dùng thấy giá trị) sẽ nhận một "Không" khó đảo. Hãy hỏi <em>sau</em> khi người dùng làm gì đó có lợi (tạo một nhắc nhở). Và app phải chạy được khi quyền bị từ chối — đừng bao giờ crash hay chặn. UX quyền này là một kỹ năng mobile thật mà chỉ dẫn "thêm notification" lướt qua.</div>
 <div class="pitfall">Push notification cần thiết bị thật và credentials thật (FCM key / Expo project) — nó <strong>không</strong> chạy trong iOS simulator thường. Test local notification trên simulator, nhưng push trên thiết bị vật lý.</div>
 </div>`,
@@ -1037,7 +1037,7 @@ dispatch(<span class="tok-function">addItem</span>({ id: <span class="tok-number
 <h2>Integrating Gemini AI (CLO10)</h2>
 <p class="lead">Adding a GenAI feature makes your project stand out. You call the Gemini API with a prompt and show the response — an AI chat, a summariser, a recipe generator. The pattern is: send a prompt, await text, render it.</p>
 <h3>Calling Gemini</h3>
-<div class="out"><pre><span class="tok-comment">// send a prompt, get a text response</span>
+<div class="out"><pre><code class="language-javascript"><span class="tok-comment">// send a prompt, get a text response</span>
 <span class="tok-keyword">const</span> res = <span class="tok-keyword">await</span> fetch(GEMINI_URL, {
   method: <span class="tok-string">'POST'</span>,
   headers: { <span class="tok-string">'Content-Type'</span>: <span class="tok-string">'application/json'</span> },
@@ -1047,7 +1047,7 @@ dispatch(<span class="tok-function">addItem</span>({ id: <span class="tok-number
 });
 <span class="tok-keyword">const</span> data = <span class="tok-keyword">await</span> res.<span class="tok-function">json</span>();
 <span class="tok-keyword">const</span> answer = data.candidates[<span class="tok-number">0</span>].content.parts[<span class="tok-number">0</span>].text;
-<span class="tok-function">setMessages</span>((prev) =&gt; [...prev, { role: <span class="tok-string">'ai'</span>, text: answer }]);</pre>
+<span class="tok-function">setMessages</span>((prev) =&gt; [...prev, { role: <span class="tok-string">'ai'</span>, text: answer }]);</code></pre>
 <em>Show a loading state while awaiting, and render the answer in a Text bubble. The AI feature is just an async fetch plus good UI.</em></div>
 <h3>Responsible AI in your app</h3>
 <div class="callout ok">Treat AI output as a <em>draft</em>, not truth: show it clearly as AI-generated, let the user edit or reject it, and never auto-act on it (e.g., don't auto-save an AI "recipe" as fact). Handle errors and empty responses gracefully.</div>
@@ -1059,7 +1059,7 @@ dispatch(<span class="tok-function">addItem</span>({ id: <span class="tok-number
 <h2>Tích hợp Gemini AI (CLO10)</h2>
 <p class="lead">Thêm một tính năng GenAI làm project của bạn nổi bật. Bạn gọi Gemini API với một prompt và hiện response — một chat AI, một bộ tóm tắt, một trình sinh công thức. Khuôn là: gửi prompt, await text, render nó.</p>
 <h3>Gọi Gemini</h3>
-<div class="out"><pre><span class="tok-comment">// gui mot prompt, nhan mot response text</span>
+<div class="out"><pre><code class="language-javascript"><span class="tok-comment">// gui mot prompt, nhan mot response text</span>
 <span class="tok-keyword">const</span> res = <span class="tok-keyword">await</span> fetch(GEMINI_URL, {
   method: <span class="tok-string">'POST'</span>,
   headers: { <span class="tok-string">'Content-Type'</span>: <span class="tok-string">'application/json'</span> },
@@ -1069,7 +1069,7 @@ dispatch(<span class="tok-function">addItem</span>({ id: <span class="tok-number
 });
 <span class="tok-keyword">const</span> data = <span class="tok-keyword">await</span> res.<span class="tok-function">json</span>();
 <span class="tok-keyword">const</span> answer = data.candidates[<span class="tok-number">0</span>].content.parts[<span class="tok-number">0</span>].text;
-<span class="tok-function">setMessages</span>((prev) =&gt; [...prev, { role: <span class="tok-string">'ai'</span>, text: answer }]);</pre>
+<span class="tok-function">setMessages</span>((prev) =&gt; [...prev, { role: <span class="tok-string">'ai'</span>, text: answer }]);</code></pre>
 <em>Hiện trạng thái loading khi await, và render câu trả lời trong một bong bóng Text. Tính năng AI chỉ là một async fetch cộng UI tốt.</em></div>
 <h3>AI có trách nhiệm trong app của bạn</h3>
 <div class="callout ok">Coi đầu ra AI là một <em>bản nháp</em>, không phải chân lý: hiện rõ nó do AI tạo, để người dùng sửa hoặc từ chối, và đừng bao giờ tự động hành động theo nó (vd đừng tự lưu một "công thức" AI như sự thật). Xử lý lỗi và response rỗng một cách nhẹ nhàng.</div>
@@ -1095,13 +1095,13 @@ dispatch(<span class="tok-function">addItem</span>({ id: <span class="tok-number
   <div class="lz-layer"><b>Error boundaries</b> — catch a crashing component so the whole app does not white-screen.</div>
 </div>
 <h3>Publishing with Expo EAS</h3>
-<div class="out"><pre><span class="tok-comment"># default Android build → .aab (Android App Bundle), the format Google Play requires</span>
+<div class="out"><pre><code class="language-bash"><span class="tok-comment"># default Android build → .aab (Android App Bundle), the format Google Play requires</span>
 npx eas build --platform android
 <span class="tok-comment"># an INSTALLABLE .apk needs a profile in eas.json:</span>
 <span class="tok-comment">#   "preview": { "android": { "buildType": "apk" } }</span>
 npx eas build --platform android --profile preview
 <span class="tok-comment"># submit to a store, or share the build link for testing</span>
-npx eas submit</pre>
+npx eas submit</code></pre>
 <em>EAS (Expo Application Services) builds in the cloud, so you need no local native toolchain. Note the trap of syllabus session 30 ("Creating Android APK Files"): a plain <code>eas build --platform android</code> produces an <strong>.aab</strong>, which the Play Store wants but which you <strong>cannot install on a phone</strong>. For a file testers can side-load you must add a profile with <code>"buildType": "apk"</code>.</em></div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Read the error message before changing code.</b> React Native's red error screen names the file and line and often the exact problem ("undefined is not an object"). Students who guess-and-change waste hours; students who read the stack trace fix in minutes. Add a <code>console.log</code> right before the failing line to inspect the actual value. Disciplined debugging — read, hypothesise, verify — is a skill the "use DevTools" lesson names but does not teach as a method.</div>
 <div class="pitfall">Publishing needs app metadata (icon, name, splash, version) and, for the stores, developer accounts and signing. Do not leave this to the last day — a first EAS build has setup steps that take time to get right.</div>
@@ -1118,13 +1118,13 @@ npx eas submit</pre>
   <div class="lz-layer"><b>Error boundaries</b> — bắt một component crash để cả app không trắng màn.</div>
 </div>
 <h3>Phát hành với Expo EAS</h3>
-<div class="out"><pre><span class="tok-comment"># build Android mac dinh -> .aab (Android App Bundle), dinh dang Google Play doi</span>
+<div class="out"><pre><code class="language-bash"><span class="tok-comment"># build Android mac dinh -> .aab (Android App Bundle), dinh dang Google Play doi</span>
 npx eas build --platform android
 <span class="tok-comment"># muon .apk CAI DUOC thi phai them profile trong eas.json:</span>
 <span class="tok-comment">#   "preview": { "android": { "buildType": "apk" } }</span>
 npx eas build --platform android --profile preview
 <span class="tok-comment"># nop len store, hoac chia se link build de test</span>
-npx eas submit</pre>
+npx eas submit</code></pre>
 <em>EAS (Expo Application Services) build trên cloud nên bạn không cần bộ công cụ native cục bộ. Chú ý cái bẫy của buổi 30 trong syllabus ("Creating Android APK Files"): lệnh <code>eas build --platform android</code> trần tạo ra <strong>.aab</strong> — thứ Play Store cần nhưng <strong>không cài thẳng vào máy được</strong>. Muốn một file người test tự cài được thì phải thêm profile có <code>"buildType": "apk"</code>.</em></div>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Đọc thông báo lỗi trước khi đổi code.</b> Màn lỗi đỏ của React Native nêu tên file và dòng và thường chính xác vấn đề ("undefined is not an object"). Sinh viên đoán-rồi-đổi phí hàng giờ; sinh viên đọc stack trace sửa trong vài phút. Thêm một <code>console.log</code> ngay trước dòng lỗi để soi giá trị thật. Debug có kỷ luật — đọc, giả thuyết, kiểm chứng — là một kỹ năng mà bài "dùng DevTools" gọi tên nhưng không dạy như một phương pháp.</div>
 <div class="pitfall">Phát hành cần metadata app (icon, tên, splash, version) và, với store, tài khoản developer và ký. Đừng để tới ngày cuối — một EAS build đầu tiên có các bước setup cần thời gian làm đúng.</div>
@@ -1243,7 +1243,7 @@ npx eas submit</pre>
 <h2>Preparing for the Practical Exam &amp; the Final Exam</h2>
 <p class="lead">The <strong>Final Exam</strong> (40%, 60 min) is the only component with a ≥4 gate; its question type is not published in the syllabus, so revise theory <em>and</em> applied work. The <strong>Practical Exam</strong> (20%, 85 min) is an <em>on-going</em> component sat during the term — expect hands-on React Native. Rehearse both.</p>
 <h3>The starter snippet — memorise this screen</h3>
-<div class="out"><pre><span class="tok-keyword">import</span> { useState } <span class="tok-keyword">from</span> <span class="tok-string">'react'</span>;
+<div class="out"><pre><code class="language-javascript"><span class="tok-keyword">import</span> { useState } <span class="tok-keyword">from</span> <span class="tok-string">'react'</span>;
 <span class="tok-keyword">import</span> { View, Text, TextInput, Pressable, FlatList } <span class="tok-keyword">from</span> <span class="tok-string">'react-native'</span>;
 
 <span class="tok-keyword">export default function</span> <span class="tok-function">App</span>() {
@@ -1258,7 +1258,7 @@ npx eas submit</pre>
         renderItem={({ item }) =&gt; &lt;Text&gt;{item.text}&lt;/Text&gt;} /&gt;
     &lt;/View&gt;
   );
-}</pre>
+}</code></pre>
 <em>This one screen exercises useState, TextInput, Pressable, validation and FlatList. If you can type it from memory, the Practical Exam becomes "add a feature to a working app".</em></div>
 <h3>Question bank — practise by CLO</h3>
 <p><b>CLO1-5 (RN, components, styling):</b></p>
@@ -1288,7 +1288,7 @@ npx eas submit</pre>
 <h2>Chuẩn bị Practical Exam &amp; Final Exam</h2>
 <p class="lead"><strong>Final Exam</strong> (40%, 60 phút) là thành phần duy nhất có cổng ≥4; syllabus không công bố dạng câu hỏi, nên hãy ôn cả lý thuyết <em>lẫn</em> phần áp dụng. <strong>Practical Exam</strong> (20%, 85 phút) là thành phần <em>on-going</em> thi trong kỳ — hãy chuẩn bị làm React Native trực tiếp. Tập cả hai.</p>
 <h3>Snippet khởi đầu — học thuộc màn này</h3>
-<div class="out"><pre><span class="tok-keyword">import</span> { useState } <span class="tok-keyword">from</span> <span class="tok-string">'react'</span>;
+<div class="out"><pre><code class="language-javascript"><span class="tok-keyword">import</span> { useState } <span class="tok-keyword">from</span> <span class="tok-string">'react'</span>;
 <span class="tok-keyword">import</span> { View, Text, TextInput, Pressable, FlatList } <span class="tok-keyword">from</span> <span class="tok-string">'react-native'</span>;
 
 <span class="tok-keyword">export default function</span> <span class="tok-function">App</span>() {
@@ -1303,7 +1303,7 @@ npx eas submit</pre>
         renderItem={({ item }) =&gt; &lt;Text&gt;{item.text}&lt;/Text&gt;} /&gt;
     &lt;/View&gt;
   );
-}</pre>
+}</code></pre>
 <em>Một màn này luyện useState, TextInput, Pressable, validation và FlatList. Nếu gõ được từ trí nhớ, Practical Exam thành "thêm một tính năng vào một app đang chạy".</em></div>
 <h3>Ngân hàng câu hỏi — luyện theo CLO</h3>
 <p><b>CLO1-5 (RN, component, styling):</b></p>

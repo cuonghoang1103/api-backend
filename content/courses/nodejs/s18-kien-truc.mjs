@@ -31,7 +31,7 @@ export default {
 
 <p>The value is in the negatives. A service that does not know it was called over HTTP can be reused by a queue worker (chapter 13), a cron job, a CLI script and a test (chapter 14) without changing a line. A route that does not know SQL cannot accidentally ship a query that scans a million rows. Each "does not know" is a class of bug that becomes impossible rather than merely unlikely.</p>
 
-<pre><code>// route — chỉ nói chuyện HTTP
+<pre><code class="language-javascript">// route — chỉ nói chuyện HTTP
 router.post('/notes', requireAuth, async (req, res, next) =&gt; {
   const parsed = createNoteSchema.safeParse(req.body);      // validate (chương 6)
   if (!parsed.success) return res.status(400).json({ fields: parsed.error.issues });
@@ -110,7 +110,7 @@ src/utils         5 file      336 dòng
 
 <p>Giá trị nằm ở những vế phủ định. Một service không biết mình được gọi qua HTTP thì dùng lại được bởi một worker hàng đợi (chương 13), một job định kỳ, một script dòng lệnh và một bài test (chương 14) mà không phải đổi một dòng. Một route không biết SQL thì không thể vô tình đưa lên một câu truy vấn quét một triệu dòng. Mỗi vế "không biết" là một lớp lỗi trở nên <em>bất khả thi</em> chứ không chỉ là ít xảy ra.</p>
 
-<pre><code>// route — chỉ nói chuyện HTTP
+<pre><code class="language-javascript">// route — chỉ nói chuyện HTTP
 router.post('/notes', requireAuth, async (req, res, next) =&gt; {
   const parsed = createNoteSchema.safeParse(req.body);      // validate (chương 6)
   if (!parsed.success) return res.status(400).json({ fields: parsed.error.issues });
@@ -189,7 +189,7 @@ src/utils         5 file      336 dòng
 <p class="lead">Where a file lives determines what a developer reads before changing it. Two organising principles compete, both are defensible, and the one you pick early is nearly impossible to change later — so this lesson lays out the trade with numbers from a codebase that has lived with the choice for a year.</p>
 
 <h3>By type, or by feature</h3>
-<pre><code>// theo LOẠI — mọi route ở một chỗ, mọi service ở một chỗ
+<pre><code class="language-typescript">// theo LOẠI — mọi route ở một chỗ, mọi service ở một chỗ
 src/routes/notes.routes.ts       src/services/notes.service.ts
 src/routes/messages.routes.ts    src/services/messages.service.ts
 src/routes/courses.routes.ts     src/services/courses.service.ts
@@ -269,7 +269,7 @@ file to nhất:
 <p class="lead">File nằm ở đâu quyết định lập trình viên phải đọc những gì trước khi sửa nó. Hai nguyên tắc tổ chức cạnh tranh nhau, cả hai đều bảo vệ được, và cái bạn chọn sớm thì gần như không đổi được về sau — nên bài này bày ra phép đánh đổi kèm số liệu từ một codebase đã sống chung với lựa chọn ấy suốt một năm.</p>
 
 <h3>Theo loại, hay theo tính năng</h3>
-<pre><code>// theo LOẠI — mọi route ở một chỗ, mọi service ở một chỗ
+<pre><code class="language-typescript">// theo LOẠI — mọi route ở một chỗ, mọi service ở một chỗ
 src/routes/notes.routes.ts       src/services/notes.service.ts
 src/routes/messages.routes.ts    src/services/messages.service.ts
 src/routes/courses.routes.ts     src/services/courses.service.ts
@@ -410,7 +410,7 @@ service gọi service khác:
 
 <p><strong>Depend on a shape, not on a module.</strong> If <code>notesService</code> needs to send email, have it accept a function rather than import <code>emailService</code> — the dependency inverts, the test (chapter 14) passes a fake, and the email module can change freely.</p>
 
-<pre><code>// ghép chặt: notes BIẾT về email
+<pre><code class="language-javascript">// ghép chặt: notes BIẾT về email
 import { sendEmail } from './email.service.js';
 async function share(note, to) { await sendEmail(to, 'Ghi chú mới', note.title); }
 
@@ -496,7 +496,7 @@ service gọi service khác:
 
 <p><strong>Phụ thuộc vào một HÌNH DẠNG, đừng phụ thuộc vào một mô-đun.</strong> Nếu <code>notesService</code> cần gửi email, hãy để nó nhận vào một hàm thay vì import <code>emailService</code> — chiều phụ thuộc đảo lại, bài test (chương 14) truyền vào một hàng giả, và mô-đun email được tự do thay đổi.</p>
 
-<pre><code>// ghép chặt: notes BIẾT về email
+<pre><code class="language-javascript">// ghép chặt: notes BIẾT về email
 import { sendEmail } from './email.service.js';
 async function share(note, to) { await sendEmail(to, 'Ghi chú mới', note.title); }
 

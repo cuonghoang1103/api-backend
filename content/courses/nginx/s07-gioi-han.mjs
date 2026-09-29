@@ -18,7 +18,7 @@ export default {
 <p class="lead">Rate limiting looks like one setting with a number in it. It is three settings, and the difference between them is the difference between a site that rejects a normal user and one that absorbs a burst without anyone noticing.</p>
 
 <h3>Same rate, three spellings, ten rapid requests</h3>
-<pre><code>limit_req_zone \$binary_remote_addr zone=cham:10m rate=2r/s;
+<pre><code class="language-bash">limit_req_zone \$binary_remote_addr zone=cham:10m rate=2r/s;
 
 location /a/ { limit_req zone=cham; }                    <span class="tok-comment"># no burst</span>
 location /b/ { limit_req zone=cham burst=5; }            <span class="tok-comment"># burst, with queueing</span>
@@ -49,7 +49,7 @@ error.log: limiting requests, excess: 0.660 by zone "cham", client: 127.0.0.1</d
 <div class="pitfall">
 <p><strong>Trap — the default rejection status is <code>503</code>, which tells the client the wrong thing.</strong> <code>503 Service Unavailable</code> means "the server is having trouble" — monitoring counts it as an error, well-behaved clients back off as if you are down, and a CDN may treat it as an origin failure. What you meant is <code>429 Too Many Requests</code>: the server is fine, this client asked too often. Set <code>limit_req_status 429;</code> and <code>limit_conn_status 429;</code> in every config that limits anything. It costs one line, it makes your own error dashboards honest, and it lets clients implement the retry behaviour the status is designed to trigger. Adding a <code>Retry-After</code> header alongside it is the difference between a client retrying sensibly and a client retrying immediately forever.</p>
 </div>
-<pre><code>http {
+<pre><code class="language-bash">http {
   limit_req_zone \$binary_remote_addr zone=chung:10m rate=10r/s;
   limit_req_status  429;          <span class="tok-comment"># NOT 503</span>
   limit_conn_status 429;
@@ -95,7 +95,7 @@ error.log: limiting requests, excess: 0.660 by zone "cham", client: 127.0.0.1</d
 <p class="lead">Giới hạn tần suất trông như MỘT thiết lập có một con số bên trong. Nó là BA thiết lập, và khác biệt giữa chúng là khác biệt giữa một site đá một người dùng bình thường ra và một site nuốt trọn một đợt dồn mà chẳng ai để ý.</p>
 
 <h3>Cùng một mức, ba cách viết, mười request liên tiếp</h3>
-<pre><code>limit_req_zone \$binary_remote_addr zone=cham:10m rate=2r/s;
+<pre><code class="language-bash">limit_req_zone \$binary_remote_addr zone=cham:10m rate=2r/s;
 
 location /a/ { limit_req zone=cham; }                    <span class="tok-comment"># không burst</span>
 location /b/ { limit_req zone=cham burst=5; }            <span class="tok-comment"># burst, có xếp hàng</span>
@@ -126,7 +126,7 @@ error.log: limiting requests, excess: 0.660 by zone "cham", client: 127.0.0.1</d
 <div class="pitfall">
 <p><strong>Bẫy — mã từ chối MẶC ĐỊNH là <code>503</code>, và nó nói với client một điều SAI.</strong> <code>503 Service Unavailable</code> nghĩa là "máy chủ đang gặp trục trặc" — hệ giám sát đếm nó là LỖI, những client cư xử tử tế thì lùi lại như thể bạn đang chết, và một CDN có thể coi đó là máy gốc hỏng. Thứ bạn MUỐN nói là <code>429 Too Many Requests</code>: máy chủ vẫn ổn, chỉ là client này hỏi quá nhiều. Hãy đặt <code>limit_req_status 429;</code> và <code>limit_conn_status 429;</code> vào MỌI cấu hình có giới hạn bất cứ thứ gì. Nó tốn một dòng, nó làm bảng lỗi của chính bạn thật thà, và nó cho client cài đặt đúng cái hành vi thử-lại mà mã trạng thái ấy sinh ra để kích hoạt. Thêm một header <code>Retry-After</code> đi kèm là khác biệt giữa một client thử lại có ý thức và một client thử lại ngay lập tức mãi mãi.</p>
 </div>
-<pre><code>http {
+<pre><code class="language-bash">http {
   limit_req_zone \$binary_remote_addr zone=chung:10m rate=10r/s;
   limit_req_status  429;          <span class="tok-comment"># KHÔNG phải 503</span>
   limit_conn_status 429;
@@ -200,7 +200,7 @@ C) Cung cau hinh B, nhung mot ke tan cong TU DOI X-Forwarded-For:
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Reading X-Forwarded-For directly is worse</span><span class="lz-d">Row C. The header is client input (Lesson 3.2), so an attacker changes it per request and every request gets a fresh bucket. The limit is not weakened — it is gone, and the config still looks like it has one.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">The answer is to fix $remote_addr itself</span><span class="lz-d"><code>set_real_ip_from</code> with the addresses of proxies you actually operate, plus <code>real_ip_header X-Forwarded-For</code>. Nginx then rewrites <code>\$remote_addr</code> to the real client, so <code>\$binary_remote_addr</code> is both correct and unforgeable — and every limit keyed on it is too.</span></div>
 </div>
-<pre><code><span class="tok-comment"># RIGHT: fix $remote_addr itself, then key on it</span>
+<pre><code class="language-bash"><span class="tok-comment"># RIGHT: fix $remote_addr itself, then key on it</span>
 set_real_ip_from 10.0.0.0/8;          <span class="tok-comment"># ONLY the proxies YOU operate</span>
 set_real_ip_from 172.16.0.0/12;
 real_ip_header   X-Forwarded-For;
@@ -274,7 +274,7 @@ C) Cung cau hinh B, nhung mot ke tan cong TU DOI X-Forwarded-For:
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Đọc thẳng X-Forwarded-For còn tệ hơn</span><span class="lz-d">Dòng C. Cái header đó là ĐẦU VÀO của client (Bài 3.2), nên kẻ tấn công đổi nó ở mỗi request và mỗi request nhận một cái xô mới toanh. Giới hạn không phải bị YẾU đi — nó BIẾN MẤT, mà cấu hình thì vẫn trông như đang có một cái.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Câu trả lời là SỬA chính $remote_addr</span><span class="lz-d"><code>set_real_ip_from</code> với địa chỉ của những proxy bạn THẬT SỰ vận hành, cộng <code>real_ip_header X-Forwarded-For</code>. Nginx khi ấy viết lại <code>\$remote_addr</code> thành client thật, nên <code>\$binary_remote_addr</code> vừa ĐÚNG vừa KHÔNG giả mạo được — và mọi giới hạn khoá theo nó cũng vậy.</span></div>
 </div>
-<pre><code><span class="tok-comment"># ĐÚNG: sửa chính $remote_addr, rồi khoá theo nó</span>
+<pre><code class="language-bash"><span class="tok-comment"># ĐÚNG: sửa chính $remote_addr, rồi khoá theo nó</span>
 set_real_ip_from 10.0.0.0/8;          <span class="tok-comment"># CHỈ các proxy do BẠN vận hành</span>
 set_real_ip_from 172.16.0.0/12;
 real_ip_header   X-Forwarded-For;
@@ -338,7 +338,7 @@ limit_req_zone \$binary_remote_addr zone=theo-ip:10m rate=10r/s;
 <p class="lead">Rate limiting counts requests over time. A different resource runs out first: the connection slots themselves. <code>limit_conn</code> bounds those per client, works exactly as advertised, and does nothing at all about the one attack people usually deploy it against.</p>
 
 <h3>It works: six slow requests, one IP</h3>
-<pre><code>limit_conn_zone \$binary_remote_addr zone=conn:10m;
+<pre><code class="language-bash">limit_conn_zone \$binary_remote_addr zone=conn:10m;
 
 location /d/ { limit_conn conn 2; proxy_pass http://api; }</code></pre>
 <div class="out">6 request DONG THOI toi mot duong dan cham 1,5 giay:
@@ -369,7 +369,7 @@ gui dong trong ket thuc header (dung khuon mau slowloris):
 <div class="pitfall">
 <p><strong>Trap — <code>limit_conn</code> counts connections that have finished reading their request headers, and a slowloris connection never finishes.</strong> The middle row is the measurement: twenty dribbling connections, a limit of two per IP, and all twenty survived. They are not counted because from Nginx's point of view no request has started yet — they are still in the header-reading phase. So the directive people reach for to stop connection exhaustion is precisely the wrong one for the best-known connection-exhaustion attack. What stops it is <code>client_header_timeout</code>: with it at 2 seconds all twenty were closed. The two directives protect against different things and neither substitutes for the other.</p>
 </div>
-<pre><code>http {
+<pre><code class="language-bash">http {
   <span class="tok-comment"># Against slowloris: cut connections that never finish their headers or body</span>
   client_header_timeout 10s;      <span class="tok-comment"># default 60s — far too generous</span>
   client_body_timeout   10s;
@@ -421,7 +421,7 @@ gui dong trong ket thuc header (dung khuon mau slowloris):
 <p class="lead">Giới hạn tần suất đếm số REQUEST theo thời gian. Có một tài nguyên khác cạn TRƯỚC: chính những cái slot kết nối. <code>limit_conn</code> chặn chúng theo từng client, chạy đúng như quảng cáo, và chẳng làm gì được với đúng cái đòn mà người ta thường triển khai nó để chống.</p>
 
 <h3>Nó CHẠY: sáu request chậm, một IP</h3>
-<pre><code>limit_conn_zone \$binary_remote_addr zone=conn:10m;
+<pre><code class="language-bash">limit_conn_zone \$binary_remote_addr zone=conn:10m;
 
 location /d/ { limit_conn conn 2; proxy_pass http://api; }</code></pre>
 <div class="out">6 request DONG THOI toi mot duong dan cham 1,5 giay:
@@ -452,7 +452,7 @@ gui dong trong ket thuc header (dung khuon mau slowloris):
 <div class="pitfall">
 <p><strong>Bẫy — <code>limit_conn</code> đếm những kết nối ĐÃ ĐỌC XONG header của request, mà một kết nối slowloris thì KHÔNG BAO GIỜ đọc xong.</strong> Dòng giữa chính là phép đo: hai mươi kết nối nhỏ giọt, một giới hạn hai cái mỗi IP, và cả hai mươi đều SỐNG. Chúng không bị đếm vì dưới góc nhìn của Nginx thì CHƯA có request nào bắt đầu cả — chúng vẫn đang ở giai đoạn đọc header. Nên cái chỉ thị người ta với tới để chặn việc vét cạn kết nối lại là cái SAI hoàn toàn cho đòn vét-cạn-kết-nối nổi tiếng nhất. Thứ chặn được nó là <code>client_header_timeout</code>: đặt nó ở 2 giây thì cả hai mươi bị đóng. Hai chỉ thị này bảo vệ hai thứ KHÁC NHAU và không cái nào thay thế được cái nào.</p>
 </div>
-<pre><code>http {
+<pre><code class="language-bash">http {
   <span class="tok-comment"># Chống nhỏ giọt: cắt kết nối chưa gửi xong header/thân</span>
   client_header_timeout 10s;      <span class="tok-comment"># mặc định 60s — quá rộng rãi</span>
   client_body_timeout   10s;
@@ -526,7 +526,7 @@ gui dong trong ket thuc header (dung khuon mau slowloris):
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">So the limit protects the backend always, and bandwidth usually</span><span class="lz-d">Which is the right way to think about it. An attacker who wants to waste your transfer costs simply omits <code>Content-Length</code>. If that matters, the defence is upstream of Nginx — a CDN or firewall rule — not this directive.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">The default is 1MB, and it is the wrong default for uploads</span><span class="lz-d"><code>client_max_body_size 1m;</code> is what you get if you say nothing, and it produces a <code>413</code> on the first photo somebody uploads. It is also the right default for an API that only receives JSON, so this is a per-location decision rather than a global one.</span></div>
 </div>
-<pre><code>http {
+<pre><code class="language-bash">http {
   client_max_body_size 1m;              <span class="tok-comment"># a tight default for the whole site</span>
 
   server {
@@ -590,7 +590,7 @@ gui dong trong ket thuc header (dung khuon mau slowloris):
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Nên giới hạn này LUÔN bảo vệ backend, còn băng thông thì THƯỜNG THƯỜNG</span><span class="lz-d">Đó là cách nghĩ đúng về nó. Một kẻ tấn công muốn đốt phí truyền dữ liệu của bạn chỉ việc BỎ <code>Content-Length</code> đi. Nếu điều đó có nghĩa lý thì tuyến phòng thủ nằm ở TRƯỚC Nginx — một CDN hay một luật tường lửa — chứ không phải ở chỉ thị này.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Mặc định là 1MB, và đó là mặc định SAI cho việc tải file</span><span class="lz-d"><code>client_max_body_size 1m;</code> là thứ bạn nhận nếu không nói gì, và nó sinh ra một cú <code>413</code> ngay tấm ảnh đầu tiên ai đó tải lên. Nó cũng là mặc định ĐÚNG cho một API chỉ nhận JSON, nên đây là quyết định theo TỪNG location chứ không phải toàn cục.</span></div>
 </div>
-<pre><code>http {
+<pre><code class="language-bash">http {
   client_max_body_size 1m;              <span class="tok-comment"># mặc định chặt cho toàn site</span>
 
   server {
@@ -650,7 +650,7 @@ gui dong trong ket thuc header (dung khuon mau slowloris):
 <p class="lead">Four axes, four lessons, and the only way to know they work together is to build the thing and probe it. This is that config, and one of the probes found a real interaction that reading the file would not have shown.</p>
 
 <h3>The config</h3>
-<pre><code>http {
+<pre><code class="language-bash">http {
   <span class="tok-comment"># 1) IDENTITY — fix $remote_addr FIRST, and only then is every limit correct (7.2)</span>
   set_real_ip_from 10.0.0.0/8;      <span class="tok-comment"># YOUR proxies only</span>
   real_ip_header    X-Forwarded-For;
@@ -757,7 +757,7 @@ Nghi 3 giay cho xo rot lai, roi gui LAI dung request do:
 <p class="lead">Bốn trục, bốn bài, và cách DUY NHẤT để biết chúng hợp tác được với nhau là dựng cái đó lên rồi đem dò. Đây là cấu hình ấy, và một trong những phép dò đã tìm ra một tương tác CÓ THẬT mà đọc file thì không thấy.</p>
 
 <h3>Cấu hình</h3>
-<pre><code>http {
+<pre><code class="language-bash">http {
   <span class="tok-comment"># 1) DANH TÍNH — sửa $remote_addr TRƯỚC, rồi mọi giới hạn mới đúng (7.2)</span>
   set_real_ip_from 10.0.0.0/8;      <span class="tok-comment"># CHỈ proxy của bạn</span>
   real_ip_header    X-Forwarded-For;

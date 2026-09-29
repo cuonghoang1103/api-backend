@@ -339,15 +339,15 @@ export default {
 
 <h3>1 · Node.js 22 LTS</h3>
 <p>Next.js runs on Node. Install the <strong>LTS</strong> (long-term support) version — 22.x at the time of writing. Check it:</p>
-<pre><code>node --version
+<pre><code class="language-bash">node --version
 <span class="out">v22.21.0</span></code></pre>
 <p>If you juggle projects on different Node versions, use <code>nvm</code> (Node Version Manager) and put the version in a <code>.nvmrc</code> file. This site pins Node 22 that way.</p>
 
 <h3>2 · Create the app</h3>
 <p>One command scaffolds a complete App Router project with TypeScript, Tailwind and ESLint wired up:</p>
-<pre><code>npx create-next-app@latest my-app</code></pre>
+<pre><code class="language-bash">npx create-next-app@latest my-app</code></pre>
 <p>It asks a few questions. For this course answer: <b>TypeScript yes</b>, <b>ESLint yes</b>, <b>Tailwind yes</b>, <b>App Router yes</b>, <b>src/ directory</b> — your choice, this course uses <code>src/</code> like cuongthai.com does. Then:</p>
-<pre><code>cd my-app
+<pre><code class="language-bash">cd my-app
 npm run dev
 <span class="out">▲ Next.js 15.x
 - Local:   http://localhost:3000
@@ -409,15 +409,15 @@ npm run dev
 
 <h3>1 · Node.js 22 LTS</h3>
 <p>Next.js chạy trên Node. Cài bản <strong>LTS</strong> (hỗ trợ dài hạn) — 22.x ở thời điểm viết. Kiểm tra:</p>
-<pre><code>node --version
+<pre><code class="language-bash">node --version
 <span class="out">v22.21.0</span></code></pre>
 <p>Nếu bạn xoay nhiều dự án ở các bản Node khác nhau, dùng <code>nvm</code> (Node Version Manager) và ghi bản cần dùng vào file <code>.nvmrc</code>. Site này ghim Node 22 theo cách đó.</p>
 
 <h3>2 · Tạo app</h3>
 <p>Một lệnh dựng nguyên một dự án App Router hoàn chỉnh có sẵn TypeScript, Tailwind và ESLint:</p>
-<pre><code>npx create-next-app@latest my-app</code></pre>
+<pre><code class="language-bash">npx create-next-app@latest my-app</code></pre>
 <p>Nó hỏi vài câu. Với khoá này hãy trả lời: <b>TypeScript có</b>, <b>ESLint có</b>, <b>Tailwind có</b>, <b>App Router có</b>, <b>thư mục src/</b> — tuỳ bạn, khoá này dùng <code>src/</code> giống cuongthai.com. Rồi:</p>
-<pre><code>cd my-app
+<pre><code class="language-bash">cd my-app
 npm run dev
 <span class="out">▲ Next.js 15.x
 - Local:   http://localhost:3000

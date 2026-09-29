@@ -395,7 +395,7 @@ hash("123456" + salt_B) → even though the password is identical</code></pre>
 
 <h3>bcrypt: hashing built specifically for passwords</h3>
 <p>Generic hash functions (like the SHA-256 you might use for file checksums) are built to be <em>fast</em> — great for checking a download, terrible for passwords, because fast means an attacker with stolen hashes can try billions of guesses per second. <strong>bcrypt</strong> (and similarly, argon2) is deliberately slow, and generates and stores its own salt automatically:</p>
-<pre><code>const hash = await bcrypt.hash(plainPassword, 10);  // 10 = "cost factor"
+<pre><code class="language-javascript">const hash = await bcrypt.hash(plainPassword, 10);  // 10 = "cost factor"
 // stores something like: $2b$10$N9qo8uLOickgx2ZMRZoMy...
 
 const isMatch = await bcrypt.compare(typedPassword, hash);
@@ -410,7 +410,7 @@ const isMatch = await bcrypt.compare(typedPassword, hash);
 <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">The salt is automatic</span><span class="lz-d">bcrypt generates a random salt per password and stores it inside the hash string, so two users with the same password get different hashes.</span></div>
 <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Compare with the library</span><span class="lz-d"><code>bcrypt.compare(plain, hash)</code>. Never hash the input and compare with <code>===</code> — the salt is in the stored hash, so that always fails.</span></div>
 </div>
-<pre><code>const hash = await bcrypt.hash(password, 12);
+<pre><code class="language-javascript">const hash = await bcrypt.hash(password, 12);
 // $2b$12$Xy8kQ2r...   ← algorithm, cost, salt and hash, all in one string
 
 const ok = await bcrypt.compare(input, hash);</code></pre>
@@ -454,7 +454,7 @@ hash("123456" + salt_B) → dù mật khẩu giống hệt</code></pre>
 
 <h3>bcrypt: hash dựng riêng cho mật khẩu</h3>
 <p>Các hàm hash tổng quát (như SHA-256 bạn có thể dùng cho checksum file) được dựng để <em>nhanh</em> — tuyệt cho kiểm một file tải về, tệ hại cho mật khẩu, vì nhanh nghĩa là kẻ tấn công có hash đánh cắp có thể thử hàng tỉ lần đoán mỗi giây. <strong>bcrypt</strong> (và tương tự, argon2) cố tình chậm, và tự sinh + tự lưu salt riêng của nó:</p>
-<pre><code>const hash = await bcrypt.hash(mậtKhẩuThô, 10);  // 10 = "cost factor"
+<pre><code class="language-javascript">const hash = await bcrypt.hash(mậtKhẩuThô, 10);  // 10 = "cost factor"
 // lưu thứ giống: $2b$10$N9qo8uLOickgx2ZMRZoMy...
 
 const isMatch = await bcrypt.compare(mậtKhẩuVừaGõ, hash);
@@ -469,7 +469,7 @@ const isMatch = await bcrypt.compare(mậtKhẩuVừaGõ, hash);
 <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Muối là tự động</span><span class="lz-d">bcrypt sinh một chuỗi muối ngẫu nhiên cho mỗi mật khẩu và cất luôn trong chuỗi hash, nên hai người dùng cùng mật khẩu vẫn có hash khác nhau.</span></div>
 <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">So sánh bằng chính thư viện đó</span><span class="lz-d"><code>bcrypt.compare(plain, hash)</code>. Đừng bao giờ tự băm đầu vào rồi so bằng <code>===</code> — muối nằm trong hash đã lưu, nên cách đó luôn luôn sai.</span></div>
 </div>
-<pre><code>const hash = await bcrypt.hash(password, 12);
+<pre><code class="language-javascript">const hash = await bcrypt.hash(password, 12);
 // $2b$12$Xy8kQ2r...   ← thuật toán, chi phí, muối và hash, tất cả trong một chuỗi
 
 const ok = await bcrypt.compare(input, hash);</code></pre>

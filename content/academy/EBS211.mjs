@@ -55,7 +55,7 @@ const c1 = doc('ebs211-1-1-what-is-embedded', '1.1 — What is an embedded syste
 <h3>Resource constraints</h3>
 <p>You may have only a few KB of RAM and flash, run on a coin cell for months, and have no operating system. Every byte and every microamp counts, so you count them.</p>
 <h3>The reactive loop</h3>
-<pre><code>// The heartbeat of most small embedded systems
+<pre><code class="language-c">// The heartbeat of most small embedded systems
 int main(void) {
     hw_init();                 // clocks, pins, peripherals
     while (1) {                // never returns
@@ -77,7 +77,7 @@ int main(void) {
 <h3>Ràng buộc tài nguyên</h3>
 <p>Bạn có thể chỉ có vài KB RAM và flash, chạy pin cúc áo hàng tháng, và không có hệ điều hành. Mỗi byte và mỗi microamp đều đáng kể, nên bạn phải đếm chúng.</p>
 <h3>Vòng lặp phản ứng</h3>
-<pre><code>// Nhịp tim của hầu hết hệ nhúng nhỏ
+<pre><code class="language-c">// Nhịp tim của hầu hết hệ nhúng nhỏ
 int main(void) {
     hw_init();                 // clock, chân, ngoại vi
     while (1) {                // không bao giờ trả về
@@ -108,7 +108,7 @@ const c2 = doc('ebs211-2-1-hardware-architecture', '2.1 — Embedded hardware ar
 </ul>
 <h3>Memory map &amp; memory-mapped registers</h3>
 <p>Everything lives at an address: flash (code), RAM (data), and <strong>peripheral registers</strong>. Writing to a peripheral register address turns hardware on/off — this is how you control a chip in C.</p>
-<pre><code>#include &lt;stdint.h&gt;
+<pre><code class="language-c">#include &lt;stdint.h&gt;
 // A peripheral register is just a fixed address
 #define RCC_AHB1ENR (*(volatile uint32_t*)0x40023830)
 #define GPIOA_MODER (*(volatile uint32_t*)0x40020000)
@@ -129,7 +129,7 @@ GPIOA_MODER |=  (1u &lt;&lt; 10);    // set pin 5 as output
 </ul>
 <h3>Bản đồ bộ nhớ &amp; thanh ghi ánh xạ bộ nhớ</h3>
 <p>Mọi thứ nằm ở một địa chỉ: flash (mã), RAM (dữ liệu), và <strong>thanh ghi ngoại vi</strong>. Ghi vào địa chỉ thanh ghi ngoại vi là bật/tắt phần cứng — đây là cách bạn điều khiển chip bằng C.</p>
-<pre><code>#include &lt;stdint.h&gt;
+<pre><code class="language-c">#include &lt;stdint.h&gt;
 // Một thanh ghi ngoại vi chỉ là một địa chỉ cố định
 #define RCC_AHB1ENR (*(volatile uint32_t*)0x40023830)
 #define GPIOA_MODER (*(volatile uint32_t*)0x40020000)
@@ -281,7 +281,7 @@ const c5 = doc('ebs211-5-1-interrupts-realtime', '5.1 — Interrupts & real-time
 </ul>
 <h3>Scheduling</h3>
 <p>With several jobs competing, a <strong>scheduler</strong> decides who runs. Higher-<strong>priority</strong> interrupts pre-empt lower ones — the airbag ISR must beat the display refresh.</p>
-<pre><code>volatile uint8_t rx_flag = 0;
+<pre><code class="language-java">volatile uint8_t rx_flag = 0;
 volatile uint8_t rx_byte = 0;
 
 // ISR: short! just grab the byte and signal main
@@ -307,7 +307,7 @@ while (1) {
 </ul>
 <h3>Lập lịch</h3>
 <p>Khi nhiều việc tranh nhau, một <strong>bộ lập lịch (scheduler)</strong> quyết ai chạy. Ngắt <strong>ưu tiên</strong> cao chiếm quyền của ngắt thấp — ISR túi khí phải thắng việc làm mới màn hình.</p>
-<pre><code>volatile uint8_t rx_flag = 0;
+<pre><code class="language-java">volatile uint8_t rx_flag = 0;
 volatile uint8_t rx_byte = 0;
 
 // ISR: ngắn! chỉ lấy byte và báo cho main
@@ -343,7 +343,7 @@ const c6 = doc('ebs211-6-1-rtos-freertos', '6.1 — Real-time operating system (
 <li><strong>Semaphore</strong> — a signal/counter; an ISR "gives" it, a task "takes" it (event notification, resource counting).</li>
 <li><strong>Mutex</strong> — a lock so only one task touches a shared resource at a time; it also fights <em>priority inversion</em>.</li>
 </ul>
-<pre><code>// FreeRTOS: two tasks + a semaphore from an ISR
+<pre><code class="language-c">// FreeRTOS: two tasks + a semaphore from an ISR
 SemaphoreHandle_t sem;
 
 void vSensorTask(void *p) {
@@ -374,7 +374,7 @@ int main(void) {
 <li><strong>Semaphore</strong> — một tín hiệu/bộ đếm; ISR "give", task "take" (báo sự kiện, đếm tài nguyên).</li>
 <li><strong>Mutex</strong> — khoá để mỗi lúc chỉ một task chạm tài nguyên chung; còn chống <em>priority inversion</em>.</li>
 </ul>
-<pre><code>// FreeRTOS: hai task + một semaphore từ ISR
+<pre><code class="language-c">// FreeRTOS: hai task + một semaphore từ ISR
 SemaphoreHandle_t sem;
 
 void vSensorTask(void *p) {

@@ -28,7 +28,7 @@ export default {
 
 <h3>The table we'll query all chapter</h3>
 <p>Everything in this chapter runs against one small <code>note</code> table. Here it is, populated with a <strong>multi-row INSERT</strong> — one statement, many rows, commas between them:</p>
-<pre><code>CREATE TABLE note (
+<pre><code class="language-sql">CREATE TABLE note (
   id         bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   title      text NOT NULL,
   author     text NOT NULL,
@@ -59,7 +59,7 @@ RETURNING id, title;</code></pre>
 
 <h3>Let DEFAULT do the work</h3>
 <p>You only list the columns you're supplying; any column with a <code>DEFAULT</code> (or that's nullable) fills itself. Omit <code>views</code> and <code>pinned</code> and they take their defaults:</p>
-<pre><code>INSERT INTO note (title, author, tag, created_at)
+<pre><code class="language-sql">INSERT INTO note (title, author, tag, created_at)
 VALUES ('Quick draft', 'Minh', NULL, '2026-04-10')
 RETURNING id, title, views, pinned;</code></pre>
 <div class="out"> id |    title    | views | pinned
@@ -70,7 +70,7 @@ RETURNING id, title, views, pinned;</code></pre>
 
 <h3>UPSERT — insert, or update if it already exists</h3>
 <p>Constantly you need "insert this row, but if a row with that key already exists, update it instead". Doing it in two steps is racy; <code>INSERT ... ON CONFLICT</code> does it atomically in one. Here's a per-tag hit counter that increments on every conflict:</p>
-<pre><code>CREATE TABLE tag_stat (tag text PRIMARY KEY, hits int NOT NULL DEFAULT 0);
+<pre><code class="language-sql">CREATE TABLE tag_stat (tag text PRIMARY KEY, hits int NOT NULL DEFAULT 0);
 
 INSERT INTO tag_stat (tag, hits) VALUES ('sql', 1)
   ON CONFLICT (tag) DO UPDATE SET hits = tag_stat.hits + 1;   <span class="tok-comment">-- run 3 times</span>
@@ -80,7 +80,7 @@ SELECT * FROM tag_stat;</code></pre>
  sql |    3
 (1 row)</div>
 <p>The first call inserted <code>('sql', 1)</code>. The next two hit the primary-key conflict on <code>tag='sql'</code> and ran the <code>DO UPDATE</code> instead, each adding 1 — so <code>hits</code> is 3. This single statement is the whole "increment a counter, creating it if missing" pattern. The other flavour, <code>DO NOTHING</code>, skips silently on conflict instead of updating:</p>
-<pre><code>INSERT INTO tag_stat (tag, hits) VALUES ('sql', 999)
+<pre><code class="language-sql">INSERT INTO tag_stat (tag, hits) VALUES ('sql', 999)
   ON CONFLICT (tag) DO NOTHING;
 SELECT * FROM tag_stat;</code></pre>
 <div class="out"> tag | hits
@@ -111,7 +111,7 @@ SELECT * FROM tag_stat;</code></pre>
 
 <h3>Bảng ta sẽ truy vấn suốt chương</h3>
 <p>Mọi thứ trong chương này chạy trên một bảng <code>note</code> nhỏ. Đây là nó, đổ dữ liệu bằng một <strong>INSERT nhiều dòng</strong> — một câu lệnh, nhiều dòng, phẩy ngăn giữa chúng:</p>
-<pre><code>CREATE TABLE note (
+<pre><code class="language-sql">CREATE TABLE note (
   id         bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   title      text NOT NULL,
   author     text NOT NULL,
@@ -142,7 +142,7 @@ RETURNING id, title;</code></pre>
 
 <h3>Để DEFAULT làm việc</h3>
 <p>Bạn chỉ liệt kê các cột mình cấp; cột nào có <code>DEFAULT</code> (hoặc cho phép null) tự điền. Bỏ qua <code>views</code> và <code>pinned</code> thì chúng nhận mặc định:</p>
-<pre><code>INSERT INTO note (title, author, tag, created_at)
+<pre><code class="language-sql">INSERT INTO note (title, author, tag, created_at)
 VALUES ('Quick draft', 'Minh', NULL, '2026-04-10')
 RETURNING id, title, views, pinned;</code></pre>
 <div class="out"> id |    title    | views | pinned
@@ -153,7 +153,7 @@ RETURNING id, title, views, pinned;</code></pre>
 
 <h3>UPSERT — chèn, hoặc cập nhật nếu đã tồn tại</h3>
 <p>Bạn liên tục cần "chèn dòng này, nhưng nếu một dòng với khoá đó đã tồn tại thì cập nhật thay vì chèn". Làm hai bước thì dễ dính đua tranh (race); <code>INSERT ... ON CONFLICT</code> làm nguyên tử trong một bước. Đây là một bộ đếm lượt theo tag, tăng mỗi lần đụng độ:</p>
-<pre><code>CREATE TABLE tag_stat (tag text PRIMARY KEY, hits int NOT NULL DEFAULT 0);
+<pre><code class="language-sql">CREATE TABLE tag_stat (tag text PRIMARY KEY, hits int NOT NULL DEFAULT 0);
 
 INSERT INTO tag_stat (tag, hits) VALUES ('sql', 1)
   ON CONFLICT (tag) DO UPDATE SET hits = tag_stat.hits + 1;   <span class="tok-comment">-- chạy 3 lần</span>
@@ -163,7 +163,7 @@ SELECT * FROM tag_stat;</code></pre>
  sql |    3
 (1 row)</div>
 <p>Lần đầu chèn <code>('sql', 1)</code>. Hai lần sau đụng khoá chính trên <code>tag='sql'</code> và chạy <code>DO UPDATE</code> thay vì chèn, mỗi lần cộng 1 — nên <code>hits</code> là 3. Câu lệnh duy nhất này chính là toàn bộ mẫu "tăng một bộ đếm, tạo nó nếu chưa có". Biến thể kia, <code>DO NOTHING</code>, âm thầm bỏ qua khi đụng độ thay vì cập nhật:</p>
-<pre><code>INSERT INTO tag_stat (tag, hits) VALUES ('sql', 999)
+<pre><code class="language-sql">INSERT INTO tag_stat (tag, hits) VALUES ('sql', 999)
   ON CONFLICT (tag) DO NOTHING;
 SELECT * FROM tag_stat;</code></pre>
 <div class="out"> tag | hits
@@ -204,7 +204,7 @@ SELECT * FROM tag_stat;</code></pre>
 
 <h3>Projection: columns and computed values</h3>
 <p>List the columns you want; you can also compute new ones and name them with <code>AS</code>:</p>
-<pre><code>SELECT id, title, views, views * 2 AS double_views
+<pre><code class="language-sql">SELECT id, title, views, views * 2 AS double_views
 FROM note ORDER BY id LIMIT 3;</code></pre>
 <div class="out"> id |        title         | views | double_views
 ----+----------------------+-------+--------------
@@ -216,7 +216,7 @@ FROM note ORDER BY id LIMIT 3;</code></pre>
 
 <h3>WHERE: the filter operators</h3>
 <p>Combine conditions with <code>AND</code>, <code>OR</code>, <code>NOT</code> and the comparison operators (<code>=</code>, <code>&lt;&gt;</code>, <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code>):</p>
-<pre><code>SELECT title, author, views
+<pre><code class="language-sql">SELECT title, author, views
 FROM note WHERE author = 'Cuong' AND views &gt; 50 ORDER BY id;</code></pre>
 <div class="out">       title       | author | views
 -------------------+--------+-------
@@ -224,7 +224,7 @@ FROM note WHERE author = 'Cuong' AND views &gt; 50 ORDER BY id;</code></pre>
  Indexes deep dive | Cuong  |    90
 (2 rows)</div>
 <p>For membership and ranges, <code>IN</code> and <code>BETWEEN</code> read more clearly than a pile of <code>OR</code>s. <code>BETWEEN</code> is inclusive of both ends:</p>
-<pre><code>SELECT title, tag  FROM note WHERE tag IN ('sql','ops') ORDER BY id;
+<pre><code class="language-sql">SELECT title, tag  FROM note WHERE tag IN ('sql','ops') ORDER BY id;
 SELECT title, created_at FROM note
   WHERE created_at BETWEEN '2026-03-01' AND '2026-03-31' ORDER BY created_at;</code></pre>
 <div class="out">       title       | tag
@@ -244,7 +244,7 @@ SELECT title, created_at FROM note
 
 <h3>Pattern matching: LIKE vs ILIKE</h3>
 <p><code>LIKE</code> matches a text pattern where <code>%</code> means "any run of characters". <code>LIKE</code> is case-sensitive; <code>ILIKE</code> is the case-insensitive version. The difference matters:</p>
-<pre><code>SELECT title FROM note WHERE title LIKE  '%sql%';   <span class="tok-comment">-- case-sensitive</span>
+<pre><code class="language-sql">SELECT title FROM note WHERE title LIKE  '%sql%';   <span class="tok-comment">-- case-sensitive</span>
 SELECT title FROM note WHERE title ILIKE '%sql%';   <span class="tok-comment">-- case-insensitive</span></code></pre>
 <div class="out"> title
 -------
@@ -258,7 +258,7 @@ SELECT title FROM note WHERE title ILIKE '%sql%';   <span class="tok-comment">--
 
 <h3>The NULL trap — the one that bites everyone</h3>
 <p><code>NULL</code> means "unknown", and unknown compared to anything is <em>also</em> unknown — never true. So you must test it with <code>IS NULL</code> / <code>IS NOT NULL</code>, never <code>= NULL</code>. Worse, a normal inequality <strong>silently skips</strong> NULL rows:</p>
-<pre><code>SELECT title, tag FROM note WHERE tag IS NULL ORDER BY id;
+<pre><code class="language-sql">SELECT title, tag FROM note WHERE tag IS NULL ORDER BY id;
 SELECT title, tag FROM note WHERE tag &lt;&gt; 'sql' ORDER BY id;   <span class="tok-comment">-- expects "not sql"</span></code></pre>
 <div class="out">      title      | tag
 -----------------+-----
@@ -295,7 +295,7 @@ SELECT title, tag FROM note WHERE tag &lt;&gt; 'sql' ORDER BY id;   <span class=
 
 <h3>Projection: cột và giá trị tính</h3>
 <p>Liệt kê các cột bạn muốn; bạn cũng có thể tính cột mới và đặt tên bằng <code>AS</code>:</p>
-<pre><code>SELECT id, title, views, views * 2 AS double_views
+<pre><code class="language-sql">SELECT id, title, views, views * 2 AS double_views
 FROM note ORDER BY id LIMIT 3;</code></pre>
 <div class="out"> id |        title         | views | double_views
 ----+----------------------+-------+--------------
@@ -307,7 +307,7 @@ FROM note ORDER BY id LIMIT 3;</code></pre>
 
 <h3>WHERE: các toán tử lọc</h3>
 <p>Kết hợp điều kiện bằng <code>AND</code>, <code>OR</code>, <code>NOT</code> và các toán tử so sánh (<code>=</code>, <code>&lt;&gt;</code>, <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code>):</p>
-<pre><code>SELECT title, author, views
+<pre><code class="language-sql">SELECT title, author, views
 FROM note WHERE author = 'Cuong' AND views &gt; 50 ORDER BY id;</code></pre>
 <div class="out">       title       | author | views
 -------------------+--------+-------
@@ -315,7 +315,7 @@ FROM note WHERE author = 'Cuong' AND views &gt; 50 ORDER BY id;</code></pre>
  Indexes deep dive | Cuong  |    90
 (2 rows)</div>
 <p>Cho việc thuộc tập và khoảng, <code>IN</code> và <code>BETWEEN</code> đọc rõ hơn một đống <code>OR</code>. <code>BETWEEN</code> bao gồm cả hai đầu:</p>
-<pre><code>SELECT title, tag  FROM note WHERE tag IN ('sql','ops') ORDER BY id;
+<pre><code class="language-sql">SELECT title, tag  FROM note WHERE tag IN ('sql','ops') ORDER BY id;
 SELECT title, created_at FROM note
   WHERE created_at BETWEEN '2026-03-01' AND '2026-03-31' ORDER BY created_at;</code></pre>
 <div class="out">       title       | tag
@@ -335,7 +335,7 @@ SELECT title, created_at FROM note
 
 <h3>Khớp mẫu: LIKE vs ILIKE</h3>
 <p><code>LIKE</code> khớp một mẫu chữ trong đó <code>%</code> nghĩa là "một chuỗi ký tự bất kỳ". <code>LIKE</code> phân biệt hoa/thường; <code>ILIKE</code> là phiên bản không phân biệt. Khác biệt có ý nghĩa:</p>
-<pre><code>SELECT title FROM note WHERE title LIKE  '%sql%';   <span class="tok-comment">-- phân biệt hoa/thường</span>
+<pre><code class="language-sql">SELECT title FROM note WHERE title LIKE  '%sql%';   <span class="tok-comment">-- phân biệt hoa/thường</span>
 SELECT title FROM note WHERE title ILIKE '%sql%';   <span class="tok-comment">-- không phân biệt</span></code></pre>
 <div class="out"> title
 -------
@@ -349,7 +349,7 @@ SELECT title FROM note WHERE title ILIKE '%sql%';   <span class="tok-comment">--
 
 <h3>Cạm bẫy NULL — cái cắn tất cả mọi người</h3>
 <p><code>NULL</code> nghĩa là "không rõ", và không-rõ đem so với bất cứ thứ gì <em>cũng</em> là không-rõ — không bao giờ đúng. Nên bạn phải kiểm nó bằng <code>IS NULL</code> / <code>IS NOT NULL</code>, không bao giờ <code>= NULL</code>. Tệ hơn, một phép bất đẳng thường <strong>âm thầm bỏ qua</strong> các dòng NULL:</p>
-<pre><code>SELECT title, tag FROM note WHERE tag IS NULL ORDER BY id;
+<pre><code class="language-sql">SELECT title, tag FROM note WHERE tag IS NULL ORDER BY id;
 SELECT title, tag FROM note WHERE tag &lt;&gt; 'sql' ORDER BY id;   <span class="tok-comment">-- kỳ vọng "không phải sql"</span></code></pre>
 <div class="out">      title      | tag
 -----------------+-----
@@ -396,7 +396,7 @@ SELECT title, tag FROM note WHERE tag &lt;&gt; 'sql' ORDER BY id;   <span class=
 
 <h3>ORDER BY — one or more sort keys</h3>
 <p>Sort by several columns; each can be <code>ASC</code> (default) or <code>DESC</code>. The second key breaks ties in the first:</p>
-<pre><code>SELECT title, author, views FROM note ORDER BY author ASC, views DESC;</code></pre>
+<pre><code class="language-sql">SELECT title, author, views FROM note ORDER BY author ASC, views DESC;</code></pre>
 <div class="out">        title         | author | views
 ----------------------+--------+-------
  Intro to SQL         | Cuong  |   120
@@ -408,7 +408,7 @@ SELECT title, tag FROM note WHERE tag &lt;&gt; 'sql' ORDER BY id;   <span class=
  Quick draft          | Minh   |     0
 (7 rows)</div>
 <p>Grouped by author alphabetically, and within each author sorted by views high-to-low. Where NULLs land in the order is also yours to control — by default NULLs sort as if largest (last in ascending). Make it explicit with <code>NULLS LAST</code>:</p>
-<pre><code>SELECT title, tag FROM note ORDER BY tag NULLS LAST;</code></pre>
+<pre><code class="language-sql">SELECT title, tag FROM note ORDER BY tag NULLS LAST;</code></pre>
 <div class="out">        title         | tag
 ----------------------+------
  Timezones done right | date
@@ -422,7 +422,7 @@ SELECT title, tag FROM note WHERE tag &lt;&gt; 'sql' ORDER BY id;   <span class=
 
 <h3>LIMIT and OFFSET — paging</h3>
 <p><code>LIMIT n</code> returns at most n rows; <code>OFFSET m</code> skips the first m. Together they page through a sorted result. "Top 3 most viewed" and then "the next 3" (page 2):</p>
-<pre><code>SELECT title, views FROM note ORDER BY views DESC LIMIT 3;
+<pre><code class="language-sql">SELECT title, views FROM note ORDER BY views DESC LIMIT 3;
 SELECT title, views FROM note ORDER BY views DESC LIMIT 3 OFFSET 3;</code></pre>
 <div class="out">        title         | views
 ----------------------+-------
@@ -441,7 +441,7 @@ SELECT title, views FROM note ORDER BY views DESC LIMIT 3 OFFSET 3;</code></pre>
 
 <h3>DISTINCT — collapse duplicates</h3>
 <p><code>DISTINCT</code> removes duplicate rows from the result. Which tags are actually in use?</p>
-<pre><code>SELECT DISTINCT tag FROM note ORDER BY tag NULLS LAST;</code></pre>
+<pre><code class="language-sql">SELECT DISTINCT tag FROM note ORDER BY tag NULLS LAST;</code></pre>
 <div class="out"> tag
 ------
  date
@@ -450,7 +450,7 @@ SELECT title, views FROM note ORDER BY views DESC LIMIT 3 OFFSET 3;</code></pre>
 
 (4 rows)</div>
 <p>Three distinct tags plus the NULL group — the four <code>sql</code> notes collapsed into one <code>sql</code> row. There's also a Postgres-specific power tool, <code>DISTINCT ON (col)</code>, which keeps the <em>first row per group</em> given an <code>ORDER BY</code>. "The newest note per author":</p>
-<pre><code>SELECT DISTINCT ON (author) author, title, created_at
+<pre><code class="language-sql">SELECT DISTINCT ON (author) author, title, created_at
 FROM note ORDER BY author, created_at DESC;</code></pre>
 <div class="out"> author |       title       | created_at
 --------+-------------------+------------
@@ -481,7 +481,7 @@ FROM note ORDER BY author, created_at DESC;</code></pre>
 
 <h3>ORDER BY — một hay nhiều khoá sắp</h3>
 <p>Sắp theo vài cột; mỗi cột có thể <code>ASC</code> (mặc định) hoặc <code>DESC</code>. Khoá thứ hai phá thế hoà của khoá thứ nhất:</p>
-<pre><code>SELECT title, author, views FROM note ORDER BY author ASC, views DESC;</code></pre>
+<pre><code class="language-sql">SELECT title, author, views FROM note ORDER BY author ASC, views DESC;</code></pre>
 <div class="out">        title         | author | views
 ----------------------+--------+-------
  Intro to SQL         | Cuong  |   120
@@ -493,7 +493,7 @@ FROM note ORDER BY author, created_at DESC;</code></pre>
  Quick draft          | Minh   |     0
 (7 rows)</div>
 <p>Gom theo tác giả theo bảng chữ cái, và trong mỗi tác giả sắp theo views cao-xuống-thấp. NULL rơi vào đâu trong thứ tự cũng do bạn kiểm soát — mặc định NULL sắp như thể lớn nhất (cuối cùng khi tăng dần). Hãy nói rõ bằng <code>NULLS LAST</code>:</p>
-<pre><code>SELECT title, tag FROM note ORDER BY tag NULLS LAST;</code></pre>
+<pre><code class="language-sql">SELECT title, tag FROM note ORDER BY tag NULLS LAST;</code></pre>
 <div class="out">        title         | tag
 ----------------------+------
  Timezones done right | date
@@ -507,7 +507,7 @@ FROM note ORDER BY author, created_at DESC;</code></pre>
 
 <h3>LIMIT và OFFSET — phân trang</h3>
 <p><code>LIMIT n</code> trả về tối đa n dòng; <code>OFFSET m</code> bỏ qua m dòng đầu. Cùng nhau chúng lật trang một kết quả đã sắp. "Top 3 xem nhiều nhất" rồi "3 cái tiếp" (trang 2):</p>
-<pre><code>SELECT title, views FROM note ORDER BY views DESC LIMIT 3;
+<pre><code class="language-sql">SELECT title, views FROM note ORDER BY views DESC LIMIT 3;
 SELECT title, views FROM note ORDER BY views DESC LIMIT 3 OFFSET 3;</code></pre>
 <div class="out">        title         | views
 ----------------------+-------
@@ -526,7 +526,7 @@ SELECT title, views FROM note ORDER BY views DESC LIMIT 3 OFFSET 3;</code></pre>
 
 <h3>DISTINCT — gộp trùng</h3>
 <p><code>DISTINCT</code> loại các dòng trùng khỏi kết quả. Những tag nào đang thật sự được dùng?</p>
-<pre><code>SELECT DISTINCT tag FROM note ORDER BY tag NULLS LAST;</code></pre>
+<pre><code class="language-sql">SELECT DISTINCT tag FROM note ORDER BY tag NULLS LAST;</code></pre>
 <div class="out"> tag
 ------
  date
@@ -535,7 +535,7 @@ SELECT title, views FROM note ORDER BY views DESC LIMIT 3 OFFSET 3;</code></pre>
  (null)
 (4 rows)</div>
 <p>Ba tag khác nhau cộng nhóm NULL — bốn note <code>sql</code> gộp thành một dòng <code>sql</code>. Cũng có một công cụ mạnh riêng của Postgres, <code>DISTINCT ON (col)</code>, giữ <em>dòng đầu tiên mỗi nhóm</em> theo một <code>ORDER BY</code>. "Note mới nhất mỗi tác giả":</p>
-<pre><code>SELECT DISTINCT ON (author) author, title, created_at
+<pre><code class="language-sql">SELECT DISTINCT ON (author) author, title, created_at
 FROM note ORDER BY author, created_at DESC;</code></pre>
 <div class="out"> author |       title       | created_at
 --------+-------------------+------------
@@ -576,13 +576,13 @@ FROM note ORDER BY author, created_at DESC;</code></pre>
 
 <h3>UPDATE ... WHERE ... RETURNING</h3>
 <p><code>UPDATE</code> sets new column values for the rows a <code>WHERE</code> selects. <code>RETURNING</code> shows you exactly what changed — invaluable for confirming you hit the right rows:</p>
-<pre><code>UPDATE note SET views = views + 1 WHERE id = 1 RETURNING id, title, views;</code></pre>
+<pre><code class="language-sql">UPDATE note SET views = views + 1 WHERE id = 1 RETURNING id, title, views;</code></pre>
 <div class="out"> id |    title     | views
 ----+--------------+-------
   1 | Intro to SQL |   121
 (1 row)</div>
 <p>One row matched and its <code>views</code> went 120 → 121. An <code>UPDATE</code> can touch many rows at once — the <code>WHERE</code> decides how many. Unpin everything by one author:</p>
-<pre><code>UPDATE note SET pinned = false WHERE author = 'Cuong' RETURNING id, title, pinned;</code></pre>
+<pre><code class="language-sql">UPDATE note SET pinned = false WHERE author = 'Cuong' RETURNING id, title, pinned;</code></pre>
 <div class="out"> id |       title       | pinned
 ----+-------------------+--------
   2 | Indexes deep dive | f
@@ -593,7 +593,7 @@ FROM note ORDER BY author, created_at DESC;</code></pre>
 
 <h3>The catastrophe: a missing WHERE</h3>
 <p>Here's the one that has cost people their weekend. <code>UPDATE</code> and <code>DELETE</code> with <strong>no <code>WHERE</code> apply to every row in the table</strong>. When you're unsure, run it inside an explicit transaction so you can look before you leap — and <code>ROLLBACK</code> if it's wrong:</p>
-<pre><code>BEGIN;
+<pre><code class="language-sql">BEGIN;
 UPDATE note SET views = 0;          <span class="tok-comment">-- NO WHERE = every row!</span>
 SELECT count(*) AS rows_hit, sum(views) AS total_views FROM note;
 ROLLBACK;                            <span class="tok-comment">-- undo the whole thing</span>
@@ -611,7 +611,7 @@ SELECT count(*) AS rows, sum(views) AS total_views FROM note;   <span class="tok
 
 <h3>DELETE ... WHERE ... RETURNING</h3>
 <p><code>DELETE</code> removes whole rows; the same rules apply — always a <code>WHERE</code>, and <code>RETURNING</code> to see what left:</p>
-<pre><code>DELETE FROM note WHERE title = 'Quick draft' RETURNING id, title;
+<pre><code class="language-sql">DELETE FROM note WHERE title = 'Quick draft' RETURNING id, title;
 SELECT count(*) AS remaining FROM note;</code></pre>
 <div class="out"> id |    title
 ----+-------------
@@ -646,13 +646,13 @@ SELECT count(*) AS remaining FROM note;</code></pre>
 
 <h3>UPDATE ... WHERE ... RETURNING</h3>
 <p><code>UPDATE</code> đặt giá trị cột mới cho các dòng mà <code>WHERE</code> chọn. <code>RETURNING</code> cho bạn xem chính xác cái gì đã đổi — vô giá để xác nhận bạn trúng đúng dòng:</p>
-<pre><code>UPDATE note SET views = views + 1 WHERE id = 1 RETURNING id, title, views;</code></pre>
+<pre><code class="language-sql">UPDATE note SET views = views + 1 WHERE id = 1 RETURNING id, title, views;</code></pre>
 <div class="out"> id |    title     | views
 ----+--------------+-------
   1 | Intro to SQL |   121
 (1 row)</div>
 <p>Một dòng khớp và <code>views</code> của nó đi 120 → 121. Một <code>UPDATE</code> có thể chạm nhiều dòng cùng lúc — <code>WHERE</code> quyết định bao nhiêu. Bỏ ghim mọi thứ của một tác giả:</p>
-<pre><code>UPDATE note SET pinned = false WHERE author = 'Cuong' RETURNING id, title, pinned;</code></pre>
+<pre><code class="language-sql">UPDATE note SET pinned = false WHERE author = 'Cuong' RETURNING id, title, pinned;</code></pre>
 <div class="out"> id |       title       | pinned
 ----+-------------------+--------
   2 | Indexes deep dive | f
@@ -663,7 +663,7 @@ SELECT count(*) AS remaining FROM note;</code></pre>
 
 <h3>Tai hoạ: thiếu WHERE</h3>
 <p>Đây là cái đã ngốn cuối tuần của nhiều người. <code>UPDATE</code> và <code>DELETE</code> <strong>không có <code>WHERE</code> áp dụng cho mọi dòng trong bảng</strong>. Khi không chắc, hãy chạy nó trong một giao dịch tường minh để nhìn trước khi nhảy — và <code>ROLLBACK</code> nếu sai:</p>
-<pre><code>BEGIN;
+<pre><code class="language-sql">BEGIN;
 UPDATE note SET views = 0;          <span class="tok-comment">-- KHÔNG WHERE = mọi dòng!</span>
 SELECT count(*) AS rows_hit, sum(views) AS total_views FROM note;
 ROLLBACK;                            <span class="tok-comment">-- vứt bỏ toàn bộ thay đổi</span>
@@ -681,7 +681,7 @@ SELECT count(*) AS rows, sum(views) AS total_views FROM note;   <span class="tok
 
 <h3>DELETE ... WHERE ... RETURNING</h3>
 <p><code>DELETE</code> gỡ nguyên dòng; cùng các luật đó — luôn có <code>WHERE</code>, và <code>RETURNING</code> để xem cái gì đã đi:</p>
-<pre><code>DELETE FROM note WHERE title = 'Quick draft' RETURNING id, title;
+<pre><code class="language-sql">DELETE FROM note WHERE title = 'Quick draft' RETURNING id, title;
 SELECT count(*) AS remaining FROM note;</code></pre>
 <div class="out"> id |    title
 ----+-------------

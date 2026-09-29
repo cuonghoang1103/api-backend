@@ -541,7 +541,7 @@ mymaster 10.0.1.5 6379 10.0.1.6 6380</div>
 <div class="callout ok"><strong><code>SENTINEL failover</code> is the rehearsal command, and you should run it on purpose.</strong> It performs a real failover without waiting for a real failure — no quorum vote needed, because you are the authority. Run it in staging until you know exactly how long it takes and what your application does during those seconds; run it in production during a quiet window once, so the first real failover is not the first one anybody has watched. The <code>+switch-master</code> message above is what clients subscribe to, and its arguments are the old address followed by the new one.</div>
 
 <h3>The client half, which is not optional</h3>
-<pre><code><span class="tok-comment">// A Sentinel-aware client: give it the SENTINELS, not the primary</span>
+<pre><code class="language-javascript"><span class="tok-comment">// A Sentinel-aware client: give it the SENTINELS, not the primary</span>
 const client = createSentinel({
   name: 'mymaster',
   sentinelRootNodes: [
@@ -648,7 +648,7 @@ mymaster 10.0.1.5 6379 10.0.1.6 6380</div>
 <div class="callout ok"><strong><code>SENTINEL failover</code> là lệnh để diễn tập, và bạn nên chạy nó một cách có chủ ý.</strong> Nó thực hiện một lần chuyển đổi thật mà không cần chờ một cú hỏng thật — không cần bỏ phiếu quorum, vì chính bạn là người có thẩm quyền. Hãy chạy nó ở môi trường thử cho tới khi bạn biết chính xác nó mất bao lâu và ứng dụng của bạn làm gì trong mấy giây đó; hãy chạy nó ở production một lần vào một khung giờ vắng, để lần chuyển đổi thật đầu tiên không phải là lần đầu tiên có người ngồi xem. Thông điệp <code>+switch-master</code> ở trên là thứ mà các thư viện khách đăng ký nghe, và các tham số của nó là địa chỉ cũ rồi tới địa chỉ mới.</div>
 
 <h3>Nửa việc ở phía thư viện khách, và nó không phải tuỳ chọn</h3>
-<pre><code><span class="tok-comment">// Một thư viện khách hiểu Sentinel: hãy đưa cho nó các SENTINEL, đừng đưa bản chính</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Một thư viện khách hiểu Sentinel: hãy đưa cho nó các SENTINEL, đừng đưa bản chính</span>
 const client = createSentinel({
   name: 'mymaster',
   sentinelRootNodes: [

@@ -829,7 +829,7 @@ ${slide('dv-00', 19, 'rsync và git đều chỉ gửi phần chênh lệch')}
 </div>
 
 <p>The commands behind those numbers, so you can run them against your own project:</p>
-<pre><code><span class="tok-comment"># rsync: xem CHINH XAC no gui bao nhieu byte</span>
+<pre><code class="language-bash"><span class="tok-comment"># rsync: xem CHINH XAC no gui bao nhieu byte</span>
 rsync -az --delete --stats --exclude .git ./ vps:/srv/app/ | grep -E 'bytes sent|Literal'
 
 <span class="tok-comment"># rsync: xem no dinh dong vao nhung TEP nao, ma KHONG gui gi (chay thu)</span>
@@ -994,7 +994,7 @@ ${slide('dv-00', 19, 'rsync và git đều chỉ gửi phần chênh lệch')}
 </div>
 
 <p>Mấy lệnh đứng sau những con số đó, để bạn chạy được trên chính dự án của mình:</p>
-<pre><code><span class="tok-comment"># rsync: xem CHINH XAC no gui bao nhieu byte</span>
+<pre><code class="language-bash"><span class="tok-comment"># rsync: xem CHINH XAC no gui bao nhieu byte</span>
 rsync -az --delete --stats --exclude .git ./ vps:/srv/app/ | grep -E 'bytes sent|Literal'
 
 <span class="tok-comment"># rsync: xem no dinh dong vao nhung TEP nao, ma KHONG gui gi (chay thu)</span>
@@ -1486,7 +1486,7 @@ ${slide('dv-00', 27, 'rsync bằng root: tệp đổi chủ, app hết ghi đư�
 
 <h3>The four steps, as commands</h3>
 ${slide('dv-00', 28, 'Deploy bằng tay: bốn bước thành bốn lệnh')}
-<pre><code><span class="tok-comment"># BUOC 1 — tao tac: chi lay thu DA COMMIT (bai 0.1)</span>
+<pre><code class="language-bash"><span class="tok-comment"># BUOC 1 — tao tac: chi lay thu DA COMMIT (bai 0.1)</span>
 git archive --format=tar HEAD | gzip &gt; /tmp/ban-phat-hanh.tar.gz
 
 <span class="tok-comment"># BUOC 2 — van chuyen</span>
@@ -1628,7 +1628,7 @@ ${slide('dv-00', 32, 'Health: “còn sống” khác “sẵn sàng nhận khá
 
 <h3>Bốn bước, viết thành lệnh</h3>
 ${slide('dv-00', 28, 'Deploy bằng tay: bốn bước thành bốn lệnh')}
-<pre><code><span class="tok-comment"># BUOC 1 — tao tac: chi lay thu DA COMMIT (bai 0.1)</span>
+<pre><code class="language-bash"><span class="tok-comment"># BUOC 1 — tao tac: chi lay thu DA COMMIT (bai 0.1)</span>
 git archive --format=tar HEAD | gzip &gt; /tmp/ban-phat-hanh.tar.gz
 
 <span class="tok-comment"># BUOC 2 — van chuyen</span>

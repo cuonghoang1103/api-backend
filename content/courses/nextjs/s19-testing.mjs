@@ -137,7 +137,7 @@ export default {
 <h2>The smallest test: call a function, check the result</h2>
 <p class="lead">A unit test takes one piece of code — usually a function — gives it a known input, and checks the output is what you expect. That check is called an <strong>assertion</strong>. <strong>Vitest</strong> (a fast, modern test runner; <strong>Jest</strong> is the older equivalent) gives you the words to write it.</p>
 
-<pre><code><span class="tok-comment">// money.ts — the code under test</span>
+<pre><code class="language-javascript"><span class="tok-comment">// money.ts — the code under test</span>
 export function formatVND(n) {
   return n.toLocaleString('vi-VN') + '&#8363;';
 }
@@ -195,7 +195,7 @@ describe('formatVND', () =&gt; {
 <h2>Test nhỏ nhất: gọi một hàm, kiểm kết quả</h2>
 <p class="lead">Một unit test lấy một mảnh code — thường là một hàm — cho nó một input đã biết, và kiểm output đúng như bạn mong. Phép kiểm đó gọi là <strong>assertion</strong> (khẳng định). <strong>Vitest</strong> (một trình chạy test nhanh, hiện đại; <strong>Jest</strong> là bản cũ tương đương) cho bạn từ ngữ để viết nó.</p>
 
-<pre><code><span class="tok-comment">// money.ts — code cần test</span>
+<pre><code class="language-javascript"><span class="tok-comment">// money.ts — code cần test</span>
 export function formatVND(n) {
   return n.toLocaleString('vi-VN') + '&#8363;';
 }
@@ -263,7 +263,7 @@ describe('formatVND', () =&gt; {
 <h2>Test what the user sees and does, not the internals</h2>
 <p class="lead">Unit tests are great for pure functions, but components have UI and interaction. <strong>React Testing Library (RTL)</strong> renders a component in memory and lets you interact with it the way a real user would — find things by their visible text or role, click them, type into them, and assert on what appears.</p>
 
-<pre><code>import { render, screen } from '@testing-library/react';
+<pre><code class="language-javascript">import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import Counter from './Counter';
 
@@ -321,7 +321,7 @@ it('increments when the button is clicked', async () =&gt; {
 <h2>Test cái người dùng thấy và làm, không phải bên trong</h2>
 <p class="lead">Unit test tuyệt cho hàm thuần, nhưng component có UI và tương tác. <strong>React Testing Library (RTL)</strong> render một component trong bộ nhớ và cho bạn tương tác với nó như một người dùng thật — tìm thứ theo chữ hoặc vai trò hiện thấy, bấm chúng, gõ vào chúng, và khẳng định về cái hiện ra.</p>
 
-<pre><code>import { render, screen } from '@testing-library/react';
+<pre><code class="language-javascript">import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import Counter from './Counter';
 
@@ -389,7 +389,7 @@ it('tăng khi nút được bấm', async () =&gt; {
 <h2>Drive the real app, top to bottom</h2>
 <p class="lead">Unit and component tests check pieces in isolation, in a fake DOM. An <strong>end-to-end (e2e)</strong> test opens a <em>real</em> browser, navigates your running app, and performs a full journey exactly as a user would — proving that all the pieces work together for real. <strong>Playwright</strong> is a popular tool for writing these.</p>
 
-<pre><code>import { test, expect } from '@playwright/test';
+<pre><code class="language-javascript">import { test, expect } from '@playwright/test';
 
 test('a user can log in', async ({ page }) =&gt; {
   await page.goto('/login');
@@ -442,7 +442,7 @@ test('a user can log in', async ({ page }) =&gt; {
 <h2>Lái app thật, từ đầu tới cuối</h2>
 <p class="lead">Unit và component test kiểm các mảnh cô lập, trong một DOM giả. Một test <strong>end-to-end (e2e)</strong> mở một trình duyệt <em>thật</em>, điều hướng app đang chạy của bạn, và thực hiện cả một hành trình đúng như người dùng — chứng minh mọi mảnh làm việc cùng nhau thật sự. <strong>Playwright</strong> là một công cụ phổ biến để viết chúng.</p>
 
-<pre><code>import { test, expect } from '@playwright/test';
+<pre><code class="language-javascript">import { test, expect } from '@playwright/test';
 
 test('người dùng đăng nhập được', async ({ page }) =&gt; {
   await page.goto('/login');

@@ -19,7 +19,7 @@ export default {
 
 <h3>The technique</h3>
 <p><code>add_header</code> can emit any variable, so it can emit the answer. The naive version puts one header at server level and one in each location:</p>
-<pre><code>server {
+<pre><code class="language-bash">server {
     server_name shop.vidu;
     add_header X-Kh-Server "shop.vidu" always;
     location = /gio-hang { add_header X-Kh-Loc "= /gio-hang" always; ... }
@@ -46,7 +46,7 @@ X-Kh-Loc: = /gio-hang</div>
 
 <h3>The version that works</h3>
 <p>Keep exactly one <code>add_header</code>, at server level, and have each location write into a variable that the header reads:</p>
-<pre><code>server {
+<pre><code class="language-bash">server {
     listen 127.0.0.1:9370;
     server_name shop.vidu;
     set \$khop "(khong dat)";
@@ -72,7 +72,7 @@ khong-biet.vidu  /bat-ky                → X-Kh: server=_ loc=/</div>
 </div>
 
 <h3>Reading it from the client side</h3>
-<pre><code><span class="tok-comment"># toan bo header, khong tai than phan hoi</span>
+<pre><code class="language-bash"><span class="tok-comment"># toan bo header, khong tai than phan hoi</span>
 curl -s -D- -o /dev/null https://cuongthai.com/api/v1/bai-viet
 
 <span class="tok-comment"># chi lay dong chan doan</span>
@@ -85,7 +85,7 @@ curl -s -D- -o /dev/null -H 'Host: shop.vidu' http://127.0.0.1/duong-dan</code><
 <h3>Take it back out</h3>
 <div class="callout warn"><strong>These headers are for diagnosis, not for production.</strong> They tell anyone who asks how your configuration is structured — which hostnames exist on the machine, how routes are split, which backend answered. That is reconnaissance handed over for free. Gate them, or remove them once the question is answered.</div>
 <p>The gate that costs nothing is the <code>map</code> from Chapter 8, so the header is emitted only for your own address:</p>
-<pre><code>map \$remote_addr \$kh_debug {
+<pre><code class="language-bash">map \$remote_addr \$kh_debug {
     default            "";                       <span class="tok-comment"># rong ⇒ add_header khong gui gi</span>
     "203.0.113.42"     "server=\$server_name loc=\$khop";
 }
@@ -105,7 +105,7 @@ server {
 
 <h3>Kỹ thuật</h3>
 <p><code>add_header</code> phát ra được bất kỳ biến nào, nên nó phát ra được câu trả lời. Phiên bản ngây thơ đặt một header ở mức server và một header trong mỗi location:</p>
-<pre><code>server {
+<pre><code class="language-bash">server {
     server_name shop.vidu;
     add_header X-Kh-Server "shop.vidu" always;
     location = /gio-hang { add_header X-Kh-Loc "= /gio-hang" always; ... }
@@ -132,7 +132,7 @@ X-Kh-Loc: = /gio-hang</div>
 
 <h3>Phiên bản chạy được</h3>
 <p>Giữ ĐÚNG một <code>add_header</code>, ở mức server, và để mỗi location ghi vào một biến mà cái header đó đọc:</p>
-<pre><code>server {
+<pre><code class="language-bash">server {
     listen 127.0.0.1:9370;
     server_name shop.vidu;
     set \$khop "(khong dat)";
@@ -158,7 +158,7 @@ khong-biet.vidu  /bat-ky                → X-Kh: server=_ loc=/</div>
 </div>
 
 <h3>Đọc nó từ phía client</h3>
-<pre><code><span class="tok-comment"># toan bo header, khong tai than phan hoi</span>
+<pre><code class="language-bash"><span class="tok-comment"># toan bo header, khong tai than phan hoi</span>
 curl -s -D- -o /dev/null https://cuongthai.com/api/v1/bai-viet
 
 <span class="tok-comment"># chi lay dong chan doan</span>
@@ -171,7 +171,7 @@ curl -s -D- -o /dev/null -H 'Host: shop.vidu' http://127.0.0.1/duong-dan</code><
 <h3>Rồi gỡ nó ra</h3>
 <div class="callout warn"><strong>Mấy header này để chẩn đoán, không phải để chạy production.</strong> Chúng kể cho bất cứ ai hỏi biết cấu hình của bạn được dựng ra sao — trên máy có những tên miền nào, các tuyến chia thế nào, backend nào đã trả lời. Đó là trinh sát được dâng miễn phí. Hãy khoá chúng lại, hoặc gỡ hẳn khi đã trả lời xong câu hỏi.</div>
 <p>Cái khoá chẳng tốn gì chính là <code>map</code> ở Chương 8, để header chỉ phát ra cho riêng địa chỉ của bạn:</p>
-<pre><code>map \$remote_addr \$kh_debug {
+<pre><code class="language-bash">map \$remote_addr \$kh_debug {
     default            "";                       <span class="tok-comment"># rong ⇒ add_header khong gui gi</span>
     "203.0.113.42"     "server=\$server_name loc=\$khop";
 }
@@ -220,7 +220,7 @@ location tien to bi regex dung truoc che mat         -t QUA (khong bat duoc)</di
 </div>
 <div class="pitfall"><strong>Trap — resolving at parse time means DNS can stop your reload.</strong> Because <code>proxy_pass http://api.noi-bo.vidu</code> is resolved once, at load, a DNS outage does not degrade your proxy — it prevents Nginx from reloading at all, and the error is <code>host not found in upstream</code>, which reads like a config typo rather than a network problem. It also means a backend whose IP changes (a container that was recreated, a service behind a rotating DNS record) is <em>never</em> re-resolved. Nginx keeps dialling the old address until someone reloads.</div>
 <p>The escape hatch is to put the hostname in a variable, which forces resolution at request time and requires a <code>resolver</code>:</p>
-<pre><code>resolver 127.0.0.53 valid=30s;
+<pre><code class="language-bash">resolver 127.0.0.53 valid=30s;
 set \$backend "http://api.noi-bo.vidu:3000";
 location /api/ { proxy_pass \$backend; }</code></pre>
 <p>That is why the variable form appears in the "not caught" list above — the whole point of it is to move the lookup past the moment <code>-t</code> runs. You trade a start-up failure for a runtime 502, and you gain the ability to follow an address that moves.</p>
@@ -295,7 +295,7 @@ location tien to bi regex dung truoc che mat         -t QUA (khong bat duoc)</di
 </div>
 <div class="pitfall"><strong>Bẫy — phân giải lúc nạp cấu hình nghĩa là DNS có thể chặn đứng lần reload của bạn.</strong> Vì <code>proxy_pass http://api.noi-bo.vidu</code> được phân giải một lần lúc nạp, một sự cố DNS KHÔNG làm proxy của bạn yếu đi — nó làm Nginx không reload được chút nào, và thông báo lại là <code>host not found in upstream</code>, nghe như một lỗi gõ nhầm trong cấu hình chứ không phải chuyện mạng. Nó còn nghĩa là một backend đổi IP (một container vừa được dựng lại, một dịch vụ nấp sau bản ghi DNS xoay vòng) sẽ KHÔNG BAO GIỜ được phân giải lại. Nginx cứ gọi mãi vào địa chỉ cũ cho tới khi có người reload.</div>
 <p>Cửa thoát là đặt tên máy vào một BIẾN, việc đó ép phân giải xảy ra lúc có request và đòi phải khai một <code>resolver</code>:</p>
-<pre><code>resolver 127.0.0.53 valid=30s;
+<pre><code class="language-bash">resolver 127.0.0.53 valid=30s;
 set \$backend "http://api.noi-bo.vidu:3000";
 location /api/ { proxy_pass \$backend; }</code></pre>
 <p>Đó chính là lý do dạng dùng biến nằm trong danh sách "không bắt được" ở trên — mục đích của nó chính là dời việc tra cứu ra khỏi cái thời điểm mà <code>-t</code> chạy. Bạn đổi một lỗi không khởi động được lấy một cú 502 lúc chạy, và đổi lại bạn có được khả năng đi theo một địa chỉ hay di chuyển.</p>
@@ -388,7 +388,7 @@ location /api/ {
   SHOP (10-shop.conf)</div>
 <div class="callout warn"><strong>A <code>[warn]</code>, and "test is successful".</strong> Nginx does not refuse a duplicate <code>server_name</code> the way it refuses a duplicate <code>location</code> — it keeps the first one it parsed and discards the rest. Includes are expanded in glob order, which is alphabetical, so <code>10-shop.conf</code> beat <code>20-cu.conf</code>. Rename a file and the winner changes. Everything in the losing block — its routes, its TLS settings, its rate limits — is dead, and the only sign is one warning line that scrolls past during a reload nobody watched.</div>
 <p>Two greps find this in any configuration, and they are worth running on a machine you have just inherited:</p>
-<pre><code><span class="tok-comment"># moi canh bao lan nay — trong do co "conflicting server name"</span>
+<pre><code class="language-bash"><span class="tok-comment"># moi canh bao lan nay — trong do co "conflicting server name"</span>
 nginx -t 2&gt;&amp;1 | grep -i warn
 
 <span class="tok-comment"># moi ten mien khai o dau, kem tep khai no</span>
@@ -396,7 +396,7 @@ nginx -T 2&gt;/dev/null | grep -E '^# configuration file|server_name' </code></p
 
 <h3>The inheritance question: which directives actually apply here?</h3>
 <p>This is where reading a config goes wrong even when you have the whole text in front of you. Lesson 11.1 measured <code>add_header</code> being discarded wholesale by a child context. <code>proxy_set_header</code> follows the same rule, and it does more damage. Three headers declared at server level, and two locations — one that adds nothing of its own, one that adds a single unrelated header:</p>
-<pre><code>server {
+<pre><code class="language-bash">server {
     proxy_set_header Host              \$host;
     proxy_set_header X-Real-IP         \$remote_addr;
     proxy_set_header X-Forwarded-Proto \$scheme;
@@ -475,7 +475,7 @@ location /api/ {
   SHOP (10-shop.conf)</div>
 <div class="callout warn"><strong>Một dòng <code>[warn]</code>, và "test is successful".</strong> Nginx KHÔNG từ chối một <code>server_name</code> trùng theo cách nó từ chối một <code>location</code> trùng — nó giữ cái đầu tiên nó phân tích được rồi vứt phần còn lại. Include được bung ra theo thứ tự glob, tức là theo bảng chữ cái, nên <code>10-shop.conf</code> thắng <code>20-cu.conf</code>. Đổi tên một tệp thì kẻ thắng đổi theo. Mọi thứ trong cái khối thua — các tuyến của nó, thiết lập TLS của nó, giới hạn tốc độ của nó — đều CHẾT, và dấu hiệu duy nhất là một dòng cảnh báo trôi qua trong một lần reload chẳng ai ngồi xem.</div>
 <p>Hai lệnh grep tìm ra chuyện này trong bất kỳ cấu hình nào, và chúng đáng được chạy trên một cái máy bạn vừa tiếp quản:</p>
-<pre><code><span class="tok-comment"># moi canh bao lan nay — trong do co "conflicting server name"</span>
+<pre><code class="language-bash"><span class="tok-comment"># moi canh bao lan nay — trong do co "conflicting server name"</span>
 nginx -t 2&gt;&amp;1 | grep -i warn
 
 <span class="tok-comment"># moi ten mien khai o dau, kem tep khai no</span>
@@ -483,7 +483,7 @@ nginx -T 2&gt;/dev/null | grep -E '^# configuration file|server_name' </code></p
 
 <h3>Câu hỏi về kế thừa: rốt cuộc chỉ thị nào đang có hiệu lực ở đây?</h3>
 <p>Đây là chỗ mà việc đọc cấu hình đi chệch NGAY CẢ KHI bạn đã có toàn bộ văn bản trước mặt. Bài 11.1 đã đo chuyện <code>add_header</code> bị một ngữ cảnh con vứt sạch. <code>proxy_set_header</code> theo đúng luật đó, và nó gây thiệt hại lớn hơn. Ba header khai ở mức server, và hai location — một cái không thêm gì của riêng nó, một cái thêm đúng một header chẳng liên quan:</p>
-<pre><code>server {
+<pre><code class="language-bash">server {
     proxy_set_header Host              \$host;
     proxy_set_header X-Real-IP         \$remote_addr;
     proxy_set_header X-Forwarded-Proto \$scheme;
@@ -570,7 +570,7 @@ nginx -T 2&gt;/dev/null | grep -E '^# configuration file|server_name' </code></p
   tong header phan hoi: 12148 byte</div>
 <div class="pitfall"><strong>Trap — <code>502</code> does not mean "the backend is down".</strong> Here the backend was healthy and its response was valid HTTP. Nginx reads the response header into a single fixed buffer — <code>proxy_buffer_size</code>, 4 KB or 8 KB depending on platform — and if the header does not fit, it gives up and returns <code>502</code>. Twelve kilobytes of headers is not exotic: a large <code>Set-Cookie</code>, a JWT in a header, a long <code>Link</code> or CSP header, or an error page from a framework that echoes the request back. The symptom is a route that works in development, where the session cookie is small, and fails in production once it is not.</div>
 <p>The tell is the error text: <code>upstream sent too big header</code>. If you only look at the status you will restart a backend that was never broken. The fix is to size the buffer for the largest header you actually emit, on that location:</p>
-<pre><code>location /up/ {
+<pre><code class="language-bash">location /up/ {
     proxy_buffer_size   32k;    <span class="tok-comment"># chi cho HEADER phan hoi</span>
     proxy_buffers     8 32k;    <span class="tok-comment"># cho phan THAN</span>
     proxy_busy_buffers_size 64k;
@@ -659,7 +659,7 @@ nginx -T 2&gt;/dev/null | grep -E '^# configuration file|server_name' </code></p
   tong header phan hoi: 12148 byte</div>
 <div class="pitfall"><strong>Bẫy — <code>502</code> KHÔNG có nghĩa là "backend chết".</strong> Ở đây backend khoẻ mạnh và phản hồi của nó là HTTP hợp lệ. Nginx đọc header phản hồi vào một bộ đệm cố định duy nhất — <code>proxy_buffer_size</code>, 4 KB hoặc 8 KB tuỳ nền tảng — và nếu header không lọt vào đó, nó bỏ cuộc và trả <code>502</code>. Mười hai kilobyte header không phải chuyện kỳ dị: một <code>Set-Cookie</code> lớn, một JWT nằm trong header, một header <code>Link</code> hay CSP dài, hoặc một trang lỗi của framework dội lại nguyên cái request. Triệu chứng là một tuyến chạy ngon trên máy phát triển, nơi cookie phiên còn nhỏ, rồi hỏng trên production khi nó không còn nhỏ nữa.</div>
 <p>Dấu hiệu nhận biết nằm ở chữ trong thông báo: <code>upstream sent too big header</code>. Nếu bạn chỉ nhìn mã trạng thái thì bạn sẽ đi khởi động lại một backend chưa từng hỏng. Cách sửa là chỉnh bộ đệm cho vừa cái header lớn nhất bạn thật sự phát ra, ngay tại location đó:</p>
-<pre><code>location /up/ {
+<pre><code class="language-bash">location /up/ {
     proxy_buffer_size   32k;    <span class="tok-comment"># chi cho HEADER phan hoi</span>
     proxy_buffers     8 32k;    <span class="tok-comment"># cho phan THAN</span>
     proxy_busy_buffers_size 64k;
@@ -732,7 +732,7 @@ nginx -T 2&gt;/dev/null | grep -E '^# configuration file|server_name' </code></p
 <p class="lead">Every chapter measured one mechanism. This is all of them in one file — running, with a real certificate and a real backend, checked by ten acceptance tests. One of those tests found a security hole in the configuration below, written by someone who had just finished writing Lesson 11.3 about that exact trap.</p>
 
 <h3>The <code>http</code> block</h3>
-<pre><code>worker_processes  auto;
+<pre><code class="language-bash">worker_processes  auto;
 worker_rlimit_nofile 65535;          <span class="tok-comment"># phai nang cung worker_connections (10.5)</span>
 error_log  /var/log/nginx/error.log warn;   <span class="tok-comment"># warn, khong bao gio debug (10.4)</span>
 events { worker_connections 4096; }
@@ -770,7 +770,7 @@ http {
 </div>
 
 <h3>The three <code>server</code> blocks</h3>
-<pre><code>    <span class="tok-comment"># 1. Cong 80: CHI de chuyen huong (Chuong 6)</span>
+<pre><code class="language-bash">    <span class="tok-comment"># 1. Cong 80: CHI de chuyen huong (Chuong 6)</span>
     server {
         listen 80 default_server;
         server_name _;
@@ -818,7 +818,7 @@ http {
     }</code></pre>
 <p>The <code>return 444</code> block is worth a sentence. Anything arriving on 443 with a hostname no <code>server</code> block claims — a scanner walking IP ranges, a domain someone pointed at you — hits the default and gets its connection closed with no response at all. Without it, those requests would be served your real site under the wrong name.</p>
 <p>And the two snippets, which exist because of a rule rather than for tidiness:</p>
-<pre><code><span class="tok-comment"># snippets/proxy.conf</span>
+<pre><code class="language-bash"><span class="tok-comment"># snippets/proxy.conf</span>
 proxy_http_version 1.1;
 proxy_set_header Connection          "";        <span class="tok-comment"># bat buoc cho keepalive (9.4)</span>
 proxy_set_header Host                \$host;
@@ -920,7 +920,7 @@ add_header X-Frame-Options SAMEORIGIN always;</code></pre>
 <p class="lead">Mỗi chương đã đo một cơ chế. Đây là tất cả chúng gộp vào một tệp — đang CHẠY, với chứng chỉ thật và backend thật, được kiểm bằng mười phép nghiệm thu. Một trong mấy phép đó đã tìm ra một lỗ bảo mật trong chính cấu hình dưới đây, viết bởi một người vừa mới viết xong Bài 11.3 về đúng cái bẫy ấy.</p>
 
 <h3>Khối <code>http</code></h3>
-<pre><code>worker_processes  auto;
+<pre><code class="language-bash">worker_processes  auto;
 worker_rlimit_nofile 65535;          <span class="tok-comment"># phai nang cung worker_connections (10.5)</span>
 error_log  /var/log/nginx/error.log warn;   <span class="tok-comment"># warn, khong bao gio debug (10.4)</span>
 events { worker_connections 4096; }
@@ -958,7 +958,7 @@ http {
 </div>
 
 <h3>Ba khối <code>server</code></h3>
-<pre><code>    <span class="tok-comment"># 1. Cong 80: CHI de chuyen huong (Chuong 6)</span>
+<pre><code class="language-bash">    <span class="tok-comment"># 1. Cong 80: CHI de chuyen huong (Chuong 6)</span>
     server {
         listen 80 default_server;
         server_name _;
@@ -1006,7 +1006,7 @@ http {
     }</code></pre>
 <p>Khối <code>return 444</code> đáng được nói một câu. Bất cứ thứ gì tới cổng 443 với một tên miền chẳng khối <code>server</code> nào nhận — một con dò quét dải IP, một tên miền ai đó trỏ vào bạn — đều rơi vào khối mặc định và bị đóng kết nối, không nhận được phản hồi nào cả. Thiếu nó thì mấy request đó sẽ được phục vụ bằng chính website thật của bạn dưới một cái tên sai.</p>
 <p>Và hai tệp snippet, tồn tại vì một CÁI LUẬT chứ không phải vì gọn gàng:</p>
-<pre><code><span class="tok-comment"># snippets/proxy.conf</span>
+<pre><code class="language-bash"><span class="tok-comment"># snippets/proxy.conf</span>
 proxy_http_version 1.1;
 proxy_set_header Connection          "";        <span class="tok-comment"># bat buoc cho keepalive (9.4)</span>
 proxy_set_header Host                \$host;

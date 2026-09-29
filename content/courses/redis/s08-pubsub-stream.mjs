@@ -107,7 +107,7 @@ redis-cli -p 7000 PUBSUB SHARDCHANNELS</code></pre>
 </div>
 
 <h3>What Pub/Sub is genuinely good at</h3>
-<pre><code><span class="tok-comment">// 1 · Cache invalidation across app instances (Lesson 6.2)</span>
+<pre><code class="language-typescript"><span class="tok-comment">// 1 · Cache invalidation across app instances (Lesson 6.2)</span>
 await redis.publish('cache:invalidate', 'product:4201');
 
 <span class="tok-comment">// 2 · Config reload without a deploy (Lesson 5.5)</span>
@@ -225,7 +225,7 @@ redis-cli -p 7000 PUBSUB SHARDCHANNELS</code></pre>
 </div>
 
 <h3>Pub/Sub thật sự giỏi việc gì</h3>
-<pre><code><span class="tok-comment">// 1 · Đẩy khoá bộ đệm cũ trên nhiều máy ứng dụng (Bài 6.2)</span>
+<pre><code class="language-typescript"><span class="tok-comment">// 1 · Đẩy khoá bộ đệm cũ trên nhiều máy ứng dụng (Bài 6.2)</span>
 await redis.publish('cache:invalidate', 'product:4201');
 
 <span class="tok-comment">// 2 · Nạp lại cấu hình mà không cần deploy (Bài 5.5)</span>
@@ -393,7 +393,7 @@ redis-cli XINFO STREAM orders | head -8</code></pre>
 </div>
 
 <h3>Memory, and the thing XDEL does not do</h3>
-<pre><code>redis-cli DEL big &gt;/dev/null
+<pre><code class="language-python">redis-cli DEL big &gt;/dev/null
 python3 -c "
 for i in range(200_000): print(f'XADD big * seq {i} payload value:{i}')
 " | redis-cli --pipe &gt;/dev/null
@@ -564,7 +564,7 @@ redis-cli XINFO STREAM orders | head -8</code></pre>
 </div>
 
 <h3>Bộ nhớ, và cái việc mà XDEL không làm</h3>
-<pre><code>redis-cli DEL big &gt;/dev/null
+<pre><code class="language-python">redis-cli DEL big &gt;/dev/null
 python3 -c "
 for i in range(200_000): print(f'XADD big * seq {i} payload value:{i}')
 " | redis-cli --pipe &gt;/dev/null
@@ -704,7 +704,7 @@ redis-cli XREADGROUP GROUP billing worker-1 STREAMS orders 0</code></pre>
 <div class="callout warn"><strong><code>NOACK</code> exists and is almost always the wrong choice.</strong> <code>XREADGROUP GROUP g c NOACK STREAMS s &gt;</code> skips the PEL entirely: the entry is delivered and immediately considered done. That gives you at-most-once delivery — a crashed worker loses its entries with no trace — which is the guarantee Pub/Sub already offers for free. The only defensible use is a high-volume, loss-tolerant stream where PEL bookkeeping is measurably the bottleneck. If you find <code>NOACK</code> in a codebase, assume it was added to make a bug go away.</div>
 
 <h3>The worker loop, in full</h3>
-<pre><code>const STREAM = 'orders', GROUP = 'billing';
+<pre><code class="language-javascript">const STREAM = 'orders', GROUP = 'billing';
 const CONSUMER = process.env.POD_NAME ?? 'worker-1';   <span class="tok-comment">// stable, not random</span>
 
 <span class="tok-comment">// Create the group once; ignore BUSYGROUP if it already exists</span>
@@ -885,7 +885,7 @@ redis-cli XREADGROUP GROUP billing worker-1 STREAMS orders 0</code></pre>
 <div class="callout warn"><strong><code>NOACK</code> có tồn tại và gần như luôn là lựa chọn sai.</strong> <code>XREADGROUP GROUP g c NOACK STREAMS s &gt;</code> bỏ qua PEL hoàn toàn: mục được giao và lập tức bị coi là xong. Điều đó cho bạn giao nhiều-nhất-một-lần — một worker sập là mất các mục của nó mà không để lại dấu vết — vốn là bảo đảm mà Pub/Sub đã cho không rồi. Cách dùng bảo vệ được duy nhất là một stream khối lượng cực lớn, chịu mất được, mà việc ghi sổ PEL đo được là nút thắt cổ chai. Nếu bạn thấy <code>NOACK</code> trong một kho mã, hãy giả định nó được thêm vào để làm một cái lỗi biến đi.</div>
 
 <h3>Vòng lặp worker, đầy đủ</h3>
-<pre><code>const STREAM = 'orders', GROUP = 'billing';
+<pre><code class="language-javascript">const STREAM = 'orders', GROUP = 'billing';
 const CONSUMER = process.env.POD_NAME ?? 'worker-1';   <span class="tok-comment">// ổn định, không ngẫu nhiên</span>
 
 <span class="tok-comment">// Tạo nhóm một lần; bỏ qua BUSYGROUP nếu nó đã tồn tại</span>
@@ -1043,7 +1043,7 @@ redis-cli XAUTOCLAIM orders billing worker-1 60000 0 COUNT 10</code></pre>
 </div>
 
 <h3>The sweeper, written out</h3>
-<pre><code>const MIN_IDLE = 60_000;      <span class="tok-comment">// longer than the slowest legitimate handler</span>
+<pre><code class="language-javascript">const MIN_IDLE = 60_000;      <span class="tok-comment">// longer than the slowest legitimate handler</span>
 const MAX_DELIVERIES = 5;
 
 async function sweep() {
@@ -1075,7 +1075,7 @@ setInterval(() =&gt; sweep().catch(log.error), 30_000);</code></pre>
 <div class="callout ok"><strong>The sweeper is a separate loop, not something bolted onto the worker loop.</strong> A worker's job is to drain <code>&gt;</code> as fast as it can; a sweeper's job is to notice abandoned work, which is a slow, periodic, whole-group concern. Running every 30 seconds is plenty. It is safe for every worker to run one — <code>min-idle-time</code> means only one of them wins each entry — and it is also fine to run it in exactly one process. What is not fine is having no sweeper at all: without one, the pending list is a leak with a business consequence, and the orders in it are simply never processed.</div>
 
 <h3>Poison messages and the dead-letter stream</h3>
-<pre><code>async function deadLetter(id, message, deliveries) {
+<pre><code class="language-javascript">async function deadLetter(id, message, deliveries) {
   await redis.multi()
     .xAdd('orders:dead', '*', {
       ...message,
@@ -1195,7 +1195,7 @@ redis-cli XAUTOCLAIM orders billing worker-1 60000 0 COUNT 10</code></pre>
 </div>
 
 <h3>Tiến trình quét, viết ra đầy đủ</h3>
-<pre><code>const MIN_IDLE = 60_000;      <span class="tok-comment">// dài hơn handler chính đáng chậm nhất</span>
+<pre><code class="language-javascript">const MIN_IDLE = 60_000;      <span class="tok-comment">// dài hơn handler chính đáng chậm nhất</span>
 const MAX_DELIVERIES = 5;
 
 async function sweep() {
@@ -1227,7 +1227,7 @@ setInterval(() =&gt; sweep().catch(log.error), 30_000);</code></pre>
 <div class="callout ok"><strong>Tiến trình quét là một vòng lặp riêng, không phải thứ chắp vào vòng lặp của worker.</strong> Việc của một worker là vét <code>&gt;</code> nhanh nhất có thể; việc của một tiến trình quét là để ý thấy công việc bị bỏ rơi, vốn là mối bận tâm chậm, định kỳ và thuộc về cả nhóm. Chạy 30 giây một lần là quá đủ. Mọi worker cùng chạy một cái thì vẫn an toàn — <code>min-idle-time</code> nghĩa là chỉ một trong số chúng thắng mỗi mục — và chạy nó ở đúng một tiến trình duy nhất cũng ổn. Cái không ổn là chẳng có tiến trình quét nào cả: thiếu nó thì danh sách chờ là một chỗ rò có hậu quả nghiệp vụ, và những đơn hàng nằm trong đó đơn giản là không bao giờ được xử lý.</div>
 
 <h3>Thông điệp độc và stream thư-chết</h3>
-<pre><code>async function deadLetter(id, message, deliveries) {
+<pre><code class="language-javascript">async function deadLetter(id, message, deliveries) {
   await redis.multi()
     .xAdd('orders:dead', '*', {
       ...message,
@@ -1312,7 +1312,7 @@ redis-cli XLEN orders:dead</code></pre>
   <div class="kv"><span class="k">Sorted set · a scheduler, not a queue</span><span class="v">Score = run-at time, and <code>ZREM</code> returning 1 is a free distributed claim (Lesson 4.4). Use it for "when", and hand the job to a stream or a list for "who runs it".</span></div>
   <div class="kv"><span class="k">The combination people actually run</span><span class="v">A sorted set for delayed jobs, feeding a stream for execution, with Pub/Sub for the notifications that come out of it. These are not competitors; they are three parts of one design.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Same 100k messages through each, one producer, four consumers, local</span>
+<pre><code class="language-bash"><span class="tok-comment"># Same 100k messages through each, one producer, four consumers, local</span>
 node bench-messaging.js --messages 100000 | tail -5</code></pre>
 <div class="out">list    (LPUSH/BRPOP)     100000 msgs  4.9s   20408/s   mem +11MB   losses on kill: 4
 stream  (XADD/XREADGROUP)  100000 msgs  6.3s   15873/s   mem +38MB   losses on kill: 0
@@ -1384,7 +1384,7 @@ redis-cli EVAL "return redis.call('MEMORY','USAGE',KEYS[1]) / redis.call('XLEN',
   <div class="kv"><span class="k">Sorted set · một bộ hẹn giờ, không phải hàng đợi</span><span class="v">Điểm = mốc chạy, và <code>ZREM</code> trả về 1 là một phép nhận việc phân tán miễn phí (Bài 4.4). Hãy dùng nó cho "khi nào", rồi giao việc cho một stream hay một list lo phần "ai chạy".</span></div>
   <div class="kv"><span class="k">Tổ hợp mà người ta thật sự chạy</span><span class="v">Một sorted set cho việc hẹn giờ, đổ vào một stream để thực thi, cùng Pub/Sub cho các thông báo sinh ra từ đó. Chúng không phải đối thủ của nhau; chúng là ba phần của cùng một thiết kế.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Cùng 100k thông điệp qua từng cách, một bên sản xuất, bốn bên tiêu thụ, chạy tại chỗ</span>
+<pre><code class="language-bash"><span class="tok-comment"># Cùng 100k thông điệp qua từng cách, một bên sản xuất, bốn bên tiêu thụ, chạy tại chỗ</span>
 node bench-messaging.js --messages 100000 | tail -5</code></pre>
 <div class="out">list    (LPUSH/BRPOP)     100000 msgs  4.9s   20408/s   mem +11MB   losses on kill: 4
 stream  (XADD/XREADGROUP)  100000 msgs  6.3s   15873/s   mem +38MB   losses on kill: 0

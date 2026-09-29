@@ -54,7 +54,7 @@ thoi gian de thu het 1 trieu cap:
   <div class="lz-step"><span class="lz-k">3 · Per-account attempt limits</span><span class="lz-t">Not per-IP</span><span class="lz-d">The attacker rotates addresses freely and cannot rotate the target account. Count failures against the identifier, with an exponential backoff that resets on success — and never a permanent lock, which hands them a denial of service.</span></div>
   <div class="lz-step"><span class="lz-k">4 · Risk signals</span><span class="lz-t">Cheap, and surprisingly effective</span><span class="lz-d">A first-ever login from a new country, a datacentre ASN, a missing or absurd user agent, a session with no prior device cookie. None is proof; together they justify demanding a second factor for that attempt.</span></div>
 </div>
-<pre><code><span class="tok-comment">// Cap per ACCOUNT, exponential backoff, self-healing.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Cap per ACCOUNT, exponential backoff, self-healing.</span>
 const KEY = &#96;dn-hong:\${normalizedEmail}&#96;;
 const n = await redis.incr(KEY);
 if (n === 1) await redis.expire(KEY, 900);
@@ -127,7 +127,7 @@ thoi gian de thu het 1 trieu cap:
   <div class="lz-step"><span class="lz-k">3 · Trần số lần thử theo TÀI KHOẢN</span><span class="lz-t">Không phải theo IP</span><span class="lz-d">Kẻ tấn công xoay địa chỉ thoải mái và KHÔNG xoay được cái tài khoản đích. Hãy đếm số lần hỏng theo định danh, lùi theo cấp số nhân và đặt lại khi đăng nhập đúng — và đừng bao giờ khoá vĩnh viễn, vì đó là trao cho họ một cú từ chối dịch vụ.</span></div>
   <div class="lz-step"><span class="lz-k">4 · Các tín hiệu rủi ro</span><span class="lz-t">Rẻ, và hiệu quả đến bất ngờ</span><span class="lz-d">Lần đầu tiên đăng nhập từ một quốc gia mới, một ASN của trung tâm dữ liệu, một user agent thiếu hoặc vô lý, một phiên không có cookie thiết bị nào từ trước. Không cái nào là bằng chứng; nhưng gộp lại thì đủ để đòi một yếu tố thứ hai cho riêng lần thử đó.</span></div>
 </div>
-<pre><code><span class="tok-comment">// Trần theo TÀI KHOẢN, lùi theo cấp số nhân, tự hồi phục.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Trần theo TÀI KHOẢN, lùi theo cấp số nhân, tự hồi phục.</span>
 const KEY = &#96;dn-hong:\${normalizedEmail}&#96;;
 const n = await redis.incr(KEY);
 if (n === 1) await redis.expire(KEY, 900);
@@ -231,7 +231,7 @@ ma diem cua "cuοngthai.com": cuU+3BFngthai.com
   <div class="lz-step"><span class="lz-k">Step-up on the actions that matter</span><span class="lz-t">Lesson 7.1, again</span><span class="lz-d">A stolen session is inside the product. Re-authentication before changing the email, adding a factor or moving money means the attacker has to phish a second time, at the exact moment the user is not expecting a prompt.</span></div>
   <div class="lz-step"><span class="lz-k">Watch for the lookalike domains</span><span class="lz-t">Detection, not prevention</span><span class="lz-d">Certificate transparency logs publish every certificate issued, so a feed filtered for names resembling yours finds the phishing site the day it is set up — often before the campaign starts.</span></div>
 </div>
-<pre><code><span class="tok-comment">// Alert when a SESSION suddenly relocates — do not block, but do detect.</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Alert when a SESSION suddenly relocates — do not block, but do detect.</span>
 if (session.lastIp &amp;&amp; asn(req.ip) !== asn(session.lastIp)) {
   await recordEvent('session.network_change', { sessionId: session.id, cu: session.lastIp, moi: req.ip });
   if (isSensitiveAction(req)) return requireReauth(req, res);   <span class="tok-comment">// ← Lesson 7.1</span>
@@ -314,7 +314,7 @@ ma diem cua "cuοngthai.com": cuU+3BFngthai.com
   <div class="lz-step"><span class="lz-k">Nâng cấp xác thực ở những hành động quan trọng</span><span class="lz-t">Lại là Bài 7.1</span><span class="lz-d">Một phiên bị cắp thì đã ở BÊN TRONG sản phẩm. Đòi xác thực lại trước khi đổi email, thêm một yếu tố hay chuyển tiền nghĩa là kẻ tấn công phải lừa đảo lần THỨ HAI, đúng vào lúc người dùng chẳng hề chờ đợi một lời nhắc nào.</span></div>
   <div class="lz-step"><span class="lz-k">Canh chừng những tên miền nhìn giống</span><span class="lz-t">Phát hiện, không phải phòng ngừa</span><span class="lz-d">Nhật ký minh bạch chứng chỉ công bố MỌI chứng chỉ được cấp, nên một luồng dữ liệu lọc theo những cái tên na ná tên bạn sẽ tìm ra trang lừa đảo ngay trong ngày nó được dựng — thường là trước khi chiến dịch bắt đầu.</span></div>
 </div>
-<pre><code><span class="tok-comment">// Cảnh báo khi một PHIÊN đột ngột đổi chỗ — không chặn, nhưng phát hiện.</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Cảnh báo khi một PHIÊN đột ngột đổi chỗ — không chặn, nhưng phát hiện.</span>
 if (session.lastIp &amp;&amp; asn(req.ip) !== asn(session.lastIp)) {
   await recordEvent('session.network_change', { sessionId: session.id, cu: session.lastIp, moi: req.ip });
   if (isSensitiveAction(req)) return requireReauth(req, res);   <span class="tok-comment">// ← Bài 7.1</span>
@@ -546,7 +546,7 @@ nem 100 lan cung chi con toi da 3 lan doan.</div>
   <div class="kv"><span class="k">Number matching closes it structurally</span><span class="v">The user must type a two-digit number displayed on the sign-in screen — which they are not looking at, because they are not signing in. There is no button to press by mistake, and the residual is a one-in-a-hundred guess capped by a wrong-entry limit.</span></div>
   <div class="kv"><span class="k">Also cap the prompts and alert on the burst</span><span class="v">Three pending approvals per account per hour, and a denied prompt should count as a security event. A burst of push requests is one of the clearest "this password is compromised" signals you will ever get — treat it like Lesson 7.3's failure burst.</span></div>
 </div>
-<pre><code><span class="tok-comment">// Number matching: the number appears on the SIGN-IN SCREEN and the user TYPES it into the app.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Number matching: the number appears on the SIGN-IN SCREEN and the user TYPES it into the app.</span>
 const so = String(randomInt(10, 100));                <span class="tok-comment">// two digits</span>
 await redis.set(&#96;push:\${sessionId}&#96;, JSON.stringify({ count, wrong: 0 }), { EX: 120 });
 showOnSignInScreen(count);                          <span class="tok-comment">// ← the attacker sees this one</span>
@@ -616,7 +616,7 @@ nem 100 lan cung chi con toi da 3 lan doan.</div>
   <div class="kv"><span class="k">Khớp số bịt nó theo CẤU TRÚC</span><span class="v">Người dùng phải GÕ một con số hai chữ số hiện trên MÀN HÌNH ĐĂNG NHẬP — thứ mà họ không hề nhìn vào, vì họ có đăng nhập đâu. Chẳng có cái nút nào để bấm nhầm cả, và phần dư lại là một cú đoán một-phần-trăm bị chặn bởi trần số lần gõ sai.</span></div>
   <div class="kv"><span class="k">Và hãy đặt trần số lời nhắc, kèm cảnh báo khi có tràng</span><span class="v">Ba lời nhắc đang chờ cho mỗi tài khoản mỗi giờ, và một lời nhắc bị TỪ CHỐI phải được tính là một sự kiện bảo mật. Một tràng yêu cầu đẩy là một trong những tín hiệu "mật khẩu này đã bị lộ" rõ nhất mà bạn từng có — hãy đối xử với nó như tràng thất bại ở Bài 7.3.</span></div>
 </div>
-<pre><code><span class="tok-comment">// Khớp số: con số hiện trên MÀN HÌNH ĐĂNG NHẬP, người dùng GÕ nó vào app.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Khớp số: con số hiện trên MÀN HÌNH ĐĂNG NHẬP, người dùng GÕ nó vào app.</span>
 const so = String(randomInt(10, 100));                <span class="tok-comment">// hai chữ số</span>
 await redis.set(&#96;push:\${sessionId}&#96;, JSON.stringify({ count, wrong: 0 }), { EX: 120 });
 showOnSignInScreen(count);                          <span class="tok-comment">// ← kẻ tấn công thấy cái này</span>
@@ -675,7 +675,7 @@ if (++state.sai &gt;= 3) { await revoke(sessionId); await warn(u, 'push.error_ma
 <p class="lead">The attacks in this lesson are unusual because the attacker acts <em>before</em> the victim exists as a user. They were catalogued systematically only in 2022, they affected a large fraction of the popular sites tested, and every one of them is invisible to a test suite that starts from an empty database and one well-behaved user.</p>
 
 <h3>The shape: act first, wait, come back</h3>
-<pre><code><span class="tok-comment">// Step 1 — the attacker registers with the VICTIM's email, today.</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Step 1 — the attacker registers with the VICTIM's email, today.</span>
 POST /sign-up { email: 'nan-nhan@congty.com', password: '<span class="tok-comment">…theirs…</span>' }
 
 <span class="tok-comment">// Step 2 — wait. Weeks, months. Do nothing at all.</span>
@@ -719,12 +719,12 @@ POST /sign-up { email: 'nan-nhan@congty.com', password: '<span class="tok-commen
 
 Ma dung MOT lan ma doi duoc nam lan. Cung hinh dang nay ap cho:
   token dat lai mat khau · loi moi · phieu giam gia · lenh rut tien.</div>
-<pre><code><span class="tok-comment">// WRONG — there is an await between READING the state and ACTING on it.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// WRONG — there is an await between READING the state and ACTING on it.</span>
 const code = await prisma.recoveryCode.findFirst({ where: { hashCode, used: false } });
 if (!code) throw new Error('khong hop le');
 await argon2.hash(newPassword);                 <span class="tok-comment">// ← 100ms. Five requests get through here together.</span>
 await prisma.recoveryCode.update({ where: { id: ma.id }, data: { used: true } });</code></pre>
-<pre><code><span class="tok-comment">// RIGHT — let the DATABASE decide who wins, with a conditional write.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// RIGHT — let the DATABASE decide who wins, with a conditional write.</span>
 const result = await prisma.recoveryCode.updateMany({
   where: { hashCode, used: false },             <span class="tok-comment">// the condition is INSIDE the write</span>
   data:  { used: true, usedAt: new Date() },
@@ -757,7 +757,7 @@ if (result.count === 0) throw new Error('khong hop le');   <span class="tok-comm
 <p class="lead">Các cú tấn công trong bài này khác thường ở chỗ kẻ tấn công hành động <em>TRƯỚC KHI</em> nạn nhân tồn tại với tư cách người dùng. Chúng chỉ mới được lập danh mục một cách có hệ thống vào năm 2022, chúng dính vào một tỉ lệ lớn các trang phổ biến được đem ra thử, và mỗi cú đều VÔ HÌNH với một bộ kiểm thử khởi đi từ một cơ sở dữ liệu trống và một người dùng ngoan ngoãn.</p>
 
 <h3>Hình dạng chung: ra tay trước, chờ, rồi quay lại</h3>
-<pre><code><span class="tok-comment">// Bước 1 — kẻ tấn công đăng ký bằng email của NẠN NHÂN, hôm nay.</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Bước 1 — kẻ tấn công đăng ký bằng email của NẠN NHÂN, hôm nay.</span>
 POST /sign-up { email: 'nan-nhan@congty.com', password: '<span class="tok-comment">…của hắn…</span>' }
 
 <span class="tok-comment">// Bước 2 — chờ. Vài tuần, vài tháng. Không làm gì cả.</span>
@@ -801,12 +801,12 @@ POST /sign-up { email: 'nan-nhan@congty.com', password: '<span class="tok-commen
 
 Ma dung MOT lan ma doi duoc nam lan. Cung hinh dang nay ap cho:
   token dat lai mat khau · loi moi · phieu giam gia · lenh rut tien.</div>
-<pre><code><span class="tok-comment">// SAI — có một cái await giữa lúc ĐỌC trạng thái và lúc HÀNH ĐỘNG theo nó.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// SAI — có một cái await giữa lúc ĐỌC trạng thái và lúc HÀNH ĐỘNG theo nó.</span>
 const code = await prisma.recoveryCode.findFirst({ where: { hashCode, used: false } });
 if (!code) throw new Error('khong hop le');
 await argon2.hash(newPassword);                 <span class="tok-comment">// ← 100ms. Năm request cùng qua được đây.</span>
 await prisma.recoveryCode.update({ where: { id: ma.id }, data: { used: true } });</code></pre>
-<pre><code><span class="tok-comment">// ĐÚNG — để CƠ SỞ DỮ LIỆU quyết định ai thắng, bằng một lệnh ghi có điều kiện.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// ĐÚNG — để CƠ SỞ DỮ LIỆU quyết định ai thắng, bằng một lệnh ghi có điều kiện.</span>
 const result = await prisma.recoveryCode.updateMany({
   where: { hashCode, used: false },             <span class="tok-comment">// điều kiện nằm TRONG lệnh ghi</span>
   data:  { used: true, usedAt: new Date() },

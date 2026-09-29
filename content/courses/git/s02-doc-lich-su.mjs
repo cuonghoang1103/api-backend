@@ -57,14 +57,14 @@ ${gallery('git-02', [
 <p class="lead">Most people run <code>git log</code>, see a wall of text, press <kbd>q</kbd>, and never come back. That is a waste of the single richest source of information about a codebase. With five flags, <code>git log</code> answers questions like "who last touched the payment code, and why?" in seconds.</p>
 
 <h3>The default, and why it is unusable</h3>
-<pre><code>git log</code></pre>
+<pre><code class="language-bash">git log</code></pre>
 <div class="out">commit 3f8a1c9d2e5b7a4c6f8e0a2b4d6c8e0f2a4b6c8d
 Author: Nguyen Van An &lt;an@example.com&gt;
 Date:   Thu Aug 21 14:20:00 2026 +0700
 
     fix: reject expired refresh tokens on /auth/refresh</div>
 <p>Six lines per commit. On a repository with 4,000 commits that is 24,000 lines. The first thing to learn is to compress it:</p>
-<pre><code>git log --oneline -10</code></pre>
+<pre><code class="language-bash">git log --oneline -10</code></pre>
 <div class="out">3f8a1c9 fix: reject expired refresh tokens on /auth/refresh
 9e2d4b7 feat(auth): add refresh token rotation
 1c5f8a3 test(auth): cover the expired-token path
@@ -79,7 +79,7 @@ ${slide('git-02', 3, 'git log: nén một dòng rồi lọc')}
   <div class="lz-layer"><span class="lz-k">--grep=</span><span class="lz-v">Search the commit <em>message</em>. Combine with <code>-i</code> for case-insensitive.</span></div>
   <div class="lz-layer"><span class="lz-k">-S / -G</span><span class="lz-v">Search the <em>content of the changes</em> — the pickaxe. Lesson 2.3 is devoted to it.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Everything that touched the auth module in the last month, by anyone:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Everything that touched the auth module in the last month, by anyone:</span>
 git log --oneline --since=<span class="tok-string">"1 month ago"</span> -- src/services/auth/
 
 <span class="tok-comment"># Every commit An made that mentions "cache":</span>
@@ -92,7 +92,7 @@ git log --oneline v1.4.0..v1.5.0</code></pre>
 <h3>Ranges: the two-dot and three-dot notation</h3>
 ${slide('git-02', 4, 'Hai chấm: cái gì có ở B mà A không có')}
 <p><code>A..B</code> means "commits reachable from B but not from A" — in practice, "what is in B that is not in A". This is the single most useful shape in Git, and it appears again in <code>diff</code>, <code>rebase</code> and pull requests:</p>
-<pre><code>git log --oneline main..feature/login   <span class="tok-comment"># what my branch adds on top of main</span>
+<pre><code class="language-bash">git log --oneline main..feature/login   <span class="tok-comment"># what my branch adds on top of main</span>
 git log --oneline feature/login..main   <span class="tok-comment"># what main has that I do not — do I need to merge?</span>
 git log --oneline origin/main..main     <span class="tok-comment"># what I have locally that is not pushed yet</span>
 git log --oneline main...feature/login  <span class="tok-comment"># three dots: commits unique to EITHER side</span></code></pre>
@@ -100,7 +100,7 @@ git log --oneline main...feature/login  <span class="tok-comment"># three dots: 
 
 <h3>Seeing the shape of history</h3>
 ${slide('git-02', 5, 'log --graph: chữ và hình của cùng một lịch sử')}
-<pre><code>git log --oneline --graph --all --decorate -15</code></pre>
+<pre><code class="language-bash">git log --oneline --graph --all --decorate -15</code></pre>
 <div class="out">*   8c4f2a1 (HEAD -&gt; main, origin/main) Merge pull request #58 from feature/login
 |\\
 | * 3f8a1c9 (feature/login) fix: reject expired refresh tokens
@@ -114,10 +114,10 @@ ${slide('git-02', 5, 'log --graph: chữ và hình của cùng một lịch sử
   <div class="kv"><span class="k">--decorate</span><span class="v">Show which branches and tags point where — <code>(HEAD -&gt; main, origin/main)</code>. On by default in recent Git.</span></div>
 </div>
 <p>You will type this constantly, so alias it (from 0.4):</p>
-<pre><code>git config --global alias.lg <span class="tok-string">"log --oneline --graph --all --decorate -20"</span></code></pre>
+<pre><code class="language-bash">git config --global alias.lg <span class="tok-string">"log --oneline --graph --all --decorate -20"</span></code></pre>
 
 <h3>Custom formats — when you need a report, not a browse</h3>
-<pre><code>git log --pretty=format:<span class="tok-string">"%h %ad %an — %s"</span> --date=short -5</code></pre>
+<pre><code class="language-bash">git log --pretty=format:<span class="tok-string">"%h %ad %an — %s"</span> --date=short -5</code></pre>
 <div class="out">3f8a1c9 2026-08-21 Nguyen Van An — fix: reject expired refresh tokens
 9e2d4b7 2026-08-20 Nguyen Van An — feat(auth): add refresh token rotation
 1c5f8a3 2026-08-19 Tran Thi Binh — test(auth): cover the expired-token path</div>
@@ -130,12 +130,12 @@ ${slide('git-02', 5, 'log --graph: chữ và hình của cùng một lịch sử
 </div>
 
 <h3>Two summaries worth knowing</h3>
-<pre><code>git shortlog -sn --since=<span class="tok-string">"3 months ago"</span></code></pre>
+<pre><code class="language-bash">git shortlog -sn --since=<span class="tok-string">"3 months ago"</span></code></pre>
 <div class="out">   142  Nguyen Van An
     87  Tran Thi Binh
     12  dependabot[bot]</div>
 <p>Commit counts per author. Useful for "who knows this codebase?" — and useless as a productivity metric, so do not use it as one.</p>
-<pre><code>git log --stat -1</code></pre>
+<pre><code class="language-bash">git log --stat -1</code></pre>
 <div class="out">3f8a1c9 fix: reject expired refresh tokens on /auth/refresh
  src/services/auth.service.ts | 14 ++++++++++----
  src/services/auth.test.ts    | 32 ++++++++++++++++++++++++++++++++
@@ -180,14 +180,14 @@ git log --oneline feature/avatar..main
 <p class="lead">Đa số người chạy <code>git log</code>, thấy một bức tường chữ, bấm <kbd>q</kbd>, rồi không quay lại nữa. Đó là phí phạm nguồn thông tin giàu có nhất về một kho mã. Với năm cái cờ, <code>git log</code> trả lời được những câu như "ai chạm vào mã thanh toán gần nhất, và vì sao?" chỉ trong vài giây.</p>
 
 <h3>Mặc định, và vì sao nó không dùng được</h3>
-<pre><code>git log</code></pre>
+<pre><code class="language-bash">git log</code></pre>
 <div class="out">commit 3f8a1c9d2e5b7a4c6f8e0a2b4d6c8e0f2a4b6c8d
 Author: Nguyen Van An &lt;an@example.com&gt;
 Date:   Thu Aug 21 14:20:00 2026 +0700
 
     fix: reject expired refresh tokens on /auth/refresh</div>
 <p>Sáu dòng cho mỗi commit. Với kho 4.000 commit thì đó là 24.000 dòng. Việc đầu tiên cần học là nén nó lại:</p>
-<pre><code>git log --oneline -10</code></pre>
+<pre><code class="language-bash">git log --oneline -10</code></pre>
 <div class="out">3f8a1c9 fix: reject expired refresh tokens on /auth/refresh
 9e2d4b7 feat(auth): add refresh token rotation
 1c5f8a3 test(auth): cover the expired-token path
@@ -202,7 +202,7 @@ ${slide('git-02', 3, 'git log: nén một dòng rồi lọc')}
   <div class="lz-layer"><span class="lz-k">--grep=</span><span class="lz-v">Tìm trong <em>lời nhắn</em> commit. Ghép với <code>-i</code> để không phân biệt hoa thường.</span></div>
   <div class="lz-layer"><span class="lz-k">-S / -G</span><span class="lz-v">Tìm trong <em>nội dung thay đổi</em> — cái cuốc chim. Bài 2.3 dành riêng cho nó.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Mọi thứ chạm vào module auth trong tháng qua, của bất kỳ ai:</span>
+<pre><code class="language-bash"><span class="tok-comment"># Mọi thứ chạm vào module auth trong tháng qua, của bất kỳ ai:</span>
 git log --oneline --since=<span class="tok-string">"1 month ago"</span> -- src/services/auth/
 
 <span class="tok-comment"># Mọi commit của An có nhắc tới "cache":</span>
@@ -215,7 +215,7 @@ git log --oneline v1.4.0..v1.5.0</code></pre>
 <h3>Khoảng: ký hiệu hai chấm và ba chấm</h3>
 ${slide('git-02', 4, 'Hai chấm: cái gì có ở B mà A không có')}
 <p><code>A..B</code> nghĩa là "những commit với tới được từ B mà không với tới được từ A" — nói thực dụng là "cái gì có trong B mà không có trong A". Đây là hình dạng hữu ích nhất trong Git, và nó xuất hiện lại ở <code>diff</code>, <code>rebase</code> và pull request:</p>
-<pre><code>git log --oneline main..feature/login   <span class="tok-comment"># nhánh của tôi thêm gì lên trên main</span>
+<pre><code class="language-bash">git log --oneline main..feature/login   <span class="tok-comment"># nhánh của tôi thêm gì lên trên main</span>
 git log --oneline feature/login..main   <span class="tok-comment"># main có gì mà tôi chưa có — có cần merge không?</span>
 git log --oneline origin/main..main     <span class="tok-comment"># tôi có gì ở cục bộ mà chưa push</span>
 git log --oneline main...feature/login  <span class="tok-comment"># ba chấm: commit riêng của MỖI bên</span></code></pre>
@@ -223,7 +223,7 @@ git log --oneline main...feature/login  <span class="tok-comment"># ba chấm: c
 
 <h3>Nhìn thấy hình dạng của lịch sử</h3>
 ${slide('git-02', 5, 'log --graph: chữ và hình của cùng một lịch sử')}
-<pre><code>git log --oneline --graph --all --decorate -15</code></pre>
+<pre><code class="language-bash">git log --oneline --graph --all --decorate -15</code></pre>
 <div class="out">*   8c4f2a1 (HEAD -&gt; main, origin/main) Merge pull request #58 from feature/login
 |\\
 | * 3f8a1c9 (feature/login) fix: reject expired refresh tokens
@@ -237,10 +237,10 @@ ${slide('git-02', 5, 'log --graph: chữ và hình của cùng một lịch sử
   <div class="kv"><span class="k">--decorate</span><span class="v">Hiện nhánh và tag đang trỏ vào đâu — <code>(HEAD -&gt; main, origin/main)</code>. Git đời mới bật sẵn.</span></div>
 </div>
 <p>Bạn sẽ gõ cái này liên tục, nên hãy đặt alias (từ bài 0.4):</p>
-<pre><code>git config --global alias.lg <span class="tok-string">"log --oneline --graph --all --decorate -20"</span></code></pre>
+<pre><code class="language-bash">git config --global alias.lg <span class="tok-string">"log --oneline --graph --all --decorate -20"</span></code></pre>
 
 <h3>Định dạng tuỳ ý — khi bạn cần một báo cáo, không phải để lướt</h3>
-<pre><code>git log --pretty=format:<span class="tok-string">"%h %ad %an — %s"</span> --date=short -5</code></pre>
+<pre><code class="language-bash">git log --pretty=format:<span class="tok-string">"%h %ad %an — %s"</span> --date=short -5</code></pre>
 <div class="out">3f8a1c9 2026-08-21 Nguyen Van An — fix: reject expired refresh tokens
 9e2d4b7 2026-08-20 Nguyen Van An — feat(auth): add refresh token rotation
 1c5f8a3 2026-08-19 Tran Thi Binh — test(auth): cover the expired-token path</div>
@@ -253,12 +253,12 @@ ${slide('git-02', 5, 'log --graph: chữ và hình của cùng một lịch sử
 </div>
 
 <h3>Hai bản tóm tắt đáng biết</h3>
-<pre><code>git shortlog -sn --since=<span class="tok-string">"3 months ago"</span></code></pre>
+<pre><code class="language-bash">git shortlog -sn --since=<span class="tok-string">"3 months ago"</span></code></pre>
 <div class="out">   142  Nguyen Van An
     87  Tran Thi Binh
     12  dependabot[bot]</div>
 <p>Số commit theo tác giả. Hữu ích cho câu "ai hiểu kho mã này?" — và vô dụng như một thước đo năng suất, nên đừng dùng nó theo hướng đó.</p>
-<pre><code>git log --stat -1</code></pre>
+<pre><code class="language-bash">git log --stat -1</code></pre>
 <div class="out">3f8a1c9 fix: reject expired refresh tokens on /auth/refresh
  src/services/auth.service.ts | 14 ++++++++++----
  src/services/auth.test.ts    | 32 ++++++++++++++++++++++++++++++++
@@ -313,7 +313,7 @@ git log --oneline feature/avatar..main
 
 <h3>git show — one commit, completely</h3>
 ${slide('git-02', 6, 'git show: siêu dữ liệu, lời nhắn, diff')}
-<pre><code>git show 3f8a1c9</code></pre>
+<pre><code class="language-bash">git show 3f8a1c9</code></pre>
 <div class="out">commit 3f8a1c9d2e5b7a4c6f8e0a2b4d6c8e0f2a4b6c8d
 Author: Nguyen Van An &lt;an@example.com&gt;
 Date:   Thu Aug 21 14:20:00 2026 +0700
@@ -331,7 +331,7 @@ index 7c4a1b2..9e8f3d1 100644
 +  }
    const user = await prisma.user.findUnique({ where: { id: payload.sub } });</div>
 <p>Metadata plus the full diff, in one view. Some useful variants:</p>
-<pre><code>git show                        <span class="tok-comment"># HEAD — the commit you just made</span>
+<pre><code class="language-bash">git show                        <span class="tok-comment"># HEAD — the commit you just made</span>
 git show HEAD~3                 <span class="tok-comment"># three commits back</span>
 git show v1.5.0                 <span class="tok-comment"># the commit a tag points at</span>
 git show 3f8a1c9 --stat         <span class="tok-comment"># just which files, not the content</span>
@@ -340,14 +340,14 @@ git show 3f8a1c9 -- src/auth.ts <span class="tok-comment"># only this file's par
 <h3>Reading a file as it was, without checking anything out</h3>
 ${slide('git-02', 7, 'commit:đường-dẫn — đọc file ở quá khứ')}
 <p>This is the one people do not know exists, and it is used constantly once you do. The syntax is <code>&lt;commit&gt;:&lt;path&gt;</code>:</p>
-<pre><code>git show HEAD~10:src/services/auth.service.ts        <span class="tok-comment"># the whole file, ten commits ago</span>
+<pre><code class="language-bash">git show HEAD~10:src/services/auth.service.ts        <span class="tok-comment"># the whole file, ten commits ago</span>
 git show v1.4.0:package.json                         <span class="tok-comment"># dependencies at that release</span>
 git show 3f8a1c9:src/config.ts &gt; /tmp/old-config.ts  <span class="tok-comment"># save the old version to compare</span></code></pre>
 <div class="callout ok">Your working directory is untouched. No stashing, no branch switching, no "let me just check something out for a second" that turns into a lost afternoon. When someone asks "what did this config look like before the migration?", this is a two-second answer.</div>
 
 <h3>git diff between any two points</h3>
 <p>In 1.3 you used <code>git diff</code> to compare the three trees. Given two commit-ish names it compares those instead — and "commit-ish" includes branches, tags, and anything from <code>gitrevisions</code>:</p>
-<pre><code>git diff HEAD~3 HEAD              <span class="tok-comment"># what changed over the last three commits</span>
+<pre><code class="language-bash">git diff HEAD~3 HEAD              <span class="tok-comment"># what changed over the last three commits</span>
 git diff v1.4.0 v1.5.0            <span class="tok-comment"># everything in a release</span>
 git diff main feature/login       <span class="tok-comment"># how the two branches differ RIGHT NOW</span>
 git diff main...feature/login     <span class="tok-comment"># what the branch added since it forked (see below)</span>
@@ -363,12 +363,12 @@ ${slide('git-02', 8, 'diff hai chấm vs ba chấm')}
 <div class="callout ok">This is exactly what a GitHub pull request shows you: the three-dot diff. If a PR's "Files changed" tab ever looks different from your local <code>git diff main feature</code>, this is why — and the PR is showing the more useful view.</div>
 
 <h3>Making a big diff readable</h3>
-<pre><code>git diff --stat v1.4.0 v1.5.0</code></pre>
+<pre><code class="language-bash">git diff --stat v1.4.0 v1.5.0</code></pre>
 <div class="out"> src/services/auth.service.ts |  42 ++++++++++--
  src/routes/auth.routes.ts    |  18 +++--
  prisma/schema.prisma         |   7 ++
  3 files changed, 58 insertions(+), 9 deletions(-)</div>
-<pre><code>git diff --name-only v1.4.0 v1.5.0     <span class="tok-comment"># just the paths — pipes well into other tools</span>
+<pre><code class="language-bash">git diff --name-only v1.4.0 v1.5.0     <span class="tok-comment"># just the paths — pipes well into other tools</span>
 git diff --name-status v1.4.0 v1.5.0   <span class="tok-comment"># paths with A(dded)/M(odified)/D(eleted)</span></code></pre>
 <div class="out">M       src/services/auth.service.ts
 A       src/services/token.service.ts
@@ -383,7 +383,7 @@ D       src/utils/legacy-auth.ts</div>
 </div>
 
 <h3>What "changed" between me and the server</h3>
-<pre><code>git fetch                              <span class="tok-comment"># update your view of the remote (no merge)</span>
+<pre><code class="language-bash">git fetch                              <span class="tok-comment"># update your view of the remote (no merge)</span>
 git diff main origin/main --stat       <span class="tok-comment"># how far apart are we?</span>
 git log --oneline main..origin/main    <span class="tok-comment"># what did they add?</span></code></pre>
 <p>Running these three after a <code>fetch</code>, before a <code>pull</code>, is the difference between knowing what is about to land in your working directory and being surprised by it.</p>
@@ -429,7 +429,7 @@ git diff --stat main...feature/avatar
 
 <h3>git show — một commit, trọn vẹn</h3>
 ${slide('git-02', 6, 'git show: siêu dữ liệu, lời nhắn, diff')}
-<pre><code>git show 3f8a1c9</code></pre>
+<pre><code class="language-bash">git show 3f8a1c9</code></pre>
 <div class="out">commit 3f8a1c9d2e5b7a4c6f8e0a2b4d6c8e0f2a4b6c8d
 Author: Nguyen Van An &lt;an@example.com&gt;
 Date:   Thu Aug 21 14:20:00 2026 +0700
@@ -447,7 +447,7 @@ index 7c4a1b2..9e8f3d1 100644
 +  }
    const user = await prisma.user.findUnique({ where: { id: payload.sub } });</div>
 <p>Siêu dữ liệu cộng diff đầy đủ, trong một khung nhìn. Vài biến thể hữu ích:</p>
-<pre><code>git show                        <span class="tok-comment"># HEAD — commit bạn vừa tạo</span>
+<pre><code class="language-bash">git show                        <span class="tok-comment"># HEAD — commit bạn vừa tạo</span>
 git show HEAD~3                 <span class="tok-comment"># lùi ba commit</span>
 git show v1.5.0                 <span class="tok-comment"># commit mà một tag trỏ tới</span>
 git show 3f8a1c9 --stat         <span class="tok-comment"># chỉ xem file nào, không xem nội dung</span>
@@ -456,14 +456,14 @@ git show 3f8a1c9 -- src/auth.ts <span class="tok-comment"># chỉ phần của f
 <h3>Đọc một file như nó từng có, mà không checkout gì cả</h3>
 ${slide('git-02', 7, 'commit:đường-dẫn — đọc file ở quá khứ')}
 <p>Đây là thứ người ta không biết là có, và khi biết rồi thì dùng suốt. Cú pháp là <code>&lt;commit&gt;:&lt;đường dẫn&gt;</code>:</p>
-<pre><code>git show HEAD~10:src/services/auth.service.ts        <span class="tok-comment"># cả file, mười commit trước</span>
+<pre><code class="language-bash">git show HEAD~10:src/services/auth.service.ts        <span class="tok-comment"># cả file, mười commit trước</span>
 git show v1.4.0:package.json                         <span class="tok-comment"># danh sách thư viện ở bản phát hành đó</span>
 git show 3f8a1c9:src/config.ts &gt; /tmp/old-config.ts  <span class="tok-comment"># lưu bản cũ ra để so</span></code></pre>
 <div class="callout ok">Thư mục làm việc của bạn không bị đụng tới. Không phải stash, không phải đổi nhánh, không có màn "để tôi checkout một tí thôi" rồi biến thành mất cả buổi chiều. Khi ai đó hỏi "cái config này trông thế nào trước lần migration?", đây là câu trả lời trong hai giây.</div>
 
 <h3>git diff giữa hai điểm bất kỳ</h3>
 <p>Ở bài 1.3 bạn dùng <code>git diff</code> để so ba cái cây. Khi đưa cho nó hai tên commit-ish thì nó so hai cái đó — và "commit-ish" gồm cả nhánh, tag, và mọi dạng trong <code>gitrevisions</code>:</p>
-<pre><code>git diff HEAD~3 HEAD              <span class="tok-comment"># ba commit vừa rồi đã đổi những gì</span>
+<pre><code class="language-bash">git diff HEAD~3 HEAD              <span class="tok-comment"># ba commit vừa rồi đã đổi những gì</span>
 git diff v1.4.0 v1.5.0            <span class="tok-comment"># mọi thứ trong một bản phát hành</span>
 git diff main feature/login       <span class="tok-comment"># hai nhánh khác nhau thế nào NGAY LÚC NÀY</span>
 git diff main...feature/login     <span class="tok-comment"># nhánh đó đã thêm gì từ lúc rẽ ra (xem dưới)</span>
@@ -479,12 +479,12 @@ ${slide('git-02', 8, 'diff hai chấm vs ba chấm')}
 <div class="callout ok">Đây đúng là thứ một pull request trên GitHub cho bạn xem: diff ba chấm. Nếu tab "Files changed" của một PR có lúc trông khác với <code>git diff main feature</code> ở máy bạn, đó chính là lý do — và PR đang hiện góc nhìn hữu ích hơn.</div>
 
 <h3>Làm một diff lớn đọc được</h3>
-<pre><code>git diff --stat v1.4.0 v1.5.0</code></pre>
+<pre><code class="language-bash">git diff --stat v1.4.0 v1.5.0</code></pre>
 <div class="out"> src/services/auth.service.ts |  42 ++++++++++--
  src/routes/auth.routes.ts    |  18 +++--
  prisma/schema.prisma         |   7 ++
  3 files changed, 58 insertions(+), 9 deletions(-)</div>
-<pre><code>git diff --name-only v1.4.0 v1.5.0     <span class="tok-comment"># chỉ đường dẫn — đưa vào công cụ khác rất tiện</span>
+<pre><code class="language-bash">git diff --name-only v1.4.0 v1.5.0     <span class="tok-comment"># chỉ đường dẫn — đưa vào công cụ khác rất tiện</span>
 git diff --name-status v1.4.0 v1.5.0   <span class="tok-comment"># đường dẫn kèm A(thêm)/M(sửa)/D(xoá)</span></code></pre>
 <div class="out">M       src/services/auth.service.ts
 A       src/services/token.service.ts
@@ -499,7 +499,7 @@ D       src/utils/legacy-auth.ts</div>
 </div>
 
 <h3>Cái gì đã "đổi" giữa tôi và máy chủ</h3>
-<pre><code>git fetch                              <span class="tok-comment"># cập nhật cái nhìn về remote (không hợp nhất)</span>
+<pre><code class="language-bash">git fetch                              <span class="tok-comment"># cập nhật cái nhìn về remote (không hợp nhất)</span>
 git diff main origin/main --stat       <span class="tok-comment"># hai bên cách nhau bao xa?</span>
 git log --oneline main..origin/main    <span class="tok-comment"># họ đã thêm gì?</span></code></pre>
 <p>Chạy ba lệnh này sau <code>fetch</code>, trước <code>pull</code>, là khác biệt giữa biết trước thứ sắp đáp xuống thư mục làm việc của bạn và bị nó làm cho bất ngờ.</p>
@@ -554,17 +554,17 @@ git diff --stat main...feature/avatar
 
 <h3>git blame — who wrote each line, and when</h3>
 ${slide('git-02', 9, 'git blame: bốn cột của một dòng')}
-<pre><code>git blame src/services/auth.service.ts</code></pre>
+<pre><code class="language-bash">git blame src/services/auth.service.ts</code></pre>
 <div class="out">7b3e9d1a (Tran Thi Binh  2026-06-14 09:12:03 +0700  46) export async function refreshToken(token: string) {
 3f8a1c9d (Nguyen Van An   2026-08-21 14:20:00 +0700  47)   // ignoreExpiration: we re-check exp below on purpose
 3f8a1c9d (Nguyen Van An   2026-08-21 14:20:00 +0700  48)   const payload = jwt.verify(token, SECRET, { ignoreExpiration: true });
 9e2d4b70 (Nguyen Van An   2026-08-20 11:05:41 +0700  49)   const user = await prisma.user.findUnique(…</div>
 <p>Four columns: the commit that last touched the line, the author, the date, and the line number. Despite the name, treat it as an index into history, not an accusation — the useful move is always the next one:</p>
-<pre><code>git show 3f8a1c9</code></pre>
+<pre><code class="language-bash">git show 3f8a1c9</code></pre>
 <p>That is the actual answer. Blame gives you the hash; <code>show</code> gives you the reasoning, which is why Chapter 1.4 spent so long on commit messages.</p>
 
 <h3>Narrowing blame to the part you care about</h3>
-<pre><code>git blame -L 44,60 src/services/auth.service.ts      <span class="tok-comment"># only lines 44–60</span>
+<pre><code class="language-bash">git blame -L 44,60 src/services/auth.service.ts      <span class="tok-comment"># only lines 44–60</span>
 git blame -L :refreshToken src/services/auth.service.ts  <span class="tok-comment"># only that function</span>
 git blame HEAD~20 -- src/services/auth.service.ts    <span class="tok-comment"># blame as of 20 commits ago</span></code></pre>
 
@@ -576,13 +576,13 @@ ${slide('git-02', 10, 'blame -w nhìn xuyên commit prettier')}
   <div class="kv"><span class="k">-C</span><span class="v">Detect lines <em>copied or moved</em> within the same commit — follows a function that moved between files.</span></div>
   <div class="kv"><span class="k">-M</span><span class="v">Detect lines moved <em>within a file</em>. Blames the original author instead of whoever reordered the file.</span></div>
 </div>
-<pre><code>git blame -w -C -M -L 44,60 src/services/auth.service.ts</code></pre>
+<pre><code class="language-bash">git blame -w -C -M -L 44,60 src/services/auth.service.ts</code></pre>
 <div class="callout ok">A repository can also record "ignore these commits when blaming" permanently: put the hashes of pure-formatting commits in a <code>.git-blame-ignore-revs</code> file, then <code>git config blame.ignoreRevsFile .git-blame-ignore-revs</code>. GitHub's blame view honours the same file. This is the professional answer to "the big prettier commit ruined blame".</div>
 
 <h3>The pickaxe: finding code that is no longer there</h3>
 ${slide('git-02', 11, 'Cái cuốc chim -S và -G')}
 <p>Blame only works on lines that still exist. When a function was <em>deleted</em>, or a config value used to be something else, blame has nothing to show you. The pickaxe searches the content of every change in history:</p>
-<pre><code><span class="tok-comment"># Commits where the NUMBER OF OCCURRENCES of "legacyAuth" changed</span>
+<pre><code class="language-bash"><span class="tok-comment"># Commits where the NUMBER OF OCCURRENCES of "legacyAuth" changed</span>
 <span class="tok-comment"># — i.e. where it was introduced or removed:</span>
 git log -S<span class="tok-string">"legacyAuth"</span> --oneline</code></pre>
 <div class="out">a4f9c2e refactor(auth): delete the legacy auth path
@@ -594,18 +594,18 @@ git log -S<span class="tok-string">"legacyAuth"</span> --oneline</code></pre>
   <div class="lz-step"><div class="lz-k">-G</div><div class="lz-t">Any touched line matches</div><div class="lz-d">Finds every commit whose diff has a line matching the regex — including moves and edits nearby.</div></div>
   <div class="lz-step"><div class="lz-k">-S … --pickaxe-regex</div><div class="lz-t">Both</div><div class="lz-d">-S semantics with a regular expression instead of a fixed string.</div></div>
 </div>
-<pre><code>git log -S<span class="tok-string">"MAX_RETRIES"</span> -p --oneline        <span class="tok-comment"># -p also prints the diff of each hit</span>
+<pre><code class="language-bash">git log -S<span class="tok-string">"MAX_RETRIES"</span> -p --oneline        <span class="tok-comment"># -p also prints the diff of each hit</span>
 git log -G<span class="tok-string">"process\\.env\\.[A-Z_]+"</span> --oneline   <span class="tok-comment"># every commit that touched an env var read</span>
 git log -S<span class="tok-string">"password"</span> --all --oneline       <span class="tok-comment"># across ALL branches — a mini secret audit</span></code></pre>
 <div class="callout warn">That last one is worth running on any repository you inherit. <code>git log -G"password|api_key" --all</code> finds credentials that were committed and later deleted (use one regex with <code>|</code>: if you write <code>-S"password" -S"api_key"</code>, Git silently keeps only the <em>last</em> <code>-S</code> and searches for <code>api_key</code> alone) — deleted from the working tree, still in every clone. Chapter 8.4 covers removing them properly; finding them is step one.</div>
 
 <h3>Following a file through renames</h3>
 ${slide('git-02', 12, '--follow đi xuyên lần đổi tên')}
-<pre><code>git log --oneline -- src/services/auth.service.ts</code></pre>
+<pre><code class="language-bash">git log --oneline -- src/services/auth.service.ts</code></pre>
 <div class="out">3f8a1c9 fix: reject expired refresh tokens
 9e2d4b7 feat(auth): add refresh token rotation</div>
 <p>Only two commits — because the file was renamed last month and Git stopped at the rename. <code>--follow</code> crosses it:</p>
-<pre><code>git log --oneline --follow -- src/services/auth.service.ts</code></pre>
+<pre><code class="language-bash">git log --oneline --follow -- src/services/auth.service.ts</code></pre>
 <div class="out">3f8a1c9 fix: reject expired refresh tokens
 9e2d4b7 feat(auth): add refresh token rotation
 c8d2f4a refactor: move auth into services/
@@ -615,7 +615,7 @@ c8d2f4a refactor: move auth into services/
 
 <h3>Searching the working tree, not history</h3>
 <p>Different question, different tool. <code>git grep</code> searches <em>current</em> content, but understands Git — so it skips <code>.gitignore</code>d files and can search any commit:</p>
-<pre><code>git grep <span class="tok-string">"refreshToken"</span>                 <span class="tok-comment"># in the working tree, tracked files only</span>
+<pre><code class="language-bash">git grep <span class="tok-string">"refreshToken"</span>                 <span class="tok-comment"># in the working tree, tracked files only</span>
 git grep -n <span class="tok-string">"refreshToken"</span> v1.4.0         <span class="tok-comment"># in an old release, without checking it out</span>
 git grep -l <span class="tok-string">"TODO"</span> -- <span class="tok-string">'*.ts'</span>              <span class="tok-comment"># just the file names, TypeScript only</span>
 git grep -c <span class="tok-string">"console.log"</span>                <span class="tok-comment"># count per file</span></code></pre>
@@ -660,17 +660,17 @@ return { MAX_RETRIES: 3, TIMEOUT_MS: 5000 };
 
 <h3>git blame — ai viết từng dòng, và khi nào</h3>
 ${slide('git-02', 9, 'git blame: bốn cột của một dòng')}
-<pre><code>git blame src/services/auth.service.ts</code></pre>
+<pre><code class="language-bash">git blame src/services/auth.service.ts</code></pre>
 <div class="out">7b3e9d1a (Tran Thi Binh  2026-06-14 09:12:03 +0700  46) export async function refreshToken(token: string) {
 3f8a1c9d (Nguyen Van An   2026-08-21 14:20:00 +0700  47)   // ignoreExpiration: we re-check exp below on purpose
 3f8a1c9d (Nguyen Van An   2026-08-21 14:20:00 +0700  48)   const payload = jwt.verify(token, SECRET, { ignoreExpiration: true });
 9e2d4b70 (Nguyen Van An   2026-08-20 11:05:41 +0700  49)   const user = await prisma.user.findUnique(…</div>
 <p>Bốn cột: commit chạm vào dòng đó gần nhất, tác giả, ngày, và số dòng. Bất chấp cái tên, hãy coi nó như một chỉ mục vào lịch sử, không phải một lời buộc tội — nước đi hữu ích luôn là nước tiếp theo:</p>
-<pre><code>git show 3f8a1c9</code></pre>
+<pre><code class="language-bash">git show 3f8a1c9</code></pre>
 <p>Đó mới là câu trả lời thật. Blame cho bạn mã băm; <code>show</code> cho bạn lý lẽ, và đó là lý do bài 1.4 dành nhiều công cho lời nhắn commit đến thế.</p>
 
 <h3>Thu hẹp blame vào đúng phần bạn quan tâm</h3>
-<pre><code>git blame -L 44,60 src/services/auth.service.ts      <span class="tok-comment"># chỉ dòng 44–60</span>
+<pre><code class="language-bash">git blame -L 44,60 src/services/auth.service.ts      <span class="tok-comment"># chỉ dòng 44–60</span>
 git blame -L :refreshToken src/services/auth.service.ts  <span class="tok-comment"># chỉ hàm đó</span>
 git blame HEAD~20 -- src/services/auth.service.ts    <span class="tok-comment"># blame tại thời điểm 20 commit trước</span></code></pre>
 
@@ -682,13 +682,13 @@ ${slide('git-02', 10, 'blame -w nhìn xuyên commit prettier')}
   <div class="kv"><span class="k">-C</span><span class="v">Nhận ra dòng được <em>chép hoặc dời</em> trong cùng một commit — bám theo một hàm chuyển giữa các file.</span></div>
   <div class="kv"><span class="k">-M</span><span class="v">Nhận ra dòng dời <em>trong cùng một file</em>. Quy về tác giả gốc thay vì người sắp xếp lại file.</span></div>
 </div>
-<pre><code>git blame -w -C -M -L 44,60 src/services/auth.service.ts</code></pre>
+<pre><code class="language-bash">git blame -w -C -M -L 44,60 src/services/auth.service.ts</code></pre>
 <div class="callout ok">Một kho mã cũng ghi được vĩnh viễn luật "bỏ qua các commit này khi blame": đặt mã băm của những commit thuần-định-dạng vào file <code>.git-blame-ignore-revs</code>, rồi <code>git config blame.ignoreRevsFile .git-blame-ignore-revs</code>. Giao diện blame của GitHub cũng tôn trọng chính file đó. Đây là câu trả lời chuyên nghiệp cho "cái commit prettier khổng lồ đã phá nát blame".</div>
 
 <h3>Cái cuốc chim: tìm mã không còn ở đó nữa</h3>
 ${slide('git-02', 11, 'Cái cuốc chim -S và -G')}
 <p>Blame chỉ chạy được trên những dòng còn tồn tại. Khi một hàm đã bị <em>xoá</em>, hoặc một giá trị cấu hình từng là thứ khác, blame không có gì để chỉ cho bạn. Cái cuốc chim tìm trong nội dung của mọi thay đổi trong lịch sử:</p>
-<pre><code><span class="tok-comment"># Những commit mà SỐ LẦN XUẤT HIỆN của "legacyAuth" thay đổi</span>
+<pre><code class="language-bash"><span class="tok-comment"># Những commit mà SỐ LẦN XUẤT HIỆN của "legacyAuth" thay đổi</span>
 <span class="tok-comment"># — tức là nơi nó được thêm vào hoặc bị gỡ ra:</span>
 git log -S<span class="tok-string">"legacyAuth"</span> --oneline</code></pre>
 <div class="out">a4f9c2e refactor(auth): delete the legacy auth path
@@ -700,18 +700,18 @@ git log -S<span class="tok-string">"legacyAuth"</span> --oneline</code></pre>
   <div class="lz-step"><div class="lz-k">-G</div><div class="lz-t">Có dòng nào chạm khớp mẫu</div><div class="lz-d">Tìm mọi commit mà diff của nó có một dòng khớp biểu thức chính quy — kể cả dời chỗ và sửa lân cận.</div></div>
   <div class="lz-step"><div class="lz-k">-S … --pickaxe-regex</div><div class="lz-t">Cả hai</div><div class="lz-d">Ngữ nghĩa của -S nhưng dùng biểu thức chính quy thay vì chuỗi cố định.</div></div>
 </div>
-<pre><code>git log -S<span class="tok-string">"MAX_RETRIES"</span> -p --oneline        <span class="tok-comment"># -p in luôn diff của từng kết quả</span>
+<pre><code class="language-bash">git log -S<span class="tok-string">"MAX_RETRIES"</span> -p --oneline        <span class="tok-comment"># -p in luôn diff của từng kết quả</span>
 git log -G<span class="tok-string">"process\\.env\\.[A-Z_]+"</span> --oneline   <span class="tok-comment"># mọi commit chạm vào việc đọc biến môi trường</span>
 git log -S<span class="tok-string">"password"</span> --all --oneline       <span class="tok-comment"># trên MỌI nhánh — một cuộc soát bí mật thu nhỏ</span></code></pre>
 <div class="callout warn">Lệnh cuối đáng chạy trên bất kỳ kho mã nào bạn tiếp quản. <code>git log -G"password|api_key" --all</code> tìm ra những chứng chỉ từng được commit rồi xoá đi (dùng MỘT biểu thức với <code>|</code>: nếu viết <code>-S"password" -S"api_key"</code> thì Git lặng lẽ chỉ giữ <code>-S</code> <em>cuối cùng</em> và chỉ tìm <code>api_key</code>) — xoá khỏi cây làm việc, nhưng vẫn nằm trong mọi bản clone. Chương 8.4 nói cách gỡ chúng cho đúng; tìm ra chúng là bước một.</div>
 
 <h3>Bám theo một file qua các lần đổi tên</h3>
 ${slide('git-02', 12, '--follow đi xuyên lần đổi tên')}
-<pre><code>git log --oneline -- src/services/auth.service.ts</code></pre>
+<pre><code class="language-bash">git log --oneline -- src/services/auth.service.ts</code></pre>
 <div class="out">3f8a1c9 fix: reject expired refresh tokens
 9e2d4b7 feat(auth): add refresh token rotation</div>
 <p>Chỉ hai commit — vì file này đã được đổi tên tháng trước và Git dừng lại ở chỗ đổi tên. <code>--follow</code> đi xuyên qua đó:</p>
-<pre><code>git log --oneline --follow -- src/services/auth.service.ts</code></pre>
+<pre><code class="language-bash">git log --oneline --follow -- src/services/auth.service.ts</code></pre>
 <div class="out">3f8a1c9 fix: reject expired refresh tokens
 9e2d4b7 feat(auth): add refresh token rotation
 c8d2f4a refactor: move auth into services/
@@ -721,7 +721,7 @@ c8d2f4a refactor: move auth into services/
 
 <h3>Tìm trong cây làm việc, không phải lịch sử</h3>
 <p>Câu hỏi khác, công cụ khác. <code>git grep</code> tìm trong nội dung <em>hiện tại</em>, nhưng nó hiểu Git — nên bỏ qua file bị <code>.gitignore</code> và tìm được trong mọi commit:</p>
-<pre><code>git grep <span class="tok-string">"refreshToken"</span>                 <span class="tok-comment"># trong cây làm việc, chỉ file được theo dõi</span>
+<pre><code class="language-bash">git grep <span class="tok-string">"refreshToken"</span>                 <span class="tok-comment"># trong cây làm việc, chỉ file được theo dõi</span>
 git grep -n <span class="tok-string">"refreshToken"</span> v1.4.0         <span class="tok-comment"># trong một bản phát hành cũ, không cần checkout</span>
 git grep -l <span class="tok-string">"TODO"</span> -- <span class="tok-string">'*.ts'</span>              <span class="tok-comment"># chỉ tên file, chỉ TypeScript</span>
 git grep -c <span class="tok-string">"console.log"</span>                <span class="tok-comment"># đếm theo từng file</span></code></pre>
@@ -784,14 +784,14 @@ ${slide('git-02', 13, 'bisect: mỗi câu trả lời vứt đi một nửa')}
 <p>Each answer throws away half the remaining history. That is why bisect scales to the Linux kernel and why it is worth learning properly.</p>
 
 <h3>The manual session</h3>
-<pre><code><span class="tok-comment"># 1. Start, and tell Git the two ends of the range.</span>
+<pre><code class="language-bash"><span class="tok-comment"># 1. Start, and tell Git the two ends of the range.</span>
 git bisect start
 git bisect bad                 <span class="tok-comment"># HEAD is broken</span>
 git bisect good v1.4.0         <span class="tok-comment"># this tag definitely worked</span></code></pre>
 <div class="out">Bisecting: 512 revisions left to test after this (roughly 9 steps)
 [7b3e9d1a…] refactor(api): extract pagination into a helper</div>
 <p>Git has checked out the midpoint. Now do whatever proves the bug present or absent — run the app, run one test, click the button — and answer:</p>
-<pre><code>npm test -- auth.test.ts       <span class="tok-comment"># or however you check</span>
+<pre><code class="language-bash">npm test -- auth.test.ts       <span class="tok-comment"># or however you check</span>
 git bisect good                <span class="tok-comment"># …or: git bisect bad</span></code></pre>
 <div class="out">Bisecting: 255 revisions left to test after this (roughly 8 steps)
 [9e2d4b70…] feat(auth): add refresh token rotation</div>
@@ -804,13 +804,13 @@ Date:   Thu Aug 21 14:20:00 2026 +0700
     fix: reject expired refresh tokens on /auth/refresh
 
  src/services/auth.service.ts | 14 ++++++++++----</div>
-<pre><code>git bisect reset               <span class="tok-comment"># ALWAYS finish with this — back to where you started</span></code></pre>
+<pre><code class="language-bash">git bisect reset               <span class="tok-comment"># ALWAYS finish with this — back to where you started</span></code></pre>
 <div class="callout warn">Forgetting <code>git bisect reset</code> leaves you on a detached HEAD in the middle of history. Everything looks wrong, your editor shows old code, and the next <code>git commit</code> lands somewhere nobody will find. If a session ever goes sideways, <code>git bisect reset</code> is always safe.</div>
 
 <h3>Automating it: git bisect run</h3>
 ${slide('git-02', 14, 'git bisect run và mã thoát')}
 <p>If you can express "is the bug present?" as a command that exits 0 for good and non-zero for bad, Git does the whole search unattended:</p>
-<pre><code>git bisect start HEAD v1.4.0            <span class="tok-comment"># bad first, then good — same as the two commands</span>
+<pre><code class="language-bash">git bisect start HEAD v1.4.0            <span class="tok-comment"># bad first, then good — same as the two commands</span>
 git bisect run npm test -- auth.test.ts</code></pre>
 <div class="out">running 'npm test' '--' 'auth.test.ts'
 …
@@ -818,23 +818,23 @@ git bisect run npm test -- auth.test.ts</code></pre>
 bisect found first bad commit</div>
 <p>Ten builds and ten test runs, with no human in the loop. For a bug you can reproduce in a script, this is the single highest-leverage command in Git.</p>
 <p>When there is no test yet, write a throwaway one — it does not need to be pretty, only to exit with the right code:</p>
-<pre><code><span class="tok-comment">#!/usr/bin/env bash</span>
+<pre><code class="language-javascript"><span class="tok-comment">#!/usr/bin/env bash</span>
 <span class="tok-comment"># /tmp/check.sh — exit 0 = good, 1 = bad, 125 = cannot test this commit</span>
 npm ci --silent || <span class="tok-keyword">exit</span> 125          <span class="tok-comment"># deps broken here → skip, do not judge</span>
 npm run build --silent || <span class="tok-keyword">exit</span> 125    <span class="tok-comment"># does not compile → skip</span>
 node -e <span class="tok-string">"const {refreshToken} = require('./dist/auth'); process.exit(refreshToken('expired') ? 1 : 0)"</span></code></pre>
-<pre><code>chmod +x /tmp/check.sh
+<pre><code class="language-bash">chmod +x /tmp/check.sh
 git bisect start HEAD v1.4.0
 git bisect run /tmp/check.sh</code></pre>
 <div class="callout ok">Exit code <strong>125</strong> is special: it means "this commit cannot be tested" and Git skips it instead of treating it as good or bad. Use it for commits that do not build — otherwise a broken build gets recorded as "bad" and bisect blames the wrong commit entirely.</div>
 
 <h3>Commits you cannot judge</h3>
-<pre><code>git bisect skip                 <span class="tok-comment"># this one: does not build / cannot reproduce</span>
+<pre><code class="language-bash">git bisect skip                 <span class="tok-comment"># this one: does not build / cannot reproduce</span>
 git bisect skip v1.4.2..v1.4.5  <span class="tok-comment"># skip a whole known-broken range</span></code></pre>
 <p>With enough skips Git may end with several candidates rather than one. That is still a huge win: five commits to read instead of a thousand.</p>
 
 <h3>Useful extras</h3>
-<pre><code>git bisect log &gt; /tmp/bisect.log   <span class="tok-comment"># save the session (paste it into the bug report)</span>
+<pre><code class="language-bash">git bisect log &gt; /tmp/bisect.log   <span class="tok-comment"># save the session (paste it into the bug report)</span>
 git bisect replay /tmp/bisect.log  <span class="tok-comment"># restore it, or hand it to a colleague</span>
 git bisect visualize               <span class="tok-comment"># show the remaining range in gitk / log --graph</span>
 git bisect terms --term-old=fast --term-new=slow   <span class="tok-comment"># rename good/bad for perf hunts</span></code></pre>
@@ -904,14 +904,14 @@ ${slide('git-02', 13, 'bisect: mỗi câu trả lời vứt đi một nửa')}
 <p>Mỗi câu trả lời vứt đi một nửa lịch sử còn lại. Vì thế bisect dùng được cho cả nhân Linux, và vì thế nó đáng học cho tử tế.</p>
 
 <h3>Phiên làm thủ công</h3>
-<pre><code><span class="tok-comment"># 1. Bắt đầu, và nói cho Git biết hai đầu của khoảng.</span>
+<pre><code class="language-bash"><span class="tok-comment"># 1. Bắt đầu, và nói cho Git biết hai đầu của khoảng.</span>
 git bisect start
 git bisect bad                 <span class="tok-comment"># HEAD đang hỏng</span>
 git bisect good v1.4.0         <span class="tok-comment"># tag này chắc chắn từng chạy được</span></code></pre>
 <div class="out">Bisecting: 512 revisions left to test after this (roughly 9 steps)
 [7b3e9d1a…] refactor(api): extract pagination into a helper</div>
 <p>Git đã checkout điểm giữa. Giờ hãy làm bất cứ điều gì chứng minh lỗi có hay không — chạy ứng dụng, chạy một test, bấm cái nút — rồi trả lời:</p>
-<pre><code>npm test -- auth.test.ts       <span class="tok-comment"># hoặc bất cứ cách nào bạn kiểm</span>
+<pre><code class="language-bash">npm test -- auth.test.ts       <span class="tok-comment"># hoặc bất cứ cách nào bạn kiểm</span>
 git bisect good                <span class="tok-comment"># …hoặc: git bisect bad</span></code></pre>
 <div class="out">Bisecting: 255 revisions left to test after this (roughly 8 steps)
 [9e2d4b70…] feat(auth): add refresh token rotation</div>
@@ -924,13 +924,13 @@ Date:   Thu Aug 21 14:20:00 2026 +0700
     fix: reject expired refresh tokens on /auth/refresh
 
  src/services/auth.service.ts | 14 ++++++++++----</div>
-<pre><code>git bisect reset               <span class="tok-comment"># LUÔN kết thúc bằng lệnh này — trở lại chỗ bạn đứng lúc đầu</span></code></pre>
+<pre><code class="language-bash">git bisect reset               <span class="tok-comment"># LUÔN kết thúc bằng lệnh này — trở lại chỗ bạn đứng lúc đầu</span></code></pre>
 <div class="callout warn">Quên <code>git bisect reset</code> sẽ để bạn nằm lại ở một HEAD lìa cành giữa lịch sử. Mọi thứ trông đều sai, trình soạn thảo hiện mã cũ, và lệnh <code>git commit</code> kế tiếp rơi vào một chỗ không ai tìm ra. Nếu một phiên có đi chệch hướng, <code>git bisect reset</code> lúc nào cũng an toàn.</div>
 
 <h3>Tự động hoá: git bisect run</h3>
 ${slide('git-02', 14, 'git bisect run và mã thoát')}
 <p>Nếu bạn diễn đạt được câu "lỗi có ở đây không?" thành một lệnh trả 0 khi tốt và khác 0 khi hỏng, Git chạy cả cuộc tìm mà không cần người:</p>
-<pre><code>git bisect start HEAD v1.4.0            <span class="tok-comment"># bad trước, rồi good — như hai lệnh ở trên</span>
+<pre><code class="language-bash">git bisect start HEAD v1.4.0            <span class="tok-comment"># bad trước, rồi good — như hai lệnh ở trên</span>
 git bisect run npm test -- auth.test.ts</code></pre>
 <div class="out">running 'npm test' '--' 'auth.test.ts'
 …
@@ -938,23 +938,23 @@ git bisect run npm test -- auth.test.ts</code></pre>
 bisect found first bad commit</div>
 <p>Mười lần dựng và mười lần chạy test, không có người ngồi canh. Với một lỗi bạn tái hiện được bằng script, đây là lệnh có đòn bẩy lớn nhất trong Git.</p>
 <p>Khi chưa có test nào, hãy viết một cái vứt đi — nó không cần đẹp, chỉ cần thoát ra với đúng mã:</p>
-<pre><code><span class="tok-comment">#!/usr/bin/env bash</span>
+<pre><code class="language-javascript"><span class="tok-comment">#!/usr/bin/env bash</span>
 <span class="tok-comment"># /tmp/check.sh — thoát 0 = tốt, 1 = hỏng, 125 = không kiểm được commit này</span>
 npm ci --silent || <span class="tok-keyword">exit</span> 125          <span class="tok-comment"># thư viện hỏng ở đây → bỏ qua, đừng phán xét</span>
 npm run build --silent || <span class="tok-keyword">exit</span> 125    <span class="tok-comment"># không biên dịch được → bỏ qua</span>
 node -e <span class="tok-string">"const {refreshToken} = require('./dist/auth'); process.exit(refreshToken('expired') ? 1 : 0)"</span></code></pre>
-<pre><code>chmod +x /tmp/check.sh
+<pre><code class="language-bash">chmod +x /tmp/check.sh
 git bisect start HEAD v1.4.0
 git bisect run /tmp/check.sh</code></pre>
 <div class="callout ok">Mã thoát <strong>125</strong> là đặc biệt: nó nghĩa là "commit này không kiểm được", và Git bỏ qua nó thay vì coi là tốt hay hỏng. Hãy dùng nó cho những commit không dựng được — nếu không, một bản dựng hỏng bị ghi nhận là "bad" và bisect sẽ đổ oan cho một commit hoàn toàn khác.</div>
 
 <h3>Những commit bạn không phán xét được</h3>
-<pre><code>git bisect skip                 <span class="tok-comment"># cái này: không dựng được / không tái hiện được</span>
+<pre><code class="language-bash">git bisect skip                 <span class="tok-comment"># cái này: không dựng được / không tái hiện được</span>
 git bisect skip v1.4.2..v1.4.5  <span class="tok-comment"># bỏ qua cả một khoảng đã biết là hỏng</span></code></pre>
 <p>Với đủ nhiều lần bỏ qua, Git có thể kết thúc với vài ứng viên thay vì một. Đó vẫn là một thắng lợi lớn: đọc năm commit thay vì một nghìn.</p>
 
 <h3>Vài thứ hữu ích thêm</h3>
-<pre><code>git bisect log &gt; /tmp/bisect.log   <span class="tok-comment"># lưu lại phiên (dán vào báo cáo lỗi)</span>
+<pre><code class="language-bash">git bisect log &gt; /tmp/bisect.log   <span class="tok-comment"># lưu lại phiên (dán vào báo cáo lỗi)</span>
 git bisect replay /tmp/bisect.log  <span class="tok-comment"># khôi phục nó, hoặc chuyển cho đồng nghiệp</span>
 git bisect visualize               <span class="tok-comment"># xem khoảng còn lại trong gitk / log --graph</span>
 git bisect terms --term-old=fast --term-new=slow   <span class="tok-comment"># đổi tên good/bad khi săn hiệu năng</span></code></pre>
@@ -1026,19 +1026,19 @@ done</code></pre>
 
 <h3>Step 1 — Find the code, not the commit (git grep)</h3>
 <p>Before history, find the mechanism. <code>git grep</code> over tracked files only, so no time is wasted in <code>node_modules/</code>:</p>
-<pre><code>git grep -n <span class="tok-string">"expiresIn\\|ignoreExpiration\\|JWT_EXPIRES"</span> -- <span class="tok-string">'src/**/*.ts'</span></code></pre>
+<pre><code class="language-bash">git grep -n <span class="tok-string">"expiresIn\\|ignoreExpiration\\|JWT_EXPIRES"</span> -- <span class="tok-string">'src/**/*.ts'</span></code></pre>
 <div class="out">src/config/env.ts:41:  JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN ?? '24h',
 src/services/auth.service.ts:23:    { expiresIn: config.JWT_EXPIRES_IN },
 src/services/auth.service.ts:48:    const payload = jwt.verify(token, SECRET, { ignoreExpiration: true });</div>
 <p>Line 48 is immediately suspicious: verification with <code>ignoreExpiration: true</code>. But suspicion is not evidence — the flag may be deliberate, with the expiry checked somewhere else. History will say.</p>
 
 <h3>Step 2 — Who wrote that line, and why (git blame → git show)</h3>
-<pre><code>git blame -w -C -L 44,52 -- src/services/auth.service.ts</code></pre>
+<pre><code class="language-bash">git blame -w -C -L 44,52 -- src/services/auth.service.ts</code></pre>
 <div class="out">7b3e9d1a (Tran Thi Binh 2026-06-14 09:12:03 +0700 44) export async function refreshToken(token: string) {
 c4a8f2e1 (Nguyen Van An  2026-07-02 16:41:55 +0700 48)   const payload = jwt.verify(token, SECRET, { ignoreExpiration: true });
 7b3e9d1a (Tran Thi Binh 2026-06-14 09:12:03 +0700 49)   const user = await prisma.user.findUnique(…</div>
 <p>The flag arrived on 2 July in <code>c4a8f2e1</code>, later than the surrounding function. Read that commit:</p>
-<pre><code>git show c4a8f2e1</code></pre>
+<pre><code class="language-bash">git show c4a8f2e1</code></pre>
 <div class="out">commit c4a8f2e1…
     fix(auth): add /auth/refresh so 24h sessions stop dying silently
 
@@ -1051,12 +1051,12 @@ c4a8f2e1 (Nguyen Van An  2026-07-02 16:41:55 +0700 48)   const payload = jwt.ver
 <h3>Step 3 — A dead end worth showing (git log on the file)</h3>
 ${slide('git-02', 16, 'Hai ngã cụt và đường thu hẹp')}
 <p>The instinct now is to read everything that touched the file:</p>
-<pre><code>git log --oneline -- src/services/auth.service.ts | wc -l</code></pre>
+<pre><code class="language-bash">git log --oneline -- src/services/auth.service.ts | wc -l</code></pre>
 <div class="out">147</div>
 <p>147 commits. Too many, and most are unrelated — renames, logging, formatting. This is where people give up and start guessing. Narrow instead of browsing.</p>
 
 <h3>Step 4 — When was the lifetime last changed? (the pickaxe)</h3>
-<pre><code>git log -S<span class="tok-string">"JWT_EXPIRES_IN"</span> --oneline --all</code></pre>
+<pre><code class="language-bash">git log -S<span class="tok-string">"JWT_EXPIRES_IN"</span> --oneline --all</code></pre>
 <div class="out">e91f4a7 chore(config): default JWT_EXPIRES_IN to 24h
 c4a8f2e fix(auth): add /auth/refresh so 24h sessions stop dying silently
 2b7d0c5 feat(auth): read token lifetime from env instead of hard-coding</div>
@@ -1064,10 +1064,10 @@ c4a8f2e fix(auth): add /auth/refresh so 24h sessions stop dying silently
 
 <h3>Step 5 — Confirm with a test, then bisect</h3>
 <p>Write the smallest possible check. It must be deterministic — a flaky check makes bisect confidently wrong:</p>
-<pre><code><span class="tok-comment">// test/refresh-expiry.test.ts — mint a token that expired an hour ago</span>
+<pre><code class="language-javascript"><span class="tok-comment">// test/refresh-expiry.test.ts — mint a token that expired an hour ago</span>
 <span class="tok-keyword">const</span> old = jwt.sign({ sub: 1, exp: Math.floor(Date.now()/1000) - 3600 }, SECRET);
 <span class="tok-keyword">await</span> expect(refreshToken(old)).rejects.toThrow();   <span class="tok-comment">// must REJECT</span></code></pre>
-<pre><code>npx vitest run test/refresh-expiry.test.ts     <span class="tok-comment"># fails on HEAD → the bug is real</span>
+<pre><code class="language-bash">npx vitest run test/refresh-expiry.test.ts     <span class="tok-comment"># fails on HEAD → the bug is real</span>
 git stash                                       <span class="tok-comment"># keep the test out of the checkouts</span>
 git bisect start HEAD v1.3.0
 git bisect run sh -c <span class="tok-string">"git stash pop || true; npx vitest run test/refresh-expiry.test.ts; r=\$?; git stash -u; exit \$r"</span></code></pre>
@@ -1079,12 +1079,12 @@ git bisect run sh -c <span class="tok-string">"git stash pop || true; npx vitest
 
 <h3>Step 6 — The second dead end: blaming the config</h3>
 <p>A plausible competing theory: someone changed <code>JWT_EXPIRES_IN</code> on the server. Check whether the code could even express that:</p>
-<pre><code>git log -p -1 e91f4a7 -- src/config/env.ts | head -20</code></pre>
+<pre><code class="language-bash">git log -p -1 e91f4a7 -- src/config/env.ts | head -20</code></pre>
 <div class="out">+  JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN ?? '24h',</div>
 <p>The value comes from the environment, so the repository cannot answer it — that is a question for the server, not for Git. Worth ruling out explicitly rather than leaving it as a nagging maybe. <strong>Knowing which questions Git cannot answer is part of using it well.</strong></p>
 
 <h3>Step 7 — Write the fix, and the message the next person needs</h3>
-<pre><code>git commit -m <span class="tok-string">"fix: reject expired refresh tokens on /auth/refresh"</span> -m <span class="tok-string">"c4a8f2e added ignoreExpiration so an expired token could be exchanged
+<pre><code class="language-bash">git commit -m <span class="tok-string">"fix: reject expired refresh tokens on /auth/refresh"</span> -m <span class="tok-string">"c4a8f2e added ignoreExpiration so an expired token could be exchanged
 for a fresh one, but the promised re-check only verified the account,
 never exp. A six-week-old token therefore still minted access tokens.
 
@@ -1154,19 +1154,19 @@ done</code></pre>
 
 <h3>Bước 1 — Tìm mã, chưa tìm commit (git grep)</h3>
 <p>Trước lịch sử, hãy tìm cơ chế. <code>git grep</code> chỉ chạy trên file được theo dõi, nên không phí thời gian trong <code>node_modules/</code>:</p>
-<pre><code>git grep -n <span class="tok-string">"expiresIn\\|ignoreExpiration\\|JWT_EXPIRES"</span> -- <span class="tok-string">'src/**/*.ts'</span></code></pre>
+<pre><code class="language-bash">git grep -n <span class="tok-string">"expiresIn\\|ignoreExpiration\\|JWT_EXPIRES"</span> -- <span class="tok-string">'src/**/*.ts'</span></code></pre>
 <div class="out">src/config/env.ts:41:  JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN ?? '24h',
 src/services/auth.service.ts:23:    { expiresIn: config.JWT_EXPIRES_IN },
 src/services/auth.service.ts:48:    const payload = jwt.verify(token, SECRET, { ignoreExpiration: true });</div>
 <p>Dòng 48 lập tức đáng ngờ: xác minh với <code>ignoreExpiration: true</code>. Nhưng nghi ngờ chưa phải bằng chứng — cái cờ đó có thể là cố ý, còn hạn dùng được kiểm ở chỗ khác. Lịch sử sẽ nói.</p>
 
 <h3>Bước 2 — Ai viết dòng đó, và vì sao (git blame → git show)</h3>
-<pre><code>git blame -w -C -L 44,52 -- src/services/auth.service.ts</code></pre>
+<pre><code class="language-bash">git blame -w -C -L 44,52 -- src/services/auth.service.ts</code></pre>
 <div class="out">7b3e9d1a (Tran Thi Binh 2026-06-14 09:12:03 +0700 44) export async function refreshToken(token: string) {
 c4a8f2e1 (Nguyen Van An  2026-07-02 16:41:55 +0700 48)   const payload = jwt.verify(token, SECRET, { ignoreExpiration: true });
 7b3e9d1a (Tran Thi Binh 2026-06-14 09:12:03 +0700 49)   const user = await prisma.user.findUnique(…</div>
 <p>Cái cờ xuất hiện ngày 2 tháng 7 trong <code>c4a8f2e1</code>, muộn hơn phần hàm bao quanh. Đọc commit đó:</p>
-<pre><code>git show c4a8f2e1</code></pre>
+<pre><code class="language-bash">git show c4a8f2e1</code></pre>
 <div class="out">commit c4a8f2e1…
     fix(auth): add /auth/refresh so 24h sessions stop dying silently
 
@@ -1179,12 +1179,12 @@ c4a8f2e1 (Nguyen Van An  2026-07-02 16:41:55 +0700 48)   const payload = jwt.ver
 <h3>Bước 3 — Một ngã cụt đáng nêu ra (git log trên file)</h3>
 ${slide('git-02', 16, 'Hai ngã cụt và đường thu hẹp')}
 <p>Bản năng lúc này là đọc mọi thứ từng chạm vào file:</p>
-<pre><code>git log --oneline -- src/services/auth.service.ts | wc -l</code></pre>
+<pre><code class="language-bash">git log --oneline -- src/services/auth.service.ts | wc -l</code></pre>
 <div class="out">147</div>
 <p>147 commit. Quá nhiều, và phần lớn không liên quan — đổi tên, thêm log, định dạng lại. Đây là chỗ người ta bỏ cuộc và bắt đầu đoán. Hãy THU HẸP thay vì lướt.</p>
 
 <h3>Bước 4 — Tuổi thọ token bị đổi lần cuối khi nào? (cái cuốc chim)</h3>
-<pre><code>git log -S<span class="tok-string">"JWT_EXPIRES_IN"</span> --oneline --all</code></pre>
+<pre><code class="language-bash">git log -S<span class="tok-string">"JWT_EXPIRES_IN"</span> --oneline --all</code></pre>
 <div class="out">e91f4a7 chore(config): default JWT_EXPIRES_IN to 24h
 c4a8f2e fix(auth): add /auth/refresh so 24h sessions stop dying silently
 2b7d0c5 feat(auth): read token lifetime from env instead of hard-coding</div>
@@ -1192,10 +1192,10 @@ c4a8f2e fix(auth): add /auth/refresh so 24h sessions stop dying silently
 
 <h3>Bước 5 — Xác nhận bằng một test, rồi bisect</h3>
 <p>Viết phép kiểm nhỏ nhất có thể. Nó phải tất định — một phép kiểm chớp nháy làm bisect sai một cách đầy tự tin:</p>
-<pre><code><span class="tok-comment">// test/refresh-expiry.test.ts — đúc một token đã hết hạn một giờ trước</span>
+<pre><code class="language-javascript"><span class="tok-comment">// test/refresh-expiry.test.ts — đúc một token đã hết hạn một giờ trước</span>
 <span class="tok-keyword">const</span> old = jwt.sign({ sub: 1, exp: Math.floor(Date.now()/1000) - 3600 }, SECRET);
 <span class="tok-keyword">await</span> expect(refreshToken(old)).rejects.toThrow();   <span class="tok-comment">// phải TỪ CHỐI</span></code></pre>
-<pre><code>npx vitest run test/refresh-expiry.test.ts     <span class="tok-comment"># hỏng trên HEAD → lỗi là thật</span>
+<pre><code class="language-bash">npx vitest run test/refresh-expiry.test.ts     <span class="tok-comment"># hỏng trên HEAD → lỗi là thật</span>
 git stash                                       <span class="tok-comment"># giữ file test ra khỏi các lần checkout</span>
 git bisect start HEAD v1.3.0
 git bisect run sh -c <span class="tok-string">"git stash pop || true; npx vitest run test/refresh-expiry.test.ts; r=\$?; git stash -u; exit \$r"</span></code></pre>
@@ -1207,12 +1207,12 @@ git bisect run sh -c <span class="tok-string">"git stash pop || true; npx vitest
 
 <h3>Bước 6 — Ngã cụt thứ hai: đổ cho cấu hình</h3>
 <p>Một giả thuyết cạnh tranh nghe rất hợp lý: ai đó đã đổi <code>JWT_EXPIRES_IN</code> trên máy chủ. Hãy kiểm xem mã có diễn đạt nổi điều đó không:</p>
-<pre><code>git log -p -1 e91f4a7 -- src/config/env.ts | head -20</code></pre>
+<pre><code class="language-bash">git log -p -1 e91f4a7 -- src/config/env.ts | head -20</code></pre>
 <div class="out">+  JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN ?? '24h',</div>
 <p>Giá trị đến từ môi trường, nên kho mã không trả lời được — đó là câu hỏi dành cho máy chủ, không dành cho Git. Đáng loại trừ một cách tường minh thay vì để nó lởn vởn như một cái "có thể". <strong>Biết câu hỏi nào Git KHÔNG trả lời được cũng là một phần của việc dùng Git giỏi.</strong></p>
 
 <h3>Bước 7 — Viết bản vá, và lời nhắn mà người sau cần</h3>
-<pre><code>git commit -m <span class="tok-string">"fix: tu choi refresh token da het han o /auth/refresh"</span> -m <span class="tok-string">"c4a8f2e them ignoreExpiration de mot token het han doi duoc token moi,
+<pre><code class="language-bash">git commit -m <span class="tok-string">"fix: tu choi refresh token da het han o /auth/refresh"</span> -m <span class="tok-string">"c4a8f2e them ignoreExpiration de mot token het han doi duoc token moi,
 nhung buoc kiem lai duoc hua hen chi xac minh tai khoan, chua bao gio
 kiem exp. Mot token sau tuan tuoi vi the van duc ra access token.
 

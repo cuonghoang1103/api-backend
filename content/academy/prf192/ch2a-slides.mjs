@@ -128,7 +128,7 @@ export default {
 <li><strong>Question 1 — "Where is it?" → its address</strong> — obtained with the <code>&amp;</code> operator, e.g. <code>printf("%p", (void*)&amp;a);</code>. Slide 28 of the deck uses this.</li>
 <li><strong>Question 2 — "How many bytes?" → the data type</strong> — obtained with <code>sizeof</code>, e.g. <code>sizeof(int)</code> → 4 in a 32/64-bit environment.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     char a = 9;          /* 0000 1001 */
@@ -147,7 +147,7 @@ int main(void) {
 <li><strong>Câu hỏi 1 — "Nó ở đâu?" → địa chỉ</strong> — lấy bằng toán tử <code>&amp;</code>, ví dụ <code>printf("%p", (void*)&amp;a);</code>. Slide 28 của deck dùng đúng cái này.</li>
 <li><strong>Câu hỏi 2 — "Mấy byte?" → kiểu dữ liệu</strong> — lấy bằng <code>sizeof</code>, ví dụ <code>sizeof(int)</code> → 4 trên môi trường 32/64-bit.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     char a = 9;          /* 0000 1001 */
@@ -187,7 +187,7 @@ int main(void) {
 <li><strong>The word "arithmetic" is the point</strong> — these four types can go into the ALU. <code>char</code> qualifying as arithmetic is exactly why <code>'A' + 1</code> is legal C and equals 66 (slide 19).</li>
 <li><strong>Bytes vs range, quickly</strong> — 1 byte = 8 bits = 2⁸ = 256 distinct patterns; split around zero that is −128…127. 4 bytes = 32 bits = 2³² ≈ 4.29 billion patterns, i.e. roughly ±2.1 billion.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     char  grade = 'A';   /* 1 byte, ASCII 65   */
@@ -205,7 +205,7 @@ int main(void) {
 <li><strong>Chữ "số học" (arithmetic) mới là điểm mấu chốt</strong> — bốn kiểu này đưa vào ALU được. Việc <code>char</code> được xếp vào kiểu số học chính là lý do <code>'A' + 1</code> là C hợp lệ và bằng 66 (slide 19).</li>
 <li><strong>Byte và miền giá trị, tính nhanh</strong> — 1 byte = 8 bit = 2⁸ = 256 mẫu bit khác nhau; chia quanh số 0 thì ra −128…127. 4 byte = 32 bit = 2³² ≈ 4,29 tỉ mẫu, tức khoảng ±2,1 tỉ.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     char  grade = 'A';   /* 1 byte, ma ASCII 65 */
@@ -225,7 +225,7 @@ int main(void) {
 <li><strong>Which one to use</strong> — <code>double</code> by default. It is the type of every un-suffixed real literal in C (slide 35), the return type of <code>&lt;math.h&gt;</code> functions, and the type <code>scanf("%lf")</code> expects. Use <code>float</code> only when memory really matters.</li>
 <li><strong>The consequence students meet first</strong> — <code>0.1 + 0.2 == 0.3</code> is <strong>false</strong> in C, because 0.1 has no exact binary representation, exactly as 1/3 has no exact decimal one. Compare reals with <code>fabs(a-b) &lt; 1e-9</code>, never with <code>==</code>.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     float  f = 123456789.0f;   /* only ~7 digits survive */
@@ -243,7 +243,7 @@ int main(void) {
 <li><strong>Nên dùng cái nào</strong> — mặc định là <code>double</code>. Nó là kiểu của mọi literal số thực không có hậu tố trong C (slide 35), là kiểu trả về của các hàm <code>&lt;math.h&gt;</code>, và là kiểu mà <code>scanf("%lf")</code> chờ đợi. Chỉ dùng <code>float</code> khi bộ nhớ thật sự đáng lo.</li>
 <li><strong>Hệ quả sinh viên gặp sớm nhất</strong> — <code>0.1 + 0.2 == 0.3</code> cho kết quả <strong>sai</strong> trong C, vì 0,1 không biểu diễn chính xác được trong nhị phân, y như 1/3 không viết chính xác được trong hệ thập phân. So sánh số thực bằng <code>fabs(a-b) &lt; 1e-9</code>, đừng bao giờ dùng <code>==</code>.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     float  f = 123456789.0f;   /* chi ~7 chu so song sot */
@@ -264,7 +264,7 @@ int main(void) {
 <li><strong>The slide's note on <code>long double</code></strong> — Standard C specifies no minimum bit count for it, only that it is <em>no fewer bits than a <code>double</code></em>. That is a deliberately weak guarantee, expanded on slide 11.</li>
 <li><strong>They are qualifiers, not new types</strong> — <code>short</code> alone means <code>short int</code>, <code>long long</code> alone means <code>long long int</code>. The word <code>int</code> is optional.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     short     s = 32767;
@@ -285,7 +285,7 @@ int main(void) {
 <li><strong>Ghi chú của slide về <code>long double</code></strong> — chuẩn C không quy định số bit tối thiểu cho nó, chỉ nói nó <em>không ít bit hơn một <code>double</code></em>. Đó là một bảo đảm cố tình để yếu, slide 11 nói kỹ hơn.</li>
 <li><strong>Chúng là bổ ngữ, không phải kiểu mới</strong> — <code>short</code> đứng một mình nghĩa là <code>short int</code>, <code>long long</code> đứng một mình nghĩa là <code>long long int</code>. Chữ <code>int</code> có thể lược.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     short     s = 32767;
@@ -307,7 +307,7 @@ int main(void) {
 <li><strong>Its own format specifiers</strong> — <code>%Lf</code> in <code>printf</code> and <code>%Lf</code> in <code>scanf</code>, and literals need the <code>L</code> suffix: <code>3.14159265358979L</code>. Forget the <code>L</code> and the literal is computed as a plain <code>double</code> first, throwing away the precision you were trying to gain.</li>
 <li><strong>The generalisable lesson</strong> — C's type sizes are a <em>contract with minimums</em>, not fixed numbers. Any program that assumes exact sizes breaks when moved to another compiler; that is what portability means in this course.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     long double x = 1.0L / 3.0L;      /* note both L suffixes */
@@ -324,7 +324,7 @@ int main(void) {
 <li><strong>Nó có ký tự định dạng riêng</strong> — <code>%Lf</code> trong <code>printf</code> và <code>%Lf</code> trong <code>scanf</code>, còn literal phải có hậu tố <code>L</code>: <code>3.14159265358979L</code>. Quên chữ <code>L</code> thì literal được tính như <code>double</code> thường trước đã, vứt đi đúng cái độ chính xác bạn định giành lấy.</li>
 <li><strong>Bài học tổng quát hơn</strong> — kích thước kiểu trong C là một <em>giao kèo có mức tối thiểu</em>, không phải con số cố định. Chương trình nào giả định kích thước chính xác thì chuyển sang trình biên dịch khác là vỡ; đó chính là nghĩa của "tính khả chuyển" trong môn này.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     long double x = 1.0L / 3.0L;      /* chu y ca hai hau to L */
@@ -343,7 +343,7 @@ int main(void) {
 <li><strong>Why it beats a magic number</strong> — <code>area = 3.14159 * r * r;</code> repeated ten times is ten chances to mistype a digit. <code>const double PI = 3.14159;</code> gives the value one name, one definition, one place to fix.</li>
 <li><strong>It qualifies <em>any</em> type</strong> — <code>const int</code>, <code>const char</code>, <code>const double</code>, and later <code>const char *</code> for read-only strings. The rule never changes: whatever is <code>const</code> cannot appear on the left of <code>=</code>.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     const double PI   = 3.14159;
@@ -364,7 +364,7 @@ int main(void) {
 <li><strong>Vì sao nó hơn số ma (magic number)</strong> — viết <code>area = 3.14159 * r * r;</code> mười lần là mười cơ hội gõ nhầm một chữ số. <code>const double PI = 3.14159;</code> cho giá trị đó một cái tên, một định nghĩa, một chỗ để sửa.</li>
 <li><strong>Nó gắn được cho <em>mọi</em> kiểu</strong> — <code>const int</code>, <code>const char</code>, <code>const double</code>, và sau này <code>const char *</code> cho chuỗi chỉ đọc. Luật không đổi: cái gì đã <code>const</code> thì không được đứng bên trái dấu <code>=</code>.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     const double PI   = 3.14159;
@@ -521,7 +521,7 @@ int main(void) {
 <li><strong>Connection to Exercise 2</strong> — this is exactly why <code>1111 0101</code> has two correct answers, −11 and 245, and the question must state which type it means.</li>
 <li><strong>The famous danger — wrap-around</strong> — unsigned arithmetic never goes negative; it wraps. <code>0u - 1</code> is 4 294 967 295, not −1. Any loop written as <code>for (unsigned i = n; i &gt;= 0; i--)</code> is <strong>infinite</strong>, because an unsigned value is always ≥ 0.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     unsigned char u = 245;   /* 1111 0101 */
@@ -540,7 +540,7 @@ int main(void) {
 <li><strong>Liên hệ với Exercise 2</strong> — đây đúng là lý do <code>1111 0101</code> có hai đáp án đều đúng, −11 và 245, và đề bắt buộc phải nói rõ nó hỏi kiểu nào.</li>
 <li><strong>Mối nguy nổi tiếng — quay vòng (wrap-around)</strong> — số học không dấu không bao giờ xuống âm; nó quay vòng. <code>0u - 1</code> ra 4.294.967.295, không phải −1. Mọi vòng lặp viết kiểu <code>for (unsigned i = n; i &gt;= 0; i--)</code> đều <strong>lặp vô tận</strong>, vì giá trị không dấu luôn ≥ 0.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     unsigned char u = 245;   /* 1111 0101 */
@@ -561,7 +561,7 @@ int main(void) {
 <li><strong>Why ASCII for this course</strong> — it is 7 bits, 0…127, fits in one <code>char</code>, and is the common ancestor every other encoding agrees with for its first 128 codes. Learn it once and the rest follows.</li>
 <li><strong>The consequence for Vietnamese</strong> — "ă", "ơ", "đ" are <em>not</em> in ASCII and do not fit in one <code>char</code>. In UTF-8 they take 2–3 bytes each, which is why <code>strlen</code> on a Vietnamese string returns more than the number of letters you see (Slot 16-18).</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     char c = 'A';
@@ -580,7 +580,7 @@ int main(void) {
 <li><strong>Vì sao môn này dùng ASCII</strong> — nó 7 bit, 0…127, lọt gọn trong một <code>char</code>, và là tổ tiên chung mà mọi bảng mã khác đều đồng ý ở 128 mã đầu. Học một lần là dùng được về sau.</li>
 <li><strong>Hệ quả với tiếng Việt</strong> — "ă", "ơ", "đ" <em>không</em> có trong ASCII và không lọt vào một <code>char</code>. Trong UTF-8 mỗi chữ chiếm 2–3 byte, đó là lý do <code>strlen</code> trên chuỗi tiếng Việt trả về số lớn hơn số chữ bạn nhìn thấy (Slot 16-18).</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     char c = 'A';
@@ -601,7 +601,7 @@ int main(void) {
 <li><strong>Codes 32–126 are printable</strong> — space, punctuation, digits, uppercase, more punctuation, lowercase. Note punctuation sits <em>between</em> the digit and letter blocks, which is why <code>'9' &lt; 'A'</code> is true but there is no clean arithmetic from one block to the next.</li>
 <li><strong>Why 7 bits</strong> — 2⁷ = 128 codes, so ASCII fits in a byte with one bit to spare. That spare bit is what "extended ASCII" tables (128–255) claimed, and where the encodings started disagreeing with each other.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     char c;
@@ -620,7 +620,7 @@ int main(void) {
 <li><strong>Mã 32–126 là ký tự in được</strong> — dấu cách, dấu câu, chữ số, chữ hoa, thêm dấu câu, chữ thường. Để ý dấu câu nằm <em>xen giữa</em> khối chữ số và khối chữ cái, nên <code>'9' &lt; 'A'</code> là đúng nhưng không có phép tính gọn gàng nào nhảy từ khối này sang khối kia.</li>
 <li><strong>Vì sao 7 bit</strong> — 2⁷ = 128 mã, nên ASCII lọt vào một byte và còn thừa một bit. Chính cái bit thừa đó bị các bảng "ASCII mở rộng" (128–255) trưng dụng, và đó là chỗ các bảng mã bắt đầu mâu thuẫn nhau.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     char c;
@@ -644,7 +644,7 @@ int main(void) {
 <li><strong>Number of pages (500)</strong> → <code>int</code> (or <code>short</code>, since no book reaches 32 767 pages). Use <code>int</code> unless you are storing millions of records.</li>
 </ul>
 <p class="nhan">Tasks 2 and 3 — declare, initialise, print</p>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     int       totalBooks   = 10000;
@@ -675,7 +675,7 @@ int main(void) {
 <li><strong>Số trang (500)</strong> → <code>int</code> (hoặc <code>short</code>, vì không cuốn nào tới 32.767 trang). Cứ dùng <code>int</code> trừ khi bạn lưu hàng triệu bản ghi.</li>
 </ul>
 <p class="nhan">Nhiệm vụ 2 và 3 — khai báo, khởi tạo, in ra</p>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 
 int main(void) {
     int       totalBooks   = 10000;
@@ -716,7 +716,7 @@ int main(void) {
 <li><strong>Do not hard-code these numbers</strong> — <code>&lt;limits.h&gt;</code> defines <code>CHAR_MIN</code>, <code>INT_MAX</code>, <code>LLONG_MAX</code> and <code>&lt;float.h&gt;</code> defines <code>DBL_MAX</code>, <code>FLT_DIG</code>. Those adapt to the compiler; your memory does not.</li>
 <li><strong>Connecting the deck</strong> — Exercise 2 overflowed because −219 is outside row 1; Exercise 3's book ID overflowed because it is outside row 5. Both errors are one glance at this table away from being avoided.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;limits.h&gt;
 
 int main(void) {
@@ -746,7 +746,7 @@ int main(void) {
 <li><strong>Đừng gõ cứng những con số này</strong> — <code>&lt;limits.h&gt;</code> định nghĩa <code>CHAR_MIN</code>, <code>INT_MAX</code>, <code>LLONG_MAX</code> và <code>&lt;float.h&gt;</code> định nghĩa <code>DBL_MAX</code>, <code>FLT_DIG</code>. Chúng tự thích nghi với trình biên dịch; trí nhớ của bạn thì không.</li>
 <li><strong>Nối lại cả deck</strong> — Exercise 2 tràn số vì −219 nằm ngoài dòng 1; mã sách của Exercise 3 tràn vì nó nằm ngoài dòng 5. Cả hai lỗi chỉ cách một cái liếc mắt vào bảng này.</li>
 </ul>
-<pre><code>#include &lt;stdio.h&gt;
+<pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;limits.h&gt;
 
 int main(void) {

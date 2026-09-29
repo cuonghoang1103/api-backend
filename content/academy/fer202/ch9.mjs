@@ -64,7 +64,7 @@ const EX20 = {
     `<span class="eyebrow">Chapter 9 · Exercise 20 · Slot 14 slide 13</span>
 <h2>Decouple your routes</h2>
 <p class="lead"><b>Goal:</b> keep routes maintainable by defining them per feature and composing them.</p>
-<pre><span class="hljs-comment">// routes.js — declare routes as data/JSX per feature</span>
+<pre><code class="language-javascript"><span class="hljs-comment">// routes.js — declare routes as data/JSX per feature</span>
 <span class="hljs-keyword">import</span> { <span class="hljs-title class_">Route</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react-router-dom&#x27;</span>;
 <span class="hljs-keyword">import</span> <span class="hljs-title class_">Home</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./Home&#x27;</span>;
 <span class="hljs-keyword">import</span> <span class="hljs-title class_">About</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./About&#x27;</span>;
@@ -86,12 +86,12 @@ const EX20 = {
       <span class="hljs-tag">&lt;<span class="hljs-name">Route</span> <span class="hljs-attr">path</span>=<span class="hljs-string">&quot;/&quot;</span> <span class="hljs-attr">element</span>=<span class="hljs-string">{</span>&lt;<span class="hljs-attr">Layout</span> /&gt;</span>}&gt;{routes}<span class="hljs-tag">&lt;/<span class="hljs-name">Route</span>&gt;</span>
     <span class="hljs-tag">&lt;/<span class="hljs-name">Routes</span>&gt;</span></span>
   );
-}</pre>
+}</code></pre>
 <div class="out"><b>Result:</b> each feature owns its routes; <code>&lt;Outlet /&gt;</code> renders the matched child inside the shared layout.</div>`,
     `<span class="eyebrow">Chương 9 · Exercise 20 · Slot 14 slide 13</span>
 <h2>Tách route của bạn</h2>
 <p class="lead"><b>Mục tiêu:</b> giữ route dễ bảo trì bằng cách khai theo tính năng rồi ghép lại.</p>
-<pre><span class="hljs-comment">// routes.js — khai route dạng dữ liệu/JSX theo tính năng</span>
+<pre><code class="language-javascript"><span class="hljs-comment">// routes.js — khai route dạng dữ liệu/JSX theo tính năng</span>
 <span class="hljs-keyword">import</span> { <span class="hljs-title class_">Route</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react-router-dom&#x27;</span>;
 <span class="hljs-keyword">import</span> <span class="hljs-title class_">Home</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./Home&#x27;</span>;
 <span class="hljs-keyword">import</span> <span class="hljs-title class_">About</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./About&#x27;</span>;
@@ -113,7 +113,7 @@ const EX20 = {
       <span class="hljs-tag">&lt;<span class="hljs-name">Route</span> <span class="hljs-attr">path</span>=<span class="hljs-string">&quot;/&quot;</span> <span class="hljs-attr">element</span>=<span class="hljs-string">{</span>&lt;<span class="hljs-attr">Layout</span> /&gt;</span>}&gt;{routes}<span class="hljs-tag">&lt;/<span class="hljs-name">Route</span>&gt;</span>
     <span class="hljs-tag">&lt;/<span class="hljs-name">Routes</span>&gt;</span></span>
   );
-}</pre>
+}</code></pre>
 <div class="out"><b>Kết quả:</b> mỗi tính năng sở hữu route của nó; <code>&lt;Outlet /&gt;</code> render con khớp bên trong layout chung.</div>`,
   ),
 };
@@ -126,7 +126,7 @@ const EX21 = {
   content: bi(
     `<span class="eyebrow">Chapter 9 · Exercise 21 · Slot 14 slide 16</span>
 <h2>Route params — a user detail page</h2>
-<pre><span class="hljs-keyword">const</span> users = [
+<pre><code class="language-javascript"><span class="hljs-keyword">const</span> users = [
   { <span class="hljs-attr">id</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">firstName</span>: <span class="hljs-string">&#x27;John&#x27;</span>, <span class="hljs-attr">lastName</span>: <span class="hljs-string">&#x27;Doe&#x27;</span>,      <span class="hljs-attr">age</span>: <span class="hljs-number">25</span> },
   { <span class="hljs-attr">id</span>: <span class="hljs-number">2</span>, <span class="hljs-attr">firstName</span>: <span class="hljs-string">&#x27;Mary&#x27;</span>, <span class="hljs-attr">lastName</span>: <span class="hljs-string">&#x27;Thompson&#x27;</span>, <span class="hljs-attr">age</span>: <span class="hljs-number">35</span> },
 ];
@@ -146,11 +146,11 @@ const EX21 = {
               : <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Not found<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span></span>;
 }
 
-<span class="hljs-comment">// routes: &lt;Route path=&quot;/users&quot; element={&lt;UserList/&gt;}/&gt;  and  path=&quot;/users/:id&quot; element={&lt;UserDetail/&gt;}</span></pre>
+<span class="hljs-comment">// routes: &lt;Route path=&quot;/users&quot; element={&lt;UserList/&gt;}/&gt;  and  path=&quot;/users/:id&quot; element={&lt;UserDetail/&gt;}</span></code></pre>
 <div class="pitfall"><b>Trap:</b> <code>useParams()</code> returns strings — <code>id</code> is <code>"1"</code>, not <code>1</code>. Convert with <code>Number(id)</code> before comparing to numeric ids.</div>`,
     `<span class="eyebrow">Chương 9 · Exercise 21 · Slot 14 slide 16</span>
 <h2>Route param — trang chi tiết user</h2>
-<pre><span class="hljs-keyword">const</span> users = [
+<pre><code class="language-javascript"><span class="hljs-keyword">const</span> users = [
   { <span class="hljs-attr">id</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">firstName</span>: <span class="hljs-string">&#x27;John&#x27;</span>, <span class="hljs-attr">lastName</span>: <span class="hljs-string">&#x27;Doe&#x27;</span>,      <span class="hljs-attr">age</span>: <span class="hljs-number">25</span> },
   { <span class="hljs-attr">id</span>: <span class="hljs-number">2</span>, <span class="hljs-attr">firstName</span>: <span class="hljs-string">&#x27;Mary&#x27;</span>, <span class="hljs-attr">lastName</span>: <span class="hljs-string">&#x27;Thompson&#x27;</span>, <span class="hljs-attr">age</span>: <span class="hljs-number">35</span> },
 ];
@@ -170,7 +170,7 @@ const EX21 = {
               : <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Không tìm thấy<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span></span>;
 }
 
-<span class="hljs-comment">// route: &lt;Route path=&quot;/users&quot; element={&lt;UserList/&gt;}/&gt;  và  path=&quot;/users/:id&quot; element={&lt;UserDetail/&gt;}</span></pre>
+<span class="hljs-comment">// route: &lt;Route path=&quot;/users&quot; element={&lt;UserList/&gt;}/&gt;  và  path=&quot;/users/:id&quot; element={&lt;UserDetail/&gt;}</span></code></pre>
 <div class="pitfall"><b>Bẫy:</b> <code>useParams()</code> trả về chuỗi — <code>id</code> là <code>"1"</code>, không phải <code>1</code>. Đổi bằng <code>Number(id)</code> trước khi so với id số.</div>`,
   ),
 };
@@ -183,7 +183,7 @@ const EX22 = {
   content: bi(
     `<span class="eyebrow">Chapter 9 · Exercise 22 · Slot 14 slide 19</span>
 <h2>Optional params &amp; navigating with Link</h2>
-<pre><span class="hljs-comment">// optional path param via nested routes</span>
+<pre><code class="language-javascript"><span class="hljs-comment">// optional path param via nested routes</span>
 &lt;<span class="hljs-title class_">Route</span> path=<span class="hljs-string">&quot;/users&quot;</span>&gt;
   <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Route</span> <span class="hljs-attr">index</span> <span class="hljs-attr">element</span>=<span class="hljs-string">{</span>&lt;<span class="hljs-attr">Users</span> /&gt;</span>} /&gt;</span>         <span class="hljs-comment">// /users</span>
   <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Route</span> <span class="hljs-attr">path</span>=<span class="hljs-string">&quot;:desc&quot;</span> <span class="hljs-attr">element</span>=<span class="hljs-string">{</span>&lt;<span class="hljs-attr">Users</span> /&gt;</span>} /&gt;</span>  <span class="hljs-comment">// /users/active</span>
@@ -199,12 +199,12 @@ const EX22 = {
       <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Sorting by {sort}<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
     <span class="hljs-tag">&lt;/&gt;</span></span>
   );
-}</pre>
+}</code></pre>
 <div class="callout"><span class="badge">★ Link vs a</span> <code>&lt;Link&gt;</code>/<code>&lt;NavLink&gt;</code> keep navigation client-side (no reload); <code>&lt;NavLink&gt;</code> also adds an <code>active</code> class to the current link for styling. A plain <code>&lt;a&gt;</code> would reload the whole app.</div>
 <div class="di-toi"><a class="link-card codelab" href="${CODELAB}" target="_blank" rel="noopener"><span class="lc-ico">⌨️</span><span class="lc-body"><span class="lc-title">Build the routes</span><span class="lc-sub">Params, query, Link — Code Lab.</span></span><span class="lc-cta">PRACTICE →</span></a></div>`,
     `<span class="eyebrow">Chương 9 · Exercise 22 · Slot 14 slide 19</span>
 <h2>Optional param &amp; điều hướng bằng Link</h2>
-<pre><span class="hljs-comment">// optional path param bằng nested route</span>
+<pre><code class="language-javascript"><span class="hljs-comment">// optional path param bằng nested route</span>
 &lt;<span class="hljs-title class_">Route</span> path=<span class="hljs-string">&quot;/users&quot;</span>&gt;
   <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Route</span> <span class="hljs-attr">index</span> <span class="hljs-attr">element</span>=<span class="hljs-string">{</span>&lt;<span class="hljs-attr">Users</span> /&gt;</span>} /&gt;</span>         <span class="hljs-comment">// /users</span>
   <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Route</span> <span class="hljs-attr">path</span>=<span class="hljs-string">&quot;:desc&quot;</span> <span class="hljs-attr">element</span>=<span class="hljs-string">{</span>&lt;<span class="hljs-attr">Users</span> /&gt;</span>} /&gt;</span>  <span class="hljs-comment">// /users/active</span>
@@ -220,7 +220,7 @@ const EX22 = {
       <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Đang sắp theo {sort}<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
     <span class="hljs-tag">&lt;/&gt;</span></span>
   );
-}</pre>
+}</code></pre>
 <div class="callout"><span class="badge">★ Link vs a</span> <code>&lt;Link&gt;</code>/<code>&lt;NavLink&gt;</code> giữ điều hướng phía client (không reload); <code>&lt;NavLink&gt;</code> còn thêm class <code>active</code> cho link hiện tại để tạo kiểu. Một <code>&lt;a&gt;</code> thuần sẽ reload cả app.</div>
 <div class="di-toi"><a class="link-card codelab" href="${CODELAB}" target="_blank" rel="noopener"><span class="lc-ico">⌨️</span><span class="lc-body"><span class="lc-title">Dựng các route</span><span class="lc-sub">Param, query, Link — Code Lab.</span></span><span class="lc-cta">LUYỆN TẬP →</span></a></div>`,
   ),

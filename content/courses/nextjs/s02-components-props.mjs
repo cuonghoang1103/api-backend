@@ -24,7 +24,7 @@ export default {
 
 <h3>Passing and receiving props</h3>
 <p>A parent passes props as JSX attributes; the child receives them as a single object, which you almost always destructure:</p>
-<pre><code>function Avatar({ src, alt }) {
+<pre><code class="language-typescript">function Avatar({ src, alt }) {
   return &lt;img src={src} alt={alt} /&gt;;
 }
 
@@ -46,7 +46,7 @@ function UserCard({ user }) {
 
 <h3>Props are read-only</h3>
 <p>A component must never modify its own props. Props are a snapshot handed down for this render; mutating them corrupts the parent's data and produces bugs React cannot help you find:</p>
-<pre><code>function Total({ items }) {
+<pre><code class="language-typescript">function Total({ items }) {
   items.push({ price: 0 });   <span class="tok-comment">// ❌ mutating a prop — the parent's array is now wrong</span>
   return &lt;p&gt;{items.length} items&lt;/p&gt;;
 }</code></pre>
@@ -82,7 +82,7 @@ function UserCard({ user }) {
 
 <h3>Truyền và nhận props</h3>
 <p>Cha truyền props như thuộc tính JSX; con nhận chúng dưới dạng một object duy nhất, mà bạn hầu như luôn destructure:</p>
-<pre><code>function Avatar({ src, alt }) {
+<pre><code class="language-typescript">function Avatar({ src, alt }) {
   return &lt;img src={src} alt={alt} /&gt;;
 }
 
@@ -104,7 +104,7 @@ function UserCard({ user }) {
 
 <h3>Props chỉ đọc</h3>
 <p>Một component không bao giờ được sửa props của chính nó. Props là một ảnh chụp trao xuống cho lần render này; mutate chúng làm hỏng dữ liệu của cha và sinh ra bug React không thể giúp bạn tìm:</p>
-<pre><code>function Total({ items }) {
+<pre><code class="language-typescript">function Total({ items }) {
   items.push({ price: 0 });   <span class="tok-comment">// ❌ mutate một prop — mảng của cha giờ đã sai</span>
   return &lt;p&gt;{items.length} items&lt;/p&gt;;
 }</code></pre>
@@ -148,7 +148,7 @@ function UserCard({ user }) {
 <p class="lead">Sometimes a component shouldn't decide its contents — it should provide a shape and let the caller fill it. React has one special prop for this: whatever JSX you nest between a component's tags arrives as the <code>children</code> prop.</p>
 
 <h3>Whatever you nest becomes <code>children</code></h3>
-<pre><code>function Panel({ title, children }) {
+<pre><code class="language-typescript">function Panel({ title, children }) {
   return (
     &lt;section className="panel"&gt;
       &lt;h2&gt;{title}&lt;/h2&gt;
@@ -168,7 +168,7 @@ function UserCard({ user }) {
 
 <h3>Composition beats configuration</h3>
 <p>Without <code>children</code>, people try to make one component do everything through a pile of props:</p>
-<pre><code><span class="tok-comment">// ❌ a component trying to be everything via props</span>
+<pre><code class="language-typescript"><span class="tok-comment">// ❌ a component trying to be everything via props</span>
 &lt;Card
   title="Hi"
   bodyText="inner text"
@@ -180,7 +180,7 @@ function UserCard({ user }) {
 
 <h3>React has no inheritance — it has composition</h3>
 <p>If you come from classes, you might reach for "ButtonBase, then PrimaryButton extends it". React doesn't work that way and doesn't need to. To specialise a component, you <em>wrap</em> or <em>configure</em> it, you don't extend it:</p>
-<pre><code>function PrimaryButton({ children, ...rest }) {
+<pre><code class="language-typescript">function PrimaryButton({ children, ...rest }) {
   return &lt;button className="btn btn-primary" {...rest}&gt;{children}&lt;/button&gt;;
 }</code></pre>
 <p>That is "PrimaryButton is a Button with these defaults" expressed by composition. The official guidance is explicit: <em>prefer composition over inheritance.</em> In years of real React you will essentially never write a class hierarchy of components.</p>
@@ -214,7 +214,7 @@ function UserCard({ user }) {
 <p class="lead">Có lúc một component không nên tự quyết nội dung của nó — nó nên cung cấp một hình dạng và để người gọi lấp đầy. React có một prop đặc biệt cho việc này: bất kỳ JSX nào bạn lồng giữa hai thẻ của một component đều tới dưới dạng prop <code>children</code>.</p>
 
 <h3>Bất kỳ thứ gì bạn lồng đều thành <code>children</code></h3>
-<pre><code>function Panel({ title, children }) {
+<pre><code class="language-typescript">function Panel({ title, children }) {
   return (
     &lt;section className="panel"&gt;
       &lt;h2&gt;{title}&lt;/h2&gt;
@@ -234,7 +234,7 @@ function UserCard({ user }) {
 
 <h3>Ghép thắng cấu hình</h3>
 <p>Không có <code>children</code>, người ta cố bắt một component làm mọi thứ qua một đống props:</p>
-<pre><code><span class="tok-comment">// ❌ một component cố làm tất cả qua props</span>
+<pre><code class="language-typescript"><span class="tok-comment">// ❌ một component cố làm tất cả qua props</span>
 &lt;Card
   title="Hi"
   bodyText="inner text"
@@ -246,7 +246,7 @@ function UserCard({ user }) {
 
 <h3>React không có kế thừa — nó có ghép</h3>
 <p>Nếu bạn đến từ class, bạn có thể định "ButtonBase, rồi PrimaryButton kế thừa nó". React không hoạt động vậy và không cần vậy. Để chuyên biệt hoá một component, bạn <em>bọc</em> hoặc <em>cấu hình</em> nó, chứ không kế thừa:</p>
-<pre><code>function PrimaryButton({ children, ...rest }) {
+<pre><code class="language-typescript">function PrimaryButton({ children, ...rest }) {
   return &lt;button className="btn btn-primary" {...rest}&gt;{children}&lt;/button&gt;;
 }</code></pre>
 <p>Đó là "PrimaryButton là một Button với các mặc định này" diễn đạt bằng ghép. Hướng dẫn chính thức nói thẳng: <em>ưu tiên ghép hơn kế thừa.</em> Qua nhiều năm React thật, bạn về cơ bản sẽ không bao giờ viết một cây kế thừa component.</p>
@@ -291,14 +291,14 @@ function UserCard({ user }) {
 
 <h3>1 · Default values</h3>
 <p>Give a prop a fallback right in the destructuring, so callers can omit it:</p>
-<pre><code>function Badge({ label = 'New' }) {
+<pre><code class="language-typescript">function Badge({ label = 'New' }) {
   return &lt;span className="badge"&gt;{label}&lt;/span&gt;;
 }</code></pre>
 <p>Verified: <code>&lt;Badge /&gt;</code> renders <span class="out" style="display:inline">&lt;span class="badge"&gt;New&lt;/span&gt;</span> and <code>&lt;Badge label="Hot" /&gt;</code> renders <span class="out" style="display:inline">&lt;span class="badge"&gt;Hot&lt;/span&gt;</span>. This is plain JavaScript default-parameter syntax; there is no React-specific mechanism to learn.</p>
 
 <h3>2 · Spreading props through</h3>
 <p>When a wrapper wants to forward arbitrary props to the element underneath it, gather the rest with <code>...</code> and spread them:</p>
-<pre><code>function Input({ label, ...rest }) {
+<pre><code class="language-typescript">function Input({ label, ...rest }) {
   return (
     &lt;label&gt;
       {label}
@@ -312,7 +312,7 @@ function UserCard({ user }) {
 
 <h3>3 · Passing functions down so children can talk back</h3>
 <p>Props flow down, but a child often needs to tell its parent something happened — a click, a submitted form. The parent passes a <em>function</em> down as a prop; the child calls it. Data down, events up:</p>
-<pre><code>function SearchBar({ onSearch }) {
+<pre><code class="language-typescript">function SearchBar({ onSearch }) {
   return &lt;button onClick={() =&gt; onSearch('react')}&gt;Search&lt;/button&gt;;
 }
 
@@ -323,7 +323,7 @@ function Page() {
 
 <h3>4 · Typing props with TypeScript</h3>
 <p>This course and cuongthai.com use TypeScript, so a component declares the exact shape of its props. It documents the component and catches a whole class of bugs — a missing prop, a string where a number was expected — before the app ever runs:</p>
-<pre><code>type BadgeProps = {
+<pre><code class="language-typescript">type BadgeProps = {
   label?: string;          <span class="tok-comment">// optional</span>
   tone: 'info' | 'warn';   <span class="tok-comment">// required, only these two values</span>
 };
@@ -358,14 +358,14 @@ function Badge({ label = 'New', tone }: BadgeProps) {
 
 <h3>1 · Giá trị mặc định</h3>
 <p>Cho một prop một giá trị dự phòng ngay trong destructuring, để người gọi có thể bỏ qua:</p>
-<pre><code>function Badge({ label = 'New' }) {
+<pre><code class="language-typescript">function Badge({ label = 'New' }) {
   return &lt;span className="badge"&gt;{label}&lt;/span&gt;;
 }</code></pre>
 <p>Đã kiểm: <code>&lt;Badge /&gt;</code> render <span class="out" style="display:inline">&lt;span class="badge"&gt;New&lt;/span&gt;</span> còn <code>&lt;Badge label="Hot" /&gt;</code> render <span class="out" style="display:inline">&lt;span class="badge"&gt;Hot&lt;/span&gt;</span>. Đây là cú pháp tham số mặc định thuần JavaScript; không có cơ chế riêng của React phải học.</p>
 
 <h3>2 · Spread props xuyên qua</h3>
 <p>Khi một wrapper muốn chuyển tiếp các props tuỳ ý xuống element bên dưới, gom phần còn lại bằng <code>...</code> rồi spread chúng:</p>
-<pre><code>function Input({ label, ...rest }) {
+<pre><code class="language-typescript">function Input({ label, ...rest }) {
   return (
     &lt;label&gt;
       {label}
@@ -379,7 +379,7 @@ function Badge({ label = 'New', tone }: BadgeProps) {
 
 <h3>3 · Truyền hàm xuống để con nói ngược lên</h3>
 <p>Props chảy xuống, nhưng con thường cần báo cho cha rằng có chuyện xảy ra — một cú click, một form đã gửi. Cha truyền một <em>hàm</em> xuống làm prop; con gọi nó. Dữ liệu xuống, sự kiện lên:</p>
-<pre><code>function SearchBar({ onSearch }) {
+<pre><code class="language-typescript">function SearchBar({ onSearch }) {
   return &lt;button onClick={() =&gt; onSearch('react')}&gt;Search&lt;/button&gt;;
 }
 
@@ -390,7 +390,7 @@ function Page() {
 
 <h3>4 · Gõ kiểu props bằng TypeScript</h3>
 <p>Khoá này và cuongthai.com dùng TypeScript, nên một component khai đúng hình dạng props của nó. Nó vừa là tài liệu cho component vừa bắt được cả một lớp bug — thiếu prop, một chuỗi ở chỗ đáng lẽ là số — trước khi app kịp chạy:</p>
-<pre><code>type BadgeProps = {
+<pre><code class="language-typescript">type BadgeProps = {
   label?: string;          <span class="tok-comment">// tuỳ chọn</span>
   tone: 'info' | 'warn';   <span class="tok-comment">// bắt buộc, chỉ hai giá trị này</span>
 };

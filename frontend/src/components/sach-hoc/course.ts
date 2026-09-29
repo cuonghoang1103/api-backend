@@ -8,6 +8,7 @@
  * Buổi viết thẳng trong data.ts (Mở đầu, IELTS Ngày 1) thì không cần tải.
  */
 import type { Day, Kind, Lesson, Voice } from './types';
+import type { KanjiDict } from './kanji';
 import { dayMeta, isReady, type CourseManifest, type DayMeta, type VocabMeta } from './manifest';
 
 export { isReady };
@@ -28,6 +29,17 @@ export type CourseDef = {
   /** Số hiển thị của buổi n (mặc định n). Khoá Nhật có Bài 0 nên hiện n − 1. */
   shownNum?: (n: number) => number;
   intro: Lesson;
+  /**
+   * Mục tra cứu đứng ngoài các buổi (vd. "Chia động từ & tính từ" của khoá Nhật) —
+   * hiện ngay dưới "Mở đầu" ở mục lục, mở bằng `?bai=<id>`. Viết thẳng (có blocks).
+   */
+  extras?: Lesson[];
+  /**
+   * Khoá tiếng Nhật: dữ liệu chữ Hán (chữ của lớp + chỉ mục từ đi chung) — TẢI CHẬM,
+   * chỉ khi mở thẻ chữ Hán / bài "Chữ Hán của lớp". Có hàm này thì chữ Hán trong
+   * bài chạm được (KanjiSheet).
+   */
+  kanji?: () => Promise<KanjiDict>;
   /** Mục lục các buổi. Buổi tải chậm: bài chỉ có metadata + `ready`, không có blocks. */
   days: Day[];
   /** Tóm tắt các buổi tải chậm, khoá theo `Day.n` (từ manifest.ts sinh tự động). */
@@ -70,7 +82,8 @@ function whenIdle(f: () => void) {
 }
 
 export function defineCourse(def: CourseDef) {
-  const allLessons: Lesson[] = [def.intro, ...def.days.flatMap((d) => d.lessons)];
+  // Mục tra cứu (extras) đứng CUỐI thứ tự đọc: "Bài tiếp" của Mở đầu vẫn là Bài 0.
+  const allLessons: Lesson[] = [def.intro, ...def.days.flatMap((d) => d.lessons), ...(def.extras ?? [])];
   const readyLessons = allLessons.filter(isReady);
 
   // Tóm tắt từng buổi: buổi tải chậm lấy từ manifest, buổi viết thẳng thì tính từ nội dung.
@@ -192,6 +205,8 @@ export function lessonText(l: Lesson): string {
       case 'write': out.push(`${b.title} — tập viết tay: ${b.chars.join(' ')}`); break;
       case 'readkanji': out.push(`${b.title}: ${b.items.map((x) => strip(x.text)).join(' / ')}`); break;
       case 'build': out.push(`${b.title}: ${b.items.map((x) => `${x.vi} → ${x.answer.join('')}`).join(' / ')}`); break;
+      case 'hanlop': out.push(`Thẻ chữ Hán của lớp — Bài ${b.bai}.`); break;
+      case 'chia': out.push('Công cụ chia động từ & tính từ: nhóm I/II/III, thể ます/て/た/ない/từ điển/普通形, tính từ い/な.'); break;
     }
   }
   return out.join('\n').slice(0, 3900);

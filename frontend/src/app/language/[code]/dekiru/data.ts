@@ -37,6 +37,15 @@ const INTRO: Lesson = {
         'Không hiểu chỗ nào thì hỏi **gia sư** ở khung bên phải — bôi đen đúng câu đó rồi hỏi.',
       ],
     },
+    {
+      t: 'note',
+      title: 'Mẹo: chạm vào chữ Hán + mục tra cứu chia động từ',
+      items: [
+        '**Chạm vào một chữ Hán bất kỳ** trong bài (bảng chữ Hán, câu đọc, chữ có furigana) để mở thẻ chữ đó: **hoạt hình thứ tự nét**, Hán Việt, On/Kun, cách nhớ, **các từ đi chung** (kể cả từ ghép với chữ đã học ở bài trước), câu ví dụ và ô tập viết.',
+        'Mỗi bài có mục **"Chữ Hán của lớp"** ngay sau phần chữ Hán cũ: Bài 5 đúng 12 chữ trên slide của cô; các bài khác là danh sách dự kiến, sẽ khớp slide khi có ảnh.',
+        'Mục **"Chia động từ & tính từ"** (ở mục lục, ngay dưới Mở đầu): nhận biết nhóm I/II/III, bảng đổi đuôi mọi thể trong sách, mỗi thể dùng trong mẫu câu nào, ô tra nhanh và bài luyện chia.',
+      ],
+    },
     { t: 'h', text: 'Thi nói JPD113 gồm gì?' },
     {
       t: 'table',
@@ -48,6 +57,16 @@ const INTRO: Lesson = {
       ],
     },
   ],
+};
+
+/** Mục tra cứu đứng ngoài các bài — hiện dưới "Mở đầu" ở mục lục (`?bai=chia-dong-tu`). */
+const CHIA: Lesson = {
+  id: 'chia-dong-tu',
+  kind: 'grammar',
+  title: 'Chia động từ & tính từ — tổng hợp Bài 3–15',
+  goal: 'Nhận ra nhóm của mọi động từ, chia đúng mọi thể trong sách (ます, て, た, ない, từ điển, thể thường) và tính từ い/な — và biết mỗi thể dùng trong mẫu câu nào, ở bài mấy.',
+  minutes: 40,
+  blocks: [{ t: 'chia' }],
 };
 
 type Stub = [Lesson['kind'], string];
@@ -89,7 +108,15 @@ export const DEKIRU = defineCourse({
   shownNum: (n) => n - 1,
   badgeWord: 'Bài',
   intro: INTRO,
+  extras: [CHIA],
   days: DAYS,
+  // Chữ Hán: chữ của lớp (soạn tay) + chỉ mục từ đi chung (sinh lúc build) — tải chậm, 3 chunk.
+  kanji: () =>
+    Promise.all([import('./bai/hanTu'), import('./bai/hanLop'), import('./bai/kanjiIndex')]).then(([h, l, k]) => ({
+      ...k.KANJI_INDEX,
+      han: h.HAN_TU,
+      lop: l.LOP,
+    })),
   // Manifest khoá theo số tệp baiN; buổi n = Bài n − 1.
   manifest: Object.fromEntries(Object.entries(MANIFEST).map(([k, v]) => [Number(k) + 1, v])),
   loadDay: (n) => loadBai(n - 1),

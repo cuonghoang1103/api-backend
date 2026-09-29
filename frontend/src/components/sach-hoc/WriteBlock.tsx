@@ -23,9 +23,9 @@ import { AI_TIMEOUT } from './audio';
 
 /* ── Dữ liệu thứ tự nét (tải một lần cho cả trang) ─────────────────────── */
 
-type StrokeMap = Record<string, string[]>;
+export type StrokeMap = Record<string, string[]>;
 let strokesPromise: Promise<StrokeMap> | null = null;
-function loadStrokes(): Promise<StrokeMap> {
+export function loadStrokes(): Promise<StrokeMap> {
   // Web: tải file tĩnh /kanjivg/strokes.json (nhẹ, trình duyệt cache).
   // App desktop (origin app://): file đó ở cuongthai.com KHÔNG có header CORS nên
   // fetch bị chặn — lùi về import() chính file JSON, gói thành chunk riêng chỉ
@@ -41,7 +41,7 @@ function loadStrokes(): Promise<StrokeMap> {
   });
   return strokesPromise;
 }
-function useStrokeData() {
+export function useStrokeData() {
   const [data, setData] = useState<StrokeMap | null>(null);
   useEffect(() => {
     let on = true;
@@ -52,7 +52,7 @@ function useStrokeData() {
 }
 
 /** Điểm bắt đầu của nét (lệnh M đầu tiên) — chỗ đặt số thứ tự. */
-function startOf(d: string): [number, number] {
+export function startOf(d: string): [number, number] {
   const m = /M\s*([-\d.]+)[ ,]?([-\d.]+)/.exec(d);
   return m ? [Number(m[1]), Number(m[2])] : [0, 0];
 }

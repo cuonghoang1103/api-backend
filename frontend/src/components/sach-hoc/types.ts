@@ -55,7 +55,15 @@ export type Block =
    * Tập viết tay (Apple Pencil / chuột): mỗi chữ một hàng — ô mẫu chạy thứ tự
    * nét (KanjiVG) + ba ô luyện, rồi ✨ AI xem chữ (POST /ielts/ai/xem-chu-viet).
    */
-  | { t: 'write'; id: string; title: string; chars: string[]; note?: string };
+  | { t: 'write'; id: string; title: string; chars: string[]; note?: string }
+  /**
+   * Thẻ "Chữ Hán của lớp" như slide của cô: chữ to, Hán Việt, On/Kun, cách nhớ,
+   * từ đi chung — chữ lấy theo danh sách lớp của bài `bai` (dữ liệu tải chậm qua
+   * `course.kanji()`); chạm vào thẻ mở thẻ chi tiết (KanjiSheet).
+   */
+  | { t: 'hanlop'; bai: number }
+  /** Công cụ chia động từ & tính từ tiếng Nhật (bảng quy tắc + ô tra nhanh + bài tập) — nhat/ChiaDongTu.tsx. */
+  | { t: 'chia' };
 
 export type Voice = 'uk-nu' | 'uk-nam' | 'us-nu' | 'us-nam' | 'ja-nu' | 'ja-nam';
 /** Nhân vật trong hội thoại — mỗi vai một hình và một giọng cố định. */

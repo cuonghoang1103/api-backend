@@ -14,6 +14,7 @@ import { TutorCtx, CourseCtx, type TutorAsk } from './tutorContext';
 import { setDefaultVoice, AI_TIMEOUT, getRate, setRate, onRate } from './audio';
 import { useTienDo } from './useTienDo';
 import { TongQuanBuoi, KeHoach, dayDone } from './TongQuan';
+import { KanjiHost } from './KanjiSheet';
 import s from './course.module.css';
 
 /** Trang đang mở: một bài, tổng quan một buổi, hoặc kế hoạch & tiến độ. */
@@ -253,7 +254,10 @@ export default function CoursePage({ course }: { course: Course }) {
             <button type="button" className={s.tocPlan} onClick={() => go({ t: 'plan' })} style={view.t === 'plan' ? { borderColor: 'var(--lh-accent)' } : undefined}>
               <CalendarDays size={16} /> Kế hoạch & tiến độ
             </button>
-            <div className={s.tocDay}>{tocItem(INTRO, 'Mở đầu')}</div>
+            <div className={s.tocDay}>
+              {tocItem(INTRO, 'Mở đầu')}
+              {(course.extras ?? []).map((l) => tocItem(l, 'Tra cứu'))}
+            </div>
             {DAYS.map((d) => {
               const ready = d.lessons.some(isReady);
               const isDone = dayDone(d, tien.done);
@@ -378,6 +382,9 @@ export default function CoursePage({ course }: { course: Course }) {
             <GiaSu {...tutorProps} />
           </aside>
         </div>
+
+        {/* Thẻ chữ Hán: chạm chữ Hán bất kỳ trong bài (chỉ khoá có dữ liệu chữ Hán). */}
+        {course.kanji && <KanjiHost course={course} />}
 
         {sheetOpen && (
           <>

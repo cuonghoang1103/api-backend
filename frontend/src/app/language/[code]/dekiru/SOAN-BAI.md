@@ -100,3 +100,59 @@ lỗi trang · commit theo pathspec · `deploy-nha.sh` (tự push).
 | 14 | ✅ ポイント 113–118, 65 từ (27/09) — sách in 開(あ)きます (bản trích đọc nhầm ひら) |
 | 15 | ✅ ポイント 119–124, 48 từ (27/09) — TRỌN SÁCH |
 | Chữ Hán B1–6 | ✅ bổ sung 👁/✍, đứng riêng/chung, readkanji (27/09) |
+
+## 6. 🈶 Chữ Hán của lớp + thẻ chữ Hán + Chia động từ (29/09/2026)
+
+Người học: "chữ Hán của khoá thiếu nhiều so với bài cô giảng" (slide Bài 5 có đúng
+12 chữ) và muốn chạm vào chữ là thấy nét viết + từ đi chung. Các mục cũ GIỮ NGUYÊN.
+
+- **Bài `bN-han-lop`** (kind `kanji`, chèn ngay SAU `bN-kanji` bằng `chenHanLop()`
+  trong `bai/hanLop.ts` — bộ nạp `bai/index.ts` và `scripts/course-manifest.mts`
+  gọi cùng hàm). Gồm: khối `hanlop` (thẻ như slide) → từ cô chép bổ sung (nếu có)
+  → `readkanji` `bN-han-doc` (≥10 câu không furigana) → `write` `bN-han-viet`.
+- **Dữ liệu từng chữ** ở `bai/hanTu.ts` (Hán Việt IN HOA · On katakana · Kun
+  hiragana với `・` tách gốc–đuôi đúng như cô viết: `み・ます`, `うし・ろ` · nghĩa ·
+  cách nhớ bằng hình · 2–5 từ đi chung, `bang: true` = cô chép trên bảng). Số nét
+  lấy từ KanjiVG, "Bài N" của từ lấy từ chỉ mục — không soạn tay.
+- **Chỉ mục** `bai/kanjiIndex.ts` — SINH TỰ ĐỘNG (`npm run dekiru:kanji`, chạy ở
+  `prebuild`): chữ → mọi từ vựng chứa nó (kèm bài), câu ví dụ, âm từ các bảng chữ
+  Hán sẵn có. `hanTu`, `hanLop.LOP`, `kanjiIndex` chỉ tải khi mở thẻ (`course.kanji()`).
+- **Thẻ chữ Hán** (`components/sach-hoc/KanjiSheet.tsx`): Inline gắn `data-kj`
+  cho MỌI chữ Hán → chạm là mở (trừ chữ nằm trong nút, hoặc đang bôi đen để hỏi
+  gia sư). Có hoạt hình nét (phát/từng nét/số nét/chậm), On/Kun, cách nhớ, từ đi
+  chung chia "bài đang học / bài trước / bài sau" + chip chữ Hán đã học, câu ví
+  dụ, tập viết (tái dùng WriteBlock, id `kj-<chữ>`).
+- Thêm chữ Hán mới vào nội dung → chạy lại `node scripts/kanjivg-subset.mjs` (ở gốc
+  repo) cho `public/kanjivg/strokes.json`.
+- **Chia động từ & tính từ**: mục tra cứu `?bai=chia-dong-tu` (CourseDef `extras`,
+  hiện dưới "Mở đầu"), khối `chia` → `components/sach-hoc/nhat/ChiaDongTu.tsx`.
+  Thuật toán `nhat/chia.ts` (nhóm I/II/III + ngoại lệ 行く・ある・来る・帰る/入る/
+  走る/知る/切る), kiểm thử `npm run dekiru:chia:test` (44 động từ + tra nhanh).
+  Thêm động từ mới của sách → thêm vào `VERBS` (thể từ điển có furigana, nhóm, bài).
+
+### Danh sách chữ của lớp — khớp slide hay dự kiến
+
+| Bài | Chữ | Nguồn |
+|---|---|---|
+| 1 | 日本人名前国学生語何私会 | dự kiến |
+| 2 | 一二三四五六七八九十百千万円 | dự kiến |
+| 3 | 時分半今月火水木金土曜朝 | dự kiến |
+| 4 | 山川町駅東西南北大小高新 | dự kiến |
+| 5 | 先週毎午後見食飲買物行休 | ✅ **khớp slide của cô** (29/09) |
+| 6 | 手歌近遠早広全部約束遊野 | dự kiến |
+| 7 | 上下中外横出入開閉使貸置 | dự kiến |
+| 8 | 父母兄弟姉妹子目口耳足長 | dự kiến |
+| 9 | 読書聞話言泳乗習運転集描 | dự kiến |
+| 10 | 右左立座歩待持帰道橋危曲 | dự kiến |
+| 11 | 起寝働始終住通活初忘慣卒 | dự kiến |
+| 12 | 病院医者体頭薬熱痛歯悪治 | dự kiến |
+| 13 | 男女赤青黄色若売知場所品 | dự kiến |
+| 14 | 田空字思便利不同笑経験化 | dự kiến |
+| 15 | 天気晴雨曇降台震事故急心 | dự kiến |
+
+Dự kiến = chữ N5/N4 có trong từ vựng/ngữ pháp bài đó, không trùng bài khác (tài
+liệu trong `~/Documents/JPD123/` không có danh sách chữ Hán của lớp; sách không có
+mục chữ Hán). Có ảnh slide của cô → sửa `chars` + `nguon: 'slide'` + `bang: true`
+cho từ cô chép, rồi `npm run course:manifest && npm run dekiru:kanji`.
+Bài 5 (29/09): từ vựng khớp đủ 61/61 "Từ mới bài 5.pdf", ポイント 37–47 đủ; bổ sung
+6 từ cô chép trên bảng (後ろ, 午後, 見学します, 飲食, 毎週, 後で) trong `b5-han-lop`.

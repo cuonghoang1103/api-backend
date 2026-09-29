@@ -48,20 +48,22 @@ const SPECS: Spec[] = [
     dir: join(LANG, 'dekiru/bai'),
     loader: 'index.ts',
     prefix: 'bai',
-    // Cùng luật với loadBai (bai/index.ts): các bài soạn + mục 📖 Theo sách ở cuối.
+    // Cùng luật với loadBai (bai/index.ts): các bài soạn + mục 📖 Theo sách ở cuối + Chữ Hán của lớp.
     written: async () => {
       const dir = join(LANG, 'dekiru/bai');
       const sach: Record<number, Lesson> = {
         ...(await load(join(dir, 'sach.ts'))).SACH,
         ...(await load(join(dir, 'sach2.ts'))).SACH_2,
       };
+      // Bài "Chữ Hán của lớp" chèn sau bN-kanji — cùng hàm với bộ nạp.
+      const { chenHanLop } = await load(join(dir, 'hanLop.ts'));
       const out: Record<number, Lesson[]> = {};
       for (const n of numbered(dir, 'bai')) {
         const m = await load(join(dir, `bai${n}.ts`));
         const bai: Lesson[] = m[`BAI_${n}`];
         if (!Array.isArray(bai)) throw new Error(`bai${n}.ts không export BAI_${n}`);
         const extra: Lesson | undefined = m[`SACH_${n}`] ?? sach[n];
-        out[n] = extra ? [...bai, extra] : bai;
+        out[n] = chenHanLop(n, extra ? [...bai, extra] : bai);
       }
       return out;
     },

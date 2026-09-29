@@ -11,11 +11,16 @@ import api from '@/lib/api';
 import ChatMarkdown from '@/components/chat/ChatMarkdown';
 import type { Block, Role, Voice } from './types';
 import { play, stopAudio, AI_TIMEOUT } from './audio';
-import { Inline } from './Blocks';
+import dynamic from 'next/dynamic';
+import { Inline, Kj } from './Blocks';
 import { useCourse, useTutor } from './tutorContext';
 import HandEssay from './HandEssay';
 import WriteBlock from './WriteBlock';
+import HanLop from './HanLop';
 import s from './course.module.css';
+
+// Công cụ chia động từ chỉ có ở một mục tra cứu — tách chunk riêng.
+const ChiaDongTu = dynamic(() => import('./nhat/ChiaDongTu'), { ssr: false, loading: () => <div className={s.soonBox} aria-busy="true">Đang tải…</div> });
 
 /* ── Nhân vật ────────────────────────────────────────────────────────── */
 
@@ -544,7 +549,7 @@ function ReadKanji({ b }: { b: Extract<Block, { t: 'readkanji' }> }) {
       ) : (
         <div className={s.qItem}>
           <div className={s.quizSub}>Còn {queue.length} câu · câu {cur + 1}/{b.items.length}</div>
-          <div className={s.rkText}>{shown ? <Inline text={b.items[cur].text} /> : bare(b.items[cur].text)}</div>
+          <div className={s.rkText}>{shown ? <Inline text={b.items[cur].text} /> : <Kj text={bare(b.items[cur].text)} />}</div>
           {shown && (
             <>
               <div className={s.ro}>{b.items[cur].ro}</div>
@@ -581,6 +586,8 @@ export function renderBlock2(b: Block, i: number) {
     case 'build': return <Build key={b.id} b={b} />;
     case 'readkanji': return <ReadKanji key={b.id} b={b} />;
     case 'write': return <WriteBlock key={b.id} b={b} />;
+    case 'hanlop': return <HanLop key={`hanlop-${b.bai}`} b={b} />;
+    case 'chia': return <ChiaDongTu key="chia" />;
     default: return null;
   }
 }

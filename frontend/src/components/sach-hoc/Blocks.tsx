@@ -28,6 +28,16 @@ function SpeakBtn({ text, label }: { text: string; label?: string }) {
   );
 }
 
+/**
+ * Mỗi chữ Hán một <span data-kj> — trang có thẻ chữ Hán (KanjiSheet) thì chạm vào
+ * là mở thẻ chữ đó; trang khác (IELTS) không có chữ Hán nên trả nguyên chuỗi.
+ */
+const KJ_RUN = /([\u4e00-\u9fff\u3400-\u4dbf])/;
+export function Kj({ text }: { text: string }) {
+  if (!KJ_RUN.test(text)) return <>{text}</>;
+  return <>{text.split(KJ_RUN).map((p, i) => (i % 2 ? <span key={i} data-kj={p}>{p}</span> : p ? <Fragment key={i}>{p}</Fragment> : null))}</>;
+}
+
 /** **đậm** và ~~gạch (câu sai)~~ — đủ cho nội dung soạn tay, không cần markdown đầy đủ. */
 export function Inline({ text }: { text: string }) {
   const parts = text.split(/(\*\*[^*]+\*\*|~~[^~]+~~|==[^=]+==|\{[^|}]+\|[^}]+\})/g);
@@ -40,9 +50,9 @@ export function Inline({ text }: { text: string }) {
             : p.startsWith('==') ? <mark key={i} className={s.hl}><Inline text={p.slice(2, -2)} /></mark>
               // {漢字|かな}: chữ Hán có furigana (ẩn/hiện theo nút của trang).
               : p.startsWith('{') && p.includes('|') ? (
-                <ruby key={i} className={s.ruby}>{p.slice(1, p.indexOf('|'))}<rt>{p.slice(p.indexOf('|') + 1, -1)}</rt></ruby>
+                <ruby key={i} className={s.ruby}><Kj text={p.slice(1, p.indexOf('|'))} /><rt>{p.slice(p.indexOf('|') + 1, -1)}</rt></ruby>
               )
-            : <Fragment key={i}>{p}</Fragment>,
+            : <Kj key={i} text={p} />,
       )}
     </>
   );

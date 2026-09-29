@@ -12,7 +12,16 @@
  */
 import type { Lesson } from '@/components/sach-hoc/types';
 
+/**
+ * Nội dung bài n + bài "Chữ Hán của lớp" (hanLop.ts) chèn sau `bN-kanji` —
+ * scripts/course-manifest.mts gọi đúng hàm `chenHanLop` này.
+ */
 export function loadBai(n: number): Promise<Lesson[]> | null {
+  const p = loadGoc(n);
+  return p && Promise.all([p, import('./hanLop')]).then(([ls, h]) => h.chenHanLop(n, ls));
+}
+
+function loadGoc(n: number): Promise<Lesson[]> | null {
   switch (n) {
     case 0: return import('./bai0').then((m) => m.BAI_0);
     case 1: return Promise.all([import('./bai1'), import('./sach')]).then(([m, s]) => [...m.BAI_1, s.SACH[1]]);

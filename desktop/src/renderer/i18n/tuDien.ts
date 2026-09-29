@@ -1389,6 +1389,10 @@ export const TU_DIEN: Record<string, string> = {
   'Chưa cắm khoá AI nên chỉ có phần số liệu ở trên.': 'No AI key configured — only the figures above are available.',
   'AI chưa trả lời được, thử lại sau.': 'AI did not respond — try again later.',
 
+  // ── AI ngoại tuyến trong Chat (features/chat) ──
+  '_Trả lời bởi AI trên máy bạn (ngoại tuyến) — có thể kém chính xác hơn._': '_Answered by the AI on your device (offline) — may be less accurate._',
+  'Mất mạng, và chưa có AI trên máy để dùng thay. Vào Cài đặt → AI ngoại tuyến để tải model dùng khi không có mạng.': 'You are offline and no on-device AI is available. Open Settings → Offline AI to download a model for offline use.',
+
   // ── Mạng nhà (features/mang) ──
   'Mạng nhà': 'Home Network',
   'Xem ai đang dùng chung mạng và đo tốc độ đường truyền.': 'See who shares your network and measure your connection speed.',

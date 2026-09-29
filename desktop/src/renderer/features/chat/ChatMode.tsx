@@ -141,7 +141,7 @@ const BAC = [
 export function ChatMode({ pro }: { pro: boolean }) {
   const { dich, dichP } = useDich();
   const { api } = useSession();
-  const { settings, layThamSo, lanDieuHuong } = useAppState();
+  const { settings, layThamSo, lanDieuHuong, online } = useAppState();
   const [luot, datLuot] = useState<Luot[]>([]);
   const [nhap, datNhap] = useState('');
   const [bac, datBac] = useState<string>('cuongmini-3.11');
@@ -573,6 +573,12 @@ export function ChatMode({ pro }: { pro: boolean }) {
 
     const truoc: Luot[] = [...luot, { vai: 'user', text, luc: Date.now(), ...(tep.length ? { tep } : {}) }];
     datLuot(truoc);
+    // Ảnh của lượt này ở dạng data URL — dành cho lối lùi model trên máy khi
+    // mất mạng (chỉ nhận `data:image/…`, xem schema `aiCucBo:hoi`).
+    const anhCucBo = tep
+      .filter((t) => t.loai === 'image' && typeof t.url === 'string' && t.url.startsWith('data:image/'))
+      .map((t) => t.url)
+      .slice(0, 3);
     datNhap('');
     dk.xoaHet();
     datLoi(null);
@@ -720,7 +726,42 @@ export function ChatMode({ pro }: { pro: boolean }) {
         }
       }
     } catch (err) {
-      if (!dieuKhien.signal.aborted) datLoi((err as Error).message);
+      if (dieuKhien.signal.aborted) {
+        // Người dùng tự huỷ — không phải lỗi.
+      } else if ((!online || err instanceof TypeError) && window.cuongthai?.aiCucBo) {
+        /* MẤT MẠNG → LƯỚI ĐỠ: hỏi model chạy trên máy (nếu đã tải + bật).
+           Chỉ chạy khi mạng đứt — có mạng thì luôn đi máy chủ (máy chủ trả
+           4xx là nó đang nói rõ điều người dùng cần biết, đừng che). Ranh giới
+           này khớp với con robot CuongMini: xem `main/aiCucBo/hoi.ts`. */
+        const lichSuCucBo = truoc
+          .slice(0, -1)
+          .filter((l) => l.text.trim())
+          .slice(-10)
+          .map((l) => ({ vaiTro: l.vai === 'user' ? 'nguoi' as const : 'may' as const, chu: l.text }));
+        let kq: { chu: string; loi?: string } | undefined;
+        try {
+          kq = await window.cuongthai.aiCucBo.hoi({
+            chu: text || 'Xem giúp mình.',
+            ...(lichSuCucBo.length ? { lichSu: lichSuCucBo } : {}),
+            ...(anhCucBo.length ? { anh: anhCucBo } : {}),
+          });
+        } catch {
+          kq = undefined;
+        }
+        if (kq?.chu) {
+          // Gắn nhãn để KHÔNG ai nhầm câu từ máy (yếu hơn) với câu trên mạng.
+          const daGanNhan = `${dich('_Trả lời bởi AI trên máy bạn (ngoại tuyến) — có thể kém chính xác hơn._')}
+
+${kq.chu}`;
+          traLoiDayDu = kq.chu;
+          datLuot((cu) => [...cu, { vai: 'assistant', text: daGanNhan }]);
+          onCauDau?.(kq.chu);
+        } else {
+          datLoi(kq?.loi ?? dich('Mất mạng, và chưa có AI trên máy để dùng thay. Vào Cài đặt → AI ngoại tuyến để tải model dùng khi không có mạng.'));
+        }
+      } else {
+        datLoi((err as Error).message);
+      }
     } finally {
       huyRef.current = null;
       datDangChay(false);

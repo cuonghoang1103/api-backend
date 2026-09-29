@@ -25,12 +25,16 @@ export default {
   defaultVideoTrack: 'YT',
   lessons: {
     /* ── Mục 0 — Deploy thật ra là gì ── */
+    'deploy-0-5-bat-dau-tai-day': { yt: 'F-9KWQByeU0', credit: "Dreams of Code — Setting up a production ready VPS is a lot easier than I thought." },
+    'deploy-0-6-bat-dau-khi-khong-co': { yt: '263CooDJZCY', credit: "Daniel Boctor — Dev Loses $440 Million in 28 minutes, Chaos Ensues" },
+    'deploy-0-0-slides': { yt: '_FErnBwMpj8', credit: "Metics Media — How to Deploy a Web App to a VPS (2026)" },
     'deploy-0-1-bon-buoc': { yt: 'H5z70EBtEow', credit: 'CodeLucky — Deployment Strategies Explained: Blue-Green vs. Canary vs. Rolling' },        // Deployment Strategies Explained: Blue-Green vs. Canary vs. Rolling
     'deploy-0-2-may-nhan': { yt: 'IbJMb-qsgaY', credit: '6 Pack Programmer — How to Deploy Node.js App on VPS for Beginners | UltaHost' },        // How to Deploy Node.js App on VPS for Beginners | UltaHost
     'deploy-0-3-lan-dau-lam-tay': { yt: 'M9gUjO26P94', credit: 'Usama Imdad Sian — Node JS deployment on Ubuntu Server (VPS) using PM2, NGINX & Git' }, // Node JS deployment on Ubuntu Server (VPS) using PM2, NGINX & Git
     'deploy-0-4-chua-giai-quyet': { yt: 'SPeQJ-fINoU', credit: 'Alexa Fazio — Deploy a Node.js app to Ubuntu Server' }, // Deploy a Node.js app to Ubuntu Server
 
     /* ── Chương 1 — Tạo tác: quyết định chính xác cái gì lên máy chủ ── */
+    'deploy-1-0-slides': { yt: 'FryJt0Tbt9Q', credit: "Travis Media — Every Developer NEEDS To Know 12-Factor App Principles" },
     'deploy-1-1-cay-lam-viec-co-gi': { yt: 'YqU20hJCgAI', credit: 'Avinashkumar - The Learning Destination — CICD: Learn Build Once Deploy Multiple Times in FIVE minutes #cicd #devops #artifact' },        // CICD: Learn Build Once Deploy Multiple Times in FIVE minutes
     'deploy-1-2-tao-tac-tai-lap-duoc': { yt: 'UWQ4GVVdPYw', credit: 'NDC Conferences — Binary Reproducible Builds with Docker - Mike Long' },      // Binary Reproducible Builds with Docker - Mike Long
     'deploy-1-3-tao-tac-phai-dung': { yt: 'ilu6yMBGS6I', credit: 'media.ccc.de — Reproducible Builds' },         // Reproducible Builds
@@ -38,6 +42,7 @@ export default {
     'deploy-1-5-giu-ban-cu-khong-day-dia': { yt: 'FHrwssNGkfk', credit: 'Red Hat Enterprise Linux — File System Out of Space? Learn How to Quickly Fix It' },  // File System Out of Space? Learn How to Quickly Fix It
 
     /* ── Chương 2 — Vận chuyển: đưa tạo tác lên máy ── */
+    'deploy-2-0-slides': { yt: 'qE77MbDnljA', credit: "Corey Schafer — Linux/Mac Terminal Tutorial: How To Use The rsync Command - Sync Files Locally and Remotely" },
     'deploy-2-1-rsync-va-hai-moi-nguy': { yt: 'BP0v98sD0qs', credit: 'Programonaut — How To Use Rsync To Easily Deploy Your Application Or Website' },     // How To Use Rsync To Easily Deploy Your Application Or Website
     'deploy-2-2-git-push-de-deploy': { yt: 'BJw-D5iwmdM', credit: 'smbCloud — #1 Deploy Rust Axum API to Production Server  - Setup Git Post-receive Hooks' },        // #1 Deploy Rust Axum API to Production Server - Setup Git Post-receive Hooks
     'deploy-2-3-tao-tac-la-anh-container': { yt: 'pf46F-dvdMM', credit: 'DevOps Bunker — How to Push Docker Images to GitHub Container Registry (GHCR) | Step-by-Step' },  // How to Push Docker Images to GitHub Container Registry (GHCR) | Step-by-Step

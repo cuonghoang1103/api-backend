@@ -50,6 +50,7 @@ export default {
     'deploy-2-5-hong-nua-chung': { yt: '-PJW17vkQak', credit: 'Research Rocks — How to Use Rsync Over SSH for Secure File Transfer on Linux | Beginner-Friendly Rsync Tutorial' },            // How to Use Rsync Over SSH for Secure File Transfer on Linux
 
     /* ── Chương 3 — Cú tráo: đổi phiên bản mà không rớt request nào ── */
+    'deploy-3-0-slides': { yt: '23EghFNQdj4', credit: "Telusko — What is Blue Green Deployment?" },
     'deploy-3-1-trao-ngay-tho-ton-bao-nhieu': { yt: 'um24VlkkqGo', credit: 'Nick Janetakis — lcurl Is a Script to Visit a Site Every X Seconds Using curl' },// lcurl Is a Script to Visit a Site Every X Seconds Using curl
     'deploy-3-2-tat-tu-te': { yt: '-OjPhPV6Rjs', credit: 'Software Developer Diaries — Here\'s how to Gracefully Shutdown your apps (with Node.js examples)' },                  // Here's how to Gracefully Shutdown your apps (with Node.js examples)
     'deploy-3-3-xanh-lam': { yt: 'FRXwz4zH7zU', credit: 'Imran Codes — Blue-Green Deployments Explained: How to Deploy Without Downtime' },                   // Blue-Green Deployments Explained: How to Deploy Without Downtime
@@ -57,6 +58,7 @@ export default {
     'deploy-3-5-script-trao-hoan-chinh': { yt: 'eQPYsGrZW_E', credit: 'DevOps & AI Toolkit — Stop Losing Requests! Learn Graceful Shutdown Techniques' },     // Stop Losing Requests! Learn Graceful Shutdown Techniques
 
     /* ── Chương 4 — Cấu hình và bí mật ── */
+    'deploy-4-0-slides': { yt: '7NTFZoDpzbQ', credit: "DevOps Directive — How to Properly Manage Application Secrets (5 LEVELS)" },
     'deploy-4-1-cau-hinh-song-ngoai-tao-tac': { yt: 'p85yYqLPiUk', credit: 'dotenvx — What is a .env.vault file' },  // What is a .env.vault file
     'deploy-4-2-luc-dung-va-luc-chay': { yt: '7UY6sp5K72E', credit: 'Back4app — ARG and ENV in your Dockerfile' },         // ARG and ENV in your Dockerfile
     'deploy-4-3-env-khong-phai-mot-dinh-dang': { yt: 'r7Yd1b-aEq4', credit: 'Technical Rajni — 🔥 Unlock the Secrets of .env Files: Master Environment Variables in 5 Minutes! 🚀' }, // Unlock the Secrets of .env Files: Master Environment Variables in 5 Minutes
@@ -64,6 +66,7 @@ export default {
     'deploy-4-5-xoay-bi-mat': { yt: 'DIVQdzgWEiY', credit: 'dotenvx — 10x your .env security with encryption to .env.vault files' },                  // 10x your .env security with encryption to .env.vault files
 
     /* ── Chương 5 — Cơ sở dữ liệu: migration và khoảng trống giữa hai lần ── */
+    'deploy-5-0-slides': { yt: 'mMsZPZKNc4g', credit: "Software Developer Diaries — Database Migrations Explained" },
     'deploy-5-1-hai-thoi-diem-khac-nhau': { yt: 'zpM-lIRscXM', credit: 'Thorben Janssen — Database Migration: Update your schema without a downtime' },   // Database Migration: Update your schema without a downtime
     'deploy-5-2-mo-rong-thu-hep': { yt: 'ONSCQWLD9d0', credit: 'Software Developer Diaries — Every engineer should know this.. (Expand-Contract Pattern)' },           // Every engineer should know this.. (Expand-Contract Pattern)
     'deploy-5-3-khoa-va-thoi-gian': { yt: 'NJBQNnfSWzY', credit: 'pganalyze — Avoiding deadlocks in Postgres migrations' },         // Avoiding deadlocks in Postgres migrations
@@ -71,6 +74,7 @@ export default {
     'deploy-5-5-lap-du-lieu-va-vi-tri': { yt: '-1aO6UznfI0', credit: 'Xata — How to perform Postgres schema changes in production with zero downtime' },     // How to perform Postgres schema changes in production with zero downtime
 
     /* ── Chương 6 — Lùi bản, và cái không lùi được ── */
+    'deploy-6-0-slides': { yt: 'AWVTKBUnoIg', credit: "ByteByteGo — Top 5 Most-Used Deployment Strategies" },
     'deploy-6-1-lui-chay-duoc': { yt: 'sQJq-MGEyB8', credit: 'CodeLucky — Rollback Procedures: Fix Deployments Fast' },  // Rollback Procedures: Fix Deployments Fast
     'deploy-6-2-lui-noi-doi': { yt: 'w-1nqcigsm4', credit: 'Cloud Stack Studio — What Is A Successful Rollback Strategy In CI/CD Pipelines? - Cloud Stack Studio' },    // What Is A Successful Rollback Strategy In CI/CD Pipelines?
     'deploy-6-3-du-lieu-hong': { yt: 'ka-PLyjV3AI', credit: 'DevOps Unicorns — Michiel Rook - Database schema migrations with zero downtime' },   // Michiel Rook - Database schema migrations with zero downtime

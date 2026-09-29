@@ -87,14 +87,39 @@ router.get('/tai-xuong', authenticate, tocDoTaiXuongLimiter, (req: Request, res:
  * `express.json`, nếu không bộ đọc JSON sẽ nuốt body trước và cố phân tích một
  * khối nhị phân.
  */
+const MAX_TAI_LEN = 50 * 1024 * 1024;
+
 router.post('/tai-len', authenticate, tocDoTaiLenLimiter, (req: Request, res: Response<ApiResponse>) => {
-  // ⚠️ `express.raw` (mount ở index.ts cho đúng đường này) ĐÃ đọc hết body vào
-  // `req.body` dạng Buffer rồi. Nếu ở đây còn nghe `req.on('data'/'end')` thì
-  // sự kiện không bao giờ bắn nữa (stream đã cạn) ⇒ không trả lời ⇒ client
-  // TREO MÃI ở bước tải lên. Vì thế đọc thẳng Buffer, không nghe stream.
-  const nhan = Buffer.isBuffer(req.body) ? req.body.length : 0;
   res.set('Cache-Control', 'no-store');
-  res.json({ success: true, data: { nhan } });
+
+  // Nếu một body-parser phía trước ĐÃ đọc body thành Buffer thì dùng luôn.
+  if (Buffer.isBuffer(req.body) && req.body.length > 0) {
+    res.json({ success: true, data: { nhan: req.body.length } });
+    return;
+  }
+
+  // ⚠️ NGƯỢC LẠI PHẢI TỰ ĐỌC VÀ RÚT CẠN STREAM. Đây là bài học đắt: nếu handler
+  // trả lời mà KHÔNG đọc hết body của request, nginx/Cloudflare giữ kết nối chờ
+  // client gửi nốt rồi mới đóng — với body có dữ liệu thì treo mãi (đo thật:
+  // POST rỗng 200 nhanh, POST 100 byte treo 20s, cả curl lẫn fetch). Đọc stream
+  // ở đây vừa đếm byte vừa rút cạn, nên luôn trả lời được.
+  let nhan = 0;
+  let xong = false;
+  const tra = (): void => {
+    if (xong) return;
+    xong = true;
+    res.json({ success: true, data: { nhan } });
+  };
+  req.on('data', (khuc: Buffer) => {
+    nhan += khuc.length;
+    if (nhan > MAX_TAI_LEN) req.destroy();
+  });
+  req.on('end', tra);
+  // Client đóng/huỷ giữa chừng: vẫn chốt bằng số đã nhận, không để treo.
+  req.on('close', tra);
+  req.on('error', () => {
+    if (!res.headersSent) res.status(400).json({ success: false, message: 'Tải lên lỗi.' });
+  });
 });
 
 export default router;

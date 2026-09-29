@@ -333,10 +333,6 @@ app.use('/api/v1/ai/chat', aiRoutesModule.chatBodyParser);
 // Webhook GitHub của CT Work cần THÂN GỐC để kiểm chữ ký HMAC — phải đứng
 // trước express.json (bộ nào đọc thân trước thì bộ sau bỏ qua).
 app.use('/api/v1/work/github/webhook', express.raw({ type: '*/*', limit: '5mb' }));
-// Đo tốc độ — tải lên: đọc body dạng thô, KHÔNG qua express.json. Đặt trước
-// express.json vì bộ đọc nào chạm body trước thì bộ sau bỏ qua. Trần 50 MB
-// khớp MAX_TAI_LEN trong tocDoMang.routes.ts.
-app.use('/api/v1/toc-do-mang/tai-len', express.raw({ type: '*/*', limit: '50mb' }));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(cookieParser(config.cookieSecret));

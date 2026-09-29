@@ -6,6 +6,19 @@
  * Luyện: CodeLab data-structures-algorithms (#module-503..508) + java-core + /algorithms.
  * Seed: node scripts/academy-seed-course.mjs --file ./content/academy/CSD201.mjs --apply
  */
+// 📑 Bài học theo từng slide, 🧪 bài thực hành chương và quiz viết lại nằm trong ./csd201/*.mjs
+// (SINH bởi flm-nguon/CSD201/gen/gen.mjs — sửa nguồn ở đó rồi chạy lại, đừng sửa tay các module).
+import sec0 from './csd201/sec0.mjs';
+import ch1 from './csd201/ch1.mjs';
+import ch2 from './csd201/ch2.mjs';
+import ch3 from './csd201/ch3.mjs';
+import ch4 from './csd201/ch4.mjs';
+import ch5 from './csd201/ch5.mjs';
+import ch6 from './csd201/ch6.mjs';
+import ch7 from './csd201/ch7.mjs';
+import ch8 from './csd201/ch8.mjs';
+import nangCao from './csd201/nang-cao.mjs';
+
 export default {
   semester: { code: 'FPTU_Hola3', name: 'Kỳ 3', ordinal: 5 },
   course: {
@@ -29,6 +42,8 @@ export default {
       title: 'Section 0 — Introduction & Study Guide|||Mục 0 — Giới thiệu môn học & Hướng dẫn học',
       description: 'Đọc trước tiên: môn học là gì, điều kiện qua môn, chuẩn đầu ra, công cụ và cách học.',
       lessons: [
+        /* 📑 Học theo từng slide (csd1, csd2, csd3) — ./csd201/sec0.mjs */
+        ...sec0.slides,
         {
           title: '0.0 — 📚 Course materials & the 8 learning outcomes|||0.0 — 📚 Tài liệu tham khảo & 8 chuẩn đầu ra',
           slug: 'csd201-tai-lieu-tham-khao',
@@ -345,6 +360,8 @@ export default {
 </div>
 `,
         },
+        /* 🧪 Thực hành + 🗂 Thuật ngữ + 📌 Tóm tắt — ./csd201/sec0.mjs */
+        sec0.practice,
       ],
     },
     /* ══════════════════ CHƯƠNG 1 — DANH SÁCH & LIÊN KẾT ══════════════════ */
@@ -352,6 +369,8 @@ export default {
       title: 'Chapter 1 — Lists & Linked Lists|||Chương 1 — Danh sách & Danh sách liên kết',
       description: 'Cấu trúc tuyến tính nền tảng: mảng, danh sách liên kết đơn, vòng, đôi — và khi nào dùng cái nào.',
       lessons: [
+        /* 📑 Học theo từng slide (csd4) — ./csd201/ch1.mjs */
+        ...ch1.slides,
         {
           title: '1.1 — Arrays & dynamic arrays|||1.1 — Mảng & mảng động',
           slug: 'csd201-mang',
@@ -808,20 +827,14 @@ so 1,2 → lấy 1 · so 4,2 → lấy 2 · so 4,3 → lấy 3 · so 4,9 → l�
 </div>
 `,
         },
+        /* 🧪 Thực hành + 🗂 Thuật ngữ + 📌 Tóm tắt — ./csd201/ch1.mjs */
+        ch1.practice,
         {
           title: 'Quiz — Chapter 1: Lists & Linked Lists|||Quiz — Chương 1: Danh sách & Liên kết',
           slug: 'csd201-quiz-ch1',
           type: 'QUIZ',
-          description: 'Kiểm tra mảng vs danh sách liên kết.',
-          quiz: {
-            timeLimitSeconds: 300,
-            questions: [
-              { question: 'Accessing element i in an array is…|||Truy cập phần tử i trong mảng là…', options: ['O(n)', 'O(1)', 'O(log n)', 'O(n²)'], correctIndex: 1, points: 1 },
-              { question: 'Inserting at the front of an array is O(n) because…|||Chèn đầu mảng là O(n) vì…', options: ['arrays are slow|||mảng chậm', 'all following elements must shift right|||mọi phần tử sau phải dời phải', 'it re-sorts|||nó sắp lại', 'it copies to disk|||nó copy ra đĩa'], correctIndex: 1, points: 1 },
-              { question: 'A linked list beats an array when you…|||Danh sách liên kết hơn mảng khi bạn…', options: ['need random access by index|||cần truy cập ngẫu nhiên theo chỉ số', 'insert/delete often at known nodes|||chèn/xóa thường tại nút đã biết', 'need contiguous memory|||cần bộ nhớ liền kề', 'never change it|||không bao giờ đổi'], correctIndex: 1, points: 1 },
-              { question: 'A doubly linked list node stores…|||Một nút danh sách liên kết đôi lưu…', options: ['only next|||chỉ next', 'both next and prev pointers|||cả con trỏ next và prev', 'an index|||một chỉ số', 'nothing extra|||không thêm gì'], correctIndex: 1, points: 1 },
-            ],
-          },
+          description: ch1.quizDescription,
+          quiz: ch1.quiz,
         },
       ],
     },
@@ -831,6 +844,8 @@ so 1,2 → lấy 1 · so 4,2 → lấy 2 · so 4,3 → lấy 3 · so 4,9 → l�
       title: 'Chapter 2 — Stacks, Queues & Priority Queues|||Chương 2 — Ngăn xếp, Hàng đợi & Hàng đợi ưu tiên',
       description: 'Cấu trúc truy cập có kỷ luật: LIFO, FIFO, deque và hàng đợi ưu tiên dựa trên heap.',
       lessons: [
+        /* 📑 Học theo từng slide (csd5, csd6) — ./csd201/ch2.mjs */
+        ...ch2.slides,
         {
           title: '2.1 — Stacks (LIFO) & Queues (FIFO)|||2.1 — Ngăn xếp (LIFO) & Hàng đợi (FIFO)',
           slug: 'csd201-stack-queue',
@@ -1205,19 +1220,14 @@ pq.<span class="tok-function">poll</span>();   <span class="tok-comment">// → 
 </div>
 `,
         },
+        /* 🧪 Thực hành + 🗂 Thuật ngữ + 📌 Tóm tắt — ./csd201/ch2.mjs */
+        ch2.practice,
         {
           title: 'Quiz — Chapter 2: Stacks, Queues & Priority Queues|||Quiz — Chương 2: Ngăn xếp, Hàng đợi & Hàng đợi ưu tiên',
           slug: 'csd201-quiz-ch2',
           type: 'QUIZ',
-          description: 'Kiểm tra stack (LIFO), queue (FIFO), deque và hàng đợi ưu tiên.',
-          quiz: {
-            timeLimitSeconds: 300,
-            questions: [
-              { question: 'A stack removes…|||Ngăn xếp lấy ra…', options: ['the oldest item (FIFO)|||phần tử cũ nhất (FIFO)', 'the most recently added item (LIFO)|||phần tử thêm gần nhất (LIFO)', 'the smallest item|||phần tử nhỏ nhất', 'a random item|||phần tử ngẫu nhiên'], correctIndex: 1, points: 1 },
-              { question: 'A binary min-heap gives insert and remove-min in…|||Heap nhị phân min cho chèn và lấy-min trong…', options: ['O(1)', 'O(log n)', 'O(n)', 'O(n²)'], correctIndex: 1, points: 1 },
-              { question: 'A deque (double-ended queue) lets you…|||Deque (hàng đợi hai đầu) cho phép bạn…', options: ['only push at one end|||chỉ thêm ở một đầu', 'add and remove at both ends in O(1)|||thêm và xoá ở cả hai đầu trong O(1)', 'sort automatically|||tự sắp xếp', 'index by key|||truy cập theo khoá'], correctIndex: 1, points: 1 },
-            ],
-          },
+          description: ch2.quizDescription,
+          quiz: ch2.quiz,
         },
       ],
     },
@@ -1227,6 +1237,8 @@ pq.<span class="tok-function">poll</span>();   <span class="tok-comment">// → 
       title: 'Chapter 3 — Recursion|||Chương 3 — Đệ quy',
       description: 'Hàm gọi chính nó: định nghĩa đệ quy, ca cơ sở, và call stack.',
       lessons: [
+        /* 📑 Học theo từng slide (csd7) — ./csd201/ch3.mjs */
+        ...ch3.slides,
         {
           title: '3.1 — Recursion & the call stack|||3.1 — Đệ quy & call stack',
           slug: 'csd201-de-quy',
@@ -1612,19 +1624,14 @@ a = 1, b = 2 → n<sup>log₂1</sup> = n⁰ = 1. f(n) = 1 → bằng nhau → <b
 </div>
 `,
         },
+        /* 🧪 Thực hành + 🗂 Thuật ngữ + 📌 Tóm tắt — ./csd201/ch3.mjs */
+        ch3.practice,
         {
           title: 'Quiz — Chapter 3: Recursion|||Quiz — Chương 3: Đệ quy',
           slug: 'csd201-quiz-ch3',
           type: 'QUIZ',
-          description: 'Kiểm tra đệ quy: ca cơ sở, đệ quy bội, đệ quy đuôi và độ phức tạp.',
-          quiz: {
-            timeLimitSeconds: 300,
-            questions: [
-              { question: 'Every correct recursion must have…|||Mọi đệ quy đúng đều phải có…', options: ['a loop inside|||một vòng lặp bên trong', 'at least one base case that stops it|||ít nhất một ca cơ sở để dừng', 'exactly two calls|||đúng hai lời gọi', 'a global variable|||một biến toàn cục'], correctIndex: 1, points: 1 },
-              { question: 'Naive recursive Fibonacci is O(2ⁿ) because it…|||Fibonacci đệ quy ngây thơ là O(2ⁿ) vì nó…', options: ['uses too much memory|||dùng quá nhiều bộ nhớ', 'recomputes the same subproblems repeatedly|||tính lại cùng bài toán con nhiều lần', 'has no base case|||không có ca cơ sở', 'uses a loop|||dùng vòng lặp'], correctIndex: 1, points: 1 },
-              { question: 'A tail-recursive call can be turned into a loop because…|||Một lời gọi đệ quy đuôi có thể biến thành vòng lặp vì…', options: ['it has no base case|||nó không có ca cơ sở', 'nothing happens after the recursive call returns|||không có gì xảy ra sau khi lời gọi đệ quy trả về', 'it calls itself twice|||nó tự gọi hai lần', 'it uses a heap|||nó dùng heap'], correctIndex: 1, points: 1 },
-            ],
-          },
+          description: ch3.quizDescription,
+          quiz: ch3.quiz,
         },
       ],
     },
@@ -1634,6 +1641,8 @@ a = 1, b = 2 → n<sup>log₂1</sup> = n⁰ = 1. f(n) = 1 → bằng nhau → <b
       title: 'Chapter 4 — Trees & Binary Search Trees|||Chương 4 — Cây & Cây nhị phân tìm kiếm',
       description: 'Cấu trúc phân cấp: cây tổng quát, cây nhị phân, duyệt cây, và BST cho tìm kiếm O(log n).',
       lessons: [
+        /* 📑 Học theo từng slide (csd8, csd9) — ./csd201/ch4.mjs */
+        ...ch4.slides,
         {
           title: '4.1 — Trees & traversals|||4.1 — Cây & phép duyệt',
           slug: 'csd201-cay-duyet',
@@ -2266,20 +2275,14 @@ i = 0 → a[0] = 9, con là −2 và 5 → đổi với −2 → [−2, 9, 5, �
 </div>
 `,
         },
+        /* 🧪 Thực hành + 🗂 Thuật ngữ + 📌 Tóm tắt — ./csd201/ch4.mjs */
+        ch4.practice,
         {
           title: 'Quiz — Chapter 4: Trees & BST|||Quiz — Chương 4: Cây & BST',
           slug: 'csd201-quiz-ch4',
           type: 'QUIZ',
-          description: 'Kiểm tra cây, duyệt cây và BST.',
-          quiz: {
-            timeLimitSeconds: 300,
-            questions: [
-              { question: 'In-order traversal of a BST visits values…|||Duyệt in-order một BST thăm các giá trị…', options: ['in reverse|||theo thứ tự ngược', 'in sorted order|||theo thứ tự đã sắp', 'randomly|||ngẫu nhiên', 'by level|||theo tầng'], correctIndex: 1, points: 1 },
-              { question: 'A balanced BST supports search in…|||BST cân bằng hỗ trợ tìm trong…', options: ['O(1)', 'O(log n)', 'O(n)', 'O(n log n)'], correctIndex: 1, points: 1 },
-              { question: 'Inserting already-sorted data into a plain BST makes it…|||Chèn dữ liệu đã sắp vào BST thường khiến nó…', options: ['faster|||nhanh hơn', 'degenerate into a linked list (O(n))|||suy biến thành danh sách liên kết (O(n))', 'self-balance|||tự cân bằng', 'a heap|||một heap'], correctIndex: 1, points: 1 },
-              { question: 'Pre-order traversal visits…|||Duyệt pre-order thăm…', options: ['left, node, right|||trái, nút, phải', 'node, left, right|||nút, trái, phải', 'left, right, node|||trái, phải, nút', 'right, node, left|||phải, nút, trái'], correctIndex: 1, points: 1 },
-            ],
-          },
+          description: ch4.quizDescription,
+          quiz: ch4.quiz,
         },
       ],
     },
@@ -2288,6 +2291,8 @@ i = 0 → a[0] = 9, con là −2 và 5 → đổi với −2 → [−2, 9, 5, �
       title: 'Chapter 5 — Graphs|||Chương 5 — Đồ thị',
       description: 'Mạng lưới đỉnh & cạnh: biểu diễn (ma trận/danh sách kề) và duyệt BFS/DFS.',
       lessons: [
+        /* 📑 Học theo từng slide (csd10, csd11) — ./csd201/ch5.mjs */
+        ...ch5.slides,
         {
           title: '5.1 — Graph representation & traversal|||5.1 — Biểu diễn & duyệt đồ thị',
           slug: 'csd201-do-thi',
@@ -3028,19 +3033,14 @@ C —— D      cạnh: A-B, A-C, A-D, B-D, C-D</div>
 </div>
 `,
         },
+        /* 🧪 Thực hành + 🗂 Thuật ngữ + 📌 Tóm tắt — ./csd201/ch5.mjs */
+        ch5.practice,
         {
           title: 'Quiz — Chapter 5: Graphs|||Quiz — Chương 5: Đồ thị',
           slug: 'csd201-quiz-ch5',
           type: 'QUIZ',
-          description: 'Kiểm tra biểu diễn đồ thị, BFS/DFS, Dijkstra và cây khung nhỏ nhất.',
-          quiz: {
-            timeLimitSeconds: 300,
-            questions: [
-              { question: 'An adjacency list uses space…|||Danh sách kề dùng không gian…', options: ['O(V²)', 'O(V+E)', 'O(1)', 'O(E²)'], correctIndex: 1, points: 1 },
-              { question: 'BFS finds the shortest path in…|||BFS tìm đường ngắn nhất trong…', options: ['a weighted graph|||đồ thị có trọng số', 'an unweighted graph|||đồ thị không trọng số', 'any graph|||đồ thị bất kỳ', 'a tree only|||chỉ cây'], correctIndex: 1, points: 1 },
-              { question: 'Dijkstra\'s algorithm requires that edge weights are…|||Thuật toán Dijkstra đòi hỏi trọng số cạnh phải…', options: ['integers|||là số nguyên', 'non-negative|||không âm', 'all equal|||đều bằng nhau', 'sorted|||đã sắp'], correctIndex: 1, points: 1 },
-            ],
-          },
+          description: ch5.quizDescription,
+          quiz: ch5.quiz,
         },
       ],
     },
@@ -3050,6 +3050,8 @@ C —— D      cạnh: A-B, A-C, A-D, B-D, C-D</div>
       title: 'Chapter 6 — Sorting|||Chương 6 — Sắp xếp',
       description: 'Từ sắp xếp cơ bản O(n²) tới quick/merge/heap O(n log n) — cơ chế, chi phí, và khi nào dùng.',
       lessons: [
+        /* 📑 Học theo từng slide (csd12) — ./csd201/ch6.mjs */
+        ...ch6.slides,
         {
           title: '6.1 — Basic sorts (O(n²))|||6.1 — Sắp xếp cơ bản (O(n²))',
           slug: 'csd201-sap-xep-co-ban',
@@ -3642,19 +3644,14 @@ tổng tiền tố → [2, 2, 4, 7, 7, 8] (count[v] = số khoá ≤ v)<br>
 </div>
 `,
         },
+        /* 🧪 Thực hành + 🗂 Thuật ngữ + 📌 Tóm tắt — ./csd201/ch6.mjs */
+        ch6.practice,
         {
           title: 'Quiz — Chapter 6: Sorting|||Quiz — Chương 6: Sắp xếp',
           slug: 'csd201-quiz-ch6',
           type: 'QUIZ',
-          description: 'Kiểm tra sắp xếp: độ phức tạp, tính ổn định, quick/merge/heap và sắp xếp tuyến tính.',
-          quiz: {
-            timeLimitSeconds: 300,
-            questions: [
-              { question: 'Merge sort is preferred when you need…|||Merge sort được ưu tiên khi bạn cần…', options: ['minimum memory|||bộ nhớ tối thiểu', 'stability and guaranteed O(n log n)|||ổn định và đảm bảo O(n log n)', 'O(n) time|||thời gian O(n)', 'in-place sorting|||sắp xếp tại chỗ'], correctIndex: 1, points: 1 },
-              { question: 'Quick sort\'s worst case is O(n²) when…|||Trường hợp xấu nhất của quick sort là O(n²) khi…', options: ['the array is empty|||mảng rỗng', 'the pivot is consistently bad|||chốt liên tục tệ', 'it is stable|||nó ổn định', 'n is even|||n chẵn'], correctIndex: 1, points: 1 },
-              { question: 'Radix sort can beat O(n log n) because it…|||Radix sort có thể vượt O(n log n) vì nó…', options: ['compares elements faster|||so sánh phần tử nhanh hơn', 'does not compare — it distributes by digit/bucket|||không so sánh — nó phân phối theo chữ số/bucket', 'uses recursion|||dùng đệ quy', 'sorts in place|||sắp tại chỗ'], correctIndex: 1, points: 1 },
-            ],
-          },
+          description: ch6.quizDescription,
+          quiz: ch6.quiz,
         },
       ],
     },
@@ -3664,6 +3661,8 @@ tổng tiền tố → [2, 2, 4, 7, 7, 8] (count[v] = số khoá ≤ v)<br>
       title: 'Chapter 7 — Hashing|||Chương 7 — Băm',
       description: 'Bảng băm: hàm băm, xử lý va chạm, và cách đạt tra cứu O(1) trung bình.',
       lessons: [
+        /* 📑 Học theo từng slide (csd13) — ./csd201/ch7.mjs */
+        ...ch7.slides,
         {
           title: '7.1 — Hash tables & collisions|||7.1 — Bảng băm & va chạm',
           slug: 'csd201-bam',
@@ -4031,19 +4030,14 @@ Công dành cho rehash = 12 + 24 + 48 + 96 + 192 + 384 + 768 = <b>1.524 lần ch
 </div>
 `,
         },
+        /* 🧪 Thực hành + 🗂 Thuật ngữ + 📌 Tóm tắt — ./csd201/ch7.mjs */
+        ch7.practice,
         {
           title: 'Quiz — Chapter 7: Hashing|||Quiz — Chương 7: Băm',
           slug: 'csd201-quiz-ch7',
           type: 'QUIZ',
-          description: 'Kiểm tra bảng băm, hàm băm, xử lý va chạm và hệ số tải/rehash.',
-          quiz: {
-            timeLimitSeconds: 300,
-            questions: [
-              { question: 'A hash table gives average-case lookup of…|||Bảng băm cho tra cứu trung bình…', options: ['O(n)', 'O(1)', 'O(log n)', 'O(n²)'], correctIndex: 1, points: 1 },
-              { question: 'Separate chaining handles collisions by…|||Chaining tách rời xử lý va chạm bằng cách…', options: ['ignoring them|||bỏ qua', 'storing colliding entries in a list at the bucket|||lưu các mục va chạm trong một danh sách tại bucket', 'resizing to O(1)|||resize về O(1)', 'sorting the table|||sắp bảng'], correctIndex: 1, points: 1 },
-              { question: 'Rehashing is triggered when…|||Rehash được kích hoạt khi…', options: ['the table is empty|||bảng rỗng', 'the load factor exceeds a threshold|||hệ số tải vượt ngưỡng', 'a key is deleted|||một khoá bị xoá', 'two keys are equal|||hai khoá bằng nhau'], correctIndex: 1, points: 1 },
-            ],
-          },
+          description: ch7.quizDescription,
+          quiz: ch7.quiz,
         },
       ],
     },
@@ -4053,6 +4047,8 @@ Công dành cho rehash = 12 + 24 + 48 + 96 + 192 + 384 + 768 = <b>1.524 lần ch
       title: 'Chapter 8 — Text Processing|||Chương 8 — Xử lý văn bản',
       description: 'Nén dữ liệu và thuật toán trên chuỗi: Huffman, LZW, run-length encoding.',
       lessons: [
+        /* 📑 Học theo từng slide (csd14) — ./csd201/ch8.mjs */
+        ...ch8.slides,
         {
           title: '8.1 — Compression: Huffman, LZW, RLE|||8.1 — Nén: Huffman, LZW, RLE',
           slug: 'csd201-nen-van-ban',
@@ -4385,19 +4381,14 @@ w="A", kế 'B' → "AB" đã có → w="AB", kế 'A' → "ABA" đã có → w=
 </div>
 `,
         },
+        /* 🧪 Thực hành + 🗂 Thuật ngữ + 📌 Tóm tắt — ./csd201/ch8.mjs */
+        ch8.practice,
         {
           title: 'Quiz — Chapter 8: Text Processing|||Quiz — Chương 8: Xử lý văn bản',
           slug: 'csd201-quiz-ch8',
           type: 'QUIZ',
-          description: 'Kiểm tra so khớp mẫu (vét cạn, KMP) và nén (Huffman, LZW, RLE).',
-          quiz: {
-            timeLimitSeconds: 300,
-            questions: [
-              { question: 'Huffman coding builds its code tree using a…|||Mã Huffman dựng cây mã bằng…', options: ['stack|||ngăn xếp', 'priority queue (heap)|||hàng đợi ưu tiên (heap)', 'hash map', 'graph|||đồ thị'], correctIndex: 1, points: 1 },
-              { question: 'KMP beats brute-force matching by…|||KMP hơn so khớp vét cạn nhờ…', options: ['comparing from the right|||so từ phải sang', 'using a failure function to skip re-checks, giving O(n+m)|||dùng hàm thất bại để bỏ qua so lại, đạt O(n+m)', 'hashing the pattern|||băm mẫu', 'sorting the text|||sắp văn bản'], correctIndex: 1, points: 1 },
-              { question: 'Run-length encoding (RLE) compresses best when the data has…|||Mã hoá độ dài chạy (RLE) nén tốt nhất khi dữ liệu có…', options: ['high randomness|||độ ngẫu nhiên cao', 'long runs of the same symbol|||các đoạn dài lặp cùng ký hiệu', 'many distinct symbols|||nhiều ký hiệu khác nhau', 'already-compressed content|||nội dung đã nén'], correctIndex: 1, points: 1 },
-            ],
-          },
+          description: ch8.quizDescription,
+          quiz: ch8.quiz,
         },
       ],
     },
@@ -4613,17 +4604,8 @@ Lần find <em>kế tiếp</em> trên bất kỳ nút nào trong số đó chỉ
           title: 'Quiz — Cumulative review: Hashing, Text & Advanced|||Quiz — Tổng ôn: Băm, Văn bản & Nâng cao',
           slug: 'csd201-quiz-advanced',
           type: 'QUIZ',
-          description: 'Kiểm tra băm, nén và chủ đề nâng cao.',
-          quiz: {
-            timeLimitSeconds: 360,
-            questions: [
-              { question: 'A hash table gives average-case lookup of…|||Bảng băm cho tra cứu trung bình…', options: ['O(n)', 'O(1)', 'O(log n)', 'O(n²)'], correctIndex: 1, points: 1 },
-              { question: 'Chaining handles collisions by…|||Chaining xử lý va chạm bằng cách…', options: ['ignoring them|||bỏ qua', 'storing colliding entries in a list at the bucket|||lưu các mục va chạm trong một danh sách tại bucket', 'resizing to O(1)|||resize về O(1)', 'sorting the table|||sắp bảng'], correctIndex: 1, points: 1 },
-              { question: 'Huffman coding builds its code tree using a…|||Mã Huffman dựng cây mã bằng…', options: ['stack|||ngăn xếp', 'priority queue (heap)|||hàng đợi ưu tiên (heap)', 'hash map', 'graph|||đồ thị'], correctIndex: 1, points: 1 },
-              { question: 'Balanced trees (AVL/Red-Black) exist to…|||Cây cân bằng (AVL/Red-Black) tồn tại để…', options: ['save memory|||tiết kiệm bộ nhớ', 'guarantee O(log n) operations|||đảm bảo thao tác O(log n)', 'sort faster|||sắp nhanh hơn', 'avoid recursion|||tránh đệ quy'], correctIndex: 1, points: 1 },
-              { question: 'Dijkstra\'s shortest-path algorithm relies on a…|||Thuật toán đường ngắn nhất Dijkstra dựa vào…', options: ['queue|||hàng đợi', 'priority queue|||hàng đợi ưu tiên', 'stack|||ngăn xếp', 'hash set'], correctIndex: 1, points: 1 },
-            ],
-          },
+          description: nangCao.quizDescription,
+          quiz: nangCao.quiz,
         },
       ],
     },

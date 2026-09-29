@@ -206,9 +206,9 @@ export const slides = S([ cover({ t, sub, chap: 'CHƯƠNG N' }), { t: 'Bản đ�
 - DNS/TLS: không đăng ký tên miền thật, không gọi Let's Encrypt production. Demo bằng `/etc/hosts` trong container,
   CA cục bộ (`mkcert`/`openssl`) hoặc **Pebble** (máy chủ ACME thử nghiệm của Let's Encrypt) trong container.
   `dig` tên miền công khai (example.com, cuongthai.com chỉ đọc bản ghi DNS) thì được.
-- ⛔ **KHÔNG BAO GIỜ gửi thông tin cá nhân của người dùng** (email, tên, số điện thoại) ra bất kỳ dịch vụ nào — kể
-  cả trong header User-Agent để "lấy được 200". Trang nào chặn bot (vd sec.gov trả 403) nhưng mở bằng trình duyệt được
-  thì cứ giữ link, ghi chú trong báo cáo, đừng lách.
+- Thông tin cá nhân của người dùng: KHÔNG tự ý đưa vào nội dung khoá. Người dùng cho phép (29/09/2026) dùng email
+  của họ khi một nguồn chính thức BẮT BUỘC khai liên hệ (vd sec.gov đòi User-Agent có email) — chỉ khi thật cần, và
+  ghi vào báo cáo. Ngoài trường hợp đó thì không gửi ra đâu.
 - Chú thích `slide(deck, n, 'chú thích')` KHÔNG được escape ⇒ không viết `<`/`>` trần trong chú thích (dùng `&lt;`).
 - Kho thử/file tạm: trong thư mục scratch người điều phối đưa, KHÔNG trong repo api-backend.
 - Xong: `docker ps -a --filter name=dvNN-` rỗng, mạng `dvNN-net` và ảnh tạm đã xoá, `~/dvhoc-NN` trên linux-nha xoá.

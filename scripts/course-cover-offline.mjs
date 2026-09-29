@@ -57,6 +57,7 @@ const KHOA = [
   ['deploy-vps',               'ubuntu',        'E95420', 'Deploy lên VPS',   'Zero → production tự tráo'],
   ['github-actions',           'githubactions', '2088FF', 'GitHub Actions',   'Zero → CI/CD chạy thật'],
   ['observability-monitoring', 'grafana',       'F46800', 'Observability',    'Log → Metric → Trace'],
+  ['kafka',                    'apachekafka',   'FFFFFF', 'Apache Kafka',     'Zero → event streaming'],
 ];
 
 const esc = (s) => String(s)

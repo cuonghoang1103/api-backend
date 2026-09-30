@@ -15,6 +15,7 @@ import { Dialog, EmptyState, formatDate, IssueTypeIcon, PriorityIcon, Spinner, S
 import { wk } from '@/components/work/hooks';
 import { Select, Switch } from '@/components/work/settings/shared';
 import { cn } from '@/lib/utils';
+import { CalendarButton } from '@/components/work/CalendarFeed';
 
 const GROUPS: Array<{ id: MyWorkItem['bucket']; label: string; tone?: string }> = [
   { id: 'overdue', label: 'Overdue', tone: 'text-[var(--w-red)]' },
@@ -158,7 +159,8 @@ export default function MyWork() {
         <Counter label="In progress" value={counts.inProgress} tone="text-[var(--w-blue)]" icon={CircleDot} />
         <Counter label="Open" value={counts.total} icon={Inbox} />
       </div>
-      <div className="flex justify-end">
+      <div className="flex flex-wrap justify-end gap-1">
+        <CalendarButton />
         <NotifyButton />
       </div>
 

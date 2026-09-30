@@ -14,7 +14,7 @@ import { effectiveProjectRole } from './permissions.js';
 import type { ProjectRole, ProjectVisibility, WorkspaceRole } from './constants.js';
 import { vnDay } from './sprints.service.js';
 
-async function visibleProjectIds(userId: number): Promise<number[]> {
+export async function visibleProjectIds(userId: number): Promise<number[]> {
   const ws = await prisma.workMember.findMany({
     where: { userId, workspace: { deletedAt: null } },
     select: {

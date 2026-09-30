@@ -9,14 +9,15 @@
 import { useMemo, useRef, useState, type ReactNode, type RefObject } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { ExternalLink } from 'lucide-react';
+import { ExternalLink, Eye } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
   userName, workApi, workError, type CustomField, type CustomValue, type CustomValues, type ProjectConfig,
 } from '@/lib/work-api';
 import { DateInput } from './fields';
 import { wk } from './hooks';
-import { PickerList, Popover, Spinner, UserAvatar, useToggle, type PickOption } from './ui';
+import { Dialog, PickerList, Popover, Spinner, UserAvatar, useToggle, type PickOption } from './ui';
+import { resolveEmbed } from '@/components/notes/extensions/NoteEmbed';
 
 function Row({ field, children }: { field: CustomField; children: ReactNode }) {
   return (
@@ -166,6 +167,7 @@ function FieldEditor({ field, value, config, onChange, disabled }: {
               validate={(v) => (/^https?:\/\/\S+$/i.test(v) ? null : 'Enter a full link that starts with http:// or https://')}
             />
           </div>
+          {url && resolveEmbed(url) && <DocPreviewButton url={url} name={field.name} />}
           {url && (
             <a href={url} target="_blank" rel="noopener noreferrer" title="Open link" className="w-btn w-btn-ghost w-btn-icon w-btn-sm shrink-0"><ExternalLink size={12} /></a>
           )}
@@ -260,5 +262,34 @@ export default function CustomFieldsGroup({ pid, num, typeKey, config, editable 
         ))
       )}
     </div>
+  );
+}
+
+/**
+ * Xem trước tài liệu (Google Docs/Sheets/Slides/Drive, OneDrive/SharePoint) ngay trong thẻ — dùng chung
+ * bộ đổi link của khối Nhúng trong Notes (resolveEmbed) và cùng danh sách frame-src của CSP. Chỉ XEM:
+ * Google/Microsoft không cho sửa trong khung trang khác, nên sửa thì bấm "Open to edit" (tab mới).
+ */
+function DocPreviewButton({ url, name }: { url: string; name: string }) {
+  const [open, setOpen] = useState(false);
+  const embed = resolveEmbed(url);
+  if (!embed) return null;
+  return (
+    <>
+      <button type="button" title="Preview" aria-label={`Preview ${name}`} className="w-btn w-btn-ghost w-btn-icon w-btn-sm shrink-0" onClick={() => setOpen(true)}><Eye size={12} /></button>
+      <Dialog
+        open={open}
+        onClose={() => setOpen(false)}
+        width={1100}
+        title={<span className="flex items-center gap-2">{name}<span className="text-[12px] font-normal text-[var(--w-text-3)]">{embed.provider} · preview</span></span>}
+        footer={<a href={url} target="_blank" rel="noopener noreferrer" className="w-btn w-btn-primary w-btn-sm"><ExternalLink size={13} /> Open to edit</a>}
+      >
+        <iframe src={embed.src} title={`${name} preview`} className="h-[70vh] w-full rounded-[6px] border border-[var(--w-border)] bg-white" allow="fullscreen" referrerPolicy="no-referrer-when-downgrade" />
+        <p className="mt-2 text-[12px] text-[var(--w-text-3)]">
+          Blank or asking you to sign in? The file must be shared (“Anyone with the link” or your school account), and you may need to be
+          signed in to Google/Microsoft in this browser. You can always use “Open to edit”.
+        </p>
+      </Dialog>
+    </>
   );
 }

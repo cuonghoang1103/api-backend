@@ -13,7 +13,7 @@ import type { Prisma } from '@prisma/client';
 import { Router, type Request, type Response } from 'express';
 import { z, ZodError } from 'zod';
 import { authenticate } from '../middleware/auth.js';
-import { asyncHandler, BadRequestError, UnauthorizedError } from '../middleware/errorHandler.js';
+import { asyncHandler, BadRequestError, UnauthorizedError, NotFoundError } from '../middleware/errorHandler.js';
 import { prisma } from '../config/database.js';
 import {
   LINK_TYPES, PRIORITY_MAX, PRIORITY_MIN, PROJECT_ROLES, PROJECT_TEMPLATES, PROJECT_TYPES,
@@ -44,6 +44,7 @@ import * as editLock from '../services/work/editLock.service.js';
 import * as exchange from '../services/work/exchange.service.js';
 import * as share from '../services/work/share.service.js';
 import * as apiTokens from '../services/work/apiTokens.service.js';
+import * as calendar from '../services/work/calendar.service.js';
 import * as trash from '../services/work/trash.service.js';
 import * as onboarding from '../services/work/onboarding.service.js';
 
@@ -126,6 +127,15 @@ router.post('/gitlab/webhook/:pid', asyncHandler(async (req, res) => {
   let body: unknown = req.body;
   if (Buffer.isBuffer(body)) { try { body = JSON.parse(body.toString('utf8')); } catch { body = null; } }
   ok(res, await gitlab.handleWebhook(idParam(req, 'pid'), token, body));
+}));
+
+// Lịch đăng ký (.ics) — ứng dụng lịch không gửi được đăng nhập, nên bí mật nằm trong URL (calendar.service.ts).
+router.get('/calendar/:file', asyncHandler(async (req, res) => {
+  const file = String(req.params.file);
+  if (!file.endsWith('.ics')) throw new NotFoundError('Calendar not found');
+  const body = await calendar.renderCalendar(file.slice(0, -4));
+  res.set({ 'Content-Type': 'text/calendar; charset=utf-8', 'Cache-Control': 'private, max-age=300', 'Content-Disposition': 'inline; filename="ct-work.ics"', 'X-Robots-Tag': 'noindex' });
+  res.send(body);
 }));
 
 // Link công khai chỉ đọc — ai có link là xem được, không cần tài khoản.
@@ -1243,6 +1253,18 @@ router.post('/me/api-tokens', asyncHandler(async (req, res) => {
 }));
 router.delete('/me/api-tokens/:tokenId', asyncHandler(async (req, res) => {
   await apiTokens.revokeToken(callerId(req), idParam(req, 'tokenId'));
+  ok(res, { revoked: true });
+}));
+
+// Link lịch (.ics) của chính mình — tạo mới = thu hồi link cũ; token chỉ trả về một lần.
+router.get('/me/calendar-link', asyncHandler(async (req, res) => {
+  ok(res, await calendar.calendarLinkStatus(callerId(req)));
+}));
+router.post('/me/calendar-link', asyncHandler(async (req, res) => {
+  ok(res, await calendar.createCalendarLink(callerId(req)), 201);
+}));
+router.delete('/me/calendar-link', asyncHandler(async (req, res) => {
+  await calendar.revokeCalendarLink(callerId(req));
   ok(res, { revoked: true });
 }));
 

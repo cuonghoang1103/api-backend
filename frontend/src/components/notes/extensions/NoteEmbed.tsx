@@ -68,10 +68,43 @@ const PROVIDERS: Provider[] = [
     ratio: '4 / 3',
     // Docs/Sheets/Slides/Drive/Maps. `/preview` và `/embed` là đường Google
     // cho phép nhúng; đường xem thường (`/edit`) bị chính Google chặn khung.
+    // Link chia sẻ thật hay có đuôi `?usp=sharing` / `#gid=…` (Sheets) — phải bỏ trước khi đổi đường,
+    // không thì `/edit` còn nguyên và Google chặn khung (khung trắng, không báo lỗi).
     toEmbed: (u) => {
-      if (u.host === 'docs.google.com') return u.href.replace(/\/(edit|view)(\?.*)?$/, '/preview');
-      if (u.host === 'drive.google.com') return u.href.replace(/\/view(\?.*)?$/, '/preview');
+      if (u.host === 'docs.google.com' && /\/(document|spreadsheets|presentation|forms)\/d\//.test(u.pathname)) {
+        const gid = /(?:^|&)gid=(\d+)/.exec(u.hash.slice(1))?.[1];
+        const base = u.pathname.replace(/\/(edit|view|htmlview|preview|viewform)?\/?$/, '');
+        return `https://docs.google.com${base}/${u.pathname.includes('/forms/') ? 'viewform?embedded=true' : `preview${gid ? `?gid=${gid}` : ''}`}`;
+      }
+      if (u.host === 'drive.google.com') {
+        const id = /\/file\/d\/([\w-]+)/.exec(u.pathname)?.[1] ?? u.searchParams.get('id');
+        return id ? `https://drive.google.com/file/d/${id}/preview` : null;
+      }
       if (u.host === 'www.google.com' && u.pathname.startsWith('/maps/embed')) return u.href;
+      return null;
+    },
+  },
+  {
+    name: 'Microsoft 365',
+    ratio: '4 / 3',
+    // Word/Excel/PowerPoint trên OneDrive/SharePoint (tài khoản trường). `action=embedview` là chế độ Microsoft
+    // cho phép nhúng; tài liệu phải bật chia sẻ, và người xem có thể phải đăng nhập Microsoft trong khung.
+    // Link rút gọn 1drv.ms không đổi được (phải theo chuyển hướng) ⇒ không nhận, chỉ mở ra tab mới.
+    toEmbed: (u) => {
+      if (u.host === 'onedrive.live.com') {
+        if (u.pathname === '/embed') return u.href;
+        const resid = u.searchParams.get('resid') ?? u.searchParams.get('id');
+        if (!resid) return null;
+        const q = new URLSearchParams({ resid });
+        for (const k of ['authkey', 'cid']) { const v = u.searchParams.get(k); if (v) q.set(k, v); }
+        return `https://onedrive.live.com/embed?${q}`;
+      }
+      if (/(^|\.)sharepoint\.com$/.test(u.host)) {
+        const e = new URL(u.href);
+        e.hash = '';
+        e.searchParams.set('action', 'embedview');
+        return e.href;
+      }
       return null;
     },
   },

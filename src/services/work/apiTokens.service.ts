@@ -33,7 +33,8 @@ declare global {
 
 export async function listTokens(userId: number) {
   return prisma.workApiToken.findMany({
-    where: { userId, revokedAt: null },
+    // Link lịch (calendar.service, scopes ["calendar"]) nằm cùng bảng nhưng KHÔNG phải token API.
+    where: { userId, revokedAt: null, NOT: { scopes: { array_contains: ['calendar'] } } },
     orderBy: { id: 'desc' },
     select: { id: true, name: true, prefix: true, scopes: true, expiresAt: true, lastUsedAt: true, lastUsedIp: true, createdAt: true },
   });
@@ -43,7 +44,7 @@ export async function createToken(userId: number, input: { name: string; scopes:
   const name = input.name.trim().slice(0, 100);
   if (!name) throw new BadRequestError('Give the token a name', 'WORK_NAME_REQUIRED');
   const scopes = [...new Set<TokenScope>(['read', ...input.scopes.filter((s) => TOKEN_SCOPES.includes(s))])];
-  const count = await prisma.workApiToken.count({ where: { userId, revokedAt: null } });
+  const count = await prisma.workApiToken.count({ where: { userId, revokedAt: null, NOT: { scopes: { array_contains: ['calendar'] } } } });
   if (count >= MAX_TOKENS) throw new BadRequestError(`You can have at most ${MAX_TOKENS} active tokens`, 'WORK_LIMIT');
   const prefix = crypto.randomBytes(4).toString('hex');
   const secret = crypto.randomBytes(24).toString('base64url');
@@ -81,7 +82,7 @@ export async function apiTokenAuth(req: Request, _res: Response, next: NextFunct
     const scopes = (row.scopes as TokenScope[]) ?? ['read'];
     if (req.method !== 'GET' && req.method !== 'HEAD' && !scopes.includes('write')) throw new ForbiddenError('This API token is read-only');
     // Token không được quản lý token.
-    if (req.path.startsWith('/me/api-tokens')) throw new ForbiddenError('Manage API tokens from the CT Work website');
+    if (req.path.startsWith('/me/api-tokens') || req.path.startsWith('/me/calendar-link')) throw new ForbiddenError('Manage API tokens from the CT Work website');
     req.userId = row.userId;
     req.user = { userId: row.userId, username: row.user.username, email: row.user.email } as typeof req.user;
     req.workToken = { id: row.id, scopes };

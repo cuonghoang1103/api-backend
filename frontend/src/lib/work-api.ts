@@ -584,6 +584,8 @@ export interface ShareLink {
   viewCount: number; lastViewedAt: string | null; createdAt: string;
 }
 export type TokenScope = 'read' | 'write';
+export interface CalendarLinkStatus { active: boolean; createdAt: string | null; lastUsedAt: string | null; prefix: string | null }
+
 export interface ApiToken { id: number; name: string; prefix: string; scopes: TokenScope[]; expiresAt: string | null; lastUsedAt: string | null; lastUsedIp: string | null; createdAt: string }
 /** Dữ liệu trang công khai /work/share/[token] — không có email, bình luận, file. */
 export interface ShareSummary {
@@ -967,6 +969,9 @@ export const workApi = {
   apiTokens: () => d<ApiToken[]>(api.get(`${B}/me/api-tokens`)),
   createApiToken: (body: { name: string; scopes: TokenScope[]; expiresInDays?: number | null }) => d<ApiToken & { token: string }>(api.post(`${B}/me/api-tokens`, body)),
   revokeApiToken: (id: number) => d(api.delete(`${B}/me/api-tokens/${id}`)),
+  calendarLink: () => d<CalendarLinkStatus>(api.get(`${B}/me/calendar-link`)),
+  createCalendarLink: () => d<{ token: string; path: string }>(api.post(`${B}/me/calendar-link`)),
+  revokeCalendarLink: () => d(api.delete(`${B}/me/calendar-link`)),
   // Trang công khai (không cần đăng nhập)
   share: (token: string) => d<ShareSummary>(api.get(`${B}/share/${encodeURIComponent(token)}`)),
   shareIssues: (token: string, section: 'board' | 'backlog') => d<ShareIssue[]>(api.get(`${B}/share/${encodeURIComponent(token)}/issues?section=${section}`)),

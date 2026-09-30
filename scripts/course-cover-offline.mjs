@@ -58,6 +58,30 @@ const KHOA = [
   ['github-actions',           'githubactions', '2088FF', 'GitHub Actions',   'Zero → CI/CD chạy thật'],
   ['observability-monitoring', 'grafana',       'F46800', 'Observability',    'Log → Metric → Trace'],
   ['kafka',                    'apachekafka',   'FFFFFF', 'Apache Kafka',     'Zero → event streaming'],
+  // 30/09/2026 — 25 khoá khung mới (content/courses/_KE-HOACH-KHOA-MOI-3009.md): bảo mật, vận hành, nền tảng CS, dữ liệu, sản phẩm.
+  ['ddos-protection', 'cloudflare', 'F38020', 'Chống DDoS', 'Cloudflare · WAF · rate limit'],
+  ['incident-response', 'pagerduty', '06AC38', 'Ứng phó sự cố', 'Phát hiện → khôi phục → postmortem'],
+  ['threat-modeling', 'owasp', 'FFFFFF', 'Threat Modeling', 'STRIDE · thiết kế an toàn'],
+  ['applied-cryptography', 'gnuprivacyguard', '0093DD', 'Mật mã ứng dụng', 'Hash · AES · RSA/ECC · TLS 1.3'],
+  ['network-security', 'wireguard', 'E0484E', 'Bảo mật mạng', 'Firewall · VPN · Zero Trust'],
+  ['cloud-container-security', 'kubernetes', '326CE5', 'Cloud & K8s Security', 'IAM · image · RBAC · runtime'],
+  ['blue-team-siem', 'elastic', '00BFB3', 'Blue Team & SIEM', 'Phát hiện xâm nhập · điều tra số'],
+  ['devsecops', 'githubactions', '2088FF', 'DevSecOps', 'Bảo mật trong CI/CD'],
+  ['reverse-engineering', 'virustotal', '5B7CFF', 'Reverse Engineering', 'Assembly · Ghidra · mã độc'],
+  ['privacy-data-law', 'proton', '8B6CFF', 'Quyền riêng tư', 'GDPR · Nghị định 13/2023'],
+  ['infrastructure-as-code', 'terraform', '9D6CE0', 'Infrastructure as Code', 'Terraform & Ansible'],
+  ['email-infrastructure', 'gmail', 'EA4335', 'Hạ tầng email', 'SPF · DKIM · DMARC · không vào spam'],
+  ['performance-load-testing', 'k6', '8F7CFF', 'Hiệu năng & Load test', 'k6 · profiling · capacity'],
+  ['networking-for-developers', 'wireshark', '3B9AD9', 'Mạng cho Dev', 'DNS · TCP · TLS · HTTP/3 · CDN'],
+  ['operating-systems-for-developers', 'linux', 'FCC624', 'Hệ điều hành', 'Process · memory · concurrency'],
+  ['distributed-systems', 'etcd', '419EDA', 'Hệ thống phân tán', 'CAP · Raft · replication'],
+  ['system-design', 'apachecassandra', '3FA9D6', 'System Design', '1 server → hàng triệu người dùng'],
+  ['search-elasticsearch', 'elasticsearch', 'FEC514', 'Tìm kiếm', 'Elasticsearch · OpenSearch · full-text'],
+  ['data-engineering', 'clickhouse', 'FFCC01', 'Data Engineering', 'ETL · ClickHouse · dbt'],
+  ['online-payments', 'stripe', '8F87FF', 'Thanh toán online', 'VNPay · MoMo · Stripe · webhook'],
+  ['ux-ui-for-developers', 'figma', 'F24E1E', 'UX/UI cho Dev', 'Figma · design system · a11y'],
+  ['seo-analytics', 'googlesearchconsole', '458CF5', 'SEO & Analytics', 'Search Console · GA4 · Web Vitals'],
+  ['solo-product', 'producthunt', 'DA552F', 'Làm sản phẩm solo', 'Ý tưởng → ra mắt → doanh thu'],
 ];
 
 const esc = (s) => String(s)
@@ -69,6 +93,8 @@ function veSvg(paths, COLOR, TITLE, SUBTITLE) {
   const LOGO_X = 96, LOGO_Y = (H - LOGO_BOX) / 2 - 12;
   const scale = LOGO_BOX / 24;
   const TX = LOGO_X + LOGO_BOX + 76;
+  // Tiêu đề dài hơn ~16 ký tự tràn khung 82px (30/09: "Infrastructure as Code", "Cloud & K8s Security") ⇒ thu nhỏ theo độ dài, sàn 52px.
+  const TITLE_SIZE = [...TITLE].length > 16 ? Math.max(52, Math.floor((82 * 16) / [...TITLE].length)) : 82;
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
@@ -100,7 +126,7 @@ function veSvg(paths, COLOR, TITLE, SUBTITLE) {
 
   <text x="${TX}" y="${H / 2 - 74}" font-family="DejaVu Sans" font-size="24" font-weight="bold"
         fill="#${COLOR}" letter-spacing="4">${esc(EYEBROW)}</text>
-  <text x="${TX}" y="${H / 2 + 8}" font-family="DejaVu Sans" font-size="82" font-weight="bold"
+  <text x="${TX}" y="${H / 2 + 8}" font-family="DejaVu Sans" font-size="${TITLE_SIZE}" font-weight="bold"
         fill="#f2f5fb">${esc(TITLE)}</text>
   ${SUBTITLE ? `<text x="${TX}" y="${H / 2 + 58}" font-family="DejaVu Sans" font-size="30"
         fill="#9aa4bd">${esc(SUBTITLE)}</text>` : ''}

@@ -35,7 +35,7 @@ import {
   dsQuyenLauCua, xoaQuyenLauCua, veCongChinh,
 } from '../agent/loop';
 import { dungLenhNenCua } from '../agent/lenhNen';
-import { duongDanCauHinh, duyetDuAn, hanMucMcp, napLaiMcp, toolMcpHienCo, trangThaiServer } from '../agent/mcp';
+import { duongDanCauHinh, duyetDuAn, hanMucMcp, loiCauHinh, napLaiMcp, toolMcpHienCo, trangThaiServer } from '../agent/mcp';
 import { cai, napChiMuc, tim } from '../agent/khoKyNang';
 import { WEB_ORIGIN } from '../config';
 import { dsWorktree, taoWorktree, xoaWorktree } from '../agent/worktree';
@@ -736,5 +736,6 @@ function trangThaiMcp(): AgentMcpTrangThai {
     server: trangThaiServer(),
     soTool: toolMcpHienCo().length,
     hanMuc: hanMucMcp(),
+    loiCauHinh: loiCauHinh(),
   };
 }

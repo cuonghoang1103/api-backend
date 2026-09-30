@@ -28,26 +28,46 @@
  *      để nó được cấp quyền dễ hơn một lệnh shell.
  *
  * ─── VÌ SAO KHÔNG DÙNG SDK CHÍNH THỨC ───
- * Phần dùng tới là ba lời gọi (`initialize`, `tools/list`, `tools/call`) trên
- * JSON-RPC phân cách bằng xuống dòng. Kéo cả một SDK về cho chừng đó, vào một
- * tiến trình đã có `fs` và `child_process`, là mở rộng bề mặt tấn công nhiều
- * hơn phần được dùng.
+ * Phần dùng tới là vài lời gọi (`initialize`, `tools/list`, `tools/call`) trên
+ * JSON-RPC. Kéo cả một SDK về cho chừng đó, vào một tiến trình đã có `fs` và
+ * `child_process`, là mở rộng bề mặt tấn công nhiều hơn phần được dùng.
+ *
+ * ─── NÂNG CẤP 30/09/2026 (để cắm được Figma) ───
+ * Tầng kết nối tách sang `mcpKetNoi.ts` (stdio + Streamable HTTP + SSE cũ),
+ * biến đổi kết quả sang `mcpNoiDung.ts` (ảnh đi tới model, cắt có báo). File
+ * này còn lo: đọc cấu hình, bật server SONG SONG, bảng trạng thái, gọi tool.
  */
 import { app } from 'electron';
-import { spawn, type ChildProcessWithoutNullStreams } from 'node:child_process';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { daDuyet, ghiDuyet } from './duyetDuAn';
+import {
+  KetNoiMcp, LoiHttp, kieuCua, laLenhTaiGoi, taoHttp, taoSse, taoStdio,
+  type CauHinhServer, type KieuKetNoi, type VanChuyen,
+} from './mcpKetNoi';
+import {
+  KHUON_TEN_SERVER, chuanSchema, chuyenKetQua, moRongBang, moRongBien, tenToolAnToan,
+  type KetQuaChuyen,
+} from './mcpNoiDung';
+
+export type { CauHinhServer } from './mcpKetNoi';
 
 // ─── Trần ──────────────────────────────────────────────────────────
 const MAX_SERVER = 5;
 const MAX_TOOL = 40;
 const MAX_MO_TA = 500;
-/** Server không bắt tay xong trong ngần này thì coi như hỏng và đi tiếp. */
-const KHOI_DONG_MS = 10_000;
+/**
+ * Hạn khởi động + bắt tay. 10 giây cũ quá ngắn cho lần đầu `npx -y …` (phải
+ * tải gói) — server "hỏng" đúng lần đầu người dùng cắm nó. Nạp chạy ở NỀN
+ * lúc mở app và các server bật song song, nên hạn dài không làm chậm gì.
+ */
+const KHOI_DONG_MS = 30_000;
+const KHOI_DONG_TAI_GOI_MS = 120_000;
 const GOI_MS = 60_000;
-/** Kết quả một tool MCP. Cùng lý do như tool khác: nó chở theo ở mọi lượt sau. */
-const MAX_KET_QUA = 16_000;
+/** `tools/list` phân trang (`nextCursor`) — chặn server trả trang vô hạn. */
+const MAX_TRANG = 10;
+/** Phiên bản giao thức ta đề nghị. Server cũ trả bản của nó — ta nhận bản đó. */
+const PHIEN_BAN_GIAO_THUC = '2025-06-18';
 
 export interface ToolMcp {
   /** Tên đã gắn tiền tố: `mcp__<server>__<tool>`. */
@@ -58,22 +78,20 @@ export interface ToolMcp {
   thamSo: Record<string, unknown>;
 }
 
-interface CauHinhServer {
-  command: string;
-  args?: string[];
-  env?: Record<string, string>;
-}
-
 interface ServerDangChay {
   ten: string;
-  tienTrinh: ChildProcessWithoutNullStreams;
-  cho: Map<number, { xong: (v: unknown) => void; hong: (e: Error) => void; dongHo: ReturnType<typeof setTimeout> }>;
-  demId: number;
-  dem: string;
+  kieu: KieuKetNoi;
+  ketNoi: KetNoiMcp;
+  tool: ToolMcp[];
+  hanGoiMs: number;
 }
 
 const dangChay = new Map<string, ServerDangChay>();
+/** Thứ tự server theo file cấu hình — để trần 40 tool cắt công bằng, ổn định. */
+let thuTu: string[] = [];
 let toolDaBiet: ToolMcp[] = [];
+/** Lỗi đọc file cấu hình toàn cục (JSON hỏng…) — hiện lên bảng, không nuốt. */
+let loiCauHinhCuoi: string | null = null;
 /**
  * Kết quả lần nạp gần nhất — GIỮ Ở ĐÂY, không ở tầng IPC.
  *
@@ -97,25 +115,62 @@ export function duongDanCauHinh(): string {
  * dùng đi tra tài liệu — nhất là khi cú pháp chỉ có ba trường.
  */
 const MAU = `{
-  "_doc": "Server MCP cho agent. Sửa file này rồi bấm 'Nạp lại MCP' trong app.",
+  "_doc": "Server MCP cho AI Code. Chép một mục trong _vidu vào servers, sửa, rồi bấm 'Nạp lại' trong bảng MCP. Ba kiểu: command (stdio), url + type http, url + type sse. Viết \${TEN_BIEN} để lấy biến môi trường.",
   "_vidu": {
-    "filesystem": { "command": "npx", "args": ["-y", "@modelcontextprotocol/server-filesystem", "/duong/dan"] }
+    "figma": {
+      "_ghi_chu": "Figma qua API token (tài khoản miễn phí được). Token: Figma > Settings > Security > Personal access tokens",
+      "command": "npx",
+      "args": ["-y", "figma-developer-mcp", "--stdio"],
+      "env": { "FIGMA_API_KEY": "figd_..." }
+    },
+    "figma-desktop": {
+      "_ghi_chu": "Figma Dev Mode MCP chính thức: mở app Figma > Preferences > Enable Dev Mode MCP Server (cần gói có Dev/Full seat)",
+      "type": "http",
+      "url": "http://127.0.0.1:3845/mcp"
+    },
+    "filesystem": { "command": "npx", "args": ["-y", "@modelcontextprotocol/server-filesystem", "/duong/dan"] },
+    "server-co-token": { "type": "http", "url": "https://vi-du.com/mcp", "headers": { "Authorization": "Bearer \${TOKEN_CUA_BAN}" } }
   },
   "servers": {}
 }
 `;
 
-async function docCauHinh(): Promise<Record<string, CauHinhServer>> {
+/**
+ * Đọc file cấu hình toàn cục.
+ *
+ * ⚠️ Bản đầu GHI ĐÈ file bằng mẫu ở MỌI lỗi — kể cả khi file có thật mà chỉ
+ * sai một dấu phẩy. Người dùng gõ thiếu một dấu, bấm "Nạp lại", và toàn bộ
+ * cấu hình họ vừa viết (kèm token) biến mất không dấu vết. Giờ chỉ ghi mẫu khi
+ * file THẬT SỰ chưa có; JSON hỏng thì báo lỗi lên bảng và KHÔNG đụng vào file.
+ *
+ * Nhận cả `servers` lẫn `mcpServers` — README của server nào cũng viết
+ * `mcpServers`, và người ta chép nguyên khối đó vào.
+ */
+async function docCauHinh(): Promise<{ bang: Record<string, CauHinhServer>; loi: string | null }> {
   const p = duongDanCauHinh();
+  let tho: string;
   try {
-    const j = JSON.parse(await fs.readFile(p, 'utf8')) as { servers?: Record<string, CauHinhServer> };
-    return j.servers && typeof j.servers === 'object' ? j.servers : {};
-  } catch {
-    // Chưa có file ⇒ ghi mẫu rồi trả về rỗng. Không ném: không cấu hình MCP là
-    // trạng thái BÌNH THƯỜNG, không phải lỗi.
-    await fs.writeFile(p, MAU, 'utf8').catch(() => {});
-    return {};
+    tho = await fs.readFile(p, 'utf8');
+  } catch (err) {
+    if ((err as NodeJS.ErrnoException).code === 'ENOENT') {
+      // Chưa có file ⇒ ghi mẫu. Không cấu hình MCP là trạng thái BÌNH THƯỜNG.
+      await fs.writeFile(p, MAU, { encoding: 'utf8', flag: 'wx' }).catch(() => {});
+      return { bang: {}, loi: null };
+    }
+    return { bang: {}, loi: `không đọc được mcp.json: ${(err as Error).message}` };
   }
+  let j: { servers?: unknown; mcpServers?: unknown };
+  try {
+    j = JSON.parse(tho) as typeof j;
+  } catch (err) {
+    return { bang: {}, loi: `mcp.json sai cú pháp JSON — ${(err as Error).message}. File KHÔNG bị sửa; sửa lỗi rồi bấm Nạp lại.` };
+  }
+  const bang = j?.servers ?? j?.mcpServers;
+  if (bang === undefined) return { bang: {}, loi: null };
+  if (!bang || typeof bang !== 'object' || Array.isArray(bang)) {
+    return { bang: {}, loi: 'mcp.json: "servers" phải là một object { "tên": { … } }' };
+  }
+  return { bang: bang as Record<string, CauHinhServer>, loi: null };
 }
 
 /**
@@ -127,7 +182,8 @@ async function docCauHinh(): Promise<Record<string, CauHinhServer>> {
  * server (kho tài liệu riêng, CSDL riêng), chứ không phải một danh sách toàn
  * cục dùng chung cho mọi repo.
  *
- * ⚠️⚠️ NHƯNG FILE NÀY NẰM TRONG KHO MÃ, VÀ NÓ LÀ MỘT DÒNG LỆNH SẼ CHẠY.
+ * ⚠️⚠️ NHƯNG FILE NÀY NẰM TRONG KHO MÃ, VÀ NÓ LÀ MỘT DÒNG LỆNH SẼ CHẠY
+ * (hoặc một URL sẽ nhận `headers` — có thể chứa `${TOKEN}` của bạn).
  * `git clone` một repo lạ rồi mở nó trong app = repo đó chọn giúp bạn một
  * tiến trình con, với env của bạn, không ai hỏi gì. Đây không phải nguy cơ lý
  * thuyết: `command` + `args` là toàn quyền trên máy.
@@ -160,11 +216,10 @@ export async function docCauHinhDuAn(goc: string | null): Promise<Record<string,
     const j = JSON.parse(tho) as { mcpServers?: unknown; servers?: unknown };
     const bang = (j.mcpServers ?? j.servers) as Record<string, CauHinhServer> | undefined;
     if (!bang || typeof bang !== 'object' || Array.isArray(bang)) return {};
-    // Lọc ngay ở đây: một mục thiếu `command` không được lọt vào vân tay, nếu
-    // không thì sửa một mục hỏng thành hỏng kiểu khác cũng bắt duyệt lại.
-    return Object.fromEntries(
-      Object.entries(bang).filter(([, c]) => c && typeof (c as CauHinhServer).command === 'string'),
-    );
+    // Lọc ngay ở đây: một mục không chạy được (thiếu cả `command` lẫn `url`)
+    // không được lọt vào vân tay, nếu không thì sửa một mục hỏng thành hỏng
+    // kiểu khác cũng bắt duyệt lại.
+    return Object.fromEntries(Object.entries(bang).filter(([, c]) => kieuCua(c) !== null));
   } catch {
     return {};   // không có file, hoặc JSON hỏng — cả hai đều là "không có MCP dự án"
   }
@@ -180,64 +235,6 @@ export async function duyetDuAn(goc: string | null): Promise<boolean> {
   return ghiDuyet(KHO_DUYET, goc, await docCauHinhDuAn(goc));
 }
 
-// ─── JSON-RPC qua stdio ────────────────────────────────────────────
-
-/**
- * Gửi một lời gọi và chờ trả lời.
- *
- * MCP dùng JSON-RPC phân cách bằng XUỐNG DÒNG — mỗi thông điệp là một dòng
- * JSON. Không có `Content-Length` như LSP; nhầm hai cái này thì server im lặng
- * không trả lời gì và trông y hệt server hỏng.
- */
-function goi(s: ServerDangChay, method: string, params?: unknown): Promise<unknown> {
-  const id = ++s.demId;
-  return new Promise((xong, hong) => {
-    const dongHo = setTimeout(() => {
-      s.cho.delete(id);
-      hong(new Error(`${s.ten}: quá ${GOI_MS / 1000}s không trả lời`));
-    }, GOI_MS);
-    s.cho.set(id, { xong, hong, dongHo });
-    try {
-      s.tienTrinh.stdin.write(`${JSON.stringify({ jsonrpc: '2.0', id, method, params })}\n`);
-    } catch (err) {
-      clearTimeout(dongHo);
-      s.cho.delete(id);
-      hong(err as Error);
-    }
-  });
-}
-
-function baoCho(s: ServerDangChay, method: string, params?: unknown): void {
-  try {
-    s.tienTrinh.stdin.write(`${JSON.stringify({ jsonrpc: '2.0', method, params })}\n`);
-  } catch {
-    /* server đã chết — lời báo không cần ai nhận */
-  }
-}
-
-function noiStdout(s: ServerDangChay): void {
-  s.tienTrinh.stdout.on('data', (mau: Buffer) => {
-    s.dem += mau.toString('utf8');
-    // Giữ bộ đệm có trần: một server hỏng in vô hạn sẽ ăn hết RAM.
-    if (s.dem.length > 4_000_000) s.dem = s.dem.slice(-1_000_000);
-
-    const dong = s.dem.split('\n');
-    s.dem = dong.pop() ?? '';
-    for (const d of dong) {
-      if (!d.trim()) continue;
-      let j: { id?: number; result?: unknown; error?: { message?: string } };
-      try { j = JSON.parse(d); } catch { continue; }
-      if (typeof j.id !== 'number') continue; // thông báo một chiều, không ai chờ
-      const c = s.cho.get(j.id);
-      if (!c) continue;
-      clearTimeout(c.dongHo);
-      s.cho.delete(j.id);
-      if (j.error) c.hong(new Error(j.error.message ?? 'lỗi MCP'));
-      else c.xong(j.result);
-    }
-  });
-}
-
 // ─── Khởi động ─────────────────────────────────────────────────────
 
 export interface KetQuaNap {
@@ -249,8 +246,19 @@ export interface KetQuaNap {
     tuDuAn?: boolean;
     /** Đang chờ người dùng duyệt — nó CHƯA chạy. */
     canDuyet?: boolean;
+    /** stdio / http / sse — để người dùng biết nó đang nói chuyện kiểu gì. */
+    kieu?: KieuKetNoi;
+    /** Số tool bị bỏ vì chạm trần tổng — không nói thì "server có 12 tool, AI thấy 8" là bí ẩn. */
+    boBot?: number;
   }>;
 }
+
+/**
+ * Hàng đợi nạp: hai lần nạp chồng nhau (lần nạp nền lúc mở app + người dùng
+ * bấm "Nạp lại") mà chạy song song thì lần sau `tatHet()` giữa chừng lần trước,
+ * và server của lần trước sống mồ côi tới khi đóng app.
+ */
+let hangNap: Promise<unknown> = Promise.resolve();
 
 /**
  * Tắt hết rồi bật lại theo cấu hình mới.
@@ -258,9 +266,16 @@ export interface KetQuaNap {
  * Luôn tắt trước: nạp lại mà không tắt thì mỗi lần bấm "Nạp lại" là thêm một
  * bộ tiến trình con nữa sống mãi tới khi đóng app.
  */
-export async function napLaiMcp(goc: string | null = null): Promise<KetQuaNap> {
+export function napLaiMcp(goc: string | null = null): Promise<KetQuaNap> {
+  const lan = hangNap.then(() => napThat(goc), () => napThat(goc));
+  hangNap = lan.catch(() => {});
+  return lan;
+}
+
+async function napThat(goc: string | null): Promise<KetQuaNap> {
   await tatHet();
-  const toanCuc = await docCauHinh();
+  const { bang: toanCuc, loi } = await docCauHinh();
+  loiCauHinhCuoi = loi;
   const cuaDuAn = await docCauHinhDuAn(goc);
   const daDuyet = await daDuyetDuAn(goc, cuaDuAn);
 
@@ -268,31 +283,30 @@ export async function napLaiMcp(goc: string | null = null): Promise<KetQuaNap> {
      `.claude/commands`: một file trong repo không được phép thay thế thứ người
      dùng tự cắm — đó là cách êm nhất để tráo một server. */
   const tenDuAn = Object.keys(cuaDuAn).filter((t) => !(t in toanCuc));
-  const cauHinh: Record<string, CauHinhServer> = { ...toanCuc };
+  const cauHinh: Record<string, CauHinhServer> = {};
+  // Khoá bắt đầu bằng `_` là chú thích (`_ghi_chu`, `_vidu`…), không phải server.
+  for (const [t, c] of Object.entries(toanCuc)) if (!t.startsWith('_')) cauHinh[t] = c;
   if (daDuyet) for (const t of tenDuAn) cauHinh[t] = cuaDuAn[t]!;
 
   const ten = Object.keys(cauHinh).slice(0, MAX_SERVER);
-  const server: KetQuaNap['server'] = [];
-  const tool: ToolMcp[] = [];
 
-  for (const t of ten) {
-    const c = cauHinh[t]!;
-    if (!c?.command || typeof c.command !== 'string') {
-      server.push({ ten: t, ok: false, soTool: 0, loi: 'thiếu "command"' });
-      continue;
-    }
-    try {
-      const ds = await batServer(t, c);
-      // Trần tool tính trên TỔNG, không phải mỗi server: 40 tool đã là ~6k
-      // token gửi lại ở mọi lượt, và đó là tiền thật.
-      const nhan = ds.slice(0, Math.max(0, MAX_TOOL - tool.length));
-      tool.push(...nhan);
-      server.push({ ten: t, ok: true, soTool: nhan.length });
-    } catch (err) {
+  /* Bật SONG SONG. Tuần tự thì một server `npx` đang tải gói (cả phút) bắt
+     mọi server sau nó đứng chờ — kể cả server chạy tức thì. */
+  const ketQua = await Promise.allSettled(ten.map((t) => batServer(t, cauHinh[t]!)));
+
+  const server: KetQuaNap['server'] = [];
+  thuTu = [];
+  ten.forEach((t, i) => {
+    const r = ketQua[i]!;
+    const kieu = kieuCua(cauHinh[t]) ?? undefined;
+    if (r.status === 'fulfilled') {
+      thuTu.push(t);
+      server.push({ ten: t, ok: true, soTool: r.value.tool.length, ...(kieu ? { kieu } : {}) });
+    } else {
       // Một server hỏng KHÔNG được làm chết những server còn lại.
-      server.push({ ten: t, ok: false, soTool: 0, loi: (err as Error).message.slice(0, 160) });
+      server.push({ ten: t, ok: false, soTool: 0, ...(kieu ? { kieu } : {}), loi: String((r.reason as Error)?.message ?? r.reason).slice(0, 400) });
     }
-  }
+  });
 
   /*
    * Server dự án CHƯA duyệt vẫn phải HIỆN RA, kèm lý do.
@@ -309,103 +323,234 @@ export async function napLaiMcp(goc: string | null = null): Promise<KetQuaNap> {
   } else {
     for (const s2 of server) if (tenDuAn.includes(s2.ten)) s2.tuDuAn = true;
   }
+  if (Object.keys(cauHinh).length > MAX_SERVER) {
+    for (const t of Object.keys(cauHinh).slice(MAX_SERVER)) {
+      server.push({ ten: t, ok: false, soTool: 0, loi: `quá trần ${MAX_SERVER} server — không bật` });
+    }
+  }
 
-  toolDaBiet = tool;
   trangThaiCuoi = server;
-  return { tool, server };
+  dungLaiDanhSachTool();
+  return { tool: toolDaBiet, server };
+}
+
+/**
+ * Gộp tool của mọi server đang sống, theo thứ tự file cấu hình, cắt ở trần
+ * TỔNG 40: 40 tool đã là ~6k token gửi lại ở mọi lượt, và đó là tiền thật.
+ * Gọi lại mỗi khi một server đổi danh sách (`list_changed`) hoặc chết.
+ */
+function dungLaiDanhSachTool(): void {
+  const tool: ToolMcp[] = [];
+  for (const t of thuTu) {
+    const s = dangChay.get(t);
+    const tt = trangThaiCuoi.find((x) => x.ten === t);
+    if (!s) continue;
+    const nhan = s.tool.slice(0, Math.max(0, MAX_TOOL - tool.length));
+    tool.push(...nhan);
+    if (tt) {
+      tt.soTool = nhan.length;
+      const bo = s.tool.length - nhan.length;
+      if (bo > 0) tt.boBot = bo; else delete tt.boBot;
+    }
+  }
+  toolDaBiet = tool;
 }
 
 export function trangThaiServer(): KetQuaNap['server'] {
   return trangThaiCuoi;
 }
 
-async function batServer(ten: string, c: CauHinhServer): Promise<ToolMcp[]> {
-  const tienTrinh = spawn(c.command, c.args ?? [], {
-    stdio: ['pipe', 'pipe', 'pipe'],
-    // Env của server MCP: kế thừa env của app + phần cấu hình thêm. Server MCP
-    // thường cần khoá API, và người dùng đặt chúng ở đây.
-    env: { ...process.env, ...(c.env ?? {}) },
-    windowsHide: true,
-  }) as ChildProcessWithoutNullStreams;
+export function loiCauHinh(): string | null {
+  return loiCauHinhCuoi;
+}
 
-  const s: ServerDangChay = { ten, tienTrinh, cho: new Map(), demId: 0, dem: '' };
-  dangChay.set(ten, s);
-  noiStdout(s);
+/** Hạn một lời gọi: mặc định 60s, người dùng đặt `timeoutMs` thì kẹp 5s–10 phút. */
+function hanCua(v: unknown, macDinh: number): number {
+  const n = typeof v === 'number' && Number.isFinite(v) ? v : macDinh;
+  return Math.min(600_000, Math.max(5_000, n));
+}
 
-  /**
-   * `spawn` KHÔNG ném khi lệnh không tồn tại — nó báo qua sự kiện `error`.
-   *
-   * Không nghe sự kiện này thì một dòng cấu hình gõ sai chờ hết 10 giây rồi mới
-   * báo "không bắt tay xong", và 10 giây đó nằm ngay trong lúc app khởi động.
-   * Đo được đúng như thế trong bộ kiểm trước khi thêm chỗ này.
+/**
+ * Dựng vận chuyển theo cấu hình, sau khi thay `${BIEN}`.
+ * Thiếu biến ⇒ ném NGAY với tên biến, đừng để server báo 401 khó hiểu.
+ */
+function dungVanChuyen(c: CauHinhServer, kieu: KieuKetNoi): VanChuyen {
+  const thieu = new Set<string>();
+  const envThem = moRongBang(c.env, process.env, thieu);
+  const env = { ...process.env, ...envThem };
+  let vc: VanChuyen;
+  if (kieu === 'stdio') {
+    const command = moRongBien(c.command!, env, thieu);
+    const args = Array.isArray(c.args) ? c.args.map((a) => moRongBien(String(a), env, thieu)) : [];
+    const cwd = typeof c.cwd === 'string' && c.cwd ? moRongBien(c.cwd, env, thieu) : undefined;
+    vc = taoStdio({ command, args, env, ...(cwd ? { cwd } : {}) });
+  } else {
+    const url = moRongBien(c.url!, env, thieu);
+    const headers = moRongBang(c.headers, env, thieu);
+    try {
+      const u = new URL(url);
+      if (u.protocol !== 'http:' && u.protocol !== 'https:') throw new Error('chỉ nhận http:// hoặc https://');
+    } catch (err) {
+      throw new Error(`url không hợp lệ "${url}": ${(err as Error).message}`);
+    }
+    vc = kieu === 'sse' ? taoSse(url, headers) : taoHttp(url, headers);
+  }
+  if (thieu.size) {
+    throw new Error(`thiếu biến môi trường ${[...thieu].join(', ')} — đặt trong "env" của server hoặc thay \${…} bằng giá trị thật`);
+  }
+  return vc;
+}
+
+async function batServer(ten: string, c: CauHinhServer): Promise<ServerDangChay> {
+  if (!KHUON_TEN_SERVER.test(ten)) {
+    throw new Error('tên server chỉ được gồm chữ không dấu, số, "_" và "-" (tối đa 32 ký tự) — nếu không, máy chủ AI sẽ loại hết tool của nó');
+  }
+  const kieu = kieuCua(c);
+  if (!kieu) {
+    throw new Error(c && typeof c === 'object' && typeof c.type === 'string' && c.type
+      ? `kiểu "${c.type}" không hỗ trợ — dùng "stdio", "http" hoặc "sse"`
+      : 'thiếu "command" (server chạy trên máy) hoặc "url" (server qua mạng)');
+  }
+  const hanKhoiDong = hanCua(
+    c.startupTimeoutMs,
+    kieu === 'stdio' && laLenhTaiGoi(c.command) ? KHOI_DONG_TAI_GOI_MS : KHOI_DONG_MS,
+  );
+  const hanGoiMs = hanCua(c.timeoutMs, GOI_MS);
+
+  /*
+   * `url` không khai `type` ⇒ thử Streamable HTTP trước; server trả 4xx cho
+   * POST (404/405…) thì LÙI sang SSE kiểu cũ — đúng quy trình tương thích
+   * ngược mà spec MCP mô tả. Người dùng không phải biết server mình thuộc đời
+   * nào.
    */
-  const loiSpawn = new Promise<never>((_, hong) => {
-    tienTrinh.once('error', (e: Error) => hong(new Error(`không chạy được "${c.command}": ${e.message}`)));
-  });
+  const coTheLuiSse = kieu === 'http' && (typeof c.type !== 'string' || c.type === '');
+  try {
+    return await batVoiKieu(ten, c, kieu, hanKhoiDong, hanGoiMs);
+  } catch (err) {
+    if (coTheLuiSse && err instanceof LoiHttp && err.status >= 400 && err.status < 500 && err.status !== 401 && err.status !== 403) {
+      try {
+        return await batVoiKieu(ten, c, 'sse', hanKhoiDong, hanGoiMs);
+      } catch (err2) {
+        throw new Error(`HTTP: ${(err as Error).message} · SSE: ${(err2 as Error).message}`);
+      }
+    }
+    throw err;
+  }
+}
 
-  tienTrinh.on('exit', () => {
-    for (const [, c2] of s.cho) { clearTimeout(c2.dongHo); c2.hong(new Error(`${ten}: server đã thoát`)); }
-    s.cho.clear();
-    dangChay.delete(ten);
-  });
-  // stderr của server MCP là log của nó, không phải lỗi giao thức. Nuốt để nó
-  // không tràn ra console của app, nhưng vẫn phải đọc — không đọc thì ống đầy
-  // và server treo.
-  tienTrinh.stderr.on('data', () => {});
+async function batVoiKieu(
+  ten: string, c: CauHinhServer, kieu: KieuKetNoi, hanKhoiDong: number, hanGoiMs: number,
+): Promise<ServerDangChay> {
+  const vc = dungVanChuyen(c, kieu);
+  const kn = new KetNoiMcp(ten, kieu, vc);
+  const s: ServerDangChay = { ten, kieu, ketNoi: kn, tool: [], hanGoiMs };
 
-  let dongHoGio: ReturnType<typeof setTimeout> | undefined;
+  let dongHo: ReturnType<typeof setTimeout> | undefined;
   const hetGio = new Promise<never>((_, hong) => {
-    dongHoGio = setTimeout(() => hong(new Error(`không bắt tay xong trong ${KHOI_DONG_MS / 1000}s`)), KHOI_DONG_MS);
+    dongHo = setTimeout(() => hong(new Error(
+      `không khởi động xong trong ${Math.round(hanKhoiDong / 1000)}s`
+      + (laLenhTaiGoi(c.command) ? ' (lần đầu npx/uvx phải tải gói — bấm Nạp lại thêm lần nữa, hoặc tăng "startupTimeoutMs")' : '')
+      + (vc.duoiLog() ? ` — ${vc.duoiLog().slice(-300)}` : ''),
+    )), hanKhoiDong);
   });
 
   try {
     await Promise.race([
-      goi(s, 'initialize', {
-        protocolVersion: '2024-11-05',
-        capabilities: {},
-        clientInfo: { name: 'cuongthai-desktop', version: '1' },
-      }),
-      loiSpawn,
+      (async () => {
+        await vc.mo();
+        await batTay(kn, hanKhoiDong);
+        s.tool = await lietKeTool(kn, ten, hanKhoiDong);
+      })(),
       hetGio,
     ]);
-    baoCho(s, 'notifications/initialized');
-
-    const ds = (await Promise.race([goi(s, 'tools/list'), loiSpawn, hetGio])) as { tools?: unknown[] };
-    return (ds?.tools ?? [])
-      .filter((t): t is Record<string, unknown> => !!t && typeof t === 'object')
-      .filter((t) => typeof t.name === 'string')
-      .map((t) => ({
-        // Tiền tố đảm bảo tool MCP không bao giờ trùng tên với tool sẵn có —
-        // một server đặt tên tool là `read_file` mà không có tiền tố thì nó lặng
-        // lẽ chiếm chỗ của tool đọc file đã qua nhà tù đường dẫn.
-        ten: `mcp__${ten}__${String(t.name)}`.slice(0, 64),
-        server: ten,
-        tenGoc: String(t.name),
-        moTa: String(t.description ?? '').slice(0, MAX_MO_TA),
-        thamSo: (t.inputSchema as Record<string, unknown>) ?? { type: 'object', properties: {} },
-      }));
   } catch (err) {
-    // Bắt tay hỏng ⇒ GIẾT tiến trình. Không giết thì một server khởi động được
-    // nhưng không nói đúng giao thức cứ sống mãi tới lúc đóng app: agent không
-    // dùng được nó, người dùng không thấy nó, và nó vẫn ăn RAM. Mỗi lần bấm
-    // "Nạp lại" lại thêm một cái nữa.
-    try { tienTrinh.kill('SIGKILL'); } catch { /* chưa kịp sống */ }
-    dangChay.delete(ten);
-    throw err;
+    // Bắt tay hỏng ⇒ ĐÓNG hẳn. Không đóng thì một server khởi động được nhưng
+    // không nói đúng giao thức cứ sống mãi tới lúc đóng app: agent không dùng
+    // được nó, người dùng không thấy nó, và nó vẫn ăn RAM.
+    await kn.dong().catch(() => {});
+    const m = (err as Error).message;
+    // Server chết giữa chừng: lõi đã ghép sẵn đuôi stderr vào lý do.
+    throw err instanceof LoiHttp ? err : new Error(kn.lyDoDong && !m.includes(kn.lyDoDong) ? kn.lyDoDong : m);
   } finally {
-    // Dọn đồng hồ dù đi đường nào: `Promise.race` bỏ qua nhánh thua, nhưng
-    // `setTimeout` của nhánh đó vẫn nằm đó giữ tiến trình bận.
-    if (dongHoGio) clearTimeout(dongHoGio);
+    if (dongHo) clearTimeout(dongHo);
   }
+
+  dangChay.set(ten, s);
+
+  // Server báo danh sách tool đổi ⇒ hỏi lại, rồi gộp lại danh sách chung.
+  kn.onThongBao = (method) => {
+    if (method !== 'notifications/tools/list_changed') return;
+    void lietKeTool(kn, ten, hanGoiMs)
+      .then((ds) => { if (dangChay.get(ten) === s) { s.tool = ds; dungLaiDanhSachTool(); } })
+      .catch(() => {});
+  };
+  // Chết SAU khi đã chạy (server crash, mất mạng): gỡ tool ngay và ghi lý do
+  // lên bảng — không thì model vẫn thấy tool và gọi vào một thứ đã chết.
+  kn.onChet = (lyDo) => {
+    if (dangChay.get(ten) !== s) return;
+    dangChay.delete(ten);
+    const tt = trangThaiCuoi.find((x) => x.ten === ten);
+    if (tt) { tt.ok = false; tt.soTool = 0; tt.loi = `đã dừng: ${lyDo}`.slice(0, 400); delete tt.boBot; }
+    dungLaiDanhSachTool();
+  };
+  return s;
+}
+
+async function batTay(kn: KetNoiMcp, hanMs: number): Promise<void> {
+  const kq = (await kn.goi('initialize', {
+    protocolVersion: PHIEN_BAN_GIAO_THUC,
+    capabilities: {},
+    clientInfo: { name: 'cuongthai-desktop', version: phienBanApp() },
+  }, hanMs)) as { protocolVersion?: unknown } | null;
+  kn.vc.datPhienBan?.(typeof kq?.protocolVersion === 'string' ? kq.protocolVersion : PHIEN_BAN_GIAO_THUC);
+  await kn.bao('notifications/initialized');
+}
+
+function phienBanApp(): string {
+  try { return app.getVersion(); } catch { return '1'; }
+}
+
+async function lietKeTool(kn: KetNoiMcp, ten: string, hanMs: number): Promise<ToolMcp[]> {
+  const tho: Array<Record<string, unknown>> = [];
+  let con: string | undefined;
+  for (let trang = 0; trang < MAX_TRANG; trang++) {
+    const ds = (await kn.goi('tools/list', con ? { cursor: con } : {}, hanMs)) as
+      { tools?: unknown[]; nextCursor?: unknown } | null;
+    for (const t of ds?.tools ?? []) if (t && typeof t === 'object') tho.push(t as Record<string, unknown>);
+    con = typeof ds?.nextCursor === 'string' && ds.nextCursor ? ds.nextCursor : undefined;
+    if (!con || tho.length >= MAX_TOOL) break;
+  }
+  const daCo = new Set<string>();
+  const ra: ToolMcp[] = [];
+  for (const t of tho) {
+    if (typeof t.name !== 'string' || !t.name) continue;
+    // Tiền tố đảm bảo tool MCP không bao giờ trùng tên với tool sẵn có —
+    // một server đặt tên tool là `read_file` mà không có tiền tố thì nó lặng
+    // lẽ chiếm chỗ của tool đọc file đã qua nhà tù đường dẫn.
+    const tenMoi = `mcp__${ten}__${tenToolAnToan(t.name)}`;
+    if (daCo.has(tenMoi)) continue;   // hai tên gốc chuẩn hoá ra trùng — giữ cái đầu
+    daCo.add(tenMoi);
+    const tieuDe = typeof (t.annotations as { title?: unknown } | undefined)?.title === 'string'
+      ? String((t.annotations as { title: string }).title) : typeof t.title === 'string' ? t.title : '';
+    const moTa = [tieuDe && tieuDe !== t.name ? tieuDe : '', String(t.description ?? '')].filter(Boolean).join(' — ');
+    ra.push({
+      ten: tenMoi,
+      server: ten,
+      tenGoc: t.name,
+      moTa: moTa.slice(0, MAX_MO_TA),
+      thamSo: chuanSchema(t.inputSchema),
+    });
+  }
+  return ra;
 }
 
 export async function tatHet(): Promise<void> {
-  for (const [, s] of dangChay) {
-    try { s.tienTrinh.kill('SIGTERM'); } catch { /* đã chết rồi */ }
-  }
+  const ds = [...dangChay.values()];
   dangChay.clear();
+  thuTu = [];
   toolDaBiet = [];
   trangThaiCuoi = [];
+  await Promise.allSettled(ds.map((s) => s.ketNoi.dong()));
 }
 
 export function toolMcpHienCo(): ToolMcp[] {
@@ -453,35 +598,52 @@ function ghiMotLuot(): boolean {
 
 // ─── Gọi tool ──────────────────────────────────────────────────────
 
-export async function goiToolMcp(ten: string, args: Record<string, unknown>): Promise<string> {
+export async function goiToolMcp(
+  ten: string, args: Record<string, unknown>, signal?: AbortSignal,
+): Promise<KetQuaChuyen> {
   if (!ghiMotLuot()) {
-    return `LỖI: đã dùng hết ${MAX_LUOT_NGAY} lượt gọi tool MCP trong hôm nay. `
-      + 'Các tool khác vẫn dùng được bình thường; hạn mức đặt lại vào ngày mai.';
+    return {
+      noiDung: `LỖI: đã dùng hết ${MAX_LUOT_NGAY} lượt gọi tool MCP trong hôm nay. `
+        + 'Các tool khác vẫn dùng được bình thường; hạn mức đặt lại vào ngày mai.',
+      anh: [], loi: true,
+    };
   }
-  return goiThat(ten, args);
+  return goiThat(ten, args, signal);
 }
 
-async function goiThat(ten: string, args: Record<string, unknown>): Promise<string> {
-  const t = toolDaBiet.find((x) => x.ten === ten);
-  if (!t) return `LỖI: không có tool MCP tên "${ten}".`;
-  const s = dangChay.get(t.server);
-  if (!s) return `LỖI: server MCP "${t.server}" không còn chạy. Bấm "Nạp lại MCP".`;
+function loiChu(noiDung: string): KetQuaChuyen {
+  return { noiDung, anh: [], loi: true };
+}
 
+async function goiThat(ten: string, args: Record<string, unknown>, signal?: AbortSignal): Promise<KetQuaChuyen> {
+  const t = toolDaBiet.find((x) => x.ten === ten);
+  if (!t) return loiChu(`LỖI: không có tool MCP tên "${ten}".`);
+  const s = dangChay.get(t.server);
+  if (!s || s.ketNoi.daDong) {
+    const tt = trangThaiCuoi.find((x) => x.ten === t.server);
+    return loiChu(`LỖI: server MCP "${t.server}" không còn chạy${tt?.loi ? ` (${tt.loi})` : ''}. Bấm "Nạp lại" trong bảng MCP.`);
+  }
+
+  const goiMot = () => s.ketNoi.goi('tools/call', { name: t.tenGoc, arguments: args ?? {} }, s.hanGoiMs, signal);
   try {
-    const kq = (await goi(s, 'tools/call', { name: t.tenGoc, arguments: args })) as {
-      content?: Array<{ type?: string; text?: string }>;
-      isError?: boolean;
-    };
-    // MCP trả về một mảng khối nội dung. Chỉ lấy phần chữ: khối ảnh/tài nguyên
-    // cần cả một đường xử lý riêng, và chưa có server nào của người dùng cần tới.
-    const chu = (kq?.content ?? [])
-      .filter((k) => k?.type === 'text' && typeof k.text === 'string')
-      .map((k) => k.text)
-      .join('\n')
-      .slice(0, MAX_KET_QUA);
-    if (kq?.isError) return `LỖI từ ${t.server}: ${chu || 'không rõ'}`;
-    return chu || '(tool chạy xong, không trả về chữ nào)';
+    let kq: unknown;
+    try {
+      kq = await goiMot();
+    } catch (err) {
+      /* Streamable HTTP: server khởi động lại thì phiên cũ hết hạn và mọi
+         POST trả 404. Bắt tay lại MỘT lần rồi gọi lại — người dùng không cần
+         biết phiên là gì. */
+      if (s.kieu === 'http' && err instanceof LoiHttp && err.status === 404 && !signal?.aborted) {
+        s.ketNoi.vc.quenPhien?.();
+        await batTay(s.ketNoi, s.hanGoiMs);
+        kq = await goiMot();
+      } else {
+        throw err;
+      }
+    }
+    return chuyenKetQua(kq, t.server);
   } catch (err) {
-    return `LỖI khi gọi ${ten}: ${(err as Error).message}`;
+    if (signal?.aborted) return loiChu(`ĐÃ HUỶ lời gọi ${ten} vì người dùng dừng.`);
+    return loiChu(`LỖI khi gọi ${ten}: ${(err as Error).message}`);
   }
 }

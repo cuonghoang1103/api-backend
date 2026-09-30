@@ -6090,7 +6090,10 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   top: calc(100% + 6px);
   right: 0;
   z-index: 30;
-  width: 290px;
+  width: 340px;
+  max-width: calc(100vw - 24px);
+  max-height: min(70vh, 560px);
+  overflow-y: auto;
   padding: 12px;
   border: 1px solid var(--ct-border);
   border-radius: var(--ct-radius);
@@ -6133,6 +6136,7 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
 
 .ct-mcp-ds li {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 7px;
   font-size: 11.5px;
@@ -6175,6 +6179,42 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   line-height: 1.5;
   color: var(--ct-text-faint);
 }
+
+/* Lỗi server / lỗi file cấu hình: xuống dòng, đọc được HẾT, chọn-chép được. */
+.ct-mcp-loi {
+  flex-basis: 100%;
+  margin: 0 0 0 13px;
+  font-size: 10.5px;
+  line-height: 1.5;
+  color: var(--ct-err);
+  white-space: pre-wrap;
+  word-break: break-word;
+  user-select: text;
+}
+.ct-mcp-loi[data-cau-hinh] {
+  margin: 0;
+  padding: 8px 10px;
+  border: 1px solid var(--ct-err);
+  border-radius: var(--ct-radius-sm);
+}
+
+.ct-mcp-mau { font-size: 11px; }
+.ct-mcp-mau summary {
+  cursor: pointer;
+  color: var(--ct-text-faint);
+  font-size: 11px;
+}
+.ct-mcp-mau[open] summary { margin-bottom: 8px; }
+.ct-mcp-mau-muc .ct-mcp-dau .ct-btn { flex-shrink: 0; white-space: nowrap; }
+.ct-mcp-mau summary::marker { content: '▸ '; }
+.ct-mcp-mau[open] summary::marker { content: '▾ '; }
+.ct-mcp-mau-muc {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 10px;
+}
+.ct-mcp-mau-muc .ct-mcp-args { margin: 0; max-height: 140px; user-select: text; }
 
 /* Tham số trên thẻ duyệt: cuộn được, KHÔNG cắt cụt. Người dùng duyệt đúng cái
    họ đọc, nên phần bị giấu là phần họ chưa duyệt. */

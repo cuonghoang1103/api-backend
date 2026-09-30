@@ -24,6 +24,7 @@ import {
   Camera,
   Download,
   Link2,
+  Copy,
   BookOpen, Check, Circle, CircleDot, CircleStop, FileCode2, FilePen, FilePlus2, FolderOpen,
   FolderPlus, FolderTree, GitBranch, History, ListChecks, Loader2, NotebookPen, Plug, RotateCcw, Search, Send,
   ShieldCheck, Sparkles, SquareTerminal, Terminal, Trash2, Undo2, X, ChevronDown, Cpu, Globe, Zap, ListPlus, PanelRight, LifeBuoy,
@@ -1855,6 +1856,72 @@ function NutWorktree({
 }
 
 /**
+ * Mẫu cấu hình chép-dán — Figma trước tiên, vì đó là câu người dùng hỏi.
+ *
+ * KHÔNG có nút "cài" ghi thẳng vào `mcp.json`: một server MCP là một dòng lệnh
+ * sẽ chạy trên máy, và file cấu hình là chỗ duy nhất người dùng NHÌN THẤY nó
+ * trước khi nó chạy. Chép + dán + tự điền token giữ đúng ranh giới đó.
+ */
+const MAU_MCP: Array<{ ten: string; moTa: string; json: string }> = [
+  {
+    ten: 'Figma (token, tài khoản miễn phí)',
+    moTa: 'Token: Figma → Settings → Security → Personal access tokens. Dán link frame vào chat là AI đọc được bố cục, màu, chữ.',
+    json: `"figma": {
+  "command": "npx",
+  "args": ["-y", "figma-developer-mcp", "--stdio"],
+  "env": { "FIGMA_API_KEY": "figd_..." }
+}`,
+  },
+  {
+    ten: 'Figma Dev Mode (app Figma desktop)',
+    moTa: 'Mở app Figma → Preferences → Enable Dev Mode MCP Server (cần Dev/Full seat). Có cả ảnh chụp frame.',
+    json: `"figma-desktop": {
+  "type": "http",
+  "url": "http://127.0.0.1:3845/mcp"
+}`,
+  },
+  {
+    ten: 'Server qua URL có token',
+    moTa: 'Kiểu http (mới) hoặc sse (cũ). ${TEN_BIEN} lấy từ biến môi trường.',
+    json: `"ten-server": {
+  "type": "http",
+  "url": "https://vi-du.com/mcp",
+  "headers": { "Authorization": "Bearer \${TOKEN_CUA_BAN}" }
+}`,
+  },
+];
+
+function MauMcp() {
+  const [daChep, datDaChep] = useState<number | null>(null);
+  const chep = async (i: number) => {
+    try {
+      await navigator.clipboard.writeText(MAU_MCP[i]!.json);
+      datDaChep(i);
+      setTimeout(() => datDaChep((x) => (x === i ? null : x)), 1500);
+    } catch { /* clipboard bị chặn — người dùng vẫn chọn-chép tay được */ }
+  };
+  return (
+    <details className="ct-mcp-mau">
+      <summary>Mẫu cấu hình (Figma…)</summary>
+      <p className="ct-mcp-trong">Dán vào trong <code>"servers": {'{ … }'}</code> của <code>mcp.json</code>, điền token, rồi bấm Nạp lại.</p>
+      {MAU_MCP.map((m, i) => (
+        <div key={m.ten} className="ct-mcp-mau-muc">
+          <div className="ct-mcp-dau">
+            <strong>{m.ten}</strong>
+            <button type="button" className="ct-btn ct-btn-ghost ct-mcp-nho" onClick={() => void chep(i)}>
+              {daChep === i ? <Check size={12} aria-hidden /> : <Copy size={12} aria-hidden />}
+              {daChep === i ? 'Đã chép' : 'Chép'}
+            </button>
+          </div>
+          <p className="ct-mcp-trong">{m.moTa}</p>
+          <pre className="ct-mcp-args">{m.json}</pre>
+        </div>
+      ))}
+    </details>
+  );
+}
+
+/**
  * Nút MCP + bảng trạng thái.
  *
  * Chỉ hiện SỐ TOOL trên nút, không hiện danh sách: một người cắm 3 server sẽ có
@@ -1940,9 +2007,15 @@ function NutMcp({ cuocId, khoa }: { cuocId: string; khoa: boolean }) {
             </button>
           </div>
 
+          {tt?.loiCauHinh && (
+            /* File hỏng thì app KHÔNG ghi đè nữa — nên phải nói to ở đây, không
+               thì người dùng thấy "chưa cắm server nào" và tưởng file bị mất. */
+            <p className="ct-mcp-loi" data-cau-hinh>{tt.loiCauHinh}</p>
+          )}
+
           {!tt || tt.server.length === 0 ? (
             <p className="ct-mcp-trong">
-              Chưa cắm server nào. Sửa file <code>mcp.json</code> rồi bấm Nạp lại.
+              Chưa cắm server nào. Sửa file <code>mcp.json</code> rồi bấm Nạp lại — có sẵn mẫu Figma bên dưới.
             </p>
           ) : (
             <ul className="ct-mcp-ds">
@@ -1950,12 +2023,25 @@ function NutMcp({ cuocId, khoa }: { cuocId: string; khoa: boolean }) {
                 <li key={s.ten} data-ok={s.ok}>
                   <span className="ct-mcp-cham" />
                   <span className="ct-mcp-ten">{s.ten}</span>
+                  {s.kieu && s.kieu !== 'stdio' && (
+                    <span className="ct-mcp-nhan" title={s.kieu === 'http' ? 'Streamable HTTP' : 'SSE (kiểu cũ)'}>{s.kieu}</span>
+                  )}
                   {s.tuDuAn && <span className="ct-mcp-nhan" title={dich('.mcp.json trong dự án')}>{dich('dự án')}</span>}
-                  <span className="ct-mcp-phu">{s.ok ? `${s.soTool} tool` : (s.loi ?? 'hỏng')}</span>
+                  {s.ok && (
+                    <span className="ct-mcp-phu" title={s.boBot ? `Bỏ ${s.boBot} tool vì chạm trần tổng 40 tool` : undefined}>
+                      {s.soTool} tool{s.boBot ? ` · bỏ ${s.boBot}` : ''}
+                    </span>
+                  )}
+                  {/* Lỗi xuống dòng riêng, ĐỌC ĐƯỢC HẾT và chọn-chép được: dòng cuối
+                      stderr ("thiếu FIGMA_API_KEY") là thứ duy nhất nói vì sao hỏng,
+                      và bản trước cắt nó bằng dấu "…" sau chừng 30 ký tự. */}
+                  {!s.ok && <span className="ct-mcp-loi">{s.loi ?? 'hỏng'}</span>}
                 </li>
               ))}
             </ul>
           )}
+
+          <MauMcp />
 
           {canDuyet && (
             /* Nói thẳng cái giá trước khi hỏi. `.mcp.json` là một dòng lệnh sẽ

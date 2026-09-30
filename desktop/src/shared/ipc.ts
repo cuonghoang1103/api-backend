@@ -1304,9 +1304,15 @@ export interface AgentMcpTrangThai {
     tuDuAn?: boolean;
     /** Đang chờ người dùng duyệt — nó CHƯA chạy. */
     canDuyet?: boolean;
+    /** Kiểu kết nối: tiến trình trên máy, hay URL. */
+    kieu?: 'stdio' | 'http' | 'sse';
+    /** Số tool bị bỏ vì chạm trần tổng 40. */
+    boBot?: number;
   }>;
   soTool: number;
   hanMuc: { daDung: number; tran: number };
+  /** `mcp.json` hỏng (JSON sai…) — file KHÔNG bị ghi đè, lỗi hiện ở đây. */
+  loiCauHinh?: string | null;
 }
 
 /** Thông tin agent lúc mở màn hình: có Pro không, trần bao nhiêu, còn bao nhiêu. */

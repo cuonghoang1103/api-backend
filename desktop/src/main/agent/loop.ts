@@ -1331,7 +1331,7 @@ async function chayToolMcpCoDuyet(
   c: CuocHoiThoai,
   signal: AbortSignal,
   phat: (e: SuKienAgent) => void,
-): Promise<{ noiDung: string; tomTat: string }> {
+): Promise<{ noiDung: string; tomTat: string; anh?: Array<{ media_type: string; data: string }> }> {
   const t = toolMcpHienCo().find((x) => x.ten === ten);
   if (!t) {
     return { noiDung: `LỖI: không có tool MCP tên "${ten}".`, tomTat: 'không có tool' };
@@ -1362,11 +1362,18 @@ async function chayToolMcpCoDuyet(
     };
   }
 
-  const noiDung = await goiToolMcp(ten, args);
+  // `signal`: người dùng bấm dừng ⇒ lời gọi MCP đang chờ bị huỷ ngay (và
+  // server được báo `notifications/cancelled`), không đứng chờ hết 60 giây.
+  const kq = await goiToolMcp(ten, args, signal);
   const h = hanMucMcp();
   return {
-    noiDung,
-    tomTat: noiDung.startsWith('LỖI') ? 'lỗi' : `${t.server} · ${h.daDung}/${h.tran} lượt hôm nay`,
+    noiDung: kq.noiDung,
+    tomTat: kq.loi
+      ? 'lỗi'
+      : `${t.server}${kq.anh.length ? ` · ${kq.anh.length} ảnh` : ''} · ${h.daDung}/${h.tran} lượt hôm nay`,
+    // Ảnh (vd. `get_screenshot` của Figma) đi đúng đường ống ảnh của
+    // `read_file`/`web_anh`: khối anh em cạnh `tool_result`.
+    ...(kq.anh.length ? { anh: kq.anh } : {}),
   };
 }
 

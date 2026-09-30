@@ -36,7 +36,7 @@ const L_csd5_1 = {
     `<span class="eyebrow">Chương 2 · Bài 2.A · 2A-Stacks, slide 1–19</span>
 <h2>Ngăn xếp — học bộ slide từng trang</h2>
 <p class="lead">Đây là bộ slide của buổi 5 theo syllabus (2.1 Stacks, CLO2). Hãy đọc bài này trước các bài 2.1–2.5 bên dưới: slide nào cũng có ý nghĩa, chương trình Java chạy được cho từng thao tác, ngăn xếp (stack) vẽ lại từng bước, chi phí Big-O và những bẫy hay mất điểm ở FE (thi cuối kỳ) và PE (thi thực hành) — kể cả một lỗi thật nằm ngay trong code <code>ArrayStack</code> của slide (slide 10).</p>
-<div class="callout"><strong>CLO2 trong syllabus:</strong> định nghĩa được ngăn xếp (stack) và hàng đợi (queue); mô tả các thao tác cơ bản và công dụng của chúng. Câu hỏi thảo luận của syllabus cho các buổi này là "Stack là gì?", "Stack có những ứng dụng nào?" và "3 phương thức chính của stack là gì?" — lời đáp nằm ở slide 3, 6 và 4. Dạng bài thường gặp: lần theo một dãy push/pop, viết push/pop trên mảng hoặc danh sách liên kết, hoặc dùng stack để kiểm tra dấu ngoặc, đổi cơ số một số.</div>
+<div class="callout"><strong>CLO2 trong syllabus:</strong> định nghĩa được ngăn xếp (stack) và hàng đợi (queue); mô tả các thao tác cơ bản và công dụng của chúng. Câu hỏi thảo luận của syllabus cho các buổi này là "Stack là gì?", "Stack có những ứng dụng nào?" và "3 phương thức chính của stack là gì?" — lời đáp nằm ở slide 3, 6 và 4. Dạng bài thường gặp: lần theo một dãy push/pop (đẩy vào/lấy ra), viết push/pop trên mảng hoặc danh sách liên kết, hoặc dùng stack để kiểm tra dấu ngoặc, đổi cơ số một số.</div>
 <h3>Cả bộ slide trong một bảng</h3>
 <table>
 <thead><tr><th>Thao tác</th><th>Stack bằng mảng (slide 8–10)</th><th>Stack liên kết (slide 11)</th><th>Dựa trên <code>ArrayList</code> / <code>LinkedList</code> (slide 12)</th></tr></thead>
@@ -886,8 +886,8 @@ fixed top() on empty -&gt; java.util.EmptyStackException</div>
 </tbody>
 </table>
 <div class="pitfall"><strong>Bug on the slide:</strong> <code>grow()</code> never sets <code>max = max1</code>. After the first grow <code>top</code> passes <code>max − 1</code>, so <code>isFull()</code> (<code>top == max-1</code>) stays false; the array never grows again and the push that reaches the end of the grown array writes outside it — the 4th push with max = 2, the 76th with the default 50 (75 cells). Fix: add <code>max = max1;</code> after <code>a = a1;</code> — <code>FixedStack</code> then grows 2 → 3 → 4 → 6 → 9 cells.</div>
-<div class="pitfall">Smaller issues: (1) <code>if (a1 == null)</code> is never true — <code>new</code> never returns <code>null</code>; when memory runs out Java throws <code>OutOfMemoryError</code>. (2) The extracted text of the slide shows <code>isEmpty()</code> twice; if the code really declares it twice it does not compile (<code>method isEmpty() is already defined in class ArrayStack</code>). (3) A method <code>top()</code> next to a field <code>top</code> is legal but confusing. (4) <code>pop()</code> leaves the object in the array — write <code>a[top] = null;</code> just before <code>top--</code> so the garbage collector can free it. (5) With capacity 1, <code>max + max/2</code> is still 1: nothing grows — use <code>max + max/2 + 1</code>.</div>
-<p><strong>Big-O:</strong> push, pop, top are O(1); the push that grows copies top + 1 elements, O(n). Because the capacity grows by half each time, those copies are rare and a push costs O(1) amortized.</p>`,
+<div class="pitfall">Smaller issues: (1) <code>if (a1 == null)</code> is never true — <code>new</code> never returns <code>null</code>; when memory runs out Java throws <code>OutOfMemoryError</code>. (2) The extracted text of the slide shows <code>isEmpty()</code> twice; if the code really declares it twice it does not compile (<code>method isEmpty() is already defined in class ArrayStack</code>). (3) A method <code>top()</code> next to a field <code>top</code> is legal but confusing. (4) <code>pop()</code> leaves the object in the array — write <code>a[top] = null;</code> just before <code>top--</code> so the garbage collector can free it. (5) With capacity 1, <code>max + max/2</code> is still 1: nothing grows and the second push already throws <code>ArrayIndexOutOfBoundsException</code> — use <code>max + max/2 + 1</code>.</div>
+<p><strong>Big-O:</strong> push, pop, top are O(1); the push that grows copies top + 1 elements, O(n). Why the push is still O(1) amortized: after a grow to capacity c the next grow comes only after c/2 cheap pushes, and the capacities (2, 3, 4, 6, 9, …) grow geometrically, so over n pushes all the copies add up to fewer than 3n — a constant number of copies per push on average (the fixed class, run to 100,000 pushes, copies about 2.8 elements per push).</p>`,
         `<p class="y-chinh">🎯 ArrayStack của slide lưu Object[] a, top và max, và nới mảng thêm một nửa khi thao tác đẩy vào (push) gặp mảng đầy — nhưng grow() quên cập nhật max, nên lớp này sẽ sập một lúc sau đó.</p>
 <ul>
 <li><code>ArrayStack()</code> gọi <code>this(50)</code>: sức chứa (capacity) mặc định 50. Mảng chứa <code>Object</code>, nên đẩy gì vào cũng được (một <code>int</code> được tự đóng hộp — autoboxing — thành <code>Integer</code>).</li>
@@ -987,8 +987,8 @@ fixed top() on empty -&gt; java.util.EmptyStackException</div>
 </tbody>
 </table>
 <div class="pitfall"><strong>Lỗi trên slide:</strong> <code>grow()</code> không hề gán <code>max = max1</code>. Sau lần nới đầu tiên, <code>top</code> vượt quá <code>max − 1</code>, nên <code>isFull()</code> (<code>top == max-1</code>) mãi mãi là false; mảng không bao giờ được nới nữa, và lần push chạm tới cuối mảng đã nới sẽ ghi ra ngoài mảng — lần push thứ 4 khi max = 2, lần thứ 76 với max mặc định 50 (mảng 75 ô). Cách sửa: thêm <code>max = max1;</code> sau <code>a = a1;</code> — khi đó <code>FixedStack</code> nới 2 → 3 → 4 → 6 → 9 ô.</div>
-<div class="pitfall">Các lỗi nhỏ hơn: (1) <code>if (a1 == null)</code> không bao giờ đúng — <code>new</code> không bao giờ trả về <code>null</code>; hết bộ nhớ thì Java ném <code>OutOfMemoryError</code>. (2) Chữ trích từ slide cho thấy <code>isEmpty()</code> xuất hiện hai lần; nếu code thật sự khai báo hai lần thì không biên dịch được (<code>method isEmpty() is already defined in class ArrayStack</code>). (3) Phương thức <code>top()</code> trùng tên với trường (field) <code>top</code> là hợp lệ nhưng dễ rối. (4) <code>pop()</code> để lại đối tượng trong mảng — viết <code>a[top] = null;</code> ngay trước <code>top--</code> để bộ dọn rác (garbage collector) thu hồi được. (5) Sức chứa 1 thì <code>max + max/2</code> vẫn là 1: không nới được gì — hãy dùng <code>max + max/2 + 1</code>.</div>
-<p><strong>Big-O:</strong> push, pop, top là O(1); lần push phải nới mảng thì chép top + 1 phần tử, O(n). Vì mỗi lần nới tăng thêm một nửa, những lần chép này hiếm dần và push tốn O(1) khấu hao (amortized).</p>`],
+<div class="pitfall">Các lỗi nhỏ hơn: (1) <code>if (a1 == null)</code> không bao giờ đúng — <code>new</code> không bao giờ trả về <code>null</code>; hết bộ nhớ thì Java ném <code>OutOfMemoryError</code>. (2) Chữ trích từ slide cho thấy <code>isEmpty()</code> xuất hiện hai lần; nếu code thật sự khai báo hai lần thì không biên dịch được (<code>method isEmpty() is already defined in class ArrayStack</code>). (3) Phương thức <code>top()</code> trùng tên với trường (field) <code>top</code> là hợp lệ nhưng dễ rối. (4) <code>pop()</code> để lại đối tượng trong mảng — viết <code>a[top] = null;</code> ngay trước <code>top--</code> để bộ dọn rác (garbage collector) thu hồi được. (5) Sức chứa 1 thì <code>max + max/2</code> vẫn là 1: không nới được gì và ngay lần push thứ hai đã văng <code>ArrayIndexOutOfBoundsException</code> — hãy dùng <code>max + max/2 + 1</code>.</div>
+<p><strong>Big-O:</strong> push, pop, top là O(1); lần push phải nới mảng thì chép top + 1 phần tử, O(n). Vì sao push vẫn O(1) khấu hao (amortized — tính trung bình trên cả dãy thao tác): sau khi nới lên sức chứa c, phải thêm c/2 lần push rẻ nữa mới tới lần nới sau, và các sức chứa (2, 3, 4, 6, 9, …) tăng theo cấp số nhân, nên qua n lần push tổng số lần chép ít hơn 3n — trung bình mỗi push chỉ chép một số hằng phần tử (lớp đã sửa, chạy tới 100.000 lần push, chép khoảng 2,8 phần tử mỗi push).</p>`],
       [11, 'Linked implementation of a stack',
         `<p class="y-chinh">🎯 With a singly linked list the top of the stack is the head: push inserts a node at the head, pop deletes the head — both O(1), and the stack is never full.</p>
 <ul>
@@ -1051,7 +1051,7 @@ pop() on empty -&gt; java.util.EmptyStackException</div>
 head -&gt; [30|*] -&gt; [20|*] -&gt; [10|null]
          top                  bottom</code></pre>
 <p><strong>Array vs linked:</strong> the array stack wastes unused cells and sometimes copies itself to grow; the linked stack pays one <code>next</code> reference per element but never fills up and never copies.</p>
-<div class="pitfall"><code>clear()</code> is not on the slide — for a linked stack it is just <code>head = null;</code>. A common PE slip for push: <code>head.next = new Node(x, null)</code> inserts <em>after</em> the head, so the new element is not on the top (and on an empty stack it throws <code>NullPointerException</code>).</div>`,
+<div class="pitfall"><code>clear()</code> is not on the slide — for a linked stack it is just <code>head = null;</code>. A common PE slip for push: <code>head.next = new Node(x, null)</code> hooks the new node <em>after</em> the head and cuts off every node that followed (push 10, 20, then 30 leaves 20 → 30: the 10 is lost), so the new element is not on the top (and on an empty stack it throws <code>NullPointerException</code>).</div>`,
         `<p class="y-chinh">🎯 Với danh sách liên kết đơn (singly linked list), đỉnh (top) của ngăn xếp (stack) chính là head (nút đầu): push (đẩy vào) chèn một nút (node) vào đầu, pop (lấy ra) xoá nút đầu — cả hai đều O(1), và stack không bao giờ bị đầy.</p>
 <ul>
 <li><code>push(x)</code>: <code>head = new Node(x, head);</code> — nút mới trỏ tới head cũ rồi trở thành head (thao tác "chèn vào đầu" của chương 1, gói trong một dòng).</li>
@@ -1113,7 +1113,7 @@ pop() on empty -&gt; java.util.EmptyStackException</div>
 head -&gt; [30|*] -&gt; [20|*] -&gt; [10|null]
          đỉnh                 đáy</code></pre>
 <p><strong>Mảng hay liên kết:</strong> stack bằng mảng phí các ô chưa dùng và thỉnh thoảng phải tự chép sang mảng lớn hơn; stack liên kết tốn thêm một tham chiếu (reference) <code>next</code> cho mỗi phần tử nhưng không bao giờ đầy và không bao giờ phải chép.</p>
-<div class="pitfall">Slide không có <code>clear()</code> — với stack liên kết nó chỉ là <code>head = null;</code>. Lỗi PE hay gặp khi viết push: <code>head.next = new Node(x, null)</code> là chèn <em>sau</em> head, nên phần tử mới không nằm trên đỉnh (và nếu stack đang rỗng thì văng <code>NullPointerException</code>).</div>`],
+<div class="pitfall">Slide không có <code>clear()</code> — với stack liên kết nó chỉ là <code>head = null;</code>. Lỗi PE hay gặp khi viết push: <code>head.next = new Node(x, null)</code> là móc nút mới vào <em>sau</em> head và cắt bỏ mọi nút phía sau (push 10, 20 rồi 30 thì còn 20 → 30: số 10 bị mất), nên phần tử mới không nằm trên đỉnh (và nếu stack đang rỗng thì văng <code>NullPointerException</code>).</div>`],
       [12, 'Implementing a stack using ArrayList and LinkedList classes in Java',
         `<p class="y-chinh">🎯 A stack can reuse Java's lists: push appends at the end and pop removes the last element — ArrayList.remove(size-1) or LinkedList.removeLast(), both O(1).</p>
 <ul>
@@ -1494,7 +1494,8 @@ scan ({[ ])}<br>
 &nbsp;&nbsp;) &nbsp;pop { BAD &nbsp;&nbsp;stack: (<br>
 &nbsp;&nbsp;{ and ) are not a pair -&gt; Incorrect</div>
 <p><strong>Big-O:</strong> each of the n characters is read once and causes at most one push or one pop — at most n pushes and n pops, as the slide says — so O(n) time and, in the worst case (<code>((((…</code>), O(n) extra memory.</p>
-<p class="meo">🧠 <strong>Remember:</strong> open → push; close → pop and compare; end → empty?</p>`,
+<p class="meo">🧠 <strong>Remember:</strong> open → push; close → pop and compare; end → empty?</p>
+<div class="pitfall">The slide's own incorrect examples catch the two classic slips: skipping the final "is the stack empty?" test accepts <code>(</code>; popping without checking <code>isEmpty()</code> crashes on the first <code>)</code> of <code>)(( )){([( )])}</code> instead of answering "incorrect".</div>`,
         `<p class="y-chinh">🎯 Quét một lượt từ trái sang phải: gặp ký hiệu mở thì đẩy vào (push), gặp ký hiệu đóng thì lấy ra (pop) rồi so, tới cuối chuỗi thì ngăn xếp (stack) phải rỗng.</p>
 <ol>
 <li>Ký hiệu mở → push nó vào stack.</li>
@@ -1575,7 +1576,8 @@ scan ({[ ])}<br>
 &nbsp;&nbsp;) &nbsp;pop { BAD &nbsp;&nbsp;stack: (<br>
 &nbsp;&nbsp;{ and ) are not a pair -&gt; Incorrect</div>
 <p><strong>Big-O:</strong> mỗi ký tự trong n ký tự được đọc một lần và gây ra nhiều nhất một lần push hoặc một lần pop — tối đa n lần push và n lần pop, đúng như slide nói — nên thời gian O(n), và trong trường hợp xấu nhất (<code>((((…</code>) tốn thêm O(n) bộ nhớ.</p>
-<p class="meo">🧠 <strong>Mẹo nhớ:</strong> mở → push; đóng → pop rồi so; hết chuỗi → rỗng chưa?</p>`],
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> mở → push; đóng → pop rồi so; hết chuỗi → rỗng chưa?</p>
+<div class="pitfall">Chính các ví dụ sai trên slide bắt được hai lỗi kinh điển: bỏ bước kiểm "stack còn rỗng không?" ở cuối thì <code>(</code> bị coi là đúng; pop mà không kiểm tra <code>isEmpty()</code> trước thì chương trình văng ngoại lệ (exception) ngay ở dấu <code>)</code> đầu tiên của <code>)(( )){([( )])}</code> thay vì trả lời "sai".</div>`],
       [16, 'Matching Parentheses and HTML Tags',
         `<p class="y-chinh">🎯 HTML and XML tags nest exactly like brackets — <code>&lt;name&gt;</code> opens, <code>&lt;/name&gt;</code> closes — so the same stack algorithm checks whether a document is valid.</p>
 <ul>
@@ -1737,7 +1739,7 @@ ArrayDeque = [C, B, A] &nbsp;&nbsp;(printed top -&gt; bottom), peek() = C, pop()
 <table>
 <thead><tr><th>Thành phần</th><th>Làm gì</th><th>Big-O</th></tr></thead>
 <tbody>
-<tr><td><code>Stack()</code></td><td>tạo một stack rỗng</td><td>O(1)</td></tr>
+<tr><td><code>Stack()</code></td><td>tạo một ngăn xếp (stack) rỗng</td><td>O(1)</td></tr>
 <tr><td><code>E push(E item)</code> — đẩy vào</td><td>đặt <code>item</code> lên đỉnh và trả về chính nó</td><td>O(1) khấu hao (amortized)</td></tr>
 <tr><td><code>E pop()</code> — lấy ra</td><td>gỡ và trả về phần tử đỉnh; rỗng thì ném <code>EmptyStackException</code></td><td>O(1)</td></tr>
 <tr><td><code>E peek()</code> — xem đỉnh</td><td>trả về phần tử đỉnh, không gỡ; rỗng thì ném <code>EmptyStackException</code></td><td>O(1)</td></tr>
@@ -1788,7 +1790,7 @@ ArrayDeque = [C, B, A] &nbsp;&nbsp;(printed top -&gt; bottom), peek() = C, pop()
 <tr><td>array + <code>top</code> (slides 8–10)</td><td>O(1); a growing push O(n), amortized O(1)</td><td>yes — grow (and update <code>max</code>!) or throw</td><td>exception</td></tr>
 <tr><td>singly linked list, top = head (slide 11)</td><td>O(1)</td><td>never</td><td>exception</td></tr>
 <tr><td><code>ArrayList</code> / <code>LinkedList</code>, top = last element (slide 12)</td><td>O(1) (amortized for <code>ArrayList</code>)</td><td>never</td><td>slide 12 returns <code>null</code></td></tr>
-<tr><td><code>java.util.Stack</code> / <code>ArrayDeque</code> (slide 17)</td><td>O(1) amortized</td><td>never</td><td><code>EmptyStackException</code> / <code>NoSuchElementException</code></td></tr>
+<tr><td><code>java.util.Stack</code> / <code>ArrayDeque</code> (slide 17)</td><td>O(1) amortized</td><td>never</td><td><code>EmptyStackException</code> / <code>pop()</code>: <code>NoSuchElementException</code>, <code>peek()</code>: <code>null</code></td></tr>
 </tbody>
 </table>
 <ul>
@@ -1805,7 +1807,7 @@ ArrayDeque = [C, B, A] &nbsp;&nbsp;(printed top -&gt; bottom), peek() = C, pop()
 <tr><td>mảng + <code>top</code> (slide 8–10)</td><td>O(1); lần push phải nới mảng O(n), khấu hao O(1)</td><td>có — nới mảng (và cập nhật <code>max</code>!) hoặc ném ngoại lệ</td><td>ngoại lệ (exception)</td></tr>
 <tr><td>danh sách liên kết đơn, đỉnh = head (slide 11)</td><td>O(1)</td><td>không bao giờ</td><td>ngoại lệ</td></tr>
 <tr><td><code>ArrayList</code> / <code>LinkedList</code>, đỉnh = phần tử cuối (slide 12)</td><td>O(1) (khấu hao với <code>ArrayList</code>)</td><td>không bao giờ</td><td>slide 12 trả về <code>null</code></td></tr>
-<tr><td><code>java.util.Stack</code> / <code>ArrayDeque</code> (slide 17)</td><td>O(1) khấu hao</td><td>không bao giờ</td><td><code>EmptyStackException</code> / <code>NoSuchElementException</code></td></tr>
+<tr><td><code>java.util.Stack</code> / <code>ArrayDeque</code> (slide 17)</td><td>O(1) khấu hao</td><td>không bao giờ</td><td><code>EmptyStackException</code> / <code>pop()</code>: <code>NoSuchElementException</code>, <code>peek()</code>: <code>null</code></td></tr>
 </tbody>
 </table>
 <ul>
@@ -1885,7 +1887,7 @@ const L_csd6_1 = {
     `<span class="eyebrow">Chương 2 · Bài 2.B · 2B-Queues, slide 1–21</span>
 <h2>Hàng đợi, deque và hàng đợi ưu tiên — học bộ slide từng trang</h2>
 <p class="lead">Đây là bộ slide của buổi 7–8 theo syllabus (2.2 Queues, 2.3 Double-Ended Queues, 2.4 The Priority Queue — CLO2). Hãy đọc sau bài 2.A và trước các bài đào sâu 2.1–2.5: slide nào cũng có ý nghĩa, bảng và code của chính slide được chạy lại bằng Java, mảng vòng (circular array) vẽ lại theo từng chỉ số, chi phí Big-O và các bẫy — kể cả một lỗi mà code hàng đợi ưu tiên (priority queue) mắc giống hệt bộ slide ngăn xếp.</p>
-<div class="callout"><strong>CLO2 trong syllabus:</strong> định nghĩa được ngăn xếp (stack) và hàng đợi (queue); mô tả các thao tác cơ bản và công dụng của chúng. Câu hỏi thảo luận của syllabus cho các buổi này: "Hàng đợi là gì?", "Stack và queue khác nhau thế nào?", "Hàng đợi ưu tiên là gì?" (gợi ý: xe cứu thương đi qua cổng dùng chung với các xe khác) — lời đáp ở slide 3 và 17. Dạng bài thường gặp: lần theo enqueue/dequeue kể cả <em>chỉ số</em> của mảng vòng, viết hàng đợi liên kết, chèn vào hàng đợi ưu tiên giữ thứ tự.</div>
+<div class="callout"><strong>CLO2 trong syllabus:</strong> định nghĩa được ngăn xếp (stack) và hàng đợi (queue); mô tả các thao tác cơ bản và công dụng của chúng. Câu hỏi thảo luận của syllabus cho các buổi này: "Hàng đợi là gì?", "Stack và queue khác nhau thế nào?", "Hàng đợi ưu tiên là gì?" (gợi ý: xe cứu thương đi qua cổng dùng chung với các xe khác) — lời đáp ở slide 3 và 17. Dạng bài thường gặp: lần theo enqueue/dequeue (đưa vào/lấy ra) kể cả <em>chỉ số</em> của mảng vòng, viết hàng đợi liên kết, chèn vào hàng đợi ưu tiên giữ thứ tự.</div>
 <h3>Cả bộ slide trong một bảng</h3>
 <table>
 <thead><tr><th>Cấu trúc</th><th>Thêm</th><th>Lấy ra</th><th>Xem phần tử kế tiếp</th><th>Slide</th></tr></thead>
@@ -2210,7 +2212,7 @@ dequeue() &nbsp;&nbsp;&nbsp;9 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(7
 <ul>
 <li>Cột Q được viết từ đầu → cuối hàng (front → rear): <code>(9, 7, 3, 5)</code> nghĩa là 9 sắp ra, còn 5 tới sau cùng.</li>
 <li>Dòng 8: <code>dequeue()</code> trên hàng rỗng ném <code>EmptyQueueException</code>; chương trình bắt (catch) nó và in "error" như slide.</li>
-<li>Bảng có <code>size()</code> (dòng 12) dù slide 4 không liệt kê — hàng đợi thật nào cũng có, và interface của slide 14 có nó.</li>
+<li>Bảng có <code>size()</code> (dòng 12) dù slide 4 không liệt kê — hàng đợi thật nào cũng có, và giao diện (interface) của slide 14 có nó.</li>
 <li>Slide ghi "–" cho "không có output": <code>enqueue</code> không trả về gì; chương trình in "-".</li>
 </ul>
 <p class="dap-an">✅ <strong>Thêm một bước:</strong> sau dòng cuối, <code>dequeue()</code> sẽ trả về 7 — nó đang đứng đầu (7, 3, 5).</p>
@@ -2221,7 +2223,7 @@ dequeue() &nbsp;&nbsp;&nbsp;9 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(7
 <li><strong>Direct</strong>: waiting lists (tickets, bookings); access to a shared resource — a printer, a CPU, a network link; multiprogramming — several programs waiting for the processor (slide 7).</li>
 <li><strong>Indirect — auxiliary data structure for algorithms</strong>: breadth-first search (BFS, chapter 5) visits vertices in the order they were discovered, using a queue.</li>
 <li><strong>Indirect — component of other data structures</strong>: a buffer between a producer and a consumer; a priority queue built from one FIFO queue per priority level.</li>
-<li>The slide's last sentence ends with "…useful in the following applications:" — the lists above it are those applications.</li>
+<li>The slide's last sentence ("…useful in the following applications:") introduces applications of this FIFO property — the direct and indirect uses listed on the slide.</li>
 </ul>
 <pre><code class="language-java">import java.util.ArrayDeque;
 import java.util.Queue;
@@ -2260,7 +2262,7 @@ minute &nbsp;6-10 &nbsp;Tuan &nbsp;slides.pptx</div>
 <li><strong>Trực tiếp (direct)</strong>: danh sách chờ (mua vé, đặt chỗ); truy cập tài nguyên dùng chung (shared resource) — máy in, CPU, đường truyền mạng; đa chương trình — nhiều chương trình cùng chờ bộ xử lý (slide 7).</li>
 <li><strong>Gián tiếp — cấu trúc phụ trợ cho thuật toán</strong>: tìm kiếm theo chiều rộng (breadth-first search — BFS, chương 5) thăm các đỉnh theo đúng thứ tự phát hiện ra chúng, nhờ một hàng đợi.</li>
 <li><strong>Gián tiếp — thành phần của cấu trúc khác</strong>: bộ đệm (buffer) giữa bên sản xuất và bên tiêu thụ; một hàng đợi ưu tiên (priority queue) dựng từ nhiều hàng đợi FIFO (vào trước ra trước), mỗi mức ưu tiên một hàng.</li>
-<li>Câu cuối của slide kết thúc bằng "…useful in the following applications:" — các danh sách phía trên chính là những ứng dụng đó.</li>
+<li>Câu cuối của slide ("…useful in the following applications:" — nhờ tính chất này mà hàng đợi còn hữu ích trong các ứng dụng sau) giới thiệu các ứng dụng của tính chất FIFO — chính là các ứng dụng trực tiếp và gián tiếp liệt kê trên slide.</li>
 </ul>
 <pre><code class="language-java">import java.util.ArrayDeque;
 import java.util.Queue;
@@ -2352,7 +2354,8 @@ t=6 &nbsp;&nbsp;P3 ran 2, 2 left &nbsp;&nbsp;&nbsp;queue now [P1 P3]<br>
 t=8 &nbsp;&nbsp;P1 ran 2, 1 left &nbsp;&nbsp;&nbsp;queue now [P3 P1]<br>
 t=10 &nbsp;P3 ran 2, finished &nbsp;queue now [P1]<br>
 t=11 &nbsp;P1 ran 1, finished &nbsp;queue now []</div>
-<p><strong>Big-O:</strong> each turn is one dequeue and at most one enqueue — O(1). Lesson 1.A (slide 15) produced the same schedule with a circular list and <code>rotate()</code>; slide 13 here explains why <code>rotate()</code> is even cheaper.</p>`,
+<p><strong>Big-O:</strong> each turn is one dequeue and at most one enqueue — O(1). Lesson 1.A (slide 15) produced the same schedule with a circular list and <code>rotate()</code>; slide 13 here explains why <code>rotate()</code> is even cheaper.</p>
+<div class="pitfall">Trace traps: a process that has finished is <em>not</em> enqueued again, and the clock advances by the time actually used — P1's last turn takes 1 unit, so it finishes at 11, not 12.</div>`,
         `<p class="y-chinh">🎯 Bộ lập lịch xoay vòng (round-robin scheduler) là một hàng đợi chạy trong vòng lặp — e = Q.dequeue(); phục vụ e; Q.enqueue(e) — nên mỗi tiến trình (process) được một lát thời gian (time slice) bằng nhau, lần lượt theo vòng.</p>
 <ul>
 <li>Round-robin (RR) là một trong những thuật toán lập lịch CPU đơn giản nhất: lát thời gian bằng nhau, xoay vòng, không có ưu tiên — và <strong>không gây đói (starvation-free)</strong>: tiến trình nào cũng tới lượt.</li>
@@ -2410,7 +2413,8 @@ t=6 &nbsp;&nbsp;P3 ran 2, 2 left &nbsp;&nbsp;&nbsp;queue now [P1 P3]<br>
 t=8 &nbsp;&nbsp;P1 ran 2, 1 left &nbsp;&nbsp;&nbsp;queue now [P3 P1]<br>
 t=10 &nbsp;P3 ran 2, finished &nbsp;queue now [P1]<br>
 t=11 &nbsp;P1 ran 1, finished &nbsp;queue now []</div>
-<p><strong>Big-O:</strong> mỗi lượt là một lần dequeue và nhiều nhất một lần enqueue — O(1). Bài 1.A (slide 15) ra đúng lịch này bằng danh sách vòng và <code>rotate()</code>; slide 13 ở đây giải thích vì sao <code>rotate()</code> còn rẻ hơn nữa.</p>`],
+<p><strong>Big-O:</strong> mỗi lượt là một lần dequeue và nhiều nhất một lần enqueue — O(1). Bài 1.A (slide 15) ra đúng lịch này bằng danh sách vòng và <code>rotate()</code>; slide 13 ở đây giải thích vì sao <code>rotate()</code> còn rẻ hơn nữa.</p>
+<div class="pitfall">Bẫy khi lần theo (trace): tiến trình đã xong thì <em>không</em> được enqueue lại, và đồng hồ chỉ tăng đúng thời gian thực chạy — lượt cuối của P1 chỉ tốn 1 đơn vị, nên P1 xong ở 11 chứ không phải 12.</div>`],
       [8, 'Array-based Queue - 1',
         `<p class="y-chinh">🎯 An array of size N is used in a circular fashion: first (f) is the index of the front element, last (l) the index of the last one, and both move right and wrap around to 0 — nothing is ever shifted.</p>
 <ul>
@@ -2591,7 +2595,7 @@ a1:    [ 60 ][ 70 ][ 80 ][ 90 ][  _ ][  _ ]
           f                 l                 first = 0, last = 3, max = 6
 then enqueue(100) writes a[++last] = a[4]</code></pre>
 <div class="pitfall">A plain <code>for (i = 0; i &lt; max; i++) a1[i] = a[i];</code> copies the wrapped queue in <em>physical</em> order 90 60 70 80, so the front would no longer be at <code>first = 0</code> — that is why <code>grow()</code> has two branches. Also: <code>max + max/2</code> adds nothing when max = 1 (a test run of the slide's class with <code>ArrayQueue(1)</code> silently overwrote the first element), and <code>if (a1 == null)</code> is never true.</div>
-<p><strong>Big-O:</strong> <code>isEmpty</code>, <code>isFull</code> O(1); <code>grow()</code> copies n elements, O(n) — rare, so enqueue stays O(1) amortized.</p>`,
+<p><strong>Big-O:</strong> <code>isEmpty</code>, <code>isFull</code> O(1); <code>grow()</code> copies n elements, O(n) — but after growing to capacity c it cannot run again before c/2 more enqueues, and the capacities grow geometrically, so all the copies over n enqueues total fewer than 3n: enqueue stays O(1) amortized.</p>`,
         `<p class="y-chinh">🎯 ArrayQueue của slide giữ a, max, first và last (bằng -1 khi rỗng); isFull có hai trường hợp, và grow() chép các phần tử theo đúng thứ tự hàng đợi sang mảng lớn hơn — lần này có cập nhật max.</p>
 <pre><code class="language-java">protected Object[] a;
 protected int max;
@@ -2643,7 +2647,7 @@ a1:    [ 60 ][ 70 ][ 80 ][ 90 ][  _ ][  _ ]
           f                 l                first = 0, last = 3, max = 6
 sau đó enqueue(100) ghi vào a[++last] = a[4]</code></pre>
 <div class="pitfall">Chép thẳng <code>for (i = 0; i &lt; max; i++) a1[i] = a[i];</code> sẽ chép hàng đợi đã quay vòng theo thứ tự <em>vật lý</em> 90 60 70 80, khi đó phần tử đầu hàng không còn nằm ở <code>first = 0</code> — vì vậy <code>grow()</code> mới cần hai nhánh. Thêm nữa: <code>max + max/2</code> không thêm được ô nào khi max = 1 (chạy thử lớp của slide với <code>ArrayQueue(1)</code> thì phần tử đầu tiên bị ghi đè mà không báo lỗi gì), và <code>if (a1 == null)</code> không bao giờ đúng.</div>
-<p><strong>Big-O:</strong> <code>isEmpty</code>, <code>isFull</code> là O(1); <code>grow()</code> chép n phần tử, O(n) — hiếm khi xảy ra, nên enqueue vẫn là O(1) khấu hao (amortized).</p>`],
+<p><strong>Big-O:</strong> <code>isEmpty</code>, <code>isFull</code> là O(1); <code>grow()</code> chép n phần tử, O(n) — nhưng sau khi nới lên sức chứa c, phải thêm c/2 lần enqueue nữa mới nới lần sau, và sức chứa tăng theo cấp số nhân, nên tổng số lần chép qua n lần enqueue ít hơn 3n: enqueue vẫn là O(1) khấu hao (amortized — tính trung bình trên cả dãy thao tác).</p>`],
       [11, 'Array implementation of a queue - 2',
         `<p class="y-chinh">🎯 enqueue writes into the cell after last (wrapping to 0), dequeue reads a[first] and moves first forward (wrapping to 0, or resetting both indices to -1 when the last element leaves) — O(1) each.</p>
 <pre><code class="language-java">class ArrayQueue {                               // the slides' code, slides 10 and 11
@@ -3831,7 +3835,7 @@ public float dequeue() {
     return (x);
 }</code></pre>
 <ul>
-<li><code>assert (!isEmpty());</code> — with <code>java -ea</code> an empty queue raises <code>AssertionError</code>; by default assertions are <strong>disabled</strong> (the output on slide 18 prints <code>assertions enabled: false</code>), so <code>dequeue()</code> on an empty queue reads <code>a[-1]</code> → ArrayIndexOutOfBoundsException: Index -1.</li>
+<li><code>assert (!isEmpty());</code> — with <code>java -ea</code> an empty queue raises <code>AssertionError</code>; by default assertions are <strong>disabled</strong> (the program's output under slide 18 above prints <code>assertions enabled: false</code>), so <code>dequeue()</code> on an empty queue reads <code>a[-1]</code> → ArrayIndexOutOfBoundsException: Index -1.</li>
 <li>Use <code>assert</code> for "this can never happen" checks while developing; to report misuse of an ADT, throw an exception (slide 4).</li>
 <li>Three ways to build a priority queue: sorted array (the slides), unsorted array, binary heap — <code>java.util.PriorityQueue</code>, lesson 2.5 and chapter 4.</li>
 </ul>
@@ -3881,7 +3885,7 @@ public float dequeue() {
     return (x);
 }</code></pre>
 <ul>
-<li><code>assert (!isEmpty());</code> — chạy với <code>java -ea</code> thì hàng rỗng gây <code>AssertionError</code>; mặc định assertion bị <strong>tắt</strong> (output ở slide 18 in <code>assertions enabled: false</code>), nên <code>dequeue()</code> trên hàng rỗng đọc <code>a[-1]</code> → ArrayIndexOutOfBoundsException: Index -1.</li>
+<li><code>assert (!isEmpty());</code> — chạy với <code>java -ea</code> thì hàng rỗng gây <code>AssertionError</code>; mặc định assertion bị <strong>tắt</strong> (output của chương trình ở phần slide 18 phía trên in <code>assertions enabled: false</code>), nên <code>dequeue()</code> trên hàng rỗng đọc <code>a[-1]</code> → ArrayIndexOutOfBoundsException: Index -1.</li>
 <li>Dùng <code>assert</code> để kiểm tra những điều "không bao giờ được xảy ra" lúc phát triển; còn báo lỗi dùng sai ADT (kiểu dữ liệu trừu tượng) thì ném ngoại lệ (exception, slide 4).</li>
 <li>Ba cách dựng hàng đợi ưu tiên: mảng có thứ tự (slide), mảng không thứ tự, đống nhị phân (binary heap) — <code>java.util.PriorityQueue</code>, bài 2.5 và chương 4.</li>
 </ul>
@@ -3964,15 +3968,15 @@ poll() on an empty queue = null</div>
 <li>Read §6.2's array queue next to slides 10–11: it computes the free cell as <code>(f + sz) % data.length</code>, clears <code>data[f]</code> after a dequeue, and throws <code>IllegalStateException</code> when full instead of growing.</li>
 <li><strong>§9.1 The Priority Queue ADT</strong> — entries as (key, value) pairs with <code>insert</code>, <code>min</code>, <code>removeMin</code>: the book's convention is the <em>smallest</em> key first, the opposite of the slides' array.</li>
 </ul>
-<p>Chapter 9 then builds priority queues with sorted and unsorted lists and with heaps — the costs in slide 19's table; heaps return in chapter 4 of this course.</p>`,
+<p>Chapter 9 then builds priority queues with sorted and unsorted lists and with heaps — the costs in the lesson's table under slide 19; heaps return in chapter 4 of this course.</p>`,
         `<p class="y-chinh">🎯 Ba mục của sách Goodrich bản 6 ứng với bộ slide này: 6.2 Queues (tr.238), 6.3 Double-Ended Queues (tr.248) và 9.1 The Priority Queue Abstract Data Type (tr.360).</p>
 <ul>
-<li><strong>§6.2 Queues</strong> (hàng đợi) — ADT hàng đợi (<code>enqueue</code>, <code>dequeue</code>, <code>first</code>, trả về <code>null</code> khi rỗng), hàng đợi bằng mảng lưu chỉ số phần tử đầu và số phần tử, hàng đợi trên danh sách liên kết đơn, và hàng đợi vòng có <code>rotate()</code> — nguồn của slide 13.</li>
+<li><strong>§6.2 Queues</strong> (hàng đợi) — ADT (kiểu dữ liệu trừu tượng) hàng đợi (<code>enqueue</code>, <code>dequeue</code>, <code>first</code>, trả về <code>null</code> khi rỗng), hàng đợi bằng mảng lưu chỉ số phần tử đầu và số phần tử, hàng đợi trên danh sách liên kết đơn, và hàng đợi vòng có <code>rotate()</code> — nguồn của slide 13.</li>
 <li><strong>§6.3 Double-Ended Queues</strong> (hàng đợi hai đầu) — ADT deque của slide 16, hai cách cài đặt, và bảng tên phương thức của <code>java.util.Deque</code>.</li>
 <li>Đọc hàng đợi mảng của §6.2 song song với slide 10–11: sách tính ô trống bằng <code>(f + sz) % data.length</code>, xoá <code>data[f]</code> sau mỗi lần dequeue, và ném <code>IllegalStateException</code> khi đầy thay vì nới mảng.</li>
 <li><strong>§9.1 The Priority Queue ADT</strong> (ADT hàng đợi ưu tiên) — mỗi phần tử là một cặp (khoá, giá trị) — (key, value) — với <code>insert</code>, <code>min</code>, <code>removeMin</code>: quy ước của sách là khoá <em>nhỏ nhất</em> ra trước, ngược với mảng của slide.</li>
 </ul>
-<p>Chương 9 sau đó dựng hàng đợi ưu tiên bằng danh sách có thứ tự, không thứ tự và bằng đống (heap) — đúng các chi phí trong bảng ở slide 19; heap sẽ quay lại ở chương 4 của môn.</p>`],
+<p>Chương 9 sau đó dựng hàng đợi ưu tiên bằng danh sách có thứ tự, không thứ tự và bằng đống (heap) — đúng các chi phí trong bảng của bài ở phần slide 19; heap sẽ quay lại ở chương 4 của môn.</p>`],
     ]),
     bi(`<h3>✅ Check yourself in 60 seconds</h3>
 <ol>
@@ -4005,7 +4009,7 @@ const L_on_ch2 = {
   title: '2.6 — 🧪 Practice + 🗂 Glossary + 📌 Summary · Stacks, queues & priority queues|||2.6 — 🧪 Thực hành + 🗂 Thuật ngữ + 📌 Tóm tắt · Ngăn xếp, hàng đợi & hàng đợi ưu tiên',
   slug: 'csd201-on-ch2',
   type: 'VIDEO',
-  description: '7 bài tập kiểu đề PE về ngăn xếp và hàng đợi (stack mảng tự nới đúng cách, kiểm tra dấu ngoặc, tính biểu thức hậu tố RPN, hàng đợi mảng vòng có quay vòng và nới rộng, hàng đợi dựng từ hai stack, lập lịch round-robin, hàng đợi ưu tiên bệnh nhân f1–f4 trên danh sách liên kết có thứ tự) có lời giải và test tự kiểm chạy thật; 23 thuật ngữ Anh–Việt; tóm tắt 8 ý, câu hỏi tự kiểm và bảng độ phức tạp của chương 2.',
+  description: '7 bài tập kiểu đề PE về ngăn xếp và hàng đợi (stack mảng tự nới đúng cách, kiểm tra dấu ngoặc, tính biểu thức hậu tố RPN, hàng đợi mảng vòng có quay vòng và nới rộng, hàng đợi dựng từ hai stack, lập lịch round-robin, hàng đợi ưu tiên bệnh nhân f1–f4 trên danh sách liên kết có thứ tự) có lời giải và test tự kiểm chạy thật; 24 thuật ngữ Anh–Việt; tóm tắt 8 ý, câu hỏi tự kiểm và bảng độ phức tạp của chương 2.',
   content: [
     bi(`<span class="eyebrow">Chapter 2 · Lesson 2.6 · Practice &amp; review</span>
 <h2>Stacks, queues &amp; priority queues — practise like the PE, then review</h2>
@@ -4516,7 +4520,7 @@ PASS dequeue order<br>
 PASS dequeue on an empty queue throws<br>
 PASS capacity 1 grows without losing data<br>
 ALL TESTS PASSED</div>
-<div class="pitfall">Growing with <code>a1[k] = a[k]</code> copies the <em>physical</em> order: the planted-bug run prints 5 6 3 4 7 instead of 3 4 5 6 7. And <code>% max</code> with max = 0 throws <code>ArithmeticException</code> — that is why the constructor requires a capacity of at least 1.</div>`,
+<div class="pitfall">Growing with <code>a1[k] = a[k]</code> copies the <em>physical</em> order: the planted-bug run prints 5 6 3 4 7 instead of 3 4 5 6 7. And capacity 0 cannot work: the first <code>enqueue</code> already writes <code>a[0]</code> of an empty array (<code>ArrayIndexOutOfBoundsException</code>), <code>2 * max</code> would stay 0, and <code>% 0</code> throws <code>ArithmeticException</code> — that is why the constructor requires a capacity of at least 1.</div>`,
     `<h3>🧪 Bài 4 — f1, f2: hàng đợi mảng vòng có quay vòng và nới rộng (kiểu PE · ~20 phút)</h3>
 <p class="nhan">Đề bài</p>
 <p>Với các trường của bộ slide 2B — mảng <code>a</code>, sức chứa (capacity) <code>max</code> (ít nhất 1), hai chỉ số <code>first</code> và <code>last</code>, bằng −1 khi rỗng — viết <code>enqueue</code> — đưa vào hàng (f1) và <code>dequeue</code> — lấy khỏi hàng (f2). Sau ô cuối là ô 0 (mảng vòng — circular array). Khi mảng đầy, <code>enqueue</code> gấp đôi mảng và giữ đúng thứ tự <em>hàng đợi</em>; <code>dequeue</code> trên hàng đợi (queue) rỗng ném <code>EmptyQueueException</code>.</p>
@@ -4604,10 +4608,12 @@ PASS dequeue order<br>
 PASS dequeue on an empty queue throws<br>
 PASS capacity 1 grows without losing data<br>
 ALL TESTS PASSED</div>
-<div class="pitfall">Nới mảng bằng <code>a1[k] = a[k]</code> là chép theo thứ tự <em>vật lý</em>: bản cài lỗi thử nghiệm in ra 5 6 3 4 7 thay vì 3 4 5 6 7. Còn <code>% max</code> với max = 0 sẽ ném <code>ArithmeticException</code> — vì vậy constructor (hàm dựng) đòi sức chứa ít nhất 1.</div>`),
+<div class="pitfall">Nới mảng bằng <code>a1[k] = a[k]</code> là chép theo thứ tự <em>vật lý</em>: bản cài lỗi thử nghiệm in ra 5 6 3 4 7 thay vì 3 4 5 6 7. Còn sức chứa 0 thì không chạy được: ngay lần <code>enqueue</code> đầu tiên đã ghi vào <code>a[0]</code> của mảng rỗng (<code>ArrayIndexOutOfBoundsException</code>), <code>2 * max</code> mãi là 0, và <code>% 0</code> ném <code>ArithmeticException</code> — vì vậy constructor (hàm dựng) đòi sức chứa ít nhất 1.</div>`),
     bi(`<h3>🧪 Exercise 5 — a queue made of two stacks (interview classic · ~15 min)</h3>
 <p class="nhan">Task</p>
 <p>Implement <code>enqueue</code>, <code>dequeue</code>, <code>front</code>, <code>isEmpty</code>, <code>size</code> of a FIFO queue using only two stacks, <code>in</code> and <code>out</code> — no array, no list. Every operation must cost O(1) amortized.</p>
+<p class="nhan">Data → expected result</p>
+<p>enqueue 1, 2; dequeue → 1; enqueue 3; dequeue, dequeue → 2, 3 (FIFO even when calls interleave). 100 enqueues then 100 dequeues → 1 … 100, each element moved from <code>in</code> to <code>out</code> exactly once.</p>
 <p class="nhan">Idea</p>
 <p><code>enqueue</code> pushes on <code>in</code>. <code>dequeue</code>/<code>front</code> work on <code>out</code>; only when <code>out</code> is <strong>empty</strong>, pour all of <code>in</code> into <code>out</code> — pouring reverses the order, so the oldest element ends up on top. Each element is moved at most once, so n operations cost O(n) in total even though one pour can cost O(n).</p>
 <p class="nhan">Solution + self-test — every line must say PASS</p>
@@ -4676,8 +4682,10 @@ ALL TESTS PASSED</div>
     `<h3>🧪 Bài 5 — hàng đợi dựng từ hai ngăn xếp (câu phỏng vấn kinh điển · ~15 phút)</h3>
 <p class="nhan">Đề bài</p>
 <p>Cài đặt <code>enqueue</code>, <code>dequeue</code>, <code>front</code>, <code>isEmpty</code>, <code>size</code> của một hàng đợi (queue) FIFO — vào trước ra trước — chỉ dùng hai ngăn xếp (stack) <code>in</code> và <code>out</code> — không mảng, không danh sách. Mọi thao tác phải tốn O(1) khấu hao (amortized).</p>
+<p class="nhan">Dữ liệu → kết quả mong đợi</p>
+<p>enqueue 1, 2; dequeue → 1; enqueue 3; dequeue, dequeue → 2, 3 (vẫn FIFO khi các lời gọi xen kẽ nhau). 100 lần enqueue rồi 100 lần dequeue → 1 … 100, mỗi phần tử được chuyển từ <code>in</code> sang <code>out</code> đúng một lần.</p>
 <p class="nhan">Ý tưởng</p>
-<p><code>enqueue</code> push vào <code>in</code>. <code>dequeue</code>/<code>front</code> làm việc trên <code>out</code>; chỉ khi <code>out</code> <strong>rỗng</strong> mới đổ toàn bộ <code>in</code> sang <code>out</code> — đổ sang thì thứ tự bị đảo, nên phần tử cũ nhất nằm trên đỉnh. Mỗi phần tử bị chuyển nhiều nhất một lần, nên n thao tác tốn tổng cộng O(n), dù một lần đổ có thể tốn O(n).</p>
+<p><code>enqueue</code> push (đẩy) vào <code>in</code>. <code>dequeue</code>/<code>front</code> làm việc trên <code>out</code>; chỉ khi <code>out</code> <strong>rỗng</strong> mới đổ toàn bộ <code>in</code> sang <code>out</code> — đổ sang thì thứ tự bị đảo, nên phần tử cũ nhất nằm trên đỉnh. Mỗi phần tử bị chuyển nhiều nhất một lần, nên n thao tác tốn tổng cộng O(n), dù một lần đổ có thể tốn O(n).</p>
 <p class="nhan">Lời giải + test tự kiểm — mọi dòng phải là PASS</p>
 <pre><code class="language-java">import java.util.ArrayDeque;
 import java.util.Deque;
@@ -5093,10 +5101,11 @@ ALL TESTS PASSED</div>
 <tr><td><strong>circular array (ring buffer)</strong></td><td>mảng vòng (bộ đệm vòng)</td><td>An array whose indices continue at 0 after the last cell, so a queue never has to shift.</td></tr>
 <tr><td><strong>wrap-around</strong></td><td>quay vòng (chỉ số)</td><td>Moving an index from the last cell back to cell 0, e.g. <code>(i + 1) % N</code>.</td></tr>
 <tr><td><strong>grow (resize)</strong></td><td>nới rộng mảng</td><td>Allocate a bigger array, copy the elements and update the capacity.</td></tr>
+<tr><td><strong>amortized cost</strong></td><td>chi phí khấu hao</td><td>The average cost per operation over a whole sequence: one expensive step (a grow, a pour from stack to stack) is shared by the many cheap ones.</td></tr>
 <tr><td><strong>activation record (stack frame)</strong></td><td>bản ghi kích hoạt (khung ngăn xếp)</td><td>The block a method call puts on the run-time stack: parameters, locals, dynamic link, return address.</td></tr>
 <tr><td><strong>run-time stack (call stack)</strong></td><td>ngăn xếp thời gian chạy</td><td>The stack of activation records; the method called last returns first.</td></tr>
 <tr><td><strong>stack overflow</strong></td><td>tràn ngăn xếp</td><td>The run-time stack is full, e.g. recursion without a base case; Java throws <code>StackOverflowError</code>.</td></tr>
-<tr><td><strong>underflow</strong></td><td>cạn (lấy từ cấu trúc rỗng)</td><td>Trying to pop or dequeue from an empty structure; it must be reported with an exception or a special value.</td></tr>
+<tr><td><strong>underflow</strong></td><td>cạn / tràn dưới (lấy từ cấu trúc rỗng)</td><td>Trying to pop or dequeue from an empty structure; it must be reported with an exception or a special value.</td></tr>
 <tr><td><strong>postfix notation (RPN)</strong></td><td>ký pháp hậu tố (Ba Lan ngược)</td><td>Operators are written after their operands, e.g. <code>5 1 2 + 4 * + 3 -</code>; one stack evaluates it.</td></tr>
 <tr><td><strong>delimiter matching</strong></td><td>khớp dấu ngoặc</td><td>Checking that every opening symbol is closed by its partner in the right order.</td></tr>
 <tr><td><strong>round-robin scheduling</strong></td><td>lập lịch xoay vòng</td><td>Each process runs for one time slice in turn, then goes back to the rear of the queue.</td></tr>
@@ -5123,10 +5132,11 @@ ALL TESTS PASSED</div>
 <tr><td><strong>circular array (ring buffer)</strong></td><td>mảng vòng (bộ đệm vòng)</td><td>Mảng mà chỉ số đi tiếp về 0 sau ô cuối, nhờ vậy hàng đợi không bao giờ phải dời phần tử.</td></tr>
 <tr><td><strong>wrap-around</strong></td><td>quay vòng (chỉ số)</td><td>Đưa chỉ số từ ô cuối quay về ô 0, ví dụ <code>(i + 1) % N</code>.</td></tr>
 <tr><td><strong>grow (resize)</strong></td><td>nới rộng mảng</td><td>Cấp mảng lớn hơn, chép các phần tử sang và cập nhật sức chứa.</td></tr>
+<tr><td><strong>amortized cost</strong></td><td>chi phí khấu hao</td><td>Chi phí trung bình mỗi thao tác tính trên cả một dãy: một bước đắt (nới mảng, đổ từ stack này sang stack kia) được chia đều cho rất nhiều bước rẻ.</td></tr>
 <tr><td><strong>activation record (stack frame)</strong></td><td>bản ghi kích hoạt (khung ngăn xếp)</td><td>Khối mà mỗi lời gọi hàm đặt lên run-time stack: tham số, biến cục bộ, liên kết động, địa chỉ trả về.</td></tr>
 <tr><td><strong>run-time stack (call stack)</strong></td><td>ngăn xếp thời gian chạy</td><td>Ngăn xếp chứa các bản ghi kích hoạt; hàm được gọi sau cùng trả về trước tiên.</td></tr>
 <tr><td><strong>stack overflow</strong></td><td>tràn ngăn xếp</td><td>Run-time stack bị đầy, ví dụ đệ quy không có điểm dừng; Java ném <code>StackOverflowError</code>.</td></tr>
-<tr><td><strong>underflow</strong></td><td>cạn (lấy từ cấu trúc rỗng)</td><td>Cố pop hoặc dequeue từ cấu trúc rỗng; phải báo bằng ngoại lệ hoặc một giá trị đặc biệt.</td></tr>
+<tr><td><strong>underflow</strong></td><td>cạn / tràn dưới (lấy từ cấu trúc rỗng)</td><td>Cố pop hoặc dequeue từ cấu trúc rỗng; phải báo bằng ngoại lệ hoặc một giá trị đặc biệt.</td></tr>
 <tr><td><strong>postfix notation (RPN)</strong></td><td>ký pháp hậu tố (Ba Lan ngược)</td><td>Toán tử viết sau các toán hạng, ví dụ <code>5 1 2 + 4 * + 3 -</code>; một ngăn xếp là tính được.</td></tr>
 <tr><td><strong>delimiter matching</strong></td><td>khớp dấu ngoặc</td><td>Kiểm tra mọi ký hiệu mở đều được đóng đúng cặp, đúng thứ tự.</td></tr>
 <tr><td><strong>round-robin scheduling</strong></td><td>lập lịch xoay vòng</td><td>Mỗi tiến trình lần lượt chạy một lát thời gian rồi quay về cuối hàng đợi.</td></tr>

@@ -1978,7 +1978,7 @@ const L_csd3_1 = {
         `<p class="y-chinh">🎯 The cover of the complexity-analysis deck — "for reading" means it is meant to be studied on your own, and what it teaches is used in every chapter after it.</p>
 <p>Every structure in CSD201 is judged by one question: when the data grows, how fast does the work grow? This deck gives you the tools to answer it — counting operations and Big-O.</p>`,
         `<p class="y-chinh">🎯 Trang bìa bộ slide phân tích độ phức tạp (complexity analysis) — dòng "for reading" nghĩa là bộ này dành để tự đọc, và kiến thức của nó được dùng ở mọi chương phía sau.</p>
-<p>Mọi cấu trúc trong CSD201 đều được đánh giá bằng một câu hỏi: dữ liệu tăng thì khối lượng công việc tăng nhanh cỡ nào? Bộ slide này cho bạn công cụ để trả lời — đếm số phép toán và ký hiệu Big-O.</p>`],
+<p>Mọi cấu trúc trong CSD201 đều được đánh giá bằng một câu hỏi: dữ liệu tăng thì khối lượng công việc tăng nhanh cỡ nào? Bộ slide này cho bạn công cụ để trả lời — đếm số phép toán và ký hiệu Big-O (ký hiệu O lớn).</p>`],
       [2, 'Objectives',
         `<p class="y-chinh">🎯 Four goals: measure an algorithm's cost, describe it with asymptotic notation (O, Ω, Θ), tell apart the best, average and worst cases, and meet the hardest family of problems (NP-complete).</p>
 <ol>
@@ -1992,7 +1992,7 @@ const L_csd3_1 = {
         `<p class="y-chinh">🎯 Bốn mục tiêu: đo chi phí của thuật toán, mô tả nó bằng ký hiệu tiệm cận (O, Ω, Θ), phân biệt trường hợp tốt nhất, trung bình và xấu nhất, và làm quen với họ bài toán khó nhất (NP-đầy đủ — NP-complete).</p>
 <ol>
 <li><strong>Độ phức tạp tính toán và độ phức tạp tiệm cận (computational and asymptotic complexity)</strong> — "chi phí" là gì và vì sao ta chỉ quan tâm khi n lớn (slide 3–19).</li>
-<li><strong>Big-O, Big-Ω và Big-Θ</strong> — cận trên, cận dưới và cận chặt của tốc độ tăng (slide 20–32; Ω và Θ nằm ở bài 0.D).</li>
+<li><strong>Big-O, Big-Ω và Big-Θ (O lớn, Omega lớn, Theta lớn)</strong> — cận trên, cận dưới và cận chặt của tốc độ tăng (slide 20–32; Ω và Θ nằm ở bài 0.D).</li>
 <li><strong>Trường hợp tốt nhất, trung bình, xấu nhất (best, average, worst case)</strong> — các đầu vào cùng kích thước có thể tốn chi phí rất khác nhau (slide 6, 11, 33–37), thêm chi phí khấu hao (amortized cost) của cả một dãy thao tác (38–40).</li>
 <li><strong>NP-đầy đủ (NP-completeness)</strong> — những bài toán chưa ai biết cách giải nhanh, dù kiểm tra một đáp án được đưa ra thì nhanh (slide 41–46).</li>
 </ol>
@@ -2051,7 +2051,7 @@ const L_csd3_1 = {
 <tr><td>Chính xác (precision) — chứng minh bằng toán học</td><td>thuật toán cho kết quả đúng với mọi đầu vào hợp lệ</td><td>một chứng minh (quy nạp, bất biến vòng lặp…)</td></tr>
 <tr><td>Chính xác — cài đặt và kiểm thử (implementation and test)</td><td>code thật sự chạy đúng như chứng minh nói</td><td>chạy trên thật nhiều đầu vào, kể cả trường hợp biên</td></tr>
 <tr><td>Đơn giản và công khai (simple and public)</td><td>dễ hiểu, dễ chia sẻ, để người khác kiểm tra và dùng lại được</td><td>mã giả rõ ràng, đọc chéo code (code review)</td></tr>
-<tr><td>Hiệu quả (effectiveness) — thời gian chạy</td><td>độ phức tạp thời gian (time complexity): số bước tăng thế nào theo n</td><td>đếm phép toán → Big-O (bộ slide này)</td></tr>
+<tr><td>Hiệu quả (effectiveness) — thời gian chạy</td><td>độ phức tạp thời gian (time complexity): số bước tăng thế nào theo n</td><td>đếm phép toán → Big-O (ký hiệu O lớn — bộ slide này)</td></tr>
 <tr><td>Hiệu quả — bộ nhớ</td><td>độ phức tạp không gian (space complexity): bộ nhớ phụ tăng thế nào theo n</td><td>đếm số ô nhớ, số đối tượng phụ → Big-O</td></tr>
 </tbody>
 </table>
@@ -2146,7 +2146,7 @@ n = 1000: loop -&gt; 500500 (1000 ops), formula -&gt; 500500 (3 ops)<br>
 n = 1000000: loop -&gt; 500000500000 (1000000 ops), formula -&gt; 500000500000 (3 ops)</div>
 <p>Vòng lặp cần n phép cộng — một triệu phép với n = 1.000.000 — còn công thức lúc nào cũng chỉ cần 3 phép toán, n bao nhiêu cũng vậy. Cùng đáp số, chi phí khác hẳn nhau.</p>
 <p class="dap-an">✅ <strong>Đáp án — thời gian đồng hồ thực (wall-clock time) đo trên hai máy khác nhau có cho biết thuật toán nào hiệu quả hơn không?</strong> Không. Thời gian đo được trộn lẫn tốc độ của máy (CPU, hệ điều hành, trình biên dịch, các chương trình khác đang chạy) với hiệu quả của thuật toán, nên thuật toán chậm chạy trên máy nhanh vẫn có thể "thắng". So sánh công bằng cần cùng máy, cùng ngôn ngữ, cùng đầu vào — hoặc tốt hơn, một thước đo không phụ thuộc máy nào cả: số phép toán (slide 10–11).</p>
-<div class="pitfall">"Chương trình A chạy 2 giây trên laptop của tôi, chương trình B chạy 5 giây trên máy phòng lab, vậy A hiệu quả hơn" — lập luận sai, và là kiểu phương án nhiễu hay gặp trong FE.</div>`],
+<div class="pitfall">"Chương trình A chạy 2 giây trên laptop của tôi, chương trình B chạy 5 giây trên máy phòng lab, vậy A hiệu quả hơn" — lập luận sai, và là kiểu phương án nhiễu hay gặp trong FE (thi cuối kỳ).</div>`],
       [6, 'Running time',
         `<p class="y-chinh">🎯 The running time of an algorithm grows with the size of its input, and for the same size it depends on which input you give it — so we speak of best, average and worst case, and usually report the worst.</p>
 <p class="ghi-chu">This slide is mainly a picture; only its title could be extracted. The explanation below teaches running time with the lesson's own example.</p>
@@ -2315,7 +2315,7 @@ public class Main
 <ul>
 <li><code>Calendar.getInstance().getTimeInMillis()</code> đọc thời điểm hiện tại tính bằng mili-giây; <code>endTimes - beginTimes</code> là thời gian đã trôi qua.</li>
 <li>Dấu <code>;</code> ngay sau <code>for(...)</code> bên trong là một <strong>thân vòng lặp rỗng (empty body)</strong>: hai vòng lặp không làm gì ngoài đếm, 10.000 × 10.000 = 10<sup>8</sup> lần.</li>
-<li>Các lệnh biên dịch và chạy được nguyên văn — chỉ thêm chú thích, và file được lưu thành <code>Main.java</code>, đúng tên mà lớp public của nó đòi hỏi. Output <strong>cố ý không in ở đây</strong>: số mili-giây mỗi máy một khác, thậm chí mỗi lần chạy một khác — hãy tự chạy thử.</li>
+<li>Các lệnh biên dịch và chạy được nguyên văn — chỉ thêm chú thích, và file được lưu thành <code>Main.java</code>, đúng tên mà lớp public (công khai) của nó đòi hỏi. Output (kết quả in ra) <strong>cố ý không in ở đây</strong>: số mili-giây mỗi máy một khác, thậm chí mỗi lần chạy một khác — hãy tự chạy thử.</li>
 <li>Trình biên dịch JIT (just-in-time — biên dịch ngay lúc chương trình chạy) của Java thậm chí được phép bỏ hẳn một vòng lặp có thân không làm gì, nên con số đo được có khi chẳng nói lên gì về chính vòng lặp.</li>
 </ul>
 <p>Thứ giữ nguyên ở mọi máy là <strong>khối lượng công việc</strong>. Chương trình dưới đây đếm nó thay vì bấm giờ:</p>
@@ -2335,7 +2335,7 @@ n = 100 -&gt; the inner body runs 10000 times<br>
 n = 1000 -&gt; the inner body runs 1000000 times<br>
 n = 10000 -&gt; the inner body runs 100000000 times</div>
 <p>n lớn gấp mười thì công việc gấp một trăm: số đếm đúng bằng n², trên bất kỳ máy nào. Slide 10–11 xây tiếp đúng trên ý này.</p>
-<div class="pitfall">Trong code của bạn, <code>for (int i = 0; i &lt; n; i++);</code> rồi tới một khối lệnh sẽ chạy vòng lặp với thân rỗng, sau đó chạy khối lệnh <strong>đúng một lần</strong>. Trên slide dấu <code>;</code> là cố ý; trong bài PE nó là lỗi âm thầm kinh điển.</div>`],
+<div class="pitfall">Trong code của bạn, <code>for (int i = 0; i &lt; n; i++);</code> rồi tới một khối lệnh sẽ chạy vòng lặp với thân rỗng, sau đó chạy khối lệnh <strong>đúng một lần</strong>. Trên slide dấu <code>;</code> là cố ý; trong bài PE (thi thực hành) nó là lỗi âm thầm kinh điển.</div>`],
       [9, 'Limitations of Experiments',
         `<p class="y-chinh">🎯 Experiments have three big limitations: you must implement the algorithm first, you can only try a limited set of inputs, and two algorithms can be compared only on the same hardware and software.</p>
 <p class="ghi-chu">This slide is mainly a picture; only its title could be extracted. The three limitations below are the standard ones behind this title.</p>
@@ -2463,7 +2463,7 @@ mixed &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[5, 2, 7, 1, 8, 3, 6
 reversed &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[8, 7, 6, 5, 4, 3, 2, 1] -&gt; 28 comparisons</div>
 <p>Sắp xếp chèn đẩy từng phần tử sang trái vượt qua các số lớn hơn nó. Dữ liệu đã sắp thì phần tử nào cũng dừng ngay (7 lần so sánh); dữ liệu đảo ngược thì phần tử nào cũng phải đi hết đường (1 + 2 + … + 7 = 28 lần so sánh).</p>
 <p>Đếm phép toán như chương trình làm cho ra cùng con số trên mọi máy, với mọi ngôn ngữ — đúng sự độc lập mà slide đòi hỏi.</p>
-<div class="pitfall">Dạng câu FE: "Phân tích độ phức tạp thời gian cố ý bỏ qua yếu tố nào?" → máy tính và ngôn ngữ lập trình. Kích thước đầu vào, và trạng thái dữ liệu (qua ba trường hợp), vẫn được giữ lại.</div>`],
+<div class="pitfall">Dạng câu FE (thi cuối kỳ): "Phân tích độ phức tạp thời gian cố ý bỏ qua yếu tố nào?" → máy tính và ngôn ngữ lập trình. Kích thước đầu vào, và trạng thái dữ liệu (qua ba trường hợp), vẫn được giữ lại.</div>`],
       [11, 'Time complexity of an algorithm (2)',
         `<p class="y-chinh">🎯 Time complexity = the number of operations an algorithm performs, written as a function of the input size n; when many inputs share the same n, we state the worst, best or average case.</p>
 <ul>
@@ -2648,7 +2648,7 @@ public class ThreeCases {
 <ul>
 <li>It hides details that do not change the analysis: types, declarations, braces, semicolons.</li>
 <li>It keeps what does: the loops, the comparisons, the assignments — so we can count them.</li>
-<li>The deck's own examples on slides 35–37 use another common style (<code>procedure … end procedure</code>, <code>:=</code>); slide 14 lists the conventions of both.</li>
+<li>The deck's own examples on slides 35–37 use another common style (<code>procedure … end procedure</code>, <code>:=</code>); the lesson's table under slide 14 lists the conventions of both.</li>
 </ul>
 <p>Translated line by line into Java and traced on A = [7, 3, 9, 2, 9, 5]:</p>
 <pre><code class="language-java">public class ArrayMax {
@@ -2690,7 +2690,7 @@ arrayMax(A, 6) = 9</div>
 <ul>
 <li>Nó giấu đi các chi tiết không làm đổi kết quả phân tích: kiểu dữ liệu, khai báo, dấu ngoặc nhọn, dấu chấm phẩy.</li>
 <li>Nó giữ lại những gì ảnh hưởng: vòng lặp, phép so sánh, phép gán — để ta đếm được.</li>
-<li>Các ví dụ của chính bộ slide ở slide 35–37 viết theo một kiểu phổ biến khác (<code>procedure … end procedure</code>, <code>:=</code>); slide 14 liệt kê quy ước của cả hai kiểu.</li>
+<li>Các ví dụ của chính bộ slide ở slide 35–37 viết theo một kiểu phổ biến khác (<code>procedure … end procedure</code>, <code>:=</code>); bảng của bài ở slide 14 liệt kê quy ước của cả hai kiểu.</li>
 </ul>
 <p>Dịch từng dòng sang Java và chạy lần theo trên A = [7, 3, 9, 2, 9, 5]:</p>
 <pre><code class="language-java">public class ArrayMax {
@@ -2751,7 +2751,7 @@ arrayMax(A, 6) = 9</div>
 <tr><td><code>if … then … [else …]</code></td><td>rẽ nhánh</td><td><code>if (…) { … } else { … }</code></td></tr>
 <tr><td><code>while … do …</code></td><td>lặp khi điều kiện còn đúng</td><td><code>while (…) { … }</code></td></tr>
 <tr><td><code>for i ← 1 to n − 1 do</code> hoặc <code>for i := 1 to n</code></td><td>vòng lặp đếm, lấy cả hai đầu mút</td><td><code>for (int i = 1; i &lt;= n - 1; i++)</code></td></tr>
-<tr><td><code>Algorithm name(p1, p2)</code> hoặc <code>procedure name(…)</code></td><td>phần đầu phương thức, kèm dòng Input và Output</td><td><code>static int name(int p1, int p2)</code></td></tr>
+<tr><td><code>Algorithm name(p1, p2)</code> hoặc <code>procedure name(…)</code></td><td>phần đầu phương thức, kèm dòng Input (đầu vào) và Output (đầu ra)</td><td><code>static int name(int p1, int p2)</code></td></tr>
 <tr><td><code>return e</code></td><td>trả về một giá trị</td><td><code>return e;</code></td></tr>
 <tr><td>n², ⌊x⌋, a<sub>i</sub></td><td>ký hiệu toán học thông thường</td><td><code>n * n</code>, <code>(int) Math.floor(x)</code>, <code>a[i]</code></td></tr>
 </tbody>
@@ -2767,7 +2767,7 @@ arrayMax(A, 6) = 9</div>
 <p class="ghi-chu">This slide is a picture and no text could be extracted from it. It comes just before "Counting Primitive Operation" (slide 16), so this block teaches what a primitive operation is; compare with the picture on your copy.</p>
 <ul>
 <li><strong>Examples</strong>: <code>x = e</code> (assign), <code>a &lt; b</code> (compare), <code>x + y</code> (arithmetic), <code>A[i]</code> (index into an array), <code>p.next</code> (follow a reference), calling a method, <code>return</code>.</li>
-<li><strong>Constant time</strong>: each costs a fixed amount, whatever n is. On a real machine that amount varies a little from one operation to another — slide 17 handles it with a fastest time a and a slowest time b.</li>
+<li><strong>Constant time</strong>: each costs a fixed amount, whatever n is. On a real machine that amount varies a little from one operation to another — the lesson handles it at slide 17 with a fastest time a and a slowest time b.</li>
 <li><strong>Not primitive</strong>: anything hiding a loop — <code>Arrays.sort(a)</code>, <code>list.contains(x)</code>, <code>s1.equals(s2)</code> on long strings, a method of yours that loops. Count their inside, or use their known Big-O.</li>
 <li>Primitive operations can be spotted in pseudocode and are largely independent of the programming language — which is why counting them removes the language from the analysis.</li>
 </ul>
@@ -2777,8 +2777,8 @@ arrayMax(A, 6) = 9</div>
 <p class="ghi-chu">Slide này là hình, không trích được chữ nào. Nó đứng ngay trước "Counting Primitive Operation" (slide 16), nên phần giảng dưới đây dạy thế nào là một phép toán cơ bản; hãy đối chiếu với hình trên bản slide của bạn.</p>
 <ul>
 <li><strong>Ví dụ</strong>: <code>x = e</code> (gán), <code>a &lt; b</code> (so sánh), <code>x + y</code> (số học), <code>A[i]</code> (lấy phần tử mảng theo chỉ số), <code>p.next</code> (đi theo một tham chiếu — reference), gọi một phương thức, <code>return</code>.</li>
-<li><strong>Thời gian hằng</strong>: mỗi phép tốn một lượng cố định, n bao nhiêu cũng vậy. Trên máy thật lượng đó xê dịch chút ít giữa các loại phép — slide 17 xử lý chuyện này bằng thời gian nhanh nhất a và chậm nhất b.</li>
-<li><strong>Không phải phép cơ bản</strong>: mọi thứ giấu một vòng lặp bên trong — <code>Arrays.sort(a)</code>, <code>list.contains(x)</code>, <code>s1.equals(s2)</code> trên chuỗi dài, một phương thức bạn tự viết có vòng lặp. Phải đếm phần bên trong của chúng, hoặc dùng Big-O đã biết của chúng.</li>
+<li><strong>Thời gian hằng</strong>: mỗi phép tốn một lượng cố định, n bao nhiêu cũng vậy. Trên máy thật lượng đó xê dịch chút ít giữa các loại phép — bài xử lý chuyện này ở slide 17 bằng thời gian nhanh nhất a và chậm nhất b.</li>
+<li><strong>Không phải phép cơ bản</strong>: mọi thứ giấu một vòng lặp bên trong — <code>Arrays.sort(a)</code>, <code>list.contains(x)</code>, <code>s1.equals(s2)</code> trên chuỗi dài, một phương thức bạn tự viết có vòng lặp. Phải đếm phần bên trong của chúng, hoặc dùng Big-O (O lớn) đã biết của chúng.</li>
 <li>Phép toán cơ bản nhận ra được ngay trên mã giả và hầu như không phụ thuộc ngôn ngữ lập trình — vì thế đếm chúng là loại được ngôn ngữ ra khỏi phép phân tích.</li>
 </ul>
 <p>Mô hình này — ô nhớ nào cũng truy cập được trong một bước, phép cơ bản nào cũng tốn thời gian hằng — gọi là <strong>mô hình RAM</strong> (random access machine — máy truy cập ngẫu nhiên).</p>
@@ -3087,7 +3087,7 @@ n = 1000: 100n = 100000, n^2 = 1000000 &nbsp;&nbsp;&lt;- n^2 is now bigger</div>
 <p>Big-O (next slide) is simply a precise way of saying "ignore the constants and the smaller terms".</p>
 <div class="pitfall">Constants still matter in practice when n is small (slide 33 shows binary search losing to sequential search on tiny arrays) — they just never change the Big-O class.</div>`,
         `<p class="y-chinh">🎯 Tốc độ tăng không bị ảnh hưởng bởi hệ số hằng (constant factor) hay các số hạng bậc thấp (lower-order term): 10²n + 10⁵ vẫn là tuyến tính, 10⁵n² + 10⁸n vẫn là bậc hai.</p>
-<p class="ghi-chu">Slide này là hình, không trích được chữ nào. Ngay trước Big-O (slide 20), phần giảng dưới đây dạy vì sao bỏ được hằng số và các số hạng nhỏ; hãy đối chiếu với hình trên bản slide của bạn.</p>
+<p class="ghi-chu">Slide này là hình, không trích được chữ nào. Ngay trước Big-O (ký hiệu O lớn, slide 20), phần giảng dưới đây dạy vì sao bỏ được hằng số và các số hạng nhỏ; hãy đối chiếu với hình trên bản slide của bạn.</p>
 <pre><code class="language-java">import java.util.Locale;
 
 public class ConstantFactors {
@@ -3157,7 +3157,7 @@ n = 1000: 100n = 100000, n^2 = 1000000 &nbsp;&nbsp;&lt;- n^2 is now bigger</div>
 </tbody>
 </table>
 <p>CSD201 dùng O gần như ở mọi nơi, và dùng Θ khi muốn nói "đúng bậc này"; Ω và Θ sẽ quay lại ở bài 0.D.</p>
-<div class="pitfall">Vì O chỉ là cận trên nên "n là O(n²)" là <strong>ĐÚNG</strong> — một cái bẫy FE rất hay gặp. Nó chỉ không phải câu trả lời tốt nhất (chặt nhất); câu trả lời chặt là O(n).</div>`],
+<div class="pitfall">Vì O chỉ là cận trên nên "n là O(n²)" là <strong>ĐÚNG</strong> — một cái bẫy FE (thi cuối kỳ) rất hay gặp. Nó chỉ không phải câu trả lời tốt nhất (chặt nhất); câu trả lời chặt là O(n).</div>`],
       [21, 'big-oh notation pronouncement',
         `<p class="y-chinh">🎯 How to say Big-O out loud — the slide writes "O to the one", "O to the n / Big-O of n" and "O to the log2 n"; in interviews you will mostly hear "O of …" together with the name of the class.</p>
 <table>
@@ -3178,7 +3178,7 @@ n = 1000: 100n = 100000, n^2 = 1000000 &nbsp;&nbsp;&lt;- n^2 is now bigger</div>
 <li>Answering with the class name is fine too: "binary search is logarithmic, linear search is linear".</li>
 </ul>
 <p class="meo">🧠 <strong>Remember:</strong> say "O of …" plus the class name — "O of n, linear" — and nobody will misunderstand you.</p>`,
-        `<p class="y-chinh">🎯 Cách đọc Big-O thành lời — slide ghi "O to the one", "O to the n / Big-O of n" và "O to the log2 n"; khi phỏng vấn bạn sẽ hay nghe "O of …" kèm tên của lớp độ phức tạp.</p>
+        `<p class="y-chinh">🎯 Cách đọc Big-O (ký hiệu O lớn) thành lời — slide ghi "O to the one", "O to the n / Big-O of n" và "O to the log2 n"; khi phỏng vấn bạn sẽ hay nghe "O of …" kèm tên của lớp độ phức tạp.</p>
 <table>
 <thead><tr><th>Viết</th><th>Slide đọc</th><th>Cách đọc phổ biến khác</th><th>Tên lớp</th></tr></thead>
 <tbody>
@@ -3243,7 +3243,7 @@ c = 1000000: n^2 &lt;= c*n first fails at n = 1000001</div>
 <p>The program only illustrates: a finite check is not a proof — the algebra above is. It also shows every candidate c breaking at n = c + 1 for n².</p>
 <div class="pitfall">c and n0 are not unique: (c = 3, n0 = 10), (c = 4, n0 = 5) and (c = 12, n0 = 1) all prove that 2n + 10 is O(n). An FE option such as "n0 must be 10" is wrong.</div>`,
         `<p class="y-chinh">🎯 Định nghĩa: f(n) là O(g(n)) nếu tồn tại một hằng số thực c &gt; 0 và một hằng số nguyên n0 ≥ 1 sao cho f(n) ≤ c·g(n) với mọi n ≥ n0.</p>
-<p class="ghi-chu">Slide này là hình, không trích được chữ nào. Nằm giữa các slide giới thiệu Big-O (20–21) và slide giải thích nó (23), phần giảng dưới đây nêu định nghĩa chuẩn của giáo trình và áp dụng nó; hãy đối chiếu với hình trên bản slide của bạn.</p>
+<p class="ghi-chu">Slide này là hình, không trích được chữ nào. Nằm giữa các slide giới thiệu Big-O (O lớn, slide 20–21) và slide giải thích nó (23), phần giảng dưới đây nêu định nghĩa chuẩn của giáo trình và áp dụng nó; hãy đối chiếu với hình trên bản slide của bạn.</p>
 <ul>
 <li><strong>c</strong> "nuốt" các hệ số hằng; <strong>n0</strong> cho phép bỏ qua các đầu vào nhỏ — bất đẳng thức chỉ cần đúng từ n0 trở đi.</li>
 <li><strong>Muốn chứng minh</strong> f(n) là O(g(n)), chỉ ra một cặp (c, n0) và chứng minh bất đẳng thức bằng đại số.</li>
@@ -3285,7 +3285,7 @@ c = 10: n^2 &lt;= c*n first fails at n = 11<br>
 c = 1000: n^2 &lt;= c*n first fails at n = 1001<br>
 c = 1000000: n^2 &lt;= c*n first fails at n = 1000001</div>
 <p>Chương trình chỉ để minh hoạ: kiểm tra một số hữu hạn giá trị không phải là chứng minh — phần đại số ở trên mới là chứng minh. Nó cũng cho thấy với n², c nào cũng gãy tại n = c + 1.</p>
-<div class="pitfall">c và n0 không duy nhất: (c = 3, n0 = 10), (c = 4, n0 = 5) hay (c = 12, n0 = 1) đều chứng minh được 2n + 10 là O(n). Phương án FE kiểu "n0 bắt buộc phải là 10" là SAI.</div>`],
+<div class="pitfall">c và n0 không duy nhất: (c = 3, n0 = 10), (c = 4, n0 = 5) hay (c = 12, n0 = 1) đều chứng minh được 2n + 10 là O(n). Phương án FE (thi cuối kỳ) kiểu "n0 bắt buộc phải là 10" là SAI.</div>`],
       [23, 'When we say f(n) is O(g(n))',
         `<p class="y-chinh">🎯 Saying "f(n) is O(g(n))" uses g(n) as a speed limit: as n goes to infinity, f(n) may never grow faster than a constant times g(n).</p>
 <ul>
@@ -3359,7 +3359,7 @@ public class RatioTest {
     `<h3>✅ Tự kiểm tra</h3>
 <ol>
 <li>Vì sao thời gian đồng hồ đo trên hai máy khác nhau không cho biết thuật toán nào tốt hơn?</li>
-<li>arrayMax trên n phần tử: phép so sánh <code>currentMax &lt; A[i]</code> chạy bao nhiêu lần, và Big-O là gì?</li>
+<li>arrayMax trên n phần tử: phép so sánh <code>currentMax &lt; A[i]</code> chạy bao nhiêu lần, và Big-O (O lớn) là gì?</li>
 <li>Chứng minh n² + 1000n là O(n²) bằng cách chỉ ra c và n0.</li>
 <li>Đúng hay sai: 5n + 3 là O(n²).</li>
 <li>Tìm tuần tự trong n phần tử: trường hợp tốt nhất bao nhiêu lần so sánh, xấu nhất bao nhiêu lần?</li>
@@ -3401,8 +3401,8 @@ const L_csd3_2 = {
 </table>`,
     `<span class="eyebrow">Mục 0 · Bài 0.D · ComplexityAnalysis, slide 24–46</span>
 <h2>Phân tích độ phức tạp, phần 2 — quy tắc Big-O, ví dụ, chi phí khấu hao và NP, học từng slide</h2>
-<p class="lead">Phần 1 (bài 0.C) đã định nghĩa Big-O. Phần này biến nó thành công cụ: các quy tắc tính Big-O mà không phải chứng minh lại từ định nghĩa mỗi lần, cận dưới Ω và cận chặt Θ, các bậc tăng thường gặp, ba ví dụ kinh điển làm trên chính mã giả của bộ slide (tìm max, tìm tuần tự, tìm nhị phân — có một lỗi cần bắt ở slide 37), chi phí khấu hao (amortized cost) của một mảng tự lớn dần, và cái nhìn đầu tiên về P, NP và NP-đầy đủ (NP-completeness).</p>
-<div class="callout"><strong>Đề thi dùng phần này thế nào:</strong> FE và các câu hỏi vấn đáp của syllabus (đề cương môn học) liên tục hỏi "độ phức tạp của … là bao nhiêu?" — tìm kiếm trên cây AVL (CQ6.3), các thuật toán sắp xếp cơ bản (CQ14.1), so khớp vét cạn và KMP (CQ18.2–18.3). Slide 24–37 là phương pháp để trả lời; slide 37 cũng chính là thuật toán tìm nhị phân bạn sẽ viết lại ở chương 3 và gặp lại trong cây nhị phân tìm kiếm ở chương 4. O(1) khấu hao giải thích vì sao <code>ArrayList.add</code> nhanh (bài 1.A, slide 21).</div>
+<p class="lead">Phần 1 (bài 0.C) đã định nghĩa Big-O (ký hiệu O lớn). Phần này biến nó thành công cụ: các quy tắc tính Big-O mà không phải chứng minh lại từ định nghĩa mỗi lần, cận dưới Ω và cận chặt Θ, các bậc tăng thường gặp, ba ví dụ kinh điển làm trên chính mã giả của bộ slide (tìm max, tìm tuần tự, tìm nhị phân — có một lỗi cần bắt ở slide 37), chi phí khấu hao (amortized cost) của một mảng tự lớn dần, và cái nhìn đầu tiên về P, NP và NP-đầy đủ (NP-completeness).</p>
+<div class="callout"><strong>Đề thi dùng phần này thế nào:</strong> FE (thi cuối kỳ) và các câu hỏi vấn đáp của syllabus (đề cương môn học) liên tục hỏi "độ phức tạp của … là bao nhiêu?" — tìm kiếm trên cây AVL (CQ6.3), các thuật toán sắp xếp cơ bản (CQ14.1), so khớp vét cạn và KMP (CQ18.2–18.3). Slide 24–37 là phương pháp để trả lời; slide 37 cũng chính là thuật toán tìm nhị phân bạn sẽ viết lại ở chương 3 và gặp lại trong cây nhị phân tìm kiếm ở chương 4. O(1) khấu hao giải thích vì sao <code>ArrayList.add</code> nhanh (bài 1.A, slide 21).</div>
 <h3>Cả phần 2 trong một bảng</h3>
 <table>
 <thead><tr><th>Ý</th><th>Quy tắc hoặc kết quả</th><th>Slide</th></tr></thead>
@@ -3461,7 +3461,7 @@ n = 1024: A = 1049600 (n + n^2 = 1049600) &nbsp;&nbsp;B = 10240 (n * log2 n = 10
 <li>Fragment B: a loop of log2 n steps inside a loop of n turns. Product rule: O(n · log n) = <strong>O(n log n)</strong>.</li>
 </ul>
 <div class="pitfall">Two loops <em>one after the other</em> add up (O(n) + O(n) = O(n)); only loops <em>inside</em> each other multiply (O(n)·O(n) = O(n²)). Writing O(n²) for two separate loops is a common FE mistake.</div>`,
-        `<p class="y-chinh">🎯 Ba định lý cho phép tính Big-O từng mảnh một: quy tắc tổng (sum rule), quy tắc tích (product rule) và tính bắc cầu (transitive property).</p>
+        `<p class="y-chinh">🎯 Ba định lý cho phép tính Big-O (O lớn) từng mảnh một: quy tắc tổng (sum rule), quy tắc tích (product rule) và tính bắc cầu (transitive property).</p>
 <p>Công thức trên slide là hình; đây là phát biểu chuẩn của ba định lý mà slide giới thiệu:</p>
 <table>
 <thead><tr><th>Định lý</th><th>Phát biểu</th><th>Dùng khi</th></tr></thead>
@@ -3500,7 +3500,7 @@ n = 1024: A = 1049600 (n + n^2 = 1049600) &nbsp;&nbsp;B = 10240 (n * log2 n = 10
 <li>Đoạn A: n + n² bước. Quy tắc tổng: O(max(n, n²)) = <strong>O(n²)</strong> — khối nhỏ hơn biến mất.</li>
 <li>Đoạn B: một vòng lặp log2 n bước nằm trong một vòng lặp n lượt. Quy tắc tích: O(n · log n) = <strong>O(n log n)</strong>.</li>
 </ul>
-<div class="pitfall">Hai vòng lặp <em>nối tiếp nhau</em> thì cộng (O(n) + O(n) = O(n)); chỉ vòng lặp <em>lồng trong nhau</em> mới nhân (O(n)·O(n) = O(n²)). Ghi O(n²) cho hai vòng lặp tách rời là lỗi FE hay gặp.</div>`],
+<div class="pitfall">Hai vòng lặp <em>nối tiếp nhau</em> thì cộng (O(n) + O(n) = O(n)); chỉ vòng lặp <em>lồng trong nhau</em> mới nhân (O(n)·O(n) = O(n²)). Ghi O(n²) cho hai vòng lặp tách rời là lỗi FE (thi cuối kỳ) hay gặp.</div>`],
       [25, 'Big-Oh of polynomials and logarithms (figure)',
         `<p class="y-chinh">🎯 Two consequences of the rules are used constantly: a polynomial of degree d is O(n<sup>d</sup>), and the base of a logarithm does not matter inside O( ).</p>
 <p class="ghi-chu">This slide is a picture and no text could be extracted from it. Slides 24–29 of the deck deal with the properties of Big-O and its relatives, so this block teaches the two properties used most often in practice; compare with the picture on your copy.</p>
@@ -3537,10 +3537,10 @@ public class LogBase {
 &nbsp;&nbsp;&nbsp;&nbsp;2^16 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4096 &nbsp;&nbsp;65536<br>
 &nbsp;&nbsp;&nbsp;&nbsp;2^32 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;32768 &nbsp;&nbsp;4294967296<br>
 &nbsp;&nbsp;&nbsp;&nbsp;2^64 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;262144 &nbsp;&nbsp;18446744073709551616</div>
-<p>The first table shows log2 n / log10 n = 3.321928… for every n — the constant log2 10. In the second, (log2 n)³ is still larger at n = 16 and n = 256, n passes it at n = 2¹⁰ = 1024 (1000 &lt; 1024), and from there the gap only widens.</p>
+<p>The first table shows log2 n / log10 n = 3.321928… for every n — the constant log2 10. In the second, (log2 n)³ is still larger at n = 16 and n = 256, by n = 2¹⁰ = 1024 n has passed it (1000 &lt; 1024; the exact crossing is at n = 982), and from there the gap only widens.</p>
 <div class="pitfall">The base does not matter for logarithms, but it <strong>does</strong> matter for exponentials: 4ⁿ = 2ⁿ · 2ⁿ is not O(2ⁿ), because the ratio 4ⁿ/2ⁿ = 2ⁿ has no ceiling. O(2ⁿ) and O(3ⁿ) are different classes.</div>`,
         `<p class="y-chinh">🎯 Hai hệ quả của các quy tắc được dùng liên tục: đa thức (polynomial) bậc d là O(n<sup>d</sup>), và cơ số (base) của logarit không quan trọng khi nằm trong O( ).</p>
-<p class="ghi-chu">Slide này là hình, không trích được chữ nào. Slide 24–29 của bộ slide bàn về tính chất của Big-O và các ký hiệu họ hàng, nên phần giảng dưới đây dạy hai tính chất được dùng nhiều nhất trong thực tế; hãy đối chiếu với hình trên bản slide của bạn.</p>
+<p class="ghi-chu">Slide này là hình, không trích được chữ nào. Slide 24–29 của bộ slide bàn về tính chất của Big-O (O lớn) và các ký hiệu họ hàng, nên phần giảng dưới đây dạy hai tính chất được dùng nhiều nhất trong thực tế; hãy đối chiếu với hình trên bản slide của bạn.</p>
 <ul>
 <li><strong>Đa thức</strong>: 5n³ − 2n² + 7 ≤ 5n³ + 2n³ + 7n³ = 14n³ với n ≥ 1, nên nó là O(n³). Tổng quát, a<sub>d</sub>n<sup>d</sup> + … + a<sub>1</sub>n + a<sub>0</sub> là O(n<sup>d</sup>): giữ lũy thừa cao nhất, bỏ hệ số của nó.</li>
 <li><strong>Cơ số của log</strong>: log<sub>a</sub> n = log<sub>b</sub> n / log<sub>b</sub> a — đổi cơ số chỉ là nhân với một hằng số, nên O(log2 n) = O(log10 n) = O(log n).</li>
@@ -3574,7 +3574,7 @@ public class LogBase {
 &nbsp;&nbsp;&nbsp;&nbsp;2^16 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4096 &nbsp;&nbsp;65536<br>
 &nbsp;&nbsp;&nbsp;&nbsp;2^32 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;32768 &nbsp;&nbsp;4294967296<br>
 &nbsp;&nbsp;&nbsp;&nbsp;2^64 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;262144 &nbsp;&nbsp;18446744073709551616</div>
-<p>Bảng thứ nhất cho thấy log2 n / log10 n = 3,321928… với mọi n — chính là hằng số log2 10. Ở bảng thứ hai, (log2 n)³ vẫn lớn hơn khi n = 16 và n = 256, tới n = 2¹⁰ = 1024 thì n vượt lên (1000 &lt; 1024), và từ đó khoảng cách chỉ ngày càng xa.</p>
+<p>Bảng thứ nhất cho thấy log2 n / log10 n = 3,321928… với mọi n — chính là hằng số log2 10. Ở bảng thứ hai, (log2 n)³ vẫn lớn hơn khi n = 16 và n = 256, tới n = 2¹⁰ = 1024 thì n đã vượt lên (1000 &lt; 1024; điểm vượt chính xác là n = 982), và từ đó khoảng cách chỉ ngày càng xa.</p>
 <div class="pitfall">Với logarit thì cơ số không quan trọng, nhưng với hàm mũ thì <strong>có</strong>: 4ⁿ = 2ⁿ · 2ⁿ không phải O(2ⁿ), vì tỉ số 4ⁿ/2ⁿ = 2ⁿ không có trần. O(2ⁿ) và O(3ⁿ) là hai lớp khác nhau.</div>`],
       [26, 'Writing Big-Oh - dominant term and tight bound (figure)',
         `<p class="y-chinh">🎯 Conventions for writing Big-O: drop constant factors and lower-order terms, and give the smallest (tightest) simple class that is still true.</p>
@@ -3596,7 +3596,7 @@ public class LogBase {
 <li>Say "O(n) in the worst case" or "O(1) amortized" when the case matters: the same method can belong to different classes in different cases.</li>
 </ul>
 <p class="meo">🧠 <strong>Remember:</strong> a Big-O answer is written like a shop sign — short and exact: O(n²), not O(3n² + 5n + 2).</p>`,
-        `<p class="y-chinh">🎯 Quy ước viết Big-O: bỏ hệ số hằng và các số hạng bậc thấp, và nêu lớp đơn giản nhỏ nhất (chặt nhất — tight) mà vẫn đúng.</p>
+        `<p class="y-chinh">🎯 Quy ước viết Big-O (O lớn): bỏ hệ số hằng và các số hạng bậc thấp, và nêu lớp đơn giản nhỏ nhất (chặt nhất — tight) mà vẫn đúng.</p>
 <p class="ghi-chu">Slide này là hình, không trích được chữ nào. Nằm trong nhóm slide về tính chất của Big-O (24–29), phần giảng dưới đây dạy cách viết một câu trả lời Big-O cho đúng quy ước; hãy đối chiếu với hình trên bản slide của bạn.</p>
 <table>
 <thead><tr><th>Thay vì</th><th>Hãy viết</th><th>Quy tắc</th></tr></thead>
@@ -3610,9 +3610,9 @@ public class LogBase {
 </tbody>
 </table>
 <ul>
-<li>Cận <strong>chặt</strong> là lớp nhỏ nhất mà vẫn đúng; câu hỏi FE thường chờ đúng đáp án này, dù một cận lỏng hơn về lý thuyết vẫn đúng.</li>
+<li>Cận <strong>chặt</strong> là lớp nhỏ nhất mà vẫn đúng; câu hỏi FE (thi cuối kỳ) thường chờ đúng đáp án này, dù một cận lỏng hơn về lý thuyết vẫn đúng.</li>
 <li>Khi chi phí phụ thuộc hai kích thước (n đỉnh và m cạnh, văn bản dài n và mẫu dài m), giữ cả hai — chúng tăng độc lập với nhau.</li>
-<li>Nói rõ "O(n) trong trường hợp xấu nhất" hay "O(1) khấu hao" khi trường hợp là quan trọng: cùng một phương thức có thể thuộc các lớp khác nhau ở các trường hợp khác nhau.</li>
+<li>Nói rõ "O(n) trong trường hợp xấu nhất" hay "O(1) khấu hao (amortized)" khi trường hợp là quan trọng: cùng một phương thức có thể thuộc các lớp khác nhau ở các trường hợp khác nhau.</li>
 </ul>
 <p class="meo">🧠 <strong>Mẹo nhớ:</strong> câu trả lời Big-O viết như biển hiệu cửa hàng — ngắn và chính xác: O(n²), không phải O(3n² + 5n + 2).</p>`],
       [27, 'Big-Omega notation (figure)',
@@ -3621,7 +3621,7 @@ public class LogBase {
 <ul>
 <li>It is Big-O turned upside down: f(n) is Ω(g(n)) exactly when g(n) is O(f(n)).</li>
 <li>Typical use: "any algorithm that must look at all n elements (maximum, sum) is Ω(n)" — no trick can do it with fewer steps.</li>
-<li><strong>Example</strong>: the number of pairs n(n − 1)/2 (the loop of slide 34) is Ω(n²) with c = 1/4 and n0 = 2, because n(n − 1)/2 ≥ n²/4 ⇔ n ≥ 2.</li>
+<li><strong>Example</strong>: the number of pairs n(n − 1)/2 (the lesson's pairs loop, slide 34) is Ω(n²) with c = 1/4 and n0 = 2, because n(n − 1)/2 ≥ n²/4 ⇔ n ≥ 2.</li>
 <li>100n is <strong>not</strong> Ω(n²): 100n ≥ c·n² would need n ≤ 100/c, which fails for large n.</li>
 </ul>
 <pre><code class="language-java">import java.util.Locale;
@@ -3653,12 +3653,12 @@ n = 400: 100n = 40000, n^2/4 = 40000.00<br>
 n = 401: 100n = 40100, n^2/4 = 40200.25 &nbsp;&nbsp;&lt;- lower bound broken<br>
 n = 10000: 100n = 1000000, n^2/4 = 25000000.00 &nbsp;&nbsp;&lt;- lower bound broken</div>
 <div class="pitfall">Ω is not "the best case" and O is not "the worst case". Each case (best, worst, average) is its own function of n, and each can be given an O, an Ω or a Θ: the worst case of linear search is Θ(n), its best case is Θ(1).</div>`,
-        `<p class="y-chinh">🎯 Big-Omega cho một cận dưới (lower bound): f(n) là Ω(g(n)) nếu có các hằng số c &gt; 0 và n0 ≥ 1 sao cho f(n) ≥ c·g(n) với mọi n ≥ n0 — f tăng ít nhất là nhanh bằng g.</p>
+        `<p class="y-chinh">🎯 Big-Omega (Omega lớn) cho một cận dưới (lower bound): f(n) là Ω(g(n)) nếu có các hằng số c &gt; 0 và n0 ≥ 1 sao cho f(n) ≥ c·g(n) với mọi n ≥ n0 — f tăng ít nhất là nhanh bằng g.</p>
 <p class="ghi-chu">Slide này là hình, không trích được chữ nào. Mục tiêu của bộ slide (slide 2) có Big-Ω và Big-Θ mà không slide chữ nào dạy chúng, nên khối này và hai khối kế tiếp dạy chúng ở vị trí này của mạch bài; hãy đối chiếu với hình trên bản slide của bạn.</p>
 <ul>
 <li>Nó là Big-O lật ngược: f(n) là Ω(g(n)) đúng khi g(n) là O(f(n)).</li>
 <li>Cách dùng điển hình: "thuật toán nào buộc phải nhìn đủ n phần tử (tìm max, tính tổng) thì là Ω(n)" — không mẹo nào làm được với ít bước hơn.</li>
-<li><strong>Ví dụ</strong>: số cặp n(n − 1)/2 (vòng lặp ở slide 34) là Ω(n²) với c = 1/4 và n0 = 2, vì n(n − 1)/2 ≥ n²/4 ⇔ n ≥ 2.</li>
+<li><strong>Ví dụ</strong>: số cặp n(n − 1)/2 (vòng lặp đếm cặp — ví dụ của bài ở slide 34) là Ω(n²) với c = 1/4 và n0 = 2, vì n(n − 1)/2 ≥ n²/4 ⇔ n ≥ 2.</li>
 <li>100n <strong>không</strong> phải Ω(n²): 100n ≥ c·n² đòi n ≤ 100/c, điều này sai khi n lớn.</li>
 </ul>
 <pre><code class="language-java">import java.util.Locale;
@@ -3725,7 +3725,7 @@ public class ThetaCheck {
 &nbsp;100000 &nbsp;&nbsp;2500000000 &nbsp;4999950000 &nbsp;&nbsp;5000000000 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.50000<br>
 checked n = 2 .. 1000000: 0 counterexamples</div>
 <p>The ratio f(n)/n² tends to 1/2 and stays inside the band [c′, c″] = [1/4, 1/2]: that is what "the same growth rate" means.</p>`,
-        `<p class="y-chinh">🎯 Big-Theta cho một cận chặt (tight bound): f(n) là Θ(g(n)) nếu nó vừa là O(g(n)) vừa là Ω(g(n)) — có các hằng số c′ &gt; 0, c″ &gt; 0 và n0 ≥ 1 sao cho c′·g(n) ≤ f(n) ≤ c″·g(n) với mọi n ≥ n0.</p>
+        `<p class="y-chinh">🎯 Big-Theta (Theta lớn) cho một cận chặt (tight bound): f(n) là Θ(g(n)) nếu nó vừa là O(g(n)) vừa là Ω(g(n)) — có các hằng số c′ &gt; 0, c″ &gt; 0 và n0 ≥ 1 sao cho c′·g(n) ≤ f(n) ≤ c″·g(n) với mọi n ≥ n0.</p>
 <p class="ghi-chu">Slide này là hình, không trích được chữ nào. Tiếp nối Big-Ω (slide 27), phần giảng dưới đây dạy Big-Θ, ký hiệu thứ ba có trong mục tiêu của bộ slide; hãy đối chiếu với hình trên bản slide của bạn.</p>
 <ul>
 <li>Θ "ghim" tốc độ tăng lại chính xác: f bị kẹp giữa hai bội số của g.</li>
@@ -3767,8 +3767,8 @@ checked n = 2 .. 1000000: 0 counterexamples</div>
 <tbody>
 <tr><td>linear search (slide 36)</td><td>Θ(1) — key first</td><td>Θ(n) — key last or missing</td><td>O(n)</td></tr>
 <tr><td>binary search (slide 37)</td><td>Θ(1) — key in the middle</td><td>Θ(log n)</td><td>O(log n)</td></tr>
-<tr><td>arrayMax (slide 16)</td><td>Θ(n)</td><td>Θ(n)</td><td>Θ(n)</td></tr>
-<tr><td>insertion sort (slides 10–11)</td><td>Θ(n) — sorted input</td><td>Θ(n²) — reversed input</td><td>O(n²)</td></tr>
+<tr><td>arrayMax (lesson's example, slides 13–16)</td><td>Θ(n)</td><td>Θ(n)</td><td>Θ(n)</td></tr>
+<tr><td>insertion sort (lesson's example, slides 10–11)</td><td>Θ(n) — sorted input</td><td>Θ(n²) — reversed input</td><td>O(n²)</td></tr>
 </tbody>
 </table>
 <ul>
@@ -3778,14 +3778,14 @@ checked n = 2 .. 1000000: 0 counterexamples</div>
 </ul>
 <p class="meo">🧠 <strong>Remember:</strong> O is a ceiling, Ω is a floor, Θ is both — the growth rate is trapped in the room.</p>`,
         `<p class="y-chinh">🎯 Ba ký hiệu so sánh tốc độ tăng giống như ≤, ≥ và =, và chúng độc lập với việc chọn trường hợp tốt nhất/xấu nhất/trung bình — chọn trường hợp trước, rồi mới chặn hàm của trường hợp đó.</p>
-<p class="ghi-chu">Slide này là hình, không trích được chữ nào. Nó khép lại nhóm slide về Big-O và các ký hiệu họ hàng (24–29), nên phần giảng dưới đây đặt O, Ω và Θ cạnh ba trường hợp; hãy đối chiếu với hình trên bản slide của bạn.</p>
+<p class="ghi-chu">Slide này là hình, không trích được chữ nào. Nó khép lại nhóm slide về Big-O (O lớn) và các ký hiệu họ hàng (24–29), nên phần giảng dưới đây đặt O, Ω và Θ cạnh ba trường hợp; hãy đối chiếu với hình trên bản slide của bạn.</p>
 <table>
 <thead><tr><th>Thuật toán</th><th>Tốt nhất</th><th>Xấu nhất</th><th>Tóm tắt một dòng an toàn</th></tr></thead>
 <tbody>
 <tr><td>tìm tuần tự (slide 36)</td><td>Θ(1) — khoá ở đầu</td><td>Θ(n) — khoá ở cuối hoặc không có</td><td>O(n)</td></tr>
 <tr><td>tìm nhị phân (slide 37)</td><td>Θ(1) — khoá ở giữa</td><td>Θ(log n)</td><td>O(log n)</td></tr>
-<tr><td>arrayMax (slide 16)</td><td>Θ(n)</td><td>Θ(n)</td><td>Θ(n)</td></tr>
-<tr><td>sắp xếp chèn (slide 10–11)</td><td>Θ(n) — đầu vào đã sắp</td><td>Θ(n²) — đầu vào đảo ngược</td><td>O(n²)</td></tr>
+<tr><td>arrayMax (ví dụ của bài, slide 13–16)</td><td>Θ(n)</td><td>Θ(n)</td><td>Θ(n)</td></tr>
+<tr><td>sắp xếp chèn (ví dụ của bài, slide 10–11)</td><td>Θ(n) — đầu vào đã sắp</td><td>Θ(n²) — đầu vào đảo ngược</td><td>O(n²)</td></tr>
 </tbody>
 </table>
 <ul>
@@ -3804,7 +3804,7 @@ checked n = 2 .. 1000000: 0 counterexamples</div>
 </ul>
 <p>Read O(g(n)) as "the set of all functions that grow no faster than g(n)": then "5n + 3 ∈ O(n)" is literally true, and "O(n) ⊆ O(n²)" makes sense.</p>
 <div class="pitfall">Never write "O(n) = T(n)": the "=" of Big-O reads only from left to right. In an exam, "T(n) is O(g(n))" is always a safe way to write your answer.</div>`,
-        `<p class="y-chinh">🎯 "Thuật toán A chạy trong thời gian Big-O của n log n" nghĩa là: số phép toán của nó, như một hàm của n, là O(n log n); và vì O(g(n)) là một tập hợp hàm, viết nó bằng dấu "=" chỉ là một quy ước.</p>
+        `<p class="y-chinh">🎯 "Thuật toán A chạy trong thời gian Big-O (O lớn) của n log n" nghĩa là: số phép toán của nó, như một hàm của n, là O(n log n); và vì O(g(n)) là một tập hợp hàm, viết nó bằng dấu "=" chỉ là một quy ước.</p>
 <ul>
 <li>"Thuật toán B là thuật toán bậc n bình phương (order n-squared)" = số phép toán của nó là O(n²).</li>
 <li>Câu nói đó nói về <strong>hàm</strong> T(n) — số phép toán — chứ không phải số giây trên một máy nào đó.</li>
@@ -3824,7 +3824,7 @@ checked n = 2 .. 1000000: 0 counterexamples</div>
 <tr><td>O(n log n)</td><td>n log n</td><td>merge sort, heap sort, quick sort on average</td></tr>
 <tr><td>O(n²)</td><td>quadratic</td><td>selection, insertion and bubble sort</td></tr>
 <tr><td>O(n<sup>b</sup>)</td><td>polynomial (b a constant)</td><td>n³: three nested loops over n; Floyd's shortest paths</td></tr>
-<tr><td>O(b<sup>n</sup>)</td><td>exponential (b &gt; 1)</td><td>trying all 2ⁿ subsets (slide 42)</td></tr>
+<tr><td>O(b<sup>n</sup>)</td><td>exponential (b &gt; 1)</td><td>trying all 2ⁿ subsets (the lesson's subset-sum example, slide 42)</td></tr>
 <tr><td>O(n!)</td><td>factorial</td><td>trying every ordering of n vertices (Hamiltonian cycle by brute force)</td></tr>
 </tbody>
 </table>
@@ -3860,7 +3860,7 @@ public class GrowthTable {
 16 &nbsp;&nbsp;&nbsp;&nbsp;4 &nbsp;16 &nbsp;&nbsp;&nbsp;&nbsp;64 &nbsp;&nbsp;&nbsp;256 &nbsp;&nbsp;4096 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;65536 &nbsp;20922789888000<br>
 32 &nbsp;&nbsp;&nbsp;&nbsp;5 &nbsp;32 &nbsp;&nbsp;&nbsp;160 &nbsp;&nbsp;1024 &nbsp;32768 &nbsp;&nbsp;4294967296 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.6e+35</div>
 <ul>
-<li>From the row n = 16 on, every row is already in increasing order. At n = 8, n³ = 512 is still above 2ⁿ = 256 (2ⁿ overtakes at n = 10, slide 32).</li>
+<li>From the row n = 16 on, every row is already in increasing order. At n = 8, n³ = 512 is still above 2ⁿ = 256 (2ⁿ overtakes at n = 10, as computed under slide 32).</li>
 <li>At small n the order can look different: at n = 2 and n = 4, n² and 2ⁿ are equal (4 = 4, 16 = 16).</li>
 <li>Polynomial orders (up to n<sup>b</sup>) count as "efficient"; exponential and factorial ones are hopeless beyond a few dozen elements — the P versus NP question of slide 42 is about exactly this boundary.</li>
 </ul>
@@ -3876,7 +3876,7 @@ public class GrowthTable {
 <tr><td>O(n log n)</td><td>n log n</td><td>merge sort (sắp xếp trộn), heap sort (sắp xếp vun đống), quick sort (sắp xếp nhanh) trong trường hợp trung bình</td></tr>
 <tr><td>O(n²)</td><td>bậc hai (quadratic)</td><td>selection, insertion và bubble sort (sắp xếp chọn, chèn, nổi bọt)</td></tr>
 <tr><td>O(n<sup>b</sup>)</td><td>đa thức (polynomial, b là hằng số)</td><td>n³: ba vòng lặp lồng nhau trên n; thuật toán Floyd tìm đường đi ngắn nhất</td></tr>
-<tr><td>O(b<sup>n</sup>)</td><td>hàm mũ (exponential, b &gt; 1)</td><td>thử mọi tập con, 2ⁿ tập (slide 42)</td></tr>
+<tr><td>O(b<sup>n</sup>)</td><td>hàm mũ (exponential, b &gt; 1)</td><td>thử mọi tập con, 2ⁿ tập (ví dụ tổng tập con của bài, slide 42)</td></tr>
 <tr><td>O(n!)</td><td>giai thừa (factorial)</td><td>thử mọi thứ tự của n đỉnh (tìm chu trình Hamilton bằng vét cạn)</td></tr>
 </tbody>
 </table>
@@ -3912,7 +3912,7 @@ public class GrowthTable {
 16 &nbsp;&nbsp;&nbsp;&nbsp;4 &nbsp;16 &nbsp;&nbsp;&nbsp;&nbsp;64 &nbsp;&nbsp;&nbsp;256 &nbsp;&nbsp;4096 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;65536 &nbsp;20922789888000<br>
 32 &nbsp;&nbsp;&nbsp;&nbsp;5 &nbsp;32 &nbsp;&nbsp;&nbsp;160 &nbsp;&nbsp;1024 &nbsp;32768 &nbsp;&nbsp;4294967296 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.6e+35</div>
 <ul>
-<li>Từ hàng n = 16 trở đi, hàng nào cũng đã đúng thứ tự tăng dần. Ở n = 8, n³ = 512 vẫn còn lớn hơn 2ⁿ = 256 (2ⁿ vượt lên ở n = 10, slide 32).</li>
+<li>Từ hàng n = 16 trở đi, hàng nào cũng đã đúng thứ tự tăng dần. Ở n = 8, n³ = 512 vẫn còn lớn hơn 2ⁿ = 256 (2ⁿ vượt lên ở n = 10, bài tính ở slide 32).</li>
 <li>Khi n nhỏ thứ tự có thể trông khác đi: ở n = 2 và n = 4, n² và 2ⁿ bằng nhau (4 = 4, 16 = 16).</li>
 <li>Các bậc đa thức (tới n<sup>b</sup>) được coi là "hiệu quả"; bậc hàm mũ và giai thừa thì vô vọng khi quá vài chục phần tử — câu hỏi P với NP ở slide 42 xoay quanh đúng ranh giới này.</li>
 </ul>
@@ -3956,7 +3956,7 @@ n! &gt; 2^n for every n &gt;= 4 &nbsp;&nbsp;(still &lt;= at n = 3)</div>
 <li>On a normal (linear) scale the fast curves leave the picture almost at once; that is why graphs of these functions often put a logarithmic scale on the vertical axis, so that all of them fit.</li>
 </ul>
 <p class="meo">🧠 <strong>Remember:</strong> judge a race at the finish line, not in the first metres — Big-O only looks at large n.</p>`,
-        `<p class="y-chinh">🎯 Vẽ thành đường cong, các hàm Big-O tiêu biểu tách nhau rất nhanh: dù lúc n nhỏ có ra sao, khi n lớn đường tăng nhanh hơn sẽ nằm trên và ở luôn trên đó.</p>
+        `<p class="y-chinh">🎯 Vẽ thành đường cong, các hàm Big-O (O lớn) tiêu biểu tách nhau rất nhanh: dù lúc n nhỏ có ra sao, khi n lớn đường tăng nhanh hơn sẽ nằm trên và ở luôn trên đó.</p>
 <p class="ghi-chu">Slide này chủ yếu là hình (đồ thị các hàm tiêu biểu dùng khi ước lượng Big-O); chữ trích được chỉ có tiêu đề và phụ đề. Chương trình dưới đây tính chính xác, với các cặp hàm của bài, đường này vượt đường kia từ chỗ nào.</p>
 <pre><code class="language-java">public class Crossover {
     interface F { double at(int n); }
@@ -4100,7 +4100,7 @@ public class CountThenConvert {
 <li>As the slide says, we describe algorithms in pseudocode for this — slides 35–37 apply the two steps to the deck's own procedures.</li>
 </ul>
 <p class="meo">🧠 <strong>Remember:</strong> a nested loop whose inner loop starts at i + 1 is still O(n²) — half of n² is still n².</p>`,
-        `<p class="y-chinh">🎯 Xác định độ phức tạp thời gian gồm hai bước: đếm số phép toán thành một hàm của n, rồi đổi số đếm sang Big-O bằng cách chỉ giữ số hạng trội.</p>
+        `<p class="y-chinh">🎯 Xác định độ phức tạp thời gian gồm hai bước: đếm số phép toán thành một hàm của n, rồi đổi số đếm sang Big-O (O lớn) bằng cách chỉ giữ số hạng trội.</p>
 <ol>
 <li><strong>Đếm (count)</strong>: chọn phép toán chạy nhiều lần nhất (thường là phép so sánh ở vòng lặp trong cùng) và đếm xem nó chạy bao nhiêu lần — chính xác, hoặc ít nhất là số hạng bậc cao nhất.</li>
 <li><strong>Đổi sang Big-O (convert)</strong>: bỏ các số hạng bậc thấp và hệ số hằng (slide 19 và 26).</li>
@@ -4214,10 +4214,10 @@ i = 5 &nbsp;a5 = 5 &nbsp;max &lt; a5? no &nbsp;&nbsp;max = 11<br>
 max = 11 after 5 comparisons on 6 numbers</div>
 <ul>
 <li>Phép so sánh <code>max &lt; ai</code> chạy một lần mỗi lượt lặp, với mọi đầu vào: tìm max không có lối thoát sớm, nên số lần so sánh ở trường hợp tốt nhất và xấu nhất bằng nhau.</li>
-<li>Lệnh <code>max := ai</code> chỉ chạy khi gặp phần tử lớn hơn — ở đây hai lần (9, rồi 11); ít nhất 0 lần (phần tử lớn nhất đứng đầu), nhiều nhất mỗi lượt một lần (dữ liệu tăng dần). Nó làm đổi hằng số, không bao giờ đổi Big-O.</li>
+<li>Lệnh <code>max := ai</code> chỉ chạy khi gặp phần tử lớn hơn — ở đây hai lần (9, rồi 11); ít nhất 0 lần (phần tử lớn nhất đứng đầu), nhiều nhất mỗi lượt một lần (dữ liệu tăng dần). Nó làm đổi hằng số, không bao giờ đổi Big-O (O lớn).</li>
 <li>Đổi sang Big-O (slide 34): (số phần tử − 1) phép so sánh → bỏ hằng số → O(n), nói chính xác hơn là Θ(n).</li>
 </ul>
-<div class="pitfall"><strong>Chỗ lệch trên slide 35 và bản đã sửa:</strong> phần đầu thủ tục liệt kê a0 … an — tức <strong>n + 1</strong> số — và vòng lặp là <code>for i := 1 to n</code>, nên <code>max &lt; ai</code> chạy <strong>n</strong> lần (5 lần với a0 … a5 trong bảng lần theo), không phải "n − 1". Bản sửa cho dãy n số: <code>procedure max(a0, a1, …, a(n−1))</code> với <code>for i := 1 to n − 1</code> → đúng n − 1 phép so sánh. Cả hai bản đều là O(n). Trong FE, "tìm max trên 10 số tốn bao nhiêu phép so sánh?" → 9.</div>`],
+<div class="pitfall"><strong>Chỗ lệch trên slide 35 và bản đã sửa:</strong> phần đầu thủ tục liệt kê a0 … an — tức <strong>n + 1</strong> số — và vòng lặp là <code>for i := 1 to n</code>, nên <code>max &lt; ai</code> chạy <strong>n</strong> lần (5 lần với a0 … a5 trong bảng lần theo), không phải "n − 1". Bản sửa cho dãy n số: <code>procedure max(a0, a1, …, a(n−1))</code> với <code>for i := 1 to n − 1</code> → đúng n − 1 phép so sánh. Cả hai bản đều là O(n). Trong FE (thi cuối kỳ), "tìm max trên 10 số tốn bao nhiêu phép so sánh?" → 9.</div>`],
       [36, 'Examples for determining time complexity - 2',
         `<p class="y-chinh">🎯 Linear search compares the key with the elements one by one and stops at the first match: from 1 comparison (best case) up to one per element (worst case) — O(n).</p>
 <pre><code class="language-plaintext">procedure linear search(key, a0, a1, ..., an: R)
@@ -4305,7 +4305,7 @@ key = 8: loc = -1, comparisons = 6</div>
 <li>"Both 1 and n are O(n)" (cả 1 lẫn n đều là O(n)) là đúng, vì O chỉ là cận trên. Nói chính xác hơn: trường hợp tốt nhất là Θ(1), xấu nhất là Θ(n).</li>
 <li>Trung bình, nếu khoá có trong dãy và có khả năng như nhau ở mỗi vị trí trong n vị trí: (n + 1)/2 phép so sánh — vẫn là Θ(n).</li>
 </ul>
-<div class="pitfall"><strong>Chỗ lệch trên slide 36 và bản đã sửa:</strong> <code>while i &lt;= n</code> trên a0 … an xét tới <strong>n + 1</strong> số, nên phép so sánh <code>key = ai</code> chạy từ 1 tới n + 1 lần (6 lần với a0 … a5 ở trên), không phải "from 1 to n" (từ 1 tới n). Bản sửa cho n số a0 … a(n−1): <code>while i &lt;= n - 1 and loc = -1</code> (trong Java là <code>i &lt; n</code>) → từ 1 tới n phép so sánh. Big-O không đổi: O(n).</div>
+<div class="pitfall"><strong>Chỗ lệch trên slide 36 và bản đã sửa:</strong> <code>while i &lt;= n</code> trên a0 … an xét tới <strong>n + 1</strong> số, nên phép so sánh <code>key = ai</code> chạy từ 1 tới n + 1 lần (6 lần với a0 … a5 ở trên), không phải "from 1 to n" (từ 1 tới n). Bản sửa cho n số a0 … a(n−1): <code>while i &lt;= n - 1 and loc = -1</code> (trong Java là <code>i &lt; n</code>) → từ 1 tới n phép so sánh. Big-O (O lớn) không đổi: O(n).</div>
 <p class="meo">🧠 <strong>Mẹo nhớ:</strong> tìm một người bạn trong hàng đợi — may thì bạn ấy đứng đầu, xui thì đứng cuối hoặc không đến, còn trung bình bạn phải đi hết nửa hàng.</p>`],
       [37, 'Examples for determining time complexity - 3',
         `<p class="y-chinh">🎯 Binary search halves the part of a sorted array that can still contain the key at every step, so it needs about log2 n steps — O(log n); but the slide's pseudocode must be corrected first.</p>
@@ -4769,7 +4769,7 @@ public class Potential {
 sums: cost = 24, amCost(slide phi) = 26, amCost(2count-N) = 26</div>
 <ul>
 <li>With the textbook potential Φ = 2·count − N, every add has amortized cost exactly 3 (only the first one 2, because we start from an empty array) — the slide's result amCost = 3. So m adds cost at most 3m: O(1) per add.</li>
-<li>The slide writes Φ with a special case: 0 when count = N. Taken literally, it shifts potential between the add that fills the array and the next add, which overflows — add 4 (fills N = 4: 3 − 4 = −1) and add 5 (overflows: 4 + 3 = 7). Each such pair still sums to 6 = 3 + 3 and the totals agree (26 = 26), so the conclusion stands; but only the version without the special case gives exactly 3 for every single add.</li>
+<li>The slide writes Φ with a special case: 0 when count = N. Taken literally, it shifts potential between the add that fills the array and the next add, which overflows — add 4 (fills N = 4: 3 − 4 = −1) and add 5 (overflows: 4 + 3 = 7). From N = 4 on, each such pair still sums to 6 = 3 + 3 (adds 1–3, where fills and overflows overlap, balance as a group: 1 + 2 + 5 = 2 + 3 + 3 = 8), and the totals agree (26 = 26), so the conclusion stands; but only the version without the special case gives exactly 3 for every single add.</li>
 </ul>
 <div class="pitfall">"Growing the array by 10 (or 100) cells each time is enough" — false: with any constant increment an add still costs O(m) on average; only multiplying the capacity (×2, or ×1.5 as Java's <code>ArrayList</code> does) gives amortized O(1).</div>`,
         `<p class="y-chinh">🎯 Thêm phần tử vào mảng linh hoạt (flexible array) tốn O(1) khi còn chỗ và O(count) khi tràn (overflow); nới thêm một hằng k làm tràn liên tục, nhân đôi làm tràn hiếm hoi — và một hàm thế (potential function) chứng minh chi phí khấu hao mỗi lần thêm là hằng số 3.</p>
@@ -4856,7 +4856,7 @@ public class Potential {
 sums: cost = 24, amCost(slide phi) = 26, amCost(2count-N) = 26</div>
 <ul>
 <li>Với hàm thế của sách giáo khoa Φ = 2·count − N, lần thêm nào cũng có chi phí khấu hao đúng bằng 3 (riêng lần đầu là 2, vì bắt đầu từ mảng rỗng) — đúng kết quả amCost = 3 của slide. Vậy m lần thêm tốn nhiều nhất 3m: O(1) mỗi lần.</li>
-<li>Slide viết Φ có một trường hợp đặc biệt: bằng 0 khi count = N. Tính đúng từng chữ như vậy thì thế bị dời giữa lần thêm làm đầy mảng và lần thêm kế tiếp gây tràn — lần 4 (làm đầy N = 4: 3 − 4 = −1) và lần 5 (tràn: 4 + 3 = 7). Mỗi cặp như vậy vẫn cộng lại bằng 6 = 3 + 3 và hai tổng khớp nhau (26 = 26), nên kết luận vẫn đứng vững; nhưng chỉ bản không có trường hợp đặc biệt mới cho đúng 3 ở từng lần thêm.</li>
+<li>Slide viết Φ có một trường hợp đặc biệt: bằng 0 khi count = N. Tính đúng từng chữ như vậy thì thế bị dời giữa lần thêm làm đầy mảng và lần thêm kế tiếp gây tràn — lần 4 (làm đầy N = 4: 3 − 4 = −1) và lần 5 (tràn: 4 + 3 = 7). Từ N = 4 trở đi, mỗi cặp như vậy vẫn cộng lại bằng 6 = 3 + 3 (ba lần thêm đầu, nơi làm đầy và tràn chồng lên nhau, cân bằng theo cả nhóm: 1 + 2 + 5 = 2 + 3 + 3 = 8), và hai tổng khớp nhau (26 = 26), nên kết luận vẫn đứng vững; nhưng chỉ bản không có trường hợp đặc biệt mới cho đúng 3 ở từng lần thêm.</li>
 </ul>
 <div class="pitfall">"Mỗi lần đầy nới thêm 10 (hay 100) ô là đủ" — SAI: nới thêm một hằng số thì trung bình mỗi lần thêm vẫn tốn O(m); chỉ khi nhân sức chứa lên (×2, hoặc ×1,5 như <code>ArrayList</code> của Java) mới được O(1) khấu hao.</div>`],
       [41, 'NP - Completeness',
@@ -5031,7 +5031,7 @@ n = 40 numbers -&gt; 1099511627776 subsets to try<br>
 n = 60 numbers -&gt; 1152921504606846976 subsets to try</div>
 <ul>
 <li><strong>Kiểm tra</strong>: đưa sẵn chứng cứ {34, 41, 19, 6}, bốn phép cộng là xác nhận xong — O(n).</li>
-<li><strong>Tìm</strong>: không có ý tưởng thông minh nào thì phải thử các tập con — ở đây 2²⁰ ≈ 1 triệu, với 60 số là 2⁶⁰ ≈ 10¹⁸. Chưa ai biết thuật toán thời gian đa thức cho bài tổng tập con (nó là bài NP-đầy đủ, khái niệm ở slide 45).</li>
+<li><strong>Tìm</strong>: không có ý tưởng thông minh nào thì phải thử các tập con — ở đây 2²⁰ ≈ 1 triệu, với 60 số là 2⁶⁰ ≈ 10¹⁸. Chưa ai biết thuật toán thời gian đa thức cho bài tổng tập con (nó là bài NP-đầy đủ — NP-complete, khái niệm ở slide 45).</li>
 </ul>
 <p class="dap-an">✅ <strong>Đáp án — bài toán NP là gì?</strong> Là bài toán dạng có/không mà mỗi câu trả lời "có" đều có chứng cứ kiểm tra được trong thời gian đa thức. <strong>P = NP?</strong> Chưa ai biết; phần lớn các nhà nghiên cứu tin rằng P ≠ NP, và chứng minh được chiều nào cũng là giải xong một trong các Bài toán Thiên niên kỷ (Millennium Prize Problems) của Viện Toán học Clay (giải thưởng 1 triệu USD).</p>
 <div class="pitfall">NP <strong>không</strong> có nghĩa là "non-polynomial" (không đa thức). Nó là "nondeterministic polynomial": kiểm tra được trong thời gian đa thức. Mọi bài toán dễ (thuộc P) cũng thuộc NP.</div>`],
@@ -5375,7 +5375,7 @@ a standard chain:   SAT &lt; 3-SAT &lt; clique &lt; vertex cover &lt; Hamiltonia
 </ol>
 <div class="pitfall">Reducing B to a known NP-complete problem (B &lt; A) proves nothing about B's hardness — it only says B is no harder than A. The known hard problem must be on the <strong>left</strong>: A &lt; B.</div>
 <p class="meo">🧠 <strong>Remember:</strong> hardness flows along the arrow — from the famous hard problem to the new one.</p>`,
-        `<p class="y-chinh">🎯 Muốn chứng minh một bài toán mới B là NP-đầy đủ: chỉ ra B thuộc NP, rồi rút gọn một bài A đã biết là NP-đầy đủ về B (A &lt; B); tính bắc cầu làm nốt phần còn lại.</p>
+        `<p class="y-chinh">🎯 Muốn chứng minh một bài toán mới B là NP-đầy đủ (NP-complete): chỉ ra B thuộc NP, rồi rút gọn một bài A đã biết là NP-đầy đủ về B (A &lt; B); tính bắc cầu làm nốt phần còn lại.</p>
 <ul>
 <li><strong>Tính bắc cầu (transitivity)</strong>: nếu A &lt; B và B &lt; C thì A &lt; C — lắp thuật toán cho B (vốn gọi C) vào trong thuật toán cho A.</li>
 <li><strong>Hệ quả</strong>: mọi bài thuộc NP rút gọn được về A (vì A là NP-đầy đủ) và A &lt; B, nên mọi bài thuộc NP rút gọn được về B. Cộng thêm B thuộc NP, B là NP-đầy đủ.</li>

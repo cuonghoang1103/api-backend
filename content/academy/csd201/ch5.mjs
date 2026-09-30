@@ -30,7 +30,7 @@ const L_csd10_1 = {
 <tr><td>Degree</td><td>number of edges touching a vertex</td><td>Σ deg(v) = 2m; digraph: Σ indeg = Σ outdeg = m</td><td>7</td></tr>
 <tr><td>Simple graph / multigraph / pseudograph</td><td>no loop and no parallel edge / parallel edges / loops allowed</td><td>a loop adds 2 to the degree</td><td>9</td></tr>
 <tr><td>Path / cycle</td><td>walk along edges / walk that comes back to its start</td><td>simple = no repeated vertex; length = number of edges</td><td>10</td></tr>
-<tr><td>Connected / strongly / weakly connected</td><td>a path between any two vertices / directed paths both ways / connected once directions are ignored</td><td>c components and no cycle ⇔ m = n − c</td><td>11</td></tr>
+<tr><td>Connected / strongly / weakly connected</td><td>a path between any two vertices / directed paths both ways / connected once directions are ignored</td><td>with c components: no cycle ⇔ m = n − c</td><td>11</td></tr>
 <tr><td>Forest / tree / spanning tree</td><td>no cycle / connected with no cycle / a tree through every vertex</td><td>a tree has m = n − 1</td><td>11, 13</td></tr>
 <tr><td>Articulation point / bridge</td><td>a vertex / an edge whose removal disconnects the graph</td><td>found with DFS</td><td>12</td></tr>
 <tr><td>Complete graph Kn</td><td>every pair of vertices joined</td><td>m = n(n − 1)/2</td><td>15</td></tr>
@@ -38,7 +38,7 @@ const L_csd10_1 = {
 </table>`,
     `<span class="eyebrow">Chương 5 · Bài 5.A · 5A-Graphs1, slide 1–17</span>
 <h2>Đồ thị, phần 1a — đồ thị là gì, và bộ từ vựng để nói về nó</h2>
-<p class="lead">Chương 5 mở ra cấu trúc tổng quát nhất của môn: đồ thị (graph) — các đối tượng gọi là đỉnh (vertex), nối với nhau từng cặp bằng cạnh (edge). Slide 1–17 là bộ từ vựng của nó: có hướng hay vô hướng, bậc, cạnh song song và khuyên, đường đi và chu trình, liên thông và liên thông mạnh, đồ thị con, cây và cây khung, đỉnh khớp và cầu, đồ thị đầy đủ. Thuật ngữ nào cũng kèm một đồ thị nhỏ của bài, vẽ bằng chữ và được kiểm bằng một chương trình Java chạy được. Bài 5.B đi tiếp slide 18–36: cách lưu đồ thị, duyệt BFS và DFS, thuật toán Dijkstra và Floyd.</p>
+<p class="lead">Chương 5 mở ra cấu trúc tổng quát nhất của môn: đồ thị (graph) — các đối tượng gọi là đỉnh (vertex), nối với nhau từng cặp bằng cạnh (edge). Slide 1–17 là bộ từ vựng của nó: có hướng hay vô hướng, bậc, cạnh song song và khuyên, đường đi và chu trình, liên thông và liên thông mạnh, đồ thị con, cây và cây khung, đỉnh khớp và cầu, đồ thị đầy đủ. Thuật ngữ nào cũng kèm một đồ thị nhỏ của bài, vẽ bằng chữ và được kiểm bằng một chương trình Java chạy được. Bài 5.B đi tiếp slide 18–36: cách lưu đồ thị, duyệt BFS và DFS (theo chiều rộng và theo chiều sâu), thuật toán Dijkstra và Floyd.</p>
 <div class="callout"><strong>CLO5 trong syllabus:</strong> trình bày về đồ thị và ứng dụng; cài đặt được đồ thị với một số thao tác cơ bản (buổi 29–40). Câu hỏi trên lớp (class question) của phần này toàn là định nghĩa: quan hệ giữa số cạnh và tổng bậc các đỉnh (CQ8.1), giả đồ thị (pseudo-graph), đồ thị liên thông, đồ thị đầy đủ là gì (CQ9.1–9.2), và đồ thị đầy đủ n đỉnh có bao nhiêu cạnh (CQ9.3). Ở FE (thi cuối kỳ) chúng quay lại thành câu trắc nghiệm ngắn; ở PE (thi thực hành) bạn cần chúng để đọc ma trận kề (adjacency matrix) không sai.</div>
 <h3>Cả phần trong một bảng</h3>
 <table>
@@ -49,7 +49,7 @@ const L_csd10_1 = {
 <tr><td>Bậc (degree)</td><td>số cạnh chạm vào một đỉnh</td><td>Σ deg(v) = 2m; có hướng: Σ bậc vào = Σ bậc ra = m</td><td>7</td></tr>
 <tr><td>Đơn đồ thị / đa đồ thị / giả đồ thị (simple graph / multigraph / pseudograph)</td><td>không khuyên, không cạnh song song / có cạnh song song / cho phép khuyên</td><td>một khuyên cộng 2 vào bậc</td><td>9</td></tr>
 <tr><td>Đường đi / chu trình (path / cycle)</td><td>đi dọc các cạnh / đi rồi quay về điểm đầu</td><td>đơn = không lặp đỉnh; độ dài = số cạnh</td><td>10</td></tr>
-<tr><td>Liên thông / liên thông mạnh / liên thông yếu (connected / strongly / weakly connected)</td><td>có đường giữa mọi cặp đỉnh / có đường có hướng cả hai chiều / liên thông khi bỏ chiều cạnh</td><td>c thành phần và không chu trình ⇔ m = n − c</td><td>11</td></tr>
+<tr><td>Liên thông / liên thông mạnh / liên thông yếu (connected / strongly / weakly connected)</td><td>có đường giữa mọi cặp đỉnh / có đường có hướng cả hai chiều / liên thông khi bỏ chiều cạnh</td><td>có c thành phần: không chu trình ⇔ m = n − c</td><td>11</td></tr>
 <tr><td>Rừng / cây / cây khung (forest / tree / spanning tree)</td><td>không chu trình / liên thông, không chu trình / cây đi qua mọi đỉnh</td><td>cây có m = n − 1</td><td>11, 13</td></tr>
 <tr><td>Đỉnh khớp / cầu (articulation point / bridge)</td><td>đỉnh / cạnh mà xoá đi thì đồ thị bị tách rời</td><td>tìm bằng DFS</td><td>12</td></tr>
 <tr><td>Đồ thị đầy đủ Kn (complete graph)</td><td>mọi cặp đỉnh đều được nối</td><td>m = n(n − 1)/2</td><td>15</td></tr>
@@ -61,7 +61,7 @@ const L_csd10_1 = {
         `<p class="y-chinh">🎯 Chapter 5 — Graphs, part 1: the deck that goes from "what is a graph" all the way to shortest paths.</p>
 <p>After lists, stacks, queues and trees, the graph is the most general structure of CSD201: a tree is simply a connected graph with no cycle, and a linked list is the thinnest tree of all — a single path. Part 1 (this deck, 36 slides) covers the definitions, storing a graph, BFS/DFS, Dijkstra and Floyd; part 2 (deck 5B-Graphs2) covers spanning trees, Euler and Hamilton cycles, and graph colouring.</p>`,
         `<p class="y-chinh">🎯 Chương 5 — Đồ thị (graph), phần 1: bộ slide đi từ "đồ thị là gì" tới tận bài toán đường đi ngắn nhất.</p>
-<p>Sau danh sách, ngăn xếp, hàng đợi và cây, đồ thị là cấu trúc tổng quát nhất của CSD201: cây (tree) chẳng qua là một đồ thị liên thông không có chu trình, còn danh sách liên kết là cái cây "gầy" nhất — chỉ một đường thẳng. Phần 1 (bộ này, 36 slide) gồm định nghĩa, cách lưu đồ thị, duyệt BFS/DFS, thuật toán Dijkstra và Floyd; phần 2 (bộ 5B-Graphs2) gồm cây khung (spanning tree), chu trình Euler và Hamilton, tô màu đồ thị (graph coloring).</p>`],
+<p>Sau danh sách, ngăn xếp, hàng đợi và cây, đồ thị là cấu trúc tổng quát nhất của CSD201: cây (tree) chẳng qua là một đồ thị liên thông không có chu trình, còn danh sách liên kết là cái cây "gầy" nhất — chỉ một đường thẳng. Phần 1 (bộ này, 36 slide) gồm định nghĩa, cách lưu đồ thị, duyệt BFS/DFS (theo chiều rộng/theo chiều sâu), thuật toán Dijkstra và Floyd; phần 2 (bộ 5B-Graphs2) gồm cây khung (spanning tree), chu trình Euler và Hamilton, tô màu đồ thị (graph coloring).</p>`],
       [2, 'Objectives',
         `<p class="y-chinh">🎯 Nine objectives: what a graph is and the words for it, how to store and traverse it, and how to find shortest paths.</p>
 <ol>
@@ -297,7 +297,7 @@ undirected graph: &nbsp;A-B &nbsp;B-C &nbsp;C-D<br>
 &nbsp;&nbsp;as a digraph: A-&gt;B B-&gt;A B-&gt;C C-&gt;B C-&gt;D D-&gt;C<br>
 &nbsp;&nbsp;6 directed edges, symmetric matrix? true</div>
 <p>Phép chuyển đổi nhìn thấy ngay trên ma trận kề (adjacency matrix): đồ thị vô hướng luôn cho ma trận <strong>đối xứng (symmetric)</strong> (<code>a[i][j] == a[j][i]</code>); chỉ một con đường một chiều là đủ phá sự đối xứng.</p>
-<div class="pitfall">Khi đề PE cho đồ thị vô hướng dưới dạng danh sách cạnh, phải gán <em>cả</em> <code>a[u][v]</code> lẫn <code>a[v][u]</code>. Chỉ gán một bên là âm thầm biến nó thành đồ thị có hướng, và BFS/DFS sẽ sót đỉnh.</div>`],
+<div class="pitfall">Khi đề PE cho đồ thị vô hướng dưới dạng danh sách cạnh, phải gán <em>cả</em> <code>a[u][v]</code> lẫn <code>a[v][u]</code>. Chỉ gán một bên là âm thầm biến nó thành đồ thị có hướng, và BFS/DFS (duyệt theo chiều rộng/chiều sâu) sẽ sót đỉnh.</div>`],
       [6, 'Graph Examples - 1',
         `<p class="y-chinh">🎯 Two real systems modelled as graphs: a city map, which is a mixed graph, and the wiring or plumbing network of a building.</p>
 <table>
@@ -933,7 +933,7 @@ digraph AB BC AC: strongly connected false, weakly connected true</div>
 components after removing a vertex: A:1 B:1 C:2 D:2 E:1 F:2 G:1<br>
 articulation points (cut-vertices): C D F<br>
 bridges (cut-edges): C-D F-G</div>
-<p>Blocks (read off by hand): {A, B, C}, {C, D}, {D, E, F}, {F, G}; two neighbouring blocks share exactly one vertex, an articulation point. <strong>Cost of this brute force:</strong> n removals × one O(n²) DFS on the matrix = O(n³); Tarjan's low-link method finds them all in a single DFS, O(n + m) — beyond the syllabus.</p>
+<p>Blocks (read off by hand): {A, B, C}, {C, D}, {D, E, F}, {F, G}; two neighbouring blocks share exactly one vertex, an articulation point. <strong>Cost of this brute force:</strong> n vertex removals × one O(n²) DFS on the matrix = O(n³), and the bridge test adds m edge removals × O(n²); Tarjan's low-link method finds them all in a single DFS, O(n + m) — beyond the syllabus.</p>
 <div class="pitfall">The slide's sentence reads as if the two separated subgraphs "are called articulation points". They are not: the <strong>vertex you removed</strong> is the articulation point (cut-vertex); the pieces are just the parts of the split graph. Likewise a bridge is an <strong>edge</strong>. FE options love to swap "vertex" and "edge" here.</div>`,
         `<p class="y-chinh">🎯 Những điểm yếu của một đồ thị liên thông: một đỉnh (đỉnh khớp) hoặc một cạnh (cầu) mà xoá đi thì đồ thị bị tách rời; các mảnh liên thông không có đỉnh khớp gọi là khối — và duyệt theo chiều sâu dùng để kiểm tính liên thông.</p>
 <ul>
@@ -995,7 +995,7 @@ bridges (cut-edges): C-D F-G</div>
 components after removing a vertex: A:1 B:1 C:2 D:2 E:1 F:2 G:1<br>
 articulation points (cut-vertices): C D F<br>
 bridges (cut-edges): C-D F-G</div>
-<p>Các khối (đọc bằng tay): {A, B, C}, {C, D}, {D, E, F}, {F, G}; hai khối cạnh nhau chung đúng một đỉnh — chính là một đỉnh khớp. <strong>Chi phí của cách vét cạn (brute force) này:</strong> n lần xoá × một lần DFS O(n²) trên ma trận = O(n³); phương pháp low-link của Tarjan tìm tất cả chỉ trong một lần DFS, O(n + m) — ngoài giáo trình.</p>
+<p>Các khối (đọc bằng tay): {A, B, C}, {C, D}, {D, E, F}, {F, G}; hai khối cạnh nhau chung đúng một đỉnh — chính là một đỉnh khớp. <strong>Chi phí của cách vét cạn (brute force) này:</strong> n lần xoá đỉnh × một lần DFS O(n²) trên ma trận = O(n³), còn phép thử cầu thêm m lần xoá cạnh × O(n²); phương pháp low-link (giá trị “thấp nhất với tới được”) của Tarjan tìm tất cả chỉ trong một lần DFS, O(n + m) — ngoài giáo trình.</p>
 <div class="pitfall">Câu trên slide đọc như thể hai đồ thị con bị tách ra "được gọi là các đỉnh khớp". KHÔNG phải: <strong>đỉnh bị xoá</strong> mới là đỉnh khớp (cut-vertex); các mảnh chỉ là những phần của đồ thị sau khi tách. Tương tự, cầu là một <strong>cạnh</strong>. Phương án FE rất hay đánh tráo "đỉnh" với "cạnh" ở chỗ này.</div>`],
       [13, 'Graph Examples - 3',
         `<p class="y-chinh">🎯 The Internet as a graph: computers are vertices and communication connections are undirected edges; one domain is a subgraph — and if its links form a spanning tree, a single broken cable disconnects it.</p>
@@ -1102,7 +1102,7 @@ with one extra cable B-D:<br>
 <p class="meo">🧠 <strong>Mẹo nhớ:</strong> cây là cách nối mọi thứ rẻ nhất (ít cáp nhất) nhưng không chịu nổi một sự cố nào; mỗi cạnh thêm vào nằm trên chu trình là mua thêm một đường dự phòng.</p>`],
       [14, 'Graph Examples - 4',
         `<p class="y-chinh">🎯 Six kinds of graph side by side — simple directed, simple undirected, weighted, undirected multigraph, directed multigraph and a graph with loops — so that you can name any graph you are shown.</p>
-<p>The slide draws one small graph for each caption. Here each kind gets the lesson's own 3-vertex example (A, B, C), and the program turns it into an adjacency matrix (rows A, B, C):</p>
+<p>The slide draws a small example for each kind named in its captions. Here each kind gets the lesson's own 3-vertex example (A, B, C), and the program turns it into an adjacency matrix (rows A, B, C):</p>
 <table>
 <thead><tr><th>Kind</th><th>The lesson's example</th><th>Directed?</th><th>Parallel edges?</th><th>Loops?</th><th>Simple?</th></tr></thead>
 <tbody>
@@ -1153,9 +1153,9 @@ with a loop &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[0 1 0] [1 0 1] [0 1 1] &n
 <li>One caption on the slide recalls the rule: no multiple edges and no loops ⇒ simple. Direction and weights do not change that — the weighted example above is simple.</li>
 </ul>
 <p class="meo">🧠 <strong>Remember:</strong> name any graph with three questions — arrows? (directed) numbers on the edges? (weighted) two edges between one pair, or an edge from a vertex to itself? (multigraph / pseudograph). "No" to the last question ⇒ simple.</p>
-<div class="pitfall">The same cell means different things: in a weighted graph <code>a[A][C] = 2</code> is a weight, in a multigraph <code>a[A][B] = 2</code> means "two edges". A PE statement always says which one — read it before you add up a matrix. (For loops, some books write 2 on the diagonal of an undirected graph; here a cell counts loops.)</div>`,
+<div class="pitfall">The same cell means different things: in a weighted graph <code>a[A][C] = 2</code> is a weight, in a multigraph <code>a[A][B] = 2</code> means "two edges". A PE statement normally says which one — read it before you add up a matrix. (For loops, some books write 2 on the diagonal of an undirected graph; here a cell counts loops.)</div>`,
         `<p class="y-chinh">🎯 Sáu loại đồ thị đặt cạnh nhau — đơn đồ thị có hướng, đơn đồ thị vô hướng, đồ thị có trọng số, đa đồ thị vô hướng, đa đồ thị có hướng và đồ thị có khuyên — để thấy đồ thị nào cũng gọi đúng tên được.</p>
-<p>Slide vẽ mỗi chú thích một đồ thị nhỏ. Ở đây mỗi loại có một ví dụ riêng của bài với 3 đỉnh (A, B, C), và chương trình đổi nó thành ma trận kề (các hàng A, B, C):</p>
+<p>Slide vẽ một ví dụ nhỏ cho mỗi loại đồ thị mà các chú thích gọi tên. Ở đây mỗi loại có một ví dụ riêng của bài với 3 đỉnh (A, B, C), và chương trình đổi nó thành ma trận kề (các hàng A, B, C):</p>
 <table>
 <thead><tr><th>Loại</th><th>Ví dụ của bài</th><th>Có hướng?</th><th>Cạnh song song?</th><th>Khuyên?</th><th>Đơn?</th></tr></thead>
 <tbody>
@@ -1206,7 +1206,7 @@ with a loop &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[0 1 0] [1 0 1] [0 1 1] &n
 <li>Một chú thích trên slide nhắc lại luật: không cạnh bội và không khuyên ⇒ đơn đồ thị. Có hướng hay có trọng số (weight) không làm thay đổi điều đó — ví dụ có trọng số ở trên vẫn là đơn đồ thị.</li>
 </ul>
 <p class="meo">🧠 <strong>Mẹo nhớ:</strong> gọi tên mọi đồ thị bằng ba câu hỏi — có mũi tên không? (có hướng) có số trên cạnh không? (có trọng số) có hai cạnh giữa một cặp đỉnh, hay cạnh từ một đỉnh về chính nó không? (đa đồ thị / giả đồ thị). Trả lời "không" cho câu cuối ⇒ đơn đồ thị.</p>
-<div class="pitfall">Cùng một ô nhưng nghĩa khác nhau: ở đồ thị có trọng số <code>a[A][C] = 2</code> là trọng số, ở đa đồ thị <code>a[A][B] = 2</code> nghĩa là "hai cạnh". Đề PE luôn nói rõ là loại nào — đọc kỹ trước khi cộng các ô của ma trận. (Với khuyên, có sách ghi 2 trên đường chéo của đồ thị vô hướng; ở đây mỗi ô đếm số khuyên.)</div>`],
+<div class="pitfall">Cùng một ô nhưng nghĩa khác nhau: ở đồ thị có trọng số <code>a[A][C] = 2</code> là trọng số, ở đa đồ thị <code>a[A][B] = 2</code> nghĩa là "hai cạnh". Đề PE thường nói rõ là loại nào — đọc kỹ trước khi cộng các ô của ma trận. (Với khuyên, có sách ghi 2 trên đường chéo của đồ thị vô hướng; ở đây mỗi ô đếm số khuyên.)</div>`],
       [15, 'Graph Terminology - 7',
         `<p class="y-chinh">🎯 A complete graph joins every pair of vertices by an edge; the simple complete graph on n vertices, Kn, has n(n − 1)/2 edges. The slide also starts the formal definition of a subgraph: G' = (V', E') with V' ⊆ V and E' ⊆ E.</p>
 <p class="nhan">Why n(n − 1)/2 — class question CQ9.3</p>
@@ -1430,9 +1430,9 @@ H5 &nbsp;V'=ABCE &nbsp;E'=AB &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb
 <table>
 <thead><tr><th>Ứng dụng</th><th>Đỉnh</th><th>Cạnh</th><th>Câu hỏi điển hình → thuật toán của chương</th></tr></thead>
 <tbody>
-<tr><td>Mạch điện tử (electronic circuits)</td><td>linh kiện, điểm nối</td><td>dây dẫn, mối nối</td><td>mọi linh kiện có thông nhau không? (DFS); đi dây tổng ngắn nhất (cây khung nhỏ nhất — minimum spanning tree, phần 2)</td></tr>
+<tr><td>Mạch điện tử (electronic circuits)</td><td>linh kiện, điểm nối</td><td>dây dẫn, mối nối</td><td>mọi linh kiện có thông nhau không? (DFS — duyệt theo chiều sâu); đi dây tổng ngắn nhất (cây khung nhỏ nhất — minimum spanning tree, phần 2)</td></tr>
 <tr><td>Mạng giao thông (transportation networks)</td><td>thành phố, nhà ga, giao lộ</td><td>đường bộ, đường sắt, chuyến bay — trọng số là km hay số phút</td><td>đường ngắn nhất từ đây (Dijkstra); bảng khoảng cách mọi cặp (Floyd)</td></tr>
-<tr><td>Mạng máy tính (computer networks)</td><td>máy tính, bộ định tuyến (router), bộ chuyển mạch (switch)</td><td>cáp, đường truyền</td><td>ít bước nhảy (hop) nhất (BFS); tập đường truyền không tạo vòng (cây khung)</td></tr>
+<tr><td>Mạng máy tính (computer networks)</td><td>máy tính, bộ định tuyến (router), bộ chuyển mạch (switch)</td><td>cáp, đường truyền</td><td>ít bước nhảy (hop) nhất (BFS — duyệt theo chiều rộng); tập đường truyền không tạo vòng (cây khung)</td></tr>
 <tr><td>Cơ sở dữ liệu (database)</td><td>bản ghi, thực thể</td><td>quan hệ giữa chúng</td><td>bản ghi nào liên quan với nhau, trực tiếp hay gián tiếp? (duyệt đồ thị)</td></tr>
 <tr><td>Sơ đồ thực thể–liên kết (entity-relationship diagram, ERD)</td><td>thực thể (Student, Course)</td><td>liên kết (Student đăng ký Course)</td><td>bản thiết kế cơ sở dữ liệu vẽ thành đồ thị</td></tr>
 </tbody>
@@ -1440,7 +1440,7 @@ H5 &nbsp;V'=ABCE &nbsp;E'=AB &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb
 <ul>
 <li>Ví dụ thật: các giao thức định tuyến trạng thái liên kết (link-state routing) như OSPF chạy thuật toán Dijkstra trên đồ thị mạng; các switch Ethernet chạy giao thức cây khung (Spanning Tree Protocol) để tắt bớt các đường dự phòng tạo vòng.</li>
 <li>Sơ đồ ERD bạn vẽ ở môn cơ sở dữ liệu (DBI202) vốn đã là một đồ thị: thực thể là đỉnh, liên kết là cạnh.</li>
-<li>Gần với lúc đi thực tập (OJT) hơn: công cụ build hay trình quản lý gói từ chối các phụ thuộc vòng (circular dependency) — tìm ra chúng là bài toán phát hiện chu trình bằng DFS (bài 5.3); gợi ý "bạn của bạn" là các đỉnh ở khoảng cách 2 trong BFS.</li>
+<li>Gần với lúc đi thực tập (OJT) hơn: công cụ build (công cụ dựng dự án) hay trình quản lý gói từ chối các phụ thuộc vòng (circular dependency) — tìm ra chúng là bài toán phát hiện chu trình bằng DFS (bài 5.3); gợi ý "bạn của bạn" là các đỉnh ở khoảng cách 2 trong BFS.</li>
 </ul>
 <p class="meo">🧠 <strong>Mẹo nhớ:</strong> "ít bước nhất" → BFS; "rẻ nhất từ một nơi" → Dijkstra; "rẻ nhất giữa mọi cặp" → Floyd; "nối tất cả với chi phí nhỏ nhất" → cây khung nhỏ nhất.</p>
 <div class="pitfall">Đường đi ngắn nhất ≠ cây khung nhỏ nhất (MST): cây khung làm nhỏ nhất <em>tổng</em> trọng số các cạnh nối mọi đỉnh, chứ không phải khoảng cách giữa hai đỉnh cho trước. Đường nối hai thành phố bên trong MST có thể dài hơn đường ngắn nhất rất nhiều.</div>`],
@@ -1464,7 +1464,7 @@ H5 &nbsp;V'=ABCE &nbsp;E'=AB &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb
 <li>Xoá đỉnh X thì đồ thị mất liên thông; xoá cạnh X–Y cũng vậy. Gọi tên X và X–Y.</li>
 </ol>
 <p class="dap-an">✅ <strong>Đáp án:</strong> (1) Σ deg = 14 = 2|E| ⇒ 7 cạnh. (2) giả đồ thị được phép có khuyên (và cạnh song song); đa đồ thị có cạnh song song nhưng không có khuyên. (3) 8 · 7 / 2 = 28. (4) n − c = 10 − 3 = 7 = m ⇒ không có chu trình: đó là một rừng (forest). (5) X là đỉnh khớp (articulation point, cut-vertex); X–Y là cầu (bridge, cut-edge).</p>
-<p><strong>Học tiếp:</strong> bài 5.B (slide 18–36 của bộ này: biểu diễn, BFS/DFS, Dijkstra, Floyd), rồi các bài đào sâu 5.1 Biểu diễn &amp; duyệt đồ thị và 5.2 Ba cách lưu một đồ thị bên dưới.</p>`),
+<p><strong>Học tiếp:</strong> bài 5.B (slide 18–36 của bộ này: biểu diễn, duyệt BFS/DFS — theo chiều rộng/chiều sâu, Dijkstra, Floyd), rồi các bài đào sâu 5.1 Biểu diễn &amp; duyệt đồ thị và 5.2 Ba cách lưu một đồ thị bên dưới.</p>`),
     books([
       ['goodrich', 'Ch.14 Graph Algorithms p.611 — §14.1 Graphs p.612 (the terminology of slides 3–16) · §14.1.1 The Graph ADT p.618', 'Chương 14 Graph Algorithms tr.611 — §14.1 Graphs tr.612 (các thuật ngữ của slide 3–16) · §14.1.1 The Graph ADT tr.618'],
     ]),
@@ -1497,7 +1497,7 @@ const L_csd10_2 = {
 </table>`,
     `<span class="eyebrow">Chương 5 · Bài 5.B · 5A-Graphs1, slide 18–36</span>
 <h2>Đồ thị, phần 1b — lưu nó, duyệt nó, tìm đường ngắn nhất</h2>
-<p class="lead">Nửa sau của bộ slide biến bộ từ vựng thành code: ba cách lưu đồ thị (danh sách kề — adjacency list, ma trận kề — adjacency matrix, ma trận liên thuộc — incidence matrix), hai phép duyệt (BFS dùng hàng đợi, DFS dùng đệ quy) và hai thuật toán đường đi ngắn nhất (Dijkstra từ một nguồn, Floyd cho mọi cặp đỉnh). Một đồ thị của bài chạy suốt slide 18–26 để bạn so sánh mọi cách biểu diễn và mọi phép duyệt trên cùng dữ liệu; code BFS và DFS của slide được chạy nguyên văn — kèm hai cái bẫy của nó — Dijkstra chạy đúng ma trận 6 đỉnh của slide, và một dòng trong mã giả Floyd được sửa lại.</p>
+<p class="lead">Nửa sau của bộ slide biến bộ từ vựng thành code: ba cách lưu đồ thị (danh sách kề — adjacency list, ma trận kề — adjacency matrix, ma trận liên thuộc — incidence matrix), hai phép duyệt (BFS — duyệt theo chiều rộng — dùng hàng đợi, DFS — duyệt theo chiều sâu — dùng đệ quy) và hai thuật toán đường đi ngắn nhất (Dijkstra từ một nguồn, Floyd cho mọi cặp đỉnh). Một đồ thị của bài chạy suốt slide 18–26 để bạn so sánh mọi cách biểu diễn và mọi phép duyệt trên cùng dữ liệu; code BFS và DFS của slide được chạy nguyên văn — kèm hai cái bẫy của nó — Dijkstra chạy đúng ma trận 6 đỉnh của slide, và một dòng trong mã giả Floyd được sửa lại.</p>
 <div class="callout"><strong>CLO5 trong syllabus:</strong> cài đặt được đồ thị với một số thao tác cơ bản — buổi 29–36 (cấu trúc dữ liệu cho đồ thị, duyệt đồ thị, đường đi ngắn nhất, thuật toán Dijkstra). Câu hỏi trên lớp: BFS là gì (CQ8.2), DFS là gì (CQ8.3), so sánh BFS và DFS (CQ10.3), mô tả đồ thị trong Java thế nào (CQ10.2), ý chính của Dijkstra (CQ11.3), Dijkstra khác Floyd ở đâu (CQ10.1, CQ12.1). Câu đồ thị trong đề PE thường cho trên ma trận kề: in thứ tự duyệt, hoặc in đường đi ngắn nhất kèm độ dài — slide 23, 26 và 29–30 là phần phải gõ lại được mà không cần nhìn.</div>
 <h3>Cả phần trong một bảng</h3>
 <table>
@@ -1611,7 +1611,7 @@ entries = 18 = 2|E| with |E| = 9, plus 8 list heads<br>
 E adjacent to C? false &nbsp;(4 entries scanned)</div>
 <ul>
 <li><strong>Bộ nhớ</strong>: n đầu danh sách + 2m phần tử với đồ thị vô hướng, vì mỗi cạnh được lưu trong cả hai danh sách → O(n + m).</li>
-<li><strong>Liệt kê láng giềng của v</strong>: O(deg(v)) — thao tác mà BFS, DFS và Dijkstra lặp đi lặp lại liên tục.</li>
+<li><strong>Liệt kê láng giềng của v</strong>: O(deg(v)) — thao tác mà BFS (duyệt theo chiều rộng), DFS (duyệt theo chiều sâu) và Dijkstra lặp đi lặp lại liên tục.</li>
 <li><strong>(u, v) có phải cạnh không?</strong> Quét danh sách của u: O(deg(u)) — chậm hơn O(1) của ma trận.</li>
 </ul>
 <div class="pitfall">Trong Java, <code>ArrayList&lt;Integer&gt;[] adj = new ArrayList[n]</code> chỉ tạo n ô <em>null</em>: ô nào cũng phải gán <code>adj[i] = new ArrayList&lt;Integer&gt;()</code> trước lần <code>add</code> đầu tiên, nếu không sẽ văng NullPointerException. (Chương trình dùng danh sách của các danh sách, vừa tránh được cảnh báo về mảng kiểu tổng quát — generic array.)</div>`],
@@ -1707,7 +1707,7 @@ E adjacent to C? false &nbsp;(one cell read: a[4][2])</div>
 <li>64 ô cho 9 cạnh: đa số ô là 0 — cái giá khi lưu đồ thị thưa (sparse) bằng ma trận. Với đồ thị dày (dense, m cỡ n²) thì gần như không phí ô nào.</li>
 <li>Đây là cách biểu diễn mà code của slide dùng (<code>a[h][i] &gt; 0</code> ở slide 23, <code>a[i][j] &gt; 0</code> ở slide 26) và cũng là dạng thường gặp trong câu đồ thị của đề PE.</li>
 </ul>
-<div class="pitfall"><code>a[i][j] &gt; 0</code> chỉ có nghĩa "có cạnh" khi "không có cạnh" được lưu là 0. Với ma trận trọng số dùng 99 (hoặc ∞) cho "không có cạnh" như slide 30, <code>99 &gt; 0</code> là đúng — BFS/DFS chép từ slide 23/26 sẽ đi theo những cạnh không hề tồn tại. Phải kiểm <code>a[i][j] &gt; 0 &amp;&amp; a[i][j] &lt; 99</code>.</div>`],
+<div class="pitfall"><code>a[i][j] &gt; 0</code> chỉ có nghĩa "có cạnh" khi "không có cạnh" được lưu là 0. Với ma trận trọng số dùng 99 (hoặc ∞) cho "không có cạnh" như slide 30, <code>99 &gt; 0</code> là đúng — BFS/DFS (duyệt theo chiều rộng/chiều sâu) chép từ slide 23/26 sẽ đi theo những cạnh không hề tồn tại. Phải kiểm <code>a[i][j] &gt; 0 &amp;&amp; a[i][j] &lt; 99</code>.</div>`],
       [20, 'Graph Representation – 3 (incidence matrix)',
         `<p class="y-chinh">🎯 An incidence matrix has one row per vertex and one column per edge: cell (v, e) is 1 when vertex v is an end of edge e — "a vertex is said to be incident to an edge if the edge is connected to the vertex".</p>
 <p>The slide (it writes "incident matrix"; the usual name is <em>incidence</em> matrix) shows it as a picture; here is the one of the lesson's graph, with the 9 edges as columns:</p>
@@ -1895,7 +1895,7 @@ public class BfsLevels {
 <div class="out">BFS from A: &nbsp;&nbsp;&nbsp;&nbsp;A(0) B(1) D(1) E(1) C(2) F(2)<br>
 restart at G: G(0) H(1)</div>
 <p>Because a vertex two edges away can only be found after all vertices one edge away have left the queue, BFS reaches every vertex by a path with the <strong>fewest edges</strong> — the idea behind lesson 5.4.</p>
-<div class="pitfall">A BFS order depends on the order in which neighbours are examined. Exam questions fix it ("in alphabetical order", "smaller index first"); with a matrix and <code>for (i = 0; i &lt; n; i++)</code> you get it for free — with an adjacency list, the list order decides.</div>`,
+<div class="pitfall">A BFS order depends on the order in which neighbours are examined. Exam questions usually fix it ("in alphabetical order", "smaller index first"); with a matrix and <code>for (i = 0; i &lt; n; i++)</code> you get it for free — with an adjacency list, the list order decides.</div>`,
         `<p class="y-chinh">🎯 BFS (duyệt theo chiều rộng — breadth-first search) thăm đỉnh xuất phát, rồi mọi láng giềng chưa thăm của nó, rồi mọi láng giềng của những đỉnh đó — từng tầng một — và khởi động lại từ một đỉnh chưa thăm nếu còn sót.</p>
 <ul>
 <li>Thăm v; rồi từng đỉnh chưa thăm kề với v — gọi là v1, v2, …, vk; rồi mọi láng giềng chưa thăm của v1, rồi của v2, cứ thế.</li>
@@ -1961,7 +1961,7 @@ public class BfsLevels {
 <div class="out">BFS from A: &nbsp;&nbsp;&nbsp;&nbsp;A(0) B(1) D(1) E(1) C(2) F(2)<br>
 restart at G: G(0) H(1)</div>
 <p>Vì một đỉnh cách hai cạnh chỉ được tìm thấy sau khi mọi đỉnh cách một cạnh đã rời hàng đợi, BFS tới mỗi đỉnh bằng đường đi <strong>ít cạnh nhất</strong> — ý tưởng của bài 5.4.</p>
-<div class="pitfall">Thứ tự BFS phụ thuộc vào thứ tự xét láng giềng. Đề thi luôn chốt điều này ("theo thứ tự chữ cái", "chỉ số nhỏ trước"); với ma trận và vòng <code>for (i = 0; i &lt; n; i++)</code> là tự động đúng — với danh sách kề thì thứ tự trong danh sách quyết định.</div>`],
+<div class="pitfall">Thứ tự BFS phụ thuộc vào thứ tự xét láng giềng. Đề thi thường chốt điều này ("theo thứ tự chữ cái", "chỉ số nhỏ trước"); với ma trận và vòng <code>for (i = 0; i &lt; n; i++)</code> là tự động đúng — với danh sách kề thì thứ tự trong danh sách quyết định.</div>`],
       [22, 'Breadth-first Search Algorithm',
         `<p class="y-chinh">🎯 The pseudocode searches a graph (directed or not) breadth first with a queue, and colours the vertices: white = not found yet, gray = found and waiting in the queue, black = finished.</p>
 <ol>
@@ -2089,7 +2089,7 @@ still white: G H</div>
 <tr><td>đen</td><td>đã lấy ra, đã xét hết các đỉnh kề</td><td>đã lấy ra và đã thăm</td></tr>
 </tbody>
 </table>
-<p>Ở mọi thời điểm, hàng đợi chứa đúng các đỉnh xám, và BFS kết thúc khi không còn đỉnh xám nào — ở đây G và H vẫn trắng vì gốc là A và mã giả không khởi động lại.</p>
+<p>Ở mọi thời điểm, hàng đợi chứa đúng các đỉnh xám, và BFS (duyệt theo chiều rộng) kết thúc khi không còn đỉnh xám nào — ở đây G và H vẫn trắng vì gốc là A và mã giả không khởi động lại.</p>
 <p><strong>Big-O:</strong> một đỉnh chỉ vào hàng đợi khi còn trắng, nên nhiều nhất một lần; mỗi danh sách kề được quét một lần → O(n + m) với danh sách kề. Trên ma trận, mỗi đỉnh lấy ra quét trọn một hàng n ô → O(n²).</p>
 <div class="pitfall">Tô xám (đánh dấu) lúc <strong>đưa vào</strong> hàng đợi, không phải lúc lấy ra. Đánh dấu muộn thì một đỉnh vào hàng đợi hai lần — trong bảng trên, E sẽ bị thêm lần nữa khi lấy B ra — sai thứ tự và tốn công vô ích.</div>
 <p class="dap-an">✅ <strong>Câu hỏi trên lớp CQ8.2 — BFS là gì?</strong> Là phép duyệt thăm đỉnh xuất phát, rồi mọi đỉnh cách một cạnh, rồi cách hai cạnh, cứ thế, bằng một hàng đợi (queue); mỗi đỉnh được thăm đúng một lần, chi phí O(n + m) với danh sách kề, và mỗi đỉnh được tới bằng đường đi ít cạnh nhất.</p>`],
@@ -2175,7 +2175,7 @@ with restart: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A B D E C F G H</div>
 <li><code>new Integer(k)</code> is deprecated since Java 9 — write <code>q.enqueue(k)</code> (autoboxing); and <code>(Integer) q.dequeue()</code> replaces the detour <code>Integer.parseInt(….toString().trim())</code>. The loop setting <code>enqueued[i] = false</code> is harmless but useless: a new boolean array is already all false.</li>
 </ul>
 <div class="pitfall">If a PE asks to "traverse all vertices" and you copy <code>breadthFirst(k)</code> from the slide, a disconnected test graph costs you the marks. Wrap it: one shared <code>enqueued[]</code>, and <code>for (s = 0; s &lt; n; s++) if (!enqueued[s]) …BFS from s…</code>.</div>`,
-        `<p class="y-chinh">🎯 BFS của môn trên ma trận kề: mảng boolean <code>enqueued[]</code> (đã vào hàng đợi) thay cho các màu, và <code>a[h][i] &gt; 0</code> nghĩa là "i là láng giềng của h".</p>
+        `<p class="y-chinh">🎯 BFS (duyệt theo chiều rộng) của môn trên ma trận kề: mảng boolean <code>enqueued[]</code> (đã vào hàng đợi) thay cho các màu, và <code>a[h][i] &gt; 0</code> nghĩa là "i là láng giềng của h".</p>
 <p>Chương trình chạy nguyên hàm của slide (chỉ canh lề lại) bên trong một lớp <code>Graph</code> nhỏ, với lớp <code>MyQueue</code> tối giản chứa <code>Object</code> đứng thay cho lớp hàng đợi của môn:</p>
 <pre><code class="language-java">import java.util.LinkedList;
 
@@ -2403,7 +2403,7 @@ DFS order: A B C F E D G H</div>
 <tr><td>dfs(H)</td><td>láng giềng của G</td><td>G H</td></tr>
 </tbody>
 </table>
-<p>Thứ tự DFS A B C F E D G H so với thứ tự BFS A B D E C F G H trên cùng đồ thị: DFS lao theo đường dài A–B–C–F–E–D trước khi kịp nhìn tới hai láng giềng còn lại của A là D và E.</p>
+<p>Thứ tự DFS A B C F E D G H so với thứ tự BFS (duyệt theo chiều rộng) A B D E C F G H trên cùng đồ thị: DFS lao theo đường dài A–B–C–F–E–D trước khi kịp nhìn tới hai láng giềng còn lại của A là D và E.</p>
 <p class="meo">🧠 <strong>Mẹo nhớ:</strong> BFS = gợn sóng trên mặt nước, lan từng vòng; DFS = người đi mê cung, theo một hành lang tới tận cùng rồi mới lùi về ngã rẽ gần nhất.</p>
 <div class="pitfall">Chạy tay DFS, lỗi kinh điển là liệt kê hết láng giềng của A trước — đó là BFS. DFS bước ngay vào B và chỉ quay lại láng giềng kế tiếp của A khi cả nhánh của B đã xong; lúc đó D và E đều đã được thăm.</div>
 <p class="dap-an">✅ <strong>Câu hỏi trên lớp CQ10.3 — BFS khác DFS thế nào:</strong> BFS dùng hàng đợi và lan theo từng tầng (đường ít cạnh nhất; tốn bộ nhớ cho cả một tầng); DFS dùng ngăn xếp hoặc đệ quy và đi hết một nhánh (tìm chu trình, thành phần liên thông, thứ tự tô-pô — topological order; bộ nhớ cho một đường đi). Cả hai thăm mỗi đỉnh một lần, O(n + m) với danh sách kề.</p>`],
@@ -2469,11 +2469,11 @@ n = 8, m = 9: list checks = 2m = 18, matrix checks = n*n = 64</div>
 <p><strong>Why O(n + m):</strong> DFS-visit runs once per vertex (n calls) and each call scans its own list once; all lists together hold 2m entries (Σ deg = 2m). On a matrix each call scans a full row of n cells: n × n = O(n²) — 64 checks instead of 18 for our graph.</p>
 <div class="pitfall">"DFS is O(n + m)" holds for adjacency lists only; the course code (slide 26) uses a matrix, so it is O(n²). Recursion depth can reach n: a path of 100 000 vertices overflows Java's stack (StackOverflowError) — an explicit stack avoids that.</div>
 <p class="dap-an">✅ <strong>Class question CQ8.3 — what is DFS?</strong> A traversal that goes from the start vertex to an unvisited neighbour, from there to one of its unvisited neighbours, and so on as deep as possible, backing up (with a stack or recursion) when a vertex has no unvisited neighbour left; O(n + m) with adjacency lists.</p>`,
-        `<p class="y-chinh">🎯 DFS cùng ý tưởng với BFS nhưng dùng ngăn xếp (stack) thay cho hàng đợi — viết bằng đệ quy thì ngăn xếp lời gọi của Java lo phần đó — và trên đồ thị n đỉnh, m cạnh nó tốn thời gian O(n + m).</p>
+        `<p class="y-chinh">🎯 DFS (duyệt theo chiều sâu) cùng ý tưởng với BFS (duyệt theo chiều rộng) nhưng dùng ngăn xếp (stack) thay cho hàng đợi — viết bằng đệ quy thì ngăn xếp lời gọi của Java lo phần đó — và trên đồ thị n đỉnh, m cạnh nó tốn thời gian O(n + m).</p>
 <ul>
 <li><strong>DFS-visit(G, u)</strong>: tô xám u; với mọi đỉnh kề v còn trắng, gọi DFS-visit(G, v); xong tô đen u.</li>
 <li><strong>DFS(G)</strong>: tô trắng mọi đỉnh, rồi gọi DFS-visit(G, root) — gốc (root). Viết như vậy thì chỉ chạy một lần từ gốc; vòng khởi động lại nằm trong code của slide 26.</li>
-<li>Xám = đang nằm trên ngăn xếp lời gọi (đã vào, chưa xong); đen = đã xong — chính là các dòng "leave" ở slide 24.</li>
+<li>Xám = đang nằm trên ngăn xếp lời gọi (đã vào, chưa xong); đen = đã xong — chính là các dòng "leave" (rời) ở slide 24.</li>
 </ul>
 <pre><code class="language-java">import java.util.ArrayList;
 
@@ -2609,7 +2609,7 @@ n = 21, fixed code: A B C D E F G H I J K L M N O P Q R S T U</div>
 </ul>
 <div class="pitfall">The slide's <code>depthFirst(int k)</code> passes the small test graphs and crashes on any graph with more than 20 vertices — a PE test set may well contain one. Always write <code>new boolean[n]</code> (the <code>= false</code> loop can go: a new boolean array is already all false).</div>
 <p class="meo">🧠 <strong>Remember:</strong> BFS marks a vertex when it enters the queue; DFS marks it when the call enters it (<code>visited[i] = true</code> right next to <code>visit(i)</code>).</p>`,
-        `<p class="y-chinh">🎯 DFS của môn: <code>depthFirst(visited, i)</code> thăm i, đánh dấu, rồi gọi đệ quy vào mọi j chưa thăm có <code>a[i][j] &gt; 0</code>; <code>depthFirst(k)</code> bắt đầu từ k, rồi khởi động lại từ mọi đỉnh còn chưa thăm.</p>
+        `<p class="y-chinh">🎯 DFS (duyệt theo chiều sâu) của môn: <code>depthFirst(visited, i)</code> thăm i, đánh dấu, rồi gọi đệ quy vào mọi j chưa thăm có <code>a[i][j] &gt; 0</code>; <code>depthFirst(k)</code> bắt đầu từ k, rồi khởi động lại từ mọi đỉnh còn chưa thăm.</p>
 <p>Chương trình chạy nguyên ba hàm của slide (chỉ canh lề lại, thêm một dòng chú thích chỗ lỗi), sau đó là bản đã sửa:</p>
 <pre><code class="language-java">class Graph {
     int[][] a;
@@ -2686,13 +2686,13 @@ n = 21, fixed code: A B C D E F G H I J K L M N O P Q R S T U</div>
 <li><strong>Lỗi (bug)</strong>: <code>new boolean[20]</code> viết cứng số 20. Với n = 21, vòng khởi tạo ghi vào <code>visited[20]</code> và văng ArrayIndexOutOfBoundsException trước khi in được gì. Phải cấp mảng theo <code>n</code>.</li>
 </ul>
 <div class="pitfall">Hàm <code>depthFirst(int k)</code> của slide qua được các đồ thị test nhỏ và sập với mọi đồ thị trên 20 đỉnh — bộ test PE hoàn toàn có thể có một đồ thị như vậy. Luôn viết <code>new boolean[n]</code> (bỏ luôn vòng gán <code>= false</code>: mảng boolean mới đã toàn false).</div>
-<p class="meo">🧠 <strong>Mẹo nhớ:</strong> BFS đánh dấu đỉnh lúc nó vào hàng đợi; DFS đánh dấu lúc lời gọi bước vào đỉnh (<code>visited[i] = true</code> ngay cạnh <code>visit(i)</code>).</p>`],
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> BFS (duyệt theo chiều rộng) đánh dấu đỉnh lúc nó vào hàng đợi; DFS đánh dấu lúc lời gọi bước vào đỉnh (<code>visited[i] = true</code> ngay cạnh <code>visit(i)</code>).</p>`],
       [27, 'Shortest Path problem',
         `<p class="y-chinh">🎯 The shortest path problem asks for a path of minimum total weight between a pair of vertices; the graph is given as a weight matrix W with W(i, i) = 0, W(i, j) = ∞ when there is no edge, and the weight of edge (i, j) otherwise.</p>
 <ul>
 <li><strong>Weight</strong> of an edge = its cost: kilometres, minutes, money. <strong>Length of a path</strong> = the sum of its weights — no longer the number of edges, as in BFS.</li>
 <li>The slide allows <strong>negative edges but no negative cycles</strong>: going round a cycle of negative total weight makes a path shorter every lap, so no shortest path would exist.</li>
-<li>∞ in code is a large constant. The slide's example (slide 30) uses 99; <code>Integer.MAX_VALUE</code> is a trap because adding anything to it overflows.</li>
+<li>∞ in code is a large constant. The slide's example (slide 30) uses 99; <code>Integer.MAX_VALUE</code> is a trap because adding any positive number to it overflows.</li>
 </ul>
 <pre><code class="language-java">public class WeightMatrix {
     static final int INF = Integer.MAX_VALUE / 2;       // big, yet INF + INF still fits in an int
@@ -2739,9 +2739,9 @@ S-&gt;X (5) plus 3 lap(s) of X-&gt;Y-&gt;X: length -1</div>
 <div class="pitfall">With <code>INF = Integer.MAX_VALUE</code>, the test <code>d[u] + w &lt; d[v]</code> compares an overflowed negative number and "improves" distances that do not exist. Take <code>Integer.MAX_VALUE / 2</code>, or a small sentinel like 99 only when every real path is shorter — and never add through a "no edge" cell.</div>`,
         `<p class="y-chinh">🎯 Bài toán đường đi ngắn nhất (shortest path) tìm đường đi có tổng trọng số nhỏ nhất giữa một cặp đỉnh; đồ thị cho bằng ma trận trọng số (weight matrix) W với W(i, i) = 0, W(i, j) = ∞ khi không có cạnh, còn lại là trọng số của cạnh (i, j).</p>
 <ul>
-<li><strong>Trọng số (weight)</strong> của cạnh = chi phí của nó: số km, số phút, số tiền. <strong>Độ dài đường đi</strong> = tổng các trọng số — không còn là số cạnh như ở BFS.</li>
+<li><strong>Trọng số (weight)</strong> của cạnh = chi phí của nó: số km, số phút, số tiền. <strong>Độ dài đường đi</strong> = tổng các trọng số — không còn là số cạnh như ở BFS (duyệt theo chiều rộng).</li>
 <li>Slide cho phép <strong>cạnh âm (negative edge) nhưng cấm chu trình âm (negative cycle)</strong>: đi vòng quanh một chu trình có tổng trọng số âm thì mỗi vòng đường đi lại ngắn thêm, nên không tồn tại đường ngắn nhất.</li>
-<li>∞ trong code là một hằng số lớn. Ví dụ ở slide 30 dùng 99; <code>Integer.MAX_VALUE</code> là một cái bẫy vì cộng thêm bất cứ số nào cũng bị tràn số (overflow).</li>
+<li>∞ trong code là một hằng số lớn. Ví dụ ở slide 30 dùng 99; <code>Integer.MAX_VALUE</code> là một cái bẫy vì cộng thêm bất kỳ số dương nào cũng bị tràn số (overflow).</li>
 </ul>
 <pre><code class="language-java">public class WeightMatrix {
     static final int INF = Integer.MAX_VALUE / 2;       // đủ lớn, mà INF + INF vẫn vừa kiểu int
@@ -2849,7 +2849,7 @@ E &nbsp;&nbsp;A-F-E &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 F &nbsp;&nbsp;A-F &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 | A-C-F &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11</div>
 <p>To reach E, BFS takes the 2-edge path A–F–E (14 + 9 = 23); Dijkstra finds A–C–F–E, one edge longer but cheaper (9 + 2 + 9 = 20). Weighted shortest paths are exactly what a map app computes when you ask for a route from A to B (class question HCM_CQ10.3).</p>
 <p class="meo">🧠 <strong>Remember:</strong> Dijkstra = BFS whose queue is ordered by distance instead of by arrival time.</p>`,
-        `<p class="y-chinh">🎯 Thuật toán Dijkstra áp dụng phương pháp tham lam (greedy) cho bài toán một nguồn (single-source): một BFS "có trọng số" từ s, nuôi lớn một "đám mây" (cloud) đỉnh quanh s, mỗi lần thêm đỉnh ở ngoài gần s nhất.</p>
+        `<p class="y-chinh">🎯 Thuật toán Dijkstra áp dụng phương pháp tham lam (greedy) cho bài toán một nguồn (single-source): một BFS (duyệt theo chiều rộng) "có trọng số" từ s, nuôi lớn một "đám mây" (cloud) đỉnh quanh s, mỗi lần thêm đỉnh ở ngoài gần s nhất.</p>
 <ul>
 <li><strong>Đám mây (cloud)</strong> = các đỉnh đã chốt khoảng cách ngắn nhất từ s. Mỗi vòng lặp thêm đỉnh ngoài đám mây có khoảng cách hiện tại nhỏ nhất, rồi cập nhật khoảng cách các láng giềng của nó.</li>
 <li>Các đỉnh vào đám mây theo thứ tự khoảng cách tăng dần tính từ s. Thuật toán dừng khi bên ngoài hết đỉnh, hoặc các đỉnh còn lại không nối với đám mây (không tới được).</li>
@@ -3222,7 +3222,7 @@ Floyd: &nbsp;&nbsp;&nbsp;A 0, B 1, C 3 &nbsp;&nbsp;(A-&gt;C-&gt;B = 3 + (-2) = 1
 <p class="nhan">Vì sao O(|V|²)</p>
 <ul>
 <li>n vòng; mỗi vòng quét n đỉnh để tìm đỉnh nhỏ nhất, rồi quét hàng của u (n ô) để nới lỏng → khoảng 2n² bước = O(n²).</li>
-<li>Với danh sách kề và hàng đợi ưu tiên (priority queue — một min-heap), tìm đỉnh nhỏ nhất chỉ tốn O(log n): tổng O((n + m) log n), nhanh hơn trên đồ thị thưa (Goodrich §14.6.2 — ngoài slide).</li>
+<li>Với danh sách kề và hàng đợi ưu tiên (priority queue — một đống nhỏ nhất, min-heap), tìm đỉnh nhỏ nhất chỉ tốn O(log n): tổng O((n + m) log n), nhanh hơn trên đồ thị thưa (Goodrich §14.6.2 — ngoài slide).</li>
 </ul>
 <p class="nhan">Vì sao trọng số âm làm nó sai — phản ví dụ (counterexample) của bài A→B 2, A→C 3, C→B −2</p>
 <pre><code class="language-java">public class DijkstraNegative {
@@ -3703,9 +3703,9 @@ negative cycle? false</div>
 <tbody>
 <tr><td>Thuật ngữ (slide 3–17)</td><td>Σ deg = 2m; Kn có n(n − 1)/2 cạnh; cây có m = n − 1</td><td>—</td></tr>
 <tr><td>Biểu diễn (18–20)</td><td>danh sách kề cho đồ thị thưa, ma trận kề cho đồ thị dày; ma trận liên thuộc n × m</td><td>bộ nhớ O(n + m) / O(n²) / O(n·m)</td></tr>
-<tr><td>BFS (21–23)</td><td>hàng đợi, đánh dấu khi đưa vào, ít cạnh nhất; thêm vòng khởi động lại</td><td>O(n + m) danh sách, O(n²) ma trận</td></tr>
-<tr><td>DFS (24–26)</td><td>đệ quy, đánh dấu khi bước vào, vòng khởi động lại; <code>new boolean[n]</code> chứ không phải 20</td><td>O(n + m) danh sách, O(n²) ma trận</td></tr>
-<tr><td>Dijkstra (27–31)</td><td>một nguồn, trọng số ≥ 0, lấy đỉnh gần nhất, nới lỏng, giữ predecessor</td><td>O(n²) với ma trận</td></tr>
+<tr><td>BFS — duyệt theo chiều rộng (21–23)</td><td>hàng đợi, đánh dấu khi đưa vào, ít cạnh nhất; thêm vòng khởi động lại</td><td>O(n + m) danh sách, O(n²) ma trận</td></tr>
+<tr><td>DFS — duyệt theo chiều sâu (24–26)</td><td>đệ quy, đánh dấu khi bước vào, vòng khởi động lại; <code>new boolean[n]</code> chứ không phải 20</td><td>O(n + m) danh sách, O(n²) ma trận</td></tr>
+<tr><td>Dijkstra (27–31)</td><td>một nguồn, trọng số ≥ 0, lấy đỉnh gần nhất, nới lỏng, giữ predecessor (đỉnh đứng trước)</td><td>O(n²) với ma trận</td></tr>
 <tr><td>Floyd (32–34)</td><td>mọi cặp, <code>D[i][j] = min(D[i][j], D[i][k] + D[k][j])</code>, k ở vòng ngoài cùng, <code>P[i][j] = k</code></td><td>O(n³)</td></tr>
 </tbody>
 </table>
@@ -3743,17 +3743,17 @@ negative cycle? false</div>
 <li>Dijkstra or Floyd: (a) a table of distances between all 50 cities; (b) one source, one edge of weight −3?</li>
 </ol>
 <p class="dap-an">✅ <strong>Answers:</strong> (1) <code>99 &gt; 0</code> is true, so BFS walks along non-existing edges; test <code>a[h][i] &gt; 0 &amp;&amp; a[h][i] &lt; 99</code>. (2) D is a neighbour of A (level 1), C is two edges away (level 2). (3) it throws ArrayIndexOutOfBoundsException — the array has 20 cells; use <code>new boolean[n]</code>. (4) C (9) enters S before D and relaxes D to 9 + 11 = 20 &lt; 22. (5) (a) Floyd — every pair, O(n³); (b) not Dijkstra (negative weight) — Floyd works as long as there is no negative cycle.</p>
-<p><strong>Next:</strong> the deep-dive lessons below — 5.2 Three ways to store a graph, 5.3 DFS: cycles, components, topological order, 5.4 BFS &amp; shortest paths in unweighted graphs, 5.5 Dijkstra step by step — then the slide-by-slide lesson of deck 5B-Graphs2 (spanning trees, Euler, Hamilton, colouring) with 5.6–5.7, and lesson 5.8 to practise the whole chapter.</p>`,
+<p><strong>Next:</strong> the deep-dive lessons below — 5.2 Three ways to store a graph, 5.3 DFS: cycles, components, topological order, 5.4 BFS &amp; shortest paths in unweighted graphs, 5.5 Dijkstra step by step — then the slide-by-slide lessons 5.C–5.D of deck 5B-Graphs2 (spanning trees, Euler, Hamilton, colouring) with 5.6–5.7, and lesson 5.8 to practise the whole chapter.</p>`,
     `<h3>✅ Tự kiểm tra trong 60 giây</h3>
 <ol>
-<li>Bạn chạy BFS của slide 23 trên ma trận trọng số dùng 99 cho "không có cạnh". Sai ở đâu, sửa thế nào?</li>
+<li>Bạn chạy BFS (duyệt theo chiều rộng) của slide 23 trên ma trận trọng số dùng 99 cho "không có cạnh". Sai ở đâu, sửa thế nào?</li>
 <li>Trên đồ thị của bài, BFS từ A thăm A B D E C F. Vì sao D đứng trước C?</li>
 <li><code>depthFirst(k)</code> của slide 26 làm gì với đồ thị 25 đỉnh?</li>
 <li>Trong ví dụ Dijkstra ở slide 30, vì sao D được chốt ở 20 chứ không phải 22?</li>
 <li>Dijkstra hay Floyd: (a) bảng khoảng cách giữa mọi cặp trong 50 thành phố; (b) một nguồn, có một cạnh trọng số −3?</li>
 </ol>
 <p class="dap-an">✅ <strong>Đáp án:</strong> (1) <code>99 &gt; 0</code> là đúng nên BFS đi theo cả những cạnh không tồn tại; kiểm <code>a[h][i] &gt; 0 &amp;&amp; a[h][i] &lt; 99</code>. (2) D là láng giềng của A (tầng 1), C cách A hai cạnh (tầng 2). (3) văng ArrayIndexOutOfBoundsException — mảng chỉ có 20 ô; dùng <code>new boolean[n]</code>. (4) C (9) vào S trước D và nới lỏng D thành 9 + 11 = 20 &lt; 22. (5) (a) Floyd — mọi cặp, O(n³); (b) không dùng Dijkstra (có trọng số âm) — Floyd chạy đúng miễn là không có chu trình âm.</p>
-<p><strong>Học tiếp:</strong> các bài đào sâu bên dưới — 5.2 Ba cách lưu một đồ thị, 5.3 DFS: chu trình, thành phần liên thông, sắp xếp tô-pô, 5.4 BFS &amp; đường đi ngắn nhất trên đồ thị không trọng số, 5.5 Dijkstra từng bước — rồi bài học theo slide của bộ 5B-Graphs2 (cây khung, Euler, Hamilton, tô màu) cùng 5.6–5.7, và bài 5.8 để luyện cả chương.</p>`),
+<p><strong>Học tiếp:</strong> các bài đào sâu bên dưới — 5.2 Ba cách lưu một đồ thị, 5.3 DFS: chu trình, thành phần liên thông, sắp xếp tô-pô, 5.4 BFS &amp; đường đi ngắn nhất trên đồ thị không trọng số, 5.5 Dijkstra từng bước — rồi hai bài học theo slide 5.C–5.D của bộ 5B-Graphs2 (cây khung, Euler, Hamilton, tô màu) cùng 5.6–5.7, và bài 5.8 để luyện cả chương.</p>`),
     books([
       ['goodrich', '§14.2 Data Structures for Graphs p.619 (§14.2.1 Edge List p.620 · §14.2.2 Adjacency List p.622 · §14.2.4 Adjacency Matrix p.625) · §14.3 Graph Traversals p.630 (§14.3.1 Depth-First Search p.631 · §14.3.3 Breadth-First Search p.640) · §14.6 Shortest Paths p.651 (§14.6.1 Weighted Graphs p.651 · §14.6.2 Dijkstra’s Algorithm p.653)', '§14.2 Data Structures for Graphs tr.619 (§14.2.1 Edge List tr.620 · §14.2.2 Adjacency List tr.622 · §14.2.4 Adjacency Matrix tr.625) · §14.3 Graph Traversals tr.630 (§14.3.1 Depth-First Search tr.631 · §14.3.3 Breadth-First Search tr.640) · §14.6 Shortest Paths tr.651 (§14.6.1 Weighted Graphs tr.651 · §14.6.2 Dijkstra’s Algorithm tr.653)'],
     ]),
@@ -4160,8 +4160,8 @@ MST weight = 24</div>
 <tr><td>7, G by D-G 9</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td></tr>
 </tbody>
 </table>
-<p><strong>Big-O:</strong> n rounds; each round scans all n vertices for the smallest d and one matrix row of n entries to update d → O(n²) = O(|V|²). Slide 9 shows the heap version, O(|E| log |V|).</p>
-<div class="pitfall">In the matrix, 0 means "no edge". Updating with <code>if (a[u][w] &lt; d[w])</code> but without <code>a[u][w] &gt; 0</code> sets d[w] = 0 for non-neighbours and builds a wrong tree. Also skip vertices already in the tree (<code>!inTree[w]</code>), or a vertex can be added twice.</div>`,
+<p><strong>Big-O:</strong> n rounds; each round scans all n vertices for the smallest d and one matrix row of n entries to update d → O(n²) = O(|V|²). The heap version, O(|E| log |V|), follows in this lesson under slide 9 (the slide itself only gives the demo order).</p>
+<div class="pitfall">In the matrix, 0 means "no edge". Updating with <code>if (a[u][w] &lt; d[w])</code> but without <code>a[u][w] &gt; 0</code> sets d[w] = 0 for non-neighbours and builds a wrong tree. Also skip vertices already in the tree (<code>!inTree[w]</code>): otherwise d[] and p[] of tree vertices are overwritten — here p[B] would become C and p[E] would become F — so the tree read from p[] at the end is wrong.</div>`,
         `<p class="y-chinh">🎯 Prim-Jarník gồm ba bước: khởi tạo cây bằng một đỉnh, lặp lại việc chuyển cạnh rẻ nhất nối cây với một đỉnh ngoài cây vào cây, dừng khi mọi đỉnh đã vào cây.</p>
 <ol>
 <li>Khởi tạo cây gồm một đỉnh chọn tuỳ ý (ở đây là A, chỉ số 0).</li>
@@ -4227,8 +4227,8 @@ MST weight = 24</div>
 <tr><td>7, G qua D-G 9</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td></tr>
 </tbody>
 </table>
-<p><strong>Big-O:</strong> n vòng; mỗi vòng quét n đỉnh để tìm d nhỏ nhất và quét một hàng ma trận gồm n ô để cập nhật d → O(n²) = O(|V|²). Slide 9 có bản dùng heap (đống), O(|E| log |V|).</p>
-<div class="pitfall">Trong ma trận, 0 nghĩa là "không có cạnh". Cập nhật bằng <code>if (a[u][w] &lt; d[w])</code> mà thiếu <code>a[u][w] &gt; 0</code> sẽ gán d[w] = 0 cho các đỉnh không kề và dựng ra cây sai. Cũng phải bỏ qua đỉnh đã nằm trong cây (<code>!inTree[w]</code>), nếu không một đỉnh có thể bị thêm hai lần.</div>`],
+<p><strong>Big-O:</strong> n vòng; mỗi vòng quét n đỉnh để tìm d nhỏ nhất và quét một hàng ma trận gồm n ô để cập nhật d → O(n²) = O(|V|²). Bản dùng heap (đống), O(|E| log |V|), có ở phần giảng slide 9 bên dưới (bản thân slide 9 chỉ cho thứ tự demo).</p>
+<div class="pitfall">Trong ma trận, 0 nghĩa là "không có cạnh". Cập nhật bằng <code>if (a[u][w] &lt; d[w])</code> mà thiếu <code>a[u][w] &gt; 0</code> sẽ gán d[w] = 0 cho các đỉnh không kề và dựng ra cây sai. Cũng phải bỏ qua đỉnh đã nằm trong cây (<code>!inTree[w]</code>): nếu không, d[] và p[] của các đỉnh đã trong cây bị ghi đè — ở đây p[B] sẽ thành C và p[E] thành F — nên cây đọc ra từ p[] lúc cuối bị sai.</div>`],
       [9, 'Prim-Jarnik Algorithm demo',
         `<p class="y-chinh">🎯 Prim's demo is read as a sequence of vertices: each step adds exactly one new vertex — the one reached by the cheapest edge that leaves the current tree.</p>
 <p>The slide shows its demo as a picture — graph (a) and the spanning tree Prim builds from vertex 0 — and the text gives the order in which the vertices are selected: <strong>0, 1, 7, 6, 5, 2, 8, 3, 9</strong>. Compare the picture with the method below, done on the office graph of slide 3 (the lesson's own example):</p>
@@ -4772,7 +4772,7 @@ K4 &nbsp;&nbsp;&nbsp;&nbsp;ABCADB : not Euler: edge C-D never used</div>
 <ul>
 <li>Thứ được đếm là <strong>cạnh</strong> (edge): mỗi cạnh phải dùng đúng một lần — không được bỏ sót, không được đi hai lần.</li>
 <li><strong>Đỉnh thì được lặp lại</strong>: một đỉnh bậc 4 sẽ được đi qua hai lần. "Chu trình" (cycle) hiểu theo nghĩa của bộ 5A-Graphs1 (đường đi bắt đầu và kết thúc ở cùng một đỉnh), không phải chu trình đơn (simple cycle).</li>
-<li>Slide minh hoạ bằng hình ba đồ thị: một đồ thị có chu trình Euler, một có đường đi Euler nhưng không có chu trình Euler, một không có cả hai. Ví dụ của bài cho ba loại đó: (1) có chu trình Euler, (2) chỉ có đường đi Euler, (3) không có cả hai:</li>
+<li>Slide minh hoạ bằng hình ba đồ thị: một đồ thị có chu trình Euler, một có đường đi Euler nhưng không có chu trình Euler, một không có cả hai. Ví dụ của bài cho ba loại đó: (1) có chu trình Euler, (2) chỉ có đường đi Euler (tam giác có đuôi — tên "tail" trong output), (3) không có cả hai:</li>
 </ul>
 <pre><code class="language-plaintext">(1) hình nơ (bowtie)    (2) tam giác có đuôi     (3) K4
 A           D           A                        A ------- B
@@ -4824,7 +4824,7 @@ K4 &nbsp;&nbsp;&nbsp;&nbsp;ABCADB : not Euler: edge C-D never used</div>
       [13, 'The Bridges of Königsberg',
         `<p class="y-chinh">🎯 Königsberg's seven bridges become a multigraph — land masses are vertices, bridges are edges — so "a walk over every bridge exactly once, back to the start" becomes "does this multigraph have an Euler cycle?".</p>
 <ul>
-<li><strong>The story</strong> (slide): the town of Königsberg (today Kaliningrad) on the Pregel river, with the island Kneiphof, and its 7 bridges in the 18th century. Is it possible to start somewhere, cross all the bridges without crossing any bridge twice, and return to the starting point?</li>
+<li><strong>The story</strong> (slide): the town of Königsberg (today Kaliningrad) on the Pregel river, with the island Kneiphof, and its 7 bridges in the 18th century (the slide writes "built in 18-th century", but the bridges are older — the 18th century is when Euler solved the puzzle). Is it possible to start somewhere, cross all the bridges without crossing any bridge twice, and return to the starting point?</li>
 <li><strong>The model</strong>: 4 land masses (labelled A, B, C, D on the slide's map and on its multigraph) → 4 vertices; 7 bridges → 7 edges. Two land masses joined by two bridges get two parallel edges, so the result is a multigraph (5A-Graphs1, slide 9).</li>
 <li><strong>The degrees</strong>: the island Kneiphof is touched by 5 bridges, each of the other three land masses by 3.</li>
 </ul>
@@ -4883,7 +4883,7 @@ longest: 6 of 7 bridges, Island-North-Island-South-Island-East-North</div>
 <p class="dap-an">✅ <strong>Answer to the slide's question:</strong> no. Every walk gets stuck after at most 6 of the 7 bridges. Euler proved it in 1736 without trying a single route: a walk must leave every land mass it enters, so each land mass in the middle of the walk needs an even number of bridges — and here all four have an odd number, while a walk has only two ends (slides 14–15).</p>`,
         `<p class="y-chinh">🎯 Bảy cây cầu Königsberg được biến thành một đa đồ thị (multigraph) — vùng đất là đỉnh, cây cầu là cạnh — nên câu hỏi "đi qua mỗi cầu đúng một lần rồi về chỗ cũ" trở thành "đa đồ thị này có chu trình Euler không?".</p>
 <ul>
-<li><strong>Câu chuyện</strong> (slide): thị trấn Königsberg (nay là Kaliningrad) bên sông Pregel, có đảo Kneiphof, và 7 cây cầu vào thế kỷ 18. Có thể xuất phát từ một nơi, đi qua mọi cây cầu mà không cầu nào phải đi hai lần, rồi quay về đúng chỗ xuất phát không?</li>
+<li><strong>Câu chuyện</strong> (slide): thị trấn Königsberg (nay là Kaliningrad) bên sông Pregel, có đảo Kneiphof, và 7 cây cầu vào thế kỷ 18 (slide ghi "built in 18-th century" — xây vào thế kỷ 18 — nhưng các cây cầu có từ trước đó; thế kỷ 18 là lúc Euler giải bài toán này). Có thể xuất phát từ một nơi, đi qua mọi cây cầu mà không cầu nào phải đi hai lần, rồi quay về đúng chỗ xuất phát không?</li>
 <li><strong>Mô hình</strong>: 4 vùng đất (được đặt tên A, B, C, D trên bản đồ và trên đa đồ thị của slide) → 4 đỉnh; 7 cây cầu → 7 cạnh. Hai vùng đất nối với nhau bằng hai cây cầu thì có hai cạnh song song (parallel edge), nên kết quả là một đa đồ thị (5A-Graphs1, slide 9).</li>
 <li><strong>Bậc (degree)</strong>: đảo Kneiphof có 5 cây cầu chạm tới, mỗi vùng đất còn lại có 3.</li>
 </ul>
@@ -5299,7 +5299,7 @@ triangle A-B-C plus edge C-D (C, D odd):<br>
 &nbsp;&nbsp;start C -&gt; stuck at D after 4 edges &nbsp;&nbsp;&lt;- not the start<br>
 &nbsp;&nbsp;start D -&gt; stuck at C after 4 edges &nbsp;&nbsp;&lt;- not the start</div>
 <p>With all degrees even, every start gets stuck exactly where it began (after 3, 7 or 10 edges, depending on the start). In the triangle with a tail, C and D have odd degree, and starting at C the walk gets stuck at D — the even-degree condition is what makes the argument work.</p>
-<div class="pitfall">The proof needs every degree even. With two odd vertices the walk may end at the other odd vertex — not a failure, but the Euler path of Theorem 2 (slide 22), which must start at an odd vertex.</div>`,
+<div class="pitfall">The proof needs every degree even. With two odd vertices, a walk started at one of them can only get stuck at the other — not a failure, but the shape of the Euler path of Theorem 2 (slide 22), which runs from one odd vertex to the other; edges the walk missed are added as spliced cycles.</div>`,
         `<p class="y-chinh">🎯 Vì sao hành trình ở slide 16 chỉ có thể kẹt tại v0: mỗi khi đi vào một đỉnh khác, số cạnh đã dùng của đỉnh đó là số lẻ, mà bậc của nó chẵn, nên luôn còn ít nhất một cạnh để đi ra.</p>
 <ul>
 <li><strong>Tại đỉnh v ≠ v0</strong>: mỗi lần ghé trước đó dùng 2 cạnh của nó (vào và ra), lần đi vào lúc này dùng thêm 1 — tổng là số lẻ. Bậc chẵn trừ đi số lẻ thì còn ít nhất 1 cạnh chưa dùng: luôn đi ra được.</li>
@@ -5351,7 +5351,7 @@ triangle A-B-C plus edge C-D (C, D odd):<br>
 &nbsp;&nbsp;start C -&gt; stuck at D after 4 edges &nbsp;&nbsp;&lt;- not the start<br>
 &nbsp;&nbsp;start D -&gt; stuck at C after 4 edges &nbsp;&nbsp;&lt;- not the start</div>
 <p>Khi mọi bậc (degree) đều chẵn, xuất phát ở đâu cũng bị kẹt đúng tại chỗ xuất phát (sau 3, 7 hoặc 10 cạnh tuỳ đỉnh đầu). Trong tam giác có đuôi, C và D có bậc lẻ, và xuất phát từ C thì kẹt ở D — chính điều kiện bậc chẵn làm cho lập luận trên đúng.</p>
-<div class="pitfall">Chứng minh cần mọi bậc đều chẵn. Khi có hai đỉnh lẻ, hành trình có thể dừng ở đỉnh lẻ còn lại — đó không phải thất bại mà chính là đường đi Euler (Euler path) của Định lý 2 (slide 22), vốn phải xuất phát từ một đỉnh lẻ.</div>`],
+<div class="pitfall">Chứng minh cần mọi bậc đều chẵn. Khi có hai đỉnh lẻ, hành trình xuất phát từ một đỉnh lẻ chỉ có thể bị kẹt ở đỉnh lẻ còn lại — đó không phải thất bại mà là dáng của đường đi Euler (Euler path) trong Định lý 2 (slide 22), vốn chạy từ đỉnh lẻ này tới đỉnh lẻ kia; các cạnh hành trình bỏ sót được ghép thêm vào dưới dạng chu trình.</div>`],
       [18, 'A procedure for constructing an Euler cycle',
         `<p class="y-chinh">🎯 Euler(G) builds one cycle, deletes its edges to get the subgraph H, then repeatedly takes a vertex that lies on the cycle and still has edges in H, builds a subcycle there and splices it in — until H has no edges left.</p>
 <ol>
@@ -5489,7 +5489,7 @@ Euler cycle: 12346786531</div>
 <div class="pitfall">Vì sao v bắt buộc phải nằm trên chu trình hiện tại? Một chu trình con không có đỉnh chung nào với chu trình thì không có chỗ để ghép vào. Lời chú thích "guaranteed by G's connectivity" (được bảo đảm nhờ G liên thông) của slide chính là lý do định lý cần đồ thị liên thông.</div>`],
       [19, 'Example',
         `<p class="y-chinh">🎯 The slide's example on vertices 1–8: a first cycle 1231, the remaining subgraph H, a subcycle 34653 found at vertex 3, and the splice that gives 12346531.</p>
-<p>The graph G drawn from the slide's text — the vertex rows 1 3 5 7 over 2 4 6 8, and the 10 edges used by the cycles of slides 19–20 (the final Euler cycle uses every edge, so these are all of G's edges). Compare it with the picture on the slide:</p>
+<p>The graph G reconstructed (inferred) from the slide's text — the vertex rows 1 3 5 7 over 2 4 6 8, and the 10 edges used by the cycles of slides 19–20 (the final Euler cycle uses every edge, so these are all of G's edges). Compare it with the picture on the slide:</p>
 <pre><code class="language-plaintext">1 ------- 3 ------- 5         7
 |       / |         |       / |
 |    /    |         |    /    |
@@ -5515,7 +5515,7 @@ Euler cycle: 12346786531</div>
 <div class="pitfall">Any vertex that is on the cycle and still has edges in H may be chosen, and any unused edge may be followed; other choices give a different but equally valid Euler cycle. When an FE question fixes a rule (for example "smallest vertex first", as here), follow it exactly.</div>
 <p class="meo">🧠 <strong>Remember:</strong> splicing replaces <em>one</em> occurrence of v by the whole subcycle, which starts and ends with v: 12[3]1 → 12[34653]1.</p>`,
         `<p class="y-chinh">🎯 Ví dụ của slide trên các đỉnh 1–8: chu trình đầu tiên 1231, đồ thị con H còn lại, chu trình con 34653 tìm được tại đỉnh 3, và phép ghép cho ra 12346531.</p>
-<p>Đồ thị G vẽ lại từ phần chữ của slide — hai hàng đỉnh 1 3 5 7 ở trên, 2 4 6 8 ở dưới — với 10 cạnh mà các chu trình ở slide 19–20 dùng tới (chu trình Euler cuối cùng dùng mọi cạnh, nên đây là toàn bộ cạnh của G). Hãy đối chiếu với hình trên slide:</p>
+<p>Đồ thị G dựng lại (suy ra) từ phần chữ của slide — hai hàng đỉnh 1 3 5 7 ở trên, 2 4 6 8 ở dưới — với 10 cạnh mà các chu trình ở slide 19–20 dùng tới (chu trình Euler cuối cùng dùng mọi cạnh, nên đây là toàn bộ cạnh của G). Hãy đối chiếu với hình trên slide:</p>
 <pre><code class="language-plaintext">1 ------- 3 ------- 5         7
 |       / |         |       / |
 |    /    |         |    /    |
@@ -6302,8 +6302,8 @@ Hamilton cycle: A B E F C D A</div>
 <p><strong>Big-O:</strong> trường hợp xấu nhất, phép tìm thử mọi thứ tự của n − 1 đỉnh còn lại — tới (n − 1)! đường đi, mỗi đường kiểm trong O(n): hàm mũ. Bài toán quyết định đồ thị có chu trình Hamilton hay không là NP-đầy đủ (NP-complete), nên chưa ai biết thuật toán đa thức nào.</p>
 <div class="pitfall">Hai lỗi kinh điển: (1) dừng ngay khi H đủ n đỉnh mà quên kiểm cạnh khép về X — như vậy mới tìm được đường đi Hamilton, chưa phải chu trình; (2) quên <code>inH[z] = false</code> khi quay lui, khiến đỉnh đã bỏ ra vẫn bị coi là "đã dùng" và bỏ lỡ lời giải.</div>`],
       [25, 'List all Hamilton’s cycles using Backtracking',
-        `<p class="ghi-chu">Only the title of this slide could be extracted as text; whatever is shown below the title is not available here. The lesson teaches the idea of the title with its own example (the graph of slide 23).</p>
-<p class="y-chinh">🎯 To list all Hamilton cycles, run the same backtracking but do not stop at the first cycle: record it, backtrack, and keep searching until every branch of the search tree has been explored.</p>
+        `<p class="y-chinh">🎯 To list all Hamilton cycles, run the same backtracking but do not stop at the first cycle: record it, backtrack, and keep searching until every branch of the search tree has been explored.</p>
+<p class="ghi-chu">Only the title of this slide could be extracted as text; whatever is shown below the title is not available here. The lesson teaches the idea of the title with its own example (the graph of slide 23).</p>
 <pre><code class="language-java">public class AllHamiltonCycles {
     static char[] v = {'A', 'B', 'C', 'D', 'E', 'F'};
     static int n = v.length;
@@ -6370,8 +6370,8 @@ each cycle is listed twice (once per direction): 2 different cycles</div>
 </ul>
 <p><strong>Big-O:</strong> listing everything explores the whole tree, which can have (n − 1)! leaves — the complete graph K<sub>n</sub> has (n − 1)!/2 distinct Hamilton cycles, already 181 440 for n = 10.</p>
 <div class="pitfall">"How many Hamilton cycles does this graph have?" — the search from a fixed start lists 4 here, but the answer is 2: the same cycle traversed in the opposite direction, or started at another vertex, is not a different cycle.</div>`,
-        `<p class="ghi-chu">Slide này chỉ trích được phần tiêu đề thành chữ; nội dung bên dưới tiêu đề không có ở đây. Bài giảng đúng ý của tiêu đề bằng ví dụ của bài (đồ thị ở slide 23).</p>
-<p class="y-chinh">🎯 Muốn liệt kê mọi chu trình Hamilton, chạy đúng phép quay lui (backtracking) đó nhưng không dừng ở chu trình đầu tiên: ghi nhận nó, lùi lại, và tìm tiếp cho tới khi mọi nhánh của cây tìm kiếm (search tree) đều đã được duyệt.</p>
+        `<p class="y-chinh">🎯 Muốn liệt kê mọi chu trình Hamilton, chạy đúng phép quay lui (backtracking) đó nhưng không dừng ở chu trình đầu tiên: ghi nhận nó, lùi lại, và tìm tiếp cho tới khi mọi nhánh của cây tìm kiếm (search tree) đều đã được duyệt.</p>
+<p class="ghi-chu">Slide này chỉ trích được phần tiêu đề thành chữ; nội dung bên dưới tiêu đề không có ở đây. Bài giảng đúng ý của tiêu đề bằng ví dụ của bài (đồ thị ở slide 23).</p>
 <pre><code class="language-java">public class AllHamiltonCycles {
     static char[] v = {'A', 'B', 'C', 'D', 'E', 'F'};
     static int n = v.length;
@@ -6857,7 +6857,7 @@ public class ColoringOrders {
 <li><strong>Euler tour and Euler cycle</strong> — the slide points to an exercise it writes as "C.14.5.2"; look for the Euler tour exercise among the Creativity (C-) exercises at the end of Chapter 14.</li>
 </ul>
 <p>The slide lists no textbook section for Hamilton cycles and graph colouring; for those, slides 23–28 and this lesson are the reference.</p>`,
-        `<p class="y-chinh">🎯 Phần đọc thêm trong giáo trình cho bộ slide này là Goodrich §14.7 về cây khung nhỏ nhất, cộng với bài tập về Euler tour (hành trình Euler) mà slide dẫn ra.</p>
+        `<p class="y-chinh">🎯 Phần đọc thêm trong giáo trình cho bộ slide này là Goodrich §14.7 về cây khung nhỏ nhất (minimum spanning tree — MST), cộng với bài tập về Euler tour (hành trình Euler) mà slide dẫn ra.</p>
 <ul>
 <li><strong>§14.7 Minimum Spanning Trees (tr.662)</strong> — bài toán của slide 3–7 và tính chất khiến lựa chọn tham lam (greedy) là an toàn (cạnh rẻ nhất bắc qua một cách chia tập đỉnh thành hai phần luôn thuộc một MST nào đó).</li>
 <li><strong>§14.7.1 Prim-Jarník Algorithm (tr.664)</strong> — slide 8–9, viết bằng hàng đợi ưu tiên (priority queue).</li>
@@ -6918,7 +6918,7 @@ const L_on_ch5 = {
 }</code></pre>`,
     `<span class="eyebrow">Chương 5 · Bài 5.8 · Thực hành &amp; ôn tập</span>
 <h2>Đồ thị — luyện như đề PE, rồi ôn lại</h2>
-<p class="lead">Tám bài tập theo dạng đề thi thực hành (PE), phủ cả hai bộ slide đồ thị — bậc, BFS/DFS, thành phần liên thông, tô màu, Dijkstra, Floyd, cây khung nhỏ nhất và chu trình Euler — bài nào cũng có lời giải tự kiểm tra được. Sau đó là thuật ngữ của chương bằng tiếng Anh và tiếng Việt, bản tóm tắt một màn hình và bảng độ phức tạp để ôn trước FE.</p>
+<p class="lead">Tám bài tập theo dạng đề thi thực hành (PE), phủ cả hai bộ slide đồ thị — bậc, BFS/DFS (duyệt theo chiều rộng/chiều sâu), thành phần liên thông, tô màu, Dijkstra, Floyd, cây khung nhỏ nhất và chu trình Euler — bài nào cũng có lời giải tự kiểm tra được. Sau đó là thuật ngữ của chương bằng tiếng Anh và tiếng Việt, bản tóm tắt một màn hình và bảng độ phức tạp để ôn trước FE.</p>
 <div class="callout"><strong>Cách dùng trang này.</strong>
 <ol>
 <li>Đọc đề, cuộn lời giải ra khỏi màn hình rồi tự viết các hàm trong Eclipse, bên trong lớp <code>Graph</code> dưới đây.</li>
@@ -7176,10 +7176,10 @@ PASS digraph: D is reached only by the restart<br>
 PASS digraph: dfs from D<br>
 PASS 22 vertices (the slide's boolean[20] would crash)<br>
 ALL TESTS PASSED</div>
-<div class="pitfall">The last test uses 22 vertices on purpose: <code>new boolean[20]</code> copied from slide 26 crashes there, and <code>breadthFirst(k)</code> copied from slide 23 never restarts, so it would print only one component. Size every array with <code>n</code> and keep the restart loop.</div>`,
+<div class="pitfall">The last test uses 22 vertices on purpose: <code>new boolean[20]</code> copied from slide 26 crashes there. And <code>breadthFirst(k)</code> copied from slide 23 never restarts, so on the lesson graph it prints only A B D E C F — the first test fails. Size every array with <code>n</code> and keep the restart loop.</div>`,
     `<h3>🧪 Bài 2 — f2: BFS và DFS qua mọi đỉnh (kiểu PE · ~15 phút)</h3>
 <p class="nhan">Đề bài</p>
-<p>Viết <code>bfs(k)</code> và <code>dfs(k)</code> trả về thứ tự thăm dạng "A B D …": bắt đầu ở đỉnh k, xét láng giềng theo chỉ số tăng dần (thứ tự chữ cái), và khi không còn đi tới được đỉnh nào nữa thì khởi động lại (restart) từ đỉnh chưa thăm đầu tiên (chỉ số 0 trở lên) cho tới khi mọi đỉnh đều được thăm. Hàm phải chạy đúng cả trên ma trận có hướng.</p>
+<p>Viết <code>bfs(k)</code> (duyệt theo chiều rộng — BFS) và <code>dfs(k)</code> (duyệt theo chiều sâu — DFS) trả về thứ tự thăm dạng "A B D …": bắt đầu ở đỉnh k, xét láng giềng theo chỉ số tăng dần (thứ tự chữ cái), và khi không còn đi tới được đỉnh nào nữa thì khởi động lại (restart) từ đỉnh chưa thăm đầu tiên (chỉ số 0 trở lên) cho tới khi mọi đỉnh đều được thăm. Hàm phải chạy đúng cả trên ma trận có hướng.</p>
 <p class="nhan">Dữ liệu → kết quả mong đợi</p>
 <p>Đồ thị của bài 5.B (A..H, cạnh AB AD AE BC BE CF DE EF GH): bfs(A) = A B D E C F G H, dfs(A) = A B C F E D G H; từ G: G H A B D E C F và G H A B C F E D.</p>
 <p class="nhan">Ý tưởng</p>
@@ -7264,7 +7264,7 @@ PASS digraph: D is reached only by the restart<br>
 PASS digraph: dfs from D<br>
 PASS 22 vertices (the slide's boolean[20] would crash)<br>
 ALL TESTS PASSED</div>
-<div class="pitfall">Test cuối cố ý dùng 22 đỉnh: <code>new boolean[20]</code> chép từ slide 26 sẽ sập ở đây, còn <code>breadthFirst(k)</code> chép từ slide 23 không khởi động lại nên chỉ in được một thành phần. Cấp mọi mảng theo <code>n</code> và giữ vòng khởi động lại.</div>`),
+<div class="pitfall">Test cuối cố ý dùng 22 đỉnh: <code>new boolean[20]</code> chép từ slide 26 sẽ sập ở đây. Còn <code>breadthFirst(k)</code> chép từ slide 23 không khởi động lại, nên trên đồ thị của bài chỉ in được A B D E C F — test đầu tiên đã FAIL. Cấp mọi mảng theo <code>n</code> và giữ vòng khởi động lại.</div>`),
     bi(`<h3>🧪 Exercise 3 — f3: connected components, cycle test, tree test (PE style · ~15 min)</h3>
 <p class="nhan">Task</p>
 <p>Write <code>count()</code> — the number of connected components; <code>list()</code> — the components as "{A,B,C} {D,E} {F}"; <code>hasCycle()</code>; and <code>isTree()</code>.</p>
@@ -7361,7 +7361,7 @@ ALL TESTS PASSED</div>
 <p class="nhan">Dữ liệu → kết quả mong đợi</p>
 <p>Đồ thị của bài 5.B → 2 thành phần {A,B,C,D,E,F} {G,H}, có chu trình, không phải cây. Các cạnh AB AC DE và F đứng riêng → 3 thành phần, không chu trình. Các cạnh AB AC CD CE → một cây. Một đỉnh duy nhất → một cây.</p>
 <p class="nhan">Ý tưởng</p>
-<p>Một lần DFS từ mỗi đỉnh chưa được gán nhãn sẽ gán cho cả thành phần của nó một số hiệu mới c. Rồi so m với n − c: <strong>m = n − c ⇔ không có chu trình</strong> (một rừng — forest); cây (tree) là liên thông (c = 1) với m = n − 1. O(n²) trên ma trận.</p>
+<p>Một lần DFS (duyệt theo chiều sâu) từ mỗi đỉnh chưa được gán nhãn sẽ gán cho cả thành phần của nó một số hiệu mới c. Rồi so m với n − c: <strong>m = n − c ⇔ không có chu trình</strong> (một rừng — forest); cây (tree) là liên thông (c = 1) với m = n − 1. O(n²) trên ma trận.</p>
 <p class="nhan">Lời giải + test tự kiểm — mọi dòng phải là PASS</p>
 <pre><code class="language-java">class Graph {
     int[][] a;
@@ -7524,7 +7524,7 @@ PASS complete K4: 4 colours<br>
 PASS bipartite, order A..F: greedy wastes a colour<br>
 PASS same graph, order A C E B D F<br>
 ALL TESTS PASSED</div>
-<div class="pitfall">Sequential colouring is not optimal: its result depends on the order — the bipartite graph above has χ = 2, yet the order A…F uses 3 colours. Computing χ(G) is NP-complete (slide 26), so a PE asks for the greedy result in a <em>stated</em> order: follow that order exactly, or your colours will not match.</div>`,
+<div class="pitfall">Sequential colouring is not optimal: its result depends on the order — the bipartite graph above has χ = 2, yet the order A…F uses 3 colours. Computing χ(G) is NP-complete (slide 26), so a PE question usually asks for the greedy result in a <em>stated</em> order: follow that order exactly, or your colours will not match.</div>`,
     `<h3>🧪 Bài 4 — f4: tô màu tuần tự (bộ 5B-Graphs2, slide 26–28 · ~15 phút)</h3>
 <p class="nhan">Đề bài</p>
 <p>Tô màu các đỉnh theo một thứ tự cho trước: mỗi đỉnh nhận số màu nhỏ nhất 1, 2, 3, … mà chưa láng giềng nào (đã tô) mang. Trả về màu từng đỉnh và số màu đã dùng, rồi kiểm không cạnh nào nối hai đỉnh cùng màu (tô màu hợp lệ — proper colouring).</p>
@@ -7604,7 +7604,7 @@ PASS complete K4: 4 colours<br>
 PASS bipartite, order A..F: greedy wastes a colour<br>
 PASS same graph, order A C E B D F<br>
 ALL TESTS PASSED</div>
-<div class="pitfall">Tô màu tuần tự (sequential colouring) không tối ưu: kết quả phụ thuộc thứ tự — đồ thị hai phía ở trên có χ = 2, vậy mà thứ tự A…F dùng tới 3 màu. Tìm χ(G) là bài toán NP-đầy đủ (NP-complete, slide 26), nên đề PE luôn hỏi kết quả tham lam theo một thứ tự <em>cho sẵn</em>: làm đúng thứ tự đó, nếu không màu sẽ lệch đáp án.</div>`),
+<div class="pitfall">Tô màu tuần tự (sequential colouring) không tối ưu: kết quả phụ thuộc thứ tự — đồ thị hai phía ở trên có χ = 2, vậy mà thứ tự A…F dùng tới 3 màu. Tìm χ(G) là bài toán NP-đầy đủ (NP-complete, slide 26), nên đề PE thường hỏi kết quả tham lam theo một thứ tự <em>cho sẵn</em>: làm đúng thứ tự đó, nếu không màu sẽ lệch đáp án.</div>`),
     bi(`<h3>🧪 Exercise 5 — f5: Dijkstra, the path and its length (PE style · ~20 min)</h3>
 <p class="nhan">Task</p>
 <p>The weight matrix uses 99 for "no edge", as on slide 30 of 5A-Graphs1. Write <code>path(s, t)</code> returning the vertices of a shortest path from s to t followed by its length — "A C F E: 20" — or "no path".</p>
@@ -8222,7 +8222,7 @@ ALL TESTS PASSED</div>
 <div class="pitfall">Run the algorithm on a <em>copy</em> of the matrix (it deletes edges), and delete both <code>g[ch][y]</code> and <code>g[y][ch]</code>. Do not forget the connectivity condition: the two triangles have only even degrees and still no Euler cycle.</div>`,
     `<h3>🧪 Bài 8 — f1…f4 trên một đồ thị: chu trình Euler (tổ hợp gần đề PE · ~25 phút)</h3>
 <p class="nhan">Đề bài</p>
-<p>Đồ thị có thể có cạnh song song (parallel edges), nên <code>a[i][j]</code> đếm số cạnh giữa i và j. f1 <code>odd()</code> — các đỉnh bậc lẻ; f2 <code>connected()</code> — mọi đỉnh không cô lập có nằm chung một mảng liên thông không? (DFS); f3 <code>kind()</code> — "Euler cycle" (có chu trình Euler), "Euler path, no Euler cycle" (có đường đi Euler, không có chu trình), "no Euler cycle, no Euler path" (không có cả hai), hoặc "not connected…"; f4 <code>cycle(x)</code> — thuật toán ngăn xếp (stack) ở slide 21 bộ 5B-Graphs2, xuất phát từ đỉnh x, luôn chọn láng giềng đầu tiên theo thứ tự chữ cái.</p>
+<p>Đồ thị có thể có cạnh song song (parallel edges), nên <code>a[i][j]</code> đếm số cạnh giữa i và j. f1 <code>odd()</code> — các đỉnh bậc lẻ; f2 <code>connected()</code> — mọi đỉnh không cô lập có nằm chung một mảng liên thông không? (DFS — duyệt theo chiều sâu); f3 <code>kind()</code> — "Euler cycle" (có chu trình Euler), "Euler path, no Euler cycle" (có đường đi Euler, không có chu trình), "no Euler cycle, no Euler path" (không có cả hai), hoặc "not connected…" (không liên thông…); f4 <code>cycle(x)</code> — thuật toán ngăn xếp (stack) ở slide 21 bộ 5B-Graphs2, xuất phát từ đỉnh x, luôn chọn láng giềng đầu tiên theo thứ tự chữ cái.</p>
 <p class="nhan">Dữ liệu → kết quả mong đợi</p>
 <ul>
 <li>Đồ thị ở slide 19–20 bộ 5B-Graphs2 (đỉnh 1…8 đổi tên thành A…H; cạnh 12, 23, 31, 34, 46, 65, 53, 67, 78, 86): mọi bậc đều chẵn → có chu trình Euler; cycle(A) = A C E F H G F D C B A.</li>
@@ -8472,7 +8472,7 @@ ALL TESTS PASSED</div>
 <tr><td>(u, v) có phải cạnh?</td><td>O(1)</td><td>O(deg u)</td><td>thế mạnh của ma trận</td></tr>
 <tr><td>bậc mọi đỉnh, số cạnh</td><td>O(n²)</td><td>O(n + m)</td><td>Σ deg = 2m</td></tr>
 <tr><td>BFS, DFS, thành phần liên thông</td><td>O(n²)</td><td>O(n + m)</td><td>vòng khởi động lại cho mọi thành phần</td></tr>
-<tr><td>Dijkstra (một nguồn, trọng số ≥ 0)</td><td>O(n²)</td><td>O((n + m) log n) với heap</td><td>giữ predecessor để in đường đi</td></tr>
+<tr><td>Dijkstra (một nguồn, trọng số ≥ 0)</td><td>O(n²)</td><td>O((n + m) log n) với heap (đống)</td><td>giữ predecessor để in đường đi</td></tr>
 <tr><td>Floyd (mọi cặp)</td><td>O(n³)</td><td>O(n³)</td><td>cho phép cạnh âm, cấm chu trình âm</td></tr>
 <tr><td>Prim (MST)</td><td>O(n²)</td><td>O((n + m) log n) với heap</td><td>nuôi một cây</td></tr>
 <tr><td>Kruskal (MST)</td><td>O(n² + m log m)</td><td>O(m log m)</td><td>khâu sắp xếp cạnh là chính</td></tr>

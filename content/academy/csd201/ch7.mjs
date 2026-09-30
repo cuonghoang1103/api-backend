@@ -31,9 +31,9 @@ const L_csd13_1 = {
 <tr><td>Mid-square</td><td>square the key, keep the middle digits</td><td>3121² = 9740641 → 406</td><td>O(1) for fixed-size keys</td></tr>
 <tr><td>Extraction</td><td>keep only some digits</td><td>123-45-6789 → 1289</td><td>O(1)</td></tr>
 <tr><td>Radix transformation</td><td>write the key in another base</td><td>345 = 423 in base 9 → 423</td><td>O(number of digits)</td></tr>
-<tr><td>Linear probing</td><td>try (h(x) + i) % M, i = 1, 2, …</td><td>89, 18, 49, 58, 69 into 10 cells (slide 16)</td><td>primary clustering</td></tr>
+<tr><td>Linear probing</td><td>try (h(x) + i) % M, i = 1, 2, …</td><td>the keys of slide 19 (89, 18, 49, 58, 69) into 10 cells</td><td>primary clustering</td></tr>
 <tr><td>Quadratic probing</td><td>try (h(x) + i²) % M, i = 1, 2, …</td><td>49 → 0, 58 → 2, 69 → 3 (slide 19)</td><td>reaches only (M + 1)/2 cells when M is prime</td></tr>
-<tr><td>Load factor</td><td>α = n / M</td><td>by Knuth's formula a miss costs ≈ 2.5 probes at α = 0.5, ≈ 50 at α = 0.9 (slide 18)</td><td>keep α ≤ 0.5 for open addressing</td></tr>
+<tr><td>Load factor</td><td>α = n / M</td><td>N / Tsize: the lower, the better (slide 18)</td><td>Knuth: a miss costs ≈ 2.5 probes at α = 0.5, ≈ 50 at α = 0.9; keep α ≤ 0.5 for open addressing</td></tr>
 </tbody>
 </table>`,
     `<span class="eyebrow">Chương 7 · Bài 7.A · 7-Hashing, slide 1–20</span>
@@ -50,9 +50,9 @@ const L_csd13_1 = {
 <tr><td>Bình phương lấy giữa (mid-square)</td><td>bình phương khoá, giữ các chữ số ở giữa</td><td>3121² = 9740641 → 406</td><td>O(1) với khoá cỡ cố định</td></tr>
 <tr><td>Trích chữ số (extraction)</td><td>chỉ giữ vài chữ số</td><td>123-45-6789 → 1289</td><td>O(1)</td></tr>
 <tr><td>Đổi cơ số (radix transformation)</td><td>viết khoá trong hệ cơ số khác</td><td>345 = 423 trong hệ 9 → 423</td><td>O(số chữ số)</td></tr>
-<tr><td>Dò tuyến tính (linear probing)</td><td>thử (h(x) + i) % M, i = 1, 2, …</td><td>89, 18, 49, 58, 69 vào 10 ô (slide 16)</td><td>bị vón cục sơ cấp (primary clustering)</td></tr>
+<tr><td>Dò tuyến tính (linear probing)</td><td>thử (h(x) + i) % M, i = 1, 2, …</td><td>các khoá của slide 19 (89, 18, 49, 58, 69) vào 10 ô</td><td>bị vón cục sơ cấp (primary clustering)</td></tr>
 <tr><td>Dò bậc hai (quadratic probing)</td><td>thử (h(x) + i²) % M, i = 1, 2, …</td><td>49 → 0, 58 → 2, 69 → 3 (slide 19)</td><td>chỉ với tới (M + 1)/2 ô khi M nguyên tố</td></tr>
-<tr><td>Hệ số tải (load factor)</td><td>α = n / M</td><td>theo công thức Knuth, tìm trượt tốn ≈ 2,5 lần dò khi α = 0,5, ≈ 50 khi α = 0,9 (slide 18)</td><td>giữ α ≤ 0,5 với địa chỉ mở</td></tr>
+<tr><td>Hệ số tải (load factor)</td><td>α = n / M</td><td>N / Tsize: càng thấp càng tốt (slide 18)</td><td>Knuth: tìm trượt tốn ≈ 2,5 lần dò khi α = 0,5, ≈ 50 khi α = 0,9; giữ α ≤ 0,5 với địa chỉ mở</td></tr>
 </tbody>
 </table>`),
     walkHead('csd13', 1, 20),
@@ -858,7 +858,7 @@ x % 10: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1000 &nbsp;1000 &nbsp;10
 <li><strong>M even</strong> → x % M keeps the parity: odd keys go to odd indexes, even keys to even ones. If all keys are even, half of the table is never used.</li>
 <li><strong>M = 2ᵖ</strong> → x % M is just the p lowest-order bits of x; the rest of the key is thrown away.</li>
 <li><strong>M = p·H</strong> → the keys H, 2H, 3H, … all land on the p positions {H, 2H, …, (p − 1)H, 0} only.</li>
-<li><strong>A good M</strong>: a prime that does not divide r<sup>k</sup> ± a for small k and a — Knuth's rule, where r is the radix of the character set (for example 256).</li>
+<li><strong>A good M</strong>: a prime that does not divide r<sup>k</sup> ± a for small k and a — Knuth's rule, where r is the radix of the character set (for example 256). The extracted slide text reads only "rka" (superscript and sign lost), so r<sup>k</sup> ± a is the lesson's reading of it.</li>
 </ul>
 <pre><code class="language-java">public class DivisionM {
     // how many different cells do these keys reach with h(x) = x % m?
@@ -898,7 +898,7 @@ odd key 37 % 10 = 7, even key 48 % 10 = 8 &nbsp;&lt;- parity is kept when M is e
 <li><strong>M chẵn</strong> → x % M giữ nguyên tính chẵn lẻ: khoá lẻ vào chỉ số lẻ, khoá chẵn vào chỉ số chẵn. Nếu mọi khoá đều chẵn thì nửa bảng không bao giờ được dùng.</li>
 <li><strong>M = 2ᵖ</strong> → x % M chỉ là p bit thấp nhất (lowest-order bits) của x; phần còn lại của khoá bị vứt bỏ.</li>
 <li><strong>M = p·H</strong> → các khoá H, 2H, 3H, … chỉ rơi vào đúng p vị trí {H, 2H, …, (p − 1)H, 0}.</li>
-<li><strong>M tốt</strong>: số nguyên tố không chia hết r<sup>k</sup> ± a với k và a nhỏ — quy tắc của Knuth, trong đó r là cơ số (radix) của bộ ký tự (ví dụ 256).</li>
+<li><strong>M tốt</strong>: số nguyên tố không chia hết r<sup>k</sup> ± a với k và a nhỏ — quy tắc của Knuth, trong đó r là cơ số (radix) của bộ ký tự (ví dụ 256). Chữ trích từ slide chỉ còn "rka" (mất chỉ số trên và dấu), nên r<sup>k</sup> ± a là cách bài đọc lại.</li>
 </ul>
 <pre><code class="language-java">public class DivisionM {
     // các khoá này rơi vào bao nhiêu ô khác nhau với h(x) = x % m?
@@ -1589,7 +1589,7 @@ M = 16 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: from any home cell only 4 of 
 <li><strong>Why</strong>: if probes i &lt; j ≤ (M − 1)/2 hit the same cell, M divides j² − i² = (j − i)(j + i); a prime M must divide one of the factors, but both lie between 1 and M − 1 — impossible. So the first (M + 1)/2 probes are all different, and at most (M − 1)/2 cells are occupied: one of them is free.</li>
 <li><strong>Advantage</strong> over linear probing: no primary clustering (slide 19).</li>
 </ul>
-<div class="pitfall">With a non-prime M it gets worse: M = 16 reaches only 4 cells from any home, because i² mod 16 is always 0, 1, 4 or 9. Rule for the FE: quadratic probing needs a prime table size and a load factor of at most 0.5.</div>`,
+<div class="pitfall">With a non-prime M it can get much worse: M = 16 reaches only 4 cells from any home, because i² mod 16 is always 0, 1, 4 or 9. Rule for the FE: quadratic probing needs a prime table size and a load factor of at most 0.5.</div>`,
         `<p class="y-chinh">🎯 Dò bậc hai không dò hết mọi ô — với M = 11 và h(x) = 3 chỉ có các ô 3, 4, 7, 1, 8, 6 từng được thử — nhưng nếu M nguyên tố và bảng còn trống ít nhất một nửa, nó luôn tìm được ô trống và không ô nào bị xét hai lần.</p>
 <pre><code class="language-java">import java.util.TreeSet;
 
@@ -1626,7 +1626,7 @@ M = 16 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: from any home cell only 4 of 
 <li><strong>Vì sao</strong>: nếu lần dò i &lt; j ≤ (M − 1)/2 trúng cùng một ô thì M chia hết j² − i² = (j − i)(j + i); M nguyên tố nên phải chia hết một trong hai thừa số, mà cả hai đều nằm giữa 1 và M − 1 — vô lý. Vậy (M + 1)/2 lần dò đầu tiên trúng các ô khác nhau, trong khi nhiều nhất (M − 1)/2 ô có người: chắc chắn có một ô trống.</li>
 <li><strong>Ưu điểm</strong> so với dò tuyến tính: không bị vón cục sơ cấp (primary clustering, slide 19).</li>
 </ul>
-<div class="pitfall">M không nguyên tố còn tệ hơn: M = 16 chỉ với tới 4 ô từ bất kỳ ô nhà nào, vì i² mod 16 luôn là 0, 1, 4 hoặc 9. Quy tắc cho FE: dò bậc hai cần kích thước bảng nguyên tố và hệ số tải (load factor) không quá 0,5.</div>`],
+<div class="pitfall">M không nguyên tố có thể còn tệ hơn nhiều: M = 16 chỉ với tới 4 ô từ bất kỳ ô nhà nào, vì i² mod 16 luôn là 0, 1, 4 hoặc 9. Quy tắc cho FE: dò bậc hai cần kích thước bảng nguyên tố và hệ số tải (load factor) không quá 0,5.</div>`],
     ]),
     bi(`<h3>✅ Check yourself in 60 seconds</h3>
 <ol>
@@ -1678,12 +1678,12 @@ const L_csd13_2 = {
 <tr><td>Cryptographic hash</td><td>fixed-size digest, hard to invert, collision-resistant</td><td>MD5 and SHA-1 are broken; use SHA-2 or SHA-3</td></tr>
 <tr><td>Hash code</td><td>key → int (may be negative) → index in 0 … M − 1</td><td><code>Math.floorMod(h, M)</code>, never <code>Math.abs(h) % M</code></td></tr>
 <tr><td>Map ADT</td><td>entries (k, v) with unique keys; get, put, remove</td><td>put returns the old value, or null for a new key</td></tr>
-<tr><td>HashMap / Hashtable / HashSet</td><td>chaining inside; default capacity 16, load factor 0.75</td><td>HashMap: nulls allowed, unsynchronized; Hashtable: synchronized, no null</td></tr>
+<tr><td>HashMap / Hashtable / HashSet</td><td>chaining inside; default capacity 16 (Hashtable: 11), load factor 0.75</td><td>HashMap: nulls allowed, unsynchronized; Hashtable: synchronized, no null</td></tr>
 </tbody>
 </table>`,
     `<span class="eyebrow">Chương 7 · Bài 7.B · 7-Hashing, slide 21–40</span>
 <h2>Băm, phần 2 — học bộ slide từng trang</h2>
-<p class="lead">Nửa sau của bộ slide về băm: các chiến lược giữ khoá va chạm khỏi chiếm ô của khoá khác (dây chuyền tách biệt — separate chaining, băm gộp dây — coalesced hashing, bucket — thùng nhiều chỗ), cách xoá trong bảng địa chỉ mở, băm hoàn hảo và băm mở rộng, hàm băm mật mã, mã băm (hash code), ADT Map (ánh xạ khoá → giá trị), và các lớp băm của java.util — HashSet, HashMap, Hashtable — thứ bạn sẽ dùng trong mọi dự án Java sau môn này.</p>
+<p class="lead">Nửa sau của bộ slide về băm: các chiến lược giữ khoá va chạm khỏi chiếm ô của khoá khác (dây chuyền tách biệt — separate chaining, băm gộp dây — coalesced hashing, bucket — thùng nhiều chỗ), cách xoá trong bảng địa chỉ mở, băm hoàn hảo và băm mở rộng, hàm băm mật mã, mã băm (hash code), ADT Map (kiểu dữ liệu trừu tượng — abstract data type — ánh xạ khoá → giá trị), và các lớp băm của java.util — HashSet, HashMap, Hashtable — thứ bạn sẽ dùng trong mọi dự án Java sau môn này.</p>
 <div class="callout"><strong>CLO7 và thêm hai câu hỏi của syllabus:</strong> <em>"Hàm băm hoàn hảo là gì?"</em> (slide 26) và <em>"Có mấy cách giải quyết va chạm? So sánh về thời gian và bộ nhớ"</em> (bảng dưới đây cộng slide 16–25). Với PE, hai kỹ năng quan trọng là tự viết một bảng băm dây chuyền nhỏ (slide 21 và 32) và dùng HashMap/HashSet cho đúng — giá trị trả về của put và add, null, equals/hashCode (slide 33–37). Bài 7.5 luyện cả hai.</div>
 <h3>Cả phần 2 trong một bảng</h3>
 <table>
@@ -1698,7 +1698,7 @@ const L_csd13_2 = {
 <tr><td>Hàm băm mật mã (cryptographic hash)</td><td>bản tóm lược cỡ cố định, khó đảo ngược, khó va chạm</td><td>MD5, SHA-1 đã bị phá; dùng SHA-2 hoặc SHA-3</td></tr>
 <tr><td>Mã băm (hash code)</td><td>khoá → số int (có thể âm) → chỉ số trong 0 … M − 1</td><td><code>Math.floorMod(h, M)</code>, đừng dùng <code>Math.abs(h) % M</code></td></tr>
 <tr><td>ADT Map</td><td>các mục (k, v), khoá không trùng; get, put, remove</td><td>put trả giá trị cũ, hoặc null nếu khoá mới</td></tr>
-<tr><td>HashMap / Hashtable / HashSet</td><td>bên trong dùng dây chuyền; sức chứa mặc định 16, hệ số tải 0,75</td><td>HashMap: cho phép null, không đồng bộ; Hashtable: đồng bộ, cấm null</td></tr>
+<tr><td>HashMap / Hashtable / HashSet</td><td>bên trong dùng dây chuyền; sức chứa mặc định 16 (Hashtable: 11), hệ số tải 0,75</td><td>HashMap: cho phép null, không đồng bộ; Hashtable: đồng bộ, cấm null</td></tr>
 </tbody>
 </table>`),
     walkHead('csd13', 21, 40),
@@ -1710,7 +1710,7 @@ const L_csd13_2 = {
 <li><strong>The table can never overflow</strong>: a linked list can always grow, so the table accepts more keys than cells — the load factor α = n/M may exceed 1.</li>
 <li><strong>Cost</strong>: inserting at the front of chain h(x) is O(1); search and delete walk one chain — about 1 + α nodes on average, O(n) if every key lands in the same chain.</li>
 </ul>
-<p class="nhan">The keys of slides 16 and 19 — 89, 18, 49, 58, 69, h(x) = x % 10 — each new key added at the front of its chain</p>
+<p class="nhan">The keys of slide 19 (placed by linear probing on slide 16) — 89, 18, 49, 58, 69, h(x) = x % 10 — each new key added at the front of its chain</p>
 <table>
 <thead><tr><th>Insert</th><th>Chain 8</th><th>Chain 9</th></tr></thead>
 <tbody>
@@ -1790,7 +1790,7 @@ after delete(49): [9] -&gt; 69 -&gt; 89</div>
 <li><strong>Bảng không bao giờ tràn (overflow)</strong>: danh sách liên kết luôn dài thêm được, nên bảng nhận được nhiều khoá hơn số ô — hệ số tải (load factor) α = n/M có thể lớn hơn 1.</li>
 <li><strong>Chi phí</strong>: chèn vào đầu dây h(x) là O(1); tìm và xoá đi dọc một dây — trung bình khoảng 1 + α nút, O(n) nếu mọi khoá rơi vào cùng một dây.</li>
 </ul>
-<p class="nhan">Các khoá của slide 16 và 19 — 89, 18, 49, 58, 69, h(x) = x % 10 — khoá mới luôn thêm vào đầu dây của nó</p>
+<p class="nhan">Các khoá của slide 19 (đã xếp bằng dò tuyến tính ở slide 16) — 89, 18, 49, 58, 69, h(x) = x % 10 — khoá mới luôn thêm vào đầu dây của nó</p>
 <table>
 <thead><tr><th>Chèn</th><th>Dây 8</th><th>Dây 9</th></tr></thead>
 <tbody>
@@ -1883,7 +1883,8 @@ after delete(49): [9] -&gt; 69 -&gt; 89</div>
     next[p] = free;                               // link the new cell to the chain
     return free;
 }</code></pre>
-<p><strong>Big-O:</strong> an insertion walks one chain, and the free pointer only ever moves up — O(M) in total over all insertions; a search walks one chain.</p>`,
+<p><strong>Big-O:</strong> an insertion walks one chain, and the free pointer only ever moves up — O(M) in total over all insertions; a search walks one chain.</p>
+<div class="pitfall">The slide says next holds "the index of the next key that is hashed to pos". That is true only until chains coalesce: after that a chain can also hold keys whose home is another cell (slide 23: 15 sits in chain 9 → 7 → 5 → 4). So a search must compare every key it meets, never assume they all share its home.</div>`,
         `<p class="y-chinh">🎯 Băm gộp dây (coalesced hashing, hay coalesced chaining) kết hợp dò tuyến tính với dây chuyền: mỗi vị trí có hai trường, info và next, và khoá va chạm được đặt vào vị trí còn trống cuối cùng của bảng rồi nối vào dây của nó qua next.</p>
 <ul>
 <li><strong>next</strong> chứa <em>chỉ số</em> của khoá kế tiếp trong dây (−1 = hết dây), nên phép tìm nhảy theo liên kết thay vì quét từng ô một như dò tuyến tính (linear probing).</li>
@@ -1902,10 +1903,11 @@ after delete(49): [9] -&gt; 69 -&gt; 89</div>
     next[p] = free;                               // nối ô mới vào dây
     return free;
 }</code></pre>
-<p><strong>Big-O:</strong> mỗi lần chèn đi dọc một dây, còn con trỏ ô trống chỉ đi lên — tổng cộng O(M) cho mọi lần chèn; phép tìm đi dọc một dây.</p>`],
+<p><strong>Big-O:</strong> mỗi lần chèn đi dọc một dây, còn con trỏ ô trống chỉ đi lên — tổng cộng O(M) cho mọi lần chèn; phép tìm đi dọc một dây.</p>
+<div class="pitfall">Slide viết next chứa "chỉ số của khoá kế tiếp được băm vào pos". Điều đó chỉ đúng khi các dây chưa gộp: sau khi gộp, một dây có thể chứa cả khoá có ô nhà khác (slide 23: 15 nằm trong dây 9 → 7 → 5 → 4). Vì vậy phép tìm phải so từng khoá gặp trên đường, đừng coi mọi khoá trong dây đều cùng ô nhà.</div>`],
       [23, 'Coalesced hashing example',
         `<p class="y-chinh">🎯 A worked example of coalesced hashing: every colliding key takes the free cell with the largest index, counted upward from the bottom of the table, and a next link attaches it to the end of its chain.</p>
-<p class="ghi-chu">The slide's example is a picture whose keys could not be extracted as text. Below is the lesson's own example — M = 10, h(x) = x % 10, the keys of slides 16–21 plus 15 — traced step by step; compare it with the picture.</p>
+<p class="ghi-chu">The slide's example is a picture whose keys could not be extracted as text. Below is the lesson's own example — M = 10, h(x) = x % 10, the keys of slide 19 plus 15 — traced step by step; compare it with the picture.</p>
 <table>
 <thead><tr><th>Insert</th><th>h(x)</th><th>Home free?</th><th>Chain walked</th><th>Last free cell</th><th>Link set</th></tr></thead>
 <tbody>
@@ -1981,7 +1983,7 @@ search 39: cells 9 7 5 4 -&gt; not found</div>
 <p><strong>Big-O:</strong> a search visits only the cells of one chain (here at most 4), never the unrelated cells between them — fewer probes than linear probing's runs, although merged chains are longer than separate chains would be.</p>
 <div class="pitfall">"Last available position" means the free cell with the <em>largest</em> index (the pointer moves up from the bottom), not the first free cell after the home cell — that would be linear probing.</div>`,
         `<p class="y-chinh">🎯 Một ví dụ băm gộp dây (coalesced hashing) có lời giải: mỗi khoá va chạm lấy ô trống có chỉ số lớn nhất, tính ngược từ đáy bảng lên, và một liên kết next gắn nó vào cuối dây của mình.</p>
-<p class="ghi-chu">Ví dụ trên slide là hình vẽ, các khoá trong hình không trích được thành chữ. Dưới đây là ví dụ của bài — M = 10, h(x) = x % 10, các khoá của slide 16–21 thêm khoá 15 — lần theo từng bước; hãy đối chiếu với hình trên slide.</p>
+<p class="ghi-chu">Ví dụ trên slide là hình vẽ, các khoá trong hình không trích được thành chữ. Dưới đây là ví dụ của bài — M = 10, h(x) = x % 10, các khoá của slide 19 thêm khoá 15 — lần theo từng bước; hãy đối chiếu với hình trên slide.</p>
 <table>
 <thead><tr><th>Chèn</th><th>h(x)</th><th>Ô nhà trống?</th><th>Dây đã đi qua</th><th>Ô trống cuối</th><th>Liên kết được gán</th></tr></thead>
 <tbody>
@@ -2756,7 +2758,7 @@ MD5("abc") &nbsp;&nbsp;&nbsp;&nbsp;= 900150983cd24fb0d6963f7d28e17f72 (128 bits)
 <ul>
 <li><strong>Integer keys</strong>: Key mod TableSize is the general strategy — unless the keys have an undesirable pattern (all end in 0 with mod 10, slide 9).</li>
 <li><strong>Other keys</strong>: first compute the hash code — in Java <code>key.hashCode()</code> — then compress it into an index.</li>
-<li><strong>Negative codes</strong>: in Java <code>h % M</code> is negative when h is negative, and a negative index crashes. Use <code>Math.floorMod(h, M)</code> or <code>(h &amp; 0x7fffffff) % M</code>.</li>
+<li><strong>Negative codes</strong>: in Java <code>h % M</code> takes the sign of h, so it can be negative when h is negative, and a negative index crashes. Use <code>Math.floorMod(h, M)</code> or <code>(h &amp; 0x7fffffff) % M</code>.</li>
 <li><strong>Real keys between 0 and 1</strong>: the slide multiplies by M and rounds; truncating, <code>(int) (x * M)</code>, is the safe reading — rounding 0.97 × 10 gives 10, one past the last index.</li>
 </ul>
 <pre><code class="language-java">public class HashCodeDemo {
@@ -2787,7 +2789,7 @@ key 0.97: (int) (x * 10) = 9, &nbsp;Math.round(x * 10) = 10</div>
 <ul>
 <li><strong>Khoá là số nguyên</strong>: Key mod TableSize (khoá chia lấy dư cho kích thước bảng) là chiến lược chung — trừ khi các khoá có quy luật xấu (mọi khoá tận cùng bằng 0 mà lấy mod 10, slide 9).</li>
 <li><strong>Khoá loại khác</strong>: tính mã băm trước — trong Java là <code>key.hashCode()</code> — rồi nén (compress) nó thành chỉ số.</li>
-<li><strong>Mã băm âm</strong>: trong Java, <code>h % M</code> ra số âm khi h âm, và chỉ số âm làm chương trình văng lỗi. Dùng <code>Math.floorMod(h, M)</code> hoặc <code>(h &amp; 0x7fffffff) % M</code>.</li>
+<li><strong>Mã băm âm</strong>: trong Java, <code>h % M</code> mang dấu của h, nên có thể ra số âm khi h âm, và chỉ số âm làm chương trình văng lỗi. Dùng <code>Math.floorMod(h, M)</code> hoặc <code>(h &amp; 0x7fffffff) % M</code>.</li>
 <li><strong>Khoá là số thực trong khoảng 0 tới 1</strong>: slide nhân với M rồi làm tròn; cắt phần lẻ, <code>(int) (x * M)</code>, mới là cách hiểu an toàn — làm tròn 0,97 × 10 ra 10, vượt quá chỉ số cuối một ô.</li>
 </ul>
 <pre><code class="language-java">public class HashCodeDemo {
@@ -2838,7 +2840,7 @@ key 0.97: (int) (x * 10) = 9, &nbsp;Math.round(x * 10) = 10</div>
 <li><strong>Mục (entry)</strong> = (khoá, giá trị): khoá để nhận diện, giá trị là dữ liệu.</li>
 <li><strong>Khoá không trùng</strong>: cất giá trị thứ hai dưới một khoá đã có sẽ thay giá trị cũ — một khoá, một giá trị.</li>
 <li><strong>Ẩn dụ tủ hồ sơ (file cabinet)</strong> trong hình của slide: hãy coi khoá là nhãn dán trên bìa hồ sơ, giá trị là thứ nằm bên trong; map chính là cái tủ.</li>
-<li><strong>Web như một map</strong>: khoá của một trang là URL của nó (ví dụ http://datastructures.net/), giá trị là nội dung trang.</li>
+<li><strong>Web như một map</strong>: khoá của một trang là URL (đường dẫn) của nó (ví dụ http://datastructures.net/), giá trị là nội dung trang.</li>
 </ul>
 <table>
 <thead><tr><th>Map</th><th>Khoá (không trùng)</th><th>Giá trị</th></tr></thead>
@@ -3184,7 +3186,7 @@ most frequent word: the (4 times), 6 distinct words</div>
 <li><strong>HashSet</strong>: adding and removing in constant time; no duplicates. (Internally it is a HashMap whose keys are the elements.)</li>
 <li><strong>HashMap</strong>: an implementation of Map — more useful and more standard; main methods <code>put(key, value)</code>, <code>get(key)</code>, <code>remove(key)</code>. Roughly equivalent to <code>Hashtable</code>, except that it is unsynchronized and permits nulls (slide 36).</li>
 <li><strong>Two performance parameters</strong>: initial capacity = number of buckets (default 16); load factor = how full the table may get before its capacity is increased (default 0.75). When the size exceeds capacity × load factor, the table is rehashed into about twice as many buckets.</li>
-<li><strong>Chaining</strong>: a hash map is a collection of singly linked lists (buckets). Since Java 8 a bucket that already holds 8 entries and gets another is turned into a red-black tree (if the table has at least 64 buckets), so its worst case becomes O(log n).</li>
+<li><strong>Chaining</strong>: a hash map is a collection of singly linked lists (buckets). Since Java 8 a bucket that already holds 8 entries and gets another is turned into a red-black tree (if the table has at least 64 buckets), so its worst case becomes O(log n) (for Comparable keys such as String or Integer).</li>
 </ul>
 <pre><code class="language-java">import java.util.HashMap;
 import java.util.HashSet;
@@ -3214,7 +3216,7 @@ resize rule: more than 16 * 0.75 = 12 entries -&gt; 32 buckets</div>
 <li><strong>HashSet</strong> (tập băm): thêm và xoá trong thời gian hằng số; không chứa phần tử trùng. (Bên trong nó là một HashMap lấy các phần tử làm khoá.)</li>
 <li><strong>HashMap</strong>: một cài đặt của Map (giao diện ánh xạ khoá → giá trị) — hữu ích và chuẩn mực hơn; các phương thức chính <code>put(key, value)</code>, <code>get(key)</code>, <code>remove(key)</code>. Gần tương đương <code>Hashtable</code>, chỉ khác là không đồng bộ hoá (unsynchronized) và cho phép null (slide 36).</li>
 <li><strong>Hai tham số hiệu năng</strong>: sức chứa ban đầu (initial capacity) = số bucket — số ngăn chứa của bảng (mặc định 16); hệ số tải (load factor) = bảng được đầy tới mức nào trước khi tự tăng sức chứa (mặc định 0,75). Khi số phần tử vượt sức chứa × hệ số tải, bảng được băm lại (rehash) sang khoảng gấp đôi số bucket.</li>
-<li><strong>Dây chuyền</strong>: một bảng ánh xạ băm (hash map) là tập các danh sách liên kết đơn (mỗi danh sách là một bucket). Từ Java 8, bucket nào đã có 8 phần tử mà còn nhận thêm sẽ được chuyển thành cây đỏ-đen (red-black tree) (nếu bảng có ít nhất 64 bucket), nên trường hợp xấu nhất chỉ còn O(log n).</li>
+<li><strong>Dây chuyền</strong>: một bảng ánh xạ băm (hash map) là tập các danh sách liên kết đơn (mỗi danh sách là một bucket). Từ Java 8, bucket nào đã có 8 phần tử mà còn nhận thêm sẽ được chuyển thành cây đỏ-đen (red-black tree) (nếu bảng có ít nhất 64 bucket), nên trường hợp xấu nhất chỉ còn O(log n) (với khoá so sánh được — Comparable — như String, Integer).</li>
 </ul>
 <pre><code class="language-java">import java.util.HashMap;
 import java.util.HashSet;
@@ -3298,7 +3300,7 @@ TreeSet (sorted): &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n
 <ul>
 <li><code>s.add(a[i])</code> trả <code>true</code> nếu từ mới và <code>false</code> nếu đã có — nên "i" bị báo trùng hai lần, "came" một lần.</li>
 <li>3 từ phân biệt, in ra là <code>[came, conquered, i]</code>: HashSet duyệt theo thứ tự các bucket (ngăn chứa) của nó — không theo thứ tự chèn (đó là <code>LinkedHashSet</code>), cũng không theo thứ tự sắp xếp (đó là <code>TreeSet</code>).</li>
-<li>Slide dùng kiểu thô (raw type) <code>Set</code>, chỉ biên dịch được kèm cảnh báo "unchecked". Hãy viết <code>Set&lt;String&gt; s = new HashSet&lt;String&gt;();</code>.</li>
+<li>Slide dùng kiểu thô (raw type) <code>Set</code>, chỉ biên dịch được kèm cảnh báo "unchecked" (thao tác không được kiểm tra kiểu). Hãy viết <code>Set&lt;String&gt; s = new HashSet&lt;String&gt;();</code>.</li>
 </ul>
 <p><strong>Big-O:</strong> n lần gọi <code>add</code>, mỗi lần O(1) trung bình → tìm mọi phần tử trùng trong O(n), thay vì O(n²) với hai vòng lặp lồng nhau.</p>
 <div class="pitfall">Đừng bao giờ dựa vào thứ tự in của HashSet hay HashMap khi làm bài thi: nó phụ thuộc mã băm và sức chứa, và có thể đổi khi bảng nới rộng. Cần thứ tự? Dùng <code>LinkedHashSet</code> (thứ tự chèn) hoặc <code>TreeSet</code> (đã sắp xếp).</div>`],
@@ -3566,7 +3568,7 @@ symbol table: x = 21, y = 7, z = 14</div>
 <p>The book's classes are generic (<code>K</code>, <code>V</code>) and compress hash codes with the MAD method (multiply–add–divide) instead of a plain <code>%</code>; the ideas are the ones of the slides.</p>`,
         `<p class="y-chinh">🎯 Chương 10 sách Goodrich bản 6 (Maps, Hash Tables, and Skip Lists) là phiên bản giáo trình của bộ slide này; mục §10.2 ứng với các slide về bảng băm.</p>
 <ul>
-<li><strong>Ch.10 Maps, Hash Tables, and Skip Lists (tr.401)</strong> — mở đầu bằng map (ánh xạ): ADT Map và ứng dụng đếm từ của slide 30–33.</li>
+<li><strong>Ch.10 Maps, Hash Tables, and Skip Lists (tr.401)</strong> — mở đầu bằng map (ánh xạ): ADT Map (kiểu dữ liệu trừu tượng Map) và ứng dụng đếm từ của slide 30–33.</li>
 <li><strong>§10.2 Hash Tables (tr.410)</strong> và <strong>§10.2.1 Hash Functions (tr.411)</strong> — mã băm (hash code) và hàm nén (compression function) (slide 5–14 và 29).</li>
 <li><strong>§10.2.2 Collision-Handling Schemes (tr.417)</strong> — dây chuyền tách biệt, địa chỉ mở, dò tuyến tính và dò bậc hai (slide 15–25).</li>
 <li><strong>§10.2.3 Load Factors, Rehashing, and Efficiency (tr.420)</strong> — hệ số tải, băm lại (rehash): slide 18 và con số 0,75 của HashMap trong Java.</li>
@@ -3609,7 +3611,7 @@ const L_on_ch7 = {
   content: [
     bi(`<span class="eyebrow">Chapter 7 · Lesson 7.5 · Practice &amp; review</span>
 <h2>Hashing — practise like the PE, then review</h2>
-<p class="lead">Seven exercises in the shape of the practical exam — from a ten-minute HashSet warm-up to a book catalogue with separate chaining and rehashing — each with a solution that tests itself. Several tests reuse the exact examples of the 7-Hashing deck (slides 19, 20, 25), so you can check the slides and your code against each other. Then the chapter's vocabulary in English and Vietnamese, a one-screen summary and the complexity table to revise from before the FE.</p>
+<p class="lead">Seven exercises in the shape of the practical exam — from a ten-minute HashSet warm-up to a book catalogue with separate chaining and rehashing — each with a solution that tests itself. Several tests reuse the exact examples of the 7-Hashing deck (slides 19 and 20) and the deletion scenario of slide 25, so you can check the slides and your code against each other. Then the chapter's vocabulary in English and Vietnamese, a one-screen summary and the complexity table to revise from before the FE.</p>
 <div class="callout"><strong>How to use this page.</strong>
 <ol>
 <li>Read the task, scroll the solution out of sight and write the methods yourself in Eclipse, on top of the given data class (<code>Car</code>, <code>Book</code>, <code>Student</code>…).</li>
@@ -3619,7 +3621,7 @@ const L_on_ch7 = {
 <p>In a CSD201 PE the skeleton — the data class, the structure class, a <code>main</code> that calls <code>f1</code>, <code>f2</code>, … and writes each answer to a file — is usually given, and you fill in the method bodies. Here every answer is printed on the screen instead of written to a file. Exercises 1–4 use java.util correctly (what you will do at work); exercises 5–7 build the table yourself (what the FE and the PE test).</p></div>`,
     `<span class="eyebrow">Chương 7 · Bài 7.5 · Thực hành &amp; ôn tập</span>
 <h2>Băm — luyện như đề PE, rồi ôn lại</h2>
-<p class="lead">Bảy bài tập theo dạng đề thi thực hành (PE) — từ bài khởi động mười phút với HashSet tới một danh mục sách dùng dây chuyền tách biệt (separate chaining) có băm lại (rehash) — bài nào cũng có lời giải tự kiểm tra được. Nhiều test dùng lại đúng các ví dụ của bộ slide 7-Hashing (slide 19, 20, 25), để bạn đối chiếu slide với code của mình. Sau đó là thuật ngữ của chương bằng tiếng Anh và tiếng Việt, bản tóm tắt một màn hình và bảng độ phức tạp để ôn trước FE.</p>
+<p class="lead">Bảy bài tập theo dạng đề thi thực hành (PE) — từ bài khởi động mười phút với HashSet tới một danh mục sách dùng dây chuyền tách biệt (separate chaining) có băm lại (rehash) — bài nào cũng có lời giải tự kiểm tra được. Nhiều test dùng lại đúng các ví dụ của bộ slide 7-Hashing (slide 19 và 20) và tình huống xoá của slide 25, để bạn đối chiếu slide với code của mình. Sau đó là thuật ngữ của chương bằng tiếng Anh và tiếng Việt, bản tóm tắt một màn hình và bảng độ phức tạp để ôn trước FE (thi cuối kỳ).</p>
 <div class="callout"><strong>Cách dùng trang này.</strong>
 <ol>
 <li>Đọc đề, cuộn lời giải ra khỏi màn hình rồi tự viết các hàm trong Eclipse, dựa trên lớp dữ liệu cho sẵn (<code>Car</code>, <code>Book</code>, <code>Student</code>…).</li>
@@ -4000,6 +4002,8 @@ ALL TESTS PASSED</div>
     bi(`<h3>🧪 Exercise 4 — equals and hashCode for your own key class (~15 min)</h3>
 <p class="nhan">Task</p>
 <p>Two <code>Student(id, name)</code> objects are the same student when their ids are equal. Write <code>equals</code> and <code>hashCode</code> so that a <code>HashSet&lt;Student&gt;</code> drops duplicates and a <code>HashMap&lt;Student, Integer&gt;</code> finds a score when asked with a <em>new</em> object that has the same id.</p>
+<p class="nhan">Data → expected result</p>
+<p>add SE01 An, SE02 Binh, SE01 An Nguyen → size <strong>2</strong>; <code>contains(new Student("SE02", "?"))</code> → <strong>true</strong>; score SE01 → 8, then <code>get(new Student("SE01", ""))</code> → <strong>8</strong>; with <code>BadStudent</code> (hash code from the name), SE01 An and SE01 AN → the set keeps <strong>both</strong> (size 2).</p>
 <p class="nhan">Idea</p>
 <p><code>equals</code> compares the ids; <code>hashCode</code> returns <code>id.hashCode()</code> — computed from the same field as <code>equals</code>, so equal students always get equal hash codes (the equals/hashCode contract) and land in the same bucket, where <code>equals</code> then recognises them. The last test shows the opposite: a <code>BadStudent</code> computes its hash code from the name, so two equal students get different codes; HashMap compares the stored hash codes before it ever calls <code>equals</code>, treats them as two different keys, and the set keeps both.</p>
 <p class="nhan">Solution + self-test — every line must say PASS</p>
@@ -4066,6 +4070,8 @@ ALL TESTS PASSED</div>
     `<h3>🧪 Bài 4 — equals và hashCode cho lớp khoá tự viết (~15 phút)</h3>
 <p class="nhan">Đề bài</p>
 <p>Hai đối tượng <code>Student(id, name)</code> là cùng một sinh viên khi id bằng nhau. Viết <code>equals</code> và <code>hashCode</code> sao cho <code>HashSet&lt;Student&gt;</code> loại bỏ bản trùng và <code>HashMap&lt;Student, Integer&gt;</code> tìm được điểm khi được hỏi bằng một đối tượng <em>mới</em> có cùng id.</p>
+<p class="nhan">Dữ liệu → kết quả mong đợi</p>
+<p>thêm SE01 An, SE02 Binh, SE01 An Nguyen → kích thước <strong>2</strong>; <code>contains(new Student("SE02", "?"))</code> → <strong>true</strong>; điểm của SE01 là 8, rồi <code>get(new Student("SE01", ""))</code> → <strong>8</strong>; với <code>BadStudent</code> (mã băm tính từ tên), SE01 An và SE01 AN → tập hợp giữ <strong>cả hai</strong> (kích thước 2).</p>
 <p class="nhan">Ý tưởng</p>
 <p><code>equals</code> so sánh id; <code>hashCode</code> trả <code>id.hashCode()</code> — tính từ đúng trường mà <code>equals</code> dùng, nên hai sinh viên bằng nhau luôn có mã băm (hash code) bằng nhau (giao ước equals/hashCode) và rơi vào cùng bucket (ngăn chứa của bảng), rồi ở đó <code>equals</code> nhận ra chúng. Test cuối cho thấy điều ngược lại: <code>BadStudent</code> tính mã băm từ tên, nên hai sinh viên bằng nhau có hai mã khác nhau; HashMap so mã băm đã lưu trước khi gọi tới <code>equals</code>, coi chúng là hai khoá khác nhau, và tập hợp giữ cả hai.</p>
 <p class="nhan">Lời giải + test tự kiểm — mọi dòng phải là PASS</p>
@@ -4327,7 +4333,7 @@ ALL TESTS PASSED</div>
 <p class="nhan">Data → expected result</p>
 <p>m = 10: plates 89 18 49 58 69 → cells <strong>9 8 0 2 3</strong> (slide 19). m = 11: six plates with home 3 (3, 14, 25, 36, 47, 58) → <strong>3 4 7 1 8 6</strong> (slide 20); a seventh plate with home 3 → <strong>−1</strong>. m = 16: after plates 16, 1, 4, 9 the plate 32 (home 0) → <strong>−1</strong> although 12 cells are free.</p>
 <p class="nhan">Idea</p>
-<p>compute every probe from the home cell: <code>(h + i * i) % m</code>, and give up after m tries. <code>search</code> follows the same sequence and stops at its first empty cell. O(1) on average while the table is at most half full and m is prime (the theorem of slide 20); with other sizes, some cells are simply unreachable.</p>
+<p>compute every probe from the home cell: <code>(h + i * i) % m</code>, and give up after m tries. <code>search</code> follows the same sequence and stops at its first empty cell. O(1) on average while the table is at most half full and m is prime (the theorem of slide 20); past half full — or with a non-prime m — the sequence can miss every free cell, because from one home cell it reaches only some cells (6 of 11, 4 of 16).</p>
 <p class="nhan">Solution + self-test — every line must say PASS</p>
 <pre><code class="language-java">class Car {
     int plate;                                           // the key
@@ -4406,7 +4412,7 @@ ALL TESTS PASSED</div>
 <p class="nhan">Dữ liệu → kết quả mong đợi</p>
 <p>m = 10: biển số 89 18 49 58 69 → các ô <strong>9 8 0 2 3</strong> (slide 19). m = 11: sáu biển số có ô nhà 3 (3, 14, 25, 36, 47, 58) → <strong>3 4 7 1 8 6</strong> (slide 20); biển số thứ bảy có ô nhà 3 → <strong>−1</strong>. m = 16: sau các biển 16, 1, 4, 9, biển 32 (ô nhà 0) → <strong>−1</strong> dù còn 12 ô trống.</p>
 <p class="nhan">Ý tưởng</p>
-<p>tính mọi lần dò từ ô nhà (home cell): <code>(h + i * i) % m</code>, và bỏ cuộc sau m lần thử. <code>search</code> đi theo đúng dãy đó và dừng ở ô trống đầu tiên của dãy. O(1) trung bình khi bảng đầy không quá một nửa và m nguyên tố (định lý ở slide 20); với kích thước khác, có những ô đơn giản là không bao giờ với tới.</p>
+<p>tính mọi lần dò từ ô nhà (home cell): <code>(h + i * i) % m</code>, và bỏ cuộc sau m lần thử. <code>search</code> đi theo đúng dãy đó và dừng ở ô trống đầu tiên của dãy. O(1) trung bình khi bảng đầy không quá một nửa và m nguyên tố (định lý ở slide 20); quá nửa bảng — hoặc m không nguyên tố — dãy dò có thể bỏ lỡ mọi ô trống, vì từ một ô nhà nó chỉ với tới một phần các ô (6 trên 11, 4 trên 16).</p>
 <p class="nhan">Lời giải + test tự kiểm — mọi dòng phải là PASS</p>
 <pre><code class="language-java">class Car {
     int plate;                                           // khoá
@@ -4584,7 +4590,7 @@ PASS remove Web -&gt; true, get -&gt; -1, size 8<br>
 PASS remove a missing title -&gt; false<br>
 PASS nodes in all chains == size<br>
 ALL TESTS PASSED</div>
-<div class="pitfall">Two rehash bugs worth marks: copying <code>old[i]</code> into <code>table[i]</code> instead of hashing every key again (the index depends on M, so <code>get</code> then searches the wrong chain), and testing <code>n / table.length &gt; 0.75</code> with two <code>int</code>s — integer division gives 0, so the table never grows. Cast to <code>double</code>.</div>`,
+<div class="pitfall">Two rehash bugs worth marks: copying <code>old[i]</code> into <code>table[i]</code> instead of hashing every key again (the index depends on M, so <code>get</code> then searches the wrong chain), and testing <code>n / table.length &gt; 0.75</code> with two <code>int</code>s — integer division gives 0 as long as n &lt; M, so the table grows only when it is completely full (n = M) — too late, and the test "4th book → 11 cells" fails. Cast to <code>double</code>.</div>`,
     `<h3>🧪 Bài 7 — f1–f4: danh mục sách với dây chuyền tách biệt và băm lại (gần đề PE thật · ~25 phút)</h3>
 <p class="nhan">Đề bài</p>
 <p>Các đối tượng <code>Book(title, price)</code> (tựa sách, giá) nằm trong một bảng băm dây chuyền (chaining) theo khoá là tựa sách, ban đầu có M = 5 ô. f1 <code>put(book)</code>: thêm sách, hoặc cập nhật giá nếu tựa đã có; sau khi thêm, nếu n / M &gt; 0,75 thì băm lại (rehash) sang 2M + 1 ô. f2 <code>get(title)</code>: trả giá, hoặc −1. f3 <code>remove(title)</code>. f4 kiểm tra: tổng số nút của mọi dây bằng n.</p>
@@ -4690,7 +4696,7 @@ PASS remove Web -&gt; true, get -&gt; -1, size 8<br>
 PASS remove a missing title -&gt; false<br>
 PASS nodes in all chains == size<br>
 ALL TESTS PASSED</div>
-<div class="pitfall">Hai lỗi rehash dễ mất điểm: chép <code>old[i]</code> sang <code>table[i]</code> thay vì băm lại từng khoá (chỉ số phụ thuộc M, nên sau đó <code>get</code> tìm nhầm dây), và kiểm tra <code>n / table.length &gt; 0.75</code> với hai số <code>int</code> — phép chia nguyên ra 0, nên bảng không bao giờ nới rộng. Hãy ép sang <code>double</code>.</div>`),
+<div class="pitfall">Hai lỗi rehash dễ mất điểm: chép <code>old[i]</code> sang <code>table[i]</code> thay vì băm lại từng khoá (chỉ số phụ thuộc M, nên sau đó <code>get</code> tìm nhầm dây), và kiểm tra <code>n / table.length &gt; 0.75</code> với hai số <code>int</code> — phép chia nguyên ra 0 chừng nào n &lt; M, nên bảng chỉ nới khi đã đầy hẳn (n = M) — quá muộn, và test "4th book → 11 cells" hỏng. Hãy ép sang <code>double</code>.</div>`),
     bi(`<h2>🗂 Glossary — English → Vietnamese</h2>
 <p>Every term of the chapter with its Vietnamese name and a one-sentence explanation. Cover the right-hand columns and test yourself.</p>
 <table>
@@ -4716,7 +4722,7 @@ ALL TESTS PASSED</div>
 <tr><td><strong>primary clustering</strong></td><td>vón cục sơ cấp</td><td>Runs of occupied cells merge, and every key hashing into a run must walk to its end.</td></tr>
 <tr><td><strong>separate chaining</strong></td><td>dây chuyền tách biệt</td><td>Each cell holds a linked list of the keys hashed to it; the array is a scatter table.</td></tr>
 <tr><td><strong>coalesced hashing</strong></td><td>băm gộp dây</td><td>A colliding key goes to the last free cell and is linked by index; chains may merge.</td></tr>
-<tr><td><strong>bucket</strong></td><td>thùng (bucket)</td><td>A block of several slots at one address; a cellar or overflow area takes what does not fit.</td></tr>
+<tr><td><strong>bucket</strong></td><td>thùng (bucket)</td><td>A block of several slots at one address; items that do not fit go to another bucket or to an overflow area.</td></tr>
 <tr><td><strong>tombstone (deleted mark)</strong></td><td>dấu "đã xoá"</td><td>Marks a deleted cell so that searches go on past it and insertions may reuse it.</td></tr>
 <tr><td><strong>rehashing</strong></td><td>băm lại</td><td>Building a bigger table and inserting every key again with the new size.</td></tr>
 <tr><td><strong>perfect hash function</strong></td><td>hàm băm hoàn hảo</td><td>No collision for a fixed, known key set; minimal if it also leaves no empty cell.</td></tr>
@@ -4749,7 +4755,7 @@ ALL TESTS PASSED</div>
 <tr><td><strong>primary clustering</strong></td><td>vón cục sơ cấp</td><td>Các dãy ô có người dính vào nhau, khoá nào băm vào cụm cũng phải đi tới cuối cụm.</td></tr>
 <tr><td><strong>separate chaining</strong></td><td>dây chuyền tách biệt</td><td>Mỗi ô giữ một danh sách liên kết các khoá băm vào nó; mảng đó là bảng phân tán.</td></tr>
 <tr><td><strong>coalesced hashing</strong></td><td>băm gộp dây</td><td>Khoá va chạm vào ô trống cuối cùng và được nối bằng chỉ số; các dây có thể nhập vào nhau.</td></tr>
-<tr><td><strong>bucket</strong></td><td>thùng (bucket)</td><td>Một khối nhiều chỗ tại một địa chỉ; vùng hầm hay vùng tràn nhận phần không vừa.</td></tr>
+<tr><td><strong>bucket</strong></td><td>thùng (bucket)</td><td>Một khối nhiều chỗ tại một địa chỉ; phần không vừa sang bucket khác hoặc vào vùng tràn.</td></tr>
 <tr><td><strong>tombstone (deleted mark)</strong></td><td>dấu "đã xoá"</td><td>Đánh dấu ô đã xoá để phép tìm vẫn đi tiếp qua nó và phép chèn được dùng lại.</td></tr>
 <tr><td><strong>rehashing</strong></td><td>băm lại</td><td>Dựng bảng lớn hơn rồi chèn lại mọi khoá theo kích thước mới.</td></tr>
 <tr><td><strong>perfect hash function</strong></td><td>hàm băm hoàn hảo</td><td>Không va chạm với một tập khoá cố định, biết trước; tối thiểu nếu còn không để ô trống.</td></tr>
@@ -4784,7 +4790,7 @@ ALL TESTS PASSED</div>
 <tr><td>insert, average</td><td>O(1) — add at the front of a chain</td><td>O(1) while α stays ≤ 0.5</td><td>h(key) + a few probes</td></tr>
 <tr><td>search, average</td><td>O(1 + α)</td><td>linear: ≈ ½(1 + 1/(1−α)) probes on a hit, ½(1 + 1/(1−α)²) on a miss</td><td>one chain / one run of occupied cells</td></tr>
 <tr><td>delete, average</td><td>O(1 + α) — ordinary list delete</td><td>O(1) — search + mark DELETED</td><td>same walk as a search</td></tr>
-<tr><td>worst case of the three</td><td>O(n) — one long chain (a Java 8+ HashMap bucket becomes a tree: O(log n))</td><td>O(n) — one long run</td><td>all keys collide</td></tr>
+<tr><td>worst case of the three</td><td>O(n) — one long chain (a Java 8+ HashMap bucket becomes a tree: O(log n) for Comparable keys)</td><td>O(n) — one long run</td><td>all keys collide</td></tr>
 <tr><td>rehash</td><td>O(n + M)</td><td>O(n + M)</td><td>every key is inserted again; amortized O(1) per insert</td></tr>
 <tr><td>min / max, sorted output</td><td>O(n + M) / O(n log n)</td><td>O(n + M) / O(n log n)</td><td>the table keeps no order</td></tr>
 <tr><td>hash of a string of length L</td><td>O(L)</td><td>O(L)</td><td>Horner's rule, one step per character</td></tr>
@@ -4817,7 +4823,7 @@ ALL TESTS PASSED</div>
 <tr><td>chèn, trung bình</td><td>O(1) — thêm vào đầu một dây</td><td>O(1) khi α còn ≤ 0,5</td><td>h(khoá) + vài lần dò</td></tr>
 <tr><td>tìm, trung bình</td><td>O(1 + α)</td><td>tuyến tính: ≈ ½(1 + 1/(1−α)) lần dò khi thấy, ½(1 + 1/(1−α)²) khi trượt</td><td>một dây / một dãy ô có người</td></tr>
 <tr><td>xoá, trung bình</td><td>O(1 + α) — xoá nút trong danh sách</td><td>O(1) — tìm + đánh dấu DELETED</td><td>đi đúng đường của phép tìm</td></tr>
-<tr><td>xấu nhất của cả ba</td><td>O(n) — một dây dài (bucket của HashMap Java 8+ thành cây: O(log n))</td><td>O(n) — một dãy dài</td><td>mọi khoá va chạm</td></tr>
+<tr><td>xấu nhất của cả ba</td><td>O(n) — một dây dài (bucket của HashMap Java 8+ thành cây: O(log n) với khoá Comparable)</td><td>O(n) — một dãy dài</td><td>mọi khoá va chạm</td></tr>
 <tr><td>băm lại (rehash)</td><td>O(n + M)</td><td>O(n + M)</td><td>chèn lại mọi khoá; khấu hao O(1) mỗi lần chèn</td></tr>
 <tr><td>min / max, in theo thứ tự</td><td>O(n + M) / O(n log n)</td><td>O(n + M) / O(n log n)</td><td>bảng không giữ thứ tự</td></tr>
 <tr><td>băm một chuỗi dài L</td><td>O(L)</td><td>O(L)</td><td>quy tắc Horner, mỗi ký tự một bước</td></tr>

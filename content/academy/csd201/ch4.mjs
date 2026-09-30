@@ -30,7 +30,7 @@ const L_csd8_1 = {
 <tr><td>Degree, path, path length</td><td>5</td><td>degree = number of children; the path from the root is unique; length = number of arcs</td><td>—</td></tr>
 <tr><td>Ordered tree</td><td>7</td><td>the children of a node have a first, second, third…</td><td>—</td></tr>
 <tr><td>Preorder / postorder (general tree)</td><td>8–9</td><td>node before / after its descendants</td><td>O(n)</td></tr>
-<tr><td>Breadth-first (level order)</td><td>10, 14</td><td>level by level, with a queue</td><td>O(n) time, queue up to one level wide</td></tr>
+<tr><td>Breadth-first (level order)</td><td>10, 14</td><td>level by level, with a queue</td><td>O(n) time, queue about one level wide</td></tr>
 <tr><td>Binary tree, proper, complete</td><td>11–12</td><td>at most 2 children; proper = 0 or 2 children; slide's "complete" = all leaves on one level</td><td>—</td></tr>
 <tr><td>Expression tree</td><td>13</td><td>operators inside, operands on the leaves; binary operators give a proper tree</td><td>evaluate: O(n)</td></tr>
 <tr><td>Preorder NLR, inorder LNR, postorder LRN</td><td>15–16</td><td>where the node (N) sits relative to left (L) and right (R)</td><td>O(n) time, O(h) call stack</td></tr>
@@ -39,7 +39,7 @@ const L_csd8_1 = {
 </table>`,
     `<span class="eyebrow">Chương 4 · Bài 4.A · 4A-Trees1, slide 1–17</span>
 <h2>Cây, phần 1a — cây là gì và đi qua một cây như thế nào</h2>
-<p class="lead">Đây là nửa đầu bộ slide được chiếu khi bắt đầu chương 4 (buổi 15–16 theo syllabus, CLO4). Hãy đọc bài này trước các bài 4.1–4.3 bên dưới: slide nào cũng được giảng, mọi thuật ngữ gắn vào một cây ví dụ, mỗi phép duyệt (traversal) đều chạy bằng Java và vẽ lại từng bước, còn hai định nghĩa khác nhau của "mức" (level) và "chiều cao" (height) được tách bạch — học kỳ nào cũng có người mất điểm vì chúng.</p>
+<p class="lead">Đây là nửa đầu bộ slide được chiếu khi bắt đầu chương 4 (buổi 15–16 theo syllabus — đề cương môn học, chuẩn đầu ra CLO4). Hãy đọc bài này trước các bài 4.1–4.3 bên dưới: slide nào cũng được giảng, mọi thuật ngữ gắn vào một cây ví dụ, mỗi phép duyệt (traversal) đều chạy bằng Java và vẽ lại từng bước, còn hai định nghĩa khác nhau của "mức" (level) và "chiều cao" (height) được tách bạch — học kỳ nào cũng có người mất điểm vì chúng.</p>
 <div class="callout"><strong>CLO4 trong syllabus:</strong> giải thích cây tổng quát (general tree), cây nhị phân (binary tree) và cây nhị phân tìm kiếm (binary search tree — BST); cài đặt BST với các thao tác cơ bản. Nửa này xây từ vựng và các phép duyệt; bài 4.B (slide 18–34) biến chúng thành lớp <code>BSTree</code> mà bạn sẽ gõ trong PE (thi thực hành). Câu hỏi FE (thi cuối kỳ) về phần này chủ yếu là "phép duyệt này in ra thứ tự nào?", "chiều cao / mức bằng bao nhiêu?" và "đây là loại cây nhị phân nào?".</div>
 <h3>Slide 1–17 trong một bảng</h3>
 <table>
@@ -50,7 +50,7 @@ const L_csd8_1 = {
 <tr><td>Bậc (degree), đường đi (path), độ dài đường đi</td><td>5</td><td>bậc = số con; đường đi từ gốc là duy nhất; độ dài = số cạnh (arc)</td><td>—</td></tr>
 <tr><td>Cây có thứ tự (ordered tree)</td><td>7</td><td>các con của một nút có thứ nhất, thứ hai, thứ ba…</td><td>—</td></tr>
 <tr><td>Tiền thứ tự / hậu thứ tự (preorder / postorder) trên cây tổng quát</td><td>8–9</td><td>thăm nút trước / sau các con cháu của nó</td><td>O(n)</td></tr>
-<tr><td>Duyệt theo chiều rộng (breadth-first, level order)</td><td>10, 14</td><td>từng mức một, dùng hàng đợi (queue)</td><td>O(n) thời gian, hàng đợi rộng tối đa cỡ một mức</td></tr>
+<tr><td>Duyệt theo chiều rộng (breadth-first, level order)</td><td>10, 14</td><td>từng mức một, dùng hàng đợi (queue)</td><td>O(n) thời gian, hàng đợi chứa cỡ một mức</td></tr>
 <tr><td>Cây nhị phân, cây proper, cây complete</td><td>11–12</td><td>tối đa 2 con; proper = mỗi nút 0 hoặc 2 con; "complete" của slide = mọi lá cùng một mức</td><td>—</td></tr>
 <tr><td>Cây biểu thức (expression tree)</td><td>13</td><td>toán tử ở nút trong, toán hạng ở lá; toán tử hai ngôi cho cây proper</td><td>tính giá trị: O(n)</td></tr>
 <tr><td>Tiền thứ tự NLR (preorder), trung thứ tự LNR (inorder), hậu thứ tự LRN (postorder)</td><td>15–16</td><td>vị trí của nút (N) so với trái (L) và phải (R)</td><td>O(n) thời gian, O(h) ngăn xếp lời gọi</td></tr>
@@ -74,6 +74,7 @@ const L_csd8_1 = {
 <li><strong>Binary search tree: search, insertion, deletion</strong> — slides 22–32.</li>
 </ol>
 <p>This lesson (4.A) walks through slides 1–17; lesson 4.B continues with slides 18–34.</p>
+<p class="dap-an">✅ <strong>The first topic, "What is a Trees?"</strong> (a typo for "What is a tree?"), is answered on slide 3: a set of nodes hanging from one root, each non-root node linked to exactly one parent.</p>
 <p class="meo">🧠 <strong>Remember:</strong> the deck climbs one rule at a time — tree → binary tree (at most two children) → binary <em>search</em> tree (left smaller, right larger).</p>`,
         `<p class="y-chinh">🎯 Mười chủ đề, theo đúng thứ tự bộ slide dạy — từ "cây là gì" tới xoá một khoá khỏi cây nhị phân tìm kiếm.</p>
 <ol>
@@ -84,6 +85,7 @@ const L_csd8_1 = {
 <li><strong>Cây nhị phân tìm kiếm (binary search tree — BST): tìm kiếm, chèn (insertion), xoá (deletion)</strong> — slide 22–32.</li>
 </ol>
 <p>Bài này (4.A) đi qua slide 1–17; bài 4.B học tiếp slide 18–34.</p>
+<p class="dap-an">✅ <strong>Chủ đề đầu tiên, "What is a Trees?"</strong> (lỗi gõ của "What is a tree?" — cây là gì?), được trả lời ở slide 3: một tập nút treo từ một gốc (root), mỗi nút không phải gốc nối với đúng một cha.</p>
 <p class="meo">🧠 <strong>Mẹo nhớ:</strong> bộ slide leo từng bậc, mỗi bậc thêm một luật — cây → cây nhị phân (tối đa hai con) → cây nhị phân <em>tìm kiếm</em> (trái nhỏ hơn, phải lớn hơn).</p>`],
       [3, 'What is a Tree?',
         `<p class="y-chinh">🎯 A tree models a hierarchy: nodes linked by parent–child relations, in which every node except one — the root — has exactly one parent.</p>
@@ -163,7 +165,7 @@ size(Sales) = 6 nodes: a child of a tree is a tree too</div>
 <div class="pitfall">"Every node of a tree has exactly one parent" is false — the root has none. The correct wording, and a favourite FE option, is "every node <em>except the root</em> has a unique parent".</div>`,
         `<p class="y-chinh">🎯 Cây (tree) mô hình hoá một hệ phân cấp (hierarchy): các nút (node) nối nhau bằng quan hệ cha–con (parent–child), trong đó mọi nút trừ một nút duy nhất — gốc (root) — đều có đúng một cha.</p>
 <ul>
-<li><strong>Mô hình trừu tượng (abstract model)</strong>: giống ADT danh sách ở chương 1, "cây" nói cấu trúc trông như thế nào, không nói lưu trữ ra sao.</li>
+<li><strong>Mô hình trừu tượng (abstract model)</strong>: giống ADT (abstract data type — kiểu dữ liệu trừu tượng) danh sách ở chương 1, "cây" nói cấu trúc trông như thế nào, không nói lưu trữ ra sao.</li>
 <li><strong>Gặp ở đâu</strong> (theo slide): cây gia phả (family tree — nguồn cảm hứng), sơ đồ tổ chức (organization chart), hệ thống tệp (file system), môi trường lập trình (programming environment).</li>
 <li><strong>Hình trên slide</strong> là sơ đồ tổ chức của công ty Computers"R"Us, gồm các đơn vị Sales, R&amp;D, Manufacturing, Laptops, Desktops, US, International, Europe, Asia và Canada.</li>
 <li><strong>Định nghĩa chính xác (đệ quy — recursive)</strong>: cấu trúc rỗng là cây rỗng (empty tree); cây khác rỗng gồm một gốc cùng các con của nó, và <em>mỗi con lại là một cây</em>.</li>
@@ -238,7 +240,7 @@ size(Sales) = 6 nodes: a child of a tree is a tree too</div>
 <div class="pitfall">"Mọi nút của cây đều có đúng một cha" là SAI — gốc không có cha. Câu đúng, cũng là phương án FE rất hay gặp, là "mọi nút <em>trừ gốc</em> đều có duy nhất một cha".</div>`],
       [4, 'Tree Terminology - 1',
         `<p class="y-chinh">🎯 The basic vocabulary — root, internal node, leaf, ancestor, descendant, subtree, level, height — pinned to one tree with the nodes A to K.</p>
-<p>The slide lists the internal nodes A, B, C, F and the leaves E, I, J, K, G, H, D. Those lists match the classic textbook tree below (check it against the picture):</p>
+<p>The slide lists the internal nodes A, B, C, F and the leaves E, I, J, K, G, H, D; the shape of its tree is only in the picture. The tree below is the lesson's own reconstruction, chosen to fit both lists — check it against the picture:</p>
 <pre><code class="language-plaintext">          A
    /      |      \\
   B       C       D
@@ -321,7 +323,7 @@ height of the tree = 4 (slide: count nodes) = 3 (book: count edges)</div>
 <p class="meo">🧠 <strong>Remember:</strong> the slide numbers levels like floors in Hà Nội (the floor at street level is floor 1); the textbook numbers them like a European lift (street level = 0). Same building, numbers shifted by one.</p>
 <div class="pitfall">"What is the height of this tree?" has two correct answers: 4 by the slide, 3 by the textbook. Read what the question says about the root (level 0 or 1) or a single node (height 0 or 1) before you pick — the distractor with the other convention is always among the options. Also: the root of a one-node tree is a <em>leaf</em>, not an internal node.</div>`,
         `<p class="y-chinh">🎯 Bộ từ vựng cơ bản — gốc, nút trong, lá, tổ tiên, con cháu, cây con, mức, chiều cao — gắn vào một cây có các nút từ A tới K.</p>
-<p>Slide liệt kê các nút trong A, B, C, F và các lá E, I, J, K, G, H, D. Hai danh sách đó khớp với cây kinh điển của sách vẽ dưới đây (hãy đối chiếu với hình):</p>
+<p>Slide liệt kê các nút trong A, B, C, F và các lá E, I, J, K, G, H, D; còn hình dạng cây chỉ có trong hình. Cây vẽ dưới đây là ví dụ của bài, dựng lại sao cho khớp cả hai danh sách đó — hãy đối chiếu với hình trên slide:</p>
 <pre><code class="language-plaintext">          A
    /      |      \\
   B       C       D
@@ -406,7 +408,7 @@ height of the tree = 4 (slide: count nodes) = 3 (book: count edges)</div>
       [5, 'Tree Terminology - 2',
         `<p class="y-chinh">🎯 Three more words: the degree of a node (how many children it has), the path from the root to a node (always unique) and the length of a path (the number of arcs on it).</p>
 <ul>
-<li><strong>Degree (order) of a node</strong>: the number of its non-empty children. In the A…K tree: A and F have degree 3, B and C degree 2, every leaf degree 0. Many books also call the largest node degree the degree of the tree (here 3; a binary tree has degree at most 2).</li>
+<li><strong>Degree (order) of a node</strong>: the number of its non-empty children. In the A…K tree drawn for slide 4: A and F have degree 3, B and C degree 2, every leaf degree 0. Many books also call the largest node degree the degree of the tree (here 3; a binary tree has degree at most 2).</li>
 <li><strong>Path</strong>: every node is reached from the root by a <em>unique</em> sequence of arcs (edges). It is unique because each node has only one parent: walking up can never branch.</li>
 <li><strong>Length of a path</strong> = the number of arcs, not the number of nodes: A → B → F → J has 4 nodes and length 3.</li>
 <li>So a node's level on the slide = (length of its path from the root) + 1.</li>
@@ -463,7 +465,7 @@ nodes = 11, arcs = 10 (= nodes - 1: every node except the root has one arc to it
 <div class="pitfall">When a question asks for the length of a path, count the <em>arcs</em>. Counting nodes gives an answer one too large — and that wrong number is usually one of the options.</div>`,
         `<p class="y-chinh">🎯 Thêm ba khái niệm: bậc của một nút (có bao nhiêu con), đường đi từ gốc tới một nút (luôn duy nhất) và độ dài của đường đi (số cạnh trên đó).</p>
 <ul>
-<li><strong>Bậc (degree, order) của một nút</strong>: số con khác rỗng của nó. Trong cây A…K: A và F bậc 3, B và C bậc 2, mọi lá bậc 0. Nhiều sách còn gọi bậc lớn nhất trong các nút là bậc của cây (ở đây là 3; cây nhị phân có bậc tối đa 2).</li>
+<li><strong>Bậc (degree, order) của một nút</strong>: số con khác rỗng của nó. Trong cây A…K vẽ cho slide 4: A và F bậc 3, B và C bậc 2, mọi lá bậc 0. Nhiều sách còn gọi bậc lớn nhất trong các nút là bậc của cây (ở đây là 3; cây nhị phân có bậc tối đa 2).</li>
 <li><strong>Đường đi (path)</strong>: mọi nút đều đi tới được từ gốc bằng một dãy cạnh (arc, edge) <em>duy nhất</em>. Duy nhất vì mỗi nút chỉ có một cha: đi ngược lên thì không bao giờ gặp ngã rẽ.</li>
 <li><strong>Độ dài đường đi (length of a path)</strong> = số cạnh, không phải số nút: A → B → F → J có 4 nút nhưng độ dài 3.</li>
 <li>Vì vậy mức (level) của một nút theo slide = (độ dài đường đi từ gốc tới nó) + 1.</li>
@@ -598,6 +600,7 @@ superclass of Object = null &nbsp;-&gt; Object is the root</div>
       [7, 'Ordered Trees',
         `<p class="y-chinh">🎯 A tree is ordered when the children of every node have a meaningful order — first, second, third… — usually drawn from left to right.</p>
 <ul>
+<li><strong>Siblings</strong> — nodes with the same parent — are drawn left to right in their order (slide).</li>
 <li>The slide's example is an ordered tree associated with a book — the chapters and sections of a book only make sense in their order.</li>
 <li>In code, an ordered tree keeps each node's children in a <code>List</code> or an array (position = order). A <code>Set</code> of children would give an unordered tree.</li>
 <li>A binary tree (slide 11) is ordered by nature: "left child" and "right child" are different roles.</li>
@@ -666,6 +669,7 @@ public class OrderedToc {
 <div class="pitfall">As ordered trees, A(B, C) and A(C, B) are two different trees even though A has the same two children. Tree questions in this course assume ordered trees unless they say otherwise — so traversal answers depend on the left-to-right order in the picture.</div>`,
         `<p class="y-chinh">🎯 Cây có thứ tự (ordered tree) là cây mà các con của mỗi nút có một thứ tự có ý nghĩa — thứ nhất, thứ hai, thứ ba… — thường vẽ từ trái sang phải.</p>
 <ul>
+<li><strong>Anh em (siblings)</strong> — các nút có cùng cha — được vẽ từ trái sang phải theo đúng thứ tự của chúng (slide).</li>
 <li>Ví dụ trên slide là một cây có thứ tự gắn với một cuốn sách — chương, mục của một cuốn sách chỉ có nghĩa khi đứng đúng thứ tự.</li>
 <li>Trong code, cây có thứ tự lưu các con của mỗi nút trong một <code>List</code> hoặc mảng (vị trí = thứ tự). Nếu lưu các con trong một <code>Set</code> (tập hợp) thì ta được cây không thứ tự (unordered tree).</li>
 <li>Cây nhị phân (binary tree, slide 11) vốn đã có thứ tự: "con trái" (left child) và "con phải" (right child) là hai vai khác nhau.</li>
@@ -737,7 +741,7 @@ public class OrderedToc {
 <ul>
 <li><strong>Algorithm</strong> (slide): <code>preOrder(v)</code>: <code>visit(v)</code>; then for each child w of v, from first to last: <code>preOrder(w)</code>.</li>
 <li><strong>Application</strong> (slide): print a structured document — the title, then part 1 with all its sections, then part 2…</li>
-<li><strong>The slide's example</strong> is the outline of "Make Money Fast!": two numbered parts (1. Motivations with 1.1 Greed and 1.2 Avidity; 2. Methods with 2.1 Stock Fraud, 2.2 Ponzi Scheme, 2.3 Bank Robbery) and References. The numbers 1–9 on the picture are the preorder visiting order.</li>
+<li><strong>The slide's example</strong> is the outline of "Make Money Fast!": the section numbers give two parts (1. Motivations with 1.1 Greed and 1.2 Avidity; 2. Methods with 2.1 Stock Fraud, 2.2 Ponzi Scheme, 2.3 Bank Robbery), plus References, which the lesson places as the last top-level entry. The numbers 1–9 on the picture are the visiting order — compare them with the table below.</li>
 </ul>
 <pre><code class="language-java">import java.util.ArrayList;
 
@@ -809,7 +813,7 @@ public class MoneyPreorder {
 <ul>
 <li><strong>Thuật toán</strong> (slide): <code>preOrder(v)</code>: thăm <code>visit(v)</code>; rồi với từng con w của v, từ con đầu tới con cuối: <code>preOrder(w)</code>.</li>
 <li><strong>Ứng dụng</strong> (slide): in một tài liệu có cấu trúc (structured document) — tiêu đề, rồi phần 1 cùng mọi mục của nó, rồi phần 2…</li>
-<li><strong>Ví dụ trên slide</strong> là dàn ý của "Make Money Fast!": hai phần có đánh số (1. Motivations gồm 1.1 Greed và 1.2 Avidity; 2. Methods gồm 2.1 Stock Fraud, 2.2 Ponzi Scheme, 2.3 Bank Robbery) và References. Các số 1–9 trên hình chính là thứ tự thăm theo preorder.</li>
+<li><strong>Ví dụ trên slide</strong> là dàn ý của "Make Money Fast!" (làm giàu nhanh): số mục cho biết có hai phần (1. Motivations gồm 1.1 Greed và 1.2 Avidity; 2. Methods gồm 2.1 Stock Fraud, 2.2 Ponzi Scheme, 2.3 Bank Robbery), cộng thêm References (tài liệu tham khảo) mà bài xếp làm mục cuối cùng ở tầng trên. Các số 1–9 trên hình là thứ tự thăm — hãy đối chiếu với bảng bên dưới.</li>
 </ul>
 <pre><code class="language-java">import java.util.ArrayList;
 
@@ -882,7 +886,7 @@ public class MoneyPreorder {
 <ul>
 <li><strong>Algorithm</strong> (slide): <code>postOrder(v)</code>: for each child w of v: <code>postOrder(w)</code>; only then <code>visit(v)</code>.</li>
 <li><strong>Application</strong> (slide): compute the space used by the files in a directory and all its subdirectories — a folder's total is known only after everything inside it has been added up.</li>
-<li><strong>The slide's example</strong>: folder cs16/ holding homeworks/ (h1c.doc 3K, h1nc.doc 2K), programs/ (DDR.java 10K, Stocks.java 25K, Robot.java 20K) and todo.txt 1K. The numbers 1–9 on the picture are the postorder visiting order.</li>
+<li><strong>The slide's example</strong>: folder cs16/ with homeworks/, programs/, todo.txt 1K and the files h1c.doc 3K, h1nc.doc 2K, DDR.java 10K, Stocks.java 25K, Robot.java 20K. The lesson groups the files by their names — the two .doc homework files in homeworks/, the three .java files in programs/ (check it against the picture); the numbers 1–9 on the picture are the postorder visiting order.</li>
 </ul>
 <pre><code class="language-plaintext">                      cs16/
           /             |               \\
@@ -963,7 +967,7 @@ public class DiskSpace {
 <ul>
 <li><strong>Thuật toán</strong> (slide): <code>postOrder(v)</code>: với từng con w của v: <code>postOrder(w)</code>; xong hết rồi mới <code>visit(v)</code>.</li>
 <li><strong>Ứng dụng</strong> (slide): tính dung lượng các tệp trong một thư mục (directory) và mọi thư mục con (subdirectory) của nó — tổng của một thư mục chỉ biết được sau khi mọi thứ bên trong đã được cộng xong.</li>
-<li><strong>Ví dụ trên slide</strong>: thư mục cs16/ chứa homeworks/ (h1c.doc 3K, h1nc.doc 2K), programs/ (DDR.java 10K, Stocks.java 25K, Robot.java 20K) và todo.txt 1K. Các số 1–9 trên hình là thứ tự thăm theo postorder.</li>
+<li><strong>Ví dụ trên slide</strong>: thư mục cs16/ với homeworks/, programs/, todo.txt 1K và các tệp h1c.doc 3K, h1nc.doc 2K, DDR.java 10K, Stocks.java 25K, Robot.java 20K. Bài xếp các tệp theo tên của chúng — hai tệp .doc bài tập về nhà vào homeworks/, ba tệp .java vào programs/ (hãy đối chiếu với hình); các số 1–9 trên hình là thứ tự thăm theo postorder.</li>
 </ul>
 <pre><code class="language-plaintext">                      cs16/
           /             |               \\
@@ -1046,7 +1050,7 @@ public class DiskSpace {
 <li><strong>The slide's algorithm</strong>: visit v; visit all the children v1, v2, … of v; then all the children of v1, then all the children of v2, …</li>
 <li><strong>Application</strong> (slide): visit a family tree by generations.</li>
 <li><strong>Why a queue</strong>: the children of v1 must wait until v2, v3… have been visited. A queue (first in, first out — chapter 2) gives exactly that: take a node from the front, put its children at the back.</li>
-<li><strong>On "Make Money Fast!"</strong> the order becomes: the title, 1. Motivations, 2. Methods, References, 1.1 Greed, 1.2 Avidity, 2.1 Stock Fraud, 2.2 Ponzi Scheme, 2.3 Bank Robbery — the numbers 1–9 on the picture. (The slide's "breadth-firth" is a typo for breadth-first.)</li>
+<li><strong>On "Make Money Fast!"</strong> the order becomes: the title, 1. Motivations, 2. Methods, References, 1.1 Greed, 1.2 Avidity, 2.1 Stock Fraud, 2.2 Ponzi Scheme, 2.3 Bank Robbery — compare with the numbers 1–9 on the picture (References stays the last top-level entry, as on slide 8). (The slide's "breadth-firth" is a typo for breadth-first.)</li>
 </ul>
 <pre><code class="language-java">import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -1108,7 +1112,7 @@ visit 9: 2.3 Bank Robbery &nbsp;queue: []</div>
 <li><strong>Thuật toán trên slide</strong>: thăm v; thăm mọi con v1, v2, … của v; rồi mọi con của v1, rồi mọi con của v2, …</li>
 <li><strong>Ứng dụng</strong> (slide): duyệt cây gia phả (family tree) theo từng thế hệ.</li>
 <li><strong>Vì sao cần hàng đợi</strong>: các con của v1 phải chờ tới khi v2, v3… được thăm xong. Hàng đợi (vào trước ra trước — FIFO, chương 2) cho đúng điều đó: lấy một nút ở đầu hàng, xếp các con của nó vào cuối hàng.</li>
-<li><strong>Trên "Make Money Fast!"</strong> thứ tự thăm thành: tiêu đề, 1. Motivations, 2. Methods, References, 1.1 Greed, 1.2 Avidity, 2.1 Stock Fraud, 2.2 Ponzi Scheme, 2.3 Bank Robbery — chính là các số 1–9 trên hình. (Chữ "breadth-firth" trên slide là lỗi gõ của breadth-first.)</li>
+<li><strong>Trên "Make Money Fast!"</strong> thứ tự thăm thành: tiêu đề, 1. Motivations, 2. Methods, References, 1.1 Greed, 1.2 Avidity, 2.1 Stock Fraud, 2.2 Ponzi Scheme, 2.3 Bank Robbery — hãy đối chiếu với các số 1–9 trên hình (References vẫn là mục cuối ở tầng trên, như ở slide 8). (Chữ "breadth-firth" trên slide là lỗi gõ của breadth-first.)</li>
 </ul>
 <pre><code class="language-java">import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -1272,7 +1276,7 @@ empty tree: no node, height 0 - still a binary tree</div>
 <li><strong>Proper binary tree</strong> (also full binary tree or 2-tree): every node other than the leaves has two children — no node has exactly one child.</li>
 <li><strong>Complete binary tree</strong> as this slide defines it: all non-terminal nodes have both children <em>and</em> all leaves are on the same level — every level is completely full. Such a tree of height h has exactly 2<sup>h</sup> − 1 nodes.</li>
 <li>Books disagree on the names: many (and the old lesson 4.2) call the slide's complete tree <strong>perfect</strong> and keep "complete" for the heap shape — every level full except possibly the last, which is filled from the left. Deck 4B-Trees2 calls that heap shape <strong>nearly complete</strong>.</li>
-<li><strong>A fact about proper trees</strong>: leaves = internal nodes + 1 (the textbook proves it in §8.2.2).</li>
+<li><strong>A fact about proper trees</strong>: in any <em>non-empty</em> proper binary tree, leaves = internal nodes + 1 (the textbook proves it in §8.2.2; the empty tree has 0 of each).</li>
 </ul>
 <pre><code class="language-java">class Node {
     int info;
@@ -1330,14 +1334,14 @@ public class TreeKinds {
 1(2(4,5),3) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;true &nbsp;&nbsp;&nbsp;false &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;true &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2<br>
 1(2(4,-),3) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;false &nbsp;&nbsp;false &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;true &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2<br>
 1(2,3(-,7)) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;false &nbsp;&nbsp;false &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;false &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2</div>
-<p>The program checks the three shapes on the lesson's four trees. "Nearly complete" is tested by numbering the nodes like a heap array (root 0, children 2i + 1 and 2i + 2): the shape has no gap exactly when every number stays below n. Each check is O(n). The last column confirms leaves = internal + 1 for the two proper trees only.</p>
+<p>The program checks the three shapes on the lesson's four trees. "Nearly complete" is tested by numbering the nodes like a heap array (root 0, children 2i + 1 and 2i + 2): the shape has no gap exactly when every number stays below n. Each check is O(n). The last two columns confirm leaves = internal + 1 for the two proper trees only.</p>
 <div class="pitfall">A classic FE trap is the name itself. By this slide, "complete" means every level is full; in the heap chapter (and in the textbook), "complete" allows a last level filled only from the left. "Full" is used for "proper" by some authors and for "every level full" by others. Take the definition given in the question; without one, use this slide's names for this deck and "nearly complete" for heaps.</div>`,
         `<p class="y-chinh">🎯 Hai hình dạng đặc biệt: trong cây nhị phân proper (full) mọi nút không phải lá đều có hai con; trong cây "complete" theo slide, thêm vào đó, mọi lá nằm trên cùng một mức.</p>
 <ul>
 <li><strong>Cây nhị phân proper</strong> (còn gọi là full binary tree hay 2-tree — cây mỗi nút trong đủ hai con): mọi nút không phải lá đều có hai con — không nút nào có đúng một con.</li>
 <li><strong>Cây nhị phân complete</strong> theo định nghĩa của slide này: mọi nút không phải lá (non-terminal) có đủ hai con <em>và</em> mọi lá nằm cùng một mức — mức nào cũng đầy kín. Cây như vậy cao h thì có đúng 2<sup>h</sup> − 1 nút.</li>
 <li>Các sách gọi tên khác nhau: nhiều sách (và bài cũ 4.2) gọi cây complete của slide là <strong>perfect</strong> (hoàn hảo), còn dành chữ "complete" cho hình dạng của đống (heap) — mọi mức đều đầy trừ có thể mức cuối, và mức cuối được lấp từ trái sang. Bộ 4B-Trees2 gọi hình dạng heap đó là <strong>nearly complete</strong> (gần đầy đủ).</li>
-<li><strong>Một tính chất của cây proper</strong>: số lá = số nút trong + 1 (sách chứng minh ở §8.2.2).</li>
+<li><strong>Một tính chất của cây proper</strong>: trong mọi cây nhị phân proper <em>khác rỗng</em>, số lá = số nút trong + 1 (sách chứng minh ở §8.2.2; cây rỗng có 0 lá và 0 nút trong).</li>
 </ul>
 <pre><code class="language-java">class Node {
     int info;
@@ -1395,7 +1399,7 @@ public class TreeKinds {
 1(2(4,5),3) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;true &nbsp;&nbsp;&nbsp;false &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;true &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2<br>
 1(2(4,-),3) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;false &nbsp;&nbsp;false &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;true &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2<br>
 1(2,3(-,7)) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;false &nbsp;&nbsp;false &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;false &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2</div>
-<p>Chương trình kiểm ba hình dạng trên bốn cây của bài. "Nearly complete" được kiểm bằng cách đánh số các nút như mảng heap (gốc số 0, hai con 2i + 1 và 2i + 2): hình dạng không có lỗ hổng khi và chỉ khi mọi số đều nhỏ hơn n. Mỗi phép kiểm là O(n). Cột cuối xác nhận số lá = số nút trong + 1 chỉ đúng với hai cây proper.</p>
+<p>Chương trình kiểm ba hình dạng trên bốn cây của bài. "Nearly complete" được kiểm bằng cách đánh số các nút như mảng heap (gốc số 0, hai con 2i + 1 và 2i + 2): hình dạng không có lỗ hổng khi và chỉ khi mọi số đều nhỏ hơn n. Mỗi phép kiểm là O(n). Hai cột cuối xác nhận số lá = số nút trong + 1 chỉ đúng với hai cây proper.</p>
 <div class="pitfall">Bẫy FE kinh điển nằm ngay ở cái tên. Theo slide này, "complete" là mọi mức đều đầy; ở chương heap (và trong sách), "complete" cho phép mức cuối chỉ đầy một phần, lấp từ trái. Còn "full" thì có tác giả dùng như "proper", có tác giả dùng như "mọi mức đều đầy". Hãy dùng định nghĩa cho trong đề; đề không cho thì dùng tên theo slide này cho bộ này và "nearly complete" cho heap.</div>`],
       [13, 'Binary Tree example - Expression Tree',
         `<p class="y-chinh">🎯 An arithmetic expression is a binary tree — operators in the internal nodes, numbers and variables on the leaves — and because +, −, ∗, / take exactly two operands, the tree is proper.</p>
@@ -2075,7 +2079,7 @@ D   E F</code></pre>
     ]),
     bi(`<h3>✅ Check yourself in 60 seconds</h3>
 <ol>
-<li>In the A…K tree of slide 4, what are the level of J and the height of the tree — by the slide, and by the textbook?</li>
+<li>In the A…K tree drawn for slide 4, what are the level of J and the height of the tree — by the slide, and by the textbook?</li>
 <li>Which traversal adds up the folder sizes of slide 9, and why not preorder?</li>
 <li>Preorder A B D E C F and inorder D B E A F C (slide 17): what is the postorder?</li>
 <li>A binary tree in which every internal node has two children — is it "complete" in the slide's sense?</li>
@@ -2085,7 +2089,7 @@ D   E F</code></pre>
 <p><strong>Next:</strong> lesson 4.B (slides 18–34: implementing binary trees, the traversal code, and the binary search tree — search, insertion, deletion by merging and by copying), then the deep-dive lessons 4.1 Trees &amp; traversals, 4.2 Binary trees: properties &amp; two implementations and 4.3 The four traversals &amp; expression trees.</p>`,
     `<h3>✅ Tự kiểm tra trong 60 giây</h3>
 <ol>
-<li>Trong cây A…K của slide 4, mức (level) của J và chiều cao (height) của cây là bao nhiêu — theo slide, và theo sách?</li>
+<li>Trong cây A…K vẽ cho slide 4, mức (level) của J và chiều cao (height) của cây là bao nhiêu — theo slide, và theo sách?</li>
 <li>Phép duyệt nào cộng dồn được dung lượng thư mục ở slide 9, vì sao không dùng tiền thứ tự (preorder)?</li>
 <li>Preorder A B D E C F và inorder (trung thứ tự) D B E A F C (slide 17): postorder (hậu thứ tự) là gì?</li>
 <li>Một cây nhị phân mà mọi nút trong đều có hai con — nó có "complete" (đầy đủ) theo nghĩa của slide không?</li>
@@ -2127,7 +2131,7 @@ const L_csd8_2 = {
 <p>h is about log₂ n for a balanced tree and up to n for a degenerate one (keys inserted in sorted order) — so "O(h)" is not automatically "O(log n)".</p>`,
     `<span class="eyebrow">Chương 4 · Bài 4.B · 4A-Trees1, slide 18–34</span>
 <h2>Cây, phần 1b — cây nhị phân bằng Java và cây nhị phân tìm kiếm</h2>
-<p class="lead">Nửa sau của bộ slide (buổi 16 và 19–20 theo syllabus, CLO4) biến các ý của bài 4.A thành code: hai cách lưu một cây nhị phân (binary tree), các phương thức duyệt (traversal), và lớp <code>BSTree</code> với tìm kiếm (search), chèn (insertion) cùng hai cách xoá (deletion). Phương thức nào cũng chạy bằng Java ngay trong bài, mỗi lần đổi con trỏ đều được lần theo từng bước, và các trường hợp đặc biệt hay làm hỏng bài PE được thử từng cái một.</p>
+<p class="lead">Nửa sau của bộ slide (buổi 16 và 19–20 theo syllabus — đề cương môn học, chuẩn đầu ra CLO4) biến các ý của bài 4.A thành code: hai cách lưu một cây nhị phân (binary tree), các phương thức duyệt (traversal), và lớp <code>BSTree</code> với tìm kiếm (search), chèn (insertion) cùng hai cách xoá (deletion). Phương thức nào cũng chạy bằng Java ngay trong bài, mỗi lần đổi con trỏ đều được lần theo từng bước, và các trường hợp đặc biệt hay làm hỏng bài PE được thử từng cái một.</p>
 <div class="callout"><strong>Vì sao nửa này quan trọng nhất cho PE (thi thực hành):</strong> câu hỏi về cây trong đề PE thường dựng trên một <code>BSTree</code> giống slide 23 — chèn các đối tượng theo một khoá (key), duyệt, đếm, tìm, xoá bằng sao chép (copying) hoặc bằng hợp nhất (merging). Slide 20–21, 24, 26 và 29–31 là phần code phải gõ lại được mà không nhìn; FE (thi cuối kỳ) hỏi đúng những điều đó trên giấy ("xoá 30 bằng copying thì ra cây nào?").</div>
 <h3>Slide 18–34 trong một bảng</h3>
 <table>
@@ -2325,7 +2329,7 @@ version 2: 8(3(-,6),10)<br>
 <li><strong>Phiên bản 1</strong> (lớp thứ nhất trên slide): <code>Node(int x)</code> gán <code>info = x</code> và <code>left = right = null</code>; các liên kết được gán sau, mỗi liên kết một lệnh.</li>
 <li><strong>Phiên bản 2</strong> (lớp thứ hai trên slide): hàm khởi tạo (constructor) đầy đủ <code>Node(int x, Node p, Node q)</code> gán cả ba trường; constructor ngắn <code>Node(int x)</code> gọi nó bằng <code>this(x, null, null)</code> — gọi dây chuyền constructor (constructor chaining), nên đoạn khởi tạo chỉ viết một lần.</li>
 <li>Các nhãn trên hình — key (data) (khoá / dữ liệu), left child (con trái), right child (con phải) — là tên ba trường; dòng "Different types of implementations of Binary tree node" trên slide nghĩa là "các kiểu cài đặt khác nhau của nút cây nhị phân".</li>
-<li>Chữ của lớp thứ hai trên slide còn có một dòng <code>Node(int x) { }</code> bên cạnh bản <code>this(x,null,null)</code>. Trên hình dòng đó là gì cũng vậy, một lớp không thể khai báo hai constructor có cùng danh sách tham số — javac dừng với lỗi "constructor Node(int) is already defined". Chỉ giữ bản <code>this(x,null,null)</code>.</li>
+<li>Chữ của lớp thứ hai trên slide còn có một dòng <code>Node(int x) { }</code> bên cạnh bản <code>this(x,null,null)</code>. Trên hình dòng đó là gì cũng vậy, một lớp không thể khai báo hai constructor có cùng danh sách tham số — javac dừng với lỗi "constructor Node(int) is already defined" (constructor Node(int) đã được khai báo rồi). Chỉ giữ bản <code>this(x,null,null)</code>.</li>
 </ul>
 <pre><code class="language-java">class Node1 {                                        // phiên bản 1 của slide (đổi tên: một file không thể có hai lớp tên Node)
     int info;
@@ -2460,7 +2464,7 @@ dequeue H &nbsp;&nbsp;visit H</div>
 </table>
 <p>The visited column reads F B G A D I C E H — the level order printed on slide 16. <strong>Big-O:</strong> each node is enqueued and dequeued exactly once → O(n); the queue never holds much more than one level.</p>
 <p>Without a home-made queue, <code>java.util.ArrayDeque&lt;Node&gt;</code> does the same job with <code>offer</code>, <code>poll</code> and <code>isEmpty</code> — and no cast.</p>
-<div class="pitfall">Drop the <code>if (p.left != null)</code> tests and <code>null</code> enters the queue; a later <code>dequeue</code> returns <code>null</code> and <code>p.left</code> throws a <code>NullPointerException</code> (an <code>ArrayDeque</code> refuses <code>null</code> straight away with the same exception).</div>`,
+<div class="pitfall">Drop the <code>if (p.left != null)</code> tests and <code>null</code> enters the queue; a later <code>dequeue</code> returns <code>null</code> and <code>p.left</code> throws a <code>NullPointerException</code> (an <code>ArrayDeque</code> refuses <code>null</code> straight away with the same exception). And with chapter 2's own <code>MyQueue</code>, whose <code>dequeue()</code> is declared <code>throws Exception</code>, the slide's <code>breadth()</code> does not compile as printed — javac: "unreported exception Exception; must be caught or declared to be thrown" — so add <code>throws Exception</code> to <code>breadth()</code> or catch it (its linked version also brings its own class <code>Node</code>: rename one of the two). The queue in the program above does not throw.</div>`,
         `<p class="y-chinh">🎯 <code>breadth()</code> trên slide chính là thuật toán dùng hàng đợi (queue) của slide 10 viết bằng Java: đưa gốc vào hàng đợi; chừng nào hàng đợi chưa rỗng thì lấy một nút ra, đưa các con khác null của nó vào, rồi thăm nó.</p>
 <ul>
 <li><code>MyQueue</code> là lớp hàng đợi của chương 2; nó chứa các <code>Object</code>, nên kết quả của <code>dequeue()</code> (lấy ra) phải ép kiểu (cast) <code>(Node)</code>.</li>
@@ -2546,7 +2550,7 @@ dequeue H &nbsp;&nbsp;visit H</div>
 </table>
 <p>Cột "được thăm" đọc ra F B G A D I C E H — đúng thứ tự theo mức (level order) in trên slide 16. <strong>Big-O:</strong> mỗi nút được xếp vào và lấy ra đúng một lần → O(n); hàng đợi không bao giờ chứa nhiều hơn khoảng một mức.</p>
 <p>Không muốn tự viết hàng đợi thì <code>java.util.ArrayDeque&lt;Node&gt;</code> làm y hệt với <code>offer</code>, <code>poll</code> và <code>isEmpty</code> — và không cần ép kiểu.</p>
-<div class="pitfall">Bỏ các lệnh kiểm <code>if (p.left != null)</code> thì <code>null</code> lọt vào hàng đợi; một lần <code>dequeue</code> sau đó trả về <code>null</code> và <code>p.left</code> ném <code>NullPointerException</code> (còn <code>ArrayDeque</code> từ chối <code>null</code> ngay lập tức với cùng ngoại lệ đó).</div>`],
+<div class="pitfall">Bỏ các lệnh kiểm <code>if (p.left != null)</code> thì <code>null</code> lọt vào hàng đợi; một lần <code>dequeue</code> sau đó trả về <code>null</code> và <code>p.left</code> ném <code>NullPointerException</code> (còn <code>ArrayDeque</code> từ chối <code>null</code> ngay lập tức với cùng ngoại lệ đó). Thêm nữa, với <code>MyQueue</code> gốc của chương 2 — có <code>dequeue()</code> khai báo <code>throws Exception</code> (ném ngoại lệ kiểm tra — checked exception) — thì <code>breadth()</code> của slide không biên dịch được nguyên văn: javac báo "unreported exception Exception; must be caught or declared to be thrown" (ngoại lệ chưa được bắt hay khai báo), nên phải thêm <code>throws Exception</code> cho <code>breadth()</code> hoặc bắt nó bằng try–catch (bản liên kết của chương 2 còn có lớp <code>Node</code> riêng: phải đổi tên một trong hai lớp). Hàng đợi trong chương trình ở trên không ném ngoại lệ.</div>`],
       [21, 'Depth-First Traversal code',
         `<p class="y-chinh">🎯 The three recursive methods are the NLR / LNR / LRN rules of slide 15 in Java: the same three lines — visit, go left, go right — in three orders, after the stop rule <code>if (p == null) return;</code>.</p>
 <ul>
@@ -3112,7 +3116,7 @@ search 70: 10 go right -&gt; 20 go right -&gt; 30 go right -&gt; 40 go right -&g
 </table>
 <p><strong>Big-O:</strong> mỗi mức một phép so sánh → tối đa h + 1 lời gọi, O(h). Cây cân bằng (balanced) có h ≈ log₂ n (3 phép so sánh cho 7 khoá, khoảng 20 cho một triệu khoá); cây "que" dựng từ khoá đã sắp xếp có h = n (dòng cuối của đầu ra — output: 7 phép so sánh cho 7 khoá) → O(n).</p>
 <p>Cùng phép tìm đó không dùng đệ quy: <code>while (p != null &amp;&amp; p.info != x) p = x &lt; p.info ? p.left : p.right;</code> — không tốn ngăn xếp lời gọi nào.</p>
-<div class="pitfall">"Tìm kiếm trên BST n nút tốn O(log n) trong trường hợp xấu nhất" — SAI. Trường hợp xấu nhất là O(n), trên cây suy biến (degenerate); O(log n) cần cây cân bằng, và đó chính là thứ cây AVL (bộ 4B-Trees2) bảo đảm.</div>`],
+<div class="pitfall">"Tìm kiếm trên cây nhị phân tìm kiếm (BST) n nút tốn O(log n) trong trường hợp xấu nhất" — SAI. Trường hợp xấu nhất là O(n), trên cây suy biến (degenerate); O(log n) cần cây cân bằng, và đó chính là thứ cây AVL (bộ 4B-Trees2) bảo đảm.</div>`],
       [25, 'Insertion - 1',
         `<p class="y-chinh">🎯 To insert x, search for x: the place where the search falls off the tree (an empty link) is exactly where x belongs — so a new key always becomes a leaf.</p>
 <p class="ghi-chu">This slide is a figure ("Inserting nodes into binary search trees"); its text is only that caption, so the walk-through below uses the lesson's own example — compare it with the pictures on the slide.</p>
@@ -3191,7 +3195,7 @@ tree = 50(30(20,40(35,-)),70(60,80)) &nbsp;&nbsp;height = 4</div>
 <ul>
 <li>Bắt đầu từ gốc; nhỏ hơn → sang trái, lớn hơn → sang phải, y như khi tìm kiếm.</li>
 <li>Gặp liên kết kế tiếp rỗng thì treo nút mới vào đó. Không nút nào phía trên bị dời chỗ.</li>
-<li>Khoá bằng nhau → khoá đã có trong cây; BST giữ các khoá khác nhau (slide 22), nên không có gì để chèn.</li>
+<li>Khoá bằng nhau → khoá đã có trong cây; cây nhị phân tìm kiếm (BST) giữ các khoá khác nhau (slide 22), nên không có gì để chèn.</li>
 </ul>
 <pre><code class="language-java">class Node {
     int info;
@@ -3257,7 +3261,7 @@ tree = 50(30(20,40(35,-)),70(60,80)) &nbsp;&nbsp;height = 4</div>
    35</code></pre>
 <p>Thứ tự chèn quan trọng: cũng tám khoá đó mà chèn theo thứ tự 20, 30, 35, 40, 50, 60, 70, 80 thì ra cây "que" cao 8 thay vì cây cao 4 như trên.</p>
 <p><strong>Big-O:</strong> O(h) để tìm chỗ + O(1) để nối nút → O(h): O(log n) trên cây cân bằng, O(n) trên cây "que".</p>
-<div class="pitfall">"Chèn 35 — nó nằm ở đâu?" Hãy đi theo các phép so sánh từ gốc (50 T, 30 P, 40 T); đừng đi tìm "một chỗ trống giữa 30 và 40". Khoá mới không bao giờ chen vào giữa các nút đã có: nó luôn thành một lá.</div>`],
+<div class="pitfall">"Chèn 35 — nó nằm ở đâu?" Hãy đi theo các phép so sánh từ gốc (50 T, 30 P, 40 T — T = trái, P = phải); đừng đi tìm "một chỗ trống giữa 30 và 40". Khoá mới không bao giờ chen vào giữa các nút đã có: nó luôn thành một lá.</div>`],
       [26, 'Insertion - 2',
         `<p class="y-chinh">🎯 The slide's iterative <code>insert</code>: pointer <code>p</code> walks down as in search while <code>f</code> follows one step behind; when <code>p</code> becomes <code>null</code>, <code>f</code> is the parent of the new node.</p>
 <ul>
@@ -3344,7 +3348,7 @@ sorted input 10 20 30 40 50 -&gt; 10(-,20(-,30(-,40(-,50))))</div>
 <tr><td>after the loop</td><td>null</td><td>40</td><td>35 &lt; 40</td><td><code>f.left = new Node(35)</code></td></tr>
 </tbody>
 </table>
-<p>Inserting 40 again stops at the second iteration with the slide's message; inserting 10, 20, 30, 40, 50 in increasing order builds the stick 10(–, 20(–, 30(–, 40(–, 50)))), every node a right child. <strong>Big-O:</strong> O(h) per insertion, so building a tree from n sorted keys costs 1 + 2 + … + n = O(n²).</p>
+<p>Inserting 40 again stops at the third iteration with the slide's message; inserting 10, 20, 30, 40, 50 in increasing order builds the stick 10(–, 20(–, 30(–, 40(–, 50)))), every node a right child. <strong>Big-O:</strong> O(h) per insertion, so building a tree from n sorted keys costs 1 + 2 + … + n = O(n²).</p>
 <p class="dap-an">✅ <strong>Syllabus question HCM_CQ6.1 — what happens if you insert an ordered array into a BST?</strong> The tree degenerates into a linked list (the stick above): height n, and search, insertion and deletion fall to O(n). Balanced trees such as AVL (deck 4B-Trees2) exist to prevent exactly this.</p>
 <div class="pitfall">Writing <code>p = new Node(x);</code> after the loop compiles, yet inserts nothing: <code>p</code> is only a local variable, and no link of the tree points to the new node. The link must be set on the parent — that is the whole reason <code>f</code> exists.</div>`,
         `<p class="y-chinh">🎯 Hàm <code>insert</code> dùng vòng lặp của slide: con trỏ <code>p</code> đi xuống như khi tìm kiếm, còn <code>f</code> đi theo sau đúng một bước; khi <code>p</code> thành <code>null</code> thì <code>f</code> chính là cha của nút mới.</p>
@@ -3432,8 +3436,8 @@ sorted input 10 20 30 40 50 -&gt; 10(-,20(-,30(-,40(-,50))))</div>
 <tr><td>sau vòng lặp</td><td>null</td><td>40</td><td>35 &lt; 40</td><td><code>f.left = new Node(35)</code></td></tr>
 </tbody>
 </table>
-<p>Chèn lại 40 thì dừng ở vòng thứ hai với thông báo của slide; chèn 10, 20, 30, 40, 50 theo thứ tự tăng dần thì ra cây "que" 10(–, 20(–, 30(–, 40(–, 50)))), nút nào cũng là con phải. <strong>Big-O:</strong> mỗi lần chèn O(h), nên dựng cây từ n khoá đã sắp xếp tốn 1 + 2 + … + n = O(n²).</p>
-<p class="dap-an">✅ <strong>Câu hỏi HCM_CQ6.1 của syllabus (đề cương môn học) — chèn một mảng đã sắp xếp vào BST thì sao?</strong> Cây suy biến (degenerate) thành một danh sách liên kết (cây "que" ở trên): cao n, và tìm kiếm, chèn, xoá đều tụt xuống O(n). Các cây cân bằng như AVL (bộ 4B-Trees2) sinh ra chính là để chặn chuyện này.</p>
+<p>Chèn lại 40 thì dừng ở vòng thứ ba với thông báo của slide; chèn 10, 20, 30, 40, 50 theo thứ tự tăng dần thì ra cây "que" 10(–, 20(–, 30(–, 40(–, 50)))), nút nào cũng là con phải. <strong>Big-O:</strong> mỗi lần chèn O(h), nên dựng cây từ n khoá đã sắp xếp tốn 1 + 2 + … + n = O(n²).</p>
+<p class="dap-an">✅ <strong>Câu hỏi HCM_CQ6.1 của syllabus (đề cương môn học) — chèn một mảng đã sắp xếp vào cây nhị phân tìm kiếm (BST) thì sao?</strong> Cây suy biến (degenerate) thành một danh sách liên kết (cây "que" ở trên): cao n, và tìm kiếm, chèn, xoá đều tụt xuống O(n). Các cây cân bằng như AVL (bộ 4B-Trees2) sinh ra chính là để chặn chuyện này.</p>
 <div class="pitfall">Viết <code>p = new Node(x);</code> sau vòng lặp vẫn biên dịch được nhưng không chèn gì cả: <code>p</code> chỉ là biến cục bộ, không liên kết nào của cây trỏ tới nút mới. Phải gán liên kết ở nút cha — đó chính là lý do tồn tại của <code>f</code>.</div>`],
       [27, 'Deletion - 1',
         `<p class="y-chinh">🎯 Deleting a key from a BST has three cases, decided by how many children its node has: none (a leaf), one, or two.</p>
@@ -3497,7 +3501,7 @@ delete 99: not in the tree -&gt; nothing to do</div>
 <p><strong>Big-O:</strong> finding p and f is O(h); cases 1 and 2 then take O(1); case 3 adds one more walk down, O(h) again — so every deletion is O(h).</p>
 <p class="meo">🧠 <strong>Remember:</strong> count the children first — 0, 1 or 2 — and the case, and the code, follow.</p>
 <div class="pitfall">Keep the parent. Once you have walked down with <code>p</code> alone there is no way back up (the nodes have no parent link), so you can no longer change the link that points to <code>p</code>.</div>`,
-        `<p class="y-chinh">🎯 Xoá một khoá khỏi BST có ba trường hợp, quyết định bởi số con của nút chứa khoá: không con (lá), một con, hoặc hai con.</p>
+        `<p class="y-chinh">🎯 Xoá một khoá khỏi cây nhị phân tìm kiếm (BST) có ba trường hợp, quyết định bởi số con của nút chứa khoá: không con (lá), một con, hoặc hai con.</p>
 <ol>
 <li><strong>Lá (leaf)</strong> — cắt nó đi: liên kết của cha thành <code>null</code>.</li>
 <li><strong>Một con</strong> — cha nhận luôn đứa con đó, kèm cả cây con (subtree) của đứa con.</li>
@@ -3637,7 +3641,7 @@ delete 10 (root, one child): 20(15,25)</div>
 <li>Cả hai trường hợp gói trong một dòng: <code>child = (p.left != null) ? p.left : p.right</code> — bằng <code>null</code> khi p là lá.</li>
 <li>Rồi nối cha với <code>child</code> ở đúng phía mà <code>p</code> từng đứng: <code>if (f.left == p) f.left = child; else f.right = child;</code>.</li>
 <li>Xoá gốc (<code>f == null</code>) thì chỉ việc cho <code>child</code> làm gốc mới.</li>
-<li>Vì sao luật BST vẫn đúng: cây con của đứa con vốn đã nằm đúng phía của <code>f</code>, và nó vẫn nằm ở đó.</li>
+<li>Vì sao luật của cây nhị phân tìm kiếm (BST) vẫn đúng: cây con của đứa con vốn đã nằm đúng phía của <code>f</code>, và nó vẫn nằm ở đó.</li>
 </ul>
 <pre><code class="language-java">class Node {
     int info;
@@ -3866,7 +3870,7 @@ inorder after: 10 20 25 40 50 60 70 80</div>
   20    40 60   80                 10   25  60   80
  /  \\                                     \\
 10   25                                    40</code></pre>
-<p>Duyệt trung thứ tự (inorder) sau khi xoá vẫn tăng dần (10 20 25 40 50 60 70 80): luật BST được giữ. <strong>Big-O:</strong> tìm p tốn O(h), tìm nút phải nhất lại O(h), nối lại O(1) → O(h).</p>
+<p>Duyệt trung thứ tự (inorder) sau khi xoá vẫn tăng dần (10 20 25 40 50 60 70 80): luật của cây nhị phân tìm kiếm (BST) được giữ. <strong>Big-O:</strong> tìm p tốn O(h), tìm nút phải nhất lại O(h), nối lại O(1) → O(h).</p>
 <div class="pitfall">"Nút phải nhất của cây con trái" nghĩa là sang <em>trái</em> một bước, rồi sang <em>phải</em> hết mức (ở đây 30 → 20 → 25). Không phải "con phải của con trái": đường đi có thể nhiều bước — hoặc không bước nào, khi con trái không có con phải và chính nó là nút phải nhất.</div>`],
       [30, 'Deletion by Merging - 2',
         `<p class="y-chinh">🎯 Merging keeps the BST valid but not its shape: after deleting by merging, the height of the tree can be (a) extended or (b) reduced.</p>
@@ -3956,7 +3960,7 @@ public class MergeHeight {
 <p>A mirror version is equally valid: hang the <em>left</em> subtree below the leftmost (smallest) node of the right subtree, and let the parent adopt <code>p.right</code>. Use the version the exam asks for; the slide's is "rightmost node of the left subtree".</p>
 <p class="dap-an">✅ <strong>Does deleting by merging always make a tree shorter?</strong> No — case (a) shows it can make the tree one level taller (3 → 4), even though a node was removed.</p>
 <div class="pitfall">When a question asks for "the height after deleting X by merging", redraw the tree. The quick reflex "one node fewer, so the height is the same or smaller" is exactly wrong here.</div>`,
-        `<p class="y-chinh">🎯 Hợp nhất (merging) giữ cây vẫn là BST nhưng không giữ hình dạng: sau khi xoá bằng hợp nhất, chiều cao của cây có thể (a) tăng lên hoặc (b) giảm xuống.</p>
+        `<p class="y-chinh">🎯 Hợp nhất (merging) giữ cây vẫn là cây nhị phân tìm kiếm (BST) nhưng không giữ hình dạng: sau khi xoá bằng hợp nhất, chiều cao của cây có thể (a) tăng lên hoặc (b) giảm xuống.</p>
 <p class="ghi-chu">Hai trường hợp trên slide là hình; chương trình tái hiện cả hai hiệu ứng trên các cây của bài.</p>
 <ul>
 <li><strong>(a) Tăng (extended)</strong>: cả cây con phải bị đẩy xuống dưới nút phải nhất của cây con trái, nút này có thể đã nằm sâu sẵn — nên chiều cao có thể tăng.</li>
@@ -4412,7 +4416,7 @@ buggy &nbsp;del 30 : 50(20(20(10,-),10),70) &nbsp;&nbsp;40 is lost, 20 appears t
 <tr><td>Cài đặt cây nhị phân</td><td>mảng có trường chỉ số (kích thước cố định) hoặc nút liên kết</td><td>O(1) mỗi nút</td></tr>
 <tr><td>Cây nhị phân tìm kiếm (BST)</td><td>trái &lt; nút &lt; phải cho cả cây con; duyệt trung thứ tự (inorder) ra dãy tăng</td><td>tìm kiếm O(h)</td></tr>
 <tr><td>Chèn (insertion)</td><td>tìm liên kết rỗng; khoá mới thành lá; khoá trùng bị từ chối</td><td>O(h)</td></tr>
-<tr><td>Xoá (deletion)</td><td>lá hoặc một con: nối lại; hai con: merging hoặc copying</td><td>O(h)</td></tr>
+<tr><td>Xoá (deletion)</td><td>lá hoặc một con: nối lại; hai con: hợp nhất (merging) hoặc sao chép (copying)</td><td>O(h)</td></tr>
 </tbody>
 </table>
 <p>h là chiều cao: khoảng log₂ n khi cây cân bằng, tới n khi cây suy biến — vấn đề mà bộ 4B-Trees2 giải quyết.</p>
@@ -4430,7 +4434,7 @@ buggy &nbsp;del 30 : 50(20(20(10,-),10),70) &nbsp;&nbsp;40 is lost, 20 appears t
 <li><strong>§11.1 Binary Search Trees (p.460)</strong> — §11.1.1 Searching Within a Binary Search Tree (p.461), §11.1.2 Insertions and Deletions (p.463): slides 22–32.</li>
 </ul>
 <p>Expect two differences: the book counts depth and height from 0 (slide 4), and its array-based representation numbers the positions level by level (root 0, children 2i + 1 and 2i + 2) instead of storing child indexes as slide 18 does. The book's classes are generic, with positions; the slides use plain <code>int</code> keys — the same algorithms in simpler packaging.</p>`,
-        `<p class="y-chinh">🎯 Chương 8 (Trees) và mục 11.1 (Binary Search Trees) của sách giáo trình là phiên bản sách của bộ slide này — đọc sau khi học slide, để ý các quy ước khác của sách.</p>
+        `<p class="y-chinh">🎯 Chương 8 (Trees — cây) và mục 11.1 (Binary Search Trees — cây nhị phân tìm kiếm) của sách giáo trình là phiên bản sách của bộ slide này — đọc sau khi học slide, để ý các quy ước khác của sách.</p>
 <ul>
 <li><strong>§8.1 General Trees (tr.308)</strong> — cây tổng quát: §8.1.1 định nghĩa và tính chất (tr.309), §8.1.2 kiểu dữ liệu trừu tượng cây — tree ADT (tr.312): ứng với slide 3–7.</li>
 <li><strong>§8.2 Binary Trees (tr.317)</strong> — cây nhị phân: §8.2.1 ADT cây nhị phân (tr.319), §8.2.2 tính chất của cây nhị phân (tr.321): slide 11–12.</li>
@@ -4452,7 +4456,7 @@ buggy &nbsp;del 30 : 50(20(20(10,-),10),70) &nbsp;&nbsp;40 is lost, 20 appears t
 <p><strong>Next:</strong> the deep-dive lessons 4.4 Binary Search Trees and 4.5 BST insertion &amp; the three deletion cases below; then deck 4B-Trees2 — balancing, rotations, AVL trees and heaps, with the old lessons 4.6 AVL trees: the four rotations and 4.7 Building a heap: sift-up, sift-down, Floyd — and finally lesson 4.8 (practice, glossary, summary) before the chapter quiz.</p>`,
     `<h3>✅ Tự kiểm tra trong 60 giây</h3>
 <ol>
-<li>Chèn 40, 20, 60, 10, 30, 50, 70, 25 vào một BST rỗng. 25 nằm ở đâu?</li>
+<li>Chèn 40, 20, 60, 10, 30, 50, 70, 25 vào một cây nhị phân tìm kiếm (BST) rỗng. 25 nằm ở đâu?</li>
 <li>Trên cây đó, xoá 40 bằng sao chép (copying, dùng khoá liền trước — predecessor). Cây bây giờ ra sao?</li>
 <li>Bắt đầu lại từ cây của câu 1, xoá 40 bằng hợp nhất (merging). Gốc mới là nút nào?</li>
 <li>Vì sao hàm <code>insert</code> của slide phải giữ thêm con trỏ <code>f</code>?</li>
@@ -5698,7 +5702,7 @@ B = 44(17(-,32),78(50(48,62(54,-)),88))<br>
 C = 50(30(20(10,-),-),70(-,80(-,90)))<br>
 &nbsp;&nbsp;&nbsp;&nbsp;10:0 20:-1 30:-2 50:0 70:+2 80:+1 90:0 &nbsp;-&gt; not AVL<br>
 node 78 of B: h(R)-h(L) = -2 (slide), h(L)-h(R) = +2 (other books)</div>
-<p>Tree A is an AVL tree. Tree B is A plus the key 54 inserted as in a plain BST: 44 (+2) and 78 (−2) break the rule — slide 12 repairs exactly this tree. Tree C has a perfect root (0) and is still not AVL: 30 is −2 and 70 is +2.</p>
+<p>Tree A is an AVL tree. Tree B is A plus the key 54 inserted as in a plain BST: 44 (+2) and 78 (−2) break the rule — the key-54 walkthrough at slide 12 below repairs exactly this tree. Tree C has a perfect root (0) and is still not AVL: 30 is −2 and 70 is +2.</p>
 <p class="meo">🧠 <strong>Remember:</strong> on the slides bf = right − left, so "+" leans right and "−" leans left.</p>
 <div class="pitfall">The sign convention differs between sources: the slide uses right − left, while lesson 4.6 of this course (and many other books) uses left − right. It is the same tree with the sign flipped — 78 is −2 here, +2 there. In the exam use the formula the question gives, and read "±2" as "unbalanced".</div>`,
         `<p class="y-chinh">🎯 Cây AVL (đặt theo tên Adelson-Velskii và Landis) là cây nhị phân tìm kiếm (BST) cân bằng theo chiều cao (height-balanced) ở mọi nút: hệ số cân bằng (balance factor) của mỗi nút chỉ được là −1, 0 hoặc +1.</p>
@@ -5765,7 +5769,7 @@ B = 44(17(-,32),78(50(48,62(54,-)),88))<br>
 C = 50(30(20(10,-),-),70(-,80(-,90)))<br>
 &nbsp;&nbsp;&nbsp;&nbsp;10:0 20:-1 30:-2 50:0 70:+2 80:+1 90:0 &nbsp;-&gt; not AVL<br>
 node 78 of B: h(R)-h(L) = -2 (slide), h(L)-h(R) = +2 (other books)</div>
-<p>Cây A là cây AVL. Cây B là A chèn thêm khoá 54 theo kiểu BST thường: 44 (+2) và 78 (−2) phá luật — slide 12 sửa đúng cây này. Cây C có gốc "hoàn hảo" (0) mà vẫn không phải AVL: 30 là −2 và 70 là +2.</p>
+<p>Cây A là cây AVL. Cây B là A chèn thêm khoá 54 theo kiểu BST thường: 44 (+2) và 78 (−2) phá luật — phần giảng slide 12 bên dưới (ví dụ khoá 54) sửa đúng cây này. Cây C có gốc "hoàn hảo" (0) mà vẫn không phải AVL: 30 là −2 và 70 là +2.</p>
 <p class="meo">🧠 <strong>Mẹo nhớ:</strong> trên slide bf = phải − trái, nên dấu "+" là nghiêng phải, dấu "−" là nghiêng trái.</p>
 <div class="pitfall">Quy ước dấu khác nhau giữa các tài liệu: slide dùng phải − trái, còn bài 4.6 của khoá này (và nhiều sách khác) dùng trái − phải. Cùng một cây, chỉ đổi dấu — 78 ở đây là −2, bên kia là +2. Đi thi hãy dùng đúng công thức đề cho, và hiểu "±2" là "mất cân bằng".</div>`],
       [11, 'Insertion algorithm in an AVL Tree',
@@ -5861,7 +5865,7 @@ insert 35: 20(5(3,10),28(25,35(30,40)))<br>
 </table>
 <p>Why at most one rotation (the slide's last point): after the rotation the subtree has exactly the height it had <em>before</em> the insertion, so no ancestor of p sees any change. The run confirms it — never more than one rotation per insert.</p>
 <p><strong>Big-O:</strong> O(log n) down + O(log n) back up + O(1) for the rotation = O(log n) per insertion.</p>
-<div class="pitfall">p is the <em>first</em> unbalanced node on the way up from the new node — the lowest one, not the root. On slide 12 both 78 and 44 reach ±2, and only 78 is rotated.</div>`,
+<div class="pitfall">p is the <em>first</em> unbalanced node on the way up from the new node — the lowest one, not the root. In the key-54 example at slide 12 below, both 78 and 44 reach ±2, and only 78 is rotated.</div>`,
         `<p class="y-chinh">🎯 Chèn như cây nhị phân tìm kiếm (BST), đi ngược lên tính lại hệ số cân bằng (balance factor), và tại nút p đầu tiên chạm ±2 thì xoay một lần, đơn hoặc kép — rồi dừng.</p>
 <ol>
 <li>Chèn nút như trong BST.</li>
@@ -5954,9 +5958,9 @@ insert 35: 20(5(3,10),28(25,35(30,40)))<br>
 </table>
 <p>Vì sao nhiều nhất một lần xoay (ý cuối của slide): sau khi xoay, cây con có đúng chiều cao nó có <em>trước</em> khi chèn, nên không tổ tiên (ancestor) nào của p thấy thay đổi. Lần chạy xác nhận điều đó — mỗi lần chèn không bao giờ quá một lần xoay.</p>
 <p><strong>Big-O:</strong> O(log n) đi xuống + O(log n) quay lên + O(1) cho phép xoay = O(log n) mỗi lần chèn.</p>
-<div class="pitfall">p là nút mất cân bằng <em>đầu tiên</em> tính từ nút mới đi lên — nút thấp nhất, không phải gốc. Ở slide 12 cả 78 lẫn 44 đều chạm ±2, nhưng chỉ 78 được xoay.</div>`],
+<div class="pitfall">p là nút mất cân bằng <em>đầu tiên</em> tính từ nút mới đi lên — nút thấp nhất, không phải gốc. Trong ví dụ khoá 54 ở slide 12 bên dưới, cả 78 lẫn 44 đều chạm ±2, nhưng chỉ 78 được xoay.</div>`],
       [12, 'Insertion in an AVL Tree demo',
-        `<p class="y-chinh">🎯 Inserting 54 makes the first unbalanced node from the bottom, 78, lean left (−2) while its son 50 leans right (+1) — a zig-zag, fixed by one double rotation that lifts 62.</p>
+        `<p class="y-chinh">🎯 In the textbook's key-54 example, inserting 54 makes the first unbalanced node from the bottom, 78, lean left (−2) while its son 50 leans right (+1) — a zig-zag, fixed by one double rotation that lifts 62.</p>
 <p class="ghi-chu">The slide is a figure titled "Balancing a tree after insertion the key 54". The same key 54 is the worked insertion example of Goodrich §11.3, the course textbook; that example is rebuilt below — compare it with the picture on the slide.</p>
 <pre><code class="language-java">AVLTree t = new AVLTree(), u = new AVLTree();
 for (int x : new int[] {44, 17, 78, 32, 50, 88, 48, 62}) { t.insert(x); u.insert(x); }   // no rotation needed
@@ -6003,7 +6007,7 @@ after rotateLeft(50), rotateRight(78)
 <li>The subtree is back to height 3, as before the insertion, so 44 returns to +1 on its own — no second rotation.</li>
 </ol>
 <p class="meo">🧠 <strong>Remember:</strong> in a double rotation the grandchild (here 62) always ends on top, with the other two as its children.</p>`,
-        `<p class="y-chinh">🎯 Chèn 54 làm nút mất cân bằng đầu tiên tính từ dưới lên, 78, lệch trái (−2) trong khi con 50 của nó lệch phải (+1) — hình zic-zắc, sửa bằng một lần xoay kép (double rotation) đưa 62 lên.</p>
+        `<p class="y-chinh">🎯 Trong ví dụ khoá 54 của giáo trình, chèn 54 làm nút mất cân bằng đầu tiên tính từ dưới lên, 78, lệch trái (−2) trong khi con 50 của nó lệch phải (+1) — hình zic-zắc, sửa bằng một lần xoay kép (double rotation) đưa 62 lên.</p>
 <p class="ghi-chu">Slide là một hình có tiêu đề "Balancing a tree after insertion the key 54" (cân bằng cây sau khi chèn khoá 54). Khoá 54 cũng chính là ví dụ chèn có lời giải trong Goodrich §11.3, giáo trình của môn; ví dụ đó được dựng lại dưới đây — hãy đối chiếu với hình trên slide.</p>
 <pre><code class="language-java">AVLTree t = new AVLTree(), u = new AVLTree();
 for (int x : new int[] {44, 17, 78, 32, 50, 88, 48, 62}) { t.insert(x); u.insert(x); }   // không cần xoay lần nào
@@ -6024,7 +6028,7 @@ BST insert 54: &nbsp;&nbsp;44(17(-,32),78(50(48,62(54,-)),88))<br>
 AVL insert 54: &nbsp;&nbsp;44(17(-,32),62(50(48,54),78(-,88)))<br>
 &nbsp;&nbsp;&nbsp;p=78(-2) q=50(+1) signs differ: rotateLeft(50), rotateRight(78)<br>
 &nbsp;&nbsp;&nbsp;bf 17:+1 32:0 44:+1 48:0 50:0 54:0 62:0 78:+1 88:0</div>
-<pre><code class="language-plaintext">chèn 54 kiểu BST, trước khi sửa
+<pre><code class="language-plaintext">chèn 54 kiểu cây nhị phân tìm kiếm (BST), trước khi sửa
              44[+2]
            /        \\
      17[+1]          78[-2]  &lt;- p
@@ -6105,7 +6109,7 @@ after delete 12: rotateRight(11), then rotateRight(8)
 <li>Deleting 5 (two children): its predecessor 4 is copied up, and removing 4 below leaves 3 at −2 → one more rotation.</li>
 </ul>
 <p><strong>Big-O:</strong> O(log n) levels, at most one single or double rotation per level → O(log n) per deletion, even when it rotates all the way up.</p>
-<div class="pitfall">In deletion the son q may have balance factor 0 (both of its subtrees equally tall), a case the slide's "same sign / different signs" rule does not mention. Treat 0 like "same sign": single rotation. A double rotation there can leave the tree unbalanced. Slide 14 has exactly this case.</div>`,
+<div class="pitfall">In deletion the son q may have balance factor 0 (both of its subtrees equally tall), a case the slide's "same sign / different signs" rule does not mention. Treat 0 like "same sign": single rotation. A double rotation there can leave the tree unbalanced. The key-32 example at slide 14 below has exactly this case.</div>`,
         `<p class="y-chinh">🎯 Xoá đi theo đúng các bước của chèn, chỉ khác một điểm: phép xoay có thể làm cây con thấp đi một mức, nên phải kiểm tiếp lên trên — đôi khi xoay thêm, tới tận gốc.</p>
 <ol>
 <li>Xoá nút như trong cây nhị phân tìm kiếm (BST); nút có hai con thì nhận khoá của nút liền trước (predecessor — nút phải nhất của cây con trái), như phần 1.</li>
@@ -6160,12 +6164,12 @@ sau khi xoá 12: rotateRight(11), rồi rotateRight(8)
 <li>Xoá 5 (có hai con): khoá liền trước 4 được chép lên, và việc gỡ 4 ở dưới làm 3 thành −2 → thêm một lần xoay.</li>
 </ul>
 <p><strong>Big-O:</strong> O(log n) mức, mỗi mức nhiều nhất một lần xoay đơn hoặc kép → O(log n) mỗi lần xoá, kể cả khi phải xoay suốt lên gốc.</p>
-<div class="pitfall">Khi xoá, con q có thể có hệ số cân bằng 0 (hai cây con của nó cao bằng nhau) — trường hợp mà luật "cùng dấu / khác dấu" của slide không nhắc tới. Hãy coi 0 như "cùng dấu": xoay đơn. Xoay kép trong trường hợp đó có thể để lại cây mất cân bằng. Slide 14 rơi đúng vào trường hợp này.</div>`],
+<div class="pitfall">Khi xoá, con q có thể có hệ số cân bằng 0 (hai cây con của nó cao bằng nhau) — trường hợp mà luật "cùng dấu / khác dấu" của slide không nhắc tới. Hãy coi 0 như "cùng dấu": xoay đơn. Xoay kép trong trường hợp đó có thể để lại cây mất cân bằng. Ví dụ khoá 32 ở slide 14 bên dưới rơi đúng vào trường hợp này.</div>`],
       [14, 'Deletion in an AVL Tree demo',
-        `<p class="y-chinh">🎯 Deleting 32 makes the root 44 right-heavy (+2); its son 62 is perfectly balanced (0), so a single left rotation makes 62 the new root.</p>
+        `<p class="y-chinh">🎯 In the textbook's key-32 example, deleting 32 makes the root 44 right-heavy (+2); its son 62 is perfectly balanced (0), so a single left rotation makes 62 the new root.</p>
 <p class="ghi-chu">The slide is a figure titled "Rebalancing an AVL tree after deleting the key 32". Deleting 32 is the next worked example of Goodrich §11.3, continuing from the tree obtained after inserting 54; it is rebuilt below — compare it with the picture.</p>
 <pre><code class="language-java">AVLTree t = new AVLTree();
-for (int x : new int[] {44, 17, 78, 32, 50, 88, 48, 62, 54}) t.insert(x);   // the tree after slide 12
+for (int x : new int[] {44, 17, 78, 32, 50, 88, 48, 62, 54}) t.insert(x);   // the key-54 result (slide-12 example)
 System.out.println("AVL tree:   " + t.show(t.root));
 System.out.println("   bf " + t.bfs(t.root));
 t.delete(32);
@@ -6177,7 +6181,7 @@ System.out.println("   bf " + t.bfs(t.root));</code></pre>
 delete 32: &nbsp;62(44(17,50(48,54)),78(-,88))<br>
 &nbsp;&nbsp;&nbsp;p=44(+2) q=62(0) q is 0: rotateLeft(44)<br>
 &nbsp;&nbsp;&nbsp;bf 17:0 44:+1 48:0 50:0 54:0 62:-1 78:+1 88:0</div>
-<pre><code class="language-plaintext">the tree of slide 12; delete 32
+<pre><code class="language-plaintext">the key-54 result above; delete 32
              44[+1]
            /        \\
      17[+1]          62[0]  &lt;- q
@@ -6201,10 +6205,10 @@ after rotateLeft(44)
 <li>62 is the root, so there is no ancestor left to check; the tree keeps height 4 and every factor is in {−1, 0, +1}.</li>
 </ol>
 <p class="meo">🧠 <strong>Remember:</strong> in a deletion think "the <em>other</em> side became too tall" — deleting on the left can force a left rotation.</p>`,
-        `<p class="y-chinh">🎯 Xoá 32 làm gốc 44 lệch phải (+2); con 62 của nó cân bằng hoàn toàn (0), nên chỉ một phép xoay trái (xoay đơn) là đưa 62 thành gốc mới.</p>
+        `<p class="y-chinh">🎯 Trong ví dụ khoá 32 của giáo trình, xoá 32 làm gốc 44 lệch phải (+2); con 62 của nó cân bằng hoàn toàn (0), nên chỉ một phép xoay trái (xoay đơn) là đưa 62 thành gốc mới.</p>
 <p class="ghi-chu">Slide là một hình có tiêu đề "Rebalancing an AVL tree after deleting the key 32" (cân bằng lại cây AVL sau khi xoá khoá 32). Xoá 32 là ví dụ có lời giải tiếp theo trong Goodrich §11.3, nối tiếp từ cây thu được sau khi chèn 54; ví dụ đó được dựng lại dưới đây — hãy đối chiếu với hình.</p>
 <pre><code class="language-java">AVLTree t = new AVLTree();
-for (int x : new int[] {44, 17, 78, 32, 50, 88, 48, 62, 54}) t.insert(x);   // cây sau slide 12
+for (int x : new int[] {44, 17, 78, 32, 50, 88, 48, 62, 54}) t.insert(x);   // cây kết quả của ví dụ khoá 54 (slide 12)
 System.out.println("AVL tree:   " + t.show(t.root));
 System.out.println("   bf " + t.bfs(t.root));
 t.delete(32);
@@ -6216,7 +6220,7 @@ System.out.println("   bf " + t.bfs(t.root));</code></pre>
 delete 32: &nbsp;62(44(17,50(48,54)),78(-,88))<br>
 &nbsp;&nbsp;&nbsp;p=44(+2) q=62(0) q is 0: rotateLeft(44)<br>
 &nbsp;&nbsp;&nbsp;bf 17:0 44:+1 48:0 50:0 54:0 62:-1 78:+1 88:0</div>
-<pre><code class="language-plaintext">cây của slide 12; xoá 32
+<pre><code class="language-plaintext">cây kết quả của ví dụ khoá 54; xoá 32
              44[+1]
            /        \\
      17[+1]          62[0]  &lt;- q
@@ -6426,7 +6430,7 @@ careful: in Java (0-1)/2 = 0, while floor(-1/2) = Math.floorDiv(-1, 2) = -1</div
 <li>Trong mảng heap (đống) [25, 13, 17, 5, 8, 3], cha và các con của chỉ số 2 là gì?</li>
 </ol>
 <p class="dap-an">✅ <strong>Đáp án:</strong> (1) Cao 5 — một chuỗi, nên tìm kiếm là O(n). (2) 1 − 3 = −2, lệch trái → xoay phải (xoay đơn nếu con trái là −1 hoặc 0, xoay kép nếu con trái là +1). (3) Khác dấu → xoay kép: xoay q sang trái trước, rồi xoay p sang phải. (4) Sau lần xoay của phép chèn, cây con lấy lại đúng chiều cao cũ nên các tổ tiên không đổi; sau lần xoay của phép xoá, cây con có thể thấp đi một mức nên đến lượt một tổ tiên bị mất cân bằng. (5) Cha ⌊(2−1)/2⌋ = 0 (giá trị 25); con trái 5 (giá trị 3); con phải 6 — nằm ngoài mảng, tức là không có.</p>
-<p><strong>Học tiếp:</strong> bài 4.D đi tiếp bộ slide (slide 17–33: heap làm hàng đợi ưu tiên, dựng heap, heap sort, ký pháp Ba Lan). Sau đó là các bài đào sâu bên dưới: 4.4 Cây nhị phân tìm kiếm (BST) và 4.5 BST: chèn &amp; ba trường hợp xoá (nền của mọi cây cân bằng), 4.6 Cây AVL: bốn phép xoay — chú ý, bài 4.6 viết hệ số cân bằng là trái − phải — và 4.7 Dựng heap: sift-up, sift-down, Floyd (đẩy lên, đẩy xuống, cách dựng heap của Floyd).</p>`),
+<p><strong>Học tiếp:</strong> bài 4.D đi tiếp bộ slide (slide 17–33: heap làm hàng đợi ưu tiên, dựng heap, heap sort (sắp xếp vun đống), ký pháp Ba Lan). Sau đó là các bài đào sâu bên dưới: 4.4 Cây nhị phân tìm kiếm (BST) và 4.5 BST: chèn &amp; ba trường hợp xoá (nền của mọi cây cân bằng), 4.6 Cây AVL: bốn phép xoay — chú ý, bài 4.6 viết hệ số cân bằng là trái − phải — và 4.7 Dựng heap: sift-up, sift-down, Floyd (đẩy lên, đẩy xuống, cách dựng heap của Floyd).</p>`),
     books([
       ['goodrich', '§11.2 Balanced Search Trees p.472 (rotations, trinode restructuring) · §11.3 AVL Trees p.479 (height-balance property, insertion, deletion) · §9.3.1 The Heap Data Structure p.370', '§11.2 Balanced Search Trees tr.472 (phép xoay, tái cấu trúc bộ ba nút) · §11.3 AVL Trees tr.479 (tính chất cân bằng chiều cao, chèn, xoá) · §9.3.1 The Heap Data Structure tr.370'],
     ]),
@@ -6669,7 +6673,7 @@ n = 7: 80 different heaps</div>
 <li>Always true: the largest value (5) is at the root, and the second largest (4) is a child of the root, since only 5 may stand above it.</li>
 <li>The smallest value (1) is always a leaf — a child would have to be even smaller — but which leaf depends on the order of the input.</li>
 </ul>
-<p>Consequence: two correct programs can print different heaps for the same input. The top-down and the bottom-up constructions of slides 21–26 give two different heaps from one array.</p>
+<p>Consequence: two correct programs can print different heaps for the same input. The top-down and the bottom-up constructions traced at slides 21–26 below give two different heaps from one array.</p>
 <p class="meo">🧠 <strong>Remember:</strong> a heap is only "partially ordered" — ordered along every path from the root down, unordered across a level.</p>
 <div class="pitfall">When an FE question asks "which array is the heap after inserting 10, 20, … in this order", only one option is right: many heaps exist for the set, but a given algorithm on a given input builds exactly one. Simulate the algorithm step by step; do not just check the heap property.</div>`,
         `<p class="y-chinh">🎯 Một tập giá trị có thể xếp thành nhiều heap (đống) khác nhau: tính chất heap chỉ cố định phần tử lớn nhất ở gốc, phần còn lại thì không.</p>
@@ -6727,7 +6731,7 @@ n = 7: 80 different heaps</div>
 <li>Luôn đúng: giá trị lớn nhất (5) nằm ở gốc, và giá trị lớn thứ hai (4) là con của gốc, vì chỉ 5 mới được đứng trên nó.</li>
 <li>Giá trị nhỏ nhất (1) luôn là lá (leaf) — nếu có con thì con phải còn nhỏ hơn nó — nhưng là lá nào thì tuỳ thứ tự dữ liệu vào.</li>
 </ul>
-<p>Hệ quả: hai chương trình đều đúng vẫn có thể in ra hai heap khác nhau cho cùng dữ liệu. Cách dựng từ trên xuống (top-down) và từ dưới lên (bottom-up) ở slide 21–26 cho hai heap khác nhau từ cùng một mảng.</p>
+<p>Hệ quả: hai chương trình đều đúng vẫn có thể in ra hai heap khác nhau cho cùng dữ liệu. Cách dựng từ trên xuống (top-down) và từ dưới lên (bottom-up) mà bài lần theo ở slide 21–26 bên dưới cho hai heap khác nhau từ cùng một mảng.</p>
 <p class="meo">🧠 <strong>Mẹo nhớ:</strong> heap chỉ "có thứ tự một phần" (partially ordered) — có thứ tự dọc theo mọi đường đi từ gốc xuống, không có thứ tự theo chiều ngang của một mức.</p>
 <div class="pitfall">Khi đề FE (thi cuối kỳ) hỏi "mảng nào là heap sau khi chèn 10, 20, … theo thứ tự này", chỉ một phương án đúng: có nhiều heap cho cùng một tập, nhưng một thuật toán cụ thể trên một dữ liệu vào cụ thể chỉ dựng ra đúng một heap. Hãy mô phỏng thuật toán từng bước; đừng chỉ kiểm tính chất heap.</div>`],
       [19, 'Heaps as Priority Queues - 1: enqueuing',
@@ -6851,14 +6855,14 @@ enqueue 30: empty cell at 7 &nbsp;[25, 13, 20, 5, 8, 3, 17, _]<br>
 <p class="meo">🧠 <strong>Hàng đợi ưu tiên (priority queue) trong một câu:</strong> phần tử có độ ưu tiên cao nhất được ra trước, bất kể đến lúc nào — xe cứu thương vượt qua hàng xe đang chờ ở cổng (gợi ý của syllabus cho câu "Hàng đợi ưu tiên là gì?").</p>`],
       [20, 'Heaps as Priority Queues - 2: dequeuing',
         `<p class="y-chinh">🎯 To dequeue, take the root (the maximum), move the last element into the root's place, and sift it down — always towards the larger son — until it is ≥ both sons.</p>
-<p class="ghi-chu">The slide shows dequeuing as a figure; the lesson's own example dequeues twice from the heap that slide 19 ended with.</p>
+<p class="ghi-chu">The slide shows dequeuing as a figure; the lesson's own example dequeues twice from the heap that the slide-19 example ended with.</p>
 <ol>
 <li>Save a[0] — it is the answer. Take x = a[n − 1] and shrink n; the shape stays nearly complete.</li>
 <li>The empty cell starts at the root. Pick the larger son; if it is larger than x, move it up and go down to its cell.</li>
 <li>When no son is larger, or there is no son, write x into the empty cell.</li>
 </ol>
 <pre><code class="language-java">public class HeapDequeue {
-    static int[] a = {30, 25, 20, 13, 8, 3, 17, 5};  // the heap after slide 19
+    static int[] a = {30, 25, 20, 13, 8, 3, 17, 5};  // the heap left by the slide-19 example
     static int n = a.length;
 
     static String show(int hole) {
@@ -6909,14 +6913,14 @@ dequeue -&gt; 25; last element 17 starts at the root &nbsp;[_, 13, 20, 5, 8, 3]<
 <p><strong>Big-O:</strong> one level per step, ⌊log₂n⌋ levels → O(log n); <code>peek()</code>, reading a[0] without removing it, is O(1). Dequeuing again and again returns 30, 25, 20, … in decreasing order — the idea of heap sort (slide 28).</p>
 <div class="pitfall">In a max-heap always move the <em>larger</em> son up (the smaller one in a min-heap). Moving the smaller son up puts a small value above its larger sibling: the heap is broken and later dequeues return wrong answers.</div>`,
         `<p class="y-chinh">🎯 Muốn lấy ra khỏi heap (đống) — thao tác dequeue — hãy lấy gốc (phần tử lớn nhất), đưa phần tử cuối vào chỗ của gốc, rồi đẩy nó xuống — luôn về phía con lớn hơn — tới khi nó ≥ cả hai con.</p>
-<p class="ghi-chu">Slide minh hoạ phép lấy ra bằng hình; ví dụ của bài lấy ra hai lần từ heap mà slide 19 để lại.</p>
+<p class="ghi-chu">Slide minh hoạ phép lấy ra bằng hình; ví dụ của bài lấy ra hai lần từ heap mà ví dụ ở slide 19 để lại.</p>
 <ol>
 <li>Cất a[0] — đó là kết quả trả về. Lấy x = a[n − 1] rồi giảm n; hình dạng vẫn gần đầy đủ.</li>
 <li>Ô trống bắt đầu ở gốc. Chọn con lớn hơn; nếu nó lớn hơn x thì dời nó lên, rồi đi xuống ô của nó.</li>
 <li>Khi không con nào lớn hơn, hoặc không còn con, ghi x vào ô trống.</li>
 </ol>
 <pre><code class="language-java">public class HeapDequeue {
-    static int[] a = {30, 25, 20, 13, 8, 3, 17, 5};  // heap sau slide 19
+    static int[] a = {30, 25, 20, 13, 8, 3, 17, 5};  // heap mà ví dụ ở slide 19 để lại
     static int n = a.length;
 
     static String show(int hole) {
@@ -7019,7 +7023,7 @@ i=8 x=11 s=3 &nbsp;[15, 12, 10, 11, 2, 6, 3, 1, 8]</div>
 <li>i = 1: 8 is larger than its father 2, so 2 moves down to index 1 and 8 becomes the root.</li>
 <li>i = 2 and i = 3: 6 and 1 are not larger than their fathers (8 and 2) — they stay where they are, with no move at all.</li>
 </ul>
-<p><strong>Big-O:</strong> the element inserted at index i may climb ⌊log₂(i+1)⌋ levels; summed over the whole array that is O(n log n) in the worst case — slide 27 measures it.</p>`,
+<p><strong>Big-O:</strong> the element inserted at index i may climb ⌊log₂(i+1)⌋ levels; summed over the whole array that is O(n log n) in the worst case — the program at slide 27 measures it.</p>`,
         `<p class="y-chinh">🎯 Phương pháp từ trên xuống (top-down) biến một mảng thành heap (đống) bằng cách coi a[0] là heap một phần tử rồi lần lượt thêm (enqueue) a[1], a[2], …, a[n−1] — mỗi phần tử mới được đẩy lên (sift up).</p>
 <p class="ghi-chu">Slide 21–23 vẽ các bước top-down bằng hình. Để lần theo, bài chạy code của slide 27 trên mảng của slide 24–26, [2 8 6 1 10 15 3 12 11] — chọn mảng này để so sánh hai phương pháp trên cùng dữ liệu; tám bước của nó được chia ra slide 21, 22 và 23.</p>
 <pre><code class="language-java">public class TopDownHeap {
@@ -7072,7 +7076,7 @@ i=8 x=11 s=3 &nbsp;[15, 12, 10, 11, 2, 6, 3, 1, 8]</div>
 <li>i = 1: 8 lớn hơn cha của nó là 2, nên 2 dời xuống chỉ số 1 và 8 thành gốc.</li>
 <li>i = 2 và i = 3: 6 và 1 không lớn hơn cha (8 và 2) — chúng đứng yên tại chỗ, không có lần dời nào.</li>
 </ul>
-<p><strong>Big-O:</strong> phần tử chèn ở chỉ số i có thể leo ⌊log₂(i+1)⌋ mức; cộng trên cả mảng là O(n log n) trong trường hợp xấu nhất — slide 27 sẽ đo điều này.</p>`],
+<p><strong>Big-O:</strong> phần tử chèn ở chỉ số i có thể leo ⌊log₂(i+1)⌋ mức; cộng trên cả mảng là O(n log n) trong trường hợp xấu nhất — chương trình ở slide 27 sẽ đo điều này.</p>`],
       [22, 'Organizing Arrays as Heaps - 2: top-down method (continued)',
         `<p class="y-chinh">🎯 Steps i = 4, 5, 6 of the top-down run: the large values 10 and 15 climb all the way to the root, while 3 stays where it is.</p>
 <p class="ghi-chu">The slide continues the top-down figure; these three steps come from the run printed on slide 21.</p>
@@ -7107,7 +7111,7 @@ i=8 x=11 s=3 &nbsp;[15, 12, 10, 11, 2, 6, 3, 1, 8]</div>
 <tr><td>6</td><td>3</td><td>3 không > 10 (chỉ số 2)</td><td>6</td><td>[15, 8, 10, 1, 2, 6, 3 | 12, 11]</td></tr>
 </tbody>
 </table>
-<pre><code class="language-plaintext">sau i = 6: a[0..6] là một heap
+<pre><code class="language-plaintext">sau i = 6: a[0..6] là một heap (đống)
             15
           /    \\
          8      10
@@ -7146,7 +7150,7 @@ i=8 x=11 s=3 &nbsp;[15, 12, 10, 11, 2, 6, 3, 1, 8]</div>
 <p>In total 8 elements moved for 8 insertions on this input. The next three slides build a heap from the same array bottom-up and obtain a <em>different</em> heap — both are correct (slide 18).</p>
 <div class="pitfall">The loop bound is <code>i&lt;n</code>. Stopping one step early (<code>i&lt;n-1</code>) leaves 11 at index 8 under its father 8 — not a heap. An off-by-one in the loop bound is a classic PE mistake.</div>`,
         `<p class="y-chinh">🎯 Hai lần chèn cuối, 12 và 11, hoàn tất heap (đống): [15, 12, 10, 11, 2, 6, 3, 1, 8].</p>
-<p class="ghi-chu">Hình cuối của loạt top-down; hai bước sau cùng của lần chạy ở slide 21 được lần theo dưới đây.</p>
+<p class="ghi-chu">Hình cuối của loạt top-down (từ trên xuống); hai bước sau cùng của lần chạy ở slide 21 được lần theo dưới đây.</p>
 <table>
 <thead><tr><th>i</th><th>x</th><th>Các cha gặp trên đường đi lên</th><th>Dừng ở s</th><th>Mảng sau bước này</th></tr></thead>
 <tbody>
@@ -7301,7 +7305,7 @@ i=0: 2 &nbsp;sinks 0 -&gt; 5 &nbsp;[15, 12, 6, 11, 10, 2, 3, 1, 8]</div>
 <ul>
 <li>i = 2: the larger son of 6 is 15, at index 5; 15 moves up, and since index 5 is a leaf, 6 stops there.</li>
 <li>i = 1: the larger son of 8 is 12 (index 3); 12 moves up. At index 3 the sons are 1 and 11; the larger, 11, is > 8, so 11 moves up and 8 lands on the leaf at index 8.</li>
-<li>Only the root is left, and it holds the smallest value of the array, 2.</li>
+<li>Only the root is left, and it holds 2, the second smallest value of the array — it will have to sink a long way.</li>
 </ul>
 <p>The low levels are cheap: the nodes at indexes 3 and 2 moved one level each, the node at index 1 two levels.</p>
 <p class="meo">🧠 <strong>Remember:</strong> sift-down compares with <em>both</em> sons and follows the larger one; sift-up compares with the father only.</p>`,
@@ -7314,7 +7318,7 @@ i=0: 2 &nbsp;sinks 0 -&gt; 5 &nbsp;[15, 12, 6, 11, 10, 2, 3, 1, 8]</div>
 <tr><td>1</td><td>8</td><td>3: 12, 4: 10, rồi 7: 1, 8: 11</td><td>12 dời lên, rồi 11 dời lên; 8 chìm xuống chỉ số 8</td><td>[2, 12, 15, 11, 10, 6, 3, 1, 8]</td></tr>
 </tbody>
 </table>
-<pre><code class="language-plaintext">sau i = 1: hai cây con của gốc đều đã là heap
+<pre><code class="language-plaintext">sau i = 1: hai cây con của gốc đều đã là heap (đống)
             2
          /     \\
        12       15
@@ -7325,7 +7329,7 @@ i=0: 2 &nbsp;sinks 0 -&gt; 5 &nbsp;[15, 12, 6, 11, 10, 2, 3, 1, 8]</div>
 <ul>
 <li>i = 2: con lớn hơn của 6 là 15, ở chỉ số 5; 15 dời lên, và vì chỉ số 5 là lá (leaf) nên 6 dừng ở đó.</li>
 <li>i = 1: con lớn hơn của 8 là 12 (chỉ số 3); 12 dời lên. Ở chỉ số 3 hai con là 1 và 11; con lớn hơn, 11, lớn hơn 8, nên 11 dời lên và 8 rơi xuống lá ở chỉ số 8.</li>
-<li>Chỉ còn lại gốc, và nó đang giữ giá trị nhỏ nhất của mảng: 2.</li>
+<li>Chỉ còn lại gốc, và nó đang giữ 2 — giá trị nhỏ thứ hai của mảng — nên sẽ phải chìm sâu.</li>
 </ul>
 <p>Các mức thấp rất rẻ: nút ở chỉ số 3 và 2 mỗi nút chỉ dời một mức, nút ở chỉ số 1 dời hai mức.</p>
 <p class="meo">🧠 <strong>Mẹo nhớ:</strong> đẩy xuống (sift-down) so với <em>cả hai</em> con và đi theo con lớn hơn; đẩy lên (sift-up) chỉ so với cha.</p>`],
@@ -7514,7 +7518,7 @@ slide 24 array &nbsp;&nbsp;&nbsp;top-down &nbsp;&nbsp;8 &nbsp;&nbsp;&nbsp;&nbsp;
 <li>The empty cell starts at f = 0; <code>s</code> is the larger son, but only among the indexes below i (<code>s+1&lt;i</code>, <code>s&lt;i</code>): the sorted tail no longer belongs to the heap.</li>
 <li>While x is smaller than that son, move the son up and go down; finally <code>a[f]=x</code>.</li>
 </ol>
-<p>The program is the code of slides 27 and 28 together, unchanged, plus two lines that print; so it starts from the heap of slide 23:</p>
+<p>The program is the code of slides 27 and 28 together, unchanged, plus two lines that print; so its first line is the top-down heap traced above (slides 21–23 of this lesson):</p>
 <pre><code class="language-java">import java.util.Arrays;
 
 public class HeapSortFU {
@@ -7583,7 +7587,7 @@ sorted &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[1, 2, 3, 6, 8, 10, 11, 12, 15]
 <li>Ô trống bắt đầu ở f = 0; <code>s</code> là con lớn hơn, nhưng chỉ xét các chỉ số nhỏ hơn i (<code>s+1&lt;i</code>, <code>s&lt;i</code>): phần đuôi đã sắp không còn thuộc heap.</li>
 <li>Chừng nào x còn nhỏ hơn người con đó, dời con lên rồi đi xuống; cuối cùng <code>a[f]=x</code>.</li>
 </ol>
-<p>Chương trình là code của slide 27 và 28 ghép lại, giữ nguyên, chỉ thêm hai dòng in; vì vậy nó xuất phát từ đúng heap của slide 23:</p>
+<p>Chương trình là code của slide 27 và 28 ghép lại, giữ nguyên, chỉ thêm hai dòng in; vì vậy dòng đầu của nó chính là heap top-down đã lần theo ở trên (slide 21–23 của bài):</p>
 <pre><code class="language-java">import java.util.Arrays;
 
 public class HeapSortFU {
@@ -7793,7 +7797,7 @@ prefix &nbsp;&nbsp;* - 5 6 7 &nbsp;&nbsp;(read right to left)<br>
 &nbsp;&nbsp;* &nbsp;&nbsp;-1 * 7 = -7 &nbsp;&nbsp;&nbsp;stack [-7]<br>
 values: -7 and -7; &nbsp;infix (5 - 6) * 7 = -7</div>
 <p><strong>Big-O:</strong> mỗi ký hiệu (token) được đẩy vào ngăn xếp (push) một lần và lấy ra (pop) nhiều nhất một lần → O(n) với n ký hiệu.</p>
-<p class="meo">🧠 <strong>Mẹo nhớ:</strong> hậu tố là cách một máy ngăn xếp (stack machine) tính toán — mã bytecode (mã máy ảo) của JVM chẳng hạn: đẩy các toán hạng vào, mỗi toán tử lấy ra hai giá trị rồi đẩy vào một.</p>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> hậu tố là cách một máy ngăn xếp (stack machine) tính toán — mã bytecode (mã máy ảo) của JVM (máy ảo Java) chẳng hạn: đẩy các toán hạng vào, mỗi toán tử lấy ra hai giá trị rồi đẩy vào một.</p>
 <div class="pitfall">Thứ tự hai lần lấy ra (pop) ngược nhau giữa hai ký pháp. Hậu tố: lần pop đầu là toán hạng <em>phải</em> (<code>b = pop(); a = pop(); a - b</code>). Tiền tố đọc ngược: lần pop đầu là toán hạng <em>trái</em>. Đảo nhầm thì 5 − 6 thành 6 − 5 = 1 — đề FE (thi cuối kỳ) rất thích bẫy này với − và /.</div>`],
       [30, 'Polish Notation and Expression Trees - 2',
         `<p class="y-chinh">🎯 In an expression tree the three traversals of part 1 read the expression in the three notations: preorder = prefix, inorder = infix, postorder = postfix.</p>
@@ -7980,7 +7984,7 @@ cây 3: 8 * (4 - 2) + 1
 <thead><tr><th>Term (slide)</th><th>Meaning</th><th>Where it mattered in part 2</th></tr></thead>
 <tbody>
 <tr><td>Tree = nodes + arcs</td><td>a data type made of nodes joined by arcs (edges)</td><td>a rotation only changes which arcs exist</td></tr>
-<tr><td>Root</td><td>the only node without a parent; it has only children</td><td>an AVL rotation or deletion can change the root (slide 14)</td></tr>
+<tr><td>Root</td><td>the only node without a parent; it has only children</td><td>an AVL rotation or deletion can change the root (the key-32 example, slide 14)</td></tr>
 <tr><td>Path</td><td>the unique sequence of arcs from the root to a node</td><td>search and insert follow one path: cost O(height)</td></tr>
 <tr><td>Orderly (ordered) tree</td><td>elements stored by a predetermined ordering criterion</td><td>BST: left &lt; node &lt; right; heap: parent ≥ children</td></tr>
 <tr><td>Binary tree</td><td>two children per node, possibly empty, each marked left or right</td><td>AVL trees and heaps are both binary trees</td></tr>
@@ -7998,7 +8002,7 @@ cây 3: 8 * (4 - 2) + 1
 <thead><tr><th>Thuật ngữ (slide)</th><th>Nghĩa</th><th>Quan trọng ở đâu trong phần 2</th></tr></thead>
 <tbody>
 <tr><td>Cây (tree) = nút (node) + cung (arc)</td><td>kiểu dữ liệu gồm các nút nối với nhau bằng cung (cạnh — edge)</td><td>phép xoay chỉ thay đổi những cung nào tồn tại</td></tr>
-<tr><td>Gốc (root)</td><td>nút duy nhất không có cha; nó chỉ có con</td><td>phép xoay hay phép xoá AVL có thể đổi gốc (slide 14)</td></tr>
+<tr><td>Gốc (root)</td><td>nút duy nhất không có cha; nó chỉ có con</td><td>phép xoay hay phép xoá AVL có thể đổi gốc (ví dụ khoá 32, slide 14)</td></tr>
 <tr><td>Đường đi (path)</td><td>dãy cung duy nhất đi từ gốc tới một nút</td><td>tìm và chèn đi theo một đường: chi phí O(chiều cao)</td></tr>
 <tr><td>Cây có thứ tự (orderly/ordered tree)</td><td>phần tử được lưu theo một tiêu chí thứ tự định trước</td><td>cây nhị phân tìm kiếm (BST): trái &lt; nút &lt; phải; heap (đống): cha ≥ con</td></tr>
 <tr><td>Cây nhị phân (binary tree)</td><td>mỗi nút có hai con, có thể rỗng, mỗi con được gọi là trái hoặc phải</td><td>cây AVL và heap đều là cây nhị phân</td></tr>
@@ -8028,7 +8032,7 @@ cây 3: 8 * (4 - 2) + 1
 </tbody>
 </table>
 <ul>
-<li>One picture per topic is enough to rebuild the rest: the chain (slide 4), Par and Ch (slide 7), the zig-zag (slide 9), the array under the heap (slide 16).</li>
+<li>One drawing per topic from this lesson is enough to rebuild the rest: the chain (slide 4), Par and Ch (slide 7), the zig-zag (slide 9), the array under the heap (slide 16).</li>
 <li>One number to remember: with a million keys, a heap has 20 levels, an AVL tree at most 28, a degenerate BST up to a million.</li>
 </ul>
 <p>Where the syllabus's discussion questions are answered: AVL tree, BST vs AVL, cost of an AVL search, balance factor formula — slides 4 and 10; heap, min vs max — slide 15; binary tree vs AVL vs heap — slide 31; priority queue — slide 19.</p>
@@ -8050,7 +8054,7 @@ cây 3: 8 * (4 - 2) + 1
 </tbody>
 </table>
 <ul>
-<li>Mỗi chủ đề nhớ một hình là đủ để dựng lại phần còn lại: cái chuỗi (slide 4), Par và Ch (slide 7), hình zic-zắc (slide 9), mảng nằm dưới heap (slide 16).</li>
+<li>Mỗi chủ đề nhớ một hình vẽ trong bài là đủ để dựng lại phần còn lại: cái chuỗi (slide 4), Par và Ch (slide 7), hình zic-zắc (slide 9), mảng nằm dưới heap (slide 16).</li>
 <li>Một con số nên nhớ: với một triệu khoá, heap có 20 mức, cây AVL nhiều nhất 28 mức, còn BST suy biến (degenerate) có thể cao tới một triệu.</li>
 </ul>
 <p>Các câu hỏi thảo luận của syllabus được trả lời ở đâu: cây AVL, BST so với AVL, chi phí tìm kiếm trên AVL, công thức hệ số cân bằng — slide 4 và 10; heap, heap min so với heap max — slide 15; cây nhị phân so với AVL so với heap — slide 31; hàng đợi ưu tiên — slide 19.</p>
@@ -8061,7 +8065,7 @@ cây 3: 8 * (4 - 2) + 1
 <ul>
 <li><strong>§11.2 Balanced Search Trees (p.472)</strong> — rotations and trinode restructuring, the operations drawn on slides 7–9.</li>
 <li><strong>§11.3 AVL Trees (p.479)</strong> — the height-balance property, why the height is O(log n), insertion and deletion with rebalancing; its worked examples use the keys 54 and 32, rebuilt on slides 12 and 14 of lesson 4.C.</li>
-<li><strong>§9.3 Heaps (p.370)</strong> and <strong>§9.3.1 The Heap Data Structure (p.370)</strong> — the heap-order property, the complete binary tree property, the height of a heap.</li>
+<li><strong>§9.3 Heaps (p.370)</strong> and <strong>§9.3.1 The Heap Data Structure (p.370)</strong> — the heap-order property, the complete binary tree property (Goodrich's "complete" is the slides' "nearly complete"; part 1's "complete" means every level full), the height of a heap.</li>
 <li><strong>§9.3.2 Implementing a Priority Queue with a Heap (p.372)</strong> — the array representation, up-heap bubbling after an insertion and down-heap bubbling after a removal (slides 19–20).</li>
 </ul>
 <p>Differences to expect: the book's priority queue is min-oriented (<code>min</code>, <code>removeMin</code>) where the slides use a max-heap — the same code with every comparison reversed. Bottom-up heap construction and heap-sort (slides 24–28) come later in the same chapter of the book.</p>
@@ -8070,8 +8074,8 @@ cây 3: 8 * (4 - 2) + 1
 <ul>
 <li><strong>§11.2 Balanced Search Trees (tr.472)</strong> — phép xoay (rotation) và tái cấu trúc bộ ba nút (trinode restructuring), đúng các thao tác vẽ ở slide 7–9.</li>
 <li><strong>§11.3 AVL Trees (tr.479)</strong> — tính chất cân bằng chiều cao (height-balance property), vì sao chiều cao là O(log n), chèn và xoá kèm cân bằng lại; các ví dụ có lời giải dùng khoá 54 và 32, được dựng lại ở slide 12 và 14 của bài 4.C.</li>
-<li><strong>§9.3 Heaps (tr.370)</strong> và <strong>§9.3.1 The Heap Data Structure (tr.370)</strong> — tính chất thứ tự heap (heap-order property), tính chất cây nhị phân đầy đủ (complete binary tree property), chiều cao của heap.</li>
-<li><strong>§9.3.2 Implementing a Priority Queue with a Heap (tr.372)</strong> — cách biểu diễn bằng mảng, nổi bọt lên (up-heap bubbling) sau khi chèn và chìm xuống (down-heap bubbling) sau khi lấy ra (slide 19–20).</li>
+<li><strong>§9.3 Heaps (tr.370)</strong> và <strong>§9.3.1 The Heap Data Structure (tr.370)</strong> (cấu trúc dữ liệu heap) — tính chất thứ tự heap (heap-order property), tính chất cây nhị phân đầy đủ (complete binary tree property — "complete" của Goodrich chính là "gần đầy đủ" trên slide; còn "complete" ở phần 1 nghĩa là mọi mức đều kín), chiều cao của heap.</li>
+<li><strong>§9.3.2 Implementing a Priority Queue with a Heap (tr.372)</strong> (cài đặt hàng đợi ưu tiên bằng heap) — cách biểu diễn bằng mảng, nổi bọt lên (up-heap bubbling) sau khi chèn và chìm xuống (down-heap bubbling) sau khi lấy ra (slide 19–20).</li>
 </ul>
 <p>Khác biệt nên biết trước: hàng đợi ưu tiên (priority queue) của sách hướng về phần tử nhỏ nhất (<code>min</code>, <code>removeMin</code>), còn slide dùng heap max — cùng một đoạn code, chỉ đảo mọi phép so sánh. Dựng heap từ dưới lên (bottom-up heap construction) và sắp xếp vun đống (heap sort) — slide 24–28 — nằm ở phần sau của cùng chương trong sách.</p>
 <p class="meo">🧠 <strong>Cách đọc:</strong> tự vẽ lại bằng tay từng hình của sách trước, rồi chạy Java của bài này trên đúng các khoá đó và so sánh.</p>`],
@@ -8107,28 +8111,28 @@ const L_on_ch4 = {
   title: '4.8 — 🧪 Practice + 🗂 Glossary + 📌 Summary · Trees, BST, AVL & heaps|||4.8 — 🧪 Thực hành + 🗂 Thuật ngữ + 📌 Tóm tắt · Cây, BST, AVL & heap',
   slug: 'csd201-on-ch4',
   type: 'VIDEO',
-  description: '8 bài tập kiểu đề PE trên cây nhị phân tìm kiếm chứa xe Car(owner, price) — chèn bỏ trùng và bốn phép duyệt, đếm lá và chiều cao, xoá bằng sao chép, xoá bằng hợp nhất, xoay trái/phải, kiểm AVL và cân bằng lại, heap và heap sort, một đề mini kết hợp f1–f4 — có lời giải và test tự kiểm chạy thật; 26 thuật ngữ Anh–Việt; tóm tắt 8 ý và bảng độ phức tạp của chương 4.',
+  description: '8 bài tập kiểu đề PE, phần lớn trên cây nhị phân tìm kiếm chứa xe Car(owner, price) — chèn bỏ trùng và bốn phép duyệt, đếm lá và chiều cao, xoá bằng sao chép, xoá bằng hợp nhất, xoay trái/phải, kiểm AVL và cân bằng lại, heap và heap sort, một đề mini kết hợp f1–f4 — có lời giải và test tự kiểm chạy thật; 26 thuật ngữ Anh–Việt; tóm tắt 8 ý và bảng độ phức tạp của chương 4.',
   content: [
     bi(`<span class="eyebrow">Chapter 4 · Lesson 4.8 · Practice &amp; review</span>
 <h2>Trees, BST, AVL &amp; heaps — practise like the PE, then review</h2>
-<p class="lead">Eight exercises on a binary search tree of cars keyed by price — the shape tree questions typically take in the practical exam — from insertion and traversals to both deletions, rotations, an AVL check, a heap and a final mini exam. Every solution tests itself. Then the chapter's vocabulary in English and Vietnamese, a one-screen summary and the complexity table to revise from before the FE.</p>
+<p class="lead">Eight exercises, most of them on a binary search tree of cars keyed by price — the shape tree questions typically take in the practical exam — from insertion and traversals to both deletions, rotations, an AVL check, a heap and a final mini exam. Every solution tests itself. Then the chapter's vocabulary in English and Vietnamese, a one-screen summary and the complexity table to revise from before the FE.</p>
 <div class="callout"><strong>How to use this page.</strong>
 <ol>
 <li>Read the task, scroll the solution out of sight and write the method yourself in Eclipse, on top of the given <code>Car</code>, <code>Node</code> and <code>BSTree</code> classes.</li>
 <li>Copy the test <code>main</code> of the solution and run it: every line must say PASS.</li>
 <li>Only then compare with the solution and read the trap under it.</li>
 </ol>
-<p>A typical CSD201 PE tree question gives the classes, an <code>insert</code>, a <code>main</code> with a menu and code that writes each answer to a file, and asks you to fill in <code>f1</code>, <code>f2</code>, … — often worded as "the first node in breadth-first order that …". Here every answer is printed on the screen instead. Exercises 1–4 and 8 use slides 18–32 of deck 4A-Trees1; exercises 5–7 use deck 4B-Trees2 (rotations, AVL trees, heaps).</p></div>`,
+<p>A typical CSD201 PE tree question gives the classes, an <code>insert</code>, a <code>main</code> with a menu and code that writes each answer to a file, and asks you to fill in <code>f1</code>, <code>f2</code>, … — often worded as "the first node in breadth-first order that …". Here every answer is printed on the screen instead. Exercises 1–4 use slides 18–32 of deck 4A-Trees1, exercises 5–7 use deck 4B-Trees2 (rotations, AVL trees, heaps), and exercise 8 combines both (a deletion by copying and a rotation).</p></div>`,
     `<span class="eyebrow">Chương 4 · Bài 4.8 · Thực hành &amp; ôn tập</span>
 <h2>Cây, BST, AVL &amp; heap — luyện như đề PE, rồi ôn lại</h2>
-<p class="lead">Tám bài tập trên một cây nhị phân tìm kiếm (binary search tree — BST) chứa các xe, khoá (key) là giá (price) — đúng dạng mà câu hỏi về cây thường có trong đề thi thực hành (PE) — từ chèn và duyệt tới cả hai cách xoá, phép xoay, kiểm cây AVL, đống (heap) và một đề mini cuối cùng. Lời giải nào cũng tự kiểm tra được. Sau đó là thuật ngữ của chương bằng tiếng Anh và tiếng Việt, bản tóm tắt một màn hình và bảng độ phức tạp để ôn trước FE.</p>
+<p class="lead">Tám bài tập, phần lớn trên một cây nhị phân tìm kiếm (binary search tree — BST) chứa các xe, khoá (key) là giá (price) — đúng dạng mà câu hỏi về cây thường có trong đề thi thực hành (PE) — từ chèn và duyệt tới cả hai cách xoá, phép xoay, kiểm cây AVL, đống (heap) và một đề mini cuối cùng. Lời giải nào cũng tự kiểm tra được. Sau đó là thuật ngữ của chương bằng tiếng Anh và tiếng Việt, bản tóm tắt một màn hình và bảng độ phức tạp để ôn trước FE (thi cuối kỳ).</p>
 <div class="callout"><strong>Cách dùng trang này.</strong>
 <ol>
 <li>Đọc đề, cuộn lời giải ra khỏi màn hình rồi tự viết hàm trong Eclipse, dựa trên các lớp <code>Car</code>, <code>Node</code> và <code>BSTree</code> cho sẵn.</li>
 <li>Chép hàm <code>main</code> kiểm thử (test) của lời giải vào và chạy: mọi dòng phải là PASS (đạt).</li>
 <li>Lúc đó mới so với lời giải và đọc cái bẫy ghi bên dưới.</li>
 </ol>
-<p>Câu hỏi về cây trong đề PE môn CSD201 thường cho sẵn các lớp, hàm <code>insert</code>, hàm <code>main</code> có menu và đoạn code ghi từng đáp án ra file, rồi yêu cầu viết thân các hàm <code>f1</code>, <code>f2</code>, … — hay được diễn đạt kiểu "nút đầu tiên theo thứ tự duyệt theo chiều rộng (breadth-first) mà …". Ở đây mọi kết quả được in ra màn hình thay vì ghi ra file. Bài 1–4 và bài 8 dùng slide 18–32 của bộ 4A-Trees1; bài 5–7 dùng bộ 4B-Trees2 (phép xoay, cây AVL, heap).</p></div>`),
+<p>Câu hỏi về cây trong đề PE môn CSD201 thường cho sẵn các lớp, hàm <code>insert</code>, hàm <code>main</code> có menu và đoạn code ghi từng đáp án ra file, rồi yêu cầu viết thân các hàm <code>f1</code>, <code>f2</code>, … — hay được diễn đạt kiểu "nút đầu tiên theo thứ tự duyệt theo chiều rộng (breadth-first) mà …". Ở đây mọi kết quả được in ra màn hình thay vì ghi ra file. Bài 1–4 dùng slide 18–32 của bộ 4A-Trees1, bài 5–7 dùng bộ 4B-Trees2 (phép xoay, cây AVL, heap), còn bài 8 kết hợp cả hai (xoá bằng sao chép và phép xoay).</p></div>`),
     bi(`<h3>🧪 Exercise 1 — f1: insert without duplicates, then the four traversals (PE style · ~15 min)</h3>
 <p class="nhan">Task</p>
 <p>Cars <code>Car(owner, price)</code> go into a BST keyed by price. Write <code>insert(owner, price)</code> that <strong>skips</strong> a car whose price is ≤ 0 or already in the tree, then <code>breadth()</code> and the three depth-first traversals, each printing the cars as (owner,price).</p>
@@ -8842,7 +8846,7 @@ PASS 70: 80 hangs below 60<br>
 PASS leaf 35<br>
 PASS only node -&gt; empty tree<br>
 ALL TESTS PASSED</div>
-<div class="pitfall">Merging may make the tree taller (4 → 5 above). That is correct — do not "repair" it; the PE compares the exact shape. And test the at-most-one-child cases first: the walk to the rightmost node starts from <code>p.left</code>, which may be <code>null</code>.</div>`,
+<div class="pitfall">Merging may make the tree taller (4 → 5 above). That is correct — do not "repair" it; a PE checker typically compares the exact shape. And test the at-most-one-child cases first: the walk to the rightmost node starts from <code>p.left</code>, which may be <code>null</code>.</div>`,
     `<h3>🧪 Bài 4 — f4: xoá bằng hợp nhất (kiểu PE · ~20 phút)</h3>
 <p class="nhan">Đề bài</p>
 <p>Viết <code>deleteByMerging(price)</code> như slide 29: cây con phải của nút bị xoá treo xuống dưới nút phải nhất của cây con trái, rồi nút cha nhận cây con trái. Nút có tối đa một con thì chỉ việc được thay bằng đứa con đó.</p>
@@ -8926,7 +8930,7 @@ PASS 70: 80 hangs below 60<br>
 PASS leaf 35<br>
 PASS only node -&gt; empty tree<br>
 ALL TESTS PASSED</div>
-<div class="pitfall">Hợp nhất (merging) có thể làm cây cao hơn (4 → 5 ở trên). Đó là kết quả đúng — đừng "sửa" nó; đề PE so đúng hình dạng cây. Và xét các trường hợp tối đa một con trước: vòng đi tới nút phải nhất bắt đầu từ <code>p.left</code>, mà <code>p.left</code> có thể là <code>null</code>.</div>`),
+<div class="pitfall">Hợp nhất (merging) có thể làm cây cao hơn (4 → 5 ở trên). Đó là kết quả đúng — đừng "sửa" nó; bài chấm PE thường so đúng hình dạng cây. Và xét các trường hợp tối đa một con trước: vòng đi tới nút phải nhất bắt đầu từ <code>p.left</code>, mà <code>p.left</code> có thể là <code>null</code>.</div>`),
     bi(`<h3>🧪 Exercise 5 — rotate a node right or left (PE style · ~20 min)</h3>
 <p class="nhan">Task</p>
 <p>Write <code>rotateRight(x)</code> and <code>rotateLeft(x)</code> for the node with price x, as on slide 7 of deck 4B-Trees2: rotating Par to the right about its left child Ch makes Ch the new root of the subtree, the right subtree of Ch becomes the left subtree of Par, and Par becomes the right subtree of Ch. If the needed child does not exist, do nothing.</p>
@@ -8938,7 +8942,7 @@ ALL TESTS PASSED</div>
  /  \\                            /  \\
 20   40                         40   70</code></pre>
 <p class="nhan">Idea</p>
-<p>three assignments move the pointers (<code>par.left = ch.right; ch.right = par;</code>), then the link that pointed to Par — the parent's left or right link, or <code>root</code> — must point to Ch. A rotation is O(1) once the node is found and never changes the inorder, so the tree stays a BST.</p>
+<p>three assignments move the pointers (<code>ch = par.left; par.left = ch.right; ch.right = par;</code>), then the link that pointed to Par — the parent's left or right link, or <code>root</code> — must point to Ch. A rotation is O(1) once the node is found and never changes the inorder, so the tree stays a BST.</p>
 <p class="nhan">Solution + self-test — every line must say PASS</p>
 <pre><code class="language-java">class Node {
     int price;
@@ -9028,7 +9032,7 @@ PASS rotateRight(30): parent 50 relinked<br>
 PASS 70 has no left child: no change<br>
 PASS stick 30-20-10: height 3 -&gt; 2<br>
 ALL TESTS PASSED</div>
-<div class="pitfall">Forgetting the relinking step is the classic mistake: the three assignments are right, but the parent still points to Par, so Ch and everything above it in the new subtree vanish from the tree (test 4 catches it). Rotating when <code>par.left == null</code> throws a <code>NullPointerException</code> (test 5).</div>`,
+<div class="pitfall">Forgetting the relinking step is the classic mistake: the three assignments are right, but the parent still points to Par, so Ch and its left subtree vanish from the tree (test 4 catches it). Rotating when <code>par.left == null</code> throws a <code>NullPointerException</code> (test 5).</div>`,
     `<h3>🧪 Bài 5 — xoay một nút sang phải hoặc sang trái (kiểu PE · ~20 phút)</h3>
 <p class="nhan">Đề bài</p>
 <p>Viết <code>rotateRight(x)</code> và <code>rotateLeft(x)</code> (xoay phải, xoay trái) cho nút có price x, như slide 7 của bộ 4B-Trees2: xoay Par sang phải quanh con trái Ch thì Ch thành gốc mới của cây con, cây con phải của Ch thành cây con trái của Par, và Par thành cây con phải của Ch. Nếu không có đứa con cần thiết thì không làm gì.</p>
@@ -9040,7 +9044,7 @@ ALL TESTS PASSED</div>
  /  \\                            /  \\
 20   40                         40   70</code></pre>
 <p class="nhan">Ý tưởng</p>
-<p>ba phép gán đổi con trỏ (<code>par.left = ch.right; ch.right = par;</code>), rồi liên kết đang trỏ tới Par — liên kết trái hoặc phải của nút cha, hoặc <code>root</code> — phải trỏ sang Ch. Phép xoay (rotation) tốn O(1) khi đã tìm được nút và không bao giờ đổi thứ tự trung thứ tự, nên cây vẫn là BST.</p>
+<p>ba phép gán đổi con trỏ (<code>ch = par.left; par.left = ch.right; ch.right = par;</code>), rồi liên kết đang trỏ tới Par — liên kết trái hoặc phải của nút cha, hoặc <code>root</code> — phải trỏ sang Ch. Phép xoay (rotation) tốn O(1) khi đã tìm được nút và không bao giờ đổi thứ tự trung thứ tự, nên cây vẫn là cây nhị phân tìm kiếm (BST).</p>
 <p class="nhan">Lời giải + test tự kiểm — mọi dòng phải là PASS</p>
 <pre><code class="language-java">class Node {
     int price;
@@ -9130,7 +9134,7 @@ PASS rotateRight(30): parent 50 relinked<br>
 PASS 70 has no left child: no change<br>
 PASS stick 30-20-10: height 3 -&gt; 2<br>
 ALL TESTS PASSED</div>
-<div class="pitfall">Quên bước nối lại liên kết của cha là lỗi kinh điển: ba phép gán đều đúng, nhưng cha vẫn trỏ vào Par, nên Ch biến mất khỏi cây (test 4 bắt lỗi này). Xoay khi <code>par.left == null</code> thì ném <code>NullPointerException</code> (test 5).</div>`),
+<div class="pitfall">Quên bước nối lại liên kết của cha là lỗi kinh điển: ba phép gán đều đúng, nhưng cha vẫn trỏ vào Par, nên Ch cùng cây con trái của nó biến mất khỏi cây (test 4 bắt lỗi này). Xoay khi <code>par.left == null</code> thì ném <code>NullPointerException</code> (test 5).</div>`),
     bi(`<h3>🧪 Exercise 6 — is it an AVL tree? If not, rebalance it (~25 min)</h3>
 <p class="nhan">Task</p>
 <p>(a) Write <code>bf(p)</code> = height(right) − height(left), the balance factor of deck 4B-Trees2, and <code>isAVL()</code>: every node has a balance factor of −1, 0 or 1. (b) Write <code>rebalance()</code> with the simple balance algorithm of slides 5–6: copy the keys into an array in inorder (so it is sorted), clear the tree, then insert the middle element and recurse on both halves.</p>
@@ -9663,7 +9667,7 @@ PASS f3 copy-delete (B,3): (H,2) moves up<br>
 PASS f4 rotate right at (C,8)<br>
 PASS inorder still sorted<br>
 ALL TESTS PASSED</div>
-<div class="pitfall">Read the order the task names: "the first node in breadth-first order" and "the first node in preorder" can be different nodes, and the check is strict. Build f3 and f4 from parts you have already tested (Exercises 3 and 5), and check the inorder at the end: if it is not sorted, a relinking is wrong.</div>`,
+<div class="pitfall">Read the order the task names: "the first node in breadth-first order" and "the first node in preorder" can be different nodes, and the grading typically compares the output exactly. Build f3 and f4 from parts you have already tested (Exercises 3 and 5), and check the inorder at the end: if it is not sorted, a relinking is wrong.</div>`,
     `<h3>🧪 Bài 8 — đề mini: f1–f4 trên cùng một cây (gần mức đề PE thật · ~30 phút)</h3>
 <p class="nhan">Đề bài</p>
 <p>Lớp <code>BSTree</code> chứa xe và hàm <code>insert</code> đã cho sẵn. <strong>f1</strong>: in cây theo chiều rộng (breadth-first). <strong>f2</strong>: duyệt tiền thứ tự (preorder), chỉ in các xe có 3 ≤ price ≤ 7. <strong>f3</strong>: tìm nút đầu tiên, theo thứ tự duyệt chiều rộng, có hai con và price &lt; 5, rồi xoá nó bằng sao chép (copying). <strong>f4</strong>: tìm nút đầu tiên, theo thứ tự duyệt chiều rộng, có con trái và price &gt; 5, rồi xoay nó sang phải.</p>
@@ -9796,7 +9800,7 @@ PASS f3 copy-delete (B,3): (H,2) moves up<br>
 PASS f4 rotate right at (C,8)<br>
 PASS inorder still sorted<br>
 ALL TESTS PASSED</div>
-<div class="pitfall">Đọc kỹ thứ tự mà đề nêu: "nút đầu tiên theo chiều rộng" và "nút đầu tiên theo tiền thứ tự" có thể là hai nút khác nhau, và bài chấm so khớp tuyệt đối. Ghép f3 và f4 từ những phần đã kiểm ở Bài 3 và Bài 5, và cuối cùng kiểm trung thứ tự (inorder): nếu không còn tăng dần thì có một chỗ nối liên kết bị sai.</div>`),
+<div class="pitfall">Đọc kỹ thứ tự mà đề nêu: "nút đầu tiên theo chiều rộng" và "nút đầu tiên theo tiền thứ tự" có thể là hai nút khác nhau, và bài chấm thường so khớp đầu ra (output) tuyệt đối. Ghép f3 và f4 từ những phần đã kiểm ở Bài 3 và Bài 5, và cuối cùng kiểm trung thứ tự (inorder): nếu không còn tăng dần thì có một chỗ nối liên kết bị sai.</div>`),
     bi(`<h2>🗂 Glossary — English → Vietnamese</h2>
 <p>Every term of the chapter with its Vietnamese name and a one-sentence explanation. Cover the right-hand columns and test yourself.</p>
 <table>
@@ -9813,7 +9817,7 @@ ALL TESTS PASSED</div>
 <tr><td><strong>degree of a node</strong></td><td>bậc của nút</td><td>The number of its non-empty children.</td></tr>
 <tr><td><strong>path length</strong></td><td>độ dài đường đi</td><td>The number of arcs (edges) on a path, not the number of nodes.</td></tr>
 <tr><td><strong>binary tree</strong></td><td>cây nhị phân</td><td>Every node has at most two children, each designated left or right.</td></tr>
-<tr><td><strong>proper (full) binary tree</strong></td><td>cây nhị phân proper (đủ hai con)</td><td>Every internal node has exactly two children; then leaves = internal nodes + 1.</td></tr>
+<tr><td><strong>proper (full) binary tree</strong></td><td>cây nhị phân proper (đủ hai con)</td><td>Every internal node has exactly two children; if the tree is non-empty, leaves = internal nodes + 1.</td></tr>
 <tr><td><strong>complete / nearly complete</strong></td><td>đầy đủ / gần đầy đủ</td><td>Deck 4A: every level full (many books say perfect); heap shape: all levels full except the last, filled from the left.</td></tr>
 <tr><td><strong>traversal</strong></td><td>phép duyệt</td><td>Visiting every node exactly once.</td></tr>
 <tr><td><strong>preorder / inorder / postorder</strong></td><td>tiền / trung / hậu thứ tự</td><td>NLR / LNR / LRN: the node before, between or after its left and right subtrees.</td></tr>
@@ -9846,7 +9850,7 @@ ALL TESTS PASSED</div>
 <tr><td><strong>degree of a node</strong></td><td>bậc của nút</td><td>Số con khác rỗng của nút.</td></tr>
 <tr><td><strong>path length</strong></td><td>độ dài đường đi</td><td>Số cạnh trên đường đi, không phải số nút.</td></tr>
 <tr><td><strong>binary tree</strong></td><td>cây nhị phân</td><td>Mỗi nút có nhiều nhất hai con, mỗi con được chỉ định là trái hoặc phải.</td></tr>
-<tr><td><strong>proper (full) binary tree</strong></td><td>cây nhị phân proper (đủ hai con)</td><td>Mọi nút trong có đúng hai con; khi đó số lá = số nút trong + 1.</td></tr>
+<tr><td><strong>proper (full) binary tree</strong></td><td>cây nhị phân proper (đủ hai con)</td><td>Mọi nút trong có đúng hai con; khi cây khác rỗng thì số lá = số nút trong + 1.</td></tr>
 <tr><td><strong>complete / nearly complete</strong></td><td>đầy đủ / gần đầy đủ</td><td>Bộ 4A: mọi mức đều đầy (nhiều sách gọi là perfect); hình dạng heap: mọi mức đầy trừ mức cuối, lấp từ trái sang.</td></tr>
 <tr><td><strong>traversal</strong></td><td>phép duyệt</td><td>Thăm mỗi nút đúng một lần.</td></tr>
 <tr><td><strong>preorder / inorder / postorder</strong></td><td>tiền / trung / hậu thứ tự</td><td>NLR / LNR / LRN: thăm nút trước, giữa hay sau hai cây con trái và phải.</td></tr>
@@ -9901,7 +9905,7 @@ ALL TESTS PASSED</div>
 <ol>
 <li><strong>Hai quy ước</strong>: slide đặt gốc ở mức (level) 1 và cho cây một nút cao (height) 1; sách bắt đầu cả hai từ 0. Mọi đáp án về "chiều cao" hay "mức" đều phụ thuộc đề dùng quy ước nào.</li>
 <li><strong>Các phép duyệt (traversal)</strong> thăm mỗi nút một lần, O(n): tiền thứ tự (preorder — nút trước, dùng in tài liệu), hậu thứ tự (postorder — nút sau cùng, dùng tính dung lượng thư mục, tính giá trị biểu thức), theo chiều rộng (breadth-first — dùng hàng đợi), trung thứ tự (inorder — cho cây nhị phân; trên BST ra dãy tăng). Inorder + preorder (hoặc postorder) dựng lại được cây nhị phân; preorder + postorder thì không.</li>
-<li><strong>Hình dạng cây nhị phân</strong>: tối đa hai con; proper (cây đủ hai con) = mỗi nút 0 hoặc 2 con; "complete" của slide = mọi mức đều đầy (perfect — hoàn hảo); heap là "nearly complete" (gần đầy đủ) — mức cuối lấp từ trái.</li>
+<li><strong>Hình dạng cây nhị phân</strong>: tối đa hai con; proper (cây đủ hai con) = mỗi nút 0 hoặc 2 con; "complete" của slide = mọi mức đều đầy (perfect — hoàn hảo); đống (heap) là "nearly complete" (gần đầy đủ) — mức cuối lấp từ trái.</li>
 <li><strong>BST (cây nhị phân tìm kiếm)</strong>: cây con trái &lt; nút &lt; cây con phải, cho cả cây con. Tìm kiếm, chèn (khoá mới thành lá, khoá trùng bị từ chối) và xoá đều đi một con đường: O(h), với log₂(n + 1) ≤ h ≤ n.</li>
 <li><strong>Xoá</strong>: lá → liên kết của cha thành null; một con → cha nhận đứa con đó; hai con → hợp nhất (merging — chiều cao có thể tăng hoặc giảm) hoặc chép khoá liền trước (copying — chiều cao không bao giờ tăng; nhớ trường hợp prev == p).</li>
 <li><strong>Cân bằng</strong>: dữ liệu vào đã sắp xếp tạo ra cây "que" (O(n) mỗi thao tác). Cách chữa: dựng lại từ mảng đã sắp bằng cách chèn phần tử giữa; phép xoay (rotation — O(1), thứ tự trung thứ tự không đổi); cây AVL giữ |chiều cao(phải) − chiều cao(trái)| ≤ 1 ở mọi nút — sau khi chèn chỉ cần tối đa một lần xoay đơn hoặc xoay kép (single / double rotation), sau khi xoá có thể phải xoay ngược lên tới tận gốc.</li>

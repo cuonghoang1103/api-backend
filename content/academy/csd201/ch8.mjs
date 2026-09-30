@@ -20,7 +20,7 @@ const L_csd14_1 = {
     bi(`<span class="eyebrow">Chapter 8 · Lesson 8.A · 8-TextProcessing, slides 1–15</span>
 <h2>Text processing, part 1 — pattern matching, slide by slide</h2>
 <p class="lead">The last chapter of the course opens with a question every editor, search engine and DNA tool asks: where does a pattern occur in a text? This lesson walks through slides 1–15: the brute-force algorithm traced on the slides' own example, then Knuth–Morris–Pratt (KMP) with its next/T[] table — every trace is printed by a Java program you can run yourself.</p>
-<div class="callout"><strong>CLO8 in the syllabus:</strong> describe the text-processing problem and its applications; explain the Huffman, LZW and run-length encoding algorithms. This lesson is the pattern-matching half (session 53). Two constructive questions of the syllabus belong here: CQ18.2 "What is the complexity of the brute-force algorithm?" and CQ18.3 "What is the complexity of KMP, and what is the role of the T[i] array?". FE questions on this part commonly ask for a complexity, a number of comparisons on a small example, or the T[] of a short pattern — practise slides 13–15 by hand until you are fast.</div>
+<div class="callout"><strong>CLO8 in the syllabus:</strong> describe the text-processing problem and its applications; explain the Huffman, LZW and run-length encoding algorithms. This lesson is the pattern-matching half (session 53). Two constructive questions of the syllabus belong here: CQ18.2 "What is the complexity of the brute-force algorithm?" and CQ18.3 "What is the complexity of the Knuth-Morris-Pratt algorithm?" (its HCM version adds "What is the role of the T[i] array?"). FE questions on this part commonly ask for a complexity, a number of comparisons on a small example, or the T[] of a short pattern — practise slides 13–15 by hand until you are fast.</div>
 <h3>Slides 1–15 in one table</h3>
 <table>
 <thead><tr><th>Question</th><th>Brute force (slides 5–9)</th><th>KMP (slides 10–15)</th></tr></thead>
@@ -35,7 +35,7 @@ const L_csd14_1 = {
     `<span class="eyebrow">Chương 8 · Bài 8.A · 8-TextProcessing, slide 1–15</span>
 <h2>Xử lý văn bản, phần 1 — so khớp mẫu, học từng slide</h2>
 <p class="lead">Chương cuối của môn mở đầu bằng câu hỏi mà mọi trình soạn thảo, máy tìm kiếm và công cụ phân tích DNA đều phải trả lời: một mẫu (pattern) xuất hiện ở đâu trong văn bản (text)? Bài này đi qua slide 1–15: thuật toán vét cạn (brute force) lần theo đúng ví dụ của slide, rồi thuật toán Knuth–Morris–Pratt (KMP) cùng bảng next/T[] — mọi bảng lần theo đều do một chương trình Java in ra, bạn tự chạy lại được.</p>
-<div class="callout"><strong>CLO8 (chuẩn đầu ra số 8) trong đề cương môn học (syllabus):</strong> mô tả bài toán xử lý văn bản và ứng dụng của nó; giải thích các thuật toán Huffman, LZW và mã hoá độ dài loạt (run-length encoding). Bài này là nửa so khớp mẫu (buổi 53). Hai câu hỏi gợi mở (constructive question) của syllabus nằm ở đây: CQ18.2 "Độ phức tạp của thuật toán vét cạn là bao nhiêu?" và CQ18.3 "Độ phức tạp của KMP là bao nhiêu, mảng T[i] dùng để làm gì?". Câu hỏi thi cuối kỳ (FE) ở phần này thường hỏi độ phức tạp, số phép so sánh trên một ví dụ nhỏ, hoặc bảng T[] của một mẫu ngắn — hãy luyện tay slide 13–15 tới khi làm nhanh.</div>
+<div class="callout"><strong>CLO8 (chuẩn đầu ra số 8) trong đề cương môn học (syllabus):</strong> mô tả bài toán xử lý văn bản và ứng dụng của nó; giải thích các thuật toán Huffman, LZW và mã hoá độ dài loạt (run-length encoding). Bài này là nửa so khớp mẫu (buổi 53). Hai câu hỏi gợi mở (constructive question) của syllabus nằm ở đây: CQ18.2 "Độ phức tạp của thuật toán vét cạn là bao nhiêu?" và CQ18.3 "Độ phức tạp của thuật toán Knuth-Morris-Pratt là bao nhiêu?" (bản HCM hỏi thêm "mảng T[i] dùng để làm gì?"). Câu hỏi thi cuối kỳ (FE) ở phần này thường hỏi độ phức tạp, số phép so sánh trên một ví dụ nhỏ, hoặc bảng T[] của một mẫu ngắn — hãy luyện tay slide 13–15 tới khi làm nhanh.</div>
 <h3>Slide 1–15 trong một bảng</h3>
 <table>
 <thead><tr><th>Câu hỏi</th><th>Vét cạn (slide 5–9)</th><th>KMP (slide 10–15)</th></tr></thead>
@@ -446,12 +446,12 @@ total comparisons = 9</div>
 n=2000 m=5: found at 1995, comparisons = 9980, (n-m+1)*m = 9980<br>
 n=1000 m=10: found at 990, comparisons = 9910, (n-m+1)*m = 9910<br>
 n=2000 m=10: found at 1990, comparisons = 19910, (n-m+1)*m = 19910</div>
-<p><strong>Big-O, counted:</strong> doubling n doubles the count, and doubling m doubles it too — it is exactly (n − m + 1)·m, which is O(nm). The slide calls it "certainly a very slow running algorithm".</p>
+<p><strong>Big-O, counted:</strong> doubling n about doubles the count, and doubling m about doubles it too — it is exactly (n − m + 1)·m, which is O(nm). The slide calls it "certainly a very slow running algorithm".</p>
 <p class="meo">🧠 <strong>Remember:</strong> brute force forgets what it has seen; KMP remembers.</p>
 <div class="pitfall">"Brute-force matching is O(n + m)" is a classic wrong FE option — that is KMP. Brute force is O(nm) in the worst case, even though on ordinary text a mismatch usually comes early and it runs fast enough.</div>`,
         `<p class="y-chinh">🎯 Sau ba lần dịch thì p khớp (vị trí 3, đếm từ 0), nhưng ý chính của slide là nhược điểm: vét cạn (brute force) so đi so lại cùng những ký tự của văn bản, nên tốn O(mn) trong trường hợp xấu nhất (worst case).</p>
 <ul>
-<li><strong>Chỗ khớp (match)</strong>: "a match would be found after shifting p three times to the right" — dịch 1, 2, 3 lần, nên p bắt đầu tại S[3]; tổng cộng 9 phép so sánh (kết quả in ra ở slide 8).</li>
+<li><strong>Chỗ khớp (match)</strong>: "a match would be found after shifting p three times to the right" (sẽ tìm thấy chỗ khớp sau khi dịch p sang phải ba lần) — dịch 1, 2, 3 lần, nên p bắt đầu tại S[3]; tổng cộng 9 phép so sánh (kết quả in ra ở slide 8).</li>
 <li><strong>Việc bị làm lại</strong>: ở lần dịch (shift) 1, phép so sánh đầu tiên là p[0] = a với S[1] = b (tới đây slide chuyển sang đếm từ 0), trong khi S[1] đã được so ở bước 2 — vét cạn đã quên mất điều đó.</li>
 <li><strong>Trường hợp xấu nhất</strong>: S = aa…ab và p = aa…ab. Ở mọi lần dịch, m − 1 ký tự khớp rồi ký tự cuối mới hỏng, nên lần dịch nào cũng tốn đủ m phép so sánh:</li>
 </ul>
@@ -493,7 +493,7 @@ n=2000 m=10: found at 1990, comparisons = 19910, (n-m+1)*m = 19910</div>
 n=2000 m=5: found at 1995, comparisons = 9980, (n-m+1)*m = 9980<br>
 n=1000 m=10: found at 990, comparisons = 9910, (n-m+1)*m = 9910<br>
 n=2000 m=10: found at 1990, comparisons = 19910, (n-m+1)*m = 19910</div>
-<p><strong>Big-O, đếm bằng số:</strong> tăng gấp đôi n thì số phép so sánh gấp đôi, tăng gấp đôi m cũng gấp đôi — con số đúng bằng (n − m + 1)·m, tức O(nm). Slide gọi đây là "chắc chắn là một thuật toán chạy rất chậm".</p>
+<p><strong>Big-O, đếm bằng số:</strong> tăng gấp đôi n thì số phép so sánh xấp xỉ gấp đôi, tăng gấp đôi m cũng xấp xỉ gấp đôi — con số đúng bằng (n − m + 1)·m, tức O(nm). Slide gọi đây là "chắc chắn là một thuật toán chạy rất chậm".</p>
 <p class="meo">🧠 <strong>Mẹo nhớ:</strong> vét cạn quên những gì đã thấy; KMP thì nhớ.</p>
 <div class="pitfall">"So khớp vét cạn là O(n + m)" là phương án sai kinh điển trong đề thi cuối kỳ (FE) — đó là KMP. Vét cạn là O(nm) trong trường hợp xấu nhất, dù trên văn bản bình thường chỗ sai khớp (mismatch) thường đến sớm nên nó vẫn chạy đủ nhanh.</div>`],
       [10, 'The Knuth-Morris-Pratt (KMP) Algorithm - 1',
@@ -568,7 +568,7 @@ n=2000 m=10: found at 1990, comparisons = 19910, (n-m+1)*m = 19910</div>
 <div class="out">n=1000 m=10: brute force 9910 comparisons, KMP 1990 (2n = 2000), same answer: true<br>
 n=10000 m=10: brute force 99910 comparisons, KMP 19990 (2n = 20000), same answer: true<br>
 n=10000 m=100: brute force 990100 comparisons, KMP 19900 (2n = 20000), same answer: true</div>
-<p>On slide 9's worst case, brute force grows with n·m while KMP stays just under 2n whatever m is — with m = 100 it does about 50 times less work, and both find the same position.</p>
+<p>On the lesson's worst case from slide 9 (S = aa…ab, p = aa…ab), brute force grows with n·m while KMP stays just under 2n whatever m is — with m = 100 it does about 50 times less work, and both find the same position.</p>
 <p class="meo">🧠 <strong>Remember:</strong> three names, three letters, one promise — linear time, O(n + m).</p>`,
         `<p class="y-chinh">🎯 Knuth, Morris và Pratt tìm ra một thuật toán so khớp chạy trong thời gian tuyến tính, O(n + m): vị trí đang xét trên văn bản S không bao giờ lùi lại.</p>
 <ul>
@@ -641,7 +641,7 @@ n=10000 m=100: brute force 990100 comparisons, KMP 19900 (2n = 20000), same answ
 <div class="out">n=1000 m=10: brute force 9910 comparisons, KMP 1990 (2n = 2000), same answer: true<br>
 n=10000 m=10: brute force 99910 comparisons, KMP 19990 (2n = 20000), same answer: true<br>
 n=10000 m=100: brute force 990100 comparisons, KMP 19900 (2n = 20000), same answer: true</div>
-<p>Trên trường hợp xấu nhất của slide 9, vét cạn tăng theo n·m còn KMP luôn dưới 2n dù m là bao nhiêu — với m = 100, KMP làm ít hơn khoảng 50 lần, và hai thuật toán tìm ra cùng một vị trí.</p>
+<p>Trên trường hợp xấu nhất mà bài dựng ở slide 9 (S = aa…ab, p = aa…ab), vét cạn tăng theo n·m còn KMP luôn dưới 2n dù m là bao nhiêu — với m = 100, KMP làm ít hơn khoảng 50 lần, và hai thuật toán tìm ra cùng một vị trí.</p>
 <p class="meo">🧠 <strong>Mẹo nhớ:</strong> ba cái tên, ba chữ cái, một lời hứa — thời gian tuyến tính, O(n + m).</p>`],
       [11, 'The Knuth-Morris-Pratt Algorithm - 2',
         `<p class="y-chinh">🎯 The running example — text a = 1010001010110 (n = 13), pattern p = 101011 (m = 6): like brute force, KMP considers shifts 0 … n − m, but it skips the shifts that cannot match.</p>
@@ -830,7 +830,7 @@ slide pp by 2: (p[2],p[0])=(1,1) (p[3],p[1])=(0,0) all equal<br>
 <p>Trượt 1 vị trí hỏng ngay (p[1] = 0, p[0] = 1) — chính là câu "in the given example this comparison is wrong" (trong ví dụ này phép so sánh đó sai) của slide — nên lần dịch 1 bị loại mà không cần đụng tới văn bản. Trượt 2 vị trí thì được: đó là slide 13.</p>
 <div class="pitfall">Các phép so mẫu với mẫu này không phụ thuộc văn bản, nên chỉ làm một lần cho mỗi mẫu (bảng T[]) rồi dùng lại cho mọi văn bản cần tìm — đó là phần tiền xử lý (preprocessing) O(m) của KMP. Phương án trong đề thi cuối kỳ (FE) nói "KMP tiền xử lý văn bản" là SAI: nó tiền xử lý mẫu.</div>`],
       [13, 'The Knuth-Morris-Pratt Algorithm - 4',
-        `<p class="y-chinh">🎯 Sliding pp two positions makes the pattern agree with itself, so the search simply continues with a[4] against p[2]; how far to fall back is precomputed as next(j) and stored in the array T[j].</p>
+        `<p class="y-chinh">🎯 Sliding pp two positions makes the pattern agree with itself, so the search simply continues with a[4] against p[2]; how far to fall back is precomputed as the KMP failure function next(j) and stored in the array T[j].</p>
 <ul>
 <li><strong>"Slide 2 (ok)"</strong>: (p[2], p[0]) and (p[3], p[1]) are equal, so p[0..1] already lies over a[2..3]: next(4) = 2, and the search goes on with (a[4], p[2]).</li>
 <li><strong>The slide's definition</strong>: next(0) = −1, next(1) = 0, and for 2 ≤ j ≤ m − 1, next(j) is a value in [0, j − 1].</li>
@@ -869,7 +869,7 @@ j=5 &nbsp;p[0..4] = 10101 &nbsp;&nbsp;&nbsp;&nbsp;border = 101 &nbsp;&nbsp;&nbsp
 T = [-1, 0, 0, 1, 2, 3]</div>
 <p><strong>Big-O:</strong> this "slide and compare" method is the definition made executable — for each of the m positions, up to m slides of up to m comparisons, O(m³). Slide 15's program builds the same table in O(m).</p>
 <p class="meo">🧠 <strong>Remember:</strong> next(j) answers "I matched j characters and then failed — how many of them can I keep?"</p>`,
-        `<p class="y-chinh">🎯 Trượt pp hai vị trí thì mẫu khớp với chính nó, nên phép tìm chỉ việc đi tiếp bằng cách so a[4] với p[2]; lùi về bao xa được tính sẵn thành next(j) và lưu trong mảng T[j].</p>
+        `<p class="y-chinh">🎯 Trượt pp hai vị trí thì mẫu khớp với chính nó, nên phép tìm chỉ việc đi tiếp bằng cách so a[4] với p[2]; lùi về bao xa được tính sẵn thành hàm thất bại (failure function) next(j) của KMP và lưu trong mảng T[j].</p>
 <ul>
 <li><strong>"Slide 2 (ok)" (trượt 2 — được)</strong>: (p[2], p[0]) và (p[3], p[1]) bằng nhau, nên p[0..1] đã nằm đúng trên a[2..3]: next(4) = 2, và phép tìm đi tiếp với (a[4], p[2]).</li>
 <li><strong>Định nghĩa của slide</strong>: next(0) = −1, next(1) = 0, và với 2 ≤ j ≤ m − 1 thì next(j) là một giá trị trong đoạn [0, j − 1].</li>
@@ -1160,7 +1160,7 @@ spaces in example 3 at i = 11 and 14</div>
 <li>Đang chạy KMP, p[k] ≠ a[r + k] và next[k] = h ≥ 0. Bước kế so cái gì, và lần dịch r mới là bao nhiêu?</li>
 </ol>
 <p class="dap-an">✅ <strong>Đáp án:</strong> (1) 12 — lần dịch 0, 1, 2 mỗi lần tốn 3 (hai chữ a khớp, phép so thứ ba hỏng), lần dịch 3 khớp với 3 phép nữa; tìm thấy ở vị trí 3. Đúng bằng (n − m + 1)·m = 4·3. (2) T = [−1, 0, 1, 0, 1, 2]. (3) Mỗi bước của vòng lặp tăng hoặc vị trí trên văn bản r + k, hoặc lần dịch r, và cả hai đều ≤ n, nên có nhiều nhất 2n bước; dựng bảng T tốn O(m). (4) So p[h] với chính a[r + k]; lần dịch mới là r + k − h.</p>
-<p><strong>Học tiếp:</strong> bài 8.B (slide 16–40: entropy, mã tiền tố, Huffman, LZW, RLE). Muốn đào sâu nửa này, bài 8.2 (so khớp mẫu: vét cạn &amp; KMP) dựng bảng thất bại (failure table) theo quy ước của sách và so KMP với Boyer–Moore, Rabin–Karp; bài 8.5 có bài tập kiểu thi thực hành (PE) kèm phép thử (test) tự kiểm.</p>`),
+<p><strong>Học tiếp:</strong> bài 8.B (slide 16–40: entropy — lượng tin trung bình, mã tiền tố, Huffman, LZW, RLE — mã hoá độ dài loạt). Muốn đào sâu nửa này, bài 8.2 (so khớp mẫu: vét cạn &amp; KMP) dựng bảng thất bại (failure table) theo quy ước của sách và so KMP với Boyer–Moore, Rabin–Karp; bài 8.5 có bài tập kiểu thi thực hành (PE) kèm phép thử (test) tự kiểm.</p>`),
     books([
       ['goodrich', 'Ch.13 Text Processing p.573 — §13.1 Abundance of Digitized Text p.574 · §13.2 Pattern-Matching Algorithms p.576 · §13.2.1 Brute Force p.576 · §13.2.3 The Knuth-Morris-Pratt Algorithm p.582', 'Chương 13 Text Processing tr.573 — §13.1 Abundance of Digitized Text tr.574 · §13.2 Pattern-Matching Algorithms tr.576 · §13.2.1 Brute Force tr.576 · §13.2.3 The Knuth-Morris-Pratt Algorithm tr.582'],
     ]),
@@ -1353,7 +1353,7 @@ RLE on a word &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: 11 -&gt; 20 char
 <li>Lines 2–4 use RLE (slide 36): a picture row with long runs shrinks from 20 to 7 characters; the word COMPRESSION grows from 11 to 20.</li>
 </ul>
 <div class="pitfall">"ZIP is lossy because the file gets smaller" is false — size says nothing about loss; the test is whether decoding returns exactly the original. The pairs to know for the FE: lossy = MP3, JPG; lossless = ZIP, GZ and every algorithm of this chapter.</div>`,
-        `<p class="y-chinh">🎯 Nén có hai loại: mất mát (lossy — MP3, JPG, một phần chi tiết bị vứt đi vĩnh viễn) và không mất mát (lossless — ZIP, GZ, lấy lại đúng nguyên bản); ba thuật toán của bộ slide — Huffman, Lempel–Ziv, RLE — đều không mất mát.</p>
+        `<p class="y-chinh">🎯 Nén có hai loại: mất mát (lossy — MP3, JPG, một phần chi tiết bị vứt đi vĩnh viễn) và không mất mát (lossless — ZIP, GZ, lấy lại đúng nguyên bản); ba thuật toán của bộ slide — Huffman, Lempel–Ziv, RLE (mã hoá độ dài loạt) — đều không mất mát.</p>
 <ul>
 <li><strong>Mất mát (lossy)</strong>: bỏ đi những gì mắt hay tai khó nhận ra, nên nén mạnh hơn nhiều — nhưng giải mã(mã hoá(x)) ≠ x.</li>
 <li><strong>Không mất mát (lossless)</strong>: giải mã(mã hoá(x)) = x, đúng từng bit — lựa chọn duy nhất cho văn bản, mã nguồn, cơ sở dữ liệu, chương trình.</li>
@@ -2070,6 +2070,7 @@ B .09  F .05        D .11    C .15    A .20    E .40</code></pre>
 <div class="pitfall">Bảng tần suất trong đề thi hiếm khi đã sắp xếp. Hãy sắp trước, hoặc mỗi bước dò tìm hai số nhỏ nhất — ở đây là .05 và .09, không phải hai ký hiệu được viết đầu tiên.</div>`],
       [26, 'Huffman Coding example - 4',
         `<p class="y-chinh">🎯 Second merge: D .11 and BF .14 — a leaf and an already merged node — become BFD .25.</p>
+<p>The forest after merge 2 (the lesson's drawing, rebuilt from the labels and codes on slides 26–29):</p>
 <pre><code class="language-plaintext">     BFD .25
      /     \\
   BF .14   D .11
@@ -2089,6 +2090,7 @@ B .09  F .05        C .15    A .20    E .40</code></pre>
 <p>Why not C .15 with BF .14? Because D .11 is smaller than C .15 — the rule looks only at the numbers.</p>
 <p class="meo">🧠 <strong>Remember:</strong> rare symbols are merged early and often → long codes; the most frequent symbol is merged last → the shortest code.</p>`,
         `<p class="y-chinh">🎯 Lần gộp thứ hai: D .11 và BF .14 — một lá và một nút đã gộp — thành BFD .25.</p>
+<p>Rừng cây sau lần gộp 2 (hình vẽ của bài, dựng lại từ nhãn và bộ mã trên slide 26–29):</p>
 <pre><code class="language-plaintext">     BFD .25
      /     \\
   BF .14   D .11
@@ -2109,6 +2111,7 @@ B .09  F .05        C .15    A .20    E .40</code></pre>
 <p class="meo">🧠 <strong>Mẹo nhớ:</strong> ký hiệu hiếm bị gộp sớm và nhiều lần → mã dài; ký hiệu hay gặp nhất được gộp sau cùng → mã ngắn nhất.</p>`],
       [27, 'Huffman Coding example - 5',
         `<p class="y-chinh">🎯 Third merge: the two smallest are now C .15 and A .20 — two original leaves — so they form a new tree AC .35 beside BFD .25.</p>
+<p>The forest after merge 3 (the lesson's drawing):</p>
 <pre><code class="language-plaintext">     BFD .25                AC .35
      /     \\                /    \\
   BF .14   D .11         A .20   C .15        E .40
@@ -2128,6 +2131,7 @@ B .09  F .05</code></pre>
 <p class="meo">🧠 <strong>Remember:</strong> think "forest", not "chain".</p>
 <div class="pitfall">A frequent mistake is to always attach the next symbol to the tree built last (BFD + C, then + A, then + E). That builds a chain: D, B and F sink one level deeper (4, 5 and 5 bits) and the average rises to 2.39 bits instead of 2.34. Check at step 3: is BFD .25 among the two smallest? No — C .15 and A .20 are.</div>`,
         `<p class="y-chinh">🎯 Lần gộp thứ ba: hai nút nhỏ nhất giờ là C .15 và A .20 — hai lá ban đầu — nên chúng tạo thành một cây mới AC .35 đứng cạnh BFD .25.</p>
+<p>Rừng cây sau lần gộp 3 (hình vẽ của bài):</p>
 <pre><code class="language-plaintext">     BFD .25                AC .35
      /     \\                /    \\
   BF .14   D .11         A .20   C .15        E .40
@@ -2148,6 +2152,7 @@ B .09  F .05</code></pre>
 <div class="pitfall">Lỗi hay gặp là lúc nào cũng gắn ký hiệu kế tiếp vào cây vừa dựng (BFD + C, rồi + A, rồi + E). Làm vậy thành một chuỗi: D, B và F chìm sâu thêm một tầng (4, 5 và 5 bit) và trung bình tăng lên 2.39 bit thay vì 2.34. Kiểm tra ở bước 3: BFD .25 có thuộc hai nút nhỏ nhất không? Không — C .15 và A .20 mới là hai nút nhỏ nhất.</div>`],
       [28, 'Huffman Coding example - 6',
         `<p class="y-chinh">🎯 Fourth merge: BFD .25 and AC .35 join into BFDAC .60, and only two nodes are left — E .40 and BFDAC .60.</p>
+<p>The forest after merge 4 (the lesson's drawing):</p>
 <pre><code class="language-plaintext">           BFDAC .60
         /             \\
    AC .35             BFD .25
@@ -2169,6 +2174,7 @@ A .20   C .15      BF .14   D .11          E .40
 <p><strong>Big-O on the example:</strong> 5 merges × (2 polls + 1 add) on a queue of at most 6 nodes; in general O(k log k) for k symbols.</p>
 <p class="meo">🧠 <strong>Remember:</strong> after k − 2 merges exactly two trees are left; the last merge makes the root.</p>`,
         `<p class="y-chinh">🎯 Lần gộp thứ tư: BFD .25 và AC .35 nối thành BFDAC .60, và chỉ còn hai nút — E .40 và BFDAC .60.</p>
+<p>Rừng cây sau lần gộp 4 (hình vẽ của bài):</p>
 <pre><code class="language-plaintext">           BFDAC .60
         /             \\
    AC .35             BFD .25
@@ -2191,6 +2197,7 @@ A .20   C .15      BF .14   D .11          E .40
 <p class="meo">🧠 <strong>Mẹo nhớ:</strong> sau k − 2 lần gộp thì còn đúng hai cây; lần gộp cuối tạo ra gốc.</p>`],
       [29, 'Huffman Coding example - 7',
         `<p class="y-chinh">🎯 The last merge makes the root BFDACE 1.00; labelling the branches 0 and 1 and reading each path from the root down gives the codes A 000, B 0100, C 001, D 011, E 1, F 0101 — none is a prefix of another.</p>
+<p>The finished tree (the lesson's drawing; compare it with the figure on the slide):</p>
 <pre><code class="language-plaintext">                    BFDACE 1.00
                  0 /           \\ 1
            BFDAC .60           E .40
@@ -2256,6 +2263,7 @@ DECADE -&gt; 01110010000111 (14 bits; fixed 3-bit code: 18) -&gt; decoded: DECAD
 <p>Decoding FACE by walking the tree: 0-1-0-1 reaches leaf F, back to the root; 0-0-0 → A; 0-0-1 → C; 1 → E. Words full of E and A are the cheapest — exactly what the frequencies asked for.</p>
 <div class="pitfall">Read codes from the root down to the leaf. Reading them upwards reverses the bits: B would come out as 0010 instead of 0100.</div>`,
         `<p class="y-chinh">🎯 Lần gộp cuối tạo ra gốc BFDACE 1.00; ghi 0 và 1 lên các nhánh rồi đọc từng đường đi từ gốc xuống sẽ được bảng mã A 000, B 0100, C 001, D 011, E 1, F 0101 — không mã nào là tiền tố (prefix) của mã khác.</p>
+<p>Cây hoàn chỉnh (hình vẽ của bài; hãy đối chiếu với hình trên slide):</p>
 <pre><code class="language-plaintext">                    BFDACE 1.00
                  0 /           \\ 1
            BFDAC .60           E .40
@@ -2552,7 +2560,7 @@ entropy H = 2.12 bits</div>
 <div class="pitfall">"Mã Huffman của một văn bản là duy nhất" là SAI; "mọi mã Huffman của một văn bản có cùng độ dài trung bình" là ĐÚNG. Đề thi cuối kỳ (FE) rất thích tráo hai câu này.</div>`],
       [32, 'Some important statements in Huffman Encoding program',
         `<p class="y-chinh">🎯 The slide's statements are the skeleton of a real Huffman encoder: count frequencies in an array of R = 256 counters, build the tree, then build the code table with a recursive buildCode.</p>
-<p>The lines follow the Huffman program of Sedgewick &amp; Wayne's <em>Algorithms</em>. Made runnable here: <code>Node</code> and <code>buildTree</code> are written in that usual way (the slide only calls <code>buildTree</code>), the input is the 100-character document of slide 23, and one typo is fixed:</p>
+<p>The lines look adapted from the Huffman program in Sedgewick &amp; Wayne's <em>Algorithms</em> (same names R, freq, st, buildCode). Made runnable here: <code>Node</code> and <code>buildTree</code> are written in that usual way (the slide only calls <code>buildTree</code>), the input is the 100-character document of slide 23, and one typo is fixed:</p>
 <pre><code class="language-java">import java.util.PriorityQueue;
 
 class Node implements Comparable&lt;Node&gt; {
@@ -2616,7 +2624,7 @@ total: 234 bits for 100 characters<br>
 </ul>
 <div class="pitfall"><code>s + 0</code> works because <code>s</code> is a String: Java turns 0 into "0" and concatenates. Without a String on the left, <code>'0' + 1</code> is arithmetic on character codes and gives 49 — the last line of the output. A classic PE surprise.</div>`,
         `<p class="y-chinh">🎯 Các câu lệnh trên slide là bộ khung của một chương trình mã hoá Huffman thật: đếm tần suất trong mảng R = 256 bộ đếm, dựng cây, rồi dựng bảng mã bằng hàm đệ quy (recursive) buildCode.</p>
-<p>Các dòng này theo đúng chương trình Huffman trong sách <em>Algorithms</em> của Sedgewick &amp; Wayne. Để chạy được: lớp <code>Node</code> và hàm <code>buildTree</code> viết theo cách thông dụng đó (slide chỉ gọi <code>buildTree</code>), đầu vào là tài liệu 100 ký tự của slide 23, và sửa một lỗi gõ (typo):</p>
+<p>Các dòng này có vẻ được chuyển thể từ chương trình Huffman trong sách <em>Algorithms</em> của Sedgewick &amp; Wayne (cùng các tên R, freq, st, buildCode). Để chạy được: lớp <code>Node</code> và hàm <code>buildTree</code> viết theo cách thông dụng đó (slide chỉ gọi <code>buildTree</code>), đầu vào là tài liệu 100 ký tự của slide 23, và sửa một lỗi gõ (typo):</p>
 <pre><code class="language-java">import java.util.PriorityQueue;
 
 class Node implements Comparable&lt;Node&gt; {
@@ -2809,7 +2817,7 @@ codes.append('(').append(dict.indexOf(P)).append(')');</code></pre>
 <div class="pitfall">Quên bước 4 — xuất mã của P cuối cùng — là lỗi LZW kinh điển: đầu ra thiếu một mã, và bên giải mã mất mấy ký tự cuối (ở đây là chữ C cuối cùng).</div>`],
       [35, 'LZW Algorithm - Encoding process demo',
         `<p class="y-chinh">🎯 Starting from the dictionary (1)A (2)B (3)C, LZW compresses the input ABBABABAC — the string these codes decode back to — into (1)(2)(2)(4)(7)(3), adding the entries (4) to (8) on the way.</p>
-<p>The slide's table (Step, Pos, Dictionary, Output) is a figure; the same table, produced by running slide 34's algorithm — compare it row by row with the slide:</p>
+<p>The slide's table (Step, Pos, Dictionary, Output) is a figure; here it is rebuilt by running slide 34's algorithm — compare it row by row with the slide:</p>
 <pre><code class="language-java">import java.util.ArrayList;
 
 public class LzwEncode {
@@ -2860,7 +2868,7 @@ compressed: (1)(2)(2)(4)(7)(3) &nbsp;(9 characters -&gt; 6 codes)</div>
 <p>9 characters became 6 codes; on longer, more repetitive inputs the dictionary entries grow longer and the saving grows with them.</p>
 <div class="pitfall">The slide numbers codes from (1). Real LZW gives the 256 single bytes the codes 0–255 and new entries 256, 257, … — the algorithm is identical, only the numbers shift. Use the numbering the question gives.</div>`,
         `<p class="y-chinh">🎯 Bắt đầu từ từ điển (1)A (2)B (3)C, LZW nén đầu vào ABBABABAC — chính là chuỗi mà các mã này giải ngược ra — thành (1)(2)(2)(4)(7)(3), dọc đường thêm các mục (4) tới (8).</p>
-<p>Bảng của slide (Step — bước, Pos — vị trí, Dictionary — từ điển, Output — đầu ra) là hình vẽ; dưới đây là cùng bảng đó do thuật toán ở slide 34 chạy ra — hãy so từng dòng với slide:</p>
+<p>Bảng của slide (Step — bước, Pos — vị trí, Dictionary — từ điển, Output — đầu ra) là hình vẽ; dưới đây là bảng được dựng lại bằng cách chạy thuật toán ở slide 34 — hãy so từng dòng với slide:</p>
 <pre><code class="language-java">import java.util.ArrayList;
 
 public class LzwEncode {
@@ -3036,7 +3044,7 @@ ABCD (4) -&gt; 1A1B1C1D (8), decodes back: true, rate = (4 - 8) / 4 = -100%</div
 <li><strong>Definitions</strong>: lossy/lossless, entropy, compression rate, prefix code.</li>
 </ul>
 <p class="meo">🧠 <strong>Remember:</strong> keep one worked example per method in your head — abaa in abcabaabcabac, the T[] of 101011, the six Huffman codes, (1)(2)(2)(4)(7)(3), 4F4O3F2O5F7O.</p>`,
-        `<p class="y-chinh">🎯 Cả bộ slide trong một câu: tìm mẫu thật nhanh (vét cạn O(nm), KMP O(n + m)) và lưu văn bản thật gọn (mã không mất mát bị chặn dưới bởi entropy — lượng tin trung bình; Huffman, LZW, RLE mỗi thuật toán gỡ một kiểu dư thừa khác nhau).</p>
+        `<p class="y-chinh">🎯 Cả bộ slide trong một câu: tìm mẫu thật nhanh (vét cạn O(nm), KMP O(n + m)) và lưu văn bản thật gọn (mã không mất mát bị chặn dưới bởi entropy — lượng tin trung bình; Huffman, LZW, RLE — mã hoá độ dài loạt — mỗi thuật toán gỡ một kiểu dư thừa khác nhau).</p>
 <table>
 <thead><tr><th>Mục trong phần tóm tắt</th><th>Điều cần mang theo</th><th>Chi phí</th></tr></thead>
 <tbody>
@@ -3069,12 +3077,12 @@ ABCD (4) -&gt; 1A1B1C1D (8), decodes back: true, rate = (4 - 8) / 4 = -100%</div
 <p>The list jumps from §13.2.1 to §13.2.3, so the section between them is not required. LZW and RLE are not on the list — for them, slides 33–36 and 39–40 plus lesson 8.4 are your reading.</p>`,
         `<p class="y-chinh">🎯 Chương 13 của sách Goodrich bản 6, Text Processing (Xử lý văn bản, tr.573), là phiên bản giáo trình của bộ slide này — slide liệt kê các mục cần đọc.</p>
 <ul>
-<li><strong>§13.1 Abundance of Digitized Text (tr.574)</strong> — slide 3, kèm ký hiệu của sách cho chuỗi: xâu con (substring), tiền tố (prefix), hậu tố (suffix).</li>
+<li><strong>§13.1 Abundance of Digitized Text (tr.574)</strong> (văn bản số hoá tràn ngập) — slide 3, kèm ký hiệu của sách cho chuỗi: xâu con (substring), tiền tố (prefix), hậu tố (suffix).</li>
 <li><strong>§13.2 Pattern-Matching Algorithms (tr.576), §13.2.1 Brute Force (tr.576)</strong> — slide 4–9 (so khớp mẫu, vét cạn).</li>
 <li><strong>§13.2.3 The Knuth-Morris-Pratt Algorithm (tr.582)</strong> — slide 10–15; hàm thất bại (failure function) của sách bắt đầu từ 0, fail[k] = T[k + 1].</li>
 <li><strong>§13.4 Text Compression and the Greedy Method (tr.595), §13.4.1 The Huffman Coding Algorithm (tr.596)</strong> — slide 16–32 (nén văn bản, mã Huffman); sách trình bày Huffman như một ví dụ của thuật toán tham lam (greedy).</li>
 </ul>
-<p>Danh sách nhảy từ §13.2.1 sang §13.2.3, nên mục ở giữa không bắt buộc. LZW và RLE không có trong danh sách — với hai thuật toán này, tài liệu đọc là slide 33–36, 39–40 và bài 8.4.</p>`],
+<p>Danh sách nhảy từ §13.2.1 sang §13.2.3, nên mục ở giữa không bắt buộc. LZW và RLE (mã hoá độ dài loạt) không có trong danh sách — với hai thuật toán này, tài liệu đọc là slide 33–36, 39–40 và bài 8.4.</p>`],
       [39, 'LZW Decoding Algorithm',
         `<p class="y-chinh">🎯 LZW decoding reads the codes one by one and rebuilds exactly the encoder's dictionary: output the string of the current code cW, and add "the string of the previous code pW + the first character of the current string".</p>
 <p class="ghi-chu">This slide shows the decoding algorithm as a figure — its text is only the title. Below is the standard LZW decoding algorithm, in the notation (pW, cW, string.cW) that slide 40 uses.</p>
@@ -3283,7 +3291,7 @@ output of the first five codes only: ABBABABA</div>
 <li>Bộ mã a = 0, b = 01, c = 11 có phải mã tiền tố không? Có giải được duy nhất không?</li>
 <li>Tần suất A 5, B 2, C 1, D 1. Dựng mã Huffman và cho tổng số bit của 9 ký hiệu này.</li>
 <li>Với từ điển (1)A, mã hoá AAAA bằng LZW, rồi giải mã lại dãy mã của bạn.</li>
-<li>RLE: nén chuỗi gồm 12 chữ W rồi một chữ B, và cho tỉ lệ nén.</li>
+<li>RLE (mã hoá độ dài loạt): nén chuỗi gồm 12 chữ W rồi một chữ B, và cho tỉ lệ nén.</li>
 <li>Vì sao không bộ mã nào cho bảng tần suất của slide 23 có trung bình 1.89 bit?</li>
 </ol>
 <p class="dap-an">✅ <strong>Đáp án:</strong> (1) Không phải mã tiền tố (0 là tiền tố của 01), nhưng giải được duy nhất: không từ mã nào là <em>phần cuối</em> của từ mã khác, nên đọc từ phải sang trái không bao giờ nhập nhằng — đọc từ trái sang thì bộ giải mã phải nhìn trước. (2) Gộp C + D = 2, rồi B + CD = 4, rồi A + 4 = 9: A 1 bit, B 2, C 3, D 3 → 5 + 4 + 3 + 3 = 15 bit (mã cố định 2 bit cần 18). (3) (1)(2)(1), thêm (2) AA và (3) AAA; giải mã: (1) → A; (2) chưa có trong từ điển → ca đặc biệt A + A = AA; (1) → A → AAAA. (4) 12W1B: 13 → 5 ký tự, (13 − 5)/13 ≈ 62%. (5) Entropy (lượng tin trung bình) là 2.28 bit và không mã giải được duy nhất nào có trung bình dưới entropy; chính phép cộng trên slide cho 2.34.</p>
@@ -3654,7 +3662,7 @@ PASS no runs: twice as long<br>
 PASS empty input<br>
 ALL TESTS PASSED</div>
 <div class="pitfall">This format breaks as soon as the data itself contains digits: 111 encodes to "31", which decodes to an empty string (both characters are read as one count). Real formats store the count in a separate byte or use an escape symbol.</div>`,
-    `<h3>🧪 Bài 3 — f3: mã hoá và giải mã RLE, số lần từ 10 trở lên (kiểu PE · ~15 phút)</h3>
+    `<h3>🧪 Bài 3 — f3: mã hoá và giải mã RLE (mã hoá độ dài loạt), số lần từ 10 trở lên (kiểu PE · ~15 phút)</h3>
 <p class="nhan">Đề bài</p>
 <p>Viết <code>encode(s)</code> — mỗi loạt (run) thành số lần + ký hiệu — và <code>decode(s)</code> khôi phục lại bản gốc. Số lần có thể gồm nhiều chữ số; chuỗi rỗng cũng phải chạy đúng.</p>
 <p class="nhan">Dữ liệu → kết quả mong đợi</p>
@@ -4579,9 +4587,9 @@ ALL TESTS PASSED</div>
 <li><strong>Nén</strong> có loại mất mát (lossy — MP3, JPG) và không mất mát (lossless — ZIP, GZ và mọi thuật toán ở đây); tỉ lệ nén là (vào − ra)/vào; không mã không mất mát nào có trung bình ít bit hơn entropy H (lượng tin trung bình).</li>
 <li><strong>Mã tiền tố (prefix code)</strong> — ký hiệu nằm ở lá của cây — luôn giải được duy nhất; bộ mã kiểu a = 1, b = 01, c = 101, d = 011 thì không.</li>
 <li><strong>Huffman</strong>: gộp hai nút nhỏ nhất tới khi còn một cây; mã = đường đi từ gốc tới lá; có nhiều mã Huffman khác nhau nhưng cùng độ dài trung bình (2.34 bit với tần suất slide 23, không phải 1.89).</li>
-<li><strong>LZW</strong> để hai bên dựng cùng một từ điển (ca đặc biệt khi giải mã: chuỗi trước + ký tự đầu của chuỗi trước); <strong>RLE</strong> ghi số lần + ký hiệu và chỉ có lợi khi có loạt dài.</li>
+<li><strong>LZW</strong> để hai bên dựng cùng một từ điển (ca đặc biệt khi giải mã: chuỗi trước + ký tự đầu của chuỗi trước); <strong>RLE</strong> (mã hoá độ dài loạt — run-length encoding) ghi số lần + ký hiệu và chỉ có lợi khi có loạt dài.</li>
 </ol>
-<h3>✅ Tự kiểm tra trước khi làm quiz</h3>
+<h3>✅ Tự kiểm tra trước khi làm bài trắc nghiệm (quiz)</h3>
 <ol>
 <li>Vì sao <code>kmpAll</code> ở Bài 2 cần thêm ô T[m]?</li>
 <li>Vì sao định dạng RLE ở Bài 3 không xử lý được văn bản 2024?</li>
@@ -4597,9 +4605,9 @@ ALL TESTS PASSED</div>
 <tr><td>So khớp vét cạn</td><td>—</td><td>(n − m + 1)·m phép so xấu nhất → O(nm)</td><td>O(1)</td><td>thường vẫn nhanh trên văn bản bình thường</td></tr>
 <tr><td>KMP</td><td>bảng T[] trong O(m)</td><td>≤ 2n phép so → O(n)</td><td>O(m)</td><td>vị trí trên văn bản không bao giờ lùi</td></tr>
 <tr><td>Huffman: đếm tần suất</td><td>—</td><td>O(n)</td><td>mỗi ký hiệu một bộ đếm</td><td>cần một lượt đọc đầu vào trước</td></tr>
-<tr><td>Huffman: dựng cây</td><td>—</td><td>k − 1 lần gộp trên heap → O(k log k)</td><td>O(k) nút</td><td>k = số ký hiệu khác nhau</td></tr>
+<tr><td>Huffman: dựng cây</td><td>—</td><td>k − 1 lần gộp trên đống (heap) → O(k log k)</td><td>O(k) nút</td><td>k = số ký hiệu khác nhau</td></tr>
 <tr><td>Huffman: mã hoá / giải mã</td><td>bảng mã O(k)</td><td>mỗi ký hiệu một lần tra / mỗi bit một cạnh</td><td>O(k)</td><td>bảng mã hoặc cây phải đi kèm tệp</td></tr>
-<tr><td>LZW mã hoá / giải mã</td><td>các ký tự đơn trong từ điển</td><td>O(n) lần tra với bảng băm (hash map) hoặc trie</td><td>chính từ điển</td><td>từ điển không bao giờ phải gửi đi</td></tr>
+<tr><td>LZW mã hoá / giải mã</td><td>các ký tự đơn trong từ điển</td><td>O(n) lần tra với bảng băm (hash map) hoặc cây tiền tố (trie)</td><td>chính từ điển</td><td>từ điển không bao giờ phải gửi đi</td></tr>
 <tr><td>RLE mã hoá / giải mã</td><td>—</td><td>O(n)</td><td>O(1) ngoài đầu ra</td><td>làm dài gấp đôi dữ liệu không có loạt</td></tr>
 </tbody>
 </table>`),

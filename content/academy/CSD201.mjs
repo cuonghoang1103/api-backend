@@ -18,6 +18,7 @@ import ch6 from './csd201/ch6.mjs';
 import ch7 from './csd201/ch7.mjs';
 import ch8 from './csd201/ch8.mjs';
 import nangCao from './csd201/nang-cao.mjs';
+import cs from './csd201/chuyen-sau.mjs';
 
 export default {
   semester: { code: 'FPTU_Hola3', name: 'Kỳ 3', ordinal: 5 },
@@ -4610,6 +4611,12 @@ Lần find <em>kế tiếp</em> trên bất kỳ nút nào trong số đó chỉ
       ],
     },
     /* ══════════════════ CHƯƠNG 9 — ÔN THI ══════════════════ */
+    /* ⭐ Chuyên sâu — ngoài giáo trình, slide TỰ DỰNG — ./csd201/chuyen-sau.mjs */
+    {
+      title: "⭐ Advanced — Interview algorithms: binary search, DP, backtracking, advanced trees & graphs, system design|||⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm kiếm nhị phân, quy hoạch động, quay lui, cây & đồ thị nâng cao, thiết kế",
+      description: "Phần TỰ THÊM ngoài giáo trình trường (đánh dấu ⭐, slide tự dựng): các dạng thuật toán phỏng vấn hay gặp nhất mà môn học không dạy — mỗi deck có code Java chạy thật, bài tập kiểu LeetCode có lời giải, và quiz.",
+      lessons: cs.lessons,
+    },
     {
       title: 'Exam preparation (PE & FE)|||Ôn thi cuối kỳ (PE & FE)',
       description: 'Chuẩn bị thi thực hành 85 phút và thi trắc nghiệm cuối kỳ: khung code, chiến lược, ngân hàng câu hỏi.',

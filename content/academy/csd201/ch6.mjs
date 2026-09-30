@@ -19,7 +19,7 @@ const L_csd12_1 = {
   content: [
     bi(`<span class="eyebrow">Chapter 6 · Lesson 6.A · 6-Sorting, slides 1–20</span>
 <h2>Sorting, part 1 — elementary sorts and quicksort, slide by slide</h2>
-<p class="lead">This is the deck of syllabus sessions 41–42 (CLO6). Slides 1–20 cover the three elementary sorts — selection, insertion, bubble — and quicksort up to the middle of its worked example. Every algorithm is run in Java, traced pass by pass on the slide's own array [5 2 3 8 1], and its cost is counted, not just stated.</p>
+<p class="lead">This is the deck of syllabus sessions 41–42 (CLO6). Slides 1–20 cover the three elementary sorts — selection, insertion, bubble — and quicksort up to the middle of its worked example. Every algorithm is run in Java and traced step by step — the elementary sorts on the slide's own array [5 2 3 8 1], quicksort on the lesson's own example — and its cost is counted, not just stated.</p>
 <div class="callout"><strong>CLO6 in the syllabus:</strong> explain the operation and performance of some basic and advanced sorting algorithms. The FE asks you to trace ("the array after the 2nd pass of insertion sort is…"), to compare costs (best/worst case, stable or not); the PE may ask you to sort an array or a linked list of objects by one field. The syllabus's constructive questions (CQ) on this part — CQ14.1 the complexity of selection, insertion and bubble sort, CQ14.2 which of the three is fastest and why, CQ15.1 what quicksort is — are answered on slides 4–12.</div>
 <h3>This part in one table</h3>
 <table>
@@ -33,7 +33,7 @@ const L_csd12_1 = {
 </table>`,
     `<span class="eyebrow">Chương 6 · Bài 6.A · 6-Sorting, slide 1–20</span>
 <h2>Sắp xếp, phần 1 — các thuật toán cơ bản và quicksort, học từng slide</h2>
-<p class="lead">Đây là bộ slide của buổi 41–42 theo syllabus (CLO6). Slide 1–20 gồm ba thuật toán sắp xếp cơ bản — chọn (selection), chèn (insertion), nổi bọt (bubble) — và sắp xếp nhanh (quicksort) tới giữa ví dụ chạy tay. Thuật toán nào cũng được chạy bằng Java, lần theo từng lượt (pass) trên chính mảng [5 2 3 8 1] của slide, và chi phí được đếm ra bằng số chứ không chỉ nói suông.</p>
+<p class="lead">Đây là bộ slide của buổi 41–42 theo syllabus (CLO6). Slide 1–20 gồm ba thuật toán sắp xếp cơ bản — chọn (selection), chèn (insertion), nổi bọt (bubble) — và sắp xếp nhanh (quicksort) tới giữa ví dụ chạy tay. Thuật toán nào cũng được chạy bằng Java và lần theo từng bước — các thuật toán cơ bản trên chính mảng [5 2 3 8 1] của slide, từng lượt (pass) một; quicksort trên ví dụ của bài — và chi phí được đếm ra bằng số chứ không chỉ nói suông.</p>
 <div class="callout"><strong>CLO6 trong syllabus:</strong> giải thích cách hoạt động và hiệu năng của một số thuật toán sắp xếp cơ bản và nâng cao. Đề FE (thi cuối kỳ) bắt lần theo ("mảng sau lượt thứ 2 của insertion sort là…"), so sánh chi phí (trường hợp tốt nhất/xấu nhất, có ổn định — stable — hay không); đề PE (thi thực hành) có thể bắt sắp một mảng hoặc một danh sách liên kết các đối tượng theo một trường. Các câu hỏi thảo luận (constructive question — CQ) của syllabus về phần này — CQ14.1 độ phức tạp của selection, insertion, bubble sort, CQ14.2 thuật toán nào trong ba cái nhanh nhất và vì sao, CQ15.1 quicksort là gì — được trả lời ở slide 4–12.</div>
 <h3>Cả phần này trong một bảng</h3>
 <table>
@@ -68,7 +68,7 @@ const L_csd12_1 = {
 <li><strong>Sắp xếp theo cơ số (radix sort)</strong> — sắp theo từng chữ số, không hề so sánh hai phần tử với nhau (38–39).</li>
 <li><strong>Sắp xếp trong java.util</strong> — <code>Arrays.sort</code>, <code>Collections.sort</code> và các hàm đi kèm (40–41).</li>
 </ol>
-<p class="meo">🧠 <strong>Mẹo nhớ:</strong> "cơ bản" = hai vòng lặp lồng nhau = O(n²); "hiệu quả" = chia nhỏ công việc (hoặc dùng heap) = O(n log n).</p>`],
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> "cơ bản" = hai vòng lặp lồng nhau = O(n²); "hiệu quả" = chia nhỏ công việc (hoặc dùng đống — heap) = O(n log n).</p>`],
       [3, 'Elementary Sorting Algorithms',
         `<p class="y-chinh">🎯 Section 1 of the deck: three sorts built from two nested loops, where every pass puts at least one more element in its place.</p>
 <p class="ghi-chu">This slide carries only the section title (no other text could be extracted); the block below introduces the section.</p>
@@ -1115,7 +1115,7 @@ sorted: [1, 2, 3, 5, 6, 7, 8, 9]</div>
       [14, 'Quicksort - 3 (figure)',
         `<p class="y-chinh">🎯 Between the idea (slide 13) and the code (slide 15) the missing piece is how to partition inside the array itself, with two indices and swaps.</p>
 <p class="ghi-chu">Slide 14 is a picture and no text could be extracted from it; this block teaches the step it sits on — partitioning in place.</p>
-<p>One standard in-place method — the one used on slides 15–30 of this lesson. The pivot is the first element a[p]; index i scans from the left, index j from the right:</p>
+<p>One standard in-place method — the one these lessons use from slide 15 to slide 30. The pivot is the first element a[p]; index i scans from the left, index j from the right:</p>
 <pre><code class="language-plaintext"> p     p+1 ... i-1      i ... j       j+1 ... r
 [pivot][  &lt;= pivot  ][ not seen yet ][  &gt; pivot  ]</code></pre>
 <ol>
@@ -1128,7 +1128,7 @@ sorted: [1, 2, 3, 5, 6, 7, 8, 9]</div>
 <p class="meo">🧠 <strong>Remember:</strong> i hunts for a big one, j hunts for a small one, swap them, repeat; when they cross, the pivot goes to j.</p>`,
         `<p class="y-chinh">🎯 Giữa ý tưởng (slide 13) và code (slide 15), mảnh còn thiếu là cách phân hoạch ngay bên trong mảng, bằng hai chỉ số (index) và các lần đổi chỗ (swap).</p>
 <p class="ghi-chu">Slide 14 là hình và không trích được chữ nào; khối này dạy bước mà nó nằm ở giữa — phân hoạch tại chỗ (in-place partition).</p>
-<p>Một cách phân hoạch tại chỗ chuẩn — cũng là cách dùng từ slide 15 tới 30 của bài. Chốt (pivot) là phần tử đầu a[p]; chỉ số i quét từ trái sang, chỉ số j quét từ phải sang:</p>
+<p>Một cách phân hoạch tại chỗ chuẩn — cũng là cách bài này dùng từ slide 15 tới slide 30. Chốt (pivot) là phần tử đầu a[p]; chỉ số i quét từ trái sang, chỉ số j quét từ phải sang:</p>
 <pre><code class="language-plaintext"> p     p+1 ... i-1      i ... j       j+1 ... r
 [chot ][  &lt;= chot    ][ chua xet     ][   &gt; chot  ]</code></pre>
 <ol>
@@ -1295,7 +1295,7 @@ public class QuickPivot {
     static int partition(int p, int r) {
         if (rule.equals("median-of-3")) swap(p, median3(p, (p + r) / 2, r));   // move the chosen pivot to a[p]
         if (rule.equals("random")) swap(p, p + rnd.nextInt(r - p + 1));
-        int pivot = a[p], i = p + 1, j = r;              // from here: the same partition as slide 15
+        int pivot = a[p], i = p + 1, j = r;              // from here: the lesson's partition (slide 15)
         while (true) {
             while (i &lt;= r &amp;&amp; le(a[i], pivot)) i++;
             while (!le(a[j], pivot)) j--;
@@ -1373,7 +1373,7 @@ public class QuickPivot {
     static int partition(int p, int r) {
         if (rule.equals("median-of-3")) swap(p, median3(p, (p + r) / 2, r));   // đưa chốt đã chọn về a[p]
         if (rule.equals("random")) swap(p, p + rnd.nextInt(r - p + 1));
-        int pivot = a[p], i = p + 1, j = r;              // từ đây: đúng phép phân hoạch ở slide 15
+        int pivot = a[p], i = p + 1, j = r;              // từ đây: đúng phép phân hoạch của bài (slide 15)
         while (true) {
             while (i &lt;= r &amp;&amp; le(a[i], pivot)) i++;
             while (!le(a[j], pivot)) j--;
@@ -1424,7 +1424,7 @@ n = 1000: n*log2(n) = 9966, n*n/2 = 500000</div>
       [17, 'Quicksort example - 1',
         `<p class="y-chinh">🎯 Stage 1 of the example: the first call quickSort(0, 9), with pivot a[0] = 50, i at index 1 and j at index 9.</p>
 <p class="ghi-chu">Slides 17–30 are pictures of the slide's own example, with no extractable text; here the lesson's own example [50 30 80 90 10 70 100 60 40 20] runs through the same kind of stages, one stage per slide, side by side with the pictures.</p>
-<p>The complete run of the lesson's example, printed by the code of slide 15 with print statements added — one line per round of the two scans:</p>
+<p>The complete run of the lesson's example, printed by the lesson's quicksort (the program shown with slide 15) with print statements added — one line per round of the two scans:</p>
 <pre><code class="language-java">public class QuickTrace {
     static int[] a = {50, 30, 80, 90, 10, 70, 100, 60, 40, 20};   // the lesson's example
 
@@ -1435,7 +1435,7 @@ n = 1000: n*log2(n) = 9966, n*n/2 = 500000</div>
     }
     static void swap(int i, int j) { int t = a[i]; a[i] = a[j]; a[j] = t; }
 
-    // the partition of slide 15, plus print statements
+    // the lesson's partition (the program shown with slide 15), plus print statements
     static int partition(int p, int r) {
         int pivot = a[p];
         int i = p + 1, j = r;
@@ -1503,7 +1503,7 @@ value: 50  30  80  90  10  70 100  60  40  20
 <p class="meo">🧠 <strong>Remember:</strong> before tracing, count the other elements of the part that are ≤ the pivot — p plus that count is the pivot's final index, a free check for any hand trace.</p>`,
         `<p class="y-chinh">🎯 Chặng 1 của ví dụ: lời gọi đầu tiên quickSort(0, 9), chốt (pivot) là a[0] = 50, i ở chỉ số 1 và j ở chỉ số 9.</p>
 <p class="ghi-chu">Slide 17–30 là các hình chạy ví dụ riêng của slide, không trích được chữ; ở đây ví dụ của bài [50 30 80 90 10 70 100 60 40 20] đi qua những chặng tương tự, mỗi slide một chặng, chạy song song với các hình đó.</p>
-<p>Toàn bộ lần chạy của ví dụ của bài, do code ở slide 15 in ra (thêm lệnh in) — mỗi vòng quét của hai chỉ số một dòng:</p>
+<p>Toàn bộ lần chạy của ví dụ của bài, do quicksort của bài (chương trình đặt cạnh slide 15) in ra (thêm lệnh in) — mỗi vòng quét của hai chỉ số một dòng:</p>
 <pre><code class="language-java">public class QuickTrace {
     static int[] a = {50, 30, 80, 90, 10, 70, 100, 60, 40, 20};   // ví dụ của bài
 
@@ -1514,7 +1514,7 @@ value: 50  30  80  90  10  70 100  60  40  20
     }
     static void swap(int i, int j) { int t = a[i]; a[i] = a[j]; a[j] = t; }
 
-    // phép phân hoạch của slide 15, thêm lệnh in
+    // phép phân hoạch của bài (chương trình cạnh slide 15), thêm lệnh in
     static int partition(int p, int r) {
         int pivot = a[p];
         int i = p + 1, j = r;
@@ -1685,7 +1685,7 @@ gia tri: 50  30  80  90  10  70 100  60  40  20
 <li>For [5 2 3 8 1], what is the array after the 2nd pass of selection sort? Of insertion sort?</li>
 <li>Which of selection, insertion and bubble sort (with the flag) are O(n) on sorted input, and why is the third one not?</li>
 <li>Which elementary sort of the deck is not stable? Show it on [2a 2b 1c] (key + label).</li>
-<li>In the partition of slides 14–15, what are i and j looking for, and when does the loop stop?</li>
+<li>In the lesson's partition (slides 14–15), what are i and j looking for, and when does the loop stop?</li>
 <li>Which input makes quicksort with a first-element pivot O(n²)?</li>
 </ol>
 <p class="dap-an">✅ <strong>Answers:</strong> (1) selection <code>1 2 3 8 5</code>, insertion <code>2 3 5 8 1</code>. (2) insertion and bubble with the flag — one pass of n−1 comparisons; selection always makes n(n−1)/2 comparisons. (3) selection: the first pass swaps 2a with 1c → <code>1c 2b 2a</code>, and nothing moves afterwards. (4) i looks for an element > pivot, j for an element ≤ pivot; stop when i ≥ j, then swap the pivot with a[j]. (5) sorted (or reverse-sorted) input — the pivot is always the minimum (or maximum), so each call removes only one element.</p>
@@ -1695,13 +1695,13 @@ gia tri: 50  30  80  90  10  70 100  60  40  20
 <li>Với [5 2 3 8 1], mảng sau lượt thứ 2 của sắp xếp chọn (selection sort) là gì? Của sắp xếp chèn (insertion sort) là gì?</li>
 <li>Trong selection, insertion và sắp xếp nổi bọt (bubble sort) có cờ, thuật toán nào là O(n) với mảng đã sắp, và vì sao thuật toán còn lại thì không?</li>
 <li>Thuật toán cơ bản nào của bộ slide không ổn định (stable)? Minh hoạ trên [2a 2b 1c] (khoá + nhãn).</li>
-<li>Trong phép phân hoạch (partition) ở slide 14–15, i và j đi tìm gì, và khi nào vòng lặp dừng?</li>
+<li>Trong phép phân hoạch (partition) của bài (slide 14–15), i và j đi tìm gì, và khi nào vòng lặp dừng?</li>
 <li>Đầu vào nào làm sắp xếp nhanh (quicksort) với chốt (pivot) là phần tử đầu tốn O(n²)?</li>
 </ol>
 <p class="dap-an">✅ <strong>Đáp án:</strong> (1) selection <code>1 2 3 8 5</code>, insertion <code>2 3 5 8 1</code>. (2) insertion và bubble có cờ — một lượt n−1 phép so sánh; selection luôn tốn n(n−1)/2 phép so sánh. (3) selection: lượt đầu đổi 2a với 1c → <code>1c 2b 2a</code>, sau đó không gì di chuyển nữa. (4) i tìm phần tử > chốt, j tìm phần tử ≤ chốt; dừng khi i ≥ j, rồi đổi chốt với a[j]. (5) mảng đã sắp (hoặc sắp ngược) — chốt luôn là phần tử nhỏ nhất (hoặc lớn nhất), nên mỗi lời gọi chỉ bớt được một phần tử.</p>
 <p><strong>Học tiếp:</strong> bài 6.B (slide 21–43: phần còn lại của ví dụ quicksort, sắp xếp trộn — merge sort, sắp xếp vun đống — heap sort, sắp xếp theo cơ số — radix sort, java.util); rồi các bài đào sâu bên dưới — 6.1 (sắp xếp cơ bản), 6.2 (sắp xếp hiệu quả), 6.3 (quick-sort: phân hoạch chi tiết, dùng cách phân hoạch Lomuto, một cách phân hoạch đúng khác) — và bài 6.8 (thực hành, thuật ngữ, tóm tắt).</p>`),
     books([
-      ['goodrich', '§9.4.1 Selection-Sort and Insertion-Sort p.386 · bubble-sort: Exercise C-7.51 · §12.2 Quick-Sort p.544 (in Ch.12 Sorting and Selection, p.531)', '§9.4.1 Selection-Sort and Insertion-Sort tr.386 · bubble-sort: bài tập C-7.51 · §12.2 Quick-Sort tr.544 (thuộc Chương 12 Sorting and Selection, tr.531)'],
+      ['goodrich', '§9.4.1 Selection-Sort and Insertion-Sort p.386 · bubble-sort: Exercise C-7.51 (as cited on slide 43) · §12.2 Quick-Sort p.544 (in Ch.12 Sorting and Selection, p.531)', '§9.4.1 Selection-Sort and Insertion-Sort tr.386 · bubble-sort: bài tập C-7.51 (theo slide 43) · §12.2 Quick-Sort tr.544 (thuộc Chương 12 Sorting and Selection, tr.531)'],
     ]),
   ].join('\n'),
 };
@@ -1716,7 +1716,7 @@ const L_csd12_2 = {
     bi(`<span class="eyebrow">Chapter 6 · Lesson 6.B · 6-Sorting, slides 21–43</span>
 <h2>Sorting, part 2 — the quicksort example to the end, merge, heap and radix sort, java.util</h2>
 <p class="lead">Slides 21–43 of the deck (syllabus sessions 45–46, CLO6): the second half of the quicksort example, then merge sort, heap sort, radix sort and the ready-made sorts of java.util. Two lines of the slides' merge code hide exam traps — a <code>!</code> that covers less than it seems and a <code>&lt;</code> that breaks stability — and both are proved with Java below.</p>
-<div class="callout"><strong>CLO6 in the syllabus:</strong> explain the operation and performance of basic and advanced sorting algorithms. The syllabus's constructive questions (CQ) on this part — CQ15.2 which sorts are divide-and-conquer, CQ15.3 which needs more space, CQ16.1 merge sort vs quicksort, CQ16.2 which is fastest and what the weaknesses of radix sort are, CQ16.3 which is best for memory — are answered on slides 31–42 and in the check at the end.</div>
+<div class="callout"><strong>CLO6 in the syllabus:</strong> explain the operation and performance of basic and advanced sorting algorithms. The syllabus's constructive questions (CQ) on this part — CQ15.2 which sorts are divide-and-conquer, CQ15.3 which needs more space, CQ16.1 what merge sort is and how it differs from quicksort, CQ16.2 which is fastest and what the weaknesses of radix sort are, CQ16.3 which is best for memory — are answered on slides 31–42 and in the check at the end.</div>
 <p>The quicksort example continues from lesson 6.A. Its code — one standard implementation, since the code on slide 15 is a picture and may differ in details — is recalled here:</p>
 <pre><code class="language-java">// Partition a[p..r] around pivot = a[p]; return the pivot's final index
 int partition(int p, int r) {
@@ -1751,8 +1751,8 @@ void quickSort(int p, int r) {
 <p>(d = number of digits, b = number of sublists — 10 for decimal digits.)</p>`,
     `<span class="eyebrow">Chương 6 · Bài 6.B · 6-Sorting, slide 21–43</span>
 <h2>Sắp xếp, phần 2 — ví dụ quicksort tới cuối, merge, heap, radix sort và java.util</h2>
-<p class="lead">Slide 21–43 của bộ slide (buổi 45–46 theo syllabus, CLO6): nửa sau của ví dụ sắp xếp nhanh (quicksort), rồi sắp xếp trộn (merge sort), sắp xếp vun đống (heap sort), sắp xếp theo cơ số (radix sort) và các hàm sắp xếp có sẵn của java.util. Hai dòng trong code merge của slide giấu bẫy thi — một dấu <code>!</code> phủ ít hơn ta tưởng và một dấu <code>&lt;</code> làm mất tính ổn định (stability) — cả hai được chứng minh bằng Java bên dưới.</p>
-<div class="callout"><strong>CLO6 trong syllabus:</strong> giải thích cách hoạt động và hiệu năng của các thuật toán sắp xếp cơ bản và nâng cao. Các câu hỏi thảo luận (constructive question — CQ) của syllabus về phần này — CQ15.2 thuật toán nào thuộc loại chia để trị (divide and conquer), CQ15.3 thuật toán nào tốn nhiều bộ nhớ hơn, CQ16.1 merge sort khác quicksort thế nào, CQ16.2 thuật toán nào nhanh nhất và điểm yếu của radix sort, CQ16.3 thuật toán nào tốt nhất về bộ nhớ — được trả lời ở slide 31–42 và trong phần tự kiểm tra cuối bài.</div>
+<p class="lead">Slide 21–43 của bộ slide (buổi 45–46 theo syllabus, CLO6): nửa sau của ví dụ sắp xếp nhanh (quicksort), rồi sắp xếp trộn (merge sort), sắp xếp vun đống (heap sort), sắp xếp theo cơ số (radix sort) và các hàm sắp xếp có sẵn của java.util. Hai dòng trong code hàm trộn (merge) của slide giấu bẫy thi — một dấu <code>!</code> phủ ít hơn ta tưởng và một dấu <code>&lt;</code> làm mất tính ổn định (stability) — cả hai được chứng minh bằng Java bên dưới.</p>
+<div class="callout"><strong>CLO6 trong syllabus:</strong> giải thích cách hoạt động và hiệu năng của các thuật toán sắp xếp cơ bản và nâng cao. Các câu hỏi thảo luận (constructive question — CQ) của syllabus về phần này — CQ15.2 thuật toán nào thuộc loại chia để trị (divide and conquer), CQ15.3 thuật toán nào tốn nhiều bộ nhớ hơn, CQ16.1 merge sort là gì và khác quicksort thế nào, CQ16.2 thuật toán nào nhanh nhất và điểm yếu của radix sort, CQ16.3 thuật toán nào tốt nhất về bộ nhớ — được trả lời ở slide 31–42 và trong phần tự kiểm tra cuối bài.</div>
 <p>Ví dụ quicksort đi tiếp từ bài 6.A. Code của nó — một bản cài đặt chuẩn, vì code ở slide 15 là hình và có thể khác chi tiết — được nhắc lại ở đây:</p>
 <pre><code class="language-java">// Phân hoạch a[p..r] quanh chốt = a[p]; trả về vị trí cuối cùng của chốt
 int partition(int p, int r) {
@@ -1780,8 +1780,8 @@ void quickSort(int p, int r) {
 <tbody>
 <tr><td>Quicksort (slide 12–30)</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n²)</td><td>O(log n) ngăn xếp đệ quy, trung bình</td><td>không</td><td>phân hoạch quanh chốt, đệ quy hai bên</td></tr>
 <tr><td>Merge sort (31–33)</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n)</td><td>có, nếu merge dùng <code>&lt;=</code></td><td>chia đôi, sắp hai nửa, trộn lại</td></tr>
-<tr><td>Heap sort (34–37)</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n log n)</td><td>O(1)</td><td>không</td><td>dựng heap max, n−1 lần đưa gốc về cuối</td></tr>
-<tr><td>Radix sort, LSD (38–39)</td><td>O(d(n + b))</td><td>O(d(n + b))</td><td>O(d(n + b))</td><td>O(n + b)</td><td>có, và bắt buộc phải có</td><td>mỗi lượt chia theo một chữ số, bắt đầu từ chữ số cuối</td></tr>
+<tr><td>Heap sort (34–37)</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n log n)</td><td>O(1)</td><td>không</td><td>dựng đống max (max heap), n−1 lần đưa gốc về cuối</td></tr>
+<tr><td>Radix sort, LSD — chữ số thấp nhất trước (38–39)</td><td>O(d(n + b))</td><td>O(d(n + b))</td><td>O(d(n + b))</td><td>O(n + b)</td><td>có, và bắt buộc phải có</td><td>mỗi lượt chia theo một chữ số, bắt đầu từ chữ số cuối</td></tr>
 </tbody>
 </table>
 <p>(d = số chữ số, b = số danh sách con — 10 với chữ số thập phân.)</p>`),
@@ -2104,7 +2104,7 @@ quickSort(0,9)   dang cho: loi goi phai (5,9) chua bat dau</code></pre>
 
     static void swap(int i, int j) { int t = a[i]; a[i] = a[j]; a[j] = t; }
 
-    static int partition(int p, int r) {                 // same partition as slide 15
+    static int partition(int p, int r) {                 // same partition as the lesson's QuickSort (slide 15)
         int pivot = a[p];
         int i = p + 1, j = r;
         while (true) {
@@ -2167,7 +2167,7 @@ calls = 13, partitions = 6, max depth = 5</div>
 
     static void swap(int i, int j) { int t = a[i]; a[i] = a[j]; a[j] = t; }
 
-    static int partition(int p, int r) {                 // cùng phép phân hoạch như slide 15
+    static int partition(int p, int r) {                 // cùng phép phân hoạch như QuickSort của bài (slide 15)
         int pivot = a[p];
         int i = p + 1, j = r;
         while (true) {
@@ -2234,7 +2234,7 @@ public class QuickFinal {
     static boolean le(Integer x, Integer y) { comps++; return cmp.compare(x, y) &lt;= 0; }
     static void swap(Integer[] a, int i, int j) { Integer t = a[i]; a[i] = a[j]; a[j] = t; }
 
-    static int partition(Integer[] a, int p, int r) {   // same partition as slide 15
+    static int partition(Integer[] a, int p, int r) {   // same partition as the lesson's QuickSort (slide 15)
         Integer pivot = a[p];
         int i = p + 1, j = r;
         while (true) {
@@ -2304,7 +2304,7 @@ public class QuickFinal {
     static boolean le(Integer x, Integer y) { comps++; return cmp.compare(x, y) &lt;= 0; }
     static void swap(Integer[] a, int i, int j) { Integer t = a[i]; a[i] = a[j]; a[j] = t; }
 
-    static int partition(Integer[] a, int p, int r) {   // cùng phép phân hoạch như slide 15
+    static int partition(Integer[] a, int p, int r) {   // cùng phép phân hoạch như QuickSort của bài (slide 15)
         Integer pivot = a[p];
         int i = p + 1, j = r;
         while (true) {
@@ -2370,7 +2370,7 @@ stability: 5#1 5#2 1#3 -&gt; 1#3 5#2 5#1</div>
 <li>Merge walks the two sorted halves with two indices and always copies the smaller front element → O(length) per merge.</li>
 <li>Halving n down to size 1 takes ⌈log₂ n⌉ levels, and every level merges n elements in total → O(n log n), whatever the input.</li>
 <li>History (slide): one of the first sorting algorithms ever run on a computer, developed by John von Neumann.</li>
-<li>The price: the merge needs a second array of up to n elements → O(n) extra memory, where quicksort needs none.</li>
+<li>The price: the merge needs a second array of up to n elements → O(n) extra memory, where quicksort needs no extra array (only its recursion stack).</li>
 </ul>
 <pre><code class="language-java">import java.util.Random;
 
@@ -2433,7 +2433,7 @@ n*log2(n) = 9966</div>
 <li>Phép trộn đi dọc hai nửa đã sắp bằng hai chỉ số và luôn chép phần tử đầu nhỏ hơn → O(độ dài) cho mỗi lần trộn.</li>
 <li>Chia đôi n cho tới kích thước 1 mất ⌈log₂ n⌉ tầng, và mỗi tầng trộn tổng cộng n phần tử → O(n log n), bất kể đầu vào.</li>
 <li>Lịch sử (slide): một trong những thuật toán sắp xếp đầu tiên chạy trên máy tính, do John von Neumann phát triển.</li>
-<li>Cái giá: phép trộn cần một mảng thứ hai tới n phần tử → O(n) bộ nhớ thêm, trong khi sắp xếp nhanh (quicksort) không cần.</li>
+<li>Cái giá: phép trộn cần một mảng thứ hai tới n phần tử → O(n) bộ nhớ thêm, trong khi sắp xếp nhanh (quicksort) không cần mảng phụ (chỉ cần ngăn xếp đệ quy).</li>
 </ul>
 <pre><code class="language-java">import java.util.Random;
 
@@ -2488,7 +2488,7 @@ reversed n = 1000: comparisons = &nbsp;4932, levels of splitting = 10<br>
 random &nbsp;&nbsp;n = 1000: comparisons = &nbsp;8707, levels of splitting = 10<br>
 n*log2(n) = 9966</div>
 <p>Số phép so sánh luôn dưới n log₂ n ≈ 9.966 với cả ba loại đầu vào (5.044 / 4.932 / 8.707) — so với 501.498 của quicksort trên mảng đã sắp (slide 16). Đầu vào đã sắp và sắp ngược còn rẻ hơn đầu vào ngẫu nhiên: mỗi lần trộn thôi so sánh ngay khi một nửa hết phần tử — nửa trái với mảng đã sắp, nửa phải với mảng sắp ngược.</p>
-<p class="dap-an">✅ <strong>Câu hỏi CQ15.2 / CQ15.3 của syllabus:</strong> các thuật toán chia để trị (divide and conquer) của bộ slide là quicksort và merge sort; trong các thuật toán sắp xếp bằng so sánh, merge sort tốn bộ nhớ thêm nhiều nhất — mảng tạm O(n) (radix sort ở slide 39 cũng cần O(n) cho các danh sách con).</p>
+<p class="dap-an">✅ <strong>Câu hỏi CQ15.2 / CQ15.3 của syllabus:</strong> các thuật toán chia để trị (divide and conquer) của bộ slide là quicksort và merge sort; trong các thuật toán sắp xếp bằng so sánh, merge sort tốn bộ nhớ thêm nhiều nhất — mảng tạm O(n) (sắp xếp theo cơ số — radix sort — ở slide 39 cũng cần O(n) cho các danh sách con).</p>
 <p class="meo">🧠 <strong>Mẹo nhớ:</strong> merge sort = "chia bừa, ghép kỹ"; quicksort = "chia kỹ, khỏi ghép".</p>`],
       [32, 'Mergesort example',
         `<p class="y-chinh">🎯 Slide 32 sorts [1 8 6 4 10 5 3 2 22] with merge sort; below, the splits and every merge made by the code of slide 33 on this array, in the order the recursion does them.</p>
@@ -2679,7 +2679,7 @@ public class MergeSortSlide                              // the slide calls this
 }</code></pre>
 <div class="out">3 5 6 7 8 9 10 11 12 14 15</div>
 <p class="nhan">Trap 1 — <code>if(!(p&lt;=q) &amp;&amp; (q&lt;=r)) return;</code></p>
-<p><code>!</code> applies only to <code>(p&lt;=q)</code>, so the test means <code>p &gt; q &amp;&amp; q &lt;= r</code>. What was probably meant is <code>!((p&lt;=q) &amp;&amp; (q&lt;=r))</code> — "return unless p ≤ q ≤ r". <code>mergeSort</code> always calls <code>merge</code> with p ≤ q &lt; r, so neither guard ever fires and the sort is correct; with nonsense arguments such as (0,5,3) only the corrected guard protects the array:</p>
+<p><code>!</code> applies only to <code>(p&lt;=q)</code>, so the test means <code>p &gt; q &amp;&amp; q &lt;= r</code>. What was probably meant is <code>!((p&lt;=q) &amp;&amp; (q&lt;=r))</code> — "return unless p ≤ q ≤ r". <code>mergeSort</code> always calls <code>merge</code> with p ≤ q &lt; r, so neither guard ever fires and the sort is correct; with nonsense arguments such as (0,5,3) only the corrected guard returns at once — the slide's lets the call through and it crashes:</p>
 <pre><code class="language-java">public class MergeGuard {
     static int[] a = {3, 7, 9, 1, 4, 8};
 
@@ -2778,7 +2778,7 @@ public class MergeStable {
 slide &nbsp;if(a[i]&lt;a[j]) &nbsp;-&gt; [7Cuong, 7An, 9Dung, 9Binh]<br>
 fixed &nbsp;if(a[i]&lt;=a[j]) -&gt; [7An, 7Cuong, 9Binh, 9Dung]</div>
 <p>With <code>&lt;</code>, 7Cuong (right half) is copied before 7An (left half): equal scores come out in reverse order, so this merge sort is not stable. With <code>&lt;=</code> the left element wins ties and the alphabetical order survives.</p>
-<div class="pitfall">Two FE favourites from this slide: (1) the meaning of <code>!(p&lt;=q) &amp;&amp; (q&lt;=r)</code> — <code>!</code> binds tighter than <code>&amp;&amp;</code>; (2) "is merge sort stable?" — yes, but only if merge takes the left element on ties (<code>&lt;=</code>). Minor points: <code>int [] b = new int[n];</code> allocates a new array in every call, and the local <code>n</code> hides the field <code>n</code> of the class — legal, but confusing.</div>`,
+<div class="pitfall">Two FE favourites from this slide: (1) the meaning of <code>!(p&lt;=q) &amp;&amp; (q&lt;=r)</code> — <code>!</code> binds tighter than <code>&amp;&amp;</code>; (2) "is merge sort stable?" — yes, but only if merge takes the left element on ties (<code>&lt;=</code>). Minor points: <code>int [] b = new int[n];</code> allocates a new array in every call, and the local <code>n</code> hides a field <code>n</code> if the class has one (the class is not on the slide; ours has one, like the classes behind slides 6–10) — legal, but confusing.</div>`,
         `<p class="y-chinh">🎯 Hàm <code>merge(p,q,r)</code> của slide trộn a[p..q] với a[q+1..r] qua mảng tạm b, còn <code>mergeSort(p,r)</code> chia tại q = (p+r)/2; chương trình chạy đúng, nhưng có hai dòng giấu bẫy thi.</p>
 <p>Code của slide cùng <code>main</code> của slide (lớp được đổi tên thành <code>MergeSortSlide</code>, vì mỗi file phải mang tên lớp public của nó; hàm tạo — constructor — và <code>display()</code> của <code>EffSort</code> không có trên slide, nên bài viết thêm bản tối thiểu):</p>
 <pre><code class="language-java">class EffSort {
@@ -2826,7 +2826,7 @@ public class MergeSortSlide                              // trên slide lớp n�
 }</code></pre>
 <div class="out">3 5 6 7 8 9 10 11 12 14 15</div>
 <p class="nhan">Bẫy 1 — <code>if(!(p&lt;=q) &amp;&amp; (q&lt;=r)) return;</code></p>
-<p>Dấu <code>!</code> chỉ áp lên <code>(p&lt;=q)</code>, nên phép kiểm tra nghĩa là <code>p &gt; q &amp;&amp; q &lt;= r</code>. Ý muốn viết có lẽ là <code>!((p&lt;=q) &amp;&amp; (q&lt;=r))</code> — "trả về trừ khi p ≤ q ≤ r". <code>mergeSort</code> luôn gọi <code>merge</code> với p ≤ q &lt; r, nên không phép kiểm tra nào kích hoạt và thuật toán vẫn đúng; nhưng với tham số vô lý như (0,5,3) thì chỉ phép kiểm tra đã sửa mới bảo vệ được mảng:</p>
+<p>Dấu <code>!</code> chỉ áp lên <code>(p&lt;=q)</code>, nên phép kiểm tra nghĩa là <code>p &gt; q &amp;&amp; q &lt;= r</code>. Ý muốn viết có lẽ là <code>!((p&lt;=q) &amp;&amp; (q&lt;=r))</code> — "trả về trừ khi p ≤ q ≤ r". <code>mergeSort</code> luôn gọi <code>merge</code> với p ≤ q &lt; r, nên không phép kiểm tra nào kích hoạt và thuật toán vẫn đúng; nhưng với tham số vô lý như (0,5,3) thì chỉ phép kiểm tra đã sửa mới trả về ngay — phép kiểm tra của slide để lời gọi đi tiếp và chương trình sập:</p>
 <pre><code class="language-java">public class MergeGuard {
     static int[] a = {3, 7, 9, 1, 4, 8};
 
@@ -2925,7 +2925,7 @@ public class MergeStable {
 slide &nbsp;if(a[i]&lt;a[j]) &nbsp;-&gt; [7Cuong, 7An, 9Dung, 9Binh]<br>
 fixed &nbsp;if(a[i]&lt;=a[j]) -&gt; [7An, 7Cuong, 9Binh, 9Dung]</div>
 <p>Với <code>&lt;</code>, 7Cuong (nửa phải) được chép trước 7An (nửa trái): các điểm bằng nhau ra theo thứ tự ngược, nên bản sắp xếp trộn (merge sort) này không ổn định (stable). Với <code>&lt;=</code>, phần tử bên trái thắng khi hoà và thứ tự ABC được giữ nguyên.</p>
-<div class="pitfall">Hai câu FE "ruột" từ slide này: (1) ý nghĩa của <code>!(p&lt;=q) &amp;&amp; (q&lt;=r)</code> — <code>!</code> ưu tiên cao hơn <code>&amp;&amp;</code>; (2) "merge sort có ổn định không?" — có, nhưng chỉ khi phép trộn lấy phần tử bên trái lúc hoà (<code>&lt;=</code>). Chi tiết nhỏ: <code>int [] b = new int[n];</code> cấp phát mảng mới ở mọi lời gọi, và biến cục bộ <code>n</code> che mất trường <code>n</code> của lớp — hợp lệ nhưng dễ gây nhầm.</div>`],
+<div class="pitfall">Hai câu FE "ruột" từ slide này: (1) ý nghĩa của <code>!(p&lt;=q) &amp;&amp; (q&lt;=r)</code> — <code>!</code> ưu tiên cao hơn <code>&amp;&amp;</code>; (2) "merge sort có ổn định không?" — có, nhưng chỉ khi phép trộn lấy phần tử bên trái lúc hoà (<code>&lt;=</code>). Chi tiết nhỏ: <code>int [] b = new int[n];</code> cấp phát mảng mới ở mọi lời gọi, và biến cục bộ <code>n</code> che mất trường <code>n</code> nếu lớp có trường đó (lớp không có trên slide; lớp của bài có, giống các lớp đứng sau slide 6–10) — hợp lệ nhưng dễ gây nhầm.</div>`],
       [34, 'Heap data structure - 1',
         `<p class="y-chinh">🎯 A (max) heap is a binary tree with two properties: every node is ≥ each of its children, and the tree is nearly complete — full on every level except the last, whose leaves are packed to the left.</p>
 <ul>
@@ -3776,7 +3776,7 @@ Collections.sort -&gt; [1, 3, 5, 9]</div>
 <tr><td>Radix, LSD, d digits</td><td>O(d(n + b))</td><td>O(d(n + b))</td><td>O(d(n + b))</td><td>O(n + b)</td><td>yes</td><td>38–39</td></tr>
 </tbody>
 </table>
-<p>The same 1000 numbers given to the six comparison sorts of the deck, in the slides' versions, counting comparisons:</p>
+<p>The same 1000 numbers given to the six comparison sorts of the deck, in the versions of these lessons (the slides' code, except quicksort — the lesson's standard version — and merge with <code>&lt;=</code>), counting comparisons:</p>
 <pre><code class="language-java">import java.util.Random;
 
 public class SortCompare {
@@ -3805,7 +3805,7 @@ public class SortCompare {
             for (int i = 0; i &lt; a.length - 1; i++) if (lt(a[i + 1], a[i])) { sw(a, i, i + 1); swapped = true; }
         } while (swapped);
     }
-    static void quick(int[] a, int p, int r) {           // slide 15 (pivot = first element)
+    static void quick(int[] a, int p, int r) {           // the lesson's quicksort (pivot = first element)
         if (p &gt;= r) return;
         int pivot = a[p], i = p + 1, j = r;
         while (true) {
@@ -3890,10 +3890,10 @@ heap &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;172
 <tr><td>Nhanh (quick)</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n²)</td><td>O(log n) ngăn xếp</td><td>không</td><td>12–30</td></tr>
 <tr><td>Trộn (merge)</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n)</td><td>có, với <code>&lt;=</code></td><td>31–33</td></tr>
 <tr><td>Vun đống (heap)</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n log n)</td><td>O(1)</td><td>không</td><td>34–37</td></tr>
-<tr><td>Cơ số (radix) LSD, d chữ số</td><td>O(d(n + b))</td><td>O(d(n + b))</td><td>O(d(n + b))</td><td>O(n + b)</td><td>có</td><td>38–39</td></tr>
+<tr><td>Cơ số (radix) LSD — chữ số thấp nhất trước, d chữ số</td><td>O(d(n + b))</td><td>O(d(n + b))</td><td>O(d(n + b))</td><td>O(n + b)</td><td>có</td><td>38–39</td></tr>
 </tbody>
 </table>
-<p>Cùng 1000 số đưa cho sáu thuật toán sắp xếp bằng so sánh của bộ slide, đúng bản trên slide, đếm số phép so sánh:</p>
+<p>Cùng 1000 số đưa cho sáu thuật toán sắp xếp bằng so sánh của bộ slide, đúng bản dùng trong các bài này (code của slide, trừ quicksort — bản cài đặt chuẩn của bài — và merge dùng <code>&lt;=</code>), đếm số phép so sánh:</p>
 <pre><code class="language-java">import java.util.Random;
 
 public class SortCompare {
@@ -3922,7 +3922,7 @@ public class SortCompare {
             for (int i = 0; i &lt; a.length - 1; i++) if (lt(a[i + 1], a[i])) { sw(a, i, i + 1); swapped = true; }
         } while (swapped);
     }
-    static void quick(int[] a, int p, int r) {           // slide 15 (chốt = phần tử đầu)
+    static void quick(int[] a, int p, int r) {           // quicksort của bài (chốt = phần tử đầu)
         if (p &gt;= r) return;
         int pivot = a[p], i = p + 1, j = r;
         while (true) {
@@ -4059,17 +4059,17 @@ const L_on_ch6 = {
 <li>Copy the test <code>main</code> of the solution and run it: every line must say PASS.</li>
 <li>Only then compare with the solution and read the trap under it.</li>
 </ol>
-<p>In a CSD201 PE the skeleton — the data class (<code>Car</code>, <code>Student</code>…), the <code>Node</code> and list classes, a <code>main</code> with a menu and code that writes each answer to a file — is usually given, and you fill in the bodies of <code>f1</code>, <code>f2</code>, … A sorting task typically appears there as "sort the list by price" on a linked list of objects. Here every answer is printed on the screen instead of written to a file. The algorithms are the ones of lessons 6.A–6.B, in the slides' versions.</p></div>`,
+<p>In a CSD201 PE the skeleton — the data class (<code>Car</code>, <code>Student</code>…), the <code>Node</code> and list classes, a <code>main</code> with a menu and code that writes each answer to a file — is usually given, and you fill in the bodies of <code>f1</code>, <code>f2</code>, … A sorting task typically appears there as "sort the list by price" on a linked list of objects. Here every answer is printed on the screen instead of written to a file. The algorithms are the ones of lessons 6.A–6.B, in the versions used there (the slides' code; for quicksort, the lesson's standard version).</p></div>`,
     `<span class="eyebrow">Chương 6 · Bài 6.8 · Thực hành &amp; ôn tập</span>
 <h2>Sắp xếp — luyện như đề PE, rồi ôn lại</h2>
-<p class="lead">Tám bài tập theo dạng đề thi thực hành (PE) và dạng câu lần theo (trace) của đề FE — từ sắp một danh sách liên kết các xe tới một bài gần với đề PE thật — bài nào cũng có lời giải tự kiểm tra được. Sau đó là thuật ngữ của chương bằng tiếng Anh và tiếng Việt, bản tóm tắt một màn hình và bảng độ phức tạp để ôn trước FE.</p>
+<p class="lead">Tám bài tập theo dạng đề thi thực hành (PE) và dạng câu lần theo (trace) của đề FE (thi cuối kỳ) — từ sắp một danh sách liên kết các xe tới một bài gần với đề PE thật — bài nào cũng có lời giải tự kiểm tra được. Sau đó là thuật ngữ của chương bằng tiếng Anh và tiếng Việt, bản tóm tắt một màn hình và bảng độ phức tạp để ôn trước FE.</p>
 <div class="callout"><strong>Cách dùng trang này.</strong>
 <ol>
 <li>Đọc đề, cuộn lời giải ra khỏi màn hình rồi tự viết hàm trong Eclipse.</li>
 <li>Chép hàm <code>main</code> kiểm thử (test) của lời giải vào và chạy: mọi dòng phải là PASS (đạt).</li>
 <li>Lúc đó mới so với lời giải và đọc cái bẫy ghi bên dưới.</li>
 </ol>
-<p>Đề PE môn CSD201 thường cho sẵn bộ khung — lớp dữ liệu (<code>Car</code>, <code>Student</code>…), lớp <code>Node</code> và lớp danh sách, hàm <code>main</code> có menu và đoạn code ghi từng đáp án ra file — còn bạn viết thân các hàm <code>f1</code>, <code>f2</code>, … Việc sắp xếp thường xuất hiện ở đó dưới dạng "sắp danh sách theo giá" trên một danh sách liên kết các đối tượng. Ở đây mọi kết quả được in ra màn hình thay vì ghi ra file. Các thuật toán là những thuật toán của bài 6.A–6.B, đúng bản trên slide.</p></div>`),
+<p>Đề PE môn CSD201 thường cho sẵn bộ khung — lớp dữ liệu (<code>Car</code>, <code>Student</code>…), lớp <code>Node</code> và lớp danh sách, hàm <code>main</code> có menu và đoạn code ghi từng đáp án ra file — còn bạn viết thân các hàm <code>f1</code>, <code>f2</code>, … Việc sắp xếp thường xuất hiện ở đó dưới dạng "sắp danh sách theo giá" trên một danh sách liên kết các đối tượng. Ở đây mọi kết quả được in ra màn hình thay vì ghi ra file. Các thuật toán là những thuật toán của bài 6.A–6.B, đúng bản đã dùng ở đó (code của slide; riêng quicksort là bản cài đặt chuẩn của bài).</p></div>`),
     bi(`<h3>🧪 Exercise 1 — f1: sort a linked list of cars by price, then by owner (PE style · ~15 min)</h3>
 <p class="nhan">Task</p>
 <p>A singly linked list holds <code>Car(owner, price)</code>. Write <code>sortByPriceThenOwner()</code>: ascending by price; cars with the same price in alphabetical order of owner. <code>head</code> and <code>tail</code> must stay correct; an empty list must not crash.</p>
@@ -4157,7 +4157,7 @@ PASS all prices equal -&gt; ABC order<br>
 PASS empty list, no crash<br>
 PASS one car<br>
 ALL TESTS PASSED</div>
-<div class="pitfall">Strings are compared with <code>compareTo</code>, never with <code>&lt;</code> (does not compile) or <code>==</code> (compares references). And without the tie-break, the order of equal prices depends on the algorithm — selection sort is not stable, so the third test would fail.</div>`,
+<div class="pitfall">Strings are compared with <code>compareTo</code>, never with <code>&lt;</code> (does not compile) or <code>==</code> (compares references). And without the tie-break, the order of equal prices depends on the algorithm: selection sort is not stable, so even the first test fails (the swap that brings Chi to the front sends Lan behind Minh); the third test, whose input is in reverse ABC order, fails with any algorithm.</div>`,
     `<h3>🧪 Bài 1 — f1: sắp danh sách liên kết các xe theo giá, rồi theo tên chủ xe (kiểu PE · ~15 phút)</h3>
 <p class="nhan">Đề bài</p>
 <p>Một danh sách liên kết đơn (singly linked list) chứa các <code>Car(owner, price)</code>. Viết <code>sortByPriceThenOwner()</code>: tăng dần theo price; các xe cùng giá thì theo thứ tự ABC của owner. <code>head</code> và <code>tail</code> phải luôn đúng; danh sách rỗng không được làm chương trình văng lỗi.</p>
@@ -4245,7 +4245,7 @@ PASS all prices equal -&gt; ABC order<br>
 PASS empty list, no crash<br>
 PASS one car<br>
 ALL TESTS PASSED</div>
-<div class="pitfall">Chuỗi (String) phải so bằng <code>compareTo</code>, không bao giờ dùng <code>&lt;</code> (không biên dịch được) hay <code>==</code> (so địa chỉ tham chiếu). Và nếu thiếu phần so owner khi bằng giá, thứ tự các xe cùng giá phụ thuộc vào thuật toán — selection sort không ổn định (stable), nên test thứ ba sẽ hỏng.</div>`),
+<div class="pitfall">Chuỗi (String) phải so bằng <code>compareTo</code>, không bao giờ dùng <code>&lt;</code> (không biên dịch được) hay <code>==</code> (so địa chỉ tham chiếu). Và nếu thiếu phần so owner khi bằng giá, thứ tự các xe cùng giá phụ thuộc vào thuật toán: selection sort không ổn định (stable), nên ngay test đầu tiên đã hỏng (lần đổi chỗ đưa Chi lên đầu đẩy Lan ra sau Minh); còn test thứ ba, đầu vào theo ABC ngược, thì thuật toán nào cũng hỏng.</div>`),
     bi(`<h3>🧪 Exercise 2 — the array after each pass: insertion vs selection sort (FE trace · ~15 min)</h3>
 <p class="nhan">Task</p>
 <p>Write <code>insertionTrace(a)</code> and <code>selectionTrace(a)</code>: each returns one line per pass — the array right after that pass — so that you can answer "the array after the k-th pass is…" without guessing.</p>
@@ -4528,7 +4528,7 @@ ALL TESTS PASSED</div>
 <div class="pitfall">Lượt cuối không đổi chỗ lần nào nhưng vẫn là một lượt: với mảng đã sắp, bubble sort có cờ chạy 1 lượt chứ không phải 0. Và phải đếm phép so sánh ở ngoài <code>if</code> — đếm bên trong là đếm số lần đổi chỗ thêm một lần nữa.</div>`),
     bi(`<h3>🧪 Exercise 4 — quicksort that counts its exchanges (PE style · ~15 min)</h3>
 <p class="nhan">Task</p>
-<p>Implement the quicksort of slide 15 (pivot = first element, i and j scanning towards each other, then the pivot swapped to j) and count the <strong>exchanges</strong>: swaps that really move two different cells. Also check the array after the first partition only.</p>
+<p>Implement the quicksort of lesson 6.A (slides 14–15; pivot = first element, i and j scanning towards each other, then the pivot swapped to j) and count the <strong>exchanges</strong>: swaps that really move two different cells. Also check the array after the first partition only.</p>
 <p class="nhan">Data → expected result</p>
 <p>The lesson's example [50 30 80 90 10 70 100 60 40 20] → after the first partition: 10 30 20 40 50 70 100 60 90 80 (pivot at 4); whole sort: 7 exchanges — 3 inside the loops plus 4 pivot moves.</p>
 <p class="nhan">Idea</p>
@@ -4543,7 +4543,7 @@ ALL TESTS PASSED</div>
         exchanges++;
     }
 
-    // the partition of slide 15 (pivot = a[p])
+    // the lesson's partition, lesson 6.A (pivot = a[p])
     static int partition(int[] a, int p, int r) {
         int pivot = a[p], i = p + 1, j = r;
         while (true) {
@@ -4603,7 +4603,7 @@ ALL TESTS PASSED</div>
 <div class="pitfall">"How many swaps?" depends on the exact code: count loop swaps only, or pivot placements too, or also the no-op swap(p, p)? Read the definition in the question. The last test shows another detail: with equal keys the very first exchange swaps a 4 with another 4 — it moves two cells yet changes nothing you can see.</div>`,
     `<h3>🧪 Bài 4 — sắp xếp nhanh (quicksort) đếm số lần đổi chỗ (kiểu PE · ~15 phút)</h3>
 <p class="nhan">Đề bài</p>
-<p>Cài quicksort của slide 15 (chốt — pivot — là phần tử đầu, i và j quét ngược chiều nhau, rồi đổi chốt về j) và đếm số <strong>lần đổi chỗ thật (exchange)</strong>: những lần đổi chỗ (swap) thực sự di chuyển hai ô khác nhau. Kiểm tra thêm mảng sau riêng lần phân hoạch (partition) đầu tiên.</p>
+<p>Cài quicksort của bài 6.A (slide 14–15; chốt — pivot — là phần tử đầu, i và j quét ngược chiều nhau, rồi đổi chốt về j) và đếm số <strong>lần đổi chỗ thật (exchange)</strong>: những lần đổi chỗ (swap) thực sự di chuyển hai ô khác nhau. Kiểm tra thêm mảng sau riêng lần phân hoạch (partition) đầu tiên.</p>
 <p class="nhan">Dữ liệu → kết quả mong đợi</p>
 <p>Ví dụ của bài [50 30 80 90 10 70 100 60 40 20] → sau lần phân hoạch đầu: 10 30 20 40 50 70 100 60 90 80 (chốt ở chỉ số 4); cả quá trình sắp: 7 lần đổi chỗ — 3 lần trong vòng lặp cộng 4 lần đưa chốt về chỗ.</p>
 <p class="nhan">Ý tưởng</p>
@@ -4618,7 +4618,7 @@ ALL TESTS PASSED</div>
         exchanges++;
     }
 
-    // phép phân hoạch của slide 15 (chốt = a[p])
+    // phép phân hoạch của bài 6.A (chốt = a[p])
     static int partition(int[] a, int p, int r) {
         int pivot = a[p], i = p + 1, j = r;
         while (true) {
@@ -4885,7 +4885,7 @@ PASS k = n sorts everything, descending<br>
 PASS k = 0 gives nothing<br>
 PASS the input array is not changed<br>
 ALL TESTS PASSED</div>
-<div class="pitfall">Off by one in the loop bound (<code>i &gt; n-1-k</code>) returns k−1 or k+1 cars — test k = 1 and k = n. Beyond the course: <code>java.util.PriorityQueue</code> used as a min heap of size k solves the same problem in O(n log k) with only O(k) memory.</div>`,
+<div class="pitfall">An off-by-one in the loop bound <code>i &gt; n-1-k</code> is silent on the main test: <code>i &gt; n-k</code> makes only k−1 removals, so the last car returned is just a heap leaf (k = 1 returns (F,20)); <code>i &gt;= n-1-k</code> runs one removal too many and, for k = n, reads a[−1]. Test k = 1 and k = n. Beyond the course: <code>java.util.PriorityQueue</code> used as a min heap of size k solves the same problem in O(n log k) with only O(k) memory.</div>`,
     `<h3>🧪 Bài 6 — k xe đắt nhất bằng sắp xếp vun đống (heap sort) dừng giữa chừng (kiểu PE · ~20 phút)</h3>
 <p class="nhan">Đề bài</p>
 <p>Cho một mảng các xe, trả về k xe đắt nhất, xe đắt nhất đứng đầu, không làm thay đổi mảng đầu vào.</p>
@@ -4953,7 +4953,7 @@ PASS k = n sorts everything, descending<br>
 PASS k = 0 gives nothing<br>
 PASS the input array is not changed<br>
 ALL TESTS PASSED</div>
-<div class="pitfall">Lệch một ở cận vòng lặp (<code>i &gt; n-1-k</code>) sẽ trả về k−1 hoặc k+1 xe — hãy thử k = 1 và k = n. Ngoài giáo trình: <code>java.util.PriorityQueue</code> dùng như một đống min (min heap) cỡ k giải cùng bài này trong O(n log k) với bộ nhớ chỉ O(k).</div>`),
+<div class="pitfall">Lệch một ở cận vòng lặp <code>i &gt; n-1-k</code> không lộ ra ở test chính: <code>i &gt; n-k</code> chỉ lấy ra k−1 lần, nên xe cuối trả về chỉ là một lá của heap (k = 1 trả về (F,20)); <code>i &gt;= n-1-k</code> lấy thừa một lần và, với k = n, đọc a[−1]. Hãy thử k = 1 và k = n. Ngoài giáo trình: <code>java.util.PriorityQueue</code> dùng như một đống min (min heap) cỡ k giải cùng bài này trong O(n log k) với bộ nhớ chỉ O(k).</div>`),
     bi(`<h3>🧪 Exercise 7 — radix sort for non-negative numbers of any length (PE style · ~15 min)</h3>
 <p class="nhan">Task</p>
 <p>Write the LSD radix sort of slides 38–39 for any array of non-negative ints: numbers may have different lengths, and the number of passes must follow the data. Also report the number of passes.</p>
@@ -5014,7 +5014,7 @@ PASS zeros and duplicates<br>
 PASS all zeros still one pass<br>
 PASS one element<br>
 ALL TESTS PASSED</div>
-<div class="pitfall">Taking the number of passes from the first element, or fixing it at 3, sorts the slide's data but fails on 802 among 2-digit numbers. Negative numbers give a negative digit and a negative sublist index — sort them separately. <code>exp</code> is a <code>long</code>, otherwise <code>exp *= 10</code> overflows once the maximum has ten digits (10⁹ or more).</div>`,
+<div class="pitfall">Taking the number of passes from the first element sorts the slide's data but fails when a longer number comes later — 45 802 24 gives 802 24 45; fixing it at 3 fails as soon as a value has four digits. Negative numbers give a negative digit and a negative sublist index — sort them separately. <code>exp</code> is a <code>long</code>, otherwise <code>exp *= 10</code> overflows once the maximum has ten digits (10⁹ or more).</div>`,
     `<h3>🧪 Bài 7 — sắp xếp theo cơ số (radix sort) cho số không âm có độ dài bất kỳ (kiểu PE · ~15 phút)</h3>
 <p class="nhan">Đề bài</p>
 <p>Viết radix sort LSD (least significant digit — chữ số thấp nhất làm trước) của slide 38–39 cho mảng số nguyên không âm bất kỳ: các số có thể dài ngắn khác nhau, và số lượt phải tính theo dữ liệu. In thêm số lượt đã chạy.</p>
@@ -5075,7 +5075,7 @@ PASS zeros and duplicates<br>
 PASS all zeros still one pass<br>
 PASS one element<br>
 ALL TESTS PASSED</div>
-<div class="pitfall">Lấy số lượt theo phần tử đầu tiên, hoặc cố định bằng 3, vẫn sắp đúng dữ liệu của slide nhưng hỏng khi có 802 lẫn giữa các số hai chữ số. Số âm cho ra chữ số âm và chỉ số danh sách con âm — phải tách riêng ra sắp. <code>exp</code> là <code>long</code>, nếu không <code>exp *= 10</code> sẽ tràn số khi giá trị lớn nhất có mười chữ số (từ 10⁹ trở lên).</div>`),
+<div class="pitfall">Lấy số lượt theo phần tử đầu tiên vẫn sắp đúng dữ liệu của slide nhưng hỏng khi một số dài hơn đứng sau — 45 802 24 ra 802 24 45; cố định bằng 3 thì hỏng ngay khi có giá trị bốn chữ số. Số âm cho ra chữ số âm và chỉ số danh sách con âm — phải tách riêng ra sắp. <code>exp</code> là <code>long</code>, nếu không <code>exp *= 10</code> sẽ tràn số khi giá trị lớn nhất có mười chữ số (từ 10⁹ trở lên).</div>`),
     bi(`<h3>🧪 Exercise 8 — f1 + f2 on a car list: sort a range, then drop repeated prices (close to a real PE · ~25 min)</h3>
 <p class="nhan">Task</p>
 <p>On a linked list of <code>Car(owner, price)</code> with a <code>size</code> field: <strong>f1</strong> <code>sortRange(k, h)</code> sorts only the cars at positions k…h (from 0, both included) by price, stably, leaving the other nodes where they are; clamp h to the last position and do nothing when k ≥ h. <strong>f2</strong> <code>removeSamePrice()</code>, on a list sorted by price, keeps only the first car of each price and keeps <code>tail</code> and <code>size</code> correct.</p>
@@ -5281,7 +5281,7 @@ PASS remove repeated prices<br>
 PASS tail and size updated<br>
 PASS k == h: nothing to do<br>
 ALL TESTS PASSED</div>
-<div class="pitfall">Đọc kỹ đề đếm vị trí từ 0 hay từ 1: khác nhau là khác xe bị di chuyển. Ở f2, chỉ cho <code>p</code> tiến lên khi không xoá gì — nếu không, ba giá liền nhau (9, 9, 9) sẽ sót lại một — và khi nút bị xoá là tail thì phải lùi <code>tail</code> về <code>p</code>.</div>`),
+<div class="pitfall">Đọc kỹ đề đếm vị trí từ 0 hay từ 1: khác nhau là khác xe bị di chuyển. Ở f2, chỉ cho <code>p</code> tiến lên khi không xoá gì — nếu không, ba giá liền nhau (9, 9, 9) sẽ sót lại một — và khi nút bị xoá là nút cuối (tail) thì phải lùi <code>tail</code> về <code>p</code>.</div>`),
     bi(`<h2>🗂 Glossary — English → Vietnamese</h2>
 <p>Every term of the chapter with its Vietnamese name and a one-sentence explanation. Cover the right-hand columns and test yourself.</p>
 <table>
@@ -5384,7 +5384,7 @@ ALL TESTS PASSED</div>
 <li><strong>Đống (heap)</strong>: cây nhị phân gần đầy đủ với cha ≥ con, lưu trong mảng — con là 2i+1 và 2i+2, cha là (i−1)/2. <strong>Sắp xếp vun đống (heap sort)</strong>: dựng heap, rồi n−1 lần đưa gốc về cuối; luôn O(n log n), bộ nhớ O(1), không ổn định.</li>
 <li><strong>Sắp xếp theo cơ số (radix sort) LSD (chữ số thấp nhất làm trước)</strong>: chia theo hàng đơn vị trước vào các danh sách con vào trước ra trước (FIFO), gom từ 0 → 9, lặp cho mọi chữ số; O(d·(n + b)), không so sánh, nhưng chỉ dùng cho khoá dạng chữ số và tốn O(n) bộ nhớ thêm.</li>
 <li><strong>Tính ổn định (stability) giúp sắp theo hai khoá dễ dàng</strong>: sắp theo khoá phụ trước, rồi sắp ổn định theo khoá chính — hoặc viết một bộ so sánh (comparator) gồm cả hai khoá.</li>
-<li><strong>Trong code thật hãy dùng java.util</strong>: <code>Arrays.sort</code> (kiểu nguyên thuỷ: Dual-Pivot Quicksort; đối tượng: TimSort ổn định), <code>Collections.sort</code> cho danh sách; <code>sort(a, from, to)</code> không tính <code>to</code>; <code>binarySearch</code> cần mảng đã sắp. Với danh sách liên kết trong bài PE, hãy đổi chỗ <code>info</code> của các nút để <code>head</code> và <code>tail</code> luôn đúng.</li>
+<li><strong>Trong code thật hãy dùng java.util</strong>: <code>Arrays.sort</code> (kiểu nguyên thuỷ — primitive: Dual-Pivot Quicksort, quicksort hai chốt; đối tượng: TimSort ổn định), <code>Collections.sort</code> cho danh sách; <code>sort(a, from, to)</code> không tính <code>to</code>; <code>binarySearch</code> cần mảng đã sắp. Với danh sách liên kết trong bài PE, hãy đổi chỗ <code>info</code> của các nút để <code>head</code> và <code>tail</code> luôn đúng.</li>
 </ol>
 <h3>✅ Tự kiểm tra trước khi làm quiz</h3>
 <ol>

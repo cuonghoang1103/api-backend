@@ -20,7 +20,7 @@ const L_csd4_1 = {
     bi(`<span class="eyebrow">Chapter 1 · Lesson 1.A · 1-ListDataStructures, slides 1–23</span>
 <h2>List data structures — the deck, slide by slide</h2>
 <p class="lead">This is the deck shown in the first sessions of the course (syllabus sessions 1–2, CLO1). Read it before lessons 1.1–1.5 below: every slide is here with what it means, a runnable Java program for every operation, the pointer moves drawn step by step, the cost in Big-O, and the traps that cost marks in the FE (final exam) and the PE (practical exam).</p>
-<div class="callout"><strong>CLO1 in the syllabus:</strong> describe the list data structure and its different implementations; <strong>implement the singly linked list</strong>. The PE almost always has a linked-list question, so slides 8–12 are the ones to be able to type from memory.</div>
+<div class="callout"><strong>CLO1 in the syllabus:</strong> describe the list data structure and its different implementations; <strong>implement the singly linked list</strong>. The PE usually has a linked-list question, so slides 8–12 are the ones to be able to type from memory.</div>
 <h3>The whole deck in one table</h3>
 <table>
 <thead><tr><th>Operation</th><th>Array (n elements)</th><th>Singly linked list (head + tail)</th><th>Doubly linked list</th></tr></thead>
@@ -36,11 +36,11 @@ const L_csd4_1 = {
 </table>`,
     `<span class="eyebrow">Chương 1 · Bài 1.A · 1-ListDataStructures, slide 1–23</span>
 <h2>Cấu trúc danh sách — học bộ slide từng trang</h2>
-<p class="lead">Đây là bộ slide được chiếu ở các buổi đầu của môn (buổi 1–2 theo syllabus, CLO1). Hãy đọc bài này trước các bài 1.1–1.5 bên dưới: slide nào cũng có ý nghĩa, chương trình Java chạy được cho từng thao tác, các bước đổi con trỏ (pointer) vẽ lại bằng chữ, chi phí Big-O và những bẫy hay mất điểm ở FE (thi cuối kỳ) và PE (thi thực hành).</p>
-<div class="callout"><strong>CLO1 trong syllabus:</strong> mô tả cấu trúc danh sách (list) và các cách cài đặt; <strong>cài đặt được danh sách liên kết đơn (singly linked list)</strong>. Đề PE gần như luôn có một câu về danh sách liên kết, nên slide 8–12 là phần bạn phải gõ lại được mà không cần nhìn.</div>
+<p class="lead">Đây là bộ slide được chiếu ở các buổi đầu của môn (buổi 1–2 theo đề cương môn học — syllabus, chuẩn đầu ra CLO1). Hãy đọc bài này trước các bài 1.1–1.5 bên dưới: đủ mọi slide kèm lời giảng ý nghĩa, chương trình Java chạy được cho từng thao tác, các bước đổi con trỏ (pointer) vẽ lại bằng chữ, chi phí Big-O và những bẫy hay mất điểm ở FE (thi cuối kỳ) và PE (thi thực hành).</p>
+<div class="callout"><strong>CLO1 (chuẩn đầu ra số 1) trong đề cương:</strong> mô tả cấu trúc danh sách (list) và các cách cài đặt; <strong>cài đặt được danh sách liên kết đơn (singly linked list)</strong>. Đề PE thường có một câu về danh sách liên kết, nên slide 8–12 là phần bạn phải gõ lại được mà không cần nhìn.</div>
 <h3>Cả bộ slide trong một bảng</h3>
 <table>
-<thead><tr><th>Thao tác</th><th>Mảng (array, n phần tử)</th><th>Danh sách liên kết đơn (có head + tail)</th><th>Danh sách liên kết đôi (doubly)</th></tr></thead>
+<thead><tr><th>Thao tác</th><th>Mảng (array, n phần tử)</th><th>Danh sách liên kết đơn (có head + tail — tham chiếu nút đầu + nút cuối)</th><th>Danh sách liên kết đôi (doubly)</th></tr></thead>
 <tbody>
 <tr><td>Đọc phần tử thứ i</td><td>O(1) — <code>a[i]</code></td><td>O(n) — đi từ head</td><td>O(n)</td></tr>
 <tr><td>Chèn / xoá ở đầu</td><td>O(n) — phải dời cả mảng</td><td>O(1)</td><td>O(1)</td></tr>
@@ -69,7 +69,7 @@ const L_csd4_1 = {
 <p class="meo">🧠 <strong>Remember:</strong> one ADT, several implementations — the whole chapter compares the <em>same</em> operations on different storage.</p>`,
         `<p class="y-chinh">🎯 Bốn mục tiêu: danh sách là gì, cấu trúc tự tham chiếu, ba loại danh sách liên kết, và các danh sách Java có sẵn.</p>
 <ol>
-<li><strong>Mô tả cấu trúc danh sách</strong> — slide 3–4 (ADT danh sách và vì sao mảng thường chưa đủ)</li>
+<li><strong>Mô tả cấu trúc danh sách</strong> — slide 3–4 (danh sách như một ADT — kiểu dữ liệu trừu tượng — và vì sao mảng thường chưa đủ)</li>
 <li><strong>Cấu trúc tự tham chiếu (self-referential structure)</strong> — slide 5 (lớp có trường tham chiếu tới chính kiểu của nó)</li>
 <li><strong>Các loại danh sách liên kết</strong> — đơn (singly, slide 6–12), vòng (circular, 13–15), đôi (doubly, 16–18)</li>
 <li><strong>Danh sách trong gói java.util</strong> — lớp <code>LinkedList</code> và <code>ArrayList</code> (slide 19–21)</li>
@@ -110,13 +110,13 @@ public class ListAdt {
 <div class="out">ArrayList: [10, 15, 30] &nbsp;size=3 &nbsp;first=10 &nbsp;last=30 &nbsp;find(30)=2<br>
 LinkedList: [10, 15, 30] &nbsp;size=3 &nbsp;first=10 &nbsp;last=30 &nbsp;find(30)=2</div>
 <div class="pitfall">An ADT question is never about storage. An FE option such as "a list must be stored in contiguous memory" is false: it describes one implementation (the array), not the list ADT.</div>`,
-        `<p class="y-chinh">🎯 Danh sách (list) là một dãy phần tử cùng một kiểu cơ sở, cho phép thêm, xoá, đọc ở bất kỳ vị trí nào — slide liệt kê các thao tác của ADT này.</p>
+        `<p class="y-chinh">🎯 Danh sách (list) là một dãy phần tử cùng một kiểu cơ sở, cho phép thêm, xoá, đọc ở bất kỳ vị trí nào — slide liệt kê các thao tác của kiểu dữ liệu trừu tượng (ADT) này.</p>
 <ul>
 <li><strong>ADT</strong> (abstract data type — kiểu dữ liệu trừu tượng) = phần <em>làm gì</em>: tập giá trị (mọi dãy phần tử kiểu BaseType, kể cả dãy rỗng) và các thao tác — không nói <em>làm thế nào</em>.</li>
 <li><strong>Hai cách cài đặt</strong>: bằng mảng (array) hoặc mảng động (dynamic array) tự nới rộng để khỏi giới hạn kích thước; hoặc bằng danh sách liên kết (linked list) gồm các nút nối nhau bằng tham chiếu. Chi phí của hai cách rất khác nhau.</li>
 <li><strong>Các thao tác trên slide</strong>: <code>getFirst()</code>, <code>getLast()</code>, <code>getNext(p)</code>, <code>getPrev(p)</code>, <code>get(p)</code>, <code>set(p,x)</code>, <code>insert(p,x)</code>, <code>remove(p)</code>, <code>removeFirst()</code>, <code>removeLast()</code>, <code>removeNext(p)</code>, <code>removePrev(p)</code>, <code>find(x)</code>, <code>size()</code>. Ở đây <code>p</code> là một <em>vị trí</em> (position) — với danh sách liên kết thì là một nút — không nhất thiết là chỉ số (index).</li>
 </ul>
-<p>Java tổ chức đúng như vậy: interface <code>List</code> là ADT, còn <code>ArrayList</code> và <code>LinkedList</code> là hai cách cài đặt. Một hàm viết cho <code>List</code> chạy y nguyên trên cả hai:</p>
+<p>Java tổ chức đúng như vậy: giao diện (interface) <code>List</code> là ADT, còn <code>ArrayList</code> và <code>LinkedList</code> là hai cách cài đặt. Một hàm viết cho <code>List</code> chạy y nguyên trên cả hai:</p>
 <pre><code class="language-java">import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -211,7 +211,7 @@ public class ArrayShift {
 delete index 2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt; [10, 15, 30, 40, 50] &nbsp;moves=3<br>
 insert 5 at index 0 -&gt; [5, 10, 15, 30, 40, 50]<br>
 insert 1 at index 0 -&gt; array is full</div>
-<p><strong>Big-O:</strong> inserting or deleting at index i moves n − i elements → O(n) in the worst case (i = 0). Reading <code>a[i]</code> stays O(1) — that is what arrays are good at.</p>
+<p><strong>Big-O:</strong> inserting at index i moves n − i elements, deleting at index i moves n − i − 1 (the output: delete index 2 of 6 → 3 moves) → O(n) in the worst case (i = 0). Reading <code>a[i]</code> stays O(1) — that is what arrays are good at.</p>
 <div class="pitfall">When inserting, shift from the <em>back</em> (<code>for (i = n; i &gt; pos; i--)</code>). Shifting from the front overwrites values you still need — a classic PE bug.</div>`,
         `<p class="y-chinh">🎯 Mảng đọc rất nhanh nhưng có ba giới hạn: kích thước cố định lúc tạo, và chèn/xoá ở giữa buộc các phần tử khác phải dời chỗ.</p>
 <ol>
@@ -279,14 +279,15 @@ public class ArrayShift {
 delete index 2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt; [10, 15, 30, 40, 50] &nbsp;moves=3<br>
 insert 5 at index 0 -&gt; [5, 10, 15, 30, 40, 50]<br>
 insert 1 at index 0 -&gt; array is full</div>
-<p><strong>Big-O:</strong> chèn hay xoá ở chỉ số i phải dời n − i phần tử → O(n) trong trường hợp xấu nhất (i = 0). Còn đọc <code>a[i]</code> vẫn là O(1) — đó là thế mạnh của mảng.</p>
+<p><strong>Big-O:</strong> chèn ở chỉ số i phải dời n − i phần tử, xoá ở chỉ số i dời n − i − 1 (output: xoá chỉ số 2 trong 6 phần tử → 3 lần dời) → O(n) trong trường hợp xấu nhất (i = 0). Còn đọc <code>a[i]</code> vẫn là O(1) — đó là thế mạnh của mảng.</p>
 <div class="pitfall">Khi chèn, phải dời từ <em>cuối về</em> (<code>for (i = n; i &gt; pos; i--)</code>). Dời từ đầu sẽ ghi đè lên các giá trị còn cần dùng — lỗi PE kinh điển.</div>`],
       [5, 'Self-Referential Structures',
         `<p class="y-chinh">🎯 A self-referential class has a field whose type is the class itself — that single idea lets us build chains (linked lists) and trees.</p>
 <ul>
-<li><strong>List node</strong> (slide, left): <code>class DataNode { Employee info; DataNode next; }</code> — one link.</li>
-<li><strong>Tree node</strong> (slide, right): <code>class DataNode { Employee info; DataNode left; DataNode right; }</code> — two links.</li>
+<li><strong>List node</strong> (on the slide): <code>class DataNode { Employee info; DataNode next; }</code> — one link.</li>
+<li><strong>Tree node</strong> (on the slide): <code>class DataNode { Employee info; DataNode left; DataNode right; }</code> — two links.</li>
 <li><strong>Why it is legal</strong>: in Java a field of class type stores a <em>reference</em> (the address of an object) or <code>null</code> — not a whole object inside the object — so there is no infinite nesting.</li>
+<li><strong>Dynamic</strong> (the slide's first sentence): structures that grow and shrink while the program runs — one <code>new</code> per node — are built from such nodes; no size is fixed in advance, unlike an array.</li>
 </ul>
 <pre><code class="language-java">class Employee {
     String name;
@@ -317,12 +318,14 @@ public class SelfRef {
 <div class="out">An (30) &nbsp;&nbsp;-&gt; next is Binh<br>
 Binh (25) &nbsp;&nbsp;-&gt; next is Chi<br>
 Chi (22) &nbsp;&nbsp;&lt;- next is null: end of the chain</div>
-<p class="meo">🧠 <strong>Remember:</strong> the data (<code>Employee</code>) and the link (<code>next</code>) sit side by side in one node; the chain ends where <code>next == null</code>.</p>`,
+<p class="meo">🧠 <strong>Remember:</strong> the data (<code>Employee</code>) and the link (<code>next</code>) sit side by side in one node; the chain ends where <code>next == null</code>.</p>
+<div class="pitfall"><code>DataNode next;</code> does not create a second node — it is only a reference, <code>null</code> until you assign one. Reading <code>p.next.info</code> while <code>p.next</code> is <code>null</code> throws a <code>NullPointerException</code>: test <code>p.next != null</code> first.</div>`,
         `<p class="y-chinh">🎯 Lớp tự tham chiếu (self-referential) có một trường mang kiểu của chính lớp đó — chỉ một ý này thôi đã đủ để dựng chuỗi (danh sách liên kết) và cây.</p>
 <ul>
-<li><strong>Nút danh sách</strong> (bên trái slide): <code>class DataNode { Employee info; DataNode next; }</code> — một liên kết.</li>
-<li><strong>Nút cây</strong> (bên phải slide): <code>class DataNode { Employee info; DataNode left; DataNode right; }</code> — hai liên kết (con trái, con phải).</li>
+<li><strong>Nút danh sách</strong> (trên slide): <code>class DataNode { Employee info; DataNode next; }</code> — một liên kết.</li>
+<li><strong>Nút cây</strong> (trên slide): <code>class DataNode { Employee info; DataNode left; DataNode right; }</code> — hai liên kết (con trái, con phải).</li>
 <li><strong>Vì sao hợp lệ</strong>: trong Java, trường có kiểu lớp chỉ lưu một <em>tham chiếu</em> (reference — địa chỉ của đối tượng) hoặc <code>null</code>, không nhét cả đối tượng vào trong đối tượng, nên không bị lồng vô hạn.</li>
+<li><strong>Động (dynamic)</strong> (câu đầu của slide): các cấu trúc lớn lên, co lại trong lúc chương trình chạy — mỗi nút một lần <code>new</code> — đều dựng từ những nút như vậy; không phải định trước kích thước như mảng.</li>
 </ul>
 <pre><code class="language-java">class Employee {
     String name;
@@ -353,7 +356,8 @@ public class SelfRef {
 <div class="out">An (30) &nbsp;&nbsp;-&gt; next is Binh<br>
 Binh (25) &nbsp;&nbsp;-&gt; next is Chi<br>
 Chi (22) &nbsp;&nbsp;&lt;- next is null: end of the chain</div>
-<p class="meo">🧠 <strong>Mẹo nhớ:</strong> dữ liệu (<code>Employee</code>) và liên kết (<code>next</code>) nằm cạnh nhau trong một nút; chuỗi kết thúc ở nút có <code>next == null</code>.</p>`],
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> dữ liệu (<code>Employee</code>) và liên kết (<code>next</code>) nằm cạnh nhau trong một nút; chuỗi kết thúc ở nút có <code>next == null</code>.</p>
+<div class="pitfall"><code>DataNode next;</code> không tạo ra nút thứ hai — nó chỉ là một tham chiếu, bằng <code>null</code> cho tới khi được gán. Đọc <code>p.next.info</code> khi <code>p.next</code> là <code>null</code> sẽ văng <code>NullPointerException</code> (ngoại lệ tham chiếu null): hãy kiểm <code>p.next != null</code> trước.</div>`],
       [6, 'Linked Lists',
         `<p class="y-chinh">🎯 A linked list is a linear data structure made of nodes, each holding some information and a reference to another node.</p>
 <ul>
@@ -362,20 +366,20 @@ Chi (22) &nbsp;&nbsp;&lt;- next is null: end of the chain</div>
 <li><strong>Non-linear</strong>: everything else — tree (one parent, several children), graph (any number of neighbours).</li>
 <li><strong>Two basic kinds</strong> on the slide: singly linked (one link, <code>next</code>) and doubly linked (two links, <code>prev</code> and <code>next</code>).</li>
 </ul>
-<p><strong>The trade-off:</strong> no shifting — inserting or deleting at a node you already hold is O(1) — but no index jump: reaching position i takes i steps, O(n).</p>
+<p><strong>The trade-off:</strong> no shifting — inserting or deleting right after a node you already hold is O(1) — but no index jump: reaching position i takes i steps, O(n).</p>
 <div class="pitfall">"A linked list is non-linear because its nodes are scattered in memory" — false. Linear vs non-linear is about the <em>logical</em> order (at most one successor), not about where the nodes sit in RAM.</div>`,
         `<p class="y-chinh">🎯 Danh sách liên kết (linked list) là cấu trúc tuyến tính gồm các nút, mỗi nút giữ một ít thông tin và một tham chiếu tới nút khác.</p>
 <ul>
 <li><strong>Cấu trúc liên kết (linked structure)</strong>: tập các nút chứa dữ liệu và liên kết tới các nút khác.</li>
-<li><strong>Tuyến tính (linear)</strong>: mỗi phần tử có nhiều nhất một phần tử đứng trước (predecessor) và một phần tử đứng sau (successor) — mảng, danh sách liên kết, stack, queue.</li>
+<li><strong>Tuyến tính (linear)</strong>: mỗi phần tử có nhiều nhất một phần tử đứng trước (predecessor) và một phần tử đứng sau (successor) — mảng, danh sách liên kết, ngăn xếp (stack), hàng đợi (queue).</li>
 <li><strong>Phi tuyến (non-linear)</strong>: mọi thứ còn lại — cây (một cha, nhiều con), đồ thị (bao nhiêu láng giềng cũng được).</li>
 <li><strong>Hai loại cơ bản</strong> trên slide: liên kết đơn (singly — một liên kết <code>next</code>) và liên kết đôi (doubly — hai liên kết <code>prev</code> và <code>next</code>).</li>
 </ul>
-<p><strong>Đánh đổi:</strong> không phải dời phần tử — chèn/xoá tại một nút đang cầm trong tay là O(1) — nhưng không nhảy thẳng theo chỉ số được: tới vị trí i phải đi i bước, O(n).</p>
+<p><strong>Đánh đổi:</strong> không phải dời phần tử — chèn/xoá ngay sau một nút đang cầm trong tay là O(1) — nhưng không nhảy thẳng theo chỉ số được: tới vị trí i phải đi i bước, O(n).</p>
 <div class="pitfall">"Danh sách liên kết là phi tuyến vì các nút nằm rải rác trong bộ nhớ" — SAI. Tuyến tính hay phi tuyến là nói về thứ tự <em>logic</em> (nhiều nhất một phần tử đứng sau), không phải vị trí các nút trong RAM.</div>`],
       [7, 'Singly Linked Lists',
         `<p class="y-chinh">🎯 In a singly linked list each node has two fields: <code>info</code> (the data the user cares about) and <code>next</code> (the link to its successor).</p>
-<p>The slide's picture shows a small integer list with two extra references, <code>head</code> (first node) and <code>tail</code> (last node). The same shape as text, with example values:</p>
+<p>The slide's picture shows a small integer list with two extra references, <code>head</code> (first node) and <code>tail</code> (last node). Drawn as text with the lesson's own values (the picture on the slide may use other numbers):</p>
 <pre><code class="language-plaintext">head                          tail
  |                             |
  v                             v
@@ -387,7 +391,7 @@ Chi (22) &nbsp;&nbsp;&lt;- next is null: end of the chain</div>
 </ul>
 <p class="meo">🧠 <strong>Remember:</strong> "the list" is only the reference <code>head</code>. Lose it and every node is lost — the garbage collector frees them.</p>`,
         `<p class="y-chinh">🎯 Trong danh sách liên kết đơn (singly linked list), mỗi nút có hai trường: <code>info</code> (dữ liệu người dùng quan tâm) và <code>next</code> (liên kết tới nút đứng sau).</p>
-<p>Hình trên slide là một danh sách số nguyên nhỏ kèm hai tham chiếu phụ: <code>head</code> (nút đầu) và <code>tail</code> (nút cuối). Vẽ lại bằng chữ, với giá trị ví dụ:</p>
+<p>Hình trên slide là một danh sách số nguyên nhỏ kèm hai tham chiếu phụ: <code>head</code> (nút đầu) và <code>tail</code> (nút cuối). Vẽ lại bằng chữ với giá trị của ví dụ của bài (hình trên slide có thể dùng số khác):</p>
 <pre><code class="language-plaintext">head                          tail
  |                             |
  v                             v
@@ -399,7 +403,7 @@ Chi (22) &nbsp;&nbsp;&lt;- next is null: end of the chain</div>
 </ul>
 <p class="meo">🧠 <strong>Mẹo nhớ:</strong> "cả danh sách" chỉ là tham chiếu <code>head</code>. Mất <code>head</code> là mất hết các nút — bộ dọn rác (garbage collector) sẽ thu hồi chúng.</p>`],
       [8, 'Singly Linked List Implementation',
-        `<p class="y-chinh">🎯 The slide's code is the skeleton you will type in the PE: a <code>Node</code> class plus a <code>MyList</code> class holding <code>head</code> and <code>tail</code>.</p>
+        `<p class="y-chinh">🎯 The slide's code is the skeleton you will meet in the PE: a <code>Node</code> class plus a <code>MyList</code> class holding <code>head</code> and <code>tail</code>.</p>
 <ul>
 <li><code>Node(int x, Node p)</code> — creates a node holding x whose <code>next</code> is p.</li>
 <li><code>isEmpty()</code> is <code>head == null</code>; <code>clear()</code> sets <code>head = tail = null</code> and the nodes become garbage.</li>
@@ -487,7 +491,7 @@ tail is now 3<br>
 &nbsp;&nbsp;8 &nbsp;3 &nbsp;4</div>
 <p><strong>Big-O:</strong> <code>add</code>, <code>isEmpty</code>, <code>clear</code> are O(1); <code>traverse</code>, <code>search</code>, <code>dele</code> are O(n).</p>
 <div class="pitfall">Deleting the last node without updating <code>tail</code> leaves <code>tail</code> pointing at a node that is no longer in the list, and the next <code>add</code> attaches to nothing. After every delete ask: did I just remove the head? the tail?</div>`,
-        `<p class="y-chinh">🎯 Code trên slide chính là bộ khung bạn sẽ gõ trong PE: lớp <code>Node</code> và lớp <code>MyList</code> giữ <code>head</code> và <code>tail</code>.</p>
+        `<p class="y-chinh">🎯 Code trên slide chính là bộ khung bạn sẽ gặp trong PE: lớp <code>Node</code> và lớp <code>MyList</code> giữ <code>head</code> (tham chiếu nút đầu) và <code>tail</code> (tham chiếu nút cuối).</p>
 <ul>
 <li><code>Node(int x, Node p)</code> — tạo nút chứa x, có <code>next</code> là p.</li>
 <li><code>isEmpty()</code> là <code>head == null</code>; <code>clear()</code> gán <code>head = tail = null</code>, các nút cũ thành rác (garbage).</li>
@@ -577,7 +581,7 @@ tail is now 3<br>
 <div class="pitfall">Xoá nút cuối mà quên cập nhật <code>tail</code> thì <code>tail</code> vẫn trỏ vào một nút không còn trong danh sách, và lệnh <code>add</code> kế tiếp nối vào "hư không". Sau mỗi lần xoá hãy tự hỏi: mình vừa xoá head? hay tail?</div>`],
       [9, 'Singly Linked Lists - 1: inserting a new node at the beginning',
         `<p class="y-chinh">🎯 Inserting at the beginning takes a few pointer moves and costs O(1), however long the list is.</p>
-<p>The slide draws the steps as pictures; here is the same operation done step by step on an example:</p>
+<p>The slide illustrates this operation with a figure; here is the same operation done step by step on the lesson's own example:</p>
 <ol>
 <li>Create the new node holding the value.</li>
 <li>Set its <code>next</code> to the current <code>head</code>.</li>
@@ -631,12 +635,12 @@ addFirst(10): head -&gt; 10 -&gt; 20 -&gt; 30 -&gt; null &nbsp;&nbsp;(tail = 30)
 <p><strong>Big-O:</strong> O(1) — no loop, just a constant number of assignments.</p>
 <p class="meo">🧠 <strong>Order matters:</strong> link the new node to the old head <em>before</em> moving <code>head</code>. Doing it the other way round makes the new node point to itself and loses the rest of the list.</p>`,
         `<p class="y-chinh">🎯 Chèn vào đầu danh sách chỉ cần vài lần đổi con trỏ và tốn O(1), dù danh sách dài bao nhiêu.</p>
-<p>Slide vẽ các bước bằng hình; dưới đây là đúng thao tác đó làm từng bước trên một ví dụ:</p>
+<p>Slide minh hoạ thao tác này bằng hình; dưới đây là đúng thao tác đó làm từng bước trên ví dụ của bài:</p>
 <ol>
 <li>Tạo nút mới chứa giá trị.</li>
-<li>Gán <code>next</code> của nó bằng <code>head</code> hiện tại.</li>
+<li>Gán <code>next</code> của nó bằng <code>head</code> (tham chiếu nút đầu) hiện tại.</li>
 <li>Dời <code>head</code> sang nút mới.</li>
-<li>Nếu danh sách đang rỗng thì <code>tail</code> cũng phải trỏ vào nút này.</li>
+<li>Nếu danh sách đang rỗng thì <code>tail</code> (tham chiếu nút cuối) cũng phải trỏ vào nút này.</li>
 </ol>
 <p class="nhan">Trạng thái sau từng bước — addFirst(10) trên head → 20 → 30</p>
 <table>
@@ -692,7 +696,7 @@ addFirst(10): head -&gt; 10 -&gt; 20 -&gt; 30 -&gt; null &nbsp;&nbsp;(tail = 30)
 <li>Otherwise <code>tail.next = node</code> (the old last node links to it)…</li>
 <li>…then <code>tail = node</code>.</li>
 </ol>
-<p class="nhan">State after each step — addLast(30) on head → 10 → 20 (tail = 20)</p>
+<p class="nhan">State after each step — the lesson's own example: addLast(30) on head → 10 → 20 (tail = 20); step 2 does not apply, the list is not empty</p>
 <table>
 <thead><tr><th>Step</th><th>Code</th><th>tail</th><th>The list read from head</th></tr></thead>
 <tbody>
@@ -754,14 +758,14 @@ addLast(30): &nbsp;head -&gt; 10 -&gt; 20 -&gt; 30 -&gt; null &nbsp;&nbsp;(tail 
 no-tail version walked 2 links to add 40: head -&gt; 10 -&gt; 20 -&gt; 30 -&gt; 40 -&gt; null &nbsp;&nbsp;(tail = 40)</div>
 <p>The last line shows the price of having no <code>tail</code>: to add 40 the loop first walked from 10 to 30. For n nodes that is n − 1 steps, so appending n items one by one costs O(n²) in total instead of O(n).</p>
 <div class="pitfall">Swapping steps 3 and 4 (<code>tail = node; tail.next = node;</code>) makes the new node point to itself and leaves it cut off from the list.</div>`,
-        `<p class="y-chinh">🎯 Chèn vào cuối là O(1) nếu danh sách giữ tham chiếu <code>tail</code>, và O(n) nếu không có.</p>
+        `<p class="y-chinh">🎯 Chèn vào cuối là O(1) nếu danh sách giữ tham chiếu <code>tail</code> (trỏ tới nút cuối), và O(n) nếu không có.</p>
 <ol>
 <li>Tạo nút với <code>next = null</code> — nó sẽ là nút cuối.</li>
 <li>Danh sách rỗng → <code>head = tail = nút mới</code>.</li>
 <li>Ngược lại <code>tail.next = nút mới</code> (nút cuối cũ nối sang nó)…</li>
 <li>…rồi <code>tail = nút mới</code>.</li>
 </ol>
-<p class="nhan">Trạng thái sau từng bước — addLast(30) trên head → 10 → 20 (tail = 20)</p>
+<p class="nhan">Trạng thái sau từng bước — ví dụ của bài: addLast(30) trên head → 10 → 20 (tail = 20); bước 2 không áp dụng vì danh sách không rỗng</p>
 <table>
 <thead><tr><th>Bước</th><th>Code</th><th>tail</th><th>Danh sách đọc từ head</th></tr></thead>
 <tbody>
@@ -832,7 +836,7 @@ no-tail version walked 2 links to add 40: head -&gt; 10 -&gt; 20 -&gt; 30 -&gt; 
 <li>Otherwise <code>head = head.next</code>; the old first node has no reference left and is garbage-collected.</li>
 </ol>
 <table>
-<thead><tr><th>List before</th><th>Case</th><th>Code</th><th>head / tail after</th></tr></thead>
+<thead><tr><th>List before (the lesson's own example)</th><th>Case</th><th>Code</th><th>head / tail after</th></tr></thead>
 <tbody>
 <tr><td>10 → 20 → 30</td><td>several nodes</td><td><code>head = head.next;</code></td><td>head = 20, tail = 30</td></tr>
 <tr><td>30</td><td>one node (<code>head == tail</code>)</td><td><code>head = tail = null;</code></td><td>both null</td></tr>
@@ -884,7 +888,7 @@ removeFirst()=20: head -&gt; 30 -&gt; null<br>
 removeFirst()=30: head -&gt; null &nbsp;&nbsp;(tail = null)<br>
 removeFirst(): list is empty</div>
 <div class="pitfall">Forgetting case 3 leaves <code>tail</code> pointing at the deleted node while <code>head</code> is <code>null</code> — the list is "empty" and "not empty" at the same time, and later operations misbehave.</div>`,
-        `<p class="y-chinh">🎯 Xoá nút đầu về bản chất là "dời <code>head</code> lên một bước" — O(1) — cộng thêm hai trường hợp đặc biệt.</p>
+        `<p class="y-chinh">🎯 Xoá nút đầu về bản chất là "dời <code>head</code> (tham chiếu nút đầu) lên một bước" — O(1) — cộng thêm hai trường hợp đặc biệt.</p>
 <ol>
 <li>Danh sách rỗng → không có gì để xoá: ném ngoại lệ (exception) hoặc trả về cờ báo.</li>
 <li>Lưu <code>head.info</code> lại để trả về.</li>
@@ -892,7 +896,7 @@ removeFirst(): list is empty</div>
 <li>Ngược lại <code>head = head.next</code>; nút đầu cũ không còn ai tham chiếu nên bị bộ dọn rác thu hồi.</li>
 </ol>
 <table>
-<thead><tr><th>Danh sách trước</th><th>Trường hợp</th><th>Code</th><th>head / tail sau</th></tr></thead>
+<thead><tr><th>Danh sách trước (ví dụ của bài)</th><th>Trường hợp</th><th>Code</th><th>head / tail sau</th></tr></thead>
 <tbody>
 <tr><td>10 → 20 → 30</td><td>nhiều nút</td><td><code>head = head.next;</code></td><td>head = 20, tail = 30</td></tr>
 <tr><td>30</td><td>một nút (<code>head == tail</code>)</td><td><code>head = tail = null;</code></td><td>cả hai là null</td></tr>
@@ -952,7 +956,7 @@ removeFirst(): list is empty</div>
 <li><code>p.next = null</code> — cut the old last node off.</li>
 <li><code>tail = p</code>.</li>
 </ol>
-<p class="nhan">Trace — removeLast() on 10 → 20 → 30 → 40</p>
+<p class="nhan">Trace — the lesson's own example: removeLast() on 10 → 20 → 30 → 40</p>
 <table>
 <thead><tr><th>Step</th><th>p</th><th>p.next == tail?</th><th>Action</th></tr></thead>
 <tbody>
@@ -1014,15 +1018,16 @@ public class RemoveLast {
 removeLast()=40: head -&gt; 10 -&gt; 20 -&gt; 30 -&gt; null &nbsp;&nbsp;(p moved 2 time(s), new tail = 30)<br>
 removeLast()=30: head -&gt; 10 -&gt; 20 -&gt; null &nbsp;&nbsp;(p moved 1 time(s), new tail = 20)</div>
 <p><strong>Big-O:</strong> for n nodes the loop runs n − 2 times → O(n). This single weakness is why slides 16–18 add a <code>prev</code> link.</p>
-<p class="meo">🧠 <strong>Remember:</strong> a singly linked list is cheap at the head (insert and delete), cheap to insert at the tail, and <em>expensive</em> to delete at the tail.</p>`,
-        `<p class="y-chinh">🎯 Xoá nút cuối của danh sách liên kết đơn tốn O(n): không có liên kết ngược, nên phải đi tới nút đứng ngay trước <code>tail</code>.</p>
+<p class="meo">🧠 <strong>Remember:</strong> a singly linked list is cheap at the head (insert and delete), cheap to insert at the tail, and <em>expensive</em> to delete at the tail.</p>
+<div class="pitfall">FE trap: "with a <code>tail</code> reference, deleting the last node of a singly linked list is O(1)" — false. <code>tail</code> finds the node to delete, but the new tail is its <em>predecessor</em>, and the only way to reach it is still the walk from <code>head</code>: O(n).</div>`,
+        `<p class="y-chinh">🎯 Xoá nút cuối của danh sách liên kết đơn tốn O(n): không có liên kết ngược, nên phải đi tới nút đứng ngay trước <code>tail</code> (nút cuối).</p>
 <ol>
 <li>Rỗng → báo lỗi; chỉ một nút → <code>head = tail = null</code>.</li>
 <li>Cho <code>p</code> đi từ <code>head</code> chừng nào <code>p.next != tail</code>.</li>
 <li><code>p.next = null</code> — cắt nút cuối cũ ra.</li>
 <li><code>tail = p</code>.</li>
 </ol>
-<p class="nhan">Lần theo — removeLast() trên 10 → 20 → 30 → 40</p>
+<p class="nhan">Lần theo — ví dụ của bài: removeLast() trên 10 → 20 → 30 → 40</p>
 <table>
 <thead><tr><th>Bước</th><th>p</th><th>p.next == tail?</th><th>Làm gì</th></tr></thead>
 <tbody>
@@ -1084,12 +1089,15 @@ public class RemoveLast {
 removeLast()=40: head -&gt; 10 -&gt; 20 -&gt; 30 -&gt; null &nbsp;&nbsp;(p moved 2 time(s), new tail = 30)<br>
 removeLast()=30: head -&gt; 10 -&gt; 20 -&gt; null &nbsp;&nbsp;(p moved 1 time(s), new tail = 20)</div>
 <p><strong>Big-O:</strong> với n nút, vòng lặp chạy n − 2 lần → O(n). Chính điểm yếu này là lý do slide 16–18 thêm liên kết <code>prev</code>.</p>
-<p class="meo">🧠 <strong>Mẹo nhớ:</strong> danh sách liên kết đơn rẻ ở đầu (chèn và xoá), rẻ khi chèn ở cuối, nhưng <em>đắt</em> khi xoá ở cuối.</p>`],
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> danh sách liên kết đơn rẻ ở đầu (chèn và xoá), rẻ khi chèn ở cuối, nhưng <em>đắt</em> khi xoá ở cuối.</p>
+<div class="pitfall">Bẫy FE: "có tham chiếu <code>tail</code> thì xoá nút cuối của danh sách liên kết đơn là O(1)" — SAI. <code>tail</code> chỉ ra nút cần xoá, nhưng tail mới là <em>nút đứng trước</em> nó (predecessor), và cách duy nhất để tới đó vẫn là đi từ <code>head</code>: O(n).</div>`],
       [13, 'Circular Lists - 1',
         `<p class="y-chinh">🎯 In a circular list the nodes form a ring: the list is finite, yet every node has a successor — the last node points back to the first.</p>
 <ul>
 <li>There is no <code>null</code> at the end, so <code>while (p != null)</code> never stops. Stop when you are <strong>back where you started</strong> — a do-while loop.</li>
 <li>Keeping only <code>tail</code> is enough: <code>tail.next</code> is the first node, so both ends are one step away.</li>
+<li>The slide's caption names the kind drawn: a circular <em>singly</em> linked list — each node still has one link, <code>next</code>; only the last <code>next</code> is no longer <code>null</code>.</li>
+<li>Special cases: empty ring → <code>tail == null</code>; one node → <code>tail.next == tail</code> (the node is its own successor).</li>
 </ul>
 <pre><code class="language-java">class CNode {
     String info;
@@ -1124,11 +1132,14 @@ public class CircularRing {
 <div class="out">one round: A B C<br>
 nodes with next == null seen in 6 steps: 0<br>
 successor of C: A</div>
+<p><strong>Big-O:</strong> one round visits each of the n nodes exactly once → O(n), the same as a singly linked list; only the stopping test changed.</p>
 <div class="pitfall">Walking a circular list with the singly-list loop <code>while (p != null)</code> is an infinite loop. When a PE program "hangs", check this first.</div>`,
         `<p class="y-chinh">🎯 Trong danh sách vòng (circular list) các nút tạo thành một vòng tròn: danh sách vẫn hữu hạn, nhưng nút nào cũng có nút đứng sau — nút cuối trỏ ngược về nút đầu.</p>
 <ul>
 <li>Không có <code>null</code> ở cuối nên <code>while (p != null)</code> không bao giờ dừng. Phải dừng khi <strong>quay lại điểm xuất phát</strong> — dùng vòng do-while.</li>
-<li>Chỉ cần giữ <code>tail</code>: <code>tail.next</code> chính là nút đầu, nên cả hai đầu đều chỉ cách một bước.</li>
+<li>Chỉ cần giữ <code>tail</code> (tham chiếu nút cuối): <code>tail.next</code> chính là nút đầu, nên cả hai đầu đều chỉ cách một bước.</li>
+<li>Chú thích trên slide gọi tên loại được vẽ: danh sách liên kết vòng <em>đơn</em> (circular singly linked list) — mỗi nút vẫn chỉ có một liên kết <code>next</code>; chỉ khác là <code>next</code> của nút cuối không còn là <code>null</code>.</li>
+<li>Trường hợp đặc biệt: vòng rỗng → <code>tail == null</code>; một nút → <code>tail.next == tail</code> (nút đó là nút đứng sau của chính nó).</li>
 </ul>
 <pre><code class="language-java">class CNode {
     String info;
@@ -1163,6 +1174,7 @@ public class CircularRing {
 <div class="out">one round: A B C<br>
 nodes with next == null seen in 6 steps: 0<br>
 successor of C: A</div>
+<p><strong>Big-O:</strong> một vòng duyệt thăm mỗi nút trong n nút đúng một lần → O(n), như danh sách liên kết đơn; chỉ điều kiện dừng là thay đổi.</p>
 <div class="pitfall">Duyệt danh sách vòng bằng vòng lặp của danh sách đơn <code>while (p != null)</code> là lặp vô hạn. Khi chương trình PE bị "treo", hãy kiểm tra chỗ này đầu tiên.</div>`],
       [14, 'Circular Lists - 2: inserting nodes',
         `<p class="y-chinh">🎯 With a <code>tail</code> reference, inserting at the front (a) and at the end (b) of a circular singly linked list are both O(1) — and (b) is simply (a) followed by moving <code>tail</code>.</p>
@@ -1174,6 +1186,7 @@ successor of C: A</div>
 <tr><td>empty list</td><td><code>q.next = q; tail = q;</code></td><td>a ring of one node</td></tr>
 </tbody>
 </table>
+<p>The program below runs (a) and (b) on the lesson's own values; match each line with parts (a) and (b) of the figure.</p>
 <pre><code class="language-java">class CNode {
     int info;
     CNode next;
@@ -1218,8 +1231,11 @@ public class CircularList {
 addLast(2): &nbsp;1 2 &nbsp;&nbsp;(tail = 2, tail.next = 1)<br>
 addFirst(0): 0 1 2 &nbsp;&nbsp;(tail = 2, tail.next = 0)<br>
 addLast(3): &nbsp;0 1 2 3 &nbsp;&nbsp;(tail = 3, tail.next = 0)</div>
-<p class="meo">🧠 <strong>Remember:</strong> in a ring, "front" and "end" are the same gap — the one right after <code>tail</code>. Only which node you call <code>tail</code> decides whether the new node is first or last.</p>`,
-        `<p class="y-chinh">🎯 Khi có tham chiếu <code>tail</code>, chèn vào đầu (a) và vào cuối (b) danh sách vòng đơn đều là O(1) — và (b) chỉ là (a) rồi dời <code>tail</code>.</p>
+<p><strong>Big-O:</strong> both cases are a few assignments and no loop → O(1). With only a <code>head</code> reference, (b) would first walk around the ring to find the last node, O(n) — that is why a circular list keeps <code>tail</code>, not <code>head</code>.</p>
+<p>Deleting is uneven: the first node goes in O(1) (<code>tail.next = tail.next.next</code>, or <code>tail = null</code> if it was the only node), but the last node needs its predecessor, found only by walking around the ring — O(n), as in slide 12.</p>
+<p class="meo">🧠 <strong>Remember:</strong> in a ring, "front" and "end" are the same gap — the one right after <code>tail</code>. Only which node you call <code>tail</code> decides whether the new node is first or last.</p>
+<div class="pitfall">In (a) the order matters: writing <code>tail.next = q</code> before <code>q.next = tail.next</code> makes q point to itself — the ring becomes <code>tail → q → q → …</code> and every other old node is lost. Link the new node first, then redirect <code>tail.next</code>.</div>`,
+        `<p class="y-chinh">🎯 Khi có tham chiếu <code>tail</code> (trỏ tới nút cuối), chèn vào đầu (a) và vào cuối (b) danh sách liên kết vòng đơn (circular singly linked list) đều là O(1) — và (b) chỉ là (a) rồi dời <code>tail</code>.</p>
 <table>
 <thead><tr><th>Trường hợp</th><th>Các bước</th><th>Kết quả</th></tr></thead>
 <tbody>
@@ -1228,6 +1244,7 @@ addLast(3): &nbsp;0 1 2 3 &nbsp;&nbsp;(tail = 3, tail.next = 0)</div>
 <tr><td>danh sách rỗng</td><td><code>q.next = q; tail = q;</code></td><td>vòng tròn một nút</td></tr>
 </tbody>
 </table>
+<p>Chương trình dưới chạy (a) và (b) trên giá trị của ví dụ của bài; hãy đối chiếu từng dòng với hai phần (a) và (b) của hình.</p>
 <pre><code class="language-java">class CNode {
     int info;
     CNode next;
@@ -1272,7 +1289,10 @@ public class CircularList {
 addLast(2): &nbsp;1 2 &nbsp;&nbsp;(tail = 2, tail.next = 1)<br>
 addFirst(0): 0 1 2 &nbsp;&nbsp;(tail = 2, tail.next = 0)<br>
 addLast(3): &nbsp;0 1 2 3 &nbsp;&nbsp;(tail = 3, tail.next = 0)</div>
-<p class="meo">🧠 <strong>Mẹo nhớ:</strong> trên vòng tròn, "đầu" và "cuối" là cùng một khe — khe ngay sau <code>tail</code>. Chỉ việc gọi nút nào là <code>tail</code> mới quyết định nút mới đứng đầu hay đứng cuối.</p>`],
+<p><strong>Big-O:</strong> cả hai trường hợp chỉ vài phép gán, không có vòng lặp → O(1). Nếu chỉ giữ <code>head</code> (nút đầu), (b) phải đi hết một vòng để tìm nút cuối, O(n) — đó là lý do danh sách vòng giữ <code>tail</code> chứ không giữ <code>head</code>.</p>
+<p>Xoá thì không đều: nút đầu xoá trong O(1) (<code>tail.next = tail.next.next</code>, hoặc <code>tail = null</code> nếu đó là nút duy nhất), còn nút cuối cần nút đứng trước nó, chỉ tìm được bằng cách đi vòng — O(n), giống slide 12.</p>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> trên vòng tròn, "đầu" và "cuối" là cùng một khe — khe ngay sau <code>tail</code>. Chỉ việc gọi nút nào là <code>tail</code> mới quyết định nút mới đứng đầu hay đứng cuối.</p>
+<div class="pitfall">Ở (a), thứ tự rất quan trọng: gán <code>tail.next = q</code> trước rồi mới <code>q.next = tail.next</code> thì q tự trỏ vào chính nó — vòng thành <code>tail → q → q → …</code> và mọi nút cũ khác bị mất. Nối nút mới trước, rồi mới đổi <code>tail.next</code>.</div>`],
       [15, 'Circular List application - Round-Robin Scheduling',
         `<p class="y-chinh">🎯 Round-robin scheduling gives every process a short time slice in cyclic order; a circular list does it with two steps repeated: serve <code>C.first()</code>, then <code>C.rotate()</code>.</p>
 <ul>
@@ -1324,7 +1344,9 @@ t=6: P3 ran 2 -&gt; 2 left<br>
 t=8: P1 ran 2 -&gt; 1 left<br>
 t=10: P3 ran 2 -&gt; finished<br>
 t=11: P1 ran 1 -&gt; finished</div>
-<p>Trace with slice = 2: P1 5→3, P2 2→done, P3 4→2, P1 3→1, P3 2→done, P1 1→done. Every process got the CPU in turn — nobody starves.</p>`,
+<p>Trace of the lesson's own example (P1 = 5, P2 = 2, P3 = 4 time units; slice = 2): P1 5→3, P2 2→done, P3 4→2, P1 3→1, P3 2→done, P1 1→done. Every process got the CPU in turn — nobody starves.</p>
+<p><strong>Big-O:</strong> each turn costs O(1) — <code>first()</code> reads <code>tail.next</code>, <code>rotate()</code> is one assignment, and removing a finished first process is one link change; the ring is never walked.</p>
+<div class="pitfall">After removing a finished process, do <em>not</em> also call <code>rotate()</code>: the next process is already first, and rotating would skip its turn. That is why the program writes <code>if … removeFirst(); else rotate();</code>.</div>`,
         `<p class="y-chinh">🎯 Lập lịch xoay vòng (round-robin scheduling) cho mỗi tiến trình (process) một lát thời gian ngắn theo vòng; danh sách vòng làm việc này bằng hai bước lặp lại: phục vụ <code>C.first()</code>, rồi <code>C.rotate()</code>.</p>
 <ul>
 <li><strong>Lát thời gian (time slice)</strong>: tiến trình chạy một lượt ngắn và bị ngắt khi hết lượt, kể cả khi việc chưa xong.</li>
@@ -1375,13 +1397,16 @@ t=6: P3 ran 2 -&gt; 2 left<br>
 t=8: P1 ran 2 -&gt; 1 left<br>
 t=10: P3 ran 2 -&gt; finished<br>
 t=11: P1 ran 1 -&gt; finished</div>
-<p>Lần theo với lát = 2: P1 5→3, P2 2→xong, P3 4→2, P1 3→1, P3 2→xong, P1 1→xong. Tiến trình nào cũng lần lượt được dùng CPU — không ai bị bỏ đói (starvation).</p>`],
+<p>Lần theo ví dụ của bài (P1 = 5, P2 = 2, P3 = 4 đơn vị thời gian; lát = 2): P1 5→3, P2 2→xong, P3 4→2, P1 3→1, P3 2→xong, P1 1→xong. Tiến trình nào cũng lần lượt được dùng bộ xử lý (CPU) — không ai bị bỏ đói (starvation).</p>
+<p><strong>Big-O:</strong> mỗi lượt tốn O(1) — <code>first()</code> đọc <code>tail.next</code>, <code>rotate()</code> là một phép gán, gỡ tiến trình đầu đã xong là đổi một liên kết; không bao giờ phải đi dọc vòng.</p>
+<div class="pitfall">Gỡ một tiến trình đã xong thì <em>đừng</em> gọi thêm <code>rotate()</code>: tiến trình kế tiếp đã đứng đầu sẵn, xoay thêm sẽ làm nó mất lượt. Vì thế chương trình viết <code>if … removeFirst(); else rotate();</code>.</div>`],
       [16, 'Doubly Linked Lists - 1',
         `<p class="y-chinh">🎯 A node of a doubly linked list has two reference fields — <code>prev</code> to its predecessor and <code>next</code> to its successor — so the list can be walked both ways.</p>
 <ul>
 <li><code>Node(int x, Node p, Node q)</code> sets info = x, prev = p, next = q.</li>
 <li><code>add(x)</code> on the slide appends: empty → <code>head = tail = new Node(x, null, null)</code>; otherwise <code>q = new Node(x, tail, null)</code>, <code>tail.next = q</code>, <code>tail = q</code>.</li>
 <li>Price: one extra reference per node. Gain: O(1) delete at the end, and O(1) delete of any node you already hold.</li>
+<li><code>backward()</code> in the program walks <code>p = p.prev</code> from <code>tail</code> — impossible in a singly linked list; the output prints 4 3 2 1.</li>
 </ul>
 <pre><code class="language-java">class Node {
     int info;
@@ -1429,12 +1454,15 @@ public class DoublyList {
     }
 }</code></pre>
 <div class="out">head to tail: 1 2 3 4<br>
-tail to head: 4 3 2 1</div>`,
+tail to head: 4 3 2 1</div>
+<p><strong>Rule of thumb:</strong> every insert or delete now changes links in <em>both</em> directions — inserting q between nodes a and b takes four assignments: <code>q.prev = a; q.next = b; a.next = q; b.prev = q;</code>.</p>
+<p><strong>Invariant to check in the PE:</strong> for every node p except the last, <code>p.next.prev == p</code>; and <code>head.prev == null</code>, <code>tail.next == null</code>.</p>`,
         `<p class="y-chinh">🎯 Nút của danh sách liên kết đôi (doubly linked list) có hai trường tham chiếu — <code>prev</code> trỏ tới nút đứng trước và <code>next</code> trỏ tới nút đứng sau — nên đi được theo cả hai chiều.</p>
 <ul>
 <li><code>Node(int x, Node p, Node q)</code> gán info = x, prev = p, next = q.</li>
 <li><code>add(x)</code> trên slide thêm vào cuối: rỗng → <code>head = tail = new Node(x, null, null)</code>; ngược lại <code>q = new Node(x, tail, null)</code>, <code>tail.next = q</code>, <code>tail = q</code>.</li>
 <li>Cái giá: thêm một tham chiếu mỗi nút. Cái được: xoá ở cuối O(1), và xoá O(1) bất kỳ nút nào đang cầm trong tay.</li>
+<li><code>backward()</code> trong chương trình đi <code>p = p.prev</code> từ <code>tail</code> (nút cuối) về — danh sách liên kết đơn không làm được; output in ra 4 3 2 1.</li>
 </ul>
 <pre><code class="language-java">class Node {
     int info;
@@ -1482,11 +1510,14 @@ public class DoublyList {
     }
 }</code></pre>
 <div class="out">head to tail: 1 2 3 4<br>
-tail to head: 4 3 2 1</div>`],
+tail to head: 4 3 2 1</div>
+<p><strong>Quy tắc:</strong> mỗi lần chèn hay xoá giờ phải sửa liên kết theo <em>cả hai</em> chiều — chèn q vào giữa hai nút a và b cần bốn phép gán: <code>q.prev = a; q.next = b; a.next = q; b.prev = q;</code>.</p>
+<p><strong>Bất biến (invariant) nên tự kiểm khi làm PE:</strong> với mọi nút p trừ nút cuối, <code>p.next.prev == p</code>; và <code>head.prev == null</code>, <code>tail.next == null</code>.</p>`],
       [17, 'Doubly Linked Lists - 2: adding a new node at the end',
         `<p class="y-chinh">🎯 Appending to a doubly linked list sets two links on the new node and one on the old tail — still O(1).</p>
+<p>Empty list first: <code>head = tail = new Node(x, null, null)</code> — a single node whose <code>prev</code> and <code>next</code> are both <code>null</code> (the first line of the output).</p>
 <table>
-<thead><tr><th>Step</th><th>Code</th><th>Links after the step (adding 30 to 10 ⇄ 20)</th></tr></thead>
+<thead><tr><th>Step</th><th>Code</th><th>Links after the step (the lesson's own example: adding 30 to 10 ⇄ 20)</th></tr></thead>
 <tbody>
 <tr><td>1</td><td><code>Node q = new Node(30, tail, null);</code></td><td>q.prev = 20, q.next = null</td></tr>
 <tr><td>2</td><td><code>tail.next = q;</code></td><td>20.next = 30</td></tr>
@@ -1533,11 +1564,14 @@ public class DoublyAddLast {
 <div class="out">addLast(10): [null&lt;-10-&gt;null]<br>
 addLast(20): [null&lt;-10-&gt;20] [10&lt;-20-&gt;null]<br>
 addLast(30): [null&lt;-10-&gt;20] [10&lt;-20-&gt;30] [20&lt;-30-&gt;null]</div>
-<p>Each bracket in the output reads <code>[prev&lt;-info-&gt;next]</code>: after every step, both directions agree.</p>
+<p>Each bracket in the output reads <code>[prev&lt;-info-&gt;next]</code>: after every <code>addLast</code>, both directions agree (between steps 1 and 2 they do not yet: <code>q.prev</code> is set but <code>20.next</code> is still <code>null</code>).</p>
+<p><strong>Big-O:</strong> three assignments and no loop → O(1), exactly like the singly version with <code>tail</code>; the extra <code>prev</code> link comes for free from the constructor.</p>
+<p><strong>Order:</strong> <code>q.prev = tail</code> must be set while <code>tail</code> still points to the old last node — before <code>tail = q</code>; the constructor call in step 1 does exactly that.</p>
 <div class="pitfall">A doubly linked list has <em>two</em> links for every connection. Setting <code>q.prev</code> but forgetting <code>tail.next = q</code> gives a list that is correct backwards and broken forwards.</div>`,
-        `<p class="y-chinh">🎯 Thêm vào cuối danh sách liên kết đôi đặt hai liên kết ở nút mới và một liên kết ở tail cũ — vẫn là O(1).</p>
+        `<p class="y-chinh">🎯 Thêm vào cuối danh sách liên kết đôi (doubly linked list) đặt hai liên kết ở nút mới và một liên kết ở nút cuối cũ (tail cũ) — vẫn là O(1).</p>
+<p>Trường hợp rỗng trước: <code>head = tail = new Node(x, null, null)</code> — một nút duy nhất có <code>prev</code> và <code>next</code> đều là <code>null</code> (dòng đầu của output).</p>
 <table>
-<thead><tr><th>Bước</th><th>Code</th><th>Liên kết sau bước (thêm 30 vào 10 ⇄ 20)</th></tr></thead>
+<thead><tr><th>Bước</th><th>Code</th><th>Liên kết sau bước (ví dụ của bài: thêm 30 vào 10 ⇄ 20)</th></tr></thead>
 <tbody>
 <tr><td>1</td><td><code>Node q = new Node(30, tail, null);</code></td><td>q.prev = 20, q.next = null</td></tr>
 <tr><td>2</td><td><code>tail.next = q;</code></td><td>20.next = 30</td></tr>
@@ -1584,7 +1618,9 @@ public class DoublyAddLast {
 <div class="out">addLast(10): [null&lt;-10-&gt;null]<br>
 addLast(20): [null&lt;-10-&gt;20] [10&lt;-20-&gt;null]<br>
 addLast(30): [null&lt;-10-&gt;20] [10&lt;-20-&gt;30] [20&lt;-30-&gt;null]</div>
-<p>Mỗi cặp ngoặc trong output đọc là <code>[prev&lt;-info-&gt;next]</code>: sau mỗi bước, hai chiều liên kết luôn khớp nhau.</p>
+<p>Mỗi cặp ngoặc trong output đọc là <code>[prev&lt;-info-&gt;next]</code>: sau mỗi lần <code>addLast</code>, hai chiều liên kết luôn khớp nhau (giữa bước 1 và bước 2 thì chưa: <code>q.prev</code> đã gán nhưng <code>20.next</code> vẫn là <code>null</code>).</p>
+<p><strong>Big-O:</strong> ba phép gán, không vòng lặp → O(1), y như bản danh sách đơn có <code>tail</code>; liên kết <code>prev</code> thêm vào được hàm tạo (constructor) gán sẵn.</p>
+<p><strong>Thứ tự:</strong> <code>q.prev = tail</code> phải được gán khi <code>tail</code> còn trỏ vào nút cuối cũ — tức là trước <code>tail = q</code>; lời gọi hàm tạo ở bước 1 làm đúng việc đó.</p>
 <div class="pitfall">Danh sách đôi có <em>hai</em> liên kết cho mỗi mối nối. Gán <code>q.prev</code> mà quên <code>tail.next = q</code> thì danh sách đúng khi đi lùi nhưng hỏng khi đi tới.</div>`],
       [18, 'Doubly Linked Lists - 3: deleting a node from the end',
         `<p class="y-chinh">🎯 Thanks to <code>prev</code>, deleting the last node is O(1): step back to <code>tail.prev</code> and cut the link — no search at all.</p>
@@ -1593,6 +1629,7 @@ addLast(30): [null&lt;-10-&gt;20] [10&lt;-20-&gt;30] [20&lt;-30-&gt;null]</div>
 <li><code>tail = tail.prev;</code></li>
 <li><code>tail.next = null;</code></li>
 </ol>
+<p>The program deletes from the lesson's own list 10 ⇄ 20 ⇄ 30 until it is empty:</p>
 <pre><code class="language-java">class Node {
     int info;
     Node prev, next;
@@ -1634,13 +1671,16 @@ public class DoublyRemoveLast {
 removeLast()=30: head &lt;-&gt; 10 &lt;-&gt; 20 &nbsp;&nbsp;(tail = 20)<br>
 removeLast()=20: head &lt;-&gt; 10 &nbsp;&nbsp;(tail = 10)<br>
 removeLast()=10: head &nbsp;&nbsp;(tail = null)</div>
-<p>Compare with slide 12: the singly linked version had to walk the list (O(n)); here there is no loop.</p>`,
-        `<p class="y-chinh">🎯 Nhờ có <code>prev</code>, xoá nút cuối chỉ tốn O(1): lùi về <code>tail.prev</code> rồi cắt liên kết — không phải tìm gì cả.</p>
+<p>Compare with slide 12: the singly linked version had to walk the list (O(n)); here there is no loop.</p>
+<p><strong>Big-O:</strong> two assignments whatever n is → O(1). The singly list needed the predecessor of <code>tail</code> and had to search for it; here <code>tail.prev</code> <em>is</em> that predecessor.</p>
+<div class="pitfall">Skipping the one-node case: <code>tail = tail.prev</code> makes <code>tail</code> null, and <code>tail.next = null</code> then throws a <code>NullPointerException</code>. After the last delete <code>head</code> must become <code>null</code> too, or the list still "contains" the deleted node.</div>`,
+        `<p class="y-chinh">🎯 Nhờ có <code>prev</code>, xoá nút cuối chỉ tốn O(1): lùi về <code>tail.prev</code> (nút đứng trước nút cuối) rồi cắt liên kết — không phải tìm gì cả.</p>
 <ol>
 <li>Rỗng → báo lỗi; một nút → <code>head = tail = null</code>.</li>
 <li><code>tail = tail.prev;</code></li>
 <li><code>tail.next = null;</code></li>
 </ol>
+<p>Chương trình xoá dần danh sách của ví dụ của bài 10 ⇄ 20 ⇄ 30 cho tới khi rỗng:</p>
 <pre><code class="language-java">class Node {
     int info;
     Node prev, next;
@@ -1682,7 +1722,9 @@ public class DoublyRemoveLast {
 removeLast()=30: head &lt;-&gt; 10 &lt;-&gt; 20 &nbsp;&nbsp;(tail = 20)<br>
 removeLast()=20: head &lt;-&gt; 10 &nbsp;&nbsp;(tail = 10)<br>
 removeLast()=10: head &nbsp;&nbsp;(tail = null)</div>
-<p>So với slide 12: bản danh sách đơn phải đi dọc danh sách (O(n)); ở đây không có vòng lặp nào.</p>`],
+<p>So với slide 12: bản danh sách đơn phải đi dọc danh sách (O(n)); ở đây không có vòng lặp nào.</p>
+<p><strong>Big-O:</strong> hai phép gán dù n bằng bao nhiêu → O(1). Danh sách đơn cần nút đứng trước <code>tail</code> và phải đi tìm nó; ở đây <code>tail.prev</code> <em>chính là</em> nút đứng trước đó.</p>
+<div class="pitfall">Bỏ qua trường hợp một nút: <code>tail = tail.prev</code> làm <code>tail</code> thành null, rồi <code>tail.next = null</code> văng <code>NullPointerException</code> (ngoại lệ tham chiếu null). Sau lần xoá cuối cùng <code>head</code> cũng phải thành <code>null</code>, nếu không danh sách vẫn "chứa" nút đã xoá.</div>`],
       [19, 'Lists in java.util - LinkedList class',
         `<p class="y-chinh">🎯 In real code you rarely write a list yourself: <code>java.util.LinkedList&lt;E&gt;</code> already offers every method on the slide.</p>
 <ul>
@@ -1690,6 +1732,7 @@ removeLast()=10: head &nbsp;&nbsp;(tail = null)</div>
 <li><code>add</code>/<code>addLast</code>, <code>addFirst</code>, <code>getFirst</code>, <code>getLast</code>, <code>removeFirst</code>, <code>removeLast</code> are O(1): Java's <code>LinkedList</code> is a <strong>doubly linked</strong> list that keeps references to its first and last nodes.</li>
 <li><code>get(int index)</code> and <code>remove(int index)</code> are O(n): the list walks from whichever end is nearer.</li>
 <li><code>toArray()</code> copies the elements into a new array; <code>clear()</code> empties the list.</li>
+<li>Return types, as in the slide's left column: <code>add</code> returns <code>boolean</code> (always <code>true</code> for a list), <code>addFirst</code>/<code>addLast</code>/<code>clear</code> return <code>void</code>, the get/remove methods return the element <code>E</code>.</li>
 </ul>
 <pre><code class="language-java">import java.util.Arrays;
 import java.util.LinkedList;
@@ -1717,13 +1760,15 @@ get(1)=B &nbsp;getFirst()=A &nbsp;getLast()=C<br>
 remove(1)=B -&gt; [A, C]<br>
 removeFirst()=A, removeLast()=C -&gt; []<br>
 toArray() -&gt; [X, Y]<br>
-after clear(): [] &nbsp;size()=0</div>`,
+after clear(): [] &nbsp;size()=0</div>
+<div class="pitfall"><code>getFirst()</code>, <code>getLast()</code>, <code>removeFirst()</code>, <code>removeLast()</code> on an empty <code>LinkedList</code> throw <code>NoSuchElementException</code>, and <code>get(i)</code> with a bad index throws <code>IndexOutOfBoundsException</code> — check <code>isEmpty()</code>/<code>size()</code> first.</div>`,
         `<p class="y-chinh">🎯 Trong code thực tế hiếm khi phải tự viết danh sách: <code>java.util.LinkedList&lt;E&gt;</code> đã có sẵn mọi phương thức trên slide.</p>
 <ul>
 <li><code>E</code> là kiểu phần tử (generics — kiểu tổng quát): <code>LinkedList&lt;String&gt;</code> chứa các chuỗi.</li>
 <li><code>add</code>/<code>addLast</code>, <code>addFirst</code>, <code>getFirst</code>, <code>getLast</code>, <code>removeFirst</code>, <code>removeLast</code> đều O(1): <code>LinkedList</code> của Java là danh sách <strong>liên kết đôi</strong>, giữ sẵn tham chiếu tới nút đầu và nút cuối.</li>
 <li><code>get(int index)</code> và <code>remove(int index)</code> là O(n): danh sách phải đi từ đầu nào gần hơn tới vị trí đó.</li>
 <li><code>toArray()</code> chép các phần tử ra một mảng mới; <code>clear()</code> làm rỗng danh sách.</li>
+<li>Kiểu trả về, đúng như cột trái của slide: <code>add</code> trả về <code>boolean</code> (với danh sách luôn là <code>true</code>), <code>addFirst</code>/<code>addLast</code>/<code>clear</code> trả về <code>void</code> (không trả gì), các phương thức get/remove trả về phần tử kiểu <code>E</code>.</li>
 </ul>
 <pre><code class="language-java">import java.util.Arrays;
 import java.util.LinkedList;
@@ -1751,11 +1796,12 @@ get(1)=B &nbsp;getFirst()=A &nbsp;getLast()=C<br>
 remove(1)=B -&gt; [A, C]<br>
 removeFirst()=A, removeLast()=C -&gt; []<br>
 toArray() -&gt; [X, Y]<br>
-after clear(): [] &nbsp;size()=0</div>`],
+after clear(): [] &nbsp;size()=0</div>
+<div class="pitfall">Gọi <code>getFirst()</code>, <code>getLast()</code>, <code>removeFirst()</code>, <code>removeLast()</code> trên <code>LinkedList</code> rỗng sẽ văng <code>NoSuchElementException</code> (ngoại lệ "không có phần tử"), còn <code>get(i)</code> với chỉ số sai văng <code>IndexOutOfBoundsException</code> (ngoại lệ chỉ số ngoài phạm vi) — hãy kiểm <code>isEmpty()</code>/<code>size()</code> trước.</div>`],
       [20, 'Lists in java.util - LinkedList class example',
         `<p class="y-chinh">🎯 The slide stores three (name, age) records in a <code>LinkedList</code> and prints them with <code>get(i)</code> inside a for loop.</p>
 <p>The program below is the slide's code (only the class holding <code>main</code> is renamed so that the file runs), followed by the same job in modern style:</p>
-<pre><code class="language-java">import java.util.LinkedList;
+<pre><code class="language-java">import java.util.*;
 
 class Node {                                  // on the slide this "Node" is just a record: name + age
     String name;
@@ -1775,7 +1821,7 @@ public class LinkedListExample {
         // --- the slide's code (raw type LinkedList)
         LinkedList t = new LinkedList();
         Node x;
-        int i;
+        int n, i;
         x = new Node("A01", 25); t.add(x);
         x = new Node("A02", 23); t.add(x);
         x = new Node("A03", 21); t.add(x);
@@ -1799,11 +1845,13 @@ average age = 23.0</div>
 <ul>
 <li>The slide uses the <strong>raw type</strong> <code>LinkedList</code> (no <code>&lt;Node&gt;</code>); it compiles only with an "unchecked" warning. Write <code>LinkedList&lt;Node&gt;</code>.</li>
 <li>The slide's class is called <code>Node</code>, but it is just a data record — <code>java.util.LinkedList</code> builds its own internal nodes.</li>
+<li><code>System.out.println(t.get(i))</code> prints through the slide's own <code>toString()</code> — name, two spaces, age — which is why the output reads <code>A01  25</code>.</li>
+<li>Inside a for-each loop never call <code>t.add(…)</code> or <code>t.remove(…)</code> on the same list: the iterator is fail-fast and usually stops with a <code>ConcurrentModificationException</code>. To delete while walking, use an explicit <code>Iterator</code> and its <code>remove()</code>.</li>
 </ul>
 <div class="pitfall"><code>for (i = 0; i &lt; t.size(); i++) t.get(i)</code> on a <strong>LinkedList</strong> is O(n²): each <code>get(i)</code> walks up to n/2 nodes. Use a for-each loop (an iterator) — one pass, O(n).</div>`,
         `<p class="y-chinh">🎯 Slide lưu ba bản ghi (tên, tuổi) vào một <code>LinkedList</code> rồi in ra bằng <code>get(i)</code> trong vòng for.</p>
 <p>Chương trình dưới là code của slide (chỉ đổi tên lớp chứa <code>main</code> để file chạy được), tiếp theo là cùng công việc viết theo kiểu hiện đại:</p>
-<pre><code class="language-java">import java.util.LinkedList;
+<pre><code class="language-java">import java.util.*;
 
 class Node {                                  // trên slide "Node" này chỉ là một bản ghi: tên + tuổi
     String name;
@@ -1823,7 +1871,7 @@ public class LinkedListExample {
         // --- code của slide (kiểu thô LinkedList)
         LinkedList t = new LinkedList();
         Node x;
-        int i;
+        int n, i;
         x = new Node("A01", 25); t.add(x);
         x = new Node("A02", 23); t.add(x);
         x = new Node("A03", 21); t.add(x);
@@ -1845,8 +1893,10 @@ A02 &nbsp;23<br>
 A03 &nbsp;21<br>
 average age = 23.0</div>
 <ul>
-<li>Slide dùng <strong>kiểu thô (raw type)</strong> <code>LinkedList</code> (không có <code>&lt;Node&gt;</code>); nó chỉ biên dịch kèm cảnh báo "unchecked". Hãy viết <code>LinkedList&lt;Node&gt;</code>.</li>
+<li>Slide dùng <strong>kiểu thô (raw type)</strong> <code>LinkedList</code> (không có <code>&lt;Node&gt;</code>); nó chỉ biên dịch kèm cảnh báo "unchecked" (chưa kiểm kiểu). Hãy viết <code>LinkedList&lt;Node&gt;</code>.</li>
 <li>Lớp trên slide tên là <code>Node</code> nhưng thật ra chỉ là một bản ghi dữ liệu — <code>java.util.LinkedList</code> tự tạo các nút bên trong của nó.</li>
+<li><code>System.out.println(t.get(i))</code> in ra qua chính <code>toString()</code> của slide — tên, hai dấu cách, tuổi — nên output có dạng <code>A01  25</code>.</li>
+<li>Trong vòng for-each, đừng gọi <code>t.add(…)</code> hay <code>t.remove(…)</code> trên chính danh sách đó: bộ duyệt (iterator) kiểu fail-fast (hỏng là báo ngay) thường dừng bằng <code>ConcurrentModificationException</code> (ngoại lệ sửa đổi đồng thời). Muốn xoá trong lúc duyệt, dùng <code>Iterator</code> tường minh và phương thức <code>remove()</code> của nó.</li>
 </ul>
 <div class="pitfall"><code>for (i = 0; i &lt; t.size(); i++) t.get(i)</code> trên một <strong>LinkedList</strong> là O(n²): mỗi lần <code>get(i)</code> phải đi tới n/2 nút. Hãy dùng vòng for-each (iterator — bộ duyệt) — một lượt, O(n).</div>`],
       [21, 'Lists in java.util - ArrayList class',
@@ -1855,6 +1905,8 @@ average age = 23.0</div>
 <li><strong>size</strong> = number of elements; <strong>capacity</strong> = length of the hidden array. When it is full, OpenJDK allocates about 1.5 × the old capacity and copies — so appending is O(1) amortized.</li>
 <li><code>ensureCapacity(n)</code> reserves room in advance; <code>trimToSize()</code> shrinks the hidden array down to the size.</li>
 <li><code>add(int index, E o)</code> and <code>remove(int index)</code> shift elements → O(n).</li>
+<li><code>get(int index)</code> is O(1): the element is read straight from the hidden array at that index — no walking, unlike <code>LinkedList</code>.</li>
+<li>Where you add or remove matters: at the end O(1) (amortized for <code>add</code>), at the front O(n) — every element shifts.</li>
 </ul>
 <pre><code class="language-java">import java.util.ArrayList;
 import java.util.Arrays;
@@ -1885,11 +1937,13 @@ remove(Integer.valueOf(10)) -&gt; [20, 30, 40, 50]<br>
 toArray() -&gt; [20, 30, 40, 50]<br>
 after clear(): size()=0 isEmpty()=true</div>
 <div class="pitfall">On an <code>ArrayList&lt;Integer&gt;</code>, <code>remove(1)</code> removes the element <strong>at index 1</strong>, not the value 1. To remove a value write <code>remove(Integer.valueOf(1))</code>. The output above shows both.</div>`,
-        `<p class="y-chinh">🎯 <code>ArrayList&lt;E&gt;</code> là cách cài danh sách bằng mảng động: <code>get(i)</code> là O(1), nhưng chèn hay xoá ở giữa phải dời phần tử.</p>
+        `<p class="y-chinh">🎯 <code>ArrayList&lt;E&gt;</code> là cách cài danh sách bằng mảng động (dynamic array): <code>get(i)</code> là O(1), nhưng chèn hay xoá ở giữa phải dời phần tử.</p>
 <ul>
 <li><strong>size</strong> (kích thước) = số phần tử đang có; <strong>capacity</strong> (sức chứa) = độ dài mảng ẩn bên trong. Khi đầy, OpenJDK cấp mảng mới khoảng 1,5 lần sức chứa cũ rồi chép sang — vì vậy thêm vào cuối là O(1) khấu hao (amortized).</li>
 <li><code>ensureCapacity(n)</code> đặt chỗ trước; <code>trimToSize()</code> thu mảng ẩn về đúng bằng size.</li>
 <li><code>add(int index, E o)</code> và <code>remove(int index)</code> phải dời phần tử → O(n).</li>
+<li><code>get(int index)</code> là O(1): phần tử được đọc thẳng từ mảng ẩn ở chỉ số đó — không phải đi dọc như <code>LinkedList</code>.</li>
+<li>Thêm/xoá ở đâu cũng quan trọng: ở cuối là O(1) (khấu hao với <code>add</code>), ở đầu là O(n) — mọi phần tử đều phải dời.</li>
 </ul>
 <pre><code class="language-java">import java.util.ArrayList;
 import java.util.Arrays;
@@ -1922,6 +1976,11 @@ after clear(): size()=0 isEmpty()=true</div>
 <div class="pitfall">Với <code>ArrayList&lt;Integer&gt;</code>, <code>remove(1)</code> xoá phần tử <strong>ở chỉ số 1</strong>, không phải giá trị 1. Muốn xoá theo giá trị phải viết <code>remove(Integer.valueOf(1))</code>. Output ở trên cho thấy cả hai.</div>`],
       [22, 'Summary',
         `<p class="y-chinh">🎯 One ADT, four kinds of storage — array/dynamic array, singly, circular and doubly linked list; choose by the operations you need most.</p>
+<ul>
+<li><strong>List</strong> — a sequence of items of one base type (slide 3).</li>
+<li><strong>Array or dynamic array</strong> — the dynamic one grows, so there is no maximum size; <code>ArrayList</code> is Java's version.</li>
+<li><strong>Linked list</strong> — the items live in nodes linked together with pointers (references in Java); singly, circular and doubly differ only in how the nodes are linked.</li>
+</ul>
 <table>
 <thead><tr><th>You need…</th><th>Choose</th><th>Why</th></tr></thead>
 <tbody>
@@ -1931,18 +1990,25 @@ after clear(): size()=0 isEmpty()=true</div>
 <tr><td>to visit items in turns, over and over</td><td>circular linked list</td><td><code>rotate()</code> is O(1)</td></tr>
 </tbody>
 </table>
-<p class="meo">🧠 <strong>The three one-line definitions from the slide:</strong> singly = a node links to its successor only; circular = the nodes form a ring; doubly = a node links to its previous and its next node.</p>`,
-        `<p class="y-chinh">🎯 Một ADT, bốn kiểu lưu — mảng/mảng động, danh sách liên kết đơn, vòng và đôi; chọn theo thao tác bạn dùng nhiều nhất.</p>
+<p class="meo">🧠 <strong>The three one-line definitions from the slide:</strong> singly = a node links to its successor only; circular = the nodes form a ring; doubly = a node links to its previous and its next node.</p>
+<p><strong>Big-O in one breath:</strong> arrays are fast at <code>get(i)</code>, linked lists at the head, and only the <code>prev</code> link makes deleting at the tail cheap.</p>`,
+        `<p class="y-chinh">🎯 Một ADT (kiểu dữ liệu trừu tượng), bốn kiểu lưu — mảng/mảng động, danh sách liên kết đơn, vòng và đôi; chọn theo thao tác bạn dùng nhiều nhất.</p>
+<ul>
+<li><strong>Danh sách (list)</strong> — một dãy phần tử cùng một kiểu cơ sở (slide 3).</li>
+<li><strong>Mảng hoặc mảng động (dynamic array)</strong> — mảng động tự nới rộng nên không có kích thước tối đa; <code>ArrayList</code> là phiên bản của Java.</li>
+<li><strong>Danh sách liên kết (linked list)</strong> — phần tử nằm trong các nút (node) nối với nhau bằng con trỏ (pointer — trong Java là tham chiếu); đơn, vòng và đôi chỉ khác nhau ở cách nối các nút.</li>
+</ul>
 <table>
 <thead><tr><th>Bạn cần…</th><th>Chọn</th><th>Vì sao</th></tr></thead>
 <tbody>
 <tr><td>đọc theo chỉ số thật nhiều</td><td>mảng / <code>ArrayList</code></td><td><code>get(i)</code> là O(1)</td></tr>
-<tr><td>chèn/xoá ở đầu thường xuyên</td><td>danh sách liên kết đơn (hoặc <code>LinkedList</code>)</td><td>O(1) tại <code>head</code></td></tr>
+<tr><td>chèn/xoá ở đầu thường xuyên</td><td>danh sách liên kết đơn (hoặc <code>LinkedList</code>)</td><td>O(1) tại <code>head</code> (nút đầu)</td></tr>
 <tr><td>xoá ở cả hai đầu hoặc đi lùi</td><td>danh sách liên kết đôi</td><td><code>prev</code> làm <code>removeLast</code> thành O(1)</td></tr>
 <tr><td>lần lượt xoay vòng qua các phần tử</td><td>danh sách liên kết vòng</td><td><code>rotate()</code> là O(1)</td></tr>
 </tbody>
 </table>
-<p class="meo">🧠 <strong>Ba định nghĩa một dòng trên slide:</strong> đơn = nút chỉ nối tới nút đứng sau; vòng = các nút tạo thành vòng tròn; đôi = nút nối tới cả nút trước và nút sau.</p>`],
+<p class="meo">🧠 <strong>Ba định nghĩa một dòng trên slide:</strong> đơn = nút chỉ nối tới nút đứng sau; vòng = các nút tạo thành vòng tròn; đôi = nút nối tới cả nút trước và nút sau.</p>
+<p><strong>Big-O gói trong một câu:</strong> mảng nhanh ở <code>get(i)</code>, danh sách liên kết nhanh ở đầu, và chỉ liên kết <code>prev</code> mới làm việc xoá ở cuối trở nên rẻ.</p>`],
       [23, 'Reading at home',
         `<p class="y-chinh">🎯 Chapter 3 of Goodrich 6e (Fundamental Data Structures) is the textbook version of this deck — read it after the slides.</p>
 <ul>
@@ -1952,11 +2018,11 @@ after clear(): size()=0 isEmpty()=true</div>
 <li><strong>§3.4 Doubly Linked Lists (p.132)</strong> — the version with header and trailer sentinel nodes (lesson 1.3 of this course).</li>
 </ul>
 <p>The book's lists are generic (<code>SinglyLinkedList&lt;E&gt;</code>) and the doubly linked one uses sentinels; the slides use plain <code>int</code> nodes — the same ideas in simpler packaging.</p>`,
-        `<p class="y-chinh">🎯 Chương 3 của sách Goodrich bản 6 (Fundamental Data Structures) là phiên bản giáo trình của bộ slide này — đọc sau khi học slide.</p>
+        `<p class="y-chinh">🎯 Chương 3 của sách Goodrich bản 6 (Fundamental Data Structures — các cấu trúc dữ liệu cơ bản) là phiên bản giáo trình của bộ slide này — đọc sau khi học slide.</p>
 <ul>
 <li><strong>§3.1 Using Arrays (tr.104)</strong> — lưu bảng điểm trò chơi trong mảng có dời phần tử, sắp xếp chèn (insertion-sort), lớp <code>java.util.Arrays</code>, mảng hai chiều.</li>
 <li><strong>§3.2 Singly Linked Lists (tr.122)</strong> — lớp <code>SinglyLinkedList</code> với <code>size</code>, <code>first</code>, <code>last</code>, <code>addFirst</code>, <code>addLast</code>, <code>removeFirst</code>.</li>
-<li><strong>§3.3 Circularly Linked Lists (tr.128)</strong> — lập lịch round-robin và <code>rotate()</code>, đúng như slide 15.</li>
+<li><strong>§3.3 Circularly Linked Lists (tr.128)</strong> — lập lịch xoay vòng (round-robin) và <code>rotate()</code>, đúng như slide 15.</li>
 <li><strong>§3.4 Doubly Linked Lists (tr.132)</strong> — bản có hai nút lính canh header và trailer (sentinel — bài 1.3 của khoá này).</li>
 </ul>
 <p>Danh sách trong sách là kiểu tổng quát (generic, <code>SinglyLinkedList&lt;E&gt;</code>) và bản liên kết đôi dùng nút lính canh; slide dùng nút <code>int</code> đơn giản — cùng ý tưởng, gói gọn hơn.</p>`],
@@ -1973,12 +2039,12 @@ after clear(): size()=0 isEmpty()=true</div>
     `<h3>✅ Tự kiểm tra trong 60 giây</h3>
 <ol>
 <li>Vì sao xoá nút cuối là O(n) với danh sách liên kết đơn nhưng O(1) với danh sách liên kết đôi?</li>
-<li>Sau khi xoá nút duy nhất của danh sách, <code>head</code> và <code>tail</code> phải bằng gì?</li>
+<li>Sau khi xoá nút duy nhất của danh sách, <code>head</code> (tham chiếu nút đầu) và <code>tail</code> (tham chiếu nút cuối) phải bằng gì?</li>
 <li>Danh sách vòng chỉ giữ <code>tail</code>. Nút đầu ở đâu?</li>
 <li><code>get(i)</code> trên <code>ArrayList</code> hay <code>LinkedList</code> nhanh hơn? Vì sao?</li>
 </ol>
 <p class="dap-an">✅ <strong>Đáp án:</strong> (1) danh sách đơn phải đi tới nút đứng trước <code>tail</code>; danh sách đôi chỉ cần đọc <code>tail.prev</code>. (2) cả hai là <code>null</code>. (3) <code>tail.next</code>. (4) <code>ArrayList</code> — nó truy cập mảng theo chỉ số trong O(1), còn <code>LinkedList</code> phải đi qua O(n) nút.</p>
-<p><strong>Học tiếp:</strong> các bài đào sâu 1.1–1.5 ngay bên dưới (mảng động, ba loại danh sách liên kết, nút lính canh, <code>ArrayList</code> vs <code>LinkedList</code>, ba bài toán kinh điển), rồi bài 1.6 (thực hành, thuật ngữ, tóm tắt) và quiz của chương.</p>`),
+<p><strong>Học tiếp:</strong> các bài đào sâu 1.1–1.5 ngay bên dưới (mảng động, ba loại danh sách liên kết, nút lính canh, <code>ArrayList</code> vs <code>LinkedList</code>, ba bài toán kinh điển), rồi bài 1.6 (thực hành, thuật ngữ, tóm tắt) và bài trắc nghiệm (quiz) của chương.</p>`),
     books([
       ['goodrich', 'Ch.3 Fundamental Data Structures — §3.1 Using Arrays p.104 · §3.2 Singly Linked Lists p.122 · §3.3 Circularly Linked Lists p.128 · §3.4 Doubly Linked Lists p.132', 'Chương 3 Fundamental Data Structures — §3.1 Using Arrays tr.104 · §3.2 Singly Linked Lists tr.122 · §3.3 Circularly Linked Lists tr.128 · §3.4 Doubly Linked Lists tr.132'],
     ]),
@@ -2004,7 +2070,7 @@ const L_on_ch1 = {
 <p>In a CSD201 PE the skeleton — the <code>Node</code> class, the list class, a <code>main</code> with a menu and code that writes each answer to a file — is usually given, and you fill in the bodies of <code>f1</code>, <code>f2</code>, … Here every answer is printed on the screen instead of written to a file.</p></div>`,
     `<span class="eyebrow">Chương 1 · Bài 1.6 · Thực hành &amp; ôn tập</span>
 <h2>Danh sách &amp; danh sách liên kết — luyện như đề PE, rồi ôn lại</h2>
-<p class="lead">Bảy bài tập theo dạng đề thi thực hành (PE) — từ bài khởi động mười phút tới một câu nhà tuyển dụng rất hay hỏi — bài nào cũng có lời giải tự kiểm tra được. Sau đó là thuật ngữ của chương bằng tiếng Anh và tiếng Việt, bản tóm tắt một màn hình và bảng độ phức tạp để ôn trước FE.</p>
+<p class="lead">Bảy bài tập theo dạng đề thi thực hành (PE) — từ bài khởi động mười phút tới một câu nhà tuyển dụng rất hay hỏi — bài nào cũng có lời giải tự kiểm tra được. Sau đó là thuật ngữ của chương bằng tiếng Anh và tiếng Việt, bản tóm tắt một màn hình và bảng độ phức tạp để ôn trước FE (thi cuối kỳ).</p>
 <div class="callout"><strong>Cách dùng trang này.</strong>
 <ol>
 <li>Đọc đề, cuộn lời giải ra khỏi màn hình rồi tự viết hàm trong Eclipse, dựa trên các lớp <code>Node</code>/<code>MyList</code> cho sẵn.</li>
@@ -2017,6 +2083,8 @@ const L_on_ch1 = {
 <p>Cars <code>Car(owner, price)</code> are loaded into a singly linked list in the order of the data. Write <code>addLast(owner, price)</code> that appends a car <strong>only when price &gt; 0</strong>; invalid rows are skipped. <code>head</code> and <code>tail</code> must stay correct.</p>
 <p class="nhan">Data → expected result</p>
 <p>A 5, B −2, C 3, D 0, E 7 → <strong>expected:</strong> (A,5) (C,3) (E,7).</p>
+<p class="nhan">Idea</p>
+<p>reject invalid data first (<code>if (price &lt;= 0) return;</code>), then the usual append: empty list → <code>head = tail = q</code>, otherwise <code>tail.next = q; tail = q;</code> — O(1) per call thanks to <code>tail</code>.</p>
 <p class="nhan">Solution + self-test — every line must say PASS</p>
 <pre><code class="language-java">class Car {
     String owner;
@@ -2087,9 +2155,11 @@ ALL TESTS PASSED</div>
 <div class="pitfall">The empty-list case must set <strong>both</strong> <code>head</code> and <code>tail</code>. Setting only <code>head</code> leaves <code>tail == null</code>, and the second <code>addLast</code> crashes with a <code>NullPointerException</code> on <code>tail.next</code>.</div>`,
     `<h3>🧪 Bài 1 — f1: thêm vào cuối có điều kiện (kiểu PE · ~10 phút)</h3>
 <p class="nhan">Đề bài</p>
-<p>Các xe <code>Car(owner, price)</code> được nạp vào một danh sách liên kết đơn (singly linked list) theo đúng thứ tự dữ liệu. Viết <code>addLast(owner, price)</code> chỉ thêm xe vào cuối <strong>khi price &gt; 0</strong>; dòng không hợp lệ bị bỏ qua. <code>head</code> và <code>tail</code> phải luôn đúng.</p>
+<p>Các xe <code>Car(owner, price)</code> được nạp vào một danh sách liên kết đơn (singly linked list) theo đúng thứ tự dữ liệu. Viết <code>addLast(owner, price)</code> chỉ thêm xe vào cuối <strong>khi price &gt; 0</strong>; dòng không hợp lệ bị bỏ qua. <code>head</code> (nút đầu) và <code>tail</code> (nút cuối) phải luôn đúng.</p>
 <p class="nhan">Dữ liệu → kết quả mong đợi</p>
 <p>A 5, B −2, C 3, D 0, E 7 → <strong>kết quả mong đợi:</strong> (A,5) (C,3) (E,7).</p>
+<p class="nhan">Ý tưởng</p>
+<p>loại dữ liệu không hợp lệ trước (<code>if (price &lt;= 0) return;</code>), rồi thêm vào cuối như thường lệ: danh sách rỗng → <code>head = tail = q</code>, ngược lại <code>tail.next = q; tail = q;</code> — mỗi lần gọi O(1) nhờ <code>tail</code>.</p>
 <p class="nhan">Lời giải + test tự kiểm — mọi dòng phải là PASS</p>
 <pre><code class="language-java">class Car {
     String owner;
@@ -2157,12 +2227,14 @@ PASS tail is the last valid car<br>
 PASS tail still right after one more add<br>
 PASS all-invalid input leaves list empty<br>
 ALL TESTS PASSED</div>
-<div class="pitfall">Trường hợp danh sách rỗng phải gán <strong>cả</strong> <code>head</code> lẫn <code>tail</code>. Chỉ gán <code>head</code> thì <code>tail == null</code>, và lần <code>addLast</code> thứ hai sẽ văng <code>NullPointerException</code> ở <code>tail.next</code>.</div>`),
+<div class="pitfall">Trường hợp danh sách rỗng phải gán <strong>cả</strong> <code>head</code> lẫn <code>tail</code>. Chỉ gán <code>head</code> thì <code>tail == null</code>, và lần <code>addLast</code> thứ hai sẽ văng <code>NullPointerException</code> (ngoại lệ tham chiếu null) ở <code>tail.next</code>.</div>`),
     bi(`<h3>🧪 Exercise 2 — f2: insert at position k (PE style · ~15 min)</h3>
 <p class="nhan">Task</p>
 <p>Write <code>insertAt(x, k)</code> so that after the call the new car is the node at position k (counting from 0). If <code>k &lt;= 0</code> or the list is empty, insert at the front; if k is past the end, append at the tail.</p>
 <p class="nhan">Idea</p>
-<p>walk a pointer <code>p</code> to position k − 1 (or stop at the tail), then <code>p.next = new Node(x, p.next)</code>. Only the front case changes <code>head</code>; only "inserted after the tail" changes <code>tail</code>.</p>
+<p>walk a pointer <code>p</code> to position k − 1 (or stop at the tail), then <code>p.next = new Node(x, p.next)</code>. Only the front case changes <code>head</code>; only "inserted after the tail" — or into an empty list — changes <code>tail</code>.</p>
+<p class="nhan">Data → expected result</p>
+<p>start empty: insertAt((B,2), 3) → (B,2), tail = (B,2); addLast (D,4); insertAt((A,1), 0) → (A,1) (B,2) (D,4); insertAt((C,3), 2) → (A,1) (B,2) (C,3) (D,4); insertAt((E,5), 99) → (A,1) (B,2) (C,3) (D,4) (E,5), tail = (E,5); insertAt((Z,0), −5) → (Z,0) becomes the head.</p>
 <p class="nhan">Solution + self-test — every line must say PASS</p>
 <pre><code class="language-java">class Car {
     String owner;
@@ -2243,7 +2315,9 @@ ALL TESTS PASSED</div>
 <p class="nhan">Đề bài</p>
 <p>Viết <code>insertAt(x, k)</code> sao cho sau lời gọi, xe mới là nút ở vị trí k (đếm từ 0). Nếu <code>k &lt;= 0</code> hoặc danh sách rỗng thì chèn vào đầu; nếu k vượt quá cuối thì thêm vào cuối (tail).</p>
 <p class="nhan">Ý tưởng</p>
-<p>cho con trỏ <code>p</code> đi tới vị trí k − 1 (hoặc dừng ở tail), rồi <code>p.next = new Node(x, p.next)</code>. Chỉ trường hợp chèn đầu mới đổi <code>head</code>; chỉ trường hợp "chèn sau tail" mới đổi <code>tail</code>.</p>
+<p>cho con trỏ <code>p</code> đi tới vị trí k − 1 (hoặc dừng ở tail), rồi <code>p.next = new Node(x, p.next)</code>. Chỉ trường hợp chèn đầu mới đổi <code>head</code>; chỉ trường hợp "chèn sau tail" — hoặc chèn vào danh sách rỗng — mới đổi <code>tail</code>.</p>
+<p class="nhan">Dữ liệu → kết quả mong đợi</p>
+<p>bắt đầu rỗng: insertAt((B,2), 3) → (B,2), tail = (B,2); addLast (D,4); insertAt((A,1), 0) → (A,1) (B,2) (D,4); insertAt((C,3), 2) → (A,1) (B,2) (C,3) (D,4); insertAt((E,5), 99) → (A,1) (B,2) (C,3) (D,4) (E,5), tail = (E,5); insertAt((Z,0), −5) → (Z,0) thành head.</p>
 <p class="nhan">Lời giải + test tự kiểm — mọi dòng phải là PASS</p>
 <pre><code class="language-java">class Car {
     String owner;
@@ -2325,6 +2399,8 @@ ALL TESTS PASSED</div>
 <p>Delete the <strong>first</strong> node whose price is the maximum. Handle: max at the head, max at the tail, two equal maxima, a list of one node.</p>
 <p class="nhan">Idea</p>
 <p>two passes — find the node (use <code>&gt;</code> so the first maximum wins), then find its predecessor and unlink it. Two passes are still O(n).</p>
+<p class="nhan">Data → expected result</p>
+<p>A5 B9 C2 D9 E1 → (A,5) (C,2) (D,9) (E,1); A9 B1 C2 → (B,1) (C,2); A1 B2 C8 → (A,1) (B,2) with tail = (B,2); A7 → empty list (head = tail = null).</p>
 <p class="nhan">Solution + self-test — every line must say PASS</p>
 <pre><code class="language-java">class Car {
     String owner;
@@ -2412,9 +2488,11 @@ ALL TESTS PASSED</div>
 <div class="pitfall">Writing <code>&gt;=</code> in the search picks the <em>last</em> maximum, and the test "first of two 9s" fails. And when the deleted node is the tail, <code>tail</code> must move to its predecessor.</div>`,
     `<h3>🧪 Bài 3 — f3: xoá xe đầu tiên có giá cao nhất (kiểu PE · ~15 phút)</h3>
 <p class="nhan">Đề bài</p>
-<p>Xoá nút <strong>đầu tiên</strong> có price lớn nhất. Phải xử lý: max ở head, max ở tail, hai giá trị max bằng nhau, danh sách một nút.</p>
+<p>Xoá nút <strong>đầu tiên</strong> có price lớn nhất. Phải xử lý: max ở đầu (head), max ở cuối (tail), hai giá trị max bằng nhau, danh sách một nút.</p>
 <p class="nhan">Ý tưởng</p>
 <p>hai lượt — tìm nút đó (dùng <code>&gt;</code> để nút max đầu tiên được giữ), rồi tìm nút đứng trước nó (predecessor) và gỡ ra. Hai lượt vẫn là O(n).</p>
+<p class="nhan">Dữ liệu → kết quả mong đợi</p>
+<p>A5 B9 C2 D9 E1 → (A,5) (C,2) (D,9) (E,1); A9 B1 C2 → (B,1) (C,2); A1 B2 C8 → (A,1) (B,2) với tail = (B,2); A7 → danh sách rỗng (head = tail = null).</p>
 <p class="nhan">Lời giải + test tự kiểm — mọi dòng phải là PASS</p>
 <pre><code class="language-java">class Car {
     String owner;
@@ -2499,7 +2577,7 @@ PASS max at the head<br>
 PASS max at the tail -&gt; tail updated<br>
 PASS single node -&gt; empty list<br>
 ALL TESTS PASSED</div>
-<div class="pitfall">Viết <code>&gt;=</code> khi tìm thì lấy trúng nút max <em>cuối cùng</em>, và test "first of two 9s" hỏng. Còn khi nút bị xoá là tail thì <code>tail</code> phải lùi về nút đứng trước nó.</div>`),
+<div class="pitfall">Viết <code>&gt;=</code> khi tìm thì lấy trúng nút max <em>cuối cùng</em>, và test "first of two 9s" (số 9 đầu tiên trong hai số 9) hỏng. Còn khi nút bị xoá là tail thì <code>tail</code> phải lùi về nút đứng trước nó.</div>`),
     bi(`<h3>🧪 Exercise 4 — reverse the list in place (interview classic · ~15 min)</h3>
 <p class="nhan">Task</p>
 <p>Reverse a singly linked list without creating any node: O(n) time, O(1) extra memory. <code>head</code> and <code>tail</code> must be correct afterwards.</p>
@@ -2511,9 +2589,11 @@ ALL TESTS PASSED</div>
 <tr><td>start</td><td>null</td><td>1</td><td>1 → 2 → 3</td></tr>
 <tr><td>after node 1</td><td>1</td><td>2</td><td>null ← 1   2 → 3</td></tr>
 <tr><td>after node 2</td><td>2</td><td>3</td><td>null ← 1 ← 2   3</td></tr>
-<tr><td>after node 3</td><td>3</td><td>null</td><td>null ← 1 ← 2 ← 3 → head = 3</td></tr>
+<tr><td>after node 3</td><td>3</td><td>null</td><td>null ← 1 ← 2 ← 3 (then head = 3)</td></tr>
 </tbody>
 </table>
+<p class="nhan">Data → expected result</p>
+<p>1 2 3 4 5 → 5 4 3 2 1 with head = 5, tail = 1 (and <code>addLast(0)</code> afterwards gives 5 4 3 2 1 0); a one-node list and an empty list stay as they are.</p>
 <p class="nhan">Solution + self-test — every line must say PASS</p>
 <pre><code class="language-java">class Node {
     int info;
@@ -2586,7 +2666,7 @@ ALL TESTS PASSED</div>
 <div class="pitfall">Writing <code>cur.next = prev</code> <em>before</em> saving <code>cur.next</code> cuts the list and loses everything after <code>cur</code>. Save first, then turn.</div>`,
     `<h3>🧪 Bài 4 — đảo ngược danh sách tại chỗ (câu phỏng vấn kinh điển · ~15 phút)</h3>
 <p class="nhan">Đề bài</p>
-<p>Đảo ngược danh sách liên kết đơn mà không tạo nút mới: thời gian O(n), bộ nhớ thêm O(1). Sau đó <code>head</code> và <code>tail</code> phải đúng.</p>
+<p>Đảo ngược danh sách liên kết đơn mà không tạo nút mới: thời gian O(n), bộ nhớ thêm O(1). Sau đó <code>head</code> (nút đầu) và <code>tail</code> (nút cuối) phải đúng.</p>
 <p class="nhan">Ý tưởng</p>
 <p>ba con trỏ <code>prev</code>, <code>cur</code>, <code>nxt</code>. Tại mỗi nút: nhớ phần còn lại, quay ngược mũi tên, rồi tiến lên.</p>
 <table>
@@ -2595,9 +2675,11 @@ ALL TESTS PASSED</div>
 <tr><td>bắt đầu</td><td>null</td><td>1</td><td>1 → 2 → 3</td></tr>
 <tr><td>xong nút 1</td><td>1</td><td>2</td><td>null ← 1   2 → 3</td></tr>
 <tr><td>xong nút 2</td><td>2</td><td>3</td><td>null ← 1 ← 2   3</td></tr>
-<tr><td>xong nút 3</td><td>3</td><td>null</td><td>null ← 1 ← 2 ← 3 → head = 3</td></tr>
+<tr><td>xong nút 3</td><td>3</td><td>null</td><td>null ← 1 ← 2 ← 3 (rồi head = 3)</td></tr>
 </tbody>
 </table>
+<p class="nhan">Dữ liệu → kết quả mong đợi</p>
+<p>1 2 3 4 5 → 5 4 3 2 1 với head = 5, tail = 1 (sau đó <code>addLast(0)</code> cho 5 4 3 2 1 0); danh sách một nút và danh sách rỗng giữ nguyên.</p>
 <p class="nhan">Lời giải + test tự kiểm — mọi dòng phải là PASS</p>
 <pre><code class="language-java">class Node {
     int info;
@@ -2673,6 +2755,8 @@ ALL TESTS PASSED</div>
 <p>Sort the list of cars ascending by price. The PE usually accepts any correct O(n²) method.</p>
 <p class="nhan">Idea</p>
 <p>selection sort on nodes — for each node <code>p</code>, find the cheapest node from <code>p</code> to the end and swap the <em>data</em> (<code>info</code>) of the two nodes. Swapping data keeps every link, so <code>head</code> and <code>tail</code> stay valid for free. O(n²) comparisons.</p>
+<p class="nhan">Data → expected result</p>
+<p>A5 B2 C9 D1 E7 → (D,1) (B,2) (A,5) (E,7) (C,9), tail = (C,9); X3 Y3 Z1 → (Z,1) (Y,3) (X,3).</p>
 <p class="nhan">Solution + self-test — every line must say PASS</p>
 <pre><code class="language-java">class Car {
     String owner;
@@ -2747,7 +2831,9 @@ ALL TESTS PASSED</div>
 <p class="nhan">Đề bài</p>
 <p>Sắp danh sách xe tăng dần theo price. Đề PE thường chấp nhận mọi cách O(n²) cho kết quả đúng.</p>
 <p class="nhan">Ý tưởng</p>
-<p>sắp xếp chọn (selection sort) trên các nút — với mỗi nút <code>p</code>, tìm nút rẻ nhất từ <code>p</code> tới cuối rồi đổi chỗ <em>dữ liệu</em> (<code>info</code>) của hai nút. Đổi dữ liệu thì mọi liên kết giữ nguyên, nên <code>head</code> và <code>tail</code> tự đúng. O(n²) phép so sánh.</p>
+<p>sắp xếp chọn (selection sort) trên các nút — với mỗi nút <code>p</code>, tìm nút rẻ nhất từ <code>p</code> tới cuối rồi đổi chỗ <em>dữ liệu</em> (<code>info</code>) của hai nút. Đổi dữ liệu thì mọi liên kết giữ nguyên, nên <code>head</code> (nút đầu) và <code>tail</code> (nút cuối) tự đúng. O(n²) phép so sánh.</p>
+<p class="nhan">Dữ liệu → kết quả mong đợi</p>
+<p>A5 B2 C9 D1 E7 → (D,1) (B,2) (A,5) (E,7) (C,9), tail = (C,9); X3 Y3 Z1 → (Z,1) (Y,3) (X,3).</p>
 <p class="nhan">Lời giải + test tự kiểm — mọi dòng phải là PASS</p>
 <pre><code class="language-java">class Car {
     String owner;
@@ -2823,6 +2909,8 @@ ALL TESTS PASSED</div>
 <p>Given the heads of two ascending lists, return one ascending list made of the <em>same</em> nodes (relink them, create no new node except a helper). O(n + m).</p>
 <p class="nhan">Idea</p>
 <p>a dummy node in front of the result removes the "is the result empty?" special case; always append the smaller head; at the end, attach whatever list is left.</p>
+<p class="nhan">Data → expected result</p>
+<p>1 4 6 and 2 3 7 9 → 1 2 3 4 6 7 9; an empty list and 5 8 → 5 8; 2 2 and 2 → 2 2 2; merging 10 20 with 15 returns the very first node of the first list.</p>
 <p class="nhan">Solution + self-test — every line must say PASS</p>
 <pre><code class="language-java">class Node {
     int info;
@@ -2880,12 +2968,15 @@ PASS one list empty<br>
 PASS equal keys<br>
 PASS no new node: result starts with a's first node<br>
 ALL TESTS PASSED</div>
-<p class="meo">🧠 <strong>Remember:</strong> this merge is exactly the heart of merge sort (Chapter 6). <code>&lt;=</code> takes equal keys from the first list first — that is what makes merge sort stable.</p>`,
+<p class="meo">🧠 <strong>Remember:</strong> this merge is exactly the heart of merge sort (Chapter 6). <code>&lt;=</code> takes equal keys from the first list first — that is what makes merge sort stable.</p>
+<div class="pitfall">Stopping when one list runs out and forgetting <code>t.next = (a != null) ? a : b</code> loses the rest of the longer list: 1 4 6 + 2 3 7 9 would give only 1 2 3 4 6.</div>`,
     `<h3>🧪 Bài 6 — trộn hai danh sách đã sắp (phỏng vấn · ~15 phút)</h3>
 <p class="nhan">Đề bài</p>
-<p>Cho head của hai danh sách tăng dần, trả về một danh sách tăng dần gồm <em>chính</em> các nút đó (nối lại liên kết, không tạo nút mới ngoài một nút phụ). O(n + m).</p>
+<p>Cho nút đầu (head) của hai danh sách tăng dần, trả về một danh sách tăng dần gồm <em>chính</em> các nút đó (nối lại liên kết, không tạo nút mới ngoài một nút phụ). O(n + m).</p>
 <p class="nhan">Ý tưởng</p>
 <p>một nút giả (dummy node) đứng trước kết quả giúp bỏ trường hợp đặc biệt "kết quả còn rỗng"; luôn nối head nhỏ hơn vào; cuối cùng nối phần còn dư của danh sách kia.</p>
+<p class="nhan">Dữ liệu → kết quả mong đợi</p>
+<p>1 4 6 và 2 3 7 9 → 1 2 3 4 6 7 9; danh sách rỗng và 5 8 → 5 8; 2 2 và 2 → 2 2 2; trộn 10 20 với 15 trả về đúng nút đầu tiên của danh sách thứ nhất.</p>
 <p class="nhan">Lời giải + test tự kiểm — mọi dòng phải là PASS</p>
 <pre><code class="language-java">class Node {
     int info;
@@ -2943,12 +3034,15 @@ PASS one list empty<br>
 PASS equal keys<br>
 PASS no new node: result starts with a's first node<br>
 ALL TESTS PASSED</div>
-<p class="meo">🧠 <strong>Mẹo nhớ:</strong> phép trộn này chính là trái tim của merge sort (Chương 6). Dấu <code>&lt;=</code> lấy khoá bằng nhau từ danh sách thứ nhất trước — nhờ đó merge sort ổn định (stable).</p>`),
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> phép trộn này chính là trái tim của sắp xếp trộn (merge sort, Chương 6). Dấu <code>&lt;=</code> lấy khoá bằng nhau từ danh sách thứ nhất trước — nhờ đó merge sort ổn định (stable).</p>
+<div class="pitfall">Dừng khi một danh sách hết mà quên <code>t.next = (a != null) ? a : b</code> là mất phần còn lại của danh sách dài hơn: 1 4 6 + 2 3 7 9 chỉ còn 1 2 3 4 6.</div>`),
     bi(`<h3>🧪 Exercise 7 — the Josephus circle on a circular list (~20 min)</h3>
 <p class="nhan">Task</p>
 <p>n people numbered 1…n sit in a circle; counting starts at person 1 and every k-th person leaves. Print the order in which they leave and the survivor. Use a circular singly linked list (slides 13–15 of the deck).</p>
 <p class="nhan">Idea</p>
 <p>keep a pointer <code>prev</code> to the node <em>before</em> the one being counted, so removing a person is one link change, O(1). Stop when one node points to itself. Total O(n·k).</p>
+<p class="nhan">Data → expected result</p>
+<p>n = 7, k = 3 → 3 6 2 7 5 1, survivor 4; n = 5, k = 2 → 2 4 1 5, survivor 3; n = 4, k = 1 → 1 2 3, survivor 4; n = 1 → nobody leaves, survivor 1.</p>
 <p class="nhan">Solution + self-test — every line must say PASS</p>
 <pre><code class="language-java">class Node {
     int info;
@@ -3005,6 +3099,8 @@ ALL TESTS PASSED</div>
 <p>n người đánh số 1…n ngồi thành vòng tròn; đếm bắt đầu từ người số 1 và cứ người thứ k thì rời vòng. In thứ tự rời vòng và người còn lại cuối cùng. Dùng danh sách liên kết vòng đơn (circular singly linked list — slide 13–15 của bộ slide).</p>
 <p class="nhan">Ý tưởng</p>
 <p>giữ con trỏ <code>prev</code> trỏ vào nút <em>đứng trước</em> người đang được đếm, nên gỡ một người chỉ là đổi một liên kết, O(1). Dừng khi còn một nút tự trỏ về chính nó. Tổng cộng O(n·k).</p>
+<p class="nhan">Dữ liệu → kết quả mong đợi</p>
+<p>n = 7, k = 3 → 3 6 2 7 5 1, còn lại 4; n = 5, k = 2 → 2 4 1 5, còn lại 3; n = 4, k = 1 → 1 2 3, còn lại 4; n = 1 → không ai rời vòng, còn lại 1.</p>
 <p class="nhan">Lời giải + test tự kiểm — mọi dòng phải là PASS</p>
 <pre><code class="language-java">class Node {
     int info;
@@ -3144,9 +3240,9 @@ ALL TESTS PASSED</div>
 </table>`,
     `<h2>📌 Tóm tắt — 7 điều cần nhớ của Chương 1</h2>
 <ol>
-<li><strong>Danh sách (list) là một ADT</strong>; mảng và danh sách liên kết là hai cách cài đặt. Chọn theo chi phí của những thao tác bạn dùng nhiều nhất.</li>
+<li><strong>Danh sách (list) là một ADT (kiểu dữ liệu trừu tượng)</strong>; mảng và danh sách liên kết là hai cách cài đặt. Chọn theo chi phí của những thao tác bạn dùng nhiều nhất.</li>
 <li><strong>Mảng (array)</strong>: <code>a[i]</code> trong O(1); chèn/xoá ở giữa O(n) vì phải dời phần tử; sức chứa cố định lúc tạo. Mảng động (<code>ArrayList</code>) nới rộng bằng cách chép sang mảng mới, nên thêm vào cuối là O(1) khấu hao.</li>
-<li><strong>Danh sách liên kết đơn (singly linked list)</strong>: O(1) ở đầu, O(1) khi thêm vào cuối nhờ <code>tail</code>, nhưng O(n) khi xoá nút cuối và O(n) để tới vị trí i.</li>
+<li><strong>Danh sách liên kết đơn (singly linked list)</strong>: O(1) ở đầu, O(1) khi thêm vào cuối nhờ <code>tail</code> (tham chiếu nút cuối), nhưng O(n) khi xoá nút cuối và O(n) để tới vị trí i.</li>
 <li>Mọi hàm trên danh sách liên kết phải chạy đúng với <strong>ba trường hợp</strong>: danh sách rỗng, một nút, và "head hoặc tail vừa bị đổi chưa?".</li>
 <li><strong>Danh sách liên kết đôi (doubly linked list)</strong>: liên kết <code>prev</code> làm <code>removeLast</code> và xoá một nút đang cầm thành O(1); <code>java.util.LinkedList</code> là danh sách liên kết đôi.</li>
 <li><strong>Danh sách vòng (circular list)</strong>: cuối không có <code>null</code> — dừng khi quay lại điểm xuất phát; chỉ cần giữ <code>tail</code> (<code>tail.next</code> là nút đầu); <code>rotate()</code> là O(1) → lập lịch xoay vòng (round-robin), bài Josephus.</li>

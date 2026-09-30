@@ -23,6 +23,8 @@ export default {
   course: {
     academyType: 'FPT',
     courseCode: 'SWD392',
+    // Seed xếp lại thứ tự bài/section theo FILE (không xoá gì) — bài ⭐ mở đầu + bài 📑 slide đứng đầu chương (30/09/2026).
+    syncOrder: true,
     title: 'Software Architecture and Design',
     slug: 'software-architecture-and-design',
     level: 'INTERMEDIATE',

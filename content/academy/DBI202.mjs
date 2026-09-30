@@ -24,6 +24,8 @@ export default {
   semester: { code: 'FPTU_Hola3', name: 'Kỳ 3', ordinal: 5 },
   course: {
     courseCode: 'DBI202',
+    // Seed xếp lại thứ tự bài/section theo FILE (không xoá gì) — bài ⭐ mở đầu + bài 📑 slide đứng đầu chương (30/09/2026).
+    syncOrder: true,
     slug: 'introduction-to-databases',
     title: 'Database Systems',
     level: 'INTERMEDIATE',

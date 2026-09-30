@@ -249,6 +249,14 @@ export async function updateProject(
         input.settings = { ...input.settings, doneRequirements: { fieldIds: ids, typeKeys: typeKeys?.length ? typeKeys : null } };
       }
     }
+    // Chỉ dẫn cho trợ lý AI (ai.service đọc): chuỗi, trần 20.000 ký tự; null/rỗng = xoá.
+    if ('aiInstructions' in input.settings) {
+      const v = input.settings.aiInstructions;
+      if (v !== null && typeof v !== 'string') throw new BadRequestError('AI instructions must be text', 'WORK_BAD_AI_INSTRUCTIONS');
+      const t = typeof v === 'string' ? v.trim() : '';
+      if (t.length > 20_000) throw new BadRequestError('AI instructions are limited to 20,000 characters', 'WORK_BAD_AI_INSTRUCTIONS');
+      input.settings = { ...input.settings, aiInstructions: t || null };
+    }
     const cur = await prisma.workProject.findUniqueOrThrow({ where: { id: projectId }, select: { settings: true } });
     data.settings = { ...((cur.settings as object) ?? {}), ...input.settings } as Prisma.InputJsonValue;
   }

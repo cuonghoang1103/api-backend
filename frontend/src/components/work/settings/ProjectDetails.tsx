@@ -91,10 +91,63 @@ export default function ProjectDetails({ config, slug }: { config: ProjectConfig
         )}
       </form>
     </Section>
+    <AiGuidelines config={config} slug={slug} />
     <DefinitionOfDone config={config} slug={slug} />
     <DoneRules config={config} slug={slug} />
     <TeamRules config={config} slug={slug} />
     </>
+  );
+}
+
+const AI_GUIDELINES_MAX = 20_000;
+
+/**
+ * Chỉ dẫn cho trợ lý AI của dự án (settings.aiInstructions) — AI hội thoại, việc một chạm và luyện bảo vệ
+ * đều đọc (8.000 ký tự đầu). Dùng cho quy ước riêng: mẫu báo cáo bắt buộc của giảng viên, cách đặt tên, …
+ * Tài liệu dài hơn thì đính kèm .md vào thẻ — AI đọc tệp .md/.txt của thẻ đang mở.
+ */
+function AiGuidelines({ config, slug }: { config: ProjectConfig; slug: string }) {
+  const invalidate = useProjectInvalidate(config.id, slug);
+  const canEdit = config.permissions.settings;
+  const saved = typeof config.settings?.aiInstructions === 'string' ? config.settings.aiInstructions : '';
+  const [text, setText] = useState(saved);
+  useEffect(() => { setText(typeof config.settings?.aiInstructions === 'string' ? config.settings.aiInstructions : ''); }, [config.settings]);
+  const dirty = text.trim() !== saved.trim();
+
+  const save = useMutation({
+    mutationFn: () => workApi.updateProject(config.id, { settings: { aiInstructions: text.trim() || null } }),
+    onSuccess: () => { toast.success(text.trim() ? 'AI guidelines saved' : 'AI guidelines removed'); invalidate(); },
+    onError: (err) => toast.error(workError(err, 'Could not save the AI guidelines')),
+  });
+
+  return (
+    <Section
+      title="AI assistant guidelines"
+      description="Rules the project AI follows when it helps here — for example the report templates your lecturer requires. The assistant reads the first 8,000 characters. For longer guides, attach a .md file to an issue: the AI reads .md/.txt attachments of the issue it is asked about."
+    >
+      {canEdit ? (
+        <form className="max-w-[720px]" onSubmit={(e) => { e.preventDefault(); if (dirty && !save.isPending) save.mutate(); }}>
+          <Field label="Guidelines" hint={`${text.length.toLocaleString()} / ${AI_GUIDELINES_MAX.toLocaleString()}`}>
+            <textarea
+              className="w-input font-[inherit]"
+              rows={Math.min(18, Math.max(5, text.split('\n').length + 1))}
+              value={text}
+              maxLength={AI_GUIDELINES_MAX}
+              onChange={(e) => setText(e.target.value)}
+              placeholder={'Reports follow the lecturer\'s templates exactly (headings, table columns).\nAlways fill the Record of Changes when a document version changes.'}
+            />
+          </Field>
+          <button type="submit" className="w-btn w-btn-primary" disabled={!dirty || save.isPending}>
+            {save.isPending && <Spinner size={12} />}
+            Save guidelines
+          </button>
+        </form>
+      ) : saved ? (
+        <pre className="max-w-[720px] whitespace-pre-wrap text-[13px] leading-relaxed text-[var(--w-text-2)]">{saved}</pre>
+      ) : (
+        <p className="text-[13px] text-[var(--w-text-3)]">No AI guidelines yet. A project admin can add them.</p>
+      )}
+    </Section>
   );
 }
 

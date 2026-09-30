@@ -158,6 +158,22 @@ export async function headObject(
 }
 
 /**
+ * Read a (small) object as UTF-8 text. Returns null when the object is missing,
+ * unreadable or larger than `maxBytes` — callers treat that as "no text", never as an error.
+ */
+export async function getObjectText(key: string, maxBytes = 512 * 1024): Promise<string | null> {
+  const client = getR2Client();
+  try {
+    const res = await client.send(new GetObjectCommand({ Bucket: config.r2.bucketName, Key: key }));
+    if (typeof res.ContentLength === 'number' && res.ContentLength > maxBytes) return null;
+    const text = await res.Body?.transformToString('utf-8');
+    return text ?? null;
+  } catch {
+    return null;
+  }
+}
+
+/**
  * Delete a single object. We don't throw on `NoSuchKey` — the
  * desired end state ("object doesn't exist") is already met, and
  * a missing file shouldn't break the parent operation (e.g. a

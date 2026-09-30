@@ -41,10 +41,10 @@ export default {
       title: 'Section 0 — Introduction & Study Guide|||Mục 0 — Giới thiệu môn học & Hướng dẫn học',
       description: 'Đọc trước tiên: môn học là gì, điều kiện qua môn, chuẩn đầu ra, và cài đặt SQL Server.',
       lessons: [
-        /* 📑 Học theo từng slide (dbi1 1–5) — ./dbi202/sec0.mjs */
-        ...sec0.slides,
         /* 🧭 Bài nền tảng bổ sung — ./dbi202/sec0.mjs */
         ...sec0.extrasStart,
+        /* 📑 Học theo từng slide (dbi1 1–5) — ./dbi202/sec0.mjs */
+        ...sec0.slides,
         {
           title: '0.1 — About DBI202 & the course map|||0.1 — Giới thiệu DBI202 & bản đồ môn học',
           slug: 'dbi202-gioi-thieu',

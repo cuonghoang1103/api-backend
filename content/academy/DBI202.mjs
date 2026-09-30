@@ -17,6 +17,7 @@ import ch5 from './dbi202/ch5.mjs';
 import ch6 from './dbi202/ch6.mjs';
 import ch7 from './dbi202/ch7.mjs';
 import ch8 from './dbi202/ch8.mjs';
+import cs from './dbi202/chuyen-sau.mjs';
 import fe from './dbi202/fe.mjs';
 
 export default {
@@ -2637,6 +2638,12 @@ Booking the last seat: T1 runs <span class="badge">SELECT seats FROM Course WHER
       ],
     },
     /* ══════════════════ ÔN THI ══════════════════ */
+    /* ⭐ Chuyên sâu — ngoài giáo trình, slide TỰ DỰNG — ./dbi202/chuyen-sau.mjs */
+    {
+      title: "⭐ Advanced — Beyond the syllabus: history, internals, expert SQL, design & interviews|||⭐ Chuyên sâu — Ngoài giáo trình: lịch sử, bên trong DBMS, SQL chuyên gia, thiết kế & phỏng vấn",
+      description: "Phần TỰ THÊM ngoài giáo trình trường (đánh dấu ⭐, slide tự dựng): lịch sử & hệ sinh thái, bên trong DBMS, chỉ mục, giao dịch & đồng thời, SQL nâng cao, thiết kế CSDL thực chiến, bảo mật & vận hành, phỏng vấn — chạy thật trên SQL Server và PostgreSQL.",
+      lessons: cs.lessons,
+    },
     {
       title: 'Exam preparation (Lab · PE · FE)|||Ôn thi (Lab · PE · FE)',
       description: 'Chuẩn bị 5 bài lab, thi thực hành 85 phút và thi trắc nghiệm: chiến lược, khung SQL, ngân hàng câu hỏi.',

@@ -97,7 +97,10 @@ jobs:
           # next.config.js already has output: 'standalone', so this
           # produces frontend/.next/standalone/ (server.js + pruned
           # node_modules), frontend/.next/static/, and frontend/public/.
-          NEXT_PUBLIC_BUILD_ID=$(date +%s) npm run build 2>&1 | tail -15
+          # Same heap cap as frontend/Dockerfile (6 GB): with Node's default heap
+          # the build died "JavaScript heap out of memory" on 30/09/2026. The
+          # ubuntu-latest runner has 16 GB RAM, so 6 GB is safe here.
+          NODE_OPTIONS="--max-old-space-size=6144" NEXT_PUBLIC_BUILD_ID=$(date +%s) npm run build 2>&1 | tail -15
           echo "--- standalone size ---"
           du -sh .next/standalone .next/static 2>/dev/null
 

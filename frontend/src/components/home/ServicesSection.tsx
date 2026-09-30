@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from '@/hooks/useTranslation';
 import { COMMERCE_ENABLED } from '@/lib/featureFlags';
@@ -82,7 +83,7 @@ const serviceContents: Record<string, ServiceContent> = {
 };
 
 export default function ServicesSection() {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const [activeService, setActiveService] = useState<string>('webDev');
 
   const services = [
@@ -158,6 +159,14 @@ export default function ServicesSection() {
                 </motion.button>
               );
             })}
+            {/* Lối vào trang quy trình (30/09/2026). */}
+            <Link
+              href="/about/quy-trinh"
+              className="flex items-center gap-2 px-5 py-3 rounded-2xl border border-dashed border-neon-violet/40 text-sm font-medium text-neon-violet hover:bg-neon-violet/10 transition-colors"
+            >
+              {locale === 'en' ? 'How I run a project' : 'Quy trình nhận & làm dự án'}
+              <ArrowRight className="w-4 h-4 ml-auto" />
+            </Link>
           </div>
 
           {/* Right: Dynamic spec panel */}

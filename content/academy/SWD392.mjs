@@ -12,6 +12,12 @@
  * ESCAPE: backtick trong code -> &#96; ; ${..} -> \${ ; < > & trong <pre><code class="language-javascript"> -> &lt; &gt; &amp;
  * Seed: node scripts/academy-seed-course.mjs --file ./content/academy/SWD392.mjs --apply
  */
+// 📑 Bài học theo từng slide, 🧪 bài thực hành chương và quiz viết lại/mới nằm trong ./swd392/*.mjs
+// (SINH bởi flm-nguon/SWD392/gen/gen.mjs — sửa nguồn ở đó rồi chạy lại, đừng sửa tay các module).
+import sec0 from './swd392/sec0.mjs';
+import ch1 from './swd392/ch1.mjs';
+import ch2 from './swd392/ch2.mjs';
+
 export default {
   semester: { code: 'FPTU_Hola7', name: 'Kỳ 7', ordinal: 9 },
   course: {
@@ -34,6 +40,10 @@ export default {
       title: 'Section 0 — Introduction & Study Guide|||Mục 0 — Giới thiệu môn học & Hướng dẫn học',
       description: 'Đọc trước tiên: môn thiết kế gì, hành trình từ yêu cầu tới kiến trúc, điều kiện qua môn & các thành phần điểm, chuẩn đầu ra, công cụ UML, ngân hàng đề tài project, và bí quyết điểm cao.',
       lessons: [
+        /* 🧭 Bài nền tảng bổ sung — ./swd392/sec0.mjs */
+        ...sec0.extrasStart,
+        /* 📑 Học theo từng slide (swd1 1–8) — ./swd392/sec0.mjs */
+        ...sec0.slides,
         {
           title: '0.1 — About SWD392 & the design journey map|||0.1 — Giới thiệu SWD392 & bản đồ hành trình thiết kế',
           slug: 'swd392-gioi-thieu',
@@ -405,6 +415,8 @@ Customer "1" -- "*" Order
       title: 'Chapter 1 — Design fundamentals & UML|||Chương 1 — Nền tảng thiết kế & UML',
       description: 'Khái niệm thiết kế (trừu tượng, mô-đun, coupling/cohesion, che giấu thông tin) và các sơ đồ UML cốt lõi.',
       lessons: [
+        /* 📑 Học theo từng slide (swd2 1–21, swd3 1–23, swd4 1–24, swd5 1–25, swd6 1–8) — ./swd392/ch1.mjs */
+        ...ch1.slides,
         {
           title: '1.1 — Core design concepts: coupling, cohesion & abstraction|||1.1 — Khái niệm cốt lõi: coupling, cohesion & trừu tượng',
           slug: 'swd392-1-1-design-concepts',
@@ -519,22 +531,14 @@ Customer "1" -- "*" Order
 <div class="pitfall">Đừng chất quá tải một sơ đồ. Class diagram hiện cấu trúc, không phải luồng; đừng vẽ thứ tự gọi hàm lên nó — đó là việc của sequence diagram. Trộn mối quan tâm làm cả hai khó đọc và mất điểm.</div>
 </div>`,
         },
+        /* 🧪 Thực hành + 🗂 Thuật ngữ + 📌 Tóm tắt — ./swd392/ch1.mjs */
+        ch1.practice,
         {
           title: 'Quiz 1 — Design fundamentals & UML|||Quiz 1 — Nền tảng thiết kế & UML',
           slug: 'swd392-quiz-1',
           type: 'QUIZ',
-          description: 'Kiểm tra coupling/cohesion, trừu tượng và quan hệ UML.',
-          quiz: {
-            timeLimitSeconds: 360,
-            questions: [
-              { question: 'Good design aims for coupling that is… and cohesion that is…|||Thiết kế tốt nhắm coupling… và cohesion…', options: ['high; low|||cao; thấp', 'low; high|||thấp; cao', 'high; high|||cao; cao', 'low; low|||thấp; thấp'], correctIndex: 1, points: 1 },
-              { question: 'Depending on an interface instead of a concrete class mainly reduces…|||Phụ thuộc một interface thay vì lớp cụ thể chủ yếu giảm…', options: ['cohesion', 'coupling', 'the number of classes|||số lớp', 'performance|||hiệu năng'], correctIndex: 1, points: 1 },
-              { question: 'The class-diagram relationship where parts die with the whole is…|||Quan hệ class-diagram mà phần chết cùng tổng thể là…', options: ['association', 'aggregation', 'composition', 'inheritance'], correctIndex: 2, points: 1 },
-              { question: 'Customer "1" -- "*" Order means…|||Customer "1" -- "*" Order nghĩa là…', options: ['one order has many customers|||một order có nhiều khách', 'one customer has many orders|||một khách có nhiều order', 'orders have no customer|||order không có khách', 'a one-to-one link|||liên kết một-một'], correctIndex: 1, points: 1 },
-              { question: 'A class that does validation, database access and formatting all at once is a…|||Một lớp làm validation, truy cập database và định dạng cùng lúc là…', options: ['good abstraction|||trừu tượng tốt', 'god class (low cohesion)|||god class (cohesion thấp)', 'a design pattern|||một design pattern', 'an interface|||một interface'], correctIndex: 1, points: 1 },
-              { question: 'To decide aggregation vs composition you ask whether… (beyond-syllabus)|||Để quyết aggregation vs composition bạn hỏi liệu… (ngoài giáo trình)', options: ['the classes look similar|||các lớp trông giống nhau', 'the part must be deleted when the whole is deleted|||phần có phải bị xoá khi tổng thể bị xoá', 'there are many classes|||có nhiều lớp', 'the names match|||tên khớp'], correctIndex: 1, points: 1 },
-            ],
-          },
+          description: ch1.quizDescription,
+          quiz: ch1.quiz,
         },
       ],
     },
@@ -544,6 +548,8 @@ Customer "1" -- "*" Order
       title: 'Chapter 2 — Requirements & analysis modeling (COMET)|||Chương 2 — Mô hình yêu cầu & phân tích (COMET)',
       description: 'Use case modeling, và analysis model của COMET: lớp/đối tượng và statechart cho hành vi.',
       lessons: [
+        /* 📑 Học theo từng slide (swd7 1–36, swd9 1–55, swd10 1–56, swd11 1–19, swd12 1–46, swd13 1–28) — ./swd392/ch2.mjs */
+        ...ch2.slides,
         {
           title: '2.1 — Use case modeling & requirements|||2.1 — Mô hình use case & yêu cầu',
           slug: 'swd392-2-1-use-cases',
@@ -650,22 +656,14 @@ Shipped --&gt; Delivered</pre>
 <div class="pitfall">Đừng nhầm statechart (trạng thái của MỘT đối tượng) với activity/sequence diagram (luồng qua nhiều đối tượng). Statechart có trạng thái và sự kiện; nếu bạn đang vẽ các bước giữa các đối tượng khác nhau, bạn muốn một sơ đồ khác.</div>
 </div>`,
         },
+        /* 🧪 Thực hành + 🗂 Thuật ngữ + 📌 Tóm tắt — ./swd392/ch2.mjs */
+        ch2.practice,
         {
           title: 'Quiz 2 — Requirements & analysis|||Quiz 2 — Yêu cầu & phân tích',
           slug: 'swd392-quiz-2',
           type: 'QUIZ',
-          description: 'Kiểm tra use case, include/extend, và analysis model COMET.',
-          quiz: {
-            timeLimitSeconds: 360,
-            questions: [
-              { question: 'A use case describes…|||Một use case mô tả…', options: ['a UI button|||một nút UI', 'an actor\'s goal-oriented interaction with the system|||tương tác hướng mục tiêu của actor với hệ', 'a database table|||một bảng database', 'a class method|||một method của lớp'], correctIndex: 1, points: 1 },
-              { question: 'A mandatory sub-use-case reused by others is linked with…|||Một sub-use-case bắt buộc được nhiều cái tái dùng nối bằng…', options: ['<<extend>>', '<<include>>', 'inheritance', 'association'], correctIndex: 1, points: 1 },
-              { question: 'In COMET, an object that holds domain data (like Order) is a… object.|||Trong COMET, một đối tượng giữ dữ liệu domain (như Order) là đối tượng…', options: ['boundary', 'control', 'entity', 'actor'], correctIndex: 2, points: 1 },
-              { question: 'A statechart models…|||Một statechart mô hình…', options: ['the flow across many objects|||luồng qua nhiều đối tượng', 'the states and transitions of one object|||trạng thái và chuyển đổi của một đối tượng', 'the database schema|||schema database', 'the class hierarchy|||cây phân cấp lớp'], correctIndex: 1, points: 1 },
-              { question: 'Which object type coordinates a use case in COMET?|||Loại đối tượng nào điều phối một use case trong COMET?', options: ['entity', 'boundary', 'control', 'actor'], correctIndex: 2, points: 1 },
-              { question: 'A use case should be written at the level of… (beyond-syllabus)|||Một use case nên viết ở mức… (ngoài giáo trình)', options: ['a single UI click|||một cú bấm UI', 'a user goal (elementary business process)|||một mục tiêu người dùng (elementary business process)', 'the whole system|||cả hệ thống', 'one database query|||một truy vấn database'], correctIndex: 1, points: 1 },
-            ],
-          },
+          description: ch2.quizDescription,
+          quiz: ch2.quiz,
         },
       ],
     },

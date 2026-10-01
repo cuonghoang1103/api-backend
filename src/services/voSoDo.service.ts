@@ -22,6 +22,7 @@ import crypto from 'node:crypto';
 import { llmComplete, checkTokenQuota, isAiAvailable } from './interview/llm/index.js';
 import { AppError, BadRequestError } from '../middleware/errorHandler.js';
 import { tachJson } from './voVietLai.service.js';
+import { kiemDoDaiDe } from './voVe.service.js';
 
 const LOAI_NUT = ['hop', 'quyet_dinh', 'csdl', 'nguoi', 'tron'] as const;
 type LoaiNut = (typeof LOAI_NUT)[number];
@@ -106,7 +107,9 @@ export function donDoThi(o: Record<string, unknown> | null, de: string): DoThiKh
 }
 
 export async function veSoDoKhoi(userId: number, b: { de?: unknown }) {
-  const de = String(b.de ?? '').trim().slice(0, 500);
+  // Trước đây `.slice(0, 500)` — cắt im lặng, cùng lỗi với `/vo/ve` (xem `kiemDoDaiDe`).
+  kiemDoDaiDe(b);
+  const de = String(b.de ?? '').trim();
   if (de.length < 2) throw new BadRequestError('Bạn muốn vẽ sơ đồ gì?');
   if (!isAiAvailable()) throw new AppError('Tính năng AI chưa được cấu hình hoặc đang tạm ngắt.', 503, 'AI_UNAVAILABLE');
   if (!(await checkTokenQuota(userId))) {
@@ -131,6 +134,7 @@ const cacViec = new Map<string, Viec>();
 const SONG_MS = 15 * 60_000;
 
 export function batDauSoDo(userId: number, b: { de?: unknown }) {
+  kiemDoDaiDe(b);
   const bay = Date.now() - SONG_MS;
   for (const [id, v] of cacViec) if (v.luc < bay) cacViec.delete(id);
   const dangChay = [...cacViec.values()].filter((v) => v.userId === userId && !v.ketQua && !v.loi).length;

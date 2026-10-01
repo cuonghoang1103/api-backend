@@ -262,8 +262,24 @@ export function hauXuLy(svg: string) {
 
 // ── Việc chính ─────────────────────────────────────────────────────────
 
+/**
+ * Trần độ dài đề. Trước 01/10/2026 là `.slice(0, 300)` — cắt IM LẶNG: người
+ * dùng dán một đề nối dây ~1.500 ký tự, AI chỉ đọc tới "hàng chân 5V…" rồi vẽ
+ * một con ESP32 trơ trọi, và không có gì báo là nửa đề đã rơi mất. Giờ quá
+ * trần thì BÁO, không cắt.
+ */
+export const DE_TOI_DA = 3000;
+
+export function kiemDoDaiDe(b: { de?: unknown }) {
+  const n = String(b.de ?? '').trim().length;
+  if (n > DE_TOI_DA) {
+    throw new BadRequestError(`Mô tả dài ${n} ký tự — tối đa ${DE_TOI_DA}. Rút gọn bớt nhé.`, 'DE_QUA_DAI');
+  }
+}
+
 export async function veBangNet(userId: number, b: { de?: unknown; kieu?: unknown; chiTiet?: unknown }) {
-  const de = String(b.de ?? '').trim().slice(0, 300);
+  kiemDoDaiDe(b);
+  const de = String(b.de ?? '').trim();
   if (de.length < 2) throw new BadRequestError('Bạn muốn vẽ gì?');
   const kieu: KieuVe = b.kieu === 'sodo' ? 'sodo' : 'hinh';
   const chiTiet = b.chiTiet === true || b.chiTiet === 'true';
@@ -340,6 +356,8 @@ function donViec() {
 
 export function batDauVe(userId: number, b: { de?: unknown; kieu?: unknown; chiTiet?: unknown }) {
   donViec();
+  // Báo ngay, đừng để lỗi nằm trong việc nền rồi mới hiện ở lượt hỏi lại.
+  kiemDoDaiDe(b);
   // Một người tối đa 3 việc đang chạy — bấm liên tục không đốt tiền vô hạn.
   const dangChay = [...cacViec.values()].filter((v) => v.userId === userId && !v.ketQua && !v.loi).length;
   if (dangChay >= 3) throw new AppError('Đang vẽ 3 hình rồi — đợi xong đã nhé.', 429, 'VE_BAN');

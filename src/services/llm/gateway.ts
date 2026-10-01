@@ -338,7 +338,8 @@ export type LlmPurpose =
   | 've_net'              // Vở iPad — "AI vẽ bằng nét": viết SVG nét đơn, máy chủ đổi ra điểm cho PKStroke
   | 'vo_viet_lai'         // Vở iPad — "AI viết lại trang": đọc ẢNH trang viết tay → khối có cấu trúc, sửa chính tả, KHÔNG thêm ý
   | 'han_tra'             // Vở iPad — "Vẽ chữ Hán": tra chữ từ âm Hán Việt / nghĩa / romaji + On/Kun/nghĩa (JSON nhỏ)
-  | 'so_do_khoi';         // Vở iPad — "Luồng / sơ đồ khối": mô tả → ĐỒ THỊ JSON (nút + cạnh); app tự dàn bố cục + viết chữ bằng nét
+  | 'so_do_khoi'          // Vở iPad — "Luồng / sơ đồ khối": mô tả → ĐỒ THỊ JSON (nút + cạnh); app tự dàn bố cục + viết chữ bằng nét
+  | 'mach_dien';          // Vở iPad — "⚡ Mạch điện": mô tả nối dây → CẤU TRÚC JSON (module, chân, dây, màu); app tự dàn kiểu bậc thang
 
 const PURPOSE_MODEL: Record<LlmPurpose, string> = {
   /**
@@ -483,6 +484,14 @@ const PURPOSE_MODEL: Record<LlmPurpose, string> = {
    * không cần giỏi hình học, chỉ cần hiểu kiến trúc phần mềm.
    */
   so_do_khoi: 'gpt-6-sol',
+  /**
+   * Vở iPad — "⚡ Mạch điện" (01/10/2026). Cùng cách chia việc với
+   * `so_do_khoi`: model chỉ TÁCH CẤU TRÚC (module, chân, dây, màu, chân để
+   * hở) và CHÉP NGUYÊN VĂN số chân — hình do app dựng. Việc khó ở đây là đọc
+   * đúng một mô tả dài 1–3 nghìn ký tự mà không đổi một chữ số nào, nên
+   * dùng model mạnh chứ không hạ xuống model rẻ.
+   */
+  mach_dien: 'gpt-6-sol',
 
   cv_critique: 'gpt-6-sol',
   cv_writing: 'gpt-6-sol',

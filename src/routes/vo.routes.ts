@@ -24,6 +24,7 @@ import { veBangNet, batDauVe, xemViecVe } from '../services/voVe.service.js';
 import { vietLaiTrang, batDauVietLai, xemViecVietLai } from '../services/voVietLai.service.js';
 import { traChuHan } from '../services/voHan.service.js';
 import { batDauSoDo, xemViecSoDo } from '../services/voSoDo.service.js';
+import { batDauMach, xemViecMach } from '../services/voMach.service.js';
 
 const router = Router();
 router.use(authenticate);
@@ -148,6 +149,23 @@ router.post('/so-do/viec', (req, res: Response<ApiResponse>, next) => {
 router.get('/so-do/viec/:id', (req, res: Response<ApiResponse>, next) => {
   try {
     res.json({ success: true, data: xemViecSoDo(req.userId!, String(req.params.id)) });
+  } catch (e) { next(e); }
+});
+
+/**
+ * Vẽ giúp → ⚡ Mạch điện (sơ đồ nối dây), CHẠY NỀN: `{ de }` (≤ 4.000 ký tự)
+ * → `{ viec }`; hỏi lại bằng GET. Kết quả: `{ xong: true, tieuDe, chinh, khoi,
+ * day, deHo, linhKien, ghiChuChan, canhBao, model }` — app tự dàn kiểu bậc thang.
+ */
+router.post('/mach/viec', (req, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: batDauMach(req.userId!, req.body ?? {}) });
+  } catch (e) { next(e); }
+});
+
+router.get('/mach/viec/:id', (req, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: xemViecMach(req.userId!, String(req.params.id)) });
   } catch (e) { next(e); }
 });
 

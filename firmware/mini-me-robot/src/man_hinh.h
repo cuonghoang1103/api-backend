@@ -124,6 +124,14 @@ namespace man_hinh {
 //
 // 20 MHz vẫn dư: đo được 167 vòng/giây, đỉnh 6,5 ms, dưới ngưỡng 8 ms
 // mà CPU cần để bơm kịp I2S.
+// ⚠️ 27/08 — hạ tạm xuống 4 MHz để chẩn đoán vụ hai mắt tối, nay trả về
+// 20 MHz. Thủ phạm KHÔNG phải tốc độ: mối xoắn trần chia `DC` cho ba màn
+// chỉ ăn một lõi (màn ngực), hai lõi kia chạm hờ. Hàn xong là hết.
+//
+// Bài học: đo `DC` trên bo mắt ra 3,3V PHẲNG LÌ trong lúc SCK/SDA/CS đều
+// có xung — chân im lìm giữa những chân đang chạy là chữ ký của MỘT SỢI
+// ĐỨT, không phải của nhiễu hay tốc độ. Tôi đã đổi firmware ba lần
+// (bỏ MISO, tắt init màn ngực, hạ tốc độ) trước khi chịu đi đo.
 static constexpr int32_t TOC_DO = 20000000;
 
 // ⚠️ HSPI (SPI3), KHÔNG phải bus mặc định. Bus mặc định của ESP32-S3
@@ -161,18 +169,51 @@ inline void resetMem(Arduino_DataBus* b) {
   delay(150);
 }
 
+/**
+ * ⚠️ CHỈ BUS NÀY KHAI `MISO`, và nó phải được `begin()` TRƯỚC hai mắt.
+ *
+ * `SPIClass::begin()` của ESP32 thoát sớm nếu bus đã khởi tạo — lần gọi
+ * ĐẦU TIÊN quyết định chân nào được gắn. Hai mắt khai `GFX_NOT_DEFINED`
+ * cho MISO (bo GC9A01 không đưa chân ấy ra), nên nếu một trong hai chạy
+ * trước thì MISO không bao giờ được gắn và phép hỏi ID im lặng thất bại.
+ *
+ * `batTatCa()` gọi `resetMem(busNguc())` đầu tiên đúng vì lý do này.
+ */
 inline Arduino_DataBus* busNguc() {
+  // ⚠️ 27/08 CHIỀU — TẠM BỎ MISO. Xin đọc kỹ lý do.
+  //
+  // Bản trước khai MISO=PIN_TFT_MISO (GPIO 3) để hỏi ID chip. Ngay sau khi
+  // deploy, hai màn mắt tắt ngóm dù `mat-demo` vẫn báo `3/3 khoi tao xong`
+  // và chip vẫn chạy. Đèn nền mắt sáng (nguồn tới nơi), chỉ hình không ra.
+  // Đo VCC ở mắt: 3,24V — đủ.
+  //
+  // Manh mối: ba màn dùng CHUNG một `SPIClass`. `SPIClass::begin()` của
+  // ESP32 thoát sớm nếu bus đã khởi tạo, nên lần gọi ĐẦU TIÊN quyết định
+  // chân nào được gắn — mà `batTatCa()` gọi `resetMem(busNguc())` trước
+  // hai mắt. Kết quả: cả bus SPI dùng chung có MISO gắn vào GPIO 3.
+  //
+  // GPIO 3 trên ESP32-S3 là chân strapping và JTAG. Attach nó làm MISO
+  // trong lúc bo màn kéo đường ấy có thể sinh tương tác mà tôi không
+  // tính tới. Bỏ MISO khỏi đây là quay về đúng cấu hình đã chạy tốt
+  // trước sáng nay.
+  //
+  // Cái giá: không hỏi được ID chip nữa. Không sao — phép hỏi ID hôm nay
+  // đã trả về `FF FF FF FF` chứng tỏ đường MISO của bo màn không hoạt
+  // động (nhiều khả năng con đệm 74x245 chạy một chiều), nên mất cũng
+  // không mất gì thực sự.
   static Arduino_DataBus* b = new Arduino_HWSPI(PIN_TFT_DC, PIN_TFT_CS, PIN_TFT_SCLK,
                                                 PIN_TFT_MOSI, GFX_NOT_DEFINED, &bus(), true);
   return b;
 }
+// ⚠️ Mỗi mắt dùng chân `DC` RIÊNG (xem chú thích ở `config.h`). Chỉ
+// `SCLK` và `MOSI` là chung — đó là bản chất bus SPI, không tách được.
 inline Arduino_DataBus* busMatTrai() {
-  static Arduino_DataBus* b = new Arduino_HWSPI(PIN_TFT_DC, PIN_EYE_CS_L, PIN_TFT_SCLK,
+  static Arduino_DataBus* b = new Arduino_HWSPI(PIN_EYE_DC_L, PIN_EYE_CS_L, PIN_TFT_SCLK,
                                                 PIN_TFT_MOSI, GFX_NOT_DEFINED, &bus(), true);
   return b;
 }
 inline Arduino_DataBus* busMatPhai() {
-  static Arduino_DataBus* b = new Arduino_HWSPI(PIN_TFT_DC, PIN_EYE_CS_R, PIN_TFT_SCLK,
+  static Arduino_DataBus* b = new Arduino_HWSPI(PIN_EYE_DC_R, PIN_EYE_CS_R, PIN_TFT_SCLK,
                                                 PIN_TFT_MOSI, GFX_NOT_DEFINED, &bus(), true);
   return b;
 }
@@ -180,35 +221,52 @@ inline Arduino_DataBus* busMatPhai() {
 
 inline Arduino_GFX* nguc() {
   Arduino_DataBus* b = busNguc();
-  // RST = GFX_NOT_DEFINED → reset bằng lệnh phần mềm (dây RST nối 3V3).
-  // Xoay 1 = ngang 480×320, giữ đúng bố cục mà `face.cpp` đang vẽ.
-  // Hướng 3, KHÔNG phải 1. Cả hai đều nằm ngang nhưng lệch nhau 180°.
-  // Đo thật 25/08/2026 trên vỏ đã lắp: hướng 1 cho hình NGƯỢC LÊN TRÊN.
-  // Con số này gắn với cách bo màn được bắt vào tấm ngực, không phải
-  // với chip — lắp lại màn theo chiều khác thì phải đổi lại.
-  // ⛔⛔ PHẢI LÀ `_18bit`, KHÔNG PHẢI `Arduino_ILI9488` trần.
-  //
-  // ILI9488 qua SPI **không nhận màu 16 bit**. Chip chỉ hiểu RGB666
-  // 18 bit; lớp `Arduino_ILI9488` trần gửi RGB565 và chỉ đúng khi nối
-  // bus SONG SONG 8/16 bit. Còn `Arduino_ILI9488_18bit` chuyển 565→666
-  // ngay lúc gửi, đó mới là lớp cho SPI.
-  //
-  // Triệu chứng khi dùng nhầm lớp (đo thật 25/08/2026): màn SÁNG ĐỤC,
-  // không hình — chip vẫn nhận lệnh khởi tạo, đèn nền vẫn chạy, chỉ dữ
-  // liệu điểm ảnh là lệch. KHÔNG có lỗi nào ở Serial, và `drawFace()`
-  // vẫn đếm đủ số lần chạy.
-  //
-  // Vì sao bàn kiểm `test/` không lộ ra: nó dùng TFT_eSPI, thư viện ấy
-  // TỰ chuyển 16→18 bit cho ILI9488. Arduino_GFX bắt chọn đúng lớp.
-  // Hai bàn thử dùng hai thư viện khác nhau nên một bên xanh không
-  // chứng minh được gì cho bên kia.
-  // Cờ IPS = true. Với false, `fillScreen(0)` — lệnh tô ĐEN — lại cho
-  // ra màn TRẮNG: đó là màu bị đảo âm bản, không phải màn hỏng.
-  // Đo thật 25/08/2026: màn sáng trắng đục suốt trong khi drawFace()
-  // vẫn đếm đủ nhịp chạy và Serial không báo lỗi nào.
-  static Arduino_GFX* g = new Arduino_ILI9488_18bit(b, GFX_NOT_DEFINED, 3, true);
+  /**
+   * ── BO MỚI: `ST7796U`, thay `ILI9488` đã cháy 26/08 ──
+   *
+   * Hai khác biệt so với lớp cũ, cả hai đều là nâng cấp:
+   *
+   * 1. **RST THẬT** (`PIN_TFT_RST`) thay cho `GFX_NOT_DEFINED`. Thư viện
+   *    tự phát xung reset phần cứng, nên không còn phụ thuộc vào việc
+   *    đường 3V3 có đủ vững để giữ chân RST cao hay không — đúng cái đã
+   *    làm màn trắng suốt hai ngày.
+   *
+   * 2. **`Arduino_ST7796` gửi RGB565** (`COLMOD 0x55`, 2 byte/điểm),
+   *    trong khi `Arduino_ILI9488_18bit` buộc phải gửi 18 bit (3 byte).
+   *    Cùng 480×320 nhưng ít hơn một phần ba dữ liệu: 307 KB thay vì
+   *    460 KB mỗi khung. Đó là lý do màn mới nhanh hơn, không phải vì
+   *    chip chạy nhanh hơn.
+   *
+   *    Muốn 262k màu như bo cũ thì đổi `0x55` thành `0x66` trong
+   *    `Arduino_ST7796.h` — thư viện để sẵn trong chú thích. Đổi lại
+   *    màn vẽ chậm hơn một phần ba.
+   *
+   * ⚠️ HƯỚNG 1, KHÔNG PHẢI 3 — và đừng chép số này từ driver khác.
+   *
+   * Bo `ILI9488` cũ cần hướng **3** (đo thật 25/08: hướng 1 cho hình
+   * ngược lên trên). Tôi chép thẳng con số đó sang `ST7796` và hình lại
+   * ra ngược — đo thật 27/08.
+   *
+   * Lý do: mỗi driver tự đặt thanh ghi `MADCTL` theo cách riêng, nên
+   * "hướng 3" của lớp này không phải "hướng 3" của lớp kia. Con số này
+   * gắn với CẶP (driver + cách bắt màn vào vỏ), không mang từ chip này
+   * sang chip khác được — kể cả khi màn nằm y nguyên chỗ cũ.
+   *
+   * Cờ IPS thì giữ: sai nó thì `fillScreen(0)` — lệnh tô ĐEN — lại ra
+   * màn TRẮNG, và đó là một buổi chiều đi tìm nhầm chỗ.
+   */
+  static Arduino_TFT* g = new Arduino_ST7796(b, PIN_TFT_RST, 1, true /* IPS */);
   return g;
 }
+
+/**
+ * Cùng con màn ngực, nhưng kiểu `Arduino_TFT*`.
+ *
+ * `eyes` cần `writeAddrWindow()` để đẩy từng dải 240×24, mà hàm đó chỉ có
+ * ở lớp TFT. `Arduino_ST7796` kế thừa `Arduino_TFT` nên ép xuống là đúng
+ * kiểu thật của đối tượng, không phải đoán.
+ */
+inline Arduino_TFT* ngucTft() { return static_cast<Arduino_TFT*>(nguc()); }
 
 inline Arduino_TFT* matTrai() {
   Arduino_DataBus* b = busMatTrai();
@@ -238,6 +296,17 @@ inline int batTatCa() {
   // Reset mềm TỪNG CON trước khi khởi tạo — thư viện không tự làm.
   // Reset mềm phòng hờ — thư viện nay đã có chân RST thật nên nó tự
   // phát xung phần cứng, nhưng gửi thêm 0x01 không hại gì.
+#if MAT_TREN_NGUC
+  // ── MỘT MÀN DUY NHẤT ──
+  //
+  // Hai màn tròn KHÔNG được chạm tới: không reset, không khởi tạo, không
+  // tạo cả đối tượng bus của chúng. Cắm hay rút chúng ra cũng không đổi
+  // gì — nhưng tốt nhất là RÚT, để bus SPI chỉ còn đúng một thiết bị.
+  resetMem(busNguc());
+  if (nguc()->begin(TOC_DO)) ok++;
+  nguc()->fillScreen(0);
+  return ok;
+#endif
 #if CO_MAN_NGUC
   resetMem(busNguc());
 #endif

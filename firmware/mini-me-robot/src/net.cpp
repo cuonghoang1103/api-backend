@@ -81,6 +81,26 @@ bool luuMang(const String& ssid, const String& pass) {
   return true;
 }
 
+/**
+ * Mạng VÀO ĐƯỢC gần nhất (01/10/2026) — thử nó TRƯỚC mọi mạng khác.
+ *
+ * Đổi chỗ ngồi là chuyện hằng ngày (nhà ↔ quán). Thử theo thứ tự lưu thì
+ * mạng nhà luôn đứng đầu, ở quán mất 16 giây thử hụt trước khi tới lượt
+ * mạng quán — đủ để người ta tưởng robot treo.
+ */
+static String mangGanNhat() {
+  kho.begin("wifi", true);
+  const String s = kho.getString("last", "");
+  kho.end();
+  return s;
+}
+static void nhoMangGanNhat(const String& ssid) {
+  if (ssid == mangGanNhat()) return;   // khỏi ghi flash mỗi lần khởi động
+  kho.begin("wifi", false);
+  kho.putString("last", ssid);
+  kho.end();
+}
+
 void quenHet() {
   kho.begin("wifi", false);
   kho.clear();
@@ -296,9 +316,33 @@ TrangThai vaoMang(void (*veUi)()) {
 
   const uint8_t n = soMang();
 
-  // Vòng 1: các mạng đã lưu. 8 giây mỗi mạng — đủ cho một router bình
-  // thường, và đủ ngắn để thử hết sáu mạng vẫn dưới một phút.
-  for (uint8_t i = 0; i < n; i++) {
+  // Vòng 0: mạng vào được gần nhất, thử HAI lần.
+  //
+  // ⚠️ Đo 01/10/2026 ở quán cà phê: ngay sau khi nạp lại firmware (bo
+  // reset giữa chừng một kết nối), router quán từ chối lần đầu bằng
+  // AUTH_FAIL (202) dù mật khẩu đúng — reset thêm một lần là vào. Bản cũ
+  // thử mỗi mạng đúng MỘT lần rồi mở cổng Odin-Setup, nên cứ khởi động
+  // lại ở quán là robot đòi cài WiFi lại từ đầu.
+  const String ganNhat = mangGanNhat();
+  int iGanNhat = -1;
+  for (uint8_t i = 0; i < n && ganNhat.length(); i++) {
+    if (tenMang(i) == ganNhat) { iGanNhat = i; break; }
+  }
+  if (iGanNhat >= 0) {
+    const String pass = matKhauMang(iGanNhat);
+    for (int lan = 0; lan < 2 && !tt.online; lan++) {
+      if (lan) delay(1500);
+      if (thuMot(ganNhat.c_str(), pass.c_str(), 9000, veUi)) {
+        tt.online = true;
+        tt.ssid = ganNhat;
+      }
+    }
+  }
+
+  // Vòng 1: các mạng đã lưu còn lại. 8 giây mỗi mạng — đủ cho một router
+  // bình thường, và đủ ngắn để thử hết sáu mạng vẫn dưới một phút.
+  for (uint8_t i = 0; i < n && !tt.online; i++) {
+    if ((int)i == iGanNhat) continue;
     const String s = tenMang(i);
     if (!s.length()) continue;
     if (thuMot(s.c_str(), matKhauMang(i).c_str(), 8000, veUi)) {
@@ -318,6 +362,7 @@ TrangThai vaoMang(void (*veUi)()) {
   }
 
   if (tt.online) {
+    nhoMangGanNhat(tt.ssid);
     tt.rssi = WiFi.RSSI();
     tt.ip = WiFi.localIP().toString();
     return tt;
@@ -365,6 +410,7 @@ void loop(void (*bomTay)()) {
 
     if (WiFi.status() == WL_CONNECTED) {
       luuMang(choSsid, choPass);
+      nhoMangGanNhat(choSsid);   // khởi động lại xong thử mạng này đầu tiên
       ketQua = 1;
       ketQuaChu = choSsid;
       keuMotTieng = true;

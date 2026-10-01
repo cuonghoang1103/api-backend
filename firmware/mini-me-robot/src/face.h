@@ -45,6 +45,19 @@ enum Emotion : uint8_t {
 
 void begin(Arduino_GFX* tft);
 
+/**
+ * Chế độ CHỈ VẼ DẢI DƯỚI (đồng hồ · NGHE/NGHĨ/NÓI · pin), bắt đầu từ
+ * hàng `yDai` tới đáy màn. Dùng khi hai mắt `eyes` vẽ lên chính màn này
+ * (`MAT_TREN_NGUC`). Mọi API khác giữ nguyên và vẫn chuyển xuống `eyes`.
+ */
+void beginDai(Arduino_GFX* tft, int yDai);
+
+/**
+ * Hiện "AM LUONG 35%" + thanh ngang ở ô giữa dải dưới trong 1,5 giây,
+ * rồi tự trả về nhãn trạng thái. Chỉ có ở chế độ dải.
+ */
+void hienAmLuong(int pct);
+
 /** Đổi biểu cảm. `ms` = 0 nghĩa là giữ mãi tới lệnh sau. */
 void set(Emotion e, uint32_t ms = 0);
 

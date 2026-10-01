@@ -46,7 +46,7 @@ Pin 18650 ×2 nối tiếp (7,4 V)
 | BCLK | GPIO 15 |
 | LRC | GPIO 16 |
 | DIN | GPIO 7 |
-| SD | 3V3 |
+| SD | **để hở** — hở = phát (L+R)/2. Loa câm mà chip không nóng thì nối 3V3 (= kênh trái; firmware đẩy cùng một mẫu ra cả hai kênh nên không mất gì). **Nối GND là TẮT loa** |
 | + / − | hai chân loa (**đừng nối − xuống đất**) |
 
 ### Màn hình 3.5" TFT SPI
@@ -92,13 +92,13 @@ Mở Serial Monitor, gõ số để chọn phép kiểm. **Số dưới đây l�
 
 ## Thứ tự nên làm
 
-**1. Bấm `1` trước tiên.** Nếu nó báo *không thấy PSRAM* thì bo của bạn không phải bản N16R8 — biết ngay bây giờ tốt hơn biết lúc hết RAM giữa lượt nói.
+**1. Bấm `0` trước tiên.** Nếu nó báo *không thấy PSRAM* thì bo của bạn không phải bản N16R8 — biết ngay bây giờ tốt hơn biết lúc hết RAM giữa lượt nói.
 
-**2. Bấm `2`, nói vào micro.** Con số phải nhảy từ vài trăm lên vài nghìn. Nếu luôn bằng 0: kiểm chân L/R đã nối đất chưa.
+**2. Bấm `1`, nói vào micro.** Con số phải nhảy từ vài trăm lên vài nghìn. Nếu luôn bằng 0: kiểm chân L/R đã nối đất chưa.
 
-**3. Bấm `3`.** Phải nghe rõ 5 nốt. Nếu im lặng mà mạch không nóng: kiểm chân SD của MAX98357A — nối nhầm xuống đất là chip tắt hoàn toàn, không báo lỗi gì.
+**3. Bấm `2`.** Phải nghe rõ 5 nốt. Nếu im lặng mà mạch không nóng: kiểm chân SD của MAX98357A — nối nhầm xuống đất là chip tắt hoàn toàn, không báo lỗi gì.
 
-**4. Bấm `4`.** Màn hiện sọc màu rồi vẽ hai con mắt. Nếu trắng xoá: sai chân DC hoặc RESET. Nếu hiện sọc nhiễu: hạ tốc độ SPI trong `platformio.ini`.
+**4. Bấm `6`** (chỉ có ở env `test-st7796` / `test-ili9488`). Màn hiện sọc màu rồi vẽ hai con mắt. Nếu trắng xoá: sai chân DC hoặc RESET. Nếu hiện sọc nhiễu: hạ tốc độ SPI trong `platformio.ini`.
 
 Xong bốn bước này là bạn đã có **robot biết nghe và biết nói** — phần khó nhất của cả dự án.
 

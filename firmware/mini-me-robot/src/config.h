@@ -94,7 +94,28 @@
  */
 #define PIN_TFT_SCLK     12
 #define PIN_TFT_MOSI     11
-#define PIN_TFT_DC       13
+#define PIN_TFT_DC       13   // DC màn NGỰC — riêng
+
+/**
+ * ⚠️ MỖI MÀN MỘT CHÂN `DC` RIÊNG (27/08/2026) — ý của người dùng, và nó
+ * đúng hơn cách tôi làm.
+ *
+ * Trước đây cả ba màn chung `GPIO 13`, nối bằng cách xoắn ba lõi vào
+ * nhau rồi cắm chung một lỗ. Mối xoắn trần đó là nghi phạm số một của cả
+ * buổi 27/08: màn ngực chạy tốt (lõi của nó ăn chắc) trong khi HAI MẮT
+ * tối ngóm, và đo điện áp KHÔNG phát hiện được — đồng hồ 10MΩ đọc đủ áp
+ * qua một mối chỉ còn dính vài sợi đồng, mà mối ấy không tải nổi sườn
+ * xung SPI.
+ *
+ * Tách chân thì xoá hẳn mối xoắn thay vì đi chứng minh nó tốt hay xấu.
+ * Rẻ hơn dò, chắc hơn hàn, và ESP32-S3 còn thừa chân.
+ *
+ * ⚠️ `SCLK` và `MOSI` thì KHÔNG tách được — đó là bản chất bus SPI, mọi
+ * thiết bị phải nghe chung xung nhịp và chung đường dữ liệu. Chỉ `DC` và
+ * `CS` mới là chân riêng của từng màn.
+ */
+#define PIN_EYE_DC_L     43   // DC mắt TRÁI  — riêng, không xoắn chung
+#define PIN_EYE_DC_R     44   // DC mắt PHẢI  — riêng, không xoắn chung
 #define PIN_TFT_CS       10   // màn ngực 3.5"
 #define PIN_EYE_CS_L      9   // mắt trái
 
@@ -114,6 +135,63 @@
  * thật; đừng đổi nó để cho đẹp lý thuyết.
  */
 #define PIN_EYE_CS_R     14   // mắt phải — GPIO 14 rảnh vì RST về 3V3
+
+/**
+ * ── MÀN NGỰC MỚI (ST7796U, 27/08/2026) CÓ HAI CHÂN MÀ BO CŨ KHÔNG CÓ ──
+ *
+ * `PIN_TFT_RST` — chân reset THẬT.
+ *
+ * Bo ILI9488 cũ không đưa RST ra, nên cả ba màn phải nối cứng lên 3V3 và
+ * reset bằng lệnh 0x01 gửi tay (xem khối chú thích ngay trên). Cách đó
+ * chạy được, nhưng nó có một lớp lỗi riêng: chip chỉ rời trạng thái
+ * reset khi chân RST ở mức cao VỮNG, nên mọi cú sụt áp trên đường 3V3 —
+ * hay một sợi dây lỏng — đều giữ chip nằm im, không nhận lệnh nào, mà
+ * ĐÈN NỀN VẪN SÁNG vì nó nối thẳng nguồn. Đó chính là màn hình trắng đã
+ * hành hai ngày 25-26/08.
+ *
+ * Có chân RST thật thì thư viện tự phát xung reset phần cứng mỗi lần
+ * khởi động, và cả lớp lỗi đó biến mất.
+ *
+ * `PIN_TFT_MISO` — đường chip NÓI NGƯỢC LẠI.
+ *
+ * ⚠️ Đây là chân đáng giá nhất trên bo mới. `man_hinh.h` có sẵn một khối
+ * cảnh báo: "`begin()` gần như KHÔNG BAO GIỜ trả false — chân MISO để
+ * trống nên nó không có cách nào biết đầu kia có gì." Vì thế firmware in
+ * `3/3 màn khởi tạo xong` trong khi một con đang chết dần, và không ai
+ * biết cho tới lúc mở mắt ra nhìn vào kính.
+ *
+ * Nối MISO thì hỏi được chip "còn sống không" và nhận câu trả lời.
+ *
+ * GPIO 3 là chân strapping (chọn nguồn JTAG lúc khởi động) nhưng ESP32-S3
+ * chỉ đọc nó trong vài chu kỳ đầu rồi thả; dùng làm MISO sau khi boot là
+ * an toàn, và nó là chân trống sạch sẽ nhất còn lại.
+ */
+#define PIN_TFT_RST      47   // màn ngực — chân reset THẬT (bo cũ không có)
+#define PIN_TFT_MISO      3   // màn ngực — để hỏi được ID chip
+
+/**
+ * ── CẢM ỨNG ĐIỆN DUNG FT6336U trên bo màn ngực (27/08/2026) ──
+ *
+ * Đi I2C, GHÉP VÀO BUS SẴN CÓ: `CTP_SCL` → `PIN_I2C_SCL` (18),
+ * `CTP_SDA` → `PIN_I2C_SDA` (8). Không tốn chân mới.
+ * `CTP_RST` nối thẳng **3V3**.
+ *
+ * ⚠️ `CTP_INT` ĐỂ HỞ — CỐ Ý, và đây là lựa chọn chứ không phải thiếu sót.
+ *
+ * Chân đó chỉ báo "vừa có người chạm". Hỏi vòng qua I2C 30-60 lần/giây
+ * cũng biết đúng điều ấy, mà rẻ hơn theo hai cách:
+ *
+ *   1. Không tốn chân. Chân trống trên bo này đếm được trên một bàn tay,
+ *      và `GPIO 44` (lựa chọn đầu tiên) hoá ra là `RX` của UART0 — trên
+ *      bo DevKitC nó in chữ RX chứ không in số, người dùng tìm không ra.
+ *   2. Bớt MỘT SỢI DÂY. Robot rung theo bánh xích, và mọi mối nối là một
+ *      chỗ hỏng — bài học đắt nhất của cả dự án này đến từ dây, không
+ *      đến từ mã.
+ *
+ * Cái giá: CPU phải hỏi đều đặn thay vì ngồi chờ. Với một con chip đang
+ * vẽ 157 khung/giây thì đó không phải chi phí đáng bàn.
+ */
+#define PIN_CTP_INT      -1   // để hở — hỏi vòng qua I2C, xem chú thích trên
 
 // ─── Cảm biến: I2C (MPU6050 0x68 + VL53L0X 0x29) ──────────
 #define PIN_I2C_SDA      8
@@ -216,7 +294,66 @@
  *
  * Màn mới về: đổi thành `1`, cắm 7 sợi, nạp lại. Hết.
  */
-#define CO_MAN_NGUC  0
+#define CO_MAN_NGUC  1
+
+/**
+ * ============================================================
+ * HAI MẮT VẼ TRÊN MÀN NGỰC — bỏ hai màn tròn (01/10/2026)
+ * ============================================================
+ *
+ * `1` = MỘT màn duy nhất (ngực ST7796U 480×320) làm cả khuôn mặt: hai
+ * mắt 240×240 đặt CẠNH NHAU chiếm trọn chiều ngang, dải trạng thái 76px
+ * bên dưới. Hai màn tròn GC9A01 KHÔNG được khởi tạo.
+ *
+ * `0` = cách cũ: hai màn tròn làm mắt, màn ngực vẽ mặt riêng.
+ *
+ * ⚠️ VÌ SAO CHUYỂN. Ngày 27/08/2026 thêm màn ngực mới vào bus thì hai mắt
+ * tròn tắt ngóm, và sau nhiều giờ loại trừ (ESP32 khoẻ 6/6 chân, firmware
+ * cũ cũng tối, rút màn ngực khỏi bus vẫn tối, nguồn 3,24V, đèn nền sáng,
+ * hạ SPI 4 MHz vẫn tối) vẫn không ra thủ phạm. Người dùng quyết định cất
+ * hai màn tròn để nghiên cứu sau và cho robot chạy được trước.
+ *
+ * Đây không phải bản hạ cấp. Bộ vẽ mắt (`eyes.cpp`, 28 biểu cảm, mống
+ * mắt 14 lớp, chớp ngẫu nhiên, đồng tử nảy theo tiếng nói) chạy NGUYÊN
+ * VẸN — chỉ đổi chỗ nó đẩy điểm ảnh tới. Hai ống kính tròn sát nhau
+ * chính là mắt ống nhòm của WALL-E, hình mẫu của con robot này từ đầu.
+ *
+ * Lợi thêm: màn ngực chỉ cần 11 sợi (MISO để hở — firmware không đọc),
+ * và từ ba thiết bị chung một bus SPI còn một. Ít mối nối hơn = ít chỗ hỏng hơn — bài học đắt nhất của cả
+ * dự án đều đến từ dây, không đến từ mã.
+ */
+#define MAT_TREN_NGUC  1
+
+/** Mép trên của hai mắt trên màn ngực. 4 chứ không 0: chạm mép trông chật. */
+#define MAT_Y          4
+/** Mép trên của dải trạng thái (đồng hồ · nghe/nghĩ/nói · pin). */
+#define DAI_Y          (MAT_Y + 240)
+
+#if MAT_TREN_NGUC && !CO_MAN_NGUC
+#error "MAT_TREN_NGUC = 1 can CO_MAN_NGUC = 1 — mat ve len man nguc"
+#endif
+
+/**
+ * ── CẢM ỨNG: GHÉP TRỤC TẤM CẢM ỨNG VỚI MÀN ──
+ *
+ * Tấm cảm ứng FT6336U có hệ toạ độ RIÊNG — dọc 320×480 — còn màn đang
+ * xoay ngang 480×320 (hướng 1). Bốn cách ghép trục đều "trông hợp lý"
+ * trên giấy, và chọn nhầm thì ngón tay đi một đằng mắt nhìn một nẻo.
+ *
+ * ⚠️ GẦN CHẮC ĐÚNG, CHƯA CHỐT BẰNG SỐ. Ngày 03/09 bàn `thu-cham` chạy
+ * đúng phép ghép này (log: `thô X=170 Y=341 → màn (341,149)`), và khi được
+ * hỏi "chấm xanh có chạy theo ngón không" user đáp "cảm ứng ok" — nhưng
+ * chưa ai đọc số ở hai góc. Xác nhận lại: `pio run -e thu-cham -t upload`,
+ * chạm GÓC TRÊN-TRÁI rồi GÓC DƯỚI-PHẢI, chấm xanh phải nằm dưới ngón.
+ * Lệch thì lật cờ, không sửa mã:
+ *
+ *   chấm chạy ngang khi ngón chạy dọc → đổi CHAM_DOI_TRUC
+ *   chấm ngược trái/phải               → đổi CHAM_LAT_X
+ *   chấm ngược trên/dưới               → đổi CHAM_LAT_Y
+ */
+#define CHAM_DOI_TRUC  1   // 1 = trục NGANG của màn lấy từ trục Y thô của tấm cảm ứng
+#define CHAM_LAT_X     0   // 1 = lật trái ↔ phải
+#define CHAM_LAT_Y     1   // 1 = lật trên ↔ dưới
 // GPIO38 và GPIO45 CÒN TRỐNG — servo đã chuyển hết sang PCA9685.
 
 // ─── Servo qua PCA9685 (I2C 0x40) ─────────────────────────

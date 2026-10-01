@@ -137,6 +137,14 @@ bool begin(Arduino_TFT* matTrai, Arduino_TFT* matPhai);
 void setBus(Arduino_DataBus* busTrai, Arduino_DataBus* busPhai);
 
 /**
+ * Đặt ô 240×240 của mỗi mắt trên màn của nó. PHẢI gọi TRƯỚC `begin()`.
+ *
+ * Mặc định (0,0) cho cả hai — đúng khi mỗi mắt có màn tròn riêng. Hai
+ * mắt chung một màn ngực 480×320 thì gọi `datViTri(0, y, 240, y)`.
+ */
+void datViTri(int16_t xTrai, int16_t yTrai, int16_t xPhai, int16_t yPhai);
+
+/**
  * Gọi mỗi vòng `loop()`. Tự chia lát: làm việc tối đa `budgetUs` micro
  * giây rồi trả CPU lại, dù khung hình chưa xong.
  *

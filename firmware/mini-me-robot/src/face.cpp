@@ -113,16 +113,37 @@ static void brow(int cx, int tiltPx, uint16_t color) {
 
 // ─── Vẽ cả mặt ─────────────────────────────────────────────
 
+// ─── Chế độ "chỉ dải dưới" (MAT_TREN_NGUC, 01/10/2026) ──────
+//
+// Khi hai mắt `eyes.cpp` vẽ lên chính màn ngực này, module `face` KHÔNG
+// được vẽ khuôn mặt nữa — nó sẽ đè lên mắt. Nó chỉ còn lo dải 76px bên
+// dưới: đồng hồ trái, NGHE/NGHĨ/NÓI giữa, pin phải, cùng một dòng.
+//
+// Mọi API (`set`, `look`, `setStatus`…) vẫn giữ nguyên và vẫn chuyển
+// tiếp xuống `eyes` như cũ — `main.cpp` gọi `face::` ở tám chỗ khác nhau,
+// đổi hết sang `eyes::` thì chỉ cần sót một chỗ là mặt và mắt nói hai
+// chuyện khác nhau.
+static bool chiDai = false;
+static int dY = 0;                          // mép trên của dải
+static int dongChu() { return dY + 30; }    // giữa dải 76px, chữ cỡ 2 cao 16px
+
+// Nhãn đang nằm trên kính — ở phạm vi FILE chứ không trong hàm, để
+// `beginDai()` đặt lại được sau khi cổng WiFi đã vẽ đè cả màn. Để nó là
+// biến static trong hàm thì sau khi màn bị xoá, hàm vẫn tưởng nhãn còn
+// đó và không vẽ lại.
+static Emotion nhanDaVe = (Emotion)255;
+
 // Đồng hồ góc trên TRÁI — chấm trạng thái ở góc phải nên không đè nhau.
 // Xoá đúng ô chữ rồi vẽ đè, KHÔNG fillScreen: khuôn mặt đang nằm đó và
 // xoá cả màn mỗi phút thì thành nháy đèn.
 static void drawClock() {
   if (!tft) return;
-  tft->fillRect(8, 6, 64, 20, C_BG);
+  const int x = chiDai ? 16 : 8, y = chiDai ? dongChu() : 6;
+  tft->fillRect(x, y, 64, 20, C_BG);
   if (!clockTxt[0]) return;
   tft->setTextColor(C_EYE_DIM, C_BG);
   tft->setTextSize(2);
-  tft->setCursor(8, 6);
+  tft->setCursor(x, y);
   tft->print(clockTxt);
 }
 
@@ -130,12 +151,13 @@ static void drawClock() {
 // liếc một cái là biết còn nhiều hay sắp chết, khỏi cần đọc số.
 static void drawBattery() {
   if (!tft) return;
-  tft->fillRect(78, 6, 54, 20, C_BG);
+  const int x = chiDai ? W - 16 - 54 : 78, y = chiDai ? dongChu() : 6;
+  tft->fillRect(x, y, 54, 20, C_BG);
   if (batPct < 0) return;
   const uint16_t col = batPct > 50 ? C_DOT_OK : (batPct > 20 ? 0xFD20 : C_DOT_BAD);
   tft->setTextColor(col, C_BG);
   tft->setTextSize(2);
-  tft->setCursor(78, 6);
+  tft->setCursor(x, y);
   tft->printf("%d%%", batPct);
 }
 
@@ -163,11 +185,15 @@ static void drawStateLabel(Emotion e) {
   // Chỉ đụng vào màn khi trạng thái ĐỔI THẬT. drawFace() còn chạy mỗi
   // lần chớp mắt (2,5-6 giây một lần), mà xoá dải 480x30 tốn ~11 ms
   // SPI — đúng loại chi phí mà cả hàm này được viết ra để né.
-  static Emotion daVe = (Emotion)255;
-  if (e == daVe) return;
-  daVe = e;
+  if (e == nhanDaVe) return;
+  nhanDaVe = e;
 
-  tft->fillRect(0, H - 30, W, 30, C_BG);
+  // Chế độ dải: chỉ xoá ô GIỮA (giữa đồng hồ và pin), không xoá cả dải —
+  // xoá cả dải là xoá luôn đồng hồ với pin rồi phải vẽ lại cả hai.
+  // Ô giữa cao 30 chứ không 20: thanh âm lượng nằm ngay dưới chữ, xoá
+  // thiếu là vạch thanh cũ nằm lại dưới chữ "DANG NGHE".
+  if (chiDai) tft->fillRect(140, dongChu() - 2, 200, 30, C_BG);
+  else tft->fillRect(0, H - 30, W, 30, C_BG);
 
   const char* s;
   uint16_t col;
@@ -175,11 +201,18 @@ static void drawStateLabel(Emotion e) {
     case LISTENING: s = "DANG NGHE";  col = 0xFFE0; break;  // vàng
     case THINKING:  s = "DANG NGHI";  col = 0xFD20; break;  // cam
     case SPEAKING:  s = "DANG NOI";   col = C_DOT_OK; break;
-    default: return;                                        // rảnh thì để trống
+    default:
+      // Dải dưới là NÚT NÓI (01/10/2026) — lúc rảnh phải nói ra điều đó,
+      // không thì chẳng ai biết chạm vào đâu. Màn tròn cũ thì để trống.
+      if (!chiDai) return;
+      s = "CHAM DE NOI";
+      col = 0x7BEF;   // xám — gợi ý, không tranh chỗ với trạng thái thật
+      break;
   }
   tft->setTextColor(col, C_BG);
   tft->setTextSize(2);
-  tft->setCursor(14, H - 26);
+  if (chiDai) tft->setCursor(W / 2 - (int)strlen(s) * 6, dongChu());   // 12px/ký tự ở cỡ 2
+  else tft->setCursor(14, H - 26);
   tft->print(s);
 }
 
@@ -336,6 +369,40 @@ static void drawFace() {
 
 // ─── API ───────────────────────────────────────────────────
 
+static uint32_t amLuongDenLuc = 0;
+
+void hienAmLuong(int pct) {
+  if (!tft || !chiDai) return;
+  pct = constrain(pct, 0, 100);
+  tft->fillRect(140, dongChu() - 2, 200, 30, C_BG);
+  char s[16];
+  snprintf(s, sizeof s, "AM LUONG %d%%", pct);
+  tft->setTextColor(0xFFFF, C_BG);
+  tft->setTextSize(2);
+  tft->setCursor(W / 2 - (int)strlen(s) * 6, dongChu());
+  tft->print(s);
+  const int rong = 160, x0 = W / 2 - rong / 2, y0 = dongChu() + 21;
+  tft->drawRect(x0, y0, rong, 6, 0x7BEF);
+  tft->fillRect(x0 + 1, y0 + 1, (rong - 2) * pct / 100, 4, C_DOT_OK);
+  amLuongDenLuc = millis() + 1500;
+  nhanDaVe = (Emotion)255;   // hết 1,5 giây thì vẽ lại nhãn trạng thái
+}
+
+void beginDai(Arduino_GFX* t, int yDai) {
+  tft = t;
+  if (!tft) return;
+  chiDai = true;
+  dY = yDai;
+  W = tft->width();
+  H = tft->height();
+  // Xoá đúng dải của mình — phần trên là của hai mắt, chúng tự xoá ô
+  // của chúng trong `eyes::begin()`.
+  tft->fillRect(0, dY, W, H - dY, C_BG);
+  nhanDaVe = (Emotion)255;   // ép nhãn vẽ lại ở vòng loop kế tiếp
+  drawClock();
+  drawBattery();
+}
+
 void begin(Arduino_GFX* t) {
   tft = t;
   // `nullptr` = chưa cắm màn ngực (xem `CO_MAN_NGUC` trong config.h).
@@ -418,7 +485,10 @@ void setStatus(bool w, bool s) {
   if (w != wifiOk || s != serverOk) {
     wifiOk = w;
     serverOk = s;
-    if (tft) {
+    // Chế độ dải KHÔNG vẽ hai chấm: góc trên phải lúc này là ô của mắt
+    // phải, vẽ vào đó là đè lên ống kính. Hai chấm WiFi/máy chủ đã có sẵn
+    // ở rìa dưới mắt trái — `eyes.cpp` vẽ chúng.
+    if (tft && !chiDai) {
       tft->fillCircle(W - 22, 16, 6, wifiOk ? C_DOT_OK : C_DOT_BAD);
       tft->fillCircle(W - 42, 16, 6, serverOk ? C_DOT_OK : C_DOT_BAD);
     }
@@ -452,6 +522,17 @@ void loop() {
     emoUntil = 0;
     emo = baseEmo;
     dirty = true;
+  }
+
+  // Chế độ dải: chớp mắt và đảo mắt là việc của `eyes`, ở đây chỉ còn
+  // nhãn NGHE/NGHĨ/NÓI — và nó tự bỏ qua khi chưa đổi, nên gọi mỗi vòng
+  // chỉ tốn một phép so sánh.
+  if (chiDai) {
+    // Đang hiện thanh âm lượng thì đừng vẽ đè nhãn lên nó.
+    if (amLuongDenLuc && (int32_t)(millis() - amLuongDenLuc) < 0) return;
+    amLuongDenLuc = 0;
+    drawStateLabel(emo);
+    return;
   }
 
   // Chớp mắt. Khoảng cách ngẫu nhiên 3-6 giây — chớp đều tăm tắp

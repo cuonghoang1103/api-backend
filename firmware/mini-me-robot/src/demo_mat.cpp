@@ -36,9 +36,18 @@
  * ⚠️ NGUỒN 3V3, KHÔNG PHẢI 5V. Đa số bo GC9A01 bán lẻ KHÔNG có mạch ổn
  * áp trên bo. Cắm 5V là chết chip, và nó chết im — màn cứ đen, không có
  * gì báo.
+ *
+ * ── MẮT TRÊN MÀN NGỰC (`MAT_TREN_NGUC = 1`, từ 01/10/2026) ──
+ *
+ * Phần đấu dây ở trên là của HAI MÀN TRÒN, đã cất. Ở chế độ này bàn thử
+ * vẽ hai mắt lên màn ngực 3.5" — đúng chỗ và đúng cỡ firmware thật vẽ —
+ * nên chỉ cần màn ngực cắm như `tim_loi_nguc.cpp` mô tả. Ba lệnh chẩn
+ * đoán `t` / `f` / `i` cũng chuyển sang màn ngực.
  */
 
 #include <Arduino.h>
+
+#include <array>
 
 #include "eyes.h"
 #include "man_hinh.h"
@@ -123,8 +132,20 @@ static void dat(int i) {
 // Gọi thẳng `->fillScreen()` trên đó là `LoadProhibited`, bo sập rồi
 // khởi động lại vô hạn — đúng thứ vừa xảy ra ngày 15/08/2026. Mọi lời
 // gọi tới hai mắt đi qua hàm này để không sót chỗ nào.
+//
+// Mắt-trên-ngực thì chỉ có MỘT màn để kiểm: màn ngực. Đừng gọi
+// `matTrai()` ở chế độ đó — nó dựng màn trên một bus chưa từng
+// `begin()`, và `begin()` nó ra thì lại cấu hình lại đúng cổng SPI màn
+// ngực đang dùng.
+static std::array<Arduino_TFT*, 2> cacMan() {
+#if MAT_TREN_NGUC
+  return {man_hinh::ngucTft(), nullptr};
+#else
+  return {man_hinh::matTrai(), man_hinh::matPhai()};
+#endif
+}
 static void moiMat(void (*viec)(Arduino_GFX*)) {
-  for (Arduino_TFT* g : {man_hinh::matTrai(), man_hinh::matPhai()})
+  for (Arduino_TFT* g : cacMan())
     if (g) viec(g);
 }
 static uint16_t _mauTo = 0;
@@ -153,13 +174,12 @@ static void veHinhKiem() {
 
 static void veLuoi() {
   // Lưới 20 px: lệch địa chỉ một dòng là thấy ngay bậc thang.
-  for (auto* g : {man_hinh::matTrai(), man_hinh::matPhai()}) {
+  for (Arduino_TFT* g : cacMan()) {
     if (!g) continue;
+    const int W = g->width(), H = g->height();   // 240×240 hoặc 480×320
     g->fillScreen(0x0000);
-    for (int i = 0; i <= 240; i += 20) {
-      g->drawFastHLine(0, i, 240, 0xFFFF);
-      g->drawFastVLine(i, 0, 240, 0xFFFF);
-    }
+    for (int y = 0; y <= H; y += 20) g->drawFastHLine(0, y, W, 0xFFFF);
+    for (int x = 0; x <= W; x += 20) g->drawFastVLine(x, 0, H, 0xFFFF);
   }
   Serial.println("\n  [kiem] luoi 20px — vuong deu = dia chi dung;"
                  " bac thang/xo lech = mat bit");
@@ -169,8 +189,13 @@ static void veLuoi() {
 static void doiTocDo() {
   mucTocDo = (mucTocDo + 1) % 4;
   const int32_t t = TOC_DO_THU[mucTocDo];
-  for (Arduino_TFT* g : {man_hinh::matTrai(), man_hinh::matPhai()})
-    if (g) g->begin(t);
+  for (Arduino_TFT* g : cacMan())
+    if (g) {
+      g->begin(t);
+      // Khởi tạo lại thì bộ nhớ màn là rác. Hai màn tròn được mắt vẽ kín
+      // lại ngay, nhưng màn ngực còn dải 76 px dưới mắt không ai vẽ.
+      g->fillScreen(0x0000);
+    }
   eyes::invalidate();
   Serial.printf("\n  [kiem] SPI -> %ld MHz. Het soc o muc nao thi sua"
                 " man_hinh::TOC_DO thanh muc do.\n", (long)(t / 1000000));
@@ -219,7 +244,7 @@ static void docSerial() {
           // chạy thay vì nạp lại hai lần để so.
           static bool dao = false;
           dao = !dao;
-          for (Arduino_TFT* g : {man_hinh::matTrai(), man_hinh::matPhai()})
+          for (Arduino_TFT* g : cacMan())
             if (g) g->invertDisplay(dao);
           Serial.printf("\n  [kiem] dao mau: %s\n", dao ? "BAT" : "TAT");
         } else if (d == "l") {
@@ -256,6 +281,16 @@ static void docSerial() {
 void setup() {
   Serial.begin(115200);
   delay(400);
+#if MAT_TREN_NGUC
+  Serial.println("\n\n=== Mini-Me Robot — ban thu HAI MAT (ve tren MAN NGUC) ===");
+  const int soMan = man_hinh::batTatCa();
+  Serial.printf("  %d/1 man da gui xong chuoi khoi tao\n", soMan);
+  // Cùng một bố cục với firmware thật (`main.cpp`): hai ô 240×240 cạnh
+  // nhau ở `MAT_Y`. Duyệt 28 biểu cảm ở đây là thấy đúng cái robot sẽ hiện.
+  eyes::setBus(man_hinh::busNguc(), man_hinh::busNguc());
+  eyes::datViTri(0, MAT_Y, 240, MAT_Y);
+  if (!eyes::begin(man_hinh::ngucTft(), man_hinh::ngucTft())) {
+#else
   Serial.println("\n\n=== Mini-Me Robot — ban thu HAI MAT (GC9A01 x2) ===");
 
   const int soMan = man_hinh::batTatCa();
@@ -263,11 +298,17 @@ void setup() {
 
   eyes::setBus(man_hinh::busMatTrai(), man_hinh::busMatPhai());
   if (!eyes::begin(man_hinh::matTrai(), man_hinh::matPhai())) {
+#endif
     Serial.println("!! eyes::begin() that bai — xem dong loi phia tren.");
     Serial.println("   Man den hoan toan? Kiem 3V3/GND va chan BLK truoc.");
     while (true) delay(1000);
   }
 
+#if !MAT_TREN_NGUC
+  // ⚠️ Khối tự kiểm dưới đây viết riêng cho HAI MÀN TRÒN (`matTrai()`,
+  // `matPhai()`). Ở chế độ mắt-trên-ngực nó sẽ vẽ vào hai màn đã cất —
+  // không hại gì, nhưng mất 16 giây nhìn vào chỗ trống. Màn ngực có bàn
+  // nghiệm thu riêng: `pio run -e tim-nguc`.
   // ── TỰ KIỂM ĐƯỜNG TRUYỀN, chạy mỗi lần bật ──
   //
   // ⚠️ Bốn ô màu đặc trong 6 giây. Nhìn qua thì thừa, nhưng nó trả lời
@@ -319,6 +360,7 @@ void setup() {
     Serial.println("── het tu kiem, bat dau ve mat ──\n");
     eyes::invalidate();
   }
+#endif
 
   // Chỉ báo trạng thái: bàn thử không có WiFi nên để đúng như thật —
   // chấm đỏ. Vẫn hiện, để bạn thấy nó nằm đâu trên kính.

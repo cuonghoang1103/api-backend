@@ -83,6 +83,22 @@ bool listening();
  * Không thay VAD, chỉ là đường tắt. Đang nghe dở thì không làm gì.
  */
 void moLuotNgay();
+
+/**
+ * Lượt BẤM-ĐỂ-NÓI (01/10/2026) — dùng cho chạm màn ngực / chạm đầu.
+ *
+ * Khác `moLuotNgay()` ở ba chỗ, đều sinh ra từ một buổi thử ở quán cà phê
+ * mà chạm "mãi không ăn":
+ *   1. Đang dở một lượt (tiếng ồn quán tự mở) ⇒ BỎ lượt đó, mở lượt mới.
+ *      Bản cũ thấy đang nghe thì không làm gì, nên lời người vừa chạm rơi
+ *      vào một lượt ồn không mang cờ chạm và bị cổng "Odin" chặn.
+ *   2. CHỜ người ta bắt đầu nói (tối đa 5 giây) rồi mới áp luật "im 650ms
+ *      là dứt câu". Áp từ khối đầu thì lượt đóng trước khi kịp mở miệng.
+ *   3. Chờ hết 5 giây không ai nói ⇒ huỷ êm, gọi `onTurnCancel`, KHÔNG gửi.
+ */
+void moLuotCham();
+/** Lượt chạm bị huỷ vì không ai nói gì — `main.cpp` dọn trạng thái. */
+void onTurnCancel(EventFn fn);
 /** Mức mic gần nhất, thang 24 bit — cùng thang với VAD_THRESHOLD. */
 int32_t level();
 /** Nền ồn phòng đang tự học được (cùng thang). */

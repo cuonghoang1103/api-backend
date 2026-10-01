@@ -138,7 +138,10 @@ static const uint32_t PLAY_START_BYTES = 16 * 1024;
 static uint8_t volumePct = 50;   // mặc định 50% — server gửi lại mức đã lưu ngay khi bo nối được
 
 void setVolume(uint8_t pct) {
-  if (pct < 10) pct = 10;
+  // Sàn 2% chứ không phải 10% (01/10/2026). Đo ở quán cà phê: người dùng
+  // bảo giảm xuống 5% rồi 1% mà robot vẫn to — vì 10% của ampli 3W đặt
+  // cách tai nửa mét vẫn là to. Vẫn không cho về 0: "0%" nghe như hỏng.
+  if (pct < 2) pct = 2;
   if (pct > 100) pct = 100;
   volumePct = pct;
 }
@@ -473,6 +476,15 @@ bool begin() {
 void onTurnStart(EventFn fn) { cbStart = fn; }
 void onChunk(ChunkFn fn) { cbChunk = fn; }
 void onTurnEnd(EventFn fn) { cbEnd = fn; }
+static EventFn cbHuy = nullptr;
+void onTurnCancel(EventFn fn) { cbHuy = fn; }
+
+// Lượt bấm-để-nói — xem `moLuotCham()` trong audio.h.
+static volatile bool epMoLuotCham = false;
+static bool luotCham = false;      // lượt đang mở là lượt do chạm
+static bool daCoTieng = false;     // trong lượt chạm đã nghe thấy người nói chưa
+static uint8_t demTiengCham = 0;   // bộ đếm rỉ, cùng kiểu `loudRun`
+static const uint32_t CHO_TIENG_MS = 5000;
 
 // ─── Phát ──────────────────────────────────────────────────
 
@@ -914,6 +926,7 @@ static void flushPreroll() {
 static void endTurn() {
   loudRun = 0;
   micOpen = false;
+  luotCham = false;
   prerollCount = 0;
   micResumeAt = millis() + VAD_COOLDOWN_MS;
   if (cbEnd) cbEnd();
@@ -1054,6 +1067,25 @@ static void pumpMic() {
   const bool loud = micLevel > vadGate(false);
   const bool conNoi = micLevel > vadGate(true);
 
+  // ── Lượt CHẠM: mở lượt mới NGAY, kể cả khi đang dở một lượt ──
+  //
+  // Không gửi `audio_end` cho lượt cũ: `cbStart()` gửi `audio_start` mới,
+  // và server XOÁ sạch phần tiếng đã nhận của lượt cũ khi thấy nó (xem
+  // `device.gateway.ts`). Cũng không `flushPreroll`: tiếng trước lúc chạm
+  // là tiếng quán, không phải lời người vừa chạm.
+  if (epMoLuotCham) {
+    epMoLuotCham = false;
+    micOpen = true;
+    micTurnAt = now;
+    micQuietAt = 0;
+    loudRun = 0;
+    prerollCount = 0;
+    luotCham = true;
+    daCoTieng = false;
+    demTiengCham = 0;
+    if (cbStart) cbStart();
+  }
+
   if (!micOpen) {
     // Bám nền KHÔNG ĐỐI XỨNG: tụt nhanh, leo chậm.
     //
@@ -1102,6 +1134,27 @@ static void pumpMic() {
   }
 
   if (cbChunk) cbChunk((const uint8_t*)pcmBlock, n * sizeof(int16_t));
+
+  // Lượt chạm: CHỜ người ta bắt đầu nói rồi mới tính chuyện dứt câu.
+  if (luotCham && !daCoTieng) {
+    if (loud) {
+      if (++demTiengCham >= 3) daCoTieng = true;
+    } else if (demTiengCham > 0) {
+      demTiengCham--;
+    }
+    if (!daCoTieng) {
+      if (now - micTurnAt >= CHO_TIENG_MS) {
+        // Chạm rồi không nói gì: huỷ êm, không gửi `audio_end`.
+        micOpen = false;
+        luotCham = false;
+        loudRun = 0;
+        micResumeAt = now + VAD_COOLDOWN_MS;
+        if (cbHuy) cbHuy();
+      }
+      return;
+    }
+    micQuietAt = 0;   // vừa có tiếng: đếm im lặng lại từ đây
+  }
 
   if (conNoi) {
     micQuietAt = 0;
@@ -1153,4 +1206,6 @@ namespace audio {
 void moLuotNgay() {
   if (!listening()) epMoLuot = true;
 }
+
+void moLuotCham() { epMoLuotCham = true; }
 }  // namespace audio

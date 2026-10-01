@@ -31,6 +31,7 @@
 #include <ArduinoJson.h>
 #include "man_hinh.h"
 #include "eyes.h"
+#include "camUng.h"
 #include <esp_heap_caps.h>
 
 #include "audio.h"
@@ -338,6 +339,14 @@ static void uiMode() {
 }
 
 static void uiRefresh() {
+#if MAT_TREN_NGUC
+  // Bảng chữ của chặng A (WiFi · IP · sóng · máy chủ…) vẽ chữ cỡ 1 vào
+  // những hàng cố định — mà lúc này các hàng đó là ô của hai mắt. Bộ vẽ
+  // mắt chỉ vẽ lại dải nào hoạt ảnh làm bẩn, nên chữ rơi vào dải đứng
+  // yên sẽ nằm lại trên ống kính. Thông tin này đã có ở Serial và ở hai
+  // chấm WiFi/máy chủ trên viền mắt trái.
+  return;
+#endif
   uiValue(0, st.wifiUp ? st.ssid : String("dang tim..."),
           st.wifiUp ? C_OK : C_WARN);
   uiValue(1, st.ip, C_VALUE);
@@ -581,6 +590,23 @@ static void upFlush() {
   upLen = 0;
 }
 
+/**
+ * Cảm xúc của CÂU TRẢ LỜI đang nói (01/10/2026), vd "happy".
+ *
+ * ⚠️ Trước đây mắt hầu như không bao giờ có cảm xúc, dù server có gửi.
+ * Server gửi lệnh `face` SAU khi đã bơm xong tiếng, còn bo thì đặt mắt
+ * SPEAKING ngay khi tiếng bắt đầu và NEUTRAL khi tiếng hết — cảm xúc chỉ
+ * kịp loé 2 giây giữa câu rồi bị đè. Giờ: cảm xúc tới lúc nào thì GIỮ từ
+ * lúc đó tới hết câu (đồng tử vẫn nảy theo tiếng — xem `eyes.cpp`), nói
+ * xong giữ thêm 2,5 giây rồi mới về bình thường.
+ */
+static String camXucLuot;
+
+/** Lượt nghe vừa được mở bằng CHẠM — kèm cờ để server khỏi đòi gọi "Odin". */
+static uint32_t chamMoLuotLuc = 0;
+/** Lần cuối âm lượng đổi bằng tay — hết vuốt 1,2 giây mới báo server lưu. */
+static uint32_t amLuongDoiLuc = 0;
+
 static void onTurnStart() {
   upLen = 0;
   upBytes = 0;
@@ -588,8 +614,57 @@ static void onTurnStart() {
   upStartMs = millis();
   st.mode = MODE_HEAR;
   st.lastNote = "nghe thay tieng noi";
+  camXucLuot = "";
   face::set(face::LISTENING);
+  // Lượt do chạm mở (trong 3 giây vừa qua) ⇒ báo server: người ta đã chủ
+  // động gọi robot, cổng "Odin" cho qua. Cờ chỉ sống 3 giây để một lượt
+  // VAD tự mở về sau không ăn ké.
+  const bool doCham = chamMoLuotLuc && millis() - chamMoLuotLuc < 3000;
+  chamMoLuotLuc = 0;
+  if (st.wsUp) ws.sendTXT(doCham ? "{\"t\":\"audio_start\",\"cham\":true}" : "{\"t\":\"audio_start\"}");
+}
+
+// ── Chạm để nói: màn ngực và cảm biến đầu dùng chung ──
+
+/** Mở lượt bấm-để-nói (xem `audio::moLuotCham`). Mắt chuyển NGHE ngay —
+ *  đó là tín hiệu duy nhất cho người vừa chạm biết robot đã nhận. */
+static void batDauNoiBangCham(const char* nguon) {
+  chamMoLuotLuc = millis();
+  audio::moLuotCham();
+  face::set(face::LISTENING);
+  sendLog("info", String(nguon) + " -> mo luot nghe");
+}
+
+/** Chạm rồi không nói gì trong 5 giây: lượt huỷ êm, robot về bình thường. */
+static void onTurnCancel() {
+  st.mode = MODE_IDLE;
+  st.lastNote = "cham ma khong noi gi";
+  face::set(face::NEUTRAL);
+  // Server vẫn giữ 5 giây tiếng quán của lượt này — `audio_start` mới bảo
+  // nó xoá, kẻo lượt VAD kế tiếp bị ghép thêm đoạn ồn đó vào đầu.
   if (st.wsUp) ws.sendTXT("{\"t\":\"audio_start\"}");
+}
+
+/** Chạm dải dưới: đang nói thì im; đang rảnh thì mở lượt bấm-để-nói. */
+static void khiChamDai() {
+  if (audio::speaking()) {
+    // Cùng cách với vỗ đầu: tắt loa THÔI thì chưa đủ, server phải ngừng bơm.
+    audio::playStop();
+    if (st.wsUp) ws.sendTXT("{\"t\":\"stop\"}");
+    camXucLuot = "";
+    face::set(face::NEUTRAL, 800);
+    sendLog("info", "cham man -> ngat loi");
+  } else {
+    batDauNoiBangCham("cham man");
+  }
+}
+
+/** Vuốt dọc trên dải dưới: mỗi nấc 5%. Hiện số lên màn, lưu sau. */
+static void khiDoiAmLuong(int buoc) {
+  const int moi = constrain((int)audio::volume() + buoc * 5, 2, 100);
+  audio::setVolume((uint8_t)moi);
+  face::hienAmLuong(audio::volume());
+  amLuongDoiLuc = millis();
 }
 
 static void onChunk(const uint8_t* data, size_t len) {
@@ -723,7 +798,13 @@ static void handleCommand(JsonDocument& doc) {
   if (!strcmp(type, "face")) {
     const char* emo = doc["payload"]["emotion"] | "neutral";
     const uint32_t ms = doc["payload"]["ms"] | 3000;
-    face::setByName(emo, ms);
+    if (st.mode == MODE_THINK || st.mode == MODE_TALK) {
+      // Cảm xúc của câu trả lời: giữ tới hết câu (xem `camXucLuot`).
+      camXucLuot = emo;
+      face::setByName(emo, 0);
+    } else {
+      face::setByName(emo, ms);   // lệnh tay từ web Console lúc rảnh
+    }
     st.lastNote = String("bieu cam: ") + emo;
     sendAck(id, true);
     return;
@@ -867,7 +948,8 @@ static void handleSayStart(JsonDocument& doc) {
 
   st.mode = MODE_TALK;
   st.lastNote = "dang nhan tieng noi";
-  face::set(face::SPEAKING);
+  if (camXucLuot.length()) face::setByName(camXucLuot.c_str(), 0);
+  else face::set(face::SPEAKING);
   audio::playBegin(rate);
 }
 
@@ -1182,8 +1264,12 @@ void setup() {
 
   // Bật cả ba màn trong một lần: ngực + hai mắt. Xoay đã đặt lúc dựng.
   const int soMan = man_hinh::batTatCa();
+#if MAT_TREN_NGUC
+  Serial.printf("[man] %d/1 man da gui xong chuoi khoi tao (mat ve tren man nguc)\n", soMan);
+#else
   Serial.printf("[man] %d/%d man da gui xong chuoi khoi tao%s\n", soMan, CO_MAN_NGUC ? 3 : 2,
                 CO_MAN_NGUC ? "" : " (chua co man nguc)");
+#endif
 
   // Khuôn mặt chiếm trọn màn, thay cho bảng chữ của chặng A. Bảng chữ
   // hữu ích lúc gỡ lỗi, nhưng một con robot nhìn vào mà thấy bảng
@@ -1191,6 +1277,20 @@ void setup() {
   // trạng thái rút gọn còn hai chấm tròn ở góc.
   // `nullptr` khi chưa cắm màn ngực: `face` tự im, và quan trọng hơn là
   // `drawFace()` không còn bơm 480×320 vào chỗ trống mỗi lần mặt đổi.
+#if MAT_TREN_NGUC
+  // ── MỘT MÀN LÀM CẢ KHUÔN MẶT ──
+  //
+  // Hai mắt vẽ cạnh nhau lên màn ngực: trái ở x=0, phải ở x=240, cùng
+  // `MAT_Y`. Dải dưới (đồng hồ · nghe/nghĩ/nói · pin) do `face` lo.
+  //
+  // ⚠️ `datViTri()` PHẢI đứng trước `eyes::begin()`: begin xoá ô 240×240
+  // của từng mắt theo độ lệch, gọi ngược thứ tự là nó xoá nhầm chỗ.
+  eyes::setBus(man_hinh::busNguc(), man_hinh::busNguc());
+  eyes::datViTri(0, MAT_Y, 240, MAT_Y);
+  if (!eyes::begin(man_hinh::ngucTft(), man_hinh::ngucTft()))
+    Serial.println("!! eyes::begin() that bai — robot van chay, chi la khong co mat");
+  face::beginDai(&tft, DAI_Y);
+#else
   face::begin(CO_MAN_NGUC ? &tft : nullptr);
 
   // Hai mắt. Vẽ theo dải có ngân sách thời gian nên chúng chạy được CẢ
@@ -1199,6 +1299,7 @@ void setup() {
   eyes::setBus(man_hinh::busMatTrai(), man_hinh::busMatPhai());
   if (!eyes::begin(man_hinh::matTrai(), man_hinh::matPhai()))
     Serial.println("!! eyes::begin() that bai — robot van chay, chi la khong co mat");
+#endif
 
   // Hai bánh xích. Không phụ thuộc màn hay mạng — dựng sớm để robot
   // luôn ở trạng thái ĐỨNG YÊN xác định, kể cả khi mọi thứ khác hỏng.
@@ -1207,6 +1308,14 @@ void setup() {
   // Sáu khớp servo. Không thấy PCA9685 thì `begin()` trả false và mọi
   // lệnh cử động thành lệnh rỗng — robot vẫn nói và vẫn chạy được.
   servo::begin();
+
+#if CO_MAN_NGUC
+  // Cảm ứng màn ngực. SAU banhXe/servo vì chúng dựng bus I2C trước — gọi
+  // `Wire.begin()` lần nữa chỉ in một dòng cảnh báo, vô hại. Không thấy
+  // FT6336U thì robot vẫn chạy đủ, chỉ không phản ứng với ngón tay.
+  camUng::begin(tft.width(), tft.height());
+  camUng::datSuKien(khiChamDai, khiDoiAmLuong);
+#endif
 
   // Cảm biến chạm TTP223: ngõ ra push-pull, tự kéo về mức thấp khi
   // không ai chạm. Vẫn khai INPUT_PULLDOWN để lúc CHƯA cắm dây thì
@@ -1223,6 +1332,7 @@ void setup() {
   audio::onTurnStart(onTurnStart);
   audio::onChunk(onChunk);
   audio::onTurnEnd(onTurnEnd);
+  audio::onTurnCancel(onTurnCancel);
   if (!audio::begin()) {
     st.lastNote = "LOI: khong mo duoc duong tieng";
     Serial.println("!! audio::begin() thất bại — xem log phía trên");
@@ -1414,9 +1524,7 @@ void loop() {
           face::set(face::NEUTRAL, 800);
           sendLog("info", "cham dau -> ngat loi");
         } else {
-          audio::moLuotNgay();
-          face::set(face::LISTENING, 1200);
-          sendLog("info", "cham dau -> mo luot nghe");
+          batDauNoiBangCham("cham dau");
         }
       }
     }
@@ -1533,7 +1641,16 @@ void loop() {
       daVe = true;
     } else if (!dangMo && daVe) {
       // Cổng đóng — trả màn về khuôn mặt.
+#if MAT_TREN_NGUC
+      // Trang cài WiFi đã vẽ đè cả màn: xoá, bắt hai mắt vẽ lại TẤT CẢ
+      // các dải (không thì chúng chỉ vẽ dải nào hoạt ảnh làm bẩn, và chữ
+      // cài WiFi đọng lại ở những dải đứng yên), rồi dựng lại dải dưới.
+      tft.fillScreen(TFT_BLACK);
+      eyes::invalidate();
+      face::beginDai(&tft, DAI_Y);
+#else
       face::begin(&tft);
+#endif
       uiInvalidate();
       daVe = false;
     }
@@ -1552,6 +1669,22 @@ void loop() {
   if (st.mode == MODE_TALK && !audio::speaking() && now - thinkSinceMs > 1000) {
     st.mode = MODE_IDLE;
     face::set(face::NEUTRAL);
+    if (camXucLuot.length()) {
+      face::setByName(camXucLuot.c_str(), 2500);
+      camXucLuot = "";
+    }
+  }
+
+  // Âm lượng đổi bằng vuốt: hết vuốt 1,2 giây mới báo server lưu — gửi mỗi
+  // nấc là năm tin nhắn cho một cú vuốt. Không lưu thì khởi động lại là
+  // server gửi xuống mức cũ, và cú vuốt coi như chưa từng có.
+  if (amLuongDoiLuc && now - amLuongDoiLuc > 1200) {
+    amLuongDoiLuc = 0;
+    if (st.wsUp) {
+      char b[48];
+      snprintf(b, sizeof b, "{\"t\":\"am_luong\",\"pct\":%d}", (int)audio::volume());
+      ws.sendTXT(b);
+    }
   }
 
   if (st.wsUp && now - lastTelemetryMs >= TELEMETRY_INTERVAL_MS) {
@@ -1591,11 +1724,27 @@ void loop() {
   gStage = "servo";
   servo::tick();
 
+#if CO_MAN_NGUC
+  // ── CẢM ỨNG ──
+  // Tự ghìm ~30 lần/giây; mỗi lần là một cú đọc I2C 5 byte (~0,6 ms).
+  gStage = "cham";
+  camUng::tick();
+#endif
+
   // ── MÀN NGỰC ──
+#if MAT_TREN_NGUC
+  // Chế độ dải chạy CẢ LÚC ĐANG NÓI. Nó chỉ vẽ lại ô nhãn 200×20 khi
+  // trạng thái đổi — ~3 ms SPI, xa dưới 128 ms đệm I2S. Đây cũng là lần
+  // đầu chữ "DANG NOI" thật sự hiện ra: bản cũ tắt `face::loop()` suốt
+  // lúc nói, nên nhãn ấy chưa bao giờ kịp vẽ.
+  gStage = "face";
+  face::loop();
+#else
   if (!audio::speaking()) {
     gStage = "face";
     face::loop();
   }
+#endif
 
   if (now - lastUiMs >= 1000) {
     lastUiMs = now;

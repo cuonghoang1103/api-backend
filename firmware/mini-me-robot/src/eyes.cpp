@@ -184,6 +184,16 @@ struct Mat {
   Arduino_TFT* gfx = nullptr;
   Arduino_DataBus* bus = nullptr;   // đường đẩy khối, xem eyes.h
   bool guong;   // mắt phải: lật trong/ngoài
+  /**
+   * Ô 240×240 của mắt này nằm ở đâu trên màn của nó.
+   *
+   * Hai màn tròn thì mỗi mắt có màn riêng nên luôn là (0, 0). Khi hai mắt
+   * cùng vẽ lên MỘT màn ngực 480×320 thì mắt phải lệch sang `x = 240`.
+   * Mọi lệnh chạm màn trong file này PHẢI cộng hai số này — sót một chỗ
+   * là mắt phải vẽ đè lên mắt trái.
+   */
+  int16_t xLech = 0;
+  int16_t yLech = 0;
 };
 static Mat matT, matP;
 
@@ -500,6 +510,15 @@ static Hinh hinhCua(Expr e, float t) {
 
     default:
       break;
+  }
+
+  // Đang NÓI mà mặt mang một cảm xúc khác (vui, buồn, ngạc nhiên…).
+  // Từ 01/10/2026 robot GIỮ cảm xúc của câu trả lời suốt lúc nói thay vì
+  // đổi sang SPEAKING — thiếu đoạn này thì mắt vui mà đứng im như ảnh dán.
+  // Nảy nhẹ hơn SPEAKING một chút: cảm xúc là chính, nhịp nói là phụ.
+  if (e != SPEAKING && mucAmMuot > 0.01f) {
+    h.rDongTu += 9 * mucAmMuot;
+    h.rMong += 3 * mucAmMuot;
   }
   return h;
 }
@@ -840,7 +859,7 @@ static void dayDai(Mat& m, int chiSoDai) {
   // riêng, chung một SPIClass) và tự bọc beginTransaction/endTransaction.
   const int y0 = chiSoDai * CAO_DAI;
   m.gfx->startWrite();
-  m.gfx->writeAddrWindow(0, y0, W, CAO_DAI);
+  m.gfx->writeAddrWindow(m.xLech, m.yLech + y0, W, CAO_DAI);
   m.bus->writePixels(dai.bo, (uint32_t)W * CAO_DAI);
   m.gfx->endWrite();
 }
@@ -1039,8 +1058,11 @@ bool begin(Arduino_TFT* matTrai, Arduino_TFT* matPhai) {
     return false;
   }
 
+  // ⚠️ `fillRect` ô của chính mắt này, KHÔNG `fillScreen`. Khi hai mắt
+  // chung một màn ngực, `fillScreen` của mắt phải xoá luôn mắt trái và
+  // dải trạng thái bên dưới — vì "màn của mắt phải" lúc này là cả màn.
   for (Mat* m : {&matT, &matP})
-    if (m->gfx) m->gfx->fillScreen(0);
+    if (m->gfx) m->gfx->fillRect(m->xLech, m->yLech, W, H, 0);
 
   matT.hienTai = matP.hienTai = HINH_MAC_DINH();
   matT.dangVe = matP.dangVe = HINH_MAC_DINH();
@@ -1054,14 +1076,25 @@ bool begin(Arduino_TFT* matTrai, Arduino_TFT* matPhai) {
   henLiecTiep();
   set(BOOTING);
 
-  Serial.printf("[eyes] 2x GC9A01 240x240, dai %dx%d = %u byte RAM trong\n", W, CAO_DAI,
-                (unsigned)(W * CAO_DAI * 2));
+  if (matT.gfx == matP.gfx)
+    Serial.printf("[eyes] 2 mat CHUNG MOT MAN: trai (%d,%d) phai (%d,%d), dai %dx%d\n",
+                  matT.xLech, matT.yLech, matP.xLech, matP.yLech, W, CAO_DAI);
+  else
+    Serial.printf("[eyes] 2x GC9A01 240x240, dai %dx%d = %u byte RAM trong\n", W, CAO_DAI,
+                  (unsigned)(W * CAO_DAI * 2));
   return true;
 }
 
 void setBus(Arduino_DataBus* busTrai, Arduino_DataBus* busPhai) {
   matT.bus = busTrai;
   matP.bus = busPhai;
+}
+
+void datViTri(int16_t xTrai, int16_t yTrai, int16_t xPhai, int16_t yPhai) {
+  matT.xLech = xTrai;
+  matT.yLech = yTrai;
+  matP.xLech = xPhai;
+  matP.yLech = yPhai;
 }
 
 void loop(uint32_t budgetUs) {
@@ -1223,8 +1256,9 @@ void power(bool on) {
   if (on) {
     matT.banBan = matP.banBan = MAT_NA;
   } else {
+    // Ô của mình thôi — xem chú thích ở `begin()`.
     for (Mat* m : {&matT, &matP})
-    if (m->gfx) m->gfx->fillScreen(0);
+      if (m->gfx) m->gfx->fillRect(m->xLech, m->yLech, W, H, 0);
   }
 }
 

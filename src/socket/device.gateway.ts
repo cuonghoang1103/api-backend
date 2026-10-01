@@ -38,7 +38,10 @@
  *   { t:'cmd',       id, type, payload }
  *   { t:'say_start', format, mime }
  *   { t:'say_end' }
- *   { t:'transcript',role, text }      so the robot can show it
+ *   { t:'transcript',role, text }      so the robot can show it ('user' = câu robot
+ *                                      nghe ra, gửi khi lượt được nhận — 01/10/2026)
+ *   { t:'phu_de', text }               phụ đề: gửi NGAY TRƯỚC tiếng của mỗi mẩu câu,
+ *                                      cùng dòng với tiếng, để bo hiện đúng lúc nói tới
  *   { t:'ping' }
  *
  * Server → device, BINARY frames: TTS audio for the current turn.
@@ -228,6 +231,7 @@ export async function speakOnDevice(
     bytes: payload.length,
     ...(sampleRate ? { sampleRate, bits: 16, channels: 1 } : {}),
   });
+  if (opts.text) sendJson(conn, { t: 'phu_de', text: chuanPhuDe(opts.text) });
   audio = payload;
 
   // 8 KB chunks: comfortably under the firmware's receive buffer and
@@ -472,6 +476,27 @@ const TTS_LEAD_MS = 20_000;
  * báo lỗi… Những thứ này không nên đi qua bảng lệnh vì chúng không
  * cần lưu vào sổ, không cần ack, và không được phép chờ.
  */
+/**
+ * Chữ cho màn ngực: NFC (bo chỉ có chữ dựng sẵn, không ghép được dấu rời
+ * kiểu "e" + U+0301), gộp khoảng trắng, cắt cho vừa bộ nhớ của bo.
+ */
+export function chuanPhuDe(text: string, toiDa = 400): string {
+  return text.normalize('NFC').replace(/\s+/g, ' ').trim().slice(0, toiDa);
+}
+
+/**
+ * Phụ đề cho mẩu câu SẮP phát. Gọi đúng chỗ — ngay trước khi đẩy tiếng của
+ * mẩu đó — vì bo ghi mốc phụ đề theo số byte tiếng đã nhận lúc nó tới
+ * (xem `loopPhuDe` trong firmware). `seq` lệch = lượt đã bị ngắt: thôi.
+ */
+export function guiPhuDe(deviceId: number, text: string, seq?: number): void {
+  const conn = connections.get(deviceId);
+  if (!conn || conn.ws.readyState !== WebSocket.OPEN) return;
+  if (seq !== undefined && conn.turnSeq !== seq) return;
+  const chu = chuanPhuDe(text);
+  if (chu) sendJson(conn, { t: 'phu_de', text: chu });
+}
+
 export function notifyDevice(deviceId: number, payload: Record<string, unknown>): boolean {
   const conn = connections.get(deviceId);
   if (!conn) return false;
@@ -710,7 +735,13 @@ async function handleText(conn: DeviceConn, msg: Record<string, unknown>): Promi
   conn.turnSeq += 1;
   try {
     const { runVoiceTurn } = await import('../services/makerlab/voiceLoop.js');
-    await runVoiceTurn({ deviceId: conn.deviceId, projectId: conn.projectId, text });
+    // `heThong`: chữ do CHÍNH bo gửi — hiện chỉ có lời chào lúc khởi động
+    // ("Chao Cuong, tu gioi thieu that ngan di"). Đó không phải tiếng
+    // người trong phòng, nên cổng "Odin" không được chặn nó. Chặn thì bật
+    // robot lên im re, và mất luôn phép thử toàn tuyến rẻ nhất (01/10/2026:
+    // log "bỏ lượt: chưa gọi tên" cho chính câu chào). Nếu sau này bo tự
+    // nhận dạng giọng nói thì phải đi loại tin khác, đừng mượn `text`.
+    await runVoiceTurn({ deviceId: conn.deviceId, projectId: conn.projectId, text, heThong: true });
   } catch (err) {
     logger.error('MakerLab text turn failed', {
       deviceId: conn.deviceId,

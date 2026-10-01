@@ -778,6 +778,11 @@ export interface VoiceTurnInput {
    * robot bằng tay, nên cổng đánh thức cho qua như thể vừa nghe "Odin".
    */
   cham?: boolean;
+  /**
+   * Chữ do CHÍNH bo gửi (lời chào lúc khởi động), không phải tiếng người
+   * trong phòng ⇒ cổng đánh thức không chặn. Xem `handleText` (01/10/2026).
+   */
+  heThong?: boolean;
 }
 
 export interface VoiceTurnResult {
@@ -949,7 +954,7 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
   // mà không ai biết: ở quán cà phê robot trả lời cả "Cô ơi" của bàn bên.
   // Có tên mặc định thì vẫn gọi được robot, nên chốt hãm không còn cần.
   const tuDanhThuc = persona.wakeWord?.trim() || TU_DANH_THUC_MAC_DINH;
-  const gacCong = persona.congDanhThuc && input.speak !== false;
+  const gacCong = persona.congDanhThuc && input.speak !== false && !input.heThong;
 
   if (gacCong) {
     const goi = timDanhThuc(heard, tuDanhThuc);
@@ -965,7 +970,13 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
       // Gọi tên suông ("Odin ơi") thì đừng đẩy vào LLM — nó sẽ bịa ra
       // câu trả lời cho một câu hỏi không tồn tại. Mở cổng rồi im, đợi
       // câu sau. Mắt mở là đủ để người ta biết nói tiếp được.
-      if (!goi.conLai) {
+      //
+      // ⚠️ "Còn lại" mà vẫn CHỈ LÀ CÁI TÊN thì cũng là gọi suông. Whisper
+      // hay lặp cả cụm ("Mây Dơ Rồi, Mây Dơ Rồi", 01/10/2026), nên một
+      // tiếng "Odin" về thành "Odin. Odin." — và chữ "Odin." bị đưa cho LLM
+      // như một câu hỏi: 7,7 giây nghĩ thay vì một câu "Hửm?" tức thì.
+      const lapTen = goi.conLai ? timDanhThuc(goi.conLai, tuDanhThuc) : null;
+      if (!goi.conLai || (lapTen?.trung && !lapTen.conLai)) {
         logger.info('MakerLab thức dậy, đợi lệnh', {
           deviceId: input.deviceId,
           khop: goi.khop,
@@ -1006,9 +1017,27 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
         suytTrung: goi.suyt || undefined,
         tuDanhThuc,
       });
+      // Báo bo rằng lượt này bỏ — không thì nó đứng ở "ĐANG NGHĨ" tới hết
+      // hạn chờ 12 giây, và ở quán (vài lượt rác mỗi phút) màn hình gần
+      // như lúc nào cũng "đang nghĩ" mà chẳng bao giờ trả lời (01/10/2026).
+      void import('../../socket/device.gateway.js')
+        .then(({ notifyDevice }) => notifyDevice(input.deviceId, { t: 'nak' }))
+        .catch(() => undefined);
       timing.total = Date.now() - started;
       return { heard, said: '', actions: [], spoken: false, ms: timing };
     }
+  }
+
+  // Lượt đã được NHẬN: cho màn ngực hiện "Bạn: …" — thứ duy nhất cho người
+  // ta biết robot nghe ĐÚNG câu mình nói hay không, trước khi phải ngồi chờ
+  // câu trả lời. Chỉ lượt nói bằng mic (gõ từ web thì người ta đã thấy chữ),
+  // và chỉ SAU cổng: lượt rác ở quán không được lên màn.
+  if (input.pcm16 && heard) {
+    void import('../../socket/device.gateway.js')
+      .then(({ notifyDevice, chuanPhuDe }) =>
+        notifyDevice(input.deviceId, { t: 'transcript', role: 'user', text: chuanPhuDe(heard, 300) }),
+      )
+      .catch(() => undefined);
   }
 
   if (overDailyCap(input.deviceId)) {
@@ -1472,6 +1501,7 @@ export async function speakOnce(
   const gw = await import('../../socket/device.gateway.js');
   const seq = gw.speakStreamBegin(deviceId, PCM_SAMPLE_RATE);
   if (seq === null) return false;
+  gw.guiPhuDe(deviceId, text, seq);
   let spoken = false;
   try {
     if (persona.voiceProvider === 'cuongmini') {
@@ -1633,6 +1663,15 @@ async function thinkAndSpeakLoi(
   const speakPiece = async (piece: string) => {
     if (seq === null) return;
     const t = Date.now();
+
+    // Phụ đề của mẩu này: xếp vào CÙNG chuỗi đẩy với tiếng, nên nó tới bo
+    // đúng ngay trước byte tiếng đầu tiên của mẩu — bo lấy số byte đã nhận
+    // lúc đó làm mốc và hiện chữ khi loa phát tới (xem firmware `loopPhuDe`).
+    // Gửi thẳng thì nó vượt lên trước cả những mẩu tiếng còn đang chờ đẩy.
+    chuoiDay = chuoiDay.then((con) => {
+      if (con && seq !== null) gw.guiPhuDe(deviceId, piece, seq);
+      return con;
+    });
 
     // ── Đường LUỒNG, chỉ cho giọng tự dựng ──
     //

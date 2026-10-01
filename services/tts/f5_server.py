@@ -55,6 +55,13 @@ VOCAB = Path(
 # trọng số v0 vào bộ khung v1 là lệch hình ngay ở lớp đầu.
 KIEN_TRUC = os.environ.get("F5_ARCH", "F5TTS_Base")
 
+# Số bước khử nhiễu. 32 là mặc định của F5-TTS. Thời gian sinh gần như
+# KHÔNG phụ thuộc độ dài câu (đo 01/10/2026 trên RTX 3060: 0,6 giây tiếng
+# hay 13 giây tiếng đều 2,7–3,9 giây) mà tỉ lệ với số bước — nên đây là
+# cần gạt duy nhất đáng kể cho độ trễ của robot. Đổi mặc định bằng env
+# `F5_NFE`; mỗi yêu cầu cũng tự chọn được (`nfe`) để đo/so tai.
+NFE_MAC_DINH = int(os.environ.get("F5_NFE", "32"))
+
 # 10 phút: đủ dài để một cuộc nói chuyện không phải nạp lại (nạp ~15 giây),
 # đủ ngắn để không giữ 2,5 GB qua đêm.
 NHAN_ROI_GIAY = float(os.environ.get("F5_NHAN_ROI_GIAY", "600"))
@@ -199,6 +206,7 @@ def voices():
 class YeuCau(BaseModel):
     text: str
     voice: str = "f5-cuong"
+    nfe: Optional[int] = None   # bỏ trống = F5_NFE
 
 
 @app.post("/noi")
@@ -224,6 +232,7 @@ def noi(y: YeuCau):
     if not y.text.strip():
         raise HTTPException(400, "Chữ rỗng")
 
+    nfe = max(8, min(64, int(y.nfe or NFE_MAC_DINH)))
     t0 = time.time()
     with _khoa:
         tts = _nap(m.get("model"))
@@ -231,6 +240,7 @@ def noi(y: YeuCau):
             ref_file=str(f),
             ref_text=m["chu"],
             gen_text=y.text,
+            nfe_step=nfe,
             show_info=lambda *a, **k: None,
             # Seed cố định: cùng câu cùng giọng ra cùng tiếng. Ngẫu nhiên
             # thì mỗi lần robot nói một kiểu, và không tái hiện được lỗi
@@ -241,9 +251,9 @@ def noi(y: YeuCau):
 
     x = np.clip(np.asarray(wav, dtype=np.float32), -1, 1)
     giay = len(x) / sr
-    print(f"[f5] {y.voice}: {giay:.2f}s tiếng trong {time.time()-t0:.2f}s", flush=True)
+    print(f"[f5] {y.voice}: {giay:.2f}s tiếng trong {time.time()-t0:.2f}s (nfe {nfe})", flush=True)
     return Response(
         content=(x * 32767).astype("<i2").tobytes(),
         media_type="application/octet-stream",
-        headers={"X-Sample-Rate": str(sr), "X-Seconds": f"{giay:.2f}"},
+        headers={"X-Sample-Rate": str(sr), "X-Seconds": f"{giay:.2f}", "X-NFE": str(nfe)},
     )

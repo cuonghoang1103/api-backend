@@ -11,13 +11,17 @@
  *     giữ yên ≥1,2s   → "được vuốt ve": mắt trái tim 3 giây
  *     chạm hai lần    → nháy mắt
  *
- *   DẢI DƯỚI (đồng hồ · trạng thái · pin) — là NÚT:
- *     chạm một cái    → nói (robot nghe ngay, khỏi gọi "Odin") hoặc,
- *                       nếu robot đang nói, bắt nó im
- *     vuốt lên/xuống  → âm lượng ±5% mỗi nấc
+ *   DẢI DƯỚI (đồng hồ · trạng thái · pin) — là NÚT NÓI:
+ *     đặt ngón xuống  → mic mở NGAY (robot đang nói thì im luôn để nghe)
+ *     giữ rồi thả     → giữ-để-nói: thả tay là gửi — chắc ăn nhất ở quán
+ *     chạm một cái    → nói xong robot tự gửi; chưa tự gửi thì CHẠM LẦN
+ *                       NỮA là gửi (nhãn ghi "CHAM LAI DE GUI")
+ *     vuốt lên/xuống  → âm lượng ±5% mỗi nấc (lượt vừa mở thì bỏ)
  *
  * Vì sao có nút: ở quán cà phê, gọi "Odin" giữa tiếng ồn hay trượt, còn
- * cổng đánh thức mà mở rộng thì robot trả lời cả bàn bên (đo 01/10).
+ * cổng đánh thức mà mở rộng thì robot trả lời cả bàn bên (đo 01/10). Và
+ * vì sao phải có cách báo "xong rồi": ở quán, tiếng nền làm VAD không biết
+ * khi nào người ta dứt câu — lượt chạm từng bị giữ đủ 15 giây mới gửi.
  *
  * Không có chân INT (`PIN_CTP_INT = -1`, xem config.h): hỏi vòng qua
  * I2C ~30 lần/giây. Đủ mượt cho ngón tay, rẻ cho CPU.
@@ -58,9 +62,14 @@ bool begin(int W, int H);
 void tick();
 
 /**
- * Việc của hai cử chỉ ở dải dưới — `main.cpp` lo, vì chỉ nó có WebSocket
- * và biết robot đang nói hay đang nghe. `buoc` = số nấc (+ lên, − xuống).
+ * Việc của các cử chỉ ở dải dưới — `main.cpp` lo, vì chỉ nó có WebSocket
+ * và biết robot đang nói hay đang nghe.
+ *   khiDat()          ngón vừa đặt xuống dải
+ *   khiGiu()          giữ yên đủ lâu mà không vuốt ⇒ đang "giữ để nói"
+ *   khiNha(daGiu)     nhấc tay — KHÔNG gọi sau một cú vuốt âm lượng
+ *   khiDoiAmLuong(b)  vuốt dọc, `b` = số nấc (+ lên, − xuống)
  */
-void datSuKien(void (*khiChamDai)(), void (*khiDoiAmLuong)(int buoc));
+void datSuKien(void (*khiDat)(), void (*khiGiu)(), void (*khiNha)(bool daGiu),
+               void (*khiDoiAmLuong)(int buoc));
 
 }  // namespace camUng

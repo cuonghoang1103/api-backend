@@ -607,7 +607,64 @@ static uint32_t chamMoLuotLuc = 0;
 /** Lần cuối âm lượng đổi bằng tay — hết vuốt 1,2 giây mới báo server lưu. */
 static uint32_t amLuongDoiLuc = 0;
 
+// ── Phụ đề trên dải dưới (01/10/2026) ──
+//
+// Server gửi `{t:'phu_de', text}` NGAY TRƯỚC tiếng của mỗi mẩu câu, trong
+// cùng dòng WebSocket với tiếng — nên lúc nó tới, `byteDaNhan()` chính là
+// chỗ mẩu đó bắt đầu trong đoạn tiếng. Hiện chữ khi loa phát TỚI chỗ đó:
+// tiếng về nhanh gấp ~3,5 lần tốc độ phát, hiện ngay lúc nhận thì chữ của
+// mẩu sau đè mẩu đang nói.
+struct PhuDeCho {
+  uint32_t moc;
+  String chu;
+};
+static PhuDeCho phuDeCho[6];
+static uint8_t soPhuDeCho = 0;
+static bool daCoPhuDeLuotNay = false;
+
+static void xepPhuDe(const char* chu) {
+  if (soPhuDeCho == 6) {   // đầy thì bỏ mẩu cũ nhất — thà sót chữ còn hơn treo
+    for (int i = 1; i < 6; i++) phuDeCho[i - 1] = phuDeCho[i];
+    soPhuDeCho--;
+  }
+  phuDeCho[soPhuDeCho++] = {audio::byteDaNhan(), String(chu)};
+  daCoPhuDeLuotNay = true;
+}
+
+static void loopPhuDe() {
+  if (!soPhuDeCho) return;
+  if (audio::speaking()) {
+    // Mẩu cuối cùng đã tới mốc thắng — mẩu trước nó coi như đã nói xong.
+    int toi = -1;
+    while (toi + 1 < soPhuDeCho && audio::byteDaPhat() > phuDeCho[toi + 1].moc) toi++;
+    if (toi < 0) return;
+    face::phuDe(phuDeCho[toi].chu.c_str());
+    for (int i = toi + 1; i < soPhuDeCho; i++) phuDeCho[i - toi - 1] = phuDeCho[i];
+    soPhuDeCho -= toi + 1;
+    return;
+  }
+  // Loa đã im mà còn mẩu chưa hiện: đoạn cuối ngắn hơn độ sâu DMA nên
+  // "đã ra loa" chưa kịp với tới mốc. Hiện mẩu cuối cho trọn câu.
+  if (st.mode != MODE_TALK) {
+    face::phuDe(phuDeCho[soPhuDeCho - 1].chu.c_str());
+    soPhuDeCho = 0;
+  }
+}
+
+/**
+ * Mặt "lúc nghỉ" ngay trước lượt nghe — server bỏ lượt (`nak`) thì trả về
+ * đúng mặt này. Không có nó thì mắt kẹt ở NGHĨ: ở quán, tiếng ồn tự mở
+ * lượt vài lần mỗi phút, server bỏ cả, và robot trông như nghĩ mãi không
+ * xong (thấy 01/10/2026). Cũng không trả về NEUTRAL cứng được: lúc cổng
+ * "Odin" đóng thì mặt nghỉ là mắt lim dim do server đặt.
+ */
+static face::Emotion matNghi = face::NEUTRAL;
+
 static void onTurnStart() {
+  {
+    const face::Emotion b = face::base();
+    if (b != face::LISTENING && b != face::THINKING && b != face::SPEAKING) matNghi = b;
+  }
   upLen = 0;
   upBytes = 0;
   upPeak = 0;
@@ -621,6 +678,7 @@ static void onTurnStart() {
   // VAD tự mở về sau không ăn ké.
   const bool doCham = chamMoLuotLuc && millis() - chamMoLuotLuc < 3000;
   chamMoLuotLuc = 0;
+  if (!doCham) face::datNhanNghe(face::NGHE_TU_DO);
   if (st.wsUp) ws.sendTXT(doCham ? "{\"t\":\"audio_start\",\"cham\":true}" : "{\"t\":\"audio_start\"}");
 }
 
@@ -632,35 +690,112 @@ static void batDauNoiBangCham(const char* nguon) {
   chamMoLuotLuc = millis();
   audio::moLuotCham();
   face::set(face::LISTENING);
+  face::datNhanNghe(face::NGHE_CHAM);
   sendLog("info", String(nguon) + " -> mo luot nghe");
+}
+
+/**
+ * Robot đang nói (hoặc đang nghĩ dở một câu trả lời) mà người ta chạm để
+ * nói: bắt im, và bảo server bỏ câu trả lời đang làm — không thì nó tới
+ * nơi giữa lúc người ta đang nói, loa bật lên và mic câm (xem
+ * `handleSayStart`).
+ */
+static void ngatDeNghe(const char* nguon) {
+  const bool dangNoi = audio::speaking();
+  if (dangNoi) audio::playStop();
+  if ((dangNoi || st.mode == MODE_THINK || st.mode == MODE_TALK) && st.wsUp)
+    ws.sendTXT("{\"t\":\"stop\"}");
+  if (dangNoi) sendLog("info", String(nguon) + " -> ngat loi");
+  camXucLuot = "";
+  soPhuDeCho = 0;
+  face::phuDe(nullptr);
 }
 
 /** Chạm rồi không nói gì trong 5 giây: lượt huỷ êm, robot về bình thường. */
 static void onTurnCancel() {
   st.mode = MODE_IDLE;
   st.lastNote = "cham ma khong noi gi";
+  face::datNhanNghe(face::NGHE_TU_DO);
   face::set(face::NEUTRAL);
   // Server vẫn giữ 5 giây tiếng quán của lượt này — `audio_start` mới bảo
   // nó xoá, kẻo lượt VAD kế tiếp bị ghép thêm đoạn ồn đó vào đầu.
   if (st.wsUp) ws.sendTXT("{\"t\":\"audio_start\"}");
 }
 
-/** Chạm dải dưới: đang nói thì im; đang rảnh thì mở lượt bấm-để-nói. */
-static void khiChamDai() {
-  if (audio::speaking()) {
-    // Cùng cách với vỗ đầu: tắt loa THÔI thì chưa đủ, server phải ngừng bơm.
-    audio::playStop();
-    if (st.wsUp) ws.sendTXT("{\"t\":\"stop\"}");
-    camXucLuot = "";
-    face::set(face::NEUTRAL, 800);
-    sendLog("info", "cham man -> ngat loi");
-  } else {
-    batDauNoiBangCham("cham man");
+// ── Dải dưới màn ngực = nút nói (01/10/2026, bản hai) ──
+//
+// Bản đầu mở mic lúc NHẢ tay rồi để VAD tự quyết khi nào dứt câu. Ở quán
+// thì VAD không quyết nổi (xem `nenCao` trong audio.cpp): lượt chạm bị giữ
+// 6,8 / 8,2 / 15 giây mới gửi, người dùng tưởng robot đơ. Giờ người dùng
+// tự báo "xong" được — giữ rồi thả, hoặc chạm thêm một cái.
+
+/** Cú chạm dải này mở lượt mới — vuốt âm lượng thì phải huỷ lượt đó. */
+static bool chamNayMoLuot = false;
+/**
+ * Robot đang BẬN (nói / nghĩ) lúc ngón đặt xuống: CHƯA ngắt vội. Người ta
+ * hay vuốt chỉnh âm lượng đúng lúc robot đang nói — ngắt ngay lúc đặt
+ * ngón thì không ai chỉnh âm lượng được nữa. Đợi biết là chạm hay giữ
+ * (không phải vuốt) rồi mới ngắt.
+ */
+static bool chamChoNgat = false;
+
+/** Đặt ngón xuống dải: đang nghe sau một cú chạm thì GỬI; không thì nghe. */
+static void khiDatDai() {
+  chamNayMoLuot = false;
+  chamChoNgat = false;
+  if (audio::luotChamDangMo()) {
+    // Cú chạm thứ hai = "tôi nói xong rồi".
+    audio::ketLuotCham(0);
+    sendLog("info", "cham man lan nua -> gui");
+    return;
   }
+  if (audio::speaking() || st.mode == MODE_THINK || st.mode == MODE_TALK) {
+    chamChoNgat = true;
+    return;
+  }
+  batDauNoiBangCham("cham man");
+  chamNayMoLuot = true;
+}
+
+/** Giữ yên đủ lâu: thành giữ-để-nói — nhãn đổi "THA TAY DE GUI". */
+static void khiGiuDai() {
+  if (chamChoNgat) {
+    chamChoNgat = false;
+    ngatDeNghe("giu man");
+    batDauNoiBangCham("giu man");
+    chamNayMoLuot = true;
+  }
+  if (!chamNayMoLuot) return;
+  audio::giuLuotCham();
+  face::datNhanNghe(face::NGHE_GIU);
+}
+
+/** Nhấc tay khỏi dải (không phải sau cú vuốt). */
+static void khiNhaDai(bool daGiu) {
+  if (chamChoNgat) {
+    // Chạm ngắn lúc robot bận = "thôi, nghe tôi nói".
+    chamChoNgat = false;
+    ngatDeNghe("cham man");
+    batDauNoiBangCham("cham man");
+    return;
+  }
+  if (!chamNayMoLuot) return;
+  chamNayMoLuot = false;
+  // Giữ-để-nói: thả là gửi, kèm 250 ms đuôi cho âm tiết cuối. Chạm ngắn
+  // thì lượt vẫn mở — người ta nói sau khi chạm, và nhãn đã dặn sẵn
+  // "CHAM LAI DE GUI".
+  if (daGiu) audio::ketLuotCham(250);
 }
 
 /** Vuốt dọc trên dải dưới: mỗi nấc 5%. Hiện số lên màn, lưu sau. */
 static void khiDoiAmLuong(int buoc) {
+  // Hoá ra là vuốt: robot đang nói thì để nó nói tiếp; ngón đặt xuống lúc
+  // rảnh đã mở mic thì bỏ lượt đó.
+  chamChoNgat = false;
+  if (chamNayMoLuot) {
+    chamNayMoLuot = false;
+    audio::huyLuotCham();
+  }
   const int moi = constrain((int)audio::volume() + buoc * 5, 2, 100);
   audio::setVolume((uint8_t)moi);
   face::hienAmLuong(audio::volume());
@@ -705,13 +840,17 @@ static void onTurnEnd() {
   st.mode = MODE_THINK;
   thinkSinceMs = millis();
   st.lastNote = "dang cho server tra loi";
+  face::datNhanNghe(face::NGHE_TU_DO);
   face::set(face::THINKING);
   if (st.wsUp) {
     ws.sendTXT("{\"t\":\"audio_end\"}");
     const uint32_t ms = millis() - upStartMs;
+    // `nen`/`p90`/`quan` để chỉnh luật phòng ồn bằng số thật về sau — đọc
+    // ở bảng maker_device_logs, khỏi phải mang robot ra quán đo lại.
     sendLog("info", String("nghe: ") + (upBytes / 1024) + " KB / " + (ms / 100) / 10.0 +
-                        " giay, dinh=" + upPeak + ", xen=" + audio::clippedSamples() +
-                        " mau (tieng xen thi Whisper doan bua)");
+                        " giay, dinh=" + upPeak + ", nen=" + audio::noise() +
+                        ", p90=" + audio::noiseHigh() + (audio::noisyRoom() ? ", quan" : "") +
+                        ", xen=" + audio::clippedSamples() + " mau");
   }
 }
 
@@ -946,6 +1085,16 @@ static void handleSayStart(JsonDocument& doc) {
     return;
   }
 
+  // Người ta vừa chạm để nói mà câu trả lời CŨ mới tới: bỏ. Bật loa lúc
+  // này là câm mic giữa câu người ta đang nói. Không gọi `playBegin` thì
+  // các khung tiếng theo sau tự rơi (`playPush` chỉ nhận khi đang phát).
+  if (audio::luotChamDangMo()) {
+    sendLog("info", "bo cau tra loi cu: nguoi dung dang noi");
+    return;
+  }
+
+  soPhuDeCho = 0;
+  daCoPhuDeLuotNay = false;
   st.mode = MODE_TALK;
   st.lastNote = "dang nhan tieng noi";
   if (camXucLuot.length()) face::setByName(camXucLuot.c_str(), 0);
@@ -1027,13 +1176,32 @@ static void onWsEvent(WStype_t type, uint8_t* payload, size_t len) {
       } else if (!strcmp(t, "transcript")) {
         const char* role = doc["role"] | "";
         const String text = String(doc["text"] | "");
-        if (!strcmp(role, "bot")) st.said = deaccent(text, 60);
-        else st.heard = deaccent(text, 60);
+        if (!strcmp(role, "bot")) {
+          st.said = deaccent(text, 60);
+          // Server cũ (hay đường lùi) không gửi `phu_de` từng mẩu: thì ít
+          // nhất hiện cả câu khi nói xong.
+          if (!daCoPhuDeLuotNay) face::phuDe(text.c_str());
+        } else {
+          st.heard = deaccent(text, 60);
+          // "Bạn: …" — robot nghe ra câu gì. Đây là thứ duy nhất cho người
+          // ta biết nó nghe ĐÚNG hay không, trước khi phải chờ câu trả lời.
+          face::phuDe(text.c_str(), true);
+        }
+      } else if (!strcmp(t, "phu_de")) {
+        const char* chu = doc["text"] | "";
+        if (*chu && !audio::luotChamDangMo()) xepPhuDe(chu);
       } else if (!strcmp(t, "nak")) {
         // Server nghe thành tiếng ồn chứ không ra câu nào. Báo bằng
         // hai nốt ĐI XUỐNG để bạn biết ngay là phải nói lại — thay vì
         // đứng chờ một câu trả lời không bao giờ tới.
-        st.mode = MODE_IDLE;
+        // Chỉ khi ĐANG CHỜ trả lời: `nak` của lượt cũ tới muộn giữa lúc một
+        // lượt mới đang nghe thì không được kéo trạng thái về rảnh.
+        if (st.mode == MODE_THINK) {
+          st.mode = MODE_IDLE;
+          // Server vừa đặt mặt (vd. lim dim vì chưa gọi tên) thì giữ nó.
+          if (!camXucLuot.length()) face::set(matNghi);
+          camXucLuot = "";
+        }
         st.lastNote = "khong nghe ro - noi lai di";
         // KHÔNG phát tiếng gì. Mọi tiếng báo đã bị gỡ bỏ theo yêu cầu
         // — trong một căn phòng, thứ robot phát ra bằng loa nên chỉ là
@@ -1314,7 +1482,7 @@ void setup() {
   // `Wire.begin()` lần nữa chỉ in một dòng cảnh báo, vô hại. Không thấy
   // FT6336U thì robot vẫn chạy đủ, chỉ không phản ứng với ngón tay.
   camUng::begin(tft.width(), tft.height());
-  camUng::datSuKien(khiChamDai, khiDoiAmLuong);
+  camUng::datSuKien(khiDatDai, khiGiuDai, khiNhaDai, khiDoiAmLuong);
 #endif
 
   // Cảm biến chạm TTP223: ngõ ra push-pull, tự kéo về mức thấp khi
@@ -1507,7 +1675,11 @@ void loop() {
       sendLog("info", "duoc vuot dau");
     } else if (!cham && chamTruoc) {    // sườn xuống
       if (!daVuot && millis() - chamTu < 800) {
-        if (audio::speaking()) {
+        if (audio::luotChamDangMo()) {
+          // Cùng luật với dải màn ngực: chạm lần nữa = "tôi nói xong rồi".
+          audio::ketLuotCham(0);
+          sendLog("info", "cham dau lan nua -> gui");
+        } else if (audio::speaking()) {
           // Đang nói mà bị chạm = "thôi đủ rồi". Trước đây muốn ngắt
           // lời robot phải mở web bấm nút; giờ vỗ cái vào đầu là im.
           audio::playStop();
@@ -1708,7 +1880,19 @@ void loop() {
   // giữa hai dải. Đây là lý do cả bộ vẽ mắt được viết theo dải: lúc
   // robot đang nói chính là lúc người ta nhìn vào mắt nó nhiều nhất.
   gStage = "eyes";
-  eyes::setLevel(audio::speaking() ? audio::level() : 0);
+  {
+    const bool dangNoi = audio::speaking();
+    const int32_t mucLoa = dangNoi ? audio::playLevel() : 0;
+    eyes::setLevel(mucLoa);
+    // Trạng thái THẬT, không suy từ biểu cảm của mắt (xem face.h).
+    face::TrangThai tt = face::RANH;
+    if (dangNoi || st.mode == MODE_TALK) tt = face::NOI;
+    else if (audio::listening() || audio::luotChamDangMo()) tt = face::NGHE;
+    else if (st.mode == MODE_THINK) tt = face::NGHI;
+    face::datTrangThai(tt);
+    face::datMuc(dangNoi ? mucLoa : tt == face::NGHE ? audio::level() : 0);
+    loopPhuDe();
+  }
   eyes::loop();
 
   // ── BÁNH XE ──
@@ -1760,11 +1944,12 @@ void loop() {
     // liền ~40 KB; heap còn 100 KB nhưng vỡ vụn thành mảnh 8 KB thì
     // vẫn không nối lại được, mà triệu chứng nhìn ra ngoài chỉ là
     // "select timeout" — không hề nói gì tới bộ nhớ.
-    Serial.printf("[st] heap=%uKB khoi=%uKB mic=%ld nen=%ld nguong=%ld che=%d ws=%d"
+    Serial.printf("[st] heap=%uKB khoi=%uKB mic=%ld nen=%ld p90=%ld%s nguong=%ld che=%d ws=%d"
                   " | tho=%ld dc=%ld dinh=%ld\n",
                   ESP.getFreeHeap() / 1024,
                   heap_caps_get_largest_free_block(MALLOC_CAP_INTERNAL) / 1024,
-                  (long)audio::level(), (long)audio::noise(), (long)audio::gate(),
+                  (long)audio::level(), (long)audio::noise(), (long)audio::noiseHigh(),
+                  audio::noisyRoom() ? "(quan)" : "", (long)audio::gate(),
                   (int)st.mode, st.wsUp ? 1 : 0,
                   (long)audio::rawLevel(), (long)audio::dc(),
                   (long)audio::peakRaw());

@@ -99,8 +99,40 @@ void moLuotNgay();
 void moLuotCham();
 /** Lượt chạm bị huỷ vì không ai nói gì — `main.cpp` dọn trạng thái. */
 void onTurnCancel(EventFn fn);
+
+/**
+ * Điều khiển lượt chạm BẰNG TAY (01/10/2026). Ở quán, VAD không biết khi
+ * nào người ta dứt câu (xem `nenCao` trong audio.cpp), nên người dùng
+ * phải nói được "xong rồi" mà không cần lời:
+ *
+ *   giữ dải dưới  → `giuLuotCham()`: tắt tự-dứt và tự-huỷ, chỉ còn trần 15s
+ *   thả tay       → `ketLuotCham(250)`: gom nốt 250 ms đuôi rồi gửi
+ *   chạm lần nữa  → `ketLuotCham(0)`: gửi ngay
+ *   hoá ra là vuốt → `huyLuotCham()`: bỏ, không gửi
+ *
+ * Dứt sớm hơn 0,5 giây sau khi mở thì coi là chạm nhầm: huỷ, không gửi.
+ */
+bool luotChamDangMo();
+void giuLuotCham();
+void ketLuotCham(uint16_t duoiMs);
+void huyLuotCham();
+/** Phân vị 90% của tiếng nền — "đỉnh thường gặp" của phòng. */
+int32_t noiseHigh();
+/** Đang áp luật phòng ồn (xem `nenCao` trong audio.cpp). */
+bool noisyRoom();
+/**
+ * Vị trí trong đoạn đang phát (byte PCM, tính từ `say_start`): đã NHẬN
+ * tới đâu, và đã thật sự RA LOA tới đâu. Phụ đề ghi mốc theo cái đầu,
+ * hiện ra theo cái sau — vì tiếng về nhanh gấp ~3,5 lần tốc độ phát, hiện
+ * ngay lúc nhận là chữ chạy trước giọng cả câu.
+ */
+uint32_t byteDaNhan();
+uint32_t byteDaPhat();
 /** Mức mic gần nhất, thang 24 bit — cùng thang với VAD_THRESHOLD. */
 int32_t level();
+/** Mức tiếng ĐANG RA LOA (cùng thang), đã bù độ trễ vòng DMA — cho mắt
+ *  nảy và vạch sóng. Mic câm lúc loa chạy nên `level()` khi đó luôn 0. */
+int32_t playLevel();
 /** Nền ồn phòng đang tự học được (cùng thang). */
 int32_t noise();
 

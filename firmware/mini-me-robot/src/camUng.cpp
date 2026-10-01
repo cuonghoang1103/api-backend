@@ -26,6 +26,9 @@ static constexpr uint32_t NHIN_VE_MS = 1200;
 /** Vuốt dọc trên dải dưới: bao nhiêu điểm ảnh là một nấc âm lượng. Dải
  *  chỉ cao 76px nên nấc phải nhỏ — vuốt xuống hết dải mới được ~5 nấc. */
 static constexpr int NAC_AM_LUONG_PX = 14;
+/** Giữ dải lâu chừng này mà không vuốt ⇒ giữ-để-nói. Bằng đúng ngưỡng cũ
+ *  của "cú bấm" (600 ms), để cú bấm chậm tay vẫn là cú bấm. */
+static constexpr uint32_t GIU_NOI_MS = 600;
 
 static bool coMat = false;
 static int manW = 480, manH = 320;
@@ -41,11 +44,17 @@ static uint32_t nhinVeLuc = 0;
 static bool trongDai = false;
 static int nacDaGui = 0;            // số nấc âm lượng đã báo trong cú vuốt này
 static bool daVuotAmLuong = false;
-static void (*suKienChamDai)() = nullptr;
+static bool daGiuNoi = false;       // cú chạm dải này đã thành giữ-để-nói
+static void (*suKienDat)() = nullptr;
+static void (*suKienGiu)() = nullptr;
+static void (*suKienNha)(bool) = nullptr;
 static void (*suKienAmLuong)(int) = nullptr;
 
-void datSuKien(void (*khiChamDai)(), void (*khiDoiAmLuong)(int buoc)) {
-  suKienChamDai = khiChamDai;
+void datSuKien(void (*khiDat)(), void (*khiGiu)(), void (*khiNha)(bool daGiu),
+               void (*khiDoiAmLuong)(int buoc)) {
+  suKienDat = khiDat;
+  suKienGiu = khiGiu;
+  suKienNha = khiNha;
   suKienAmLuong = khiDoiAmLuong;
 }
 
@@ -117,6 +126,16 @@ void tick() {
   int sx = 0, sy = 0;
   if (co) anhXa(rx, ry, manW, manH, sx, sy);
 
+  // Nhả tay phải thấy HAI lần hỏi liền (66 ms) mới tính. Tấm cảm ứng thỉnh
+  // thoảng trả "không ai chạm" đúng một nhịp giữa lúc ngón vẫn đè — với
+  // giữ-để-nói thì một nhịp hụt là gửi lượt giữa câu.
+  static uint8_t nhipHut = 0;
+  if (!co && dangCham) {
+    if (++nhipHut < 2) return;
+  } else {
+    nhipHut = 0;
+  }
+
   if (co && !dangCham) {
     // ── Ngón vừa đặt xuống ──
     dangCham = true;
@@ -128,17 +147,32 @@ void tick() {
     trongDai = sy >= DAI_Y;
     nacDaGui = 0;
     daVuotAmLuong = false;
+    daGiuNoi = false;
     nhinVe(sx, sy);
-    if (trongDai) Serial.printf("[cham] dai (%d,%d)\n", sx, sy);
+    if (trongDai) {
+      // Mở mic NGAY lúc đặt ngón, không đợi nhả: người giữ-để-nói bắt đầu
+      // nói ngay khi ấn, và đợi nhả là mất chữ đầu.
+      Serial.printf("[cham] dai (%d,%d)\n", sx, sy);
+      if (suKienDat) suKienDat();
+    }
   } else if (co && dangCham && trongDai) {
-    // ── Ngón đang trên DẢI DƯỚI: vuốt dọc = âm lượng ──
+    // ── Ngón đang trên DẢI DƯỚI: vuốt dọc = âm lượng, giữ yên = giữ-để-nói ──
     // Mắt vẫn liếc xuống theo ngón — robot "nhìn" vào nút đang bị bấm.
     nhinVe(sx, sy);
-    const int nac = (yDau - sy) / NAC_AM_LUONG_PX;   // vuốt LÊN là to lên
-    if (nac != nacDaGui) {
-      if (suKienAmLuong) suKienAmLuong(nac - nacDaGui);
-      nacDaGui = nac;
-      daVuotAmLuong = true;
+    // Vuốt chỉ tính TRƯỚC khi thành giữ-để-nói: đang giữ mà ngón trôi
+    // 14 px (rất dễ, khi vừa giữ vừa nói) thì không được đổi âm lượng.
+    if (!daGiuNoi) {
+      const int nac = (yDau - sy) / NAC_AM_LUONG_PX;   // vuốt LÊN là to lên
+      if (nac != nacDaGui) {
+        if (suKienAmLuong) suKienAmLuong(nac - nacDaGui);
+        nacDaGui = nac;
+        daVuotAmLuong = true;
+      }
+    }
+    if (!daVuotAmLuong && !daGiuNoi && now - chamLuc >= GIU_NOI_MS) {
+      daGiuNoi = true;
+      Serial.println("[cham] dai -> giu de noi");
+      if (suKienGiu) suKienGiu();
     }
   } else if (co && dangCham) {
     // ── Ngón đang trên kính ──
@@ -153,12 +187,13 @@ void tick() {
     // ── Nhấc tay khỏi DẢI DƯỚI ──
     dangCham = false;
     trongDai = false;
-    // Cú chạm ngắn, không vuốt ⇒ bấm nút. Ngưỡng dài hơn cú chạm ở vùng
-    // mắt một chút: bấm nút thì người ta hay ấn rồi mới nhả.
-    if (!daVuotAmLuong && now - chamLuc < 600) {
-      Serial.println("[cham] dai -> nut noi");
-      if (suKienChamDai) suKienChamDai();
+    // Cú vuốt âm lượng thì thôi — lượt mic mở lúc đặt ngón đã bị huỷ ở
+    // nấc đầu tiên rồi (xem `main.cpp`).
+    if (!daVuotAmLuong) {
+      Serial.println(daGiuNoi ? "[cham] dai -> tha tay (giu de noi)" : "[cham] dai -> nha tay");
+      if (suKienNha) suKienNha(daGiuNoi);
     }
+    daGiuNoi = false;
     nhinVeLuc = now + NHIN_VE_MS;
   } else if (!co && dangCham) {
     // ── Ngón vừa nhấc lên ──

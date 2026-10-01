@@ -1,5 +1,6 @@
 #include "face.h"
 
+#include "chuViet.h"
 #include "eyes.h"
 
 namespace face {
@@ -125,20 +126,30 @@ static void brow(int cx, int tiltPx, uint16_t color) {
 // chuyện khác nhau.
 static bool chiDai = false;
 static int dY = 0;                          // mép trên của dải
-static int dongChu() { return dY + 30; }    // giữa dải 76px, chữ cỡ 2 cao 16px
+
+// ── Dải hai dòng (01/10/2026) ──
+// Dòng trên: giờ · TRẠNG THÁI (chấm màu + chữ + vạch sóng) · pin.
+// Dòng dưới: phụ đề — câu robot nghe được, rồi câu nó đang nói.
+// Mỗi dòng cao `chuViet::caoDong()` (32 px, đủ chữ hoa hai dấu "Ặ").
+static int yDong1() { return dY + 2; }
+static int yDong2() { return dY + 40; }
+static constexpr int O1_X = 92, O1_W = 296;     // ô trạng thái, giữa giờ và pin
+static constexpr int O2_X = 12;                 // ô phụ đề, gần trọn bề ngang
+static int o2W() { return W - 2 * O2_X; }
 
 // Nhãn đang nằm trên kính — ở phạm vi FILE chứ không trong hàm, để
 // `beginDai()` đặt lại được sau khi cổng WiFi đã vẽ đè cả màn. Để nó là
 // biến static trong hàm thì sau khi màn bị xoá, hàm vẫn tưởng nhãn còn
 // đó và không vẽ lại.
 static Emotion nhanDaVe = (Emotion)255;
+static KieuNghe kieuNghe = NGHE_TU_DO;
 
 // Đồng hồ góc trên TRÁI — chấm trạng thái ở góc phải nên không đè nhau.
 // Xoá đúng ô chữ rồi vẽ đè, KHÔNG fillScreen: khuôn mặt đang nằm đó và
 // xoá cả màn mỗi phút thì thành nháy đèn.
 static void drawClock() {
   if (!tft) return;
-  const int x = chiDai ? 16 : 8, y = chiDai ? dongChu() : 6;
+  const int x = chiDai ? 16 : 8, y = chiDai ? dY + 13 : 6;
   tft->fillRect(x, y, 64, 20, C_BG);
   if (!clockTxt[0]) return;
   tft->setTextColor(C_EYE_DIM, C_BG);
@@ -151,7 +162,7 @@ static void drawClock() {
 // liếc một cái là biết còn nhiều hay sắp chết, khỏi cần đọc số.
 static void drawBattery() {
   if (!tft) return;
-  const int x = chiDai ? W - 16 - 54 : 78, y = chiDai ? dongChu() : 6;
+  const int x = chiDai ? W - 16 - 54 : 78, y = chiDai ? dY + 13 : 6;
   tft->fillRect(x, y, 54, 20, C_BG);
   if (batPct < 0) return;
   const uint16_t col = batPct > 50 ? C_DOT_OK : (batPct > 20 ? 0xFD20 : C_DOT_BAD);
@@ -188,32 +199,220 @@ static void drawStateLabel(Emotion e) {
   if (e == nhanDaVe) return;
   nhanDaVe = e;
 
-  // Chế độ dải: chỉ xoá ô GIỮA (giữa đồng hồ và pin), không xoá cả dải —
-  // xoá cả dải là xoá luôn đồng hồ với pin rồi phải vẽ lại cả hai.
-  // Ô giữa cao 30 chứ không 20: thanh âm lượng nằm ngay dưới chữ, xoá
-  // thiếu là vạch thanh cũ nằm lại dưới chữ "DANG NGHE".
-  if (chiDai) tft->fillRect(140, dongChu() - 2, 200, 30, C_BG);
-  else tft->fillRect(0, H - 30, W, 30, C_BG);
+  // Chỉ còn cho màn tròn cũ — chế độ dải đã có `loopDai()` riêng.
+  tft->fillRect(0, H - 30, W, 30, C_BG);
 
   const char* s;
   uint16_t col;
   switch (e) {
-    case LISTENING: s = "DANG NGHE";  col = 0xFFE0; break;  // vàng
+    case LISTENING:   // vàng — cùng màu, chỉ khác lời dặn
+      s = kieuNghe == NGHE_GIU ? "THA TAY DE GUI" : kieuNghe == NGHE_CHAM ? "CHAM LAI DE GUI" : "DANG NGHE";
+      col = 0xFFE0;
+      break;
     case THINKING:  s = "DANG NGHI";  col = 0xFD20; break;  // cam
     case SPEAKING:  s = "DANG NOI";   col = C_DOT_OK; break;
     default:
-      // Dải dưới là NÚT NÓI (01/10/2026) — lúc rảnh phải nói ra điều đó,
-      // không thì chẳng ai biết chạm vào đâu. Màn tròn cũ thì để trống.
-      if (!chiDai) return;
-      s = "CHAM DE NOI";
-      col = 0x7BEF;   // xám — gợi ý, không tranh chỗ với trạng thái thật
-      break;
+      return;
   }
   tft->setTextColor(col, C_BG);
   tft->setTextSize(2);
-  if (chiDai) tft->setCursor(W / 2 - (int)strlen(s) * 6, dongChu());   // 12px/ký tự ở cỡ 2
-  else tft->setCursor(14, H - 26);
+  tft->setCursor(14, H - 26);
   tft->print(s);
+}
+
+// ─── Dải hai dòng: trạng thái + phụ đề (01/10/2026) ─────────
+
+static TrangThai trangThai = RANH;
+static int trangThaiDaVe = -1;
+static uint32_t amLuongDenLuc = 0;   // đang hiện thanh âm lượng tới lúc này
+static KieuNghe kieuDaVe = NGHE_TU_DO;
+
+// Vạch sóng: 5 cột, mỗi cột là mức tiếng của một nhịp 70 ms trước —
+// trông như sóng trôi, và nó NẢY THEO TIẾNG THẬT chứ không phải hoạt
+// hình đóng sẵn: nghe thì theo mic (người ta thấy robot đang nghe mình),
+// nói thì theo tiếng ra loa.
+static int32_t mucSong = 0;
+static uint8_t cotSong[5] = {0, 0, 0, 0, 0};
+static uint32_t songLuc = 0;
+static int songX = -1;     // mép trái ô sóng trên màn; -1 = trạng thái này không có sóng
+static uint8_t nhipNghi = 0;
+
+// Phụ đề
+static String phuDeChu;
+static bool phuDeNguoi = false;
+static int phuDeDau = 0;          // byte đầu của trang đang hiện
+static int phuDeHet = 0;          // byte cuối (không tính) của trang đang hiện
+static uint32_t trangSauLuc = 0;  // lúc lật trang kế; 0 = không lật nữa
+static uint32_t xoaPhuDeLuc = 0;  // rảnh đủ lâu thì xoá dòng dưới
+static bool dong2Ban = true;      // dòng dưới cần vẽ lại
+
+static const uint16_t C_NGHE = 0xFFE0;   // vàng — đến lượt bạn nói
+static const uint16_t C_NGHI = 0xFD20;   // cam  — chờ đi, nó đang nghĩ
+static const uint16_t C_NOI = 0x07E0;    // xanh — nó đang nói
+static const uint16_t C_RANH = 0x7BEF;   // xám  — gợi ý, không tranh chỗ
+static const uint16_t C_PHU_DE = 0xEF7D; // trắng ngà — chữ dài đọc đỡ chói
+static const uint16_t C_BAN = 0xAD55;    // xám sáng — lời người dùng
+
+static uint16_t mauTrangThai(TrangThai t) {
+  return t == NGHE ? C_NGHE : t == NGHI ? C_NGHI : t == NOI ? C_NOI : C_RANH;
+}
+
+static const char* chuTrangThai(TrangThai t) {
+  switch (t) {
+    case NGHE: return "ĐANG NGHE";
+    case NGHI: return "ĐANG NGHĨ";
+    case NOI:  return "ĐANG NÓI";
+    default:   return "CHẠM ĐỂ NÓI";
+  }
+}
+
+/** Dòng trên, ô giữa: chấm màu + chữ trạng thái (+ chỗ cho vạch sóng). */
+static void veDong1() {
+  const uint16_t mau = mauTrangThai(trangThai);
+  const char* chu = chuTrangThai(trangThai);
+  const bool coSong = trangThai != RANH;
+  const int lw = chuViet::doRong(chu);
+  const int tong = (coSong ? 18 : 0) + lw + (coSong ? 12 + 32 : 0);
+  int x0 = O1_X + (O1_W - tong) / 2;
+  if (x0 < O1_X) x0 = O1_X;
+  const int y = yDong1();
+  tft->fillRect(O1_X, y, O1_W, chuViet::caoDong(), C_BG);
+  int xc = x0;
+  if (coSong) {
+    tft->fillCircle(x0 + 5, y + 17, 5, mau);
+    xc += 18;
+  }
+  chuViet::ve(tft, xc, y, lw, chu, mau, C_BG);
+  songX = coSong ? xc + lw + 12 : -1;
+  memset(cotSong, 0, sizeof cotSong);
+  songLuc = 0;
+}
+
+/** Vạch sóng (nghe/nói) hoặc ba chấm chạy (nghĩ), ~14 hình/giây. Ô nhỏ
+ *  32×20 px nên mỗi lần vẽ chỉ vài trăm điểm — không làm loa đói đệm. */
+static void veSong(uint32_t now) {
+  if (songX < 0 || now - songLuc < 70) return;
+  songLuc = now;
+  const int y = yDong1() + 7, cao = 20;
+  if (trangThai == NGHI) {
+    nhipNghi = (nhipNghi + 1) % 12;
+    const int sang = nhipNghi / 4;   // 0..2, mỗi chấm sáng ~280 ms
+    for (int i = 0; i < 3; i++)
+      tft->fillCircle(songX + 5 + i * 11, y + cao / 2, 3, i == sang ? C_NGHI : 0x4208);
+    return;
+  }
+  // Mức → chiều cao, thang log như đồng tử của mắt (eyes.cpp) để tiếng
+  // nhỏ vẫn nhúc nhích mà tiếng to không chạm trần mãi.
+  const float m = mucSong <= 0 ? 0.0f : min(1.0f, logf(1.0f + mucSong / 4000.0f) / 4.8f);
+  for (int i = 4; i > 0; i--) cotSong[i] = cotSong[i - 1];
+  cotSong[0] = (uint8_t)(3 + m * (cao - 3));
+  const uint16_t mau = mauTrangThai(trangThai);
+  for (int i = 0; i < 5; i++) {
+    const int x = songX + i * 7, h = cotSong[i];
+    tft->fillRect(x, y, 4, cao - h, C_BG);
+    tft->fillRect(x, y + cao - h, 4, h, mau);
+  }
+}
+
+/** Lời dặn ở dòng dưới khi đang nghe sau một cú chạm. */
+static const char* loiDanNghe() {
+  return kieuNghe == NGHE_GIU ? "Thả tay ra để gửi"
+       : kieuNghe == NGHE_CHAM ? "Nói xong thì chạm lần nữa để gửi"
+       : "";
+}
+
+/** Tính trang đang hiện của phụ đề: [phuDeDau, phuDeHet). */
+static void tinhTrang() {
+  const char* c = phuDeChu.c_str();
+  const int len = phuDeChu.length();
+  if (phuDeDau >= len) { phuDeHet = len; return; }
+  const int vua = chuViet::vuaDong(c + phuDeDau, o2W());
+  phuDeHet = phuDeDau + (vua > 0 ? vua : len - phuDeDau);
+}
+
+static void veDong2() {
+  dong2Ban = false;
+  const int y = yDong2();
+  const int w = o2W();
+  if (phuDeChu.length()) {
+    const char* c = phuDeChu.c_str();
+    // Bỏ khoảng trắng đầu trang — chỗ ngắt dòng để lại.
+    int dau = phuDeDau;
+    while (dau < phuDeHet && c[dau] == ' ') dau++;
+    chuViet::ve(tft, O2_X, y, w, c + dau, phuDeNguoi ? C_BAN : C_PHU_DE, C_BG, chuViet::GIUA,
+                phuDeHet - dau);
+    return;
+  }
+  const char* dan = trangThai == NGHE ? loiDanNghe() : "";
+  chuViet::ve(tft, O2_X, y, w, dan, C_RANH, C_BG, chuViet::GIUA);
+}
+
+/** Lật trang phụ đề theo nhịp ĐỌC: ~60 ms mỗi byte (tiếng Việt ~1,2 byte
+ *  một chữ, máy đọc ~14 chữ/giây), không nhanh hơn 1,6 giây một trang. */
+static void henTrangSau(uint32_t now) {
+  if (phuDeHet >= (int)phuDeChu.length()) {
+    trangSauLuc = 0;
+    return;
+  }
+  const uint32_t ms = max<uint32_t>(1600, (uint32_t)(phuDeHet - phuDeDau) * 60);
+  trangSauLuc = now + ms;
+  if (!trangSauLuc) trangSauLuc = 1;
+}
+
+static void loopDai(uint32_t now) {
+  // Đang hiện thanh âm lượng (dòng dưới) thì đừng vẽ đè lên nó.
+  const bool dangAmLuong = amLuongDenLuc && (int32_t)(now - amLuongDenLuc) < 0;
+  if (!dangAmLuong && amLuongDenLuc) {
+    amLuongDenLuc = 0;
+    dong2Ban = true;
+  }
+
+  if ((int)trangThai != trangThaiDaVe) {
+    trangThaiDaVe = trangThai;
+    veDong1();
+    // Lượt nghe mới: phụ đề của lượt trước không còn nghĩa gì.
+    if (trangThai == NGHE && phuDeChu.length()) {
+      phuDeChu = "";
+      trangSauLuc = 0;
+    }
+    // Rảnh rồi thì để câu cuối nằm lại 4 giây cho người ta đọc nốt.
+    xoaPhuDeLuc = trangThai == RANH && phuDeChu.length() ? now + 4000 : 0;
+    dong2Ban = true;
+  }
+  if (kieuNghe != kieuDaVe) {
+    kieuDaVe = kieuNghe;
+    dong2Ban = true;
+  }
+  if (xoaPhuDeLuc && (int32_t)(now - xoaPhuDeLuc) >= 0) {
+    xoaPhuDeLuc = 0;
+    phuDeChu = "";
+    trangSauLuc = 0;
+    dong2Ban = true;
+  }
+  if (trangSauLuc && (int32_t)(now - trangSauLuc) >= 0) {
+    phuDeDau = phuDeHet;
+    tinhTrang();
+    henTrangSau(now);
+    dong2Ban = true;
+  }
+  if (dong2Ban && !dangAmLuong) veDong2();
+  veSong(now);
+}
+
+void datTrangThai(TrangThai t) { trangThai = t; }
+
+void datMuc(int32_t muc) { mucSong = muc; }
+
+void phuDe(const char* utf8, bool nguoiDung) {
+  phuDeChu = utf8 ? utf8 : "";
+  phuDeChu.trim();
+  phuDeNguoi = nguoiDung;
+  if (nguoiDung && phuDeChu.length()) phuDeChu = String("Bạn: ") + phuDeChu;
+  phuDeDau = 0;
+  tinhTrang();
+  xoaPhuDeLuc = 0;
+  henTrangSau(millis());
+  dong2Ban = true;
 }
 
 static void drawFace() {
@@ -369,23 +568,28 @@ static void drawFace() {
 
 // ─── API ───────────────────────────────────────────────────
 
-static uint32_t amLuongDenLuc = 0;
-
 void hienAmLuong(int pct) {
   if (!tft || !chiDai) return;
   pct = constrain(pct, 0, 100);
-  tft->fillRect(140, dongChu() - 2, 200, 30, C_BG);
-  char s[16];
-  snprintf(s, sizeof s, "AM LUONG %d%%", pct);
-  tft->setTextColor(0xFFFF, C_BG);
-  tft->setTextSize(2);
-  tft->setCursor(W / 2 - (int)strlen(s) * 6, dongChu());
-  tft->print(s);
-  const int rong = 160, x0 = W / 2 - rong / 2, y0 = dongChu() + 21;
-  tft->drawRect(x0, y0, rong, 6, 0x7BEF);
-  tft->fillRect(x0 + 1, y0 + 1, (rong - 2) * pct / 100, 4, C_DOT_OK);
+  // Dòng dưới: "Âm lượng 35%" bên trái, thanh ngang bên phải, cả cụm ở giữa.
+  char s[24];
+  snprintf(s, sizeof s, "Âm lượng %d%%", pct);
+  const int lw = chuViet::doRong(s);
+  const int rong = 160, tong = lw + 16 + rong;
+  const int x0 = (W - tong) / 2, y = yDong2();
+  tft->fillRect(O2_X, y, o2W(), chuViet::caoDong(), C_BG);
+  chuViet::ve(tft, x0, y, lw, s, TFT_WHITE, C_BG);
+  const int bx = x0 + lw + 16, by = y + 13;
+  tft->drawRect(bx, by, rong, 8, C_RANH);
+  tft->fillRect(bx + 1, by + 1, (rong - 2) * pct / 100, 6, C_NOI);
   amLuongDenLuc = millis() + 1500;
-  nhanDaVe = (Emotion)255;   // hết 1,5 giây thì vẽ lại nhãn trạng thái
+  if (!amLuongDenLuc) amLuongDenLuc = 1;
+}
+
+void datNhanNghe(KieuNghe k) {
+  if (k == kieuNghe) return;
+  kieuNghe = k;
+  nhanDaVe = (Emotion)255;   // cùng là LISTENING nhưng chữ khác: phải vẽ lại
 }
 
 void beginDai(Arduino_GFX* t, int yDai) {
@@ -399,6 +603,8 @@ void beginDai(Arduino_GFX* t, int yDai) {
   // của chúng trong `eyes::begin()`.
   tft->fillRect(0, dY, W, H - dY, C_BG);
   nhanDaVe = (Emotion)255;   // ép nhãn vẽ lại ở vòng loop kế tiếp
+  trangThaiDaVe = -1;        // … và cả hai dòng của dải
+  dong2Ban = true;
   drawClock();
   drawBattery();
 }
@@ -512,6 +718,7 @@ void setBattery(int pct) {
 }
 
 Emotion current() { return emo; }
+Emotion base() { return baseEmo; }
 
 void loop() {
   if (!tft) return;
@@ -528,10 +735,7 @@ void loop() {
   // nhãn NGHE/NGHĨ/NÓI — và nó tự bỏ qua khi chưa đổi, nên gọi mỗi vòng
   // chỉ tốn một phép so sánh.
   if (chiDai) {
-    // Đang hiện thanh âm lượng thì đừng vẽ đè nhãn lên nó.
-    if (amLuongDenLuc && (int32_t)(millis() - amLuongDenLuc) < 0) return;
-    amLuongDenLuc = 0;
-    drawStateLabel(emo);
+    loopDai(now);
     return;
   }
 

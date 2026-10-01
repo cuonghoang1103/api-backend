@@ -58,6 +58,42 @@ void beginDai(Arduino_GFX* tft, int yDai);
  */
 void hienAmLuong(int pct);
 
+/**
+ * Lời dặn trên nhãn NGHE (01/10/2026). Ở quán, robot không tự biết khi nào
+ * người ta nói xong (xem `nenCao` trong audio.cpp), nên nhãn phải nói cách
+ * báo "xong rồi" — không thì chẳng ai đoán ra.
+ */
+enum KieuNghe : uint8_t {
+  NGHE_TU_DO = 0,   // "DANG NGHE"       — VAD tự mở, tự dứt
+  NGHE_CHAM = 1,    // "CHAM LAI DE GUI" — mở bằng một cú chạm
+  NGHE_GIU = 2,     // "THA TAY DE GUI"  — đang giữ dải để nói
+};
+void datNhanNghe(KieuNghe k);
+
+/**
+ * TRẠNG THÁI của robot cho dải dưới (01/10/2026) — tách khỏi CẢM XÚC.
+ *
+ * ⚠️ Bản trước suy nhãn từ biểu cảm của mắt: LISTENING → "DANG NGHE"…
+ * Từ khi mỗi câu trả lời kèm một cảm xúc (happy, love…), lúc robot đang
+ * nói thì mắt là HAPPY chứ không phải SPEAKING — và nhãn rơi vào nhánh
+ * mặc định "CHAM DE NOI". Người dùng thấy robot đang nói mà màn bảo
+ * "chạm để nói". Mắt chở CẢM XÚC, dải chở TRẠNG THÁI — hai thứ khác nhau.
+ *
+ * `main.cpp` gọi mỗi vòng loop; chỉ vẽ lại khi đổi.
+ */
+enum TrangThai : uint8_t { RANH, NGHE, NGHI, NOI };
+void datTrangThai(TrangThai t);
+
+/** Mức tiếng cho vạch sóng cạnh nhãn — mic lúc nghe, loa lúc nói (thang 24 bit). */
+void datMuc(int32_t muc);
+
+/**
+ * Phụ đề dòng dưới, UTF-8 có dấu. `nguoiDung` = câu robot NGHE được
+ * (hiện "Bạn: …", màu xám); không thì là câu robot đang NÓI (màu trắng).
+ * Dài quá một dòng thì tự lật trang theo nhịp đọc. `nullptr`/"" = xoá.
+ */
+void phuDe(const char* utf8, bool nguoiDung = false);
+
 /** Đổi biểu cảm. `ms` = 0 nghĩa là giữ mãi tới lệnh sau. */
 void set(Emotion e, uint32_t ms = 0);
 
@@ -91,5 +127,7 @@ void setClock(const char* hhmm);
 void setBattery(int pct);
 
 Emotion current();
+/** Biểu cảm NỀN (cái `current()` trả về khi hết biểu cảm tạm). */
+Emotion base();
 
 }  // namespace face

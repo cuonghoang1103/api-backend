@@ -155,7 +155,6 @@ static inline int16_t applyVolume(int16_t s) {
 
 // ─── Trạng thái nghe ───────────────────────────────────────
 static bool micOpen = false;      // VAD đang trong một lượt nói
-static uint32_t micQuietAt = 0;   // mốc bắt đầu im lặng
 static uint32_t micTurnAt = 0;    // mốc mở lượt (để chặn lượt quá dài)
 static uint32_t micResumeAt = 0;  // trước mốc này thì không nghe
 static int32_t micLevel = 0;
@@ -240,6 +239,71 @@ static int32_t vadGate(bool giuLuot = false) {
   const int32_t TRAN = 8388608 / 4;
   if (gate > TRAN) gate = TRAN;
   return gate;
+}
+
+/**
+ * ── DỨT CÂU Ở PHÒNG ỒN (01/10/2026) ──
+ *
+ * `noiseFloor` là ĐÁY của tiếng nền. Luật cũ: "còn nói = vượt 2× đáy, dứt
+ * câu = im LIỀN 650 ms". Ở phòng yên thì đúng — tiếng nền đứng im quanh
+ * đáy. Ở quán cà phê thì lượt nghe KHÔNG BAO GIỜ tự đóng. Đo thật ở quán
+ * 01/10/2026, 60 mẫu 1 giây một lần:
+ *
+ *     đáy 14.156 · trung vị 1,6× đáy · p75 2,7× · p90 3,5× · 33% số khối > 2× đáy
+ *
+ * Cứ ba khối thì một khối tiếng nền "trông như đang nói", mà 650 ms im
+ * liền là 41 khối LIỀN NHAU — gần như không bao giờ có. Lượt nào cũng chạy
+ * tới trần: "Bạn còn ở đấy không?" bị giữ 15,0 giây mới gửi, "Mấy giờ
+ * rồi?" 6,8 giây, và cứ vài chục giây lại một lượt 15 giây toàn tiếng quán
+ * (479 KB) cho Whisper bịa ra phụ đề YouTube.
+ *
+ * Trong khi đó giọng người đang chạm robot — đỉnh khối 320.000–680.000 —
+ * vẫn cao gấp 5–10 lần p90 của nền. Tách được; chỉ là thước đang đặt ở
+ * ĐÁY của nền thay vì ở ĐỈNH THƯỜNG GẶP của nó. Nên:
+ *
+ *   `nenCao`   = phân vị 90% của tiếng nền, học lúc rảnh như `noiseFloor`
+ *   còn nói    = vượt max(2× đáy, `nenCao`)
+ *   dứt câu    = bộ đếm im lặng RỈ — gai nền lẻ tẻ (chén va, ai cười) chỉ
+ *                TRỪ BỚT chứ không xoá sạch; phải to LIỀN 3 khối (một âm
+ *                tiết thật) mới tính là người còn đang nói
+ *   mở lượt VAD = vượt max(4× đáy, 1,5× `nenCao`) — bớt lượt rác từ quán
+ *
+ * ⚠️ DÙNG CHUNG cho mọi phòng, KHÔNG bật/tắt theo "phòng ồn hay yên". Bản
+ * đầu có công tắc đó (p90 > 1,25× ngưỡng giữ) và nạp vào bo ở quán thì nó
+ * NHẤP NHÁY: đáy quán tự trôi 15–22 nghìn nên p90/đáy dao động 1,95–3,7,
+ * lượt nào rơi vào lúc "tắt" là quay về luật cũ — đúng luật treo 15 giây.
+ * Ở phòng yên luật mới cho kết quả như luật cũ (mô phỏng 2.500 câu: 0 lần
+ * cắt giữa câu, trễ dứt 0,58 so với 0,6 giây), vì nền không vượt 2× đáy
+ * thì cả hai ngưỡng đều về đúng số cũ.
+ */
+static int32_t nenCao = VAD_THRESHOLD;
+static const int32_t TRAN_VAD = 8388608 / 4;   // cùng trần với vadGate()
+
+/** Nền có "gai" (p90 vượt 2× đáy). Chỉ để chọn số nấc "bắt đầu nói" của
+ *  lượt chạm và để ghi log — luật dứt câu thì dùng chung, xem trên. */
+static bool nenCoGai() { return nenCao > vadGate(true); }
+
+/** Vượt mức này là "còn đang nói". */
+static int32_t nguongGiu() {
+  const int32_t g = vadGate(true);
+  int32_t x = nenCao > g ? nenCao : g;
+  if (x > TRAN_VAD) x = TRAN_VAD;
+  return x;
+}
+
+/** Vượt mức này là "rõ ràng có người nói gần mic". Phòng yên: đúng 4× đáy. */
+static int32_t nguongRo() {
+  const int32_t a = 2 * nguongGiu();
+  const int32_t b = vadGate(false);
+  return a > b ? a : b;
+}
+
+/** Ngưỡng MỞ lượt VAD. Lượt chạm không dùng nó — chạm là đã mở rồi. */
+static int32_t nguongMoVad() {
+  const int32_t g = vadGate(false);
+  int32_t q = nenCao + nenCao / 2;
+  if (q > TRAN_VAD) q = TRAN_VAD;
+  return q > g ? q : g;
 }
 
 /**
@@ -485,6 +549,20 @@ static bool luotCham = false;      // lượt đang mở là lượt do chạm
 static bool daCoTieng = false;     // trong lượt chạm đã nghe thấy người nói chưa
 static uint8_t demTiengCham = 0;   // bộ đếm rỉ, cùng kiểu `loudRun`
 static const uint32_t CHO_TIENG_MS = 5000;
+// Giữ-để-nói: đang giữ tay thì người dùng tự quyết lúc dứt — không VAD,
+// không huỷ vì "chưa nghe thấy ai", chỉ còn trần 15 giây.
+static bool dangGiuCham = false;
+// Hẹn dứt lượt chạm: thả tay + một khúc đuôi. 0 = không hẹn.
+static uint32_t ketChamLuc = 0;
+// Dứt chủ động sớm hơn chừng này sau khi mở = chạm nhầm ⇒ huỷ, không gửi.
+static const uint32_t CHAM_TOI_THIEU_MS = 500;
+
+// Luật dứt câu ở phòng ồn — xem `nenCao`. Đếm theo KHỐI 16 ms.
+static const uint32_t KHOI_MS = AUDIO_BLOCK_SAMPLES * 1000UL / MIC_SAMPLE_RATE;
+static uint16_t khoiIm = 0;   // bộ đếm im lặng RỈ
+static uint8_t dayTo = 0;     // số khối "rõ là giọng" LIỀN NHAU
+
+static void huyCham();
 
 // ─── Phát ──────────────────────────────────────────────────
 
@@ -597,6 +675,30 @@ void playStop() {
   micResumeAt = millis() + MIC_RESUME_DELAY_MS;
 }
 
+/**
+ * Mức tiếng ĐANG RA LOA — cho mắt nảy và vạch sóng "ĐANG NÓI" (01/10/2026).
+ *
+ * ⚠️ Trước đây mắt đọc `level()` lúc robot nói — nhưng đó là mức MIC, mà
+ * mic thì câm suốt lúc loa chạy (`pumpMic` đặt về 0). Nên "đồng tử nảy
+ * theo tiếng" chưa từng nảy lần nào.
+ *
+ * Đo ở chỗ GHI vào DMA thì sớm hơn tai nghe đúng bằng độ sâu vòng DMA
+ * (16 × 512 mẫu ≈ 0,5 giây) — mắt sẽ nhép trước tiếng. Nên mỗi khối ghi
+ * kèm mốc "lúc nó thật sự kêu", và `playLevel()` đọc khối có mốc vừa qua.
+ */
+static constexpr int VONG_MUC = 64;
+static struct { uint32_t luc; int32_t muc; } mucPhat[VONG_MUC];
+static uint32_t soMucPhat = 0;
+
+int32_t playLevel() {
+  const uint32_t now = millis();
+  for (uint32_t k = 0; k < VONG_MUC && k < soMucPhat; k++) {
+    const auto& m = mucPhat[(soMucPhat - 1 - k) % VONG_MUC];
+    if ((int32_t)(now - m.luc) >= 0) return now - m.luc < 120 ? m.muc : 0;
+  }
+  return 0;
+}
+
 /** Đẩy một lát nhỏ ra loa. Nhỏ để loop() không bị giữ quá lâu. */
 static void pumpPlayback() {
   // Kẹt ở trạng thái GOM: nguồn chết giữa chừng. Có gì phát nấy sau 3
@@ -707,10 +809,12 @@ static void pumpPlayback() {
     if (!n) break;
 
     const uint32_t at = readPos % cap;
+    int32_t tong = 0;
     for (uint32_t i = 0; i < n; i++) {
       const uint32_t o = (at + i * 2) % cap;
       const int16_t raw =
           (int16_t)((uint16_t)playBuf[o] | ((uint16_t)playBuf[(o + 1) % cap] << 8));
+      tong += abs(raw);
       const int16_t v = applyVolume(raw);
       stereoBlock[i * 2] = v;
       stereoBlock[i * 2 + 1] = v;
@@ -719,6 +823,12 @@ static void pumpPlayback() {
     size_t wrote = 0;
     i2s_write(I2S_NUM_1, stereoBlock, n * 2 * sizeof(int16_t), &wrote, 0);
     if (wrote == 0) return;  // DMA đã no — để dành vòng sau
+
+    // Mức trước âm lượng (×32 về cùng thang 24 bit với mic, để mắt dùng
+    // chung một phép quy đổi), kêu sau một vòng DMA nữa.
+    mucPhat[soMucPhat % VONG_MUC] = {
+        millis() + (uint32_t)(SPK_DMA_COUNT * 512UL * 1000UL / playRate), (tong / (int32_t)n) * 32};
+    soMucPhat++;
 
     // `wrote` đếm byte khung STEREO; mỗi mẫu một kênh cõng 4 byte.
     readPos += (wrote / 4) * 2;
@@ -818,8 +928,8 @@ static void pumpPlayback() {
     // lượt nhầm lúc rồi đóng ngay. Xoá sạch cả hai.
     loudRun = 0;
     prerollCount = 0;
+    if (micOpen && luotCham) huyCham();   // lượt chạm dở: báo main.cpp dọn
     micOpen = false;
-    micQuietAt = 0;
   }
 }
 
@@ -889,8 +999,8 @@ void beep(uint16_t freq, uint16_t ms, uint8_t loudness) {
   // quên ở đường tiếng báo — vì lúc viết chỉ nghĩ nó "ngắn quá, không
   // sao đâu".
   loudRun = 0;
+  if (micOpen && luotCham) huyCham();   // lượt chạm dở: báo main.cpp dọn
   micOpen = false;
-  micQuietAt = 0;
   prerollCount = 0;
   micResumeAt = millis() + MIC_RESUME_DELAY_MS;
 }
@@ -927,9 +1037,36 @@ static void endTurn() {
   loudRun = 0;
   micOpen = false;
   luotCham = false;
+  dangGiuCham = false;
+  ketChamLuc = 0;
   prerollCount = 0;
   micResumeAt = millis() + VAD_COOLDOWN_MS;
   if (cbEnd) cbEnd();
+}
+
+/** Huỷ êm lượt chạm: không gửi `audio_end`, `main.cpp` dọn trạng thái. */
+static void huyCham() {
+  micOpen = false;
+  luotCham = false;
+  dangGiuCham = false;
+  ketChamLuc = 0;
+  loudRun = 0;
+  micResumeAt = millis() + VAD_COOLDOWN_MS;
+  if (cbHuy) cbHuy();
+}
+
+/**
+ * Người dùng CHỦ ĐỘNG dứt lượt chạm (thả tay sau khi giữ, hoặc chạm lần
+ * nữa). Gửi luôn, không hỏi VAD có nghe thấy giọng hay không: người ta
+ * vừa bảo "tôi nói xong rồi", và ở quán thì chính VAD mới là thứ không
+ * đáng tin. Tiếng ồn lọt qua đã có bộ lọc Whisper-bịa ở server lo.
+ */
+static void dungCham() {
+  ketChamLuc = 0;
+  dangGiuCham = false;
+  if (!micOpen || !luotCham) return;
+  if (millis() - micTurnAt >= CHAM_TOI_THIEU_MS) endTurn();
+  else huyCham();
 }
 
 static void pumpMic() {
@@ -1047,25 +1184,25 @@ static void pumpMic() {
           mauNen[j + 1] = v;
         }
         noiseFloor = mauNen[soMau / 4];   // phân vị 25%
+        nenCao = mauNen[soMau * 9 / 10];  // phân vị 90% — xem `nenCao`
       } else {
         noiseFloor = VAD_THRESHOLD / 2;
+        nenCao = noiseFloor;
       }
       if (noiseFloor < VAD_THRESHOLD / 4) noiseFloor = VAD_THRESHOLD / 4;
-      Serial.printf("[vad] do nen phong: %ld (tu %u mau), nguong mo %ld, giu %ld\n",
-                    (long)noiseFloor, soMau, (long)vadGate(false), (long)vadGate(true));
+      if (nenCao < noiseFloor) nenCao = noiseFloor;
+      Serial.printf("[vad] do nen phong: %ld (tu %u mau), p90 %ld, nguong mo %ld, giu %ld%s\n",
+                    (long)noiseFloor, soMau, (long)nenCao, (long)nguongMoVad(),
+                    (long)nguongGiu(), nenCoGai() ? " — nen co gai (kieu quan)" : "");
     }
     pushPreroll(pcmBlock);
     return;
   }
 
-  // ⚠️ HAI NGƯỠNG, CHỌN THEO ĐANG-Ở-TRONG-LƯỢT HAY CHƯA.
-  //
-  // `loud` dùng cho việc MỞ lượt (ngưỡng nghiêm), `conNoi` dùng cho việc
-  // GIỮ lượt (ngưỡng dễ). Bản trước dùng chung một biến cho cả hai, nên
-  // phụ âm đầu tiếng Việt — gần như im — bị tính là "đã dứt câu" và lượt
-  // bị cắt vụn giữa chừng.
-  const bool loud = micLevel > vadGate(false);
-  const bool conNoi = micLevel > vadGate(true);
+  // `ro` = rõ là có người nói gần mic. Phòng yên: vượt 4× đáy, đúng ngưỡng
+  // MỞ cũ. Ở quán: cao hơn hẳn — gấp đôi đỉnh thường gặp của nền.
+  const bool ro = micLevel > nguongRo();
+  const bool coGai = nenCoGai();
 
   // ── Lượt CHẠM: mở lượt mới NGAY, kể cả khi đang dở một lượt ──
   //
@@ -1077,12 +1214,14 @@ static void pumpMic() {
     epMoLuotCham = false;
     micOpen = true;
     micTurnAt = now;
-    micQuietAt = 0;
     loudRun = 0;
     prerollCount = 0;
     luotCham = true;
     daCoTieng = false;
     demTiengCham = 0;
+    ketChamLuc = 0;   // `dangGiuCham` thì GIỮ: có thể đã bật trước khi lượt kịp mở
+    khoiIm = 0;
+    dayTo = 0;
     if (cbStart) cbStart();
   }
 
@@ -1097,6 +1236,18 @@ static void pumpMic() {
     if (micLevel < noiseFloor) noiseFloor += (micLevel - noiseFloor) / 8;
     else noiseFloor += (micLevel - noiseFloor) / 512 + 1;
 
+    // Phân vị 90% của nền (xem `nenCao`). Bước theo tỉ lệ, 1/256 giá trị
+    // hiện tại: vượt thì lên 9 bước, dưới thì xuống 1 — cân bằng đúng lúc
+    // 10% số khối vượt. Từ đáy leo lên p90 của quán mất chưa tới 1 giây;
+    // quán vãn thì tụt về trong khoảng 6 giây.
+    {
+      const int32_t buoc = nenCao / 256 + 1;
+      if (micLevel > nenCao) nenCao += 9 * buoc;
+      else nenCao -= buoc;
+      if (nenCao < noiseFloor) nenCao = noiseFloor;
+      if (nenCao > 8388608) nenCao = 8388608;
+    }
+
     // Bộ đếm RỈ, không phải chuỗi liên tiếp.
     //
     // Bản trước xoá sạch bộ đếm mỗi khi có một khối nhỏ — và tiếng
@@ -1109,7 +1260,8 @@ static void pumpMic() {
     // nó chỉ to một hai khối rồi tắt hẳn nên bộ đếm rỉ hết trước khi
     // chạm ngưỡng; còn một câu nói thì các khoảng lặng ngắn không đủ
     // xoá công của những khối to trước đó.
-    if (loud) loudRun++;
+    // Phòng ồn thì ngưỡng MỞ cao hơn (1,5× p90 của nền) — xem `nenCao`.
+    if (micLevel > nguongMoVad()) loudRun++;
     else if (loudRun > 0) loudRun--;
 
     // Chạm đầu = ÉP MỞ lượt, khỏi cần đủ to.
@@ -1128,39 +1280,67 @@ static void pumpMic() {
     epMoLuot = false;
     micOpen = true;
     micTurnAt = now;
-    micQuietAt = 0;
+    khoiIm = 0;
+    dayTo = 0;
     if (cbStart) cbStart();
     flushPreroll();  // gửi cả phần âm đầu đã trôi qua trước khi VAD kịp nhận ra
   }
 
   if (cbChunk) cbChunk((const uint8_t*)pcmBlock, n * sizeof(int16_t));
 
-  // Lượt chạm: CHỜ người ta bắt đầu nói rồi mới tính chuyện dứt câu.
-  if (luotCham && !daCoTieng) {
-    if (loud) {
-      if (++demTiengCham >= 3) daCoTieng = true;
-    } else if (demTiengCham > 0) {
-      demTiengCham--;
-    }
-    if (!daCoTieng) {
-      if (now - micTurnAt >= CHO_TIENG_MS) {
-        // Chạm rồi không nói gì: huỷ êm, không gửi `audio_end`.
-        micOpen = false;
-        luotCham = false;
-        loudRun = 0;
-        micResumeAt = now + VAD_COOLDOWN_MS;
-        if (cbHuy) cbHuy();
-      }
+  if (luotCham) {
+    // Đã thả tay (giữ-để-nói): gom nốt khúc đuôi rồi GỬI, bất kể VAD.
+    // Người ta hay nhả tay trước khi dứt hẳn âm tiết cuối.
+    if (ketChamLuc) {
+      if ((int32_t)(now - ketChamLuc) >= 0) dungCham();
       return;
     }
-    micQuietAt = 0;   // vừa có tiếng: đếm im lặng lại từ đây
+    // Đang giữ tay: người dùng tự quyết lúc dứt. Chỉ còn trần thời gian.
+    if (dangGiuCham) {
+      if (now - micTurnAt >= VAD_MAX_TURN_MS) endTurn();
+      return;
+    }
+    // Chạm một cái: CHỜ người ta bắt đầu nói rồi mới tính chuyện dứt câu.
+    //
+    // Phòng ồn đòi 5 nấc chứ không 3. Mô phỏng trên nền dựng theo số đo ở
+    // quán: 3 nấc thì 13% số lần chờ, riêng tiếng quán đã đủ "bắt đầu nói"
+    // — lượt dứt sau đó 1 giây, gửi tiếng ồn, còn lời thật nói sau thì
+    // rơi vào một lượt VAD không cờ chạm và bị cổng "Odin" chặn. 5 nấc
+    // còn 3%, mà giọng cỡ người dùng (đỉnh 320–680 nghìn) vẫn nhận ra
+    // trọn vẹn, chậm thêm chừng 50 ms.
+    if (!daCoTieng) {
+      if (ro) {
+        if (++demTiengCham >= (coGai ? 5 : 3)) daCoTieng = true;
+      } else if (demTiengCham > 0) {
+        demTiengCham--;
+      }
+      if (!daCoTieng) {
+        // Chạm rồi không nói gì: huỷ êm, không gửi `audio_end`.
+        if (now - micTurnAt >= CHO_TIENG_MS) huyCham();
+        return;
+      }
+      khoiIm = 0;       // vừa có tiếng: đếm im lặng lại từ đây
+      dayTo = 0;
+    }
   }
 
-  if (conNoi) {
-    micQuietAt = 0;
-  } else if (micQuietAt == 0) {
-    micQuietAt = now;
-  } else if (now - micQuietAt >= VAD_SILENCE_MS) {
+  // ── Dứt câu — xem `nenCao` ──
+  //
+  // Gai nền lẻ tẻ chỉ TRỪ BỚT bộ đếm im lặng chứ không xoá sạch; phải to
+  // LIỀN 3 khối — một âm tiết thật, dài hơn 48 ms — mới tính là người còn
+  // đang nói. Âm nhỏ giữa câu (phụ âm đầu tiếng Việt gần như im) cũng chỉ
+  // trừ bớt, nên câu không bị cắt vụn — lý do ngày trước có VAD_HOLD_MULT.
+  if (ro) {
+    if (++dayTo >= 3) khoiIm = 0;
+    else khoiIm = khoiIm > 2 ? khoiIm - 2 : 0;
+  } else if (micLevel > nguongGiu()) {
+    dayTo = 0;
+    khoiIm = khoiIm > 2 ? khoiIm - 2 : 0;
+  } else {
+    dayTo = 0;
+    khoiIm++;
+  }
+  if ((uint32_t)khoiIm * KHOI_MS >= VAD_SILENCE_MS) {
     endTurn();
     return;
   }
@@ -1208,4 +1388,49 @@ void moLuotNgay() {
 }
 
 void moLuotCham() { epMoLuotCham = true; }
+
+bool luotChamDangMo() { return epMoLuotCham || (micOpen && luotCham); }
+
+void giuLuotCham() {
+  if (luotChamDangMo()) dangGiuCham = true;
+}
+
+void ketLuotCham(uint16_t duoiMs) {
+  if (epMoLuotCham) {
+    // Lượt chưa kịp mở (mic còn chờ loa vừa tắt) mà đã bảo dứt: chưa có
+    // tiếng nào để gửi.
+    epMoLuotCham = false;
+    dangGiuCham = false;
+    if (cbHuy) cbHuy();
+    return;
+  }
+  if (!micOpen || !luotCham) return;
+  if (duoiMs == 0) {
+    dungCham();
+  } else {
+    dangGiuCham = false;
+    ketChamLuc = millis() + duoiMs;
+    if (!ketChamLuc) ketChamLuc = 1;   // 0 nghĩa là "không hẹn"
+  }
+}
+
+void huyLuotCham() {
+  if (epMoLuotCham) {
+    epMoLuotCham = false;
+    dangGiuCham = false;
+    if (cbHuy) cbHuy();
+    return;
+  }
+  if (micOpen && luotCham) huyCham();
+}
+
+int32_t noiseHigh() { return nenCao; }
+uint32_t byteDaNhan() { return writePos; }
+uint32_t byteDaPhat() {
+  // Byte đã rời vòng đệm vào DMA, trừ đi phần DMA còn giữ chưa kêu
+  // (16 khối × 512 mẫu × 2 byte) — tức là byte ĐÃ RA LOA.
+  const uint32_t treo = SPK_DMA_COUNT * 512UL * 2UL;
+  return readPos > treo ? readPos - treo : 0;
+}
+bool noisyRoom() { return nenCoGai(); }
 }  // namespace audio

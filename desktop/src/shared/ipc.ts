@@ -2540,7 +2540,7 @@ export interface DesktopBridge {
      * THƯ MỤC, thứ `FileReader` luôn ném lỗi.
      */
     themDuong(cuocId: string, duong: string): Promise<
-      { ok: true; tuongDoi: string; byte: number; laThuMuc: boolean; coSan: boolean }
+      { ok: true; tuongDoi: string; byte: number; laThuMuc: boolean; coSan: boolean; ngoai?: boolean }
       | { ok: false; loi: string }
     >;
     /**

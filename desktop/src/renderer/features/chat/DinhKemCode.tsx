@@ -49,6 +49,8 @@ export interface TepCode {
   tuongDoi?: string;
   /** Kéo cả một THƯ MỤC vào — agent dùng `list_dir`/`grep` chứ không `read_file`. */
   laThuMuc?: boolean;
+  /** Thư mục NGOÀI dự án — app vừa cấp quyền CHỈ ĐỌC; `tuongDoi` là đường tuyệt đối. */
+  ngoai?: boolean;
   dangTai?: boolean;
   loi?: string;
 }
@@ -222,7 +224,7 @@ export function useDinhKemCode(cuocId: string) {
           datTep((cu) => cu.map((t) => {
             if (t.id !== id) return t;
             if (!r || !r.ok) return { ...t, dangTai: false, loi: r?.loi ?? 'Không thêm được.' };
-            return { ...t, dangTai: false, tuongDoi: r.tuongDoi, byte: r.byte, laThuMuc: r.laThuMuc };
+            return { ...t, dangTai: false, tuongDoi: r.tuongDoi, byte: r.byte, laThuMuc: r.laThuMuc, ...(r.ngoai ? { ngoai: true } : {}) };
           }));
           return;
         }
@@ -309,7 +311,14 @@ export function useDinhKemCode(cuocId: string) {
   /** Ảnh gửi thẳng trong lượt này. */
   const anhGuiThang = tep.filter((t) => t.guiThang && t.dataUrl).map((t) => t.dataUrl!);
   /** Đường dẫn các file đã nằm trên đĩa — chèn vào câu hỏi cho agent. */
-  const duongDanTrenDia = tep.filter((t) => t.tuongDoi).map((t) => t.tuongDoi!);
+  /* Thư mục NGOÀI dự án phải kèm lời dặn ngay trong câu hỏi: luật mặc định
+     của agent là "đường dẫn tương đối", và không có lời dặn thì model cắt
+     đường tuyệt đối thành tương đối rồi đọc nhầm vào dự án. */
+  const duongDanTrenDia = tep.filter((t) => t.tuongDoi).map((t) => (t.ngoai
+    ? `${t.tuongDoi!} — thư mục NGOÀI dự án, người dùng vừa cấp quyền CHỈ ĐỌC. Dùng NGUYÊN đường dẫn tuyệt đối này `
+      + '(hoặc đường tuyệt đối bên trong nó) làm `path` cho list_dir / read_file / grep, và làm tiền tố `pattern` cho glob. '
+      + 'Đọc được .pdf .pptx .docx .xlsx và file chữ; không sửa được gì trong đó.'
+    : t.tuongDoi!));
   const dangTai = tep.some((t) => t.dangTai);
 
   return {
@@ -402,7 +411,10 @@ export function DaiTepCode({ tep, bo }: { tep: TepCode[]; bo: (id: string) => vo
           <span className="ct-dkc-phu">
             {t.loi ? t.loi
               : t.dangTai ? 'đang lưu…'
-                : t.guiThang ? `${coChu(t.byte)} · gửi kèm` : `${coChu(t.byte)} · agent tự mở`}
+                : t.guiThang ? `${coChu(t.byte)} · gửi kèm`
+                  : t.ngoai ? 'thư mục ngoài · chỉ đọc'
+                    : t.laThuMuc ? 'thư mục · agent tự mở'
+                      : `${coChu(t.byte)} · agent tự mở`}
           </span>
           <button type="button" className="ct-dkc-bo" onClick={() => bo(t.id)} aria-label={`Bỏ ${t.ten}`}>
             <X size={11} aria-hidden />

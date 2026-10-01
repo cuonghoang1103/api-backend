@@ -171,7 +171,11 @@ describe('datDinhKemTuDuong — kéo-thả từ Finder', () => {
     // không nới lỏng thành so chuỗi cẩu thả.
     const anhEm = `${goc}-cu`;
     await fs.mkdir(anhEm, { recursive: true });
-    await expect(datDinhKemTuDuong(goc, anhEm)).rejects.toThrow(/ngoài dự án/);
+    // Từ 01/10/2026 thư mục ngoài được CẤP QUYỀN ĐỌC thay vì từ chối — nên
+    // dấu hiệu "bị coi là ngoài" giờ là `ngoai: true` + đường TUYỆT ĐỐI.
+    const r = await datDinhKemTuDuong(goc, anhEm);
+    expect(r.ngoai).toBe(true);
+    expect(path.isAbsolute(r.tuongDoi)).toBe(true);
   });
 
   it('file NGOÀI dự án thì chép vào .cuongthai/dinh-kem', async () => {
@@ -205,8 +209,18 @@ describe('datDinhKemTuDuong — kéo-thả từ Finder', () => {
     expect(r.tuongDoi).toBe(path.join('src', 'sau'));
   });
 
-  it('THƯ MỤC ngoài dự án bị từ chối, kèm lý do dùng được', async () => {
-    await expect(datDinhKemTuDuong(goc, ngoai)).rejects.toThrow(/ngoài dự án/);
+  /**
+   * Người dùng 01/10/2026 kéo thư mục slide môn học (ngoài dự án) vào và bị
+   * từ chối. Giờ: KHÔNG chép (có thể là hàng GB), mà cấp quyền CHỈ ĐỌC và trả
+   * đường tuyệt đối cho agent.
+   */
+  it('THƯ MỤC ngoài dự án ⇒ cấp quyền chỉ đọc, KHÔNG chép, trả đường tuyệt đối', async () => {
+    const { dsThuMucDocNgoai } = await import('./jail');
+    const r = await datDinhKemTuDuong(goc, ngoai);
+    expect(r).toMatchObject({ laThuMuc: true, ngoai: true });
+    expect(r.tuongDoi).toBe(`${path.resolve(ngoai)}${path.sep}`);
+    expect(dsThuMucDocNgoai(goc)).toContain(path.resolve(ngoai));
+    await expect(fs.access(path.join(goc, '.cuongthai'))).rejects.toThrow();   // không chép gì
   });
 
   /*

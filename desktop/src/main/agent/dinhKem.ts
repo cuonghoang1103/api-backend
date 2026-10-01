@@ -32,6 +32,7 @@
  */
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import { capQuyenDocNgoai } from './jail';
 
 /**
  * Trần một file. Lớn hơn nữa thì gần như chắc chắn là gửi nhầm (một thư mục
@@ -164,6 +165,8 @@ export interface KetQuaDuongDan {
   laThuMuc: boolean;
   /** `true` khi file vốn đã nằm trong dự án, không phải bản chép. */
   coSan: boolean;
+  /** Thư mục NGOÀI dự án, vừa được cấp quyền CHỈ ĐỌC; `tuongDoi` là đường TUYỆT ĐỐI. */
+  ngoai?: boolean;
 }
 
 export async function datDinhKemTuDuong(goc: string, duong: string): Promise<KetQuaDuongDan> {
@@ -198,13 +201,15 @@ export async function datDinhKemTuDuong(goc: string, duong: string): Promise<Ket
     };
   }
 
-  /* Thư mục NGOÀI dự án: không chép (một cú kéo nhỡ tay có thể là 2GB
-     node_modules). Nói thẳng ra để người dùng tự chọn cách khác. */
+  /* Thư mục NGOÀI dự án: KHÔNG chép (một cú kéo nhỡ tay có thể là 2GB
+     node_modules) — mà CẤP QUYỀN CHỈ ĐỌC cho đúng thư mục đó (`jail.ts` →
+     `capQuyenDocNgoai`). Bản trước từ chối thẳng với câu "Agent chỉ đọc được
+     trong thư mục dự án", và người dùng 01/10/2026 kéo cả thư mục slide môn
+     học vào thì bị chặn đúng chỗ họ cần nhất.
+     Agent nhận đường TUYỆT ĐỐI và dùng nó trong list_dir/read_file/grep/glob. */
   if (tt.isDirectory()) {
-    throw new Error(
-      'Thư mục này nằm ngoài dự án. Agent chỉ đọc được trong thư mục dự án — '
-      + 'hãy mở nó bằng nút chọn thư mục, hoặc kéo một thư mục nằm trong dự án.',
-    );
+    const daCap = capQuyenDocNgoai(gocThat, that);
+    return { tuongDoi: `${daCap}${path.sep}`, byte: 0, laThuMuc: true, coSan: true, ngoai: true };
   }
 
   if (tt.size === 0) throw new Error('File rỗng.');

@@ -27,6 +27,7 @@
  * thuyết phục được model; nó không thuyết phục được `if`.
  */
 import fs from 'node:fs/promises';
+import os from 'node:os';
 import path from 'node:path';
 
 /**
@@ -38,6 +39,9 @@ import path from 'node:path';
  */
 const THU_MUC_CAM = new Set([
   'node_modules', '.git', '.svn', '.hg',
+  // Kho khoá của người dùng — có ý nghĩa từ khi agent đọc được thư mục NGOÀI
+  // dự án (`capQuyenDocNgoai`): kéo nhầm cả thư mục nhà vào là `.ssh` lộ ra.
+  '.ssh', '.aws', '.gnupg', '.kube', '.docker', '.azure',
   'dist', 'build', 'out', 'coverage', '.turbo', '.cache', '.parcel-cache',
   'vendor', '__pycache__', '.venv', 'venv', '.tox',
   'Pods', 'DerivedData', '.gradle', 'target',
@@ -171,4 +175,89 @@ export async function moTrongNguc(
   }
 
   return dich;
+}
+
+/**
+ * ============================================================
+ * THƯ MỤC NGOÀI DỰ ÁN — CẤP QUYỀN CHỈ ĐỌC
+ * ============================================================
+ *
+ * Người dùng 01/10/2026 kéo thư mục slide + tài liệu (nằm ngoài dự án) vào AI
+ * Code và nhận "Thư mục này nằm ngoài dự án. Agent chỉ đọc được trong thư mục
+ * dự án". Đúng luật, nhưng luật đó sai với ý họ: một cú KÉO TAY là lời cho
+ * phép rõ ràng nhất có thể — cùng ý với `/add-dir` của Claude Code.
+ *
+ * Nên: kéo thư mục ngoài vào ⇒ thư mục ĐÓ được ĐỌC (list_dir, read_file,
+ * grep, glob) bằng đường dẫn TUYỆT ĐỐI. Không hơn:
+ *   • CHỈ ĐỌC — mọi tool ghi vẫn đi `moTrongNguc(gốc dự án, …)` với đường
+ *     tương đối, nên đường tuyệt đối bị từ chối như cũ.
+ *   • Vẫn qua đúng `moTrongNguc` với GỐC là thư mục được cấp ⇒ danh sách chặn
+ *     (`.env`, khoá, `.ssh`…) và chốt symlink giữ nguyên tác dụng.
+ *   • Theo DỰ ÁN và chỉ trong lần mở app này — không ghi ra đĩa. Mở lại app
+ *     thì kéo lại; một quyền đọc sống mãi mà người dùng đã quên là thứ không
+ *     nên tồn tại.
+ *   • Không cấp cho thư mục quá rộng: `/`, thư mục nhà, hay tổ tiên của nó —
+ *     đó là cú kéo nhầm, không phải ý muốn cho AI đọc cả máy.
+ */
+const docNgoai = new Map<string, string[]>();
+const MAX_THU_MUC_NGOAI = 20;
+
+/** Lý do KHÔNG cấp, hoặc `null` nếu cấp được. */
+export function lyDoKhongCapNgoai(thuMuc: string): string | null {
+  const t = path.resolve(thuMuc);
+  const nha = path.resolve(os.homedir());
+  if (t === path.parse(t).root) return 'Không cấp quyền đọc cả ổ đĩa — hãy kéo đúng thư mục tài liệu cần đọc.';
+  const relNha = path.relative(t, nha);
+  if (t === nha || (!relNha.startsWith('..') && !path.isAbsolute(relNha))) {
+    return 'Không cấp quyền đọc cả thư mục nhà — hãy kéo đúng thư mục tài liệu cần đọc (ví dụ Documents/MonHoc).';
+  }
+  const doan = t.split(path.sep).filter(Boolean);
+  const an = doan.find((d) => thuMucBiCam(d));
+  if (an) return `Không cấp quyền đọc thư mục nằm trong "${an}".`;
+  return null;
+}
+
+/** Cấp quyền đọc `thuMuc` cho dự án `goc`. Ném lỗi kèm lý do nếu không cấp được. */
+export function capQuyenDocNgoai(goc: string, thuMuc: string): string {
+  const ly = lyDoKhongCapNgoai(thuMuc);
+  if (ly) throw new LoiNguc(ly);
+  const k = path.resolve(goc);
+  const t = path.resolve(thuMuc);
+  const ds = (docNgoai.get(k) ?? []).filter((x) => x !== t);
+  ds.push(t);
+  docNgoai.set(k, ds.slice(-MAX_THU_MUC_NGOAI));
+  return t;
+}
+
+export function dsThuMucDocNgoai(goc: string): string[] {
+  return [...(docNgoai.get(path.resolve(goc)) ?? [])];
+}
+
+/** Chỉ để kiểm thử. */
+export function _xoaQuyenDocNgoai(): void { docNgoai.clear(); }
+
+/**
+ * Đường dẫn TUYỆT ĐỐI → (thư mục được cấp chứa nó, phần tương đối bên trong).
+ * Không thuộc thư mục nào đã cấp ⇒ `null`. Chọn thư mục được cấp SÂU NHẤT khi
+ * lồng nhau, để `tienTo` hiển thị gần với thứ model đã hỏi nhất.
+ */
+export function timThuMucNgoai(goc: string, duongTuyetDoi: string): { goc: string; tuongDoi: string } | null {
+  const d = path.resolve(duongTuyetDoi);
+  let tot: { goc: string; tuongDoi: string } | null = null;
+  for (const r of dsThuMucDocNgoai(goc)) {
+    const rel = path.relative(r, d);
+    if (rel.startsWith('..') || path.isAbsolute(rel)) continue;
+    if (!tot || r.length > tot.goc.length) tot = { goc: r, tuongDoi: rel };
+  }
+  return tot;
+}
+
+/** Câu lỗi khi model dùng đường tuyệt đối CHƯA được cấp — dạy nó đường đúng. */
+export function loiNgoaiChuaCap(duong: string, goc: string): LoiNguc {
+  const ds = dsThuMucDocNgoai(goc);
+  return new LoiNguc(
+    `"${duong}" nằm ngoài dự án và CHƯA được cấp quyền đọc. `
+    + (ds.length ? `Thư mục ngoài đang được đọc: ${ds.join(', ')}. ` : '')
+    + 'Trong dự án thì dùng đường dẫn TƯƠNG ĐỐI. Cần đọc chỗ khác thì nhờ người dùng KÉO thư mục đó vào khung chat.',
+  );
 }

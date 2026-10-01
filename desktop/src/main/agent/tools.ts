@@ -27,7 +27,7 @@ import path from 'node:path';
 import { promisify } from 'node:util';
 
 import { soSanhDong, type KetQuaDiff } from './diff';
-import { fileBiCam, LoiNguc, moTrongNguc, thuMucBiCam, TRAN_BYTE_FILE } from './jail';
+import { fileBiCam, LoiNguc, loiNgoaiChuaCap, moTrongNguc, thuMucBiCam, timThuMucNgoai, TRAN_BYTE_FILE } from './jail';
 import { dinhDangTheoTen, napAnh, suaAnh } from './anh';
 import { hienKhoangTrang, timGanDung } from './ganDung';
 import { kiemDuongDanNgoai } from './ghiNgoai';
@@ -338,10 +338,23 @@ export async function chayToolAgent(
         if (!note) return { noiDung: 'LỖI: phiên này không bật quyền ghi ghi chú.', tomTat: 'không có quyền' };
         return await toolNotesGhi(args, note);
       }
-      case 'list_dir': return await toolListDir(goc, args);
-      case 'read_file': return await toolReadFile(goc, args);
-      case 'grep': return await toolGrep(goc, args);
-      case 'glob': return await toolGlob(goc, args);
+      case 'list_dir':
+      case 'read_file':
+      case 'grep':
+      case 'glob': {
+        /* Đường TUYỆT ĐỐI ⇒ phải thuộc một thư mục NGOÀI dự án mà người dùng
+           đã kéo vào (`capQuyenDocNgoai`). Khi đó tool chạy với GỐC là thư mục
+           ấy — vẫn qua `moTrongNguc`, nên danh sách chặn còn nguyên — và mọi
+           đường dẫn in ra mang tiền tố tuyệt đối để model dùng lại được. */
+        const ngoai = chuyenSangNgoai(goc, ten, args);
+        const g = ngoai?.goc ?? goc;
+        const a = ngoai?.args ?? args;
+        const tienTo = ngoai?.goc;
+        if (ten === 'list_dir') return await toolListDir(g, a, ngoai ? String(args.path) : undefined);
+        if (ten === 'read_file') return await toolReadFile(g, a);
+        if (ten === 'grep') return await toolGrep(g, a, tienTo);
+        return await toolGlob(g, a, tienTo);
+      }
       case 'git_status': return await toolGitStatus(goc);
       case 'git_diff': return await toolGitDiff(goc, args);
       case 'sua_nhieu_cho': {
@@ -429,11 +442,46 @@ export async function chayToolAgent(
   }
 }
 
+// ─── Đọc thư mục NGOÀI dự án (đã được người dùng kéo vào) ──────────
+
+/**
+ * `path` (hoặc `pattern` của glob) là đường TUYỆT ĐỐI ⇒ đổi sang (gốc = thư mục
+ * ngoài đã cấp, đường tương đối bên trong). Tuyệt đối mà chưa cấp ⇒ lỗi dạy
+ * model cách đúng. Tương đối ⇒ `null`, chạy như cũ trong dự án.
+ */
+function chuyenSangNgoai(
+  goc: string, ten: string, args: Record<string, unknown>,
+): { goc: string; args: Record<string, unknown> } | null {
+  if (ten === 'glob') {
+    const mau = String(args.pattern ?? '').trim();
+    if (!path.isAbsolute(mau)) return null;
+    // Tách phần thư mục cố định (trước ký tự đại diện đầu tiên) để tìm gốc.
+    const viTriSao = mau.search(/[*?[{]/);
+    const coDinh = viTriSao < 0 ? mau : mau.slice(0, mau.lastIndexOf('/', viTriSao) + 1);
+    const n = timThuMucNgoai(goc, coDinh || '/');
+    if (!n) throw loiNgoaiChuaCap(mau, goc);
+    const conLai = path.relative(n.goc, mau.slice(0, coDinh.length)).split(path.sep).join('/');
+    const duoi = mau.slice(coDinh.length);
+    return { goc: n.goc, args: { ...args, pattern: [conLai, duoi].filter(Boolean).join('/') || '**/*' } };
+  }
+  const p = typeof args.path === 'string' ? args.path.trim() : '';
+  if (!p || !path.isAbsolute(p)) return null;
+  const n = timThuMucNgoai(goc, p);
+  if (!n) throw loiNgoaiChuaCap(p, goc);
+  return { goc: n.goc, args: { ...args, path: n.tuongDoi || '.' } };
+}
+
+/** Đường hiển thị: thêm tiền tố tuyệt đối khi đang đọc thư mục ngoài. */
+function hienDuong(tienTo: string | undefined, tuongDoi: string): string {
+  return tienTo ? path.join(tienTo, tuongDoi) : tuongDoi;
+}
+
 // ─── list_dir ──────────────────────────────────────────────────────
 
-async function toolListDir(goc: string, args: Record<string, unknown>): Promise<KetQuaTool> {
-  const tuongDoi = typeof args.path === 'string' && args.path.trim() ? args.path : '.';
-  const dich = await moTrongNguc(goc, tuongDoi === '.' ? '' : tuongDoi, { phaiCoThat: true });
+async function toolListDir(goc: string, args: Record<string, unknown>, nhanHien?: string): Promise<KetQuaTool> {
+  const tuongDoiThat = typeof args.path === 'string' && args.path.trim() ? args.path : '.';
+  const tuongDoi = nhanHien ?? tuongDoiThat;
+  const dich = await moTrongNguc(goc, tuongDoiThat === '.' ? '' : tuongDoiThat, { phaiCoThat: true });
 
   const muc = await fs.readdir(dich, { withFileTypes: true });
   const thuMuc: string[] = [];
@@ -481,6 +529,43 @@ async function toolReadFile(goc: string, args: Record<string, unknown>): Promise
    * `docPdf` tự cắt ở 120k ký tự.
    */
   if (path.extname(dich).toLowerCase() === '.pdf') return await docFilePdf(dich, st.size, String(args.path ?? ''));
+
+  /*
+   * SLIDE / TÀI LIỆU OFFICE (01/10/2026) — `.pptx` `.docx` `.xlsx`.
+   *
+   * Trước đây rơi xuống nhánh "file nhị phân" ở dưới, nên agent nói nó không
+   * đọc được slide. Chúng là zip chứa XML: rút chữ theo từng slide (kèm ghi
+   * chú người thuyết trình), từng đoạn + bảng, từng sheet. Cùng chỗ với PDF:
+   * TRƯỚC trần 2MB, vì một bộ slide 15MB phần lớn là ảnh, chữ thì ít.
+   */
+  {
+    const duoiOffice = path.extname(dich).toLowerCase();
+    const { laFileOffice, docOffice } = await import('./docOffice');
+    if (laFileOffice(duoiOffice)) {
+      if (st.size > 60 * 1024 * 1024) {
+        return { noiDung: `LỖI: file nặng ${(st.size / 1048576).toFixed(1)}MB, quá trần 60MB.`, tomTat: 'quá lớn' };
+      }
+      const nhan = String(args.path ?? '');
+      let kq;
+      try {
+        kq = docOffice(await fs.readFile(dich), duoiOffice);
+      } catch (e) {
+        return {
+          noiDung: `LỖI: không mở được "${nhan}" (${(e as Error).message}). File có thể hỏng, đặt mật khẩu, `
+            + 'hoặc là định dạng cũ (.ppt/.doc/.xls) — loại đó cần đổi sang bản mới hoặc xuất PDF.',
+          tomTat: 'Office hỏng',
+        };
+      }
+      const donVi = kq.loai === 'pptx' ? 'slide' : kq.loai === 'xlsx' ? 'sheet' : 'đoạn';
+      return {
+        noiDung: `${kq.loai.toUpperCase()} "${nhan}" — ${kq.soPhan} ${donVi}, chữ đã rút ra `
+          + '(hình ảnh/biểu đồ trong file KHÔNG có ở đây):\n\n'
+          + (kq.chu || '(không có chữ nào)')
+          + (kq.catBot ? '\n\n[… đã cắt bớt vì quá dài.]' : ''),
+        tomTat: `${kq.loai} ${kq.soPhan} ${donVi} · ${kq.chu.length} ký tự`,
+      };
+    }
+  }
 
   /*
    * NOTEBOOK: dựng lại thành chữ, KHÔNG đổ nguyên JSON.
@@ -1368,7 +1453,7 @@ async function toolRunCommand(
 
 // ─── grep ──────────────────────────────────────────────────────────
 
-async function toolGrep(goc: string, args: Record<string, unknown>): Promise<KetQuaTool> {
+async function toolGrep(goc: string, args: Record<string, unknown>, tienTo?: string): Promise<KetQuaTool> {
   const mauTho = String(args.pattern ?? '');
   if (!mauTho) return { noiDung: 'LỖI: thiếu "pattern".', tomTat: 'thiếu mẫu' };
 
@@ -1436,7 +1521,7 @@ async function toolGrep(goc: string, args: Record<string, unknown>): Promise<Ket
         if (!re.test(dongNay)) continue;
         tongKhop++;
         if (!nhom) {
-          nhom = { file: path.relative(goc, p).split(path.sep).join('/'), dong: [], soKhop: 0 };
+          nhom = { file: hienDuong(tienTo, path.relative(goc, p)).split(path.sep).join('/'), dong: [], soKhop: 0 };
           theoFile.push(nhom);
         }
         nhom.soKhop++;
@@ -1488,7 +1573,7 @@ async function toolGrep(goc: string, args: Record<string, unknown>): Promise<Ket
 
 // ─── glob ──────────────────────────────────────────────────────────
 
-async function toolGlob(goc: string, args: Record<string, unknown>): Promise<KetQuaTool> {
+async function toolGlob(goc: string, args: Record<string, unknown>, tienTo?: string): Promise<KetQuaTool> {
   const mau = String(args.pattern ?? '').trim();
   if (!mau) return { noiDung: 'LỖI: thiếu "pattern".', tomTat: 'thiếu mẫu' };
   const re = mauGlobThanhRegex(mau, { toanDuong: true });
@@ -1512,7 +1597,7 @@ async function toolGlob(goc: string, args: Record<string, unknown>): Promise<Ket
       const tuongDoi = path.relative(goc, p).split(path.sep).join('/');
       if (!re.test(tuongDoi)) continue;
       const st = await fs.stat(p).catch(() => null);
-      thay.push({ p: tuongDoi, luc: st?.mtimeMs ?? 0 });
+      thay.push({ p: hienDuong(tienTo, tuongDoi).split(path.sep).join('/'), luc: st?.mtimeMs ?? 0 });
     }
   };
   await di(goc);

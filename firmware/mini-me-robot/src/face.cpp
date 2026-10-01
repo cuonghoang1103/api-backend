@@ -224,6 +224,7 @@ static void drawStateLabel(Emotion e) {
 
 static TrangThai trangThai = RANH;
 static int trangThaiDaVe = -1;
+static bool dangNgu = false;
 static uint32_t amLuongDenLuc = 0;   // đang hiện thanh âm lượng tới lúc này
 static KieuNghe kieuDaVe = NGHE_TU_DO;
 
@@ -254,6 +255,7 @@ static const uint16_t C_PHU_DE = 0xEF7D; // trắng ngà — chữ dài đọc �
 static const uint16_t C_BAN = 0xAD55;    // xám sáng — lời người dùng
 
 static uint16_t mauTrangThai(TrangThai t) {
+  if (t == RANH && dangNgu) return 0x4A69;   // xám tối — đang ngủ, đừng chói
   return t == NGHE ? C_NGHE : t == NGHI ? C_NGHI : t == NOI ? C_NOI : C_RANH;
 }
 
@@ -262,7 +264,7 @@ static const char* chuTrangThai(TrangThai t) {
     case NGHE: return "ĐANG NGHE";
     case NGHI: return "ĐANG NGHĨ";
     case NOI:  return "ĐANG NÓI";
-    default:   return "CHẠM ĐỂ NÓI";
+    default:   return dangNgu ? "ĐANG NGỦ" : "CHẠM ĐỂ NÓI";
   }
 }
 
@@ -370,8 +372,10 @@ static void loopDai(uint32_t now) {
   if ((int)trangThai != trangThaiDaVe) {
     trangThaiDaVe = trangThai;
     veDong1();
-    // Lượt nghe mới: phụ đề của lượt trước không còn nghĩa gì.
-    if (trangThai == NGHE && phuDeChu.length()) {
+    // Lượt nghe mới: phụ đề của lượt trước không còn nghĩa gì. Và "Bạn: …"
+    // chỉ sống lúc ĐANG NGHĨ — robot cất tiếng là xoá: người dùng không
+    // muốn chữ chạy bên dưới lúc nó đang nói (01/10/2026).
+    if ((trangThai == NGHE || (trangThai == NOI && phuDeNguoi)) && phuDeChu.length()) {
       phuDeChu = "";
       trangSauLuc = 0;
     }
@@ -402,6 +406,12 @@ static void loopDai(uint32_t now) {
 void datTrangThai(TrangThai t) { trangThai = t; }
 
 void datMuc(int32_t muc) { mucSong = muc; }
+
+void datNgu(bool ngu) {
+  if (ngu == dangNgu) return;
+  dangNgu = ngu;
+  trangThaiDaVe = -1;   // cùng là RANH nhưng chữ khác: vẽ lại dòng trên
+}
 
 void phuDe(const char* utf8, bool nguoiDung) {
   phuDeChu = utf8 ? utf8 : "";

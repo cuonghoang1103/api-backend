@@ -72,4 +72,8 @@ void tick();
 void datSuKien(void (*khiDat)(), void (*khiGiu)(), void (*khiNha)(bool daGiu),
                void (*khiDoiAmLuong)(int buoc));
 
+/** `millis()` lúc ngón đặt xuống lần gần nhất (0 = chưa ai chạm) — để
+ *  `main.cpp` biết có người thật đang ở đây (xem songDong). */
+uint32_t chamLanCuoi();
+
 }  // namespace camUng

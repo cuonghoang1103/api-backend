@@ -261,12 +261,12 @@ static int32_t vadGate(bool giuLuot = false) {
  * vẫn cao gấp 5–10 lần p90 của nền. Tách được; chỉ là thước đang đặt ở
  * ĐÁY của nền thay vì ở ĐỈNH THƯỜNG GẶP của nó. Nên:
  *
- *   `nenCao`   = phân vị 90% của tiếng nền, học lúc rảnh như `noiseFloor`
- *   còn nói    = vượt max(2× đáy, `nenCao`)
+ *   `nenCao()` = phân vị 90% của tiếng nền = đáy × `tiGai`, tỉ lệ học CHẬM
+ *   còn nói    = vượt max(2× đáy, `nenCao()`)
  *   dứt câu    = bộ đếm im lặng RỈ — gai nền lẻ tẻ (chén va, ai cười) chỉ
  *                TRỪ BỚT chứ không xoá sạch; phải to LIỀN 3 khối (một âm
  *                tiết thật) mới tính là người còn đang nói
- *   mở lượt VAD = vượt max(4× đáy, 1,5× `nenCao`) — bớt lượt rác từ quán
+ *   mở lượt VAD = 4× đáy, Y NGUYÊN như trước — xem đoạn ⚠️ thứ hai dưới.
  *
  * ⚠️ DÙNG CHUNG cho mọi phòng, KHÔNG bật/tắt theo "phòng ồn hay yên". Bản
  * đầu có công tắc đó (p90 > 1,25× ngưỡng giữ) và nạp vào bo ở quán thì nó
@@ -275,18 +275,40 @@ static int32_t vadGate(bool giuLuot = false) {
  * Ở phòng yên luật mới cho kết quả như luật cũ (mô phỏng 2.500 câu: 0 lần
  * cắt giữa câu, trễ dứt 0,58 so với 0,6 giây), vì nền không vượt 2× đáy
  * thì cả hai ngưỡng đều về đúng số cũ.
+ *
+ * ⚠️ BẢN ĐẦU HỌC p90 NHANH (lên 3,5% mỗi khối) — VÀ ROBOT ĐIẾC DẦN KHI
+ * NGƯỜI TA NÓI. Người dùng ở quán: "nói mãi nó vẫn không nghe, hay phải
+ * nói to?". Đo qua USB: p90 nhảy 18k ↔ 76k trong 25 giây — mỗi khi có ai
+ * nói, chính giọng đó được học thành "nền", ngưỡng mở (khi ấy là 1,5× p90)
+ * vọt lên ~114k, gấp ba ngưỡng cũ, và càng nói càng không mở. Đúng cái bẫy
+ * mà `noiseFloor` đã né từ 11/08 bằng cách leo CHẬM.
+ *
+ * Sửa hai chỗ: (1) mở lượt VAD trả về đúng 4× đáy như trước hôm nay — độ
+ * nhạy người dùng đã quen; lượt rác ở quán nhiều hơn nhưng giờ dứt sau ~1
+ * giây chứ không kéo 15 giây. (2) Không học p90 trực tiếp nữa mà học TỈ
+ * LỆ p90/đáy, thật chậm (một câu nói 2 giây đẩy nó lên chừng 15%, quán đổi
+ * thì theo kịp sau 10–20 giây). Đáy vốn đã kháng được tiếng nói, nên tích
+ * của hai thứ cũng kháng được.
  */
-static int32_t nenCao = VAD_THRESHOLD;
+// Tỉ lệ p90/đáy, dấu phẩy tĩnh 16 bit (65536 = 1×). Kẹp 1×..5×: quán đo
+// được 1,7–5,3 lúc khởi động.
+static int32_t tiGai = 2 << 16;
 static const int32_t TRAN_VAD = 8388608 / 4;   // cùng trần với vadGate()
+
+static int32_t nenCao() {
+  const int64_t x = ((int64_t)noiseFloor * tiGai) >> 16;
+  return x > TRAN_VAD ? TRAN_VAD : (int32_t)x;
+}
 
 /** Nền có "gai" (p90 vượt 2× đáy). Chỉ để chọn số nấc "bắt đầu nói" của
  *  lượt chạm và để ghi log — luật dứt câu thì dùng chung, xem trên. */
-static bool nenCoGai() { return nenCao > vadGate(true); }
+static bool nenCoGai() { return nenCao() > vadGate(true); }
 
 /** Vượt mức này là "còn đang nói". */
 static int32_t nguongGiu() {
   const int32_t g = vadGate(true);
-  int32_t x = nenCao > g ? nenCao : g;
+  const int32_t c = nenCao();
+  int32_t x = c > g ? c : g;
   if (x > TRAN_VAD) x = TRAN_VAD;
   return x;
 }
@@ -298,13 +320,9 @@ static int32_t nguongRo() {
   return a > b ? a : b;
 }
 
-/** Ngưỡng MỞ lượt VAD. Lượt chạm không dùng nó — chạm là đã mở rồi. */
-static int32_t nguongMoVad() {
-  const int32_t g = vadGate(false);
-  int32_t q = nenCao + nenCao / 2;
-  if (q > TRAN_VAD) q = TRAN_VAD;
-  return q > g ? q : g;
-}
+/** Ngưỡng MỞ lượt VAD = 4× đáy, như trước 01/10 — xem ⚠️ ở trên. Lượt
+ *  chạm không dùng nó: chạm là đã mở rồi. */
+static int32_t nguongMoVad() { return vadGate(false); }
 
 /**
  * Đếm số khối to LIÊN TIẾP — phải đủ dài mới mở lượt nghe.
@@ -1184,15 +1202,17 @@ static void pumpMic() {
           mauNen[j + 1] = v;
         }
         noiseFloor = mauNen[soMau / 4];   // phân vị 25%
-        nenCao = mauNen[soMau * 9 / 10];  // phân vị 90% — xem `nenCao`
       } else {
         noiseFloor = VAD_THRESHOLD / 2;
-        nenCao = noiseFloor;
       }
       if (noiseFloor < VAD_THRESHOLD / 4) noiseFloor = VAD_THRESHOLD / 4;
-      if (nenCao < noiseFloor) nenCao = noiseFloor;
+      if (soMau >= 8) {
+        // Tỉ lệ p90/đáy của 2 giây đo — xem `tiGai`.
+        const int64_t r = ((int64_t)mauNen[soMau * 9 / 10] << 16) / noiseFloor;
+        tiGai = (int32_t)(r < (1 << 16) ? (1 << 16) : r > (5 << 16) ? (5 << 16) : r);
+      }
       Serial.printf("[vad] do nen phong: %ld (tu %u mau), p90 %ld, nguong mo %ld, giu %ld%s\n",
-                    (long)noiseFloor, soMau, (long)nenCao, (long)nguongMoVad(),
+                    (long)noiseFloor, soMau, (long)nenCao(), (long)nguongMoVad(),
                     (long)nguongGiu(), nenCoGai() ? " — nen co gai (kieu quan)" : "");
     }
     pushPreroll(pcmBlock);
@@ -1236,16 +1256,15 @@ static void pumpMic() {
     if (micLevel < noiseFloor) noiseFloor += (micLevel - noiseFloor) / 8;
     else noiseFloor += (micLevel - noiseFloor) / 512 + 1;
 
-    // Phân vị 90% của nền (xem `nenCao`). Bước theo tỉ lệ, 1/256 giá trị
-    // hiện tại: vượt thì lên 9 bước, dưới thì xuống 1 — cân bằng đúng lúc
-    // 10% số khối vượt. Từ đáy leo lên p90 của quán mất chưa tới 1 giây;
-    // quán vãn thì tụt về trong khoảng 6 giây.
+    // Tỉ lệ p90/đáy (xem `tiGai`): vượt thì lên 9 bước, dưới thì xuống 1 —
+    // cân bằng đúng lúc 10% số khối vượt. Bước = 1/8192 giá trị: toàn khối
+    // vượt thì gấp đôi sau ~10 giây, nên một câu nói vài giây chỉ đẩy nhẹ.
     {
-      const int32_t buoc = nenCao / 256 + 1;
-      if (micLevel > nenCao) nenCao += 9 * buoc;
-      else nenCao -= buoc;
-      if (nenCao < noiseFloor) nenCao = noiseFloor;
-      if (nenCao > 8388608) nenCao = 8388608;
+      const int32_t buoc = tiGai / 8192 + 1;
+      if (micLevel > nenCao()) tiGai += 9 * buoc;
+      else tiGai -= buoc;
+      if (tiGai < (1 << 16)) tiGai = 1 << 16;
+      if (tiGai > (5 << 16)) tiGai = 5 << 16;
     }
 
     // Bộ đếm RỈ, không phải chuỗi liên tiếp.
@@ -1424,7 +1443,7 @@ void huyLuotCham() {
   if (micOpen && luotCham) huyCham();
 }
 
-int32_t noiseHigh() { return nenCao; }
+int32_t noiseHigh() { return nenCao(); }
 uint32_t byteDaNhan() { return writePos; }
 uint32_t byteDaPhat() {
   // Byte đã rời vòng đệm vào DMA, trừ đi phần DMA còn giữ chưa kêu

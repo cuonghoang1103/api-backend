@@ -87,6 +87,10 @@ void datTrangThai(TrangThai t);
 /** Mức tiếng cho vạch sóng cạnh nhãn — mic lúc nghe, loa lúc nói (thang 24 bit). */
 void datMuc(int32_t muc);
 
+/** Robot đang ngủ (xem songDong) — lúc rảnh dải ghi "ĐANG NGỦ" thay cho
+ *  "CHẠM ĐỂ NÓI", màu tối hơn. */
+void datNgu(bool ngu);
+
 /**
  * Phụ đề dòng dưới, UTF-8 có dấu. `nguoiDung` = câu robot NGHE được
  * (hiện "Bạn: …", màu xám); không thì là câu robot đang NÓI (màu trắng).

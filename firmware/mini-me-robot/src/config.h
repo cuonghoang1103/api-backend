@@ -328,6 +328,14 @@
 #define MAT_Y          4
 /** Mép trên của dải trạng thái (đồng hồ · nghe/nghĩ/nói · pin). */
 #define DAI_Y          (MAT_Y + 240)
+/**
+ * Phụ đề LỜI ROBOT NÓI ở dòng dưới của dải: TẮT (01/10/2026, người dùng:
+ * "nó nói ra tiếng rồi, không cần sub bên dưới"). Lúc nói, dải chỉ còn
+ * "ĐANG NÓI" + vạch sóng. Dòng "Bạn: …" (robot nghe ra câu gì) vẫn hiện
+ * lúc ĐANG NGHĨ và tự xoá khi robot bắt đầu nói.
+ * Server vẫn gửi `phu_de` — bật lại chỉ cần đổi 1 rồi nạp.
+ */
+#define HIEN_PHU_DE_LOI_NOI 0
 
 #if MAT_TREN_NGUC && !CO_MAN_NGUC
 #error "MAT_TREN_NGUC = 1 can CO_MAN_NGUC = 1 — mat ve len man nguc"

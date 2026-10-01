@@ -41,6 +41,7 @@
 #include "net.h"
 #include "ota.h"
 #include "config.h"
+#include "songDong.h"
 #include "secrets.h"
 
 // Màn NGỰC. Ba màn (ngực + hai mắt) dựng chung trong `man_hinh.h` vì
@@ -672,12 +673,14 @@ static void onTurnStart() {
   st.mode = MODE_HEAR;
   st.lastNote = "nghe thay tieng noi";
   camXucLuot = "";
-  face::set(face::LISTENING);
   // Lượt do chạm mở (trong 3 giây vừa qua) ⇒ báo server: người ta đã chủ
   // động gọi robot, cổng "Odin" cho qua. Cờ chỉ sống 3 giây để một lượt
   // VAD tự mở về sau không ăn ké.
   const bool doCham = chamMoLuotLuc && millis() - chamMoLuotLuc < 3000;
   chamMoLuotLuc = 0;
+  // Đang ngủ mà lượt do VAD tự mở (ở quán: tiếng bàn bên) thì mắt vẫn
+  // nhắm — chỉ dải dưới hiện "ĐANG NGHE". Server nhận lượt thì mới dậy.
+  if (doCham || !songDong::dangNgu()) face::set(face::LISTENING);
   if (!doCham) face::datNhanNghe(face::NGHE_TU_DO);
   if (st.wsUp) ws.sendTXT(doCham ? "{\"t\":\"audio_start\",\"cham\":true}" : "{\"t\":\"audio_start\"}");
 }
@@ -841,7 +844,7 @@ static void onTurnEnd() {
   thinkSinceMs = millis();
   st.lastNote = "dang cho server tra loi";
   face::datNhanNghe(face::NGHE_TU_DO);
-  face::set(face::THINKING);
+  if (!songDong::dangNgu()) face::set(face::THINKING);
   if (st.wsUp) {
     ws.sendTXT("{\"t\":\"audio_end\"}");
     const uint32_t ms = millis() - upStartMs;
@@ -937,6 +940,15 @@ static void handleCommand(JsonDocument& doc) {
   if (!strcmp(type, "face")) {
     const char* emo = doc["payload"]["emotion"] | "neutral";
     const uint32_t ms = doc["payload"]["ms"] | 3000;
+    // Đang ngủ say mà server bảo "lim dim" (lượt bỏ vì chưa gọi tên) thì cứ
+    // ngủ. Mọi cảm xúc khác đi kèm một lượt server ĐÃ nhận ⇒ có người thật.
+    if (songDong::dangNgu()) {
+      if (!strcmp(emo, "sleepy")) {
+        sendAck(id, true);
+        return;
+      }
+      songDong::coNguoi();
+    }
     if (st.mode == MODE_THINK || st.mode == MODE_TALK) {
       // Cảm xúc của câu trả lời: giữ tới hết câu (xem `camXucLuot`).
       camXucLuot = emo;
@@ -1095,6 +1107,7 @@ static void handleSayStart(JsonDocument& doc) {
 
   soPhuDeCho = 0;
   daCoPhuDeLuotNay = false;
+  songDong::coNguoi();
   st.mode = MODE_TALK;
   st.lastNote = "dang nhan tieng noi";
   if (camXucLuot.length()) face::setByName(camXucLuot.c_str(), 0);
@@ -1180,16 +1193,17 @@ static void onWsEvent(WStype_t type, uint8_t* payload, size_t len) {
           st.said = deaccent(text, 60);
           // Server cũ (hay đường lùi) không gửi `phu_de` từng mẩu: thì ít
           // nhất hiện cả câu khi nói xong.
-          if (!daCoPhuDeLuotNay) face::phuDe(text.c_str());
+          if (HIEN_PHU_DE_LOI_NOI && !daCoPhuDeLuotNay) face::phuDe(text.c_str());
         } else {
           st.heard = deaccent(text, 60);
           // "Bạn: …" — robot nghe ra câu gì. Đây là thứ duy nhất cho người
           // ta biết nó nghe ĐÚNG hay không, trước khi phải chờ câu trả lời.
           face::phuDe(text.c_str(), true);
+          songDong::coNguoi();
         }
       } else if (!strcmp(t, "phu_de")) {
         const char* chu = doc["text"] | "";
-        if (*chu && !audio::luotChamDangMo()) xepPhuDe(chu);
+        if (HIEN_PHU_DE_LOI_NOI && *chu && !audio::luotChamDangMo()) xepPhuDe(chu);
       } else if (!strcmp(t, "nak")) {
         // Server nghe thành tiếng ồn chứ không ra câu nào. Báo bằng
         // hai nốt ĐI XUỐNG để bạn biết ngay là phải nói lại — thay vì
@@ -1199,7 +1213,7 @@ static void onWsEvent(WStype_t type, uint8_t* payload, size_t len) {
         if (st.mode == MODE_THINK) {
           st.mode = MODE_IDLE;
           // Server vừa đặt mặt (vd. lim dim vì chưa gọi tên) thì giữ nó.
-          if (!camXucLuot.length()) face::set(matNghi);
+          if (!camXucLuot.length() && !songDong::dangNgu()) face::set(matNghi);
           camXucLuot = "";
         }
         st.lastNote = "khong nghe ro - noi lai di";
@@ -1646,6 +1660,7 @@ void loop() {
         char s[6];
         snprintf(s, sizeof(s), "%02d:%02d", t.tm_hour, t.tm_min);
         face::setClock(s);
+        songDong::datGio(t.tm_hour);
       }
       face::setBattery(phanTramPin(docPin()));
     }
@@ -1668,6 +1683,7 @@ void loop() {
 
     if (cham && !chamTruoc) {          // sườn lên
       chamTu = millis();
+      songDong::coNguoi();
       daVuot = false;
     } else if (cham && !daVuot && millis() - chamTu > 1500) {
       daVuot = true;                    // giữ lâu = vuốt đầu
@@ -1892,6 +1908,16 @@ void loop() {
     face::datTrangThai(tt);
     face::datMuc(dangNoi ? mucLoa : tt == face::NGHE ? audio::level() : 0);
     loopPhuDe();
+
+    // Lúc rảnh: nhìn quanh, giật mình, ngủ (xem songDong.h). Chạm màn bất
+    // kỳ chỗ nào cũng là có người — kể cả vuốt ve vùng mắt.
+    static uint32_t chamDaBiet = 0;
+    const uint32_t ch = camUng::chamLanCuoi();
+    if (ch != chamDaBiet) {
+      chamDaBiet = ch;
+      songDong::coNguoi();
+    }
+    songDong::tick(tt == face::RANH, audio::level(), audio::noise());
   }
   eyes::loop();
 

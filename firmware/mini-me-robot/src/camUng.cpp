@@ -50,6 +50,8 @@ static void (*suKienGiu)() = nullptr;
 static void (*suKienNha)(bool) = nullptr;
 static void (*suKienAmLuong)(int) = nullptr;
 
+uint32_t chamLanCuoi() { return chamLuc; }
+
 void datSuKien(void (*khiDat)(), void (*khiGiu)(), void (*khiNha)(bool daGiu),
                void (*khiDoiAmLuong)(int buoc)) {
   suKienDat = khiDat;

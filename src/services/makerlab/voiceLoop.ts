@@ -26,6 +26,7 @@ import type { Prisma } from '@prisma/client';
 import { prisma } from '../../config/database.js';
 import { logger } from '../../utils/logger.js';
 import { canTraCuu, tinMoiNhat, timTrenWeb, dungDoanTraCuu } from './web.js';
+import { canHeThong, khoiHeThong, chuLaAdmin } from './heThong.js';
 import { timKienThuc, dungDoanKienThuc } from './kienThuc.js';
 import { transcribeWithGroq } from '../interview/voice/stt.js';
 import {
@@ -1434,8 +1435,25 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
     return `${cau} ${viTri}`;
   }
 
+  // ── Hỏi về HỆ THỐNG của chủ robot (chỉ đọc) — xem heThong.ts ──
+  //
+  // Đứng TRƯỚC tra web và CHẶN nó: "hôm nay web của tôi có bao nhiêu người
+  // đăng ký" có chữ "hôm nay" nên `canTraCuu` sẽ đi Google nguyên câu đó, và
+  // model nhận về mấy trang chẳng liên quan đè lên số liệu thật.
+  let doanHeThong = '';
+  const chuDeHeThong = canHeThong(heard);
+  if (chuDeHeThong.length && (await chuLaAdmin(input.deviceId))) {
+    const t = Date.now();
+    doanHeThong = await khoiHeThong(chuDeHeThong);
+    logger.info('MakerLab đọc số liệu hệ thống', {
+      deviceId: input.deviceId,
+      chuDe: chuDeHeThong,
+      ms: Date.now() - t,
+    });
+  }
+
   let doanTraCuu = '';
-  const kieuTra = canTraCuu(heard);
+  const kieuTra = doanHeThong ? null : canTraCuu(heard);
   if (kieuTra) {
     const t = Date.now();
     const muc =
@@ -1477,12 +1495,14 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
       lyDo: loai.lyDo,
       nao: persona.nao ?? 'tu-dong',
     });
-    const r = await thinkAndSpeak(persona, heard, input.deviceId, ctx, timing, doanTraCuu, loai);
+    const r = await thinkAndSpeak(
+      persona, heard, input.deviceId, ctx, timing, doanHeThong || doanTraCuu, loai,
+    );
     reply = r.reply;
     spoken = r.spoken;
     timing.llm = r.llmMs;
   } else {
-    reply = await think(persona, heard, input.deviceId, ctx, doanTraCuu);
+    reply = await think(persona, heard, input.deviceId, ctx, doanHeThong || doanTraCuu);
     timing.llm = Date.now() - t1;
   }
 

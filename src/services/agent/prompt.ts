@@ -533,7 +533,7 @@ export function buildSystemPrompt(opts: {
    * giao diện nó chưa từng thấy.
    */
   const tatCa: Array<{ co: boolean; nut: string; lam: string }> = [
-    { co: coWeb, nut: 'Trình duyệt', lam: 'mở trang web, đọc nội dung SAU KHI JavaScript chạy, xem lỗi console' },
+    { co: coWeb, nut: 'Trình duyệt', lam: 'mở trang web, đọc nội dung SAU KHI JavaScript chạy, xem slide/ảnh trên trang (chụp + cuộn), đọc file theo link bằng phiên đăng nhập của người dùng, xem lỗi console' },
     { co: coLenh, nut: 'Chạy lệnh', lam: 'chạy `npm test`, `git status`, dựng dự án' },
     { co: coSua, nut: 'Sửa file', lam: 'sửa và tạo file trong dự án' },
   ];

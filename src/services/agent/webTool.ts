@@ -25,11 +25,16 @@
  *      hướng 302 về `localhost` thì lớp kiểm ban đầu đã đi qua từ lâu.
  */
 import { lookup } from 'node:dns/promises';
+import type { ServerToolResult } from './serverTools.js';
 import { isIP } from 'node:net';
 
 /** Trần chữ trả cho model. Cùng lý do như mọi kết quả tool: nó chở theo mỗi lượt. */
 const MAX_CHU = 30_000;
 const MAX_BYTE_TAI = 3 * 1024 * 1024;
+/** Trần cho FILE (PDF, slide, ảnh) — chữ rút ra nhỏ hơn file nhiều, nên trần rộng hơn trang HTML. */
+const MAX_BYTE_FILE = 40 * 1024 * 1024;
+/** Ảnh gửi model: co về cạnh dài 1568px (model cũng co về cỡ đó ở đầu kia). */
+const CANH_ANH = 1568;
 const HET_GIO_MS = 20_000;
 const MAX_CHUYEN_HUONG = 4;
 
@@ -108,7 +113,7 @@ export function htmlSangChu(html: string): string {
     .trim();
 }
 
-export interface KetQuaWeb { content: string; summary: string }
+export type KetQuaWeb = ServerToolResult;
 
 export async function docWeb(args: Record<string, unknown>): Promise<KetQuaWeb> {
   const tho = typeof args.url === 'string' ? args.url.trim() : '';
@@ -162,7 +167,7 @@ export async function docWeb(args: Record<string, unknown>): Promise<KetQuaWeb> 
           // Nói thật mình là ai. Nhiều trang chặn UA trống, và giả làm trình
           // duyệt là nói dối chủ trang về thứ đang đọc họ.
           'User-Agent': 'CuongThaiAgent/1.0 (+https://cuongthai.com)',
-          Accept: 'text/html,text/plain,application/json;q=0.9,*/*;q=0.5',
+          Accept: 'text/html,text/plain,application/json;q=0.9,application/pdf,image/*;q=0.8,*/*;q=0.5',
         },
       });
       if (res.status < 300 || res.status >= 400) break;
@@ -179,11 +184,12 @@ export async function docWeb(args: Record<string, unknown>): Promise<KetQuaWeb> 
     }
 
     const kieu = (res.headers.get('content-type') || '').toLowerCase();
-    if (!/text\/|json|xml|javascript/.test(kieu)) {
-      return {
-        content: `LỖI: nội dung kiểu "${kieu || 'không rõ'}" — tool này chỉ đọc được chữ (HTML, văn bản, JSON).`,
-        summary: 'không phải chữ',
-      };
+    /* FILE (01/10/2026): PDF, slide/tài liệu Office, ảnh. Trước đây trả
+       "tool này chỉ đọc được chữ" — nên một link slide hay ảnh bài học là ngõ
+       cụt dù đọc được hết. Nhận dạng theo BYTE ĐẦU, không chỉ content-type:
+       nhiều máy chủ trả `application/octet-stream` cho mọi thứ. */
+    if (!/text\/|json|javascript/.test(kieu) || /officedocument|ms-powerpoint|ms-excel|msword/.test(kieu)) {
+      return await docFileNhiPhan(res, u, kieu);
     }
 
     // Đọc theo mẩu và DỪNG khi vượt trần, thay vì `res.text()` rồi mới cắt: một
@@ -218,4 +224,94 @@ export async function docWeb(args: Record<string, unknown>): Promise<KetQuaWeb> 
   } finally {
     clearTimeout(dongHo);
   }
+}
+
+// ─── File nhị phân theo link: PDF · Office · ảnh ───────────────────
+
+async function docHetThan(res: Response, tran: number): Promise<Buffer | null> {
+  const doc = res.body?.getReader();
+  if (!doc) return Buffer.alloc(0);
+  const cuc: Uint8Array[] = [];
+  let tong = 0;
+  for (;;) {
+    const { done, value } = await doc.read();
+    if (done) break;
+    tong += value.byteLength;
+    if (tong > tran) { void doc.cancel(); return null; }
+    cuc.push(value);
+  }
+  return Buffer.concat(cuc);
+}
+
+async function docFileNhiPhan(res: Response, u: URL, kieu: string): Promise<ServerToolResult> {
+  const b = await docHetThan(res, MAX_BYTE_FILE);
+  if (!b) return { content: `LỖI: file lớn hơn ${MAX_BYTE_FILE / 1048576}MB.`, summary: 'file quá lớn' };
+  const nguon = u.toString();
+  const duoi = (/\.([a-z0-9]{2,5})$/i.exec(u.pathname)?.[1] ?? '').toLowerCase();
+
+  const laPdf = b.subarray(0, 5).toString('latin1') === '%PDF-';
+  const laZip = b[0] === 0x50 && b[1] === 0x4b;
+  const laAnh = (b[0] === 0x89 && b[1] === 0x50) || (b[0] === 0xff && b[1] === 0xd8)
+    || b.subarray(0, 3).toString('latin1') === 'GIF' || b.subarray(8, 12).toString('latin1') === 'WEBP'
+    || /^image\/(png|jpeg|gif|webp|avif)/.test(kieu);
+
+  if (laAnh) {
+    try {
+      const { default: sharp } = await import('sharp');
+      // `animated: false`: GIF/WebP động chỉ lấy khung đầu — model nhận ảnh tĩnh.
+      const jpg = await sharp(b, { animated: false, limitInputPixels: 80_000_000 })
+        .rotate()
+        .resize({ width: CANH_ANH, height: CANH_ANH, fit: 'inside', withoutEnlargement: true })
+        .flatten({ background: '#ffffff' })
+        .jpeg({ quality: 85 })
+        .toBuffer();
+      return {
+        content: `Ảnh tại ${nguon} — nhìn ảnh kèm theo.`,
+        summary: `ảnh ${Math.round(jpg.length / 1024)} KB`,
+        anh: [{ media_type: 'image/jpeg', data: jpg.toString('base64') }],
+      };
+    } catch (e) {
+      return { content: `LỖI: không giải mã được ảnh (${(e as Error).message}).`, summary: 'ảnh hỏng' };
+    }
+  }
+
+  if (laPdf) {
+    try {
+      const { extractPdf } = await import('../cv/extract.service.js');
+      const r = await extractPdf(b);
+      const chu = r.text.length > MAX_CHU ? `${r.text.slice(0, MAX_CHU)}\n\n[… đã cắt bớt, PDF dài hơn ${MAX_CHU} ký tự]` : r.text;
+      return {
+        content: `Nguồn: ${nguon}\nPDF ${r.pages} trang`
+          + (r.imageOnly ? ' — NGHI BẢN SCAN (gần như không có chữ chọn được). Nếu có trình duyệt (`web_mo` + `web_anh`) thì mở nó ra để NHÌN từng trang.' : '')
+          + `:\n\n${chu || '(không rút được chữ)'}`,
+        summary: `PDF ${r.pages} trang`,
+      };
+    } catch (e) {
+      return { content: `LỖI: không mở được PDF (${(e as Error).message}).`, summary: 'PDF hỏng' };
+    }
+  }
+
+  const duoiOffice = ['pptx', 'docx', 'xlsx'].includes(duoi) ? `.${duoi}` as '.pptx' | '.docx' | '.xlsx'
+    : /presentationml/.test(kieu) ? '.pptx' : /wordprocessingml/.test(kieu) ? '.docx' : /spreadsheetml/.test(kieu) ? '.xlsx' : null;
+  if (laZip && duoiOffice) {
+    try {
+      const { docOffice } = await import('./docOffice.js');
+      const r = docOffice(b, duoiOffice);
+      const chu = r.chu.length > MAX_CHU ? `${r.chu.slice(0, MAX_CHU)}\n\n[… đã cắt bớt]` : r.chu;
+      return { content: `Nguồn: ${nguon}\n${r.loai.toUpperCase()} — ${r.soPhan} phần:\n\n${chu}`, summary: `${r.loai} ${r.soPhan} phần` };
+    } catch (e) {
+      return { content: `LỖI: không mở được file Office (${(e as Error).message}).`, summary: 'Office hỏng' };
+    }
+  }
+
+  if (/xml/.test(kieu) && !b.subarray(0, 4000).includes(0)) {
+    const chu = b.toString('utf8');
+    return { content: `Nguồn: ${nguon}\n\n${chu.slice(0, MAX_CHU)}`, summary: `${Math.round(chu.length / 100) / 10}k ký tự` };
+  }
+
+  return {
+    content: `LỖI: "${kieu || 'không rõ kiểu'}" (${Math.round(b.length / 1024)} KB) — doc_web đọc được trang HTML/chữ, PDF, `
+      + '.pptx/.docx/.xlsx và ảnh (png/jpg/gif/webp). File cũ .ppt/.doc/.xls: tải về bằng `web_tai` rồi `read_file`.',
+    summary: 'loại không hỗ trợ',
+  };
 }

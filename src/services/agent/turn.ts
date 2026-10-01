@@ -1156,7 +1156,7 @@ export async function runAgentTurn(
       for (const c of vongServer) {
         const args = docArgs(c.function.arguments);
         const kq = await runServerTool(c.function.name, args, input.userId);
-        append.push({ role: 'tool', tool_call_id: c.id, content: kq.content });
+        append.push({ role: 'tool', tool_call_id: c.id, content: kq.content, ...(kq.anh?.length ? { anh: kq.anh } : {}) });
         emit({ type: 'server_tool', name: c.function.name, summary: kq.summary });
       }
 

@@ -490,12 +490,71 @@ export async function docTrangDayDu(vung?: string): Promise<string> {
   return typeof chu === 'string' ? chu : '';
 }
 
-/** Ảnh chụp trang, PNG base64. */
-export async function chupTrang(): Promise<string | null> {
+/**
+ * Ảnh chụp phần ĐANG HIỆN của trang, base64.
+ *
+ * PNG nếu vừa trần, không thì JPEG: màn Retina chụp ra PNG 4–8MB, vượt trần
+ * máy chủ (5,6MB chuỗi) và bị bỏ — đúng loại trang nhiều ảnh/slide mà người
+ * dùng muốn AI nhìn. JPEG 85% của cùng khung hình chỉ vài trăm KB.
+ */
+export async function chupTrang(): Promise<{ data: string; kieu: 'image/png' | 'image/jpeg' } | null> {
   const wc = khung?.webContents;
   if (!wc) return null;
   const anh = await wc.capturePage();
-  return anh.isEmpty() ? null : anh.toPNG().toString('base64');
+  if (anh.isEmpty()) return null;
+  const png = anh.toPNG();
+  if (png.length <= 2_500_000) return { data: png.toString('base64'), kieu: 'image/png' };
+  // Rộng quá 1600px thì co lại: model cũng co về ~1568px ở đầu kia.
+  const co = anh.getSize();
+  const nho = co.width > 1600 ? anh.resize({ width: 1600, quality: 'good' }) : anh;
+  return { data: nho.toJPEG(85).toString('base64'), kieu: 'image/jpeg' };
+}
+
+import { MA_LIET_KE_ANH, maCuonTrang } from './trangScript';
+
+export interface KetQuaCuon { ok: boolean; loi?: string; y?: number; cao?: number; tong?: number; trongKhung?: boolean }
+
+/**
+ * Cuộn trang trước khi chụp — `web_anh` trước đây chỉ thấy MÀN ĐẦU, nên slide
+ * thứ 2 trở đi (và mọi ảnh dưới nếp gấp) là vô hình với agent.
+ *
+ * ⚠️ Nhiều trang KHÔNG cuộn bằng `window`: khung xem slide, trang tài liệu
+ * kiểu ứng dụng (thanh bên cố định) cuộn trong một `div overflow:auto`.
+ * `window.scrollBy` lúc đó không làm gì cả. Nên: trang cuộn được thì cuộn
+ * trang; không thì tìm khung cuộn LỚN NHẤT đang hiện và cuộn nó.
+ */
+export async function cuonTrang(huong: 'xuong' | 'len' | 'dau' | 'cuoi' | null, den?: string): Promise<KetQuaCuon> {
+  const wc = khung?.webContents;
+  if (!wc) return { ok: false, loi: 'chưa mở trình duyệt' };
+  const ma = maCuonTrang(huong, den);
+  try {
+    const kq = await wc.executeJavaScript(ma, true) as KetQuaCuon;
+    // Chờ ảnh lười (loading="lazy") và hiệu ứng cuộn kịp vẽ trước khi chụp.
+    await new Promise((r) => setTimeout(r, 450));
+    return kq;
+  } catch (e) {
+    return { ok: false, loi: (e as Error).message };
+  }
+}
+
+export interface AnhTrenTrang { src: string; alt: string; rong: number; cao: number; dangHien: boolean }
+
+/**
+ * Ảnh trên trang: <img> (lấy `currentSrc` — đúng tấm srcset đang dùng) và ảnh
+ * nền CSS của khối đủ lớn. Bỏ ảnh tí hon (icon, pixel theo dõi) và ảnh
+ * `data:`/`blob:` (không đọc lại được bằng địa chỉ). Lớn trước — slide, sơ đồ,
+ * ảnh bài học là thứ người ta hỏi, không phải biểu tượng 16px.
+ */
+export async function lietKeAnh(toiDa = 40): Promise<AnhTrenTrang[]> {
+  const wc = khung?.webContents;
+  if (!wc) return [];
+  const ma = MA_LIET_KE_ANH;
+  try {
+    const ds = await wc.executeJavaScript(ma, true) as AnhTrenTrang[];
+    return (Array.isArray(ds) ? ds : []).sort((a, b) => b.rong * b.cao - a.rong * a.cao).slice(0, toiDa);
+  } catch {
+    return [];
+  }
 }
 
 /**
@@ -762,6 +821,43 @@ function ganBatTai(): void {
  * `net.request` với `session` của chính khung ⇒ vẫn mang cookie đăng nhập,
  * nhưng lấy thẳng byte về, không đi qua tầng quyết-định-hiển-thị của Chromium.
  */
+export interface KetQuaTaiBoNho { ok: boolean; byte?: Buffer; kieu?: string; ten?: string; loi?: string }
+
+/**
+ * Tải một địa chỉ VÀO BỘ NHỚ bằng phiên đăng nhập của trình duyệt nhúng —
+ * không ghi đĩa, không hỏi thư mục.
+ *
+ * Để agent ĐỌC/NHÌN một file theo link (slide PDF, ảnh bài học) trên trang
+ * cần đăng nhập. `doc_web` chạy ở máy chủ, không có cookie của người dùng, nên
+ * nó chỉ thấy trang đăng nhập; `web_tai` thì bắt chọn thư mục và ghi rác ra
+ * đĩa cho một thứ chỉ cần đọc một lần.
+ */
+export async function taiVaoBoNho(url: string, tranByte: number): Promise<KetQuaTaiBoNho> {
+  const sach = hopLe(url);
+  if (!sach) return { ok: false, loi: 'chỉ đọc được địa chỉ http:// hoặc https://' };
+  return await new Promise<KetQuaTaiBoNho>((xong) => {
+    let daTraLoi = false;
+    const tra = (kq: KetQuaTaiBoNho): void => { if (!daTraLoi) { daTraLoi = true; xong(kq); } };
+    const req = net.request({ url: sach, session: session.fromPartition(PHAN_VUNG), useSessionCookies: true });
+    req.on('response', (res) => {
+      const ma = res.statusCode;
+      if (ma >= 400) { tra({ ok: false, loi: `máy chủ trả ${ma}` }); return; }
+      const kieu = String(res.headers['content-type'] ?? '').split(';')[0]!.trim().toLowerCase();
+      const cuc: Buffer[] = [];
+      let tong = 0;
+      res.on('data', (c: Buffer) => {
+        tong += c.length;
+        if (tong > tranByte) { req.abort(); tra({ ok: false, loi: `file lớn hơn ${(tranByte / 1048576).toFixed(0)}MB` }); return; }
+        cuc.push(c);
+      });
+      res.on('end', () => tra({ ok: true, byte: Buffer.concat(cuc), kieu, ten: tenTuUrl(sach) }));
+    });
+    req.on('error', (e) => tra({ ok: false, loi: e.message }));
+    setTimeout(() => { try { req.abort(); } catch { /* */ } tra({ ok: false, loi: 'quá 45s chưa tải xong' }); }, 45_000);
+    req.end();
+  });
+}
+
 async function taiBangNet(url: string, thuMuc: string, tenGoiY?: string): Promise<KetQuaTai> {
   return await new Promise<KetQuaTai>((xong) => {
     let daTraLoi = false;

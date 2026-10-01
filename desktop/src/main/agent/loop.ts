@@ -853,7 +853,6 @@ export async function chayLuot(
     // phải duyệt riêng. `git_write` theo `choSua` vì commit là ghi vào repo;
     // `shell_nen` theo `choChayLenh` vì nó vẫn là chạy lệnh.
     if (boiCanh.choChayLenh) capabilities.push('shell', 'shell_nen', 'terminal');
-    if (boiCanh.choTrinhDuyet) capabilities.push('browser');
     if (boiCanh.choSua) capabilities.push('git_write');
     /* Sửa ảnh đi theo `choSua` vì nó ghi một file vào dự án — nhưng là khả
        năng RIÊNG, không gộp vào `fs_write`. Máy chủ dựa vào đúng chỗ này để
@@ -863,6 +862,11 @@ export async function chayLuot(
   }
   // NGOÀI khối trên: ghi chú sống trên máy chủ, không cần thư mục dự án nào.
   if (boiCanh.choGhiNote) capabilities.push('notes_write');
+  /* TRÌNH DUYỆT cũng NGOÀI khối trên (01/10/2026): đọc một trang web, xem
+     slide/ảnh trên web của người dùng không cần thư mục dự án nào. Bản trước
+     để nó TRONG khối `if (goc)`, nên bật nút "Trình duyệt" mà chưa mở thư
+     mục thì model không có tool web nào — trong khi giao diện nói là có. */
+  if (boiCanh.choTrinhDuyet) capabilities.push('browser');
 
   // Đọc LẠI ở mỗi lượt người dùng gõ — xem ghi chú đầu `ghiChu.ts`. Đọc một
   // lần cho cả lượt là đủ: trong cùng một lượt agent không sửa file này, và đọc
@@ -1206,6 +1210,12 @@ export async function chayLuot(
               tomTat: 'không có kỹ năng đó',
             }
             : { noiDung: than, tomTat: `kỹ năng ${tenKn}` };
+        } else if (!boiCanh.goc && goi.name.startsWith('web_')) {
+          /* Tool trình duyệt chạy được khi CHƯA mở dự án — trừ việc tải về
+             (`web_tai*`) vẫn chạy được vì thư mục tải do người dùng chọn qua
+             hộp thoại, không phụ thuộc dự án. Gốc rỗng: không tool đọc/ghi
+             file nào đi qua nhánh này. */
+          kq = await chayToolAgent('', goi.name, goi.args, undefined, boiCanhLenh);
         } else if (!boiCanh.goc) {
           kq = { noiDung: 'LỖI: người dùng chưa chọn thư mục dự án nào.', tomTat: 'chưa mở dự án' };
         } else if (goi.name === 'giao_viec_phu') {

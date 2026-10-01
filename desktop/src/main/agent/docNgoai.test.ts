@@ -157,3 +157,35 @@ describe('thư mục ngoài — cấp quyền CHỈ ĐỌC', () => {
     expect(kq.noiDung).toMatch(/CHƯA được cấp/);
   });
 });
+
+describe('read_file — định dạng cũ + zip', () => {
+  it('.zip ⇒ liệt kê mục bên trong', async () => {
+    await fs.copyFile(path.join(MAU, 'slide.pptx'), path.join(goc, 'bo.zip'));
+    const kq = await chayToolAgent(goc, 'read_file', { path: 'bo.zip' });
+    expect(kq.noiDung).toMatch(/là file zip, \d+ mục/);
+    expect(kq.noiDung).toContain('ppt/presentation.xml');
+  });
+
+  it('.doc ⇒ đọc được (textutil trên macOS hoặc LibreOffice)', async () => {
+    await fs.copyFile(path.join(MAU, 'tai-lieu.doc'), path.join(goc, 'cu.doc'));
+    const kq = await chayToolAgent(goc, 'read_file', { path: 'cu.doc' });
+    if (/cần LibreOffice/.test(kq.noiDung)) return;            // máy CI không có công cụ nào — chấp nhận, lỗi đã nói rõ
+    expect(kq.noiDung).toContain('useState lưu state');
+  });
+
+  it('.ppt / .xls ⇒ đọc được khi có LibreOffice, không thì nói rõ cách gỡ', async () => {
+    const { timSoffice } = await import('./docCu');
+    const coLo = !!(await timSoffice());
+    await fs.copyFile(path.join(MAU, 'slide.ppt'), path.join(goc, 'cu.ppt'));
+    await fs.copyFile(path.join(MAU, 'bang.xls'), path.join(goc, 'cu.xls'));
+    const p = await chayToolAgent(goc, 'read_file', { path: 'cu.ppt' });
+    const x = await chayToolAgent(goc, 'read_file', { path: 'cu.xls' });
+    if (coLo) {
+      expect(p.noiDung).toContain('Slide một: React Hooks');
+      expect(x.noiDung).toContain('Cường\t9.5');
+    } else {
+      expect(p.noiDung).toMatch(/cần LibreOffice/);
+      expect(p.noiDung).toMatch(/PDF đều đọc được/);
+    }
+  }, 120_000);
+});

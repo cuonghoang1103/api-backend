@@ -120,7 +120,7 @@ export const AGENT_TOOLS: readonly AgentToolDef[] = [
     parameters: {
       type: 'object',
       properties: {
-        path: { type: 'string', description: 'Đường dẫn TƯƠNG ĐỐI so với gốc dự án. Gốc là "." hoặc "".' },
+        path: { type: 'string', description: 'Đường dẫn TƯƠNG ĐỐI so với gốc dự án (hoặc TUYỆT ĐỐI bên trong thư mục ngoài người dùng đã kéo vào). Gốc là "." hoặc "".' },
       },
       required: ['path'],
     },
@@ -141,11 +141,19 @@ export const AGENT_TOOLS: readonly AgentToolDef[] = [
       // bảo người dùng tự đổi sang ảnh, đúng thứ vừa được vá.
       'ĐỌC ĐƯỢC CẢ PDF — tự rút chữ ra (giữ thứ tự đọc, đánh dấu ngắt trang), trần 40MB. ' +
       'ĐỪNG bảo người dùng tự đổi PDF sang ảnh. Chỉ khi kết quả nói rõ đó là BẢN SCAN ' +
-      '(không có chữ chọn được) thì mới OCR: `pdftoppm -png -r 200 <file> trang` rồi read_file từng ảnh.',
+      '(không có chữ chọn được) thì mới OCR: `pdftoppm -png -r 200 <file> trang` rồi read_file từng ảnh. ' +
+      // App desktop 01/10/2026: Office + định dạng cũ + zip — xem desktop/src/main/agent/docOffice.ts, docCu.ts.
+      // Không nói ra ở đây thì model vẫn bảo người dùng "xuất slide ra PDF giúp mình".
+      'ĐỌC ĐƯỢC CẢ SLIDE / TÀI LIỆU / BẢNG TÍNH: .pptx (chữ từng slide theo thứ tự trình chiếu + ghi chú người '
+      + 'thuyết trình), .docx (đoạn, tiêu đề, bảng), .xlsx (từng sheet, cột cách bằng tab); định dạng cũ .ppt .doc '
+      + '.xls và .odt .odp .ods .rtf (app tự đổi bằng LibreOffice/textutil — nếu máy thiếu, kết quả nói cách gỡ); '
+      + '.zip thì liệt kê bên trong. ĐỪNG bảo người dùng tự xuất PDF hay chụp ảnh các file này. ' +
+      'THƯ MỤC NGOÀI DỰ ÁN: nếu người dùng đã KÉO một thư mục vào khung chat, câu hỏi sẽ ghi đường dẫn TUYỆT ĐỐI '
+      + 'của nó — dùng NGUYÊN đường tuyệt đối đó (chỉ đọc) cho read_file / list_dir / grep / glob.',
     parameters: {
       type: 'object',
       properties: {
-        path: { type: 'string', description: 'Đường dẫn TƯƠNG ĐỐI so với gốc dự án.' },
+        path: { type: 'string', description: 'Đường dẫn TƯƠNG ĐỐI so với gốc dự án (hoặc TUYỆT ĐỐI bên trong thư mục ngoài người dùng đã kéo vào).' },
         offset: { type: 'integer', description: 'Bắt đầu từ dòng số mấy (1 là dòng đầu). Mặc định 1.' },
         limit: { type: 'integer', description: 'Đọc bao nhiêu dòng. Mặc định 800, tối đa 2000.' },
       },
@@ -166,7 +174,7 @@ export const AGENT_TOOLS: readonly AgentToolDef[] = [
       type: 'object',
       properties: {
         pattern: { type: 'string', description: 'Biểu thức chính quy.' },
-        path: { type: 'string', description: 'Chỉ tìm trong thư mục con này. Bỏ trống = cả dự án.' },
+        path: { type: 'string', description: 'Chỉ tìm trong thư mục con này. Bỏ trống = cả dự án. Đường TUYỆT ĐỐI của thư mục ngoài người dùng đã kéo vào cũng được.' },
         glob: { type: 'string', description: 'Chỉ tìm trong file khớp mẫu, ví dụ "*.ts".' },
         max: { type: 'integer', description: 'Tối đa bấy nhiêu dòng khớp (mặc định 100, trần 300).' },
         chi_ten_file: { type: 'boolean', description: 'true = chỉ liệt kê file có khớp + số lần khớp.' },
@@ -184,7 +192,7 @@ export const AGENT_TOOLS: readonly AgentToolDef[] = [
       'Kết quả sắp theo lần sửa gần nhất, cắt ở 200 file.',
     parameters: {
       type: 'object',
-      properties: { pattern: { type: 'string', description: 'Mẫu glob, tương đối so với gốc dự án.' } },
+      properties: { pattern: { type: 'string', description: 'Mẫu glob, tương đối so với gốc dự án — hoặc bắt đầu bằng đường TUYỆT ĐỐI của thư mục ngoài người dùng đã kéo vào, vd "/Users/x/Slides/**/*.pptx".' } },
       required: ['pattern'],
     },
   },
@@ -808,6 +816,12 @@ export const AGENT_TOOLS: readonly AgentToolDef[] = [
         tu: { type: 'integer', description: 'Đọc từ ký tự thứ mấy (mặc định 0). Kết quả trước sẽ cho biết số cần điền để đọc tiếp.' },
         tim: { type: 'string', description: 'Chỉ trả các đoạn quanh từ khoá này (không phân biệt hoa thường).' },
         vung: { type: 'string', description: 'Bộ chọn CSS để chỉ đọc một vùng, vd "main" hay "#bang-gia". Bỏ trống = cả trang.' },
+        anh: { type: 'boolean', description: 'true = thay vì chữ, trả DANH SÁCH ẢNH trên trang (địa chỉ, kích thước, alt) — slide, sơ đồ, ảnh bài học.' },
+        file: {
+          type: 'string',
+          description: 'Địa chỉ một FILE để đọc/nhìn bằng PHIÊN ĐĂNG NHẬP của trình duyệt (không ghi đĩa, không cần mở trang): '
+            + 'ảnh ⇒ bạn NHÌN được; PDF/.pptx/.docx/.xlsx ⇒ chữ. Dùng cho file trên trang cần đăng nhập — `doc_web` không có phiên đó.',
+        },
       },
     },
   },
@@ -819,9 +833,17 @@ export const AGENT_TOOLS: readonly AgentToolDef[] = [
       'Chụp màn hình trang đang mở và trả ảnh về cho bạn NHÌN. '
       + 'Dùng khi câu hỏi là về HÌNH: bố cục lệch, màu sai, chữ đè lên nhau, nút bị che, ảnh không hiện. '
       + 'Chữ thì `web_doc` rẻ hơn nhiều và đọc được nhiều hơn — chỉ chụp khi thật sự cần THẤY. '
+      + 'Chỉ chụp phần ĐANG HIỆN: muốn xem slide/ảnh phía dưới thì truyền `cuon` ("xuong" mỗi lần ~một màn, "dau", "cuoi", "len") '
+      + 'hoặc `den` (bộ chọn CSS) để cuộn tới trước khi chụp — kết quả nói đã tới cuối chưa. Khung xem slide cuộn bên trong cũng được. '
       + 'Nếu kết quả nói ảnh không gửi được thì cổng đang dùng không nhận ảnh trong kết quả tool: '
       + 'khi đó ĐỪNG đoán bố cục, hãy nói thẳng là bạn chưa nhìn thấy.',
-    parameters: { type: 'object', properties: {} },
+    parameters: {
+      type: 'object',
+      properties: {
+        cuon: { type: 'string', enum: ['xuong', 'len', 'dau', 'cuoi'], description: 'Cuộn trước khi chụp. Bỏ trống = chụp tại chỗ.' },
+        den: { type: 'string', description: 'Bộ chọn CSS — cuộn phần tử này lên đầu màn rồi chụp, vd "#slide-5".' },
+      },
+    },
   },
   {
     name: 'web_console',
@@ -994,7 +1016,9 @@ export const AGENT_TOOLS: readonly AgentToolDef[] = [
       + 'Dùng khi cần tra tài liệu thư viện, đọc changelog, xem một thông báo lỗi lạ, '
       + 'hoặc kiểm chứng một API trước khi viết mã theo nó. '
       + 'CHỈ đọc được địa chỉ công khai — địa chỉ nội bộ (localhost, 192.168.x, 10.x) bị chặn. '
-      + 'Trang dài sẽ bị cắt; nếu cần phần sau thì nói rõ cho người dùng là bạn mới đọc một phần.',
+      + 'Trang dài sẽ bị cắt; nếu cần phần sau thì nói rõ cho người dùng là bạn mới đọc một phần. '
+      + 'ĐỌC ĐƯỢC CẢ FILE theo link: PDF (rút chữ), .pptx/.docx/.xlsx (rút chữ), và ẢNH png/jpg/gif/webp (trả ảnh để bạn NHÌN) — '
+      + 'nên link slide/tài liệu/ảnh công khai thì đưa thẳng vào đây. File trên trang CẦN ĐĂNG NHẬP thì dùng `web_doc` với `file`.',
     parameters: {
       type: 'object',
       properties: {

@@ -30,6 +30,8 @@ export interface ServerToolResult {
   content: string;
   /** Một dòng cho giao diện hiện tiến trình ("3 ghi chú"). Không đưa cho model. */
   summary: string;
+  /** Ảnh để model NHÌN (vd. `doc_web` trỏ tới một tấm ảnh). Cùng đường ống với `web_anh`. */
+  anh?: Array<{ media_type: string; data: string }>;
 }
 
 /**

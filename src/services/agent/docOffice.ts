@@ -1,4 +1,10 @@
 /**
+ * ⚠️ BẢN SAO CÓ CHỦ Ý của `desktop/src/main/agent/docOffice.ts` — máy chủ và
+ * app desktop là hai gói riêng, không import chéo được. Sửa một bên thì sửa
+ * cả bên kia (cùng phép kiểm: file Office do LibreOffice thật xuất ra).
+ * Ở máy chủ nó phục vụ `doc_web` khi một ĐỊA CHỈ trỏ tới .pptx/.docx/.xlsx.
+ */
+/**
  * ============================================================
  * ĐỌC FILE OFFICE — .pptx · .docx · .xlsx → CHỮ
  * ============================================================

@@ -27,7 +27,7 @@ import path from 'node:path';
 import { promisify } from 'node:util';
 
 import { soSanhDong, type KetQuaDiff } from './diff';
-import { fileBiCam, LoiNguc, loiNgoaiChuaCap, moTrongNguc, thuMucBiCam, timThuMucNgoai, TRAN_BYTE_FILE } from './jail';
+import { capQuyenDocNgoai, fileBiCam, LoiNguc, loiNgoaiChuaCap, moTrongNguc, thuMucBiCam, timThuMucNgoai, TRAN_BYTE_FILE } from './jail';
 import { dinhDangTheoTen, napAnh, suaAnh } from './anh';
 import { hienKhoangTrang, timGanDung } from './ganDung';
 import { kiemDuongDanNgoai } from './ghiNgoai';
@@ -404,7 +404,7 @@ export async function chayToolAgent(
       // dùng sẽ bấm bừa, và lúc đó cái duyệt ở `web_bam` cũng mất giá trị.
       case 'web_mo': return await toolWebMo(args);
       case 'web_doc': return await toolWebDoc(args);
-      case 'web_anh': return await toolWebAnh();
+      case 'web_anh': return await toolWebAnh(args);
       case 'web_console': return await toolWebConsole();
       case 'web_lien_ket': return await toolWebLienKet(args);
 
@@ -419,13 +419,20 @@ export async function chayToolAgent(
 
       // Tải file: GHI RA ĐĨA THẬT, ngoài thư mục dự án. Ranh giới cho phép là
       // thư mục người dùng tự chọn ở lần tải đầu (xem `thuMucTaiCuaCuoc`).
-      case 'web_tai': {
-        if (!lenh) return { noiDung: 'LỖI: phiên này chưa bật quyền trình duyệt.', tomTat: 'không có quyền' };
-        return await toolWebTai(args, lenh);
-      }
+      case 'web_tai':
       case 'web_tai_nhieu': {
         if (!lenh) return { noiDung: 'LỖI: phiên này chưa bật quyền trình duyệt.', tomTat: 'không có quyền' };
-        return await toolWebTaiNhieu(args, lenh);
+        const kq = ten === 'web_tai' ? await toolWebTai(args, lenh) : await toolWebTaiNhieu(args, lenh);
+        /* Thư mục tải do NGƯỜI DÙNG chọn bằng hộp thoại ⇒ cho agent ĐỌC LẠI
+           được thứ vừa tải (`read_file` đường tuyệt đối). Trước đây "tải slide
+           về rồi đọc" gãy ở bước hai: file nằm ngoài dự án nên bị chặn. */
+        if (goc && lenh.so.thuMucTai) {
+          try {
+            capQuyenDocNgoai(goc, lenh.so.thuMucTai);
+            kq.noiDung += `\n(Đọc lại được bằng read_file với đường TUYỆT ĐỐI — thư mục tải ${lenh.so.thuMucTai} đã được mở quyền đọc.)`;
+          } catch { /* thư mục quá rộng (vd. cả thư mục nhà) — không cấp, model sẽ nhận lỗi rõ khi đọc */ }
+        }
+        return kq;
       }
 
       default:
@@ -589,6 +596,52 @@ async function toolReadFile(goc: string, args: Record<string, unknown>): Promise
         + r.chu,
       tomTat: `notebook ${r.soO} ô`,
     };
+  }
+
+  /* ĐỊNH DẠNG CŨ / ODF (.doc .ppt .xls .rtf .odt .odp .ods) — đổi bằng công cụ
+     có sẵn trên máy rồi đọc. Xem `docCu.ts`. */
+  {
+    const { DUOI_CU, doiFileCu } = await import('./docCu');
+    const duoiCu = path.extname(dich).toLowerCase();
+    if (DUOI_CU.has(duoiCu)) {
+      if (st.size > 60 * 1024 * 1024) return { noiDung: `LỖI: file nặng ${(st.size / 1048576).toFixed(1)}MB, quá trần 60MB.`, tomTat: 'quá lớn' };
+      const nhan = String(args.path ?? '');
+      const doi = await doiFileCu(dich);
+      if (doi.kieu === 'loi') return { noiDung: `Chưa đọc được "${nhan}": ${doi.loi}`, tomTat: 'cần LibreOffice' };
+      if (doi.kieu === 'chu') {
+        const chu = doi.chu.length > 120_000 ? `${doi.chu.slice(0, 120_000)}\n\n[… đã cắt bớt.]` : doi.chu;
+        return { noiDung: `"${nhan}" (${doi.nho}):\n\n${chu}`, tomTat: `${duoiCu} · ${doi.chu.length} ký tự` };
+      }
+      const { docOffice } = await import('./docOffice');
+      try {
+        const r = docOffice(doi.byte, doi.duoi);
+        return {
+          noiDung: `"${nhan}" (${doi.nho}) — ${r.soPhan} phần, chữ đã rút ra:\n\n${r.chu}${r.catBot ? '\n\n[… đã cắt bớt.]' : ''}`,
+          tomTat: `${duoiCu}→${doi.duoi} · ${r.soPhan} phần`,
+        };
+      } catch (e) {
+        return { noiDung: `LỖI: đổi xong nhưng đọc hỏng (${(e as Error).message}).`, tomTat: 'đọc hỏng' };
+      }
+    }
+  }
+
+  /* .zip — liệt kê bên trong (bài nộp, bộ tài liệu nén). Muốn đọc file bên
+     trong thì giải nén bằng run_command (`unzip -o x.zip -d thu-muc`). */
+  if (path.extname(dich).toLowerCase() === '.zip') {
+    if (st.size > 200 * 1024 * 1024) return { noiDung: 'LỖI: file zip quá 200MB.', tomTat: 'quá lớn' };
+    const { Zip } = await import('./docOffice');
+    try {
+      const ds = new Zip(await fs.readFile(dich)).dsMuc();
+      const hien = ds.slice(0, 400);
+      return {
+        noiDung: `"${String(args.path ?? '')}" là file zip, ${ds.length} mục${ds.length > hien.length ? ` (hiện ${hien.length} đầu)` : ''}. `
+          + 'Muốn đọc nội dung thì giải nén bằng run_command, ví dụ `unzip -o <file> -d <thư-mục>`.\n'
+          + hien.map((m) => `${m.ten}${m.ten.endsWith('/') ? '' : `  (${m.byte >= 1024 ? `${Math.round(m.byte / 1024)} KB` : `${m.byte} B`})`}`).join('\n'),
+        tomTat: `zip ${ds.length} mục`,
+      };
+    } catch (e) {
+      return { noiDung: `LỖI: không đọc được zip (${(e as Error).message}).`, tomTat: 'zip hỏng' };
+    }
   }
 
   if (st.size > TRAN_BYTE_FILE) {
@@ -2052,8 +2105,102 @@ const WEB_DOC_MOT_LAN = 24_000;
  * đoạn nào, gọi lại với `tu=` bao nhiêu để đọc tiếp — hoặc `tim=` để chỉ lấy
  * những đoạn quanh một từ khoá.
  */
+async function docFileTheoLink(url: string): Promise<KetQuaTool> {
+  let dich = url;
+  try { dich = new URL(url, trinhDuyet.urlHienTai() || undefined).toString(); } catch { /* để hopLe báo */ }
+  const kq = await trinhDuyet.taiVaoBoNho(dich, 40 * 1024 * 1024);
+  if (!kq.ok || !kq.byte) return { noiDung: `LỖI đọc ${dich}: ${kq.loi ?? 'không tải được'}`, tomTat: 'tải hỏng' };
+  const b = kq.byte;
+  const duoi = path.extname(new URL(dich).pathname).toLowerCase();
+  const kieu = kq.kieu ?? '';
+
+  // Nhận dạng theo BYTE ĐẦU trước, rồi mới tin content-type/đuôi: máy chủ hay
+  // trả `application/octet-stream` cho mọi thứ.
+  const laPng = b.subarray(0, 4).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47]));
+  const laJpg = b[0] === 0xff && b[1] === 0xd8;
+  const laGif = b.subarray(0, 3).toString('latin1') === 'GIF';
+  const laWebp = b.subarray(8, 12).toString('latin1') === 'WEBP';
+  const laPdf = b.subarray(0, 5).toString('latin1') === '%PDF-';
+  const laZip = b[0] === 0x50 && b[1] === 0x4b;
+
+  if (laPng || laJpg || laGif || laWebp) {
+    const { nativeImage } = await import('electron');
+    let media = laPng ? 'image/png' : laJpg ? 'image/jpeg' : laGif ? 'image/gif' : 'image/webp';
+    let data = b;
+    // Ảnh lớn ⇒ co về 1568px JPEG (GIF/WebP động thì giữ nguyên nếu vừa trần).
+    if (b.length > 1_400_000 || laPng) {
+      const anh = nativeImage.createFromBuffer(b);
+      if (!anh.isEmpty()) {
+        const { width } = anh.getSize();
+        const nho = width > 1568 ? anh.resize({ width: 1568, quality: 'good' }) : anh;
+        const jpg = nho.toJPEG(85);
+        if (jpg.length < data.length || data.length > 1_400_000) { data = jpg; media = 'image/jpeg'; }
+      }
+    }
+    if (data.length > 4_000_000) return { noiDung: 'LỖI: ảnh quá lớn kể cả sau khi thu nhỏ.', tomTat: 'ảnh quá lớn' };
+    return {
+      noiDung: `Ảnh ${dich} — nhìn ảnh kèm theo.`,
+      tomTat: `ảnh ${Math.round(data.length / 1024)} KB`,
+      anh: [{ media_type: media, data: data.toString('base64') }],
+    };
+  }
+  if (laPdf || kieu === 'application/pdf') {
+    const { docPdf } = await import('./docPdf');
+    try {
+      const r = await docPdf(b);
+      return {
+        noiDung: `PDF ${dich} — ${r.soTrang} trang${r.banScan ? ' (NGHI BẢN SCAN: gần như không có chữ chọn được; mở nó bằng web_mo rồi web_anh để nhìn từng trang)' : ''}:\n\n${r.text}`
+          + (r.catBot ? '\n\n[… đã cắt bớt vì quá dài.]' : ''),
+        tomTat: `PDF ${r.soTrang} trang`,
+      };
+    } catch (e) {
+      return { noiDung: `LỖI: không mở được PDF (${(e as Error).message}).`, tomTat: 'PDF hỏng' };
+    }
+  }
+  const { laFileOffice, docOffice } = await import('./docOffice');
+  const duoiOffice = laFileOffice(duoi) ? duoi
+    : /presentationml/.test(kieu) ? '.pptx' : /wordprocessingml/.test(kieu) ? '.docx' : /spreadsheetml/.test(kieu) ? '.xlsx' : null;
+  if (laZip && duoiOffice) {
+    try {
+      const r = docOffice(b, duoiOffice);
+      return { noiDung: `${r.loai.toUpperCase()} ${dich} — ${r.soPhan} phần:\n\n${r.chu}${r.catBot ? '\n\n[… đã cắt bớt.]' : ''}`, tomTat: `${r.loai} ${r.soPhan} phần` };
+    } catch (e) {
+      return { noiDung: `LỖI: không mở được file Office (${(e as Error).message}).`, tomTat: 'Office hỏng' };
+    }
+  }
+  if (/^text\/|json|xml|javascript/.test(kieu) && !b.subarray(0, 4000).includes(0)) {
+    const chu = b.toString('utf8');
+    return { noiDung: `${dich} (${kieu}):\n\n${chu.slice(0, WEB_DOC_MOT_LAN)}${chu.length > WEB_DOC_MOT_LAN ? '\n[… còn nữa]' : ''}`, tomTat: `${chu.length} ký tự` };
+  }
+  return {
+    noiDung: `${dich} là "${kieu || 'không rõ kiểu'}" (${Math.round(b.length / 1024)} KB) — chưa đọc được loại này. `
+      + 'Đọc được: ảnh png/jpg/gif/webp, PDF, pptx/docx/xlsx, file chữ.',
+    tomTat: 'loại không hỗ trợ',
+  };
+}
+
 async function toolWebDoc(args: Record<string, unknown> = {}): Promise<KetQuaTool> {
+  /* `file: "<địa chỉ>"` — ĐỌC/NHÌN một file theo link bằng phiên đăng nhập
+     của trình duyệt (01/10/2026). Ảnh ⇒ trả ảnh để NHÌN; PDF/PPTX/DOCX/XLSX
+     ⇒ rút chữ. Không ghi đĩa, và KHÔNG cần đang mở trang nào. */
+  if (typeof args.file === 'string' && args.file.trim()) return await docFileTheoLink(args.file.trim());
+
   if (!trinhDuyet.dangMo()) return { noiDung: 'LỖI: chưa mở trang nào. Gọi web_mo trước.', tomTat: 'chưa mở' };
+  /* `anh: true` — danh sách ẢNH trên trang (slide, sơ đồ, ảnh bài học). Chữ
+     của trang không chứa ảnh, nên trước đây agent "đọc trang" xong vẫn không
+     biết trang có những hình gì. Có địa chỉ rồi thì `doc_web` một địa chỉ ảnh
+     là NHÌN được nó, còn `web_anh` chụp phần đang hiện. */
+  if (args.anh === true) {
+    const ds = await trinhDuyet.lietKeAnh();
+    if (!ds.length) return { noiDung: `Trang ${trinhDuyet.urlHienTai()} không có ảnh nào đủ lớn (đã bỏ icon < 64px và ảnh data:/blob:).`, tomTat: '0 ảnh' };
+    return {
+      noiDung: `${ds.length} ảnh trên ${trinhDuyet.urlHienTai()} (lớn trước). Muốn NHÌN một ảnh: doc_web với địa chỉ của nó; `
+        + 'hoặc web_anh với den="img[src*=\'tên-file\']" để cuộn tới rồi chụp.\n'
+        + ds.map((a, i) => `${i + 1}. ${a.rong}×${a.cao}${a.dangHien ? ' (đang hiện)' : ''}${a.alt ? ` — "${a.alt}"` : ''}\n   ${a.src}`).join('\n'),
+      tomTat: `${ds.length} ảnh`,
+    };
+  }
+
   const vung = typeof args.vung === 'string' && args.vung.trim() ? args.vung.trim().slice(0, 200) : undefined;
   let chu: string;
   try {
@@ -2489,10 +2636,23 @@ async function toolWebTaiNhieu(args: Record<string, unknown>, boiCanh: BoiCanhLe
   };
 }
 
-async function toolWebAnh(): Promise<KetQuaTool> {
+async function toolWebAnh(args: Record<string, unknown> = {}): Promise<KetQuaTool> {
   if (!trinhDuyet.dangMo()) return { noiDung: 'LỖI: chưa mở trang nào. Gọi web_mo trước.', tomTat: 'chưa mở' };
-  const anh = await trinhDuyet.chupTrang();
-  if (!anh) return { noiDung: 'LỖI: không chụp được màn hình.', tomTat: 'hỏng' };
+  /* Cuộn TRƯỚC khi chụp (01/10/2026): trước đây chỉ thấy màn đầu, nên slide
+     thứ hai trở đi là vô hình. `cuon` = xuong/len/dau/cuoi, `den` = bộ chọn CSS. */
+  const cuon = ['xuong', 'len', 'dau', 'cuoi'].includes(String(args.cuon)) ? args.cuon as 'xuong' | 'len' | 'dau' | 'cuoi' : null;
+  const den = typeof args.den === 'string' && args.den.trim() ? args.den.trim().slice(0, 200) : undefined;
+  let viTri = '';
+  if (cuon || den) {
+    const c = await trinhDuyet.cuonTrang(cuon, den);
+    if (!c.ok) return { noiDung: `LỖI khi cuộn: ${c.loi}`, tomTat: 'cuộn hỏng' };
+    const het = (c.y ?? 0) + (c.cao ?? 0) >= (c.tong ?? 0) - 4;
+    viTri = ` — đang ở ${c.y}/${c.tong}px${c.trongKhung ? ' (cuộn trong khung nội dung)' : ''}`
+      + (het ? ', ĐÃ TỚI CUỐI' : ', còn nữa: gọi lại với cuon="xuong"');
+  }
+  const chup = await trinhDuyet.chupTrang();
+  if (!chup) return { noiDung: 'LỖI: không chụp được màn hình.', tomTat: 'hỏng' };
+  const anh = chup.data;
   /* Trần 5,6MB chuỗi base64 — đúng con số máy chủ lọc (`MAX_ANH_BYTES`).
      Vượt thì máy chủ BỎ IM LẶNG, và model sẽ tưởng nó đã xem ảnh. */
   if (anh.length > 5_600_000) {
@@ -2502,8 +2662,8 @@ async function toolWebAnh(): Promise<KetQuaTool> {
     };
   }
   return {
-    noiDung: `Ảnh chụp ${trinhDuyet.urlHienTai()} — nhìn ảnh kèm theo.`,
-    tomTat: `ảnh ${Math.round(anh.length / 1365)} KB`,
-    anh: [{ media_type: 'image/png', data: anh }],
+    noiDung: `Ảnh chụp ${trinhDuyet.urlHienTai()}${viTri} — nhìn ảnh kèm theo.`,
+    tomTat: `ảnh ${Math.round(anh.length / 1365)} KB${cuon ? ` · cuộn ${cuon}` : ''}`,
+    anh: [{ media_type: chup.kieu, data: anh }],
   };
 }

@@ -57,7 +57,7 @@ export default function LegalShell({
             <li><b>Thương hiệu:</b> {SELLER_INFO.brand} — {' '}
               <a href="https://cuongthai.com" className="text-neon-violet hover:underline">cuongthai.com</a></li>
             <li><b>Địa chỉ:</b> {SELLER_INFO.address}</li>
-            <li><b>Mã số thuế / ĐKKD:</b> {SELLER_INFO.taxCode}</li>
+            {SELLER_INFO.taxCode && <li><b>Mã số thuế / ĐKKD:</b> {SELLER_INFO.taxCode}</li>}
             <li><b>Điện thoại / Zalo:</b> <a href={`tel:${SELLER_INFO.phone}`} className="text-neon-violet hover:underline">{SELLER_INFO.phone}</a></li>
             <li><b>Email:</b> <a href={`mailto:${SELLER_INFO.email}`} className="text-neon-violet hover:underline">{SELLER_INFO.email}</a></li>
           </ul>

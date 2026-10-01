@@ -3,7 +3,7 @@
 > **Mục đích:** kết thúc vòng đời hệ thống (hoặc chuyển sang nhà cung cấp khác) mà không mất dữ liệu cần giữ, không giữ dữ liệu phải xoá, và không để lại tài nguyên "mồ côi".
 > **Ai điền:** PM điều phối; Dữ liệu & AI (xuất, xoá), DevOps / Hạ tầng (tắt, huỷ), Pháp lý (nghĩa vụ lưu trữ, biên bản), AppSec (xoá an toàn, thu hồi khoá), Hỗ trợ (thông báo); khách quyết định và ký.
 > **Khi nào:** giai đoạn 20 · Ngừng & chuyển giao hệ thống.
-> **Chuẩn tham chiếu:** ISO/IEC/IEEE 12207:2017 (Disposal process), ISO/IEC 27001:2022 Annex A 8.10 (Information deletion), NIST SP 800-88 (Media sanitization), quy định hiện hành về dữ liệu cá nhân (Nghị định 13/2023/NĐ-CP, Luật Bảo vệ dữ liệu cá nhân 2025 và văn bản hướng dẫn).
+> **Chuẩn tham chiếu:** ISO/IEC/IEEE 12207:2017 (Disposal process), ISO/IEC 27001:2022 Annex A 8.10 (Information deletion), NIST SP 800-88 (Media sanitization), quy định hiện hành về dữ liệu cá nhân (Luật Bảo vệ dữ liệu cá nhân số 91/2025/QH15, Nghị định 356/2025/NĐ-CP — yêu cầu xoá hợp lệ: phản hồi trong 2 ngày làm việc, hoàn tất xoá trong 20 ngày).
 > ⚠️ Nghĩa vụ lưu giữ (kế toán, thuế, pháp lý) và nghĩa vụ xoá phải được luật sư / kế toán của khách xác nhận.
 
 ---

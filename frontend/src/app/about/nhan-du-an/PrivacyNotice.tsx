@@ -1,20 +1,21 @@
 'use client';
 
 /**
- * Thông báo xử lý dữ liệu cá nhân cho phiếu "Gửi yêu cầu dự án" — theo Nghị
- * định 13/2023/NĐ-CP về bảo vệ dữ liệu cá nhân (Điều 11: sự đồng ý; Điều 13:
- * thông báo xử lý; Điều 9: quyền của chủ thể dữ liệu).
+ * Thông báo xử lý dữ liệu cá nhân cho phiếu "Gửi yêu cầu dự án" — theo Luật
+ * Bảo vệ dữ liệu cá nhân số 91/2025/QH15 và Nghị định 356/2025/NĐ-CP (cùng hiệu
+ * lực 01/01/2026; NĐ 356 thay thế NĐ 13/2023/NĐ-CP). Phiên bản 2026-10-01b đổi
+ * căn cứ pháp lý + nêu thời hạn xử lý yêu cầu xoá (2 ngày làm việc / 20 ngày).
  *
  * `CONSENT_VERSION` PHẢI khớp `CONSENT_VERSION` ở
  * `src/services/projectRequest.service.ts` — backend lưu phiên bản này kèm thời
  * điểm đồng ý. Sửa nội dung thông báo ⇒ đổi phiên bản ở CẢ HAI chỗ.
  *
- * TODO(người điều phối/user): thời hạn lưu 12 tháng là đề xuất của gói UI —
- * user cần xác nhận; backend hiện CHƯA có việc tự xoá phiếu quá hạn.
+ * Thời hạn lưu 12 tháng: user xác nhận 01/10/2026. Backend tự xoá phiếu quá hạn mỗi đêm
+ * (`purgeExpiredProjectRequests` trong src/services/projectRequest.service.ts, lịch ở cron.service.ts).
  */
 import { STUDIO_EMAIL, T } from '@/components/studio/StudioUI';
 
-export const CONSENT_VERSION = '2026-10-01';
+export const CONSENT_VERSION = '2026-10-01b';
 
 type Bi = readonly [string, string];
 
@@ -57,8 +58,8 @@ const ROWS: { k: Bi; v: Bi }[] = [
   {
     k: ['Quyền của bạn', 'Your rights'],
     v: [
-      'Được biết, xem, yêu cầu sửa, yêu cầu xoá dữ liệu, hạn chế xử lý, rút lại sự đồng ý bất cứ lúc nào (việc rút lại không ảnh hưởng tới phần xử lý đã diễn ra trước đó), và khiếu nại. Gửi yêu cầu qua email ở trên, ghi kèm mã phiếu.',
-      'To be informed, access, correct, delete, restrict processing, withdraw consent at any time (withdrawal does not affect processing already carried out), and to complain. Send requests to the email above with your request code.',
+      'Được biết, xem, yêu cầu sửa, yêu cầu xoá dữ liệu, hạn chế xử lý, rút lại sự đồng ý bất cứ lúc nào (việc rút lại không ảnh hưởng tới phần xử lý đã diễn ra trước đó), và khiếu nại. Gửi yêu cầu qua email ở trên, ghi kèm mã phiếu. Với yêu cầu xoá hợp lệ: phản hồi trong 2 ngày làm việc và hoàn tất xoá trong 20 ngày.',
+      'To be informed, access, correct, delete, restrict processing, withdraw consent at any time (withdrawal does not affect processing already carried out), and to complain. Send requests to the email above with your request code. For a valid deletion request: we respond within 2 working days and complete deletion within 20 days.',
     ],
   },
 ];
@@ -72,8 +73,8 @@ export default function PrivacyNotice({ lang }: { lang: 'vi' | 'en' }) {
       </p>
       <p className={`${T.small} mt-1`}>
         {lang === 'en'
-          ? `Under Decree 13/2023/ND-CP on personal data protection · version ${CONSENT_VERSION}`
-          : `Theo Nghị định 13/2023/NĐ-CP về bảo vệ dữ liệu cá nhân · phiên bản ${CONSENT_VERSION}`}
+          ? `Under the Law on Personal Data Protection No. 91/2025/QH15 and Decree 356/2025/ND-CP · version ${CONSENT_VERSION}`
+          : `Theo Luật Bảo vệ dữ liệu cá nhân số 91/2025/QH15 và Nghị định 356/2025/NĐ-CP · phiên bản ${CONSENT_VERSION}`}
       </p>
       <dl className="mt-4 space-y-3.5 text-[0.85rem] leading-relaxed">
         {ROWS.map((r) => (

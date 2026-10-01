@@ -80,7 +80,7 @@ export default {
       ['kich-thuoc', 'Dimensions of data quality', 'Các chiều của chất lượng dữ liệu', 'Đầy đủ, đúng, kịp thời, nhất quán, duy nhất · Ví dụ Excel 2020 nhìn lại · Đếm hai đầu pipeline'],
       ['kiem-tu-dong', 'Automated checks: dbt tests, Great Expectations, Soda', 'Kiểm tự động: dbt test, Great Expectations, Soda', 'Kiểm schema, khoảng giá trị, độ tươi · Chặn pipeline khi sai · Không làm "kiểm cho có"'],
       ['contract', 'Data contracts and schema evolution', 'Hợp đồng dữ liệu và tiến hoá schema', 'Đổi tên cột ở backend làm vỡ báo cáo · Hợp đồng giữa đội sản phẩm và đội dữ liệu · Bài học thật: đổi tên enum vỡ seed trên production'],
-      ['rieng-tu', 'Privacy: PII, anonymisation and access control', 'Quyền riêng tư: dữ liệu cá nhân, ẩn danh hoá và phân quyền', 'Băm/giả danh email · Phân quyền theo cột · Thời hạn lưu · Trỏ privacy-data-law cho Nghị định 13/2023'],
+      ['rieng-tu', 'Privacy: PII, anonymisation and access control', 'Quyền riêng tư: dữ liệu cá nhân, ẩn danh hoá và phân quyền', 'Băm/giả danh email · Phân quyền theo cột · Thời hạn lưu · Trỏ privacy-data-law cho Luật Bảo vệ dữ liệu cá nhân 91/2025/QH15 và Nghị định 356/2025/NĐ-CP'],
     ]],
     ['Chapter 9 — Dashboards and self-service analytics', 'Chương 9 — Dashboard và phân tích tự phục vụ', 'Đưa số liệu tới người ra quyết định.', [
       ['metabase', 'Metabase: questions, dashboards, alerts', 'Metabase: câu hỏi, dashboard, cảnh báo', 'Tự host bằng Docker · Kết nối ClickHouse/PostgreSQL · Phân quyền nhóm'],

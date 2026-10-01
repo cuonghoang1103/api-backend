@@ -68,7 +68,7 @@ export default function HeroDanhMuc({
           className="inline-flex items-center gap-2 rounded-full border border-neon-violet/30 bg-neon-violet/10 px-3 py-1 text-xs font-medium text-violet-700 [.theme-dark_&]:text-violet-200"
         >
           <span className="h-1.5 w-1.5 rounded-full bg-neon-violet shadow-[0_0_8px_2px_rgba(139,92,246,0.7)]" />
-          Thư viện khoá học CuongThai
+          CuongThai Course Library
         </motion.span>
 
         <motion.h1
@@ -77,9 +77,9 @@ export default function HeroDanhMuc({
           transition={{ duration: 0.5, delay: 0.05 }}
           className="mt-5 font-heading text-[2rem] leading-tight font-bold text-text-primary sm:text-5xl"
         >
-          Học lập trình{' '}
+          Learn the stack{' '}
           <span className="bg-gradient-to-r from-neon-indigo via-neon-violet to-neon-fuchsia bg-clip-text text-transparent">
-            từ số 0 tới đi làm
+            CuongThai runs on
           </span>
         </motion.h1>
 
@@ -89,8 +89,7 @@ export default function HeroDanhMuc({
           transition={{ duration: 0.5, delay: 0.1 }}
           className="mx-auto mt-4 max-w-2xl text-base text-text-secondary sm:text-lg"
         >
-          Khoá học tiếng Việt có lộ trình rõ ràng, bài giảng chi tiết, bài tập thực hành và dự án thật —
-          cùng kho môn FPTU Academy bám sát giáo trình.
+          Every course is a tool used in production here — with a clear path and in-depth lessons.
         </motion.p>
 
         <motion.form

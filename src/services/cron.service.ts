@@ -25,6 +25,7 @@ import { completedExpiryCutoff, COMPLETED_TASK_RETENTION_DAYS } from '../utils/d
 import { deleteByKey } from '../storage/uploadService.js';
 import { sendDueReminders } from './myLanguage.reminder.service.js';
 import { submitSitemapToIndexNow } from './indexnow.service.js';
+import { purgeExpiredProjectRequests } from './projectRequest.service.js';
 
 let _started = false;
 
@@ -113,6 +114,16 @@ export function startCronJobs(): void {
   // ─── Hourly health check ───
   // CT Work: email nhắc việc 08:00 giờ VN (01:00 UTC). Tự tắt nếu
   // WORK_REMINDER_EMAILS khác 'true' — mặc định KHÔNG gửi gì.
+  // Phiếu yêu cầu dự án quá 12 tháng không đi tới hợp đồng ⇒ xoá (NĐ13 — thông báo /about/nhan-du-an). 20:40 UTC = 03:40 VN.
+  cron.schedule('40 20 * * *', async () => {
+    try {
+      const n = await purgeExpiredProjectRequests();
+      if (n) logger.info('cron: xoá phiếu yêu cầu dự án quá hạn lưu', { count: n });
+    } catch (err) {
+      logger.error('cron purge project requests failed', { error: (err as Error).message });
+    }
+  });
+
   cron.schedule('0 1 * * *', async () => {
     try {
       const { sendMorningReminders } = await import('./work/myWork.service.js');

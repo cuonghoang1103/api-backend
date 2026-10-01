@@ -164,9 +164,9 @@ export default function Footer() {
           <div>
             <h4 className="font-heading font-semibold text-text-primary mb-4">Thông tin người bán</h4>
             <ul className="space-y-2 text-text-muted text-sm">
-              <li>{SELLER_INFO.legalName}</li>
+              <li>{SELLER_INFO.legalName} · cuongthai.com</li>
               <li>{SELLER_INFO.address}</li>
-              <li>MST/ĐKKD: {SELLER_INFO.taxCode}</li>
+              {SELLER_INFO.taxCode && <li>MST/ĐKKD: {SELLER_INFO.taxCode}</li>}
               <li>
                 <a href={`tel:${SELLER_INFO.phone}`} className="hover:text-neon-violet transition-colors">
                   ĐT/Zalo: {SELLER_INFO.phone}

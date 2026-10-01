@@ -13,7 +13,7 @@
 - Luật Thương mại 2005 (36/2005/QH11);
 - Luật Sở hữu trí tuệ 2005 (sửa đổi, bổ sung 2009, 2019, 2022);
 - Luật Giao dịch điện tử 2023 (20/2023/QH15);
-- Quy định hiện hành về bảo vệ dữ liệu cá nhân (Nghị định 13/2023/NĐ-CP; Luật Bảo vệ dữ liệu cá nhân 2025 và văn bản hướng dẫn);
+- Quy định hiện hành về bảo vệ dữ liệu cá nhân (Luật Bảo vệ dữ liệu cá nhân số 91/2025/QH15; Nghị định 356/2025/NĐ-CP);
 - Quy định hiện hành về hoá đơn, chứng từ (Nghị định 123/2020/NĐ-CP và văn bản sửa đổi).
 
 ## Các bên

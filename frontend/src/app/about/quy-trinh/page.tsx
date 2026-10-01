@@ -46,7 +46,7 @@ const SPINE: { match: string; name: string; use: Bi }[] = [
   { match: 'Semantic Versioning', name: 'Semantic Versioning 2.0.0', use: ['Đánh số phiên bản và ghi chú phát hành.', 'Version numbering and release notes.'] },
   { match: 'ITIL', name: 'ITIL® 4', use: ['Phát hành, triển khai và xử lý sự cố khi vận hành.', 'Release, deployment and incident management in operations.'] },
   { match: 'CMMI', name: 'CMMI (ISACA)', use: ['Chỉ ở mức khái niệm — để tự đánh giá độ trưởng thành của quy trình, không phải chứng nhận.', 'Conceptual only — to self-assess process maturity, not a certification.'] },
-  { match: 'Nghị định 13/2023', name: 'Nghị định 13/2023/NĐ-CP', use: ['Bảo vệ dữ liệu cá nhân: đồng ý, thông báo, quyền của chủ thể dữ liệu, xoá dữ liệu.', 'Personal data protection: consent, notice, data-subject rights, deletion.'] },
+  { match: '91/2025/QH15', name: 'Luật Bảo vệ dữ liệu cá nhân 91/2025/QH15 + Nghị định 356/2025/NĐ-CP', use: ['Bảo vệ dữ liệu cá nhân: đồng ý, thông báo, quyền của chủ thể dữ liệu, xoá dữ liệu.', 'Personal data protection: consent, notice, data-subject rights, deletion.'] },
 ];
 
 export default function ProcessPage() {

@@ -5,7 +5,7 @@
  *
  * Dịch vụ · mô hình hợp tác (KHÔNG ghi giá — lấy từ `ENGAGEMENTS` trong
  * quy-trinh/data.ts) · những gì khách nhận khi bàn giao · câu hỏi thường gặp ·
- * phiếu "Gửi yêu cầu dự án" + thông báo xử lý dữ liệu theo NĐ 13/2023/NĐ-CP.
+ * phiếu "Gửi yêu cầu dự án" + thông báo xử lý dữ liệu theo Luật BVDLCN 91/2025/QH15 + Nghị định 356/2025/NĐ-CP.
  *
  * ⛔ Không số liệu bịa, không lời khen, không cam kết thời gian phản hồi chưa
  * được chủ site duyệt.
@@ -156,8 +156,8 @@ const FAQ: { q: Bi; a: Bi }[] = [
   {
     q: ['Dữ liệu của doanh nghiệp được bảo vệ thế nào trong dự án?', 'How is our data protected during the project?'],
     a: [
-      'Dữ liệu thật chỉ dùng khi thật cần và theo thoả thuận; môi trường phát triển dùng dữ liệu giả lập. Hệ thống xử lý dữ liệu cá nhân được thiết kế theo Nghị định 13/2023/NĐ-CP, và kiểm tra bảo mật theo OWASP ASVS là một giai đoạn riêng của quy trình.',
-      'Real data is used only when needed and as agreed; development uses synthetic data. Systems handling personal data are designed for Decree 13/2023/ND-CP, and security verification against OWASP ASVS is a stage of its own in the process.',
+      'Dữ liệu thật chỉ dùng khi thật cần và theo thoả thuận; môi trường phát triển dùng dữ liệu giả lập. Hệ thống xử lý dữ liệu cá nhân được thiết kế theo Luật Bảo vệ dữ liệu cá nhân số 91/2025/QH15 và Nghị định 356/2025/NĐ-CP, và kiểm tra bảo mật theo OWASP ASVS là một giai đoạn riêng của quy trình.',
+      'Real data is used only when needed and as agreed; development uses synthetic data. Systems handling personal data are designed for the Law on Personal Data Protection No. 91/2025/QH15 and Decree 356/2025/ND-CP, and security verification against OWASP ASVS is a stage of its own in the process.',
     ],
   },
 ];

@@ -7,7 +7,7 @@
  * Luật backend (src/routes/projectRequest.routes.ts, zod) được kiểm lại ở đây
  * để người gửi thấy lỗi ngay tại ô, nhưng backend vẫn là nơi quyết:
  *   · name ≥ 2 · email hợp lệ · productTypes ≥ 1 · needs ≥ 20 ký tự
- *   · consent === true (NĐ 13/2023) · `website` = ô bẫy bot, luôn để trống
+ *   · consent === true (Luật BVDLCN 91/2025/QH15 + NĐ 356/2025) · `website` = ô bẫy bot, luôn để trống
  *   · 5 phiếu/giờ/IP ⇒ 429
  * Lỗi 400 trả `message` dạng "<trường>: <lý do>" ⇒ gắn vào đúng ô.
  */
@@ -66,7 +66,7 @@ const SECURITY: { v: ProjectRequestSecurityLevel; label: Bi; hint: Bi }[] = [
   {
     v: 'SENSITIVE',
     label: ['Dữ liệu nhạy cảm', 'Sensitive data'],
-    hint: ['Sức khoẻ, tài chính, sinh trắc học, vị trí… (dữ liệu cá nhân nhạy cảm theo NĐ 13/2023).', 'Health, financial, biometric, location… (sensitive personal data under Decree 13/2023).'],
+    hint: ['Sức khoẻ, tài chính, sinh trắc học, vị trí… (dữ liệu cá nhân nhạy cảm theo Luật Bảo vệ dữ liệu cá nhân 91/2025/QH15 và Nghị định 356/2025/NĐ-CP).', 'Health, financial, biometric, location… (sensitive personal data under the Law on Personal Data Protection No. 91/2025/QH15 and Decree 356/2025/ND-CP).'],
   },
 ];
 

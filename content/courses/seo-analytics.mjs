@@ -72,7 +72,7 @@ export default {
       ['bao-cao', 'Reports, explorations and BigQuery export', 'Báo cáo, khám phá và xuất sang BigQuery', 'Funnel exploration · Lấy mẫu dữ liệu và ngưỡng · Xuất dữ liệu thô'],
     ]],
     ['Chapter 7 — Privacy-friendly analytics', 'Chương 7 — Analytics tôn trọng quyền riêng tư', 'Đo đủ để quyết định, không theo dõi người dùng.', [
-      ['quyen-rieng-tu', 'Cookies, consent and the law, from a developer’s view', 'Cookie, sự đồng ý và pháp luật, nhìn từ lập trình viên', 'Banner đồng ý chặn tag thật sự (không chỉ để trang trí) · Consent Mode · Trỏ privacy-data-law cho GDPR và Nghị định 13/2023'],
+      ['quyen-rieng-tu', 'Cookies, consent and the law, from a developer’s view', 'Cookie, sự đồng ý và pháp luật, nhìn từ lập trình viên', 'Banner đồng ý chặn tag thật sự (không chỉ để trang trí) · Consent Mode · Trỏ privacy-data-law cho GDPR, Luật Bảo vệ dữ liệu cá nhân 91/2025/QH15 và Nghị định 356/2025/NĐ-CP'],
       ['plausible-umami', 'Plausible and Umami: cookieless analytics, self-hosted', 'Plausible và Umami: analytics không cookie, tự host', 'Dựng bằng Docker sau nginx/Cloudflare · Sự kiện tuỳ chỉnh · So sánh với GA4: ít dữ liệu hơn, ít rủi ro hơn'],
       ['chan-quang-cao', 'Ad blockers, bots and data accuracy', 'Trình chặn quảng cáo, bot và độ chính xác dữ liệu', 'Bao nhiêu phần trăm bị chặn · Proxy qua tên miền của mình và giới hạn đạo đức · Lọc bot · Đối chiếu với log server'],
       ['log-server', 'Server-side analytics from your own logs and database', 'Analytics phía server từ log và CSDL của chính mình', 'Log nginx/Cloudflare · Sự kiện ghi từ backend (đăng ký, nâng cấp Pro) — đáng tin nhất · Ghép với dữ liệu hành vi'],

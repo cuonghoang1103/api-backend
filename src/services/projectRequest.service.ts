@@ -41,8 +41,12 @@ export type ProjectRequestStatus = (typeof PROJECT_REQUEST_STATUSES)[number];
 export const PRODUCT_TYPES = ['WEB', 'APP', 'TOOL', 'AI', 'OTHER'] as const;
 export const SECURITY_LEVELS = ['NORMAL', 'PERSONAL_DATA', 'SENSITIVE'] as const;
 
-/** Phiên bản thông báo xử lý dữ liệu (NĐ 13/2023) hiện hành — form gửi kèm, thiếu thì lấy số này. */
-export const CONSENT_VERSION = '2026-10-01';
+/**
+ * Phiên bản thông báo xử lý dữ liệu (Luật BVDLCN 91/2025/QH15 + NĐ 356/2025/NĐ-CP) hiện hành — form gửi kèm,
+ * thiếu thì lấy số này. PHẢI khớp `CONSENT_VERSION` trong frontend/src/app/about/nhan-du-an/PrivacyNotice.tsx.
+ * 2026-10-01 = bản trích NĐ 13/2023 (đã hết hiệu lực); 2026-10-01b = đổi sang căn cứ hiện hành.
+ */
+export const CONSENT_VERSION = '2026-10-01b';
 
 /** Đổi tay được: admin không được nhảy thẳng sang PROJECT_CREATED (chỉ nút tạo dự án làm việc đó). */
 export const MANUAL_STATUSES: ProjectRequestStatus[] = ['NEW', 'QUALIFYING', 'ACCEPTED', 'DECLINED'];
@@ -155,7 +159,7 @@ export function roleplaySample(): ProjectRequestInput {
     budgetRange: 'Chưa xác định (vai giả lập)',
     desiredDeadline: '3 tháng (vai giả lập)',
     securityLevel: 'SENSITIVE',
-    securityNote: 'Có dữ liệu sức khoẻ — dữ liệu cá nhân nhạy cảm theo Nghị định 13/2023/NĐ-CP.',
+    securityNote: 'Có dữ liệu sức khoẻ — dữ liệu cá nhân nhạy cảm theo Luật Bảo vệ dữ liệu cá nhân 91/2025/QH15 và Nghị định 356/2025/NĐ-CP.',
     source: 'roleplay',
   };
 }
@@ -260,7 +264,7 @@ const paras = (s: string | null | undefined): TNode[] => (s ? s.split(/\n+/).map
 const LABEL_SECURITY: Record<string, string> = {
   NORMAL: 'Thông thường',
   PERSONAL_DATA: 'Có dữ liệu cá nhân',
-  SENSITIVE: 'Dữ liệu cá nhân nhạy cảm (NĐ 13/2023)',
+  SENSITIVE: 'Dữ liệu cá nhân nhạy cảm (Luật BVDLCN 91/2025/QH15)',
 };
 
 type RequestRow = NonNullable<Awaited<ReturnType<typeof prisma.projectRequest.findUnique>>>;
@@ -503,4 +507,23 @@ export async function workProjectInfo(projectId: number | null) {
   const live = await liveProjectUrl(projectId);
   if (!live) return { projectId, deleted: true as const, url: null, key: null, shareUrl: null };
   return { projectId, deleted: false as const, url: live.url, key: live.key, shareUrl: await activeShareUrl(projectId) };
+}
+
+/**
+ * Xoá phiếu yêu cầu quá hạn lưu — đúng câu "Thời gian lưu" trong thông báo xử lý dữ liệu
+ * (`frontend/src/app/about/nhan-du-an/PrivacyNotice.tsx`, phiên bản 2026-10-01b (câu này không đổi từ 2026-10-01), user xác nhận 12 tháng 01/10/2026):
+ * "Tối đa 12 tháng kể từ lần liên lạc cuối nếu không đi tới hợp đồng".
+ *   · Lần liên lạc cuối ≈ `updatedAt` (mọi lần đổi trạng thái/ghi chú đều chạm vào nó).
+ *   · Phiếu đã thành dự án (`workProjectId` có, hoặc PROJECT_CREATED) = đã đi tới hợp đồng ⇒ KHÔNG xoá ở đây;
+ *     giữ theo thời hạn lưu hồ sơ của hợp đồng.
+ * Xoá cứng (không soft-delete) — giữ lại bản sao là trái với chính lời hứa trong thông báo.
+ */
+export const PROJECT_REQUEST_RETENTION_MONTHS = 12;
+export async function purgeExpiredProjectRequests(now = new Date()): Promise<number> {
+  const cutoff = new Date(now);
+  cutoff.setMonth(cutoff.getMonth() - PROJECT_REQUEST_RETENTION_MONTHS);
+  const r = await prisma.projectRequest.deleteMany({
+    where: { updatedAt: { lt: cutoff }, workProjectId: null, status: { not: 'PROJECT_CREATED' } },
+  });
+  return r.count;
 }

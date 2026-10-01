@@ -54,7 +54,7 @@ const submitSchema = z.object({
   desiredDeadline: optText(100),
   securityLevel: z.enum(SECURITY_LEVELS).default('NORMAL'),
   securityNote: optText(5000),
-  /** Bắt buộc true — Nghị định 13/2023/NĐ-CP: không đồng ý thì không được lưu dữ liệu. */
+  /** Bắt buộc true — Luật BVDLCN 91/2025/QH15 + Nghị định 356/2025/NĐ-CP: không đồng ý thì không được lưu dữ liệu. */
   consent: z.literal(true, { errorMap: () => ({ message: 'Cần đồng ý xử lý dữ liệu cá nhân để gửi phiếu' }) }),
   consentVersion: z.string().trim().max(30).optional().nullable(),
   source: optText(100),

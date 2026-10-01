@@ -29,7 +29,6 @@ import { BE_MAT } from './lo-trinh/PhanTu';
 
 type CheDo = 'thap' | 'nghe';
 
-const MAU_XEN_KE: [string, string] = ['#818cf8', '#6366f1'];
 const MAU_NGOAI: [string, string] = ['#94a3b8', '#64748b'];
 
 // Môn của từng tầng đã ghép "làm được gì" + dự án — tính một lần.
@@ -40,7 +39,12 @@ const MON_THEO_TANG: Record<number, MonHoc[]> = Object.fromEntries(
   ]),
 );
 const MON_THAP: MonHoc[] = THAP.flatMap((t) => MON_THEO_TANG[t.so]);
-const MON_XEN_KE: MonHoc[] = SONG_SONG.map((b) => ghepMon(b, { duAn: 'Học xen kẽ — dùng cho mọi dự án', nhom: 'Học xen kẽ, không chờ tầng nào', hex: MAU_XEN_KE }));
+// Học xen kẽ = con trỏ tới khoá ĐÃ có trong tháp (mỗi khoá chỉ nằm trong tháp một lần).
+const XEN_KE: { mon: MonHoc; viTri: number; tang: number }[] = SONG_SONG.flatMap((slug) => {
+  const viTri = MON_THAP.findIndex((m) => m.slug === slug);
+  const tang = THAP.find((t) => t.buoc.some((b) => b.slug === slug))?.so ?? 0;
+  return viTri < 0 ? [] : [{ mon: MON_THAP[viTri], viTri, tang }];
+});
 const MON_NGOAI: MonHoc[] = NGOAI_LE.map((b) => ghepMon(b, { duAn: 'Ngoài đường chính', nhom: 'Ngoài tháp, tuỳ chọn', hex: MAU_NGOAI, tuyChon: true }));
 
 export default function CourseRoadmap() {
@@ -109,7 +113,7 @@ export default function CourseRoadmap() {
                 Học <b className="text-text-primary">từ đáy tháp lên</b>: mỗi tầng dựa trên tầng dưới nó. Trong một tầng,
                 học theo số thứ tự. Stack chính là <b className="text-text-primary">React + Node.js + PostgreSQL</b>,{' '}
                 <b className="text-text-primary">Python</b> cho AI, <b className="text-text-primary">Spring Boot</b> là
-                backend thứ hai. Khoá không có trong tháp là tuỳ chọn.
+                backend thứ hai. Tháp có đủ {MON_THAP.length} khoá trên {THAP.length} tầng — không cần học hết: từ tầng 5 trở lên chọn theo hướng bạn muốn đi.
               </>
             ) : (
               <>
@@ -175,7 +179,7 @@ export default function CourseRoadmap() {
           <div className={`${BE_MAT} relative rounded-2xl overflow-hidden lt-luoi lg:sticky lg:top-20`}>
             <div className="relative px-4 sm:px-5 pt-4 flex items-center justify-between gap-2 flex-wrap text-sm text-text-secondary">
               <span className="flex items-center gap-2">
-                <Landmark className="w-4 h-4 text-violet-700 [.theme-dark_&]:text-neon-violet" /> Tháp 6 tầng, {MON_THAP.length} khoá
+                <Landmark className="w-4 h-4 text-violet-700 [.theme-dark_&]:text-neon-violet" /> Tháp {THAP.length} tầng, {MON_THAP.length} khoá
               </span>
               {la3D && <span className="text-[11px] text-text-muted">Rê chuột để xoay nhẹ</span>}
             </div>
@@ -237,14 +241,27 @@ export default function CourseRoadmap() {
           <div className="min-w-0">
             <h3 className="font-heading text-lg font-bold text-text-primary">Học xen kẽ, không chờ tầng nào</h3>
             <p className="text-sm text-text-secondary">
-              Mỗi tuần một ít — những thứ này quyết định bạn có qua được phỏng vấn không.
+              Đã nằm trong tháp, nhưng đừng chờ tới tầng của chúng: mỗi tuần một ít — những thứ này quyết định bạn có qua được phỏng vấn không.
             </p>
           </div>
         </div>
-        <div className="mt-3 grid md:grid-cols-2 gap-2.5">
-          {MON_XEN_KE.map((m, i) => (
-            <HangMon key={m.slug} mon={m} td={tienDo[m.slug]} coTienDo={coTienDo} onMo={() => moMon(MON_XEN_KE, i)} />
-          ))}
+        <div className="mt-3 flex flex-wrap gap-2">
+          {XEN_KE.map(({ mon, viTri, tang: soTang }) => {
+            const td = tienDo[mon.slug];
+            return (
+              <button
+                key={mon.slug}
+                type="button"
+                onClick={() => moMon(MON_THAP, viTri)}
+                className={`${BE_MAT} inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm hover:border-neon-violet/50 transition-colors min-w-0`}
+              >
+                <span className="w-2 h-2 rounded-full shrink-0" style={{ background: mon.hex[1] }} />
+                <span className="font-semibold text-text-primary truncate">{mon.ten}</span>
+                <span className="text-xs text-text-muted whitespace-nowrap">tầng {soTang}</span>
+                {coTienDo && td && <span className="text-xs font-bold tabular-nums text-text-primary">{td.pct}%</span>}
+              </button>
+            );
+          })}
         </div>
       </section>
 
@@ -276,11 +293,11 @@ export default function CourseRoadmap() {
         </div>
         <div className={`${BE_MAT} rounded-2xl p-5`}>
           <h3 className="font-heading font-bold text-text-primary mb-1 flex items-center gap-2">
-            <Package className="w-5 h-5 text-text-muted" /> Những khoá không có trong tháp
+            <Package className="w-5 h-5 text-text-muted" /> Khoá không nằm trong tháp
           </h3>
           <p className="text-sm text-text-secondary mb-3">
-            Có thật và dùng được, nhưng <b className="text-text-primary">không nằm trên đường chính</b>. Bỏ qua cũng không
-            sao.
+            Mọi khoá lập trình đều đã nằm trong tháp. Khoá dưới đây <b className="text-text-primary">không phải kỹ năng lập
+            trình</b> — học khi thích, bỏ qua cũng không sao.
           </p>
           <div className="space-y-2">
             {MON_NGOAI.map((m, i) => (

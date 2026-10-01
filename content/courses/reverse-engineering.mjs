@@ -3,7 +3,7 @@
  * content/courses/_KE-HOACH-KHOA-MOI-3009.md (Nhóm B). Soạn chi tiết SAU theo content/courses/docker/_HOP-DONG.md. Xem _chung/khung.mjs.
  * AN TOÀN & PHÁP LÝ: mọi bài thực hành chỉ trên crackme/CTF hợp pháp, phần mềm của chính mình, hoặc mẫu mã độc từ kho nghiên cứu
  * trong VM cô lập (không mạng, snapshot) — không bao giờ chạy mẫu trên máy thật; không dạy bẻ khoá phần mềm thương mại.
- * Pháp lý ghi trung tính (Luật An ninh mạng 2018, BLHS điều 285–289, Luật SHTT về phần mềm) — người soạn chi tiết kiểm văn bản.
+ * Pháp lý ghi trung tính (Luật An ninh mạng 116/2025/QH15, BLHS điều 285–289, Luật SHTT về phần mềm) — người soạn chi tiết kiểm văn bản.
  * Ảnh bìa: người điều phối dựng (logo simple-icons ghidra).
  */
 import { khung } from './_chung/khung.mjs';
@@ -28,7 +28,7 @@ export default {
   sections: khung('rev', [
     ['Section 0 — Reading what the compiler left behind', 'Mục 0 — Đọc thứ trình biên dịch để lại', 'Đảo ngược là gì, ai cần, và luật chơi an toàn.', [
       ['bat-dau-tai-day', 'Start here (1/2) — What reverse engineering is, its history, and the analyses that changed events', 'Bắt đầu tại đây (1/2) — Reverse engineering là gì, lịch sử, và những lần phân tích đã đổi chiều sự việc', 'Đọc chương trình như đọc một cỗ máy đã lắp sẵn · Mốc: IDA thập niên 1990, radare 2006, NSA công bố Ghidra 2019 · Stuxnet 2010: phân tích ra mục tiêu là máy ly tâm · WannaCry 05/2017: kill switch tìm thấy nhờ đọc mã · Mirai 2016 và mã nguồn bị công bố · Ai dùng RE: phòng thủ, tương thích, kiểm toán'],
-      ['bat-dau-hoc-xong', 'Start here (2/2) — What you can do after this course, careers, and the legal and safety rules', 'Bắt đầu tại đây (2/2) — Học xong làm được gì, nghề nghiệp, và luật pháp lý & an toàn', 'Vị trí: Malware Analyst, Vulnerability Researcher, Threat Intel, bảo mật ứng dụng di động · Được phép: phần mềm của mình, crackme/CTF, mẫu nghiên cứu trong lab · Không: bẻ khoá bản quyền, phân tích phần mềm vi phạm điều khoản · Pháp lý ghi trung tính: Luật An ninh mạng 2018, BLHS điều 285–289, Luật SHTT — kiểm văn bản mới nhất'],
+      ['bat-dau-hoc-xong', 'Start here (2/2) — What you can do after this course, careers, and the legal and safety rules', 'Bắt đầu tại đây (2/2) — Học xong làm được gì, nghề nghiệp, và luật pháp lý & an toàn', 'Vị trí: Malware Analyst, Vulnerability Researcher, Threat Intel, bảo mật ứng dụng di động · Được phép: phần mềm của mình, crackme/CTF, mẫu nghiên cứu trong lab · Không: bẻ khoá bản quyền, phân tích phần mềm vi phạm điều khoản · Pháp lý ghi trung tính: Luật An ninh mạng 116/2025/QH15 (hiệu lực 01/07/2026), BLHS điều 285–289, Luật SHTT — kiểm văn bản mới nhất'],
       ['lab', 'Building a safe lab: isolated VMs, snapshots, no shared folders, host-only network', 'Dựng lab an toàn: VM cô lập, snapshot, không thư mục chia sẻ, mạng host-only', 'REMnux và FLARE-VM · Tắt clipboard/thư mục chia sẻ · Snapshot sạch trước mỗi lần chạy · Không chạy mẫu trên máy thật hay máy có dữ liệu thật · Công cụ: Ghidra, radare2, gdb + pwndbg'],
     ]],
     ['Chapter 1 — From source code to machine code', 'Chương 1 — Từ mã nguồn tới mã máy', 'Hiểu trình biên dịch làm gì để đi ngược lại.', [

@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 
 // Metadata-only layout: page.tsx là client component.
 const DESCRIPTION =
-  'Gửi yêu cầu dự án phần mềm: web, ứng dụng di động, công cụ nội bộ và tự động hoá, tích hợp AI. Mô hình hợp tác, những gì bạn nhận được khi bàn giao, và thông báo xử lý dữ liệu cá nhân theo Nghị định 13/2023/NĐ-CP.';
+  'Gửi yêu cầu dự án phần mềm: web, ứng dụng di động, công cụ nội bộ và tự động hoá, tích hợp AI. Mô hình hợp tác, những gì bạn nhận được khi bàn giao, và thông báo xử lý dữ liệu cá nhân theo Luật Bảo vệ dữ liệu cá nhân số 91/2025/QH15 và Nghị định 356/2025/NĐ-CP.';
 
 export const metadata: Metadata = {
   title: 'Nhận dự án',

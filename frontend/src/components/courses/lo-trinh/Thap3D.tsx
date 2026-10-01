@@ -10,9 +10,12 @@ export interface SoLieuTang {
   pctTB: number;
 }
 
-// Đáy rộng nhất. Màn hẹp thì thu ít lại để chữ vẫn đọc được ở 360px.
-const RONG_3D = ['100%', '90%', '80%', '70%', '61%', '53%'];
-const RONG_PHANG = ['100%', '96%', '92%', '88%', '84%', '80%'];
+// Đáy rộng nhất, thu đều lên đỉnh — tính theo SỐ TẦNG (tháp đã lên 11 tầng 01/10/2026).
+// 3D: đỉnh còn 64% (11 tầng: 52% làm cụt tên tầng đỉnh "Nghề nghiệp…" — 01/10/2026); phẳng (màn hẹp): đỉnh 78% cho màn 360px.
+function rongTang(i: number, n: number, la3D: boolean) {
+  const thu = la3D ? 36 : 22;
+  return `${Math.round((100 - (n > 1 ? (i * thu) / (n - 1) : 0)) * 10) / 10}%`;
+}
 
 export default function Thap3D({
   la3D,
@@ -33,11 +36,14 @@ export default function Thap3D({
   daDangNhap: boolean;
   onChon: (so: number) => void;
 }) {
-  const cao = la3D ? 74 : 66;
+  const n = tangs.length;
+  // Nhiều tầng thì mỗi tầng thấp lại để cả tháp vẫn nằm gọn trong một màn hình.
+  const cao = n > 8 ? (la3D ? 56 : 58) : la3D ? 74 : 66;
+  const gon = n > 8;
   return (
     <div className="relative">
       <San3D la3D={la3D} gocX={-17} className={la3D ? 'pt-10 pb-6 px-6' : 'py-2'}>
-        <div className="flex flex-col items-center" style={la3D ? { transformStyle: 'preserve-3d' } : { gap: 10 }}>
+        <div className="flex flex-col items-center" style={la3D ? { transformStyle: 'preserve-3d' } : { gap: gon ? 8 : 10 }}>
           {[...tangs].reverse().map((t) => {
             const i = t.so - 1; // 0 = đáy
             const s = soLieu[t.so] ?? { tong: t.buoc.length, xong: 0, pctTB: 0 };
@@ -48,7 +54,7 @@ export default function Thap3D({
               <Khoi
                 key={t.so}
                 la3D={la3D}
-                rong={(la3D ? RONG_3D : RONG_PHANG)[i]}
+                rong={rongTang(i, n, la3D)}
                 cao={cao}
                 sau={72}
                 // Tầng đỉnh lộ cả mặt trên; tầng dưới chỉ lộ gờ 15px (+26 khi tầng được chọn nhô ra).
@@ -56,13 +62,13 @@ export default function Thap3D({
                 lui={-i * 15}
                 hex={t.hex}
                 chon={dangChon}
-                tre={0.1 + i * 0.11}
+                tre={0.1 + i * (gon ? 0.07 : 0.11)}
                 onClick={() => onChon(t.so)}
                 ariaLabel={`Tầng ${t.so}: ${t.ten}. ${s.xong} trên ${s.tong} khoá xong. Bấm để xem các môn.`}
                 ariaPressed={dangChon}
               >
-                <div className="h-full flex items-center gap-3 px-3 sm:px-4">
-                  <span className="shrink-0 w-9 h-9 rounded-full bg-white/20 ring-1 ring-white/40 flex items-center justify-center font-heading font-bold text-base">
+                <div className={`h-full flex items-center ${gon ? 'gap-2.5' : 'gap-3'} px-3 sm:px-4`}>
+                  <span className={`shrink-0 ${gon ? 'w-8 h-8 text-sm' : 'w-9 h-9 text-base'} rounded-full bg-white/20 ring-1 ring-white/40 flex items-center justify-center font-heading font-bold`}>
                     {xongHet ? <CheckCircle2 className="w-5 h-5" /> : t.so}
                   </span>
                   <div className="min-w-0 flex-1">

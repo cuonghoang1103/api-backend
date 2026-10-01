@@ -33,6 +33,22 @@ export const CHAO_DOI_NAO: Record<Nao, string> = {
   cong: 'Rồi, tôi quay lại não trên mạng. Chậm hơn mà nói năng tử tế hơn đấy.',
 };
 
+/** Câu xác nhận khi về chế độ TỰ ĐỘNG (`nao = null`) — xem `chonNao.ts`. */
+export const CHAO_TU_DONG =
+  'Rồi, tôi tự chọn não nhé: chuyện phiếm thì dùng não ở nhà cho nhanh, câu khó thì lên mạng nghĩ cho kỹ.';
+
+/**
+ * "Đổi sang não tự động / kết hợp / tự chọn não" — bỏ ghim, để robot chọn
+ * não theo từng câu (01/10/2026). Tách khỏi `khopDoiNao` vì ở đó `null`
+ * nghĩa là "không phải lệnh"; ở đây đích đến lại chính là `null`.
+ */
+export function khopNaoTuDong(heard: string): boolean {
+  const s = khongDau(heard);
+  if (!s || s.length > 50) return false;
+  if (!/(doi|chuyen|switch|dung|xai|bat|che do)/.test(s)) return false;
+  return /(tu dong|ket hop|tu chon|auto)/.test(s) && /(nao|model|che do)/.test(s);
+}
+
 function khongDau(s: string): string {
   return s
     .toLowerCase()

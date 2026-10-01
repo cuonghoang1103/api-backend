@@ -91,7 +91,8 @@ import {
   tiengCuaCheDo,
   type ChoXacNhan,
 } from './lechTieng.js';
-import { khopDoiNao, CHAO_DOI_NAO, type Nao } from './nao.js';
+import { khopDoiNao, khopNaoTuDong, CHAO_DOI_NAO, CHAO_TU_DONG, type Nao } from './nao.js';
+import { phanLoaiCau, loiDanDoDai, type DoDai, type LoaiCau } from './chonNao.js';
 
 // ─── Conversation memory ───────────────────────────────────
 //
@@ -240,6 +241,7 @@ async function dungMessages(
   deviceId: number,
   heard: string,
   doanTraCuu: string,
+  doDai?: DoDai,
 ): Promise<Array<{ role: 'system' | 'user' | 'assistant'; content: string }>> {
   // Kho kiến thức chạy SONG SONG với lịch sử: cả hai đều là truy vấn DB vài
   // mili giây, nối tiếp nhau thì cộng dồn vô nghĩa trên đường nói.
@@ -257,6 +259,9 @@ async function dungMessages(
     // và vai `user` vì template Qwen3.5 chỉ cho một system message ở đầu.
     ...(doanKienThuc ? [{ role: 'user' as const, content: doanKienThuc }] : []),
     ...(doanTraCuu ? [{ role: 'user' as const, content: doanTraCuu }] : []),
+    // Độ dài theo CHÍNH câu này (chonNao.ts) — ngay trước câu hỏi để model
+    // đọc nó cuối cùng, và không lưu vào lịch sử nên không đọng lại.
+    ...(doDai ? [{ role: 'user' as const, content: loiDanDoDai(doDai) }] : []),
     /**
      * ⚠️ SỐ LIỆU TRẠNG THÁI CHỈ ĐƯA KHI NGƯỜI TA HỎI TỚI.
      *
@@ -608,6 +613,16 @@ function clientFor(p: LlmProvider): OpenAI {
     logger.info('MakerLab dùng LLM', { provider: p.label, baseURL: p.baseURL });
   }
   return c;
+}
+
+/**
+ * Model cho câu KHÓ khi đi cổng. Đo 01/10/2026 (hết câu đầu, cùng một câu
+ * hỏi, từ chính máy chủ): gpt-5.6-terra 2,3–2,7s · gpt-5.6-luna 2,1–3,2s ·
+ * gpt-6-luna 6,7–7,6s · gpt-6-sol 7,6–28s (model suy luận — hợp chat trên
+ * web, không hợp nói chuyện). Đổi bằng env `LLM_MODEL_ROBOT_KHO`.
+ */
+function modelKho(): string {
+  return process.env.LLM_MODEL_ROBOT_KHO || 'gpt-5.6-terra';
 }
 
 function robotModel(p: LlmProvider): string {
@@ -1310,6 +1325,19 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
     // "đổi về model cũ đi" mà rơi vào LLM thì model sẽ NÓI VỀ việc đổi
     // model thay vì ĐỔI. Tệ hơn nữa: nếu não hiện tại đang là thứ người
     // ta muốn bỏ, câu trả lời đó lại do chính nó nói ra.
+    if (khopNaoTuDong(heard)) {
+      if (persona.nao) await luuNao(input.projectId, null);
+      const spokenNao = await speakOnce(persona, CHAO_TU_DONG, input.deviceId);
+      timing.total = Date.now() - started;
+      emitTranscript(input.deviceId, 'bot', CHAO_TU_DONG);
+      logger.info('MakerLab doi nao', {
+        deviceId: input.deviceId,
+        tu: persona.nao ?? '(tu dong)',
+        sang: '(tu dong)',
+        heard,
+      });
+      return { heard, said: CHAO_TU_DONG, actions: [], spoken: spokenNao, ms: timing };
+    }
     const naoMoi = khopDoiNao(heard);
     if (naoMoi && naoMoi !== persona.nao) {
       await luuNao(input.projectId, naoMoi);
@@ -1439,7 +1467,17 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
   let spoken = false;
 
   if (input.speak !== false) {
-    const r = await thinkAndSpeak(persona, heard, input.deviceId, ctx, timing, doanTraCuu);
+    // Chọn não + độ dài theo CHÍNH câu này — xem `chonNao.ts`. Ghi log để
+    // lúc robot trả lời cụt hay lan man thì biết luật nào quyết.
+    const loai = phanLoaiCau(heard);
+    logger.info('MakerLab chọn não', {
+      deviceId: input.deviceId,
+      kho: loai.kho,
+      doDai: loai.doDai,
+      lyDo: loai.lyDo,
+      nao: persona.nao ?? 'tu-dong',
+    });
+    const r = await thinkAndSpeak(persona, heard, input.deviceId, ctx, timing, doanTraCuu, loai);
     reply = r.reply;
     spoken = r.spoken;
     timing.llm = r.llmMs;
@@ -1553,10 +1591,15 @@ async function thinkAndSpeak(
   ctx: { deviceName?: string; battery?: number | null },
   timing: { tts: number },
   doanTraCuu = '',
+  loai?: LoaiCau,
 ): Promise<{ reply: RobotReply; spoken: boolean; llmMs: number }> {
+  // Chế độ TỰ ĐỘNG (`nao = null`) mà câu khó ⇒ lên cổng thẳng, bỏ máy nhà.
+  // Người dùng GHIM não nào thì vẫn nghe người dùng — ghim máy nhà để khỏi
+  // tốn tiền mà câu khó lại lén lên cổng thì ghim để làm gì.
+  const lenCong = persona.nao === null && !!loai?.kho;
   // Chỉ xin vé khi máy nhà thật sự là đích đến — hỏi hàng đợi trong lúc
   // robot đang ghim 'cong' là tự bịa ra một phép chờ vô nghĩa.
-  const diMayNha = llmChain(persona.nao)[0]?.label === 'may-nha';
+  const diMayNha = !lenCong && llmChain(persona.nao)[0]?.label === 'may-nha';
   const ve = diMayNha ? await xinSlot('robot') : null;
   if (ve && !ve.duoc) {
     logger.warn('MakerLab máy nhà kẹt, robot nói bằng cổng lượt này', {
@@ -1566,7 +1609,9 @@ async function thinkAndSpeak(
     });
   }
   try {
-    return await thinkAndSpeakLoi(persona, heard, deviceId, ctx, timing, doanTraCuu, !!ve && !ve.duoc);
+    return await thinkAndSpeakLoi(
+      persona, heard, deviceId, ctx, timing, doanTraCuu, lenCong || (!!ve && !ve.duoc), loai,
+    );
   } finally {
     // ⚠️ `finally`, không phải cuối thân hàm: đường này có `return` ở cả
     // nhánh thành công lẫn nhánh `catch`, bỏ sót một nhánh là rò slot.
@@ -1582,16 +1627,18 @@ async function thinkAndSpeakLoi(
   timing: { tts: number },
   doanTraCuu = '',
   boQuaMayNha = false,
+  loai?: LoaiCau,
 ): Promise<{ reply: RobotReply; spoken: boolean; llmMs: number }> {
   const started = Date.now();
   const gw = await import('../../socket/device.gateway.js');
   const { PCM_SAMPLE_RATE } = await import('./audio.js');
 
-  const messages = await dungMessages(persona, ctx, deviceId, heard, doanTraCuu);
+  const messages = await dungMessages(persona, ctx, deviceId, heard, doanTraCuu, loai?.doDai);
 
   const chain = llmChain(persona.nao, boQuaMayNha);
   const p = chain[0];
-  const model = robotModel(p);
+  // Câu khó mà đi cổng thì dùng model "nghĩ kỹ" — xem `modelKho()`.
+  const model = loai?.kho && p.label !== 'may-nha' ? modelKho() : robotModel(p);
 
   let seq: number | null = null;
   let spoken = false;

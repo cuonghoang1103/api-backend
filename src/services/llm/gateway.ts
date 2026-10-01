@@ -520,7 +520,15 @@ const PURPOSE_MODEL: Record<LlmPurpose, string> = {
    * `LLM_MODEL_PLAN_REVIEW=claude-sonnet-4-6`.
    */
   plan_review: 'gpt-5.4-mini',
-  robot_voice: 'gpt-5.4-mini',
+  /**
+   * Robot Maker Lab khi đi CỔNG (máy nhà chết, ghim 'cong', hay câu khó ở chế
+   * độ tự động — xem `makerlab/chonNao.ts`). Trước là `gpt-5.4-mini`, và
+   * 01/10/2026 cổng trả `503 model_not_found` cho nó: khoá GPT không còn
+   * bán model đó, tức lưới đỡ của robot đã hỏng mà không ai thấy (máy nhà
+   * vẫn sống nên không lượt nào rơi xuống). Đo cùng ngày, hết câu đầu:
+   * gpt-5.6-terra 2,3–2,7s — nhanh nhất trong các model còn bán.
+   */
+  robot_voice: 'gpt-5.6-terra',
 
   /**
    * Kèm cặp trong Xưởng Remix — sonnet-5, theo đúng luật "việc TƯƠNG TÁC".

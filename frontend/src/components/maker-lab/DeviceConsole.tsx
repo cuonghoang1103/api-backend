@@ -797,9 +797,11 @@ export function DeviceConsole({
                   ))}
                 </div>
                 <p className="mt-1.5 text-[11px]" style={{ color: 'var(--text-muted)' }}>
-                  Máy nhà nhanh hơn nhiều nhưng tiếng Việt kém hơn chút. <b>Máy nhà chết thì
-                  robot tự nhảy sang não trên mạng</b> — mất điện ở nhà cũng vẫn nói được, không
-                  cần bạn làm gì. Đổi được cả bằng giọng nói: &ldquo;đổi về model cũ đi&rdquo;.
+                  <b>Tự động</b> chọn não theo TỪNG CÂU: chuyện phiếm, hỏi giờ dùng máy nhà (nhanh,
+                  miễn phí, đáp ngắn); câu khó — vì sao, giải thích, so sánh, hướng dẫn — lên mạng
+                  nghĩ kỹ và đáp đủ ý. Ghim <b>Máy nhà</b> thì không bao giờ tốn tiền. <b>Máy nhà
+                  chết thì robot tự nhảy sang não trên mạng</b> — mất điện ở nhà vẫn nói được. Đổi
+                  bằng giọng nói: &ldquo;đổi sang não tự động&rdquo;, &ldquo;đổi về model cũ đi&rdquo;.
                 </p>
               </div>
 

@@ -17,6 +17,10 @@
 import sec0 from './swd392/sec0.mjs';
 import ch1 from './swd392/ch1.mjs';
 import ch2 from './swd392/ch2.mjs';
+import ch3 from './swd392/ch3.mjs';
+import ch4 from './swd392/ch4.mjs';
+import ch5 from './swd392/ch5.mjs';
+import fe from './swd392/fe.mjs';
 
 export default {
   semester: { code: 'FPTU_Hola7', name: 'Kỳ 7', ordinal: 9 },
@@ -675,6 +679,8 @@ Shipped --&gt; Delivered</pre>
       title: 'Chapter 3 — Software architecture & quality attributes|||Chương 3 — Kiến trúc phần mềm & quality attributes',
       description: 'Các kiểu kiến trúc (layered/client-server/MVC/microservices/event-driven) và cân bằng quality attributes.',
       lessons: [
+        /* 📑 Học theo từng slide (swd8 1–19, swd16 1–34, swd17 1–32, swd18 1–28, swd19 1–42, swd20 1–46, swd21 1–31, swd22 1–20, swd23 1–24, swd24 1–22, swd25 1–40, swd26 1–21) — ./swd392/ch3.mjs */
+        ...ch3.slides,
         {
           title: '3.1 — Architectural styles|||3.1 — Các kiểu kiến trúc',
           slug: 'swd392-3-1-architecture-styles',
@@ -787,22 +793,14 @@ Shipped --&gt; Delivered</pre>
 <div class="pitfall">Bỏ qua yêu cầu phi chức năng là một thất bại thiết kế hàng đầu. Một hệ có đủ mọi tính năng nhưng chậm không dùng được, hoặc không an toàn, hoặc không thể đổi, là đã thất bại — dù nó "chạy". Thiết kế cho các phẩm chất, không chỉ tính năng.</div>
 </div>`,
         },
+        /* 🧪 Thực hành + 🗂 Thuật ngữ + 📌 Tóm tắt — ./swd392/ch3.mjs */
+        ch3.practice,
         {
           title: 'Quiz 3 — Architecture & quality|||Quiz 3 — Kiến trúc & chất lượng',
           slug: 'swd392-quiz-3',
           type: 'QUIZ',
-          description: 'Kiểm tra kiểu kiến trúc, quality attributes và đánh đổi.',
-          quiz: {
-            timeLimitSeconds: 360,
-            questions: [
-              { question: 'A layered architecture is often chosen because it…|||Kiến trúc phân lớp thường được chọn vì nó…', options: ['is the fastest possible|||nhanh nhất có thể', 'lets you replace/test one layer (e.g., swap the DB)|||cho thay/test một lớp (vd đổi DB)', 'needs no database|||không cần database', 'removes all coupling|||bỏ mọi coupling'], correctIndex: 1, points: 1 },
-              { question: 'Microservices mainly trade simplicity for…|||Microservices chủ yếu đánh đổi sự đơn giản lấy…', options: ['nothing|||không gì', 'independent scaling/deployment (at operational cost)|||mở rộng/triển khai độc lập (với chi phí vận hành)', 'fewer servers|||ít server hơn', 'no network calls|||không lời gọi mạng'], correctIndex: 1, points: 1 },
-              { question: 'Quality attributes are also known as…|||Quality attributes còn gọi là…', options: ['functional requirements|||yêu cầu chức năng', 'non-functional requirements|||yêu cầu phi chức năng', 'use cases|||use case', 'design patterns|||design pattern'], correctIndex: 1, points: 1 },
-              { question: 'Adding heavy encryption typically improves security but hurts…|||Thêm mã hoá nặng thường cải thiện bảo mật nhưng hại…', options: ['maintainability|||khả bảo trì', 'performance|||hiệu năng', 'security|||bảo mật', 'usability|||khả dụng người dùng'], correctIndex: 1, points: 1 },
-              { question: 'A system with all features but that is unusably slow has…|||Một hệ đủ tính năng nhưng chậm không dùng được là…', options: ['succeeded|||thành công', 'failed on a quality attribute|||thất bại ở một quality attribute', 'good architecture|||kiến trúc tốt', 'high cohesion|||cohesion cao'], correctIndex: 1, points: 1 },
-              { question: 'A good quality-attribute requirement is written as a measurable scenario, e.g.… (beyond-syllabus)|||Một yêu cầu quality-attribute tốt viết dưới dạng scenario đo được, vd… (ngoài giáo trình)', options: ['"the system is fast"|||"hệ thống nhanh"', '"95% of requests return within 200ms under 1000 users"|||"95% request trả trong 200ms dưới 1000 người dùng"', '"it should be good"|||"nó nên tốt"', '"users like it"|||"người dùng thích"'], correctIndex: 1, points: 1 },
-            ],
-          },
+          description: ch3.quizDescription,
+          quiz: ch3.quiz,
         },
       ],
     },
@@ -812,6 +810,8 @@ Shipped --&gt; Delivered</pre>
       title: 'Chapter 4 — Design patterns (GoF)|||Chương 4 — Design patterns (GoF)',
       description: 'Design pattern là gì, cách tài liệu hoá, và các pattern creational/structural/behavioral tiêu biểu.',
       lessons: [
+        /* 📑 Học theo từng slide (swd14 1–114, swd15 1–14) — ./swd392/ch4.mjs */
+        ...ch4.slides,
         {
           title: '4.1 — What is a pattern? Creational patterns|||4.1 — Pattern là gì? Nhóm creational',
           slug: 'swd392-4-1-creational',
@@ -962,22 +962,14 @@ checkout.<span class="tok-function">pay</span>(<span class="tok-number">100</spa
 <div class="pitfall">Lạm dụng Decorator hay lồng pattern có thể tạo một mớ rối khó theo hơn vấn đề nó giải. Một pattern phải làm thiết kế <em>rõ hơn</em>; nếu nó làm rối hơn, bỏ nó.</div>
 </div>`,
         },
+        /* 🧪 Thực hành + 🗂 Thuật ngữ + 📌 Tóm tắt — ./swd392/ch4.mjs */
+        ch4.practice,
         {
           title: 'Quiz 4 — Design patterns|||Quiz 4 — Design patterns',
           slug: 'swd392-quiz-4',
           type: 'QUIZ',
-          description: 'Kiểm tra tài liệu pattern, creational/structural/behavioral.',
-          quiz: {
-            timeLimitSeconds: 360,
-            questions: [
-              { question: 'A design pattern is…|||Một design pattern là…', options: ['code you copy verbatim|||code bạn chép nguyên văn', 'a named, proven, adaptable solution to a recurring problem|||một giải pháp có tên, kiểm chứng, thích ứng được cho vấn đề lặp lại', 'a programming language|||một ngôn ngữ lập trình', 'a UML tool|||một công cụ UML'], correctIndex: 1, points: 1 },
-              { question: 'Singleton ensures…|||Singleton đảm bảo…', options: ['many instances|||nhiều instance', 'exactly one instance of a class|||đúng một instance của một lớp', 'no instances|||không instance', 'faster code|||code nhanh hơn'], correctIndex: 1, points: 1 },
-              { question: 'Swapping an algorithm at runtime (e.g., payment methods) is the… pattern.|||Đổi một thuật toán lúc chạy (vd phương thức thanh toán) là pattern…', options: ['Singleton', 'Strategy', 'Adapter', 'Facade'], correctIndex: 1, points: 1 },
-              { question: 'Notifying many objects when one changes is the… pattern.|||Báo nhiều đối tượng khi một cái đổi là pattern…', options: ['Observer', 'Builder', 'Decorator', 'Factory'], correctIndex: 0, points: 1 },
-              { question: 'Making an incompatible legacy interface usable is the… pattern.|||Làm một interface cũ không tương thích dùng được là pattern…', options: ['Adapter', 'Strategy', 'Observer', 'Singleton'], correctIndex: 0, points: 1 },
-              { question: 'Strategy and Factory both help satisfy which SOLID principle? (beyond-syllabus)|||Strategy và Factory đều giúp thoả nguyên tắc SOLID nào? (ngoài giáo trình)', options: ['Single Responsibility', 'Open/Closed (open to extension, closed to modification)|||Open/Closed (mở mở rộng, đóng sửa)', 'no principle|||không nguyên tắc', 'Liskov only|||chỉ Liskov'], correctIndex: 1, points: 1 },
-            ],
-          },
+          description: ch4.quizDescription,
+          quiz: ch4.quiz,
         },
       ],
     },
@@ -987,6 +979,8 @@ checkout.<span class="tok-function">pay</span>(<span class="tok-number">100</spa
       title: 'Chapter 5 — Relational database design & AI tools|||Chương 5 — Thiết kế CSDL quan hệ & công cụ AI',
       description: 'Chuyển analysis model thành thiết kế CSDL quan hệ, và dùng AI (ChatGPT/PlantUML/Copilot) hỗ trợ thiết kế.',
       lessons: [
+        /* 📑 Học theo từng slide (swd27 1–18) — ./swd392/ch5.mjs */
+        ...ch5.slides,
         {
           title: '5.1 — Relational design from the model|||5.1 — Thiết kế quan hệ từ mô hình',
           slug: 'swd392-5-1-database-design',
@@ -1099,22 +1093,14 @@ AI trả về text PlantUML; bạn dán vào một renderer và <b>kiểm multip
 <div class="pitfall">Đừng bao giờ trình một thiết kế AI sinh mà bạn không bảo vệ được. Ở đánh giá project và Practical exam bạn phải giải thích mọi lớp, quan hệ và quyết định. AI "làm hộ bạn" sụp đổ dưới một câu "vì sao em chọn cái này?" — kiểm chứng và thấm mọi thứ.</div>
 </div>`,
         },
+        /* 🧪 Thực hành + 🗂 Thuật ngữ + 📌 Tóm tắt — ./swd392/ch5.mjs */
+        ch5.practice,
         {
           title: 'Quiz 5 — Database design & AI|||Quiz 5 — Thiết kế CSDL & AI',
           slug: 'swd392-quiz-5',
           type: 'QUIZ',
-          description: 'Kiểm tra ánh xạ lớp→bảng, chuẩn hoá, và dùng AI có trách nhiệm.',
-          quiz: {
-            timeLimitSeconds: 360,
-            questions: [
-              { question: 'A many-to-many relationship maps to…|||Một quan hệ nhiều-nhiều ánh xạ tới…', options: ['a foreign key on one side|||khoá ngoại ở một bên', 'a junction/associative table|||một bảng trung gian', 'a single table|||một bảng đơn', 'no table|||không bảng'], correctIndex: 1, points: 1 },
-              { question: 'A 1-to-many association is implemented with a foreign key on the…|||Một quan hệ 1-nhiều được hiện thực bằng khoá ngoại ở phía…', options: ['"one" side|||phía "một"', '"many" side|||phía "nhiều"', 'both sides|||cả hai', 'neither|||không bên nào'], correctIndex: 1, points: 1 },
-              { question: 'In COMET, the schema should be driven by…|||Trong COMET, schema nên được dẫn bởi…', options: ['the database first|||database trước', 'the analysis model (classes)|||analysis model (các lớp)', 'the UI|||giao diện', 'the framework|||framework'], correctIndex: 1, points: 1 },
-              { question: 'When an AI generates a class diagram, you must…|||Khi một AI sinh một class diagram, bạn phải…', options: ['use it as-is|||dùng nguyên xi', 'verify multiplicities and relationship types|||kiểm multiplicity và loại quan hệ', 'delete it|||xoá nó', 'never use AI|||không bao giờ dùng AI'], correctIndex: 1, points: 1 },
-              { question: 'The best use of AI in design is to…|||Cách dùng AI tốt nhất trong thiết kế là…', options: ['make all decisions for you|||quyết mọi thứ hộ bạn', 'generate options and drafts you then judge and own|||sinh phương án và bản nháp bạn rồi phán đoán và sở hữu', 'replace the designer|||thay thế nhà thiết kế', 'skip the requirements|||bỏ qua yêu cầu'], correctIndex: 1, points: 1 },
-              { question: 'Deliberately denormalizing a schema for performance is… (beyond-syllabus)|||Chủ đích denormalize một schema vì hiệu năng là… (ngoài giáo trình)', options: ['always a mistake|||luôn là lỗi', 'a conscious trade-off to document|||một đánh đổi có ý thức cần ghi lại', 'required by 3NF|||bắt buộc bởi 3NF', 'impossible|||bất khả'], correctIndex: 1, points: 1 },
-            ],
-          },
+          description: ch5.quizDescription,
+          quiz: ch5.quiz,
         },
       ],
     },
@@ -1415,89 +1401,15 @@ AI trả về text PlantUML; bạn dán vào một renderer và <b>kiểm multip
           "description": "PE của SWD392 là phần áp dụng của bài thi cuối 145 phút: 20%, 85 phút, cổng ≥ 4. Đây là bài THIẾT KẾ (use case, lớp, statechart, pattern, kiến trúc) — không phải bài code.",
           "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · Practical Exam</span>\n<h2>The PE is a design exam, not a coding exam</h2>\n<p class=\"lead\">SWD392's final exam has <strong>two parts totalling 145 minutes</strong>: the <strong>Practical Exam &mdash; 20%, 85 minutes, completion criterion 4</strong>, and the Theory Exam &mdash; 40%, 60 minutes, completion criterion 4. Together they are the 60% &ldquo;Final exam&rdquo; row group. The subject is <em>Software Architecture and Design</em> and every CLO is about modelling, architecture and patterns &mdash; so the practical asks you to <strong>produce a design</strong>, not to make a program compile.</p>\n<div class=\"callout warn\"><strong>Correction.</strong> An earlier version of this page said the PE was &ldquo;a hands-on coding exam &hellip; a program that runs and does 80% beats one that does not compile&rdquo;. That contradicts both the subject's CLOs and this course's own lesson 0.2 (&ldquo;Applied modeling/design, 85 min&rdquo;). Practise drawing and justifying, not typing.</div>\n<table>\n<thead><tr><th>Field</th><th>Value in the syllabus</th></tr></thead>\n<tbody>\n<tr><td>Type</td><td>Final exam (one of two parts)</td></tr>\n<tr><td>Weight</td><td><strong>20%</strong> (Theory Exam is the other 40%)</td></tr>\n<tr><td>Completion criterion</td><td><strong>4</strong> &mdash; an independent gate</td></tr>\n<tr><td>Duration</td><td><strong>85 minutes</strong> (145 minutes for both exam parts together)</td></tr>\n<tr><td>Tools named by the syllabus</td><td>Rational Software Architect; Visual Paradigm, MagicDraw, Visio &mdash; modelling tools, not IDEs</td></tr>\n</tbody>\n</table>\n\n<h3>What 85 minutes of applied design can ask for</h3>\n<table>\n<thead><tr><th>CLO</th><th>Be able to produce from a scenario</th><th>Lesson</th></tr></thead>\n<tbody>\n<tr><td>CLO2</td><td>A use-case model: actors, use cases, one full use-case description, include/extend, association multiplicity</td><td>2.1, 1.2</td></tr>\n<tr><td>CLO3</td><td>An analysis model: class diagram with the object categories (entity, boundary, control, application logic) and a statechart for one state-dependent object</td><td>2.2</td></tr>\n<tr><td>CLO4</td><td>An architecture for the scenario, <em>justified against quality attributes</em> &mdash; and named in Gomaa's terms (layered, client/server, service-oriented, component-based, concurrent/real-time)</td><td>3.1, 3.2</td></tr>\n<tr><td>CLO5</td><td>A relational schema mapped from the class diagram: tables, keys, how associations and inheritance become tables</td><td>5.1</td></tr>\n<tr><td>CLO6</td><td>A design pattern chosen for the problem and <strong>documented</strong> in the standard structure (intent, problem, solution, structure, consequences)</td><td>4.1, 4.2</td></tr>\n</tbody>\n</table>\n\n<h3>How to spend the 85 minutes</h3>\n<ol>\n<li><strong>0&ndash;8 min</strong> &mdash; read the scenario twice and underline nouns (candidate classes) and verbs (candidate operations/use cases). List the deliverables the paper asks for and budget minutes to each.</li>\n<li><strong>8&ndash;30 min</strong> &mdash; use-case model and the class diagram. Get names, multiplicities and relationship types right; these feed everything after.</li>\n<li><strong>30&ndash;55 min</strong> &mdash; the dynamic part (sequence/communication diagram or statechart) and the architecture choice.</li>\n<li><strong>55&ndash;75 min</strong> &mdash; the pattern and/or the database mapping, with the justification written out.</li>\n<li><strong>75&ndash;85 min</strong> &mdash; consistency pass: does every class in the sequence diagram exist in the class diagram? Does the statechart's object appear as a class? Inconsistency is the cheapest mark to lose.</li>\n</ol>\n<div class=\"callout ok\"><strong>The habit that earns marks:</strong> never hand in a diagram without one or two sentences of justification beside it. &ldquo;Layered, because the requirement says the database may be replaced&rdquo; scores; an unlabelled correct diagram often does not.</div>\n<div class=\"callout\"><span class=\"badge\">Sample</span> A scenario-based modelling prompt bank will be added here later, in the exam room.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · Practical Exam</span>\n<h2>PE là bài thi THIẾT KẾ, không phải bài thi code</h2>\n<p class=\"lead\">Thi cuối kỳ của SWD392 có <strong>hai phần, tổng 145 phút</strong>: <strong>Practical Exam &mdash; 20%, 85 phút, mốc hoàn thành 4</strong>, và Theory Exam &mdash; 40%, 60 phút, mốc hoàn thành 4. Cộng lại chúng là nhóm dòng &ldquo;Final exam&rdquo; 60%. Môn học tên là <em>Software Architecture and Design</em> và mọi CLO đều nói về mô hình hoá, kiến trúc và pattern &mdash; nên phần thực hành yêu cầu bạn <strong>làm ra một bản thiết kế</strong>, không phải làm cho một chương trình biên dịch được.</p>\n<div class=\"callout warn\"><strong>Đính chính.</strong> Bản trước của trang này viết PE là &ldquo;bài thi code trực tiếp &hellip; một chương trình chạy được và làm đúng 80% thắng một chương trình không biên dịch nổi&rdquo;. Điều đó mâu thuẫn với cả CLO của môn lẫn chính bài 0.2 của khoá này (&ldquo;Mô hình/thiết kế áp dụng, 85 phút&rdquo;). Hãy luyện vẽ và lập luận, đừng luyện gõ code.</div>\n<table>\n<thead><tr><th>Trường</th><th>Giá trị trong syllabus</th></tr></thead>\n<tbody>\n<tr><td>Loại</td><td>Thi cuối kỳ (một trong hai phần)</td></tr>\n<tr><td>Trọng số</td><td><strong>20%</strong> (Theory Exam là 40% còn lại)</td></tr>\n<tr><td>Mốc hoàn thành</td><td><strong>4</strong> &mdash; một cổng độc lập</td></tr>\n<tr><td>Thời lượng</td><td><strong>85 phút</strong> (cả hai phần thi là 145 phút)</td></tr>\n<tr><td>Công cụ syllabus nêu tên</td><td>Rational Software Architect; Visual Paradigm, MagicDraw, Visio &mdash; công cụ mô hình hoá, không phải IDE</td></tr>\n</tbody>\n</table>\n\n<h3>85 phút thiết kế áp dụng có thể hỏi gì</h3>\n<table>\n<thead><tr><th>CLO</th><th>Phải làm ra được từ một tình huống</th><th>Bài</th></tr></thead>\n<tbody>\n<tr><td>CLO2</td><td>Mô hình use case: tác nhân, use case, một bản mô tả use case đầy đủ, include/extend, multiplicity của quan hệ</td><td>2.1, 1.2</td></tr>\n<tr><td>CLO3</td><td>Analysis model: sơ đồ lớp với các nhóm đối tượng (entity, boundary, control, application logic) và một statechart cho một đối tượng phụ thuộc trạng thái</td><td>2.2</td></tr>\n<tr><td>CLO4</td><td>Một kiến trúc cho tình huống, <em>có lập luận theo thuộc tính chất lượng</em> &mdash; và gọi tên theo Gomaa (phân lớp, client/server, hướng dịch vụ, dựa thành phần, đồng thời/thời gian thực)</td><td>3.1, 3.2</td></tr>\n<tr><td>CLO5</td><td>Lược đồ quan hệ ánh xạ từ sơ đồ lớp: bảng, khoá, quan hệ và kế thừa thành bảng thế nào</td><td>5.1</td></tr>\n<tr><td>CLO6</td><td>Một design pattern chọn cho bài toán và <strong>được tài liệu hoá</strong> theo cấu trúc chuẩn (ý đồ, vấn đề, giải pháp, cấu trúc, hệ quả)</td><td>4.1, 4.2</td></tr>\n</tbody>\n</table>\n\n<h3>Chia 85 phút thế nào</h3>\n<ol>\n<li><strong>0&ndash;8 phút</strong> &mdash; đọc tình huống hai lượt, gạch chân danh từ (lớp ứng viên) và động từ (thao tác/use case ứng viên). Liệt kê những thứ đề đòi và chia phút cho từng thứ.</li>\n<li><strong>8&ndash;30 phút</strong> &mdash; mô hình use case và sơ đồ lớp. Làm đúng tên, multiplicity và loại quan hệ; mọi thứ sau đều ăn theo chúng.</li>\n<li><strong>30&ndash;55 phút</strong> &mdash; phần động (sơ đồ tuần tự/giao tiếp hoặc statechart) và lựa chọn kiến trúc.</li>\n<li><strong>55&ndash;75 phút</strong> &mdash; pattern và/hoặc ánh xạ cơ sở dữ liệu, viết rõ phần lập luận.</li>\n<li><strong>75&ndash;85 phút</strong> &mdash; rà nhất quán: mọi lớp trong sơ đồ tuần tự có tồn tại trong sơ đồ lớp không? Đối tượng của statechart có xuất hiện thành một lớp không? Mất điểm vì thiếu nhất quán là mất rẻ nhất.</li>\n</ol>\n<div class=\"callout ok\"><strong>Thói quen ăn điểm:</strong> đừng bao giờ nộp một sơ đồ mà không kèm một hai câu lập luận. &ldquo;Phân lớp, vì yêu cầu nói cơ sở dữ liệu có thể bị thay&rdquo; thì có điểm; một sơ đồ đúng nhưng không nhãn thì thường không.</div>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Ngân hàng đề mô hình hoá dạng tình huống sẽ được thêm vào đây sau, trong trang phòng thi.</div>\n</div>"
         },
+        /* 🧩 Bài bổ sung — ./swd392/fe.mjs */
+        ...fe.extrasEnd,
         {
           "title": "TE — Theory Exam (40%, 60'), the biggest single weight|||TE — Thi lý thuyết (40%, 60'), trọng số lớn nhất",
           "slug": "swd392-final-exam-fe",
           "type": "article",
           "description": "Theory Exam: 40%, 60 phút, cổng ≥ 4 — thành phần nặng nhất của SWD392. Nội dung theo các chương Gomaa + UML Distilled + GoF. Kèm câu luyện.",
           "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · Theory Exam</span>\n<h2>TE &mdash; 40% in 60 minutes</h2>\n<p class=\"lead\">The Theory Exam is the <strong>largest single component of SWD392</strong>: <strong>40%, 60 minutes, completion criterion 4</strong>. With the 85-minute Practical Exam it forms the 145-minute final. Three independent gates decide the subject &mdash; Course Project &ge; 5, Theory &ge; 4, Practical &ge; 4 &mdash; so a strong project cannot rescue a weak theory paper.</p>\n<div class=\"callout warn\"><strong>Correction.</strong> This page previously called the theory paper &ldquo;FE&rdquo; and asserted it was &ldquo;a computer-graded multiple-choice test&rdquo;. The syllabus names it the <strong>Theory Exam</strong> and its question-type cell is truncated in the published export &mdash; so the marking format is not something to bet on. Prepare to define, compare and justify in writing as well as to recognise.</div>\n\n<h3>What it covers &mdash; follow the textbook chapters, not just the slides</h3>\n<table>\n<thead><tr><th>CLO / area</th><th>Expect questions on</th><th>Source</th></tr></thead>\n<tbody>\n<tr><td>CLO1 &mdash; design fundamentals</td><td>Abstraction, information hiding, modularity, coupling and cohesion; software life-cycle models and where design sits</td><td>Gomaa Ch 1&ndash;4; lesson 1.1</td></tr>\n<tr><td>CLO2 &mdash; COMET/UML</td><td>The steps of the COMET method; UML diagram types and when each is used; association multiplicity; collaboration/communication diagrams</td><td>Gomaa Ch 5&ndash;9; Fowler, <em>UML Distilled</em>; lessons 1.2, 2.1</td></tr>\n<tr><td>CLO3 &mdash; analysis model</td><td>Object structuring categories (entity, boundary, control, application logic); finite state machines and statecharts; state-dependent interaction</td><td>Gomaa Ch 7&ndash;11; lesson 2.2</td></tr>\n<tr><td>CLO4 &mdash; architecture</td><td>Subsystem structuring criteria; object-oriented, client/server, <b>service-oriented (Ch 16)</b>, <b>component-based (Ch 17)</b> and <b>concurrent/real-time (Ch 18)</b> architectures, plus their case studies (Ch 21&ndash;24)</td><td>Gomaa Ch 12&ndash;18, 21&ndash;24; lessons 3.1, 3.2</td></tr>\n<tr><td>CLO5 &mdash; relational database</td><td>Mapping classes, associations and inheritance to tables; keys; where the database sits in the design model</td><td>lesson 5.1</td></tr>\n<tr><td>CLO6 &mdash; design patterns</td><td>The documentation structure of a pattern; creational, structural and behavioural patterns and what problem each solves</td><td>Gamma et al., <em>Design Patterns</em>; lessons 4.1, 4.2</td></tr>\n<tr><td>CLO7 &mdash; AI tools</td><td>Using ChatGPT, PlantUML and Copilot for architecture analysis and design &mdash; and what has to be verified by hand</td><td>lesson 5.2</td></tr>\n</tbody>\n</table>\n\n<h3>Technique</h3>\n<ul>\n<li>60 minutes over seven CLOs: keep answers tight. A definition plus one concrete example is usually the full mark.</li>\n<li>Comparison questions (&ldquo;entity vs control object&rdquo;, &ldquo;aggregation vs composition&rdquo;, &ldquo;orchestration vs choreography&rdquo;) want the <em>distinguishing</em> property first, then the example.</li>\n<li>When asked to choose an architecture or a pattern, name it and tie it to a quality attribute or a force in the problem &mdash; that link is the mark.</li>\n<li>Never leave a blank: the &ge; 4 gate on 40% of the subject makes an unanswered item expensive.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Practice</span> The items below are practice questions drawn from this course. Real past-exam questions will be added later, in the exam room.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · Theory Exam</span>\n<h2>TE &mdash; 40% trong 60 phút</h2>\n<p class=\"lead\">Theory Exam là <strong>thành phần đơn lẻ lớn nhất của SWD392</strong>: <strong>40%, 60 phút, mốc hoàn thành 4</strong>. Cùng Practical Exam 85 phút, nó tạo thành bài thi cuối 145 phút. Ba cổng độc lập quyết định môn học &mdash; Course Project &ge; 5, Theory &ge; 4, Practical &ge; 4 &mdash; nên một project mạnh không cứu được bài lý thuyết yếu.</p>\n<div class=\"callout warn\"><strong>Đính chính.</strong> Trang này trước đây gọi bài lý thuyết là &ldquo;FE&rdquo; và khẳng định nó là &ldquo;thi trắc nghiệm máy chấm&rdquo;. Syllabus gọi nó là <strong>Theory Exam</strong> và ô dạng câu hỏi bị cắt trong bản xuất công bố &mdash; nên đừng đặt cược vào hình thức chấm. Hãy chuẩn bị định nghĩa, so sánh và lập luận bằng chữ, chứ không chỉ nhận diện phương án.</div>\n\n<h3>Nội dung phủ &mdash; bám các chương sách, đừng chỉ bám slide</h3>\n<table>\n<thead><tr><th>CLO / mảng</th><th>Chờ câu hỏi về</th><th>Nguồn</th></tr></thead>\n<tbody>\n<tr><td>CLO1 &mdash; nền tảng thiết kế</td><td>Trừu tượng hoá, che giấu thông tin, mô-đun hoá, coupling và cohesion; các mô hình vòng đời phần mềm và chỗ đứng của thiết kế</td><td>Gomaa Ch 1&ndash;4; bài 1.1</td></tr>\n<tr><td>CLO2 &mdash; COMET/UML</td><td>Các bước của phương pháp COMET; các loại sơ đồ UML và khi nào dùng cái nào; multiplicity của quan hệ; sơ đồ collaboration/communication</td><td>Gomaa Ch 5&ndash;9; Fowler, <em>UML Distilled</em>; bài 1.2, 2.1</td></tr>\n<tr><td>CLO3 &mdash; analysis model</td><td>Các nhóm cấu trúc đối tượng (entity, boundary, control, application logic); máy trạng thái hữu hạn và statechart; tương tác phụ thuộc trạng thái</td><td>Gomaa Ch 7&ndash;11; bài 2.2</td></tr>\n<tr><td>CLO4 &mdash; kiến trúc</td><td>Tiêu chí phân rã hệ con; kiến trúc hướng đối tượng, client/server, <b>hướng dịch vụ (Ch 16)</b>, <b>dựa thành phần (Ch 17)</b> và <b>đồng thời/thời gian thực (Ch 18)</b>, kèm các case study (Ch 21&ndash;24)</td><td>Gomaa Ch 12&ndash;18, 21&ndash;24; bài 3.1, 3.2</td></tr>\n<tr><td>CLO5 &mdash; cơ sở dữ liệu quan hệ</td><td>Ánh xạ lớp, quan hệ và kế thừa thành bảng; khoá; cơ sở dữ liệu nằm ở đâu trong design model</td><td>bài 5.1</td></tr>\n<tr><td>CLO6 &mdash; design pattern</td><td>Cấu trúc tài liệu hoá một pattern; nhóm creational, structural, behavioral và mỗi cái giải quyết vấn đề gì</td><td>Gamma và cộng sự, <em>Design Patterns</em>; bài 4.1, 4.2</td></tr>\n<tr><td>CLO7 &mdash; công cụ AI</td><td>Dùng ChatGPT, PlantUML và Copilot để phân tích và thiết kế kiến trúc &mdash; và thứ gì bắt buộc phải tự kiểm lại</td><td>bài 5.2</td></tr>\n</tbody>\n</table>\n\n<h3>Kỹ thuật làm bài</h3>\n<ul>\n<li>60 phút cho bảy CLO: viết gọn. Một định nghĩa kèm một ví dụ cụ thể thường đã là điểm tối đa.</li>\n<li>Câu so sánh (&ldquo;entity với control object&rdquo;, &ldquo;aggregation với composition&rdquo;, &ldquo;orchestration với choreography&rdquo;) muốn thấy điểm <em>phân biệt</em> trước, rồi mới tới ví dụ.</li>\n<li>Khi đề bảo chọn kiến trúc hay pattern, hãy gọi tên nó và nối với một thuộc tính chất lượng hoặc một áp lực trong bài toán &mdash; mối nối đó chính là điểm.</li>\n<li>Đừng bỏ trống câu nào: cổng &ge; 4 trên 40% môn học làm một câu bỏ trống rất đắt.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Luyện tập</span> Các câu dưới đây là câu luyện lấy từ chính môn học. Đề thi thật sẽ được thêm sau, trong trang phòng thi.</div>\n</div>",
-          "quiz": {
-            "timeLimitSeconds": 360,
-            "questions": [
-              {
-                "id": "q1",
-                "points": 1,
-                "question": "Good design aims for coupling that is… and cohesion that is…|||Thiết kế tốt nhắm coupling… và cohesion…",
-                "options": [
-                  "high; low|||cao; thấp",
-                  "low; high|||thấp; cao",
-                  "high; high|||cao; cao",
-                  "low; low|||thấp; thấp"
-                ],
-                "correctIndex": 1
-              },
-              {
-                "id": "q2",
-                "points": 1,
-                "question": "Depending on an interface instead of a concrete class mainly reduces…|||Phụ thuộc một interface thay vì lớp cụ thể chủ yếu giảm…",
-                "options": [
-                  "cohesion",
-                  "coupling",
-                  "the number of classes|||số lớp",
-                  "performance|||hiệu năng"
-                ],
-                "correctIndex": 1
-              },
-              {
-                "id": "q3",
-                "points": 1,
-                "question": "The class-diagram relationship where parts die with the whole is…|||Quan hệ class-diagram mà phần chết cùng tổng thể là…",
-                "options": [
-                  "association",
-                  "aggregation",
-                  "composition",
-                  "inheritance"
-                ],
-                "correctIndex": 2
-              },
-              {
-                "id": "q4",
-                "points": 1,
-                "question": "Customer \"1\" -- \"*\" Order means…|||Customer \"1\" -- \"*\" Order nghĩa là…",
-                "options": [
-                  "one order has many customers|||một order có nhiều khách",
-                  "one customer has many orders|||một khách có nhiều order",
-                  "orders have no customer|||order không có khách",
-                  "a one-to-one link|||liên kết một-một"
-                ],
-                "correctIndex": 1
-              },
-              {
-                "id": "q5",
-                "points": 1,
-                "question": "A class that does validation, database access and formatting all at once is a…|||Một lớp làm validation, truy cập database và định dạng cùng lúc là…",
-                "options": [
-                  "good abstraction|||trừu tượng tốt",
-                  "god class (low cohesion)|||god class (cohesion thấp)",
-                  "a design pattern|||một design pattern",
-                  "an interface|||một interface"
-                ],
-                "correctIndex": 1
-              },
-              {
-                "id": "q6",
-                "points": 1,
-                "question": "To decide aggregation vs composition you ask whether… (beyond-syllabus)|||Để quyết aggregation vs composition bạn hỏi liệu… (ngoài giáo trình)",
-                "options": [
-                  "the classes look similar|||các lớp trông giống nhau",
-                  "the part must be deleted when the whole is deleted|||phần có phải bị xoá khi tổng thể bị xoá",
-                  "there are many classes|||có nhiều lớp",
-                  "the names match|||tên khớp"
-                ],
-                "correctIndex": 1
-              }
-            ]
-          }
+          "quiz": fe.quiz
         }
       ]
     },

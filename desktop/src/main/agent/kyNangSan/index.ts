@@ -33,6 +33,7 @@ import devopsWindows from '../../../../../src/services/agent/kyNangSan/devops-wi
 import serverMayNha from '../../../../../src/services/agent/kyNangSan/server-may-nha.md?raw';
 import webgl3d from '../../../../../src/services/agent/kyNangSan/3d-webgl.md?raw';
 import lamGame from '../../../../../src/services/agent/kyNangSan/lam-game.md?raw';
+import phongThuMayChu from '../../../../../src/services/agent/kyNangSan/phong-thu-may-chu.md?raw';
 
 /** Nội dung thô (có phần đầu YAML) của từng kỹ năng — bản đóng gói. */
 export const KY_NANG_SAN_THO: readonly string[] = [
@@ -40,4 +41,5 @@ export const KY_NANG_SAN_THO: readonly string[] = [
   database, kiemThu, baoMat, giaoDienWeb,
   gitGithub, thietKeApi, tinhNangAi, doAnBaoCao,
   devopsWindows, serverMayNha, webgl3d, lamGame,
+  phongThuMayChu,
 ];

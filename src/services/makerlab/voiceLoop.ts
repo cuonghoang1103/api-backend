@@ -971,8 +971,20 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
           khop: goi.khop,
           giay: persona.giayThucGiac,
         });
+        // ĐÁP một câu ngắn (01/10/2026, người dùng yêu cầu: gọi "Odin" thì
+        // nó phải "Hửm, bạn gọi tôi hả?"). Trước chỉ mở to mắt — ở quán ồn
+        // người gọi không nhìn robot, tưởng nó điếc rồi gọi mãi. Vẫn KHÔNG
+        // đẩy vào LLM: không có câu hỏi nào để trả lời.
+        const cau = CAU_DAP_GOI_TEN[Math.floor(Math.random() * CAU_DAP_GOI_TEN.length)];
+        baoMat(input.deviceId, 'happy', 2500);
+        const noi = await speakOnce(persona, cau, input.deviceId);
+        if (noi) emitTranscript(input.deviceId, 'bot', cau);
+        // Tính giờ thức lại từ lúc ĐÁP XONG — câu đáp ăn mất 2-3 giây của
+        // cửa sổ 10 giây, người ta chưa kịp nói gì đã ngủ lại.
+        moCong(input.deviceId, persona.giayThucGiac);
+        henNguLai(input.deviceId, persona.giayThucGiac);
         timing.total = Date.now() - started;
-        return { heard, said: '', actions: [], spoken: false, ms: timing };
+        return { heard, said: noi ? cau : '', actions: [], spoken: noi, ms: timing };
       }
       // Cắt tên ra khỏi câu lệnh. Để nguyên "Odin đi tới đây" thì model
       // coi tên là một phần yêu cầu và hay chào lại thay vì đi.
@@ -2197,6 +2209,14 @@ async function think(
  */
 /** Tên gọi robot khi ô "Từ đánh thức" trên web để trống. */
 const TU_DANH_THUC_MAC_DINH = 'Odin';
+
+/** Câu đáp khi chỉ được gọi tên, không kèm lệnh — đổi câu cho đỡ máy móc. */
+const CAU_DAP_GOI_TEN = [
+  'Hửm, bạn gọi tôi hả?',
+  'Ơi, tôi đây!',
+  'Dạ, tôi nghe đây!',
+  'Có tôi đây, bạn nói đi!',
+];
 
 async function dispatchAction(deviceId: number, action: ValidatedCommand): Promise<void> {
   // Âm lượng AI đổi theo lời người dùng ("giảm xuống 10%") thì phải NHỚ —

@@ -719,7 +719,7 @@ export function buildSystemPrompt(
     `\nTrả lời BẮT BUỘC bằng JSON đúng một dòng, không bọc trong markdown:
 {"say":"<câu bạn nói>","actions":[{"type":"face","payload":{"emotion":"happy","ms":2000}}]}
 - "say": lời thoại thuần, không ký tự đặc biệt. Bắt buộc có.
-- "actions": 0 đến 3 lệnh. Bỏ trống nếu câu trả lời không cần cử động.
+- "actions": 1 đến 3 lệnh. LUÔN có đúng MỘT lệnh "face" mang cảm xúc của chính câu bạn nói — mắt là chỗ người ta nhìn vào khi nói chuyện với bạn, mắt đứng yên là bạn thành cái loa. Chọn "emotion" hợp với câu: happy, excited, love, proud, shy, curious, thinking, confused, surprised, suspicious, sad, scared, annoyed, angry, bored, sleepy, dizzy, wink (nháy mắt khi đùa), neutral (chỉ khi câu thật sự không có cảm xúc nào). Thêm lệnh cử động khác nếu câu chuyện gọi tới.
 Không viết gì ngoài JSON đó.`,
     /**
      * ⚠️ MỌI THỨ ĐỔI MỖI LƯỢT PHẢI NẰM CUỐI PROMPT.
@@ -873,4 +873,28 @@ export function buildFewShot(
     out.push({ role: 'assistant', content: JSON.stringify({ say: s.bot, actions: [] }) });
   }
   return out;
+}
+
+// ════════════════════════════════════════════════════════════
+// Lưu âm lượng (01/10/2026)
+// ════════════════════════════════════════════════════════════
+//
+// Âm lượng sống ở `traits.amLuong`, và `guiLaiCaiDat()` (device.gateway)
+// gửi nó xuống mỗi lần bo nối lại — vì bo không tự nhớ. Trước đây chỉ web
+// ghi vào đó; đổi bằng giọng nói ("giảm xuống 10%") hay vuốt trên màn ngực
+// thì khởi động lại là mất. Hai hàm dưới cho hai đường đó ghi chung một chỗ.
+
+/** Hoà `amLuong` (2..100) vào traits đang có, giữ nguyên mọi khoá khác. */
+export async function luuAmLuong(projectId: number, pct: number): Promise<void> {
+  if (!Number.isFinite(pct)) return;
+  const muc = Math.max(2, Math.min(100, Math.round(pct)));
+  const p = await prisma.makerPersona.findUnique({ where: { projectId }, select: { traits: true } });
+  if (!p) return;
+  const traits = { ...((p.traits as Record<string, unknown> | null) ?? {}), amLuong: muc };
+  await prisma.makerPersona.update({ where: { projectId }, data: { traits } });
+}
+
+export async function luuAmLuongTheoThietBi(deviceId: number, pct: number): Promise<void> {
+  const dev = await prisma.makerDevice.findUnique({ where: { id: deviceId }, select: { projectId: true } });
+  if (dev?.projectId) await luuAmLuong(dev.projectId, pct);
 }

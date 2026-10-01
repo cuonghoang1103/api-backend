@@ -394,7 +394,7 @@ export async function upsertPersona(
       ...(coCheDo ? { cheDo: data.cheDo } : {}),
       // Âm lượng lưu vào persona chứ không chỉ gửi xuống bo: bo mất điện
       // là quên sạch, mà người dùng đã chỉnh thì họ mong nó GIỮ NGUYÊN.
-      ...(coAmLuong ? { amLuong: Math.max(10, Math.min(100, data.amLuong as number)) } : {}),
+      ...(coAmLuong ? { amLuong: Math.max(2, Math.min(100, data.amLuong as number)) } : {}),
       ...(coCong ? { congDanhThuc: data.congDanhThuc } : {}),
       ...(coGiay
         ? { giayThucGiac: Math.max(5, Math.min(300, Math.round(data.giayThucGiac as number))) }

@@ -852,7 +852,7 @@ export function DeviceConsole({
                 <div className="flex items-center gap-2">
                   <button
                     type="button"
-                    onClick={() => setAmLuong((v) => Math.max(10, v - 10))}
+                    onClick={() => setAmLuong((v) => Math.max(2, v - 10))}
                     className="grid h-8 w-8 shrink-0 place-items-center rounded-lg border text-sm font-bold"
                     style={{ borderColor: 'var(--border-color)', color: 'var(--text-secondary)' }}
                     aria-label="Giảm âm lượng"
@@ -861,9 +861,9 @@ export function DeviceConsole({
                   </button>
                   <input
                     type="range"
-                    min={10}
+                    min={2}
                     max={100}
-                    step={5}
+                    step={1}
                     value={amLuong}
                     onChange={(e) => setAmLuong(Number(e.target.value))}
                     className="w-full"

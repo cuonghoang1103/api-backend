@@ -773,6 +773,11 @@ export interface VoiceTurnInput {
   text?: string;
   /** Console messages shouldn't play out of the robot's speaker unless asked. */
   speak?: boolean;
+  /**
+   * Lượt mở bằng CHẠM màn ngực (01/10/2026): người ta đã chủ động gọi
+   * robot bằng tay, nên cổng đánh thức cho qua như thể vừa nghe "Odin".
+   */
+  cham?: boolean;
 }
 
 export interface VoiceTurnResult {
@@ -931,20 +936,23 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
   // cả khi bỏ qua. Không có dòng đó thì lúc cổng nhận hụt, màn hình
   // trống trơn và không tài nào biết Whisper đã chép ra cái gì.
   //
-  // ⚠️ BA ĐIỀU KIỆN, thiếu một là cổng KHÔNG chạy:
+  // ⚠️ HAI ĐIỀU KIỆN, thiếu một là cổng KHÔNG chạy:
   //  1. Cờ bật (`congDanhThuc`) — người dùng tắt được từ web.
-  //  2. `wakeWord` KHÔNG rỗng. Chốt hãm quan trọng nhất: ô trống mà vẫn
-  //     gác thì robot câm vĩnh viễn và trông y như hỏng. Prod trước
-  //     16/08/2026 chính là ô trống.
-  //  3. `speak !== false` — đường GÕ CHỮ từ web Console luôn lọt. Người
+  //  2. `speak !== false` — đường GÕ CHỮ từ web Console luôn lọt. Người
   //     ta vừa gõ vào ô chat của robot thì đã là cố ý nói với nó rồi;
   //     bắt gõ thêm "Odin" là vô nghĩa. Đây cũng là ĐƯỜNG THOÁT khi
   //     cổng nhận hụt: web vẫn sai khiến được robot đang ngủ.
-  const gacCong =
-    persona.congDanhThuc && !!persona.wakeWord?.trim() && input.speak !== false;
+  //
+  // Ô từ đánh thức TRỐNG thì dùng "Odin" (01/10/2026). Trước đó ô trống =
+  // cổng tắt — chốt hãm để robot không câm vĩnh viễn — nhưng ô trên web có
+  // chữ gợi ý xám "Odin" trông y như đã điền, nên prod chạy ô trống suốt
+  // mà không ai biết: ở quán cà phê robot trả lời cả "Cô ơi" của bàn bên.
+  // Có tên mặc định thì vẫn gọi được robot, nên chốt hãm không còn cần.
+  const tuDanhThuc = persona.wakeWord?.trim() || TU_DANH_THUC_MAC_DINH;
+  const gacCong = persona.congDanhThuc && input.speak !== false;
 
   if (gacCong) {
-    const goi = timDanhThuc(heard, persona.wakeWord);
+    const goi = timDanhThuc(heard, tuDanhThuc);
 
     if (goi.trung) {
       moCong(input.deviceId, persona.giayThucGiac);
@@ -969,9 +977,10 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
       // Cắt tên ra khỏi câu lệnh. Để nguyên "Odin đi tới đây" thì model
       // coi tên là một phần yêu cầu và hay chào lại thay vì đi.
       heard = goi.conLai;
-    } else if (dangThuc(input.deviceId)) {
+    } else if (input.cham || dangThuc(input.deviceId)) {
       // Đang trong cuộc nói chuyện — mỗi lượt đẩy hạn ra xa, nên không
-      // phải gọi tên lại giữa chừng.
+      // phải gọi tên lại giữa chừng. Lượt mở bằng CHẠM cũng vào đây:
+      // chạm là đã gọi rồi.
       moCong(input.deviceId, persona.giayThucGiac);
       henNguLai(input.deviceId, persona.giayThucGiac);
     } else {
@@ -983,7 +992,7 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
         // robot không dậy thì đọc dòng này, thấy Whisper chép thành gì,
         // rồi thêm thẳng chuỗi đó vào `PHIEN_AM_THEM` trong danhThuc.ts.
         suytTrung: goi.suyt || undefined,
-        tuDanhThuc: persona.wakeWord,
+        tuDanhThuc,
       });
       timing.total = Date.now() - started;
       return { heard, said: '', actions: [], spoken: false, ms: timing };
@@ -2186,7 +2195,21 @@ async function think(
  * chỗ chứa một bài bốn phút — server tải, đổi mã, rồi rót xuống theo
  * đúng đường tiếng đang dùng để nói.
  */
+/** Tên gọi robot khi ô "Từ đánh thức" trên web để trống. */
+const TU_DANH_THUC_MAC_DINH = 'Odin';
+
 async function dispatchAction(deviceId: number, action: ValidatedCommand): Promise<void> {
+  // Âm lượng AI đổi theo lời người dùng ("giảm xuống 10%") thì phải NHỚ —
+  // trước 01/10 chỉ đẩy lệnh xuống bo, khởi động lại là về mức cũ.
+  if (action.type === 'volume') {
+    const pct = Number((action.payload as { level?: unknown }).level);
+    if (Number.isFinite(pct)) {
+      void import('./persona.js')
+        .then(({ luuAmLuongTheoThietBi }) => luuAmLuongTheoThietBi(deviceId, pct))
+        .catch(() => undefined);
+    }
+  }
+
   if (action.type === 'play_music' || action.type === 'stop_music') {
     try {
       const music = await import('./music.js');

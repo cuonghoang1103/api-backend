@@ -190,7 +190,10 @@ export default function PersonaEditor({ projectId, persona, devices, accent }: P
   const [dangXoaNho, setDangXoaNho] = useState(false);
 
   // ── Cổng đánh thức ──
-  const [tuDanhThuc, setTuDanhThuc] = useState(persona?.wakeWord ?? '');
+  // Trống ⇒ hiện sẵn "Odin" thật (không phải chữ gợi ý xám): chữ gợi ý
+  // trông y như đã điền, và prod đã chạy ô trống — cổng tắt — mà không ai
+  // biết (01/10/2026). Máy chủ cũng tự dùng "Odin" khi ô trống.
+  const [tuDanhThuc, setTuDanhThuc] = useState(persona?.wakeWord || 'Odin');
   // `!== false` chứ không `?? true`: khoá vắng mặt nghĩa là BẬT (mặc
   // định), chỉ đúng chữ `false` mới là tắt.
   const [congDanhThuc, setCongDanhThuc] = useState(
@@ -227,7 +230,7 @@ export default function PersonaEditor({ projectId, persona, devices, accent }: P
       kho: (persona?.traits as { boTinhCach?: unknown })?.boTinhCach ?? {},
       boDang: (persona?.traits as { tinhCachDangDung?: unknown })?.tinhCachDangDung ?? null,
       viTri: (persona?.traits as { viTri?: unknown })?.viTri ?? '',
-      tuDanhThuc: persona?.wakeWord ?? '',
+      tuDanhThuc: persona?.wakeWord || 'Odin',
       congDanhThuc: (persona?.traits as { congDanhThuc?: unknown })?.congDanhThuc !== false,
       giayThucGiac: (() => {
         const v = Number((persona?.traits as { giayThucGiac?: unknown })?.giayThucGiac);
@@ -728,7 +731,8 @@ export default function PersonaEditor({ projectId, persona, devices, accent }: P
             </p>
             {congDanhThuc && !tuDanhThuc.trim() && (
               <p className="mt-1 text-xs font-medium" style={{ color: '#f59e0b' }}>
-                Bỏ trống thì cổng tự vô hiệu — robot vẫn trả lời mọi thứ.
+                Bỏ trống thì robot dùng tên mặc định &ldquo;Odin&rdquo;. Muốn robot trả lời
+                mọi câu thì tắt công tắc ở trên.
               </p>
             )}
           </div>

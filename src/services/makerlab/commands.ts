@@ -48,6 +48,17 @@ export const commandSchemas = {
       'thinking',
       'confused',
       'wink',
+      // Chín cảm xúc mắt vẽ được mà trước 01/10 bị chặn ở đây — nên mắt
+      // nghèo cảm xúc dù bộ vẽ có 28 kiểu (`eyes.cpp`, bảng TEN).
+      'curious',
+      'scared',
+      'dizzy',
+      'suspicious',
+      'excited',
+      'bored',
+      'shy',
+      'proud',
+      'annoyed',
     ]),
     ms: z.number().int().min(0).max(60_000).default(3000),
   }),
@@ -90,12 +101,15 @@ export const commandSchemas = {
    * MAX98357A KHÔNG có chân chỉnh âm lượng — chỉnh phải làm bằng phần
    * mềm, nhân hệ số vào mẫu tiếng trước khi đẩy vào I2S.
    *
-   * Sàn 10 chứ không phải 0: "0%" nghe như robot hỏng, mà người dùng
+   * Sàn 2 chứ không phải 0: "0%" nghe như robot hỏng, mà người dùng
    * bảo "nhỏ hết cỡ" thì ý là nhỏ chứ không phải câm. Muốn câm hẳn thì
    * dùng lệnh `mute` — một hành động rõ ràng, có thể huỷ.
+   *
+   * Sàn từng là 10 — đo 01/10/2026 ở quán cà phê: người dùng bảo "5%",
+   * "1%" mà robot vẫn to, vì 10% của ampli 3W cách tai nửa mét vẫn là to.
    */
   volume: z.object({
-    level: z.number().int().min(10).max(100),
+    level: z.number().int().min(2).max(100),
   }),
   /** Bật một bài trong thư viện nhạc của web. */
   play_music: z.object({
@@ -207,13 +221,13 @@ export function commandCheatSheet(): string {
     'move {left,right,ms}  — bánh trái/phải, -255..255, ms<=5000',
     'stop {}',
     'turn {deg,speed}      — xoay tại chỗ, deg -360..360',
-    'face {emotion,ms}     — neutral|happy|sad|angry|surprised|sleepy|love|thinking|confused|wink',
+    'face {emotion,ms}     — neutral|happy|sad|angry|surprised|sleepy|love|thinking|confused|wink|curious|scared|dizzy|suspicious|excited|bored|shy|proud|annoyed',
     'look {x,y}            — hướng mắt, -1..1',
     'led {r,g,b,effect}    — effect: solid|breathe|spin|blink|off',
     'head {pan,tilt}       — pan -90..90, tilt -35..35',
     'arm {side,shoulder,elbow,ms} — side: left|right|both · vai -90..90 · khuỷu -120..0 (chỉ gập vào)',
     'dance {name}          — spin|wiggle|nod|shake|celebrate',
-    'volume {level}        — âm lượng loa 10..100 (phần trăm)',
+    'volume {level}        — âm lượng loa 2..100 (phần trăm)',
     'play_music {query}    — bật nhạc trong thư viện; query là tên bài và/hoặc ca sĩ',
     'stop_music {}         — tắt nhạc đang phát',
   ].join('\n');

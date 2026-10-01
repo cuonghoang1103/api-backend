@@ -24,7 +24,10 @@
  *   { t:'telemetry', ...any numeric fields }
  *   { t:'log',       level, msg }
  *   { t:'ack',       id, ok, error? }
+ *   { t:'audio_start', cham? }         bắt đầu một lượt nghe; `cham: true` = lượt
+ *                                      mở bằng CHẠM màn ngực ⇒ cổng "Odin" cho qua
  *   { t:'audio_end' }                  end of one spoken turn
+ *   { t:'am_luong', pct }              người dùng vuốt đổi âm lượng trên bo ⇒ lưu
  *   { t:'text',      text }            device did its own STT
  *   { t:'stop' }                       cắt lời: ngừng bơm tiếng NGAY
  *   { t:'pong' }
@@ -90,6 +93,10 @@ interface DeviceConn {
   speaking: boolean;
   /** Bumped on every new turn; a stale TTS stream checks this and stops. */
   turnSeq: number;
+  /** Lượt đang thu được MỞ BẰNG CHẠM màn ngực — người ta đã chủ động gọi
+   *  robot, nên cổng "Odin" cho qua (01/10/2026). Đọc xong ở `audio_end`
+   *  thì hạ ngay, để lượt VAD tự mở về sau không ăn ké. */
+  turnCham: boolean;
   /**
    * What the board can actually play. Declared in `hello`; defaults to
    * mp3 for anything that doesn't say. A microcontroller that asks for
@@ -523,7 +530,7 @@ async function guiLaiCaiDat(conn: DeviceConn): Promise<void> {
     });
     const v = Number((p?.traits as { amLuong?: unknown } | null)?.amLuong);
     if (!Number.isFinite(v) || v <= 0) return;
-    const pct = Math.max(10, Math.min(100, Math.trunc(v)));
+    const pct = Math.max(2, Math.min(100, Math.trunc(v)));
     // Trường là `level`, KHÔNG phải `percent` — firmware đọc
     // `payload["level"] | 100`, nên gõ sai tên thì nó lặng lẽ lấy 100
     // và âm lượng nhảy về hết cỡ. Nguồn sự thật: `commands.ts`.
@@ -675,6 +682,8 @@ async function handleAudioEnd(conn: DeviceConn): Promise<void> {
   const audio = Buffer.concat(conn.audioChunks);
   conn.audioChunks = [];
   conn.audioBytes = 0;
+  const cham = conn.turnCham;
+  conn.turnCham = false;
   if (audio.length < 4000) return; // < 0.12s — a click, not speech
 
   conn.turnSeq += 1;
@@ -684,6 +693,7 @@ async function handleAudioEnd(conn: DeviceConn): Promise<void> {
       deviceId: conn.deviceId,
       projectId: conn.projectId,
       pcm16: audio,
+      ...(cham ? { cham: true } : {}),
     });
   } catch (err) {
     logger.error('MakerLab voice turn failed', {
@@ -756,7 +766,19 @@ async function onMessage(conn: DeviceConn, raw: RawData, isBinary: boolean): Pro
       conn.turnSeq += 1;
       conn.audioChunks = [];
       conn.audioBytes = 0;
+      conn.turnCham = msg.cham === true;
       break;
+    case 'am_luong': {
+      // Âm lượng đổi bằng tay ngay trên robot (vuốt dải dưới màn ngực).
+      // Không lưu thì lần `hello` sau server gửi xuống mức cũ — cú vuốt
+      // coi như chưa từng có.
+      const pct = Number(msg.pct);
+      if (Number.isFinite(pct)) {
+        const { luuAmLuong } = await import('../services/makerlab/persona.js');
+        await luuAmLuong(conn.projectId, pct);
+      }
+      break;
+    }
     case 'stop':
       // Người dùng vỗ đầu robot để cắt lời nó.
       //
@@ -1007,6 +1029,7 @@ function acceptDevice(ws: WebSocket, auth: AuthResult): void {
     speaking: false,
     audioFormat: 'mp3',
     turnSeq: 0,
+    turnCham: false,
     streamStartedAt: 0,
     streamBytes: 0,
     streamBytesPerSec: 32_000, // 16 kHz × 16 bit × 1 kênh, ghi đè ở say_start

@@ -7,8 +7,9 @@
  *   kind      → 'primary' | 'alternative' (branch) | 'info' (concept).
  */
 import { MO_RONG } from './roadmap.seed.mo-rong.js';
+import { ROADMAP_MOI, themChangHoc } from './roadmap.seed.khoa-web.js';
 
-export type SeedLink = { type: 'code-lab' | 'roadmap' | 'external'; ref: string };
+export type SeedLink = { type: 'code-lab' | 'roadmap' | 'external' | 'course'; ref: string };
 export type SeedResource = { type: 'article' | 'video' | 'course' | 'official' | 'feed'; title: string; url: string; premium?: boolean };
 export interface SeedNode {
   title: string; subtitle?: string; kind?: 'primary' | 'alternative' | 'info';
@@ -3641,4 +3642,5 @@ function gopMoRong(goc: SeedRoadmap[], them: Record<string, SeedStage[]>): SeedR
   });
 }
 
-export const ROADMAP_SEED: SeedRoadmap[] = gopMoRong(BAN_VIET_TAY, MO_RONG);
+// Lộ trình 6 nghề (01/10/2026): thêm data-engineer, cloud-architect và chặng "📚 Học trên cuongthai.com" — roadmap.seed.khoa-web.ts
+export const ROADMAP_SEED: SeedRoadmap[] = themChangHoc(gopMoRong([...BAN_VIET_TAY, ...ROADMAP_MOI], MO_RONG));

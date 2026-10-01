@@ -14,7 +14,7 @@ export default {
     status: 'PUBLISHED',
     isFeatured: false,
     syncOrder: true,
-    thumbnailUrl: 'https://media.cuongthai.com/images/course-covers/api-design.png?v=1',
+    thumbnailUrl: 'https://media.cuongthai.com/images/course-covers/api-design.png?v=4',
     shortDescription: 'Design APIs other developers enjoy using, then scale them: REST done properly, errors, pagination, versioning, idempotency, caching, queues, and the system-design interview round explained from first principles.|||Thiết kế API mà người khác thích dùng, rồi mở rộng nó: REST làm cho đúng, lỗi, phân trang, versioning, idempotency, cache, hàng đợi, và vòng phỏng vấn system design giải thích từ gốc.',
     description: 'Khoá thiết kế API và system design cơ bản cho lập trình viên backend/fullstack. Nửa đầu: thiết kế REST API chuẩn chỉnh (tài nguyên, phương thức, status code, lỗi, phân trang, lọc, versioning, idempotency, OpenAPI, bảo mật API). Nửa sau: tư duy hệ thống (độ trễ và thông lượng, cache, cơ sở dữ liệu và mở rộng, hàng đợi, realtime, tính sẵn sàng) và cách đi qua một vòng phỏng vấn system design từng bước, với các đề kinh điển như rút gọn link, feed, chat, đặt lịch.',
     whatYouLearn: 'Thiết kế endpoint và mô hình tài nguyên rõ ràng; trả lỗi nhất quán; phân trang cursor đúng cách; version API mà không phá client; làm POST an toàn khi thử lại; viết tài liệu OpenAPI; ước lượng tải; chọn cache, index, replica, hàng đợi đúng lúc; và trình bày một bài system design trong 45 phút.',
@@ -70,29 +70,29 @@ export default {
       ['design-first', 'Design-first vs code-first', 'Thiết kế trước hay code trước', 'Quy trình đội · Review API như review code'],
       ['khac', 'GraphQL and gRPC: when REST is not the answer', 'GraphQL và gRPC: khi REST không phải câu trả lời', 'So sánh thẳng · Chi phí vận hành · Chọn cho đồ án'],
     ]],
-    ['Chapter 8 — Thinking in systems', 'Chương 8 — Tư duy hệ thống', 'Độ trễ, thông lượng, và ước lượng nhanh.', [
-      ['so-lieu', 'Latency numbers and back-of-the-envelope estimates', 'Con số độ trễ và ước lượng nhanh', 'RAM vs đĩa vs mạng · QPS · Dung lượng lưu trữ'],
-      ['mot-may', 'How far one server goes', 'Một máy chủ đi được bao xa', 'Đo thật một API Express · Nút thắt ở đâu'],
-      ['mo-rong', 'Scaling up vs scaling out', 'Mở rộng dọc và mở rộng ngang', 'Stateless · Load balancer · Sticky session'],
-      ['kha-dung', 'Availability, SLOs and failure', 'Tính sẵn sàng, SLO và hỏng hóc', 'Số 9 · Điểm hỏng đơn · Degrade có kiểm soát'],
+    ['Chapter 8 — Thinking in systems', 'Chương 8 — Tư duy hệ thống', 'Độ trễ, tải và tính sẵn sàng nhìn từ hợp đồng API. Hệ thống tổng thể ⇒ khoá System Design.', [
+      ['so-lieu', 'Latency budgets for an API call (full estimation → System Design)', 'Ngân sách độ trễ cho một lời gọi API (ước lượng đầy đủ → khoá System Design)', 'Bảng độ trễ vừa đủ: RAM, đĩa, mạng, CSDL · Một request đi qua bao nhiêu chặng · Đặt p95/p99 cho từng endpoint · Ước lượng QPS và dung lượng → /courses/system-design Ch1'],
+      ['mot-may', 'Measuring your API: load tests and the first bottleneck', 'Đo API của bạn: test tải và nút thắt đầu tiên', 'Đo thật một endpoint Express (autocannon/k6) · Endpoint chậm thường do thiết kế: N+1, payload quá lớn · Sửa bằng hợp đồng: phân trang, chọn trường, nén · Nút thắt hạ tầng → /courses/system-design Ch1–2'],
+      ['mo-rong', 'Designing APIs that scale out: statelessness and safe retries', 'Thiết kế API để mở rộng ngang: không trạng thái và gửi lại an toàn', 'Không giữ phiên trong RAM tiến trình · Token thay sticky session · Mọi lệnh ghi an toàn khi gửi lại (idempotency) · Load balancer và các giai đoạn mở rộng → /courses/system-design Ch2'],
+      ['kha-dung', 'API availability in the contract: SLOs, timeouts, 429/503 and degradation', 'Tính sẵn sàng trong hợp đồng API: SLO, timeout, 429/503 và suy giảm có kiểm soát', 'Công bố SLO và trang trạng thái · Retry-After, 429 và 503 đúng nghĩa · Trả dữ liệu cũ hay báo lỗi — ghi vào hợp đồng · Thiết kế cho hỏng hóc toàn hệ → /courses/system-design Ch1'],
     ]],
-    ['Chapter 9 — Data at scale', 'Chương 9 — Dữ liệu khi lớn lên', 'Cache, index, replica, phân mảnh.', [
-      ['cache', 'Caching layers and invalidation', 'Các tầng cache và vô hiệu hoá', 'CDN · Redis · Cache-aside · TTL · Stampede'],
-      ['db-doc', 'Read replicas and connection pooling', 'Bản sao đọc và pool kết nối', 'Độ trễ sao chép · PgBouncer · Đọc sau khi ghi'],
-      ['sharding', 'Partitioning and sharding', 'Phân vùng và sharding', 'Khi nào cần · Khoá phân mảnh · Cái giá'],
-      ['nosql', 'SQL vs NoSQL, honestly', 'SQL vs NoSQL, nói thẳng', 'Khi nào Postgres là đủ · Document/key-value/wide-column'],
+    ['Chapter 9 — Data at scale', 'Chương 9 — Dữ liệu khi lớn lên', 'Cache HTTP, đọc-sau-ghi, phân trang và định danh sống sót khi dữ liệu lớn lên.', [
+      ['cache', 'HTTP caching for APIs: Cache-Control, ETag and conditional requests', 'Cache HTTP cho API: Cache-Control, ETag và request có điều kiện', 'Cache-Control public/private/no-store · ETag, If-None-Match và 304 · Vary và cache theo người dùng · Mẫu cache phía server, stampede → /courses/redis Ch6 và /courses/system-design Ch3'],
+      ['db-doc', 'Read-after-write in the API contract: replicas and stale reads', 'Đọc-sau-ghi trong hợp đồng API: bản sao đọc và dữ liệu cũ', 'Người dùng vừa sửa mà không thấy — lỗi hợp đồng hay lỗi hạ tầng · Trả bản ghi mới ngay trong response của lệnh ghi · Phiên bản/ETag để client biết dữ liệu mới tới đâu · Replica và pool kết nối → /courses/distributed-systems Ch3, /courses/postgresql'],
+      ['sharding', 'Pagination, IDs and filters that survive sharding', 'Phân trang, định danh và bộ lọc sống sót qua sharding', 'Cursor thay offset · ID không đoán được, không lộ số lượng · Tránh truy vấn chéo phân mảnh nhờ thiết kế endpoint · Sharding ở mức hạ tầng → /courses/system-design Ch2 và /courses/distributed-systems Ch4'],
+      ['nosql', 'SQL vs NoSQL seen from the API: how the datastore shapes endpoints', 'SQL vs NoSQL nhìn từ API: kho dữ liệu định hình endpoint thế nào', 'Khi nào Postgres là đủ · Document store và payload lồng nhau · Truy vấn linh hoạt vs mẫu truy cập cố định · Tiêu chí chọn CSDL theo mẫu truy cập → /courses/system-design Ch3'],
     ]],
-    ['Chapter 10 — Async and realtime', 'Chương 10 — Bất đồng bộ và thời gian thực', 'Hàng đợi, sự kiện, WebSocket.', [
-      ['hang-doi', 'Queues and background work', 'Hàng đợi và việc chạy nền', 'Khi nào đẩy vào hàng đợi · At-least-once · Trỏ khoá Hàng đợi'],
-      ['su-kien', 'Events, outbox and eventual consistency', 'Sự kiện, outbox và nhất quán cuối cùng', 'Transactional outbox · Idempotent consumer'],
-      ['realtime', 'Realtime: polling, SSE, WebSockets', 'Thời gian thực: polling, SSE, WebSocket', 'So sánh · Mở rộng WebSocket · Trỏ khoá Socket.IO'],
+    ['Chapter 10 — Async and realtime', 'Chương 10 — Bất đồng bộ và thời gian thực', 'API bất đồng bộ (202), hợp đồng sự kiện, realtime và webhook.', [
+      ['hang-doi', 'Asynchronous APIs: 202 Accepted, job resources and polling', 'API bất đồng bộ: 202 Accepted, tài nguyên công việc và hỏi lại', 'POST trả 202 + Location tới /jobs/{id} · Trạng thái, tiến độ, kết quả, huỷ · Thời hạn giữ kết quả · Hàng đợi và worker phía sau → /courses/background-jobs'],
+      ['su-kien', 'Event contracts: payload design, versioning and idempotent consumers', 'Hợp đồng sự kiện: thiết kế payload, phiên bản và consumer idempotent', 'Sự kiện mỏng hay dày · Phiên bản và tương thích ngược · AsyncAPI để mô tả sự kiện · Outbox, saga, nhất quán giữa dịch vụ → /courses/software-architecture Ch9'],
+      ['realtime', 'Realtime APIs: polling, SSE or WebSockets — choosing the contract', 'API thời gian thực: polling, SSE hay WebSocket — chọn hợp đồng', 'So sánh theo nhu cầu · Định dạng thông điệp và xác thực kết nối · Nối lại và lấy bù tin đã lỡ · Mở rộng WebSocket → /courses/socket-io'],
       ['webhook', 'Designing webhooks', 'Thiết kế webhook', 'Ký payload · Thử lại · Thứ tự và trùng lặp'],
     ]],
-    ['Chapter 11 — The system design interview', 'Chương 11 — Vòng phỏng vấn system design', 'Khung trả lời và các đề kinh điển.', [
-      ['khung', 'A framework for the 45-minute interview', 'Khung trả lời 45 phút', 'Làm rõ yêu cầu · Ước lượng · Thiết kế tổng · Đào sâu · Đánh đổi'],
-      ['rut-gon-link', 'Design a URL shortener', 'Thiết kế dịch vụ rút gọn link', 'Sinh mã · Lưu trữ · Cache · Thống kê'],
-      ['feed-chat', 'Design a news feed and a chat', 'Thiết kế news feed và chat', 'Fan-out · Realtime · Lưu tin nhắn'],
-      ['dat-lich', 'Design a booking system', 'Thiết kế hệ thống đặt lịch', 'Chống đặt trùng · Khoá · Thông báo'],
+    ['Chapter 11 — The system design interview', 'Chương 11 — Vòng phỏng vấn system design', 'Phỏng vấn thiết kế API: khung trả lời và các đề kinh điển.', [
+      ['khung', 'A framework for API design interview questions (full system design → System Design)', 'Khung trả lời câu hỏi phỏng vấn thiết kế API (system design trọn vẹn → khoá System Design)', 'Làm rõ người dùng và use case · Tài nguyên, endpoint, lỗi, phân trang · Xác thực, rate limit, phiên bản · Khung 45 phút system design → /courses/system-design'],
+      ['rut-gon-link', 'Interview: design the API of a URL shortener', 'Phỏng vấn: thiết kế API cho dịch vụ rút gọn link', 'Endpoint tạo/đọc/xoá link · Mã tuỳ chọn, trùng mã, hết hạn · API thống kê click và rate limit · Lưu trữ và quy mô → /courses/system-design Ch4'],
+      ['feed-chat', 'Interview: design the APIs of a news feed and a chat', 'Phỏng vấn: thiết kế API cho news feed và chat', 'Phân trang feed bằng cursor · Gửi tin: REST hay WebSocket, id phía client chống trùng · Đã đọc và đồng bộ nhiều thiết bị ở mức hợp đồng · Fan-out và lưu trữ → /courses/system-design Ch6–7'],
+      ['dat-lich', 'Interview: design the API of a booking system', 'Phỏng vấn: thiết kế API cho hệ thống đặt lịch', 'Giữ chỗ tạm có hạn · Idempotency key khi đặt · 409 Conflict khi trùng · Khoá và chống đặt trùng ở quy mô lớn → /courses/system-design Ch9'],
     ]],
     ['Chapter 12 — Capstone: design and build a production API', 'Chương 12 — Dự án cuối khoá: thiết kế và dựng một API production', 'API "Đặt lịch phòng khám" từ OpenAPI tới triển khai.', [
       ['thiet-ke', 'Designing the API contract', 'Thiết kế hợp đồng API', 'Tài nguyên · Lỗi · Phân trang · OpenAPI'],

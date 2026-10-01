@@ -46,35 +46,35 @@ export default {
       ['go-loi', 'Debugging with AI', 'Gỡ lỗi cùng AI', 'Đưa đủ ngữ cảnh · Giả thuyết → kiểm chứng'],
       ['tieng-anh', 'Technical English with AI', 'Tiếng Anh kỹ thuật với AI', 'Đọc tài liệu · Viết PR/commit · Luyện phỏng vấn'],
     ]],
-    ['Chapter 4 — Calling LLM APIs', 'Chương 4 — Gọi LLM API', 'Tích hợp model vào backend Node.', [
-      ['api-dau-tien', 'Your first API call', 'Lời gọi API đầu tiên', 'SDK · Khoá API ở server · System prompt · Tin nhắn'],
-      ['streaming', 'Streaming responses to the browser', 'Trả lời dạng dòng về trình duyệt', 'SSE · Huỷ giữa chừng · Hiển thị Markdown'],
-      ['cau-truc', 'Structured output', 'Đầu ra có cấu trúc', 'JSON theo schema · Kiểm bằng Zod · Thử lại khi sai'],
-      ['loi-gioi-han', 'Errors, rate limits and timeouts', 'Lỗi, giới hạn tần suất và timeout', '429/529 · Retry · Trần chi phí'],
+    ['Chapter 4 — Calling LLM APIs', 'Chương 4 — Gọi LLM API', 'Dùng agent viết code ngoài giao diện chat: script, CI, đầu ra có cấu trúc. Muốn XÂY tính năng AI ⇒ khoá LLM Apps.', [
+      ['api-dau-tien', 'If you want to build AI features, take LLM Apps — this course stays on coding', 'Muốn xây tính năng AI thì học khoá LLM Apps — khoá này chỉ bàn chuyện viết code', 'Khoá này dạy DÙNG AI để viết code, không dạy xây sản phẩm AI · Cốt lõi cần nhớ: khoá API để ở server, system prompt, tin nhắn · Gọi API, streaming, output có cấu trúc, rate limit học sâu ở /courses/llm-apps · Thứ mang sang các bài sau: điều khiển agent viết code qua CLI/SDK'],
+      ['streaming', 'Running a coding agent headless: scripts and CI', 'Chạy agent viết code không giao diện: script và CI', 'Chế độ không tương tác (headless, -p) · Đọc output dạng dòng (stream-json) để theo dõi tiến độ · Gắn vào GitHub Actions: tự sửa lint, tự viết mô tả PR · Giới hạn quyền, số bước và thời gian khi không có người trông'],
+      ['cau-truc', 'Asking for structured results: patches, checklists and JSON reports', 'Đòi kết quả có cấu trúc: bản vá, checklist và báo cáo JSON', 'Bắt agent trả diff thay vì đoạn văn · Báo cáo review dạng JSON để script đọc · Kiểm đầu ra bằng lệnh thật (tsc, test) chứ không bằng mắt · Schema/Zod cho output trong sản phẩm → /courses/llm-apps Ch4'],
+      ['loi-gioi-han', 'Limits, quotas and running out mid-task with a coding agent', 'Hạn mức, quota và hết lượt giữa chừng khi dùng agent viết code', 'Gói thuê bao vs trả theo token · Phiên dài ăn ngữ cảnh: khi nào dọn, khi nào chia việc · Hết hạn mức giữa chừng: ghi lại việc còn dở để phiên sau làm tiếp · Retry/429 trong sản phẩm → /courses/llm-apps Ch6'],
     ]],
-    ['Chapter 5 — Prompting for products', 'Chương 5 — Viết prompt cho sản phẩm', 'Prompt là code: có phiên bản và có test.', [
-      ['nguyen-tac', 'Prompt principles that hold up', 'Nguyên tắc prompt đứng vững', 'Rõ ràng · Ví dụ · Vai trò · Định dạng'],
-      ['few-shot', 'Examples and few-shot', 'Ví dụ và few-shot', 'Chọn ví dụ · Tránh học vẹt'],
-      ['phien-ban', 'Versioning and testing prompts', 'Quản lý phiên bản và test prompt', 'Prompt trong repo · Test hồi quy'],
-      ['da-ngon-ngu', 'Vietnamese and bilingual apps', 'Tiếng Việt và ứng dụng song ngữ', 'Dấu · Thuật ngữ · Chi phí token tiếng Việt'],
+    ['Chapter 5 — Prompting for products', 'Chương 5 — Viết prompt cho sản phẩm', 'Prompt cho việc viết code: chỉ đúng mẫu, lưu prompt dùng lại trong repo.', [
+      ['nguyen-tac', 'Prompt principles for coding tasks (product prompts → LLM Apps)', 'Nguyên tắc prompt cho việc viết code (prompt cho sản phẩm → khoá LLM Apps)', 'Giao việc cho agent khác prompt chạy trong sản phẩm · Mục tiêu, file liên quan, lệnh kiểm, tiêu chí xong · Mẫu giao việc dùng lại được · Prompt cho người dùng cuối → /courses/llm-apps Ch2'],
+      ['few-shot', 'Showing examples: pointing the agent at code to imitate', 'Đưa ví dụ: chỉ agent tới đoạn code mẫu cần bắt chước', 'Trỏ file mẫu thay vì mô tả bằng lời · Quy ước đặt tên và cấu trúc thư mục · Tránh agent chép nhầm mẫu cũ đã lỗi thời · Ví dụ: thêm một route mới theo đúng route có sẵn'],
+      ['phien-ban', 'Reusable prompts in the repo: custom commands, skills and CLAUDE.md', 'Prompt dùng lại trong repo: lệnh tuỳ biến, skill và CLAUDE.md', 'Lệnh tuỳ biến cho việc lặp lại (review, viết test, phát hành) · Hướng dẫn theo thư mục · Prompt có phiên bản cùng code, review qua PR · Kiểm prompt bằng cách chạy lại trên việc cũ'],
+      ['da-ngon-ngu', 'Working with AI in Vietnamese and English: comments, commits, docs', 'Làm việc với AI bằng tiếng Việt và tiếng Anh: chú thích, commit, tài liệu', 'Giao việc bằng tiếng Việt, code và commit bằng tiếng Anh — chọn quy ước cho nhóm · Thuật ngữ nhất quán giữa code và giao diện · Bẫy chuỗi có dấu: mã hoá, regex ranh giới từ · Ứng dụng AI song ngữ cho người dùng → /courses/llm-apps'],
     ]],
-    ['Chapter 6 — Tool use and agents', 'Chương 6 — Tool use và agent', 'Cho model gọi hàm của bạn.', [
-      ['tool-use', 'Tool use (function calling)', 'Tool use (gọi hàm)', 'Định nghĩa tool · Vòng lặp · Kết quả tool'],
-      ['agent', 'Building a small agent loop', 'Dựng một vòng lặp agent nhỏ', 'Khi nào dừng · Giới hạn bước · Log'],
-      ['mcp', 'MCP: connecting tools to AI apps', 'MCP: nối công cụ vào ứng dụng AI', 'Khái niệm · Viết một MCP server nhỏ'],
-      ['an-toan', 'Guardrails for agents', 'Rào chắn cho agent', 'Quyền tối thiểu · Xác nhận hành động nguy hiểm'],
+    ['Chapter 6 — Tool use and agents', 'Chương 6 — Tool use và agent', 'Agent viết code dùng tool, MCP và rào chắn ra sao. Tự xây agent ⇒ khoá AI Agents.', [
+      ['tool-use', 'How a coding agent uses tools: read, edit, run (building agents → AI Agents)', 'Agent viết code dùng tool thế nào: đọc, sửa, chạy (tự xây agent → khoá AI Agents)', 'Đọc nhật ký tool để biết agent đã làm gì · Vì sao agent chạy lệnh rồi tự sửa lỗi · Đọc hiểu đủ để giám sát, không cần tự viết · Vòng lặp tool và thiết kế tool → /courses/ai-agents Ch1–2'],
+      ['agent', 'Delegating multi-step work: plans, subagents and checkpoints', 'Giao việc nhiều bước: kế hoạch, agent con và điểm dừng kiểm', 'Bắt agent lập kế hoạch trước khi sửa · Chia việc lớn thành bước có lệnh kiểm · Agent con song song: khi nào lợi, khi nào giẫm chân nhau · Worktree riêng cho mỗi luồng việc'],
+      ['mcp', 'Plugging MCP servers into your coding agent', 'Cắm MCP server vào agent viết code', 'Dùng MCP có sẵn: GitHub, CSDL, trình duyệt · Cho agent đọc issue và tài liệu thật thay vì đoán · Rủi ro của MCP bên thứ ba · Tự viết MCP server → /courses/ai-agents Ch3'],
+      ['an-toan', 'Guardrails when the agent runs commands on your machine', 'Rào chắn khi agent chạy lệnh trên máy bạn', 'Danh sách lệnh cho phép/cấm · Hook chặn lệnh nguy hiểm (xoá, force push, reset CSDL) · Sandbox, container, worktree · Sự cố thật: agent xoá dữ liệu, đẩy nhầm nhánh · Guardrail trong sản phẩm → /courses/ai-agents Ch6'],
     ]],
-    ['Chapter 7 — Embeddings and RAG', 'Chương 7 — Embedding và RAG', 'Hỏi đáp trên tài liệu của chính bạn.', [
-      ['embedding', 'Embeddings and similarity', 'Embedding và độ tương đồng', 'Vector · Cosine · Ví dụ trực quan'],
-      ['pgvector', 'pgvector in Postgres', 'pgvector trong Postgres', 'Cột vector · Index HNSW · Truy vấn'],
-      ['rag', 'Retrieval-augmented generation', 'Retrieval-augmented generation (RAG)', 'Chia đoạn · Truy xuất · Trích dẫn nguồn'],
-      ['cai-thien', 'Improving retrieval', 'Cải thiện truy xuất', 'Hybrid search · Rerank · Đo recall'],
+    ['Chapter 7 — Embeddings and RAG', 'Chương 7 — Embedding và RAG', 'Mớm đúng ngữ cảnh cho trợ lý code, hỏi đáp trên chính codebase. Tự xây RAG ⇒ khoá RAG.', [
+      ['embedding', 'How coding assistants find the right code (RAG itself → RAG & Vector Search)', 'Trợ lý code tìm đúng đoạn code thế nào (học RAG → khoá RAG & Vector Search)', 'Embedding là gì trong một câu · Tìm kiếm có chủ đích (grep) vs chỉ mục vector của IDE · Vì sao agent đôi khi "không thấy" file · Embedding, chunking, pgvector học sâu ở /courses/rag-vector-search'],
+      ['pgvector', 'Feeding the agent the right context: files, docs and references', 'Mớm đúng ngữ cảnh cho agent: file, tài liệu, tham chiếu', 'Chỉ đích danh file thay vì để nó tự đoán · Đưa tài liệu thư viện đúng phiên bản (llms.txt, MCP tài liệu) · Ngữ cảnh quá dài làm chất lượng giảm · pgvector trong sản phẩm → /courses/rag-vector-search Ch3'],
+      ['rag', 'Q&A over your own codebase: asking the agent to explain and locate', 'Hỏi đáp trên chính codebase của bạn: nhờ agent giải thích và chỉ chỗ', 'Câu hỏi "chỗ nào xử lý X?" · Bắt agent trích file:dòng làm bằng chứng · Kiểm lại trích dẫn bằng cách mở file · Sơ đồ luồng dữ liệu do AI vẽ — tin tới đâu'],
+      ['cai-thien', 'Keeping the agent’s context fresh: conventions, lessons and stale docs', 'Giữ ngữ cảnh của agent luôn mới: quy ước, bài học và tài liệu cũ', 'Model không biết phiên bản thư viện mới nhất · Ghi quy ước và bài học sự cố vào bộ nhớ dự án · Dọn tài liệu cũ đánh lừa agent · Đo xem agent còn lặp lại lỗi cũ không'],
     ]],
-    ['Chapter 8 — Evaluation, cost and safety', 'Chương 8 — Đánh giá, chi phí và an toàn', 'Biết nó tốt tới đâu và tốn bao nhiêu.', [
-      ['evals', 'Evals: measuring quality', 'Evals: đo chất lượng', 'Bộ câu hỏi chuẩn · Chấm tự động · LLM chấm LLM'],
-      ['chi-phi', 'Cost control', 'Kiểm soát chi phí', 'Đếm token · Cache prompt · Chọn model theo việc · Trần ngày'],
-      ['injection', 'Prompt injection and data leaks', 'Prompt injection và lộ dữ liệu', 'OWASP LLM Top 10 · Tách dữ liệu và lệnh'],
-      ['rieng-tu', 'Privacy and responsible use', 'Quyền riêng tư và dùng có trách nhiệm', 'Dữ liệu người dùng · Minh bạch · Luật'],
+    ['Chapter 8 — Evaluation, cost and safety', 'Chương 8 — Đánh giá, chi phí và an toàn', 'AI có thật làm bạn nhanh hơn không, tốn bao nhiêu, và rủi ro bảo mật/pháp lý khi code với AI.', [
+      ['evals', 'Measuring whether AI really makes you faster (product evals → AI Agents, MLOps)', 'Đo xem AI có thật làm bạn nhanh hơn (eval cho sản phẩm → khoá AI Agents, MLOps)', 'Thời gian tới khi PR được merge, số lần phải sửa lại · Bộ việc mẫu để so công cụ và model · Nghiên cứu thật về năng suất khi dùng AI · Eval cho sản phẩm AI → /courses/ai-agents Ch7–8 và /courses/mlops-llmops Ch9'],
+      ['chi-phi', 'The cost of AI-assisted development for you and your team', 'Chi phí phát triển có AI hỗ trợ cho bạn và nhóm', 'Thuê bao theo người vs API theo token · Chọn model theo độ khó của việc · Ngữ cảnh dài là tiền · Chi phí của tính năng AI trong sản phẩm → /courses/llm-apps Ch6'],
+      ['injection', 'Prompt injection against coding agents: poisoned repos, issues and packages', 'Prompt injection nhắm vào agent viết code: repo, issue và gói bị cài bẫy', 'Lệnh ẩn trong README, issue, chú thích · Gói bịa tên (slopsquatting) · Không để agent tự chạy script lạ · Phòng thủ cho sản phẩm LLM, OWASP LLM Top 10 → /courses/llm-apps Ch7'],
+      ['rieng-tu', 'Privacy, licences and company policy when coding with AI', 'Quyền riêng tư, giấy phép và chính sách công ty khi code với AI', 'Code công ty có được gửi lên AI không · Bí mật trong .env và log · Giấy phép của code AI sinh ra · Ghi rõ phần AI đóng góp trong commit'],
     ]],
     ['Chapter 9 — Capstone: an AI assistant for a booking app', 'Chương 9 — Dự án cuối khoá: trợ lý AI cho app đặt lịch', 'Trợ lý hỏi đáp + đặt lịch bằng tool use + RAG.', [
       ['thiet-ke', 'Designing the assistant', 'Thiết kế trợ lý', 'Việc nó làm và không làm · Dữ liệu'],

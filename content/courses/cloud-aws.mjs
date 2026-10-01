@@ -71,11 +71,11 @@ export default {
       ['bi-mat', 'Secrets Manager and Parameter Store', 'Secrets Manager và Parameter Store', 'Không để mật khẩu trong code · Xoay khoá'],
       ['khac', 'DynamoDB and ElastiCache in brief', 'DynamoDB và ElastiCache tóm tắt', 'Khi nào dùng · Chi phí'],
     ]],
-    ['Chapter 8 — Infrastructure as code', 'Chương 8 — Hạ tầng dưới dạng mã', 'Terraform: dựng lại mọi thứ bằng một lệnh.', [
-      ['vi-sao', 'Why click-ops does not scale', 'Vì sao bấm tay không mở rộng được', 'Không tái lập được · Quên dọn'],
-      ['terraform', 'Terraform basics', 'Terraform căn bản', 'Provider · Resource · plan/apply/destroy'],
-      ['state', 'State, modules and environments', 'State, module và môi trường', 'State từ xa · Module · dev/prod'],
-      ['ci', 'Terraform in GitHub Actions', 'Terraform trong GitHub Actions', 'plan trên PR · apply có duyệt'],
+    ['Chapter 8 — Infrastructure as code', 'Chương 8 — Hạ tầng dưới dạng mã', 'IaC vừa đủ cho AWS; học bài bản ở khoá Infrastructure as Code, kiến trúc lớn ở Cloud Architecture.', [
+      ['vi-sao', 'Why click-ops does not scale — and where to learn IaC properly', 'Vì sao bấm tay không mở rộng được — và học IaC bài bản ở đâu', 'Không tái lập được · Quên dọn, hoá đơn bất ngờ · Chương này chỉ dạy đủ để dựng app của khoá trên AWS · Terraform/Ansible bài bản → /courses/infrastructure-as-code'],
+      ['terraform', 'Just enough Terraform for this course’s AWS stack', 'Terraform vừa đủ cho hạ tầng AWS của khoá này', 'Provider AWS và thông tin xác thực an toàn · Dựng lại bằng code VPC + máy chủ đã làm tay ở Ch2–4 · plan/apply/destroy · Biến, module, state sâu → /courses/infrastructure-as-code Ch2–5'],
+      ['state', 'AWS-specific IaC notes: state on S3, CloudFormation and CDK at a glance', 'Ghi chú IaC riêng cho AWS: state trên S3, lướt qua CloudFormation và CDK', 'Backend S3 và khoá state · CloudFormation/CDK khác Terraform ở đâu · Khi nào dùng công cụ của chính AWS · Quản lý và bảo mật state → /courses/infrastructure-as-code Ch4'],
+      ['ci', 'Terraform in GitHub Actions, just enough — and what comes next', 'Terraform trong GitHub Actions vừa đủ — và học gì tiếp theo', 'plan trên PR, apply có duyệt (đủ cho dự án cuối khoá) · OIDC thay khoá truy cập dài hạn · IaC trong CI/CD và GitOps → /courses/infrastructure-as-code Ch11 · Landing zone, nhiều tài khoản, HA/DR → /courses/cloud-architecture'],
     ]],
     ['Chapter 9 — Observability and cost', 'Chương 9 — Quan sát và chi phí', 'CloudWatch, cảnh báo và hoá đơn.', [
       ['cloudwatch', 'CloudWatch logs and metrics', 'Log và chỉ số CloudWatch', 'Log nhóm · Chỉ số · Dashboard'],

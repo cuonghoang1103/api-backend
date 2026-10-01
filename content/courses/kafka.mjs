@@ -17,7 +17,7 @@ export default {
     status: 'PUBLISHED',
     isFeatured: false,
     syncOrder: true,
-    thumbnailUrl: 'https://media.cuongthai.com/images/course-covers/kafka.png?v=1',
+    thumbnailUrl: 'https://media.cuongthai.com/images/course-covers/kafka.png?v=4',
     shortDescription: 'Event streaming from zero: what a distributed log is, topics, partitions, consumer groups, delivery guarantees, Kafka Connect and Streams, Docker, Spring Boot and Node.js — plus the production failures behind interview questions.|||Event streaming từ con số 0: nhật ký phân tán là gì, topic, partition, consumer group, đảm bảo giao nhận, Kafka Connect và Streams, Docker, Spring Boot và Node.js — cùng các sự cố production đứng sau câu hỏi phỏng vấn.',
     description: 'Khoá Kafka cho lập trình viên backend đã biết một ngôn ngữ server (Java/Spring hoặc Node.js), SQL và Docker. Vì sao hệ thống lớn cần một nhật ký sự kiện; lịch sử Kafka từ LinkedIn tới Apache; kiến trúc broker, topic, partition, offset, replication; producer và consumer từ cơ bản tới nâng cao (key, acks, batching, idempotence, transaction, rebalance); at-most/at-least/exactly-once; schema và Schema Registry; Kafka Connect và CDC từ PostgreSQL; Kafka Streams; vận hành (KRaft, giám sát, retention, compaction, bảo mật); so sánh RabbitMQ/Redis Streams/Pulsar; và dự án cuối khoá: hệ thống đặt hàng hướng sự kiện nhiều dịch vụ.',
     whatYouLearn: 'Giải thích Kafka bằng ngôn ngữ đời thường; chạy cụm Kafka bằng Docker Compose; viết producer/consumer bằng Java (Spring Boot) và Node.js; chọn khoá partition và số partition; xử lý rebalance, trùng lặp và thứ tự; đạt exactly-once khi cần; dùng Connect để đồng bộ CSDL; giám sát consumer lag; trả lời câu hỏi phỏng vấn Kafka có cơ sở.',
@@ -77,7 +77,7 @@ export default {
       ['kafka-streams', 'Kafka Streams basics', 'Kafka Streams cơ bản', 'KStream vs KTable · Topology · Stateless/stateful'],
       ['window-join', 'Windows, aggregations and joins', 'Cửa sổ thời gian, gom nhóm và join', 'Tumbling/hopping/session · Đếm theo phút · Join luồng với bảng'],
       ['ksqldb-flink', 'ksqlDB and Apache Flink at a glance', 'Lướt qua ksqlDB và Apache Flink', 'SQL trên luồng · Khi nào cần Flink'],
-      ['event-sourcing', 'Event sourcing and CQRS', 'Event sourcing và CQRS', 'Trạng thái là tổng các sự kiện · Mô hình đọc riêng · Khi nào không nên'],
+      ['event-sourcing', 'What event sourcing and CQRS ask of Kafka (patterns → Software Architecture)', 'Event sourcing và CQRS đòi hỏi gì ở Kafka (mẫu thiết kế → khoá Software Architecture)', 'Compaction và retention vô hạn · Dựng mô hình đọc bằng KTable · Vì sao Kafka không phải event store hoàn chỉnh (không khoá lạc quan theo thực thể) · Event sourcing và CQRS bài bản → /courses/software-architecture Ch9'],
     ]],
     ['Chapter 9 — Operating Kafka in production', 'Chương 9 — Vận hành Kafka trên production', 'Giám sát, bảo mật, mở rộng và sự cố.', [
       ['giam-sat', 'Monitoring: consumer lag, throughput, under-replicated partitions', 'Giám sát: consumer lag, thông lượng, partition thiếu bản sao', 'Prometheus + Grafana · Cảnh báo lag · Trỏ khoá Observability'],

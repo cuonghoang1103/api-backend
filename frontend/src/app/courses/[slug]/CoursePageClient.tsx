@@ -21,6 +21,7 @@ import { getPrerequisites, hasAcknowledgedPrereq, acknowledgePrereq } from '@/li
 import { PrerequisiteModal, PrerequisiteBanner } from '@/components/courses/PrerequisiteGate';
 import { tachGachDauDong, nenMotCot } from '@/lib/courseBlurb';
 import { CourseDescription } from '@/components/courses/CourseDescription';
+import { tachCauDai } from '@/lib/courseDescription';
 import { AnhDaiDien } from '@/components/ui/AnhDaiDien';
 import type { Course, CourseReview } from '@/types';
 
@@ -104,15 +105,15 @@ function OldCourseAccessOptions({
           className="flex items-center justify-between w-full px-4 py-3 rounded-xl border border-neon-violet/30 bg-gradient-to-r from-neon-indigo/10 to-neon-violet/10 hover:from-neon-indigo/20 hover:to-neon-violet/20 transition-all"
         >
           <div className="flex items-center gap-3">
-            <CheckCircle className="w-5 h-5 text-neon-violet" />
+            <CheckCircle className="w-5 h-5 text-violet-700 [.theme-dark_&]:text-neon-violet" />
             <div className="text-left">
-              <p className="text-sm font-semibold text-neon-violet">Vào học ngay</p>
-              <p className="text-xs text-neon-violet/60">
+              <p className="text-sm font-semibold text-violet-700 [.theme-dark_&]:text-neon-violet">Vào học ngay</p>
+              <p className="text-xs text-violet-700/80 [.theme-dark_&]:text-neon-violet/60">
                 {isAdminViewer ? 'Truy cập admin — không cần đăng ký' : 'Bạn đã đăng ký khoá này'}
               </p>
             </div>
           </div>
-          <ChevronRight className="w-4 h-4 text-neon-violet/60" />
+          <ChevronRight className="w-4 h-4 text-violet-700/80 [.theme-dark_&]:text-neon-violet/60" />
         </button>
       </div>
     );
@@ -142,24 +143,24 @@ function OldCourseAccessOptions({
         disabled={enrolling || isPaidType}
         className={`flex items-center justify-between w-full px-4 py-3 rounded-xl border transition-all disabled:opacity-50
           ${isPaidType
-            ? 'bg-darkbg border-darkborder cursor-not-allowed opacity-40'
+            ? 'bg-[var(--bg-primary)] border-[var(--border-color)] cursor-not-allowed opacity-40'
             : 'bg-gradient-to-r from-green-500/10 to-green-600/10 border-green-500/30 hover:from-green-500/20 hover:to-green-600/20 hover:border-green-500/50'
           }`}
       >
         <div className="flex items-center gap-3">
           {enrolling ? (
-            <Loader2 className="w-5 h-5 text-green-400 animate-spin" />
+            <Loader2 className="w-5 h-5 text-green-700 [.theme-dark_&]:text-green-400 animate-spin" />
           ) : (
-            <Award className="w-5 h-5 text-green-400" />
+            <Award className="w-5 h-5 text-green-700 [.theme-dark_&]:text-green-400" />
           )}
           <div className="text-left">
-            <p className={`text-sm font-semibold ${isPaidType ? 'text-text-muted' : 'text-green-400'}`}>Miễn phí</p>
-            <p className={`text-xs ${isPaidType ? 'text-text-muted/60' : 'text-green-400/60'}`}>
+            <p className={`text-sm font-semibold ${isPaidType ? 'text-text-muted' : 'text-green-700 [.theme-dark_&]:text-green-400'}`}>Miễn phí</p>
+            <p className={`text-xs ${isPaidType ? 'text-text-muted/60' : 'text-green-700 [.theme-dark_&]:text-green-400/60'}`}>
               {isPaidType ? 'Không áp dụng' : 'Đăng ký & học ngay'}
             </p>
           </div>
         </div>
-        <ChevronDown className="w-4 h-4 text-green-400/60" />
+        <ChevronDown className="w-4 h-4 text-green-700 [.theme-dark_&]:text-green-400/60" />
       </button>
 
       {/* Trả phí or Mã kích hoạt — chỉ hiện khi PAID, 2 lựa chọn độc lập */}
@@ -175,13 +176,13 @@ function OldCourseAccessOptions({
                   bg-gradient-to-r from-neon-indigo/10 to-neon-violet/10 hover:from-neon-indigo/20 hover:to-neon-violet/20"
               >
                 <div className="flex items-center gap-3">
-                  <CheckCircle className="w-5 h-5 text-neon-violet" />
+                  <CheckCircle className="w-5 h-5 text-violet-700 [.theme-dark_&]:text-neon-violet" />
                   <div className="text-left">
-                    <p className="text-sm font-semibold text-neon-violet">Vào học ngay</p>
-                    <p className="text-xs text-neon-violet/60">Đã thanh toán thành công</p>
+                    <p className="text-sm font-semibold text-violet-700 [.theme-dark_&]:text-neon-violet">Vào học ngay</p>
+                    <p className="text-xs text-violet-700/80 [.theme-dark_&]:text-neon-violet/60">Đã thanh toán thành công</p>
                   </div>
                 </div>
-                <ChevronRight className="w-4 h-4 text-neon-violet/60" />
+                <ChevronRight className="w-4 h-4 text-violet-700/80 [.theme-dark_&]:text-neon-violet/60" />
               </button>
             ) : isCodeEnrollment && hasCodeSession ? (
               // Flow 2a: CODE enrollment with valid session — navigate directly
@@ -191,22 +192,22 @@ function OldCourseAccessOptions({
                   bg-gradient-to-r from-neon-indigo/10 to-neon-violet/10 hover:from-neon-indigo/20 hover:to-neon-violet/20"
               >
                 <div className="flex items-center gap-3">
-                  <CheckCircle className="w-5 h-5 text-neon-violet" />
+                  <CheckCircle className="w-5 h-5 text-violet-700 [.theme-dark_&]:text-neon-violet" />
                   <div className="text-left">
-                    <p className="text-sm font-semibold text-neon-violet">Tiếp tục học</p>
-                    <p className="text-xs text-neon-violet/60">Mã kích hoạt hợp lệ cho phiên này</p>
+                    <p className="text-sm font-semibold text-violet-700 [.theme-dark_&]:text-neon-violet">Tiếp tục học</p>
+                    <p className="text-xs text-violet-700/80 [.theme-dark_&]:text-neon-violet/60">Mã kích hoạt hợp lệ cho phiên này</p>
                   </div>
                 </div>
-                <ChevronRight className="w-4 h-4 text-neon-violet/60" />
+                <ChevronRight className="w-4 h-4 text-violet-700/80 [.theme-dark_&]:text-neon-violet/60" />
               </button>
             ) : (
               // Flow 2b: CODE enrollment but no session — require re-entry of code
               <div className="px-4 py-4 space-y-3">
                 <div className="flex items-start gap-2 p-3 rounded-lg bg-neon-violet/10 border border-neon-violet/30">
-                  <KeyRound className="w-4 h-4 text-neon-violet mt-0.5 shrink-0" />
+                  <KeyRound className="w-4 h-4 text-violet-700 [.theme-dark_&]:text-neon-violet mt-0.5 shrink-0" />
                   <div>
-                    <p className="text-sm font-semibold text-neon-violet">Nhập lại mã để tiếp tục</p>
-                    <p className="text-xs text-neon-violet/60">Mỗi phiên làm việc cần xác nhận mã kích hoạt</p>
+                    <p className="text-sm font-semibold text-violet-700 [.theme-dark_&]:text-neon-violet">Nhập lại mã để tiếp tục</p>
+                    <p className="text-xs text-violet-700/80 [.theme-dark_&]:text-neon-violet/60">Mỗi phiên làm việc cần xác nhận mã kích hoạt</p>
                   </div>
                 </div>
                 <div className="flex gap-2">
@@ -220,7 +221,7 @@ function OldCourseAccessOptions({
                     onKeyDown={e => { if (e.key === 'Enter') handleActivateCode(); }}
                     placeholder="ABC123"
                     maxLength={10}
-                    className="flex-1 px-3 py-2 bg-darkbg border border-darkborder rounded-lg text-sm text-text-primary font-mono font-bold tracking-widest placeholder:font-normal placeholder:tracking-normal placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 uppercase text-center"
+                    className="flex-1 px-3 py-2 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-lg text-sm text-text-primary font-mono font-bold tracking-widest placeholder:font-normal placeholder:tracking-normal placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 uppercase text-center"
                   />
                   <button
                     onClick={handleActivateCode}
@@ -230,17 +231,17 @@ function OldCourseAccessOptions({
                     {activatingCode ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Xác nhận'}
                   </button>
                 </div>
-                {codeError && <p className="text-xs text-red-400">{codeError}</p>}
+                {codeError && <p className="text-xs text-red-700 [.theme-dark_&]:text-red-400">{codeError}</p>}
               </div>
             )
           ) : (
             // ── No access yet — show purchase form ──
             <>
               <div className="px-4 py-3 border-b border-neon-violet/20">
-                <p className="text-sm font-semibold text-neon-violet">
+                <p className="text-sm font-semibold text-violet-700 [.theme-dark_&]:text-neon-violet">
                   {COURSE_PAYMENT_ENABLED ? 'Trả phí or Mã kích hoạt' : 'Mã kích hoạt'}
                 </p>
-                <p className="text-xs text-neon-violet/60">
+                <p className="text-xs text-violet-700/80 [.theme-dark_&]:text-neon-violet/60">
                   {COURSE_PAYMENT_ENABLED
                     ? 'Chọn 1 trong 2 cách để truy cập khóa học'
                     : 'Nhập mã kích hoạt để truy cập khóa học'}
@@ -255,11 +256,11 @@ function OldCourseAccessOptions({
                 <button
                   onClick={handleBuyCourse}
                   disabled={buying}
-                  className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg border border-neon-violet/30 bg-darkbg hover:bg-neon-violet/10 transition-all disabled:opacity-50"
+                  className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg border border-neon-violet/30 bg-[var(--bg-primary)] hover:bg-neon-violet/10 transition-all disabled:opacity-50"
                 >
                   {buying
-                    ? <Loader2 className="w-4 h-4 text-neon-violet animate-spin" />
-                    : <CreditCard className="w-4 h-4 text-neon-violet" />}
+                    ? <Loader2 className="w-4 h-4 text-violet-700 [.theme-dark_&]:text-neon-violet animate-spin" />
+                    : <CreditCard className="w-4 h-4 text-violet-700 [.theme-dark_&]:text-neon-violet" />}
                   <div className="text-left">
                     <p className="text-sm font-medium text-text-primary">Thanh toán online (PayOS)</p>
                     <p className="text-xs text-text-muted">Mua ngay – {priceLabel} · QR/ATM/Visa</p>
@@ -270,7 +271,7 @@ function OldCourseAccessOptions({
                 {/* Mã kích hoạt */}
                 <div className="flex flex-col gap-2">
                   <div className="flex items-center gap-2">
-                    <KeyRound className="w-4 h-4 text-neon-violet shrink-0" />
+                    <KeyRound className="w-4 h-4 text-violet-700 [.theme-dark_&]:text-neon-violet shrink-0" />
                     <span className="text-sm font-medium text-text-primary">Mã kích hoạt</span>
                   </div>
                   <div className="flex gap-2">
@@ -284,7 +285,7 @@ function OldCourseAccessOptions({
                       onKeyDown={e => { if (e.key === 'Enter') handleActivateCode(); }}
                       placeholder="ABC123"
                       maxLength={10}
-                      className="flex-1 px-3 py-2 bg-darkbg border border-darkborder rounded-lg text-sm text-text-primary font-mono font-bold tracking-widest placeholder:font-normal placeholder:tracking-normal placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 uppercase text-center"
+                      className="flex-1 px-3 py-2 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-lg text-sm text-text-primary font-mono font-bold tracking-widest placeholder:font-normal placeholder:tracking-normal placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 uppercase text-center"
                     />
                     <button
                       onClick={handleActivateCode}
@@ -298,7 +299,7 @@ function OldCourseAccessOptions({
                       )}
                     </button>
                   </div>
-                  {codeError && <p className="text-xs text-red-400">{codeError}</p>}
+                  {codeError && <p className="text-xs text-red-700 [.theme-dark_&]:text-red-400">{codeError}</p>}
                 </div>
               </div>
             </>
@@ -500,18 +501,18 @@ export default function CourseDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-darkbg flex items-center justify-center">
-        <Loader2 className="w-10 h-10 animate-spin text-neon-violet" />
+      <div className="[--text-muted:#65686d] [.theme-dark_&]:[--text-muted:#8a8d91] min-h-screen bg-[var(--bg-primary)] flex items-center justify-center">
+        <Loader2 className="w-10 h-10 animate-spin text-violet-700 [.theme-dark_&]:text-neon-violet" />
       </div>
     );
   }
 
   if (!course) {
     return (
-      <div className="min-h-screen bg-darkbg flex items-center justify-center">
+      <div className="[--text-muted:#65686d] [.theme-dark_&]:[--text-muted:#8a8d91] min-h-screen bg-[var(--bg-primary)] flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-2xl font-bold text-text-primary mb-4">Course not found</h2>
-          <Link href="/courses" className="text-neon-violet hover:text-neon-indigo">Back to Courses</Link>
+          <Link href="/courses" className="text-violet-700 [.theme-dark_&]:text-neon-violet hover:text-neon-indigo">Back to Courses</Link>
         </div>
       </div>
     );
@@ -524,7 +525,7 @@ export default function CourseDetailPage() {
   const isPaidCourse = accessType === 'PAID';
   const isCodeCourse = accessType === 'CODE';
   const whatYouLearnList = tachGachDauDong(course.whatYouLearn);
-  const requirementsList = tachGachDauDong(course.requirements);
+  const requirementsList = tachCauDai(tachGachDauDong(course.requirements));
 
   // Only enrolled learners (or admin/instructor) may post a review.
   const canReview = Boolean(course.isEnrolled || course.hasPaidAccess || (course as any).isAdmin);
@@ -556,7 +557,7 @@ export default function CourseDetailPage() {
   };
 
   return (
-    <div className="min-h-screen bg-darkbg">
+    <div className="[--text-muted:#65686d] [.theme-dark_&]:[--text-muted:#8a8d91] min-h-screen bg-[var(--bg-primary)]">
       {showPrereqModal && (
         <PrerequisiteModal
           courseTitle={course.title}
@@ -572,7 +573,7 @@ export default function CourseDetailPage() {
         />
       )}
       {/* Hero */}
-      <section className="relative py-16 overflow-hidden bg-gradient-to-b from-neon-indigo/10 to-darkbg">
+      <section className="relative py-16 overflow-hidden bg-gradient-to-b from-neon-indigo/10 to-[var(--bg-primary)]">
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute top-0 left-1/4 w-[400px] h-[400px] bg-neon-indigo/10 rounded-full blur-[150px]" />
           <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-neon-violet/10 rounded-full blur-[150px]" />
@@ -596,14 +597,14 @@ export default function CourseDetailPage() {
             <div className="lg:col-span-2">
               <div className="flex items-center gap-2 mb-4">
                 {course.categoryName && (
-                  <span className="px-3 py-1 bg-neon-indigo/20 text-neon-indigo text-sm rounded-full font-medium">
+                  <span className="px-3 py-1 bg-neon-indigo/20 text-indigo-700 [.theme-dark_&]:text-neon-indigo text-sm rounded-full font-medium">
                     {course.categoryName}
                   </span>
                 )}
                 <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                  course.level === 'BEGINNER' ? 'bg-green-500/10 text-green-400' :
-                  course.level === 'INTERMEDIATE' ? 'bg-yellow-500/10 text-yellow-400' :
-                  'bg-red-500/10 text-red-400'
+                  course.level === 'BEGINNER' ? 'bg-green-500/10 text-green-700 [.theme-dark_&]:text-green-400' :
+                  course.level === 'INTERMEDIATE' ? 'bg-yellow-500/10 text-amber-800 [.theme-dark_&]:text-yellow-400' :
+                  'bg-red-500/10 text-red-700 [.theme-dark_&]:text-red-400'
                 }`}>
                   {course.level === 'BEGINNER' ? 'Beginner' :
                    course.level === 'INTERMEDIATE' ? 'Intermediate' :
@@ -634,7 +635,7 @@ export default function CourseDetailPage() {
                 {course.instructorId ? (
                   <Link
                     href={`/profile/${course.instructorId}`}
-                    className="flex items-center gap-3 group/gv rounded-xl -m-1 p-1 transition-colors hover:bg-white/5"
+                    className="flex items-center gap-3 group/gv rounded-xl -m-1 p-1 transition-colors hover:bg-[var(--bg-surface-hover)]"
                     title={`Xem hồ sơ ${course.instructorName || 'giảng viên'}`}
                   >
                     <AnhDaiDien src={course.instructorAvatar} ten={course.instructorName} className="w-10 h-10" />
@@ -671,7 +672,7 @@ export default function CourseDetailPage() {
                   {course.totalStudents.toLocaleString('vi-VN')} students
                 </span>
                 {course.avgRating > 0 && (
-                  <span className="flex items-center gap-1.5 text-yellow-400">
+                  <span className="flex items-center gap-1.5 text-amber-700 [.theme-dark_&]:text-yellow-400">
                     <Star className="w-4 h-4 fill-current" />
                     {Number(course.avgRating).toFixed(1)} ({course.totalReviews} reviews)
                   </span>
@@ -687,7 +688,7 @@ export default function CourseDetailPage() {
 
             {/* Right: Enrollment card */}
             <div>
-              <div className="bg-darkcard border border-darkborder/50 rounded-2xl overflow-hidden sticky top-6">
+              <div className="bg-[var(--bg-card)] border border-[color-mix(in_srgb,var(--border-color)_50%,transparent)] rounded-2xl overflow-hidden sticky top-6">
                 {course.thumbnailUrl && (
                   <div className="aspect-video relative">
                     <SafeImage
@@ -709,7 +710,7 @@ export default function CourseDetailPage() {
                   <div className="flex items-center gap-3 mb-4">
                     {hasDiscount ? (
                       <>
-                        <span className="text-3xl font-bold text-neon-violet">
+                        <span className="text-3xl font-bold text-violet-700 [.theme-dark_&]:text-neon-violet">
                           {formatPrice(Number(course.discountPrice), false)}
                         </span>
                         <span className="text-lg text-text-muted line-through">
@@ -717,7 +718,7 @@ export default function CourseDetailPage() {
                         </span>
                       </>
                     ) : (
-                      <span className="text-3xl font-bold text-neon-violet">
+                      <span className="text-3xl font-bold text-violet-700 [.theme-dark_&]:text-neon-violet">
                         {formatPrice(Number(course.price), course.isFree)}
                       </span>
                     )}
@@ -765,10 +766,10 @@ export default function CourseDetailPage() {
 
             {/* What you'll learn */}
             {whatYouLearnList.length > 0 && (
-              <section className="bg-darkcard border border-darkborder/50 rounded-2xl p-6">
+              <section className="bg-[var(--bg-card)] border border-[color-mix(in_srgb,var(--border-color)_50%,transparent)] rounded-2xl p-6">
                 <h2 className="text-xl font-heading font-bold text-text-primary mb-5 flex items-center gap-2">
-                  <Award className="w-5 h-5 text-neon-violet" />
-                  What You Will Learn
+                  <Award className="w-5 h-5 text-violet-700 [.theme-dark_&]:text-neon-violet" />
+                  Bạn sẽ học được gì
                 </h2>
                 <div
                   className={`grid gap-x-6 gap-y-3 ${
@@ -777,7 +778,7 @@ export default function CourseDetailPage() {
                 >
                   {whatYouLearnList.map((item, i) => (
                     <div key={i} className="flex items-start gap-3 text-sm text-text-secondary leading-relaxed">
-                      <CheckCircle className="w-5 h-5 text-green-400 shrink-0 mt-0.5" />
+                      <CheckCircle className="w-5 h-5 text-green-700 [.theme-dark_&]:text-green-400 shrink-0 mt-0.5" />
                       <span className="min-w-0">{item}</span>
                     </div>
                   ))}
@@ -787,24 +788,24 @@ export default function CourseDetailPage() {
 
             {/* Description */}
             {course.description && (
-              <section className="bg-darkcard border border-darkborder/50 rounded-2xl p-6">
-                <h2 className="text-xl font-heading font-bold text-text-primary mb-4">Course Description</h2>
+              <section className="bg-[var(--bg-card)] border border-[color-mix(in_srgb,var(--border-color)_50%,transparent)] rounded-2xl p-6">
+                <h2 className="text-xl font-heading font-bold text-text-primary mb-4">Mô tả khoá học</h2>
                 <CourseDescription html={course.description} />
               </section>
             )}
 
             {/* Curriculum */}
-            <section className="bg-darkcard border border-darkborder/50 rounded-2xl p-6">
+            <section className="bg-[var(--bg-card)] border border-[color-mix(in_srgb,var(--border-color)_50%,transparent)] rounded-2xl p-6">
                 <h2 className="text-xl font-heading font-bold text-text-primary mb-5 flex items-center gap-2">
-                  <BookOpen className="w-5 h-5 text-neon-violet" />
-                  Course Content
+                  <BookOpen className="w-5 h-5 text-violet-700 [.theme-dark_&]:text-neon-violet" />
+                  Nội dung khoá học
                 </h2>
               <div className="space-y-2">
                 {course.sections?.map((section) => (
-                  <div key={section.id} className="border border-darkborder/30 rounded-xl overflow-hidden">
+                  <div key={section.id} className="border border-[color-mix(in_srgb,var(--border-color)_30%,transparent)] rounded-xl overflow-hidden">
                     <button
                       onClick={() => toggleSection(section.id)}
-                      className="w-full flex items-center justify-between p-4 bg-darkbg/50 hover:bg-darkbg transition-colors text-left"
+                      className="w-full flex items-center justify-between p-4 bg-[color-mix(in_srgb,var(--bg-primary)_50%,transparent)] hover:bg-[var(--bg-primary)] transition-colors text-left"
                     >
                       <div>
                         <h3 className="font-semibold text-text-primary">{pickLang(section.title, locale)}</h3>
@@ -818,13 +819,13 @@ export default function CourseDetailPage() {
                       }
                     </button>
                     {expandedSections.has(section.id) && (
-                      <div className="divide-y divide-darkborder/20">
+                      <div className="divide-y divide-[color-mix(in_srgb,var(--border-color)_20%,transparent)]">
                         {section.lessons?.map((lesson) => {
                           const locked = section.isLocked && !course.hasPaidAccess;
                           const isFree = lesson.isFreePreview;
                           return (
                             <div key={lesson.id} className="flex items-center gap-3 p-3 pl-4">
-                              <div className={`shrink-0 ${locked ? 'text-text-muted' : isFree ? 'text-green-400' : 'text-neon-indigo'}`}>
+                              <div className={`shrink-0 ${locked ? 'text-text-muted' : isFree ? 'text-green-700 [.theme-dark_&]:text-green-400' : 'text-neon-indigo'}`}>
                                 {locked ? <Lock className="w-4 h-4" /> : <Play className="w-4 h-4" />}
                               </div>
                               <div className="flex-1 min-w-0">
@@ -834,7 +835,7 @@ export default function CourseDetailPage() {
                                     {formatDuration(lesson.videoDurationSeconds)}
                                   </span>
                                   {isFree && !course.isEnrolled && (
-                                    <span className="text-xs text-green-400 font-medium">Preview</span>
+                                    <span className="text-xs text-green-700 [.theme-dark_&]:text-green-400 font-medium">Preview</span>
                                   )}
                                 </div>
                               </div>
@@ -854,14 +855,14 @@ export default function CourseDetailPage() {
               {!isAuthenticated && (
                 <div className="mt-4 rounded-xl border border-neon-violet/30 bg-gradient-to-r from-neon-indigo/10 to-neon-violet/10 p-4 flex items-center justify-between gap-4 flex-wrap">
                   <div className="flex items-center gap-3">
-                    <Lock className="w-5 h-5 text-neon-violet shrink-0" />
+                    <Lock className="w-5 h-5 text-violet-700 [.theme-dark_&]:text-neon-violet shrink-0" />
                     <p className="text-sm text-text-secondary">
-                      Bạn cần <span className="font-semibold text-neon-violet">đăng nhập</span> để xem thêm nội dung khoá học chi tiết.
+                      Bạn cần <span className="font-semibold text-violet-700 [.theme-dark_&]:text-neon-violet">đăng nhập</span> để xem thêm nội dung khoá học chi tiết.
                     </p>
                   </div>
                   <button
                     onClick={() => router.push(`/login?callbackUrl=${encodeURIComponent(`/courses/${course.slug}`)}`)}
-                    className="shrink-0 px-4 py-2 rounded-lg bg-neon-violet/20 hover:bg-neon-violet/30 border border-neon-violet/40 text-neon-violet text-sm font-semibold transition-colors"
+                    className="shrink-0 px-4 py-2 rounded-lg bg-neon-violet/20 hover:bg-neon-violet/30 border border-neon-violet/40 text-violet-700 [.theme-dark_&]:text-neon-violet text-sm font-semibold transition-colors"
                   >
                     Đăng nhập
                   </button>
@@ -871,12 +872,12 @@ export default function CourseDetailPage() {
 
             {/* Requirements */}
             {requirementsList.length > 0 && (
-              <section className="bg-darkcard border border-darkborder/50 rounded-2xl p-6">
-                <h2 className="text-xl font-heading font-bold text-text-primary mb-4">Requirements</h2>
+              <section className="bg-[var(--bg-card)] border border-[color-mix(in_srgb,var(--border-color)_50%,transparent)] rounded-2xl p-6">
+                <h2 className="text-xl font-heading font-bold text-text-primary mb-4">Yêu cầu đầu vào</h2>
                 <ul className="space-y-2">
                   {requirementsList.map((item, i) => (
                     <li key={i} className="flex items-start gap-3 text-text-secondary text-sm leading-relaxed">
-                      <span className="text-neon-violet mt-1 shrink-0">•</span>
+                      <span className="text-violet-700 [.theme-dark_&]:text-neon-violet mt-1 shrink-0">•</span>
                       <span className="min-w-0">{item}</span>
                     </li>
                   ))}
@@ -885,17 +886,17 @@ export default function CourseDetailPage() {
             )}
 
             {/* Reviews & ratings */}
-            <section className="bg-darkcard border border-darkborder/50 rounded-2xl p-6">
+            <section className="bg-[var(--bg-card)] border border-[color-mix(in_srgb,var(--border-color)_50%,transparent)] rounded-2xl p-6">
               <div className="flex items-center justify-between gap-4 mb-5 flex-wrap">
                 <h2 className="text-xl font-heading font-bold text-text-primary flex items-center gap-2">
-                  <Star className="w-5 h-5 text-yellow-400 fill-yellow-400" />
+                  <Star className="w-5 h-5 text-amber-400 fill-amber-400 [.theme-dark_&]:text-yellow-400 [.theme-dark_&]:fill-yellow-400" />
                   Đánh giá học viên
                 </h2>
                 {displayReviewCount > 0 && (
                   <div className="flex items-center gap-2">
                     <div className="flex items-center gap-0.5">
                       {Array.from({ length: 5 }).map((_, i) => (
-                        <Star key={i} className={`w-4 h-4 ${i < Math.round(displayAvgRating) ? 'text-yellow-400 fill-yellow-400' : 'text-darkborder'}`} />
+                        <Star key={i} className={`w-4 h-4 ${i < Math.round(displayAvgRating) ? 'text-amber-400 fill-amber-400 [.theme-dark_&]:text-yellow-400 [.theme-dark_&]:fill-yellow-400' : 'text-[var(--border-color)]'}`} />
                       ))}
                     </div>
                     <span className="text-sm text-text-secondary">{displayAvgRating.toFixed(1)} · {displayReviewCount} đánh giá</span>
@@ -905,7 +906,7 @@ export default function CourseDetailPage() {
 
               {/* Review form — enrolled learners (or admin) only. Others read-only. */}
               {canReview ? (
-                <div className="mb-6 rounded-2xl border border-darkborder bg-darkbg/50 p-4">
+                <div className="mb-6 rounded-2xl border border-[var(--border-color)] bg-[color-mix(in_srgb,var(--bg-primary)_50%,transparent)] p-4">
                   <p className="text-sm font-medium text-text-primary mb-2">Đánh giá của bạn</p>
                   <div className="flex items-center gap-1 mb-3">
                     {Array.from({ length: 5 }).map((_, i) => {
@@ -920,7 +921,7 @@ export default function CourseDetailPage() {
                           className="p-0.5"
                           aria-label={`${val} sao`}
                         >
-                          <Star className={`w-7 h-7 transition-colors ${val <= (reviewHover || reviewRating) ? 'text-yellow-400 fill-yellow-400' : 'text-darkborder'}`} />
+                          <Star className={`w-7 h-7 transition-colors ${val <= (reviewHover || reviewRating) ? 'text-amber-400 fill-amber-400 [.theme-dark_&]:text-yellow-400 [.theme-dark_&]:fill-yellow-400' : 'text-[var(--border-color)]'}`} />
                         </button>
                       );
                     })}
@@ -931,7 +932,7 @@ export default function CourseDetailPage() {
                     onChange={(e) => setReviewContent(e.target.value)}
                     rows={3}
                     placeholder="Share your thoughts on the course (optional)…"
-                    className="w-full px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 resize-none mb-3"
+                    className="w-full px-4 py-3 rounded-xl bg-[var(--bg-primary)] border border-[var(--border-color)] text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 resize-none mb-3"
                   />
                   <button
                     onClick={submitReview}
@@ -943,7 +944,7 @@ export default function CourseDetailPage() {
                   </button>
                 </div>
               ) : (
-                <div className="mb-6 rounded-xl border border-darkborder bg-darkbg/40 p-4 text-sm text-text-muted">
+                <div className="mb-6 rounded-xl border border-[var(--border-color)] bg-[color-mix(in_srgb,var(--bg-primary)_40%,transparent)] p-4 text-sm text-text-muted">
                   Đăng ký và học khoá này để có thể đánh giá.
                 </div>
               )}
@@ -952,14 +953,14 @@ export default function CourseDetailPage() {
               {reviews.length > 0 ? (
                 <div className="space-y-4">
                   {reviews.map((review) => (
-                    <div key={review.id} className="border-b border-darkborder/20 pb-4 last:border-0">
+                    <div key={review.id} className="border-b border-[color-mix(in_srgb,var(--border-color)_20%,transparent)] pb-4 last:border-0">
                       <div className="flex items-center gap-3 mb-2">
                         <AnhDaiDien src={review.userAvatar} ten={review.userFullName} className="w-9 h-9" />
                         <div>
                           <p className="font-medium text-text-primary text-sm">{review.userFullName}</p>
                           <div className="flex items-center gap-1">
                             {Array.from({ length: 5 }).map((_, i) => (
-                              <Star key={i} className={`w-3.5 h-3.5 ${i < review.rating ? 'text-yellow-400 fill-yellow-400' : 'text-darkborder'}`} />
+                              <Star key={i} className={`w-3.5 h-3.5 ${i < review.rating ? 'text-amber-400 fill-amber-400 [.theme-dark_&]:text-yellow-400 [.theme-dark_&]:fill-yellow-400' : 'text-[var(--border-color)]'}`} />
                             ))}
                           </div>
                         </div>

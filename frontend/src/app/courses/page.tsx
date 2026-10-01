@@ -1,53 +1,88 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { Suspense } from 'react';
-import { Search, Filter, ChevronDown, Loader2 } from 'lucide-react';
+import { Compass, LayoutGrid, GraduationCap, X } from 'lucide-react';
 import CourseCard from '@/components/course/CourseCard';
 import CourseRoadmap from '@/components/courses/CourseRoadmap';
+import HeroDanhMuc from '@/components/courses/danh-muc/HeroDanhMuc';
+import { ThanhDanhMuc, ChipCapDo, CAP_DO } from '@/components/courses/danh-muc/BoLocDanhMuc';
+import { LuoiKhung, KhongCoKetQua, LoiTai, PhanTrang } from '@/components/courses/danh-muc/TrangThaiDanhMuc';
 import { coursesApi, courseCategoryApi } from '@/lib/api';
 import type { Course, CourseCategory } from '@/types';
 
-const LEVELS = [
-  { value: '', label: 'All' },
-  { value: 'BEGINNER', label: 'Beginner' },
-  { value: 'INTERMEDIATE', label: 'Intermediate' },
-  { value: 'ADVANCED', label: 'Advanced' },
-];
+const CAP_DO_HOP_LE = new Set<string>(CAP_DO.map((l) => l.value));
 
 function CoursesContent() {
   const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+
   const [courses, setCourses] = useState<Course[]>([]);
   const [categories, setCategories] = useState<CourseCategory[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loi, setLoi] = useState(false);
   const [totalPages, setTotalPages] = useState(0);
   const [totalElements, setTotalElements] = useState(0);
 
+  // Ô nhập (gõ dở) tách khỏi từ khoá ĐÃ áp dụng — gõ không làm đổi trang/bộ lọc.
   const [keyword, setKeyword] = useState(searchParams.get('q') || '');
-  const [category, setCategory] = useState('');
-  const [level, setLevel] = useState('');
+  const [tuKhoa, setTuKhoa] = useState(searchParams.get('q') || '');
+  const [category, setCategory] = useState(searchParams.get('category') || '');
+  const [level, setLevel] = useState(() => {
+    const l = searchParams.get('level') || '';
+    return CAP_DO_HOP_LE.has(l) ? l : '';
+  });
   const [page, setPage] = useState(0);
   const [size] = useState(12);
-  const [showFilters, setShowFilters] = useState(false);
+  const [lanTai, setLanTai] = useState(0); // bấm "Thử lại" = tăng số này
   // Top-level tab: general Courses vs the FPTU Academy sub-catalog.
   // Academy courses live in the same table (academyType != 'GENERAL')
   // but are surfaced ONLY here, never in the general "All" list.
-  const [academyMode, setAcademyMode] = useState(false);
+  const [academyMode, setAcademyMode] = useState(searchParams.get('tab') === 'academy');
   // Tab "Lộ trình": tháp thứ tự học, thay cho lưới khoá. Mở thẳng bằng ?tab=lo-trinh.
   const [roadmapMode, setRoadmapMode] = useState(searchParams.get('tab') === 'lo-trinh');
 
+  // Con số thật cho hero (đếm một lần, mỗi lượt chỉ xin 1 khoá).
+  const [tongKhoa, setTongKhoa] = useState<number | null>(null);
+  const [tongMonAcademy, setTongMonAcademy] = useState<number | null>(null);
+
+  const luoiRef = useRef<HTMLDivElement>(null);
+  const maYeuCau = useRef(0);
+
   useEffect(() => {
     courseCategoryApi.getAll().then(r => setCategories(r.data.data || [])).catch(() => {});
+    coursesApi.getAll({ page: 1, size: 1, gon: 1 })
+      .then(r => setTongKhoa(r.data?.pagination?.total ?? null)).catch(() => {});
+    coursesApi.getAll({ page: 1, size: 1, academy: 'fpt', gon: 1 })
+      .then(r => setTongMonAcademy(r.data?.pagination?.total ?? null)).catch(() => {});
   }, []);
 
-  const fetchCourses = async () => {
+  // Đồng bộ bộ lọc lên URL (replace, không cuộn) — giữ nguyên các tham số khác.
+  useEffect(() => {
+    const p = new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '');
+    const dat = (k: string, v: string) => (v ? p.set(k, v) : p.delete(k));
+    dat('tab', roadmapMode ? 'lo-trinh' : academyMode ? 'academy' : '');
+    dat('q', roadmapMode ? '' : tuKhoa);
+    dat('category', roadmapMode || academyMode ? '' : category);
+    dat('level', roadmapMode ? '' : level);
+    const qs = p.toString();
+    const moi = qs ? `${pathname}?${qs}` : pathname;
+    if (typeof window !== 'undefined' && moi !== `${window.location.pathname}${window.location.search}`) {
+      router.replace(moi, { scroll: false });
+    }
+  }, [roadmapMode, academyMode, tuKhoa, category, level, pathname, router]);
+
+  const fetchCourses = useCallback(async () => {
+    const ma = ++maYeuCau.current;
     setLoading(true);
+    setLoi(false);
     try {
       const res = await coursesApi.getAll({
         page: page + 1,
         size,
-        keyword: keyword || undefined,
+        keyword: tuKhoa || undefined,
         // Categories don't apply to the Academy sub-catalog.
         category: academyMode ? undefined : (category || undefined),
         level: level || undefined,
@@ -58,210 +93,174 @@ function CoursesContent() {
         // đó `sections` chiếm 2,5 MB, cộng 12 lượt truy vấn nặng song song.
         gon: 1,
       });
+      if (ma !== maYeuCau.current) return; // bộ lọc đã đổi trong lúc chờ
       const coursesData = res.data?.data;
       const pagination = res.data?.pagination;
       setCourses(Array.isArray(coursesData) ? coursesData : []);
       setTotalPages(pagination?.totalPages || 0);
       setTotalElements(pagination?.total || 0);
     } catch {
+      if (ma !== maYeuCau.current) return;
       setCourses([]);
+      setLoi(true);
     } finally {
-      setLoading(false);
+      if (ma === maYeuCau.current) setLoading(false);
     }
-  };
+  }, [page, size, tuKhoa, category, level, academyMode]);
 
   useEffect(() => {
     if (roadmapMode) return;
     fetchCourses();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, category, level, academyMode, roadmapMode]);
+  }, [fetchCourses, roadmapMode, lanTai]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     setPage(0);
-    fetchCourses();
+    setRoadmapMode(false);
+    setTuKhoa(keyword.trim());
+    // Cùng từ khoá đã áp dụng thì deps không đổi ⇒ ép tải lại.
+    setLanTai(n => n + 1);
   };
 
+  const xoaTuKhoa = () => {
+    setKeyword('');
+    if (tuKhoa) { setTuKhoa(''); setPage(0); }
+  };
+
+  const xoaBoLoc = () => {
+    setKeyword(''); setTuKhoa(''); setCategory(''); setLevel(''); setPage(0);
+  };
+
+  const doiTrang = (p: number) => {
+    setPage(p);
+    luoiRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  const coBoLoc = !!(tuKhoa || level || (!academyMode && category));
+  const tenDanhMuc = categories.find(c => c.slug === category)?.name;
+  const nhanCapDo = CAP_DO.find(l => l.value === level)?.label;
+
+  const tabs = [
+    { key: 'lo-trinh', nhan: 'Lộ trình học', Icon: Compass, active: roadmapMode,
+      onClick: () => setRoadmapMode(true) },
+    { key: 'tat-ca', nhan: 'Tất cả khoá học', Icon: LayoutGrid, active: !roadmapMode && !academyMode,
+      onClick: () => { setRoadmapMode(false); setAcademyMode(false); setPage(0); } },
+    { key: 'academy', nhan: 'FPTU Academy', Icon: GraduationCap, active: !roadmapMode && academyMode,
+      onClick: () => { setRoadmapMode(false); setAcademyMode(true); setCategory(''); setPage(0); } },
+  ];
+
   return (
-    <div className="min-h-screen bg-darkbg">
-      {/* Hero */}
-      <section className="relative py-20 overflow-hidden">
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-neon-indigo/10 rounded-full blur-[150px]" />
-          <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-neon-violet/10 rounded-full blur-[150px]" />
-        </div>
-        <div className="relative max-w-6xl mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-5xl font-heading font-bold text-text-primary mb-4">
-            Online <span className="bg-gradient-to-r from-neon-indigo to-neon-violet bg-clip-text text-transparent">Courses</span>
-          </h1>
-          <p className="text-text-secondary text-lg max-w-2xl mx-auto mb-8">
-            Learn programming from beginner to advanced with high-quality courses,
-            detailed lessons and hands-on materials.
-          </p>
-          <form onSubmit={handleSearch} className="max-w-2xl mx-auto flex gap-3">
-            <div className="relative flex-1">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted" />
-              <input
-                value={keyword}
-                onChange={e => setKeyword(e.target.value)}
-                placeholder="Search courses..."
-                className="w-full pl-12 pr-4 py-3.5 rounded-xl bg-darkcard border border-darkborder text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 transition-colors"
-              />
-            </div>
-            <button
-              type="submit"
-              className="px-6 py-3.5 bg-gradient-to-r from-neon-indigo to-neon-violet text-white font-semibold rounded-xl hover:opacity-90 transition-opacity"
-            >
-              Search
-            </button>
-          </form>
-        </div>
-      </section>
+    <div className="min-h-screen bg-[var(--bg-primary)] overflow-x-hidden [--text-muted:#65686d] [.theme-dark_&]:[--text-muted:#8a8d91]">
+      <HeroDanhMuc
+        keyword={keyword}
+        onKeywordChange={setKeyword}
+        onSubmit={handleSearch}
+        onClear={xoaTuKhoa}
+        tongKhoa={tongKhoa}
+        tongMonAcademy={tongMonAcademy}
+        soDanhMuc={categories.length}
+      />
 
       <div className="max-w-6xl mx-auto px-4 pb-20">
-        {/* Top-level tabs: general Courses vs FPTU Academy. Academy
+        {/* Top-level tabs: Lộ trình · Tất cả · FPTU Academy. Academy
             courses only appear under their own tab. */}
-        <div className="flex items-center gap-2 mb-6 border-b border-darkborder overflow-x-auto whitespace-nowrap">
-          <button
-            onClick={() => setRoadmapMode(true)}
-            className={`px-4 py-2.5 text-sm font-medium -mb-px border-b-2 transition-colors flex items-center gap-1.5 ${
-              roadmapMode ? 'border-neon-violet text-text-primary' : 'border-transparent text-text-muted hover:text-text-primary'
-            }`}
+        <div className="mb-8 pt-6">
+          <div
+            role="tablist"
+            aria-label="Chế độ xem khoá học"
+            className="flex w-full gap-1 overflow-x-auto whitespace-nowrap rounded-2xl border border-[var(--border-color)] bg-[var(--bg-card)] p-1 sm:w-fit"
           >
-            🧭 Lộ trình học
-          </button>
-          <button
-            onClick={() => { setRoadmapMode(false); setAcademyMode(false); setPage(0); }}
-            className={`px-4 py-2.5 text-sm font-medium -mb-px border-b-2 transition-colors ${
-              !roadmapMode && !academyMode ? 'border-neon-violet text-text-primary' : 'border-transparent text-text-muted hover:text-text-primary'
-            }`}
-          >
-            Tất cả khoá học
-          </button>
-          <button
-            onClick={() => { setRoadmapMode(false); setAcademyMode(true); setCategory(''); setPage(0); }}
-            className={`px-4 py-2.5 text-sm font-medium -mb-px border-b-2 transition-colors flex items-center gap-1.5 ${
-              !roadmapMode && academyMode ? 'border-neon-violet text-text-primary' : 'border-transparent text-text-muted hover:text-text-primary'
-            }`}
-          >
-            🎓 FPTU Academy
-          </button>
+            {tabs.map(({ key, nhan, Icon, active, onClick }) => (
+              <button
+                key={key}
+                role="tab"
+                aria-selected={active}
+                onClick={onClick}
+                className={`flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium transition-all sm:flex-none ${
+                  active
+                    ? 'bg-gradient-to-r from-neon-indigo to-neon-violet text-white shadow-[0_6px_20px_-8px_rgba(139,92,246,0.8)]'
+                    : 'text-text-muted hover:bg-[var(--bg-surface-hover)] hover:text-text-primary'
+                }`}
+              >
+                <Icon className="h-4 w-4 shrink-0" />
+                {nhan}
+              </button>
+            ))}
+          </div>
         </div>
 
         {roadmapMode ? (
           <CourseRoadmap />
         ) : (
         <>
-        {/* Filter bar */}
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-3 flex-wrap">
-            <button
-              onClick={() => setShowFilters(!showFilters)}
-              className="flex items-center gap-2 px-4 py-2 bg-darkcard border border-darkborder rounded-lg text-text-primary text-sm hover:border-neon-violet/30 transition-colors"
-            >
-              <Filter className="w-4 h-4" />
-              Filters
-              <ChevronDown className={`w-4 h-4 transition-transform ${showFilters ? 'rotate-180' : ''}`} />
-            </button>
+        {/* Bộ lọc */}
+        <div className="mb-8 space-y-5">
+          {categories.length > 0 && !academyMode && (
+            <div>
+              <h2 className="mb-3 text-sm font-semibold text-text-secondary">Khám phá theo danh mục</h2>
+              <ThanhDanhMuc
+                categories={categories}
+                dangChon={category}
+                onChon={(slug) => { setCategory(slug); setPage(0); }}
+                tongKhoa={tongKhoa}
+              />
+            </div>
+          )}
+          {academyMode && (
+            <div className="rounded-2xl border border-neon-violet/25 bg-gradient-to-r from-neon-indigo/10 via-neon-violet/5 to-transparent p-4 text-sm text-text-secondary">
+              <span className="font-semibold text-text-primary">FPTU Academy</span> — các môn bám sát giáo trình FPT University
+              (slide, bài tập, đề luyện thi). Tìm nhanh bằng mã môn, ví dụ <span className="font-mono text-violet-700 [.theme-dark_&]:text-violet-300">PRF192</span>.
+            </div>
+          )}
+          <ChipCapDo dangChon={level} onChon={(v) => { setLevel(v); setPage(0); }} />
+        </div>
 
-            {categories.length > 0 && !academyMode && (
-              <div className="flex items-center gap-2 flex-wrap">
-                <button
-                  onClick={() => { setCategory(''); setPage(0); }}
-                  className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-                    !category ? 'bg-neon-violet text-white' : 'bg-darkcard border border-darkborder text-text-muted hover:text-text-primary'
-                  }`}
-                >
-                    All
-                  </button>
-                {categories.map(cat => (
-                  <button
-                    key={cat.id}
-                    onClick={() => { setCategory(cat.slug); setPage(0); }}
-                    className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-                      category === cat.slug ? 'bg-neon-violet text-white' : 'bg-darkcard border border-darkborder text-text-muted hover:text-text-primary'
-                    }`}
-                  >
-                    {cat.name}
-                  </button>
-                ))}
-              </div>
+        {/* Kết quả + bộ lọc đang áp dụng */}
+        <div ref={luoiRef} className="mb-6 flex scroll-mt-24 flex-wrap items-center justify-between gap-3">
+          <p className="text-sm text-text-muted" aria-live="polite">
+            {loading ? 'Đang tải…' : loi ? '' : (
+              <>Tìm thấy <span className="font-semibold text-text-primary">{totalElements.toLocaleString('vi-VN')}</span> {academyMode ? 'môn học' : 'khoá học'}</>
             )}
-          </div>
-
-          <select
-            value={level}
-            onChange={e => { setLevel(e.target.value); setPage(0); }}
-            className="px-4 py-2 bg-darkcard border border-darkborder rounded-lg text-text-primary text-sm focus:outline-none focus:border-neon-violet/50"
-          >
-            {LEVELS.map(l => (
-              <option key={l.value} value={l.value}>{l.label}</option>
-            ))}
-          </select>
-        </div>
-
-        {/* Results count */}
-        <div className="flex items-center justify-between mb-6">
-          <p className="text-text-muted text-sm">
-            {loading ? 'Loading...' : `Found ${totalElements.toLocaleString('vi-VN')} courses`}
           </p>
+          {coBoLoc && (
+            <div className="flex min-w-0 flex-wrap items-center gap-2">
+              {tuKhoa && (
+                <button onClick={xoaTuKhoa} className="inline-flex max-w-full items-center gap-1 rounded-full border border-[var(--border-color)] bg-[var(--bg-card)] px-2.5 py-1 text-xs text-text-secondary hover:text-text-primary">
+                  <span className="truncate">“{tuKhoa}”</span> <X className="h-3 w-3 shrink-0" />
+                </button>
+              )}
+              {!academyMode && category && (
+                <button onClick={() => { setCategory(''); setPage(0); }} className="inline-flex items-center gap-1 rounded-full border border-[var(--border-color)] bg-[var(--bg-card)] px-2.5 py-1 text-xs text-text-secondary hover:text-text-primary">
+                  {tenDanhMuc || category} <X className="h-3 w-3" />
+                </button>
+              )}
+              {level && (
+                <button onClick={() => { setLevel(''); setPage(0); }} className="inline-flex items-center gap-1 rounded-full border border-[var(--border-color)] bg-[var(--bg-card)] px-2.5 py-1 text-xs text-text-secondary hover:text-text-primary">
+                  {nhanCapDo} <X className="h-3 w-3" />
+                </button>
+              )}
+              <button onClick={xoaBoLoc} className="text-xs font-medium text-violet-700 [.theme-dark_&]:text-violet-300 hover:underline">
+                Xoá tất cả
+              </button>
+            </div>
+          )}
         </div>
 
-        {/* Grid */}
+        {/* Lưới */}
         {loading ? (
-          <div className="flex items-center justify-center py-20">
-            <Loader2 className="w-8 h-8 animate-spin text-neon-violet" />
-          </div>
+          <LuoiKhung soThe={6} />
+        ) : loi ? (
+          <LoiTai onThuLai={() => setLanTai(n => n + 1)} />
         ) : courses.length === 0 ? (
-          <div className="text-center py-20">
-            <div className="text-6xl mb-4">📚</div>
-            <h3 className="text-xl font-semibold text-text-primary mb-2">No courses yet</h3>
-            <p className="text-text-muted">Try changing filters or search keywords.</p>
-          </div>
+          <KhongCoKetQua coBoLoc={coBoLoc} onXoaBoLoc={xoaBoLoc} />
         ) : (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {courses.map(course => (
                 <CourseCard key={course.id} course={course} />
               ))}
             </div>
-
-            {/* Pagination */}
-            {totalPages > 1 && (
-              <div className="flex items-center justify-center gap-2 mt-12">
-                <button
-                  onClick={() => setPage(Math.max(0, page - 1))}
-                  disabled={page === 0}
-                  className="px-4 py-2 bg-darkcard border border-darkborder rounded-lg text-text-primary text-sm hover:border-neon-violet/30 disabled:opacity-30 transition-colors"
-                >
-                  Previous
-                </button>
-                {Array.from({ length: Math.min(totalPages, 7) }, (_, i) => {
-                  const p = page < 3 ? i : page > totalPages - 4 ? totalPages - 7 + i : page - 3 + i;
-                  if (p < 0 || p >= totalPages) return null;
-                  return (
-                    <button
-                      key={p}
-                      onClick={() => setPage(p)}
-                      className={`w-10 h-10 rounded-lg text-sm font-medium transition-colors ${
-                        p === page
-                          ? 'bg-gradient-to-r from-neon-indigo to-neon-violet text-white'
-                          : 'bg-darkcard border border-darkborder text-text-muted hover:text-text-primary'
-                      }`}
-                    >
-                      {p + 1}
-                    </button>
-                  );
-                })}
-                <button
-                  onClick={() => setPage(Math.min(totalPages - 1, page + 1))}
-                  disabled={page >= totalPages - 1}
-                  className="px-4 py-2 bg-darkcard border border-darkborder rounded-lg text-text-primary text-sm hover:border-neon-violet/30 disabled:opacity-30 transition-colors"
-                >
-                  Next
-                </button>
-              </div>
-            )}
+            <PhanTrang page={page} totalPages={totalPages} onChange={doiTrang} />
           </>
         )}
         </>
@@ -274,8 +273,10 @@ function CoursesContent() {
 export default function CoursesPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-darkbg flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-neon-violet" />
+      <div className="min-h-screen bg-[var(--bg-primary)] [--text-muted:#65686d] [.theme-dark_&]:[--text-muted:#8a8d91]">
+        <div className="max-w-6xl mx-auto px-4 pt-40">
+          <LuoiKhung soThe={6} />
+        </div>
       </div>
     }>
       <CoursesContent />

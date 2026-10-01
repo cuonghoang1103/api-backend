@@ -42,6 +42,7 @@ function nodeHref(n: RoadmapNodeT): { href: string; external: boolean } | null {
   if (!n.linkType || !n.linkRef) return null;
   if (n.linkType === 'code-lab') return { href: `/code-lab/${n.linkRef}`, external: false };
   if (n.linkType === 'roadmap') return { href: `/roadmap/${n.linkRef}`, external: false };
+  if (n.linkType === 'course') return { href: `/courses/${n.linkRef}`, external: false };
   if (n.linkType === 'external') return { href: n.linkRef, external: /^https?:\/\//.test(n.linkRef) };
   return null;
 }
@@ -335,6 +336,7 @@ function NodeDrawer({
   const trackName = (node.linkRef || '').replace(/-/g, ' ');
   const recTitle = node.linkType === 'code-lab' ? trackName
     : node.linkType === 'roadmap' ? `Lộ trình ${trackName}`
+    : node.linkType === 'course' ? `Khoá ${trackName}`
     : link?.href === '/algorithms' ? 'Trang Algorithms (trực quan)'
     : 'Tài liệu chính thức';
   const recCTA = link ? (
@@ -388,7 +390,7 @@ function NodeDrawer({
           {link && (
             <div className="rounded-xl border p-3" style={{ borderColor: `${color}55`, background: `${color}10` }}>
               <div className="mb-2 flex items-center gap-1.5 text-xs font-semibold" style={{ color }}>
-                <Star size={13} className="fill-current" /> Đề xuất{node.linkType === 'code-lab' ? ' · Bài học Code Lab' : ''}
+                <Star size={13} className="fill-current" /> Đề xuất{node.linkType === 'code-lab' ? ' · Bài học Code Lab' : node.linkType === 'course' ? ' · Khoá học trên web' : ''}
               </div>
               <div className="flex items-center justify-between gap-3">
                 <div className="min-w-0">

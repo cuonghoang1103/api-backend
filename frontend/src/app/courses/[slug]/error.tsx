@@ -16,9 +16,9 @@ export default function CourseError({
   }, [error]);
 
   return (
-    <div className="min-h-screen bg-darkbg flex items-center justify-center px-4">
+    <div className="min-h-screen bg-[var(--bg-primary)] flex items-center justify-center px-4">
       <div className="text-center max-w-md">
-        <div className="w-16 h-16 mx-auto mb-5 rounded-2xl bg-red-500/10 text-red-400 flex items-center justify-center text-2xl">
+        <div className="w-16 h-16 mx-auto mb-5 rounded-2xl bg-red-500/10 text-red-700 [.theme-dark_&]:text-red-400 flex items-center justify-center text-2xl">
           !
         </div>
         <h2 className="text-2xl font-heading font-bold text-text-primary mb-2">
@@ -39,7 +39,7 @@ export default function CourseError({
           </button>
           <Link
             href="/courses"
-            className="px-5 py-2.5 rounded-xl border border-darkborder text-text-secondary hover:bg-white/5 text-sm"
+            className="px-5 py-2.5 rounded-xl border border-[var(--border-color)] text-text-secondary hover:bg-[var(--bg-surface-hover)] text-sm"
           >
             Về danh sách khóa học
           </Link>

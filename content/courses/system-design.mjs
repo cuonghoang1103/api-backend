@@ -23,7 +23,7 @@ export default {
     status: 'PUBLISHED',
     isFeatured: false,
     syncOrder: true,
-    thumbnailUrl: 'https://media.cuongthai.com/images/course-covers/system-design.png?v=1',
+    thumbnailUrl: 'https://media.cuongthai.com/images/course-covers/system-design.png?v=4',
     shortDescription: 'Real system design, not interview theatre: grow one server to millions of users, then design classic systems end to end — URL shortener, feed, chat, rate limiter, payments, ticket booking — with numbers, schemas and costs.|||System design thật, không diễn phỏng vấn: nâng một máy chủ lên hàng triệu người dùng, rồi thiết kế trọn các hệ kinh điển — rút gọn link, feed, chat, rate limiter, thanh toán, đặt vé chống trùng — kèm con số, schema và chi phí.',
     description: 'Khoá thiết kế hệ thống cho người đã làm backend và muốn đi xa hơn "vẽ hộp trong 45 phút". Phần 1 nâng một hệ thống giống cuongthai.com từ một VPS lên hàng triệu người dùng, mỗi bước có con số và lý do: tách CSDL, cache, CDN, stateless + load balancer, replica, hàng đợi, phân mảnh, nhiều vùng. Phần 2 là các khối xây dựng (CSDL, cache, hàng đợi, lưu trữ đối tượng, tìm kiếm, realtime, định danh) được chọn theo đánh đổi. Phần 3 là các case study kinh điển thiết kế tới mức schema, API, luồng dữ liệu, điểm hỏng, chi phí và cách vận hành: rút gọn link, rate limiter, news feed, chat, thông báo, thanh toán/ví, đặt vé chống double-booking, tìm kiếm & gợi ý, lưu trữ và phát video, bảng xếp hạng. Phần cuối: viết tài liệu thiết kế (design doc/ADR) và dựng lại kiến trúc LabFlow AI cho quy mô lớn.',
     whatYouLearn: 'Ước lượng tải, dung lượng và chi phí từ yêu cầu; biết bước nâng cấp nào đáng làm ở quy mô nào (và cái nào là lãng phí); chọn CSDL, cache, hàng đợi, lưu trữ theo đánh đổi có số liệu; thiết kế chi tiết mười hệ kinh điển tới schema và API; xử lý hot key, thundering herd, double-booking, fan-out; viết design doc và ADR như ở công ty; bảo vệ thiết kế đồ án trước hội đồng hoặc nhà tuyển dụng.',
@@ -105,7 +105,7 @@ export default {
     ]],
     ['Chapter 12 — Design docs, reviews and evolving architecture', 'Chương 12 — Tài liệu thiết kế, review và tiến hoá kiến trúc', 'Thiết kế ở công ty trông như thế nào.', [
       ['design-doc', 'Writing a design doc people actually read', 'Viết design doc người ta thật sự đọc', 'Bối cảnh, mục tiêu, phi mục tiêu · Phương án đã loại và vì sao · Kế hoạch triển khai và rollback'],
-      ['adr', 'Architecture Decision Records', 'Ghi quyết định kiến trúc (ADR)', 'Mẫu Nygard · Ghi lại "vì sao" · Ví dụ ADR: vì sao cuongthai.com build ở máy nhà và không push-to-deploy'],
+      ['adr', 'ADRs from the system designer’s seat (full method → Software Architecture)', 'ADR nhìn từ ghế người thiết kế hệ thống (bài bản → khoá Software Architecture)', 'Ghi lại "vì sao" bên cạnh design doc · Ví dụ: vì sao cuongthai.com build ở máy nhà và không push-to-deploy · Mẫu Nygard, vòng đời ADR, C4, arc42 → /courses/software-architecture Ch2'],
       ['monolith-micro', 'Modular monolith vs microservices, honestly', 'Modular monolith và microservices, nói thật', 'Chi phí vận hành microservices · Tách theo ranh giới dữ liệu · Strangler fig · Phần lớn đội nhỏ nên giữ monolith'],
       ['review-migration', 'Design reviews and large migrations', 'Review thiết kế và di chuyển lớn', 'Câu hỏi reviewer hay hỏi · Dual-write → backfill → chuyển đọc → tắt cũ · Feature flag'],
     ]],

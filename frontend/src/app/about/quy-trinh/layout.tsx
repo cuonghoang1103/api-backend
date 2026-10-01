@@ -2,8 +2,10 @@ import type { Metadata } from 'next';
 
 // Metadata-only layout: page.tsx là client component nên không export
 // metadata được (cùng cách với app/about/layout.tsx).
-const DESCRIPTION =
-  'Quy trình nhận & làm dự án phần mềm của CuongHoang: 15 giai đoạn từ tiếp nhận, khảo sát, đặc tả, thiết kế, phát triển, kiểm thử, bảo mật, DevOps, nghiệm thu, bàn giao tới bảo hành — mỗi giai đoạn có tài liệu bàn giao, tiêu chuẩn tham chiếu và cổng chất lượng.';
+import { STAGES } from './data';
+
+// Số giai đoạn ĐẾM từ data.ts — không gõ tay (bản 1 ghi cứng "15").
+const DESCRIPTION = `Quy trình nhận & làm dự án phần mềm của CuongHoang Studio: ${STAGES.length} giai đoạn từ tiếp nhận yêu cầu, đánh giá phù hợp, pháp lý, đặc tả, thiết kế, phát triển, kiểm thử, bảo mật, DevOps, nghiệm thu, phát hành, bàn giao tới bảo trì và ngừng hệ thống — mỗi giai đoạn có bộ phận phụ trách, RACI, cổng chất lượng và mẫu tài liệu.`;
 
 export const metadata: Metadata = {
   title: 'Quy trình nhận & làm dự án',

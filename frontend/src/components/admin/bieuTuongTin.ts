@@ -4,7 +4,7 @@
  * một công cụ làm việc không cần chúng.
  */
 import type { LucideIcon } from 'lucide-react';
-import { Banknote, Bell, Coins, Crown, Flag, KeyRound, Landmark, Package, Trash2, Wrench } from 'lucide-react';
+import { Banknote, Bell, ClipboardList, Coins, Crown, Flag, KeyRound, Landmark, Package, Trash2, Wrench } from 'lucide-react';
 
 export const BIEU_TUONG_TIN: Record<string, LucideIcon> = {
   XIN_KEY: KeyRound,
@@ -16,5 +16,6 @@ export const BIEU_TUONG_TIN: Record<string, LucideIcon> = {
   XOA_TAI_KHOAN: Trash2,
   NAP_DIEM: Coins,
   MUA_PRO: Crown,
+  YEU_CAU_DU_AN: ClipboardList,
   KHAC: Bell,
 };

@@ -32,7 +32,7 @@ const TEN_LOAI: Record<string, [en: string, vi: string]> = {
   DA_THANH_TOAN: ['Paid', 'Đã thanh toán'], CHUYEN_KHOAN_CHO_DUYET: ['Transfer to confirm', 'Chờ xác nhận CK'],
   DOI_KEY: ['Key replacement', 'Đổi key hỏng'], BAO_CAO: ['Report', 'Báo cáo'],
   XOA_TAI_KHOAN: ['Account deletion', 'Xoá tài khoản'], NAP_DIEM: ['Top-up', 'Nạp điểm'],
-  MUA_PRO: ['Pro purchase', 'Mua Pro'], KHAC: ['Other', 'Khác'],
+  MUA_PRO: ['Pro purchase', 'Mua Pro'], YEU_CAU_DU_AN: ['Project request', 'Yêu cầu dự án'], KHAC: ['Other', 'Khác'],
 };
 
 const BO_LOC = [

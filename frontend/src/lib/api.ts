@@ -5852,3 +5852,103 @@ export const ghiNhanhApi = {
   nhapMd: (data: { filename: string; markdown: string }) =>
     api.post<{ data: GhiNhanhKetQua }>('/notes/ghi-nhanh/nhap-md', data),
 };
+
+// ─── Phiếu yêu cầu dự án (/about/quy-trinh — "Nhận dự án") ─────────────
+// Backend: src/routes/projectRequest.routes.ts. Công khai: submit(); còn lại admin.
+
+export type ProjectRequestStatus = 'NEW' | 'QUALIFYING' | 'ACCEPTED' | 'DECLINED' | 'PROJECT_CREATED';
+export type ProjectRequestProductType = 'WEB' | 'APP' | 'TOOL' | 'AI' | 'OTHER';
+export type ProjectRequestSecurityLevel = 'NORMAL' | 'PERSONAL_DATA' | 'SENSITIVE';
+
+/** Thân form công khai. `consent` BẮT BUỘC true (NĐ 13/2023); `website` là ô bẫy bot — luôn để trống, ẩn khỏi người dùng. */
+export interface ProjectRequestSubmit {
+  name: string;
+  email: string;
+  phone?: string | null;
+  organization?: string | null;
+  senderRole?: string | null;
+  productTypes: ProjectRequestProductType[];
+  /** Tối thiểu 20 ký tự. */
+  needs: string;
+  businessGoals?: string | null;
+  endUsers?: string | null;
+  existingSystems?: string | null;
+  budgetRange?: string | null;
+  desiredDeadline?: string | null;
+  securityLevel?: ProjectRequestSecurityLevel;
+  securityNote?: string | null;
+  consent: true;
+  /** Phiên bản thông báo xử lý dữ liệu khách đã đọc (vd '2026-10-01'). */
+  consentVersion?: string | null;
+  source?: string | null;
+  website?: string;
+}
+
+export interface ProjectRequestListItem {
+  id: number;
+  code: string;
+  name: string;
+  email: string;
+  organization: string | null;
+  productTypes: ProjectRequestProductType[];
+  status: ProjectRequestStatus;
+  isRoleplay: boolean;
+  securityLevel: ProjectRequestSecurityLevel;
+  workProjectId: number | null;
+  createdAt: string;
+  statusChangedAt: string | null;
+}
+
+export interface ProjectRequestDetail extends ProjectRequestListItem {
+  phone: string | null;
+  senderRole: string | null;
+  needs: string;
+  businessGoals: string | null;
+  endUsers: string | null;
+  existingSystems: string | null;
+  budgetRange: string | null;
+  desiredDeadline: string | null;
+  securityNote: string | null;
+  consent: boolean;
+  consentAt: string | null;
+  consentVersion: string | null;
+  source: string | null;
+  ip: string | null;
+  userAgent: string | null;
+  internalNote: string | null;
+  updatedAt: string;
+  workProject: { projectId: number; deleted: boolean; url: string | null; key: string | null; shareUrl: string | null } | null;
+}
+
+export interface CreatedWorkProjectResult {
+  alreadyExisted: boolean;
+  projectId: number;
+  key: string;
+  url: string;
+  shareUrl: string | null;
+  templateSource: 'file' | 'minimal' | null;
+  counts: { epics: number; tasks: number; gates: number; labels: number };
+}
+
+export const projectRequestApi = {
+  /** Công khai, không cần đăng nhập. Giới hạn 5 phiếu/giờ/IP. Trả mã phiếu (vd YC-2026-0001). */
+  submit: (data: ProjectRequestSubmit) =>
+    api.post<{ success: true; data: { code: string | null; received: true } }>('/project-requests', data),
+};
+
+export const adminProjectRequestApi = {
+  list: (params?: { status?: ProjectRequestStatus; roleplay?: '0' | '1'; q?: string; page?: number; limit?: number }) =>
+    api.get<{
+      success: true;
+      data: { items: ProjectRequestListItem[]; total: number; page: number; limit: number; counts: Partial<Record<ProjectRequestStatus, number>> };
+    }>('/admin/project-requests', { params }),
+  get: (id: number) => api.get<{ success: true; data: ProjectRequestDetail }>(`/admin/project-requests/${id}`),
+  /** Đổi trạng thái (trừ PROJECT_CREATED — chỉ nút tạo dự án đặt được) và/hoặc ghi chú nội bộ. */
+  update: (id: number, data: { status?: Exclude<ProjectRequestStatus, 'PROJECT_CREATED'>; internalNote?: string | null }) =>
+    api.patch<{ success: true; data: ProjectRequestDetail }>(`/admin/project-requests/${id}`, data),
+  /** Tạo phiếu NHẬP VAI (khách giả lập) để tự luyện quy trình. */
+  createRoleplay: () => api.post<{ success: true; data: ProjectRequestDetail }>('/admin/project-requests/roleplay'),
+  /** Idempotent: bấm lại trả dự án đã tạo (alreadyExisted=true). Phiếu phải ACCEPTED. */
+  createWorkProject: (id: number) =>
+    api.post<{ success: true; data: CreatedWorkProjectResult }>(`/admin/project-requests/${id}/create-work-project`),
+};

@@ -1,0 +1,130 @@
+/*
+ * Bộ token "Studio doanh nghiệp" — dùng chung cho luồng 3 trang
+ *   /about/studio → /about/nhan-du-an → /about/quy-trinh (+ trang con).
+ *
+ * Phương án A (user chọn 01/10/2026): nền sáng trang trọng, mực navy, MỘT màu
+ * nhấn (đồng thau), chữ lớn, nhiều khoảng trắng.
+ *
+ * Theme tối = class `theme-dark` trên <html> (KHÔNG dùng `dark:` của Tailwind —
+ * xem CLAUDE.md). Ở theme tối, nền/viền lấy từ biến theme của cả site
+ * (`--bg-*`, `--border-color`) để trang không lệch tông với phần còn lại.
+ *
+ * Component đọc token bằng Tailwind arbitrary value: `text-[color:var(--s-ink)]`,
+ * `bg-[var(--s-band)]`, `border-[color:var(--s-line)]`.
+ */
+.root {
+  --s-ink: #0e2240;          /* mực navy: tiêu đề, nút chính, số thứ tự */
+  --s-ink-2: #23406a;        /* navy nhạt hơn cho chữ phụ đậm */
+  --s-body: #334155;         /* chữ thân bài */
+  --s-muted: #64748b;        /* chú thích */
+  --s-accent: #9a6f22;       /* đồng thau — màu nhấn DUY NHẤT */
+  --s-accent-soft: color-mix(in srgb, #9a6f22 10%, transparent);
+  --s-paper: var(--bg-card);  /* nền chính (trắng ở theme sáng) */
+  --s-band: #f3f5f8;         /* dải nền xen kẽ — xám lạnh, không phải kem */
+  --s-raise: #ffffff;        /* bề mặt nổi trên dải */
+  --s-line: #dbe1e8;         /* đường kẻ */
+  --s-line-strong: #b9c3cf;
+  --s-on-ink: #ffffff;       /* chữ trên nền navy */
+  --s-focus: #2563eb;
+
+  min-height: 100vh;
+  overflow-x: clip;
+  background: var(--s-paper);
+  color: var(--s-body);
+}
+
+:global(html.theme-dark) .root {
+  --s-ink: #e7ecf4;
+  --s-ink-2: #c3cede;
+  --s-body: var(--text-secondary);
+  --s-muted: var(--text-muted);
+  --s-accent: #d4ad62;
+  --s-accent-soft: color-mix(in srgb, #d4ad62 14%, transparent);
+  --s-paper: var(--bg-primary);
+  --s-band: var(--bg-card);
+  --s-raise: var(--bg-surface);
+  --s-line: var(--border-color);
+  --s-line-strong: color-mix(in srgb, var(--text-muted) 55%, transparent);
+  --s-on-ink: #0e2240;
+  --s-focus: #7aa7ff;
+}
+
+/* Viền focus rõ cho bàn phím, mọi phần tử tương tác trong trang. */
+.root :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--s-focus);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* Liên kết trong văn bản (thẻ <a> không mang class): gạch chân mảnh màu nhấn.
+   `:not([class])` để không đè các liên kết dạng thẻ/nút đã tự tạo kiểu. */
+.prose a:not([class]) {
+  color: var(--s-ink);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--s-accent) 70%, transparent);
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+.prose a:not([class]):hover { text-decoration-color: var(--s-accent); }
+
+/* Bảng tài liệu (RACI, ma trận) — khung cuộn riêng, KHÔNG display:block trên
+   <table> (xem feedback_bang_markdown_can_khung_cuon_rieng). */
+.tableWrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid var(--s-line);
+  border-radius: 12px;
+  background: var(--s-raise);
+}
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.875rem;
+}
+.table th,
+.table td {
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid var(--s-line);
+  text-align: left;
+  vertical-align: top;
+}
+.table thead th {
+  position: sticky;
+  top: 0;
+  background: var(--s-band);
+  color: var(--s-ink);
+  font-weight: 600;
+  white-space: nowrap;
+  z-index: 1;
+}
+.table tbody tr:last-child td,
+.table tbody tr:last-child th { border-bottom: 0; }
+.table .center { text-align: center; vertical-align: middle; }
+.table .stickyCol {
+  position: sticky;
+  left: 0;
+  background: var(--s-raise);
+  z-index: 2;
+  min-width: 11rem;
+  max-width: 18rem;
+}
+.table thead .stickyCol { background: var(--s-band); z-index: 3; }
+
+/* Ô chữ RACI */
+.raci {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 0.8rem;
+  font-variant-numeric: tabular-nums;
+}
+.raciR { background: var(--s-ink); color: var(--s-on-ink); }
+.raciA { background: var(--s-accent); color: #fff; }
+.raciC { border: 1.5px solid var(--s-ink-2); color: var(--s-ink-2); }
+.raciI { border: 1px dashed var(--s-line-strong); color: var(--s-muted); }
+:global(html.theme-dark) .raciA { color: #1a1406; }

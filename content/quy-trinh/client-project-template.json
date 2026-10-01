@@ -1,0 +1,1612 @@
+{
+  "version": "2.0",
+  "name": "Dự án khách hàng",
+  "description": "Mẫu dự án theo quy trình nhận & làm dự án của cuongthai.com: mỗi giai đoạn một epic, việc gắn nhãn vai `vai:<key>`, việc cuối mỗi giai đoạn là cổng chất lượng (gate) với checklist = điều kiện ra.",
+  "source": {
+    "stages": "frontend/src/app/about/quy-trinh/data.ts",
+    "tasks": "content/quy-trinh/viec-theo-giai-doan.mjs",
+    "build": "npx tsx content/quy-trinh/dung-mau-du-an.mts"
+  },
+  "labelPrefix": "vai:",
+  "roles": [
+    {
+      "key": "sales",
+      "name": "Kinh doanh & Tiền bán hàng",
+      "nameEn": "Sales & Presales"
+    },
+    {
+      "key": "ba",
+      "name": "Phân tích nghiệp vụ (BA)",
+      "nameEn": "Business Analysis (BA)"
+    },
+    {
+      "key": "ux",
+      "name": "Thiết kế UX/UI",
+      "nameEn": "UX/UI Design"
+    },
+    {
+      "key": "arch",
+      "name": "Kiến trúc giải pháp",
+      "nameEn": "Solution Architecture"
+    },
+    {
+      "key": "pm",
+      "name": "Quản lý dự án / Scrum Master",
+      "nameEn": "Project Management / Scrum Master"
+    },
+    {
+      "key": "dev",
+      "name": "Phát triển (FE · BE · Mobile)",
+      "nameEn": "Engineering (FE · BE · Mobile)"
+    },
+    {
+      "key": "qa",
+      "name": "Đảm bảo chất lượng (QA/QC)",
+      "nameEn": "Quality Assurance (QA/QC)"
+    },
+    {
+      "key": "sec",
+      "name": "Bảo mật ứng dụng (AppSec)",
+      "nameEn": "Application Security (AppSec)"
+    },
+    {
+      "key": "devops",
+      "name": "DevOps / SRE",
+      "nameEn": "DevOps / SRE"
+    },
+    {
+      "key": "infra",
+      "name": "Hạ tầng & Mạng",
+      "nameEn": "Infrastructure & Network"
+    },
+    {
+      "key": "data",
+      "name": "Dữ liệu & AI",
+      "nameEn": "Data & AI"
+    },
+    {
+      "key": "support",
+      "name": "Hỗ trợ & Chăm sóc khách hàng",
+      "nameEn": "Support & Customer Success"
+    },
+    {
+      "key": "legal",
+      "name": "Pháp lý & Tài chính",
+      "nameEn": "Legal & Finance"
+    },
+    {
+      "key": "pmo",
+      "name": "Văn phòng quản lý dự án (PMO)",
+      "nameEn": "Project Management Office (PMO)"
+    },
+    {
+      "key": "client",
+      "name": "Khách hàng (Product Owner / nhà tài trợ)",
+      "nameEn": "Client (Product Owner / sponsor)"
+    }
+  ],
+  "stages": [
+    {
+      "slug": "tiep-nhan",
+      "n": 0,
+      "phase": "discover",
+      "title": "Tiếp nhận yêu cầu & tư vấn ban đầu",
+      "titleEn": "Intake & first consultation",
+      "epic": {
+        "summary": "GĐ 00 · Tiếp nhận yêu cầu & tư vấn ban đầu",
+        "description": "**Mục tiêu:** Ghi nhận yêu cầu vào một phiếu có mã, hiểu khách đang gặp vấn đề gì và vì sao là bây giờ — trước khi hứa bất cứ điều gì.\n\nNhóm: Khám phá (Discover) · Giai đoạn 00/20 · Intake & first consultation\n\n### Đầu vào\n- Yêu cầu của khách (biểu mẫu, email, người giới thiệu)\n- Thông tin công khai về tổ chức của khách\n\n### Điều kiện vào (entry criteria)\n- Có kênh liên hệ hợp lệ và người gửi đã đồng ý xử lý dữ liệu liên hệ\n- Yêu cầu thuộc loại sản phẩm được nhận (web, mobile, tool nội bộ, AI, IoT)\n\n### Đầu ra bàn giao\n- Phiếu tiếp nhận yêu cầu có mã\n- Biên bản buổi tư vấn (1 trang): vấn đề, mục tiêu, ràng buộc, câu hỏi còn mở\n- NDA đã ký (khi cần)\n\n### Khách hàng tham gia\n- Kể vấn đề bằng lời của mình, cho ví dụ thật\n- Chỉ ra người ra quyết định và người sẽ dùng sản phẩm\n\n### Bộ phận tham gia\n- `vai:sales` Kinh doanh & Tiền bán hàng — đầu mối tiếp nhận, chủ trì buổi tư vấn\n- `vai:ba` Phân tích nghiệp vụ (BA) — dự buổi tư vấn, ghi nhận nhu cầu và câu hỏi mở\n- `vai:arch` Kiến trúc giải pháp — tham vấn khi có câu hỏi khả thi kỹ thuật\n- `vai:legal` Pháp lý & Tài chính — NDA, thông báo xử lý dữ liệu\n- `vai:client` Khách hàng (Product Owner / nhà tài trợ) — mô tả vấn đề, chỉ ra người quyết định\n\n### Mẫu tài liệu\n- [Phiếu tiếp nhận yêu cầu](https://cuongthai.com/quy-trinh/mau/phieu-tiep-nhan-yeu-cau.md)\n\n### Tiêu chuẩn tham chiếu\n- PMI — PMBOK® Guide 7th ed. — Miền hiệu suất \"Stakeholders\": xác định & hiểu các bên liên quan\n- ISO 21502:2020 — Hướng dẫn quản lý dự án — các hoạt động trước và lúc khởi động dự án\n- Nghị định 13/2023/NĐ-CP — Bảo vệ dữ liệu cá nhân — sự đồng ý của chủ thể dữ liệu trước khi xử lý\n\n### Học thêm\n- [SWE201c · Software Engineering](https://cuongthai.com/academy/courses/introduction-to-software-engineering)\n- [SSG104 · Communication & Teamwork](https://cuongthai.com/academy/courses/communication-and-in-group-working-skills)\n- [Solo Product](https://cuongthai.com/courses/solo-product)\n- [Privacy & Data Law](https://cuongthai.com/courses/privacy-data-law)\n\n### Sai lầm hay gặp\n- Báo giá ngay trong buổi gọi đầu khi chưa hiểu vấn đề\n- Ghi chép rời rạc trong chat, không có phiếu → mất dấu yêu cầu\n- Chỉ nói chuyện với người đặt hàng, không biết ai quyết định và ai sẽ dùng\n- Nhận tài liệu mật trước khi có NDA\n\nQuy trình đầy đủ: https://cuongthai.com/about/quy-trinh"
+      },
+      "tasks": [
+        {
+          "summary": "Tiếp nhận yêu cầu, cấp mã phiếu và xác nhận đã nhận",
+          "role": "sales",
+          "checklist": [
+            "Phản hồi khách trong 1 ngày làm việc",
+            "Ghi nguồn yêu cầu (web, giới thiệu, sự kiện…)",
+            "Kiểm trùng với phiếu cũ của cùng tổ chức",
+            "Lưu bằng chứng đồng ý xử lý dữ liệu (thời điểm, phiên bản thông báo)"
+          ]
+        },
+        {
+          "summary": "Ký NDA trước khi nhận tài liệu / dữ liệu nhạy cảm",
+          "role": "legal",
+          "checklist": [
+            "Xác định khách có chia sẻ thông tin mật không",
+            "Gửi NDA hai chiều theo mẫu đã được luật sư duyệt",
+            "Lưu bản NDA đã ký vào hồ sơ dự án"
+          ]
+        },
+        {
+          "summary": "Họp tư vấn đầu tiên (30–45 phút)",
+          "role": "sales",
+          "checklist": [
+            "Hỏi bối cảnh, người dùng, mục tiêu kinh doanh đo được",
+            "Hỏi hạn chót, khoảng ngân sách, ràng buộc pháp lý",
+            "Xác định người ra quyết định và người dùng cuối",
+            "Hỏi \"vì sao\" để tách nhu cầu khỏi giải pháp đã nghĩ sẵn"
+          ]
+        },
+        {
+          "summary": "Gửi biên bản tư vấn và danh sách câu hỏi mở",
+          "role": "ba",
+          "checklist": [
+            "Biên bản ≤ 1 trang: vấn đề, mục tiêu, ràng buộc",
+            "Mỗi câu hỏi mở có người trả lời và hạn",
+            "Gửi trong 24 giờ, xin khách xác nhận qua email"
+          ]
+        },
+        {
+          "summary": "Cổng chất lượng — Tiếp nhận yêu cầu & tư vấn ban đầu",
+          "role": "sales",
+          "checklist": [
+            "Phiếu yêu cầu có mã, đủ các trường bắt buộc",
+            "Biên bản buổi tư vấn đã gửi và được khách xác nhận qua email",
+            "Đã biết người ra quyết định, người dùng cuối và hạn chót mong muốn",
+            "NDA đã ký nếu khách sẽ chia sẻ thông tin mật"
+          ],
+          "gate": true
+        }
+      ]
+    },
+    {
+      "slug": "tien-ban-hang",
+      "n": 1,
+      "phase": "discover",
+      "title": "Tiền bán hàng & đánh giá phù hợp",
+      "titleEn": "Presales & qualification",
+      "epic": {
+        "summary": "GĐ 01 · Tiền bán hàng & đánh giá phù hợp",
+        "description": "**Mục tiêu:** Quyết định có nên theo đuổi dự án hay không theo tiêu chí viết sẵn — nhu cầu, ngân sách, thẩm quyền, thời hạn, năng lực, rủi ro — và nói \"không\" sớm khi không phù hợp.\n\nNhóm: Khám phá (Discover) · Giai đoạn 01/20 · Presales & qualification\n\n### Đầu vào\n- Phiếu yêu cầu và biên bản tư vấn\n- Danh mục dự án đang chạy, lịch nguồn lực\n\n### Điều kiện vào (entry criteria)\n- Phiếu ở trạng thái \"Đã tiếp nhận\", có biên bản tư vấn\n- Đã biết người ra quyết định phía khách\n\n### Đầu ra bàn giao\n- Bảng đánh giá phù hợp (qualification scorecard)\n- Biên bản quyết định go/no-go kèm lý do và điều kiện\n- Sổ rủi ro sơ bộ\n- Thư phản hồi khách\n\n### Khách hàng tham gia\n- Trả lời câu hỏi về ngân sách, người quyết định, thời hạn\n- Cho biết ràng buộc pháp lý và tuân thủ của tổ chức\n\n### Bộ phận tham gia\n- `vai:sales` Kinh doanh & Tiền bán hàng — chủ trì chấm điểm và phản hồi khách\n- `vai:arch` Kiến trúc giải pháp — đánh giá khả thi kỹ thuật\n- `vai:pm` Quản lý dự án / Scrum Master — đánh giá lịch và nguồn lực\n- `vai:legal` Pháp lý & Tài chính — rà soát rủi ro pháp lý và dữ liệu\n- `vai:pmo` Văn phòng quản lý dự án (PMO) — quyết định go/no-go trong danh mục dự án\n- `vai:client` Khách hàng (Product Owner / nhà tài trợ) — cung cấp thông tin sàng lọc\n\n### Mẫu tài liệu\n- [Bảng đánh giá phù hợp & go/no-go](https://cuongthai.com/quy-trinh/mau/checklist-danh-gia-phu-hop.md)\n- [Sổ đăng ký rủi ro](https://cuongthai.com/quy-trinh/mau/so-dang-ky-rui-ro.md)\n\n### Tiêu chuẩn tham chiếu\n- PRINCE2® 7th ed. (2023) — Nguyên tắc \"lý do kinh doanh tiếp tục chính đáng\" và thực hành Business case\n- ISO/IEC/IEEE 12207:2017 — Quy trình Cung cấp (Supply): bên cung cấp đánh giá đề nghị của bên mua và quyết định có phản hồi hay không\n- BANT (IBM) — Khung sàng lọc cơ hội: Budget, Authority, Need, Timeline\n\n### Học thêm\n- [PMG201c · Project Management](https://cuongthai.com/academy/courses/project-management)\n- [IAA202 · IS Risk Management](https://cuongthai.com/academy/courses/iaa202-risk-management-in-information-systems)\n- [SWE201c · Software Engineering](https://cuongthai.com/academy/courses/introduction-to-software-engineering)\n- [Solo Product](https://cuongthai.com/courses/solo-product)\n\n### Sai lầm hay gặp\n- Nhận mọi dự án vì sợ mất khách → quá tải và trễ hạn\n- Quyết định bằng cảm tính, không ghi lý do → không rút kinh nghiệm được\n- Bỏ qua câu hỏi \"ai trả tiền, ai quyết định\"\n- Hứa thời hạn trước khi kiểm lịch nguồn lực\n\nQuy trình đầy đủ: https://cuongthai.com/about/quy-trinh"
+      },
+      "tasks": [
+        {
+          "summary": "Chấm bảng đánh giá phù hợp (BANT + năng lực + pháp lý)",
+          "role": "sales",
+          "checklist": [
+            "Chấm đủ 10 tiêu chí, ghi bằng chứng cho từng điểm",
+            "Đánh dấu tiêu chí loại trực tiếp (pháp lý, xung đột lợi ích, đạo đức)",
+            "Đính kèm bảng chấm vào phiếu yêu cầu"
+          ]
+        },
+        {
+          "summary": "Đánh giá khả thi kỹ thuật",
+          "role": "arch",
+          "checklist": [
+            "Liệt kê công nghệ / tích hợp cần có",
+            "Đánh dấu phần ngoài năng lực hiện tại của đội",
+            "Nêu rủi ro kỹ thuật lớn và cách giảm"
+          ]
+        },
+        {
+          "summary": "Đánh giá năng lực và lịch nguồn lực",
+          "role": "pm",
+          "checklist": [
+            "Đối chiếu hạn chót với lịch các dự án đang chạy",
+            "Xác định ai sẵn sàng cho từng vai",
+            "Ghi rủi ro phụ thuộc một người"
+          ]
+        },
+        {
+          "summary": "Rà soát rủi ro pháp lý và dữ liệu cá nhân",
+          "role": "legal",
+          "checklist": [
+            "Hệ thống có xử lý dữ liệu cá nhân / dữ liệu nhạy cảm không",
+            "Có yêu cầu ngành hoặc lưu trữ trong nước không",
+            "Có xung đột lợi ích với khách hiện tại không"
+          ]
+        },
+        {
+          "summary": "Phản hồi khách bằng văn bản",
+          "role": "sales",
+          "checklist": [
+            "Nêu quyết định và điều kiện (nếu có)",
+            "Nếu \"go\": đề xuất phạm vi và thời lượng khảo sát",
+            "Nếu \"no-go\": cảm ơn, nêu lý do ngắn gọn, gợi ý hướng khác"
+          ]
+        },
+        {
+          "summary": "Cổng chất lượng — Tiền bán hàng & đánh giá phù hợp",
+          "role": "pmo",
+          "checklist": [
+            "Bảng chấm điểm hoàn thành đủ tiêu chí",
+            "Quyết định go/no-go có người duyệt và lý do bằng văn bản",
+            "Rủi ro lớn đã ghi vào sổ rủi ro sơ bộ, có người theo dõi",
+            "Khách đã nhận phản hồi bằng văn bản"
+          ],
+          "gate": true
+        }
+      ]
+    },
+    {
+      "slug": "khao-sat",
+      "n": 2,
+      "phase": "discover",
+      "title": "Khảo sát & phân tích nghiệp vụ",
+      "titleEn": "Discovery & business analysis",
+      "epic": {
+        "summary": "GĐ 02 · Khảo sát & phân tích nghiệp vụ",
+        "description": "**Mục tiêu:** Vẽ lại quy trình làm việc hiện tại của khách, tìm đúng chỗ đau, và xác định phạm vi phần mềm sẽ chạm tới.\n\nNhóm: Khám phá (Discover) · Giai đoạn 02/20 · Discovery & business analysis\n\n### Đầu vào\n- Phiếu yêu cầu, quyết định go và các điều kiện kèm theo\n- Tài liệu, biểu mẫu, báo cáo hiện có của khách\n- Dữ liệu mẫu đã ẩn danh\n\n### Điều kiện vào (entry criteria)\n- Quyết định \"go\" đã ghi lại\n- NDA đã ký nếu cần xem dữ liệu thật\n- Khách bố trí đầu mối và lịch phỏng vấn\n\n### Đầu ra bàn giao\n- Tài liệu phân tích nghiệp vụ (BA document): bối cảnh, vai trò, quy trình as-is/to-be\n- Sơ đồ ngữ cảnh + sơ đồ quy trình BPMN\n- Bảng thuật ngữ (glossary) để hai bên nói cùng một ngôn ngữ\n\n### Khách hàng tham gia\n- Sắp xếp người dùng thật cho phỏng vấn\n- Cung cấp dữ liệu mẫu (đã ẩn thông tin nhạy cảm)\n\n### Bộ phận tham gia\n- `vai:ba` Phân tích nghiệp vụ (BA) — chủ trì phỏng vấn, mô hình hoá quy trình\n- `vai:ux` Thiết kế UX/UI — quan sát người dùng, ghi chỗ đau trải nghiệm\n- `vai:arch` Kiến trúc giải pháp — khảo sát hệ thống hiện có và điểm tích hợp\n- `vai:data` Dữ liệu & AI — đánh giá dữ liệu hiện có: khối lượng, chất lượng, dữ liệu cá nhân\n- `vai:client` Khách hàng (Product Owner / nhà tài trợ) — bố trí người dùng, xác nhận kết quả\n\n### Mẫu tài liệu\n- [Tài liệu phân tích nghiệp vụ (BA)](https://cuongthai.com/quy-trinh/mau/tai-lieu-phan-tich-nghiep-vu.md)\n\n### Tiêu chuẩn tham chiếu\n- IIBA — BABOK® Guide v3 — Khung kỹ thuật phân tích nghiệp vụ: elicitation, phân tích, mô hình hoá\n- OMG BPMN 2.0.2 — Ký pháp chuẩn cho sơ đồ quy trình nghiệp vụ\n\n### Học thêm\n- [SWR302 · Software Requirements](https://cuongthai.com/academy/courses/software-requirements)\n- [SWE201c · Software Engineering](https://cuongthai.com/academy/courses/introduction-to-software-engineering)\n- [Solo Product](https://cuongthai.com/courses/solo-product)\n\n### Sai lầm hay gặp\n- Chỉ phỏng vấn quản lý, bỏ qua người dùng thật\n- Ghi giải pháp thay vì vấn đề (\"cần nút X\")\n- Không hỏi về dữ liệu cũ → bất ngờ ở bước chuyển dữ liệu\n- Nhận dữ liệu thật chưa ẩn danh\n\nQuy trình đầy đủ: https://cuongthai.com/about/quy-trinh"
+      },
+      "tasks": [
+        {
+          "summary": "Lập kế hoạch khảo sát và danh sách người phỏng vấn",
+          "role": "ba",
+          "checklist": [
+            "Liệt kê mọi nhóm người dùng chính",
+            "Chuẩn bị bộ câu hỏi theo nhóm",
+            "Đặt lịch với khách, gửi trước mục đích buổi phỏng vấn"
+          ]
+        },
+        {
+          "summary": "Phỏng vấn và quan sát người dùng",
+          "role": "ux",
+          "checklist": [
+            "Phỏng vấn ít nhất một đại diện mỗi nhóm người dùng",
+            "Quan sát thao tác thật nếu được",
+            "Ghi chỗ đau bằng nguyên lời người dùng"
+          ]
+        },
+        {
+          "summary": "Vẽ quy trình as-is / to-be (BPMN) và sơ đồ ngữ cảnh",
+          "role": "ba",
+          "checklist": [
+            "Mỗi luồng chính có sơ đồ as-is và to-be",
+            "Đánh số điểm đau trên sơ đồ as-is",
+            "Ghi phần nào phần mềm làm, phần nào vẫn làm tay"
+          ]
+        },
+        {
+          "summary": "Khảo sát hệ thống và dữ liệu hiện có",
+          "role": "data",
+          "checklist": [
+            "Liệt kê hệ thống nguồn, chủ sở hữu, khối lượng dữ liệu",
+            "Đánh giá chất lượng dữ liệu sơ bộ",
+            "Đánh dấu dữ liệu cá nhân; dữ liệu mẫu phải được ẩn danh"
+          ]
+        },
+        {
+          "summary": "Hoàn thiện tài liệu BA và glossary, xin khách xác nhận",
+          "role": "ba",
+          "checklist": [
+            "Danh sách vấn đề có xếp hạng ưu tiên",
+            "Phạm vi và ngoài phạm vi sơ bộ",
+            "Glossary định nghĩa mọi thuật ngữ nghiệp vụ",
+            "Gửi khách xác nhận bằng văn bản"
+          ]
+        },
+        {
+          "summary": "Cổng chất lượng — Khảo sát & phân tích nghiệp vụ",
+          "role": "ba",
+          "checklist": [
+            "Tài liệu BA được khách xác nhận",
+            "Sơ đồ as-is/to-be đủ cho mọi luồng chính",
+            "Danh sách hệ thống tích hợp và dữ liệu cần chuyển (khối lượng ước tính)",
+            "Danh sách vấn đề có xếp hạng ưu tiên",
+            "Glossary có định nghĩa cho thuật ngữ nghiệp vụ"
+          ],
+          "gate": true
+        }
+      ]
+    },
+    {
+      "slug": "de-xuat",
+      "n": 3,
+      "phase": "define",
+      "title": "Đề xuất giải pháp & ước lượng",
+      "titleEn": "Solution proposal & estimate",
+      "epic": {
+        "summary": "GĐ 03 · Đề xuất giải pháp & ước lượng",
+        "description": "**Mục tiêu:** Đưa ra một hướng giải quyết cụ thể (thường 2–3 phương án), ước lượng trung thực kèm khoảng sai số và lịch mốc — đủ để khách quyết định đầu tư.\n\nNhóm: Xác định (Define) · Giai đoạn 03/20 · Solution proposal & estimate\n\n### Đầu vào\n- Tài liệu BA và danh sách vấn đề ưu tiên\n- Quyết định go và điều kiện kèm theo\n- Năng lực đội và đơn giá nội bộ\n\n### Điều kiện vào (entry criteria)\n- Tài liệu BA đã được khách xác nhận\n- Biết khoảng ngân sách và thời hạn mong muốn\n\n### Đầu ra bàn giao\n- Tài liệu đề xuất (proposal): giải pháp, phạm vi, ngoài phạm vi, giả định, rủi ro\n- Bảng WBS + ước lượng ba điểm\n- Lịch mốc (milestone) và mô hình hợp tác đề xuất\n- Báo giá theo mốc (gửi riêng cho khách, không công bố)\n\n### Khách hàng tham gia\n- Chọn phương án và mức ưu tiên tính năng (MoSCoW)\n- Xác nhận các giả định — sai giả định thì ước lượng được xem lại\n\n### Bộ phận tham gia\n- `vai:sales` Kinh doanh & Tiền bán hàng — đầu mối thương mại, trình bày đề xuất\n- `vai:arch` Kiến trúc giải pháp — xây dựng và so sánh phương án kỹ thuật\n- `vai:ba` Phân tích nghiệp vụ (BA) — chốt phạm vi và MVP\n- `vai:pm` Quản lý dự án / Scrum Master — WBS, ước lượng, lịch mốc\n- `vai:pmo` Văn phòng quản lý dự án (PMO) — duyệt nội bộ trước khi gửi\n- `vai:client` Khách hàng (Product Owner / nhà tài trợ) — chọn phương án, ưu tiên phạm vi\n\n### Mẫu tài liệu\n- [Đề xuất giải pháp & ước lượng](https://cuongthai.com/quy-trinh/mau/de-xuat-giai-phap.md)\n\n### Tiêu chuẩn tham chiếu\n- PMBOK® — Three-point estimating (PERT) — Ước lượng (O + 4M + P) / 6, ghi rõ độ bất định\n- PMI — PMBOK® Guide 7th ed. — Miền \"Planning\" và \"Uncertainty\": kế hoạch có giả định, ước lượng có khoảng\n- ISO/IEC/IEEE 12207:2017 — Quy trình Cung cấp: chuẩn bị và gửi phản hồi cho bên mua\n- MoSCoW (DSDM / Agile Business Consortium) — Must / Should / Could / Won’t — ưu tiên phạm vi theo giá trị\n\n### Học thêm\n- [SWE201c · Software Engineering](https://cuongthai.com/academy/courses/introduction-to-software-engineering)\n- [PMG201c · Project Management](https://cuongthai.com/academy/courses/project-management)\n- [Solo Product](https://cuongthai.com/courses/solo-product)\n- [System Design](https://cuongthai.com/courses/system-design)\n\n### Sai lầm hay gặp\n- Ước lượng một con số duy nhất, không có khoảng\n- Quên phần không phải viết mã: kiểm thử, triển khai, đào tạo, chuyển dữ liệu, quản lý\n- Ẩn giả định → tranh cãi khi phạm vi thay đổi\n- Báo giá thấp để thắng rồi bù bằng change request\n\nQuy trình đầy đủ: https://cuongthai.com/about/quy-trinh"
+      },
+      "tasks": [
+        {
+          "summary": "Xây dựng và so sánh 2–3 phương án giải pháp",
+          "role": "arch",
+          "checklist": [
+            "So sánh tự xây / SaaS / kết hợp",
+            "Ước tính chi phí vận hành hằng tháng cho từng phương án",
+            "Nêu rủi ro và mức khoá chặt nhà cung cấp"
+          ]
+        },
+        {
+          "summary": "Lập WBS và ước lượng ba điểm",
+          "role": "pm",
+          "checklist": [
+            "WBS phủ cả kiểm thử, bảo mật, triển khai, đào tạo, chuyển dữ liệu, quản lý",
+            "Ước lượng O / M / P cho từng hạng mục, tính E = (O + 4M + P) / 6",
+            "Tách dự phòng rủi ro thành dòng riêng"
+          ]
+        },
+        {
+          "summary": "Đề xuất MVP và thứ tự ưu tiên (MoSCoW)",
+          "role": "ba",
+          "checklist": [
+            "Phân loại Must / Should / Could / Won’t",
+            "Ghi giả định và hệ quả nếu giả định sai",
+            "Xin khách chọn MVP"
+          ]
+        },
+        {
+          "summary": "Soạn đề xuất và lịch mốc, duyệt nội bộ",
+          "role": "sales",
+          "checklist": [
+            "Tóm tắt 1 trang cho người quyết định",
+            "Lịch mốc kèm tiêu chí nghiệm thu từng mốc",
+            "Chi phí bên thứ ba liệt kê riêng; báo giá gửi riêng",
+            "PMO duyệt trước khi gửi; đặt ngày hết hiệu lực"
+          ]
+        },
+        {
+          "summary": "Trình bày đề xuất và ghi nhận lựa chọn của khách",
+          "role": "client",
+          "checklist": [
+            "Khách chọn phương án",
+            "Khách xác nhận MVP và giả định bằng văn bản",
+            "Câu hỏi còn mở có hạn trả lời"
+          ]
+        },
+        {
+          "summary": "Cổng chất lượng — Đề xuất giải pháp & ước lượng",
+          "role": "sales",
+          "checklist": [
+            "Đề xuất có phạm vi, ngoài phạm vi, giả định, rủi ro",
+            "Ước lượng có khoảng (O–M–P) và mức tin cậy",
+            "Khách đã chọn phương án, MVP và thứ tự ưu tiên",
+            "Đề xuất đã qua duyệt nội bộ trước khi gửi"
+          ],
+          "gate": true
+        }
+      ]
+    },
+    {
+      "slug": "phap-ly-tai-chinh",
+      "n": 4,
+      "phase": "define",
+      "title": "Hợp đồng, pháp lý & khởi động",
+      "titleEn": "Contract, legal & kick-off",
+      "epic": {
+        "summary": "GĐ 04 · Hợp đồng, pháp lý & khởi động",
+        "description": "**Mục tiêu:** Chốt khung pháp lý và tài chính trước khi làm: ai sở hữu gì, thanh toán theo mốc nào, nghiệm thu ra sao, dữ liệu được xử lý thế nào — rồi khởi động dự án với đúng người.\n\nNhóm: Xác định (Define) · Giai đoạn 04/20 · Contract, legal & kick-off\n\n### Đầu vào\n- Đề xuất đã được chấp thuận\n- Mẫu hợp đồng của hai bên\n- Thông tin pháp nhân và người ký\n\n### Điều kiện vào (entry criteria)\n- Khách đã chọn phương án và MVP bằng văn bản\n- Có người có thẩm quyền ký phía khách\n\n### Đầu ra bàn giao\n- Hợp đồng khung (MSA) + SOW đã ký\n- Phụ lục: lịch thanh toán theo mốc, tiêu chí nghiệm thu, điều khoản bảo hành\n- Danh mục giấy phép bên thứ ba (sơ bộ)\n- Thoả thuận xử lý dữ liệu (nếu áp dụng)\n- Biên bản họp kick-off\n\n### Khách hàng tham gia\n- Bộ phận pháp chế của khách rà soát và ký\n- Cử Product Owner và nhà tài trợ dự án (sponsor)\n- Dự họp kick-off với người có quyền quyết định\n\n### Bộ phận tham gia\n- `vai:legal` Pháp lý & Tài chính — hợp đồng, sở hữu trí tuệ, DPA, hoá đơn\n- `vai:sales` Kinh doanh & Tiền bán hàng — đàm phán điều khoản thương mại\n- `vai:pm` Quản lý dự án / Scrum Master — viết SOW, chủ trì kick-off\n- `vai:arch` Kiến trúc giải pháp — danh mục giấy phép bên thứ ba\n- `vai:pmo` Văn phòng quản lý dự án (PMO) — duyệt điều khoản và người ký phía nhà cung cấp\n- `vai:client` Khách hàng (Product Owner / nhà tài trợ) — rà soát, ký, cử Product Owner\n\n### Mẫu tài liệu\n- [Hợp đồng khung (MSA) — mẫu tham khảo](https://cuongthai.com/quy-trinh/mau/hop-dong-khung.md)\n- [Phạm vi công việc (SOW)](https://cuongthai.com/quy-trinh/mau/sow.md)\n- [Biên bản họp kick-off](https://cuongthai.com/quy-trinh/mau/bien-ban-kick-off.md)\n\n### Tiêu chuẩn tham chiếu\n- Bộ luật Dân sự 2015 (91/2015/QH13) — Khung pháp lý cho hợp đồng dịch vụ\n- Luật Sở hữu trí tuệ 2005 (sửa đổi 2009, 2019, 2022) — Chương trình máy tính được bảo hộ quyền tác giả như tác phẩm văn học\n- Luật Giao dịch điện tử 2023 (20/2023/QH15) — Giá trị pháp lý của hợp đồng và chữ ký điện tử\n- Nghị định 123/2020/NĐ-CP — Hoá đơn, chứng từ điện tử (kèm văn bản sửa đổi, bổ sung hiện hành)\n- ISO/IEC 5230:2020 (OpenChain) — Chương trình tuân thủ giấy phép mã nguồn mở\n- Nghị định 13/2023/NĐ-CP — Phân vai Bên Kiểm soát / Bên Xử lý dữ liệu cá nhân trong hợp đồng\n\n### Học thêm\n- [LAW102 · Business Law & Ethics](https://cuongthai.com/academy/courses/law102-business-law-and-ethics-fundamentals)\n- [Privacy & Data Law](https://cuongthai.com/courses/privacy-data-law)\n- [Online Payments](https://cuongthai.com/courses/online-payments)\n- [PMG201c · Project Management](https://cuongthai.com/academy/courses/project-management)\n\n### Sai lầm hay gặp\n- Dùng mẫu hợp đồng trên mạng không qua luật sư\n- Không ghi thời điểm chuyển giao sở hữu trí tuệ → tranh chấp mã nguồn\n- Hợp đồng trọn gói nhưng thanh toán theo thời gian thay vì theo mốc nghiệm thu\n- Quên giấy phép bên thứ ba (font, thư viện GPL, API trả phí) đi kèm sản phẩm\n- Kick-off thiếu người ra quyết định phía khách\n\nQuy trình đầy đủ: https://cuongthai.com/about/quy-trinh"
+      },
+      "tasks": [
+        {
+          "summary": "Soạn hợp đồng khung (MSA) và SOW",
+          "role": "legal",
+          "checklist": [
+            "SOW khớp đề xuất đã duyệt: phạm vi, ngoài phạm vi, mốc",
+            "Tiêu chí nghiệm thu từng mốc đo được",
+            "Bảo hành, giới hạn trách nhiệm, chấm dứt và trả dữ liệu",
+            "Luật sư rà soát trước khi gửi"
+          ]
+        },
+        {
+          "summary": "Chốt điều khoản sở hữu trí tuệ và danh mục giấy phép bên thứ ba",
+          "role": "arch",
+          "checklist": [
+            "Liệt kê thư viện, font, ảnh, API trả phí và giấy phép của chúng",
+            "Đánh dấu giấy phép có nghĩa vụ đặc biệt (copyleft…)",
+            "Ghi thời điểm chuyển giao quyền sở hữu mã nguồn"
+          ]
+        },
+        {
+          "summary": "Lập lịch thanh toán theo mốc và thông tin hoá đơn",
+          "role": "legal",
+          "checklist": [
+            "Mỗi mốc thanh toán gắn với một biên bản nghiệm thu",
+            "Thông tin xuất hoá đơn điện tử của khách",
+            "Thời hạn thanh toán và xử lý chậm trả"
+          ]
+        },
+        {
+          "summary": "Thoả thuận xử lý dữ liệu (DPA) nếu xử lý dữ liệu cá nhân",
+          "role": "legal",
+          "checklist": [
+            "Xác định bên kiểm soát / bên xử lý dữ liệu",
+            "Biện pháp bảo vệ và thời hạn thông báo vi phạm",
+            "Quy tắc trả và xoá dữ liệu khi kết thúc"
+          ]
+        },
+        {
+          "summary": "Ký hợp đồng (hai bên)",
+          "role": "client",
+          "checklist": [
+            "Người ký có thẩm quyền ở cả hai bên",
+            "Chữ ký số hoặc bản ký tay được lưu",
+            "Product Owner và nhà tài trợ phía khách được chỉ định"
+          ]
+        },
+        {
+          "summary": "Họp kick-off và gửi biên bản",
+          "role": "pm",
+          "checklist": [
+            "Có mặt người ra quyết định của khách",
+            "Thống nhất RACI, kênh liên lạc, nhịp báo cáo, đường leo thang",
+            "Thống nhất quy trình thay đổi (CR)",
+            "Gửi biên bản và danh sách việc trong 24 giờ"
+          ]
+        },
+        {
+          "summary": "Cổng chất lượng — Hợp đồng, pháp lý & khởi động",
+          "role": "legal",
+          "checklist": [
+            "MSA + SOW + phụ lục đã ký bởi người có thẩm quyền",
+            "Điều khoản sở hữu trí tuệ, bảo mật, dữ liệu cá nhân rõ ràng",
+            "Lịch thanh toán gắn với mốc nghiệm thu",
+            "Kick-off đã họp, biên bản đã gửi",
+            "Danh sách đầu mối và kênh liên lạc được hai bên xác nhận"
+          ],
+          "gate": true
+        }
+      ]
+    },
+    {
+      "slug": "dac-ta-yeu-cau",
+      "n": 5,
+      "phase": "define",
+      "title": "Đặc tả yêu cầu",
+      "titleEn": "Requirements specification",
+      "epic": {
+        "summary": "GĐ 05 · Đặc tả yêu cầu",
+        "description": "**Mục tiêu:** Biến mong muốn thành yêu cầu kiểm chứng được: ai làm gì, trong điều kiện nào, và thế nào thì coi là \"xong\".\n\nNhóm: Xác định (Define) · Giai đoạn 05/20 · Requirements specification\n\n### Đầu vào\n- Tài liệu BA, SOW đã ký\n- Biên bản kick-off\n\n### Điều kiện vào (entry criteria)\n- SOW đã ký\n- Product Owner phía khách đã được chỉ định\n\n### Đầu ra bàn giao\n- SRS (Software Requirements Specification)\n- Product backlog với user story + acceptance criteria\n- Danh sách NFR có số đo (vd: trang chính < 2,5 s LCP trên 4G)\n- Ma trận truy vết (RTM)\n\n### Khách hàng tham gia\n- Đọc và ký duyệt SRS / backlog\n- Xác nhận tiêu chí chấp nhận — đây là căn cứ nghiệm thu sau này\n\n### Bộ phận tham gia\n- `vai:ba` Phân tích nghiệp vụ (BA) — viết SRS, user story, RTM\n- `vai:qa` Đảm bảo chất lượng (QA/QC) — bảo đảm tiêu chí chấp nhận kiểm thử được\n- `vai:arch` Kiến trúc giải pháp — chốt NFR có số đo\n- `vai:sec` Bảo mật ứng dụng (AppSec) — yêu cầu bảo mật & dữ liệu cá nhân\n- `vai:ux` Thiết kế UX/UI — tham vấn luồng thao tác\n- `vai:client` Khách hàng (Product Owner / nhà tài trợ) — ký duyệt SRS và tiêu chí chấp nhận\n\n### Mẫu tài liệu\n- [Đặc tả yêu cầu phần mềm (SRS)](https://cuongthai.com/quy-trinh/mau/srs.md)\n- [Phiếu yêu cầu thay đổi (CR)](https://cuongthai.com/quy-trinh/mau/phieu-yeu-cau-thay-doi.md)\n\n### Tiêu chuẩn tham chiếu\n- ISO/IEC/IEEE 29148:2018 — Kỹ nghệ yêu cầu — cấu trúc và đặc tính của một SRS tốt\n- ISO/IEC 25010:2023 — Mô hình chất lượng sản phẩm — khung để liệt kê NFR\n- INVEST (Bill Wake) — Tiêu chí user story tốt: độc lập, thương lượng được, có giá trị, ước lượng được, nhỏ, kiểm thử được\n\n### Học thêm\n- [SWR302 · Software Requirements](https://cuongthai.com/academy/courses/software-requirements)\n- [SWP391 · Dev Project](https://cuongthai.com/academy/courses/software-development-project)\n- [Agile & Teamwork](https://cuongthai.com/courses/agile-teamwork)\n\n### Sai lầm hay gặp\n- Yêu cầu không kiểm thử được\n- Bỏ NFR đến cuối → kiến trúc phải làm lại\n- SRS viết xong để đó, không cập nhật theo CR\n- Trộn yêu cầu với giải pháp giao diện\n\nQuy trình đầy đủ: https://cuongthai.com/about/quy-trinh"
+      },
+      "tasks": [
+        {
+          "summary": "Viết use case và user story theo vai trò",
+          "role": "ba",
+          "checklist": [
+            "Mỗi tác nhân có danh sách use case",
+            "Mỗi story theo INVEST",
+            "Ma trận phân quyền màn hình theo vai trò"
+          ]
+        },
+        {
+          "summary": "Viết tiêu chí chấp nhận (Given / When / Then)",
+          "role": "qa",
+          "checklist": [
+            "Mọi story của sprint đầu có tiêu chí chấp nhận",
+            "Có kịch bản lỗi và giá trị biên, không chỉ đường thuận",
+            "Tiêu chí kiểm thử được, không có từ mơ hồ"
+          ]
+        },
+        {
+          "summary": "Chốt yêu cầu phi chức năng có số đo",
+          "role": "arch",
+          "checklist": [
+            "Hiệu năng, khả dụng, bảo mật, truy cập, sao lưu (RPO / RTO)",
+            "Mỗi NFR có số đo mục tiêu và cách đo",
+            "Trình duyệt / thiết bị được hỗ trợ"
+          ]
+        },
+        {
+          "summary": "Liệt kê yêu cầu bảo mật và dữ liệu cá nhân",
+          "role": "sec",
+          "checklist": [
+            "Chọn mức OWASP ASVS mục tiêu",
+            "Dữ liệu cá nhân: thu gì, vì sao, giữ bao lâu, ai xem",
+            "Yêu cầu nhật ký kiểm toán (audit log)"
+          ]
+        },
+        {
+          "summary": "Lập ma trận truy vết (RTM) và xin ký duyệt SRS",
+          "role": "ba",
+          "checklist": [
+            "Mỗi yêu cầu có ID duy nhất và nằm trong RTM",
+            "Quy tắc nghiệp vụ và thông báo hệ thống có ID",
+            "SRS có số phiên bản; khách ký duyệt"
+          ]
+        },
+        {
+          "summary": "Cổng chất lượng — Đặc tả yêu cầu",
+          "role": "ba",
+          "checklist": [
+            "SRS được ký duyệt, có số phiên bản và ngày",
+            "Mọi story của sprint đầu có tiêu chí chấp nhận",
+            "Mỗi NFR có số đo và cách đo",
+            "RTM đã khởi tạo",
+            "Từ mốc này, mọi thay đổi đi qua phiếu CR"
+          ],
+          "gate": true
+        }
+      ]
+    },
+    {
+      "slug": "thiet-ke-ux-ui",
+      "n": 6,
+      "phase": "design",
+      "title": "Thiết kế UX/UI",
+      "titleEn": "UX/UI design",
+      "epic": {
+        "summary": "GĐ 06 · Thiết kế UX/UI",
+        "description": "**Mục tiêu:** Cho khách \"chạm\" vào sản phẩm trước khi viết mã: luồng thao tác rõ, giao diện nhất quán, dùng được cho cả người khiếm thị và trên điện thoại.\n\nNhóm: Thiết kế (Design) · Giai đoạn 06/20 · UX/UI design\n\n### Đầu vào\n- SRS và user story có tiêu chí chấp nhận\n- Nhận diện thương hiệu\n- Kết quả khảo sát người dùng (persona, chỗ đau)\n\n### Điều kiện vào (entry criteria)\n- Luồng chính đã có user story và tiêu chí chấp nhận\n- Có nhận diện thương hiệu hoặc đã thống nhất làm mới\n\n### Đầu ra bàn giao\n- Wireframe + mockup mọi màn hình chính (desktop & mobile)\n- Prototype tương tác\n- Ghi chú kiểm thử khả dụng & danh sách chỉnh sửa\n- Design tokens / thư viện component\n\n### Khách hàng tham gia\n- Góp ý prototype theo từng vòng\n- Cung cấp nhận diện thương hiệu (logo, màu, font)\n\n### Bộ phận tham gia\n- `vai:ux` Thiết kế UX/UI — thiết kế luồng, giao diện, kiểm thử khả dụng\n- `vai:ba` Phân tích nghiệp vụ (BA) — đối chiếu thiết kế với yêu cầu\n- `vai:dev` Phát triển (FE · BE · Mobile) — đánh giá khả thi, nhận design tokens\n- `vai:qa` Đảm bảo chất lượng (QA/QC) — rà truy cập (a11y) trên thiết kế\n- `vai:client` Khách hàng (Product Owner / nhà tài trợ) — góp ý và duyệt prototype\n\n### Mẫu tài liệu\n- [Kế hoạch & kết quả kiểm thử khả dụng](https://cuongthai.com/quy-trinh/mau/kiem-thu-kha-dung.md)\n\n### Tiêu chuẩn tham chiếu\n- WCAG 2.2 (W3C, 2023) — Tiêu chuẩn truy cập nội dung web — mục tiêu mức AA\n- ISO 9241-210:2019 — Thiết kế lấy con người làm trung tâm\n- Nielsen — 10 Usability Heuristics — Bộ nguyên tắc đánh giá nhanh giao diện\n\n### Học thêm\n- [UX/UI for Developers](https://cuongthai.com/courses/ux-ui-for-developers)\n- [Tailwind CSS](https://cuongthai.com/courses/tailwind-css)\n- [React](https://cuongthai.com/courses/react)\n\n### Sai lầm hay gặp\n- Thiết kế chỉ cho desktop\n- Không có trạng thái lỗi / rỗng\n- Prototype đẹp nhưng không khả thi kỹ thuật\n- Duyệt bằng ảnh tĩnh thay vì cho người dùng bấm thử\n\nQuy trình đầy đủ: https://cuongthai.com/about/quy-trinh"
+      },
+      "tasks": [
+        {
+          "summary": "Vẽ user flow và sitemap",
+          "role": "ux",
+          "checklist": [
+            "Mỗi luồng chính có user flow",
+            "Sitemap / sơ đồ màn hình đầy đủ",
+            "BA đối chiếu với SRS"
+          ]
+        },
+        {
+          "summary": "Wireframe rồi mockup desktop và mobile",
+          "role": "ux",
+          "checklist": [
+            "Trạng thái tải / lỗi / rỗng cho mỗi màn hình",
+            "Bố cục chạy từ chiều rộng 360 px",
+            "Dùng nội dung thật thay lorem ipsum"
+          ]
+        },
+        {
+          "summary": "Prototype và kiểm thử khả dụng với 3–5 người dùng",
+          "role": "ux",
+          "checklist": [
+            "Có đồng ý tham gia và ghi hình",
+            "Mỗi nhiệm vụ có điều kiện thành công",
+            "Ghi phát hiện kèm mức độ và đề xuất sửa"
+          ]
+        },
+        {
+          "summary": "Rà truy cập (WCAG 2.2 AA) trên thiết kế",
+          "role": "qa",
+          "checklist": [
+            "Tương phản chữ thường ≥ 4.5:1",
+            "Vùng chạm ≥ 24×24 px",
+            "Thứ tự focus và trạng thái focus nhìn thấy"
+          ]
+        },
+        {
+          "summary": "Bàn giao design tokens / thư viện component",
+          "role": "dev",
+          "checklist": [
+            "Màu, chữ, khoảng cách, bo góc thành tokens",
+            "Chế độ sáng / tối (nếu có)",
+            "Đánh giá khả thi kỹ thuật các tương tác phức tạp"
+          ]
+        },
+        {
+          "summary": "Cổng chất lượng — Thiết kế UX/UI",
+          "role": "ux",
+          "checklist": [
+            "Mockup mọi màn hình chính trên desktop và mobile",
+            "Prototype được khách duyệt bằng văn bản",
+            "Kết quả kiểm thử khả dụng đã được áp dụng hoặc ghi lý do không áp dụng",
+            "Design tokens bàn giao cho đội phát triển",
+            "Thiết kế đạt kiểm tra WCAG 2.2 AA (tương phản, kích thước vùng chạm, thứ tự focus)"
+          ],
+          "gate": true
+        }
+      ]
+    },
+    {
+      "slug": "kien-truc",
+      "n": 7,
+      "phase": "design",
+      "title": "Kiến trúc & thiết kế kỹ thuật",
+      "titleEn": "Architecture & technical design",
+      "epic": {
+        "summary": "GĐ 07 · Kiến trúc & thiết kế kỹ thuật",
+        "description": "**Mục tiêu:** Quyết định hệ thống được chia thế nào, dữ liệu nằm ở đâu, các phần nói chuyện với nhau ra sao — và ghi lại vì sao chọn như vậy.\n\nNhóm: Thiết kế (Design) · Giai đoạn 07/20 · Architecture & technical design\n\n### Đầu vào\n- SRS và NFR có số đo\n- Prototype đã duyệt\n- Ràng buộc hạ tầng và ngân sách vận hành\n\n### Điều kiện vào (entry criteria)\n- SRS đã được duyệt\n- NFR có số đo\n\n### Đầu ra bàn giao\n- SDD / SAD: sơ đồ C4 (ngữ cảnh, container, component), sơ đồ triển khai\n- ERD + từ điển dữ liệu\n- Đặc tả API OpenAPI 3.1\n- Danh sách ADR\n- Threat model + biện pháp giảm thiểu\n\n### Khách hàng tham gia\n- Xác nhận ràng buộc hạ tầng / chi phí vận hành hằng tháng\n- Cấp thông tin tích hợp bên thứ ba (API key thử nghiệm, tài liệu)\n\n### Bộ phận tham gia\n- `vai:arch` Kiến trúc giải pháp — chủ trì kiến trúc, ADR, review thiết kế\n- `vai:dev` Phát triển (FE · BE · Mobile) — thiết kế chi tiết, hợp đồng API\n- `vai:data` Dữ liệu & AI — ERD, từ điển dữ liệu, chiến lược migration\n- `vai:sec` Bảo mật ứng dụng (AppSec) — threat model và biện pháp giảm thiểu\n- `vai:devops` DevOps / SRE — sơ đồ triển khai, ràng buộc vận hành\n- `vai:client` Khách hàng (Product Owner / nhà tài trợ) — duyệt chi phí vận hành, cấp thông tin tích hợp\n\n### Mẫu tài liệu\n- [Tài liệu thiết kế phần mềm (SDD)](https://cuongthai.com/quy-trinh/mau/sdd.md)\n- [Ghi quyết định kiến trúc (ADR)](https://cuongthai.com/quy-trinh/mau/adr.md)\n\n### Tiêu chuẩn tham chiếu\n- ISO/IEC/IEEE 42010:2022 — Mô tả kiến trúc: quan điểm, góc nhìn, bên liên quan\n- IEEE 1016-2009 — Cấu trúc tài liệu thiết kế phần mềm (SDD)\n- OpenAPI Specification 3.1 — Chuẩn mô tả REST API máy đọc được\n- C4 model · ADR (M. Nygard) — Sơ đồ kiến trúc 4 mức + ghi quyết định ngắn gọn\n- STRIDE (Microsoft) — Phân loại mối đe doạ khi threat modeling\n\n### Học thêm\n- [SWD392 · Architecture & Design](https://cuongthai.com/academy/courses/software-architecture-and-design)\n- [DBI202 · Databases](https://cuongthai.com/academy/courses/introduction-to-databases)\n- [System Design](https://cuongthai.com/courses/system-design)\n- [API Design](https://cuongthai.com/courses/api-design)\n- [Threat Modeling](https://cuongthai.com/courses/threat-modeling)\n- [PostgreSQL](https://cuongthai.com/courses/postgresql)\n\n### Sai lầm hay gặp\n- Microservices cho hệ thống nhỏ\n- Không ghi ADR → sau vài tháng không ai nhớ vì sao\n- API thiết kế theo bảng CSDL thay vì theo use case\n- Threat model làm một lần rồi bỏ\n\nQuy trình đầy đủ: https://cuongthai.com/about/quy-trinh"
+      },
+      "tasks": [
+        {
+          "summary": "Chọn kiểu kiến trúc và vẽ sơ đồ C4 (mức 1–3)",
+          "role": "arch",
+          "checklist": [
+            "Kiểu kiến trúc theo quy mô thật, có lý do",
+            "Sơ đồ ngữ cảnh, container, component",
+            "Sơ đồ triển khai cho dev / staging / production"
+          ]
+        },
+        {
+          "summary": "Thiết kế CSDL: ERD, từ điển dữ liệu, chiến lược migration",
+          "role": "data",
+          "checklist": [
+            "ERD chuẩn hoá, chỉ mục cho truy vấn chính",
+            "Từ điển dữ liệu đánh dấu trường dữ liệu cá nhân",
+            "Migration có phiên bản, chạy lại an toàn"
+          ]
+        },
+        {
+          "summary": "Viết hợp đồng API (OpenAPI 3.1)",
+          "role": "dev",
+          "checklist": [
+            "API thiết kế theo use case, không theo bảng",
+            "Định dạng lỗi và phản hồi thống nhất",
+            "Khoá phần API của sprint đầu"
+          ]
+        },
+        {
+          "summary": "Threat model (STRIDE) cho luồng dữ liệu nhạy cảm",
+          "role": "sec",
+          "checklist": [
+            "Vẽ luồng dữ liệu và ranh giới tin cậy",
+            "Liệt kê mối đe doạ theo STRIDE",
+            "Đưa biện pháp giảm thiểu vào backlog"
+          ]
+        },
+        {
+          "summary": "Ghi ADR và họp review thiết kế",
+          "role": "arch",
+          "checklist": [
+            "Mỗi quyết định khó đảo ngược có ADR",
+            "Mỗi NFR có cơ chế đáp ứng trong thiết kế",
+            "Biên bản review có danh sách việc"
+          ]
+        },
+        {
+          "summary": "Duyệt chi phí hạ tầng và vận hành hằng tháng",
+          "role": "client",
+          "checklist": [
+            "Bảng chi phí vận hành theo giả định tải",
+            "Tài khoản cloud / dịch vụ đứng tên khách",
+            "Khách duyệt bằng văn bản"
+          ]
+        },
+        {
+          "summary": "Cổng chất lượng — Kiến trúc & thiết kế kỹ thuật",
+          "role": "arch",
+          "checklist": [
+            "SDD có C4 mức 1–3 và sơ đồ triển khai",
+            "ERD, từ điển dữ liệu và chiến lược migration hoàn chỉnh",
+            "OpenAPI cho sprint đầu đã khoá",
+            "Biện pháp từ threat model đã vào backlog",
+            "Mọi quyết định khó đảo ngược có ADR; review thiết kế có biên bản"
+          ],
+          "gate": true
+        }
+      ]
+    },
+    {
+      "slug": "lap-ke-hoach",
+      "n": 8,
+      "phase": "build",
+      "title": "Lập kế hoạch & thiết lập dự án",
+      "titleEn": "Planning & project setup",
+      "epic": {
+        "summary": "GĐ 08 · Lập kế hoạch & thiết lập dự án",
+        "description": "**Mục tiêu:** Dựng \"đường ray\" trước khi chạy tàu: kế hoạch có baseline, kho mã, pipeline kiểm tra tự động, ba môi trường tách biệt và nhịp báo cáo.\n\nNhóm: Xây dựng (Build) · Giai đoạn 08/20 · Planning & project setup\n\n### Đầu vào\n- SOW, SRS, SDD\n- Backlog đã ưu tiên\n\n### Điều kiện vào (entry criteria)\n- SDD và API contract của sprint đầu đã khoá\n- Đội và vai trò đã xác nhận\n\n### Đầu ra bàn giao\n- Kế hoạch dự án có baseline + lịch sprint + Definition of Done\n- Repo có README, CONTRIBUTING, .env.example, pipeline CI chạy xanh\n- Môi trường staging truy cập được cho khách\n- Sổ rủi ro và kế hoạch truyền thông\n\n### Khách hàng tham gia\n- Chỉ định một đầu mối duyệt (product owner phía khách)\n- Được mời vào board công việc để theo dõi\n\n### Bộ phận tham gia\n- `vai:pm` Quản lý dự án / Scrum Master — kế hoạch, lịch sprint, sổ rủi ro, truyền thông\n- `vai:devops` DevOps / SRE — CI/CD và các môi trường\n- `vai:dev` Phát triển (FE · BE · Mobile) — repo, quy ước nhánh, khung dự án\n- `vai:qa` Đảm bảo chất lượng (QA/QC) — đồng thiết kế Definition of Done\n- `vai:pmo` Văn phòng quản lý dự án (PMO) — duyệt baseline kế hoạch\n- `vai:client` Khách hàng (Product Owner / nhà tài trợ) — chỉ định Product Owner, theo dõi board\n\n### Mẫu tài liệu\n- [Kế hoạch quản lý dự án](https://cuongthai.com/quy-trinh/mau/ke-hoach-du-an.md)\n- [Sổ đăng ký rủi ro](https://cuongthai.com/quy-trinh/mau/so-dang-ky-rui-ro.md)\n- [Báo cáo tiến độ tuần](https://cuongthai.com/quy-trinh/mau/bao-cao-tuan.md)\n\n### Tiêu chuẩn tham chiếu\n- The Scrum Guide (2020) — Sự kiện, vai trò, artefact của Scrum\n- The Twelve-Factor App — Cấu hình qua env, tách build/release/run, dev ≈ prod\n- Conventional Commits 1.0.0 — Quy ước thông điệp commit đọc được bằng máy\n- ISO 31000:2018 — Quản lý rủi ro — nguyên tắc và hướng dẫn\n\n### Học thêm\n- [Agile & Teamwork](https://cuongthai.com/courses/agile-teamwork)\n- [PMG201c · Project Management](https://cuongthai.com/academy/courses/project-management)\n- [Git](https://cuongthai.com/courses/git)\n- [GitHub Actions](https://cuongthai.com/courses/github-actions)\n- [Docker](https://cuongthai.com/courses/docker)\n- [SWP391 · Dev Project](https://cuongthai.com/academy/courses/software-development-project)\n\n### Sai lầm hay gặp\n- Bắt đầu code trước khi có CI → nợ kỹ thuật ngay từ đầu\n- Dùng chung CSDL giữa staging và production\n- Definition of Done mơ hồ\n- Không có baseline nên không đo được trễ bao nhiêu\n\nQuy trình đầy đủ: https://cuongthai.com/about/quy-trinh"
+      },
+      "tasks": [
+        {
+          "summary": "Lập kế hoạch dự án có baseline và lịch sprint",
+          "role": "pm",
+          "checklist": [
+            "Phạm vi, lịch, nguồn lực, rủi ro trong một tài liệu",
+            "Lịch sprint và ngày demo",
+            "PMO duyệt baseline"
+          ]
+        },
+        {
+          "summary": "Thống nhất Definition of Ready / Definition of Done",
+          "role": "qa",
+          "checklist": [
+            "DoD gồm review, CI xanh, test, chạy trên staging, tài liệu",
+            "DoR gồm tiêu chí chấp nhận, thiết kế đã duyệt, ước lượng",
+            "Đội và Product Owner cùng đồng ý"
+          ]
+        },
+        {
+          "summary": "Tạo repo, quy ước nhánh, mẫu PR, bảo vệ main",
+          "role": "dev",
+          "checklist": [
+            "README, CONTRIBUTING, .env.example đầy đủ",
+            "Main bắt buộc review và CI xanh",
+            "Quy ước commit (Conventional Commits)"
+          ]
+        },
+        {
+          "summary": "Dựng CI và ba môi trường dev / staging / production",
+          "role": "devops",
+          "checklist": [
+            "CI chạy lint, kiểm kiểu, test, build trên mỗi PR",
+            "Mỗi môi trường có CSDL và bí mật riêng",
+            "Staging chạy end-to-end bản \"hello world\""
+          ]
+        },
+        {
+          "summary": "Lập sổ rủi ro, kế hoạch truyền thông, mẫu báo cáo tuần",
+          "role": "pm",
+          "checklist": [
+            "Mỗi rủi ro có người theo dõi và phương án",
+            "Lịch họp định kỳ đã gửi",
+            "Khách có link xem board công việc"
+          ]
+        },
+        {
+          "summary": "Cổng chất lượng — Lập kế hoạch & thiết lập dự án",
+          "role": "pm",
+          "checklist": [
+            "Kế hoạch có baseline: phạm vi, lịch, nguồn lực, rủi ro",
+            "Definition of Done đã thống nhất",
+            "CI xanh trên main",
+            "Staging chạy end-to-end bản \"hello world\"",
+            "Khách có quyền xem board công việc"
+          ],
+          "gate": true
+        }
+      ]
+    },
+    {
+      "slug": "phat-trien",
+      "n": 9,
+      "phase": "build",
+      "title": "Phát triển",
+      "titleEn": "Development",
+      "epic": {
+        "summary": "GĐ 09 · Phát triển",
+        "description": "**Mục tiêu:** Làm ra phần mềm chạy được theo từng lát mỏng, mỗi sprint có thứ để khách bấm thử, mỗi dòng mã đều qua review.\n\nNhóm: Xây dựng (Build) · Giai đoạn 09/20 · Development\n\n### Đầu vào\n- Backlog sprint với tiêu chí chấp nhận\n- Mockup, design tokens, API contract\n- Definition of Done\n\n### Điều kiện vào (entry criteria)\n- CI xanh, môi trường staging sẵn sàng\n- Story trong sprint có tiêu chí chấp nhận và thiết kế đã duyệt\n\n### Đầu ra bàn giao\n- Mã nguồn trong repo, lịch sử commit sạch\n- Bản build staging sau mỗi sprint + ghi chú thay đổi\n- Tài liệu API cập nhật, sổ tay dev\n- Báo cáo tiến độ tuần\n\n### Khách hàng tham gia\n- Dự demo cuối sprint, thử trên staging, phản hồi trong 2–3 ngày\n- Ưu tiên lại backlog; duyệt hoặc từ chối phiếu CR\n\n### Bộ phận tham gia\n- `vai:dev` Phát triển (FE · BE · Mobile) — viết mã, review chéo, migration\n- `vai:data` Dữ liệu & AI — tính năng AI / dữ liệu: prompt, eval, trần chi phí\n- `vai:qa` Đảm bảo chất lượng (QA/QC) — viết test song song, kiểm story theo DoD\n- `vai:arch` Kiến trúc giải pháp — review thiết kế trong PR lớn\n- `vai:pm` Quản lý dự án / Scrum Master — điều phối sprint, demo, CR\n- `vai:client` Khách hàng (Product Owner / nhà tài trợ) — dự demo, phản hồi, duyệt CR\n\n### Mẫu tài liệu\n- [Phiếu yêu cầu thay đổi (CR)](https://cuongthai.com/quy-trinh/mau/phieu-yeu-cau-thay-doi.md)\n- [Báo cáo tiến độ tuần](https://cuongthai.com/quy-trinh/mau/bao-cao-tuan.md)\n\n### Tiêu chuẩn tham chiếu\n- Google Engineering Practices — Code Review — Hướng dẫn review mã: người review nhìn gì, PR nhỏ thế nào\n- GitHub Flow / trunk-based — Nhánh ngắn, merge thường xuyên, main luôn deploy được\n- ISO/IEC 27001:2022 — Annex A 8.25–8.28 — Vòng đời phát triển an toàn và lập trình an toàn\n\n### Học thêm\n- [PRJ301 · Java Web](https://cuongthai.com/academy/courses/java-web-application-development)\n- [Spring Boot](https://cuongthai.com/courses/spring-boot)\n- [Node.js](https://cuongthai.com/courses/nodejs)\n- [Next.js](https://cuongthai.com/courses/nextjs)\n- [React](https://cuongthai.com/courses/react)\n- [React Native](https://cuongthai.com/courses/react-native)\n- [TypeScript](https://cuongthai.com/courses/typescript)\n- [Prisma ORM](https://cuongthai.com/courses/prisma-orm)\n- [LLM Apps](https://cuongthai.com/courses/llm-apps)\n- [Full-stack Project](https://cuongthai.com/courses/fullstack-project)\n\n### Sai lầm hay gặp\n- PR khổng lồ, review cho có\n- \"Chạy trên máy tôi\" nhưng chưa chạy trên staging\n- Sửa theo yêu cầu miệng, không qua CR\n- Tin rằng kiểm kiểu xanh là build xanh\n\nQuy trình đầy đủ: https://cuongthai.com/about/quy-trinh"
+      },
+      "tasks": [
+        {
+          "summary": "Phát triển backend và migration theo hợp đồng API",
+          "role": "dev",
+          "checklist": [
+            "Unit test cho nghiệp vụ mới",
+            "Migration chạy được trên bản sao dữ liệu thật",
+            "Không log dữ liệu cá nhân hay bí mật"
+          ]
+        },
+        {
+          "summary": "Phát triển frontend / mobile theo design system",
+          "role": "dev",
+          "checklist": [
+            "Đủ trạng thái tải / lỗi / rỗng",
+            "Responsive và truy cập theo thiết kế đã duyệt",
+            "Gọi API qua lớp client chung, xử lý lỗi thống nhất"
+          ]
+        },
+        {
+          "summary": "Tính năng AI: prompt có phiên bản, eval, trần chi phí (nếu có)",
+          "role": "data",
+          "checklist": [
+            "Bộ eval với câu hỏi thật trước khi chọn model",
+            "Trần chi phí theo ngày / người dùng",
+            "Đường lùi khi nhà cung cấp lỗi"
+          ]
+        },
+        {
+          "summary": "Review mã và merge",
+          "role": "dev",
+          "checklist": [
+            "PR nhỏ, có mô tả và liên kết story",
+            "Người review khác người viết",
+            "CI xanh trên bản cuối trước khi merge"
+          ]
+        },
+        {
+          "summary": "Demo cuối sprint và báo cáo tuần",
+          "role": "pm",
+          "checklist": [
+            "Demo trên staging, không trên máy dev",
+            "Ghi phản hồi của khách thành thẻ",
+            "Gửi báo cáo tuần: xong, tiếp theo, rủi ro, cần quyết định"
+          ]
+        },
+        {
+          "summary": "Xử lý yêu cầu thay đổi (CR)",
+          "role": "ba",
+          "checklist": [
+            "Mọi yêu cầu ngoài phạm vi có phiếu CR",
+            "Đánh giá ảnh hưởng: công, lịch, rủi ro",
+            "Chỉ làm khi khách duyệt bằng văn bản; cập nhật SRS / RTM"
+          ]
+        },
+        {
+          "summary": "Cổng chất lượng — Phát triển",
+          "role": "pm",
+          "checklist": [
+            "Mọi story hoàn thành đạt Definition of Done",
+            "Demo cuối sprint đã diễn ra, phản hồi đã ghi",
+            "Không còn lỗi mức nghiêm trọng mở trong phần đã làm",
+            "Tài liệu API và sổ tay dev được cập nhật"
+          ],
+          "gate": true
+        }
+      ]
+    },
+    {
+      "slug": "chuyen-du-lieu",
+      "n": 10,
+      "phase": "build",
+      "title": "Chuyển đổi & di trú dữ liệu",
+      "titleEn": "Data migration",
+      "epic": {
+        "summary": "GĐ 10 · Chuyển đổi & di trú dữ liệu",
+        "description": "**Mục tiêu:** Đưa dữ liệu từ hệ thống cũ sang hệ thống mới đầy đủ, đúng và hợp pháp — được tập dượt nhiều lần trước ngày thật và luôn có đường quay lui.\n\nNhóm: Xây dựng (Build) · Giai đoạn 10/20 · Data migration\n\n### Đầu vào\n- Danh sách hệ thống nguồn và dữ liệu cần chuyển (từ khảo sát)\n- ERD và migration schema của hệ thống mới\n- Bản sao dữ liệu nguồn (ẩn danh khi cần)\n\n### Điều kiện vào (entry criteria)\n- ERD và schema đã ổn định cho phạm vi cần chuyển\n- Có quyền truy cập bản sao dữ liệu nguồn\n- Chủ sở hữu dữ liệu phía khách đã được chỉ định\n\n### Đầu ra bàn giao\n- Kế hoạch chuyển dữ liệu và bảng ánh xạ\n- Script chuyển đổi + log các lần chạy thử\n- Báo cáo đối soát có xác nhận của người dùng nghiệp vụ\n- Kế hoạch cutover và quay lui\n\n### Khách hàng tham gia\n- Chỉ định chủ sở hữu dữ liệu\n- Quyết định dữ liệu nào giữ, dữ liệu nào bỏ\n- Kiểm mẫu đối soát và bảo đảm cơ sở pháp lý khi chuyển dữ liệu cá nhân\n\n### Bộ phận tham gia\n- `vai:data` Dữ liệu & AI — chủ trì ánh xạ, script, chạy thử\n- `vai:ba` Phân tích nghiệp vụ (BA) — quy tắc nghiệp vụ cho chuyển đổi\n- `vai:dev` Phát triển (FE · BE · Mobile) — viết và tối ưu script\n- `vai:qa` Đảm bảo chất lượng (QA/QC) — đối soát, kiểm mẫu\n- `vai:devops` DevOps / SRE — kế hoạch cutover, sao lưu, quay lui\n- `vai:sec` Bảo mật ứng dụng (AppSec) — bảo vệ dữ liệu cá nhân trong quá trình chuyển\n- `vai:client` Khách hàng (Product Owner / nhà tài trợ) — chủ sở hữu dữ liệu, xác nhận đối soát\n\n### Mẫu tài liệu\n- [Kế hoạch chuyển dữ liệu & đối soát](https://cuongthai.com/quy-trinh/mau/ke-hoach-chuyen-du-lieu.md)\n\n### Tiêu chuẩn tham chiếu\n- DAMA-DMBOK2 (DAMA International) — Khung tri thức quản lý dữ liệu: chất lượng, tích hợp, di trú dữ liệu\n- ISO/IEC 25012:2008 — Mô hình chất lượng dữ liệu: chính xác, đầy đủ, nhất quán, kịp thời…\n- Nghị định 13/2023/NĐ-CP — Chuyển dữ liệu cá nhân sang hệ mới cũng là \"xử lý\" — cần cơ sở và mục đích hợp pháp\n\n### Học thêm\n- [DBI202 · Databases](https://cuongthai.com/academy/courses/introduction-to-databases)\n- [PostgreSQL](https://cuongthai.com/courses/postgresql)\n- [Prisma ORM](https://cuongthai.com/courses/prisma-orm)\n- [Data Engineering](https://cuongthai.com/courses/data-engineering)\n- [Privacy & Data Law](https://cuongthai.com/courses/privacy-data-law)\n\n### Sai lầm hay gặp\n- Chuyển dữ liệu ngay ngày go-live mà chưa tập dượt\n- Chỉ đếm số bản ghi mà không kiểm nội dung\n- Chép sang bảng mới mà không xử lý bảng cũ → dữ liệu trùng ở hai nơi\n- Dùng dữ liệu thật chưa ẩn danh trên máy dev\n\nQuy trình đầy đủ: https://cuongthai.com/about/quy-trinh"
+      },
+      "tasks": [
+        {
+          "summary": "Kiểm kê và đánh giá chất lượng dữ liệu nguồn",
+          "role": "data",
+          "checklist": [
+            "Số bản ghi, tỉ lệ trùng, thiếu, sai định dạng",
+            "Đánh dấu trường dữ liệu cá nhân",
+            "Chủ sở hữu dữ liệu phía khách xác nhận phạm vi"
+          ]
+        },
+        {
+          "summary": "Lập bảng ánh xạ trường và quy tắc chuyển đổi",
+          "role": "ba",
+          "checklist": [
+            "Ánh xạ 100% trường trong phạm vi",
+            "Quy tắc xử lý trùng / thiếu / mặc định",
+            "Múi giờ, mã hoá ký tự, định dạng số / tiền tệ"
+          ]
+        },
+        {
+          "summary": "Viết script chuyển đổi chạy lại được",
+          "role": "dev",
+          "checklist": [
+            "Upsert theo khoá tự nhiên, chạy lại không nhân đôi",
+            "Chạy theo lô, ghi log từng lô",
+            "Nạp theo thứ tự khoá ngoại"
+          ]
+        },
+        {
+          "summary": "Chạy thử (rehearsal) ít nhất hai lần trên bản sao",
+          "role": "data",
+          "checklist": [
+            "Đo thời gian mỗi lần chạy",
+            "Ghi lỗi và sửa trước lần sau",
+            "Xoá bản sao dữ liệu thử sau khi xong"
+          ]
+        },
+        {
+          "summary": "Đối soát và xin xác nhận của chủ sở hữu dữ liệu",
+          "role": "qa",
+          "checklist": [
+            "So số bản ghi và checksum / tổng tiền theo nhóm",
+            "Người dùng nghiệp vụ kiểm mẫu ngẫu nhiên trên giao diện",
+            "Lỗi còn lại được khách chấp nhận bằng văn bản"
+          ]
+        },
+        {
+          "summary": "Lập kế hoạch cutover và quay lui",
+          "role": "devops",
+          "checklist": [
+            "Trình tự bước, người làm, điểm quyết định tiếp / lùi",
+            "Backup hệ thống cũ ngay trước cutover",
+            "Thời gian cutover vừa cửa sổ bảo trì; quay lui đã thử"
+          ]
+        },
+        {
+          "summary": "Cổng chất lượng — Chuyển đổi & di trú dữ liệu",
+          "role": "data",
+          "checklist": [
+            "Bảng ánh xạ phủ 100% trường trong phạm vi",
+            "Ít nhất một lần chạy thử đầy đủ: số lượng và checksum khớp",
+            "Lỗi dữ liệu còn lại được khách chấp nhận bằng văn bản",
+            "Thời gian cutover đo được và vừa cửa sổ bảo trì",
+            "Kế hoạch quay lui đã được thử"
+          ],
+          "gate": true
+        }
+      ]
+    },
+    {
+      "slug": "kiem-thu",
+      "n": 11,
+      "phase": "verify",
+      "title": "Kiểm thử",
+      "titleEn": "Testing",
+      "epic": {
+        "summary": "GĐ 11 · Kiểm thử",
+        "description": "**Mục tiêu:** Tìm lỗi trước khách hàng — ở mọi tầng, tự động hoá phần lặp lại, và đo được mức độ bao phủ.\n\nNhóm: Kiểm chứng (Verify) · Giai đoạn 11/20 · Testing\n\n### Đầu vào\n- SRS, tiêu chí chấp nhận, RTM\n- Bản build ổn định trên staging\n\n### Điều kiện vào (entry criteria)\n- Build ổn định trên staging, smoke test xanh\n- Test plan đã được duyệt\n- Dữ liệu kiểm thử đã sẵn sàng\n\n### Đầu ra bàn giao\n- Test plan + bộ test case (truy vết về yêu cầu)\n- Báo cáo kiểm thử: pass/fail, lỗi còn mở theo mức độ\n- Báo cáo tải: thông lượng, độ trễ p95\n\n### Khách hàng tham gia\n- Cung cấp dữ liệu và kịch bản thực tế để test\n- Thống nhất mức lỗi nào chặn phát hành\n\n### Bộ phận tham gia\n- `vai:qa` Đảm bảo chất lượng (QA/QC) — kế hoạch kiểm thử, test case, báo cáo\n- `vai:dev` Phát triển (FE · BE · Mobile) — unit / integration test, sửa lỗi\n- `vai:devops` DevOps / SRE — môi trường và công cụ kiểm thử tải\n- `vai:ba` Phân tích nghiệp vụ (BA) — tham vấn kịch bản nghiệp vụ\n- `vai:client` Khách hàng (Product Owner / nhà tài trợ) — dữ liệu thực tế, mức lỗi chặn phát hành\n\n### Mẫu tài liệu\n- [Kế hoạch kiểm thử](https://cuongthai.com/quy-trinh/mau/ke-hoach-kiem-thu.md)\n- [Bộ test case](https://cuongthai.com/quy-trinh/mau/test-case.md)\n- [Báo cáo kiểm thử](https://cuongthai.com/quy-trinh/mau/bao-cao-kiem-thu.md)\n\n### Tiêu chuẩn tham chiếu\n- ISTQB® CTFL v4.0 — Thuật ngữ, cấp độ và kỹ thuật thiết kế test\n- ISO/IEC/IEEE 29119 — Bộ chuẩn quy trình & tài liệu kiểm thử phần mềm\n\n### Học thêm\n- [SWT301 · Software Testing](https://cuongthai.com/academy/courses/software-testing)\n- [Testing](https://cuongthai.com/courses/testing)\n- [Performance & Load](https://cuongthai.com/courses/performance-load-testing)\n\n### Sai lầm hay gặp\n- Chỉ test đường thuận lợi (happy path)\n- Dồn kiểm thử về cuối dự án\n- Đo bao phủ dòng mã mà không đo bao phủ yêu cầu\n- Bộ kiểm \"xanh\" vì kiểm sai thứ\n\nQuy trình đầy đủ: https://cuongthai.com/about/quy-trinh"
+      },
+      "tasks": [
+        {
+          "summary": "Viết kế hoạch kiểm thử",
+          "role": "qa",
+          "checklist": [
+            "Chiến lược theo cấp độ và tiêu chí vào / ra",
+            "Định nghĩa mức độ lỗi và mức chặn phát hành (khách đồng ý)",
+            "Trình duyệt / thiết bị cam kết"
+          ]
+        },
+        {
+          "summary": "Thiết kế test case truy vết về yêu cầu",
+          "role": "qa",
+          "checklist": [
+            "Mỗi yêu cầu có ít nhất một test case",
+            "Có test giá trị biên và kịch bản lỗi",
+            "Cập nhật RTM"
+          ]
+        },
+        {
+          "summary": "Unit và integration test trong CI",
+          "role": "dev",
+          "checklist": [
+            "Nghiệp vụ chính có unit test",
+            "API + CSDL có integration test",
+            "Chạy tự động trên mỗi PR"
+          ]
+        },
+        {
+          "summary": "System / E2E, hồi quy và truy cập",
+          "role": "qa",
+          "checklist": [
+            "Luồng chính chạy trên trình duyệt thật",
+            "Bộ hồi quy tự động trong CI",
+            "Kiểm truy cập bằng axe + kiểm tay"
+          ]
+        },
+        {
+          "summary": "Kiểm thử hiệu năng và tải theo NFR",
+          "role": "devops",
+          "checklist": [
+            "Kịch bản tải giống hành vi thật",
+            "Đo p95 / p99, tỉ lệ lỗi",
+            "So với mục tiêu NFR, ghi báo cáo"
+          ]
+        },
+        {
+          "summary": "Phân loại lỗi và phát hành báo cáo kiểm thử",
+          "role": "qa",
+          "checklist": [
+            "Lỗi có bước tái hiện, mức độ, ưu tiên",
+            "Lỗi đã sửa được kiểm lại và hồi quy",
+            "Báo cáo có khuyến nghị sẵn sàng / chưa sẵn sàng"
+          ]
+        },
+        {
+          "summary": "Cổng chất lượng — Kiểm thử",
+          "role": "qa",
+          "checklist": [
+            "100% test case ưu tiên cao đã chạy",
+            "Không còn lỗi Critical/High mở",
+            "NFR hiệu năng đạt (vd độ trễ p95 theo cam kết)",
+            "Báo cáo kiểm thử đã phát hành; RTM cập nhật kết quả"
+          ],
+          "gate": true
+        }
+      ]
+    },
+    {
+      "slug": "bao-mat",
+      "n": 12,
+      "phase": "verify",
+      "title": "Bảo mật",
+      "titleEn": "Security",
+      "epic": {
+        "summary": "GĐ 12 · Bảo mật",
+        "description": "**Mục tiêu:** Bảo mật là yêu cầu, không phải bước trang trí: kiểm theo danh mục có sẵn, quét tự động, không để lộ bí mật, và xử lý dữ liệu cá nhân đúng luật.\n\nNhóm: Kiểm chứng (Verify) · Giai đoạn 12/20 · Security\n\n### Đầu vào\n- Threat model và SDD\n- Bản build trên staging\n- Yêu cầu tuân thủ của khách\n\n### Điều kiện vào (entry criteria)\n- Tính năng chính đã chạy trên staging\n- Threat model đã cập nhật theo thiết kế hiện tại\n\n### Đầu ra bàn giao\n- Checklist ASVS đã đánh dấu + bằng chứng\n- Báo cáo quét & danh sách lỗ hổng đã xử lý\n- Chính sách quản lý bí mật và phân quyền\n- Hồ sơ đánh giá tác động xử lý dữ liệu cá nhân (nếu áp dụng)\n\n### Khách hàng tham gia\n- Cho biết yêu cầu tuân thủ (dữ liệu cá nhân, thanh toán…)\n- Tự giữ tài khoản gốc (root) của các dịch vụ\n- Ký chấp nhận rủi ro bằng văn bản với lỗ hổng chưa xử lý (nếu có)\n\n### Bộ phận tham gia\n- `vai:sec` Bảo mật ứng dụng (AppSec) — review bảo mật, ASVS, quét, DAST\n- `vai:dev` Phát triển (FE · BE · Mobile) — vá lỗ hổng\n- `vai:devops` DevOps / SRE — quản lý bí mật, quét trong CI\n- `vai:infra` Hạ tầng & Mạng — quyền tối thiểu trên hạ tầng\n- `vai:legal` Pháp lý & Tài chính — tuân thủ dữ liệu cá nhân\n- `vai:client` Khách hàng (Product Owner / nhà tài trợ) — nêu yêu cầu tuân thủ, giữ tài khoản gốc\n\n### Mẫu tài liệu\n- [Checklist bảo mật trước phát hành](https://cuongthai.com/quy-trinh/mau/checklist-bao-mat.md)\n\n### Tiêu chuẩn tham chiếu\n- OWASP ASVS 5.0 — Tiêu chuẩn kiểm chứng bảo mật ứng dụng\n- OWASP Top 10 — 10 nhóm rủi ro web phổ biến nhất\n- NIST SP 800-218 (SSDF) — Khung phát triển phần mềm an toàn\n- CWE Top 25 — Các điểm yếu phần mềm nguy hiểm nhất\n- Nghị định 13/2023/NĐ-CP — Biện pháp bảo vệ và hồ sơ đánh giá tác động xử lý dữ liệu cá nhân\n\n### Học thêm\n- [Web Security](https://cuongthai.com/courses/web-security)\n- [Authentication](https://cuongthai.com/courses/authentication)\n- [DevSecOps](https://cuongthai.com/courses/devsecops)\n- [Threat Modeling](https://cuongthai.com/courses/threat-modeling)\n- [Privacy & Data Law](https://cuongthai.com/courses/privacy-data-law)\n\n### Sai lầm hay gặp\n- Ẩn nút trên giao diện mà không chặn API\n- Khoá API bên thứ ba nằm trong mã gửi về trình duyệt\n- Quét một lần trước go-live rồi thôi\n- Chấp nhận rủi ro bằng lời\n\nQuy trình đầy đủ: https://cuongthai.com/about/quy-trinh"
+      },
+      "tasks": [
+        {
+          "summary": "Review mã tập trung bảo mật",
+          "role": "sec",
+          "checklist": [
+            "Xác thực, phiên, đặt lại mật khẩu",
+            "Phân quyền ở server, chặn IDOR",
+            "Nhập liệu, upload, SSRF"
+          ]
+        },
+        {
+          "summary": "Bật SCA / SAST và quét bí mật trong CI",
+          "role": "devops",
+          "checklist": [
+            "Quét phụ thuộc (npm audit / Dependabot / Trivy)",
+            "Quét mã tĩnh (Semgrep)",
+            "Quét bí mật trong lịch sử git (gitleaks)"
+          ]
+        },
+        {
+          "summary": "Kiểm theo OWASP ASVS mức đã thống nhất",
+          "role": "sec",
+          "checklist": [
+            "Điền checklist bảo mật kèm bằng chứng",
+            "Header bảo mật, CORS, HTTPS / HSTS",
+            "Log không chứa bí mật hay dữ liệu cá nhân"
+          ]
+        },
+        {
+          "summary": "Quét động (DAST) trên staging",
+          "role": "sec",
+          "checklist": [
+            "Chạy OWASP ZAP trên staging",
+            "Phân loại phát hiện theo mức độ",
+            "Tạo thẻ sửa cho mức Critical / High"
+          ]
+        },
+        {
+          "summary": "Đánh giá tác động xử lý dữ liệu cá nhân (nếu áp dụng)",
+          "role": "legal",
+          "checklist": [
+            "Liệt kê hoạt động xử lý, mục đích, cơ sở",
+            "Biện pháp bảo vệ đã áp dụng",
+            "Lập hồ sơ đánh giá tác động theo quy định hiện hành"
+          ]
+        },
+        {
+          "summary": "Cổng chất lượng — Bảo mật",
+          "role": "sec",
+          "checklist": [
+            "Không còn lỗ hổng Critical/High mở, hoặc có chấp nhận rủi ro bằng văn bản",
+            "Checklist ASVS ở mức đã thống nhất hoàn thành, có bằng chứng",
+            "Không có bí mật trong lịch sử git",
+            "Không còn CVE nghiêm trọng đã có bản vá trong phụ thuộc",
+            "Hồ sơ đánh giá tác động dữ liệu cá nhân đã lập (nếu áp dụng)"
+          ],
+          "gate": true
+        }
+      ]
+    },
+    {
+      "slug": "ha-tang-devops",
+      "n": 13,
+      "phase": "verify",
+      "title": "Hạ tầng, mạng & DevOps",
+      "titleEn": "Infrastructure, network & DevOps",
+      "epic": {
+        "summary": "GĐ 13 · Hạ tầng, mạng & DevOps",
+        "description": "**Mục tiêu:** Chuẩn bị nơi sản phẩm sẽ sống: tên miền, chứng chỉ, CDN, container, giám sát và sao lưu — dựng lại được từ mã.\n\nNhóm: Kiểm chứng (Verify) · Giai đoạn 13/20 · Infrastructure, network & DevOps\n\n### Đầu vào\n- Sơ đồ triển khai trong SDD\n- NFR về khả dụng, SLO, RPO / RTO\n- Ngân sách hạ tầng đã duyệt\n\n### Điều kiện vào (entry criteria)\n- Sơ đồ triển khai và ngân sách hạ tầng đã duyệt\n- Tài khoản cloud và tên miền đứng tên khách\n\n### Đầu ra bàn giao\n- Sơ đồ hạ tầng & mạng\n- Script / IaC triển khai, runbook vận hành\n- Dashboard giám sát + kênh cảnh báo\n- Kế hoạch sao lưu & biên bản thử khôi phục\n\n### Khách hàng tham gia\n- Sở hữu tên miền và tài khoản cloud đứng tên mình\n- Duyệt chi phí hạ tầng hằng tháng\n\n### Bộ phận tham gia\n- `vai:devops` DevOps / SRE — pipeline, container, giám sát, sao lưu\n- `vai:infra` Hạ tầng & Mạng — DNS, TLS, CDN, mạng, tường lửa\n- `vai:sec` Bảo mật ứng dụng (AppSec) — cấu hình an toàn, header, quyền\n- `vai:dev` Phát triển (FE · BE · Mobile) — health check, cấu hình ứng dụng\n- `vai:client` Khách hàng (Product Owner / nhà tài trợ) — sở hữu tài khoản, duyệt chi phí\n\n### Mẫu tài liệu\n- [Runbook triển khai & quay lui](https://cuongthai.com/quy-trinh/mau/runbook-trien-khai.md)\n\n### Tiêu chuẩn tham chiếu\n- RFC 8555 (ACME) — Giao thức cấp chứng chỉ TLS tự động\n- Google SRE — SLI / SLO — Định nghĩa mức dịch vụ đo được\n- DORA metrics — Tần suất deploy, lead time, tỉ lệ lỗi thay đổi, thời gian khôi phục\n\n### Học thêm\n- [Deploy VPS](https://cuongthai.com/courses/deploy-vps)\n- [Docker](https://cuongthai.com/courses/docker)\n- [Nginx](https://cuongthai.com/courses/nginx)\n- [GitHub Actions](https://cuongthai.com/courses/github-actions)\n- [Infrastructure as Code](https://cuongthai.com/courses/infrastructure-as-code)\n- [Observability](https://cuongthai.com/courses/observability-monitoring)\n- [Networking](https://cuongthai.com/courses/networking-for-developers)\n- [Linux & Bash](https://cuongthai.com/courses/linux-bash)\n- [Self-hosting](https://cuongthai.com/courses/self-hosting)\n- [Network Security](https://cuongthai.com/courses/network-security)\n\n### Sai lầm hay gặp\n- Sao lưu nhưng chưa từng thử khôi phục\n- Build ngay trên máy chủ production làm đầy đĩa\n- Cấu hình bind-mount nằm ngoài ảnh nên deploy ảnh không cập nhật nó\n- Tài khoản cloud đứng tên người làm thay vì khách\n\nQuy trình đầy đủ: https://cuongthai.com/about/quy-trinh"
+      },
+      "tasks": [
+        {
+          "summary": "Cấu hình tên miền, DNS và xác thực email",
+          "role": "infra",
+          "checklist": [
+            "Tên miền đứng tên khách",
+            "Bản ghi DNS có kiểm soát",
+            "SPF / DKIM / DMARC"
+          ]
+        },
+        {
+          "summary": "TLS tự gia hạn, CDN / WAF, reverse proxy, tường lửa",
+          "role": "infra",
+          "checklist": [
+            "HTTPS tự gia hạn (ACME)",
+            "Chỉ mở cổng cần thiết",
+            "Cấu hình proxy kiểm từ bên trong container sau khi đổi"
+          ]
+        },
+        {
+          "summary": "Đóng gói container và pipeline triển khai có smoke test",
+          "role": "devops",
+          "checklist": [
+            "Ảnh dựng từ commit đã commit, không từ cây làm việc dở",
+            "Smoke test sau deploy: báo lỗi khi 404 / 5xx",
+            "Kiểm chính bộ smoke test (công cụ có trong ảnh)"
+          ]
+        },
+        {
+          "summary": "Giám sát, cảnh báo và SLO",
+          "role": "devops",
+          "checklist": [
+            "Log, số đo, theo dõi lỗi",
+            "Cảnh báo uptime, đĩa, chứng chỉ tới đúng người",
+            "SLO được khách đồng ý"
+          ]
+        },
+        {
+          "summary": "Sao lưu 3-2-1 và thử khôi phục",
+          "role": "devops",
+          "checklist": [
+            "Sao lưu tự động, có bản ngoài máy chủ",
+            "Khôi phục thử bằng đúng phiên bản ảnh của production",
+            "Lập biên bản thử khôi phục"
+          ]
+        },
+        {
+          "summary": "Viết runbook vận hành và quay lui",
+          "role": "devops",
+          "checklist": [
+            "Các bước triển khai, smoke test, quay lui",
+            "Danh sách cấu hình nằm ngoài ảnh và cách cập nhật",
+            "Liên hệ khẩn"
+          ]
+        },
+        {
+          "summary": "Cổng chất lượng — Hạ tầng, mạng & DevOps",
+          "role": "devops",
+          "checklist": [
+            "Staging tương đương production (cùng ảnh, khác dữ liệu)",
+            "Deploy tự động, có smoke test sau deploy",
+            "Giám sát và cảnh báo tới đúng người",
+            "Sao lưu tự động + một lần khôi phục thử thành công có biên bản",
+            "Runbook vận hành hoàn chỉnh"
+          ],
+          "gate": true
+        }
+      ]
+    },
+    {
+      "slug": "uat-nghiem-thu",
+      "n": 14,
+      "phase": "ship",
+      "title": "UAT & nghiệm thu",
+      "titleEn": "UAT & acceptance",
+      "epic": {
+        "summary": "GĐ 14 · UAT & nghiệm thu",
+        "description": "**Mục tiêu:** Khách tự kiểm tra sản phẩm theo đúng tiêu chí chấp nhận đã ký ở bước Đặc tả yêu cầu — không phải theo cảm giác.\n\nNhóm: Bàn giao (Ship) · Giai đoạn 14/20 · UAT & acceptance\n\n### Đầu vào\n- Tiêu chí chấp nhận đã ký\n- Báo cáo kiểm thử và bảo mật\n- Môi trường UAT / staging\n\n### Điều kiện vào (entry criteria)\n- Kiểm thử hệ thống đạt cổng (không còn lỗi Critical/High)\n- Kịch bản UAT được khách duyệt\n- Người dùng thật đã được bố trí\n\n### Đầu ra bàn giao\n- Kế hoạch & kịch bản UAT\n- Danh sách phát hiện và trạng thái xử lý\n- Biên bản nghiệm thu có chữ ký\n\n### Khách hàng tham gia\n- Dành thời gian cho người dùng thật kiểm thử\n- Ký biên bản nghiệm thu khi đạt tiêu chí\n\n### Bộ phận tham gia\n- `vai:client` Khách hàng (Product Owner / nhà tài trợ) — thực hiện UAT và ký nghiệm thu\n- `vai:ba` Phân tích nghiệp vụ (BA) — viết kịch bản UAT, hướng dẫn người dùng\n- `vai:qa` Đảm bảo chất lượng (QA/QC) — hỗ trợ, ghi nhận và tái hiện lỗi\n- `vai:pm` Quản lý dự án / Scrum Master — điều phối, phân loại phát hiện\n- `vai:dev` Phát triển (FE · BE · Mobile) — sửa lỗi trong vòng UAT\n- `vai:support` Hỗ trợ & Chăm sóc khách hàng — chuẩn bị tiếp nhận sau go-live\n\n### Mẫu tài liệu\n- [Kế hoạch UAT & biên bản nghiệm thu](https://cuongthai.com/quy-trinh/mau/bien-ban-nghiem-thu-uat.md)\n- [Phiếu yêu cầu thay đổi (CR)](https://cuongthai.com/quy-trinh/mau/phieu-yeu-cau-thay-doi.md)\n\n### Tiêu chuẩn tham chiếu\n- ISTQB® — Acceptance testing — Kiểm thử chấp nhận người dùng / vận hành / hợp đồng\n- ISO/IEC 25010:2023 — Dùng lại mô hình chất lượng để đối chiếu NFR\n\n### Học thêm\n- [SWT301 · Software Testing](https://cuongthai.com/academy/courses/software-testing)\n- [SWP391 · Dev Project](https://cuongthai.com/academy/courses/software-development-project)\n- [Testing](https://cuongthai.com/courses/testing)\n\n### Sai lầm hay gặp\n- UAT biến thành vòng thu thập yêu cầu mới\n- Người kiểm là chính người làm ra sản phẩm\n- Không ghi phiên bản build được nghiệm thu\n- Nghiệm thu bằng lời\n\nQuy trình đầy đủ: https://cuongthai.com/about/quy-trinh"
+      },
+      "tasks": [
+        {
+          "summary": "Soạn kế hoạch và kịch bản UAT từ tiêu chí chấp nhận",
+          "role": "ba",
+          "checklist": [
+            "Mỗi tiêu chí chấp nhận có kịch bản",
+            "Kịch bản viết bằng ngôn ngữ nghiệp vụ",
+            "Khách duyệt kịch bản"
+          ]
+        },
+        {
+          "summary": "Chuẩn bị môi trường và dữ liệu UAT",
+          "role": "devops",
+          "checklist": [
+            "Môi trường đúng phiên bản build cần nghiệm thu",
+            "Dữ liệu gần thật, không dùng dữ liệu cá nhân thật chưa được đồng ý",
+            "Tài khoản cho từng vai trò người kiểm"
+          ]
+        },
+        {
+          "summary": "Khách thực hiện UAT",
+          "role": "client",
+          "checklist": [
+            "Người dùng thật chạy đủ kịch bản",
+            "Mỗi phát hiện có bằng chứng",
+            "Ghi kết quả đạt / không đạt"
+          ]
+        },
+        {
+          "summary": "Phân loại phát hiện: lỗi / CR / cải tiến sau",
+          "role": "pm",
+          "checklist": [
+            "Lỗi so với đặc tả → sửa",
+            "Thay đổi yêu cầu → lập phiếu CR",
+            "Cải tiến → đưa vào backlog sau"
+          ]
+        },
+        {
+          "summary": "Sửa lỗi và chạy lại vòng UAT",
+          "role": "dev",
+          "checklist": [
+            "Sửa lỗi chặn nghiệm thu",
+            "QA kiểm lại trước khi trả khách",
+            "Ghi phiên bản build mới"
+          ]
+        },
+        {
+          "summary": "Cổng chất lượng — UAT & nghiệm thu",
+          "role": "client",
+          "checklist": [
+            "100% kịch bản UAT đã chạy",
+            "Không còn lỗi chặn nghiệm thu",
+            "Phát hiện còn lại đã phân loại và có kế hoạch",
+            "Biên bản nghiệm thu ký bởi người có thẩm quyền, ghi rõ phiên bản build",
+            "Mốc thanh toán tương ứng được kích hoạt"
+          ],
+          "gate": true
+        }
+      ]
+    },
+    {
+      "slug": "quan-ly-phat-hanh",
+      "n": 15,
+      "phase": "ship",
+      "title": "Quản lý phát hành",
+      "titleEn": "Release management",
+      "epic": {
+        "summary": "GĐ 15 · Quản lý phát hành",
+        "description": "**Mục tiêu:** Mỗi bản phát hành có số hiệu, nội dung, người duyệt và đường lùi rõ ràng — để luôn biết chính xác đang chạy gì và quay lại được trong vài phút.\n\nNhóm: Bàn giao (Ship) · Giai đoạn 15/20 · Release management\n\n### Đầu vào\n- Biên bản nghiệm thu (UAT)\n- Báo cáo kiểm thử và bảo mật\n- Danh sách thay đổi từ git\n\n### Điều kiện vào (entry criteria)\n- Biên bản nghiệm thu (toàn phần hoặc theo mốc) đã ký\n- Không còn lỗi chặn phát hành\n\n### Đầu ra bàn giao\n- Release notes + CHANGELOG\n- Bản phát hành có tag, checksum / chữ ký\n- Biên bản duyệt phát hành\n- Kế hoạch và lệnh quay lui đã thử\n\n### Khách hàng tham gia\n- Duyệt nội dung và thời điểm phát hành\n- Thông báo người dùng cuối\n\n### Bộ phận tham gia\n- `vai:devops` DevOps / SRE — đóng gói, gắn tag, quay lui\n- `vai:pm` Quản lý dự án / Scrum Master — lịch phát hành, release notes, họp duyệt\n- `vai:qa` Đảm bảo chất lượng (QA/QC) — xác nhận chất lượng bản phát hành\n- `vai:dev` Phát triển (FE · BE · Mobile) — feature flag, CHANGELOG kỹ thuật\n- `vai:support` Hỗ trợ & Chăm sóc khách hàng — thông báo và chuẩn bị hỗ trợ người dùng\n- `vai:client` Khách hàng (Product Owner / nhà tài trợ) — duyệt nội dung và thời điểm\n\n### Mẫu tài liệu\n- [Ghi chú phát hành (release notes)](https://cuongthai.com/quy-trinh/mau/release-notes.md)\n- [Runbook triển khai & quay lui](https://cuongthai.com/quy-trinh/mau/runbook-trien-khai.md)\n\n### Tiêu chuẩn tham chiếu\n- Semantic Versioning 2.0.0 — MAJOR.MINOR.PATCH — đổi MAJOR khi phá vỡ tương thích\n- Keep a Changelog 1.1.0 — Quy ước ghi thay đổi cho người đọc\n- ITIL® 4 — Release management · Deployment management — Hai thực hành tách biệt: phát hành giá trị cho người dùng và đưa thay đổi lên môi trường\n- OpenFeature (CNCF) — Đặc tả mở, trung lập nhà cung cấp cho API feature flag\n- DORA metrics — Tỉ lệ thay đổi gây lỗi và thời gian khôi phục\n\n### Học thêm\n- [Git](https://cuongthai.com/courses/git)\n- [GitHub Actions](https://cuongthai.com/courses/github-actions)\n- [Docker](https://cuongthai.com/courses/docker)\n- [Deploy VPS](https://cuongthai.com/courses/deploy-vps)\n\n### Sai lầm hay gặp\n- Tăng số phiên bản bằng tay rồi quên phát hành\n- Hai lượt build ghi đè lên cùng một số phiên bản\n- Migration không đảo ngược được mà không có kế hoạch\n- Cờ tính năng để mãi thành nợ kỹ thuật\n\nQuy trình đầy đủ: https://cuongthai.com/about/quy-trinh"
+      },
+      "tasks": [
+        {
+          "summary": "Đánh số phiên bản (SemVer) và gắn tag",
+          "role": "devops",
+          "checklist": [
+            "Số phiên bản chưa từng được công bố",
+            "Tag git trùng với bản build",
+            "Không có lượt dựng nào khác đang chạy cho cùng số"
+          ]
+        },
+        {
+          "summary": "Viết release notes và CHANGELOG",
+          "role": "pm",
+          "checklist": [
+            "Viết cho người dùng: mới, thay đổi, đã sửa, cần làm gì",
+            "Ghi migration, biến môi trường mới, cờ tính năng",
+            "Hỗ trợ rà ngôn ngữ"
+          ]
+        },
+        {
+          "summary": "Đóng gói bản phát hành và giữ bản quay lui",
+          "role": "devops",
+          "checklist": [
+            "Bản phát hành bất biến, có checksum / chữ ký",
+            "Bản trước còn trong registry / trên máy",
+            "Kiểm tương thích môi trường chạy (libc, kiến trúc CPU…)"
+          ]
+        },
+        {
+          "summary": "Cấu hình cờ tính năng và kế hoạch bật dần",
+          "role": "dev",
+          "checklist": [
+            "Mỗi cờ có chủ sở hữu và ngày gỡ",
+            "Giá trị mặc định an toàn",
+            "Kế hoạch bật theo nhóm người dùng"
+          ]
+        },
+        {
+          "summary": "Diễn tập quay lui",
+          "role": "devops",
+          "checklist": [
+            "Chạy lệnh quay lui trên staging",
+            "Đo thời gian quay lui",
+            "Ghi điều kiện bắt buộc quay lui vào runbook"
+          ]
+        },
+        {
+          "summary": "Họp duyệt phát hành (go/no-go)",
+          "role": "qa",
+          "checklist": [
+            "Báo cáo kiểm thử và bảo mật đạt cổng",
+            "Biên bản UAT đã ký",
+            "Migration có hướng xử lý nếu phải quay lui",
+            "Khách đồng ý thời điểm phát hành"
+          ]
+        },
+        {
+          "summary": "Cổng chất lượng — Quản lý phát hành",
+          "role": "pm",
+          "checklist": [
+            "Số phiên bản nhất quán giữa git tag, ảnh / bản cài và release notes",
+            "Bản trước được giữ và lệnh quay lui đã thử",
+            "Migration CSDL tương thích ngược hoặc có kịch bản khôi phục",
+            "Biên bản duyệt phát hành đã ký",
+            "Thông báo phát hành đã gửi"
+          ],
+          "gate": true
+        }
+      ]
+    },
+    {
+      "slug": "trien-khai-ban-giao",
+      "n": 16,
+      "phase": "ship",
+      "title": "Triển khai & bàn giao",
+      "titleEn": "Go-live & handover",
+      "epic": {
+        "summary": "GĐ 16 · Triển khai & bàn giao",
+        "description": "**Mục tiêu:** Đưa lên production an toàn, có đường lùi, rồi trao tận tay mọi thứ khách cần để tự làm chủ sản phẩm.\n\nNhóm: Bàn giao (Ship) · Giai đoạn 16/20 · Go-live & handover\n\n### Đầu vào\n- Bản phát hành đã duyệt và runbook\n- Kế hoạch cutover đã tập dượt\n- Tài liệu người dùng & quản trị\n\n### Điều kiện vào (entry criteria)\n- Biên bản duyệt phát hành đã ký\n- Cửa sổ go-live được khách chấp thuận\n- Backup production mới nhất đã được kiểm\n\n### Đầu ra bàn giao\n- Bản phát hành chạy trên production\n- Tài liệu người dùng, tài liệu quản trị, runbook\n- Kho mã nguồn + quyền truy cập, danh sách tài khoản & bí mật (bàn giao an toàn)\n- Biên bản bàn giao\n\n### Khách hàng tham gia\n- Chọn thời điểm go-live ít ảnh hưởng\n- Nhận và đổi mật khẩu mọi tài khoản được bàn giao\n\n### Bộ phận tham gia\n- `vai:devops` DevOps / SRE — chủ trì go-live, hypercare\n- `vai:data` Dữ liệu & AI — cutover dữ liệu và đối soát\n- `vai:support` Hỗ trợ & Chăm sóc khách hàng — đào tạo, tài liệu người dùng, tiếp nhận hỗ trợ\n- `vai:pm` Quản lý dự án / Scrum Master — điều phối bàn giao, biên bản\n- `vai:sec` Bảo mật ứng dụng (AppSec) — bàn giao bí mật an toàn\n- `vai:client` Khách hàng (Product Owner / nhà tài trợ) — chọn thời điểm, nhận bàn giao, đổi mật khẩu\n\n### Mẫu tài liệu\n- [Runbook triển khai & quay lui](https://cuongthai.com/quy-trinh/mau/runbook-trien-khai.md)\n- [Biên bản bàn giao](https://cuongthai.com/quy-trinh/mau/bien-ban-ban-giao.md)\n\n### Tiêu chuẩn tham chiếu\n- ITIL® 4 — Release & Deployment management — Thực hành phát hành và triển khai có kiểm soát\n- ISO/IEC/IEEE 12207:2017 — Quy trình Chuyển giao (Transition): đưa hệ thống vào môi trường vận hành\n- Semantic Versioning 2.0.0 — Đánh số bản phát hành\n\n### Học thêm\n- [Deploy VPS](https://cuongthai.com/courses/deploy-vps)\n- [PostgreSQL](https://cuongthai.com/courses/postgresql)\n- [GitHub Actions](https://cuongthai.com/courses/github-actions)\n- [SEP490 · Capstone](https://cuongthai.com/academy/courses/sep490-se-capstone-project)\n\n### Sai lầm hay gặp\n- Go-live chiều thứ Sáu\n- Bàn giao mật khẩu qua chat\n- Quên chuyển quyền sở hữu tên miền / tài khoản cloud\n- Không có người trực sau go-live\n\nQuy trình đầy đủ: https://cuongthai.com/about/quy-trinh"
+      },
+      "tasks": [
+        {
+          "summary": "Go-live theo runbook",
+          "role": "devops",
+          "checklist": [
+            "Backup production trước, kiểm đọc được",
+            "Chạy migration, thay container, smoke test",
+            "Kiểm đúng phiên bản đang chạy"
+          ]
+        },
+        {
+          "summary": "Cutover dữ liệu và đối soát sau go-live",
+          "role": "data",
+          "checklist": [
+            "Chạy đúng kịch bản đã tập dượt",
+            "Đối soát số lượng và checksum",
+            "Khách xác nhận kết quả đối soát"
+          ]
+        },
+        {
+          "summary": "Đào tạo người dùng và quản trị viên",
+          "role": "support",
+          "checklist": [
+            "Buổi đào tạo theo vai trò",
+            "Tài liệu người dùng và quản trị khớp phiên bản",
+            "Video hướng dẫn cho thao tác chính"
+          ]
+        },
+        {
+          "summary": "Bàn giao mã nguồn, tài khoản và bí mật",
+          "role": "pm",
+          "checklist": [
+            "Chuyển quyền sở hữu repo, tên miền, tài khoản cloud",
+            "Bí mật bàn giao qua trình quản lý mật khẩu",
+            "Khách đổi mật khẩu / xoay khoá sau khi nhận"
+          ]
+        },
+        {
+          "summary": "Hypercare 72 giờ",
+          "role": "devops",
+          "checklist": [
+            "Người trực và kênh khẩn đã thông báo",
+            "Theo dõi log, lỗi, hiệu năng",
+            "Không còn sự cố P1 / P2 mở khi kết thúc"
+          ]
+        },
+        {
+          "summary": "Ký biên bản bàn giao",
+          "role": "client",
+          "checklist": [
+            "Kiểm đủ danh mục tài liệu và tài khoản",
+            "Danh sách hạng mục chuyển sang bảo hành",
+            "Ký biên bản"
+          ]
+        },
+        {
+          "summary": "Cổng chất lượng — Triển khai & bàn giao",
+          "role": "pm",
+          "checklist": [
+            "Production chạy đúng phiên bản, smoke test xanh",
+            "Đối soát dữ liệu sau cutover khớp",
+            "Người dùng và quản trị viên đã được đào tạo",
+            "Mọi tài khoản và khoá đã bàn giao, khách đã đổi mật khẩu",
+            "Hết hypercare không còn sự cố P1/P2 mở; biên bản bàn giao đã ký"
+          ],
+          "gate": true
+        }
+      ]
+    },
+    {
+      "slug": "dong-du-an",
+      "n": 17,
+      "phase": "ship",
+      "title": "Đóng dự án",
+      "titleEn": "Project closure",
+      "epic": {
+        "summary": "GĐ 17 · Đóng dự án",
+        "description": "**Mục tiêu:** Kết thúc dự án có chủ đích: xác nhận mọi nghĩa vụ đã xong, rút bài học, lưu trữ hồ sơ, thu hồi quyền truy cập và quyết toán — thay vì để dự án \"tắt dần\".\n\nNhóm: Bàn giao (Ship) · Giai đoạn 17/20 · Project closure\n\n### Đầu vào\n- Biên bản bàn giao, SOW\n- Sổ rủi ro, nhật ký thay đổi (CR)\n- Số liệu thực tế: công, lỗi, thời gian\n\n### Điều kiện vào (entry criteria)\n- Biên bản bàn giao đã ký\n- Hypercare đã kết thúc\n\n### Đầu ra bàn giao\n- Biên bản đóng dự án / thanh lý hợp đồng\n- Báo cáo retrospective & bài học kinh nghiệm\n- Hồ sơ dự án lưu trữ có mục lục\n- Danh sách quyền truy cập đã thu hồi\n\n### Khách hàng tham gia\n- Xác nhận không còn hạng mục tồn đọng\n- Tham gia retrospective, góp ý thẳng thắn\n- Xác nhận đã thu hồi quyền của đội\n\n### Bộ phận tham gia\n- `vai:pm` Quản lý dự án / Scrum Master — chủ trì đóng dự án, retrospective\n- `vai:pmo` Văn phòng quản lý dự án (PMO) — lưu trữ, cập nhật tài sản quy trình\n- `vai:legal` Pháp lý & Tài chính — thanh lý hợp đồng, hoá đơn cuối\n- `vai:devops` DevOps / SRE — thu hồi quyền, xoay vòng bí mật\n- `vai:sec` Bảo mật ứng dụng (AppSec) — xác nhận không còn quyền thừa\n- `vai:client` Khách hàng (Product Owner / nhà tài trợ) — xác nhận hoàn tất, tham gia retro\n\n### Mẫu tài liệu\n- [Retrospective & bài học kinh nghiệm](https://cuongthai.com/quy-trinh/mau/retrospective.md)\n- [Biên bản đóng dự án](https://cuongthai.com/quy-trinh/mau/bien-ban-dong-du-an.md)\n\n### Tiêu chuẩn tham chiếu\n- PMBOK® Guide 6th ed. — Close Project or Phase (4.7) — Quy trình đóng dự án / giai đoạn: hoàn tất, chuyển giao, lưu trữ\n- ISO 21502:2020 — Hướng dẫn đóng dự án và đánh giá sau dự án\n- CMMI (ISACA) — mức khái niệm — Bài học trở thành tài sản quy trình của tổ chức\n- Retrospective Prime Directive (Norm Kerth, 2001) — Họp nhìn lại không đổ lỗi\n\n### Học thêm\n- [PMG201c · Project Management](https://cuongthai.com/academy/courses/project-management)\n- [Agile & Teamwork](https://cuongthai.com/courses/agile-teamwork)\n- [SWP391 · Dev Project](https://cuongthai.com/academy/courses/software-development-project)\n\n### Sai lầm hay gặp\n- Dự án \"tắt dần\", không có biên bản đóng\n- Quên thu hồi quyền → rủi ro bảo mật cho cả hai bên\n- Retrospective biến thành buổi đổ lỗi\n- Ghi bài học rồi không thay đổi gì\n\nQuy trình đầy đủ: https://cuongthai.com/about/quy-trinh"
+      },
+      "tasks": [
+        {
+          "summary": "Đối chiếu sản phẩm bàn giao với SOW",
+          "role": "pm",
+          "checklist": [
+            "Mỗi hạng mục SOW có biên bản nghiệm thu",
+            "Hạng mục tồn chuyển sang bảo hành có danh sách",
+            "Khách xác nhận không còn hạng mục khác"
+          ]
+        },
+        {
+          "summary": "Retrospective toàn dự án",
+          "role": "pm",
+          "checklist": [
+            "So ước lượng với thực tế",
+            "Tìm nguyên nhân gốc, không đổ lỗi",
+            "Mỗi hành động cải tiến có người phụ trách và hạn"
+          ]
+        },
+        {
+          "summary": "Thu hồi quyền truy cập và xoay vòng bí mật",
+          "role": "devops",
+          "checklist": [
+            "Danh sách tài khoản đội từng có quyền và ngày thu hồi",
+            "Khách xoay vòng bí mật đội từng dùng",
+            "Xoá bản sao dữ liệu khách trên máy đội"
+          ]
+        },
+        {
+          "summary": "Quyết toán và thanh lý hợp đồng",
+          "role": "legal",
+          "checklist": [
+            "Phát hành hoá đơn cuối",
+            "Xác nhận thanh toán đủ",
+            "Thanh lý hợp đồng hoặc chuyển sang hợp đồng bảo trì"
+          ]
+        },
+        {
+          "summary": "Lưu trữ hồ sơ và cập nhật mẫu quy trình",
+          "role": "pmo",
+          "checklist": [
+            "Hồ sơ dự án có mục lục, thời hạn lưu",
+            "Repo nội bộ chuyển chỉ đọc",
+            "Bài học đưa vào mẫu / checklist / script"
+          ]
+        },
+        {
+          "summary": "Cổng chất lượng — Đóng dự án",
+          "role": "pm",
+          "checklist": [
+            "Không còn hạng mục SOW mở, hoặc đã chuyển sang bảo hành có danh sách",
+            "Retrospective có hành động cải tiến, mỗi hành động có người phụ trách",
+            "Hồ sơ lưu trữ đầy đủ",
+            "Mọi quyền truy cập tạm thời của đội đã thu hồi và ghi nhận",
+            "Hoá đơn cuối đã phát hành; hợp đồng thanh lý hoặc chuyển bảo trì"
+          ],
+          "gate": true
+        }
+      ]
+    },
+    {
+      "slug": "bao-hanh-bao-tri",
+      "n": 18,
+      "phase": "run",
+      "title": "Bảo hành, vận hành & bảo trì",
+      "titleEn": "Warranty, operations & maintenance",
+      "epic": {
+        "summary": "GĐ 18 · Bảo hành, vận hành & bảo trì",
+        "description": "**Mục tiêu:** Giữ sản phẩm sống khoẻ sau bàn giao: sửa lỗi trong thời hạn bảo hành, xử lý sự cố theo quy trình, vá bảo mật đều đặn.\n\nNhóm: Vận hành (Run) · Giai đoạn 18/20 · Warranty, operations & maintenance\n\n### Đầu vào\n- Biên bản bàn giao, SLA, runbook\n- Hệ thống giám sát và cảnh báo\n\n### Điều kiện vào (entry criteria)\n- Biên bản bàn giao đã ký\n- Kênh tiếp nhận và SLA có hiệu lực\n\n### Đầu ra bàn giao\n- Thoả thuận SLA (mức độ sự cố, thời gian phản hồi)\n- Nhật ký sự cố & postmortem\n- Báo cáo bảo trì định kỳ\n\n### Khách hàng tham gia\n- Báo sự cố qua kênh đã thống nhất, kèm ảnh / bước tái hiện\n- Quyết định có gia hạn hợp đồng bảo trì sau bảo hành\n\n### Bộ phận tham gia\n- `vai:support` Hỗ trợ & Chăm sóc khách hàng — tiếp nhận, phân loại, liên lạc khách\n- `vai:devops` DevOps / SRE — xử lý sự cố, giám sát, sao lưu\n- `vai:dev` Phát triển (FE · BE · Mobile) — sửa lỗi bảo hành\n- `vai:sec` Bảo mật ứng dụng (AppSec) — vá bảo mật, theo dõi CVE\n- `vai:pm` Quản lý dự án / Scrum Master — báo cáo bảo trì, gia hạn hợp đồng\n- `vai:client` Khách hàng (Product Owner / nhà tài trợ) — báo sự cố, quyết định gia hạn\n\n### Mẫu tài liệu\n- [Thoả thuận mức dịch vụ (SLA) bảo trì](https://cuongthai.com/quy-trinh/mau/sla-bao-tri.md)\n- [Báo cáo sự cố (postmortem)](https://cuongthai.com/quy-trinh/mau/bao-cao-su-co-postmortem.md)\n\n### Tiêu chuẩn tham chiếu\n- NIST SP 800-61 Rev. 3 — Hướng dẫn ứng phó sự cố an ninh mạng\n- ISO/IEC/IEEE 14764:2022 — Quy trình bảo trì phần mềm\n- ITIL® 4 — Incident management — Tiếp nhận, phân loại, khôi phục dịch vụ\n\n### Học thêm\n- [Incident Response](https://cuongthai.com/courses/incident-response)\n- [Observability](https://cuongthai.com/courses/observability-monitoring)\n- [Deploy VPS](https://cuongthai.com/courses/deploy-vps)\n- [PostgreSQL](https://cuongthai.com/courses/postgresql)\n\n### Sai lầm hay gặp\n- Không phân biệt lỗi bảo hành với yêu cầu mới\n- Sửa nóng trên production không qua quy trình\n- Postmortem đổ lỗi cho cá nhân\n- Quên dọn dẹp đĩa / log → sự cố\n\nQuy trình đầy đủ: https://cuongthai.com/about/quy-trinh"
+      },
+      "tasks": [
+        {
+          "summary": "Thiết lập kênh tiếp nhận và SLA",
+          "role": "support",
+          "checklist": [
+            "Kênh tiếp nhận và giờ hỗ trợ đã thông báo khách",
+            "Định nghĩa mức độ P1–P4 và thời gian phản hồi",
+            "Mẫu báo sự cố cho khách"
+          ]
+        },
+        {
+          "summary": "Tiếp nhận, phân loại và xử lý sự cố theo SLA",
+          "role": "devops",
+          "checklist": [
+            "Ghi thời gian phản hồi và khắc phục so với SLA",
+            "Phân biệt lỗi bảo hành với yêu cầu mới",
+            "Không sửa nóng production ngoài quy trình"
+          ]
+        },
+        {
+          "summary": "Viết postmortem cho sự cố P1 / P2",
+          "role": "devops",
+          "checklist": [
+            "Dòng thời gian và nguyên nhân gốc",
+            "Hành động biến bài học thành kiểm tra tự động",
+            "Gửi khách bản tóm tắt"
+          ]
+        },
+        {
+          "summary": "Cập nhật phụ thuộc và vá bảo mật định kỳ",
+          "role": "sec",
+          "checklist": [
+            "Lịch cập nhật hằng tháng",
+            "Theo dõi CVE của phụ thuộc chính",
+            "Chứng chỉ và tên miền không hết hạn"
+          ]
+        },
+        {
+          "summary": "Khôi phục thử định kỳ và báo cáo bảo trì",
+          "role": "pm",
+          "checklist": [
+            "Khôi phục thử có biên bản",
+            "Theo dõi dung lượng đĩa và chi phí vận hành",
+            "Báo cáo bảo trì gửi khách theo kỳ"
+          ]
+        },
+        {
+          "summary": "Cổng chất lượng — Bảo hành, vận hành & bảo trì",
+          "role": "support",
+          "checklist": [
+            "Hết thời hạn bảo hành, không còn lỗi bảo hành mở",
+            "Báo cáo tổng kết bảo hành đã gửi",
+            "Khách đã quyết định: gia hạn bảo trì, chuyển giao, hoặc ngừng hệ thống"
+          ],
+          "gate": true
+        }
+      ]
+    },
+    {
+      "slug": "cai-tien",
+      "n": 19,
+      "phase": "run",
+      "title": "Cải tiến liên tục",
+      "titleEn": "Continuous improvement",
+      "epic": {
+        "summary": "GĐ 19 · Cải tiến liên tục",
+        "description": "**Mục tiêu:** Dùng số liệu và phản hồi thật để quyết định làm gì tiếp — thay vì thêm tính năng theo cảm hứng.\n\nNhóm: Vận hành (Run) · Giai đoạn 19/20 · Continuous improvement\n\n### Đầu vào\n- Số liệu sản phẩm và nhật ký sự cố\n- Phản hồi người dùng\n- Mục tiêu kinh doanh mới\n\n### Điều kiện vào (entry criteria)\n- Sản phẩm chạy ổn định trên production\n- Có đo lường (analytics, giám sát) với sự đồng ý phù hợp\n\n### Đầu ra bàn giao\n- Báo cáo số liệu sản phẩm\n- Tổng hợp phản hồi người dùng\n- Lộ trình v2 (roadmap)\n\n### Khách hàng tham gia\n- Chia sẻ mục tiêu kinh doanh mới\n- Cùng ưu tiên lộ trình\n\n### Bộ phận tham gia\n- `vai:data` Dữ liệu & AI — thu thập và phân tích số liệu\n- `vai:ux` Thiết kế UX/UI — phỏng vấn, khảo sát người dùng\n- `vai:ba` Phân tích nghiệp vụ (BA) — tổng hợp nhu cầu, đề xuất lộ trình\n- `vai:pm` Quản lý dự án / Scrum Master — rà soát định kỳ với khách\n- `vai:sales` Kinh doanh & Tiền bán hàng — cơ hội hợp tác tiếp theo\n- `vai:client` Khách hàng (Product Owner / nhà tài trợ) — mục tiêu mới, duyệt lộ trình\n\n### Mẫu tài liệu\n- [Đề xuất giải pháp & ước lượng](https://cuongthai.com/quy-trinh/mau/de-xuat-giai-phap.md)\n- [Phiếu yêu cầu thay đổi (CR)](https://cuongthai.com/quy-trinh/mau/phieu-yeu-cau-thay-doi.md)\n\n### Tiêu chuẩn tham chiếu\n- Core Web Vitals (Google) — LCP, INP, CLS — số đo trải nghiệm thực tế\n- Build–Measure–Learn (Lean Startup) — Vòng lặp học từ số liệu\n\n### Học thêm\n- [SEO & Analytics](https://cuongthai.com/courses/seo-analytics)\n- [Solo Product](https://cuongthai.com/courses/solo-product)\n- [Performance & Load](https://cuongthai.com/courses/performance-load-testing)\n- [SWP391 · Dev Project](https://cuongthai.com/academy/courses/software-development-project)\n\n### Sai lầm hay gặp\n- Thêm tính năng theo người nói to nhất\n- Đo mà không có câu hỏi cần trả lời\n- Bỏ qua nợ kỹ thuật\n- Quên chi phí vận hành tăng theo người dùng\n\nQuy trình đầy đủ: https://cuongthai.com/about/quy-trinh"
+      },
+      "tasks": [
+        {
+          "summary": "Thu thập và phân tích số liệu sản phẩm",
+          "role": "data",
+          "checklist": [
+            "Analytics tuân thủ đồng ý cookie / dữ liệu",
+            "Phễu chuyển đổi, tỉ lệ dùng tính năng, Core Web Vitals",
+            "Chi phí vận hành so với dự kiến"
+          ]
+        },
+        {
+          "summary": "Phỏng vấn / khảo sát người dùng",
+          "role": "ux",
+          "checklist": [
+            "Khảo sát ngắn cho người dùng thật",
+            "Phỏng vấn sâu một vài người dùng chính",
+            "Tổng hợp yêu cầu kèm nguồn và tần suất"
+          ]
+        },
+        {
+          "summary": "Rà soát định kỳ với khách",
+          "role": "pm",
+          "checklist": [
+            "Số liệu, sự cố, chi phí, nợ kỹ thuật",
+            "Mục tiêu kinh doanh mới của khách",
+            "Ghi quyết định và việc tiếp theo"
+          ]
+        },
+        {
+          "summary": "Đề xuất lộ trình v2 có ưu tiên",
+          "role": "ba",
+          "checklist": [
+            "Ưu tiên theo giá trị / công sức",
+            "Có hạng mục trả nợ kỹ thuật",
+            "Hạng mục được duyệt đi vào bước Đề xuất như vòng mới"
+          ]
+        },
+        {
+          "summary": "Cổng chất lượng — Cải tiến liên tục",
+          "role": "client",
+          "checklist": [
+            "Báo cáo số liệu và phản hồi đã gửi khách",
+            "Lộ trình v2 có ưu tiên được khách duyệt",
+            "Hạng mục v2 đi vào bước Đề xuất như một vòng mới"
+          ],
+          "gate": true
+        }
+      ]
+    },
+    {
+      "slug": "ngung-he-thong",
+      "n": 20,
+      "phase": "run",
+      "title": "Ngừng & chuyển giao hệ thống",
+      "titleEn": "Decommissioning & exit",
+      "epic": {
+        "summary": "GĐ 20 · Ngừng & chuyển giao hệ thống",
+        "description": "**Mục tiêu:** Khi hệ thống hết vòng đời hoặc khách chuyển nhà cung cấp: trả dữ liệu ở định dạng dùng được, chuyển giao trơn tru, xoá dữ liệu cá nhân đúng luật và có bằng chứng — không để lại máy chủ \"mồ côi\".\n\nNhóm: Vận hành (Run) · Giai đoạn 20/20 · Decommissioning & exit\n\n### Đầu vào\n- Hợp đồng: điều khoản chấm dứt và trả dữ liệu\n- Danh mục tài sản, tài khoản, tích hợp\n- Chính sách và thời hạn lưu trữ dữ liệu\n\n### Điều kiện vào (entry criteria)\n- Quyết định ngừng hoặc chuyển giao bằng văn bản\n- Thời hạn lưu trữ từng loại dữ liệu đã thống nhất\n\n### Đầu ra bàn giao\n- Kế hoạch ngừng hệ thống\n- Gói dữ liệu trả lại + từ điển dữ liệu + checksum\n- Biên bản xoá / huỷ dữ liệu\n- Danh sách tài nguyên đã huỷ (máy chủ, tài khoản, khoá, tên miền)\n\n### Khách hàng tham gia\n- Quyết định dữ liệu nào phải giữ (nghĩa vụ kế toán, pháp lý) và dữ liệu nào xoá\n- Thông báo người dùng cuối\n- Xác nhận đã nhận đủ dữ liệu và ký biên bản\n\n### Bộ phận tham gia\n- `vai:pm` Quản lý dự án / Scrum Master — điều phối kế hoạch ngừng\n- `vai:data` Dữ liệu & AI — xuất, kiểm và xoá dữ liệu\n- `vai:devops` DevOps / SRE — tắt dịch vụ, huỷ tài nguyên\n- `vai:legal` Pháp lý & Tài chính — nghĩa vụ lưu trữ, biên bản xoá\n- `vai:sec` Bảo mật ứng dụng (AppSec) — xoá an toàn, thu hồi khoá\n- `vai:support` Hỗ trợ & Chăm sóc khách hàng — thông báo người dùng\n- `vai:client` Khách hàng (Product Owner / nhà tài trợ) — quyết định giữ / xoá, xác nhận nhận dữ liệu\n\n### Mẫu tài liệu\n- [Kế hoạch ngừng hệ thống & biên bản xoá dữ liệu](https://cuongthai.com/quy-trinh/mau/ke-hoach-ngung-he-thong.md)\n\n### Tiêu chuẩn tham chiếu\n- ISO/IEC/IEEE 12207:2017 — Quy trình Loại bỏ (Disposal): kết thúc hệ thống có kiểm soát\n- Nghị định 13/2023/NĐ-CP — Quyền xoá dữ liệu của chủ thể; xoá khi hết mục đích xử lý (kèm văn bản hướng dẫn hiện hành)\n- Luật Bảo vệ dữ liệu cá nhân 2025 — Luật thông qua 26/06/2025, hiệu lực 01/01/2026 — đối chiếu cùng luật sư khi áp dụng\n- ISO/IEC 27001:2022 — Annex A 8.10 — Xoá thông tin khi không còn cần\n- NIST SP 800-88 — Hướng dẫn làm sạch phương tiện lưu trữ (media sanitization)\n\n### Học thêm\n- [Privacy & Data Law](https://cuongthai.com/courses/privacy-data-law)\n- [LAW102 · Business Law & Ethics](https://cuongthai.com/academy/courses/law102-business-law-and-ethics-fundamentals)\n- [PostgreSQL](https://cuongthai.com/courses/postgresql)\n- [Deploy VPS](https://cuongthai.com/courses/deploy-vps)\n\n### Sai lầm hay gặp\n- Tắt máy chủ nhưng quên bản sao lưu ở nơi khác\n- Xoá dữ liệu mà luật buộc phải giữ (vd chứng từ kế toán)\n- Bản ghi DNS còn trỏ vào dịch vụ đã huỷ → bị chiếm tên miền con\n- Quên huỷ thanh toán định kỳ\n\nQuy trình đầy đủ: https://cuongthai.com/about/quy-trinh"
+      },
+      "tasks": [
+        {
+          "summary": "Lập kế hoạch ngừng và kiểm kê nơi dữ liệu nằm",
+          "role": "pm",
+          "checklist": [
+            "Kiểm kê CSDL, file, bản sao lưu, log, máy dev, bên thứ ba",
+            "Quyết định giữ / trả / xoá cho từng loại dữ liệu (khách quyết)",
+            "Liệt kê phụ thuộc: tích hợp, webhook, DNS, email"
+          ]
+        },
+        {
+          "summary": "Thông báo người dùng cuối",
+          "role": "support",
+          "checklist": [
+            "Thông báo trước theo thời hạn đã thoả thuận",
+            "Hướng dẫn người dùng tải dữ liệu của mình (nếu có)",
+            "Nhắc lại trước ngày tắt"
+          ]
+        },
+        {
+          "summary": "Xuất và trả dữ liệu cho khách",
+          "role": "data",
+          "checklist": [
+            "Định dạng mở (CSV / JSON / SQL dump) kèm từ điển dữ liệu",
+            "Tạo checksum cho từng tệp",
+            "Khách xác nhận mở và đọc được"
+          ]
+        },
+        {
+          "summary": "Tắt dịch vụ và huỷ tài nguyên",
+          "role": "devops",
+          "checklist": [
+            "Chuyển chỉ đọc → tắt dịch vụ",
+            "Gỡ bản ghi DNS trỏ vào dịch vụ đã huỷ",
+            "Huỷ khoá API, webhook, chứng chỉ; dừng thanh toán định kỳ"
+          ]
+        },
+        {
+          "summary": "Xoá dữ liệu cá nhân và bản sao lưu, lập biên bản",
+          "role": "legal",
+          "checklist": [
+            "Xoá theo kế hoạch ở mọi nơi đã kiểm kê",
+            "Dữ liệu giữ theo nghĩa vụ có ngày xoá cụ thể",
+            "Biên bản xoá có người thực hiện và người kiểm chứng"
+          ]
+        },
+        {
+          "summary": "Cổng chất lượng — Ngừng & chuyển giao hệ thống",
+          "role": "client",
+          "checklist": [
+            "Dữ liệu đã trả kèm checksum, khách xác nhận đọc được",
+            "Dữ liệu cá nhân và bản sao lưu đã xoá theo kế hoạch, có biên bản",
+            "Không còn tài nguyên tính phí hay khoá còn hiệu lực",
+            "DNS và tên miền đã xử lý theo thoả thuận",
+            "Biên bản kết thúc đã ký"
+          ],
+          "gate": true
+        }
+      ]
+    }
+  ]
+}

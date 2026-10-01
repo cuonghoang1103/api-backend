@@ -2,6 +2,7 @@ import type { MetadataRoute } from 'next'
 import { getServerApiBaseUrl } from '@/lib/server-api'
 import { SHOP_ENABLED } from '@/lib/featureFlags'
 import { TYPES as AI_TEMPLATE_TYPES } from '@/lib/ai-templates/catalog'
+import { STAGES as PROCESS_STAGES } from '@/app/about/quy-trinh/data'
 
 /**
  * sitemap.xml — auto-generated at build time + ISR'd by Next.
@@ -93,6 +94,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE_URL}/hub`, lastModified: now, changeFrequency: 'weekly', priority: 0.5 },
     { url: `${SITE_URL}/about`, lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
     { url: `${SITE_URL}/about/quy-trinh`, lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
+    // Luồng "Studio doanh nghiệp" (bản 2, 01/10/2026): giới thiệu → nhận dự án → quy trình.
+    { url: `${SITE_URL}/about/studio`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${SITE_URL}/about/nhan-du-an`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${SITE_URL}/about/quy-trinh/to-chuc`, lastModified: now, changeFrequency: 'monthly', priority: 0.4 },
+    ...PROCESS_STAGES.map((s) => ({
+      url: `${SITE_URL}/about/quy-trinh/${s.slug}`,
+      lastModified: now,
+      changeFrequency: 'monthly' as const,
+      priority: 0.4,
+    })),
     { url: `${SITE_URL}/download`, lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
     { url: `${SITE_URL}/tools/image-to-doc`, lastModified: now, changeFrequency: 'monthly', priority: 0.4 },
 

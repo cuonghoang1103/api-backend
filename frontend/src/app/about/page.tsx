@@ -1510,12 +1510,14 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── BỔ SUNG 30/09/2026: lối vào /about/quy-trinh ──────────────────────
-          Chỉ CHÈN thêm một khối, không đổi phần nào của giao diện cũ. */}
+      {/* ── BỔ SUNG 30/09/2026: lối vào luồng nhận dự án ──────────────────────
+          Chỉ CHÈN thêm một khối, không đổi phần nào của giao diện cũ.
+          01/10/2026 (bản 2): trỏ vào BƯỚC 1 của luồng /about/studio →
+          /about/nhan-du-an → /about/quy-trinh; bỏ số giai đoạn gõ cứng. */}
       <section className="pt-20 pb-4">
         <div className="max-w-6xl mx-auto px-4">
           <Link
-            href="/about/quy-trinh"
+            href="/about/studio"
             className="group relative flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6 rounded-2xl border border-neon-violet/30 bg-neon-violet/[0.06] p-5 sm:p-6 hover:border-neon-violet/60 transition-colors overflow-hidden"
           >
             <span className="shrink-0 w-12 h-12 rounded-xl bg-neon-gradient flex items-center justify-center text-white">
@@ -1523,20 +1525,20 @@ export default function AboutPage() {
             </span>
             <span className="flex-1 min-w-0">
               <span className="block text-xs font-mono uppercase tracking-wider text-neon-violet mb-1">
-                {L('Quy trình tôi áp dụng', 'How I work')}
+                {L('Nhận dự án', 'Work with me')}
               </span>
               <span className="block text-lg sm:text-xl font-heading font-bold text-text-primary">
-                {L('Quy trình nhận & làm dự án — 15 giai đoạn', 'How I take on & deliver a project — 15 stages')}
+                {L('Studio, nhận dự án & quy trình làm việc', 'Studio, project intake & delivery process')}
               </span>
               <span className="block text-sm text-text-secondary mt-1">
                 {L(
-                  'Từ tiếp nhận, khảo sát, đặc tả, thiết kế, kiểm thử, bảo mật, DevOps tới nghiệm thu, bàn giao và bảo trì — kèm tài liệu bàn giao và tiêu chuẩn tham chiếu.',
-                  'Intake, discovery, specs, design, testing, security, DevOps, acceptance, handover and maintenance — with deliverables and reference standards.',
+                  'Giới thiệu studio, gửi yêu cầu dự án, rồi xem từng giai đoạn từ tiếp nhận tới bảo trì — với bộ phận phụ trách, RACI, cổng chất lượng và mẫu tài liệu.',
+                  'Meet the studio, send a project request, then walk through every stage from intake to maintenance — with owners, RACI, quality gates and document templates.',
                 )}
               </span>
             </span>
             <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-neon-violet shrink-0">
-              {L('Xem quy trình', 'See the process')}
+              {L('Bắt đầu', 'Start here')}
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </span>
           </Link>

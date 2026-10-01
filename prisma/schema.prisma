@@ -2875,6 +2875,56 @@ model ContactSubmission {
   @@map("contact_submissions")
 }
 
+/// Phiếu yêu cầu dự án từ khách (trang /about/quy-trinh — "Nhận dự án").
+/// Vòng đời: NEW → QUALIFYING → ACCEPTED | DECLINED → PROJECT_CREATED.
+/// Admin duyệt rồi bấm MỘT nút để dựng dự án CT Work từ mẫu
+/// `content/quy-trinh/client-project-template.json`.
+model ProjectRequest {
+  id              Int       @id @default(autoincrement())
+  /// Mã phiếu đưa cho khách, vd YC-2026-0001 (đánh số lại mỗi năm).
+  code            String    @unique(map: "uk_project_request_code") @db.VarChar(20)
+  name            String    @db.VarChar(120)
+  email           String    @db.VarChar(254)
+  phone           String?   @db.VarChar(30)
+  organization    String?   @db.VarChar(200)
+  /// Vai trò người gửi trong tổ chức (CTO, chủ doanh nghiệp, PM…).
+  senderRole      String?   @map("sender_role") @db.VarChar(120)
+  /// WEB | APP | TOOL | AI | OTHER
+  productTypes    String[]  @map("product_types")
+  needs           String    @db.Text
+  businessGoals   String?   @map("business_goals") @db.Text
+  endUsers        String?   @map("end_users") @db.Text
+  existingSystems String?   @map("existing_systems") @db.Text
+  /// Khoảng ngân sách dạng chữ ("100–300 triệu") — KHÔNG ép thành số.
+  budgetRange     String?   @map("budget_range") @db.VarChar(100)
+  desiredDeadline String?   @map("desired_deadline") @db.VarChar(100)
+  /// NORMAL | PERSONAL_DATA | SENSITIVE (dữ liệu cá nhân nhạy cảm theo NĐ 13/2023)
+  securityLevel   String    @default("NORMAL") @map("security_level") @db.VarChar(20)
+  securityNote    String?   @map("security_note") @db.Text
+  /// Đồng ý xử lý dữ liệu cá nhân (Nghị định 13/2023/NĐ-CP) — bắt buộc true.
+  consent         Boolean   @default(false)
+  consentAt       DateTime? @map("consent_at")
+  /// Phiên bản thông báo xử lý dữ liệu mà khách đã đọc lúc đồng ý.
+  consentVersion  String?   @map("consent_version") @db.VarChar(30)
+  source          String?   @db.VarChar(100)
+  ip              String?   @db.VarChar(64)
+  userAgent       String?   @map("user_agent") @db.VarChar(500)
+  /// NEW | QUALIFYING | ACCEPTED | DECLINED | PROJECT_CREATED
+  status          String    @default("NEW") @db.VarChar(20)
+  internalNote    String?   @map("internal_note") @db.Text
+  workProjectId   Int?      @unique(map: "uk_project_request_work_project") @map("work_project_id")
+  /// Phiếu admin tự tạo để luyện nhập vai — KHÔNG phải khách thật.
+  isRoleplay      Boolean   @default(false) @map("is_roleplay")
+  statusChangedAt DateTime? @map("status_changed_at")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+
+  workProject WorkProject? @relation(fields: [workProjectId], references: [id], onDelete: SetNull)
+
+  @@index([status, createdAt(sort: Desc)], map: "idx_project_request_status_created")
+  @@map("project_requests")
+}
+
 // ============================================================
 // 17. DIRECT MESSAGING
 // ============================================================
@@ -9775,30 +9825,32 @@ model WorkProject {
   updatedAt    DateTime  @updatedAt @map("updated_at")
   deletedAt    DateTime? @map("deleted_at")
 
-  workspace    WorkSpace             @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-  lead         User?                 @relation("WorkProjectLead", fields: [leadId], references: [id], onDelete: SetNull)
-  members      WorkProjectMember[]
-  invites      WorkInvite[]
-  workflows    WorkWorkflow[]
-  issueTypes   WorkIssueType[]
-  issues       WorkIssue[]
-  labels       WorkLabel[]
-  components   WorkComponent[]
-  sprints      WorkSprint[]
-  testPlans    WorkTestPlan[]
-  testCycles   WorkTestCycle[]
-  customFields WorkCustomField[]
-  savedFilters WorkSavedFilter[]
-  dashboards   WorkDashboard[]
-  versions     WorkVersion[]
-  automations  WorkAutomationRule[]
-  github       WorkGithubConnection?
-  devActivity  WorkDevActivity[]
-  publicLinks  WorkPublicLink[]
-  aiThreads    WorkAiThread[]
-  chatHooks    WorkChatHook[]
-  gitlab       WorkGitlabConnection?
-  editLocks    WorkEditLock[]
+  workspace     WorkSpace             @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  lead          User?                 @relation("WorkProjectLead", fields: [leadId], references: [id], onDelete: SetNull)
+  members       WorkProjectMember[]
+  invites       WorkInvite[]
+  workflows     WorkWorkflow[]
+  issueTypes    WorkIssueType[]
+  issues        WorkIssue[]
+  labels        WorkLabel[]
+  components    WorkComponent[]
+  sprints       WorkSprint[]
+  testPlans     WorkTestPlan[]
+  testCycles    WorkTestCycle[]
+  customFields  WorkCustomField[]
+  savedFilters  WorkSavedFilter[]
+  dashboards    WorkDashboard[]
+  versions      WorkVersion[]
+  automations   WorkAutomationRule[]
+  github        WorkGithubConnection?
+  devActivity   WorkDevActivity[]
+  publicLinks   WorkPublicLink[]
+  aiThreads     WorkAiThread[]
+  chatHooks     WorkChatHook[]
+  gitlab        WorkGitlabConnection?
+  editLocks     WorkEditLock[]
+  /// Phiếu yêu cầu của khách đã sinh ra dự án này (tối đa một).
+  clientRequest ProjectRequest?
 
   @@unique([workspaceId, key], name: "uk_work_project_key", map: "uk_work_project_key")
   @@map("work_projects")

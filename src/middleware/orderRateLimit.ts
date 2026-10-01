@@ -154,3 +154,15 @@ export const tocDoTaiLenLimiter = taoLimiter({
   max: parseInt(process.env.SPEEDTEST_UP_LIMIT_PER_MIN || '40', 10),
   message: 'Bạn đang đo tốc độ quá nhiều lần. Vui lòng chờ một lát.',
 });
+
+/**
+ * Phiếu yêu cầu dự án (form công khai, không cần đăng nhập ⇒ khoá theo IP).
+ * Khách thật gửi một hai phiếu; 5 phiếu/giờ đủ cho người sửa và gửi lại,
+ * nhưng chặn script bơm phiếu rác vào hộp thư admin + Telegram.
+ */
+export const projectRequestLimiter = taoLimiter({
+  prefix: 'rl:projreq:',
+  windowMs: 60 * 60_000,
+  max: parseInt(process.env.PROJECT_REQUEST_LIMIT_PER_HOUR || '5', 10),
+  message: 'Bạn đã gửi quá nhiều phiếu yêu cầu. Vui lòng chờ một lát hoặc liên hệ trực tiếp qua email.',
+});

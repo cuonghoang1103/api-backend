@@ -46,6 +46,8 @@ export function ChiTietViec({ viecId, onDong, onDoi }: { viecId: number | null; 
   const [tep, setTep] = useState<Array<{ url: string; ten?: string; loai?: string }>>([]);
   const [dangTai, setDangTai] = useState(false);
   const [dangNop, setDangNop] = useState(false);
+  const [traLoi, setTraLoi] = useState<string[]>([]);
+  const [dangTraLoi, setDangTraLoi] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
   const tai = useCallback(async () => {
@@ -102,7 +104,7 @@ export function ChiTietViec({ viecId, onDong, onDoi }: { viecId: number | null; 
   }
 
   const l = v ? NHAN_LOAI[v.loai] ?? { ten: v.loai, bieuTuong: '•' } : null;
-  const coTheNop = v && v.trangThai !== 'DAT' && v.trangThai !== 'CHO_CHAM';
+  const coTheNop = v && v.trangThai !== 'DAT' && v.trangThai !== 'CHO_CHAM' && v.trangThai !== 'VAN_DAP';
   const h = v ? conLai(v.hanChot) : null;
 
   return (
@@ -116,6 +118,14 @@ export function ChiTietViec({ viecId, onDong, onDoi }: { viecId: number | null; 
             <span>· Tuần {v.tuan} · {l?.ten} · ⏱ {v.thoiLuongPhut} phút · trọng số {v.trongSo}</span>
             <span className={h?.tre ? 'font-semibold text-red-500' : ''}>· hạn {new Date(v.hanChot).toLocaleString('vi-VN', { weekday: 'short', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })} ({h?.chu})</span>
             <NhanTrangThai t={v.trangThai} />
+            {v.gioBatDau && (
+              <label className="inline-flex items-center gap-1 rounded-full bg-[var(--bg-primary)] px-2 py-0.5">
+                📅 giờ học
+                <input type="datetime-local" className="bg-transparent text-text-primary outline-none"
+                  defaultValue={new Date(new Date(v.gioBatDau).getTime() + 7 * 3_600_000).toISOString().slice(0, 16)}
+                  onBlur={async (e) => { if (!e.target.value) return; await hocTapApi.doiGio(v.id, `${e.target.value}:00+07:00`).catch((x) => setLoi(thongBao(x))); await tai(); onDoi(); }} />
+              </label>
+            )}
             <span className="rounded-full bg-[var(--bg-primary)] px-2 py-0.5">giao bởi {v.nguon === 'NGUOI_HOC' ? 'bạn' : v.nguon === 'CLAUDE' ? 'Claude' : 'AI'}</span>
           </div>
 
@@ -148,6 +158,36 @@ export function ChiTietViec({ viecId, onDong, onDoi }: { viecId: number | null; 
               <DanhSach tieuDe="💪 Làm tốt" ds={v.loiCanSua?.diemManh} mau="#10b981" />
               <DanhSach tieuDe="❌ Lỗi cần sửa" ds={v.loiCanSua?.loi} mau="#ef4444" />
               <DanhSach tieuDe="📈 Cần cải thiện" ds={v.loiCanSua?.canCaiThien} mau="#f59e0b" />
+            </div>
+          )}
+
+          {v.trangThai === 'VAN_DAP' && v.vanDap && (
+            <div className="space-y-3 rounded-2xl border-2 border-sky-500/60 bg-sky-500/10 p-4">
+              <div className="text-sm font-black text-sky-500">🎤 VẤN ĐÁP — bằng chứng đã đạt ({v.vanDap.diemBangChung}/10), giờ chứng minh bạn TỰ LÀM và HIỂU</div>
+              <p className="text-xs text-text-muted">Trả lời bằng lời của bạn, ngắn thôi. Đúng ≥ 2/3 câu mới được tích. Đừng hỏi AI — vấn đáp là để bạn biết mình hiểu thật chưa.</p>
+              {v.vanDap.cauHoi.map((c, i) => (
+                <label key={i} className="block space-y-1">
+                  <span className="text-sm font-semibold text-text-primary">{i + 1}. {c}</span>
+                  <textarea rows={3} className={oNhap} value={traLoi[i] ?? ''} onChange={(e) => setTraLoi((a) => { const n = [...a]; n[i] = e.target.value; return n; })} />
+                </label>
+              ))}
+              <Nut disabled={dangTraLoi || v.vanDap.cauHoi.some((_, i) => (traLoi[i] ?? '').trim().length < 3)} onClick={async () => {
+                setDangTraLoi(true); setLoi('');
+                try { await hocTapApi.vanDap(v.id, traLoi); setTraLoi([]); await tai(); onDoi(); } catch (e) { setLoi(thongBao(e)); } finally { setDangTraLoi(false); }
+              }}><Send size={14} /> {dangTraLoi ? 'Đang chấm vấn đáp…' : 'Nộp câu trả lời'}</Nut>
+            </div>
+          )}
+
+          {v.vanDap?.ketQua && (
+            <div className={cx('rounded-2xl border p-3 text-sm', v.vanDap.ketQua.hieu ? 'border-emerald-500/40' : 'border-orange-500/40')}>
+              <div className="font-bold text-text-primary">🎤 Vấn đáp: {v.vanDap.ketQua.tungCau.filter((t) => t.dung).length}/{v.vanDap.ketQua.tungCau.length} câu đúng {v.vanDap.ketQua.hieu ? '— chứng minh được hiểu bài ✅' : '— chưa chứng minh được ❌'}</div>
+              {v.vanDap.cauHoi.map((c, i) => (
+                <div key={i} className="mt-2 text-xs">
+                  <div className="font-semibold text-text-primary">{v.vanDap!.ketQua!.tungCau[i]?.dung ? '✓' : '✗'} {c}</div>
+                  <div className="text-text-muted">Bạn: {v.vanDap!.traLoi?.[i]}</div>
+                  {v.vanDap!.ketQua!.tungCau[i]?.goiY && <div className="text-emerald-600">Ý đúng: {v.vanDap!.ketQua!.tungCau[i].goiY}</div>}
+                </div>
+              ))}
             </div>
           )}
 
@@ -196,7 +236,7 @@ export function ChiTietViec({ viecId, onDong, onDoi }: { viecId: number | null; 
                     <Send size={14} /> {dangNop ? 'Đang nộp…' : 'Nộp cho AI chấm'}
                   </Nut>
                 </div>
-                <p className="text-[11px] text-text-muted">AI chỉ tích khi bằng chứng đủ. “Em làm xong rồi” không phải bằng chứng 🙂</p>
+                <p className="text-[11px] text-text-muted"><b>Đạt khi:</b> nộp ĐỦ mọi mục trong “📎 Phải nộp” <b>và</b> điểm ≥ 5/10. Thiếu một mục bắt buộc thì chưa đạt, dù phần còn lại tốt. “Em làm xong rồi” không phải bằng chứng 🙂</p>
               </div>
             </>
           )}

@@ -9222,6 +9222,16 @@ model NhiemVuHoc {
   /// Ai tạo việc: 'AI' | 'CLAUDE' | 'NGUOI_HOC'
   nguon String @default("AI") @db.VarChar(12)
 
+  /// GIỜ HỌC dự kiến (xếp lịch tự động quanh lịch lớp, hoặc người học kéo).
+  /// Tới giờ ⇒ nhắc; quá 15' chưa bấm Bắt đầu ⇒ cảnh báo + tính "bỏ lỡ giờ học" vào tỷ lệ trượt.
+  gioBatDau   DateTime? @map("gio_bat_dau")
+  /// Đã gửi lời nhắc "tới giờ" / "đang trễ" — để cron không gửi lặp.
+  daNhacLuc   DateTime? @map("da_nhac_luc")
+  daBaoTreLuc DateTime? @map("da_bao_tre_luc")
+  /// VẤN ĐÁP chống học vẹt: bằng chứng đạt ⇒ AI hỏi lại 2–3 câu về CHÍNH bài đã nộp;
+  /// trả lời đúng mới DAT. { cauHoi: string[], traLoi?: string[], ketQua?: {...}, diemBangChung: number }
+  vanDap      Json?     @map("van_dap")
+
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
@@ -9231,6 +9241,7 @@ model NhiemVuHoc {
 
   @@index([userId, hanChot], map: "idx_nhiem_vu_hoc_user_han")
   @@index([monId, tuan], map: "idx_nhiem_vu_hoc_mon_tuan")
+  @@index([userId, gioBatDau], map: "idx_nhiem_vu_hoc_user_gio")
   @@map("nhiem_vu_hoc")
 }
 

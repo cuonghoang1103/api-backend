@@ -1,0 +1,41 @@
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import { xepLichThuan, type KhungLop, type ViecXep } from './xepLich.js';
+
+// Thứ Sáu 02/10/2026 15:30 giờ VN = 08:30 UTC.
+const NOW = new Date('2026-10-02T08:30:00Z');
+const vn = (d: Date) => new Date(d.getTime() + 7 * 3_600_000).toISOString().slice(0, 16).replace('T', ' ');
+const lop: KhungLop[] = [
+  { thu: 1, batDau: '12:50', ketThuc: '15:10', maMon: 'LAB211' },
+  { thu: 4, batDau: '15:20', ketThuc: '17:40', maMon: 'LAB211' },
+  { thu: 5, batDau: '07:30', ketThuc: '09:50', maMon: 'JPD123' },
+];
+const v = (id: number, han: string, phut: number, o: Partial<ViecXep> = {}): ViecXep =>
+  ({ id, maMon: 'FER202', tieuDe: `việc ${id}`, hanChot: new Date(han), thoiLuongPhut: phut, trongSo: 1, ...o });
+
+test('xếp sau giờ hiện tại, né bữa tối, có nghỉ 10 phút', () => {
+  const kq = xepLichThuan([v(1, '2026-10-02T16:59:59Z', 60), v(2, '2026-10-02T16:59:59Z', 60), v(3, '2026-10-02T16:59:59Z', 60)], lop, NOW);
+  assert.equal(vn(kq.get(1)!), '2026-10-02 15:35');
+  assert.equal(vn(kq.get(2)!), '2026-10-02 16:45');
+  // 17:55 + 60 = 18:55 đè bữa tối 18:30 ⇒ sang 19:25
+  assert.equal(vn(kq.get(3)!), '2026-10-02 19:25');
+});
+
+test('việc LÊN LỚP đặt đúng slot lớp của môn ngày hạn', () => {
+  const kq = xepLichThuan([v(9, '2026-10-08T16:59:59Z', 140, { maMon: 'LAB211', tieuDe: 'P0071 — LÊN LỚP slot 4' })], lop, NOW);
+  assert.equal(vn(kq.get(9)!), '2026-10-08 15:20');
+});
+
+test('né giờ lớp (+30 phút đi lại) và trần 360 phút/ngày thường', () => {
+  // Thứ Hai 05/10: lớp 12:50–15:10 ⇒ bận 12:20–15:40
+  const now = new Date('2026-10-05T04:00:00Z'); // 11:00 VN
+  const kq = xepLichThuan([v(1, '2026-10-05T16:59:59Z', 90), v(2, '2026-10-05T16:59:59Z', 300)], lop, now);
+  assert.equal(vn(kq.get(1)!), '2026-10-05 15:50');
+  // 90 + 300 > 360 ⇒ việc 2 sang hôm sau; 07:00+300 đè bữa trưa ⇒ 12:55
+  assert.equal(vn(kq.get(2)!), '2026-10-06 12:55');
+});
+
+test('khối cố định được né', () => {
+  const kq = xepLichThuan([v(1, '2026-10-03T16:59:59Z', 30)], lop, NOW, {}, [{ bd: new Date('2026-10-02T08:35:00Z'), phut: 60 }]);
+  assert.equal(vn(kq.get(1)!), '2026-10-02 16:45');
+});

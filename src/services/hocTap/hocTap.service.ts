@@ -12,6 +12,7 @@ import { Prisma } from '@prisma/client';
 import { prisma } from '../../config/database.js';
 import { AppError, BadRequestError, ForbiddenError, NotFoundError } from '../../middleware/errorHandler.js';
 import { tinhRuiRoKy, tinhRuiRoMon, tuanDaQua, tuanHienTai, type KetQuaRuiRo, type ViecTinh } from './ruiRo.js';
+import { lichLopCua, xepLich } from './xepLich.js';
 
 export const LOAI_VIEC = ['NEN_TANG', 'BAI_HOC', 'BAI_TAP', 'LAB', 'QUIZ', 'PE', 'FE', 'ON_TAP', 'GHI_CHU'] as const;
 export type LoaiViec = (typeof LOAI_VIEC)[number];
@@ -63,6 +64,7 @@ function sangViecTinh(v: ViecDb): ViecTinh {
     loai: v.loai,
     diem: v.diem,
     soLanTre: v.bangChung.filter((b) => b.nopTre).length,
+    boLo: !!v.daBaoTreLuc,
   };
 }
 
@@ -85,8 +87,10 @@ export interface MonTongQuan {
 
 export async function tongQuan(userId: number, now = new Date()) {
   const hocKy = await kyDangHoc(userId);
-  if (!hocKy) return { hocKy: null, tuan: 0, mon: [], ruiRoKy: { tyLe: 0, mucDo: 'xanh' as const }, homNay: [], quaHan: [], choCham: [] };
+  if (!hocKy) return { hocKy: null, tuan: 0, mon: [], ruiRoKy: { tyLe: 0, mucDo: 'xanh' as const }, homNay: [], quaHan: [], choCham: [], lich: [] };
 
+  // Việc mới (chưa có giờ) ⇒ xếp giờ ngay, để mục "Lịch học" không bao giờ thiếu việc.
+  await xepLich(userId, { chiViecChuaCoGio: true, now }).catch(() => 0);
   const tuanQua = tuanDaQua(hocKy.batDau, hocKy.soTuan, now);
   const tuan = tuanHienTai(hocKy.batDau, hocKy.soTuan, now);
   const mons = await prisma.monHocKy.findMany({
@@ -123,16 +127,37 @@ export async function tongQuan(userId: number, now = new Date()) {
   const gon = (v: (typeof tatCa)[number]) => ({
     id: v.id, monId: v.monId, maMon: v.maMon, mau: v.mau, tieuDe: v.tieuDe, loai: v.loai, hanChot: v.hanChot,
     thoiLuongPhut: v.thoiLuongPhut, trangThai: v.trangThai, batDauLuc: v.batDauLuc, diem: v.diem, tuan: v.tuan,
+    gioBatDau: v.gioBatDau, boLo: !!v.daBaoTreLuc,
   });
   const chuaXong = (v: (typeof tatCa)[number]) => v.trangThai !== 'DAT' && v.trangThai !== 'CHO_CHAM';
   const quaHan = tatCa.filter((v) => chuaXong(v) && v.hanChot < now).map(gon);
   const homNay = tatCa
-    .filter((v) => chuaXong(v) && v.hanChot >= now && (v.hanChot <= cuoiHomNay || v.trangThai === 'DANG_LAM'))
+    .filter((v) => chuaXong(v) && v.hanChot >= now && (v.hanChot <= cuoiHomNay || v.trangThai === 'DANG_LAM' || (v.gioBatDau !== null && v.gioBatDau <= cuoiHomNay)))
+    .sort((a, b) => (a.gioBatDau?.getTime() ?? a.hanChot.getTime()) - (b.gioBatDau?.getTime() ?? b.hanChot.getTime()))
     .map(gon);
   // Hôm nay trống thì kéo 3 việc gần nhất lên — một màn hình "không có gì làm"
   // ở tuần 4 là lời nói dối nguy hiểm nhất mục này có thể nói.
   if (!homNay.length) homNay.push(...tatCa.filter((v) => chuaXong(v) && v.hanChot >= now).slice(0, 3).map(gon));
   const choCham = tatCa.filter((v) => v.trangThai === 'CHO_CHAM').map(gon);
+
+  // Lịch 7 ngày: lớp trên trường + khối tự học đã xếp, theo giờ VN.
+  const lop = await lichLopCua(userId);
+  const homNay0 = homNayVN(now);
+  const lich = Array.from({ length: 7 }, (_, i) => {
+    const ngay = new Date(homNay0.getTime() + i * 86_400_000);
+    const dauUtc = ngay.getTime() - 7 * 3_600_000;
+    const thu = ((ngay.getUTCDay() + 6) % 7) + 1;
+    return {
+      ngay: ngay.toISOString().slice(0, 10),
+      thu,
+      lop: lop.filter((l) => l.thu === thu).sort((a, b) => a.batDau.localeCompare(b.batDau))
+        .map((l) => ({ maMon: l.maMon, batDau: l.batDau, ketThuc: l.ketThuc, phong: l.phong, slot: l.slot })),
+      viec: tatCa
+        .filter((v) => v.gioBatDau && v.gioBatDau.getTime() >= dauUtc && v.gioBatDau.getTime() < dauUtc + 86_400_000)
+        .sort((a, b) => a.gioBatDau!.getTime() - b.gioBatDau!.getTime())
+        .map(gon),
+    };
+  });
 
   return {
     hocKy: { id: hocKy.id, ten: hocKy.ten, batDau: hocKy.batDau, soTuan: hocKy.soTuan, tuanThi: hocKy.tuanThi },
@@ -144,6 +169,7 @@ export async function tongQuan(userId: number, now = new Date()) {
     homNay,
     quaHan,
     choCham,
+    lich,
   };
 }
 
@@ -334,6 +360,7 @@ export async function nopBangChung(userId: number, viecId: number, b: { noiDung?
   const v = await viecCuaToi(userId, viecId);
   if (v.trangThai === 'DAT') throw new BadRequestError('Việc này đã đạt rồi');
   if (v.trangThai === 'CHO_CHAM') throw new BadRequestError('Lần nộp trước đang được chấm — đợi kết quả đã');
+  if (v.trangThai === 'VAN_DAP') throw new BadRequestError('Bằng chứng đã đạt — trả lời vấn đáp trước đã');
   const noiDung = (b.noiDung ?? '').trim().slice(0, 30_000);
   const lienKet = (b.lienKet ?? []).map((x) => String(x).trim()).filter((x) => /^https?:\/\//.test(x)).slice(0, 10);
   const tep = (b.tep ?? []).filter((t) => t && /^https?:\/\//.test(t.url)).slice(0, 10)
@@ -451,4 +478,49 @@ export async function chayBuoiSang(now = new Date()) {
     }
   }
   return dem;
+}
+
+/** Người học tự dời GIỜ HỌC (không phải hạn chót — hạn thì không tự đổi được). */
+export async function doiGio(userId: number, viecId: number, gio: Date) {
+  const v = await viecCuaToi(userId, viecId);
+  if (v.trangThai === 'DAT') throw new BadRequestError('Việc này đã đạt');
+  if (Number.isNaN(gio.getTime())) throw new BadRequestError('Giờ không hợp lệ');
+  return prisma.nhiemVuHoc.update({ where: { id: viecId }, data: { gioBatDau: gio, daNhacLuc: null } });
+}
+
+/**
+ * Cron 5 phút: nhắc "tới giờ học" (5' trước) và báo "đang trễ" (quá 15' chưa
+ * bấm Bắt đầu). Việc bị trễ được ghi `daBaoTreLuc` (tính vào tỷ lệ trượt) rồi
+ * XẾP LẠI sang khung trống kế tiếp — lịch luôn còn thật, không thành bãi việc cũ.
+ */
+export async function nhacGioHoc(now = new Date()) {
+  const { guiThongBao } = await import('../push/apns.js');
+  const sapToi = await prisma.nhiemVuHoc.findMany({
+    where: { trangThai: { in: ['CHUA_LAM', 'CHUA_DAT'] }, batDauLuc: null, daNhacLuc: null, gioBatDau: { gte: new Date(now.getTime() - 60_000), lte: new Date(now.getTime() + 6 * 60_000) } },
+    include: { mon: { select: { maMon: true } } },
+  });
+  for (const v of sapToi) {
+    const gio = new Date(v.gioBatDau!.getTime() + 7 * 3_600_000).toISOString().slice(11, 16);
+    await guiThongBao(v.userId, { tieuDe: `⏰ ${gio} — ${v.mon.maMon}`, than: `${v.tieuDe} (${v.thoiLuongPhut} phút). Mở Học kỳ → Bắt đầu.`, duLieu: { url: '/hoc-tap', viecId: v.id }, nhom: 'hoc-tap' });
+    await prisma.nhiemVuHoc.update({ where: { id: v.id }, data: { daNhacLuc: now } });
+  }
+
+  const tre = await prisma.nhiemVuHoc.findMany({
+    where: { trangThai: { in: ['CHUA_LAM', 'CHUA_DAT'] }, batDauLuc: null, gioBatDau: { lt: new Date(now.getTime() - 15 * 60_000) } },
+    include: { mon: { select: { maMon: true } } },
+  });
+  const nguoi = new Set<number>();
+  for (const v of tre) {
+    // Báo một lần cho mỗi lần bỏ lỡ; giữ dấu lần đầu (tính vào rủi ro), rồi xếp lại.
+    if (!v.daBaoTreLuc || (v.gioBatDau && v.daBaoTreLuc < v.gioBatDau)) {
+      await guiThongBao(v.userId, { tieuDe: `🚨 Bỏ lỡ giờ học — ${v.mon.maMon}`, than: `"${v.tieuDe}" đã trễ 15'. Việc này được dời sang khung sau, và tỷ lệ trượt của môn tăng. Mở Học kỳ để xem.`, duLieu: { url: '/hoc-tap' }, nhom: 'hoc-tap' });
+      await prisma.nhiemVuHoc.update({ where: { id: v.id }, data: { daBaoTreLuc: now } });
+    }
+    nguoi.add(v.userId);
+  }
+  for (const u of nguoi) {
+    await prisma.nhiemVuHoc.updateMany({ where: { userId: u, trangThai: { in: ['CHUA_LAM', 'CHUA_DAT'] }, batDauLuc: null, gioBatDau: { lt: new Date(now.getTime() - 15 * 60_000) } }, data: { gioBatDau: null } });
+    await xepLich(u, { chiViecChuaCoGio: true, now }).catch(() => 0);
+  }
+  return { nhac: sapToi.length, tre: tre.length };
 }

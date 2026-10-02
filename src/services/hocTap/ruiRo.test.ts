@@ -51,3 +51,10 @@ test('tuần hiện tại và mức màu', () => {
   assert.equal(mucDoCua(14), 'xanh');
   assert.equal(mucDoCua(50), 'do');
 });
+
+test('bỏ lỡ giờ học cộng 2 điểm mỗi việc, tối đa 20', () => {
+  const goc = tinhRuiRoMon([v({}), v({})], 3.5, 8, NOW).tyLe;
+  const sau = tinhRuiRoMon([v({ boLo: true }), v({ boLo: true })], 3.5, 8, NOW);
+  assert.equal(sau.tyLe, goc + 4);
+  assert.equal(sau.boLo, 2);
+});

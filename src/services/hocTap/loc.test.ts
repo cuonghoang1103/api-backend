@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { locKeHoach } from './keHoachAI.js';
-import { locKetQua } from './chamBangChung.js';
+import { locKetQua, locVanDap } from './chamBangChung.js';
 
 test('locKeHoach: dựng link từ id/slug đã kiểm, bỏ id bịa, kẹp tuần', () => {
   const bai = new Map([[101, 'fer202']]);
@@ -31,4 +31,11 @@ test('locKetQua: kẹp điểm, cần có điểm, dat chỉ khi true thật', (
   assert.equal(r.diem, 10);
   assert.deepEqual(r.loiCanSua, ['a', '3']);
   assert.throws(() => locKetQua({ dat: true }));
+});
+
+test('locVanDap: mã quyết "hiểu" khi đúng ≥ 2/3 câu, không tin cờ model', () => {
+  assert.equal(locVanDap({ hieu: true, diem: 9, tungCau: [{ dung: true }, { dung: false }, { dung: false }] }, 3).hieu, false);
+  assert.equal(locVanDap({ diem: 7, tungCau: [{ dung: true }, { dung: true }, { dung: false }] }, 3).hieu, true);
+  assert.equal(locVanDap({ diem: 7, tungCau: [{ dung: true }, { dung: false }] }, 2).hieu, false);
+  assert.equal(locVanDap({ diem: 7, tungCau: [] }, 2).hieu, false);
 });

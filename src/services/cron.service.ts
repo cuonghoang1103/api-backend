@@ -558,6 +558,16 @@ export function startCronJobs(): void {
     }
   }, { timezone: 'UTC' });
 
+  // Mỗi 5 phút — Huấn luyện học kỳ: nhắc "tới giờ học", báo "bỏ lỡ" rồi xếp lại.
+  cron.schedule('*/5 * * * *', async () => {
+    try {
+      const { nhacGioHoc } = await import('./hocTap/hocTap.service.js');
+      await nhacGioHoc();
+    } catch (err) {
+      logger.error('cron hoc-tap nhắc giờ lỗi', { error: (err as Error).message });
+    }
+  }, { timezone: 'UTC' });
+
   // 07:00 VN — Huấn luyện học kỳ (/hoc-tap): chụp tỷ lệ trượt của ngày (vẽ biểu
   // đồ) và đẩy một thông báo "hôm nay làm gì, đang trượt bao nhiêu %".
   cron.schedule('0 0 * * *', async () => {

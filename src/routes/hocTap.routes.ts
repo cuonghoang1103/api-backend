@@ -12,9 +12,10 @@ import { authenticate } from '../middleware/auth.js';
 import { BadRequestError, ForbiddenError } from '../middleware/errorHandler.js';
 import { apiTokenAuth } from '../services/work/apiTokens.service.js';
 import * as svc from '../services/hocTap/hocTap.service.js';
-import { canHanMuc, chamBangChungAI, chamNen, hanMucAI } from '../services/hocTap/chamBangChung.js';
+import { canHanMuc, chamBangChungAI, chamNen, hanMucAI, traLoiVanDap } from '../services/hocTap/chamBangChung.js';
 import { batDauSoanKeHoach, loiHuanLuyen, trangThaiSoan } from '../services/hocTap/keHoachAI.js';
 import { prisma } from '../config/database.js';
+import { xepLich } from '../services/hocTap/xepLich.js';
 
 const router = Router();
 router.use(apiTokenAuth);
@@ -112,6 +113,12 @@ router.get('/viec/:id', h(async (req) => {
 }));
 router.patch('/viec/:id', h(async (req) => svc.suaViec(req.userId!, id(req), parse(viecSchema.partial(), req.body), laNguoiCham(req))));
 router.delete('/viec/:id', h(async (req) => { await svc.xoaViec(req.userId!, id(req), laNguoiCham(req)); return { ok: true }; }));
+/** Xếp lại giờ học cho mọi việc chưa bắt đầu (sau khi lịch lớp đổi, hoặc muốn làm mới). */
+router.post('/xep-lich', h(async (req) => ({ daXep: await xepLich(req.userId!) })));
+router.patch('/viec/:id/gio', h(async (req) => {
+  const { gioBatDau } = parse(z.object({ gioBatDau: z.string().min(10) }), req.body);
+  return svc.doiGio(req.userId!, id(req), new Date(gioBatDau));
+}));
 router.post('/viec/:id/bat-dau', h(async (req) => svc.batDauViec(req.userId!, id(req))));
 
 /** Nộp bằng chứng ⇒ AI chấm NỀN; client hỏi lại GET /viec/:id. */
@@ -127,6 +134,13 @@ router.post('/viec/:id/nop', h(async (req) => {
   // `khongChamAI`: nộp để Claude chấm trong phiên học (không tốn lượt AI web).
   if (!b.khongChamAI) chamNen(bc.id);
   return bc;
+}));
+
+/** Trả lời vấn đáp sau khi bằng chứng đạt — đúng ≥ 2/3 câu mới DAT. */
+router.post('/viec/:id/van-dap', h(async (req) => {
+  await canHanMuc(req.userId!);
+  const { traLoi } = parse(z.object({ traLoi: z.array(z.string().max(3000)).min(1).max(3) }), req.body);
+  return traLoiVanDap(req.userId!, id(req), traLoi);
 }));
 
 router.post('/bang-chung/:id/cham-lai', h(async (req) => {

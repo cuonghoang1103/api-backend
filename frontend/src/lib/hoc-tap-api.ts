@@ -5,16 +5,19 @@
 import { api, fileApi } from './api';
 
 export type MucDo = 'xanh' | 'vang' | 'cam' | 'do';
-export type TrangThai = 'CHUA_LAM' | 'DANG_LAM' | 'CHO_CHAM' | 'DAT' | 'CHUA_DAT';
+export type TrangThai = 'CHUA_LAM' | 'DANG_LAM' | 'CHO_CHAM' | 'VAN_DAP' | 'DAT' | 'CHUA_DAT';
 
 export interface RuiRo {
-  tyLe: number; mucDo: MucDo; tienDo: number; kyVong: number; quaHan: number; nopTre: number;
+  tyLe: number; mucDo: MucDo; tienDo: number; kyVong: number; quaHan: number; nopTre: number; boLo?: number;
   diemLuyenTB: number | null; lyDo: string[];
 }
 export interface ViecGon {
   id: number; monId: number; maMon: string; mau: string | null; tieuDe: string; loai: string; hanChot: string;
   thoiLuongPhut: number; trangThai: TrangThai; batDauLuc: string | null; diem: number | null; tuan: number;
+  gioBatDau?: string | null; boLo?: boolean;
 }
+export interface LopNgay { maMon: string; batDau: string; ketThuc: string; phong: string | null; slot: number | null }
+export interface NgayLich { ngay: string; thu: number; lop: LopNgay[]; viec: ViecGon[] }
 export interface MonTQ {
   id: number; maMon: string; ten: string; mau: string | null; courseSlug: string | null; trinhDo: string | null;
   mucTieu: string | null; nenTang: Array<{ slug: string; ten: string; lyDo?: string }> | null; ruiRo: RuiRo;
@@ -25,7 +28,7 @@ export interface MonTQ {
 export interface TongQuan {
   hocKy: { id: number; ten: string; batDau: string; soTuan: number; tuanThi: number } | null;
   tuan: number; tuanQua?: number; mon: MonTQ[]; ruiRoKy: { tyLe: number; mucDo: MucDo }; tienDoKy?: number;
-  homNay: ViecGon[]; quaHan: ViecGon[]; choCham: ViecGon[];
+  homNay: ViecGon[]; quaHan: ViecGon[]; choCham: ViecGon[]; lich?: NgayLich[];
 }
 export interface BangChung {
   id: number; lanNop: number; noiDung: string | null; lienKet: string[] | null; tep: Array<{ url: string; ten?: string; loai?: string }> | null;
@@ -34,10 +37,11 @@ export interface BangChung {
 }
 export interface Viec {
   id: number; monId: number; tuan: number; loai: string; tieuDe: string; huongDan: string | null; yeuCauBangChung: string | null;
-  lienKet: string | null; thoiLuongPhut: number; hanChot: string; trongSo: number; trangThai: TrangThai;
+  lienKet: string | null; thoiLuongPhut: number; hanChot: string; trongSo: number; trangThai: TrangThai; gioBatDau?: string | null;
   batDauLuc: string | null; nopLuc: string | null; diem: number | null; nhanXet: string | null;
   loiCanSua: { loi?: string[]; canCaiThien?: string[]; diemManh?: string[] } | null; nguoiCham: string | null;
   chamLuc: string | null; nguon: string; bangChung: BangChung[];
+  vanDap?: { cauHoi: string[]; diemBangChung: number; traLoi?: string[]; ketQua?: { hieu: boolean; diem: number; nhanXet: string; tungCau: Array<{ dung: boolean; goiY: string }> } } | null;
 }
 export interface ChiTietMon {
   mon: { id: number; maMon: string; ten: string; mau: string | null; trinhDo: string | null; mucTieu: string | null; courseSlug: string | null; nenTang: MonTQ['nenTang']; hocKy: { soTuan: number; tuanThi: number } };
@@ -75,8 +79,11 @@ export const hocTapApi = {
   viec: (id: number) => d<Viec & { mon: { maMon: string; ten: string } }>(api.get(`/hoc-tap/viec/${id}`)),
   batDau: (id: number) => d(api.post(`/hoc-tap/viec/${id}/bat-dau`)),
   nop: (id: number, b: { noiDung?: string; lienKet?: string[]; tep?: Array<{ url: string; ten?: string; loai?: string }>; khongChamAI?: boolean }) => d<BangChung>(api.post(`/hoc-tap/viec/${id}/nop`, b)),
+  vanDap: (id: number, traLoi: string[]) => d<{ hieu: boolean; diem: number; nhanXet: string; diemCuoi: number | null }>(api.post(`/hoc-tap/viec/${id}/van-dap`, { traLoi })),
   chamLai: (bangChungId: number) => d(api.post(`/hoc-tap/bang-chung/${bangChungId}/cham-lai`)),
   xoaViec: (id: number) => d(api.delete(`/hoc-tap/viec/${id}`)),
+  doiGio: (id: number, gioBatDau: string) => d(api.patch(`/hoc-tap/viec/${id}/gio`, { gioBatDau })),
+  xepLai: () => d<{ daXep: number }>(api.post('/hoc-tap/xep-lich')),
 
   taiTep: async (f: File) => {
     const r = await fileApi.upload(f, f.type.startsWith('image/') ? 'images' : 'documents');
@@ -108,6 +115,7 @@ export const NHAN_TRANG_THAI: Record<TrangThai, { ten: string; mau: string }> = 
   CHUA_LAM: { ten: 'Chưa làm', mau: '#94a3b8' },
   DANG_LAM: { ten: 'Đang làm', mau: '#3b82f6' },
   CHO_CHAM: { ten: 'Đang chấm', mau: '#a855f7' },
+  VAN_DAP: { ten: 'Vấn đáp', mau: '#0ea5e9' },
   DAT: { ten: 'Đạt', mau: '#10b981' },
   CHUA_DAT: { ten: 'Chưa đạt — nộp lại', mau: '#f97316' },
 };

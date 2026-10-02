@@ -11,6 +11,7 @@ import { hocTapApi, MAU_MUC, type TongQuan } from '@/lib/hoc-tap-api';
 import { DongHoRuiRo, DongViec, Khung, Nut, The, ThanhTienDo, cx } from './ui';
 import { ChiTietViec, thongBao } from './ChiTietViec';
 import { SoanKeHoach, TaoKy, ThemMon } from './ThietLap';
+import { LichHoc } from './LichHoc';
 
 function BieuDo({ diem }: { diem: Array<{ ngay: string; tyLe: number }> }) {
   if (diem.length < 2) return <p className="text-xs text-text-muted">Biểu đồ sẽ có sau vài ngày (mỗi sáng 7h hệ thống chụp lại một lần).</p>;
@@ -109,6 +110,8 @@ export default function TrangHocTap() {
         </div>
         {nhanXet && <div className="mt-4 rounded-2xl border border-[var(--border-color)] bg-[var(--bg-card)] p-4 text-sm markdown-body"><Markdown mdx={nhanXet} /></div>}
       </The>
+
+      <LichHoc tq={tq} onMo={setMoViec} onDoi={tai} />
 
       <div className="grid gap-5 lg:grid-cols-[1fr_380px]">
         {/* ── Môn ─────────────────────────────────────────────── */}

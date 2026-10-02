@@ -25,6 +25,8 @@ export interface ViecTinh {
   diem: number | null;
   /** Số lần nộp sau khi hết thời lượng bấm giờ. */
   soLanTre: number;
+  /** Đã từng bỏ lỡ giờ học đã xếp (quá 15' chưa bấm Bắt đầu). Tuỳ chọn để mã cũ khỏi vỡ. */
+  boLo?: boolean;
 }
 
 export interface KetQuaRuiRo {
@@ -34,6 +36,7 @@ export interface KetQuaRuiRo {
   kyVong: number;      // % đáng lẽ phải xong theo lịch
   quaHan: number;      // số việc quá hạn chưa đạt
   nopTre: number;      // tổng lần nộp trễ giờ
+  boLo: number;        // số việc từng bị bỏ lỡ giờ học
   diemLuyenTB: number | null; // điểm TB các bài luyện QUIZ/PE/FE đã chấm
   lyDo: string[];      // từng thành phần cộng vào, để giao diện giải thích
 }
@@ -87,6 +90,14 @@ export function tinhRuiRoMon(viec: ViecTinh[], tuanQua: number, tuanThi: number,
     tyLe += c;
   }
 
+  // Không học đúng giờ đã hẹn — người dùng yêu cầu 02/10: "lười, không làm đúng giờ" phải đẩy % lên.
+  const boLo = viec.filter((v) => v.boLo).length;
+  if (boLo > 0) {
+    const c = 2 * Math.min(boLo, 10);
+    lyDo.push(`${boLo} lần bỏ lỡ giờ học đã hẹn: +${c}`);
+    tyLe += c;
+  }
+
   const luyen = viec.filter((v) => LOAI_LUYEN_DE.has(v.loai) && v.diem !== null);
   const diemLuyenTB = luyen.length ? luyen.reduce((s, v) => s + (v.diem ?? 0), 0) / luyen.length : null;
   if (diemLuyenTB !== null && diemLuyenTB < 5) {
@@ -105,6 +116,7 @@ export function tinhRuiRoMon(viec: ViecTinh[], tuanQua: number, tuanThi: number,
     kyVong: Math.round(kyVong * 100),
     quaHan,
     nopTre,
+    boLo,
     diemLuyenTB: diemLuyenTB === null ? null : Math.round(diemLuyenTB * 10) / 10,
     lyDo,
   };

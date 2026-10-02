@@ -205,9 +205,15 @@ Quy tắc:
 - Có dấu hiệu chép nguyên từ AI/mẫu mà không hiểu (văn trơn tru khác hẳn phần còn lại, mã thừa phức tạp không liên quan đề) ⇒ ghi rõ trong nhanXet và yêu cầu tự giải thích.
 - Điểm 0–10. dat=true chỉ khi đáp ứng ĐỦ yêu cầu bằng chứng và điểm ≥ 5.
 - Viết tiếng Việt dễ hiểu; sinh viên yếu tiếng Anh nên thuật ngữ tiếng Anh phải kèm nghĩa.
+- Sinh viên dùng macOS: tên thư mục/tệp KHÔNG phân biệt hoa thường (WebdesignFundamental = WebDesignFundamental) — đừng bắt lỗi chữ hoa/thường trừ khi đề yêu cầu chạy trên Linux/máy chủ; chỉ nhắc như thói quen tốt.
+- Lỗi nhỏ không thuộc yêu cầu bằng chứng thì ghi vào canCaiThien, KHÔNG dùng để đánh trượt.
+
+VẤN ĐÁP CHỐNG HỌC VẸT: nếu dat=true, soạn thêm 2–3 câu hỏi NGẮN về CHÍNH bài sinh viên vừa nộp
+(bắt giải thích một dòng code/lệnh cụ thể của họ, dự đoán kết quả nếu đổi một chi tiết, hoặc vì sao chọn cách đó).
+Câu hỏi phải trả lời được trong 1–3 câu bởi người THẬT SỰ tự làm; người chép từ AI sẽ lúng túng. Không hỏi có/không.
 
 Trả về DUY NHẤT một JSON:
-{"dat": boolean, "diem": number, "nhanXet": "2–5 câu", "loiCanSua": ["lỗi cụ thể + cách sửa"], "canCaiThien": ["điều nên luyện thêm"], "diemManh": ["điều làm tốt"]}`;
+{"dat": boolean, "diem": number, "nhanXet": "2–5 câu", "loiCanSua": ["lỗi cụ thể + cách sửa"], "canCaiThien": ["điều nên luyện thêm"], "diemManh": ["điều làm tốt"], "cauHoiVanDap": ["câu 1", "câu 2"]}`;
 
 // ─── Chấm ────────────────────────────────────────────────────────
 
@@ -231,8 +237,17 @@ export async function chamBangChungAI(bangChungId: number): Promise<void> {
     ].filter(Boolean).join('\n');
 
     const r = await visionComplete({ system: HE_THONG, userText, images: anh, userId: bc.userId, purpose: 'study_verify', feature: 'hoc_tap', maxTokens: 2500 });
-    const kq = locKetQua(bocJson(r.text));
+    const raw = bocJson(r.text);
+    const kq = locKetQua(raw);
+    const cauHoi = dsChu(raw.cauHoiVanDap, 3);
     await ghiKetQua(bc.id, kq, 'AI');
+    // Bằng chứng đạt ⇒ CHƯA tích: chuyển sang VẤN ĐÁP (trả lời đúng mới DAT).
+    if (kq.dat && kq.diem >= 5 && cauHoi.length) {
+      await prisma.nhiemVuHoc.update({
+        where: { id: v.id },
+        data: { trangThai: 'VAN_DAP', vanDap: { cauHoi, diemBangChung: kq.diem, bangChungId: bc.id } },
+      });
+    }
   } catch (e) {
     const loi = e instanceof Error ? e.message : String(e);
     logger.warn('hocTap: AI chấm hỏng', { bangChungId, loi });
@@ -249,4 +264,58 @@ export async function chamBangChungAI(bangChungId: number): Promise<void> {
 /** Gọi không chờ — chấm có thể mất 20–60 giây, vượt trần 100 giây của Cloudflare nếu chờ đồng bộ. */
 export function chamNen(bangChungId: number): void {
   void chamBangChungAI(bangChungId).catch((e) => logger.error('hocTap: chamNen', { bangChungId, e: String(e) }));
+}
+
+// ─── Vấn đáp ─────────────────────────────────────────────────────
+
+export interface KetQuaVanDap { hieu: boolean; diem: number; nhanXet: string; tungCau: Array<{ dung: boolean; goiY: string }> }
+
+export function locVanDap(o: Record<string, unknown>, soCau: number): KetQuaVanDap {
+  const tung = (Array.isArray(o.tungCau) ? o.tungCau : []).slice(0, soCau).map((x) => {
+    const r = (x ?? {}) as Record<string, unknown>;
+    return { dung: r.dung === true, goiY: String(r.goiY ?? '').slice(0, 600) };
+  });
+  const diem = Math.min(10, Math.max(0, Number(o.diem) || 0));
+  const dung = tung.filter((t) => t.dung).length;
+  // MÃ quyết định "hiểu": đúng ít nhất 2/3 số câu (2/2, 2/3, 3/3) — không tin cờ của model.
+  const hieu = tung.length > 0 && dung * 3 >= tung.length * 2;
+  return { hieu, diem, nhanXet: String(o.nhanXet ?? '').slice(0, 2000), tungCau: tung };
+}
+
+export async function traLoiVanDap(userId: number, viecId: number, traLoi: string[]) {
+  const v = await prisma.nhiemVuHoc.findFirst({ where: { id: viecId, userId }, include: { mon: true } });
+  if (!v) throw new AppError('Không tìm thấy việc', 404, 'NOT_FOUND');
+  if (v.trangThai !== 'VAN_DAP' || !v.vanDap) throw new AppError('Việc này không ở bước vấn đáp', 400, 'BAD_STATE');
+  const vd = v.vanDap as { cauHoi: string[]; diemBangChung: number; bangChungId?: number };
+  const tl = vd.cauHoi.map((_, i) => String(traLoi[i] ?? '').trim().slice(0, 3000));
+  if (tl.some((x) => x.length < 3)) throw new AppError('Trả lời đủ mọi câu (bằng lời của bạn)', 400, 'MISSING');
+  const bc = vd.bangChungId ? await prisma.bangChungHoc.findUnique({ where: { id: vd.bangChungId } }) : null;
+
+  const { llmComplete } = await import('../interview/llm/index.js');
+  const r = await llmComplete({
+    step: 'generation',
+    system: `Bạn là giảng viên vấn đáp. Sinh viên vừa nộp bài và được hỏi lại để chứng minh TỰ LÀM và HIỂU (không học vẹt, không chép AI).
+Chấm từng câu: đúng ý chính bằng lời của họ là đạt (không cần văn hay, sai chính tả không sao). Trả lời chung chung, lạc đề, hoặc nghe như chép nguyên văn định nghĩa mà không gắn vào bài của họ ⇒ chưa đạt.
+Viết tiếng Việt dễ hiểu. Trả về DUY NHẤT JSON: {"diem": 0-10, "nhanXet": "1–3 câu", "tungCau": [{"dung": boolean, "goiY": "đáp ý đúng ngắn gọn"}]}`,
+    messages: [{ role: 'user', content: [
+      `Việc: ${v.tieuDe} (${v.mon.maMon})`,
+      bc?.noiDung ? `Bài sinh viên đã nộp:\n${bc.noiDung.slice(0, 12000)}` : '',
+      ...vd.cauHoi.map((c, i) => `Câu ${i + 1}: ${c}\nTrả lời: ${tl[i]}`),
+    ].filter(Boolean).join('\n\n') }],
+    purpose: 'study_verify',
+    feature: 'hoc_tap',
+    userId,
+    maxTokens: 1500,
+    maxRetries: 1,
+  });
+  const kq = locVanDap(bocJson(r.text), vd.cauHoi.length);
+  const diemCuoi = Math.round((vd.diemBangChung * 0.6 + kq.diem * 0.4) * 10) / 10;
+  await prisma.nhiemVuHoc.update({
+    where: { id: viecId },
+    data: kq.hieu
+      ? { trangThai: 'DAT', diem: diemCuoi, vanDap: { ...vd, traLoi: tl, ketQua: kq } as never, chamLuc: new Date() }
+      : { trangThai: 'CHUA_DAT', vanDap: { ...vd, traLoi: tl, ketQua: kq } as never,
+          nhanXet: `Bằng chứng ổn nhưng vấn đáp CHƯA chứng minh được bạn hiểu bài (${kq.tungCau.filter((t) => t.dung).length}/${kq.tungCau.length} câu). ${kq.nhanXet} Đọc gợi ý, học lại phần đó rồi nộp lại.` },
+  });
+  return { ...kq, diemCuoi: kq.hieu ? diemCuoi : null };
 }

@@ -101,13 +101,20 @@ export function catLuotCu(
  * phần cũ trên màn hình và tưởng agent còn nhớ. Nói thẳng ra thì nó biết mình
  * mất gì và biết hỏi lại.
  */
-export function loiNhacDaCat(soLuot: number): AgentMessage {
-  return {
-    role: 'user',
-    content:
-      `[Hệ thống: ${soLuot} lượt hỏi đáp cũ nhất đã được bỏ khỏi ngữ cảnh vì hội thoại quá dài. `
-      + 'Người dùng VẪN nhìn thấy chúng trên màn hình, còn bạn thì không. '
-      + 'Nếu câu hỏi hiện tại nhắc tới thứ gì bạn không thấy, hãy nói thẳng là phần đó đã ngoài tầm nhớ '
-      + 'và hỏi lại — đừng đoán.]',
-  };
+export function loiNhacDaCat(
+  soLuot: number,
+  ghiNho?: { deBai: string | null; tomTat: string | null },
+): AgentMessage {
+  const phan: string[] = [
+    `[Hệ thống: ${soLuot} lượt hỏi đáp cũ nhất đã được bỏ khỏi ngữ cảnh vì hội thoại quá dài. `
+    + 'Người dùng VẪN nhìn thấy chúng trên màn hình, còn bạn chỉ còn phần ghi nhớ dưới đây.',
+  ];
+  // Ghim đề bài + tóm tắt (tomTatLuotCu.ts, 02/10/2026) — agent nhớ đại ý thay vì quên sạch.
+  if (ghiNho?.deBai) phan.push(`\nYÊU CẦU GỐC CỦA NGƯỜI DÙNG (tin nhắn đầu tiên, giữ nguyên):\n${ghiNho.deBai}`);
+  if (ghiNho?.tomTat) phan.push(`\nTÓM TẮT PHẦN ĐÃ BỎ (do máy tóm tắt — chi tiết nhỏ có thể thiếu):\n${ghiNho.tomTat}`);
+  phan.push(
+    '\nNếu câu hỏi hiện tại cần chi tiết KHÔNG có trong phần ghi nhớ này, hãy nói thẳng là phần đó đã ngoài tầm nhớ '
+    + 'và hỏi lại hoặc đọc lại file — đừng đoán.]',
+  );
+  return { role: 'user', content: phan.join('\n') };
 }

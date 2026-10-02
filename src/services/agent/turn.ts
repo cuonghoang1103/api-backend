@@ -54,6 +54,7 @@ import { loiCanViTien, xemViTien } from './viTien.js';
 import { runServerTool } from './serverTools.js';
 import { buildSystemPrompt, catGhiChu, type WorkspaceHint } from './prompt.js';
 import { catLuotCu, loiNhacDaCat, tongKyTu } from './catCu.js';
+import { ghiNhoLuotDaBo } from './tomTatLuotCu.js';
 import { parseCapabilities, parseToolMcp, toolByName, toolsForGateway, type AgentCapability } from './tools.js';
 import { logger } from '../../utils/logger.js';
 import { prisma } from '../../config/database.js';
@@ -181,6 +182,8 @@ function catThoChoAnToan(raw: unknown[], tran: number): unknown[] {
   return dau > 0 ? duoi.slice(dau) : duoi;
 }
 const MAX_TOTAL_CHARS = 600_000;
+/** Chỗ chừa dưới trần cho phần ghi nhớ (đề bài ghim ≤ 6k + tóm tắt ~900 từ). */
+const CHO_GHI_NHO = 16_000;
 /** Trần cho MỘT kết quả tool do app gửi lên. App đã tự cắt; đây là lớp phòng khi app cũ chưa cắt. */
 const MAX_TOOL_RESULT_CHARS = 60_000;
 /**
@@ -819,10 +822,18 @@ export async function runAgentTurn(
    * còn lại; cắt bỏ hẳn những lượt cũ nhất. Làm ngược thì công nén bỏ ra cho
    * những lượt sắp bị vứt là công vô ích.
    */
-  const boLuot = catLuotCu(messagesGoc, MAX_TOTAL_CHARS, MAX_MESSAGES);
-  const messages = boLuot.soLuotDaBo > 0
-    ? [loiNhacDaCat(boLuot.soLuotDaBo), ...boLuot.messages]
-    : boLuot.messages;
+  // Chừa CHO_GHI_NHO ký tự dưới trần cho đề bài ghim + bản tóm tắt chèn vào đầu.
+  const boLuot = catLuotCu(messagesGoc, MAX_TOTAL_CHARS - CHO_GHI_NHO, MAX_MESSAGES);
+  let messages = boLuot.messages;
+  if (boLuot.soLuotDaBo > 0) {
+    /* Không quên sạch: ghim đề bài + tóm tắt các lượt bị bỏ (đệm theo băm nên chỉ
+       tốn một lời gọi model rẻ khi phần bị bỏ thay đổi). Hỏng ⇒ lời nhắc cũ. */
+    const ghiNho = await ghiNhoLuotDaBo(messagesGoc, boLuot.messages.length);
+    if (ghiNho.daGoiModel) {
+      emit({ type: 'server_tool', name: 'tóm tắt ngữ cảnh', summary: `ghi nhớ ${boLuot.soLuotDaBo} lượt cũ` });
+    }
+    messages = [loiNhacDaCat(boLuot.soLuotDaBo, ghiNho), ...boLuot.messages];
+  }
   const capabilities: AgentCapability[] = parseCapabilities(input.capabilities);
   const buocDaDi = demBuocViecNay(messages);
   const mucNoLuc = docMucNoLuc(input.mucNoLuc);

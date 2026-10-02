@@ -55,12 +55,15 @@ export interface KeHoach { tomTat: string; nenTang: Array<{ slug: string; ten: s
 export interface HanMuc { admin: boolean; pro: boolean; daDung: number; tran: number | null; conLai: number | null }
 
 const d = <T,>(p: Promise<{ data: { data: T } }>) => p.then((r) => r.data.data);
+/** Lời gọi có AI chạy đồng bộ (nhận xét, vấn đáp, chấm lại): axios mặc định cắt ở 30 giây, model cần 20–60.
+ *  Để 95 giây — dưới trần 100 giây của Cloudflare. */
+const AI = { timeout: 95_000 };
 
 export const hocTapApi = {
   tongQuan: () => d<TongQuan>(api.get('/hoc-tap/tong-quan')),
   hanMuc: () => d<HanMuc>(api.get('/hoc-tap/han-muc')),
   lichSu: (ngay = 60) => d<Array<{ monId: number | null; ngay: string; tyLe: number; tienDo: number }>>(api.get(`/hoc-tap/rui-ro/lich-su?ngay=${ngay}`)),
-  nhanXet: () => d<{ loi: string }>(api.post('/hoc-tap/nhan-xet')),
+  nhanXet: () => d<{ loi: string }>(api.post('/hoc-tap/nhan-xet', undefined, AI)),
 
   taoKy: (b: { ten: string; batDau: string; soTuan: number; tuanThi: number }) => d<{ item: { id: number } }>(api.post('/hoc-ky', b)),
   dsKy: () => d<{ items: Array<{ id: number; ten: string; batDau: string; soTuan: number; tuanThi: number; dangHoc: boolean }> }>(api.get('/hoc-ky')),
@@ -79,8 +82,8 @@ export const hocTapApi = {
   viec: (id: number) => d<Viec & { mon: { maMon: string; ten: string } }>(api.get(`/hoc-tap/viec/${id}`)),
   batDau: (id: number) => d(api.post(`/hoc-tap/viec/${id}/bat-dau`)),
   nop: (id: number, b: { noiDung?: string; lienKet?: string[]; tep?: Array<{ url: string; ten?: string; loai?: string }>; khongChamAI?: boolean }) => d<BangChung>(api.post(`/hoc-tap/viec/${id}/nop`, b)),
-  vanDap: (id: number, traLoi: string[]) => d<{ hieu: boolean; diem: number; nhanXet: string; diemCuoi: number | null }>(api.post(`/hoc-tap/viec/${id}/van-dap`, { traLoi })),
-  chamLai: (bangChungId: number) => d(api.post(`/hoc-tap/bang-chung/${bangChungId}/cham-lai`)),
+  vanDap: (id: number, traLoi: string[]) => d<{ hieu: boolean; diem: number; nhanXet: string; diemCuoi: number | null }>(api.post(`/hoc-tap/viec/${id}/van-dap`, { traLoi }, AI)),
+  chamLai: (bangChungId: number) => d(api.post(`/hoc-tap/bang-chung/${bangChungId}/cham-lai`, undefined, AI)),
   xoaViec: (id: number) => d(api.delete(`/hoc-tap/viec/${id}`)),
   doiGio: (id: number, gioBatDau: string) => d(api.patch(`/hoc-tap/viec/${id}/gio`, { gioBatDau })),
   xepLai: () => d<{ daXep: number }>(api.post('/hoc-tap/xep-lich')),

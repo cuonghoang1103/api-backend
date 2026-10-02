@@ -32,13 +32,13 @@ iOS và iPad.
 
 ## Công thức tỷ lệ trượt (thuần, có test)
 Tính cho từng môn, phần trăm:
-- `kyVong` = trọng số các việc có hạn ≤ hôm nay ÷ tổng trọng số
+- `kyVong` = tuần đã qua ÷ tuần thi (so với LỊCH, không so với hạn từng việc — xem đầu `ruiRo.ts`)
 - `thucTe` = trọng số các việc đã `DAT` ÷ tổng trọng số
 - `tre` = max(0, kyVong − thucTe)
 - `gap` = 1 + (tuần đã qua ÷ tuần thi), tức là càng gần ngày thi thì càng nặng
 - `rủi ro` = 5 + 70·tre·gap + 3·(số việc quá hạn, tối đa 8) + 2·(số lần nộp trễ giờ, tối đa 5)
   + phạt điểm luyện (QUIZ/PE/FE có điểm trung bình < 5 thì cộng tối đa 20). Kết quả kẹp trong khoảng 1–99.
-- Cả kỳ = trung bình có trọng số các môn, nhưng **không thấp hơn môn tệ nhất trừ 10**.
+- Cả kỳ = trung bình các môn, nhưng **không thấp hơn môn tệ nhất trừ 10**.
 - Mức màu: < 15 xanh · 15–30 vàng · 30–50 cam · ≥ 50 **đỏ, nhấp nháy**.
 
 ## Đợt
@@ -52,7 +52,7 @@ Tính cho từng môn, phần trăm:
   - [x] AI viết lời cảnh báo rủi ro (`study_coach`)
   - [x] Token `ctw_…` dùng được cho `/hoc-tap`, endpoint chấm thủ công `nguoiCham=CLAUDE`
   - [x] Cron 07:00: chụp số rủi ro trong ngày, nhắc việc hôm nay và việc quá hạn (push + thông báo)
-  - [x] Hạn mức AI: thường 10 lượt/ngày, Pro 100, admin không giới hạn
+  - [x] Hạn mức AI: thường 20 lượt/24h, Pro 150, admin không giới hạn
 - [x] **Đ2. Web `/hoc-tap`**:
   - [x] Đầu trang: tuần X/10 và đồng hồ đo rủi ro cả kỳ (đỏ khi ≥ 50)
   - [x] Thẻ cho từng môn: % tiến độ, % rủi ro, đếm ngược ngày thi, việc kế tiếp

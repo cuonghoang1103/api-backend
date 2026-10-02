@@ -42,6 +42,8 @@ export interface KetQuaRuiRo {
 }
 
 const LOAI_LUYEN_DE = new Set(['QUIZ', 'PE', 'FE']);
+/** Ân hạn sau hạn chót (23:59 VN) tới 05:00 sáng hôm sau — khung học bù đêm. */
+export const AN_HAN_MS = 5 * 3_600_000;
 
 export function mucDoCua(tyLe: number): MucDo {
   if (tyLe < 15) return 'xanh';
@@ -76,7 +78,8 @@ export function tinhRuiRoMon(viec: ViecTinh[], tuanQua: number, tuanThi: number,
   if (phanCham >= 0.5) lyDo.push(`Chậm ${Math.round(tre * 100)}% so với lịch (đáng lẽ xong ${Math.round(kyVong * 100)}%, mới đạt ${Math.round(thucTe * 100)}%): +${Math.round(phanCham)}`);
   tyLe += phanCham;
 
-  const quaHan = viec.filter((v) => v.trangThai !== 'DAT' && v.hanChot.getTime() < now.getTime()).length;
+  // Ân hạn 5 giờ = khung "bù đêm" 00:00–05:00: làm bù trong giờ ngủ chưa tính quá hạn.
+  const quaHan = viec.filter((v) => v.trangThai !== 'DAT' && v.hanChot.getTime() + AN_HAN_MS < now.getTime()).length;
   if (quaHan > 0) {
     const c = 3 * Math.min(quaHan, 8);
     lyDo.push(`${quaHan} việc quá hạn: +${c}`);

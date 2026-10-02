@@ -83,21 +83,29 @@ export function xepLichThuan(
 
   // 2) Việc tự học: khung trống SỚM NHẤT. Nếu nó đã trễ hạn thì mọi khung sau
   //    còn trễ hơn — nên khung sớm nhất luôn là lựa chọn đúng.
+  //    Việc hạn ngày D không kịp trước 23:45 ⇒ "BÙ ĐÊM" 23:45–05:00 (người dùng 02/10:
+  //    "không hoàn thành thì vào giờ ngủ 24h–5h sáng bù") — bỏ qua trần ngày cho phần bù.
+  const timKhung = (d: number, thu: number, dai: number, i: number, denNgay: number): number | null => {
+    const ban = [...banTrongNgay(thu, lop), ...(daChiem.get(d) ?? [])].sort((a, b) => a[0] - b[0]);
+    let t = i === 0 ? Math.max(tu, Math.ceil((nowMs - d) / 60_000 / 5) * 5) : tu;
+    for (const [a, b] of ban) {
+      if (t + dai <= a) break;
+      if (b + nghi > t) t = b + nghi;
+    }
+    return t + dai > denNgay ? null : t;
+  };
   for (const v of ds) {
     if (ketQua.has(v.id)) continue;
     const dai = Math.max(5, v.thoiLuongPhut);
+    const hanNgay = ngayHan(v);
     for (let i = 0; i < soNgay; i++) {
       const d = ngay0 + i * NGAY;
       const thu = thuVN(d);
       const tran = thu >= 6 ? tranCT : tranT;
-      if ((daDung.get(d) ?? 0) + dai > Math.max(tran, dai)) continue;
-      const ban = [...banTrongNgay(thu, lop), ...(daChiem.get(d) ?? [])].sort((a, b) => a[0] - b[0]);
-      let t = i === 0 ? Math.max(tu, Math.ceil((nowMs - d) / 60_000 / 5) * 5) : tu;
-      for (const [a, b] of ban) {
-        if (t + dai <= a) break;
-        if (b + nghi > t) t = b + nghi;
-      }
-      if (t + dai > den) continue;
+      let t: number | null = null;
+      if ((daDung.get(d) ?? 0) + dai <= Math.max(tran, dai)) t = timKhung(d, thu, dai, i, den);
+      if (t === null && d === hanNgay) t = timKhung(d, thu, dai, i, 29 * 60); // bù đêm tới 05:00
+      if (t === null) continue;
       const ms = d + t * 60_000;
       chiem(ms, dai);
       ketQua.set(v.id, new Date(ms));
@@ -117,7 +125,7 @@ export async function lichLopCua(userId: number): Promise<Array<KhungLop & { pho
  * Xếp lại giờ cho mọi việc CHƯA BẮT ĐẦU (chưa làm hoặc chưa đạt) của kỳ đang học.
  * `chiViecChuaCoGio`: chỉ xếp việc mới (không có giờ) — dùng khi mở trang.
  */
-export async function xepLich(userId: number, opts: { chiViecChuaCoGio?: boolean; now?: Date } = {}) {
+export async function xepLich(userId: number, opts: { chiViecChuaCoGio?: boolean; now?: Date; tu?: Date } = {}) {
   const now = opts.now ?? new Date();
   const viec = await prisma.nhiemVuHoc.findMany({
     where: { userId, trangThai: { in: ['CHUA_LAM', 'CHUA_DAT'] }, batDauLuc: null, mon: { hocKy: { dangHoc: true } } },
@@ -131,9 +139,11 @@ export async function xepLich(userId: number, opts: { chiViecChuaCoGio?: boolean
   const canXep = opts.chiViecChuaCoGio ? viec.filter((v) => !v.gioBatDau) : viec;
   if (!canXep.length) return 0;
   const lop = await lichLopCua(userId);
+  // `tu`: "Lùi lịch" — xếp lại bắt đầu từ giờ người học hẹn quay lại (không sớm hơn bây giờ).
+  const mocXep = opts.tu && opts.tu > now ? opts.tu : now;
   const kq = xepLichThuan(
     canXep.map((v) => ({ id: v.id, maMon: v.mon.maMon, tieuDe: v.tieuDe, hanChot: v.hanChot, thoiLuongPhut: v.thoiLuongPhut, trongSo: v.trongSo })),
-    lop, now, {}, giu.map((v) => ({ bd: v.gioBatDau!, phut: v.thoiLuongPhut })),
+    lop, mocXep, {}, giu.map((v) => ({ bd: v.gioBatDau!, phut: v.thoiLuongPhut })),
   );
   const ghi = canXep.filter((v) => kq.has(v.id)).map((v) =>
     prisma.nhiemVuHoc.update({ where: { id: v.id }, data: { gioBatDau: kq.get(v.id)!, daNhacLuc: null } }));

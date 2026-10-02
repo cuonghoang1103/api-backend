@@ -86,7 +86,7 @@ export const hocTapApi = {
   chamLai: (bangChungId: number) => d(api.post(`/hoc-tap/bang-chung/${bangChungId}/cham-lai`, undefined, AI)),
   xoaViec: (id: number) => d(api.delete(`/hoc-tap/viec/${id}`)),
   doiGio: (id: number, gioBatDau: string) => d(api.patch(`/hoc-tap/viec/${id}/gio`, { gioBatDau })),
-  xepLai: () => d<{ daXep: number }>(api.post('/hoc-tap/xep-lich')),
+  xepLai: (tu?: string) => d<{ daXep: number }>(api.post('/hoc-tap/xep-lich', tu ? { tu } : {})),
 
   taiTep: async (f: File) => {
     const r = await fileApi.upload(f, f.type.startsWith('image/') ? 'images' : 'documents');

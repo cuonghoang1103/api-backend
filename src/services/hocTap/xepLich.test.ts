@@ -31,8 +31,8 @@ test('né giờ lớp (+30 phút đi lại) và trần 360 phút/ngày thường
   const now = new Date('2026-10-05T04:00:00Z'); // 11:00 VN
   const kq = xepLichThuan([v(1, '2026-10-05T16:59:59Z', 90), v(2, '2026-10-05T16:59:59Z', 300)], lop, now);
   assert.equal(vn(kq.get(1)!), '2026-10-05 15:50');
-  // 90 + 300 > 360 ⇒ việc 2 sang hôm sau; 07:00+300 đè bữa trưa ⇒ 12:55
-  assert.equal(vn(kq.get(2)!), '2026-10-06 12:55');
+  // 90 + 300 > 360 nhưng hạn là HÔM NAY ⇒ bù đêm (bỏ qua trần): 19:25 → 00:25, không đẩy sang hôm sau
+  assert.equal(vn(kq.get(2)!), '2026-10-05 19:25');
 });
 
 test('khối cố định được né', () => {
@@ -43,4 +43,11 @@ test('khối cố định được né', () => {
 test('cùng ngày hạn: giữ thứ tự kế hoạch (id), không xếp theo trọng số', () => {
   const kq = xepLichThuan([v(5, '2026-10-02T16:59:59Z', 30, { trongSo: 1 }), v(6, '2026-10-02T16:59:59Z', 30, { trongSo: 5 })], lop, NOW);
   assert.ok(kq.get(5)! < kq.get(6)!);
+});
+
+test('hạn hôm nay mà không kịp trước 23:45 ⇒ bù đêm 00:00–05:00, không đẩy sang ngày sau', () => {
+  const muon = new Date('2026-10-02T16:00:00Z'); // 23:00 VN thứ Sáu
+  const kq = xepLichThuan([v(1, '2026-10-02T16:59:59Z', 60)], lop, muon);
+  // 23:05 + 60' = 00:05 vượt 23:45 ⇒ vẫn làm tiếp trong khung bù đêm, không dời sang 07:00 hôm sau
+  assert.equal(vn(kq.get(1)!), '2026-10-02 23:05');
 });

@@ -63,8 +63,11 @@ const phutChuoi = (hhmm: string) => { const [h, m] = hhmm.split(':').map(Number)
 
 /** Lưới tuần kiểu lịch: cột = ngày, trục dọc = giờ. Cuộn ngang TRONG khung trên điện thoại. */
 function LuoiTuan({ lich, now, onMo }: { lich: NgayLich[]; now: number; onMo: (id: number) => void }) {
-  const cao = (GIO_CUOI - GIO_DAU) * PX;
-  const y = (p: number) => ((p - GIO_DAU * 60) / 60) * PX;
+  // Có khối bù đêm (00:00–05:00) ⇒ lưới mở lên từ 00:00, không thì bắt đầu 06:00.
+  const somNhat = Math.min(GIO_DAU * 60, ...lich.flatMap((n) => n.viec.map((v) => phutVN(v.gioBatDau!))));
+  const GIO_DAU_THAT = Math.floor(somNhat / 60);
+  const cao = (GIO_CUOI - GIO_DAU_THAT) * PX;
+  const y = (p: number) => ((p - GIO_DAU_THAT * 60) / 60) * PX;
   const phutNay = phutVN(new Date(now).toISOString());
   return (
     <div className="overflow-x-auto rounded-2xl border border-[var(--border-color)]">
@@ -77,8 +80,8 @@ function LuoiTuan({ lich, now, onMo }: { lich: NgayLich[]; now: number; onMo: (i
         ))}
         {/* trục giờ */}
         <div className="relative sticky left-0 z-10 bg-[var(--bg-card)]" style={{ height: cao }}>
-          {Array.from({ length: GIO_CUOI - GIO_DAU }, (_, h) => (
-            <div key={h} className="absolute right-1 -translate-y-1/2 text-[10px] tabular-nums text-text-muted" style={{ top: h * PX }}>{String(GIO_DAU + h).padStart(2, '0')}:00</div>
+          {Array.from({ length: GIO_CUOI - GIO_DAU_THAT }, (_, h) => (
+            <div key={h} className={cx('absolute right-1 -translate-y-1/2 text-[10px] tabular-nums', GIO_DAU_THAT + h < 5 ? 'text-indigo-400' : 'text-text-muted')} style={{ top: h * PX }}>{String(GIO_DAU_THAT + h).padStart(2, '0')}:00</div>
           ))}
         </div>
         {lich.map((n, i) => (
@@ -105,7 +108,8 @@ function LuoiTuan({ lich, now, onMo }: { lich: NgayLich[]; now: number; onMo: (i
                 </button>
               );
             })}
-            {i === 0 && phutNay >= GIO_DAU * 60 && (
+            {GIO_DAU_THAT < 5 && <div className="pointer-events-none absolute inset-x-0 top-0 bg-indigo-500/5" style={{ height: y(5 * 60) }} />}
+            {i === 0 && phutNay >= GIO_DAU_THAT * 60 && (
               <div className="pointer-events-none absolute inset-x-0 z-30 h-0.5 bg-red-500" style={{ top: y(phutNay) }}>
                 <div className="absolute -left-1 -top-1 h-2.5 w-2.5 rounded-full bg-red-500" />
               </div>
@@ -123,6 +127,8 @@ export function LichHoc({ tq, onMo, onDoi }: { tq: TongQuan; onMo: (id: number) 
   const [quyen, setQuyen] = useState<NotificationPermission | 'khong-ho-tro'>('default');
   const [dangXep, setDangXep] = useState(false);
   const [cheDo, setCheDo] = useState<'tuan' | 'ngay'>('tuan');
+  const [moLui, setMoLui] = useState(false);
+  const [gioLui, setGioLui] = useState('');
   useEffect(() => { if (window.innerWidth < 640) setCheDo('ngay'); }, []);
 
   useEffect(() => {
@@ -166,10 +172,40 @@ export function LichHoc({ tq, onMo, onDoi }: { tq: TongQuan; onMo: (id: number) 
             <button key={k} onClick={() => setCheDo(k)} className={cx('rounded-lg px-3 py-1.5', cheDo === k ? 'bg-neon-violet text-white' : 'text-text-muted')}>{k === 'tuan' ? 'Tuần' : 'Ngày'}</button>
           ))}
         </div>
+        <Nut kieu="phu" onClick={() => setMoLui((x) => !x)}>⏸ Lùi lịch</Nut>
         <Nut kieu="phu" disabled={dangXep} onClick={async () => { setDangXep(true); try { await hocTapApi.xepLai(); onDoi(); } finally { setDangXep(false); } }}>
           <RefreshCw size={14} className={dangXep ? 'animate-spin' : ''} /> Xếp lại
         </Nut>
       </div>
+
+      {moLui && (
+        <div className="mb-3 flex flex-wrap items-center gap-2 rounded-2xl border border-amber-500/50 bg-amber-500/10 p-3 text-sm text-text-primary">
+          <span>Mấy giờ bạn quay lại học?</span>
+          <input type="time" value={gioLui} onChange={(e) => setGioLui(e.target.value)} className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-primary)] px-2 py-1" />
+          <Nut disabled={!gioLui || dangXep} onClick={async () => {
+            const homNay = new Date(Date.now() + 7 * 3_600_000).toISOString().slice(0, 10);
+            let moc = new Date(`${homNay}T${gioLui}:00+07:00`);
+            if (moc.getTime() < Date.now()) moc = new Date(moc.getTime() + 86_400_000); // giờ đã qua ⇒ hiểu là sáng mai
+            setDangXep(true);
+            try { await hocTapApi.xepLai(moc.toISOString()); setMoLui(false); onDoi(); } finally { setDangXep(false); }
+          }}>Xếp lại từ giờ đó</Nut>
+          <p className="w-full text-[11px] text-text-muted">⚠️ Lùi lịch không xoá phạt: việc hạn hôm nay không kịp trước 23:45 sẽ bị dồn vào GIỜ NGỦ (00:00–05:00). Quá 05:00 mới tính quá hạn.</p>
+        </div>
+      )}
+
+      {(() => {
+        const gioNayVN = new Date(now + 7 * 3_600_000).getUTCHours();
+        const homNayDem = (lich[0]?.viec ?? []).filter((v) => v.trangThai !== 'DAT' && phutVN(v.gioBatDau!) + v.thoiLuongPhut > 23 * 60 + 45).length
+          + (lich[1]?.viec ?? []).filter((v) => v.trangThai !== 'DAT' && phutVN(v.gioBatDau!) < 5 * 60).length;
+        const tre = homNay.filter((v) => trangThaiGio(v, now) === 'tre').length;
+        return (
+          <>
+            {gioNayVN < 5 && <div className="mb-2 rounded-xl bg-indigo-500/15 px-3 py-2 text-sm font-semibold text-indigo-400">🌙 Bạn đang học bù vào GIỜ NGỦ. Bù xong thì ngủ — đừng để thành thói quen, sáng mai vẫn có lịch 07:00.</div>}
+            {homNayDem > 0 && <div className="mb-2 rounded-xl bg-amber-500/15 px-3 py-2 text-sm font-semibold text-amber-600">⚠️ Hôm nay đã dồn {homNayDem} việc vào giờ ngủ (00:00–05:00) vì làm muộn / lùi lịch.</div>}
+            {tre > 0 && <div className="mb-2 rounded-xl bg-red-500/15 px-3 py-2 text-sm font-bold text-red-500">🚨 CẢNH CÁO: {tre} việc đang trễ giờ đã hẹn. Mỗi việc bỏ lỡ +2% tỷ lệ trượt của môn đó.</div>}
+          </>
+        );
+      })()}
 
       {/* Bây giờ / tiếp theo */}
       {bayGio ? (

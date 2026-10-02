@@ -11,7 +11,7 @@
 import { Prisma } from '@prisma/client';
 import { prisma } from '../../config/database.js';
 import { AppError, BadRequestError, ForbiddenError, NotFoundError } from '../../middleware/errorHandler.js';
-import { tinhRuiRoKy, tinhRuiRoMon, tuanDaQua, tuanHienTai, type KetQuaRuiRo, type ViecTinh } from './ruiRo.js';
+import { AN_HAN_MS, tinhRuiRoKy, tinhRuiRoMon, tuanDaQua, tuanHienTai, type KetQuaRuiRo, type ViecTinh } from './ruiRo.js';
 import { lichLopCua, xepLich } from './xepLich.js';
 
 export const LOAI_VIEC = ['NEN_TANG', 'BAI_HOC', 'BAI_TAP', 'LAB', 'QUIZ', 'PE', 'FE', 'ON_TAP', 'GHI_CHU'] as const;
@@ -130,9 +130,9 @@ export async function tongQuan(userId: number, now = new Date()) {
     gioBatDau: v.gioBatDau, boLo: !!v.daBaoTreLuc,
   });
   const chuaXong = (v: (typeof tatCa)[number]) => v.trangThai !== 'DAT' && v.trangThai !== 'CHO_CHAM';
-  const quaHan = tatCa.filter((v) => chuaXong(v) && v.hanChot < now).map(gon);
+  const quaHan = tatCa.filter((v) => chuaXong(v) && v.hanChot.getTime() + AN_HAN_MS < now.getTime()).map(gon);
   const homNay = tatCa
-    .filter((v) => chuaXong(v) && v.hanChot >= now && (v.hanChot <= cuoiHomNay || v.trangThai === 'DANG_LAM' || (v.gioBatDau !== null && v.gioBatDau <= cuoiHomNay)))
+    .filter((v) => chuaXong(v) && v.hanChot.getTime() + AN_HAN_MS >= now.getTime() && (v.hanChot <= cuoiHomNay || v.trangThai === 'DANG_LAM' || (v.gioBatDau !== null && v.gioBatDau <= cuoiHomNay)))
     .sort((a, b) => (a.gioBatDau?.getTime() ?? a.hanChot.getTime()) - (b.gioBatDau?.getTime() ?? b.hanChot.getTime()))
     .map(gon);
   // Hôm nay trống thì kéo 3 việc gần nhất lên — một màn hình "không có gì làm"
@@ -368,7 +368,7 @@ export async function nopBangChung(userId: number, viecId: number, b: { noiDung?
   if (!noiDung && !lienKet.length && !tep.length) throw new BadRequestError('Nộp ít nhất một thứ: chữ, link hoặc ảnh/tệp');
 
   const hetGio = v.batDauLuc ? v.batDauLuc.getTime() + v.thoiLuongPhut * 60_000 * 1.25 : null;
-  const nopTre = now > v.hanChot || (hetGio !== null && now.getTime() > hetGio);
+  const nopTre = now.getTime() > v.hanChot.getTime() + AN_HAN_MS || (hetGio !== null && now.getTime() > hetGio);
   const lan = (await prisma.bangChungHoc.count({ where: { nhiemVuId: viecId } })) + 1;
   const [bc] = await prisma.$transaction([
     prisma.bangChungHoc.create({

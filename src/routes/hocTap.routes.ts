@@ -114,7 +114,12 @@ router.get('/viec/:id', h(async (req) => {
 router.patch('/viec/:id', h(async (req) => svc.suaViec(req.userId!, id(req), parse(viecSchema.partial(), req.body), laNguoiCham(req))));
 router.delete('/viec/:id', h(async (req) => { await svc.xoaViec(req.userId!, id(req), laNguoiCham(req)); return { ok: true }; }));
 /** Xếp lại giờ học cho mọi việc chưa bắt đầu (sau khi lịch lớp đổi, hoặc muốn làm mới). */
-router.post('/xep-lich', h(async (req) => ({ daXep: await xepLich(req.userId!) })));
+router.post('/xep-lich', h(async (req) => {
+  const { tu } = parse(z.object({ tu: z.string().optional() }), req.body);
+  const moc = tu ? new Date(tu) : undefined;
+  if (moc && Number.isNaN(moc.getTime())) throw new BadRequestError('"tu" không hợp lệ');
+  return { daXep: await xepLich(req.userId!, { tu: moc }) };
+}));
 router.patch('/viec/:id/gio', h(async (req) => {
   const { gioBatDau } = parse(z.object({ gioBatDau: z.string().min(10) }), req.body);
   return svc.doiGio(req.userId!, id(req), new Date(gioBatDau));

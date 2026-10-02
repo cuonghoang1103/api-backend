@@ -180,16 +180,18 @@ export function LichHoc({ tq, onMo, onDoi }: { tq: TongQuan; onMo: (id: number) 
 
       {moLui && (
         <div className="mb-3 flex flex-wrap items-center gap-2 rounded-2xl border border-amber-500/50 bg-amber-500/10 p-3 text-sm text-text-primary">
-          <span>Mấy giờ bạn quay lại học?</span>
+          <span>Mấy giờ bạn quay lại học? <span className="text-xs text-text-muted">(trong hôm nay, muộn nhất 05:00 sáng mai)</span></span>
           <input type="time" value={gioLui} onChange={(e) => setGioLui(e.target.value)} className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-primary)] px-2 py-1" />
           <Nut disabled={!gioLui || dangXep} onClick={async () => {
-            const homNay = new Date(Date.now() + 7 * 3_600_000).toISOString().slice(0, 10);
-            let moc = new Date(`${homNay}T${gioLui}:00+07:00`);
-            if (moc.getTime() < Date.now()) moc = new Date(moc.getTime() + 86_400_000); // giờ đã qua ⇒ hiểu là sáng mai
+            // Ngày A = 05:00 → 05:00 hôm sau. Giờ 00:00–04:59 = giờ bù đêm CỦA NGÀY A (lịch ngày hôm sau).
+            const ngayA = new Date(Date.now() + 7 * 3_600_000 - 5 * 3_600_000).toISOString().slice(0, 10);
+            let moc = new Date(`${ngayA}T${gioLui}:00+07:00`);
+            if (Number(gioLui.slice(0, 2)) < 5) moc = new Date(moc.getTime() + 86_400_000);
+            if (moc.getTime() < Date.now() - 60_000) { window.alert('Giờ đó đã qua. Chỉ lùi tới một giờ SAU bây giờ, trong hôm nay (muộn nhất 05:00 sáng mai).'); return; }
             setDangXep(true);
             try { await hocTapApi.xepLai(moc.toISOString()); setMoLui(false); onDoi(); } finally { setDangXep(false); }
           }}>Xếp lại từ giờ đó</Nut>
-          <p className="w-full text-[11px] text-text-muted">⚠️ Lùi lịch không xoá phạt: việc hạn hôm nay không kịp trước 23:45 sẽ bị dồn vào GIỜ NGỦ (00:00–05:00). Quá 05:00 mới tính quá hạn.</p>
+          <p className="w-full text-[11px] text-text-muted">⚠️ Chỉ lùi trong khung của hôm nay. Lùi lịch không xoá phạt: việc hạn hôm nay không kịp trước 23:45 bị dồn vào GIỜ NGỦ (00:00–05:00) — vẫn thuộc hôm nay. Quá 05:00 mới tính quá hạn.</p>
         </div>
       )}
 

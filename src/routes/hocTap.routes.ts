@@ -118,6 +118,14 @@ router.post('/xep-lich', h(async (req) => {
   const { tu } = parse(z.object({ tu: z.string().optional() }), req.body);
   const moc = tu ? new Date(tu) : undefined;
   if (moc && Number.isNaN(moc.getTime())) throw new BadRequestError('"tu" không hợp lệ');
+  // Chỉ lùi TRONG ngày A: ngày A = 05:00 sáng → 05:00 sáng hôm sau (00:00–05:00 là giờ bù đêm
+  // của chính ngày A). Người dùng chốt 02/10: "không được qua ngày khác".
+  if (moc) {
+    const now = Date.now();
+    const VN = 7 * 3_600_000, NGAY = 86_400_000;
+    const dauNgayA = Math.floor((now - 5 * 3_600_000 + VN) / NGAY) * NGAY - VN + 5 * 3_600_000; // 05:00 VN của ngày A
+    if (moc.getTime() > dauNgayA + NGAY) throw new BadRequestError('Chỉ được lùi lịch trong ngày hôm nay — muộn nhất 05:00 sáng mai (giờ bù đêm).');
+  }
   return { daXep: await xepLich(req.userId!, { tu: moc }) };
 }));
 router.patch('/viec/:id/gio', h(async (req) => {

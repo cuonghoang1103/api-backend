@@ -22,6 +22,7 @@
  */
 import type { LucideIcon } from 'lucide-react';
 import {
+  Target,
   AudioWaveform,
   Binary,
   Bookmark,
@@ -122,6 +123,10 @@ export const ROUTES: readonly RouteDef[] = [
     keywords: ['voice', 'tts', 'giong noi', 'doc van ban'] },
 
   // ── Học tập ──────────────────────────────────────────────
+  /* Huấn luyện học kỳ — AI giao việc, chấm bằng chứng, báo tỷ lệ trượt.
+     Dùng lại trang web (`features/hocTap/HocTapPage`). */
+  { path: '/hoc-tap', label: 'Học kỳ', icon: Target, group: 'hoc',
+    keywords: ['hoc ky', 'học kỳ', 'ke hoach hoc', 'kế hoạch', 'ty le truot', 'trượt môn', 'deadline', 'bai tap'] },
   { path: '/academy', label: 'Học viện', icon: GraduationCap, group: 'hoc',
     keywords: ['academy', 'khoá học', 'môn', 'fpt', 'hoc vien'] },
   /* Hai trang tư vấn của Học viện — dùng lại nguyên của web (xem

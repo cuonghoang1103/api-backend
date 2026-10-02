@@ -226,7 +226,8 @@ describe('khopTuyenWeb', () => {
        `/academy/so-do-mon-hoc`) — app trước đó không có chúng. 75 → 94 ngày
        23/09/2026: cây CT Work (`/work`, 19 trang). 24/09: `/work/search` ⇒ 95. */
     // 28/09/2026: +2 khoá học kiểu sách (/language/:code/ielts, /language/:code/dekiru).
-    expect(thay.size).toBe(97);
+    // 02/10/2026: +2 Huấn luyện học kỳ (/hoc-tap, /hoc-tap/mon/:id).
+    expect(thay.size).toBe(99);
   });
 });
 

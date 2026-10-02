@@ -27,6 +27,7 @@ import { XuongNoiDungPage } from './features/creator/XuongNoiDungPage';
 import { DuAnPage } from './features/projects/DuAnPage';
 import { ExpHubPage } from './features/exp-hub/ExpHubPage';
 import { TaiChinhPage } from './features/finance/TaiChinhPage';
+import { HocTapPage } from './features/hocTap/HocTapPage';
 import { DienDanPage } from './features/forum/DienDanPage';
 import { DaLuuPage } from './features/saved/DaLuuPage';
 import { TrangCaNhanPage } from './features/profile/TrangCaNhanPage';
@@ -78,6 +79,7 @@ export const NATIVE_PAGES: Readonly<Record<string, ComponentType>> = {
   '/projects': DuAnPage,
   '/exp-hub': ExpHubPage,
   '/finance': TaiChinhPage,
+  '/hoc-tap': HocTapPage,
   '/forum': DienDanPage,
   '/saved': DaLuuPage,
   '/profile': TrangCaNhanPage,
@@ -108,6 +110,7 @@ const CHU_CAY: ReadonlyArray<readonly [string, ComponentType]> = [
   ['/projects', DuAnPage],
   ['/exp-hub', ExpHubPage],
   ['/finance', TaiChinhPage],
+  ['/hoc-tap', HocTapPage],
   ['/forum', DienDanPage],
   ['/saved', DaLuuPage],
   ['/profile', TrangCaNhanPage],

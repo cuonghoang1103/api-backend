@@ -179,6 +179,9 @@ export const TUYEN_WEB: readonly TuyenWeb[] = [
    */
 
   /* ── Tài chính (13 màn, nhiều nhất) ── */
+  // Huấn luyện học kỳ (02/10/2026) — xem docs/hoc-tap-coach-plan.md.
+  { mau: '/hoc-tap', nap: () => import('@/app/hoc-tap/page') },
+  { mau: '/hoc-tap/mon/:id', nap: () => import('@/app/hoc-tap/mon/[id]/page') },
   { mau: '/finance', nap: () => import('@/app/finance/page') },
   { mau: '/finance/currency', nap: () => import('@/app/finance/currency/page') },
   { mau: '/finance/debts', nap: () => import('@/app/finance/debts/page') },
@@ -307,6 +310,8 @@ export const GOC_WEB: readonly string[] = [
   '/academy',
   /* CT Work — cả cây, gồm hai đường công khai `invite/*` và `share/*`. */
   '/work',
+  /* Huấn luyện học kỳ — `/hoc-tap/mon/:id`. */
+  '/hoc-tap',
   /* Sổ tay: `/notes` là màn `NotesPage` (khớp chính xác); mục này mở đường cho
      `/notes/graph` — "Đồ thị liên kết" trong ⌘K và trang chủ Sổ tay. */
   '/notes',

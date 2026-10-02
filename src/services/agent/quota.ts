@@ -34,6 +34,7 @@
 import { prisma } from '../../config/database.js';
 import { logger } from '../../utils/logger.js';
 import { HE_SO_FABLE, MODEL_FABLE } from './fable.js';
+import { tokenGiaHan } from './keyGiaHan.js';
 
 /** Mặc định. Đổi bằng env, không sửa mã. `AGENT_TOKEN_CAP=0` = tắt trần (có chủ ý). */
 const MAC_DINH_TRAN = 4_000_000;
@@ -56,7 +57,12 @@ export function soGioCuaSo(): number {
 export interface HanMuc {
   /** Token đã tiêu trong cửa sổ (vào + ra). */
   daDung: number;
+  /** Trần HIỆU LỰC = `tranGoc` + `giaHan`. */
   tran: number;
+  /** Trần gốc (env `AGENT_TOKEN_CAP`). */
+  tranGoc: number;
+  /** Token cộng thêm nhờ KEY GIA HẠN còn trong cửa sổ, đúng phiên bản key (`keyGiaHan.ts`). */
+  giaHan: number;
   conLai: number;
   /** 0–100, để vẽ thanh đo. */
   phanTram: number;
@@ -77,14 +83,28 @@ export interface HanMuc {
  * trong `llm/budget.ts`. Ví tiền vẫn còn cầu dao ngân sách toàn site đứng sau.
  */
 export async function xemHanMuc(userId: number): Promise<HanMuc> {
-  const tran = tranToken();
+  const tranGoc = tranToken();
   const soGio = soGioCuaSo();
+  /*
+   * KEY GIA HẠN (02/10/2026): trần hiệu lực = trần gốc + các lần nhập key còn
+   * trong cửa sổ, đúng phiên bản key hiện hành. Đọc hỏng ⇒ 0 (về trần gốc),
+   * không làm hỏng cả phép đo. Chỉ nới TOKEN — trần TIỀN không đụng tới.
+   */
+  let giaHan = 0;
+  if (tranGoc > 0) {
+    try {
+      giaHan = await tokenGiaHan(userId, soGio);
+    } catch (err) {
+      logger.warn('agent: không đọc được key gia hạn, dùng trần gốc', { error: (err as Error).message });
+    }
+  }
+  const tran = tranGoc + giaHan;
   const trong = (d: Partial<HanMuc> = {}): HanMuc => ({
-    daDung: 0, tran, conLai: tran, phanTram: 0, soGio,
+    daDung: 0, tran, tranGoc, giaHan, conLai: tran, phanTram: 0, soGio,
     hetHan: false, hoiLucNao: null, hoiHetLuc: null, ...d,
   });
 
-  if (tran <= 0) return trong(); // 0 = tắt trần
+  if (tranGoc <= 0) return trong(); // 0 = tắt trần
 
   /*
    * ── ADMIN KHÔNG BỊ CHẶN, NHƯNG VẪN BỊ ĐẾM ──────────────────────────
@@ -146,6 +166,8 @@ export async function xemHanMuc(userId: number): Promise<HanMuc> {
     return {
       daDung,
       tran,
+      tranGoc,
+      giaHan,
       conLai: Math.max(0, tran - daDung),
       phanTram: Math.min(100, Math.round((daDung / tran) * 100)),
       soGio,

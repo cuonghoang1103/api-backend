@@ -631,6 +631,125 @@ function CongDuPhongAdmin() {
   );
 }
 
+/**
+ * KEY GIA HẠN HẠN MỨC AI CODE (02/10/2026). Người dùng hết hạn mức token 5 giờ
+ * ⇒ nhập key này trong app ⇒ +N token (cửa sổ trượt) và agent làm tiếp chỗ
+ * dở. Nhập lại bao nhiêu lần cũng được. ĐỔI/TẮT key = key cũ chết VÀ mọi phần
+ * đã cấp thôi tính ngay. KHÔNG nới trần tiền. Backend: `/api/v1/admin/du-phong/gia-han`.
+ */
+function KeyGiaHanAdmin() {
+  const [t, setT] = useState<{ daBat: boolean; phienBan: number; soTokenMoiLan: number; tranGoc: number; soGio: number } | null>(null);
+  const [key, setKey] = useState('');
+  const [soToken, setSoToken] = useState('');
+  const [dangLuu, setDangLuu] = useState(false);
+
+  const nap = useCallback(async () => {
+    try {
+      const r = await fetch('/api/v1/admin/du-phong/gia-han', { credentials: 'include' });
+      const j = await r.json();
+      setT(j.data ?? null);
+      if (j.data?.soTokenMoiLan) setSoToken(String(j.data.soTokenMoiLan));
+    } catch { setT(null); }
+  }, []);
+  useEffect(() => { nap(); }, [nap]);
+
+  const gui = async (body: Record<string, unknown>, xong: string) => {
+    setDangLuu(true);
+    try {
+      const r = await fetch('/api/v1/admin/du-phong/gia-han', {
+        method: 'PUT', credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(j.message ?? 'Lỗi');
+      toast.success(xong);
+      setKey('');
+      nap();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : 'Không lưu được.');
+    } finally { setDangLuu(false); }
+  };
+
+  const luuKey = () => {
+    if (key.trim().length < 6) { toast.error('Key tối thiểu 6 ký tự.'); return; }
+    if (t?.daBat && !window.confirm('Đổi key? Key cũ sẽ không nhập được nữa và mọi phần gia hạn đã cấp thôi tính ngay.')) return;
+    const so = Number(soToken);
+    gui(
+      { key: key.trim(), ...(Number.isFinite(so) && so > 0 && so !== t?.soTokenMoiLan ? { soTokenMoiLan: so } : {}) },
+      t?.daBat ? 'Đã đổi key — key cũ và phần đã cấp hết hiệu lực.' : 'Đã bật key gia hạn.',
+    );
+  };
+  const tat = () => {
+    if (!window.confirm('Tắt key gia hạn? Mọi phần gia hạn đã cấp thôi tính ngay.')) return;
+    gui({ key: null }, 'Đã tắt key gia hạn.');
+  };
+  const luuSo = () => {
+    const so = Number(soToken);
+    if (!Number.isFinite(so) || so < 1000) { toast.error('Số token không hợp lệ.'); return; }
+    gui({ soTokenMoiLan: so }, `Mỗi lần nhập key sẽ cộng ${k(so)} token.`);
+  };
+
+  return (
+    <div className="p-4 rounded-xl border border-darkborder bg-darkcard text-sm space-y-3">
+      <div className="flex flex-wrap items-center gap-2">
+        <b className="text-text-primary">🔑 Key gia hạn hạn mức AI Code</b>
+        {t && (
+          <span className={`px-2 py-0.5 rounded-full text-xs border ${t.daBat ? 'border-green-500/50 text-green-400' : 'border-darkborder text-text-muted'}`}>
+            {t.daBat ? `Đang bật · phiên bản ${t.phienBan}` : 'Đang tắt'}
+          </span>
+        )}
+      </div>
+      <p className="text-text-muted">
+        Khi người dùng hết hạn mức token {t ? <>({k(t.tranGoc)} / {t.soGio} giờ)</> : null}, app AI Code hiện ô
+        {' '}<b className="text-text-primary">“Nhập key để làm tiếp”</b>. Nhập đúng ⇒ cộng
+        {' '}<b className="text-text-primary">{t ? k(t.soTokenMoiLan) : '…'} token</b> trong cửa sổ trượt và agent làm tiếp
+        đúng chỗ dở; hết lại thì nhập lại đúng key. <b className="text-text-primary">Đổi hoặc tắt key</b> là key cũ
+        không nhập được nữa và phần đã cấp thôi tính ngay. Key <b className="text-text-primary">không nới trần tiền</b> theo ngày.
+      </p>
+      <div className="flex flex-wrap gap-2">
+        <input
+          type="password"
+          value={key}
+          onChange={(e) => setKey(e.target.value)}
+          placeholder={t?.daBat ? 'Key mới (đổi = thu hồi key cũ)' : 'Đặt key để bật'}
+          autoComplete="new-password"
+          className="flex-1 min-w-[200px] px-3 py-1.5 rounded-lg bg-darkbg border border-darkborder text-text-primary text-sm"
+        />
+        <button
+          onClick={luuKey}
+          disabled={dangLuu || !key}
+          className="px-3 py-1.5 rounded-lg text-xs border border-neon-violet text-neon-violet disabled:opacity-50"
+        >{t?.daBat ? 'Đổi key' : 'Bật key gia hạn'}</button>
+        {t?.daBat && (
+          <button
+            onClick={tat}
+            disabled={dangLuu}
+            className="px-3 py-1.5 rounded-lg text-xs border border-darkborder text-text-muted"
+          >Tắt</button>
+        )}
+      </div>
+      <div className="flex flex-wrap items-center gap-2">
+        <label className="text-text-muted text-xs" htmlFor="so-token-gia-han">Token mỗi lần nhập</label>
+        <input
+          id="so-token-gia-han"
+          type="number"
+          min={1000}
+          step={100000}
+          value={soToken}
+          onChange={(e) => setSoToken(e.target.value)}
+          className="w-40 px-3 py-1.5 rounded-lg bg-darkbg border border-darkborder text-text-primary text-sm"
+        />
+        <button
+          onClick={luuSo}
+          disabled={dangLuu || !soToken || Number(soToken) === t?.soTokenMoiLan}
+          className="px-3 py-1.5 rounded-lg text-xs border border-darkborder text-text-muted disabled:opacity-50"
+        >Lưu số token</button>
+      </div>
+    </div>
+  );
+}
+
 function TabFable() {
   const [rows, setRows] = useState<DonFable[]>([]);
   const [tranGoc, setTranGoc] = useState(0);
@@ -681,6 +800,7 @@ function TabFable() {
   return (
     <div className="space-y-4">
       <CongDuPhongAdmin />
+      <KeyGiaHanAdmin />
 
       <div className="p-4 rounded-xl border border-darkborder bg-darkcard text-sm text-text-muted flex gap-3">
         <Info className="w-4 h-4 mt-0.5 shrink-0 text-neon-violet" />

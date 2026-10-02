@@ -358,6 +358,8 @@ const bridge: DesktopBridge = {
     dongCuoc: (cuocId: string) => ipcRenderer.invoke('agent:dongCuoc', { cuocId }) as Promise<void>,
     send: (cuocId: string, text: string, anh?: string[]) =>
       ipcRenderer.invoke('agent:send', { cuocId, text, anh }) as Promise<void>,
+    lamTiep: (cuocId: string) =>
+      ipcRenderer.invoke('agent:lamTiep', { cuocId }) as Promise<void>,
     cancel: (cuocId: string) => ipcRenderer.invoke('agent:cancel', { cuocId }) as Promise<void>,
     ghiChuTrangThai: (cuocId: string) =>
       ipcRenderer.invoke('agent:ghiChuTrangThai', { cuocId }) as Promise<{ co: boolean; ten: string | null }>,

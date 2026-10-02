@@ -72,7 +72,8 @@ export type MucHienThi =
    * hình giật cứng.
    */
   | { kieu: 'lenhRa'; text: string }
-  | { kieu: 'loi'; text: string; ma?: string };
+  /** `coKeyGiaHan`: hết hạn mức token và admin đã bật key gia hạn ⇒ hiện ô nhập key. */
+  | { kieu: 'loi'; text: string; ma?: string; coKeyGiaHan?: boolean };
 
 /**
  * Gộp một mẩu chữ vào bảng ghi.
@@ -304,7 +305,11 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
           /* `DOI_CONG` chỉ là dòng báo giữa lượt (đổi rambo ↔ dự phòng) — lượt
              vẫn đang chạy, đừng tắt chỉ báo "đang nghĩ". */
           if (e.ma !== 'DOI_CONG') datDangNghi(false);
-          datMuc((truoc) => [...truoc, { kieu: 'loi', text: e.thongDiep, ...(e.ma ? { ma: e.ma } : {}) }]);
+          datMuc((truoc) => [...truoc, {
+            kieu: 'loi', text: e.thongDiep,
+            ...(e.ma ? { ma: e.ma } : {}),
+            ...(e.coKeyGiaHan ? { coKeyGiaHan: true } : {}),
+          }]);
           break;
         case 'daXoa':
           // Main đã xoá hội thoại ⇒ dọn theo. Không dọn thì màn hình kể một câu
@@ -488,6 +493,33 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
   }, [napPhien, cuocId]);
 
   /**
+   * CHẠY TIẾP lượt vừa bị chặn (key gia hạn, 02/10/2026) — không thêm bong
+   * bóng câu hỏi, không bắt người dùng gõ lại: main gửi lại NGUYÊN hội thoại.
+   * `quota` (nếu có) là hạn mức mới máy chủ vừa trả — vẽ ngay lên thanh đo.
+   */
+  const lamTiep = useCallback(async (quota?: AgentQuota) => {
+    const cau = window.cuongthai;
+    if (!cau || dangGui.current) return;
+    dangGui.current = true;
+    if (quota) datHanMuc(quota);
+    datMuc((truoc) => [...truoc, { kieu: 'loi', ma: 'LAM_TIEP', text: 'Đã gia hạn — agent làm tiếp từ chỗ đang dở.' }]);
+    datDangChay(true);
+    datDangNghi(true);
+    try {
+      await cau.agent.lamTiep(cuocId);
+    } catch (err) {
+      datMuc((truoc) => [...truoc, { kieu: 'loi', text: (err as Error).message }]);
+    } finally {
+      dangGui.current = false;
+      datDangChay(false);
+      datDangNghi(false);
+      datDangDung(false);
+      window.dispatchEvent(new CustomEvent(SU_KIEN_AGENT_XONG));
+      void napPhien();
+    }
+  }, [napPhien, cuocId]);
+
+  /**
    * Dừng lượt đang chạy.
    *
    * ⚠️ PHẢI đổi màn hình NGAY, đừng đợi main bắn sự kiện về.
@@ -557,6 +589,7 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
   return {
     trangThai: { muc, dangChay, dangNghi, buoc, hanMuc, tienPhien, soFileDaSua, keHoach, nguCanh } satisfies TrangThaiAgent,
     gui,
+    lamTiep,
     dung,
     dangDung,
     batDauLai,

@@ -49,6 +49,7 @@ import { modelAgentTu } from './models.js';
 import { congDuPhong, modelDuPhongAgent, veDuPhongHopLe } from './congDuPhong.js';
 import { LOI_LAM_VIEC } from './prompt.js';
 import { loiHetHan, xemHanMuc, type HanMuc } from './quota.js';
+import { coKeyGiaHan } from './keyGiaHan.js';
 import { HE_SO_FABLE, MODEL_FABLE, loiHetFable, xemHanMucFable } from './fable.js';
 import { loiCanViTien, xemViTien } from './viTien.js';
 import { runServerTool } from './serverTools.js';
@@ -315,7 +316,11 @@ export type AgentEvent =
       /** Có nén ngữ cảnh không, và cắt được bao nhiêu. Để hiện "đã lược N kết quả cũ". */
       compact?: { soDaLuoc: number; kyTuDaCat: number };
     }
-  | { type: 'error'; error: string; code?: string };
+  /**
+   * `coKeyGiaHan` CHỈ đi kèm `AGENT_QUOTA_EXCEEDED` (02/10/2026): admin đã đặt
+   * key gia hạn ⇒ app hiện ô "Nhập key để làm tiếp". Không có ⇒ app im ô đó.
+   */
+  | { type: 'error'; error: string; code?: string; coKeyGiaHan?: boolean };
 
 export interface AgentTurnInput {
   messages: unknown;
@@ -878,7 +883,10 @@ export async function runAgentTurn(
   // 2. Hạn mức 5 giờ của NGƯỜI DÙNG — bể riêng của agent.
   const hanMuc = await xemHanMuc(input.userId);
   if (hanMuc.hetHan) {
-    emit({ type: 'error', error: loiHetHan(hanMuc), code: 'AGENT_QUOTA_EXCEEDED' });
+    emit({
+      type: 'error', error: loiHetHan(hanMuc), code: 'AGENT_QUOTA_EXCEEDED',
+      coKeyGiaHan: await coKeyGiaHan(),
+    });
     return;
   }
 

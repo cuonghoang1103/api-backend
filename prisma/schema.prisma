@@ -379,6 +379,8 @@ model User {
   keyReplacements    KeyReplacementRequest[]
   llmKeyRequests     LlmKeyRequest[]
   fableQuotaRequests FableQuotaRequest[]
+  /// Các lần nhập KEY GIA HẠN hạn mức AI Code (02/10/2026).
+  agentQuotaGrants   AgentQuotaGrant[]
   /// Video người dùng tự thêm vào màn "Học bằng video".
   videoTuThem        VideoNguoiDung[]        @relation("VideoNguoiDungChuSoHuu")
   videoYeuThich      VideoYeuThich[]         @relation("VideoYeuThichChuSoHuu")
@@ -10803,4 +10805,22 @@ model WorkEditLock {
 
   @@id([userId, projectId])
   @@map("work_edit_locks")
+}
+
+/// KEY GIA HẠN hạn mức AI Code (02/10/2026) — mỗi hàng là MỘT lần người dùng
+/// nhập đúng key do admin đặt (`services/agent/keyGiaHan.ts`). Cộng `soToken`
+/// vào trần token của cửa sổ 5 giờ TRƯỢT, chỉ khi `phienBan` còn khớp với key
+/// hiện hành — admin đổi/tắt key là mọi lần cấp cũ thôi tính ngay. KHÔNG nới
+/// trần TIỀN (ví agent) — đó là lưới bảo vệ ví của chủ web.
+model AgentQuotaGrant {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  soToken   Int      @map("so_token")
+  phienBan  Int      @map("phien_ban")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt], name: "idx_agent_quota_grant_user_created")
+  @@map("agent_quota_grants")
 }

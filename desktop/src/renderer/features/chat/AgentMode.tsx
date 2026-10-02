@@ -39,6 +39,7 @@ import { GoiYLenh, LENH_AGENT } from './GoiYLenh';
 import { NutOpenCode } from './NutOpenCode';
 import { ID_FABLE, XinThemFable, moTaHanMuc, useHanMucFable } from './HanMucFable';
 import { HoiQuayVeCongChinh, MoCongDuPhong, moTaDuPhong, useCongDuPhong } from './CongDuPhong';
+import { NhapKeyGiaHan } from './NhapKeyGiaHan';
 import { GoiYFile, docTokenFile, type TokenFile } from './GoiYFile';
 import { BangHook } from './BangHook';
 import { BangBoNho } from './BangBoNho';
@@ -96,7 +97,7 @@ export function AgentMode({
 }) {
   const { dich, dichP } = useDich();
   const {
-    trangThai, gui, dung, dangDung, batDauLai, traLoiXinPhep, hoanTac, quayLui, luiFile, tachNhanh,
+    trangThai, gui, lamTiep, dung, dangDung, batDauLai, traLoiXinPhep, hoanTac, quayLui, luiFile, tachNhanh,
     phien, phienDangMo, moPhien, xoaPhien,
   } = useAgent(cuocId, info);
   const { settings, setSetting } = useAppState();
@@ -1032,13 +1033,18 @@ export function AgentMode({
           if (m.kieu === 'loi') {
             return (
               <div key={i} className="ct-notice" data-tone={
-                m.ma === 'HOAN_TAC' || m.ma === 'RAMBO_BAO_TRI' ? 'warn' : m.ma === 'KHOI_PHUC' || m.ma === 'DOI_CONG' || m.ma === 'RAMBO_SONG_LAI' ? 'info' : 'err'
+                m.ma === 'HOAN_TAC' || m.ma === 'RAMBO_BAO_TRI' ? 'warn' : m.ma === 'KHOI_PHUC' || m.ma === 'DOI_CONG' || m.ma === 'RAMBO_SONG_LAI' || m.ma === 'LAM_TIEP' ? 'info' : 'err'
               }>
                 <span>{m.text}</span>
                 {/* Hết hạn mức Cuong Fable ⇒ xin thêm ngay tại chỗ (26/09/2026). */}
                 {m.ma === 'FABLE_QUOTA_EXCEEDED' && <XinThemFable />}
                 {/* Cổng chính (rambo) sập ⇒ hỏi có dùng cổng dự phòng không (27/09/2026). */}
                 {m.ma === 'RAMBO_BAO_TRI' && <MoCongDuPhong baoTri />}
+                {/* Hết hạn mức token 5 giờ + admin đã bật key gia hạn ⇒ nhập key,
+                    tự gửi lại ĐÚNG lượt vừa bị chặn (02/10/2026). */}
+                {m.ma === 'AGENT_QUOTA_EXCEEDED' && m.coKeyGiaHan && (
+                  <NhapKeyGiaHan khoa={trangThai.dangChay} onXong={(q) => { void lamTiep(q); }} />
+                )}
                 {/* Cổng chính sống lại SAU khi việc xong ⇒ người dùng chọn (27/09/2026). */}
                 {m.ma === 'RAMBO_SONG_LAI' && <HoiQuayVeCongChinh cuocId={cuocId} />}
               </div>

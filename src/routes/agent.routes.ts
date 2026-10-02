@@ -17,6 +17,7 @@
  * khả năng làm hỏng bên kia.
  */
 import { Router, type NextFunction, type Response } from 'express';
+import rateLimit from 'express-rate-limit';
 
 import { authenticate } from '../middleware/auth.js';
 import { isProEffective, cauChanPro } from '../services/pro.service.js';
@@ -29,6 +30,7 @@ import { AgentInputError, runAgentTurn, type AgentEvent } from '../services/agen
 import { congAgent, gatewayConfigured, kiemRamboSong, modelFor, ramboDangNghi } from '../services/llm/gateway.js';
 import { MODEL_DU_PHONG, MoKhoaLoi, congDuPhong, daCoMatKhau, modelDuPhongAgent, moKhoaDuPhong, tenDuPhong, veDuPhongHopLe } from '../services/agent/congDuPhong.js';
 import { dsModelAgent } from '../services/agent/models.js';
+import { KeyGiaHanLoi, coKeyGiaHan, nhapKeyGiaHan } from '../services/agent/keyGiaHan.js';
 import { datTenViec } from '../services/agent/datTen.js';
 import { DS_MUC_NO_LUC } from '../services/agent/turn.js';
 import { xemHanMucFable } from '../services/agent/fable.js';
@@ -232,24 +234,72 @@ router.get('/ky-nang', async (_req: any, res: Response<ApiResponse>, next) => {
   } catch (err) { next(err); }
 });
 
+/** Dạng trả về chung cho `/usage` và `/gia-han` — app vẽ thẳng lên thanh đo. */
+async function goiUsage(userId: number): Promise<Record<string, unknown>> {
+  const h = await xemHanMuc(userId);
+  return {
+    daDung: h.daDung,
+    tran: h.tran,
+    tranGoc: h.tranGoc,
+    giaHan: h.giaHan,
+    conLai: h.conLai,
+    phanTram: h.phanTram,
+    soGio: h.soGio,
+    hetHan: h.hetHan,
+    hoiLucNao: h.hoiLucNao?.toISOString() ?? null,
+    hoiHetLuc: h.hoiHetLuc?.toISOString() ?? null,
+    coKeyGiaHan: await coKeyGiaHan(),
+  };
+}
+
 router.get('/usage', async (req: any, res: Response<ApiResponse>, next) => {
   try {
-    const h = await xemHanMuc(req.userId);
     res.json({
       success: true,
       data: {
         pro: await isProEffective(req.userId).catch(() => false),
-        daDung: h.daDung,
-        tran: h.tran,
-        conLai: h.conLai,
-        phanTram: h.phanTram,
-        soGio: h.soGio,
-        hetHan: h.hetHan,
-        hoiLucNao: h.hoiLucNao?.toISOString() ?? null,
-        hoiHetLuc: h.hoiHetLuc?.toISOString() ?? null,
+        ...(await goiUsage(req.userId)),
       },
     });
   } catch (err) {
+    next(err);
+  }
+});
+
+/**
+ * KEY GIA HẠN (02/10/2026) — `POST /gia-han { key }`.
+ *
+ * Hết hạn mức token 5 giờ (`AGENT_QUOTA_EXCEEDED`) ⇒ app hỏi key admin đặt ⇒
+ * đúng thì cộng `soTokenMoiLan` vào trần (cửa sổ trượt) và trả hạn mức mới; app
+ * tự gửi lại đúng lượt vừa bị chặn. Xem `services/agent/keyGiaHan.ts`.
+ *
+ * Mã lỗi: 409 `KEY_GIA_HAN_CHUA_BAT` · 403 `KEY_GIA_HAN_SAI` (sai HOẶC admin đã
+ * đổi key — app xoá key đang nhớ) · 429 `KEY_GIA_HAN_THU_QUA_NHIEU`.
+ *
+ * Hai lớp chống dò: rate-limit theo người ở đây (10 lần/15 phút, tính cả lần
+ * đúng) + khoá 15 phút sau 5 lần SAI trong dịch vụ.
+ */
+const giaHanLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 10,
+  standardHeaders: true,
+  legacyHeaders: false,
+  keyGenerator: (req: any): string => `gia-han:${req.userId ?? req.ip ?? 'anon'}`,
+  message: { success: false, message: 'Nhập key quá nhiều lần. Thử lại sau 15 phút.', code: 'KEY_GIA_HAN_THU_QUA_NHIEU' },
+});
+
+router.post('/gia-han', chiPro, giaHanLimiter, async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const key = String((req.body as { key?: unknown })?.key ?? '').trim();
+    const kq = await nhapKeyGiaHan(req.userId, key.slice(0, 200));
+    logger.info('[gia-han] nhập key gia hạn hạn mức AI Code', { userId: req.userId, soToken: kq.soToken });
+    res.json({ success: true, data: { soToken: kq.soToken, ...(await goiUsage(req.userId)) } });
+  } catch (err) {
+    if (err instanceof KeyGiaHanLoi) {
+      const status = err.code === 'KEY_GIA_HAN_THU_QUA_NHIEU' ? 429 : err.code === 'KEY_GIA_HAN_CHUA_BAT' ? 409 : 403;
+      next(new AppError(err.message, status, err.code));
+      return;
+    }
     next(err);
   }
 });

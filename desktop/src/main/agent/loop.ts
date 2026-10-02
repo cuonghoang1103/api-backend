@@ -111,7 +111,8 @@ export type SuKienAgent =
       loai: 'xong'; hanMuc: HanMucUi | null; tienUsd: number; daLuoc: number; soFileDaSua: number;
       nguCanh?: NguCanhUi;
     }
-  | { loai: 'loi'; thongDiep: string; ma?: string }
+  /** `coKeyGiaHan`: hết hạn mức token VÀ admin đã bật key gia hạn (02/10/2026). */
+  | { loai: 'loi'; thongDiep: string; ma?: string; coKeyGiaHan?: boolean }
   | { loai: 'huy' }
   /** Hội thoại ở main vừa bị xoá sạch — giao diện PHẢI dọn bảng ghi theo. */
   | { loai: 'daXoa' };
@@ -769,9 +770,20 @@ export async function chayLuot(
   cauHoi: string,
   boiCanh: BoiCanh,
   phat: (e: SuKienAgent) => void,
+  /**
+   * `lamTiep` (02/10/2026 — key gia hạn): chạy tiếp ĐÚNG lượt vừa dừng vì lỗi,
+   * với nguyên `hoiThoai` — KHÔNG đẩy câu hỏi mới. Lượt bị chặn ở máy chủ
+   * trước khi model chạy, nên hội thoại đang dừng ở điểm nhất quán (câu hỏi
+   * hoặc kết quả tool cuối) và gửi lại y nguyên là agent đi tiếp đúng chỗ.
+   */
+  tuyChon: { lamTiep?: boolean } = {},
 ): Promise<void> {
   const c = layCuoc(cuocId);
   if (c.dangChay) throw new Error('Việc này đang chạy dở. Hãy dừng nó trước.');
+  if (tuyChon.lamTiep && c.hoiThoai.length === 0) {
+    phat({ loai: 'loi', thongDiep: 'Không có việc dở nào để làm tiếp trong tab này.', ma: 'KHONG_CO_VIEC_DO' });
+    return;
+  }
   /**
    * Chạy SONG SONG được — nhưng chỉ khi hai việc KHÔNG GHI vào cùng một chỗ.
    *
@@ -823,18 +835,29 @@ export async function chayLuot(
    * khỏi hội thoại thật sau lần quay lui đầu tiên — và nút lùi file sẽ trỏ vào
    * đúng sai chỗ mà không có gì báo.
    */
-  c.so.luot = c.hoiThoai.filter((m) => m.role === 'user').length + 1;
-  c.hoiThoai.push(
-    boiCanh.anh?.length
-      ? {
-          role: 'user',
-          content: [
-            { type: 'text', text: cauHoi },
-            ...boiCanh.anh.map((url) => ({ type: 'image_url' as const, image_url: { url } })),
-          ],
-        }
-      : { role: 'user', content: cauHoi },
-  );
+  if (tuyChon.lamTiep) {
+    /* CÙNG lượt người dùng đang dở ⇒ không +1 (khớp cách `quayLui` đếm). */
+    c.so.luot = Math.max(1, c.hoiThoai.filter((m) => m.role === 'user').length);
+    /* Tin cuối là chữ assistant (vd. phần bị ngắt giữ lại ở `giuChuDo`) ⇒ cổng
+       không nhận hội thoại kết thúc bằng assistant: thêm một câu "làm tiếp". */
+    const cuoi = c.hoiThoai[c.hoiThoai.length - 1];
+    if (cuoi?.role === 'assistant' && !cuoi.tool_calls?.length) {
+      c.hoiThoai.push({ role: 'user', content: 'Tiếp tục đúng từ chỗ đang dừng, đừng lặp lại phần đã làm.' });
+    }
+  } else {
+    c.so.luot = c.hoiThoai.filter((m) => m.role === 'user').length + 1;
+    c.hoiThoai.push(
+      boiCanh.anh?.length
+        ? {
+            role: 'user',
+            content: [
+              { type: 'text', text: cauHoi },
+              ...boiCanh.anh.map((url) => ({ type: 'image_url' as const, image_url: { url } })),
+            ],
+          }
+        : { role: 'user', content: cauHoi },
+    );
+  }
   if (!c.duAn && boiCanh.goc) c.duAn = tenThuMuc(boiCanh.goc);
 
   // Chỉ khai báo khả năng khi THẬT SỰ có thư mục. Khai bừa thì máy chủ đưa tool
@@ -1014,7 +1037,10 @@ export async function chayLuot(
           continue;
         }
         giuChuDo();
-        phat({ loai: 'loi', thongDiep: phanHoi.thongDiep, ma: phanHoi.ma });
+        phat({
+          loai: 'loi', thongDiep: phanHoi.thongDiep, ma: phanHoi.ma,
+          ...(phanHoi.coKeyGiaHan ? { coKeyGiaHan: true } : {}),
+        });
         return;
       }
       const ketQua = phanHoi.ketQua;
@@ -1600,7 +1626,7 @@ async function mgoiMotLuot(o: {
   cuocId?: string;
   signal: AbortSignal;
   phat: (e: SuKienAgent) => void;
-}): Promise<{ ok: true; ketQua: KetQuaLuot } | { ok: false; thongDiep: string; ma: string }> {
+}): Promise<{ ok: true; ketQua: KetQuaLuot } | { ok: false; thongDiep: string; ma: string; coKeyGiaHan?: boolean }> {
   /*
    * ĐỨT KẾT NỐI PHẢI THÀNH MÃ, KHÔNG ĐƯỢC NÉM THÔ.
    *
@@ -1748,7 +1774,7 @@ async function mgoiMotLuotThat(o: {
   cuocId?: string;
   signal: AbortSignal;
   phat: (e: SuKienAgent) => void;
-}): Promise<{ ok: true; ketQua: KetQuaLuot } | { ok: false; thongDiep: string; ma: string }> {
+}): Promise<{ ok: true; ketQua: KetQuaLuot } | { ok: false; thongDiep: string; ma: string; coKeyGiaHan?: boolean }> {
   /*
    * ⚠️ HẠN TỔNG CHO LỜI GỌI NÀY, chồng lên tín hiệu huỷ của người dùng.
    *
@@ -1813,7 +1839,7 @@ async function mgoiMotLuotThat(o: {
   const giaiMa = new TextDecoder();
   let dem = '';
   const ra: KetQuaLuot = { append: [], stop: 'end', toolCalls: [], quota: null, costUsd: 0, daLuoc: 0 };
-  let loi: { thongDiep: string; ma: string } | null = null;
+  let loi: { thongDiep: string; ma: string; coKeyGiaHan?: boolean } | null = null;
 
   for (;;) {
     /* ⚠️ KHÔNG `await doc.read()` trần.
@@ -1884,7 +1910,10 @@ async function mgoiMotLuotThat(o: {
           // Ghi lại, KHÔNG phát ngay: chỗ gọi có thể quyết định thử lại, và
           // phát lỗi trước khi thử lại là hiện một thông báo đỏ rồi tự sửa —
           // người dùng đọc được cái đỏ đó và tưởng đã hỏng.
-          loi = { thongDiep: e.error, ma: e.code ?? 'LLM_ERROR' };
+          loi = {
+            thongDiep: e.error, ma: e.code ?? 'LLM_ERROR',
+            ...(e.coKeyGiaHan === true ? { coKeyGiaHan: true } : {}),
+          };
           break;
       }
     }

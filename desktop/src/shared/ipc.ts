@@ -1403,7 +1403,11 @@ export type AgentUiEvent = { cuocId: string } & (
       loai: 'xong'; hanMuc: AgentQuota | null; tienUsd: number; daLuoc: number; soFileDaSua: number;
       nguCanh?: AgentNguCanh;
     }
-  | { loai: 'loi'; thongDiep: string; ma?: string }
+  /**
+   * `coKeyGiaHan` chỉ đi kèm `AGENT_QUOTA_EXCEEDED` (02/10/2026): admin đã đặt
+   * key gia hạn ⇒ hiện ô "Nhập key để làm tiếp" ngay dưới lỗi.
+   */
+  | { loai: 'loi'; thongDiep: string; ma?: string; coKeyGiaHan?: boolean }
   | { loai: 'huy' }
   /**
    * Hội thoại ở main vừa bị xoá sạch (đổi thư mục dự án, chuyển worktree, bỏ
@@ -1571,6 +1575,8 @@ export const INVOKE_CHANNELS = {
   'agent:chooseWorkspace': agentCuocSchema,
   'agent:clearWorkspace': agentCuocSchema,
   'agent:send': agentSendSchema,
+  /** Chạy tiếp ĐÚNG lượt vừa bị chặn (key gia hạn, 02/10/2026) — không thêm câu hỏi mới. */
+  'agent:lamTiep': agentCuocSchema,
   'agent:cancel': agentCuocSchema,
   'agent:reset': agentCuocSchema,
   'agent:taoCuoc': null,
@@ -2462,6 +2468,11 @@ export interface DesktopBridge {
     taoCuoc(): Promise<string>;
     dongCuoc(cuocId: string): Promise<void>;
     send(cuocId: string, text: string, anh?: string[]): Promise<void>;
+    /**
+     * Chạy tiếp lượt vừa dừng vì lỗi (vd. hết hạn mức rồi nhập key gia hạn)
+     * với NGUYÊN hội thoại đang có — KHÔNG thêm câu hỏi mới. Cũng chạy lâu như `send`.
+     */
+    lamTiep(cuocId: string): Promise<void>;
     cancel(cuocId: string): Promise<void>;
     ghiChuTrangThai(cuocId: string): Promise<{ co: boolean; ten: string | null }>;
     taoGhiChu(cuocId: string): Promise<{ ok: boolean; daCo: boolean }>;

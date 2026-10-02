@@ -15,7 +15,7 @@
  * trình đi qua kênh sự kiện `agent:event`; `invoke` chỉ để biết lượt đã kết
  * thúc (hoặc hỏng ngay từ đầu).
  */
-import { BrowserWindow, dialog, shell } from 'electron';
+import { BrowserWindow, dialog, shell, type IpcMainInvokeEvent } from 'electron';
 import { execFile } from 'node:child_process';
 import fs from 'node:fs/promises';
 import path from 'node:path';
@@ -349,7 +349,16 @@ export function registerAgentHandlers(): void {
     return moTa(cuocId, null);
   });
 
-  handle('agent:send', async ({ cuocId, text, anh }, event) => {
+  /**
+   * Chạy một lượt cho tab `cuocId`. Dùng chung cho `agent:send` (câu hỏi mới)
+   * và `agent:lamTiep` (chạy tiếp lượt vừa bị chặn — key gia hạn, 02/10/2026):
+   * hai đường PHẢI dựng cùng một bối cảnh quyền/thư mục, tách ra hai bản là
+   * một ngày nào đó một bản quên một trường.
+   */
+  const chayCho = async (
+    cuocId: string, text: string, anh: string[] | undefined,
+    event: IpcMainInvokeEvent, lamTiep: boolean,
+  ): Promise<void> => {
     if (cuocDangChay(cuocId)) throw new Error('Việc này đang chạy dở. Hãy dừng nó trước.');
 
     const goc = gocCua(cuocId);
@@ -387,7 +396,16 @@ export function registerAgentHandlers(): void {
         ...(nhanh ? { nhanh } : {}),
       },
       phat,
+      { lamTiep },
     );
+  };
+
+  handle('agent:send', async ({ cuocId, text, anh }, event) => {
+    await chayCho(cuocId, text, anh, event, false);
+  });
+
+  handle('agent:lamTiep', async ({ cuocId }, event) => {
+    await chayCho(cuocId, '', undefined, event, true);
   });
 
   handle('agent:cancel', ({ cuocId }) => {

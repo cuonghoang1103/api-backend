@@ -339,7 +339,10 @@ export type LlmPurpose =
   | 'vo_viet_lai'         // Vở iPad — "AI viết lại trang": đọc ẢNH trang viết tay → khối có cấu trúc, sửa chính tả, KHÔNG thêm ý
   | 'han_tra'             // Vở iPad — "Vẽ chữ Hán": tra chữ từ âm Hán Việt / nghĩa / romaji + On/Kun/nghĩa (JSON nhỏ)
   | 'so_do_khoi'          // Vở iPad — "Luồng / sơ đồ khối": mô tả → ĐỒ THỊ JSON (nút + cạnh); app tự dàn bố cục + viết chữ bằng nét
-  | 'mach_dien';          // Vở iPad — "⚡ Mạch điện": mô tả nối dây → CẤU TRÚC JSON (module, chân, dây, màu); app tự dàn kiểu bậc thang
+  | 'mach_dien'           // Vở iPad — "⚡ Mạch điện": mô tả nối dây → CẤU TRÚC JSON (module, chân, dây, màu); app tự dàn kiểu bậc thang
+  | 'study_plan'          // /hoc-tap — soạn việc học theo môn/tuần từ mục lục Academy (JSON)
+  | 'study_verify'        // /hoc-tap — chấm BẰNG CHỨNG người học nộp (chữ + ẢNH) → đạt/điểm/lỗi (JSON)
+  | 'study_coach';        // /hoc-tap — diễn đạt lời cảnh báo từ tỷ lệ trượt MÃ đã tính
 
 const PURPOSE_MODEL: Record<LlmPurpose, string> = {
   /**
@@ -492,6 +495,12 @@ const PURPOSE_MODEL: Record<LlmPurpose, string> = {
    * dùng model mạnh chứ không hạ xuống model rẻ.
    */
   mach_dien: 'gpt-6-sol',
+  // /hoc-tap (02/10/2026): người dùng chỉ định gpt-6-sol của modelapi; chấm
+  // bằng chứng cần MẮT (ảnh Terminal, ảnh bài làm) và sol là model GPT duy
+  // nhất của cổng nhìn ảnh thật — xem đoạn `doc_ocr` ở CLAUDE.md.
+  study_plan: 'gpt-6-sol',
+  study_verify: 'gpt-6-sol',
+  study_coach: 'gpt-6-sol',
 
   cv_critique: 'gpt-6-sol',
   cv_writing: 'gpt-6-sol',
@@ -660,7 +669,7 @@ export interface LlmEndpoint {
  * chưa từng thấy tấm ảnh nào, và người dùng nhận về một bản chép bịa. Nên chặn
  * ở đây, chứ không trông vào việc nhớ đừng ghi tên nó vào `LLM_LOCAL_PURPOSES`.
  */
-const VISION_PURPOSES = new Set<LlmPurpose>(['chat_vision', 'doc_ocr', 'vo_viet_lai']);
+const VISION_PURPOSES = new Set<LlmPurpose>(['chat_vision', 'doc_ocr', 'vo_viet_lai', 'study_verify']);
 
 /**
  * Việc PHẢI GỌI TOOL nhiều lượt. Chặn khỏi máy nhà vì cùng một lý do như ảnh:
@@ -821,7 +830,7 @@ function batDauDo(): void {
 // `ve_net` có mặt vì lý do KHÁC: nó gọi qua `llmComplete` (hiểu cả hai giao
 // thức), nhưng chất lượng nét vẽ đo được chỉ tốt trên `gpt-6-sol` — đi rambo là
 // ra model Claude vẽ kém hơn hẳn.
-const VIEC_CHI_OPENAI = new Set<LlmPurpose>(['cv_parse', 'cv_critique', 'cv_writing', 'doc_ocr', 've_net', 'vo_viet_lai']);
+const VIEC_CHI_OPENAI = new Set<LlmPurpose>(['cv_parse', 'cv_critique', 'cv_writing', 'doc_ocr', 've_net', 'vo_viet_lai', 'study_plan', 'study_verify', 'study_coach']);
 
 export function endpointFor(purpose: LlmPurpose): LlmEndpoint {
   // Đặt TRƯỚC nhánh máy nhà: `agent_code` nằm trong `TOOL_PURPOSES` nên nó

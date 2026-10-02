@@ -558,6 +558,18 @@ export function startCronJobs(): void {
     }
   }, { timezone: 'UTC' });
 
+  // 07:00 VN — Huấn luyện học kỳ (/hoc-tap): chụp tỷ lệ trượt của ngày (vẽ biểu
+  // đồ) và đẩy một thông báo "hôm nay làm gì, đang trượt bao nhiêu %".
+  cron.schedule('0 0 * * *', async () => {
+    try {
+      const { chayBuoiSang } = await import('./hocTap/hocTap.service.js');
+      const n = await chayBuoiSang();
+      logger.info('cron hoc-tap buổi sáng', { nguoi: n });
+    } catch (err) {
+      logger.error('cron hoc-tap buổi sáng lỗi', { error: (err as Error).message });
+    }
+  }, { timezone: 'UTC' });
+
   // ─── Startup recovery ───
   void recoverPendingJobs();
 

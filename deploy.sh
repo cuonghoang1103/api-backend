@@ -978,6 +978,7 @@ for route in \
     video-hoc/danh-muc \
     video-hoc/thu-vien \
     video-hoc/cua-toi \
+    hoc-tap/tong-quan \
     xuong-3d/bo-phan \
     gifs \
     toc-do-mang/ping \

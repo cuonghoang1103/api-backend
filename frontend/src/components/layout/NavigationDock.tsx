@@ -13,7 +13,7 @@ import {
   Gamepad2, Users, PlayCircle, Megaphone, Briefcase, Crown,
   FileText, Newspaper, Radio, Code2, Binary, Map as MapIcon, ClipboardCheck,
   Waypoints, Blocks, CircuitBoard,
-  AudioLines, ScanText, Terminal
+  AudioLines, ScanText, Terminal, Target
 } from 'lucide-react';
 import { useMessagingStore } from '@/store/messagingStore';
 import { useAuthStore } from '@/store/authStore';
@@ -94,6 +94,8 @@ const ALL_DOCK_ITEMS: DockItem[] = [
   { href: '/projects', label: 'Projects', icon: FolderOpen, section: 'code' },
   { href: '/repos', label: 'GitHub Repos', icon: Github, section: 'code' },
   // Learn
+  // Huấn luyện học kỳ — AI giao việc, chấm bằng chứng, báo tỷ lệ trượt (02/10/2026).
+  { href: '/hoc-tap', label: 'Học kỳ', icon: Target, section: 'learn' },
   { href: '/academy', label: 'Academy', icon: GraduationCap, section: 'learn' },
   { href: '/exam', label: 'Exam Room', icon: ClipboardCheck, section: 'learn' },
   { href: '/courses', label: 'Courses', icon: BookMarked, section: 'learn' },

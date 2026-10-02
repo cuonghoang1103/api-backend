@@ -175,6 +175,10 @@ model User {
   codeExerciseTutorAsks   CodeExerciseTutorAsk[]
   hocKy                   HocKy[]
   lichThi                 LichThi[]
+  monHocKy                MonHocKy[]
+  nhiemVuHoc              NhiemVuHoc[]
+  bangChungHoc            BangChungHoc[]
+  ruiRoHocNgay            RuiRoHocNgay[]
 
   // Notification graph — who is the receiver / sender on social
   // notifications. The reverse relations are defined on
@@ -9085,8 +9089,9 @@ model HocKy {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  user    User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user    User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   lichThi LichThi[]
+  monHoc  MonHocKy[]
 
   @@index([userId, dangHoc], map: "idx_hoc_ky_user")
   @@map("hoc_ky")
@@ -9131,6 +9136,152 @@ model LichThi {
 
   @@index([userId, ngay], map: "idx_lich_thi_user_ngay")
   @@map("lich_thi")
+}
+
+// ============================================================
+// HUẤN LUYỆN HỌC KỲ (/hoc-tap) — 02/10/2026
+// ------------------------------------------------------------
+// AI soạn việc học theo môn/tuần; người học NỘP BẰNG CHỨNG, chỉ AI (hoặc
+// Claude Code qua token, hoặc admin) được chấm và tích. Tỷ lệ trượt do mã
+// tính (src/services/hocTap/ruiRo.ts), không do AI đoán.
+// Kế hoạch: docs/hoc-tap-coach-plan.md
+// ============================================================
+
+/// Một MÔN trong một kỳ của một người.
+model MonHocKy {
+  id      Int @id @default(autoincrement())
+  userId  Int @map("user_id")
+  hocKyId Int @map("hoc_ky_id")
+
+  maMon String @map("ma_mon") @db.VarChar(30)
+  ten   String @db.VarChar(200)
+
+  /// Khoá Academy tương ứng (nếu có). Không khoá ngoại: khoá có thể bị seed lại.
+  courseId   Int?    @map("course_id")
+  courseSlug String? @map("course_slug") @db.VarChar(255)
+
+  /// Người học tự mô tả: "chưa biết gì, chưa có nền web"… AI đọc khi soạn kế hoạch.
+  trinhDo String? @map("trinh_do") @db.Text
+  /// Mục tiêu: "qua môn", "8 điểm"…
+  mucTieu String? @map("muc_tieu") @db.VarChar(200)
+  /// Các khoá nền phải học trước: [{slug,ten}].
+  nenTang Json?   @map("nen_tang")
+  mau     String? @db.VarChar(20)
+  thuTu   Int     @default(0) @map("thu_tu")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user    User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  hocKy   HocKy          @relation(fields: [hocKyId], references: [id], onDelete: Cascade)
+  nhiemVu NhiemVuHoc[]
+  ruiRo   RuiRoHocNgay[]
+
+  @@unique([hocKyId, maMon], map: "uk_mon_hoc_ky_ma")
+  @@index([userId], map: "idx_mon_hoc_ky_user")
+  @@map("mon_hoc_ky")
+}
+
+/// Một VIỆC HỌC: bài học, bài tập, lab, quiz, đề PE/FE luyện, ghi chú…
+model NhiemVuHoc {
+  id     Int @id @default(autoincrement())
+  userId Int @map("user_id")
+  monId  Int @map("mon_id")
+
+  /// Tuần của kỳ (1..soTuan). Việc nền tảng bù cho tuần đã qua vẫn gắn tuần hiện tại.
+  tuan Int
+  /// 'NEN_TANG' | 'BAI_HOC' | 'BAI_TAP' | 'LAB' | 'QUIZ' | 'PE' | 'FE' | 'ON_TAP' | 'GHI_CHU'
+  loai String @db.VarChar(16)
+
+  tieuDe          String  @map("tieu_de") @db.VarChar(255)
+  /// Hướng dẫn chi tiết (markdown): làm gì, gõ gì, nộp gì.
+  huongDan        String? @map("huong_dan") @db.Text
+  /// Bằng chứng cần nộp: "ảnh Terminal bước 2–4 + câu trả lời…".
+  yeuCauBangChung String? @map("yeu_cau_bang_chung") @db.Text
+  lienKet         String? @map("lien_ket") @db.VarChar(500)
+
+  /// Thời lượng bấm giờ (phút).
+  thoiLuongPhut Int      @default(30) @map("thoi_luong_phut")
+  hanChot       DateTime @map("han_chot")
+  trongSo       Int      @default(1) @map("trong_so")
+  thuTu         Int      @default(0) @map("thu_tu")
+
+  /// 'CHUA_LAM' | 'DANG_LAM' | 'CHO_CHAM' | 'DAT' | 'CHUA_DAT'
+  trangThai String    @default("CHUA_LAM") @map("trang_thai") @db.VarChar(12)
+  batDauLuc DateTime? @map("bat_dau_luc")
+  nopLuc    DateTime? @map("nop_luc")
+
+  /// Kết quả lần chấm gần nhất.
+  diem      Float?
+  nhanXet   String?   @map("nhan_xet") @db.Text
+  loiCanSua Json?     @map("loi_can_sua")
+  /// 'AI' | 'CLAUDE' | 'ADMIN'
+  nguoiCham String?   @map("nguoi_cham") @db.VarChar(10)
+  chamLuc   DateTime? @map("cham_luc")
+
+  /// Ai tạo việc: 'AI' | 'CLAUDE' | 'NGUOI_HOC'
+  nguon String @default("AI") @db.VarChar(12)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  mon       MonHocKy       @relation(fields: [monId], references: [id], onDelete: Cascade)
+  bangChung BangChungHoc[]
+
+  @@index([userId, hanChot], map: "idx_nhiem_vu_hoc_user_han")
+  @@index([monId, tuan], map: "idx_nhiem_vu_hoc_mon_tuan")
+  @@map("nhiem_vu_hoc")
+}
+
+/// Một LẦN NỘP bằng chứng cho một việc (nộp lại được nhiều lần).
+model BangChungHoc {
+  id        Int @id @default(autoincrement())
+  userId    Int @map("user_id")
+  nhiemVuId Int @map("nhiem_vu_id")
+  lanNop    Int @default(1) @map("lan_nop")
+
+  noiDung String? @map("noi_dung") @db.Text
+  /// ["https://github.com/..."]
+  lienKet Json?   @map("lien_ket")
+  /// [{url, ten, loai}] — tệp đã lên R2.
+  tep     Json?
+
+  /// Kết quả chấm đầy đủ (JSON của AI đã được mã kiểm lại).
+  ketQua    Json?
+  diem      Float?
+  dat       Boolean?
+  nguoiCham String?   @map("nguoi_cham") @db.VarChar(10)
+  chamLuc   DateTime? @map("cham_luc")
+  /// Nộp sau khi hết thời lượng bấm giờ.
+  nopTre    Boolean   @default(false) @map("nop_tre")
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user    User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  nhiemVu NhiemVuHoc @relation(fields: [nhiemVuId], references: [id], onDelete: Cascade)
+
+  @@index([nhiemVuId], map: "idx_bang_chung_hoc_nv")
+  @@map("bang_chung_hoc")
+}
+
+/// Ảnh chụp tỷ lệ trượt mỗi ngày (monId null = cả kỳ) để vẽ biểu đồ.
+model RuiRoHocNgay {
+  id      Int      @id @default(autoincrement())
+  userId  Int      @map("user_id")
+  monId   Int?     @map("mon_id")
+  ngay    DateTime @db.Date
+  tyLe    Int      @map("ty_le")
+  tienDo  Int      @map("tien_do")
+  chiTiet Json?    @map("chi_tiet")
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  mon  MonHocKy? @relation(fields: [monId], references: [id], onDelete: Cascade)
+
+  @@index([userId, ngay], map: "idx_rui_ro_hoc_user_ngay")
+  @@map("rui_ro_hoc_ngay")
 }
 
 // ============================================================

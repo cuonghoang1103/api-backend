@@ -51,7 +51,9 @@ export async function visionComplete(opts: {
   /** Việc (bảng model trong gateway). Mặc định `doc_ocr`. Phải là việc CÓ MẮT
    *  và chỉ nói giao thức OpenAI — tức nằm trong cả `VISION_PURPOSES` lẫn
    *  `VIEC_CHI_OPENAI`, không thì bị đẩy sang cổng/máy không đọc được body này. */
-  purpose?: Extract<LlmPurpose, 'doc_ocr' | 'vo_viet_lai'>;
+  purpose?: Extract<LlmPurpose, 'doc_ocr' | 'vo_viet_lai' | 'study_verify'>;
+  /** Nhãn tính tiền trong `interviewLLMCallLog.feature`. Mặc định `doctool`. */
+  feature?: string;
   /** Trần thời gian MỘT lượt (ms). Mặc định `DOCTOOL_TIMEOUT_MS` / 120 giây. */
   timeoutMs?: number;
 }): Promise<VisionResult> {
@@ -117,7 +119,7 @@ export async function visionComplete(opts: {
       const outputTokens = json.usage?.completion_tokens ?? 0;
       const tien = costUsd(model, inputTokens, outputTokens);
 
-      await ghiLog({ userId: opts.userId, model, inputTokens, outputTokens, success: true });
+      await ghiLog({ userId: opts.userId, model, inputTokens, outputTokens, success: true, feature: opts.feature });
 
       // Trả về rỗng mà không báo lỗi là kiểu hỏng khó thấy nhất: người dùng
       // nhận một trang trắng và tưởng ảnh của mình có vấn đề.
@@ -138,7 +140,7 @@ export async function visionComplete(opts: {
     }
   }
 
-  await ghiLog({ userId: opts.userId, model, inputTokens: 0, outputTokens: 0, success: false });
+  await ghiLog({ userId: opts.userId, model, inputTokens: 0, outputTokens: 0, success: false, feature: opts.feature });
   logger.warn('docTools: lời gọi có ảnh thất bại', { model, error: lastErr instanceof Error ? lastErr.message : String(lastErr) });
   throw lastErr instanceof Error ? lastErr : new Error('Gọi model thất bại');
 }
@@ -150,12 +152,13 @@ async function ghiLog(d: {
   inputTokens: number;
   outputTokens: number;
   success: boolean;
+  feature?: string;
 }): Promise<void> {
   await prisma.interviewLLMCallLog
     .create({
       data: {
         userId: d.userId ?? null,
-        feature: 'doctool',
+        feature: d.feature ?? 'doctool',
         step: 'generation',
         provider: 'openai_compatible',
         model: d.model,

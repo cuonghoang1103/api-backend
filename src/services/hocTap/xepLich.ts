@@ -65,7 +65,11 @@ export function xepLichThuan(
   };
   for (const k of coDinh) chiem(k.bd.getTime(), k.phut);
 
-  const ds = [...viec].sort((a, b) => a.hanChot.getTime() - b.hanChot.getTime() || b.trongSo - a.trongSo || a.id - b.id);
+  // Theo NGÀY hạn, rồi THỨ TỰ trong kế hoạch (id tăng = soạn trước). KHÔNG xếp theo trọng số
+  // trong cùng ngày: đo 02/10 trên prod, trọng số đẩy "JS" lên trước "HTML", "Component" lên
+  // trước "JSX" — sai trình tự học. Kế hoạch đã soạn theo đúng thứ tự, giữ nguyên nó.
+  const ngayHan = (v: ViecXep) => dauNgayVN(v.hanChot.getTime());
+  const ds = [...viec].sort((a, b) => ngayHan(a) - ngayHan(b) || a.id - b.id);
 
   // 1) Việc lên lớp: đúng slot lớp của môn trong ngày hạn (không tính vào trần tự học).
   for (const v of ds.filter((x) => laLenLop(x.tieuDe))) {

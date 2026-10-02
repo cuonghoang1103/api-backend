@@ -39,3 +39,8 @@ test('khối cố định được né', () => {
   const kq = xepLichThuan([v(1, '2026-10-03T16:59:59Z', 30)], lop, NOW, {}, [{ bd: new Date('2026-10-02T08:35:00Z'), phut: 60 }]);
   assert.equal(vn(kq.get(1)!), '2026-10-02 16:45');
 });
+
+test('cùng ngày hạn: giữ thứ tự kế hoạch (id), không xếp theo trọng số', () => {
+  const kq = xepLichThuan([v(5, '2026-10-02T16:59:59Z', 30, { trongSo: 1 }), v(6, '2026-10-02T16:59:59Z', 30, { trongSo: 5 })], lop, NOW);
+  assert.ok(kq.get(5)! < kq.get(6)!);
+});

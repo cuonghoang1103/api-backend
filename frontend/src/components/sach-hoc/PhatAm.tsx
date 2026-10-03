@@ -9,11 +9,12 @@
  * cụm, cách nhau dấu cách) — CHỈ khi số âm tách được khớp số âm Azure trả;
  * lệch thì hiện chấm tròn không tên, không đoán. Giọng Mỹ thì Azure tự trả IPA.
  */
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Mic, Square, Volume2 } from 'lucide-react';
 import api from '@/lib/api';
 import { play, AI_TIMEOUT } from './audio';
 import { blobToWav16k } from './wav';
+import { useMicro } from './useMicro';
 import type { Block } from './types';
 import s from './course.module.css';
 
@@ -49,15 +50,11 @@ export function tachAm(ipa: string): string[] {
 const mau = (d: number) => (d >= 80 ? s.paGood : d >= 60 ? s.paWarn : s.paBad);
 
 function MotCau({ it, giong }: { it: { text: string; ipa: string; vi?: string }; giong: 'uk' | 'us' }) {
-  const [rec, setRec] = useState(false);
   const [busy, setBusy] = useState(false);
   const [url, setUrl] = useState<string | null>(null);
   const [kq, setKq] = useState<KetQua | null>(null);
   const [err, setErr] = useState('');
-  const mr = useRef<MediaRecorder | null>(null);
-  const hen = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => () => { if (url) URL.revokeObjectURL(url); }, [url]);
-  useEffect(() => () => { if (hen.current) clearTimeout(hen.current); mr.current?.state === 'recording' && mr.current.stop(); }, []);
 
   const cham = async (blob: Blob) => {
     setBusy(true); setErr('');
@@ -76,30 +73,14 @@ function MotCau({ it, giong }: { it: { text: string; ipa: string; vi?: string };
     } finally { setBusy(false); }
   };
 
-  const toggle = async () => {
-    if (rec) { mr.current?.stop(); return; }
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const m = new MediaRecorder(stream);
-      const chunks: Blob[] = [];
-      m.ondataavailable = (e) => e.data.size && chunks.push(e.data);
-      m.onstop = () => {
-        if (hen.current) clearTimeout(hen.current);
-        stream.getTracks().forEach((t) => t.stop());
-        setRec(false);
-        const blob = new Blob(chunks, { type: m.mimeType || 'audio/webm' });
-        setUrl(URL.createObjectURL(blob));
-        void cham(blob);
-      };
-      mr.current = m;
-      setKq(null); setErr(''); setUrl(null);
-      m.start();
-      setRec(true);
-      hen.current = setTimeout(() => m.state === 'recording' && m.stop(), GHI_TOI_DA_MS);
-    } catch {
-      setErr('Không mở được micro. Cho phép trình duyệt dùng micro rồi thử lại.');
-    }
-  };
+  // Nói xong (im 1,2 giây) là tự dừng và chấm luôn — không phải bấm Dừng.
+  const mic = useMicro({
+    toiDaMs: GHI_TOI_DA_MS,
+    tuDung: { imMs: 1200 },
+    onXong: (blob) => { setUrl(URL.createObjectURL(blob)); void cham(blob); },
+  });
+  const ghi = () => { setKq(null); setErr(''); setUrl(null); void mic.batDau(); };
+  const err2 = err || mic.loi;
 
   // Gắn phiên âm của bài vào từ Azure trả về (bỏ qua từ "Insertion" — đọc thừa).
   const ipaTu = it.ipa.split(/\s+/).filter(Boolean);
@@ -123,12 +104,22 @@ function MotCau({ it, giong }: { it: { text: string; ipa: string; vi?: string };
           <button type="button" className={s.btnGhost} onClick={() => play({ text: it.text, voice: giong === 'us' ? 'us-nu' : 'uk-nu' })}>
             <Volume2 size={15} /> Nghe mẫu
           </button>
-          <button type="button" className={rec ? s.recOn : s.btn} onClick={toggle} disabled={busy}>
-            {rec ? <><Square size={14} /> Dừng</> : <><Mic size={15} /> {busy ? 'Đang chấm…' : kq ? 'Đọc lại' : 'Đọc & chấm'}</>}
-          </button>
+          {mic.trangThai === 'ghi' ? (
+            <button type="button" className={s.recOn} onClick={mic.dung}><Square size={14} /> Xong</button>
+          ) : (
+            <button type="button" className={s.btn} onClick={ghi} disabled={busy || mic.trangThai === 'mo'}>
+              <Mic size={15} /> {mic.trangThai === 'mo' ? 'Đang mở micro…' : busy ? 'Đang chấm…' : kq ? 'Đọc lại' : 'Đọc & chấm'}
+            </button>
+          )}
         </div>
       </div>
-      {err && <div className={`${s.feedback} ${s.bad}`}>{err}</div>}
+      {mic.trangThai === 'ghi' && (
+        <div className={s.paLive}>
+          <span className={s.paDot} /> Đang nghe — đọc to dòng trên, nói xong máy tự chấm
+          <span className={s.paMeter}><i style={{ width: `${Math.round(mic.muc * 100)}%` }} /></span>
+        </div>
+      )}
+      {err2 && <div className={`${s.feedback} ${s.bad}`}>{err2}</div>}
       {kq && (
         <div className={s.paResult}>
           <div className={s.paScores}>

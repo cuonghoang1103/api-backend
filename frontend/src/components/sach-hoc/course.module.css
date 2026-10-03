@@ -1427,3 +1427,9 @@
 .paBad { color: var(--lh-bad); }
 .paOmit { color: var(--lh-ink-3); text-decoration: line-through; border-style: dashed; }
 :global(html.theme-dark) .paWarn { color: #f6c453; }
+.paLive { display: flex; align-items: center; gap: 10px; margin-top: 10px; font-size: 14px; color: var(--lh-ink-2); flex-wrap: wrap; }
+.paDot { width: 10px; height: 10px; border-radius: 999px; background: #e11d48; animation: paNhay 1s ease-in-out infinite; }
+@keyframes paNhay { 50% { opacity: 0.25; } }
+.paMeter { position: relative; width: 120px; height: 8px; border-radius: 999px; background: var(--lh-surface-2); overflow: hidden; }
+.paMeter i { position: absolute; inset: 0 auto 0 0; background: linear-gradient(90deg, #10b981, #f59e0b); border-radius: 999px; transition: width 60ms linear; }
+@media (prefers-reduced-motion: reduce) { .paDot { animation: none; } }

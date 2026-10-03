@@ -17,6 +17,7 @@ import { Inline, Kj } from './Blocks';
 import { useCourse, useTutor } from './tutorContext';
 import HandEssay from './HandEssay';
 import WriteBlock from './WriteBlock';
+import { useMicro } from './useMicro';
 import HanLop from './HanLop';
 import PhatAm from './PhatAm';
 import s from './course.module.css';
@@ -349,38 +350,20 @@ function SpeakQ({ q, part }: { q: string; part: string }) {
   // Máy chấm nói hiện chỉ hiểu tiếng Anh (Whisper 'en' + tiêu chí IELTS) — khoá
   // tiếng Nhật chỉ ghi âm & nghe lại, không gửi đi chấm sai ngôn ngữ.
   const ja = useCourse()?.voice.startsWith('ja');
-  const [rec, setRec] = useState(false);
   const [blob, setBlob] = useState<Blob | null>(null);
+  const [url, setUrl] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [out, setOut] = useState<{ chu?: string | null; ketQua?: string | null; err?: string } | null>(null);
-  const mr = useRef<MediaRecorder | null>(null);
-  const url = blob ? URL.createObjectURL(blob) : null;
+  /** Lượt chấm hiện hành — ghi bài mới trong lúc bài cũ đang chấm thì kết quả cũ bị bỏ. */
+  const luot = useRef(0);
   useEffect(() => () => { if (url) URL.revokeObjectURL(url); }, [url]);
-
-  const toggle = async () => {
-    if (rec) { mr.current?.stop(); return; }
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      // Safari/iPad chỉ ghi được mp4; Chrome ghi webm. Để trình duyệt tự chọn.
-      const m = new MediaRecorder(stream);
-      const chunks: Blob[] = [];
-      m.ondataavailable = (e) => e.data.size && chunks.push(e.data);
-      m.onstop = () => {
-        stream.getTracks().forEach((t) => t.stop());
-        setBlob(new Blob(chunks, { type: m.mimeType || 'audio/webm' }));
-        setRec(false);
-      };
-      mr.current = m;
-      setBlob(null); setOut(null);
-      m.start();
-      setRec(true);
-    } catch {
-      setOut({ err: 'Không mở được micro. Cho phép trình duyệt dùng micro rồi thử lại.' });
-    }
-  };
+  // Câu trả lời Speaking dài và có lúc ngập ngừng tự nhiên ⇒ KHÔNG tự dừng theo khoảng lặng; tối đa 3 phút.
+  const mic = useMicro({ toiDaMs: 180_000, onXong: (b) => { setBlob(b); setUrl(URL.createObjectURL(b)); } });
+  const ghi = () => { luot.current += 1; setBlob(null); setUrl(null); setOut(null); setBusy(false); void mic.batDau(); };
 
   const grade = async () => {
     if (!blob) return;
+    const my = ++luot.current;
     setBusy(true);
     try {
       const fd = new FormData();
@@ -389,13 +372,15 @@ function SpeakQ({ q, part }: { q: string; part: string }) {
       fd.append('cauHoi', q);
       fd.append('part', part);
       const r = await api.post('/ielts/ai/cham-noi', fd, { headers: { 'Content-Type': 'multipart/form-data' }, ...AI_TIMEOUT });
+      if (my !== luot.current) return;
       const d = r.data?.data as { chu: string | null; ketQua: string | null; lyDo?: string };
       setOut(d?.ketQua ? d : { chu: d?.chu, err: d?.lyDo === 'khong_nghe_thay' ? 'Chưa nghe thấy bạn nói — thử nói to và gần micro hơn.' : 'Chưa chấm được, thử lại nhé.' });
     } catch (e) {
+      if (my !== luot.current) return;
       const st = (e as { response?: { status?: number } })?.response?.status;
       setOut({ err: st === 401 ? 'Đăng nhập để AI chấm phần nói.' : 'Không gửi được bản ghi. Thử lại nhé.' });
     } finally {
-      setBusy(false);
+      if (my === luot.current) setBusy(false);
     }
   };
 
@@ -408,9 +393,14 @@ function SpeakQ({ q, part }: { q: string; part: string }) {
         </button>
       </div>
       <div className={s.qRow} style={{ paddingLeft: 44 }}>
-        <button type="button" className={rec ? s.recOn : s.btnGhost} onClick={toggle}>
-          <Mic size={15} /> {rec ? 'Dừng ghi' : blob ? 'Ghi lại' : 'Trả lời (ghi âm)'}
-        </button>
+        {mic.trangThai === 'ghi' ? (
+          <button type="button" className={s.recOn} onClick={mic.dung}><Square size={14} /> Xong</button>
+        ) : (
+          <button type="button" className={s.btnGhost} onClick={ghi} disabled={mic.trangThai === 'mo'}>
+            <Mic size={15} /> {mic.trangThai === 'mo' ? 'Đang mở micro…' : blob ? 'Ghi lại' : 'Trả lời (ghi âm)'}
+          </button>
+        )}
+        {mic.trangThai === 'ghi' && <span className={s.paMeter} title="Mức micro"><i style={{ width: `${Math.round(mic.muc * 100)}%` }} /></span>}
         {url && <audio src={url} controls className={s.recAudio} />}
         {blob && !ja && (
           <button type="button" className={s.btn} disabled={busy} onClick={grade}>
@@ -418,7 +408,7 @@ function SpeakQ({ q, part }: { q: string; part: string }) {
           </button>
         )}
       </div>
-      {out?.err && <div className={`${s.feedback} ${s.bad}`} style={{ paddingLeft: 44 }}>{out.err}</div>}
+      {(out?.err || mic.loi) && <div className={`${s.feedback} ${s.bad}`} style={{ paddingLeft: 44 }}>{out?.err || mic.loi}</div>}
       {out?.ketQua && (
         <div className={`${s.turnA} ${s.essayResult}`} style={{ marginLeft: 44 }}>
           {out.chu && <p className={s.quizSub}><b>Máy nghe được:</b> “{out.chu}”</p>}

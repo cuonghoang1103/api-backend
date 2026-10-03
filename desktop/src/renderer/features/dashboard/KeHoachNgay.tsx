@@ -343,7 +343,9 @@ export function KeHoachNgay({ onDoiViec }: { onDoiViec?: () => void }) {
           </p>
         )}
 
-        {/* Ô nhập */}
+        {/* Giữ form đầy đủ nhưng chỉ mở khi người dùng cần lên kế hoạch. */}
+        <details className="ct-workspace-add-plan">
+        <summary>{dich('Thêm việc vào kế hoạch')}</summary>
         <div className="ct-kh-them">
           <input
             className="ct-kh-ten"
@@ -386,6 +388,7 @@ export function KeHoachNgay({ onDoiViec }: { onDoiViec?: () => void }) {
           </div>
         </div>
 
+        </details>
         {loi && <p className="ct-kh-loi" role="alert">{loi}</p>}
 
         {/* Danh sách việc */}

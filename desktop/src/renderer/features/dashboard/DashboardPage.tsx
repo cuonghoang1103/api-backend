@@ -31,11 +31,12 @@
  * Mở app lúc mất mạng vẫn phải thấy việc hôm nay. `swr` trả bản cache trước rồi
  * cập nhật khi bản mới về, nên màn hình không bao giờ trắng vì đang chờ mạng.
  */
+import './workspace.css';
 import type React from 'react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   Bell, BookOpen, Briefcase, ChevronRight, Coffee, Dumbbell, Flame,
-  Gamepad2, MessageSquare, Moon, RefreshCw, UtensilsCrossed, Users, X,
+  Gamepad2, MessageSquare, Moon, RefreshCw, UtensilsCrossed, Users, X, Sparkles, NotebookPen, Music, FileUser,
 } from 'lucide-react';
 import { useAppState } from '../../app-state';
 import { useSession } from '../../auth/session';
@@ -426,7 +427,7 @@ export function DashboardPage() {
   const phanTramExp = du ? Math.min(100, Math.round(((du.exp % EXP_MOI_CAP) / EXP_MOI_CAP) * 100)) : 0;
 
   return (
-    <div className="ct-page ct-tq">
+    <div className="ct-page ct-tq ct-workspace">
       {/* Nền AURORA — hai quầng sáng mờ sau phần chào.
           Trang cũ là chữ trắng trên một mảng đen phẳng, nên nó "đúng" mà không
           có gì để nhìn. Quầng sáng đặt SAU nội dung (`z-index: 0`, không bắt
@@ -435,6 +436,7 @@ export function DashboardPage() {
       {/* ── Lời chào ───────────────────────────────────────── */}
       <header className="ct-tq-chao">
         <div>
+          <p className="ct-workspace-eyebrow">{dich('Không gian của bạn')}</p>
           <h1 className="ct-tq-chao-chu">
             {loiChao(gio)}{user?.username ? `, ${user.username}` : ''}
           </h1>
@@ -494,14 +496,14 @@ export function DashboardPage() {
         </div>
 
         <button type="button" className="ct-tq-o ct-tq-o-bam" data-nhan="tin"
-          onClick={() => navigate('/messages')} disabled={!chuaDoc.tinNhan}>
+          onClick={() => navigate('/messages')}>
           <MessageSquare size={15} aria-hidden className="ct-tq-o-icon" />
           <span className="ct-tq-o-so">{chuaDoc.tinNhan}</span>
           <span className="ct-tq-o-nhan">{dich('tin nhắn chưa đọc')}</span>
         </button>
 
         <button type="button" className="ct-tq-o ct-tq-o-bam" data-nhan="bao"
-          onClick={() => navigate('/notifications')} disabled={!chuaDoc.thongBao}>
+          onClick={() => navigate('/notifications')}>
           <Bell size={15} aria-hidden className="ct-tq-o-icon" />
           <span className="ct-tq-o-so">{chuaDoc.thongBao}</span>
           <span className="ct-tq-o-nhan">{dich('thông báo mới')}</span>
@@ -514,6 +516,9 @@ export function DashboardPage() {
         </div>
       </div>
 
+      <div className="ct-workspace-grid">
+      <section className="ct-workspace-tasks" aria-label={dich('Việc cần làm')}>
+      <div className="ct-workspace-heading"><div><span className="ct-workspace-eyebrow">{dich('TỪNG BƯỚC MỘT')}</span><h2>{dich('Hôm nay, mình làm gì?')}</h2></div><span className="ct-workspace-count">{xong}/{viecHomNay.length}</span></div>
       {/* ── Việc hôm nay ───────────────────────────────────── */}
       {dangTai && !du ? (
         <p className="ct-muted" style={{ padding: '10px 2px' }}>{dich('Đang tải…')}</p>
@@ -534,11 +539,15 @@ export function DashboardPage() {
           phải làm, chỉ khác góc nhìn — bảng trên là "hôm nay/tuần này", bảng
           này là lịch tháng bấm được vào từng ngày. Tách chúng ra xa nhau thì
           người dùng phải cuộn qua lại để đối chiếu hai danh sách việc. */}
+      </section>
+      <aside className="ct-workspace-planner" aria-label={dich('Kế hoạch')}>
       <KeHoachNgay onDoiViec={() => { void nap(true); }} />
+      </aside>
 
       {/* "Giờ tới đi đâu" đứng TRƯỚC bảng tuần: đó là câu hỏi gấp nhất, và
           trả lời nó bằng bảng tuần thì phải tìm cột hôm nay rồi tự so giờ. */}
-      <LichHomNay buoi={buoiHomNay} />
+      <div className="ct-workspace-agenda"><LichHomNay buoi={buoiHomNay} /></div>
+      </div>
 
       {/* Lịch học đứng SAU việc hôm nay, TRƯỚC dải 24 giờ: việc là thứ mình
           tự đặt ra, lịch học là thứ đã cố định — đọc việc trước rồi mới xem nó
@@ -665,18 +674,19 @@ export function DashboardPage() {
 
       {/* ── Đi nhanh ───────────────────────────────────────── */}
       <section className="ct-tq-khoi">
-        <div className="ct-tq-khoi-dau"><h2>{dich('Đi nhanh')}</h2></div>
+        <div className="ct-tq-khoi-dau"><h2>{dich('Công cụ của bạn')}</h2></div>
         <div className="ct-tq-nhanh">
           {([
-            { p: '/chat', t: 'AI Chat', m: 'Hỏi đáp, lập trình, chạy code' },
-            { p: '/notes', t: 'Ghi chú', m: 'Sổ tay học tập' },
-            { p: '/music', t: 'Nhạc', m: 'Nghe online hoặc đã tải' },
-            { p: '/cv', t: 'CV', m: 'Dựng và mổ CV' },
+            { p: '/chat', t: 'AI Chat', m: 'Hỏi đáp, lập trình, chạy code', icon: Sparkles },
+            { p: '/notes', t: 'Ghi chú', m: 'Sổ tay học tập', icon: NotebookPen },
+            { p: '/music', t: 'Nhạc', m: 'Nghe online hoặc đã tải', icon: Music },
+            { p: '/cv', t: 'CV', m: 'Dựng và mổ CV', icon: FileUser },
           ] as const).map((x) => (
             <button key={x.p} type="button" className="ct-tq-link" onClick={() => navigate(x.p)}>
+              <i className="ct-workspace-tool-icon"><x.icon size={22} aria-hidden /></i>
               <span>
-                <strong>{x.t}</strong>
-                <em>{x.m}</em>
+                <strong>{dich(x.t)}</strong>
+                <em>{dich(x.m)}</em>
               </span>
               <ChevronRight size={15} aria-hidden />
             </button>

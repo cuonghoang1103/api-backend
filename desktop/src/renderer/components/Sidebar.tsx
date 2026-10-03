@@ -6,12 +6,12 @@
  * cho danh sách điều hướng — nếu để cả 14 mục cùng nhận Tab thì người dùng bàn
  * phím phải bấm Tab 14 lần mới ra khỏi sidebar.
  */
-import { useCallback, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { PanelLeft, PanelLeftClose, PanelLeftOpen, Settings } from 'lucide-react';
 import { useAppState } from '../app-state';
 import { UpdateBanner } from './UpdateBanner';
 import { UserMenu } from './UserMenu';
-import { GROUP_LABELS, GROUP_ORDER, INTERNAL_ROUTES, ROUTES, isPorted } from '../routes';
+import { GROUP_LABELS, GROUP_ORDER, INTERNAL_ROUTES, ROUTES } from '../routes';
 import { useDich } from '../i18n';
 
 /**
@@ -50,7 +50,15 @@ export function Sidebar() {
     settings.sidebarMode === 'icons' || settings.sidebarMode === 'hidden'
       ? settings.sidebarMode
       : 'full';
-  const collapsed = mode === 'icons';
+  const [compact, setCompact] = useState(() => window.matchMedia('(max-width: 650px)').matches);
+  useEffect(() => {
+    const query = window.matchMedia('(max-width: 650px)');
+    const update = () => setCompact(query.matches);
+    update();
+    query.addEventListener('change', update);
+    return () => query.removeEventListener('change', update);
+  }, []);
+  const collapsed = mode === 'icons' || compact;
   const listRef = useRef<HTMLDivElement>(null);
 
   const onKeyDown = useCallback((event: React.KeyboardEvent<HTMLDivElement>) => {
@@ -91,6 +99,7 @@ export function Sidebar() {
       data-collapsed={collapsed}
       aria-label="Điều hướng chính"
     >
+      <div className="ct-sidebar-brand"><span className="ct-sidebar-monogram" aria-hidden>CT</span>{!collapsed && <span><strong>CuongThai</strong><small>{dich('Không gian cá nhân')}</small></span>}</div>
       <div className="ct-sidebar-scroll" ref={listRef} onKeyDown={onKeyDown}>
         {GROUP_ORDER.map((group) => {
           /* `trangCon` bị loại: chúng có route nhưng là BƯỚC BÊN TRONG một
@@ -98,7 +107,7 @@ export function Sidebar() {
              `routes.ts`. Command palette thì vẫn tìm ra chúng. */
           const items = ROUTES.filter((r) => r.group === group && !r.trangCon);
           return (
-            <div className="ct-nav-group" key={group}>
+            <div className="ct-nav-group" key={group} data-group={group}>
               {/* Khi thu gọn, nhãn nhóm bị ẩn khỏi mắt nhưng vẫn ở lại cho
                   trình đọc màn hình — cấu trúc không nên biến mất chỉ vì
                   giao diện hẹp lại. */}
@@ -122,17 +131,13 @@ export function Sidebar() {
                     data-active={active}
                     aria-current={active ? 'page' : undefined}
                     // `title` cho tooltip gốc của HĐH khi sidebar thu gọn.
+                    aria-label={dich(item.label)}
                     title={collapsed ? dich(item.label) : undefined}
                     tabIndex={active ? 0 : -1}
                     onClick={() => navigate(item.path)}
                   >
-                    <item.icon className="ct-nav-icon" size={17} aria-hidden />
+                    <item.icon className="ct-nav-icon" size={20} strokeWidth={1.8} aria-hidden />
                     <span className="ct-nav-label">{dich(item.label)}</span>
-                    {/* Chấm nhỏ = đã có màn hình native trong app. Route chưa
-                        port vẫn vào được, chỉ là hiện màn "mở trên web". */}
-                    {isPorted(item.path) && (
-                      <span className="ct-native-dot" title="Có màn hình riêng trong app" />
-                    )}
                     {item.pro && (
                       <span className="ct-pro-badge" aria-label="Cần tài khoản Pro">
                         Pro

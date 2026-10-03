@@ -1247,6 +1247,16 @@ const CHUAN_BI = {
       await p.waitForTimeout(300);
       return;
     }
+    if (process.env.CT_DASH_TOP === '1') {
+      await p.locator('.ct-workspace').waitFor();
+      const details = p.locator('.ct-workspace-add-plan');
+      if (await details.getAttribute('open') !== null) throw new Error('Form kế hoạch phải thu gọn mặc định');
+      await details.locator('summary').click();
+      if (await details.getAttribute('open') === null) throw new Error('Không mở được form kế hoạch');
+      await details.locator('summary').click();
+      await p.evaluate(() => { document.querySelector('.ct-content')?.scrollTo(0, 0); });
+      return;
+    }
     await p.click('.ct-tq-dong button', { timeout: 2000 }).catch(() => {});
     await p.waitForTimeout(350);
     /* Dải 24 giờ phải LUÔN có đúng 24 cột, không cột nào rộng 0.

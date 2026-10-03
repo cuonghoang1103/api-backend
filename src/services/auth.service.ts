@@ -9,6 +9,7 @@ import { emailService } from './email.service.js';
 import { generateOtp, verifyOtp, getOtpTtl, type OtpType } from './otp.service.js';
 import { logger } from '../utils/logger.js';
 import { putObject } from '../config/r2.js';
+import { mfaAtConHieuLuc } from './mfa/adminMfa.js';
 
 const SALT_ROUNDS = 12;
 
@@ -933,13 +934,16 @@ export class AuthService {
     email: string;
     roles: string[];
     roleVersion: bigint;
-  }): { token: string; refreshToken: string } {
+  }, mfaAt?: number): { token: string; refreshToken: string } {
     const payload: JwtPayload = {
       userId: user.id,
       username: user.username,
       email: user.email,
       roles: user.roles,
       roleVersion: Number(user.roleVersion),
+      // Claim step-up MFA: chỉ gắn khi đã xác minh mã. Giữ NGUYÊN mốc gốc
+      // qua mỗi lần refresh — refresh không được gia hạn bước xác minh.
+      ...(mfaAt ? { mfaAt } : {}),
     };
 
     const token = jwt.sign(payload, config.jwtSecret, {
@@ -947,7 +951,7 @@ export class AuthService {
     } as jwt.SignOptions);
 
     const refreshToken = jwt.sign(
-      { userId: user.id, type: 'refresh' },
+      { userId: user.id, type: 'refresh', ...(mfaAt ? { mfaAt } : {}) },
       config.jwtRefreshSecret,
       { expiresIn: config.jwtRefreshExpiresIn as jwt.SignOptions['expiresIn'] } as jwt.SignOptions,
     );
@@ -988,7 +992,29 @@ export class AuthService {
     if (!user.enabled) throw new AppError('Account is disabled', 403, 'ACCOUNT_DISABLED');
     if (!user.accountNonLocked) throw new AppError('Account is locked', 403, 'ACCOUNT_LOCKED');
 
-    return this.buildAuthResponse(user);
+    // Mang claim MFA sang token mới NẾU còn hạn (tính từ mốc xác minh gốc,
+    // không phải từ lúc refresh) và không cũ hơn lần bật MFA gần nhất.
+    // Hết hạn thì rơi claim — admin sẽ gặp MFA_REQUIRED và nhập mã lại.
+    const mfaAt = user.mfaEnabled && mfaAtConHieuLuc(decoded.mfaAt, { enabledAt: user.mfaEnabledAt })
+      ? decoded.mfaAt
+      : undefined;
+
+    return this.buildAuthResponse(user, mfaAt);
+  }
+
+  /**
+   * Cấp lại cặp token SAU khi đã xác minh MFA (step-up). Gọi từ
+   * `/auth/mfa/verify` và `/auth/mfa/enable` — KHÔNG tự kiểm mã ở đây.
+   */
+  async capTokenSauMfa(userId: number, mfaAt: number): Promise<AuthResponse> {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      include: { roles: { include: { role: true } } },
+    });
+    if (!user) throw new AppError('User not found', 401, 'USER_NOT_FOUND');
+    if (!user.enabled) throw new AppError('Account is disabled', 403, 'ACCOUNT_DISABLED');
+    if (!user.accountNonLocked) throw new AppError('Account is locked', 403, 'ACCOUNT_LOCKED');
+    return this.buildAuthResponse(user, mfaAt);
   }
 
   // ─── Build Auth Response ───────────────────────────────
@@ -1000,7 +1026,7 @@ export class AuthService {
     avatarUrl: string | null;
     roles: { role: { name: string } }[];
     roleVersion: bigint;
-  }): AuthResponse {
+  }, mfaAt?: number): AuthResponse {
     const roles = user.roles.map((ur) => ur.role.name);
     const { token, refreshToken } = this.generateTokens({
       id: user.id,
@@ -1008,7 +1034,7 @@ export class AuthService {
       email: user.email,
       roles,
       roleVersion: user.roleVersion,
-    });
+    }, mfaAt);
 
     return {
       userId: user.id,

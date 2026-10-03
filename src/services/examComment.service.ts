@@ -21,6 +21,7 @@
 import { createHash } from 'node:crypto';
 import { prisma } from '../config/database.js';
 import { AppError } from '../middleware/errorHandler.js';
+import { damBaoMfaAdmin, type MfaClaims } from './mfa/adminMfa.js';
 
 const MAX_CONTENT = 3000;
 // Trả lời CuongMini là lời giải nhiều bước/nhiều cách (đã thấy thật 5 cách
@@ -113,10 +114,11 @@ export async function updateComment(commentId: number, userId: number, content: 
   await prisma.examQuestionComment.update({ where: { id: commentId }, data: { content: text, isEdited: true } });
 }
 
-export async function deleteComment(commentId: number, userId: number, isAdmin: boolean) {
+export async function deleteComment(commentId: number, userId: number, isAdmin: boolean, mfaClaims?: MfaClaims) {
   const existing = await prisma.examQuestionComment.findUnique({ where: { id: commentId }, select: { userId: true } });
   if (!existing) throw new AppError('Không tìm thấy bình luận.', 404);
   if (existing.userId !== userId && !isAdmin) throw new AppError('Chỉ xoá được bình luận của chính mình.', 403);
+  if (existing.userId !== userId) await damBaoMfaAdmin(userId, mfaClaims); // quyền admin ⇒ step-up MFA
   await prisma.examQuestionComment.delete({ where: { id: commentId } });
 }
 

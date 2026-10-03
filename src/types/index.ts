@@ -19,6 +19,8 @@ export interface JwtPayload {
   email: string;
   roles: string[];
   roleVersion: number;
+  /** Epoch GIÂY lúc xác minh MFA (step-up admin). Chỉ có sau /auth/mfa/verify|enable. */
+  mfaAt?: number;
 }
 
 export interface AuthResponse {

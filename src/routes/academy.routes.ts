@@ -7,6 +7,7 @@ import { llmComplete, checkTokenQuota, isAiAvailable, aiOffReason } from '../ser
 import { ADVISOR_SPECS, ADVISOR_SUGGESTED_QUESTIONS, MARKET_REPORTS, type AdvisorSpec } from '../data/academyAdvisor.js';
 import type { ApiResponse } from '../types/index.js';
 import { baoAdmin } from '../services/thongBaoAdmin.service.js';
+import { damBaoMfaAdmin } from '../services/mfa/adminMfa.js';
 
 const router = Router();
 
@@ -728,6 +729,7 @@ router.delete('/advisor/comments/:id', authenticate, async (req: any, res: Respo
     if (!c) throw new AppError('Không tìm thấy bình luận.', 404);
     const isAdmin = Array.isArray(req.user?.roles) && req.user.roles.includes('ROLE_ADMIN');
     if (c.userId !== req.userId && !isAdmin) throw new AppError('Không có quyền xoá.', 403);
+    if (c.userId !== req.userId) await damBaoMfaAdmin(req.userId, req.user); // quyền admin ⇒ step-up MFA
     await prisma.advisorComment.delete({ where: { id } });
     res.json({ success: true, data: { id } });
   } catch (error) {

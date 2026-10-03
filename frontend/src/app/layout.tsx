@@ -121,6 +121,13 @@ const AnnouncementBotPopup = dynamic(
   () => import('@/components/social/AnnouncementBotPopup'),
   { ssr: false }
 )
+// Hộp nhập mã xác thực 2 lớp (step-up admin) — interceptor trong lib/api.ts
+// mở nó khi backend trả 403 MFA_REQUIRED. Mount ở GỐC vì quyền admin còn dùng
+// ngoài /admin (xoá bài người khác trên feed, hàng đợi hỗ trợ /messages…).
+const MfaStepUpDialog = dynamic(
+  () => import('@/components/admin/MfaStepUpDialog'),
+  { ssr: false }
+)
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://cuongthai.com'),
@@ -407,6 +414,7 @@ export default function RootLayout({
               <PWAInstallPrompt />
               <PostCommentModal />
               <AnnouncementBotPopup />
+              <MfaStepUpDialog />
             </ClientOnly>
           </LocaleWrapper>
         </ThemeProvider>

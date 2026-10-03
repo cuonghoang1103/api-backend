@@ -82,6 +82,7 @@ import { notifyAdminPost } from '../services/notification.service.js';
 import {
   getEnhancedPublicProfile,
 } from '../services/follow.service.js';
+import { mfaAdminDat } from '../services/mfa/adminMfa.js';
 
 const router = Router();
 
@@ -207,7 +208,12 @@ router.post(
             where: { id: userId },
             include: { roles: { include: { role: true } } },
           });
-          if (user?.roles.some((ur) => ['ROLE_ADMIN', 'ADMIN', 'SUPER_ADMIN'].includes(ur.role.name))) {
+          // Gửi thông báo tới MỌI user là quyền admin ⇒ chỉ khi đã step-up MFA
+          // (không chặn việc đăng bài — chỉ bỏ phần phát tán).
+          if (
+            user?.roles.some((ur) => ['ROLE_ADMIN', 'ADMIN', 'SUPER_ADMIN'].includes(ur.role.name)) &&
+            (await mfaAdminDat(userId, req.user))
+          ) {
             await notifyAdminPost(userId, post.id, typeof content === 'string' ? content.slice(0, 80) : undefined);
           }
         } catch { /* non-fatal */ }
@@ -348,7 +354,7 @@ router.delete(
       const postId = parseInt(req.params.id, 10);
       if (isNaN(postId)) throw new AppError('Invalid post ID', 400, 'INVALID_ID');
 
-      const result = await deletePost(postId, userId);
+      const result = await deletePost(postId, userId, req.user);
       res.json({ success: true, data: result });
     } catch (error) {
       next(error);
@@ -686,7 +692,7 @@ router.delete(
       const commentId = parseInt(req.params.id, 10);
       if (isNaN(commentId)) throw new AppError('Invalid comment ID', 400, 'INVALID_ID');
 
-      const result = await deleteComment(commentId, userId);
+      const result = await deleteComment(commentId, userId, req.user);
       res.json({ success: true, data: result });
     } catch (error) {
       next(error);

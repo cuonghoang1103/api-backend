@@ -42,6 +42,7 @@ import {
  ForbiddenError,
 } from '../middleware/errorHandler.js';
 import type { ApiResponse } from '../types/index.js';
+import { quyetDinhMfaAdmin, loiMfa } from '../services/mfa/adminMfa.js';
 
 const router = Router();
 
@@ -51,6 +52,7 @@ interface JwtPayload {
  email: string;
  roles: string[];
  roleVersion: number;
+ mfaAt?: number;
 }
 
 /**
@@ -95,6 +97,8 @@ async function requireAdminInline(
  select: {
  enabled: true,
  accountNonLocked: true,
+ mfaEnabled: true,
+ mfaEnabledAt: true,
  roles: {
  select: {
  role: { select: { name: true } },
@@ -112,6 +116,9 @@ async function requireAdminInline(
  return name === 'ADMIN' || name === 'ROLE_ADMIN';
  });
  if (!isAdmin) throw new ForbiddenError('Admin access required');
+ // Cùng luật step-up MFA với requireAdmin (services/mfa/adminMfa.ts).
+ const loiMfaAdmin = quyetDinhMfaAdmin(user, decoded);
+ if (loiMfaAdmin) throw loiMfa(loiMfaAdmin);
 
  // Stash on req for downstream handlers if they need it (matches
  // `authenticate`/`requireAdmin` convention).

@@ -28,6 +28,7 @@ import { messagesService } from '../services/messages.service.js';
 import { messagingSafetyService } from '../services/messaging-safety.service.js';
 import { uploadImage, uploadDocument, UploadError } from '../storage/uploadService.js';
 import type { ApiResponse } from '../types/index.js';
+import { damBaoMfaAdmin } from '../services/mfa/adminMfa.js';
 
 const router = Router();
 
@@ -99,6 +100,8 @@ router.get('/threads', async (req: Request, res: Response, next: NextFunction) =
     // "Đã xoá" recovery tab). Only applies to the personal inbox.
     const view = req.query.view === 'deleted' ? 'deleted' : 'active';
     if (scope === 'support' && isAdmin) {
+      // Hàng đợi hỗ trợ = đọc hội thoại của NGƯỜI KHÁC bằng quyền admin ⇒ step-up MFA.
+      await damBaoMfaAdmin(req.userId!, req.user);
       const threads = isSuperAdmin
         ? await messagesService.listAllAdminThreads()  // Super admin: see all
         : await messagesService.listThreadsForAdmin(req.userId!);  // Regular admin: see only theirs
@@ -200,7 +203,7 @@ router.delete('/messages/:id', async (req: Request, res: Response, next: NextFun
   try {
     const id = parseInt(req.params.id, 10);
     if (isNaN(id)) throw new AppError('Invalid message ID', 400, 'INVALID_ID');
-    await messagesService.softDeleteMessage(id, req.userId!);
+    await messagesService.softDeleteMessage(id, req.userId!, req.user);
     res.json({ success: true });
   } catch (error) {
     next(error);

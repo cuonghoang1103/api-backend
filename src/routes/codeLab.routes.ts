@@ -38,6 +38,7 @@ import * as workspace from '../services/codeLab.workspace.service.js';
 import { generateRoadmap, generateExercises, commitExercises } from '../services/codeLab.ai.service.js';
 import { generateLesson, commitLesson, getModuleLesson, clearLesson, hoiBaiGiang } from '../services/codeLab.lesson.service.js';
 import * as phongLab from '../services/labRoom/phongLab.service.js';
+import { damBaoMfaAdmin } from '../services/mfa/adminMfa.js';
 
 const router = Router();
 
@@ -274,6 +275,7 @@ router.delete('/exercises/:id(\\d+)/ai/asks/:askId(\\d+)', authenticate, async (
     if (cu.userId !== req.user!.userId && !laAdmin) {
       throw new AppError('Chỉ người hỏi hoặc admin mới xoá được', 403, 'FORBIDDEN');
     }
+    if (cu.userId !== req.user!.userId) await damBaoMfaAdmin(req.user!.userId, req.user); // quyền admin ⇒ step-up MFA
     await prisma.codeExerciseTutorAsk.delete({ where: { id: askId } });
     res.json({ success: true, data: { deleted: askId } });
   } catch (e) { next(e); }

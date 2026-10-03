@@ -17,6 +17,7 @@ import {
 } from '../config/r2.js';
 import { logger } from '../utils/logger.js';
 import type { ApiResponse } from '../types/index.js';
+import { damBaoMfaAdmin } from '../services/mfa/adminMfa.js';
 
 const router = Router();
 
@@ -3324,6 +3325,7 @@ router.delete('/lessons/:id(\\d+)/ai/asks/:askId(\\d+)', authenticate, async (re
     if (cu.userId !== req.userId && !laAdmin) {
       throw new AppError('Chỉ người hỏi hoặc admin mới xoá được', 403, 'FORBIDDEN');
     }
+    if (cu.userId !== req.userId) await damBaoMfaAdmin(req.userId!, req.user); // quyền admin ⇒ step-up MFA
     await prisma.lessonTutorAsk.delete({ where: { id: askId } });
     res.json({ success: true, data: { deleted: askId } });
   } catch (error) {

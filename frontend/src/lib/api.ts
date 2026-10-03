@@ -43,7 +43,12 @@ export function getFriendlyErrorMessage(error: ApiError): string {
       if (msg) return msg;
     }
 
-    if (status === 403) return 'Access denied. You do not have permission.';
+    if (status === 403) {
+      const c = error.response.data?.code;
+      if (c === 'MFA_REQUIRED') return 'Cần nhập mã xác thực 2 lớp để làm việc quản trị.';
+      if (c === 'MFA_SETUP_REQUIRED') return 'Tài khoản quản trị phải bật xác thực 2 lớp trước.';
+      return 'Access denied. You do not have permission.';
+    }
     if (status === 404) return 'Resource not found.';
     if (status === 409 || rawMsg.includes('already') || rawMsg.includes('exists')) {
       return 'This record already exists. Please use a different value.';
@@ -156,13 +161,55 @@ function refreshSession(): Promise<boolean> {
   return refreshInFlight;
 }
 
+// ─── Step-up MFA cho admin (04/10/2026) ──────────────────────
+// Backend trả 403 `MFA_REQUIRED` khi admin đã bật MFA mà token chưa có claim
+// `mfaAt` còn hạn. Interceptor mở hộp nhập mã (`MfaStepUpDialog`, mount MỘT
+// lần ở layout gốc và tự đăng ký qua `dangKyHopMfa`), xác minh xong thì THỬ
+// LẠI đúng request gốc. Nhiều request cùng 403 một lúc dùng chung MỘT lời hứa
+// ⇒ chỉ một hộp. `MFA_SETUP_REQUIRED` (ADMIN_MFA_ENFORCE=true) ⇒ dẫn tới trang
+// thiết lập. Request gốc đã thử lại một lần thì không mở hộp lần nữa (tránh
+// vòng lặp nếu cookie mới không về tới).
+export const TRANG_THIET_LAP_MFA = '/admin/bao-mat-tai-khoan';
+type MoHopMfa = () => Promise<boolean>;
+let moHopMfa: MoHopMfa | null = null;
+let mfaInFlight: Promise<boolean> | null = null;
+
+/** Hộp nhập mã gọi hàm này khi mount; trả hàm huỷ đăng ký. */
+export function dangKyHopMfa(fn: MoHopMfa): () => void {
+  moHopMfa = fn;
+  return () => { if (moHopMfa === fn) moHopMfa = null; };
+}
+
+/** Mở (hoặc nhập chung vào) hộp step-up. true = đã xác minh. */
+export function yeuCauXacMinhMfa(): Promise<boolean> {
+  if (!moHopMfa) return Promise.resolve(false);
+  if (!mfaInFlight) {
+    mfaInFlight = moHopMfa()
+      .catch(() => false)
+      .finally(() => { mfaInFlight = null; });
+  }
+  return mfaInFlight;
+}
+
 api.interceptors.response.use(
   (response) => response,
   async (error: ApiError) => {
     error.userFriendlyMessage = getFriendlyErrorMessage(error);
 
-    const original = error.config as (typeof error.config & { _retried?: boolean }) | undefined;
+    const original = error.config as (typeof error.config & { _retried?: boolean; _mfaRetried?: boolean }) | undefined;
     const url = String(original?.url ?? '');
+    const errCode = error.response?.data?.code;
+    if (error.response?.status === 403 && original && !url.includes('/auth/mfa/')) {
+      if (errCode === 'MFA_REQUIRED' && !original._mfaRetried) {
+        original._mfaRetried = true;
+        const ok = await yeuCauXacMinhMfa();
+        if (ok) return api(original);
+      } else if (errCode === 'MFA_SETUP_REQUIRED' && typeof window !== 'undefined') {
+        if (!window.location.pathname.startsWith(TRANG_THIET_LAP_MFA)) {
+          window.location.assign(TRANG_THIET_LAP_MFA);
+        }
+      }
+    }
     // Auto-heal an expired session ONCE, then replay the request. Skip
     // /auth/* so a genuinely-invalid login/refresh doesn't loop.
     if (
@@ -180,6 +227,37 @@ api.interceptors.response.use(
 );
 
 export { api };
+
+// ─── MFA (TOTP) cho admin — /api/v1/auth/mfa/* ───────────────
+export interface MfaStatus {
+  isAdmin: boolean;
+  enabled: boolean;
+  enabledAt: string | null;
+  pendingSetup: boolean;
+  recoveryCodesRemaining: number;
+  stepUp: { valid: boolean; expiresAt: string | null };
+  ttlHours: number;
+  enforce: boolean;
+}
+export const mfaApi = {
+  status: () => api.get<ApiResponse<MfaStatus>>('/auth/mfa/status').then((r) => r.data.data!),
+  setup: () =>
+    api.post<ApiResponse<{ secret: string; otpauthUri: string; issuer: string }>>('/auth/mfa/setup').then((r) => r.data.data!),
+  enable: (code: string) =>
+    api.post<ApiResponse<{ recoveryCodes: string[]; mfaAt: number }>>('/auth/mfa/enable', { code }).then((r) => r.data.data!),
+  verify: (input: { code?: string; recoveryCode?: string }) =>
+    api.post<ApiResponse<{ mfaAt: number; usedRecoveryCode: boolean }>>('/auth/mfa/verify', input).then((r) => r.data.data!),
+  disable: (input: { code?: string; recoveryCode?: string }) =>
+    api.post<ApiResponse<{ enabled: false }>>('/auth/mfa/disable', input).then((r) => r.data.data!),
+  regenerateRecoveryCodes: (code: string) =>
+    api.post<ApiResponse<{ recoveryCodes: string[] }>>('/auth/mfa/recovery-codes', { code }).then((r) => r.data.data!),
+};
+
+/** Chữ lỗi từ backend (song ngữ "vi / en" trong `message`) — lấy nguyên. */
+export function loiMfaTuApi(e: unknown, fallback: string): string {
+  const d = (e as ApiError)?.response?.data as { message?: string; errors?: { msg?: string }[] } | undefined;
+  return d?.errors?.[0]?.msg || d?.message || fallback;
+}
 
 // Auth API
 export const authApi = {

@@ -6,8 +6,12 @@ import { authenticate } from '../middleware/auth.js';
 import { AppError } from '../middleware/errorHandler.js';
 import { softCaptchaMiddleware } from '../middleware/captcha.js';
 import type { ApiResponse, AuthResponse } from '../types/index.js';
+import mfaRoutes from './mfa.routes.js';
 
 const router = Router();
+
+// MFA (TOTP) step-up cho admin — /api/v1/auth/mfa/*. Xem routes/mfa.routes.ts.
+router.use('/mfa', mfaRoutes);
 
 // ─── POST /api/v1/auth/login ─────────────────────────────
 router.post(

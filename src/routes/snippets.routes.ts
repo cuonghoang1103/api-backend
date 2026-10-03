@@ -264,7 +264,7 @@ router.patch('/comments/:cid(\\d+)', authenticate, async (req, res: Response<Api
 router.delete('/comments/:cid(\\d+)', authenticate, async (req, res: Response<ApiResponse>, next) => {
   try {
     const cid = parseInt(req.params.cid);
-    await commentsService.deleteComment(cid, req.user!.userId);
+    await commentsService.deleteComment(cid, req.user!.userId, req.user);
     res.json({ success: true, message: 'Comment deleted' });
   } catch (error) { next(error); }
 });

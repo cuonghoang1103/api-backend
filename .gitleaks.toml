@@ -64,3 +64,13 @@ regexTarget = "line"
 regexes = [
   '''image:\s*ghcr\.io/[^/]+/api-backend-postgres:[0-9.]+-[0-9.]+-pgvector''',
 ]
+
+# ── Khoá IndexNow (04/10/2026) ───────────────────────────────────────────────
+# CÔNG KHAI theo giao thức: site phục vụ nó ở /cb36d6e5ecc54ce3ded3fbc9fa441682.txt
+# (frontend/public/) để Bing/Yandex kiểm quyền sở hữu, và indexnow.service.ts gọi
+# kèm nó trong URL. Không mở được gì. Chỉ cho phép ĐÚNG giá trị này, chỉ với
+# generic-api-key — mọi chuỗi khác trong .env.example vẫn bị quét như cũ.
+[[allowlists]]
+description = "Khoá IndexNow công khai"
+targetRules = ["generic-api-key"]
+regexes = ['''^cb36d6e5ecc54ce3ded3fbc9fa441682$''']

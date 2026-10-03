@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import { config } from '../config/env.js';
 import { prisma } from '../config/database.js';
 import { UnauthorizedError, ForbiddenError } from './errorHandler.js';
+import { quyetDinhMfaAdmin, loiMfa } from '../services/mfa/adminMfa.js';
 
 export interface JwtPayload {
   userId: number;
@@ -10,6 +11,8 @@ export interface JwtPayload {
   email: string;
   roles: string[];
   roleVersion: number;
+  /** Epoch GIÂY lúc xác minh MFA (step-up admin) — xem services/mfa/adminMfa.ts. */
+  mfaAt?: number;
 }
 
 declare global {
@@ -116,6 +119,15 @@ export function requireRole(...roles: string[]) {
         throw new ForbiddenError('Insufficient permissions');
       }
 
+      // Quyền tới từ vai trò ADMIN ⇒ cùng luật step-up MFA với requireAdmin.
+      // (User ADMIN vào route cho phép ADMIN — kể cả khi route cũng mở cho
+      // EDITOR: token bị đánh cắp của admin không được dùng "cửa EDITOR" để
+      // lách MFA.)
+      if (userRoles.includes('ADMIN') && roles.some((r) => r.toUpperCase().replace('ROLE_', '') === 'ADMIN')) {
+        const loi = quyetDinhMfaAdmin(user, req.user);
+        if (loi) throw loiMfa(loi);
+      }
+
       // Attach fresh role version for session invalidation
       req.user.roleVersion = Number(user.roleVersion);
       req.user.roles = userRoles;
@@ -127,7 +139,33 @@ export function requireRole(...roles: string[]) {
   };
 }
 
+/** User + vai trò như `requireAdmin` cần — tách ra để test giả lập được. */
+type UserCoVaiTro = {
+  enabled: boolean;
+  accountNonLocked: boolean;
+  roleVersion: bigint | number;
+  mfaEnabled: boolean;
+  mfaEnabledAt: Date | null;
+  roles: { role: { name: string } }[];
+};
+type TaiUserCoVaiTro = (userId: number) => Promise<UserCoVaiTro | null>;
+
+const taiUserCoVaiTro: TaiUserCoVaiTro = (userId) =>
+  prisma.user.findUnique({
+    where: { id: userId },
+    include: { roles: { include: { role: true } } },
+  });
+
 export function requireAdmin(role: string = 'ROLE_ADMIN') {
+  return taoRequireAdmin(role, taiUserCoVaiTro);
+}
+
+/**
+ * Lõi của `requireAdmin` với nguồn user tiêm vào (test truyền hàm giả).
+ * Sau khi xác nhận vai trò từ CSDL: nếu admin đã bật MFA mà token chưa có
+ * `mfaAt` hợp lệ ⇒ 403 MFA_REQUIRED (xem services/mfa/adminMfa.ts).
+ */
+export function taoRequireAdmin(role: string, taiUser: TaiUserCoVaiTro) {
   return async (
     req: Request,
     _res: Response,
@@ -143,10 +181,7 @@ export function requireAdmin(role: string = 'ROLE_ADMIN') {
       req.user = decoded;
       req.userId = decoded.userId;
 
-      const user = await prisma.user.findUnique({
-        where: { id: decoded.userId },
-        include: { roles: { include: { role: true } } },
-      });
+      const user = await taiUser(decoded.userId);
 
       if (!user) {
         throw new UnauthorizedError('User not found');
@@ -165,6 +200,12 @@ export function requireAdmin(role: string = 'ROLE_ADMIN') {
 
       if (!hasRole) {
         throw new ForbiddenError('Admin access required');
+      }
+
+      // Step-up MFA — chỉ áp cho quyền ADMIN (requireAdmin('ROLE_X') khác thì không).
+      if (role.toUpperCase().replace('ROLE_', '') === 'ADMIN') {
+        const loi = quyetDinhMfaAdmin(user, decoded);
+        if (loi) throw loiMfa(loi);
       }
 
       req.user.roleVersion = Number(user.roleVersion);

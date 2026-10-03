@@ -413,7 +413,7 @@ router.put('/comments/:commentId', authenticate, async (req, res: Response<ApiRe
 
 router.delete('/comments/:commentId', authenticate, async (req, res: Response<ApiResponse>, next) => {
   try {
-    await deleteComment(Number(req.params.commentId), req.userId!, await laAdmin(req.userId));
+    await deleteComment(Number(req.params.commentId), req.userId!, await laAdmin(req.userId), req.user);
     res.json({ success: true });
   } catch (e) { next(e); }
 });

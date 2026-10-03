@@ -41,6 +41,7 @@ import { uploadAudio, uploadImage, UploadError } from '../storage/uploadService.
 import { config } from '../config/env.js';
 import { logger } from '../utils/logger.js';
 import type { ApiResponse } from '../types/index.js';
+import { damBaoMfaAdmin } from '../services/mfa/adminMfa.js';
 
 const router = Router();
 
@@ -793,6 +794,8 @@ router.put(
       if (!isOwner && !isAdmin) {
         throw new AppError('You do not have permission to edit this playlist', 403, 'FORBIDDEN');
       }
+      // Sửa/xoá playlist NGƯỜI KHÁC = quyền admin ⇒ step-up MFA.
+      if (!isOwner) await damBaoMfaAdmin(req.userId!, req.user);
 
       const { name, description, coverUrl, isPublic } = req.body;
 
@@ -842,6 +845,8 @@ router.post(
       if (!isOwner && !isAdmin) {
         throw new AppError('You do not have permission to edit this playlist', 403, 'FORBIDDEN');
       }
+      // Sửa/xoá playlist NGƯỜI KHÁC = quyền admin ⇒ step-up MFA.
+      if (!isOwner) await damBaoMfaAdmin(req.userId!, req.user);
 
       const coverFile = req.files?.cover?.[0] as Express.Multer.File | undefined;
       if (!coverFile) {
@@ -899,6 +904,8 @@ router.delete(
       if (!isOwner && !isAdmin) {
         throw new AppError('You do not have permission to delete this playlist', 403, 'FORBIDDEN');
       }
+      // Sửa/xoá playlist NGƯỜI KHÁC = quyền admin ⇒ step-up MFA.
+      if (!isOwner) await damBaoMfaAdmin(req.userId!, req.user);
 
       await musicService.deletePlaylist(id);
 

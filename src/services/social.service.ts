@@ -19,6 +19,7 @@ import { registerSocketEmitter } from '../socket/messaging.socket.js';
 import { deleteByUrls } from '../storage/uploadService.js';
 import { getAcceptedFriendIds } from './friend.service.js';
 import { logger } from '../utils/logger.js';
+import { damBaoMfaAdmin, type MfaClaims } from './mfa/adminMfa.js';
 
 // ─── Huy hiệu PRO trên bình luận (13/09/2026) ─────────────────────────────
 //
@@ -618,7 +619,7 @@ export async function getPostById(postId: number, currentUserId?: number) {
   });
 }
 
-export async function deletePost(postId: number, userId: number) {
+export async function deletePost(postId: number, userId: number, mfaClaims?: MfaClaims) {
   const post = await prisma.socialPost.findUnique({
     where: { id: postId },
     select: {
@@ -635,8 +636,10 @@ export async function deletePost(postId: number, userId: number) {
   // Allow post author OR any user with the ADMIN role to delete.
   // This implements the requirement "admin có quyền cao nhất trong n,
   // có thể xoá bài viết của bất kì user hay tài khoản nào".
-  if (post.authorId !== userId && !(await isUserAdmin(userId))) {
-    throw new AppError('Unauthorized', 403, 'FORBIDDEN');
+  if (post.authorId !== userId) {
+    if (!(await isUserAdmin(userId))) throw new AppError('Unauthorized', 403, 'FORBIDDEN');
+    // Xoá bài NGƯỜI KHÁC = dùng quyền admin ⇒ step-up MFA.
+    await damBaoMfaAdmin(userId, mfaClaims);
   }
 
   // ── Best-effort R2 cleanup ─────────────────────────────────────
@@ -1644,7 +1647,7 @@ export async function getCommentReplies(
   return { data, pagination: { nextCursor, hasNextPage, limit } };
 }
 
-export async function deleteComment(commentId: number, userId: number) {
+export async function deleteComment(commentId: number, userId: number, mfaClaims?: MfaClaims) {
   const comment = await prisma.socialComment.findUnique({
     where: { id: commentId },
     select: { userId: true, parentId: true, postId: true },
@@ -1653,8 +1656,10 @@ export async function deleteComment(commentId: number, userId: number) {
   if (!comment) throw new AppError('Comment not found', 404, 'COMMENT_NOT_FOUND');
 
   // Allow comment author OR any admin to delete.
-  if (comment.userId !== userId && !(await isUserAdmin(userId))) {
-    throw new AppError('Unauthorized', 403, 'FORBIDDEN');
+  if (comment.userId !== userId) {
+    if (!(await isUserAdmin(userId))) throw new AppError('Unauthorized', 403, 'FORBIDDEN');
+    // Xoá bình luận NGƯỜI KHÁC = dùng quyền admin ⇒ step-up MFA.
+    await damBaoMfaAdmin(userId, mfaClaims);
   }
 
   await prisma.socialComment.delete({ where: { id: commentId } });

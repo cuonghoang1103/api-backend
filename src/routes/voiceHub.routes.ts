@@ -151,7 +151,7 @@ publicRouter.delete('/comments/:cid', authenticate, async (req, res: Response<Ap
     const userId = requireUserId(req);
     const cid = parseInt(req.params.cid, 10);
     if (Number.isNaN(cid)) throw new AppError('Invalid comment id', 400, 'INVALID_ID');
-    await deleteComment(cid, userId);
+    await deleteComment(cid, userId, req.user);
     res.json({ success: true, data: { id: cid } });
   } catch (error) {
     next(error);

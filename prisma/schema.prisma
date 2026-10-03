@@ -100,8 +100,23 @@ model User {
   lastLoginAt        DateTime? @map("last_login_at")
   lastLoginIp        String?   @map("last_login_ip") @db.VarChar(64)
   lastLoginUserAgent String?   @map("last_login_user_agent") @db.VarChar(500)
+
+  // ─── MFA (TOTP) cho admin — kiểu STEP-UP (04/10/2026) ────────────────
+  // Đăng nhập không đổi; token chỉ mang claim `mfaAt` sau khi nhập đúng mã,
+  // và `requireAdmin` đòi claim đó khi `mfaEnabled`. Xem src/services/mfa/.
+  // mfaSecret: secret base32 đã MÃ HOÁ (AES-256-GCM, AAD = userId) — không
+  //   bao giờ lưu dạng rõ. Có giá trị mà mfaEnabled=false = đang thiết lập dở.
+  // mfaRecoveryCodes: HMAC-SHA256 (+ tiêu ngoài CSDL) của 10 mã khôi phục;
+  //   dùng mã nào thì xoá đúng phần tử đó (array_remove) ⇒ mỗi mã một lần.
+  // mfaLastUsedStep: bước TOTP (30s) của mã gần nhất được chấp nhận — chặn
+  //   dùng lại cùng một mã trong cửa sổ ±1.
+  mfaEnabled       Boolean   @default(false) @map("mfa_enabled")
+  mfaSecret        String?   @map("mfa_secret") @db.Text
+  mfaRecoveryCodes String[]  @default([]) @map("mfa_recovery_codes")
+  mfaEnabledAt     DateTime? @map("mfa_enabled_at")
+  mfaLastUsedStep  Int?      @map("mfa_last_used_step")
   // Theme preference: dark or light
-  theme              String?   @default("dark") @map("theme") @db.VarChar(10)
+  theme            String?   @default("dark") @map("theme") @db.VarChar(10)
   // Cross-device settings blob (added 2026-08-08). Everything the user
   // configures in /settings that isn't already its own column lives here:
   //   { sound: { masterEnabled, volume, enabled: {kind: bool} },
@@ -112,7 +127,7 @@ model User {
   // mean a migration per toggle. Null = "never touched, use defaults".
   // The uploaded MP3 blobs stay in the browser's IndexedDB; only the
   // names/toggles round-trip here.
-  preferences        Json?     @map("preferences")
+  preferences      Json?     @map("preferences")
 
   provider   String? @db.VarChar(50)
   providerId String? @map("provider_id") @db.VarChar(255)

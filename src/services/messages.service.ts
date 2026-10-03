@@ -28,6 +28,7 @@ import { AppError } from '../middleware/errorHandler.js';
 import { registerSocketEmitter, type MessageEventPayload } from '../socket/messaging.socket.js';
 import { messagingSafetyService } from './messaging-safety.service.js';
 import { getStorageProvider } from '../storage/StorageProvider.js';
+import { damBaoMfaAdmin, type MfaClaims } from './mfa/adminMfa.js';
 
 const MAX_CONTENT_LENGTH = 4000;
 const MAX_ATTACHMENTS_PER_MESSAGE = 5;
@@ -887,7 +888,7 @@ export class MessagesService {
     return count;
   }
 
-  async softDeleteMessage(messageId: number, requesterId: number) {
+  async softDeleteMessage(messageId: number, requesterId: number, mfaClaims?: MfaClaims) {
     const msg = await prisma.message.findUnique({
       where: { id: messageId },
       include: { thread: true },
@@ -902,6 +903,8 @@ export class MessagesService {
     if (msg.senderId !== requesterId && !isRequesterAdmin) {
       throw new AppError('You can only delete your own messages', 403, 'NOT_MESSAGE_OWNER');
     }
+    // Xoá tin NGƯỜI KHÁC = quyền admin ⇒ step-up MFA.
+    if (msg.senderId !== requesterId) await damBaoMfaAdmin(requesterId, mfaClaims);
     if (msg.recalledAt) {
       // Already recalled — the "delete" semantics are essentially
       // the same as recall from the UI's perspective.

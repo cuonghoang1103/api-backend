@@ -11,6 +11,7 @@
  */
 import { prisma } from '../../config/database.js';
 import { AppError } from '../../middleware/errorHandler.js';
+import { damBaoMfaAdmin, type MfaClaims } from '../mfa/adminMfa.js';
 
 const MAX_LEN = 4_000;
 
@@ -128,11 +129,12 @@ export async function editComment(commentId: number, userId: number, content: st
   return toDto(updated as unknown as Record<string, unknown>, new Set());
 }
 
-export async function deleteComment(commentId: number, userId: number): Promise<void> {
+export async function deleteComment(commentId: number, userId: number, mfaClaims?: MfaClaims): Promise<void> {
   const existing = await prisma.voiceComment.findUnique({ where: { id: commentId }, select: { userId: true } });
   if (!existing) throw new AppError('Comment not found', 404, 'COMMENT_NOT_FOUND');
-  if (existing.userId !== userId && !(await userIsAdmin(userId))) {
-    throw new AppError('Không có quyền xoá bình luận này', 403, 'FORBIDDEN');
+  if (existing.userId !== userId) {
+    if (!(await userIsAdmin(userId))) throw new AppError('Không có quyền xoá bình luận này', 403, 'FORBIDDEN');
+    await damBaoMfaAdmin(userId, mfaClaims); // xoá của người khác = quyền admin ⇒ step-up MFA
   }
   await prisma.voiceComment.delete({ where: { id: commentId } });
 }

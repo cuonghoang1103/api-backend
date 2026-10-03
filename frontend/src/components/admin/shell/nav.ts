@@ -15,7 +15,7 @@ import {
   Activity, AlertTriangle, BarChart3, BookOpen, Briefcase, Clapperboard, ClipboardList, Code2,
   CreditCard, Crown, Database, FileText, FlaskConical, FolderKanban, Gamepad2, Github,
   GraduationCap, Inbox, KeyRound, Languages, LayoutDashboard, LibraryBig, Mic, MonitorPlay,
-  Music, Newspaper, Radio, Receipt, Search, Server, ShoppingBag, Sparkles, Star, Sticker,
+  Music, Newspaper, Radio, Receipt, Search, Server, ShieldCheck, ShoppingBag, Sparkles, Star, Sticker,
   Tag, Ticket, TrendingUp, UserX, Users, UsersRound, Zap,
 } from 'lucide-react';
 
@@ -134,6 +134,7 @@ export const ADMIN_NAV: AdminNavGroup[] = [
       { label: 'Infrastructure', vi: 'Hạ tầng', href: '/admin/ha-tang', icon: Server, keywords: 'hạ tầng vps gpu máy nhà' },
       { label: 'Voice studio', vi: 'Xưởng giọng', href: '/admin/xuong-giong', icon: Mic, keywords: 'xưởng giọng thu âm train tts' },
       { label: 'System stats', vi: 'Thống kê hệ thống', href: '/admin/stats', icon: BarChart3, keywords: 'thống kê hệ thống' },
+      { label: 'Account security', vi: 'Bảo mật tài khoản', href: '/admin/bao-mat-tai-khoan', icon: ShieldCheck, keywords: 'mfa 2fa totp xác thực 2 lớp hai lớp bảo mật authenticator mã khôi phục' },
     ],
   },
 ];

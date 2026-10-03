@@ -38,6 +38,7 @@ import {
 import { config } from '../config/env.js';
 import { logger } from '../utils/logger.js';
 import type { ApiResponse } from '../types/index.js';
+import { damBaoMfaAdmin } from '../services/mfa/adminMfa.js';
 
 const router = Router();
 const SIGNED_URL_EXPIRY_MS = 30 * 60 * 1000;
@@ -211,6 +212,8 @@ router.delete('/:id', authenticate, async (req, res: Response<ApiResponse>, next
     if (file.uploadedBy !== req.userId && !req.user?.roles?.includes('ROLE_ADMIN')) {
       throw new AppError('Not authorized to delete this file', 403, 'FORBIDDEN');
     }
+    // Xoá file NGƯỜI KHÁC = quyền admin ⇒ step-up MFA.
+    if (file.uploadedBy !== req.userId) await damBaoMfaAdmin(req.userId!, req.user);
     // Best-effort storage delete. We do it BEFORE the DB delete
     // so a failed DB delete still leaves the file marked for
     // cleanup. Conversely, if the storage delete throws, we

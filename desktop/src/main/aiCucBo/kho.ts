@@ -65,21 +65,27 @@ export interface GoiBoChay {
  * trên đúng một hãng card. Bắt người dùng tải 391 MB để có thể nhanh hơn một
  * chút, trên một tính năng vốn đã là lưới đỡ lúc mất mạng, là đổi sai chiều.
  */
+/* `mb` = CỠ THẬT tới byte (÷1e6), đọc từ API release b10976 ngày 03/10/2026.
+   ⛔ Đừng làm tròn: bộ tải chỉ cho lệch 2% (taiVe.ts), mà gói win-cpu-x64 thật
+   nặng 18,43 MB — ghi "18" là lệch 2,4% ⇒ file tải ĐÚNG bị vứt như hỏng, và
+   máy Windows không có Vulkan (lùi về CPU) KHÔNG BAO GIỜ cài được (bắt bởi
+   desktop-ai-ngoai-tuyen.yml trên windows-latest). Đổi BAN_LLAMA thì đọc lại:
+   gh api repos/ggml-org/llama.cpp/releases/tags/<bản> --jq '.assets[]|"\(.name) \(.size)"' */
 const BO_CHAY: Record<string, GoiBoChay[]> = {
-  'darwin-arm64': [{ ten: `llama-${BAN_LLAMA}-bin-macos-arm64.tar.gz`, mb: 11, tangToc: 'metal' }],
-  'darwin-x64': [{ ten: `llama-${BAN_LLAMA}-bin-macos-x64.tar.gz`, mb: 11, tangToc: 'metal' }],
+  'darwin-arm64': [{ ten: `llama-${BAN_LLAMA}-bin-macos-arm64.tar.gz`, mb: 11.149629, tangToc: 'metal' }],
+  'darwin-x64': [{ ten: `llama-${BAN_LLAMA}-bin-macos-x64.tar.gz`, mb: 11.200001, tangToc: 'metal' }],
   'win32-x64': [
-    { ten: `llama-${BAN_LLAMA}-bin-win-vulkan-x64.zip`, mb: 32, tangToc: 'vulkan' },
-    { ten: `llama-${BAN_LLAMA}-bin-win-cpu-x64.zip`, mb: 18, tangToc: 'cpu' },
+    { ten: `llama-${BAN_LLAMA}-bin-win-vulkan-x64.zip`, mb: 31.675956, tangToc: 'vulkan' },
+    { ten: `llama-${BAN_LLAMA}-bin-win-cpu-x64.zip`, mb: 18.428731, tangToc: 'cpu' },
   ],
-  'win32-arm64': [{ ten: `llama-${BAN_LLAMA}-bin-win-cpu-arm64.zip`, mb: 12, tangToc: 'cpu' }],
+  'win32-arm64': [{ ten: `llama-${BAN_LLAMA}-bin-win-cpu-arm64.zip`, mb: 11.99712, tangToc: 'cpu' }],
   'linux-x64': [
-    { ten: `llama-${BAN_LLAMA}-bin-ubuntu-vulkan-x64.tar.gz`, mb: 30, tangToc: 'vulkan' },
-    { ten: `llama-${BAN_LLAMA}-bin-ubuntu-x64.tar.gz`, mb: 17, tangToc: 'cpu' },
+    { ten: `llama-${BAN_LLAMA}-bin-ubuntu-vulkan-x64.tar.gz`, mb: 30.189596, tangToc: 'vulkan' },
+    { ten: `llama-${BAN_LLAMA}-bin-ubuntu-x64.tar.gz`, mb: 16.844927, tangToc: 'cpu' },
   ],
   'linux-arm64': [
-    { ten: `llama-${BAN_LLAMA}-bin-ubuntu-vulkan-arm64.tar.gz`, mb: 24, tangToc: 'vulkan' },
-    { ten: `llama-${BAN_LLAMA}-bin-ubuntu-arm64.tar.gz`, mb: 14, tangToc: 'cpu' },
+    { ten: `llama-${BAN_LLAMA}-bin-ubuntu-vulkan-arm64.tar.gz`, mb: 24.232037, tangToc: 'vulkan' },
+    { ten: `llama-${BAN_LLAMA}-bin-ubuntu-arm64.tar.gz`, mb: 13.469344, tangToc: 'cpu' },
   ],
 };
 
@@ -100,9 +106,9 @@ const BO_CHAY: Record<string, GoiBoChay[]> = {
  */
 const GOI_CUDA_WIN: GoiBoChay = {
   ten: `llama-${BAN_LLAMA}-bin-win-cuda-12.4-x64.zip`,
-  mb: 254,
+  mb: 254.086292,
   tangToc: 'cuda',
-  kem: { ten: 'cudart-llama-bin-win-cuda-12.4-x64.zip', mb: 391 },
+  kem: { ten: 'cudart-llama-bin-win-cuda-12.4-x64.zip', mb: 391.443627 },
 };
 
 /**

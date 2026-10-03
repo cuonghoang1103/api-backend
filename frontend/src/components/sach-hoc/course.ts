@@ -7,7 +7,7 @@
  * còn nội dung một buổi tải qua `loadDay` khi mở — mỗi buổi một chunk JS.
  * Buổi viết thẳng trong data.ts (Mở đầu, IELTS Ngày 1) thì không cần tải.
  */
-import type { Day, Kind, Lesson, Voice } from './types';
+import type { Day, Kind, Lesson, LessonVideo, Voice } from './types';
 import type { KanjiDict } from './kanji';
 import { dayMeta, isReady, type CourseManifest, type DayMeta, type VocabMeta } from './manifest';
 
@@ -40,6 +40,13 @@ export type CourseDef = {
    * bài chạm được (KanjiSheet).
    */
   kanji?: () => Promise<KanjiDict>;
+  /**
+   * Video bài giảng theo id bài (hiện đầu bài, trước nội dung). Tách khỏi blocks để
+   * thay video không phải đụng vào bài.
+   */
+  videos?: Record<string, LessonVideo[]>;
+  /** Trang riêng đi kèm khoá (vd. Phòng thi thử) — hiện ngay dưới "Kế hoạch & tiến độ". */
+  links?: { href: string; label: string }[];
   /** Mục lục các buổi. Buổi tải chậm: bài chỉ có metadata + `ready`, không có blocks. */
   days: Day[];
   /** Tóm tắt các buổi tải chậm, khoá theo `Day.n` (từ manifest.ts sinh tự động). */

@@ -16,6 +16,7 @@ import { TRA_CONG_THUC, TRA_TU_VUNG } from './tracuu';
 
 import { defineCourse } from '@/components/sach-hoc/course';
 import type { Lesson, Day } from '@/components/sach-hoc/types';
+import { VIDEO_BAI } from './videos';
 
 // Các tệp ngay/ngayN.ts lấy kiểu từ đây — giữ đường import cũ cho chúng.
 export type { Ex, Block, Voice, Role, Kind, Lesson, Day } from '@/components/sach-hoc/types';
@@ -679,6 +680,8 @@ export const IELTS = defineCourse({
   intro: INTRO,
   // Hai mục tra cứu cả khoá (công thức · từ vựng) — hiện dưới "Mở đầu" ở mục lục.
   extras: [TRA_CONG_THUC, TRA_TU_VUNG],
+  links: [{ href: '/language/en/ielts/phong-thi', label: '🎯 Phòng thi thử (đề đủ 3 phần)' }],
+  videos: VIDEO_BAI,
   days: DAYS,
   // Ngày 1 viết thẳng ở trên; Ngày 2+ chỉ có mục lục (ngay/manifest.ts), nội dung tải khi mở.
   manifest: MANIFEST,

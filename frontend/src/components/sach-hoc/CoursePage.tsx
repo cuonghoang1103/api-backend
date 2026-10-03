@@ -15,6 +15,7 @@ import { setDefaultVoice, AI_TIMEOUT, getRate, setRate, onRate } from './audio';
 import { useTienDo } from './useTienDo';
 import { TongQuanBuoi, KeHoach, dayDone } from './TongQuan';
 import { KanjiHost } from './KanjiSheet';
+import { VideoBai } from './VideoBai';
 import s from './course.module.css';
 
 /** Trang đang mở: một bài, tổng quan một buổi, hoặc kế hoạch & tiến độ. */
@@ -258,6 +259,9 @@ export default function CoursePage({ course, lessonExtra }: {
             <button type="button" className={s.tocPlan} onClick={() => go({ t: 'plan' })} style={view.t === 'plan' ? { borderColor: 'var(--lh-accent)' } : undefined}>
               <CalendarDays size={16} /> Kế hoạch & tiến độ
             </button>
+            {(course.links ?? []).map((k) => (
+              <Link key={k.href} href={k.href} className={s.tocPlan}>{k.label}</Link>
+            ))}
             <div className={s.tocDay}>
               {tocItem(INTRO, 'Mở đầu')}
               {(course.extras ?? []).map((l) => tocItem(l, 'Tra cứu'))}
@@ -332,6 +336,7 @@ export default function CoursePage({ course, lessonExtra }: {
                   </span>
                 </div>
                 {lessonExtra?.(lesson, day?.n)}
+                <VideoBai videos={course.videos?.[lesson.id] ?? []} />
 
                 {full ? (
                   <Blocks key={lesson.id} blocks={full.blocks ?? []} framed={lesson.kind === 'grammar'} />

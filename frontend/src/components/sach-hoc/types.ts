@@ -112,3 +112,18 @@ export type Lesson = {
 
 export type Day = { n: number; lessons: Lesson[] };
 
+/** Một video bài giảng YouTube gắn với một bài (CourseDef.videos). */
+export type LessonVideo = {
+  /** videoId 11 ký tự. */
+  id: string;
+  /** Đúng `author_name — title` mà oEmbed trả về (scripts/yt-check.mjs). */
+  credit: string;
+  /** Thời lượng hiển thị, vd "12:30". */
+  dur: string;
+  lang: 'en' | 'vi';
+  /** Một câu tiếng Việt: video nói gì, xem đoạn nào. */
+  note: string;
+  /** Giây bắt đầu (tuỳ chọn). */
+  start?: number;
+};
+

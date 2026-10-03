@@ -1506,3 +1506,9 @@
 
 /* App desktop: không có thanh điều hướng của web ở trên ⇒ bỏ khoảng chừa 4rem. */
 :global(.ct-web-host) .root { padding-top: 0; min-height: 100%; }
+.demDoc {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px;
+  margin-top: 10px; padding: 10px 14px; border-radius: 12px; font-size: 14.5px;
+  background: var(--lh-warn-soft); color: var(--lh-ink); border: 1px solid color-mix(in srgb, #f59e0b 35%, transparent);
+}
+.demDoc b { font-variant-numeric: tabular-nums; font-size: 16px; }

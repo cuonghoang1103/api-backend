@@ -22,8 +22,9 @@ import {
 import type { StageBundle } from './data/bundles';
 import FigureView from './FigureView';
 import { isCorrect } from './check';
-import { play as phat, stopAudio, type Voice } from '@/components/sach-hoc/audio';
+import { play as phat, stopAudio, skipClip, type Voice, type Clip } from '@/components/sach-hoc/audio';
 import { dungLoiDan } from '@/components/sach-hoc/nghe';
+import { DemDocCau } from '@/components/sach-hoc/DemDocCau';
 
 /** Mỗi người nói một giọng, theo thứ tự xuất hiện trong bài. */
 const GIONG: Voice[] = ['uk-nu', 'uk-nam', 'us-nu', 'us-nam'];
@@ -44,6 +45,7 @@ export default function ListeningView({ d, supported }: { d: StageBundle; suppor
   const [rate, setRate] = useState(0.7);
   const [playing, setPlaying] = useState(false);
   const [lineIdx, setLineIdx] = useState(-1);
+  const [cho, setCho] = useState<number | null>(null);
   const [showScript, setShowScript] = useState(false);
 
   /** Chặn callback của lượt phát cũ khi người dùng đã bấm Dừng hoặc đổi bài. */
@@ -56,6 +58,7 @@ export default function ListeningView({ d, supported }: { d: StageBundle; suppor
     stopAudio();
     setPlaying(false);
     setLineIdx(-1);
+    setCho(null);
   }, []);
 
   // Rời tab hoặc rời trang mà còn đang đọc thì tiếng vẫn chạy — phải dọn.
@@ -82,11 +85,12 @@ export default function ListeningView({ d, supported }: { d: StageBundle; suppor
     const so = LISTENINGS.findIndex((l) => l.id === ex.id) + 1;
     const { mo, ket } = dungLoiDan({ so: `Recording ${so}`, tieuDe: ex.title, cau: [1, ex.questions.length] });
     const bai = ex.lines.map((l) => ({ text: l.text, voice: GIONG[nguoi.indexOf(l.who ?? '') % GIONG.length], toc: rate }));
+    const all: Clip[] = [...mo, ...bai, ...ket];
     void phat(
-      [...mo, ...bai, ...ket],
-      () => { if (myRun === runId.current) { setPlaying(false); setLineIdx(-1); } },
+      all,
+      () => { if (myRun === runId.current) { setPlaying(false); setLineIdx(-1); setCho(null); } },
       // Chỉ số dòng trừ phần lời dẫn đầu; ngoài lời thoại thì không tô dòng nào.
-      { onClip: (i) => { if (myRun === runId.current) setLineIdx(i >= mo.length && i < mo.length + bai.length ? i - mo.length : -1); }, gapMs: 350 },
+      { onClip: (i) => { if (myRun === runId.current) { setLineIdx(i >= mo.length && i < mo.length + bai.length ? i - mo.length : -1); setCho(all[i].pauseMs ? Date.now() + all[i].pauseMs! : null); } }, gapMs: 350 },
     );
   }, [ex.lines, ex.id, ex.title, ex.questions.length, LISTENINGS, rate]);
 
@@ -191,6 +195,7 @@ export default function ListeningView({ d, supported }: { d: StageBundle; suppor
             </button>
           ))}
 
+          {playing && cho && <div className="w-full"><DemDocCau het={cho} onBoQua={skipClip} /></div>}
           {playing && lineIdx >= 0 && (
             <span className="text-xs text-slate-500">
               Đang đọc dòng {lineIdx + 1}/{ex.lines.length}

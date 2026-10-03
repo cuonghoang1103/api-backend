@@ -22,8 +22,9 @@ import Link from 'next/link';
 import { ArrowLeft, Clock, Play, Square, Sparkles, Check, X, RotateCcw } from 'lucide-react';
 import api from '@/lib/api';
 import ChatMarkdown from '@/components/chat/ChatMarkdown';
-import { play, stopAudio, skipClip, AI_TIMEOUT, type Voice } from '@/components/sach-hoc/audio';
+import { play, stopAudio, skipClip, AI_TIMEOUT, type Voice, type Clip } from '@/components/sach-hoc/audio';
 import { dungLoiDan } from '@/components/sach-hoc/nghe';
+import { DemDocCau } from '@/components/sach-hoc/DemDocCau';
 import { useLangUser } from '@/components/language/primitives';
 import FigureView from '@/app/tech-trends/ielts/FigureView';
 import { isCorrect } from '@/app/tech-trends/ielts/check';
@@ -124,6 +125,7 @@ function PhanNghe({ l, set, xem, onPhat }: { l: Luot; set: (k: string, v: string
   const [dangPhat, setDangPhat] = useState<string | null>(null);
   /** Đang ở lời dẫn (đầu/cuối) của Part nào — để hiện nút bỏ qua ở chế độ luyện. */
   const [loiDan, setLoiDan] = useState<string | null>(null);
+  const [cho, setCho] = useState<number | null>(null);
   useEffect(() => () => stopAudio(), []);
   let so = 0;
   return (
@@ -142,10 +144,12 @@ function PhanNghe({ l, set, xem, onPhat }: { l: Luot; set: (k: string, v: string
             tieuDe: b.title,
             cau: [tu, tu + b.questions.length - 1],
             chao: bi === 0 ? 'Welcome to the Cuong Thai English IELTS practice test. This is the Listening section.' : null,
+            docGiay: 30, // phòng thi: đúng thời gian đọc câu hỏi của đề thật
           });
           const bai = b.lines.map((x) => ({ text: x.text, voice: GIONG[nguoi.indexOf(x.who ?? '') % GIONG.length] }));
-          play([...mo, ...bai, ...ket], () => { setDangPhat((c) => (c === b.id ? null : c)); setLoiDan(null); }, {
-            onClip: (i) => setLoiDan(i < mo.length || i >= mo.length + bai.length ? b.id : null),
+          const all: Clip[] = [...mo, ...bai, ...ket];
+          play(all, () => { setDangPhat((c) => (c === b.id ? null : c)); setLoiDan(null); setCho(null); }, {
+            onClip: (i) => { setLoiDan(i < mo.length || i >= mo.length + bai.length ? b.id : null); setCho(all[i].pauseMs ? Date.now() + all[i].pauseMs! : null); },
           });
           setDangPhat(b.id);
           setLoiDan(b.id);
@@ -168,7 +172,8 @@ function PhanNghe({ l, set, xem, onPhat }: { l: Luot; set: (k: string, v: string
                 </button>
               </div>
             </div>
-            {l.luyen && loiDan === b.id && dangPhat === b.id && (
+            {dangPhat === b.id && cho && <DemDocCau het={cho} onBoQua={l.luyen || xem ? skipClip : undefined} />}
+            {l.luyen && loiDan === b.id && dangPhat === b.id && !cho && (
               <div className={s.hint}>🎙️ Lời dẫn của đề · <button type="button" className={s.ghost} onClick={skipClip}>⏭ Bỏ qua</button></div>
             )}
             {!xem && (

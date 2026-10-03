@@ -23,6 +23,8 @@ import { tepTinh } from './moiTruong';
 
 export const NHAC_MO = '/audio/cuongthai-mo.mp3';
 export const NHAC_KET = '/audio/cuongthai-ket.mp3';
+/** Tiếng "ting" ngay trước khi vào bài — người học biết chắc phần nghe bắt đầu. */
+export const TING = '/audio/cuongthai-ting.mp3';
 
 export type LoiDan = {
   /** "Day 3, Recording 1" · "Part 2" · "Recording 4". */
@@ -33,7 +35,12 @@ export type LoiDan = {
   boiCanh?: string;
   /** Câu hỏi đi kèm [từ, đến]. */
   cau?: [number, number];
-  /** Giây để đọc câu hỏi; mặc định 10 + 3 giây mỗi câu, tối đa 30 (đề thật ~30). */
+  /**
+   * Giây để đọc câu hỏi. Mặc định cho LUYỆN TẬP: 8 + 1 giây mỗi câu, tối đa 20 — câu
+   * hỏi đã hiện sẵn trên màn hình, và 30 giây im lặng làm người học tưởng bài nghe
+   * bị đứng (phản hồi của người dùng 03/10/2026). Phòng thi truyền 30 như đề thật.
+   * Web hiện đồng hồ đếm ngược + nút "Nghe ngay" trong lúc chờ (DemDocCau).
+   */
   docGiay?: number;
   /** Câu chào đầu — Phòng thi chỉ chào ở Part 1. `null` = không chào. */
   chao?: string | null;
@@ -45,7 +52,7 @@ const cauChu = (c?: [number, number]) =>
 /** Các đoạn phát TRƯỚC và SAU phần hội thoại. */
 export function dungLoiDan(o: LoiDan): { mo: Clip[]; ket: Clip[] } {
   const c = cauChu(o.cau);
-  const doc = o.cau ? (o.docGiay ?? Math.min(30, 10 + 3 * (o.cau[1] - o.cau[0] + 1))) : 0;
+  const doc = o.cau ? (o.docGiay ?? Math.min(20, 8 + (o.cau[1] - o.cau[0] + 1))) : 0;
   const chao = o.chao === undefined ? 'Welcome to Cuong Thai English. IELTS Listening.' : o.chao;
   const dan = (text: string): Clip => ({ text, voice: 'dan' });
   const mo: Clip[] = [
@@ -53,7 +60,8 @@ export function dungLoiDan(o: LoiDan): { mo: Clip[]; ket: Clip[] } {
     dan(`${chao ? `${chao} ` : ''}${o.so}: ${o.tieuDe.replace(/[.!?]$/, '')}.`),
     ...(o.boiCanh ? [dan(`You will hear ${o.boiCanh}`)] : []),
     ...(c && doc ? [dan(`First, you have ${doc} seconds to look at ${c}.`), { text: '', pauseMs: doc * 1000 }] : []),
-    dan(c ? `Now listen carefully and answer ${c}.` : 'Now listen carefully.'),
+    dan(`${c ? `Now listen carefully and answer ${c}.` : 'Now listen carefully.'} Get ready. The recording starts now.`),
+    { text: '', sfx: tepTinh(TING) },
   ];
   const ket: Clip[] = [
     dan(`That is the end of ${o.so}.${c ? ' You now have thirty seconds to check your answers.' : ''}`),

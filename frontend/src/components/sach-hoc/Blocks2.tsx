@@ -10,8 +10,9 @@ import { Play, Square, Eye, EyeOff, Mic, Volume2, Sparkles, RotateCcw } from 'lu
 import api from '@/lib/api';
 import ChatMarkdown from '@/components/chat/ChatMarkdown';
 import type { Block, Role, Voice } from './types';
-import { play, stopAudio, skipClip, AI_TIMEOUT } from './audio';
+import { play, stopAudio, skipClip, AI_TIMEOUT, type Clip } from './audio';
 import { dungLoiDan } from './nghe';
+import { DemDocCau } from './DemDocCau';
 import dynamic from 'next/dynamic';
 import { Inline, Kj } from './Blocks';
 import { useCourse, useTutor } from './tutorContext';
@@ -105,20 +106,26 @@ function Listen({ b }: { b: Extract<Block, { t: 'listen' }> }) {
   const [line, setLine] = useState<number | null>(null);
   /** Đang ở đâu trong băng: lời dẫn đầu / hội thoại / lời kết (chỉ khi có `b.dan`). */
   const [doan, setDoan] = useState<'mo' | 'bai' | 'ket' | null>(null);
+  /** Hết giờ đọc câu hỏi lúc nào (đang ở khoảng im lặng) — null khi không chờ. */
+  const [cho, setCho] = useState<number | null>(null);
   useEffect(() => () => stopAudio(), []);
 
   // Bấm phát lúc đang phát = phát LẠI TỪ ĐẦU (người học muốn nghe lại); dừng có nút riêng.
   const start = () => {
     const bai = b.lines.map((l) => ({ text: l.text, voice: l.voice ?? 'uk-nu' }));
     const { mo, ket } = b.dan ? dungLoiDan({ ...b.dan, tieuDe: b.title }) : { mo: [], ket: [] };
-    play([...mo, ...bai, ...ket], () => { setPlaying(false); setDoan(null); }, {
-      onClip: (i) => setDoan(i < mo.length ? 'mo' : i < mo.length + bai.length ? 'bai' : 'ket'),
+    const all: Clip[] = [...mo, ...bai, ...ket];
+    play(all, () => { setPlaying(false); setDoan(null); setCho(null); }, {
+      onClip: (i) => {
+        setDoan(i < mo.length ? 'mo' : i < mo.length + bai.length ? 'bai' : 'ket');
+        setCho(all[i].pauseMs ? Date.now() + all[i].pauseMs! : null);
+      },
     });
     setPlaying(true);
     setDoan(mo.length ? 'mo' : 'bai');
     setPlays((n) => n + 1);
   };
-  const dung = () => { stopAudio(); setPlaying(false); setDoan(null); };
+  const dung = () => { stopAudio(); setPlaying(false); setDoan(null); setCho(null); };
 
   return (
     <div className={s.listenBox}>
@@ -139,8 +146,12 @@ function Listen({ b }: { b: Extract<Block, { t: 'listen' }> }) {
       </div>
       {playing && b.dan && doan && doan !== 'bai' && (
         <div className={s.quizSub} style={{ marginTop: 8, display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
-          <span>{doan === 'mo' ? '🎙️ Phần giới thiệu — đọc trước câu hỏi bên dưới trong lúc chờ' : '🎙️ Hết bài — soát lại đáp án'}</span>
-          <button type="button" className={s.btnGhost} onClick={skipClip}>⏭ Bỏ qua đoạn này</button>
+          {cho ? <DemDocCau het={cho} onBoQua={skipClip} /> : (
+            <>
+              <span>{doan === 'mo' ? '🎙️ Phần giới thiệu của bài nghe' : '🎙️ Hết bài — soát lại đáp án'}</span>
+              <button type="button" className={s.btnGhost} onClick={skipClip}>⏭ Bỏ qua đoạn này</button>
+            </>
+          )}
         </div>
       )}
       <button type="button" className={s.linkBtn} onClick={() => setShow(!show)} style={{ marginTop: 10 }}>

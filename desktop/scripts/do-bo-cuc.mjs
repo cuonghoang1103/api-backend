@@ -1650,26 +1650,45 @@ const CHUAN_BI = {
     const hangDau = p.locator('.notes-theme-root .group').first();
     await hangDau.hover().catch(() => {});
     await p.waitForTimeout(200);
-    const nutBut = hangDau.locator('button[aria-label="Đổi tên"]').first();
-    if (await nutBut.count() === 0) {
-      throw new Error('Không thấy nút "Đổi tên" trên hàng đầu của cây Sổ tay.');
-    }
-    await nutBut.click({ force: true }).catch(() => {});
+    /* Từ 26/09/2026 (cây Sổ tay "gọn") KHÔNG còn nút bút chì trên hàng: đổi tên
+       bằng NHẤP ĐÚP vào tên, hoặc menu "Tuỳ chọn cho …" → "Đổi tên". Chốt cũ đi
+       tìm nút bút chì nên đỏ suốt từ đó — đỏ vì bộ kiểm lỗi thời, không phải vì
+       app (đo 04/10/2026). Nay kiểm CẢ HAI lối, lối nào cũng phải mở ô nhập
+       ngay và focus vào nó. */
+    const kiemOSua = async (loi) => {
+      await p.waitForTimeout(250);
+      const oSua = await p.evaluate(() => {
+        const o = document.querySelector('.notes-theme-root input[aria-label="Đổi tên"]');
+        if (!o) return { co: false };
+        return { co: true, focus: document.activeElement === o };
+      });
+      if (!oSua.co) {
+        throw new Error(`${loi} mà KHÔNG mở ô nhập — \`window.prompt\` quay lại? `
+          + '(Electron ném `prompt() is not supported`, nên nút chết câm.)');
+      }
+      if (!oSua.focus) throw new Error(`${loi}: ô đổi tên mở ra nhưng KHÔNG được focus — gõ ngay là mất chữ.`);
+      await p.keyboard.press('Escape').catch(() => {});
+      await p.waitForTimeout(150);
+    };
+    /* Hàng ĐẦU có thể là "Hộp thư" — cố ý không đổi tên được — nên lấy hàng đầu
+       tiên CÓ tên nhấp-đúp-để-đổi-tên. */
+    const hangDoiTen = p.locator('.notes-theme-root .group')
+      .filter({ has: p.locator('button[title*="nhấp đúp để đổi tên"]') }).first();
+    if (await hangDoiTen.count() === 0) throw new Error('Cây Sổ tay không có hàng nào đổi tên được.');
+    const nhan = hangDoiTen.locator('button[title*="nhấp đúp để đổi tên"]').first();
+    await nhan.dblclick({ force: true }).catch(() => {});
+    await kiemOSua('Nhấp đúp vào tên');
+    await hangDoiTen.hover().catch(() => {});
+    const nutMenu = hangDoiTen.locator('button[aria-label^="Tuỳ chọn cho"]').first();
+    if (await nutMenu.count() === 0) throw new Error('Hàng đầu cây Sổ tay không có nút "Tuỳ chọn cho …".');
+    await nutMenu.click({ force: true }).catch(() => {});
     await p.waitForTimeout(250);
-    const oSua = await p.evaluate(() => {
-      const o = document.querySelector('.notes-theme-root .group input');
-      if (!o) return { co: false };
-      return { co: true, focus: document.activeElement === o, gt: o.value };
-    });
-    if (!oSua.co) {
-      throw new Error(
-        'Bấm nút Đổi tên mà KHÔNG mở ô nhập — `window.prompt` quay lại? '
-        + '(Electron ném `prompt() is not supported`, nên nút chết câm.)',
-      );
-    }
-    if (!oSua.focus) throw new Error('Ô đổi tên mở ra nhưng KHÔNG được focus — gõ ngay là mất chữ.');
-    await p.keyboard.press('Escape').catch(() => {});
-    await p.waitForTimeout(150);
+    const mucDoiTen = p.getByRole('menuitem', { name: 'Đổi tên' }).first();
+    const mucDoiTen2 = p.locator('button', { hasText: 'Đổi tên' }).first();
+    if (await mucDoiTen.count()) await mucDoiTen.click({ force: true });
+    else if (await mucDoiTen2.count()) await mucDoiTen2.click({ force: true });
+    else throw new Error('Menu "Tuỳ chọn" của hàng không có mục "Đổi tên".');
+    await kiemOSua('Menu → Đổi tên');
 
     /* ─── TẠO MỚI ⇒ MỞ Ô ĐẶT TÊN · XOÁ ⇒ ĂN NGAY LẦN BẤM ĐẦU ───
        Hai lỗi người dùng báo 10/09/2026, đo trong MỘT mạch để mục vừa tạo
@@ -1683,68 +1702,64 @@ const CHUAN_BI = {
          gọi DELETE, nên đường bấm đúng; chốt này canh phần còn lại — hàng có
          thật sự biến khỏi cây sau đúng một lần bấm không. */
     {
+      /* Từ đợt thiết kế lại 26/09: tạo đi qua nút "Mới ▾" → menu, mở một ô ĐẶT
+         TÊN trước (không còn hàng "Môn học mới" mặc định) — Enter mới tạo thật,
+         Esc huỷ mà không để lại rác. */
       const demHangTruoc = await demHang();
-      const themMon = p.locator('button[aria-label="Thêm môn học"]').first();
-      if (await themMon.count() === 0) throw new Error('Không thấy nút "Thêm môn học".');
-      await themMon.click({ force: true }).catch(() => {});
-      await p.waitForTimeout(700);
+      const nutMoi = p.locator('.notes-theme-root button[aria-haspopup="menu"]', { hasText: 'Mới' }).first();
+      if (await nutMoi.count() === 0) throw new Error('Không thấy nút "Mới ▾" của Sổ tay.');
+      const chonMuc = async (nhan) => {
+        await nutMoi.click({ force: true });
+        await p.waitForTimeout(300);
+        const muc = p.locator(`[role="menuitem"]:has-text("${nhan}"), button:has-text("${nhan}")`).first();
+        if (await muc.count() === 0) throw new Error(`Menu "Mới" không có mục "${nhan}".`);
+        await muc.click({ force: true });
+      };
+      const oTen = async (goiY, cho) => {
+        await p.waitForTimeout(cho);
+        return p.evaluate((g) => {
+          const o = document.querySelector(`.notes-theme-root input[placeholder="${g}"]`);
+          return o ? { co: true, focus: document.activeElement === o, ai: document.activeElement?.className?.slice(0, 60) ?? '' } : { co: false };
+        }, goiY);
+      };
 
-      const oMoi = await p.evaluate(() => {
-        const o = document.querySelector('.notes-theme-root .group input');
-        return o ? { co: true, focus: document.activeElement === o } : { co: false };
-      });
-      if (!oMoi.co) {
-        throw new Error(
-          'Tạo mục mới mà KHÔNG mở ô đặt tên — cờ `vuaTao` đặt SAU `refreshTree()`? '
-          + '(`Row` đọc cờ bằng useState, chỉ đọc lần đầu.)',
-        );
+      await chonMuc('Môn mới');
+      let o = await oTen('Tên môn mới…', 500);
+      if (!o.co) throw new Error('Chọn "Môn mới" mà KHÔNG mở ô đặt tên.');
+      if (!o.focus) throw new Error('Ô đặt tên môn mở ra nhưng KHÔNG được focus — gõ ngay là mất chữ.');
+      await p.keyboard.press('Escape');
+      await p.waitForTimeout(300);
+      if ((await oTen('Tên môn mới…', 0)).co) throw new Error('Esc không đóng ô đặt tên môn.');
+      if ((await demHang()) !== demHangTruoc) throw new Error('Huỷ đặt tên mà cây vẫn đổi số hàng — tạo rác?');
+
+      const tenMon = `Đo bố cục ${Date.now().toString(36)}`;
+      await chonMuc('Môn mới');
+      await oTen('Tên môn mới…', 400);
+      await p.keyboard.type(tenMon);
+      await p.keyboard.press('Enter');
+      await p.waitForTimeout(1300);
+      const hangMoi = p.locator('.notes-theme-root .group', { hasText: tenMon }).first();
+      if (await hangMoi.count() === 0) throw new Error(`Gõ tên + Enter mà cây không có môn "${tenMon}".`);
+      if ((await demHang()) <= demHangTruoc) throw new Error('Tạo môn mới mà cây không dài ra.');
+
+      /* ─── TẠO TRANG: chờ ĐỦ LÂU rồi mới hỏi tiêu điểm ───
+         Khung soạn thảo TipTap tự chiếm focus ở khung hình sau; hỏi ngay thì
+         xanh oan. Đi qua menu của chính môn vừa tạo — "Mới ▾ → Trang mới" phụ
+         thuộc ngữ cảnh đang chọn nên không chắc trúng môn này. */
+      await hangMoi.hover().catch(() => {});
+      await hangMoi.locator('button[aria-label^="Tuỳ chọn cho"]').first().click({ force: true });
+      await p.waitForTimeout(300);
+      await p.locator('[role="menuitem"]:has-text("Tạo trang trong môn"), button:has-text("Tạo trang trong môn")').first().click({ force: true });
+      o = await oTen('Tên trang mới…', 1400);
+      if (!o.co) throw new Error('"Tạo trang trong môn" mà không mở ô đặt tên.');
+      if (!o.focus) {
+        throw new Error(`Ô đặt tên trang mới MẤT tiêu điểm (đang ở: ${o.ai}) — gõ tên là mất chữ.`);
       }
-      if (!oMoi.focus) throw new Error('Ô đặt tên mở ra nhưng KHÔNG được focus — gõ ngay là mất chữ.');
-      await p.keyboard.press('Escape').catch(() => {});
-      await p.waitForTimeout(250);
+      await p.keyboard.press('Escape');
+      await p.waitForTimeout(300);
 
-      const sauKhiTao = await demHang();
-      if (sauKhiTao <= demHangTruoc) {
-        throw new Error(`Tạo môn mới mà cây không dài ra (${demHangTruoc} → ${sauKhiTao}).`);
-      }
-
-      /* ─── VÀ ĐƯỜNG NGƯỜI DÙNG THẬT SỰ ĐI: TẠO GHI CHÚ ───
-         Khác tạo MÔN ở một chỗ quyết định: tạo ghi chú còn gọi `setSelected`,
-         tức là khung soạn thảo TipTap bên phải mount ngay sau đó — và TipTap
-         tự chiếm tiêu điểm. Ô đặt tên mở ra rồi bị cướp focus, `onBlur` chốt
-         luôn cái tên mặc định, và người dùng thấy đúng cái họ tả: "ấn vào đổi
-         tên không được".
-         ⚠️ Phải chờ ĐỦ LÂU rồi mới hỏi: hỏi ngay thì ô vẫn còn focus và chốt
-         xanh oan — TipTap cướp tiêu điểm ở khung hình sau. */
-      {
-        const hangMon = p.locator('.notes-theme-root .group').first();
-        await hangMon.hover().catch(() => {});
-        await p.waitForTimeout(200);
-        const themGhiChu = hangMon.locator('button[aria-label="Thêm ghi chú"]').first();
-        if (await themGhiChu.count()) {
-          await themGhiChu.click({ force: true }).catch(() => {});
-          await p.waitForTimeout(1400);
-          const o = await p.evaluate(() => {
-            const e = document.querySelector('.notes-theme-root .group input');
-            return e
-              ? { co: true, focus: document.activeElement === e, ai: document.activeElement?.className?.slice(0, 60) ?? '' }
-              : { co: false, ai: document.activeElement?.className?.slice(0, 60) ?? '' };
-          });
-          if (!o.co) throw new Error('Tạo GHI CHÚ mới mà không mở ô đặt tên.');
-          if (!o.focus) {
-            throw new Error(
-              `Ô đặt tên của ghi chú mới MẤT tiêu điểm (đang ở: ${o.ai}) — `
-              + 'khung soạn thảo cướp focus, gõ tên là mất chữ.',
-            );
-          }
-          await p.keyboard.press('Escape').catch(() => {});
-          await p.waitForTimeout(200);
-        }
-      }
-
-      /* Xoá đúng mục vừa tạo. `confirm` bị thay để đo được không cần người. */
-      /* Đếm NGAY TRƯỚC khi xoá, không dùng lại số đo từ trước khi tạo ghi chú
-         — bước tạo ghi chú ở trên đã làm cây dài thêm một hàng. */
+      /* Xoá đúng môn vừa tạo: MỘT cú bấm ⇒ MỘT confirm ⇒ MỘT DELETE ⇒ hàng biến
+         mất ("xoá phải spam 2 lần"). `confirm` bị thay để đo không cần người. */
       const truocKhiXoa = await demHang();
       const soDelete = [];
       const demXoa = (r) => { if (r.method() === 'DELETE') soDelete.push(r.url()); };
@@ -1753,11 +1768,14 @@ const CHUAN_BI = {
         globalThis.__demConfirm = 0;
         window.confirm = () => { globalThis.__demConfirm += 1; return true; };
       });
-      const hangMoi = p.locator('.notes-theme-root .group', { hasText: 'Môn học mới' }).last();
       await hangMoi.hover().catch(() => {});
       await p.waitForTimeout(200);
-      await hangMoi.locator('button[aria-label="Xoá"]').first().click({ force: true }).catch(() => {});
-      await p.waitForTimeout(900);
+      await hangMoi.locator('button[aria-label^="Tuỳ chọn cho"]').first().click({ force: true });
+      await p.waitForTimeout(300);
+      const mucXoa = p.locator('[role="menuitem"]:has-text("Xoá môn"), button:has-text("Xoá môn")').first();
+      if (await mucXoa.count() === 0) throw new Error('Menu của môn không có mục "Xoá môn".');
+      await mucXoa.click({ force: true });
+      await p.waitForTimeout(1000);
       p.off('request', demXoa);
 
       const demC = await p.evaluate(() => globalThis.__demConfirm);

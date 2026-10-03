@@ -1401,3 +1401,29 @@
 }
 .vidNote { margin-top: 4px; font-size: 14.5px; line-height: 1.55; color: var(--lh-ink-2); }
 .vidCredit { margin-top: 4px; font-size: 12.5px; color: var(--lh-ink-3); }
+
+/* ── 🗣️ Luyện phát âm (PhatAm.tsx) ─────────────────────────────────── */
+.paItem { padding: 14px 0; border-top: 1px dashed var(--lh-line); }
+.paHead { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; }
+.paText { font-size: 17px; font-weight: 650; color: var(--lh-ink); }
+.paBtns { display: flex; gap: 8px; flex-wrap: wrap; }
+.paResult { margin-top: 12px; display: flex; flex-direction: column; gap: 10px; }
+.paScores { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; font-size: 14px; color: var(--lh-ink-2); }
+.paTotal {
+  display: inline-flex; min-width: 46px; height: 46px; padding: 0 8px; align-items: center; justify-content: center;
+  border-radius: 999px; font-size: 18px; font-weight: 800; border: 2px solid currentColor;
+}
+.paWords { display: flex; flex-wrap: wrap; gap: 8px; }
+.paWord {
+  display: inline-flex; flex-direction: column; align-items: center; gap: 3px; padding: 6px 10px; border-radius: 10px;
+  border: 1.5px solid currentColor; background: var(--lh-surface);
+}
+.paWord > b { font-size: 16px; }
+.paWord > small { font-size: 11.5px; }
+.paPhones { display: flex; gap: 3px; }
+.paPhones i { font-style: normal; font-size: 13px; font-weight: 650; font-family: var(--font-inter), system-ui, sans-serif; }
+.paGood { color: var(--lh-good); }
+.paWarn { color: #b7791f; }
+.paBad { color: var(--lh-bad); }
+.paOmit { color: var(--lh-ink-3); text-decoration: line-through; border-style: dashed; }
+:global(html.theme-dark) .paWarn { color: #f6c453; }

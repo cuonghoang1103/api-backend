@@ -57,6 +57,8 @@ export type Block =
   | { t: 'chart'; kind: 'line' | 'bar'; title: string; unit?: string; labels: string[]; series: { name: string; values: number[] }[] }
   /** Luyện nói: nghe câu hỏi → ghi âm → nghe lại → AI chấm (POST /ielts/ai/cham-noi). */
   | { t: 'speak'; id: string; part: '1' | '2' | '3'; questions: string[] }
+  /** Luyện phát âm: đọc câu cho sẵn, Azure chấm từng từ/từng âm. `ipa` mỗi từ một cụm, cách nhau dấu cách. */
+  | { t: 'phatam'; id: string; title?: string; note?: string; items: { text: string; ipa: string; vi?: string }[] }
   /**
    * Ghép câu: cho nghĩa tiếng Việt + các mảnh từ đã xáo, người học bấm theo
    * đúng thứ tự để dựng câu. `answer` là thứ tự đúng (có thể nhiều cách đúng

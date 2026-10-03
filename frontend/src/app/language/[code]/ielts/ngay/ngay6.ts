@@ -845,6 +845,27 @@ const D6_SPEAKING: Lesson = {
       ],
     },
 
+    {
+      t: "phatam",
+      id: "d6-phat-am",
+      title: "Luyện phát âm — máy chấm 8 nhị trùng âm",
+      note: "Bấm “Nghe mẫu”, rồi “Đọc & chấm” và đọc to đúng dòng đó. Nhị trùng âm phải TRƯỢT từ âm đầu sang âm sau; đọc thành một âm đơn (home → “hôm”) là máy chấm đỏ. Giữ cả phụ âm cuối (time, light).",
+      items: [
+        { text: "day, rain, table", ipa: "deɪ reɪn teɪbl", vi: "/eɪ/" },
+        { text: "time, light, buy", ipa: "taɪm laɪt baɪ", vi: "/aɪ/ — giữ /m/, /t/ cuối" },
+        { text: "boy, coin, noise", ipa: "bɔɪ kɔɪn nɔɪz", vi: "/ɔɪ/" },
+        { text: "house, town, loud", ipa: "haʊs taʊn laʊd", vi: "/aʊ/" },
+        { text: "home, road, phone", ipa: "həʊm rəʊd fəʊn", vi: "/əʊ/ — không đọc “hôm”, “phôn”" },
+        { text: "ear, idea, beer", ipa: "ɪə aɪdɪə bɪə", vi: "/ɪə/" },
+        { text: "chair, where, bear", ipa: "tʃeə weə beə", vi: "/eə/" },
+        { text: "tour, pure, cure", ipa: "tʊə pjʊə kjʊə", vi: "/ʊə/" },
+        { text: "late, let", ipa: "leɪt let", vi: "/eɪ/ · /e/" },
+        { text: "coat, cot", ipa: "kəʊt kɒt", vi: "/əʊ/ · /ɒ/" },
+        { text: "I go home by train every day.", ipa: "aɪ ɡəʊ həʊm baɪ treɪn evri deɪ", vi: "/aɪ/ /əʊ/ /eɪ/ trong một câu" },
+        { text: "I know how to make a cake.", ipa: "aɪ nəʊ haʊ tə meɪk ə keɪk", vi: "/aɪ/ /əʊ/ /aʊ/ /eɪ/" },
+      ],
+    },
+
     { t: "h", text: "7. Luyện nói" },
     {
       t: "p",

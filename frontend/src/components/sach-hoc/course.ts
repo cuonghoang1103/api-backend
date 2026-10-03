@@ -212,6 +212,7 @@ export function lessonText(l: Lesson): string {
       case 'essay': out.push(`Đề viết ${b.task}: ${b.prompt}`); break;
       case 'chart': out.push(`Biểu đồ: ${b.title} (${b.labels.join(', ')})`); break;
       case 'speak': out.push(`Câu hỏi Speaking Part ${b.part}: ${b.questions.join(' / ')}`); break;
+      case 'phatam': out.push(`Luyện phát âm: ${b.items.map((x) => `${x.text} /${x.ipa}/`).join(' · ')}`); break;
       case 'write': out.push(`${b.title} — tập viết tay: ${b.chars.join(' ')}`); break;
       case 'readkanji': out.push(`${b.title}: ${b.items.map((x) => strip(x.text)).join(' / ')}`); break;
       case 'build': out.push(`${b.title}: ${b.items.map((x) => `${x.vi} → ${x.answer.join('')}`).join(' / ')}`); break;

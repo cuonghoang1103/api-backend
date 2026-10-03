@@ -804,6 +804,26 @@ const D4_SPEAKING: Lesson = {
       ],
     },
 
+    {
+      t: "phatam",
+      id: "d4-phat-am",
+      title: "Luyện phát âm — máy chấm 11 nguyên âm đơn",
+      note: "Bấm “Nghe mẫu”, rồi “Đọc & chấm” và đọc to đúng dòng đó. Máy tô màu TỪNG ÂM: xanh là đúng, vàng là gần đúng, đỏ là cần sửa. Để ý cặp ngắn – dài: âm có ː phải kéo dài thật rõ.",
+      items: [
+        { text: "ship, sheep", ipa: "ʃɪp ʃiːp", vi: "/ɪ/ ngắn · /iː/ dài" },
+        { text: "sit, seat", ipa: "sɪt siːt", vi: "/ɪ/ ngắn · /iː/ dài" },
+        { text: "full, fool", ipa: "fʊl fuːl", vi: "/ʊ/ ngắn · /uː/ dài" },
+        { text: "bad, bed", ipa: "bæd bed", vi: "/æ/ mở rộng · /e/ hẹp hơn" },
+        { text: "cut, cart", ipa: "kʌt kɑːt", vi: "/ʌ/ ngắn · /ɑː/ dài" },
+        { text: "dog, door", ipa: "dɒɡ dɔː", vi: "/ɒ/ ngắn · /ɔː/ dài" },
+        { text: "bird, word, heard", ipa: "bɜːd wɜːd hɜːd", vi: "/ɜː/ — không đọc “bơt”, “wo”, “hia”" },
+        { text: "The cat sat on a black hat.", ipa: "ðə kæt sæt ɒn ə blæk hæt", vi: "/æ/ cả câu" },
+        { text: "Please sit in this seat.", ipa: "pliːz sɪt ɪn ðɪs siːt", vi: "/iː/ và /ɪ/ xen kẽ" },
+        { text: "Look at the food in the pool.", ipa: "lʊk ət ðə fuːd ɪn ðə puːl", vi: "/ʊ/ và /uː/" },
+        { text: "The bird heard a word.", ipa: "ðə bɜːd hɜːd ə wɜːd", vi: "/ɜː/ cả câu" },
+      ],
+    },
+
     { t: "h", text: "7. Luyện nói" },
     {
       t: "p",

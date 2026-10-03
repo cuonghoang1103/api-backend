@@ -641,7 +641,7 @@ function renderBlock(b: Block, i: number) {
         }
 }
 
-const IS_EXERCISE = new Set(['vocabAll', 'quiz', 'mcq', 'dictation', 'listen', 'essay', 'speak', 'passage', 'build', 'readkanji', 'write']);
+const IS_EXERCISE = new Set(['vocabAll', 'quiz', 'mcq', 'dictation', 'listen', 'essay', 'speak', 'phatam', 'passage', 'build', 'readkanji', 'write']);
 
 /**
  * `framed` (bài ngữ pháp): mỗi mục bắt đầu bằng tiêu đề được ĐÓNG KHUNG cùng

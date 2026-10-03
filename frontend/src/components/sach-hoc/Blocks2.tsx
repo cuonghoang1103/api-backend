@@ -17,6 +17,7 @@ import { useCourse, useTutor } from './tutorContext';
 import HandEssay from './HandEssay';
 import WriteBlock from './WriteBlock';
 import HanLop from './HanLop';
+import PhatAm from './PhatAm';
 import s from './course.module.css';
 
 // Công cụ chia động từ chỉ có ở một mục tra cứu — tách chunk riêng.
@@ -585,6 +586,7 @@ export function renderBlock2(b: Block, i: number) {
     case 'essay': return <Essay key={b.id} b={b} />;
     case 'chart': return <Chart key={i} b={b} />;
     case 'speak': return <Speak key={b.id} b={b} />;
+    case 'phatam': return <PhatAm key={b.id} b={b} />;
     case 'build': return <Build key={b.id} b={b} />;
     case 'readkanji': return <ReadKanji key={b.id} b={b} />;
     case 'write': return <WriteBlock key={b.id} b={b} />;

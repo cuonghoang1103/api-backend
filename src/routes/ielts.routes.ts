@@ -20,6 +20,7 @@ import * as svc from '../services/ielts/ielts.service.js';
 import { hoiVeChu, chamBaiViet, CAC_Y } from '../services/ielts/hoiAI.service.js';
 import { dungDe, nopDe, lichSuThi } from '../services/ielts/deThi.service.js';
 import { chamBaiNoi } from '../services/ielts/chamNoi.service.js';
+import { chamPhatAm } from '../services/ielts/phatAm.service.js';
 import { docTo } from '../services/ielts/docTo.service.js';
 import { xemChuViet, chamVietTay, MAX_TRANG } from '../services/ielts/vietTay.service.js';
 import multer from 'multer';
@@ -110,6 +111,15 @@ router.post('/ai/cham-viet-tay',
  * xuống đĩa, và "mượn tạm" là cách những tệp không định lưu vẫn được lưu.
  */
 const audioNoi = multer({ storage: multer.memoryStorage(), limits: { fileSize: 20 * 1024 * 1024 } });
+// Chấm phát âm từng âm (Azure). Web gửi WAV 16 kHz mono; audio không được lưu.
+const audioPhatAm = multer({ storage: multer.memoryStorage(), limits: { fileSize: 1024 * 1024 } });
+router.post('/ai/cham-phat-am', audioPhatAm.single('audio'), async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const f = req.file;
+    if (!f?.buffer?.length) throw new Error('Thiếu audio');
+    ok(res, await chamPhatAm(uid(req), { audio: f.buffer, cau: String(req.body?.cau ?? ''), giong: req.body?.giong ? String(req.body.giong) : undefined }));
+  } catch (e) { next(e); }
+});
 router.post('/ai/cham-noi', audioNoi.single('audio'), async (req, res: Response<ApiResponse>, next) => {
   try {
     const f = req.file;

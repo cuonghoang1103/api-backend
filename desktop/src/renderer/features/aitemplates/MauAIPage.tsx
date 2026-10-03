@@ -180,7 +180,7 @@ export function MauAIPage() {
     <div className="ct-page ct-mau">
       <header className="ct-mau-dau">
         <div>
-          <h1>{dich('Mẫu AI')}</h1>
+          <h1>Skill AI</h1>
           <p className="ct-muted">
             {TONG.toLocaleString('vi-VN')} mẫu cho Claude Code — tra cứu được cả khi mất mạng.
           </p>

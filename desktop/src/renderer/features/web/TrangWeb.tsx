@@ -105,8 +105,41 @@ export function useCauNoiWeb(): boolean {
  *    gọi `toast.*` trong cây web im lặng không hiện gì) — nhưng nó ảnh hưởng
  *    CẢ SÁU cây đã chạy tốt, nên tách ra làm riêng, có đo.
  */
+/**
+ * Lớp `theme-dark` của WEB trên <html> — đặt khi app tối và đang có ít nhất một
+ * cây web mở (04/10/2026).
+ *
+ * CSS của web (module khoá học, Ngoại ngữ, CT Work, IELTS…) đổi màu theo
+ * `html.theme-dark`, không theo `data-ct-theme` của app. Trước đây chỉ IELTS và CT
+ * Work tự đặt lớp này, nên mọi cây web khác hiện bản SÁNG giữa vỏ app tối —
+ * đúng lời người dùng: "bị mờ bởi background", "trộn màu trắng đen".
+ *
+ * ĐẾM người giữ chứ không bật/tắt thẳng: Học kỳ nằm trong Tổng quan, cây web
+ * lồng nhau được, và cây gỡ trước không được giật lớp khỏi cây còn đang mở.
+ * Lớp có sẵn từ trước (không phải ta đặt) thì không bao giờ gỡ.
+ */
+const LOP_TOI = 'theme-dark';
+let soNguoiGiu = 0;
+let laTaDat = false;
+export function useLopToiWeb(bat: boolean) {
+  useEffect(() => {
+    if (!bat) return;
+    const html = document.documentElement;
+    if (soNguoiGiu === 0) {
+      laTaDat = !html.classList.contains(LOP_TOI);
+      if (laTaDat) html.classList.add(LOP_TOI);
+    }
+    soNguoiGiu += 1;
+    return () => {
+      soNguoiGiu -= 1;
+      if (soNguoiGiu === 0 && laTaDat) { html.classList.remove(LOP_TOI); laTaDat = false; }
+    };
+  }, [bat]);
+}
+
 export function VoWeb({ children }: { children: React.ReactNode }) {
   const { resolvedTheme } = useAppState();
+  useLopToiWeb(resolvedTheme === 'dark');
   return (
     <div className={`ct-web-host${resolvedTheme === 'dark' ? ' dark' : ''}`}>
       <TanStackQueryProvider>{children}</TanStackQueryProvider>

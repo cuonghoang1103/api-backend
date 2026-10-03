@@ -11,7 +11,7 @@ import { PanelLeft, PanelLeftClose, PanelLeftOpen, Settings } from 'lucide-react
 import { useAppState } from '../app-state';
 import { UpdateBanner } from './UpdateBanner';
 import { UserMenu } from './UserMenu';
-import { GROUP_LABELS, GROUP_ORDER, INTERNAL_ROUTES, ROUTES } from '../routes';
+import { GROUP_LABELS, GROUP_ORDER, INTERNAL_ROUTES, THANH_BEN, findRoute } from '../routes';
 import { useDich } from '../i18n';
 
 /**
@@ -102,10 +102,13 @@ export function Sidebar() {
       <div className="ct-sidebar-brand"><span className="ct-sidebar-monogram" aria-hidden>CT</span>{!collapsed && <span><strong>CuongThai</strong><small>{dich('Không gian cá nhân')}</small></span>}</div>
       <div className="ct-sidebar-scroll" ref={listRef} onKeyDown={onKeyDown}>
         {GROUP_ORDER.map((group) => {
-          /* `trangCon` bị loại: chúng có route nhưng là BƯỚC BÊN TRONG một
-             trang khác, không phải tính năng đứng riêng. Xem chú thích ở
-             `routes.ts`. Command palette thì vẫn tìm ra chúng. */
-          const items = ROUTES.filter((r) => r.group === group && !r.trangCon);
+          /* Chỉ những trang trong `THANH_BEN` (danh sách gọn người dùng chốt
+             04/10/2026), theo đúng thứ tự ở đó. Trang khác vẫn có route — ⌘K
+             tìm ra. Xem chú thích ở `routes.ts`. */
+          const items = (THANH_BEN[group] ?? [])
+            .map((d) => findRoute(d))
+            .filter((r): r is NonNullable<typeof r> => !!r && !r.trangCon);
+          if (items.length === 0) return null;
           return (
             <div className="ct-nav-group" key={group} data-group={group}>
               {/* Khi thu gọn, nhãn nhóm bị ẩn khỏi mắt nhưng vẫn ở lại cho

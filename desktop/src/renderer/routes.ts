@@ -118,8 +118,8 @@ export const ROUTES: readonly RouteDef[] = [
   // ── AI ───────────────────────────────────────────────────
   { path: '/chat', label: 'AI Chat', icon: Bot, group: 'ai',
     keywords: ['ai', 'chat', 'gpt', 'tro ly', 'hoi dap'] },
-  { path: '/ai-templates', label: 'Mẫu AI', icon: Wand2, group: 'ai',
-    keywords: ['ai templates', 'mau ai', 'prompt'] },
+  { path: '/ai-templates', label: 'Skill AI', icon: Wand2, group: 'ai',
+    keywords: ['ai templates', 'mau ai', 'mẫu ai', 'skill', 'skills', 'agent', 'prompt'] },
   { path: '/voice', label: 'Giọng nói', icon: Mic, group: 'ai',
     keywords: ['voice', 'tts', 'giong noi', 'doc van ban'] },
 
@@ -128,8 +128,8 @@ export const ROUTES: readonly RouteDef[] = [
      Dùng lại trang web (`features/hocTap/HocTapPage`). */
   { path: '/hoc-tap', label: 'Học kỳ', icon: Target, group: 'hoc',
     keywords: ['hoc ky', 'học kỳ', 'ke hoach hoc', 'kế hoạch', 'ty le truot', 'trượt môn', 'deadline', 'bai tap'] },
-  { path: '/academy', label: 'Học viện', icon: GraduationCap, group: 'hoc',
-    keywords: ['academy', 'khoá học', 'môn', 'fpt', 'hoc vien'] },
+  { path: '/academy', label: 'Academy', icon: GraduationCap, group: 'hoc',
+    keywords: ['academy', 'học viện', 'khoá học', 'môn', 'fpt', 'hoc vien'] },
   /* Hai trang tư vấn của Học viện — dùng lại nguyên của web (xem
      `dinhTuyenWeb.ts`). Phải khai ở ĐÂY nữa: `findRoute` khớp CHÍNH XÁC, nên
      thiếu là bấm vào rơi thẳng vào màn "Không tìm thấy" — đúng thứ phép kiểm
@@ -143,8 +143,8 @@ export const ROUTES: readonly RouteDef[] = [
     keywords: ['tu van', 'nganh', 'chon nganh', 'major', 'huong nghiep'] },
   { path: '/academy/so-do-mon-hoc', label: 'Sơ đồ môn học', icon: Network, group: 'hoc', trangCon: true,
     keywords: ['so do', 'mon hoc', 'curriculum', 'khung chuong trinh'] },
-  { path: '/courses', label: 'Khoá học', icon: Library, group: 'hoc',
-    keywords: ['courses', 'khoa hoc'] },
+  { path: '/courses', label: 'Courses', icon: Library, group: 'hoc',
+    keywords: ['courses', 'khoa hoc', 'khoá học'] },
   { path: '/code-lab', label: 'Code Lab', icon: Braces, group: 'hoc',
     keywords: ['code', 'lab', 'bài tập', 'thuc hanh'] },
   { path: '/exam', label: 'Phòng thi', icon: ClipboardList, group: 'hoc',
@@ -169,8 +169,8 @@ export const ROUTES: readonly RouteDef[] = [
     keywords: ['interview', 'luyện phỏng vấn', 'phong van', 'mock interview', 'luyen phong van'] },
 
   // ── Làm & sáng tạo ───────────────────────────────────────
-  { path: '/maker-lab', label: 'Maker Lab', icon: Cpu, group: 'lam',
-    keywords: ['maker', 'robot', 'odin', 'esp32', 'phan cung'] },
+  { path: '/maker-lab', label: 'IoT Odin', icon: Cpu, group: 'lam',
+    keywords: ['iot', 'odin', 'maker lab', 'maker', 'robot', 'odin', 'esp32', 'phan cung'] },
   { path: '/creator', label: 'Xưởng nội dung', icon: Sparkles, group: 'lam',
     keywords: ['creator', 'studio', 'kich ban', 'video', 'xuong'] },
   { path: '/xuong-remix', label: 'Xưởng Remix', icon: AudioWaveform, group: 'lam',
@@ -219,6 +219,27 @@ export const GROUP_LABELS: Record<RouteGroup, string> = {
 };
 
 export const GROUP_ORDER: readonly RouteGroup[] = ['chinh', 'ai', 'hoc', 'lam', 'khac'];
+
+/**
+ * THANH BÊN GỌN — đúng danh sách người dùng chốt ngày 04/10/2026:
+ * *"trên appdesktop giờ gom nay đi, chỉ dùng những trang chính sau thôi"*.
+ *
+ *  • Chính: Tổng quan, Tin nhắn, Ghi chú, Bạn bè.
+ *  • AI: AI Chat, Skill AI (đổi tên từ Mẫu AI). "Giọng nói" bỏ khỏi thanh bên.
+ *  • Học tập: IELTS GHIM ĐẦU; Học kỳ đã GỘP vào Tổng quan (tab "Học kỳ").
+ *  • Làm & sáng tạo: IoT Odin (đổi tên từ Maker Lab), CT Work.
+ *
+ * Thứ tự ở ĐÂY là thứ tự hiển thị — không phụ thuộc thứ tự khai trong `ROUTES`.
+ * Trang không có tên ở đây vẫn còn route: ⌘K tìm ra, link trong trang vẫn mở
+ * được (Code Lab, Phòng thi, Phỏng vấn, Bảng tin, Nhạc…). Muốn đưa lại một
+ * trang lên thanh bên thì chỉ thêm đường dẫn của nó vào đúng nhóm.
+ */
+export const THANH_BEN: Readonly<Partial<Record<RouteGroup, readonly string[]>>> = {
+  chinh: ['/dashboard', '/messages', '/notes', '/friends'],
+  ai: ['/chat', '/ai-templates'],
+  hoc: ['/ielts', '/academy', '/courses', '/language', '/algorithms', '/simulation', '/roadmap'],
+  lam: ['/maker-lab', '/work'],
+};
 
 /** Route nội bộ của app — không có trên web, nên không mở ngoài được. */
 export const INTERNAL_ROUTES = {

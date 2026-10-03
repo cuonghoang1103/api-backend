@@ -88,7 +88,7 @@ export function KhoaHocPage() {
     <div className="ct-page ct-hv">
       <header className="ct-hv-dau">
         <div>
-          <h1><Library size={20} aria-hidden /> {dich('Khoá học')}</h1>
+          <h1><Library size={20} aria-hidden /> Courses</h1>
           <p className="ct-muted">
             {ds.length > 0
               ? `${ds.length} khoá · ${tongBai} bài — soạn riêng, học theo thứ tự`

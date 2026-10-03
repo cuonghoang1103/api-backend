@@ -20,12 +20,8 @@
  *    `contain: layout paint` để nó thành khối chứa cho con `fixed`: `inset-0`
  *    giờ là vùng nội dung của app, và z-index của CT Work không vượt ra ngoài.
  *
- * 3. CHỦ ĐỀ TỐI. `work.css` đổi token bằng `html.theme-dark .work-root` — lớp
- *    chủ đề TOÀN CỤC của web. App không đặt lớp đó (nó dùng `data-ct-theme`),
- *    nên không làm gì thì CT Work luôn sáng trong app tối. Đặt `theme-dark` lên
- *    <html> CHỈ khi trang này đang mở và app đang tối, gỡ khi rời trang — không
- *    chép lại bộ token (chép là hai bản lệch nhau lúc nào không hay).
- *    ⚠️ `theme-dark`, KHÔNG phải `dark` — xem CLAUDE.md, lỗi 02/07/2026.
+ * 3. CHỦ ĐỀ TỐI. `work.css` đổi token bằng `html.theme-dark .work-root`. `VoWeb`
+ *    (TrangWeb.tsx) đặt lớp đó cho mọi cây web khi app tối — xem `useLopToiWeb`.
  *
  * 4. REALTIME. `useProjectRealtime` (components/work/hooks.ts) vào phòng
  *    `work:project:<id>` qua `connectSocket()` của `lib/socket.ts`. Ở app, cắm
@@ -34,31 +30,19 @@
  *    không tự cập nhật khi người khác sửa.
  */
 import { lazy, useEffect } from 'react';
-import { useAppState } from '../../app-state';
 import { camSocketDesktop } from '../../shims/web-socket-adapter';
 import { TrangWebTheoTuyen } from '../web/TrangWeb';
 
 /** Khai ở TẦM MÔ-ĐUN — xem ghi chú của `khung` trong `TrangWebTheoTuyen`. */
 const KhungCtWork = lazy(() => import('@/app/work/layout'));
 
-/** Lớp chủ đề toàn cục của web. */
-const LOP_TOI = 'theme-dark';
 
 export function CtWorkPage() {
-  const { resolvedTheme } = useAppState();
 
   useEffect(() => {
     camSocketDesktop();
   }, []);
 
-  useEffect(() => {
-    if (resolvedTheme !== 'dark') return;
-    const html = document.documentElement;
-    // Ai đó khác đã đặt sẵn thì đừng gỡ của họ khi rời trang.
-    if (html.classList.contains(LOP_TOI)) return;
-    html.classList.add(LOP_TOI);
-    return () => { html.classList.remove(LOP_TOI); };
-  }, [resolvedTheme]);
 
   return (
     <div className="ct-work-host">

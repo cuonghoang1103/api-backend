@@ -37,6 +37,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   Bell, BookOpen, Briefcase, ChevronRight, Coffee, Dumbbell, Flame,
   Gamepad2, MessageSquare, Moon, RefreshCw, UtensilsCrossed, Users, X, Sparkles, NotebookPen, Music, FileUser,
+  LayoutDashboard, Target,
 } from 'lucide-react';
 import { useAppState } from '../../app-state';
 import { useSession } from '../../auth/session';
@@ -47,6 +48,11 @@ import { LichHomNay } from './LichHomNay';
 import { KeHoachNgay } from './KeHoachNgay';
 import { xepLan } from './dai24';
 import { useDich } from '../../i18n';
+import { TrangWebDon } from '../web/TrangWeb';
+
+/** Học kỳ — nguyên trang `/hoc-tap` của web, gộp vào Tổng quan (04/10/2026). */
+const napHocKy = () => import('@/app/hoc-tap/page');
+type TabTq = 'hom-nay' | 'hoc-ky';
 
 /**
  * ⚠️ `api.request` TỰ tuần tự hoá `body` — ĐỪNG `JSON.stringify` trước.
@@ -154,7 +160,27 @@ const THU = ['Chủ nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm',
 
 export function DashboardPage() {
   const { dich } = useDich();
-  const { online, navigate } = useAppState();
+  const { online, navigate, layThamSo } = useAppState();
+
+  /**
+   * Tab của Tổng quan: "Hôm nay" (việc, lịch, dải 24 giờ) và "Học kỳ" (Huấn luyện
+   * học kỳ của web — tỷ lệ trượt, lịch học, AI chấm). Người dùng 04/10/2026:
+   * "trang học kì bạn gộp vào trang tổng quan … full chức năng như trên web".
+   * Nhớ tab giữa các lần mở; `?tab=hoc-ky` (từ trang một môn bấm quay lại) thắng.
+   */
+  const [tab, datTabGoc] = useState<TabTq>(() => (layThamSo('tab') === 'hoc-ky' ? 'hoc-ky' : 'hom-nay'));
+  useEffect(() => {
+    if (tab === 'hoc-ky') return;
+    void window.cuongthai?.settings.getAll().then((t) => {
+      if ((t as Record<string, unknown>).tqTab === 'hoc-ky') datTabGoc('hoc-ky');
+    });
+    // Chỉ đọc lúc mở trang.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  const datTab = useCallback((t: TabTq) => {
+    datTabGoc(t);
+    void window.cuongthai?.settings.set('tqTab', t);
+  }, []);
   const { api, userId, user } = useSession();
 
   const [du, setDu] = useState<DashboardData | null>(null);
@@ -474,6 +500,22 @@ export function DashboardPage() {
         )}
       </header>
 
+      <div className="ct-tq-tabs" role="tablist" aria-label={dich('Tổng quan')}>
+        <button type="button" role="tab" aria-selected={tab === 'hom-nay'} className="ct-tq-tab"
+          data-active={tab === 'hom-nay'} onClick={() => datTab('hom-nay')}>
+          <LayoutDashboard size={14} aria-hidden /> {dich('Hôm nay')}
+        </button>
+        <button type="button" role="tab" aria-selected={tab === 'hoc-ky'} className="ct-tq-tab"
+          data-active={tab === 'hoc-ky'} onClick={() => datTab('hoc-ky')}>
+          <Target size={14} aria-hidden /> {dich('Học kỳ')}
+        </button>
+      </div>
+
+      {tab === 'hoc-ky' ? (
+        <section className="ct-tq-hocky" aria-label={dich('Học kỳ')}>
+          <TrangWebDon nap={napHocKy} ten={dich('Học kỳ')} canPhien />
+        </section>
+      ) : (<>
       {loi && (
         <div className="ct-notice" data-tone="warn" style={{ marginBottom: 14 }}>
           <span>{loi}</span>
@@ -693,6 +735,7 @@ export function DashboardPage() {
           ))}
         </div>
       </section>
+      </>)}
     </div>
   );
 }

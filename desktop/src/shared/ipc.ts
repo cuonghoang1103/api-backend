@@ -237,6 +237,8 @@ export const settingKeySchema = z.enum([
   'aiThuMucTaiCuoi',
   /** Tab phạm vi đang xem ở Tổng quan (`today`…`year`). */
   'tqPhamVi',
+  /** Tab Tổng quan đang mở: `hom-nay` hoặc `hoc-ky` (Học kỳ gộp vào 04/10/2026). */
+  'tqTab',
   /** Bật tiếng cho việc tick xong / nhắc nhở. Mặc định BẬT. */
   'tqAmThanh',
   /**

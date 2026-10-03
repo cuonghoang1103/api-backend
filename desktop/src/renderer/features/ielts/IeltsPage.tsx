@@ -8,25 +8,12 @@
  * Mọi link `/language/en/ielts…` trong mã web được shim đổi sang `/ielts…`
  * (`doiDuongApp` trong shims/next-navigation.tsx) nên bấm đâu cũng ở lại mục này.
  *
- * Chủ đề: CSS IELTS đổi màu theo `html.theme-dark` của WEB; app chỉ đặt
- * `data-ct-theme` ⇒ không làm gì thì IELTS luôn sáng. Cùng cách CtWorkPage:
- * app tối thì gắn `theme-dark` lên <html> khi đang ở mục này, rời thì gỡ.
+ * Chủ đề: CSS IELTS đổi màu theo `html.theme-dark` của WEB — `VoWeb` (TrangWeb.tsx)
+ * tự đặt lớp đó cho MỌI cây web khi app tối (`useLopToiWeb`).
  */
-import { useEffect } from 'react';
-import { useAppState } from '../../app-state';
 import { TrangWebTheoTuyen } from '../web/TrangWeb';
 
-const LOP_TOI = 'theme-dark';
-
 export function IeltsPage() {
-  const { resolvedTheme } = useAppState();
-  useEffect(() => {
-    if (resolvedTheme !== 'dark') return;
-    const html = document.documentElement;
-    if (html.classList.contains(LOP_TOI)) return; // của người khác — đừng gỡ hộ
-    html.classList.add(LOP_TOI);
-    return () => { html.classList.remove(LOP_TOI); };
-  }, [resolvedTheme]);
   // Khung KHÔNG cuộn mang container `ctnoidung`: CSS khoá học đo bề rộng VÙNG NỘI
   // DUNG (thanh bên app ăn ~220px) thay vì cửa sổ. Không cuộn để lớp phủ fixed bên
   // trong (ngăn kéo gia sư, cửa sổ gọi gia sư) vẫn đứng yên khi trang cuộn.

@@ -139,7 +139,7 @@ export function TheMon({ mon, onMo }: { mon: Mon; onMo: () => void }) {
 /* ── Chi tiết một môn ────────────────────────────────────────────────────── */
 
 export function ChiTietMon({
-  slug, onQuayLai, nhanQuayLai = 'Học viện',
+  slug, onQuayLai, nhanQuayLai = 'Academy',
 }: {
   slug: string;
   onQuayLai: () => void;

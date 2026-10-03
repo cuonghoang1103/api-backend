@@ -177,7 +177,7 @@ export function HocVienPage() {
     <div className="ct-page ct-hv">
       <header className="ct-hv-dau">
         <div>
-          <h1><GraduationCap size={20} aria-hidden /> {dich('Học viện')}</h1>
+          <h1><GraduationCap size={20} aria-hidden /> Academy</h1>
           <p className="ct-muted">
             {ky.length > 0
               ? `${ky.length} kỳ · ${tongMon} môn — chương trình FPTU`

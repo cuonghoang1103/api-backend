@@ -1,11 +1,13 @@
-/* Graphite Studio: scoped dashboard surfaces + consistent application navigation. */
-.ct-shell:has(.ct-workspace) {
+/* Graphite Studio: bảng màu CHUNG của cả app (04/10/2026 — trước chỉ bật khi đang ở
+   Tổng quan qua `:has(.ct-workspace)`, nên mỗi trang khác một tông; `:has()` trên
+   vỏ app còn bắt trình duyệt soát lại kiểu mỗi lần DOM đổi). */
+.ct-shell {
   --ct-sidebar-w: 224px; --ct-sidebar: #eaf0f8;
   --ct-bg: #f2f5fa; --ct-surface: #fff; --ct-surface-2: #eaf0f8;
   --ct-border: #d7dfeb; --ct-text: #192638; --ct-text-muted: #52647c;
   --ct-text-faint: #62748a; --ct-accent: #5265d9; --ct-accent-text: #4154c4;
 }
-:root[data-ct-theme='dark'] .ct-shell:has(.ct-workspace) {
+:root[data-ct-theme='dark'] .ct-shell {
   --ct-sidebar: #171c26;
   --ct-bg: #11151d; --ct-surface: #1d2532; --ct-surface-2: #252f40;
   --ct-border: #344155; --ct-text: #f2f5fa; --ct-text-muted: #a7b4c8;
@@ -18,13 +20,13 @@
 .ct-sidebar-brand strong { display: block; font-size: 16px; letter-spacing: -.025em; }
 .ct-sidebar-brand small { display: block; font-size: 11px; color: var(--ct-text-muted); margin-top: 2px; }
 .ct-sidebar[data-collapsed='true'] .ct-sidebar-brand { padding-inline: 13px; }
-.ct-sidebar .ct-nav-group { --nav-ink: var(--ct-accent-text); margin-bottom: 19px; }
+.ct-sidebar .ct-nav-group { --nav-ink: var(--ct-accent-text); margin-bottom: 14px; }
 .ct-sidebar .ct-nav-group[data-group='ai'] { --nav-ink: #a88bdb; }
 .ct-sidebar .ct-nav-group[data-group='hoc'] { --nav-ink: #359cb1; }
 .ct-sidebar .ct-nav-group[data-group='lam'] { --nav-ink: #bd8740; }
 .ct-sidebar .ct-nav-group[data-group='khac'] { --nav-ink: #4b9b80; }
 .ct-sidebar .ct-nav-group-label { font-size: 10px; font-weight: 700; letter-spacing: .09em; margin-bottom: 7px; color: var(--ct-text-muted); }
-.ct-sidebar .ct-nav-item { min-height: 38px; padding: 8px 11px; margin-bottom: 3px; gap: 11px; border-radius: 9px; font-size: 13px; transition: background 150ms, color 150ms; }
+.ct-sidebar .ct-nav-item { min-height: 35px; padding: 7px 11px; margin-bottom: 2px; gap: 11px; border-radius: 9px; font-size: 13px; transition: background 150ms, color 150ms; }
 .ct-sidebar .ct-nav-icon { color: var(--nav-ink, var(--ct-text-muted)); flex-shrink: 0; }
 .ct-sidebar .ct-nav-item[data-active='true'] { background: var(--ct-active); color: var(--ct-accent-text); box-shadow: inset 3px 0 var(--ct-accent); font-weight: 650; }
 .ct-sidebar .ct-nav-item[data-active='true'] .ct-nav-icon { color: var(--ct-accent-text); }
@@ -106,3 +108,14 @@
 @media (prefers-reduced-motion: reduce) {
   .ct-workspace *, .ct-sidebar * { animation: none !important; transition: none !important; }
 }
+
+/* ── Tab Tổng quan: Hôm nay | Học kỳ (04/10/2026) ─────────────────────── */
+.ct-tq-tabs { display: inline-flex; gap: 4px; padding: 4px; margin: -6px 0 22px; background: var(--ct-surface); border: 1px solid var(--ct-border); border-radius: 12px; }
+.ct-tq-tab { display: inline-flex; align-items: center; gap: 7px; height: 34px; padding: 0 16px; border-radius: 9px; font-size: 13px; font-weight: 600; color: var(--ct-text-muted); background: transparent; transition: background 150ms, color 150ms; }
+.ct-tq-tab:hover { color: var(--ct-text); background: var(--ct-hover); }
+.ct-tq-tab[data-active='true'] { background: var(--ct-active); color: var(--ct-accent-text); }
+/* Học kỳ là trang web nhúng: bỏ phần chừa thanh nav của web, khung cuộn riêng và nền
+   trang — nó cuộn CÙNG Tổng quan và đứng trên nền của app. */
+.ct-tq-hocky .ct-web-host { height: auto; overflow: visible; }
+.ct-tq-hocky .ct-web-host > .pt-16 { padding-top: 0; min-height: 0; background: transparent; }
+.ct-tq-hocky .ct-web-host > .pt-16 > .mx-auto { max-width: none; padding: 0 0 24px; }

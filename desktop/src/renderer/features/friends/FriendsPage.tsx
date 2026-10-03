@@ -23,13 +23,14 @@
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
-  Check, CloudOff, MessageSquare, RefreshCw, Search, UserCheck, UserMinus, UserPlus, Users, X,
+  Check, CloudOff, MessageSquare, RefreshCw, Search, Send, UserCheck, UserMinus, UserPlus, Users, X,
 } from 'lucide-react';
 import { useAppState } from '../../app-state';
 import { useSession } from '../../auth/session';
 import { OfflineUnavailableError, swr } from '../../offline/cache';
 import { useDich } from '../../i18n';
 import { Chu } from '../../i18n/Chu';
+import { datTruyVanCho } from '../../shims/next-navigation';
 
 interface Nguoi {
   id: number;
@@ -175,153 +176,188 @@ export function FriendsPage() {
     return 'chua';
   };
 
-  const TABS: Array<{ k: Tab; ten: string; so?: number }> = [
-    { k: 'ban', ten: 'Bạn bè', so: ban.length },
-    { k: 'den', ten: 'Lời mời', so: den.length },
-    { k: 'di', ten: 'Đã gửi', so: di.length },
-    { k: 'tim', ten: 'Tìm bạn' },
+  /** Mở thẳng cuộc trò chuyện với người này (messenger web đọc `?peer=`). */
+  const nhanTin = (n: Nguoi) => {
+    datTruyVanCho('/messages', `peer=${n.id}`);
+    navigate('/messages');
+  };
+
+  const dangOnline = ban.filter((n) => n.isOnline);
+  const MUC: Array<{ k: Tab | 'online'; ten: string; icon: React.ReactNode; so?: number }> = [
+    { k: 'ban', ten: 'Tất cả bạn bè', icon: <Users size={16} aria-hidden />, so: ban.length },
+    { k: 'online', ten: 'Đang online', icon: <span className="ct-bb2-cham" aria-hidden />, so: dangOnline.length },
+    { k: 'den', ten: 'Lời mời kết bạn', icon: <UserCheck size={16} aria-hidden />, so: den.length },
+    { k: 'di', ten: 'Đã gửi', icon: <Send size={16} aria-hidden />, so: di.length },
+    { k: 'tim', ten: 'Tìm bạn & gợi ý', icon: <UserPlus size={16} aria-hidden /> },
   ];
+  const [chiOnline, datChiOnline] = useState(false);
+  const mucDangChon = chiOnline && tab === 'ban' ? 'online' : tab;
+
+  /** Lọc nhanh trong danh sách bạn (khác ô "Tìm bạn" — cái đó tìm cả web). */
+  const [loc, datLoc] = useState('');
+  const banHienThi = (chiOnline ? dangOnline : ban).filter((n) => {
+    const q = loc.trim().toLowerCase();
+    return !q || ten(n).toLowerCase().includes(q) || n.username.toLowerCase().includes(q);
+  });
+
+  const tieuDe = { ban: chiOnline ? 'Đang online' : 'Tất cả bạn bè', den: 'Lời mời kết bạn', di: 'Lời mời đã gửi', tim: 'Tìm bạn & gợi ý' }[tab];
 
   return (
-    <div className="ct-page ct-bb" style={{ maxWidth: 780 }}>
-      <div className="ct-page-head" style={{ marginBottom: 12 }}>
-        <div>
+    <div className="ct-bb2">
+      {/* ── Cột trái: điều hướng ── */}
+      <aside className="ct-bb2-ray" aria-label={dich('Bạn bè')}>
+        <div className="ct-bb2-ray-dau">
           <h1>{dich('Bạn bè')}</h1>
-          <p className="ct-muted" style={{ margin: 0 }}>
-            {ban.length ? `${ban.length} người bạn` : 'Kết nối với người khác trên cuongthai.com'}
-          </p>
-        </div>
-        <button type="button" className="ct-btn ct-btn-ghost" onClick={() => void nap()} disabled={dangTai}>
-          <RefreshCw size={14} aria-hidden className={dangTai ? 'ct-spin' : undefined} /> Làm mới
-        </button>
-      </div>
-
-      <div className="ct-bb-tabs">
-        {TABS.map((t) => (
-          <button key={t.k} type="button" data-chon={tab === t.k} onClick={() => datTab(t.k)}>
-            {t.ten}
-            {/* Chỉ hiện số khi CÓ — một con số 0 cạnh mỗi tab là nhiễu. */}
-            {!!t.so && <span>{t.so}</span>}
+          <button type="button" className="ct-bb2-lammoi" onClick={() => void nap()} disabled={dangTai}
+            title={dich('Làm mới')} aria-label={dich('Làm mới')}>
+            <RefreshCw size={15} aria-hidden className={dangTai ? 'ct-spin' : undefined} />
           </button>
-        ))}
-      </div>
-
-      {loi && (
-        <div className="ct-notice" data-tone="warn" style={{ marginBottom: 12 }}>
-          <CloudOff size={15} aria-hidden /> <span>{loi}</span>
         </div>
-      )}
+        <nav className="ct-bb2-muc">
+          {MUC.map((m) => (
+            <button key={m.k} type="button" data-chon={mucDangChon === m.k}
+              onClick={() => {
+                if (m.k === 'online') { datTab('ban'); datChiOnline(true); }
+                else { datTab(m.k); datChiOnline(false); }
+              }}>
+              <span className="ct-bb2-muc-icon">{m.icon}</span>
+              <span className="ct-bb2-muc-ten">{dich(m.ten)}</span>
+              {!!m.so && <span className="ct-bb2-muc-so" data-noi={m.k === 'den'}>{m.so}</span>}
+            </button>
+          ))}
+        </nav>
+      </aside>
 
-      {/* ── Bạn bè ── */}
-      {tab === 'ban' && (
-        dangTai && ban.length === 0 ? <p className="ct-muted">{dich('Đang tải…')}</p>
-          : ban.length === 0 ? (
-            <div className="ct-empty">
-              <Users size={28} aria-hidden className="ct-empty-icon" />
-              <p><Chu cau="Chưa có người bạn nào. Sang tab **Tìm bạn** để bắt đầu." /></p>
+      {/* ── Vùng chính ── */}
+      <section className="ct-bb2-chinh">
+        <header className="ct-bb2-chinh-dau">
+          <div>
+            <h2>{dich(tieuDe)}</h2>
+            <p>
+              {tab === 'ban' && (ban.length ? `${banHienThi.length}/${ban.length} người` : dich('Kết nối với người khác trên cuongthai.com'))}
+              {tab === 'den' && `${den.length} lời mời đang chờ bạn trả lời`}
+              {tab === 'di' && `${di.length} lời mời chưa được trả lời`}
+              {tab === 'tim' && dich('Tìm theo tên, hoặc kết bạn với người được gợi ý')}
+            </p>
+          </div>
+          {(tab === 'ban' || tab === 'tim') && (
+            <div className="ct-bb2-tim">
+              <Search size={15} aria-hidden />
+              {tab === 'ban' ? (
+                <input value={loc} placeholder={dich('Lọc bạn bè…')} maxLength={80}
+                  onChange={(e) => datLoc(e.target.value)} />
+              ) : (
+                <input value={tuKhoa} autoFocus placeholder={dich('Tìm theo tên hoặc tên đăng nhập…')} maxLength={80}
+                  onChange={(e) => datTuKhoa(e.target.value)} />
+              )}
             </div>
+          )}
+        </header>
+
+        {loi && (
+          <div className="ct-notice" data-tone="warn" style={{ marginBottom: 14 }}>
+            <CloudOff size={15} aria-hidden /> <span>{loi}</span>
+          </div>
+        )}
+
+        {tab === 'ban' && (
+          dangTai && ban.length === 0 ? <p className="ct-muted">{dich('Đang tải…')}</p>
+            : banHienThi.length === 0 ? (
+              <Trong icon={<Users size={30} aria-hidden />}>
+                {ban.length === 0
+                  ? <Chu cau="Chưa có người bạn nào. Sang **Tìm bạn & gợi ý** để bắt đầu." />
+                  : chiOnline ? dich('Chưa có bạn nào đang online.') : `Không ai khớp “${loc.trim()}”.`}
+              </Trong>
+            ) : (
+              <ul className="ct-bb2-luoi">
+                {banHienThi.map((n) => (
+                  <The key={n.id} n={n} phu={n.since ? `Bạn từ ${new Date(n.since).toLocaleDateString('vi-VN')}` : undefined}>
+                    <button type="button" className="ct-btn" onClick={() => nhanTin(n)}>
+                      <MessageSquare size={14} aria-hidden /> Nhắn tin
+                    </button>
+                    <button type="button" className="ct-bb2-phu" onClick={() => void huyBan(n)}
+                      disabled={dangChay.has(n.id)} title={dich('Huỷ kết bạn')} aria-label={dich('Huỷ kết bạn')}>
+                      <UserMinus size={15} aria-hidden />
+                    </button>
+                  </The>
+                ))}
+              </ul>
+            )
+        )}
+
+        {tab === 'den' && (
+          den.length === 0 ? (
+            <Trong icon={<UserCheck size={30} aria-hidden />}>{dich('Không có lời mời nào đang chờ.')}</Trong>
           ) : (
-            <ul className="ct-bb-ds">
-              {ban.map((n) => (
-                <Dong key={n.id} n={n}>
-                  <button type="button" className="ct-btn ct-btn-ghost" onClick={() => navigate('/messages')}>
-                    <MessageSquare size={13} aria-hidden /> Nhắn tin
+            <ul className="ct-bb2-luoi">
+              {den.map((m) => (
+                <The key={m.friendshipId} n={m.user} phu={`Gửi ${new Date(m.createdAt).toLocaleDateString('vi-VN')}`}>
+                  <button type="button" className="ct-btn" onClick={() => void traLoi(m, true)} disabled={dangChay.has(m.user.id)}>
+                    <Check size={14} aria-hidden /> Đồng ý
                   </button>
-                  <button type="button" className="ct-bb-huy" onClick={() => void huyBan(n)}
-                    disabled={dangChay.has(n.id)} title={dich('Huỷ kết bạn')}>
-                    <UserMinus size={14} aria-hidden />
+                  <button type="button" className="ct-btn ct-btn-ghost" onClick={() => void traLoi(m, false)} disabled={dangChay.has(m.user.id)}>
+                    <X size={14} aria-hidden /> Từ chối
                   </button>
-                </Dong>
+                </The>
               ))}
             </ul>
           )
-      )}
+        )}
 
-      {/* ── Lời mời đến ── */}
-      {tab === 'den' && (
-        den.length === 0 ? (
-          <div className="ct-empty">
-            <UserCheck size={28} aria-hidden className="ct-empty-icon" />
-            <p>{dich('Không có lời mời nào đang chờ.')}</p>
-          </div>
-        ) : (
-          <ul className="ct-bb-ds">
-            {den.map((m) => (
-              <Dong key={m.friendshipId} n={m.user}>
-                <button type="button" className="ct-btn" onClick={() => void traLoi(m, true)} disabled={dangChay.has(m.user.id)}>
-                  <Check size={13} aria-hidden /> Đồng ý
-                </button>
-                <button type="button" className="ct-btn ct-btn-ghost" onClick={() => void traLoi(m, false)} disabled={dangChay.has(m.user.id)}>
-                  <X size={13} aria-hidden /> Từ chối
-                </button>
-              </Dong>
-            ))}
-          </ul>
-        )
-      )}
+        {tab === 'di' && (
+          di.length === 0 ? (
+            <Trong icon={<Send size={30} aria-hidden />}>{dich('Bạn chưa gửi lời mời nào.')}</Trong>
+          ) : (
+            <ul className="ct-bb2-luoi">
+              {di.map((m) => (
+                <The key={m.friendshipId} n={m.user} phu={dich('Đang chờ')}>
+                  <button type="button" className="ct-btn ct-btn-ghost" onClick={() => void rutLoiMoi(m)} disabled={dangChay.has(m.user.id)}>
+                    {dich('Thu hồi')}
+                  </button>
+                </The>
+              ))}
+            </ul>
+          )
+        )}
 
-      {/* ── Đã gửi ── */}
-      {tab === 'di' && (
-        di.length === 0 ? (
-          <div className="ct-empty">
-            <UserPlus size={28} aria-hidden className="ct-empty-icon" />
-            <p>{dich('Bạn chưa gửi lời mời nào.')}</p>
-          </div>
-        ) : (
-          <ul className="ct-bb-ds">
-            {di.map((m) => (
-              <Dong key={m.friendshipId} n={m.user}>
-                <span className="ct-bb-cho">{dich('Đang chờ')}</span>
-                <button type="button" className="ct-btn ct-btn-ghost" onClick={() => void rutLoiMoi(m)} disabled={dangChay.has(m.user.id)}>
-                  {dich('Thu hồi')}
-                </button>
-              </Dong>
-            ))}
-          </ul>
-        )
-      )}
-
-      {/* ── Tìm bạn ── */}
-      {tab === 'tim' && (
-        <>
-          <div className="ct-bb-tim">
-            <Search size={15} aria-hidden />
-            <input
-              value={tuKhoa}
-              placeholder={dich('Tìm theo tên hoặc tên đăng nhập…')}
-              maxLength={80}
-              onChange={(e) => datTuKhoa(e.target.value)}
-            />
-          </div>
-
-          {tuKhoa.trim().length >= 2 ? (
+        {tab === 'tim' && (
+          tuKhoa.trim().length >= 2 ? (
             dangTim ? <p className="ct-muted">{dich('Đang tìm…')}</p>
-              : ketQua?.length === 0 ? <p className="ct-muted">Không tìm thấy ai khớp “{tuKhoa.trim()}”.</p>
+              : ketQua?.length === 0 ? <Trong icon={<Search size={30} aria-hidden />}>Không tìm thấy ai khớp “{tuKhoa.trim()}”.</Trong>
                 : (
-                  <ul className="ct-bb-ds">
+                  <ul className="ct-bb2-luoi">
                     {(ketQua ?? []).filter((n) => n.id !== userId).map((n) => (
-                      <Dong key={n.id} n={n}>
+                      <The key={n.id} n={n}>
                         <NutKetBan n={n} qh={quanHe(n.id)} dang={dangChay.has(n.id)} onMoi={() => void moiKetBan(n)} />
-                      </Dong>
+                      </The>
                     ))}
                   </ul>
                 )
           ) : (
             <>
-              <p className="ct-bb-nhan">{dich('Gợi ý cho bạn')}</p>
+              <p className="ct-bb2-nhan">{dich('Gợi ý cho bạn')}</p>
               {goiY.length === 0 ? <p className="ct-muted">{dich('Chưa có gợi ý nào.')}</p> : (
-                <ul className="ct-bb-ds">
+                <ul className="ct-bb2-luoi">
                   {goiY.filter((n) => n.id !== userId).map((n) => (
-                    <Dong key={n.id} n={n}>
+                    <The key={n.id} n={n}>
                       <NutKetBan n={n} qh={quanHe(n.id)} dang={dangChay.has(n.id)} onMoi={() => void moiKetBan(n)} />
-                    </Dong>
+                    </The>
                   ))}
                 </ul>
               )}
             </>
-          )}
-        </>
-      )}
+          )
+        )}
+      </section>
+    </div>
+  );
+}
+
+function Trong({ icon, children }: { icon: React.ReactNode; children: React.ReactNode }) {
+  return (
+    <div className="ct-bb2-trong">
+      <span className="ct-bb2-trong-icon">{icon}</span>
+      <p>{children}</p>
     </div>
   );
 }
@@ -341,16 +377,22 @@ function NutKetBan({ n, qh, dang, onMoi }: {
   );
 }
 
-function Dong({ n, children }: { n: Nguoi; children: React.ReactNode }) {
+function The({ n, phu, children }: { n: Nguoi; phu?: string | undefined; children: React.ReactNode }) {
   const { dich } = useDich();
   return (
-    <li className="ct-bb-dong">
-      <Avatar n={n} />
-      <div className="ct-bb-dong-chu">
-        <strong>{ten(n)}</strong>
-        <span>@{n.username}{n.isOnline && <em className="ct-bb-online"> {dich('· đang online')}</em>}</span>
+    <li className="ct-bb2-the">
+      <div className="ct-bb2-the-dau">
+        <span className="ct-bb2-avt-boc">
+          <Avatar n={n} />
+          {n.isOnline && <span className="ct-bb2-online" title={dich('đang online')} />}
+        </span>
+        <div className="ct-bb2-the-chu">
+          <strong title={ten(n)}>{ten(n)}</strong>
+          <span>@{n.username}</span>
+          {phu && <small>{phu}</small>}
+        </div>
       </div>
-      <div className="ct-bb-nut">{children}</div>
+      <div className="ct-bb2-the-nut">{children}</div>
     </li>
   );
 }

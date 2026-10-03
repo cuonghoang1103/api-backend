@@ -2671,6 +2671,61 @@ code {
 
    KHÔNG đặt `background`: cây web tự sơn nền theo chủ đề của nó, đè nền của
    app lên sẽ lộ ra ở mọi khoảng nó chưa sơn tới. */
+/*
+ * CẦU NỐI MÀU web → app (04/10/2026).
+ *
+ * Mọi cây web dùng lại trong app (Ngoại ngữ, Học kỳ, Maker Lab, Lộ trình,
+ * CT Work…) tô màu bằng biến chủ đề CỦA WEB — `--bg-card`, `--text-primary`,
+ * `--border-color`, `--cat-*`… — khai ở `globals.css`, tệp mà app KHÔNG nạp.
+ * `var()` không giải được thì trình duyệt vứt cả khai báo: thẻ mất nền (lộ nền
+ * trang), chữ rơi về màu kế thừa, viền thành `currentColor` dày thô. Người dùng
+ * 04/10: "giao diện đang bị mờ bởi background và xấu lắm".
+ *
+ * Trước đây vá từng vùng (`.ct-hv-noidung`, `.ct-ghi-nhanh-host`) — mỗi trang mới
+ * port là một lần quên. Khai ở `:root` một lần: hộp thoại portal ra `<body>` cũng
+ * có màu, và tên biến không đụng token `--ct-*` của app. Ánh xạ sang token của
+ * app nên tự theo sáng/tối VÀ hợp tông với vỏ app thay vì xám của web.
+ */
+:root {
+  --bg-primary: var(--ct-bg);
+  --bg-card: var(--ct-surface);
+  --bg-surface: var(--ct-surface-2);
+  --bg-surface-hover: var(--ct-hover);
+  --bg-surface-active: var(--ct-active);
+  --bg-overlay: var(--ct-surface);
+  --bg-glass: color-mix(in srgb, var(--ct-surface) 94%, transparent);
+  --border-color: var(--ct-border);
+  --border-light: color-mix(in srgb, var(--ct-text) 10%, transparent);
+  --border-light-hover: color-mix(in srgb, var(--ct-text) 16%, transparent);
+  --text-primary: var(--ct-text);
+  --text-secondary: var(--ct-text-muted);
+  --text-muted: var(--ct-text-faint);
+  --accent-color: var(--ct-accent);
+  --accent-hover: var(--ct-accent-text);
+  --shadow-sm: var(--ct-shadow-sm);
+  --shadow-md: var(--ct-shadow-sm);
+  --shadow-lg: var(--ct-shadow);
+  --shadow-xl: var(--ct-shadow);
+  --font-nunito: 'Nunito';
+  /* Bảng màu kỹ năng của Ngoại ngữ — chép đúng giá trị web (đã đo tương phản). */
+  --cat-alphabet-bg: #EEEDFE; --cat-alphabet-fg: #26215C; --cat-alphabet-icon: #7F77DD;
+  --cat-vocab-bg: #E1F5EE; --cat-vocab-fg: #04342C; --cat-vocab-icon: #1c9b73;
+  --cat-grammar-bg: #FAECE7; --cat-grammar-fg: #4A1B0C; --cat-grammar-icon: #D85A30;
+  --cat-listening-bg: #FBEAF0; --cat-listening-fg: #4B1528; --cat-listening-icon: #D4537E;
+  --cat-speaking-bg: #E6F1FB; --cat-speaking-fg: #042C53; --cat-speaking-icon: #378ADD;
+  --cat-reading-bg: #FAEEDA; --cat-reading-fg: #412402; --cat-reading-icon: #ba7c1e;
+  --cat-ai-bg: #F3EAFD; --cat-ai-fg: #2E0A4F; --cat-ai-icon: #9333EA;
+}
+:root[data-ct-theme='dark'] {
+  --cat-alphabet-bg: #313040; --cat-alphabet-fg: #968fe3; --cat-alphabet-icon: #968fe3;
+  --cat-vocab-bg: #233631; --cat-vocab-fg: #3dac88; --cat-vocab-icon: #3dac88;
+  --cat-grammar-bg: #3d2c27; --cat-grammar-fg: #e07b59; --cat-grammar-icon: #e07b59;
+  --cat-listening-bg: #3d2b32; --cat-listening-fg: #dd799a; --cat-listening-icon: #dd799a;
+  --cat-speaking-bg: #273340; --cat-speaking-fg: #5b9fe3; --cat-speaking-icon: #5b9fe3;
+  --cat-reading-bg: #403626; --cat-reading-fg: #ef9f27; --cat-reading-icon: #ef9f27;
+  --cat-ai-bg: #342741; --cat-ai-fg: #b878f1; --cat-ai-icon: #b878f1;
+}
+
 .ct-web-host {
   /* Web khai --app-nav-h (chiều cao thanh điều hướng của WEB) ở globals.css; app
      không có thanh đó. Thiếu biến ⇒ `top: var(--app-nav-h)` và
@@ -13356,6 +13411,21 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   min-height: 0;
 }
 
+/*
+ * Tin nhắn TRÀN KHUNG (04/10/2026). Web đặt messenger trong cột `max-w-6xl` giữa
+ * trang — hợp tab trình duyệt, nhưng trong app nó thành một ô hẹp giữa hai mảng
+ * trống ("cứ hẹp hẹp ở giữa bé vậy rất khó nhìn", ảnh người dùng). App là cửa sổ
+ * làm việc: dùng hết bề ngang, viền mỏng quanh, chiều cao đúng khung.
+ */
+.ct-web-nhung .relative.mx-auto.max-w-6xl {
+  max-width: none;
+  height: 100% !important;
+  padding: 10px 14px 12px;
+}
+.ct-web-nhung > .relative.min-h-dvh.pt-16 { padding-top: 0; min-height: 0; }
+.ct-web-nhung .relative.mx-auto.max-w-6xl > header { margin-bottom: 8px; }
+.ct-web-nhung .relative.mx-auto.max-w-6xl > header h1 { font-size: 18px; }
+
 /* Mọi thứ bên trong đo theo khung app, không đo theo màn hình. */
 .ct-web-nhung :where([class*="dvh"], [class*="-screen"]) {
   max-height: 100%;
@@ -15240,3 +15310,77 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   min-height: 0;
   container: ctnoidung / inline-size;
 }
+
+/*
+ * CUỘN MƯỢT trong các cây web (04/10/2026).
+ *
+ * Người dùng: "lướt xuống hay kéo lên khi mới vào nó lag quá, giật giật đơ đơ".
+ * Đo bằng long-animation-frame trên app thật: Lộ trình có khung 160–250ms KHÔNG
+ * có mã nào chạy và style/layout ~2ms — thời gian nằm ở VẼ. Thủ phạm là
+ * `backdrop-blur` trên từng thẻ (16 thẻ, mỗi thẻ đọc lại và làm mờ phần nền phía
+ * sau ở MỌI khung cuộn) cộng các quầng `blur-[100px]` phủ nửa trang.
+ *
+ * Kính mờ trên một thẻ đặt trên NỀN PHẲNG không đổi gì cho mắt — phía sau nó
+ * chẳng có gì để làm mờ — mà vẫn trả nguyên cái giá. Tắt ở thẻ thường; GIỮ ở
+ * thanh dính/lớp nổi (`sticky`, `fixed`, hộp thoại), nơi có nội dung trôi qua bên
+ * dưới thật. Quầng sáng lớn: hạ `filter` thành bóng tròn mờ sẵn bằng gradient —
+ * cùng dáng, không phải làm mờ lại khi cuộn.
+ */
+.ct-web-host :is(.backdrop-blur-sm, .backdrop-blur, .backdrop-blur-md, .backdrop-blur-lg, .backdrop-blur-xl):not(.sticky, .fixed, [role='dialog']) {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+.ct-web-host :is(.blur-3xl, [class*='blur-[6'], [class*='blur-[7'], [class*='blur-[8'], [class*='blur-[9'], [class*='blur-[1']) {
+  filter: none;
+  -webkit-mask-image: radial-gradient(closest-side, #000 0%, transparent 100%);
+  mask-image: radial-gradient(closest-side, #000 0%, transparent 100%);
+}
+
+/* ── Bạn bè kiểu desktop (04/10/2026) ───────────────────────────────────
+   Người dùng kèm ảnh: "làm lại trang bạn bè cho đẹp kiểu desktop … full khung
+   hình đi sao cứ hẹp hẹp ở giữa". Hai cột: thanh điều hướng của chính trang
+   (đếm từng mục, lời mời có chấm nổi) + lưới thẻ dùng HẾT bề ngang. */
+.ct-bb2 { display: grid; grid-template-columns: 248px minmax(0, 1fr); height: 100%; min-height: 0; }
+.ct-bb2-ray { display: flex; flex-direction: column; gap: 14px; padding: 22px 14px; border-right: 1px solid var(--ct-border); background: color-mix(in srgb, var(--ct-surface) 55%, transparent); overflow-y: auto; }
+.ct-bb2-ray-dau { display: flex; align-items: center; justify-content: space-between; padding: 0 8px; }
+.ct-bb2-ray-dau h1 { margin: 0; font-size: 21px; font-weight: 700; letter-spacing: -.025em; }
+.ct-bb2-lammoi { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 9px; color: var(--ct-text-muted); }
+.ct-bb2-lammoi:hover { background: var(--ct-hover); color: var(--ct-text); }
+.ct-bb2-muc { display: flex; flex-direction: column; gap: 3px; }
+.ct-bb2-muc button { display: flex; align-items: center; gap: 11px; min-height: 40px; padding: 8px 10px; border-radius: 10px; font-size: 13.5px; color: var(--ct-text-muted); text-align: left; transition: background 140ms, color 140ms; }
+.ct-bb2-muc button:hover { background: var(--ct-hover); color: var(--ct-text); }
+.ct-bb2-muc button[data-chon='true'] { background: var(--ct-active); color: var(--ct-accent-text); font-weight: 650; }
+.ct-bb2-muc-icon { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 9px; background: var(--ct-surface-2); flex: 0 0 30px; }
+.ct-bb2-muc button[data-chon='true'] .ct-bb2-muc-icon { background: color-mix(in srgb, var(--ct-accent) 22%, transparent); }
+.ct-bb2-muc-ten { flex: 1; }
+.ct-bb2-muc-so { min-width: 22px; padding: 1px 7px; border-radius: 999px; font-size: 11.5px; font-weight: 650; text-align: center; background: var(--ct-surface-2); color: var(--ct-text-muted); font-variant-numeric: tabular-nums; }
+.ct-bb2-muc-so[data-noi='true'] { background: #ef4444; color: #fff; }
+.ct-bb2-cham { width: 9px; height: 9px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 0 3px #22c55e33; }
+.ct-bb2-chinh { min-width: 0; overflow-y: auto; padding: 24px 28px 48px; }
+.ct-bb2-chinh-dau { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-bottom: 20px; }
+.ct-bb2-chinh-dau h2 { margin: 0 0 4px; font-size: 19px; font-weight: 680; letter-spacing: -.02em; }
+.ct-bb2-chinh-dau p { margin: 0; font-size: 13px; color: var(--ct-text-muted); }
+.ct-bb2-tim { display: flex; align-items: center; gap: 8px; width: min(380px, 100%); height: 38px; padding: 0 12px; border: 1px solid var(--ct-border); border-radius: 10px; background: var(--ct-surface); color: var(--ct-text-faint); }
+.ct-bb2-tim:focus-within { border-color: var(--ct-accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ct-accent) 20%, transparent); }
+.ct-bb2-tim input { flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; color: var(--ct-text); font-size: 13.5px; }
+.ct-bb2-luoi { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(268px, 1fr)); gap: 14px; }
+.ct-bb2-the { display: flex; flex-direction: column; gap: 16px; padding: 18px; border: 1px solid var(--ct-border); border-radius: 16px; background: var(--ct-surface); transition: border-color 150ms, transform 150ms, box-shadow 150ms; }
+.ct-bb2-the:hover { border-color: color-mix(in srgb, var(--ct-accent) 45%, var(--ct-border)); transform: translateY(-2px); box-shadow: var(--ct-shadow-sm); }
+.ct-bb2-the-dau { display: flex; align-items: center; gap: 13px; min-width: 0; }
+.ct-bb2-avt-boc { position: relative; flex: 0 0 52px; }
+.ct-bb2-avt-boc .ct-bb-avt { width: 52px; height: 52px; font-size: 19px; }
+.ct-bb2-online { position: absolute; right: 1px; bottom: 1px; width: 13px; height: 13px; border-radius: 50%; background: #22c55e; border: 2.5px solid var(--ct-surface); }
+.ct-bb2-the-chu { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.ct-bb2-the-chu strong { font-size: 15px; font-weight: 650; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ct-bb2-the-chu span { font-size: 12.5px; color: var(--ct-text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ct-bb2-the-chu small { font-size: 11.5px; color: var(--ct-text-faint); }
+.ct-bb2-the-nut { display: flex; gap: 8px; align-items: center; }
+.ct-bb2-the-nut .ct-btn { flex: 1; justify-content: center; }
+.ct-bb2-phu { display: grid; place-items: center; width: 36px; height: 34px; border-radius: 9px; border: 1px solid var(--ct-border); color: var(--ct-text-muted); }
+.ct-bb2-phu:hover { color: var(--ct-err); border-color: color-mix(in srgb, var(--ct-err) 50%, var(--ct-border)); }
+.ct-bb2-nhan { margin: 0 0 12px; font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--ct-text-muted); }
+.ct-bb2-trong { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 70px 20px; text-align: center; color: var(--ct-text-muted); }
+.ct-bb2-trong-icon { display: grid; place-items: center; width: 64px; height: 64px; border-radius: 20px; background: var(--ct-surface-2); color: var(--ct-text-faint); }
+.ct-bb2-trong p { margin: 0; max-width: 360px; font-size: 13.5px; }
+@container (max-width: 760px) { .ct-bb2 { grid-template-columns: 1fr; } }
+@media (max-width: 900px) { .ct-bb2 { grid-template-columns: 200px minmax(0, 1fr); } }

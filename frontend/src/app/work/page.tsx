@@ -10,7 +10,7 @@ import { toast } from 'sonner';
 import { ChevronRight, Columns3, Compass, FolderKanban, Layers, Plus, RotateCcw, Users } from 'lucide-react';
 import { workApi, workError, type WorkspaceSummary } from '@/lib/work-api';
 import { wk } from '@/components/work/hooks';
-import { EmptyState, Popover, relativeTime, Spinner, useToggle } from '@/components/work/ui';
+import { EmptyState, Popover, relativeTime, Spinner, useToggle, PageLoading } from '@/components/work/ui';
 import { PageHeader, WorkspaceMark, WS_ROLE_LABEL } from '@/components/work/settings/shared';
 import CreateWorkspaceDialog from '@/components/work/workspace/CreateWorkspaceDialog';
 import MyWork from '@/components/work/MyWork';
@@ -275,7 +275,7 @@ function NewProjectButton({ workspaces, onNewWorkspace }: { workspaces: Workspac
 
 export default function WorkHomePage() {
   return (
-    <Suspense fallback={<div className="flex h-full items-center justify-center"><Spinner size={20} /></div>}>
+    <Suspense fallback={<PageLoading />}>
       <WorkspacesHome />
     </Suspense>
   );

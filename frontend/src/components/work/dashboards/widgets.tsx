@@ -69,8 +69,8 @@ const MY_ISSUES_JQL = 'assignee = currentUser() AND statusCategory != Done ORDER
 
 // ─── Màu ─────────────────────────────────────────────────────────
 
-const PALETTE = ['var(--w-accent)', 'var(--w-green)', 'var(--w-orange)', 'var(--w-blue)', 'var(--w-yellow)', 'var(--w-red)', '#9b51e0', '#64748b', '#0f9fb0', '#c2549d'];
-const CATEGORY_COLOR: Record<string, string> = { TODO: 'var(--w-text-3)', IN_PROGRESS: 'var(--w-accent)', DONE: 'var(--w-green)' };
+const PALETTE = ['var(--w-chart-1)', 'var(--w-chart-2)', 'var(--w-chart-3)', 'var(--w-chart-4)', 'var(--w-chart-5)', 'var(--w-chart-6)', 'var(--w-chart-7)', 'var(--w-chart-8)'];
+const CATEGORY_COLOR: Record<string, string> = { TODO: 'var(--w-status-todo)', IN_PROGRESS: 'var(--w-status-progress)', DONE: 'var(--w-status-done)' };
 
 function groupColor(g: StatsGroup, i: number, groupBy: GroupBy | undefined): string {
   if (g.key === 'none') return 'var(--w-border-strong)';
@@ -282,7 +282,7 @@ function BarWidget({ pid, jql, groupBy }: { pid: number; jql: string; groupBy: G
     <div className="w-full min-w-0" style={{ height }}>
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={data} layout="vertical" margin={{ top: 0, right: 16, bottom: 0, left: 0 }} barCategoryGap={6}>
-          <CartesianGrid stroke="var(--w-border)" horizontal={false} />
+          <CartesianGrid stroke="var(--w-chart-grid)" horizontal={false} />
           <XAxis type="number" allowDecimals={false} tick={axisTick} tickLine={false} axisLine={{ stroke: 'var(--w-border-strong)' }} />
           <YAxis
             type="category" dataKey="label" width={96} tick={axisTick} tickLine={false} axisLine={false}
@@ -319,7 +319,7 @@ function CreatedResolvedWidget({ pid, jql, days }: { pid: number; jql: string; d
       <div className="h-[200px] w-full min-w-0">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={q.data} margin={{ top: 6, right: 8, bottom: 0, left: -20 }}>
-            <CartesianGrid stroke="var(--w-border)" vertical={false} />
+            <CartesianGrid stroke="var(--w-chart-grid)" vertical={false} />
             <XAxis dataKey="day" tickFormatter={fmtDay} tick={axisTick} tickLine={false} axisLine={{ stroke: 'var(--w-border-strong)' }} minTickGap={24} />
             <YAxis allowDecimals={false} tick={axisTick} tickLine={false} axisLine={false} width={40} />
             <Tooltip content={<CountTooltip labelFormat={fmtDay} />} cursor={{ stroke: 'var(--w-border-strong)' }} />
@@ -363,14 +363,14 @@ function BurndownWidget({ pid, sprintId }: { pid: number; sprintId: number | nul
         <div className="h-[200px] w-full min-w-0">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={d.points} margin={{ top: 6, right: 8, bottom: 0, left: -12 }}>
-              <CartesianGrid stroke="var(--w-border)" vertical={false} />
+              <CartesianGrid stroke="var(--w-chart-grid)" vertical={false} />
               <XAxis dataKey="day" tickFormatter={fmtDay} tick={axisTick} tickLine={false} axisLine={{ stroke: 'var(--w-border-strong)' }} minTickGap={20} />
               <YAxis allowDecimals={false} tick={axisTick} tickLine={false} axisLine={false} width={44}
                 label={{ value: unitLabel(d.unit), angle: -90, position: 'insideLeft', offset: 18, fill: 'var(--w-text-3)', fontSize: 11 }} />
               <Tooltip content={<CountTooltip labelFormat={fmtDay} />} cursor={{ stroke: 'var(--w-border-strong)' }} />
               <Line type="linear" dataKey="ideal" name="Guideline" stroke="var(--w-text-3)" strokeDasharray="5 4" strokeWidth={1.5} dot={false} isAnimationActive={false} />
-              <Line type="stepAfter" dataKey="remaining" name="Remaining" stroke="var(--w-accent)" strokeWidth={2}
-                dot={d.points.filter((x) => x.remaining !== null).length < 3 ? { r: 3, fill: 'var(--w-accent)', strokeWidth: 0 } : false} isAnimationActive={false} />
+              <Line type="stepAfter" dataKey="remaining" name="Remaining" stroke="var(--w-chart-1)" strokeWidth={2}
+                dot={d.points.filter((x) => x.remaining !== null).length < 3 ? { r: 3, fill: 'var(--w-chart-1)', strokeWidth: 0 } : false} isAnimationActive={false} />
             </LineChart>
           </ResponsiveContainer>
         </div>

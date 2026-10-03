@@ -8,17 +8,19 @@
 
 import { useRef } from 'react';
 import type React from 'react';
-import { ChevronDown, Rows3, Tag, X } from 'lucide-react';
+import { ChevronDown, Rows3, Tag, Users, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import type { ProjectConfig } from '@/lib/work-api';
+import type { ProjectConfig, WorkTeam } from '@/lib/work-api';
 import { PickerList, Popover, useToggle } from '../ui';
 import { GROUP_OPTIONS, quickActive, EMPTY_QUICK, type GroupBy, type QuickFilters } from './grouping';
 
 const chip = (on: boolean) =>
   cn('w-btn w-btn-sm', on && '!border-[var(--w-accent-border)] !bg-[var(--w-accent-soft)] !text-[var(--w-accent-text)]');
 
-export default function BoardToolbar({ config, group, onGroup, quick, onQuick, shown, total, lanes, onCollapseAll, leading }: {
+export default function BoardToolbar({ config, group, onGroup, quick, onQuick, shown, total, lanes, onCollapseAll, leading, teams }: {
   config: ProjectConfig;
+  /** Bộ phận của không gian — chỉ truyền khi dự án bật mô-đun teams (S1). */
+  teams?: WorkTeam[];
   /** Bộ lọc của trang (tìm kiếm, avatar, Only my issues, Type) — gộp chung một hàng. */
   leading?: React.ReactNode;
   group: GroupBy;
@@ -35,11 +37,13 @@ export default function BoardToolbar({ config, group, onGroup, quick, onQuick, s
   const groupRef = useRef<HTMLButtonElement>(null);
   const labelMenu = useToggle();
   const labelRef = useRef<HTMLButtonElement>(null);
+  const teamMenu = useToggle();
+  const teamRef = useRef<HTMLButtonElement>(null);
   const cur = GROUP_OPTIONS.find((g) => g.value === group) ?? GROUP_OPTIONS[0];
   const set = (patch: Partial<QuickFilters>) => onQuick({ ...quick, ...patch });
 
   return (
-    <div className="flex shrink-0 flex-wrap items-center gap-1.5 border-b border-[var(--w-border)] px-4 py-1.5">
+    <div className="flex shrink-0 items-center gap-1.5 border-b border-[var(--w-border)] px-4 py-2 sm:flex-wrap max-sm:overflow-x-auto max-sm:[scrollbar-width:none] [&>*]:shrink-0">
       {leading}
       {leading && <span className="mx-1 hidden h-5 w-px bg-[var(--w-border)] sm:block" aria-hidden />}
       <button
@@ -78,7 +82,7 @@ export default function BoardToolbar({ config, group, onGroup, quick, onQuick, s
       )}
 
       <span className="mx-1 h-4 w-px bg-[var(--w-border)]" aria-hidden />
-      <span className="text-[11.5px] font-medium uppercase tracking-wide text-[var(--w-text-3)]">Quick filters</span>
+      <span className="text-[12px] font-medium text-[var(--w-text-3)] max-lg:sr-only">Quick filters</span>
       <button type="button" aria-pressed={quick.recent} className={chip(quick.recent)} onClick={() => set({ recent: !quick.recent })} title="Updated in the last 48 hours">
         Recently updated
       </button>
@@ -104,12 +108,31 @@ export default function BoardToolbar({ config, group, onGroup, quick, onQuick, s
           </Popover>
         </>
       )}
+      {teams && teams.length > 0 && (
+        <>
+          <button ref={teamRef} type="button" className={chip(quick.teams.length > 0)} onClick={teamMenu.toggle} aria-haspopup="listbox" aria-expanded={teamMenu.on}>
+            <Users size={12} /> Team{quick.teams.length > 0 && ` · ${quick.teams.length === 1 ? (teams.find((t) => t.id === quick.teams[0])?.key ?? 'None') : quick.teams.length}`} <ChevronDown size={12} className="opacity-60" />
+          </button>
+          <Popover open={teamMenu.on} onClose={teamMenu.close} anchorRef={teamRef} width={240}>
+            <PickerList
+              multi
+              options={[
+                { value: 0, label: 'No team' },
+                ...teams.map((t) => ({ value: t.id, label: t.name, hint: t.key, keywords: t.key, icon: <span className="h-2 w-2 rounded-full" style={{ background: t.color }} /> })),
+              ]}
+              selected={quick.teams}
+              onPick={(id) => set({ teams: quick.teams.includes(id) ? quick.teams.filter((x) => x !== id) : [...quick.teams, id] })}
+              placeholder="Filter by team…"
+            />
+          </Popover>
+        </>
+      )}
       {quickActive(quick) && (
         <button type="button" className="w-btn w-btn-ghost w-btn-sm" onClick={() => onQuick(EMPTY_QUICK)}>
           <X size={12} /> Clear quick filters
         </button>
       )}
-      <span className="ml-auto text-[11.5px] tabular text-[var(--w-text-3)]" title="Issues on this board, sub-tasks included">
+      <span className="ml-auto pl-2 text-[12px] tabular text-[var(--w-text-3)]" title="Issues on this board, sub-tasks included">
         {shown === total ? `${total} ${total === 1 ? 'issue' : 'issues'}` : `${shown} of ${total} issues`}
       </span>
     </div>

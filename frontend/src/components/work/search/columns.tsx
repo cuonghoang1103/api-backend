@@ -183,7 +183,7 @@ export const DEFAULT_COLUMNS: ColId[] = ['type', 'key', 'title', 'status', 'prio
 export function gridTemplates(cols: ColId[]) {
   const d = ['28px', ...cols.map((c) => COLUMNS[c].track)].join(' ');
   // Điện thoại: rãnh hẹp để tiêu đề còn chỗ (người chỉ còn avatar).
-  const narrow: Partial<Record<ColId, string>> = { type: '18px', key: '60px', status: '88px', assignee: '22px' };
+  const narrow: Partial<Record<ColId, string>> = { type: '18px', key: '60px', title: 'minmax(0,1fr)', status: '88px', assignee: '22px' };
   const m = ['20px', ...cols.filter((c) => COLUMNS[c].mobile).map((c) => narrow[c] ?? COLUMNS[c].track)].join(' ');
   const minWidth = 28 + cols.reduce((s, c) => s + COLUMNS[c].min + 10, 0) + 32;
   return { d, m, minWidth };

@@ -19,7 +19,7 @@ import {
   type ProjectConfig, type TimelineData, type TimelineItem,
 } from '@/lib/work-api';
 import { wk, type Lookups } from './hooks';
-import { EmptyState, IssueTypeIcon, PickerList, Popover, Spinner, UserAvatar, useToggle, type PickOption } from './ui';
+import { EmptyState, IssueTypeIcon, PickerList, Popover, UserAvatar, useToggle, type PickOption, PageLoading } from './ui';
 
 const DAY = 86_400_000;
 const ROW_H = 36;
@@ -319,7 +319,7 @@ export default function Timeline({ config, pid, lk, onOpen }: { config: ProjectC
     return n;
   });
 
-  if (q.isLoading) return <div className="flex h-full items-center justify-center"><Spinner size={20} /></div>;
+  if (q.isLoading) return <PageLoading />;
   if (q.error || !data) {
     return <EmptyState title="Could not load the timeline" body={workError(q.error)} action={<button type="button" className="w-btn" onClick={() => q.refetch()}>Try again</button>} />;
   }
@@ -333,7 +333,7 @@ export default function Timeline({ config, pid, lk, onOpen }: { config: ProjectC
     <div className="flex h-full min-h-0 flex-col" style={{ ['--tl-weekend' as string]: 'color-mix(in srgb, var(--w-text) 4%, transparent)' }}>
       {/* Thanh công cụ */}
       <div className="flex shrink-0 flex-wrap items-center gap-2 border-b border-[var(--w-border)] px-4 py-2">
-        <button type="button" onClick={() => setNarrowTree((v) => !v)} className={cn('w-btn w-btn-sm w-btn-icon', narrowTree && 'bg-[var(--w-active)]')} title={narrowTree ? 'Show issue titles' : 'Collapse the issue column'} aria-label="Toggle issue column">
+        <button type="button" onClick={() => setNarrowTree((v) => !v)} className={cn('w-btn w-btn-sm w-btn-icon', narrowTree && 'w-btn-on')} title={narrowTree ? 'Show issue titles' : 'Collapse the issue column'} aria-label="Toggle issue column">
           <PanelLeft size={13} />
         </button>
         <div className="inline-flex overflow-hidden rounded-[6px] border border-[var(--w-border-strong)]" role="group" aria-label="Zoom">
@@ -351,7 +351,7 @@ export default function Timeline({ config, pid, lk, onOpen }: { config: ProjectC
         </div>
         <button type="button" className="w-btn w-btn-sm" onClick={scrollToday}><Crosshair size={13} /> Today</button>
 
-        <button ref={peopleBtn} type="button" onClick={peoplePop.toggle} className={cn('w-btn w-btn-sm', people.length > 0 && 'bg-[var(--w-active)]')}>
+        <button ref={peopleBtn} type="button" onClick={peoplePop.toggle} className={cn('w-btn w-btn-sm', people.length > 0 && 'w-btn-on')}>
           <Filter size={12} /> Assignee{people.length > 0 && ` · ${people.length}`}
         </button>
         <Popover open={peoplePop.on} onClose={peoplePop.close} anchorRef={peopleBtn} width={240}>
@@ -365,7 +365,7 @@ export default function Timeline({ config, pid, lk, onOpen }: { config: ProjectC
         </Popover>
         {versionOptions.length > 0 && (
           <>
-            <button ref={versionBtn} type="button" onClick={versionPop.toggle} className={cn('w-btn w-btn-sm max-w-[180px]', versionId !== null && 'bg-[var(--w-active)]')}>
+            <button ref={versionBtn} type="button" onClick={versionPop.toggle} className={cn('w-btn w-btn-sm max-w-[180px]', versionId !== null && 'w-btn-on')}>
               <span className="truncate">{versionName ? `Version: ${versionName}` : 'Version'}</span> <ChevronDown size={12} className="shrink-0" />
             </button>
             <Popover open={versionPop.on} onClose={versionPop.close} anchorRef={versionBtn} width={240}>
@@ -396,7 +396,7 @@ export default function Timeline({ config, pid, lk, onOpen }: { config: ProjectC
                   Critical path: {data.criticalDays} day{data.criticalDays === 1 ? '' : 's'}
                 </span>
               )}
-              <button type="button" onClick={() => setShowCritical((v) => !v)} aria-pressed={showCritical} className={cn('w-btn w-btn-sm', showCritical && 'bg-[var(--w-active)]')}>
+              <button type="button" onClick={() => setShowCritical((v) => !v)} aria-pressed={showCritical} className={cn('w-btn w-btn-sm', showCritical && 'w-btn-on')}>
                 <Route size={13} /> <span className="hidden sm:inline">Show critical path</span>
               </button>
             </>
@@ -561,7 +561,7 @@ export default function Timeline({ config, pid, lk, onOpen }: { config: ProjectC
                   const left = xOf(s.start);
                   const width = Math.max((s.end - s.start + 1) * dw, 6);
                   const type = lk.types.get(it.typeId);
-                  const color = isEpic ? (type?.color ?? '#7c3aed') : (type?.color ?? 'var(--w-accent)');
+                  const color = isEpic ? (type?.color ?? 'var(--w-epic)') : (type?.color ?? 'var(--w-accent)');
                   const isCrit = showCritical && critical.ids.has(it.id);
                   const isConflict = conflictIds.has(it.id);
                   const dragging = drag?.id === it.id;

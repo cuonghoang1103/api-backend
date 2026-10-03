@@ -102,7 +102,7 @@ export default function SavedFilters({ config, activeId, query, onLoad, onSaved 
         ref={btnRef}
         type="button"
         onClick={pop.toggle}
-        className={cn('w-btn w-btn-sm gap-1', active && 'border-[var(--w-accent-border)] bg-[var(--w-accent-soft)] text-[var(--w-accent-text)] hover:!bg-[var(--w-accent-soft)]')}
+        className={cn('w-btn w-btn-sm gap-1', active && 'w-btn-on')}
         aria-haspopup="menu"
         aria-expanded={pop.on}
       >

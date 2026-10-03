@@ -438,7 +438,7 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
               ) : quota ? <QuotaChip quota={quota} /> : null}
             </div>
           </div>
-          <button type="button" className={cn('w-btn w-btn-ghost w-btn-icon w-btn-sm', view === 'history' && 'bg-[var(--w-active)]')} onClick={() => setView(view === 'history' ? 'chat' : 'history')} aria-label="Conversation history" title="Team conversations">
+          <button type="button" className={cn('w-btn w-btn-ghost w-btn-icon w-btn-sm', view === 'history' && 'w-btn-on')} onClick={() => setView(view === 'history' ? 'chat' : 'history')} aria-label="Conversation history" title="Team conversations">
             <History size={14} />
           </button>
           <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" onClick={newConversation} disabled={!!waiting} aria-label="New conversation" title="New conversation">

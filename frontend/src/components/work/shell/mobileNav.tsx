@@ -51,3 +51,41 @@ export function MobileNavButton() {
     </button>
   );
 }
+
+// ─── Sidebar thu gọn (≥md) ───────────────────────────────────────
+//
+// Thu gọn = thanh icon 60px. Người dùng bấm ⇒ nhớ lựa chọn (localStorage, có thể
+// ném lỗi ở cửa sổ riêng tư ⇒ bọc try). Chưa từng chọn ⇒ tự thu gọn khi cửa sổ
+// hẹp hơn 1100px (cửa sổ app desktop 820px vẫn còn ~760px cho board).
+
+const RAIL_KEY = 'ctwork.sidebar.collapsed';
+
+function readRail(): boolean | null {
+  try {
+    const v = window.localStorage.getItem(RAIL_KEY);
+    return v === null ? null : v === '1';
+  } catch { return null; }
+}
+
+interface RailState {
+  collapsed: boolean;
+  /** true khi người dùng đã tự chọn (khi đó không tự đổi theo bề ngang nữa). */
+  chosen: boolean;
+  init: () => void;
+  toggle: () => void;
+}
+
+export const useSidebarRail = create<RailState>((set, get) => ({
+  collapsed: false,
+  chosen: false,
+  init: () => {
+    const saved = readRail();
+    if (saved !== null) set({ collapsed: saved, chosen: true });
+    else set({ collapsed: window.innerWidth < 1100, chosen: false });
+  },
+  toggle: () => {
+    const next = !get().collapsed;
+    try { window.localStorage.setItem(RAIL_KEY, next ? '1' : '0'); } catch { /* bỏ qua */ }
+    set({ collapsed: next, chosen: true });
+  },
+}));

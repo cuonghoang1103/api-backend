@@ -20,6 +20,7 @@ import { CATEGORY_DOT, IssueTypeIcon, Spinner, WorkPortal } from './ui';
 import { searchHelp } from './help/content';
 import { openContextualHelp, openHelp } from './help/store';
 import { readHelpLang } from './help/HelpPanel';
+import { OPEN_PALETTE_EVENT } from './shell/HeaderTools';
 import { openAiPanel, type AiQuickRequest } from './ai/store';
 
 const ITEM =
@@ -51,8 +52,13 @@ export default function CommandPalette() {
         setOpen((v) => !v);
       }
     };
+    const onOpen = () => setOpen(true);
     document.addEventListener('keydown', onKey);
-    return () => document.removeEventListener('keydown', onKey);
+    window.addEventListener(OPEN_PALETTE_EVENT, onOpen);
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      window.removeEventListener(OPEN_PALETTE_EVENT, onOpen);
+    };
   }, []);
 
   if (!open) return null;
@@ -231,7 +237,7 @@ function Palette({ onClose }: { onClose: () => void }) {
                 className="h-12 min-w-0 flex-1 bg-transparent text-[14px] outline-none placeholder:text-[var(--w-text-3)]"
               />
               {searching && <Spinner size={14} />}
-              <kbd className="w-kbd hidden sm:inline-flex">esc</kbd>
+              <kbd className="w-kbd max-sm:!hidden">esc</kbd>
             </div>
 
             <Command.List className="max-h-[min(420px,55vh)] overflow-y-auto overscroll-contain p-1.5">

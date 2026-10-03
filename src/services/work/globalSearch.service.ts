@@ -87,7 +87,7 @@ export async function visibleProjects(userId: number): Promise<VisibleProject[]>
 async function batchContexts(userId: number, projects: VisibleProject[], known: string[], onMissing: (m: JqlMiss) => void) {
   const ids = projects.map((p) => p.id);
   const wsIds = [...new Set(projects.map((p) => p.workspace.id))];
-  const [statuses, types, labels, components, sprints, fields, members] = await Promise.all([
+  const [statuses, types, labels, components, sprints, fields, members, teams, stages] = await Promise.all([
     prisma.workStatus.findMany({ where: { workflow: { projectId: { in: ids } } }, select: { id: true, name: true, category: true, workflow: { select: { projectId: true } } } }),
     prisma.workIssueType.findMany({ where: { projectId: { in: ids } }, select: { id: true, key: true, name: true, projectId: true } }),
     prisma.workLabel.findMany({ where: { projectId: { in: ids } }, select: { id: true, name: true, projectId: true } }),
@@ -96,6 +96,8 @@ async function batchContexts(userId: number, projects: VisibleProject[], known: 
     prisma.workCustomField.findMany({ where: { projectId: { in: ids } }, select: { id: true, name: true, kind: true, options: true, projectId: true } }),
     // Người theo KHÔNG GIAN: `assignee = bob` ở dự án bob không vào được thì khớp rỗng, không sao.
     prisma.workMember.findMany({ where: { workspaceId: { in: wsIds } }, select: { workspaceId: true, user: { select: { id: true, username: true } } } }),
+    prisma.workTeam.findMany({ where: { workspaceId: { in: wsIds } }, select: { id: true, key: true, name: true, workspaceId: true } }),
+    prisma.workStage.findMany({ where: { projectId: { in: ids } }, select: { id: true, n: true, slug: true, name: true, projectId: true } }),
   ]);
   const by = <T, K>(rows: T[], key: (r: T) => K) => {
     const m = new Map<K, T[]>();
@@ -109,6 +111,8 @@ async function batchContexts(userId: number, projects: VisibleProject[], known: 
   const sp = by(sprints, (s) => s.projectId);
   const cf = by(fields, (f) => f.projectId);
   const mb = by(members, (m) => m.workspaceId);
+  const tm = by(teams, (t) => t.workspaceId);
+  const sg = by(stages, (x) => x.projectId);
   const now = new Date();
   return new Map<number, JqlContext>(projects.map((p) => [p.id, {
     projectKey: p.key, projectName: p.name, userId, now, knownProjects: known, onMissing,
@@ -119,6 +123,8 @@ async function batchContexts(userId: number, projects: VisibleProject[], known: 
     sprints: (sp.get(p.id) ?? []).map(({ id, name, state }) => ({ id, name, state })),
     customFields: (cf.get(p.id) ?? []).map((f) => ({ id: f.id, name: f.name, kind: f.kind, options: (f.options as Array<{ id: string; label: string }>) ?? [] })),
     members: (mb.get(p.workspace.id) ?? []).map((m) => m.user),
+    teams: (tm.get(p.workspace.id) ?? []).map(({ id, key, name }) => ({ id, key, name })),
+    stages: (sg.get(p.id) ?? []).map(({ id, n, slug, name }) => ({ id, n, slug, name })),
   }]));
 }
 

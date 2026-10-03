@@ -16,7 +16,7 @@ import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import {
   AlertOctagon, Bookmark, Bug, CheckSquare, ChevronsUp, ChevronUp, ChevronDown, ChevronsDown, Equal,
-  FileText, FlaskConical, Layers, SquareDashedBottom, X, Check, Search, SearchX,
+  FileText, FlaskConical, Inbox, Layers, SquareDashedBottom, X, Check, Search, SearchX,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { userName, type IssueTypeKey, type StatusCategory, type WorkUser } from '@/lib/work-api';
@@ -329,6 +329,19 @@ export function UserAvatar({ user, size = 22, className }: { user: Pick<WorkUser
   );
 }
 
+/** Ô chữ tắt màu cố định cho dự án (theo khoá dự án) — sidebar, thanh trên, lưới dự án. */
+export function ProjectMark({ k, size = 20, letters = 1 }: { k: string; size?: number; letters?: 1 | 2 }) {
+  return (
+    <span
+      aria-hidden="true"
+      style={{ background: avatarColor(k), width: size, height: size, fontSize: Math.round(size * (letters === 2 ? 0.38 : 0.52)) }}
+      className="inline-flex shrink-0 items-center justify-center rounded-[5px] font-bold leading-none tracking-[-0.02em] text-white shadow-[inset_0_0_0_1px_rgba(0,0,0,0.08)]"
+    >
+      {k.slice(0, letters)}
+    </span>
+  );
+}
+
 // ─── Loại thẻ, ưu tiên, trạng thái ───────────────────────────────
 
 const TYPE_ICON: Record<IssueTypeKey, typeof Bug> = {
@@ -346,7 +359,7 @@ export function IssueTypeIcon({ type, size = 14 }: { type: { key: string; color:
   return (
     <span
       title={type?.name}
-      style={{ background: type?.color ?? '#64748b', width: size + 2, height: size + 2 }}
+      style={{ background: type?.color ?? 'var(--w-chart-8)', width: size + 2, height: size + 2 }}
       className="inline-flex shrink-0 items-center justify-center rounded-[4px] text-white"
     >
       <Icon size={size - 3} strokeWidth={2.5} />
@@ -355,11 +368,11 @@ export function IssueTypeIcon({ type, size = 14 }: { type: { key: string; color:
 }
 
 export const PRIORITIES = [
-  { value: 1, label: 'Highest', color: 'var(--w-red)', Icon: ChevronsUp },
-  { value: 2, label: 'High', color: 'var(--w-orange)', Icon: ChevronUp },
-  { value: 3, label: 'Medium', color: 'var(--w-yellow)', Icon: Equal },
-  { value: 4, label: 'Low', color: 'var(--w-blue)', Icon: ChevronDown },
-  { value: 5, label: 'Lowest', color: 'var(--w-text-3)', Icon: ChevronsDown },
+  { value: 1, label: 'Highest', color: 'var(--w-prio-1)', Icon: ChevronsUp },
+  { value: 2, label: 'High', color: 'var(--w-prio-2)', Icon: ChevronUp },
+  { value: 3, label: 'Medium', color: 'var(--w-prio-3)', Icon: Equal },
+  { value: 4, label: 'Low', color: 'var(--w-prio-4)', Icon: ChevronDown },
+  { value: 5, label: 'Lowest', color: 'var(--w-prio-5)', Icon: ChevronsDown },
 ] as const;
 
 export function priorityOf(priority: number) {
@@ -379,17 +392,40 @@ export function PriorityIcon({ priority, size = 15, showLabel, className }: { pr
   );
 }
 
-/** Màu chấm theo nhóm trạng thái: chưa làm xám · đang làm xanh dương · xong xanh lá. */
+/** Màu theo nhóm trạng thái: chưa làm xám · đang làm xanh dương · xong xanh lá. */
 export const CATEGORY_DOT: Record<StatusCategory, string> = {
-  TODO: 'var(--w-text-3)',
-  IN_PROGRESS: 'var(--w-blue)',
-  DONE: 'var(--w-green)',
+  TODO: 'var(--w-status-todo)',
+  IN_PROGRESS: 'var(--w-status-progress)',
+  DONE: 'var(--w-status-done)',
 };
 
+/**
+ * Glyph trạng thái — hình + màu (không chỉ màu, cho người mù màu):
+ * vòng rỗng = chưa làm · vòng nửa đặc = đang làm · vòng đặc có dấu ✓ = xong.
+ */
+export function StatusGlyph({ category, size = 12, className }: { category: StatusCategory; size?: number; className?: string }) {
+  const c = CATEGORY_DOT[category];
+  return (
+    <svg width={size} height={size} viewBox="0 0 14 14" aria-hidden="true" className={cn('shrink-0', className)}>
+      {category === 'DONE' ? (
+        <>
+          <circle cx="7" cy="7" r="6.25" fill={c} />
+          <path d="M4.3 7.2 6.2 9l3.5-3.8" fill="none" stroke="var(--w-panel)" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+        </>
+      ) : (
+        <>
+          <circle cx="7" cy="7" r="5.75" fill="none" stroke={c} strokeWidth="1.6" />
+          {category === 'IN_PROGRESS' && <path d="M7 3.2a3.8 3.8 0 0 1 0 7.6Z" fill={c} />}
+        </>
+      )}
+    </svg>
+  );
+}
+
 const CATEGORY_STYLE: Record<StatusCategory, string> = {
-  TODO: 'bg-[var(--w-sunken)] text-[var(--w-text-2)] border-[var(--w-border-strong)]',
-  IN_PROGRESS: 'bg-[color-mix(in_srgb,var(--w-blue)_12%,transparent)] text-[var(--w-text)] border-[color-mix(in_srgb,var(--w-blue)_35%,transparent)]',
-  DONE: 'bg-[color-mix(in_srgb,var(--w-green)_12%,transparent)] text-[var(--w-text)] border-[color-mix(in_srgb,var(--w-green)_35%,transparent)]',
+  TODO: 'bg-[var(--w-sunken)] text-[var(--w-text-2)] border-[var(--w-border)]',
+  IN_PROGRESS: 'bg-[color-mix(in_srgb,var(--w-blue)_11%,transparent)] text-[var(--w-text)] border-[color-mix(in_srgb,var(--w-blue)_28%,transparent)]',
+  DONE: 'bg-[color-mix(in_srgb,var(--w-green)_11%,transparent)] text-[var(--w-text)] border-[color-mix(in_srgb,var(--w-green)_28%,transparent)]',
 };
 
 /** "In review" thay vì "IN REVIEW": viết hoa chữ đầu, giữ nguyên chữ viết tắt (QA, UAT…). */
@@ -410,9 +446,9 @@ export function StatusBadge({ status, className }: { status: { name: string; cat
   return (
     <span
       title={status.name}
-      className={cn('inline-flex h-[22px] max-w-full items-center gap-1.5 whitespace-nowrap rounded-full border px-2 text-[12px] font-medium leading-none', CATEGORY_STYLE[status.category], className)}
+      className={cn('inline-flex h-[22px] max-w-full items-center gap-1.5 whitespace-nowrap rounded-[6px] border px-1.5 pr-2 text-[12px] font-medium leading-none', CATEGORY_STYLE[status.category], className)}
     >
-      <span aria-hidden="true" className="inline-block h-[7px] w-[7px] shrink-0 rounded-full align-middle" style={{ background: CATEGORY_DOT[status.category] }} />
+      <StatusGlyph category={status.category} size={12} />
       <span className="min-w-0 truncate">{text}</span>
     </span>
   );
@@ -420,9 +456,9 @@ export function StatusBadge({ status, className }: { status: { name: string; cat
 
 export function LabelChip({ label }: { label: { name: string; color: string } }) {
   return (
-    <span className="inline-flex h-[20px] items-center gap-1 rounded-full border border-[var(--w-border-strong)] px-2 text-[11px] text-[var(--w-text-2)]">
-      <span className="h-1.5 w-1.5 rounded-full" style={{ background: label.color }} />
-      {label.name}
+    <span className="inline-flex h-[20px] max-w-[160px] items-center gap-1.5 rounded-[4px] bg-[var(--w-sunken)] px-1.5 text-[11px] font-medium text-[var(--w-text-2)] shadow-[inset_0_0_0_1px_var(--w-border)]">
+      <span className="h-2 w-2 shrink-0 rounded-[2px]" style={{ background: label.color }} />
+      <span className="truncate">{label.name}</span>
     </span>
   );
 }
@@ -430,8 +466,35 @@ export function LabelChip({ label }: { label: { name: string; color: string } })
 // ─── Nhỏ lẻ ──────────────────────────────────────────────────────
 
 export const Spinner = ({ size = 16 }: { size?: number }) => (
-  <span style={{ width: size, height: size }} className="inline-block animate-spin rounded-full border-2 border-[var(--w-border-strong)] border-t-[var(--w-accent)]" />
+  <span role="status" aria-label="Loading" style={{ width: size, height: size }} className="inline-block animate-spin rounded-full border-2 border-[var(--w-border-strong)] border-t-[var(--w-accent)]" />
 );
+
+/**
+ * Trạng thái đang tải của cả một vùng: khung chờ (skeleton) có hình dạng
+ * "một thanh tiêu đề + vài hàng" thay cho vòng quay trơ trọi giữa màn hình.
+ * Dùng chung cho mọi trang /work để chỗ nào cũng tải trông như nhau.
+ */
+export function PageLoading({ rows = 6, label = 'Loading…' }: { rows?: number; label?: string }) {
+  return (
+    <div role="status" aria-live="polite" className="flex h-full min-h-[200px] w-full flex-col gap-3 overflow-hidden p-5 md:p-6">
+      <span className="sr-only">{label}</span>
+      <div className="flex items-center gap-3" aria-hidden="true">
+        <span className="w-skel h-6 w-6 !rounded-full" />
+        <span className="w-skel h-4 w-[38%] max-w-[260px]" />
+        <span className="ml-auto w-skel h-7 w-20" />
+      </div>
+      <div className="mt-2 space-y-2.5" aria-hidden="true">
+        {Array.from({ length: rows }, (_, i) => (
+          <div key={i} className="flex items-center gap-3">
+            <span className="w-skel h-3.5 w-3.5 shrink-0 !rounded-[4px]" />
+            <span className="w-skel h-3.5 shrink-0" style={{ width: 52 }} />
+            <span className="w-skel h-3.5" style={{ width: `${[62, 48, 71, 55, 40, 66, 58, 45][i % 8]}%` }} />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 const NOT_FOUND_RE = /not found|unavailable|no access|does not exist/i;
 
@@ -452,13 +515,11 @@ export function EmptyState({ title, body, action, icon }: { title: string; body?
     </div>
   ) : undefined);
   return (
-    <div className="flex flex-col items-center justify-center px-6 py-16 text-center">
-      {(icon || notFound) && (
-        <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-full border border-[var(--w-border)] bg-[var(--w-sunken)] text-[var(--w-text-3)]">
-          {icon ?? <SearchX size={20} />}
-        </div>
-      )}
-      <div className="text-[16px] font-semibold">{title}</div>
+    <div className="flex flex-col items-center justify-center px-6 py-14 text-center md:py-20">
+      <div className="relative mb-4 flex h-12 w-12 items-center justify-center rounded-[12px] border border-[var(--w-border)] bg-[var(--w-sunken)] text-[var(--w-text-3)] shadow-[var(--w-shadow-card)]">
+        {icon ?? (notFound ? <SearchX size={20} /> : <Inbox size={20} />)}
+      </div>
+      <div className="text-[16px] font-semibold tracking-[-0.01em]">{title}</div>
       {text && <p className="mt-1.5 max-w-[440px] text-[14px] leading-relaxed text-[var(--w-text-2)]">{text}</p>}
       {act && <div className="mt-5">{act}</div>}
     </div>

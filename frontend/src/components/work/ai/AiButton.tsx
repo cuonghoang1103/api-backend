@@ -17,7 +17,7 @@ export default function AiButton({ config, issueNumber }: { config: ProjectConfi
       title="Ask AI"
     >
       <Sparkles size={14} className="text-[var(--w-accent-text)]" />
-      <span className="max-md:hidden">Ask AI</span>
+      <span className="max-lg:hidden">Ask AI</span>
     </button>
   );
 }

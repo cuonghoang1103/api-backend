@@ -10,7 +10,7 @@ import { useQuery } from '@tanstack/react-query';
 import { workApi } from '@/lib/work-api';
 import { wk } from './hooks';
 import IssueDetail from './IssueDetail';
-import { isTyping, Spinner, WorkPortal } from './ui';
+import { isTyping, WorkPortal, PageLoading } from './ui';
 
 export default function IssueDrawer({ pid, num, onClose, onOpenIssue }: {
   pid: number;
@@ -50,7 +50,7 @@ export default function IssueDrawer({ pid, num, onClose, onOpenIssue }: {
         {cfg ? (
           <IssueDetail pid={pid} num={current} config={cfg} onClose={onClose} onOpenIssue={open} variant="drawer" />
         ) : (
-          <div className="flex h-full items-center justify-center"><Spinner size={20} /></div>
+          <PageLoading />
         )}
       </div>
     </WorkPortal>

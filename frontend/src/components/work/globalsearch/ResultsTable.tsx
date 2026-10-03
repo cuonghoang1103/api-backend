@@ -44,7 +44,7 @@ export function ResultsHeader({ sort, onSort }: { sort: SortState | null; onSort
   return (
     <div
       role="row"
-      className={cn(GRID, 'sticky top-0 z-[1] hidden h-8 border-b border-[var(--w-border)] bg-[var(--w-panel)] px-4 text-[11px] font-medium uppercase tracking-wide text-[var(--w-text-3)] md:grid')}
+      className={cn(GRID, 'sticky top-0 z-[1] hidden h-9 border-b border-[var(--w-border)] bg-[var(--w-panel)] px-4 text-[12px] font-medium text-[var(--w-text-3)] md:grid')}
     >
       {COLS.map((c) => {
         const active = sort?.col === c.id;
@@ -57,7 +57,7 @@ export function ResultsHeader({ sort, onSort }: { sort: SortState | null; onSort
             onClick={() => onSort(c.id)}
             title={`Sort by ${c.label.toLowerCase()}`}
             className={cn(
-              'flex h-full min-w-0 items-center gap-1 uppercase tracking-wide transition-colors hover:text-[var(--w-text)]',
+              'flex h-full min-w-0 items-center gap-1 transition-colors hover:text-[var(--w-text)]',
               c.align === 'right' && 'justify-end',
               active && 'text-[var(--w-text)]',
             )}

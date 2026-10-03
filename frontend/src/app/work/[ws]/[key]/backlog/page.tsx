@@ -17,7 +17,7 @@ import GettingStartedCard from '@/components/work/onboarding/GettingStartedCard'
 import StartProjectButton from '@/components/work/onboarding/StartProjectButton';
 import ProjectHeader from '@/components/work/ProjectHeader';
 import { CREATE_ISSUE_EVENT, useLookups, useProject, useProjectRealtime, wk } from '@/components/work/hooks';
-import { EmptyState, isTyping, Spinner, UserAvatar } from '@/components/work/ui';
+import { EmptyState, isTyping, UserAvatar, PageLoading } from '@/components/work/ui';
 
 const EPIC_PANEL_KEY = 'work.backlog.epics';
 
@@ -106,7 +106,7 @@ function BacklogView({ config, pid, slug }: { config: ProjectConfig; pid: number
       </ProjectHeader>
 
       <div className="flex shrink-0 flex-wrap items-center gap-2 border-b border-[var(--w-border)] px-4 py-2">
-        <button type="button" onClick={toggleEpics} className={cn('w-btn w-btn-sm max-md:!hidden', epicPanel && 'bg-[var(--w-active)]')} title="Show epics">
+        <button type="button" onClick={toggleEpics} className={cn('w-btn w-btn-sm max-md:!hidden', epicPanel && 'w-btn-on')} title="Show epics">
           <PanelLeft size={13} /> Epics
         </button>
         <div className="relative">
@@ -170,7 +170,7 @@ function BacklogView({ config, pid, slug }: { config: ProjectConfig; pid: number
                   className={cn('mb-0.5 w-full rounded-[6px] px-2 py-1.5 text-left', epic === e.id ? 'bg-[var(--w-active)]' : 'hover:bg-[var(--w-hover)]')}
                 >
                   <div className="flex items-center gap-1.5 text-[13px]">
-                    <span className="h-2 w-2 shrink-0 rounded-[2px] bg-[#7c3aed]" />
+                    <span className="h-2 w-2 shrink-0 rounded-[2px] bg-[var(--w-epic)]" />
                     <span className={cn('min-w-0 flex-1 truncate', e.done && 'text-[var(--w-text-3)] line-through')}>{e.title}</span>
                   </div>
                   <div className="mt-1.5 flex items-center gap-2">
@@ -189,7 +189,7 @@ function BacklogView({ config, pid, slug }: { config: ProjectConfig; pid: number
           {/* Danh sách "Getting started" nằm trong vùng cuộn để không chiếm chỗ cố định. */}
           <GettingStartedCard config={config} slug={slug} onCreateIssue={config.permissions.createIssues ? () => setCreateOpen(true) : undefined} className="mx-4 mt-3" />
           {backlog.isLoading ? (
-            <div className="flex h-full items-center justify-center"><Spinner size={20} /></div>
+            <PageLoading />
           ) : backlog.error ? (
             <EmptyState title="Could not load the backlog" body={workError(backlog.error)} action={<button type="button" className="w-btn" onClick={() => backlog.refetch()}>Try again</button>} />
           ) : data ? (
@@ -211,7 +211,7 @@ function BacklogView({ config, pid, slug }: { config: ProjectConfig; pid: number
 
 export default function BacklogPage() {
   return (
-    <Suspense fallback={<div className="flex h-full items-center justify-center"><Spinner size={20} /></div>}>
+    <Suspense fallback={<PageLoading />}>
       <Inner />
     </Suspense>
   );
@@ -220,7 +220,7 @@ export default function BacklogPage() {
 function Inner() {
   const params = useParams<{ ws: string; key: string }>();
   const { pid, config, isLoading, error } = useProject(params.ws, params.key);
-  if (isLoading) return <div className="flex h-full items-center justify-center"><Spinner size={20} /></div>;
+  if (isLoading) return <PageLoading />;
   if (error || !config || !pid) return <EmptyState title="Project not found" body={error ? workError(error) : 'It may have been deleted, or you do not have access.'} action={<StartProjectButton label="Start a new project" />} />;
   return <BacklogView config={config} pid={pid} slug={params.ws} />;
 }

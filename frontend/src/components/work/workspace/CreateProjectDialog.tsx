@@ -1,8 +1,11 @@
 'use client';
 
 /**
- * Tạo dự án — trình hướng dẫn 2 bước:
- *   1. Chọn mẫu (thẻ có biểu tượng, một dòng mô tả, "Best for …").
+ * Tạo dự án — trình hướng dẫn:
+ *   0. Chọn LOẠI dự án (lớp studio S1): Personal · School · Software · Client —
+ *      mỗi loại kèm mô-đun mặc định (chỉ Client bật Teams/Stages/Approvals/Handoffs)
+ *      và một mẫu gợi ý ⇒ chọn loại là sang thẳng bước đặt tên.
+ *   1. (tuỳ chọn) Đổi mẫu (thẻ có biểu tượng, một dòng mô tả, "Best for …").
  *   2. Tên + mã (tự sinh từ tên) + "Add sample data" (mặc định BẬT cho dự án đầu tiên).
  * Không truyền workspaceId (người mới chưa có không gian) ⇒ tự dùng không gian
  * đầu tiên được phép tạo dự án, hoặc lặng lẽ tạo "<Tên>'s workspace" — người
@@ -14,11 +17,13 @@ import { useRouter } from 'next/navigation';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import {
-  ArrowLeft, Briefcase, Building2, Check, ChevronDown, ChevronRight, FlaskConical, GraduationCap, ListChecks, Square, type LucideIcon,
+  ArrowLeft, Briefcase, Building2, Check, ChevronDown, ChevronRight, Code2, FlaskConical, GraduationCap, ListChecks, Square, User, type LucideIcon,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuthStore } from '@/store/authStore';
-import { workApi, workError, type ProjectTemplate, type ProjectType } from '@/lib/work-api';
+import { workApi, workError, type ModuleMap, type ProjectKind, type ProjectTemplate, type ProjectType, type StudioModule } from '@/lib/work-api';
+import { KIND_INFO, KINDS, S1_MODULES } from '../studio/shared';
+import { Switch } from '../settings/shared';
 import { wk } from '../hooks';
 import { Dialog, Field, Spinner } from '../ui';
 import { Select } from '../settings/shared';
@@ -41,6 +46,13 @@ export const TEMPLATES: TemplateCard[] = [
   { key: 'COMPANY', name: 'Team project', body: 'Code review and QA columns before Done.', bestFor: 'Product teams at work', type: 'SCRUM', icon: Building2, color: '#7c3aed' },
   { key: 'BLANK', name: 'Blank project', body: 'To Do, In Progress, Done. Configure the rest yourself.', bestFor: 'Anything else', type: 'SCRUM', icon: Square, color: '#64748b' },
 ];
+
+const KIND_ICON: Record<ProjectKind, LucideIcon> = { PERSONAL: User, SCHOOL: GraduationCap, SOFTWARE: Code2, CLIENT: Briefcase };
+/** Mẫu gợi ý cho từng loại (đổi được ở bước mẫu). */
+const KIND_TEMPLATE: Record<ProjectKind, ProjectTemplate> = { PERSONAL: 'BLANK', SCHOOL: 'SWP391', SOFTWARE: 'COMPANY', CLIENT: 'FREELANCE' };
+/** Mẫu ⇒ loại (khớp kindFromTemplate ở backend) khi mở thẳng bằng initialTemplate. */
+const TEMPLATE_KIND: Record<ProjectTemplate, ProjectKind> = { SWR302: 'SCHOOL', SWT301: 'SCHOOL', SWP391: 'SCHOOL', FREELANCE: 'CLIENT', BLANK: 'SOFTWARE', COMPANY: 'SOFTWARE' };
+const modulesFor = (k: ProjectKind): Partial<ModuleMap> => Object.fromEntries(S1_MODULES.map((m) => [m.key, KIND_INFO[k].modules.includes(m.key)]));
 
 export const PROJECT_KEY_RE = /^[A-Z][A-Z0-9]{1,9}$/;
 
@@ -76,7 +88,9 @@ export default function CreateProjectDialog({
   const router = useRouter();
   const qc = useQueryClient();
   const me = useAuthStore((s) => s.user);
-  const [step, setStep] = useState<1 | 2>(1);
+  const [step, setStep] = useState<0 | 1 | 2>(0);
+  const [kind, setKind] = useState<ProjectKind>('SCHOOL');
+  const [modules, setModules] = useState<Partial<ModuleMap>>({});
   const [template, setTemplate] = useState<ProjectTemplate>('SWP391');
   const [name, setName] = useState('');
   const [key, setKey] = useState('');
@@ -94,7 +108,10 @@ export default function CreateProjectDialog({
 
   useEffect(() => {
     if (!open) return;
-    setStep(initialTemplate ? 2 : 1);
+    setStep(initialTemplate ? 2 : 0);
+    const k0 = initialTemplate ? TEMPLATE_KIND[initialTemplate] : 'SCHOOL';
+    setKind(k0);
+    setModules(modulesFor(k0));
     setTemplate(initialTemplate ?? 'SWP391');
     setName(''); setKey(''); setKeyTouched(false);
     setType(TEMPLATES.find((t) => t.key === (initialTemplate ?? 'SWP391'))?.type ?? 'SCRUM');
@@ -121,6 +138,7 @@ export default function CreateProjectDialog({
       const ws = await ensureWorkspace();
       const p = await workApi.createProject(ws.id, {
         name: name.trim(), key, type, template, visibility, description: description.trim() || null,
+        kind, modules,
       });
       let sampled = 0;
       if (sample) {
@@ -148,10 +166,59 @@ export default function CreateProjectDialog({
     setType(t.type);
     setStep(2);
   };
+  const pickKind = (k: ProjectKind) => {
+    setKind(k);
+    setModules(modulesFor(k));
+    const t = TEMPLATES.find((x) => x.key === KIND_TEMPLATE[k])!;
+    setTemplate(t.key);
+    setType(t.type);
+    setStep(2);
+  };
+  const onModules = S1_MODULES.filter((m) => modules[m.key]);
 
   return (
-    <Dialog open={open} onClose={onClose} title={step === 1 ? 'Create project · choose a template' : 'Create project · name it'} width={660}>
-      {step === 1 ? (
+    <Dialog open={open} onClose={onClose} title={step === 0 ? 'Create project · what kind of project?' : step === 1 ? 'Create project · choose a template' : 'Create project · name it'} width={660}>
+      {step === 0 ? (
+        <div>
+          <p className="mb-3 text-[13px] text-[var(--w-text-2)]">
+            The type decides which modules start on. Everything can be changed later in Project settings → Project type &amp; modules.
+          </p>
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2" role="radiogroup" aria-label="Project type">
+            {KINDS.map((k) => {
+              const Icon = KIND_ICON[k];
+              const info = KIND_INFO[k];
+              return (
+                <button
+                  key={k}
+                  type="button"
+                  role="radio"
+                  aria-checked={kind === k}
+                  onClick={() => pickKind(k)}
+                  className={cn(
+                    'group relative flex gap-3 rounded-[8px] border px-3 py-3 text-left transition-colors',
+                    kind === k ? 'border-[var(--w-accent-border)] bg-[var(--w-accent-soft)]' : 'border-[var(--w-border-strong)] hover:bg-[var(--w-hover)]',
+                  )}
+                >
+                  <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-[7px] bg-[var(--w-sunken)] text-[var(--w-text-2)]"><Icon size={16} /></span>
+                  <span className="min-w-0 flex-1 pr-4">
+                    <span className="block text-[13px] font-medium">{info.label}</span>
+                    <span className="mt-0.5 block text-[12px] leading-snug text-[var(--w-text-2)]">{info.body}</span>
+                    <span className="mt-1.5 flex flex-wrap gap-1">
+                      {info.modules.length ? info.modules.map((m) => (
+                        <span key={m} className="rounded-[4px] bg-[var(--w-accent-soft)] px-1.5 text-[11px] font-medium leading-[18px] text-[var(--w-accent-text)]">{S1_MODULES.find((x) => x.key === m)?.label}</span>
+                      )) : <span className="text-[11px] text-[var(--w-text-3)]">No extra modules</span>}
+                    </span>
+                  </span>
+                  <ChevronRight size={14} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[var(--w-text-3)] opacity-0 transition-opacity group-hover:opacity-100" />
+                </button>
+              );
+            })}
+          </div>
+          <div className="mt-4 flex justify-end">
+            <button type="button" className="w-btn" onClick={onClose}>Cancel</button>
+          </div>
+        </div>
+      ) : step === 1 ? (
         <div>
           <p className="mb-3 text-[13px] text-[var(--w-text-2)]">
             Templates set up columns, issue types and settings for you. You can change everything later.
@@ -184,7 +251,8 @@ export default function CreateProjectDialog({
               );
             })}
           </div>
-          <div className="mt-4 flex justify-end">
+          <div className="mt-4 flex justify-end gap-2">
+            <button type="button" className="w-btn mr-auto" onClick={() => setStep(2)}><ArrowLeft size={13} /> Back</button>
             <button type="button" className="w-btn" onClick={onClose}>Cancel</button>
           </div>
         </div>
@@ -202,8 +270,14 @@ export default function CreateProjectDialog({
               <span className="block text-[13px] font-medium">{picked.name}</span>
               <span className="block truncate text-[11px] text-[var(--w-text-3)]">Best for: {picked.bestFor}</span>
             </span>
-            <span className="flex shrink-0 items-center gap-1 text-[12px] text-[var(--w-accent-text)]"><ArrowLeft size={12} /> Change</span>
+            <span className="flex shrink-0 items-center gap-1 text-[12px] text-[var(--w-accent-text)]">Change template</span>
           </button>
+          <p className="-mt-1 mb-3 flex flex-wrap items-center gap-x-1.5 text-[12px] text-[var(--w-text-3)]">
+            <span>Type: <b className="font-medium text-[var(--w-text-2)]">{KIND_INFO[kind].label}</b></span>
+            <span aria-hidden="true">·</span>
+            <span>{onModules.length ? `Modules: ${onModules.map((m) => m.label).join(', ')}` : 'No extra modules'}</span>
+            <button type="button" className="text-[var(--w-accent-text)] hover:underline" onClick={() => setStep(0)}>Change type</button>
+          </p>
 
           <div className="grid grid-cols-1 gap-x-3 sm:grid-cols-[1fr_160px]">
             <Field label="Project name">
@@ -295,11 +369,24 @@ export default function CreateProjectDialog({
               <Field label="Description (optional)">
                 <textarea className="w-input" rows={2} value={description} maxLength={5000} onChange={(e) => setDescription(e.target.value)} />
               </Field>
+              <Field label="Modules">
+                <ul className="divide-y divide-[var(--w-border)] rounded-[8px] border border-[var(--w-border)]">
+                  {S1_MODULES.map((m) => (
+                    <li key={m.key} className="flex items-center gap-3 px-3 py-2">
+                      <span className="min-w-0 flex-1">
+                        <span className="block text-[13px] font-medium">{m.label}</span>
+                        <span className="block text-[12px] leading-snug text-[var(--w-text-2)]">{m.body}</span>
+                      </span>
+                      <Switch checked={!!modules[m.key]} onChange={(v) => setModules((x) => ({ ...x, [m.key as StudioModule]: v }))} label={`${m.label} module`} />
+                    </li>
+                  ))}
+                </ul>
+              </Field>
             </div>
           )}
 
           <div className="mt-2 flex items-center justify-end gap-2">
-            <button type="button" className="w-btn mr-auto" onClick={() => setStep(1)}>
+            <button type="button" className="w-btn mr-auto" onClick={() => setStep(0)}>
               <ArrowLeft size={13} /> Back
             </button>
             <button type="button" className="w-btn" onClick={onClose}>Cancel</button>

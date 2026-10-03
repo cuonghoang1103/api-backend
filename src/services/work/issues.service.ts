@@ -12,14 +12,14 @@ import {
   getSignedDownloadUrl, getSignedUploadUrl, headObject, deleteObject,
 } from '../../config/r2.js';
 import { getStorageProvider } from '../../storage/StorageProvider.js';
-import { BadRequestError, ForbiddenError, NotFoundError } from '../../middleware/errorHandler.js';
+import { AppError, BadRequestError, ForbiddenError, NotFoundError } from '../../middleware/errorHandler.js';
 import { displayName, PUBLIC_USER } from './common.js';
 import type { IssueTypeKey, LinkType } from './constants.js';
 import { emitWorkEvent, projectRoom, type WorkActor } from './events.js';
 import { getIO } from '../../socket/messaging.socket.js';
 import { DEFAULT_TEMPLATE_NAMES, defaultIssueTemplate, type IssueTemplateDoc } from './templates.js';
 import { applyIssueChange, createIssue, moveIssue, type IssuePatch, type MoveInput } from './issueChange.js';
-import { canDeleteIssue, canModifyComment, requireProject, type ProjectAccess } from './permissions.js';
+import { canDeleteIssue, canModifyComment, loadProjectAccess, requireProject, type ProjectAccess } from './permissions.js';
 import { tiptapToText } from './tiptapText.js';
 
 const userActor = (userId: number): WorkActor => ({ kind: 'USER', userId });
@@ -34,6 +34,7 @@ const actorOf = (userId: number, via: Via = 'USER'): WorkActor => ({ kind: via, 
 /** Trường của một thẻ trên board/danh sách — gọn, không mô tả. */
 export const CARD_SELECT = {
   id: true, number: true, title: true, typeId: true, statusId: true, parentId: true, sprintId: true, fixVersionId: true,
+  teamId: true, stageId: true,
   priority: true, assigneeId: true, reporterId: true, storyPoints: true, dueDate: true, rank: true, version: true,
   resolvedAt: true, createdAt: true, updatedAt: true,
   labels: { select: { labelId: true } },
@@ -69,6 +70,10 @@ export interface IssueFilters {
   /** 0 = chưa giao cho ai. */
   assigneeIds?: number[];
   labelIds?: number[];
+  /** Bộ phận (lớp studio). 0 = chưa có bộ phận. */
+  teamIds?: number[];
+  /** Giai đoạn (lớp studio). */
+  stageId?: number;
   /** số = một sprint · 'backlog' = chưa vào sprint · 'open' = mọi sprint chưa đóng. */
   sprint?: number | 'backlog' | 'open';
   parentId?: number;
@@ -91,6 +96,11 @@ export async function listIssues(userId: number, projectId: number, f: IssueFilt
     and.push({ OR: [...(ids.length ? [{ assigneeId: { in: ids } }] : []), ...(f.assigneeIds.includes(0) ? [{ assigneeId: null }] : [])] });
   }
   if (f.labelIds?.length) and.push({ labels: { some: { labelId: { in: f.labelIds } } } });
+  if (f.teamIds?.length) {
+    const ids = f.teamIds.filter((x) => x > 0);
+    and.push({ OR: [...(ids.length ? [{ teamId: { in: ids } }] : []), ...(f.teamIds.includes(0) ? [{ teamId: null }] : [])] });
+  }
+  if (f.stageId) and.push({ stageId: f.stageId });
   if (f.sprint === 'backlog') and.push({ sprintId: null });
   else if (f.sprint === 'open') and.push({ sprint: { state: { not: 'CLOSED' } } });
   else if (typeof f.sprint === 'number') and.push({ sprintId: f.sprint });
@@ -125,6 +135,8 @@ export async function listIssues(userId: number, projectId: number, f: IssueFilt
   return { items, total, nextCursor: hasMore ? items[items.length - 1].rank : null };
 }
 
+export const BOARD_LIMIT = 2000;
+
 /**
  * Board: Scrum lấy sprint đang chạy (hoặc sprint chỉ định); Kanban lấy mọi
  * thẻ chưa xong + thẻ xong trong 14 ngày gần nhất (cột Done không phình vô hạn).
@@ -151,8 +163,12 @@ export async function getBoard(userId: number, projectId: number, sprintId?: num
     where.OR = recentOrOpen;
     fallback = project.type !== 'KANBAN';
   }
-  const rows = await prisma.workIssue.findMany({ where, orderBy: [{ rank: 'asc' }, { id: 'asc' }], take: 2000, select: CARD_SELECT });
-  return { mode: project.type, sprint, fallback, issues: rows.map(toCard) };
+  // Trần 2000 thẻ (board vẽ hết trong một lượt). Vượt trần thì KHÔNG im lặng nữa:
+  // trả `truncated` + `total` để giao diện báo "đang hiện 2000/N, lọc bớt".
+  const rows = await prisma.workIssue.findMany({ where, orderBy: [{ rank: 'asc' }, { id: 'asc' }], take: BOARD_LIMIT + 1, select: CARD_SELECT });
+  const truncated = rows.length > BOARD_LIMIT;
+  const total = truncated ? await prisma.workIssue.count({ where }) : rows.length;
+  return { mode: project.type, sprint, fallback, issues: rows.slice(0, BOARD_LIMIT).map(toCard), truncated, total, limit: BOARD_LIMIT };
 }
 
 export async function getIssueDetail(userId: number, projectId: number, number: number) {
@@ -178,7 +194,7 @@ export async function getIssueDetail(userId: number, projectId: number, number: 
       watchers: { select: { userId: true } },
     },
   });
-  if (!issue) throw new NotFoundError('Issue not found');
+  if (!issue) return throwIfMoved(userId, projectId, number);
   const { linksOut, linksIn, watchers, components, ...rest } = issue;
   const brief = (i: { id: number; number: number; title: string; statusId: number; typeId: number; project: { key: string } }) => ({
     id: i.id, key: `${i.project.key}-${i.number}`, number: i.number, title: i.title, statusId: i.statusId, typeId: i.typeId,
@@ -196,6 +212,25 @@ export async function getIssueDetail(userId: number, projectId: number, number: 
     isWatching: watchers.some((w) => w.userId === userId),
     canDelete: canDeleteIssue(access.role, userId, issue.reporterId),
   };
+}
+
+/**
+ * Thẻ không có ở (dự án, số) này: nếu nó đã CHUYỂN sang dự án khác (bảng mã cũ)
+ * và người xem vào được dự án mới ⇒ 404 WORK_ISSUE_MOVED kèm mã mới để giao
+ * diện tự chuyển hướng. Không vào được dự án mới ⇒ 404 thường (không lộ gì).
+ */
+async function throwIfMoved(userId: number, projectId: number, number: number): Promise<never> {
+  const alias = await prisma.workIssueAlias.findUnique({
+    where: { uk_work_issue_alias: { projectId, number } },
+    select: { issue: { select: { projectId: true, number: true, deletedAt: true, project: { select: { key: true, deletedAt: true } } } } },
+  });
+  const to = alias?.issue;
+  if (to && !to.deletedAt && !to.project.deletedAt && (await loadProjectAccess(userId, to.projectId))) {
+    throw new AppError(`This issue moved to ${to.project.key}-${to.number}`, 404, 'WORK_ISSUE_MOVED', {
+      projectId: to.projectId, key: `${to.project.key}-${to.number}`, number: to.number,
+    });
+  }
+  throw new NotFoundError('Issue not found');
 }
 
 function pickDetail(r: Record<string, unknown>) {
@@ -219,7 +254,7 @@ export interface CreateIssueBody extends Omit<IssuePatch, 'statusId'> {
 export async function createIssueAs(userId: number, projectId: number, body: CreateIssueBody, via: Via = 'USER') {
   const access = await requireProject(userId, projectId, 'issue.create');
   // Khách hàng tạo thẻ (báo lỗi, gửi yêu cầu) nhưng không tự giao việc hay xếp sprint.
-  if (access.role === 'CLIENT' && (body.assigneeId || body.sprintId || body.storyPoints !== undefined)) {
+  if (access.role === 'CLIENT' && (body.assigneeId || body.sprintId || body.storyPoints !== undefined || body.teamId || body.stageId)) {
     throw new ForbiddenError('Clients can report issues but cannot assign or plan them');
   }
   const { labelIds, componentIds, ...rest } = body;

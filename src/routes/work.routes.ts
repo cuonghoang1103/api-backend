@@ -16,8 +16,8 @@ import { authenticate } from '../middleware/auth.js';
 import { asyncHandler, BadRequestError, UnauthorizedError, NotFoundError } from '../middleware/errorHandler.js';
 import { prisma } from '../config/database.js';
 import {
-  LINK_TYPES, PRIORITY_MAX, PRIORITY_MIN, PROJECT_ROLES, PROJECT_TEMPLATES, PROJECT_TYPES,
-  PROJECT_VISIBILITY, WORKSPACE_ROLES,
+  APPROVAL_MODES, APPROVAL_STATUSES, APPROVAL_TARGETS, HANDOFF_STATUSES, LINK_TYPES, PRIORITY_MAX, PRIORITY_MIN,
+  PROJECT_KINDS, PROJECT_ROLES, PROJECT_TEMPLATES, PROJECT_TYPES, PROJECT_VISIBILITY, STUDIO_MODULES, TEAM_ROLES, WORKSPACE_ROLES,
 } from '../services/work/constants.js';
 import * as issues from '../services/work/issues.service.js';
 import { registerWorkNotifications } from '../services/work/notify.js';
@@ -47,6 +47,11 @@ import * as apiTokens from '../services/work/apiTokens.service.js';
 import * as calendar from '../services/work/calendar.service.js';
 import * as trash from '../services/work/trash.service.js';
 import * as onboarding from '../services/work/onboarding.service.js';
+import * as teams from '../services/work/teams.service.js';
+import * as stages from '../services/work/stages.service.js';
+import * as approvals from '../services/work/approvals.service.js';
+import * as handoffs from '../services/work/handoffs.service.js';
+import { moveIssueToProject } from '../services/work/issueMove.service.js';
 
 registerWorkNotifications();
 tests.registerTestingHooks();
@@ -285,6 +290,9 @@ router.post('/workspaces/:wsId/projects', asyncHandler(async (req, res) => {
     template: z.enum(PROJECT_TEMPLATES).default('BLANK'),
     visibility: z.enum(PROJECT_VISIBILITY).optional(),
     firstSprint: z.boolean().optional(),
+    // Lớp studio: loại dự án ⇒ mô-đun mặc định; `modules` ghi đè từng mô-đun.
+    kind: z.enum(PROJECT_KINDS).optional(),
+    modules: z.record(z.enum(STUDIO_MODULES), z.boolean()).optional(),
   }), req.body);
   ok(res, await projects.createProject(callerId(req), idParam(req, 'wsId'), body), 201);
 }));
@@ -372,7 +380,8 @@ router.get('/projects/:pid/board', asyncHandler(async (req, res) => {
 
 router.get('/projects/:pid/issues', asyncHandler(async (req, res) => {
   const q = parse(z.object({
-    status: idList, type: idList, assignee: idList, label: idList,
+    status: idList, type: idList, assignee: idList, label: idList, team: idList,
+    stage: id.optional(),
     sprint: z.union([z.literal('backlog'), z.literal('open'), id]).optional(),
     parent: id.optional(),
     q: z.string().max(200).optional(),
@@ -383,6 +392,7 @@ router.get('/projects/:pid/issues', asyncHandler(async (req, res) => {
   }), req.query);
   ok(res, await issues.listIssues(callerId(req), idParam(req, 'pid'), {
     statusIds: q.status, typeIds: q.type, assigneeIds: q.assignee, labelIds: q.label,
+    teamIds: q.team, stageId: q.stage,
     sprint: q.sprint, parentId: q.parent, q: q.q,
     includeDone: q.includeDone === undefined ? undefined : q.includeDone === 'true',
     excludeEpics: q.excludeEpics === 'true',
@@ -403,6 +413,9 @@ const issueFields = {
   parentId: id.nullable(),
   sprintId: id.nullable(),
   fixVersionId: id.nullable(),
+  // Lớp studio — chỉ ghi được khi mô-đun teams/stages bật (issueChange.ts kiểm, 403 MODULE_DISABLED).
+  teamId: id.nullable(),
+  stageId: id.nullable(),
   statusId: id,
   labelIds: z.array(id).max(30),
   componentIds: z.array(id).max(30),
@@ -826,7 +839,11 @@ router.put('/projects/:pid/workflows/:wfId/order', asyncHandler(async (req, res)
 router.put('/projects/:pid/workflows/:wfId/transitions', asyncHandler(async (req, res) => {
   const body = parse(z.object({
     mode: z.enum(['free', 'restricted']),
-    transitions: z.array(z.object({ from: id.nullable(), to: id })).max(500).optional(),
+    transitions: z.array(z.object({
+      from: id.nullable(), to: id,
+      // Luật của luồng chuyển (đợt S1): cần phê duyệt / chỉ bộ phận X.
+      rules: z.object({ requireApproval: z.boolean().optional(), teamIds: z.array(id).max(20).optional() }).nullable().optional(),
+    })).max(500).optional(),
   }), req.body);
   await custom.setTransitions(callerId(req), idParam(req, 'pid'), idParam(req, 'wfId'), body);
   ok(res, { updated: true });
@@ -1330,6 +1347,180 @@ router.get('/search', asyncHandler(async (req, res) => {
     offset: z.coerce.number().int().min(0).max(globalSearch.MAX_DEPTH - 1).optional(),
   }), req.query);
   ok(res, await globalSearch.globalSearch(callerId(req), q));
+}));
+
+// ═══ LỚP STUDIO đợt S1 (04/10/2026) ═══════════════════════════════════
+// Loại dự án + mô-đun · bộ phận · giai đoạn + cổng · phê duyệt · bàn giao ·
+// chuyển thẻ sang dự án khác. Quyền + mô-đun kiểm trong service
+// (permissions.ts + studio.ts assertModule ⇒ 403 MODULE_DISABLED).
+
+router.get('/projects/:pid/studio', asyncHandler(async (req, res) => {
+  ok(res, await projects.getStudioConfig(callerId(req), idParam(req, 'pid')));
+}));
+router.put('/projects/:pid/studio', asyncHandler(async (req, res) => {
+  const body = parse(z.object({
+    kind: z.enum(PROJECT_KINDS).optional(),
+    applyKindDefaults: z.boolean().optional(),
+    modules: z.record(z.enum(STUDIO_MODULES), z.boolean()).optional(),
+    stageGate: z.object({ approverIds: z.array(id).max(10).optional(), mode: z.enum(APPROVAL_MODES).optional() }).nullable().optional(),
+  }), req.body);
+  ok(res, await projects.updateStudioConfig(callerId(req), idParam(req, 'pid'), body));
+}));
+
+// ─── Bộ phận (cấp không gian) ──────────────────────────────────────
+
+const teamBody = z.object({
+  key: z.string().min(2).max(16),
+  name: z.string().min(1).max(80),
+  color: hexColor.optional(),
+  description: z.string().max(2000).nullable().optional(),
+  leadIds: z.array(id).max(20).optional(),
+  memberIds: z.array(id).max(200).optional(),
+});
+
+router.get('/workspaces/:wsId/teams', asyncHandler(async (req, res) => {
+  ok(res, await teams.listTeams(callerId(req), idParam(req, 'wsId'), { includeArchived: req.query.includeArchived === 'true' }));
+}));
+router.post('/workspaces/:wsId/teams', asyncHandler(async (req, res) => {
+  ok(res, await teams.createTeam(callerId(req), idParam(req, 'wsId'), parse(teamBody, req.body)), 201);
+}));
+router.get('/workspaces/:wsId/teams/:teamId', asyncHandler(async (req, res) => {
+  ok(res, await teams.getTeam(callerId(req), idParam(req, 'wsId'), idParam(req, 'teamId')));
+}));
+router.patch('/workspaces/:wsId/teams/:teamId', asyncHandler(async (req, res) => {
+  const body = parse(z.object({
+    name: z.string().min(1).max(80).optional(), color: hexColor.optional(),
+    description: z.string().max(2000).nullable().optional(), archived: z.boolean().optional(),
+  }), req.body);
+  ok(res, await teams.updateTeam(callerId(req), idParam(req, 'wsId'), idParam(req, 'teamId'), body));
+}));
+router.delete('/workspaces/:wsId/teams/:teamId', asyncHandler(async (req, res) => {
+  await teams.deleteTeam(callerId(req), idParam(req, 'wsId'), idParam(req, 'teamId'));
+  ok(res, { deleted: true });
+}));
+router.put('/workspaces/:wsId/teams/:teamId/members/:userId', asyncHandler(async (req, res) => {
+  const { role } = parse(z.object({ role: z.enum(TEAM_ROLES).default('MEMBER') }), req.body ?? {});
+  ok(res, await teams.setTeamMember(callerId(req), idParam(req, 'wsId'), idParam(req, 'teamId'), idParam(req, 'userId'), role));
+}));
+router.delete('/workspaces/:wsId/teams/:teamId/members/:userId', asyncHandler(async (req, res) => {
+  ok(res, await teams.removeTeamMember(callerId(req), idParam(req, 'wsId'), idParam(req, 'teamId'), idParam(req, 'userId')));
+}));
+router.get('/workspaces/:wsId/teams/:teamId/queue', asyncHandler(async (req, res) => {
+  const q = parse(z.object({
+    projectId: id.optional(),
+    status: z.enum(['open', 'done', 'all']).optional(),
+    unassigned: z.enum(['true', 'false']).optional(),
+    limit: z.coerce.number().int().min(1).max(200).optional(),
+    offset: z.coerce.number().int().min(0).max(100_000).optional(),
+  }), req.query);
+  ok(res, await teams.teamQueue(callerId(req), idParam(req, 'wsId'), idParam(req, 'teamId'), { ...q, unassigned: q.unassigned === 'true' }));
+}));
+router.put('/workspaces/:wsId/teams/:teamId/queue/:issueId/assignee', asyncHandler(async (req, res) => {
+  const { assigneeId } = parse(z.object({ assigneeId: id.nullable() }), req.body);
+  ok(res, await teams.assignFromQueue(callerId(req), idParam(req, 'wsId'), idParam(req, 'teamId'), idParam(req, 'issueId'), assigneeId));
+}));
+
+// ─── Giai đoạn + cổng ──────────────────────────────────────────────
+
+const stageSlug = z.string().min(1).max(80);
+router.get('/projects/:pid/stages', asyncHandler(async (req, res) => {
+  ok(res, await stages.listStages(callerId(req), idParam(req, 'pid')));
+}));
+router.post('/projects/:pid/stages', asyncHandler(async (req, res) => {
+  const body = parse(z.object({ n: z.number().int().min(0).max(999).optional(), slug: stageSlug, name: z.string().min(1).max(160), gateIssueNumber: id.nullable().optional() }), req.body);
+  ok(res, await stages.createStage(callerId(req), idParam(req, 'pid'), body), 201);
+}));
+router.patch('/projects/:pid/stages/:sid', asyncHandler(async (req, res) => {
+  const body = parse(z.object({ n: z.number().int().min(0).max(999).optional(), slug: stageSlug.optional(), name: z.string().min(1).max(160).optional(), gateIssueNumber: id.nullable().optional() }), req.body);
+  ok(res, await stages.updateStage(callerId(req), idParam(req, 'pid'), idParam(req, 'sid'), body));
+}));
+router.delete('/projects/:pid/stages/:sid', asyncHandler(async (req, res) => {
+  await stages.deleteStage(callerId(req), idParam(req, 'pid'), idParam(req, 'sid'));
+  ok(res, { deleted: true });
+}));
+router.post('/projects/:pid/stages/:sid/activate', asyncHandler(async (req, res) => {
+  const body = parse(z.object({ override: z.object({ reason: z.string().min(1).max(1000) }).nullable().optional() }), req.body ?? {});
+  ok(res, await stages.activateStage(callerId(req), idParam(req, 'pid'), idParam(req, 'sid'), body));
+}));
+router.post('/projects/:pid/stages/:sid/request-gate', asyncHandler(async (req, res) => {
+  const body = parse(z.object({ description: z.string().max(5000).nullable().optional(), dueAt: z.coerce.date().nullable().optional() }), req.body ?? {});
+  ok(res, await stages.requestGate(callerId(req), idParam(req, 'pid'), idParam(req, 'sid'), body), 201);
+}));
+
+// ─── Phê duyệt ─────────────────────────────────────────────────────
+
+router.get('/me/approvals', asyncHandler(async (req, res) => {
+  ok(res, await approvals.myPendingApprovals(callerId(req)));
+}));
+router.get('/projects/:pid/approvals', asyncHandler(async (req, res) => {
+  const q = parse(z.object({
+    status: z.enum(APPROVAL_STATUSES).optional(), targetType: z.enum(APPROVAL_TARGETS).optional(),
+    issue: id.optional(), stage: id.optional(), limit: z.coerce.number().int().min(1).max(200).optional(),
+  }), req.query);
+  ok(res, await approvals.listApprovals(callerId(req), idParam(req, 'pid'), { status: q.status, targetType: q.targetType, issueNumber: q.issue, stageId: q.stage, limit: q.limit }));
+}));
+router.post('/projects/:pid/approvals', asyncHandler(async (req, res) => {
+  const body = parse(z.object({
+    targetType: z.literal('ISSUE').default('ISSUE'),
+    issueNumber: id,
+    title: z.string().min(1).max(200).optional(),
+    description: z.string().max(5000).nullable().optional(),
+    mode: z.enum(APPROVAL_MODES).optional(),
+    approverIds: z.array(id).min(1).max(10),
+    dueAt: z.coerce.date().nullable().optional(),
+  }), req.body);
+  ok(res, await approvals.createApproval(callerId(req), idParam(req, 'pid'), body), 201);
+}));
+router.get('/projects/:pid/approvals/:aid', asyncHandler(async (req, res) => {
+  ok(res, await approvals.getApproval(callerId(req), idParam(req, 'pid'), idParam(req, 'aid')));
+}));
+router.post('/projects/:pid/approvals/:aid/decide', asyncHandler(async (req, res) => {
+  const body = parse(z.object({ decision: z.enum(['APPROVE', 'REJECT']), comment: z.string().max(5000).nullable().optional() }), req.body);
+  ok(res, await approvals.decideApproval(callerId(req), idParam(req, 'pid'), idParam(req, 'aid'), body, { ip: req.ip ?? null }));
+}));
+router.post('/projects/:pid/approvals/:aid/cancel', asyncHandler(async (req, res) => {
+  const { reason } = parse(z.object({ reason: z.string().max(1000).nullable().optional() }), req.body ?? {});
+  ok(res, await approvals.cancelApproval(callerId(req), idParam(req, 'pid'), idParam(req, 'aid'), reason));
+}));
+
+// ─── Bàn giao ──────────────────────────────────────────────────────
+
+router.get('/me/handoffs', asyncHandler(async (req, res) => {
+  ok(res, await handoffs.myPendingHandoffs(callerId(req)));
+}));
+router.get('/projects/:pid/handoffs', asyncHandler(async (req, res) => {
+  const q = parse(z.object({ status: z.enum(HANDOFF_STATUSES).optional(), limit: z.coerce.number().int().min(1).max(200).optional() }), req.query);
+  ok(res, await handoffs.listProjectHandoffs(callerId(req), idParam(req, 'pid'), q));
+}));
+router.get('/projects/:pid/issues/:num/handoffs', asyncHandler(async (req, res) => {
+  ok(res, await handoffs.listIssueHandoffs(callerId(req), idParam(req, 'pid'), idParam(req, 'num')));
+}));
+router.post('/projects/:pid/issues/:num/handoffs', asyncHandler(async (req, res) => {
+  const body = parse(z.object({
+    toTeamId: id.nullable().optional(),
+    toUserId: id.nullable().optional(),
+    checklist: z.array(z.object({ text: z.string().min(1).max(300), done: z.boolean().optional() })).max(30).optional(),
+    note: z.string().max(5000).nullable().optional(),
+  }), req.body);
+  ok(res, await handoffs.createHandoff(callerId(req), idParam(req, 'pid'), idParam(req, 'num'), body), 201);
+}));
+router.post('/projects/:pid/handoffs/:hid/accept', asyncHandler(async (req, res) => {
+  const body = parse(z.object({ checklist: z.array(z.boolean()).max(30).optional() }), req.body ?? {});
+  ok(res, await handoffs.acceptHandoff(callerId(req), idParam(req, 'pid'), idParam(req, 'hid'), body));
+}));
+router.post('/projects/:pid/handoffs/:hid/return', asyncHandler(async (req, res) => {
+  const body = parse(z.object({ reason: z.string().min(1).max(5000) }), req.body);
+  ok(res, await handoffs.returnHandoff(callerId(req), idParam(req, 'pid'), idParam(req, 'hid'), body));
+}));
+router.post('/projects/:pid/handoffs/:hid/cancel', asyncHandler(async (req, res) => {
+  ok(res, await handoffs.cancelHandoff(callerId(req), idParam(req, 'pid'), idParam(req, 'hid')));
+}));
+
+// ─── Chuyển thẻ sang dự án khác (cùng không gian) ─────────────────
+
+router.post('/projects/:pid/issues/:num/move-project', asyncHandler(async (req, res) => {
+  const body = parse(z.object({ targetProjectId: id, version: z.number().int().min(0).optional() }), req.body);
+  ok(res, await moveIssueToProject(callerId(req), idParam(req, 'pid'), idParam(req, 'num'), body));
 }));
 
 export default router;

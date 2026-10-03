@@ -10,6 +10,7 @@ import { prisma } from '../../config/database.js';
 import { BadRequestError, ConflictError, NotFoundError } from '../../middleware/errorHandler.js';
 import { STATUS_CATEGORIES, type StatusCategory } from './constants.js';
 import { emitWorkEvent } from './events.js';
+import { assertModule, transitionRulesOf, type TransitionRules } from './studio.js';
 import { requireProject } from './permissions.js';
 
 const touch = (projectId: number, userId: number) => emitWorkEvent({ type: 'project.updated', projectId, actor: { kind: 'USER', userId } });
@@ -139,9 +140,9 @@ export async function setTransitions(
   userId: number,
   projectId: number,
   workflowId: number,
-  input: { mode: 'free' | 'restricted'; transitions?: Array<{ from: number | null; to: number }> },
+  input: { mode: 'free' | 'restricted'; transitions?: Array<{ from: number | null; to: number; rules?: TransitionRules | null }> },
 ) {
-  await requireProject(userId, projectId, 'project.settings');
+  const access = await requireProject(userId, projectId, 'project.settings');
   await findWorkflow(projectId, workflowId);
   const ids = new Set((await prisma.workStatus.findMany({ where: { workflowId }, select: { id: true } })).map((s) => s.id));
   const list = input.mode === 'free' ? [] : (input.transitions ?? []);
@@ -149,10 +150,23 @@ export async function setTransitions(
     if (!ids.has(t.to) || (t.from !== null && !ids.has(t.from))) throw new BadRequestError('A transition uses a status from another workflow', 'WORK_BAD_STATUS');
   }
   if (input.mode === 'restricted' && !list.length) throw new BadRequestError('Add at least one transition, or allow all', 'WORK_NO_TRANSITIONS');
+  // Luật của luồng chuyển (đợt S1): cần mô-đun tương ứng; bộ phận phải thuộc không gian.
+  const allTeamIds = new Set<number>();
+  for (const t of list) {
+    const r = transitionRulesOf(t.rules ?? {});
+    if (r.requireApproval) assertModule(access, 'approvals');
+    if (r.teamIds?.length) { assertModule(access, 'teams'); r.teamIds.forEach((x) => allTeamIds.add(x)); }
+  }
+  if (allTeamIds.size) {
+    const found = await prisma.workTeam.count({ where: { id: { in: [...allTeamIds] }, workspaceId: access.workspaceId } });
+    if (found !== allTeamIds.size) throw new BadRequestError('A transition rule uses a team from another workspace', 'WORK_BAD_TEAM');
+  }
   const uniq = [...new Map(list.map((t) => [`${t.from}-${t.to}`, t])).values()].filter((t) => t.from !== t.to);
   await prisma.$transaction([
     prisma.workTransition.deleteMany({ where: { workflowId } }),
-    prisma.workTransition.createMany({ data: uniq.map((t) => ({ workflowId, fromStatusId: t.from, toStatusId: t.to })) }),
+    prisma.workTransition.createMany({
+      data: uniq.map((t) => ({ workflowId, fromStatusId: t.from, toStatusId: t.to, rules: transitionRulesOf(t.rules ?? {}) as Prisma.InputJsonValue })),
+    }),
   ]);
   touch(projectId, userId);
 }

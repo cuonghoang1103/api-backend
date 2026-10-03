@@ -1,48 +1,116 @@
-/* ─────────────────────────────────────────────────────────────────────────
-   CT Work — token giao diện (23/09/2026).
+/* Hallmark · genre: modern-minimal · macrostructure: Workbench (app shell) · design-system: work.css tokens · designed-as-app
+ * Hallmark · pre-emit critique: P4 H4 E4 S4 R5 V4
+ * ─────────────────────────────────────────────────────────────────────────
+   CT Work — hệ token giao diện, bản 2 (04/10/2026).
 
-   Cùng ngôn ngữ với /admin (tham chiếu Linear): border mảnh, không card
-   chồng card, không shadow khắp nơi, mật độ thông tin cao, một màu nhấn.
-   Khác /admin ở chỗ CÓ nền sáng: người dùng site chọn sáng/tối bằng class
-   `theme-dark` trên <html> (KHÔNG phải `.dark` — xem CLAUDE.md), nên token
-   có hai bộ. Mọi component trong /work chỉ dùng biến --w-*.
+   Bản 1 (23–24/09) mượn ngôn ngữ Linear: xám lạnh + tím chàm #5e6ad2. Bản 2
+   giữ khung đó (border mảnh, không card chồng card, mật độ cao, MỘT màu nhấn)
+   nhưng có giọng riêng — "Graphite & Iris":
+   · nền xám ấm như giấy than chì (không phải xám xanh lạnh của Linear/Jira);
+   · một màu nhấn iris hơi lam hơn, đậm hơn, chỉ dùng cho hành động + chỗ đang chọn;
+   · mã thẻ (ATL-12) luôn bằng JetBrains Mono — "chữ ký" của công cụ;
+   · trạng thái vẽ bằng GLYPH (vòng rỗng / nửa vòng / vòng đặc) + màu, không chỉ màu.
+
+   Quy ước:
+   · Mọi màu trong /work đi qua biến --w-*. Biểu đồ dùng --w-chart-1…8.
+   · Bán kính: --w-r-xs 4 · --w-r-sm 6 · --w-r-md 8 · --w-r-lg 12 (pill = 999px).
+   · Khoảng cách theo lưới 4pt: --w-s-1 (4px) … --w-s-10 (40px).
+   · Thang chữ: 11 · 12 · 13 · 14 · 16 · 20 · 24 (--w-fs-2xs … --w-fs-2xl).
+     Cỡ nửa pixel cũ (12.5px, 11.5px…) được "hút" về thang ở cuối file.
+   · Tương phản: --w-text-3 ≥ 4.5:1 trên --w-panel, --w-raised VÀ --w-sunken
+     ở cả hai theme (đo bằng công thức WCAG 2.x, xem ghi chú từng dòng).
+   · Theme tối = class `theme-dark` trên <html> (KHÔNG phải `.dark` — CLAUDE.md).
    ───────────────────────────────────────────────────────────────────────── */
 
 .work-root {
-  /* Thang chữ — dùng cho mọi chỗ mới; chỗ cũ viết text-[13px] vẫn chạy. */
+  /* Thang chữ */
+  --w-fs-2xs: 11px;
   --w-fs-xs: 12px;
   --w-fs-sm: 13px;
   --w-fs-md: 14px;
   --w-fs-lg: 16px;
   --w-fs-xl: 20px;
+  --w-fs-2xl: 24px;
 
-  --w-bg: #f4f4f6;
-  --w-panel: #ffffff;
-  --w-raised: #ffffff;
-  --w-sunken: #f3f3f5;
-  --w-hover: rgba(15, 15, 20, 0.045);
-  --w-active: rgba(94, 106, 210, 0.1);
-  --w-border: rgba(15, 15, 20, 0.09);
-  --w-border-strong: rgba(15, 15, 20, 0.17);
-  --w-text: #16161a;
-  --w-text-2: #4f4f58;
-  /* ≥4.5:1 trên --w-panel (5.3) và --w-sunken (4.7) — WCAG AA. */
-  --w-text-3: #6b6b74;
-  --w-accent: #5e6ad2;
-  --w-accent-hover: #4f5bc4;
-  --w-accent-text: #4450bd;
+  /* Lưới 4pt */
+  --w-s-1: 4px;  --w-s-2: 8px;  --w-s-3: 12px; --w-s-4: 16px; --w-s-5: 20px;
+  --w-s-6: 24px; --w-s-8: 32px; --w-s-10: 40px;
+
+  /* Bán kính */
+  --w-r-xs: 4px;
+  --w-r-sm: 6px;
+  --w-r-md: 8px;
+  --w-r-lg: 12px;
+  --w-radius: var(--w-r-sm);      /* tên cũ — giữ cho mã đang dùng */
+  --w-radius-lg: var(--w-r-md);
+
+  /* Chiều cao khung */
+  --w-header-h: 52px;
+  --w-sidebar-w: 248px;
+  --w-sidebar-rail: 60px;
+
+  --w-font-mono: var(--font-jetbrains-mono), 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --w-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  /* Bề mặt — xám ấm (than chì) */
+  --w-bg: #f4f3f0;            /* khung ứng dụng (sidebar, viền ngoài) */
+  --w-panel: #ffffff;         /* vùng làm việc */
+  --w-raised: #ffffff;        /* thẻ, popover */
+  --w-sunken: #f3f2ef;        /* cột board, ô nhóm, nền chip */
+  --w-hover: rgba(30, 28, 22, 0.05);
+  --w-active: rgba(79, 91, 213, 0.1);
+  --w-border: rgba(30, 28, 22, 0.1);
+  --w-border-strong: rgba(30, 28, 22, 0.18);
+
+  /* Chữ 3 cấp */
+  --w-text: #1a1a17;          /* 17.4:1 trên trắng */
+  --w-text-2: #4b4a44;        /* 8.9:1 trên trắng · 7.9:1 trên sunken */
+  --w-text-3: #696861;        /* 5.6:1 trên trắng · 5.0:1 trên sunken · 5.0:1 trên bg */
+
+  /* Nhấn — iris */
+  --w-accent: #4f5bd5;        /* chữ trắng trên nó: 5.5:1 */
+  --w-accent-hover: #434fc4;
+  --w-accent-text: #3f4bbf;   /* 7.1:1 trên trắng */
+  --w-accent-soft: rgba(79, 91, 213, 0.1);
+  --w-accent-border: rgba(79, 91, 213, 0.48);
+  --w-on-accent: #ffffff;
   --w-code-inline: #b4400c;
-  --w-accent-soft: rgba(94, 106, 210, 0.1);
-  --w-accent-border: rgba(94, 106, 210, 0.45);
-  --w-green: #23845a;
-  --w-yellow: #a57f12;
-  --w-orange: #c9602e;
-  --w-red: #d23b36;
-  --w-blue: #2474e0;
-  --w-shadow-card: 0 1px 2px rgba(15, 15, 20, 0.05), 0 1px 1px rgba(15, 15, 20, 0.03);
-  --w-shadow-pop: 0 10px 30px rgba(15, 15, 20, 0.13), 0 0 0 1px rgba(15, 15, 20, 0.07);
-  --w-radius: 6px;
-  --w-radius-lg: 8px;
+
+  /* Tín hiệu (chữ trên trắng đều ≥ 4.5:1 trừ vàng — vàng chỉ dùng cho icon/viền) */
+  --w-green: #1f8552;
+  --w-yellow: #9a7410;
+  --w-orange: #c2561f;
+  --w-red: #cf342f;
+  --w-blue: #2d6bd6;
+  --w-epic: #7a4fd0;
+
+  /* Trạng thái (nhóm) */
+  --w-status-todo: #8a897f;     /* chỉ dùng cho glyph/chấm (đồ hoạ ≥ 3:1), không cho chữ */
+  --w-status-progress: var(--w-blue);
+  --w-status-done: var(--w-green);
+
+  /* Ưu tiên */
+  --w-prio-1: var(--w-red);
+  --w-prio-2: var(--w-orange);
+  --w-prio-3: var(--w-yellow);
+  --w-prio-4: var(--w-blue);
+  --w-prio-5: var(--w-text-3);
+
+  /* Bảng màu biểu đồ — 8 màu phân biệt được, cùng độ sáng gần nhau */
+  --w-chart-1: #4f5bd5;
+  --w-chart-2: #148a8a;
+  --w-chart-3: #d0621f;
+  --w-chart-4: #9a45b8;
+  --w-chart-5: #2f8a4e;
+  --w-chart-6: #b0840f;
+  --w-chart-7: #c63a62;
+  --w-chart-8: #5f6878;
+  --w-chart-grid: rgba(30, 28, 22, 0.08);
+
+  /* Bóng — rất nhẹ; nổi = viền + bóng, không chỉ bóng */
+  --w-shadow-card: 0 1px 0 rgba(30, 28, 22, 0.04), 0 1px 2px rgba(30, 28, 22, 0.06);
+  --w-shadow-lift: 0 2px 4px rgba(30, 28, 22, 0.06), 0 8px 20px rgba(30, 28, 22, 0.08);
+  --w-shadow-pop: 0 12px 32px rgba(30, 28, 22, 0.14), 0 0 0 1px rgba(30, 28, 22, 0.08);
 
   background: var(--w-bg);
   color: var(--w-text);
@@ -53,60 +121,126 @@
   -webkit-font-smoothing: antialiased;
 }
 
-/* Nền tối: bề mặt tách lớp rõ hơn (nền < panel < nổi) để bớt "phẳng". */
+/* Nền tối: ba lớp tách rõ (khung < vùng làm việc < thẻ nổi), cột board LÕM
+   xuống dưới vùng làm việc để thẻ nổi lên rõ. */
 html.theme-dark .work-root {
   color-scheme: dark;
-  --w-bg: #0b0b0d;
-  --w-panel: #121215;
-  --w-raised: #1a1a1f;
-  --w-sunken: #0e0e11;
-  --w-hover: rgba(255, 255, 255, 0.05);
-  --w-active: rgba(120, 130, 235, 0.16);
-  --w-border: rgba(255, 255, 255, 0.075);
-  --w-border-strong: rgba(255, 255, 255, 0.14);
-  --w-text: #ececef;
-  --w-text-2: #adadb5;
-  /* ≥4.5:1 trên --w-panel (5.8) và --w-raised (5.3). */
-  --w-text-3: #8e8e97;
-  --w-accent: #6470db;
-  --w-accent-hover: #7580e6;
-  --w-accent-text: #aab0f5;
+  --w-bg: #0d0d0f;
+  --w-panel: #151517;
+  --w-raised: #1d1d20;
+  --w-sunken: #111113;
+  --w-hover: rgba(255, 255, 255, 0.055);
+  --w-active: rgba(124, 134, 240, 0.17);
+  --w-border: rgba(255, 255, 255, 0.08);
+  --w-border-strong: rgba(255, 255, 255, 0.15);
+
+  --w-text: #ededef;          /* 15.6:1 trên panel */
+  --w-text-2: #b6b6bd;        /* 9.0:1 trên panel · 8.3:1 trên raised */
+  --w-text-3: #8f8f98;        /* 5.7:1 trên panel · 5.3:1 trên raised · 5.9:1 trên sunken */
+
+  --w-accent: #5d67d8;        /* chữ trắng: 4.8:1 */
+  --w-accent-hover: #6871e0;
+  --w-accent-text: #a9b0f7;   /* 8.9:1 trên panel */
+  --w-accent-soft: rgba(110, 120, 235, 0.16);
+  --w-accent-border: rgba(130, 140, 245, 0.55);
   --w-code-inline: #f4a261;
-  --w-accent-soft: rgba(100, 112, 219, 0.16);
-  --w-accent-border: rgba(120, 130, 235, 0.5);
+
   --w-green: #4cb782;
   --w-yellow: #d9b44a;
   --w-orange: #e8875a;
-  --w-red: #eb6a65;
-  --w-blue: #4ea7fc;
-  --w-shadow-card: 0 1px 0 rgba(255, 255, 255, 0.03) inset, 0 1px 3px rgba(0, 0, 0, 0.35);
-  --w-shadow-pop: 0 12px 36px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.09);
+  --w-red: #ef6b66;
+  --w-blue: #5aa5f8;
+  --w-epic: #a688f0;
+  --w-status-todo: #8f8f98;
+
+  --w-chart-1: #7c86f0;
+  --w-chart-2: #3cbcbc;
+  --w-chart-3: #ec8a50;
+  --w-chart-4: #c27ae0;
+  --w-chart-5: #55c07f;
+  --w-chart-6: #d9b44a;
+  --w-chart-7: #ec6f93;
+  --w-chart-8: #9aa3b2;
+  --w-chart-grid: rgba(255, 255, 255, 0.07);
+
+  --w-shadow-card: 0 1px 0 rgba(255, 255, 255, 0.035) inset, 0 1px 2px rgba(0, 0, 0, 0.4);
+  --w-shadow-lift: 0 1px 0 rgba(255, 255, 255, 0.05) inset, 0 8px 22px rgba(0, 0, 0, 0.5);
+  --w-shadow-pop: 0 14px 40px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.1);
 }
 
-.work-root ::selection { background: rgba(94, 106, 210, 0.3); }
+.work-root ::selection { background: color-mix(in srgb, var(--w-accent) 30%, transparent); }
 .work-root * { scrollbar-width: thin; scrollbar-color: var(--w-border-strong) transparent; }
 .work-root .tabular { font-variant-numeric: tabular-nums; }
 
-/* Lưới đỡ cỡ chữ: không chữ nào trong /work nhỏ hơn 11px (chữ 9–10px khó
-   đọc trên màn thường). Độ ưu tiên (0,2,0) thắng tiện ích Tailwind. */
+/* ─── Hút cỡ chữ / bán kính lẻ về thang ────────────────────────────────
+   Mã cũ có 23 cỡ chữ khác nhau (12.5px, 11.5px, 13.5px…) và 11 bán kính.
+   Thay vì sửa tay ~1.500 chỗ, lớp này "hút" giá trị lẻ về thang token.
+   Độ ưu tiên (0,2,0) thắng tiện ích Tailwind (0,1,0). Chữ nhỏ nhất là 11px
+   (nhãn sidebar / eyebrow); chữ 11px viết bằng tiện ích được nâng lên 12px
+   để dễ đọc (quyết định 24/09, giữ nguyên). */
 .work-root .text-\[9px\],
 .work-root .text-\[9\.5px\],
 .work-root .text-\[10px\],
-.work-root .text-\[10\.5px\] { font-size: 11px; }
+.work-root .text-\[10\.5px\] { font-size: var(--w-fs-2xs); }
 .work-root .text-\[11px\],
-.work-root .text-\[11\.5px\] { font-size: 12px; }
+.work-root .text-\[11\.5px\] { font-size: var(--w-fs-xs); }
+.work-root .text-\[12\.5px\] { font-size: var(--w-fs-sm); }
+.work-root .text-\[13\.5px\],
+.work-root .text-\[14\.5px\] { font-size: var(--w-fs-md); }
+.work-root .text-\[18px\],
+.work-root .text-\[19px\],
+.work-root .text-\[21px\],
+.work-root .text-\[22px\] { font-size: var(--w-fs-xl); }
+.work-root .text-\[26px\] { font-size: var(--w-fs-2xl); }
 
-/* Thẻ nổi nhẹ (danh sách, ô số liệu) — thay cho border phẳng. */
+.work-root .rounded-\[3px\] { border-radius: var(--w-r-xs); }
+.work-root .rounded-\[5px\] { border-radius: var(--w-r-sm); }
+.work-root .rounded-\[7px\],
+.work-root .rounded-\[9px\] { border-radius: var(--w-r-md); }
+.work-root .rounded-\[10px\],
+.work-root .rounded-\[14px\] { border-radius: var(--w-r-lg); }
+
+/* Đầu bảng: chữ thường-kiểu-câu 12px như danh sách Issues — bản 1 có bảng
+   VIẾT HOA, bảng không, tuỳ người viết. Một luật cho mọi bảng. */
+.work-root :is(thead, tr, th).uppercase,
+.work-root thead .uppercase { text-transform: none; letter-spacing: 0; font-size: var(--w-fs-xs); }
+
+/* Mã thẻ / mã dự án: JetBrains Mono — "chữ ký" của CT Work. */
+.work-root .font-mono { font-family: var(--w-font-mono); letter-spacing: -0.01em; }
+
+/* Thẻ nổi nhẹ (danh sách, ô số liệu) — viền + bóng rất nhẹ, không card chồng card. */
 .w-card {
-  background: var(--w-raised); border: 1px solid var(--w-border); border-radius: var(--w-radius-lg);
+  background: var(--w-raised); border: 1px solid var(--w-border); border-radius: var(--w-r-md);
   box-shadow: var(--w-shadow-card);
 }
-a.w-card, button.w-card { transition: border-color 120ms, background-color 120ms, box-shadow 120ms; }
-a.w-card:hover, button.w-card:hover { border-color: var(--w-border-strong); }
+a.w-card, button.w-card { transition: border-color 140ms var(--w-ease), box-shadow 140ms var(--w-ease), transform 140ms var(--w-ease); }
+a.w-card:hover, button.w-card:hover { border-color: var(--w-border-strong); box-shadow: var(--w-shadow-lift); }
 a.w-card:focus-visible, button.w-card:focus-visible { outline: 2px solid var(--w-accent-border); outline-offset: 1px; }
 
-/* Nhãn nhóm nhỏ (sidebar, danh mục cài đặt). */
-.w-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--w-text-3); }
+/* Nhãn nhóm nhỏ (sidebar, danh mục cài đặt). Viết thường-kiểu-câu, không
+   VIẾT HOA cả dòng — bản 1 có bốn hàng chữ hoa chồng nhau trong sidebar. */
+.w-eyebrow { font-size: 12px; font-weight: 600; letter-spacing: 0.005em; color: var(--w-text-3); }
+
+/* Tiêu đề khối trong trang (Description, Linked issues, Sub-tasks…). */
+.w-section-title { font-size: var(--w-fs-sm); font-weight: 600; color: var(--w-text); letter-spacing: -0.005em; }
+
+/* Mảnh nhỏ: số đếm, điểm, mã. */
+.w-count {
+  display: inline-flex; align-items: center; justify-content: center; min-width: 20px; height: 18px; padding: 0 6px;
+  border-radius: 999px; background: var(--w-sunken); color: var(--w-text-2);
+  font-size: var(--w-fs-2xs); font-weight: 600; font-variant-numeric: tabular-nums; line-height: 1;
+}
+html.theme-dark .work-root .w-count { background: rgba(255, 255, 255, 0.07); }
+
+/* Khung chờ (skeleton) — thay cho vòng quay trơ trọi ở giữa trang. */
+.w-skel {
+  display: block; border-radius: var(--w-r-sm);
+  background: linear-gradient(90deg, var(--w-sunken) 0%, color-mix(in srgb, var(--w-sunken) 55%, var(--w-panel)) 50%, var(--w-sunken) 100%);
+  background-size: 200% 100%; animation: w-skel 1.4s ease-in-out infinite;
+}
+html.theme-dark .work-root .w-skel { background-image: linear-gradient(90deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.09) 50%, rgba(255,255,255,0.05) 100%); }
+@keyframes w-skel { from { background-position: 100% 0; } to { background-position: -100% 0; } }
+@media (prefers-reduced-motion: reduce) { .w-skel { animation: none; } }
 
 /* Nút cơ bản — dùng class chứ không tạo component cho mọi biến thể.
    ⚠️ File này nạp SAU Tailwind, nên .w-btn { display } thắng `hidden` cùng độ
@@ -116,23 +250,40 @@ a.w-card:focus-visible, button.w-card:focus-visible { outline: 2px solid var(--w
    cũng không có layer và sẽ xoá nền + viền của mọi nút. */
 .w-btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 6px;
-  height: 30px; padding: 0 12px; border-radius: var(--w-radius);
+  height: 30px; padding: 0 12px; border-radius: var(--w-r-sm);
   font-size: 13px; font-weight: 500; line-height: 1; white-space: nowrap;
-  border: 1px solid var(--w-border-strong); background: var(--w-panel); color: var(--w-text);
-  transition: background-color 120ms, border-color 120ms, color 120ms;
+  border: 1px solid var(--w-border-strong); background: var(--w-raised); color: var(--w-text);
+  box-shadow: 0 1px 0 rgba(30, 28, 22, 0.04);
+  transition: background-color 120ms var(--w-ease), border-color 120ms var(--w-ease), color 120ms var(--w-ease), box-shadow 120ms var(--w-ease);
 }
-.w-btn:hover:not(:disabled) { background: var(--w-hover); }
+html.theme-dark .work-root .w-btn { box-shadow: none; }
+.w-btn:hover:not(:disabled) { background-image: linear-gradient(var(--w-hover), var(--w-hover)); }
+.w-btn:active:not(:disabled) { background-image: linear-gradient(var(--w-hover), var(--w-hover)), linear-gradient(var(--w-hover), var(--w-hover)); }
 .w-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 .w-btn:focus-visible { outline: 2px solid var(--w-accent-border); outline-offset: 1px; }
-.w-btn-primary { background: var(--w-accent); border-color: var(--w-accent); color: #fff; }
-.w-btn-primary:hover:not(:disabled) { background: var(--w-accent-hover); }
-.w-btn-ghost { background: transparent; border-color: transparent; color: var(--w-text-2); }
-.w-btn-ghost:hover:not(:disabled) { color: var(--w-text); }
+.w-btn-primary {
+  background: var(--w-accent); border-color: var(--w-accent); color: var(--w-on-accent);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.14) inset, 0 1px 2px color-mix(in srgb, var(--w-accent) 35%, transparent);
+}
+html.theme-dark .work-root .w-btn-primary { box-shadow: 0 1px 0 rgba(255, 255, 255, 0.12) inset; }
+.w-btn-primary:hover:not(:disabled) { background: var(--w-accent-hover); background-image: none; }
+.w-btn-ghost { background: transparent; border-color: transparent; color: var(--w-text-2); box-shadow: none; }
+.w-btn-ghost:hover:not(:disabled) { color: var(--w-text); background: var(--w-hover); background-image: none; }
 .w-btn-danger { color: var(--w-red); }
 .w-btn-danger-solid { background: var(--w-red); border-color: var(--w-red); color: #fff; }
-.w-btn-danger-solid:hover:not(:disabled) { background: color-mix(in srgb, var(--w-red) 88%, #000); }
+.w-btn-danger-solid:hover:not(:disabled) { background: color-mix(in srgb, var(--w-red) 88%, #000); background-image: none; }
 .w-btn-sm { height: 26px; padding: 0 8px; font-size: 12px; }
 .w-btn-icon { width: 28px; padding: 0; }
+.w-btn-sm.w-btn-icon { width: 26px; }
+/* Nút bật/tắt (bộ lọc nhanh, "Only my issues"…) đang BẬT. */
+.w-btn.w-btn-warn {
+  border-color: color-mix(in srgb, var(--w-orange) 55%, transparent); background: color-mix(in srgb, var(--w-orange) 14%, transparent); color: var(--w-orange);
+}
+/* Lưu ý: tiện ích Tailwind KHÔNG đổi được nền/màu chữ của .w-btn (file này nạp sau,
+   cùng độ ưu tiên) — trạng thái bật/tắt phải dùng .w-btn-on / .w-btn-warn, hoặc `!`. */
+.w-btn.w-btn-on {
+  border-color: var(--w-accent-border); background: var(--w-accent-soft); color: var(--w-accent-text);
+}
 
 /* Ô nhập. Bộ chọn cố ý có độ ưu tiên THẤP (0,0,1): `input:where(.w-input)`
    thắng preflight `input { padding: 0 }` (cùng độ ưu tiên, nạp sau) nhưng THUA
@@ -169,8 +320,8 @@ html.theme-dark .work-root input[type='date'], html.theme-dark .work-root input[
 .w-label { display: block; font-size: 12px; font-weight: 500; color: var(--w-text-2); margin-bottom: 6px; }
 .w-kbd {
   display: inline-flex; align-items: center; justify-content: center; min-width: 18px; height: 18px; padding: 0 4px;
-  border-radius: 4px; border: 1px solid var(--w-border-strong); color: var(--w-text-3);
-  font-size: 11px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; line-height: 1;
+  border-radius: var(--w-r-xs); border: 1px solid var(--w-border-strong); border-bottom-width: 2px; color: var(--w-text-3);
+  font-size: 11px; font-family: var(--w-font-mono); line-height: 1; background: var(--w-panel);
 }
 
 /* Nội dung soạn thảo giàu (mô tả thẻ, bình luận). */
@@ -200,7 +351,7 @@ html.theme-dark .work-root input[type='date'], html.theme-dark .work-root input[
 .w-prose ul[data-type='taskList'] li { display: flex; gap: 8px; align-items: flex-start; }
 .w-prose ul[data-type='taskList'] li > label { margin-top: 4px; }
 .w-prose blockquote { border-left: 3px solid var(--w-border-strong); padding-left: 12px; color: var(--w-text-2); margin: 0 0 8px; }
-.w-prose code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12.5px; background: var(--w-sunken); border: 1px solid var(--w-border); border-radius: 4px; padding: 1px 4px; color: var(--w-code-inline); }
+.w-prose code { font-family: var(--w-font-mono); font-size: 12.5px; background: var(--w-sunken); border: 1px solid var(--w-border); border-radius: 4px; padding: 1px 4px; color: var(--w-code-inline); }
 /* Khối code: bảng màu VS Code Dark+ ở CẢ hai giao diện sáng/tối (như editor thật), để code
    đọc giống lúc gõ trong IDE. Token do lowlight/highlight.js gắn class hljs-*. */
 .w-prose pre {
@@ -239,6 +390,17 @@ html.theme-dark .work-root input[type='date'], html.theme-dark .work-root input[
   .work-root [contenteditable='true'] { font-size: 16px !important; }
 }
 
+/* globals.css ép MỌI ô nhập 16px dưới 1024px (chống iOS phóng to) — kể cả cửa sổ
+   desktop hẹp dùng chuột (app desktop 820px), làm ô tìm "Search board" to gấp
+   rưỡi chữ xung quanh. Màn có chuột (pointer: fine) từ 641px trở lên thì trả về
+   cỡ của thang. Màn cảm ứng vẫn giữ 16px. */
+@media (min-width: 641px) and (max-width: 1023.98px) and (pointer: fine) {
+  .work-root input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='color']),
+  .work-root textarea,
+  .work-root select { font-size: 13px !important; }
+  .work-root textarea.text-\[20px\] { font-size: 20px !important; }
+}
+
 /* Ngón tay cần đích chạm lớn hơn chuột. */
 @media (pointer: coarse) {
   .work-root .w-btn { min-height: 36px; }
@@ -247,3 +409,23 @@ html.theme-dark .work-root input[type='date'], html.theme-dark .work-root input[
   .work-root .w-header .w-btn-icon { min-width: 40px; }
   .work-root .w-nav-row { min-height: 38px; }
 }
+
+/* ─── Sidebar thu gọn (thanh icon) ────────────────────────────────────
+   WorkSidebar gắn `.w-rail` lên <nav>. Mọi hàng `.w-nav-row` chỉ còn icon
+   (svg) + phần tử gắn `.w-keep` (ô màu dự án, vạch "đang chọn"); chữ, số,
+   phím tắt đều ẩn. Mục mới thêm sau tự theo, không cần nhánh riêng. */
+.w-rail .w-nav-row { justify-content: center; gap: 0; padding-left: 0 !important; padding-right: 0 !important; }
+.w-rail .w-nav-row > :not(svg):not(.w-keep) { display: none !important; }
+.w-rail .w-rail-hide { display: none !important; }
+.w-rail .w-subnav { margin-left: 0; padding-left: 0; border-left: 0; margin-top: 2px; padding-top: 4px; border-top: 1px solid var(--w-border); }
+.w-rail > div:first-child { padding-left: 8px; padding-right: 8px; }
+
+/* Hàng điều hướng: vạch nhấn bên trái khi chọn, icon theo màu chữ. */
+.work-root .w-nav-row { transition: background-color 120ms var(--w-ease), color 120ms var(--w-ease); }
+.work-root .w-nav-row:focus-visible { outline: 2px solid var(--w-accent-border); outline-offset: -2px; }
+
+/* Vạch ngăn trước cụm ⌘K · chuông · người dùng (shell/HeaderTools): chỉ hiện khi
+   NGAY TRƯỚC nó là cụm nút của trang và cụm đó có nút. Trang không có nút (cài
+   đặt, header tools={false}…) thì không còn vạch trơ trọi giữa khoảng trống. */
+.work-root .w-tools-sep { display: none; }
+.work-root .w-header-actions:not(:empty) + .w-tools > .w-tools-sep { display: block; }

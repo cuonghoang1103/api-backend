@@ -21,7 +21,7 @@ import {
 } from '@/lib/work-api';
 import { useLookups, wk } from '../hooks';
 import { AssigneePicker, PriorityPicker } from '../fields';
-import { Dialog, Field, formatBytes, isTyping, PriorityIcon, relativeTime, Spinner, StatusBadge, WorkPortal } from '../ui';
+import { Dialog, Field, formatBytes, isTyping, PriorityIcon, relativeTime, Spinner, StatusBadge, WorkPortal, PageLoading } from '../ui';
 import { Select } from '../settings/shared';
 import { formatDateTime, RUN_META, RunStatusPill, STEP_META } from './runStatus';
 
@@ -282,7 +282,7 @@ export default function RunPanel({ config, pid, runId, runIds, onNavigate, onClo
 
         <div className="min-h-0 flex-1 overflow-y-auto">
           {run.isLoading || (!data && !run.error) ? (
-            <div className="flex h-full items-center justify-center"><Spinner size={20} /></div>
+            <PageLoading />
           ) : run.error || !data ? (
             <div className="px-6 py-16 text-center">
               <div className="text-[15px] font-semibold">Could not load this test run</div>
@@ -352,14 +352,14 @@ export default function RunPanel({ config, pid, runId, runIds, onNavigate, onClo
 
               {data.testCase.preconditions && (
                 <section className="mt-5">
-                  <h3 className="mb-1.5 text-[12px] font-medium uppercase tracking-wide text-[var(--w-text-3)]">Preconditions</h3>
+                  <h3 className="mb-1.5 text-[12px] font-semibold text-[var(--w-text-2)]">Preconditions</h3>
                   <p className="whitespace-pre-wrap text-[13px] leading-relaxed">{data.testCase.preconditions}</p>
                 </section>
               )}
 
               {data.gherkin && (
                 <section className="mt-5">
-                  <h3 className="mb-1.5 text-[12px] font-medium uppercase tracking-wide text-[var(--w-text-3)]">Scenario</h3>
+                  <h3 className="mb-1.5 text-[12px] font-semibold text-[var(--w-text-2)]">Scenario</h3>
                   <pre className="overflow-x-auto whitespace-pre rounded-[6px] border border-[var(--w-border)] bg-[var(--w-sunken)] px-3 py-2.5 font-mono text-[12.5px] leading-relaxed">{data.gherkin}</pre>
                 </section>
               )}
@@ -367,7 +367,7 @@ export default function RunPanel({ config, pid, runId, runIds, onNavigate, onClo
               {/* Các bước */}
               <section className="mt-5">
                 <div className="mb-2 flex flex-wrap items-center gap-2">
-                  <h3 className="text-[12px] font-medium uppercase tracking-wide text-[var(--w-text-3)]">
+                  <h3 className="text-[12px] font-semibold text-[var(--w-text-2)]">
                     Steps {data.steps.length > 0 && <span className="tabular normal-case">({data.steps.length - todoCount}/{data.steps.length})</span>}
                   </h3>
                   <span className="hidden text-[11px] text-[var(--w-text-3)] md:inline">
@@ -408,7 +408,7 @@ export default function RunPanel({ config, pid, runId, runIds, onNavigate, onClo
 
               {/* Ghi chú */}
               <section className="mt-6">
-                <h3 className="mb-1.5 text-[12px] font-medium uppercase tracking-wide text-[var(--w-text-3)]">Comment</h3>
+                <h3 className="mb-1.5 text-[12px] font-semibold text-[var(--w-text-2)]">Comment</h3>
                 <AutoText
                   key={`c-${data.id}`}
                   value={data.comment ?? ''}
@@ -432,7 +432,7 @@ export default function RunPanel({ config, pid, runId, runIds, onNavigate, onClo
               {/* Bug */}
               <section className="mt-6">
                 <div className="mb-2 flex items-center gap-2">
-                  <h3 className="text-[12px] font-medium uppercase tracking-wide text-[var(--w-text-3)]">Defects</h3>
+                  <h3 className="text-[12px] font-semibold text-[var(--w-text-2)]">Defects</h3>
                   {canCreateBug && status !== 'FAIL' && status !== 'BLOCKED' && (
                     <button type="button" className="w-btn w-btn-ghost w-btn-sm ml-auto" onClick={() => setBugOpen(true)}><Bug size={13} /> Create bug</button>
                   )}
@@ -561,7 +561,7 @@ function StepRow({ step, index, canExecute, rowRef, actualRef, onKeyDown, onStat
 function StepCell({ label, text, mono }: { label: string; text: string | null; mono?: boolean }) {
   return (
     <div className="min-w-0">
-      <div className="text-[10.5px] font-medium uppercase tracking-wide text-[var(--w-text-3)]">{label}</div>
+      <div className="text-[12px] font-medium text-[var(--w-text-3)]">{label}</div>
       <div className={cn('whitespace-pre-wrap break-words text-[13px] leading-relaxed', mono && text && 'font-mono text-[12.5px]', !text && 'text-[var(--w-text-3)]')}>{text || '—'}</div>
     </div>
   );
@@ -734,7 +734,7 @@ function EvidenceSection({ pid, evidence, uploads, canAttach, testKey, onFiles }
       onDrop={(e) => { e.preventDefault(); setDrag(false); if (canAttach && e.dataTransfer.files.length) onFiles(Array.from(e.dataTransfer.files)); }}
     >
       <div className="mb-2 flex items-center gap-2">
-        <h3 className="text-[12px] font-medium uppercase tracking-wide text-[var(--w-text-3)]">
+        <h3 className="text-[12px] font-semibold text-[var(--w-text-2)]">
           Evidence {evidence.length > 0 && <span className="tabular normal-case">({evidence.length})</span>}
         </h3>
         {canAttach && (

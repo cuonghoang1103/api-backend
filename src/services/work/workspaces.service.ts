@@ -135,6 +135,8 @@ export async function updateMemberRole(userId: number, workspaceId: number, targ
     throw new ForbiddenError('Use "Transfer ownership" to change the owner');
   }
   await prisma.workMember.update({ where: { id: target.id }, data: { role } });
+  // Khách (GUEST) không thuộc bộ phận nào của studio.
+  if (role === 'GUEST') await prisma.workTeamMember.deleteMany({ where: { userId: targetUserId, team: { workspaceId } } });
   // Hạ xuống GUEST có thể mất quyền xem dự án — đuổi khỏi phòng, client vào lại với quyền mới.
   const projects = await prisma.workProject.findMany({ where: { workspaceId }, select: { id: true } });
   for (const p of projects) evictFromProject(p.id, targetUserId);
@@ -150,6 +152,8 @@ export async function removeMember(userId: number, workspaceId: number, targetUs
   const projects = await prisma.workProject.findMany({ where: { workspaceId }, select: { id: true } });
   await prisma.$transaction([
     prisma.workProjectMember.deleteMany({ where: { userId: targetUserId, project: { workspaceId } } }),
+    // Rời không gian thì rời luôn các bộ phận của không gian (lớp studio).
+    prisma.workTeamMember.deleteMany({ where: { userId: targetUserId, team: { workspaceId } } }),
     prisma.workMember.delete({ where: { id: target.id } }),
   ]);
   // Rời không gian là mất quyền ngay — đuổi khỏi mọi phòng socket của không gian.

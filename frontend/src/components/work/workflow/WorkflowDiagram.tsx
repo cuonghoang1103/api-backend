@@ -731,6 +731,7 @@ export default function WorkflowDiagram({ wf, config, draft, canEdit, invalidate
         {selEdge && (
           <EdgeInspector
             key={selEdge}
+            config={config}
             edgeKey={selEdge}
             statuses={statuses}
             canEdit={canEdit}

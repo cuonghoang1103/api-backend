@@ -14,7 +14,8 @@
 
 import { prisma } from '../../config/database.js';
 import { ForbiddenError, NotFoundError } from '../../middleware/errorHandler.js';
-import type { ProjectRole, ProjectVisibility, WorkspaceRole } from './constants.js';
+import type { ProjectKind, ProjectRole, ProjectVisibility, WorkspaceRole } from './constants.js';
+import { modulesOf, projectKindOf, type ModuleMap } from './studio.js';
 
 /** Mọi hành động có kiểm quyền. Thêm hành động mới thì thêm vào đây VÀ vào MATRIX. */
 export type ProjectAction =
@@ -30,14 +31,24 @@ export type ProjectAction =
   | 'comment.moderate'      // xoá bình luận của người khác
   | 'attachment.add'
   | 'sprint.manage'         // tạo/bắt đầu/kết thúc sprint, xếp backlog
-  | 'ai.use';               // gọi trợ lý AI trong dự án (hạn mức kiểm riêng)
+  | 'ai.use'                // gọi trợ lý AI trong dự án (hạn mức kiểm riêng)
+  // ── Lớp studio (đợt S1, 04/10/2026) ──
+  | 'studio.configure'      // đổi loại dự án, bật/tắt mô-đun, người duyệt cổng
+  | 'stage.manage'          // tạo/sửa giai đoạn, kích hoạt, ghi đè thứ tự (có lý do)
+  | 'stage.requestGate'     // gửi giai đoạn đi duyệt cổng
+  | 'approval.create'       // tạo yêu cầu phê duyệt
+  | 'approval.decide'       // ĐƯỢC ĐỨNG TÊN người duyệt (vẫn chỉ quyết bước của CHÍNH mình)
+  | 'approval.manage'       // huỷ yêu cầu của người khác
+  | 'handoff.create'        // bàn giao thẻ cho bộ phận/người khác
+  | 'handoff.manage';       // nhận/trả lại/huỷ bàn giao THAY người nhận
 
 export type WorkspaceAction =
   | 'workspace.view'
   | 'workspace.settings'
   | 'workspace.members'
   | 'workspace.createProject'
-  | 'workspace.delete';
+  | 'workspace.delete'
+  | 'workspace.teams';      // tạo/sửa/xoá bộ phận, đổi thành viên bộ phận
 
 const ALL_PROJECT_ROLES: readonly ProjectRole[] = ['ADMIN', 'MEMBER', 'VIEWER', 'TEACHER', 'CLIENT'];
 
@@ -63,6 +74,16 @@ const PROJECT_MATRIX: Record<ProjectAction, readonly ProjectRole[]> = {
   'attachment.add': ['ADMIN', 'MEMBER', 'CLIENT'],
   'sprint.manage': ['ADMIN'],
   'ai.use': ['ADMIN', 'MEMBER'],
+  'studio.configure': ['ADMIN'],
+  'stage.manage': ['ADMIN'],
+  'stage.requestGate': ['ADMIN', 'MEMBER'],
+  'approval.create': ['ADMIN', 'MEMBER'],
+  // Khách hàng và giảng viên ĐƯỢC đứng tên duyệt (khách duyệt nghiệm thu, thầy
+  // duyệt cổng đồ án) — nhưng chỉ bước của chính họ, xem canDecideApprovalStep.
+  'approval.decide': ['ADMIN', 'MEMBER', 'TEACHER', 'CLIENT'],
+  'approval.manage': ['ADMIN'],
+  'handoff.create': ['ADMIN', 'MEMBER'],
+  'handoff.manage': ['ADMIN'],
 };
 
 const WORKSPACE_MATRIX: Record<WorkspaceAction, readonly WorkspaceRole[]> = {
@@ -71,6 +92,7 @@ const WORKSPACE_MATRIX: Record<WorkspaceAction, readonly WorkspaceRole[]> = {
   'workspace.members': ['OWNER', 'ADMIN'],
   'workspace.createProject': ['OWNER', 'ADMIN', 'MEMBER'],
   'workspace.delete': ['OWNER'],
+  'workspace.teams': ['OWNER', 'ADMIN'],
 };
 
 /**
@@ -134,6 +156,74 @@ export function canModifyComment(role: ProjectRole | null, userId: number, autho
   return can(role, 'comment.moderate');
 }
 
+// ─── Lớp studio: luật theo NGƯỜI (hàm thuần) ─────────────────────
+
+export interface StepLite { id: number; approverId: number; position: number; decision: string }
+
+/**
+ * Bước nào đang chờ quyết định NGAY BÂY GIỜ. PARALLEL: mọi bước PENDING.
+ * SEQUENTIAL: chỉ bước PENDING có position nhỏ nhất (người sau đợi người trước).
+ */
+export function actionableSteps(mode: string, steps: StepLite[]): StepLite[] {
+  const pending = steps.filter((s) => s.decision === 'PENDING').sort((a, b) => a.position - b.position || a.id - b.id);
+  if (mode === 'PARALLEL') return pending;
+  return pending.length ? [pending[0]] : [];
+}
+
+/**
+ * Một người được quyết định một bước khi: vai trò được đứng tên duyệt, bước là
+ * của CHÍNH người đó (không ai — kể cả ADMIN — duyệt thay; ADMIN muốn dừng thì
+ * huỷ cả yêu cầu), yêu cầu còn PENDING, và tới lượt (tuần tự) hoặc song song.
+ */
+export function canDecideApprovalStep(
+  role: ProjectRole | null,
+  userId: number,
+  approval: { status: string; mode: string; steps: StepLite[] },
+  stepId: number,
+): boolean {
+  if (!can(role, 'approval.decide') || approval.status !== 'PENDING') return false;
+  const step = approval.steps.find((s) => s.id === stepId);
+  if (!step || step.approverId !== userId) return false;
+  return actionableSteps(approval.mode, approval.steps).some((s) => s.id === stepId);
+}
+
+/** Người tạo (còn quyền tạo) hoặc ADMIN dự án huỷ được yêu cầu phê duyệt. */
+export function canCancelApproval(role: ProjectRole | null, userId: number, createdById: number | null): boolean {
+  if (can(role, 'approval.manage')) return true;
+  return createdById !== null && createdById === userId && can(role, 'approval.create');
+}
+
+/**
+ * Nhận / trả lại một bàn giao: người nhận đích danh, hoặc trưởng bộ phận nhận
+ * (khi bàn giao cho cả bộ phận) — miễn là còn quyền sửa thẻ trong dự án; ADMIN
+ * dự án làm thay được. Khách/giảng viên/người chỉ xem thì không.
+ */
+export function canDecideHandoff(
+  role: ProjectRole | null,
+  userId: number,
+  h: { toUserId: number | null; toTeamLeadIds: number[] },
+): boolean {
+  if (can(role, 'handoff.manage')) return true;
+  if (!can(role, 'issue.edit')) return false;
+  return h.toUserId === userId || h.toTeamLeadIds.includes(userId);
+}
+
+/** Người tạo bàn giao huỷ được khi còn chờ; ADMIN dự án luôn huỷ được. */
+export function canCancelHandoff(role: ProjectRole | null, userId: number, createdById: number | null): boolean {
+  if (can(role, 'handoff.manage')) return true;
+  return createdById !== null && createdById === userId && can(role, 'handoff.create');
+}
+
+/**
+ * Giao việc trong HÀNG ĐỢI của bộ phận: người sửa được thẻ, hoặc trưởng bộ
+ * phận của thẻ đó (kể cả khi chỉ có vai VIEWER trong dự án — đó là việc của
+ * trưởng bộ phận). Khách/giảng viên không bao giờ là thành viên bộ phận.
+ */
+export function canAssignTeamIssue(role: ProjectRole | null, isTeamLead: boolean): boolean {
+  if (can(role, 'issue.edit')) return true;
+  return isTeamLead && (role === 'VIEWER' || role === 'MEMBER' || role === 'ADMIN');
+}
+
 // ─── Tầng đọc DB ──────────────────────────────────────────────────
 
 export interface ProjectAccess {
@@ -143,6 +233,10 @@ export interface ProjectAccess {
   role: ProjectRole;
   workspaceRole: WorkspaceRole;
   options: ProjectOptions;
+  /** Loại dự án hiệu lực (cột kind, hoặc suy từ mẫu với dự án cũ). */
+  kind: ProjectKind;
+  /** Mô-đun studio đang bật (settings.modules; dự án cũ ⇒ tắt hết). */
+  modules: ModuleMap;
 }
 
 /**
@@ -158,6 +252,9 @@ export async function loadProjectAccess(userId: number, projectId: number): Prom
       workspaceId: true,
       visibility: true,
       settings: true,
+      kind: true,
+      template: true,
+      clientRequest: { select: { id: true } },
       workspace: { select: { members: { where: { userId }, select: { role: true } } } },
       members: { where: { userId }, select: { role: true } },
     },
@@ -170,7 +267,12 @@ export async function loadProjectAccess(userId: number, projectId: number): Prom
     visibility: project.visibility as ProjectVisibility,
   });
   if (!role || !workspaceRole) return null;
-  return { projectId: project.id, workspaceId: project.workspaceId, key: project.key, role, workspaceRole, options: projectOptionsOf(project.settings) };
+  return {
+    projectId: project.id, workspaceId: project.workspaceId, key: project.key, role, workspaceRole,
+    options: projectOptionsOf(project.settings),
+    kind: projectKindOf({ kind: project.kind, template: project.template, fromClientRequest: !!project.clientRequest }),
+    modules: modulesOf(project.settings),
+  };
 }
 
 /** Như loadProjectAccess nhưng ném lỗi: 404 khi không thấy, 403 khi thấy mà không được làm. */

@@ -117,7 +117,7 @@ export const BasicFilters = forwardRef<HTMLInputElement, {
             <X size={12} />
           </button>
         ) : (
-          <kbd className="w-kbd pointer-events-none absolute right-1.5 top-1/2 hidden -translate-y-1/2 sm:inline-flex">/</kbd>
+          <kbd className="w-kbd pointer-events-none absolute right-1.5 top-1/2 -translate-y-1/2 max-sm:!hidden">/</kbd>
         )}
       </div>
       <FilterMenu

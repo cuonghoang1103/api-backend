@@ -7,11 +7,11 @@
 
 import { Suspense } from 'react';
 import GlobalSearchPage from '@/components/work/globalsearch/SearchPage';
-import { Spinner } from '@/components/work/ui';
+import { PageLoading } from '@/components/work/ui';
 
 export default function WorkSearchRoute() {
   return (
-    <Suspense fallback={<div className="flex h-full items-center justify-center"><Spinner size={20} /></div>}>
+    <Suspense fallback={<PageLoading />}>
       <GlobalSearchPage />
     </Suspense>
   );

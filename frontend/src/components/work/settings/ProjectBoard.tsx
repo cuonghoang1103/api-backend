@@ -109,7 +109,7 @@ export default function ProjectBoard({ config, slug }: { config: ProjectConfig; 
 
         {draft.mode === 'custom' && (
           <>
-            <h4 className="mb-2 text-[12px] font-semibold uppercase tracking-[0.04em] text-[var(--w-text-3)]">Columns</h4>
+            <h4 className="mb-2 text-[12px] font-semibold text-[var(--w-text-2)]">Columns</h4>
             <div className="overflow-hidden rounded-[8px] border border-[var(--w-border)]">
               {draft.cols.map((c, i) => (
                 <div key={c.uid} className="flex items-center gap-2 border-b border-[var(--w-border)] px-3 py-2 last:border-b-0">
@@ -161,7 +161,7 @@ export default function ProjectBoard({ config, slug }: { config: ProjectConfig; 
               </button>
             )}
 
-            <h4 className="mb-2 mt-6 text-[12px] font-semibold uppercase tracking-[0.04em] text-[var(--w-text-3)]">Status mapping</h4>
+            <h4 className="mb-2 mt-6 text-[12px] font-semibold text-[var(--w-text-2)]">Status mapping</h4>
             <div className="overflow-hidden rounded-[8px] border border-[var(--w-border)]">
               {workflows.map((w) => (
                 <div key={w.id}>

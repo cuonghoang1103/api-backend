@@ -21,7 +21,7 @@ import ProjectHeader from '@/components/work/ProjectHeader';
 import { CompleteSprintDialog } from '@/components/work/SprintDialogs';
 import { CREATE_ISSUE_EVENT, useLookups, useProject, useProjectRealtime, wk } from '@/components/work/hooks';
 import {
-  EmptyState, IssueTypeIcon, isTyping, PickerList, Popover, Spinner, UserAvatar, useToggle,
+  EmptyState, IssueTypeIcon, isTyping, PickerList, Popover, UserAvatar, useToggle, PageLoading,
 } from '@/components/work/ui';
 
 function daysLeft(end: string | null) {
@@ -124,10 +124,10 @@ function BoardView({ config, pid, slug }: { config: ProjectConfig; pid: number; 
             </button>
           ))}
         </div>
-        <button type="button" onClick={() => setOnlyMine((v) => !v)} className={cn('w-btn w-btn-sm', onlyMine && 'border-[var(--w-accent-border)] bg-[var(--w-accent-soft)] text-[var(--w-accent-text)]')}>
+        <button type="button" onClick={() => setOnlyMine((v) => !v)} className={cn('w-btn w-btn-sm', onlyMine && 'w-btn-on')}>
           Only my issues
         </button>
-        <button ref={typeRef} type="button" onClick={typeMenu.toggle} className={cn('w-btn w-btn-sm', types.length > 0 && 'border-[var(--w-accent-border)] bg-[var(--w-accent-soft)] text-[var(--w-accent-text)]')}>
+        <button ref={typeRef} type="button" onClick={typeMenu.toggle} className={cn('w-btn w-btn-sm', types.length > 0 && 'w-btn-on')}>
           <Filter size={12} /> Type{types.length > 0 && ` · ${types.length}`}
         </button>
         <Popover open={typeMenu.on} onClose={typeMenu.close} anchorRef={typeRef} width={220}>
@@ -184,7 +184,7 @@ function BoardView({ config, pid, slug }: { config: ProjectConfig; pid: number; 
 
       <div className="min-h-0 flex-1">
         {board.isLoading ? (
-          <div className="flex h-full items-center justify-center"><Spinner size={20} /></div>
+          <PageLoading />
         ) : board.error ? (
           <EmptyState title="Could not load the board" body={workError(board.error)} action={<button type="button" className="w-btn" onClick={() => board.refetch()}>Try again</button>} />
         ) : board.data && !board.data.issues.length && !filtered ? (
@@ -216,7 +216,7 @@ function BoardView({ config, pid, slug }: { config: ProjectConfig; pid: number; 
 // useSearchParams bắt buộc nằm trong <Suspense> — thiếu là Next 14 báo lỗi lúc build.
 export default function BoardPage() {
   return (
-    <Suspense fallback={<div className="flex h-full items-center justify-center"><Spinner size={20} /></div>}>
+    <Suspense fallback={<PageLoading />}>
       <BoardPageInner />
     </Suspense>
   );
@@ -225,7 +225,7 @@ export default function BoardPage() {
 function BoardPageInner() {
   const params = useParams<{ ws: string; key: string }>();
   const { pid, config, isLoading, error } = useProject(params.ws, params.key);
-  if (isLoading) return <div className="flex h-full items-center justify-center"><Spinner size={20} /></div>;
+  if (isLoading) return <PageLoading />;
   if (error || !config || !pid) {
     return <EmptyState title="Project not found" body={error ? workError(error) : 'It may have been deleted, or you do not have access.'} action={<StartProjectButton label="Start a new project" />} />;
   }

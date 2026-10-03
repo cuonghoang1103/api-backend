@@ -9,16 +9,17 @@
  */
 
 import Link from 'next/link';
-import { useCallback, useMemo, useRef, useState, type ReactNode } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { useRouter } from 'next/navigation';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import {
-  Copy, CopyPlus, ChevronDown, ChevronRight, Eye, ExternalLink, Link2, MoreHorizontal, Paperclip, Plus, Trash2, X, Download, FileText,
+  ArrowRightLeft, Copy, CopyPlus, ChevronDown, ChevronRight, Eye, ExternalLink, Link2, MoreHorizontal, Paperclip, Plus, Trash2, X, Download, FileText,
 } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import { cn } from '@/lib/utils';
 import {
-  workApi, workError, workErrorStatus, type IssueDetail as TIssueDetail, type IssuePatch, type LinkType,
+  issueMovedTo, workApi, workError, workErrorStatus, type IssueDetail as TIssueDetail, type IssuePatch, type LinkType,
   type ProjectConfig, type TiptapDoc, type IssueAttachment,
 } from '@/lib/work-api';
 import CreateIssueDialog from './CreateIssueDialog';
@@ -33,14 +34,17 @@ import {
 import { useLookups, wk, type Lookups } from './hooks';
 import IssueActivity from './IssueActivity';
 import { MobileNavButton } from './shell/mobileNav';
+import HeaderTools from './shell/HeaderTools';
+import { Crumb, CrumbSep } from './ProjectHeader';
 import { TimeTrackingBlock } from './TimeTracking';
 import DevelopmentPanel from './DevelopmentPanel';
+import { IssueApprovals, IssueHandoffs, MoveIssueDialog, StagePicker, TeamPicker } from './studio/IssueStudio';
+import { studioOn } from './studio/shared';
 import RichEditor, { isDocEmpty, RichView } from './RichEditor';
 import {
-  formatBytes, formatDate, IssueTypeIcon, Popover, PriorityIcon, relativeTime, Spinner, StatusBadge, UserAvatar, useToggle,
+  formatBytes, formatDate, IssueTypeIcon, Popover, PriorityIcon, ProjectMark, relativeTime, Spinner, StatusBadge, UserAvatar, useToggle,
   EmptyState,
-  publicOrigin,
-} from './ui';
+  publicOrigin, PageLoading} from './ui';
 
 const LINK_PHRASE: Record<LinkType, [string, string]> = {
   BLOCKS: ['blocks', 'is blocked by'],
@@ -63,7 +67,7 @@ function Prop({ label, children }: { label: string; children: ReactNode }) {
 
 function TitleEditor({ value, editable, onSave }: { value: string; editable: boolean; onSave: (v: string) => void }) {
   const [draft, setDraft] = useState<string | null>(null);
-  if (!editable) return <h1 className="text-[20px] font-semibold leading-snug">{value}</h1>;
+  if (!editable) return <h1 className="text-[20px] font-semibold leading-snug tracking-[-0.015em] [overflow-wrap:anywhere]">{value}</h1>;
   const commit = () => {
     const t = draft?.trim();
     setDraft(null);
@@ -81,7 +85,7 @@ function TitleEditor({ value, editable, onSave }: { value: string; editable: boo
         if (e.key === 'Escape') { setDraft(null); (e.target as HTMLTextAreaElement).blur(); }
       }}
       ref={(el) => { if (el) { el.style.height = 'auto'; el.style.height = `${el.scrollHeight}px`; } }}
-      className="-mx-1.5 w-[calc(100%+12px)] resize-none rounded-[6px] bg-transparent px-1.5 py-0.5 text-[20px] font-semibold leading-snug text-[var(--w-text)] outline-none hover:bg-[var(--w-hover)] focus:bg-[var(--w-panel)] focus:shadow-[0_0_0_1px_var(--w-accent-border)]"
+      className="-mx-1.5 w-[calc(100%+12px)] resize-none rounded-[6px] bg-transparent px-1.5 py-0.5 text-[20px] font-semibold leading-snug tracking-[-0.015em] text-[var(--w-text)] outline-none hover:bg-[var(--w-hover)] focus:bg-[var(--w-panel)] focus:shadow-[0_0_0_1px_var(--w-accent-border)]"
     />
   );
 }
@@ -360,6 +364,8 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
   const menuRef = useRef<HTMLButtonElement>(null);
   const [subtaskOpen, setSubtaskOpen] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [moving, setMoving] = useState(false);
+  const router = useRouter();
   // Trang riêng trên điện thoại/iPad dọc: thẻ "Details" ngay dưới tiêu đề, mở sẵn.
   const [detailsOpen, setDetailsOpen] = useState(true);
 
@@ -367,6 +373,15 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
   const issue = q.data;
   const editable = config.permissions.editIssues;
   const base = `/work/${config.workspace.slug}/${config.key}`;
+
+  // Mã cũ của thẻ đã chuyển dự án (S1) ⇒ server trả 404 WORK_ISSUE_MOVED kèm mã mới: tự sang mã mới.
+  const moved = issueMovedTo(q.error);
+  useEffect(() => {
+    if (!moved) return;
+    const projectKey = moved.key.slice(0, moved.key.lastIndexOf('-'));
+    toast.info(`${config.key}-${num} moved to ${moved.key}`);
+    router.replace(`/work/${config.workspace.slug}/${projectKey}/issue/${moved.number}`);
+  }, [moved?.key]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const update = useMutation({
     mutationFn: (patch: IssuePatch) => workApi.updateIssue(pid, num, { ...patch, version: issue?.version }),
@@ -422,7 +437,7 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
     else window.location.href = `/work/${config.workspace.slug}/${k}/issue/${n}`;
   };
 
-  if (q.isLoading) return <div className="flex h-full items-center justify-center"><Spinner size={20} /></div>;
+  if (q.isLoading || moved) return <PageLoading />;
   if (!issue) {
     return (
       <div className="flex h-full flex-col">
@@ -446,6 +461,12 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
           <button type="button" onClick={() => set({ assigneeId: meId })} className="px-2 text-[12px] text-[var(--w-accent-text)] hover:underline">Assign to me</button>
         )}
       </Prop>
+      {studioOn(config, 'teams') && (
+        <Prop label="Team"><TeamPicker config={config} value={issue.teamId} onChange={(teamId) => set({ teamId })} disabled={!editable} /></Prop>
+      )}
+      {studioOn(config, 'stages') && (
+        <Prop label="Stage"><StagePicker config={config} value={issue.stageId} onChange={(stageId) => set({ stageId })} disabled={!editable} /></Prop>
+      )}
       <Prop label="Reporter">
         <div className="flex items-center gap-2 px-2 text-[13px]"><UserAvatar user={issue.reporter} size={18} /><span className="truncate">{issue.reporter ? (issue.reporter.displayName || issue.reporter.fullName || issue.reporter.username) : 'Unknown'}</span></div>
       </Prop>
@@ -497,10 +518,21 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
   return (
     <div className="flex h-full flex-col">
       {/* Thanh trên */}
-      <div className="flex h-12 shrink-0 items-center gap-2 border-b border-[var(--w-border)] px-4">
+      <div className={cn('w-header flex shrink-0 items-center gap-2 border-b border-[var(--w-border)] px-4', variant === 'page' ? 'h-[52px] md:px-5' : 'h-12')}>
         {/* Trang riêng: nút ☰ của điện thoại nằm ở header này (thay thanh dự phòng của layout). */}
         {variant === 'page' && <MobileNavButton />}
-        <div className="flex min-w-0 items-center gap-1.5 text-[12px] text-[var(--w-text-3)]">
+        {variant === 'page' && (
+          <nav aria-label="Breadcrumb" className="flex min-w-0 shrink items-center gap-1.5 text-[13px] max-md:!hidden">
+            <Crumb href={`/work/${config.workspace.slug}`} className="max-w-[160px] max-lg:!hidden">{config.workspace.name}</Crumb>
+            <CrumbSep className="max-lg:!hidden" />
+            <Crumb href={`${base}/board`} className="max-w-[200px]">
+              <ProjectMark k={config.key} size={18} />
+              <span className="truncate">{config.name}</span>
+            </Crumb>
+            <CrumbSep />
+          </nav>
+        )}
+        <div className={cn('flex min-w-0 items-center gap-1.5 text-[var(--w-text-3)]', variant === 'page' ? 'text-[13px]' : 'text-[12px]')}>
           {issue.parent && (
             <>
               <button type="button" onClick={() => onOpenIssue(issue.parent!.number)} className="flex items-center gap-1 hover:text-[var(--w-text)]">
@@ -513,7 +545,7 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
           <IssueTypeIcon type={type} size={12} />
           <span className="font-mono text-[var(--w-text-2)]">{lk.issueKey(issue.number)}</span>
         </div>
-        <div className="ml-auto flex items-center gap-1">
+        <div className="w-header-actions ml-auto flex items-center gap-1">
           <EditLockPill config={config} />
           {type && <AiIssueMenu config={config} issueNumber={issue.number} typeKey={type.key} />}
           <button
@@ -532,7 +564,7 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
           {(issue.canDelete || config.permissions.createIssues) && (
             <>
               <button ref={menuRef} type="button" onClick={menu.toggle} className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label="More actions"><MoreHorizontal size={14} /></button>
-              <Popover open={menu.on} onClose={menu.close} anchorRef={menuRef} width={200} align="end">
+              <Popover open={menu.on} onClose={menu.close} anchorRef={menuRef} width={230} align="end">
                 <div className="p-1">
                   {config.permissions.createIssues && (
                     <button
@@ -543,6 +575,16 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
                       className="flex w-full items-center gap-2 rounded-[5px] px-2 py-1.5 text-left text-[13px] hover:bg-[var(--w-hover)] disabled:opacity-50"
                     >
                       <CopyPlus size={13} /> Clone
+                    </button>
+                  )}
+                  {issue.canDelete && (
+                    <button
+                      type="button"
+                      onClick={() => { menu.close(); setMoving(true); }}
+                      title="Move this issue to another project in the same workspace"
+                      className="flex w-full items-center gap-2 rounded-[5px] px-2 py-1.5 text-left text-[13px] hover:bg-[var(--w-hover)]"
+                    >
+                      <ArrowRightLeft size={13} /> Move to another project
                     </button>
                   )}
                   {issue.canDelete && (
@@ -560,12 +602,13 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
           )}
           {onClose && <button type="button" onClick={onClose} title="Close (Esc)" className="w-btn w-btn-ghost w-btn-icon w-btn-sm"><X size={15} /></button>}
         </div>
+        {variant === 'page' && <HeaderTools />}
       </div>
 
       {/* Thân */}
       <div className="min-h-0 flex-1 overflow-y-auto">
-        <div className={cn('flex flex-col gap-6 p-5', variant === 'page' ? 'lg:flex-row lg:gap-10 lg:px-8' : 'xl:flex-row')}>
-          <div className="min-w-0 flex-1 space-y-6">
+        <div className={cn('flex flex-col gap-6 p-5', variant === 'page' ? 'mx-auto w-full max-w-[1240px] lg:flex-row lg:gap-8 lg:px-8 lg:py-7' : 'xl:flex-row')}>
+          <div className={cn('min-w-0 flex-1 space-y-7', variant === 'page' && 'max-w-[820px]')}>
             <TitleEditor value={issue.title} editable={editable} onSave={(title) => set({ title })} />
             <div className="xl:hidden">{variant === 'drawer' && properties}</div>
             {variant === 'page' && (
@@ -591,16 +634,20 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
               </section>
             )}
             <section>
-              <h3 className="mb-1.5 text-[13px] font-semibold">Description</h3>
+              <h3 className="w-section-title mb-2">Description</h3>
               <Description issue={issue} config={config} editable={editable} onSave={(d) => set({ descriptionJson: d })} saving={update.isPending} />
             </section>
             <Subtasks issue={issue} config={config} lk={lk} onOpen={onOpenIssue} onAdd={() => setSubtaskOpen(true)} />
             <Links issue={issue} pid={pid} lk={lk} editable={editable} onOpenKey={openKey} />
+            {studioOn(config, 'approvals') && <IssueApprovals config={config} issue={issue} issueKey={lk.issueKey(issue.number)} />}
+            {studioOn(config, 'handoffs') && <IssueHandoffs config={config} issue={issue} issueKey={lk.issueKey(issue.number)} />}
             <Attachments issue={issue} pid={pid} config={config} />
             <IssueActivity pid={pid} num={num} config={config} lk={lk} />
           </div>
-          <aside className={cn('shrink-0', variant === 'page' ? 'hidden lg:block lg:w-[300px]' : 'hidden xl:block xl:w-[280px]')}>
-            <div className={cn(variant === 'page' && 'lg:sticky lg:top-0')}>{properties}</div>
+          <aside aria-label="Issue details" className={cn('shrink-0', variant === 'page' ? 'hidden lg:block lg:w-[320px]' : 'hidden xl:block xl:w-[290px]')}>
+            <div className={cn('rounded-[12px] border border-[var(--w-border)] bg-[var(--w-raised)] p-3.5 shadow-[var(--w-shadow-card)]', variant === 'page' && 'lg:sticky lg:top-0')}>
+              {properties}
+            </div>
           </aside>
         </div>
       </div>
@@ -614,6 +661,7 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
         confirmLabel="Delete issue"
         pending={del.isPending}
       />
+      {issue.canDelete && <MoveIssueDialog open={moving} onClose={() => setMoving(false)} config={config} issue={issue} lk={lk} />}
       <CreateIssueDialog open={subtaskOpen} onClose={() => setSubtaskOpen(false)} config={config} defaults={subtaskDefaults} onCreated={onOpenIssue} />
     </div>
   );

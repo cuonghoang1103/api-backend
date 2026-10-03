@@ -18,6 +18,9 @@ import { ColorPicker } from './ProjectLabels';
 import { useProjectInvalidate } from './useProjectInvalidate';
 import { AddStatusForm, CATEGORIES, CATEGORY_LABEL, DeleteStatusDialog, WipInput, useStatusUpdate } from '../workflow/statusParts';
 import { useTransitionDraft, type TransitionDraft } from '../workflow/useTransitionDraft';
+import { parsePair } from '../workflow/graph';
+import TransitionRulesFields, { rulesAvailable, rulesSummary } from '../workflow/TransitionRules';
+import { studioOn, useWorkspaceTeams } from '../studio/shared';
 import WorkflowDiagram from '../workflow/WorkflowDiagram';
 
 export { CATEGORY_LABEL, WipInput };
@@ -110,9 +113,42 @@ function StatusRow({
   );
 }
 
+// ─── Luật của từng mũi tên (lớp studio S1) ───────────────────────
+
+function RulesList({ config, statuses, draft, canEdit }: { config: ProjectConfig; statuses: WorkStatus[]; draft: TransitionDraft; canEdit: boolean }) {
+  const [open, setOpen] = useState<string | null>(null);
+  const teams = useWorkspaceTeams(config.workspace.id, studioOn(config, 'teams'));
+  const teamKeys = new Map((teams.data ?? []).map((t) => [t.id, t.key]));
+  const name = (id: number | null) => (id === null ? 'Any status' : statuses.find((s) => s.id === id)?.name ?? '?');
+  const keys = [...draft.pairs].sort();
+  return (
+    <div className="mt-4">
+      <h4 className="w-section-title mb-1">Transition rules</h4>
+      <p className="mb-2 text-[12px] text-[var(--w-text-3)]">Require an approval, or limit a move to certain teams. Saved with the transitions.</p>
+      <ul className="divide-y divide-[var(--w-border)] overflow-hidden rounded-[8px] border border-[var(--w-border)]">
+        {keys.map((k) => {
+          const { from, to } = parsePair(k);
+          const sum = rulesSummary(config, draft, k, teamKeys);
+          return (
+            <li key={k}>
+              <button type="button" onClick={() => setOpen(open === k ? null : k)} aria-expanded={open === k} className="flex w-full min-w-0 items-center gap-2 px-3 py-2 text-left text-[13px] hover:bg-[var(--w-hover)]">
+                <span className={cn('min-w-0 truncate', from === null && 'italic text-[var(--w-text-2)]')}>{name(from)}</span>
+                <span aria-hidden="true" className="shrink-0 text-[var(--w-text-3)]">→</span>
+                <span className="min-w-0 truncate">{name(to)}</span>
+                <span className={cn('ml-auto shrink-0 text-[12px]', sum ? 'font-medium text-[var(--w-accent-text)]' : 'text-[var(--w-text-3)]')}>{sum || 'No rules'}</span>
+              </button>
+              {open === k && <div className="border-t border-[var(--w-border)] bg-[var(--w-sunken)] px-3 py-3"><TransitionRulesFields config={config} draft={draft} edgeKey={k} canEdit={canEdit} /></div>}
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  );
+}
+
 // ─── Ma trận luồng chuyển ────────────────────────────────────────
 
-function TransitionsEditor({ wf, statuses, canEdit, draft }: { wf: WorkWorkflow; statuses: WorkStatus[]; canEdit: boolean; draft: TransitionDraft }) {
+function TransitionsEditor({ wf, statuses, canEdit, draft, config }: { wf: WorkWorkflow; statuses: WorkStatus[]; canEdit: boolean; draft: TransitionDraft; config: ProjectConfig }) {
   const { mode, pairs } = draft;
 
   const switchMode = (m: 'free' | 'restricted') => {
@@ -127,7 +163,7 @@ function TransitionsEditor({ wf, statuses, canEdit, draft }: { wf: WorkWorkflow;
   return (
     <div className="mt-4">
       <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
-        <h4 className="text-[12px] font-semibold uppercase tracking-[0.04em] text-[var(--w-text-3)]">Transitions</h4>
+        <h4 className="w-section-title">Transitions</h4>
         {canEdit && draft.dirty && (
           <div className="flex items-center gap-2">
             <button type="button" className="w-btn w-btn-sm" onClick={draft.discard}>Discard</button>
@@ -193,6 +229,7 @@ function TransitionsEditor({ wf, statuses, canEdit, draft }: { wf: WorkWorkflow;
           <p className="mt-2 text-[12px] text-[var(--w-text-3)]">
             {pairs.size ? `${pairs.size} allowed move${pairs.size === 1 ? '' : 's'}. “From any status” lets issues reach that status from anywhere.` : 'Check at least one move, or allow all moves.'}
           </p>
+          {rulesAvailable(config) && pairs.size > 0 && <RulesList config={config} statuses={statuses} draft={draft} canEdit={canEdit} />}
         </>
       )}
     </div>
@@ -278,7 +315,7 @@ function WorkflowPanel({
             {canEdit && <AddStatusForm pid={config.id} wfId={wf.id} onAdded={() => invalidate()} />}
           </div>
           <p className="mt-2 text-[12px] text-[var(--w-text-3)]">Statuses appear on the board in this order. Every workflow needs at least one “To do” and one “Done” status.</p>
-          <TransitionsEditor wf={wf} statuses={statuses} canEdit={canEdit} draft={draft} />
+          <TransitionsEditor wf={wf} statuses={statuses} canEdit={canEdit} draft={draft} config={config} />
         </>
       )}
 

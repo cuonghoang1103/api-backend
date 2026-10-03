@@ -15,7 +15,7 @@ export default function HelpButton() {
       title="Help & guide (?)"
     >
       <CircleHelp size={14} className="text-[var(--w-text-2)]" />
-      <span className="max-md:hidden">Help</span>
+      <span className="max-xl:hidden">Help</span>
     </button>
   );
 }

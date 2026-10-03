@@ -16,6 +16,7 @@ import { wk } from '@/components/work/hooks';
 import { Select, Switch } from '@/components/work/settings/shared';
 import { cn } from '@/lib/utils';
 import { CalendarButton } from '@/components/work/CalendarFeed';
+import WaitingOnMe from '@/components/work/studio/WaitingOnMe';
 
 const GROUPS: Array<{ id: MyWorkItem['bucket']; label: string; tone?: string }> = [
   { id: 'overdue', label: 'Overdue', tone: 'text-[var(--w-red)]' },
@@ -163,6 +164,9 @@ export default function MyWork() {
         <CalendarButton />
         <NotifyButton />
       </div>
+
+      {/* Lớp studio (S1): phê duyệt tới lượt tôi + bàn giao chờ tôi nhận — rỗng thì không hiện. */}
+      <WaitingOnMe />
 
       {!items.length ? (
         <div className="w-card flex flex-col items-center px-6 py-14 text-center">

@@ -10,17 +10,19 @@ import { Lock, type LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { avatarColor, Dialog, Spinner } from '../ui';
 import { MobileNavButton } from '../shell/mobileNav';
+import HeaderTools from '../shell/HeaderTools';
 
 /** Thanh tiêu đề 52px: nút ☰ (điện thoại), tiêu đề trái, hành động phải. */
 export function PageHeader({ title, sub, actions }: { title: ReactNode; sub?: ReactNode; actions?: ReactNode }) {
   return (
-    <header className="w-header flex h-[52px] shrink-0 items-center gap-2 border-b border-[var(--w-border)] px-3 md:gap-3 md:px-5">
+    <header className="w-header flex h-[52px] shrink-0 items-center gap-2 border-b border-[var(--w-border)] px-3 md:gap-2.5 md:px-5">
       <MobileNavButton />
       <div className="flex min-w-0 flex-1 items-center gap-2">
-        <h1 className="flex min-w-0 items-center truncate text-[15px] font-semibold">{title}</h1>
+        <h1 className="flex min-w-0 items-center truncate text-[15px] font-semibold tracking-[-0.01em]">{title}</h1>
         {sub && <span className="hidden truncate text-[13px] text-[var(--w-text-3)] sm:inline">{sub}</span>}
       </div>
-      {actions && <div className="flex shrink-0 items-center gap-2">{actions}</div>}
+      {actions && <div className="w-header-actions flex shrink-0 items-center gap-1.5">{actions}</div>}
+      <HeaderTools />
     </header>
   );
 }

@@ -306,7 +306,7 @@ export default function TestEditor({ config, pid, num, onOpenIssue }: {
 function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
     <section className="mt-6">
-      <h2 className="mb-2 text-[12px] font-semibold uppercase tracking-wide text-[var(--w-text-3)]">{title}</h2>
+      <h2 className="mb-2 text-[12px] font-semibold text-[var(--w-text-2)]">{title}</h2>
       {children}
     </section>
   );
@@ -316,7 +316,7 @@ function SideSection({ title, action, children }: { title: string; action?: Reac
   return (
     <section>
       <div className="mb-2 flex items-center justify-between gap-2">
-        <h3 className="text-[12px] font-semibold uppercase tracking-wide text-[var(--w-text-3)]">{title}</h3>
+        <h3 className="text-[12px] font-semibold text-[var(--w-text-2)]">{title}</h3>
         {action}
       </div>
       {children}

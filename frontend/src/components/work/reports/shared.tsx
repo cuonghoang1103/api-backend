@@ -59,11 +59,11 @@ export function SprintSelect({ sprints, value, onChange, className }: { sprints:
 
 export function StatCell({ label, value, hint, tone }: { label: string; value: ReactNode; hint?: ReactNode; tone?: 'green' | 'red' | 'accent' }) {
   return (
-    <div className="min-w-0 rounded-[var(--w-radius-lg)] border border-[var(--w-border)] bg-[var(--w-panel)] px-3 py-2.5">
-      <div className="truncate text-[11px] font-medium uppercase tracking-wide text-[var(--w-text-3)]">{label}</div>
+    <div className="min-w-0 rounded-[10px] border border-[var(--w-border)] bg-[var(--w-raised)] px-3.5 py-3 shadow-[var(--w-shadow-card)]">
+      <div className="truncate text-[12px] font-medium text-[var(--w-text-2)]">{label}</div>
       <div
         className={cn(
-          'mt-1 truncate text-[18px] font-semibold tabular-nums',
+          'mt-1 truncate text-[24px] font-semibold leading-tight tracking-[-0.02em] tabular-nums',
           tone === 'green' && 'text-[var(--w-green)]',
           tone === 'red' && 'text-[var(--w-red)]',
           tone === 'accent' && 'text-[var(--w-accent-text)]',

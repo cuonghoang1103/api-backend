@@ -325,6 +325,8 @@ export async function snapshotActiveSprints(): Promise<number> {
 
 // ─── Backlog ─────────────────────────────────────────────────────
 
+export const BACKLOG_LIMIT = 3000;
+
 /**
  * Mọi thứ trang Backlog cần trong một lượt: sprint chưa đóng (đang chạy trước),
  * thẻ tầng 0 của chúng, thẻ chưa vào sprint nào (chưa xong), và epic kèm tiến độ.
@@ -332,19 +334,20 @@ export async function snapshotActiveSprints(): Promise<number> {
 export async function getBacklog(userId: number, projectId: number) {
   await requireProject(userId, projectId, 'project.view');
   const mode = await estimationOf(projectId);
-  const [sprints, issues, epics] = await Promise.all([
+  const backlogWhere: Prisma.WorkIssueWhereInput = {
+    projectId, deletedAt: null, type: { level: 0 },
+    OR: [{ sprint: { state: { not: 'CLOSED' } } }, { sprintId: null, resolvedAt: null }],
+  };
+  const [sprints, rawIssues, epics] = await Promise.all([
     prisma.workSprint.findMany({
       where: { projectId, state: { not: 'CLOSED' } },
       orderBy: [{ state: 'asc' }, { position: 'asc' }, { id: 'asc' }], // 'ACTIVE' < 'PLANNED'
       select: SPRINT_SELECT,
     }),
     prisma.workIssue.findMany({
-      where: {
-        projectId, deletedAt: null, type: { level: 0 },
-        OR: [{ sprint: { state: { not: 'CLOSED' } } }, { sprintId: null, resolvedAt: null }],
-      },
+      where: backlogWhere,
       orderBy: [{ rank: 'asc' }, { id: 'asc' }],
-      take: 3000,
+      take: BACKLOG_LIMIT + 1,
       select: { ...CARD_SELECT, originalEstimateMin: true },
     }),
     prisma.workIssue.findMany({
@@ -356,9 +359,16 @@ export async function getBacklog(userId: number, projectId: number) {
       },
     }),
   ]);
+  // Trần 3000 thẻ: vượt thì báo `truncated` + `total` thay vì cắt im lặng.
+  const truncated = rawIssues.length > BACKLOG_LIMIT;
+  const issues = rawIssues.slice(0, BACKLOG_LIMIT);
+  const total = truncated ? await prisma.workIssue.count({ where: backlogWhere }) : issues.length;
   return {
     unit: mode,
     sprints,
+    truncated,
+    total,
+    limit: BACKLOG_LIMIT,
     issues: issues.map((i) => {
       const { originalEstimateMin, ...card } = i;
       return { ...toCard(card), originalEstimateMin, estimate: estimateOf(i, mode) };

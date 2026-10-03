@@ -54,7 +54,10 @@ export default function GettingStartedCard({
   const [collapsed, setCollapsed] = useState(false);
   useEffect(() => {
     setDismissed(readFlag(DISMISS_KEY(pid)));
-    setCollapsed(readFlag(COLLAPSE_KEY));
+    // Chưa từng chọn ⇒ điện thoại mặc định GẬP (6 bước chiếm trọn màn 390px, đẩy board xuống dưới).
+    let saved: string | null = null;
+    try { saved = localStorage.getItem(COLLAPSE_KEY); } catch { /* bị chặn */ }
+    setCollapsed(saved === null ? window.innerWidth < 640 : saved === '1');
   }, [pid]);
 
   const q = useQuery({
@@ -130,16 +133,19 @@ export default function GettingStartedCard({
   const pct = Math.round((doneCount / steps.length) * 100);
 
   const dismiss = () => { writeFlag(DISMISS_KEY(pid), true); setDismissed(true); };
-  const toggle = () => setCollapsed((v) => { writeFlag(COLLAPSE_KEY, !v); return !v; });
+  const toggle = () => setCollapsed((v) => {
+    try { localStorage.setItem(COLLAPSE_KEY, v ? '0' : '1'); } catch { /* bị chặn */ }
+    return !v;
+  });
 
   return (
     <section
       aria-label="Getting started"
-      className={cn('rounded-[var(--w-radius-lg,10px)] border border-[var(--w-border)] bg-[var(--w-panel)]', className)}
+      className={cn('overflow-hidden rounded-[10px] border border-[var(--w-border)] bg-[var(--w-raised)] shadow-[var(--w-shadow-card)]', className)}
     >
-      <div className="flex flex-wrap items-center gap-x-3 gap-y-2 px-4 py-2.5">
-        <div className="min-w-0 flex-1">
-          <div className="flex items-center gap-2">
+      <div className="flex flex-wrap items-center gap-x-2 gap-y-2 px-4 py-2.5">
+        <div className="min-w-0 flex-1 max-sm:basis-full">
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
             <h2 className="text-[13px] font-semibold">Getting started</h2>
             <span className="text-[12px] tabular-nums text-[var(--w-text-3)]">{doneCount} of {steps.length} done</span>
           </div>
@@ -170,10 +176,10 @@ export default function GettingStartedCard({
       {!collapsed && (
         <ol className="grid grid-cols-1 gap-px border-t border-[var(--w-border)] bg-[var(--w-border)] sm:grid-cols-2 xl:grid-cols-3">
           {steps.map((s, i) => (
-            <li key={s.id} className="flex min-w-0 items-start gap-2.5 bg-[var(--w-panel)] px-4 py-2.5">
+            <li key={s.id} className="flex min-w-0 items-start gap-2.5 bg-[var(--w-raised)] px-4 py-3">
               <span
                 className={cn(
-                  'mt-0.5 flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full border text-[10px] font-semibold',
+                  'mt-0.5 flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full border text-[11px] font-semibold tabular',
                   s.done ? 'border-[var(--w-green)] bg-[var(--w-green)] text-white' : 'border-[var(--w-border-strong)] text-[var(--w-text-3)]',
                 )}
                 aria-hidden

@@ -1,37 +1,51 @@
 'use client';
 
 /**
- * Sidebar CT Work: đổi không gian + chuông thông báo, "My work" luôn ở trên
- * cùng, danh sách dự án, điều hướng trong dự án chia nhóm (Planning · Work ·
- * Insights). Đọc slug/key từ đường dẫn — sidebar sống ở layout nên không nhận params.
+ * Sidebar CT Work: đổi không gian, "My work" luôn ở trên cùng, danh sách dự án,
+ * điều hướng trong dự án chia nhóm (Planning · Work · Insights). Đọc slug/key
+ * từ đường dẫn — sidebar sống ở layout nên không nhận params.
+ *
+ * Bản 2 (04/10/2026):
+ * · Thu gọn thành thanh icon 60px (nút ở chân sidebar, nhớ lựa chọn) — class
+ *   `w-rail` trên <nav>; work.css giấu mọi chữ trong hàng `.w-nav-row`, chỉ để
+ *   lại icon + những gì gắn `w-keep`. Mục mới thêm sau tự thu gọn theo, không
+ *   cần viết nhánh riêng.
+ * · Chuông + người dùng chuyển lên thanh trên (shell/HeaderTools) ở ≥md; trong
+ *   ngăn kéo điện thoại (có `onNavigate`) vẫn hiện ở đây.
+ * · Điều hướng dự án là DỮ LIỆU (PROJECT_NAV, WORKSPACE_NAV): thêm Stages /
+ *   Approvals / Teams sau này = thêm một dòng vào mảng, không sửa JSX.
  */
 
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
+import type { LucideIcon } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import {
   ArrowLeft, CalendarRange, CircleHelp, KeyRound, FlaskConical, Rocket, BarChart3, ChevronDown, Columns3, Inbox, LayoutDashboard,
-  List, ListOrdered, Plus, Search, Settings, Users, LayoutGrid, Check, Sparkles,
+  List, ListOrdered, Plus, Search, Settings, Users, LayoutGrid, Check, Sparkles, PanelLeftClose, PanelLeftOpen, Milestone, BadgeCheck, Network,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { workApi } from '@/lib/work-api';
+import { workApi, type StudioModule } from '@/lib/work-api';
 import { useAuthStore } from '@/store/authStore';
 import { wk } from './hooks';
-import { avatarColor, Popover, UserAvatar, useToggle } from './ui';
+import { Popover, ProjectMark, UserAvatar, useToggle } from './ui';
 import { WorkspaceMark } from './settings/shared';
 import { openHelp } from './help/store';
 import { lastAiPid, openAiPanel, useAiPanel } from './ai/store';
 import WorkInbox from './shell/WorkInbox';
+import { useSidebarRail } from './shell/mobileNav';
 
 const NOT_SLUG = new Set(['invite', 'share', 'developer', 'search']);
+const WS_PAGES = new Set(['settings', 'teams']);
 
 export function useWorkPath() {
   const pathname = usePathname() ?? '';
   const parts = pathname.split('/').filter(Boolean); // ['work', slug, key, view, ...]
   // Các trang tĩnh dưới /work không phải slug không gian.
   const slug = parts[1] && !NOT_SLUG.has(parts[1]) ? decodeURIComponent(parts[1]) : undefined;
-  const key = parts[2] && parts[2] !== 'settings' ? decodeURIComponent(parts[2]).toUpperCase() : undefined;
+  // Trang cấp không gian (/settings, /teams) không phải mã dự án — mã dự án luôn VIẾT HOA trên URL.
+  const key = parts[2] && !WS_PAGES.has(parts[2]) ? decodeURIComponent(parts[2]).toUpperCase() : undefined;
   const view = parts[3];
   return { pathname, slug, key, view };
 }
@@ -40,10 +54,10 @@ const ROW = 'w-nav-row relative flex h-8 items-center gap-2.5 rounded-[6px] px-2
 const ROW_IDLE = 'text-[var(--w-text-2)] hover:bg-[var(--w-hover)] hover:text-[var(--w-text)]';
 const ROW_ON = 'bg-[var(--w-active)] font-medium text-[var(--w-text)]';
 
-function NavItem({ href, icon: Icon, label, active, indent, badge }: { href: string; icon: typeof List; label: string; active: boolean; indent?: boolean; badge?: React.ReactNode }) {
+function NavItem({ href, icon: Icon, label, active, indent, badge }: { href: string; icon: LucideIcon; label: string; active: boolean; indent?: boolean; badge?: React.ReactNode }) {
   return (
-    <Link href={href} aria-current={active ? 'page' : undefined} className={cn(ROW, indent && 'pl-3', active ? ROW_ON : ROW_IDLE)}>
-      {active && <span aria-hidden="true" className="absolute inset-y-1.5 left-0 w-[3px] rounded-full bg-[var(--w-accent)]" />}
+    <Link href={href} title={label} aria-label={label} aria-current={active ? 'page' : undefined} className={cn(ROW, indent && 'pl-3', active ? ROW_ON : ROW_IDLE)}>
+      {active && <span aria-hidden="true" className="w-keep absolute inset-y-1.5 left-0 w-[3px] rounded-full bg-[var(--w-accent)]" />}
       <Icon size={15} className={cn('shrink-0', active ? 'text-[var(--w-accent-text)]' : 'opacity-80')} />
       <span className="min-w-0 flex-1 truncate">{label}</span>
       {badge}
@@ -53,32 +67,81 @@ function NavItem({ href, icon: Icon, label, active, indent, badge }: { href: str
 
 function GroupLabel({ children, action }: { children: React.ReactNode; action?: React.ReactNode }) {
   return (
-    <div className="mb-1 mt-4 flex h-6 items-center justify-between px-2 first:mt-1">
+    <div className="w-rail-hide mb-1 mt-4 flex h-6 items-center justify-between px-2 first:mt-1">
       <span className="w-eyebrow">{children}</span>
       {action}
     </div>
   );
 }
 
-/** Ô chữ tắt màu cố định cho dự án (khoá dự án). */
-function ProjectMark({ k }: { k: string }) {
-  return (
-    <span
-      aria-hidden="true"
-      style={{ background: avatarColor(k) }}
-      className="flex h-[20px] w-[20px] shrink-0 items-center justify-center rounded-[5px] text-[11px] font-bold leading-none text-white"
-    >
-      {k.slice(0, 1)}
-    </span>
-  );
+// ─── Điều hướng dạng dữ liệu ─────────────────────────────────────
+
+interface NavDef {
+  /** Đoạn đường dẫn sau /work/<slug>/<KEY>/ */
+  path: string;
+  label: string;
+  icon: LucideIcon;
+  /** Đang ở trang này? (view = đoạn thứ 4 của đường dẫn) */
+  match: (view: string | undefined) => boolean;
+  /** Lớp studio: chỉ hiện khi dự án BẬT mô-đun này (dự án cũ/School không thấy). */
+  module?: StudioModule;
 }
+
+/**
+ * Điều hướng trong một dự án, chia nhóm. Chỗ dành sẵn cho mục sau này:
+ *   Work     → Stages (quy trình theo giai đoạn), Approvals (duyệt)
+ * Thêm = một phần tử { path, label, icon, match } vào đúng nhóm.
+ */
+const PROJECT_NAV: { group: string; items: NavDef[] }[] = [
+  {
+    group: 'Planning',
+    items: [
+      { path: 'board', label: 'Board', icon: Columns3, match: (v) => v === 'board' || v === undefined },
+      { path: 'backlog', label: 'Backlog', icon: ListOrdered, match: (v) => v === 'backlog' },
+      { path: 'timeline', label: 'Timeline', icon: CalendarRange, match: (v) => v === 'timeline' },
+      { path: 'releases', label: 'Releases', icon: Rocket, match: (v) => v === 'releases' },
+    ],
+  },
+  {
+    group: 'Work',
+    items: [
+      { path: 'list', label: 'Issues', icon: List, match: (v) => v === 'list' || v === 'issue' },
+      { path: 'stages', label: 'Stages', icon: Milestone, match: (v) => v === 'stages', module: 'stages' },
+      { path: 'approvals', label: 'Approvals', icon: BadgeCheck, match: (v) => v === 'approvals', module: 'approvals' },
+      { path: 'tests', label: 'Tests', icon: FlaskConical, match: (v) => v === 'tests' },
+    ],
+  },
+  {
+    group: 'Insights',
+    items: [
+      { path: 'reports', label: 'Reports', icon: BarChart3, match: (v) => v === 'reports' },
+      { path: 'dashboards', label: 'Dashboards', icon: LayoutDashboard, match: (v) => v === 'dashboards' },
+    ],
+  },
+];
+
+/**
+ * Mục cấp không gian. `module` = chỉ hiện khi ÍT NHẤT một dự án của không gian
+ * bật mô-đun đó, và người xem không phải khách (Teams — lớp studio S1).
+ */
+const WORKSPACE_NAV: { path: string; label: string; icon: LucideIcon; module?: StudioModule }[] = [
+  { path: '', label: 'Projects', icon: LayoutGrid },
+  { path: '/teams', label: 'Teams', icon: Network, module: 'teams' },
+  { path: '/settings', label: 'Members & settings', icon: Users },
+];
 
 export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void }) {
   const { pathname, slug, key, view } = useWorkPath();
+  // Ngăn kéo điện thoại (có onNavigate) không bao giờ thu gọn.
+  const inDrawer = !!onNavigate;
+  const railOn = useSidebarRail((st) => st.collapsed);
+  const toggleRail = useSidebarRail((st) => st.toggle);
+  const rail = !inDrawer && railOn;
   const search = useSearchParams();
   const user = useAuthStore((s) => s.user);
   const switcher = useToggle();
   const switcherRef = useRef<HTMLButtonElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   const workspaces = useQuery({ queryKey: wk.workspaces, queryFn: workApi.workspaces, staleTime: 60_000 });
   const ws = useQuery({ queryKey: wk.workspace(slug ?? ''), queryFn: () => workApi.workspaceBySlug(slug!), enabled: !!slug, staleTime: 30_000 });
@@ -88,6 +151,22 @@ export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void })
   const homeTab = search?.get('tab');
   const onMyWork = pathname === '/work' && homeTab !== 'workspaces';
   const onWorkspaces = pathname === '/work' && homeTab === 'workspaces';
+
+  // Mở dự án ⇒ cuộn khối của nó (tên + điều hướng con) vào vùng nhìn thấy của sidebar.
+  const projectCount = projects.length;
+  useEffect(() => {
+    if (!key) return;
+    const t = setTimeout(() => {
+      const box = scrollRef.current?.querySelector<HTMLElement>('[data-open-project]');
+      const sc = scrollRef.current;
+      if (!box || !sc) return;
+      const b = box.getBoundingClientRect();
+      const c = sc.getBoundingClientRect();
+      if (b.bottom > c.bottom - 8) sc.scrollTop += Math.min(b.bottom - c.bottom + 16, b.top - c.top - 8);
+      else if (b.top < c.top) sc.scrollTop -= c.top - b.top + 8;
+    }, 60);
+    return () => clearTimeout(t);
+  }, [key, projectCount]);
 
   /* AI — lối vào luôn thấy được (04/10/2026). Trước đây chỉ có nút nhỏ ở header
      của một dự án, nên người dùng kết luận "CT Work chưa có AI". Trong dự án: mở
@@ -108,7 +187,7 @@ export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void })
   }, [aiPid]);
 
   return (
-    <nav aria-label="CT Work" className="flex h-full flex-col text-[13.5px]" onClick={(e) => (e.target as HTMLElement).closest('a') && onNavigate?.()}>
+    <nav aria-label="CT Work" data-rail={rail || undefined} className={cn('flex h-full flex-col text-[13.5px]', rail && 'w-rail')} onClick={(e) => (e.target as HTMLElement).closest('a') && onNavigate?.()}>
       {/* Đầu: đổi không gian + chuông. */}
       <div className="flex items-center gap-1 px-2 pb-1 pt-2.5">
         <button
@@ -117,20 +196,22 @@ export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void })
           onClick={switcher.toggle}
           aria-haspopup="menu"
           aria-expanded={switcher.on}
+          title={currentName ?? 'CT Work'}
           className="w-nav-row flex h-10 min-w-0 flex-1 items-center gap-2.5 rounded-[8px] px-2 text-left transition-colors hover:bg-[var(--w-hover)]"
         >
           {currentName ? (
-            <WorkspaceMark name={currentName} size={26} />
+            <span className="w-keep flex"><WorkspaceMark name={currentName} size={26} /></span>
           ) : (
-            <span className="flex h-[26px] w-[26px] shrink-0 items-center justify-center rounded-[7px] bg-[var(--w-accent)] text-[11px] font-bold text-white">CT</span>
+            <span className="w-keep flex h-[26px] w-[26px] shrink-0 items-center justify-center rounded-[7px] bg-[var(--w-accent)] text-[11px] font-bold text-white">CT</span>
           )}
           <span className="min-w-0 flex-1 leading-tight">
             <span className="block truncate text-[14px] font-semibold">{currentName ?? 'CT Work'}</span>
             <span className="block truncate text-[12px] text-[var(--w-text-3)]">{currentName ? 'Workspace' : 'Choose a workspace'}</span>
           </span>
-          <ChevronDown size={14} className="shrink-0 text-[var(--w-text-3)]" />
+          <ChevronDown size={14} className="w-rail-hide shrink-0 text-[var(--w-text-3)]" />
         </button>
-        <WorkInbox onNavigate={onNavigate} />
+        {/* ≥md chuông nằm ở thanh trên (HeaderTools); ngăn kéo điện thoại giữ ở đây. */}
+        {inDrawer && <WorkInbox onNavigate={onNavigate} />}
         <Popover open={switcher.on} onClose={switcher.close} anchorRef={switcherRef} width={260}>
           <div className="p-1" role="menu">
             <div className="w-eyebrow px-2 pb-1 pt-1.5">Workspaces</div>
@@ -159,7 +240,10 @@ export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void })
         </Popover>
       </div>
 
-      <div className="flex-1 overflow-y-auto px-2 pb-3">
+      {/* Vùng cuộn RIÊNG giữa đầu và chân sidebar: min-h-0 để nó co lại thay vì đẩy chân
+          xuống dưới mép; dải mờ ở đáy báo "còn nữa"; dự án đang mở tự cuộn vào tầm nhìn
+          (dự án cuối danh sách từng mở ra ngay dưới chân sidebar, trông như bị che). */}
+      <div ref={scrollRef} className="relative min-h-0 flex-1 overflow-y-auto overscroll-contain px-2 pb-3">
         {/* "My work" luôn tới được, kể cả khi đang trong một dự án. */}
         <div className="mt-1 space-y-0.5">
           <NavItem href="/work?tab=my-work" icon={Inbox} label="My work" active={onMyWork} />
@@ -185,8 +269,15 @@ export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void })
           <>
             <GroupLabel>Workspace</GroupLabel>
             <div className="space-y-0.5">
-              <NavItem href={`/work/${slug}`} icon={LayoutGrid} label="Projects" active={pathname === `/work/${slug}`} />
-              <NavItem href={`/work/${slug}/settings`} icon={Users} label="Members & settings" active={pathname.startsWith(`/work/${slug}/settings`)} />
+              {WORKSPACE_NAV.filter((n) => !n.module || (ws.data?.role !== 'GUEST' && projects.some((p) => p.modules?.[n.module!]))).map((n) => (
+                <NavItem
+                  key={n.label}
+                  href={`/work/${slug}${n.path}`}
+                  icon={n.icon}
+                  label={n.label}
+                  active={n.path ? pathname.startsWith(`/work/${slug}${n.path}`) : pathname === `/work/${slug}`}
+                />
+              ))}
             </div>
 
             <GroupLabel
@@ -203,29 +294,27 @@ export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void })
                 const open = key === p.key;
                 const base = `/work/${slug}/${p.key}`;
                 return (
-                  <div key={p.id}>
+                  <div key={p.id} data-open-project={open || undefined}>
                     <Link
                       href={`${base}/board`}
                       title={p.name}
+                      aria-label={p.name}
                       className={cn(ROW, open ? 'font-semibold text-[var(--w-text)]' : ROW_IDLE)}
                     >
-                      <ProjectMark k={p.key} />
+                      <span className="w-keep flex"><ProjectMark k={p.key} size={20} /></span>
                       <span className="min-w-0 flex-1 truncate">{p.name}</span>
                       <span className="shrink-0 font-mono text-[11px] text-[var(--w-text-3)]">{p.key}</span>
                     </Link>
                     {open && (
-                      <div className="mb-2 ml-[18px] mt-0.5 border-l border-[var(--w-border)] pl-1.5">
-                        <div className="w-eyebrow px-2 pb-0.5 pt-2">Planning</div>
-                        <NavItem href={`${base}/board`} icon={Columns3} label="Board" active={view === 'board' || view === undefined} indent />
-                        <NavItem href={`${base}/backlog`} icon={ListOrdered} label="Backlog" active={view === 'backlog'} indent />
-                        <NavItem href={`${base}/timeline`} icon={CalendarRange} label="Timeline" active={view === 'timeline'} indent />
-                        <NavItem href={`${base}/releases`} icon={Rocket} label="Releases" active={view === 'releases'} indent />
-                        <div className="w-eyebrow px-2 pb-0.5 pt-2">Work</div>
-                        <NavItem href={`${base}/list`} icon={List} label="Issues" active={view === 'list' || view === 'issue'} indent />
-                        <NavItem href={`${base}/tests`} icon={FlaskConical} label="Tests" active={view === 'tests'} indent />
-                        <div className="w-eyebrow px-2 pb-0.5 pt-2">Insights</div>
-                        <NavItem href={`${base}/reports`} icon={BarChart3} label="Reports" active={view === 'reports'} indent />
-                        <NavItem href={`${base}/dashboards`} icon={LayoutDashboard} label="Dashboards" active={view === 'dashboards'} indent />
+                      <div className="w-subnav mb-2 ml-[18px] mt-0.5 border-l border-[var(--w-border)] pl-1.5">
+                        {PROJECT_NAV.map((g) => (
+                          <div key={g.group}>
+                            <div className="w-eyebrow w-rail-hide px-2 pb-0.5 pt-2">{g.group}</div>
+                            {g.items.filter((n) => !n.module || p.modules?.[n.module]).map((n) => (
+                              <NavItem key={n.path} href={`${base}/${n.path}`} icon={n.icon} label={n.label} active={n.match(view)} indent />
+                            ))}
+                          </div>
+                        ))}
                         <div className="my-1.5 border-t border-[var(--w-border)]" />
                         <NavItem href={`${base}/settings`} icon={Settings} label="Project settings" active={view === 'settings'} indent />
                       </div>
@@ -234,7 +323,7 @@ export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void })
                 );
               })}
               {ws.data && !projects.length && (
-                <p className="px-2 py-1 text-[13px] text-[var(--w-text-3)]">No projects yet.</p>
+                <p className="w-rail-hide px-2 py-1 text-[13px] text-[var(--w-text-3)]">No projects yet.</p>
               )}
             </div>
           </>
@@ -243,20 +332,22 @@ export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void })
             <GroupLabel>Your workspaces</GroupLabel>
             <div className="space-y-0.5">
               {workspaces.data.map((w) => (
-                <Link key={w.id} href={`/work/${w.slug}`} className={cn(ROW, ROW_IDLE)}>
-                  <WorkspaceMark name={w.name} size={20} />
+                <Link key={w.id} href={`/work/${w.slug}`} title={w.name} className={cn(ROW, ROW_IDLE)}>
+                  <span className="w-keep flex"><WorkspaceMark name={w.name} size={20} /></span>
                   <span className="min-w-0 flex-1 truncate">{w.name}</span>
                 </Link>
               ))}
             </div>
           </>
         ) : null}
+        <div aria-hidden="true" className="pointer-events-none sticky bottom-[-12px] -mb-3 mt-1 h-5 bg-gradient-to-t from-[var(--w-bg)] to-transparent" />
       </div>
 
       <div className="space-y-0.5 border-t border-[var(--w-border)] p-2">
         <button
           type="button"
           onClick={() => { onNavigate?.(); openHelp(); }}
+          title="Help & guide"
           className={cn(ROW, ROW_IDLE, 'w-full text-left')}
         >
           <CircleHelp size={15} className="shrink-0 opacity-80" />
@@ -264,10 +355,24 @@ export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void })
           <kbd className="w-kbd max-md:!hidden">?</kbd>
         </button>
         <NavItem href="/work/developer" icon={KeyRound} label="API tokens" active={pathname.startsWith('/work/developer')} />
-        <Link href="/" className={cn(ROW, ROW_IDLE)}>
-          <ArrowLeft size={15} className="shrink-0 opacity-80" /> Back to CuongThai
+        <Link href="/" title="Back to CuongThai" className={cn(ROW, ROW_IDLE)}>
+          <ArrowLeft size={15} className="shrink-0 opacity-80" /> <span className="min-w-0 flex-1 truncate">Back to CuongThai</span>
         </Link>
-        {user && (
+        {!inDrawer && (
+          <button
+            type="button"
+            onClick={toggleRail}
+            title={rail ? 'Expand sidebar' : 'Collapse sidebar'}
+            aria-label={rail ? 'Expand sidebar' : 'Collapse sidebar'}
+            aria-expanded={!rail}
+            className={cn(ROW, ROW_IDLE, 'w-full text-left')}
+          >
+            {rail ? <PanelLeftOpen size={15} className="shrink-0 opacity-80" /> : <PanelLeftClose size={15} className="shrink-0 opacity-80" />}
+            <span className="min-w-0 flex-1 truncate">Collapse sidebar</span>
+          </button>
+        )}
+        {/* ≥md người dùng nằm ở thanh trên (HeaderTools); ngăn kéo điện thoại giữ ở đây. */}
+        {user && inDrawer && (
           <div className="mt-1 flex items-center gap-2.5 rounded-[6px] px-2 py-1.5">
             <UserAvatar user={{ username: user.username, fullName: user.fullName ?? null, displayName: user.displayName ?? null, avatarUrl: user.avatarUrl ?? null }} size={24} />
             <span className="min-w-0 flex-1 leading-tight">

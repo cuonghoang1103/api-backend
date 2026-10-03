@@ -8,7 +8,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { workApi, workError, type WorkWorkflow } from '@/lib/work-api';
+import { workApi, workError, type TransitionRules, type WorkWorkflow } from '@/lib/work-api';
 import { pairKey, parsePair } from './graph';
 
 export type TransitionMode = 'free' | 'restricted';
@@ -21,6 +21,13 @@ export interface TransitionDraft {
   dirty: boolean;
   /** Giới hạn mà không còn mũi tên nào ⇒ máy chủ từ chối, nút Lưu phải tắt. */
   invalid: boolean;
+  /**
+   * Luật của từng mũi tên (lớp studio S1: cần phê duyệt / chỉ bộ phận X), theo pairKey.
+   * Lưu chung lượt setTransitions — TRƯỚC đây lượt lưu không gửi rules nên sẽ XOÁ
+   * luật đang có; giờ bản nháp mang luật theo để không mất.
+   */
+  rules: Map<string, TransitionRules>;
+  setRule: (key: string, r: TransitionRules) => void;
   setMode: (m: TransitionMode) => void;
   setPairs: (next: Set<string> | ((prev: Set<string>) => Set<string>)) => void;
   add: (from: number | null, to: number) => void;
@@ -37,13 +44,28 @@ export function useTransitionDraft(wf: WorkWorkflow, pid: number, onSaved: () =>
   const sig = wf.transitions.map((t) => pairKey(t.fromStatusId, t.toStatusId)).sort().join(',');
   const initialPairs = useMemo(() => new Set(sig ? sig.split(',') : []), [sig]);
   const statusSig = wf.statuses.map((s) => s.id).sort((a, b) => a - b).join(',');
+  const rulesSig = JSON.stringify(wf.transitions
+    .filter((t) => t.rules && (t.rules.requireApproval || t.rules.teamIds?.length))
+    .map((t) => [pairKey(t.fromStatusId, t.toStatusId), cleanRules(t.rules!)])
+    .sort((a, b) => String(a[0]).localeCompare(String(b[0]))));
+  const initialRules = useMemo(() => new Map<string, TransitionRules>(JSON.parse(rulesSig) as Array<[string, TransitionRules]>), [rulesSig]);
+  const [rules, setRules] = useState<Map<string, TransitionRules>>(initialRules);
+  useEffect(() => { setRules(new Map(initialRules)); }, [initialRules]);
+  const setRule = useCallback((key: string, r: TransitionRules) => setRules((m) => {
+    const n = new Map(m);
+    const c = cleanRules(r);
+    if (c.requireApproval || c.teamIds?.length) n.set(key, c); else n.delete(key);
+    return n;
+  }), []);
 
   const [mode, setMode] = useState<TransitionMode>(initialMode);
   const [pairs, setPairsState] = useState<Set<string>>(initialPairs);
   const prev = useRef({ mode: initialMode, pairs: initialPairs });
 
   const same = (a: Set<string>, b: Set<string>) => a.size === b.size && [...a].every((k) => b.has(k));
-  const dirty = mode !== initialMode || (mode === 'restricted' && !same(pairs, initialPairs));
+  // Luật chỉ tính cho mũi tên còn trong bản nháp (xoá mũi tên ⇒ luật của nó đi theo).
+  const rulesDirty = mode === 'restricted' && rulesSigOf(rules, pairs) !== rulesSigOf(initialRules, pairs);
+  const dirty = mode !== initialMode || (mode === 'restricted' && (!same(pairs, initialPairs) || rulesDirty));
 
   // Máy chủ đổi (vừa lưu / phiên khác / xoá trạng thái): chưa sửa gì thì nạp lại;
   // đang sửa dở thì giữ bản nháp, chỉ bỏ cặp trỏ vào trạng thái đã mất.
@@ -71,12 +93,12 @@ export function useTransitionDraft(wf: WorkWorkflow, pid: number, onSaved: () =>
     const k = pairKey(from, to);
     setPairsState((p) => { const n = new Set(p); if (n.has(k)) n.delete(k); else n.add(k); return n; });
   }, []);
-  const discard = useCallback(() => { setMode(initialMode); setPairsState(new Set(initialPairs)); }, [initialMode, initialPairs]);
+  const discard = useCallback(() => { setMode(initialMode); setPairsState(new Set(initialPairs)); setRules(new Map(initialRules)); }, [initialMode, initialPairs, initialRules]);
 
   const mutation = useMutation({
     mutationFn: () => {
       if (mode === 'free') return workApi.setTransitions(pid, wf.id, { mode: 'free' });
-      return workApi.setTransitions(pid, wf.id, { mode: 'restricted', transitions: [...pairs].map(parsePair) });
+      return workApi.setTransitions(pid, wf.id, { mode: 'restricted', transitions: [...pairs].map((k) => ({ ...parsePair(k), rules: rules.get(k) ?? null })) });
     },
     onSuccess: () => { toast.success(mode === 'free' ? 'Workflow is free again — any status can move to any status' : 'Transitions saved'); onSaved(); },
     onError: (err) => toast.error(workError(err, 'Could not save the transitions')),
@@ -85,8 +107,22 @@ export function useTransitionDraft(wf: WorkWorkflow, pid: number, onSaved: () =>
   return {
     mode, pairs, initialMode, initialPairs, dirty,
     invalid: mode === 'restricted' && !pairs.size,
+    rules, setRule,
     setMode, setPairs, add, remove, toggle, discard,
     save: () => mutation.mutate(),
     saving: mutation.isPending,
   };
+}
+
+/** Bỏ khoá thừa / giá trị rỗng để so sánh và gửi đi ổn định. */
+function cleanRules(r: TransitionRules): TransitionRules {
+  const out: TransitionRules = {};
+  if (r.requireApproval) out.requireApproval = true;
+  const ids = [...new Set(r.teamIds ?? [])].sort((a, b) => a - b);
+  if (ids.length) out.teamIds = ids;
+  return out;
+}
+
+function rulesSigOf(m: Map<string, TransitionRules>, pairs: Set<string>): string {
+  return JSON.stringify([...m.entries()].filter(([k]) => pairs.has(k)).sort((a, b) => a[0].localeCompare(b[0])));
 }

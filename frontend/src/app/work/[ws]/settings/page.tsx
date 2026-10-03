@@ -8,7 +8,7 @@ import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigat
 import { useQuery } from '@tanstack/react-query';
 import { workApi, workError } from '@/lib/work-api';
 import { wk } from '@/components/work/hooks';
-import { EmptyState, Spinner } from '@/components/work/ui';
+import { EmptyState, PageLoading } from '@/components/work/ui';
 import { PageHeader, SettingsLayout, type NavGroup, type TabDef } from '@/components/work/settings/shared';
 import { Crumb, CrumbSep } from '@/components/work/ProjectHeader';
 import WorkspaceGeneral from '@/components/work/settings/WorkspaceGeneral';
@@ -45,7 +45,7 @@ function WorkspaceSettings() {
   const tab: Tab = raw && tabs.some((t) => t.key === raw) ? raw : 'general';
   const setTab = (t: Tab) => router.replace(`${pathname}${t === 'general' ? '' : `?tab=${t}`}`, { scroll: false });
 
-  if (q.isLoading) return <div className="flex h-full items-center justify-center"><Spinner size={20} /></div>;
+  if (q.isLoading) return <PageLoading />;
   if (q.error || !ws) {
     return (
       <div className="flex h-full flex-col">
@@ -75,7 +75,7 @@ function WorkspaceSettings() {
 
 export default function WorkspaceSettingsPage() {
   return (
-    <Suspense fallback={<div className="flex h-full items-center justify-center"><Spinner size={20} /></div>}>
+    <Suspense fallback={<PageLoading />}>
       <WorkspaceSettings />
     </Suspense>
   );

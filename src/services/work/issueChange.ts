@@ -21,6 +21,8 @@ import { emitWorkEvent, type FieldChange, type WorkActor, type WorkEvent } from 
 import { can, loadProjectAccess } from './permissions.js';
 import { rankAfter, rankBetween, rankInitial } from './rank.js';
 import { tiptapToText } from './tiptapText.js';
+import { assertModule, hasRules, transitionRulesOf } from './studio.js';
+import { currentTargetHash, signedHash } from './approvalContent.js';
 
 type Tx = Prisma.TransactionClient;
 
@@ -38,6 +40,10 @@ export interface IssuePatch {
   parentId?: number | null;
   sprintId?: number | null;
   fixVersionId?: number | null;
+  /** Bộ phận phụ trách (mô-đun teams). null = bỏ trống — luôn được phép. */
+  teamId?: number | null;
+  /** Giai đoạn (mô-đun stages). null = bỏ trống — luôn được phép. */
+  stageId?: number | null;
   statusId?: number;
 }
 
@@ -91,15 +97,72 @@ export async function assertDoneRequirements(tx: Tx, projectId: number, issueId:
   }
 }
 
-/** Quy trình không có luồng chuyển nào = chuyển tự do. Có thì phải khớp một dòng. */
-async function assertTransitionAllowed(tx: Tx, workflowId: number, fromStatusId: number, toStatusId: number) {
+/**
+ * Quy trình không có luồng chuyển nào = chuyển tự do. Có thì phải khớp một dòng.
+ *
+ * Luật của dòng khớp (WorkTransition.rules — đợt S1, trước đó là cột chết):
+ *   - teamIds: chỉ thành viên các bộ phận này (hoặc ADMIN dự án) được chuyển;
+ *   - requireApproval: thẻ phải có một phê duyệt ISSUE đã APPROVED mà nội dung
+ *     chưa đổi kể từ lúc ký (hash còn khớp) — ADMIN cũng không vượt được.
+ * Dòng cụ thể (from = trạng thái hiện tại) thắng dòng "từ bất kỳ đâu". Chỉ áp
+ * cho người và AI; luật tự động/hệ thống không bị chặn (cùng lý do Done rules).
+ */
+async function assertTransitionAllowed(
+  tx: Tx, workflowId: number, fromStatusId: number, toStatusId: number,
+  ctx?: { issueId: number; projectId: number; actor: WorkActor },
+) {
   if (fromStatusId === toStatusId) return;
   const total = await tx.workTransition.count({ where: { workflowId } });
   if (total === 0) return;
-  const ok = await tx.workTransition.count({
+  const rows = await tx.workTransition.findMany({
     where: { workflowId, toStatusId, OR: [{ fromStatusId }, { fromStatusId: null }] },
+    select: { fromStatusId: true, rules: true },
   });
-  if (!ok) throw new BadRequestError('This status change is not allowed by the workflow', 'WORK_TRANSITION_DENIED');
+  if (!rows.length) throw new BadRequestError('This status change is not allowed by the workflow', 'WORK_TRANSITION_DENIED');
+  const rules = transitionRulesOf((rows.find((r) => r.fromStatusId === fromStatusId) ?? rows[0]).rules);
+  if (!hasRules(rules) || !ctx || (ctx.actor.kind !== 'USER' && ctx.actor.kind !== 'AI') || !ctx.actor.userId) return;
+  const userId = ctx.actor.userId;
+  if (rules.teamIds?.length) {
+    const access = await loadProjectAccess(userId, ctx.projectId);
+    if (access?.role !== 'ADMIN') {
+      const inTeam = await tx.workTeamMember.count({ where: { userId, teamId: { in: rules.teamIds } } });
+      if (!inTeam) {
+        const names = (await tx.workTeam.findMany({ where: { id: { in: rules.teamIds } }, select: { name: true } })).map((t) => t.name);
+        throw new BadRequestError(`Only members of ${names.join(', ') || 'the assigned team'} can make this status change`, 'WORK_TRANSITION_TEAM');
+      }
+    }
+  }
+  if (rules.requireApproval) {
+    const approvals = await tx.workApproval.findMany({
+      where: { issueId: ctx.issueId, targetType: 'ISSUE', status: 'APPROVED' },
+      select: { targetType: true, issueId: true, stageId: true, contentHash: true, steps: { select: { contentHash: true, decidedAt: true } } },
+    });
+    const now = approvals.length ? await currentTargetHash(tx, approvals[0]) : null;
+    if (!approvals.some((a) => signedHash(a) === now)) {
+      throw new BadRequestError(
+        approvals.length
+          ? 'This issue changed after it was approved. Request approval again before making this status change.'
+          : 'This status change needs an approved approval request on the issue first',
+        'WORK_TRANSITION_APPROVAL',
+      );
+    }
+  }
+}
+
+/** Bộ phận phải thuộc cùng không gian, chưa lưu trữ; mô-đun teams phải bật. */
+async function assertTeam(tx: Tx, projectId: number, teamId: number) {
+  const p = await tx.workProject.findUniqueOrThrow({ where: { id: projectId }, select: { workspaceId: true, settings: true } });
+  assertModule(p, 'teams');
+  const t = await tx.workTeam.findFirst({ where: { id: teamId, workspaceId: p.workspaceId, archivedAt: null }, select: { id: true } });
+  if (!t) throw new BadRequestError('Team not found in this workspace', 'WORK_BAD_TEAM');
+}
+
+/** Giai đoạn phải thuộc dự án; mô-đun stages phải bật. */
+async function assertStage(tx: Tx, projectId: number, stageId: number) {
+  const p = await tx.workProject.findUniqueOrThrow({ where: { id: projectId }, select: { settings: true } });
+  assertModule(p, 'stages');
+  const st = await tx.workStage.findFirst({ where: { id: stageId, projectId }, select: { id: true } });
+  if (!st) throw new BadRequestError('Stage not found in this project', 'WORK_BAD_STAGE');
 }
 
 async function assertParent(tx: Tx, projectId: number, parentId: number, childLevel: number, childId?: number) {
@@ -208,6 +271,8 @@ export async function createIssue(input: CreateIssueInput, actor: WorkActor) {
     // Epic không nằm trong sprint.
     if (type.level === 1) sprintId = null;
     if (input.fixVersionId) await assertVersion(tx, input.projectId, input.fixVersionId);
+    if (input.teamId) await assertTeam(tx, input.projectId, input.teamId);
+    if (input.stageId) await assertStage(tx, input.projectId, input.stageId);
 
     const last = await tx.workIssue.findFirst({
       where: { projectId: input.projectId },
@@ -225,6 +290,8 @@ export async function createIssue(input: CreateIssueInput, actor: WorkActor) {
         parentId: input.parentId ?? null,
         sprintId,
         fixVersionId: input.fixVersionId ?? null,
+        teamId: input.teamId ?? null,
+        stageId: input.stageId ?? null,
         title: title.slice(0, 255),
         ...descriptionFields(input.descriptionJson),
         priority: input.priority ?? PRIORITY_DEFAULT,
@@ -336,10 +403,22 @@ export async function applyIssueChange(issueId: number, patch: IssuePatch, actor
       data.fixVersionId = patch.fixVersionId;
     }
 
+    if (patch.teamId !== undefined && patch.teamId !== before.teamId) {
+      if (patch.teamId !== null) await assertTeam(tx, before.projectId, patch.teamId);
+      track('teamId', before.teamId, patch.teamId);
+      data.teamId = patch.teamId;
+    }
+
+    if (patch.stageId !== undefined && patch.stageId !== before.stageId) {
+      if (patch.stageId !== null) await assertStage(tx, before.projectId, patch.stageId);
+      track('stageId', before.stageId, patch.stageId);
+      data.stageId = patch.stageId;
+    }
+
     if (patch.statusId !== undefined && patch.statusId !== before.statusId) {
       const workflowId = await workflowIdForType(tx, before.projectId, before.type.workflowId);
       const target = await assertStatusInWorkflow(tx, patch.statusId, workflowId);
-      await assertTransitionAllowed(tx, workflowId, before.statusId, patch.statusId);
+      await assertTransitionAllowed(tx, workflowId, before.statusId, patch.statusId, { issueId, projectId: before.projectId, actor });
       track('statusId', before.statusId, patch.statusId);
       data.statusId = patch.statusId;
       // Vào cột DONE thì ghi thời điểm xong; rời DONE thì xoá — báo cáo

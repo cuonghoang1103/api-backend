@@ -354,6 +354,50 @@ thêm một route GET không cần tham số vào smoke-test của `deploy.sh`.
 - 8.1 app desktop dùng lại 19 trang web; 8.2 iOS SwiftUI gốc (commit cục bộ ở kho ios-app,
   chưa lên TestFlight). Target macOS của ios-app vẫn hỏng từ trước (10/09), không do CT Work.
 
+### Đợt S1 — lớp studio (04/10/2026, BACKEND; giao diện làm ở phiên khác)
+
+Nguyên tắc: **loại dự án** (PERSONAL · SCHOOL · SOFTWARE · CLIENT) + **mô-đun bật/tắt theo
+dự án** (`settings.modules`; hàm chung `moduleOn` / `assertModule` trong
+`src/services/work/studio.ts`). Dự án tạo trước đợt này: cột `kind` NULL (loại suy từ mẫu lúc
+đọc, không ghi ngược), **không có `settings.modules` ⇒ mọi mô-đun TẮT, hành vi y như cũ**
+(route mô-đun ⇒ 403 `MODULE_DISABLED`; test `work.studio.db.test.ts` giữ điều này).
+Migration `20261004100000_work_studio_s1` chỉ THÊM (1 cột nullable work_projects, 2 cột nullable
+work_issues, 7 bảng); mọi FK trên/vào `work_issues` + FK SET NULL của bảng studio đều DEFERRABLE.
+
+- [x] S1.A Loại dự án + mô-đun: `kind` khi tạo dự án (có `kind` ⇒ mặc định theo loại, CLIENT bật
+      teams/stages/approvals/handoffs; không có ⇒ tắt hết như client cũ), `GET/PUT /projects/:pid/studio`
+      (ADMIN dự án, audit `project.studio`), khoá chừa cho đợt sau: docs, clientPortal, changeRequests,
+      raid, meetings, finance · M
+- [x] S1.B Bộ phận cấp không gian (`work_teams`, `work_team_members` LEAD/MEMBER, khách không vào được),
+      thẻ có `teamId`, hàng đợi bộ phận (lọc dự án/trạng thái/chưa người nhận, phân trang), trưởng bộ phận
+      giao việc trong hàng đợi, JQL `team` (+ `stage`) · M
+- [x] S1.C Giai đoạn + cổng (`work_stages`, thẻ có `stageId`): kích hoạt bị chặn khi giai đoạn trước chưa
+      DONE (ADMIN ghi đè có lý do ⇒ audit `stage.override`); DONE CHỈ qua phê duyệt cổng; người duyệt cổng
+      cấu hình ở `settings.stageGate` (mặc định ADMIN dự án) · M
+- [x] S1.C' `WorkTransition.rules` dùng thật: `{ requireApproval, teamIds }` (kiểm trong `applyIssueChange`,
+      chỉ với người/AI; ADMIN vượt luật bộ phận, KHÔNG vượt luật phê duyệt) · S
+- [x] S1.D Phê duyệt (`work_approvals` + `work_approval_steps`): ISSUE | STAGE_GATE (chừa DOC, CR), tuần tự /
+      song song, một phiếu chống ⇒ REJECTED, không ai duyệt thay (kể cả ADMIN), mỗi bước lưu IP +
+      `contentHash` SHA-256 (chữ ký); nội dung đổi sau khi ký ⇒ `contentChanged` (cảnh báo, không tự huỷ);
+      "chờ tôi duyệt" `GET /me/approvals`; thông báo + realtime `approval.updated` + audit · L
+- [x] S1.E Bàn giao (`work_handoffs`): checklist phải tick đủ mới nhận, nhận ⇒ đổi team/người qua
+      `applyIssueChange` (lịch sử thẻ ghi lại), trả lại bắt buộc lý do, `GET /me/handoffs` · M
+- [x] S1.E' Chuyển thẻ sang dự án khác cùng không gian (`POST …/issues/:num/move-project`): giữ id ⇒ bình
+      luận/tệp/lịch sử/liên kết đi theo; số mới; việc con đi cùng; nhãn/component/trường ghép theo tên;
+      mã cũ ⇒ 404 `WORK_ISSUE_MOVED` kèm mã mới (`work_issue_aliases`). Từ chối epic, việc con, thẻ Test,
+      thẻ còn phê duyệt/bàn giao chờ · M
+- [x] S1.F Board (2000) và backlog (3000) trả `truncated` + `total` + `limit` thay vì cắt im lặng · S
+- [x] S1.G Phiếu khách → dự án `kind: CLIENT`: 14 bộ phận theo `roles` của
+      `content/quy-trinh/client-project-template.json` (bỏ vai `client` — khách là GUEST), 21 giai đoạn
+      (slug khớp `/about/quy-trinh/<slug>`, GĐ đầu ACTIVE, thẻ cổng gắn `gateIssueId`), việc gán `teamId` +
+      `stageId`, **để trống người làm** (không còn giao hết cho admin; nhãn `vai:*` giữ lại) · M
+- **Nghiệm thu 04/10/2026:** 17 test DB mới (`src/routes/work.studio.db.test.ts`) + 140/140 test DB CT Work
+  (3 lượt liền) + `studio.test.ts` (luật thuần) trong `npm test`; chạy thật backend :3101 — phiếu → dự án
+  CLIENT → duyệt cổng GĐ0 → kích hoạt GĐ1 → bàn giao BA→DEV nhận + trả lại → dự án SCHOOL cũ ⇒ MODULE_DISABLED.
+- [ ] Giao diện cho S1 (phiên làm lại giao diện /work) · L
+- [ ] Đợt S2: tài liệu kiểu Confluence + cổng khách duyệt · Đợt S3: CR + RAID, họp, portfolio · Đợt S4: tài chính,
+      báo cáo khách tự động
+
 ## 10. Rủi ro
 
 | Rủi ro | Cách giữ |

@@ -10,12 +10,12 @@ import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigat
 import { workError } from '@/lib/work-api';
 import IssueDrawer from '@/components/work/IssueDrawer';
 import { useProject, useProjectRealtime } from '@/components/work/hooks';
-import { EmptyState, Spinner } from '@/components/work/ui';
+import { EmptyState, PageLoading } from '@/components/work/ui';
 import TestEditor from '@/components/work/tests/TestEditor';
 
 export default function TestCasePage() {
   return (
-    <Suspense fallback={<div className="flex h-full items-center justify-center"><Spinner size={20} /></div>}>
+    <Suspense fallback={<PageLoading />}>
       <Inner />
     </Suspense>
   );
@@ -43,7 +43,7 @@ function Inner() {
     router.push(s ? `${pathname}?${s}` : pathname!, { scroll: false });
   }, [router, pathname, search]);
 
-  if (isLoading) return <div className="flex h-full items-center justify-center"><Spinner size={20} /></div>;
+  if (isLoading) return <PageLoading />;
   if (error || !config || !pid || !Number.isInteger(num) || num <= 0) {
     return <EmptyState title="Test not found" body={error ? workError(error) : 'It may have been deleted, or you do not have access.'} />;
   }

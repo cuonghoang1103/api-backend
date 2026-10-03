@@ -63,7 +63,7 @@ function TypeIcon({ type }: { type: string }) {
   );
 }
 
-export default function WorkInbox({ onNavigate }: { onNavigate?: () => void }) {
+export default function WorkInbox({ onNavigate, align = 'start' }: { onNavigate?: () => void; align?: 'start' | 'end' }) {
   useNotificationSocket(); // idempotent — navbar thường đã gắn rồi
   const router = useRouter();
   const qc = useQueryClient();
@@ -149,7 +149,7 @@ export default function WorkInbox({ onNavigate }: { onNavigate?: () => void }) {
           </span>
         )}
       </button>
-      <Popover open={pop.on} onClose={pop.close} anchorRef={btnRef} width={360}>
+      <Popover open={pop.on} onClose={pop.close} anchorRef={btnRef} width={360} align={align}>
         <div role="dialog" aria-label="CT Work notifications">
           <div className="flex items-center justify-between border-b border-[var(--w-border)] px-3.5 py-2.5">
             <div className="flex items-center gap-2">

@@ -111,7 +111,7 @@ export default function BurndownTab({ pid }: { pid: number }) {
                     {/* Sprint mới chạy 1–2 ngày thì đường chỉ có 1–2 điểm — Recharts không vẽ
                         được đường từ 1 điểm, nên bật chấm để người xem vẫn thấy số liệu. */}
                     <LineChart data={d.points} margin={{ top: 8, right: 12, bottom: 0, left: -8 }}>
-                      <CartesianGrid stroke="var(--w-border)" vertical={false} />
+                      <CartesianGrid stroke="var(--w-chart-grid)" vertical={false} />
                       <XAxis dataKey="day" tickFormatter={fmtDay} tick={axisTick} tickLine={false} axisLine={{ stroke: 'var(--w-border-strong)' }} minTickGap={16} />
                       <YAxis tick={axisTick} tickLine={false} axisLine={false} allowDecimals={false} width={48}
                         label={{ value: unitLabel(unit), angle: -90, position: 'insideLeft', offset: 18, fill: 'var(--w-text-3)', fontSize: 11 }} />
@@ -119,7 +119,7 @@ export default function BurndownTab({ pid }: { pid: number }) {
                       {mode === 'burndown' ? (
                         <>
                           <Line type="linear" dataKey="ideal" name="Guideline" stroke="var(--w-text-3)" strokeDasharray="5 4" strokeWidth={1.5} dot={false} isAnimationActive={false} />
-                          <Line type="stepAfter" dataKey="remaining" name="Remaining" stroke="var(--w-accent)" strokeWidth={2} dot={d.points.filter((x) => x.remaining !== null).length < 3 ? { r: 3.5, fill: 'var(--w-accent)', strokeWidth: 0 } : false} activeDot={{ r: 4 }} isAnimationActive={false} />
+                          <Line type="stepAfter" dataKey="remaining" name="Remaining" stroke="var(--w-chart-1)" strokeWidth={2} dot={d.points.filter((x) => x.remaining !== null).length < 3 ? { r: 3.5, fill: 'var(--w-chart-1)', strokeWidth: 0 } : false} activeDot={{ r: 4 }} isAnimationActive={false} />
                         </>
                       ) : (
                         <>

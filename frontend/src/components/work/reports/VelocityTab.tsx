@@ -36,14 +36,14 @@ export default function VelocityTab({ pid }: { pid: number }) {
         <div className="h-[280px] w-full min-w-0">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={d.sprints} margin={{ top: 8, right: 8, bottom: 0, left: -8 }} barGap={3} barCategoryGap="24%">
-              <CartesianGrid stroke="var(--w-border)" vertical={false} />
+              <CartesianGrid stroke="var(--w-chart-grid)" vertical={false} />
               <XAxis dataKey="name" tick={axisTick} tickLine={false} axisLine={{ stroke: 'var(--w-border-strong)' }} interval={0}
                 tickFormatter={(s: string) => (s.length > 12 ? `${s.slice(0, 11)}…` : s)} />
               <YAxis tick={axisTick} tickLine={false} axisLine={false} allowDecimals={false} width={48}
                 label={{ value: u, angle: -90, position: 'insideLeft', offset: 18, fill: 'var(--w-text-3)', fontSize: 11 }} />
               <Tooltip content={<ChartTooltip unit={d.unit} />} cursor={{ fill: 'var(--w-hover)' }} />
               <Bar dataKey="committedPoints" name="Committed" fill="var(--w-text-3)" radius={[3, 3, 0, 0]} maxBarSize={28} isAnimationActive={false} />
-              <Bar dataKey="completedPoints" name="Completed" fill="var(--w-accent)" radius={[3, 3, 0, 0]} maxBarSize={28} isAnimationActive={false} />
+              <Bar dataKey="completedPoints" name="Completed" fill="var(--w-chart-1)" radius={[3, 3, 0, 0]} maxBarSize={28} isAnimationActive={false} />
             </BarChart>
           </ResponsiveContainer>
         </div>

@@ -300,14 +300,14 @@ export function ShareReportsView({ token }: { token: string }) {
               <div className="h-[260px] w-full min-w-0">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={burndown.points} margin={{ top: 8, right: 12, bottom: 0, left: -8 }}>
-                    <CartesianGrid stroke="var(--w-border)" vertical={false} />
+                    <CartesianGrid stroke="var(--w-chart-grid)" vertical={false} />
                     <XAxis dataKey="day" tickFormatter={fmtDay} tick={axisTick} tickLine={false} axisLine={{ stroke: 'var(--w-border-strong)' }} minTickGap={16} />
                     <YAxis tick={axisTick} tickLine={false} axisLine={false} allowDecimals={false} width={48} />
                     <Tooltip content={<ChartTooltip unit={burndown.unit} labelFormat={fmtDay} />} cursor={{ stroke: 'var(--w-border-strong)' }} />
                     <Line type="linear" dataKey="ideal" name="Guideline" stroke="var(--w-text-3)" strokeDasharray="5 4" strokeWidth={1.5} dot={false} isAnimationActive={false} />
                     <Line
-                      type="stepAfter" dataKey="remaining" name="Remaining" stroke="var(--w-accent)" strokeWidth={2} activeDot={{ r: 4 }} isAnimationActive={false}
-                      dot={burndown.points.filter((x) => x.remaining !== null).length < 3 ? { r: 3.5, fill: 'var(--w-accent)', strokeWidth: 0 } : false}
+                      type="stepAfter" dataKey="remaining" name="Remaining" stroke="var(--w-chart-1)" strokeWidth={2} activeDot={{ r: 4 }} isAnimationActive={false}
+                      dot={burndown.points.filter((x) => x.remaining !== null).length < 3 ? { r: 3.5, fill: 'var(--w-chart-1)', strokeWidth: 0 } : false}
                     />
                   </LineChart>
                 </ResponsiveContainer>
@@ -328,13 +328,13 @@ export function ShareReportsView({ token }: { token: string }) {
               <div className="h-[260px] w-full min-w-0">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={velocity.sprints} margin={{ top: 8, right: 8, bottom: 0, left: -8 }} barGap={3} barCategoryGap="24%">
-                    <CartesianGrid stroke="var(--w-border)" vertical={false} />
+                    <CartesianGrid stroke="var(--w-chart-grid)" vertical={false} />
                     <XAxis dataKey="name" tick={axisTick} tickLine={false} axisLine={{ stroke: 'var(--w-border-strong)' }} interval={0}
                       tickFormatter={(s: string) => (s.length > 12 ? `${s.slice(0, 11)}…` : s)} />
                     <YAxis tick={axisTick} tickLine={false} axisLine={false} allowDecimals={false} width={48} />
                     <Tooltip content={<ChartTooltip unit={velocity.unit} />} cursor={{ fill: 'var(--w-hover)' }} />
                     <Bar dataKey="committedPoints" name="Committed" fill="var(--w-text-3)" radius={[3, 3, 0, 0]} maxBarSize={28} isAnimationActive={false} />
-                    <Bar dataKey="completedPoints" name="Completed" fill="var(--w-accent)" radius={[3, 3, 0, 0]} maxBarSize={28} isAnimationActive={false} />
+                    <Bar dataKey="completedPoints" name="Completed" fill="var(--w-chart-1)" radius={[3, 3, 0, 0]} maxBarSize={28} isAnimationActive={false} />
                   </BarChart>
                 </ResponsiveContainer>
               </div>

@@ -29,12 +29,13 @@ import { toast } from 'sonner';
 import { ChevronDown, ChevronRight, Layers, Plus } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
-  workApi, workError, workErrorStatus, type BoardColumn, type BoardData, type IssueCard, type ProjectConfig,
+  workApi, workError, workErrorStatus, type BoardColumn, type BoardData, type IssueCard, type ProjectConfig, type StatusCategory,
 } from '@/lib/work-api';
 import { allowedTargets, wk, type Lookups } from './hooks';
-import { IssueTypeIcon, StatusBadge, UserAvatar } from './ui';
+import { IssueTypeIcon, StatusBadge, StatusGlyph, UserAvatar } from './ui';
 import { CardBody } from './board/BoardCard';
 import BoardToolbar from './board/BoardToolbar';
+import { TeamsCtx, TruncatedStrip, studioOn, useWorkspaceTeams } from './studio/shared';
 import {
   buildLanes, EMPTY_QUICK, isSubtask, makeQuickTest, subtasksByParent, type GroupBy, type Lane, type QuickFilters, type SubtaskInfo,
 } from './board/grouping';
@@ -68,7 +69,7 @@ function SortableCard({ issue, lk, onOpen, disabled, subtasks, inDone, showParen
     <div
       ref={setNodeRef}
       style={{ transform: CSS.Translate.toString(transform), transition }}
-      className={cn('rounded-[7px] outline-none focus-visible:ring-2 focus-visible:ring-[var(--w-accent-border)]', isDragging && 'opacity-40')}
+      className={cn('cursor-grab rounded-[8px] outline-none focus-visible:ring-2 focus-visible:ring-[var(--w-accent-border)] active:cursor-grabbing', isDragging && 'opacity-35 [&>div]:border-dashed [&>div]:shadow-none')}
       {...attributes}
       // Không kéo được (chỉ xem / đang khoá chỉnh sửa) vẫn MỞ thẻ được ⇒ không phải "disabled".
       aria-disabled={undefined}
@@ -138,12 +139,17 @@ function Cell({ laneKey, col, cards, lk, onOpen, canDrag, onQuickAdd, highlight,
       ref={setNodeRef}
       style={COL_STYLE}
       className={cn(
-        'flex shrink-0 flex-col gap-1.5 rounded-[8px] bg-[var(--w-sunken)] p-1.5 transition-colors',
+        'flex shrink-0 flex-col gap-2 rounded-[10px] border border-transparent bg-[var(--w-sunken)] p-2 transition-[background-color,border-color,opacity] duration-150',
         grow ? 'min-h-[160px]' : 'min-h-[64px]',
-        highlight && 'bg-[var(--w-accent-soft)] outline outline-1 outline-[var(--w-accent-border)]',
-        blocked && 'opacity-50',
+        highlight && 'border-dashed !border-[var(--w-accent-border)] bg-[var(--w-accent-soft)]',
+        blocked && 'opacity-45',
       )}
     >
+      {!cards.length && !onQuickAdd && grow && (
+        <div aria-hidden="true" className="flex h-16 items-center justify-center rounded-[8px] border border-dashed border-[var(--w-border-strong)] text-[12px] text-[var(--w-text-3)]">
+          {inDone ? 'Drop finished work here' : 'No issues'}
+        </div>
+      )}
       <SortableContext items={cards.map((i) => i.id)} strategy={verticalListSortingStrategy}>
         {cards.map((i) => (
           <SortableCard
@@ -175,7 +181,7 @@ function LaneHeader({ lane, lk, collapsed, onToggle, onOpen, info, count }: {
         {collapsed ? <ChevronRight size={14} className="shrink-0" /> : <ChevronDown size={14} className="shrink-0" />}
         {lane.userId !== undefined && <UserAvatar user={lane.userId ? lk.members.get(lane.userId) : null} size={20} />}
         {lane.epic !== undefined && (
-          <span className="inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-[4px] bg-[#7c3aed] text-white"><Layers size={10} /></span>
+          <span className="inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-[4px] bg-[var(--w-epic)] text-white"><Layers size={10} /></span>
         )}
         {p && <IssueTypeIcon type={lk.types.get(p.typeId)} size={13} />}
         {p && <span className="shrink-0 font-mono text-[11.5px] text-[var(--w-text-3)]">{lk.issueKey(p.number)}</span>}
@@ -216,6 +222,9 @@ export default function Board({ config, lk, data, visible, onOpen, toolbarLeadin
   const lsKey = `ctwork:board:${pid}`;
   const [group, setGroupState] = useState<GroupBy>('none');
   const [quick, setQuick] = useState<QuickFilters>(EMPTY_QUICK);
+  // Bộ phận (S1): chỉ tải + chỉ hiện khi dự án bật mô-đun teams.
+  const teamsQ = useWorkspaceTeams(config.workspace.id, studioOn(config, 'teams'));
+  const teamMap = useMemo(() => (teamsQ.data ? new Map(teamsQ.data.map((t) => [t.id, t])) : null), [teamsQ.data]);
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
   // Đọc lựa chọn đã lưu sau khi gắn (tránh lệch HTML lúc hydrate).
   useEffect(() => {
@@ -435,8 +444,10 @@ export default function Board({ config, lk, data, visible, onOpen, toolbarLeadin
   const shown = filtered.length;
 
   return (
+    <TeamsCtx.Provider value={teamMap}>
     <div className="flex h-full flex-col">
       <BoardToolbar
+        teams={teamsQ.data?.filter((t) => !t.archivedAt)}
         config={config}
         group={group}
         onGroup={setGroup}
@@ -448,28 +459,30 @@ export default function Board({ config, lk, data, visible, onOpen, toolbarLeadin
         onCollapseAll={(c) => saveCollapsed(c ? new Set(lanes.map((l) => `${group}:${l.key}`)) : new Set())}
         leading={toolbarLeading}
       />
+      <TruncatedStrip data={data} />
       <DndContext sensors={sensors} collisionDetection={closestCorners} onDragStart={onDragStart} onDragOver={onDragOver} onDragEnd={onDragEnd} onDragCancel={onDragCancel}>
         <div className="min-h-0 flex-1 overflow-auto [scrollbar-gutter:stable]">
           <div className="flex min-h-full min-w-max flex-col px-4 pb-4">
             {/* Đầu cột — dính trên cùng khi cuộn dọc */}
-            <div className="sticky top-0 z-[2] flex gap-3 bg-[var(--w-panel)] pb-2 pt-3">
+            <div className="sticky top-0 z-[2] flex gap-3 bg-[var(--w-panel)] pb-1.5 pt-3">
               {config.boardColumns.map((col) => {
                 const s = colStats.get(col.key) ?? { count: 0, points: 0 };
                 const over = col.wipLimit !== null && s.count > col.wipLimit;
                 return (
-                  <div key={col.key} style={COL_STYLE} className="flex h-7 shrink-0 items-center gap-2 px-1">
-                    <span className="truncate text-[12px] font-semibold uppercase tracking-[0.03em] text-[var(--w-text-2)]">{col.name}</span>
+                  <div key={col.key} style={COL_STYLE} className="flex h-8 shrink-0 items-center gap-2 px-1.5">
+                    <StatusGlyph category={(col.category in { TODO: 1, IN_PROGRESS: 1, DONE: 1 } ? col.category : "TODO") as StatusCategory} size={14} />
+                    <span className="truncate text-[13px] font-semibold text-[var(--w-text)]">{col.name}</span>
                     <span
                       className={cn(
-                        'shrink-0 rounded-full px-1.5 text-[11.5px] tabular',
-                        over ? 'bg-[color-mix(in_srgb,var(--w-red)_14%,transparent)] font-semibold text-[var(--w-red)]' : 'bg-[var(--w-sunken)] text-[var(--w-text-2)]',
+                        'w-count shrink-0',
+                        over && '!bg-[color-mix(in_srgb,var(--w-red)_14%,transparent)] !text-[var(--w-red)]',
                       )}
                       title={col.wipLimit !== null ? `${s.count} issues · WIP limit ${col.wipLimit}${over ? ' — over the limit' : ''}` : `${s.count} issues`}
                     >
                       {s.count}{col.wipLimit !== null && ` / ${col.wipLimit}`}
                     </span>
-                    {over && <span className="shrink-0 text-[10.5px] font-semibold uppercase text-[var(--w-red)]">Over WIP</span>}
-                    <span className="ml-auto shrink-0 text-[11px] tabular text-[var(--w-text-3)]" title="Story points in this column">{Math.round(s.points * 10) / 10} pts</span>
+                    {over && <span className="shrink-0 text-[11px] font-semibold text-[var(--w-red)]">Over WIP</span>}
+                    <span className="ml-auto shrink-0 text-[12px] tabular text-[var(--w-text-3)]" title="Story points in this column">{Math.round(s.points * 10) / 10} pts</span>
                   </div>
                 );
               })}
@@ -528,5 +541,6 @@ export default function Board({ config, lk, data, visible, onOpen, toolbarLeadin
         </DragOverlay>
       </DndContext>
     </div>
+    </TeamsCtx.Provider>
   );
 }

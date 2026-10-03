@@ -13,7 +13,7 @@ import { workError, type ProjectConfig } from '@/lib/work-api';
 import IssueDrawer from '@/components/work/IssueDrawer';
 import ProjectHeader from '@/components/work/ProjectHeader';
 import { useProject, useProjectRealtime } from '@/components/work/hooks';
-import { EmptyState, Spinner } from '@/components/work/ui';
+import { EmptyState, PageLoading } from '@/components/work/ui';
 import LibraryTab from '@/components/work/tests/LibraryTab';
 import PlansTab from '@/components/work/tests/PlansTab';
 import NewTestDialog from '@/components/work/tests/NewTestDialog';
@@ -125,7 +125,7 @@ function TestsView({ config, pid }: { config: ProjectConfig; pid: number }) {
 // useSearchParams bắt buộc nằm trong <Suspense> — thiếu là Next 14 báo lỗi lúc build.
 export default function TestsPage() {
   return (
-    <Suspense fallback={<div className="flex h-full items-center justify-center"><Spinner size={20} /></div>}>
+    <Suspense fallback={<PageLoading />}>
       <Inner />
     </Suspense>
   );
@@ -134,7 +134,7 @@ export default function TestsPage() {
 function Inner() {
   const params = useParams<{ ws: string; key: string }>();
   const { pid, config, isLoading, error } = useProject(params.ws, params.key);
-  if (isLoading) return <div className="flex h-full items-center justify-center"><Spinner size={20} /></div>;
+  if (isLoading) return <PageLoading />;
   if (error || !config || !pid) {
     return <EmptyState title="Project not found" body={error ? workError(error) : 'It may have been deleted, or you do not have access.'} />;
   }

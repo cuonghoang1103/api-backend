@@ -171,6 +171,15 @@ export function useProjectRealtime(pid: number | undefined, onEvent?: (e: WorkEv
       queue(wk.backlog(pid));
       queue(wk.reports(pid));
       queue(wk.tests(pid)); // thẻ TEST/BUG đổi ⇒ danh sách test + truy vết đổi theo
+      // Lớp studio (S1): giai đoạn / phê duyệt / bàn giao đổi ⇒ làm tươi danh sách của chúng.
+      if (e.type === 'stage.updated' || e.type === 'approval.updated' || e.type === 'handoff.updated') {
+        queue(['work', 'stages', pid]);
+        queue(['work', 'approvals', pid]);
+        queue(['work', 'handoffs', pid]);
+        queue(['work', 'my-approvals']);
+        queue(['work', 'my-handoffs']);
+        queue(['work', 'team-queue']);
+      }
       if (e.type === 'sprint.updated') {
         queue(wk.sprints(pid));
         queue(wk.project(pid)); // config.sprints (ô chọn sprint) cũng đổi

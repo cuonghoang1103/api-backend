@@ -19,7 +19,7 @@ import IssueDrawer from '@/components/work/IssueDrawer';
 import ProjectHeader from '@/components/work/ProjectHeader';
 import { AssigneePicker } from '@/components/work/fields';
 import { useLookups, useProject, useProjectRealtime, wk } from '@/components/work/hooks';
-import { Dialog, EmptyState, isTyping, Popover, PriorityIcon, Spinner, useToggle } from '@/components/work/ui';
+import { Dialog, EmptyState, isTyping, Popover, PriorityIcon, Spinner, useToggle, PageLoading } from '@/components/work/ui';
 import { ConfirmDialog } from '@/components/work/settings/shared';
 import { blobError, saveBlob } from '@/components/work/search/ExportMenu';
 import RunPanel from '@/components/work/tests/RunPanel';
@@ -574,7 +574,7 @@ function AddTestsDialog({ config, pid, existing, onClose, onAdd }: {
 
 export default function CyclePage() {
   return (
-    <Suspense fallback={<div className="flex h-full items-center justify-center"><Spinner size={20} /></div>}>
+    <Suspense fallback={<PageLoading />}>
       <Inner />
     </Suspense>
   );
@@ -584,7 +584,7 @@ function Inner() {
   const params = useParams<{ ws: string; key: string; cycleId: string }>();
   const { pid, config, isLoading, error } = useProject(params.ws, params.key);
   const cycleId = Number(params.cycleId);
-  if (isLoading) return <div className="flex h-full items-center justify-center"><Spinner size={20} /></div>;
+  if (isLoading) return <PageLoading />;
   if (error || !config || !pid) return <EmptyState title="Project not found" body={error ? workError(error) : 'It may have been deleted, or you do not have access.'} />;
   if (!Number.isInteger(cycleId) || cycleId <= 0) return <EmptyState title="Test cycle not found" />;
   return <CycleView config={config} pid={pid} cycleId={cycleId} />;

@@ -43,6 +43,15 @@ describe('bảng quyền dự án', () => {
     'attachment.add':   [true,  true,  false, false, true ],
     'sprint.manage':    [true,  false, false, false, false],
     'ai.use':           [true,  true,  false, false, false],
+    // Lớp studio (đợt S1)
+    'studio.configure':  [true,  false, false, false, false],
+    'stage.manage':      [true,  false, false, false, false],
+    'stage.requestGate': [true,  true,  false, false, false],
+    'approval.create':   [true,  true,  false, false, false],
+    'approval.decide':   [true,  true,  false, true,  true ],
+    'approval.manage':   [true,  false, false, false, false],
+    'handoff.create':    [true,  true,  false, false, false],
+    'handoff.manage':    [true,  false, false, false, false],
   };
   for (const [action, row] of Object.entries(expected) as Array<[ProjectAction, boolean[]]>) {
     it(action, () => {
@@ -110,5 +119,11 @@ describe('bảng quyền không gian', () => {
   });
   it('người ngoài không thấy gì', () => {
     assert.equal(canWorkspace(null, 'workspace.view'), false);
+  });
+  it('bộ phận: chỉ OWNER/ADMIN tạo/sửa', () => {
+    assert.equal(canWorkspace('OWNER', 'workspace.teams'), true);
+    assert.equal(canWorkspace('ADMIN', 'workspace.teams'), true);
+    assert.equal(canWorkspace('MEMBER', 'workspace.teams'), false);
+    assert.equal(canWorkspace('GUEST', 'workspace.teams'), false);
   });
 });

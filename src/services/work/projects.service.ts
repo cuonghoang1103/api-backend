@@ -7,8 +7,10 @@ import { prisma } from '../../config/database.js';
 import { BadRequestError, ConflictError, ForbiddenError, NotFoundError } from '../../middleware/errorHandler.js';
 import { PUBLIC_USER } from './common.js';
 import {
-  PROJECT_KEY_RE, type ProjectRole, type ProjectTemplate, type ProjectType, type ProjectVisibility,
+  PROJECT_KEY_RE, type ProjectKind, type ProjectRole, type ProjectTemplate, type ProjectType, type ProjectVisibility,
 } from './constants.js';
+import { defaultModulesFor, kindFromTemplate, mergeModules, modulesOf, noModules, projectKindOf, type ModuleMap } from './studio.js';
+import { auditProject } from './audit.js';
 import { emitWorkEvent, evictFromProject } from './events.js';
 import {
   can, effectiveProjectRole, loadProjectAccess, requireProject, requireWorkspace, type ProjectOptions,
@@ -25,6 +27,13 @@ export async function createProject(
     type: ProjectType; template: ProjectTemplate; visibility?: ProjectVisibility;
     /** Bỏ trống = theo mẫu (SWP391/SWR302 Scrum có sẵn "Sprint 1"). */
     firstSprint?: boolean;
+    /**
+     * Loại dự án (lớp studio). Có ⇒ mô-đun mặc định theo loại (CLIENT bật 4 mô-đun
+     * đợt S1). KHÔNG có (client cũ) ⇒ loại suy từ mẫu, mô-đun TẮT hết như trước.
+     */
+    kind?: ProjectKind;
+    /** Ghi đè bật/tắt từng mô-đun lúc tạo (sau mặc định theo loại). */
+    modules?: Partial<Record<string, boolean>>;
   },
 ) {
   await requireWorkspace(userId, workspaceId, 'workspace.createProject');
@@ -43,12 +52,20 @@ export async function createProject(
         data: {
           workspaceId, key, name: name.slice(0, 120), description: input.description?.trim() || null,
           type: input.type, template: input.template, visibility: input.visibility ?? 'WORKSPACE', leadId: userId,
+          kind: input.kind ?? kindFromTemplate(input.template),
         },
       });
       // Người tạo luôn là ADMIN của dự án mình tạo — kể cả khi chỉ là MEMBER của không gian.
       await tx.workProjectMember.create({ data: { projectId: project.id, userId, role: 'ADMIN' } });
       await seedProjectConfig(tx, project.id, input.template, input.type, { firstSprint: input.firstSprint });
-      return { id: project.id, key: project.key, name: project.name };
+      // Mô-đun ghi SAU seed (seed đặt settings của mẫu) — gộp, không đè.
+      const modules = mergeModules(input.kind ? defaultModulesFor(input.kind) : noModules(), input.modules ?? {});
+      const cur = await tx.workProject.findUniqueOrThrow({ where: { id: project.id }, select: { settings: true } });
+      await tx.workProject.update({
+        where: { id: project.id },
+        data: { settings: { ...((cur.settings as object) ?? {}), modules } as Prisma.InputJsonValue },
+      });
+      return { id: project.id, key: project.key, name: project.name, kind: project.kind as ProjectKind, modules };
     });
   } catch (err) {
     if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === 'P2002') {
@@ -66,6 +83,7 @@ export async function listProjects(userId: number, workspaceId: number) {
     orderBy: [{ archivedAt: { sort: 'asc', nulls: 'first' } }, { createdAt: 'asc' }],
     select: {
       id: true, key: true, name: true, description: true, type: true, template: true, visibility: true, archivedAt: true,
+      kind: true, settings: true, clientRequest: { select: { id: true } },
       lead: { select: PUBLIC_USER },
       members: { where: { userId }, select: { role: true } },
       _count: { select: { issues: { where: { deletedAt: null, resolvedAt: null } } } },
@@ -79,8 +97,12 @@ export async function listProjects(userId: number, workspaceId: number) {
       visibility: p.visibility as ProjectVisibility,
     });
     if (!role) continue;
-    const { members: _m, _count, ...rest } = p;
-    out.push({ ...rest, role, openIssues: _count.issues });
+    const { members: _m, _count, settings, clientRequest, kind, ...rest } = p;
+    out.push({
+      ...rest, role, openIssues: _count.issues,
+      kind: projectKindOf({ kind, template: p.template, fromClientRequest: !!clientRequest }),
+      modules: modulesOf(settings),
+    });
   }
   return out;
 }
@@ -106,14 +128,14 @@ export async function getProjectConfig(userId: number, projectId: number) {
     where: { id: projectId },
     select: {
       id: true, key: true, name: true, description: true, type: true, template: true, visibility: true,
-      settings: true, archivedAt: true, createdAt: true, leadId: true,
+      settings: true, archivedAt: true, createdAt: true, leadId: true, kind: true,
       workspace: { select: { id: true, name: true, slug: true } },
       workflows: {
         orderBy: { id: 'asc' },
         select: {
           id: true, name: true, isDefault: true,
           statuses: { orderBy: { position: 'asc' }, select: { id: true, name: true, category: true, color: true, position: true, wipLimit: true } },
-          transitions: { select: { id: true, fromStatusId: true, toStatusId: true, name: true } },
+          transitions: { select: { id: true, fromStatusId: true, toStatusId: true, name: true, rules: true } },
         },
       },
       issueTypes: { where: { archived: false }, orderBy: { position: 'asc' }, select: { id: true, key: true, name: true, icon: true, color: true, level: true, workflowId: true } },
@@ -130,6 +152,10 @@ export async function getProjectConfig(userId: number, projectId: number) {
   const members = await projectMembers(projectId);
   return {
     ...project,
+    // Lớp studio: loại hiệu lực (dự án cũ suy từ mẫu) + mô-đun đang bật.
+    kind: access.kind,
+    kindStored: project.kind,
+    modules: access.modules,
     role: access.role,
     workspaceRole: access.workspaceRole,
     permissions: permissionFlags(access.role, access.options),
@@ -151,6 +177,15 @@ export function permissionFlags(role: ProjectRole, opts: ProjectOptions = {}) {
     settings: can(role, 'project.settings'),
     manageMembers: can(role, 'project.members'),
     useAi: can(role, 'ai.use'),
+    // Lớp studio — chỉ là quyền theo VAI; mô-đun tắt thì route vẫn 403 MODULE_DISABLED.
+    configureStudio: can(role, 'studio.configure'),
+    manageStages: can(role, 'stage.manage'),
+    requestGate: can(role, 'stage.requestGate'),
+    createApprovals: can(role, 'approval.create'),
+    beApprover: can(role, 'approval.decide'),
+    manageApprovals: can(role, 'approval.manage'),
+    createHandoffs: can(role, 'handoff.create'),
+    manageHandoffs: can(role, 'handoff.manage'),
   };
 }
 
@@ -238,6 +273,9 @@ export async function updateProject(
     data.leadId = input.leadId;
   }
   if (input.settings !== undefined) {
+    // Khoá của lớp studio chỉ đổi qua PUT /projects/:pid/studio (có kiểm + audit).
+    const { modules: _mod, stageGate: _gate, ...rest } = input.settings;
+    input.settings = rest;
     // Điều kiện Done: chỉ nhận trường của CHÍNH dự án này, loại thẻ là chuỗi.
     if ('doneRequirements' in input.settings) {
       const raw = input.settings.doneRequirements as { fieldIds?: unknown; typeKeys?: unknown } | null;
@@ -349,4 +387,75 @@ export async function deleteComponent(userId: number, projectId: number, compone
   await requireProject(userId, projectId, 'project.settings');
   const r = await prisma.workComponent.deleteMany({ where: { id: componentId, projectId } });
   if (!r.count) throw new NotFoundError('Component not found');
+}
+
+
+// ─── Lớp studio: loại dự án + mô-đun + người duyệt cổng ──────────
+
+/** Cấu hình người duyệt cổng giai đoạn (settings.stageGate). Trống = mặc định ADMIN dự án. */
+export interface StageGateConfig { approverIds: number[]; mode: 'SEQUENTIAL' | 'PARALLEL' }
+
+export function stageGateOf(settings: unknown): StageGateConfig {
+  const g = ((settings ?? {}) as { stageGate?: { approverIds?: unknown; mode?: unknown } }).stageGate;
+  const ids = Array.isArray(g?.approverIds) ? [...new Set(g!.approverIds.filter((x): x is number => Number.isInteger(x) && x > 0))] : [];
+  return { approverIds: ids, mode: g?.mode === 'PARALLEL' ? 'PARALLEL' : 'SEQUENTIAL' };
+}
+
+export async function getStudioConfig(userId: number, projectId: number) {
+  const access = await requireProject(userId, projectId, 'project.view');
+  const p = await prisma.workProject.findUniqueOrThrow({ where: { id: projectId }, select: { kind: true, settings: true } });
+  return { kind: access.kind, kindStored: p.kind, modules: access.modules, stageGate: stageGateOf(p.settings) };
+}
+
+/**
+ * Đổi loại dự án / bật-tắt mô-đun / người duyệt cổng. Chỉ ADMIN dự án. Đổi loại
+ * KHÔNG tự bật/tắt mô-đun (tránh một cú bấm làm mất board của cả nhóm) — client
+ * gửi kèm `applyKindDefaults: true` nếu muốn lấy bộ mặc định của loại mới.
+ * Tắt mô-đun không xoá dữ liệu: bật lại là thấy lại.
+ */
+export async function updateStudioConfig(
+  userId: number,
+  projectId: number,
+  input: { kind?: ProjectKind; applyKindDefaults?: boolean; modules?: Partial<Record<string, boolean>>; stageGate?: { approverIds?: number[]; mode?: 'SEQUENTIAL' | 'PARALLEL' } | null },
+) {
+  const access = await requireProject(userId, projectId, 'studio.configure');
+  const p = await prisma.workProject.findUniqueOrThrow({ where: { id: projectId }, select: { kind: true, settings: true, template: true } });
+  const settings = { ...((p.settings as Record<string, unknown>) ?? {}) };
+  const before: ModuleMap = modulesOf(settings);
+  let modules = before;
+  const kind = input.kind ?? null;
+  if (kind && input.applyKindDefaults) modules = defaultModulesFor(kind);
+  if (input.modules) modules = mergeModules(modules, input.modules);
+  settings.modules = modules;
+
+  if (input.stageGate !== undefined) {
+    if (input.stageGate === null) delete settings.stageGate;
+    else {
+      const ids = [...new Set(input.stageGate.approverIds ?? [])];
+      for (const uid of ids) {
+        const a = await loadProjectAccess(uid, projectId);
+        if (!a || !can(a.role, 'approval.decide')) throw new BadRequestError('Every gate approver must be a project member who can approve (not a viewer)', 'WORK_BAD_APPROVER');
+      }
+      settings.stageGate = { approverIds: ids, mode: input.stageGate.mode === 'PARALLEL' ? 'PARALLEL' : 'SEQUENTIAL' };
+    }
+  }
+
+  await prisma.workProject.update({
+    where: { id: projectId },
+    data: { ...(kind ? { kind } : {}), settings: settings as Prisma.InputJsonValue },
+  });
+  const changed = Object.keys(modules).filter((k) => modules[k as keyof ModuleMap] !== before[k as keyof ModuleMap]);
+  if (kind || changed.length || input.stageGate !== undefined) {
+    await auditProject(projectId, {
+      actorId: userId, action: 'project.studio', targetType: 'project', targetId: projectId,
+      summary: [
+        kind && kind !== access.kind ? `Changed project type to ${kind}` : null,
+        changed.length ? `Modules: ${changed.map((k) => `${k} ${modules[k as keyof ModuleMap] ? 'on' : 'off'}`).join(', ')}` : null,
+        input.stageGate !== undefined ? 'Updated stage gate approvers' : null,
+      ].filter(Boolean).join(' · ') || 'Updated studio settings',
+      detail: { kind, modules, stageGate: settings.stageGate ?? null },
+    });
+  }
+  emitWorkEvent({ type: 'project.updated', projectId, actor: { kind: 'USER', userId } });
+  return getStudioConfig(userId, projectId);
 }

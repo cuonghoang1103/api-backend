@@ -10,7 +10,7 @@ import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigat
 import { workError, type ProjectConfig } from '@/lib/work-api';
 import ProjectHeader from '@/components/work/ProjectHeader';
 import { useLookups, useProject, useProjectRealtime } from '@/components/work/hooks';
-import { EmptyState, Spinner } from '@/components/work/ui';
+import { EmptyState, PageLoading } from '@/components/work/ui';
 import { cn } from '@/lib/utils';
 import BurndownTab from '@/components/work/reports/BurndownTab';
 import VelocityTab from '@/components/work/reports/VelocityTab';
@@ -111,7 +111,7 @@ function ReportsView({ config, pid }: { config: ProjectConfig; pid: number }) {
 // useSearchParams bắt buộc nằm trong <Suspense> — thiếu là Next 14 báo lỗi lúc build.
 export default function ReportsPage() {
   return (
-    <Suspense fallback={<div className="flex h-full items-center justify-center"><Spinner size={20} /></div>}>
+    <Suspense fallback={<PageLoading />}>
       <ReportsPageInner />
     </Suspense>
   );
@@ -120,7 +120,7 @@ export default function ReportsPage() {
 function ReportsPageInner() {
   const params = useParams<{ ws: string; key: string }>();
   const { pid, config, isLoading, error } = useProject(params.ws, params.key);
-  if (isLoading) return <div className="flex h-full items-center justify-center"><Spinner size={20} /></div>;
+  if (isLoading) return <PageLoading />;
   if (error || !config || !pid) {
     return <EmptyState title="Project not found" body={error ? workError(error) : 'It may have been deleted, or you do not have access.'} />;
   }

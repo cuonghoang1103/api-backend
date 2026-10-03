@@ -12,6 +12,11 @@ export type WorkspaceRole = 'OWNER' | 'ADMIN' | 'MEMBER' | 'GUEST';
 export type ProjectRole = 'ADMIN' | 'MEMBER' | 'VIEWER' | 'TEACHER' | 'CLIENT';
 export type ProjectType = 'SCRUM' | 'KANBAN' | 'TESTING';
 export type ProjectTemplate = 'BLANK' | 'SWR302' | 'SWT301' | 'SWP391' | 'FREELANCE' | 'COMPANY';
+/** Loại dự án (lớp studio S1). Dự án cũ: suy từ mẫu (kindStored = null). */
+export type ProjectKind = 'PERSONAL' | 'SCHOOL' | 'SOFTWARE' | 'CLIENT';
+/** Mô-đun bật/tắt theo dự án. Đợt S1 có tính năng thật: teams, stages, approvals, handoffs. */
+export type StudioModule = 'teams' | 'stages' | 'approvals' | 'handoffs' | 'docs' | 'clientPortal' | 'changeRequests' | 'raid' | 'meetings' | 'finance';
+export type ModuleMap = Record<StudioModule, boolean>;
 export type StatusCategory = 'TODO' | 'IN_PROGRESS' | 'DONE';
 export type IssueTypeKey = 'EPIC' | 'STORY' | 'TASK' | 'BUG' | 'SUBTASK' | 'TEST' | 'REQUIREMENT';
 export type LinkType = 'BLOCKS' | 'RELATES' | 'DUPLICATES' | 'CLONES' | 'TESTS';
@@ -49,6 +54,9 @@ export interface ProjectSummary {
   lead: WorkUser | null;
   role: ProjectRole;
   openIssues: number;
+  /** Lớp studio (S1). */
+  kind?: ProjectKind;
+  modules?: ModuleMap;
 }
 
 export interface WorkspaceDetail {
@@ -62,7 +70,9 @@ export interface WorkspaceDetail {
 }
 
 export interface WorkStatus { id: number; name: string; category: StatusCategory; color: string; position: number; wipLimit: number | null }
-export interface WorkTransition { id: number; fromStatusId: number | null; toStatusId: number; name: string | null }
+/** Luật của luồng chuyển (S1): cần phê duyệt thẻ / chỉ thành viên các bộ phận. `{}` = không luật. */
+export interface TransitionRules { requireApproval?: boolean; teamIds?: number[] }
+export interface WorkTransition { id: number; fromStatusId: number | null; toStatusId: number; name: string | null; rules?: TransitionRules }
 export interface WorkWorkflow { id: number; name: string; isDefault: boolean; statuses: WorkStatus[]; transitions: WorkTransition[] }
 /** Bố cục sơ đồ: statusId → toạ độ (lưu trong project.settings.workflowLayout[wfId]). */
 export type WorkflowLayout = Record<string, { x: number; y: number }>;
@@ -84,6 +94,16 @@ export interface ProjectPermissions {
   settings: boolean;
   manageMembers: boolean;
   useAi: boolean;
+  // Lớp studio (S1) — quyền theo VAI; mô-đun tắt thì API vẫn trả 403 MODULE_DISABLED.
+  configureStudio?: boolean;
+  manageStages?: boolean;
+  requestGate?: boolean;
+  createApprovals?: boolean;
+  /** Được đứng tên người duyệt (vẫn chỉ quyết bước của chính mình). */
+  beApprover?: boolean;
+  manageApprovals?: boolean;
+  createHandoffs?: boolean;
+  manageHandoffs?: boolean;
 }
 
 export interface ProjectConfig {
@@ -114,6 +134,10 @@ export interface ProjectConfig {
   boardColumns: BoardColumn[];
   members: ProjectMember[];
   customFields: CustomField[];
+  /** Lớp studio (S1): loại hiệu lực, loại đã lưu (null = dự án cũ), mô-đun đang bật. */
+  kind?: ProjectKind;
+  kindStored?: ProjectKind | null;
+  modules?: ModuleMap;
 }
 
 /** Một thẻ trên board / danh sách. */
@@ -128,6 +152,10 @@ export interface IssueCard {
   parentNumber: number | null;
   sprintId: number | null;
   fixVersionId: number | null;
+  /** Bộ phận phụ trách (S1, mô-đun teams). */
+  teamId?: number | null;
+  /** Giai đoạn (S1, mô-đun stages). */
+  stageId?: number | null;
   priority: number;
   assigneeId: number | null;
   reporterId: number | null;
@@ -226,6 +254,10 @@ export interface BoardData {
   /** Scrum chưa có sprint chạy ⇒ board đang hiện mọi thẻ mở. */
   fallback: boolean;
   issues: IssueCard[];
+  /** Board cắt ở `limit` (2000) thẻ: true ⇒ đang hiện `limit`/`total`, báo người dùng lọc bớt. */
+  truncated?: boolean;
+  total?: number;
+  limit?: number;
 }
 
 export interface IssuePatch {
@@ -241,6 +273,9 @@ export interface IssuePatch {
   parentId?: number | null;
   sprintId?: number | null;
   fixVersionId?: number | null;
+  /** S1 — chỉ ghi được khi mô-đun teams/stages bật (403 MODULE_DISABLED). */
+  teamId?: number | null;
+  stageId?: number | null;
   statusId?: number;
   labelIds?: number[];
   componentIds?: number[];
@@ -252,6 +287,9 @@ export interface IssueQuery {
   type?: number[];
   assignee?: number[];
   label?: number[];
+  /** Bộ phận (0 = chưa có bộ phận). */
+  team?: number[];
+  stage?: number;
   sprint?: number | 'backlog' | 'open';
   parent?: number;
   q?: string;
@@ -282,7 +320,11 @@ export type WorkEvent =
   | { type: 'issue.updated'; projectId: number; issueId: number; actor: { kind: string; userId: number | null }; changes: Array<{ field: string; from: string | null; to: string | null }> }
   | { type: 'comment.created'; projectId: number; issueId: number; commentId: number; actor: { kind: string; userId: number | null } }
   | { type: 'sprint.updated'; projectId: number; sprintId: number; actor: { kind: string; userId: number | null } }
-  | { type: 'project.updated'; projectId: number; actor: { kind: string; userId: number | null } };
+  | { type: 'project.updated'; projectId: number; actor: { kind: string; userId: number | null } }
+  // Lớp studio (S1)
+  | { type: 'stage.updated'; projectId: number; stageId: number; status: StageStatus | 'DELETED'; actor: { kind: string; userId: number | null } }
+  | { type: 'approval.updated'; projectId: number; approvalId: number; status: ApprovalStatus; targetType: ApprovalTarget; targetIssueId: number | null; stageId: number | null; actor: { kind: string; userId: number | null } }
+  | { type: 'handoff.updated'; projectId: number; handoffId: number; issueId: number; status: HandoffStatus; actor: { kind: string; userId: number | null } };
 
 
 // ─── Đợt 2: sprint, backlog, báo cáo ─────────────────────────────
@@ -312,6 +354,10 @@ export interface BacklogData {
   sprints: SprintFull[];
   issues: BacklogIssue[];
   epics: BacklogEpic[];
+  /** Backlog cắt ở `limit` (3000) thẻ: true ⇒ đang hiện `limit`/`total`. */
+  truncated?: boolean;
+  total?: number;
+  limit?: number;
 }
 
 export interface BulkPatch {
@@ -638,6 +684,8 @@ function qs(q: IssueQuery): string {
   list('status', q.status);
   list('type', q.type);
   list('assignee', q.assignee);
+  list('team', q.team);
+  if (q.stage) p.set('stage', String(q.stage));
   list('label', q.label);
   if (q.sprint !== undefined) p.set('sprint', String(q.sprint));
   if (q.parent) p.set('parent', String(q.parent));
@@ -674,8 +722,8 @@ export const workApi = {
   acceptInvite: (token: string) => d<{ slug: string }>(api.post(`${B}/invites/${encodeURIComponent(token)}/accept`)),
 
   // Dự án
-  createProject: (wsId: number, body: { key: string; name: string; description?: string | null; type: ProjectType; template: ProjectTemplate; visibility?: 'WORKSPACE' | 'PRIVATE' }) =>
-    d<{ id: number; key: string; name: string }>(api.post(`${B}/workspaces/${wsId}/projects`, body)),
+  createProject: (wsId: number, body: { key: string; name: string; description?: string | null; type: ProjectType; template: ProjectTemplate; visibility?: 'WORKSPACE' | 'PRIVATE'; kind?: ProjectKind; modules?: Partial<ModuleMap> }) =>
+    d<{ id: number; key: string; name: string; kind?: ProjectKind; modules?: ModuleMap }>(api.post(`${B}/workspaces/${wsId}/projects`, body)),
   resolve: (slug: string, key: string) => d<{ projectId: number }>(api.get(`${B}/resolve/${encodeURIComponent(slug)}/${encodeURIComponent(key)}`)),
   /**
    * Cấu hình dự án. Khi người xem đang BẬT khoá chỉnh sửa, các quyền SỬA bị tắt ngay
@@ -845,7 +893,7 @@ export const workApi = {
   createWorkflow: (pid: number, body: { name: string; copyFrom?: number | null }) => d<{ id: number }>(api.post(`${B}/projects/${pid}/workflows`, body)),
   addStatus: (pid: number, wfId: number, body: { name: string; category: StatusCategory; color?: string }) => d<WorkStatus>(api.post(`${B}/projects/${pid}/workflows/${wfId}/statuses`, body)),
   reorderStatuses: (pid: number, wfId: number, statusIds: number[]) => d(api.put(`${B}/projects/${pid}/workflows/${wfId}/order`, { statusIds })),
-  setTransitions: (pid: number, wfId: number, body: { mode: 'free' | 'restricted'; transitions?: Array<{ from: number | null; to: number }> }) =>
+  setTransitions: (pid: number, wfId: number, body: { mode: 'free' | 'restricted'; transitions?: Array<{ from: number | null; to: number; rules?: TransitionRules | null }> }) =>
     d(api.put(`${B}/projects/${pid}/workflows/${wfId}/transitions`, body)),
   /** Toạ độ nút sơ đồ quy trình (settings.workflowLayout[wfId]); null = về tự sắp xếp. */
   setWorkflowLayout: (pid: number, wfId: number, positions: WorkflowLayout | null) =>
@@ -1105,4 +1153,238 @@ export const workSearchApi = {
   search: (opts: { jql?: string; q?: string; limit?: number; offset?: number }) =>
     d<GlobalSearchResult>(api.get(`${B}/search${params({ jql: opts.jql || undefined, q: opts.q || undefined, limit: opts.limit, offset: opts.offset || undefined })}`)),
   facets: () => d<GlobalSearchFacets>(api.get(`${B}/search/facets`)),
+};
+
+// ═══ LỚP STUDIO đợt S1 (04/10/2026) — backend: services/work/{studio,teams,stages,approvals,handoffs,issueMove}.ts ═══
+// Mọi route của mô-đun đang TẮT trả 403 `code: 'MODULE_DISABLED'` (data.module = tên mô-đun) —
+// dùng `moduleDisabled(err)` để hiện "Turn on in Project settings → Modules" thay vì lỗi đỏ.
+
+export type TeamRole = 'LEAD' | 'MEMBER';
+export type StageStatus = 'NOT_STARTED' | 'ACTIVE' | 'GATE_REVIEW' | 'DONE';
+export type ApprovalTarget = 'ISSUE' | 'STAGE_GATE' | 'DOC' | 'CR';
+export type ApprovalMode = 'SEQUENTIAL' | 'PARALLEL';
+export type ApprovalStatus = 'PENDING' | 'APPROVED' | 'REJECTED' | 'CANCELLED';
+export type StepDecision = 'PENDING' | 'APPROVED' | 'REJECTED' | 'SKIPPED';
+export type HandoffStatus = 'PENDING' | 'ACCEPTED' | 'RETURNED' | 'CANCELLED';
+
+export interface StageGateConfig { approverIds: number[]; mode: ApprovalMode }
+export interface StudioConfig { kind: ProjectKind; kindStored: ProjectKind | null; modules: ModuleMap; stageGate: StageGateConfig }
+
+export interface WorkTeam {
+  id: number;
+  workspaceId: number;
+  key: string;
+  name: string;
+  color: string;
+  description: string | null;
+  archivedAt: string | null;
+  createdAt: string;
+  members: Array<WorkUser & { teamRole: TeamRole }>;
+  leadIds: number[];
+  /** Thẻ chưa xong của bộ phận (mọi dự án). */
+  openIssues: number;
+}
+
+export interface TeamQueueItem extends IssueCard {
+  projectId: number;
+  projectKey: string;
+  projectName: string;
+  /** "CL-12" */
+  key: string;
+  assignee: WorkUser | null;
+}
+export interface TeamQueue { team: WorkTeam; isLead: boolean; total: number; limit: number; offset: number; items: TeamQueueItem[] }
+
+export interface WorkStage {
+  id: number;
+  n: number;
+  /** Với dự án khách: khớp /about/quy-trinh/<slug>. */
+  slug: string;
+  name: string;
+  status: StageStatus;
+  gateIssueId: number | null;
+  gateIssue: { id: number; number: number; title: string; resolvedAt: string | null } | null;
+  startedAt: string | null;
+  completedAt: string | null;
+  createdAt: string;
+}
+export interface StageSummary extends WorkStage {
+  gateIssueKey: string | null;
+  issueCount: number;
+  doneCount: number;
+  /** Yêu cầu duyệt cổng đang chờ (nếu có). */
+  pendingApprovalId: number | null;
+}
+
+export interface ApprovalStep {
+  id: number;
+  approverId: number;
+  position: number;
+  decision: StepDecision;
+  comment: string | null;
+  decidedAt: string | null;
+  /** SHA-256 nội dung lúc người này quyết ("chữ ký"). IP không bao giờ trả ra. */
+  contentHash: string | null;
+  approver: WorkUser;
+}
+export interface WorkApproval {
+  id: number;
+  projectId: number;
+  targetType: ApprovalTarget;
+  issueId: number | null;
+  stageId: number | null;
+  title: string;
+  description: string | null;
+  mode: ApprovalMode;
+  status: ApprovalStatus;
+  dueAt: string | null;
+  /** Hash nội dung lúc gửi duyệt. */
+  contentHash: string | null;
+  decidedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+  createdBy: WorkUser | null;
+  issue: { id: number; number: number; title: string } | null;
+  stage: { id: number; n: number; slug: string; name: string; status: StageStatus } | null;
+  steps: ApprovalStep[];
+  issueKey: string | null;
+  currentHash: string | null;
+  signedHash: string | null;
+  /** ⚠ Đã có người ký mà nội dung bây giờ khác lúc ký — cảnh báo, phê duyệt KHÔNG tự huỷ. */
+  contentChanged: boolean;
+  /** Còn chờ mà nội dung đã khác lúc gửi duyệt. */
+  changedSinceRequest: boolean;
+  myStepId: number | null;
+  canDecide: boolean;
+  canCancel: boolean;
+  /** Người đang tới lượt (tuần tự: 1 người; song song: mọi người còn chờ). */
+  waitingOn: number[];
+}
+export interface MyApproval extends WorkApproval { project: { id: number; key: string; name: string; workspaceSlug: string } }
+
+export interface HandoffChecklistItem { text: string; done: boolean }
+export interface TeamBrief { id: number; key: string; name: string; color: string }
+export interface WorkHandoff {
+  id: number;
+  projectId: number;
+  issueId: number;
+  issueKey: string;
+  issue: { number: number; title: string };
+  fromTeamId: number | null;
+  fromUserId: number | null;
+  toTeamId: number | null;
+  toUserId: number | null;
+  fromTeam: TeamBrief | null;
+  toTeam: TeamBrief | null;
+  fromUser: WorkUser | null;
+  toUser: WorkUser | null;
+  createdBy: WorkUser | null;
+  checklist: HandoffChecklistItem[];
+  note: string | null;
+  status: HandoffStatus;
+  returnReason: string | null;
+  createdById: number | null;
+  decidedById: number | null;
+  createdAt: string;
+  decidedAt: string | null;
+  canDecide: boolean;
+  canCancel: boolean;
+}
+export interface MyHandoff extends WorkHandoff { project: { id: number; key: string; name: string; workspaceSlug: string } }
+
+export interface MoveIssueResult {
+  issueId: number;
+  projectId: number;
+  /** Mã mới, vd "OT-7". Mã cũ trả 404 code WORK_ISSUE_MOVED kèm data { projectId, key, number }. */
+  key: string;
+  number: number;
+  subtasks: Array<{ from: string; to: string }>;
+  /** Nhãn/component/trường không có ở dự án đích nên bị bỏ. */
+  dropped: string[];
+  canEditTarget: boolean;
+}
+
+/** Lỗi do mô-đun đang tắt ⇒ tên mô-đun; không phải ⇒ null. */
+export function moduleDisabled(err: unknown): StudioModule | null {
+  const r = (err as { response?: { status?: number; data?: { code?: string; data?: { module?: StudioModule } } } })?.response;
+  return r?.status === 403 && r.data?.code === 'MODULE_DISABLED' ? (r.data.data?.module ?? null) : null;
+}
+
+/** 404 vì thẻ đã chuyển sang dự án khác ⇒ mã mới để chuyển hướng; không phải ⇒ null. */
+export function issueMovedTo(err: unknown): { projectId: number; key: string; number: number } | null {
+  const r = (err as { response?: { status?: number; data?: { code?: string; data?: { projectId: number; key: string; number: number } } } })?.response;
+  return r?.status === 404 && r.data?.code === 'WORK_ISSUE_MOVED' && r.data.data ? r.data.data : null;
+}
+
+export const workStudioApi = {
+  // Loại dự án + mô-đun + người duyệt cổng (ADMIN dự án)
+  studio: (pid: number) => d<StudioConfig>(api.get(`${B}/projects/${pid}/studio`)),
+  updateStudio: (pid: number, body: { kind?: ProjectKind; applyKindDefaults?: boolean; modules?: Partial<ModuleMap>; stageGate?: { approverIds?: number[]; mode?: ApprovalMode } | null }) =>
+    d<StudioConfig>(api.put(`${B}/projects/${pid}/studio`, body)),
+
+  // Bộ phận (cấp không gian; tạo/sửa = OWNER/ADMIN không gian; khách không xem được)
+  teams: (wsId: number, includeArchived = false) => d<WorkTeam[]>(api.get(`${B}/workspaces/${wsId}/teams${includeArchived ? '?includeArchived=true' : ''}`)),
+  team: (wsId: number, teamId: number) => d<WorkTeam>(api.get(`${B}/workspaces/${wsId}/teams/${teamId}`)),
+  createTeam: (wsId: number, body: { key: string; name: string; color?: string; description?: string | null; leadIds?: number[]; memberIds?: number[] }) =>
+    d<WorkTeam>(api.post(`${B}/workspaces/${wsId}/teams`, body)),
+  updateTeam: (wsId: number, teamId: number, body: { name?: string; color?: string; description?: string | null; archived?: boolean }) =>
+    d<WorkTeam>(api.patch(`${B}/workspaces/${wsId}/teams/${teamId}`, body)),
+  deleteTeam: (wsId: number, teamId: number) => d(api.delete(`${B}/workspaces/${wsId}/teams/${teamId}`)),
+  setTeamMember: (wsId: number, teamId: number, userId: number, role: TeamRole = 'MEMBER') =>
+    d<WorkTeam>(api.put(`${B}/workspaces/${wsId}/teams/${teamId}/members/${userId}`, { role })),
+  removeTeamMember: (wsId: number, teamId: number, userId: number) => d<WorkTeam>(api.delete(`${B}/workspaces/${wsId}/teams/${teamId}/members/${userId}`)),
+  teamQueue: (wsId: number, teamId: number, q: { projectId?: number; status?: 'open' | 'done' | 'all'; unassigned?: boolean; limit?: number; offset?: number } = {}) =>
+    d<TeamQueue>(api.get(`${B}/workspaces/${wsId}/teams/${teamId}/queue${params({ projectId: q.projectId, status: q.status, unassigned: q.unassigned ? 'true' : undefined, limit: q.limit, offset: q.offset })}`)),
+  /** Trưởng bộ phận (hoặc người sửa được thẻ) giao/bỏ giao việc từ hàng đợi. */
+  assignFromQueue: (wsId: number, teamId: number, issueId: number, assigneeId: number | null) =>
+    d<IssueCard>(api.put(`${B}/workspaces/${wsId}/teams/${teamId}/queue/${issueId}/assignee`, { assigneeId })),
+
+  // Giai đoạn + cổng
+  stages: (pid: number) => d<StageSummary[]>(api.get(`${B}/projects/${pid}/stages`)),
+  createStage: (pid: number, body: { n?: number; slug: string; name: string; gateIssueNumber?: number | null }) => d<WorkStage>(api.post(`${B}/projects/${pid}/stages`, body)),
+  updateStage: (pid: number, sid: number, body: { n?: number; slug?: string; name?: string; gateIssueNumber?: number | null }) => d<WorkStage>(api.patch(`${B}/projects/${pid}/stages/${sid}`, body)),
+  deleteStage: (pid: number, sid: number) => d(api.delete(`${B}/projects/${pid}/stages/${sid}`)),
+  /** 409 WORK_STAGE_BLOCKED (data.blockingStage) khi giai đoạn trước chưa DONE; ADMIN gửi override.reason để vượt (ghi audit). */
+  activateStage: (pid: number, sid: number, override?: { reason: string }) => d<WorkStage>(api.post(`${B}/projects/${pid}/stages/${sid}/activate`, override ? { override } : {})),
+  requestGate: (pid: number, sid: number, body: { description?: string | null; dueAt?: string | null } = {}) =>
+    d<{ stage: WorkStage; approval: WorkApproval }>(api.post(`${B}/projects/${pid}/stages/${sid}/request-gate`, body)),
+
+  // Phê duyệt
+  myApprovals: () => d<MyApproval[]>(api.get(`${B}/me/approvals`)),
+  approvals: (pid: number, q: { status?: ApprovalStatus; targetType?: ApprovalTarget; issue?: number; stage?: number; limit?: number } = {}) =>
+    d<WorkApproval[]>(api.get(`${B}/projects/${pid}/approvals${params(q)}`)),
+  approval: (pid: number, aid: number) => d<WorkApproval>(api.get(`${B}/projects/${pid}/approvals/${aid}`)),
+  createApproval: (pid: number, body: { issueNumber: number; approverIds: number[]; mode?: ApprovalMode; title?: string; description?: string | null; dueAt?: string | null }) =>
+    d<WorkApproval>(api.post(`${B}/projects/${pid}/approvals`, { targetType: 'ISSUE', ...body })),
+  /** REJECT bắt buộc comment. 409 WORK_APPROVAL_NOT_YOUR_TURN khi tuần tự chưa tới lượt. */
+  decideApproval: (pid: number, aid: number, body: { decision: 'APPROVE' | 'REJECT'; comment?: string | null }) =>
+    d<WorkApproval>(api.post(`${B}/projects/${pid}/approvals/${aid}/decide`, body)),
+  cancelApproval: (pid: number, aid: number, reason?: string) => d<WorkApproval>(api.post(`${B}/projects/${pid}/approvals/${aid}/cancel`, { reason })),
+
+  // Bàn giao
+  myHandoffs: () => d<MyHandoff[]>(api.get(`${B}/me/handoffs`)),
+  projectHandoffs: (pid: number, q: { status?: HandoffStatus; limit?: number } = {}) => d<WorkHandoff[]>(api.get(`${B}/projects/${pid}/handoffs${params(q)}`)),
+  issueHandoffs: (pid: number, num: number) => d<WorkHandoff[]>(api.get(`${B}/projects/${pid}/issues/${num}/handoffs`)),
+  createHandoff: (pid: number, num: number, body: { toTeamId?: number | null; toUserId?: number | null; checklist?: Array<{ text: string; done?: boolean }>; note?: string | null }) =>
+    d<WorkHandoff>(api.post(`${B}/projects/${pid}/issues/${num}/handoffs`, body)),
+  /** `checklist` = trạng thái tick theo đúng thứ tự mục; thiếu mục chưa tick ⇒ 400 WORK_HANDOFF_CHECKLIST. */
+  acceptHandoff: (pid: number, hid: number, checklist?: boolean[]) => d<WorkHandoff>(api.post(`${B}/projects/${pid}/handoffs/${hid}/accept`, { checklist })),
+  returnHandoff: (pid: number, hid: number, reason: string) => d<WorkHandoff>(api.post(`${B}/projects/${pid}/handoffs/${hid}/return`, { reason })),
+  cancelHandoff: (pid: number, hid: number) => d<WorkHandoff>(api.post(`${B}/projects/${pid}/handoffs/${hid}/cancel`)),
+
+  // Chuyển thẻ sang dự án khác (cùng không gian; ADMIN hoặc người báo)
+  moveToProject: (pid: number, num: number, targetProjectId: number, version?: number) =>
+    d<MoveIssueResult>(api.post(`${B}/projects/${pid}/issues/${num}/move-project`, { targetProjectId, version })),
+};
+
+export const workStudioKeys = {
+  studio: (pid: number) => ['work', 'studio', pid] as const,
+  teams: (wsId: number) => ['work', 'teams', wsId] as const,
+  teamQueue: (wsId: number, teamId: number) => ['work', 'team-queue', wsId, teamId] as const,
+  stages: (pid: number) => ['work', 'stages', pid] as const,
+  approvals: (pid: number) => ['work', 'approvals', pid] as const,
+  myApprovals: ['work', 'my-approvals'] as const,
+  handoffs: (pid: number) => ['work', 'handoffs', pid] as const,
+  issueHandoffs: (pid: number, num: number) => ['work', 'handoffs', pid, num] as const,
+  myHandoffs: ['work', 'my-handoffs'] as const,
 };

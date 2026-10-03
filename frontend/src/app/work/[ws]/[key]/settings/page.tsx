@@ -6,14 +6,15 @@ import { Suspense } from 'react';
 import Link from 'next/link';
 import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation';
 import {
-  Archive, Boxes, Columns3, Download, GitMerge, Github, Link2, MessageSquareShare, Shapes, SlidersHorizontal, Tag, TextCursorInput, Trash2, TriangleAlert, Upload, Users, Workflow, Zap,
+  Archive, Blocks, Boxes, Columns3, Download, GitMerge, Github, Link2, MessageSquareShare, Shapes, SlidersHorizontal, Tag, TextCursorInput, Trash2, TriangleAlert, Upload, Users, Workflow, Zap,
 } from 'lucide-react';
 import { workError } from '@/lib/work-api';
 import { useProject } from '@/components/work/hooks';
-import { EmptyState, Spinner } from '@/components/work/ui';
+import { EmptyState, PageLoading } from '@/components/work/ui';
 import { PageHeader, ReadOnlyNotice, SettingsLayout, type NavGroup, type TabDef } from '@/components/work/settings/shared';
-import { Crumb, CrumbSep } from '@/components/work/ProjectHeader';
+import ProjectHeader from '@/components/work/ProjectHeader';
 import ProjectDetails from '@/components/work/settings/ProjectDetails';
+import ProjectStudio from '@/components/work/settings/ProjectStudio';
 import ProjectMembers from '@/components/work/settings/ProjectMembers';
 import ProjectLabels from '@/components/work/settings/ProjectLabels';
 import ProjectComponents from '@/components/work/settings/ProjectComponents';
@@ -31,7 +32,7 @@ import ProjectShare from '@/components/work/settings/ProjectShare';
 import ProjectTrash from '@/components/work/settings/ProjectTrash';
 import ProjectDanger from '@/components/work/settings/ProjectDanger';
 
-type Tab = 'details' | 'members' | 'labels' | 'components' | 'workflow' | 'board' | 'types' | 'fields' | 'automation' | 'github' | 'gitlab' | 'chat' | 'share' | 'export' | 'import' | 'trash' | 'danger';
+type Tab = 'details' | 'studio' | 'members' | 'labels' | 'components' | 'workflow' | 'board' | 'types' | 'fields' | 'automation' | 'github' | 'gitlab' | 'chat' | 'share' | 'export' | 'import' | 'trash' | 'danger';
 
 function ProjectSettings() {
   const params = useParams<{ ws: string; key: string }>();
@@ -47,6 +48,7 @@ function ProjectSettings() {
   const groups: NavGroup<Tab>[] = [
     { label: 'General', tabs: [
       { key: 'details', label: 'Details', icon: SlidersHorizontal },
+      { key: 'studio', label: 'Project type & modules', icon: Blocks },
       { key: 'members', label: 'Members', icon: Users },
       { key: 'labels', label: 'Labels', icon: Tag },
       { key: 'components', label: 'Components', icon: Boxes },
@@ -76,7 +78,7 @@ function ProjectSettings() {
   const tab: Tab = raw && tabs.some((t) => t.key === raw) ? raw : 'details';
   const setTab = (t: Tab) => router.replace(`${pathname}${t === 'details' ? '' : `?tab=${t}`}`, { scroll: false });
 
-  if (isLoading) return <div className="flex h-full items-center justify-center"><Spinner size={20} /></div>;
+  if (isLoading) return <PageLoading />;
   if (error || !config) {
     return (
       <div className="flex h-full flex-col">
@@ -99,17 +101,7 @@ function ProjectSettings() {
 
   return (
     <div className="flex h-full flex-col">
-      <PageHeader
-        title={
-          <>
-            <Crumb href={`/work/${slug}`} className="max-w-[160px] font-normal max-sm:hidden">{config.workspace.name}</Crumb>
-            <CrumbSep className="mx-1.5 max-sm:hidden" />
-            <Crumb href={`/work/${slug}/${config.key}/board`} className="max-w-[220px] font-normal">{config.name}</Crumb>
-            <CrumbSep className="mx-1.5" />
-            Settings
-          </>
-        }
-      />
+      <ProjectHeader config={config} title="Settings" tools={false} />
       <SettingsLayout groups={groups} active={tab} onChange={setTab} label="Project settings">
         {config.archivedAt && (
           <div className="mb-6 flex items-center gap-2 rounded-[8px] border border-[var(--w-border)] bg-[var(--w-sunken)] px-3 py-2.5 text-[13px] text-[var(--w-text-2)]">
@@ -121,6 +113,7 @@ function ProjectSettings() {
           <ReadOnlyNotice>You can view these settings, but only project admins can change them.</ReadOnlyNotice>
         )}
         {tab === 'details' && <ProjectDetails config={config} slug={slug} />}
+        {tab === 'studio' && <ProjectStudio config={config} slug={slug} />}
         {tab === 'members' && <ProjectMembers config={config} slug={slug} />}
         {tab === 'labels' && <ProjectLabels config={config} slug={slug} />}
         {tab === 'components' && <ProjectComponents config={config} slug={slug} />}
@@ -144,7 +137,7 @@ function ProjectSettings() {
 
 export default function ProjectSettingsPage() {
   return (
-    <Suspense fallback={<div className="flex h-full items-center justify-center"><Spinner size={20} /></div>}>
+    <Suspense fallback={<PageLoading />}>
       <ProjectSettings />
     </Suspense>
   );

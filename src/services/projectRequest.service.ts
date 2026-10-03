@@ -31,6 +31,7 @@ import { createWorkspace } from './work/workspaces.service.js';
 import { createProject, getProjectConfig, upsertLabel } from './work/projects.service.js';
 import { createIssueAs } from './work/issues.service.js';
 import { createLink } from './work/share.service.js';
+import { ensureTeams } from './work/teams.service.js';
 import { frontendUrl } from './work/common.js';
 
 // ─── Hằng ───────────────────────────────────────────────────────
@@ -168,11 +169,11 @@ export function roleplaySample(): ProjectRequestInput {
 
 export interface ClientTemplateTask { summary: string; role: string; checklist: string[]; gate?: boolean; description?: string }
 export interface ClientTemplateStage {
-  slug: string; n: number; title: string;
+  slug: string; n: number; title: string; titleEn?: string;
   epic: { summary: string; description?: string };
   tasks: ClientTemplateTask[];
 }
-export interface ClientProjectTemplate { version: string | number; roles: Array<{ key: string; name: string }>; stages: ClientTemplateStage[] }
+export interface ClientProjectTemplate { version: string | number; roles: Array<{ key: string; name: string; nameEn?: string }>; stages: ClientTemplateStage[] }
 
 /** Bản tối thiểu khi gói nội dung chưa giao file JSON — đủ để nút chạy và kiểm được. */
 const MINIMAL_TEMPLATE: ClientProjectTemplate = {
@@ -309,7 +310,21 @@ export interface CreatedWorkProject {
   shareUrl: string | null;
   /** null = dự án đã có từ trước, lượt này không dựng gì. */
   templateSource: 'file' | 'minimal' | null;
-  counts: { epics: number; tasks: number; gates: number; labels: number };
+  counts: { epics: number; tasks: number; gates: number; labels: number; teams?: number; teamsCreated?: number; stages?: number };
+}
+
+/**
+ * Bộ phận dựng từ `roles` của mẫu (CÙNG bộ khoá với `DEPT_KEYS` của trang
+ * /about/quy-trinh — sales, ba, ux… — nhưng mẫu JSON đọc được lúc chạy và mỗi
+ * việc đã ghi sẵn `role`, nên ánh xạ việc → bộ phận là 1:1, không cần bảng dịch).
+ * Vai `client` KHÔNG thành bộ phận: khách là người ngoài (GUEST), không thể là
+ * thành viên bộ phận — việc của khách giữ nhãn `vai:client`, để trống bộ phận.
+ */
+export const CLIENT_ROLE_KEY = 'client';
+export function teamDefsFromTemplate(t: ClientProjectTemplate) {
+  return t.roles
+    .filter((r) => r.key !== CLIENT_ROLE_KEY)
+    .map((r, i) => ({ key: r.key.toUpperCase(), name: r.nameEn || r.name, color: ROLE_COLORS[i % ROLE_COLORS.length], description: r.name }));
 }
 
 async function liveProjectUrl(projectId: number) {
@@ -398,6 +413,8 @@ export async function createWorkProjectFromRequest(adminId: number, requestId: n
       template: 'COMPANY',
       visibility: 'PRIVATE',
       firstSprint: false,
+      // Dự án khách của studio: bật bộ phận, giai đoạn + cổng, phê duyệt, bàn giao.
+      kind: 'CLIENT',
     });
   } catch (err) {
     // Hai lượt cùng lọt qua bước kiểm ở trên ⇒ UNIQUE (workspace, key) chặn lượt sau.
@@ -406,8 +423,16 @@ export async function createWorkProjectFromRequest(adminId: number, requestId: n
   }
 
   const pid = project.id;
-  const counts = { epics: 0, tasks: 0, gates: 0, labels: 0 };
+  const counts = { epics: 0, tasks: 0, gates: 0, labels: 0, teams: 0, teamsCreated: 0, stages: 0 };
   try {
+    // Bộ phận cấp không gian theo vai của mẫu (đã có thì dùng lại). Bộ phận MỚI
+    // nhận admin làm trưởng để luôn có người giao việc từ hàng đợi.
+    const teamDefs = teamDefsFromTemplate(template);
+    const { byKey: teamByKey, created: teamsCreated } = await ensureTeams(ws.id, teamDefs, adminId);
+    counts.teams = teamDefs.length;
+    counts.teamsCreated = teamsCreated;
+    const teamOf = (role: string) => (role === CLIENT_ROLE_KEY ? null : teamByKey.get(role.toUpperCase()) ?? null);
+
     // Nhãn: một nhãn mỗi vai (lọc thẻ theo vai khi nhập vai) + nhãn cổng + nhãn phiếu.
     const labelId: Record<string, number> = {};
     const roleName = new Map(template.roles.map((x) => [x.key, x.name]));
@@ -438,7 +463,16 @@ export async function createWorkProjectFromRequest(adminId: number, requestId: n
     });
 
     const stages = [...template.stages].sort((a, b) => a.n - b.n);
-    for (const s of stages) {
+    for (const [idx, s] of stages.entries()) {
+      // Giai đoạn có cấu trúc (slug khớp /about/quy-trinh/<slug>); giai đoạn đầu chạy ngay.
+      const stage = await prisma.workStage.create({
+        data: {
+          projectId: pid, n: s.n, slug: s.slug, name: (s.titleEn || s.title).slice(0, 160),
+          ...(idx === 0 ? { status: 'ACTIVE', startedAt: new Date() } : {}),
+        },
+        select: { id: true },
+      });
+      counts.stages++;
       const epic = await createIssueAs(adminId, pid, {
         typeId: typeId.EPIC,
         title: `${s.n}. ${s.epic.summary}`.slice(0, 255),
@@ -447,13 +481,15 @@ export async function createWorkProjectFromRequest(adminId: number, requestId: n
           PB('Giai đoạn: ', `${s.title} (/about/quy-trinh/${s.slug})`),
         ),
         priority: 3,
-        assigneeId: adminId,
+        stageId: stage.id,
         labelIds: extra,
       });
       counts.epics++;
       for (const k of s.tasks) {
         const roleLabel = labelId[`vai:${k.role}`];
-        await createIssueAs(adminId, pid, {
+        // Không giao cho admin nữa: để trống người làm, gán BỘ PHẬN theo vai —
+        // trưởng bộ phận nhận từ hàng đợi. Nhãn vai:* giữ lại cho tương thích.
+        const task = await createIssueAs(adminId, pid, {
           typeId: typeId.TASK,
           title: k.summary.slice(0, 255),
           descriptionJson: DOC(
@@ -463,12 +499,16 @@ export async function createWorkProjectFromRequest(adminId: number, requestId: n
             k.checklist?.length ? TASKS(k.checklist) : P('—'),
           ),
           priority: k.gate ? 2 : 3,
-          assigneeId: adminId,
           parentId: epic.id,
+          teamId: teamOf(k.role),
+          stageId: stage.id,
           labelIds: [roleLabel, ...(k.gate ? [labelId['cong-chat-luong']] : []), ...extra],
         });
         counts.tasks++;
-        if (k.gate) counts.gates++;
+        if (k.gate) {
+          counts.gates++;
+          await prisma.workStage.update({ where: { id: stage.id }, data: { gateIssueId: task.id } });
+        }
       }
     }
 

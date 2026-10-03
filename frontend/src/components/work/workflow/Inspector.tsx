@@ -4,7 +4,8 @@
 
 import { useEffect, useState } from 'react';
 import { AlertTriangle, ArrowRight, ArrowLeftRight, Trash2, X } from 'lucide-react';
-import type { StatusCategory, WorkStatus } from '@/lib/work-api';
+import type { ProjectConfig, StatusCategory, WorkStatus } from '@/lib/work-api';
+import TransitionRulesFields, { rulesAvailable } from './TransitionRules';
 import { Spinner, StatusBadge } from '../ui';
 import { Select } from '../settings/shared';
 import { ColorPicker } from '../settings/ProjectLabels';
@@ -36,7 +37,7 @@ function PanelShell({ eyebrow, onClose, children }: { eyebrow: string; onClose: 
 }
 
 const SubHead = ({ children }: { children: React.ReactNode }) => (
-  <div className="mb-1.5 mt-4 text-[11px] font-semibold uppercase tracking-[0.04em] text-[var(--w-text-3)] first:mt-0">{children}</div>
+  <div className="mb-1.5 mt-4 text-[12px] font-semibold text-[var(--w-text-2)] first:mt-0">{children}</div>
 );
 
 // ─── Trạng thái ──────────────────────────────────────────────────
@@ -184,9 +185,11 @@ export function NodeInspector({
 // ─── Mũi tên ─────────────────────────────────────────────────────
 
 export function EdgeInspector({
-  edgeKey, statuses, canEdit, draft, onClose, onSelectEdge,
+  edgeKey, statuses, canEdit, draft, onClose, onSelectEdge, config,
 }: {
   edgeKey: string; statuses: WorkStatus[]; canEdit: boolean; draft: TransitionDraft; onClose: () => void; onSelectEdge: (key: string) => void;
+  /** Có ⇒ hiện luật của mũi tên khi dự án bật approvals/teams (lớp studio S1). */
+  config?: ProjectConfig;
 }) {
   const { from, to } = parsePair(edgeKey);
   const byId = new Map(statuses.map((s) => [s.id, s]));
@@ -207,6 +210,12 @@ export function EdgeInspector({
           : <>Issues in <b className="font-medium text-[var(--w-text)]">any status</b> can move to <b className="font-medium text-[var(--w-text)]">{b.name}</b> — Jira calls this a global transition.</>}
         {hasReverse && ' They can also move back.'}
       </p>
+      {config && rulesAvailable(config) && (
+        <>
+          <SubHead>Rules</SubHead>
+          <TransitionRulesFields config={config} draft={draft} edgeKey={edgeKey} canEdit={canEdit} />
+        </>
+      )}
       {canEdit && (
         <div className="mt-4 flex flex-col gap-2">
           {reverse && !hasReverse && (

@@ -393,7 +393,7 @@ function Block({ label, tone, icon, children }: { label: string; tone: string; i
     <div className="relative rounded-[8px] border border-[var(--w-border)] bg-[var(--w-panel)]">
       <div className="flex items-center gap-2 border-b border-[var(--w-border)] px-3 py-2">
         <span className="flex h-5 w-5 items-center justify-center rounded-[5px] text-white" style={{ background: tone }}>{icon}</span>
-        <span className="text-[12px] font-semibold uppercase tracking-wide text-[var(--w-text-2)]">{label}</span>
+        <span className="text-[12px] font-semibold text-[var(--w-text-2)]">{label}</span>
       </div>
       <div className="space-y-3 p-3">{children}</div>
     </div>
@@ -653,7 +653,7 @@ function AuditLog({ config, slug, rules, ruleFilter, setRuleFilter }: {
         <div className="overflow-x-auto rounded-[8px] border border-[var(--w-border)]">
           <table className="w-full min-w-[680px] text-[13px]">
             <thead>
-              <tr className="border-b border-[var(--w-border)] text-left text-[11px] uppercase tracking-wide text-[var(--w-text-3)]">
+              <tr className="border-b border-[var(--w-border)] text-left text-[11px] text-[var(--w-text-3)]">
                 <th className="px-3 py-2 font-medium">Time</th>
                 <th className="px-3 py-2 font-medium">Rule</th>
                 <th className="px-3 py-2 font-medium">Issue</th>
@@ -841,7 +841,7 @@ export default function ProjectAutomation({ config, slug }: { config: ProjectCon
 
             {canEdit && (
               <div className="mt-6">
-                <h3 className="mb-2 text-[12px] font-semibold uppercase tracking-wide text-[var(--w-text-3)]">Templates</h3>
+                <h3 className="mb-2 text-[12px] font-semibold text-[var(--w-text-2)]">Templates</h3>
                 <div className="grid gap-2 sm:grid-cols-2">
                   {TEMPLATES.map((t) => (
                     <button

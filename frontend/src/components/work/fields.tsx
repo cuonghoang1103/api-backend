@@ -21,7 +21,7 @@ import {
 } from './ui';
 
 /** Nút mở popover chọn. `bare` = không viền (dùng trong cột thuộc tính). */
-function Trigger({ children, disabled, bare, onClick, triggerRef, className }: {
+export function Trigger({ children, disabled, bare, onClick, triggerRef, className }: {
   children: ReactNode; disabled?: boolean; bare?: boolean; onClick: () => void; triggerRef: React.RefObject<HTMLButtonElement>; className?: string;
 }) {
   return (
@@ -43,7 +43,7 @@ function Trigger({ children, disabled, bare, onClick, triggerRef, className }: {
   );
 }
 
-function usePick() {
+export function usePick() {
   const t = useToggle();
   const ref = useRef<HTMLButtonElement>(null);
   return { ...t, ref };

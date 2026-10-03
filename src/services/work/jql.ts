@@ -287,6 +287,10 @@ export interface JqlContext {
   members: Array<{ id: number; username: string }>;
   sprints: Array<{ id: number; name: string; state: string }>;
   customFields: Array<{ id: number; name: string; kind: string; options: Array<{ id: string; label: string }> }>;
+  /** Bộ phận của KHÔNG GIAN (lớp studio): `team = BA` khớp mã hoặc tên. Thiếu = không có bộ phận nào. */
+  teams?: Array<{ id: number; key: string; name: string }>;
+  /** Giai đoạn của dự án: `stage = khao-sat` khớp slug, tên hoặc số thứ tự. */
+  stages?: Array<{ id: number; n: number; slug: string; name: string }>;
   now?: Date;
   /** Tên dự án — `project = "Tên dự án"` cũng khớp. */
   projectName?: string;
@@ -333,6 +337,8 @@ const FIELD_ALIASES: Record<string, string> = {
   resolved: 'resolved', resolutiondate: 'resolved',
   watcher: 'watcher', watchers: 'watcher',
   project: 'project',
+  team: 'team', teams: 'team', department: 'team',
+  stage: 'stage', phase: 'stage',
 };
 
 /** Tên trường người dùng gõ ⇒ tên chuẩn (hoặc undefined nếu không phải trường có sẵn). */
@@ -362,6 +368,7 @@ export function projectScope(q: JqlQuery): { include: string[] | null; exclude: 
 export const JQL_FIELDS = [
   'key', 'summary', 'description', 'text', 'status', 'statusCategory', 'type', 'priority', 'assignee', 'reporter',
   'labels', 'component', 'sprint', 'parent', 'points', 'created', 'updated', 'due', 'resolved', 'watcher', 'project',
+  'team', 'stage',
 ];
 export const JQL_FUNCTIONS = ['currentUser()', 'openSprints()', 'closedSprints()', 'futureSprints()', 'now()', 'startOfDay()', 'startOfWeek()', 'startOfMonth()', 'endOfDay()', 'endOfWeek()', 'endOfMonth()'];
 
@@ -547,6 +554,18 @@ export function compileJql(q: JqlQuery, ctx: JqlContext): { where: W; orderBy: P
         if (notEmpty) return { components: { some: {} } };
         const ids = nameIds(ctx.components, values, 'component', pos);
         return inOrNot(op, pos) ? { components: { none: { componentId: { in: ids } } } } : { components: { some: { componentId: { in: ids } } } };
+      }
+      case 'team': {
+        if (empty) return { teamId: null };
+        if (notEmpty) return { teamId: { not: null } };
+        const ids = nameIds(ctx.teams ?? [], values, 'team', pos, (t) => [t.key]);
+        return inOrNot(op, pos) ? { NOT: { teamId: { in: ids } } } : { teamId: { in: ids } };
+      }
+      case 'stage': {
+        if (empty) return { stageId: null };
+        if (notEmpty) return { stageId: { not: null } };
+        const ids = nameIds(ctx.stages ?? [], values, 'stage', pos, (st) => [st.slug, String(st.n)]);
+        return inOrNot(op, pos) ? { NOT: { stageId: { in: ids } } } : { stageId: { in: ids } };
       }
       case 'sprint': {
         if (empty) return { sprintId: null };

@@ -18,7 +18,7 @@ import AiPanelHost from '@/components/work/ai/AiPanelHost';
 import HelpPanelHost from '@/components/work/help/HelpPanel';
 import { useDaDangNhap } from '@/hooks/useDaDangNhap';
 import { Spinner } from '@/components/work/ui';
-import { useMobileNav } from '@/components/work/shell/mobileNav';
+import { useMobileNav, useSidebarRail } from '@/components/work/shell/mobileNav';
 
 export default function WorkLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname() ?? '';
@@ -30,6 +30,10 @@ export default function WorkLayout({ children }: { children: React.ReactNode }) 
   const pageHasHeader = useMobileNav((s) => s.headers > 0);
 
   useEffect(() => setMobileNav(false), [pathname, setMobileNav]);
+
+  // Sidebar thu gọn (≥md): đọc lựa chọn đã lưu / tự thu gọn khi cửa sổ hẹp.
+  const rail = useSidebarRail((s) => s.collapsed);
+  useEffect(() => { useSidebarRail.getState().init(); }, []);
 
   // Lưới đỡ phía client (middleware là chốt chính): phiên hết hạn giữa chừng.
   useEffect(() => {
@@ -46,7 +50,10 @@ export default function WorkLayout({ children }: { children: React.ReactNode }) 
         <div className="flex flex-1 items-center justify-center"><Spinner size={20} /></div>
       ) : (
         <>
-          <aside className="hidden w-[248px] shrink-0 border-r border-[var(--w-border)] bg-[var(--w-bg)] md:block">
+          <aside
+            className="hidden shrink-0 overflow-hidden bg-[var(--w-bg)] transition-[width] duration-200 ease-out md:block"
+            style={{ width: rail ? 'var(--w-sidebar-rail)' : 'var(--w-sidebar-w)' }}
+          >
             {/* Sidebar đọc ?tab= (useSearchParams) ⇒ cần Suspense. */}
             <Suspense fallback={null}><WorkSidebar /></Suspense>
           </aside>
@@ -62,7 +69,7 @@ export default function WorkLayout({ children }: { children: React.ReactNode }) 
               </aside>
             </div>
           )}
-          <main className="flex min-w-0 flex-1 flex-col bg-[var(--w-panel)] md:my-2 md:mr-2 md:rounded-[10px] md:border md:border-[var(--w-border)]" style={{ boxShadow: 'var(--w-shadow-card)' }}>
+          <main className="flex min-w-0 flex-1 flex-col bg-[var(--w-panel)] md:my-2 md:mr-2 md:rounded-[12px] md:border md:border-[var(--w-border)]" style={{ boxShadow: 'var(--w-shadow-card)' }}>
             {!pageHasHeader && (
               <div className="w-header flex h-[52px] shrink-0 items-center gap-2 border-b border-[var(--w-border)] px-3 md:hidden">
                 <button type="button" onClick={() => setMobileNav(true)} className="w-btn w-btn-ghost w-btn-icon" aria-label="Open navigation">

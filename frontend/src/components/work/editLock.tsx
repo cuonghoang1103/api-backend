@@ -104,12 +104,12 @@ export function EditLockButton({ config }: { config: ProjectConfig }) {
       aria-label={locked ? 'Editing is locked — click to unlock' : 'Lock editing'}
       title={locked ? 'Editing is locked for you in this project. Click to unlock.' : 'Lock editing so you can browse without changing anything by accident'}
       className={cn(
-        'w-btn w-btn-sm shrink-0',
-        locked && 'border-[color-mix(in_srgb,var(--w-orange)_55%,transparent)] bg-[color-mix(in_srgb,var(--w-orange)_14%,transparent)] text-[var(--w-orange)]',
+        'w-btn shrink-0',
+        locked && 'w-btn-warn',
       )}
     >
-      {locked ? <Lock size={13} /> : <LockOpen size={13} />}
-      <span className="max-md:hidden">{locked ? 'Locked' : 'Lock'}</span>
+      {locked ? <Lock size={14} /> : <LockOpen size={14} className="text-[var(--w-text-2)]" />}
+      <span className="max-xl:hidden">{locked ? 'Locked' : 'Lock'}</span>
     </button>
   );
 }
@@ -140,7 +140,7 @@ export function EditLockPill({ config }: { config: ProjectConfig }) {
       onClick={() => { void unlock(config.id); }}
       title="Editing is locked — you can read, comment and ask the AI. Click to unlock."
       aria-label="Editing is locked — click to unlock"
-      className="w-btn w-btn-sm shrink-0 border-[color-mix(in_srgb,var(--w-orange)_55%,transparent)] bg-[color-mix(in_srgb,var(--w-orange)_14%,transparent)] text-[var(--w-orange)]"
+      className="w-btn w-btn-sm w-btn-warn shrink-0"
     >
       <Lock size={12} /> Locked
     </button>

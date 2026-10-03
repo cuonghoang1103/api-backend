@@ -13,6 +13,7 @@ import type { IssueCard } from '@/lib/work-api';
 import type { Lookups } from '../hooks';
 import { IssueTypeIcon, LabelChip, PriorityIcon, UserAvatar } from '../ui';
 import type { SubtaskInfo } from './grouping';
+import { TeamChip, useTeamLookup } from '../studio/shared';
 
 export function isOverdue(i: Pick<IssueCard, 'dueDate' | 'statusId'>, lk: Lookups) {
   if (!i.dueDate || lk.statuses.get(i.statusId)?.category === 'DONE') return false;
@@ -30,7 +31,7 @@ export function PointsBadge({ points, unit = 'pts' }: { points: number | null; u
   if (points === null || points === undefined) return null;
   return (
     <span
-      className="inline-flex h-[18px] shrink-0 items-center rounded-full bg-[var(--w-sunken)] px-1.5 text-[11px] font-medium tabular text-[var(--w-text-2)]"
+      className="inline-flex h-[18px] shrink-0 items-center rounded-[4px] bg-[var(--w-sunken)] px-1.5 text-[11px] font-semibold tabular text-[var(--w-text-2)] shadow-[inset_0_0_0_1px_var(--w-border)]"
       title={`Estimate: ${points} ${unit === 'pts' ? (points === 1 ? 'story point' : 'story points') : unit}`}
     >
       {points} {unit === 'pts' && points === 1 ? 'pt' : unit}
@@ -88,13 +89,15 @@ export function CardBody({ issue, lk, dragging, subtasks, inDoneColumn, onOpen, 
   const openKids = subtasks?.open ?? 0;
   const warn = !!inDoneColumn && openKids > 0;
   const assignee = issue.assigneeId ? lk.members.get(issue.assigneeId) : null;
+  // Bộ phận (S1): chỉ có khi board cung cấp TeamsCtx — tức dự án bật mô-đun teams.
+  const team = useTeamLookup()?.get(issue.teamId ?? 0);
   return (
     <div
       className={cn(
-        'rounded-[7px] border border-[var(--w-border)] bg-[var(--w-panel)] px-3 py-2.5 transition-[border-color,box-shadow]',
-        'hover:border-[var(--w-border-strong)]',
+        'group/card rounded-[8px] border border-[var(--w-border)] bg-[var(--w-raised)] px-3 pb-2.5 pt-2.5 shadow-[var(--w-shadow-card)] transition-[border-color,box-shadow] duration-150',
+        'hover:border-[var(--w-border-strong)] hover:shadow-[var(--w-shadow-lift)]',
         warn && 'border-[color-mix(in_srgb,var(--w-orange)_55%,transparent)]',
-        dragging && 'rotate-[1.5deg] border-[var(--w-accent-border)] shadow-[var(--w-shadow-pop)]',
+        dragging && 'rotate-[1.5deg] cursor-grabbing border-[var(--w-accent-border)] shadow-[var(--w-shadow-pop)]',
       )}
     >
       {warn && (
@@ -105,7 +108,7 @@ export function CardBody({ issue, lk, dragging, subtasks, inDoneColumn, onOpen, 
           <AlertTriangle size={11} /> {openKids} open {openKids === 1 ? 'sub-task' : 'sub-tasks'}
         </div>
       )}
-      <p className={cn('mb-2 line-clamp-3 text-[14px] leading-snug text-[var(--w-text)]', done && 'text-[var(--w-text-3)] line-through decoration-[var(--w-text-3)]')}>
+      <p className={cn('mb-2 line-clamp-3 text-[14px] font-medium leading-[1.4] tracking-[-0.005em] text-[var(--w-text)]', done && 'font-normal text-[var(--w-text-3)] line-through decoration-[var(--w-text-3)]')}>
         {issue.title}
       </p>
       {labels.length > 0 && (
@@ -118,9 +121,10 @@ export function CardBody({ issue, lk, dragging, subtasks, inDoneColumn, onOpen, 
           )}
         </div>
       )}
-      <div className="flex items-center gap-1.5 text-[11px] text-[var(--w-text-3)]">
+      <div className="flex min-w-0 items-center gap-1.5 text-[11px] text-[var(--w-text-3)]">
         <IssueTypeIcon type={lk.types.get(issue.typeId)} size={12} />
-        <span className={cn('shrink-0 font-mono text-[var(--w-text-2)]', done && 'line-through')}>{lk.issueKey(issue.number)}</span>
+        <span className={cn('shrink-0 font-mono text-[12px] font-medium text-[var(--w-text-2)]', done && 'line-through')}>{lk.issueKey(issue.number)}</span>
+        {team && <TeamChip team={team} />}
         {showParent && issue.parentNumber && (
           <span className="truncate font-mono" title="Parent issue">↑ {lk.issueKey(issue.parentNumber)}</span>
         )}
@@ -142,7 +146,7 @@ export function CardBody({ issue, lk, dragging, subtasks, inDoneColumn, onOpen, 
             onClick={(e) => { e.stopPropagation(); setExpanded((v) => !v); }}
             onKeyDown={(e) => e.stopPropagation()}
             aria-expanded={expanded}
-            className="flex h-7 w-full items-center gap-1.5 rounded-b-[7px] px-3 text-[11.5px] text-[var(--w-text-2)] hover:bg-[var(--w-hover)]"
+            className="flex h-7 w-full items-center gap-1.5 rounded-b-[8px] px-3 text-[11.5px] text-[var(--w-text-2)] hover:bg-[var(--w-hover)]"
           >
             {expanded ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
             <span>{subtasks.total} {subtasks.total === 1 ? 'sub-task' : 'sub-tasks'}</span>

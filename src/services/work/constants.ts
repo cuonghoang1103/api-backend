@@ -44,3 +44,39 @@ export const PRIORITY_DEFAULT = 3;
 
 /** Mã dự án: 2–10 ký tự, bắt đầu bằng chữ, chỉ chữ in hoa và số (SWP, SWT301). */
 export const PROJECT_KEY_RE = /^[A-Z][A-Z0-9]{1,9}$/;
+
+// ─── Lớp studio (đợt S1, 04/10/2026) ─────────────────────────────
+
+/** Loại dự án — chọn lúc tạo; quyết định mô-đun mặc định (studio.ts). */
+export const PROJECT_KINDS = ['PERSONAL', 'SCHOOL', 'SOFTWARE', 'CLIENT'] as const;
+export type ProjectKind = (typeof PROJECT_KINDS)[number];
+
+/**
+ * Mô-đun bật/tắt theo dự án. Đợt S1 dùng thật 4 mô-đun đầu; các khoá sau CHỪA
+ * CHỖ cho đợt 2–4 (lưu được, chưa có route nào đọc).
+ */
+export const STUDIO_MODULES = ['teams', 'stages', 'approvals', 'handoffs', 'docs', 'clientPortal', 'changeRequests', 'raid', 'meetings', 'finance'] as const;
+export type StudioModule = (typeof STUDIO_MODULES)[number];
+/** Mô-đun đã có tính năng thật (đợt S1). */
+export const STUDIO_MODULES_S1: readonly StudioModule[] = ['teams', 'stages', 'approvals', 'handoffs'];
+
+export const TEAM_ROLES = ['LEAD', 'MEMBER'] as const;
+export type TeamRole = (typeof TEAM_ROLES)[number];
+
+export const STAGE_STATUSES = ['NOT_STARTED', 'ACTIVE', 'GATE_REVIEW', 'DONE'] as const;
+export type StageStatus = (typeof STAGE_STATUSES)[number];
+
+export const APPROVAL_TARGETS = ['ISSUE', 'STAGE_GATE', 'DOC', 'CR'] as const;
+export type ApprovalTarget = (typeof APPROVAL_TARGETS)[number];
+export const APPROVAL_MODES = ['SEQUENTIAL', 'PARALLEL'] as const;
+export type ApprovalMode = (typeof APPROVAL_MODES)[number];
+export const APPROVAL_STATUSES = ['PENDING', 'APPROVED', 'REJECTED', 'CANCELLED'] as const;
+export type ApprovalStatus = (typeof APPROVAL_STATUSES)[number];
+export const STEP_DECISIONS = ['PENDING', 'APPROVED', 'REJECTED', 'SKIPPED'] as const;
+export type StepDecision = (typeof STEP_DECISIONS)[number];
+
+export const HANDOFF_STATUSES = ['PENDING', 'ACCEPTED', 'RETURNED', 'CANCELLED'] as const;
+export type HandoffStatus = (typeof HANDOFF_STATUSES)[number];
+
+/** Mã bộ phận: 2–16 ký tự, bắt đầu bằng chữ, chữ in hoa/số/gạch dưới (BA, DEV, QA_AUTO). */
+export const TEAM_KEY_RE = /^[A-Z][A-Z0-9_]{1,15}$/;

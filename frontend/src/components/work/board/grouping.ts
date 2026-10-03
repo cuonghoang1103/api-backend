@@ -24,11 +24,13 @@ export interface QuickFilters {
   dueWeek: boolean;
   unassigned: boolean;
   labels: number[];
+  /** Bộ phận (S1, mô-đun teams) — 0 = thẻ chưa có bộ phận. */
+  teams: number[];
 }
 
-export const EMPTY_QUICK: QuickFilters = { recent: false, dueWeek: false, unassigned: false, labels: [] };
+export const EMPTY_QUICK: QuickFilters = { recent: false, dueWeek: false, unassigned: false, labels: [], teams: [] };
 
-export const quickActive = (q: QuickFilters) => q.recent || q.dueWeek || q.unassigned || q.labels.length > 0;
+export const quickActive = (q: QuickFilters) => q.recent || q.dueWeek || q.unassigned || q.labels.length > 0 || q.teams.length > 0;
 
 /** Hết Chủ nhật tuần này (giờ máy) — "Due this week" tính tới đó, gồm cả thẻ đã quá hạn. */
 function endOfWeek(now = new Date()): number {
@@ -50,6 +52,7 @@ export function makeQuickTest(q: QuickFilters, lk: Lookups): (i: IssueCard) => b
       if (new Date(`${i.dueDate.slice(0, 10)}T00:00:00`).getTime() > weekEnd) return false;
     }
     if (q.labels.length && !i.labelIds.some((l) => q.labels.includes(l))) return false;
+    if (q.teams.length && !q.teams.includes(i.teamId ?? 0)) return false;
     return true;
   };
 }

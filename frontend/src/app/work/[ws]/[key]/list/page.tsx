@@ -27,8 +27,7 @@ import { workApi, workError, userName, type BulkPatch, type IssueCard, type Issu
 import { CREATE_ISSUE_EVENT, useLookups, useProject, useProjectRealtime, wk } from '@/components/work/hooks';
 import {
   EmptyState, IssueTypeIcon, PickerList, Popover, Spinner, UserAvatar,
-  isTyping, useToggle, type PickOption,
-} from '@/components/work/ui';
+  isTyping, useToggle, type PickOption, PageLoading} from '@/components/work/ui';
 import { ConfirmDialog } from '@/components/work/settings/shared';
 import BulkBar from '@/components/work/board/BulkBar';
 import { bulkSetStatusByName, type BulkResult } from '@/components/work/board/bulk';
@@ -40,8 +39,10 @@ import CreateIssueDialog from '@/components/work/CreateIssueDialog';
 import { JqlInput, type JqlInputHandle } from '@/components/work/search/JqlInput';
 import SavedFilters from '@/components/work/search/SavedFilters';
 import ExportMenu from '@/components/work/search/ExportMenu';
-import { MobileNavButton } from '@/components/work/shell/mobileNav';
+import ProjectHeader from '@/components/work/ProjectHeader';
 import { basicToJql, jqlErrorOf } from '@/components/work/search/jql';
+import { studioOn, useWorkspaceTeams } from '@/components/work/studio/shared';
+import { workStudioApi, workStudioKeys } from '@/lib/work-api';
 
 const PAGE = 100;
 const ME = -1; // giá trị "Me" trong picker; trên URL là chữ `me`
@@ -147,7 +148,7 @@ function ModeToggle({ mode, onChange }: { mode: 'basic' | 'jql'; onChange: (m: '
 
 export default function IssuesListPage({ params }: { params: { ws: string; key: string } }) {
   return (
-    <Suspense fallback={<div className="flex h-full items-center justify-center"><Spinner size={20} /></div>}>
+    <Suspense fallback={<PageLoading />}>
       <IssuesList slug={decodeURIComponent(params.ws)} projectKey={decodeURIComponent(params.key).toUpperCase()} />
     </Suspense>
   );
@@ -169,6 +170,10 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
   const statusSel = useMemo(() => strList(sp?.get('status') ?? null), [sp]);
   const assigneeSel = useMemo(() => assigneeList(sp?.get('assignee') ?? null), [sp]);
   const labelSel = useMemo(() => numList(sp?.get('label') ?? null), [sp]);
+  // Lớp studio (S1): bộ phận (0 = chưa có bộ phận) + giai đoạn — chỉ khi mô-đun bật.
+  const teamSel = useMemo(() => (sp?.get('team') ?? '').split(',').filter((x) => x !== '').map(Number).filter((n) => Number.isInteger(n) && n >= 0), [sp]);
+  const stageParam = Number(sp?.get('stage'));
+  const stageSel = Number.isInteger(stageParam) && stageParam > 0 ? stageParam : null;
   const showDone = sp?.get('done') === '1';
   const jqlMode = sp?.get('mode') === 'jql';
   const jqlParam = sp?.get('jql') ?? '';
@@ -227,12 +232,18 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
       status: statusIds.length ? statusIds : undefined,
       assignee: assignee.length ? assignee : undefined,
       label: labelSel.length ? labelSel : undefined,
+      team: teamSel.length ? teamSel : undefined,
+      stage: stageSel ?? undefined,
       includeDone: showDone || pickedDone,
       limit: PAGE,
     };
-  }, [qParam, typeSel, statusSel, statusGroups, assigneeSel, meId, labelSel, showDone]);
+  }, [qParam, typeSel, statusSel, statusGroups, assigneeSel, meId, labelSel, teamSel, stageSel, showDone]);
 
-  const hasFilters = !!(qParam || typeSel.length || statusSel.length || assigneeSel.length || labelSel.length);
+  const hasFilters = !!(qParam || typeSel.length || statusSel.length || assigneeSel.length || labelSel.length || teamSel.length || stageSel);
+  const teamsOn = studioOn(config, 'teams');
+  const stagesOn = studioOn(config, 'stages');
+  const teamsQ = useWorkspaceTeams(config?.workspace.id, teamsOn);
+  const stagesQ = useQuery({ queryKey: workStudioKeys.stages(pid ?? 0), queryFn: () => workStudioApi.stages(pid!), enabled: !!pid && stagesOn, staleTime: 30_000 });
   // Lọc theo trạng thái mà cấu hình chưa về thì chưa dựng được danh sách id — chờ.
   const ready = !!pid && !!config;
 
@@ -489,21 +500,33 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
 
   const clearFilters = () => {
     setSearch('');
-    setParams({ q: null, type: null, status: null, assignee: null, label: null });
+    setParams({ q: null, type: null, status: null, assignee: null, label: null, team: null, stage: null });
   };
 
   const summaryOf = (labels: string[]) => (labels.length === 1 ? `· ${labels[0]}` : `· ${labels.length}`);
 
   // Bộ lọc cơ bản đang chọn ⇒ JQL tương đương (sang JQL không mất bộ lọc).
   const currentBasicJql = () =>
-    basicToJql({
+    [basicToJql({
       q: qParam,
       typeNames: typeSel.map((id) => lk.types.get(id)?.name).filter((x): x is string => !!x),
       statusNames: statusSel,
       assignees: assigneeSel.map((a) => (a === ME ? 'me' : a === 0 ? 'none' : lk.members.get(a)?.username ?? '')).filter(Boolean),
       labelNames: labelSel.map((id) => lk.labels.get(id)?.name).filter((x): x is string => !!x),
       includeDone: showDone,
-    });
+    }), studioJql()].filter(Boolean).join(' AND ');
+
+  // JQL có `team` / `stage` (S1) — basicToJql chưa biết hai trường này.
+  const studioJql = () => {
+    const parts: string[] = [];
+    const named = teamSel.filter((id) => id > 0).map((id) => teamsQ.data?.find((t) => t.id === id)?.key).filter((x): x is string => !!x);
+    const one = named.length === 1 ? `team = ${named[0]}` : named.length ? `team IN (${named.join(', ')})` : '';
+    if (teamSel.includes(0)) parts.push(one ? `(${one} OR team IS EMPTY)` : 'team IS EMPTY');
+    else if (one) parts.push(one);
+    const st = stagesQ.data?.find((x) => x.id === stageSel);
+    if (st) parts.push(`stage = ${st.slug}`);
+    return parts.join(' AND ');
+  };
 
   const setMode = (m: 'basic' | 'jql') => {
     if (m === 'jql') setParams({ mode: 'jql', jql: jqlParam || currentBasicJql() || null });
@@ -521,7 +544,7 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
     );
   }
   if (projectLoading || !config) {
-    return <div className="flex h-full items-center justify-center"><Spinner size={20} /></div>;
+    return <PageLoading />;
   }
 
   const countLabel = list.isLoading || list.isError ? '' : jqlMode && jqlTotal !== undefined ? String(jqlTotal) : `${items.length}${list.hasNextPage ? '+' : ''}`;
@@ -530,14 +553,14 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
 
   return (
     <div className="flex h-full min-w-0 flex-col">
-      {/* Thanh đầu */}
-      <div className="flex h-12 shrink-0 items-center gap-2 border-b border-[var(--w-border)] px-3 md:px-4">
-        <MobileNavButton />
-        <span className="hidden truncate text-[13px] text-[var(--w-text-3)] sm:inline">{config.name}</span>
-        <span className="hidden text-[var(--w-text-3)] sm:inline">/</span>
-        <h1 className="text-[14px] font-semibold">Issues</h1>
-        {countLabel && <span className="tabular rounded-[4px] bg-[var(--w-sunken)] px-1.5 py-0.5 text-[11px] text-[var(--w-text-2)]">{countLabel}</span>}
-        <div className="flex-1" />
+      {/* Thanh đầu — cùng khung ProjectHeader với mọi trang dự án */}
+      <ProjectHeader
+        config={config}
+        title="Issues"
+        tools={false}
+        wrap
+        extra={countLabel ? <span className="w-count">{countLabel}</span> : undefined}
+      >
         <ModeToggle mode={jqlMode ? 'jql' : 'basic'} onChange={setMode} />
         <SavedFilters
           config={config}
@@ -554,7 +577,7 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
             <kbd className="ml-1 hidden rounded-[3px] bg-white/20 px-1 text-[10px] font-medium leading-[16px] md:inline">C</kbd>
           </button>
         )}
-      </div>
+      </ProjectHeader>
 
       {/* Thanh lọc */}
       {jqlMode ? (
@@ -592,7 +615,7 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
               <X size={12} />
             </button>
           ) : (
-            <kbd className="w-kbd pointer-events-none absolute right-1.5 top-1/2 hidden -translate-y-1/2 sm:inline-flex">/</kbd>
+            <kbd className="w-kbd pointer-events-none absolute right-1.5 top-1/2 -translate-y-1/2 max-sm:!hidden">/</kbd>
           )}
         </div>
         <FilterButton
@@ -625,6 +648,24 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
             summary={summaryOf(labelSel.map((id) => lk.labels.get(id)?.name ?? '?'))}
           />
         )}
+        {teamsOn && (teamsQ.data?.length ?? 0) > 0 && (
+          <FilterButton
+            label="Team"
+            options={[{ value: 0, label: 'No team' }, ...(teamsQ.data ?? []).filter((t) => !t.archivedAt).map((t) => ({ value: t.id, label: t.name, hint: t.key, keywords: t.key, icon: <span className="h-2 w-2 rounded-full" style={{ background: t.color }} /> }))]}
+            selected={teamSel}
+            onToggle={(v) => setParams({ team: joinOrNull(toggleIn(teamSel, v)) })}
+            summary={summaryOf(teamSel.map((id) => (id === 0 ? 'No team' : teamsQ.data?.find((t) => t.id === id)?.key ?? '?')))}
+          />
+        )}
+        {stagesOn && (stagesQ.data?.length ?? 0) > 0 && (
+          <FilterButton
+            label="Stage"
+            options={(stagesQ.data ?? []).map((st) => ({ value: st.id, label: `${st.n}. ${st.name}`, keywords: st.slug }))}
+            selected={stageSel ? [stageSel] : []}
+            onToggle={(v) => setParams({ stage: v === stageSel ? null : String(v) })}
+            summary={stageSel ? `· ${stagesQ.data?.find((x) => x.id === stageSel)?.n ?? '?'}` : undefined}
+          />
+        )}
         <label className="ml-1 flex h-[26px] cursor-pointer select-none items-center gap-1.5 rounded-[6px] px-1.5 text-[12px] text-[var(--w-text-2)] hover:bg-[var(--w-hover)]">
           <input
             type="checkbox"
@@ -647,7 +688,7 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
        <div style={{ ...gridVars, minWidth: tpl.minWidth }} className="max-md:!min-w-0">
         <div
           role="row"
-          className={cn(GRID, 'sticky top-0 z-[1] h-8 border-b border-[var(--w-border)] bg-[var(--w-panel)] px-3 text-[11px] font-medium uppercase tracking-wide text-[var(--w-text-3)] md:px-4')}
+          className={cn(GRID, 'sticky top-0 z-[1] h-9 border-b border-[var(--w-border)] bg-[var(--w-panel)] px-3 text-[12px] font-medium text-[var(--w-text-3)] shadow-[0_1px_0_var(--w-border)] md:px-4')}
         >
           <span className="flex items-center" role="columnheader" aria-label="Select">
             {canBulk && (
@@ -674,7 +715,7 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
                 onClick={() => onSort(c)}
                 title={`Sort by ${def.label.toLowerCase()}${jqlMode && def.jql ? ' (ORDER BY in JQL)' : jqlMode ? ' (loaded rows only)' : ''}`}
                 className={cn(
-                  'flex h-full min-w-0 items-center gap-1 uppercase tracking-wide hover:text-[var(--w-text)]',
+                  'flex h-full min-w-0 items-center gap-1 hover:text-[var(--w-text)]',
                   def.align === 'right' && 'justify-end',
                   !def.mobile && 'max-md:hidden',
                   active && 'text-[var(--w-text)]',
@@ -691,10 +732,10 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
           <div aria-busy="true">
             {Array.from({ length: 10 }).map((_, i) => (
               <div key={i} className="flex h-9 items-center gap-3 border-b border-[var(--w-border)] px-3 md:px-4">
-                <span className="h-4 w-4 rounded-[4px] bg-[var(--w-sunken)]" />
-                <span className="h-3 w-12 rounded bg-[var(--w-sunken)]" />
-                <span className="h-3 rounded bg-[var(--w-sunken)]" style={{ width: `${30 + ((i * 37) % 40)}%` }} />
-                <span className="h-4 w-16 rounded-full bg-[var(--w-sunken)]" />
+                <span className="w-skel h-4 w-4 !rounded-[4px]" />
+                <span className="w-skel h-3 w-12" />
+                <span className="w-skel h-3" style={{ width: `${30 + ((i * 37) % 40)}%` }} />
+                <span className="w-skel h-4 w-16 !rounded-full" />
               </div>
             ))}
           </div>
@@ -847,7 +888,7 @@ function IssueRow({
       className={cn(
         GRID,
         'group h-9 cursor-pointer border-b border-[var(--w-border)] px-3 text-[13px] md:px-4',
-        selected ? 'bg-[var(--w-accent-soft)]' : highlighted ? 'bg-[var(--w-active)]' : 'hover:bg-[var(--w-hover)]',
+        selected ? 'bg-[var(--w-accent-soft)] shadow-[inset_2px_0_0_var(--w-accent)]' : highlighted ? 'bg-[var(--w-active)] shadow-[inset_2px_0_0_var(--w-accent-border)]' : 'hover:bg-[var(--w-hover)]',
       )}
     >
       <span className="flex items-center" role="cell">

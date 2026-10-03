@@ -36,7 +36,12 @@ export type WorkEvent =
   | { type: 'issue.deleted'; projectId: number; issueId: number; actor: WorkActor }
   | { type: 'comment.created'; projectId: number; issueId: number; commentId: number; actor: WorkActor }
   | { type: 'sprint.updated'; projectId: number; sprintId: number; actor: WorkActor }
-  | { type: 'project.updated'; projectId: number; actor: WorkActor };
+  | { type: 'project.updated'; projectId: number; actor: WorkActor }
+  // Lớp studio (đợt S1). Cố ý KHÔNG có trường `issueId` ở approval/stage: các
+  // listener cũ (chatHooks…) nhận diện sự kiện thẻ bằng `'issueId' in e`.
+  | { type: 'stage.updated'; projectId: number; stageId: number; status: string; actor: WorkActor }
+  | { type: 'approval.updated'; projectId: number; approvalId: number; status: string; targetType: string; targetIssueId: number | null; stageId: number | null; actor: WorkActor }
+  | { type: 'handoff.updated'; projectId: number; handoffId: number; issueId: number; status: string; actor: WorkActor };
 
 type Listener = (event: WorkEvent) => void | Promise<void>;
 const listeners = new Set<Listener>();

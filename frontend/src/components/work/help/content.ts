@@ -31,7 +31,7 @@ export type HelpBlock =
 /** Nút "Open this page": project = trong dự án đang mở, workspace = trong không gian đang mở, global = đường tuyệt đối. */
 export interface HelpPageLink { scope: 'project' | 'workspace' | 'global'; path: string; label: LText }
 
-export type HelpCategory = 'start' | 'people' | 'plan' | 'track' | 'quality' | 'ai' | 'connect' | 'reference';
+export type HelpCategory = 'start' | 'people' | 'plan' | 'track' | 'studio' | 'quality' | 'ai' | 'connect' | 'reference';
 
 export interface HelpArticle {
   id: string;
@@ -49,6 +49,7 @@ export const HELP_CATEGORIES: Array<{ id: HelpCategory; label: LText }> = [
   { id: 'people', label: { en: 'Workspaces & people', vi: 'Không gian & thành viên' } },
   { id: 'plan', label: { en: 'Planning work', vi: 'Lập kế hoạch' } },
   { id: 'track', label: { en: 'Tracking & reports', vi: 'Theo dõi & báo cáo' } },
+  { id: 'studio', label: { en: 'Studio: teams, stages & approvals', vi: 'Studio: bộ phận, giai đoạn & phê duyệt' } },
   { id: 'quality', label: { en: 'Testing', vi: 'Kiểm thử' } },
   { id: 'ai', label: { en: 'AI & automation', vi: 'AI & tự động hoá' } },
   { id: 'connect', label: { en: 'Integrations & data', vi: 'Tích hợp & dữ liệu' } },
@@ -1477,6 +1478,170 @@ export const HELP_ARTICLES: HelpArticle[] = [
     related: ['workspaces', 'issues', 'public-links'],
   },
 
+  // ═══ STUDIO (lớp studio đợt S1 — dự án khách, bộ phận, giai đoạn) ═══
+  {
+    id: 'project-types',
+    category: 'studio',
+    title: { en: 'Project types & modules', vi: 'Loại dự án & mô-đun' },
+    summary: {
+      en: 'Pick Personal, School, Software or Client, and turn modules such as Teams, Stages, Approvals and Handoffs on or off per project.',
+      vi: 'Chọn Personal, School, Software hay Client, và bật/tắt từng mô-đun như Teams, Stages, Approvals, Handoffs cho mỗi dự án.',
+    },
+    keywords: ['type', 'kind', 'module', 'studio', 'client', 'school', 'personal', 'loai du an', 'mo dun', 'bat tat'],
+    pages: [page('project', 'settings?tab=studio', 'Project type & modules', 'Loại dự án & mô-đun')],
+    blocks: [
+      p(
+        'Every project has a **type**. The type only decides which **modules** start on — nothing is locked, and changing it never deletes data.',
+        'Mỗi dự án có một **loại**. Loại chỉ quyết định **mô-đun** nào bật sẵn — không khoá gì, và đổi loại không bao giờ xoá dữ liệu.',
+      ),
+      table(
+        [['Type', 'Loại'], ['Best for', 'Hợp với'], ['Modules on', 'Mô-đun bật sẵn']],
+        [
+          ['Personal', ['Your own tasks', 'Việc riêng của bạn'], NO],
+          [['School / coursework', 'School / môn học'], ['SWP391, SWR302, SWT301 groups', 'Nhóm SWP391, SWR302, SWT301'], NO],
+          [['Software team', 'Software team'], ['Product teams', 'Nhóm làm sản phẩm'], NO],
+          [['Client project (studio)', 'Client project (studio)'], ['Work for a client through departments', 'Làm cho khách qua nhiều bộ phận'], 'Teams · Stages · Approvals · Handoffs'],
+        ],
+      ),
+      steps(
+        ['Open **Project settings → Project type & modules** (project admins).', 'Mở **Project settings → Project type & modules** (admin dự án).'],
+        ['Pick a type. Tick **Also switch modules to the … defaults** if you want its modules too, then **Change type**.', 'Chọn loại. Tick **Also switch modules to the … defaults** nếu muốn lấy luôn mô-đun của loại đó, rồi bấm **Change type**.'],
+        ['Or flip a single module with its switch. A module that is off is simply hidden — its stages, approvals and handoffs come back when you turn it on.', 'Hoặc bật/tắt từng mô-đun bằng công tắc. Mô-đun tắt chỉ bị ẩn — giai đoạn, phê duyệt, bàn giao đã có sẽ hiện lại khi bật.'],
+      ),
+      tip(
+        'Projects created before project types existed keep every module off, so they look exactly as before.',
+        'Dự án tạo trước khi có loại dự án giữ mọi mô-đun tắt, nên trông y như cũ.',
+      ),
+    ],
+    related: ['teams', 'stages-gates', 'approvals', 'handoffs'],
+  },
+
+  {
+    id: 'teams',
+    category: 'studio',
+    title: { en: 'Teams', vi: 'Bộ phận (Teams)' },
+    summary: {
+      en: 'Departments shared by every project in a workspace, each with its own work queue and leads.',
+      vi: 'Bộ phận dùng chung cho mọi dự án trong không gian, mỗi bộ phận có hàng đợi việc và trưởng bộ phận.',
+    },
+    keywords: ['team', 'department', 'queue', 'lead', 'bo phan', 'hang doi', 'truong'],
+    pages: [page('workspace', 'teams', 'Teams', 'Bộ phận')],
+    blocks: [
+      p(
+        'A team (BA, DEV, QA…) lives in the **workspace**, so one team can serve many projects. Workspace owners and admins create teams under **Teams** in the sidebar; guests cannot join.',
+        'Bộ phận (BA, DEV, QA…) nằm ở **không gian**, nên một bộ phận phục vụ được nhiều dự án. Owner/Admin không gian tạo bộ phận ở mục **Teams** trên sidebar; khách không vào được bộ phận.',
+      ),
+      list(
+        ['In projects with the Teams module on, issues get a **Team** field, a team chip on the board and a **Team** filter on the board and in Issues.', 'Ở dự án bật mô-đun Teams, thẻ có trường **Team**, chip bộ phận trên board và bộ lọc **Team** ở board và Issues.'],
+        ['Each team has a **queue**: its issues from every project you can see. Filter by project, status or **Unassigned only**.', 'Mỗi bộ phận có **hàng đợi**: thẻ của bộ phận ở mọi dự án bạn xem được. Lọc theo dự án, trạng thái, hoặc **Unassigned only**.'],
+        ['**Leads** assign people straight from the queue and accept handoffs sent to the team.', '**Trưởng bộ phận** giao người ngay trong hàng đợi và nhận bàn giao gửi tới bộ phận.'],
+      ),
+      p('In JQL use {{team = QA}} or {{team IS EMPTY}}.', 'Trong JQL dùng {{team = QA}} hoặc {{team IS EMPTY}}.'),
+    ],
+    related: ['project-types', 'handoffs', 'issues-list-jql'],
+  },
+
+  {
+    id: 'stages-gates',
+    category: 'studio',
+    title: { en: 'Stages & gates', vi: 'Giai đoạn & cổng duyệt' },
+    summary: {
+      en: 'Run a project as numbered stages that open in order and close only through a gate approval.',
+      vi: 'Chạy dự án theo các giai đoạn đánh số, mở theo thứ tự và chỉ đóng qua phê duyệt cổng.',
+    },
+    keywords: ['stage', 'phase', 'gate', 'milestone', 'override', 'giai doan', 'cong', 'kich hoat'],
+    pages: [page('project', 'stages', 'Stages', 'Giai đoạn')],
+    blocks: [
+      p(
+        'A stage goes **Not started → Active → Gate review → Done**. The **Stages** page shows the stages in a strip and as a list with progress (done/total issues in the stage).',
+        'Một giai đoạn đi **Not started → Active → Gate review → Done**. Trang **Stages** hiện các giai đoạn thành một dải và một danh sách có tiến độ (thẻ xong/tổng thẻ của giai đoạn).',
+      ),
+      steps(
+        ['A project admin clicks **Activate**. If an earlier stage is not done, CT Work shows **Blocked by stage N** — finish that stage, or type a reason and **Activate anyway** (recorded in the audit log).', 'Admin dự án bấm **Activate**. Nếu giai đoạn trước chưa xong, CT Work báo **Blocked by stage N** — làm xong giai đoạn đó, hoặc ghi lý do rồi bấm **Activate anyway** (ghi vào audit log).'],
+        ['When the work is ready, click **Request gate review**. The gate approvers (Project settings → Project type & modules; by default the project lead) are asked to sign off.', 'Khi xong việc, bấm **Request gate review**. Người duyệt cổng (Project settings → Project type & modules; mặc định là trưởng dự án) được mời ký duyệt.'],
+        ['Approved ⇒ the stage is **Done**. Rejected or cancelled ⇒ it goes back to **Active**; fix and request again.', 'Duyệt ⇒ giai đoạn **Done**. Bị từ chối hoặc huỷ ⇒ về **Active**; sửa rồi gửi lại.'],
+      ),
+      tip(
+        'Stages whose slug matches a CuongThai process step show a **Process guide** link that opens the guide for that step.',
+        'Giai đoạn có slug khớp một bước trong quy trình CuongThai sẽ có link **Process guide** mở tài liệu của bước đó.',
+      ),
+      warn('Gate reviews need the **Approvals** module too.', 'Duyệt cổng cần bật cả mô-đun **Approvals**.'),
+    ],
+    related: ['approvals', 'project-types'],
+  },
+
+  {
+    id: 'approvals',
+    category: 'studio',
+    title: { en: 'Approvals', vi: 'Phê duyệt (Approvals)' },
+    summary: {
+      en: 'Formal sign-off on an issue or a stage gate — in order or all at once, each decision signed with a content fingerprint.',
+      vi: 'Ký duyệt chính thức một thẻ hoặc cổng giai đoạn — lần lượt hoặc cùng lúc, mỗi quyết định có dấu vân tay nội dung.',
+    },
+    keywords: ['approval', 'approve', 'reject', 'sign', 'signature', 'sign off', 'phe duyet', 'duyet', 'tu choi', 'chu ky'],
+    pages: [page('project', 'approvals', 'Approvals', 'Phê duyệt')],
+    blocks: [
+      steps(
+        ['Open an issue → **Approvals → Request approval**. Add approvers, choose **One after another** or **All at once**, an optional due date and a note.', 'Mở thẻ → **Approvals → Request approval**. Thêm người duyệt, chọn **One after another** hoặc **All at once**, hạn và ghi chú (tuỳ chọn).'],
+        ['Approvers see it under **Waiting on me** (My work and the project’s **Approvals** page) and in the bell.', 'Người duyệt thấy nó ở **Waiting on me** (My work và trang **Approvals** của dự án) và trong chuông.'],
+        ['**Approve** or **Reject** — rejecting needs a reason. One rejection rejects the whole request.', 'Bấm **Approve** hoặc **Reject** — từ chối phải ghi lý do. Một người từ chối là cả yêu cầu bị từ chối.'],
+      ),
+      list(
+        ['Nobody decides for someone else — not even an admin. Admins and the requester can **Cancel request**.', 'Không ai quyết thay người khác — kể cả admin. Admin và người gửi có thể **Cancel request**.'],
+        ['Each decision is **Signed** with a SHA-256 fingerprint of the content at that moment. If the issue changes afterwards you see **Content changed since approval** — the decision still stands, so review and ask again if needed.', 'Mỗi quyết định được **Signed** bằng dấu vân tay SHA-256 của nội dung lúc đó. Nếu thẻ đổi sau đó sẽ thấy **Content changed since approval** — quyết định vẫn giữ, hãy xem lại và xin duyệt lại nếu cần.'],
+        ['A workflow move can require an approved request: Project settings → Workflow → **Transition rules**.', 'Một bước chuyển trạng thái có thể bắt buộc đã được duyệt: Project settings → Workflow → **Transition rules**.'],
+      ),
+    ],
+    related: ['stages-gates', 'workflow', 'notifications'],
+  },
+
+  {
+    id: 'handoffs',
+    category: 'studio',
+    title: { en: 'Handoffs', vi: 'Bàn giao (Handoffs)' },
+    summary: {
+      en: 'Pass an issue to another team or person with a checklist they tick before accepting — or return it with a reason.',
+      vi: 'Chuyển thẻ cho bộ phận/người khác kèm checklist họ phải tick đủ mới nhận — hoặc trả lại kèm lý do.',
+    },
+    keywords: ['handoff', 'hand off', 'handover', 'checklist', 'accept', 'return', 'ban giao', 'tra lai', 'nhan'],
+    blocks: [
+      steps(
+        ['Open the issue → **Handoffs → Hand off**. Choose a team, a person or both, write the checklist (their Definition of Ready) and a note.', 'Mở thẻ → **Handoffs → Hand off**. Chọn bộ phận, người hoặc cả hai, viết checklist (Definition of Ready của bên nhận) và ghi chú.'],
+        ['The receiver — the person, or the receiving team’s lead — sees it under **Incoming handoffs** in My work and on the team page.', 'Bên nhận — người được chỉ định, hoặc trưởng bộ phận nhận — thấy nó ở **Incoming handoffs** trong My work và trang bộ phận.'],
+        ['**Accept** only works once every checklist item is ticked; the issue then moves to the new team/assignee and its history records the change.', '**Accept** chỉ bấm được khi đã tick đủ checklist; thẻ chuyển sang bộ phận/người mới và lịch sử thẻ ghi lại.'],
+        ['**Return** needs a reason; the issue stays where it was and the sender is told why.', '**Return** phải có lý do; thẻ giữ nguyên và người gửi được báo lý do.'],
+      ),
+      tip('One pending handoff per issue. The sender or a project admin can **Cancel handoff**.', 'Mỗi thẻ chỉ một bàn giao đang chờ. Người gửi hoặc admin dự án có thể **Cancel handoff**.'),
+    ],
+    related: ['teams', 'approvals'],
+  },
+
+  {
+    id: 'move-issue',
+    category: 'studio',
+    title: { en: 'Move an issue to another project', vi: 'Chuyển thẻ sang dự án khác' },
+    summary: {
+      en: 'Move an issue (with its sub-tasks) to another project in the same workspace. The key changes; old links redirect.',
+      vi: 'Chuyển một thẻ (kèm sub-task) sang dự án khác trong cùng không gian. Mã thẻ đổi; link cũ tự chuyển hướng.',
+    },
+    keywords: ['move', 'transfer', 'another project', 'key change', 'redirect', 'chuyen the', 'du an khac', 'doi ma'],
+    blocks: [
+      steps(
+        ['Open the issue → **⋯ → Move to another project** (project admins and the reporter).', 'Mở thẻ → **⋯ → Move to another project** (admin dự án và người tạo thẻ).'],
+        ['Pick a project in the same workspace and click **Move issue**.', 'Chọn dự án trong cùng không gian rồi bấm **Move issue**.'],
+      ),
+      list(
+        ['The issue gets a new key in the target project. Opening the old key (e.g. a bookmark) jumps to the new one.', 'Thẻ có mã mới ở dự án đích. Mở mã cũ (vd từ bookmark) sẽ tự chuyển sang mã mới.'],
+        ['Comments, attachments, history, watchers and links come along. Sprint, fix version, epic and stage are cleared; labels, components and custom fields are matched by name.', 'Bình luận, tệp, lịch sử, người theo dõi và liên kết đi theo. Sprint, fix version, epic và giai đoạn bị xoá; nhãn, component, trường tuỳ chỉnh ghép theo tên.'],
+      ),
+      warn(
+        'Epics, sub-tasks, test issues and issues with a pending approval or handoff cannot be moved.',
+        'Không chuyển được epic, sub-task, thẻ Test, và thẻ còn phê duyệt hoặc bàn giao đang chờ.',
+      ),
+    ],
+    related: ['issues', 'teams'],
+  },
+
   // ═══ TRA CỨU ═══
   {
     id: 'apps',
@@ -1738,7 +1903,7 @@ export function helpSnippet(a: HelpArticle, query: string, lang: HelpLang, max =
 // ─── Bài theo trang đang mở ──────────────────────────────────────
 
 const SETTINGS_TAB_ARTICLE: Record<string, string> = {
-  members: 'roles', automation: 'automation', github: 'github', share: 'public-links',
+  studio: 'project-types', members: 'roles', automation: 'automation', github: 'github', share: 'public-links',
   import: 'import-export', trash: 'trash-audit', danger: 'trash-audit', fields: 'issues',
 };
 
@@ -1756,6 +1921,7 @@ export function helpArticleForPath(pathname: string, search = ''): string {
   if (parts[1] === 'search') return 'global-search';
   if (parts.length === 2) return 'templates';
   if (parts[2] === 'settings') return tab === 'audit' || tab === 'trash' ? 'trash-audit' : 'workspaces';
+  if (parts[2] === 'teams') return 'teams';
   const view = parts[3] ?? 'board';
   switch (view) {
     case 'board': return 'board';
@@ -1765,6 +1931,8 @@ export function helpArticleForPath(pathname: string, search = ''): string {
     case 'list': return 'issues-list-jql';
     case 'issue': return 'issues';
     case 'tests': return 'testing';
+    case 'stages': return 'stages-gates';
+    case 'approvals': return 'approvals';
     case 'dashboards': return 'filters-dashboards';
     case 'reports': return tab === 'time' || tab === 'capacity' ? 'time-capacity' : 'reports';
     case 'settings': return SETTINGS_TAB_ARTICLE[tab] ?? 'workflow';

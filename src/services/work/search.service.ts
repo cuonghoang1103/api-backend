@@ -13,7 +13,7 @@ import { projectMembers } from './projects.service.js';
 import { estimateOf, estimationOf, vnDay } from './sprints.service.js';
 
 async function jqlContext(projectId: number, userId: number, key: string): Promise<JqlContext> {
-  const [project, statuses, types, labels, components, members, sprints, customFields] = await Promise.all([
+  const [project, statuses, types, labels, components, members, sprints, customFields, teams, stages] = await Promise.all([
     prisma.workProject.findUnique({ where: { id: projectId }, select: { name: true } }),
     prisma.workStatus.findMany({ where: { workflow: { projectId } }, select: { id: true, name: true, category: true } }),
     prisma.workIssueType.findMany({ where: { projectId }, select: { id: true, key: true, name: true } }),
@@ -22,8 +22,12 @@ async function jqlContext(projectId: number, userId: number, key: string): Promi
     projectMembers(projectId),
     prisma.workSprint.findMany({ where: { projectId }, select: { id: true, name: true, state: true } }),
     prisma.workCustomField.findMany({ where: { projectId }, select: { id: true, name: true, kind: true, options: true } }),
+    // Bộ phận cấp không gian (kể cả đã lưu trữ — thẻ cũ vẫn tìm được).
+    prisma.workTeam.findMany({ where: { workspace: { projects: { some: { id: projectId } } } }, select: { id: true, key: true, name: true } }),
+    prisma.workStage.findMany({ where: { projectId }, select: { id: true, n: true, slug: true, name: true } }),
   ]);
   return {
+    teams, stages,
     projectKey: key, projectName: project?.name, userId, statuses, types, labels, components,
     members: members.map((m) => ({ id: m.id, username: m.username })),
     sprints,

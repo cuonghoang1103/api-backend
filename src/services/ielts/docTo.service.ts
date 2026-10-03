@@ -1,6 +1,13 @@
 /**
- * Đọc to cho khoá IELTS trên web — giọng Anh thật (Google Cloud WaveNet),
- * sinh MỘT lần rồi nằm trên R2.
+ * Đọc to cho khoá IELTS trên web — giọng Anh thật, sinh MỘT lần rồi nằm trên R2.
+ *
+ * Ba nguồn, theo thứ tự (03/10/2026):
+ *   1. Azure Speech Neural — `AZURE_SPEECH_KEY` + `AZURE_SPEECH_REGION`. Gói F0
+ *      miễn phí 0,5 triệu ký tự/tháng; cùng khoá đó chấm phát âm. Đây là đường
+ *      chính: Google Cloud đòi TRẢ TRƯỚC 800.000₫ với thẻ Việt Nam.
+ *   2. Google Cloud WaveNet — `GOOGLE_TTS_API_KEY` (giữ lại nếu sau này có khoá).
+ *   3. Google Dịch — không khoá, một giọng mỗi thứ tiếng. Azure hết hạn mức
+ *      tháng (429) hay lỗi thì cũng rơi về đây: bài nghe không bao giờ câm.
  * ─────────────────────────────────────────────────────────────────────────
  * Vì sao không dùng giọng máy của trình duyệt: mỗi máy một giọng (Mac đọc
  * khác iPad khác Windows), có máy không có giọng Anh nào, và giọng mặc định
@@ -33,6 +40,16 @@ export const GIONG = {
 } as const;
 export type Giong = keyof typeof GIONG;
 
+/** Giọng Azure Neural tương ứng (đo 03/10: cả 6 có trong /voices/list vùng eastasia). */
+const GIONG_AZURE: Record<Giong, string> = {
+  'uk-nu': 'en-GB-SoniaNeural',
+  'uk-nam': 'en-GB-RyanNeural',
+  'us-nu': 'en-US-AvaNeural',
+  'us-nam': 'en-US-AndrewNeural',
+  'ja-nu': 'ja-JP-NanamiNeural',
+  'ja-nam': 'ja-JP-KeitaNeural',
+};
+
 const TOI_DA_KY_TU = 1500;
 /** Trần số lần SINH MỚI mỗi người mỗi ngày (file đã có thì không tính). */
 const TRAN_SINH_MOI_NGAY = 400;
@@ -64,6 +81,43 @@ function ssmlDanhVan(text: string): string {
   return `<speak>${body}</speak>`;
 }
 
+/** Azure: SSML có prosody (tốc độ) và say-as cho bài đánh vần. Lỗi → ném, bên gọi tự lùi. */
+async function synthesizeAzure(text: string, giong: Giong, toc: number, danhVan: boolean): Promise<Buffer> {
+  const key = process.env.AZURE_SPEECH_KEY!;
+  const region = process.env.AZURE_SPEECH_REGION || 'eastasia';
+  const name = GIONG_AZURE[giong];
+  const body = danhVan ? ssmlDanhVan(text).replace(/^<speak>|<\/speak>$/g, '') : escXml(text);
+  const rate = `${Math.round((toc - 1) * 100)}%`;
+  const ssml = `<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="${name.slice(0, 5)}">`
+    + `<voice name="${name}"><prosody rate="${rate}">${body}</prosody></voice></speak>`;
+  const res = await fetch(`https://${region}.tts.speech.microsoft.com/cognitiveservices/v1`, {
+    method: 'POST',
+    headers: {
+      'Ocp-Apim-Subscription-Key': key,
+      'Content-Type': 'application/ssml+xml',
+      'X-Microsoft-OutputFormat': 'audio-24khz-48kbitrate-mono-mp3',
+      'User-Agent': 'cuongthai-ielts',
+    },
+    signal: AbortSignal.timeout(20_000),
+    body: ssml,
+  });
+  if (!res.ok) throw new Error(`Azure TTS ${res.status}: ${(await res.text().catch(() => '')).slice(0, 200)}`);
+  const buf = Buffer.from(await res.arrayBuffer());
+  if (buf.length < 500) throw new Error('Azure TTS trả về rỗng');
+  return buf;
+}
+
+/** Giọng Google Dịch — lưới đỡ cuối, không khoá. */
+async function docGoogleDich(text: string, giong: Giong, bam: string, danhVan: boolean) {
+  const keyGt = `ielts/audio/gt-${giong.slice(0, 2)}/${bam}.mp3`;
+  if (await objectExists(keyGt)) return { url: buildPublicUrl(keyGt), giongDon: true };
+  const tl = giong.startsWith('ja') ? 'ja' : giong.startsWith('us') ? 'en-US' : 'en-GB';
+  const doc = danhVan ? text.split(/\s*,\s*/).join('. ') : text;
+  const mp3 = await synthesizeGoogle(doc, tl);
+  const { url } = await putObject(keyGt, mp3, 'audio/mpeg');
+  return { url, giongDon: true };
+}
+
 export async function docTo(userId: number, b: { text?: unknown; giong?: unknown; toc?: unknown; kieu?: unknown }) {
   const text = String(b.text ?? '').trim();
   if (!text) throw new BadRequestError('Thiếu chữ để đọc');
@@ -73,25 +127,30 @@ export async function docTo(userId: number, b: { text?: unknown; giong?: unknown
   const danhVan = b.kieu === 'danhvan';
 
   const bam = crypto.createHash('sha1').update(`${giong}|${toc}|${danhVan ? 'dv' : 'tt'}|${text}`).digest('hex');
+
+  // 1. Azure — thư mục riêng `az-…` để không lẫn với file WaveNet/Google Dịch cũ.
+  if (process.env.AZURE_SPEECH_KEY) {
+    const keyAz = `ielts/audio/az-${giong}/${bam}.mp3`;
+    if (await objectExists(keyAz)) return { url: buildPublicUrl(keyAz) };
+    if (!demSinh(userId)) return { url: null, lyDo: 'quota' as const };
+    try {
+      const { url } = await putObject(keyAz, await synthesizeAzure(text, giong, toc, danhVan), 'audio/mpeg');
+      return { url };
+    } catch (e) {
+      console.warn('[ielts/doc] Azure TTS hỏng, lùi về Google Dịch:', (e as Error).message);
+      return docGoogleDich(text, giong, bam, danhVan);
+    }
+  }
+
   const key = `ielts/audio/${giong}/${bam}.mp3`;
   if (await objectExists(key)) return { url: buildPublicUrl(key) };
 
   const apiKey = process.env.GOOGLE_TTS_API_KEY;
   if (!demSinh(userId)) return { url: null, lyDo: 'quota' as const };
-  // Chưa có khoá Google Cloud (đo 28/09: production KHÔNG có) → giọng của Google
-  // Dịch: miễn phí, không khoá, rõ hơn hẳn giọng hệ thống mà Cốc Cốc/Chrome trên
-  // Mac đang đọc. Đổi lại: chỉ MỘT giọng mỗi thứ tiếng (không nam/nữ) và không
-  // có SSML — web tự chỉnh tốc độ bằng playbackRate. Có khoá thì đi WaveNet ở dưới.
-  if (!apiKey) {
-    const keyGt = `ielts/audio/gt-${giong.slice(0, 2)}/${bam}.mp3`;
-    if (await objectExists(keyGt)) return { url: buildPublicUrl(keyGt) };
-    const tl = giong.startsWith('ja') ? 'ja' : giong.startsWith('us') ? 'en-US' : 'en-GB';
-    const doc = danhVan ? text.split(/\s*,\s*/).join('. ') : text;
-    const mp3 = await synthesizeGoogle(doc, tl);
-    const { url } = await putObject(keyGt, mp3, 'audio/mpeg');
-    return { url, giongDon: true };
-  }
+  // 3. Không khoá nào → Google Dịch (xem chú thích đầu tệp).
+  if (!apiKey) return docGoogleDich(text, giong, bam, danhVan);
 
+  // 2. Google Cloud WaveNet.
   const name = GIONG[giong];
   const res = await fetch(
     `https://texttospeech.googleapis.com/v1/text:synthesize?key=${encodeURIComponent(apiKey)}`,

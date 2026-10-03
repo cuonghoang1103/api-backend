@@ -680,7 +680,10 @@ export const IELTS = defineCourse({
   intro: INTRO,
   // Hai mục tra cứu cả khoá (công thức · từ vựng) — hiện dưới "Mở đầu" ở mục lục.
   extras: [TRA_CONG_THUC, TRA_TU_VUNG],
-  links: [{ href: '/language/en/ielts/phong-thi', label: '🎯 Phòng thi thử (đề đủ 3 phần)' }],
+  links: [
+    { href: '/language/en/ielts/phong-thi', label: '🎯 Phòng thi thử (đề đủ 3 phần)' },
+    { href: '/language/en/ielts/luyen-them', label: '📚 Luyện thêm theo chặng (0 → 7.5)' },
+  ],
   videos: VIDEO_BAI,
   days: DAYS,
   // Ngày 1 viết thẳng ở trên; Ngày 2+ chỉ có mục lục (ngay/manifest.ts), nội dung tải khi mở.

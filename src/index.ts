@@ -338,6 +338,12 @@ app.use('/api/v1/ai/chat', aiRoutesModule.chatBodyParser);
 // Webhook GitHub của CT Work cần THÂN GỐC để kiểm chữ ký HMAC — phải đứng
 // trước express.json (bộ nào đọc thân trước thì bộ sau bỏ qua).
 app.use('/api/v1/work/github/webhook', express.raw({ type: '*/*', limit: '5mb' }));
+// AI Code gửi LẠI toàn bộ lịch sử mỗi lượt, kể cả ẢNH do tool tự chụp (web_mo, chụp
+// màn hình trình duyệt nhúng). Một việc dài vượt 10MB dù người dùng không gửi ảnh nào ⇒
+// 413 "Ảnh hoặc tệp gửi kèm quá lớn" giữa chừng (03/10/2026). Route agent có trần riêng;
+// turn.ts đã gỡ ảnh cũ trước khi gửi cổng nên trần này không làm tăng chi phí AI.
+// Phải đứng TRƯỚC bộ đọc chung: body đã đọc rồi thì bộ sau bỏ qua.
+app.use('/api/v1/agent', express.json({ limit: '48mb' }));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(cookieParser(config.cookieSecret));

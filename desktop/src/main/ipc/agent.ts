@@ -15,9 +15,10 @@
  * trình đi qua kênh sự kiện `agent:event`; `invoke` chỉ để biết lượt đã kết
  * thúc (hoặc hỏng ngay từ đầu).
  */
-import { BrowserWindow, dialog, shell, type IpcMainInvokeEvent } from 'electron';
+import { app, BrowserWindow, dialog, shell, type IpcMainInvokeEvent } from 'electron';
 import { execFile } from 'node:child_process';
 import fs from 'node:fs/promises';
+import { constants as fsConstants } from 'node:fs';
 import path from 'node:path';
 import { promisify } from 'node:util';
 
@@ -32,8 +33,13 @@ import {
   daChonGocCua, datGocNeuChuaCo, gocCuaCuoc, huyLuotCua, napPhien, quayLui, quyenCuaCuoc, soCuaCuoc,
   datCheDoQuyen, tachNhanhCuoc, taoCuoc,
   xoaHoiThoai, type SuKienAgent,
-  dsQuyenLauCua, xoaQuyenLauCua, veCongChinh,
+  dsQuyenLauCua, xoaQuyenLauCua, veCongChinh, chayLuotCucBo,
+  datTomTatCua, hoiThoaiCua, nguCanhChiTietCua,
 } from '../agent/loop';
+import { chanDoan, goiCompact } from '../agent/lenhMayChu';
+import { dangMatMang } from '../aiCucBo/mang';
+import { modelChoCode } from '../aiCucBo/quanLy';
+import { duongCuaLuot } from '../agent/epCucBo';
 import { dungLenhNenCua } from '../agent/lenhNen';
 import { duongDanCauHinh, duyetDuAn, hanMucMcp, loiCauHinh, napLaiMcp, toolMcpHienCo, trangThaiServer } from '../agent/mcp';
 import { cai, napChiMuc, tim } from '../agent/khoKyNang';
@@ -223,6 +229,27 @@ ra tu ma — moi dong o day tiet kiem cho ban hang chuc buoc mo mam.
 -->
 `;
 
+/**
+ * ── THÔNG TIN AGENT LẦN CUỐI CÓ MẠNG (03/10/2026) ──
+ *
+ * Mất mạng thì `/agent/tools` không trả lời, `getInfo` trả `pro: false` — và
+ * trang AI Code (ChatPage) chỉ mở tab khi `info.pro` ⇒ quay "Đang mở việc…"
+ * MÃI MÃI. Đúng lúc AI Code ngoại tuyến cần hiện ra thì cả trang không mở.
+ *
+ * Nên nhớ lần cuối máy chủ trả lời (ra đĩa — app mở lên lúc đã mất mạng cũng
+ * cần). Quyền Pro vẫn do MÁY CHỦ quyết; đây chỉ là nhớ lại câu nó đã nói. Hạn
+ * mức token thì bỏ (`quota: null`): việc trên máy không tiêu hạn mức máy chủ.
+ */
+const tepInfoCuoi = (): string => path.join(app.getPath('userData'), 'agent-info-cuoi.json');
+async function docInfoCuoi(): Promise<AgentInfo | null> {
+  try {
+    const j = JSON.parse(await fs.readFile(tepInfoCuoi(), 'utf8')) as AgentInfo;
+    return typeof j?.pro === 'boolean' ? { ...j, quota: null, soViecConLai: null } : null;
+  } catch {
+    return null;
+  }
+}
+
 export function registerAgentHandlers(): void {
   handle('agent:getInfo', async (): Promise<AgentInfo> => {
     const phien = readStoredSession();
@@ -230,9 +257,11 @@ export function registerAgentHandlers(): void {
     if (!phien) return trong;
 
     try {
+      /* Trần 8 giây: WiFi chưa đăng nhập cổng có thể treo kết nối rất lâu —
+         không trần thì trang AI Code quay "Đang kiểm tra quyền…" mãi. */
       const [rTools, rUsage] = await Promise.all([
-        fetch(`${API_ORIGIN}/api/v1/agent/tools`, { headers: { Authorization: `Bearer ${phien.sessionToken}` } }),
-        fetch(`${API_ORIGIN}/api/v1/agent/usage`, { headers: { Authorization: `Bearer ${phien.sessionToken}` } }),
+        fetch(`${API_ORIGIN}/api/v1/agent/tools`, { headers: { Authorization: `Bearer ${phien.sessionToken}` }, signal: AbortSignal.timeout(8000) }),
+        fetch(`${API_ORIGIN}/api/v1/agent/usage`, { headers: { Authorization: `Bearer ${phien.sessionToken}` }, signal: AbortSignal.timeout(8000) }),
       ]);
       if (!rTools.ok) return trong;
 
@@ -250,7 +279,7 @@ export function registerAgentHandlers(): void {
         ? { daDung: usage.daDung, tran: usage.tran, phanTram: usage.phanTram, hoiLucNao: usage.hoiLucNao }
         : null;
 
-      return {
+      const ra: AgentInfo = {
         pro: tools.data?.pro ?? false,
         configured: tools.data?.configured ?? false,
         model: tools.data?.model ?? null,
@@ -262,10 +291,13 @@ export function registerAgentHandlers(): void {
         ...(tools.data?.models ? { models: tools.data.models } : {}),
         ...(tools.data?.mucNoLuc ? { mucNoLuc: tools.data.mucNoLuc } : {}),
       };
+      void fs.writeFile(tepInfoCuoi(), JSON.stringify(ra)).catch(() => {});
+      return ra;
     } catch {
       // Mất mạng. KHÔNG ném — màn hình agent vẫn phải mở được để người dùng
-      // nhìn thấy lịch sử phiên trước, chỉ là không gửi được câu mới.
-      return trong;
+      // nhìn thấy lịch sử phiên trước, VÀ (03/10/2026) để AI Code ngoại tuyến
+      // chạy được: trả lại câu máy chủ nói lần cuối thay vì `pro: false`.
+      return (await docInfoCuoi()) ?? trong;
     }
   });
 
@@ -355,16 +387,29 @@ export function registerAgentHandlers(): void {
    * hai đường PHẢI dựng cùng một bối cảnh quyền/thư mục, tách ra hai bản là
    * một ngày nào đó một bản quên một trường.
    */
+  /**
+   * `/offline` (03/10/2026) — các tab mà người dùng ÉP chạy AI trên máy dù có
+   * mạng. Chỉ trong RAM: mở lại app là về máy chủ như cũ (ép ngoại tuyến là
+   * quyết định cho một buổi, không phải cài đặt vĩnh viễn).
+   */
+  const epCucBo = new Set<string>();
+
   const chayCho = async (
     cuocId: string, text: string, anh: string[] | undefined,
-    event: IpcMainInvokeEvent, lamTiep: boolean,
+    event: IpcMainInvokeEvent, lamTiep: boolean, chiDoc = false,
   ): Promise<void> => {
     if (cuocDangChay(cuocId)) throw new Error('Việc này đang chạy dở. Hãy dừng nó trước.');
 
     const goc = gocCua(cuocId);
     const conSong = goc && (await conDungDuoc(goc)) ? goc : null;
     if (goc && !conSong) datGocChoCuoc(cuocId, null);
-    const quyen = quyenCuaCuoc(cuocId);
+    const quyenTab = quyenCuaCuoc(cuocId);
+    /* `/plan` · `/review`: CHỈ ĐỌC cho riêng lượt này — bỏ mọi quyền ghi khỏi
+       bối cảnh, nên `capabilities` không mời tool ghi nào. Chế độ quyền của
+       tab không đổi; lượt sau trở lại như cũ. */
+    const quyen = chiDoc
+      ? { ...quyenTab, choSua: false, choChayLenh: false, choGhiNote: false }
+      : quyenTab;
 
     // Bắn thẳng về đúng cửa sổ đã gửi yêu cầu, không phải "mọi cửa sổ": nếu sau
     // này app có nhiều cửa sổ thì tiến trình của cửa sổ này không được rơi vào
@@ -381,6 +426,53 @@ export function registerAgentHandlers(): void {
     };
 
     const nhanh = conSong ? await nhanhGit(conSong) : null;
+
+    /*
+     * ── MẤT MẠNG ⇒ AI CODE NGOẠI TUYẾN (03/10/2026) ──
+     *
+     * Hỏi bộ theo dõi mạng (gõ cửa máy chủ thật, xem `aiCucBo/mang.ts`) NGAY
+     * trước khi gửi. Có mạng ⇒ đi máy chủ như cũ, KHÔNG BAO GIỜ rơi xuống máy
+     * (ranh giới 1). "Làm tiếp" (key gia hạn) là việc của máy chủ, không rẽ.
+     */
+    /* `/offline` ép tay ⇒ đi đường máy y như mất mạng, nhưng KHÔNG cần công tắc
+       "Tự dùng khi mất mạng" (người dùng vừa tự chọn). Công tắc "Cho phép" thì
+       vẫn phải tôn trọng. */
+    const ep = epCucBo.has(cuocId);
+    if (!lamTiep && (ep || (await dangMatMang()))) {
+      const s = getSettings() as Record<string, unknown>;
+      const chon = await modelChoCode().catch(() => null);
+      const duong = duongCuaLuot({
+        ep,
+        matMang: true,
+        choPhepChay: s.aiCucBoBat !== false,
+        tuDungKhiMatMang: s.aiCucBoTuDong !== false,
+        coModel: !!chon?.ma,
+      });
+      if (duong === 'cucBo') {
+        await chayLuotCucBo(
+          cuocId,
+          text,
+          {
+            goc: conSong, choSua: quyen.choSua, choChayLenh: quyen.choChayLenh,
+            ...(anh?.length ? { anh } : {}),
+            ...(nhanh ? { nhanh } : {}),
+          },
+          phat,
+        );
+        return;
+      }
+      phat(duong === 'daTat'
+        ? {
+          loai: 'loi', ma: 'CUC_BO_DA_TAT',
+          thongDiep: 'Mất mạng, và AI ngoại tuyến đang TẮT trong Cài đặt → AI ngoại tuyến (công tắc "Cho phép" hoặc "Tự dùng khi mất mạng").',
+        }
+        : {
+          loai: 'loi', ma: 'CUC_BO_CHUA_CAI',
+          thongDiep: `Mất mạng — không với tới AI máy chủ. ${chon?.vi ?? 'Chưa có AI ngoại tuyến cho AI Code trên máy này.'}`,
+        });
+      return;
+    }
+
     await chayLuot(
       cuocId,
       text,
@@ -400,8 +492,62 @@ export function registerAgentHandlers(): void {
     );
   };
 
-  handle('agent:send', async ({ cuocId, text, anh }, event) => {
-    await chayCho(cuocId, text, anh, event, false);
+  handle('agent:send', async ({ cuocId, text, anh, chiDoc }, event) => {
+    await chayCho(cuocId, text, anh, event, false, chiDoc === true);
+  });
+
+  /* ── Lệnh `/` cần main (03/10/2026) ─────────────────────────── */
+
+  handle('agent:datEpCucBo', ({ cuocId, bat }) => {
+    if (bat === true) epCucBo.add(cuocId);
+    else if (bat === false) epCucBo.delete(cuocId);
+    return { bat: epCucBo.has(cuocId) };
+  });
+
+  handle('agent:nguCanhChiTiet', ({ cuocId }) => nguCanhChiTietCua(cuocId));
+
+  handle('agent:compact', async ({ cuocId, ghiChu }) => {
+    if (cuocDangChay(cuocId)) return { ok: false as const, loi: 'Việc này đang chạy — đợi lượt xong rồi /compact.' };
+    const phien = readStoredSession();
+    if (!phien) return { ok: false as const, loi: 'Chưa đăng nhập.' };
+    const truoc = nguCanhChiTietCua(cuocId);
+    const kq = await goiCompact({
+      origin: API_ORIGIN, token: phien.sessionToken, hoiThoai: hoiThoaiCua(cuocId),
+      ...(ghiChu ? { ghiChu } : {}),
+    });
+    if (!kq.ok) return kq;
+    if (!('tomTat' in kq)) return { ok: true as const, soTinDaGop: 0 };
+    /* Lượt mới có thể đã bắt đầu trong lúc chờ máy chủ — chỉ gắn khi hội
+       thoại còn đúng như lúc gửi đi (dài hơn thì vẫn khớp: chỉ nối thêm). */
+    if (cuocDangChay(cuocId)) return { ok: false as const, loi: 'Một lượt mới đã bắt đầu — thử /compact lại sau.' };
+    datTomTatCua(cuocId, kq.tomTat);
+    const sau = nguCanhChiTietCua(cuocId);
+    return {
+      ok: true as const, soTinDaGop: kq.soTinDaGop, soLuotDaGop: kq.soLuotDaGop, xemTruoc: kq.xemTruoc,
+      kyTuTruoc: truoc.tongGui, kyTuSau: sau.tongGui,
+    };
+  });
+
+  handle('agent:chanDoan', async ({ cuocId }) => {
+    const phien = readStoredSession();
+    const s = getSettings() as Record<string, unknown>;
+    return chanDoan({
+      origin: API_ORIGIN,
+      token: phien?.sessionToken ?? null,
+      phienBan: app.getVersion(),
+      nenTang: `${process.platform}-${process.arch}`,
+      goc: gocCua(cuocId),
+      matMang: () => dangMatMang(),
+      aiCucBo: async () => {
+        const c = await modelChoCode();
+        return c ? { ma: c.ma ?? null, ...(c.ten ? { ten: c.ten } : {}), ...(c.vi ? { vi: c.vi } : {}) } : null;
+      },
+      aiCucBoBat: s.aiCucBoBat !== false,
+      quyenThuMuc: async (goc) => ({
+        doc: await fs.access(goc, fsConstants.R_OK).then(() => true, () => false),
+        ghi: await fs.access(goc, fsConstants.W_OK).then(() => true, () => false),
+      }),
+    });
   });
 
   handle('agent:lamTiep', async ({ cuocId }, event) => {

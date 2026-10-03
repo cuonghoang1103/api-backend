@@ -24,6 +24,7 @@ import { useAppState } from '../../app-state';
 import { MenuChamDoc, type MucMenu } from './MenuChamDoc';
 import { mauDuAn } from './mauDuAn';
 import { useDich } from '../../i18n';
+import { DaiMoThanhBen, useThanhBenPhu } from './thanhBenHep';
 
 export interface ThuMuc {
   id: string;
@@ -81,6 +82,8 @@ export function ThanhBenChat({
   const [tim, datTim] = useState('');
   const [dangKeo, datDangKeo] = useState(false);
   const [suaTen, datSuaTen] = useState<{ id: string; ten: string } | null>(null);
+  /* Cột hẹp ⇒ lớp phủ (03/10/2026) — cùng cơ chế với thanh bên AI Code. */
+  const { phuMo, datPhuMo, thanRef } = useThanhBenPhu();
 
   const gap = settings.chatThanhBenGap === true;
   const rong = typeof settings.chatThanhBenRong === 'number'
@@ -155,20 +158,14 @@ export function ThanhBenChat({
 
   if (gap) {
     return (
-      <button
-        type="button"
-        className="ct-tb-mo"
-        onClick={() => setSetting('chatThanhBenGap', false)}
-        title={dich('Hiện lịch sử trò chuyện')}
-        aria-label={dich('Hiện lịch sử trò chuyện')}
-      >
-        <ChevronLeft size={14} aria-hidden style={{ transform: 'rotate(180deg)' }} />
-      </button>
+      <DaiMoThanhBen nhan={dich('Lịch sử trò chuyện')} dem={ds.length} onBam={() => setSetting('chatThanhBenGap', false)} />
     );
   }
 
   return (
-    <aside className="ct-tb" style={{ width: rong }} data-keo={dangKeo}>
+    <>
+    <DaiMoThanhBen nhan={dich('Lịch sử trò chuyện')} chiHep dangMo={phuMo} onBam={() => datPhuMo((v) => !v)} />
+    <aside className="ct-tb" style={{ width: rong }} data-keo={dangKeo} data-phu-mo={phuMo} ref={thanRef}>
       <div className="ct-tb-dau">
         <button type="button" className="ct-tb-nut" onClick={onTaoMoi} title={dich('Cuộc mới')}>
           <MessageSquarePlus size={14} aria-hidden />
@@ -229,7 +226,7 @@ export function ThanhBenChat({
                     <button
                       type="button"
                       className="ct-tb-muc-mo"
-                      onClick={() => onMo(p.id)}
+                      onClick={() => { onMo(p.id); datPhuMo(false); }}
                       onDoubleClick={() => datSuaTen({ id: p.id, ten: ten(p) })}
                       title={`${ten(p)}\n(bấm đúp để đổi tên)`}
                     >
@@ -270,5 +267,6 @@ export function ThanhBenChat({
         title={dich('Kéo để đổi bề rộng · bấm đúp để về mặc định')}
       />
     </aside>
+    </>
   );
 }

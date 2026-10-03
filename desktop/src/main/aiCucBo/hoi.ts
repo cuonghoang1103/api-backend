@@ -177,7 +177,12 @@ export async function hoiMay(yc: YeuCauHoi): Promise<KetQuaHoi | null> {
     const r = await fetch(`${dang.goc}/v1/chat/completions`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ messages: tin, max_tokens: 900, temperature: 0.7 }),
+      /* `enable_thinking: false` (03/10/2026): bản 1,7B là Qwen3 "lai" — để
+         mặc định nó NGHĨ hàng trăm token ẩn trước mỗi câu, ăn cả trần 900 token
+         lẫn thời gian chờ trên máy yếu. Model không có chế độ nghĩ bỏ qua cờ. */
+      body: JSON.stringify({
+        messages: tin, max_tokens: 900, temperature: 0.7, chat_template_kwargs: { enable_thinking: false },
+      }),
       /* 3 phút. Máy chỉ có CPU gõ 8 chữ/giây, nên một câu trả lời dài thật sự
          mất hơn một phút — trần ngắn hơn sẽ cắt ngang đúng những máy yếu mà
          tính năng này sinh ra để phục vụ. */

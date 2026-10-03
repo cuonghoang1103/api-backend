@@ -17,8 +17,9 @@
  * [[feedback_two_curl_resume_corrupts_file]]. Ở đây chốt bằng `dangTai`: một
  * file chỉ có đúng một lượt tải tại một thời điểm.
  */
-import { createWriteStream } from 'node:fs';
-import { mkdir, rename, rm, stat } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
+import { createReadStream, createWriteStream } from 'node:fs';
+import { mkdir, readFile, rename, rm, stat, writeFile } from 'node:fs/promises';
 import { dirname } from 'node:path';
 import { Readable } from 'node:stream';
 import { pipeline } from 'node:stream/promises';
@@ -38,6 +39,11 @@ export interface YeuCauTai {
   dich: string;
   /** Cỡ mong đợi, byte. `0` = không kiểm. Lệch quá 2% là hỏng. */
   coMong?: number;
+  /**
+   * SHA-256 mong đợi (hex). Có ⇒ kiểm sau khi tải, sai thì XOÁ và báo hỏng.
+   * Xem `kiemSha256` vì sao CỠ ĐÚNG chưa đủ.
+   */
+  sha256?: string;
   onTienDo?: (t: TienDo) => void;
   signal?: AbortSignal | undefined;
 }
@@ -68,7 +74,7 @@ async function coFile(p: string): Promise<number> {
  * lại — người dùng tải bản ảnh sau khi đã có bản chữ không phải tải lại gì.
  */
 export async function taiFile(yc: YeuCauTai): Promise<string> {
-  const { url, dich, coMong = 0, onTienDo, signal } = yc;
+  const { url, dich, coMong = 0, onTienDo, signal, sha256 } = yc;
 
   /* ⚠️⚠️ GIÀNH KHOÁ TRƯỚC MỌI `await`, KHÔNG có ngoại lệ.
      Bản đầu đặt `dangTai.add()` SAU `await coFile(dich)` và phép kiểm bắt
@@ -88,8 +94,13 @@ export async function taiFile(yc: YeuCauTai): Promise<string> {
        không có, vì nó trông như đã xong. */
     const daXong = await coFile(dich);
     if (daXong > 0 && (coMong === 0 || Math.abs(daXong - coMong) / coMong < 0.02)) {
-      onTienDo?.({ daCo: daXong, tong: daXong, bps: 0 });
-      return dich;
+      /* Cỡ đúng mà mã sai = file hỏng từ lần tải cũ ⇒ xoá, tải lại từ đầu. */
+      if (!sha256 || await kiemSha256(dich, sha256)) {
+        onTienDo?.({ daCo: daXong, tong: daXong, bps: 0 });
+        return dich;
+      }
+      await rm(dich, { force: true });
+      await rm(tam, { force: true });
     }
 
     await mkdir(dirname(dich), { recursive: true });
@@ -164,6 +175,14 @@ export async function taiFile(yc: YeuCauTai): Promise<string> {
     }
 
     await rename(tam, dich);
+    if (sha256 && !(await kiemSha256(dich, sha256))) {
+      await rm(dich, { force: true });
+      throw new LoiTai(
+        'Tải xong nhưng file HỎNG (sai mã kiểm tra) — thường do lần tải dở trước đó nối nhầm vào bản mới. '
+        + 'Đã xoá; bấm tải lại là tải sạch từ đầu.',
+        'cocHong',
+      );
+    }
     onTienDo?.({ daCo: co, tong: co, bps });
     return dich;
   } catch (e) {
@@ -177,6 +196,40 @@ export async function taiFile(yc: YeuCauTai): Promise<string> {
   } finally {
     dangTai.delete(dich);
   }
+}
+
+/**
+ * ── KIỂM SHA-256 — vì CỠ ĐÚNG KHÔNG CÓ NGHĨA LÀ FILE ĐÚNG (03/10/2026) ──
+ *
+ * Đo thật trên máy chủ app: file `Qwen3-4B-Instruct-2507-Q4_K_M.gguf` đúng
+ * 2.497.281.120 byte (khớp từng byte với HuggingFace) mà model chỉ nhả
+ * "@@@@@@@@…". SHA-256 lệch hẳn. Nguyên nhân: phần `.dangtai` tải dở từ
+ * 23/09, ba tuần sau được TẢI TIẾP bằng `Range:` — trong lúc đó kho trên
+ * HuggingFace đã thay file (cùng cỡ, khác nội dung). Ghép nửa cũ + nửa mới ⇒
+ * một file đúng cỡ, hỏng câm. File mmproj tải 02/10 trên cùng máy cũng lệch mã.
+ *
+ * Hai lớp chữa, đi cùng nhau:
+ *   1. `kho.ts` ghim REVISION (commit) thay vì `main` — nội dung không bao giờ
+ *      đổi dưới chân bộ tải tiếp.
+ *   2. Kiểm SHA-256 sau khi tải, và MỘT LẦN cho file cũ trước khi bật (bắt
+ *      được những file đã hỏng trên máy người dùng từ trước bản này).
+ *
+ * Kết quả kiểm được nhớ bằng tệp `<file>.sha256` — băm 18,6 GB mất cỡ chục
+ * giây, không làm lại mỗi lần bật.
+ */
+export async function kiemSha256(duong: string, mong: string): Promise<boolean> {
+  const dau = `${duong}.sha256`;
+  const daNho = await readFile(dau, 'utf8').catch(() => '');
+  if (daNho.trim() === mong) return true;
+  const h = createHash('sha256');
+  try {
+    await pipeline(createReadStream(duong, { highWaterMark: 4 << 20 }), h);
+  } catch {
+    return false;
+  }
+  const ok = h.digest('hex') === mong;
+  if (ok) await writeFile(dau, mong).catch(() => {});
+  return ok;
 }
 
 /** Còn bao nhiêu giây nữa xong. `null` khi chưa đủ dữ kiện để nói. */

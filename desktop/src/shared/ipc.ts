@@ -202,8 +202,19 @@ export const settingKeySchema = z.enum([
    */
   'robotX',
   'robotY',
-  /** Thả tay thì robot có tự hút vào mép màn hình không. Mặc định BẬT. */
+  /**
+   * Thả tay thì robot có tự hút vào mép màn hình không. MẶC ĐỊNH TẮT từ
+   * 03/10/2026 (chỉ `true` mới bật) — mặc định bật là thủ phạm chính của lỗi
+   * "kéo vào đúng chỗ mà nó tự chạy qua chỗ khác".
+   */
   'robotBamMep',
+  /** Cỡ robot theo %, 20–100 bước 5. Thay nấc `odinCo` cũ (vẫn đọc làm dự phòng). */
+  'robotCo',
+  /**
+   * Vị trí robot nổi, JSON `ViTriLuu` (màn hình + toạ độ tuyệt đối + tương
+   * đối). CHỈ main ghi. Xem `robotViTri.ts`.
+   */
+  'robotViTri',
   /**
    * Ngôn ngữ GIAO DIỆN app: `'vi'` (mặc định) hoặc `'en'`.
    *
@@ -800,7 +811,40 @@ export const agentSendSchema = z.object({
      Ba con số này phải đi cùng nhau: lệch thì ảnh thứ n bị bỏ IM LẶNG ở đúng
      tầng nào có số nhỏ nhất, và không có gì báo. */
   anh: z.array(anhSchema).max(8).optional(),
+  /**
+   * CHỈ ĐỌC cho RIÊNG lượt này (03/10/2026) — `/plan` và `/review`: main bỏ
+   * quyền sửa/chạy lệnh/ghi ghi chú khỏi `capabilities` của lượt đó, nên model
+   * không được mời tool ghi, bất kể chế độ quyền của tab đang là gì.
+   */
+  chiDoc: z.boolean().optional(),
 });
+
+/** `/compact [ghi chú]` — tóm tắt phần cũ của hội thoại ngay bây giờ. */
+export const agentCompactSchema = z.object({
+  cuocId: z.string().min(1).max(64),
+  ghiChu: z.string().max(500).optional(),
+});
+
+/** `/offline` — ÉP tab này chạy bằng AI trên máy (bật/tắt tay). Thiếu `bat` = chỉ ĐỌC trạng thái. */
+export const agentEpCucBoSchema = z.object({
+  cuocId: z.string().min(1).max(64),
+  bat: z.boolean().optional(),
+});
+
+/** Kết quả `/context` — xem `main/agent/thanGui.ts#phanTichNguCanh`. */
+export interface AgentNguCanhChiTiet {
+  deBai: number; lichSu: number; ketQuaTool: number; soAnh: number; byteAnh: number;
+  tong: number; soTin: number; soLuot: number; tongGui: number;
+  tomTat: { soTinDaGop: number; luc: number } | null;
+}
+
+/** Một dòng của `/doctor`. */
+export interface AgentMucChanDoan { ten: string; muc: 'ok' | 'canh' | 'loi'; chiTiet: string }
+
+/** Kết quả `/compact`. */
+export type AgentKetQuaCompact =
+  | { ok: true; soTinDaGop: number; soLuotDaGop?: number; xemTruoc?: string; kyTuTruoc?: number; kyTuSau?: number }
+  | { ok: false; loi: string; ma?: string };
 
 /**
  * BỐN CHẾ ĐỘ QUYỀN của AI Code — người dùng đối chiếu với Claude Code.
@@ -1183,7 +1227,7 @@ export interface ThietBiMangBridge {
   laRouter: boolean;
 }
 
-export type AiCucBoMa = 'nho' | 'vua' | 'anh';
+export type AiCucBoMa = 'nho' | 'vua' | 'anh' | 'code';
 
 export interface AiCucBoTinhTrang {
   may: {
@@ -1195,6 +1239,9 @@ export interface AiCucBoTinhTrang {
     /** `false` = mới nhìn tên card, CHƯA chạy thử. Đừng hứa gì với người dùng. */
     chacChan: boolean;
     tenGpu: string;
+    /** VRAM lớn nhất của một GPU, GB. `-1`/vắng = chưa đo được. */
+    vramGb?: number;
+    nvidia?: boolean;
   };
   khuyen: {
     nen: AiCucBoMa | null;
@@ -1206,6 +1253,14 @@ export interface AiCucBoTinhTrang {
   daCo: AiCucBoMa[];
   dangChay: AiCucBoMa | null;
   goc: string | null;
+  /** Máy này chạy AI Code ngoại tuyến bằng bản nào (03/10/2026). */
+  khuyenCode: {
+    nen: AiCucBoMa | null;
+    choPhep: AiCucBoMa[];
+    muc: 'manh' | 'vua' | 'yeu';
+    vi: string;
+  };
+  boChayCuda: boolean;
   /** Sổ model để giao diện vẽ, khỏi chép cứng tên và dung lượng ở renderer. */
   kho: {
     ma: AiCucBoMa;
@@ -1213,7 +1268,23 @@ export interface AiCucBoTinhTrang {
     moTa: string;
     gb: number;
     ramGb: number;
+    /** Có mặt = dùng được cho AI Code ngoại tuyến. */
+    code?: { nhan: string };
   }[];
+}
+
+/**
+ * AI Code sẽ chạy bằng model nào khi mất mạng — xem `chonModelCode()` ở
+ * `main/aiCucBo/quanLy.ts`. `ma: null` = chưa có bản dùng được.
+ */
+export interface AiCucBoCheDoCode {
+  ma: AiCucBoMa | null;
+  ten: string;
+  nhan: string;
+  vi: string;
+  nenTai: AiCucBoMa | null;
+  /** Hai công tắc trong Cài đặt cho phép tự chuyển không. */
+  choPhepTuDong: boolean;
 }
 
 /** Một nhịp tiến độ của việc tải/cài. Đi qua sự kiện `aiCucBo:tienDo`. */
@@ -1350,7 +1421,11 @@ export interface AgentInfo {
  * giao diện im lặng bỏ qua một loại sự kiện mà không ai biết.
  */
 export type AgentUiEvent = { cuocId: string } & (
-  | { loai: 'batDau'; model: string; buoc?: number; tranBuoc?: number }
+  /**
+   * `cucBo` có mặt = lượt này chạy bằng AI NGOẠI TUYẾN trên máy (03/10/2026).
+   * Giao diện đổi màu nhấn + gắn nhãn máy vào câu trả lời (ranh giới 2).
+   */
+  | { loai: 'batDau'; model: string; buoc?: number; tranBuoc?: number; cucBo?: { ten: string; nhan: string } }
   | { loai: 'chu'; delta: string }
   /**
    * Tool BẮT ĐẦU chạy. Phát TRƯỚC khi gọi, khác `tool` (phát sau khi xong).
@@ -1577,6 +1652,10 @@ export const INVOKE_CHANNELS = {
   'agent:send': agentSendSchema,
   /** Chạy tiếp ĐÚNG lượt vừa bị chặn (key gia hạn, 02/10/2026) — không thêm câu hỏi mới. */
   'agent:lamTiep': agentCuocSchema,
+  'agent:compact': agentCompactSchema,
+  'agent:nguCanhChiTiet': agentCuocSchema,
+  'agent:chanDoan': agentCuocSchema,
+  'agent:datEpCucBo': agentEpCucBoSchema,
   'agent:cancel': agentCuocSchema,
   'agent:reset': agentCuocSchema,
   'agent:taoCuoc': null,
@@ -1748,17 +1827,24 @@ export const INVOKE_CHANNELS = {
    * phút, không ai chờ một Promise lâu như thế mà không thấy gì.
    */
   'aiCucBo:tinhTrang': null,
-  'aiCucBo:cai': z.object({ ma: z.enum(['nho', 'vua', 'anh']) }),
+  'aiCucBo:cai': z.object({ ma: z.enum(['nho', 'vua', 'anh', 'code']) }),
   'aiCucBo:huyCai': null,
   'aiCucBo:bat': z.object({
-    ma: z.enum(['nho', 'vua', 'anh']),
+    ma: z.enum(['nho', 'vua', 'anh', 'code']),
     /* `true` = NGƯỜI DÙNG tự bấm Bật ⇒ đừng tự tắt khi để không. Lượt bật do
        lưới đỡ tự làm thì để `false` và nó sẽ tự trả RAM sau 15 phút. */
     nguoiDungBam: z.boolean().optional(),
   }),
   'aiCucBo:tat': null,
-  'aiCucBo:xoa': z.object({ ma: z.enum(['nho', 'vua', 'anh']) }),
+  'aiCucBo:xoa': z.object({ ma: z.enum(['nho', 'vua', 'anh', 'code']) }),
   'aiCucBo:goSach': null,
+  /** AI Code sẽ dùng model nào khi mất mạng — không bật gì, chỉ hỏi. */
+  'aiCucBo:cheDoCode': null,
+  /**
+   * Gõ cửa máy chủ NGAY (không chờ nhịp 30 giây). Renderer gọi khi
+   * `navigator.onLine` đổi hoặc khi một lời gọi API vừa hỏng vì mạng.
+   */
+  'aiCucBo:kiemMang': null,
   /** Hỏi AI trên máy. Trả nguyên câu — cùng kiểu với `robot:hoi`. */
   'aiCucBo:hoi': z.object({
     chu: z.string().min(1).max(20_000),
@@ -1802,7 +1888,26 @@ export const INVOKE_CHANNELS = {
   'pty:mayCo': null,
 
   'robot:datCo': z.object({ nac: z.number().int().min(0).max(3) }),
-  'robot:keoBatDau': z.object({}).optional(),
+  /** Cỡ robot theo % (20–100). Main làm tròn về bước 5 và GIỮ chỗ đứng. */
+  'robot:datPhanTram': z.object({ phanTram: z.number().min(20).max(100) }),
+  /**
+   * Tính (và tuỳ chọn áp) bố cục cửa sổ robot quanh điểm neo. Hai nhịp — xem
+   * `apBoCuc` trong `robotNoi.ts`. `null` = chỉ con robot.
+   */
+  'robot:boCuc': z.object({
+    noiDung: z.object({
+      loai: z.enum(['bong', 'bang', 'chat']),
+      rong: z.number().min(0).max(4000),
+      cao: z.number().min(0).max(4000),
+    }).nullable(),
+    apDung: z.boolean(),
+  }),
+  /** Về góc dưới-phải màn hình chính. */
+  'robot:veMacDinh': z.object({}).optional(),
+  /** Nền tảng + Wayland thuần hay không (để giao diện nói rõ giới hạn). */
+  'robot:nenTang': z.object({}).optional(),
+  /* `kieu`: 'hop' = kéo con robot; 'caKhung' = kéo cả khung chat bằng thanh tiêu đề. */
+  'robot:keoBatDau': z.object({ kieu: z.enum(['hop', 'caKhung']).optional() }).optional(),
   /* Độ lệch so với chỗ bấm xuống, đơn vị điểm ảnh CSS. Chặn hai đầu để một
      renderer hỏng (hoặc một `NaN`) không quăng cửa sổ ra ngoài mọi màn hình,
      chỗ người dùng không kéo lại được. */
@@ -1866,6 +1971,8 @@ export const INVOKE_CHANNELS = {
     model: z.string().min(1).max(60).optional(),
     phienId: z.string().min(1).max(120).nullable().optional(),
     anh: z.array(z.string().min(16).max(8_000_000)).max(4).optional(),
+    /** Kỹ năng người dùng chọn ở chip (hoặc 'tu-dong'). Máy chủ lọc lại bằng danh sách trắng. */
+    kyNang: z.enum(['tu-dong', 'anh', 'code', 'toan', 'tieng-anh', 'tieng-nhat', 'tieng-viet']).optional(),
   }),
   /** Danh sách phiên chat để mở lịch sử ngay trong khung mini. */
   'robot:phienDs': z.null(),
@@ -2039,6 +2146,12 @@ export const EVENT_CHANNELS = [
    * "vẫn đang chạy" mà không phải chuyển cửa sổ. `chu: null` = đã xong.
    */
   'robot:viec',
+  /** Main đổi neo/cỡ (menu, màn hình đổi) ⇒ cửa sổ robot dựng lại bố cục. `{ phanTram }` */
+  'robot:boCucLai',
+  /** Thiết đặt robot cần biết vừa đổi (theme, tự dính mép…). `{ key, value }` */
+  'robot:thietDat',
+  /** Mở bảng chỉnh vị trí & cỡ (từ menu chuột phải). */
+  'robot:cheDoChinh',
   /** Đăng nhập OAuth qua trình duyệt đã xong — mang token về cho app. */
   'oauth:xong',
   /** Phím media của bàn phím (Play/Pause · Next · Prev), kể cả khi app không ở trước. */
@@ -2148,6 +2261,23 @@ export type UpdateStatus =
  * Bề mặt API mà preload gắn lên `window.cuongthai`. Renderer chỉ thấy đúng
  * chừng này — không hơn.
  */
+/** Kỹ năng của trợ lý robot. Khớp `KY_NANG_TRO_LY` ở máy chủ. */
+export type RobotKyNang = 'tu-dong' | 'anh' | 'code' | 'toan' | 'tieng-anh' | 'tieng-nhat' | 'tieng-viet';
+
+/** Bố cục cửa sổ robot — xem `tinhBoCuc` trong `main/robotViTri.ts`. */
+export interface RobotHop { gocX: 'trai' | 'phai'; gocY: 'tren' | 'duoi'; dx: number; dy: number }
+export interface RobotKetQuaBoCuc {
+  boCuc: {
+    cuaSo: { x: number; y: number; width: number; height: number };
+    hop: RobotHop;
+    noiDung: 'tren' | 'duoi' | null;
+    caoNoiDung: number;
+    coHop: { width: number; height: number };
+  };
+  hopTruoc: RobotHop;
+  phanTram: number;
+}
+
 export interface DesktopBridge {
   app: {
     getInfo(): Promise<AppInfo>;
@@ -2429,6 +2559,10 @@ export interface DesktopBridge {
     xoa(ma: AiCucBoMa): Promise<{ ok: boolean; loi?: string }>;
     /** Gỡ sạch cả model lẫn bộ chạy. */
     goSach(): Promise<{ ok: boolean; loi?: string }>;
+    /** AI Code sẽ dùng model nào khi mất mạng. */
+    cheDoCode(): Promise<AiCucBoCheDoCode>;
+    /** Gõ cửa máy chủ ngay. `online` = máy chủ trả lời được (kể cả 4xx). */
+    kiemMang(): Promise<{ online: boolean }>;
     /** Hỏi AI trên máy. `null` ở `chu` nghĩa là chưa bật. */
     hoi(p: {
       chu: string;
@@ -2467,7 +2601,15 @@ export interface DesktopBridge {
     /** Mở một cuộc (tab) mới. Trả về id — mọi lời gọi sau đó phải mang nó. */
     taoCuoc(): Promise<string>;
     dongCuoc(cuocId: string): Promise<void>;
-    send(cuocId: string, text: string, anh?: string[]): Promise<void>;
+    send(cuocId: string, text: string, anh?: string[], tuyChon?: { chiDoc?: boolean }): Promise<void>;
+    /** `/compact [ghi chú]` — tóm tắt phần cũ ngay (cần máy chủ có `POST /agent/compact`). */
+    compact(cuocId: string, ghiChu?: string): Promise<AgentKetQuaCompact>;
+    /** `/context` — ngữ cảnh chia theo loại. */
+    nguCanhChiTiet(cuocId: string): Promise<AgentNguCanhChiTiet>;
+    /** `/doctor` — chẩn đoán mạng, máy chủ, cổng, AI ngoại tuyến, quyền thư mục. */
+    chanDoan(cuocId: string): Promise<AgentMucChanDoan[]>;
+    /** `/offline` — ép tab chạy AI trên máy. Thiếu `bat` = chỉ đọc. Trả trạng thái hiện tại. */
+    datEpCucBo(cuocId: string, bat?: boolean): Promise<{ bat: boolean }>;
     /**
      * Chạy tiếp lượt vừa dừng vì lỗi (vd. hết hạn mức rồi nhập key gia hạn)
      * với NGUYÊN hội thoại đang có — KHÔNG thêm câu hỏi mới. Cũng chạy lâu như `send`.
@@ -2667,7 +2809,15 @@ export interface DesktopBridge {
     /** Đưa cửa sổ chính ra trước và điều hướng tới `duongDan`. */
     moChinh(duongDan: string): Promise<void>;
     datCo(nac: number): Promise<void>;
-    keoBatDau(): Promise<void>;
+    /** Đặt cỡ %, trả về % đã chuẩn hoá (bước 5, kẹp 20–100). */
+    datPhanTram(phanTram: number): Promise<number>;
+    boCuc(
+      noiDung: { loai: 'bong' | 'bang' | 'chat'; rong: number; cao: number } | null,
+      apDung: boolean,
+    ): Promise<RobotKetQuaBoCuc | null>;
+    veMacDinh(): Promise<void>;
+    nenTang(): Promise<{ heDieuHanh: string; waylandThuan: boolean; xWayland: boolean }>;
+    keoBatDau(kieu?: 'hop' | 'caKhung'): Promise<void>;
     keoToi(dx: number, dy: number): Promise<void>;
     keoXong(): Promise<void>;
     /**
@@ -2685,8 +2835,10 @@ export interface DesktopBridge {
     /** Phím tắt toàn cục đang giữ được, đã định dạng cho người đọc, hoặc `null`. */
     phimTat(): Promise<string | null>;
     /** Hỏi nhanh một câu, trả về câu trả lời đã hoàn chỉnh (không chảy chữ). */
-    hoi(chu: string, them?: { model?: string; phienId?: string | null; anh?: string[] }): Promise<{
+    hoi(chu: string, them?: { model?: string; phienId?: string | null; anh?: string[]; kyNang?: RobotKyNang }): Promise<{
       chu: string;
+      /** Kỹ năng máy chủ đã áp (nhận tự động hoặc theo chip). */
+      kyNang?: string | null;
       phienId: string | null;
       roiBac: { thanh: string; lyDo: string } | null;
       /** Câu này do AI TRÊN MÁY trả lời vì máy chủ không với tới được. */

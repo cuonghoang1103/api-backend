@@ -37,6 +37,8 @@ import { xemHanMucFable } from '../services/agent/fable.js';
 import { dsKyNangSan } from '../services/agent/kyNangSan.js';
 import { prisma } from '../config/database.js';
 import { baoAdmin } from '../services/thongBaoAdmin.service.js';
+import { CompactLoi, compactChuDong } from '../services/agent/compactChuDong.js';
+import { hardCapUsd, softCapUsd, todaySpendUsd } from '../services/llm/budget.js';
 
 const router = Router();
 router.use(authenticate);
@@ -249,7 +251,28 @@ async function goiUsage(userId: number): Promise<Record<string, unknown>> {
     hoiLucNao: h.hoiLucNao?.toISOString() ?? null,
     hoiHetLuc: h.hoiHetLuc?.toISOString() ?? null,
     coKeyGiaHan: await coKeyGiaHan(),
+    tienNgay: await tienNgay(),
   };
+}
+
+/**
+ * TRẦN TIỀN NGÀY của cả máy chủ (`llm/budget.ts`) — cho `/usage` của AI Code
+ * (03/10/2026). CHỈ trả PHẦN TRĂM, không trả số đô: chi tiêu toàn hệ thống là
+ * số liệu kinh doanh, người dùng chỉ cần biết "còn chạy được không / sắp chạm
+ * trần chưa". Hỏng đọc sổ ⇒ `null`, không làm hỏng cả `/usage`.
+ */
+async function tienNgay(): Promise<{ phanTram: number; catViecNen: boolean; dungHet: boolean } | null> {
+  try {
+    const da = await todaySpendUsd();
+    const cung = hardCapUsd();
+    return {
+      phanTram: cung > 0 ? Math.min(100, Math.round((da / cung) * 100)) : 0,
+      catViecNen: da >= softCapUsd(),
+      dungHet: cung > 0 && da >= cung,
+    };
+  } catch {
+    return null;
+  }
 }
 
 router.get('/usage', async (req: any, res: Response<ApiResponse>, next) => {
@@ -300,6 +323,39 @@ router.post('/gia-han', chiPro, giaHanLimiter, async (req: any, res: Response<Ap
       next(new AppError(err.message, status, err.code));
       return;
     }
+    next(err);
+  }
+});
+
+/**
+ * `POST /compact` — lệnh `/compact [ghi chú]` của AI Code (03/10/2026).
+ *
+ * Thân: `{ messages, giuLuot?, ghiChu? }` (messages = hội thoại app đang giữ,
+ * nên gỡ ảnh trước khi gửi). Trả `{ tomTat, deBai, soTinDaGop, soLuotDaGop }`:
+ * app thay `soTinDaGop` tin đầu bằng bản tóm tắt TRONG HỘI THOẠI GỬI LÊN, còn
+ * bản đầy đủ vẫn trên màn hình. Xem `services/agent/compactChuDong.ts`.
+ *
+ * Rate-limit riêng: mỗi lần là một lời gọi model (rẻ, nhưng không miễn phí).
+ */
+const compactLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 30,
+  standardHeaders: true,
+  legacyHeaders: false,
+  keyGenerator: (req: any): string => `compact:${req.userId ?? req.ip ?? 'anon'}`,
+  message: { success: false, message: 'Tóm tắt quá nhiều lần. Thử lại sau 15 phút.', code: 'COMPACT_QUA_NHIEU' },
+});
+
+router.post('/compact', chiPro, compactLimiter, async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const b = (req.body ?? {}) as { messages?: unknown; giuLuot?: unknown; ghiChu?: unknown };
+    const kq = await compactChuDong(b.messages, { giuLuot: b.giuLuot, ghiChu: b.ghiChu });
+    logger.info('[agent/compact] tóm tắt chủ động', {
+      userId: req.userId, soTinDaGop: kq.soTinDaGop, daGoiModel: kq.daGoiModel,
+    });
+    res.json({ success: true, data: kq });
+  } catch (err) {
+    if (err instanceof CompactLoi) { next(new AppError(err.message, err.status, err.code)); return; }
     next(err);
   }
 });

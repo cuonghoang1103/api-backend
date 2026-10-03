@@ -120,6 +120,29 @@ export function AppStateProvider({
     });
   }, [bridge]);
 
+  /*
+   * Đồng bộ với bộ GÕ CỬA máy chủ ở main (03/10/2026, `aiCucBo/mang.ts`).
+   *
+   * Main chỉ phát `app:networkChanged` khi trạng thái ĐỔI — cửa sổ mở ra SAU
+   * lần đổi đó sẽ mãi tin `navigator.onLine` (true) trong khi main đã biết là
+   * mất mạng. Nên hỏi một lần lúc gắn, và hỏi lại ngay mỗi khi trình duyệt
+   * thấy card mạng đổi (nhanh hơn nhịp 30 giây của main).
+   */
+  useEffect(() => {
+    const kiem = (): void => {
+      void bridge?.aiCucBo?.kiemMang?.()
+        .then((r) => { if (typeof r?.online === 'boolean') setOnline(r.online); })
+        .catch(() => {});
+    };
+    kiem();
+    window.addEventListener('online', kiem);
+    window.addEventListener('offline', kiem);
+    return () => {
+      window.removeEventListener('online', kiem);
+      window.removeEventListener('offline', kiem);
+    };
+  }, [bridge]);
+
   /* Tham số của lần điều hướng gần nhất, ví dụ `phien=abc` khi bấm hai lần
      vào robot để mở đúng cuộc trò chuyện bằng giọng nói.
 

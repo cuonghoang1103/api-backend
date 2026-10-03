@@ -17,9 +17,11 @@ describe('lọc lệnh', () => {
   });
 
   it('khớp cả TÊN KHÁC nhưng vẫn hiện tên chính', () => {
-    // Gõ `/mo` phải ra `/clear`, không phải `/moi` — tài liệu và mọi chỗ khác
+    // Gõ `/moi` phải ra `/clear`, không phải `/moi` — tài liệu và mọi chỗ khác
     // gọi nó là `/clear`, hiện tên khác là dạy người dùng một cái tên phụ.
-    expect(locLenh('/mo').map((l) => l.ten)).toEqual(['/clear']);
+    // (03/10/2026: đổi từ `/mo` sang `/moi` — `/model` mới cũng bắt đầu bằng `mo`.)
+    expect(locLenh('/moi').map((l) => l.ten)).toEqual(['/clear']);
+    expect(locLenh('/mo').map((l) => l.ten)).toEqual(['/clear', '/model']);
   });
 
   it('không phải lệnh thì không gợi ý gì', () => {

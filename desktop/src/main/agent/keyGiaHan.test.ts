@@ -36,7 +36,8 @@ describe('key gia hạn — làm tiếp không gián đoạn', () => {
   });
 
   it('send và lamTiep dựng CÙNG một bối cảnh (một hàm chung)', () => {
-    expect(ipcAgent).toMatch(/handle\('agent:send'[\s\S]{0,120}chayCho\(cuocId, text, anh, event, false\)/);
+    // 03/10/2026: `agent:send` thêm cờ `chiDoc` (/plan, /review) — vẫn CÙNG hàm `chayCho`.
+    expect(ipcAgent).toMatch(/handle\('agent:send'[\s\S]{0,120}chayCho\(cuocId, text, anh, event, false(, chiDoc === true)?\)/);
     expect(ipcAgent).toMatch(/handle\('agent:lamTiep'[\s\S]{0,120}chayCho\(cuocId, '', undefined, event, true\)/);
   });
 

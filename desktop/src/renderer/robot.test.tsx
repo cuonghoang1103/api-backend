@@ -27,6 +27,10 @@ const goi = {
   menu: vi.fn(async () => {}),
   hutMep: vi.fn(async () => {}),
   phimTat: vi.fn(async () => null),
+  datPhanTram: vi.fn(async (pt: number) => pt),
+  boCuc: vi.fn(async () => null),
+  veMacDinh: vi.fn(async () => {}),
+  nenTang: vi.fn(async () => ({ heDieuHanh: 'darwin', waylandThuan: false, xWayland: false })),
 };
 
 /** Người nghe của từng kênh sự kiện, để phép kiểm tự bắn tin như main. */
@@ -150,7 +154,7 @@ describe('⭐ LỖI 3 — bong bóng trả lời tự tắt và có nút ×', ()
     await banTin('thử nổi bọt');
     await act(async () => { (document.querySelector('.rb-bong-x') as HTMLElement).click(); });
     await quaNhipHoan();
-    expect(goi.doiKichThuoc).not.toHaveBeenCalled();
+    expect(document.querySelector('.rb')?.getAttribute('data-rong')).toBe('false');
   });
 
   it('⭐ ô ĐO vô hình mang cùng `data-co-x` với bong bóng thật', async () => {
@@ -163,5 +167,68 @@ describe('⭐ LỖI 3 — bong bóng trả lời tự tắt và có nút ×', ()
     expect(o?.getAttribute('data-co-x')).toBe(that?.getAttribute('data-co-x'));
     expect(o?.getAttribute('data-loai')).toBe(that?.getAttribute('data-loai'));
     await act(async () => { (document.querySelector('.rb-bong-x') as HTMLElement).click(); });
+  });
+});
+
+describe('⭐ 03/10/2026 — bảng chỉnh 20–100% và kéo "thả đâu đứng đó"', () => {
+  async function moBang(): Promise<void> {
+    if (document.querySelector('.rb')?.getAttribute('data-keo') !== 'true') {
+      await bamNhieu(3);
+      await quaNhipHoan();
+    }
+  }
+
+  it('ba cú bấm mở bảng chỉnh: thanh trượt 20–100, bước 5, có số %', async () => {
+    await moBang();
+    const r = document.querySelector('.rb-bang input[type="range"]') as HTMLInputElement | null;
+    expect(r).not.toBeNull();
+    expect([r!.min, r!.max, r!.step]).toEqual(['20', '100', '5']);
+    expect(document.querySelector('.rb-bang-so')?.textContent).toMatch(/^\d+%$/);
+  });
+
+  it('kéo thanh trượt ⇒ gửi đúng % (đã làm tròn bước 5) xuống main', async () => {
+    await moBang();
+    const r = document.querySelector('.rb-bang input[type="range"]') as HTMLInputElement;
+    await act(async () => {
+      const dat = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')!.set!;
+      dat.call(r, '35');
+      r.dispatchEvent(new Event('input', { bubbles: true }));
+    });
+    expect(goi.datPhanTram).toHaveBeenCalledWith(35);
+  });
+
+  it('⛔ "tự dính mép" MẶC ĐỊNH TẮT (thủ phạm chính của "tự chạy chỗ khác")', async () => {
+    await moBang();
+    const o = document.querySelector('.rb-bang-hang input') as HTMLInputElement;
+    expect(o.checked).toBe(false);
+  });
+
+  it('kéo: một lần keoBatDau, thả là keoXong — và cú thả KHÔNG tính là một cú bấm', async () => {
+    await moBang();
+    const t = than();
+    await act(async () => {
+      t.dispatchEvent(new MouseEvent('pointerdown', { bubbles: true, button: 0, screenX: 100, screenY: 100 }));
+      for (let i = 1; i <= 5; i++) {
+        window.dispatchEvent(new MouseEvent('pointermove', { screenX: 100 + i * 10, screenY: 100 + i * 4 }));
+      }
+      window.dispatchEvent(new MouseEvent('pointerup', { screenX: 150, screenY: 120 }));
+      t.dispatchEvent(new MouseEvent('click', { bubbles: true, detail: 1, screenX: 150, screenY: 120 }));
+    });
+    await quaNhipHoan();
+    expect(goi.keoBatDau).toHaveBeenCalledTimes(1);
+    expect(goi.keoBatDau).toHaveBeenCalledWith('hop');
+    expect(goi.keoToi).toHaveBeenLastCalledWith(50, 20);
+    expect(goi.keoXong).toHaveBeenCalledTimes(1);
+    expect(document.querySelector('.rb')?.getAttribute('data-rong')).toBe('false');
+  });
+
+  it('bấm rồi rung tay 2px KHÔNG thành kéo', async () => {
+    await moBang();
+    await act(async () => {
+      than().dispatchEvent(new MouseEvent('pointerdown', { bubbles: true, button: 0, screenX: 300, screenY: 300 }));
+      window.dispatchEvent(new MouseEvent('pointermove', { screenX: 302, screenY: 301 }));
+      window.dispatchEvent(new MouseEvent('pointerup', { screenX: 302, screenY: 301 }));
+    });
+    expect(goi.keoBatDau).not.toHaveBeenCalled();
   });
 });

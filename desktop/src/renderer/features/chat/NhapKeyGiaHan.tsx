@@ -31,10 +31,12 @@ interface KetQuaGiaHan extends AgentQuota {
 
 const trieu = (n: number): string => (n / 1_000_000).toLocaleString('vi-VN', { maximumFractionDigits: 2 });
 
-export function NhapKeyGiaHan({ khoa = false, onXong }: {
+export function NhapKeyGiaHan({ khoa = false, onXong, chuXong }: {
   /** Agent đang chạy (vd. đã làm tiếp ở tab này) ⇒ không cho gửi. */
   khoa?: boolean;
   onXong: (quota: AgentQuota) => void;
+  /** Câu sau khi cộng xong — mặc định nói về việc làm tiếp (đường hết hạn mức). `/usage` thay câu khác. */
+  chuXong?: string;
 }) {
   const { api } = useSession();
   const [key, datKey] = useState('');
@@ -68,8 +70,8 @@ export function NhapKeyGiaHan({ khoa = false, onXong }: {
   if (xong !== null) {
     return (
       <p className="ct-duphong-chu">
-        <Check size={12} aria-hidden /> Đã cộng {trieu(xong)} triệu token — agent đang làm tiếp chỗ dở.
-        Hết lần nữa thì nhập lại đúng key này.
+        <Check size={12} aria-hidden /> Đã cộng {trieu(xong)} triệu token — {chuXong ?? 'agent đang làm tiếp chỗ dở.'}
+        {' '}Hết lần nữa thì nhập lại đúng key này.
       </p>
     );
   }

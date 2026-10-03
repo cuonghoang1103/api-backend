@@ -5,7 +5,8 @@
  */
 import {
   baoRobot, datNacCo, doiCo, doiKichThuoc, keoBatDau, keoToi, keoXong, moTrangChinh,
-  hutLaiVaoMep, nacCoHienTai, batTatRobot,
+  hutLaiVaoMep, phanTramHienTai, batTatRobot, datPhanTram, apBoCuc, veGocMacDinh,
+  thongTinNenTang, batTuDinhMep,
 } from '../robotNoi';
 import { phimDeDoc, phimRobotHienTai } from '../phimRobot';
 import { Menu, BrowserWindow } from 'electron';
@@ -43,9 +44,27 @@ export function registerRobotHandlers(): void {
 
   handle('robot:datCo', ({ nac }) => { datNacCo(nac); });
 
+  /* Cỡ %, 20–100. Ghi thiết đặt ở ĐÂY (một chỗ) rồi báo con trong app. */
+  handle('robot:datPhanTram', ({ phanTram }) => {
+    const pt = datPhanTram(phanTram);
+    setSetting('robotCo', pt);
+    for (const w of BrowserWindow.getAllWindows()) {
+      if (!w.isDestroyed()) w.webContents.send('robot:coDoi', { phanTram: pt });
+    }
+    return pt;
+  });
+
+  handle('robot:boCuc', ({ noiDung, apDung }) => apBoCuc(
+    noiDung ? { loai: noiDung.loai, co: { width: noiDung.rong, height: noiDung.cao } } : null,
+    apDung,
+  ));
+
+  handle('robot:veMacDinh', () => { veGocMacDinh(); });
+  handle('robot:nenTang', () => thongTinNenTang());
+
   /* Kéo cửa sổ robot. Ba nhịp: chốt gốc, dời theo độ lệch, buông. Xem chú
      thích ở `robotNoi.ts` — vì sao không dùng `-webkit-app-region: drag`. */
-  handle('robot:keoBatDau', () => { keoBatDau(); });
+  handle('robot:keoBatDau', (p) => { keoBatDau(p?.kieu ?? 'hop'); });
   handle('robot:keoToi', ({ dx, dy }) => { keoToi(Number(dx) || 0, Number(dy) || 0); });
   handle('robot:keoXong', () => { keoXong(); });
 
@@ -64,19 +83,24 @@ export function registerRobotHandlers(): void {
     Menu.buildFromTemplate(bangMenuRobot({
       trongApp,
       tiengAnh: getSettings().ngonNgu === 'en',
-      nacCo: nacCoHienTai(),
-      bamMep: getSettings().robotBamMep !== false,
+      phanTram: phanTramHienTai(),
+      bamMep: batTuDinhMep(),
       moChat: () => moTrangChinh('/chat', ''),
-      datCo: (n) => {
-        setSetting('odinCo', n);
-        datNacCo(n);
-        /* Con robot TRONG app đọc `odinCo` từ AppState, mà AppState chỉ nạp
-           thiết đặt một lần lúc mở app. Không bắn tin thì đổi cỡ từ menu chỉ
-           ăn ở con nổi, và người dùng thấy hai con robot lệch cỡ nhau. */
-        for (const w of BrowserWindow.getAllWindows()) w.webContents.send('robot:coDoi', { nac: n });
-        hutLaiVaoMep();
+      datCo: (p) => {
+        /* KHÔNG hút mép sau khi đổi cỡ nữa — đó là một lần "tự chạy". */
+        const pt = datPhanTram(p);
+        setSetting('robotCo', pt);
+        /* Con robot TRONG app đọc cỡ từ AppState (nạp một lần lúc mở app).
+           Không bắn tin thì hai con robot lệch cỡ nhau. */
+        for (const w of BrowserWindow.getAllWindows()) w.webContents.send('robot:coDoi', { phanTram: pt });
       },
-      datBamMep: (v) => setSetting('robotBamMep', v),
+      chinh: () => baoRobot('robot:cheDoChinh', {}),
+      veMacDinh: () => veGocMacDinh(),
+      datBamMep: (v) => {
+        setSetting('robotBamMep', v);
+        baoRobot('robot:thietDat', { key: 'robotBamMep', value: v });
+        if (v) hutLaiVaoMep();
+      },
       /* MỘT công tắc, HAI con robot.
        *
        * ⚠️ Trước bản này, tắt con NỔI chỉ gọi `dongRobot()` mà không ghi thiết
@@ -224,7 +248,7 @@ export function registerRobotHandlers(): void {
     }
   });
 
-  handle('robot:hoi', async ({ chu, model, phienId, anh }) => {
+  handle('robot:hoi', async ({ chu, model, phienId, anh, kyNang }) => {
     const phien = readStoredSession();
     /* Chưa đăng nhập mà ĐÃ tải AI về máy thì vẫn hỏi được — model nằm trên
        máy họ, không cần tài khoản nào để chạy. Bắt đăng nhập ở đây là dựng
@@ -240,7 +264,7 @@ export function registerRobotHandlers(): void {
 
     try {
       const r = await hoiTroLy(phien.sessionToken, chu, false, {
-        model, phienId: phienId ?? undefined, anh,
+        model, phienId: phienId ?? undefined, anh, kyNang,
       });
       if (r.chu) return r;
       /* Máy chủ trả lời RỖNG cũng là hỏng, chỉ là hỏng lặng lẽ hơn. Rơi xuống
@@ -497,6 +521,8 @@ export interface ThemHoi {
   phienId?: string | undefined;
   /** Ảnh dán vào, dạng data URL. Chỉ bậc Pro/Max dùng được. */
   anh?: string[] | undefined;
+  /** Kỹ năng chọn ở chip ('tu-dong' = để máy chủ tự nhận theo câu hỏi). */
+  kyNang?: string | undefined;
 }
 
 export interface KetQuaHoi {
@@ -510,6 +536,8 @@ export interface KetQuaHoi {
    * luận là Max chẳng khác gì — trong khi thứ cần biết là "cái này cần Pro".
    */
   roiBac: { thanh: string; lyDo: string } | null;
+  /** Kỹ năng máy chủ đã áp — để khung chat gắn nhãn nhỏ dưới câu trả lời. */
+  kyNang?: string | null;
 }
 
 /* `export` để phép kiểm gọi thẳng được. Cái đáng kiểm ở đây — thân yêu cầu có
@@ -546,7 +574,12 @@ export async function hoiTroLy(
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({
           message: chu,
-          ngonNgu: ngonNguHienTai(),
+          /* Ngôn ngữ: lượt NÓI luôn gửi (máy đọc đọc theo nó). Lượt GÕ chỉ gửi
+             khi người dùng đã chủ động chọn — không thì để máy chủ theo ngôn
+             ngữ của câu hỏi. Gửi 'vi' mặc định cho mọi lượt gõ là lý do một
+             phần của lỗi 03/10/2026: "bảo trả lời tiếng Anh vẫn trả tiếng Việt". */
+          ...(laLoiNoi || typeof getSettings().odinNgonNgu === 'string' ? { ngonNgu: ngonNguHienTai() } : {}),
+          ...(them.kyNang && !laLoiNoi ? { kyNang: them.kyNang } : {}),
           ...(phienNoi ? { sessionId: phienNoi } : {}),
           ...(laLoiNoi ? { voice: true } : {}),
           ...(them.model ? { model: them.model } : {}),
@@ -563,6 +596,7 @@ export async function hoiTroLy(
       let dem = '';
       let ra = '';
       let roiBac: KetQuaHoi['roiBac'] = null;
+      let kyNangDaAp: string | null = null;
       for await (const mau of res.body as unknown as AsyncIterable<Uint8Array>) {
         dem += giaiMa.decode(mau, { stream: true });
         const dong = dem.split('\n');
@@ -573,7 +607,9 @@ export async function hoiTroLy(
             const e = JSON.parse(d.slice(6)) as {
               type?: string; text?: string; error?: string;
               effective?: string; fellBack?: boolean; reason?: string;
+              kyNang?: string;
             };
+            if (e.type === 'kyNang' && typeof e.kyNang === 'string') kyNangDaAp = e.kyNang;
             if (e.type === 'chunk' && e.text) ra += e.text;
             if (e.type === 'error' && e.error) ra += `\n[lỗi] ${e.error}`;
             if (e.type === 'model' && e.fellBack && e.effective) {
@@ -593,7 +629,7 @@ export async function hoiTroLy(
         luotRobot = themLuot(luotRobot, { vai: 'user', chu, anh: them.anh });
         luotRobot = themLuot(luotRobot, { vai: 'assistant', chu: traLoi });
       }
-      return { chu: traLoi || '(không có nội dung)', phienId: phienNoi, roiBac };
+      return { chu: traLoi || '(không có nội dung)', phienId: phienNoi, roiBac, kyNang: kyNangDaAp };
     } catch (err) {
       return {
         chu: `Không gọi được máy chủ: ${(err as Error).message}`,

@@ -33,6 +33,7 @@ import type { ApiResponse } from '../types/index.js';
 import type { ChatMessageDto } from '../types/index.js';
 import { getGenStats, getFeatureUsers } from '../services/genStats.service.js';
 import { laAppIos } from '../utils/appIos.js';
+import { docKyNang } from '../services/troLy/kyNangTroLy.js';
 
 const router = Router();
 
@@ -479,6 +480,13 @@ router.post('/chat', optionalAuth, quotaMiddleware(), async (req: any, res: Resp
     ),
     choTimWeb: (req.body as { choTimWeb?: unknown }).choTimWeb !== false,
     appIos: laAppIos(req),
+    // Kỹ năng của robot CuongMini — danh sách trắng (xem troLy/kyNangTroLy.ts).
+    kyNang: docKyNang((req.body as { kyNang?: unknown }).kyNang),
+    banKyNang: (k: string) => {
+      if (res.writableEnded) return;
+      // KHÔNG đặt tên trường `text` — app cũ cộng `text` của mọi khung vào câu trả lời.
+      res.write(`data: ${JSON.stringify({ type: 'kyNang', kyNang: k })}\n\n`);
+    },
 
     /*
      * BƯỚC và NGUỒN đi bằng khung SSE RIÊNG, không lẫn vào `chunk`.

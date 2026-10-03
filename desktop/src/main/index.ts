@@ -10,7 +10,8 @@
  */
 import { app, BrowserWindow, net } from 'electron';
 import path from 'node:path';
-import { DEEP_LINK_SCHEME, IS_DEV } from './config';
+import { API_ORIGIN, DEEP_LINK_SCHEME, IS_DEV } from './config';
+import { datTheoDoiMang, taoGoCua, TheoDoiMang } from './aiCucBo/mang';
 import {
   applySessionPolicies,
   forbidChildProcesses,
@@ -280,15 +281,32 @@ async function bootstrap(): Promise<void> {
  * tuyên bố với người dùng là đã có mạng — xem Phase 3.
  */
 function watchNetwork(): void {
-  let previous = net.isOnline();
+  /*
+   * 03/10/2026 — `net.isOnline()` một mình KHÔNG đủ để tự đổi sang AI ngoại
+   * tuyến: WiFi không ra internet vẫn báo online. Nên giờ GÕ CỬA máy chủ thật
+   * (xem `aiCucBo/mang.ts`); `net.isOnline()` chỉ còn là đường tắt "chắc chắn
+   * mất" khi không có card mạng nào. Cùng kênh `app:networkChanged` như cũ ⇒
+   * mọi trang đang nghe kênh này tự chính xác hơn mà không phải sửa gì.
+   */
+  const theoDoi = new TheoDoiMang({
+    goCua: taoGoCua(`${API_ORIGIN}/api/v1/system/health`),
+    coGiaoDien: () => net.isOnline(),
+    khiDoi: (t) => {
+      for (const window of BrowserWindow.getAllWindows()) {
+        if (!window.isDestroyed()) window.webContents.send('app:networkChanged', { online: t.online });
+      }
+    },
+  });
+  datTheoDoiMang(theoDoi);
+  theoDoi.batDau();
 
+  /* Card mạng vừa đổi ⇒ gõ cửa ngay, đừng chờ nhịp 30 giây. */
+  let previous = net.isOnline();
   setInterval(() => {
     const current = net.isOnline();
     if (current === previous) return;
     previous = current;
-    for (const window of BrowserWindow.getAllWindows()) {
-      window.webContents.send('app:networkChanged', { online: current });
-    }
+    void theoDoi.kiemNgay();
   }, 3000);
 }
 

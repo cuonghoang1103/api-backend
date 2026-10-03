@@ -46,6 +46,16 @@ export function registerSettingsHandlers(): void {
     /* Bật/tắt trợ lý phải ăn NGAY, cả con nổi lẫn con trong app. Trước bản
        này chỉ con trong app nghe `robotEnabled`, nên tắt công tắc xong con nổi
        vẫn đứng đó — người dùng báo đúng chuyện đó 14/09/2026. */
+    /* Cửa sổ robot nổi là entry riêng, đọc thiết đặt một lần lúc mở: đổi chủ
+       đề sáng/tối hay "tự dính mép" ở chỗ khác thì phải báo nó. Đổi CỠ từ con
+       robot trong app thì con nổi đổi theo (một khoá cho cả hai con). */
+    if (key === 'theme' || key === 'robotBamMep' || key === 'robotCo') {
+      void import('../robotNoi').then((m) => {
+        if (key === 'robotCo' && typeof value === 'number') m.datPhanTram(value);
+        m.baoRobot('robot:thietDat', { key, value });
+      });
+    }
+
     if (key === 'robotEnabled') {
       void import('../robotNoi').then((m) => {
         m.dongBoRobotNoi();

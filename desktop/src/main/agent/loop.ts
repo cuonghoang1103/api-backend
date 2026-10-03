@@ -22,6 +22,8 @@
  * đầu tiên đã dính (xem ghi chú trong `src/services/agent/turn.ts`).
  */
 import { BrowserWindow } from 'electron';
+import { stat } from 'node:fs/promises';
+import { isAbsolute, join } from 'node:path';
 import { API_ORIGIN } from '../config';
 import { readStoredSession } from '../ipc/auth';
 import type { KetQuaDiff } from './diff';
@@ -32,6 +34,9 @@ import { dsKyNang, docThanKyNang, napKyNangMayChu } from './kyNang';
 import { docBoNho, docTatCa as docTatCaBoNho, mucLuc as mucLucBoNho, nhoBaiHoc, quenBaiHoc, tangLanKhop } from './boNho';
 import { BoDemLoiLap, dauHieuLoi, khopBoNho } from './dauHieuLoi';
 import { dsAgentPhu, docThanAgentPhu } from './agentPhu';
+import {
+  chuanBiThan, ghepTomTat, phanTichNguCanh, type NguCanhChiTiet, type TinGui, type TomTatCompact,
+} from './thanGui';
 import {
   datTokenChoDatTen, docPhien, dungLaiHienThi, luuPhien, taoPhienNhanh,
   type MucKhoiPhuc, type TinNhanLuu,
@@ -46,6 +51,10 @@ import { dungLenhNenCua } from './lenhNen';
 import { dongTerminalCua } from '../terminal/phienTerminal';
 import { hanMucMcp, goiToolMcp, laToolMcp, toolMcpHienCo } from './mcp';
 import { hoiNguoiDung, huyTatCa, type YeuCauXinPhep } from './xinPhep';
+import { chayVongCucBo, type TinNhanCucBo } from '../aiCucBo/agentCucBo';
+import { promptCode, TEN_TOOL_CUC_BO, toolCucBo } from '../aiCucBo/promptCode';
+import { batChoCode } from '../aiCucBo/quanLy';
+import type { MaModel } from '../aiCucBo/kho';
 
 /**
  * Trần vòng lặp phía app — LƯỚI ĐỠ, không phải chốt chặn thật.
@@ -75,7 +84,8 @@ const MAX_VONG = 320;
 
 /** Sự kiện đẩy lên renderer. Đây là thứ giao diện vẽ. */
 export type SuKienAgent =
-  | { loai: 'batDau'; model: string; buoc?: number; tranBuoc?: number }
+  /** `cucBo` có mặt = lượt chạy bằng AI NGOẠI TUYẾN trên máy (03/10/2026). */
+  | { loai: 'batDau'; model: string; buoc?: number; tranBuoc?: number; cucBo?: { ten: string; nhan: string } }
   | { loai: 'chu'; delta: string }
   /** Một tool vừa chạy xong (bất kể vòng 1 hay vòng 2) — để hiện dòng tiến trình. */
   | { loai: 'toolBatDau'; id: string; ten: string; vong: 'may' | 'notes' }
@@ -251,6 +261,12 @@ interface CuocHoiThoai {
   so: SoCuoc;
   /** Việc phụ đã giao trong LƯỢT hiện tại. Đặt lại về 0 ở đầu mỗi câu hỏi. */
   soViecPhu: number;
+  /**
+   * Bản `/compact` (03/10/2026): thay `soTinDaGop` tin đầu khi GỬI LÊN. Chỉ ở
+   * RAM — `hoiThoai` vẫn đầy đủ (lưu phiên, quay lui, màn hình). Mở lại phiên
+   * hay khởi động lại app thì mất, lượt sau gửi nguyên văn như trước.
+   */
+  tomTat: TomTatCompact | null;
 }
 
 const cuoc = new Map<string, CuocHoiThoai>();
@@ -259,7 +275,7 @@ function layCuoc(id: string): CuocHoiThoai {
   let c = cuoc.get(id);
   if (!c) {
     c = {
-      id, phienId: id, hoiThoai: [], duAn: null, dangChay: null, so: taoSoCuoc(), soViecPhu: 0,
+      id, phienId: id, hoiThoai: [], duAn: null, dangChay: null, so: taoSoCuoc(), soViecPhu: 0, tomTat: null,
       goc: null, daChonGoc: false, cheDoQuyen: 'keHoach', choSua: false, choChayLenh: false, choGhiNote: false,
       choTrinhDuyet: trinhDuyetMacDinh(),
     };
@@ -513,6 +529,7 @@ export function napPhien(
   huyLuotCua(cuocId);
   c.phienId = phienId;
   c.hoiThoai = tinNhan as TinNhan[];
+  c.tomTat = null;
   c.duAn = duAn;
   // Khôi phục cả THƯ MỤC của phiên đó. Từ khi mỗi tab một dự án, mở một việc cũ
   // vào tab đang trỏ dự án khác thì agent đọc nhầm repo và trả lời rất tự tin
@@ -577,6 +594,25 @@ export function bangGhiCua(id: string): MucKhoiPhuc[] {
   return dungLaiHienThi(layCuoc(id).hoiThoai as TinNhanLuu[]);
 }
 
+/** Hội thoại giao thức (bản ĐẦY ĐỦ) của một cuộc — cho `/compact` gửi lên tóm tắt. */
+export function hoiThoaiCua(id: string): readonly TinGui[] {
+  return layCuoc(id).hoiThoai as TinGui[];
+}
+
+/** Gắn bản `/compact` vào cuộc. `null` = bỏ. */
+export function datTomTatCua(id: string, tt: TomTatCompact | null): void {
+  layCuoc(id).tomTat = tt;
+}
+
+/** `/context` — chia ngữ cảnh theo loại, kèm trạng thái bản tóm tắt. */
+export function nguCanhChiTietCua(id: string): NguCanhChiTiet & { tomTat: { soTinDaGop: number; luc: number } | null } {
+  const c = layCuoc(id);
+  return {
+    ...phanTichNguCanh(c.hoiThoai as TinGui[], c.tomTat),
+    tomTat: c.tomTat ? { soTinDaGop: c.tomTat.soTinDaGop, luc: c.tomTat.luc } : null,
+  };
+}
+
 export function soFileDaSuaCua(id: string): number {
   return soFileDaSua(layCuoc(id).so);
 }
@@ -613,6 +649,7 @@ export function xoaHoiThoai(id: string): void {
   const c = layCuoc(id);
   huyLuotCua(id);
   c.hoiThoai = [];
+  c.tomTat = null;
   c.duAn = null;
   // Việc mới trong cùng tab ⇒ phiên mới. Giữ `phienId` cũ là ghi đè lên việc
   // trước bằng một hội thoại rỗng.
@@ -689,6 +726,8 @@ export function quayLui(cuocId: string, k: number): KetQuaQuayLui {
      mã sau này khớp với thứ tự việc xảy ra. */
   const soFileSeLui = demFileSeLui(c.so, k);
   c.hoiThoai = c.hoiThoai.slice(0, cat);
+  // Lùi vào trong phần đã /compact ⇒ bản tóm tắt nói về những lượt không còn.
+  if (c.tomTat && cat <= c.tomTat.soTinDaGop) c.tomTat = null;
   return { ok: true, cauHoi, coSuaFile, soFileSeLui };
 }
 
@@ -927,6 +966,8 @@ export async function chayLuot(
 
   /** Đã thử lại mấy lần ở CHỖ KẸT HIỆN TẠI. Đi được một bước là về 0. */
   let daThuLai = 0;
+  /** Đã 413 một lần trong lượt này ⇒ từ đó gửi KHÔNG ảnh nào (xem nhánh 413). */
+  let goSachAnh = false;
 
   /*
    * ⚠️ LƯU THEO TỪNG VÒNG, không chỉ ở `finally` (26/09/2026).
@@ -978,7 +1019,9 @@ export async function chayLuot(
       const phanHoi = await mgoiMotLuot({
         cuocId: c.id,
         token: phien.sessionToken,
-        messages: c.hoiThoai,
+        /* Bản `/compact` (nếu có) thay phần đầu — CHỈ trong bản gửi. */
+        messages: ghepTomTat(c.hoiThoai as TinGui[], c.tomTat) as TinNhan[],
+        ...(goSachAnh ? { giuAnhLuot: 0 } : {}),
         capabilities,
         ...(boiCanh.goc
           ? {
@@ -1005,6 +1048,21 @@ export async function chayLuot(
       });
 
       if (!phanHoi.ok) {
+        /*
+         * 413 — THÂN QUÁ LỚN (03/10/2026). App đã gỡ ảnh cũ trước khi gửi
+         * (`thanGui.ts`), nên tới đây là còn ảnh của lượt gần nhất hoặc một
+         * kết quả tool khổng lồ. Gỡ SẠCH ảnh rồi thử lại ĐÚNG MỘT LẦN, nói câu
+         * đúng thay vì "Ảnh hoặc tệp gửi kèm quá lớn" rồi dừng cả việc.
+         */
+        if ((phanHoi.ma === '413' || phanHoi.ma === 'PAYLOAD_TOO_LARGE') && !goSachAnh) {
+          goSachAnh = true;
+          phat({
+            loai: 'loi', ma: 'TU_GO_ANH',
+            thongDiep: 'Hội thoại quá lớn — đã tự gỡ ảnh cũ, gửi lại.',
+          });
+          vong--;
+          continue;
+        }
         if (MA_DANG_THU_LAI.has(phanHoi.ma) && daThuLai < CHO_THU_LAI_MS.length) {
           /**
            * ⚠️ THỬ LẠI NHIỀU LẦN, CÓ CHỜ.
@@ -1089,69 +1147,8 @@ export async function chayLuot(
       for (const goi of ketQua.toolCalls) {
         if (dieuKhien.signal.aborted) { phat({ loai: 'huy' }); return; }
 
-        // Bối cảnh ghi chỉ dựng khi người dùng đã bật chế độ sửa. Không bật thì
-        // `chayToolAgent` nhận `undefined` và tự trả lỗi cho model.
-        const boiCanhGhi = boiCanh.choSua
-          ? {
-              signal: dieuKhien.signal,
-              so: c.so,
-              // Chế độ `tuSua`/`tuSuaVaLenh` ⇒ sửa file khỏi thẻ duyệt.
-              tuDuyet: tuDuyetSua(c.cheDoQuyen),
-              xinPhep: (y: YeuCauXinPhep & { diff: KetQuaDiff; taoMoi: boolean }) =>
-                phat({ loai: 'xinPhep', id: y.id, ten: y.ten, duongDan: y.duongDan, taoMoi: y.taoMoi, diff: y.diff }),
-            }
-          : undefined;
-
-        // Bối cảnh LỆNH tách riêng khỏi bối cảnh GHI: hai quyền bật độc lập,
-        // nên bật "cho sửa" không được kéo theo "cho chạy lệnh".
-        /* Dùng chung cho lệnh shell VÀ cho `web_bam`/`web_go` — cả hai đều
-           cần đúng một thứ: một đường xin duyệt có hiện nguyên văn việc sắp làm. */
-        const boiCanhLenh = (boiCanh.choChayLenh || boiCanh.choTrinhDuyet)
-          ? {
-              signal: dieuKhien.signal,
-              so: c.so,
-              xinPhepLenh: (y: YeuCauXinPhep & { phanLoai: PhanLoaiLenh }) =>
-                phat({ loai: 'xinPhepLenh', id: y.id, lenh: y.duongDan, phanLoai: y.phanLoai }),
-              onRa: (mau: string) => phat({ loai: 'lenhRa', mau }),
-              // CHỈ lệnh mức 'thuong', và chỉ ở chế độ `tuSuaVaLenh`.
-              tuDuyetLenh: (muc: 'thuong' | 'cankiem' | 'nguyhiem') => tuDuyetLenh(c.cheDoQuyen, muc),
-            }
-          : undefined;
-
-        const boiCanhNen = boiCanh.choChayLenh
-          ? {
-              cuocId: c.id,
-              so: c.so,
-              signal: dieuKhien.signal,
-              xinPhepLenh: (y: YeuCauXinPhep & { phanLoai: PhanLoaiLenh }) =>
-                phat({ loai: 'xinPhepLenh', id: y.id, lenh: y.duongDan, phanLoai: y.phanLoai }),
-              // Terminal thật tự duyệt theo CÙNG luật với lệnh thường.
-              tuDuyetLenh: (muc: 'thuong' | 'cankiem' | 'nguyhiem') => tuDuyetLenh(c.cheDoQuyen, muc),
-            }
-          : undefined;
-
-        const boiCanhGit = boiCanh.choSua
-          ? {
-              so: c.so,
-              signal: dieuKhien.signal,
-              xinPhepGit: (y: YeuCauXinPhep & { viec: 'commit' | 'pr'; chiTiet: string }) =>
-                phat({ loai: 'xinPhepGit', id: y.id, viec: y.viec, chiTiet: y.chiTiet }),
-            }
-          : undefined;
-
-        // Ghi chú KHÔNG theo `choSua`: nó không phải file trong dự án.
-        const boiCanhNote = boiCanh.choGhiNote
-          ? {
-              so: c.so,
-              signal: dieuKhien.signal,
-              xinPhepNote: (y: YeuCauXinPhep & { viec: 'tao' | 'ghi'; chiTiet: string }) =>
-                phat({ loai: 'xinPhepNote', id: y.id, viec: y.viec, chiTiet: y.chiTiet }),
-            }
-          : undefined;
-
-        const boiCanhKeHoach = {
-          keHoach: (viec: Array<{ ten: string; trangThai: string }>) => phat({ loai: 'keHoach', viec }),
-        };
+        const { boiCanhGhi, boiCanhLenh, boiCanhNen, boiCanhGit, boiCanhNote, boiCanhKeHoach } =
+          taoBoiCanhTool(c, boiCanh, dieuKhien.signal, phat);
 
         /* Báo ĐANG CHẠY trước khi gọi. Tool có thể mất hàng chục giây (tạo
            PDF, `npm test`, tải một lô file) và trước đây màn hình không đổi gì
@@ -1344,6 +1341,244 @@ export async function chayLuot(
       });
     }
   }
+}
+
+/**
+ * ── MỘT LƯỢT AI CODE NGOẠI TUYẾN (03/10/2026) ──────────────────
+ *
+ * Gọi từ `ipc/agent.ts` khi bộ theo dõi mạng nói MẤT MẠNG và máy đã có bản
+ * dùng được cho AI Code. Khác `chayLuot` ở đúng một chỗ: thay vì gửi hội thoại
+ * lên máy chủ, nó đưa cho `chayVongCucBo()` nói chuyện với llama-server trên
+ * máy. Mọi thứ còn lại DÙNG CHUNG: cùng `CuocHoiThoai` (có mạng lại thì hỏi
+ * tiếp ngay trong tab đó, máy chủ đọc được những gì model trên máy đã làm),
+ * cùng `chayToolAgent`, cùng `taoBoiCanhTool` (quyền, thẻ duyệt, lệnh nguy
+ * hiểm), cùng hook, cùng cách lưu phiên.
+ *
+ * Bộ tool là TẬP CON (`promptCode.ts`) — MCP, trình duyệt, ghi chú, việc phụ
+ * đều cần mạng hoặc cần model lớn, nên KHÔNG đưa cho model trên máy.
+ */
+export async function chayLuotCucBo(
+  cuocId: string,
+  cauHoi: string,
+  boiCanh: BoiCanh,
+  phat: (e: SuKienAgent) => void,
+  /** CHỈ cho kiểm thật / CI: ép một bản model đã tải, bỏ qua lời khuyên theo sức máy. */
+  tuyChon: { epModel?: MaModel } = {},
+): Promise<void> {
+  const c = layCuoc(cuocId);
+  if (c.dangChay) throw new Error('Việc này đang chạy dở. Hãy dừng nó trước.');
+  if ((boiCanh.choSua || boiCanh.choChayLenh) && boiCanh.goc) {
+    const dung = [...cuoc.values()].find((k) => k.id !== c.id && k.dangChay && k.goc === boiCanh.goc);
+    if (dung) {
+      throw new Error('Một việc khác đang chạy trên CÙNG thư mục dự án này. Hãy đợi nó xong — hai agent cùng ghi một chỗ sẽ đè lên nhau.');
+    }
+  }
+
+  const dieuKhien = new AbortController();
+  c.dangChay = dieuKhien;
+  c.so.luot = c.hoiThoai.filter((m) => m.role === 'user').length + 1;
+  /* Ảnh: model trên máy (bản chữ) không xem được — nói thẳng trong câu hỏi để
+     nó không trả lời như thể đã thấy ảnh. */
+  const ghiChuAnh = boiCanh.anh?.length
+    ? `\n\n[App: người dùng có dán ${boiCanh.anh.length} ảnh, nhưng AI trên máy KHÔNG xem được ảnh — nói rõ điều đó nếu câu hỏi cần ảnh.]`
+    : '';
+  c.hoiThoai.push({ role: 'user', content: `${cauHoi}${ghiChuAnh}` });
+  if (!c.duAn && boiCanh.goc) c.duAn = tenThuMuc(boiCanh.goc);
+
+  const luu = (): void => {
+    void luuPhien(c.phienId, c.hoiThoai as TinNhanLuu[], c.duAn, c.goc).then(() => baoPhienDoi()).catch(() => {});
+  };
+  luu();
+
+  try {
+    /* Nạp model có thể lâu (lần đầu macOS ~22 giây, bản 30B đọc 18,6 GB từ
+       đĩa) — hiện thành một dòng "đang chạy" để màn hình không đứng im. */
+    phat({ loai: 'toolBatDau', id: 'cucbo-nap', ten: 'nạp AI trên máy', vong: 'may' });
+    const may = await batChoCode(
+      (chu) => phat({ loai: 'tool', id: 'cucbo-nap', ten: 'nạp AI trên máy', tomTat: chu, vong: 'may' }),
+      tuyChon.epModel,
+    );
+    phat({ loai: 'tool', id: 'cucbo-nap', ten: 'nạp AI trên máy', tomTat: `${may.ten} · sẵn sàng`, vong: 'may' });
+    if (dieuKhien.signal.aborted) { phat({ loai: 'huy' }); return; }
+
+    const ghiChuDuAn = boiCanh.goc ? await docGhiChuDuAn(boiCanh.goc) : null;
+    const heThong = promptCode({
+      tenModel: may.ten,
+      chiViecNho: may.ma !== 'code',
+      tranBuoc: may.tranBuoc,
+      nenTang: process.platform,
+      duAn: boiCanh.goc ? tenThuMuc(boiCanh.goc) : null,
+      nhanh: boiCanh.nhanh,
+      choSua: !!boiCanh.choSua,
+      choChayLenh: !!boiCanh.choChayLenh,
+      ghiChuDuAn,
+    });
+    const tools = toolCucBo({ coDuAn: !!boiCanh.goc, choSua: !!boiCanh.choSua, choChayLenh: !!boiCanh.choChayLenh });
+
+    await chayVongCucBo({
+      goc: may.goc,
+      tenModel: may.ten,
+      nhan: may.nhan,
+      heThong,
+      hoiThoai: c.hoiThoai as TinNhanCucBo[],
+      tools,
+      cuaSo: may.cuaSo,
+      tranBuoc: may.tranBuoc,
+      signal: dieuKhien.signal,
+      soFileDaSua: () => soFileDaSua(c.so),
+      phat: (e) => phat(e as SuKienAgent),
+      truocKhiXong: async () => {
+        if (!boiCanh.goc) return;
+        const hookXong = await chayHook({ moc: 'xongLuot', goc: boiCanh.goc, signal: dieuKhien.signal });
+        if (hookXong.ra !== '') phat({ loai: 'lenhRa', mau: hookXong.ra });
+      },
+      chayTool: async (goi) => {
+        phat({ loai: 'toolBatDau', id: goi.id, ten: goi.name, vong: 'may' });
+        baoViecRaRobot(viecNganCuaTool(goi.name));
+        /* Chốt cuối: model nhỏ bịa tên tool là chuyện thường. Động cơ đã lọc
+           theo danh sách gửi đi, đây là lớp thứ hai — không có đường nào để một
+           tên lạ đi vào `chayToolAgent` từ vòng ngoại tuyến. */
+        if (!TEN_TOOL_CUC_BO.has(goi.name) || !tools.some((t) => t.name === goi.name)) {
+          const loi = `LỖI: tool "${goi.name}" không có trong chế độ ngoại tuyến.`;
+          phat({ loai: 'tool', id: goi.id, ten: goi.name, tomTat: 'không có tool này', vong: 'may' });
+          return loi;
+        }
+        if (!boiCanh.goc) {
+          phat({ loai: 'tool', id: goi.id, ten: goi.name, tomTat: 'chưa mở dự án', vong: 'may' });
+          return 'LỖI: người dùng chưa chọn thư mục dự án nào.';
+        }
+        const hookTruoc = await chayHook({ moc: 'truocTool', goc: boiCanh.goc, tenTool: goi.name, signal: dieuKhien.signal });
+        if (hookTruoc.chan) {
+          phat({ loai: 'tool', id: goi.id, ten: goi.name, tomTat: 'hook chặn', vong: 'may' });
+          return `BỊ CHẶN bởi hook của người dùng — tool này KHÔNG chạy.\n\n${hookTruoc.ra}`;
+        }
+        const bc = taoBoiCanhTool(c, boiCanh, dieuKhien.signal, phat);
+        goi.args = await sanhDuongDuAn(boiCanh.goc, goi.args);
+        const kq = await chayToolAgent(
+          boiCanh.goc, goi.name, goi.args, bc.boiCanhGhi, bc.boiCanhLenh, bc.boiCanhKeHoach, bc.boiCanhNen, bc.boiCanhGit,
+        );
+        const hookSau = await chayHook({ moc: 'sauTool', goc: boiCanh.goc, tenTool: goi.name, signal: dieuKhien.signal });
+        const noiDung = hookSau.ra === '' ? kq.noiDung : `${kq.noiDung}\n\n${hookSau.ra}`;
+        phat({
+          loai: 'tool', id: goi.id, ten: goi.name, vong: 'may',
+          tomTat: hookSau.ra === '' ? kq.tomTat : `${kq.tomTat} · hook có nói`,
+          ...(noiDung ? { chiTiet: noiDung.slice(0, TRAN_CHI_TIET) } : {}),
+          ...(kq.diff ? { diff: kq.diff } : {}),
+          ...(typeof goi.args?.path === 'string' && goi.args.path ? { duongDan: goi.args.path } : {}),
+        });
+        luu();
+        return noiDung;
+      },
+    });
+  } catch (e) {
+    if (dieuKhien.signal.aborted) phat({ loai: 'huy' });
+    else {
+      phat({ loai: 'tool', id: 'cucbo-nap', ten: 'nạp AI trên máy', tomTat: 'không bật được', vong: 'may' });
+      phat({ loai: 'loi', thongDiep: (e as Error)?.message || 'AI trên máy không bật được.', ma: 'CUC_BO_KHONG_BAT' });
+    }
+  } finally {
+    if (c.dangChay === dieuKhien) c.dangChay = null;
+    baoViecRaRobot(null);
+    luu();
+  }
+}
+
+/**
+ * Model NHỎ hay chép tên thư mục dự án vào đầu đường dẫn: đo thật 03/10/2026,
+ * Qwen3-1.7B gọi `list_dir("ct-thuthat-duan-nv8Xk")` — đúng cái tên prompt
+ * nói — và mọi lời gọi sau đều "không có file". Gỡ tiền tố đó, nhưng CHỈ khi
+ * đường dẫn gốc không tồn tại mà bản đã gỡ thì có (repo `api` có thư mục con
+ * `api/` là chuyện thường — đừng bẻ đường đúng của họ).
+ */
+async function sanhDuongDuAn(goc: string, args: Record<string, unknown>): Promise<Record<string, unknown>> {
+  const p = args.path;
+  if (typeof p !== 'string' || !p || isAbsolute(p)) return args;
+  const ten = tenThuMuc(goc);
+  const sach = p.replace(/^\.?\//, '');
+  let moi: string | null = null;
+  if (sach === ten) moi = '.';
+  else if (sach.startsWith(`${ten}/`)) moi = sach.slice(ten.length + 1) || '.';
+  if (moi === null) return args;
+  const coThat = async (x: string): Promise<boolean> => stat(join(goc, x)).then(() => true, () => false);
+  if (await coThat(sach)) return args;
+  return (moi === '.' || await coThat(moi)) || args.content !== undefined ? { ...args, path: moi } : args;
+}
+
+/**
+ * Bối cảnh cho `chayToolAgent` theo đúng quyền của cuộc — DÙNG CHUNG cho vòng
+ * lặp máy chủ và vòng lặp NGOẠI TUYẾN (03/10/2026). Tách ra để hai đường không
+ * thể lệch luật: một bản sao tay ở đường ngoại tuyến là chỗ một ngày nào đó
+ * quên `tuDuyetLenh` và lệnh nguy hiểm chạy không cần duyệt.
+ */
+function taoBoiCanhTool(
+  c: CuocHoiThoai, boiCanh: BoiCanh, signal: AbortSignal, phat: (e: SuKienAgent) => void,
+) {
+  const dieuKhien = { signal };
+  // Bối cảnh ghi chỉ dựng khi người dùng đã bật chế độ sửa. Không bật thì
+  // `chayToolAgent` nhận `undefined` và tự trả lỗi cho model.
+  const boiCanhGhi = boiCanh.choSua
+    ? {
+        signal: dieuKhien.signal,
+        so: c.so,
+        // Chế độ `tuSua`/`tuSuaVaLenh` ⇒ sửa file khỏi thẻ duyệt.
+        tuDuyet: tuDuyetSua(c.cheDoQuyen),
+        xinPhep: (y: YeuCauXinPhep & { diff: KetQuaDiff; taoMoi: boolean }) =>
+          phat({ loai: 'xinPhep', id: y.id, ten: y.ten, duongDan: y.duongDan, taoMoi: y.taoMoi, diff: y.diff }),
+      }
+    : undefined;
+
+  // Bối cảnh LỆNH tách riêng khỏi bối cảnh GHI: hai quyền bật độc lập,
+  // nên bật "cho sửa" không được kéo theo "cho chạy lệnh".
+  /* Dùng chung cho lệnh shell VÀ cho `web_bam`/`web_go` — cả hai đều
+     cần đúng một thứ: một đường xin duyệt có hiện nguyên văn việc sắp làm. */
+  const boiCanhLenh = (boiCanh.choChayLenh || boiCanh.choTrinhDuyet)
+    ? {
+        signal: dieuKhien.signal,
+        so: c.so,
+        xinPhepLenh: (y: YeuCauXinPhep & { phanLoai: PhanLoaiLenh }) =>
+          phat({ loai: 'xinPhepLenh', id: y.id, lenh: y.duongDan, phanLoai: y.phanLoai }),
+        onRa: (mau: string) => phat({ loai: 'lenhRa', mau }),
+        // CHỈ lệnh mức 'thuong', và chỉ ở chế độ `tuSuaVaLenh`.
+        tuDuyetLenh: (muc: 'thuong' | 'cankiem' | 'nguyhiem') => tuDuyetLenh(c.cheDoQuyen, muc),
+      }
+    : undefined;
+
+  const boiCanhNen = boiCanh.choChayLenh
+    ? {
+        cuocId: c.id,
+        so: c.so,
+        signal: dieuKhien.signal,
+        xinPhepLenh: (y: YeuCauXinPhep & { phanLoai: PhanLoaiLenh }) =>
+          phat({ loai: 'xinPhepLenh', id: y.id, lenh: y.duongDan, phanLoai: y.phanLoai }),
+        // Terminal thật tự duyệt theo CÙNG luật với lệnh thường.
+        tuDuyetLenh: (muc: 'thuong' | 'cankiem' | 'nguyhiem') => tuDuyetLenh(c.cheDoQuyen, muc),
+      }
+    : undefined;
+
+  const boiCanhGit = boiCanh.choSua
+    ? {
+        so: c.so,
+        signal: dieuKhien.signal,
+        xinPhepGit: (y: YeuCauXinPhep & { viec: 'commit' | 'pr'; chiTiet: string }) =>
+          phat({ loai: 'xinPhepGit', id: y.id, viec: y.viec, chiTiet: y.chiTiet }),
+      }
+    : undefined;
+
+  // Ghi chú KHÔNG theo `choSua`: nó không phải file trong dự án.
+  const boiCanhNote = boiCanh.choGhiNote
+    ? {
+        so: c.so,
+        signal: dieuKhien.signal,
+        xinPhepNote: (y: YeuCauXinPhep & { viec: 'tao' | 'ghi'; chiTiet: string }) =>
+          phat({ loai: 'xinPhepNote', id: y.id, viec: y.viec, chiTiet: y.chiTiet }),
+      }
+    : undefined;
+
+  const boiCanhKeHoach = {
+    keHoach: (viec: Array<{ ten: string; trangThai: string }>) => phat({ loai: 'keHoach', viec }),
+  };
+
+  return { boiCanhGhi, boiCanhLenh, boiCanhNen, boiCanhGit, boiCanhNote, boiCanhKeHoach };
 }
 
 /**
@@ -1624,6 +1859,8 @@ async function mgoiMotLuot(o: {
   toolMcp?: Array<{ name: string; description: string; parameters: Record<string, unknown> }>;
   /** Tab nào — để cổng dự phòng BÁM theo tab (xem `giuDuPhong`). */
   cuocId?: string;
+  /** Giữ ảnh của ngần này lượt cuối (mặc định 2; 0 = gỡ sạch — sau 413). */
+  giuAnhLuot?: number;
   signal: AbortSignal;
   phat: (e: SuKienAgent) => void;
 }): Promise<{ ok: true; ketQua: KetQuaLuot } | { ok: false; thongDiep: string; ma: string; coKeyGiaHan?: boolean }> {
@@ -1772,6 +2009,8 @@ async function mgoiMotLuotThat(o: {
   toolMcp?: Array<{ name: string; description: string; parameters: Record<string, unknown> }>;
   /** Tab nào — để cổng dự phòng BÁM theo tab (xem `giuDuPhong`). */
   cuocId?: string;
+  /** Giữ ảnh của ngần này lượt cuối (mặc định 2; 0 = gỡ sạch — sau 413). */
+  giuAnhLuot?: number;
   signal: AbortSignal;
   phat: (e: SuKienAgent) => void;
 }): Promise<{ ok: true; ketQua: KetQuaLuot } | { ok: false; thongDiep: string; ma: string; coKeyGiaHan?: boolean }> {
@@ -1788,12 +2027,9 @@ async function mgoiMotLuotThat(o: {
    * MẤT nút Dừng — đổi một lỗi khó chịu lấy một lỗi tệ hơn.
    */
   const henLuot = AbortSignal.timeout(TRAN_MOT_LUOT_MS);
-  const res = await fetch(`${API_ORIGIN}/api/v1/agent/turn`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${o.token}` },
-    signal: AbortSignal.any([o.signal, henLuot]),
-    body: JSON.stringify({
-      messages: o.messages,
+  /* Gỡ ảnh cũ + tự gỡ thêm khi thân > ~30MB — xem `thanGui.ts` (gốc lỗi 413). */
+  const { than } = chuanBiThan((messages) => JSON.stringify({
+      messages,
       capabilities: o.capabilities,
       workspace: o.workspace,
       ghiChuDuAn: o.ghiChuDuAn,
@@ -1818,17 +2054,27 @@ async function mgoiMotLuotThat(o: {
       /* Tab đang bám dự phòng ⇒ máy chủ đi thẳng dự phòng, KHÔNG gõ cửa rambo
          giữa chừng (tránh đổi model giữa một việc). */
       duPhongGiu: o.cuocId ? giuDuPhong.has(o.cuocId) : false,
-    }),
+    }), o.messages as TinGui[], o.giuAnhLuot === undefined ? {} : { giuLuot: o.giuAnhLuot });
+  const res = await fetch(`${API_ORIGIN}/api/v1/agent/turn`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${o.token}` },
+    signal: AbortSignal.any([o.signal, henLuot]),
+    body: than,
   });
 
   if (!res.ok) {
     // 403 = chưa Pro. Phải phân biệt với 401 (phiên hết hạn) vì hai cái dẫn tới
     // hai màn hình khác hẳn nhau: một cái mời nâng cấp, một cái bắt đăng nhập.
-    const than = await res.json().catch(() => ({})) as { message?: string; code?: string };
+    const loiThan = await res.json().catch(() => ({})) as { message?: string; code?: string };
+    /* 413 từ nginx là trang HTML, không có `code` ⇒ ép về một mã để chỗ gọi
+       nhận ra và tự gỡ ảnh thử lại. */
+    if (res.status === 413) {
+      return { ok: false, thongDiep: 'Hội thoại quá lớn so với trần máy chủ.', ma: 'PAYLOAD_TOO_LARGE' };
+    }
     return {
       ok: false,
-      thongDiep: than.message ?? `Máy chủ trả về ${res.status}.`,
-      ma: than.code ?? String(res.status),
+      thongDiep: loiThan.message ?? `Máy chủ trả về ${res.status}.`,
+      ma: loiThan.code ?? String(res.status),
     };
   }
   if (!res.body) {

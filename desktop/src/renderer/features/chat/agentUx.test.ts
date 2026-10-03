@@ -52,7 +52,9 @@ describe('2. gõ được trong lúc agent chạy', () => {
 
   it('hàng chờ được RÚT khi lượt xong', () => {
     expect(agentMode, 'xếp vào mà không rút ra thì câu nằm đó vĩnh viễn')
-      .toMatch(/useEffect\([\s\S]{0,400}hangCho\.length === 0[\s\S]{0,300}void gui\(/);
+      /* 03/10/2026: rút qua `xuLyCau` (không phải `gui` thẳng) để LỆNH `/` xếp
+         hàng vẫn chạy như lệnh — bản cũ gửi `/clear` xếp hàng cho model. */
+      .toMatch(/useEffect\([\s\S]{0,400}hangCho\.length === 0[\s\S]{0,300}xuLyCau\(dau, false\)/);
   });
 });
 

@@ -35,7 +35,7 @@
 export const BAN_LLAMA = 'b10976';
 
 /** Loại tăng tốc của gói bộ chạy. Quyết định tốc độ NẠP ĐỀ, tức quyết định tất cả. */
-export type LoaiTangToc = 'metal' | 'vulkan' | 'cpu';
+export type LoaiTangToc = 'metal' | 'vulkan' | 'cuda' | 'cpu';
 
 export interface GoiBoChay {
   /** Tên file trong release của llama.cpp. */
@@ -43,6 +43,13 @@ export interface GoiBoChay {
   /** Cỡ xấp xỉ để hiện cho người dùng trước khi họ bấm. */
   mb: number;
   tangToc: LoaiTangToc;
+  /**
+   * Gói PHẢI giải nén CHUNG thư mục với gói chính. Chỉ gói CUDA của Windows
+   * có: `cudart-*.zip` chứa `cudart64_12.dll`, `cublas64_12.dll`… mà
+   * `ggml-cuda.dll` cần. Thiếu nó thì `--list-devices` không thấy CUDA0 và
+   * bộ cài lùi về Vulkan — đúng, nhưng là tải 254 MB cho không.
+   */
+  kem?: { ten: string; mb: number };
 }
 
 /**
@@ -76,17 +83,48 @@ const BO_CHAY: Record<string, GoiBoChay[]> = {
   ],
 };
 
-/** Danh sách gói bộ chạy cho một nền tảng, ưu tiên trước. Rỗng = không hỗ trợ. */
-export function goiBoChay(nenTang: string, kienTruc: string): GoiBoChay[] {
-  return BO_CHAY[`${nenTang}-${kienTruc}`] ?? [];
+/**
+ * Gói CUDA cho Windows x64 — CHỈ mời khi máy có card NVIDIA VÀ người dùng cài
+ * bản lập trình 30B (03/10/2026).
+ *
+ * Quyết định "không CUDA" ở trên vẫn đúng cho bản 1,7B/4B: 645 MB (254 + 391
+ * cudart) cho một model 1-2,5 GB là đổi sai chiều. Nhưng bản 30B nặng 18,6 GB
+ * và là model MoE — phần lớn tầng nằm ở GPU, phần tràn ra chạy CPU; ở đó CUDA
+ * nhanh hơn Vulkan rõ rệt trên card NVIDIA. Thêm 3% dung lượng để mỗi bước
+ * agent nhanh hơn là đổi ĐÚNG chiều. Bản 12.4 chứ không 13.x: CUDA 13 đòi
+ * driver ≥ 580, máy chưa cập nhật driver sẽ chết lúc khởi động.
+ *
+ * Tên + cỡ đọc từ API release b10976 ngày 03/10/2026 (byte thật):
+ *   llama-b10976-bin-win-cuda-12.4-x64.zip   254.086.292
+ *   cudart-llama-bin-win-cuda-12.4-x64.zip   391.443.627  (KHÔNG mang số bản)
+ */
+const GOI_CUDA_WIN: GoiBoChay = {
+  ten: `llama-${BAN_LLAMA}-bin-win-cuda-12.4-x64.zip`,
+  mb: 254,
+  tangToc: 'cuda',
+  kem: { ten: 'cudart-llama-bin-win-cuda-12.4-x64.zip', mb: 391 },
+};
+
+/**
+ * Danh sách gói bộ chạy cho một nền tảng, ưu tiên trước. Rỗng = không hỗ trợ.
+ *
+ * `tuyChon.cuda` = máy có NVIDIA và đang cài bản lập trình ⇒ Windows x64 thử
+ * CUDA trước, hỏng thì vẫn còn Vulkan → CPU phía sau.
+ */
+export function goiBoChay(
+  nenTang: string, kienTruc: string, tuyChon: { cuda?: boolean } = {},
+): GoiBoChay[] {
+  const ds = BO_CHAY[`${nenTang}-${kienTruc}`] ?? [];
+  if (tuyChon.cuda && nenTang === 'win32' && kienTruc === 'x64') return [GOI_CUDA_WIN, ...ds];
+  return ds;
 }
 
-/** Địa chỉ tải một gói bộ chạy. */
-export function duongBoChay(goi: GoiBoChay): string {
+/** Địa chỉ tải một gói bộ chạy (hoặc gói kèm của nó). */
+export function duongBoChay(goi: GoiBoChay | { ten: string }): string {
   return `https://github.com/ggml-org/llama.cpp/releases/download/${BAN_LLAMA}/${goi.ten}`;
 }
 
-export type MaModel = 'nho' | 'vua' | 'anh';
+export type MaModel = 'nho' | 'vua' | 'anh' | 'code';
 
 export interface Model {
   ma: MaModel;
@@ -95,13 +133,34 @@ export interface Model {
   /** Một câu nói model này làm được gì, bằng lời của người dùng. */
   moTa: string;
   kho: string;
+  /**
+   * Commit đã GHIM của kho HuggingFace (03/10/2026) — cùng lý do ghim
+   * `BAN_LLAMA`: tải `main` là để nội dung đổi dưới chân bộ tải tiếp, và một
+   * file đúng cỡ sai nội dung đã lọt thật (xem `kiemSha256` ở taiVe.ts).
+   */
+  rev: string;
   file: string;
+  /** SHA-256 của `file` ở đúng `rev` (= `x-linked-etag` của HuggingFace). */
+  sha256: string;
   /** Cỡ file, GB. Hiện trước khi người dùng bấm tải. */
   gb: number;
   /** RAM đỉnh ĐO THẬT lúc chạy, GB — không phải cỡ file. Chênh nhau 1 GB. */
   ramGb: number;
   /** File chiếu ảnh. Chỉ model nhìn được ảnh mới có. */
-  mmproj?: { file: string; gb: number };
+  mmproj?: { file: string; gb: number; sha256: string };
+  /**
+   * Dùng được cho AI Code ngoại tuyến không (model có gọi tool qua chat
+   * template). Vắng = không. `nho` gọi được tool nhưng 1,7B đi quá 2-3 bước
+   * là lạc — KHÔNG mời cho AI Code (chỉ dùng trong phép kiểm CI).
+   */
+  code?: {
+    /** Cửa sổ ngữ cảnh khi chạy cho AI Code. Agent chở kết quả tool nên cần rộng hơn chat. */
+    cuaSo: number;
+    /** Trần bước mỗi câu hỏi. Model nhỏ hơn ⇒ trần thấp hơn: lạc thì lạc sớm, đừng đốt 5 phút. */
+    tranBuoc: number;
+    /** Nhãn hiện cạnh tên model trong AI Code. */
+    nhan: string;
+  };
 }
 
 /**
@@ -118,7 +177,9 @@ export const MODEL: readonly Model[] = Object.freeze([
     ten: 'Bản gọn',
     moTa: 'Trả lời câu hỏi ngắn, giải thích khái niệm. Chạy được trên máy yếu.',
     kho: 'unsloth/Qwen3-1.7B-GGUF',
+    rev: 'd7f544eead698dbd1f15126ef60b45a1e1933222',
     file: 'Qwen3-1.7B-Q4_K_M.gguf',
+    sha256: 'b139949c5bd74937ad8ed8c8cf3d9ffb1e99c866c823204dc42c0d91fa181897',
     gb: 1.1,
     ramGb: 1.8,
   },
@@ -127,19 +188,53 @@ export const MODEL: readonly Model[] = Object.freeze([
     ten: 'Bản đầy đủ',
     moTa: 'Hiểu bài học dài, viết được mã và giải toán. Cần máy khá.',
     kho: 'unsloth/Qwen3-4B-Instruct-2507-GGUF',
+    rev: 'a06e946bb6b655725eafa393f4a9745d460374c9',
     file: 'Qwen3-4B-Instruct-2507-Q4_K_M.gguf',
+    sha256: '3605803b982cb64aead44f6c1b2ae36e3acdb41d8e46c8a94c6533bc4c67e597',
     gb: 2.5,
     ramGb: 3.6,
+    code: { cuaSo: 16384, tranBuoc: 12, nhan: 'chỉ việc nhỏ' },
   },
   {
     ma: 'anh',
     ten: 'Bản xem ảnh',
     moTa: 'Đọc được ảnh chụp màn hình: chữ, số và biểu đồ trong ảnh.',
     kho: 'Qwen/Qwen3-VL-4B-Instruct-GGUF',
+    rev: '1cd86afb9a95c410a6038ab3b40d8b578c892266',
     file: 'Qwen3VL-4B-Instruct-Q4_K_M.gguf',
+    sha256: '66358cb18bb6b3b1b6675aa412c7a88ef01d228f481184d13668e5201c730a0a',
     gb: 2.5,
     ramGb: 4.6,
-    mmproj: { file: 'mmproj-Qwen3VL-4B-Instruct-F16.gguf', gb: 0.84 },
+    mmproj: {
+      file: 'mmproj-Qwen3VL-4B-Instruct-F16.gguf',
+      gb: 0.84,
+      sha256: '256f3a43bd4205ffef48d6b92715e1e70b5b0e9aef06522584967513a9985331',
+    },
+  },
+  /*
+   * BẢN LẬP TRÌNH — cho AI Code ngoại tuyến trên máy mạnh (03/10/2026).
+   *
+   * Qwen3-Coder-30B-A3B: MoE 30B tham số, mỗi token chỉ chạy ~3B ⇒ tốc độ gần
+   * bản 4B nhưng hiểu mã và gọi tool nhiều bước tốt hơn hẳn. Kho `unsloth`
+   * chứ không `Qwen/`: Qwen KHÔNG phát hành GGUF cho model này (`Qwen/Qwen3-
+   * Coder-30B-A3B-Instruct-GGUF` trả 401 — kho không tồn tại, kiểm 03/10/2026),
+   * và bản unsloth có chat template đã vá phần gọi tool.
+   *
+   * Cỡ ĐO bằng `curl -sI` file thật 03/10/2026: x-linked-size 18.556.689.568.
+   * `ramGb` = file 18,6 + KV ctx 32k (~3,1 GB f16) + đệm tính toán ~0,8 GB —
+   * xem `reference_do_that_ai_local_4b` mục 30B cho số đo thật trên M1 Max.
+   */
+  {
+    ma: 'code',
+    ten: 'Bản lập trình (30B)',
+    moTa: 'Cho AI Code khi mất mạng: đọc mã, sửa file, chạy lệnh nhiều bước. Cần máy mạnh.',
+    kho: 'unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF',
+    rev: 'b17cb02dd882d5b6ab62fc777ad2995f19668350',
+    file: 'Qwen3-Coder-30B-A3B-Instruct-Q4_K_M.gguf',
+    sha256: 'fadc3e5f8d42bf7e894a785b05082e47daee4df26680389817e2093056f088ad',
+    gb: 18.56,
+    ramGb: 22.5,
+    code: { cuaSo: 32768, tranBuoc: 30, nhan: 'chạy trên máy này' },
   },
 ]);
 
@@ -147,9 +242,14 @@ export function timModel(ma: string): Model | undefined {
   return MODEL.find((m) => m.ma === ma);
 }
 
-/** Địa chỉ tải một file của model trên HuggingFace. */
+/** Địa chỉ tải một file của model trên HuggingFace — ở đúng commit đã ghim. */
 export function duongModel(m: Model, file = m.file): string {
-  return `https://huggingface.co/${m.kho}/resolve/main/${file}`;
+  return `https://huggingface.co/${m.kho}/resolve/${m.rev}/${file}`;
+}
+
+/** SHA-256 mong đợi của một file thuộc model (file chính hoặc mmproj). */
+export function shaCua(m: Model, file = m.file): string {
+  return file === m.mmproj?.file ? m.mmproj.sha256 : m.sha256;
 }
 
 /** Tổng dung lượng phải tải cho một model, kể cả file chiếu ảnh. */
@@ -164,6 +264,23 @@ export interface CauHinhMay {
   diaGb: number;
   /** Máy có đường tăng tốc GPU dùng được không. */
   coGpu: boolean;
+}
+
+/** Thêm những gì cần để quyết bản cho AI Code. Mọi trường đều có thể "chưa biết". */
+export interface CauHinhMayCode extends CauHinhMay {
+  nenTang: string;
+  kienTruc: string;
+  /** VRAM lớn nhất của một GPU rời, GB. `-1`/vắng = chưa đo được. Apple Silicon: bỏ qua (bộ nhớ hợp nhất). */
+  vramGb?: number;
+}
+
+export interface LoiKhuyenCode {
+  /** Bản nên dùng cho AI Code ngoại tuyến. `null` = máy này không nên chạy AI Code ngoại tuyến. */
+  nen: MaModel | null;
+  choPhep: MaModel[];
+  /** Mức máy — để giao diện vẽ nhãn. */
+  muc: 'manh' | 'vua' | 'yeu';
+  vi: string;
 }
 
 export interface LoiKhuyen {
@@ -278,5 +395,70 @@ export function loiKhuyen(may: CauHinhMay): LoiKhuyen {
     choPhep: ['nho', 'vua', 'anh'],
     vi: 'Máy này chạy được cả ba bản. Nên bắt đầu với bản đầy đủ; '
       + 'muốn hỏi bằng ảnh chụp màn hình thì tải thêm bản xem ảnh.',
+  };
+}
+
+
+/**
+ * Máy này chạy AI Code ngoại tuyến bằng bản nào (03/10/2026).
+ *
+ * Ba mức, và ngưỡng do chủ app chốt chứ không suy diễn:
+ *   • MẠNH — Apple Silicon ≥ 32 GB, hoặc GPU rời ≥ 16 GB VRAM, hoặc RAM ≥ 32 GB
+ *     kèm GPU dùng được ⇒ bản lập trình 30B.
+ *   • VỪA — có GPU và đủ RAM cho bản 4B ⇒ bản đầy đủ, nhãn "chỉ việc nhỏ".
+ *   • YẾU — không GPU hoặc thiếu RAM ⇒ KHÔNG mời (ranh giới 3: nạp đề 33,8
+ *     t/s trên CPU, mà agent nạp lại cả hội thoại MỖI bước — một việc 6 bước
+ *     là 6-7 phút chờ). Chat vẫn dùng bản gọn như cũ.
+ */
+export function loiKhuyenCode(may: CauHinhMayCode): LoiKhuyenCode {
+  const code = timModel('code')!;
+  const vua = timModel('vua')!;
+  const conCho = ramConCho(may.ramGb);
+  const bietDia = may.diaGb >= 0;
+  const appleSilicon = may.nenTang === 'darwin' && may.kienTruc === 'arm64';
+  const vram = may.vramGb ?? -1;
+
+  if (!may.coGpu) {
+    return {
+      nen: null, choPhep: [], muc: 'yeu',
+      vi: 'Máy này chưa có GPU dùng được, nên KHÔNG mời AI Code ngoại tuyến: agent đọc lại cả '
+        + 'hội thoại ở MỖI bước, chạy bằng CPU thì một việc vài bước phải chờ nhiều phút (đo thật: '
+        + 'nạp đề 33,8 chữ/giây). Chat ngoại tuyến vẫn dùng bản gọn được.',
+    };
+  }
+
+  const manh = (appleSilicon && may.ramGb >= 32) || vram >= 16 || (may.ramGb >= 32 && may.coGpu);
+  /* Mạnh nhưng ĐĨA không đủ 18,6 GB (+2 GB đệm) ⇒ lùi xuống bản 4B, nói rõ vì sao. */
+  const duDiaCode = !bietDia || may.diaGb >= code.gb + 2;
+  /* RAM hệ thống cần: GPU rời ≥ 16 GB gánh phần lớn tầng nên RAM chỉ chở phần
+     tràn; còn Apple Silicon / máy RAM lớn thì cả model nằm trong RAM. */
+  const ramCanCode = !appleSilicon && vram >= 16 ? Math.max(4, code.ramGb - vram) : code.ramGb;
+  if (manh && conCho >= ramCanCode && duDiaCode) {
+    return {
+      nen: 'code', choPhep: ['code', 'vua'], muc: 'manh',
+      vi: appleSilicon
+        ? `Máy Apple Silicon ${may.ramGb} GB đủ sức chạy bản lập trình 30B cho AI Code (tải ${code.gb} GB).`
+        : vram >= 16
+          ? `GPU có ${vram} GB VRAM — đủ chạy bản lập trình 30B cho AI Code (tải ${code.gb} GB).`
+          : `Máy ${may.ramGb} GB RAM kèm GPU — chạy được bản lập trình 30B (phần tràn khỏi GPU chạy trên CPU, chậm hơn một chút).`,
+    };
+  }
+
+  const ramCode4b = vua.ramGb + 1.2; // ctx 16k ⇒ KV gấp đôi bản chat 8k (đo: 3,6 GB ở 8k)
+  if (conCho >= ramCode4b) {
+    const lyDo = manh && !duDiaCode
+      ? `Máy đủ mạnh cho bản 30B nhưng đĩa chỉ còn ${may.diaGb.toFixed(1)} GB (cần ${(code.gb + 2).toFixed(1)} GB). `
+      : '';
+    return {
+      nen: 'vua', choPhep: ['vua'], muc: 'vua',
+      vi: `${lyDo}AI Code ngoại tuyến dùng bản 4B — CHỈ hợp việc nhỏ: đọc một hai file, sửa vài dòng, `
+        + 'chạy một lệnh kiểm. Việc lớn nên chờ có mạng.',
+    };
+  }
+
+  return {
+    nen: null, choPhep: [], muc: 'yeu',
+    vi: `Máy có GPU nhưng chỉ còn ${conCho.toFixed(1)} GB RAM cho AI sau khi chừa phần app và hệ điều hành — `
+      + `AI Code ngoại tuyến cần ít nhất ${ramCode4b.toFixed(1)} GB. Chat ngoại tuyến vẫn dùng bản gọn được.`,
   };
 }

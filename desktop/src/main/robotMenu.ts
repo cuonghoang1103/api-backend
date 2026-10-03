@@ -40,34 +40,57 @@ function dich(cau: string, en: boolean): string {
   return en ? TU_DIEN[cau] ?? cau : cau;
 }
 
-export const NHAN_CO = ['100%', '82%', '66%', '52%'] as const;
+/** Các mức cỡ có sẵn trong menu (bước 10). Bước 5 chi tiết nằm ở bảng chỉnh. */
+export const MUC_CO = [100, 90, 80, 70, 60, 50, 40, 30, 20] as const;
 
 export interface TuyChonMenuRobot {
   /** `true` = con robot vẽ TRONG trang app; `false` = cửa sổ nổi riêng. */
   trongApp: boolean;
   /** Người dùng đang để giao diện tiếng Anh. */
   tiengAnh: boolean;
-  nacCo: number;
+  /** Cỡ hiện tại, %. */
+  phanTram: number;
   bamMep: boolean;
   moChat: () => void;
-  datCo: (nac: number) => void;
+  /** Nhận % (20–100). */
+  datCo: (phanTram: number) => void;
+  /** Mở bảng chỉnh vị trí & cỡ (thanh trượt 20–100% bước 5). */
+  chinh?: () => void;
+  /** Về góc dưới-phải màn hình chính. */
+  veMacDinh?: () => void;
   datBamMep: (v: boolean) => void;
   tat: () => void;
 }
 
 export function bangMenuRobot(o: TuyChonMenuRobot): MenuItemConstructorOptions[] {
   const d = (cau: string): string => dich(cau, o.tiengAnh);
+  /* Cỡ đang dùng có thể là bội số 5 lẻ (vd 85%) — khi ấy không mục nào chấm,
+     và mục đầu tiên của menu con nói rõ cỡ thật. */
+  const coMuc = (MUC_CO as readonly number[]).includes(o.phanTram);
   return [
     { label: d('Mở AI Chat'), click: () => o.moChat() },
     { type: 'separator' },
     {
       label: d('Cỡ'),
-      submenu: NHAN_CO.map((ten, i) => ({
-        label: ten,
-        type: 'radio' as const,
-        checked: o.nacCo === i,
-        click: () => o.datCo(i),
-      })),
+      submenu: [
+        ...(coMuc ? [] : [{ label: `${o.phanTram}%`, type: 'radio' as const, checked: true, enabled: false }]),
+        ...MUC_CO.map((pt) => ({
+          label: `${pt}%`,
+          type: 'radio' as const,
+          checked: o.phanTram === pt,
+          click: () => o.datCo(pt),
+        })),
+      ],
+    },
+    {
+      label: d('Chỉnh vị trí & cỡ…'),
+      click: () => o.chinh?.(),
+      visible: !o.trongApp && !!o.chinh,
+    },
+    {
+      label: d('Về góc mặc định'),
+      click: () => o.veMacDinh?.(),
+      visible: !o.trongApp && !!o.veMacDinh,
     },
     {
       label: d('Tự dính mép màn hình'),

@@ -1,0 +1,113 @@
+# ============================================================
+# AI NGOẠI TUYẾN — kiểm THẬT trên macOS / Windows / Ubuntu (bấm tay)
+# ============================================================
+#
+# Vì sao có workflow này: luồng tải + cài + chạy AI ngoại tuyến mới chỉ từng
+# chạy thật trên macOS. Windows (gói zip PHẲNG, `tar` của Windows, đường dẫn
+# `\`, Vulkan thiếu loader ⇒ phải lùi về CPU) và Linux chưa ai chạy — mà đó là
+# chỗ dễ hỏng nhất (xem memory `project_ai_ngoai_tuyen_app_desktop`).
+#
+# Nó chạy ĐÚNG mã của app — `src/main/aiCucBo/thuThat.test.ts` gọi `cai()` →
+# `taiFile` (tải tiếp + kiểm SHA-256) → `giaiNen` → `hoiThietBiThat`
+# (`--list-devices`, lùi gói) → `bat` (llama-server, chờ /health) → `hoiMay`
+# (một câu chat) → `chayVongCucBo` (một lượt gọi tool giả). Phần B (tuỳ chọn)
+# chạy một việc AI Code thật: `chayLuotCucBo` + `chayToolAgent` sửa một dòng
+# trong một dự án tạm — kiểm luôn đường dẫn Windows của bộ tool.
+#
+# ⛔ CHỈ `workflow_dispatch` — mỗi lượt tải ~1,1 GB model × 3 máy. Đừng thêm
+# `push:`. Bấm: Actions → "Desktop — AI ngoại tuyến (3 nền tảng)" → Run.
+name: Desktop — AI ngoại tuyến (3 nền tảng)
+
+on:
+  workflow_dispatch:
+    inputs:
+      model:
+        description: 'Bản model cho phần A (nho = 1,7B nhỏ nhất)'
+        required: false
+        default: 'nho'
+        type: choice
+        options: [nho, vua]
+      agent:
+        description: 'Chạy thêm phần B: một việc AI Code thật (đọc 1 file, sửa 1 dòng) bằng bản 1,7B trên CPU'
+        required: false
+        default: true
+        type: boolean
+
+permissions:
+  contents: read
+
+jobs:
+  thu-that:
+    name: ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, windows-latest, ubuntu-latest]
+    defaults:
+      run:
+        working-directory: desktop
+    env:
+      # Không cần Electron thật: phép thử nạp mã main qua vitest, `electron` bị
+      # giả lập trong test. Bỏ tải ~100 MB binary Electron mỗi máy.
+      ELECTRON_SKIP_BINARY_DOWNLOAD: '1'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: desktop/package-lock.json
+
+      - name: Cài phụ thuộc (bỏ script cài — không dựng Electron/native)
+        run: npm ci --ignore-scripts --no-audit --no-fund
+
+      - name: Kiểm kiểu phần main
+        run: npx tsc --noEmit -p tsconfig.node.json
+
+      - name: Kiểm đơn vị của AI ngoại tuyến (server giả, không tải gì)
+        run: npx vitest run src/main/aiCucBo src/shared/cheDoAi.test.ts
+
+      - name: Máy runner
+        shell: bash
+        run: |
+          echo "OS: $RUNNER_OS $RUNNER_ARCH"
+          node -e "const o=require('os');console.log('RAM', (o.totalmem()/1e9).toFixed(1),'GB · CPU', o.cpus().length, 'nhân ·', o.cpus()[0].model)"
+          df -h . || true
+
+      - name: A — tải llama.cpp ghim + model, bật, hỏi 1 câu, 1 lượt gọi tool
+        shell: bash
+        env:
+          CT_THU_THAT: '1'
+          CT_THU_MODEL: ${{ inputs.model }}
+          CT_THU_GOC: ${{ runner.temp }}/ai-ngoai-tuyen
+        run: |
+          start=$(date +%s)
+          npx vitest run src/main/aiCucBo/thuThat.test.ts -t "A\." --reporter=verbose
+          echo "⏱ Phần A tổng: $(( $(date +%s) - start ))s"
+
+      - name: B — một việc AI Code thật (đọc 1 file, sửa 1 dòng)
+        if: ${{ inputs.agent }}
+        # Bản 1,7B trên CPU của runner là lưới đỡ tệ nhất có thể — trượt ở đây
+        # có thể là CHẤT LƯỢNG model chứ không phải lỗi app. Đọc log: lỗi đường
+        # dẫn / "bị chặn" / không bật được mới là lỗi app.
+        continue-on-error: true
+        shell: bash
+        env:
+          CT_THU_THAT: '1'
+          CT_THU_AGENT: '1'
+          CT_THU_AGENT_MODEL: 'nho'
+          CT_THU_CHI_TIET: '1'
+          CT_THU_GOC: ${{ runner.temp }}/ai-ngoai-tuyen
+        run: |
+          start=$(date +%s)
+          npx vitest run src/main/aiCucBo/thuThat.test.ts -t "B\." --reporter=verbose
+          echo "⏱ Phần B tổng: $(( $(date +%s) - start ))s"
+
+      - name: Nhật ký llama-server + cây thư mục (khi hỏng)
+        if: failure()
+        shell: bash
+        run: |
+          find "${{ runner.temp }}/ai-ngoai-tuyen" -maxdepth 3 | head -80 || true

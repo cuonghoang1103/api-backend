@@ -32,7 +32,12 @@ export type MucHienThi =
    * hơn hiện một con số bịa ra từ mốc lưu của cả phiên.
    */
   | { kieu: 'nguoi'; text: string; anh?: string[]; luc?: number }
-  | { kieu: 'may'; text: string }
+  /**
+   * `cucBo` = tên model TRÊN MÁY đã viết câu này (03/10/2026). Ranh giới 2:
+   * mọi câu từ máy phải mang nhãn — giữ trên CHÍNH mục, nên có mạng lại rồi
+   * lượt sau đi máy chủ thì câu cũ vẫn nói rõ nó từ đâu ra.
+   */
+  | { kieu: 'may'; text: string; cucBo?: string }
   /**
    * Một lời gọi tool. `dangChay` = đã bắt đầu, CHƯA có kết quả.
    *
@@ -87,12 +92,14 @@ export type MucHienThi =
  * (nối nhầm thì mọi câu trả lời dính liền thành một khối), mà lại là chỗ mắt
  * thường khó soi ra vì nó chỉ hỏng khi có công cụ chen vào giữa.
  */
-export function gopChu(truoc: MucHienThi[], delta: string): MucHienThi[] {
+export function gopChu(truoc: MucHienThi[], delta: string, cucBo?: string | null): MucHienThi[] {
   const cuoi = truoc[truoc.length - 1];
-  if (cuoi?.kieu === 'may') {
-    return [...truoc.slice(0, -1), { kieu: 'may', text: cuoi.text + delta }];
+  /* Đổi nguồn (máy chủ ↔ máy) thì mở mục mới — một bong bóng không được nửa
+     mang nhãn máy, nửa không. */
+  if (cuoi?.kieu === 'may' && (cuoi.cucBo ?? null) === (cucBo ?? null)) {
+    return [...truoc.slice(0, -1), { ...cuoi, text: cuoi.text + delta }];
   }
-  return [...truoc, { kieu: 'may', text: delta }];
+  return [...truoc, { kieu: 'may', text: delta, ...(cucBo ? { cucBo } : {}) }];
 }
 
 export interface TrangThaiAgent {
@@ -115,6 +122,11 @@ export interface TrangThaiAgent {
   soFileDaSua: number;
   /** Ngữ cảnh đã dùng tới đâu. `null` = chưa chạy lượt nào nên chưa biết. */
   nguCanh: AgentNguCanh | null;
+  /**
+   * Lượt GẦN NHẤT (đang chạy hoặc vừa xong) chạy bằng AI trên máy — tên + nhãn.
+   * `null` = lượt gần nhất đi máy chủ (hoặc chưa có lượt nào).
+   */
+  cucBo: { ten: string; nhan: string } | null;
 }
 
 /**
@@ -134,6 +146,9 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
   const [soFileDaSua, datSoFileDaSua] = useState(0);
   const [keHoach, datKeHoach] = useState<AgentViec[]>([]);
   const [nguCanh, datNguCanh] = useState<AgentNguCanh | null>(null);
+  const [cucBo, datCucBo] = useState<{ ten: string; nhan: string } | null>(null);
+  /* Đọc trong listener (đóng một lần) — state sẽ là bản cũ, ref thì không. */
+  const cucBoRef = useRef<string | null>(null);
 
   // Hạn mức ban đầu lấy từ `getInfo`; sau đó mỗi khung `xong` tự cập nhật, nên
   // KHÔNG cần gọi lại `/usage` — gọi lại là thêm một round-trip cho một con số
@@ -169,7 +184,8 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
   }, [cuocId]);
 
   const themChu = useCallback((delta: string) => {
-    datMuc((truoc) => gopChu(truoc, delta));
+    const nguon = cucBoRef.current;
+    datMuc((truoc) => gopChu(truoc, delta, nguon));
   }, []);
 
   // Gắn listener MỘT LẦN cho cả vòng đời trang. Gắn/gỡ theo `dangChay` sẽ bỏ lỡ
@@ -185,6 +201,8 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
       switch (e.loai) {
         case 'batDau':
           datDangNghi(true);
+          cucBoRef.current = e.cucBo?.ten ?? null;
+          datCucBo(e.cucBo ?? null);
           /* Bước thứ mấy / tổng bao nhiêu. Cổng này KHÔNG chảy chữ thật (đo
              121 mẩu về cùng một mili giây), nên giữa hai lần gọi là một
              khoảng lặng dài không phân biệt được với treo. Con số này là thứ
@@ -465,16 +483,24 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
   /** Chặn gửi hai lần khi người dùng bấm nhanh — React chưa kịp vẽ lại nút. */
   const dangGui = useRef(false);
 
-  const gui = useCallback(async (text: string, anh?: string[]) => {
+  /**
+   * `tuyChon.chiDoc` — lượt CHỈ ĐỌC (`/plan`, `/review`): main bỏ quyền ghi khỏi
+   * lượt này. `tuyChon.hienThi` — chữ HIỆN trong bong bóng khi khác chữ gửi đi
+   * (lệnh `/review` gửi cả đoạn hướng dẫn dài, nhưng bong bóng chỉ cần
+   * `/review src/main`). Bản lưu phiên giữ chữ GỬI ĐI — đó là thứ model đọc.
+   */
+  const gui = useCallback(async (text: string, anh?: string[], tuyChon?: { chiDoc?: boolean; hienThi?: string }) => {
     const cau = window.cuongthai;
     if (!cau || dangGui.current) return;
     dangGui.current = true;
 
-    datMuc((truoc) => [...truoc, { kieu: 'nguoi', text, luc: Date.now(), ...(anh?.length ? { anh } : {}) }]);
+    datMuc((truoc) => [...truoc, {
+      kieu: 'nguoi', text: tuyChon?.hienThi ?? text, luc: Date.now(), ...(anh?.length ? { anh } : {}),
+    }]);
     datDangChay(true);
     datDangNghi(true);
     try {
-      await cau.agent.send(cuocId, text, anh);
+      await cau.agent.send(cuocId, text, anh, tuyChon?.chiDoc ? { chiDoc: true } : undefined);
     } catch (err) {
       datMuc((truoc) => [...truoc, { kieu: 'loi', text: (err as Error).message }]);
     } finally {
@@ -586,9 +612,16 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
     return kq;
   }, [cuocId]);
 
+  /** Một dòng thông báo trên bảng ghi (CHỈ hiển thị — không vào hội thoại gửi lên). */
+  const baoTin = useCallback((text: string, ma: string) => {
+    datMuc((truoc) => [...truoc, { kieu: 'loi', text, ma }]);
+  }, []);
+
   return {
-    trangThai: { muc, dangChay, dangNghi, buoc, hanMuc, tienPhien, soFileDaSua, keHoach, nguCanh } satisfies TrangThaiAgent,
+    trangThai: { muc, dangChay, dangNghi, buoc, hanMuc, tienPhien, soFileDaSua, keHoach, nguCanh, cucBo } satisfies TrangThaiAgent,
     gui,
+    baoTin,
+    datHanMuc,
     lamTiep,
     dung,
     dangDung,

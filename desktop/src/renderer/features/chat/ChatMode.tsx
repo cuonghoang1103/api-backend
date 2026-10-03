@@ -19,7 +19,7 @@
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
-  CircleStop, FolderOpen, FolderPlus, History, MessageSquare, Plus, Send, Trash2, X, Search, BookOpen, WifiOff } from 'lucide-react';
+  CircleStop, FolderOpen, FolderPlus, History, MessageSquare, Plus, Send, Trash2, X, Search, BookOpen } from 'lucide-react';
 import { useAppState } from '../../app-state';
 import { useMoRieng } from '../../components/moRieng';
 import { docThanhTieng, ngungNoi, phatTieng } from '../odin/giongNoi';
@@ -42,6 +42,7 @@ import { NutTinNhan } from './NutTinNhan';
    là phải nhớ sửa hai chỗ — đúng kiểu trôi dạt đã làm vỡ seed hồi 08/08. */
 import { ThanhBenChat, type PhienChat, type ThuMuc } from './ThanhBenChat';
 import { useDich } from '../../i18n';
+import { DaiNgoaiTuyen, NhanMay, useGiaoDienNgoaiTuyen } from './NgoaiTuyen';
 
 /**
  * Bộ lọc thư mục đang chọn.
@@ -73,6 +74,8 @@ interface Luot {
   /** Nguồn web đã dùng cho lượt trả lời này. Gắn vào LƯỢT chứ không vào màn
       hình — cuộn lên xem câu cũ vẫn phải thấy nó đã dựa vào đâu. */
   nguon?: Nguon[];
+  /** Tên model TRÊN MÁY đã viết câu này (lưới đỡ lúc mất mạng) — ranh giới 2. */
+  cucBo?: string;
 }
 
 /**
@@ -455,6 +458,17 @@ export function ChatMode({ pro }: { pro: boolean }) {
     return cucBoTt?.kho.find((m) => m.ma === ma)?.ten ?? 'AI trên máy';
   })();
 
+  /* ── Giao diện ngoại tuyến (03/10/2026) — cùng luật với AI Code, xem
+     `shared/cheDoAi.ts`. `online` giờ là kết quả GÕ CỬA máy chủ thật (main),
+     không còn là `navigator.onLine`. */
+  const luotCuoi = luot[luot.length - 1];
+  const ngoaiTuyen = useGiaoDienNgoaiTuyen({
+    dangChay,
+    luotLaCucBo: luotCuoi?.vai === 'assistant' && !!luotCuoi.cucBo,
+    coModel: (cucBoTt?.daCo.length ?? 0) > 0,
+    choPhep: settings.aiCucBoBat !== false && settings.aiCucBoTuDong !== false,
+  });
+
   useEffect(() => () => huyRef.current?.abort(), []);
 
   /**
@@ -612,6 +626,10 @@ export function ChatMode({ pro }: { pro: boolean }) {
     huyRef.current = dieuKhien;
 
     try {
+      /* Bộ theo dõi mạng (main) đã KẾT LUẬN mất mạng ⇒ đi thẳng xuống AI trên
+         máy, đừng bắt người dùng chờ lời gọi máy chủ quá hạn rồi mới rơi xuống.
+         `TypeError` để rơi đúng vào nhánh lưới đỡ ở `catch` bên dưới. */
+      if (!online) throw new TypeError('ngoại tuyến');
       /**
        * Tạo phiên TRƯỚC nếu chưa có.
        *
@@ -771,12 +789,15 @@ export function ChatMode({ pro }: { pro: boolean }) {
           kq = undefined;
         }
         if (kq?.chu) {
-          // Gắn nhãn để KHÔNG ai nhầm câu từ máy (yếu hơn) với câu trên mạng.
+          /* Gắn nhãn để KHÔNG ai nhầm câu từ máy (yếu hơn) với câu trên mạng.
+             Hai lớp: nhãn chữ NẰM TRONG nội dung (sống qua sao chép/lưu), và
+             `cucBo` để bong bóng tự vẽ huy hiệu + đổi màu. */
           const daGanNhan = `${dich('_Trả lời bởi AI trên máy bạn (ngoại tuyến) — có thể kém chính xác hơn._')}
 
 ${kq.chu}`;
           traLoiDayDu = kq.chu;
-          datLuot((cu) => [...cu, { vai: 'assistant', text: daGanNhan }]);
+          const tenMay = modelCucBoSanSang ?? dich('AI trên máy');
+          datLuot((cu) => [...cu, { vai: 'assistant', text: daGanNhan, cucBo: tenMay }]);
           onCauDau?.(kq.chu);
         } else {
           datLoi(kq?.loi ?? dich('Mất mạng, và chưa có AI trên máy để dùng thay. Vào Cài đặt → AI ngoại tuyến để tải model dùng khi không có mạng.'));
@@ -831,6 +852,7 @@ ${kq.chu}`;
       />
     <div
       className="ct-agent"
+      data-ngoai-tuyen={ngoaiTuyen.nen === 'ngoaiTuyen' ? '1' : undefined}
       data-keo={dk.dangKeo}
       /* `onDragEnter` PHẢI có bên cạnh `onDragOver`: thiếu nó thì lớp phủ chỉ
          hiện khi con trỏ đã rê được một quãng, và cú kéo nhanh-thả-ngay trông
@@ -976,21 +998,12 @@ ${kq.chu}`;
       )}
       </div>
 
-      {!online && (
-        <div className="ct-offline-bar" data-co={modelCucBoSanSang ? 'co' : 'khong'} role="status">
-          {modelCucBoSanSang ? (
-            <>
-              <WifiOff size={15} aria-hidden />
-              <span>{dichP('Đang ngoại tuyến — trả lời bằng AI trên máy ({ten}). Có mạng lại sẽ tự dùng model đầy đủ.', { ten: modelCucBoSanSang })}</span>
-            </>
-          ) : (
-            <>
-              <WifiOff size={15} aria-hidden />
-              <span>{dich('Đang ngoại tuyến, và chưa có AI trên máy. Vào Cài đặt → AI ngoại tuyến để tải model dùng khi không có mạng.')}</span>
-            </>
-          )}
-        </div>
-      )}
+      <DaiNgoaiTuyen
+        tt={ngoaiTuyen}
+        tenModel={luotCuoi?.cucBo ?? modelCucBoSanSang ?? ''}
+        lyDo={dich('Vào Cài đặt → AI ngoại tuyến để tải model dùng khi không có mạng.')}
+        dangChay={dangChay}
+      />
       <div className="ct-agent-scroll" ref={cuonRef}>
         {luot.length === 0 && (
           <div className="ct-agent-trong">
@@ -1019,7 +1032,8 @@ ${kq.chu}`;
              (`.ct-md`), còn bong bóng, khoảng cách và màu nền là của lớp này.
              Bỏ nó đi thì markdown vẫn đúng nhưng câu trả lời mất hẳn khung, và
              nhìn như chữ rơi tự do giữa trang. Giống hệt cách `AgentMode` bọc. */
-          <div key={i} className="ct-agent-may">
+          <div key={i} className="ct-agent-may" data-cuc-bo={l.cucBo ? '1' : undefined}>
+            {l.cucBo && <NhanMay ten={l.cucBo} />}
             <ChuAgent text={l.text} />
             {l.nguon?.length ? <TheNguon nguon={l.nguon} /> : null}
           </div>
@@ -1047,12 +1061,10 @@ ${kq.chu}`;
         />
       )}
 
+      {/* Ô soạn = MỘT khung, hàng công cụ ở đáy — cùng cấu trúc với AI Code
+          (03/10/2026): cột hẹp không còn bóp ô chữ giữa sáu cái nút. */}
       <div className="ct-agent-soan">
-        <ODinhKem oFileRef={dk.oFileRef} nhanTuO={dk.nhanTuO} />
-        {/* Không Pro ⇒ khoá nút và NÓI RÕ vì sao. Cho bấm rồi để máy chủ lặng
-            lẽ bỏ file là đúng cái bẫy vừa đo được. */}
-        <NutDinhKem onBam={dk.moChonTep} khoa={dangChay || !pro} khongPro={!pro} />
-        {pro && <NutChupManHinh onBam={() => datDangChupMan(true)} khoa={dangChay} />}
+       <div className="ct-agent-soan-khung" data-chay={dangChay}>
         <textarea
           className="ct-agent-o"
           rows={2}
@@ -1066,6 +1078,13 @@ ${kq.chu}`;
           }}
           disabled={dangChay}
         />
+        <div className="ct-agent-soan-hang">
+        <ODinhKem oFileRef={dk.oFileRef} nhanTuO={dk.nhanTuO} />
+        {/* Không Pro ⇒ khoá nút và NÓI RÕ vì sao. Cho bấm rồi để máy chủ lặng
+            lẽ bỏ file là đúng cái bẫy vừa đo được. */}
+        <NutDinhKem onBam={dk.moChonTep} khoa={dangChay || !pro} khongPro={!pro} />
+        {pro && <NutChupManHinh onBam={() => datDangChupMan(true)} khoa={dangChay} />}
+        <span className="ct-agent-soan-dem" aria-hidden />
         {/* Gọi thoại: giữ để nói, thả ra là gửi thẳng vào khung chat này —
             nên câu nói nằm lại trong lịch sử, xem lại được như tin nhắn gõ tay. */}
         {/* Nút NÓI CHUYỆN — mở màn riêng, không phải giữ-để-nói.
@@ -1096,6 +1115,8 @@ ${kq.chu}`;
             {dich('Gửi')}
           </button>
         )}
+        </div>
+       </div>
       </div>
 
       <div className="ct-chat-chan">

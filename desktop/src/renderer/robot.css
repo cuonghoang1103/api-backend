@@ -1,107 +1,185 @@
+/* Hallmark · component: floating-assistant (robot + chat panel) · genre: playful · theme: custom (vibe: "robot bạn học, mềm, tò mò, gọn")
+ * paper oklch(98.5% 0.008 280)/oklch(21% 0.025 280) · accent oklch(56% 0.16 282) indigo · mint oklch(80% 0.12 172) (mắt robot)
+ * states: default · hover · focus · active · disabled · loading · error · success
+ * contrast: pass (chữ chính ≥ 7:1, chữ phụ ≥ 4.5:1 ở cả hai chủ đề)
+ */
+
 /**
- * Cửa sổ robot nổi.
+ * Cửa sổ robot nổi — CuongMini.
  *
  * ⚠️ Nền PHẢI trong suốt tới tận cùng. Bất kỳ màu nào ở `html`, `body`, hay
- * `.rb` cũng thành một khối chữ nhật lơ lửng trên màn hình người dùng — cửa sổ
- * này không có khung để giấu nó.
+ * `.rb` cũng thành một khối chữ nhật lơ lửng trên màn hình người dùng.
+ *
+ * ⚠️ Cửa sổ này KHÔNG nạp `styles.css`, nên KHÔNG có `--ct-*`. Mọi màu là token
+ * `--rb-*` khai ngay dưới đây, có bản sáng/tối theo `html[data-theme]` (do
+ * `robot.tsx` đặt theo thiết đặt `theme` của app, 'system' thì theo hệ điều
+ * hành). Đừng viết màu thẳng vào luật — thêm token rồi dùng.
+ *
+ * ─── BỐ CỤC (bản 03/10/2026) ───
+ * Robot KHÔNG còn nằm trong flex dính góc dưới-phải. `.rb-hop` đặt tuyệt đối
+ * theo số main tính (`useBoCuc`), nội dung (`.rb-nd`) chiếm phần còn lại phía
+ * trên hoặc dưới. Nhờ vậy cửa sổ phình/co quanh robot mà robot đứng yên.
+ * Và KHÔNG còn `-webkit-app-region: drag` ở đâu cả — vùng kéo của hệ điều hành
+ * dời cửa sổ mà mã không biết (không kẹp, không lưu), là một nguyên nhân của
+ * "tự chạy chỗ khác". Kéo đi qua main (`keoBatDau/keoToi/keoXong`).
  */
-* { box-sizing: border-box; }
+:root {
+  --rb-font: ui-rounded, -apple-system, BlinkMacSystemFont, 'Segoe UI Variable Text', 'Segoe UI', 'Noto Sans', Roboto, sans-serif;
+  --rb-font-ma: ui-monospace, SFMono-Regular, Menlo, Consolas, 'DejaVu Sans Mono', monospace;
 
-body {
+  /* Tối (mặc định) */
+  --rb-giay: oklch(21% 0.025 280);
+  --rb-giay-2: oklch(26% 0.03 280);
+  --rb-giay-3: oklch(31% 0.035 280);
+  --rb-muc: oklch(96% 0.008 280);
+  --rb-muc-2: oklch(80% 0.02 280);
+  --rb-muc-nhat: oklch(68% 0.025 280);
+  --rb-vien: oklch(100% 0 0 / 0.1);
+  --rb-vien-dam: oklch(100% 0 0 / 0.18);
+  --rb-nhan: oklch(70% 0.14 282);
+  --rb-nhan-nen: oklch(70% 0.14 282 / 0.16);
+  --rb-tren-nhan: oklch(99% 0 0);
+  --rb-toi: oklch(56% 0.16 282);
+  --rb-bac-ha: oklch(80% 0.12 172);
+  --rb-bac-ha-nen: oklch(80% 0.12 172 / 0.14);
+  --rb-xanh: oklch(72% 0.13 245);
+  --rb-vang: oklch(82% 0.13 85);
+  --rb-vang-nen: oklch(82% 0.13 85 / 0.12);
+  --rb-luc: oklch(76% 0.14 160);
+  --rb-do: oklch(66% 0.19 25);
+  --rb-do-nen: oklch(66% 0.19 25 / 0.14);
+  --rb-bong-do: oklch(0% 0 0 / 0.5);
+  --rb-ma-nen: oklch(15% 0.02 280);
+
+  /* Màu tô code (highlight.js) */
+  --rb-hl-tu-khoa: oklch(76% 0.13 310);
+  --rb-hl-chuoi: oklch(82% 0.13 135);
+  --rb-hl-so: oklch(78% 0.13 50);
+  --rb-hl-kieu: oklch(85% 0.12 85);
+  --rb-hl-bien: oklch(76% 0.11 245);
+  --rb-hl-chu-thich: oklch(62% 0.02 280);
+
+  --rb-de: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --rb-nay: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --rb-bo: 14px;
+}
+
+:root[data-theme='light'] {
+  --rb-giay: oklch(98.8% 0.006 280);
+  --rb-giay-2: oklch(95.5% 0.014 280);
+  --rb-giay-3: oklch(91.5% 0.02 280);
+  --rb-muc: oklch(24% 0.03 280);
+  --rb-muc-2: oklch(38% 0.03 280);
+  --rb-muc-nhat: oklch(50% 0.03 280);
+  --rb-vien: oklch(30% 0.05 280 / 0.12);
+  --rb-vien-dam: oklch(30% 0.05 280 / 0.22);
+  --rb-nhan: oklch(52% 0.17 282);
+  --rb-nhan-nen: oklch(52% 0.17 282 / 0.1);
+  --rb-toi: oklch(54% 0.17 282);
+  --rb-bac-ha: oklch(52% 0.11 172);
+  --rb-bac-ha-nen: oklch(70% 0.12 172 / 0.16);
+  --rb-xanh: oklch(52% 0.15 245);
+  --rb-vang: oklch(58% 0.13 70);
+  --rb-vang-nen: oklch(82% 0.13 85 / 0.22);
+  --rb-luc: oklch(52% 0.13 160);
+  --rb-do: oklch(55% 0.2 25);
+  --rb-do-nen: oklch(66% 0.19 25 / 0.12);
+  --rb-bong-do: oklch(30% 0.05 280 / 0.22);
+  --rb-ma-nen: oklch(96% 0.01 280);
+
+  --rb-hl-tu-khoa: oklch(46% 0.2 320);
+  --rb-hl-chuoi: oklch(48% 0.14 145);
+  --rb-hl-so: oklch(55% 0.16 45);
+  --rb-hl-kieu: oklch(50% 0.12 75);
+  --rb-hl-bien: oklch(48% 0.15 250);
+  --rb-hl-chu-thich: oklch(55% 0.02 280);
+}
+
+* { box-sizing: border-box; }
+/* `[hidden]` của trình duyệt thua mọi `display:` viết tay — khung chat ẩn
+   (`hidden`) mà vẫn `display:flex` là một khung vô hình nuốt chuột. */
+[hidden] { display: none !important; }
+
+html, body {
   margin: 0;
   background: transparent;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  color: #e8e8f0;
+  overflow: hidden;
+}
+
+body {
+  font-family: var(--rb-font);
+  color: var(--rb-muc);
   user-select: none;
+  -webkit-font-smoothing: antialiased;
 }
 
 .rb {
+  position: relative;
   width: 100vw;
   height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  align-items: flex-end;
-  padding: 8px;
-  gap: 8px;
+  overflow: hidden;
 }
 
-/**
- * KÉO ĐỂ DỜI, nhưng phần bấm được thì không kéo.
- *
- * `-webkit-app-region: drag` nuốt mọi sự kiện chuột của phần tử. Đặt nó lên cả
- * con robot thì click/dblclick không bao giờ tới nơi. Nên: vùng kéo là NỀN
- * quanh robot, còn bản thân robot là `no-drag`.
- */
-.rb { -webkit-app-region: drag; }
-/* ⚠️ `.rb` là vùng KÉO cửa sổ, và vùng kéo NUỐT sạch sự kiện chuột. Bong
-   bóng vừa dọn ra khỏi `.rb-than` nên phải tự khai no-drag, không thì nút
-   "bấm để đọc đầy đủ" chết câm — build vẫn xanh. */
-.rb-than, .rb-chat, .rb-bong { -webkit-app-region: no-drag; }
+button { font-family: inherit; }
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible { outline: 2px solid var(--rb-nhan); outline-offset: 2px; }
 
-/* ── Mở khoá kéo (ấn ba lần vào robot) ──
-   Trả thân robot về vùng KÉO để túm được chính nó. Không thể vừa kéo vừa
-   nhận bấm — `-webkit-app-region: drag` nuốt mọi sự kiện chuột của phần tử —
-   nên đây là một công tắc, không phải trạng thái thường trực.
+/* ══ HỘP ROBOT ═══════════════════════════════════════════════════════════
+   `.rb-hop` = đúng cỡ hộp ở % hiện tại, đặt theo góc main tính.
+   `.rb-hop-trong` luôn bố cục ở 150×160 rồi `zoom` theo % — Chromium dựng
+   lại SVG và chữ ở cỡ mới (nét sắc ở HiDPI, khác `transform: scale` vốn phóng
+   ảnh đã vẽ), và mọi thứ trong hộp (robot, mic, chấm báo) co ĐÚNG TỈ LỆ. */
+.rb-hop { position: absolute; }
 
-   Vòng nét đứt nhấp nháy để người dùng biết đã ăn: cửa sổ này không có
-   thanh tiêu đề, nên không còn dấu hiệu nào khác. */
-/* Mở khoá kéo: KHÔNG bật `-webkit-app-region: drag`. Nó nuốt sạch sự kiện
-   chuột nên ba cú bấm để khoá lại không bao giờ tới nơi — người dùng mở khoá
-   xong là kẹt. Cửa sổ dời bằng `setBounds` ở main (xem `robotNoi.ts`). */
-/* `touch-action: none` — bàn di chính xác của Windows gửi cử chỉ cuộn/vuốt
-   dưới dạng sự kiện con trỏ; thiếu dòng này thì trình duyệt nuốt mất chuỗi
-   `pointermove` để cuộn trang, và cú kéo đứt giữa chừng. */
-.rb[data-keo='true'] .rb-than { -webkit-app-region: no-drag; cursor: grab; touch-action: none; }
-.rb[data-dang-keo='true'] .rb-than { cursor: grabbing; }
+.rb-hop-trong {
+  width: 150px;
+  height: 160px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding-bottom: 6px;
+}
+
+.rb-than {
+  position: relative;
+  flex: 0 0 auto;
+  cursor: pointer;
+  filter: drop-shadow(0 8px 18px var(--rb-bong-do));
+  transition: transform 0.18s var(--rb-de);
+  touch-action: none;
+}
+.rb-than:hover { transform: translateY(-3px) scale(1.04); }
+.rb-than:active { transform: translateY(0) scale(0.97); }
+
+/* Hộp quá nhỏ (dưới 45%) ⇒ ẩn mic, robot ngồi giữa hộp. */
+.rb-hop[data-nho='true'] .rb-noi { display: none; }
+.rb-hop[data-nho='true'] .rb-hop-trong { justify-content: center; padding-bottom: 0; }
+
+/* ── Chế độ chỉnh: vòng nét đứt + con trỏ bàn tay ── */
+.rb[data-keo='true'] .rb-than { cursor: grab; }
+.rb[data-dang-keo='true'] .rb-than { cursor: grabbing; transform: scale(1.06) rotate(-3deg); transition: none; }
 .rb[data-keo='true'] .rb-than::before {
   content: '';
-  position: absolute; inset: -6px;
-  border: 2px dashed var(--ct-accent, #7c6cf0);
+  position: absolute;
+  inset: -6px;
+  border: 2px dashed var(--rb-nhan);
   border-radius: 999px;
   animation: rb-mokhoa 1.6s ease-in-out infinite;
   pointer-events: none;
 }
-/* Hàng nút cỡ, chỉ hiện lúc mở khoá. */
-.rb-co {
-  position: absolute; top: 2px; left: 50%;
-  transform: translateX(-50%);
-  z-index: 5;
-  display: flex; align-items: center; gap: 2px;
-  padding: 2px 4px;
-  border-radius: 999px;
-  background: rgba(20, 20, 32, 0.94);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  -webkit-app-region: no-drag;
-}
-.rb-co button {
-  width: 18px; height: 18px;
-  border: none; border-radius: 50%;
-  background: none; color: #fff;
-  font-size: 13px; line-height: 1; cursor: pointer;
-}
-.rb-co button:hover:not(:disabled) { background: rgba(255, 255, 255, 0.18); }
-.rb-co button:disabled { opacity: 0.3; cursor: default; }
-.rb-co span { font-size: 9.5px; color: rgba(255, 255, 255, 0.7); min-width: 26px; text-align: center; }
+/* Wayland thuần: app không tự đặt được vị trí ⇒ để compositor kéo (vùng kéo
+   gốc) — CHỈ ở đây và chỉ lúc đang chỉnh. Thoát chế độ bằng nút "Xong". */
+.rb[data-wl='true'][data-keo='true'] .rb-than { -webkit-app-region: drag; }
 
 @keyframes rb-mokhoa {
   0%, 100% { opacity: 0.45; }
   50%      { opacity: 1; }
 }
 
-.rb-than {
-  position: relative;
-  /* Bong bóng co, robot thì KHÔNG — nếu không, câu dài sẽ bóp méo con robot. */
-  flex: 0 0 auto;
-  cursor: pointer;
-  filter: drop-shadow(0 8px 22px rgba(0, 0, 0, 0.45));
-  transition: transform 0.18s ease;
-}
-
-.rb-than:hover { transform: translateY(-3px) scale(1.04); }
-.rb-than:active { transform: translateY(0) scale(0.97); }
-
-/* Chấm báo có tin — nhỏ, ở vai robot, đủ để liếc thấy. */
+/* Chấm báo có tin — ở vai robot, màu theo loại tin. */
 .rb-cham {
   position: absolute;
   top: 10px;
@@ -109,96 +187,256 @@ body {
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background: #ef4444;
-  border: 2px solid #12121a;
+  background: var(--rb-do);
+  border: 2px solid var(--rb-giay);
   animation: rb-dap 1.6s ease-in-out infinite;
 }
+.rb-cham[data-loai='tra-loi'] { background: var(--rb-luc); }
+.rb-cham[data-loai='nhac'] { background: var(--rb-bac-ha); }
+.rb-cham[data-loai='mang'] { background: var(--rb-vang); }
 
 @keyframes rb-dap {
   0%, 100% { transform: scale(1); }
   50% { transform: scale(1.22); }
 }
 
-/* Bong bóng thông báo. Neo BÊN TRÁI robot vì robot đứng ở mép phải màn hình —
-   thả sang phải là nó tràn ra ngoài cửa sổ và bị cắt. */
-/*
- * Bong bóng chữ nằm TRÊN robot, trong dòng chảy thường của `.rb`.
- *
- * ⚠️ TRƯỚC 20/08/2026 NÓ `position: absolute; right: calc(100% + 6px)`, và
- * đó là một cái bẫy hình học. Khối chứa là `.rb-than`, mà `.rb-than` co vừa
- * đúng con robot (110px). Với `right` = 110 + 6 và `left: auto`, bề rộng khả
- * dụng cho hộp co-vừa-nội-dung là 110 − 116 = **−6px** ⇒ kẹp về 0 ⇒ trình
- * duyệt lùi về bề rộng NHỎ NHẤT có thể: đúng bằng từ dài nhất trong câu.
- * `max-width: 230px` chưa bao giờ có tác dụng.
- *
- * Đo thật ở cả ba cỡ cửa sổ: bong bóng rộng **71px** — 150×190, 300×250 và
- * 380×520 đều ra 71px. Nên lần chữa trước (thêm cỡ cửa sổ `noi`) không thể
- * ăn thua: bề rộng bong bóng chưa bao giờ phụ thuộc cửa sổ. Người dùng gửi
- * ảnh "♪ SƠN TÙNG M-TP | SKY" gãy thành bốn chữ một dòng.
- *
- * Nằm trong dòng chảy thì bề rộng do CỬA SỔ quyết định, và `min-height: 0`
- * cho phép flex CO nó lại khi cửa sổ hụt — thay vì để nó tràn ra ngoài biên
- * và bị cắt câm. Không còn con số nào phải khớp tay giữa CSS và `robotNoi.ts`.
- */
+/* ══ BIỂU CẢM THÊM (ngoài đôi mắt trong `OdinRobot`) ════════════════════ */
+
+/* Ngủ gật: ba chữ z bay lên. */
+.rb-zzz {
+  position: absolute;
+  top: 2px;
+  right: 6px;
+  z-index: 2;
+  font: 700 13px/1 var(--rb-font);
+  color: var(--rb-muc-nhat);
+  pointer-events: none;
+}
+.rb-zzz, .rb-zzz i, .rb-zzz b { font-style: normal; display: inline-block; animation: rb-z 2.4s ease-in-out infinite; }
+.rb-zzz i { font-size: 10px; animation-delay: 0.6s; }
+.rb-zzz b { font-size: 8px; animation-delay: 1.2s; }
+@keyframes rb-z {
+  0%   { opacity: 0; transform: translate(0, 4px); }
+  40%  { opacity: 1; }
+  100% { opacity: 0; transform: translate(6px, -10px); }
+}
+
+/* Bối rối: dấu hỏi lắc lư + đầu nghiêng. */
+.rb-hoi {
+  position: absolute;
+  top: -2px;
+  right: 10px;
+  z-index: 2;
+  font: 800 20px/1 var(--rb-font);
+  color: var(--rb-vang);
+  animation: rb-lac 1.2s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes rb-lac {
+  0%, 100% { transform: rotate(-10deg); }
+  50% { transform: rotate(12deg) translateY(-2px); }
+}
+.odin-canh[data-mood='boiRoi'] .odin-head {
+  transform-box: fill-box;
+  transform-origin: 50% 90%;
+  animation: rb-nghieng 1.8s var(--rb-de) infinite;
+}
+@keyframes rb-nghieng {
+  0%, 100% { transform: rotate(-6deg); }
+  50% { transform: rotate(-2deg); }
+}
+
+/* Mất mạng: huy hiệu wifi gạch chéo + robot nhạt màu đi. */
+.rb-mat-mang {
+  position: absolute;
+  top: 2px;
+  right: 6px;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  color: var(--rb-vang);
+  background: var(--rb-giay);
+  border: 1px solid var(--rb-vien-dam);
+  pointer-events: none;
+}
+.odin-canh[data-mood='matMang'] .odin-svg { filter: saturate(0.35); }
+
+/* Đang đọc: miệng mấp máy. */
+.odin-canh .odin-mieng {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  animation: rb-mieng 0.32s ease-in-out infinite alternate;
+}
+@keyframes rb-mieng {
+  from { transform: scaleY(0.35); }
+  to   { transform: scaleY(1.15); }
+}
+
+/* Vui: ba đốm lấp lánh nở quanh đầu. */
+.rb-lap-lanh { position: absolute; inset: 0; pointer-events: none; z-index: 2; }
+.rb-lap-lanh i {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  background: var(--rb-bac-ha);
+  clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%);
+  animation: rb-lap 1.1s var(--rb-de) both;
+}
+.rb-lap-lanh i:nth-child(1) { top: 6px; left: 8px; }
+.rb-lap-lanh i:nth-child(2) { top: 0; right: 14px; width: 9px; height: 9px; animation-delay: 0.12s; }
+.rb-lap-lanh i:nth-child(3) { top: 30px; right: 2px; width: 5px; height: 5px; animation-delay: 0.24s; }
+@keyframes rb-lap {
+  0%   { opacity: 0; transform: scale(0.2) rotate(0deg); }
+  45%  { opacity: 1; transform: scale(1.1) rotate(45deg); }
+  100% { opacity: 0; transform: scale(0.6) rotate(90deg); }
+}
+
+/* Bong bóng SUY NGHĨ trên đầu khi robot đang đọc. */
+.rb-nghi-icon {
+  position: absolute;
+  top: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding: 5px 9px;
+  border-radius: 12px 12px 12px 3px;
+  background: var(--rb-toi);
+  box-shadow: 0 4px 14px var(--rb-bong-do);
+  z-index: 2;
+  animation: rb-nghi-hien 0.25s ease;
+}
+.rb-nghi-icon i {
+  display: block;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--rb-tren-nhan);
+  animation: rb-nghi-cham 1.25s ease-in-out infinite;
+}
+.rb-nghi-icon i:nth-child(2) { animation-delay: 0.18s; }
+.rb-nghi-icon i:nth-child(3) { animation-delay: 0.36s; }
+@keyframes rb-nghi-cham {
+  0%, 100% { opacity: 0.35; transform: translateY(0); }
+  50%      { opacity: 1;    transform: translateY(-2px); }
+}
+@keyframes rb-nghi-hien {
+  from { opacity: 0; transform: translateX(-50%) translateY(4px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+/* ══ NÚT NÓI — dùng lại `.odin-mic` của dock trong app (MỘT nhân vật) ══ */
+.rb-noi { display: flex; justify-content: center; margin-top: -2px; }
+.rb-noi .odin-mic[data-tt='nghe'] { background: var(--rb-do); color: var(--rb-tren-nhan); }
+.rb-noi .odin-mic:disabled { cursor: default; opacity: 0.75; }
+.rb-noi .odin-mic.rb-dung { background: var(--odin-body); color: var(--rb-tren-nhan); }
+.rb-noi .odin-mic.rb-dung:hover { background: var(--odin-body-light); }
+
+.rb-xoay {
+  width: 12px;
+  height: 12px;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: rb-quay 0.7s linear infinite;
+}
+@keyframes rb-quay { to { transform: rotate(360deg); } }
+
+/* ══ VÙNG NỘI DUNG (bong bóng / bảng chỉnh / khung chat) ═════════════════
+   `top`/`bottom` do `robot.tsx` đặt: phần cửa sổ phía TRÊN hoặc DƯỚI robot.
+   Nội dung nghiêng về phía robot đang đứng (`data-ngang`). */
+.rb-nd {
+  position: absolute;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 0 8px;
+  min-height: 0;
+}
+.rb-nd[data-phia='tren'] { justify-content: flex-end; }
+.rb-nd[data-phia='duoi'] { justify-content: flex-start; }
+.rb-nd[data-ngang='phai'] { align-items: flex-end; }
+.rb-nd[data-ngang='trai'] { align-items: flex-start; }
+.rb-nd-chat { align-items: stretch !important; padding: 0 4px; }
+
+/* ── Bong bóng thông báo ──
+   Nằm trong DÒNG CHẢY (không `position: absolute` trong khối co vừa robot —
+   đo thật 20/08/2026 bẫy đó cho bong bóng rộng 71px ở mọi cỡ cửa sổ). Có
+   đuôi chỉ về phía robot. */
 .rb-bong {
   position: relative;
-  align-self: flex-end;
   max-width: 100%;
-  /* `auto` (mặc định của flex cột) CẤM co dưới cỡ nội dung ⇒ tràn biên ⇒ cắt. */
   min-height: 0;
-  padding: 8px 11px;
-  border-radius: 12px;
-  background: rgba(28, 28, 40, 0.97);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-  /* <button> không kế thừa `color`, `font-family` hay canh chữ. Khai ở ĐÂY
-     (chứ không ở `button.rb-bong`) để cả hai loại bong bóng — <div> "đang
-     nghĩ" và <button> "có tin" — ăn cùng một bộ. */
-  font-family: inherit;
-  color: inherit;
+  padding: 9px 12px 9px 26px;
+  border-radius: var(--rb-bo);
+  background: var(--rb-giay);
+  color: var(--rb-muc);
+  border: 1px solid var(--rb-vien);
+  box-shadow: 0 10px 28px -6px var(--rb-bong-do);
+  font: 500 12.5px/1.45 var(--rb-font);
   text-align: left;
-  font-size: 12px;
-  line-height: 1.45;
   white-space: normal;
-  animation: rb-hien 0.22s ease;
-  /* Câu dài thì CUỘN. Trần chiều cao do flex đặt (`min-height: 0` ở trên),
-     không phải một con số chép tay — nên nó tự đúng ở mọi nấc cỡ robot. */
+  overflow-wrap: anywhere;
+  animation: rb-hien 0.28s var(--rb-nay);
   overflow-y: auto;
   overscroll-behavior: contain;
 }
-
-.rb-bong[data-loai='cho'] {
-  border-left: 3px solid rgba(255, 255, 255, 0.25);
-  color: rgba(255, 255, 255, 0.72);
-  font-style: italic;
+/* Chấm màu đầu bong bóng nói LOẠI tin (thay sọc viền trái cũ). */
+.rb-bong::before {
+  content: '';
+  position: absolute;
+  left: 11px;
+  top: 14px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--rb-nhan);
 }
+.rb-bong[data-loai='tin-nhan']::before { background: var(--rb-xanh); }
+.rb-bong[data-loai='thong-bao']::before { background: var(--rb-vang); }
+.rb-bong[data-loai='nhac']::before { background: var(--rb-bac-ha); }
+.rb-bong[data-loai='tra-loi']::before { background: var(--rb-luc); }
+.rb-bong[data-loai='mang']::before { background: var(--rb-vang); }
+.rb-bong[data-loai='cho'] { color: var(--rb-muc-2); }
+.rb-bong[data-loai='cho']::before { background: var(--rb-muc-nhat); animation: rb-tho-cham 1.2s ease-in-out infinite; }
+.rb-bong[data-loai='viec'] { display: flex; align-items: center; gap: 6px; padding-left: 12px; font-size: 11.5px; }
+.rb-bong[data-loai='viec']::before { display: none; }
+
+/* Đuôi bong bóng — hình thoi nhỏ ló ra phía robot. Đặt trên VỎ (`.rb-bong-boc`)
+   chứ không trên bong bóng: bong bóng cuộn (`overflow-y: auto`) sẽ cắt mất nó. */
+.rb-nd .rb-bong-boc::after {
+  content: '';
+  position: absolute;
+  z-index: 1;
+  width: 10px;
+  height: 10px;
+  background: var(--rb-giay);
+  border: 1px solid var(--rb-vien);
+  transform: rotate(45deg);
+  pointer-events: none;
+}
+.rb-nd[data-phia='tren'] .rb-bong-boc::after { bottom: -5px; border-top: 0; border-left: 0; }
+.rb-nd[data-phia='duoi'] .rb-bong-boc::after { top: -5px; border-bottom: 0; border-right: 0; }
+.rb-nd[data-ngang='phai'] .rb-bong-boc::after { right: var(--rb-duoi, 34px); }
+.rb-nd[data-ngang='trai'] .rb-bong-boc::after { left: var(--rb-duoi, 34px); }
+.rb-nd[data-phia='tren'] > .rb-bong-boc { margin-bottom: 7px; }
+.rb-nd[data-phia='duoi'] > .rb-bong-boc { margin-top: 7px; }
+.rb-nd .rb-bong { max-height: 100%; }
 
 @keyframes rb-hien {
-  from { opacity: 0; transform: translateX(8px); }
-  to { opacity: 1; transform: none; }
+  from { opacity: 0; transform: translateY(6px) scale(0.96); }
+  to   { opacity: 1; transform: none; }
 }
 
-.rb-bong[data-loai='tin-nhan'] { border-left: 3px solid #60a5fa; }
-.rb-bong[data-loai='thong-bao'] { border-left: 3px solid #fbbf24; }
-.rb-bong[data-loai='nhac'] { border-left: 3px solid #34d399; }
-.rb-bong[data-loai='agent'] { border-left: 3px solid #a78bfa; }
-
-/* ── AI Code đang chạy ──
-   Nhạt hơn thông báo thật: đây là NỀN CẢNH ("vẫn đang chạy"), không phải thứ
-   đòi người dùng phản ứng. Nó cũng sống hàng phút chứ không chớp tắt 8 giây,
-   nên nếu nổi bật bằng thông báo thì nó thành thứ gây phiền suốt buổi. */
-.rb-bong[data-loai='viec'] {
-  display: flex; align-items: center; gap: 6px;
-  border-left: 3px solid #a78bfa;
-  opacity: 0.92;
-  font-size: 11px;
-}
-/* Chấm THỞ — bằng chứng sống rằng còn thứ đang chạy. Một dòng chữ đứng im
-   vài phút không phân biệt được với một dòng chữ bị kẹt lại từ lượt trước. */
 .rb-viec-cham {
   width: 6px; height: 6px; flex-shrink: 0;
   border-radius: 50%;
-  background: #a78bfa;
+  background: var(--rb-nhan);
   animation: rb-tho-cham 1.4s ease-in-out infinite;
 }
 @keyframes rb-tho-cham {
@@ -206,144 +444,198 @@ body {
   50%      { opacity: 1;    transform: scale(1.15); }
 }
 
-/* Bong bóng "có tin" là NÚT (bấm để mở trang chat đầy đủ). `<button>` mang
-   theo một bộ mặc định của trình duyệt, nên phải đặt lại — nhưng đặt lại bằng
-   `font: inherit` thì HỎNG.
+/* `<button>` mang bộ mặc định của trình duyệt. ⚠️ KHÔNG `font: inherit` ở đây —
+   nó đặt lại cả `font-size` (bẫy 20/08/2026, ô đo lệch dòng ⇒ chữ bị xén). */
+button.rb-bong { display: block; cursor: pointer; }
+button.rb-bong:hover { border-color: var(--rb-vien-dam); }
+button.rb-bong:active { transform: scale(0.99); }
 
-   ⚠️ `font:` là thuộc tính VIẾT TẮT: nó đặt lại cả `font-size`. Chọn lọc của
-   `button.rb-bong` (0,1,1) cao hơn `.rb-bong` (0,1,0) và lại nằm sau, nên nó
-   nuốt luôn `font-size: 12px` ở trên và trả chữ về cỡ kế thừa — **16px**.
-   Đo thật 20/08/2026: bong bóng "có tin" vẽ ở 16px còn bong bóng "đang nghĩ"
-   (một <div>, cùng lớp CSS) vẽ ở 12px. To hơn 33%, và không ai thấy vì hai
-   loại bong bóng hiếm khi hiện cạnh nhau.
-
-   Hậu quả nặng hơn cái xấu: ô đo `.rb-do` là một <div> nên đo ở 12px, cửa sổ
-   tính theo số đo ấy, rồi bong bóng thật vẽ ở 16px và xuống hai dòng ⇒ **dòng
-   cuối bị xén**. Đúng cái ảnh người dùng gửi sau khi tôi tưởng đã vá xong.
-
-   Nay chỉ đặt lại đúng thứ <button> làm sai, và để `font-size` cho `.rb-bong`.
-   Ô đo cũng đã đổi thành <button> để không còn khe hở nào giữa hai bên. */
-button.rb-bong {
-  display: block;
-  cursor: pointer;
-  -webkit-app-region: no-drag;   /* nằm trong vùng kéo cửa sổ ⇒ phải trừ ra */
-}
-
-button.rb-bong:hover { border-color: rgba(167, 139, 250, 0.75); }
-
-/* ── Bong bóng thông báo + nút ẨN ──
-   Vỏ bọc chỉ để neo nút ×. Nó KHÔNG được thêm một pixel nào vào hộp của bong
-   bóng: ô đo vô hình (`.rb-do`) đo bong bóng chứ không đo vỏ này, và mọi chênh
-   lệch giữa hai bên đều biến thành một dòng chữ bị xén (đã trả giá 20/08/2026).
-   Nên: không viền, không đệm, `display: contents` thì lại mất `position:
-   relative` — dùng `flex` với hộp khít đúng bằng con. */
 .rb-bong-boc {
   position: relative;
-  align-self: flex-end;
   display: flex;
   max-width: 100%;
   min-height: 0;
+  max-height: calc(100% - 7px);
 }
-/* Chừa chỗ cho nút × bằng ĐỆM PHẢI của chính bong bóng, không phải bằng một ô
-   flex riêng: chữ trong bong bóng phải xuống dòng TRÁNH cái nút, chứ không
-   chui xuống dưới nó. Ô đo mang cùng thuộc tính này nên hai bên khớp nhau. */
-.rb-bong[data-co-x='true'] { padding-right: 26px; }
+.rb-bong[data-co-x='true'] { padding-right: 30px; }
 
 .rb-bong-x {
   position: absolute;
-  top: 4px;
-  right: 5px;
-  width: 17px;
-  height: 17px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  top: 6px;
+  right: 6px;
+  z-index: 1;
+  width: 20px;
+  height: 20px;
+  display: grid;
+  place-items: center;
   padding: 0;
   border: 0;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.12);
-  color: rgba(255, 255, 255, 0.72);
-  font-family: inherit;
-  font-size: 13px;
+  background: var(--rb-giay-2);
+  color: var(--rb-muc-nhat);
+  font-size: 14px;
   line-height: 1;
   cursor: pointer;
-  /* Nằm trong vùng kéo cửa sổ ⇒ phải trừ ra, không thì bấm vào nó là kéo cửa sổ. */
-  -webkit-app-region: no-drag;
   transition: background 0.15s ease, color 0.15s ease;
 }
-.rb-bong-x:hover { background: rgba(239, 68, 68, 0.9); color: #fff; }
-.rb-bong-x:focus-visible { outline: 2px solid #a78bfa; outline-offset: 1px; }
+.rb-bong-x:hover { background: var(--rb-do); color: var(--rb-tren-nhan); }
 
-/* ── Khung chat mini ──
-   Nâng cấp 25/09/2026 (người dùng: "trông tối giản xấu quá"): nền kính mờ có
-   ánh tím ở đỉnh, tiêu đề có logo, bong bóng người dùng tô gradient, ô soạn
-   là một thẻ bo tròn chứa textarea tự giãn + nút gửi tròn. Màu viết thẳng —
-   cửa sổ robot KHÔNG có bảng biến `--ct-*` (xem chú thích phần markdown). */
+/* Ô ĐO — bản sao vô hình của bong bóng, `max-width` cố định để số đo là cỡ
+   MONG MUỐN, độc lập với cửa sổ hiện tại. */
+.rb-do {
+  position: fixed !important;
+  left: -10000px;
+  top: 0;
+  max-width: 300px;
+  overflow: visible;
+  visibility: hidden;
+  pointer-events: none;
+  animation: none;
+}
+
+/* ══ BẢNG CHỈNH (3 lần bấm) ══════════════════════════════════════════════ */
+.rb-bang {
+  width: 240px;
+  margin: 4px 0;
+  padding: 12px 12px 10px;
+  border-radius: var(--rb-bo);
+  background: var(--rb-giay);
+  border: 1px solid var(--rb-vien);
+  box-shadow: 0 14px 34px -8px var(--rb-bong-do);
+  font-size: 12px;
+  animation: rb-hien 0.24s var(--rb-de);
+}
+.rb-bang-dau { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.rb-bang-dau strong { font-size: 13px; font-weight: 700; }
+.rb-bang-xong {
+  padding: 4px 12px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--rb-toi);
+  color: var(--rb-tren-nhan);
+  font-size: 11.5px;
+  font-weight: 650;
+  cursor: pointer;
+}
+.rb-bang-xong:hover { filter: brightness(1.08); }
+.rb-bang-meo { margin: 4px 0 10px; color: var(--rb-muc-nhat); font-size: 11.5px; line-height: 1.4; }
+
+.rb-bang-co { display: flex; align-items: center; gap: 6px; }
+.rb-bang-co > button {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  border: 1px solid var(--rb-vien-dam);
+  border-radius: 50%;
+  background: var(--rb-giay-2);
+  color: var(--rb-muc);
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+}
+.rb-bang-co > button:hover:not(:disabled) { background: var(--rb-giay-3); }
+.rb-bang-co > button:disabled { opacity: 0.35; cursor: default; }
+.rb-bang-co input[type='range'] { flex: 1; min-width: 0; accent-color: var(--rb-nhan); cursor: pointer; }
+.rb-bang-so {
+  flex: none;
+  min-width: 40px;
+  text-align: right;
+  font: 700 12.5px/1 var(--rb-font-ma);
+  color: var(--rb-nhan);
+}
+
+.rb-bang-hang {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 10px;
+  color: var(--rb-muc-2);
+  cursor: pointer;
+}
+.rb-bang-hang input { accent-color: var(--rb-nhan); margin: 0; }
+.rb-bang-phu {
+  margin-top: 8px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--rb-nhan);
+  font-size: 11.5px;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+.rb-bang-ghi {
+  margin: 8px 0 0;
+  padding: 6px 8px;
+  border-radius: 8px;
+  background: var(--rb-vang-nen);
+  color: var(--rb-muc-2);
+  font-size: 10.5px;
+  line-height: 1.4;
+}
+
+/* ══ KHUNG CHAT "TRỢ LÝ" ═════════════════════════════════════════════════ */
 .rb-chat {
   flex: 1;
   width: 100%;
   min-height: 0;
   display: flex;
   flex-direction: column;
-  border-radius: 18px;
-  background:
-    radial-gradient(120% 60% at 0% 0%, rgba(124, 108, 240, 0.16), transparent 60%),
-    radial-gradient(90% 50% at 100% 0%, rgba(34, 211, 238, 0.08), transparent 55%),
-    rgba(16, 16, 24, 0.97);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow:
-    0 24px 60px rgba(0, 0, 0, 0.55),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  background: var(--rb-giay);
+  border: 1px solid var(--rb-vien);
+  box-shadow: 0 24px 56px -12px var(--rb-bong-do);
   overflow: hidden;
-  animation: rb-chat-mo 0.22s cubic-bezier(0.2, 0.8, 0.2, 1);
+  animation: rb-chat-mo 0.26s var(--rb-de);
 }
-
 @keyframes rb-chat-mo {
-  from { opacity: 0; transform: translateY(8px) scale(0.985); }
+  from { opacity: 0; transform: translateY(8px) scale(0.98); }
   to   { opacity: 1; transform: none; }
 }
 
 .rb-chat-dau {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 10px 12px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-  background: rgba(255, 255, 255, 0.02);
+  gap: 6px;
+  padding: 9px 10px 9px 14px;
+  border-bottom: 1px solid var(--rb-vien);
+  background: var(--rb-giay-2);
   font-size: 13px;
-  /* Thanh tiêu đề kéo được — quy ước của mọi cửa sổ. */
-  -webkit-app-region: drag;
+  cursor: grab;
+  touch-action: none;
 }
+.rb-chat-dau:active { cursor: grabbing; }
+.rb-chat-ten { flex: none; font-weight: 750; letter-spacing: -0.01em; }
 
-.rb-chat-logo {
-  flex: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
-  border-radius: 8px;
-  color: #fff;
-  background: linear-gradient(135deg, #8b7cf6, #22d3ee);
-  box-shadow: 0 4px 12px rgba(124, 108, 240, 0.45);
+.rb-bac {
+  min-width: 0;
+  max-width: 128px;
+  padding: 3px 6px;
+  border-radius: 999px;
+  border: 1px solid var(--rb-vien-dam);
+  background: var(--rb-giay);
+  color: var(--rb-muc-2);
+  font: 600 11px/1.2 var(--rb-font);
+  cursor: pointer;
 }
+.rb-bac option { background: var(--rb-giay); color: var(--rb-muc); }
 
-.rb-chat-nut { display: flex; gap: 4px; -webkit-app-region: no-drag; }
-
+.rb-chat-nut { display: flex; gap: 2px; margin-left: auto; }
 .rb-chat-nut button {
-  padding: 3px 9px;
-  border: 1px solid transparent;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.05);
-  color: #b8b8c8;
+  padding: 4px 8px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--rb-muc-2);
   font-size: 11px;
-  font-family: inherit;
+  font-weight: 600;
+  white-space: nowrap;
   cursor: pointer;
   transition: background 0.15s ease, color 0.15s ease;
 }
-
-.rb-chat-nut button:hover { color: #fff; background: rgba(255, 255, 255, 0.12); }
-.rb-chat-nut button:last-child:hover { background: rgba(239, 68, 68, 0.85); }
+.rb-chat-nut button:hover { color: var(--rb-muc); background: var(--rb-giay-3); }
+.rb-chat-nut button[data-dang='true'] { color: var(--rb-nhan); background: var(--rb-nhan-nen); }
+.rb-chat-nut .rb-chat-dong { display: grid; place-items: center; width: 24px; height: 24px; padding: 0; }
 
 .rb-chat-than {
   flex: 1;
@@ -356,306 +648,190 @@ button.rb-bong:hover { border-color: rgba(167, 139, 250, 0.75); }
   gap: 10px;
   user-select: text;
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.16) transparent;
+  scrollbar-color: var(--rb-vien-dam) transparent;
 }
 .rb-chat-than::-webkit-scrollbar { width: 6px; }
-.rb-chat-than::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.14); border-radius: 3px; }
+.rb-chat-than::-webkit-scrollbar-thumb { background: var(--rb-vien-dam); border-radius: 3px; }
 
-.rb-chat-trong { margin: 0; color: #7a7a8c; font-size: 11.5px; line-height: 1.5; }
+.rb-chat-trong { margin: 0; color: var(--rb-muc-nhat); font-size: 11.5px; line-height: 1.5; }
 
-/* Màn chào khi chưa có lượt nào. */
+/* Màn chào: một câu, một dòng gợi ý, vài câu mẫu theo kỹ năng đang chọn. */
 .rb-chao {
   margin: auto 0;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   gap: 6px;
-  padding: 12px 8px;
-  text-align: center;
+  padding: 4px 4px 8px;
 }
-.rb-chao-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 44px;
-  height: 44px;
-  border-radius: 14px;
-  font-size: 22px;
-  background: linear-gradient(135deg, rgba(139, 124, 246, 0.25), rgba(34, 211, 238, 0.18));
-  border: 1px solid rgba(255, 255, 255, 0.1);
+.rb-chao-tieu { margin: 0; font-size: 17px; font-weight: 750; letter-spacing: -0.02em; color: var(--rb-muc); }
+.rb-mau { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; margin-top: 6px; }
+.rb-mau button {
+  max-width: 100%;
+  padding: 7px 11px;
+  border: 1px dashed var(--rb-vien-dam);
+  border-radius: 12px;
+  background: transparent;
+  color: var(--rb-muc-2);
+  font-size: 12px;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease, transform 0.15s var(--rb-de);
 }
-.rb-chao-tieu { margin: 4px 0 0; font-size: 14px; font-weight: 650; color: #f2f2f8; }
+.rb-mau button:hover { border-style: solid; border-color: var(--rb-nhan); background: var(--rb-nhan-nen); transform: translateY(-1px); }
 
 .rb-toi, .rb-may {
-  /* `min-width: 0` + `max-width` để bảng/khối mã CUỘN trong bong bóng thay vì
-     đẩy bong bóng rộng ra ngoài khung và bị xén. */
   min-width: 0;
   max-width: 88%;
   padding: 8px 12px;
   font-size: 12.5px;
   line-height: 1.55;
   white-space: pre-wrap;
-  /* `anywhere` chứ không chỉ `break-word`: chuỗi liền không dấu cách (URL,
-     đường dẫn, lệnh dài) vẫn phải gãy được, không thì nó chạy mãi sang phải. */
   overflow-wrap: anywhere;
   word-break: break-word;
 }
-
 .rb-toi {
   align-self: flex-end;
-  color: #fff;
-  background: linear-gradient(135deg, #6d5df0, #5b8cf5);
-  border-radius: 16px 16px 4px 16px;
-  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.3);
+  color: var(--rb-tren-nhan);
+  background: var(--rb-toi);
+  border-radius: 16px 16px 5px 16px;
 }
 .rb-may {
+  position: relative;
   align-self: flex-start;
-  /* Câu trả lời có bảng/mã thì cần hết bề ngang. */
   max-width: 100%;
-  background: rgba(255, 255, 255, 0.055);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 16px 16px 16px 4px;
-  /* Markdown tự lo xuống dòng; `pre-wrap` ở đây nhân đôi khoảng trắng. */
+  background: var(--rb-giay-2);
+  border: 1px solid var(--rb-vien);
+  border-radius: 16px 16px 16px 5px;
   white-space: normal;
 }
-.rb-cho {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  color: #8a8a9c;
-  font-style: italic;
+.rb-may[data-loi='true'] { background: var(--rb-do-nen); border-color: var(--rb-do); }
+.rb-nhan-ky-nang {
+  display: inline-block;
+  margin-top: 6px;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--rb-bac-ha-nen);
+  color: var(--rb-bac-ha);
+  font-size: 10px;
+  font-weight: 700;
 }
-/* Ba chấm "đang gõ". */
+.rb-cho { display: inline-flex; align-items: center; gap: 8px; color: var(--rb-muc-nhat); }
 .rb-go { display: inline-flex; gap: 3px; }
 .rb-go i {
   width: 5px; height: 5px;
   border-radius: 50%;
-  background: #a78bfa;
+  background: var(--rb-nhan);
   animation: rb-nghi-cham 1.2s ease-in-out infinite;
 }
 .rb-go i:nth-child(2) { animation-delay: 0.15s; }
 .rb-go i:nth-child(3) { animation-delay: 0.3s; }
 
-/* ── Ô soạn: thẻ bo tròn chứa textarea tự giãn + nút gửi tròn ── */
+/* ── Chip KỸ NĂNG ── xuống dòng chứ không cuộn ngang: chip bị che một nửa
+   thì không ai biết còn chip ở sau. */
+.rb-ky-nang {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  padding: 8px 10px 0;
+}
+.rb-ky-nang button {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px 4px 5px;
+  border: 1px solid var(--rb-vien-dam);
+  border-radius: 999px;
+  background: var(--rb-giay);
+  color: var(--rb-muc-2);
+  font-size: 11.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.15s var(--rb-nay);
+}
+.rb-ky-nang button b {
+  display: grid;
+  place-items: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: var(--rb-giay-3);
+  color: var(--rb-muc);
+  font: 700 10.5px/1 var(--rb-font);
+}
+.rb-ky-nang button:hover { border-color: var(--rb-nhan); color: var(--rb-muc); }
+.rb-ky-nang button:active { transform: scale(0.96); }
+.rb-ky-nang button[data-chon='true'] {
+  background: var(--rb-nhan-nen);
+  border-color: var(--rb-nhan);
+  color: var(--rb-muc);
+}
+.rb-ky-nang button[data-chon='true'] b { background: var(--rb-nhan); color: var(--rb-tren-nhan); }
+
+/* ── Ô soạn ── */
 .rb-chat-soan {
   display: flex;
   align-items: flex-end;
-  gap: 6px;
+  gap: 4px;
   margin: 8px 10px 10px;
-  padding: 6px 6px 6px 12px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 5px;
+  border: 1px solid var(--rb-vien-dam);
   border-radius: 16px;
-  background: rgba(0, 0, 0, 0.3);
+  background: var(--rb-giay-2);
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
-.rb-chat-soan:focus-within {
-  border-color: rgba(139, 124, 246, 0.8);
-  box-shadow: 0 0 0 3px rgba(139, 124, 246, 0.18);
-}
-
+.rb-chat-soan:focus-within { border-color: var(--rb-nhan); box-shadow: 0 0 0 3px var(--rb-nhan-nen); }
 .rb-chat-soan textarea {
   flex: 1;
   min-width: 0;
   max-height: 132px;
-  padding: 6px 0;
+  padding: 7px 4px;
   border: 0;
   background: transparent;
-  color: inherit;
-  font-family: inherit;
-  font-size: 12.5px;
-  line-height: 1.5;
+  color: var(--rb-muc);
+  font: 400 12.5px/1.5 var(--rb-font);
   resize: none;
   outline: none;
   overflow-y: auto;
-  /* Chữ dài TỰ XUỐNG DÒNG, kể cả chuỗi liền không dấu cách. */
   white-space: pre-wrap;
   overflow-wrap: anywhere;
   user-select: text;
 }
-.rb-chat-soan textarea::placeholder { color: #6e6e82; }
-
-.rb-chat-soan .rb-gui {
+.rb-chat-soan textarea:focus-visible { outline: none; }
+.rb-chat-soan textarea::placeholder { color: var(--rb-muc-nhat); }
+.rb-kep, .rb-gui {
   flex: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  display: grid;
+  place-items: center;
   width: 32px;
   height: 32px;
   padding: 0;
   border: 0;
   border-radius: 11px;
-  background: linear-gradient(135deg, #7c6cf0, #5b8cf5);
-  color: #fff;
-  cursor: pointer;
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
-  transition: transform 0.12s ease, opacity 0.15s ease;
-}
-.rb-chat-soan .rb-gui:hover:not(:disabled) { transform: translateY(-1px); }
-.rb-chat-soan .rb-gui:disabled { opacity: 0.35; cursor: default; box-shadow: none; }
-
-@media (prefers-reduced-motion: reduce) {
-  .rb-chat, .rb-go i { animation: none; }
-}
-
-/* ── Nói với robot ──
-   ⚠️ DÙNG LẠI `.odin-mic` + `.odin-wave` CỦA DOCK TRONG APP, không dựng bộ
-   riêng. Bản đầu tôi làm một bộ `.rb-mic`/`.rb-song` khác hẳn — 46×30 viền
-   trắng nền mờ, so với 40×26 nền xanh đen chữ bạc hà của dock. Người dùng
-   nhìn ra ngay: "cái mic ở ngoài không giống như khi đang ở trong app".
-   Robot nổi và robot trong app phải là MỘT nhân vật, không phải hai con
-   giống nhau mặc đồ khác. Dưới đây chỉ còn phần cửa sổ nổi cần thêm. */
-.rb-noi {
-  display: flex;
-  justify-content: center;
-  margin-top: -4px;
-  -webkit-app-region: no-drag;   /* nếu không, kéo cửa sổ nuốt mất cú bấm */
-}
-
-/* Đang thu: dock đã có `[data-active]` màu đỏ. Cửa sổ nổi dùng `data-tt`
-   nên ánh xạ sang cùng một màu, để hai nơi báo "đang nghe" giống hệt nhau. */
-.rb-noi .odin-mic[data-tt='nghe'] {
-  background: #f2545b;
-  color: #fff;
-}
-
-.rb-noi .odin-mic:disabled { cursor: default; opacity: 0.75; }
-
-/* Đang ĐỌC: sóng âm kiêm nút DỪNG. Khác trạng thái "đang nghe" của dock, nên
-   phải khác màu — nếu không người dùng không phân biệt được lúc nào robot
-   nghe mình và lúc nào nó đang nói. */
-.rb-noi .odin-mic.rb-dung {
-  background: var(--odin-body);
-  color: #fff;
-}
-
-.rb-noi .odin-mic.rb-dung:hover { background: var(--odin-body-light); }
-
-.rb-xoay {
-  width: 12px;
-  height: 12px;
-  border: 2px solid currentColor;
-  border-top-color: transparent;
-  border-radius: 50%;
-  animation: rb-quay 0.7s linear infinite;
-}
-
-@keyframes rb-quay { to { transform: rotate(360deg); } }
-
-@media (prefers-reduced-motion: reduce) {
-  .rb-xoay { animation-duration: 2s; }
-}
-
-/* ── Bong bóng SUY NGHĨ trên đầu robot ──
-   Hiện khi robot đang đọc. Ba chấm nở dần như bong bóng trong truyện tranh —
-   nó nói "câu dưới kia là robot đang nói", tách hẳn khỏi bong bóng thông báo
-   (tin nhắn, nhạc) vốn dùng chung khung chữ. */
-.rb-nghi-icon {
-  position: absolute;
-  top: -2px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  gap: 3px;
-  padding: 5px 9px;
-  border-radius: 12px 12px 12px 3px;
-  background: rgba(139, 138, 245, 0.95);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
-  z-index: 2;
-  animation: rb-nghi-hien 0.25s ease;
-}
-
-/* Hai chấm nhỏ dưới bong bóng — cho nó ra dáng "suy nghĩ" chứ không phải
-   một cái nhãn dán. */
-.rb-nghi-icon::after {
-  content: '';
-  position: absolute;
-  bottom: -7px;
-  left: 8px;
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: rgba(139, 138, 245, 0.8);
-}
-
-.rb-nghi-icon i {
-  display: block;
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: #fff;
-  animation: rb-nghi-cham 1.25s ease-in-out infinite;
-}
-
-.rb-nghi-icon i:nth-child(2) { animation-delay: 0.18s; }
-.rb-nghi-icon i:nth-child(3) { animation-delay: 0.36s; }
-
-@keyframes rb-nghi-cham {
-  0%, 100% { opacity: 0.35; transform: translateY(0); }
-  50%      { opacity: 1;    transform: translateY(-2px); }
-}
-
-@keyframes rb-nghi-hien {
-  from { opacity: 0; transform: translateX(-50%) translateY(4px); }
-  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .rb-nghi-icon i { animation: none; opacity: 0.9; }
-}
-
-/*
- * Ô ĐO — bản sao vô hình của bong bóng, dùng để lấy cỡ THẬT của chữ.
- *
- * ⚠️ KHÔNG đo chính bong bóng đang hiện. Nó bị bề rộng cửa sổ ép, nên số đo
- * lấy về luôn nhỏ hơn hoặc bằng cửa sổ hiện tại ⇒ cửa sổ không bao giờ nở ra
- * được nữa, và nó KHOÁ ở cỡ nhỏ vĩnh viễn. Ô này nằm ngoài màn hình với
- * `max-width` cố định nên số đo là cỡ MONG MUỐN, độc lập với cửa sổ.
- */
-.rb-do {
-  position: fixed;
-  left: -10000px;
-  top: 0;
-  max-width: 300px;
-  max-height: none;
-  overflow: visible;
-  visibility: hidden;
-  pointer-events: none;
-  animation: none;
-}
-
-/* ══ CHAT MINI: bậc model · lịch sử · ảnh ════════════════════════════════
-   Khung này rộng ~380px. Mọi thứ thêm vào đây phải CO được, nếu không nó đẩy
-   nút đóng ra ngoài mép cửa sổ và người dùng không thu gọn được nữa. */
-.rb-bac {
-  -webkit-app-region: no-drag;
-  min-width: 0;
-  max-width: 132px;
-  padding: 3px 6px;
-  border-radius: 7px;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  background: rgba(255, 255, 255, 0.06);
-  color: #d8d8e4;
-  font-size: 11px;
   cursor: pointer;
 }
-.rb-bac:focus { outline: 1px solid #7c7cf0; }
-.rb-bac option { background: #16161f; color: #e8e8f0; }
-
-/* Tiêu đề co lại nhường chỗ cho ô chọn bậc; hàng nút luôn giữ nguyên. */
-.rb-chat-dau > strong { flex: none; }
-.rb-chat-dau { gap: 6px; }
-.rb-chat-nut { margin-left: auto; }
-.rb-chat-nut button { padding: 3px 7px; font-size: 10.5px; white-space: nowrap; }
+.rb-kep { background: transparent; color: var(--rb-muc-nhat); }
+.rb-kep:hover:not(:disabled) { background: var(--rb-giay-3); color: var(--rb-muc); }
+.rb-kep:disabled { opacity: 0.35; cursor: default; }
+.rb-gui {
+  background: var(--rb-toi);
+  color: var(--rb-tren-nhan);
+  transition: transform 0.15s var(--rb-nay), opacity 0.15s ease;
+}
+.rb-gui:hover:not(:disabled) { transform: translateY(-1px); }
+.rb-gui:active:not(:disabled) { transform: scale(0.94); }
+.rb-gui:disabled { opacity: 0.35; cursor: default; }
 
 /* ── Lịch sử ── */
 .rb-su {
-  -webkit-app-region: no-drag;
   max-height: 190px;
   overflow-y: auto;
   padding: 4px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid var(--rb-vien);
+  background: var(--rb-giay-2);
 }
 .rb-su button {
   display: flex;
@@ -664,122 +840,85 @@ button.rb-bong:hover { border-color: rgba(167, 139, 250, 0.75); }
   width: 100%;
   padding: 6px 8px;
   border: 0;
-  border-radius: 7px;
+  border-radius: 8px;
   background: transparent;
-  color: #d2d2e0;
+  color: var(--rb-muc-2);
   font-size: 11.5px;
   text-align: left;
   cursor: pointer;
 }
-.rb-su button:hover { background: rgba(255, 255, 255, 0.07); }
-.rb-su button[data-dang='true'] { background: rgba(124, 124, 240, 0.18); color: #fff; }
-.rb-su button > span {
-  /* `min-width: 0` để tiêu đề dài CẮT chứ không đẩy con số ra khỏi khung. */
-  flex: 1;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.rb-su button > em { flex: none; font-style: normal; font-size: 10px; color: #7a7a8c; }
+.rb-su button:hover { background: var(--rb-giay-3); color: var(--rb-muc); }
+.rb-su button[data-dang='true'] { background: var(--rb-nhan-nen); color: var(--rb-muc); }
+.rb-su button > span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rb-su button > em { flex: none; font-style: normal; font-size: 10px; color: var(--rb-muc-nhat); }
 
 /* ── Ảnh ── */
-.rb-anh {
-  display: block;
-  max-width: 100%;
-  max-height: 150px;
-  border-radius: 9px;
-  margin-bottom: 5px;
-}
-.rb-anh-cho {
-  -webkit-app-region: no-drag;
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-  padding: 7px 12px 0;
-}
+.rb-anh { display: block; max-width: 100%; max-height: 150px; border-radius: 10px; margin-bottom: 5px; }
+.rb-anh-cho { display: flex; gap: 6px; flex-wrap: wrap; padding: 8px 12px 0; }
 .rb-anh-cho span { position: relative; display: inline-flex; }
-.rb-anh-cho img {
-  width: 46px; height: 46px; object-fit: cover;
-  border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.16);
-}
+.rb-anh-cho img { width: 46px; height: 46px; object-fit: cover; border-radius: 9px; border: 1px solid var(--rb-vien-dam); }
 .rb-anh-cho button {
   position: absolute;
   top: -5px;
   right: -5px;
-  width: 17px;
-  height: 17px;
+  width: 18px;
+  height: 18px;
   padding: 0;
   border: 0;
   border-radius: 50%;
-  background: #2a2a38;
-  color: #d8d8e4;
-  font-size: 10px;
+  background: var(--rb-muc);
+  color: var(--rb-giay);
+  font-size: 12px;
   line-height: 1;
   cursor: pointer;
 }
 
-/* Câu báo khi máy chủ hạ bậc. Đứng NGAY TRÊN ô nhập, không lẫn vào dòng chảy
-   hội thoại — nó nói về công cụ, không phải là lời của trợ lý. */
+/* Câu báo khi máy chủ hạ bậc — nói về CÔNG CỤ, không phải lời của trợ lý. */
 .rb-bao {
   margin: 0;
   padding: 6px 12px;
   font-size: 10.5px;
   line-height: 1.45;
-  color: #e2b44f;
-  background: rgba(226, 180, 79, 0.1);
+  color: var(--rb-vang);
+  background: var(--rb-vang-nen);
 }
 
-/* ══ MARKDOWN TRONG KHUNG CHAT MINI ══════════════════════════════════════
-   Khung chat dùng lại `ChuAgent` của app chính, nhưng KHÔNG dùng lại CSS của
-   nó — vì hai lý do:
-
-   1. `robot.html` là entry RIÊNG và không nạp `styles.css`. Không có bộ luật
-      nào ở đây thì markdown dựng ra nhưng trần trụi.
-   2. Cửa sổ này rộng ~380px. Chép nguyên cỡ chữ của app chính vào đây là
-      bảng tràn, tiêu đề to quá khổ, khối mã cuộn ngang liên tục.
-
-   ⚠️ KHÔNG dùng `var(--ct-*)` ở đây. Cửa sổ robot không có bảng biến đó —
-   đúng cái bẫy đã làm hoạt ảnh robot chết câm một lần (`--ct-ease` rỗng thì cả
-   thuộc tính `animation` hỏng). Màu viết thẳng. */
+/* ══ MARKDOWN TRONG KHUNG CHAT ═══════════════════════════════════════════
+   Dùng lại `ChuAgent` của app chính nhưng KHÔNG dùng lại CSS của nó (cửa sổ
+   này không nạp `styles.css`, và cỡ chữ app chính quá to cho khung ~400px). */
 .rb-may .ct-md { font-size: 12.5px; line-height: 1.6; }
 .rb-may .ct-md p { margin: 0 0 8px; }
 .rb-may .ct-md > div > *:last-child { margin-bottom: 0; }
-.rb-may .ct-md strong { font-weight: 650; color: #fff; }
+.rb-may .ct-md strong { font-weight: 700; color: var(--rb-muc); }
 .rb-may .ct-md em { font-style: italic; }
-.rb-may .ct-md h4 {
-  margin: 12px 0 6px;
-  font-size: 12.5px;
-  font-weight: 650;
-  color: #fff;
-}
+.rb-may .ct-md h1, .rb-may .ct-md h2, .rb-may .ct-md h3,
+.rb-may .ct-md h4 { margin: 12px 0 6px; font-size: 13px; font-weight: 700; font-style: normal; color: var(--rb-muc); }
 .rb-may .ct-md > div > h4:first-child { margin-top: 0; }
-.rb-may .ct-md ul,
-.rb-may .ct-md ol { margin: 0 0 8px; padding-left: 18px; }
+.rb-may .ct-md ul, .rb-may .ct-md ol { margin: 0 0 8px; padding-left: 18px; }
 .rb-may .ct-md li { margin: 2px 0; }
-.rb-may .ct-md li::marker { color: #7a7a8c; }
-.rb-may .ct-md a { color: #9d9dfa; text-decoration: underline; cursor: pointer; }
+.rb-may .ct-md li::marker { color: var(--rb-muc-nhat); }
+.rb-may .ct-md a { color: var(--rb-nhan); text-decoration: underline; cursor: pointer; }
 .rb-may .ct-md code {
-  padding: 1px 4px;
-  border-radius: 4px;
-  background: rgba(255, 255, 255, 0.09);
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  padding: 1px 5px;
+  border-radius: 5px;
+  background: var(--rb-giay-3);
+  font-family: var(--rb-font-ma);
   font-size: 11.5px;
 }
 .rb-may .ct-md blockquote {
   margin: 0 0 8px;
   padding: 2px 0 2px 10px;
-  border-left: 2px solid rgba(255, 255, 255, 0.18);
-  color: #b8b8c8;
+  border-left: 2px solid var(--rb-vien-dam);
+  color: var(--rb-muc-2);
 }
 
-/* Khối mã: cuộn NGANG trong chính nó, không đẩy bong bóng rộng ra. */
+/* Khối mã: nền riêng, tô màu theo token, gãy dòng thay vì cuộn ngang. */
 .rb-may .ct-md-ma {
   margin: 0 0 8px;
-  border-radius: 9px;
+  border-radius: 10px;
   overflow: hidden;
-  background: rgba(0, 0, 0, 0.34);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--rb-ma-nen);
+  border: 1px solid var(--rb-vien);
 }
 .rb-may .ct-md-ma-dau {
   display: flex;
@@ -787,147 +926,127 @@ button.rb-bong:hover { border-color: rgba(167, 139, 250, 0.75); }
   gap: 6px;
   padding: 4px 9px;
   font-size: 10px;
-  color: #8a8a9c;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  color: var(--rb-muc-nhat);
+  border-bottom: 1px solid var(--rb-vien);
 }
 .rb-may .ct-md-ma pre {
   margin: 0;
   padding: 8px 10px;
   overflow-x: auto;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-family: var(--rb-font-ma);
   font-size: 11px;
   line-height: 1.55;
-  /* Gãy dòng dài thay vì cuộn ngang — khung hẹp, cuộn ngang che mất nửa
-     lệnh. Chép vẫn ra đúng mã gốc (nút Chép đọc chữ, không đọc bố cục). */
+  color: var(--rb-muc);
   white-space: pre-wrap;
   overflow-wrap: anywhere;
 }
 .rb-may .ct-md-ma pre code { padding: 0; border: 0; background: none; font-size: inherit; }
-
-/* Nhãn ngôn ngữ + nút Chép trên đầu khối mã. Không có luật ở đây thì nút dùng
-   kiểu mặc định của trình duyệt — nền trắng, viền nổi, to bằng nửa khối mã.
-   Người dùng nhìn thấy đúng như thế trong ảnh chụp 14/09. */
 .rb-may .ct-md-ma-ngon { margin-right: auto; text-transform: lowercase; }
-.rb-may .ct-md-ma-chep {
+.rb-may .ct-md-ma-chep,
+.rb-may .ct-md-ma-dau button {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  padding: 2px 7px;
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  padding: 2px 8px;
+  border: 1px solid var(--rb-vien-dam);
   border-radius: 999px;
   background: transparent;
-  color: #b8b8c8;
+  color: var(--rb-muc-2);
   font-size: 10px;
   cursor: pointer;
 }
-.rb-may .ct-md-ma-chep:hover { color: #fff; border-color: rgba(255, 255, 255, 0.3); }
+.rb-may .ct-md-ma-chep:hover,
+.rb-may .ct-md-ma-dau button:hover { color: var(--rb-muc); border-color: var(--rb-nhan); }
 
-/* Bảng: cuộn ngang, không bao giờ làm rộng bong bóng. */
+.rb-may .hljs-keyword, .rb-may .hljs-built_in, .rb-may .hljs-selector-tag { color: var(--rb-hl-tu-khoa); }
+.rb-may .hljs-string, .rb-may .hljs-regexp, .rb-may .hljs-addition { color: var(--rb-hl-chuoi); }
+.rb-may .hljs-number, .rb-may .hljs-literal, .rb-may .hljs-symbol { color: var(--rb-hl-so); }
+.rb-may .hljs-type, .rb-may .hljs-title, .rb-may .hljs-class, .rb-may .hljs-section { color: var(--rb-hl-kieu); }
+.rb-may .hljs-variable, .rb-may .hljs-attr, .rb-may .hljs-property, .rb-may .hljs-params { color: var(--rb-hl-bien); }
+.rb-may .hljs-comment, .rb-may .hljs-quote, .rb-may .hljs-meta { color: var(--rb-hl-chu-thich); font-style: italic; }
+.rb-may .hljs-deletion { color: var(--rb-do); }
+
+/* Bảng: cuộn ngang trong chính nó. */
 .rb-may .ct-md-bang { margin: 0 0 8px; overflow-x: auto; }
 .rb-may .ct-md-bang table { border-collapse: collapse; font-size: 11.5px; }
 .rb-may .ct-md-bang th,
 .rb-may .ct-md-bang td {
   padding: 4px 8px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--rb-vien);
   text-align: left;
   vertical-align: top;
-  /* Xuống dòng TRONG ô: khung chỉ ~400px, `nowrap` bắt đọc bảng bằng cách
-     cuộn ngang từng ô (ảnh người dùng 25/09). Cột đầu (tên tuỳ chọn) giữ
-     một dòng vì nó ngắn và gãy ra thì khó đọc. */
   white-space: normal;
   min-width: 90px;
 }
 .rb-may .ct-md-bang td:first-child,
 .rb-may .ct-md-bang th:first-child { white-space: nowrap; min-width: 0; }
-.rb-may .ct-md-bang th { color: #fff; font-weight: 600; background: rgba(255, 255, 255, 0.04); }
+.rb-may .ct-md-bang th { color: var(--rb-muc); font-weight: 650; background: var(--rb-giay-3); }
 
-/* Ảnh model trả về trong markdown. Cũng dùng cho app chính — cùng tên lớp. */
 .ct-md-anh,
-.rb-may .ct-md-anh {
-  display: block;
-  max-width: 100%;
-  height: auto;
-  margin: 4px 0 8px;
-  border-radius: 9px;
-}
+.rb-may .ct-md-anh { display: block; max-width: 100%; height: auto; margin: 4px 0 8px; border-radius: 10px; }
 
-/* Công thức khối: cuộn ngang thay vì tràn ra khỏi bong bóng. */
+/* Công thức khối (KaTeX): cuộn ngang thay vì tràn khỏi bong bóng. */
 .rb-may .ct-toan-khoi { overflow-x: auto; overflow-y: hidden; padding: 2px 0; }
+.rb-may .katex { color: var(--rb-muc); }
 
-/* ── Gia sư bài học trong khung robot ────────────────────── */
-/* Thanh ngữ cảnh: bài nào đang được hỏi. Không có nó thì một câu trả lời đúng
-   cũng trông như trả lời nhầm, vì người đọc không biết "bài này" là bài gì. */
+/* ── Gia sư bài học ── */
 .rb-bai {
   display: flex;
   align-items: baseline;
   gap: 8px;
-  padding: 6px 12px;
-  border-bottom: 1px solid rgba(34, 211, 238, 0.14);
-  background: rgba(34, 211, 238, 0.06);
+  padding: 6px 14px;
+  border-bottom: 1px solid var(--rb-vien);
+  background: var(--rb-bac-ha-nen);
 }
 .rb-bai-ten {
   flex: 1;
   min-width: 0;
-  /* Tên bài dài không được kéo giãn cửa sổ robot — nó là cửa sổ nhỏ, cố định. */
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   font-size: 12px;
-  font-weight: 600;
-  color: #e2e8f0;
+  font-weight: 650;
+  color: var(--rb-muc);
 }
-.rb-bai-ma {
-  flex: none;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 10px;
-  letter-spacing: 0.04em;
-  color: #64748b;
-}
+.rb-bai-ma { flex: none; font: 600 10px/1 var(--rb-font-ma); letter-spacing: 0.04em; color: var(--rb-muc-nhat); }
 
 .rb-goiy { display: flex; flex-direction: column; gap: 8px; }
 .rb-goiy-ds { display: flex; flex-direction: column; gap: 6px; }
 .rb-goiy-ds > button,
 .rb-slide-ds > button {
   padding: 7px 10px;
-  border: 1px solid rgba(34, 211, 238, 0.16);
-  border-radius: 10px;
-  background: #0d1117;
-  color: #cbd5e1;
+  border: 1px solid var(--rb-vien-dam);
+  border-radius: 12px;
+  background: var(--rb-giay-2);
+  color: var(--rb-muc-2);
   font-size: 12px;
   line-height: 1.35;
   text-align: left;
   cursor: pointer;
 }
 .rb-goiy-ds > button:hover:not(:disabled),
-.rb-slide-ds > button:hover:not(:disabled) {
-  border-color: rgba(34, 211, 238, 0.45);
-  background: rgba(34, 211, 238, 0.07);
-}
+.rb-slide-ds > button:hover:not(:disabled) { border-color: var(--rb-bac-ha); background: var(--rb-bac-ha-nen); color: var(--rb-muc); }
 .rb-goiy-ds > button:disabled,
 .rb-slide-ds > button:disabled { opacity: 0.4; cursor: default; }
 
-.rb-slide > summary {
-  padding: 6px 2px;
-  font-size: 12px;
-  color: #94a3b8;
-  cursor: pointer;
-  list-style: none;
-}
+.rb-slide > summary { padding: 6px 2px; font-size: 12px; color: var(--rb-muc-2); cursor: pointer; list-style: none; }
 .rb-slide > summary::-webkit-details-marker { display: none; }
-.rb-slide > summary::before { content: '📑 '; }
-.rb-slide[open] > summary { color: #22d3ee; }
-/* Một bài ghép ba bộ slide có thể tới 60 mục — cuộn trong khung, đừng đẩy ô
-   nhập xuống khỏi cửa sổ. */
-.rb-slide-ds {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  max-height: 180px;
-  overflow-y: auto;
-}
-.rb-slide-ds > button > em {
-  font-style: normal;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 10px;
-  color: #22d3ee;
+.rb-slide > summary::before { content: '▸ '; }
+.rb-slide[open] > summary { color: var(--rb-bac-ha); }
+.rb-slide[open] > summary::before { content: '▾ '; }
+.rb-slide-ds { display: flex; flex-direction: column; gap: 4px; max-height: 180px; overflow-y: auto; }
+.rb-slide-ds > button > em { font-style: normal; font-family: var(--rb-font-ma); font-size: 10px; color: var(--rb-bac-ha); }
+
+/* ══ GIẢM CHUYỂN ĐỘNG ════════════════════════════════════════════════════
+   Mọi hoạt ảnh ở đây chỉ dùng transform/opacity; bật "giảm chuyển động" thì
+   tắt hết phần lặp vô tận và nhún nhảy, chỉ giữ đổi trạng thái tức thì. */
+@media (prefers-reduced-motion: reduce) {
+  .rb-chat, .rb-bong, .rb-bang, .rb-go i, .rb-nghi-icon, .rb-nghi-icon i,
+  .rb-zzz, .rb-zzz i, .rb-zzz b, .rb-hoi, .rb-lap-lanh i, .rb-cham, .rb-viec-cham,
+  .odin-canh .odin-mieng, .odin-canh[data-mood='boiRoi'] .odin-head,
+  .rb[data-keo='true'] .rb-than::before,
+  .rb-bong[data-loai='cho']::before { animation: none !important; }
+  .rb-lap-lanh { display: none; }
+  .rb-xoay { animation-duration: 2s; }
+  .rb-than, .rb-than:hover, .rb-than:active { transition: none; transform: none; }
 }

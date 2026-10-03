@@ -21,9 +21,10 @@ import { join } from 'node:path';
 import type { AiCucBoMa, AiCucBoTienDo, AiCucBoTinhTrang } from '../../shared/ipc';
 import { MODEL } from '../aiCucBo/kho';
 import {
-  batModel, cai, datGoc, goSach, tatModel, tinhTrang, xoa,
+  batChoChat, batModel, cai, datGoc, goSach, modelChoCode, tatModel, tinhTrang, xoa,
 } from '../aiCucBo/quanLy';
-import { dangSan, duocPhepChay, hoiMay } from '../aiCucBo/hoi';
+import { dangSan, duocPhepChay, hoiMay, tuDungKhiMatMang } from '../aiCucBo/hoi';
+import { dangMatMang, theoDoiMang } from '../aiCucBo/mang';
 import { danhDauNguoiDungBat } from '../aiCucBo/chay';
 import { handle } from './index';
 
@@ -48,6 +49,7 @@ const khoChoGiaoDien = (): AiCucBoTinhTrang['kho'] => MODEL.map((m) => ({
   moTa: m.moTa,
   gb: Math.round((m.gb + (m.mmproj?.gb ?? 0)) * 100) / 100,
   ramGb: m.ramGb,
+  ...(m.code ? { code: { nhan: m.code.nhan } } : {}),
 }));
 
 export function dangKyAiCucBo(): void {
@@ -74,6 +76,8 @@ export function dangKyAiCucBo(): void {
           tenGpu: '',
         },
         khuyen: { nen: null, choPhep: [], vi: 'Chưa đọc được cấu hình máy này.' },
+        khuyenCode: { nen: null, choPhep: [], muc: 'yeu', vi: 'Chưa đọc được cấu hình máy này.' },
+        boChayCuda: false,
         coBoChay: false,
         daCo: [],
         dangChay: null,
@@ -147,7 +151,30 @@ export function dangKyAiCucBo(): void {
     }
   });
 
+  handle('aiCucBo:cheDoCode', async () => {
+    const choPhepTuDong = duocPhepChay() && tuDungKhiMatMang();
+    try {
+      return { ...(await modelChoCode()), choPhepTuDong };
+    } catch {
+      return { ma: null, ten: '', nhan: '', vi: 'Chưa đọc được cấu hình máy này.', nenTai: null, choPhepTuDong };
+    }
+  });
+
+  handle('aiCucBo:kiemMang', async () => {
+    const t = theoDoiMang();
+    if (!t) return { online: true };
+    return { online: (await t.kiemNgay()).online };
+  });
+
   handle('aiCucBo:hoi', async ({ chu, lichSu, anh }) => {
+    /*
+     * Lưới đỡ của CHAT: chưa bật thì TỰ BẬT — nhưng chỉ khi đã kiểm là mất
+     * mạng thật và người dùng cho phép tự dùng (03/10/2026). Trước đây phải
+     * vào Cài đặt bấm Bật trước khi mất mạng — đúng lúc người ta không nghĩ tới.
+     */
+    if (!dangSan() && duocPhepChay() && tuDungKhiMatMang() && (await dangMatMang())) {
+      await batChoChat().catch(() => null);
+    }
     if (!dangSan()) return { chu: '', loi: 'AI trên máy chưa bật.' };
     const ra = await hoiMay({ chu, lichSu, anh });
     if (ra?.chu) return { chu: ra.chu };

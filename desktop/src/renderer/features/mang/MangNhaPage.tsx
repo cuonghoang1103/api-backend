@@ -231,22 +231,22 @@ function ThietBiThe({ tb, laCuaToi, doiChon }: {
   const Icon = BIEU_TUONG[loai];
   const nhan = tb.laMinh ? dich('Máy này') : tb.laRouter ? dich('Router (cổng mạng)') : null;
   return (
-    <div className="ct-tb" data-loai={tb.laMinh ? 'minh' : tb.laRouter ? 'router' : laCuaToi ? 'cua-toi' : 'khac'}>
-      <div className="ct-tb-icon"><Icon size={22} aria-hidden /></div>
-      <div className="ct-tb-info">
-        <div className="ct-tb-ten">
-          <span className="ct-tb-ten-chinh">{tb.ten ?? tb.hang}</span>
-          {nhan && <span className="ct-tb-tag hl">{nhan}</span>}
-          {tb.macAn && <span className="ct-tb-tag">{dich('MAC ẩn')}</span>}
+    <div className="ct-tbi" data-loai={tb.laMinh ? 'minh' : tb.laRouter ? 'router' : laCuaToi ? 'cua-toi' : 'khac'}>
+      <div className="ct-tbi-icon"><Icon size={22} aria-hidden /></div>
+      <div className="ct-tbi-info">
+        <div className="ct-tbi-ten">
+          <span className="ct-tbi-ten-chinh">{tb.ten ?? tb.hang}</span>
+          {nhan && <span className="ct-tbi-tag hl">{nhan}</span>}
+          {tb.macAn && <span className="ct-tbi-tag">{dich('MAC ẩn')}</span>}
         </div>
-        <div className="ct-tb-phu">
-          <span className="ct-tb-ip">{tb.ip}</span>
-          <span className="ct-tb-mac">{tb.mac}</span>
+        <div className="ct-tbi-phu">
+          <span className="ct-tbi-ip">{tb.ip}</span>
+          <span className="ct-tbi-mac">{tb.mac}</span>
           {tb.ten && tb.hang !== '—' && <span>{tb.hang}</span>}
         </div>
       </div>
       {!tb.laMinh && !tb.laRouter && (
-        <label className="ct-tb-check" title={dich('Đây là máy của tôi')}>
+        <label className="ct-tbi-check" title={dich('Đây là máy của tôi')}>
           <input type="checkbox" checked={laCuaToi} onChange={doiChon} />
           <span>{dich('Máy của tôi')}</span>
         </label>

@@ -51,6 +51,8 @@ export interface DangChay {
   /** Địa chỉ gốc để gọi, dạng `http://127.0.0.1:18xxx`. */
   goc: string;
   maModel: string;
+  /** Cửa sổ ngữ cảnh đã mở. AI Code cần rộng hơn chat — xem `kho.ts` mục `code`. */
+  cuaSo: number;
 }
 
 let tienTrinh: ChildProcess | null = null;
@@ -199,6 +201,8 @@ export interface YeuCauBat {
   coGpu: boolean;
   /** Báo tiến trình nạp cho giao diện, để người dùng không tưởng app treo. */
   onTin?: (chu: string) => void;
+  /** Cửa sổ ngữ cảnh. Vắng = 8192 (đủ cho chat). Đang chạy cùng model mà cửa sổ NHỎ hơn ⇒ bật lại. */
+  cuaSo?: number;
 }
 
 export class LoiChay extends Error {}
@@ -210,9 +214,25 @@ export class LoiChay extends Error {}
  * việc đó cách nhau hàng chục giây, và trả về sớm nghĩa là lượt chat đầu tiên
  * của người dùng ăn lỗi kết nối.
  */
-export async function bat(yc: YeuCauBat): Promise<DangChay> {
+/**
+ * Lượt bật đang chờ. Chat và AI Code có thể cùng gọi `bat()` trong một giây
+ * (mất mạng ⇒ cả hai cùng rơi xuống lưới đỡ). Không xếp hàng thì hai tiến
+ * trình llama-server cùng nạp hai bản 2,5-18 GB vào RAM — máy 16 GB đứng hình.
+ */
+let hangBat: Promise<unknown> = Promise.resolve();
+
+export function bat(yc: YeuCauBat): Promise<DangChay> {
+  const lan = hangBat.then(() => batMotLuot(yc), () => batMotLuot(yc));
+  hangBat = lan.catch(() => {});
+  return lan;
+}
+
+async function batMotLuot(yc: YeuCauBat): Promise<DangChay> {
+  const cuaSo = yc.cuaSo ?? CUA_SO;
   if (dangChay) {
-    if (dangChay.maModel === yc.maModel) return dangChay;
+    /* Cùng model và cửa sổ đang mở ĐỦ rộng ⇒ dùng luôn. Rộng hơn cần cũng
+       không sao — chat chạy trên cửa sổ 32k của AI Code vẫn đúng. */
+    if (dangChay.maModel === yc.maModel && dangChay.cuaSo >= cuaSo) return dangChay;
     await tat();
   }
 
@@ -229,7 +249,14 @@ export async function bat(yc: YeuCauBat): Promise<DangChay> {
     '--model', yc.duongModel,
     '--host', '127.0.0.1',
     '--port', String(cong),
-    '-c', String(CUA_SO),
+    '-c', String(cuaSo),
+    /* MỘT khe: app có một người dùng. Mặc định `-np auto` chia KV thành nhiều
+       khe và ở một số bản mỗi khe chỉ nhận một phần cửa sổ — AI Code tưởng có
+       32k mà thật ra mỗi lượt chỉ có 8k, rồi tràn ngữ cảnh ở bước thứ ba. */
+    '-np', '1',
+    /* Gọi tool cần chat template jinja của model. Bản b10976 đã bật sẵn, ghi
+       rõ ra để một lần nâng bản đổi mặc định không âm thầm tắt AI Code. */
+    '--jinja',
     '-ngl', String(yc.coGpu ? MOI_LOP_LEN_GPU : 0),
     /* Không cần trang web của chính llama.cpp — app tự có giao diện, và tắt
        nó đi thì bớt một mặt phơi ra trên máy người dùng. */
@@ -274,7 +301,7 @@ export async function bat(yc: YeuCauBat): Promise<DangChay> {
       throw new LoiChay(`AI trên máy không bật được. ${daChet}${viSao ? `\n\n${viSao}` : ''}`);
     }
     if (await khoeChua(goc)) {
-      dangChay = { cong, goc, maModel: yc.maModel };
+      dangChay = { cong, goc, maModel: yc.maModel, cuaSo };
       hoanTuTat();
       yc.onTin?.('Đã sẵn sàng.');
       return dangChay;
@@ -319,6 +346,7 @@ export async function xoaModel(duong: string): Promise<void> {
   await tat();
   await rm(duong, { force: true });
   await rm(`${duong}.dangtai`, { force: true });
+  await rm(`${duong}.sha256`, { force: true });
 }
 
 /** Tệp đã tải trọn chưa (theo cỡ mong đợi). */

@@ -10,25 +10,13 @@
  * không chỗ nào nói ra, nên chỉ người đã quen Claude Code mới gõ nó theo phản
  * xạ. Một tính năng không ai biết là một tính năng không tồn tại.
  */
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useDich } from '../../i18n';
+import { LENH_AGENT, type LenhGach } from './lenhGach';
 
-export interface LenhGach {
-  ten: string;
-  mo: string;
-  /** Tên khác cùng nghĩa — gõ cái nào cũng ra. */
-  khac?: string[];
-}
-
-export const LENH_AGENT: LenhGach[] = [
-  { ten: '/clear', mo: 'Xoá hội thoại, bắt đầu việc mới', khac: ['/new', '/moi'] },
-  { ten: '/undo', mo: 'Hoàn tác mọi file agent đã sửa trong việc này', khac: ['/hoantac'] },
-  { ten: '/cost', mo: 'Tiền đã tiêu và hạn mức còn lại', khac: ['/tien', '/chiphi'] },
-  { ten: '/diff', mo: 'Xem git diff của dự án đang mở', khac: ['/thaydoi'] },
-  { ten: '/kynang', mo: 'Tìm và cài kỹ năng từ kho AI Templates vào dự án', khac: ['/skill'] },
-  { ten: '/quyen', mo: 'Xem và thu hồi các lệnh đã "Luôn cho phép"', khac: ['/permissions'] },
-  { ten: '/help', mo: 'Danh sách lệnh gạch chéo', khac: ['/?', '/tro-giup'] },
-];
+/* Danh sách lệnh nay sống ở `lenhGach.ts` (03/10/2026 — ba nhóm lệnh mới);
+   giữ lối xuất cũ để mọi chỗ đang nhập từ đây khỏi phải đổi. */
+export { LENH_AGENT, type LenhGach };
 
 /**
  * Lọc theo phần người dùng đã gõ.
@@ -73,10 +61,17 @@ export function GoiYLenh({
     return locLenh(chu, [...LENH_AGENT, ...them.filter((l) => !daCo.has(l.ten))]);
   }, [chu, them]);
   const [chon, datChon] = useState(0);
+  const bangRef = useRef<HTMLDivElement>(null);
 
   // Gõ thêm ⇒ danh sách đổi ⇒ con trỏ phải về đầu, nếu không nó trỏ vào một
   // dòng không còn ở đó.
   useEffect(() => { datChon(0); }, [chu]);
+
+  /* Bảng nay có ~25 lệnh và tự cuộn (CSS trần chiều cao) — dòng đang chọn bằng
+     phím mũi tên phải luôn NHÌN THẤY, không thì Enter chọn một dòng khuất. */
+  useEffect(() => {
+    bangRef.current?.querySelector('[data-chon="true"]')?.scrollIntoView({ block: 'nearest' });
+  }, [chon]);
 
   useEffect(() => {
     if (ds.length === 0) return;
@@ -99,7 +94,7 @@ export function GoiYLenh({
   if (ds.length === 0) return null;
 
   return (
-    <div className="ct-goiy" role="listbox" aria-label={dich('Lệnh')}>
+    <div className="ct-goiy ct-goiy-lenh" role="listbox" aria-label={dich('Lệnh')} ref={bangRef}>
       {ds.map((l, i) => (
         <button
           key={l.ten}
@@ -110,7 +105,7 @@ export function GoiYLenh({
           onMouseEnter={() => datChon(i)}
           onClick={() => onChon(l.ten)}
         >
-          <code>{l.ten}</code>
+          <code>{l.ten}{l.thamSo ? <i className="ct-goiy-ts"> {l.thamSo}</i> : null}</code>
           <span>{l.mo}</span>
           {l.khac?.length ? <em>{l.khac.join(' ')}</em> : null}
         </button>

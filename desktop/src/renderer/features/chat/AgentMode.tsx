@@ -27,8 +27,16 @@ import {
   Copy,
   BookOpen, Check, Circle, CircleDot, CircleStop, FileCode2, FilePen, FilePlus2, FolderOpen,
   FolderPlus, FolderTree, GitBranch, History, ListChecks, Loader2, NotebookPen, Plug, RotateCcw, Search, Send,
-  ShieldCheck, Sparkles, SquareTerminal, Terminal, Trash2, Undo2, X, ChevronDown, Cpu, Globe, Zap, ListPlus, PanelRight, LifeBuoy,
+  ShieldCheck, Sparkles, SquareTerminal, Terminal, Trash2, Undo2, X, ChevronDown, Cpu, Globe, Zap, ListPlus, PanelRight, LifeBuoy, WifiOff,
+  MoreHorizontal, Brain, Webhook, PlugZap, ChevronsDownUp, ChevronsUpDown,
 } from 'lucide-react';
+import { useSession } from '../../auth/session';
+import { moTam, useMoTuNgoai } from './moTam';
+import {
+  PROMPT_DUYET_KE_HOACH, PROMPT_INIT, TEN_CHE_DO, chonPhien, dsCauHoi, layUsage, locPhien, moTaChanDoan,
+  moTaDsCauHoi, moTaDsPhien, moTaNguCanh, moTaTrangThai, moTaTroGiup, moTaUsage, promptPlan, promptReview,
+  tachLenh, tenFileXuat, timMuc, timTheoChu, xuatMarkdown,
+} from './lenhGach';
 import { useAppState } from '../../app-state';
 import { useMoRieng } from '../../components/moRieng';
 import { ThanhDangLam } from './ThanhDangLam';
@@ -61,6 +69,10 @@ import { ChupManHinh, NutChupManHinh } from './ChupManHinh';
 import { XinPhep, XinPhepGit, XinPhepLenh, XinPhepMcp, XinPhepNote } from './XinPhep';
 import { useDich } from '../../i18n';
 import { Chu } from '../../i18n/Chu';
+import { DaiNgoaiTuyen, NhanMay, useCheDoCode, useGiaoDienNgoaiTuyen, useMoCaiNgoaiTuyen } from './NgoaiTuyen';
+
+/** Nút kèm câu trả lời của lệnh `/`. */
+type NutLenh = 'nhapKey' | 'caiNgoaiTuyen' | null;
 
 export function AgentMode({
   cuocId,
@@ -98,9 +110,23 @@ export function AgentMode({
   const { dich, dichP } = useDich();
   const {
     trangThai, gui, lamTiep, dung, dangDung, batDauLai, traLoiXinPhep, hoanTac, quayLui, luiFile, tachNhanh,
-    phien, phienDangMo, moPhien, xoaPhien,
+    phien, phienDangMo, moPhien, xoaPhien, baoTin, datHanMuc,
   } = useAgent(cuocId, info);
-  const { settings, setSetting } = useAppState();
+  const { settings, setSetting, online } = useAppState();
+  const { api } = useSession();
+  /* ── AI CODE NGOẠI TUYẾN (03/10/2026) ── main tự rẽ lượt xuống máy khi mất
+     mạng (`ipc/agent.ts`); ở đây chỉ VẼ cho người dùng biết đã rẽ. */
+  const cheDoCode = useCheDoCode();
+  const ngoaiTuyen = useGiaoDienNgoaiTuyen({
+    dangChay: trangThai.dangChay,
+    luotLaCucBo: trangThai.cucBo !== null,
+    coModel: !!cheDoCode?.ma,
+    choPhep: cheDoCode?.choPhepTuDong ?? true,
+  });
+  const moCaiNgoaiTuyen = useMoCaiNgoaiTuyen();
+  const dangNgoaiTuyen = ngoaiTuyen.nen === 'ngoaiTuyen';
+  const tenCucBo = trangThai.cucBo?.ten ?? cheDoCode?.ten ?? '';
+  const nhanCucBo = trangThai.cucBo?.nhan ?? cheDoCode?.nhan ?? '';
 
   /* Mở việc cũ khi thanh bên yêu cầu. Dùng `moPhien` của `useAgent` chứ không
      gọi thẳng IPC — xem chú thích ở `ChatPage.moPhienVaoTab`. */
@@ -150,6 +176,21 @@ export function AgentMode({
    * mãi mãi, ở mọi lượt sau. Nó cũng không phải thứ model cần đọc.
    */
   const [lenhTraLoi, datLenhTraLoi] = useState<string | null>(null);
+  /** Nút đi kèm câu trả lời của lệnh (`/usage` → ô nhập key, `/doctor` → cài AI ngoại tuyến). */
+  const [lenhNut, datLenhNut] = useState<NutLenh>(null);
+  /** `/offline` — tab này đang bị ÉP chạy AI trên máy (nguồn sự thật ở main). */
+  const [epCucBo, datEpCucBo] = useState(false);
+  /* Trạng thái ép sống ở main — dựng lại khi trang được gắn lại (đổi route rồi
+     quay về), nếu không màn hình nói "máy chủ" trong khi lượt sau chạy trên máy. */
+  useEffect(() => {
+    let con = true;
+    void window.cuongthai?.agent.datEpCucBo?.(cuocId)
+      .then((r) => { if (con && r) datEpCucBo(r.bat === true); })
+      .catch(() => {});
+    return () => { con = false; };
+  }, [cuocId]);
+  /** Vừa `/plan` ⇒ khi lượt xong, mời duyệt kế hoạch rồi mới cho làm. */
+  const [choDuyetKH, datChoDuyetKH] = useState(false);
 
   /*
    * Lệnh gạch chéo do dự án định nghĩa. Nạp lại mỗi khi đổi thư mục — lệnh
@@ -245,6 +286,11 @@ export function AgentMode({
   const webUrl = web?.url ?? null;
   /** localhost:3000 — dev server hay dùng nhất, và chỉ là MẶC ĐỊNH (`ep:false`). */
   const WEB_MAC_DINH = 'http://localhost:3000';
+  const batKhungWeb = useCallback(() => {
+    datWeb((cu) => (cu ? null : { url: WEB_MAC_DINH, ep: false }));
+  }, []);
+  /** Gốc của khung — để biết tab này có đang HIỆN không (mọi tab đều dựng). */
+  const gocRef = useRef<HTMLDivElement>(null);
   /* Bảng chạy lệnh — mở/đóng bằng nút, KHÔNG tự mở. Nó chiếm chỗ dưới bảng
      ghi, và người dùng phần lớn thời gian không cần tới. */
   const [moBangLenh, datMoBangLenh] = useState(false);
@@ -301,6 +347,33 @@ export function AgentMode({
     };
   }, [dangKeoWeb, setSetting]);
 
+  /*
+   * PHÍM TẮT (03/10/2026) — giữ được thao tác khi khung hẹp gom nút vào "⋯".
+   * CHỈ tab đang hiện nghe: mọi tab dựng một `AgentMode`, tab ẩn có
+   * `offsetParent === null` (cha `display: none`).
+   */
+  useEffect(() => {
+    const phim = (e: KeyboardEvent): void => {
+      const goc = gocRef.current;
+      if (!goc || goc.offsetParent === null || e.isComposing) return;
+      if (e.ctrlKey && !e.metaKey && !e.shiftKey && (e.key === '`' || e.code === 'Backquote')) {
+        e.preventDefault();
+        datMoBangLenh((v) => !v);
+        return;
+      }
+      if (!(e.metaKey || e.ctrlKey) || !e.shiftKey || e.altKey) return;
+      const k = e.key.toLowerCase();
+      if (k === 'b') batKhungWeb();
+      else if (k === 'm') moTam(cuocId, 'model');
+      else if (k === 'l') lichSu.bat();
+      else if (k === 'y') moTam(cuocId, 'boNho');
+      else return;
+      e.preventDefault();
+    };
+    window.addEventListener('keydown', phim);
+    return () => window.removeEventListener('keydown', phim);
+  }, [cuocId, batKhungWeb, lichSu.bat]);
+
   const [xaDay, datXaDay] = useState(false);
   const XA_DAY_PX = 240;
 
@@ -313,6 +386,11 @@ export function AgentMode({
     const el = cuonRef.current;
     if (!el) return;
     const theo = (): void => {
+      /* Bảng ghi CHỈ cuộn dọc. Một khối rộng (bảng, đường dẫn dài) mà lọt
+         lưới CSS thì trình duyệt vẫn cho cuộn ngang bằng lập trình (chọn chữ,
+         focus, scrollIntoView) — và chữ của MỌI tin nhắn mất ký tự đầu
+         ("ản local…"). Kéo về 0 ngay khi lệch. */
+      if (el.scrollLeft !== 0) el.scrollLeft = 0;
       datXaDay(el.scrollHeight - el.scrollTop - el.clientHeight > XA_DAY_PX);
     };
     theo();
@@ -394,40 +472,37 @@ export function AgentMode({
     if (w) { datThuMuc(w); void batDauLai(); }
   };
 
-  const guiDi = (): void => {
-    const text = nhap.trim();
-    if (!text) return;
+  /** Đặt câu trả lời của một lệnh cục bộ (+ nút kèm nếu có). `null` = đóng. */
+  const traLoi = useCallback((md: string | null, nut: NutLenh = null): void => {
+    datLenhTraLoi(md);
+    datLenhNut(md === null ? null : nut);
+  }, []);
 
-    /*
-     * ⚠️ CHẶN KHI ĐÍNH KÈM CHƯA XONG. Không có chốt này thì bấm Gửi sớm một
-     * nhịp là `dk.anhGuiThang`/`dk.duongDanTrenDia` còn RỖNG — câu hỏi đi một
-     * mình, model nói "tôi không thấy ảnh nào", và trên màn hình thẻ file vẫn
-     * nằm đó như đã gửi. Không có lỗi nào để lần.
-     *
-     * Cửa sổ này rộng ra hẳn từ khi ảnh to được THU NHỎ ngay trong app
-     * (`thuNhoAnh`): giải mã + vẽ + nén một ảnh 4K mất vài trăm mili giây.
-     */
-    if (dk.dangTai) return;
+  /**
+   * Bật/tắt ÉP chạy AI trên máy cho tab này (`/offline`, mục "AI trên máy"
+   * trong menu model). Nguồn sự thật ở main (`epCucBo` trong `ipc/agent.ts`) —
+   * lấy lại trạng thái nó trả về chứ không tự lật cờ ở đây.
+   */
+  const doiEpCucBo = useCallback(async (bat: boolean): Promise<boolean> => {
+    const r = await window.cuongthai?.agent.datEpCucBo(cuocId, bat);
+    const moi = r?.bat === true;
+    datEpCucBo(moi);
+    if (!moi) ngoaiTuyen.quayVe();
+    return moi;
+  }, [cuocId, ngoaiTuyen]);
 
-    /* Đang chạy ⇒ XẾP HÀNG. Xem chú thích ở `hangCho`. Lệnh gạch chéo cũng
-       xếp hàng chứ không chạy ngay: `/clear` giữa lượt là xoá hội thoại mà
-       máy chủ đang đọc dở. */
-    if (trangThai.dangChay) {
-      datHangCho((truoc) => [...truoc, text]);
-      datNhap('');
-      return;
-    }
-
-    /**
-     * Lệnh gạch chéo — xử lý ở đây, KHÔNG gửi lên model.
-     *
-     * `/clear` làm đúng việc nút ↺ vẫn làm, nhưng gõ được. Người quen Claude
-     * Code gõ nó theo phản xạ, và nếu nó rơi vào model thì model sẽ lịch sự
-     * giải thích rằng nó không xoá được gì — tức là một lượt bị tính tiền để
-     * nói "không".
-     */
-    const lenh = text.toLowerCase();
-
+  /**
+   * Chạy MỘT câu: lệnh `/` hoặc câu hỏi cho agent.
+   *
+   * Tách khỏi `guiDi` (03/10/2026) để HÀNG CHỜ đi qua đúng đường này. Bản cũ rút
+   * hàng chờ bằng `gui(dau)` thẳng — nên `/clear` gõ lúc agent đang chạy được
+   * xếp hàng rồi GỬI CHO MODEL như một câu hỏi, trái với chính chú thích nói
+   * "lệnh gạch chéo cũng xếp hàng".
+   *
+   * `dinhKem` = câu vừa gõ ở ô soạn (mang theo ảnh/file đang đính kèm); câu rút
+   * từ hàng chờ thì không — đính kèm đã gửi cùng câu đầu hoặc đã bị bỏ.
+   */
+  const xuLyCau = (text: string, dinhKem: boolean): void => {
     /* Lệnh của DỰ ÁN, gõ tay kèm tham số: `/rade IOT102` + Enter.
      *
      * Phải bắt Ở ĐÂY chứ không chỉ ở bảng gợi ý: `locLenh` ẩn bảng ngay khi có
@@ -436,160 +511,15 @@ export function AgentMode({
     const dauCach = text.indexOf(' ');
     const tenLenh = (dauCach < 0 ? text : text.slice(0, dauCach)).toLowerCase();
     const cuaDuAn = lenhDuAn.find((l) => l.ten === tenLenh);
-    if (cuaDuAn) {
+    /* Lệnh dựng sẵn THẮNG lệnh dự án trùng tên — cùng luật với bảng gợi ý. */
+    const dungSan = tachLenh(text);
+    if (cuaDuAn && !dungSan) {
       bungLenhDuAn(cuaDuAn.than, dauCach < 0 ? '' : text.slice(dauCach + 1));
       return;
     }
 
-    /* ⛔ Những lệnh dưới đây KHÔNG tốn một lượt nào: chúng đọc trạng thái sẵn
-       có trong renderer. Để chúng rơi vào model là trả tiền cho một câu trả
-       lời mà chính app đã biết. */
-    if (lenh === '/help' || lenh === '/?' || lenh === '/tro-giup') {
-      datNhap('');
-      datLenhTraLoi(
-        `**Lệnh gạch chéo**\n\n${LENH_AGENT.map((l) => {
-          const khac = l.khac?.length ? ` _(hoặc ${l.khac.join(', ')})_` : '';
-          return `- \`${l.ten}\`${khac} — ${l.mo}`;
-        }).join('\n')}`,
-      );
-      return;
-    }
-
-    /*
-     * `/quyen` — xem và thu hồi danh sách "Luôn cho phép".
-     *
-     * Một danh sách cho phép KHÔNG xoá được là một cái bẫy: người dùng bấm một
-     * lần lúc vội, rồi không bao giờ tìm lại được thứ mình đã cho phép. Nên
-     * lệnh này ra đời cùng lúc với cái nút, không phải sau.
-     *
-     * Chạy ngay tại chỗ, không tốn một lượt gọi cổng — nó chỉ đọc trạng thái
-     * cục bộ, khác `/diff` (phải nhờ agent vì cần quyền đọc đĩa).
-     */
-    /*
-     * `/kynang` — mượn kỹ năng từ kho `/ai-templates` (1.877 component).
-     *
-     * Kho đó và AI Code theo CÙNG quy ước Claude Code, nên "học" một kỹ năng
-     * chỉ là chép đúng tệp vào đúng thư mục — không cần dịch gì cả. Xem
-     * `main/agent/khoKyNang.ts`.
-     *
-     * ⚠️ CỐ Ý không cài được hook và MCP từ đây: chúng là dòng lệnh SẼ CHẠY
-     * trên máy, và chúng có cửa duyệt vân tay riêng. Ba loại ở đây là CHỮ đi
-     * vào ngữ cảnh của model — rủi ro khác hẳn, nên đường vào cũng khác.
-     */
-    if (lenh === '/kynang' || lenh === '/skill') {
-      datNhap('');
-      const phan = text.trim().split(/\s+/);
-      void (async () => {
-        const b = window.cuongthai?.agent;
-        if (!b) return;
-        if (phan[1] === 'cai' || phan[1] === 'install') {
-          const ten = phan[2];
-          if (!ten) { datLenhTraLoi('Thiếu tên. Ví dụ: `/kynang cai database-optimizer`'); return; }
-          const ghiDe = phan.includes('--de');
-          datLenhTraLoi(`Đang tải \`${ten}\`…`);
-          /* Tìm lại để biết LOẠI — người dùng chỉ gõ tên. Trùng tên giữa hai
-             loại thì ưu tiên `skill`: đó là loại đông nhất và cũng là thứ họ
-             gõ `/kynang` để tìm. */
-          const kq = await b.khoTim(cuocId, ten);
-          const m = kq.find((x) => x.ten === ten) ?? kq[0];
-          if (!m) { datLenhTraLoi(`Không tìm thấy \`${ten}\` trong kho.`); return; }
-          const r = await b.khoCai(cuocId, m.ten, m.loai, ghiDe);
-          datLenhTraLoi(r.ok
-            ? `Đã cài **${m.ten}** (${m.loai}) vào \`${r.duongDan}\`.\n\n`
-              + 'Agent thấy nó từ lượt sau. Xem lại bằng `git diff` trước khi commit — '
-              + 'đây là nội dung từ repo của người khác.\n\n```\n'
-              + `${(r.xemTruoc ?? '').slice(0, 600)}\n\`\`\``
-            : `Không cài được: ${r.loi}`);
-          return;
-        }
-        const tuKhoa = phan.slice(1).join(' ').trim();
-        if (!tuKhoa) {
-          /* Trọn khối markdown là MỘT mục từ điển. Cắt theo dòng rồi nối lại
-             thì bản dịch không đảo được trật tự, mà tiếng Anh cần đảo ở đúng
-             những dòng có chỗ thay. */
-          datLenhTraLoi(dich('**Kho AI Templates** — 871 kỹ năng · 421 agent phụ · 286 lệnh.\n\n- Tìm: `/kynang <từ khoá>` (bỏ dấu cũng ra — `bao mat`)\n- Cài: `/kynang cai <tên>` · ghi đè: thêm `--de`\n\n_Hook và MCP không cài từ đây — chúng là lệnh sẽ chạy, và có cửa duyệt riêng._'));
-          return;
-        }
-        const ds = await b.khoTim(cuocId, tuKhoa).catch(() => []);
-        datLenhTraLoi(ds.length === 0
-          ? dichP('Không có gì khớp "{tu}".', { tu: tuKhoa })
-          : `**${ds.length}** kết quả cho "${tuKhoa}":\n\n`
-            + ds.map((x) => `- \`${x.ten}\` · ${x.loai} · ${x.danhMuc}`).join('\n')
-            + '\n\nCài: `/kynang cai <tên>`');
-      })();
-      return;
-    }
-
-    if (lenh === '/quyen' || lenh === '/permissions') {
-      datNhap('');
-      const dau = text.trim().split(/\s+/);
-      void (async () => {
-        if (dau[1] === 'xoa' || dau[1] === 'clear') {
-          const rieng = dau.slice(2).join(' ').trim();
-          const so = await window.cuongthai?.agent.xoaQuyenLau(cuocId, rieng || undefined) ?? 0;
-          datLenhTraLoi(so === 0
-            ? dich('Không có quyền nào bị thu hồi.')
-            : `Đã thu hồi **${so}** quyền${rieng ? ` cho \`${rieng}\`` : ' của dự án này'}.`);
-          return;
-        }
-        const r = await window.cuongthai?.agent.dsQuyenLau(cuocId);
-        if (!r?.goc) { datLenhTraLoi(dich('Tab này chưa mở dự án nào.')); return; }
-        datLenhTraLoi(r.khoa.length === 0
-          ? dichP('Dự án `{goc}` chưa có quyền nào được "Luôn cho phép".\n\n_Nút đó nằm trên thẻ duyệt, cạnh "Cho phép"._', { goc: r.goc ?? '' })
-          : dichP('**{n}** thứ đang được tự duyệt ở `{goc}`:', { n: r.khoa.length, goc: r.goc ?? '' })
-            + '\n\n'
-            + r.khoa.map((k) => `- \`${k}\``).join('\n')
-            + '\n\n'
-            + dich('Thu hồi tất cả: `/quyen xoa` · thu hồi một cái: `/quyen xoa <nguyên văn>`'));
-      })();
-      return;
-    }
-
-    if (lenh === '/cost' || lenh === '/tien' || lenh === '/chiphi') {
-      datNhap('');
-      const q = trangThai.hanMuc;
-      datLenhTraLoi(
-        dich('**Chi phí việc này**') + '\n\n'
-        + dichP('- Đã tiêu: **~${tien}**\n', { tien: trangThai.tienPhien.toFixed(3) })
-        /* `buoc` là `{ nay, tran }`, không phải số — lấy `nay`. Bản cũ nội
-           suy thẳng cả object nên dòng này in ra `[object Object]` ở mọi lượt
-           có bước; `tsc` chỉ bắt được sau khi chuyển sang `dichP` (nội suy
-           trong template literal thì mọi thứ đều hợp lệ). */
-        + dichP('- Số bước đã đi: {n}\n', { n: trangThai.buoc?.nay ?? 0 })
-        + (q ? dichP('- Hạn mức 5 giờ: còn **{con}** / {tran} token\n', {
-          con: Math.max(0, q.tran - q.daDung).toLocaleString('vi-VN'),
-          tran: q.tran.toLocaleString('vi-VN'),
-        }) : '')
-        + dichP('- File đã sửa (hoàn tác được): {n}\n\n', { n: trangThai.soFileDaSua })
-        + dich('_Con số là ƯỚC LƯỢNG — cổng không công khai giá._'),
-      );
-      return;
-    }
-
-    if (lenh === '/undo' || lenh === '/hoantac') {
-      datNhap('');
-      if (trangThai.soFileDaSua === 0) {
-        datLenhTraLoi(dich('Chưa có file nào để hoàn tác trong việc này.'));
-        return;
-      }
-      void hoanTac();
-      return;
-    }
-
-    /* `/diff` KHÁC ba lệnh trên: nó cần đọc đĩa, mà chỉ agent mới có quyền đó.
-       Nên nó biến thành một câu hỏi cho agent — vẫn tốn một lượt, nhưng người
-       dùng gõ bốn ký tự thay vì một câu. */
-    if (lenh === '/diff' || lenh === '/thaydoi') {
-      datNhap('');
-      dk.xoaHet();
-      void gui('Chạy git_diff rồi tóm tắt ngắn gọn những gì đã thay đổi trong dự án.');
-      return;
-    }
-
-    if (lenh === '/clear' || lenh === '/new' || lenh === '/moi') {
-      datNhap('');
-      dk.xoaHet();
-      void batDauLai();
+    if (dungSan) {
+      void chayLenhDungSan(dungSan.ten, dungSan.thamSo, text);
       return;
     }
 
@@ -600,14 +530,367 @@ export function AgentMode({
      * trường phụ mà prompt không nhắc tới thì model bỏ qua — file coi như chưa
      * từng gửi. Một dòng chữ thì nó đọc chắc chắn.
      */
+    if (!dinhKem) { void gui(text); return; }
     const duong = dk.duongDanTrenDia;
     const kem = duong.length
       ? `${text}\n\nFile tôi vừa đính kèm (đọc bằng read_file khi cần):\n${duong.map((d) => `- ${d}`).join('\n')}`
       : text;
-
-    datNhap('');
+    const anh = dk.anhGuiThang.length ? dk.anhGuiThang : undefined;
     dk.xoaHet();
-    void gui(kem, dk.anhGuiThang.length ? dk.anhGuiThang : undefined);
+    void gui(kem, anh);
+  };
+
+  /**
+   * LỆNH `/` DỰNG SẴN. Phần thuần (đọc tham số, dựng câu trả lời) ở
+   * `lenhGach.ts`; ở đây chỉ nối vào trạng thái của tab.
+   *
+   * ⛔ Lệnh chạy CỤC BỘ không tốn một lượt nào: chúng đọc trạng thái sẵn có
+   * hoặc hỏi máy chủ một route rẻ. Để chúng rơi vào model là trả tiền cho một
+   * câu trả lời mà chính app đã biết. Chỉ `/plan`, `/review`, `/init`, `/diff`
+   * là câu hỏi cho agent (chúng CẦN agent đọc mã).
+   */
+  const chayLenhDungSan = async (ten: string, thamSo: string, goc: string): Promise<void> => {
+    const b = window.cuongthai?.agent;
+    if (!b) return;
+    const dsModel = dsModelCua(info);
+    const dsMuc = dsMucCua(info);
+    switch (ten) {
+      case '/help':
+        traLoi(moTaTroGiup(LENH_AGENT, lenhDuAn));
+        return;
+
+      case '/clear':
+        dk.xoaHet();
+        datChoDuyetKH(false);
+        traLoi(null);
+        void batDauLai();
+        return;
+
+      /*
+       * `/kynang` — mượn kỹ năng từ kho `/ai-templates` (1.877 component).
+       *
+       * Kho đó và AI Code theo CÙNG quy ước Claude Code, nên "học" một kỹ năng
+       * chỉ là chép đúng tệp vào đúng thư mục — không cần dịch gì cả. Xem
+       * `main/agent/khoKyNang.ts`.
+       *
+       * ⚠️ CỐ Ý không cài được hook và MCP từ đây: chúng là dòng lệnh SẼ CHẠY
+       * trên máy, và chúng có cửa duyệt vân tay riêng. Ba loại ở đây là CHỮ đi
+       * vào ngữ cảnh của model — rủi ro khác hẳn, nên đường vào cũng khác.
+       */
+      case '/kynang': {
+        const phan = thamSo.split(/\s+/).filter(Boolean);
+        if (phan[0] === 'cai' || phan[0] === 'install') {
+          const tenKn = phan[1];
+          if (!tenKn) { traLoi('Thiếu tên. Ví dụ: `/kynang cai database-optimizer`'); return; }
+          const ghiDe = phan.includes('--de');
+          traLoi(`Đang tải \`${tenKn}\`…`);
+          /* Tìm lại để biết LOẠI — người dùng chỉ gõ tên. Trùng tên giữa hai
+             loại thì ưu tiên `skill`: đó là loại đông nhất và cũng là thứ họ
+             gõ `/kynang` để tìm. */
+          const kq = await b.khoTim(cuocId, tenKn);
+          const m = kq.find((x) => x.ten === tenKn) ?? kq[0];
+          if (!m) { traLoi(`Không tìm thấy \`${tenKn}\` trong kho.`); return; }
+          const r = await b.khoCai(cuocId, m.ten, m.loai, ghiDe);
+          traLoi(r.ok
+            ? `Đã cài **${m.ten}** (${m.loai}) vào \`${r.duongDan}\`.\n\n`
+              + 'Agent thấy nó từ lượt sau. Xem lại bằng `git diff` trước khi commit — '
+              + 'đây là nội dung từ repo của người khác.\n\n```\n'
+              + `${(r.xemTruoc ?? '').slice(0, 600)}\n\`\`\``
+            : `Không cài được: ${r.loi}`);
+          return;
+        }
+        const tuKhoa = thamSo.trim();
+        if (!tuKhoa) {
+          /* Trọn khối markdown là MỘT mục từ điển. Cắt theo dòng rồi nối lại
+             thì bản dịch không đảo được trật tự, mà tiếng Anh cần đảo ở đúng
+             những dòng có chỗ thay. */
+          traLoi(dich('**Kho AI Templates** — 871 kỹ năng · 421 agent phụ · 286 lệnh.\n\n- Tìm: `/kynang <từ khoá>` (bỏ dấu cũng ra — `bao mat`)\n- Cài: `/kynang cai <tên>` · ghi đè: thêm `--de`\n\n_Hook và MCP không cài từ đây — chúng là lệnh sẽ chạy, và có cửa duyệt riêng._'));
+          return;
+        }
+        const ds = await b.khoTim(cuocId, tuKhoa).catch(() => []);
+        traLoi(ds.length === 0
+          ? dichP('Không có gì khớp "{tu}".', { tu: tuKhoa })
+          : `**${ds.length}** kết quả cho "${tuKhoa}":\n\n`
+            + ds.map((x) => `- \`${x.ten}\` · ${x.loai} · ${x.danhMuc}`).join('\n')
+            + '\n\nCài: `/kynang cai <tên>`');
+        return;
+      }
+
+      /*
+       * `/quyen` — xem và thu hồi danh sách "Luôn cho phép".
+       *
+       * Một danh sách cho phép KHÔNG xoá được là một cái bẫy: người dùng bấm một
+       * lần lúc vội, rồi không bao giờ tìm lại được thứ mình đã cho phép.
+       */
+      case '/quyen': {
+        const dau = thamSo.split(/\s+/).filter(Boolean);
+        if (dau[0] === 'xoa' || dau[0] === 'clear') {
+          const rieng = dau.slice(1).join(' ').trim();
+          const n = await b.xoaQuyenLau(cuocId, rieng || undefined) ?? 0;
+          traLoi(n === 0
+            ? dich('Không có quyền nào bị thu hồi.')
+            : `Đã thu hồi **${n}** quyền${rieng ? ` cho \`${rieng}\`` : ' của dự án này'}.`);
+          return;
+        }
+        const r = await b.dsQuyenLau(cuocId);
+        if (!r?.goc) { traLoi(dich('Tab này chưa mở dự án nào.')); return; }
+        traLoi(r.khoa.length === 0
+          ? dichP('Dự án `{goc}` chưa có quyền nào được "Luôn cho phép".\n\n_Nút đó nằm trên thẻ duyệt, cạnh "Cho phép"._', { goc: r.goc ?? '' })
+          : dichP('**{n}** thứ đang được tự duyệt ở `{goc}`:', { n: r.khoa.length, goc: r.goc ?? '' })
+            + '\n\n'
+            + r.khoa.map((x) => `- \`${x}\``).join('\n')
+            + '\n\n'
+            + dich('Thu hồi tất cả: `/quyen xoa` · thu hồi một cái: `/quyen xoa <nguyên văn>`'));
+        return;
+      }
+
+      case '/cost': {
+        const q = trangThai.hanMuc;
+        traLoi(
+          dich('**Chi phí việc này**') + '\n\n'
+          + dichP('- Đã tiêu: **~${tien}**\n', { tien: trangThai.tienPhien.toFixed(3) })
+          /* `buoc` là `{ nay, tran }`, không phải số — lấy `nay`. */
+          + dichP('- Số bước đã đi: {n}\n', { n: trangThai.buoc?.nay ?? 0 })
+          + (q ? dichP('- Hạn mức 5 giờ: còn **{con}** / {tran} token\n', {
+            con: Math.max(0, q.tran - q.daDung).toLocaleString('vi-VN'),
+            tran: q.tran.toLocaleString('vi-VN'),
+          }) : '')
+          + dichP('- File đã sửa (hoàn tác được): {n}\n\n', { n: trangThai.soFileDaSua })
+          + dich('_Con số là ƯỚC LƯỢNG — cổng không công khai giá. Chi tiết hạn mức: `/usage`._'),
+        );
+        return;
+      }
+
+      case '/undo':
+        if (trangThai.soFileDaSua === 0) { traLoi(dich('Chưa có file nào để hoàn tác trong việc này.')); return; }
+        traLoi(null);
+        void hoanTac();
+        return;
+
+      /* `/diff` cần đọc đĩa, mà chỉ agent mới có quyền đó — nên nó là một câu
+         hỏi cho agent (vẫn tốn một lượt), gửi ở chế độ CHỈ ĐỌC. */
+      case '/diff':
+        traLoi(null);
+        void gui('Chạy git_diff rồi tóm tắt ngắn gọn những gì đã thay đổi trong dự án.', undefined, { chiDoc: true, hienThi: goc });
+        return;
+
+      // ── Nhóm 1 ────────────────────────────────────────────────
+      case '/model': {
+        const q = thamSo.trim();
+        if (!q) { moTam(cuocId, 'model'); traLoi(null); return; }
+        const qc = q.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+        if (/^(du ?phong|fallback)$/.test(qc)) { moTam(cuocId, 'model'); traLoi('Mở menu model — mục **Dùng cổng dự phòng** ở dưới danh sách.'); return; }
+        if (/^(offline|ngoai ?tuyen|may|local|tren may)$/.test(qc)) { await chayLenhDungSan('/offline', 'bat', goc); return; }
+        if (/^(server|may ?chu|online)$/.test(qc)) { await chayLenhDungSan('/offline', 'tat', goc); return; }
+        const m = timTheoChu(q, dsModel);
+        if (!m) {
+          traLoi(`Không rõ model "${q}". Có:\n\n${dsModel.map((x) => `- \`${x.id}\` — ${x.ten}${x.dungDuoc ? '' : ' (chưa cắm khoá)'}`).join('\n')}\n\nGõ \`/model\` không tham số để mở menu.`);
+          return;
+        }
+        if (!m.dungDuoc) { traLoi(`**${m.ten}** chưa dùng được — máy chủ chưa cắm khoá cho nhà cung cấp này.`); return; }
+        /* Model đắt (Fable ×3,5) phải qua thẻ xác nhận trong menu — gõ tắt
+           không được là cửa sau vượt qua câu hỏi đó. */
+        if (m.dat) { moTam(cuocId, 'model'); traLoi(`**${m.ten}** tốn gấp 3,5 lần — xác nhận trong menu vừa mở.`); return; }
+        await doiModel(m.id);
+        traLoi(`Đã đổi model sang **${m.ten}** — ${m.mo}.`);
+        return;
+      }
+
+      case '/effort': {
+        const q = thamSo.trim();
+        const nay = thuMuc?.mucNoLuc ?? 'vua';
+        if (!q) {
+          traLoi(`**Mức nỗ lực** — gõ \`/effort <mức>\`:\n\n${dsMuc.map((x) => `- ${x.id === nay ? '**▸ ' : ''}${x.ten}${x.id === nay ? '**' : ''} — ${x.mo}`).join('\n')}`);
+          return;
+        }
+        const m = timMuc(q, dsMuc);
+        if (!m) { traLoi(`Không rõ mức "${q}". Có: ${dsMuc.map((x) => x.ten).join(' · ')}.`); return; }
+        await doiMucNoLuc(m.id);
+        traLoi(`Đã đổi mức nỗ lực sang **${m.ten}** — ${m.mo}.`);
+        return;
+      }
+
+      case '/usage': {
+        if (!api) { traLoi('Chưa đăng nhập.'); return; }
+        traLoi('Đang hỏi hạn mức…');
+        try {
+          const u = await layUsage((d) => api.request(d));
+          datHanMuc({ daDung: u.daDung, tran: u.tran, phanTram: u.phanTram, hoiLucNao: u.hoiLucNao });
+          traLoi(moTaUsage(u), u.coKeyGiaHan ? 'nhapKey' : null);
+        } catch (e) {
+          traLoi(`Không đọc được hạn mức: ${(e as Error).message}`);
+        }
+        return;
+      }
+
+      case '/context': {
+        const ct = await b.nguCanhChiTiet(cuocId);
+        traLoi(moTaNguCanh(ct, trangThai.nguCanh?.tran ?? 600_000, trangThai.nguCanh?.soLuotDaBo ?? 0));
+        return;
+      }
+
+      case '/compact': {
+        traLoi(`Đang tóm tắt phần cũ${thamSo ? ` (giữ: ${thamSo})` : ''}…`);
+        const r = await b.compact(cuocId, thamSo || undefined);
+        if (!r.ok) { traLoi(`Không /compact được: ${r.loi}`); return; }
+        if (r.soTinDaGop === 0) { traLoi('Việc này còn ngắn (chưa quá 2 lượt) — chưa có gì để gộp.'); return; }
+        const k = (n?: number): string => (n === undefined ? '?' : `${Math.round(n / 1000)}k`);
+        baoTin(`Từ đây trở lên: ${r.soLuotDaGop ?? '?'} lượt đầu đã được tóm tắt (/compact) — agent đọc bản tóm tắt, bạn vẫn cuộn đọc được bản đầy đủ.`, 'COMPACT');
+        traLoi(`Đã gộp **${r.soLuotDaGop ?? '?'} lượt đầu** vào một bản tóm tắt. Ngữ cảnh gửi lên: **${k(r.kyTuTruoc)} → ${k(r.kyTuSau)}** ký tự.\n\n`
+          + `Bản đầy đủ vẫn ở trên để bạn đọc; quay lui về trước điểm gộp thì bản tóm tắt tự bỏ.\n\n> ${(r.xemTruoc ?? '').split('\n').slice(0, 8).join('\n> ')}`);
+        return;
+      }
+
+      case '/status': {
+        const app = await window.cuongthai?.app.getInfo().catch(() => null);
+        const nayModel = dsModel.find((x) => x.id === (thuMuc?.model ?? 'sonnet-5'));
+        const nayMuc = dsMuc.find((x) => x.id === (thuMuc?.mucNoLuc ?? 'vua'));
+        const duPhong = trangThai.muc.some((m) => m.kieu === 'loi' && m.ma === 'DOI_CONG');
+        traLoi(moTaTrangThai({
+          phienBan: app?.version ?? '?',
+          cong: epCucBo ? 'epNgoaiTuyen' : dangNgoaiTuyen ? 'ngoaiTuyen' : duPhong ? 'duPhong' : 'chinh',
+          online,
+          ...(tenCucBo ? { tenCucBo } : {}),
+          duAn: thuMuc?.name ?? null,
+          duongDan: thuMuc?.path ?? null,
+          nhanh: thuMuc?.branch ?? null,
+          model: nayModel?.ten ?? thuMuc?.model ?? '?',
+          muc: nayMuc?.ten ?? '?',
+          cheDo: TEN_CHE_DO[thuMuc?.cheDoQuyen ?? 'keHoach'],
+          tomTat: trangThai.muc.some((m) => m.kieu === 'loi' && m.ma === 'COMPACT'),
+        }));
+        return;
+      }
+
+      // ── Nhóm 2 ────────────────────────────────────────────────
+      case '/plan': {
+        if (!thamSo) { traLoi('Gõ việc cần lập kế hoạch: `/plan thêm trang cài đặt cho AI ngoại tuyến`. Lượt đó CHỈ ĐỌC — không sửa file, không chạy lệnh — rồi bạn duyệt mới làm.'); return; }
+        traLoi(null);
+        datChoDuyetKH(true);
+        void gui(promptPlan(thamSo), undefined, { chiDoc: true, hienThi: goc });
+        return;
+      }
+
+      case '/review':
+        if (!coThuMuc) { traLoi(dich('Tab này chưa mở dự án nào.')); return; }
+        traLoi(null);
+        void gui(promptReview(thamSo), undefined, { chiDoc: true, hienThi: goc });
+        return;
+
+      case '/init': {
+        if (!coThuMuc) { traLoi('Chọn thư mục dự án trước — `/init` ghi `AGENTS.md` vào gốc dự án.'); return; }
+        /* Ghi file cần quyền sửa. Ở chế độ chỉ đọc thì nâng lên "Hỏi từng việc"
+           — mỗi lần ghi VẪN hiện thẻ duyệt, nên không có gì tự ghi sau lưng. */
+        if ((thuMuc?.cheDoQuyen ?? 'keHoach') === 'keHoach') {
+          await doiCheDoQuyen('hoi');
+          baoTin('Đã chuyển sang chế độ "Hỏi từng việc" để agent ghi AGENTS.md — mỗi lần ghi vẫn hỏi bạn.', 'DOI_CHE_DO');
+        }
+        traLoi(null);
+        void gui(PROMPT_INIT, undefined, { hienThi: goc });
+        return;
+      }
+
+      case '/resume': {
+        if (!thamSo) { lichSu.bat(); traLoi(moTaDsPhien(locPhien(phien, ''))); return; }
+        const p = chonPhien(phien, thamSo);
+        if (!p) { traLoi(moTaDsPhien(locPhien(phien, thamSo))); return; }
+        traLoi(null);
+        void moPhien(p.id);
+        return;
+      }
+
+      case '/rewind': {
+        const ds = dsCauHoi(trangThai.muc);
+        const n = Number(thamSo);
+        if (!thamSo || !Number.isInteger(n)) { traLoi(moTaDsCauHoi(ds)); return; }
+        if (n < 1 || n > ds.length) { traLoi(`Không có câu hỏi thứ ${n} (việc này có ${ds.length} câu).`); return; }
+        traLoi(null);
+        const r = await quayLui(n);
+        if (!r) return;
+        datNhap(r.cauHoi);
+        /* "Khôi phục hội thoại + file": dùng ĐÚNG điểm lưu theo lượt mà nút
+           "Lùi cả file" vẫn dùng (`luiFile` — mỗi câu hỏi là một mốc). */
+        if (r.soFileSeLui > 0) {
+          const kq = await luiFile(n);
+          datCanhQuayLui({
+            chu: kq === null
+              ? 'Đã quay lui hội thoại, nhưng lùi file hỏng — xem dòng lỗi trên bảng ghi.'
+              : `Đã quay về câu ${n}: cắt hội thoại và lùi ${kq.soFile} file về trước câu đó.`
+                + (kq.loi.length > 0 ? ` ${kq.loi.length} file không lùi được: ${kq.loi.join('; ')}` : ''),
+          });
+        } else {
+          datCanhQuayLui({
+            chu: r.coSuaFile
+              ? `Đã quay về câu ${n}. Đoạn vừa bỏ có chạy lệnh — thay đổi do lệnh gây ra không lùi được tự động.`
+              : `Đã quay về câu ${n}. Câu hỏi đó đã nằm lại trong ô soạn để bạn sửa và gửi lại.`,
+          });
+        }
+        return;
+      }
+
+      case '/memory': moTam(cuocId, 'boNho'); traLoi(null); return;
+      case '/hooks': moTam(cuocId, 'hook'); traLoi(null); return;
+      case '/mcp': moTam(cuocId, 'mcp'); traLoi(null); return;
+
+      // ── Nhóm 3 ────────────────────────────────────────────────
+      case '/export': {
+        if (trangThai.muc.length === 0) { traLoi('Việc này chưa có gì để xuất.'); return; }
+        const luc = new Date();
+        const tieuDe = cauDau?.kieu === 'nguoi' ? cauDau.text.slice(0, 80) : 'Việc AI Code';
+        const md = xuatMarkdown(trangThai.muc, { tieuDe, duAn: thuMuc?.name ?? null, luc });
+        const r = await window.cuongthai?.app.luuFile(tenFileXuat(tieuDe, luc), new TextEncoder().encode(md));
+        traLoi(r?.ok ? `Đã xuất ${trangThai.muc.length} mục ra file Markdown (${Math.round(md.length / 1024)} KB).`
+          : r?.huy ? 'Đã huỷ xuất.' : `Không lưu được: ${r?.loi ?? 'lỗi không rõ'}`);
+        return;
+      }
+
+      case '/doctor': {
+        traLoi('Đang chẩn đoán…');
+        const ds = await b.chanDoan(cuocId).catch((e: unknown) => [{ ten: 'Chẩn đoán', muc: 'loi' as const, chiTiet: (e as Error).message }]);
+        traLoi(moTaChanDoan(ds), ds.some((m) => m.ten === 'AI ngoại tuyến' && m.muc !== 'ok') ? 'caiNgoaiTuyen' : null);
+        return;
+      }
+
+      case '/offline': {
+        const q = thamSo.trim().toLowerCase();
+        const bat = q === 'bat' || q === 'bật' || q === 'on' ? true : q === 'tat' || q === 'tắt' || q === 'off' ? false : !epCucBo;
+        if (bat && !cheDoCode?.ma) {
+          traLoi(`Máy này chưa có AI ngoại tuyến cho AI Code. ${cheDoCode?.vi ?? ''}`.trim(), 'caiNgoaiTuyen');
+          return;
+        }
+        const moi = await doiEpCucBo(bat);
+        traLoi(moi
+          ? `Tab này giờ chạy bằng **${tenCucBo || 'AI trên máy'}** (không gửi lên máy chủ) cho tới khi gõ \`/offline\` lần nữa. Model nhỏ — có thể sót, kiểm lại khi cần.`
+          : 'Đã quay về AI máy chủ cho tab này.');
+        return;
+      }
+      default:
+        traLoi(`Lệnh \`${ten}\` chưa nối.`);
+    }
+  };
+
+  const guiDi = (): void => {
+    const text = nhap.trim();
+    if (!text) return;
+
+    /*
+     * ⚠️ CHẶN KHI ĐÍNH KÈM CHƯA XONG. Không có chốt này thì bấm Gửi sớm một
+     * nhịp là `dk.anhGuiThang`/`dk.duongDanTrenDia` còn RỖNG — câu hỏi đi một
+     * mình, model nói "tôi không thấy ảnh nào", và trên màn hình thẻ file vẫn
+     * nằm đó như đã gửi. Không có lỗi nào để lần.
+     */
+    if (dk.dangTai) return;
+
+    /* Đang chạy ⇒ XẾP HÀNG. Xem chú thích ở `hangCho`. Lệnh gạch chéo cũng
+       xếp hàng chứ không chạy ngay: `/clear` giữa lượt là xoá hội thoại mà
+       máy chủ đang đọc dở. Khi rút ra, nó đi qua `xuLyCau` — chạy như lệnh. */
+    if (trangThai.dangChay) {
+      datHangCho((truoc) => [...truoc, text]);
+      datNhap('');
+      return;
+    }
+    datNhap('');
+    xuLyCau(text, true);
   };
 
   /*
@@ -624,8 +907,9 @@ export function AgentMode({
     if (trangThai.dangChay || hangCho.length === 0) return;
     const [dau, ...conLai] = hangCho;
     datHangCho(conLai);
-    if (dau) void gui(dau);
-  }, [trangThai.dangChay, hangCho, gui]);
+    if (dau) xuLyCau(dau, false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [trangThai.dangChay, hangCho]);
 
   const phimTrongO = (e: React.KeyboardEvent<HTMLTextAreaElement>): void => {
     // Bộ gõ tiếng Việt/CJK dùng Enter để CHỐT chữ đang gõ. Gửi lúc đó là cắt
@@ -695,12 +979,14 @@ export function AgentMode({
        Giờ luôn nhận, và nếu thiếu thư mục thì lớp phủ nói thẳng phải làm gì. */
     <div
       className="ct-agent"
+      ref={gocRef}
       /* ⚠️ Cờ này nằm ở ĐÂY chứ không chỉ ở `.ct-agent-doi` bên trong, vì cột
          đọc được khai trên chính phần tử này — và CSS không chọn ngược lên cha
          được. Thiếu nó thì khi mở khung web, đệm cột tính theo bề ngang của CẢ
          HAI khung cộng lại, rộng hơn cả khung chat, và chữ bị ép xuống một ký
          tự một dòng. Người dùng gửi ảnh 16/09/2026. */
       data-co-web={webUrl !== null}
+      data-ngoai-tuyen={dangNgoaiTuyen || epCucBo ? '1' : undefined}
       data-keo={dk.dangKeo}
       onDragEnter={dk.keoVao}
       onDragOver={dk.keoTren}
@@ -726,170 +1012,238 @@ export function AgentMode({
         />
       )}
 
-      {/* ── Thanh phạm vi quyền + hạn mức ── */}
-      <div className="ct-agent-bar">
-        <button
-          type="button"
-          className="ct-agent-ws"
-          onClick={() => void chonThuMuc()}
-          title={thuMuc?.path ?? dich('Chưa chọn thư mục dự án')}
-        >
-          <FolderOpen size={14} aria-hidden />
-          <span className="ct-agent-ws-name">{thuMuc?.name ?? dich('Chọn thư mục dự án…')}</span>
-          {thuMuc?.branch && <span className="ct-agent-branch">{thuMuc.branch}</span>}
-        </button>
+      {!(epCucBo && online) && <DaiNgoaiTuyen
+        tt={ngoaiTuyen}
+        tenModel={tenCucBo}
+        nhan={nhanCucBo}
+        lyDo={cheDoCode?.vi ?? ''}
+        dangChay={trangThai.dangChay}
+      />}
 
-        {coThuMuc && (
+      {/* `/offline` — ép tay chạy trên máy (dải riêng: dải của gói ngoại tuyến
+          chỉ nói về MẤT MẠNG, còn đây là người dùng tự chọn khi có mạng). */}
+      {epCucBo && online && (
+        <div className="ct-ngoai-tuyen-dai" data-loai="chay" role="status">
+          <PlugZap size={15} aria-hidden />
+          <span className="ct-ngoai-tuyen-chu">
+            <strong>{dich('Ngoại tuyến')}</strong>
+            {tenCucBo && <> · {tenCucBo}</>}
+            {' · '}{dich('bạn bật bằng /offline — không gửi lên máy chủ')}
+          </span>
+          <button type="button" className="ct-ngoai-tuyen-nut" onClick={() => void doiEpCucBo(false)}>
+            <RotateCcw size={13} aria-hidden /> {dich('Quay về AI máy chủ')}
+          </button>
+        </div>
+      )}
+
+      {/* ── Thanh công cụ ──
+          Hai nhóm: TRÁI = phạm vi quyền (thư mục, chế độ) — thứ người dùng phải
+          luôn thấy; PHẢI = model/ngữ cảnh/hạn mức rồi tới công cụ. Nhóm "phụ"
+          (`data-phu`) gom vào menu "⋯" khi CỘT hẹp — đo bằng `@container`, không
+          bằng cửa sổ (BO-CUC.md luật 3). */}
+      <div className="ct-agent-bar">
+        <div className="ct-agent-bar-trai">
+          <button
+            type="button"
+            className="ct-agent-ws"
+            onClick={() => void chonThuMuc()}
+            title={thuMuc?.path ?? dich('Chưa chọn thư mục dự án')}
+          >
+            <FolderOpen size={14} aria-hidden />
+            <span className="ct-agent-ws-name">{thuMuc?.name ?? dich('Chọn thư mục dự án…')}</span>
+            {thuMuc?.branch && <span className="ct-agent-branch">{thuMuc.branch}</span>}
+          </button>
+
+          {coThuMuc && (
+            <button
+              type="button"
+              className="ct-agent-icon"
+              data-nut="boThuMuc"
+              onClick={() => void boThuMuc()}
+              title={dich('Thôi cho đọc thư mục này')}
+              aria-label={dich('Thôi cho đọc thư mục này')}
+            >
+              <X size={13} aria-hidden />
+            </button>
+          )}
+
+          {coThuMuc && (
+            <ChonCheDo
+              cuocId={cuocId}
+              cheDo={thuMuc?.cheDoQuyen ?? 'keHoach'}
+              khoa={trangThai.dangChay}
+              onChon={(c) => void doiCheDoQuyen(c)}
+            />
+          )}
+        </div>
+
+        <div className="ct-agent-bar-phai">
+          {/* Ngoại tuyến ⇒ chip nói ĐÚNG model đang trả lời (model trên máy),
+              không phải model máy chủ đã chọn — chọn model máy chủ lúc này
+              chẳng có tác dụng gì. */}
+          {dangNgoaiTuyen || epCucBo ? (
+            <span className="ct-chip-cucbo" title={dich('AI Code đang chạy bằng model trên máy này')}>
+              {epCucBo && online ? <PlugZap size={12} aria-hidden /> : <WifiOff size={12} aria-hidden />}
+              <span>{tenCucBo || dich('AI trên máy')}</span>
+            </span>
+          ) : (
+            <ChonModelVaMuc
+              cuocId={cuocId}
+              muc={thuMuc?.mucNoLuc ?? 'vua'}
+              model={thuMuc?.model ?? 'sonnet-5'}
+              khoa={trangThai.dangChay}
+              info={info}
+              onChonMuc={(m) => void doiMucNoLuc(m)}
+              onChonModel={(m) => void doiModel(m)}
+              cucBo={cheDoCode?.ma ? { ten: tenCucBo || cheDoCode.ten || 'AI trên máy', bat: epCucBo } : null}
+              onDoiCucBo={(b) => void doiEpCucBo(b)}
+            />
+          )}
+
+          {trangThai.nguCanh && <VongNguCanh n={trangThai.nguCanh} />}
+
+          {trangThai.hanMuc && <ThanhHanMuc quota={trangThai.hanMuc} soViec={info.soViecConLai} />}
+
+          {trangThai.soFileDaSua > 0 && (
+            <button
+              type="button"
+              className="ct-agent-hoantac"
+              onClick={() => void hoanTac()}
+              title={dich('Trả mọi file agent đã sửa trong việc này về nguyên trạng')}
+            >
+              <Undo2 size={13} aria-hidden />
+              <span className="ct-agent-nhan">Hoàn tác {trangThai.soFileDaSua} file</span>
+            </button>
+          )}
+
+          <span className="ct-agent-bar-vach" aria-hidden />
+
+          {/* Bảng chạy lệnh của NGƯỜI DÙNG — khác hẳn `run_command` của agent:
+              ở đây không có thẻ duyệt, vì chính người dùng vừa gõ lệnh. */}
+          <button
+            type="button"
+            className="ct-agent-cong"
+            data-bat={moBangLenh}
+            data-nut="terminal"
+            onClick={() => datMoBangLenh((v) => !v)}
+            title={`${dich('Terminal thật trong thư mục dự án — gõ lệnh, ssh, mật khẩu… (agent cũng dùng chung)')} · ${PHIM.terminal}`}
+          >
+            <SquareTerminal size={14} aria-hidden />
+            <span className="ct-agent-nhan">Terminal</span>
+          </button>
+
+          {/* MỞ KHUNG WEB ngay trong AI Code. Khác nút "Trình duyệt" (cấp QUYỀN
+              cho agent): nút này chỉ mở khung cho NGƯỜI DÙNG nhìn — nên nó
+              không bị khoá lúc agent đang chạy. `ep: false` ⇒ chỉ nạp
+              `WEB_MAC_DINH` khi chưa có trang nào. */}
+          <button
+            type="button"
+            className="ct-agent-cong"
+            data-bat={webUrl !== null}
+            data-nut="khungweb"
+            onClick={batKhungWeb}
+            title={`${webUrl !== null
+              ? dich('Đóng khung trình duyệt bên phải')
+              : dich('Mở trình duyệt ngay cạnh bảng ghi — xem trang chạy trong lúc agent sửa mã')} · ${PHIM.web}`}
+          >
+            <PanelRight size={14} aria-hidden />
+            <span className="ct-agent-nhan">{dich('Khung web')}</span>
+          </button>
+
+          {/* ── Nhóm PHỤ: hiện thẳng khi cột rộng, gom vào "⋯" khi hẹp ── */}
+          {/* Trình duyệt KHÔNG cần thư mục dự án: agent có thể mở một trang bất
+              kỳ để đọc tài liệu hay kiểm một API. */}
+          <button
+            type="button"
+            className="ct-agent-cong"
+            data-phu
+            data-bat={thuMuc?.choTrinhDuyet === true}
+            data-nut="trinhduyet"
+            onClick={() => void doiCheDoTrinhDuyet()}
+            disabled={trangThai.dangChay}
+            title={
+              thuMuc?.choTrinhDuyet
+                ? dich('Agent ĐANG lái được trình duyệt: mở trang, đọc sau khi JS chạy, xem console. Bấm/gõ vẫn phải bạn duyệt. Bấm để tắt. (Nhớ cho những việc sau.)')
+                : dich('Bật cho agent MỞ TRANG WEB — YouTube, tài liệu, localhost — ngay cạnh bảng ghi, đọc nội dung sau khi JS chạy và xem lỗi console. Mọi thao tác bấm/gõ vẫn hỏi bạn. (Nhớ cho những việc sau.)')
+            }
+          >
+            <Globe size={14} aria-hidden />
+            <span className="ct-agent-nhan">{dich('Trình duyệt')}</span>
+            <span className="ct-agent-den" aria-label={thuMuc?.choTrinhDuyet ? dich('đang bật') : dich('đang tắt')} />
+          </button>
+
+          {/* KHÔNG bọc trong `coThuMuc`: sổ ghi chú nằm trên máy chủ, không phải
+              trong thư mục dự án. */}
+          <button
+            type="button"
+            className="ct-agent-cong"
+            data-phu
+            data-bat={thuMuc?.choGhiNote === true}
+            data-nut="ghinote"
+            onClick={() => void doiCheDoNote()}
+            disabled={trangThai.dangChay}
+            title={
+              thuMuc?.choGhiNote
+                ? 'Agent ĐANG ghi được vào Ghi chú (mỗi lần ghi vẫn phải bạn duyệt). Bấm để tắt.'
+                : 'Bật cho agent tạo và sửa ghi chú của bạn trên cuongthai.com. Bạn thấy nội dung rồi mới duyệt.'
+            }
+          >
+            <NotebookPen size={14} aria-hidden />
+            <span className="ct-agent-nhan">{dich('Ghi chú')}</span>
+            <span className="ct-agent-den" aria-label={thuMuc?.choGhiNote ? dich('đang bật') : dich('đang tắt')} />
+          </button>
+
+          {/* Bốn tấm có bảng riêng. Khi hẹp chỉ ẨN NÚT (CSS), giữ cái bọc để
+              bảng của chúng vẫn mở được từ menu "⋯" và từ lệnh `/`. */}
+          <span className="ct-agent-tam" data-phu-tam>
+            {coThuMuc && (
+              <NutWorktree cuocId={cuocId} khoa={trangThai.dangChay} onDoi={() => { void napThuMuc(); void batDauLai(); }} />
+            )}
+            <NutMcp cuocId={cuocId} khoa={trangThai.dangChay} />
+            <BangHook cuocId={cuocId} khoa={trangThai.dangChay} />
+            <BangBoNho cuocId={cuocId} khoa={trangThai.dangChay} />
+          </span>
+
+          <MenuThem
+            onLichSu={lichSu.bat}
+            soViec={phien.length}
+            onViecMoi={() => void batDauLai()}
+            coViec={trangThai.muc.length > 0}
+            cuocId={cuocId}
+            coThuMuc={coThuMuc}
+            khoa={trangThai.dangChay}
+            trinhDuyet={thuMuc?.choTrinhDuyet === true}
+            ghiChu={thuMuc?.choGhiNote === true}
+            onTrinhDuyet={() => void doiCheDoTrinhDuyet()}
+            onGhiChu={() => void doiCheDoNote()}
+          />
+
           <button
             type="button"
             className="ct-agent-icon"
-            data-nut="boThuMuc"
-            onClick={() => void boThuMuc()}
-            title={dich('Thôi cho đọc thư mục này')}
+            data-phu
+            data-nut="lichSu"
+            onClick={lichSu.bat}
+            title={`Việc đã lưu (${phien.length}) · ${PHIM.lichSu}`}
+            aria-label={dich('Việc đã lưu')}
           >
-            <X size={13} aria-hidden />
+            <History size={14} aria-hidden />
           </button>
-        )}
 
-        <div className="ct-agent-bar-spacer" />
-
-        {coThuMuc && (
-          <ChonCheDo
-            cuocId={cuocId}
-            cheDo={thuMuc?.cheDoQuyen ?? 'keHoach'}
-            khoa={trangThai.dangChay}
-            onChon={(c) => void doiCheDoQuyen(c)}
-          />
-        )}
-
-        {/* Trình duyệt KHÔNG cần thư mục dự án: agent có thể mở một trang bất
-            kỳ để đọc tài liệu hay kiểm một API. */}
-        <button
-          type="button"
-          className="ct-agent-suanut"
-          data-bat={thuMuc?.choTrinhDuyet === true}
-          data-nut="trinhduyet"
-          onClick={() => void doiCheDoTrinhDuyet()}
-          disabled={trangThai.dangChay}
-          title={
-            thuMuc?.choTrinhDuyet
-              ? dich('Agent ĐANG lái được trình duyệt: mở trang, đọc sau khi JS chạy, xem console. Bấm/gõ vẫn phải bạn duyệt. Bấm để tắt. (Nhớ cho những việc sau.)')
-              : dich('Bật cho agent MỞ TRANG WEB — YouTube, tài liệu, localhost — ngay cạnh bảng ghi, đọc nội dung sau khi JS chạy và xem lỗi console. Mọi thao tác bấm/gõ vẫn hỏi bạn. (Nhớ cho những việc sau.)')
-          }
-        >
-          <Globe size={13} aria-hidden />
-          {thuMuc?.choTrinhDuyet ? dich('Trình duyệt: BẬT') : dich('Trình duyệt: tắt')}
-        </button>
-
-        {/* MỞ KHUNG WEB ngay trong AI Code, không phải sang tab Trình duyệt.
-            Khác hẳn nút bên trái: nút kia cấp QUYỀN cho agent lái trình duyệt,
-            nút này chỉ mở khung cho NGƯỜI DÙNG nhìn — nên nó không bị khoá
-            lúc agent đang chạy, đó chính là lúc cần xem trang nhất.
-            `ep: false` ⇒ chỉ nạp `WEB_MAC_DINH` khi chưa có trang nào; trang
-            đang mở ở tab Trình duyệt được giữ nguyên. */}
-        <button
-          type="button"
-          className="ct-btn ct-btn-ghost"
-          data-bat={webUrl !== null}
-          onClick={() => datWeb((cu) => (cu ? null : { url: WEB_MAC_DINH, ep: false }))}
-          title={webUrl !== null
-            ? dich('Đóng khung trình duyệt bên phải')
-            : dich('Mở trình duyệt ngay cạnh bảng ghi — xem trang chạy trong lúc agent sửa mã')}
-        >
-          <PanelRight size={13} aria-hidden />
-          {webUrl !== null ? dich('Khung web: MỞ') : dich('Khung web')}
-        </button>
-
-        {/* Bảng chạy lệnh của NGƯỜI DÙNG — khác hẳn `run_command` của agent:
-            ở đây không có thẻ duyệt, vì chính người dùng vừa gõ lệnh. Hỏi lại
-            thứ họ vừa tự gõ là màn kịch, và nó dạy người ta bấm bừa. */}
-        <button
-          type="button"
-          className="ct-btn ct-btn-ghost"
-          data-bat={moBangLenh}
-          onClick={() => datMoBangLenh((v) => !v)}
-          title={dich('Terminal thật trong thư mục dự án — gõ lệnh, ssh, mật khẩu… (agent cũng dùng chung)')}
-        >
-          <SquareTerminal size={13} aria-hidden />
-          {moBangLenh ? dich('Terminal: MỞ') : 'Terminal'}
-        </button>
-
-        {/* KHÔNG bọc trong `coThuMuc`: sổ ghi chú nằm trên máy chủ, không phải
-            trong thư mục dự án. Ẩn nút này khi chưa mở dự án nghĩa là bắt người
-            dùng chọn một thư mục mã chỉ để nhờ agent ghi chú. */}
-        <button
-          type="button"
-          className="ct-agent-suanut"
-          data-bat={thuMuc?.choGhiNote === true}
-          data-nut="ghinote"
-          onClick={() => void doiCheDoNote()}
-          disabled={trangThai.dangChay}
-          title={
-            thuMuc?.choGhiNote
-              ? 'Agent ĐANG ghi được vào Ghi chú (mỗi lần ghi vẫn phải bạn duyệt). Bấm để tắt.'
-              : 'Bật cho agent tạo và sửa ghi chú của bạn trên cuongthai.com. Bạn thấy nội dung rồi mới duyệt.'
-          }
-        >
-          <NotebookPen size={13} aria-hidden />
-          {thuMuc?.choGhiNote ? dich('Ghi chú: BẬT') : dich('Ghi chú: tắt')}
-        </button>
-
-        {trangThai.soFileDaSua > 0 && (
           <button
             type="button"
-            className="ct-agent-hoantac"
-            onClick={() => void hoanTac()}
-            title={dich('Trả mọi file agent đã sửa trong việc này về nguyên trạng')}
+            className="ct-agent-icon"
+            data-phu
+            data-nut="viecMoi"
+            onClick={() => void batDauLai()}
+            disabled={trangThai.muc.length === 0}
+            title={dich('Bắt đầu việc mới (xoá hội thoại, KHÔNG hoàn lại hạn mức)')}
+            aria-label={dich('Bắt đầu việc mới')}
           >
-            <Undo2 size={13} aria-hidden />
-            Hoàn tác {trangThai.soFileDaSua} file
+            <RotateCcw size={14} aria-hidden />
           </button>
-        )}
-
-        <ChonModelVaMuc
-          muc={thuMuc?.mucNoLuc ?? 'vua'}
-          model={thuMuc?.model ?? 'sonnet-5'}
-          khoa={trangThai.dangChay}
-          info={info}
-          onChonMuc={(m) => void doiMucNoLuc(m)}
-          onChonModel={(m) => void doiModel(m)}
-        />
-
-        {trangThai.nguCanh && <VongNguCanh n={trangThai.nguCanh} />}
-
-        {trangThai.hanMuc && <ThanhHanMuc quota={trangThai.hanMuc} soViec={info.soViecConLai} />}
-
-        {coThuMuc && (
-          <NutWorktree cuocId={cuocId} khoa={trangThai.dangChay} onDoi={() => { void napThuMuc(); void batDauLai(); }} />
-        )}
-
-        <NutMcp cuocId={cuocId} khoa={trangThai.dangChay} />
-
-        <BangHook cuocId={cuocId} khoa={trangThai.dangChay} />
-        <BangBoNho cuocId={cuocId} khoa={trangThai.dangChay} />
-
-        <button
-          type="button"
-          className="ct-agent-icon"
-          data-nut="lichSu"
-          onClick={lichSu.bat}
-          title={`Việc đã lưu (${phien.length})`}
-        >
-          <History size={13} aria-hidden />
-        </button>
-
-        <button
-          type="button"
-          className="ct-agent-icon"
-          data-nut="viecMoi"
-          onClick={() => void batDauLai()}
-          disabled={trangThai.muc.length === 0}
-          title={dich('Bắt đầu việc mới (xoá hội thoại, KHÔNG hoàn lại hạn mức)')}
-        >
-          <RotateCcw size={13} aria-hidden />
-        </button>
+        </div>
       </div>
-
       {trangThai.keHoach.length > 0 && <BangKeHoach viec={trangThai.keHoach} />}
 
       {/*
@@ -906,10 +1260,10 @@ export function AgentMode({
         chỉ đưa cái nút, để người dùng quyết. Rẻ hơn một lượt bị tính tiền
         cho một câu hỏi họ không đặt.
       */}
-      {!trangThai.dangChay
+      {!trangThai.dangChay && !choDuyetKH
         && trangThai.keHoach.length > 0
         && trangThai.keHoach.some((v) => v.trangThai !== 'xong') && (
-        <div className="ct-notice" data-tone="warn" style={{ margin: '0 0 8px' }}>
+        <div className="ct-notice ct-agent-bao" data-tone="warn">
           <span>
             {dichP('Kế hoạch còn {n} việc chưa xong mà agent đã dừng.',
               { n: trangThai.keHoach.filter((v) => v.trangThai !== 'xong').length })}
@@ -925,7 +1279,7 @@ export function AgentMode({
       )}
 
       {canhQuayLui && (
-        <div className="ct-notice" data-tone="warn" style={{ margin: '0 0 8px' }}>
+        <div className="ct-notice ct-agent-bao" data-tone="warn">
           <span>{canhQuayLui.chu}</span>
           {canhQuayLui.moc !== undefined && (canhQuayLui.soFile ?? 0) > 0 && (
             <button
@@ -1025,7 +1379,8 @@ export function AgentMode({
           }
           if (m.kieu === 'may') {
             return (
-              <div key={i} className="ct-agent-may">
+              <div key={i} className="ct-agent-may" data-cuc-bo={m.cucBo ? '1' : undefined}>
+                {m.cucBo && <NhanMay ten={m.cucBo} />}
                 <ChuAgent text={m.text} />
               </div>
             );
@@ -1033,13 +1388,19 @@ export function AgentMode({
           if (m.kieu === 'loi') {
             return (
               <div key={i} className="ct-notice" data-tone={
-                m.ma === 'HOAN_TAC' || m.ma === 'RAMBO_BAO_TRI' ? 'warn' : m.ma === 'KHOI_PHUC' || m.ma === 'DOI_CONG' || m.ma === 'RAMBO_SONG_LAI' || m.ma === 'LAM_TIEP' ? 'info' : 'err'
+                m.ma === 'HOAN_TAC' || m.ma === 'RAMBO_BAO_TRI' || m.ma === 'CUC_BO_CHUA_CAI' || m.ma === 'CUC_BO_DA_TAT' || m.ma === 'MAX_STEPS' || m.ma === 'TOOL_HONG' ? 'warn' : m.ma === 'KHOI_PHUC' || m.ma === 'DOI_CONG' || m.ma === 'RAMBO_SONG_LAI' || m.ma === 'LAM_TIEP' || m.ma === 'TU_GO_ANH' || m.ma === 'COMPACT' || m.ma === 'DOI_CHE_DO' ? 'info' : 'err'
               }>
                 <span>{m.text}</span>
                 {/* Hết hạn mức Cuong Fable ⇒ xin thêm ngay tại chỗ (26/09/2026). */}
                 {m.ma === 'FABLE_QUOTA_EXCEEDED' && <XinThemFable />}
                 {/* Cổng chính (rambo) sập ⇒ hỏi có dùng cổng dự phòng không (27/09/2026). */}
                 {m.ma === 'RAMBO_BAO_TRI' && <MoCongDuPhong baoTri />}
+                {/* Mất mạng mà chưa có / đang tắt AI ngoại tuyến ⇒ một nút tới đúng chỗ cài. */}
+                {(m.ma === 'CUC_BO_CHUA_CAI' || m.ma === 'CUC_BO_DA_TAT') && (
+                  <button type="button" className="ct-ngoai-tuyen-nut" onClick={moCaiNgoaiTuyen}>
+                    {m.ma === 'CUC_BO_DA_TAT' ? dich('Mở cài đặt') : dich('Cài AI ngoại tuyến')}
+                  </button>
+                )}
                 {/* Hết hạn mức token 5 giờ + admin đã bật key gia hạn ⇒ nhập key,
                     tự gửi lại ĐÚNG lượt vừa bị chặn (02/10/2026). */}
                 {m.ma === 'AGENT_QUOTA_EXCEEDED' && m.coKeyGiaHan && (
@@ -1129,7 +1490,9 @@ export function AgentMode({
           }
           // Đầu ra lệnh: hiện nguyên văn, KHÔNG dựng bằng innerHTML. Đây là chữ
           // do một tiến trình bất kỳ trên máy in ra, và nó có thể chứa bất cứ gì.
-          if (m.kieu === 'lenhRa') return <pre key={i} className="ct-lenh-ra">{m.text}</pre>;
+          if (m.kieu === 'lenhRa') {
+            return <KhoiLenhRa key={i} text={m.text} tenTruoc={lenhTruoc(trangThai.muc, i)} dangChay={trangThai.dangChay && i === trangThai.muc.length - 1} />;
+          }
           /* ĐANG CHẠY — chưa có kết quả. Trước 24/08/2026 dòng này chỉ xuất
              hiện SAU khi tool xong, nên một tool mất 30 giây (tạo PDF, chạy
              `npm test`, tải một lô file) là 30 giây màn hình không đổi gì và
@@ -1151,6 +1514,20 @@ export function AgentMode({
             đang tìm bằng chứng app còn chạy. Xem `ThanhDangLam`. */}
       </div>
 
+      {/* Nút xuống cuối neo vào KHUNG BẢNG GHI (03/10/2026) — không còn neo
+          theo một số px đo từ đáy trang, thứ đã đè lên ô soạn khi ô soạn đổi cỡ. */}
+      {xaDay && (
+        <button
+          type="button"
+          className="ct-agent-xuongday"
+          onClick={() => xuongDay()}
+          title={dich('Xuống cuối hội thoại')}
+          aria-label={dich('Xuống cuối hội thoại')}
+        >
+          <ChevronDown size={16} aria-hidden />
+          {trangThai.dangChay && <span className="ct-agent-xuongday-cham" aria-hidden />}
+        </button>
+      )}
       {webUrl !== null && (
         <>
           <div
@@ -1169,18 +1546,6 @@ export function AgentMode({
       )}
       </div>
 
-      {xaDay && (
-        <button
-          type="button"
-          className="ct-agent-xuongday"
-          onClick={() => xuongDay()}
-          title={dich('Xuống cuối hội thoại')}
-          aria-label={dich('Xuống cuối hội thoại')}
-        >
-          <ChevronDown size={16} aria-hidden />
-          {trangThai.dangChay && <span className="ct-agent-xuongday-cham" aria-hidden />}
-        </button>
-      )}
 
       {dangChupMan && (
         <ChupManHinh
@@ -1257,10 +1622,49 @@ export function AgentMode({
       )}
 
       {lenhTraLoi !== null && (
-        <div className="ct-lenh-traloi">
-          <ChuAgent text={lenhTraLoi} />
-          <button type="button" title={dich('Đóng')} onClick={() => datLenhTraLoi(null)}>
+        <div className="ct-lenh-traloi" role="status">
+          <div className="ct-lenh-traloi-than">
+            <ChuAgent text={lenhTraLoi} />
+            {lenhNut === 'nhapKey' && (
+              <NhapKeyGiaHan
+                khoa={trangThai.dangChay}
+                chuXong="hạn mức mới đã có hiệu lực."
+                onXong={(q) => datHanMuc(q)}
+              />
+            )}
+            {lenhNut === 'caiNgoaiTuyen' && (
+              <button type="button" className="ct-ngoai-tuyen-nut" onClick={moCaiNgoaiTuyen}>
+                {dich('Mở cài đặt AI ngoại tuyến')}
+              </button>
+            )}
+          </div>
+          <button type="button" title={dich('Đóng')} aria-label={dich('Đóng')} onClick={() => traLoi(null)}>
             <X size={12} aria-hidden />
+          </button>
+        </div>
+      )}
+
+      {/* `/plan` xong ⇒ DUYỆT rồi mới làm. Lượt kế hoạch chạy CHỈ ĐỌC (main bỏ
+          quyền ghi khỏi lượt đó), nên tới đây chưa có gì bị sửa. */}
+      {choDuyetKH && !trangThai.dangChay && trangThai.muc.length > 0 && (
+        <div className="ct-notice ct-duyet-kh" data-tone="info">
+          <ListChecks size={14} aria-hidden />
+          <span>{dich('Kế hoạch ở trên đã xong (chưa sửa gì). Duyệt thì agent làm theo; chế độ "Kế hoạch" sẽ được nâng lên "Hỏi từng việc".')}</span>
+          <button
+            type="button"
+            className="ct-btn"
+            onClick={() => {
+              datChoDuyetKH(false);
+              void (async () => {
+                if ((thuMuc?.cheDoQuyen ?? 'keHoach') === 'keHoach') await doiCheDoQuyen('hoi');
+                void gui(PROMPT_DUYET_KE_HOACH);
+              })();
+            }}
+          >
+            <Check size={13} aria-hidden /> {dich('Duyệt & làm')}
+          </button>
+          <button type="button" className="ct-btn ct-btn-ghost" onClick={() => datChoDuyetKH(false)}>
+            {dich('Bỏ qua')}
           </button>
         </div>
       )}
@@ -1302,14 +1706,11 @@ export function AgentMode({
 
       <MoiGhiChu cuocId={cuocId} coThuMuc={coThuMuc} />
 
+      {/* Ô soạn = MỘT khung: chữ ở trên, hàng công cụ ở dưới (03/10/2026).
+          Bản cũ xếp 📎 · 📷 · ô chữ · nút Gửi trên CÙNG một hàng — cột hẹp là ô
+          chữ bị bóp còn vài chục px và placeholder mất cả hai đầu. */}
       <div className="ct-agent-soan">
-        <ODinhKemCode oFileRef={dk.oFileRef} nhanTuO={dk.nhanTuO} />
-        {/* Chưa chọn thư mục dự án ⇒ khoá: file trên đĩa phải nằm TRONG gốc dự
-            án (ngục của agent), nên không có gốc thì không có chỗ để đặt. */}
-        <NutChonTep onBam={dk.moChonTep} khoa={trangThai.dangChay || !coThuMuc} />
-        {/* Chụp màn hình KHÔNG cần thư mục dự án: ảnh đi đường "gửi thẳng",
-            không ghi xuống đĩa, nên không cần ngục để đặt vào. */}
-        <NutChupManHinh onBam={() => datDangChupMan(true)} khoa={trangThai.dangChay} />
+       <div className="ct-agent-soan-khung" data-chay={trangThai.dangChay}>
         <textarea
           ref={oNhapRef}
           className="ct-agent-o"
@@ -1317,7 +1718,7 @@ export function AgentMode({
           onPaste={dk.danVao}
           value={nhap}
           placeholder={coThuMuc
-            ? `Hỏi về dự án ${thuMuc?.name}… (kéo thả, dán hoặc bấm 📎 để gửi file)`
+            ? `Hỏi về ${thuMuc?.name}… (kéo thả hoặc dán file, gõ / để xem lệnh)`
             : 'Chọn thư mục dự án trước, rồi hỏi…'}
           onChange={(e) => capNhatNhap(e.target.value, e.target.selectionStart ?? e.target.value.length)}
           /* Di chuyển con trỏ bằng phím mũi tên hay chuột KHÔNG bắn `onChange`.
@@ -1331,6 +1732,18 @@ export function AgentMode({
           onBlur={() => datTokenFile(null)}
           onKeyDown={phimTrongO}
         />
+        <div className="ct-agent-soan-hang">
+        <ODinhKemCode oFileRef={dk.oFileRef} nhanTuO={dk.nhanTuO} />
+        {/* Chưa chọn thư mục dự án ⇒ khoá: file trên đĩa phải nằm TRONG gốc dự
+            án (ngục của agent), nên không có gốc thì không có chỗ để đặt. */}
+        <NutChonTep onBam={dk.moChonTep} khoa={trangThai.dangChay || !coThuMuc} />
+        {/* Chụp màn hình KHÔNG cần thư mục dự án: ảnh đi đường "gửi thẳng",
+            không ghi xuống đĩa, nên không cần ngục để đặt vào. */}
+        <NutChupManHinh onBam={() => datDangChupMan(true)} khoa={trangThai.dangChay} />
+        <span className="ct-agent-soan-goiy" aria-hidden>
+          <kbd>/</kbd> {dich('lệnh')} · <kbd>@</kbd> {dich('file')} · <kbd>⇧↵</kbd> {dich('xuống dòng')}
+        </span>
+        <span className="ct-agent-soan-dem" aria-hidden />
         {trangThai.dangChay ? (
           <>
             {nhap.trim() && (
@@ -1365,6 +1778,8 @@ export function AgentMode({
             {dich('Gửi')}
           </button>
         )}
+        </div>
+       </div>
       </div>
 
       <div className="ct-agent-chan">
@@ -1391,6 +1806,142 @@ export function AgentMode({
           onDong={() => datAnhTo(null)}
         />
       )}
+    </div>
+  );
+}
+
+/** Nhãn phím tắt — đúng ký hiệu của từng hệ điều hành. */
+const LA_MAC = typeof navigator !== 'undefined' && /Mac|iPhone|iPad/.test(navigator.platform);
+const PHIM = {
+  terminal: LA_MAC ? '⌃`' : 'Ctrl+`',
+  web: LA_MAC ? '⇧⌘B' : 'Ctrl+Shift+B',
+  model: LA_MAC ? '⇧⌘M' : 'Ctrl+Shift+M',
+  lichSu: LA_MAC ? '⇧⌘L' : 'Ctrl+Shift+L',
+  boNho: LA_MAC ? '⇧⌘Y' : 'Ctrl+Shift+Y',
+} as const;
+
+/**
+ * MENU "⋯" — chỉ HIỆN khi cột hẹp (CSS `@container cotagent`).
+ *
+ * Gom những nút ít dùng: hai công tắc quyền (Trình duyệt, Ghi chú) và bốn tấm
+ * (Worktree, MCP, Hook, Bộ nhớ). Mục tấm KHÔNG dựng bảng thứ hai — nó gọi
+ * `moTam` để mở đúng bảng gốc (nút gốc chỉ bị ẩn, bảng vẫn còn đó).
+ */
+function MenuThem({
+  cuocId, coThuMuc, khoa, trinhDuyet, ghiChu, onTrinhDuyet, onGhiChu, onLichSu, soViec, onViecMoi, coViec,
+}: {
+  cuocId: string; coThuMuc: boolean; khoa: boolean; trinhDuyet: boolean; ghiChu: boolean;
+  onTrinhDuyet: () => void; onGhiChu: () => void;
+  onLichSu: () => void; soViec: number; onViecMoi: () => void; coViec: boolean;
+}) {
+  const { dich } = useDich();
+  const { mo, bat, dong, boc } = useMoRieng('agent:them');
+  const coBat = trinhDuyet || ghiChu;
+  const muc: Array<{ key: string; icon: React.ReactNode; nhan: string; phai?: string; bat?: boolean; tat?: boolean; lam: () => void }> = [
+    { key: 'trinhduyet', icon: <Globe size={14} aria-hidden />, nhan: dich('Trình duyệt cho agent'), bat: trinhDuyet, tat: khoa, lam: () => { onTrinhDuyet(); dong(); } },
+    { key: 'ghinote', icon: <NotebookPen size={14} aria-hidden />, nhan: dich('Ghi vào Ghi chú'), bat: ghiChu, tat: khoa, lam: () => { onGhiChu(); dong(); } },
+    ...(coThuMuc ? [{ key: 'worktree', icon: <GitBranch size={14} aria-hidden />, nhan: 'Worktree', lam: () => moTam(cuocId, 'worktree') }] : []),
+    { key: 'mcp', icon: <Plug size={14} aria-hidden />, nhan: dich('Máy chủ MCP'), phai: '/mcp', lam: () => moTam(cuocId, 'mcp') },
+    { key: 'hook', icon: <Webhook size={14} aria-hidden />, nhan: 'Hook', phai: '/hooks', tat: khoa, lam: () => moTam(cuocId, 'hook') },
+    { key: 'bonho', icon: <Brain size={14} aria-hidden />, nhan: dich('Bộ nhớ'), phai: PHIM.boNho, tat: khoa, lam: () => moTam(cuocId, 'boNho') },
+    { key: 'lichsu', icon: <History size={14} aria-hidden />, nhan: `${dich('Việc đã lưu')} (${soViec})`, phai: PHIM.lichSu, lam: () => { dong(); onLichSu(); } },
+    { key: 'viecmoi', icon: <RotateCcw size={14} aria-hidden />, nhan: dich('Việc mới'), phai: '/clear', tat: !coViec, lam: () => { dong(); onViecMoi(); } },
+  ];
+  return (
+    <div className="ct-agent-them" ref={boc}>
+      <button
+        type="button"
+        className="ct-agent-icon"
+        data-nut="them"
+        data-co-bat={coBat}
+        onClick={bat}
+        aria-haspopup="menu"
+        aria-expanded={mo}
+        title={dich('Thêm công cụ')}
+        aria-label={dich('Thêm công cụ')}
+      >
+        <MoreHorizontal size={15} aria-hidden />
+      </button>
+      {mo && (
+        <div className="ct-agent-them-bang" role="menu">
+          {muc.map((m) => (
+            <button
+              key={m.key}
+              type="button"
+              role="menuitem"
+              data-muc={m.key}
+              disabled={m.tat}
+              onClick={m.lam}
+            >
+              {m.icon}
+              <span>{m.nhan}</span>
+              {m.bat !== undefined
+                ? <em data-bat={m.bat}>{m.bat ? dich('bật') : dich('tắt')}</em>
+                : m.phai ? <kbd>{m.phai}</kbd> : null}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/** Dòng tool chạy lệnh gần nhất TRƯỚC khối đầu ra — để khối có tiêu đề. */
+function lenhTruoc(muc: readonly MucHienThi[], i: number): string | null {
+  for (let j = i - 1; j >= 0 && j >= i - 6; j--) {
+    const m = muc[j];
+    if (m?.kieu === 'tool' && /run_command|chay_lenh_nen|doc_dau_ra_nen/.test(m.ten)) return m.tomTat || m.ten;
+    if (m?.kieu === 'xinPhepLenh') return m.lenh;
+    if (m?.kieu === 'nguoi') break;
+  }
+  return null;
+}
+
+/**
+ * KHỐI ĐẦU RA LỆNH — tiêu đề lệnh + chép + thu gọn (03/10/2026).
+ *
+ * Bản cũ là một `pre` trần: không biết của lệnh nào, không chép được gọn, và
+ * `npm test` dài hai nghìn dòng chiếm cả bảng ghi. Nay: dòng đầu `$ …` (nếu
+ * lệnh tự in ra) hoặc dòng tool ngay trước nó làm tiêu đề; thân cuộn riêng hai
+ * chiều với trần chiều cao; dài thì mặc định thu về 12 dòng cuối.
+ *
+ * Vẫn KHÔNG dựng bằng innerHTML — đây là chữ do một tiến trình bất kỳ in ra.
+ */
+function KhoiLenhRa({ text, tenTruoc, dangChay }: { text: string; tenTruoc: string | null; dangChay: boolean }) {
+  const { dich } = useDich();
+  const dong = text.replace(/\n$/, '').split('\n');
+  const dau = dong[0]?.startsWith('$ ') ? dong[0].slice(2) : null;
+  const tieuDe = dau ?? tenTruoc ?? dich('Đầu ra lệnh');
+  const dai = dong.length > 14;
+  const [thu, datThu] = useState<boolean | null>(null);
+  const daThu = thu ?? false;
+  const [daChep, datDaChep] = useState(false);
+  const chep = (): void => {
+    void navigator.clipboard.writeText(text).then(() => {
+      datDaChep(true);
+      setTimeout(() => datDaChep(false), 1400);
+    }).catch(() => { /* clipboard bị chặn — vẫn chọn-chép tay được */ });
+  };
+  const hien = daThu ? dong.slice(-3).join('\n') : text;
+  return (
+    <div className="ct-lenhra" data-thu={daThu} data-chay={dangChay}>
+      <div className="ct-lenhra-dau">
+        {dangChay ? <Loader2 size={12} aria-hidden className="ct-spin" /> : <SquareTerminal size={12} aria-hidden />}
+        <code className="ct-lenhra-ten" title={tieuDe}>{tieuDe}</code>
+        <span className="ct-lenhra-dem">{dong.length} {dich('dòng')}</span>
+        <button type="button" onClick={chep} title={dich('Chép toàn bộ đầu ra')} aria-label={dich('Chép toàn bộ đầu ra')}>
+          {daChep ? <Check size={12} aria-hidden /> : <Copy size={12} aria-hidden />}
+          <span>{daChep ? dich('Đã chép') : dich('Chép')}</span>
+        </button>
+        {dai && (
+          <button type="button" onClick={() => datThu(!daThu)} aria-expanded={!daThu}
+            title={daThu ? dich('Mở đầy đủ') : dich('Thu gọn')}>
+            {daThu ? <ChevronsUpDown size={12} aria-hidden /> : <ChevronsDownUp size={12} aria-hidden />}
+            <span>{daThu ? dich('Mở') : dich('Thu gọn')}</span>
+          </button>
+        )}
+      </div>
+      <pre className="ct-lenh-ra" tabIndex={0}>{hien}</pre>
     </div>
   );
 }
@@ -1425,6 +1976,12 @@ function BangKeHoach({ viec }: { viec: AgentViec[] }) {
    */
   const [tuGap, datTuGap] = useState<boolean | null>(null);
   const gap = tuGap ?? trongXong;
+  /* Bước ĐANG LÀM — hiện ngay trên đầu dải, kể cả khi gập (03/10/2026): câu
+     "đang tới đâu rồi?" phải trả lời được bằng một cái liếc, không phải mở ra
+     rồi dò xem dòng nào có chấm quay. */
+  const dang = viec.find((v) => v.trangThai === 'dang')
+    ?? (trongXong ? null : viec.find((v) => v.trangThai !== 'xong'));
+  const soThuTu = dang ? viec.indexOf(dang) + 1 : 0;
 
   return (
     <div className="ct-kehoach" data-gap={gap}>
@@ -1436,17 +1993,24 @@ function BangKeHoach({ viec }: { viec: AgentViec[] }) {
         title={gap ? 'Mở kế hoạch' : 'Gập kế hoạch'}
       >
         <ListChecks size={13} aria-hidden />
-        <span>{dich('Kế hoạch')}</span>
+        <span className="ct-kehoach-nhan">{dich('Kế hoạch')}</span>
         <span className="ct-kehoach-dem">{xong}/{viec.length}</span>
-        <div className="ct-kehoach-thanh">
+        <div className="ct-kehoach-thanh" aria-hidden>
           <div className="ct-kehoach-day" style={{ width: `${(xong / viec.length) * 100}%` }} />
         </div>
+        {dang ? (
+          <span className="ct-kehoach-buoc" title={dang.ten}>
+            <b>{dich('Bước')} {soThuTu}</b> {dang.ten}
+          </span>
+        ) : (
+          <span className="ct-kehoach-buoc" data-xong>{dich('Đã xong cả kế hoạch')}</span>
+        )}
         <ChevronDown size={13} aria-hidden className="ct-kehoach-mui" />
       </button>
       {gap ? null : (
       <ul className="ct-kehoach-ds">
         {viec.map((v, i) => (
-          <li key={i} data-tt={v.trangThai}>
+          <li key={i} data-tt={v.trangThai} aria-current={v === dang ? 'step' : undefined}>
             {v.trangThai === 'xong'
               ? <Check size={12} aria-hidden />
               : v.trangThai === 'dang'
@@ -1512,11 +2076,41 @@ const DS_MUC: Array<{ id: MucNoLuc; ten: string; mo: string }> = [
   { id: 'ultracode', ten: 'Ultracode', mo: '260 bước · 10 agent phụ — chia việc, chạy song song, tự phản biện' },
 ];
 
+/**
+ * Bảng của MÁY CHỦ thắng bảng chép cứng ở trên. Con số bước là thứ máy chủ
+ * áp đặt, nên app tự khai "60 bước" trong khi máy chủ đã đổi thành 100 là một
+ * lời nói dối không ai phát hiện được. Bảng chép cứng chỉ để app còn chạy được
+ * với máy chủ cũ chưa khai hai trường này. Dùng chung cho menu và `/effort`.
+ */
+function dsMucCua(info: AgentInfo): Array<{ id: MucNoLuc; ten: string; mo: string }> {
+  return info.mucNoLuc?.length
+    ? info.mucNoLuc.map((m) => ({
+        id: m.id,
+        ten: m.ten,
+        mo: `${m.buoc} bước · ${m.viecPhu} agent phụ${m.id === 'ultracode' ? ' — chia việc, chạy song song, tự phản biện' : ''}`,
+      }))
+    : DS_MUC;
+}
+
+/** Danh sách model hiện có — dùng chung cho menu và `/model`. */
+function dsModelCua(info: AgentInfo): Array<{ id: ModelAgent; ten: string; mo: string; dungDuoc: boolean; dat: boolean }> {
+  return info.models?.length
+    ? info.models.map((m) => ({
+        id: m.id as ModelAgent, ten: doiTenModel(m.ten), mo: m.mo, dungDuoc: m.dungDuoc,
+        dat: m.dat === true || m.id === ID_FABLE,
+      }))
+    : DS_MODEL.map((m) => ({ ...m, dungDuoc: true, dat: false }));
+}
+
 function ChonModelVaMuc({
-  muc, model, khoa, info, onChonMuc, onChonModel,
+  cuocId, muc, model, khoa, info, onChonMuc, onChonModel, cucBo, onDoiCucBo,
 }: {
+  cuocId: string;
   muc: MucNoLuc; model: ModelAgent; khoa: boolean; info: AgentInfo;
   onChonMuc: (m: MucNoLuc) => void; onChonModel: (m: ModelAgent) => void;
+  /** AI trên máy (gói ngoại tuyến) — `null` khi máy chưa có model cho AI Code. */
+  cucBo: { ten: string; bat: boolean } | null;
+  onDoiCucBo: (bat: boolean) => void;
 }) {
   const { dich } = useDich();
   /* Đóng-khi-bấm-ra-ngoài và "mỗi lúc một tấm" nay ở `useMoRieng`. Bản cũ tự
@@ -1525,6 +2119,7 @@ function ChonModelVaMuc({
   /* Không lấy `dong`: chọn model xong bảng CỐ Ý ở lại, vì đa số người đổi
      model rồi đổi luôn mức nỗ lực ngay bên dưới. */
   const { mo, bat, boc } = useMoRieng('agent:model');
+  useMoTuNgoai(cuocId, 'model', mo, bat);
   /* Cuong Fable 5 tốn gấp 3,5 lần ⇒ bấm chọn phải XÁC NHẬN, và menu nói rõ
      còn bao nhiêu hạn mức. Chỉ hỏi máy chủ khi menu đang mở. */
   const { h: hanMucFable } = useHanMucFable(mo);
@@ -1535,26 +2130,8 @@ function ChonModelVaMuc({
   const [moDuPhong, datMoDuPhong] = useState(false);
   useEffect(() => { if (!mo) datMoDuPhong(false); }, [mo]);
 
-  // Bảng của MÁY CHỦ thắng bảng chép cứng ở trên. Con số bước là thứ máy chủ
-  // áp đặt, nên app tự khai "60 bước" trong khi máy chủ đã đổi thành 100 là
-  // một lời nói dối không ai phát hiện được. Bảng chép cứng chỉ để app còn
-  // chạy được với máy chủ cũ chưa khai hai trường này.
-  const dsMuc = info.mucNoLuc?.length
-    ? info.mucNoLuc.map((m) => {
-        const cu = DS_MUC.find((x) => x.id === m.id);
-        return {
-          id: m.id,
-          ten: m.ten,
-          mo: `${m.buoc} bước · ${m.viecPhu} agent phụ${cu && cu.id === 'ultracode' ? ' — chia việc, chạy song song, tự phản biện' : ''}`,
-        };
-      })
-    : DS_MUC;
-  const dsModel = info.models?.length
-    ? info.models.map((m) => ({
-        id: m.id as ModelAgent, ten: doiTenModel(m.ten), mo: m.mo, dungDuoc: m.dungDuoc,
-        dat: m.dat === true || m.id === ID_FABLE,
-      }))
-    : DS_MODEL.map((m) => ({ ...m, dungDuoc: true, dat: false }));
+  const dsMuc = dsMucCua(info);
+  const dsModel = dsModelCua(info);
 
   const mucNay = dsMuc.find((m) => m.id === muc) ?? dsMuc[1] ?? DS_MUC[1]!;
   const modelNay = dsModel.find((m) => m.id === model) ?? dsModel[0] ?? { ...DS_MODEL[0]!, dungDuoc: true };
@@ -1647,6 +2224,27 @@ function ChonModelVaMuc({
                     <MoCongDuPhong />
                   </div>
                 )}
+              </li>
+            </ul>
+          )}
+
+          {/* AI TRÊN MÁY (03/10/2026) — cùng chỗ với cổng dự phòng: đều là
+              "chạy bằng gì". Bật = ép tab chạy model trên máy (y như `/offline`). */}
+          {cucBo && (
+            <ul className="ct-chonmm-ds">
+              <li>
+                <button
+                  type="button"
+                  data-chon-cucbo
+                  data-chon={cucBo.bat}
+                  onClick={() => onDoiCucBo(!cucBo.bat)}
+                >
+                  {cucBo.bat ? <Check size={12} aria-hidden /> : <PlugZap size={12} aria-hidden />}
+                  <span>
+                    <strong>{dich('AI trên máy')} · {cucBo.ten}</strong>
+                    <em>{cucBo.bat ? dich('Đang dùng — bấm để quay về máy chủ') : dich('Chạy trên máy này, không gửi lên máy chủ (/offline)')}</em>
+                  </span>
+                </button>
               </li>
             </ul>
           )}
@@ -1746,6 +2344,7 @@ function NutWorktree({
 }: { cuocId: string; khoa: boolean; onDoi: () => void }) {
   const { dich } = useDich();
   const { mo, bat, boc } = useMoRieng('agent:worktree');
+  useMoTuNgoai(cuocId, 'worktree', mo, bat);
   const [ds, datDs] = useState<AgentWorktree[]>([]);
   const [ten, datTen] = useState('');
   const [ban, datBan] = useState(false);
@@ -1940,6 +2539,7 @@ function MauMcp() {
 function NutMcp({ cuocId, khoa }: { cuocId: string; khoa: boolean }) {
   const { dich } = useDich();
   const { mo, bat, boc } = useMoRieng('agent:mcp');
+  useMoTuNgoai(cuocId, 'mcp', mo, bat);
   const [tt, datTt] = useState<AgentMcpTrangThai | null>(null);
   const [dangNap, datDangNap] = useState(false);
 

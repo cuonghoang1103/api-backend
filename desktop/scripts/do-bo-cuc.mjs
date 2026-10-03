@@ -42,7 +42,7 @@ if (!fs.existsSync(path.join(thuMuc, 'bo-cuc/trang-thu.html'))) {
 /* 1920 thêm 05/09/2026: người dùng chạy app ở cửa sổ ~2000px và báo mọi trang
    "hẹp ở giữa". Bộ đo cũ dừng ở 1440 nên nó KHÔNG BAO GIỜ thấy được vấn đề đó —
    nó chỉ hỏi "có tràn khi hẹp không", không hỏi "có phí chỗ khi rộng không". */
-const BE_RONG = [1920, 1440, 1180, 1000, 860];
+const BE_RONG = JSON.parse(process.env.CT_RONG ?? 'null') ?? [1920, 1440, 1180, 1000, 860];
 /** Cao khung nhìn dùng cho mọi trang — chốt "lớp phủ có nằm trong tầm nhìn không" đo theo nó. */
 const innerHeightGia = 900;
 
@@ -153,6 +153,9 @@ const BANG = [
        Mock tĩnh không đo được "tạo mới" lẫn "xoá": tạo xong gọi lại
        `/notes/tree` vẫn ra cây cũ, nên hàng mới không bao giờ xuất hiện và
        mọi chốt nhắm vào nó đo một thứ không có trên màn hình. */
+    [/\/agent\/usage/, () => ({ daDung: 2_400_000, tran: 6_500_000, tranGoc: 6_000_000, giaHan: 500_000,
+      conLai: 4_100_000, phanTram: 37, soGio: 5, hoiLucNao: '2026-10-03T05:00:00Z', hoiHetLuc: null,
+      coKeyGiaHan: true, tienNgay: { phanTram: 41, catViecNen: false, dungHet: false } })],
     [/\/notes\/tree/, () => ({
       tree: cayNotes(),
       recent: mang(3, (i) => ({ id: i, title: `Vừa mở ${i}`, subjectId: 1, chapterId: null })),
@@ -468,6 +471,12 @@ const BANG = [
       { id: 8, subject: 'Lab OOP', classCode: 'LAB211', room: 'DE-223', weekday: 2, startTime: '12:50', endTime: '15:10', remindMinutes: 30, soBuoiVang: 0 },
       { id: 9, subject: 'Lab OOP', classCode: 'LAB211', room: 'DE-C203', weekday: 5, startTime: '15:20', endTime: '17:40', remindMinutes: 30, soBuoiVang: 0 },
     ] })],
+    /* Điểm uy tín (KeHoachNgay) — thiếu mock thì `uyTin.bac.mau` nổ và cả
+       `/dashboard` thành trang trắng trong bộ đo (03/10/2026). */
+    [/\/dashboard\/uy-tin/, () => ({ diem: 72, moc: 100, so: [],
+      bac: { ma: 'kha', ten: 'Khá', mau: '#22c55e', mo: 'Giữ nhịp đều.' } })],
+    [/\/dashboard\/ngay/, () => ({ tasks: [] })],
+    [/\/dashboard\/thang/, () => ({ ngay: {} })],
     [/\/dashboard$/, () => ({ level: 3, exp: 120, totalExp: 500, streak: 4,
         timeline: mang(24, (i) => ({ hour: i - 1, activity: i % 3 === 0 ? 'hoc' : null })),
         /* Dữ liệu giả phải chạm được vào MỌI nhánh hiển thị mới, nếu không bộ đo
@@ -622,6 +631,21 @@ await ctx.route('**/api/v1/**', async (tuyen) => {
     body: JSON.stringify({ success: true, message: 'ok', data: payload, timestamp: '2026-08-22T00:00:00Z' }),
   });
 });
+
+/* `CT_NGOAI_TUYEN=1` (03/10/2026) — dựng trang ở trạng thái MẤT MẠNG: dải
+   "🔌 Ngoại tuyến", màu nhấn xanh mòng két, chip model cục bộ. Đọc ở bản giả
+   `app-state` (vite.bo-cuc.config.ts) và ở `kiemMang` của cầu nối giả. */
+await ctx.addInitScript((matMang) => { globalThis.__CT_ONLINE = !matMang; }, process.env.CT_NGOAI_TUYEN === '1');
+
+/* `CT_THANH_BEN=rong|hep|an` (03/10/2026) — trạng thái thanh bên DỰ ÁN của AI
+   Code. Người dùng chụp lỗi ở đúng ba trạng thái này: kéo rộng, kéo hẹp tối
+   thiểu (chữ bị cắt mép TRÁI), ẩn hẳn (nút mở lại trôi giữa mép). Bơm thẳng
+   vào thiết đặt của bản giả `app-state` (vite.bo-cuc.config.ts). */
+await ctx.addInitScript((tb) => {
+  globalThis.__CT_SETTINGS = tb === 'hep' ? { aiThanhBenRong: 190 }
+    : tb === 'an' ? { aiThanhBenGap: true }
+      : tb === 'rong' ? { aiThanhBenRong: 380 } : {};
+}, process.env.CT_THANH_BEN ?? '');
 
 await ctx.addInitScript((nn) => {
   /* `CT_NGON_NGU=en` để đo bố cục ở BẢN TIẾNG ANH — chữ hai thứ tiếng dài khác
@@ -839,6 +863,38 @@ await ctx.addInitScript((nn) => {
                    1000: -20.3, 2000: -22.7, 4000: -26.1, 8000: -31.5, 16000: -42.9 } },
     },
     dsCuocDangMo: [],
+    /* Bảng ghi CÓ NỘI DUNG + lượt ĐANG CHẠY (03/10/2026): câu trả lời dài có
+       từ không ngắt được, dòng tool, câu hỏi. `dangChay: true` để thanh "đang
+       làm" + nút Dừng cùng được đo, và để dải kế hoạch dở không bật cảnh báo
+       "agent đã dừng" (bộ đo coi mọi `.ct-notice` warn là thẻ lỗi). */
+    /* Lệnh `/` (03/10/2026) — đủ dữ liệu để `CT_THU_LENH=1` chạy thử từng lệnh. */
+    nguCanhChiTiet: { deBai: 900, lichSu: 41_000, ketQuaTool: 260_000, soAnh: 2, byteAnh: 2_400_000,
+      tong: 301_900, soTin: 64, soLuot: 7, tongGui: 301_900, tomTat: null },
+    compact: { ok: true, soTinDaGop: 40, soLuotDaGop: 5, kyTuTruoc: 301_900, kyTuSau: 62_000,
+      xemTruoc: '- Mục tiêu: sửa bố cục AI Code\n- Ràng buộc: đừng đụng frontend/about' },
+    chanDoan: [
+      { ten: 'Phiên bản app', muc: 'ok', chiTiet: '0.5.150 · darwin-arm64' },
+      { ten: 'Mạng', muc: 'ok', chiTiet: 'Có mạng.' },
+      { ten: 'Máy chủ', muc: 'ok', chiTiet: 'Trả lời sau 84ms.' },
+      { ten: 'AI ngoại tuyến', muc: 'canh', chiTiet: 'Chưa cài.' },
+    ],
+    datEpCucBo: (_c, bat) => ({ bat }),
+    /* Bảng Hook (mở bằng /hooks) — mảng/số như cầu nối thật, không `undefined`. */
+    hookDem: 0, hookNhatKy: [], kyNangDs: [], hookChoDuyet: [],
+    luuFile: { ok: true },
+    /* Không bao giờ xong ⇒ lượt gửi ở bước CHUAN_BI cứ "đang chạy". */
+    send: () => new Promise(() => {}),
+    /* Mảng, như cầu nối thật — `undefined` làm `guiDi` nổ ở `lenhDuAn.find`. */
+    lenhDuAn: [],
+    bangGhi: {
+      dangChay: false,
+      muc: [
+        { kieu: 'nguoi', text: 'Bản local đang lỗi build, bạn xem giúp src/renderer/features/chat/AgentMode.tsx và sửa cho tôi nhé' },
+        { kieu: 'tool', ten: 'read_file', tomTat: 'src/renderer/features/chat/AgentMode.tsx · 2.377 dòng' },
+        { kieu: 'tool', ten: 'grep', tomTat: '"min-width" trong src/renderer/styles.css — 214 kết quả' },
+        { kieu: 'may', text: 'Bản local lỗi vì JavaScript không tìm thấy module. Đường dẫn dài không ngắt được: /Users/admin/Downloads/api-backend/desktop/src/renderer/features/chat/AgentMode.tsx\n\n```ts\nconst rongWeb = typeof settings.aiKhungWebRong === "number" ? Math.max(RONG_WEB_MIN, settings.aiKhungWebRong) : 560; // một dòng mã rất dài để thử cuộn ngang\n```\n\n| Tệp | Dòng | Lỗi |\n|---|---|---|\n| AgentMode.tsx | 1205 | thiếu min-width:0 ở flex item chứa khung web bên phải |\n| styles.css | 3860 | overflow-x của bảng ghi |' },
+      ],
+    },
     /* Danh sách việc đã lưu, NHIỀU DỰ ÁN.
        Để rỗng thì thanh bên chỉ hiện "Chưa có việc nào được lưu" — tức là mọi
        chốt nhắm vào nó (nhóm theo dự án, màu nhóm, tiêu đề dính khi cuộn, nút
@@ -861,7 +917,7 @@ await ctx.addInitScript((nn) => {
       { id: 'test-dung-vitest-run', phamVi: 'du_an', loai: 'quy_uoc', tieuDe: 'Chạy test bằng npx vitest run (không watch)', viSao: 'npm test mở watch mode và treo.', apDung: 'npx vitest run <file>', tao: '2026-09-26', sua: '2026-09-26', lanKhop: 0 },
       { id: 'may-windows-powershell', phamVi: 'chung', loai: 'moi_truong', tieuDe: 'Máy Windows: lệnh chạy qua cmd.exe, dùng npm.cmd', viSao: 'PowerShell chặn script .ps1.', apDung: 'Gọi npm.cmd / npx.cmd.', tao: '2026-09-26', sua: '2026-09-26', lanKhop: 1 },
     ],
-    mcpTrangThai: { soTool: 0, server: [], daDung: 0, tran: 200 },
+    mcpTrangThai: { soTool: 0, server: [], hanMuc: { daDung: 0, tran: 200 } },
     getStatus: { state: 'idle' },
     /* HÀM, không phải hằng — mỗi tab một id, đúng như `taoCuoc()` thật.
        Trả hằng `'cuoc-1'` thì sáu tab mang cùng một id, và mọi lỗi kiểu
@@ -876,6 +932,9 @@ await ctx.addInitScript((nn) => {
        09/09/2026: chốt cửa cảnh báo "Bỏ qua tất cả" viết xong, chạy xanh, mà
        chưa từng chạy một lần nào. */
     getWorkspace: { path: '/tmp/du-an-do-bo-cuc', name: 'du-an-do-bo-cuc' },
+    /* AI ngoại tuyến (03/10/2026): máy có bản 30B ⇒ mất mạng là AI Code đổi giao diện. */
+    cheDoCode: { ma: 'code', ten: 'Bản lập trình (30B)', nhan: 'chạy trên máy này', vi: '', nenTai: null, choPhepTuDong: true },
+    kiemMang: () => ({ online: globalThis.__CT_ONLINE !== false }),
   };
   const nhomGia = new Proxy({}, {
     // Giá trị là HÀM ⇒ gọi nó (mỗi lần một kết quả). Ngược lại trả hằng.
@@ -908,7 +967,22 @@ await ctx.addInitScript((nn) => {
         + 'deploy@160.1.2.3\'s password: '
       : '\x1b[32mcuong@mac\x1b[0m:\x1b[34m~/du-an\x1b[0m$ ',
   };
-  window.cuongthai = new Proxy({ on: () => () => {} }, {
+  /* `on` GIỮ người nghe (03/10/2026) để bước CHUAN_BI của `/chat` bơm được
+     sự kiện agent THẬT (kế hoạch, đầu ra lệnh, dòng tool, chữ dài) — bảng ghi
+     trống là trạng thái ít phần tử nhất, dễ qua nhất, và đúng là chỗ người
+     dùng chụp lỗi cắt chữ. */
+  const nghe = new Map();
+  const on = (kenh, f) => {
+    if (!nghe.has(kenh)) nghe.set(kenh, new Set());
+    nghe.get(kenh).add(f);
+    return () => nghe.get(kenh)?.delete(f);
+  };
+  window.__phatAgent = (e) => {
+    for (let i = 1; i <= demCuoc; i += 1) {
+      for (const f of nghe.get('agent:event') ?? []) f({ ...e, cuocId: `cuoc-${i}` });
+    }
+  };
+  window.cuongthai = new Proxy({ on }, {
     get: (t, nhom) => (nhom === 'on' ? t.on : nhom === 'pty' ? ptyGia : nhomGia),
   });
 }, process.env.CT_NGON_NGU === 'en' ? 'en' : null);
@@ -1277,6 +1351,7 @@ const CHUAN_BI = {
       await p.waitForTimeout(120);
     }
 
+
     /* Cửa cảnh báo của chế độ "Bỏ qua tất cả" PHẢI hiện ra và PHẢI nằm trong
        khung nhìn. Nó là thứ duy nhất đứng giữa model và `rm -rf` — một lớp phủ
        dựng ra nhưng tụt khỏi màn hình ở đây nghĩa là người dùng bấm một mục
@@ -1381,6 +1456,12 @@ const CHUAN_BI = {
         throw new Error(`Thanh bên — ${buoc}: nhóm "${ten}" mong ${mong ? 'MỞ' : 'GẬP'}, thấy ${JSON.stringify(s)}`);
       }
     };
+    /* Cột hẹp ⇒ thanh bên là LỚP PHỦ (03/10/2026): mở nó bằng dải bên trái
+       trước khi kiểm, rồi cất đi (Esc) để phần đo phía sau thấy khung AI. */
+    const daiHep = p.locator('.ct-tb-mo[data-chi-hep]');
+    const laHep = (await daiHep.count()) > 0 && await daiHep.first().isVisible();
+    if (laHep) { await daiHep.first().click(); await p.waitForTimeout(250); }
+    if (process.env.CT_THANH_BEN !== 'an') {
     await kiemTB('mặc định', 'ett1', false);
     await nutTB('ett1').click({ timeout: 2000 });
     await p.waitForTimeout(300);
@@ -1399,6 +1480,13 @@ const CHUAN_BI = {
     await p.waitForTimeout(350);
     await kiemTB('xoá tìm', 'ielts', false);
     await kiemTB('xoá tìm (giữ lựa chọn đã nhớ)', 'ett1', true);
+    }
+    if (laHep) {
+      await p.keyboard.press('Escape');
+      await p.waitForTimeout(200);
+      const conMo = await p.evaluate(() => document.querySelector('.ct-tb[data-phu-mo="true"]') !== null);
+      if (conMo) throw new Error('Lớp phủ thanh bên không cất đi khi bấm Esc.');
+    }
 
     /* ─── TERMINAL THẬT (26/09/2026) ───
        Mở khung Terminal rồi ĐÒI thấy xterm vẽ ra CHỮ — không chỉ một khung
@@ -1415,13 +1503,103 @@ const CHUAN_BI = {
     }
 
     /* ─── BỘ NHỚ (26/09/2026): mở bảng, ĐÒI thấy đủ bài học mẫu. ─── */
-    await tabHien.locator('.ct-agent-bar button', { hasText: 'Bộ nhớ' }).first().click();
+    /* Cột hẹp ⇒ nút Bộ nhớ nằm trong menu "⋯" (03/10/2026). Đi đúng đường
+       người dùng đi: thấy nút thì bấm nút, không thì mở "⋯" rồi chọn mục. */
+    const nutBoNho = tabHien.locator('.ct-agent-bar button', { hasText: 'Bộ nhớ' }).first();
+    if (await nutBoNho.isVisible()) await nutBoNho.click();
+    else {
+      await tabHien.locator('[data-nut="them"]').first().click({ timeout: 3000 });
+      await tabHien.locator('.ct-agent-them-bang [data-muc="bonho"]').first().click({ timeout: 3000 });
+    }
     await p.waitForTimeout(300);
     const soBai = await tabHien.locator('.ct-bn-ds > li').count();
     if (soBai !== 3) throw new Error(`Bảng Bộ nhớ không vẽ đủ bài học mẫu (thấy ${soBai}/3).`);
     await tabHien.locator('.ct-bn-dau').first().click();
     await p.waitForTimeout(200);
     if (!(await tabHien.locator('.ct-bn-than').count())) throw new Error('Bấm một bài học mà không mở ra phần thân.');
+    await p.keyboard.press('Escape').catch(() => {});
+    /*
+     * `CT_THU_LENH=1` (03/10/2026) — CHẠY THẬT từng lệnh `/` trên giao diện:
+     * gõ vào ô soạn, Enter, rồi đòi thấy đúng thứ lệnh đó phải làm (câu trả
+     * lời, tấm vừa mở). Bộ đo bố cục chỉ hỏi "có tràn không"; đây hỏi "lệnh
+     * có làm gì không" — một lệnh chỉ hiện chữ là lệnh không tồn tại.
+     */
+    if (process.env.CT_THU_LENH === '1') {
+      const o = tabHien.locator('textarea.ct-agent-o').first();
+      const traLoi = async () => (await tabHien.locator('.ct-lenh-traloi').first().textContent().catch(() => '')) ?? '';
+      /* Dấu cách cuối = đã gõ xong tên lệnh ⇒ bảng gợi ý không mở (nó mà mở thì
+         Enter là CHỌN gợi ý chứ không chạy lệnh — đúng thiết kế). */
+      const go = async (lenh) => {
+        await o.fill(`${lenh} `);
+        await o.press('Enter');
+        await p.waitForTimeout(350);
+      };
+      const ket = [];
+      const doi = async (ten, ok) => { ket.push(`${ok ? '✓' : '✗'} ${ten}`); if (!ok) throw new Error(`Lệnh ${ten} không làm đúng việc.`); };
+      await go('/help'); await doi('/help', /\/compact[\s\S]*\/doctor/.test(await traLoi()));
+      await go('/context'); await doi('/context', /Kết quả tool \+ tham số/.test(await traLoi()));
+      await go('/usage'); await doi('/usage', /Key gia hạn/.test(await traLoi()) && (await tabHien.locator('.ct-lenh-traloi .ct-duphong').count()) > 0);
+      await go('/status'); await doi('/status', /Cổng: cổng chính/.test(await traLoi()));
+      await go('/doctor'); await doi('/doctor', /Chẩn đoán/.test(await traLoi()));
+      await go('/compact giữ tên file'); await doi('/compact', /Đã gộp/.test(await traLoi()) && (await tabHien.locator('.ct-notice[data-tone="info"]', { hasText: '/compact' }).count()) > 0);
+      await go('/effort rất cao'); await doi('/effort', /Rất cao/.test(await traLoi()));
+      await go('/model gpt sol'); await doi('/model <tên>', /GPT 6 Sol/.test(await traLoi()));
+      await go('/rewind'); await doi('/rewind', /Quay về câu hỏi nào/.test(await traLoi()));
+      await go('/resume'); await doi('/resume', /Việc đã lưu/.test(await traLoi()));
+      await go('/export'); await doi('/export', /Đã xuất/.test(await traLoi()));
+      await go('/offline'); await doi('/offline', /giờ chạy bằng/.test(await traLoi()) && (await tabHien.locator('.ct-chip-cucbo').count()) > 0);
+      await go('/offline'); await doi('/offline (tắt)', /quay về AI máy chủ/.test(await traLoi()));
+      await go('/cost'); await doi('/cost', /Chi phí việc này/.test(await traLoi()));
+      await go('/memory'); await doi('/memory', (await tabHien.locator('.ct-bn-bang').count()) > 0);
+      await p.keyboard.press('Escape');
+      await go('/mcp'); await doi('/mcp', (await tabHien.locator('.ct-mcp-bang').count()) > 0);
+      await p.keyboard.press('Escape');
+      await go('/hooks'); await doi('/hooks', (await tabHien.locator('.ct-mcp-bang').count()) > 0);
+      await p.keyboard.press('Escape');
+      await go('/model'); await doi('/model', (await tabHien.locator('.ct-chonmm-bang').count()) > 0);
+      await p.keyboard.press('Escape');
+      await go('/plan thêm nút xuất PDF'); await doi('/plan', /\/plan thêm nút xuất PDF/.test((await tabHien.locator('.ct-agent-nguoi').last().textContent()) ?? ''));
+      console.log(`      lệnh /: ${ket.join(' · ')}`);
+      return;
+    }
+    await p.keyboard.press('Escape').catch(() => {});
+    /* GỬI một câu để lượt ĐANG CHẠY (cầu nối giả `send` không bao giờ xong):
+       thanh "đang làm", nút Dừng, hàng chờ cùng được đo. Làm SAU các chốt ở
+       trên vì lúc đang chạy bộ chọn chế độ quyền bị khoá — đúng thiết kế. */
+    await tabHien.locator('textarea.ct-agent-o').first().fill('Sửa giúp tôi bố cục thanh công cụ khi cửa sổ hẹp');
+    await tabHien.locator('[data-nut="gui"]').first().click({ timeout: 3000 });
+    await p.waitForTimeout(200);
+    if (process.env.CT_GO_LOI) console.log('DEBUG', await p.evaluate(() => ({ nguoi: document.querySelectorAll('.ct-tab-noi[data-hien="true"] .ct-agent-nguoi').length, dung: document.querySelectorAll('.ct-tab-noi[data-hien="true"] .ct-agent-dung').length, o: document.querySelector('.ct-tab-noi[data-hien="true"] textarea.ct-agent-o')?.value })));
+    /* Bơm một lượt agent ĐÔNG (03/10/2026): dải kế hoạch có bước đang làm,
+       dòng tool có chi tiết, khối đầu ra lệnh có dòng rất dài, hạn mức + vòng
+       ngữ cảnh. Đây là đúng những khối người dùng chụp bị cắt mép phải. */
+    await p.evaluate(() => {
+      const phat = window.__phatAgent;
+      if (!phat) return;
+      phat({ loai: 'batDau', model: 'sonnet-5', buoc: 7, tranBuoc: 30 });
+      phat({ loai: 'keHoach', viec: [
+        { ten: 'Đọc cấu trúc thanh công cụ AI Code', trangThai: 'xong' },
+        { ten: 'Tìm flex item thiếu min-width:0 trong styles.css', trangThai: 'xong' },
+        { ten: 'Sửa bố cục co giãn theo @container cho thanh công cụ và ô nhập', trangThai: 'dang' },
+        { ten: 'Chạy npm run do:bo-cuc ở 4 bề rộng', trangThai: 'cho' },
+        { ten: 'Chụp ảnh trước/sau', trangThai: 'cho' },
+      ] });
+      phat({ loai: 'toolBatDau', id: 't1', ten: 'run_command', vong: 'may' });
+      phat({ loai: 'tool', id: 't1', ten: 'run_command', vong: 'may', tomTat: 'npm run typecheck — 2 lỗi',
+        chiTiet: 'src/renderer/features/chat/AgentMode.tsx(1205,7): error TS2322: Type string is not assignable to type number.' });
+      phat({ loai: 'lenhRa', mau: '$ npm run build\n> cuongthai-desktop@0.5.150 build\nvite v5 building for production...\n' + 'x'.repeat(30) + '/Users/admin/Downloads/api-backend/desktop/node_modules/.vite/deps/chunk-ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.js (một dòng log rất dài không có chỗ ngắt để thử tràn ngang)\n✓ 2377 modules transformed.\n' });
+      phat({ loai: 'toolBatDau', id: 't2', ten: 'edit_file', vong: 'may' });
+      phat({ loai: 'xong', tienUsd: 0.042, soFileDaSua: 2, daLuoc: 0,
+        hanMuc: { daDung: 2_400_000, tran: 6_000_000, phanTram: 40, hoiLucNao: '2026-10-03T12:00:00Z' },
+        nguCanh: { kyTu: 412_000, tran: 600_000, phanTram: 69, soLuotDaBo: 2 } });
+    });
+    await p.waitForTimeout(300);
+    /* `CT_CHE_DO=chat` ⇒ sau khi đo đủ AI Code, chuyển sang Trò chuyện để đo +
+       chụp chế độ đó ở cùng bề rộng (03/10/2026 — đề giao sửa CẢ Chat). */
+    if (process.env.CT_CHE_DO === 'chat') {
+      await p.click('.ct-segment-nut[data-che-do="chat"]');
+      await p.waitForTimeout(500);
+    }
   },
   '/notes': async (p) => {
     const demHang = () => p.evaluate(() =>
@@ -1688,12 +1866,21 @@ for (const duong of DUONG) {
   for (const rong of BE_RONG) {
     const p = await ctx.newPage();
     const loiTrang = [];
+    p.on('pageerror', (e) => process.env.CT_GO_LOI && console.log('PAGEERR', e.message, (e.stack ?? '').split('\n').slice(0,4).join(' / ')));
     p.on('pageerror', (e) => loiTrang.push(`${e.message} @ ${(e.stack ?? '').split('\n')[1]?.trim() ?? '?'}`.slice(0, 200)));
     p.on('console', (m) => { if (m.type() === 'error') loiTrang.push(m.text().slice(0, 200)); });
     await p.setViewportSize({ width: rong, height: 900 });
     await p.goto(`http://127.0.0.1:${cong}/bo-cuc/trang-thu.html?trang=${encodeURIComponent(duong)}`);
     await p.waitForTimeout(1200);
-    if (CHUAN_BI[duong]) { await CHUAN_BI[duong](p); await p.waitForTimeout(400); }
+    /* Bước chuẩn bị hỏng thì GHI ĐỎ rồi vẫn chụp + đo (03/10/2026). Bản cũ để
+       lỗi bay thẳng ra ngoài: cả lượt đo chết, không còn ảnh nào để nhìn xem
+       trang hỏng thế nào — đúng lúc cần ảnh nhất. Vẫn ĐỎ, không nuốt. */
+    if (CHUAN_BI[duong]) {
+      try { await CHUAN_BI[duong](p); } catch (e) {
+        loi.push(`${rong}px: bước CHUẨN BỊ hỏng — ${String(e?.message ?? e).split('\n')[0].slice(0, 200)}`);
+      }
+      await p.waitForTimeout(400);
+    }
 
     /* `CT_CHUP=<thư mục>` ⇒ chụp lại từng trang ở từng bề rộng. Bộ đo này chỉ
        trả lời "có tràn không"; nó KHÔNG trả lời được "trông có ổn không" — mà
@@ -1792,7 +1979,54 @@ for (const duong of DUONG) {
         }
       }
 
+      /*
+       * CẮT TRONG KHUNG LỒNG (03/10/2026) — chỉ cho trang AI (`.ct-ai-term`).
+       *
+       * Hai chốt trên KHÔNG thấy được ba lỗi người dùng chụp ở AI Code:
+       *   • nút bị cắt bởi một tổ tiên `overflow: hidden` NẰM TRONG khung (cột
+       *     `.ct-ai-than`) — nút vẫn trong mép `.ct-content` nên chốt 2 im;
+       *   • chữ trong bảng ghi bị đẩy lệch trái (mất ký tự đầu) — bảng ghi cuộn
+       *     dọc nên `overflowX` tính ra `auto` và `trongVungCuon` bỏ qua TẤT CẢ;
+       *   • thanh bên kéo hẹp cắt chữ mép TRÁI — chốt 2 chỉ so mép phải.
+       * Nên ở đây: mọi điều khiển + mọi khối chữ của AI phải nằm TRỌN trong
+       * tổ tiên gần nhất có cắt (hidden/clip/auto), trừ vùng CỐ Ý cuộn ngang
+       * (`[data-cuon-ngang]`, thanh tab, khối mã/bảng/đầu ra lệnh).
+       */
+      const catLong = [];
+      if (document.querySelector('.ct-ai-term')) {
+        const CO_Y_CUON = '[data-cuon-ngang], .ct-tabs, .ct-tt-tabs, pre, table, .ct-ma, .ct-diff, .ct-bang-cuon, .xterm';
+        const sel = '.ct-ai-than button, .ct-ai-than input, .ct-ai-than textarea, '
+          + '.ct-agent-may, .ct-agent-nguoi, .ct-agent-tool, .ct-lenh-ra, .ct-kehoach, .ct-tb-nhom h3, .ct-tb-tongquan, .ct-dang-lam';
+        for (const e of noi.querySelectorAll(sel)) {
+          const r = e.getBoundingClientRect();
+          if (r.width === 0 || r.height === 0) continue;
+          if (e.closest(CO_Y_CUON) && e.closest(CO_Y_CUON) !== e) continue;
+          if (trongLopPhu(e)) continue;
+          for (let n = e.parentElement; n && n !== noi; n = n.parentElement) {
+            const cs = getComputedStyle(n);
+            if (cs.overflowX === 'visible') continue;
+            if (n.matches(CO_Y_CUON)) break;
+            const k = n.getBoundingClientRect();
+            /* Viền trái/phải + thanh cuộn dọc không tính là "trong". */
+            const trai = k.left + n.clientLeft - 1;
+            const phai = k.left + n.clientLeft + n.clientWidth + 1;
+            if (r.left < trai || r.right > phai) {
+              catLong.push(`${(e.className || e.tagName).toString().split(' ')[0]} "${(e.textContent ?? '').trim().slice(0, 20)}" cắt bởi ${(n.className || n.tagName).toString().split(' ')[0]}`);
+            }
+            break;
+          }
+        }
+        /* Bảng ghi / thanh bên bị đẩy lệch ngang (scrollLeft ≠ 0) = chữ mất đầu. */
+        for (const n of noi.querySelectorAll('.ct-agent-scroll, .ct-tb-ds, .ct-agent, .ct-ai-than')) {
+          if (n.getBoundingClientRect().width === 0) continue;
+          if (n.scrollLeft > 0) catLong.push(`${n.className.split(' ')[0]} bị cuộn ngang lệch ${n.scrollLeft}px`);
+          if (n.scrollWidth > n.clientWidth + 1) catLong.push(`${n.className.split(' ')[0]} rộng hơn khung ${n.scrollWidth - n.clientWidth}px`);
+        }
+      }
+
       return {
+        catLong: [...new Set(catLong)].slice(0, 5),
+        soCatLong: catLong.length,
         tranTrang: document.documentElement.scrollWidth - document.documentElement.clientWidth,
         tranNoi: noi.scrollWidth - noi.clientWidth,
         loBenPhai: [...new Set(loBenPhai)].slice(0, 4),
@@ -1849,6 +2083,7 @@ for (const duong of DUONG) {
     }
     if (kq.tranTrang > 0) loi.push(`${rong}px: cả trang tràn ${kq.tranTrang}px`);
     if (kq.soLo > 0) loi.push(`${rong}px: ${kq.soLo} điều khiển lọt ra ngoài khung — ${kq.loBenPhai.join(' · ')}`);
+    if (kq.soCatLong > 0) loi.push(`${rong}px: ${kq.soCatLong} phần tử AI bị cắt trong khung lồng — ${kq.catLong.join(' · ')}`);
   }
 
   const dat = loi.length === 0;

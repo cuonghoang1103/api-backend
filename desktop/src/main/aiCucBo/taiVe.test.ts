@@ -176,3 +176,20 @@ describe('số hiện cho người dùng', () => {
     expect(coChu(12e3)).toBe('12 KB');
   });
 });
+
+describe('kiemSha256 — cỡ đúng chưa chắc file đúng (03/10/2026)', () => {
+  it('đúng mã ⇒ true và NHỚ kết quả; sai mã ⇒ false', async () => {
+    const { kiemSha256 } = await import('./taiVe');
+    const { mkdtemp, writeFile: ghi, readFile: doc } = await import('node:fs/promises');
+    const { tmpdir: tam } = await import('node:os');
+    const { join: noi } = await import('node:path');
+    const { createHash } = await import('node:crypto');
+    const g = await mkdtemp(noi(tam(), 'ct-sha-'));
+    const f = noi(g, 'm.gguf');
+    await ghi(f, 'noi dung that');
+    const dung = createHash('sha256').update('noi dung that').digest('hex');
+    expect(await kiemSha256(f, '0'.repeat(64))).toBe(false);
+    expect(await kiemSha256(f, dung)).toBe(true);
+    expect((await doc(`${f}.sha256`, 'utf8')).trim()).toBe(dung);
+  });
+});

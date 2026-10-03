@@ -14,7 +14,7 @@
  *    ở đúng chỗ nó xảy ra.
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Cpu, Download, HardDrive, Loader2, Play, RefreshCw, Sparkles, Square, Trash2, X } from 'lucide-react';
+import { Code2, Cpu, Download, HardDrive, Loader2, Play, RefreshCw, Sparkles, Square, Trash2, X } from 'lucide-react';
 import type { AiCucBoMa, AiCucBoTienDo, AiCucBoTinhTrang } from '../../../shared/ipc';
 import { useDich } from '../../i18n';
 import { useAppState } from '../../app-state';
@@ -33,7 +33,15 @@ function tocDo(bps: number): string {
 
 export function AiNgoaiTuyen() {
   const { dich } = useDich();
-  const { settings, setSetting } = useAppState();
+  const { settings, setSetting, layThamSo, lanDieuHuong } = useAppState();
+  /* Mở từ dải "Mất mạng — chưa có AI ngoại tuyến" của AI Code/Chat ⇒ cuộn
+     thẳng tới đây. Cài đặt là một trang dài; bắt người đang mất mạng tự lần
+     tìm mục này là thêm một bước vào đúng lúc họ đang bực nhất. */
+  const khung = useRef<HTMLElement | null>(null);
+  const [canCuon, datCanCuon] = useState(false);
+  useEffect(() => {
+    if (layThamSo('muc') === 'ai-ngoai-tuyen') datCanCuon(true);
+  }, [lanDieuHuong, layThamSo]);
   /* Mặc định BẬT cả hai — người đã tải model về là người muốn dùng nó. */
   const choChay = settings.aiCucBoBat !== false;
   const tuDong = settings.aiCucBoTuDong !== false;
@@ -70,6 +78,14 @@ export function AiNgoaiTuyen() {
     });
     return () => { conSong.current = false; bo?.(); };
   }, [nap, dich]);
+
+  /* Cuộn khi ĐÃ có nội dung — cuộn lúc còn "Đang xem cấu hình máy…" thì
+     khung còn thấp, nạp xong nó dài ra và mục tiêu trôi khỏi tầm nhìn. */
+  useEffect(() => {
+    if (!canCuon || !tt) return;
+    datCanCuon(false);
+    requestAnimationFrame(() => khung.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+  }, [canCuon, tt]);
 
   const tai = async (ma: AiCucBoMa) => {
     setLoi('');
@@ -139,13 +155,67 @@ export function AiNgoaiTuyen() {
     );
   }
 
-  const { may, khuyen } = tt;
+  const { may, khuyen, khuyenCode } = tt;
   const dangTai = tienDo !== null;
   /** Bản hợp máy nhất — thứ người dùng thật sự cần biết. */
   const nenDung = khuyen.nen ? tt.kho.find((m) => m.ma === khuyen.nen) : undefined;
 
+  /** Một hàng model — dùng cho cả danh sách chat lẫn danh sách AI Code. */
+  const hang = (m: AiCucBoTinhTrang['kho'][number], duoc: boolean, laNen: boolean, ghiChu?: string) => {
+    const coRoi = tt.daCo.includes(m.ma);
+    const chay = tt.dangChay === m.ma;
+    const ban = dangTai || dangLam !== null || !choChay;
+    return (
+      <div key={m.ma} className="ct-field" style={{ alignItems: 'flex-start', opacity: duoc || coRoi ? 1 : 0.55 }}>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div className="ct-field-label">
+            {m.ten}
+            {laNen && <span className="ct-the" style={{ marginLeft: 8 }}>{dich('Hợp máy bạn')}</span>}
+            {chay && <span className="ct-the" style={{ marginLeft: 8 }}>{dich('Đang chạy')}</span>}
+            {ghiChu && <span className="ct-the" data-tone="warn" style={{ marginLeft: 8 }}>{ghiChu}</span>}
+          </div>
+          <div className="ct-field-help">{m.moTa}</div>
+          <div className="ct-field-help" style={{ fontVariantNumeric: 'tabular-nums' }}>
+            {dich('Tải về')} {gb(m.gb)} · {dich('cần')} {gb(m.ramGb)} {dich('bộ nhớ khi chạy')}
+          </div>
+          {!duoc && !coRoi && (
+            <div className="ct-field-help">{dich('Máy này chưa đủ cho bản đó.')}</div>
+          )}
+        </div>
+        <div style={{ display: 'flex', gap: 8, flexShrink: 0, flexWrap: 'wrap' }}>
+          {!coRoi && (
+            <button type="button" className="ct-btn" disabled={ban || !duoc} onClick={() => void tai(m.ma)}>
+              <Download size={14} /> {dich('Tải')}
+            </button>
+          )}
+          {coRoi && !chay && (
+            <button type="button" className="ct-btn" disabled={ban} onClick={() => void bat(m.ma)}>
+              {dangLam === m.ma ? <Loader2 size={14} className="ct-spin" /> : <Play size={14} />}
+              {' '}{dich('Bật')}
+            </button>
+          )}
+          {chay && (
+            <button type="button" className="ct-btn" disabled={ban} onClick={() => void tat()}>
+              <Square size={14} /> {dich('Tắt')}
+            </button>
+          )}
+          {coRoi && (
+            <button type="button" className="ct-btn ct-btn-ghost" disabled={ban}
+              onClick={() => void xoa(m.ma)}
+              title={dich('Xoá khỏi máy')} aria-label={dich('Xoá khỏi máy')}>
+              <Trash2 size={14} />
+            </button>
+          )}
+        </div>
+      </div>
+    );
+  };
+  const modelCode = tt.kho.filter((m) => m.code);
+  const nenCode = khuyenCode.nen ? tt.kho.find((m) => m.ma === khuyenCode.nen) : undefined;
+  const mucMay = khuyenCode.muc === 'manh' ? dich('Máy mạnh') : khuyenCode.muc === 'vua' ? dich('Máy trung bình') : dich('Máy yếu cho AI Code');
+
   return (
-    <section className="ct-section">
+    <section className="ct-section" id="ai-ngoai-tuyen" ref={khung}>
       <h2>{dich('AI ngoại tuyến')}</h2>
       <p className="ct-field-help">
         {dich('Tải AI về chạy thẳng trên máy bạn. Mất mạng vẫn hỏi được, và câu hỏi không rời khỏi máy. Đổi lại, nó trả lời kém hơn bản trên mạng.')}
@@ -278,65 +348,60 @@ export function AiNgoaiTuyen() {
 
       {loi && <p className="ct-loi" style={{ marginTop: 12 }}>{loi}</p>}
 
-      {/* ── Các bản ─────────────────────────────────────── */}
+      {/* ── Các bản cho CHAT ────────────────────────────── */}
       <div style={{ display: 'grid', gap: 10, marginTop: 16 }}>
-        {tt.kho.map((m) => {
-          const coRoi = tt.daCo.includes(m.ma);
-          const chay = tt.dangChay === m.ma;
-          const duoc = khuyen.choPhep.includes(m.ma);
-          const ban = dangTai || dangLam !== null || !choChay;
-          return (
-            <div key={m.ma} className="ct-field" style={{ alignItems: 'flex-start', opacity: duoc || coRoi ? 1 : 0.55 }}>
-              <div style={{ flex: 1 }}>
-                <div className="ct-field-label">
-                  {m.ten}
-                  {khuyen.nen === m.ma && (
-                    <span className="ct-the" style={{ marginLeft: 8 }}>{dich('Hợp máy bạn')}</span>
-                  )}
-                  {chay && (
-                    <span className="ct-the" style={{ marginLeft: 8 }}>{dich('Đang chạy')}</span>
-                  )}
-                </div>
-                <div className="ct-field-help">{m.moTa}</div>
-                <div className="ct-field-help" style={{ fontVariantNumeric: 'tabular-nums' }}>
-                  {dich('Tải về')} {gb(m.gb)} · {dich('cần')} {gb(m.ramGb)} {dich('bộ nhớ khi chạy')}
-                </div>
-                {/* Máy không đủ thì nói NGAY Ở ĐÂY, chứ không để họ bấm rồi mới biết. */}
-                {!duoc && !coRoi && (
-                  <div className="ct-field-help">{dich('Máy này chưa đủ cho bản đó.')}</div>
-                )}
-              </div>
-              <div style={{ display: 'flex', gap: 8, flexShrink: 0 }}>
-                {!coRoi && (
-                  <button type="button" className="ct-btn" disabled={ban || !duoc}
-                    onClick={() => void tai(m.ma)}>
-                    <Download size={14} /> {dich('Tải')}
-                  </button>
-                )}
-                {coRoi && !chay && (
-                  <button type="button" className="ct-btn" disabled={ban}
-                    onClick={() => void bat(m.ma)}>
-                    {dangLam === m.ma ? <Loader2 size={14} className="ct-spin" /> : <Play size={14} />}
-                    {' '}{dich('Bật')}
-                  </button>
-                )}
-                {chay && (
-                  <button type="button" className="ct-btn" disabled={ban} onClick={() => void tat()}>
-                    <Square size={14} /> {dich('Tắt')}
-                  </button>
-                )}
-                {coRoi && (
-                  <button type="button" className="ct-btn ct-btn-ghost" disabled={ban}
-                    onClick={() => void xoa(m.ma)}
-                    title={dich('Xoá khỏi máy')} aria-label={dich('Xoá khỏi máy')}>
-                    <Trash2 size={14} />
-                  </button>
-                )}
-              </div>
-            </div>
-          );
-        })}
+        {tt.kho.filter((m) => m.ma !== 'code').map((m) => hang(m, khuyen.choPhep.includes(m.ma), khuyen.nen === m.ma))}
       </div>
+
+      {/* ── AI CODE NGOẠI TUYẾN (03/10/2026) ─────────────────
+          Mục riêng vì câu hỏi riêng: "máy tôi có chạy được AI Code khi mất
+          mạng không, bản nào, vì sao". Agent nạp lại cả hội thoại MỖI bước nên
+          ngưỡng cao hơn chat nhiều — máy chạy chat tốt chưa chắc chạy nổi agent. */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 22 }}>
+        <Code2 size={16} aria-hidden />
+        <span className="ct-field-label" style={{ flex: 1 }}>{dich('AI Code ngoại tuyến')}</span>
+        <span className="ct-the" data-tone={khuyenCode.muc === 'yeu' ? 'warn' : undefined}>{mucMay}</span>
+      </div>
+      <p className="ct-field-help" style={{ marginTop: 4 }}>
+        {dich('Mất mạng thì AI Code tự chạy bằng model trên máy: đọc mã, sửa file, chạy lệnh — vẫn qua đúng các bước duyệt như khi có mạng. Có mạng lại sẽ hỏi quay về AI máy chủ.')}
+      </p>
+      <div style={{
+        marginTop: 8, padding: '12px 14px', borderRadius: 10,
+        border: '1px solid var(--ct-line, #e5e7eb)', display: 'flex', gap: 10, alignItems: 'flex-start',
+      }}
+      >
+        <Sparkles size={16} style={{ flexShrink: 0, marginTop: 2, opacity: 0.8 }} />
+        <div style={{ flex: 1, minWidth: 0 }}>
+          {nenCode && (
+            <div className="ct-field-label" style={{ marginBottom: 2 }}>
+              {dich('Nên dùng:')} {nenCode.ten} · {gb(nenCode.gb)}
+            </div>
+          )}
+          <div className="ct-field-help" style={{ margin: 0 }}>{khuyenCode.vi}</div>
+          {typeof may.vramGb === 'number' && may.vramGb > 0 && may.nenTang !== 'darwin' && (
+            <div className="ct-field-help" style={{ margin: '4px 0 0' }}>
+              {dich('VRAM đo được:')} {gb(may.vramGb)}{tt.boChayCuda ? ` · ${dich('đang dùng bộ chạy CUDA')}` : ''}
+            </div>
+          )}
+          {nenCode && !tt.daCo.includes(nenCode.ma) && !dangTai && (
+            <button type="button" className="ct-btn" style={{ marginTop: 10 }}
+              disabled={!choChay || dangLam !== null}
+              onClick={() => void tai(nenCode.ma)}>
+              <Download size={14} /> {dich('Tải bản này cho AI Code')}
+            </button>
+          )}
+        </div>
+      </div>
+      {khuyenCode.muc !== 'yeu' && (
+        <div style={{ display: 'grid', gap: 10, marginTop: 10 }}>
+          {modelCode.map((m) => hang(
+            m,
+            khuyenCode.choPhep.includes(m.ma),
+            khuyenCode.nen === m.ma,
+            m.code?.nhan === 'chỉ việc nhỏ' ? dich('chỉ việc nhỏ') : undefined,
+          ))}
+        </div>
+      )}
 
       <p className="ct-field-help" style={{ marginTop: 14 }}>
         {dich('Khi có mạng, app vẫn tự dùng bản trên mạng vì nó trả lời tốt hơn. AI trên máy là lưới đỡ lúc mất kết nối.')}

@@ -14,7 +14,7 @@
  */
 import { contextBridge, ipcRenderer, webUtils } from 'electron';
 import type {
-  AgentInfo,
+  AgentInfo, AgentKetQuaCompact, AgentNguCanhChiTiet, AgentMucChanDoan,
   TerminalKetQua,
   PhienPty,
   AgentBaiHoc,
@@ -59,6 +59,8 @@ import type {
   StoredSession,
   UpdateStatus,
   ThongTinMangBridge,
+  RobotKetQuaBoCuc,
+  RobotKyNang,
 } from '../shared/ipc';
 import type { CaiXuat } from '../shared/dinhDangXuat';
 
@@ -82,6 +84,9 @@ const ALLOWED_EVENTS: readonly EventChannel[] = [
   'academy:giaSuLuot',
   'robot:congTac',
   'robot:viec',
+  'robot:boCucLai',
+  'robot:thietDat',
+  'robot:cheDoChinh',
   'oauth:xong',
   'nhac:phim',
   'aiCucBo:tienDo',
@@ -323,6 +328,8 @@ const bridge: DesktopBridge = {
     tat: () => ipcRenderer.invoke('aiCucBo:tat'),
     xoa: (ma) => ipcRenderer.invoke('aiCucBo:xoa', { ma }),
     goSach: () => ipcRenderer.invoke('aiCucBo:goSach'),
+    cheDoCode: () => ipcRenderer.invoke('aiCucBo:cheDoCode'),
+    kiemMang: () => ipcRenderer.invoke('aiCucBo:kiemMang'),
     hoi: (p) => ipcRenderer.invoke('aiCucBo:hoi', p),
   },
 
@@ -356,8 +363,16 @@ const bridge: DesktopBridge = {
     // dừng thì gọi `cancel()`, đừng trông vào việc lời hứa này tự bỏ cuộc.
     taoCuoc: () => ipcRenderer.invoke('agent:taoCuoc') as Promise<string>,
     dongCuoc: (cuocId: string) => ipcRenderer.invoke('agent:dongCuoc', { cuocId }) as Promise<void>,
-    send: (cuocId: string, text: string, anh?: string[]) =>
-      ipcRenderer.invoke('agent:send', { cuocId, text, anh }) as Promise<void>,
+    send: (cuocId: string, text: string, anh?: string[], tuyChon?: { chiDoc?: boolean }) =>
+      ipcRenderer.invoke('agent:send', { cuocId, text, anh, ...(tuyChon?.chiDoc ? { chiDoc: true } : {}) }) as Promise<void>,
+    compact: (cuocId: string, ghiChu?: string) =>
+      ipcRenderer.invoke('agent:compact', { cuocId, ...(ghiChu ? { ghiChu } : {}) }) as Promise<AgentKetQuaCompact>,
+    nguCanhChiTiet: (cuocId: string) =>
+      ipcRenderer.invoke('agent:nguCanhChiTiet', { cuocId }) as Promise<AgentNguCanhChiTiet>,
+    chanDoan: (cuocId: string) =>
+      ipcRenderer.invoke('agent:chanDoan', { cuocId }) as Promise<AgentMucChanDoan[]>,
+    datEpCucBo: (cuocId: string, bat?: boolean) =>
+      ipcRenderer.invoke('agent:datEpCucBo', bat === undefined ? { cuocId } : { cuocId, bat }) as Promise<{ bat: boolean }>,
     lamTiep: (cuocId: string) =>
       ipcRenderer.invoke('agent:lamTiep', { cuocId }) as Promise<void>,
     cancel: (cuocId: string) => ipcRenderer.invoke('agent:cancel', { cuocId }) as Promise<void>,
@@ -480,7 +495,11 @@ const bridge: DesktopBridge = {
     doiCo: (co: 'gon' | 'noi' | 'rong', bong?: { rong: number; cao: number }) =>
       ipcRenderer.invoke('robot:doiCo', { co, bong }) as Promise<void>,
     datCo: (nac: number) => ipcRenderer.invoke('robot:datCo', { nac }) as Promise<void>,
-    keoBatDau: () => ipcRenderer.invoke('robot:keoBatDau') as Promise<void>,
+    datPhanTram: (phanTram: number) => ipcRenderer.invoke('robot:datPhanTram', { phanTram }) as Promise<number>,
+    boCuc: (noiDung, apDung) => ipcRenderer.invoke('robot:boCuc', { noiDung, apDung }) as Promise<RobotKetQuaBoCuc | null>,
+    veMacDinh: () => ipcRenderer.invoke('robot:veMacDinh') as Promise<void>,
+    nenTang: () => ipcRenderer.invoke('robot:nenTang') as Promise<{ heDieuHanh: string; waylandThuan: boolean; xWayland: boolean }>,
+    keoBatDau: (kieu?: 'hop' | 'caKhung') => ipcRenderer.invoke('robot:keoBatDau', kieu ? { kieu } : undefined) as Promise<void>,
     keoToi: (dx: number, dy: number) => ipcRenderer.invoke('robot:keoToi', { dx, dy }) as Promise<void>,
     keoXong: () => ipcRenderer.invoke('robot:keoXong') as Promise<void>,
     menu: (trongApp: boolean) => ipcRenderer.invoke('robot:menu', { trongApp }) as Promise<void>,
@@ -491,9 +510,10 @@ const bridge: DesktopBridge = {
     phimTat: () => ipcRenderer.invoke('robot:phimTat') as Promise<string | null>,
     moChinh: (duongDan: string) =>
       ipcRenderer.invoke('robot:moChinh', { duongDan }) as Promise<void>,
-    hoi: (chu: string, them?: { model?: string; phienId?: string | null; anh?: string[] }) =>
+    hoi: (chu: string, them?: { model?: string; phienId?: string | null; anh?: string[]; kyNang?: RobotKyNang }) =>
       ipcRenderer.invoke('robot:hoi', { chu, ...them }) as Promise<{
         chu: string;
+        kyNang?: string | null;
         phienId: string | null;
         roiBac: { thanh: string; lyDo: string } | null;
       }>,

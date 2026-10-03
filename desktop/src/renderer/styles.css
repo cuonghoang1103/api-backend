@@ -14359,7 +14359,11 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
 /* Lưới thẻ thiết bị */
 .ct-mang-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 @media (max-width: 620px) { .ct-mang-grid { grid-template-columns: 1fr; } }
-.ct-tb {
+/* ⚠️ `.ct-tbi` (thẻ THIẾT BỊ), KHÔNG phải `.ct-tb` — tên cũ trùng hẳn với thanh
+   bên AI Code (`.ct-tb`, ThanhBen.tsx) và luật `align-items: center` ở đây làm
+   mọi con của thanh bên co về bề rộng nội dung rồi canh GIỮA: kéo hẹp thanh bên
+   là chữ bị cắt cả mép TRÁI ("iệc · 12 dự án"). Đổi tên 03/10/2026. */
+.ct-tbi {
   display: flex; align-items: center; gap: 12px;
   padding: 13px 14px; border-radius: 13px;
   border: 1px solid var(--ct-border); background: var(--ct-surface);
@@ -14367,27 +14371,27 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   animation: ct-tb-vao 260ms var(--ct-ease);
 }
 @keyframes ct-tb-vao { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
-.ct-tb[data-loai='minh'] { border-left-color: var(--ct-accent); }
-.ct-tb[data-loai='router'] { border-left-color: var(--ct-ok); }
-.ct-tb[data-loai='khac'] { border-left-color: var(--ct-warn); }
-.ct-tb[data-loai='cua-toi'] { border-left-color: var(--ct-text-faint); }
-.ct-tb-icon {
+.ct-tbi[data-loai='minh'] { border-left-color: var(--ct-accent); }
+.ct-tbi[data-loai='router'] { border-left-color: var(--ct-ok); }
+.ct-tbi[data-loai='khac'] { border-left-color: var(--ct-warn); }
+.ct-tbi[data-loai='cua-toi'] { border-left-color: var(--ct-text-faint); }
+.ct-tbi-icon {
   width: 38px; height: 38px; flex-shrink: 0; border-radius: 10px;
   display: grid; place-items: center;
   background: var(--ct-surface-2); color: var(--ct-text-muted);
 }
-.ct-tb[data-loai='minh'] .ct-tb-icon { background: var(--ct-active); color: var(--ct-accent-text); }
-.ct-tb[data-loai='router'] .ct-tb-icon { background: color-mix(in srgb, var(--ct-ok) 15%, transparent); color: var(--ct-ok); }
-.ct-tb-info { flex: 1; min-width: 0; }
-.ct-tb-ten { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
-.ct-tb-ten-chinh { font-weight: 600; font-size: 14px; color: var(--ct-text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; }
-.ct-tb-tag { font-size: 10.5px; font-weight: 700; padding: 2px 7px; border-radius: 999px; background: var(--ct-hover); color: var(--ct-text-faint); text-transform: uppercase; letter-spacing: 0.02em; }
-.ct-tb-tag.hl { background: var(--ct-active); color: var(--ct-accent-text); }
-.ct-tb-phu { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 3px; font-size: 12px; color: var(--ct-text-faint); font-variant-numeric: tabular-nums; }
-.ct-tb-ip { font-weight: 600; color: var(--ct-text-muted); }
-.ct-tb-mac { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
-.ct-tb-check { display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0; font-size: 12px; color: var(--ct-text-muted); cursor: pointer; }
-.ct-tb-check input { accent-color: var(--ct-accent); }
+.ct-tbi[data-loai='minh'] .ct-tbi-icon { background: var(--ct-active); color: var(--ct-accent-text); }
+.ct-tbi[data-loai='router'] .ct-tbi-icon { background: color-mix(in srgb, var(--ct-ok) 15%, transparent); color: var(--ct-ok); }
+.ct-tbi-info { flex: 1; min-width: 0; }
+.ct-tbi-ten { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+.ct-tbi-ten-chinh { font-weight: 600; font-size: 14px; color: var(--ct-text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; }
+.ct-tbi-tag { font-size: 10.5px; font-weight: 700; padding: 2px 7px; border-radius: 999px; background: var(--ct-hover); color: var(--ct-text-faint); text-transform: uppercase; letter-spacing: 0.02em; }
+.ct-tbi-tag.hl { background: var(--ct-active); color: var(--ct-accent-text); }
+.ct-tbi-phu { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 3px; font-size: 12px; color: var(--ct-text-faint); font-variant-numeric: tabular-nums; }
+.ct-tbi-ip { font-weight: 600; color: var(--ct-text-muted); }
+.ct-tbi-mac { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+.ct-tbi-check { display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0; font-size: 12px; color: var(--ct-text-muted); cursor: pointer; }
+.ct-tbi-check input { accent-color: var(--ct-accent); }
 
 /* Thẻ thông báo (cảnh báo / lỗi / cần app) */
 .ct-mang-card { padding: 14px 16px; border-radius: 13px; font-size: 13.5px; line-height: 1.6; }
@@ -14458,3 +14462,766 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
 .ct-gauge-chay[data-gd='taiXuong'] { stroke: url(#ctGradDl); }
 .ct-keto[data-dang='do'] .ct-keto-dau,
 .ct-keto[data-dang='do'] .ct-keto-gt { color: var(--ct-accent-text); }
+
+/* ═══════════════════════════════════════════════════════════════
+   AI NGOẠI TUYẾN — khung AI đổi màu khi chạy bằng model trên máy
+   (03/10/2026 — features/chat/NgoaiTuyen.tsx)
+
+   Đổi `--ct-accent` NGAY TRÊN khung AI chứ không ở :root: chỉ khung đang chạy
+   trên máy đổi màu, phần còn lại của app giữ nguyên — đổi cả app là nói sai
+   (Ghi chú, Học viện… không chạy trên model nào cả). Mọi nút/viền/vòng ngữ
+   cảnh trong khung đọc `--ct-accent` nên tự đổi theo, không phải sửa từng chỗ.
+   Xanh mòng két: khác hẳn chàm của máy chủ, không trùng màu cảnh báo/lỗi.
+   ═══════════════════════════════════════════════════════════════ */
+.ct-agent[data-ngoai-tuyen='1'] {
+  --ct-accent: #0d9488;
+  --ct-accent-text: #0f766e;
+  --ct-active: rgba(13, 148, 136, 0.12);
+  box-shadow: inset 0 3px 0 0 var(--ct-accent);
+}
+:root[data-ct-theme='dark'] .ct-agent[data-ngoai-tuyen='1'] {
+  --ct-accent: #2dd4bf;
+  --ct-accent-text: #5eead4;
+  --ct-active: rgba(45, 212, 191, 0.16);
+}
+
+.ct-ngoai-tuyen-dai {
+  display: flex;
+  flex-wrap: wrap;            /* BO-CUC luật 2: cửa sổ hẹp thì xuống dòng, không cắt */
+  align-items: center;
+  gap: 6px 10px;
+  min-width: 0;
+  padding: 8px 14px;
+  font-size: 13px;
+  border-bottom: 1px solid var(--ct-border);
+  color: var(--ct-accent-text);
+  background: color-mix(in srgb, var(--ct-accent) 11%, var(--ct-surface));
+}
+.ct-ngoai-tuyen-dai svg { flex-shrink: 0; }
+.ct-ngoai-tuyen-dai[data-loai='coMang'] {
+  background: color-mix(in srgb, var(--ct-ok) 12%, var(--ct-surface));
+}
+.ct-ngoai-tuyen-dai[data-loai='thieu'] {
+  color: var(--ct-err);
+  background: color-mix(in srgb, var(--ct-err) 10%, var(--ct-surface));
+}
+.ct-ngoai-tuyen-chu { flex: 1 1 220px; min-width: 0; overflow-wrap: anywhere; }
+.ct-ngoai-tuyen-chu strong { font-weight: 700; }
+.ct-ngoai-tuyen-hoi { color: var(--ct-ok); font-weight: 600; min-width: 0; }
+.ct-ngoai-tuyen-phu { color: var(--ct-text-muted); font-size: 12px; margin-left: auto; }
+.ct-ngoai-tuyen-nut {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-left: auto;
+  padding: 4px 10px;
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 600;
+  border-radius: 8px;
+  border: 1px solid currentColor;
+  color: inherit;
+  background: var(--ct-surface);
+  cursor: pointer;
+}
+.ct-notice .ct-ngoai-tuyen-nut { margin-left: 8px; color: var(--ct-accent-text); }
+.ct-ngoai-tuyen-nut:hover { background: var(--ct-hover); }
+
+/* Chip model khi ngoại tuyến — thay chỗ nút chọn model máy chủ. */
+.ct-chip-cucbo {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 220px;
+  padding: 4px 10px;
+  font-size: 12.5px;
+  font-weight: 600;
+  border-radius: 999px;
+  color: var(--ct-accent-text);
+  background: color-mix(in srgb, var(--ct-accent) 14%, var(--ct-surface));
+  border: 1px solid color-mix(in srgb, var(--ct-accent) 40%, transparent);
+}
+.ct-chip-cucbo span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* Nhãn máy trên MỖI câu trả lời từ máy (ranh giới 2) — không ai nhầm với câu máy chủ. */
+.ct-nhan-may {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 6px;
+  padding: 2px 8px;
+  font-size: 11.5px;
+  font-weight: 600;
+  border-radius: 6px;
+  color: #0f766e;
+  background: rgba(13, 148, 136, 0.12);
+}
+:root[data-ct-theme='dark'] .ct-nhan-may { color: #5eead4; background: rgba(45, 212, 191, 0.16); }
+.ct-agent-may[data-cuc-bo='1'] { border-left: 3px solid #0d9488; }
+:root[data-ct-theme='dark'] .ct-agent-may[data-cuc-bo='1'] { border-left-color: #2dd4bf; }
+
+/* ══════════════════════════════════════════════════════════════════════════
+ * AI CODE — BỐ CỤC CO GIÃN + GIAO DIỆN (03/10/2026)
+ * ══════════════════════════════════════════════════════════════════════════
+ * Hallmark · component: AI Code workspace (thanh công cụ · dải kế hoạch · dòng
+ *   tool · khối đầu ra lệnh · ô soạn · thanh bên) · genre: modern-minimal ·
+ *   theme: giữ token `.ct-ai-term` sẵn có (KHÔNG thêm màu mới ngoài biến)
+ * states: default · hover · focus-visible · active · disabled · loading · error · success
+ *
+ * Người dùng chụp 3 ảnh (03/10): thanh bên cắt chữ mép TRÁI, thanh công cụ /
+ * dải kế hoạch / đầu ra lệnh / ô nhập bị cắt mép PHẢI, chữ tin nhắn mất ký tự
+ * đầu, nút mở lại thanh bên là mẩu nhỏ trôi giữa mép. Gốc từng cái:
+ *   • `.ct-tb` bị khối "thẻ thiết bị" của trang Mạng nhà dùng TRÙNG TÊN (đã đổi
+ *     thành `.ct-tbi`) — `align-items:center` canh giữa mọi con của thanh bên;
+ *   • thanh công cụ 15 nút, không có chỗ gom ⇒ 4–5 hàng, đẩy bảng ghi về 0px;
+ *   • bảng ghi `overflow-y:auto` ⇒ `overflow-x` thành `auto`, khối rộng làm nó
+ *     cuộn ngang được (chữ mất đầu);
+ *   • ô soạn xếp 📎 · 📷 · ô chữ · Gửi trên một hàng ⇒ ô chữ bị bóp.
+ * Luật áp dụng: `desktop/BO-CUC.md` (min-width:0 · flex-wrap · @container ·
+ * overflow-x:auto cho thứ dài vô hạn). Khối này đứng CUỐI tệp nên thắng các
+ * khai báo cũ cùng độ đặc hiệu — sửa ở đây, đừng sửa rải rác phía trên.
+ */
+
+/* ── Nhịp khoảng cách + bậc chữ của khung (một thang, dùng lại mọi nơi) ── */
+.ct-agent {
+  --ac-1: 4px;
+  --ac-2: 8px;
+  --ac-3: 12px;
+  --ac-4: 16px;
+  --ac-cao-nut: 28px;
+  --ac-chu-tin: 13.5px;   /* lời agent + câu hỏi */
+  --ac-chu-tool: 12px;    /* dòng tool */
+  --ac-chu-ra: 12px;      /* đầu ra lệnh (mono) */
+  --ac-chu-tt: 11.5px;    /* trạng thái, nhãn phụ */
+  min-width: 0;
+}
+
+/* Trang AI luôn nền terminal tối — kể cả khi app ở chủ đề SÁNG. Bản màu sáng
+   của dải ngoại tuyến (#0f766e trên nền #0a0e0d ≈ 2,4:1) vì thế không đọc
+   được; dùng bản tối ở MỌI chủ đề trong phạm vi `.ct-ai-term`. */
+.ct-ai-term .ct-agent[data-ngoai-tuyen='1'] {
+  --ct-accent: #2dd4bf;
+  --ct-accent-text: #5eead4;
+  --ct-active: rgba(45, 212, 191, 0.16);
+}
+
+/* ── Luật 1: mọi flex item chứa nội dung co được ── */
+.ct-ai-term .ct-chedo,
+.ct-ai-term .ct-tab-noi,
+.ct-agent-doi,
+.ct-agent-doi > .ct-agent-scroll { min-width: 0; }
+
+/* ══ THANH CÔNG CỤ ══ */
+.ct-agent .ct-agent-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ac-2) var(--ac-3);
+  min-width: 0;
+  padding: 0 0 var(--ac-2);
+}
+.ct-agent-bar-trai,
+.ct-agent-bar-phai {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ac-1);
+  min-width: 0;
+}
+.ct-agent-bar-trai { flex: 1 1 220px; }
+.ct-agent-bar-phai { flex: 0 1 auto; justify-content: flex-end; margin-left: auto; }
+
+/* Mọi điều khiển trên thanh: CÙNG chiều cao, cùng bo góc, cùng cỡ chữ. Bản cũ
+   có năm kiểu nút cao 24–34px đứng cạnh nhau. */
+.ct-agent-bar :is(.ct-agent-ws, .ct-chedo-nut, .ct-chonmm-nut, .ct-agent-hoantac, .ct-agent-cong,
+  .ct-agent-icon, .ct-chip-cucbo, .ct-mcp-boc > .ct-btn) {
+  height: var(--ac-cao-nut);
+  box-sizing: border-box;
+  border-radius: 8px;
+  font-size: var(--ac-chu-tt);
+}
+.ct-agent .ct-agent-ws { flex: 0 1 auto; min-width: 0; max-width: 300px; padding: 0 var(--ac-2); }
+.ct-agent .ct-agent-ws-name { min-width: 0; }
+.ct-agent .ct-agent-icon { width: var(--ac-cao-nut); }
+.ct-agent .ct-chonmm-nut { padding: 0 var(--ac-2); max-width: 240px; }
+.ct-agent .ct-chonmm-chu { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+
+.ct-agent-cong {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 var(--ac-2);
+  border: 1px solid var(--ct-border);
+  background: var(--ct-surface-2);
+  color: var(--ct-text-muted);
+  font: inherit;
+  font-size: var(--ac-chu-tt);
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background var(--ct-motion-fast) var(--ct-ease), color var(--ct-motion-fast) var(--ct-ease),
+    border-color var(--ct-motion-fast) var(--ct-ease);
+}
+.ct-agent-cong:hover:not(:disabled) { background: var(--ct-hover); color: var(--ct-text); }
+.ct-agent-cong:active:not(:disabled) { transform: translateY(1px); }
+.ct-agent-cong:disabled { opacity: 0.45; cursor: default; }
+.ct-agent-cong[data-bat='true'] {
+  color: var(--ct-accent-text);
+  border-color: color-mix(in srgb, var(--ct-accent) 45%, transparent);
+  background: color-mix(in srgb, var(--ct-accent) 9%, var(--ct-surface-2));
+}
+/* Chấm trạng thái của hai công tắc quyền: tắt = rỗng, bật = đặc. Nói được
+   BẬT/TẮT mà không phải in chữ "BẬT" viết hoa lên nút. */
+.ct-agent-den {
+  width: 7px; height: 7px; flex: none;
+  border-radius: 50%;
+  border: 1.5px solid currentColor;
+  opacity: 0.6;
+}
+.ct-agent-cong[data-bat='true'] .ct-agent-den { background: currentColor; opacity: 1; }
+
+.ct-agent-bar-vach { width: 1px; height: 16px; margin: 0 var(--ac-1); background: var(--ct-border); }
+
+.ct-agent :is(.ct-agent-cong, .ct-agent-icon, .ct-agent-ws, .ct-agent-hoantac, .ct-chonmm-nut):focus-visible,
+.ct-agent-them-bang button:focus-visible,
+.ct-lenhra-dau button:focus-visible,
+.ct-kehoach-dau:focus-visible {
+  outline: 2px solid var(--ct-accent);
+  outline-offset: 1px;
+}
+
+/* Bọc bốn tấm (Worktree/MCP/Hook/Bộ nhớ) — một hàng nhỏ, không vỡ hàng giữa. */
+.ct-agent-tam { display: inline-flex; align-items: center; gap: var(--ac-1); }
+.ct-agent-tam > .ct-mcp-boc > .ct-btn { padding: 0 var(--ac-2); gap: 6px; }
+
+/* Bảng của các tấm: KHÔNG được tràn ra ngoài khung. Neo phải như cũ, nhưng
+   trần bề rộng theo CỘT (`cqw` của `cotagent`) chứ không theo cửa sổ. */
+.ct-agent .ct-mcp-bang,
+.ct-agent .ct-chonmm-bang { max-width: calc(100cqw - 24px); }
+
+/* ── Menu "⋯": chỉ hiện khi cột hẹp ── */
+.ct-agent-them { position: relative; display: none; }
+.ct-agent-them > .ct-agent-icon[data-co-bat='true']::after {
+  content: '';
+  position: absolute; top: 4px; right: 4px;
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--ct-accent);
+}
+.ct-agent-them-bang {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 35;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  width: 248px;
+  max-width: calc(100cqw - 24px);
+  padding: var(--ac-1);
+  border: 1px solid var(--ct-border);
+  border-radius: 10px;
+  background: var(--ct-surface);
+  box-shadow: var(--ct-shadow);
+}
+.ct-agent-them-bang button {
+  display: flex; align-items: center; gap: var(--ac-2);
+  min-height: 30px;
+  padding: 0 var(--ac-2);
+  border: 0; border-radius: 7px;
+  background: none; color: var(--ct-text);
+  font: inherit; font-size: 12.5px; text-align: left;
+  cursor: pointer;
+}
+.ct-agent-them-bang button:hover:not(:disabled) { background: var(--ct-hover); }
+.ct-agent-them-bang button:disabled { opacity: 0.45; cursor: default; }
+.ct-agent-them-bang button > svg { color: var(--ct-text-muted); flex: none; }
+.ct-agent-them-bang button > span { flex: 1; min-width: 0; }
+.ct-agent-them-bang kbd,
+.ct-agent-them-bang em {
+  font: 500 10.5px var(--ct-term-mono, ui-monospace, monospace);
+  font-style: normal;
+  color: var(--ct-text-faint);
+}
+.ct-agent-them-bang em[data-bat='true'] { color: var(--ct-accent-text); }
+
+/* ══ CO THEO BỀ RỘNG CỘT (@container cotagent — đặt trên `.ct-agent`) ══ */
+@container cotagent (max-width: 880px) {
+  /* Nhóm phụ vào "⋯". Bốn tấm: ẩn NÚT, giữ cái bọc để bảng vẫn mở được. */
+  .ct-agent-bar [data-phu] { display: none; }
+  .ct-agent-bar [data-phu-tam] > .ct-mcp-boc > button:first-child { display: none; }
+  .ct-agent-them { display: block; }
+}
+@container cotagent (max-width: 640px) {
+  /* Nút công cụ còn icon (chữ vẫn trong DOM cho trình đọc màn hình + title). */
+  .ct-agent-bar .ct-agent-cong .ct-agent-nhan,
+  .ct-agent-bar .ct-agent-hoantac .ct-agent-nhan { display: none; }
+  .ct-agent-bar .ct-agent-cong,
+  .ct-agent-bar .ct-agent-hoantac { width: var(--ac-cao-nut); padding: 0; justify-content: center; }
+  .ct-agent-bar-vach { display: none; }
+  .ct-agent .ct-agent-ws { max-width: 170px; }
+  .ct-agent .ct-agent-hanmuc-chu { display: none; }
+  .ct-agent .ct-chonmm-cham,
+  .ct-agent .ct-chonmm-muc { display: none; }
+}
+@container cotagent (max-width: 460px) {
+  .ct-agent .ct-agent-branch { display: none; }
+  .ct-agent .ct-chedo-nut { font-size: 0; gap: 0; padding: 0 var(--ac-2); }
+  .ct-agent .ct-chedo-nut > svg { font-size: initial; }
+  .ct-agent .ct-chonmm-nut { max-width: 132px; }
+  .ct-agent .ct-agent-hanmuc-thanh { width: 36px; }
+}
+
+/* ══ BẢNG GHI ══
+   Chỉ cuộn DỌC. Mọi con co được (`min-width:0`), chữ dài ngắt ở bất kỳ đâu,
+   còn khối rộng thật (mã, bảng, đầu ra lệnh) tự cuộn ngang TRONG chính nó. */
+.ct-agent .ct-agent-scroll { overflow-x: hidden; }
+.ct-agent-scroll > * { min-width: 0; max-width: 100%; }
+.ct-agent-may,
+.ct-agent-nguoi { overflow-wrap: anywhere; }
+.ct-agent-may :is(pre, .ct-md-ma, .ct-md-bang) { max-width: 100%; }
+.ct-agent .ct-md-ma { min-width: 0; }
+.ct-agent .ct-md-ma-dau { min-width: 0; gap: var(--ac-2); }
+.ct-agent .ct-md-bang { overflow-x: auto; }
+.ct-agent-may { font-size: var(--ac-chu-tin); }
+
+/* Dòng tool: một CỘT liền mạch. Tool kề nhau sát lại (nhịp 2px), cách tin
+   nhắn một nhịp lớn — mắt nhóm được "một loạt việc" thay vì từng dòng rời. */
+.ct-agent .ct-agent-tool {
+  max-width: 100%;
+  min-width: 0;
+  margin: 0;
+  font-size: var(--ac-chu-tool);
+}
+.ct-agent .ct-agent-tool-dong { min-height: 24px; gap: var(--ac-2); }
+.ct-agent .ct-agent-tool code { flex: none; max-width: 40%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ct-agent .ct-agent-tool-tomtat { flex: 1; min-width: 0; }
+.ct-agent-may + .ct-agent-tool,
+.ct-agent-nguoi + .ct-agent-tool { margin-top: var(--ac-1); }
+.ct-agent-tool + .ct-agent-may { margin-top: var(--ac-3); }
+.ct-agent .ct-agent-tool-chitiet,
+.ct-agent .ct-ma { max-width: 100%; overflow-x: auto; }
+
+/* ══ KHỐI ĐẦU RA LỆNH ══ */
+.ct-lenhra {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  margin: var(--ac-1) 0 var(--ac-2);
+  border: 1px solid #1f2430;
+  border-radius: var(--ct-radius-sm);
+  background: #0b0e14;
+  overflow: hidden;
+}
+.ct-lenhra-dau {
+  display: flex;
+  align-items: center;
+  gap: var(--ac-2);
+  min-width: 0;
+  min-height: 30px;
+  padding: 0 var(--ac-1) 0 var(--ac-2);
+  border-bottom: 1px solid #1f2430;
+  background: #10141c;
+  color: #8b95a7;
+  font-size: var(--ac-chu-tt);
+}
+.ct-lenhra-dau > svg { flex: none; color: var(--ct-tool-chay, var(--ct-accent)); }
+.ct-lenhra-ten {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font: 600 var(--ac-chu-ra) var(--ct-term-mono, ui-monospace, monospace);
+  color: #d6dde8;
+}
+.ct-lenhra-dem { flex: none; font-variant-numeric: tabular-nums; color: #6b7588; }
+.ct-lenhra-dau button {
+  display: inline-flex; align-items: center; gap: 4px;
+  height: 22px; padding: 0 6px;
+  border: 0; border-radius: 5px;
+  background: none; color: #8b95a7;
+  font: inherit; font-size: 11px;
+  cursor: pointer;
+}
+.ct-lenhra-dau button:hover { background: rgba(255, 255, 255, 0.06); color: #e6edf3; }
+.ct-agent .ct-lenhra .ct-lenh-ra {
+  margin: 0;
+  max-height: 280px;
+  overflow: auto;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  white-space: pre;
+  font-size: var(--ac-chu-ra);
+}
+.ct-lenhra[data-thu='true'] .ct-lenh-ra { max-height: none; color: #8b95a7; }
+@container cotagent (max-width: 460px) {
+  .ct-lenhra-dem,
+  .ct-lenhra-dau button > span { display: none; }
+}
+
+/* ══ DẢI KẾ HOẠCH ══ bước đang làm nằm ngay trên đầu dải, kể cả khi gập. */
+.ct-agent .ct-kehoach { min-width: 0; margin-bottom: var(--ac-2); }
+.ct-agent .ct-kehoach-dau {
+  display: flex;
+  align-items: center;
+  gap: var(--ac-2);
+  min-width: 0;
+  width: 100%;
+}
+.ct-kehoach-nhan { flex: none; font-weight: 600; }
+.ct-agent .ct-kehoach-dem { flex: none; }
+.ct-agent .ct-kehoach-thanh { flex: 0 0 72px; }
+.ct-kehoach-buoc {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: left;
+  color: var(--ct-text);
+  font-weight: 500;
+}
+.ct-kehoach-buoc > b { color: var(--ct-accent-text); font-weight: 650; margin-right: 4px; }
+.ct-kehoach-buoc[data-xong] { color: var(--ct-ok); }
+.ct-agent .ct-kehoach-ds li { min-width: 0; overflow-wrap: anywhere; }
+.ct-agent .ct-kehoach-ds li[aria-current='step'] {
+  color: var(--ct-text);
+  font-weight: 600;
+  background: color-mix(in srgb, var(--ct-accent) 8%, transparent);
+  box-shadow: inset 2px 0 0 var(--ct-accent);
+  border-radius: 0 6px 6px 0;
+}
+.ct-agent .ct-kehoach-ds li[data-tt='xong'] span { opacity: 0.75; }
+@container cotagent (max-width: 520px) {
+  .ct-agent .ct-kehoach-thanh,
+  .ct-kehoach-nhan { display: none; }
+}
+
+/* ══ THANH "ĐANG LÀM" — một dòng gọn, không còn là cả một tấm thẻ ══ */
+.ct-agent .ct-danglam {
+  margin: var(--ac-1) var(--ct-le-doc, 16px) 0;
+  padding: var(--ac-1) var(--ac-2);
+  min-width: 0;
+  border: 0;
+  border-radius: 7px;
+  background: color-mix(in srgb, var(--ct-accent) 7%, transparent);
+  font-size: var(--ac-chu-tt);
+}
+.ct-agent .ct-danglam-chu { flex: 1 1 160px; min-width: 0; overflow-wrap: anywhere; }
+
+/* ══ Ô SOẠN — một khung, hàng công cụ ở đáy ══ */
+.ct-agent .ct-agent-soan {
+  display: block;
+  padding: var(--ac-2) var(--ct-le-doc, 16px) 0;
+  min-width: 0;
+}
+.ct-agent-soan-khung {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border: 1px solid var(--ct-border);
+  border-radius: 12px;
+  background: var(--ct-bg);
+  transition: border-color var(--ct-motion-fast) var(--ct-ease), box-shadow var(--ct-motion-fast) var(--ct-ease);
+}
+.ct-agent-soan-khung:focus-within {
+  border-color: color-mix(in srgb, var(--ct-accent) 70%, var(--ct-border));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ct-accent) 14%, transparent);
+}
+.ct-agent .ct-agent-soan-khung .ct-agent-o,
+.ct-ai-term .ct-agent-soan-khung .ct-agent-o {
+  flex: none;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  min-height: 44px;
+  max-height: 40vh;
+  padding: 10px 12px 4px;
+  border: 0;
+  border-radius: 12px 12px 0 0;
+  background: transparent;
+  box-shadow: none;
+  font-size: var(--ac-chu-tin);
+  overflow-wrap: anywhere;
+}
+.ct-agent .ct-agent-soan-khung .ct-agent-o:focus { outline: none; box-shadow: none; }
+.ct-agent-soan-hang {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ac-1);
+  min-width: 0;
+  padding: var(--ac-1) var(--ac-1) var(--ac-1) 6px;
+}
+.ct-agent-soan-goiy {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-left: var(--ac-1);
+  color: var(--ct-text-faint);
+  font-size: 11px;
+}
+.ct-agent-soan-goiy kbd {
+  padding: 0 4px;
+  border: 1px solid var(--ct-border);
+  border-radius: 4px;
+  font: 500 10.5px var(--ct-term-mono, ui-monospace, monospace);
+  color: var(--ct-text-muted);
+}
+.ct-agent-soan-dem { flex: 1; }
+.ct-agent-soan-hang > .ct-btn { height: 30px; padding: 0 12px; border-radius: 8px; }
+@container cotagent (max-width: 560px) {
+  .ct-agent-soan-goiy { display: none; }
+}
+
+/* Chân: một dòng nhỏ, cắt gọn khi hẹp (câu đầy đủ còn trong `title` không cần). */
+.ct-agent .ct-agent-chan {
+  flex-wrap: wrap;
+  gap: var(--ac-1) var(--ac-3);
+  padding: 6px var(--ct-le-doc, 16px) 0;
+  margin-top: 0;
+  border-top: 0;
+  min-width: 0;
+}
+.ct-agent .ct-agent-chan > span { min-width: 0; overflow-wrap: anywhere; }
+
+/* Thông báo trên bảng ghi (kế hoạch dở, quay lui) — cùng lề cột đọc. */
+.ct-agent > .ct-notice,
+.ct-agent .ct-agent-bao {
+  margin: 0 0 var(--ac-2);
+  min-width: 0;
+  flex-wrap: wrap;
+}
+.ct-duyet-kh { display: flex; align-items: center; gap: var(--ac-2); margin: var(--ac-2) var(--ct-le-doc, 16px) 0; }
+.ct-duyet-kh > span { flex: 1 1 220px; min-width: 0; }
+
+/* Trả lời của lệnh `/` — cùng lề cột đọc, cuộn riêng nếu dài (/help ~25 dòng). */
+.ct-agent .ct-lenh-traloi {
+  margin: var(--ac-2) var(--ct-le-doc, 16px) 0;
+  max-height: 42vh;
+  overflow-y: auto;
+}
+.ct-lenh-traloi-than { min-width: 0; display: flex; flex-direction: column; gap: var(--ac-2); }
+.ct-lenh-traloi-than .ct-ngoai-tuyen-nut { align-self: flex-start; margin-left: 0; }
+.ct-agent .ct-lenh-traloi .ct-md-bang { overflow-x: auto; }
+
+/* Bảng gợi ý lệnh: ~25 lệnh ⇒ trần chiều cao + cuộn riêng. */
+.ct-agent .ct-goiy { margin: 0 var(--ct-le-doc, 16px) 6px; }
+.ct-goiy-lenh { max-height: min(46vh, 380px); overflow-y: auto; }
+.ct-goiy-lenh button { align-items: center; }
+.ct-goiy-ts { font-style: normal; font-weight: 400; color: var(--ct-text-faint); }
+@container cotagent (max-width: 520px) {
+  .ct-goiy-lenh em { display: none; }
+}
+
+/* ══ THANH BÊN DỰ ÁN ══ */
+.ct-ai-than > .ct-tb {
+  container-type: inline-size;
+  container-name: thanhben;
+  align-items: stretch;   /* KHÔNG canh giữa con — xem chú thích `.ct-tbi` */
+  min-width: 0;
+}
+.ct-tb > * { min-width: 0; }
+.ct-tb-tongquan { min-width: 0; flex-wrap: nowrap; }
+.ct-tb-tongquan-chu { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ct-tb-tatca { flex: none; display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
+@container thanhben (max-width: 236px) {
+  .ct-tb-tatca > span { display: none; }
+  .ct-tb-tatca { padding: 3px 5px; }
+}
+
+/* Thanh bên đã ẩn ⇒ một DẢI chạy suốt chiều cao, có nhãn dọc. */
+.ct-ai-than > .ct-tb-mo {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--ac-2, 8px);
+  width: 30px;
+  height: auto;
+  margin-right: 10px;
+  padding: 10px 0;
+  border: 1px solid var(--ct-border);
+  border-radius: 10px;
+  background: var(--ct-surface);
+  color: var(--ct-text-muted);
+  cursor: pointer;
+}
+.ct-ai-than > .ct-tb-mo:hover { color: var(--ct-text); border-color: color-mix(in srgb, var(--ct-accent) 50%, var(--ct-border)); background: var(--ct-hover); }
+.ct-ai-than > .ct-tb-mo:focus-visible { outline: 2px solid var(--ct-accent); outline-offset: 1px; }
+.ct-tb-mo-chu {
+  writing-mode: vertical-rl;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+.ct-tb-mo-dem {
+  min-width: 18px;
+  padding: 1px 4px;
+  border-radius: 999px;
+  background: var(--ct-hover);
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+/* ══ ĐẦU TRANG AI — một hàng gọn: chế độ bên trái, lời chào nhỏ bên phải ══ */
+.ct-ai-term .ct-panel-full > .ct-page-head {
+  container-type: inline-size;
+  container-name: dautrang;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ac-2, 8px) 12px;
+  min-height: 34px;
+  margin-bottom: 8px;
+}
+.ct-ai-term .ct-panel-full > .ct-page-head > .ct-segment { order: 0; }
+.ct-ai-term .ct-panel-full > .ct-page-head > .ct-page-head-chu {
+  order: 1;
+  flex: 1 1 0;
+  min-width: 0;
+  justify-content: flex-end;
+  overflow: hidden;
+}
+.ct-ai-term .ct-panel-full > .ct-page-head > .ct-page-head-gap { order: 2; margin: 0; }
+.ct-ai-term .ct-page-head .ct-rgc-svg { height: 26px; }
+@container dautrang (max-width: 640px) {
+  .ct-ai-term .ct-page-head-chu { display: none; }
+}
+@media (max-width: 720px) {
+  .ct-ai-term .ct-segment-nut { padding: 6px 9px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ct-agent-cong, .ct-agent-soan-khung { transition: none; }
+  .ct-agent-cong:active:not(:disabled) { transform: none; }
+}
+
+/* ── Thanh bên ↔ khung AI Code: chia chỗ theo bề rộng THẬT của vùng chứa ── */
+.ct-ai-term .ct-ai-than {
+  container-type: inline-size;
+  container-name: aithan;
+  position: relative;
+  /* `clip`, không `hidden`: `hidden` vẫn cho cuộn bằng lập trình (focus,
+     scrollIntoView) — cả thanh bên lẫn khung bị đẩy lên mất đầu. */
+  overflow: clip;
+}
+/* Thanh bên không bao giờ ăn quá 42% vùng chứa, dù người dùng kéo rộng tới đâu. */
+.ct-ai-than > .ct-tb { max-width: 42cqw; }
+.ct-ai-than > .ct-tb-mo[data-chi-hep] { display: none; }
+@container aithan (max-width: 620px) {
+  .ct-ai-than > .ct-tb-mo[data-chi-hep] { display: flex; }
+  .ct-ai-than > .ct-tb { display: none; }
+  .ct-ai-than > .ct-tb[data-phu-mo='true'] {
+    display: flex;
+    position: absolute;
+    top: 0; bottom: 0; left: 0;
+    z-index: 40;
+    width: min(300px, 88cqw) !important;   /* thắng bề rộng kéo tay (style) */
+    max-width: none;
+    margin: 0;
+    padding: 8px 8px 8px 6px;
+    border-radius: 0 12px 12px 0;
+    background: var(--ct-surface);
+    box-shadow: var(--ct-shadow);
+  }
+  .ct-ai-than > .ct-tb[data-phu-mo='true'] .ct-tb-keo { display: none; }
+}
+
+/* Khung AI Code luôn chừa chỗ cho bảng ghi: terminal và dải kế hoạch không
+   được đẩy nó về 0 (ảnh chụp 03/10: khung chỉ còn thanh công cụ + terminal). */
+.ct-agent .ct-agent-doi { min-height: 120px; }
+.ct-agent .ct-tt { max-height: 45%; min-height: 96px; }
+.ct-lenhra > .ct-lenh-ra { min-width: 0; }
+
+/* Chừa chỗ cho robot Odin THEO BỀ RỘNG CỘT (03/10/2026). Bản cũ chừa cứng
+   90px mỗi bên: cột 340px còn 160px cho chữ — ô soạn bị bóp, placeholder mất
+   cả hai đầu ("ản du-an-"). Nay chừa dần: cột rộng vẫn 90px, cột hẹp về 16px. */
+.ct-page-full[data-chua-robot='true'] .ct-agent {
+  --ct-le-doc: max(16px, min(90px, calc((100cqw - 360px) / 4)), calc((100% - var(--ct-cot-doc)) / 2));
+}
+/* Cột hẹp ⇒ lề nhỏ ⇒ con robot (cố định góc phải-dưới) rơi lên nút Gửi. Chỉ
+   hàng công cụ TRONG khung soạn chừa chỗ — mép khung vẫn thẳng với bảng ghi. */
+@container cotagent (max-width: 700px) {
+  .ct-page-full[data-chua-robot='true'] .ct-agent-soan-hang { padding-right: 84px; }
+}
+
+/* Thanh công cụ: nhóm phải có cơ sở 0 ⇒ luôn ở LẠI hàng đầu nếu còn chỗ, tự
+   xuống dòng BÊN TRONG nó (căn phải) thay vì cả cụm rơi xuống một hàng mới. */
+.ct-agent-bar-trai { flex: 0 1 auto; }
+.ct-agent-bar-phai { flex: 1 1 0; min-width: min(100%, 300px); }
+
+/* Chiều DỌC: thanh công cụ + dải kế hoạch + terminal không được đẩy ô soạn
+   ra khỏi đáy. Dải kế hoạch và terminal CO được; bảng ghi giữ tối thiểu. */
+.ct-agent .ct-kehoach {
+  flex-shrink: 1;
+  min-height: 34px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.ct-agent .ct-kehoach-ds { min-height: 0; overflow-y: auto; max-height: min(148px, 22vh); }
+.ct-agent .ct-tt { flex-shrink: 1; }
+.ct-agent .ct-agent-doi { min-height: 96px; }
+.ct-agent :is(.ct-agent-soan, .ct-agent-chan, .ct-danglam, .ct-agent-bar) { flex-shrink: 0; }
+
+/* Nút "xuống cuối" neo vào khung bảng ghi, không theo số px từ đáy trang. */
+.ct-agent .ct-agent-doi { position: relative; }
+.ct-agent .ct-agent-doi > .ct-agent-xuongday { bottom: var(--ac-3); }
+
+/* Trò chuyện dùng CÙNG luật chia chỗ với AI Code (thanh bên ↔ khung). */
+.ct-ai-term .ct-chat-doi {
+  container-type: inline-size;
+  container-name: aithan;
+  position: relative;
+  overflow: clip;
+}
+.ct-chat-doi > .ct-tb {
+  container-type: inline-size;
+  container-name: thanhben;
+  align-items: stretch;
+  min-width: 0;
+  max-width: 42cqw;
+}
+.ct-chat-doi > .ct-tb-mo[data-chi-hep] { display: none; }
+.ct-chat-doi > .ct-tb-mo {
+  align-self: stretch;
+  display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+  gap: 8px; width: 30px; height: auto; margin-right: 10px; padding: 10px 0;
+  border: 1px solid var(--ct-border); border-radius: 10px;
+  background: var(--ct-surface); color: var(--ct-text-muted); cursor: pointer;
+}
+.ct-chat-doi > .ct-tb-mo:hover { color: var(--ct-text); background: var(--ct-hover); }
+.ct-chat-doi > .ct-tb-mo:focus-visible { outline: 2px solid var(--ct-accent); outline-offset: 1px; }
+@container aithan (max-width: 620px) {
+  .ct-chat-doi > .ct-tb-mo[data-chi-hep] { display: flex; }
+  .ct-chat-doi > .ct-tb { display: none; }
+  .ct-chat-doi > .ct-tb[data-phu-mo='true'] {
+    display: flex;
+    position: absolute;
+    top: 0; bottom: 0; left: 0;
+    z-index: 40;
+    width: min(300px, 88cqw) !important;
+    max-width: none;
+    margin: 0;
+    padding: 8px 8px 8px 6px;
+    border-radius: 0 12px 12px 0;
+    background: var(--ct-surface);
+    box-shadow: var(--ct-shadow);
+  }
+  .ct-chat-doi > .ct-tb[data-phu-mo='true'] .ct-tb-keo { display: none; }
+}
+/* Chân Trò chuyện: hàng bậc model + ghi chú co/xuống dòng, cùng lề cột đọc. */
+.ct-agent .ct-chat-chan {
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  min-width: 0;
+  padding: 6px var(--ct-le-doc, 16px) 0;
+}
+.ct-agent .ct-chat-chan-chu { min-width: 0; overflow-wrap: anywhere; }
+.ct-agent .ct-noluc { flex-wrap: wrap; }
+.ct-agent .ct-chat-thanh { flex-wrap: wrap; min-width: 0; }

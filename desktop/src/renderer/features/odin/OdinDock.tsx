@@ -34,6 +34,7 @@ import GiaSuTrongRobot from '@/components/chat/GiaSuTrongRobot';
 import { useGiaSuBaiStore } from '@/store/giaSuBaiStore';
 import './odin.css';
 import { useDich } from '../../i18n';
+import { BUOC_CO, CO_TOI_DA, CO_TOI_THIEU, chuanPhanTram, phanTramTuThietDat } from '../../../shared/coRobot';
 
 export function OdinDock() {
   const { dich } = useDich();
@@ -265,8 +266,10 @@ export function OdinDock() {
   const keoDuoc = settings.odinKeoDuoc === true;
   /* Cùng khoá `odinCo` với con robot nổi — hai khoá riêng thì người dùng
      chỉnh một con, con kia đứng nguyên, và họ phải nhớ đang chỉnh cái nào. */
-  const nacCo = typeof settings.odinCo === 'number' ? Math.max(0, Math.min(3, settings.odinCo)) : 0;
-  const heSo = [1, 0.82, 0.66, 0.52][nacCo]!;
+  /* Cỡ %, 20–100 bước 5 — cùng khoá `robotCo` với con nổi (khoá nấc `odinCo`
+     cũ vẫn đọc làm dự phòng). */
+  const phanTram = phanTramTuThietDat(settings);
+  const heSo = phanTram / 100;
   const phai = typeof settings.odinPhai === 'number' ? settings.odinPhai : 22;
   const duoi = typeof settings.odinDuoi === 'number' ? settings.odinDuoi : 16;
 
@@ -297,8 +300,9 @@ export function OdinDock() {
      app, nên không nghe tin này thì con robot trong app giữ nguyên cỡ cũ và
      người dùng thấy hai con robot lệch cỡ nhau. */
   useEffect(() => window.cuongthai?.on('robot:coDoi', (p) => {
-    const n = (p as { nac?: number }).nac;
-    if (typeof n === 'number') setSetting('odinCo', n);
+    const o = p as { nac?: number; phanTram?: number };
+    if (typeof o.phanTram === 'number') setSetting('robotCo', chuanPhanTram(o.phanTram));
+    else if (typeof o.nac === 'number') setSetting('odinCo', o.nac);
   }), [setSetting]);
   /* Công tắc robot nghe ở AppState (`robot:congTac`) — một chỗ cho cả con
      robot trong app lẫn ô tick trong trang Cài đặt. Xem chú thích ở đó. */
@@ -450,11 +454,11 @@ export function OdinDock() {
           robot suốt ngày và người dùng bấm nhầm khi định mở AI Chat. */}
       {keoDuoc && (
         <div className="odin-co">
-          <button type="button" onClick={() => setSetting('odinCo', Math.min(3, nacCo + 1))}
-            disabled={nacCo >= 3} title={dich('Nhỏ hơn')}>−</button>
-          <span>{['100%', '82%', '66%', '52%'][nacCo]}</span>
-          <button type="button" onClick={() => setSetting('odinCo', Math.max(0, nacCo - 1))}
-            disabled={nacCo <= 0} title={dich('To hơn')}>+</button>
+          <button type="button" onClick={() => setSetting('robotCo', chuanPhanTram(phanTram - BUOC_CO))}
+            disabled={phanTram <= CO_TOI_THIEU} title={dich('Nhỏ hơn')}>−</button>
+          <span>{phanTram}%</span>
+          <button type="button" onClick={() => setSetting('robotCo', chuanPhanTram(phanTram + BUOC_CO))}
+            disabled={phanTram >= CO_TOI_DA} title={dich('To hơn')}>+</button>
         </div>
       )}
 

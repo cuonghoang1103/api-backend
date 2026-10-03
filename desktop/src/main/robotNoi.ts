@@ -30,121 +30,119 @@
 import { BrowserWindow, screen, app } from 'electron';
 import path from 'node:path';
 import { IS_DEV, DEV_SERVER_URL, RENDERER_SOURCE, APP_ORIGIN } from './config';
-import { kep, doiCoGiuGoc, vungChoDiem, hutMep, nenHienRobot, type Vung } from './robotViTri';
+import {
+  hutMep, nenHienRobot, type Vung, type Co, type Diem, type ManHinh, type BoCuc, type HopTrongCuaSo,
+  coHop, phanTramTuThietDat, chuanPhanTram, vungDung, manHinhChoDiem, neoKhiKeo, doiCoGiuNeo,
+  tinhBoCuc, hopTheoCuaSo, taoViTriLuu, docViTriLuu, viTriKhoiDong, viTriMacDinh, kep,
+} from './robotViTri';
 import { getSettings, setSetting } from './store';
 
-/** Kích thước lúc thu gọn — vừa đúng con robot cộng một chút bóng đổ. */
-const GON = { width: 150, height: 190 };
+/*
+ * ════════════════════════════════════════════════════════════════════
+ * VỊ TRÍ + CỠ — xem chú thích dài "BẢN 03/10/2026" trong `robotViTri.ts`
+ * ════════════════════════════════════════════════════════════════════
+ *
+ * Main giữ ĐÚNG HAI con số quyết định chỗ đứng của robot:
+ *   • `neo` — góc trái-trên của HỘP robot trên màn hình (toạ độ DIP);
+ *   • `pt`  — cỡ % (20–100, bước 5).
+ * Cửa sổ là hệ quả: `tinhBoCuc(neo, coHop(pt), nội dung, vùng)`. Bong bóng,
+ * bảng chỉnh hay khung chat chỉ làm cửa sổ phình quanh neo — neo không đổi.
+ * Neo chỉ đổi khi NGƯỜI DÙNG kéo, đổi cỡ, bấm "về góc mặc định", hoặc khi màn
+ * hình chứa nó biến mất.
+ */
+
+/** Khung chat mini ở 100%: rộng 400, cao nội dung 520 (thêm hộp robot ở dưới). */
+const CO_KHUNG_CHAT: Co = { width: 400, height: 520 };
+
+let pt = 100;
+let neo: Diem | null = null;
+/** Nội dung đang bày cạnh robot, để đổi cỡ / đổi màn hình dựng lại được. */
+let noiDung: { loai: LoaiNoiDung; co: Co } | null = null;
+/** Phía nội dung đang mở — giữ lại khi kéo khung chat để không lật bố cục. */
+let phia: { phai: boolean; tren: boolean } | undefined;
+
+export type LoaiNoiDung = 'bong' | 'bang' | 'chat';
+
+function nenTang(): string { return process.platform; }
 
 /**
- * Hệ số cỡ theo nấc người dùng chọn. Nấc 0 = 100% (mặc định), nhỏ dần.
- *
- * Cửa sổ PHẢI co theo, không chỉ co hình: `WebContentsView` trong suốt vẫn
- * chặn chuột ở phần rỗng, nên thu nhỏ mỗi con robot mà giữ cửa sổ 150×190 là
- * để lại một mảng vô hình nuốt cú bấm của người dùng vào thứ nằm dưới.
+ * Wayland THUẦN (không qua XWayland): compositor KHÔNG cho app tự đặt vị trí
+ * cửa sổ, và không cho đọc toạ độ con trỏ toàn màn hình. `setBounds` chỉ đổi
+ * được cỡ. Electron 33 mặc định chạy X11/XWayland — nhánh này chỉ bật khi
+ * người dùng tự ép `--ozone-platform=wayland` (hoặc hint `auto` trên phiên
+ * Wayland).
  */
-const HE_SO = [1, 0.82, 0.66, 0.52] as const;
-let nacCo = 0;
-
-export function datNacCo(nac: number): void {
-  nacCo = Math.max(0, Math.min(HE_SO.length - 1, Math.round(nac)));
-  // Truyền lại số đo gần nhất: không có nó thì `coNoi()` lấy trần, và đổi nấc
-  // giữa lúc robot đang nói sẽ làm cửa sổ giật phình ra rồi co lại.
-  doiCo(coHienTai, bongCuoi ?? undefined);
+export function laWaylandThuan(): boolean {
+  if (process.platform !== 'linux') return false;
+  const cong = app.commandLine?.getSwitchValue?.('ozone-platform') ?? '';
+  if (cong === 'wayland') return true;
+  if (cong === 'x11') return false;
+  const goiY = `${app.commandLine?.getSwitchValue?.('ozone-platform-hint') ?? ''} ${process.env.ELECTRON_OZONE_PLATFORM_HINT ?? ''}`;
+  return /wayland|auto/.test(goiY) && process.env.XDG_SESSION_TYPE === 'wayland';
 }
 
-function nhan(kt: { width: number; height: number }): { width: number; height: number } {
-  const h = HE_SO[nacCo] ?? 1;
-  return { width: Math.round(kt.width * h), height: Math.round(kt.height * h) };
-}
-/** Lúc mở khung chat mini. */
-const RONG = { width: 420, height: 600 };
-
-/**
- * Cỡ khi robot đang NÓI — tính TỪ SỐ ĐO THẬT của bong bóng, không phải hằng số.
- *
- * ⚠️ Cỡ `noi` cũ là hằng `300×250`, và nó KHÔNG chữa được gì. Nguyên nhân thật
- * nằm ở CSS: bong bóng `position: absolute` trong một khối chứa co vừa con
- * robot chỉ còn bề rộng khả dụng ÂM, nên trình duyệt lùi về từ dài nhất. Đo
- * thật 20/08/2026: bong bóng rộng **71px ở CẢ BA cỡ cửa sổ** — 150×190,
- * 300×250, 380×520 đều ra 71px. Phình cửa sổ không đụng gì tới nó.
- *
- * Nay bong bóng nằm trong dòng chảy và renderer gửi sang cỡ thật của nó, nên
- * cửa sổ ôm vừa đúng chữ. Điều đó quan trọng vì cửa sổ này TRONG SUỐT mà vẫn
- * CHẶN CHUỘT ở phần rỗng: mỗi pixel thừa là một pixel người dùng bấm vào app
- * bên dưới không ăn. Tin ngắn ("♪ Sơn Tùng M-TP") nay còn NHỎ HƠN cỡ cũ.
- *
- * Chỉ CAO là co theo nấc; BỀ RỘNG chữ thì không — người dùng thu nhỏ con
- * robot, không phải thu nhỏ chữ họ cần đọc.
- */
-const BONG_RONG_TOI_DA = 300;
-const BONG_CAO_TOI_DA = 240;
-/** `.rb` đệm 8px mỗi bên, và cách robot 8px. Khớp với `robot.css`. */
-const DEM = 16;
-const KHE = 8;
-
-function coNoi(bong?: { rong: number; cao: number }): { width: number; height: number } {
-  const g = nhan(GON);
-  // Không có số đo (lượt đầu, trước khi renderer kịp đo) thì lấy trần — thà
-  // rộng một nhịp còn hơn cắt mất chữ rồi mới chỉnh lại.
-  const rong = Math.min(bong?.rong ?? BONG_RONG_TOI_DA, BONG_RONG_TOI_DA);
-  const cao = Math.min(bong?.cao ?? BONG_CAO_TOI_DA, BONG_CAO_TOI_DA);
+export function thongTinNenTang(): { heDieuHanh: string; waylandThuan: boolean; xWayland: boolean } {
+  const wl = laWaylandThuan();
   return {
-    width: Math.max(g.width, Math.ceil(rong) + DEM),
-    height: g.height + KHE + Math.ceil(cao),
+    heDieuHanh: process.platform,
+    waylandThuan: wl,
+    xWayland: process.platform === 'linux' && !wl && process.env.XDG_SESSION_TYPE === 'wayland',
   };
 }
-/** Chừa mép màn hình. */
-const LE = 24;
+
+function cacManHinh(): ManHinh[] {
+  return screen.getAllDisplays().map((d, i) => ({
+    id: typeof d.id === 'number' ? d.id : i,
+    bounds: d.bounds ?? d.workArea,
+    workArea: d.workArea,
+    scaleFactor: d.scaleFactor,
+  }));
+}
+
+function manHinhChinh(): ManHinh {
+  const d = screen.getPrimaryDisplay();
+  return { id: typeof d.id === 'number' ? d.id : 0, bounds: d.bounds ?? d.workArea, workArea: d.workArea };
+}
+
+function hop(): Co { return coHop(pt); }
+
+/** Màn hình đang chứa TÂM hộp robot. */
+function manHinhCuaNeo(n: Diem): ManHinh {
+  const h = hop();
+  return manHinhChoDiem({ x: n.x + h.width / 2, y: n.y + h.height / 2 }, cacManHinh()) ?? manHinhChinh();
+}
+
+function neoHienTai(): Diem {
+  if (!neo) neo = viTriKhoiDong(docViTriLuu(getSettings()), hop(), cacManHinh(), nenTang()) ?? viTriMacDinh(hop(), manHinhChinh());
+  return neo;
+}
+
+/**
+ * Ghi vị trí xuống đĩa — CHỈ sau thao tác của người dùng (thả tay, đổi cỡ,
+ * về mặc định). Không bao giờ ghi khi màn hình tự đổi: rút màn ngoài ra rồi cắm
+ * lại thì robot phải về đúng chỗ cũ trên màn ngoài.
+ */
+function luuViTri(): void {
+  const n = neoHienTai();
+  const m = manHinhCuaNeo(n);
+  setSetting('robotViTri', JSON.stringify(taoViTriLuu(n, hop(), m, nenTang())));
+  setSetting('robotX', n.x);
+  setSetting('robotY', n.y);
+}
+
+/**
+ * `setBounds` rồi KIỂM cỡ. Windows với hai màn khác tỉ lệ (100% / 150%) đổi cỡ
+ * cửa sổ khi nó vượt ranh giới màn hình — `setBounds` trả về một cửa sổ to/nhỏ
+ * hơn yêu cầu. Đặt lại cỡ ngay thì robot không phình xẹp khi kéo qua màn.
+ */
+function datKhung(w: BrowserWindow, r: Vung): void {
+  w.setBounds(r);
+  const b = w.getBounds();
+  if (b.width !== r.width || b.height !== r.height) w.setSize(r.width, r.height);
+}
 
 let cuaSo: BrowserWindow | null = null;
 let dangRong = false;
-
-function viTriGocDuoi(w: number, h: number): { x: number; y: number } {
-  // `workArea` chứ không phải `bounds`: nó đã trừ dock/taskbar, nên robot không
-  // nằm nửa dưới thanh dock.
-  const { workArea } = screen.getPrimaryDisplay();
-  return {
-    x: Math.round(workArea.x + workArea.width - w - LE),
-    y: Math.round(workArea.y + workArea.height - h - LE),
-  };
-}
-
-/**
- * Vùng làm việc của màn hình ĐANG CHỨA cửa sổ robot.
- *
- * ⚠️ KHÔNG dùng `getPrimaryDisplay()` cho việc kẹp. Người dùng kéo robot sang
- * màn ngoài rồi thu nhỏ nó, mà kẹp theo màn CHÍNH thì cửa sổ bị lôi ngược về
- * màn chính — trông y như robot tự nhảy chỗ.
- */
-function vungHienTai(w: BrowserWindow): Vung {
-  return screen.getDisplayMatching(w.getBounds()).workArea;
-}
-
-/** Vị trí đã lưu, nếu nó còn nằm trên một màn hình đang cắm. */
-function viTriDaLuu(w: number, h: number): { x: number; y: number } | null {
-  const c = getSettings();
-  if (typeof c.robotX !== 'number' || typeof c.robotY !== 'number') return null;
-  const cacVung = screen.getAllDisplays().map((d) => d.workArea);
-  const vung = vungChoDiem({ x: c.robotX, y: c.robotY }, cacVung, screen.getPrimaryDisplay().workArea);
-  const o = kep({ x: c.robotX, y: c.robotY, width: w, height: h }, vung);
-  return { x: o.x, y: o.y };
-}
-
-/**
- * Ghi vị trí xuống đĩa.
- *
- * Gọi ở `keoXong`, KHÔNG gọi trong `keoToi`: `keoToi` chạy mỗi khung hình lúc
- * kéo, và `setSetting` ghi cả tệp cấu hình bằng `writeFileSync` đồng bộ ngay
- * trên tiến trình main. Ghi 120 lần mỗi giây ở đó là tự làm cửa sổ giật.
- */
-function luuViTri(): void {
-  const w = cuaSoRobot();
-  if (!w) return;
-  const b = w.getBounds();
-  setSetting('robotX', b.x);
-  setSetting('robotY', b.y);
-}
 
 export function robotDangMo(): boolean {
   return !!cuaSo && !cuaSo.isDestroyed();
@@ -154,32 +152,53 @@ export function cuaSoRobot(): BrowserWindow | null {
   return robotDangMo() ? cuaSo : null;
 }
 
+let ngheManHinh = false;
+
+/**
+ * Màn hình đổi (cắm/rút, đổi độ phân giải, đổi tỉ lệ) ⇒ dựng lại neo TỪ VỊ TRÍ
+ * ĐÃ LƯU, không từ toạ độ đang có — toạ độ đang có có thể đã bị hệ điều hành
+ * đẩy đi. Không ghi đè vị trí đã lưu.
+ */
+function batNgheManHinh(): void {
+  if (ngheManHinh || typeof screen.on !== 'function') return;
+  ngheManHinh = true;
+  const dungLai = (): void => {
+    if (!robotDangMo() || gocKeo) return;
+    neo = null;
+    neoHienTai();
+    baoBoCucLai();
+  };
+  screen.on('display-added', dungLai);
+  screen.on('display-removed', dungLai);
+  screen.on('display-metrics-changed', dungLai);
+}
+
+/** Bảo renderer dựng lại bố cục (hai nhịp, xem `apBoCuc`). */
+function baoBoCucLai(): void {
+  const w = cuaSoRobot();
+  if (w) w.webContents.send('robot:boCucLai', { phanTram: pt });
+}
+
 export function moRobot(): BrowserWindow {
   if (cuaSo && !cuaSo.isDestroyed()) return cuaSo;
 
-  /* Lấy nấc cỡ từ THIẾT ĐẶT ngay, đừng đợi renderer của robot gọi `datCo`.
-     Không có dòng này thì cửa sổ mở ở 100% rồi mới co lại sau vài trăm mili
-     giây — và trong khoảng đó con nổi to hơn hẳn con trong app, đúng cái
-     "hai con robot khác cỡ" người dùng chụp lại. */
-  const nacLuu = getSettings().odinCo;
-  if (typeof nacLuu === 'number') nacCo = Math.max(0, Math.min(HE_SO.length - 1, Math.round(nacLuu)));
-
-  /* Vị trí đã lưu trước, mặc định góc dưới-phải sau. Trước bản này `moRobot`
-     LUÔN lấy góc dưới-phải: đo thật 10/09/2026 — kéo robot tới (154,61), thoát
-     app, mở lại thì nó về (1554,841). Người dùng đặt robot ở đâu cũng vô nghĩa
-     sau lần khởi động kế tiếp. */
-  const kt = nhan(GON);
-  const { x, y } = viTriDaLuu(kt.width, kt.height) ?? viTriGocDuoi(kt.width, kt.height);
+  /* Cỡ đọc TỪ THIẾT ĐẶT ngay — không đợi renderer. Không có dòng này thì cửa
+     sổ mở ở 100% rồi mới co lại sau vài trăm mili giây ("hai con khác cỡ"). */
+  pt = phanTramTuThietDat(getSettings());
+  neo = null;
+  noiDung = null;
+  phia = undefined;
+  const n = neoHienTai();
+  const h = hop();
+  batNgheManHinh();
   cuaSo = new BrowserWindow({
-    ...GON,
-    ...kt,
-    x,
-    y,
+    ...h,
+    x: n.x,
+    y: n.y,
     frame: false,
     transparent: true,
-    // `hasShadow: false` — bóng của HỆ ĐIỀU HÀNH vẽ theo hình chữ nhật cửa sổ,
-    // nên với nền trong suốt nó thành một khối bóng vuông lơ lửng quanh con
-    // robot tròn. Bóng thật do CSS vẽ.
+    // Bóng của HỆ ĐIỀU HÀNH vẽ theo hình chữ nhật cửa sổ — với nền trong suốt
+    // nó thành một khối bóng vuông quanh con robot tròn. Bóng thật do CSS vẽ.
     hasShadow: false,
     resizable: false,
     movable: true,
@@ -189,22 +208,8 @@ export function moRobot(): BrowserWindow {
     skipTaskbar: true,
     /**
      * ⚠️⚠️ DỰNG TRONG TRẠNG THÁI ẨN, rồi mới `showInactive()`.
-     *
-     * Không có dòng này thì `BrowserWindow` tự hiện VÀ TỰ LẤY TIÊU ĐIỂM ngay
-     * khi dựng — và đó là gốc của lỗi "vào app thấy HAI con robot".
-     *
-     * Cơ chế ẩn con robot nổi dựa vào `dangOTrongApp()`, tức "có cửa sổ nào
-     * KHÁC robot đang giữ tiêu điểm không". Lúc khởi động, cửa sổ robot cướp
-     * tiêu điểm nên câu trả lời là KHÔNG, robot nổi ở lại — trong khi người
-     * dùng đang nhìn thẳng vào app và đã thấy con robot trong app.
-     *
-     * Đo thật 16/09/2026, ba mốc:
-     *   ① vừa khởi động   robot.html HIỆN và CÓ tiêu điểm · index.html không
-     *   ② app mất tiêu điểm  robot vẫn hiện (đúng)
-     *   ③ app có tiêu điểm   robot ẩn ✓ (cơ chế vốn chạy đúng)
-     * Tức máy móc không sai; chỉ mốc ① không bao giờ xảy ra như thiết kế.
-     *
-     * `showInactive()` là thứ cả tệp này đã dùng ở chỗ khác vì đúng lý do ấy.
+     * Không có dòng này thì cửa sổ robot tự hiện VÀ TỰ LẤY TIÊU ĐIỂM lúc dựng —
+     * gốc của lỗi "vào app thấy HAI con robot" (đo thật 16/09/2026).
      */
     show: false,
     // macOS: panel mới nổi được trên app toàn màn hình.
@@ -219,36 +224,20 @@ export function moRobot(): BrowserWindow {
     },
   });
 
-  // 'screen-saver' là mức cao nhất còn dùng được — đủ để nổi trên cả app toàn
-  // màn hình. `alwaysOnTop(true)` trần chỉ nổi trên cửa sổ thường.
   cuaSo.setAlwaysOnTop(true, 'screen-saver');
-  // Theo người dùng qua mọi không gian làm việc (Spaces trên macOS). Không đặt
-  // thì chuyển sang desktop khác là robot biến mất.
   cuaSo.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
 
-  /**
-   * ⚠️ `RENDERER_SOURCE`, KHÔNG PHẢI `IS_DEV`.
-   *
-   * `IS_DEV` chỉ là `!app.isPackaged`, nên chạy bản dựng bằng
-   * `electron dist/main/index.cjs` (đúng cách mọi phép kiểm chạy) sẽ khiến robot
-   * đi tìm dev server không tồn tại và nạp về một trang TRẮNG — không lỗi nào,
-   * không log nào, chỉ là con robot không bao giờ hiện. Cửa sổ chính dùng
-   * `RENDERER_SOURCE`; robot phải dùng đúng cái đó.
-   */
+  /* ⚠️ `RENDERER_SOURCE`, KHÔNG PHẢI `IS_DEV` — chạy bản dựng bằng `electron
+     dist/main/index.cjs` mà dùng `IS_DEV` là robot nạp dev server không tồn
+     tại và thành một trang TRẮNG câm. */
   const duong = RENDERER_SOURCE === 'dev'
     ? `${DEV_SERVER_URL}/robot.html`
     : `${APP_ORIGIN}/robot.html`;
   void cuaSo.loadURL(duong);
 
-  /* Hiện KHÔNG lấy tiêu điểm, và chỉ sau khi vẽ xong — hiện sớm là một ô
-     trong suốt nhấp nháy ở góc màn hình. Xem chú thích `show: false` trên. */
   cuaSo.once('ready-to-show', () => {
-    /* ⚠️ `!dangAn` là bắt buộc, không phải phòng xa. Cửa sổ có thể vừa được
-       dựng ĐÚNG LÚC app đang ở trước mặt (người dùng bật lại robot từ Cài
-       đặt) — khi ấy `dongBoRobotNoi()` đã gọi `robotTheoTieuDiem()` và quyết
-       định là PHẢI ẨN, nhưng quyết định đó xảy ra TRƯỚC khi trang vẽ xong.
-       Thiếu chốt này thì `showInactive()` lật ngược nó, và người dùng lại
-       thấy hai con robot — đúng lỗi vừa sửa, tới bằng một cửa khác. */
+    /* `!dangAn` bắt buộc: cửa sổ có thể vừa dựng đúng lúc app đang ở trước mặt
+       và `dongBoRobotNoi()` đã quyết định PHẢI ẨN. */
     if (cuaSo && !cuaSo.isDestroyed() && !dangAn) cuaSo.showInactive();
   });
 
@@ -257,93 +246,159 @@ export function moRobot(): BrowserWindow {
   return cuaSo;
 }
 
+export interface KetQuaBoCuc {
+  boCuc: BoCuc;
+  /** Robot theo góc của bố cục MỚI, đo trong cửa sổ HIỆN TẠI — đặt trước khi đổi cỡ. */
+  hopTruoc: HopTrongCuaSo;
+  phanTram: number;
+}
+
 /**
- * Đổi giữa thu gọn và mở rộng, GIỮ NGUYÊN góc dưới-phải.
+ * Tính (và tuỳ chọn ÁP) bố cục cửa sổ cho một nội dung.
  *
- * Phóng to từ góc trên-trái là hành vi mặc định của `setBounds`, và nó làm con
- * robot nhảy vào giữa màn hình. Neo theo góc dưới-phải thì khung chat mở ra
- * đúng chỗ mắt đang nhìn.
+ * HAI NHỊP để robot không giật một khung hình nào:
+ *   1. renderer gọi với `apDung: false`, nhận `hopTruoc` và đặt robot neo vào
+ *      góc của bố cục mới — với khoảng cách đúng cho cửa sổ CŨ;
+ *   2. renderer gọi lại với `apDung: true` ⇒ main đổi cỡ cửa sổ; robot neo ở
+ *      góc không đổi nên đứng yên; renderer đặt `boCuc.hop` cuối cùng.
  */
+export function apBoCuc(nd: { loai: LoaiNoiDung; co: Co } | null, apDung: boolean): KetQuaBoCuc | null {
+  const w = cuaSoRobot();
+  if (!w) return null;
+  const n = neoHienTai();
+  const h = hop();
+  const m = manHinhCuaNeo(n);
+  const vung = vungDung(m, nenTang());
+  /* Khung chat giữ phía cũ (kéo khung đi rồi thả không lật bố cục); bong bóng
+     và bảng chỉnh thì luôn mở về phía còn chỗ. */
+  const giuPhia = nd?.loai === 'chat' && noiDung?.loai === 'chat' ? phia : undefined;
+  const co = nd ? { width: nd.co.width, height: nd.co.height } : null;
+  const bc = tinhBoCuc(n, h, co, vung, giuPhia);
+  const hopTruoc = hopTheoCuaSo(n, h, w.getBounds(), bc.hop);
+  if (apDung) {
+    noiDung = nd;
+    dangRong = nd?.loai === 'chat';
+    phia = nd ? { phai: bc.hop.gocX === 'phai', tren: bc.noiDung === 'tren' } : phia;
+    datKhung(w, bc.cuaSo);
+  }
+  return { boCuc: bc, hopTruoc, phanTram: pt };
+}
+
+/* ── API cũ, giữ cho tương thích — giờ đi qua `apBoCuc` ── */
+
 /** Ba cỡ cửa sổ, theo việc robot đang làm. */
 export type CoRobot = 'gon' | 'noi' | 'rong';
 
-let coHienTai: CoRobot = 'gon';
-/** Số đo bong bóng gần nhất, để `datNacCo` đổi nấc mà không phình cửa sổ. */
-let bongCuoi: { rong: number; cao: number } | null = null;
-
 export function doiCo(co: CoRobot, bong?: { rong: number; cao: number }): void {
-  const w = cuaSoRobot();
-  if (!w) return;
-  // Đang mở khung chat thì KHÔNG thu nhỏ vì một bong bóng — người dùng đang
-  // gõ dở, cửa sổ co lại giữa chừng là mất chỗ gõ.
-  if (coHienTai === 'rong' && co === 'noi') return;
-  coHienTai = co;
-  if (bong) bongCuoi = bong;
-  dangRong = co === 'rong';
-  // Khung chat mini KHÔNG co theo nấc: nó chứa chữ để đọc, thu nhỏ là
-  // không đọc nổi. Chỉ con robot mới co.
-  const kt = co === 'rong' ? RONG : co === 'noi' ? coNoi(bong) : nhan(GON);
-  /* Neo theo góc GẦN NHẤT, không phải cứng góc dưới-phải.
-     Đo thật 10/09/2026, cả hai đều hỏng ở góc trên-trái:
-       • thu về nấc 52% ở (10,43) ⇒ nhảy tới (82,134) — rời khỏi góc đã chọn;
-       • mở khung chat 380×520 ở (10,43) ⇒ (-220,-287), văng hẳn khỏi màn hình.
-     Neo dưới-phải chỉ đúng khi robot ĐANG ở góc dưới-phải. */
-  w.setBounds(doiCoGiuGoc(w.getBounds(), kt, vungHienTai(w)));
+  if (co === 'gon') { apBoCuc(null, true); return; }
+  if (co === 'rong') { apBoCuc({ loai: 'chat', co: CO_KHUNG_CHAT }, true); return; }
+  // Đang mở khung chat thì KHÔNG thu nhỏ vì một bong bóng.
+  if (noiDung?.loai === 'chat') return;
+  apBoCuc({ loai: 'bong', co: { width: Math.min(bong?.rong ?? 300, 300) + 16, height: Math.min(bong?.cao ?? 240, 240) } }, true);
 }
 
 export function doiKichThuoc(rong: boolean): void {
-  const w = cuaSoRobot();
-  if (!w) return;
-  dangRong = rong;
-  coHienTai = rong ? 'rong' : 'gon';
-  // `nhan(GON)` chứ không phải `GON`: người dùng đã chọn nấc cỡ, đóng khung
-  // chat mà trả về 100% là xoá mất lựa chọn của họ.
-  const kt = rong ? RONG : nhan(GON);
-  /* Cùng luật neo-góc-gần-nhất với `doiCo`. ⚠️ Đây là đường RIÊNG: vá mỗi
-     `doiCo` rồi đo lại vẫn thấy khung chat văng tới (-230,-297) khi robot
-     đứng ở góc trên-trái — hai hàm cùng chép một phép tính neo sai. */
-  w.setBounds(doiCoGiuGoc(w.getBounds(), kt, vungHienTai(w)));
+  doiCo(rong ? 'rong' : 'gon');
+}
+
+export const KHUNG_CHAT = CO_KHUNG_CHAT;
+
+/**
+ * Đổi cỡ % — GIỮ chỗ người dùng đặt (xem `doiCoGiuNeo`), rồi bảo renderer
+ * dựng lại. KHÔNG hút mép nữa: bản cũ gọi `hutLaiVaoMep()` sau mỗi lần đổi cỡ,
+ * và đó là một trong những lần robot "tự chạy".
+ */
+export function datPhanTram(moi: number): number {
+  const ptMoi = chuanPhanTram(moi);
+  if (ptMoi === pt && neo) return pt;
+  const n = neoHienTai();
+  const cu = hop();
+  const vung = vungDung(manHinhCuaNeo(n), nenTang());
+  pt = ptMoi;
+  neo = doiCoGiuNeo(n, cu, hop(), vung);
+  luuViTri();
+  baoBoCucLai();
+  return pt;
+}
+
+/** Nấc cũ 0–3 (menu cũ / con trong app bản cũ). */
+export function datNacCo(nac: number): void {
+  datPhanTram([100, 80, 65, 50][Math.max(0, Math.min(3, Math.round(nac)))] ?? 100);
+}
+
+export function phanTramHienTai(): number { return pt; }
+
+/** Về góc dưới-phải màn chính — lối thoát khi robot đứng chỗ khó với. */
+export function veGocMacDinh(): void {
+  neo = viTriMacDinh(hop(), manHinhChinh());
+  luuViTri();
+  baoBoCucLai();
 }
 
 /**
  * ============================================================
- * KÉO CỬA SỔ ROBOT BẰNG JS, KHÔNG BẰNG `-webkit-app-region`
+ * KÉO — main tự đọc con trỏ, renderer chỉ "gõ nhịp"
  * ============================================================
  *
- * Bản trước mở khoá kéo bằng cách đặt `-webkit-app-region: drag` lên thân
- * robot. Nó kéo được thật, nhưng đổi lại MẤT LỐI RA: thuộc tính đó nuốt sạch
- * sự kiện chuột của phần tử, nên sau khi mở khoá thì `onClick` không còn bắn
- * nữa và ba cú bấm để KHOÁ LẠI không bao giờ tới nơi. Người dùng mở khoá xong
- * là kẹt luôn ở chế độ kéo.
+ * Vì sao không cộng `screenX` của renderer như bản cũ: ở Windows hai màn khác
+ * tỉ lệ, `screenX` của Chromium và toạ độ `setBounds` của Electron KHÔNG cùng
+ * một hệ khi cửa sổ vượt ranh giới màn — robot nhảy một đoạn đúng lúc qua màn.
+ * `screen.getCursorScreenPoint()` và `setBounds` cùng là DIP của Electron.
  *
- * Kéo bằng `setBounds` giữ được cả hai: chuột vẫn là chuột, và cửa sổ vẫn dời.
+ * Renderer gửi `keoToi` theo `requestAnimationFrame` (gộp mọi `pointermove`
+ * trong một khung hình thành một lời gọi) — bản cũ gửi mỗi `pointermove`, 120
+ * lời gọi IPC/giây trên chuột 120Hz, xếp hàng sau nhau ⇒ "kéo không mượt".
  *
- * ⚠️ CHỐT GỐC Ở MAIN, KHÔNG Ở RENDERER. Renderer chỉ gửi ĐỘ LỆCH so với chỗ
- * bấm xuống. Nếu renderer tự cộng dồn rồi gửi vị trí tuyệt đối thì mỗi lần
- * `setBounds` chạy, con trỏ trong cửa sổ vừa dời lại sinh một `pointermove`
- * mới — cửa sổ tự đẩy chính nó và trượt đi mất.
+ * Wayland thuần không có toạ độ con trỏ toàn cục ⇒ lùi về độ lệch renderer gửi.
  */
-let gocKeo: { x: number; y: number } | null = null;
+let gocKeo: {
+  kieu: 'hop' | 'caKhung';
+  troDau: Diem;
+  /** Con trỏ − neo (kéo hộp) hoặc con trỏ − góc cửa sổ (kéo cả khung). */
+  lech: Diem;
+  /** Neo − góc cửa sổ, chỉ dùng khi kéo cả khung. */
+  neoTrongKhung: Diem;
+  co: Co;
+} | null = null;
 
-export function keoBatDau(): void {
+function troChuot(): Diem | null {
+  if (laWaylandThuan() || typeof screen.getCursorScreenPoint !== 'function') return null;
+  return screen.getCursorScreenPoint();
+}
+
+export function keoBatDau(kieu: 'hop' | 'caKhung' = 'hop'): void {
   const w = cuaSoRobot();
   if (!w) return;
+  if (henHut) { clearInterval(henHut); henHut = null; }
+  const n = neoHienTai();
   const b = w.getBounds();
-  gocKeo = { x: b.x, y: b.y };
+  const p = troChuot() ?? { x: n.x, y: n.y };
+  gocKeo = {
+    kieu,
+    troDau: p,
+    lech: kieu === 'hop' ? { x: p.x - n.x, y: p.y - n.y } : { x: p.x - b.x, y: p.y - b.y },
+    neoTrongKhung: { x: n.x - b.x, y: n.y - b.y },
+    co: { width: b.width, height: b.height },
+  };
 }
 
 export function keoToi(dx: number, dy: number): void {
   const w = cuaSoRobot();
   const g = gocKeo;
   if (!w || !g) return;
-  // Chỉ đổi x/y. Đưa cả width/height vào là ép cửa sổ vẽ lại toàn bộ mỗi
-  // khung hình khi kéo, và trên máy chậm nó giật.
-  const b = w.getBounds();
-  /* KẸP trong màn hình. Đo thật trước khi vá: `keoToi(9000,9000)` cho ra
-     x=1688 trên vùng 1728 rộng — robot 150px chỉ còn 40px thò vào. macOS chặn
-     hờ một phần; **Windows không chặn gì**, `x` nhận đúng -5000 và cửa sổ
-     không khung + `skipTaskbar` ấy không còn đường nào lôi lại. */
-  w.setBounds(kep({ ...b, x: Math.round(g.x + dx), y: Math.round(g.y + dy) }, vungHienTai(w)));
+  const p = troChuot() ?? { x: g.troDau.x + dx, y: g.troDau.y + dy };
+  const ds = cacManHinh();
+  if (g.kieu === 'hop') {
+    neo = neoKhiKeo(p, g.lech, hop(), ds, nenTang());
+    datKhung(w, { ...neo, ...hop() });
+    return;
+  }
+  /* Kéo CẢ khung chat: dời cứng cả cửa sổ, neo đi theo. Kẹp cả cửa sổ trong
+     màn hình đang chứa con trỏ. */
+  const m = manHinhChoDiem(p, ds) ?? manHinhChinh();
+  const r = kep({ x: Math.round(p.x - g.lech.x), y: Math.round(p.y - g.lech.y), ...g.co }, vungDung(m, nenTang()));
+  neo = { x: r.x + g.neoTrongKhung.x, y: r.y + g.neoTrongKhung.y };
+  datKhung(w, r);
 }
 
 /** Lề khi robot dính mép — 0 thì nó trông như bị cắt mất một nửa cái bóng. */
@@ -352,63 +407,63 @@ const LE_MEP = 6;
 let henHut: ReturnType<typeof setInterval> | null = null;
 
 /**
- * Trượt cửa sổ về đích trong ~180ms.
- *
- * ⚠️ KHÔNG nhảy một phát tới đích. `setBounds` không có hoạt ảnh trên Windows
- * lẫn Linux (macOS có tham số `animate` nhưng nó chỉ chạy cho cửa sổ thường),
- * nên nhảy thẳng là robot biến mất ở chỗ này rồi hiện ra chỗ kia — mắt đọc nó
- * là "lỗi", không phải "hút vào mép". Tự nội suy từng khung là cách duy nhất
- * trông có chủ đích trên cả ba nền tảng.
+ * Trượt hộp robot về đích trong ~180ms (chỉ dùng khi người dùng BẬT "tự dính
+ * mép"). `setBounds` không có hoạt ảnh trên Windows/Linux nên tự nội suy.
  */
-function truotToi(w: BrowserWindow, dich: { x: number; y: number }): void {
+function truotToi(dich: Diem): void {
   if (henHut) { clearInterval(henHut); henHut = null; }
-  const dau = w.getBounds();
+  const dau = neoHienTai();
   const dx = dich.x - dau.x;
   const dy = dich.y - dau.y;
-  if (dx === 0 && dy === 0) return;
+  if (dx === 0 && dy === 0) { luuViTri(); return; }
   const KHUNG = 12;
   let i = 0;
   henHut = setInterval(() => {
     i += 1;
     const w2 = cuaSoRobot();
     if (!w2) { if (henHut) clearInterval(henHut); henHut = null; return; }
-    // easeOutCubic: nhanh lúc đầu, êm lúc chạm mép.
-    const t = 1 - Math.pow(1 - i / KHUNG, 3);
-    const b = w2.getBounds();
-    w2.setBounds({ ...b, x: Math.round(dau.x + dx * t), y: Math.round(dau.y + dy * t) });
+    const t = 1 - Math.pow(1 - i / KHUNG, 3);   // easeOutCubic
+    neo = { x: Math.round(dau.x + dx * t), y: Math.round(dau.y + dy * t) };
+    datKhung(w2, { ...neo, ...hop() });
     if (i >= KHUNG) {
       if (henHut) clearInterval(henHut);
       henHut = null;
       luuViTri();
+      baoBoCucLai();
     }
   }, 15);
 }
 
-/** Nấc cỡ đang dùng — menu chuột phải cần biết để chấm dấu đúng mục. */
-export function nacCoHienTai(): number { return nacCo; }
+/** Người dùng có BẬT "tự dính mép" không. MẶC ĐỊNH TẮT (03/10/2026). */
+export function batTuDinhMep(): boolean {
+  return getSettings().robotBamMep === true;
+}
 
-/** Hút lại vào mép ngay, không cần kéo — dùng sau khi đổi cỡ từ menu. */
+/** Hút vào mép ngay — chỉ khi người dùng đã bật tuỳ chọn. */
 export function hutLaiVaoMep(): void {
   const w = cuaSoRobot();
-  if (!w || getSettings().robotBamMep === false) return;
-  truotToi(w, hutMep(w.getBounds(), vungHienTai(w), LE_MEP));
+  if (!w || !batTuDinhMep()) return;
+  const n = neoHienTai();
+  const m = manHinhCuaNeo(n);
+  const r = hutMep({ ...n, ...hop() }, m.workArea, LE_MEP);
+  truotToi({ x: r.x, y: r.y });
 }
 
 export function keoXong(): void {
+  const g = gocKeo;
   gocKeo = null;
   const w = cuaSoRobot();
-  if (!w) return;
-  /* HÚT VÀO MÉP kiểu bong bóng chat. Tắt được bằng `robotBamMep: false` —
-     có người muốn đặt robot đúng một chỗ giữa màn hình, và ép hút là cướp mất
-     lựa chọn đó. Mặc định BẬT: mép là chỗ ít che nội dung nhất. */
-  if (getSettings().robotBamMep === false) { luuViTri(); return; }
-  const dich = hutMep(w.getBounds(), vungHienTai(w), LE_MEP);
-  truotToi(w, dich);
+  if (!w || !g) return;
+  /* THẢ Ở ĐÂU ĐỨNG Ở ĐÓ. Hút mép chỉ khi người dùng tự bật — trước 03/10/2026
+     nó mặc định BẬT và là thủ phạm chính của "tự chạy qua chỗ khác". */
+  if (g.kieu === 'hop' && batTuDinhMep()) { hutLaiVaoMep(); return; }
+  luuViTri();
 }
 
 export function dangMoRong(): boolean {
   return dangRong;
 }
+
 
 /** Gửi một sự kiện cho robot (thông báo, nhạc đang phát…). */
 export function baoRobot(kenh: string, du: unknown): void {

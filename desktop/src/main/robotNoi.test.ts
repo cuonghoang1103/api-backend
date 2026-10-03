@@ -24,12 +24,18 @@ const cuaSoGia = {
 };
 
 /** Cửa sổ robot mà `moRobot()` dựng ra — đủ mặt các phương thức nó gọi tới. */
+/** Khung cửa sổ "thật" của cửa sổ giả — `setBounds` ghi vào, `getBounds` đọc ra. */
+let khungGia = { x: 0, y: 0, width: 150, height: 160 };
+/** Con trỏ chuột toàn màn hình mà `screen.getCursorScreenPoint()` trả. */
+const troGia = { x: 0, y: 0 };
+
 function cuaSoMoi(): unknown {
   return {
     isDestroyed: () => false,
     destroy: vi.fn(),
-    setBounds: vi.fn(),
-    getBounds: () => ({ x: 0, y: 0, width: 150, height: 190 }),
+    setBounds: vi.fn((r: typeof khungGia) => { khungGia = { ...r }; }),
+    setSize: vi.fn(),
+    getBounds: () => ({ ...khungGia }),
     setAlwaysOnTop: vi.fn(),
     setVisibleOnAllWorkspaces: vi.fn(),
     setIgnoreMouseEvents: vi.fn(),
@@ -45,9 +51,10 @@ function cuaSoMoi(): unknown {
 vi.mock('electron', () => ({
   app: { on: vi.fn(), focus: vi.fn() },
   screen: {
-    getPrimaryDisplay: () => ({ workArea: { x: 0, y: 0, width: 1920, height: 1080 } }),
-    getDisplayNearestPoint: () => ({ workArea: { x: 0, y: 0, width: 1920, height: 1080 } }),
-    getAllDisplays: () => [{ workArea: { x: 0, y: 0, width: 1920, height: 1080 } }],
+    getPrimaryDisplay: () => ({ id: 1, bounds: { x: 0, y: 0, width: 1920, height: 1080 }, workArea: { x: 0, y: 0, width: 1920, height: 1040 } }),
+    getAllDisplays: () => [{ id: 1, bounds: { x: 0, y: 0, width: 1920, height: 1080 }, workArea: { x: 0, y: 0, width: 1920, height: 1040 } }],
+    getCursorScreenPoint: () => ({ ...troGia }),
+    on: vi.fn(),
   },
   BrowserWindow: Object.assign(vi.fn(cuaSoMoi), { getAllWindows: () => [cuaSoGia] }),
 }));
@@ -63,7 +70,9 @@ vi.mock('./config', () => ({
   RENDERER_SOURCE: 'bundle', APP_ORIGIN: 'app://ct',
 }));
 
-const { batTatRobot, moRobot, dongRobot, dongBoRobotNoi } = await import('./robotNoi');
+const {
+  batTatRobot, moRobot, dongRobot, dongBoRobotNoi, keoBatDau, keoToi, keoXong, apBoCuc, datPhanTram,
+} = await import('./robotNoi');
 
 beforeEach(() => {
   for (const k of Object.keys(kho)) delete kho[k];
@@ -163,5 +172,58 @@ describe('⭐ bật LẠI robot trong lúc app đang ở trước', () => {
     const san = w.once.mock.calls.find(([ten]) => ten === 'ready-to-show');
     san![1]();
     expect(w.showInactive.mock.calls).toHaveLength(0);
+  });
+});
+
+describe('⭐ 03/10/2026 — thả ở đâu ĐỨNG YÊN ở đó', () => {
+  function moMoi(): { setBounds: { mock: { calls: unknown[][] } } } {
+    dongRobot();
+    kho.robotViTri = JSON.stringify({ id: 1, x: 500, y: 400, tx: 0, ty: 0, mw: 1920, mh: 1080 });
+    const w = moRobot() as unknown as { setBounds: { mock: { calls: unknown[][] } } };
+    khungGia = { x: 500, y: 400, width: 150, height: 160 };
+    return w;
+  }
+
+  it('mở lại ⇒ đúng toạ độ đã lưu, không về góc dưới-phải', () => {
+    dongRobot();
+    kho.robotViTri = JSON.stringify({ id: 1, x: 321, y: 123, tx: 0, ty: 0, mw: 1920, mh: 1080 });
+    moRobot();
+    const opt = (BrowserWindow as unknown as { mock: { calls: [Record<string, unknown>][] } }).mock.calls.at(-1)![0];
+    expect([opt.x, opt.y]).toEqual([321, 123]);
+  });
+
+  it('kéo theo con trỏ, thả ra KHÔNG tự chạy sang mép (mặc định tắt hút mép), và LƯU', async () => {
+    const w = moMoi();
+    troGia.x = 560; troGia.y = 480;          // nắm robot ở (60, 80) trong hộp
+    keoBatDau('hop');
+    troGia.x = 960; troGia.y = 580;
+    keoToi(400, 100);
+    expect(khungGia).toEqual({ x: 900, y: 500, width: 150, height: 160 });
+    const soLanTruoc = w.setBounds.mock.calls.length;
+    keoXong();
+    await new Promise((r) => setTimeout(r, 300));   // quá thời gian trượt hút mép cũ
+    expect(w.setBounds.mock.calls.length).toBe(soLanTruoc);
+    expect(khungGia.x).toBe(900);
+    expect(JSON.parse(kho.robotViTri as string)).toMatchObject({ id: 1, x: 900, y: 500 });
+  });
+
+  it('⛔ hiện rồi tắt bong bóng ⇒ cửa sổ về ĐÚNG hộp robot cũ (không trôi)', () => {
+    moMoi();
+    const kq = apBoCuc({ loai: 'bong', co: { width: 316, height: 70 } }, true)!;
+    expect(kq.boCuc.cuaSo.height).toBe(160 + 8 + 70);
+    apBoCuc(null, true);
+    expect(khungGia).toEqual({ x: 500, y: 400, width: 150, height: 160 });
+  });
+
+  it('đổi cỡ 35% ⇒ hộp đúng tỉ lệ; trục ở phần ba giữa giữ TÂM, trục sát mép giữ MÉP', () => {
+    moMoi();
+    expect(datPhanTram(37)).toBe(35);
+    const kq = apBoCuc(null, true)!;
+    expect(kq.boCuc.coHop).toEqual({ width: 53, height: 56 });
+    // x: tâm 575/1920 = 0,30 ⇒ phần ba TRÁI ⇒ giữ mép trái; y: 480/1080 ⇒ giữa ⇒ giữ tâm.
+    expect(khungGia.x).toBe(500);
+    const tamY = khungGia.y + khungGia.height / 2;
+    expect(Math.abs(tamY - 480)).toBeLessThanOrEqual(1);
+    datPhanTram(100);
   });
 });

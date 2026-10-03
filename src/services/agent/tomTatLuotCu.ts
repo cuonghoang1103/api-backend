@@ -96,13 +96,16 @@ GIỮ (gạch đầu dòng, cụ thể, có đường dẫn file/tên lệnh th�
 BỎ: lời chào, đoạn suy nghĩ lan man, nội dung file dài, log thừa.
 Không bịa thứ không có trong đoạn đọc. Tiếng Việt (giữ nguyên thuật ngữ/tên kỹ thuật). Tối đa khoảng 900 từ.`;
 
-async function goiTomTat(dauVao: string, banCu: string | null): Promise<string | null> {
+async function goiTomTat(dauVao: string, banCu: string | null, ghiChu?: string): Promise<string | null> {
   const chu = dauVao.length > TRAN_VAO
     ? `${dauVao.slice(0, TRAN_VAO / 3)}\n[… lược bớt phần giữa …]\n${dauVao.slice(-(TRAN_VAO * 2) / 3)}`
     : dauVao;
-  const user = banCu
+  const than = banCu
     ? `BẢN TÓM TẮT ĐÃ CÓ (phần trước đó):\n${banCu}\n\nPHẦN MỚI CẦN GỘP VÀO:\n${chu}\n\nViết lại MỘT bản tóm tắt gộp cả hai.`
     : chu;
+  /* `/compact <ghi chú>` (03/10/2026): người dùng dặn giữ gì khi tóm tắt. Đặt
+     SAU nội dung để model đọc nó như chỉ dẫn cuối, không lẫn vào hội thoại. */
+  const user = ghiChu ? `${than}\n\nNGƯỜI DÙNG DẶN KHI TÓM TẮT (ưu tiên giữ): ${ghiChu}` : than;
   try {
     const ep = endpointFor('cv_parse'); // việc máy đọc ⇒ model rẻ (cùng lựa chọn với datTen.ts)
     const res = await fetch(chatUrlOf(ep), {
@@ -146,6 +149,8 @@ export interface GhiNhoLuotCu {
 export async function ghiNhoLuotDaBo(
   messagesGoc: readonly AgentMessage[],
   soConLai: number,
+  /** Lời dặn của `/compact <ghi chú>` — đổi khoá đệm, không lẫn với bản không dặn. */
+  ghiChu?: string,
 ): Promise<GhiNhoLuotCu> {
   const daBo = messagesGoc.slice(0, messagesGoc.length - soConLai);
   const dauTien = messagesGoc.find((m) => m.role === 'user');
@@ -156,7 +161,7 @@ export async function ghiNhoLuotDaBo(
   const chep = luot.map(chepLuot);
   // Khoá theo tiền tố: khoa[k] = băm của k lượt đầu (k = 1..n).
   const khoa: string[] = [];
-  let gop = '';
+  let gop = ghiChu ? `\u0001${ghiChu}` : '';
   for (const c of chep) { gop += `\n\u0000${c}`; khoa.push(bam(gop)); }
 
   const n = luot.length;
@@ -168,7 +173,7 @@ export async function ghiNhoLuotDaBo(
   while (k > 0 && !dem.has(khoa[k - 1]!)) k--;
   const banCu = k > 0 ? dem.get(khoa[k - 1]!)! : null;
   const moi = chep.slice(k).join('\n\n---\n\n');
-  const tomTat = await goiTomTat(moi, banCu);
+  const tomTat = await goiTomTat(moi, banCu, ghiChu);
   if (tomTat) nhoDem(khoa[n - 1]!, tomTat);
   return { deBai, tomTat: tomTat ?? banCu, daGoiModel: true };
 }

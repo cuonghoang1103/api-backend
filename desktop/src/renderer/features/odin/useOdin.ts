@@ -51,7 +51,13 @@ export type OdinMood =
   /** Vừa có tin nhắn / thông báo — vẫy tay gọi. */
   | 'vay'
   /** Agent vừa làm xong việc — ăn mừng. */
-  | 'mung';
+  | 'mung'
+  /** Đang ĐỌC câu trả lời thành tiếng — miệng mấp máy. */
+  | 'noi'
+  /** Vừa gặp lỗi khi hỏi — nghiêng đầu, mắt lệch, dấu hỏi. */
+  | 'boiRoi'
+  /** Mất mạng — mắt cụp, đám mây xám. */
+  | 'matMang';
 
 /**
  * Trần chữ cho bong bóng nổi. ~40 từ — đủ cho một câu trả lời nói, và vừa

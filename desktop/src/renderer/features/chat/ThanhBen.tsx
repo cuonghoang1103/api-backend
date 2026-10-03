@@ -36,6 +36,7 @@ import {
   KHOA_GHIM, boNho, datMo, giaiMaBangNho, maHoaBangNho, nhomDangMo, type BangNho,
 } from './nhomThanhBen';
 import { useDich } from '../../i18n';
+import { DaiMoThanhBen, useThanhBenPhu } from './thanhBenHep';
 
 /** Kéo hẹp hơn thì tiêu đề cụt tới mức vô dụng; rộng hơn thì lấn hội thoại. */
 const RONG_MIN = 190;
@@ -93,6 +94,8 @@ export function ThanhBen({
   const [phienDaMo, datPhienDaMo] = useState<{ cuoc: string | null; id: string } | null>(null);
   /** Nhóm gập/mở tay TRONG lúc tìm. Sống tạm — xoá ô tìm là bỏ. */
   const [bangKhiTim, datBangKhiTim] = useState<BangNho>({});
+  /* Cột hẹp ⇒ thanh bên thành LỚP PHỦ — xem `thanhBenHep.tsx`. */
+  const { phuMo, datPhuMo, thanRef } = useThanhBenPhu();
 
   const gap = settings.aiThanhBenGap === true;
   const rong = typeof settings.aiThanhBenRong === 'number'
@@ -232,6 +235,7 @@ export function ThanhBen({
   const moPhien = (id: string): void => {
     datPhienDaMo({ cuoc: cuocId, id });
     onMoPhien(id);
+    datPhuMo(false);
   };
 
   const xoa = async (id: string): Promise<void> => {
@@ -321,20 +325,20 @@ export function ThanhBen({
 
   if (gap) {
     return (
-      <button
-        type="button"
-        className="ct-tb-mo"
-        onClick={() => setSetting('aiThanhBenGap', false)}
-        title={dich('Hiện lịch sử')}
-        aria-label={dich('Hiện lịch sử')}
-      >
-        <ChevronLeft size={14} aria-hidden style={{ transform: 'rotate(180deg)' }} />
-      </button>
+      /* Đã ẩn: một DẢI chạy suốt chiều cao (xem `thanhBenHep.tsx`). */
+      <DaiMoThanhBen
+        nhan={dich('Lịch sử việc')}
+        dem={ds?.filter((p) => p.luuTru !== true).length ?? 0}
+        onBam={() => setSetting('aiThanhBenGap', false)}
+      />
     );
   }
 
   return (
-    <aside className="ct-tb" style={{ width: rong }} data-keo={dangKeo}>
+    <>
+    {/* Dải mở lớp phủ — CSS chỉ cho hiện khi cột hẹp (`[data-chi-hep]`). */}
+    <DaiMoThanhBen nhan={dich('Lịch sử việc')} chiHep dangMo={phuMo} onBam={() => datPhuMo((v) => !v)} />
+    <aside className="ct-tb" style={{ width: rong }} data-keo={dangKeo} data-phu-mo={phuMo} ref={thanRef}>
       <div className="ct-tb-dau">
         <button type="button" className="ct-tb-nut" onClick={onTaoTab} title={dich('Việc mới')}>
           <MessageSquarePlus size={14} aria-hidden />
@@ -379,13 +383,19 @@ export function ThanhBen({
           /* Dòng tóm tắt + nút gập/mở TẤT CẢ. Chỉ hiện khi có từ hai nhóm: một
              nhóm thì nút của chính nhóm đó đã làm đúng việc này. */
           <div className="ct-tb-tongquan">
-            <span>
+            <span className="ct-tb-tongquan-chu">
               {nhom.reduce((t, n) => t + n.ps.length, 0)} việc · {nhom.filter((n) => !n.laGhim).length} dự án
             </span>
-            <button type="button" className="ct-tb-tatca" onClick={batTatCa}>
+            <button
+              type="button"
+              className="ct-tb-tatca"
+              onClick={batTatCa}
+              title={coNhomMo ? dich('Thu gọn tất cả') : dich('Mở tất cả')}
+              aria-label={coNhomMo ? dich('Thu gọn tất cả') : dich('Mở tất cả')}
+            >
               {coNhomMo
-                ? <><ChevronsDownUp size={11} aria-hidden /> {dich('Thu gọn tất cả')}</>
-                : <><ChevronsUpDown size={11} aria-hidden /> {dich('Mở tất cả')}</>}
+                ? <><ChevronsDownUp size={11} aria-hidden /> <span>{dich('Thu gọn tất cả')}</span></>
+                : <><ChevronsUpDown size={11} aria-hidden /> <span>{dich('Mở tất cả')}</span></>}
             </button>
           </div>
         )}
@@ -505,5 +515,6 @@ export function ThanhBen({
         title={dich('Kéo để đổi bề rộng · bấm đúp để về mặc định')}
       />
     </aside>
+    </>
   );
 }

@@ -86,6 +86,45 @@ function Eyes({
     );
   }
 
+  if (mood === 'boiRoi') {
+    /* Hai mắt LỆCH cỡ + một mí chéo: "hả?" chứ không phải "hỏng rồi". Lỗi hỏi
+       đáp hay do mạng/máy chủ, không phải lỗi của người dùng — mặt robot không
+       được trông như đang trách họ. */
+    return (
+      <>
+        <rect x="55" y="72" width="22" height="22" rx="11" fill="var(--odin-eye)" />
+        <rect x="95" y="78" width="15" height="11" rx="5.5" fill="var(--odin-eye)" />
+        <path d="M92 70 L114 66" stroke="var(--odin-eye)" strokeWidth="4" strokeLinecap="round" />
+        <path d="M74 96 q6 -4 12 0 q6 4 12 0" stroke="var(--odin-eye)" strokeWidth="3"
+          strokeLinecap="round" fill="none" />
+      </>
+    );
+  }
+
+  if (mood === 'matMang') {
+    // Mắt CỤP xuống (vòng cung úp) — buồn nhẹ, kiên nhẫn chờ.
+    return (
+      <>
+        <path d="M54 78 Q65 90 76 78" stroke="var(--odin-eye)" strokeWidth="5.5"
+          strokeLinecap="round" fill="none" opacity="0.8" />
+        <path d="M92 78 Q103 90 114 78" stroke="var(--odin-eye)" strokeWidth="5.5"
+          strokeLinecap="round" fill="none" opacity="0.8" />
+      </>
+    );
+  }
+
+  if (mood === 'noi') {
+    /* Mắt thường + MIỆNG mấp máy (`.odin-mieng` co giãn bằng CSS). Đang đọc mà
+       mặt đứng im thì không ai biết tiếng phát ra là từ con robot này. */
+    return (
+      <>
+        <rect x="56" y="70" width="18" height="18" rx="9" fill="var(--odin-eye)" />
+        <rect x="94" y="70" width="18" height="18" rx="9" fill="var(--odin-eye)" />
+        <ellipse className="odin-mieng" cx="84" cy="95" rx="7" ry="4" fill="var(--odin-eye)" />
+      </>
+    );
+  }
+
   if (mood === 'nghi') {
     // Liếc sang một bên — dáng đang nghĩ.
     return (

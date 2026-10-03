@@ -18,6 +18,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { FileCode2, Play, RotateCw, ShieldCheck } from 'lucide-react';
 import { useMoRieng } from '../../components/moRieng';
+import { useMoTuNgoai } from './moTam';
 import type { AgentHookNhatKy } from '../../../shared/ipc';
 import { useDich } from '../../i18n';
 import { Chu } from '../../i18n/Chu';
@@ -35,6 +36,7 @@ function gio(luc: number): string {
 export function BangHook({ cuocId, khoa }: { cuocId: string; khoa: boolean }) {
   const { dich, dichP } = useDich();
   const { mo, bat, boc } = useMoRieng('agent:hook');
+  useMoTuNgoai(cuocId, 'hook', mo, bat);
   const [soHook, datSoHook] = useState<number | null>(null);
   const [nhatKy, datNhatKy] = useState<AgentHookNhatKy[]>([]);
   const [kyNang, datKyNang] = useState<Array<{ ten: string; moTa: string }>>([]);

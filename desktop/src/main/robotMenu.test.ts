@@ -7,12 +7,12 @@
  * đây là chỗ duy nhất canh được nó.
  */
 import { describe, expect, it, vi } from 'vitest';
-import { bangMenuRobot, NHAN_CO, type TuyChonMenuRobot } from './robotMenu';
+import { bangMenuRobot, MUC_CO, type TuyChonMenuRobot } from './robotMenu';
 
 const goc = (): TuyChonMenuRobot => ({
   trongApp: false,
   tiengAnh: false,
-  nacCo: 0,
+  phanTram: 100,
   bamMep: true,
   moChat: vi.fn(),
   datCo: vi.fn(),
@@ -44,13 +44,25 @@ describe('mục trong menu', () => {
 });
 
 describe('trạng thái hiện đúng', () => {
-  it('nấc cỡ ĐANG dùng được chấm dấu, và chỉ một nấc', () => {
+  it('cỡ ĐANG dùng được chấm dấu, và chỉ một mục', () => {
     // Chấm sai thì người dùng đổi cỡ xong mở lại menu thấy dấu ở chỗ khác, và
     // họ không còn tin cái menu nữa.
-    const b = bangMenuRobot({ ...goc(), nacCo: 2 });
+    const b = bangMenuRobot({ ...goc(), phanTram: 60 });
     const con = muc(b, 'Cỡ')?.submenu as { label: string; checked: boolean }[];
-    expect(con).toHaveLength(NHAN_CO.length);
-    expect(con.filter((m) => m.checked).map((m) => m.label)).toEqual(['66%']);
+    expect(con).toHaveLength(MUC_CO.length);
+    expect(con.filter((m) => m.checked).map((m) => m.label)).toEqual(['60%']);
+  });
+
+  it('cỡ lẻ bước 5 (85%) ⇒ có một dòng nói cỡ thật, không chấm bừa mục khác', () => {
+    const con = muc(bangMenuRobot({ ...goc(), phanTram: 85 }), 'Cỡ')?.submenu as
+      { label: string; checked: boolean; enabled?: boolean }[];
+    expect(con.filter((m) => m.checked).map((m) => m.label)).toEqual(['85%']);
+    expect(con[0]!.enabled).toBe(false);
+  });
+
+  it('menu cỡ đi trọn 20–100%', () => {
+    expect(Math.min(...MUC_CO)).toBe(20);
+    expect(Math.max(...MUC_CO)).toBe(100);
   });
 
   it('ô "dính mép" theo đúng thiết đặt', () => {
@@ -61,11 +73,22 @@ describe('trạng thái hiện đúng', () => {
 });
 
 describe('bấm thì gọi đúng việc', () => {
-  it('chọn một nấc cỡ ⇒ `datCo` nhận đúng CHỈ SỐ nấc, không phải nhãn', () => {
+  it('chọn một mức cỡ ⇒ `datCo` nhận đúng SỐ %, không phải nhãn hay chỉ số', () => {
     const o = goc();
-    const con = muc(bangMenuRobot(o), 'Cỡ')?.submenu as { click: () => void }[];
-    con[3]!.click();
-    expect(o.datCo).toHaveBeenCalledWith(3);
+    const con = muc(bangMenuRobot(o), 'Cỡ')?.submenu as { label: string; click: () => void }[];
+    con.find((m) => m.label === '30%')!.click();
+    expect(o.datCo).toHaveBeenCalledWith(30);
+  });
+
+  it('con nổi có "Chỉnh vị trí & cỡ…" và "Về góc mặc định"; con trong app thì không', () => {
+    const o = { ...goc(), chinh: vi.fn(), veMacDinh: vi.fn() };
+    const b = bangMenuRobot(o);
+    (muc(b, 'Chỉnh vị trí & cỡ…')!.click as () => void)();
+    (muc(b, 'Về góc mặc định')!.click as () => void)();
+    expect(o.chinh).toHaveBeenCalled();
+    expect(o.veMacDinh).toHaveBeenCalled();
+    const trong = bangMenuRobot({ ...o, trongApp: true });
+    expect(muc(trong, 'Chỉnh vị trí & cỡ…')?.visible).toBe(false);
   });
 
   it('bật/tắt dính mép ⇒ truyền trạng thái MỚI của ô, không phải trạng thái cũ', () => {

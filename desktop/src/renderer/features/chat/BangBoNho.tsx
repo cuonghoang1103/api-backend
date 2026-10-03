@@ -12,6 +12,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { Brain, RotateCw, Trash2 } from 'lucide-react';
 import type { AgentBaiHoc } from '../../../shared/ipc';
 import { useMoRieng } from '../../components/moRieng';
+import { useMoTuNgoai } from './moTam';
 import { useDich } from '../../i18n';
 
 const TEN_LOAI: Record<AgentBaiHoc['loai'], string> = {
@@ -21,6 +22,7 @@ const TEN_LOAI: Record<AgentBaiHoc['loai'], string> = {
 export function BangBoNho({ cuocId, khoa }: { cuocId: string; khoa: boolean }) {
   const { dich } = useDich();
   const { mo, bat, boc } = useMoRieng('agent:boNho');
+  useMoTuNgoai(cuocId, 'boNho', mo, bat);
   const [ds, datDs] = useState<AgentBaiHoc[]>([]);
   const [moRong, datMoRong] = useState<string | null>(null);
 

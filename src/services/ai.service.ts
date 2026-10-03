@@ -49,6 +49,7 @@ import { isProEffective } from './pro.service.js';
 import { isAnthropicModel } from './llm/gateway.js';
 import { canTimWeb } from './search/canTim.js';
 import { boiCanhHomNay } from './troLy/boiCanhHomNay.js';
+import { luatKyNang, type KyNangTroLy } from './troLy/kyNangTroLy.js';
 import { goiChoModel, timWeb } from './search/searxng.js';
 import { logger } from '../utils/logger.js';
 
@@ -306,13 +307,20 @@ const VOICE_RULES =
  */
 function luatNgonNgu(ngonNgu?: 'vi' | 'en'): string {
   if (ngonNgu === 'en') {
-    return 'ALWAYS reply in English — every single time, even when the user writes or speaks '
-      + 'Vietnamese. The user picked English in settings; do NOT mirror the language of their '
-      + 'question. If they ask in Vietnamese, understand it and still answer in English.\n\n';
+    return 'Reply in English by default — even when the user writes or speaks Vietnamese (they '
+      + 'picked English in settings; do NOT just mirror the language of the question). EXCEPTION: '
+      + 'if the user EXPLICITLY asks for the answer in another language ("bằng tiếng Việt", '
+      + '"in Japanese", "日本語で", "trả lời tiếng Nhật"…), obey that request for that answer.\n\n';
   }
   if (ngonNgu === 'vi') {
-    return 'LUÔN trả lời bằng tiếng Việt, kể cả khi người dùng hỏi bằng tiếng Anh. Người dùng đã '
-      + 'chọn tiếng Việt trong thiết đặt — đừng đổi ngôn ngữ theo câu hỏi.\n\n';
+    /* 03/10/2026: luật cũ "LUÔN tiếng Việt… đừng đổi" chặn cả YÊU CẦU RÕ của người dùng —
+       user gõ "bằng tiếng anh cơ mà" và nhận "Xin lỗi, tôi cần trả lời bằng tiếng Việt theo thiết
+       đặt hiện tại". Thiết đặt là MẶC ĐỊNH, không phải lệnh cấm. Câu yêu cầu viết bằng tiếng Anh
+       ngay trong luật để chính luật không kéo model về tiếng Việt khi phải trả lời tiếng Anh. */
+    return 'Mặc định trả lời bằng tiếng Việt, kể cả khi người dùng hỏi bằng tiếng Anh (đừng chỉ '
+      + 'bắt chước ngôn ngữ câu hỏi). NGOẠI LỆ: nếu người dùng YÊU CẦU RÕ trả lời bằng ngôn ngữ khác '
+      + '("bằng tiếng Anh", "trả lời tiếng Nhật", "in English", "日本語で"…) thì trả lời ĐÚNG ngôn ngữ đó, '
+      + 'không xin lỗi, không viện thiết đặt. If the user explicitly asks for English, answer fully in English.\n\n';
   }
   return 'Mặc định trả lời bằng tiếng Việt; nếu người dùng viết bằng ngôn ngữ khác thì trả lời bằng ngôn ngữ đó.\n\n';
 }
@@ -517,6 +525,13 @@ interface ChatContext {
    * vài giây im lặng vào đúng thứ người dùng đang chờ nghe).
    */
   choTimWeb?: boolean;
+  /**
+   * Kỹ năng cho lượt này (robot CuongMini). `'tu-dong'` ⇒ máy chủ tự nhận theo
+   * câu hỏi. Danh sách trắng — xem `troLy/kyNangTroLy.ts`.
+   */
+  kyNang?: KyNangTroLy | 'tu-dong';
+  /** Máy chủ gọi lại MỘT LẦN với kỹ năng đã áp, để client gắn nhãn. */
+  banKyNang?: (k: KyNangTroLy) => void;
   /** Máy chủ gọi lại để đẩy BƯỚC ra SSE ("đang tìm…", "đang đọc…"). */
   banBuoc?: (buoc: { viec: 'tim' | 'doc'; chu: string }) => void;
   /** Máy chủ gọi lại MỘT LẦN với danh sách nguồn đã dùng. */
@@ -1152,7 +1167,8 @@ export class AIService {
     // KHÔNG Pro bấm micro thì nhận về câu đầy markdown rồi máy đọc phải đọc cả
     // dấu sao và gạch đầu dòng. Đo thật 18/08: bậc Pro rơi xuống đường miễn phí
     // (tài khoản chưa Pro) và câu trả lời ra `- **Lập trình & phát triển`.
-    const systemPrompt = buildSystemPrompt(ragContext, false, !!context.voice, context.ngonNgu, !!context.appIos);
+    const systemPrompt = buildSystemPrompt(ragContext, false, !!context.voice, context.ngonNgu, !!context.appIos)
+      + luatKyNang(context.kyNang, message, !!context.images?.length, !!context.voice).luat;
 
     // Save user message
     if (sessionId) {
@@ -1217,7 +1233,12 @@ export class AIService {
      * LÀM GIÀU, không phải mắt xích bắt buộc.
      */
     const nguCanhWeb = await timNeuCan(context);
+    /* KỸ NĂNG (robot CuongMini gửi `kyNang`): khối luật theo việc — ảnh, code,
+       toán, tiếng Anh/Nhật/Việt. Không gửi ⇒ rỗng, web /chat y như trước. */
+    const kn = luatKyNang(context.kyNang, message, !!context.images?.length, !!context.voice);
+    if (kn.kyNang) context.banKyNang?.(kn.kyNang);
     const systemPrompt = buildSystemPrompt(ragContext, selected.tier === 'claude', !!context.voice, context.ngonNgu, !!context.appIos)
+      + kn.luat
       + nguCanhWeb;
 
     // Save user message

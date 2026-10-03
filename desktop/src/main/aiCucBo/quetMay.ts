@@ -41,6 +41,54 @@ export interface KetQuaQuet {
   chacChan: boolean;
   /** Tên GPU để hiện cho người dùng thấy máy mình được nhận ra. Có thể rỗng. */
   tenGpu: string;
+  /**
+   * VRAM lớn nhất của MỘT GPU, GB. `-1` = chưa đo được. Nguồn: `nvidia-smi`
+   * (NVIDIA) hoặc `--list-devices` của llama.cpp sau khi cài. KHÔNG lấy từ
+   * `Win32_VideoController.AdapterRAM`: trường đó là uint32, card ≥ 4 GB nào
+   * cũng báo đúng 4 GB.
+   */
+  vramGb?: number;
+  /** Có card NVIDIA trả lời `nvidia-smi` — điều kiện để mời gói CUDA (Windows). */
+  nvidia?: boolean;
+}
+
+/**
+ * Hỏi `nvidia-smi` VRAM của card NVIDIA. Không có lệnh / không có card ⇒ `null`.
+ * Có mặt trên mọi máy Windows/Linux đã cài driver NVIDIA, kể cả không cài CUDA.
+ */
+async function hoiNvidia(): Promise<{ vramGb: number; ten: string } | null> {
+  try {
+    const { stdout } = await chay(
+      'nvidia-smi --query-gpu=name,memory.total --format=csv,noheader,nounits',
+      { timeout: 5000, windowsHide: true },
+    );
+    let lon = -1;
+    const ten: string[] = [];
+    for (const dong of stdout.split(/\r?\n/)) {
+      const [t, mib] = dong.split(',').map((x) => x.trim());
+      const n = Number(mib);
+      if (t && Number.isFinite(n) && n > 0) {
+        ten.push(t);
+        lon = Math.max(lon, lamTron(n / 1024));
+      }
+    }
+    return lon > 0 ? { vramGb: lon, ten: ten.join(' · ') } : null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Đọc VRAM từ đầu ra `--list-devices`: `CUDA0: NVIDIA RTX 4080 (16375 MiB, 15000 MiB free)`.
+ * Trả GB của thiết bị lớn nhất, `-1` khi không có con số nào.
+ */
+export function vramTuDanhSach(dong: string[]): number {
+  let lon = -1;
+  for (const d of dong) {
+    const m = /\((\d+)\s*MiB/i.exec(d);
+    if (m) lon = Math.max(lon, lamTron(Number(m[1]) / 1024));
+  }
+  return lon;
 }
 
 /** Làm tròn một chữ số thập phân — người dùng không cần 15,996094 GB. */
@@ -140,6 +188,15 @@ export async function quetMay(thuMucModel: string): Promise<KetQuaQuet> {
   const hoi = lenhHoiGpu();
   if (!hoi) return { nenTang, kienTruc, ramGb, diaGb, coGpu: false, chacChan: false, tenGpu: '' };
 
+  /* NVIDIA trả lời được `nvidia-smi` thì đó là bằng chứng mạnh hơn tên thiết bị:
+     driver thật đã cài (máy dùng driver cơ bản của Windows không có lệnh này). */
+  const nv = await hoiNvidia();
+  if (nv) {
+    return {
+      nenTang, kienTruc, ramGb, diaGb, coGpu: true, chacChan: false, tenGpu: nv.ten, vramGb: nv.vramGb, nvidia: true,
+    };
+  }
+
   try {
     /* Trần 6 giây: trên máy có card đang ngủ, lệnh hỏi thiết bị đánh thức nó
        dậy và có thể treo vài giây. Quá hạn thì coi như không có — thà mời bản
@@ -156,6 +213,8 @@ export async function quetMay(thuMucModel: string): Promise<KetQuaQuet> {
 export interface ThietBiThat {
   coGpu: boolean;
   ten: string;
+  /** VRAM lớn nhất llama.cpp báo, GB. `-1` = không có số. */
+  vramGb?: number;
   /** Lệnh có chạy tới nơi không. `false` = chưa biết gì cả, KHÁC với "không có GPU". */
   chayDuoc: boolean;
   /** Quá hạn (thường là macOS quét tệp mới ở lần chạy đầu) chứ không phải chết. */
@@ -211,6 +270,7 @@ export async function hoiThietBiThat(duongLlamaServer: string): Promise<ThietBiT
       coGpu: true,
       ten: dong.map((d) => d.replace(/\s*\(.*$/, '')).join(' · '),
       chayDuoc: true,
+      vramGb: vramTuDanhSach(dong),
     };
   } catch (e) {
     /*

@@ -81,10 +81,17 @@ describe('sổ model', () => {
       .toBeGreaterThan(anh.gb);
   });
 
-  it('địa chỉ model dựng đúng dạng của HuggingFace', () => {
+  it('địa chỉ model dựng đúng dạng của HuggingFace — ở COMMIT đã ghim, không phải `main`', () => {
+    /* 03/10/2026: tải `main` + tải tiếp bằng Range đã ghép ra một file 4B đúng
+       cỡ mà sai nội dung (model nhả "@@@@"). Ghim commit để nội dung không đổi. */
     expect(duongModel(timModel('nho')!)).toBe(
-      'https://huggingface.co/unsloth/Qwen3-1.7B-GGUF/resolve/main/Qwen3-1.7B-Q4_K_M.gguf',
+      'https://huggingface.co/unsloth/Qwen3-1.7B-GGUF/resolve/d7f544eead698dbd1f15126ef60b45a1e1933222/Qwen3-1.7B-Q4_K_M.gguf',
     );
+    for (const m of MODEL) {
+      expect(duongModel(m), `${m.ma} trỏ "main"`).not.toContain('/resolve/main/');
+      expect(m.sha256, `${m.ma} thiếu sha256`).toMatch(/^[0-9a-f]{64}$/);
+      if (m.mmproj) expect(m.mmproj.sha256).toMatch(/^[0-9a-f]{64}$/);
+    }
     const anh = timModel('anh')!;
     expect(duongModel(anh, anh.mmproj!.file)).toContain('mmproj-Qwen3VL-4B-Instruct-F16.gguf');
   });
@@ -162,7 +169,7 @@ describe('lời khuyên cho máy người dùng', () => {
   });
 
   it('RAM càng nhiều thì càng KHÔNG được mời bản nhỏ hơn', () => {
-    const bac = { nho: 1, vua: 2, anh: 3 } as const;
+    const bac = { nho: 1, vua: 2, anh: 3, code: 4 } as const;
     let truoc = 0;
     for (const ram of [4, 6, 8, 12, 16, 24, 32, 64]) {
       const k = loiKhuyen({ ramGb: ram, diaGb: 100, coGpu: true });

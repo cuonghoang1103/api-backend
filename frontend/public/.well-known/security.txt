@@ -1,0 +1,7 @@
+# Báo lỗ hổng bảo mật cho cuongthai.com — xem chính sách tại trang Policy.
+# Report security vulnerabilities for cuongthai.com — see the Policy page.
+Contact: mailto:cuongthaihnhe176322@gmail.com
+Expires: 2027-10-04T00:00:00.000Z
+Preferred-Languages: vi, en
+Canonical: https://cuongthai.com/.well-known/security.txt
+Policy: https://cuongthai.com/about/bao-mat#bao-lo-hong

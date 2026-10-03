@@ -527,3 +527,102 @@ export async function purgeExpiredProjectRequests(now = new Date()): Promise<num
   });
   return r.count;
 }
+
+// ─── Khách tự tra cứu phiếu (/about/nhan-du-an/tra-cuu) ─────────
+
+/**
+ * Hình dạng CÔNG KHAI của một phiếu — danh sách TRẮNG. Thêm cột mới vào
+ * `project_requests` sẽ KHÔNG tự lộ ra đây; muốn khách thấy thì phải thêm tay.
+ * Tuyệt đối không có: internalNote, phone, ip, userAgent, securityNote, ngân sách…
+ */
+export interface ProjectRequestPublicView {
+  code: string;
+  status: ProjectRequestStatus;
+  createdAt: Date;
+  updatedAt: Date;
+  statusChangedAt: Date | null;
+  productTypes: string[];
+  /** Tên tổ chức khách đã ghi (nếu có) — để khách nhận ra phiếu của mình. */
+  organization: string | null;
+  /** 240 ký tự đầu của phần "nhu cầu". */
+  summary: string;
+  /** Lời nhắn admin viết riêng cho khách (`clientNote`). */
+  clientNote: string | null;
+  /** Link CT Work chỉ đọc — chỉ khi phiếu đã thành dự án và link khách còn hiệu lực. */
+  progressUrl: string | null;
+}
+
+export const LOOKUP_CODE_RE = /^YC-\d{4}-\d{1,6}$/;
+const SUMMARY_MAX = 240;
+
+/** Chuẩn hoá đầu vào tra cứu; sai định dạng ⇒ null (route trả CÙNG 404 như "không khớp"). */
+export function normalizeLookup(code: string, email: string): { code: string; email: string } | null {
+  const c = code.trim().toUpperCase();
+  const e = email.trim().toLowerCase();
+  if (!LOOKUP_CODE_RE.test(c) || !e.includes('@')) return null;
+  return { code: c, email: e };
+}
+
+type LookupRow = {
+  code: string; email: string; status: string; createdAt: Date; updatedAt: Date; statusChangedAt: Date | null;
+  productTypes: string[]; organization: string | null; needs: string; clientNote: string | null;
+};
+
+/** So email KHÔNG phân biệt hoa thường. Tách riêng để kiểm thử không cần CSDL. */
+export function emailMatches(stored: string, given: string): boolean {
+  return stored.trim().toLowerCase() === given.trim().toLowerCase();
+}
+
+/** Ánh xạ hàng CSDL → bản công khai (danh sách trắng). */
+export function toPublicView(r: LookupRow, progressUrl: string | null): ProjectRequestPublicView {
+  const needs = r.needs.replace(/\s+/g, ' ').trim();
+  return {
+    code: r.code,
+    status: (PROJECT_REQUEST_STATUSES as readonly string[]).includes(r.status) ? (r.status as ProjectRequestStatus) : 'NEW',
+    createdAt: r.createdAt,
+    updatedAt: r.updatedAt,
+    statusChangedAt: r.statusChangedAt,
+    productTypes: r.productTypes,
+    organization: r.organization?.replace(/^\[NHẬP VAI\]\s*/, '') || null,
+    summary: needs.length > SUMMARY_MAX ? `${needs.slice(0, SUMMARY_MAX - 1).trimEnd()}…` : needs,
+    clientNote: r.clientNote?.trim() || null,
+    progressUrl,
+  };
+}
+
+/**
+ * Link tiến độ cho KHÁCH: chỉ dùng link mà nút "Tạo dự án CT Work" sinh riêng
+ * cho phiếu này (nhãn `Khách — <mã>`, không chia sẻ mô tả thẻ), còn hiệu lực.
+ * KHÔNG lấy link bất kỳ của dự án (có thể là link cho giảng viên, bật mô tả),
+ * và KHÔNG tự tạo lại khi admin đã thu hồi — thu hồi là quyết định có chủ ý.
+ */
+async function clientProgressUrl(projectId: number, code: string): Promise<string | null> {
+  const live = await prisma.workProject.findFirst({ where: { id: projectId, deletedAt: null, workspace: { deletedAt: null } }, select: { id: true } });
+  if (!live) return null;
+  const links = await prisma.workPublicLink.findMany({
+    where: { projectId, label: `Khách — ${code}`, revokedAt: null, OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }] },
+    orderBy: { id: 'desc' },
+    select: { token: true, options: true },
+  });
+  const ok = links.find((l) => (l.options as { descriptions?: boolean } | null)?.descriptions !== true);
+  return ok ? frontendUrl(`/work/share/${ok.token}`) : null;
+}
+
+/**
+ * Tra cứu công khai: CHỈ trả khi cả mã VÀ email khớp. Không khớp / sai định
+ * dạng / không tồn tại ⇒ null — route biến mọi trường hợp đó thành CÙNG một 404.
+ */
+export async function lookupProjectRequest(code: string, email: string): Promise<ProjectRequestPublicView | null> {
+  const n = normalizeLookup(code, email);
+  if (!n) return null;
+  const r = await prisma.projectRequest.findUnique({
+    where: { code: n.code },
+    select: {
+      code: true, email: true, status: true, createdAt: true, updatedAt: true, statusChangedAt: true,
+      productTypes: true, organization: true, needs: true, clientNote: true, workProjectId: true,
+    },
+  });
+  if (!r || !emailMatches(r.email, n.email)) return null;
+  const progressUrl = r.workProjectId && r.status === 'PROJECT_CREATED' ? await clientProgressUrl(r.workProjectId, r.code) : null;
+  return toPublicView(r, progressUrl);
+}

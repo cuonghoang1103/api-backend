@@ -3,7 +3,7 @@
 /**
  * /about/nhan-du-an — BƯỚC 2/3 của luồng "Studio doanh nghiệp": Nhận dự án.
  *
- * Dịch vụ · mô hình hợp tác (KHÔNG ghi giá — lấy từ `ENGAGEMENTS` trong
+ * Dịch vụ · dự án mẫu (packages.ts) · mô hình hợp tác (KHÔNG ghi giá — lấy từ `ENGAGEMENTS` trong
  * quy-trinh/data.ts) · những gì khách nhận khi bàn giao · câu hỏi thường gặp ·
  * phiếu "Gửi yêu cầu dự án" + thông báo xử lý dữ liệu theo Luật BVDLCN 91/2025/QH15 + Nghị định 356/2025/NĐ-CP.
  *
@@ -11,6 +11,7 @@
  * được chủ site duyệt.
  */
 import Link from 'next/link';
+import { useState } from 'react';
 import {
   Bullets,
   NextStep,
@@ -24,6 +25,8 @@ import {
 import type { Engagement } from '../quy-trinh/data';
 import RequestForm from './RequestForm';
 import PrivacyNotice from './PrivacyNotice';
+import PackageCatalog from './PackageCatalog';
+import { PACKAGES } from './packages';
 import s from '@/components/studio/showroom.module.css';
 import ScrollReveal from '@/components/studio/ScrollReveal';
 
@@ -169,6 +172,14 @@ export default function IntakeClient({ stageCount, engagements }: { stageCount: 
   const { lang, L } = useStudioLang();
   const p = (b: Bi) => (lang === 'en' ? b[1] : b[0]);
   const pk = (b: Bi, l: 'vi' | 'en') => (l === 'en' ? b[1] : b[0]);
+  // Gói "Dự án mẫu" khách đã chọn — đi vào phiếu (RequestForm) qua prop.
+  const [chosenPkg, setChosenPkg] = useState<string | null>(null);
+  const choosePackage = (id: string) => {
+    setChosenPkg(id);
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // Khung hình kế: phiếu đã kịp hiện thẻ "gói đã chọn".
+    setTimeout(() => document.getElementById('gui-yeu-cau')?.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' }), 30);
+  };
 
   return (
     <StudioShell step={2} className={s.page}>
@@ -194,6 +205,9 @@ export default function IntakeClient({ stageCount, engagements }: { stageCount: 
               <a href="#dich-vu" className={T.btnGhost}>
                 {L('Xem dịch vụ', 'See services')}
               </a>
+              <Link href="/about/nhan-du-an/tra-cuu" className={T.btnGhost}>
+                {L('Tra cứu phiếu đã gửi', 'Track a request')}
+              </Link>
             </div>
           </div>
           <ol className={s.steps} aria-label={L('Sau khi gửi phiếu', 'After you send a request')}>
@@ -236,8 +250,21 @@ export default function IntakeClient({ stageCount, engagements }: { stageCount: 
         </div>
       </Section>
 
+      {/* ── Dự án mẫu ──────────────────────────────────────────────────── */}
+      <Section id="du-an-mau">
+        <SectionHeader
+          label={L('Dự án mẫu', 'Sample projects')}
+          title={L(`${PACKAGES.length} gói sản phẩm cụ thể`, `${PACKAGES.length} concrete product packages`)}
+          lead={L(
+            'Chọn gói gần với nhu cầu nhất để buổi trao đổi bắt đầu từ một phạm vi rõ ràng. Thời gian là ước lượng sơ bộ cho một kỹ sư chính, chốt sau khảo sát; chi phí báo riêng trong đề xuất. Demo chỉ trỏ tới sản phẩm đang chạy thật trên site này.',
+            'Pick the package closest to your need so the first conversation starts from a clear scope. Timeframes are rough estimates for one lead engineer, confirmed after discovery; cost is quoted in the proposal. Demos only point to products actually running on this site.',
+          )}
+        />
+        <PackageCatalog lang={lang} chosenId={chosenPkg} onChoose={choosePackage} />
+      </Section>
+
       {/* ── Mô hình hợp tác ──────────────────────────────────────────── */}
-      <Section>
+      <Section className="border-t border-[color:var(--s-line)]">
         <SectionHeader
           label={L('Mô hình hợp tác', 'Engagement models')}
           title={L('Chọn cách làm việc hợp với dự án', 'Choose the way of working that fits')}
@@ -349,7 +376,7 @@ export default function IntakeClient({ stageCount, engagements }: { stageCount: 
         />
         <div className="grid gap-10 lg:grid-cols-[minmax(0,8fr)_minmax(0,4fr)] lg:gap-12 items-start">
           <div className={`${T.card} p-5 sm:p-8 min-w-0`}>
-            <RequestForm lang={lang} />
+            <RequestForm lang={lang} packageId={chosenPkg} onClearPackage={() => setChosenPkg(null)} />
           </div>
           <aside className="min-w-0 lg:sticky lg:top-24 lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto rounded-xl border border-[color:var(--s-line)] bg-[var(--s-raise)] p-5 sm:p-6">
             <PrivacyNotice lang={lang} />

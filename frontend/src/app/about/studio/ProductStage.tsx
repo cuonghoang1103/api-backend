@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { motion, useMotionValue, useReducedMotion, useSpring } from 'framer-motion';
 import { ArrowUpRight, Layers3, Monitor, Smartphone, Terminal } from 'lucide-react';
 import { PRODUCTS } from './content';
+import { caseHref } from './caseSlugs';
 import s from './showroom.module.css';
 
 /** Architectural exhibit, not a fabricated screenshot of a shipped interface. */
@@ -40,7 +41,10 @@ export default function ProductStage({ lang }: { lang: 'vi' | 'en' }) {
       </div>
       <div className={s.productInfo} aria-live="polite" aria-atomic="true">
         <p className={s.productKind}>{bi(p.kind)}</p><h2>{p.name}</h2><p>{bi(p.what)}</p>
-        {p.href && <Link href={p.href}>{L('Khám phá sản phẩm', 'Explore product')}<ArrowUpRight size={16} aria-hidden="true" /></Link>}
+        <div className={s.productLinks}>
+          {p.href && <Link href={p.href}>{L('Khám phá sản phẩm', 'Explore product')}<ArrowUpRight size={16} aria-hidden="true" /></Link>}
+          {caseHref(p.id) && <Link href={caseHref(p.id)!}>{L('Xem case study', 'Read the case study')}<ArrowUpRight size={16} aria-hidden="true" /></Link>}
+        </div>
       </div>
     </div>
   );

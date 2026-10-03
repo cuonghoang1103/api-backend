@@ -37,7 +37,8 @@ export default {
         role: 'legal',
         checklist: [
           'Xác định khách có chia sẻ thông tin mật không',
-          'Gửi NDA hai chiều theo mẫu đã được luật sư duyệt',
+          'Gửi NDA hai chiều theo mẫu (nda.md) đã được luật sư duyệt',
+          'Ký TRƯỚC buổi khảo sát và trước khi nhận tài liệu / quyền truy cập',
           'Lưu bản NDA đã ký vào hồ sơ dự án',
         ],
       },
@@ -256,6 +257,8 @@ export default {
           'Xác định bên kiểm soát / bên xử lý dữ liệu',
           'Biện pháp bảo vệ và thời hạn thông báo vi phạm',
           'Quy tắc trả và xoá dữ liệu khi kết thúc',
+          'Điền danh sách bên xử lý phụ (hạ tầng, lưu trữ, LLM…) và việc chuyển dữ liệu ra nước ngoài theo mẫu dpa.md',
+          'Luật sư đối chiếu căn cứ hiện hành (Luật 91/2025/QH15 + NĐ 356/2025/NĐ-CP)',
         ],
       },
       {

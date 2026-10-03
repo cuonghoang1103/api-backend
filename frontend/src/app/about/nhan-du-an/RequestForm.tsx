@@ -10,11 +10,17 @@
  *   · consent === true (Luật BVDLCN 91/2025/QH15 + NĐ 356/2025) · `website` = ô bẫy bot, luôn để trống
  *   · 5 phiếu/giờ/IP ⇒ 429
  * Lỗi 400 trả `message` dạng "<trường>: <lý do>" ⇒ gắn vào đúng ô.
+ *
+ * Gói "Dự án mẫu" (`packageId`, tuỳ chọn — packages.ts): IntakeClient giữ id,
+ * phiếu hiện tên gói + nút bỏ chọn, và tự tick loại sản phẩm của gói. Khi gửi,
+ * id đi trong trường `source` có sẵn: `about/nhan-du-an#goi=<id>` (cột
+ * VarChar(100), admin thấy ở dòng "nguồn:"). KHÔNG gửi khoá `packageId` riêng:
+ * zod `z.object` ở backend lặng lẽ BỎ khoá lạ, và không đổi schema/migration.
  */
 import Link from 'next/link';
-import { useId, useState } from 'react';
+import { useEffect, useId, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { AlertCircle, CheckCircle2, Copy, Loader2 } from 'lucide-react';
+import { AlertCircle, CheckCircle2, Copy, Loader2, Package, X } from 'lucide-react';
 import {
   projectRequestApi,
   type ProjectRequestProductType,
@@ -23,6 +29,7 @@ import {
 } from '@/lib/api';
 import { STUDIO_EMAIL, T } from '@/components/studio/StudioUI';
 import { CONSENT_VERSION } from './PrivacyNotice';
+import { findPackage } from './packages';
 
 type Lang = 'vi' | 'en';
 type Bi = readonly [string, string];
@@ -124,7 +131,16 @@ const EMPTY: FormState = {
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PHONE_RE = /^[0-9+().\s-]*$/;
 
-export default function RequestForm({ lang }: { lang: Lang }) {
+export default function RequestForm({
+  lang,
+  packageId = null,
+  onClearPackage,
+}: {
+  lang: Lang;
+  /** Gói "Dự án mẫu" khách đã bấm "Chọn gói này" (tuỳ chọn). */
+  packageId?: string | null;
+  onClearPackage?: () => void;
+}) {
   const L = (vi: string, en: string) => (lang === 'en' ? en : vi);
   const p = (b: Bi) => (lang === 'en' ? b[1] : b[0]);
   const reduced = !!useReducedMotion();
@@ -137,6 +153,19 @@ export default function RequestForm({ lang }: { lang: Lang }) {
   const [sending, setSending] = useState(false);
   const [code, setCode] = useState<string | null | undefined>(undefined); // undefined = chưa gửi
   const [copied, setCopied] = useState(false);
+  const pkg = findPackage(packageId);
+
+  // Chọn gói ⇒ tự tick loại sản phẩm của gói (chỉ THÊM, không gỡ thứ khách đã tick).
+  useEffect(() => {
+    if (!pkg) return;
+    setF((s) => {
+      const add = pkg.productTypes.filter((t) => !s.productTypes.includes(t));
+      return add.length ? { ...s, productTypes: [...s.productTypes, ...add] } : s;
+    });
+    setErrors((e) => (e.productTypes ? { ...e, productTypes: undefined } : e));
+    // Phiếu đang ở màn "đã nhận" mà khách chọn gói khác ⇒ mở lại phiếu trống.
+    setCode(undefined);
+  }, [pkg]);
 
   const set = <K extends keyof FormState>(k: K, v: FormState[K]) => {
     setF((s) => ({ ...s, [k]: v }));
@@ -186,7 +215,7 @@ export default function RequestForm({ lang }: { lang: Lang }) {
       securityNote: f.securityLevel === 'NORMAL' ? null : opt(f.securityNote),
       consent: true,
       consentVersion: CONSENT_VERSION,
-      source: 'about/nhan-du-an',
+      source: pkg ? `about/nhan-du-an#goi=${pkg.id}` : 'about/nhan-du-an',
       website: f.website,
     };
     setSending(true);
@@ -194,6 +223,7 @@ export default function RequestForm({ lang }: { lang: Lang }) {
       const res = await projectRequestApi.submit(body);
       setCode(res.data?.data?.code ?? null);
       setF(EMPTY);
+      onClearPackage?.();
       // Khối "đã nhận" chỉ có sau lần render tới ⇒ cuộn ở khung hình kế.
       setTimeout(() => document.getElementById(id('done'))?.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'center' }), 60);
     } catch (err) {
@@ -271,6 +301,12 @@ export default function RequestForm({ lang }: { lang: Lang }) {
                   >
                     <Copy className="w-3.5 h-3.5" /> {copied ? L('Đã chép', 'Copied') : L('Chép mã', 'Copy code')}
                   </button>
+                  <Link
+                    href={`/about/nhan-du-an/tra-cuu?code=${encodeURIComponent(code)}`}
+                    className="inline-flex items-center rounded-md border border-[color:var(--s-line-strong)] px-2.5 py-1 text-xs font-semibold text-[color:var(--s-ink)]"
+                  >
+                    {L('Tra cứu phiếu', 'Track this request')}
+                  </Link>
                 </div>
               </div>
             ) : null}
@@ -354,6 +390,22 @@ export default function RequestForm({ lang }: { lang: Lang }) {
       </Fieldset>
 
       <Fieldset legend={L('2. Dự án', '2. The project')}>
+        {pkg && (
+          <div className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-2 rounded-lg border border-[color:var(--s-ink)] bg-[var(--s-band)] p-3.5">
+            <Package aria-hidden className="h-5 w-5 shrink-0 text-[color:var(--s-accent)]" />
+            <div className="min-w-0 flex-1">
+              <p className="text-[0.75rem] text-[color:var(--s-muted)]">{L('Gói đã chọn từ Dự án mẫu', 'Package chosen from sample projects')}</p>
+              <p className="text-sm font-semibold text-[color:var(--s-ink)] break-words">{p(pkg.name)}</p>
+            </div>
+            <button
+              type="button"
+              onClick={onClearPackage}
+              className="inline-flex items-center gap-1.5 rounded-md border border-[color:var(--s-line-strong)] px-2.5 py-1 text-xs font-semibold text-[color:var(--s-ink)] hover:border-[color:var(--s-ink)]"
+            >
+              <X aria-hidden className="h-3.5 w-3.5" /> {L('Bỏ chọn gói', 'Remove package')}
+            </button>
+          </div>
+        )}
         <div>
           <p id={id('productTypes-l')} className="text-sm font-semibold text-[color:var(--s-ink)]">
             {L('Loại sản phẩm * (chọn được nhiều)', 'Product type * (pick any)')}

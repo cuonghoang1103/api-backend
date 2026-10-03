@@ -25,6 +25,7 @@ import { CinemaProvider, Scene } from './cinema';
 import { CAPABILITIES, PRINCIPLES, PRODUCTS, SIZE_NOTES, type Bi, type ChartNode, type Product } from './content';
 import s from './broadsheet.module.css';
 import ProductStage from './ProductStage';
+import { caseHref } from './caseSlugs';
 
 type Row = [string, number | null];
 
@@ -379,12 +380,20 @@ function ProductScene({ pr, p, L }: { pr: Product; p: (b: Bi) => string; L: (vi:
           </dd>
         </div>
       </dl>
-      {pr.href && pr.linkLabel && (
+      {((pr.href && pr.linkLabel) || caseHref(pr.id)) && (
         <div className={s.actions}>
-          <Link href={pr.href} className={s.link}>
-            {p(pr.linkLabel)}
-            <ArrowRight aria-hidden className="w-4 h-4" />
-          </Link>
+          {pr.href && pr.linkLabel && (
+            <Link href={pr.href} className={s.link}>
+              {p(pr.linkLabel)}
+              <ArrowRight aria-hidden className="w-4 h-4" />
+            </Link>
+          )}
+          {caseHref(pr.id) && (
+            <Link href={caseHref(pr.id)!} className={s.link}>
+              {L('Xem case study', 'Read the case study')}
+              <ArrowRight aria-hidden className="w-4 h-4" />
+            </Link>
+          )}
         </div>
       )}
     </>

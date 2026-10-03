@@ -257,6 +257,12 @@ export const DOCS = {
   sla: T('sla-bao-tri', 'Thoả thuận mức dịch vụ (SLA) bảo trì', 'Maintenance SLA'),
   postmortem: T('bao-cao-su-co-postmortem', 'Báo cáo sự cố (postmortem)', 'Incident postmortem'),
   decommission: T('ke-hoach-ngung-he-thong', 'Kế hoạch ngừng hệ thống & biên bản xoá dữ liệu', 'Decommissioning plan & data deletion record'),
+  nda: T('nda', 'Thoả thuận bảo mật thông tin hai chiều (NDA) — mẫu tham khảo', 'Mutual non-disclosure agreement (NDA) — reference'),
+  dpa: T('dpa', 'Thoả thuận xử lý dữ liệu cá nhân (DPA) — mẫu tham khảo', 'Data processing agreement (DPA) — reference'),
+  quote: T('bao-gia', 'Báo giá — mẫu tham khảo', 'Quotation — reference'),
+  warranty: T('chinh-sach-bao-hanh', 'Chính sách bảo hành sau bàn giao', 'Post-delivery warranty policy'),
+  liquidation: T('bien-ban-thanh-ly-hop-dong', 'Biên bản thanh lý hợp đồng — mẫu tham khảo', 'Contract liquidation record — reference'),
+  comms: T('ke-hoach-giao-tiep', 'Kế hoạch giao tiếp & leo thang', 'Communication & escalation plan'),
 } satisfies Record<string, DocTemplate>;
 
 const D = DOCS;
@@ -347,7 +353,7 @@ const STAGES_RAW: StageInput[] = [
       ['Gửi biên bản tóm tắt trong 24 giờ sau buổi gọi', 'Summary sent within 24 hours of the call'],
       ['Mỗi câu hỏi mở có người phụ trách và hạn trả lời', 'Every open question has an owner and a due date'],
     ],
-    templates: [D.intake],
+    templates: [D.intake, D.nda],
     pitfalls: [
       ['Báo giá ngay trong buổi gọi đầu khi chưa hiểu vấn đề', 'Quoting a price on the first call before understanding the problem'],
       ['Ghi chép rời rạc trong chat, không có phiếu → mất dấu yêu cầu', 'Notes scattered across chats, no ticket → requests get lost'],
@@ -601,7 +607,7 @@ const STAGES_RAW: StageInput[] = [
       ['Chi phí bên thứ ba (cloud, giấy phép, API trả phí) liệt kê riêng', 'Third-party costs (cloud, licences, paid APIs) listed separately'],
       ['Đề xuất có ngày hết hiệu lực', 'Proposal has an expiry date'],
     ],
-    templates: [D.proposal],
+    templates: [D.proposal, D.quote],
     pitfalls: [
       ['Ước lượng một con số duy nhất, không có khoảng', 'Giving a single number with no range'],
       ['Quên phần không phải viết mã: kiểm thử, triển khai, đào tạo, chuyển dữ liệu, quản lý', 'Forgetting non-coding work: testing, deployment, training, migration, management'],
@@ -695,7 +701,7 @@ const STAGES_RAW: StageInput[] = [
       ['Thời điểm chuyển giao quyền sở hữu mã nguồn', 'When source-code ownership transfers'],
       ['Mẫu hợp đồng đã qua luật sư rà soát', 'Contract template reviewed by a lawyer'],
     ],
-    templates: [D.msa, D.sow, D.kickoff],
+    templates: [D.msa, D.sow, D.dpa, D.kickoff],
     pitfalls: [
       ['Dùng mẫu hợp đồng trên mạng không qua luật sư', 'Using an internet contract template without a lawyer'],
       ['Không ghi thời điểm chuyển giao sở hữu trí tuệ → tranh chấp mã nguồn', 'No IP transfer point → disputes over the code'],
@@ -1040,7 +1046,7 @@ const STAGES_RAW: StageInput[] = [
       ['Lịch họp định kỳ đã gửi (daily, demo, retro, báo cáo tuần)', 'Recurring meetings scheduled (daily, demo, retro, weekly report)'],
       ['Mỗi rủi ro có người theo dõi và phương án', 'Each risk has an owner and a response'],
     ],
-    templates: [D.pmp, D.risk, D.weekly],
+    templates: [D.pmp, D.comms, D.risk, D.weekly],
     pitfalls: [
       ['Bắt đầu code trước khi có CI → nợ kỹ thuật ngay từ đầu', 'Coding before CI exists → technical debt from day one'],
       ['Dùng chung CSDL giữa staging và production', 'Sharing a database between staging and production'],
@@ -1737,7 +1743,7 @@ const STAGES_RAW: StageInput[] = [
       ['Quyền sở hữu tên miền và tài khoản cloud đã chuyển cho khách', 'Domain and cloud account ownership transferred to the client'],
       ['Tài liệu người dùng khớp phiên bản đang chạy', 'User docs match the running version'],
     ],
-    templates: [D.runbook, D.handover],
+    templates: [D.runbook, D.handover, D.warranty],
     pitfalls: [
       ['Go-live chiều thứ Sáu', 'Going live on a Friday afternoon'],
       ['Bàn giao mật khẩu qua chat', 'Handing over passwords in chat'],
@@ -1826,7 +1832,7 @@ const STAGES_RAW: StageInput[] = [
       ['Repo nội bộ chuyển chế độ lưu trữ, chỉ đọc', 'Internal repos archived as read-only'],
       ['Khách có bản sao tài liệu cuối cùng', 'Client holds the final copies of all documents'],
     ],
-    templates: [D.retro, D.closure],
+    templates: [D.retro, D.closure, D.liquidation],
     pitfalls: [
       ['Dự án "tắt dần", không có biên bản đóng', 'Projects that fade out with no closure record'],
       ['Quên thu hồi quyền → rủi ro bảo mật cho cả hai bên', 'Forgetting to revoke access → security risk for both sides'],
@@ -1909,7 +1915,7 @@ const STAGES_RAW: StageInput[] = [
       ['Khôi phục thử định kỳ có biên bản', 'Recorded periodic restore tests'],
       ['Theo dõi dung lượng đĩa và chi phí vận hành', 'Disk usage and running cost monitored'],
     ],
-    templates: [D.sla, D.postmortem],
+    templates: [D.sla, D.warranty, D.postmortem],
     pitfalls: [
       ['Không phân biệt lỗi bảo hành với yêu cầu mới', 'Not separating warranty defects from new requests'],
       ['Sửa nóng trên production không qua quy trình', 'Hot-fixing production outside the process'],

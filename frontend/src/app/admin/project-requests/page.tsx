@@ -108,7 +108,8 @@ export default function AdminProjectRequestsPage() {
   const [detail, setDetail] = useState<ProjectRequestDetail | null>(null);
   const [detailLoading, setDetailLoading] = useState(false);
   const [note, setNote] = useState('');
-  const [busy, setBusy] = useState<'status' | 'note' | 'project' | 'roleplay' | null>(null);
+  const [clientNote, setClientNote] = useState('');
+  const [busy, setBusy] = useState<'status' | 'note' | 'clientNote' | 'project' | 'roleplay' | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -138,6 +139,7 @@ export default function AdminProjectRequestsPage() {
       const res = await adminProjectRequestApi.get(id);
       setDetail(res.data.data);
       setNote(res.data.data.internalNote ?? '');
+      setClientNote(res.data.data.clientNote ?? '');
     } catch (err) {
       toast.error(errMsg(err, 'Không tải được phiếu.'));
       setDetail(null);
@@ -180,6 +182,20 @@ export default function AdminProjectRequestsPage() {
       toast.success('Đã lưu ghi chú nội bộ.');
     } catch (err) {
       toast.error(errMsg(err, 'Lưu ghi chú thất bại.'));
+    } finally {
+      setBusy(null);
+    }
+  };
+
+  const saveClientNote = async () => {
+    if (!detail) return;
+    setBusy('clientNote');
+    try {
+      const res = await adminProjectRequestApi.update(detail.id, { clientNote: clientNote.trim() || null });
+      applyDetail(res.data.data);
+      toast.success('Đã lưu lời nhắn — khách thấy ngay ở trang tra cứu.');
+    } catch (err) {
+      toast.error(errMsg(err, 'Lưu lời nhắn thất bại.'));
     } finally {
       setBusy(null);
     }
@@ -495,6 +511,30 @@ export default function AdminProjectRequestsPage() {
                   style={{ ...inputStyle }}
                 >
                   {busy === 'note' ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />} Lưu ghi chú
+                </button>
+
+                {/* Lời nhắn cho khách — CÔNG KHAI ở /about/nhan-du-an/tra-cuu (khách nhập mã + email) */}
+                <label className="block">
+                  <span className="mb-1 block text-[11px] font-semibold uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>
+                    Lời nhắn cho khách (KHÁCH THẤY ở trang tra cứu phiếu)
+                  </span>
+                  <textarea
+                    rows={3}
+                    maxLength={5000}
+                    value={clientNote}
+                    onChange={(e) => setClientNote(e.target.value)}
+                    placeholder="Vd: Đã nhận phiếu, sẽ gọi trao đổi trong tuần này. Đừng ghi đánh giá nội bộ ở đây."
+                    className="w-full rounded-lg border px-3 py-2 text-sm outline-none"
+                    style={inputStyle}
+                  />
+                </label>
+                <button
+                  onClick={() => void saveClientNote()}
+                  disabled={busy === 'clientNote' || clientNote === (detail.clientNote ?? '')}
+                  className="inline-flex items-center gap-2 rounded-xl border px-3 py-1.5 text-sm font-medium disabled:opacity-40"
+                  style={{ ...inputStyle }}
+                >
+                  {busy === 'clientNote' ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />} Lưu lời nhắn cho khách
                 </button>
               </div>
             ) : (

@@ -5916,6 +5916,8 @@ export interface ProjectRequestDetail extends ProjectRequestListItem {
   ip: string | null;
   userAgent: string | null;
   internalNote: string | null;
+  /** Lời nhắn CÔNG KHAI cho khách — hiện ở /about/nhan-du-an/tra-cuu. */
+  clientNote: string | null;
   updatedAt: string;
   workProject: { projectId: number; deleted: boolean; url: string | null; key: string | null; shareUrl: string | null } | null;
 }
@@ -5930,10 +5932,32 @@ export interface CreatedWorkProjectResult {
   counts: { epics: number; tasks: number; gates: number; labels: number };
 }
 
+/** Bản công khai khi khách tự tra cứu — danh sách trắng ở backend (`toPublicView`), không có ghi chú nội bộ. */
+export interface ProjectRequestLookupResult {
+  code: string;
+  status: ProjectRequestStatus;
+  createdAt: string;
+  updatedAt: string;
+  statusChangedAt: string | null;
+  productTypes: ProjectRequestProductType[];
+  organization: string | null;
+  /** ~240 ký tự đầu của phần nhu cầu. */
+  summary: string;
+  clientNote: string | null;
+  /** Link CT Work chỉ đọc — chỉ khi đã tạo dự án và link khách còn hiệu lực. */
+  progressUrl: string | null;
+}
+
 export const projectRequestApi = {
   /** Công khai, không cần đăng nhập. Giới hạn 5 phiếu/giờ/IP. Trả mã phiếu (vd YC-2026-0001). */
   submit: (data: ProjectRequestSubmit) =>
     api.post<{ success: true; data: { code: string | null; received: true } }>('/project-requests', data),
+  /**
+   * Khách tự tra cứu: phải khớp CẢ mã lẫn email (POST để email không vào URL).
+   * Không khớp ⇒ 404 chung; quá 10 lần/15 phút/IP ⇒ 429.
+   */
+  lookup: (data: { code: string; email: string }) =>
+    api.post<{ success: true; data: ProjectRequestLookupResult }>('/project-requests/lookup', data),
 };
 
 export const adminProjectRequestApi = {
@@ -5944,7 +5968,7 @@ export const adminProjectRequestApi = {
     }>('/admin/project-requests', { params }),
   get: (id: number) => api.get<{ success: true; data: ProjectRequestDetail }>(`/admin/project-requests/${id}`),
   /** Đổi trạng thái (trừ PROJECT_CREATED — chỉ nút tạo dự án đặt được) và/hoặc ghi chú nội bộ. */
-  update: (id: number, data: { status?: Exclude<ProjectRequestStatus, 'PROJECT_CREATED'>; internalNote?: string | null }) =>
+  update: (id: number, data: { status?: Exclude<ProjectRequestStatus, 'PROJECT_CREATED'>; internalNote?: string | null; clientNote?: string | null }) =>
     api.patch<{ success: true; data: ProjectRequestDetail }>(`/admin/project-requests/${id}`, data),
   /** Tạo phiếu NHẬP VAI (khách giả lập) để tự luyện quy trình. */
   createRoleplay: () => api.post<{ success: true; data: ProjectRequestDetail }>('/admin/project-requests/roleplay'),

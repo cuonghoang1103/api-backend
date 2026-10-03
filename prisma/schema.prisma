@@ -2918,6 +2918,8 @@ model ProjectRequest {
   /// NEW | QUALIFYING | ACCEPTED | DECLINED | PROJECT_CREATED
   status          String    @default("NEW") @db.VarChar(20)
   internalNote    String?   @map("internal_note") @db.Text
+  /// Lời nhắn admin gửi khách — HIỆN CÔNG KHAI ở /about/nhan-du-an/tra-cuu (khác internalNote, không bao giờ lộ).
+  clientNote      String?   @map("client_note") @db.Text
   workProjectId   Int?      @unique(map: "uk_project_request_work_project") @map("work_project_id")
   /// Phiếu admin tự tạo để luyện nhập vai — KHÔNG phải khách thật.
   isRoleplay      Boolean   @default(false) @map("is_roleplay")

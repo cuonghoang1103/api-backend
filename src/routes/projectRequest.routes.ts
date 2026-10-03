@@ -5,17 +5,21 @@
  *
  * Nghiệp vụ ở `services/projectRequest.service.ts`.
  */
-import { Router, type Request, type Response } from 'express';
+import { Router, type Request, type RequestHandler, type Response } from 'express';
+import rateLimit from 'express-rate-limit';
+import { RedisStore } from 'rate-limit-redis';
 import { z, ZodError } from 'zod';
+import { getRedis } from '../config/redis.js';
 import { prisma } from '../config/database.js';
 import { authenticate, requireAdmin } from '../middleware/auth.js';
 import { asyncHandler, BadRequestError, NotFoundError } from '../middleware/errorHandler.js';
 import { projectRequestLimiter } from '../middleware/orderRateLimit.js';
 import {
   CONSENT_VERSION, MANUAL_STATUSES, PRODUCT_TYPES, PROJECT_REQUEST_STATUSES, SECURITY_LEVELS,
-  createProjectRequest, createWorkProjectFromRequest, roleplaySample, workProjectInfo,
+  createProjectRequest, createWorkProjectFromRequest, lookupProjectRequest, roleplaySample, workProjectInfo,
 } from '../services/projectRequest.service.js';
 import { baoAdmin } from '../services/thongBaoAdmin.service.js';
+import { logger } from '../utils/logger.js';
 import type { ApiResponse } from '../types/index.js';
 
 function parse<T extends z.ZodTypeAny>(schema: T, value: unknown): z.infer<T> {
@@ -94,6 +98,55 @@ publicProjectRequestRouter.post('/', projectRequestLimiter, asyncHandler(async (
   res.status(201).json({ success: true, data: { code: row.code, received: true } });
 }));
 
+// ─── Khách tự tra cứu phiếu ─────────────────────────────────────
+//
+// POST (không GET) để email không nằm trong URL / access log / lịch sử trình duyệt.
+
+/**
+ * Giới hạn CHẶT theo IP — chống dò mã phiếu (YC-2026-0001 là số tuần tự, đoán
+ * được) ghép với email. Cùng khuôn `taoLimiter` ở middleware/orderRateLimit.ts:
+ * bộ đếm Redis, khoá theo IP đuôi phải XFF, FAIL-OPEN khi Redis chết.
+ * Khoá CHỈ theo IP (không theo userId): trang tra cứu là công khai.
+ */
+const lookupLimiter: RequestHandler = (() => {
+  const limiter = rateLimit({
+    windowMs: 15 * 60_000,
+    max: parseInt(process.env.PROJECT_REQUEST_LOOKUP_LIMIT || '10', 10),
+    store: new RedisStore({
+      sendCommand: (async (...args: string[]) => (await getRedis()).sendCommand(args)) as never,
+      prefix: 'rl:projreq-lookup:',
+    }),
+    standardHeaders: true,
+    legacyHeaders: false,
+    keyGenerator: (req) => `ip:${clientIp(req) ?? 'unknown'}`,
+    message: {
+      success: false,
+      message: 'Bạn đã tra cứu quá nhiều lần. Vui lòng thử lại sau 15 phút. / Too many lookups — please try again in 15 minutes.',
+      code: 'LOOKUP_RATE_LIMIT_EXCEEDED',
+    },
+  });
+  return (req, res, next) => limiter(req, res, (err?: unknown) => {
+    if (err) logger.warn('[rate-limit] store lỗi — cho qua', { error: err instanceof Error ? err.message : String(err) });
+    next();
+  });
+})();
+
+const lookupSchema = z.object({
+  code: z.string().max(40),
+  email: z.string().max(254),
+});
+
+/** Một lỗi DUY NHẤT cho mọi trường hợp không khớp — không lộ "mã có tồn tại không". */
+const LOOKUP_NOT_FOUND = 'Không tìm thấy phiếu khớp với mã và email này. / No request matches this code and email.';
+
+publicProjectRequestRouter.post('/lookup', lookupLimiter, asyncHandler(async (req: Request, res: Response<ApiResponse>) => {
+  const body = parse(lookupSchema, req.body);
+  const view = await lookupProjectRequest(body.code, body.email);
+  if (!view) throw new NotFoundError(LOOKUP_NOT_FOUND);
+  res.setHeader('Cache-Control', 'no-store');
+  res.json({ success: true, data: view });
+}));
+
 // ─── Admin ──────────────────────────────────────────────────────
 
 export const adminProjectRequestRouter = Router();
@@ -162,7 +215,9 @@ adminProjectRequestRouter.get('/:id', asyncHandler(async (req: Request, res: Res
 const patchSchema = z.object({
   status: z.enum(MANUAL_STATUSES as [string, ...string[]]).optional(),
   internalNote: z.string().max(20_000).nullable().optional(),
-}).refine((b) => b.status !== undefined || b.internalNote !== undefined, { message: 'Không có gì để cập nhật' });
+  /** Lời nhắn CÔNG KHAI — khách thấy ở trang tra cứu. */
+  clientNote: z.string().max(5_000).nullable().optional(),
+}).refine((b) => b.status !== undefined || b.internalNote !== undefined || b.clientNote !== undefined, { message: 'Không có gì để cập nhật' });
 
 adminProjectRequestRouter.patch('/:id', asyncHandler(async (req: Request, res: Response<ApiResponse>) => {
   const id = idParam(req);
@@ -174,6 +229,7 @@ adminProjectRequestRouter.patch('/:id', asyncHandler(async (req: Request, res: R
   }
   const data: Record<string, unknown> = {};
   if (body.internalNote !== undefined) data.internalNote = body.internalNote?.trim() || null;
+  if (body.clientNote !== undefined) data.clientNote = body.clientNote?.trim() || null;
   if (body.status && body.status !== cur.status) { data.status = body.status; data.statusChangedAt = new Date(); }
   const row = await prisma.projectRequest.update({ where: { id }, data });
   res.json({ success: true, data: { ...row, workProject: await workProjectInfo(row.workProjectId) } });

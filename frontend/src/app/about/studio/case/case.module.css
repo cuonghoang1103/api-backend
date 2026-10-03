@@ -1,0 +1,706 @@
+/* Case study — /about/studio/case/<slug>.
+ * Màu, chữ và khoảng cách lấy từ token `--c-*` của `.paper` (broadsheet.module.css),
+ * nên sáng/tối tự theo `html.theme-dark` ở đó — file này không khai màu nào.
+ * Tiêu đề luôn chữ đứng (font-style: normal). Chịu được 320px: không bảng,
+ * không cột cố định dưới 40rem, chữ dài được bẻ (`overflow-wrap: anywhere`). */
+
+.wrap {
+  max-width: 72rem;
+  margin-inline: auto;
+  padding: 0 var(--space-md) var(--space-3xl);
+  min-width: 0;
+}
+
+/* ── Đầu trang ─────────────────────────────────────────────────────────────── */
+.crumb {
+  padding-top: var(--space-lg);
+}
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  min-height: var(--hit);
+  font-size: 0.875rem;
+  color: var(--c-ink-2);
+  text-decoration: none;
+}
+.hero {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  padding-block: var(--space-lg) var(--space-xl);
+  border-bottom: 1px solid var(--c-rule);
+}
+.eyebrow {
+  margin: 0;
+  font: 600 0.7rem/1.6 var(--font-mono);
+  letter-spacing: 0.12em;
+  color: var(--c-accent);
+}
+.title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-style: normal;
+  font-size: clamp(2.2rem, 4.6vw + 1rem, 4rem);
+  line-height: 1.06;
+  letter-spacing: -0.045em;
+  color: var(--c-ink);
+  overflow-wrap: anywhere;
+}
+.kind {
+  margin: 0;
+  font: 0.75rem/1.5 var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--c-muted);
+}
+.summary {
+  margin: 0;
+  max-width: 64ch;
+  font-size: 1.125rem;
+  line-height: 1.7;
+  color: var(--c-ink-2);
+}
+.caveat {
+  margin: 0;
+  max-width: 64ch;
+  padding: var(--space-sm) var(--space-md);
+  border-left: 3px solid var(--c-accent);
+  background: var(--c-paper-2);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--c-ink);
+}
+.facts {
+  margin: var(--space-sm) 0 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0 var(--space-lg);
+}
+.facts > div {
+  display: grid;
+  gap: var(--space-3xs);
+  padding-block: var(--space-sm);
+  border-top: 1px solid var(--c-rule);
+  min-width: 0;
+}
+.facts dt {
+  font-size: var(--text-xs);
+  color: var(--c-muted);
+}
+.facts dd {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--c-ink);
+  overflow-wrap: anywhere;
+}
+.status {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-xs);
+}
+.status::before {
+  content: '';
+  flex: none;
+  width: 0.45rem;
+  height: 0.45rem;
+  background: var(--c-accent);
+  transform: translateY(-0.1em);
+}
+.links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--space-lg);
+}
+.links > li {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0 var(--space-xs);
+  min-width: 0;
+}
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  min-height: var(--hit);
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--c-ink);
+  text-decoration: underline;
+  text-decoration-color: var(--c-rule-strong);
+  text-underline-offset: 3px;
+}
+.linkNote {
+  font-size: var(--text-xs);
+  color: var(--c-muted);
+}
+@media (hover: hover) and (pointer: fine) {
+  .back:hover,
+  .link:hover,
+  .toc a:hover,
+  .pagerLink:hover .pagerName {
+    color: var(--c-accent);
+    text-decoration-color: var(--c-accent);
+  }
+}
+.back:focus-visible,
+.link:focus-visible,
+.toc a:focus-visible,
+.pagerLink:focus-visible {
+  outline: 2px solid var(--c-accent);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+/* ── Mục lục ───────────────────────────────────────────────────────────────── */
+.toc {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--space-lg);
+  padding-block: var(--space-xs);
+  border-bottom: 1px solid var(--c-rule);
+}
+.toc a {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  min-height: var(--hit);
+  font-size: 0.85rem;
+  color: var(--c-ink-2);
+  text-decoration: none;
+}
+.tocNo {
+  font: 0.7rem/1 var(--font-mono);
+  color: var(--c-muted);
+}
+
+/* ── Một phần ──────────────────────────────────────────────────────────────── */
+.part {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-lg);
+  padding-block: var(--space-2xl) var(--space-xl);
+  border-bottom: 1px solid var(--c-rule);
+  scroll-margin-top: 6rem;
+}
+.partHead {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+  min-width: 0;
+}
+.partNo {
+  font: 600 0.75rem/1 var(--font-mono);
+  color: var(--c-accent);
+  letter-spacing: 0.08em;
+}
+.partTitle {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-style: normal;
+  font-size: clamp(1.5rem, 1.4vw + 1.1rem, 2.1rem);
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+  color: var(--c-ink);
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+.partBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  min-width: 0;
+}
+.prose {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  max-width: 68ch;
+}
+.prose p,
+.lede {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.75;
+  color: var(--c-ink-2);
+  max-width: 68ch;
+}
+.subhead {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-style: normal;
+  font-size: 1.1rem;
+  line-height: 1.35;
+  color: var(--c-ink);
+}
+.caption {
+  font-size: var(--text-xs);
+  line-height: 1.55;
+  color: var(--c-muted);
+}
+.date {
+  margin: 0;
+  font: 0.75rem/1.5 var(--font-mono);
+  color: var(--c-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Thẻ (người dùng, tính năng) ───────────────────────────────────────────── */
+.cards {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr));
+  gap: var(--space-md);
+}
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding: var(--space-md) var(--space-md) var(--space-lg);
+  border: 1px solid var(--c-rule);
+  border-radius: 14px;
+  background: var(--c-paper-2);
+  min-width: 0;
+}
+.cardTitle {
+  margin: 0;
+  font-weight: 600;
+  font-style: normal;
+  font-size: 1rem;
+  line-height: 1.4;
+  color: var(--c-ink);
+}
+.cardBody {
+  margin: 0;
+  font-size: 0.925rem;
+  line-height: 1.65;
+  color: var(--c-ink-2);
+}
+
+/* ── Sơ đồ kiến trúc: tầng chồng tầng, mũi tên có nhãn giữa hai tầng ─────── */
+.arch {
+  margin: 0;
+  padding: var(--space-md);
+  border: 1px solid var(--c-rule);
+  border-radius: 16px;
+  background: var(--c-paper-2);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  min-width: 0;
+}
+.tiers {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.tierItem {
+  min-width: 0;
+}
+.tier {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-xs);
+  min-width: 0;
+}
+.tierLabel {
+  margin: 0;
+  font: 600 0.7rem/1.5 var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--c-accent);
+}
+.nodes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  min-width: 0;
+}
+.node {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1 1 9rem;
+  min-width: 0;
+  padding: var(--space-xs) var(--space-sm);
+  border: 1px solid var(--c-rule-strong);
+  border-radius: 10px;
+  background: var(--c-paper);
+}
+.nodeName {
+  font-weight: 600;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  color: var(--c-ink);
+  overflow-wrap: anywhere;
+}
+.nodeNote {
+  font-size: 0.75rem;
+  line-height: 1.45;
+  color: var(--c-muted);
+  overflow-wrap: anywhere;
+}
+.flow {
+  display: flex;
+  align-items: stretch;
+  gap: var(--space-sm);
+  min-height: 2.5rem;
+  padding-left: var(--space-md);
+}
+.flowLine {
+  flex: none;
+  width: 0;
+  border-left: 1px solid var(--c-accent);
+}
+.flowLabel {
+  align-self: center;
+  font: 0.72rem/1.4 var(--font-mono);
+  color: var(--c-ink-2);
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+
+/* Đường triển khai / phát hành: chuỗi bước đánh số. */
+.pipeline {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+.steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-xs);
+}
+.step {
+  display: grid;
+  grid-template-columns: 1.75rem minmax(0, 1fr);
+  gap: var(--space-sm);
+  align-items: start;
+  padding: var(--space-xs) 0;
+  border-top: 1px dashed var(--c-rule-strong);
+}
+.step:first-child {
+  border-top: 0;
+}
+.stepNo {
+  display: grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 999px;
+  border: 1px solid var(--c-accent);
+  font: 600 0.75rem/1 var(--font-mono);
+  color: var(--c-accent);
+}
+.stepText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.stepName {
+  font-weight: 600;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: var(--c-ink);
+}
+
+/* ── Quyết định, sự cố ─────────────────────────────────────────────────────── */
+.entries {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+}
+.entry {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--c-rule-strong);
+  min-width: 0;
+}
+.entryTitle {
+  margin: 0;
+  display: flex;
+  gap: var(--space-sm);
+  align-items: baseline;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-style: normal;
+  font-size: 1.2rem;
+  line-height: 1.35;
+  letter-spacing: -0.015em;
+  color: var(--c-ink);
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+.entryNo {
+  flex: none;
+  font: 600 0.75rem/1 var(--font-mono);
+  color: var(--c-accent);
+}
+.triple {
+  margin: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-md);
+}
+.triple > div {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+  min-width: 0;
+}
+.triple dt {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--c-accent);
+}
+.triple dd {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--c-ink-2);
+  overflow-wrap: anywhere;
+}
+.risks {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr));
+  gap: var(--space-xs) var(--space-lg);
+}
+.risks > li {
+  display: grid;
+  grid-template-columns: var(--space-md) minmax(0, 1fr);
+  gap: var(--space-xs);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--c-ink);
+}
+.risks > li::before {
+  content: '';
+  width: 0.45rem;
+  height: 0.45rem;
+  margin-top: 0.6em;
+  background: var(--c-accent);
+}
+
+/* ── Con số ────────────────────────────────────────────────────────────────── */
+.metricGroups {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-xl);
+}
+.metricGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  min-width: 0;
+}
+.metricHead {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3xs);
+  padding-bottom: var(--space-xs);
+  border-bottom: 1px solid var(--c-rule-strong);
+}
+.ledger {
+  margin: 0;
+}
+.ledgerRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding-block: var(--space-sm);
+  border-bottom: 1px solid var(--c-rule);
+}
+.ledgerRow dt {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.ledgerLabel {
+  font-size: 0.95rem;
+  color: var(--c-ink);
+}
+.how {
+  font: 0.7rem/1.45 var(--font-mono);
+  color: var(--c-muted);
+  overflow-wrap: anywhere;
+}
+.ledgerRow dd {
+  margin: 0;
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: 1.15rem;
+  color: var(--c-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Công nghệ ─────────────────────────────────────────────────────────────── */
+.stack {
+  margin: 0;
+  display: grid;
+}
+.stackRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-3xs);
+  padding-block: var(--space-sm);
+  border-bottom: 1px solid var(--c-rule);
+}
+.stackRow dt {
+  font-size: var(--text-xs);
+  color: var(--c-muted);
+}
+.stackRow dd {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--c-ink);
+  overflow-wrap: anywhere;
+}
+
+/* ── Kết ───────────────────────────────────────────────────────────────────── */
+.end {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+  padding-top: var(--space-xl);
+}
+.pager {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--space-md);
+}
+.pagerLink {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+  min-height: var(--hit);
+  padding-block: var(--space-xs);
+  text-decoration: none;
+  min-width: 0;
+}
+.pagerNext {
+  align-items: flex-end;
+  text-align: right;
+}
+.pagerDir {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  font-size: var(--text-xs);
+  color: var(--c-muted);
+}
+.pagerName {
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--c-ink);
+  overflow-wrap: anywhere;
+}
+.cta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  padding: var(--space-lg) var(--space-md);
+  border: 1px solid var(--c-rule);
+  border-radius: 18px;
+  background: var(--c-paper-2);
+}
+.ctaText {
+  margin: 0;
+  max-width: 60ch;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--c-ink);
+}
+.ctaLinks {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm) var(--space-lg);
+}
+
+/* ── ≥ 40rem ───────────────────────────────────────────────────────────────── */
+@media (min-width: 40rem) {
+  .wrap {
+    padding-inline: var(--space-xl);
+  }
+  .facts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .arch {
+    padding: var(--space-lg);
+  }
+  .tier {
+    grid-template-columns: 8.5rem minmax(0, 1fr);
+    gap: var(--space-md);
+    align-items: center;
+  }
+  .flow {
+    padding-left: calc(8.5rem + var(--space-md) + var(--space-md));
+  }
+  .stackRow {
+    grid-template-columns: 11rem minmax(0, 1fr);
+    gap: var(--space-md);
+  }
+  .cta {
+    padding: var(--space-xl);
+  }
+}
+
+/* ── ≥ 56rem: số + tiêu đề phần đứng cột trái ──────────────────────────────── */
+@media (min-width: 56rem) {
+  .part {
+    grid-template-columns: 15rem minmax(0, 1fr);
+    gap: var(--space-2xl);
+  }
+  .partHead {
+    position: sticky;
+    top: 6rem;
+    align-self: start;
+  }
+  .triple {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-lg);
+  }
+  .steps {
+    grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+    gap: var(--space-md);
+  }
+  .step {
+    grid-template-columns: 1fr;
+    border-top: 0;
+    border-left: 1px dashed var(--c-rule-strong);
+    padding: 0 0 0 var(--space-sm);
+  }
+  .metricGroups {
+    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+  }
+}
+@media (min-width: 64rem) {
+  .facts {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}

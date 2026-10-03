@@ -192,9 +192,20 @@ export function runCode(code: string, timeoutMs = 6000): Promise<{ ok: boolean; 
       resolve(r);
     };
     try {
-      const blob = new Blob([WORKER_SRC], { type: 'application/javascript' });
-      url = URL.createObjectURL(blob);
-      worker = new Worker(url);
+      /* App desktop (04/10/2026): CSP của app cấm `new Function` (không có
+         'unsafe-eval') và worker dựng từ `blob:` THỪA KẾ CSP đó ⇒ "Failed to
+         construct 'Worker'". App đưa một tệp worker hộp cát có CSP RIÊNG (được eval,
+         không được ra mạng) qua `__CT_HOP_CAT_WORKER__`; nạp mã worker vào nó bằng
+         tin nhắn đầu tiên. Trên web biến này không có ⇒ đường blob như cũ. */
+      const hopCat = (globalThis as { __CT_HOP_CAT_WORKER__?: string }).__CT_HOP_CAT_WORKER__;
+      if (hopCat) {
+        worker = new Worker(hopCat);
+        worker.postMessage({ __napMa: WORKER_SRC });
+      } else {
+        const blob = new Blob([WORKER_SRC], { type: 'application/javascript' });
+        url = URL.createObjectURL(blob);
+        worker = new Worker(url);
+      }
       const timer = setTimeout(() => finish({ ok: false, error: 'Execution timed out — an infinite loop? (6s limit)', commands: [] }), timeoutMs);
       worker.onmessage = (ev: MessageEvent) => { clearTimeout(timer); const d = ev.data as { ok: boolean; error?: string; commands?: Cmd[] }; finish({ ok: d.ok, error: d.error, commands: d.commands || [] }); };
       worker.onerror = (ev: ErrorEvent) => { clearTimeout(timer); finish({ ok: false, error: ev.message || 'Worker error', commands: [] }); };

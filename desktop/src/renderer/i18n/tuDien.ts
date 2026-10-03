@@ -36,6 +36,17 @@ export const TU_DIEN: Record<string, string> = {
   'Phòng thi': 'Exam Room',
   'Ngoại ngữ': 'Languages',
   'Học kỳ': 'Semester',
+  // Courses — thanh lọc (04/10/2026).
+  'Cấp độ': 'Level',
+  'Mọi cấp độ': 'All levels',
+  'Mới nhất': 'Newest',
+  'Nhiều bài nhất': 'Most lessons',
+  'Tên A → Z': 'Name A → Z',
+  'Đang học': 'In progress',
+  'Tất cả khoá học': 'All courses',
+  'Bỏ lọc': 'Clear filters',
+  'Không khoá nào khớp bộ lọc.': 'No course matches the filters.',
+  'Chưa có khoá học nào được đăng.': 'No courses published yet.',
   // Bạn bè kiểu desktop (04/10/2026).
   'Kết nối với người khác trên cuongthai.com': 'Connect with others on cuongthai.com',
   'Tìm theo tên, hoặc kết bạn với người được gợi ý': 'Search by name, or add someone suggested',

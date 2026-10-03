@@ -110,8 +110,12 @@ export function HocVienPage() {
         try {
           const r = await swr<Mon[]>({
             userId,
-            key: `academy:mon:${s.id}`,
-            fetcher: () => api.request<Mon[]>(`/api/v1/courses/semester/${s.id}`),
+            key: `academy:mon-gon:${s.id}`,
+            /* `?gon=1` (04/10/2026): danh sách chỉ đọc tên/mã/ảnh/số bài. Bản đầy
+               đủ kéo cả cây chương→bài của MỌI môn — đo thật 9 kỳ = 12 MB JSON, trang
+               hiện "0 môn" mấy giây trong lúc chờ và giật khi parse. Bản gọn ~1 MB.
+               Chi tiết một môn vẫn tự tải `/courses/:slug` khi mở (monHoc.tsx). */
+            fetcher: () => api.request<Mon[]>(`/api/v1/courses/semester/${s.id}?gon=1`),
             online,
             ttlMs: 30 * 60 * 1000,
           });

@@ -75,6 +75,8 @@ export interface Mon {
   sections?: Muc[] | null;
   isEnrolled?: boolean;
   enrollmentProgress?: number | null;
+  /** Danh mục của khoá tự soạn (`/courses` trả kèm) — dùng để lọc ở trang Courses. */
+  categoryName?: string | null;
 }
 
 export interface Muc {
@@ -119,7 +121,7 @@ export function TheMon({ mon, onMo }: { mon: Mon; onMo: () => void }) {
     <button type="button" className="ct-hv-the" onClick={onMo}>
       <span className="ct-hv-the-anh">
         {mon.thumbnailUrl
-          ? <img src={mon.thumbnailUrl} alt="" loading="lazy" />
+          ? <img src={mon.thumbnailUrl} alt="" loading="lazy" decoding="async" />
           : <span className="ct-gn-anh-trong"><BookOpen size={20} aria-hidden /></span>}
         {mon.courseCode && <span className="ct-hv-ma">{mon.courseCode}</span>}
       </span>

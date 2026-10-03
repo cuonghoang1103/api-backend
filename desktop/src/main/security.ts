@@ -173,6 +173,32 @@ function contentSecurityPolicy(): string {
 }
 
 /**
+ * Worker hộp cát chạy mã NGƯỜI DÙNG viết (trang Thuật toán dựng thuật toán từ
+ * mã gõ tay, bằng `new Function`). Worker nạp từ URL dùng CSP của CHÍNH phản
+ * hồi chở nó, không thừa kế của trang — nên chỉ tệp này được `'unsafe-eval'`:
+ *  • `connect-src 'none'`: mã lạ không gọi được mạng (không fetch, không
+ *    WebSocket, không importScripts từ ngoài);
+ *  • là worker: không có DOM, không có `window.cuongthai`, không đọc được
+ *    localStorage hay cookie của app.
+ * Khớp CHÍNH XÁC đường dẫn — không phải mọi tệp `.js`.
+ */
+const CSP_HOP_CAT_WORKER = [
+  "default-src 'none'",
+  "script-src 'unsafe-eval'",
+  "connect-src 'none'",
+].join('; ');
+
+function laHopCatWorker(rawUrl: string): boolean {
+  try {
+    const u = new URL(rawUrl);
+    return u.pathname === '/hop-cat-worker.js'
+      && (u.origin === APP_ORIGIN || (IS_DEV && u.origin === DEV_SERVER_URL));
+  } catch {
+    return false;
+  }
+}
+
+/**
  * Áp các chính sách cấp session. Gọi một lần sau khi app ready.
  */
 export function applySessionPolicies(): void {
@@ -182,7 +208,9 @@ export function applySessionPolicies(): void {
     callback({
       responseHeaders: {
         ...details.responseHeaders,
-        'Content-Security-Policy': [contentSecurityPolicy()],
+        'Content-Security-Policy': [
+          laHopCatWorker(details.url) ? CSP_HOP_CAT_WORKER : contentSecurityPolicy(),
+        ],
         'X-Content-Type-Options': ['nosniff'],
       },
     });

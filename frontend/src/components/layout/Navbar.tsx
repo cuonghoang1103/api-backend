@@ -691,7 +691,7 @@ export default function Navbar() {
           Facebook Messenger app, which has no site tab bar while chatting). */}
       <div
         className={`app-bottom-nav sm:hidden fixed bottom-0 right-0 z-[61] transition-[left] duration-300 ${
-          pathname?.startsWith('/messages') ? 'hidden' : ''
+          (pathname?.startsWith('/messages') || pathname === '/about/studio' || pathname?.startsWith('/about/quy-trinh') || pathname === '/about/nhan-du-an') ? 'hidden' : ''
         }`}
         style={{
           background: 'var(--bg-overlay)',

@@ -27,7 +27,10 @@ import {
 import { CROSS_CUTTING, LOOP, PHASES, STAGES, pick } from './data';
 import { DEPARTMENTS } from './departments';
 import ProcessRing from './ProcessRing';
+import PhaseExplorer from './PhaseExplorer';
 import PhaseTimeline from './PhaseTimeline';
+import s from '@/components/studio/showroom.module.css';
+import ScrollReveal from '@/components/studio/ScrollReveal';
 
 type Bi = readonly [string, string];
 
@@ -82,40 +85,40 @@ export default function ProcessPage() {
   const loopTo = STAGES[LOOP.to];
 
   return (
-    <StudioShell step={3}>
+    <StudioShell step={3} className={s.page}>
+      <ScrollReveal />
       {/* ── Mở đầu + vòng 3D ───────────────────────────────────────────── */}
-      <section className="pt-14 sm:pt-20 pb-10">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="grid gap-8 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-16 items-end">
+      <section className={s.hero}>
+        <div className={s.heroInner}>
+          <div>
             <div className="min-w-0">
               <p className={T.label}>{L('Quy trình', 'Process')}</p>
-              <h1 className={`${T.display} mt-4`}>
-                {L(`${counts.stages} giai đoạn, từ phiếu yêu cầu tới ngày ngừng hệ thống.`, `${counts.stages} stages, from the first request to the day the system is retired.`)}
+              <h1 className={s.heroTitle}>
+                {L('Rõ từng bước. Rõ phần bàn giao.', 'Clear steps. Tangible handovers.')}
               </h1>
             </div>
-            <p className={`${T.lead} min-w-0`}>
+            <p className={s.heroLead}>
               {L(
-                `Mỗi giai đoạn có đội phụ trách, ma trận trách nhiệm RACI, điều kiện vào/ra và mẫu tài liệu. ${counts.phases} pha, ${counts.deliverables} đầu ra bàn giao, ${counts.templates} mẫu tài liệu tải được.`,
-                `Each stage has an owning team, a RACI responsibility matrix, entry/exit criteria and document templates. ${counts.phases} phases, ${counts.deliverables} deliverables, ${counts.templates} downloadable templates.`,
+                `Từ buổi trao đổi đầu tiên đến khi sản phẩm vận hành. Khám phá ${counts.phases} pha để biết ai phụ trách, bạn nhận được gì và khi nào công việc sẵn sàng đi tiếp.`,
+                `From the first conversation to a running product. Explore ${counts.phases} phases to see who owns the work, what you receive and when it is ready to move forward.`,
               )}
             </p>
           </div>
         </div>
-        <div className="max-w-6xl mx-auto px-4 mt-6">
-          <ProcessRing stages={STAGES} selected={selected} onSelect={setSelected} lang={lang} reduced={reduced} />
-          <ul className="mt-6 flex flex-wrap justify-center gap-x-5 gap-y-2">
-            {PHASES.map((p) => (
-              <li key={p.key} className="flex items-center gap-1.5 text-[0.78rem] text-[color:var(--s-muted)]">
-                <span className="w-2 h-2 rounded-full" style={{ background: p.color }} />
-                {pick(p.label, lang)}
-              </li>
-            ))}
-          </ul>
+        <div data-scroll-reveal className="max-w-[1120px] mx-auto mt-12">
+          <PhaseExplorer lang={lang} />
+          <details className={`mt-8 ${s.disclosure}`}>
+            <summary className="cursor-pointer min-h-11 py-3 font-medium">{L(`Khám phá ${counts.stages} giai đoạn trong không gian 3D`, `Explore ${counts.stages} stages in 3D`)}</summary>
+            <ProcessRing stages={STAGES} selected={selected} onSelect={setSelected} lang={lang} reduced={reduced} />
+          </details>
+
         </div>
       </section>
 
       {/* ── Đường thời gian theo pha ──────────────────────────────────── */}
-      <section id="trinh-tu" className="scroll-mt-28 pt-12 sm:pt-16 border-t border-[color:var(--s-line)]">
+      <section id="trinh-tu" className="scroll-mt-28 max-w-6xl mx-auto px-4">
+        <details className={s.disclosure}>
+        <summary>{L('Xem toàn bộ trình tự và vòng cải tiến', 'View the full sequence and improvement loop')}</summary>
         <div className="max-w-6xl mx-auto px-4">
           <SectionHeader
             label={L('Trình tự', 'Sequence')}
@@ -131,6 +134,7 @@ export default function ProcessPage() {
           />
         </div>
         <PhaseTimeline stages={STAGES} lang={lang} reduced={reduced} />
+        </details>
       </section>
 
       {/* ── Khung chuẩn tham chiếu ────────────────────────────────────── */}

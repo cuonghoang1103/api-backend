@@ -32,8 +32,8 @@ export function useStudioLang() {
 export const T = {
   /** Tiêu đề trang — chữ có chân Fraunces (đã nạp sẵn ở layout gốc). */
   display:
-    'font-editorial font-medium tracking-[-0.015em] text-[color:var(--s-ink)] text-[2.35rem] leading-[1.08] sm:text-[3.1rem] lg:text-[3.75rem]',
-  h2: 'font-editorial font-medium tracking-[-0.01em] text-[color:var(--s-ink)] text-[1.75rem] leading-[1.15] sm:text-[2.15rem]',
+    'font-heading font-semibold tracking-[-0.04em] text-[color:var(--s-ink)] text-[2.35rem] leading-[1.08] sm:text-[3.1rem] lg:text-[3.75rem]',
+  h2: 'font-heading font-semibold tracking-[-0.03em] text-[color:var(--s-ink)] text-[1.75rem] leading-[1.15] sm:text-[2.15rem]',
   h3: 'font-heading font-semibold text-[color:var(--s-ink)] text-[1.05rem] leading-snug',
   lead: 'text-[1.05rem] sm:text-[1.15rem] leading-[1.7] text-[color:var(--s-body)]',
   body: 'text-[0.95rem] leading-[1.7] text-[color:var(--s-body)]',
@@ -97,9 +97,21 @@ export function FlowSteps({ current }: { current: 1 | 2 | 3 }) {
 }
 
 // ─── Khung trang ───────────────────────────────────────────────────────────
-export function StudioShell({ step, children }: { step: 1 | 2 | 3; children: React.ReactNode }) {
+/**
+ * `className` (tuỳ chọn) gắn THÊM vào gốc — để một trang đè bộ token `--s-*`
+ * của riêng nó (vd /about/studio bản giấy ngà). Không truyền thì y như cũ.
+ */
+export function StudioShell({
+  step,
+  children,
+  className,
+}: {
+  step: 1 | 2 | 3;
+  children: React.ReactNode;
+  className?: string;
+}) {
   return (
-    <div className={s.root}>
+    <div className={className ? `${s.root} ${className}` : s.root}>
       {/* Thanh điều hướng cố định của site cao 4rem. */}
       <div className="pt-16">
         <FlowSteps current={step} />
@@ -144,8 +156,42 @@ export function SectionHeader({ title, lead, label }: { title: string; lead?: Re
   );
 }
 
-/** Khối chuyển sang trang kế trong luồng. */
-export function NextStep({ href, step, title, desc, cta }: { href: string; step: string; title: string; desc: string; cta: string }) {
+/**
+ * Khối chuyển sang trang kế trong luồng.
+ * `variant="plain"`: chỉ dựng khung ngữ nghĩa (không lớp Tailwind), mỗi mảnh có
+ * `data-part` để trang gọi tự tạo kiểu — /about/studio dùng cách này. Mặc định
+ * `card` giữ nguyên giao diện cho hai trang còn lại.
+ */
+export function NextStep({
+  href,
+  step,
+  title,
+  desc,
+  cta,
+  variant = 'card',
+  className,
+}: {
+  href: string;
+  step: string;
+  title: string;
+  desc: string;
+  cta: string;
+  variant?: 'card' | 'plain';
+  className?: string;
+}) {
+  if (variant === 'plain') {
+    return (
+      <Link href={href} className={className} data-part="root">
+        <span data-part="step">{step}</span>
+        <span data-part="title">{title}</span>
+        <span data-part="desc">{desc}</span>
+        <span data-part="cta">
+          {cta}
+          <ArrowRight aria-hidden className="w-4 h-4" />
+        </span>
+      </Link>
+    );
+  }
   return (
     <section className="py-16 sm:py-20">
       <div className="max-w-6xl mx-auto px-4">

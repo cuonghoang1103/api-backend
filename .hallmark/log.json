@@ -1,4 +1,39 @@
 {
+  "entries": [
+    {
+      "date": "2026-10-01",
+      "route": "/about/studio",
+      "macrostructure": "Feature Stack",
+      "genre": "editorial",
+      "theme": "custom",
+      "theme_axes": "light / roman-serif / warm",
+      "vibe": "ivory broadsheet, oxblood ink, cinematic",
+      "enrichment": "Tier A — scroll-linked CSS 3D scene cuts (framer-motion useScroll/useTransform) + typographic product diagrams",
+      "brief": "Redesign step 1 of 3 of the client-intake flow for enterprise IT leads: sticky chapter pane + 3D scenes (profile, counted figures, 5 real products, stack, commitments) → primary 'see the process', secondary 'send a request'.",
+      "files": [
+        "frontend/src/app/about/studio/broadsheet.module.css",
+        "frontend/src/app/about/studio/cinema.tsx",
+        "frontend/src/app/about/studio/content.ts",
+        "frontend/src/app/about/studio/StudioClient.tsx",
+        "frontend/src/app/about/studio/layout.tsx",
+        "frontend/src/components/studio/StudioUI.tsx (additive: StudioShell className, NextStep variant='plain')"
+      ],
+      "fonts": [
+        "Newsreader Variable (opsz, roman)",
+        "Be Vietnam Pro 400/600",
+        "JetBrains Mono (figures + provenance only)"
+      ],
+      "preEmitCritique": {
+        "philosophy": 4,
+        "hierarchy": 4,
+        "execution": 4,
+        "specificity": 4,
+        "restraint": 4,
+        "variety": 5
+      },
+      "motionRationale": "Scroll-linked on purpose: user asked for film-like 3D scene cuts; Feature Stack is built on scroll position. Reduced motion = 140ms opacity only; <48rem wide or <42rem tall = flat stack."
+    }
+  ],
   "updatedAt": "2026-08-26",
   "route": "/",
   "contract": {
@@ -6,7 +41,11 @@
     "macrostructure": "Split Studio (iterated)",
     "tokens": "frontend/tokens.css",
     "enrichment": "real 3D capture, CSS pointer tilt and a 2.5D shaded robot that enters and leaves through a hatch cut into the header rail",
-    "motionPrimitives": ["entrance", "pointer tilt", "narrative mascot cycle (rise · dribble · kick · turn · descend)"],
+    "motionPrimitives": [
+      "entrance",
+      "pointer tilt",
+      "narrative mascot cycle (rise · dribble · kick · turn · descend)"
+    ],
     "performanceGuardrails": [
       "no WebGL or 3D runtime on homepage",
       "no Lottie assistant payload on homepage",
@@ -44,7 +83,14 @@
       "six real statistics plus a counted-at provenance line",
       "01/02/03 rail index restored"
     ],
-    "verifiedViewports": [320, 375, 414, 768, 1280, 1920],
+    "verifiedViewports": [
+      320,
+      375,
+      414,
+      768,
+      1280,
+      1920
+    ],
     "verifiedFrames": "28 paused samples of the 24s cycle rendered in both themes (headless Chromium, animation-delay sampling)"
   }
 }

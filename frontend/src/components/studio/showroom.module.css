@@ -1,0 +1,95 @@
+/* Scoped to the intake and process landing pages, not their documentation. */
+.page.page {
+  --s-paper: #fff;
+  --s-band: #f5f5f7;
+  --s-raise: #fff;
+  --s-ink: #1d1d1f;
+  --s-ink-2: #343438;
+  --s-body: #515154;
+  --s-muted: #626267;
+  --s-accent: #245ac4;
+  --s-line: #dedee2;
+  --s-line-strong: #a6a6ad;
+  --s-on-ink: #fff;
+}
+:global(html.theme-dark) .page.page {
+  --s-paper: #101012;
+  --s-band: #19191c;
+  --s-raise: #242427;
+  --s-ink: #f5f5f7;
+  --s-ink-2: #dedee2;
+  --s-body: #bdbdc4;
+  --s-muted: #a5a5ad;
+  --s-accent: #91c7ff;
+  --s-line: #36363c;
+  --s-line-strong: #707078;
+  --s-on-ink: #101012;
+}
+.hero { padding: clamp(56px, 8vw, 112px) 24px 64px; }
+.heroInner { max-width: 1120px; margin: auto; }
+.heroTitle { max-width: 900px; margin: 20px 0 24px; font-size: clamp(2.75rem, 6vw, 5rem); font-weight: 600; line-height: 1.12; letter-spacing: -.055em; color: var(--s-ink); text-wrap: balance; }
+.heroLead { max-width: 620px; font-size: clamp(1rem, 1.8vw, 1.25rem); line-height: 1.65; color: var(--s-body); }
+.actions { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 32px; }
+.actions a { border-radius: 999px; min-height: 48px; padding-inline: 24px; }
+.steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 32px; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--s-line); }
+.stepNumber { display: block; margin-bottom: 20px; color: var(--s-muted); font-size: .8rem; font-variant-numeric: tabular-nums; }
+.stepTitle { font-weight: 600; font-size: 1rem; color: var(--s-ink); margin-bottom: 8px; }
+.services { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+.service { padding: clamp(24px, 4vw, 48px); border-radius: 24px; background: var(--s-raise); }
+.service h3 { font-size: clamp(1.5rem, 2.5vw, 2rem); font-weight: 600; letter-spacing: -.035em; line-height: 1.2; color: var(--s-ink); }
+.explorer { display: grid; grid-template-columns: 250px minmax(0, 1fr); border-radius: 24px; background: var(--s-band); overflow: hidden; }
+.phaseNav { padding: 24px; display: flex; flex-direction: column; gap: 8px; }
+.phaseButton { display: flex; align-items: center; gap: 16px; min-height: 48px; text-align: left; padding: 12px 16px; border-radius: 12px; font-size: .9rem; color: var(--s-body); transition: background .18s, color .18s; }
+.phaseButton:hover { background: var(--s-raise); }
+.phaseButton[aria-pressed='true'] { background: #245ac4; color: #fff; box-shadow: 0 4px 14px #245ac426; }
+.phaseButton span { font-size: .75rem; font-variant-numeric: tabular-nums; }
+.phaseContent { padding: clamp(24px, 4vw, 48px); background: var(--s-raise); margin: 8px; border-radius: 18px; min-width: 0; }
+.phaseHeading { margin-bottom: 24px; font-size: clamp(1.6rem, 3vw, 2.5rem); font-weight: 600; letter-spacing: -.035em; color: var(--s-ink); }
+.stage { display: grid; grid-template-columns: 32px minmax(0, 1fr) 24px; gap: 16px; padding: 24px 0; border-top: 1px solid var(--s-line); color: var(--s-ink); }
+.stageNumber { padding-top: 4px; font-size: .75rem; color: var(--s-muted); font-variant-numeric: tabular-nums; }
+.stage h3 { font-size: 1.15rem; font-weight: 600; line-height: 1.4; }
+.stage p { margin-top: 12px; font-size: .95rem; line-height: 1.7; color: var(--s-body); }
+.stage small { display: block; margin-top: 16px; font-size: .8rem; color: var(--s-muted); }
+.stage:hover h3 { text-decoration: underline; text-underline-offset: 4px; }
+.disclosure { border-block: 1px solid var(--s-line); padding-block: 16px; }
+.disclosure summary { cursor: pointer; padding: 16px 0; font-weight: 600; color: var(--s-ink); }
+@media (max-width: 767px) {
+  .hero { padding-inline: 20px; }
+  .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 24px; margin-top: 48px; }
+  .stepNumber { margin-bottom: 12px; }
+  .services { grid-template-columns: 1fr; }
+  .explorer { grid-template-columns: 1fr; }
+  .phaseNav { flex-direction: row; overflow-x: auto; padding: 16px; }
+  .phaseButton { flex-shrink: 0; }
+  .phaseContent { padding: 24px 20px; }
+  .stage { grid-template-columns: 24px minmax(0, 1fr) 16px; gap: 8px; }
+}
+.heroInner { animation: arrive .7s cubic-bezier(.2,.7,.2,1) both; }
+.heroTitle { border-left: 3px solid var(--s-accent); padding-left: 24px; }
+.actions a, .service, .stage { transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease; }
+.actions a:first-child { background: #245ac4; color: #fff; border-color: #245ac4; }
+.service { border: 1px solid var(--s-line); box-shadow: 0 8px 30px #16345906; }
+.service, .phaseButton { --tone: #245ac4; --wash: #eaf1ff; }
+.service:nth-child(4n+2), .phaseButton:nth-child(4n+2) { --tone: #7651bc; --wash: #f1ecfc; }
+.service:nth-child(4n+3), .phaseButton:nth-child(4n+3) { --tone: #08786c; --wash: #e4f5ef; }
+.service:nth-child(4n+4), .phaseButton:nth-child(4n+4) { --tone: #b14f2d; --wash: #fff0e7; }
+.service { border-top: 3px solid var(--tone); background: var(--wash); }
+.service h3 { color: var(--tone); }
+.phaseButton > span { color: var(--tone); }
+.phaseButton[aria-pressed='true'] { color: var(--tone); background: var(--wash); border-left: 3px solid var(--tone); }
+:global(html.theme-dark) .page .service { background: color-mix(in srgb, var(--tone) 12%, #111722); }
+:global(html.theme-dark) .page .service h3 { color: var(--wash); }
+:global(html.theme-dark) .page .phaseButton:not([aria-pressed='true']) > span { color: #b9cafa; }
+@media (hover: hover) { .page .service:hover { border-color: var(--tone); box-shadow: 0 18px 40px color-mix(in srgb, var(--tone) 15%, transparent); } }
+.phaseButton:focus-visible, .actions a:focus-visible, .stage:focus-visible { outline: 2px solid var(--s-accent); outline-offset: 5px; }
+@media (hover: hover) {
+  .service:hover { transform: translateY(-5px); border-color: var(--s-accent); box-shadow: 0 18px 40px #16345914; }
+  .actions a:hover { transform: translateY(-2px); box-shadow: 0 8px 20px #245ac425; }
+  .stage:hover { transform: translateX(4px); }
+}
+@keyframes arrive { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) {
+  .heroInner { animation: none; }
+  .phaseButton, .actions a, .service, .stage { transition: none; }
+  .service:hover, .actions a:hover, .stage:hover { transform: none; }
+}

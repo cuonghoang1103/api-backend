@@ -1,0 +1,27 @@
+.exhibit { position: relative; isolation: isolate; min-width: 0; border: 1px solid #ffffff20; border-radius: 28px; padding: 24px; background: radial-gradient(ellipse at 70% 20%, #66513c40, transparent 65%), #171b20; color: #f3f1ec; box-shadow: 0 32px 90px #0003; perspective: 1200px; }
+.exhibitTop { display: flex; justify-content: space-between; color: #bbb5ac; font: 10px/1.5 ui-monospace, monospace; letter-spacing: .14em; }
+.space { position: relative; height: 300px; display: grid; place-items: center; perspective: 1100px; }
+.orbit { position: absolute; width: 88%; height: 130px; bottom: 10px; border: 1px solid #d6b47725; border-radius: 50%; transform: rotate(-12deg); }
+.assembly { position: relative; width: 240px; height: 160px; transform-style: preserve-3d; }
+.plane { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: space-between; padding: 20px; border: 1px solid #ffffff30; border-radius: 16px; box-shadow: 0 20px 38px #0004; }
+.plane span { font-size: 10px; letter-spacing: .13em; }
+.plane small { font: 10px/1.5 ui-monospace, monospace; color: #c7c8cb; }
+.planeBack { background: #242a32; transform: translate(30px,-58px) rotateX(48deg) rotateZ(-24deg); color: #bba483; }
+.planeMiddle { background: #323a43; transform: translate(5px,0) rotateX(48deg) rotateZ(-24deg); color: #e1c29a; }
+.planeFront { background: linear-gradient(130deg,#efe7d9,#b8b3aa); transform: translate(-20px,58px) rotateX(48deg) rotateZ(-24deg); color: #222831; }
+.planeFront small { color: #39414a; }
+.planeFront strong { font-size: 22px; line-height: 1.1; letter-spacing: -.04em; }
+.platforms { display: flex; gap: 12px; }
+.platforms svg { width: 17px; height: 17px; }
+.artCaption { text-align: center; color: #b5b7bc; font-size: 11px; margin: 12px 0 22px; }
+.selector { display: flex; gap: 4px; padding: 4px; border-radius: 12px; background: #080a0d70; }
+.selector button { flex: 1; min-height: 44px; padding: 8px; border-radius: 9px; font-size: 11px; color: #b8bcc4; transition: background 180ms, color 180ms; }
+.selector button[aria-pressed=true] { background: #e8e2d8; color: #222831; box-shadow: 0 2px 8px #0003; }
+.selector button:focus-visible, .productInfo a:focus-visible { outline: 2px solid #e1c29a; outline-offset: 4px; }
+.productInfo { padding-top: 22px; min-height: 185px; }
+.productInfo h2 { font-size: 24px; font-weight: 600; letter-spacing: -.04em; margin: 6px 0 10px; }
+.productInfo p:not(.productKind) { color: #bec1c7; font-size: 13px; line-height: 1.8; }
+.productKind { font: 10px/1.5 ui-monospace, monospace; text-transform: uppercase; letter-spacing: .1em; color: #d6b477; }
+.productInfo a { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; margin-top: 8px; font-size: 12px; font-weight: 600; color: #ead5b6; }
+@media (max-width: 400px) { .exhibit { padding: 16px; border-radius: 20px; } .assembly { width: 205px; height: 145px; } .space { height: 270px; } .plane { padding: 15px; } .selector button { font-size: 10px; padding: 5px; } }
+@media (prefers-reduced-motion: reduce) { .selector button { transition: none; } }

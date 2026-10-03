@@ -1,0 +1,40 @@
+.scene {
+  --s-ink: #edf6ff;
+  --s-ink-2: #afcde8;
+  --s-on-ink: #061222;
+  --s-raise: #13263d;
+  --s-muted: #9ab2cc;
+  --s-accent: #8edfff;
+  --s-line-strong: #496783;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: 28px 12px;
+  border: 1px solid #31475e;
+  border-radius: 28px;
+  background: radial-gradient(ellipse at 50% 42%, #143754 0%, #091625 48%, #040a12 100%);
+  box-shadow: inset 0 1px 0 #ffffff18, 0 24px 64px #00000020;
+}
+.scene::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(circle, #accfe950 .8px, transparent 1px);
+  background-size: 73px 67px;
+  mask-image: linear-gradient(transparent, #000 35%, transparent);
+}
+.core {
+  border-radius: 50%;
+  border: 1px solid #a7e8ff80;
+  background: radial-gradient(circle at 32% 25%, #e1faff, #65c7ed 9%, #195485 35%, #091727 72%);
+  box-shadow: inset -18px -20px 30px #020811, inset 5px 5px 18px #c2eeff70, 0 0 60px #4facda30;
+  color: #fff;
+  text-shadow: 0 2px 12px #000;
+}
+.core span { color: #fff; }
+.orbit { border: 1px solid #68c8ef70; box-shadow: 0 0 20px #4fa4d51a, inset 0 0 20px #4fa4d51a; }
+.node { box-shadow: inset 0 1px 0 #ffffff30, 0 8px 18px #0008; }
+.scene button:focus-visible, .scene a:focus-visible { outline: 2px solid #a3eaff; outline-offset: 5px; }
+@media (max-width: 640px) { .scene { border-radius: 18px; padding: 20px 8px; } }

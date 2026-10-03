@@ -119,7 +119,7 @@ export default function PhaseTimeline({ stages, lang, reduced }: Props) {
                 {g.stages.map((s, i) => (
                   <motion.li
                     key={s.slug}
-                    initial={reduced ? false : { opacity: 0, y: 18 }}
+                    initial={false}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: '-40px' }}
                     transition={{ duration: 0.4, delay: Math.min(i * 0.06, 0.2) }}

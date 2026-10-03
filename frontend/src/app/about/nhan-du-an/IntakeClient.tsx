@@ -24,6 +24,8 @@ import {
 import type { Engagement } from '../quy-trinh/data';
 import RequestForm from './RequestForm';
 import PrivacyNotice from './PrivacyNotice';
+import s from '@/components/studio/showroom.module.css';
+import ScrollReveal from '@/components/studio/ScrollReveal';
 
 type Bi = readonly [string, string];
 
@@ -169,22 +171,23 @@ export default function IntakeClient({ stageCount, engagements }: { stageCount: 
   const pk = (b: Bi, l: 'vi' | 'en') => (l === 'en' ? b[1] : b[0]);
 
   return (
-    <StudioShell step={2}>
+    <StudioShell step={2} className={s.page}>
+      <ScrollReveal />
       {/* ── Mở đầu ─────────────────────────────────────────────────────── */}
-      <section className="pt-14 sm:pt-20 pb-14">
-        <div className="max-w-6xl mx-auto px-4 grid gap-12 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-16 items-end">
+      <section className={s.hero}>
+        <div className={s.heroInner}>
           <div className="min-w-0">
             <p className={T.label}>{L('Nhận dự án', 'Start a project')}</p>
-            <h1 className={`${T.display} mt-4`}>
-              {L('Bắt đầu bằng một phiếu mô tả vấn đề.', 'It starts with a short description of the problem.')}
+            <h1 className={s.heroTitle}>
+              {L('Ý tưởng của bạn. Sản phẩm tiếp theo.', 'Your idea. The next product.')}
             </h1>
-            <p className={`${T.lead} mt-6 max-w-[58ch]`}>
+            <p className={s.heroLead}>
               {L(
                 'Chưa cần tài liệu hay giải pháp. Phiếu yêu cầu giúp studio đánh giá mức độ phù hợp trước buổi trao đổi đầu tiên — và nói thẳng nếu dự án không hợp.',
                 'No documents or solution needed yet. The request lets the studio assess fit before the first conversation — and say so plainly if it isn’t a match.',
               )}
             </p>
-            <div className="mt-8 flex flex-wrap gap-3">
+            <div className={s.actions}>
               <a href="#gui-yeu-cau" className={T.btnPrimary}>
                 {L('Điền phiếu yêu cầu', 'Fill in the request')}
               </a>
@@ -193,17 +196,16 @@ export default function IntakeClient({ stageCount, engagements }: { stageCount: 
               </a>
             </div>
           </div>
-          <ol className="min-w-0 border-l-2 border-[color:var(--s-ink)] pl-6 space-y-5" aria-label={L('Sau khi gửi phiếu', 'After you send a request')}>
+          <ol className={s.steps} aria-label={L('Sau khi gửi phiếu', 'After you send a request')}>
             {[
               [L('Gửi phiếu', 'Send the request'), L('Nhận mã phiếu ngay trên màn hình.', 'Get a request code on screen.')],
               [L('Đánh giá phù hợp', 'Fit assessment'), L('Trả lời “đi tiếp” hoặc “không”, kèm lý do.', 'A “go” or “no”, with reasons.')],
               [L('Họp khám phá', 'Discovery call'), L('30–45 phút về bối cảnh, người dùng, mục tiêu.', '30–45 minutes on context, users, goals.')],
               [L('Đề xuất', 'Proposal'), L('Phạm vi, kế hoạch theo mốc, rủi ro, chi phí.', 'Scope, milestones, risks, cost.')],
             ].map(([t, d], i) => (
-              <li key={t} className="relative">
-                <span aria-hidden className="absolute -left-[1.94rem] top-1 w-3 h-3 rounded-full bg-[var(--s-paper)] border-2 border-[color:var(--s-ink)]" />
-                <p className="text-sm font-semibold text-[color:var(--s-ink)]">
-                  <span className="text-[color:var(--s-accent)] tabular-nums mr-2">{i + 1}</span>
+              <li key={t}>
+                <span aria-hidden className={s.stepNumber}>0{i + 1}</span>
+                <p className={s.stepTitle}>
                   {t}
                 </p>
                 <p className={T.small}>{d}</p>
@@ -223,10 +225,10 @@ export default function IntakeClient({ stageCount, engagements }: { stageCount: 
             `Every kind of product goes through the same ${stageCount} stages; what differs is which stages carry more weight.`,
           )}
         />
-        <div className="grid gap-px rounded-xl overflow-hidden border border-[color:var(--s-line)] bg-[var(--s-line)] md:grid-cols-2">
+        <div className={s.services}>
           {SERVICES.map((sv) => (
-            <article key={sv.id} className="bg-[var(--s-raise)] p-6 sm:p-8 min-w-0">
-              <h3 className="font-editorial text-[1.5rem] leading-tight text-[color:var(--s-ink)]">{p(sv.title)}</h3>
+            <article key={sv.id} className={s.service}>
+              <h3>{p(sv.title)}</h3>
               <p className={`${T.body} mt-3`}>{p(sv.body)}</p>
               <Bullets className="mt-5" items={sv.includes.map(p)} />
             </article>
@@ -257,7 +259,7 @@ export default function IntakeClient({ stageCount, engagements }: { stageCount: 
             <tbody>
               {engagements.map((e) => (
                 <tr key={e.id} className="border-t border-[color:var(--s-line)] align-top">
-                  <th scope="row" className="py-5 pr-6 font-editorial text-[1.2rem] font-normal text-[color:var(--s-ink)]">{pk(e.title, lang)}</th>
+                  <th scope="row" className="py-5 pr-6 font-heading text-[1.2rem] font-semibold text-[color:var(--s-ink)]">{pk(e.title, lang)}</th>
                   <td className={`py-5 pr-6 ${T.body}`}>{pk(e.body, lang)}</td>
                   <td className={`py-5 pr-6 ${T.body}`}>{pk(e.fits, lang)}</td>
                   <td className={`py-5 ${T.body}`}>{pk(e.tradeoff, lang)}</td>
@@ -269,7 +271,7 @@ export default function IntakeClient({ stageCount, engagements }: { stageCount: 
         <div className="md:hidden space-y-4">
           {engagements.map((e) => (
             <div key={e.id} className={`${T.card} p-5`}>
-              <h3 className="font-editorial text-[1.25rem] text-[color:var(--s-ink)]">{pk(e.title, lang)}</h3>
+              <h3 className="font-heading font-semibold text-[1.25rem] text-[color:var(--s-ink)]">{pk(e.title, lang)}</h3>
               <p className={`${T.body} mt-2`}>{pk(e.body, lang)}</p>
               <dl className="mt-3 space-y-2 text-sm">
                 <div>

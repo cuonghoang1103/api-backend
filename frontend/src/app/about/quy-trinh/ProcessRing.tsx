@@ -31,6 +31,7 @@
  * - `prefers-reduced-motion`: không tự xoay, chọn thì nhảy thẳng tới vị trí.
  */
 import Link from 'next/link';
+import cinema from './cinema.module.css';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   animate,
@@ -138,8 +139,8 @@ export default function ProcessRing({ stages, selected, onSelect, lang, reduced 
 
   // Tự xoay (5°/giây).
   useAnimationFrame((_, delta) => {
-    if (reduced || !inView || paused.current || tookOver.current || drag.current) return;
-    rot.set(rot.get() - delta * 0.005);
+    if (reduced || !inView || document.hidden || paused.current || tookOver.current || drag.current) return;
+    rot.set(rot.get() - Math.min(delta, 50) * 0.005);
   });
 
   // Chọn → đưa giai đoạn đó ra chính diện theo đường ngắn nhất.
@@ -186,7 +187,7 @@ export default function ProcessRing({ stages, selected, onSelect, lang, reduced 
   const fColor = phaseOf(fs.phase).color;
 
   return (
-    <div className="relative w-full select-none">
+    <div className={`relative w-full select-none ${cinema.scene}`}>
       <div
         ref={wrapRef}
         style={{ height: prm.height }}
@@ -218,14 +219,22 @@ export default function ProcessRing({ stages, selected, onSelect, lang, reduced 
                   width: prm.R * 2,
                   height: prm.R * 2,
                   transform: 'translate(-50%, -50%) rotateX(90deg)',
-                  border: '1px dashed color-mix(in srgb, var(--s-muted) 55%, transparent)',
+                  border: '1px solid #74c7ed66',
                   background: 'radial-gradient(circle, color-mix(in srgb, var(--s-ink) 5%, transparent) 0%, transparent 70%)',
                 }}
               />
+              {[0.72, 1.12].map((scale) => (
+                <div
+                  key={scale}
+                  aria-hidden
+                  className={`absolute left-0 top-0 rounded-full ${cinema.orbit}`}
+                  style={{ width: prm.R * 2 * scale, height: prm.R * 2 * scale, transform: 'translate(-50%, -50%) rotateX(90deg) translateZ(-24px)', pointerEvents: 'none' }}
+                />
+              ))}
               {/* Lõi */}
               <div
                 aria-hidden
-                className="absolute left-0 top-0 w-48 h-48 flex flex-col items-center justify-center text-center"
+                className={`absolute left-0 top-0 w-48 h-48 flex flex-col items-center justify-center text-center ${cinema.core}`}
                 style={{ transform: 'translate(-50%, -50%) translateZ(-60px)' }}
               >
                 <span className="font-editorial text-[5rem] leading-none text-[color:var(--s-ink)] tabular-nums">{n}</span>
@@ -350,7 +359,7 @@ function RingNode({
         tabIndex={-1}
         aria-hidden
         style={{ transform: cardTransform, opacity: cardOpacity, visibility: cardVis }}
-        className={`absolute left-0 top-0 w-[124px] h-[80px] rounded-[10px] border px-3 py-2 text-left flex flex-col justify-between ${
+        className={`${cinema.node} absolute left-0 top-0 w-[124px] h-[80px] rounded-[10px] border px-3 py-2 text-left flex flex-col justify-between ${
           active
             ? 'bg-[var(--s-ink)] border-[color:var(--s-ink)] text-[color:var(--s-on-ink)]'
             : 'bg-[var(--s-raise)] border-[color:var(--s-line-strong)] text-[color:var(--s-ink)]'
@@ -368,7 +377,7 @@ function RingNode({
         style={{ transform: chipTransform, opacity: chipOpacity, visibility: chipVis }}
         aria-pressed={active}
         aria-label={`${stage.n}. ${title}`}
-        className={`absolute left-0 top-0 w-[34px] h-[34px] rounded-full border-[1.5px] flex items-center justify-center text-[12px] font-semibold tabular-nums ${
+        className={`${cinema.node} absolute left-0 top-0 w-[34px] h-[34px] rounded-full border-[1.5px] flex items-center justify-center text-[12px] font-semibold tabular-nums ${
           strong
             ? 'bg-[var(--s-ink)] border-[color:var(--s-ink)] text-[color:var(--s-on-ink)]'
             : 'bg-[var(--s-raise)] border-[color:var(--s-ink-2)] text-[color:var(--s-ink)]'

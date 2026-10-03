@@ -71,6 +71,8 @@ export default function FloatingAIAssistant() {
    !nguoiDungBat
    || pathname?.startsWith('/creator') || pathname?.startsWith('/admin')
    || pathname?.startsWith('/nhung-video')
+   // Studio has its own project CTA; the floating tutor obscures the exhibit.
+   || pathname === '/about/studio' || pathname?.startsWith('/about/quy-trinh') || pathname === '/about/nhan-du-an'
    // CT Work có trợ lý AI riêng trong dự án (đợt 4); robot nổi đè lên board.
    || pathname === '/work' || pathname?.startsWith('/work/')
    // Sổ tay có nút "Hỏi ghi chú" riêng ở đúng góc này; robot đè lên nó (26/09).

@@ -87,3 +87,24 @@ iCloud `~/Ielts` (ảnh HEIC, hay bị xoay ngang) để soạn từng đợt.
 | 6 | ✅ trang 91–110 (28/09): Flow-chart Completion, Opinion intro 5 bước, Speaking Wh- (Daily Routine 6 câu, Family 2), 8 nguyên âm đôi, homework 6 chỗ trống |
 | 1–6 | 🔎 rà soát lại toàn bộ với ảnh 29/09/2026: đủ từ/câu như sách; thêm recap, rule, bài dịch 💡 từng điểm ngữ pháp, `more` cho từ vựng; Ngày 6 bài đọc sửa cho đáp án khớp Answer Explanation (firm · simplicity · full version · feedback) |
 | 7–15 | chờ ảnh (ảnh mới bắt đầu từ trang 111) |
+
+## Trọn gói mỗi Ngày mới (từ 03/10/2026)
+
+Soạn xong nội dung theo sách thì CHƯA xong ngày đó. Đủ khi có cả:
+
+1. **Video bài giảng** cho mỗi bài trong `videos.ts` — tìm theo
+   `reference_tim_video_youtube_cho_bai_hoc` (agent xuất TSV, ghép bằng script, bắt
+   trùng ID với các ngày cũ; mỗi ID qua oEmbed + `playabilityStatus` OK).
+2. **Khối `phatam`** (luyện phát âm, Azure chấm từng âm) — chọn âm theo chủ đề ngày
+   đó; `ipa` Anh-Anh, mỗi từ một cụm cách nhau dấu cách, KHÔNG dấu nhấn ˈ.
+   Đặt dưới tiêu đề "Thêm: …" nếu sách không có phần phát âm.
+3. **Tự bổ sung** chỗ sách sơ sài / sắp xếp chưa hợp lý (user cho phép 03/10) — vẫn
+   giữ đủ nội dung sách, chỉ thêm; ghi lại đã thêm gì khi báo cáo.
+4. **Bài kiểm tra chặng**: cuối mỗi chặng (hiện có `d6-kiem-tra` — Ngày 1–6) thêm một
+   bài `kind: 'review'` gom ngữ pháp · từ vựng · dịch · nghe · đọc · viết · nói · phát âm,
+   ngưỡng đạt ≥70% từng phần, chỉ rõ Ngày cần ôn. Dự kiến: giữa khoá (~Ngày 10/11, xem
+   sách có ngày ôn tập không), thi cuối khoá (Ngày 15, dạng đề IELTS đủ 4 kỹ năng).
+   Viết THẲNG trong `ngayN.ts` — script mục lục chạy node strip-types, KHÔNG nạp được
+   `import './x'` (không đuôi .ts) từ tệp ngày.
+5. `npm run course:manifest`, `npx tsc --noEmit`, `npm run build`; mở bài bằng
+   Playwright xem không kẹt "Đang tải bài…".

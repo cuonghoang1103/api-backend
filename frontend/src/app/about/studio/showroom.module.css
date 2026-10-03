@@ -1,27 +1,65 @@
-.exhibit { position: relative; isolation: isolate; min-width: 0; border: 1px solid #ffffff20; border-radius: 28px; padding: 24px; background: radial-gradient(ellipse at 70% 20%, #66513c40, transparent 65%), #171b20; color: #f3f1ec; box-shadow: 0 32px 90px #0003; perspective: 1200px; }
-.exhibitTop { display: flex; justify-content: space-between; color: #bbb5ac; font: 10px/1.5 ui-monospace, monospace; letter-spacing: .14em; }
+/* Tủ trưng bày CỐ Ý TỐI ở cả hai giao diện (vật trưng bày, không phải nền
+   trang) — nên không có nhánh html.theme-dark. Màu gom thành token ở đây; giá
+   trị giữ y nguyên bản GPT Astra 03/10/2026. */
+.exhibit {
+  --sr-line: #ffffff20;
+  --sr-glow: #66513c40;
+  --sr-bg: #171b20;
+  --sr-ink: #f3f1ec;
+  --sr-shadow-soft: #0003;
+  --sr-label: #bbb5ac;
+  --sr-orbit: #d6b47725;
+  --sr-plane-line: #ffffff30;
+  --sr-shadow: #0004;
+  --sr-plane-sub: #c7c8cb;
+  --sr-plane-back: #242a32;
+  --sr-plane-back-ink: #bba483;
+  --sr-plane-mid: #323a43;
+  --sr-gold-soft: #e1c29a;
+  --sr-front-a: #efe7d9;
+  --sr-front-b: #b8b3aa;
+  --sr-front-ink: #222831;
+  --sr-front-sub: #39414a;
+  --sr-caption: #b5b7bc;
+  --sr-selector: #080a0d70;
+  --sr-btn: #b8bcc4;
+  --sr-btn-on: #e8e2d8;
+  --sr-body: #bec1c7;
+  --sr-gold: #d6b477;
+  --sr-link: #ead5b6;
+}
+.exhibit { position: relative; isolation: isolate; min-width: 0; border: 1px solid var(--sr-line); border-radius: 28px; padding: 24px; background: radial-gradient(ellipse at 70% 20%, var(--sr-glow), transparent 65%), var(--sr-bg); color: var(--sr-ink); box-shadow: 0 32px 90px var(--sr-shadow-soft); perspective: 1200px; }
+.exhibitTop { display: flex; justify-content: space-between; color: var(--sr-label); font: 10px/1.5 ui-monospace, monospace; letter-spacing: .14em; }
 .space { position: relative; height: 300px; display: grid; place-items: center; perspective: 1100px; }
-.orbit { position: absolute; width: 88%; height: 130px; bottom: 10px; border: 1px solid #d6b47725; border-radius: 50%; transform: rotate(-12deg); }
-.assembly { position: relative; width: 240px; height: 160px; transform-style: preserve-3d; }
-.plane { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: space-between; padding: 20px; border: 1px solid #ffffff30; border-radius: 16px; box-shadow: 0 20px 38px #0004; }
+.orbit { position: absolute; width: 88%; height: 130px; bottom: 10px; border: 1px solid var(--sr-orbit); border-radius: 50%; transform: rotate(-12deg); }
+/* `flat`, KHÔNG `preserve-3d` (03/10/2026): ba tấm cùng nghiêng 48°, xếp sâu
+   thật thì mép dưới tấm giữa đâm xuyên lên trên tấm trước và che mất khẩu hiệu
+   (bản GPT gốc dính đúng lỗi này). Phẳng ⇒ thứ tự vẽ theo DOM: trước luôn trên. */
+.assembly { position: relative; width: 240px; height: 160px; transform-style: flat; }
+.plane { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: space-between; padding: 20px; border: 1px solid var(--sr-plane-line); border-radius: 16px; box-shadow: 0 20px 38px var(--sr-shadow); }
 .plane span { font-size: 10px; letter-spacing: .13em; }
-.plane small { font: 10px/1.5 ui-monospace, monospace; color: #c7c8cb; }
-.planeBack { background: #242a32; transform: translate(30px,-58px) rotateX(48deg) rotateZ(-24deg); color: #bba483; }
-.planeMiddle { background: #323a43; transform: translate(5px,0) rotateX(48deg) rotateZ(-24deg); color: #e1c29a; }
-.planeFront { background: linear-gradient(130deg,#efe7d9,#b8b3aa); transform: translate(-20px,58px) rotateX(48deg) rotateZ(-24deg); color: #222831; }
-.planeFront small { color: #39414a; }
+.plane small { font: 10px/1.5 ui-monospace, monospace; color: var(--sr-plane-sub); }
+.planeBack { background: var(--sr-plane-back); transform: translate(30px,-58px) rotateX(48deg) rotateZ(-24deg); color: var(--sr-plane-back-ink); }
+.planeMiddle { background: var(--sr-plane-mid); transform: translate(5px,0) rotateX(48deg) rotateZ(-24deg); color: var(--sr-gold-soft); }
+.planeFront { background: linear-gradient(130deg,var(--sr-front-a),var(--sr-front-b)); transform: translate(-20px,58px) rotateX(48deg) rotateZ(-24deg); color: var(--sr-front-ink); }
+/* Tấm sau + giữa bị tấm phía trên che gần hết — chỉ dải mép trên còn lộ, nên
+   icon + nhãn + công nghệ dồn lên một hàng ở đó (trước đây nằm giữa, bị che). */
+.planeBack, .planeMiddle { flex-direction: row; flex-wrap: wrap; justify-content: flex-start; align-content: flex-start; align-items: center; gap: 2px 10px; padding-top: 14px; }
+.planeBack svg, .planeMiddle svg { width: 16px; height: 16px; }
+.planeBack small, .planeMiddle small { flex-basis: 100%; }
+.planeFront small { color: var(--sr-front-sub); }
 .planeFront strong { font-size: 22px; line-height: 1.1; letter-spacing: -.04em; }
 .platforms { display: flex; gap: 12px; }
 .platforms svg { width: 17px; height: 17px; }
-.artCaption { text-align: center; color: #b5b7bc; font-size: 11px; margin: 12px 0 22px; }
-.selector { display: flex; gap: 4px; padding: 4px; border-radius: 12px; background: #080a0d70; }
-.selector button { flex: 1; min-height: 44px; padding: 8px; border-radius: 9px; font-size: 11px; color: #b8bcc4; transition: background 180ms, color 180ms; }
-.selector button[aria-pressed=true] { background: #e8e2d8; color: #222831; box-shadow: 0 2px 8px #0003; }
-.selector button:focus-visible, .productInfo a:focus-visible { outline: 2px solid #e1c29a; outline-offset: 4px; }
+.artCaption { text-align: center; color: var(--sr-caption); font-size: 11px; margin: 12px 0 22px; }
+.selector { display: flex; flex-wrap: wrap; gap: 4px; padding: 4px; border-radius: 12px; background: var(--sr-selector); }
+.selector button { flex: 1 1 30%; white-space: nowrap; min-height: 44px; padding: 8px; border-radius: 9px; font-size: 11px; color: var(--sr-btn); transition: background 180ms, color 180ms; }
+.selector button[aria-pressed=true] { background: var(--sr-btn-on); color: var(--sr-front-ink); box-shadow: 0 2px 8px var(--sr-shadow-soft); }
+.selector button:focus-visible, .productInfo a:focus-visible { outline: 2px solid var(--sr-gold-soft); outline-offset: 4px; }
 .productInfo { padding-top: 22px; min-height: 185px; }
 .productInfo h2 { font-size: 24px; font-weight: 600; letter-spacing: -.04em; margin: 6px 0 10px; }
-.productInfo p:not(.productKind) { color: #bec1c7; font-size: 13px; line-height: 1.8; }
-.productKind { font: 10px/1.5 ui-monospace, monospace; text-transform: uppercase; letter-spacing: .1em; color: #d6b477; }
-.productInfo a { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; margin-top: 8px; font-size: 12px; font-weight: 600; color: #ead5b6; }
+.productInfo p:not(.productKind) { color: var(--sr-body); font-size: 13px; line-height: 1.8; }
+.productKind { font: 10px/1.5 ui-monospace, monospace; text-transform: uppercase; letter-spacing: .1em; color: var(--sr-gold); }
+.productInfo a { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; margin-top: 8px; font-size: 12px; font-weight: 600; color: var(--sr-link); }
 @media (max-width: 400px) { .exhibit { padding: 16px; border-radius: 20px; } .assembly { width: 205px; height: 145px; } .space { height: 270px; } .plane { padding: 15px; } .selector button { font-size: 10px; padding: 5px; } }
 @media (prefers-reduced-motion: reduce) { .selector button { transition: none; } }

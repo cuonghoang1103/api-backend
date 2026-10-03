@@ -31,12 +31,12 @@ export default function ProductStage({ lang }: { lang: 'vi' | 'en' }) {
         <motion.div className={s.assembly} style={reduced ? undefined : { rotateX, rotateY }}>
           <div className={`${s.plane} ${s.planeBack}`}><Layers3 size={22} /><span>DATA & STORAGE</span><small>PostgreSQL · R2</small></div>
           <div className={`${s.plane} ${s.planeMiddle}`}><Terminal size={22} /><span>APPLICATION API</span><small>Express · TypeScript</small></div>
-          <div className={`${s.plane} ${s.planeFront}`}><div className={s.platforms}><Monitor /><Terminal /><Smartphone /></div><strong>One system.<br />Many possibilities.</strong><small>WEB / DESKTOP / iOS</small></div>
+          <div className={`${s.plane} ${s.planeFront}`}><div className={s.platforms}><Monitor /><Terminal /><Smartphone /></div><strong>{L('Một hệ thống.', 'One system.')}<br />{L('Muôn vàn khả năng.', 'Many possibilities.')}</strong><small>WEB / DESKTOP / iOS</small></div>
         </motion.div>
       </div>
       <p className={s.artCaption}>{L('Sơ đồ kiến trúc hệ sinh thái cuongthai.com', 'Architecture of the cuongthai.com ecosystem')}</p>
       <div className={s.selector} role="group" aria-label={L('Chọn sản phẩm', 'Choose a product')}>
-        {PRODUCTS.slice(0, 3).map((product, i) => <button key={product.id} type="button" aria-pressed={i === selected} onClick={() => setSelected(i)}>{product.name}</button>)}
+        {PRODUCTS.map((product, i) => <button key={product.id} type="button" aria-pressed={i === selected} onClick={() => setSelected(i)}>{product.name}</button>)}
       </div>
       <div className={s.productInfo} aria-live="polite" aria-atomic="true">
         <p className={s.productKind}>{bi(p.kind)}</p><h2>{p.name}</h2><p>{bi(p.what)}</p>

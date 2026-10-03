@@ -128,18 +128,27 @@ export function stopAudio() {
   try { window.speechSynthesis?.cancel(); } catch { /* bỏ qua */ }
 }
 
-/** Phát lần lượt các đoạn; `onEnd` gọi khi xong hết hoặc bị dừng. */
-export async function play(clips: Clip | Clip[], onEnd?: () => void) {
+/**
+ * Phát lần lượt các đoạn; `onEnd` gọi khi xong hết hoặc bị dừng.
+ * `opt.onClip(i)` báo đoạn thứ i bắt đầu (tô sáng dòng đang đọc), `opt.gapMs`
+ * nghỉ giữa hai đoạn (người học kịp chép bài nghe).
+ */
+export async function play(clips: Clip | Clip[], onEnd?: () => void, opt?: { onClip?: (i: number) => void; gapMs?: number }) {
   stopAudio();
   const my = run;
   // Bỏ markup trước khi đọc: {漢字|かな} → 漢字, **đậm** → đậm.
   const clean = (t: string) => t.replace(/\{([^|}]+)\|[^}]+\}/g, '$1').replace(/\*\*|==|~~/g, '');
   const list = (Array.isArray(clips) ? clips : [clips]).map((c) => ({ ...c, text: clean(c.text) }));
   try {
-    for (const c of list) {
+    for (const [i, c] of list.entries()) {
       if (my !== run) return;
+      if (i > 0 && opt?.gapMs) {
+        await new Promise((r) => setTimeout(r, opt.gapMs));
+        if (my !== run) return;
+      }
       const { url, don } = await urlFor(c);
       if (my !== run) return;
+      opt?.onClip?.(i);
       if (url) {
         await new Promise<void>((resolve) => {
           const a = new Audio(url);

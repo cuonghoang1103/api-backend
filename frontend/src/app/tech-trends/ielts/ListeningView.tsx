@@ -6,9 +6,11 @@
  * đều phải tính từ `d.listenings`, không gõ tay — đã dính một lần: chú thích
  * ghi cứng "6 bài" trong khi chặng 3 có 4.
  *
- * Cách phát: đọc TỪNG DÒNG bằng speechSynthesis, dòng này xong mới sang dòng
- * kia. Không nối cả bài thành một chuỗi dài vì hai lý do: Chrome cắt ngang khi
- * chuỗi quá dài, và người học cần dừng đúng giữa hai lượt thoại để chép kịp.
+ * Cách phát: TỪNG DÒNG qua bộ đọc chung của khoá học (components/sach-hoc/
+ * audio.ts — giọng Azure Neural thật, mỗi người nói một giọng, file lưu R2;
+ * mất mạng/chưa đăng nhập thì tự lùi giọng trình duyệt). Trước 03/10/2026 tab
+ * này gọi thẳng speechSynthesis nên luôn là giọng máy. Từng dòng một vì người
+ * học cần dừng đúng giữa hai lượt thoại để chép kịp, và để tô sáng dòng đang đọc.
  *
  * Transcript ẨN cho tới khi bấm chấm bài. Nhìn chữ mà bảo là luyện nghe thì
  * chỉ đang luyện đọc.
@@ -20,6 +22,10 @@ import {
 import type { StageBundle } from './data/bundles';
 import FigureView from './FigureView';
 import { isCorrect } from './check';
+import { play as phat, stopAudio, type Voice } from '@/components/sach-hoc/audio';
+
+/** Mỗi người nói một giọng, theo thứ tự xuất hiện trong bài. */
+const GIONG: Voice[] = ['uk-nu', 'uk-nam', 'us-nu', 'us-nam'];
 
 /** Tốc độ đọc — chặng 1 mặc định chậm hơn tốc độ thi thật. */
 const RATES = [
@@ -46,11 +52,7 @@ export default function ListeningView({ d, supported }: { d: StageBundle; suppor
 
   const stop = useCallback(() => {
     runId.current += 1;
-    try {
-      window.speechSynthesis?.cancel();
-    } catch {
-      /* bỏ qua */
-    }
+    stopAudio();
     setPlaying(false);
     setLineIdx(-1);
   }, []);
@@ -70,47 +72,16 @@ export default function ListeningView({ d, supported }: { d: StageBundle; suppor
    * đợi: cách này biết được đang ở dòng nào để tô sáng, và dừng được giữa chừng.
    */
   const play = useCallback(() => {
-    if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
-    const synth = window.speechSynthesis;
-    synth.cancel();
-
     runId.current += 1;
     const myRun = runId.current;
     setPlaying(true);
-
-    const voices = synth.getVoices();
-    const enVoice = voices.find((v) => v.lang === 'en-US') || voices.find((v) => v.lang?.startsWith('en'));
-
-    const speakLine = (i: number): void => {
-      if (myRun !== runId.current) return;
-      if (i >= ex.lines.length) {
-        setPlaying(false);
-        setLineIdx(-1);
-        return;
-      }
-      setLineIdx(i);
-      const u = new SpeechSynthesisUtterance(ex.lines[i].text);
-      if (enVoice) {
-        u.voice = enVoice;
-        u.lang = enVoice.lang || 'en-US';
-      } else {
-        u.lang = 'en-US';
-      }
-      u.rate = rate;
-      u.onend = () => {
-        if (myRun !== runId.current) return;
-        // Nghỉ ngắn giữa hai lượt thoại để người học kịp chép.
-        setTimeout(() => speakLine(i + 1), 350);
-      };
-      u.onerror = () => {
-        if (myRun !== runId.current) return;
-        setPlaying(false);
-        setLineIdx(-1);
-      };
-      synth.speak(u);
-    };
-
-    speakLine(0);
+    const nguoi: string[] = [];
+    ex.lines.forEach((l) => { const w = l.who ?? ''; if (!nguoi.includes(w)) nguoi.push(w); });
+    void phat(
+      ex.lines.map((l) => ({ text: l.text, voice: GIONG[nguoi.indexOf(l.who ?? '') % GIONG.length], toc: rate })),
+      () => { if (myRun === runId.current) { setPlaying(false); setLineIdx(-1); } },
+      { onClip: (i) => { if (myRun === runId.current) setLineIdx(i); }, gapMs: 350 },
+    );
   }, [ex.lines, rate]);
 
   const correctCount = ex.questions.filter((q, i) => isCorrect(answers[i] ?? '', q.answer, q.alt)).length;

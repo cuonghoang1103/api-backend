@@ -411,7 +411,7 @@ export default function FigureView({ figure }: { figure: Figure }) {
     (figure.kind === 'bar' || figure.kind === 'line') && (figure.series?.length ?? 0) > 1;
 
   return (
-    <figure className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+    <figure className="fig-dark rounded-2xl border border-white/10 bg-white/[0.03] p-4">
       <figcaption className="mb-3">
         <p className="text-white text-sm font-semibold leading-snug">{figure.title}</p>
         {figure.note && <p className="text-slate-500 text-xs mt-0.5">{figure.note}</p>}

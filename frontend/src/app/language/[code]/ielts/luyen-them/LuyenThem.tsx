@@ -14,8 +14,8 @@
  * người học chỉ xem một. Hai tab "Lộ trình" và "Luyện mỗi ngày" vẫn cần cả 4
  * chặng (trộn từ/bài của mọi chặng) — chỉ tải khi bấm vào.
  *
- * Nền tối cố định như trang cũ (các view viết bằng màu slate trên nền tối,
- * KHÔNG dùng `dark:` — xem chú thích đầu IeltsClient.tsx).
+ * Màu: các view viết cứng cho nền tối; `sang.module.css` ánh xạ sang giao diện
+ * sáng của khoá khi web không ở theme-dark (KHÔNG dùng `dark:` — xem đầu IeltsClient.tsx).
  */
 import { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
@@ -26,7 +26,9 @@ import {
 } from 'lucide-react';
 import { STAGE_INFO, loadStage } from '@/app/tech-trends/ielts/data/loadStage';
 import type { StageBundle } from '@/app/tech-trends/ielts/data/bundleTypes';
-import { useSpeak } from '@/app/tech-trends/tieng-anh-giao-tiep/useSpeak';
+import { useDoc } from './useDoc';
+import sang from './sang.module.css';
+import cs from '@/components/sach-hoc/course.module.css';
 
 const Dang = () => <div className="py-16 text-center text-sm text-slate-500">Đang tải…</div>;
 const LessonsView = dynamic(() => import('@/app/tech-trends/ielts/LessonsView'), { loading: Dang });
@@ -72,7 +74,7 @@ export default function LuyenThem() {
   const [tab, setTab] = useState<TabId>('lessons');
   const [bundles, setBundles] = useState<(StageBundle | null)[]>([null, null, null, null]);
   const [loadErr, setLoadErr] = useState(false);
-  const { speak, current, supported } = useSpeak();
+  const { speak, current, supported } = useDoc();
   // Chỉ GHI URL sau khi đã ĐỌC nó: StrictMode chạy effect hai lần, ghi trước là
   // lượt đọc thứ hai thấy `tab=lessons` vừa ghi và link ?tab=… mất tác dụng.
   const [urlRead, setUrlRead] = useState(false);
@@ -111,7 +113,9 @@ export default function LuyenThem() {
   const canChang = THEO_CHANG.includes(activeTab);
 
   return (
-    <div className="min-h-screen pt-24 pb-24" style={{ background: '#0a0a0f' }}>
+    // cs.root: khai các biến màu --lh-* (sáng/tối) mà sang.module.css dùng.
+    <div className={cs.root}>
+    <div className={`min-h-screen pt-8 pb-24 ${sang.sang}`}>
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <Link href="/language/en/ielts" className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors mb-6">
           <ArrowLeft className="w-4 h-4" /> Khoá IELTS 15 ngày
@@ -202,6 +206,7 @@ export default function LuyenThem() {
         {activeTab === 'life' && <LifeView speak={speak} current={current} supported={supported} />}
         {activeTab === 'exam' && <ExamView />}
       </div>
+    </div>
     </div>
   );
 }

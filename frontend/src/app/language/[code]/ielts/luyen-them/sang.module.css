@@ -1,0 +1,64 @@
+/*
+ * Giao diện SÁNG cho Kho luyện thêm (03/10/2026). Các view cũ trong
+ * app/tech-trends/ielts viết cứng màu cho nền tối (text-white, bg-white/[0.03],
+ * text-sky-300…). Thay vì sửa ~4.000 dòng, lớp này ánh xạ ĐÚNG các class đang
+ * dùng sang bảng màu của khoá (biến --lh-* của course.module.css) — CHỈ khi web
+ * không ở giao diện tối (html.theme-dark giữ nguyên vẻ cũ). Màu chữ nhạt (sky-300,
+ * emerald-300…) đổi sang sắc đậm để đủ tương phản trên nền sáng.
+ * SINH TỰ ĐỘNG từ danh sách class trong các view — thêm class màu mới vào view
+ * thì sinh lại (xem commit). Biểu đồ (.fig-dark) giữ thẻ nền tối: chữ SVG tô
+ * bằng thuộc tính cứng (#cbd5e1), CSS không đổi được.
+ */
+.sang { background: var(--lh-bg); }
+:global(html.theme-dark) .sang { background: #0a0a0f; }
+:global(html:not(.theme-dark)) .sang :global(.fig-dark) { background: #111827; border-color: #1f2937; border-radius: 1rem; }
+:global(html:not(.theme-dark)) .sang :global(.bg-white\/10):not(:global(.fig-dark *)) { background-color: var(--lh-surface-2); }
+:global(html:not(.theme-dark)) .sang :global(.bg-white\/20):not(:global(.fig-dark *)) { background-color: var(--lh-surface-2); }
+:global(html:not(.theme-dark)) .sang :global(.bg-white\/5):not(:global(.fig-dark *)) { background-color: var(--lh-surface); }
+:global(html:not(.theme-dark)) .sang :global(.bg-white\/\[0\.01\]):not(:global(.fig-dark *)) { background-color: var(--lh-surface); }
+:global(html:not(.theme-dark)) .sang :global(.bg-white\/\[0\.02\]):not(:global(.fig-dark *)) { background-color: var(--lh-surface); }
+:global(html:not(.theme-dark)) .sang :global(.bg-white\/\[0\.03\]):not(:global(.fig-dark *)) { background-color: var(--lh-surface); }
+:global(html:not(.theme-dark)) .sang :global(.bg-white\/\[0\.04\]):not(:global(.fig-dark *)) { background-color: var(--lh-surface); }
+:global(html:not(.theme-dark)) .sang :global(.border-white\/10):not(:global(.fig-dark *)) { border-color: var(--lh-line); }
+:global(html:not(.theme-dark)) .sang :global(.border-white\/15):not(:global(.fig-dark *)) { border-color: var(--lh-line); }
+:global(html:not(.theme-dark)) .sang :global(.border-white\/5):not(:global(.fig-dark *)) { border-color: var(--lh-line); }
+:global(html:not(.theme-dark)) .sang :global(.hover\:bg-white\/10):hover:not(:global(.fig-dark *)) { background-color: var(--lh-surface-2); }
+:global(html:not(.theme-dark)) .sang :global(.hover\:bg-white\/\[0\.02\]):hover:not(:global(.fig-dark *)) { background-color: var(--lh-surface); }
+:global(html:not(.theme-dark)) .sang :global(.hover\:border-white\/20):hover:not(:global(.fig-dark *)) { border-color: var(--lh-line); }
+:global(html:not(.theme-dark)) .sang :global(.hover\:border-white\/25):hover:not(:global(.fig-dark *)) { border-color: var(--lh-line); }
+:global(html:not(.theme-dark)) .sang :global(.hover\:text-emerald-300):hover:not(:global(.fig-dark *)) { color: #047857; }
+:global(html:not(.theme-dark)) .sang :global(.hover\:text-rose-300):hover:not(:global(.fig-dark *)) { color: #be123c; }
+:global(html:not(.theme-dark)) .sang :global(.hover\:text-violet-300):hover:not(:global(.fig-dark *)) { color: #6d28d9; }
+:global(html:not(.theme-dark)) .sang :global(.hover\:text-white):hover:not(:global(.fig-dark *)) { color: var(--lh-ink); }
+:global(html:not(.theme-dark)) .sang :global(.placeholder\:text-slate-600)::placeholder:not(:global(.fig-dark *)) { color: #8a909a; }
+:global(html:not(.theme-dark)) .sang :global(.text-amber-100):not(:global(.fig-dark *)) { color: #b45309; }
+:global(html:not(.theme-dark)) .sang :global(.text-amber-200):not(:global(.fig-dark *)) { color: #b45309; }
+:global(html:not(.theme-dark)) .sang :global(.text-amber-300):not(:global(.fig-dark *)) { color: #b45309; }
+:global(html:not(.theme-dark)) .sang :global(.text-amber-300\/80):not(:global(.fig-dark *)) { color: #b45309; }
+:global(html:not(.theme-dark)) .sang :global(.text-amber-400):not(:global(.fig-dark *)) { color: #b45309; }
+:global(html:not(.theme-dark)) .sang :global(.text-emerald-100):not(:global(.fig-dark *)) { color: #047857; }
+:global(html:not(.theme-dark)) .sang :global(.text-emerald-200):not(:global(.fig-dark *)) { color: #047857; }
+:global(html:not(.theme-dark)) .sang :global(.text-emerald-200\/90):not(:global(.fig-dark *)) { color: #047857; }
+:global(html:not(.theme-dark)) .sang :global(.text-emerald-300):not(:global(.fig-dark *)) { color: #047857; }
+:global(html:not(.theme-dark)) .sang :global(.text-emerald-300\/90):not(:global(.fig-dark *)) { color: #047857; }
+:global(html:not(.theme-dark)) .sang :global(.text-emerald-400):not(:global(.fig-dark *)) { color: #047857; }
+:global(html:not(.theme-dark)) .sang :global(.text-rose-200):not(:global(.fig-dark *)) { color: #be123c; }
+:global(html:not(.theme-dark)) .sang :global(.text-rose-200\/90):not(:global(.fig-dark *)) { color: #be123c; }
+:global(html:not(.theme-dark)) .sang :global(.text-rose-300):not(:global(.fig-dark *)) { color: #be123c; }
+:global(html:not(.theme-dark)) .sang :global(.text-rose-300\/90):not(:global(.fig-dark *)) { color: #be123c; }
+:global(html:not(.theme-dark)) .sang :global(.text-rose-400):not(:global(.fig-dark *)) { color: #be123c; }
+:global(html:not(.theme-dark)) .sang :global(.text-sky-200):not(:global(.fig-dark *)) { color: #0369a1; }
+:global(html:not(.theme-dark)) .sang :global(.text-sky-300):not(:global(.fig-dark *)) { color: #0369a1; }
+:global(html:not(.theme-dark)) .sang :global(.text-sky-400):not(:global(.fig-dark *)) { color: #0369a1; }
+:global(html:not(.theme-dark)) .sang :global(.text-slate-100):not(:global(.fig-dark *)) { color: var(--lh-ink); }
+:global(html:not(.theme-dark)) .sang :global(.text-slate-200):not(:global(.fig-dark *)) { color: var(--lh-ink); }
+:global(html:not(.theme-dark)) .sang :global(.text-slate-300):not(:global(.fig-dark *)) { color: var(--lh-ink-2); }
+:global(html:not(.theme-dark)) .sang :global(.text-slate-400):not(:global(.fig-dark *)) { color: var(--lh-ink-3); }
+:global(html:not(.theme-dark)) .sang :global(.text-slate-500):not(:global(.fig-dark *)) { color: var(--lh-ink-3); }
+:global(html:not(.theme-dark)) .sang :global(.text-slate-600):not(:global(.fig-dark *)) { color: #8a909a; }
+:global(html:not(.theme-dark)) .sang :global(.text-violet-200):not(:global(.fig-dark *)) { color: #6d28d9; }
+:global(html:not(.theme-dark)) .sang :global(.text-violet-300):not(:global(.fig-dark *)) { color: #6d28d9; }
+:global(html:not(.theme-dark)) .sang :global(.text-violet-300\/60):not(:global(.fig-dark *)) { color: #6d28d9; }
+:global(html:not(.theme-dark)) .sang :global(.text-violet-300\/70):not(:global(.fig-dark *)) { color: #6d28d9; }
+:global(html:not(.theme-dark)) .sang :global(.text-violet-400):not(:global(.fig-dark *)) { color: #6d28d9; }
+:global(html:not(.theme-dark)) .sang :global(.text-white):not(:global(.fig-dark *)) { color: var(--lh-ink); }

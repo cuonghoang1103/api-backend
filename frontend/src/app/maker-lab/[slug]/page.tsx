@@ -130,7 +130,7 @@ export default function MakerProjectPage() {
           Không tìm thấy dự án này.
         </p>
         <Link href="/maker-lab" className="text-sm font-medium" style={{ color: 'var(--accent-color)' }}>
-          ← Về Maker Lab
+          ← Về IoT Odin
         </Link>
       </div>
     );
@@ -148,7 +148,7 @@ export default function MakerProjectPage() {
         className="mb-5 inline-flex items-center gap-1.5 text-sm"
         style={{ color: 'var(--text-muted)' }}
       >
-        <ArrowLeft size={14} /> Maker Lab
+        <ArrowLeft size={14} /> IoT Odin
       </Link>
 
       {/* ── Header ── */}

@@ -26,7 +26,16 @@ const TITLES: Record<string, string> = {
 export function TitleBar({ onOpenPalette }: { onOpenPalette: () => void }) {
   const { dich } = useDich();
   const { route } = useAppState();
-  const nhan = TITLES[route] ?? findRoute(route)?.label;
+  /* Trang CON của một cây (`/maker-lab/odin`, `/work/acme/WEB/board`) không có
+     mục riêng trong `ROUTES` — lấy nhãn của đoạn cha gần nhất, thay vì rơi về
+     "CuongThai" như thể người dùng vừa rời khỏi mục đó. */
+  const nhan = TITLES[route] ?? (() => {
+    for (let d = route; d.includes('/'); d = d.slice(0, d.lastIndexOf('/'))) {
+      const r = findRoute(d);
+      if (r) return r.label;
+    }
+    return undefined;
+  })();
   const title = nhan ? dich(nhan) : 'CuongThai';
 
   const isMac = navigator.userAgent.includes('Mac');

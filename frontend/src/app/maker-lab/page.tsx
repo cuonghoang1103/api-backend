@@ -1,7 +1,9 @@
 'use client';
 
 /**
- * Maker Lab — hub.
+ * IoT Odin — hub (đổi tên từ "Maker Lab" 04/10/2026, người dùng: "làm ngắn gọn
+ * lại đừng có giới thiệu dài dòng … IOT Odin, Robot AI do CuongThai làm ra từ
+ * phần cứng phần mềm"). Route vẫn là /maker-lab để link cũ không gãy.
  *
  * One place for every physical build, whatever board it runs on.
  * The ESP32 robot is project #1, not the point of the page: the
@@ -15,10 +17,7 @@ import {
   ArrowRight,
   Boxes,
   CircuitBoard,
-  Cpu,
   Loader2,
-  Radio,
-  Wrench,
 } from 'lucide-react';
 import { listProjects } from '@/lib/maker-lab-api';
 import type { MakerPlatform, MakerProjectStatus, MakerProjectSummary } from '@/types/maker-lab';
@@ -74,41 +73,38 @@ export default function MakerLabHub() {
     // floats over its left edge — without it the page title sits under
     // the hamburger button. Same reservation as /exp-hub.
     <div className="mx-auto max-w-6xl px-4 pb-10 pt-20 sm:px-6 sm:pt-24 lg:pb-14">
-      {/* ── Header ── */}
-      <header className="mb-10">
-        <div className="mb-3 flex items-center gap-2">
-          <CircuitBoard size={22} style={{ color: '#22d3ee' }} />
-          <span
-            className="text-xs font-bold uppercase tracking-[0.2em]"
-            style={{ color: '#22d3ee' }}
-          >
-            Maker Lab
+      {/* ── Header: gọn — một dòng nói nó là gì, ba con số, bộ lọc ── */}
+      <header className="mb-8">
+        <div className="mb-3 inline-flex items-center gap-2 rounded-full border px-3 py-1"
+          style={{ borderColor: 'rgba(34,211,238,0.35)', background: 'rgba(34,211,238,0.08)' }}>
+          <CircuitBoard size={14} style={{ color: '#22d3ee' }} />
+          <span className="text-[11px] font-bold uppercase tracking-[0.18em]" style={{ color: '#22d3ee' }}>
+            by CuongThai
           </span>
         </div>
-        <h1
-          className="text-3xl font-extrabold tracking-tight sm:text-4xl"
-          style={{ color: 'var(--text-primary)' }}
-        >
-          Xưởng phần cứng
+        <h1 className="text-3xl font-extrabold tracking-tight sm:text-4xl" style={{ color: 'var(--text-primary)' }}>
+          IoT Odin
         </h1>
-        <p className="mt-3 max-w-2xl text-base leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-          Mọi dự án phần cứng và nhúng ở một chỗ: robot, cảm biến, drone, bo tự thiết kế. Mỗi dự án
-          có danh sách linh kiện kèm lý do chọn, sơ đồ nối dây, lộ trình firmware, và{' '}
-          <strong style={{ color: 'var(--text-primary)' }}>bảng điều khiển trực tiếp</strong> — thiết
-          bị thật nối thẳng vào server này.
+        <p className="mt-2 max-w-2xl text-base leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+          Robot AI và thiết bị IoT CuongThai tự làm — phần cứng, firmware, AI và bảng điều khiển trực tiếp ở một chỗ.
         </p>
 
-        <div className="mt-6 flex flex-wrap gap-2">
-          <FilterChip active={!platform} onClick={() => setPlatform('')} label="Tất cả" />
-          {platforms.map((p) => (
-            <FilterChip
-              key={p}
-              active={platform === p}
-              onClick={() => setPlatform(p)}
-              label={PLATFORM_LABEL[p]}
-            />
-          ))}
-        </div>
+        {projects.length > 0 && (
+          <div className="mt-5 flex flex-wrap gap-6">
+            <HeroStat value={projects.length} label="dự án" />
+            <HeroStat value={projects.reduce((n, p) => n + p.componentCount, 0)} label="linh kiện" />
+            <HeroStat value={projects.filter((p) => p.status === 'LIVE').length} label="đang chạy" />
+          </div>
+        )}
+
+        {platforms.length > 1 && (
+          <div className="mt-6 flex flex-wrap gap-2">
+            <FilterChip active={!platform} onClick={() => setPlatform('')} label="Tất cả" />
+            {platforms.map((p) => (
+              <FilterChip key={p} active={platform === p} onClick={() => setPlatform(p)} label={PLATFORM_LABEL[p]} />
+            ))}
+          </div>
+        )}
       </header>
 
       {/* ── Projects ── */}
@@ -132,29 +128,6 @@ export default function MakerLabHub() {
         </div>
       )}
 
-      {/* ── How this works ── */}
-      <section className="mt-14">
-        <h2 className="mb-4 text-lg font-bold" style={{ color: 'var(--text-primary)' }}>
-          Xưởng này khác gì một trang hướng dẫn
-        </h2>
-        <div className="grid gap-4 sm:grid-cols-3">
-          <InfoCard
-            icon={<Wrench size={18} />}
-            title="Có lý do, không chỉ có danh sách"
-            body="Mỗi linh kiện đều kèm giải thích vì sao chọn con đó thay vì con rẻ hơn — thứ mà bảng giá không nói cho bạn biết, và thứ khiến bạn mất một buổi tối nếu chọn sai."
-          />
-          <InfoCard
-            icon={<Radio size={18} />}
-            title="Thiết bị nối thẳng vào đây"
-            body="Bo mạch mở WebSocket tới chính server này. Không qua đám mây của hãng nào, không tài khoản bên thứ ba, dữ liệu cảm biến nằm trong Postgres của bạn."
-          />
-          <InfoCard
-            icon={<Cpu size={18} />}
-            title="Chạy thử trước khi mua"
-            body="Bảng điều khiển hoạt động với robot giả lập, nên bạn kiểm được toàn bộ đường đi của dữ liệu trước khi bỏ tiền mua linh kiện đầu tiên."
-          />
-        </div>
-      </section>
     </div>
   );
 }
@@ -268,7 +241,7 @@ function FilterChip({
       style={{
         borderColor: active ? '#22d3ee' : 'var(--border-color)',
         background: active ? 'rgba(34,211,238,0.1)' : 'transparent',
-        color: active ? '#0891b2' : 'var(--text-secondary)',
+        color: active ? '#22d3ee' : 'var(--text-secondary)',
       }}
     >
       {label}
@@ -276,29 +249,11 @@ function FilterChip({
   );
 }
 
-function InfoCard({
-  icon,
-  title,
-  body,
-}: {
-  icon: React.ReactNode;
-  title: string;
-  body: string;
-}) {
+function HeroStat({ value, label }: { value: number; label: string }) {
   return (
-    <div
-      className="rounded-xl border p-4"
-      style={{ borderColor: 'var(--border-color)', background: 'var(--bg-card)' }}
-    >
-      <div className="mb-2" style={{ color: '#22d3ee' }}>
-        {icon}
-      </div>
-      <h3 className="mb-1.5 text-sm font-bold" style={{ color: 'var(--text-primary)' }}>
-        {title}
-      </h3>
-      <p className="text-xs leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-        {body}
-      </p>
+    <div className="flex items-baseline gap-1.5">
+      <span className="text-2xl font-extrabold tabular-nums" style={{ color: 'var(--text-primary)' }}>{value}</span>
+      <span className="text-sm" style={{ color: 'var(--text-muted)' }}>{label}</span>
     </div>
   );
 }

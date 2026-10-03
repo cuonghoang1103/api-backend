@@ -1040,4 +1040,459 @@ const D6_HOMEWORK: Lesson = {
   ],
 };
 
-export const NGAY_6: Lesson[] = [D6_READING, D6_WRITING, D6_SPEAKING, D6_HOMEWORK];
+/* ═══════════════ Bài kiểm tra chặng 1 (Ngày 1–6) — đứng cuối Ngày 6 ═══════════════ */
+/**
+ * Bài kiểm tra chặng 1 — ôn trọn Ngày 1–6, làm sau khi học xong Ngày 6.
+ *
+ * Chỉ kiểm những gì 6 ngày đầu đã dạy: câu đơn & hiện tại đơn (N1), đại từ
+ * (N3), danh từ đếm được / không đếm được (N5), từ vựng Mạng xã hội · Giáo dục ·
+ * Làm việc từ xa, cụm động từ, đánh vần tên & số điện thoại (N1), Sentence
+ * Completion (N4), Flow-chart Completion (N6), mở bài Opinion (N6), Overview
+ * Task 1 (N4), Speaking Yes/No (N4) + Wh- (N6), nguyên âm đơn (N4), nhị trùng
+ * âm (N6), đuôi -s/-es (N1), /ð/ (N3).
+ *
+ * Mọi câu tiếng Anh (bài nghe, bài đọc, câu hỏi) đều VIẾT MỚI cho bài này —
+ * không lấy từ sách hay từ các bài của khoá (xem ../SOAN-BAI.md).
+ * id mọi bài tập bắt đầu bằng `kt1-` (tiến độ & điểm lưu theo id — đừng đổi).
+ */
+
+export const KIEM_TRA_1: Lesson = {
+  id: 'd6-kiem-tra',
+  kind: 'review',
+  title: 'Bài kiểm tra chặng 1 (Ngày 1–6)',
+  goal: 'Tự đo xem đã nắm chắc ngữ pháp, từ vựng và 4 kỹ năng của Ngày 1–6 chưa, biết chính xác phần nào cần ôn lại trước khi sang Ngày 7.',
+  minutes: 75,
+  blocks: [
+    /* ───────────── 0. Cách làm bài & cách tính điểm ───────────── */
+    {
+      t: 'p',
+      text: 'Đây là **bài kiểm tra chặng 1** (checkpoint test — bài kiểm tra ở một "trạm dừng" giữa khoá). Nó gom lại mọi thứ bạn đã học trong **Ngày 1 đến Ngày 6** thành **8 phần**: Ngữ pháp, Từ vựng, Dịch, Nghe, Đọc, Viết, Nói, Phát âm. Không có kiến thức mới — chỉ có những gì bạn đã gặp.',
+    },
+    {
+      t: 'note',
+      title: 'Cách làm bài',
+      items: [
+        '**Gập sách, gập vở**: không mở lại bài học, không tra từ điển, không hỏi Gia sư AI trong lúc làm. Mục đích là biết bạn **thật sự nhớ** được bao nhiêu.',
+        'Làm **một mạch** trong khoảng **75 phút** — đặt đồng hồ. Gợi ý: Ngữ pháp 10′ · Từ vựng 10′ · Dịch 10′ · Nghe 8′ · Đọc 15′ · Viết 12′ · Nói 6′ · Phát âm 4′.',
+        'Ở phần **Dịch**, cố **không bấm 💡 Gợi ý**. Bấm thì vẫn được, nhưng hãy tự trừ câu đó khi tính điểm.',
+        'Phần **Nghe**: chỉ nghe **tối đa 2 lần**, chưa mở lời thoại cho tới khi điền xong cả 6 chỗ trống.',
+        'Làm xong một phần thì **ghi điểm ra giấy** rồi mới sang phần sau. Cuối bài đối chiếu với bảng dưới đây.',
+      ],
+    },
+    {
+      t: 'table',
+      caption: 'Cách tính điểm — mỗi phần tự hiện điểm của nó; ĐẠT = từ 70% trở lên ở TỪNG phần',
+      head: ['Phần', 'Số câu', 'Đạt khi', 'Chưa đạt thì ôn lại'],
+      rows: [
+        ['1. Ngữ pháp', '16', '≥ 12 câu đúng', 'Ngày 1 · Câu đơn & thì hiện tại đơn — Ngày 3 · Đại từ — Ngày 5 · Danh từ đếm được & không đếm được (mục 5–6)'],
+        ['2. Từ vựng', '10 + 6', '≥ 7/10 và ≥ 5/6', 'Ngày 1 · Từ vựng Mạng xã hội — Ngày 3 · Từ vựng Giáo dục & Xã hội — Ngày 5 · Từ vựng Làm việc từ xa (cả mục Cụm động từ)'],
+        ['3. Dịch Việt → Anh', '6', '≥ 5 câu đúng', 'Các bài dịch "Luyện nhanh / Dịch nhanh" trong bài ngữ pháp Ngày 1, 3, 5 và Bài tập Ngày 1 (phần I)'],
+        ['4. Nghe', '6', '≥ 5 câu đúng', 'Ngày 1 · Nghe: bảng chữ cái & đánh vần — Ngày 3 & 5 · Nghe chép chính tả'],
+        ['5. Đọc', '4 + 3', '≥ 5/7 câu đúng (cộng hai khối)', 'Ngày 4 · Đọc: Sentence Completion 1 — Ngày 6 · Đọc: Flow-chart Completion 1 — Ngày 2 · Từ khoá'],
+        ['6. Viết', '2 đoạn ngắn', 'AI chấm ≥ band 4.0 và mở bài có ĐỦ paraphrase + thesis', 'Ngày 6 · Viết: Opinion Essay 1 (mục 2, 5) — Ngày 4 · Viết Task 1 (mục 3, Overview)'],
+        ['7. Nói', '5 câu hỏi', 'AI chấm ≥ band 4.0, mỗi câu trả lời 2–3 câu', 'Ngày 4 · Nói: Yes/No — Ngày 6 · Nói: Wh-'],
+        ['8. Phát âm', '6 dòng', '≥ 70 điểm ở ít nhất 5/6 dòng', 'Ngày 4 mục 6 (nguyên âm đơn) — Ngày 6 mục 6 (nhị trùng âm) — Ngày 1 (đuôi -s/-es) — Ngày 3 (âm /ð/)'],
+      ],
+    },
+
+    /* ───────────── 1. Ngữ pháp ───────────── */
+    { t: 'h', text: 'Phần 1 — Ngữ pháp' },
+    {
+      t: 'p',
+      text: 'Chọn đáp án đúng cho chỗ trống. Kiến thức: **thì hiện tại đơn** (thêm -s/-es, câu phủ định, câu hỏi), **đại từ** (chủ ngữ / tân ngữ / sở hữu / phản thân), **danh từ đếm được – không đếm được** (much, many, a few, a little, some, any).',
+    },
+    {
+      t: 'mcq',
+      id: 'kt1-ngu-phap',
+      title: 'Phần 1 — Ngữ pháp (16 câu)',
+      items: [
+        { q: 'My aunt ___ in a small bakery near the market.', options: ['work', 'works', 'working'], correct: 1, why: 'Chủ ngữ **my aunt** = she (số ít) → động từ thêm **-s**: works.' },
+        { q: 'Tom ___ his homework after dinner every day.', options: ['do', 'dos', 'does'], correct: 2, why: 'Động từ tận cùng bằng **-o** thì thêm **-es**: do → **does** (như go → goes).' },
+        { q: 'The baby ___ when she is hungry.', options: ['cries', 'crys', 'cry'], correct: 0, why: '**cry** tận cùng là phụ âm + **y** → bỏ y, thêm **-ies**: cries. Chủ ngữ the baby = she.' },
+        { q: 'My grandparents ___ the news on TV every evening.', options: ['watches', 'watch', 'watching'], correct: 1, why: 'Chủ ngữ **số nhiều** (my grandparents = they) → động từ **nguyên mẫu**, không thêm -es.' },
+        { q: 'Linh ___ tea. She only drinks water.', options: ["don't like", "doesn't likes", "doesn't like"], correct: 2, why: 'Chủ ngữ she → **doesn\'t**; sau doesn\'t động từ **về nguyên mẫu**: doesn\'t **like** (không phải likes).' },
+        { q: '___ your brother live in Hanoi?', options: ['Do', 'Does', 'Is'], correct: 1, why: 'Câu hỏi Yes/No, chủ ngữ **your brother** (số ít) → **Does** + S + V nguyên mẫu. Không dùng Is vì đã có động từ thường live.' },
+        { q: 'Where ___ your parents work?', options: ['do', 'does', 'are'], correct: 0, why: 'Câu hỏi Wh-: Wh- + **do** + S (số nhiều: your parents) + V nguyên mẫu.' },
+        { q: 'Nam and ___ are in the same English class.', options: ['me', 'I', 'my'], correct: 1, why: 'Chỗ trống nằm trong **chủ ngữ** (đứng trước động từ are) → dùng đại từ chủ ngữ **I**. ~~Nam and me are~~ là lỗi hay gặp.' },
+        { q: 'Our teacher always helps ___ with difficult words.', options: ['we', 'our', 'us'], correct: 2, why: 'Đứng **sau động từ** helps → cần đại từ **tân ngữ**: us.' },
+        { q: 'This phone isn\'t ___. It belongs to my sister.', options: ['mine', 'my', 'me'], correct: 0, why: 'Sau is và **không có danh từ đi theo** → dùng **đại từ sở hữu** mine (= my phone). "my" phải có danh từ phía sau.' },
+        { q: 'Every Friday, the students clean the classroom ___. Nobody helps them.', options: ['theirselves', 'themselves', 'them'], correct: 1, why: '"Tự họ làm, không ai giúp" → đại từ **phản thân** của they là **themselves**. ~~theirselves~~ không tồn tại.' },
+        { q: 'How ___ money do you spend on apps each month?', options: ['many', 'much', 'a few'], correct: 1, why: '**money** là danh từ **không đếm được** → How **much**. (How many + danh từ số nhiều.)' },
+        { q: 'I have ___ questions about the homework. Can I ask you now?', options: ['a few', 'a little', 'much'], correct: 0, why: '**questions** đếm được, số nhiều → **a few** (vài, đủ để hỏi). a little và much đi với danh từ không đếm được.' },
+        { q: 'We don\'t have ___ homework this weekend, so we can relax.', options: ['some', 'many', 'any'], correct: 2, why: 'Câu **phủ định** → **any**. homework **không đếm được** nên cũng không dùng many.' },
+        { q: 'Could I have ___ water, please?', options: ['a', 'some', 'any'], correct: 1, why: 'Câu **xin / mời** (mong người kia đồng ý) → dùng **some**, kể cả khi là câu hỏi. water không đếm được nên không dùng a.' },
+        { q: 'The information on this website ___ very useful.', options: ['are', 'is', 'be'], correct: 1, why: '**information** không đếm được → luôn đi với động từ **số ít**: is. Không có dạng ~~informations~~.' },
+      ],
+    },
+
+    /* ───────────── 2. Từ vựng ───────────── */
+    { t: 'h', text: 'Phần 2 — Từ vựng' },
+    {
+      t: 'p',
+      text: 'Điền **một từ tiếng Anh** vào chỗ trống. Nghĩa tiếng Việt của từ cần điền nằm trong ngoặc. Từ lấy từ ba chủ đề đã học: **Mạng xã hội** (Ngày 1), **Giáo dục** (Ngày 3), **Làm việc từ xa** (Ngày 5). Viết đúng chính tả — sai một chữ cái là sai.',
+    },
+    {
+      t: 'quiz',
+      id: 'kt1-tu-vung',
+      title: 'Phần 2a — Từ vựng chủ đề (10 câu)',
+      kind: 'fill',
+      items: [
+        { q: 'Her cooking video went ___ and got two million views in one day. (lan truyền rất nhanh)', answers: ['viral'], hint: 'Ngày 1 · Mạng xã hội' },
+        { q: 'Change your ___ settings so strangers cannot see your photos. (quyền riêng tư)', answers: ['privacy'], hint: 'Ngày 1 · Mạng xã hội' },
+        { q: 'My phone shows a ___ every time someone comments on my post. (thông báo)', answers: ['notification'], hint: 'Ngày 1 · Mạng xã hội' },
+        { q: 'Good teachers ___ shy students to ask questions. (khuyến khích)', answers: ['encourage'], hint: 'Ngày 3 · Giáo dục' },
+        { q: 'Free online lessons give children in poor areas ___ to good teachers. (sự tiếp cận)', answers: ['access'], hint: 'Ngày 3 · Giáo dục' },
+        { q: 'Many students lose ___ when the lessons are boring. (động lực)', answers: ['motivation'], hint: 'Ngày 3 · Giáo dục' },
+        { q: 'Reading English news every day can ___ your vocabulary. (cải thiện)', answers: ['improve'], hint: 'Ngày 3 · Giáo dục' },
+        { q: 'My ___ and I have a short video meeting every Monday. (đồng nghiệp)', answers: ['colleague'], hint: 'Ngày 5 · Làm việc từ xa' },
+        { q: 'A ___ works for many different clients and has no single boss. (người làm việc tự do)', answers: ['freelancer'], hint: 'Ngày 5 · Làm việc từ xa' },
+        { q: 'My working hours are very ___: I can start at 7 or at 10. (linh hoạt)', answers: ['flexible'], hint: 'Ngày 5 · Làm việc từ xa' },
+      ],
+    },
+    {
+      t: 'mcq',
+      id: 'kt1-cum-dong-tu',
+      title: 'Phần 2b — Cụm động từ (6 câu)',
+      items: [
+        { q: 'I was ill for a week, so now I need to ___ with the lessons I missed.', options: ['catch up', 'drop out', 'log out'], correct: 0, why: '**catch up** = bắt kịp, học bù phần bị lỡ (Ngày 3, Ngày 5).' },
+        { q: 'He ___ of university in his second year because he had no money.', options: ['handed in', 'dropped out', 'set up'], correct: 1, why: '**drop out (of)** = bỏ học giữa chừng (Ngày 3). handed in = nộp bài; set up = thiết lập.' },
+        { q: 'Please ___ your essays before Friday.', options: ['pick up', 'put off', 'hand in'], correct: 2, why: '**hand in** = nộp (bài) (Ngày 3). put off = trì hoãn — ngược nghĩa với yêu cầu "trước thứ Sáu".' },
+        { q: "Don't ___ your report until the last minute. Start it today.", options: ['put off', 'work on', 'check in'], correct: 0, why: '**put off** = hoãn lại, trì hoãn (Ngày 5). Câu sau "Start it today" cho thấy lời khuyên là đừng trì hoãn.' },
+        { q: 'She ___ her feed for an hour every night before bed.', options: ['signs up', 'scrolls through', 'hands in'], correct: 1, why: '**scroll through** = lướt (màn hình, bảng tin) (Ngày 1). feed = bảng tin.' },
+        { q: 'Before the exam, I always ___ my notes one more time.', options: ['go over', 'turn on', 'log in'], correct: 0, why: '**go over** = xem lại, rà soát kỹ (Ngày 3). Chủ ngữ I → động từ nguyên mẫu go.' },
+      ],
+    },
+
+    /* ───────────── 3. Dịch ───────────── */
+    { t: 'h', text: 'Phần 3 — Dịch Việt → Anh' },
+    {
+      t: 'p',
+      text: 'Dịch mỗi câu sang tiếng Anh, viết **cả câu**, có dấu chấm hoặc dấu hỏi ở cuối. Mỗi câu gộp **hai điểm ngữ pháp** đã học. Máy chấp nhận nhiều cách viết đúng; nếu bạn chắc câu mình đúng mà máy báo sai, hãy so với đáp án mẫu — có thể bạn dùng một từ khác nghĩa.',
+    },
+    {
+      t: 'quiz',
+      id: 'kt1-dich',
+      title: 'Phần 3 — Dịch Việt → Anh (6 câu)',
+      kind: 'translate',
+      grammar: "S + V(s/es) · S + don't/doesn't + V · Do/Does + S + V? · đại từ chủ ngữ / tân ngữ / sở hữu (mine, hers) / phản thân (themselves) · a few + N-s · much + N không đếm được",
+      items: [
+        {
+          q: 'Em gái tôi không dùng Facebook.',
+          hint: "my younger sister, doesn't use",
+          answers: [
+            "My younger sister doesn't use Facebook.",
+            'My younger sister does not use Facebook.',
+            "My little sister doesn't use Facebook.",
+            'My little sister does not use Facebook.',
+            "My sister doesn't use Facebook.",
+            'My sister does not use Facebook.',
+          ],
+        },
+        {
+          q: 'Bố bạn có làm việc ở nhà không?',
+          hint: 'Does, your father, work, at home / from home',
+          answers: [
+            'Does your father work at home?',
+            'Does your father work from home?',
+            'Does your dad work at home?',
+            'Does your dad work from home?',
+          ],
+        },
+        {
+          q: 'Họ tự làm bài tập về nhà.',
+          hint: 'do, their homework, themselves',
+          answers: [
+            'They do their homework themselves.',
+            'They do their homework by themselves.',
+            'They do the homework themselves.',
+            'They do the homework by themselves.',
+            'They themselves do their homework.',
+          ],
+        },
+        {
+          q: 'Tôi có vài câu hỏi về khoá học này.',
+          hint: 'have, a few questions, about this course',
+          answers: [
+            'I have a few questions about this course.',
+            "I've got a few questions about this course.",
+            'I have got a few questions about this course.',
+            'I have some questions about this course.',
+          ],
+        },
+        {
+          q: 'Chúng tôi không có nhiều thời gian rảnh vào buổi sáng.',
+          hint: "don't have, much free time, in the morning",
+          answers: [
+            "We don't have much free time in the morning.",
+            'We do not have much free time in the morning.',
+            "We don't have much free time in the mornings.",
+            'We do not have much free time in the mornings.',
+            "We don't have a lot of free time in the morning.",
+            "We don't have a lot of free time in the mornings.",
+            "We don't have much spare time in the morning.",
+            "We don't have much spare time in the mornings.",
+          ],
+        },
+        {
+          q: 'Chiếc máy tính này là của cô ấy, không phải của tôi.',
+          hint: 'this computer / laptop, is hers, not mine',
+          answers: [
+            'This computer is hers, not mine.',
+            'This laptop is hers, not mine.',
+            "This computer is hers, it's not mine.",
+            "This laptop is hers, it's not mine.",
+            'This computer is hers, not my computer.',
+            'This computer is hers and not mine.',
+          ],
+        },
+      ],
+    },
+
+    /* ───────────── 4. Nghe ───────────── */
+    { t: 'h', text: 'Phần 4 — Nghe' },
+    {
+      t: 'p',
+      text: 'Bạn sẽ nghe một cuộc gọi điện tới một trung tâm tiếng Anh. Đây là dạng **Form Completion** (điền phiếu) của IELTS Listening Part 1: người nghe phải ghi lại tên được **đánh vần từng chữ cái** và một **số điện thoại**. Đọc phiếu bên dưới **trước khi nghe** để biết mình cần chờ thông tin gì.',
+    },
+    {
+      t: 'table',
+      caption: 'Sunrise Language Centre — Enrolment form (Phiếu đăng ký học)',
+      head: ['Mục', 'Thông tin'],
+      rows: [
+        ['Course', '(1) ______ course for beginners'],
+        ['Class day', '(2) ______ evening'],
+        ['First name', 'Khoa'],
+        ['Family name', '(3) ______'],
+        ['Phone number', '(4) ______'],
+        ['Job', '(5) ______'],
+        ['Heard about the centre from', "a friend's (6) ______ on Facebook"],
+      ],
+    },
+    {
+      t: 'listen',
+      id: 'kt1-nghe-bai',
+      title: 'Enrolling in an English course',
+      note: 'Giọng Anh-Anh, khoảng 1 phút rưỡi. Nghe tối đa 2 lần. Chưa mở lời thoại cho tới khi điền xong 6 chỗ trống.',
+      lines: [
+        { who: 'Receptionist', voice: 'uk-nu', text: 'Good morning, Sunrise Language Centre. How can I help you?', vi: 'Chào buổi sáng, Trung tâm Ngoại ngữ Sunrise xin nghe. Tôi giúp gì được cho bạn?' },
+        { who: 'Khoa', voice: 'uk-nam', text: "Hi. I'd like to sign up for an English course, please.", vi: 'Chào chị. Tôi muốn đăng ký một khoá tiếng Anh.' },
+        { who: 'Receptionist', voice: 'uk-nu', text: 'Of course. We have a writing course and a speaking course for beginners. Which one would you like?', vi: 'Vâng. Chúng tôi có khoá viết và khoá nói cho người mới bắt đầu. Bạn muốn khoá nào?' },
+        { who: 'Khoa', voice: 'uk-nam', text: 'The speaking course, please. I can read quite well, but I find it hard to talk.', vi: 'Khoá nói ạ. Tôi đọc khá ổn nhưng nói thì thấy khó.' },
+        { who: 'Receptionist', voice: 'uk-nu', text: 'No problem. Is there a day that suits you?', vi: 'Không sao. Bạn hợp với ngày nào?' },
+        { who: 'Khoa', voice: 'uk-nam', text: 'Is there a class on Monday evening?', vi: 'Có lớp tối thứ Hai không chị?' },
+        { who: 'Receptionist', voice: 'uk-nu', text: "I'm afraid the Monday class is full now. But we still have places on Thursday evening.", vi: 'Rất tiếc lớp tối thứ Hai đã đủ người. Nhưng lớp tối thứ Năm vẫn còn chỗ.' },
+        { who: 'Khoa', voice: 'uk-nam', text: "Thursday is fine. I don't work late on Thursdays.", vi: 'Thứ Năm được ạ. Thứ Năm tôi không làm muộn.' },
+        { who: 'Receptionist', voice: 'uk-nu', text: "Great. Can I take your name? I've got your first name as Khoa. What's your family name?", vi: 'Tốt quá. Cho tôi xin tên bạn. Tôi đã ghi tên là Khoa. Họ của bạn là gì?' },
+        { who: 'Khoa', voice: 'uk-nam', text: "It's Truong. That's T, R, U, O, N, G.", vi: 'Là Trương. Đánh vần T, R, U, O, N, G.' },
+        { who: 'Receptionist', voice: 'uk-nu', text: 'T, R, U, O, N, G. Thank you. And what is the best phone number for you?', vi: 'T, R, U, O, N, G. Cảm ơn bạn. Số điện thoại nào gọi cho bạn tiện nhất?' },
+        { who: 'Khoa', voice: 'uk-nam', text: "It's oh nine one two, eight oh six, four seven three. Oh, sorry, no. The end is four three seven.", vi: 'Là 0912, 806, 473. À, xin lỗi, không phải. Ba số cuối là 437.' },
+        { who: 'Receptionist', voice: 'uk-nu', text: 'So that is oh nine one two, eight oh six, four three seven.', vi: 'Vậy là 0912, 806, 437.' },
+        { who: 'Khoa', voice: 'uk-nam', text: "That's right.", vi: 'Đúng rồi ạ.' },
+        { who: 'Receptionist', voice: 'uk-nu', text: 'And what do you do, Khoa?', vi: 'Còn bạn làm nghề gì, Khoa?' },
+        { who: 'Khoa', voice: 'uk-nam', text: "I'm a nurse. I work in a hospital, and some of my patients don't speak Vietnamese.", vi: 'Tôi là y tá. Tôi làm ở bệnh viện, và một vài bệnh nhân của tôi không nói tiếng Việt.' },
+        { who: 'Receptionist', voice: 'uk-nu', text: 'I see. One last question. How did you hear about us?', vi: 'Tôi hiểu rồi. Câu hỏi cuối. Bạn biết đến trung tâm bằng cách nào?' },
+        { who: 'Khoa', voice: 'uk-nam', text: 'A friend of mine shared a post about your centre on Facebook.', vi: 'Một người bạn của tôi chia sẻ một bài đăng về trung tâm trên Facebook.' },
+        { who: 'Receptionist', voice: 'uk-nu', text: 'Lovely. Thank you, Khoa. See you on Thursday.', vi: 'Tuyệt. Cảm ơn Khoa. Hẹn gặp bạn thứ Năm nhé.' },
+      ],
+    },
+    {
+      t: 'quiz',
+      id: 'kt1-nghe-dien',
+      title: 'Phần 4 — Nghe và điền phiếu (6 câu)',
+      kind: 'fill',
+      items: [
+        { q: '(1) Course: ___ course for beginners', answers: ['speaking'] },
+        { q: '(2) Class day: ___ evening', answers: ['Thursday', 'Thursdays', 'Thurs', 'Thu'] },
+        { q: '(3) Family name: ___', answers: ['Truong'] },
+        { q: '(4) Phone number: ___', answers: ['0912 806 437', '0912806437', '0912 806437', '0912-806-437'] },
+        { q: '(5) Job: ___', answers: ['nurse', 'a nurse'] },
+        { q: "(6) Heard about the centre from: a friend's ___ on Facebook", answers: ['post'] },
+      ],
+    },
+    {
+      t: 'note',
+      title: 'Giải thích đáp án — cẩn thận với bẫy',
+      items: [
+        '**(1) speaking** — lễ tân nêu **hai** khoá (writing và speaking); Khoa chọn "The speaking course".',
+        '**(2) Thursday** — bẫy: Khoa hỏi **Monday** trước, nhưng lớp thứ Hai đã đầy (full). Đáp án là ngày **còn chỗ**: Thursday. Viết hoa chữ cái đầu hay không đều được chấm đúng.',
+        '**(3) Truong** — nghe đánh vần **T-R-U-O-N-G**. Không viết dấu tiếng Việt (Trương) vì phiếu tiếng Anh. Nhầm hay gặp: **U** /juː/ với **W**; **G** /dʒiː/ với **J** /dʒeɪ/.',
+        '**(4) 0912 806 437** — bẫy **sửa lời**: Khoa đọc "four seven three" rồi sửa thành "four three seven". Luôn lấy thông tin **cuối cùng**. "oh" = số 0.',
+        '**(5) nurse** — "I\'m a nurse." Câu sau (làm ở bệnh viện) xác nhận lại.',
+        '**(6) post** — "shared a **post** about your centre on Facebook". post = bài đăng (từ vựng Ngày 1).',
+      ],
+    },
+
+    /* ───────────── 5. Đọc ───────────── */
+    { t: 'h', text: 'Phần 5 — Đọc' },
+    {
+      t: 'p',
+      text: 'Đọc **câu hỏi trước**, gạch chân từ khoá, rồi mới đọc bài để tìm vị trí. Bài có 4 đoạn A–D. Hai dạng câu hỏi: **Sentence Completion** (hoàn thành câu — Ngày 4) và **Flow-chart Completion** (hoàn thành sơ đồ quy trình — Ngày 6). Đáp án là từ **lấy nguyên văn trong bài**.',
+    },
+    {
+      t: 'passage',
+      title: 'The Repair Café',
+      intro: 'Bài đọc viết riêng cho bài kiểm tra này — khoảng 250 từ, 4 đoạn A–D.',
+      paras: [
+        {
+          label: 'A',
+          text: 'In many towns, people meet once a month at a "repair café". Visitors bring broken things from home, such as lamps, toasters, bicycles and clothes, and volunteers try to fix them for free. In the small town of Elmwood, the café takes place in a community hall or a library, and it usually lasts about four hours on a Saturday afternoon.',
+        },
+        {
+          label: 'B',
+          text: 'The volunteers are ordinary people with useful skills. Some are retired engineers, and others are students who enjoy working with electronics. They do not get any money for their work. Instead, many of them say that the best reward is the smile on a visitor\'s face when an old radio or a favourite lamp works again.',
+        },
+        {
+          label: 'C',
+          text: 'A visit follows a simple process. First, every visitor writes their name and the problem on a form at the reception desk. Next, a volunteer looks at the item carefully and decides whether it can be repaired. If it can, the owner sits next to the volunteer and watches every step, so that he or she can do the job alone next time. At the end, visitors are invited to have a cup of tea and leave a small donation in a box by the door.',
+        },
+        {
+          label: 'D',
+          text: 'Supporters believe that repair cafés reduce waste, because fewer things end up in the rubbish bin. The Elmwood organisers say that their volunteers can fix about two thirds of the items. However, some modern products are difficult to open, and spare parts can be expensive. For this reason, many volunteers would like companies to make goods that are easier to repair.',
+        },
+      ],
+    },
+    {
+      t: 'p',
+      text: '**Questions 1–4.** Complete the sentences below. Choose **NO MORE THAN TWO WORDS** from the passage for each answer. — *Hoàn thành các câu dưới đây. Chọn **KHÔNG QUÁ HAI TỪ** trong bài đọc cho mỗi câu trả lời.*',
+    },
+    {
+      t: 'quiz',
+      id: 'kt1-doc-cau',
+      title: 'Phần 5a — Sentence Completion (4 câu) — NO MORE THAN TWO WORDS',
+      kind: 'fill',
+      items: [
+        { q: '(1) In Elmwood, the repair café is held in a community hall or a ___.', answers: ['library'] },
+        { q: '(2) Some of the volunteers are students who like working with ___.', answers: ['electronics'] },
+        { q: "(3) For many volunteers, the best reward is seeing a visitor's ___ when something works again.", answers: ['smile'] },
+        { q: '(4) Some modern products are hard to open, and ___ can cost a lot of money.', answers: ['spare parts'] },
+      ],
+    },
+    {
+      t: 'p',
+      text: '**Questions 5–7.** Complete the flow-chart below. Choose **ONE WORD ONLY** from the passage for each answer. — *Hoàn thành sơ đồ. Chọn **MỘT TỪ DUY NHẤT** trong bài đọc cho mỗi câu trả lời.*',
+    },
+    {
+      t: 'table',
+      caption: 'A visit to the repair café — Một lần đến quán sửa đồ',
+      head: ['', 'Bước (đọc từ trên xuống)'],
+      rows: [
+        ['1', 'The visitor writes down his or her name and the problem on a **(5) ______** — **Khách ghi tên và vấn đề của món đồ vào một (5) ______**'],
+        ['↓', ''],
+        ['2', 'A volunteer checks the item and decides if it can be **(6) ______** — **Tình nguyện viên xem món đồ và quyết định nó có thể được (6) ______ hay không**'],
+        ['↓', ''],
+        ['3', 'The owner watches the work, then has tea and gives a small **(7) ______** — **Chủ đồ xem sửa, rồi uống trà và để lại một khoản (7) ______ nhỏ**'],
+      ],
+    },
+    {
+      t: 'quiz',
+      id: 'kt1-doc-so-do',
+      title: 'Phần 5b — Flow-chart Completion (3 câu) — ONE WORD ONLY',
+      kind: 'fill',
+      items: [
+        { q: '(5) The visitor writes down his or her name and the problem on a ___', answers: ['form'] },
+        { q: '(6) A volunteer checks the item and decides if it can be ___', answers: ['repaired'] },
+        { q: '(7) The owner watches the work, then has tea and gives a small ___', answers: ['donation'] },
+      ],
+    },
+    {
+      t: 'note',
+      title: 'Giải thích đáp án — Phần 5 (vị trí trong bài)',
+      items: [
+        '**(1) library** — đoạn **A**, câu 3: "the café takes place in a community hall or a **library**". Paraphrase: takes place in = **is held in**.',
+        '**(2) electronics** — đoạn **B**, câu 2: "students who enjoy working with **electronics**". enjoy = **like**. Bẫy: ~~engineers~~ là nhóm khác (retired engineers), không phải thứ học sinh làm cùng.',
+        '**(3) smile** — đoạn **B**, câu cuối: "the best reward is the **smile** on a visitor\'s face". Chỉ một từ "smile" là đủ; ~~face~~ sai nghĩa.',
+        '**(4) spare parts** — đoạn **D**, câu 3: "**spare parts** can be expensive". expensive = **cost a lot of money**; difficult to open = **hard to open**. Đúng 2 từ — vừa giới hạn.',
+        '**(5) form** — đoạn **C**, câu 2: "writes their name and the problem on a **form** at the reception desk". Sau "on a" cần **danh từ**.',
+        '**(6) repaired** — đoạn **C**, câu 3: "decides whether it **can be repaired**". whether = **if**; looks at = **checks**. Sau "can be" cần động từ dạng **V3** → repaired (không viết repair).',
+        '**(7) donation** — đoạn **C**, câu cuối: "leave a small **donation** in a box by the door". leave = **gives**. Bẫy: ~~box~~ là chỗ bỏ tiền, không phải thứ được cho. Sơ đồ đi **theo thứ tự** bài: (5) → (6) → (7) đều nằm trong đoạn C, từ trên xuống.',
+      ],
+    },
+
+    /* ───────────── 6. Viết ───────────── */
+    { t: 'h', text: 'Phần 6 — Viết' },
+    {
+      t: 'p',
+      text: 'Hai bài viết ngắn. Bài 6a chỉ cần **mở bài** Task 2 dạng Opinion (đúng kỹ năng Ngày 6). Bài 6b chỉ cần **đoạn Overview** của Task 1 (Ngày 4). Viết xong thì bấm cho AI chấm; nhớ rằng đây là đoạn ngắn nên AI có thể trừ điểm vì "chưa đủ bài" — hãy đọc nhận xét về **nội dung, từ vựng và ngữ pháp** của đoạn bạn viết.',
+    },
+    {
+      t: 'essay',
+      id: 'kt1-viet-mo-bai',
+      task: 'Task 2',
+      prompt: 'Some people think that children under 16 should not be allowed to use social media. To what extent do you agree or disagree? — CHỈ VIẾT MỞ BÀI (introduction), 40–60 từ: một câu paraphrase đề + một câu thesis statement nêu rõ quan điểm và 1–2 lý do.',
+      minWords: 40,
+      tips: [
+        'Làm theo 5 bước Ngày 6: đọc đề (chủ đề: social media · đối tượng: children under 16 · ý kiến: should not be allowed) → paraphrase → thesis → ghép → rà soát.',
+        'Paraphrase gợi ý: children under 16 → **young people below the age of sixteen / teenagers**; should not be allowed to use → **should be banned from using**; social media → **social networking sites / platforms such as Facebook and TikTok**.',
+        'Mở câu paraphrase bằng **It is often argued that…** hoặc **Many people believe that…**. Không chép nguyên câu đề.',
+        'Thesis: **I completely agree / I partly agree / I disagree with this view because…** + 1–2 lý do ngắn (vd. privacy, time for study, keeping up with friends).',
+        'Dùng thì **hiện tại đơn**; chủ ngữ số nhiều (children, teenagers) → động từ **không thêm -s**. Soát lại trước khi nộp.',
+      ],
+    },
+    {
+      t: 'essay',
+      id: 'kt1-viet-overview',
+      task: 'Task 1',
+      prompt: 'The table shows the average number of hours per week that employees in three departments of one company worked from home in 2020, 2022 and 2024. Sales: 4 hours, 10 hours, 12 hours · IT: 8 hours, 20 hours, 24 hours · Customer service: 2 hours, 6 hours, 5 hours. — CHỈ VIẾT ĐOẠN OVERVIEW (tổng quan), 1–2 câu, khoảng 25–40 từ. Không đưa số liệu chi tiết.',
+      minWords: 20,
+      tips: [
+        'Mở đầu bằng **Overall,** hoặc **In general,**.',
+        'Nêu **2 đặc điểm nổi bật nhất**: (1) xu hướng chung — giờ làm ở nhà tăng hay giảm? (2) bộ phận nào **cao nhất** suốt cả giai đoạn?',
+        'Khung câu Ngày 4: **Overall, + N1 + V-ed (rose / increased…), while + N2 + V-ed.**',
+        'Số liệu trong quá khứ (2020–2024) → dùng **quá khứ đơn** (rose, increased, was). **Không** viết con số như 24 hours trong overview.',
+      ],
+    },
+
+    /* ───────────── 7. Nói ───────────── */
+    { t: 'h', text: 'Phần 7 — Nói (Speaking Part 1)' },
+    {
+      t: 'p',
+      text: 'Năm câu hỏi Part 1 trộn **Yes/No** (Ngày 4) và **Wh-** (Ngày 6). Với câu Yes/No: **trả lời thẳng – lý do – ví dụ**. Với câu Wh-: **trả lời thẳng + chi tiết + lợi ích/cảm xúc**. Nói 2–3 câu cho mỗi câu hỏi, không học thuộc lòng.',
+    },
+    {
+      t: 'speak',
+      id: 'kt1-noi',
+      part: '1',
+      questions: [
+        'Do you use social media every day?',
+        'What do you usually do in the evening?',
+        'Do you enjoy learning English?',
+        'Who do you live with?',
+        'How do you usually get to school or work?',
+      ],
+    },
+
+    /* ───────────── 8. Phát âm ───────────── */
+    { t: 'h', text: 'Phần 8 — Phát âm' },
+    {
+      t: 'phatam',
+      id: 'kt1-phat-am',
+      title: 'Phần 8 — Phát âm (6 dòng)',
+      note: 'Bấm “Nghe mẫu” một lần, rồi “Đọc & chấm”. Ghi lại điểm tổng của từng dòng — đạt khi ít nhất 5/6 dòng từ 70 điểm. Để ý: âm dài có ː phải kéo dài; nhị trùng âm phải trượt; đuôi -s/-es đọc đúng /s/, /z/ hay /ɪz/; /ð/ đưa đầu lưỡi ra giữa hai hàm răng.',
+      items: [
+        { text: 'sit, seat, full, fool', ipa: 'sɪt siːt fʊl fuːl', vi: 'nguyên âm ngắn – dài: /ɪ/ /iː/ · /ʊ/ /uː/' },
+        { text: 'late, home, now', ipa: 'leɪt həʊm naʊ', vi: 'nhị trùng âm /eɪ/ /əʊ/ /aʊ/' },
+        { text: 'She watches videos and likes posts.', ipa: 'ʃi wɒtʃɪz vɪdiəʊz ənd laɪks pəʊsts', vi: 'watches /ɪz/ · videos /z/ · likes /s/ · posts /s/' },
+        { text: 'They do their homework together.', ipa: 'ðeɪ duː ðeə həʊmwɜːk təɡeðə', vi: '/ð/ trong they, their, together' },
+        { text: 'My boss checks his emails at nine.', ipa: 'maɪ bɒs tʃeks hɪz iːmeɪlz ət naɪn', vi: '/ɒ/ ngắn · checks /s/ · emails /z/ · /aɪ/' },
+        { text: 'I know these words are hard.', ipa: 'aɪ nəʊ ðiːz wɜːdz ə hɑːd', vi: '/əʊ/ · /ð/ · /ɜː/ · /ɑː/ dài' },
+      ],
+    },
+
+    /* ───────────── 9. Tổng kết ───────────── */
+    {
+      t: 'recap',
+      title: 'Xong bài kiểm tra — bước tiếp theo',
+      items: [
+        '**Đạt cả 8 phần** (mỗi phần ≥ 70%) → sang **Ngày 7**. Chúc mừng, nền của bạn đã chắc!',
+        'Chưa đạt **Ngữ pháp** hoặc **Dịch** → ôn lại bài ngữ pháp **Ngày 1** (hiện tại đơn), **Ngày 3** (đại từ), **Ngày 5** (danh từ, mục 5–6) và làm lại các bài "Dịch nhanh" trong đó.',
+        'Chưa đạt **Từ vựng** → mở lại bài từ vựng **Ngày 1, 3, 5**, dùng nút "Che nghĩa / Che từ" để tự kiểm đến khi thuộc, nhất là mục **Cụm động từ**.',
+        'Chưa đạt **Nghe** → ôn **Ngày 1** (bảng chữ cái, đánh vần) và làm lại bài nghe chép **Ngày 3, Ngày 5**. Chưa đạt **Đọc** → làm lại bài đọc **Ngày 4** (Sentence Completion) và **Ngày 6** (Flow-chart).',
+        'Chưa đạt **Viết / Nói / Phát âm** → ôn **Ngày 6** (mở bài Opinion, câu Wh-, nhị trùng âm) và **Ngày 4** (Overview Task 1, câu Yes/No, nguyên âm đơn). Ôn xong thì **làm lại đúng phần đó** của bài kiểm tra này.',
+      ],
+    },
+  ],
+};
+
+// Bài kiểm tra chặng 1 nằm ngay trên — viết trong tệp ngày (script mục lục chạy bằng
+// node strip-types, không nạp được import tương đối không đuôi .ts).
+export const NGAY_6: Lesson[] = [D6_READING, D6_WRITING, D6_SPEAKING, D6_HOMEWORK, KIEM_TRA_1];

@@ -239,6 +239,7 @@ export const MANIFEST: CourseManifest = {
       {"id":"d6-viet","kind":"writing","title":"Viết: Opinion Essay 1 — viết mở bài Task 2","goal":"Viết được mở bài 2 câu cho bài luận nêu quan điểm (Opinion Essay) Task 2: đọc đề, viết lại đề (paraphrase), nêu quan điểm kèm lý do (thesis), ghép lại và tự rà lỗi.","minutes":50,"ready":true},
       {"id":"d6-noi","kind":"speaking","title":"Nói: Trả lời câu hỏi Wh- (Part 1 · Thói quen hằng ngày, Gia đình)","goal":"Trả lời câu hỏi What/Where/When/Why/Who/How ở Speaking Part 1 bằng 2–3 câu theo công thức (trả lời thẳng + chi tiết + lợi ích/cảm xúc) về thói quen hằng ngày và gia đình, và phát âm đúng 8 nhị trùng âm.","minutes":50,"ready":true},
       {"id":"d6-bai-tap","kind":"homework","title":"Bài tập Ngày 6","goal":"Hoàn thành mở bài cho 3 đề Opinion (điền 6 chỗ trống theo các bước paraphrase → thesis → ghép), rồi tự ghép câu thesis statement đúng thứ tự.","minutes":30,"ready":true},
+      {"id":"d6-kiem-tra","kind":"review","title":"Bài kiểm tra chặng 1 (Ngày 1–6)","goal":"Tự đo xem đã nắm chắc ngữ pháp, từ vựng và 4 kỹ năng của Ngày 1–6 chưa, biết chính xác phần nào cần ôn lại trước khi sang Ngày 7.","minutes":75,"ready":true},
     ],
     grammar: [],
     vocab: [
@@ -289,7 +290,14 @@ export const MANIFEST: CourseManifest = {
       {"id":"d6-de-2","title":"Đề 2 — điền 2 chỗ trống (1 từ mỗi chỗ)","lessonId":"d6-bai-tap","count":2},
       {"id":"d6-de-3","title":"Đề 3 — điền 2 chỗ trống (tối đa 2 từ mỗi chỗ)","lessonId":"d6-bai-tap","count":2},
       {"id":"d6-ghep-thesis","title":"Ghép câu thesis statement (4 câu)","lessonId":"d6-bai-tap","count":4},
+      {"id":"kt1-ngu-phap","title":"Phần 1 — Ngữ pháp (16 câu)","lessonId":"d6-kiem-tra","count":16},
+      {"id":"kt1-tu-vung","title":"Phần 2a — Từ vựng chủ đề (10 câu)","lessonId":"d6-kiem-tra","count":10},
+      {"id":"kt1-cum-dong-tu","title":"Phần 2b — Cụm động từ (6 câu)","lessonId":"d6-kiem-tra","count":6},
+      {"id":"kt1-dich","title":"Phần 3 — Dịch Việt → Anh (6 câu)","lessonId":"d6-kiem-tra","count":6},
+      {"id":"kt1-nghe-dien","title":"Phần 4 — Nghe và điền phiếu (6 câu)","lessonId":"d6-kiem-tra","count":6},
+      {"id":"kt1-doc-cau","title":"Phần 5a — Sentence Completion (4 câu) — NO MORE THAN TWO WORDS","lessonId":"d6-kiem-tra","count":4},
+      {"id":"kt1-doc-so-do","title":"Phần 5b — Flow-chart Completion (3 câu) — ONE WORD ONLY","lessonId":"d6-kiem-tra","count":3},
     ],
-    minutes: 175,
+    minutes: 250,
   },
 };

@@ -715,10 +715,12 @@ export const IELTS = defineCourse({
   // Ngày 1 viết thẳng ở trên; Ngày 2+ chỉ có mục lục (ngay/manifest.ts), nội dung tải khi mở.
   manifest: MANIFEST,
   loadDay: loadNgay,
-  kindLabel: {},
+  // `review` = bài kiểm tra chặng (vd. d6-kiem-tra) — khoá IELTS không có bài "ôn tập" nào khác.
+  kindLabel: { review: 'Kiểm tra' },
   kindEn: {
     intro: 'Start Here', grammar: 'Basic Grammar', vocab: 'Basic Vocabulary', listening: 'Listening Skills',
     reading: 'Reading Skills', writing: 'Writing Skills', speaking: 'Speaking Skills', homework: 'Homework',
+    review: 'Checkpoint Test',
   },
   kindHue: {},
   voice: 'uk-nu',

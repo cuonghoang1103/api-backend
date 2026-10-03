@@ -13,8 +13,8 @@ export function useDoc() {
   const [current, setCurrent] = useState<string | null>(null);
   useEffect(() => () => stopAudio(), []);
   const speak = useCallback((text: string) => {
-    setCurrent(text);
     void play({ text, voice: 'uk-nu' }, () => setCurrent((c) => (c === text ? null : c)));
+    setCurrent(text); // sau play(): play() tắt đèn của lượt cũ trước
   }, []);
   return { speak, current, supported: true };
 }

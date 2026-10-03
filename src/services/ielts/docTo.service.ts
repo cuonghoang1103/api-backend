@@ -121,6 +121,20 @@ async function docGoogleDich(text: string, giong: Giong, bam: string, danhVan: b
   return { url, giongDon: true };
 }
 
+/**
+ * Tệp đã chắc chắn có trên R2 — khỏi hỏi lại R2 mỗi lần bấm (đo 03/10: 135ms
+ * cho câu đã có, gần hết là lượt HEAD sang R2). Và lượt ĐANG tạo của từng
+ * tệp: bấm liên tục / web tải trước trùng câu thì chỉ gọi Azure MỘT lần.
+ */
+const daCo = new Set<string>();
+const dangTao = new Map<string, Promise<string>>();
+async function coSan(key: string): Promise<boolean> {
+  if (daCo.has(key)) return true;
+  const ok = await objectExists(key);
+  if (ok) { if (daCo.size > 50_000) daCo.clear(); daCo.add(key); }
+  return ok;
+}
+
 export async function docTo(userId: number, b: { text?: unknown; giong?: unknown; toc?: unknown; kieu?: unknown }) {
   const text = String(b.text ?? '').trim();
   if (!text) throw new BadRequestError('Thiếu chữ để đọc');
@@ -134,14 +148,23 @@ export async function docTo(userId: number, b: { text?: unknown; giong?: unknown
   // 1. Azure — thư mục riêng `az-…` để không lẫn với file WaveNet/Google Dịch cũ.
   if (process.env.AZURE_SPEECH_KEY) {
     const keyAz = `ielts/audio/az-${giong}/${bam}.mp3`;
-    if (await objectExists(keyAz)) return { url: buildPublicUrl(keyAz) };
+    if (await coSan(keyAz)) return { url: buildPublicUrl(keyAz) };
+    const dang = dangTao.get(keyAz);
+    if (dang) return dang.then((url) => ({ url }), () => docGoogleDich(text, giong, bam, danhVan));
     if (!demSinh(userId)) return { url: null, lyDo: 'quota' as const };
-    try {
+    const p = (async () => {
       const { url } = await putObject(keyAz, await synthesizeAzure(text, giong, toc, danhVan), 'audio/mpeg');
-      return { url };
+      daCo.add(keyAz);
+      return url;
+    })();
+    dangTao.set(keyAz, p);
+    try {
+      return { url: await p };
     } catch (e) {
       console.warn('[ielts/doc] Azure TTS hỏng, lùi về Google Dịch:', (e as Error).message);
       return docGoogleDich(text, giong, bam, danhVan);
+    } finally {
+      dangTao.delete(keyAz);
     }
   }
 

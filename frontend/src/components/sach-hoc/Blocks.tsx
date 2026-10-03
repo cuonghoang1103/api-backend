@@ -19,8 +19,9 @@ function SpeakBtn({ text, label }: { text: string; label?: string }) {
       className={`${s.speak} ${on ? s.speakOn : ''}`}
       aria-label={label ?? `Nghe: ${text}`}
       onClick={() => {
-        setOn(true);
+        // play() TRƯỚC: nó gọi onEnd của lượt cũ (có thể chính nút này) rồi mới bật đèn.
         play({ text }, () => setOn(false));
+        setOn(true);
       }}
     >
       <Volume2 size={15} />

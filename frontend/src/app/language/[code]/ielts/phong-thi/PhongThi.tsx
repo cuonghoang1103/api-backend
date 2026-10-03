@@ -19,7 +19,7 @@
  */
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Clock, Play, Square, Sparkles, Check, X } from 'lucide-react';
+import { ArrowLeft, Clock, Play, Square, Sparkles, Check, X, RotateCcw } from 'lucide-react';
 import api from '@/lib/api';
 import ChatMarkdown from '@/components/chat/ChatMarkdown';
 import { play, stopAudio, skipClip, AI_TIMEOUT, type Voice } from '@/components/sach-hoc/audio';
@@ -131,12 +131,10 @@ function PhanNghe({ l, set, xem, onPhat }: { l: Luot; set: (k: string, v: string
       {l.de.phan.nghe.bai.map((b, bi) => {
         const nguoi: string[] = [];
         b.lines.forEach((x) => { const w = x.who ?? ''; if (!nguoi.includes(w)) nguoi.push(w); });
-        const khoa = !xem && !l.luyen && l.daPhat[b.id] && dangPhat !== b.id;
+        // Thi thật: mỗi bài phát MỘT lần, đang phát cũng không dừng/không phát lại.
+        // Chế độ luyện / xem lại: bấm lại = phát lại từ đầu, dừng có nút riêng.
+        const khoa = !xem && !l.luyen && (l.daPhat[b.id] || dangPhat === b.id);
         const phat = () => {
-          if (dangPhat === b.id) { stopAudio(); setDangPhat(null); return; }
-          stopAudio();
-          setDangPhat(b.id);
-          onPhat(b.id);
           // Lời dẫn kiểu băng đề thật: Part N, câu tính dồn từ các Part trước.
           const tu = l.de.phan.nghe.bai.slice(0, bi).reduce((n, x) => n + x.questions.length, 0) + 1;
           const { mo, ket } = dungLoiDan({
@@ -149,6 +147,9 @@ function PhanNghe({ l, set, xem, onPhat }: { l: Luot; set: (k: string, v: string
           play([...mo, ...bai, ...ket], () => { setDangPhat((c) => (c === b.id ? null : c)); setLoiDan(null); }, {
             onClip: (i) => setLoiDan(i < mo.length || i >= mo.length + bai.length ? b.id : null),
           });
+          setDangPhat(b.id);
+          setLoiDan(b.id);
+          onPhat(b.id);
         };
         return (
           <section key={b.id} className={s.part}>
@@ -158,16 +159,21 @@ function PhanNghe({ l, set, xem, onPhat }: { l: Luot; set: (k: string, v: string
                 <div className={s.partTitle}>{b.title}{b.titleVi ? <span className={s.muted}> — {b.titleVi}</span> : null}</div>
                 {b.context && <div className={s.muted}>{b.context}</div>}
               </div>
-              <button type="button" className={s.playBtn} onClick={phat} disabled={khoa} aria-label={dangPhat === b.id ? 'Dừng' : 'Phát bài nghe'}>
-                {dangPhat === b.id ? <Square size={18} /> : <Play size={20} />}
-              </button>
+              <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                {dangPhat === b.id && (xem || l.luyen) && (
+                  <button type="button" className={s.ghost} onClick={() => stopAudio()} aria-label="Dừng"><Square size={14} /></button>
+                )}
+                <button type="button" className={s.playBtn} onClick={phat} disabled={khoa} aria-label={dangPhat === b.id ? 'Phát lại từ đầu' : 'Phát bài nghe'}>
+                  {dangPhat === b.id ? <RotateCcw size={18} /> : <Play size={20} />}
+                </button>
+              </div>
             </div>
             {l.luyen && loiDan === b.id && dangPhat === b.id && (
               <div className={s.hint}>🎙️ Lời dẫn của đề · <button type="button" className={s.ghost} onClick={skipClip}>⏭ Bỏ qua</button></div>
             )}
             {!xem && (
               <div className={s.hint}>
-                {khoa ? 'Đã phát — như thi thật, mỗi bài chỉ nghe một lần.' : l.luyen ? 'Chế độ luyện: nghe lại được.' : 'Đọc trước câu hỏi, rồi bấm ▶. Chỉ nghe được MỘT lần.'}
+                {khoa ? (dangPhat === b.id ? 'Đang phát — như thi thật, không dừng hay nghe lại được.' : 'Đã phát — như thi thật, mỗi bài chỉ nghe một lần.') : l.luyen ? 'Chế độ luyện: nghe lại được.' : 'Đọc trước câu hỏi, rồi bấm ▶. Chỉ nghe được MỘT lần.'}
               </div>
             )}
             {b.questions.map((c, ci) => { so++; const k = `n${bi}-${ci}`; return <CauHoi key={k} k={k} n={so} c={c} v={l.ans[k] ?? ''} set={set} xem={xem} />; })}

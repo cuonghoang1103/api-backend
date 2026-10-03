@@ -106,27 +106,24 @@ function Listen({ b }: { b: Extract<Block, { t: 'listen' }> }) {
   const [doan, setDoan] = useState<'mo' | 'bai' | 'ket' | null>(null);
   useEffect(() => () => stopAudio(), []);
 
+  // Bấm phát lúc đang phát = phát LẠI TỪ ĐẦU (người học muốn nghe lại); dừng có nút riêng.
   const start = () => {
-    if (playing) {
-      stopAudio();
-      setPlaying(false);
-      setDoan(null);
-      return;
-    }
-    setPlaying(true);
-    setPlays((n) => n + 1);
     const bai = b.lines.map((l) => ({ text: l.text, voice: l.voice ?? 'uk-nu' }));
     const { mo, ket } = b.dan ? dungLoiDan({ ...b.dan, tieuDe: b.title }) : { mo: [], ket: [] };
     play([...mo, ...bai, ...ket], () => { setPlaying(false); setDoan(null); }, {
       onClip: (i) => setDoan(i < mo.length ? 'mo' : i < mo.length + bai.length ? 'bai' : 'ket'),
     });
+    setPlaying(true);
+    setDoan(mo.length ? 'mo' : 'bai');
+    setPlays((n) => n + 1);
   };
+  const dung = () => { stopAudio(); setPlaying(false); setDoan(null); };
 
   return (
     <div className={s.listenBox}>
       <div className={s.listenTop}>
-        <button type="button" className={s.playBig} onClick={start} aria-label={playing ? 'Dừng' : 'Phát bài nghe'}>
-          {playing ? <Square size={20} /> : <Play size={22} />}
+        <button type="button" className={s.playBig} onClick={start} aria-label={playing ? 'Phát lại từ đầu' : 'Phát bài nghe'} title={playing ? 'Phát lại từ đầu' : 'Phát bài nghe'}>
+          {playing ? <RotateCcw size={20} /> : <Play size={22} />}
         </button>
         <div className="min-w-0 flex-1">
           <div className={s.listenLabel}>🎧 Bài nghe</div>
@@ -137,6 +134,7 @@ function Listen({ b }: { b: Extract<Block, { t: 'listen' }> }) {
           </div>
         </div>
         {playing && <span className={s.wave} aria-hidden><i /><i /><i /><i /><i /></span>}
+        {playing && <button type="button" className={s.btnGhost} onClick={dung}><Square size={14} /> Dừng</button>}
       </div>
       {playing && b.dan && doan && doan !== 'bai' && (
         <div className={s.quizSub} style={{ marginTop: 8, display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
@@ -155,7 +153,7 @@ function Listen({ b }: { b: Extract<Block, { t: 'listen' }> }) {
                 type="button"
                 className={s.speak}
                 aria-label="Nghe câu này"
-                onClick={() => { setLine(i); play({ text: l.text, voice: l.voice ?? 'uk-nu' }, () => setLine(null)); }}
+                onClick={() => { play({ text: l.text, voice: l.voice ?? 'uk-nu' }, () => setLine(null)); setLine(i); setPlaying(false); setDoan(null); }}
               >
                 <Volume2 size={14} />
               </button>
@@ -178,22 +176,16 @@ function Dialogue({ b }: { b: Extract<Block, { t: 'dialogue' }> }) {
   const voiceFor = useVoiceFor();
   const [on, setOn] = useState<number | null>(null);
   const [all, setAll] = useState(false);
-  // Cờ dừng bằng ref: vòng lặp async cần đọc giá trị MỚI NHẤT giữa hai câu,
-  // mà state trong closure thì luôn là giá trị lúc bấm.
-  const stopRef = useRef(false);
-  useEffect(() => () => { stopRef.current = true; stopAudio(); }, []);
+  useEffect(() => () => stopAudio(), []);
 
-  const playAll = async () => {
-    if (all) { stopRef.current = true; stopAudio(); setAll(false); setOn(null); return; }
-    stopRef.current = false;
+  const playAll = () => {
+    if (all) { stopAudio(); return; }
+    // MỘT lượt phát cho cả đoạn, tô sáng người đang nói qua onClip. (Trước 03/10
+    // là vòng lặp chờ từng câu — bị nút khác chen vào thì vòng lặp tưởng câu đã
+    // xong và tự phát tiếp câu sau, đè lên tiếng của nút kia.)
+    play(b.lines.map((l) => ({ text: l.text, voice: voiceFor(l.role, l.who) })), () => { setAll(false); setOn(null); }, { onClip: (i) => setOn(i) });
     setAll(true);
-    // Phát từng câu để tô sáng đúng người đang nói.
-    for (let i = 0; i < b.lines.length && !stopRef.current; i++) {
-      setOn(i);
-      await new Promise<void>((r) => play({ text: b.lines[i].text, voice: voiceFor(b.lines[i].role, b.lines[i].who) }, r));
-    }
-    setAll(false);
-    setOn(null);
+    setOn(0);
   };
 
   return (
@@ -214,7 +206,7 @@ function Dialogue({ b }: { b: Extract<Block, { t: 'dialogue' }> }) {
               <button
                 type="button"
                 className={s.dText}
-                onClick={() => { setOn(i); play({ text: l.text, voice: voiceFor(l.role, l.who) }, () => setOn(null)); }}
+                onClick={() => { play({ text: l.text, voice: voiceFor(l.role, l.who) }, () => setOn(null)); setOn(i); }}
               >
                 <Inline text={l.text} />
               </button>

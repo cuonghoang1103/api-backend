@@ -27,6 +27,7 @@ import {
 import { STAGE_INFO, loadStage } from '@/app/tech-trends/ielts/data/loadStage';
 import type { StageBundle } from '@/app/tech-trends/ielts/data/bundleTypes';
 import { useDoc } from './useDoc';
+import { stopAudio } from '@/components/sach-hoc/audio';
 import sang from './sang.module.css';
 import cs from '@/components/sach-hoc/course.module.css';
 
@@ -95,6 +96,9 @@ export default function LuyenThem() {
     u.searchParams.set('tab', tab);
     window.history.replaceState(null, '', u);
   }, [stageIdx, tab, urlRead]);
+
+  // Đổi chặng hay đổi tab: dừng tiếng của tab cũ.
+  useEffect(() => { stopAudio(); }, [stageIdx, tab]);
 
   useEffect(() => {
     if (bundles[stageIdx]) return;

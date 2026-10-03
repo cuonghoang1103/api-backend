@@ -11,7 +11,7 @@ import type { Lesson } from './types';
 import { Blocks } from './Blocks';
 import { GiaSu, type Turn } from './GiaSu';
 import { TutorCtx, CourseCtx, type TutorAsk } from './tutorContext';
-import { setDefaultVoice, AI_TIMEOUT, getRate, setRate, onRate } from './audio';
+import { setDefaultVoice, AI_TIMEOUT, getRate, setRate, onRate, stopAudio } from './audio';
 import { useTienDo } from './useTienDo';
 import { TongQuanBuoi, KeHoach, dayDone } from './TongQuan';
 import { KanjiHost } from './KanjiSheet';
@@ -55,6 +55,9 @@ export default function CoursePage({ course, lessonExtra }: {
   // Mặc định là trang Kế hoạch — nó là "bàn học": hôm nay học buổi nào, đã
   // xong bao nhiêu. Người lần đầu vào sẽ thấy form đặt lịch ngay ở đó.
   const [view, setView] = useState<View>({ t: 'plan' });
+  // Chuyển bài / buổi / trang kế hoạch: dừng tiếng đang phát (bài cũ không được nói tiếp).
+  const viewKey = view.t === 'lesson' ? `l:${view.id}` : view.t === 'day' ? `d:${view.n}` : 'plan';
+  useEffect(() => { stopAudio(); }, [viewKey]);
   const [tocOpen, setTocOpen] = useState(false);
   const [sheetOpen, setSheetOpen] = useState(false);
   const [turns, setTurns] = useState<Turn[]>([]);

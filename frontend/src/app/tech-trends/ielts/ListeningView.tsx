@@ -148,21 +148,29 @@ export default function ListeningView({ d, supported }: { d: StageBundle; suppor
 
         {/* Điều khiển phát */}
         <div className="mt-4 flex flex-wrap items-center gap-2">
+          {/* Bấm lại = phát lại từ đầu; dừng có nút riêng (03/10/2026). */}
           <button
             type="button"
-            onClick={playing ? stop : play}
+            onClick={play}
             disabled={!supported}
             className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm border transition-colors ${
               !supported
                 ? 'bg-white/[0.02] border-white/5 text-slate-600 cursor-not-allowed'
-                : playing
-                  ? 'bg-rose-500/20 border-rose-400/40 text-rose-200 hover:bg-rose-500/30'
-                  : 'bg-emerald-500/20 border-emerald-400/40 text-emerald-200 hover:bg-emerald-500/30'
+                : 'bg-emerald-500/20 border-emerald-400/40 text-emerald-200 hover:bg-emerald-500/30'
             }`}
           >
-            {playing ? <Square className="w-4 h-4" /> : <Play className="w-4 h-4" />}
-            {playing ? 'Dừng' : 'Phát bài nghe'}
+            {playing ? <RotateCcw className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+            {playing ? 'Phát lại từ đầu' : 'Phát bài nghe'}
           </button>
+          {playing && (
+            <button
+              type="button"
+              onClick={stop}
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm border transition-colors bg-rose-500/20 border-rose-400/40 text-rose-200 hover:bg-rose-500/30"
+            >
+              <Square className="w-4 h-4" /> Dừng
+            </button>
+          )}
 
           <span className="inline-flex items-center gap-1.5 text-xs text-slate-500">
             <Gauge className="w-3.5 h-3.5" />

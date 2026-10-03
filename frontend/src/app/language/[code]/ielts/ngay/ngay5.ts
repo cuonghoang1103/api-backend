@@ -772,6 +772,21 @@ const D5_VOCAB: Lesson = {
         { en: 'To be honest, I tend to put off difficult tasks until the last minute.', vi: 'Thật lòng mà nói, tôi hay trì hoãn những việc khó đến phút chót. (Speaking Part 1)' },
       ],
     },
+    { t: "h", text: "Thêm: Luyện phát âm — từ vựng làm việc từ xa" },
+    {
+      t: "phatam",
+      id: "d5-phat-am",
+      title: "Luyện phát âm — từ vựng Remote Work",
+      note: "Bấm “Nghe mẫu”, rồi “Đọc & chấm” và đọc to đúng dòng đó. Xanh là đúng, vàng là gần đúng, đỏ là cần sửa. Từ nhiều âm tiết: nghe kỹ âm tiết được nhấn (đứng sau dấu ˈ trong phiên âm ở phần từ vựng, viết HOA ở cột gợi ý).",
+      items: [
+        { text: "office, workplace, employee", ipa: "ɒfɪs wɜːkpleɪs ɪmplɔɪiː", vi: "OF-fice · WORK-place · em-PLOY-ee" },
+        { text: "computer, internet, online", ipa: "kəmpjuːtə ɪntənet ɒnlaɪn", vi: "com-PU-ter · IN-ter-net · on-LINE" },
+        { text: "flexible, colleague, freelancer", ipa: "fleksəbl kɒliːɡ friːlɑːnsə", vi: "FLEX-i-ble · COL-league · FREE-lan-cer" },
+        { text: "I work from home three days a week.", ipa: "aɪ wɜːk frəm həʊm θriː deɪz ə wiːk", vi: "/θ/ trong three" },
+        { text: "Working from home helps me save time.", ipa: "wɜːkɪŋ frəm həʊm helps miː seɪv taɪm", vi: "/ps/ trong helps" },
+        { text: "My colleagues have an online meeting every Monday.", ipa: "maɪ kɒliːɡz hæv ən ɒnlaɪn miːtɪŋ evri mʌndeɪ", vi: "/ɡz/ trong colleagues" },
+      ],
+    },
   ],
 };
 

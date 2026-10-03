@@ -49,6 +49,7 @@ export const MANIFEST: CourseManifest = {
       "Đại từ quan hệ: nối hai câu bằng who, which, that",
       "\"It\" làm chủ ngữ giả và \"one\" chỉ người nói chung",
       "Ứng dụng đại từ vào IELTS Writing Task 2",
+      "Thêm: Phát âm /ð/ trong đại từ (this, that, they, them, their)",
     ],
     vocab: [
       {"w":"achievement","pos":"n","ipa":"/əˈtʃiːvmənt/","vi":"thành tích, thành tựu"},

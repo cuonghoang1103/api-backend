@@ -659,6 +659,21 @@ const D2_SPEAKING: Lesson = {
         "Should parents encourage their children to read more? Why?",
       ],
     },
+    { t: "h", text: "Thêm: Luyện phát âm — câu trả lời Part 1, giữ âm cuối" },
+    {
+      t: "phatam",
+      id: "d2-phat-am",
+      title: "Luyện phát âm — đọc câu trả lời Part 1",
+      note: "Bấm “Nghe mẫu”, rồi “Đọc & chấm” và đọc to đúng dòng đó. Xanh là đúng, vàng là gần đúng, đỏ là cần sửa. Giữ rõ âm CUỐI mỗi từ (name, live, student, books) — lỗi người Việt hay mắc nhất ở Part 1.",
+      items: [
+        { text: "My name is Lan.", ipa: "maɪ neɪm ɪz læn", vi: "/m/ cuối trong name" },
+        { text: "I live in a big city.", ipa: "aɪ lɪv ɪn ə bɪɡ sɪti", vi: "/v/ cuối trong live, /ɡ/ trong big" },
+        { text: "I'm a student.", ipa: "aɪm ə stjuːdənt", vi: "/t/ cuối trong student" },
+        { text: "I like reading books.", ipa: "aɪ laɪk riːdɪŋ bʊks", vi: "/k/ trong like, /ks/ trong books" },
+        { text: "I usually get up at six.", ipa: "aɪ juːʒuəli ɡet ʌp ət sɪks", vi: "/ks/ trong six" },
+        { text: "At the weekend, I often play sports with my friends.", ipa: "ət ðə wiːkend aɪ ɒfn pleɪ spɔːts wɪð maɪ frendz", vi: "/ts/ trong sports, /dz/ trong friends" },
+      ],
+    },
   ],
 };
 

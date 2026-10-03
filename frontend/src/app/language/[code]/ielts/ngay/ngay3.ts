@@ -580,6 +580,30 @@ const D3_GRAMMAR: Lesson = {
         { q: '___ is important to revise every day.', answers: ['it'] },
       ],
     },
+    { t: "h", text: "Thêm: Phát âm /ð/ trong đại từ (this, that, they, them, their)" },
+    {
+      t: "note",
+      title: "Âm /ð/ — tiếng Việt không có, nên phải tập riêng",
+      items: [
+        "Đặt **đầu lưỡi giữa hai hàm răng**, thổi hơi ra và để **cổ họng rung** (sờ tay lên cổ sẽ thấy rung).",
+        "Đừng đọc thành **\"d\"** (~~dis~~, ~~dey~~) hay **\"z\"** (~~zis~~). Gặp rất nhiều trong đại từ: this, that, these, those, they, them, their.",
+        "Cùng cách đặt lưỡi nhưng **không rung** là /θ/: think, three, thank.",
+      ],
+    },
+    {
+      t: "phatam",
+      id: "d3-phat-am",
+      title: "Luyện phát âm — âm /ð/ trong đại từ",
+      note: "Bấm “Nghe mẫu”, rồi “Đọc & chấm” và đọc to đúng dòng đó. Xanh là đúng, vàng là gần đúng, đỏ là cần sửa. Nhìn gương: phải thấy đầu lưỡi giữa hai hàm răng.",
+      items: [
+        { text: "this, that, these, those", ipa: "ðɪs ðæt ðiːz ðəʊz", vi: "/ð/ đầu từ" },
+        { text: "they, them, their", ipa: "ðeɪ ðem ðeə", vi: "/ð/ đầu từ" },
+        { text: "They love their teacher.", ipa: "ðeɪ lʌv ðeə tiːtʃə", vi: "they · their" },
+        { text: "This book is mine, that one is yours.", ipa: "ðɪs bʊk ɪz maɪn ðæt wʌn ɪz jɔːz", vi: "this · that" },
+        { text: "These are my friends. I study with them.", ipa: "ðiːz ə maɪ frendz aɪ stʌdi wɪð ðem", vi: "these · with · them" },
+        { text: "She did it herself.", ipa: "ʃi dɪd ɪt hɜːself", vi: "đại từ phản thân" },
+      ],
+    },
   ],
 };
 

@@ -333,6 +333,32 @@ const D1_GRAMMAR: Lesson = {
         { q: 'He ___ (watch) football every weekend.', answers: ['watches'] },
       ],
     },
+    { t: "h", text: "Thêm: Phát âm đuôi -s/-es của động từ (he/she/it)" },
+    {
+      t: "note",
+      title: "Ba cách đọc đuôi -s/-es — quy tắc theo ÂM CUỐI của động từ, không theo chữ",
+      items: [
+        "**/s/** sau âm vô thanh /p/, /t/, /k/, /f/, /θ/: works /wɜːks/, likes /laɪks/, stops /stɒps/.",
+        "**/z/** sau âm hữu thanh và nguyên âm: plays /pleɪz/, lives /lɪvz/, reads /riːdz/.",
+        "**/ɪz/** sau /s/, /z/, /ʃ/, /tʃ/, /dʒ/: watches /ˈwɒtʃɪz/, uses /ˈjuːzɪz/, finishes /ˈfɪnɪʃɪz/ — thêm hẳn một âm tiết.",
+        "Người Việt hay **bỏ hẳn đuôi -s** (\"she work\") — giám khảo nghe như sai ngữ pháp dù bạn viết đúng. Đọc rõ âm cuối là ăn điểm cả ngữ pháp lẫn phát âm.",
+      ],
+    },
+    {
+      t: "phatam",
+      id: "d1-phat-am",
+      title: "Luyện phát âm — đuôi -s/-es",
+      note: "Bấm “Nghe mẫu”, rồi “Đọc & chấm” và đọc to đúng dòng đó. Xanh là đúng, vàng là gần đúng, đỏ là cần sửa. Để ý âm CUỐI của động từ.",
+      items: [
+        { text: "works, likes, stops", ipa: "wɜːks laɪks stɒps", vi: "/s/" },
+        { text: "plays, lives, reads", ipa: "pleɪz lɪvz riːdz", vi: "/z/" },
+        { text: "watches, uses, finishes", ipa: "wɒtʃɪz juːzɪz fɪnɪʃɪz", vi: "/ɪz/ — thêm một âm tiết" },
+        { text: "She works in a bank.", ipa: "ʃi wɜːks ɪn ə bæŋk", vi: "/s/ trong câu" },
+        { text: "He plays football every week.", ipa: "hi pleɪz fʊtbɔːl evri wiːk", vi: "/z/ trong câu" },
+        { text: "My mother watches TV at night.", ipa: "maɪ mʌðə wɒtʃɪz tiːviː ət naɪt", vi: "/ɪz/ trong câu" },
+        { text: "My friend posts photos every day.", ipa: "maɪ frend pəʊsts fəʊtəʊz evri deɪ", vi: "posts /s/ · photos /z/" },
+      ],
+    },
   ],
 };
 

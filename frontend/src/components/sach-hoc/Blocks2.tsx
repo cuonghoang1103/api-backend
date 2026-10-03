@@ -10,7 +10,8 @@ import { Play, Square, Eye, EyeOff, Mic, Volume2, Sparkles, RotateCcw } from 'lu
 import api from '@/lib/api';
 import ChatMarkdown from '@/components/chat/ChatMarkdown';
 import type { Block, Role, Voice } from './types';
-import { play, stopAudio, AI_TIMEOUT } from './audio';
+import { play, stopAudio, skipClip, AI_TIMEOUT } from './audio';
+import { dungLoiDan } from './nghe';
 import dynamic from 'next/dynamic';
 import { Inline, Kj } from './Blocks';
 import { useCourse, useTutor } from './tutorContext';
@@ -101,17 +102,24 @@ function Listen({ b }: { b: Extract<Block, { t: 'listen' }> }) {
   const [plays, setPlays] = useState(0);
   const [show, setShow] = useState(false);
   const [line, setLine] = useState<number | null>(null);
+  /** Đang ở đâu trong băng: lời dẫn đầu / hội thoại / lời kết (chỉ khi có `b.dan`). */
+  const [doan, setDoan] = useState<'mo' | 'bai' | 'ket' | null>(null);
   useEffect(() => () => stopAudio(), []);
 
   const start = () => {
     if (playing) {
       stopAudio();
       setPlaying(false);
+      setDoan(null);
       return;
     }
     setPlaying(true);
     setPlays((n) => n + 1);
-    play(b.lines.map((l) => ({ text: l.text, voice: l.voice ?? 'uk-nu' })), () => setPlaying(false));
+    const bai = b.lines.map((l) => ({ text: l.text, voice: l.voice ?? 'uk-nu' }));
+    const { mo, ket } = b.dan ? dungLoiDan({ ...b.dan, tieuDe: b.title }) : { mo: [], ket: [] };
+    play([...mo, ...bai, ...ket], () => { setPlaying(false); setDoan(null); }, {
+      onClip: (i) => setDoan(i < mo.length ? 'mo' : i < mo.length + bai.length ? 'bai' : 'ket'),
+    });
   };
 
   return (
@@ -130,6 +138,12 @@ function Listen({ b }: { b: Extract<Block, { t: 'listen' }> }) {
         </div>
         {playing && <span className={s.wave} aria-hidden><i /><i /><i /><i /><i /></span>}
       </div>
+      {playing && b.dan && doan && doan !== 'bai' && (
+        <div className={s.quizSub} style={{ marginTop: 8, display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+          <span>{doan === 'mo' ? '🎙️ Phần giới thiệu — đọc trước câu hỏi bên dưới trong lúc chờ' : '🎙️ Hết bài — soát lại đáp án'}</span>
+          <button type="button" className={s.btnGhost} onClick={skipClip}>⏭ Bỏ qua đoạn này</button>
+        </div>
+      )}
       <button type="button" className={s.linkBtn} onClick={() => setShow(!show)} style={{ marginTop: 10 }}>
         {show ? <><EyeOff size={13} className="inline" /> Ẩn lời thoại</> : <><Eye size={13} className="inline" /> Hiện lời thoại (transcript)</>}
       </button>

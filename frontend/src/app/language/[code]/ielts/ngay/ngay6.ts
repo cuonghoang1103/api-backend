@@ -1272,6 +1272,7 @@ export const KIEM_TRA_1: Lesson = {
       t: 'listen',
       id: 'kt1-nghe-bai',
       title: 'Enrolling in an English course',
+      dan: { so: 'Checkpoint Test 1, Listening', boiCanh: 'a conversation between a receptionist at a language centre and a student who wants to join an English course.', cau: [1, 6] },
       note: 'Giọng Anh-Anh, khoảng 1 phút rưỡi. Nghe tối đa 2 lần. Chưa mở lời thoại cho tới khi điền xong 6 chỗ trống.',
       lines: [
         { who: 'Receptionist', voice: 'uk-nu', text: 'Good morning, Sunrise Language Centre. How can I help you?', vi: 'Chào buổi sáng, Trung tâm Ngoại ngữ Sunrise xin nghe. Tôi giúp gì được cho bạn?' },

@@ -48,7 +48,15 @@ export type Block =
   /** Bài đọc: đoạn có nhãn A, B, C… như đề Reading thật. */
   | { t: 'passage'; title: string; intro?: string; paras: { label?: string; text: string }[] }
   /** Bài nghe: file giọng Anh (máy chủ sinh), lời thoại ẩn cho tới khi người học muốn xem. */
-  | { t: 'listen'; id: string; title: string; note?: string; lines: { who?: string; voice?: Voice; text: string; ro?: string; vi?: string }[] }
+  | {
+      t: 'listen'; id: string; title: string; note?: string; lines: { who?: string; voice?: Voice; text: string; ro?: string; vi?: string }[];
+      /**
+       * Lời dẫn kiểu băng đề IELTS (nghe.ts). `so`: nhãn bài, vd "Day 3, Recording 1";
+       * `boiCanh`: câu tiếng Anh "a talk about…"; `cau`: [từ, đến] câu hỏi đi kèm.
+       * Thiếu `dan` thì bài phát thẳng như cũ.
+       */
+      dan?: { so: string; boiCanh?: string; cau?: [number, number] };
+    }
   /** Hội thoại mẫu có nhân vật (Speaking): mỗi dòng một người, bấm nghe từng câu hoặc cả bài. */
   | { t: 'dialogue'; title?: string; lines: { who: string; role: Role; text: string; vi?: string; ro?: string }[] }
   /** Ô viết bài + AI chấm theo 4 tiêu chí (POST /ielts/ai/cham-viet). */
@@ -84,7 +92,8 @@ export type Block =
   /** Công cụ chia động từ & tính từ tiếng Nhật (bảng quy tắc + ô tra nhanh + bài tập) — nhat/ChiaDongTu.tsx. */
   | { t: 'chia' };
 
-export type Voice = 'uk-nu' | 'uk-nam' | 'us-nu' | 'us-nam' | 'ja-nu' | 'ja-nam';
+/** `dan` = người dẫn bài nghe (giới thiệu, đánh số câu) — giọng riêng, khác mọi nhân vật. */
+export type Voice = 'uk-nu' | 'uk-nam' | 'us-nu' | 'us-nam' | 'ja-nu' | 'ja-nam' | 'dan';
 /** Nhân vật trong hội thoại — mỗi vai một hình và một giọng cố định. */
 export type Role = 'examiner' | 'candidate' | 'a' | 'b' | 'c';
 

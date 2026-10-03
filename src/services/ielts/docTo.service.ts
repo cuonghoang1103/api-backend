@@ -37,6 +37,8 @@ export const GIONG = {
   // Khoá tiếng Nhật (Dekiru, JPD113/123) dùng chung đường này.
   'ja-nu': 'ja-JP-Wavenet-A',
   'ja-nam': 'ja-JP-Wavenet-C',
+  // Người dẫn bài nghe (lời giới thiệu, đánh số câu) — components/sach-hoc/nghe.ts.
+  dan: 'en-GB-Wavenet-A',
 } as const;
 export type Giong = keyof typeof GIONG;
 
@@ -48,6 +50,7 @@ const GIONG_AZURE: Record<Giong, string> = {
   'us-nam': 'en-US-AndrewNeural',
   'ja-nu': 'ja-JP-NanamiNeural',
   'ja-nam': 'ja-JP-KeitaNeural',
+  dan: 'en-GB-LibbyNeural',
 };
 
 const TOI_DA_KY_TU = 1500;

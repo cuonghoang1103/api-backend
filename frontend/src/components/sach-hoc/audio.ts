@@ -27,6 +27,10 @@ export type Clip = {
   toc?: number;
   /** 'danhvan': "W, A, L, S, H" — đọc từng tên chữ cái, ngắt nhịp. */
   kieu?: 'danhvan';
+  /** Phát tệp âm thanh có sẵn (nhạc hiệu) thay vì đọc `text`. */
+  sfx?: string;
+  /** Im lặng chừng ấy mili-giây (thời gian đọc câu hỏi) thay vì đọc `text`. */
+  pauseMs?: number;
 };
 
 /**
@@ -119,6 +123,12 @@ function browserSay(c: Clip): Promise<void> {
   });
 }
 
+/** Bỏ qua đoạn đang phát (một câu dẫn, khoảng lặng, nhạc hiệu) — phát tiếp đoạn sau. */
+export function skipClip() {
+  audio?.pause();
+  cancelCur?.();
+}
+
 export function stopAudio() {
   run += 1;
   audio?.pause();
@@ -146,7 +156,12 @@ export async function play(clips: Clip | Clip[], onEnd?: () => void, opt?: { onC
         await new Promise((r) => setTimeout(r, opt.gapMs));
         if (my !== run) return;
       }
-      const { url, don } = await urlFor(c);
+      if (c.pauseMs) {
+        opt?.onClip?.(i);
+        await new Promise<void>((resolve) => { const t = setTimeout(resolve, c.pauseMs); cancelCur = () => { clearTimeout(t); resolve(); }; });
+        continue;
+      }
+      const { url, don } = c.sfx ? { url: c.sfx, don: false } : await urlFor(c);
       if (my !== run) return;
       opt?.onClip?.(i);
       if (url) {
@@ -155,13 +170,15 @@ export async function play(clips: Clip | Clip[], onEnd?: () => void, opt?: { onC
           const nam = don && (c.voice ?? defaultVoice).endsWith('nam');
           a.dataset.nam = nam ? '1' : '0';
           a.preservesPitch = !nam;
-          a.defaultPlaybackRate = userRate * (nam ? NAM_RATE : 1);
+          // Nhạc hiệu luôn phát đúng tốc độ gốc — chỉnh 0.75× là cho lời nói.
+          a.defaultPlaybackRate = c.sfx ? 1 : userRate * (nam ? NAM_RATE : 1);
           a.playbackRate = a.defaultPlaybackRate;
           audio = a;
           cancelCur = resolve;
           a.onended = () => resolve();
-          a.onerror = () => { browserSay(c).then(resolve); };
-          a.play().catch(() => { browserSay(c).then(resolve); });
+          // Nhạc hiệu hỏng thì bỏ qua lặng lẽ — không đọc chữ rỗng.
+          a.onerror = () => { (c.sfx ? Promise.resolve() : browserSay(c)).then(resolve); };
+          a.play().catch(() => { (c.sfx ? Promise.resolve() : browserSay(c)).then(resolve); });
         });
       } else {
         await new Promise<void>((resolve) => {

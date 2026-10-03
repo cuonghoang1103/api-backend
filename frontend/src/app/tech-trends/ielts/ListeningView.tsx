@@ -23,6 +23,7 @@ import type { StageBundle } from './data/bundles';
 import FigureView from './FigureView';
 import { isCorrect } from './check';
 import { play as phat, stopAudio, type Voice } from '@/components/sach-hoc/audio';
+import { dungLoiDan } from '@/components/sach-hoc/nghe';
 
 /** Mỗi người nói một giọng, theo thứ tự xuất hiện trong bài. */
 const GIONG: Voice[] = ['uk-nu', 'uk-nam', 'us-nu', 'us-nam'];
@@ -77,12 +78,17 @@ export default function ListeningView({ d, supported }: { d: StageBundle; suppor
     setPlaying(true);
     const nguoi: string[] = [];
     ex.lines.forEach((l) => { const w = l.who ?? ''; if (!nguoi.includes(w)) nguoi.push(w); });
+    // Lời dẫn kiểu băng đề IELTS (nhạc hiệu, "Recording N", thời gian đọc câu hỏi).
+    const so = LISTENINGS.findIndex((l) => l.id === ex.id) + 1;
+    const { mo, ket } = dungLoiDan({ so: `Recording ${so}`, tieuDe: ex.title, cau: [1, ex.questions.length] });
+    const bai = ex.lines.map((l) => ({ text: l.text, voice: GIONG[nguoi.indexOf(l.who ?? '') % GIONG.length], toc: rate }));
     void phat(
-      ex.lines.map((l) => ({ text: l.text, voice: GIONG[nguoi.indexOf(l.who ?? '') % GIONG.length], toc: rate })),
+      [...mo, ...bai, ...ket],
       () => { if (myRun === runId.current) { setPlaying(false); setLineIdx(-1); } },
-      { onClip: (i) => { if (myRun === runId.current) setLineIdx(i); }, gapMs: 350 },
+      // Chỉ số dòng trừ phần lời dẫn đầu; ngoài lời thoại thì không tô dòng nào.
+      { onClip: (i) => { if (myRun === runId.current) setLineIdx(i >= mo.length && i < mo.length + bai.length ? i - mo.length : -1); }, gapMs: 350 },
     );
-  }, [ex.lines, rate]);
+  }, [ex.lines, ex.id, ex.title, ex.questions.length, LISTENINGS, rate]);
 
   const correctCount = ex.questions.filter((q, i) => isCorrect(answers[i] ?? '', q.answer, q.alt)).length;
 

@@ -22,7 +22,8 @@ import Link from 'next/link';
 import { ArrowLeft, Clock, Play, Square, Sparkles, Check, X } from 'lucide-react';
 import api from '@/lib/api';
 import ChatMarkdown from '@/components/chat/ChatMarkdown';
-import { play, stopAudio, AI_TIMEOUT, type Voice } from '@/components/sach-hoc/audio';
+import { play, stopAudio, skipClip, AI_TIMEOUT, type Voice } from '@/components/sach-hoc/audio';
+import { dungLoiDan } from '@/components/sach-hoc/nghe';
 import { useLangUser } from '@/components/language/primitives';
 import FigureView from '@/app/tech-trends/ielts/FigureView';
 import { isCorrect } from '@/app/tech-trends/ielts/check';
@@ -121,6 +122,8 @@ function CauHoi({ k, n, c, v, set, xem }: { k: string; n: number; c: Cau; v: str
 /* ── Phần Nghe ───────────────────────────────────────────────────────── */
 function PhanNghe({ l, set, xem, onPhat }: { l: Luot; set: (k: string, v: string) => void; xem: boolean; onPhat: (id: string) => void }) {
   const [dangPhat, setDangPhat] = useState<string | null>(null);
+  /** Đang ở lời dẫn (đầu/cuối) của Part nào — để hiện nút bỏ qua ở chế độ luyện. */
+  const [loiDan, setLoiDan] = useState<string | null>(null);
   useEffect(() => () => stopAudio(), []);
   let so = 0;
   return (
@@ -134,7 +137,18 @@ function PhanNghe({ l, set, xem, onPhat }: { l: Luot; set: (k: string, v: string
           stopAudio();
           setDangPhat(b.id);
           onPhat(b.id);
-          play(b.lines.map((x) => ({ text: x.text, voice: GIONG[nguoi.indexOf(x.who ?? '') % GIONG.length] })), () => setDangPhat((c) => (c === b.id ? null : c)));
+          // Lời dẫn kiểu băng đề thật: Part N, câu tính dồn từ các Part trước.
+          const tu = l.de.phan.nghe.bai.slice(0, bi).reduce((n, x) => n + x.questions.length, 0) + 1;
+          const { mo, ket } = dungLoiDan({
+            so: `Part ${bi + 1}`,
+            tieuDe: b.title,
+            cau: [tu, tu + b.questions.length - 1],
+            chao: bi === 0 ? 'Welcome to the Cuong Thai English IELTS practice test. This is the Listening section.' : null,
+          });
+          const bai = b.lines.map((x) => ({ text: x.text, voice: GIONG[nguoi.indexOf(x.who ?? '') % GIONG.length] }));
+          play([...mo, ...bai, ...ket], () => { setDangPhat((c) => (c === b.id ? null : c)); setLoiDan(null); }, {
+            onClip: (i) => setLoiDan(i < mo.length || i >= mo.length + bai.length ? b.id : null),
+          });
         };
         return (
           <section key={b.id} className={s.part}>
@@ -148,6 +162,9 @@ function PhanNghe({ l, set, xem, onPhat }: { l: Luot; set: (k: string, v: string
                 {dangPhat === b.id ? <Square size={18} /> : <Play size={20} />}
               </button>
             </div>
+            {l.luyen && loiDan === b.id && dangPhat === b.id && (
+              <div className={s.hint}>🎙️ Lời dẫn của đề · <button type="button" className={s.ghost} onClick={skipClip}>⏭ Bỏ qua</button></div>
+            )}
             {!xem && (
               <div className={s.hint}>
                 {khoa ? 'Đã phát — như thi thật, mỗi bài chỉ nghe một lần.' : l.luyen ? 'Chế độ luyện: nghe lại được.' : 'Đọc trước câu hỏi, rồi bấm ▶. Chỉ nghe được MỘT lần.'}

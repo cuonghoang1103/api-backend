@@ -822,6 +822,7 @@ const D3_LISTENING: Lesson = {
       t: 'listen',
       id: 'd3-nghe-bai',
       title: 'Bees and why we need them',
+      dan: { so: 'Day 3, Recording 1', boiCanh: 'a short talk about bees and why they are so important to people.', cau: [1, 22] },
       note: 'Giọng Anh-Anh, khoảng 2 phút. Nghe cả bài trước, làm bài điền bên dưới, rồi mới mở lời thoại để soát.',
       lines: D3_SCRIPT.map((text) => ({ text, voice: 'uk-nu' as const })),
     },

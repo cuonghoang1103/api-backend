@@ -22,6 +22,7 @@
  */
 import type { LucideIcon } from 'lucide-react';
 import {
+  Award,
   Target,
   AudioWaveform,
   Binary,
@@ -148,6 +149,8 @@ export const ROUTES: readonly RouteDef[] = [
     keywords: ['code', 'lab', 'bài tập', 'thuc hanh'] },
   { path: '/exam', label: 'Phòng thi', icon: ClipboardList, group: 'hoc',
     keywords: ['exam', 'thi', 'de thi', 'kiem tra', 'phong thi'] },
+  { path: '/ielts', label: 'IELTS', icon: Award, group: 'hoc',
+    keywords: ['ielts', 'luyen thi', 'band', 'listening', 'reading', 'writing', 'speaking', 'phat am', 'phong thi'] },
   { path: '/language', label: 'Ngoại ngữ', icon: Languages, group: 'hoc',
     keywords: ['my language', 'tiếng anh', 'tiếng nhật', 'ngoai ngu'] },
   { path: '/algorithms', label: 'Thuật toán', icon: Binary, group: 'hoc',

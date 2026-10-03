@@ -2672,6 +2672,10 @@ code {
    KHÔNG đặt `background`: cây web tự sơn nền theo chủ đề của nó, đè nền của
    app lên sẽ lộ ra ở mọi khoảng nó chưa sơn tới. */
 .ct-web-host {
+  /* Web khai --app-nav-h (chiều cao thanh điều hướng của WEB) ở globals.css; app
+     không có thanh đó. Thiếu biến ⇒ `top: var(--app-nav-h)` và
+     `calc(100vh - var(--app-nav-h) …)` của khoá IELTS thành không hợp lệ (03/10/2026). */
+  --app-nav-h: 0px;
   height: 100%;
   overflow-y: auto;
   overscroll-behavior: contain;
@@ -15225,3 +15229,14 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
 .ct-agent .ct-chat-chan-chu { min-width: 0; overflow-wrap: anywhere; }
 .ct-agent .ct-noluc { flex-wrap: wrap; }
 .ct-agent .ct-chat-thanh { flex-wrap: wrap; min-width: 0; }
+
+/* IELTS (03/10/2026) — khung đo bề rộng cho @container ctnoidung của khoá học.
+   container-type kéo theo layout containment ⇒ lớp phủ fixed bên trong neo vào
+   khung này (vùng nội dung, chừa thanh bên của app) — khung KHÔNG cuộn nên chúng
+   vẫn đứng yên; phần cuộn là .ct-web-host bên trong. */
+.ct-ielts-khung {
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  container: ctnoidung / inline-size;
+}

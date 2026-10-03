@@ -105,6 +105,16 @@ interface BoDieuHuong {
  * Work mở ngăn chi tiết thẻ đúng bằng kiểu đổi-mỗi-truy-vấn này. Phần `#…` bị
  * bỏ: app không cuộn theo neo, và để nó dính vào đường dẫn là không khớp route.
  */
+/**
+ * Đường dẫn của WEB → đường dẫn của APP khi hai nơi đặt cùng trang ở chỗ khác.
+ * IELTS (03/10/2026): web ở `/language/en/ielts…`, app có mục riêng `/ielts…` —
+ * không đổi thì bấm "Phòng thi thử" trong khoá là nhảy sang mục Ngoại ngữ.
+ */
+export function doiDuongApp(duong: string): string {
+  const m = /^\/language\/en\/ielts(\/.*)?$/.exec(duong);
+  return m ? `/ielts${m[1] ?? ''}` : duong;
+}
+
 export function tachHref(href: string, hienTai: string): [string, string] {
   const khongNeo = href.split('#')[0] ?? '';
   const i = khongNeo.indexOf('?');
@@ -114,7 +124,7 @@ export function tachHref(href: string, hienTai: string): [string, string] {
      trang") — trang chủ của app là bảng điều khiển. Thanh bên CT Work có nút
      "Back to CuongThai" trỏ đúng `/`. */
   if (duong === '/') return ['/dashboard', q];
-  return [duong || hienTai, q];
+  return [doiDuongApp(duong || hienTai), q];
 }
 
 export function useRouter(): BoDieuHuong {

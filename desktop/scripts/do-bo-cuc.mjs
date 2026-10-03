@@ -636,6 +636,10 @@ await ctx.route('**/api/v1/**', async (tuyen) => {
    "🔌 Ngoại tuyến", màu nhấn xanh mòng két, chip model cục bộ. Đọc ở bản giả
    `app-state` (vite.bo-cuc.config.ts) và ở `kiemMang` của cầu nối giả. */
 await ctx.addInitScript((matMang) => { globalThis.__CT_ONLINE = !matMang; }, process.env.CT_NGOAI_TUYEN === '1');
+/* Chủ đề app mà bản giả app-state báo cho trang (`resolvedTheme`) — trước 03/10/2026
+   nó luôn là 'dark', nên `CT_THEME=light` chỉ đổi màu VỎ app còn trang đọc chủ đề từ
+   app-state (vd. mục IELTS gắn html.theme-dark) vẫn tối: ảnh chụp sai. */
+await ctx.addInitScript((t) => { globalThis.__CT_THEME = t; }, process.env.CT_THEME || 'dark');
 
 /* `CT_THANH_BEN=rong|hep|an` (03/10/2026) — trạng thái thanh bên DỰ ÁN của AI
    Code. Người dùng chụp lỗi ở đúng ba trạng thái này: kéo rộng, kéo hẹp tối

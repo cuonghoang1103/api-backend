@@ -29,7 +29,7 @@ import { useAuthStore } from '@/store/authStore';
 import { useAppState } from '../../app-state';
 import { useSession } from '../../auth/session';
 import { configureWebApi } from '../../shims/web-api-adapter';
-import { LoiChuyenHuong, LoiKhongTimThay, ThamSoTuyen, useSearchParams } from '../../shims/next-navigation';
+import { LoiChuyenHuong, LoiKhongTimThay, ThamSoTuyen, useSearchParams, chupTruyVan, datTruyVanCho, doiDuongApp } from '../../shims/next-navigation';
 import TanStackQueryProvider from '@/components/providers/TanStackQueryProvider';
 import { khopTuyenWeb } from './dinhTuyenWeb';
 /* ⚠️ `dich` (hàm tầm mô-đun) chứ không chỉ `useDich`: `RanhGioiTuyen` là CLASS
@@ -176,7 +176,7 @@ class RanhGioiTuyen extends Component<
   override componentDidCatch(loi: unknown): void {
     /* Điều hướng Ở ĐÂY, không phải trong `render`: gọi `navigate()` giữa lượt
        vẽ là đặt state của component khác ngay trong lúc vẽ. */
-    if (loi instanceof LoiChuyenHuong) { this.props.chuyenHuong(loi.den); return; }
+    if (loi instanceof LoiChuyenHuong) { this.props.chuyenHuong(doiDuongApp(loi.den)); return; }
     if (loi instanceof LoiKhongTimThay) return;
     console.error(`[${this.props.ten}] trang nổ:`, loi);
   }
@@ -239,6 +239,14 @@ export function TrangWebTheoTuyen({ ten, khung: Khung }: {
   const { route, navigate } = useAppState();
   const san = useCauNoiWeb();
   const khop = useMemo(() => khopTuyenWeb(route), [route]);
+  /* Cửa nối chuỗi truy vấn cho mã web đọc/ghi thẳng (sach-hoc/moiTruong.ts): app chạy
+     ở app://…/index.html nên `window.location.search` không mang `?bai=`. Gắn NGAY
+     trong lượt vẽ (không chờ effect) vì trang con đọc nó trong effect của chính nó,
+     mà effect con chạy TRƯỚC effect cha. */
+  (globalThis as { __CT_TRUY_VAN__?: { doc: () => string; ghi: (q: string) => void } }).__CT_TRUY_VAN__ = {
+    doc: () => chupTruyVan(route),
+    ghi: (q: string) => datTruyVanCho(route, q),
+  };
   /*
    * ⚠️ PROPS CỦA TRANG NEXT (23/09/2026). Next truyền `{ params, searchParams }`
    * vào MỌI trang, và một số trang đọc tham số từ ĐÓ chứ không từ `useParams()`:

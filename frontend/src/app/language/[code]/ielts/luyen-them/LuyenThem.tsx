@@ -28,6 +28,7 @@ import { STAGE_INFO, loadStage } from '@/app/tech-trends/ielts/data/loadStage';
 import type { StageBundle } from '@/app/tech-trends/ielts/data/bundleTypes';
 import { useDoc } from './useDoc';
 import { stopAudio } from '@/components/sach-hoc/audio';
+import { docTruyVan, ghiTruyVan } from '@/components/sach-hoc/moiTruong';
 import sang from './sang.module.css';
 import cs from '@/components/sach-hoc/course.module.css';
 
@@ -82,7 +83,7 @@ export default function LuyenThem() {
 
   // ?chang=2&tab=vocab — mở thẳng đúng chỗ (link từ khoá 15 ngày, hay gửi cho bạn).
   useEffect(() => {
-    const q = new URLSearchParams(window.location.search);
+    const q = docTruyVan();
     const c = Number(q.get('chang'));
     if (c >= 1 && c <= 4) setStageIdx(c - 1);
     const t = q.get('tab') as TabId | null;
@@ -91,10 +92,7 @@ export default function LuyenThem() {
   }, []);
   useEffect(() => {
     if (!urlRead) return;
-    const u = new URL(window.location.href);
-    u.searchParams.set('chang', String(stageIdx + 1));
-    u.searchParams.set('tab', tab);
-    window.history.replaceState(null, '', u);
+    ghiTruyVan((q) => { q.set('chang', String(stageIdx + 1)); q.set('tab', tab); });
   }, [stageIdx, tab, urlRead]);
 
   // Đổi chặng hay đổi tab: dừng tiếng của tab cũ.

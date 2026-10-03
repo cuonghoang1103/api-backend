@@ -6,7 +6,7 @@
  * (đã từng là nguồn của vòng vẽ vô tận) và cách lùi về đường dẫn cha.
  */
 import { describe, expect, it } from 'vitest';
-import { chupTruyVan, datTruyVanCho, tachHref, theoDoiTruyVan } from './next-navigation';
+import { chupTruyVan, datTruyVanCho, tachHref, theoDoiTruyVan, doiDuongApp } from './next-navigation';
 
 /** Bản sao phép tính "lùi về cha" trong `useRouter().back()`. */
 function duongCha(route: string): string {
@@ -96,5 +96,18 @@ describe('tachHref — href của router.push/replace', () => {
 
   it('giữ nguyên dấu `?` thứ hai nằm trong giá trị', () => {
     expect(tachHref('/a?q=x?y', '/x')).toEqual(['/a', 'q=x?y']);
+  });
+});
+
+describe('doiDuongApp — IELTS là mục riêng của app (03/10/2026)', () => {
+  it('link /language/en/ielts… của web ở lại mục /ielts…', () => {
+    expect(tachHref('/language/en/ielts/phong-thi', '/ielts')).toEqual(['/ielts/phong-thi', '']);
+    expect(tachHref('/language/en/ielts?bai=d3-nghe', '/x')).toEqual(['/ielts', 'bai=d3-nghe']);
+    expect(doiDuongApp('/language/en/ielts')).toBe('/ielts');
+  });
+  it('không đụng các trang Ngoại ngữ khác', () => {
+    expect(doiDuongApp('/language/en/vocab')).toBe('/language/en/vocab');
+    expect(doiDuongApp('/language/ja/ielts')).toBe('/language/ja/ielts');
+    expect(doiDuongApp('/language/en/ieltsx')).toBe('/language/en/ieltsx');
   });
 });

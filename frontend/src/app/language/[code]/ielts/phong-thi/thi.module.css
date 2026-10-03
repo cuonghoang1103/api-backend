@@ -106,3 +106,6 @@
 .scores { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 12px 0; }
 .score { display: flex; flex-direction: column; gap: 2px; padding: 16px; border-radius: 14px; background: var(--lh-surface); border: 1px solid var(--lh-line); }
 .score > b { font-size: 28px; font-weight: 800; }
+
+/* App desktop: không có thanh điều hướng của web ⇒ thanh đồng hồ dính sát mép trên. */
+:global(.ct-web-host) .top { top: 0; }

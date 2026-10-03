@@ -49,7 +49,7 @@ function gia() {
           datNgonNgu(NN);
           /* CT_NGOAI_TUYEN=1 (03/10/2026) ⇒ dựng trang ở trạng thái MẤT MẠNG để
              đo + chụp dải "Ngoại tuyến" và màu nhấn đổi của khung AI. */
-          const S = { online: globalThis.__CT_ONLINE !== false, settings: { ngonNgu: NN, ...(globalThis.__CT_SETTINGS ?? {}) }, setSetting: () => {}, resolvedTheme: 'dark',
+          const S = { online: globalThis.__CT_ONLINE !== false, settings: { ngonNgu: NN, ...(globalThis.__CT_SETTINGS ?? {}) }, setSetting: () => {}, resolvedTheme: globalThis.__CT_THEME === 'light' ? 'light' : 'dark',
                       theme: 'dark', toggleSidebar: () => {}, zoom: 1, datZoom: () => {},
                       layThamSo: () => null, datThamSo: () => {}, lanDieuHuong: 0 };
           /* ⚠️ PHẢI CÓ route + navigate THẬT, không phải hằng.

@@ -21,6 +21,7 @@ import { hoiVeChu, chamBaiViet, CAC_Y } from '../services/ielts/hoiAI.service.js
 import { dungDe, nopDe, lichSuThi } from '../services/ielts/deThi.service.js';
 import { chamBaiNoi } from '../services/ielts/chamNoi.service.js';
 import { chamPhatAm } from '../services/ielts/phatAm.service.js';
+import { goiGiaSu, hoiGiaSu } from '../services/ielts/goiGiaSu.service.js';
 import { docTo } from '../services/ielts/docTo.service.js';
 import { xemChuViet, chamVietTay, MAX_TRANG } from '../services/ielts/vietTay.service.js';
 import multer from 'multer';
@@ -119,6 +120,19 @@ router.post('/ai/cham-phat-am', audioPhatAm.single('audio'), async (req, res: Re
     if (!f?.buffer?.length) throw new Error('Thiếu audio');
     ok(res, await chamPhatAm(uid(req), { audio: f.buffer, cau: String(req.body?.cau ?? ''), giong: req.body?.giong ? String(req.body.giong) : undefined }));
   } catch (e) { next(e); }
+});
+// 📞 Luyện phát âm cùng gia sư (giọng) — goiGiaSu.service.ts.
+// Lượt luyện: multipart `audio` (WAV 16 kHz; vắng = mở cuộc gọi) + `trangThai` JSON
+// {danhSach, viTri, lanThu, chuDe}. Lượt hỏi (có AI): JSON {cauHoi, mau, chuDe}.
+router.post('/ai/goi-gia-su', audioPhatAm.single('audio'), async (req, res: Response<ApiResponse>, next) => {
+  try {
+    let tt: { danhSach?: unknown; viTri?: unknown; lanThu?: unknown; chuDe?: unknown } = {};
+    try { tt = JSON.parse(String(req.body?.trangThai ?? '{}')); } catch { /* lượt mở đầu có thể không gửi */ }
+    ok(res, await goiGiaSu(uid(req), { audio: req.file?.buffer, ...tt }));
+  } catch (e) { next(e); }
+});
+router.post('/ai/goi-gia-su/hoi', async (req, res: Response<ApiResponse>, next) => {
+  try { ok(res, await hoiGiaSu(uid(req), req.body ?? {})); } catch (e) { next(e); }
 });
 router.post('/ai/cham-noi', audioNoi.single('audio'), async (req, res: Response<ApiResponse>, next) => {
   try {

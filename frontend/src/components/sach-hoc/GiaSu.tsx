@@ -60,7 +60,7 @@ function AnswerTools({ text }: { text: string }) {
 }
 
 export function GiaSu({
-  name, lessonTitle, turns, asking, loggedIn, selection, onAsk, onClear, onClose, closeLabel,
+  name, lessonTitle, turns, asking, loggedIn, selection, onAsk, onClear, onClose, closeLabel, onGoi,
 }: {
   /** Tên gia sư hiển thị ("Gia sư IELTS", "Gia sư tiếng Nhật"). */
   name: string;
@@ -75,6 +75,8 @@ export function GiaSu({
   onClose?: () => void;
   /** Nhãn nút đóng: ngăn kéo = "Đóng", cột bên phải trên máy tính = "Ẩn gia sư". */
   closeLabel?: string;
+  /** Mở cuộc gọi luyện phát âm bằng giọng (chỉ khoá IELTS). */
+  onGoi?: () => void;
 }) {
   const [text, setText] = useState('');
   const bodyRef = useRef<HTMLDivElement>(null);
@@ -98,6 +100,11 @@ export function GiaSu({
           <div className={s.tutorName}>{name}</div>
           <div className={s.tutorSub}>Đang học: {lessonTitle}</div>
         </div>
+        {onGoi && (
+          <button type="button" className={s.goiMoNut} onClick={onGoi} title="Luyện phát âm cùng gia sư bằng giọng (gia sư nói tiếng Việt)">
+            📞<span>Luyện nói</span>
+          </button>
+        )}
         {turns.length > 0 && (
           <button type="button" className={s.iconBtn} onClick={onClear} aria-label="Xoá cuộc trò chuyện">
             <Trash2 size={16} />

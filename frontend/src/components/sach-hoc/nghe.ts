@@ -19,6 +19,7 @@
  * đổi nhạc hiệu thì thay hai tệp đó, giữ nguyên tên.
  */
 import type { Clip } from './audio';
+import { tepTinh } from './moiTruong';
 
 export const NHAC_MO = '/audio/cuongthai-mo.mp3';
 export const NHAC_KET = '/audio/cuongthai-ket.mp3';
@@ -48,7 +49,7 @@ export function dungLoiDan(o: LoiDan): { mo: Clip[]; ket: Clip[] } {
   const chao = o.chao === undefined ? 'Welcome to Cuong Thai English. IELTS Listening.' : o.chao;
   const dan = (text: string): Clip => ({ text, voice: 'dan' });
   const mo: Clip[] = [
-    { text: '', sfx: NHAC_MO },
+    { text: '', sfx: tepTinh(NHAC_MO) },
     dan(`${chao ? `${chao} ` : ''}${o.so}: ${o.tieuDe.replace(/[.!?]$/, '')}.`),
     ...(o.boiCanh ? [dan(`You will hear ${o.boiCanh}`)] : []),
     ...(c && doc ? [dan(`First, you have ${doc} seconds to look at ${c}.`), { text: '', pauseMs: doc * 1000 }] : []),
@@ -56,7 +57,7 @@ export function dungLoiDan(o: LoiDan): { mo: Clip[]; ket: Clip[] } {
   ];
   const ket: Clip[] = [
     dan(`That is the end of ${o.so}.${c ? ' You now have thirty seconds to check your answers.' : ''}`),
-    { text: '', sfx: NHAC_KET },
+    { text: '', sfx: tepTinh(NHAC_KET) },
   ];
   return { mo, ket };
 }

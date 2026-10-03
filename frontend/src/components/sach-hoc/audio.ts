@@ -9,6 +9,7 @@
  * giọng chồng lên nhau là thứ người học ghét nhất.
  */
 import api from '@/lib/api';
+import { tepTinh } from './moiTruong';
 
 import type { Voice } from './types';
 export type { Voice };
@@ -85,7 +86,7 @@ function moKhoa() {
   if (!el) {
     el = new Audio();
     el.preload = 'auto';
-    el.src = SILENT;
+    el.src = tepTinh(SILENT); // app desktop: tệp tĩnh phải xin bằng địa chỉ tuyệt đối
     el.play().catch(() => { /* ngoài cú bấm — lần sau sẽ mở được */ });
   }
 }

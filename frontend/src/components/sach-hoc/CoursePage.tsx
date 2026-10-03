@@ -16,13 +16,16 @@ import { useTienDo } from './useTienDo';
 import { TongQuanBuoi, KeHoach, dayDone } from './TongQuan';
 import { KanjiHost } from './KanjiSheet';
 import { VideoBai } from './VideoBai';
+import { docTruyVan, ghiTruyVan, laAppDesktop } from './moiTruong';
+import dynamic from 'next/dynamic';
+const GoiGiaSu = dynamic(() => import('./GoiGiaSu'), { ssr: false });
 import s from './course.module.css';
 
 /** Trang đang mở: một bài, tổng quan một buổi, hoặc kế hoạch & tiến độ. */
 type View = { t: 'lesson'; id: string } | { t: 'day'; n: number } | { t: 'plan' };
 
 function viewFromUrl(course: Course): View | null {
-  const q = new URLSearchParams(window.location.search);
+  const q = docTruyVan();
   const bai = q.get('bai');
   if (bai && course.readyLessons.some((l) => l.id === bai)) return { t: 'lesson', id: bai };
   const buoi = Number(q.get('buoi'));
@@ -65,11 +68,15 @@ export default function CoursePage({ course, lessonExtra }: {
    * Màn hẹp hơn thì gia sư vốn là ngăn kéo, không bị ảnh hưởng.
    */
   const [anGiaSu, setAnGiaSu] = useState(false);
+  const gocRef = useRef<HTMLDivElement>(null);
   useEffect(() => { try { setAnGiaSu(localStorage.getItem('sachhoc:an-gia-su') === '1'); } catch { /* bỏ qua */ } }, []);
   const doiGiaSu = (an: boolean) => { setAnGiaSu(an); try { localStorage.setItem('sachhoc:an-gia-su', an ? '1' : '0'); } catch { /* bỏ qua */ } };
   const moGiaSu = () => {
     // Máy tính: hiện lại cột bên phải. Màn hẹp: mở ngăn kéo như cũ.
-    if (window.matchMedia('(min-width: 1280px)').matches) doiGiaSu(false);
+    // Trên web đo cửa sổ (khớp @media của CSS). Trong app desktop CSS đo VÙNG NỘI DUNG
+    // (@container ctnoidung) — thanh bên của app ăn ~220px — nên phải đo đúng vùng đó.
+    const rong = laAppDesktop() ? (gocRef.current?.clientWidth ?? 0) : window.innerWidth;
+    if (rong >= 1280) doiGiaSu(false);
     else setSheetOpen(true);
   };
   const [turns, setTurns] = useState<Turn[]>([]);
@@ -95,11 +102,8 @@ export default function CoursePage({ course, lessonExtra }: {
     setTocOpen(false);
     setTurns([]);
     setSelection('');
-    const url = new URL(window.location.href);
-    ['bai', 'buoi', 'xem'].forEach((k) => url.searchParams.delete(k));
     const [k, val] = viewToQuery(v);
-    url.searchParams.set(k, val);
-    window.history.replaceState(null, '', url);
+    ghiTruyVan((q) => { ['bai', 'buoi', 'xem'].forEach((x) => q.delete(x)); q.set(k, val); });
     window.scrollTo({ top: 0 });
   }, []);
   const open = useCallback((l: Lesson) => {
@@ -191,7 +195,14 @@ export default function CoursePage({ course, lessonExtra }: {
 
   const doneDays = DAYS.filter((d) => dayDone(d, tien.done)).length;
 
+  // 📞 Luyện phát âm cùng gia sư: câu mẫu = khối luyện phát âm của bài đang mở (không có thì máy chủ dùng ngân hàng chung).
+  const [goiMo, setGoiMo] = useState(false);
+  const danhSachGoi = useMemo(
+    () => (full?.blocks ?? []).flatMap((b) => (b.t === 'phatam' ? b.items.map((x) => ({ text: x.text, ipa: x.ipa })) : [])),
+    [full],
+  );
   const tutorProps = {
+    onGoi: course.tutor.mon === 'ielts' ? () => { setSheetOpen(false); stopAudio(); setGoiMo(true); } : undefined,
     name: course.tutor.name,
     lessonTitle: viewTitle,
     turns,
@@ -228,7 +239,7 @@ export default function CoursePage({ course, lessonExtra }: {
   return (
     <CourseCtx.Provider value={course}>
     <TutorCtx.Provider value={ctx}>
-      <div className={`${s.root} ${isJa ? s.ja : ''} ${isJa && !furi ? s.noFuri : ''} ${isJa && !roma ? s.noRo : ''}`}>
+      <div ref={gocRef} className={`${s.root} ${isJa ? s.ja : ''} ${isJa && !furi ? s.noFuri : ''} ${isJa && !roma ? s.noRo : ''}`}>
         <div className={s.bar}>
           <div className={s.barInner}>
             <Link href={course.backHref} className={s.iconBtn} aria-label="Quay lại">
@@ -412,6 +423,10 @@ export default function CoursePage({ course, lessonExtra }: {
 
         {/* Thẻ chữ Hán: chạm chữ Hán bất kỳ trong bài (chỉ khoá có dữ liệu chữ Hán). */}
         {course.kanji && <KanjiHost course={course} />}
+
+        {goiMo && (
+          <GoiGiaSu danhSach={danhSachGoi} chuDe={lesson ? lesson.title : 'những âm người Việt hay đọc sai'} onClose={() => { stopAudio(); setGoiMo(false); }} />
+        )}
 
         {sheetOpen && (
           <>

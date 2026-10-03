@@ -56,6 +56,14 @@ describe('khopTuyenWeb', () => {
     expect(khopTuyenWeb('/language/en/ielts')?.tuyen.mau).toBe('/language/:code/ielts');
   });
 
+  it('mục IELTS riêng: /ielts… mở đúng trang web IELTS với code = en', () => {
+    expect(khopTuyenWeb('/ielts')?.thamSo).toEqual({ code: 'en' });
+    expect(khopTuyenWeb('/ielts/phong-thi')?.tuyen.mau).toBe('/ielts/phong-thi');
+    expect(khopTuyenWeb('/ielts/luyen-them')?.thamSo).toEqual({ code: 'en' });
+    expect(khopTuyenWeb('/language/en/ielts/phong-thi')?.tuyen.mau).toBe('/language/:code/ielts/phong-thi');
+    expect(thuocCayWeb('/ielts/phong-thi')).toBe(true);
+  });
+
   /*
    * Cây Phỏng vấn có hai đường TĨNH hai đoạn (`drill`, `history`) và hai đường
    * ĐỘNG ba đoạn (`session/:id`, `report/:id`). Chúng không tranh nhau vì
@@ -227,7 +235,9 @@ describe('khopTuyenWeb', () => {
        23/09/2026: cây CT Work (`/work`, 19 trang). 24/09: `/work/search` ⇒ 95. */
     // 28/09/2026: +2 khoá học kiểu sách (/language/:code/ielts, /language/:code/dekiru).
     // 02/10/2026: +2 Huấn luyện học kỳ (/hoc-tap, /hoc-tap/mon/:id).
-    expect(thay.size).toBe(99);
+    // 03/10/2026: +5 IELTS — Phòng thi & Kho luyện dưới /language/:code/ielts, và
+    // mục riêng /ielts, /ielts/phong-thi, /ielts/luyen-them (code cố định 'en').
+    expect(thay.size).toBe(104);
   });
 });
 

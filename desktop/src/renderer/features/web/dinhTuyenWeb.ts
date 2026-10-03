@@ -33,6 +33,8 @@ export interface TuyenWeb {
   mau: string;
   /** Nạp chậm — 51.000 dòng mã web không nên nằm trong gói khởi động. */
   nap: () => Promise<{ default: ComponentType }>;
+  /** Tham số CỐ ĐỊNH gộp vào tham số động — vd. cây `/ielts` của app là `/language/en/ielts` của web. */
+  thamSoCo?: Readonly<Record<string, string>>;
 }
 
 export const TUYEN_WEB: readonly TuyenWeb[] = [
@@ -60,6 +62,13 @@ export const TUYEN_WEB: readonly TuyenWeb[] = [
   // Khoá học kiểu sách (28/09/2026): IELTS 4 kỹ năng và tiếng Nhật できる日本語 —
   // cùng bộ khung components/sach-hoc, tải nội dung từng buổi theo import().
   { mau: '/language/:code/ielts', nap: () => import('@/app/language/[code]/ielts/page') },
+  { mau: '/language/:code/ielts/phong-thi', nap: () => import('@/app/language/[code]/ielts/phong-thi/page') },
+  { mau: '/language/:code/ielts/luyen-them', nap: () => import('@/app/language/[code]/ielts/luyen-them/page') },
+
+  /* ── IELTS — mục riêng trên thanh bên (03/10/2026); cùng trang web, code='en'. ── */
+  { mau: '/ielts', nap: () => import('@/app/language/[code]/ielts/page'), thamSoCo: { code: 'en' } },
+  { mau: '/ielts/phong-thi', nap: () => import('@/app/language/[code]/ielts/phong-thi/page'), thamSoCo: { code: 'en' } },
+  { mau: '/ielts/luyen-them', nap: () => import('@/app/language/[code]/ielts/luyen-them/page'), thamSoCo: { code: 'en' } },
   { mau: '/language/:code/dekiru', nap: () => import('@/app/language/[code]/dekiru/page') },
 
   /* ── Lộ trình ── */
@@ -293,14 +302,14 @@ export function khopTuyenWeb(duong: string): KhopTuyen | null {
       if (m.startsWith(':')) thamSo[m.slice(1)] = decodeURIComponent(d);
       else if (m !== d) { khop = false; break; }
     }
-    if (khop) return { tuyen, thamSo };
+    if (khop) return { tuyen, thamSo: { ...tuyen.thamSoCo, ...thamSo } };
   }
   return null;
 }
 
 /** Gốc của những cây route mà trang web sở hữu — dùng cho router của app. */
 export const GOC_WEB: readonly string[] = [
-  '/language', '/roadmap', '/interview', '/cv',
+  '/language', '/ielts', '/roadmap', '/interview', '/cv',
   '/maker-lab', '/creator', '/projects', '/exp-hub',
   '/finance', '/forum', '/saved', '/profile',
   '/tech-trends',

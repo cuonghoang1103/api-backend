@@ -14,6 +14,7 @@
 import { useState } from 'react';
 import { Play } from 'lucide-react';
 import type { LessonVideo } from './types';
+import { laAppDesktop } from './moiTruong';
 import s from './course.module.css';
 
 function MotVideo({ v, first }: { v: LessonVideo; first: boolean }) {
@@ -36,11 +37,21 @@ function MotVideo({ v, first }: { v: LessonVideo; first: boolean }) {
             referrerPolicy="strict-origin-when-cross-origin"
           />
         ) : (
-          <button type="button" className={s.vidCover} onClick={() => setOn(true)} aria-label={`Phát video: ${title}`}>
+          <button
+            type="button"
+            className={s.vidCover}
+            // App desktop chặn mọi khung nhúng (CSP frame-src 'none', cố ý) ⇒ mở video
+            // bằng trình duyệt hệ thống (setWindowOpenHandler → shell.openExternal).
+            onClick={() => (laAppDesktop()
+              ? window.open(`https://www.youtube.com/watch?v=${v.id}${v.start ? `&t=${v.start}s` : ''}`, '_blank')
+              : setOn(true))}
+            aria-label={`Phát video: ${title}`}
+          >
             {/* eslint-disable-next-line @next/next/no-img-element -- ảnh bìa YouTube, không qua next/image */}
             <img src={`https://i.ytimg.com/vi/${v.id}/hqdefault.jpg`} alt="" loading="lazy" />
             <span className={s.vidPlay}><Play size={26} fill="currentColor" /></span>
             <span className={s.vidDur}>{v.dur}</span>
+            {laAppDesktop() && <span className={s.vidNgoai}>Mở trên YouTube ↗</span>}
           </button>
         )}
       </div>

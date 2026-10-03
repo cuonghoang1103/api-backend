@@ -19,6 +19,7 @@ import { play } from './audio';
 import WriteBlock, { startOf, useStrokeData } from './WriteBlock';
 import s from './course.module.css';
 import k from './kanji.module.css';
+import { docTruyVan } from './moiTruong';
 
 /* ── Mở thẻ từ bất cứ đâu ─────────────────────────────────────────────── */
 
@@ -35,7 +36,7 @@ const kana = (t: string) => t.replace(/\{[^|}]+\|([^}]+)\}/g, '$1').replace(/［
 /** Bài đang mở (từ `?bai=b5-…`) — mốc "đã học / bài này / bài sau". */
 function currentBai(): number | null {
   if (typeof window === 'undefined') return null;
-  const m = /^b(\d+)-/.exec(new URLSearchParams(window.location.search).get('bai') ?? '');
+  const m = /^b(\d+)-/.exec(docTruyVan().get('bai') ?? '');
   return m ? Number(m[1]) : null;
 }
 

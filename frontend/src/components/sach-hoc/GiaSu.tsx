@@ -60,7 +60,7 @@ function AnswerTools({ text }: { text: string }) {
 }
 
 export function GiaSu({
-  name, lessonTitle, turns, asking, loggedIn, selection, onAsk, onClear, onClose,
+  name, lessonTitle, turns, asking, loggedIn, selection, onAsk, onClear, onClose, closeLabel,
 }: {
   /** Tên gia sư hiển thị ("Gia sư IELTS", "Gia sư tiếng Nhật"). */
   name: string;
@@ -73,6 +73,8 @@ export function GiaSu({
   onAsk: (a: TutorAsk) => void;
   onClear: () => void;
   onClose?: () => void;
+  /** Nhãn nút đóng: ngăn kéo = "Đóng", cột bên phải trên máy tính = "Ẩn gia sư". */
+  closeLabel?: string;
 }) {
   const [text, setText] = useState('');
   const bodyRef = useRef<HTMLDivElement>(null);
@@ -102,7 +104,7 @@ export function GiaSu({
           </button>
         )}
         {onClose && (
-          <button type="button" className={s.iconBtn} onClick={onClose} aria-label="Đóng">
+          <button type="button" className={s.iconBtn} onClick={onClose} aria-label={closeLabel ?? 'Đóng'} title={closeLabel ?? 'Đóng'}>
             <X size={18} />
           </button>
         )}

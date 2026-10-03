@@ -60,6 +60,18 @@ export default function CoursePage({ course, lessonExtra }: {
   useEffect(() => { stopAudio(); }, [viewKey]);
   const [tocOpen, setTocOpen] = useState(false);
   const [sheetOpen, setSheetOpen] = useState(false);
+  /**
+   * Ẩn cột gia sư trên máy tính (≥1280px) — bài giảng giãn rộng. Nhớ trên máy.
+   * Màn hẹp hơn thì gia sư vốn là ngăn kéo, không bị ảnh hưởng.
+   */
+  const [anGiaSu, setAnGiaSu] = useState(false);
+  useEffect(() => { try { setAnGiaSu(localStorage.getItem('sachhoc:an-gia-su') === '1'); } catch { /* bỏ qua */ } }, []);
+  const doiGiaSu = (an: boolean) => { setAnGiaSu(an); try { localStorage.setItem('sachhoc:an-gia-su', an ? '1' : '0'); } catch { /* bỏ qua */ } };
+  const moGiaSu = () => {
+    // Máy tính: hiện lại cột bên phải. Màn hẹp: mở ngăn kéo như cũ.
+    if (window.matchMedia('(min-width: 1280px)').matches) doiGiaSu(false);
+    else setSheetOpen(true);
+  };
   const [turns, setTurns] = useState<Turn[]>([]);
   const [asking, setAsking] = useState(false);
   const [selection, setSelection] = useState('');
@@ -248,13 +260,13 @@ export default function CoursePage({ course, lessonExtra }: {
             <button type="button" className={`${s.iconBtn} ${s.tocBtn}`} onClick={() => setTocOpen(true)}>
               <List size={17} /><span className={s.btnLabel}>Mục lục</span>
             </button>
-            <button type="button" className={s.tutorBtn} onClick={() => setSheetOpen(true)}>
+            <button type="button" className={`${s.tutorBtn} ${anGiaSu ? s.tutorBtnHien : ''}`} onClick={moGiaSu} title="Mở gia sư AI">
               <RobotAI size={22} /><span className={s.btnLabel}>Gia sư</span>
             </button>
           </div>
         </div>
 
-        <div className={s.layout}>
+        <div className={`${s.layout} ${anGiaSu ? s.layoutRong : ''}`}>
           <nav className={tocOpen ? s.tocOpen : s.toc} aria-label="Mục lục khoá học">
             <div className={s.tocClose}>
               <button type="button" className={s.iconBtn} onClick={() => setTocOpen(false)} aria-label="Đóng mục lục"><X size={18} /></button>
@@ -391,9 +403,11 @@ export default function CoursePage({ course, lessonExtra }: {
             )}
           </article>
 
-          <aside className={s.tutorCol}>
-            <GiaSu {...tutorProps} />
-          </aside>
+          {!anGiaSu && (
+            <aside className={s.tutorCol}>
+              <GiaSu {...tutorProps} onClose={() => doiGiaSu(true)} closeLabel="Ẩn gia sư (bài giảng rộng hơn)" />
+            </aside>
+          )}
         </div>
 
         {/* Thẻ chữ Hán: chạm chữ Hán bất kỳ trong bài (chỉ khoá có dữ liệu chữ Hán). */}

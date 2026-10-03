@@ -32,6 +32,15 @@
 import { lazy, useEffect } from 'react';
 import { camSocketDesktop } from '../../shims/web-socket-adapter';
 import { TrangWebTheoTuyen } from '../web/TrangWeb';
+import { useAiPanel } from '@/components/work/ai/store';
+/* Font Inter như trên web — `work.css` gọi `var(--font-inter), Inter` kèm
+   `cv11`/`ss03`; app chưa từng nạp nên CT Work rơi về font hệ thống và trông lệch
+   so với web (04/10/2026). Lấy từ `frontend/node_modules` (CI cài sẵn cho alias `@`),
+   chỉ trong chunk của trang này. */
+import '@/../node_modules/@fontsource/inter/400.css';
+import '@/../node_modules/@fontsource/inter/500.css';
+import '@/../node_modules/@fontsource/inter/600.css';
+import '@/../node_modules/@fontsource/inter/700.css';
 
 /** Khai ở TẦM MÔ-ĐUN — xem ghi chú của `khung` trong `TrangWebTheoTuyen`. */
 const KhungCtWork = lazy(() => import('@/app/work/layout'));
@@ -43,9 +52,19 @@ export function CtWorkPage() {
     camSocketDesktop();
   }, []);
 
+  /* Ngăn AI của CT Work là cột 440px dính mép phải — đúng chỗ con robot Odin nổi,
+     nên robot đè lên nút Gửi. Mở ngăn thì gắn lớp lên <html> để robot né sang trái
+     (styles.css: `.ct-work-ai-mo .odin-dock`), đóng ngăn hay rời trang là gỡ. */
+  const aiMo = useAiPanel((st) => st.open);
+  useEffect(() => {
+    if (!aiMo) return;
+    document.documentElement.classList.add('ct-work-ai-mo');
+    return () => document.documentElement.classList.remove('ct-work-ai-mo');
+  }, [aiMo]);
+
 
   return (
-    <div className="ct-work-host">
+    <div className="ct-work-host" data-khung-fixed>
       <TrangWebTheoTuyen ten="CT Work" khung={KhungCtWork} />
     </div>
   );

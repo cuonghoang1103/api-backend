@@ -22,7 +22,7 @@ import { common, createLowlight } from 'lowlight';
 import { Bold, Code, Italic, List, ListChecks, ListOrdered, Link2, Quote, SquareCode } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { userName, type TiptapDoc, type WorkUser } from '@/lib/work-api';
-import { UserAvatar, WorkPortal } from './ui';
+import { UserAvatar, WorkPortal, khungFixed } from './ui';
 
 /** ~35 ngôn ngữ phổ biến (java, ts, sql, bash, yaml, json…) — tạo một lần cho cả trang. */
 const LOWLIGHT = createLowlight(common);
@@ -224,7 +224,10 @@ export default function RichEditor({
       {mention && matches.length > 0 && editor && (
         <WorkPortal>
           <div
-            style={{ position: 'fixed', left: Math.min(mention.left, window.innerWidth - 248), top: mention.top, width: 240, boxShadow: 'var(--w-shadow-pop)' }}
+            style={(() => {
+              const k = khungFixed();
+              return { position: 'fixed', left: Math.min(mention.left - k.left, k.width - 248), top: mention.top - k.top, width: 240, boxShadow: 'var(--w-shadow-pop)' } as const;
+            })()}
             className="z-[90] rounded-[8px] bg-[var(--w-raised)] p-1"
           >
             {matches.map((m, i) => (

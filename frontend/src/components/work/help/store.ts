@@ -6,6 +6,7 @@
  * mở cùng MỘT ngăn do HelpPanelHost vẽ (giống ai/store.ts).
  */
 
+import { docDuong, docTruyVan } from '@/components/sach-hoc/moiTruong';
 import { create } from 'zustand';
 import { helpArticleForPath } from './content';
 
@@ -33,5 +34,6 @@ export const closeHelp = () => useHelp.getState().closeHelp();
 /** Mở đúng bài của trang đang xem (đọc URL lúc bấm). */
 export function openContextualHelp() {
   if (typeof window === 'undefined') return;
-  openHelp(helpArticleForPath(window.location.pathname, window.location.search));
+  // Qua `moiTruong`: trong app desktop `window.location` là /index.html, không phải trang CT Work.
+  openHelp(helpArticleForPath(docDuong(), `?${docTruyVan().toString()}`));
 }

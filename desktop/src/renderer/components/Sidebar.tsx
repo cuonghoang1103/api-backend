@@ -58,7 +58,12 @@ export function Sidebar() {
     query.addEventListener('change', update);
     return () => query.removeEventListener('change', update);
   }, []);
-  const collapsed = mode === 'icons' || compact;
+  /* CT Work có thanh bên RIÊNG (không gian làm việc, dự án, bộ lọc). Hai thanh bên
+     đầy đủ cạnh nhau ăn ~470px và đẩy bảng/backlog xuống ~800px ở cửa sổ 1280 —
+     nên ở /work thanh của app tự thu về dạng icon (KHÔNG ghi vào cài đặt; rời CT
+     Work là trở lại như người dùng đã chọn). 04/10/2026. */
+  const trongCtWork = route === '/work' || route.startsWith('/work/');
+  const collapsed = mode === 'icons' || compact || trongCtWork;
   const listRef = useRef<HTMLDivElement>(null);
 
   const onKeyDown = useCallback((event: React.KeyboardEvent<HTMLDivElement>) => {

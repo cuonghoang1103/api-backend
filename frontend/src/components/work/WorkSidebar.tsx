@@ -8,11 +8,11 @@
 
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import {
   ArrowLeft, CalendarRange, CircleHelp, KeyRound, FlaskConical, Rocket, BarChart3, ChevronDown, Columns3, Inbox, LayoutDashboard,
-  List, ListOrdered, Plus, Search, Settings, Users, LayoutGrid, Check,
+  List, ListOrdered, Plus, Search, Settings, Users, LayoutGrid, Check, Sparkles,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { workApi } from '@/lib/work-api';
@@ -21,6 +21,7 @@ import { wk } from './hooks';
 import { avatarColor, Popover, UserAvatar, useToggle } from './ui';
 import { WorkspaceMark } from './settings/shared';
 import { openHelp } from './help/store';
+import { lastAiPid, openAiPanel, useAiPanel } from './ai/store';
 import WorkInbox from './shell/WorkInbox';
 
 const NOT_SLUG = new Set(['invite', 'share', 'developer', 'search']);
@@ -88,6 +89,24 @@ export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void })
   const onMyWork = pathname === '/work' && homeTab !== 'workspaces';
   const onWorkspaces = pathname === '/work' && homeTab === 'workspaces';
 
+  /* AI — lối vào luôn thấy được (04/10/2026). Trước đây chỉ có nút nhỏ ở header
+     của một dự án, nên người dùng kết luận "CT Work chưa có AI". Trong dự án: mở
+     cho dự án đó; ngoài dự án: mở dự án dùng AI gần nhất. ⌘J bật/tắt. */
+  const duAnMo = projects.find((p) => p.key === key);
+  const aiPid = duAnMo?.id ?? lastAiPid();
+  const aiOpen = useAiPanel((st) => st.open);
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (!(e.metaKey || e.ctrlKey) || e.key.toLowerCase() !== 'j' || e.altKey || e.shiftKey) return;
+      if (aiPid == null) return;
+      e.preventDefault();
+      if (useAiPanel.getState().open) useAiPanel.getState().closeAiPanel();
+      else openAiPanel({ pid: aiPid });
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [aiPid]);
+
   return (
     <nav aria-label="CT Work" className="flex h-full flex-col text-[13.5px]" onClick={(e) => (e.target as HTMLElement).closest('a') && onNavigate?.()}>
       {/* Đầu: đổi không gian + chuông. */}
@@ -147,6 +166,19 @@ export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void })
           {/* Tìm thẻ mọi dự án. Không gán phím "/" toàn cục: list/board đã dùng nó — ⌘K là đủ. */}
           <NavItem href="/work/search" icon={Search} label="Search" active={pathname.startsWith('/work/search')} />
           {!slug && <NavItem href="/work?tab=workspaces" icon={LayoutGrid} label="Workspaces" active={onWorkspaces} />}
+          {aiPid != null && (
+            <button
+              type="button"
+              onClick={() => (aiOpen ? useAiPanel.getState().closeAiPanel() : openAiPanel({ pid: aiPid }))}
+              aria-pressed={aiOpen}
+              className={cn(ROW, 'w-full text-left', aiOpen ? ROW_ON : ROW_IDLE)}
+              title={duAnMo ? `Ask AI about ${duAnMo.name}` : 'Ask AI (last project)'}
+            >
+              <Sparkles size={15} className="shrink-0 text-[var(--w-accent-text)]" />
+              <span className="min-w-0 flex-1 truncate">Ask AI{duAnMo ? '' : ' · last project'}</span>
+              <kbd className="w-kbd max-md:!hidden">⌘J</kbd>
+            </button>
+          )}
         </div>
 
         {slug ? (

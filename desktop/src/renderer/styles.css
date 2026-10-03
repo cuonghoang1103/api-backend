@@ -200,8 +200,10 @@ body {
 }
 
 /* Không xoá viền focus. Đây là cách duy nhất người dùng bàn phím biết mình
-   đang ở đâu; bỏ nó là bỏ luôn khả năng dùng app không có chuột. */
-:focus-visible {
+   đang ở đâu; bỏ nó là bỏ luôn khả năng dùng app không có chuột.
+   Trừ CT Work (`.work-root`): nó có viền focus riêng theo token `--w-*`; quy tắc
+   toàn cục này đè lên làm mọi ô bo góc lạ khi focus (04/10/2026). */
+:focus-visible:not(.work-root *) {
   outline: 2px solid var(--ct-accent);
   outline-offset: 1px;
   border-radius: var(--ct-radius-sm);
@@ -212,7 +214,7 @@ button {
   color: inherit;
 }
 
-code {
+code:not(.work-root *) {
   font-family: ui-monospace, 'SF Mono', Menlo, monospace;
   font-size: 0.92em;
   background: var(--ct-hover);
@@ -15387,6 +15389,7 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
 
 /* Thuật toán: web chừa 4rem cho thanh nav (`lg:mt-16`, `lg:h-[calc(100vh-4rem)]`)
    và lề phải cho dock nổi (`xl:pr-16`). App không có hai thứ đó. */
+.ct-work-host { --font-inter: 'Inter'; }
 .ct-web-host > .lg\:mt-16 { margin-top: 0; }
 .ct-web-host > .lg\:h-\[calc\(100vh-4rem\)\] { height: 100%; padding-top: 16px; }
 .ct-web-host > .xl\:pr-16 { padding-right: 12px; }
@@ -15414,3 +15417,6 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
    cuộn ngay ⇒ khung 120–260ms toàn ở VẼ (giải mã + raster ảnh). Thẻ ngoài màn hình
    thì khỏi vẽ (`content-visibility`), ảnh giải mã ngoài luồng chính (`decoding`). */
 .ct-hv-the { content-visibility: auto; contain-intrinsic-size: auto 280px; }
+
+/* Robot Odin né ngăn AI của CT Work (rộng 440px, dính mép phải) — xem CtWorkPage. */
+.ct-work-ai-mo .odin-dock { translate: -440px 0; transition: translate 220ms var(--ct-ease); }

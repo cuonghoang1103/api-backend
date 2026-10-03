@@ -276,9 +276,11 @@ export function TrangWebTheoTuyen({ ten, khung: Khung }: {
      ở app://…/index.html nên `window.location.search` không mang `?bai=`. Gắn NGAY
      trong lượt vẽ (không chờ effect) vì trang con đọc nó trong effect của chính nó,
      mà effect con chạy TRƯỚC effect cha. */
-  (globalThis as { __CT_TRUY_VAN__?: { doc: () => string; ghi: (q: string) => void } }).__CT_TRUY_VAN__ = {
+  (globalThis as { __CT_TRUY_VAN__?: { doc: () => string; ghi: (q: string) => void; duong: () => string } }).__CT_TRUY_VAN__ = {
     doc: () => chupTruyVan(route),
     ghi: (q: string) => datTruyVanCho(route, q),
+    // Đường dẫn THẬT của trang (window.location.pathname ở app luôn là /index.html).
+    duong: () => route,
   };
   /*
    * ⚠️ PROPS CỦA TRANG NEXT (23/09/2026). Next truyền `{ params, searchParams }`

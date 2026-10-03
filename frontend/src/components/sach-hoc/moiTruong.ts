@@ -16,7 +16,7 @@
  */
 import { anhTuyetDoi } from '@/lib/anhTuyetDoi';
 
-type CauNoi = { doc: () => string; ghi: (q: string) => void };
+type CauNoi = { doc: () => string; ghi: (q: string) => void; duong?: () => string };
 const g = globalThis as { __CT_TRUY_VAN__?: CauNoi };
 
 /** Có cầu nối `window.cuongthai` của preload ⇒ đang trong app desktop. */
@@ -28,6 +28,12 @@ export function laAppDesktop(): boolean {
 export function docTruyVan(): URLSearchParams {
   if (g.__CT_TRUY_VAN__) return new URLSearchParams(g.__CT_TRUY_VAN__.doc());
   return new URLSearchParams(typeof window === 'undefined' ? '' : window.location.search);
+}
+
+/** Đường dẫn của trang đang mở (web: URL thật; app: route của app, không phải /index.html). */
+export function docDuong(): string {
+  if (g.__CT_TRUY_VAN__?.duong) return g.__CT_TRUY_VAN__.duong();
+  return typeof window === 'undefined' ? '' : window.location.pathname;
 }
 
 /** Sửa chuỗi truy vấn tại chỗ — không điều hướng, không tải lại. */

@@ -6,6 +6,7 @@
  * bấm và được ghi nhận là do AI (không cộng công cho ai).
  */
 
+import { docTruyVan } from '@/components/sach-hoc/moiTruong';
 import { useCallback, useState, type ReactNode } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
@@ -63,7 +64,7 @@ function useOpenResult(config: ProjectConfig) {
     }
     if (pathname && pathname.startsWith(base) && DRAWER_PAGES.test(pathname.slice(base.length))) {
       // Đọc query lúc bấm (không dùng useSearchParams: host gắn ở layout, tránh bail-out CSR).
-      const p = new URLSearchParams(window.location.search);
+      const p = docTruyVan();   // app desktop: query nằm ở kho của app, không ở window.location
       p.set('issue', String(item.number));
       router.push(`${pathname}?${p.toString()}`);
     } else {

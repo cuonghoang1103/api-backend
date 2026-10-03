@@ -279,6 +279,14 @@ declare module '@/app/work/layout' {
 /* Provider react-query của web. `VoWeb` dựng nó cho MỌI cây web dùng lại —
    `/creator` và `/saved` gọi `useQuery`, và thiếu nó thì chúng nổ ngay lúc vẽ
    với "No QueryClient set". Khai riêng vì wildcard trên chỉ phủ module TRANG. */
+/**
+ * Kho trạng thái ngăn AI của CT Work — app chỉ ĐỌC `open` để robot Odin né ngăn
+ * (features/work/CtWorkPage.tsx). Khai đúng phần đang dùng.
+ */
+declare module '@/components/work/ai/store' {
+  export const useAiPanel: <T>(chon: (st: { open: boolean; pid: number | null }) => T) => T;
+}
+
 declare module '@/components/providers/TanStackQueryProvider' {
   import type { ComponentType, ReactNode } from 'react';
   const P: ComponentType<{ children: ReactNode }>;

@@ -30,13 +30,25 @@ interface AiPanelState {
   clearQuick: () => void;
 }
 
+/** Dự án dùng AI gần nhất — để nút "Ask AI" ở trang KHÔNG thuộc dự án nào (My work,
+ *  tìm kiếm) vẫn mở được đúng chỗ người dùng vừa làm (04/10/2026). Per-viewer. */
+const LAST_PID = 'ctwork-ai-last-pid';
+export function lastAiPid(): number | null {
+  try {
+    const v = Number(localStorage.getItem(LAST_PID));
+    return Number.isInteger(v) && v > 0 ? v : null;
+  } catch { return null; }
+}
+
 export const useAiPanel = create<AiPanelState>((set) => ({
   open: false,
   pid: null,
   issueNumber: null,
   quick: null,
-  openAiPanel: ({ pid, issueNumber, quick }) =>
-    set({ open: true, pid, issueNumber: issueNumber ?? quick?.issueNumber ?? null, quick: quick ?? null }),
+  openAiPanel: ({ pid, issueNumber, quick }) => {
+    try { localStorage.setItem(LAST_PID, String(pid)); } catch { /* chỉ là tiện ích */ }
+    set({ open: true, pid, issueNumber: issueNumber ?? quick?.issueNumber ?? null, quick: quick ?? null });
+  },
   closeAiPanel: () => set({ open: false, quick: null }),
   clearIssue: () => set({ issueNumber: null }),
   clearQuick: () => set({ quick: null }),

@@ -12,7 +12,7 @@ import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 import { Command } from 'cmdk';
 import { useQuery } from '@tanstack/react-query';
-import { ArrowRight, BookOpen, CircleHelp, Columns3, CornerDownLeft, FolderKanban, LayoutGrid, List, Plus, Search, Settings, TextSearch, Users } from 'lucide-react';
+import { ArrowRight, BookOpen, CircleHelp, Columns3, CornerDownLeft, FolderKanban, LayoutGrid, List, Plus, Search, Settings, Sparkles, TextSearch, Users } from 'lucide-react';
 import { workApi, workSearchApi, workSearchKeys, type StatusCategory } from '@/lib/work-api';
 import { openCreateIssue, wk } from './hooks';
 import { useWorkPath } from './WorkSidebar';
@@ -20,6 +20,7 @@ import { CATEGORY_DOT, IssueTypeIcon, Spinner, WorkPortal } from './ui';
 import { searchHelp } from './help/content';
 import { openContextualHelp, openHelp } from './help/store';
 import { readHelpLang } from './help/HelpPanel';
+import { openAiPanel, type AiQuickRequest } from './ai/store';
 
 const ITEM =
   'flex h-9 cursor-pointer items-center gap-2.5 rounded-[6px] px-2.5 text-[13px] text-[var(--w-text-2)] data-[selected=true]:bg-[var(--w-hover)] data-[selected=true]:text-[var(--w-text)]';
@@ -156,6 +157,19 @@ function Palette({ onClose }: { onClose: () => void }) {
       list.push({ id: 'board', label: 'Go to board', icon: <Columns3 size={15} />, run: () => go(`${base}/board`) });
       list.push({ id: 'issues', label: 'Go to issues', icon: <List size={15} />, run: () => go(`${base}/list`) });
       list.push({ id: 'project-settings', label: 'Project settings', icon: <Settings size={15} />, run: () => go(`${base}/settings`) });
+    }
+    // AI — trước 04/10/2026 ⌘K không có lối nào vào AI.
+    if (inProject && config?.permissions.useAi) {
+      const pid = config.id;
+      const ai = (id: string, label: string, keywords: string, quick?: AiQuickRequest) => list.push({
+        id, label, icon: <Sparkles size={15} />, keywords: `ai tro ly ${keywords}`,
+        ...(id === 'ai-ask' ? { hint: '⌘J' } : {}),
+        run: () => { onClose(); openAiPanel({ pid, ...(quick ? { quick } : {}) }); },
+      });
+      ai('ai-ask', 'Ask AI', 'hoi assistant chat');
+      ai('ai-req', 'AI: Requirement check before submitting', 'soat req yeu cau review', { task: 'req_review' });
+      ai('ai-meeting', 'AI: Meeting notes to tasks', 'bien ban hop meeting', { task: 'meeting_notes' });
+      ai('ai-health', 'AI: Team health check', 'suc khoe nhom team', { task: 'team_health' });
     }
     list.push({ id: 'search', label: 'Search all issues', icon: <TextSearch size={15} />, keywords: 'find filter jql query advanced', run: () => go('/work/search') });
     if (slug) {

@@ -29,6 +29,24 @@ export function WorkPortal({ children }: { children: ReactNode }) {
   return el ? createPortal(children, el) : null;
 }
 
+/**
+ * KHUNG mà phần tử `position: fixed` trong #work-portal thật sự bám vào.
+ *
+ * Trên web là cửa sổ. Trong app desktop, CT Work nằm trong vùng nội dung (bên
+ * phải thanh bên 218px, dưới thanh tiêu đề 44px) và vỏ của nó đặt `contain:
+ * layout paint` ⇒ `fixed` tính từ góc VỎ chứ không từ góc cửa sổ. Lấy toạ độ
+ * `getBoundingClientRect()` (theo cửa sổ) đặt thẳng vào thì mọi popover — kể
+ * cả menu AI — lệch đúng 218px/44px và bị cắt ở mép phải (04/10/2026). Vỏ nào
+ * làm khối chứa thì gắn `data-khung-fixed`; không có thì là cửa sổ như cũ.
+ */
+export function khungFixed(): { left: number; top: number; width: number; height: number } {
+  const k = typeof document === 'undefined' ? null
+    : document.getElementById('work-portal')?.closest<HTMLElement>('[data-khung-fixed]');
+  if (!k) return { left: 0, top: 0, width: window.innerWidth, height: window.innerHeight };
+  const r = k.getBoundingClientRect();
+  return { left: r.left, top: r.top, width: r.width, height: r.height };
+}
+
 // ─── Popover ─────────────────────────────────────────────────────
 
 interface PopoverProps {
@@ -49,13 +67,16 @@ export function Popover({ open, onClose, anchorRef, children, width = 240, align
   useLayoutEffect(() => {
     if (!open) return;
     const place = () => {
-      const a = anchorRef.current?.getBoundingClientRect();
-      if (!a) return;
+      const r = anchorRef.current?.getBoundingClientRect();
+      if (!r) return;
+      // Đổi toạ độ cửa sổ → toạ độ của khung chứa `fixed` (xem `khungFixed`).
+      const k = khungFixed();
+      const a = { top: r.top - k.top, bottom: r.bottom - k.top, left: r.left - k.left, right: r.right - k.left };
       const h = ref.current?.offsetHeight ?? 280;
       const below = a.bottom + 4;
-      const top = below + h > window.innerHeight - 8 && a.top - h - 4 > 8 ? a.top - h - 4 : below;
+      const top = below + h > k.height - 8 && a.top - h - 4 > 8 ? a.top - h - 4 : below;
       let left = align === 'end' ? a.right - width : a.left;
-      left = Math.max(8, Math.min(left, window.innerWidth - width - 8));
+      left = Math.max(8, Math.min(left, k.width - width - 8));
       setPos({ top, left });
     };
     place();

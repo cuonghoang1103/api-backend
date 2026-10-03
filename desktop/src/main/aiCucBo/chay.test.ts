@@ -73,7 +73,11 @@ describe('xin cổng', () => {
   });
 });
 
-describe('bật máy chủ', () => {
+/* Tệp chạy giả là script `#!/usr/bin/env node` — Windows không spawn được loại
+   này (ENOENT, đo trên runner windows-latest 03/10/2026). Logic chọn `.exe` đã
+   có phép kiểm riêng ở trên; spawn THẬT trên Windows do thuThat.test.ts (phần A/B
+   của workflow desktop-ai-ngoai-tuyen.yml) gánh với llama-server.exe thật. */
+describe.skipIf(process.platform === 'win32')('bật máy chủ', () => {
   /**
    * Tệp chạy giả: dựng một máy chủ HTTP trả `/health` giống llama-server.
    * `doiGiay` để giả lập việc nạp model lâu.

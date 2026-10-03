@@ -69,7 +69,10 @@ async function moiTruong(maModel: 'vua' | 'anh') {
 
 const ANH = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUg==';
 
-describe('⭐ hai mô-đun phải thấy CÙNG một trạng thái', () => {
+/* Máy chủ giả là script shebang ⇒ Windows không spawn được (xem chay.test.ts). */
+const coTepGia = process.platform !== 'win32';
+
+describe.runIf(coTepGia)('⭐ hai mô-đun phải thấy CÙNG một trạng thái', () => {
   it('bật bằng chay.ts thì hoi.ts phải thấy — không thấy = lưới đỡ chết câm', async () => {
     expect(dangSan(), 'chưa bật mà đã báo sẵn sàng').toBe(false);
     await moiTruong('vua');
@@ -83,7 +86,7 @@ describe('⭐ hai mô-đun phải thấy CÙNG một trạng thái', () => {
   }, 30_000);
 });
 
-describe('đường ảnh', () => {
+describe.runIf(coTepGia)('đường ảnh', () => {
   it('bản CHỮ + ảnh ⇒ chặn bằng tiếng Việt, KHÔNG gửi đi', async () => {
     const { soGhi } = await moiTruong('vua');
     expect(nhinDuocAnh()).toBe(false);

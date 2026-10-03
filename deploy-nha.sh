@@ -31,6 +31,19 @@
 #   bash deploy-nha.sh --khong-lui  # hỏng thì dừng hẳn, không tự lùi
 #   bash deploy-nha.sh --chi-build  # build + đẩy ảnh lên GHCR, KHÔNG tráo
 #   bash deploy-nha.sh --khong-day  # CHỈ build ở nhà, không đẩy, không tráo
+#   bash deploy-nha.sh --build-github  # MÁY NHÀ CHẾT: GitHub Actions dựng ảnh
+#                                      # thay (build-anh-deploy.yml), phần VPS y nguyên
+#
+# ─── Chế độ --build-github (03/10/2026) ──────────────────────────────────
+# Máy nhà mất điện + mất mạng cả ngày ⇒ không deploy được gì: `deploy.sh` thì
+# đẩy NGUYÊN cây làm việc và build trên VPS 6GB (từng OOM), còn
+# `deploy-ghcr.yml` dựng bằng Dockerfile.ghcr.* nên ảnh THIẾU `content/` và
+# seed nội dung chạy rỗng (30/09). Chế độ này chỉ thay đúng phần cần máy nhà
+# (bước 1→4: dựng + kiểm + đẩy GHCR) bằng workflow `build-anh-deploy.yml`,
+# dựng bằng ĐÚNG Dockerfile.backend + frontend/Dockerfile như máy nhà. Mã đi
+# qua nhánh tạm `deploy-tam/<sha>` trên origin (KHÔNG phải main — main vẫn chỉ
+# được đẩy ở bước 8 sau khi bộ kiểm CI xanh), nhánh tạm bị xoá ngay khi dựng
+# xong hay hỏng. Từ bước 5 trở đi chạy Y NGUYÊN như máy nhà.
 #
 # ─── Sửa 17/08/2026 (sau khi phát hiện nó chưa từng chạy trót lọt) ─────────
 #  1. Kiểm đăng nhập GHCR **trước** khi build. Trước đây khoá thiếu thì phải
@@ -77,8 +90,17 @@ CHI_BUILD=false
 KHONG_DAY=false
 KHONG_HOI=false
 CHO_LUI=false
+BUILD_GITHUB=false
+# Trần thời gian chờ GitHub Actions dựng ảnh (giây). Dựng nguội trên runner
+# 4 nhân: ~15–25 phút; job tự có timeout 60 phút.
+TRAN_GITHUB=${TRAN_GITHUB:-3600}
+WF_DUNG_ANH="build-anh-deploy.yml"
+DA_DAY_NHANH_TAM=false
+CO_GOC="$*"   # cờ gốc — để in gợi ý lệnh chạy lại
 for a in "$@"; do
     case "$a" in
+        # Máy nhà chết: GitHub Actions dựng ảnh thay — xem đầu file.
+        --build-github) BUILD_GITHUB=true ;;
         --khong-lui) TU_LUI=false ;;
         # Cho phép deploy một commit KHÔNG chứa commit production đang chạy.
         # Chỉ dùng khi CỐ Ý lùi (rollback). Xem chốt 0a.
@@ -149,11 +171,26 @@ chay_canh_gio() {
     return $ma
 }
 
-sshnha() { chay_canh_gio ssh -o ConnectTimeout=15 "${SSH_SONG[@]}" -o BatchMode=yes "$MAY_NHA" "$@"; }
+# Chế độ --build-github mà máy nhà không với tới được thì MAY_NHA rỗng: trả
+# lỗi ngay thay vì gọi `ssh ""`. Mọi chỗ gọi sshnha ở phần VPS (báo tin, dọn
+# thư mục build) vốn đã `|| true` nên chỉ đơn giản là bị bỏ qua.
+sshnha() { [ -n "$MAY_NHA" ] || return 1; chay_canh_gio ssh -o ConnectTimeout=15 "${SSH_SONG[@]}" -o BatchMode=yes "$MAY_NHA" "$@"; }
 sshvps() { chay_canh_gio ssh -i "$VPS_SSH_KEY" -o ConnectTimeout=15 "${SSH_SONG[@]}" -o StrictHostKeyChecking=accept-new "${VPS_USER}@${VPS_IP}" "$@"; }
+
+goi_y_build_github() {
+    warn "💡 Máy nhà hỏng mà vẫn muốn deploy ĐÚNG như máy nhà (chỉ mã đã commit, đủ content/ để seed)?"
+    warn "   Cho GitHub Actions dựng ảnh thay:  bash deploy-nha.sh ${CO_GOC:+$CO_GOC }--build-github"
+}
 
 lui_ve_vps() {
     local ly_do="$1"
+    # Chế độ --build-github: KHÔNG bao giờ lùi về deploy.sh — người chạy đã
+    # chọn đường này chính vì không muốn đẩy cây làm việc / build trên VPS.
+    if [ "$BUILD_GITHUB" = true ]; then
+        fail "$ly_do — dừng (chế độ --build-github không tự lùi về deploy.sh)"
+        exit 1
+    fi
+    goi_y_build_github
     if [ "$TU_LUI" != true ]; then
         fail "$ly_do — dừng ở đây (đang bật --khong-lui)"
         exit 1
@@ -178,7 +215,12 @@ lui_ve_vps() {
 
 echo ""
 echo "==============================================="
+if [ "$BUILD_GITHUB" = true ]; then
+echo "  Deploy: GITHUB ACTIONS build → VPS tráo"
+echo "  ⚙️  CHẾ ĐỘ --build-github (máy nhà không dựng ảnh)"
+else
 echo "  Deploy: MÁY NHÀ build → VPS tráo"
+fi
 echo "  $(date '+%Y-%m-%d %H:%M:%S')"
 echo "==============================================="
 echo ""
@@ -284,6 +326,174 @@ if [ -f scripts/exam-check.mjs ] && command -v node &>/dev/null; then
     ok "Đề thi OK"
 fi
 
+# ─── 1→4 (chế độ --build-github): GitHub Actions dựng + kiểm + đẩy GHCR ─
+#
+# Thay ĐÚNG phần cần máy nhà. Giữ nguyên các tính chất của đường máy nhà:
+#  • CHỈ mã đã commit: đẩy `HEAD` (không phải cây làm việc) lên nhánh tạm.
+#  • Dựng bằng Dockerfile.backend + frontend/Dockerfile, cùng build-arg, rồi
+#    chạy cùng phép kiểm 3b (libc ↔ engine Prisma) ngay trên runner — xem
+#    .github/workflows/build-anh-deploy.yml.
+#  • main KHÔNG bị đụng ở đây; vẫn chỉ bước 8 mới push main, sau bộ kiểm CI.
+# Chốt 0a (chống lùi) và 0b (đề thi) đã chạy ở trên, trước khi tới đây.
+NHANH_TAM="deploy-tam/${SHA}"
+
+xoa_nhanh_tam() {
+    [ "$DA_DAY_NHANH_TAM" = true ] || return 0
+    DA_DAY_NHANH_TAM=false
+    if chay_gh git push --quiet origin --delete "$NHANH_TAM" 2>/dev/null; then
+        info "Đã xoá nhánh tạm ${NHANH_TAM} trên origin"
+    else
+        warn "Không xoá được nhánh tạm — xoá tay: git push origin --delete ${NHANH_TAM}"
+    fi
+}
+
+# In lệnh thay vì chạy, để thử luồng mà không đụng GitHub: DRY_GITHUB=1.
+chay_gh() {
+    if [ "${DRY_GITHUB:-0}" = 1 ]; then echo "[DRY] $*" >&2; return 0; fi
+    "$@"
+}
+
+dung_anh_tren_github() {
+    info "⚙️  CHẾ ĐỘ --build-github: GitHub Actions dựng ảnh thay máy nhà"
+
+    command -v gh >/dev/null || { fail "Thiếu 'gh' (GitHub CLI) — cài rồi 'gh auth login'."; exit 1; }
+    if [ "${DRY_GITHUB:-0}" != 1 ] && ! gh auth status >/dev/null 2>&1; then
+        fail "'gh' chưa đăng nhập — chạy 'gh auth login' (cần quyền repo + workflow)."
+        exit 1
+    fi
+
+    # Workflow chạy theo bản file Ở CHÍNH commit được dispatch, nên commit đó
+    # phải có nó. Thường chỉ thiếu khi CỐ Ý lùi (--cho-lui) về commit cũ hơn
+    # ngày 03/10/2026.
+    if ! git cat-file -e "HEAD:.github/workflows/${WF_DUNG_ANH}" 2>/dev/null; then
+        fail "Commit ${SHA} không có .github/workflows/${WF_DUNG_ANH} — chế độ --build-github không dựng được nó."
+        fail "(commit cũ hơn lúc thêm chế độ này?) Dùng máy nhà, hoặc cherry-pick workflow vào rồi deploy commit mới."
+        exit 1
+    fi
+    # GitHub chỉ nhận workflow_dispatch cho workflow mà file của nó ĐÃ có trên
+    # nhánh mặc định. Thiếu thì lệnh dispatch sẽ 404 — báo trước cho rõ.
+    git fetch --quiet origin main 2>/dev/null || true
+    if ! git cat-file -e "origin/main:.github/workflows/${WF_DUNG_ANH}" 2>/dev/null; then
+        warn "origin/main CHƯA có .github/workflows/${WF_DUNG_ANH} — GitHub có thể từ chối dispatch (404)."
+        warn "Nếu vậy: đưa commit chứa workflow lên main một lần (git push origin main, sau pre-push checklist) rồi chạy lại."
+    fi
+
+    # Máy nhà có thể vẫn với tới được (vd chỉ Docker/đĩa hỏng) — nếu được thì
+    # giữ lại để phần sau còn báo tin Telegram + ghi mốc 'đã lên production'.
+    # Không được thì MAY_NHA rỗng và các bước đó tự bỏ qua.
+    if ssh -o ConnectTimeout=4 -o BatchMode=yes "$MAY_NHA_LAN" true 2>/dev/null; then
+        MAY_NHA="$MAY_NHA_LAN"
+    elif ssh -o ConnectTimeout=8 -o BatchMode=yes "$MAY_NHA_XA" true 2>/dev/null; then
+        MAY_NHA="$MAY_NHA_XA"
+    fi
+    if [ -n "$MAY_NHA" ]; then info "Máy nhà vẫn với tới được (${MAY_NHA}) — chỉ dùng để báo tin + ghi mốc."
+    else info "Máy nhà không với tới — bỏ qua báo tin Telegram + ghi mốc 'đã lên production'."; fi
+
+    local day=true
+    [ "$KHONG_DAY" = true ] && day=false
+
+    # Nhánh tạm bị xoá khi xong dù thành hay hỏng, kể cả Ctrl-C.
+    trap 'xoa_nhanh_tam' EXIT
+    trap 'xoa_nhanh_tam; exit 130' INT TERM
+
+    info "Đẩy commit ${SHA} lên nhánh tạm ${NHANH_TAM} (KHÔNG phải main)..."
+    DA_DAY_NHANH_TAM=true
+    if ! chay_gh git push --quiet --force origin "HEAD:refs/heads/${NHANH_TAM}"; then
+        fail "Không đẩy được nhánh tạm lên origin."
+        exit 1
+    fi
+
+    # Ghi lại các run ĐÃ có trên nhánh này (lượt trước cùng sha) để nhận ra
+    # đúng run mới sinh — `gh workflow run` không trả về id.
+    local truoc moi="" url="" i
+    truoc=" $(chay_gh gh run list --branch "$NHANH_TAM" --event workflow_dispatch --limit 20 \
+                --json databaseId --jq '.[].databaseId' 2>/dev/null | tr '\n' ' ') "
+
+    info "Gọi workflow ${WF_DUNG_ANH} (sha=${SHA}, day=${day})..."
+    local kq_dispatch
+    if ! kq_dispatch=$(chay_gh gh workflow run "$WF_DUNG_ANH" --ref "$NHANH_TAM" -f sha="$SHA" -f day="$day" 2>&1); then
+        fail "Không gọi được workflow:"
+        echo "$kq_dispatch" | sed 's/^/         /'
+        echo "$kq_dispatch" | grep -qiE '404|not found' && \
+            fail "→ Gần như chắc chắn: origin/main chưa có ${WF_DUNG_ANH} (xem cảnh báo ở trên)."
+        exit 1
+    fi
+
+    if [ "${DRY_GITHUB:-0}" = 1 ]; then
+        ok "[DRY] Dừng trước khi theo dõi run — không có gì thật được gọi."
+        exit 0
+    fi
+
+    # Tìm run mới (thường xuất hiện sau 2–10 giây).
+    for i in $(seq 1 30); do
+        while read -r id u; do
+            [ -z "$id" ] && continue
+            case "$truoc" in *" $id "*) continue ;; esac
+            moi="$id"; url="$u"; break
+        done < <(gh run list --branch "$NHANH_TAM" --event workflow_dispatch --limit 20 \
+                    --json databaseId,url --jq '.[] | "\(.databaseId) \(.url)"' 2>/dev/null)
+        [ -n "$moi" ] && break
+        sleep 3
+    done
+    if [ -z "$moi" ]; then
+        fail "Đã gọi workflow nhưng sau 90s không thấy run nào trên ${NHANH_TAM}."
+        fail "Xem tay: gh run list --workflow ${WF_DUNG_ANH}"
+        exit 1
+    fi
+    ok "Run GitHub: ${url}"
+
+    # Theo dõi có TRẦN — không dùng `gh run watch` vì nó không có giới hạn giờ.
+    local bat_dau trang_thai ket_luan da_qua lan_bao=0
+    bat_dau=$(date +%s)
+    while :; do
+        trang_thai=$(gh run view "$moi" --json status,conclusion --jq '.status + " " + (.conclusion // "")' 2>/dev/null)
+        ket_luan=$(echo "$trang_thai" | awk '{print $2}')
+        [ "$(echo "$trang_thai" | awk '{print $1}')" = "completed" ] && break
+        da_qua=$(( $(date +%s) - bat_dau ))
+        if [ "$da_qua" -ge "$TRAN_GITHUB" ]; then
+            fail "Run chưa xong sau ${TRAN_GITHUB}s — huỷ và dừng. ${url}"
+            gh run cancel "$moi" >/dev/null 2>&1 || true
+            exit 1
+        fi
+        if [ $(( da_qua / 120 )) -gt "$lan_bao" ]; then
+            lan_bao=$(( da_qua / 120 ))
+            info "  …GitHub đang dựng ($(( da_qua / 60 )) phút, trạng thái: ${trang_thai:-?})"
+        fi
+        sleep 20
+    done
+
+    if [ "$ket_luan" != "success" ]; then
+        fail "GitHub dựng ảnh HỎNG (kết luận: ${ket_luan:-?}) — ${url}"
+        fail "Log các bước hỏng (80 dòng cuối):"
+        gh run view "$moi" --log-failed 2>/dev/null | tail -80 | sed 's/^/         /'
+        exit 1
+    fi
+    ok "GitHub đã dựng + kiểm ảnh xong (${url})"
+
+    xoa_nhanh_tam
+    trap - EXIT INT TERM
+
+    if [ "$KHONG_DAY" = true ]; then
+        ok "Xong phần build (--khong-day). Ảnh dựng trên runner, KHÔNG đẩy đi đâu."
+        exit 0
+    fi
+
+    # Không tin lời "success": hỏi chính VPS — thứ sẽ kéo ảnh ở bước 5 — xem
+    # tag có thật trên GHCR không.
+    info "Kiểm tag :${SHA} có thật trên GHCR (hỏi từ VPS)..."
+    if ! sshvps "docker manifest inspect ${GHCR_BE}:${SHA} >/dev/null && docker manifest inspect ${GHCR_FE}:${SHA} >/dev/null"; then
+        fail "VPS KHÔNG thấy ${GHCR_BE}:${SHA} hoặc ${GHCR_FE}:${SHA} trên GHCR — dừng trước khi tráo."
+        fail "Kiểm: gói GHCR có cho repo này quyền ghi (Package settings → Manage Actions access) không, và VPS đã docker login ghcr.io chưa."
+        exit 1
+    fi
+    ok "Ảnh đã lên GHCR (tag ${SHA} và latest) — dựng bởi GitHub Actions"
+}
+
+if [ "$BUILD_GITHUB" = true ]; then
+    dung_anh_tren_github
+else
+# ── Nhánh MÁY NHÀ (bước 1→4) — giữ nguyên, không thụt lề để diff gọn ──
+
 # ─── 1. Máy nhà còn sống không ─────────────────────────────────────────
 info "Kiểm máy nhà..."
 # LAN trước, đường hầm sau. `-o BatchMode` để không bao giờ ngồi chờ hỏi mật khẩu.
@@ -314,6 +524,7 @@ if [ "$KHONG_DAY" != true ]; then
         fail "Chạy MỘT LẦN (token cần quyền write:packages):"
         fail "    ssh ${MAY_NHA} 'echo <TOKEN> | docker login ghcr.io -u cuonghoang1103 --password-stdin'"
         fail "Hoặc chạy 'bash deploy-nha.sh --khong-day' để chỉ thử build, không đẩy."
+        goi_y_build_github
         exit 1
     fi
     ok "Máy nhà đã đăng nhập GHCR"
@@ -474,6 +685,7 @@ if ! day_anh_len_ghcr; then
     ok "Lần 2 qua — đúng là trục trặc mạng, không phải cấu hình."
 fi
 ok "Ảnh đã lên GHCR (tag ${SHA} và latest)"
+fi   # ← hết nhánh MÁY NHÀ (bước 1→4); chế độ --build-github đã làm phần này ở dung_anh_tren_github
 
 if [ "$CHI_BUILD" = true ]; then
     ok "Xong phần build (--chi-build). Chưa tráo gì trên VPS."
@@ -944,8 +1156,10 @@ sshvps "
     | xargs -r docker rmi >/dev/null 2>&1
   docker image prune -f >/dev/null 2>&1
   df -h / | tail -1" | sed 's/^/         /'
-info "Dọn thư mục build cũ ở máy nhà (giữ 3 bản gần nhất)..."
-sshnha "cd ${THU_MUC_NHA} 2>/dev/null && ls -1t | tail -n +4 | xargs -r rm -rf" 2>/dev/null || true
+if [ "$BUILD_GITHUB" != true ]; then
+    info "Dọn thư mục build cũ ở máy nhà (giữ 3 bản gần nhất)..."
+    sshnha "cd ${THU_MUC_NHA} 2>/dev/null && ls -1t | tail -n +4 | xargs -r rm -rf" 2>/dev/null || true
+fi
 
 # ─── 8. Tự đẩy lên GitHub khi các phép kiểm BẮT BUỘC của CI đều xanh ───
 #
@@ -1087,12 +1301,21 @@ ok "Container đang chạy ĐÚNG ảnh ${SHA} (đã so mã băm, không phải 
 # `refs/heads/da-len-prod` là thứ hook trên kho trần đọc để biết production
 # đang chạy gì. Hỏng bước này KHÔNG được làm hỏng deploy — ảnh đã lên rồi;
 # chỉ cảnh báo là chốt sẽ dùng mốc cũ hơn (chặt hơn, không nguy hiểm).
-if git push --quiet --force "${MAY_NHA}:${KHO_TUONG_DOI}" "HEAD:refs/heads/da-len-prod" 2>/dev/null; then
+# Chế độ --build-github mà máy nhà không với tới: MAY_NHA rỗng ⇒ bỏ qua (đừng
+# để git hiểu ":cuongthai-build/repo.git" thành một đường dẫn cục bộ).
+if [ -z "$MAY_NHA" ]; then
+    warn "Máy nhà không với tới — CHƯA ghi mốc 'đã lên production' (hook kho trần dùng mốc cũ;"
+    warn "chốt 0a vẫn đọc thẳng từ VPS nên không ảnh hưởng). Lần deploy bằng máy nhà sau sẽ ghi lại."
+elif git push --quiet --force "${MAY_NHA}:${KHO_TUONG_DOI}" "HEAD:refs/heads/da-len-prod" 2>/dev/null; then
     ok "Đã ghi mốc 'đã lên production' = ${SHA} (chốt chống lùi dùng mốc này)"
 else
     warn "Không ghi được mốc 'đã lên production' — chốt sẽ dùng mốc cũ hơn."
 fi
 
 echo ""
-ok "XONG — production đang chạy commit ${SHA}"
+if [ "$BUILD_GITHUB" = true ]; then
+    ok "XONG — production đang chạy commit ${SHA} (ảnh dựng bởi GitHub Actions, chế độ --build-github)"
+else
+    ok "XONG — production đang chạy commit ${SHA}"
+fi
 echo ""

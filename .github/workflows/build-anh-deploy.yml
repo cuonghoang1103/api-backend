@@ -1,0 +1,200 @@
+name: Dựng ảnh deploy (thay máy nhà)
+
+# ============================================================
+# ĐƯỜNG DỰNG ẢNH DỰ PHÒNG cho `deploy-nha.sh --build-github` (03/10/2026).
+#
+# `deploy-nha.sh` có hai nửa: (A) DỰNG hai ảnh ở máy nhà rồi đẩy GHCR, (B) mọi
+# bước trên VPS (tráo, migrate, seed nội dung, smoke-test, nginx, push main…).
+# Chỉ (A) cần máy nhà. Máy nhà mất điện/mất mạng thì workflow này làm (A) thay,
+# còn (B) vẫn do chính deploy-nha.sh chạy y nguyên từ máy Mac.
+#
+# ⚠️ Dựng ĐÚNG như máy nhà — `Dockerfile.backend` + `frontend/Dockerfile`, cùng
+# build-arg — chứ KHÔNG phải `Dockerfile.ghcr.backend`/`frontend/Dockerfile.ghcr`
+# của deploy-ghcr.yml: hai file kia dựng ảnh THIẾU `content/`, nên bước seed nội
+# dung chạy rỗng mà log vẫn xanh (đo thật 30/09/2026). Đổi lệnh build ở đây thì
+# đổi cả bước 3 của deploy-nha.sh, và ngược lại.
+#
+# KHÔNG có trigger `push:` — cố ý. Workflow này chỉ DỰNG + ĐẨY ẢNH, không tráo
+# gì trên VPS; nhưng dựng tự động mỗi lần push thì vô ích và tốn phút chạy.
+# deploy-nha.sh gọi nó bằng:
+#   gh workflow run build-anh-deploy.yml -f sha=<sha ngắn> --ref deploy-tam/<sha ngắn>
+# ============================================================
+
+run-name: Dựng ảnh deploy ${{ inputs.sha }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      sha:
+        description: 'SHA (dạng ngắn, đúng như deploy-nha.sh dùng làm tag ảnh) — phải là commit ở đầu nhánh được chọn'
+        required: true
+        type: string
+      day:
+        description: 'Đẩy ảnh lên GHCR (bỏ chọn = chỉ dựng + kiểm, như --khong-day)'
+        required: false
+        default: true
+        type: boolean
+
+# Hai lượt cùng một sha thì lượt sau XẾP HÀNG sau lượt trước, không chạy chồng
+# (cùng đẩy một tag) và không huỷ lượt đang chạy (deploy-nha.sh đang theo dõi nó).
+concurrency:
+  group: build-anh-deploy-${{ inputs.sha }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  GHCR_BE: ghcr.io/cuonghoang1103/api-backend-backend
+  GHCR_FE: ghcr.io/cuonghoang1103/api-backend-frontend
+
+jobs:
+  dung-anh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Kiểm đầu vào
+        env:
+          SHA_VAO: ${{ inputs.sha }}
+        run: |
+          if ! [[ "$SHA_VAO" =~ ^[0-9a-f]{7,40}$ ]]; then
+            echo "::error::sha '$SHA_VAO' không hợp lệ (cần 7–40 ký tự hex)"; exit 1
+          fi
+
+      # Checkout đúng commit ở đầu nhánh được dispatch (deploy-tam/<sha>), rồi
+      # đối chiếu với input: lệch nhau là dựng nhầm mã dưới tag của commit khác
+      # — đúng kiểu hỏng câm mà chốt chống lùi của deploy-nha.sh không bắt được.
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+
+      - name: Đối chiếu commit với input sha
+        env:
+          SHA_VAO: ${{ inputs.sha }}
+        run: |
+          THAT=$(git rev-parse HEAD)
+          case "$THAT" in
+            "$SHA_VAO"*) echo "OK: HEAD=$THAT khớp input $SHA_VAO" ;;
+            *) echo "::error::HEAD=$THAT KHÔNG khớp input sha=$SHA_VAO — dừng, không dựng ảnh mang tag sai"; exit 1 ;;
+          esac
+
+      # Runner chỉ còn ~14GB đĩa trống; ảnh backend (có content/ + node_modules)
+      # cộng ảnh frontend và lớp trung gian của cả hai có thể vượt. Gỡ bộ công
+      # cụ không dùng tới (~25GB) cho chắc.
+      - name: Dọn đĩa runner
+        run: |
+          df -h / | tail -1
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL || true
+          docker system prune -af >/dev/null 2>&1 || true
+          df -h / | tail -1
+
+      - name: Đăng nhập GHCR
+        if: ${{ inputs.day }}
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # ⛔ Y NGUYÊN hai lệnh của deploy-nha.sh bước 3 (song song như máy nhà).
+      #  • PHẢI `-f Dockerfile.backend`: `docker build .` lấy `Dockerfile` trần
+      #    (node:22-alpine, musl) mang engine Prisma glibc ⇒ backend restart vô tận,
+      #    API 502 bảy phút (18/08/2026).
+      #  • `YTDLP_NGAY` theo giờ VN như máy nhà (runner chạy UTC).
+      #  • Heap của `next build` đã đặt sẵn trong frontend/Dockerfile (6GB); runner
+      #    ubuntu-latest có 16GB RAM nên chạy song song với backend vẫn đủ.
+      - name: Dựng hai ảnh (song song, đúng như máy nhà)
+        env:
+          SHA: ${{ inputs.sha }}
+          DOCKER_BUILDKIT: '1'
+        run: |
+          # Shell mặc định của Actions là `bash -e`: `wait` của bản build hỏng
+          # sẽ giết step ngay, trước khi kịp in log. Tự xử lý mã lỗi.
+          set +e
+          NGAY=$(TZ=Asia/Ho_Chi_Minh date +%F)
+          docker build -f Dockerfile.backend --build-arg YTDLP_NGAY="$NGAY" \
+            -t "$GHCR_BE:$SHA" -t "$GHCR_BE:latest" . > /tmp/be.log 2>&1 &
+          PID_BE=$!
+          docker build -f frontend/Dockerfile --build-arg BUILD_NUMBER="$SHA" \
+            -t "$GHCR_FE:$SHA" -t "$GHCR_FE:latest" ./frontend > /tmp/fe.log 2>&1 &
+          PID_FE=$!
+          wait $PID_BE; MA_BE=$?
+          wait $PID_FE; MA_FE=$?
+          echo "backend=$MA_BE frontend=$MA_FE"
+          if [ $MA_BE -ne 0 ]; then echo "::group::backend log (80 dòng cuối)"; tail -80 /tmp/be.log; echo "::endgroup::"; fi
+          if [ $MA_FE -ne 0 ]; then echo "::group::frontend log (80 dòng cuối)"; tail -80 /tmp/fe.log; echo "::endgroup::"; fi
+          [ $MA_BE -eq 0 ] && [ $MA_FE -eq 0 ] || { echo "::error::Dựng ảnh hỏng (backend=$MA_BE frontend=$MA_FE)"; exit 1; }
+          docker images --format '{{.Repository}}:{{.Tag}}\t{{.Size}}' | grep -- "$SHA"
+          df -h / | tail -1
+
+      # Cùng phép kiểm bước 3b của deploy-nha.sh: build xanh KHÔNG có nghĩa là
+      # ảnh chạy được. Engine Prisma phải hợp libc của chính ảnh.
+      - name: Kiểm ảnh backend chạy nổi (libc ↔ engine Prisma)
+        env:
+          SHA: ${{ inputs.sha }}
+        run: |
+          KQ=$(docker run --rm --entrypoint sh "$GHCR_BE:$SHA" -c '
+              if ls /lib/ld-musl-x86_64.so.1 >/dev/null 2>&1; then echo -n musl; else echo -n glibc; fi
+              echo -n " "
+              ls node_modules/.prisma/client/ 2>/dev/null | grep -o "debian\|musl" | head -1
+          ')
+          LIBC_ANH=$(echo "$KQ" | awk '{print $1}')
+          LIBC_ENGINE=$(echo "$KQ" | awk '{print $2}')
+          [ "$LIBC_ENGINE" = "debian" ] && LIBC_ENGINE=glibc
+          if [ -z "$LIBC_ANH" ] || [ -z "$LIBC_ENGINE" ]; then
+            echo "::error::Không đọc được engine Prisma trong ảnh backend (ảnh hỏng?) — KQ='$KQ'"; exit 1
+          elif [ "$LIBC_ANH" != "$LIBC_ENGINE" ]; then
+            echo "::error::Ảnh backend nền $LIBC_ANH nhưng engine Prisma là $LIBC_ENGINE — dựng nhầm Dockerfile?"; exit 1
+          fi
+          echo "OK: nền $LIBC_ANH, engine $LIBC_ENGINE"
+          # Ảnh phải mang theo content/ — thiếu nó thì seed nội dung ở bước 6b
+          # chạy rỗng mà vẫn báo xanh (lỗi của đường Dockerfile.ghcr 30/09/2026).
+          SO=$(docker run --rm --entrypoint sh "$GHCR_BE:$SHA" -c 'ls content 2>/dev/null | wc -l')
+          if [ "${SO:-0}" -lt 1 ]; then
+            echo "::error::Ảnh backend KHÔNG có content/ — seed nội dung sẽ chạy rỗng"; exit 1
+          fi
+          echo "OK: content/ có $SO mục"
+
+      # Ảnh frontend phải KHỞI ĐỘNG được. Không có env production nên trang có
+      # thể trả 500 (gọi API lúc SSR) — chỉ cần server TRẢ LỜI HTTP bất kỳ, tức
+      # là `server.js` lên được. Kiểm bằng node vì ảnh không có curl/wget.
+      - name: Kiểm ảnh frontend khởi động được
+        env:
+          SHA: ${{ inputs.sha }}
+        run: |
+          docker run -d --name fe-kiem "$GHCR_FE:$SHA" >/dev/null
+          LEN=false
+          for _ in $(seq 1 30); do
+            if docker exec fe-kiem node -e "require('http').get('http://127.0.0.1:3000/',r=>{console.log('HTTP',r.statusCode);process.exit(0)}).on('error',()=>process.exit(1))" 2>/dev/null; then
+              LEN=true; break
+            fi
+            [ "$(docker inspect -f '{{.State.Running}}' fe-kiem 2>/dev/null)" = "true" ] || break
+            sleep 2
+          done
+          if [ "$LEN" != true ]; then
+            echo "::error::Ảnh frontend không trả lời HTTP sau 60s"
+            docker logs --tail 40 fe-kiem || true
+            docker rm -f fe-kiem >/dev/null 2>&1 || true
+            exit 1
+          fi
+          docker rm -f fe-kiem >/dev/null 2>&1 || true
+          echo "OK: frontend khởi động được"
+
+      # Đẩy cả `:<sha>` lẫn `:latest` — đúng bộ tag máy nhà đẩy (bước 4).
+      - name: Đẩy ảnh lên GHCR
+        if: ${{ inputs.day }}
+        env:
+          SHA: ${{ inputs.sha }}
+        run: |
+          day() {
+            docker push "$GHCR_BE:$SHA" && docker push "$GHCR_BE:latest" && \
+            docker push "$GHCR_FE:$SHA" && docker push "$GHCR_FE:latest"
+          }
+          day || { echo "Lần 1 hỏng — thử lại"; sleep 10; day; }
+          # Kiểm tag có thật trên registry, không tin lời `docker push`.
+          docker manifest inspect "$GHCR_BE:$SHA" >/dev/null
+          docker manifest inspect "$GHCR_FE:$SHA" >/dev/null
+          echo "OK: $GHCR_BE:$SHA và $GHCR_FE:$SHA đã có trên GHCR"

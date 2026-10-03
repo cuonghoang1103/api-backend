@@ -214,6 +214,20 @@ bash deploy-nha.sh --khong-lui  # hỏng thì dừng hẳn
 bash deploy-nha.sh --khong-day  # chỉ build ở nhà, không đẩy, không tráo
 ```
 
+**Máy nhà chết (mất điện/mạng) ⇒ `bash deploy-nha.sh --build-github`** (03/10/2026).
+GitHub Actions (`.github/workflows/build-anh-deploy.yml`, chỉ `workflow_dispatch`)
+dựng hai ảnh THAY máy nhà — đúng `Dockerfile.backend` + `frontend/Dockerfile`,
+cùng build-arg, cùng phép kiểm libc ↔ engine Prisma, có kiểm `content/` — rồi
+đẩy GHCR `:<sha>` + `:latest`; từ bước tráo trở đi (migrate, **seed nội dung**,
+smoke-test, nginx, push main sau bộ kiểm CI, chốt cuối) chạy y nguyên. Khác
+`deploy.sh` (đẩy cây làm việc, build trên VPS) và `deploy-ghcr.yml` (ảnh thiếu
+`content/` ⇒ seed rỗng). Mã đi qua nhánh tạm `deploy-tam/<sha>` (tự xoá), KHÔNG
+đụng main trước bước 8. Cần: `gh` đã đăng nhập; workflow phải có trên
+`origin/main` (GitHub chỉ dispatch workflow có ở nhánh mặc định) VÀ trong commit
+đang deploy. Dựng nguội ~15–25 phút. Máy nhà không với tới thì bỏ qua báo
+Telegram + ghi mốc `da-len-prod`. Không bao giờ tự lùi về `deploy.sh`. Thử luồng
+không gọi GitHub: `DRY_GITHUB=1`.
+
 ⚠️ Nó **hỏi `[y/N]`** khi cây làm việc còn thay đổi chưa commit (những thay đổi
 đó sẽ KHÔNG lên production). Chạy nền thì phải `echo y | bash deploy-nha.sh`,
 không thì nó dừng im với exit 0.

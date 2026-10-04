@@ -50,3 +50,16 @@ export function ghiTruyVan(sua: (q: URLSearchParams) => void): void {
 export function tepTinh(duong: string): string {
   return anhTuyetDoi(duong);
 }
+
+/**
+ * Link CHIA SẺ được cho người khác: web dùng chính địa chỉ trang; app desktop
+ * (app://cuongthai/index.html) thì đổi sang cuongthai.com + `duongWeb` — nếu
+ * không, nút "Chép liên kết" chép ra một địa chỉ không ai mở được (04/10/2026).
+ */
+export function linkChiaSe(duongWeb: string, truyVan = ''): string {
+  const q = truyVan ? `?${truyVan.replace(/^\?/, '')}` : '';
+  if (typeof window !== 'undefined' && /^https?:$/.test(window.location.protocol)) {
+    return `${window.location.origin}${window.location.pathname}${q}`;
+  }
+  return `https://cuongthai.com${duongWeb}${q}`;
+}

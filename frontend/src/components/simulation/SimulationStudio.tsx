@@ -21,6 +21,7 @@
  * hoạt render lại, nên kéo thanh tua hay đổi tuỳ chọn không làm giật trang.
  */
 
+import { linkChiaSe } from '@/components/sach-hoc/moiTruong';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   ChevronLeft,
@@ -267,7 +268,7 @@ export default function SimulationStudio() {
   const copyLink = useCallback(async () => {
     if (typeof window === 'undefined') return;
     try {
-      await navigator.clipboard.writeText(`${window.location.origin}${window.location.pathname}?${buildQuery()}`);
+      await navigator.clipboard.writeText(linkChiaSe('/simulation', buildQuery()));
       setCopiedLink(true);
       window.setTimeout(() => setCopiedLink(false), 1800);
     } catch {

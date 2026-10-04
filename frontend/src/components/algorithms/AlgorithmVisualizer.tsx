@@ -1,5 +1,6 @@
 'use client';
 
+import { linkChiaSe } from '@/components/sach-hoc/moiTruong';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Play, Pause, SkipBack, SkipForward, RotateCcw, Zap, Loader2, AlertCircle, ChevronRight, Share2, Check } from 'lucide-react';
 import { CATALOG, CATEGORIES, type AlgoDef } from './catalog';
@@ -108,7 +109,7 @@ export default function AlgorithmVisualizer() {
   const share = useCallback(() => {
     try {
       const enc = btoa(unescape(encodeURIComponent(code)));
-      const url = `${window.location.origin}${window.location.pathname}?code=${encodeURIComponent(enc)}`;
+      const url = linkChiaSe('/algorithms', `code=${encodeURIComponent(enc)}`);
       void navigator.clipboard?.writeText(url);
       setCopied(true);
       setTimeout(() => setCopied(false), 1800);

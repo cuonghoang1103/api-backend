@@ -407,3 +407,19 @@ export async function chotLuot(
 ): Promise<void> {
   await api.post(`${BASE}/plans/${planId}/xong`, { kieu, phut });
 }
+
+/**
+ * Máy chủ thật để thiết bị/robot giả lập nối WebSocket `/device-ws`.
+ *
+ * Trên web là chính trang đang mở. Trong app desktop trang chạy ở
+ * `app://cuongthai`, nên `window.location.host` là "cuongthai" — robot giả lập
+ * nối hụt và đoạn `secrets.h` in ra tên máy sai (04/10/2026). Không phải http(s)
+ * thì về cuongthai.com.
+ */
+export function mayChuThietBi(): { wsGoc: string; host: string } {
+  if (typeof window !== 'undefined' && /^https?:$/.test(window.location.protocol)) {
+    const { protocol, host } = window.location;
+    return { wsGoc: `${protocol === 'https:' ? 'wss:' : 'ws:'}//${host}`, host };
+  }
+  return { wsGoc: 'wss://cuongthai.com', host: 'cuongthai.com' };
+}

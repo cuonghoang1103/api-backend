@@ -55,6 +55,7 @@ import {
   registerDevice,
   sendCommand,
   updatePersona,
+  mayChuThietBi,
 } from '@/lib/maker-lab-api';
 import { listVoices } from '@/lib/voice-mini-api';
 import type { MakerDevice, MakerDeviceCredentials } from '@/types/maker-lab';
@@ -1280,13 +1281,13 @@ function CredentialsCard({
 }) {
   const wsUrl =
     typeof window !== 'undefined'
-      ? `${window.location.protocol === 'https:' ? 'wss' : 'ws'}://${window.location.host}/device-ws?key=${creds.deviceKey}&secret=${creds.secret}`
+      ? `${mayChuThietBi().wsGoc}/device-ws?key=${creds.deviceKey}&secret=${creds.secret}`
       : '';
 
   const snippet = `// firmware/${projectSlug}/src/secrets.h
 #define DEVICE_KEY    "${creds.deviceKey}"
 #define DEVICE_SECRET "${creds.secret}"
-#define WS_HOST       "${typeof window !== 'undefined' ? window.location.host : 'cuongthai.com'}"
+#define WS_HOST       "${mayChuThietBi().host}"
 #define WS_PATH       "/device-ws"`;
 
   return (

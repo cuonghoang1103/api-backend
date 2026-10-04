@@ -27,6 +27,8 @@
  *             `say_end`. Mặc định là MP3.
  */
 
+import { mayChuThietBi } from '@/lib/maker-lab-api';
+
 export type LenhRobot = {
   id?: number;
   type: string;
@@ -55,7 +57,7 @@ function diaChiGoc(): string {
   const ep = process.env.NEXT_PUBLIC_DEVICE_WS_URL;
   if (ep) return ep.replace(/\/$/, '');
   if (typeof window === 'undefined') return '';
-  return `${window.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${window.location.host}`;
+  return mayChuThietBi().wsGoc;   // app desktop: không dùng app://cuongthai
 }
 
 export class ThietBiAo {

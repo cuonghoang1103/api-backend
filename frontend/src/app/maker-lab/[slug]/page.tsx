@@ -15,7 +15,7 @@
  */
 
 import { useEffect, useState } from 'react';
-import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import {
   ArrowLeft,
@@ -77,6 +77,7 @@ export default function MakerProjectPage() {
   const params = useParams();
   const router = useRouter();
   const search = useSearchParams();
+  const pathname = usePathname();
   const slug = String(params?.slug ?? '');
 
   const [project, setProject] = useState<MakerProjectDetail | null>(null);
@@ -110,9 +111,13 @@ export default function MakerProjectPage() {
     setTab(id);
     // Deep-linkable without a reload — handy when sharing "look at the
     // wiring tab" with someone.
-    const url = new URL(window.location.href);
-    url.searchParams.set('tab', id);
-    router.replace(url.pathname + url.search, { scroll: false });
+    //
+    // ⚠️ Dựng từ `usePathname`/`useSearchParams`, KHÔNG từ `window.location`: trong
+    // app desktop trang chạy ở app://cuongthai/index.html, nên bản cũ điều hướng
+    // sang "/index.html?tab=…" ⇒ màn "Không tìm thấy" mỗi lần bấm tab (04/10/2026).
+    const q = new URLSearchParams(search?.toString() ?? '');
+    q.set('tab', id);
+    router.replace(`${pathname ?? `/maker-lab/${slug}`}?${q.toString()}`, { scroll: false });
   }
 
   if (loading) {

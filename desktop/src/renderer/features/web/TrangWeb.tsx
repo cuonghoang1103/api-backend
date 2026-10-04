@@ -62,6 +62,12 @@ export function useCauNoiWeb(): boolean {
   useEffect(() => {
     if (!api || !user) return;
     configureWebApi({ apiBase: api.baseUrlForForms(), getToken: () => api.getToken() });
+    /* ĐÃ nạp đúng người này rồi thì THÔI (04/10/2026). `setAuth` của web coi mỗi lần
+       gọi là một lần ĐĂNG NHẬP và phát tiếng "login" — mà hook này chạy ở mỗi trang
+       web được mở ⇒ chuyển trang nào cũng kêu "Yahooo" (người dùng: "hơi điếc tai").
+       Token không cần nạp lại: axios của web đọc nó qua `getToken` ở trên. */
+    const daCo = (useAuthStore.getState() as unknown as { isAuthenticated?: boolean; user?: { id?: number } | null });
+    if (daCo.isAuthenticated && daCo.user?.id === user.userId) { datXong(true); return; }
     useAuthStore.getState().setAuth({
       userId: user.userId,
       username: user.username,

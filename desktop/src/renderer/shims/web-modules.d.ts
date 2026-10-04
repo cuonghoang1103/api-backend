@@ -288,6 +288,11 @@ declare module '@/components/simulation/SimulationStudio' {
  */
 /* Phần CLIENT của trang chi tiết dự án — `[slug]/page.tsx` là server component nên
    app nạp thẳng tệp này (dinhTuyenWeb `/projects/:slug`). */
+declare module '@/app/exp-hub/[slug]/ChiTietSnippetClient' {
+  import type { ComponentType } from 'react';
+  const ChiTietSnippetClient: ComponentType;
+  export default ChiTietSnippetClient;
+}
 declare module '@/app/projects/[slug]/ProjectPageClient' {
   import type { ComponentType } from 'react';
   const TrangChiTietDuAn: ComponentType;

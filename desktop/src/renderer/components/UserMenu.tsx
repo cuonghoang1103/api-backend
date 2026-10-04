@@ -13,7 +13,20 @@ import { useDich } from '../i18n';
 
 export function UserMenu({ collapsed }: { collapsed: boolean }) {
   const { dich } = useDich();
-  const { user, phase, logout, unsyncedCount } = useSession();
+  const { user, phase, logout, unsyncedCount, api } = useSession();
+  /* Ảnh đại diện + tên hiển thị THẬT như trên web (04/10/2026). Phiên đăng nhập
+     chỉ chụp lúc đăng nhập — đổi ảnh trên web xong thì app vẫn hiện ảnh cũ —
+     nên hỏi lại hồ sơ một lần khi mở app. Ảnh hỏng thì về chữ cái đầu. */
+  const [hoSo, datHoSo] = useState<{ anh?: string | undefined; ten?: string | undefined }>({});
+  const [anhHong, datAnhHong] = useState(false);
+  useEffect(() => {
+    if (!api || !user) return;
+    let huy = false;
+    void (api.request('/api/v1/profile') as Promise<{ avatarUrl?: string | null; displayName?: string | null; fullName?: string | null }>)
+      .then((p) => { if (!huy && p) datHoSo({ anh: p.avatarUrl ?? undefined, ten: p.displayName || p.fullName || undefined }); })
+      .catch(() => { /* ngoại tuyến — giữ ảnh của phiên */ });
+    return () => { huy = true; };
+  }, [api, user]);
   const [open, setOpen] = useState(false);
   const [confirming, setConfirming] = useState<number | null>(null);
   const [busy, setBusy] = useState(false);
@@ -39,7 +52,9 @@ export function UserMenu({ collapsed }: { collapsed: boolean }) {
 
   if (!user) return null;
 
-  const label = user.fullName?.trim() || user.username || dich('Tài khoản');
+  const label = hoSo.ten?.trim() || user.fullName?.trim() || user.username || dich('Tài khoản');
+  const anh = hoSo.anh || user.avatarUrl;
+  const coAnh = !!anh && /^(https?:|data:|blob:)/.test(anh) && !anhHong;
   const unverified = phase === 'chua-xac-minh-duoc';
 
   const startLogout = async () => {
@@ -72,8 +87,10 @@ export function UserMenu({ collapsed }: { collapsed: boolean }) {
         title={collapsed ? label : undefined}
         onClick={() => setOpen((value) => !value)}
       >
-        <span className="ct-avatar" aria-hidden>
-          {label.charAt(0).toUpperCase()}
+        <span className="ct-avatar" data-anh={coAnh} aria-hidden>
+          {coAnh
+            ? <img src={anh} alt="" onError={() => datAnhHong(true)} referrerPolicy="no-referrer" />
+            : label.charAt(0).toUpperCase()}
         </span>
         <span className="ct-nav-label">{label}</span>
       </button>

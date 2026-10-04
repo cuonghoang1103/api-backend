@@ -122,13 +122,14 @@ describe('khopTuyenWeb', () => {
        thích trong `dinhTuyenWeb.ts`. Chốt lại để ai đó thêm lại thì phải thêm
        CÓ Ý THỨC, sau khi đã viết lại chúng thành client component. */
     for (const d of ['/games', '/games/leaderboard', '/games/love-me', '/games/co-vua',
-                     '/repos', '/repos/12', '/repos/tag/react',
-                     '/exp-hub/abc']) {
+                     '/repos', '/repos/12', '/repos/tag/react']) {
       expect(khopTuyenWeb(d), `${d} là server component, phải KHÔNG có tuyến`).toBeNull();
     }
     /* `/projects/:slug` ĐÃ đưa lại (04/10/2026): nạp thẳng phần client
        `ProjectPageClient`, không qua vỏ server `page.tsx`. */
     expect(khopTuyenWeb('/projects/mot-du-an')?.thamSo).toEqual({ slug: 'mot-du-an' });
+    // `/exp-hub/:slug` cũng đưa lại cùng ngày — nạp `ChiTietSnippetClient`.
+    expect(khopTuyenWeb('/exp-hub/abc')?.thamSo).toEqual({ slug: 'abc' });
 
     // Và bản ĐỘNG vẫn phải khớp bình thường với giá trị thật.
     expect(khopTuyenWeb('/finance/debts/12')?.thamSo).toEqual({ id: '12' });
@@ -281,7 +282,8 @@ describe('khopTuyenWeb', () => {
     // 04/10/2026: +2 CT Work Đợt S4 (finance, present).
     // 04/10/2026: +1 Thông báo (/notifications).
     // 04/10/2026: +1 CT Work Đợt S5a (desk — service desk & SLA).
-    expect(thay.size).toBe(132);
+    // 04/10/2026: +1 chi tiết EXP_Hub (/exp-hub/:slug).
+    expect(thay.size).toBe(133);
   });
 });
 

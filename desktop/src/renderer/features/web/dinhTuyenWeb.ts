@@ -193,6 +193,9 @@ export const TUYEN_WEB: readonly TuyenWeb[] = [
 
   /* ── Exp Hub ── */
   { mau: '/exp-hub', nap: () => import('@/app/exp-hub/page') },
+  /* Chi tiết EXP_Hub (04/10/2026): `[slug]/page.tsx` là server component `async`
+     — app nạp bản CLIENT `ChiTietSnippetClient` (tải qua API, dựng chung giao diện). */
+  { mau: '/exp-hub/:slug', nap: () => import('@/app/exp-hub/[slug]/ChiTietSnippetClient') },
 
   /* ── Trò chơi ── */
   // ⚠️ TĨNH TRƯỚC ĐỘNG: đường dưới cùng hình dạng với `/games/:slug`.
@@ -237,7 +240,7 @@ export const TUYEN_WEB: readonly TuyenWeb[] = [
    *
    *   /repos · /repos/:id · /repos/tag/:slug          (CẢ cây)
    *   /games · /games/leaderboard · /games/:slug      (CẢ cây)
-   *   /exp-hub/:slug                                  (trang chi tiết)
+   *   (`/exp-hub/:slug` và `/projects/:slug` đã đưa LẠI 04/10/2026 — nạp phần client.)
    *   (`/projects/:slug` đã đưa LẠI vào 04/10/2026 — nạp thẳng ProjectPageClient.)
    *
    * Chúng khai `export default async function` — component BẤT ĐỒNG BỘ, thứ

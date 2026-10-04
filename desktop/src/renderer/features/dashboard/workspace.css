@@ -120,3 +120,28 @@
 .ct-tq-hocky .ct-web-host { height: auto; overflow: visible; }
 .ct-tq-hocky .ct-web-host > .pt-16 { padding-top: 0; min-height: 0; background: transparent; }
 .ct-tq-hocky .ct-web-host > .pt-16 > .mx-auto { max-width: none; padding: 0 0 24px; }
+
+/* ── Logo CuongThai (04/10/2026) — dấu "CT" một nét như app iOS, sáng chạy liên tục ── */
+.ct-logo { display: inline-flex; align-items: center; gap: 10px; min-width: 0; }
+.ct-logo-dau { width: 34px; height: 34px; flex: 0 0 34px; overflow: visible; }
+.ct-logo-dau path { fill: none; stroke-width: 11; stroke-linecap: round; stroke-linejoin: round; }
+.ct-logo-nen { stroke: url(#ct-logo-mau); opacity: 0.38; }
+.ct-logo-sang { stroke: url(#ct-logo-mau); stroke-dasharray: 34 66; animation: ct-logo-chay 2.8s linear infinite; }
+.ct-logo-quang { filter: blur(3.5px); opacity: 0.9; }
+@keyframes ct-logo-chay { from { stroke-dashoffset: 100; } to { stroke-dashoffset: 0; } }
+.ct-logo-chu { display: flex; flex-direction: column; min-width: 0; }
+.ct-logo-chu strong {
+  font-size: 16.5px; font-weight: 800; letter-spacing: -.025em; line-height: 1.15;
+  background: linear-gradient(100deg, #8C5AF0 0%, #F472B6 40%, #fff 50%, #F472B6 60%, #8C5AF0 100%);
+  background-size: 250% 100%;
+  -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent;
+  animation: ct-logo-lot 3.2s ease-in-out infinite;
+}
+:root[data-ct-theme='light'] .ct-logo-chu strong { background-image: linear-gradient(100deg, #7A45E8 0%, #DB2777 40%, #fbcfe8 50%, #DB2777 60%, #7A45E8 100%); }
+@keyframes ct-logo-lot { 0% { background-position: 100% 0; } 100% { background-position: -150% 0; } }
+.ct-logo-chu small { display: block; font-size: 11px; color: var(--ct-text-muted); margin-top: 2px; }
+.ct-sidebar[data-collapsed='true'] .ct-logo-dau { width: 30px; height: 30px; flex-basis: 30px; }
+@media (prefers-reduced-motion: reduce) {
+  .ct-logo-sang, .ct-logo-chu strong { animation: none; }
+  .ct-logo-sang { stroke-dasharray: none; }
+}

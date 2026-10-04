@@ -12,6 +12,7 @@ import { useAppState } from '../app-state';
 import { UpdateBanner } from './UpdateBanner';
 import { UserMenu } from './UserMenu';
 import { GROUP_LABELS, GROUP_ORDER, INTERNAL_ROUTES, THANH_BEN, findRoute } from '../routes';
+import { LogoCuongThai } from './LogoCuongThai';
 import { useDich } from '../i18n';
 
 /**
@@ -104,7 +105,7 @@ export function Sidebar() {
       data-collapsed={collapsed}
       aria-label="Điều hướng chính"
     >
-      <div className="ct-sidebar-brand"><span className="ct-sidebar-monogram" aria-hidden>CT</span>{!collapsed && <span><strong>CuongThai</strong><small>{dich('Không gian cá nhân')}</small></span>}</div>
+      <div className="ct-sidebar-brand"><LogoCuongThai coChu={!collapsed} phu={dich('Không gian cá nhân')} /></div>
       <div className="ct-sidebar-scroll" ref={listRef} onKeyDown={onKeyDown}>
         {GROUP_ORDER.map((group) => {
           /* Chỉ những trang trong `THANH_BEN` (danh sách gọn người dùng chốt

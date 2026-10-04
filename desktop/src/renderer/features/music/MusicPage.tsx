@@ -307,11 +307,18 @@ export function MusicPage() {
     return ds;
   }, [tracks, sapXep]);
 
+  /** Dán link YouTube vào ô tìm (04/10) — máy chủ trả đúng video đó; ở đây chỉ để đổi nhãn
+   *  và tìm xem bài ấy đã nằm trong thư viện chưa (dòng chưa rút còn giữ link gốc). */
+  const idLinkYT = useMemo(
+    () => /(?:youtube\.com\/(?:watch\?(?:[^#]*&)?v=|shorts\/|live\/|embed\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/.exec(query.trim())?.[1] ?? null,
+    [query],
+  );
   const ketQuaTim = useMemo(() => {
+    if (idLinkYT) return tracks.filter((t) => (t.audioUrl ?? '').includes(idLinkYT));
     const needle = fold(query.trim());
     if (!needle) return [];
     return tracks.filter((t) => fold(`${t.title} ${t.artist ?? ''}`).includes(needle));
-  }, [tracks, query]);
+  }, [tracks, query, idLinkYT]);
 
   const daTaiDs = useMemo(() => tracks.filter((t) => downloaded.has(t.id)), [tracks, downloaded]);
 
@@ -475,7 +482,7 @@ export function MusicPage() {
               ref={oTim}
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder={dich('Tìm trong thư viện hoặc trên YouTube…')}
+              placeholder={dich('Tìm bài trong thư viện, trên YouTube — hoặc dán link YouTube…')}
               aria-label={dich('Tìm bài hát')}
             />
             {dangTimYT ? <Loader2 size={14} className="ct-spin" aria-hidden />
@@ -519,13 +526,16 @@ export function MusicPage() {
         {/* ─── Kết quả tìm ─── */}
         {tim && (
           <section className="mz-khoi">
-            <h2 className="mz-h2">{dichP('Kết quả cho “{q}”', { q: tim })}</h2>
+            <h2 className="mz-h2">{idLinkYT ? dich('Bài từ link YouTube bạn dán') : dichP('Kết quả cho “{q}”', { q: tim })}</h2>
             {ketQuaTim.length > 0
               ? <BangBai tracks={ketQuaTim} hanhDong={hanhDong} />
-              : !dangTimYT && <p className="mz-trong-nho">{dich('Không có bài nào trong thư viện khớp.')}</p>}
+              : !dangTimYT && !idLinkYT && <p className="mz-trong-nho">{dich('Không có bài nào trong thư viện khớp.')}</p>}
+            {idLinkYT && !dangTimYT && ketQuaYT.length === 0 && ketQuaTim.length === 0 && (
+              <p className="mz-trong-nho">{online ? dich('Không mở được video này — có thể link sai, video riêng tư hoặc đã bị xoá.') : dich('Cần có mạng để mở link YouTube.')}</p>
+            )}
             {ketQuaYT.length > 0 && (
               <>
-                <h3 className="mz-h3"><Youtube size={15} aria-hidden /> {dich('Trên YouTube')} <small>{dich('— thêm vào thư viện là nghe được như mọi bài khác')}</small></h3>
+                <h3 className="mz-h3"><Youtube size={15} aria-hidden /> {idLinkYT ? dich('Video trong link') : dich('Trên YouTube')} <small>{dich('— thêm vào thư viện là nghe được như mọi bài khác')}</small></h3>
                 <div className="mz-bang">
                   {ketQuaYT.map((r) => (
                     <div key={r.videoId} className="mz-dong mz-dong-yt">

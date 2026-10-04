@@ -51,6 +51,7 @@ import { ThongBaoPage } from './features/thongBao/ThongBaoPage';
 import { PhongVanPage } from './features/interview/PhongVanPage';
 import { CtWorkPage } from './features/work/CtWorkPage';
 import { MangNhaPage } from './features/mang/MangNhaPage';
+import { HoSoPage } from './features/profile/HoSoPage';
 import { thuocCayWeb } from './features/web/dinhTuyenWeb';
 
 export const NATIVE_PAGES: Readonly<Record<string, ComponentType>> = {
@@ -87,6 +88,7 @@ export const NATIVE_PAGES: Readonly<Record<string, ComponentType>> = {
   '/forum': DienDanPage,
   '/saved': DaLuuPage,
   '/profile': TrangCaNhanPage,
+  '/ho-so': HoSoPage,
   '/work': CtWorkPage,
   '/toc-do-mang': MangNhaPage,
 };

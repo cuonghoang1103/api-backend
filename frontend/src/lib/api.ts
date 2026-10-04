@@ -307,6 +307,13 @@ export const authApi = {
 
   getProfile: () => api.get('/profile'),
 
+  /** Tên đăng nhập (04/10/2026) — người đăng nhập bằng Google/GitHub/Apple được tự đặt tên
+   *  kiểu `ten_mf2k3x9`; giờ đổi được. Xem src/services/doiTenDangNhap.service.ts. */
+  checkUsername: (u: string) =>
+    api.get<{ data: { hopLe: boolean; conTrong: boolean; ten: string; lyDo?: string } }>('/profile/username/check', { params: { u } }),
+  changeUsername: (username: string, dungLamTenHienThi: boolean) =>
+    api.patch('/profile/username', { username, dungLamTenHienThi }),
+
   // Extended profile update — accepts all Phase 1 fields. The
   // backend's authService.updateProfile validates each field and
   // throws AppError(400) with a code (e.g. INVALID_GENDER) so the

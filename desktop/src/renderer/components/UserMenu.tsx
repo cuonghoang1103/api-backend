@@ -7,13 +7,17 @@
  * gõ. Vì thế ở đây hỏi trước, nói rõ số lượng, và mặc định GIỮ dữ liệu lại.
  */
 import { useEffect, useRef, useState } from 'react';
-import { AlertTriangle, LogOut, User } from 'lucide-react';
+import { AlertTriangle, LogOut, User, UserPen } from 'lucide-react';
 import { useSession } from '../auth/session';
+import { useAppState } from '../app-state';
 import { useDich } from '../i18n';
 
 export function UserMenu({ collapsed }: { collapsed: boolean }) {
   const { dich } = useDich();
   const { user, phase, logout, unsyncedCount, api } = useSession();
+  const { route, navigate } = useAppState();
+  /* Vào/ra trang hồ sơ ⇒ hỏi lại hồ sơ: đổi ảnh, tên ở đó xong thì góc này đổi theo ngay. */
+  const oTrangHoSo = route.startsWith('/ho-so');
   /* Ảnh đại diện + tên hiển thị THẬT như trên web (04/10/2026). Phiên đăng nhập
      chỉ chụp lúc đăng nhập — đổi ảnh trên web xong thì app vẫn hiện ảnh cũ —
      nên hỏi lại hồ sơ một lần khi mở app. Ảnh hỏng thì về chữ cái đầu. */
@@ -26,7 +30,7 @@ export function UserMenu({ collapsed }: { collapsed: boolean }) {
       .then((p) => { if (!huy && p) datHoSo({ anh: p.avatarUrl ?? undefined, ten: p.displayName || p.fullName || undefined }); })
       .catch(() => { /* ngoại tuyến — giữ ảnh của phiên */ });
     return () => { huy = true; };
-  }, [api, user]);
+  }, [api, user, oTrangHoSo]);
   const [open, setOpen] = useState(false);
   const [confirming, setConfirming] = useState<number | null>(null);
   const [busy, setBusy] = useState(false);
@@ -108,6 +112,17 @@ export function UserMenu({ collapsed }: { collapsed: boolean }) {
             )}
           </div>
 
+          {confirming === null && (
+            <button
+              type="button"
+              role="menuitem"
+              className="ct-usermenu-item"
+              onClick={() => { setOpen(false); navigate('/ho-so'); }}
+            >
+              <UserPen size={14} aria-hidden />
+              Hồ sơ & tên đăng nhập
+            </button>
+          )}
           {confirming === null ? (
             <button
               type="button"

@@ -15,8 +15,9 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { toast } from 'sonner';
-import { User, Link2, Save, Loader2, Image as ImageIcon } from 'lucide-react';
-import { authApi } from '@/lib/api';
+import { User, Link2, Save, Loader2, Image as ImageIcon, Upload } from 'lucide-react';
+import { authApi, fileApi } from '@/lib/api';
+import { TheTenDangNhap } from '@/components/settings/TheTenDangNhap';
 import { useAuthStore } from '@/store/authStore';
 import {
   SettingsPage, SettingsCard, Field, TextInput, TextArea, Button,
@@ -59,6 +60,8 @@ export default function ProfileSettingsPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [taiKhoan, setTaiKhoan] = useState<{ username: string; provider: string | null }>({ username: '', provider: null });
+  const [dangTaiAnh, setDangTaiAnh] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -67,6 +70,7 @@ export default function ProfileSettingsPage() {
         const res = await authApi.getProfile();
         const p = ((res.data as any)?.data ?? {}) as Record<string, any>;
         if (cancelled) return;
+        setTaiKhoan({ username: String(p.username ?? ''), provider: (p.provider as string | null) ?? null });
         setForm({
           displayName: p.displayName ?? '',
           fullName: p.fullName ?? '',
@@ -164,6 +168,26 @@ export default function ProfileSettingsPage() {
     }
   };
 
+  /** Tải ảnh lên R2 rồi lưu NGAY vào hồ sơ — không bắt bấm "Lưu thay đổi" thêm lần nữa. */
+  const taiAnh = async (file: File) => {
+    if (file.size > 8 * 1024 * 1024) { toast.error('Ảnh tối đa 8 MB.'); return; }
+    setDangTaiAnh(true);
+    try {
+      const up = (await fileApi.upload(file, 'images')) as { data?: { data?: { url?: string } } };
+      const url = up.data?.data?.url;
+      if (!url) throw new Error('no url');
+      const res = await authApi.updateProfile({ avatarUrl: url });
+      set('avatarUrl', url);
+      const updated = (res.data as { data?: unknown })?.data;
+      if (updated) updateUser(updated as never);
+      toast.success('Đã đổi ảnh đại diện.');
+    } catch {
+      toast.error('Tải ảnh lên thất bại. Vui lòng thử lại.');
+    } finally {
+      setDangTaiAnh(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center gap-2 py-20 text-sm" style={{ color: 'var(--text-secondary)' }}>
@@ -182,6 +206,18 @@ export default function ProfileSettingsPage() {
         </Button>
       }
     >
+      {taiKhoan.username && (
+        <TheTenDangNhap
+          username={taiKhoan.username}
+          provider={taiKhoan.provider}
+          onDoi={(p) => {
+            setTaiKhoan((t) => ({ ...t, username: String(p.username ?? t.username) }));
+            if (typeof p.displayName === 'string') set('displayName', p.displayName);
+            updateUser(p as never);
+          }}
+        />
+      )}
+
       <SettingsCard title="Thông tin cơ bản" icon={<User className="h-4 w-4" />}>
         <div className="grid gap-4 sm:grid-cols-2">
           <Field label="Tên hiển thị" hint="Tên mọi người thấy trên feed và bình luận" error={errors.displayName}>
@@ -263,7 +299,7 @@ export default function ProfileSettingsPage() {
 
       <SettingsCard
         title="Ảnh đại diện"
-        description="Dán link ảnh trực tiếp. Để đổi ảnh bằng cách tải lên, dùng nút đổi ảnh ngay trên trang cá nhân."
+        description="Tải ảnh từ máy lên (lưu ngay, đồng bộ cả web và app) hoặc dán link ảnh."
         icon={<ImageIcon className="h-4 w-4" />}
       >
         <div className="flex flex-wrap items-center gap-4">
@@ -283,6 +319,14 @@ export default function ProfileSettingsPage() {
               <User className="h-6 w-6" />
             </div>
           )}
+          <label
+            className="inline-flex cursor-pointer items-center gap-2 rounded-xl border px-3 py-2 text-sm font-medium"
+            style={{ background: 'var(--bg-surface)', borderColor: 'var(--border-color)', color: 'var(--text-primary)' }}
+          >
+            {dangTaiAnh ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
+            {dangTaiAnh ? 'Đang tải lên…' : 'Tải ảnh lên'}
+            <input type="file" accept="image/*" className="hidden" disabled={dangTaiAnh} onChange={(e) => { const f = e.target.files?.[0]; e.target.value = ''; if (f) void taiAnh(f); }} />
+          </label>
           <div className="min-w-[240px] flex-1">
             <Field label="Link ảnh đại diện">
               <TextInput

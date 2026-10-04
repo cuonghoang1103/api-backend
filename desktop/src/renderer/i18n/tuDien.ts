@@ -648,8 +648,13 @@ export const TU_DIEN: Record<string, string> = {
   'Khu vực nhạc': 'Music area',
   'Tìm bài hát': 'Search for a song',
   'Tìm trong thư viện hoặc trên YouTube…': 'Search your library or YouTube…',
+  'Tìm bài trong thư viện, trên YouTube — hoặc dán link YouTube…': 'Search your library or YouTube — or paste a YouTube link…',
   'Kết quả trên YouTube': 'YouTube results',
   'Trên YouTube': 'On YouTube',
+  'Video trong link': 'Video from the link',
+  'Bài từ link YouTube bạn dán': 'Song from the YouTube link you pasted',
+  'Không mở được video này — có thể link sai, video riêng tư hoặc đã bị xoá.': 'Could not open this video — the link may be wrong, or the video is private or deleted.',
+  'Cần có mạng để mở link YouTube.': 'You need to be online to open a YouTube link.',
   'Bài lấy từ YouTube — rút âm thanh về máy chủ để nghe được trong app':
     'Taken from YouTube — the audio is extracted on the server so it plays inside the app',
   '— thêm vào thư viện là nghe được như mọi bài khác':

@@ -1275,6 +1275,27 @@ async function handleYouTubeSearch(
 
     const query = q.trim();
 
+    /* Dán LINK YouTube vào ô tìm (04/10/2026): tìm theo từ khoá thì YouTube coi
+       cả cái link là chữ và trả về bài khác. Nhận ra link ⇒ lấy ĐÚNG video đó,
+       trả về cùng hình dạng một kết quả tìm — nút nghe / thêm thư viện / rút về
+       R2 phía app và web dùng lại nguyên. Không lọc thể loại Nhạc như khi tìm. */
+    const idTuLink = layIdVideoYouTube(query);
+    if (idTuLink) {
+      const u = new URL('https://www.googleapis.com/youtube/v3/videos');
+      u.searchParams.set('part', 'snippet,contentDetails');
+      u.searchParams.set('id', idTuLink);
+      u.searchParams.set('key', apiKey);
+      const r = await fetch(u.toString());
+      if (!r.ok) {
+        logger.error('YouTube video-by-link API error', { body: await r.text() });
+        throw new AppError('YouTube lookup failed', 502, 'YOUTUBE_ERROR');
+      }
+      const d = (await r.json()) as { items?: Array<{ id: string; snippet: { title: string; channelTitle: string }; contentDetails?: { duration?: string } }> };
+      const v = d.items?.[0];
+      res.json({ success: true, data: v ? [ketQuaYouTube(v.id, v.snippet.title, v.snippet.channelTitle, parseYouTubeDuration(v.contentDetails?.duration || ''))] : [] });
+      return;
+    }
+
     // Step 1: Search YouTube for the music video
     const searchUrl = new URL('https://www.googleapis.com/youtube/v3/search');
     searchUrl.searchParams.set('part', 'snippet');
@@ -1347,65 +1368,8 @@ async function handleYouTubeSearch(
     // items with `id.videoId` present, so the non-null assertion
     // is safe here.
     const results = videoItems.map((item) => {
-      const snippet = item.snippet;
       const videoId = item.id.videoId!;
-      const rawTitle = snippet.title || '';
-
-      // Try to extract artist - title pattern
-      let artistName = snippet.channelTitle || 'Unknown Artist';
-      let trackTitle = rawTitle;
-
-      // Common separators: " - ", " — ", " | "
-      const separators = [' - ', ' — ', ' | ', ' – ', ' // '];
-      for (const sep of separators) {
-        if (rawTitle.includes(sep)) {
-          const parts = rawTitle.split(sep);
-          // Usually artist comes first, title comes second
-          artistName = parts[0].trim();
-          trackTitle = parts.slice(1).join(sep).trim();
-          break;
-        }
-      }
-
-      // Clean up "Official Video", "Audio", "Lyric Video" etc.
-      const junkPatterns = [
-        /\(Official (?:Music )?Video\)/i,
-        /\(Official (?:Music )?Audio\)/i,
-        /\(Lyric (?:Video|Audio)\)/i,
-        /\[Official (?:Music )?Video\]/i,
-        /\[Official (?:Music )?Audio\]/i,
-        /\[Lyric (?:Video|Audio)\]/i,
-        /\(Audio\)/i,
-        /\[Audio\]/i,
-      ];
-      for (const pat of junkPatterns) {
-        trackTitle = trackTitle.replace(pat, '').trim();
-      }
-
-      const thumbnails = snippet.thumbnails as Record<string, { url?: string }> | undefined;
-      // Use i.ytimg.com CDN URLs built directly from videoId.  The API's
-      // `thumbnails.*.url` field sometimes returns a URL that gets blocked
-      // by YouTube's per-video anti-hotlink rules on certain referrers.
-      // Constructing the URL from the CDN hostname guarantees hotlink-
-      // friendly delivery regardless of the video's individual config.
-      // Prefer maxresdefault when the video has it; fall back to hqdefault
-      // which is guaranteed to exist for every YouTube video.
-      const thumbnail =
-        thumbnails?.['maxresdefault']?.url
-        || `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
-
-      const rawDuration = durationMap[videoId] || '';
-      const duration = parseYouTubeDuration(rawDuration);
-
-      return {
-        id: videoId,
-        title: trackTitle,
-        artist: artistName,
-        thumbnail,
-        videoId,
-        durationSeconds: duration,
-        duration: formatDuration(duration),
-      };
+      return ketQuaYouTube(videoId, item.snippet.title || '', item.snippet.channelTitle, parseYouTubeDuration(durationMap[videoId] || ''));
     });
 
     res.json({ success: true, data: results });
@@ -1415,6 +1379,54 @@ async function handleYouTubeSearch(
 }
 
 
+
+/**
+ * Lấy mã video (11 ký tự) từ một link YouTube bất kỳ người dùng dán vào:
+ * watch?v=, youtu.be/, shorts/, live/, embed/, music.youtube.com, m.youtube.com,
+ * kể cả đuôi `?si=…&t=…`. Không phải link YouTube ⇒ null (tìm theo từ khoá như cũ).
+ */
+export function layIdVideoYouTube(q: string): string | null {
+  let u: URL;
+  try { u = new URL(/^https?:\/\//i.test(q) ? q : `https://${q}`); } catch { return null; }
+  const host = u.hostname.replace(/^(www|m|music)\./, '');
+  const hopLe = (id: string | null | undefined) => (id && /^[A-Za-z0-9_-]{11}$/.test(id) ? id : null);
+  if (host === 'youtu.be') return hopLe(u.pathname.split('/')[1]);
+  if (host !== 'youtube.com' && host !== 'youtube-nocookie.com') return null;
+  if (u.pathname === '/watch') return hopLe(u.searchParams.get('v'));
+  const m = /^\/(?:shorts|live|embed|v)\/([^/?#]+)/.exec(u.pathname);
+  return hopLe(m?.[1]);
+}
+
+/** Một dòng kết quả YouTube — tách "Ca sĩ - Tên bài" và bỏ đuôi "(Official Video)"… */
+function ketQuaYouTube(videoId: string, rawTitle: string, channelTitle: string | undefined, durationSeconds: number) {
+  let artistName = channelTitle || 'Unknown Artist';
+  let trackTitle = rawTitle;
+  // Common separators: " - ", " — ", " | " — usually artist first, title second.
+  for (const sep of [' - ', ' — ', ' | ', ' – ', ' // ']) {
+    if (rawTitle.includes(sep)) {
+      const parts = rawTitle.split(sep);
+      artistName = parts[0].trim();
+      trackTitle = parts.slice(1).join(sep).trim();
+      break;
+    }
+  }
+  for (const pat of [
+    /\(Official (?:Music )?Video\)/i, /\(Official (?:Music )?Audio\)/i, /\(Lyric (?:Video|Audio)\)/i,
+    /\[Official (?:Music )?Video\]/i, /\[Official (?:Music )?Audio\]/i, /\[Lyric (?:Video|Audio)\]/i,
+    /\(Audio\)/i, /\[Audio\]/i,
+  ]) trackTitle = trackTitle.replace(pat, '').trim();
+  return {
+    id: videoId,
+    title: trackTitle,
+    artist: artistName,
+    // Ảnh dựng thẳng từ CDN i.ytimg.com theo mã video — URL trong API đôi khi bị
+    // chặn hotlink theo từng video; hqdefault luôn tồn tại.
+    thumbnail: `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`,
+    videoId,
+    durationSeconds,
+    duration: formatDuration(durationSeconds),
+  };
+}
 
 function parseYouTubeDuration(iso: string): number {
   if (!iso) return 0;

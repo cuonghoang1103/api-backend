@@ -283,7 +283,8 @@ describe('khopTuyenWeb', () => {
     // 04/10/2026: +1 Thông báo (/notifications).
     // 04/10/2026: +1 CT Work Đợt S5a (desk — service desk & SLA).
     // 04/10/2026: +1 chi tiết EXP_Hub (/exp-hub/:slug).
-    expect(thay.size).toBe(133);
+    // 04/10/2026: +1 hồ sơ & tên đăng nhập (/ho-so).
+    expect(thay.size).toBe(134);
   });
 });
 

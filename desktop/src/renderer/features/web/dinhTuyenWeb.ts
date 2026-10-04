@@ -271,6 +271,9 @@ export const TUYEN_WEB: readonly TuyenWeb[] = [
   /* ── Thông báo (04/10/2026) ── */
   { mau: '/notifications', nap: () => import('@/app/notifications/page') },
 
+  /* Hồ sơ: tên đăng nhập + tên hiển thị + ảnh + tiểu sử — dùng chung trang web (04/10/2026). */
+  /* App đặt ở `/ho-so`: `/settings` là màn Cài đặt native của app, nuốt mọi đường con. */
+  { mau: '/ho-so', nap: () => import('@/app/settings/profile/page') },
   { mau: '/profile', nap: () => import('@/app/profile/page') },
   { mau: '/profile/:id', nap: () => import('@/app/profile/[id]/page') },
   { mau: '/profile/:id/v2', nap: () => import('@/app/profile/[id]/v2/page') },
@@ -372,7 +375,7 @@ export const GOC_WEB: readonly string[] = [
   /* Code Lab — cả cây (04/10/2026); `/code-lab` chính nó cũng là trang web. */
   '/code-lab',
   '/maker-lab', '/creator', '/projects', '/exp-hub',
-  '/finance', '/forum', '/saved', '/profile',
+  '/finance', '/forum', '/saved', '/profile', '/ho-so',
   '/tech-trends',
   /* ⚠️ `/academy` CHÍNH NÓ vẫn là màn native (`HocVienPage`, có đọc ngoại
      tuyến) — `nativePageFor` khớp chính xác TRƯỚC khi hỏi tới cây web, nên

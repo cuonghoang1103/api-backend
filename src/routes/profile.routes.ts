@@ -7,6 +7,7 @@ import {
   cancelRequest,
 } from '../services/accountDeletion.service.js';
 import { authenticate } from '../middleware/auth.js';
+import { doiTenDangNhap, kiemTenDangNhap } from '../services/doiTenDangNhap.service.js';
 import type { ApiResponse } from '../types/index.js';
 
 const router = Router();
@@ -118,6 +119,27 @@ router.put('/', authenticate, async (req, res: Response<ApiResponse>, next) => {
     // GET /api/v1/profile (displayName fallback, sanitised values).
     const profile = await authService.getProfile(req.userId!);
     res.json({ success: true, data: profile });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// ─── Tên đăng nhập (04/10/2026) — doiTenDangNhap.service.ts ───
+// GET  /api/v1/profile/username/check?u=  → { hopLe, conTrong, ten, lyDo? }
+// PATCH /api/v1/profile/username { username, dungLamTenHienThi? } → hồ sơ mới
+router.get('/username/check', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await kiemTenDangNhap(req.userId!, req.query.u) });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.patch('/username', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const kq = await doiTenDangNhap(req.userId!, req.body?.username, req.body?.dungLamTenHienThi === true);
+    const profile = await authService.getProfile(req.userId!);
+    res.json({ success: true, data: { ...profile, dangNhapBangTenMoi: kq.dangNhapBangTenMoi } });
   } catch (error) {
     next(error);
   }

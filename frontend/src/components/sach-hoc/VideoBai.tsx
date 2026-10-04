@@ -11,13 +11,23 @@
  * Danh sách video nằm ở `videos.ts` của từng khoá (CourseDef.videos), KHÔNG
  * nằm trong blocks của bài: thay video không phải đụng vào nội dung bài.
  */
-import { useState } from 'react';
+import { useState, type ComponentType } from 'react';
 import { Play } from 'lucide-react';
 import type { LessonVideo } from './types';
 import { laAppDesktop } from './moiTruong';
 import s from './course.module.css';
 
-function MotVideo({ v, first }: { v: LessonVideo; first: boolean }) {
+/**
+ * Trình phát của APP DESKTOP (04/10/2026). App chặn mọi khung nhúng nên `<iframe>`
+ * không chạy; app gắn trình phát native của nó vào `__CT_KHUNG_VIDEO__` (xem
+ * desktop `features/ielts/IeltsPage.tsx`) để video phát NGAY TRONG APP thay vì mở
+ * YouTube ngoài. Trên web biến này không có ⇒ iframe như cũ.
+ */
+type KhungApp = ComponentType<{ url: string; onDong: () => void; batDau?: number; phuDe?: string }>;
+const khungApp = (): KhungApp | null =>
+  (laAppDesktop() ? ((globalThis as { __CT_KHUNG_VIDEO__?: KhungApp }).__CT_KHUNG_VIDEO__ ?? null) : null);
+
+function MotVideo({ v, first, onXemTrongApp }: { v: LessonVideo; first: boolean; onXemTrongApp: (v: LessonVideo) => void }) {
   const [on, setOn] = useState(false);
   const [title, channel] = v.credit.includes(' — ') ? [v.credit.split(' — ').slice(1).join(' — '), v.credit.split(' — ')[0]] : [v.credit, ''];
   const src =
@@ -42,16 +52,18 @@ function MotVideo({ v, first }: { v: LessonVideo; first: boolean }) {
             className={s.vidCover}
             // App desktop chặn mọi khung nhúng (CSP frame-src 'none', cố ý) ⇒ mở video
             // bằng trình duyệt hệ thống (setWindowOpenHandler → shell.openExternal).
-            onClick={() => (laAppDesktop()
-              ? window.open(`https://www.youtube.com/watch?v=${v.id}${v.start ? `&t=${v.start}s` : ''}`, '_blank')
-              : setOn(true))}
+            onClick={() => {
+              if (khungApp()) { onXemTrongApp(v); return; }
+              if (laAppDesktop()) { window.open(`https://www.youtube.com/watch?v=${v.id}${v.start ? `&t=${v.start}s` : ''}`, '_blank'); return; }
+              setOn(true);
+            }}
             aria-label={`Phát video: ${title}`}
           >
             {/* eslint-disable-next-line @next/next/no-img-element -- ảnh bìa YouTube, không qua next/image */}
             <img src={`https://i.ytimg.com/vi/${v.id}/hqdefault.jpg`} alt="" loading="lazy" />
             <span className={s.vidPlay}><Play size={26} fill="currentColor" /></span>
             <span className={s.vidDur}>{v.dur}</span>
-            {laAppDesktop() && <span className={s.vidNgoai}>Mở trên YouTube ↗</span>}
+            {laAppDesktop() && !khungApp() && <span className={s.vidNgoai}>Mở trên YouTube ↗</span>}
           </button>
         )}
       </div>
@@ -69,7 +81,11 @@ function MotVideo({ v, first }: { v: LessonVideo; first: boolean }) {
 }
 
 export function VideoBai({ videos }: { videos: LessonVideo[] }) {
+  /* App: MỘT trình phát cho cả bài (lớp phủ native chỉ có một) — đứng TRÊN lưới,
+     rộng hết cột; bấm video khác là đổi video. */
+  const [dangXem, datDangXem] = useState<LessonVideo | null>(null);
   if (!videos.length) return null;
+  const Khung = dangXem ? khungApp() : null;
   return (
     <section className={s.vidBox} aria-label="Video bài giảng">
       <div className={s.vidHead}>
@@ -78,8 +94,17 @@ export function VideoBai({ videos }: { videos: LessonVideo[] }) {
           Xem video trước, rồi học phần bên dưới. Video tiếng Anh đã bật sẵn phụ đề — chậm quá thì chỉnh tốc độ 0.75× trong ⚙️ của video.
         </span>
       </div>
+      {Khung && dangXem && (
+        <Khung
+          key={dangXem.id}
+          url={`https://www.youtube.com/watch?v=${dangXem.id}`}
+          onDong={() => datDangXem(null)}
+          {...(dangXem.start ? { batDau: dangXem.start } : {})}
+          {...(dangXem.lang === 'en' ? { phuDe: 'en' } : {})}
+        />
+      )}
       <div className={s.vidGrid}>
-        {videos.map((v, i) => <MotVideo key={v.id} v={v} first={i === 0 && videos.length > 1} />)}
+        {videos.map((v, i) => <MotVideo key={v.id} v={v} first={i === 0 && videos.length > 1} onXemTrongApp={datDangXem} />)}
       </div>
     </section>
   );

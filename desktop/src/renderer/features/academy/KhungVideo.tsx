@@ -55,8 +55,15 @@ export function maYouTube(url: string | null | undefined): string | null {
 }
 
 export function KhungVideo({
-  url, onDong,
-}: { url: string; onDong: () => void }) {
+  url, onDong, batDau, phuDe,
+}: {
+  url: string;
+  onDong: () => void;
+  /** Giây bắt đầu (IELTS có video mở từ giữa). */
+  batDau?: number | undefined;
+  /** Mã ngôn ngữ phụ đề bật sẵn, vd 'en'. */
+  phuDe?: string | undefined;
+}) {
   const { dich } = useDich();
   const oRef = useRef<HTMLDivElement>(null);
   const daMoRef = useRef(false);
@@ -106,13 +113,13 @@ function gocSite(): string {
          100% khung, không còn gì khác để tải. */
       const goc = gocSite();
       const dich = ma && goc
-        ? `${goc}/nhung-video?v=${encodeURIComponent(ma)}`
+        ? `${goc}/nhung-video?v=${encodeURIComponent(ma)}${batDau ? `&t=${Math.round(batDau)}` : ''}${phuDe ? `&cc=${phuDe}` : ''}`
         : url;
       void cau.browser.mo(vung, dich);
     } else {
       void cau.browser.datVung(vung);
     }
-  }, [url]);
+  }, [url, batDau, phuDe]);
 
   useEffect(() => {
     // Đợi một khung hình cho bố cục xong rồi mới đo — đo ngay trong effect thì

@@ -34,6 +34,10 @@ function maYouTube(raw: string): string {
 function Khung() {
   const sp = useSearchParams();
   const ma = maYouTube(sp.get('v') ?? '');
+  /* 04/10/2026 — IELTS trong app phát qua đây: mốc bắt đầu (giây) + phụ đề bật
+     sẵn (người mất gốc nghe chay video tiếng Anh thì vô ích). */
+  const batDau = Math.max(0, parseInt(sp.get('t') ?? '0', 10) || 0);
+  const phuDe = /^[a-z]{2}$/.test(sp.get('cc') ?? '') ? sp.get('cc') : null;
 
   if (!ma) {
     return (
@@ -46,7 +50,9 @@ function Khung() {
   return (
     <iframe
       // `youtube-nocookie` để không dính cookie theo dõi cho một khung chỉ để xem bài học.
-      src={`https://www.youtube-nocookie.com/embed/${ma}?rel=0&modestbranding=1&playsinline=1`}
+      src={`https://www.youtube-nocookie.com/embed/${ma}?rel=0&modestbranding=1&playsinline=1&autoplay=1`
+        + (batDau ? `&start=${batDau}` : '')
+        + (phuDe ? `&cc_load_policy=1&cc_lang_pref=${phuDe}&hl=${phuDe}` : '')}
       title="Video bài học"
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
       allowFullScreen

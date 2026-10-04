@@ -12,6 +12,14 @@
  * tự đặt lớp đó cho MỌI cây web khi app tối (`useLopToiWeb`).
  */
 import { TrangWebTheoTuyen } from '../web/TrangWeb';
+import { KhungVideo } from '../academy/KhungVideo';
+
+/* Video bài giảng IELTS phát NGAY TRONG APP (04/10/2026). App chặn khung nhúng
+   (CSP frame-src 'none', cố ý) nên trang web `VideoBai` trước đây đẩy ra trình
+   duyệt — người dùng: "rất phiền". Cho mượn trình phát của Học viện (lớp phủ
+   native nạp /nhung-video, đã chạy cho Academy/Courses) qua cầu nối toàn cục;
+   `VideoBai` dùng nó khi có. */
+(globalThis as { __CT_KHUNG_VIDEO__?: unknown }).__CT_KHUNG_VIDEO__ = KhungVideo;
 
 export function IeltsPage() {
   // Khung KHÔNG cuộn mang container `ctnoidung`: CSS khoá học đo bề rộng VÙNG NỘI

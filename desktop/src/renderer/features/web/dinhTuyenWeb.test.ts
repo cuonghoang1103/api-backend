@@ -237,7 +237,8 @@ describe('khopTuyenWeb', () => {
     // 02/10/2026: +2 Huấn luyện học kỳ (/hoc-tap, /hoc-tap/mon/:id).
     // 03/10/2026: +5 IELTS — Phòng thi & Kho luyện dưới /language/:code/ielts, và
     // mục riêng /ielts, /ielts/phong-thi, /ielts/luyen-them (code cố định 'en').
-    expect(thay.size).toBe(104);
+    // 04/10/2026: +4 CT Work lớp studio S1 (teams, teams/:teamId, stages, approvals).
+    expect(thay.size).toBe(108);
   });
 });
 

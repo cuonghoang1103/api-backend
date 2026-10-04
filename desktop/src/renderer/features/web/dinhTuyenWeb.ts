@@ -263,6 +263,10 @@ export const TUYEN_WEB: readonly TuyenWeb[] = [
   { mau: '/work/share/:token', nap: () => import('@/app/work/share/[token]/page') },
   { mau: '/work/:ws', nap: () => import('@/app/work/[ws]/page') },
   { mau: '/work/:ws/settings', nap: () => import('@/app/work/[ws]/settings/page') },
+  /* Lớp studio Đợt S1 (04/10/2026): bộ phận — tĩnh "teams" phải đứng TRƯỚC
+     `/work/:ws/:key`, và `/teams/:teamId` (4 đoạn) trước `/:key/board`. */
+  { mau: '/work/:ws/teams', nap: () => import('@/app/work/[ws]/teams/page') },
+  { mau: '/work/:ws/teams/:teamId', nap: () => import('@/app/work/[ws]/teams/[teamId]/page') },
   { mau: '/work/:ws/:key', nap: () => import('@/app/work/[ws]/[key]/page') },
   { mau: '/work/:ws/:key/board', nap: () => import('@/app/work/[ws]/[key]/board/page') },
   { mau: '/work/:ws/:key/backlog', nap: () => import('@/app/work/[ws]/[key]/backlog/page') },
@@ -273,6 +277,9 @@ export const TUYEN_WEB: readonly TuyenWeb[] = [
   { mau: '/work/:ws/:key/dashboards', nap: () => import('@/app/work/[ws]/[key]/dashboards/page') },
   { mau: '/work/:ws/:key/tests', nap: () => import('@/app/work/[ws]/[key]/tests/page') },
   { mau: '/work/:ws/:key/settings', nap: () => import('@/app/work/[ws]/[key]/settings/page') },
+  // Lớp studio Đợt S1: giai đoạn & cổng, phê duyệt có chữ ký.
+  { mau: '/work/:ws/:key/stages', nap: () => import('@/app/work/[ws]/[key]/stages/page') },
+  { mau: '/work/:ws/:key/approvals', nap: () => import('@/app/work/[ws]/[key]/approvals/page') },
   { mau: '/work/:ws/:key/tests/:num', nap: () => import('@/app/work/[ws]/[key]/tests/[num]/page') },
   { mau: '/work/:ws/:key/issue/:num', nap: () => import('@/app/work/[ws]/[key]/issue/[num]/page') },
   { mau: '/work/:ws/:key/tests/cycles/:cycleId', nap: () => import('@/app/work/[ws]/[key]/tests/cycles/[cycleId]/page') },

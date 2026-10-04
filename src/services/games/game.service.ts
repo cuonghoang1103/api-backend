@@ -27,6 +27,9 @@ const SCORE_CAPS: Record<string, number> = {
   schulte: 12_000, // 3 vòng, mỗi vòng ô×600/giây — nhanh phi thực tế vẫn dưới trần
   stroop: 6_000, // 60 giây, ~1,5 câu/giây × 40 điểm
   'ma-tran-iq': 4_000, // 12 câu × (100 + 40×5 + 60)
+  sudoku: 5_000, // gốc Siêu khó 5000, chỉ trừ xuống
+  'noi-day': 6_000, // 5 màn × (200×(N−3) + 300)
+  '2048': 400_000, // ô 65536 ≈ 1,1 triệu là phi thực tế; ván rất giỏi ~ 200k
 };
 const DEFAULT_SCORE_CAP = 50_000;
 

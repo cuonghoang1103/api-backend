@@ -100,6 +100,24 @@ export const GAME_REGISTRY: Record<string, GameRegistryEntry> = {
     scoreCap: 6_000,
     scored: true,
   },
+  sudoku: {
+    name: 'Sudoku (4 mức, đề duy nhất)',
+    load: () => loader(() => import('./SudokuGame')),
+    scoreCap: 5_000,
+    scored: true,
+  },
+  'noi-day': {
+    name: 'Nối dây (tư duy không gian)',
+    load: () => loader(() => import('./NoiDayGame')),
+    scoreCap: 6_000,
+    scored: true,
+  },
+  '2048': {
+    name: '2048',
+    load: () => loader(() => import('./Game2048')),
+    scoreCap: 400_000,
+    scored: true,
+  },
   'ma-tran-iq': {
     name: 'Ma trận IQ (suy luận quy luật)',
     load: () => loader(() => import('./MaTranIqGame')),

@@ -1,0 +1,61 @@
+/* Sudoku — lưới kính sáng màu ngọc, khối 3×3 viền đậm, bàn phím số tròn. */
+.goc { --o: min(9.6vw, 52px); width: 100%; max-width: 560px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 12px; color: #ecfeff; user-select: none; -webkit-user-select: none; }
+.chonTieuDe { font-size: 20px; font-weight: 800; margin-top: 10px; }
+.chonMuc { width: 100%; display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.chonMuc button {
+  --i: 0;
+  display: flex; flex-direction: column; align-items: flex-start; gap: 4px; padding: 18px; border-radius: 18px; text-align: left; color: #ecfeff;
+  background: linear-gradient(150deg, hsla(calc(170 + var(--i) * 40), 80%, 45%, 0.35), rgba(15, 23, 42, 0.7)); border: 1px solid hsla(calc(170 + var(--i) * 40), 80%, 65%, 0.35);
+  animation: vao 0.4s ease-out backwards; animation-delay: calc(var(--i) * 70ms); transition: transform 0.15s, box-shadow 0.2s;
+}
+.chonMuc button:hover { transform: translateY(-3px); box-shadow: 0 14px 30px -14px hsla(calc(170 + var(--i) * 40), 90%, 60%, 0.9); }
+.chonMuc b { font-size: 18px; }
+.chonMuc span { font-size: 13px; color: rgba(236, 254, 255, 0.7); }
+.chonMuc small { color: #fde047; letter-spacing: 2px; }
+@keyframes vao { from { opacity: 0; transform: translateY(12px); } }
+.dangTao { padding: 60px 0; color: #a5f3fc; animation: nhip 1.2s ease-in-out infinite; }
+@keyframes nhip { 50% { opacity: 0.4; } }
+
+.hud { width: 100%; display: flex; align-items: center; gap: 8px; }
+.chip { padding: 6px 12px; border-radius: 999px; font-size: 13px; background: rgba(255, 255, 255, 0.07); border: 1px solid rgba(255, 255, 255, 0.1); }
+.chip b { font-variant-numeric: tabular-nums; }
+.tim { margin-left: auto; display: flex; gap: 3px; }
+.tim svg { color: #475569; }
+.tim svg[data-con='true'] { color: #fb7185; fill: #fb7185; }
+
+.luoi {
+  position: relative; display: grid; grid-template-columns: repeat(9, var(--o)); grid-template-rows: repeat(9, var(--o)); padding: 6px; border-radius: 16px;
+  background: linear-gradient(160deg, #0b2a33, #071820); box-shadow: 0 30px 60px -30px rgba(8, 145, 178, 0.8), 0 0 0 2px rgba(103, 232, 249, 0.25);
+}
+.o {
+  position: relative; display: grid; place-items: center; border: 1px solid rgba(103, 232, 249, 0.1); background: rgba(255, 255, 255, 0.02); color: #67e8f9;
+  font-size: calc(var(--o) * 0.52); cursor: pointer; transition: background 0.12s;
+}
+.o[data-phai='true'] { border-right: 2px solid rgba(103, 232, 249, 0.55); }
+.o[data-duoi='true'] { border-bottom: 2px solid rgba(103, 232, 249, 0.55); }
+.o[data-goc='true'] { color: #f0fdfa; font-weight: 700; }
+.o[data-vung='true'] { background: rgba(34, 211, 238, 0.08); }
+.o[data-cungso='true'] { background: rgba(34, 211, 238, 0.24); }
+.o[data-chon='true'] { background: rgba(34, 211, 238, 0.42); box-shadow: inset 0 0 0 2px #67e8f9; z-index: 1; }
+.o[data-sai='true'] { color: #fb7185; background: rgba(244, 63, 94, 0.18); }
+.o[data-rung='true'] { animation: rung 0.35s ease; }
+@keyframes rung { 25% { transform: translateX(-3px); } 75% { transform: translateX(3px); } }
+.so { animation: hien 0.15s ease-out; }
+@keyframes hien { from { transform: scale(0.6); opacity: 0; } }
+.nhap { display: grid; grid-template-columns: repeat(3, 1fr); width: 100%; height: 100%; padding: 2px; }
+.nhap i { display: grid; place-items: center; font-style: normal; font-size: calc(var(--o) * 0.2); color: rgba(165, 243, 252, 0.8); }
+.lop { position: absolute; inset: 0; display: grid; place-items: center; border-radius: inherit; background: rgba(7, 24, 32, 0.8); animation: vao 0.4s ease-out; }
+.lop b { font-size: 30px; background: linear-gradient(90deg, #67e8f9, #a7f3d0); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.lop[data-kq='thua'] b { background-image: linear-gradient(90deg, #fb7185, #fda4af); }
+
+.congCu { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; width: min(100%, 480px); }
+.congCu button { display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 8px 4px; border-radius: 12px; font-size: 12px; color: #a5f3fc; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.08); }
+.congCu button:disabled { opacity: 0.35; }
+.congCu button[data-bat='true'] { color: #0b2a33; background: linear-gradient(135deg, #67e8f9, #a7f3d0); }
+.banSo { display: grid; grid-template-columns: repeat(9, 1fr); gap: 6px; width: min(100%, 480px); }
+.banSo button { display: flex; flex-direction: column; align-items: center; padding: 8px 0 4px; border-radius: 12px; color: #ecfeff; background: linear-gradient(160deg, rgba(34, 211, 238, 0.2), rgba(15, 23, 42, 0.6)); border: 1px solid rgba(103, 232, 249, 0.25); transition: transform 0.1s; }
+.banSo button:active { transform: scale(0.94); }
+.banSo button:disabled { opacity: 0.25; }
+.banSo b { font-size: 20px; }
+.banSo small { font-size: 10px; color: rgba(165, 243, 252, 0.7); }
+@media (prefers-reduced-motion: reduce) { .chonMuc button, .dangTao, .o, .so, .lop { animation: none !important; } }

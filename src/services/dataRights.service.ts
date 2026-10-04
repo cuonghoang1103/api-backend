@@ -1,5 +1,5 @@
 /**
- * Data-subject rights (Nghị định 13/2023/NĐ-CP) — self-service export + erasure.
+ * Data-subject rights (Luật BVDLCN 91/2025/QH15 + Nghị định 356/2025/NĐ-CP, thay NĐ 13/2023 từ 01/01/2026) — self-service export + erasure.
  *
  * - exportUserData: returns a JSON copy of the requesting user's own data.
  * - anonymizeAccount: "delete my account" done as anonymisation, not a hard
@@ -41,7 +41,7 @@ export async function exportUserData(userId: number): Promise<unknown> {
 
   return {
     exportedAt: new Date().toISOString(),
-    note: 'Bản sao dữ liệu cá nhân của bạn trên CuongThai (Nghị định 13/2023/NĐ-CP).',
+    note: 'Bản sao dữ liệu cá nhân của bạn trên CuongThai (Luật Bảo vệ dữ liệu cá nhân 91/2025/QH15 và Nghị định 356/2025/NĐ-CP).',
     profile: user,
     shopOrders,
     courseOrders,

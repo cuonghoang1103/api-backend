@@ -157,6 +157,10 @@ export async function portfolio(userId: number, workspaceId: number, opts: { inc
       : Promise.resolve([]),
   ]);
 
+  // Đợt S5a: SLA service desk — chỉ dự án bật serviceDesk (một lượt đọc cho mọi dự án).
+  const deskIds = projects.filter((p) => modulesOf(p.settings).serviceDesk).map((p) => p.id);
+  const slaByProject = deskIds.length ? await (await import('./serviceDesk.service.js')).portfolioSla(deskIds, now.getTime()) : new Map();
+
   // Phụ thuộc liên dự án — ẩn mã/tiêu đề phía dự án người xem không thấy.
   const side = (i: (typeof links)[number]['fromIssue']) => (visibleIds.has(i.projectId)
     ? { hidden: false as const, projectId: i.projectId, key: `${i.project.key}-${i.number}`, projectKey: i.project.key, projectName: i.project.name, number: i.number, title: i.title, dueDate: dayOf(i.dueDate) }
@@ -214,6 +218,8 @@ export async function portfolio(userId: number, workspaceId: number, opts: { inc
     const health = ragOf({
       open, overdue, sprint, milestones, blockedBy: blockedIssues.size, pendingApprovals, oldestPendingApprovalDays,
       openRisks, pendingChangeRequests,
+      // Người không đọc được hàng đợi service desk (khách/GUEST) ⇒ không tính luật S5a (cùng luật "người của đội").
+      sla: govView ? slaByProject.get(p.id) ?? null : null,
     });
 
     rows.push({

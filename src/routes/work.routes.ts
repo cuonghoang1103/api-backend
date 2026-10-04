@@ -59,6 +59,8 @@ import { moveIssueToProject } from '../services/work/issueMove.service.js';
 import portfolioRoutes from './work.portfolio.routes.js';
 import governanceRoutes from './work.governance.routes.js';
 import s4Routes, { s4PublicRoutes } from './work.s4.routes.js';
+import deskRoutes from './work.desk.routes.js';
+import s5cRoutes from './work.s5c.routes.js';
 
 registerWorkNotifications();
 tests.registerTestingHooks();
@@ -776,8 +778,9 @@ router.post('/projects/:pid/ai/chat', asyncHandler(async (req, res) => {
 }));
 router.post('/projects/:pid/ai/quick', asyncHandler(async (req, res) => {
   const body = parse(z.object({
-    task: z.enum(['write_story', 'split', 'generate_tests', 'improve_bug', 'summarize', 'review_story', 'meeting_notes', 'req_review', 'team_health']),
+    task: z.enum(['write_story', 'split', 'generate_tests', 'improve_bug', 'summarize', 'review_story', 'meeting_notes', 'req_review', 'team_health', 'draft_srs', 'summarize_page']),
     issueNumber: id.nullable().optional(),
+    pageNumber: id.nullable().optional(), // đợt S5c: summarize_page
     text: z.string().max(20000).nullable().optional(),
     threadId: id.nullable().optional(),
     label: z.string().max(120).nullable().optional(),
@@ -1766,5 +1769,9 @@ router.use(portfolioRoutes);
 router.use(governanceRoutes);
 // Đợt S4: tài chính · báo cáo khách/steering · thuyết trình · xuất trọn — tuyến ở work.s4.routes.ts (qua chốt cổng khách ở trên).
 router.use(s4Routes);
+// Đợt S5a: service desk & SLA — tuyến ở work.desk.routes.ts (qua chốt cổng khách ở trên; khách chỉ /portal/desk/**).
+router.use(deskRoutes);
+// Đợt S5c: mô-đun mới cho dự án cũ · thùng rác Docs · nhập lại dự án từ ZIP — tuyến ở work.s5c.routes.ts (qua chốt cổng khách ở trên).
+router.use(s5cRoutes);
 
 export default router;

@@ -65,8 +65,10 @@ export async function purgeIssue(userId: number, projectId: number, number: numb
 
 export async function listDeletedProjects(userId: number, workspaceId: number) {
   await requireWorkspace(userId, workspaceId, 'workspace.settings');
+  // Đợt S5c: dự án đang được NHẬP (ẩn bằng deletedAt tới khi xong) không phải dự án đã xoá — không liệt kê/khôi phục.
+  const importing = (await prisma.workProjectImport.findMany({ where: { workspaceId, status: { in: ['QUEUED', 'RUNNING'] }, projectId: { not: null } }, select: { projectId: true } })).map((r) => r.projectId!);
   return prisma.workProject.findMany({
-    where: { workspaceId, deletedAt: { not: null } },
+    where: { workspaceId, deletedAt: { not: null }, ...(importing.length ? { id: { notIn: importing } } : {}) },
     orderBy: { deletedAt: 'desc' },
     select: { id: true, key: true, name: true, deletedAt: true, _count: { select: { issues: { where: { deletedAt: null } } } } },
   });
@@ -76,6 +78,7 @@ export async function restoreProject(userId: number, workspaceId: number, projec
   await requireWorkspace(userId, workspaceId, 'workspace.settings');
   const p = await prisma.workProject.findFirst({ where: { id: projectId, workspaceId, deletedAt: { not: null } }, select: { key: true, name: true } });
   if (!p) throw new NotFoundError('Deleted project not found');
+  if (await prisma.workProjectImport.count({ where: { projectId, status: { in: ['QUEUED', 'RUNNING'] } } })) throw new ConflictError('This project is still being imported');
   await prisma.workProject.update({ where: { id: projectId }, data: { deletedAt: null } });
   await audit({ workspaceId, projectId, actorId: userId, action: 'project.restore', targetType: 'project', targetId: projectId, summary: `Restored project ${p.key} “${p.name}”` });
 }

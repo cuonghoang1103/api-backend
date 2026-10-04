@@ -35,6 +35,8 @@ export const RAG_RULES = {
   AMBER_RISK_SCORE: 15,
   /** Đợt S3b — CR chờ quyết định (Submitted / Under review) lâu hơn N ngày ⇒ VÀNG. */
   AMBER_CR_DAYS: 5,
+  /** Đợt S5a — service desk: % mục tiêu SLA đạt trong THÁNG NÀY dưới ngưỡng này ⇒ VÀNG (P1 mở đã vi phạm ⇒ ĐỎ). */
+  AMBER_SLA_PERCENT: 90,
 } as const;
 
 /** Bản chữ của luật — trả kèm API để giao diện hiện "How is health computed?". */
@@ -44,6 +46,7 @@ export const RAG_RULE_TEXT: Array<{ level: Exclude<Rag, 'GREEN'>; text: string }
   { level: 'RED', text: `The active sprint is at risk and needs ≥ ${RAG_RULES.RED_PACE_RATIO}× its recent pace (or nothing was burned yet).` },
   { level: 'RED', text: `${RAG_RULES.RED_OVERDUE_ABS}+ overdue issues, or ${RAG_RULES.RED_OVERDUE_MIN}+ overdue issues that are ≥ ${Math.round(RAG_RULES.RED_OVERDUE_SHARE * 100)}% of open issues.` },
   { level: 'RED', text: `An open risk in the RAID log scores ${RAG_RULES.RED_RISK_SCORE} or more (probability × impact).` },
+  { level: 'RED', text: 'An open P1 service desk request has breached its SLA.' },
   { level: 'AMBER', text: 'The active sprint is at risk (needs > 1.3× its recent pace).' },
   { level: 'AMBER', text: 'At least one overdue issue.' },
   { level: 'AMBER', text: `A milestone is due within ${RAG_RULES.AMBER_MILESTONE_DAYS} days with < ${Math.round(RAG_RULES.AMBER_MILESTONE_DONE * 100)}% of its issues done.` },
@@ -51,6 +54,7 @@ export const RAG_RULE_TEXT: Array<{ level: Exclude<Rag, 'GREEN'>; text: string }
   { level: 'AMBER', text: `An approval has been waiting more than ${RAG_RULES.AMBER_APPROVAL_DAYS} days.` },
   { level: 'AMBER', text: `An open risk in the RAID log scores ${RAG_RULES.AMBER_RISK_SCORE} or more.` },
   { level: 'AMBER', text: `A change request has been waiting for a decision more than ${RAG_RULES.AMBER_CR_DAYS} days.` },
+  { level: 'AMBER', text: `Less than ${RAG_RULES.AMBER_SLA_PERCENT}% of service desk SLA targets met this month.` },
 ];
 
 export interface RagReason {
@@ -60,6 +64,7 @@ export interface RagReason {
     | 'MILESTONE_LATE' | 'SPRINT_ENDED' | 'SPRINT_PACE_SEVERE' | 'OVERDUE_MANY'
     | 'SPRINT_AT_RISK' | 'OVERDUE_SOME' | 'MILESTONE_SOON' | 'BLOCKED_CROSS' | 'APPROVAL_WAITING'
     | 'RISK_CRITICAL' | 'RISK_HIGH' | 'CR_WAITING'
+    | 'SLA_P1_BREACHED' | 'SLA_BELOW_TARGET'
     | 'ALL_CLEAR';
   text: string;
 }
@@ -89,6 +94,11 @@ export interface RagInput {
   openRisks?: Array<{ key: string; title: string; score: number }>;
   /** Đợt S3b — CR đang chờ quyết định (chỉ khi mô-đun changeRequests bật): tuổi theo ngày từ lúc gửi. */
   pendingChangeRequests?: Array<{ key: string; waitingDays: number }>;
+  /**
+   * Đợt S5a — service desk (chỉ khi mô-đun serviceDesk bật và người xem là người của đội): yêu cầu P1 ĐANG MỞ đã vi
+   * phạm SLA, và % mục tiêu đạt trong tháng này (null = chưa mục tiêu nào có kết quả).
+   */
+  sla?: { openP1Breached: Array<{ key: string; title: string }>; monthPercent: number | null; monthDone: number } | null;
 }
 
 const plural = (n: number, w: string) => `${n} ${w}${n === 1 ? '' : 's'}`;
@@ -133,7 +143,15 @@ export function ragOf(i: RagInput): { rag: Rag; reasons: RagReason[] } {
     });
   }
 
+  if (i.sla?.openP1Breached.length) {
+    const top = i.sla.openP1Breached[0];
+    reasons.push({ level: 'RED', code: 'SLA_P1_BREACHED', text: `${plural(i.sla.openP1Breached.length, 'open P1 request')} breached SLA — ${top.key} "${top.title}".` });
+  }
+
   // ── VÀNG ──
+  if (i.sla && i.sla.monthPercent !== null && i.sla.monthPercent < RAG_RULES.AMBER_SLA_PERCENT) {
+    reasons.push({ level: 'AMBER', code: 'SLA_BELOW_TARGET', text: `Only ${i.sla.monthPercent}% of service desk SLA targets met this month (${i.sla.monthDone} with an outcome; target ≥ ${RAG_RULES.AMBER_SLA_PERCENT}%).` });
+  }
   const high = risks.filter((r) => r.score >= RAG_RULES.AMBER_RISK_SCORE && r.score < RAG_RULES.RED_RISK_SCORE);
   if (high.length) {
     reasons.push({

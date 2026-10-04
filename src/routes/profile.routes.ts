@@ -11,7 +11,7 @@ import type { ApiResponse } from '../types/index.js';
 
 const router = Router();
 
-// ─── Data-subject rights (Nghị định 13/2023) ───────────
+// ─── Data-subject rights (Luật BVDLCN 91/2025/QH15 + NĐ 356/2025) ───────────
 // GET /api/v1/profile/export-data — download a JSON copy of your own data.
 // Unchanged: export stays instant and self-service. Only ERASURE now
 // goes through admin review (see below).

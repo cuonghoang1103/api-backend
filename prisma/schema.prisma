@@ -455,6 +455,8 @@ model User {
   workMeetingsOrganized  WorkMeeting[]           @relation("WorkMeetingOrganizer")
   workMeetingInvites     WorkMeetingAttendee[]   @relation("WorkMeetingAttendeeUser")
   workMeetingActions     WorkMeetingAction[]     @relation("WorkMeetingActionAssignee")
+  // CRM nhẹ của studio (đợt S5b, 05/10/2026) — /admin/crm
+  crmDealsOwned          CrmDeal[]               @relation("CrmDealOwner")
 
   @@index([email], name: "idx_users_email")
   @@map("users")
@@ -2968,6 +2970,8 @@ model ProjectRequest {
   updatedAt       DateTime  @updatedAt @map("updated_at")
 
   workProject WorkProject? @relation(fields: [workProjectId], references: [id], onDelete: SetNull)
+  /// Deal CRM sinh từ phiếu này (đợt S5b) — xem src/services/crm/.
+  crmDeal     CrmDeal?
 
   @@index([status, createdAt(sort: Desc)], map: "idx_project_request_status_created")
   @@map("project_requests")
@@ -10082,6 +10086,9 @@ model WorkProject {
   reportSchedule    WorkReportSchedule?
   clientReports     WorkClientReport[]
   exports           WorkProjectExport[]
+  /// Đợt S5a: service desk & SLA (mô-đun serviceDesk) — cấu hình + bản ghi Problem.
+  deskSettings      WorkDeskSettings?
+  deskProblems      WorkDeskProblem[]
   /// Phiếu yêu cầu của khách đã sinh ra dự án này (tối đa một).
   clientRequest     ProjectRequest?
 
@@ -10262,6 +10269,8 @@ model WorkIssue {
   crLinks        WorkChangeRequestLink[]
   raidLinks      WorkRaidLink[]
   meetingActions WorkMeetingAction[]
+  /// Đợt S5a: phần service desk của thẻ (loại yêu cầu, P1–P4, SLA, CSAT) — chỉ thẻ đi qua service desk.
+  deskTicket     WorkDeskTicket?
   assignee       User?                   @relation("WorkIssueAssignee", fields: [assigneeId], references: [id], onDelete: SetNull)
   reporter       User?                   @relation("WorkIssueReporter", fields: [reporterId], references: [id], onDelete: SetNull)
   linksOut       WorkIssueLink[]         @relation("WorkIssueLinkFrom")
@@ -11320,6 +11329,8 @@ model WorkPage {
   issueLinks   WorkPageIssueLink[]
   comments     WorkPageComment[]
   approvals    WorkApproval[]
+  /// Đợt S5a: Problem có trang postmortem này.
+  postmortemOf WorkDeskProblem[]
 
   @@unique([projectId, number], name: "uk_work_page_number", map: "uk_work_page_number")
   @@index([projectId, parentId, position], name: "idx_work_page_tree")
@@ -11942,6 +11953,172 @@ model WorkProjectExport {
   @@map("work_project_exports")
 }
 
+/// Đợt S5c — một lần NHẬP LẠI dự án từ ZIP xuất trọn (S4, formatVersion 1) vào không gian `workspaceId`.
+/// Luôn tạo DỰ ÁN MỚI (projectId = dự án mới khi xong). UPLOADED (đã kiểm + chạy thử, ZIP nằm trên R2 ở `filePath`)
+/// → QUEUED → RUNNING → DONE | FAILED; CANCELLED / EXPIRED (24 giờ không bấm nhập ⇒ xoá ZIP). Không FK (dòng nhật
+/// ký sống độc lập với không gian/dự án/người) — projectImport.service.ts.
+model WorkProjectImport {
+  id            Int       @id @default(autoincrement())
+  workspaceId   Int       @map("workspace_id")
+  requestedById Int?      @map("requested_by_id")
+  status        String    @default("UPLOADED") @db.VarChar(16)
+  progress      Int       @default(0)
+  stage         String?   @db.VarChar(120)
+  /// Key R2 của ZIP đã tải lên (null sau khi nhập xong / huỷ / hết hạn).
+  filePath      String?   @map("file_path") @db.VarChar(500)
+  fileName      String?   @map("file_name") @db.VarChar(200)
+  size          Int?
+  sourceKey     String?   @map("source_key") @db.VarChar(10)
+  sourceName    String?   @map("source_name") @db.VarChar(120)
+  projectKey    String?   @map("project_key") @db.VarChar(10)
+  projectName   String?   @map("project_name") @db.VarChar(120)
+  projectId     Int?      @map("project_id")
+  /// Chạy thử: số dòng từng bảng, ánh xạ người, bộ phận, tệp, cảnh báo.
+  plan          Json?
+  /// Kết quả: số dòng đã nhập / bỏ qua từng bảng.
+  result        Json?
+  error         String?   @db.Text
+  expiresAt     DateTime? @map("expires_at")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  startedAt     DateTime? @map("started_at")
+  finishedAt    DateTime? @map("finished_at")
+
+  @@index([workspaceId, createdAt], name: "idx_work_import_workspace")
+  @@index([status], name: "idx_work_import_status")
+  @@map("work_project_imports")
+}
+
+/// Đợt S5a — cấu hình SERVICE DESK & SLA của một dự án (mô-đun `serviceDesk`). Một dòng/dự án; THIẾU dòng
+/// ⇒ mặc định trong slaRules.ts (T2–T6 08:00–17:00 Asia/Ho_Chi_Minh, P1 30 phút/4 giờ …). JSON được chuẩn
+/// hoá khi đọc (goalsOf / matrixOf / requestTypesOf) — giá trị sai kiểu rơi về mặc định, không bao giờ vỡ.
+model WorkDeskSettings {
+  id                Int      @id @default(autoincrement())
+  projectId         Int      @unique(map: "uk_work_desk_settings_project") @map("project_id")
+  timezone          String   @default("Asia/Ho_Chi_Minh") @db.VarChar(64)
+  /// Ngày làm theo ISO (1 = Thứ Hai … 7 = Chủ nhật).
+  workDays          Json     @default("[1,2,3,4,5]") @map("work_days")
+  /// Phút từ 00:00 giờ địa phương; start < end.
+  workStart         Int      @default(480) @map("work_start")
+  workEnd           Int      @default(1020) @map("work_end")
+  /// ["YYYY-MM-DD", …] — ngày lễ không tính giờ.
+  holidays          Json     @default("[]")
+  /// { P1: { firstResponseMin, resolutionMin, calendar: BUSINESS|ALWAYS }, … }
+  goals             Json     @default("{}")
+  /// Impact × Urgency ⇒ P: { HIGH: { HIGH: "P1", … }, … }
+  matrix            Json     @default("{}")
+  /// Loại yêu cầu (Incident / Service request / Question / Change) + trường form riêng.
+  requestTypes      Json     @default("[]") @map("request_types")
+  /// Trạng thái thẻ mà khi VÀO ⇒ tạm dừng đồng hồ ("Waiting for customer").
+  pauseStatusIds    Json     @default("[]") @map("pause_status_ids")
+  /// Trạng thái thẻ mà khi VÀO ⇒ tính là first response.
+  responseStatusIds Json     @default("[]") @map("response_status_ids")
+  atRiskPercent     Int      @default(75) @map("at_risk_percent")
+  updatedById       Int?     @map("updated_by_id")
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+
+  project WorkProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@map("work_desk_settings")
+}
+
+/// Đợt S5a — phần service desk của MỘT thẻ: loại yêu cầu, Impact × Urgency ⇒ `priority` P1–P4 (TÁCH khỏi
+/// `work_issues.priority` 1–5 — SLA chỉ đọc cột này), người yêu cầu, câu trả lời form, chờ khách, first
+/// response, CSAT. Trạng thái SLA LUÔN tính lại từ `work_sla_events` (slaRules.computeSla); các cột frStatus/resStatus…
+/// chỉ là BẢN CHỤP gần nhất cho hàng đợi sắp xếp/lọc, cron 5 phút cập nhật. `frAlert`/`resAlert` = mức cảnh
+/// báo đã gửi (0 · 1 AT_RISK · 2 BREACHED) — mỗi mốc báo đúng một lần. Cột người KHÔNG FK tới users.
+model WorkDeskTicket {
+  id                Int       @id @default(autoincrement())
+  issueId           Int       @unique(map: "uk_work_desk_ticket_issue") @map("issue_id")
+  /// INCIDENT | SERVICE_REQUEST | QUESTION | CHANGE
+  requestType       String    @map("request_type") @db.VarChar(24)
+  /// HIGH | MEDIUM | LOW
+  impact            String    @db.VarChar(8)
+  urgency           String    @db.VarChar(8)
+  /// P1 | P2 | P3 | P4
+  priority          String    @db.VarChar(2)
+  /// PORTAL (khách gửi) | STAFF (nhân viên tạo / đưa thẻ vào desk)
+  channel           String    @default("STAFF") @db.VarChar(8)
+  requesterId       Int?      @map("requester_id")
+  /// Câu trả lời các trường form của loại yêu cầu { key: value }.
+  fields            Json      @default("{}")
+  waiting           Boolean   @default(false)
+  waitingSince      DateTime? @map("waiting_since")
+  /// Trạng thái thẻ trước khi vào "chờ khách" — khách trả lời ⇒ đưa về (nếu luồng cho phép).
+  statusBeforeWait  Int?      @map("status_before_wait")
+  firstResponseAt   DateTime? @map("first_response_at")
+  firstResponseById Int?      @map("first_response_by_id")
+  frStatus          String    @default("ON_TRACK") @map("fr_status") @db.VarChar(12)
+  resStatus         String    @default("ON_TRACK") @map("res_status") @db.VarChar(12)
+  frDueAt           DateTime? @map("fr_due_at")
+  resDueAt          DateTime? @map("res_due_at")
+  frBreachedAt      DateTime? @map("fr_breached_at")
+  resBreachedAt     DateTime? @map("res_breached_at")
+  frAlert           Int       @default(0) @map("fr_alert")
+  resAlert          Int       @default(0) @map("res_alert")
+  slaCheckedAt      DateTime? @map("sla_checked_at")
+  problemId         Int?      @map("problem_id")
+  csatRequestedAt   DateTime? @map("csat_requested_at")
+  csatRating        Int?      @map("csat_rating")
+  csatComment       String?   @map("csat_comment") @db.Text
+  csatAt            DateTime? @map("csat_at")
+  createdAt         DateTime  @default(now()) @map("created_at")
+  updatedAt         DateTime  @updatedAt @map("updated_at")
+
+  issue   WorkIssue        @relation(fields: [issueId], references: [id], onDelete: Cascade)
+  problem WorkDeskProblem? @relation(fields: [problemId], references: [id], onDelete: SetNull)
+  events  WorkSlaEvent[]
+
+  @@index([problemId], name: "idx_work_desk_ticket_problem")
+  @@map("work_desk_tickets")
+}
+
+/// Đợt S5a — dòng sự kiện SLA (chỉ thêm, không sửa): START · PAUSE · RESUME · FIRST_RESPONSE · RESOLVE ·
+/// REOPEN · PRIORITY (value = mức mới). Đủ để tính lại CHÍNH XÁC trạng thái SLA ở bất kỳ thời điểm nào.
+model WorkSlaEvent {
+  id        Int      @id @default(autoincrement())
+  ticketId  Int      @map("ticket_id")
+  kind      String   @db.VarChar(16)
+  at        DateTime
+  value     String?  @db.VarChar(32)
+  actorId   Int?     @map("actor_id")
+  note      String?  @db.VarChar(200)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  ticket WorkDeskTicket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+
+  @@index([ticketId, at], name: "idx_work_sla_event_ticket")
+  @@map("work_sla_events")
+}
+
+/// Đợt S5a — PROBLEM (ITIL 4 Problem management): nguyên nhân chung của nhiều Incident. Incident nối vào
+/// qua `work_desk_tickets.problem_id`. "Create postmortem" ⇒ trang Docs (S2a) từ mẫu bao-cao-su-co-postmortem.md.
+/// status: OPEN | INVESTIGATING | KNOWN_ERROR | RESOLVED | CLOSED. Nội bộ — khách không bao giờ thấy.
+model WorkDeskProblem {
+  id               Int       @id @default(autoincrement())
+  projectId        Int       @map("project_id")
+  number           Int
+  title            String    @db.VarChar(255)
+  description      String?   @db.Text
+  status           String    @default("OPEN") @db.VarChar(16)
+  rootCause        String?   @map("root_cause") @db.Text
+  workaround       String?   @db.Text
+  ownerId          Int?      @map("owner_id")
+  postmortemPageId Int?      @map("postmortem_page_id")
+  createdById      Int?      @map("created_by_id")
+  resolvedAt       DateTime? @map("resolved_at")
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+  deletedAt        DateTime? @map("deleted_at")
+
+  project    WorkProject      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  postmortem WorkPage?        @relation(fields: [postmortemPageId], references: [id], onDelete: SetNull)
+  incidents  WorkDeskTicket[]
+
+  @@unique([projectId, number], name: "uk_work_desk_problem_number", map: "uk_work_desk_problem_number")
+  @@map("work_desk_problems")
+}
+
 /// KEY GIA HẠN hạn mức AI Code (02/10/2026) — mỗi hàng là MỘT lần người dùng
 /// nhập đúng key do admin đặt (`services/agent/keyGiaHan.ts`). Cộng `soToken`
 /// vào trần token của cửa sổ 5 giờ TRƯỢT, chỉ khi `phienBan` còn khớp với key
@@ -11958,4 +12135,181 @@ model AgentQuotaGrant {
 
   @@index([userId, createdAt], name: "idx_agent_quota_grant_user_created")
   @@map("agent_quota_grants")
+}
+
+// ============================================================
+// CRM NHẸ CHO STUDIO (CT Work đợt S5b, 05/10/2026) — /admin/crm
+// ============================================================
+// Pipeline B2B tối giản (kiểu Pipedrive): tổ chức · người liên hệ · deal ·
+// hoạt động · đề xuất có link khách chấp thuận. CHỈ ADMIN. Luật nghiệp vụ
+// thuần ở src/services/crm/rules.ts; đồng bộ phiếu ↔ deal ở crm.service.ts.
+
+model CrmOrganization {
+  id        Int      @id @default(autoincrement())
+  name      String   @db.VarChar(200)
+  industry  String?  @db.VarChar(120)
+  /// Quy mô (chữ ngắn: "1-10", "11-50"…)
+  size      String?  @db.VarChar(30)
+  website   String?  @db.VarChar(300)
+  /// Mã số thuế — tuỳ chọn
+  taxCode   String?  @map("tax_code") @db.VarChar(20)
+  note      String?  @db.Text
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  contacts CrmContact[]
+  deals    CrmDeal[]
+
+  @@index([name], map: "idx_crm_org_name")
+  @@map("crm_organizations")
+}
+
+/// Người liên hệ — dữ liệu cá nhân (Luật BVDLCN 91/2025/QH15 + NĐ 356/2025/NĐ-CP).
+/// Ẩn danh hoá: xoá PII, đặt `anonymizedAt`, GIỮ số liệu deal.
+model CrmContact {
+  id               Int       @id @default(autoincrement())
+  orgId            Int?      @map("org_id")
+  name             String    @db.VarChar(120)
+  title            String?   @db.VarChar(120)
+  /// Luôn lưu chữ thường (ghép phiếu theo email).
+  email            String?   @db.VarChar(254)
+  phone            String?   @db.VarChar(30)
+  /// EMAIL | PHONE | ZALO | MEETING | OTHER
+  preferredChannel String?   @map("preferred_channel") @db.VarChar(20)
+  /// Đồng ý được liên hệ / xử lý dữ liệu + thời điểm + nguồn bằng chứng.
+  consent          Boolean   @default(false)
+  consentAt        DateTime? @map("consent_at")
+  consentSource    String?   @map("consent_source") @db.VarChar(120)
+  note             String?   @db.Text
+  anonymizedAt     DateTime? @map("anonymized_at")
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+
+  org        CrmOrganization? @relation(fields: [orgId], references: [id], onDelete: SetNull)
+  deals      CrmDeal[]
+  activities CrmActivity[]
+
+  @@index([email], map: "idx_crm_contact_email")
+  @@index([orgId], map: "idx_crm_contact_org")
+  @@map("crm_contacts")
+}
+
+/// LEAD → QUALIFIED → DISCOVERY → PROPOSAL → NEGOTIATION → WON | LOST.
+model CrmDeal {
+  id               Int       @id @default(autoincrement())
+  title            String    @db.VarChar(200)
+  orgId            Int?      @map("org_id")
+  contactId        Int?      @map("contact_id")
+  /// id gói ở frontend/src/app/about/nhan-du-an/packages.ts
+  packageId        String?   @map("package_id") @db.VarChar(40)
+  /// Giá trị ƯỚC TÍNH do người nhập — hệ thống không tự tính.
+  valueAmount      Decimal?  @map("value_amount") @db.Decimal(18, 2)
+  currency         String    @default("VND") @db.VarChar(3)
+  /// % ghi đè; null = theo giai đoạn (rules.ts STAGE_PROBABILITY).
+  probability      Int?
+  stage            String    @default("LEAD") @db.VarChar(20)
+  lostReason       String?   @map("lost_reason") @db.Text
+  expectedCloseAt  DateTime? @map("expected_close_at") @db.Date
+  ownerId          Int?      @map("owner_id")
+  source           String?   @db.VarChar(100)
+  projectRequestId Int?      @unique(map: "uk_crm_deal_project_request") @map("project_request_id")
+  isRoleplay       Boolean   @default(false) @map("is_roleplay")
+  /// Bảng đánh giá phù hợp (checklist-danh-gia-phu-hop.md): điểm, rủi ro, quyết định go/no-go.
+  qualification    Json?
+  ndaSigned        Boolean   @default(false) @map("nda_signed")
+  ndaSignedAt      DateTime? @map("nda_signed_at") @db.Date
+  ndaFileKey       String?   @map("nda_file_key") @db.VarChar(500)
+  ndaFileName      String?   @map("nda_file_name") @db.VarChar(255)
+  stageChangedAt   DateTime  @default(now()) @map("stage_changed_at")
+  wonAt            DateTime? @map("won_at")
+  lostAt           DateTime? @map("lost_at")
+  lastActivityAt   DateTime  @default(now()) @map("last_activity_at")
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+
+  org            CrmOrganization?     @relation(fields: [orgId], references: [id], onDelete: SetNull)
+  contact        CrmContact?          @relation(fields: [contactId], references: [id], onDelete: SetNull)
+  owner          User?                @relation("CrmDealOwner", fields: [ownerId], references: [id], onDelete: SetNull)
+  projectRequest ProjectRequest?      @relation(fields: [projectRequestId], references: [id], onDelete: SetNull)
+  activities     CrmActivity[]
+  proposals      CrmProposal[]
+  stageChanges   CrmDealStageChange[]
+
+  @@index([stage, updatedAt(sort: Desc)], map: "idx_crm_deal_stage")
+  @@index([contactId], map: "idx_crm_deal_contact")
+  @@index([orgId], map: "idx_crm_deal_org")
+  @@map("crm_deals")
+}
+
+/// Lịch sử chuyển giai đoạn — nguồn của báo cáo chuyển đổi + chu kỳ.
+model CrmDealStageChange {
+  id        Int      @id @default(autoincrement())
+  dealId    Int      @map("deal_id")
+  fromStage String?  @map("from_stage") @db.VarChar(20)
+  toStage   String   @map("to_stage") @db.VarChar(20)
+  actorId   Int?     @map("actor_id")
+  at        DateTime @default(now())
+
+  deal CrmDeal @relation(fields: [dealId], references: [id], onDelete: Cascade)
+
+  @@index([dealId, at], map: "idx_crm_stage_change_deal")
+  @@map("crm_deal_stage_changes")
+}
+
+/// CALL | EMAIL | MEETING | NOTE | TASK — gắn deal và/hoặc contact.
+model CrmActivity {
+  id          Int       @id @default(autoincrement())
+  dealId      Int?      @map("deal_id")
+  contactId   Int?      @map("contact_id")
+  type        String    @db.VarChar(10)
+  subject     String    @db.VarChar(200)
+  body        String?   @db.Text
+  dueAt       DateTime? @map("due_at")
+  done        Boolean   @default(false)
+  doneAt      DateTime? @map("done_at")
+  /// Đã báo admin "tới hạn" (cron) — đổi hạn thì xoá để báo lại.
+  notifiedAt  DateTime? @map("notified_at")
+  createdById Int?      @map("created_by_id")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  deal    CrmDeal?    @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  contact CrmContact? @relation(fields: [contactId], references: [id], onDelete: SetNull)
+
+  @@index([dealId, createdAt], map: "idx_crm_activity_deal")
+  @@index([contactId], map: "idx_crm_activity_contact")
+  @@index([type, done, dueAt], map: "idx_crm_activity_due")
+  @@map("crm_activities")
+}
+
+/// Đề xuất (de-xuat-giai-phap.md + bao-gia.md) — Markdown, có phiên bản.
+/// DRAFT sửa được; SENT trở đi ĐÓNG BĂNG nội dung (hash), khách Accept/Decline qua link token.
+model CrmProposal {
+  id                Int       @id @default(autoincrement())
+  dealId            Int       @map("deal_id")
+  version           Int
+  title             String    @db.VarChar(200)
+  content           String    @db.Text
+  /// DRAFT | SENT | ACCEPTED | REJECTED
+  status            String    @default("DRAFT") @db.VarChar(10)
+  token             String?   @unique(map: "uk_crm_proposal_token") @db.VarChar(64)
+  tokenExpiresAt    DateTime? @map("token_expires_at")
+  tokenRevokedAt    DateTime? @map("token_revoked_at")
+  /// sha256 nội dung lúc gửi (rules.ts proposalHash).
+  contentHash       String?   @map("content_hash") @db.VarChar(64)
+  sentAt            DateTime? @map("sent_at")
+  viewedAt          DateTime? @map("viewed_at")
+  respondedAt       DateTime? @map("responded_at")
+  responseName      String?   @map("response_name") @db.VarChar(120)
+  responseNote      String?   @map("response_note") @db.Text
+  responseIp        String?   @map("response_ip") @db.VarChar(64)
+  responseUserAgent String?   @map("response_user_agent") @db.VarChar(500)
+  createdById       Int?      @map("created_by_id")
+  createdAt         DateTime  @default(now()) @map("created_at")
+  updatedAt         DateTime  @updatedAt @map("updated_at")
+
+  deal CrmDeal @relation(fields: [dealId], references: [id], onDelete: Cascade)
+
+  @@unique([dealId, version], name: "uk_crm_proposal_version", map: "uk_crm_proposal_version")
+  @@map("crm_proposals")
 }

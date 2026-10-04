@@ -21,7 +21,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import {
-  AlertTriangle, BadgeCheck, Check, ChevronRight, CloudOff, Download, FileText, History, Link2, Loader2, MoreHorizontal, Plus, RefreshCw, Save, Trash2, X, Share2,
+  AlertTriangle, BadgeCheck, Check, ChevronRight, CloudOff, Download, FileText, History, Link2, Loader2, MoreHorizontal, Plus, RefreshCw, Save, Sparkles, Trash2, X, Share2,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
@@ -36,6 +36,7 @@ import { ApprovalDialog } from '../studio/ApprovalDetail';
 import { RequestApprovalDialog } from '../studio/IssueStudio';
 import { ApprovalPill, Pill, ProcessGuideLink, WarnStrip, fmtDateTime, studioOn } from '../studio/shared';
 import DocHistory from './DocHistory';
+import { openAiPanel } from '../ai/store';
 import { InternalPill, portalStaff, VisibleToClient } from '../portal/ClientShare';
 import NewPageDialog from './NewPageDialog';
 import { PAGE_STATUS, PageStatusPill, VisibilityBadge, docsBase, downloadText } from './shared';
@@ -276,6 +277,8 @@ export default function DocView({ config, num }: { config: ProjectConfig; num: n
         <Popover open={more} onClose={() => setMore(false)} anchorRef={moreRef} width={220} align="end">
           <div className="p-1" role="menu">
             <MenuItem icon={Download} label="Export as Markdown (.md)" onClick={() => { setMore(false); exportMd.mutate(); }} />
+            {/* Đợt S5c: AI tóm tắt trang (đọc qua quyền của người bấm; không đề xuất gì). */}
+            {config.permissions.useAi && <MenuItem icon={Sparkles} label="Summarize with AI" onClick={() => { setMore(false); void flush(); openAiPanel({ pid, quick: { task: 'summarize_page', pageNumber: num, label: `Summarize “${page.title.slice(0, 60)}”` } }); }} />}
             {editable && <MenuItem icon={Save} label="Save as a named version…" onClick={() => { setMore(false); setNoteOpen(true); }} />}
             {editable && <MenuItem icon={Plus} label="Add a sub-page" onClick={() => { setMore(false); setNewChild(true); }} />}
             {page.canManage && <MenuItem icon={Trash2} label="Delete page…" danger onClick={() => { setMore(false); setConfirmDel(true); }} />}

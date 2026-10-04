@@ -56,7 +56,7 @@ const MANUAL: ManualStatus[] = ['NEW', 'QUALIFYING', 'ACCEPTED', 'DECLINED'];
 const SECURITY_LABEL: Record<string, string> = {
   NORMAL: 'Thông thường',
   PERSONAL_DATA: 'Có dữ liệu cá nhân',
-  SENSITIVE: 'Dữ liệu cá nhân nhạy cảm (NĐ 13/2023)',
+  SENSITIVE: 'Dữ liệu cá nhân nhạy cảm (Luật BVDLCN 91/2025/QH15 + NĐ 356/2025/NĐ-CP)',
 };
 
 function fmt(value: string | null | undefined): string {
@@ -405,6 +405,16 @@ export default function AdminProjectRequestsPage() {
                   {detail.senderRole && <span className="inline-flex items-center gap-1"><Building2 className="h-3 w-3" /> {detail.senderRole}</span>}
                   <span className="inline-flex items-center gap-1"><CalendarDays className="h-3 w-3" /> Gửi {fmt(detail.createdAt)}</span>
                 </div>
+
+                {/* Deal CRM (đợt S5b) — liên kết ngược: phiếu ⇒ deal ở /admin/crm */}
+                {(() => {
+                  const deal = (detail as ProjectRequestDetail & { crmDeal?: { id: number; stage: string } | null }).crmDeal;
+                  return deal ? (
+                    <a href={`/admin/crm?deal=${deal.id}`} className="inline-flex items-center gap-1.5 text-xs font-medium hover:underline" style={{ color: 'var(--text-secondary)' }}>
+                      <Link2 className="h-3.5 w-3.5" /> Deal CRM #{deal.id} · {deal.stage}
+                    </a>
+                  ) : null;
+                })()}
 
                 {/* Dự án CT Work */}
                 <div className="rounded-xl border p-3" style={{ borderColor: 'rgba(139,92,246,0.35)', background: 'rgba(139,92,246,0.05)' }}>

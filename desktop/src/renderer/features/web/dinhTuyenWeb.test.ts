@@ -280,7 +280,8 @@ describe('khopTuyenWeb', () => {
     // 04/10/2026: +5 CT Work Đợt S3b (meetings, meetings/:num, changes, changes/:num, raid).
     // 04/10/2026: +2 CT Work Đợt S4 (finance, present).
     // 04/10/2026: +1 Thông báo (/notifications).
-    expect(thay.size).toBe(131);
+    // 04/10/2026: +1 CT Work Đợt S5a (desk — service desk & SLA).
+    expect(thay.size).toBe(132);
   });
 });
 

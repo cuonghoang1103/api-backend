@@ -177,7 +177,7 @@ export default function AccountDataPage() {
     <SettingsPage
       title="Tài khoản & Dữ liệu"
       description={
-        'Thông tin tài khoản và quyền của bạn theo Nghị định 13/2023/NĐ-CP.'
+        'Thông tin tài khoản và quyền của bạn theo Luật Bảo vệ dữ liệu cá nhân 91/2025/QH15 và Nghị định 356/2025/NĐ-CP.'
       }
     >
       {/* ── Account facts ────────────────────────────────────── */}

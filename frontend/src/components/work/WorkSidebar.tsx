@@ -28,6 +28,7 @@ import {
   Handshake, PackageCheck, Activity,
   CalendarClock, GitPullRequestArrow, ShieldAlert,
   Wallet, Receipt, FileBarChart,
+  Headset,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { workApi, type StudioModule } from '@/lib/work-api';
@@ -122,6 +123,8 @@ const PROJECT_NAV: { group: string; items: NavDef[] }[] = [
       { path: 'raid', label: 'RAID', icon: ShieldAlert, match: (v) => v === 'raid', module: 'raid' },
       // Đợt S4: tài chính (đơn giá/chi phí chỉ ADMIN; MEMBER chỉ timesheet của mình — server quyết).
       { path: 'finance', label: 'Finance', icon: Wallet, match: (v) => v === 'finance', module: 'finance', roles: ['ADMIN', 'MEMBER'] },
+      // Đợt S5a: service desk & SLA (hàng đợi, Problem, báo cáo SLA) — chỉ khi mô-đun serviceDesk bật.
+      { path: 'desk', label: 'Service desk', icon: Headset, match: (v) => v === 'desk', module: 'serviceDesk' },
       { path: 'tests', label: 'Tests', icon: FlaskConical, match: (v) => v === 'tests' },
     ],
   },

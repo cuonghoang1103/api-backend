@@ -24,6 +24,7 @@ import { clientPeopleIds, maskUser, peopleFilterFor, TEAM_USER, type PeopleFilte
 import { canDeleteIssue, canModifyComment, commentVisibilityFor, isClientScoped, loadProjectAccess, requireProject, type ProjectAccess } from './permissions.js';
 import { assertModule } from './studio.js';
 import { tiptapToText } from './tiptapText.js';
+import { logger } from '../../utils/logger.js';
 
 const userActor = (userId: number): WorkActor => ({ kind: 'USER', userId });
 /**
@@ -560,6 +561,12 @@ export async function addComment(
     return c;
   });
   emitWorkEvent({ type: 'comment.created', projectId, issueId: id, commentId: comment.id, actor: actorOf(userId, via) });
+  // Đợt S5a: trả lời PUBLIC đầu tiên của đội ⇒ first response; khách trả lời ⇒ hết "chờ khách". Lỗi chỉ ghi log.
+  if (access.modules.serviceDesk) {
+    await import('./serviceDesk.service.js')
+      .then((m) => m.onComment(id, { authorId: userId, visibility: vis, isAi: via === 'AI', createdAt: comment.createdAt }))
+      .catch((err) => logger.warn('[work] desk: cập nhật SLA sau bình luận lỗi', { issueId: id, err: (err as Error).message }));
+  }
   return comment;
 }
 

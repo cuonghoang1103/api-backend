@@ -12,7 +12,8 @@
  */
 
 import { useEffect, useState } from 'react';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { workS5cKeys } from '@/lib/work-s5c-api';
 import { toast } from 'sonner';
 import { Briefcase, Code2, GraduationCap, Plus, User, X, type LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -24,6 +25,7 @@ import { usePick } from '../fields';
 import { Section, Select, Switch } from './shared';
 import { useProjectInvalidate } from './useProjectInvalidate';
 import { KIND_INFO, KINDS, LATER_MODULES, S1_MODULES } from '../studio/shared';
+import ModuleUpgrade from './ModuleUpgrade';
 
 const KIND_ICON: Record<ProjectKind, LucideIcon> = { PERSONAL: User, SCHOOL: GraduationCap, SOFTWARE: Code2, CLIENT: Briefcase };
 
@@ -37,6 +39,7 @@ const NEEDS: Partial<Record<StudioModule, { on: StudioModule; text: string }>> =
 
 export default function ProjectStudio({ config, slug }: { config: ProjectConfig; slug: string }) {
   const invalidateProject = useProjectInvalidate(config.id, slug);
+  const qc = useQueryClient();
   const canEdit = !!config.permissions.configureStudio;
   const q = useQuery({ queryKey: workStudioKeys.studio(config.id), queryFn: () => workStudioApi.studio(config.id) });
   const [kind, setKind] = useState<ProjectKind | null>(null);
@@ -53,7 +56,7 @@ export default function ProjectStudio({ config, slug }: { config: ProjectConfig;
 
   const update = useMutation({
     mutationFn: (body: Parameters<typeof workStudioApi.updateStudio>[1]) => workStudioApi.updateStudio(config.id, body),
-    onSuccess: () => { q.refetch(); invalidateProject(); },
+    onSuccess: () => { q.refetch(); invalidateProject(); qc.invalidateQueries({ queryKey: workS5cKeys.available(config.id) }); },
     onError: (err) => toast.error(workError(err, 'Could not save the change')),
   });
 
@@ -125,6 +128,9 @@ export default function ProjectStudio({ config, slug }: { config: ProjectConfig;
           </div>
         )}
       </Section>
+
+      {/* Đợt S5c: mô-đun có sẵn nhưng đang tắt + "Enable all recommended" (chỉ khoá chưa ai quyết). */}
+      <ModuleUpgrade config={config} onChanged={() => { q.refetch(); invalidateProject(); }} />
 
       <Section title="Modules" description="Turn on only what this project needs. Turning a module off hides it — stages, approvals and handoffs already recorded are kept and come back when you turn it on again.">
         <ul className="divide-y divide-[var(--w-border)] overflow-hidden rounded-[8px] border border-[var(--w-border)]">

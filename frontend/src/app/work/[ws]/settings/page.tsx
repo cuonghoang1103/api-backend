@@ -1,9 +1,9 @@
 'use client';
 
-/** /work/<slug>/settings — cài đặt không gian: General · Members · Invitations · Trash. */
+/** /work/<slug>/settings — cài đặt không gian: General · Members · Invitations · Audit log · Import project (S5c) · Trash. */
 
 import { Suspense } from 'react';
-import { MailPlus, ScrollText, SlidersHorizontal, Trash2, Users } from 'lucide-react';
+import { FileUp, MailPlus, ScrollText, SlidersHorizontal, Trash2, Users } from 'lucide-react';
 import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import { workApi, workError } from '@/lib/work-api';
@@ -16,8 +16,9 @@ import WorkspaceMembers from '@/components/work/settings/WorkspaceMembers';
 import WorkspaceInvitations from '@/components/work/settings/WorkspaceInvitations';
 import WorkspaceTrash from '@/components/work/settings/WorkspaceTrash';
 import WorkspaceAudit from '@/components/work/settings/WorkspaceAudit';
+import WorkspaceImport from '@/components/work/settings/WorkspaceImport';
 
-type Tab = 'general' | 'members' | 'invitations' | 'audit' | 'trash';
+type Tab = 'general' | 'members' | 'invitations' | 'audit' | 'import' | 'trash';
 
 function WorkspaceSettings() {
   const params = useParams<{ ws: string }>();
@@ -37,6 +38,8 @@ function WorkspaceSettings() {
     ] },
     { label: 'Data', tabs: canManage ? [
       { key: 'audit' as const, label: 'Audit log', icon: ScrollText },
+      // Đợt S5c: nhập lại dự án từ ZIP xuất trọn (luôn thành dự án MỚI).
+      { key: 'import' as const, label: 'Import project', icon: FileUp },
       { key: 'trash' as const, label: 'Trash', icon: Trash2 },
     ] : [] },
   ];
@@ -67,6 +70,7 @@ function WorkspaceSettings() {
         {tab === 'members' && <WorkspaceMembers ws={ws} />}
         {tab === 'invitations' && <WorkspaceInvitations ws={ws} />}
         {tab === 'audit' && <WorkspaceAudit workspaceId={ws.id} />}
+        {tab === 'import' && <WorkspaceImport ws={ws} />}
         {tab === 'trash' && <WorkspaceTrash ws={ws} />}
       </SettingsLayout>
     </div>

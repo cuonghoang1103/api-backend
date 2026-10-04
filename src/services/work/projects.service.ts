@@ -13,7 +13,7 @@ import { defaultModulesFor, kindFromTemplate, mergeModules, modulesOf, noModules
 import { auditProject } from './audit.js';
 import { emitWorkEvent, evictFromProject } from './events.js';
 import {
-  can, docAccess, effectiveProjectRole, effectiveWorkspaceRole, governanceAccess, isClientScoped, loadProjectAccess, portalOnlyUserIds, requireProject, requireWorkspace,
+  can, deskAccess, docAccess, effectiveProjectRole, effectiveWorkspaceRole, governanceAccess, isClientScoped, loadProjectAccess, portalOnlyUserIds, requireProject, requireWorkspace,
   type ProjectOptions,
 } from './permissions.js';
 import { financeAccess } from './financeRules.js';
@@ -173,7 +173,7 @@ export async function getProjectConfig(userId: number, projectId: number) {
     modules: access.modules,
     role: access.role,
     workspaceRole: access.workspaceRole,
-    permissions: { ...permissionFlags(access.role, access.options), ...docFlags(access), ...govFlags(access), ...(await s4Flags(access, userId)) },
+    permissions: { ...permissionFlags(access.role, access.options), ...docFlags(access), ...govFlags(access), ...(await s4Flags(access, userId)), ...deskFlags(access) },
     boardColumns: boardColumns(project.workflows, project.settings),
     members,
   };
@@ -208,6 +208,12 @@ export function permissionFlags(role: ProjectRole, opts: ProjectOptions = {}) {
 function docFlags(access: { role: ProjectRole; workspaceRole: WorkspaceRole }) {
   const d = docAccess(access.role, access.workspaceRole);
   return { viewAllDocs: d.view === 'ALL', editDocs: d.edit, manageDocs: d.manage };
+}
+
+/** Cờ service desk (đợt S5a) — phần nội bộ (hàng đợi, đồng hồ SLA, Problem, báo cáo) chỉ cho người của đội. */
+function deskFlags(access: { role: ProjectRole; workspaceRole: WorkspaceRole }) {
+  const d = deskAccess(access.role, access.workspaceRole);
+  return { viewDesk: d.view, workDesk: d.work, configureDesk: d.configure };
 }
 
 /** Cờ CR / RAID / họp (đợt S3b) — khách và GUEST (trừ giảng viên) không thấy phần nội bộ. */

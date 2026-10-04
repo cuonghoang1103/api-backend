@@ -27,6 +27,11 @@ export interface ReportData {
   risks: Array<{ key: string; title: string; level: string | null; response: string | null; mitigation: string | null }> | null;
   nextSteps: ReportItem[];
   counts: { completed: number; inProgress: number; open: number };
+  /**
+   * Đợt S5a — chỉ số TỔNG của service desk trong kỳ (mô-đun serviceDesk). Khách: chỉ yêu cầu đã chia sẻ; không mã,
+   * không tên, không chi tiết vi phạm. Không có trường này (báo cáo cũ / mô-đun tắt) ⇒ không in mục nào.
+   */
+  serviceDesk?: { received: number; resolved: number; open: number; firstResponsePercent: number | null; resolutionPercent: number | null; csatAvg: number | null; csatCount: number } | null;
   /** Chỉ báo cáo NỘI BỘ (steering). */
   internal?: {
     overdue: Array<ReportItem & { dueDate: string | null; assignee: string | null }>;
@@ -78,6 +83,14 @@ export function reportMarkdown(d: ReportData): string {
   if (d.changes?.length) {
     out.push('## Approved changes', '');
     for (const c of d.changes) out.push(`- CR-${c.number} ${c.title}${c.scheduleDays ? ` · ${c.scheduleDays > 0 ? '+' : ''}${c.scheduleDays} days` : ''}${c.costAmount ? ` · ${money(c.costAmount, c.costCurrency)}` : ''}`);
+    out.push('');
+  }
+  if (d.serviceDesk && (d.serviceDesk.received || d.serviceDesk.resolved || d.serviceDesk.open)) {
+    const s = d.serviceDesk;
+    const pc = (v: number | null) => (v === null ? '—' : `${v}%`);
+    out.push('## Support requests', '', `- Received ${s.received} · resolved ${s.resolved} · open ${s.open}`);
+    out.push(`- Responded on time: ${pc(s.firstResponsePercent)} · resolved on time: ${pc(s.resolutionPercent)}`);
+    if (s.csatCount) out.push(`- Satisfaction: ${s.csatAvg}/5 from ${s.csatCount} rating${s.csatCount === 1 ? '' : 's'}`);
     out.push('');
   }
   if (d.risks?.length) {

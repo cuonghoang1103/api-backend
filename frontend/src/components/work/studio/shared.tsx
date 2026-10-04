@@ -40,6 +40,8 @@ export const S1_MODULES: Array<{ key: StudioModule; label: string; body: string 
   // Đợt S4.
   { key: 'finance', label: 'Finance', body: 'Hourly rates, weekly timesheets with approval and locking, budget vs actual with a forecast, other costs and payment milestones. Tracking only — CT Work does not issue invoices.' },
   { key: 'reports', label: 'Client reports & present', body: 'A weekly client report built from shared data and emailed on a schedule (no AI needed), an internal steering report, printable PDFs and a full-screen present mode.' },
+  // Đợt S5a.
+  { key: 'serviceDesk', label: 'Service desk & SLA', body: 'Request types, P1–P4 from impact × urgency, SLA clocks on working hours (paused while waiting for the customer), queues, alerts, CSAT, problems with postmortems and SLA reports.' },
 ];
 
 /** Khoá chừa cho đợt sau — hiện mờ "Coming later" để người dùng biết hướng đi. */
@@ -49,7 +51,7 @@ export const KIND_INFO: Record<ProjectKind, { label: string; short: string; body
   PERSONAL: { label: 'Personal', short: 'Personal', body: 'Your own tasks and side projects. Just a board — nothing to set up.', modules: [] },
   SCHOOL: { label: 'School / coursework', short: 'School', body: 'Group assignments and capstones (SWP391, SWR302, SWT301). Sprints, tests and reports for your lecturer.', modules: [] },
   SOFTWARE: { label: 'Software team', short: 'Software', body: 'A product team shipping software: sprints, code review, releases and GitHub.', modules: [] },
-  CLIENT: { label: 'Client project (studio)', short: 'Client', body: 'Work delivered for a client through departments: stages with gate reviews, approvals and handoffs.', modules: ['teams', 'stages', 'approvals', 'handoffs', 'docs', 'clientPortal', 'changeRequests', 'raid', 'meetings', 'finance', 'reports'] },
+  CLIENT: { label: 'Client project (studio)', short: 'Client', body: 'Work delivered for a client through departments: stages with gate reviews, approvals and handoffs.', modules: ['teams', 'stages', 'approvals', 'handoffs', 'docs', 'clientPortal', 'changeRequests', 'raid', 'meetings', 'finance', 'reports', 'serviceDesk'] },
 };
 export const KINDS: ProjectKind[] = ['PERSONAL', 'SCHOOL', 'SOFTWARE', 'CLIENT'];
 

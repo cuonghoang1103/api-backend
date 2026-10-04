@@ -3,7 +3,7 @@ import LegalShell from '@/components/legal/LegalShell';
 
 export const metadata: Metadata = {
   title: 'Chính sách bảo mật',
-  description: 'Chính sách bảo mật thông tin của CuongThai theo Nghị định 13/2023/NĐ-CP: dữ liệu thu thập, mục đích, chia sẻ, thời hạn lưu trữ và quyền của chủ thể dữ liệu.',
+  description: 'Chính sách bảo mật thông tin của CuongThai theo Luật Bảo vệ dữ liệu cá nhân 91/2025/QH15 và Nghị định 356/2025/NĐ-CP: dữ liệu thu thập, mục đích, chia sẻ, thời hạn lưu trữ và quyền của chủ thể dữ liệu.',
   alternates: { canonical: 'https://cuongthai.com/chinh-sach-bao-mat' },
 };
 
@@ -12,7 +12,7 @@ export default function Page() {
     <LegalShell title="Chính sách bảo mật" activeHref="/chinh-sach-bao-mat">
       <p>
         CuongThai tôn trọng và bảo vệ thông tin cá nhân của người dùng, tuân thủ
-        <b> Nghị định 13/2023/NĐ-CP</b> về bảo vệ dữ liệu cá nhân. Chính sách này
+        <b> Luật Bảo vệ dữ liệu cá nhân số 91/2025/QH15</b> và <b>Nghị định 356/2025/NĐ-CP</b> (hiệu lực từ 01/01/2026, thay thế Nghị định 13/2023/NĐ-CP). Chính sách này
         mô tả cách chúng tôi thu thập, sử dụng, lưu trữ và bảo vệ dữ liệu của Quý khách.
       </p>
 
@@ -48,7 +48,7 @@ export default function Page() {
       </ul>
 
       <h2>5. Quyền của chủ thể dữ liệu</h2>
-      <p>Theo Nghị định 13/2023/NĐ-CP, Quý khách có quyền:</p>
+      <p>Theo Luật Bảo vệ dữ liệu cá nhân 91/2025/QH15 và Nghị định 356/2025/NĐ-CP, Quý khách có quyền:</p>
       <ul>
         <li><b>Truy cập &amp; tải dữ liệu:</b> tự tải bản sao dữ liệu của mình (định dạng JSON) tại <b>Cài đặt → Tài khoản &amp; Dữ liệu</b>.</li>
         <li><b>Chỉnh sửa:</b> cập nhật thông tin cá nhân trong trang hồ sơ.</li>

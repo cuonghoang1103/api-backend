@@ -12,6 +12,8 @@ import type { AiQuickTask } from '@/lib/work-api';
 export interface AiQuickRequest {
   task: AiQuickTask;
   issueNumber?: number | null;
+  /** Đợt S5c: việc một chạm trên một trang Docs (summarize_page). */
+  pageNumber?: number | null;
   text?: string | null;
   /** Tiêu đề hiện trên lượt trả lời (vd "Break into stories"); bỏ trống thì lấy theo task. */
   label?: string;

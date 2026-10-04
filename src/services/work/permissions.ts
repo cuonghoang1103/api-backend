@@ -292,6 +292,21 @@ export function canDeleteGovernance(role: ProjectRole | null, workspaceRole: Wor
   return g.edit && createdById !== null && createdById === userId;
 }
 
+// ─── Service desk & SLA (đợt S5a, mô-đun serviceDesk) ──────────────
+
+/**
+ * Quyền trên phần NỘI BỘ của service desk (hàng đợi, đồng hồ SLA, sự kiện SLA, Problem, báo cáo, cấu hình):
+ *   - Khách (vai CLIENT) và GUEST (trừ giảng viên TEACHER) KHÔNG thấy — khách chỉ gửi yêu cầu, xem trạng thái,
+ *     "We'll respond within …" và trả lời CSAT qua /portal/desk/** (đã nằm trong danh sách trắng /portal/**).
+ *   - VIEWER / TEACHER chỉ xem; MEMBER / ADMIN xử lý (tạo, chờ khách, đổi mức P, Problem, postmortem).
+ *   - Cấu hình (loại yêu cầu, ma trận, mục tiêu, lịch làm việc): ADMIN dự án.
+ * Cùng luật "người của đội" với governanceAccess — một định nghĩa, không chép lại.
+ */
+export function deskAccess(role: ProjectRole | null, workspaceRole: WorkspaceRole | null): { view: boolean; work: boolean; configure: boolean } {
+  const g = governanceAccess(role, workspaceRole);
+  return { view: g.view, work: g.edit, configure: g.manage };
+}
+
 // ─── Tầng đọc DB ──────────────────────────────────────────────────
 
 export interface ProjectAccess {

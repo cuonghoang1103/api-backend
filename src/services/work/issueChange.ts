@@ -15,6 +15,7 @@
 
 import { Prisma } from '@prisma/client';
 import { prisma } from '../../config/database.js';
+import { logger } from '../../utils/logger.js';
 import { BadRequestError, ConflictError, NotFoundError } from '../../middleware/errorHandler.js';
 import { PRIORITY_DEFAULT, PRIORITY_MAX, PRIORITY_MIN } from './constants.js';
 import { emitWorkEvent, type FieldChange, type WorkActor, type WorkEvent } from './events.js';
@@ -472,6 +473,13 @@ export async function applyIssueChange(issueId: number, patch: IssuePatch, actor
   if (result.changes.length || opts.rank !== undefined) {
     const event: WorkEvent = { type: 'issue.updated', projectId: head.projectId, issueId, actor, changes: result.changes };
     emitWorkEvent(event);
+  }
+  // Đợt S5a: đổi trạng thái của thẻ service desk ⇒ sự kiện SLA (giải quyết / mở lại / chờ khách / trả lời).
+  // Gọi thẳng sau commit (không qua bus) để lệnh trả về là SLA đã đúng; lỗi chỉ ghi log, không làm hỏng lệnh.
+  if (result.changes.some((c) => c.field === 'statusId')) {
+    await import('./serviceDesk.service.js')
+      .then((m) => m.onIssueChanged(issueId, result.changes, actor))
+      .catch((err) => logger.warn('[work] desk: cập nhật SLA sau đổi trạng thái lỗi', { issueId, err: (err as Error).message }));
   }
   return result;
 }

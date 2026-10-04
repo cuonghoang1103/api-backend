@@ -20,7 +20,7 @@ import remarkGfm from 'remark-gfm';
 import remarkBreaks from 'remark-breaks';
 import rehypeSanitize from 'rehype-sanitize';
 import { toast } from 'sonner';
-import { Activity, AlertTriangle, ArrowUp, ClipboardCheck, GraduationCap, History, Lock, RotateCcw, Search, Sparkles, Square, SquarePen, Trash2, Users, X } from 'lucide-react';
+import { Activity, AlertTriangle, ArrowUp, ClipboardCheck, FileText, GraduationCap, History, Lock, RotateCcw, Search, Sparkles, Square, SquarePen, Trash2, Users, X } from 'lucide-react';
 import {
   isAiQuotaError, workApi, workError, workErrorStatus,
   type AiMessage, type AiQuickTask, type AiQuota, type ProjectConfig,
@@ -49,6 +49,8 @@ export const QUICK_TITLES: Record<AiQuickTask, string> = {
   meeting_notes: 'Meeting notes to tasks',
   req_review: 'Requirement check before submitting',
   team_health: 'Team health check',
+  draft_srs: 'Draft SRS from requirements',
+  summarize_page: 'Summarize page',
 };
 
 /**
@@ -297,8 +299,8 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
     let tid: number | null = threadId;
     (async () => {
       try {
-        tid = await ensureThread(`${title}${quick.issueNumber && key ? ` · ${key}-${quick.issueNumber}` : ''}`);
-        const a = await workApi.aiQuick(pid, { task: quick.task, issueNumber: quick.issueNumber ?? null, text: quick.text ?? null, threadId: tid, label: title });
+        tid = await ensureThread(`${title}${quick.issueNumber && key ? ` · ${key}-${quick.issueNumber}` : ''}${quick.pageNumber ? ` · document ${quick.pageNumber}` : ''}`);
+        const a = await workApi.aiQuick(pid, { task: quick.task, issueNumber: quick.issueNumber ?? null, pageNumber: quick.pageNumber ?? null, text: quick.text ?? null, threadId: tid, label: title });
         onQuota(a.quota);
       } catch (err) {
         if (waitGen.current === gen) handleError(err);
@@ -354,7 +356,7 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
   }, [waiting, pid, qc, selectThread, handleError]);
 
   /** Soát Req / sức khoẻ nhóm: số liệu do server tính, AI diễn giải — chạy như việc một chạm. */
-  const runTool = (task: 'req_review' | 'team_health') => {
+  const runTool = (task: 'req_review' | 'team_health' | 'draft_srs') => {
     if (waiting) return;
     openAiPanel({ pid, quick: { task } });
   };
@@ -488,7 +490,7 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
               {threadId && !thread && threadQ.isLoading ? (
                 <div className="flex justify-center pt-10"><Spinner size={16} /></div>
               ) : !messages.length && !pendingQ && !waiting ? (
-                <EmptyState suggestions={suggestions} onPick={fill} disabled={aiOff} onBrowse={() => setView('history')} onTool={runTool} onDefense={startDefense} />
+                <EmptyState suggestions={suggestions} onPick={fill} disabled={aiOff} onBrowse={() => setView('history')} onTool={runTool} onDefense={startDefense} docsTools={!!config?.modules?.docs && !!config?.permissions.editDocs} />
               ) : (
                 <div className="space-y-4">
                   {messages.map((m) => (m.role === 'user' ? (
@@ -778,9 +780,11 @@ function Typing({ label, onCancel }: { label: string; onCancel: () => void }) {
 
 const DEFENSE_FOCUS: Array<[string, string]> = [['me', 'My screens'], ['C1', 'C1'], ['C2', 'C2'], ['C3', 'C3'], ['C4', 'C4'], ['C5', 'C5'], ['all', 'Whole project']];
 
-function EmptyState({ suggestions, onPick, disabled, onBrowse, onTool, onDefense }: {
+function EmptyState({ suggestions, onPick, disabled, onBrowse, onTool, onDefense, docsTools }: {
   suggestions: string[]; onPick: (s: string) => void; disabled?: boolean; onBrowse?: () => void;
-  onTool?: (task: 'req_review' | 'team_health') => void; onDefense?: (focus: string) => void;
+  onTool?: (task: 'req_review' | 'team_health' | 'draft_srs') => void; onDefense?: (focus: string) => void;
+  /** Đợt S5c: dự án bật Docs + người xem sửa được tài liệu ⇒ có "Draft SRS from requirements". */
+  docsTools?: boolean;
 }) {
   const [picking, setPicking] = useState(false);
   return (
@@ -833,6 +837,13 @@ function EmptyState({ suggestions, onPick, disabled, onBrowse, onTool, onDefense
                   <ClipboardCheck size={15} className="mt-0.5 shrink-0 text-[var(--w-accent-text)]" />
                   <span><span className="block text-[13px] font-medium">Check requirements before submitting</span><span className="block text-[12px] text-[var(--w-text-2)]">Finds every Req in this iteration missing a PIC, unhappy cases, Quality L2, Evidence or finished SRS/SDS/Code/Test — and what to fix first.</span></span>
                 </button>
+                {docsTools && (
+                  <button type="button" disabled={disabled} onClick={() => onTool('draft_srs')}
+                    className="flex items-start gap-2.5 rounded-[8px] border border-[var(--w-border)] bg-[var(--w-panel)] px-3 py-2 text-left hover:bg-[var(--w-hover)] disabled:opacity-50">
+                    <FileText size={15} className="mt-0.5 shrink-0 text-[var(--w-accent-text)]" />
+                    <span><span className="block text-[13px] font-medium">Draft SRS from requirements</span><span className="block text-[12px] text-[var(--w-text-2)]">Turns this project&apos;s requirements, stories and epics into an SRS document you review before it is created.</span></span>
+                  </button>
+                )}
                 <button type="button" disabled={disabled} onClick={() => onTool('team_health')}
                   className="flex items-start gap-2.5 rounded-[8px] border border-[var(--w-border)] bg-[var(--w-panel)] px-3 py-2 text-left hover:bg-[var(--w-hover)] disabled:opacity-50">
                   <Activity size={15} className="mt-0.5 shrink-0 text-[var(--w-accent-text)]" />

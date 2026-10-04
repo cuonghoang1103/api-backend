@@ -22,7 +22,7 @@ import { isClientScoped, loadProjectAccess } from './permissions.js';
 import { modulesOf } from './studio.js';
 
 export type PortalSection = 'overview' | 'requests' | 'approvals' | 'documents' | 'deliverables' | 'activity' | 'meetings';
-export type PortalKind = 'reply' | 'approval' | 'stage' | 'deliverable' | 'uat' | 'request' | 'meeting';
+export type PortalKind = 'reply' | 'approval' | 'stage' | 'deliverable' | 'uat' | 'request' | 'meeting' | 'csat';
 
 export interface WorkNotifyLike {
   receiverId: number;
@@ -164,6 +164,9 @@ export function clientEmailContent(payload: Record<string, unknown>): { subject:
       return { subject: `Meeting: ${title}`, heading: typeof payload.message === 'string' && payload.message ? payload.message : 'You are invited to a meeting', lines: [title, excerpt], cta: 'Open meeting' };
     case 'deliverable':
       return { subject: `New deliverable: ${title}`, heading: 'A new deliverable is ready', lines: [`“${title}” has been delivered and is ready to download.`], cta: 'Open deliverables' };
+    // Đợt S5a: mời người gửi yêu cầu chấm CSAT khi yêu cầu được giải quyết.
+    case 'csat':
+      return { subject: `How did we do? ${key}: ${title}`, heading: `Your request ${key} was resolved`, lines: [title, 'Please rate how we handled it — from 1 (poor) to 5 (excellent) — and add a comment if you like. It takes ten seconds.'], cta: 'Rate this request' };
     case 'request':
     default:
       return { subject: `Update on ${key}: ${title}`, heading: `Update on ${key}`, lines: [title, excerpt], cta: 'Open client portal' };

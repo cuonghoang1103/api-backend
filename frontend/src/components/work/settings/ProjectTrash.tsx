@@ -5,7 +5,7 @@
  * xoá vĩnh viễn chỉ admin dự án (khớp trash.service.ts ở backend).
  */
 
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { RotateCcw, Trash2 } from 'lucide-react';
@@ -13,8 +13,35 @@ import { workApi, workError, userName, type ProjectConfig, type TrashIssue } fro
 import { EmptyState, IssueTypeIcon, relativeTime, Spinner, UserAvatar } from '../ui';
 import { ConfirmDialog, ReadOnlyNotice, Section } from './shared';
 import { useProjectInvalidate } from './useProjectInvalidate';
+import DocsTrash from './DocsTrash';
+import { studioOn } from '../studio/shared';
 
+/** Đợt S5c: Trash có hai tab — Issues (như cũ) · Docs (khi mô-đun docs bật và người xem sửa được tài liệu). */
 export default function ProjectTrash({ config, slug }: { config: ProjectConfig; slug: string }) {
+  const docsOn = studioOn(config, 'docs') && !!config.permissions.editDocs;
+  const [kind, setKind] = useState<'issues' | 'docs'>('issues');
+  const tabs = docsOn ? (
+    <div role="tablist" aria-label="Trash contents" className="mb-3 inline-flex rounded-[8px] border border-[var(--w-border)] p-0.5">
+      {(['issues', 'docs'] as const).map((k) => (
+        <button key={k} type="button" role="tab" aria-selected={kind === k} onClick={() => setKind(k)}
+          className={`rounded-[6px] px-3 py-1 text-[12.5px] font-medium ${kind === k ? 'bg-[var(--w-accent-soft)] text-[var(--w-accent-text)]' : 'text-[var(--w-text-2)] hover:bg-[var(--w-hover)]'}`}>
+          {k === 'issues' ? 'Issues' : 'Docs'}
+        </button>
+      ))}
+    </div>
+  ) : null;
+  if (docsOn && kind === 'docs') {
+    return (
+      <Section title="Trash" description="Deleted documents stay here until an admin deletes them permanently. Restoring brings back the whole page tree that was deleted with it.">
+        {tabs}
+        <DocsTrash config={config} />
+      </Section>
+    );
+  }
+  return <IssueTrash config={config} slug={slug} tabs={tabs} />;
+}
+
+function IssueTrash({ config, slug, tabs }: { config: ProjectConfig; slug: string; tabs: ReactNode }) {
   const canRestore = config.permissions.deleteIssues;
   const canPurge = config.permissions.settings;
   const qc = useQueryClient();
@@ -49,6 +76,7 @@ export default function ProjectTrash({ config, slug }: { config: ProjectConfig; 
   if (!canRestore) {
     return (
       <Section title="Trash" description={description}>
+        {tabs}
         <ReadOnlyNotice>You need permission to delete issues to view and restore the trash.</ReadOnlyNotice>
       </Section>
     );
@@ -58,6 +86,7 @@ export default function ProjectTrash({ config, slug }: { config: ProjectConfig; 
 
   return (
     <Section title="Trash" description={description}>
+      {tabs}
       {q.isLoading ? (
         <div className="flex justify-center py-10"><Spinner size={18} /></div>
       ) : q.error ? (

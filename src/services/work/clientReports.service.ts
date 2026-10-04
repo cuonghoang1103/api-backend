@@ -223,6 +223,10 @@ export async function buildReportData(projectId: number, modules: ModuleMap, o: 
     nextSteps,
     counts: { completed: completed.length, inProgress: inProgress.length, open },
   };
+  // Đợt S5a: chỉ số tổng của service desk trong kỳ (khách: chỉ yêu cầu đã chia sẻ — periodSummary tự lọc).
+  if (modules.serviceDesk) {
+    data.serviceDesk = await (await import('./serviceDesk.service.js')).periodSummary(projectId, since, until, client ? 'client' : 'internal').catch(() => null);
+  }
   if (!client) data.internal = await internalExtras(projectId, modules, o, k);
   return data;
 }

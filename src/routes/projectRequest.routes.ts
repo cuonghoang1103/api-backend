@@ -19,6 +19,7 @@ import {
   createProjectRequest, createWorkProjectFromRequest, lookupProjectRequest, roleplaySample, workProjectInfo,
 } from '../services/projectRequest.service.js';
 import { baoAdmin } from '../services/thongBaoAdmin.service.js';
+import { ensureDealForRequest, syncDealFromRequest } from '../services/crm/crm.service.js';
 import { logger } from '../utils/logger.js';
 import type { ApiResponse } from '../types/index.js';
 
@@ -93,6 +94,11 @@ publicProjectRequestRouter.post('/', projectRequestLimiter, asyncHandler(async (
     mucDo: 'can_xu_ly',
     entityId: row.id,
     khoaChongTrung: `YEU_CAU_DU_AN:${row.id}`,
+  });
+
+  // CRM (đợt S5b): phiếu mới ⇒ người liên hệ + tổ chức + deal LEAD. Hỏng thì chỉ ghi log — không làm rớt phiếu.
+  void ensureDealForRequest(row.id).catch((err: unknown) => {
+    logger.error('[crm] tạo deal từ phiếu hỏng', { requestId: row.id, error: err instanceof Error ? err.message : String(err) });
   });
 
   res.status(201).json({ success: true, data: { code: row.code, received: true } });
@@ -197,6 +203,9 @@ adminProjectRequestRouter.post('/roleplay', asyncHandler(async (req: Request, re
     { ...roleplaySample(), consentVersion: CONSENT_VERSION },
     { ip: null, userAgent: 'roleplay', isRoleplay: true },
   );
+  await ensureDealForRequest(row.id).catch((err: unknown) => {
+    logger.error('[crm] tạo deal từ phiếu nhập vai hỏng', { requestId: row.id, error: err instanceof Error ? err.message : String(err) });
+  });
   res.status(201).json({ success: true, data: row });
 }));
 
@@ -207,7 +216,7 @@ function idParam(req: Request): number {
 }
 
 adminProjectRequestRouter.get('/:id', asyncHandler(async (req: Request, res: Response<ApiResponse>) => {
-  const row = await prisma.projectRequest.findUnique({ where: { id: idParam(req) } });
+  const row = await prisma.projectRequest.findUnique({ where: { id: idParam(req) }, include: { crmDeal: { select: { id: true, stage: true } } } });
   if (!row) throw new NotFoundError('Không tìm thấy phiếu yêu cầu');
   res.json({ success: true, data: { ...row, workProject: await workProjectInfo(row.workProjectId) } });
 }));
@@ -231,11 +240,14 @@ adminProjectRequestRouter.patch('/:id', asyncHandler(async (req: Request, res: R
   if (body.internalNote !== undefined) data.internalNote = body.internalNote?.trim() || null;
   if (body.clientNote !== undefined) data.clientNote = body.clientNote?.trim() || null;
   if (body.status && body.status !== cur.status) { data.status = body.status; data.statusChangedAt = new Date(); }
-  const row = await prisma.projectRequest.update({ where: { id }, data });
+  const row = await prisma.projectRequest.update({ where: { id }, data, include: { crmDeal: { select: { id: true, stage: true } } } });
+  // CRM (đợt S5b): đổi trạng thái phiếu ⇒ đẩy deal tới (không kéo lùi) — xem crm.service.ts.
+  if (data.status) await syncDealFromRequest(id, req.userId ?? null);
   res.json({ success: true, data: { ...row, workProject: await workProjectInfo(row.workProjectId) } });
 }));
 
 adminProjectRequestRouter.post('/:id/create-work-project', asyncHandler(async (req: Request, res: Response<ApiResponse>) => {
   const result = await createWorkProjectFromRequest(req.userId!, idParam(req));
+  if (!result.alreadyExisted) await syncDealFromRequest(idParam(req), req.userId ?? null);
   res.status(result.alreadyExisted ? 200 : 201).json({ success: true, data: result });
 }));

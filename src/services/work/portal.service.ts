@@ -281,7 +281,7 @@ export async function createClientIssue(
 }
 
 /** Báo cho đội: trưởng bộ phận nhận (nếu có), không thì ADMIN dự án. */
-async function notifyTeamOfRequest(projectId: number, senderId: number, created: { id: number; number: number; teamId: number | null }, title: string, message: string) {
+export async function notifyTeamOfRequest(projectId: number, senderId: number, created: { id: number; number: number; teamId: number | null }, title: string, message: string) {
   try {
     const p = await prisma.workProject.findUniqueOrThrow({ where: { id: projectId }, select: { key: true, workspace: { select: { slug: true } } } });
     let to: number[] = [];
@@ -313,6 +313,8 @@ export async function submitRequest(
   const title = input.title.trim();
   if (!title) throw new BadRequestError('Give your request a short title', 'WORK_TITLE_REQUIRED');
   const created = await createClientIssue(projectId, userId, { ...input, title });
+  // Đợt S5a: mô-đun serviceDesk bật ⇒ yêu cầu gửi qua đường cũ cũng có SLA (tác động/khẩn cấp mặc định của loại).
+  if (ctx.access.modules.serviceDesk) await (await import('./serviceDesk.service.js')).attachFromLegacyPortal(projectId, created.id, input.kind, userId);
   emitWorkEvent({ type: 'issue.updated', projectId, issueId: created.id, actor: { kind: 'USER', userId }, changes: [{ field: 'clientVisible', from: 'false', to: 'true' }] });
   await auditProject(projectId, { actorId: userId, action: 'portal.request', targetType: 'issue', targetId: created.id, summary: `Client request ${ctx.access.key}-${created.number} (${created.kind}): ${title.slice(0, 120)}` });
   await notifyTeamOfRequest(projectId, userId, created, title, `New ${created.kind.toLowerCase()} from the client portal`);

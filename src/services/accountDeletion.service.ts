@@ -11,7 +11,7 @@
  * Now the user FILES a request and an admin reviews it. `anonymizeAccount()`
  * runs from exactly one place: `approve()` below.
  *
- * Nghị định 13/2023 note: the law gives the data subject a right to erasure,
+ * Luật BVDLCN 91/2025/QH15 + NĐ 356/2025/NĐ-CP (thay NĐ 13/2023) note: the law gives the data subject a right to erasure,
  * not a right to instant erasure — a review step (and the 72h grace window
  * the UI advertises) is compatible with it, and the export-my-data path is
  * untouched and still instant.

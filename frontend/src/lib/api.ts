@@ -327,7 +327,7 @@ export const authApi = {
     allowMessagesFromStrangers?: boolean;
   }) => api.put('/profile', data),
 
-  // Data-subject rights (Nghị định 13/2023).
+  // Data-subject rights (Luật BVDLCN 91/2025/QH15 + NĐ 356/2025/NĐ-CP).
   exportData: () => api.get('/profile/export-data'),
 
   // ─── Account erasure — admin-reviewed since 2026-08-08 ───
@@ -5938,7 +5938,7 @@ export type ProjectRequestStatus = 'NEW' | 'QUALIFYING' | 'ACCEPTED' | 'DECLINED
 export type ProjectRequestProductType = 'WEB' | 'APP' | 'TOOL' | 'AI' | 'OTHER';
 export type ProjectRequestSecurityLevel = 'NORMAL' | 'PERSONAL_DATA' | 'SENSITIVE';
 
-/** Thân form công khai. `consent` BẮT BUỘC true (NĐ 13/2023); `website` là ô bẫy bot — luôn để trống, ẩn khỏi người dùng. */
+/** Thân form công khai. `consent` BẮT BUỘC true (Luật BVDLCN 91/2025/QH15 + NĐ 356/2025); `website` là ô bẫy bot — luôn để trống, ẩn khỏi người dùng. */
 export interface ProjectRequestSubmit {
   name: string;
   email: string;

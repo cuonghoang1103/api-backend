@@ -124,6 +124,26 @@ export function startCronJobs(): void {
     }
   });
 
+  // CRM nhẹ (đợt S5b): việc (TASK) tới hạn ⇒ báo admin đúng một lần mỗi hạn — mỗi 15 phút. Không LLM.
+  cron.schedule('*/15 * * * *', async () => {
+    try {
+      const { notifyDueTasks } = await import('./crm/crm.service.js');
+      const n = await notifyDueTasks();
+      if (n) logger.info('cron: báo việc CRM tới hạn', { count: n });
+    } catch (err) {
+      logger.error('cron crm due tasks failed', { error: (err as Error).message });
+    }
+  });
+  // CRM: tóm tắt deal "stale" (> 14 ngày không hoạt động) — 08:30 giờ VN (01:30 UTC), tối đa một tin/ngày.
+  cron.schedule('30 1 * * *', async () => {
+    try {
+      const { notifyStaleDeals } = await import('./crm/crm.service.js');
+      await notifyStaleDeals();
+    } catch (err) {
+      logger.error('cron crm stale digest failed', { error: (err as Error).message });
+    }
+  });
+
   // ─── Bảng xếp hạng nhạc — 06:05 giờ VN (23:05 UTC) ───
   // Apple RSS + YouTube chart (1 đơn vị), rồi ghép video cho tối đa 20 bài MỚI
   // vào bảng (100 đơn vị/bài). Không dùng AI. Xem music-charts.service.ts.
@@ -189,6 +209,18 @@ export function startCronJobs(): void {
       if (n) logger.info('[work] sprint snapshots', { sprints: n });
     } catch (err) {
       logger.warn('[work] sprint snapshot failed', { error: (err as Error).message });
+    }
+  });
+
+  // CT Work đợt S5a: service desk — mỗi 5 phút tính lại đồng hồ SLA của yêu cầu đang mở và cảnh báo nội bộ
+  // khi sang AT_RISK / BREACHED (mỗi mốc ĐÚNG MỘT LẦN). Thuần tính toán từ sự kiện SLA, KHÔNG gọi LLM.
+  cron.schedule('*/5 * * * *', async () => {
+    try {
+      const { runSlaChecks } = await import('./work/serviceDesk.service.js');
+      const r = await runSlaChecks();
+      if (r.alerts) logger.info('[work] SLA alerts sent', r);
+    } catch (err) {
+      logger.warn('[work] SLA checks failed', { error: (err as Error).message });
     }
   });
 

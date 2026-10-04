@@ -14,7 +14,7 @@ import type { LucideIcon } from 'lucide-react';
 import {
   Activity, AlertTriangle, BarChart3, BookOpen, Briefcase, Clapperboard, ClipboardList, Code2,
   CreditCard, Crown, Database, FileText, FlaskConical, FolderKanban, Gamepad2, Github,
-  GraduationCap, Inbox, KeyRound, Languages, LayoutDashboard, LibraryBig, Mic, MonitorPlay,
+  GraduationCap, Handshake, Inbox, KeyRound, Languages, LayoutDashboard, LibraryBig, Mic, MonitorPlay,
   Music, Newspaper, Radio, Receipt, Search, Server, ShieldCheck, ShoppingBag, Sparkles, Star, Sticker,
   Tag, Ticket, TrendingUp, UserX, Users, UsersRound, Zap,
 } from 'lucide-react';
@@ -78,6 +78,7 @@ export const ADMIN_NAV: AdminNavGroup[] = [
     items: [
       { label: 'Revenue', vi: 'Doanh thu', href: '/admin/commerce', icon: TrendingUp, keywords: 'thương mại doanh thu đối soát chuyển khoản duyệt key ngân hàng' },
       { label: 'Project requests', vi: 'Yêu cầu dự án', href: '/admin/project-requests', icon: ClipboardList, keywords: 'phiếu yêu cầu dự án khách hàng nhận dự án nhập vai ct work quy trình' },
+      { label: 'CRM', vi: 'CRM', href: '/admin/crm', icon: Handshake, keywords: 'crm pipeline deal khách hàng tiềm năng lead đề xuất báo giá go no-go người liên hệ tổ chức kanban dự báo' },
       { label: 'Shop', vi: 'Cửa hàng', href: '/admin/shop', icon: ShoppingBag, keywords: 'quản lý shop sản phẩm' },
       { label: 'Orders', vi: 'Đơn hàng', href: '/admin/orders', icon: Receipt, keywords: 'đơn hàng quản lý đơn hàng' },
       { label: 'Course orders', vi: 'Đơn khoá học', href: '/admin/course-orders', icon: CreditCard, keywords: 'đơn hàng khoá học vnpay' },

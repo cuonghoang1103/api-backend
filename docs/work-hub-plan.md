@@ -16,8 +16,9 @@ Một công cụ quản lý dự án dùng thật lâu dài cho ba loại dự �
 Tiêu chuẩn: tính năng tương đương **Jira Premium + plugin kiểm thử Xray** ở những phần
 các loại dự án trên thật sự dùng, cộng một **trợ lý AI** biết quản lý, nhắc việc và gợi ý.
 
-**Không làm** (ngoài phạm vi, ghi rõ để khỏi trôi): chợ plugin, Service Desk/SLA kiểu
-Jira Service Management, tự lưu trữ trên máy chủ khách (on-premise), SSO SAML doanh nghiệp.
+**Không làm** (ngoài phạm vi, ghi rõ để khỏi trôi): chợ plugin, tự lưu trữ trên máy chủ khách (on-premise),
+SSO SAML doanh nghiệp. ~~Service Desk/SLA kiểu Jira Service Management~~ — **đã làm ở Đợt S5a** (04/10/2026, người
+dùng đổi ý: cần cho dự án nhận ngoài có hợp đồng bảo hành/vận hành) — xem mục "Đợt S5a".
 
 ## 2. Đối chiếu tính năng với Jira trả phí
 
@@ -397,6 +398,8 @@ work_issues, 7 bảng); mọi FK trên/vào `work_issues` + FK SET NULL của b�
 - [ ] Giao diện cho S1 (phiên làm lại giao diện /work) · L
 - [x] Đợt S2a: tài liệu kiểu Confluence (xem mục dưới) · [x] Đợt S2b: cổng khách duyệt (xem mục dưới) · [x] Đợt S3a: portfolio + workload · [x] Đợt S3b: CR + RAID,
       họp (xem mục dưới) · [x] Đợt S4: tài chính, báo cáo khách tự động, thuyết trình, xuất trọn dự án (xem mục dưới)
+      · [x] Đợt S5a: service desk & SLA (xem mục dưới)
+      · [x] Đợt S5c: hoàn thiện — mô-đun mới cho dự án cũ, thùng rác Docs, nhập lại dự án từ ZIP, AI đọc/ghi Docs (xem mục dưới)
 
 ### Đợt S2a — tài liệu dự án kiểu Confluence (04/10/2026, mô-đun `docs`)
 
@@ -617,6 +620,178 @@ DEFERRABLE INITIALLY DEFERRED; cột người KHÔNG FK tới users (số liệu
   Work; E2E Playwright (backend :3171 + Next :3170): đặt đơn giá → nộp/duyệt tuần → ngân sách vs thực tế → UAT ⇒ mốc DUE → báo cáo tuần xem
   trước/in/gửi → khách đọc trong cổng → steering → present ←/→/Esc → export ZIP tải về mở được; 0 lỗi JS, 0 tràn ngang 390px; ảnh
   `~/Desktop/ct-work-ui/s4/`.
+
+### Đợt S5a — service desk & SLA (04/10/2026, mô-đun `serviceDesk`)
+
+Chuẩn tham chiếu: ITIL 4 (Incident / Service request / Problem management, ưu tiên = Impact × Urgency), Jira Service
+Management (request types, SLA goals theo lịch, pause conditions, queues, CSAT). Bật mặc định cho dự án CLIENT MỚI
+(`STUDIO_MODULES_S5A` trong `defaultModulesFor`); dự án cũ (không có khoá) ⇒ 403 `MODULE_DISABLED`, yêu cầu gửi qua cổng
+cũ không có SLA. Migration `20261004230000_work_s5a` chỉ THÊM 4 bảng (`work_desk_settings`, `work_desk_tickets`,
+`work_sla_events`, `work_desk_problems`), FK mới DEFERRABLE INITIALLY DEFERRED, cột người không FK tới users. Luật thuần
+`slaRules.ts` (test `serviceDesk.test.ts`), DB ở `serviceDesk.service.ts`, tuyến `src/routes/work.desk.routes.ts` (một dòng
+`router.use` cuối work.routes.ts — qua chốt cổng khách; khách chỉ `/portal/desk/**`, đã nằm trong danh sách trắng `/portal/**`).
+Quyền MỘT hàm `permissions.deskAccess` (= luật "người của đội" của governanceAccess: khách/GUEST trừ TEACHER ⇒ 403
+`WORK_INTERNAL_ONLY`; VIEWER/TEACHER xem; MEMBER+ xử lý; ADMIN cấu hình).
+
+- [x] S5a.A Loại yêu cầu theo dự án: Incident · Service request · Question · Change (Change ⇒ CR nháp S3b khi mô-đun
+      changeRequests bật, `sourceIssueId` = thẻ). Mỗi loại: tên/mô tả cho khách, ẩn/hiện, form ≤ 8 trường (text/textarea/date,
+      bắt buộc), tác động + khẩn cấp mặc định, có hỏi khách tác động hay không · M
+- [x] S5a.B Ưu tiên P1–P4 = ma trận Impact × Urgency (3×3, mặc định ITIL rút 4 mức, cấu hình được) ở CỘT RIÊNG
+      `work_desk_tickets.priority` — TÁCH khỏi `work_issues.priority` (1–5): ánh xạ hai chiều thì mọi đường đổi ưu tiên cũ
+      (board, hàng loạt, luật tự động, AI, nhập Jira) âm thầm đổi mục tiêu SLA. Lúc tạo qua desk chỉ GIEO một lần P1→1 … P4→4 · S
+- [x] S5a.C SLA: first response + resolution theo P, lịch làm việc (ngày làm, giờ, ngày lễ — nút thêm lễ VN cố định dương lịch;
+      Tết/Giỗ Tổ tự thêm), múi giờ IANA, mỗi mức chọn giờ làm hoặc 24/7. Đồng hồ = hàm thuần trên dòng sự kiện
+      (START/PAUSE/RESUME/FIRST_RESPONSE/RESOLVE/REOPEN/PRIORITY) ⇒ tính lại chính xác bất kỳ lúc nào. Luật: chờ khách tạm
+      dừng (nút, hoặc vào trạng thái cấu hình — khách trả lời ⇒ chạy tiếp + thẻ về trạng thái trước nếu luồng cho phép);
+      first response = bình luận PUBLIC đầu tiên của đội (dự án không bật cổng: bình luận đầu tiên của người khác người yêu cầu;
+      ghi chú nội bộ + AI không tính) hoặc vào trạng thái cấu hình; giải quyết trước khi trả lời ⇒ FR dừng ở đó; mở lại ⇒ cộng
+      dồn; ĐỔI P ⇒ mục tiêu của P MỚI áp cho toàn bộ thời gian TỪ LÚC TẠO. AT_RISK ≥ 75% (cấu hình 10–99), BREACHED > mục tiêu.
+      Móc thẳng (await, sau commit) ở `applyIssueChange` (đổi trạng thái) + `issues.addComment`. Cron `*/5` `runSlaChecks` (không
+      LLM): cảnh báo WORK_ALERT tới người làm → trưởng bộ phận → ADMIN dự án, mỗi mốc ĐÚNG MỘT LẦN (`frAlert/resAlert` chỉ tăng,
+      giành mức bằng UPDATE có điều kiện; đổi P mới hạ) · L
+- [x] S5a.D Hàng đợi `/desk`: All open · Unassigned · My open · At risk · Breached · Waiting for customer · By team · Resolved; lọc
+      loại/P/tìm, sắp theo SLA (vi phạm trước, rồi gần hạn) / P / mới / cập nhật; hai đồng hồ đếm ngược (đếm trơn chỉ khi chắc chạy
+      liên tục tới hạn, tải lại 30 giây); bảng ≥ lg, thẻ trên điện thoại · M
+- [x] S5a.E Cổng khách: form theo loại + "Who is affected? / How urgent?" bằng chữ dễ hiểu (hệ thống ra P, loại không hỏi ⇒ mặc
+      định, khách không tự nâng được), xem trước "We'll respond within …"; yêu cầu trong cổng chỉ thấy MỤC TIÊU + đã trả lời/đã
+      giải quyết (không thời gian đã chạy, vi phạm, sự kiện, Problem); đường cổng cũ `/portal/requests` cũng gắn SLA khi mô-đun
+      bật. Đóng ⇒ mời CSAT 1–5 + bình luận (email + chuông tới ĐÚNG người gửi, loại thư `csat` trong portalNotify), chỉ người gửi,
+      chỉ khi đã giải quyết, một lần (403 `WORK_CSAT_NOT_REQUESTER` / 409). **Tiếp nhận qua email: BỎ** — repo chưa có đường nhận
+      email đến (không IMAP/webhook inbound) · M
+- [x] S5a.F Problem (`work_desk_problems`, PRB-n): gom nhiều Incident, nguyên nhân gốc, cách tạm khắc phục, trạng thái; "Create
+      postmortem" ⇒ trang Docs (S2a, INTERNAL) từ mẫu `bao-cao-su-co-postmortem.md`: điền bảng đầu (mã, mức, bắt đầu, phát hiện,
+      khắc phục, thời gian ảnh hưởng, người chỉ huy) + dòng thời gian từ sự kiện SLA của các incident (kèm thời điểm vi phạm do
+      slaRules tính) theo múi giờ dự án · M
+- [x] S5a.G Báo cáo SLA: % đạt FR / resolution theo P × tháng (chỉ mục tiêu đã có kết quả), MTTR (giờ đồng hồ), số vi phạm, CSAT TB,
+      vi phạm gần đây, phản hồi khách; xuất .xlsx (`xlsxWorkbook` có sẵn). Báo cáo tuần khách S4: mục "Support requests" chỉ số tổng
+      (khách: chỉ yêu cầu đã chia sẻ). Portfolio RAG: P1 đang mở đã vi phạm ⇒ ĐỎ `SLA_P1_BREACHED`; tháng này đạt < 90% ⇒ VÀNG
+      `SLA_BELOW_TARGET` (chỉ người của đội). Xuất trọn dự án thêm 4 bảng · M
+- [x] S5a.H Giao diện: sidebar "Service desk", `/desk` (Queues · Problems · Reports · Settings), khu "Service desk" trong chi tiết thẻ
+      (P, impact/urgency, hai đồng hồ, chờ khách/Resume, người yêu cầu, form, Problem/CR, CSAT, SLA log, "Add to service desk"),
+      cổng khách (form mới + bảng mục tiêu + CSAT), module card; help "Service desk & SLA", "Priorities (P1–P4)", "CSAT" (song ngữ);
+      tuyến app desktop `desk` · L
+- **Nghiệm thu 04/10/2026:** `serviceDesk.test.ts` 29 phép (qua đêm, cuối tuần, Chủ nhật, ngày lễ, hạn đúng mép giờ, 24/7, múi
+  giờ Tokyo, đổi giờ mùa hè New York, lịch hỏng không treo, ma trận, tạm dừng nhiều lần + PAUSE trùng, chờ khách trước khi trả
+  lời, giải quyết trước khi trả lời + mở lại cộng dồn, đổi P lên/xuống/tương lai, cảnh báo một lần, ô báo cáo, chữ cho khách,
+  loại yêu cầu, file không nạp LLM) trong `npm test`; `work.s5a.db.test.ts` 11 test DB (dự án cũ MODULE_DISABLED + yêu cầu cổng cũ
+  không SLA, khách CLIENT_PORTAL_ONLY + bản cổng không lộ P/thời gian/sự kiện/ghi chú, Incident HIGH×HIGH ⇒ P1, ghi chú nội bộ không
+  tính first response, chờ khách nút + trạng thái cấu hình ⇒ PAUSE/RESUME + thẻ về trạng thái trước, đổi P ⇒ vi phạm ngay, cảnh báo
+  AT_RISK/BREACHED đúng một lần, CSAT chỉ người gửi + một lần, Problem + postmortem có dòng thời gian, báo cáo + xlsx, portfolio đỏ,
+  báo cáo tuần khách chỉ số tổng, đường cổng cũ gắn SLA); 208/208 test DB CT Work; E2E Playwright (backend :3181 + Next :3180, SLA
+  đặt 24/7 vì hôm chạy là Chủ nhật): khách gửi Incident tác động cao ⇒ P1 + "We'll respond within 30 minutes" ⇒ hàng đợi (vi phạm
+  đứng đầu, đồng hồ đếm ngược) ⇒ "Reply to client" ⇒ first response Met ⇒ Waiting for customer ⇒ Paused ⇒ khách trả lời ⇒ RESUME ⇒
+  đóng ⇒ CSAT 4★ ⇒ Problem 2 incident ⇒ "Create postmortem" ⇒ trang Docs có dòng thời gian; 26 kiểm, 0 lỗi JS, 0 tràn ngang 390px;
+  ảnh `~/Desktop/ct-work-ui/s5a/`.
+
+### Đợt S5b — CRM nhẹ cho studio (05/10/2026, khu ADMIN `/admin/crm`, KHÔNG phải mô-đun CT Work)
+
+Chuẩn tham chiếu: pipeline B2B kiểu Pipedrive/HubSpot ở mức tối giản. Chỉ ADMIN (`requireAdmin('ROLE_ADMIN')` ⇒ qua MFA step-up
+nếu bật). Migration viết tay `20261005010000_crm_s5b` chỉ THÊM 6 bảng (`crm_organizations`, `crm_contacts`, `crm_deals`,
+`crm_deal_stage_changes`, `crm_activities`, `crm_proposals`) + back-relation `ProjectRequest.crmDeal`, `User.crmDealsOwned`.
+Luật thuần `src/services/crm/rules.ts` (test `rules.test.ts`), DB `crm.service.ts`, tuyến `src/routes/crm.routes.ts`
+(`/api/v1/admin/crm/**` + công khai `/api/v1/proposals/:token`), giao diện `frontend/src/app/admin/crm/page.tsx` +
+`frontend/src/components/admin/crm/*` + trang khách `frontend/src/app/proposal/[token]/` (API `frontend/src/lib/crm-api.ts`).
+
+- [x] S5b.A Mô hình: Organization (tên, ngành, quy mô, website, MST tuỳ chọn, ghi chú) · Contact (org tuỳ chọn, chức vụ, email
+      chữ thường, SĐT, kênh ưa thích, **đồng ý + thời điểm + nguồn bằng chứng** — thời điểm do server ghi) · Deal (gói từ
+      `packages.ts`, giá trị ƯỚC TÍNH do người nhập + tiền tệ, xác suất ghi đè hoặc mặc định theo giai đoạn 10/20/40/60/80/100/0,
+      ngày dự kiến chốt, người phụ trách = admin, nguồn, lý do thua, NDA đã ký + ngày + tệp R2 riêng tư) · Activity
+      (CALL/EMAIL/MEETING/NOTE/TASK, hạn, xong) · Proposal (phiên bản, Markdown, DRAFT/SENT/ACCEPTED/REJECTED, token có hạn) ·
+      lịch sử giai đoạn (nguồn của báo cáo phễu + chu kỳ) · M
+- [x] S5b.B Luật giai đoạn (`checkStageChange`): kéo được nhảy cóc/lùi; LOST bắt buộc lý do; vào DISCOVERY/PROPOSAL/NEGOTIATION/WON
+      cần bảng go/no-go = GO hoặc GO có điều kiện (NO_GO ⇒ chỉ còn LOST); deal tạo tay chỉ ở LEAD/QUALIFIED (không lách cổng);
+      phiếu đã PROJECT_CREATED ⇒ deal khoá ở WON. Bảng đánh giá = 10 tiêu chí của `checklist-danh-gia-phu-hop.md` (0/1/2,
+      7·8·9 bằng 0 ⇒ NO_GO bắt buộc, ≥15 GO, 10–14 có điều kiện — phải ghi điều kiện, <10 NO_GO; GO cần chấm đủ 10) · M
+- [x] S5b.C **Đồng bộ phiếu ↔ deal** (ghi rõ luật):
+      · phiếu mới (form công khai + phiếu nhập vai) ⇒ `ensureDealForRequest`: ghép Contact theo EMAIL (chưa ẩn danh, không phân
+        biệt hoa thường; chỉ ĐIỀN chỗ trống, đồng ý mới nhất thắng), Org theo TÊN (không phân biệt hoa thường), Deal LEAD gắn
+        `projectRequestId` (UNIQUE ⇒ idempotent), gói từ `#goi=` của `source`. Hỏng ⇒ chỉ log, phiếu không rớt;
+      · deal ⇒ phiếu: LEAD→NEW · QUALIFIED→QUALIFYING · DISCOVERY/PROPOSAL/NEGOTIATION/WON→ACCEPTED · LOST→DECLINED; phiếu
+        PROJECT_CREATED không đổi nữa;
+      · phiếu ⇒ deal (admin đổi ở /admin/project-requests) CHỈ ĐẨY TỚI: QUALIFYING ⇒ LEAD→QUALIFIED; ACCEPTED ⇒ ≤QUALIFIED→DISCOVERY;
+        DECLINED ⇒ deal mở → LOST (lý do tự ghi); PROJECT_CREATED ⇒ WON. Đường này bỏ qua cổng go/no-go (admin đã quyết ở trang phiếu);
+      · deal WON ⇒ "Create CT Work project" tái dùng `createWorkProjectFromRequest`; deal không có phiếu ⇒ tạo PHIẾU NỘI BỘ
+        (`source = crm:deal-<id>`, loại sản phẩm theo gói) rồi đặt ACCEPTED. Liên kết hai chiều: deal ⇒ phiếu ⇒ dự án; chi tiết
+        phiếu trả `crmDeal` (link "Deal CRM #id" ở /admin/project-requests) · M
+- [x] S5b.D Đề xuất: bản nháp ghép `de-xuat-giai-phap.md` + `bao-gia.md` (bỏ khối hướng dẫn nội bộ đầu mẫu, điền bảng đầu: mã
+      phiếu/khách/phiên bản/ngày); sửa được khi DRAFT; "Đóng băng & lấy link" ⇒ SHA-256 (dealId+version+title+content, CRLF chuẩn
+      hoá) + token 24 byte, hạn 1–90 ngày (mặc định 30), thu hồi link các bản SENT cũ, đẩy deal tới PROPOSAL; cần go/no-go = GO.
+      Khách `/proposal/[token]` (noindex, no-referrer, song ngữ khung, sáng/tối, 390px): nhập tên + "đã đọc phiên bản N" ⇒
+      Accept/Decline gửi kèm hash; server so hash lúc gửi VÀ hash tính lại (409 `PROPOSAL_CHANGED`), giành bằng UPDATE có điều
+      kiện (409 `PROPOSAL_ALREADY_RESPONDED`), ghi thời điểm + IP (mục phải XFF) + UA + tên; Accept ⇒ deal NEGOTIATION + hộp thư
+      admin. Hết hạn 410, thu hồi 404; bộ đếm Redis theo IP (xem 120/15', trả lời 10/15') · M
+- [x] S5b.E Nhắc việc (cron, KHÔNG LLM): `*/15` TASK tới hạn chưa xong ⇒ `baoAdmin` đúng một lần mỗi hạn (giành `notifiedAt`
+      bằng UPDATE có điều kiện; đổi hạn ⇒ báo lại); 08:30 VN tóm tắt deal "stale" (mở, > 14 ngày không hoạt động — cờ tính lúc đọc,
+      `lastActivityAt` chạm khi có hoạt động/đổi giai đoạn/đề xuất) · S
+- [x] S5b.F Dữ liệu cá nhân (Luật BVDLCN 91/2025/QH15 + NĐ 356/2025/NĐ-CP): "Export JSON" một người (hồ sơ, org, deal + đề xuất +
+      lịch sử, hoạt động, phiếu cùng email); "Anonymize / delete" (gõ XOA): xoá PII, đồng ý = false, nội dung hoạt động gắn người đó,
+      tiêu đề deal không có org; IP/UA của đề xuất CHƯA chấp thuận; phiếu chưa thành dự án XOÁ CỨNG; GIỮ số liệu deal, phiếu đã thành
+      dự án và đề xuất đã chấp thuận (bằng chứng giao kết — báo lại cho admin). API admin `Cache-Control: no-store` · M
+- [x] S5b.G Giao diện `/admin/crm` (mục "CRM" nhóm Commerce): Pipeline Kanban kéo thả (dnd-kit, chạm giữ 250 ms) với tổng + trọng số
+      mỗi cột tách theo tiền tệ; Deals (tìm + lọc giai đoạn/người/gói/nhập vai/stale); Contacts; Organizations; Tasks; Reports (tỷ lệ
+      chuyển đổi theo bậc cao nhất đã chạm, win rate, chu kỳ TB tạo→thắng, nguồn lead + gói, dự báo tháng Σ giá trị × xác suất,
+      không quy đổi tiền tệ); ngăn kéo deal (Tổng quan · Hoạt động · Go/no-go · Đề xuất, NDA, liên kết phiếu/dự án); "Nhập từ phiếu"
+      tạo deal cho phiếu cũ. App desktop KHÔNG nhúng /admin hay /about (`dinhTuyenWeb.ts`) ⇒ không thêm tuyến · L
+
+### Đợt S5c — hoàn thiện (05/10/2026): mô-đun mới cho dự án cũ · thùng rác Docs · nhập lại dự án · AI đọc/ghi Docs
+
+Tuyến ở `src/routes/work.s5c.routes.ts` (một dòng `router.use` cuối work.routes.ts — qua chốt cổng khách; không thêm mẫu tuyến
+khách nào ⇒ khách bị cách ly gọi ⇒ 403 `CLIENT_PORTAL_ONLY`). Migration viết tay `20261005030000_work_s5c` chỉ THÊM 1 bảng
+`work_project_imports` (không FK). Luật thuần trong `src/services/work/s5c.test.ts` (16 phép, trong `npm test`).
+
+- [x] S5c.A Mô-đun mới cho dự án cũ (`moduleUpgrade.ts`): `GET /projects/:pid/studio/available` (mô-đun + mô tả + `recommended`
+      theo loại + `undecided`) và `POST /projects/:pid/studio/apply-defaults` (ADMIN dự án — `studio.configure`; audit `project.studio`).
+      Chỉ áp mặc định theo loại cho khoá **CHƯA QUYẾT**: khoá thiếu trong `settings.modules`, HOẶC `false` chỉ là chỗ giữ (dự án tạo
+      trước ngày mô-đun có tính năng — `MODULE_SINCE`, vì S1 `noModules()` ghi sẵn docs/clientPortal/… = false) mà chưa ai bật/tắt tay
+      (không dòng audit `project.studio` nào nhắc "<khoá> on|off"). Khoá đã bật, khoá ai đó bật/tắt tay, khoá false của dự án tạo SAU
+      ngày mô-đun ra đời ⇒ giữ nguyên. Bấm lần hai không ghi thêm. Bật cổng khách ⇒ đuổi khách khỏi phòng realtime như `updateStudioConfig`.
+      UI: khối "Available modules" trên Settings → Project type & modules (mô-đun đang tắt + mô tả, nhãn Recommended / New since this
+      project was created, nút "Enable all recommended for this project type" chỉ ADMIN) · M
+- [x] S5c.B Thùng rác Docs (`pageTrash.service.ts`): `GET /projects/:pid/trash/pages`, `POST …/trash/pages/:num/restore`,
+      `DELETE …/trash/pages/:num`. Một dòng cho mỗi LẦN xoá (gốc = cha null / còn sống / bị xoá lúc khác) + số trang con đi kèm; xem =
+      người sửa được tài liệu (docs bật); khôi phục = chủ trang hoặc ADMIN, đưa lại CẢ CÂY CON cùng `deletedAt`, cha còn ⇒ giữ cha + vị
+      trí, cha đã xoá/không còn ⇒ lên gốc cuối danh sách; xoá vĩnh viễn CHỈ ADMIN, trang có phê duyệt đã ký (APPROVED/REJECTED) ⇒ 409
+      `WORK_PAGE_HAS_SIGNOFF` (chữ ký là bằng chứng). Audit `page.restore` / `page.purge`. **Tự dọn sau N ngày: KHÔNG** — thẻ đã xoá cũng
+      không có cơ chế đó (trash.service chỉ xoá tay), giữ một luật. UI: Settings → Trash có tab Issues | Docs · M
+- [x] S5c.C Nhập lại dự án từ ZIP `formatVersion: 1` (`projectImport.service.ts`): `POST /workspaces/:wsId/imports` (multipart `file`
+      ≤ 200 MB, multer ghi tạm os.tmpdir ⇒ kiểm + chạy thử ⇒ đẩy ZIP lên R2 `work-imports/<ws>/<uuid>.zip`, tệp tạm xoá trong finally;
+      KHÔNG giữ trên đĩa VPS), `GET …/imports`, `GET …/imports/:id`, `POST …/imports/:id/start { key, name }` (chạy nền, tiến trình),
+      `DELETE …/imports/:id`. Chỉ OWNER/ADMIN không gian. Kiểm toàn vẹn: đúng ZIP, có manifest, đúng format + formatVersion (cao hơn ⇒
+      "made by a newer version"), số dòng từng data/*.json khớp manifest, SHA-256 khớp `checksums` (bản xuất từ S5c có — S4 sửa nhỏ ở
+      `projectExport.service.ts`: thêm `checksums`, `users[].emailHash` + `userHashSalt`, vẫn formatVersion 1). Chạy thử trả số dòng từng
+      bảng, ánh xạ người, bộ phận dùng lại/tạo mới, tệp có/thiếu nội dung, cảnh báo. Bộ máy nhập CHUNG đọc `Prisma.dmmf` (không chép tay
+      cột): FK tới bảng đã nhập ⇒ id mới; tới bảng nhập sau / chính nó ⇒ để null rồi điền lại; người ⇒ thành viên không gian đích CÙNG
+      EMAIL (băm có muối — tệp không chứa email); bản xuất cũ không băm ⇒ chỉ khớp CÙNG tài khoản (trùng id + username). Không khớp ⇒ để
+      trống + "Imported from <tên>" (bình luận: dòng đầu thân; thẻ: sự kiện lịch sử `imported`); cột bắt buộc ⇒ bỏ dòng (thành viên, giờ
+      làm, cảm xúc, người theo dõi, người dự họp, chữ ký phê duyệt), bộ lọc/dashboard ⇒ chủ = người nhập, cột người không-FK bắt buộc
+      (timesheet) ⇒ id ÂM của người gốc. Thẻ giữ số; bộ phận ánh xạ theo MÃ, thiếu thì tạo; tệp có nội dung ⇒ tải lại R2 `work/<pid>/<issue>/…`,
+      không ⇒ liên kết hỏng `work-import-missing/…`. Không nhập: GitHub/GitLab, webhook chat, link công khai (bí mật đã xoá), hội thoại AI,
+      nhật ký luật, audit cũ, bí danh mã thẻ; luật tự động nhập TẮT; phê duyệt đang chờ ⇒ CANCELLED. Dự án ẩn (deletedAt) trong lúc nhập
+      (Trash không liệt kê/khôi phục nó); lỗi ⇒ xoá cứng dự án dở + bộ phận vừa tạo. Tối đa 1 lần nhập/không gian, 2/toàn hệ thống; bản
+      tải lên không dùng sau 24 giờ ⇒ xoá ZIP (EXPIRED, quét khi gọi API — không thêm cron). UI: Workspace settings → Import project · L
+- [x] S5c.D AI đọc/ghi Docs (`aiDocs.ts` + ai.service): tool ĐỌC `search_pages` / `read_page` chạy ngay trong vòng hỏi (model trả
+      `reads` ⇒ mã đọc qua `pages.searchPages` / `pages.getPage` ĐÚNG quyền người hỏi ⇒ hỏi lại, tối đa 2 vòng); mục lục trang trong ngữ
+      cảnh cũng lọc theo `docAccess` (GUEST/CLIENT chỉ thấy trang CLIENT; trang INTERNAL ⇒ "not found or not visible to you"). Tool GHI
+      `draft_page` / `update_page_section` chỉ là ĐỀ XUẤT; Apply ⇒ `createPage` (phiên bản CREATE) / `updatePage` + `versionNote` "AI
+      suggestion applied: …" (phiên bản MANUAL riêng, mục được thay theo tiêu đề — `docSections.ts`). Việc một chạm `draft_srs` (SRS từ
+      requirement/story/epic + khung mẫu `srs`, chỉ giữ ĐÚNG một draft_page) và `summarize_page` (`pageNumber`, không đề xuất). Khách cổng:
+      tuyến /ai/** ngoài danh sách trắng ⇒ CLIENT_PORTAL_ONLY; docs tắt ⇒ không mời đọc/ghi, quick ⇒ MODULE_DISABLED. UI: thẻ "Create
+      document" / "Update document section" trong khung AI, "Summarize with AI" (menu ⋯ của trang), "Draft SRS with AI" (trang chủ Docs +
+      công cụ trong khung AI). Test dùng model giả `_setAskForTests` · M
+- [x] S5c.E Nhãn pháp lý cũ "NĐ 13/2023" ⇒ Luật BVDLCN 91/2025/QH15 + NĐ 356/2025/NĐ-CP (thay NĐ 13 từ 01/01/2026) ở UI/pháp lý sản
+      phẩm: `/admin/project-requests` (nhãn SENSITIVE), `/chinh-sach-bao-mat` (mô tả + 2 đoạn), `/settings/account`, ghi chú trong bản
+      xuất dữ liệu cá nhân (`dataRights.service.ts`) + chú thích mã liên quan. KHÔNG sửa nội dung khoá học/lộ trình (roadmapData.ts,
+      roadmap.seed.*) — đó là bài học về luật, không phải căn cứ pháp lý của sản phẩm · S
+- [x] Help: "Import a project export", "Docs: trash and the AI assistant" (song ngữ); "Project export" bỏ câu "chưa có nhập lại".
+- **Nghiệm thu 05/10/2026:** `s5c.test.ts` 16 phép trong `npm test`; `work.s5c.db.test.ts` 5 test DB (dự án cũ y nguyên tới khi bấm,
+  khoá đã quyết giữ nguyên, MEMBER 403, bấm lại không ghi; thùng rác Docs khôi phục cây / về gốc / quyền / chữ ký 409; xuất ⇒ nhập
+  ⇒ số dòng MỌI bảng nhập được khớp, giữ số thẻ/cha/sprint/version/bộ phận/giai đoạn, tệp tải lại + liên kết hỏng; không gian khác ⇒
+  "Imported from …"; ZIP không phải ZIP / formatVersion 9 / checksum lệch ⇒ 400 rõ ràng; MEMBER/GUEST 403; mã trùng 409; AI: GUEST không
+  đọc trang INTERNAL qua mục lục/read_page/search_pages/summarize_page, đề xuất không tự áp dụng, Apply ⇒ phiên bản MANUAL, draft_srs chỉ
+  giữ draft_page, khách CLIENT_PORTAL_ONLY); 213/213 test DB CT Work; E2E Playwright (backend :3201 + Next :3200): bật mô-đun cho dự án
+  cũ → xoá trang có 2 con → Trash/Docs → khôi phục cả cây → xuất → nhập thành ACMEB (đối chiếu: mọi bảng khớp, riêng pageVersions lệch
+  đúng 1 bản do bước AI áp dụng SAU khi xuất) → ZIP hỏng báo lỗi → đề xuất AI "Update document section" → Apply ⇒ v1→v2 → "Summarize
+  with AI" gọi cổng LLM thật (200); 0 lỗi JS, 0 tràn ngang 390px; ảnh `~/Desktop/ct-work-ui/s5c/`.
 
 ## 10. Rủi ro
 

@@ -55,7 +55,7 @@ export type ProjectKind = (typeof PROJECT_KINDS)[number];
  * Mô-đun bật/tắt theo dự án. Đợt S1 dùng thật 4 mô-đun đầu; các khoá sau CHỪA
  * CHỖ cho đợt 2–4 (lưu được, chưa có route nào đọc).
  */
-export const STUDIO_MODULES = ['teams', 'stages', 'approvals', 'handoffs', 'docs', 'clientPortal', 'changeRequests', 'raid', 'meetings', 'finance', 'reports'] as const;
+export const STUDIO_MODULES = ['teams', 'stages', 'approvals', 'handoffs', 'docs', 'clientPortal', 'changeRequests', 'raid', 'meetings', 'finance', 'reports', 'serviceDesk'] as const;
 export type StudioModule = (typeof STUDIO_MODULES)[number];
 /** Mô-đun đã có tính năng thật (đợt S1). */
 export const STUDIO_MODULES_S1: readonly StudioModule[] = ['teams', 'stages', 'approvals', 'handoffs'];
@@ -167,3 +167,11 @@ export const PAYMENT_TRIGGERS = ['MANUAL', 'UAT', 'STAGE_GATE'] as const;
 export type PaymentTrigger = (typeof PAYMENT_TRIGGERS)[number];
 export const REPORT_KINDS = ['CLIENT_WEEKLY', 'STEERING'] as const;
 export type ReportKind = (typeof REPORT_KINDS)[number];
+
+// ─── Service desk & SLA (đợt S5a, 04/10/2026) ────────────────────
+
+/**
+ * Mô-đun có tính năng thật từ đợt S5a: `serviceDesk` — loại yêu cầu, ưu tiên P1–P4 (Impact × Urgency), SLA
+ * theo lịch làm việc, hàng đợi, CSAT, Problem + postmortem. Luật thuần ở slaRules.ts.
+ */
+export const STUDIO_MODULES_S5A: readonly StudioModule[] = ['serviceDesk'];

@@ -15,7 +15,9 @@
  * Không xuất: lời mời đang chờ (email + mã băm), khoá chỉnh sửa cá nhân, hội thoại AI riêng tư của người
  * khác (visibility PRIVATE). Người dùng chỉ có trường công khai (không email — common.PUBLIC_USER).
  *
- * Chưa có NHẬP LẠI (restore) — đợt sau; `formatVersion` + bảng tách riêng để nhập được về sau.
+ * NHẬP LẠI (đợt S5c): projectImport.service.ts — tạo dự án MỚI từ tệp này. Từ S5c manifest có thêm `checksums`
+ * (SHA-256 từng tệp data/*.json + attachments/manifest.json) và `users[].emailHash` (+ `userHashSalt`) — vẫn
+ * `formatVersion: 1` (chỉ thêm trường tuỳ chọn; tệp cũ thiếu chúng vẫn nhập được).
  *
  * LƯU TRỮ = Cloudflare R2, KHÔNG BAO GIỜ đĩa VPS (VPS từng chết vì đầy đĩa — Postgres chung đĩa). ZIP dựng
  * THEO LUỒNG (JSZip generateNodeStream, tệp đính kèm đọc lười từ R2 từng cái một) ra MỘT tệp tạm trong
@@ -205,6 +207,11 @@ export const EXPORT_TABLES: Array<[name: string, load: Loader]> = [
   ['paymentMilestones', (pid) => prisma.workPaymentMilestone.findMany({ where: { projectId: pid } }) as unknown as Promise<Rows>],
   ['reportSchedule', (pid) => prisma.workReportSchedule.findMany({ where: { projectId: pid } }) as unknown as Promise<Rows>],
   ['clientReports', (pid) => prisma.workClientReport.findMany({ where: { projectId: pid } }) as unknown as Promise<Rows>],
+  // Đợt S5a: service desk & SLA.
+  ['deskSettings', (pid) => prisma.workDeskSettings.findMany({ where: { projectId: pid } }) as unknown as Promise<Rows>],
+  ['deskProblems', (pid) => prisma.workDeskProblem.findMany({ where: { projectId: pid } }) as unknown as Promise<Rows>],
+  ['deskTickets', (_pid, c) => prisma.workDeskTicket.findMany({ where: byIssue(c) }) as unknown as Promise<Rows>],
+  ['slaEvents', (_pid, c) => prisma.workSlaEvent.findMany({ where: { ticket: byIssue(c) }, orderBy: { id: 'asc' } }) as unknown as Promise<Rows>],
   ['auditLog', (pid) => prisma.workAuditLog.findMany({ where: { projectId: pid }, orderBy: { id: 'asc' } }) as unknown as Promise<Rows>],
 ];
 
@@ -215,7 +222,7 @@ function redact(table: string, rows: Rows): Rows {
 }
 
 /** Mọi id người xuất hiện trong dữ liệu (cột *Id / *_id trỏ tới người) ⇒ bảng users công khai. */
-const USER_COLS = /^(userId|assigneeId|reporterId|leadId|authorId|actorId|uploaderId|createdById|ownerId|requesterId|approverId|organizerId|invitedById|decidedById|lastEditedById|fromUserId|toUserId|updatedById|reopenedById|requestedById)$/;
+const USER_COLS = /^(userId|assigneeId|reporterId|leadId|authorId|actorId|uploaderId|createdById|ownerId|requesterId|approverId|organizerId|invitedById|decidedById|lastEditedById|fromUserId|toUserId|updatedById|reopenedById|requestedById|firstResponseById)$/;
 
 function collectUserIds(tables: Record<string, Rows>): number[] {
   const ids = new Set<number>();
@@ -248,6 +255,14 @@ function lazyStream(open: () => Promise<Readable>): Readable {
   return out;
 }
 
+/** Đợt S5c: băm email để ánh xạ người khi nhập lại (dùng chung với projectImport.service). */
+export function emailHash(salt: string, email: string): string {
+  return crypto.createHash('sha256').update(`${salt}:${email.trim().toLowerCase()}`).digest('hex');
+}
+export const sha256Hex = (buf: Buffer) => crypto.createHash('sha256').update(buf).digest('hex');
+/** Kho đang dùng (R2 hoặc kho giả của test) — nhập lại (S5c) dùng CHUNG kho với xuất. */
+export const exportStore = (): ExportStore => store;
+
 // ─── Chạy một lần xuất ────────────────────────────────────────────
 
 async function progress(id: number, progressPct: number, stage: string) {
@@ -275,7 +290,11 @@ export async function runExport(exportId: number): Promise<void> {
       i += 1;
       if (i % 6 === 0) await progress(exportId, 5 + (i / EXPORT_TABLES.length) * 55, `Reading ${name}`);
     }
-    tables.users = await prisma.user.findMany({ where: { id: { in: collectUserIds(tables) } }, select: PUBLIC_USER }) as unknown as Rows;
+    // Đợt S5c: kèm `emailHash` = SHA-256(muối của lần xuất + email chữ thường) để NHẬP LẠI ánh xạ được người theo
+    // email trong không gian đích mà KHÔNG lộ email trong tệp (muối ngẫu nhiên mỗi lần xuất, ghi ở manifest).
+    const userHashSalt = crypto.randomBytes(16).toString('hex');
+    tables.users = (await prisma.user.findMany({ where: { id: { in: collectUserIds(tables) } }, select: { ...PUBLIC_USER, email: true } }))
+      .map(({ email, ...u }) => ({ ...u, emailHash: email ? emailHash(userHashSalt, email) : null })) as unknown as Rows;
 
     // Tệp đính kèm: manifest luôn có; nội dung chỉ khi chọn + tổng ≤ giới hạn. HEAD trước để tệp mất
     // trên R2 chỉ bị ghi "missing" thay vì làm hỏng cả lần xuất.
@@ -307,6 +326,11 @@ export async function runExport(exportId: number): Promise<void> {
       fileEntries.push(entry);
     }
     const counts = Object.fromEntries(Object.entries(tables).map(([k, v]) => [k, v.length]));
+    // Đợt S5c: dựng sẵn từng tệp data/*.json để ghi SHA-256 vào manifest — nhập lại kiểm toàn vẹn từng tệp.
+    const dataFiles = new Map(Object.entries(tables).map(([name, rows]) => [`data/${name}.json`, json(rows)]));
+    const attManifest = json(fileEntries);
+    const checksums: Record<string, string> = { 'attachments/manifest.json': sha256Hex(attManifest) };
+    for (const [pathName, buf] of dataFiles) checksums[pathName] = sha256Hex(buf);
     const manifest = {
       format: EXPORT_FORMAT,
       formatVersion: EXPORT_FORMAT_VERSION,
@@ -315,19 +339,21 @@ export async function runExport(exportId: number): Promise<void> {
       project: { id: pid, key: project.key, name: project.name },
       workspace: { id: project.workspaceId, slug: project.workspace.slug, name: project.workspace.name },
       tables: counts,
+      checksums,
+      userHashSalt,
       files: {
         count: atts.length, totalBytes, requested: ex.includeFiles, included, limitBytes: limit,
         note: ex.includeFiles && !withFiles ? `File contents skipped: ${totalBytes} bytes is over the ${limit}-byte limit. Only the manifest is included.` : undefined,
       },
       notes: [
-        'Restore (import) is not available yet. This format is versioned so a later release can import it.',
+        'Import it as a NEW project from Workspace settings → Import project (CT Work S5c). checksums = SHA-256 of each data file.',
         'Secrets are redacted: GitHub/GitLab secrets, chat webhook URLs, public link tokens. Pending invitations, personal edit locks and private AI chats are not exported.',
-        'Users carry public fields only (no email addresses).',
+        'Users carry public fields only (no email addresses); emailHash = SHA-256(userHashSalt + lower-case email) lets an import match people already in the target workspace.',
       ],
     };
     zip.file('manifest.json', json(manifest));
-    for (const [name, rows] of Object.entries(tables)) zip.file(`data/${name}.json`, json(rows));
-    zip.file('attachments/manifest.json', json(fileEntries));
+    for (const [pathName, buf] of dataFiles) zip.file(pathName, buf);
+    zip.file('attachments/manifest.json', attManifest);
     zip.file('README.txt', [
       `CT Work project export — ${project.key} ${project.name}`,
       `Format ${EXPORT_FORMAT} v${EXPORT_FORMAT_VERSION}, exported ${manifest.exportedAt}.`,
@@ -336,7 +362,7 @@ export async function runExport(exportId: number): Promise<void> {
       'data/*.json — one file per table, rows exactly as stored (dates in ISO 8601, UTC).',
       'attachments/manifest.json — every attachment (storage key, name, size); files/ has the contents when included.',
       '',
-      'Restore is not available yet; keep this file as a backup.',
+      'Restore: Workspace settings → Import project creates a NEW project from this file (the original is never overwritten).',
     ].join('\n'));
     await progress(exportId, 72, 'Writing archive');
     await pipeline(zip.generateNodeStream({ type: 'nodebuffer', streamFiles: true, compression: 'DEFLATE', compressionOptions: { level: 6 } }), fs.createWriteStream(tmp));

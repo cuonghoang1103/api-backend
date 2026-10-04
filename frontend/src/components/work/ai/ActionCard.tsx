@@ -10,7 +10,7 @@ import { docTruyVan } from '@/components/sach-hoc/moiTruong';
 import { useCallback, useState, type ReactNode } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
-import { ArrowRight, Check, CheckCheck, CornerDownRight, ExternalLink, FlaskConical, MessageSquare, Pencil, X } from 'lucide-react';
+import { ArrowRight, Check, CheckCheck, CornerDownRight, ExternalLink, FileText, FlaskConical, MessageSquare, Pencil, X } from 'lucide-react';
 import { workApi, workError, type AiAction, type ProjectConfig } from '@/lib/work-api';
 import { cn } from '@/lib/utils';
 import { IssueTypeIcon, PRIORITIES, PriorityIcon, Spinner, UserAvatar } from '../ui';
@@ -41,6 +41,10 @@ export function blockedReason(action: AiAction, config: ProjectConfig): string |
     case 'update_issue':
     case 'move_to_sprint':
       return p.editIssues ? null : 'You don’t have permission to edit issues in this project';
+    // Đợt S5c — tài liệu: server kiểm lại (docs bật + quyền sửa trang).
+    case 'draft_page':
+    case 'update_page_section':
+      return p.editDocs ? null : 'You don’t have permission to edit documents in this project';
     default:
       return null;
   }
@@ -60,6 +64,10 @@ function useOpenResult(config: ProjectConfig) {
     closeAiPanel();
     if (item.action.type === 'create_test') {
       router.push(`${base}/tests/${item.number}`);
+      return;
+    }
+    if (item.action.type === 'draft_page' || item.action.type === 'update_page_section') {
+      router.push(`${base}/docs/${item.number}`);
       return;
     }
     if (pathname && pathname.startsWith(base) && DRAWER_PAGES.test(pathname.slice(base.length))) {
@@ -168,6 +176,8 @@ const TITLES: Record<AiAction['type'], string> = {
   add_comment: 'Add comment',
   move_to_sprint: 'Move to sprint',
   create_test: 'Create test case',
+  draft_page: 'Create document',
+  update_page_section: 'Update document section',
 };
 
 export function ActionCard({ config, item, busy, onEdit, onApply, onDismiss, onOpen }: {
@@ -194,6 +204,7 @@ export function ActionCard({ config, item, busy, onEdit, onApply, onDismiss, onO
       <div className="flex items-center gap-1.5 border-b border-[var(--w-border)] px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.03em] text-[var(--w-text-3)]">
         {TITLES[action.type]}
         {action.type === 'update_issue' || action.type === 'add_comment' ? <span className="font-mono normal-case text-[var(--w-text-2)]">{k(action.number)}</span> : null}
+        {action.type === 'update_page_section' ? <span className="font-mono normal-case text-[var(--w-text-2)]">#{action.number}</span> : null}
       </div>
 
       <div className="px-3 py-2.5">
@@ -286,6 +297,15 @@ function Assignee({ config, username }: { config: ProjectConfig; username: strin
 function Priority({ value }: { value: number }) {
   const p = PRIORITIES.find((x) => x.value === value);
   return <span className="inline-flex items-center gap-1"><PriorityIcon priority={value} size={14} />{p?.label ?? value}</span>;
+}
+
+/** Xem trước Markdown AI soạn (chữ thô, cuộn riêng — đủ để đọc trước khi Apply). */
+function MarkdownPreview({ text }: { text: string }) {
+  return (
+    <pre className="max-h-[220px] overflow-auto whitespace-pre-wrap break-words rounded-[6px] border border-[var(--w-border)] bg-[var(--w-sunken)] px-2.5 py-2 font-sans text-[12px] leading-relaxed text-[var(--w-text-2)]">
+      {text}
+    </pre>
+  );
 }
 
 function Clamp({ text }: { text: string }) {
@@ -401,6 +421,28 @@ function ActionBody({ config, action, editable, onEdit }: { config: ProjectConfi
               ))}
             </ol>
           ) : null}
+        </div>
+      );
+
+    case 'draft_page':
+      return (
+        <div className="space-y-1.5">
+          <EditableTitle value={action.title} editable={editable} onChange={(title) => onEdit({ ...action, title })} icon={<FileText size={14} className="shrink-0 text-[var(--w-text-3)]" />} />
+          {action.parent ? <div className="px-1.5 text-[12px] text-[var(--w-text-3)]">Under document #{action.parent}</div> : null}
+          <MarkdownPreview text={action.markdown} />
+          <div className="px-1.5 text-[11.5px] text-[var(--w-text-3)]">Applying creates a new Draft document (version 1). Nothing is saved before you apply.</div>
+        </div>
+      );
+
+    case 'update_page_section':
+      return (
+        <div className="space-y-1.5">
+          <Row label="Section">
+            <span className="font-medium">{action.heading}</span>
+            <span className="ml-1.5 text-[11.5px] text-[var(--w-text-3)]">{action.mode === 'append' ? '(add to the end)' : '(replace)'}</span>
+          </Row>
+          <MarkdownPreview text={action.markdown} />
+          <div className="px-1.5 text-[11.5px] text-[var(--w-text-3)]">Applying saves a new version of document #{action.number}; you can compare or restore it from History.</div>
         </div>
       );
 

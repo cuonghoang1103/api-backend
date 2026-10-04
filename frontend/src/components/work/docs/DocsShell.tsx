@@ -11,7 +11,8 @@
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { FilePlus2, FileText, ListTree, Search } from 'lucide-react';
+import { FilePlus2, FileText, ListTree, Search, Sparkles } from 'lucide-react';
+import { openAiPanel } from '../ai/store';
 import { cn } from '@/lib/utils';
 import { workDocsApi, type PageStatus, type ProjectConfig, type WorkPageList } from '@/lib/work-api';
 import ProjectHeader from '../ProjectHeader';
@@ -102,7 +103,15 @@ function DocsHome({ config, list, onNew }: { config: ProjectConfig; list: WorkPa
 
   return (
     <div className="mx-auto w-full max-w-[880px] px-4 py-6 md:px-8">
-      <h2 className="text-[20px] font-semibold tracking-[-0.01em]">Project documents</h2>
+      <div className="flex flex-wrap items-center gap-2">
+        <h2 className="text-[20px] font-semibold tracking-[-0.01em]">Project documents</h2>
+        {/* Đợt S5c: AI soạn SRS từ requirement/story/epic ⇒ ĐỀ XUẤT draft_page, người dùng Apply mới tạo trang. */}
+        {canEdit && config.permissions.useAi && (
+          <button type="button" className="w-btn w-btn-sm ml-auto" onClick={() => openAiPanel({ pid: config.id, quick: { task: 'draft_srs' } })}>
+            <Sparkles size={13} /> Draft SRS with AI
+          </button>
+        )}
+      </div>
       <p className="mt-1 text-[13px] text-[var(--w-text-2)]">{list.pages.length} page{list.pages.length === 1 ? '' : 's'} · pick one on the left, or search the text of every page.</p>
 
       <div className="relative mt-4">

@@ -1997,9 +1997,144 @@ export const HELP_ARTICLES: HelpArticle[] = [
         ['Left out on purpose: webhook URLs and tokens, pending invitations, private AI chats, and people’s email addresses.', 'Cố ý bỏ ra: URL webhook và token, lời mời đang chờ, hội thoại AI riêng tư, và email của mọi người.'],
         ['Every export and download link is recorded in the audit log.', 'Mỗi lần xuất và mỗi link tải đều được ghi vào nhật ký quản trị.'],
       ),
-      warn('Restore (import back) is not available yet. The file carries a format version so a later release can import it.', 'Chưa có nhập lại (restore). Tệp mang phiên bản định dạng để bản sau nhập được.'),
+      p('To restore, use **Workspace settings → Import project** — it always creates a NEW project from the file (see “Import a project export”).', 'Muốn khôi phục: **Workspace settings → Import project** — luôn tạo DỰ ÁN MỚI từ tệp (xem “Nhập lại dự án từ tệp xuất”).'),
     ],
-    related: ['import-export', 'trash-audit', 'finance-timesheets'],
+    related: ['project-import', 'import-export', 'trash-audit', 'finance-timesheets'],
+  },
+  // ─── Đợt S5c: nhập lại dự án · Docs trong thùng rác + AI · mô-đun mới ───
+  {
+    id: 'project-import',
+    category: 'connect',
+    title: { en: 'Import a project export', vi: 'Nhập lại dự án từ tệp xuất' },
+    summary: {
+      en: 'Turn a “whole project” ZIP back into a working project — always as a NEW project with a key you choose. Workspace owners and admins only.',
+      vi: 'Biến tệp ZIP “xuất trọn dự án” thành dự án dùng được — luôn là DỰ ÁN MỚI với mã bạn chọn. Chỉ chủ và admin không gian.',
+    },
+    keywords: ['import', 'restore', 'backup', 'zip', 'migrate', 'copy project', 'nhap lai', 'khoi phuc', 'sao luu', 'chuyen du an'],
+    pages: [page('workspace', 'settings?tab=import', 'Workspace settings → Import project', 'Cài đặt không gian → Import project')],
+    blocks: [
+      steps(
+        ['**Workspace settings → Import project → Choose file** and pick the `.zip` from **Export the whole project** (up to 200 MB).', '**Workspace settings → Import project → Choose file** và chọn tệp `.zip` của **Export the whole project** (tối đa 200 MB).'],
+        ['CT Work checks the file first (format version, row counts, checksums) and shows a preview: rows per table, who is matched, teams that will be reused or created, attachments, and warnings. Nothing is created yet.', 'CT Work kiểm tệp trước (phiên bản định dạng, số dòng, mã kiểm) và hiện bản xem trước: số dòng từng bảng, ai được ghép, bộ phận dùng lại hay tạo mới, tệp đính kèm và cảnh báo. Chưa tạo gì cả.'],
+        ['Pick the new project key and name, then **Import as new project**. It runs in the background with a progress bar.', 'Chọn mã và tên dự án mới rồi bấm **Import as new project**. Việc nhập chạy nền, có thanh tiến trình.'],
+      ),
+      list(
+        ['Comes along: issues (same numbers), comments, history, sprints, versions, stages, docs with their versions, change requests, RAID, meetings, finance, service desk and SLA events.', 'Đi theo: thẻ (giữ số), bình luận, lịch sử, sprint, version, giai đoạn, tài liệu kèm phiên bản, yêu cầu thay đổi, RAID, họp, tài chính, service desk và sự kiện SLA.'],
+        ['People are matched by email with members of this workspace. Anyone else is left empty and marked **Imported from <name>**; their work logs, reactions and approval signatures are skipped.', 'Người được ghép theo email với thành viên không gian này. Người khác để trống và ghi **Imported from <tên>**; giờ làm, cảm xúc và chữ ký phê duyệt của họ bị bỏ.'],
+        ['Attachments are uploaded again when the ZIP contains their files; otherwise they stay as broken links.', 'Tệp đính kèm được tải lên lại khi ZIP có nội dung tệp; không thì giữ dạng liên kết hỏng.'],
+        ['Not imported: GitHub/GitLab connections, chat webhooks, public links (their secrets were removed on export), AI chats and the old audit log. Automation rules arrive turned off; pending approvals arrive cancelled.', 'Không nhập: kết nối GitHub/GitLab, webhook chat, link công khai (bí mật đã bị xoá khi xuất), hội thoại AI và nhật ký quản trị cũ. Luật tự động nhập ở trạng thái tắt; phê duyệt đang chờ thành đã huỷ.'],
+      ),
+      tip('If anything fails halfway, the half-built project is removed — nothing is left behind and the original project is never touched.', 'Hỏng giữa chừng thì dự án dựng dở bị xoá — không để lại gì, và dự án gốc không bao giờ bị đụng tới.'),
+    ],
+    related: ['project-export', 'trash-audit'],
+  },
+  {
+    id: 'docs-trash-ai',
+    category: 'studio',
+    title: { en: 'Docs: trash and the AI assistant', vi: 'Docs: thùng rác và trợ lý AI' },
+    summary: {
+      en: 'Deleted pages wait in the project trash with their child pages. The AI assistant can read the documents you can read and propose new pages or section edits — nothing changes until you press Apply.',
+      vi: 'Trang đã xoá nằm trong thùng rác dự án cùng trang con. Trợ lý AI đọc được tài liệu bạn đọc được và đề xuất trang mới hoặc sửa một mục — không gì thay đổi cho tới khi bạn bấm Apply.',
+    },
+    keywords: ['docs', 'trash', 'restore page', 'deleted document', 'ai', 'srs', 'summarize', 'thung rac', 'khoi phuc trang', 'tom tat', 'soan srs'],
+    pages: [page('project', 'settings?tab=trash', 'Project settings → Trash → Docs', 'Cài đặt dự án → Trash → Docs'), page('project', 'docs', 'Docs', 'Docs')],
+    blocks: [
+      list(
+        ['**Trash → Docs** lists each deletion once, with how many child pages went with it. **Restore** brings the whole tree back under its old parent — or to the top level if the parent is gone. The page owner or a project admin can restore; only admins can delete permanently, and pages with signed approvals cannot be deleted permanently.', '**Trash → Docs** liệt kê mỗi lần xoá một dòng, kèm số trang con đi cùng. **Restore** đưa cả cây về dưới trang cha cũ — hoặc lên gốc nếu cha không còn. Chủ trang hoặc admin dự án khôi phục được; chỉ admin xoá vĩnh viễn, và trang có phê duyệt đã ký thì không xoá vĩnh viễn được.'],
+        ['In the AI panel, ask about your documents — the assistant searches and reads only pages you are allowed to read (client-only viewers never see internal pages through it).', 'Trong khung AI, hỏi về tài liệu — trợ lý chỉ tìm và đọc những trang bạn được đọc (người chỉ xem trang cho khách không bao giờ thấy trang nội bộ qua AI).'],
+        ['**Draft SRS with AI** (Docs home or the AI panel) turns requirements, stories and epics into an SRS draft; **Summarize with AI** (page menu ⋯) summarises one page.', '**Draft SRS with AI** (trang chủ Docs hoặc khung AI) soạn bản nháp SRS từ requirement, story, epic; **Summarize with AI** (menu ⋯ của trang) tóm tắt một trang.'],
+        ['Document suggestions show as cards. **Apply** creates the page (version 1) or saves a new version with the rewritten section — compare or restore it from **History**.', 'Đề xuất về tài liệu hiện thành thẻ. **Apply** tạo trang (phiên bản 1) hoặc lưu một phiên bản mới với mục đã viết lại — so sánh hay khôi phục ở **History**.'],
+      ),
+    ],
+    related: ['project-docs', 'project-export'],
+  },
+  // ─── Đợt S5a: service desk & SLA ─────────────────────────────────
+  {
+    id: 'service-desk',
+    category: 'studio',
+    title: { en: 'Service desk & SLA', vi: 'Service desk & SLA' },
+    summary: {
+      en: 'Handle client requests like Jira Service Management: request types, P1–P4 priorities, SLA clocks on your working hours, queues, alerts, problems and postmortems.',
+      vi: 'Xử lý yêu cầu của khách như Jira Service Management: loại yêu cầu, ưu tiên P1–P4, đồng hồ SLA theo giờ làm việc, hàng đợi, cảnh báo, Problem và postmortem.',
+    },
+    keywords: ['service desk', 'sla', 'incident', 'service request', 'queue', 'first response', 'resolution', 'waiting for customer', 'problem', 'postmortem', 'itil', 'jsm', 'ho tro', 'su co', 'yeu cau dich vu', 'hang doi', 'cam ket'],
+    pages: [page('project', 'desk', 'Service desk', 'Service desk'), page('project', 'desk?tab=settings', 'Service desk → Settings', 'Service desk → Cài đặt')],
+    blocks: [
+      p('Module **Service desk & SLA** — on for new Client projects; older projects turn it on in Project settings → Modules. Clients send requests in the client portal; the team works them from **Service desk** in the sidebar.', 'Mô-đun **Service desk & SLA** — bật sẵn cho dự án Client mới; dự án cũ bật trong Project settings → Modules. Khách gửi yêu cầu trong cổng khách; đội xử lý ở mục **Service desk** trên thanh bên.'),
+      h('Request types', 'Loại yêu cầu'),
+      list(
+        ['**Incident** — something is broken (ITIL incident). **Service request** — access, an account, a routine task. **Question**. **Change** — also opens a draft change request when the Change requests module is on.', '**Incident** — có gì đó hỏng (sự cố theo ITIL). **Service request** — cấp quyền, tài khoản, việc định kỳ. **Question** — câu hỏi. **Change** — kèm mở một yêu cầu thay đổi nháp khi mô-đun Change requests bật.'],
+        ['Each type has its own short form (up to 8 fields), a default impact and urgency, and can be hidden from the portal. Edit them in **Settings**.', 'Mỗi loại có form ngắn riêng (tối đa 8 trường), tác động và mức khẩn mặc định, và có thể ẩn khỏi cổng. Sửa trong **Settings**.'],
+      ),
+      h('SLA clocks', 'Đồng hồ SLA'),
+      list(
+        ['Two goals per priority: **time to first response** and **time to resolution**. They count only during working hours (days, hours, public holidays, project time zone) — or around the clock if you set that priority to 24/7.', 'Hai mục tiêu cho mỗi mức: **thời gian phản hồi đầu tiên** và **thời gian giải quyết**. Chỉ đếm trong giờ làm (ngày, giờ, ngày lễ, múi giờ dự án) — hoặc 24/7 nếu bạn đặt mức đó như vậy.'],
+        ['**First response** = the first **Reply to client** from the team (internal notes and AI drafts never count), or a move into a status you marked as a response.', '**First response** = lần **Reply to client** đầu tiên của đội (ghi chú nội bộ và bản nháp AI không tính), hoặc chuyển vào trạng thái bạn đánh dấu là phản hồi.'],
+        ['**Waiting for customer** pauses both clocks — press the button on the issue, or move it into a status marked as waiting. When the client replies the clock resumes (and the issue goes back to its previous status if the workflow allows).', '**Waiting for customer** dừng cả hai đồng hồ — bấm nút trên thẻ, hoặc chuyển vào trạng thái đánh dấu là chờ. Khách trả lời thì đồng hồ chạy tiếp (và thẻ về trạng thái trước nếu quy trình cho phép).'],
+        ['Resolution stops when the issue reaches a Done status; reopening continues the same clock.', 'Resolution dừng khi thẻ vào trạng thái Done; mở lại thì chạy tiếp đồng hồ cũ.'],
+        ['**At risk** = 75% of the goal used (configurable), **Breached** = over the goal. Assignees (or the team lead, or project admins) get one alert at each step — never repeated.', '**At risk** = đã dùng 75% mục tiêu (chỉnh được), **Breached** = vượt mục tiêu. Người làm (hoặc trưởng bộ phận, hoặc admin dự án) nhận một cảnh báo cho mỗi mốc — không lặp lại.'],
+      ),
+      h('Queues', 'Hàng đợi'),
+      p('All open · Unassigned · My open · At risk · Breached · Waiting for customer · By team · Resolved. Sort by SLA puts breached requests first, then the ones closest to their deadline. Clocks refresh every 30 seconds.', 'All open · Unassigned · My open · At risk · Breached · Waiting for customer · By team · Resolved. Sắp theo SLA đưa yêu cầu đã vi phạm lên đầu, rồi tới cái gần hạn nhất. Đồng hồ tự làm tươi mỗi 30 giây.'),
+      h('Problems & postmortems', 'Problem & postmortem'),
+      steps(
+        ['**Problems → New problem** and link the incidents that share a cause.', '**Problems → New problem** rồi liên kết các incident cùng nguyên nhân.'],
+        ['Record the root cause and workaround as you learn them.', 'Ghi nguyên nhân gốc và cách tạm khắc phục khi tìm ra.'],
+        ['**Create postmortem** makes a Docs page from the blameless postmortem template, with the timeline filled in from the incidents’ SLA events (opened, first response, waiting, resolved, breaches).', '**Create postmortem** tạo một trang Docs từ mẫu postmortem không đổ lỗi, điền sẵn dòng thời gian từ sự kiện SLA của các incident (mở, phản hồi đầu, chờ khách, giải quyết, vi phạm).'],
+      ),
+      h('Reports', 'Báo cáo'),
+      p('**Reports** shows, per month and priority, the share of first-response and resolution goals met, MTTR, breaches and average CSAT, with an .xlsx export. The client weekly report adds totals only; Portfolio turns a project red for an open breached P1 and amber under 90% met this month.', '**Reports** hiện theo tháng và theo mức: tỉ lệ đạt mục tiêu phản hồi và giải quyết, MTTR, số vi phạm, CSAT trung bình, xuất được .xlsx. Báo cáo tuần cho khách chỉ thêm số tổng; Portfolio tô đỏ dự án có P1 đang mở đã vi phạm và vàng khi tháng này đạt dưới 90%.'),
+      warn('Email intake (turning emails into requests) is not available — the server has no inbound mailbox. Clients use the portal.', 'Chưa có tiếp nhận qua email (biến email thành yêu cầu) — máy chủ chưa có hộp thư nhận. Khách dùng cổng khách.'),
+    ],
+    related: ['desk-priorities', 'csat', 'client-portal', 'change-requests', 'project-docs'],
+  },
+  {
+    id: 'desk-priorities',
+    category: 'studio',
+    title: { en: 'Priorities (P1–P4)', vi: 'Mức ưu tiên (P1–P4)' },
+    summary: {
+      en: 'Service desk priority comes from impact × urgency. Clients describe who is affected and how badly; the matrix decides P1–P4 and the SLA goals.',
+      vi: 'Mức ưu tiên của service desk đi từ tác động × mức khẩn. Khách mô tả ai bị ảnh hưởng và nặng thế nào; ma trận quyết định P1–P4 và mục tiêu SLA.',
+    },
+    keywords: ['priority', 'p1', 'p2', 'p3', 'p4', 'impact', 'urgency', 'matrix', 'itil', 'muc uu tien', 'tac dong', 'khan cap'],
+    pages: [page('project', 'desk?tab=settings', 'Service desk → Settings', 'Service desk → Cài đặt')],
+    blocks: [
+      p('Clients never pick a priority. They answer two plain questions — **Who is affected?** (just me · a team · many people or the whole business) and **How urgent is it?** (it can wait · work is slowed · work has stopped). The matrix turns the answers into P1–P4 (ITIL 4).', 'Khách không bao giờ tự chọn mức ưu tiên. Họ trả lời hai câu dễ hiểu — **Ai bị ảnh hưởng?** (chỉ tôi · một nhóm · nhiều người hoặc cả công ty) và **Gấp cỡ nào?** (chờ được · công việc chậm lại · công việc dừng hẳn). Ma trận đổi câu trả lời thành P1–P4 (ITIL 4).'),
+      table(
+        [['Impact ↓ / Urgency →', 'Tác động ↓ / Khẩn →'], 'High', 'Medium', 'Low'],
+        [['High', 'P1', 'P2', 'P3'], ['Medium', 'P2', 'P3', 'P4'], ['Low', 'P3', 'P4', 'P4']],
+      ),
+      table(
+        [['Default goals (working hours 08:00–17:00)', 'Mục tiêu mặc định (giờ làm 08:00–17:00)'], ['First response', 'Phản hồi đầu'], ['Resolution', 'Giải quyết']],
+        [['P1 · Critical', '30 min', ['4 hours', '4 giờ']], ['P2 · High', ['1 hour', '1 giờ'], ['1 day', '1 ngày']], ['P3 · Medium', ['4 hours', '4 giờ'], ['3 days', '3 ngày']], ['P4 · Low', ['1 day', '1 ngày'], ['5 days', '5 ngày']]],
+      ),
+      list(
+        ['Change the matrix, the goals and 24/7 per priority in **Service desk → Settings** (project admins).', 'Đổi ma trận, mục tiêu và 24/7 theo từng mức ở **Service desk → Settings** (admin dự án).'],
+        ['The team can change impact or urgency on the issue. The new priority’s goals apply to the **whole time since the request was created** — raising a request to P1 three hours in breaches it straight away; lowering it can clear a breach. Every change is kept in the SLA log.', 'Đội đổi được tác động hoặc mức khẩn trên thẻ. Mục tiêu của mức MỚI áp cho **toàn bộ thời gian kể từ lúc tạo** — nâng lên P1 sau ba giờ là vi phạm ngay; hạ mức có thể hết vi phạm. Mọi lần đổi đều nằm trong SLA log.'],
+        ['P1–P4 is separate from the issue’s own priority (Highest…Lowest) used on boards and filters. A new request starts with a matching issue priority, then the two are independent.', 'P1–P4 tách khỏi mức ưu tiên riêng của thẻ (Highest…Lowest) dùng trên board và bộ lọc. Yêu cầu mới bắt đầu với mức thẻ tương ứng, sau đó hai trường độc lập.'],
+      ),
+    ],
+    related: ['service-desk', 'csat'],
+  },
+  {
+    id: 'csat',
+    category: 'studio',
+    title: { en: 'CSAT (customer satisfaction)', vi: 'CSAT (mức hài lòng của khách)' },
+    summary: {
+      en: 'When a request is resolved, the person who raised it is asked to rate it from 1 to 5 with an optional comment. Results appear in Service desk → Reports.',
+      vi: 'Khi một yêu cầu được giải quyết, người gửi yêu cầu được mời chấm từ 1 đến 5 kèm bình luận tuỳ chọn. Kết quả nằm ở Service desk → Reports.',
+    },
+    keywords: ['csat', 'satisfaction', 'survey', 'rating', 'feedback', 'stars', 'hai long', 'khao sat', 'danh gia'],
+    pages: [page('project', 'desk?tab=reports', 'Service desk → Reports', 'Service desk → Báo cáo')],
+    blocks: [
+      list(
+        ['Sent once, when the request first reaches Done: an email and a notification with a link to the request in the client portal.', 'Gửi một lần, khi yêu cầu vào Done lần đầu: email và thông báo kèm link tới yêu cầu trong cổng khách.'],
+        ['Only the person who raised the request can answer, only once, and only after it is resolved. Other clients and the team cannot rate on their behalf.', 'Chỉ người gửi yêu cầu trả lời được, một lần, và chỉ sau khi đã giải quyết. Khách khác và đội không chấm thay được.'],
+        ['The team sees the rating and comment on the issue (Service desk section) and in **Reports → Customer feedback**; the client weekly report shows the average only.', 'Đội thấy điểm và bình luận trên thẻ (khu Service desk) và ở **Reports → Customer feedback**; báo cáo tuần cho khách chỉ có điểm trung bình.'],
+      ),
+      tip('A low score is a signal, not a verdict — read the comment, reply in the request, and link repeat issues to a problem.', 'Điểm thấp là tín hiệu, không phải bản án — đọc bình luận, trả lời trong yêu cầu, và gom lỗi lặp lại vào một Problem.'),
+    ],
+    related: ['service-desk', 'client-portal'],
   },
 
   {

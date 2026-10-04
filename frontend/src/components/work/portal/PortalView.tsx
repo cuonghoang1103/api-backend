@@ -34,6 +34,7 @@ import { ApprovalsTab, PortalApprovalDialog } from './PortalApprovals';
 import { StaffPanel } from './PortalStaff';
 import { MeetingsTab, PortalMeetingDialog } from './PortalMeetings';
 import { PaymentsTab, ReportsTab } from './PortalS4';
+import { DeskRequestDialog, PortalSlaPanel } from '../desk/PortalDesk';
 
 export const PORTAL_TABS: Array<{ id: PortalTab; label: string; icon: typeof Inbox }> = [
   { id: 'overview', label: 'Overview', icon: LayoutDashboard },
@@ -236,7 +237,7 @@ function NewRequestDialog({ pid, open, onClose, onCreated }: { pid: number; open
   );
 }
 
-function RequestsTab({ pid, asClient, viewer, openIssue }: { pid: number; asClient: boolean; viewer?: PortalViewer; openIssue: (n: number) => void }) {
+function RequestsTab({ pid, asClient, viewer, openIssue, deskOn }: { pid: number; asClient: boolean; viewer?: PortalViewer; openIssue: (n: number) => void; deskOn?: boolean }) {
   const [filter, setFilter] = useState<'all' | 'open' | 'done' | 'mine'>('all');
   const [creating, setCreating] = useState(false);
   const q = useQuery({ queryKey: [...workPortalKeys.tab(pid, 'requests', asClient), filter], queryFn: () => workPortalApi.requests(pid, asClient, filter) });
@@ -280,7 +281,10 @@ function RequestsTab({ pid, asClient, viewer, openIssue }: { pid: number; asClie
       ) : (
         <EmptyState icon={<Inbox size={20} />} title="Nothing here yet" body="Items the team shares with you, and requests you send, show up here." />
       )}
-      <NewRequestDialog pid={pid} open={creating} onClose={() => setCreating(false)} onCreated={openIssue} />
+      {/* Đợt S5a: mô-đun serviceDesk bật ⇒ form theo loại yêu cầu + tác động/khẩn cấp (hệ thống ra P, có SLA). */}
+      {deskOn
+        ? <DeskRequestDialog pid={pid} open={creating} onClose={() => setCreating(false)} onCreated={openIssue} />
+        : <NewRequestDialog pid={pid} open={creating} onClose={() => setCreating(false)} onCreated={openIssue} />}
     </div>
   );
 }
@@ -290,7 +294,7 @@ async function downloadFile(pid: number, aid: number) {
 }
 
 /** Một thẻ như khách thấy: mô tả, tệp đã chia sẻ, các trả lời công khai + ô trả lời. */
-export function RequestDialog({ pid, num, asClient, onClose }: { pid: number; num: number | null; asClient: boolean; onClose: () => void }) {
+export function RequestDialog({ pid, num, asClient, onClose, deskOn }: { pid: number; num: number | null; asClient: boolean; onClose: () => void; deskOn?: boolean }) {
   const qc = useQueryClient();
   const q = useQuery({ queryKey: workPortalKeys.request(pid, num ?? 0, asClient), queryFn: () => workPortalApi.request(pid, num!, asClient), enabled: !!num });
   const [doc, setDoc] = useState<TiptapDoc | null>(null);
@@ -308,6 +312,7 @@ export function RequestDialog({ pid, num, asClient, onClose }: { pid: number; nu
       {q.isLoading ? <PageLoading rows={3} /> : q.error || !r ? <EmptyState title="Not available" body={workError(q.error)} /> : (
         <div className="space-y-5">
           {!r.viewer.isClient && <ClientPill label={r.viewer.preview ? 'Preview — exactly what the client sees' : 'Visible to client'} />}
+          {deskOn && num && <PortalSlaPanel pid={pid} num={num} asClient={asClient} />}
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[12.5px] text-[var(--w-text-3)]">
             <StatusBadge status={r.status} />
             <span>{r.type.name}</span>
@@ -503,6 +508,7 @@ export default function PortalView({ config, pid }: { config: ProjectConfig; pid
   const meetingsOn = !!config.modules?.meetings;
   const financeOn = !!config.modules?.finance;
   const reportsOn = !!config.modules?.reports;
+  const deskOn = !!config.modules?.serviceDesk;
   const tabs = useMemo(() => PORTAL_TABS.filter((t) => (t.id !== 'meetings' || meetingsOn) && (t.id !== 'payments' || financeOn) && (t.id !== 'reports' || reportsOn)), [meetingsOn, financeOn, reportsOn]);
   const waiting = overview.data?.waitingOnClient.length ?? 0;
 
@@ -541,7 +547,7 @@ export default function PortalView({ config, pid }: { config: ProjectConfig; pid
           </div>
         </nav>
         {p.tab === 'overview' && <OverviewTab pid={pid} asClient={asClient} go={p.set} />}
-        {p.tab === 'requests' && <RequestsTab pid={pid} asClient={asClient} viewer={viewer} openIssue={(n) => p.set({ issue: String(n) })} />}
+        {p.tab === 'requests' && <RequestsTab pid={pid} asClient={asClient} viewer={viewer} openIssue={(n) => p.set({ issue: String(n) })} deskOn={deskOn} />}
         {p.tab === 'approvals' && <ApprovalsTab pid={pid} asClient={asClient} config={config} openApproval={(id) => p.set({ approval: String(id) })} />}
         {p.tab === 'documents' && <DocumentsTab pid={pid} asClient={asClient} openDoc={(n) => p.set({ doc: String(n) })} />}
         {p.tab === 'deliverables' && <DeliverablesTab pid={pid} asClient={asClient} />}
@@ -556,7 +562,7 @@ export default function PortalView({ config, pid }: { config: ProjectConfig; pid
           </p>
         )}
       </div>
-      <RequestDialog pid={pid} num={p.issue} asClient={asClient} onClose={() => p.set({ issue: null })} />
+      <RequestDialog pid={pid} num={p.issue} asClient={asClient} onClose={() => p.set({ issue: null })} deskOn={deskOn} />
       <PortalApprovalDialog pid={pid} id={p.approval} asClient={asClient} config={config} onClose={() => p.set({ approval: null })} />
       <DocumentDialog pid={pid} num={p.doc} asClient={asClient} onClose={() => p.set({ doc: null })} />
       {meetingsOn && <PortalMeetingDialog pid={pid} num={p.meeting} asClient={asClient} onClose={() => p.set({ meeting: null })} />}

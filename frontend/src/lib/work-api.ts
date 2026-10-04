@@ -15,7 +15,7 @@ export type ProjectTemplate = 'BLANK' | 'SWR302' | 'SWT301' | 'SWP391' | 'FREELA
 /** Loại dự án (lớp studio S1). Dự án cũ: suy từ mẫu (kindStored = null). */
 export type ProjectKind = 'PERSONAL' | 'SCHOOL' | 'SOFTWARE' | 'CLIENT';
 /** Mô-đun bật/tắt theo dự án. Đợt S1 có tính năng thật: teams, stages, approvals, handoffs. */
-export type StudioModule = 'teams' | 'stages' | 'approvals' | 'handoffs' | 'docs' | 'clientPortal' | 'changeRequests' | 'raid' | 'meetings' | 'finance' | 'reports';
+export type StudioModule = 'teams' | 'stages' | 'approvals' | 'handoffs' | 'docs' | 'clientPortal' | 'changeRequests' | 'raid' | 'meetings' | 'finance' | 'reports' | 'serviceDesk';
 export type ModuleMap = Record<StudioModule, boolean>;
 export type StatusCategory = 'TODO' | 'IN_PROGRESS' | 'DONE';
 export type IssueTypeKey = 'EPIC' | 'STORY' | 'TASK' | 'BUG' | 'SUBTASK' | 'TEST' | 'REQUIREMENT';
@@ -120,6 +120,10 @@ export interface ProjectPermissions {
   viewReports?: boolean;
   sendClientReports?: boolean;
   exportProject?: boolean;
+  // Service desk & SLA (S5a) — phần nội bộ (hàng đợi, đồng hồ, Problem, báo cáo) chỉ cho người của đội.
+  viewDesk?: boolean;
+  workDesk?: boolean;
+  configureDesk?: boolean;
 }
 
 export interface ProjectConfig {
@@ -502,7 +506,10 @@ export type AiAction =
   | { type: 'update_issue'; number: number; title?: string | null; description?: string | null; priority?: number | null; assignee?: string | null; storyPoints?: number | null; status?: string | null; sprint?: string | null; dueDate?: string | null }
   | { type: 'add_comment'; number: number; text: string }
   | { type: 'move_to_sprint'; numbers: number[]; sprint: string }
-  | { type: 'create_test'; title: string; preconditions?: string | null; steps: Array<{ action: string; data?: string | null; expected?: string | null }>; requirement?: number | null };
+  | { type: 'create_test'; title: string; preconditions?: string | null; steps: Array<{ action: string; data?: string | null; expected?: string | null }>; requirement?: number | null }
+  // Đợt S5c — tài liệu (mô-đun docs): Apply ⇒ trang mới / phiên bản mới của trang.
+  | { type: 'draft_page'; title: string; markdown: string; parent?: number | null }
+  | { type: 'update_page_section'; number: number; heading: string; markdown: string; mode?: 'replace' | 'append' | null };
 export interface AiAnswer {
   reply: string; actions: AiAction[]; quota: AiQuota;
   /** Hội thoại đã lưu ở server (trả về từ chat/quick). */
@@ -520,7 +527,7 @@ export interface AiThreadSummary {
   lastMessageAt: string; createdAt: string; createdById: number | null; createdBy: WorkUser | null; participants: WorkUser[]; mine: boolean;
 }
 export interface AiThread extends Omit<AiThreadSummary, 'participants' | 'mine'> { canManage: boolean; messages: AiMessage[] }
-export type AiQuickTask = 'write_story' | 'split' | 'generate_tests' | 'improve_bug' | 'summarize' | 'review_story' | 'meeting_notes' | 'req_review' | 'team_health';
+export type AiQuickTask = 'write_story' | 'split' | 'generate_tests' | 'improve_bug' | 'summarize' | 'review_story' | 'meeting_notes' | 'req_review' | 'team_health' | 'draft_srs' | 'summarize_page';
 export interface AiFilterResult {
   filter: { status: number[]; type: number[]; assignee: number[]; label: number[]; sprint?: number | 'backlog'; q?: string; includeDone?: boolean };
   explanation: string | null; quota: AiQuota;
@@ -906,8 +913,8 @@ export const workApi = {
   onboarding: (pid: number) => d<OnboardingStatus>(api.get(`${B}/projects/${pid}/onboarding`)),
   addSampleData: (pid: number) => d<{ issues: number; labels: number; sprintId: number | null; plans: number }>(api.post(`${B}/projects/${pid}/sample-data`, {}, { timeout: 120_000 })),
   removeSampleData: (pid: number) => d<{ issues: number; labels: number; sprintRemoved: boolean }>(api.delete(`${B}/projects/${pid}/sample-data`, { timeout: 60_000 })),
-  aiQuick: (pid: number, body: { task: AiQuickTask; issueNumber?: number | null; text?: string | null; threadId?: number | null; label?: string | null }) =>
-    d<AiAnswer>(api.post(`${B}/projects/${pid}/ai/quick`, body, { timeout: 120_000 })),
+  aiQuick: (pid: number, body: { task: AiQuickTask; issueNumber?: number | null; pageNumber?: number | null; text?: string | null; threadId?: number | null; label?: string | null }) =>
+    d<AiAnswer>(api.post(`${B}/projects/${pid}/ai/quick`, body, { timeout: 180_000 })),
   aiFilter: (pid: number, question: string) => d<AiFilterResult>(api.post(`${B}/projects/${pid}/ai/filter`, { question }, { timeout: 60_000 })),
   aiApply: (pid: number, action: AiAction) => d<{ summary: string; number?: number }>(api.post(`${B}/projects/${pid}/ai/apply`, { action })),
   aiWeeklyReport: (pid: number, body: { audience: 'teacher' | 'client' | 'team'; language?: 'en' | 'vi' }) =>

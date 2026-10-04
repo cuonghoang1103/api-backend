@@ -42,6 +42,7 @@ import { IssueApprovals, IssueHandoffs, MoveIssueDialog, StagePicker, TeamPicker
 import { studioOn } from './studio/shared';
 import { LinkedDocs } from './docs/LinkedDocs';
 import { IssueGovernance } from './governance/IssueGovernance';
+import { IssueDesk } from './desk/IssueDesk';
 import { AttachmentClientControls, IssueClientShare } from './portal/ClientShare';
 import RichEditor, { isDocEmpty, RichView } from './RichEditor';
 import {
@@ -643,6 +644,9 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
                 {detailsOpen && <div className="border-t border-[var(--w-border)] px-3 pb-3 pt-3">{properties}</div>}
               </section>
             )}
+            {/* Đợt S5a: service desk — P1–P4, đồng hồ SLA, chờ khách (tự ẩn khi mô-đun tắt / khách / thẻ không qua desk
+                mà người xem không xử lý được). Đặt TRƯỚC mô tả: với yêu cầu của khách, đồng hồ là thứ cần thấy đầu tiên. */}
+            <IssueDesk config={config} issueNumber={issue.number} />
             <section>
               <h3 className="w-section-title mb-2">Description</h3>
               <Description issue={issue} config={config} editable={editable} onSave={(d) => set({ descriptionJson: d })} saving={update.isPending} />
@@ -654,6 +658,7 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
             {studioOn(config, 'docs') && <LinkedDocs config={config} issueNumber={issue.number} />}
             {/* Đợt S3b: CR liên quan + rủi ro liên quan (tự ẩn khi mô-đun tắt / khách). */}
             <IssueGovernance config={config} issueNumber={issue.number} />
+            <IssueDesk config={config} issueNumber={issue.number} show="add" />
             <Attachments issue={issue} pid={pid} config={config} />
             <IssueActivity pid={pid} num={num} config={config} lk={lk} clientShared={!!issue.clientVisible} />
           </div>

@@ -114,6 +114,8 @@ const savedCodesRoutes = (await import(path.join(__dirname, 'routes', 'savedCode
 const contactRoutes = (await import(path.join(__dirname, 'routes', 'contact.routes.js'))).default;
 // Phiếu yêu cầu dự án (/about/quy-trinh) — công khai + admin.
 const { publicProjectRequestRouter, adminProjectRequestRouter } = await import(path.join(__dirname, 'routes', 'projectRequest.routes.js'));
+// CRM nhẹ của studio (đợt S5b) — /admin/crm + trang khách /proposal/[token].
+const { adminCrmRouter, publicProposalRouter } = await import(path.join(__dirname, 'routes', 'crm.routes.js'));
 const uploadRoutes = (await import(path.join(__dirname, 'routes', 'upload.routes.js'))).default;
 const devPostRoutes = (await import(path.join(__dirname, 'routes', 'devPost.routes.js'))).default;
 const systemRoutes = (await import(path.join(__dirname, 'routes', 'system.routes.js'))).default;
@@ -583,6 +585,8 @@ app.use('/api/v1/my-codes', savedCodesRoutes);
 app.use('/api/v1/contact', contactRoutes);
 app.use('/api/v1/project-requests', publicProjectRequestRouter);
 app.use('/api/v1/admin/project-requests', adminProjectRequestRouter);
+app.use('/api/v1/admin/crm', adminCrmRouter);
+app.use('/api/v1/proposals', publicProposalRouter);
 app.use('/api/v1/files', failOpen(uploadLimiter), uploadRoutes);
 app.use('/api/v1/dev-posts', devPostRoutes);
 app.use('/api/v1/tech-trends', techTrendsPublicRoutes);

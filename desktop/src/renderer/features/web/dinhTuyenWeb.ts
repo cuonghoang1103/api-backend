@@ -183,6 +183,11 @@ export const TUYEN_WEB: readonly TuyenWeb[] = [
   { mau: '/projects', nap: () => import('@/app/projects/page') },
   // ⚠️ TĨNH TRƯỚC ĐỘNG: `/projects/search` cùng hình dạng với `/projects/:slug`.
   { mau: '/projects/search', nap: () => import('@/app/projects/search/page') },
+  /* Chi tiết dự án (04/10/2026): `[slug]/page.tsx` là SERVER component (chỉ dựng
+     metadata SEO) bọc `ProjectPageClient` — phần client đó tự đọc slug bằng
+     `useParams`, nên app nạp THẲNG nó. Thiếu tuyến này thì nút "Mở trang đầy đủ"
+     trong Projects ra "Không có trang cho đường dẫn /projects/<slug>". */
+  { mau: '/projects/:slug', nap: () => import('@/app/projects/[slug]/ProjectPageClient') },
 
   /* ── Kho mã ── */
 
@@ -232,7 +237,8 @@ export const TUYEN_WEB: readonly TuyenWeb[] = [
    *
    *   /repos · /repos/:id · /repos/tag/:slug          (CẢ cây)
    *   /games · /games/leaderboard · /games/:slug      (CẢ cây)
-   *   /projects/:slug · /exp-hub/:slug                (trang chi tiết)
+   *   /exp-hub/:slug                                  (trang chi tiết)
+   *   (`/projects/:slug` đã đưa LẠI vào 04/10/2026 — nạp thẳng ProjectPageClient.)
    *
    * Chúng khai `export default async function` — component BẤT ĐỒNG BỘ, thứ
    * chỉ Next chạy được ở phía MÁY CHỦ. Dựng chúng trong cây React phía client

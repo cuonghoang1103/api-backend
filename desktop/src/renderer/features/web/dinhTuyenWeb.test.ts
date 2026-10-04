@@ -123,9 +123,12 @@ describe('khopTuyenWeb', () => {
        CÓ Ý THỨC, sau khi đã viết lại chúng thành client component. */
     for (const d of ['/games', '/games/leaderboard', '/games/love-me', '/games/co-vua',
                      '/repos', '/repos/12', '/repos/tag/react',
-                     '/projects/mot-du-an', '/exp-hub/abc']) {
+                     '/exp-hub/abc']) {
       expect(khopTuyenWeb(d), `${d} là server component, phải KHÔNG có tuyến`).toBeNull();
     }
+    /* `/projects/:slug` ĐÃ đưa lại (04/10/2026): nạp thẳng phần client
+       `ProjectPageClient`, không qua vỏ server `page.tsx`. */
+    expect(khopTuyenWeb('/projects/mot-du-an')?.thamSo).toEqual({ slug: 'mot-du-an' });
 
     // Và bản ĐỘNG vẫn phải khớp bình thường với giá trị thật.
     expect(khopTuyenWeb('/finance/debts/12')?.thamSo).toEqual({ id: '12' });
@@ -262,7 +265,8 @@ describe('khopTuyenWeb', () => {
     // 04/10/2026: +6 Code Lab (cả cây web thay màn native).
     // 04/10/2026: +2 CT Work Đợt S2a — tài liệu dự án (docs, docs/:num).
     // 04/10/2026: +2 Content Creator AI (/creator/quay-khoa-hoc, /creator/y-tuong-ai).
-    expect(thay.size).toBe(118);
+    // 04/10/2026: +1 chi tiết dự án (/projects/:slug → ProjectPageClient).
+    expect(thay.size).toBe(119);
   });
 });
 

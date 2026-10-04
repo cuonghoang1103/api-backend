@@ -262,6 +262,14 @@ declare module '@/components/simulation/SimulationStudio' {
  * module trang của Next mới có hợp đồng trên. Thứ khác trong `@/app` mà
  * desktop cần dùng thì vẫn phải khai riêng, đúng như trước.
  */
+/* Phần CLIENT của trang chi tiết dự án — `[slug]/page.tsx` là server component nên
+   app nạp thẳng tệp này (dinhTuyenWeb `/projects/:slug`). */
+declare module '@/app/projects/[slug]/ProjectPageClient' {
+  import type { ComponentType } from 'react';
+  const TrangChiTietDuAn: ComponentType;
+  export default TrangChiTietDuAn;
+}
+
 declare module '@/app/*/page' {
   import type { ComponentType } from 'react';
   const Trang: ComponentType;

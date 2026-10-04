@@ -41,7 +41,19 @@
  * hành, có sẵn trên macOS.
  */
 import { TrangWebTheoTuyen } from '../web/TrangWeb';
+import './phongvan-desk.css';
 
+/*
+ * ─── Khung co giãn (04/10/2026) ───
+ * Bọc trong `.ct-pv-khung` (container query) để năm màn nới theo vùng nội dung
+ * thay vì bó `max-w-3xl` giữa cửa sổ rộng — xem `phongvan-desk.css`. Thanh
+ * "Bắt đầu" dính đáy + tóm tắt lựa chọn nằm ngay trong trang web
+ * (`app/interview/page.tsx`), nên web cũng có.
+ */
 export function PhongVanPage() {
-  return <TrangWebTheoTuyen ten="Phỏng vấn" />;
+  return (
+    <div className="ct-pv-khung">
+      <TrangWebTheoTuyen ten="Phỏng vấn" />
+    </div>
+  );
 }

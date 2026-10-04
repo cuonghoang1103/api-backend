@@ -20,6 +20,8 @@
 import { createRoot } from 'react-dom/client';
 import { AppStateProvider } from '../../src/renderer/app-state';
 import { nativePageFor } from '../../src/renderer/page-registry';
+import { INTERNAL_ROUTES } from '../../src/renderer/routes';
+import { Settings } from '../../src/renderer/pages/Settings';
 import { MusicPlayerProvider } from '../../src/renderer/features/music/player';
 /* Giống `main.tsx` của app thật: thiếu provider này là mọi mã web dùng
    `useQuery` ném ngay lúc vẽ, và bộ đo báo "trang trống" — một lỗi của BỘ ĐO
@@ -44,7 +46,9 @@ useAuthStore.getState().setAuth({
 } as never);
 
 const duong = new URLSearchParams(location.search).get('trang') ?? '/dashboard';
-const Trang = nativePageFor(duong);
+/* Cài đặt là tuyến NỘI BỘ (App.tsx dựng thẳng, không qua sổ đăng ký trang) —
+   thiếu nhánh này thì `CT_TRANG='["/app/settings"]'` luôn báo "trang trống". */
+const Trang = duong === INTERNAL_ROUTES.settings ? Settings : nativePageFor(duong);
 
 createRoot(document.getElementById('root')!).render(
   <AppStateProvider tuyenBanDau={duong}>

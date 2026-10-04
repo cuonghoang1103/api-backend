@@ -89,7 +89,7 @@ export default function OverviewTab({ project, onChange }: OverviewTabProps) {
  </div>
 
  <label className="block">
- <span className="text-xs text-text-muted">Title</span>
+ <span className="text-xs text-text-muted">{t('ovTitleLabel')}</span>
  <input
  type="text"
  value={project.title}
@@ -158,7 +158,7 @@ export default function OverviewTab({ project, onChange }: OverviewTabProps) {
  </div>
 
  <label className="block">
- <span className="text-xs text-text-muted">Main hook (1 sentence viewers see first)</span>
+ <span className="text-xs text-text-muted">{t('ovMainHookLabel')}</span>
  <input
  type="text"
  value={project.mainHook ?? ''}
@@ -169,7 +169,7 @@ export default function OverviewTab({ project, onChange }: OverviewTabProps) {
  </label>
 
  <label className="block mt-4">
- <span className="text-xs text-text-muted">Concept (full brief)</span>
+ <span className="text-xs text-text-muted">{t('ovConceptLabel')}</span>
  <textarea
  value={project.concept ?? ''}
  onChange={(e) => update('concept', e.target.value)}
@@ -230,7 +230,7 @@ export default function OverviewTab({ project, onChange }: OverviewTabProps) {
  </div>
  <div className="flex flex-wrap gap-1.5 mb-2">
  {project.tags.length === 0 ? (
- <p className="text-xs text-text-muted italic">No tags yet</p>
+ <p className="text-xs text-text-muted italic">{t('ovNoTags')}</p>
  ) : (
  project.tags.map((t) => (
  <span
@@ -300,7 +300,7 @@ export default function OverviewTab({ project, onChange }: OverviewTabProps) {
 
  <ul className="space-y-1.5 mb-3">
  {links.length === 0 ? (
- <li className="text-xs text-text-muted italic">No links yet</li>
+ <li className="text-xs text-text-muted italic">{t('ovNoLinks')}</li>
  ) : (
  links.map((l, i) => (
  <li

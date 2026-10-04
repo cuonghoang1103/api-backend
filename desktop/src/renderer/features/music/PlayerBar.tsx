@@ -10,12 +10,13 @@
  * nguyên chiều cao như cũ.
  */
 import {
-  ChevronDown, ChevronUp, Music2, Pause, Play, Repeat, Repeat1, Shuffle,
+  ChevronDown, ChevronUp, Heart, Moon, Music2, Pause, Play, Repeat, Repeat1, Shuffle,
   SkipBack, SkipForward, Volume1, Volume2, VolumeX,
 } from 'lucide-react';
 import { useAppState } from '../../app-state';
 import { clock, useMusicPlayer } from './player';
 import { useDich } from '../../i18n';
+import './music2.css';
 
 export function PlayerBar() {
   const { dich } = useDich();
@@ -25,9 +26,11 @@ export function PlayerBar() {
     toggle, step, batDauTua,
     volume, setVolume, muted, setMuted,
     shuffle, setShuffle, repeat, setRepeat,
+    daThich, doiThich, henGio, henGioConLai,
   } = useMusicPlayer();
 
   if (!current) return null;
+  const thich = daThich.has(current.id);
 
   const progress = length > 0 ? Math.min(100, (shownPosition / length) * 100) : 0;
   const oTrangNhac = route === '/music';
@@ -76,7 +79,9 @@ export function PlayerBar() {
   return (
     <div className="ct-player" role="group" aria-label={dich('Điều khiển phát nhạc')}>
       {/* Bấm vào tên bài để nhảy về trang Nhạc — lối quay lại quen thuộc khi
-          đang nghe dở mà đi lang thang chỗ khác. */}
+          đang nghe dở mà đi lang thang chỗ khác. Trái tim đứng ngay cạnh tên:
+          đang nghe ở trang khác mà thích bài này thì lưu được luôn. */}
+      <div className="mz-pb-trai">
       <button
         type="button"
         className="ct-player-now"
@@ -92,6 +97,24 @@ export function PlayerBar() {
           <span className="ct-player-artist">{current.artist || 'Không rõ nghệ sĩ'}</span>
         </span>
       </button>
+      <button
+        type="button"
+        className="mz-tim"
+        data-on={thich}
+        onClick={() => void doiThich(current)}
+        aria-pressed={thich}
+        aria-label={thich ? dich('Bỏ thích') : dich('Thích')}
+        title={thich ? dich('Bỏ thích') : dich('Thích')}
+      >
+        <Heart size={15} aria-hidden fill={thich ? 'currentColor' : 'none'} />
+      </button>
+      {henGio !== null && (
+        <span className="mz-pb-hen" title={dich('Hẹn giờ tắt nhạc')}>
+          <Moon size={12} aria-hidden />
+          {henGio === 'het-bai' ? dich('Hết bài này') : clock(henGioConLai)}
+        </span>
+      )}
+      </div>
 
       <div className="ct-player-mid">
         <div className="ct-player-buttons">

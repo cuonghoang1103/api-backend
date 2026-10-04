@@ -117,7 +117,7 @@ function CreatorDashboardInner() {
  const isEmpty = !isLoading && projects.length === 0;
 
  return (
- <div className="px-4 sm:px-6 lg:px-8 py-8 max-w-7xl mx-auto">
+ <div className="px-[clamp(14px,2.4vw,36px)] py-8 w-full max-w-[2400px] mx-auto">
  {/* Hero strip */}
  <motion.section
  initial={{ opacity: 0, y: 16 }}

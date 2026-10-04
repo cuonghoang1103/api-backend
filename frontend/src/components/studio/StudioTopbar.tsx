@@ -28,7 +28,10 @@ import {
  Lightbulb,
  KanbanSquare,
  ListChecks,
+ GraduationCap,
 } from 'lucide-react';
+import { laAppDesktop } from '@/components/sach-hoc/moiTruong';
+import css from './studioTopbar.module.css';
 import { useStudioStore } from '@/store/studioStore';
 import { useStudioT, type StudioKey } from '@/lib/studio-i18n';
 
@@ -40,6 +43,10 @@ interface CreatorNavItem {
 
 const CREATOR_NAV: CreatorNavItem[] = [
  { labelKey: 'navDashboard', href: '/creator', icon: LayoutDashboard },
+ // Hai lối vào AI (04/10/2026) — đứng ngay sau Tổng quan vì đó là việc chính:
+ // quay bài giảng từ đúng nội dung khoá học, và biến một ý tưởng thành kịch bản.
+ { labelKey: 'navFilmCourse', href: '/creator/quay-khoa-hoc', icon: GraduationCap },
+ { labelKey: 'navAiIdeas', href: '/creator/y-tuong-ai', icon: Wand2 },
  { labelKey: 'navIdeas', href: '/creator/ideas', icon: Lightbulb },
  { labelKey: 'navPipeline', href: '/creator/pipeline', icon: KanbanSquare },
  { labelKey: 'navCalendar', href: '/creator/calendar', icon: CalendarRange },
@@ -47,12 +54,16 @@ const CREATOR_NAV: CreatorNavItem[] = [
  ];
 
 export default function StudioTopbar() {
- const { t, lang, setLang } = useStudioT();
+ const { t, lang, setLang, doiDuocNgonNgu } = useStudioT();
  const pathname = usePathname();
  const router = useRouter();
  const openCreateModal = useStudioStore((s) => s.openCreateModal);
  const openSeriesModal = useStudioStore((s) => s.openSeriesModal);
  const [user, setUser] = useState<{ name: string } | null>(null);
+ // Trong app desktop: không có trang /admin của web, và `/api/auth/admin-check`
+ // là route của Next (app chạy ở app://…) — bỏ cả nút lẫn lời gọi.
+ const [trongApp, setTrongApp] = useState(false);
+ useEffect(() => { setTrongApp(laAppDesktop()); }, []);
 
  // We don't need a hard auth gate here — middleware + the
  // creator layout already verified the admin cookie. But
@@ -60,6 +71,7 @@ export default function StudioTopbar() {
  // pull it from the same admin-check endpoint the admin
  // panel uses.
  useEffect(() => {
+ if (laAppDesktop()) return;
  let cancelled = false;
  (async () => {
  try {
@@ -86,9 +98,9 @@ export default function StudioTopbar() {
  initial={{ y: -10, opacity: 0 }}
  animate={{ y: 0, opacity: 1 }}
  transition={{ duration: 0.35, ease: [0.23, 1, 0.32, 1] }}
- className="sticky top-0 z-30 border-b border-studio-500/20 bg-darkcard/70 backdrop-blur-xl"
+ className={`${css.bar} sticky top-0 z-30 border-b border-studio-500/20 bg-darkcard`}
  >
- <div className="flex items-center gap-4 px-4 sm:px-6 h-14">
+ <div className="flex items-center gap-3 px-4 sm:px-6 h-14">
  {/* Brand — amber gradient chip + name. */}
  <Link
  href="/creator"
@@ -97,19 +109,19 @@ export default function StudioTopbar() {
  <div className="w-9 h-9 rounded-xl bg-studio-gradient flex items-center justify-center shadow-[0_0_18px_rgba(245,158,11,0.35)] group-hover:shadow-[0_0_24px_rgba(245,158,11,0.55)] transition-shadow">
  <Clapperboard className="w-5 h-5 text-studio-950" strokeWidth={2.4} />
  </div>
- <div className="hidden sm:flex flex-col leading-tight">
+ <div className={`${css.thuongHieu} flex-col leading-tight`}>
  <span className="font-heading font-bold text-sm text-text-primary">
  {t('studioName')}
  </span>
  <span className="text-[10px] uppercase tracking-[0.18em] text-studio-400">
- cuonghoang.dev / creator
+ cuongthai.com / creator
  </span>
  </div>
  </Link>
 
  {/* In-area nav. Active route gets amber pill; inactive
  routes are dim. Mobile: icons only. Desktop: icon + label. */}
- <nav className="flex items-center gap-1 ml-2 overflow-x-auto">
+ <nav className="flex items-center gap-1 min-w-0 overflow-x-auto">
  {CREATOR_NAV.map((item) => {
  const isActive =
  pathname === item.href ||
@@ -119,7 +131,8 @@ export default function StudioTopbar() {
  <Link
  key={item.href}
  href={item.href}
- className={`group flex items-center gap-1.5 px-3 h-9 rounded-lg text-sm font-medium transition-all ${
+ title={t(item.labelKey)}
+ className={`group flex items-center gap-1.5 px-2.5 h-9 shrink-0 rounded-lg text-sm font-medium transition-all ${
  isActive
  ? 'bg-studio-500/15 text-studio-300 ring-1 ring-studio-500/30'
  : 'text-text-secondary hover:text-text-primary hover:bg-white/5'
@@ -130,21 +143,22 @@ export default function StudioTopbar() {
  isActive ? 'text-studio-400' : 'text-text-muted group-hover:text-text-secondary'
  }`}
  />
- <span className="hidden md:inline whitespace-nowrap">{t(item.labelKey)}</span>
+ <span className={css.nhanNav}>{t(item.labelKey)}</span>
  </Link>
  );
  })}
  </nav>
 
- <div className="ml-auto flex items-center gap-2">
+ <div className="ml-auto flex items-center gap-2 shrink-0">
  {/* Back to admin panel — quick escape hatch. */}
- <Link
+ {!trongApp && <Link
  href="/admin"
- className="hidden sm:flex items-center gap-1.5 px-2.5 h-9 rounded-lg text-xs text-text-muted hover:text-text-primary hover:bg-white/5 transition-colors"
+ title={t('backToAdmin')}
+ className="flex items-center gap-1.5 px-2.5 h-9 rounded-lg text-xs text-text-muted hover:text-text-primary hover:bg-white/5 transition-colors"
  >
  <ArrowLeft className="w-3.5 h-3.5" />
- <span>{t('backToAdmin')}</span>
- </Link>
+ <span className={css.nhanPhu}>{t('backToAdmin')}</span>
+ </Link>}
 
  {/* New project CTA — primary amber. Opens the global
  CreateProjectModal via studioStore so this works from
@@ -153,10 +167,11 @@ export default function StudioTopbar() {
  in-flight edits). */}
  <button
  onClick={() => openCreateModal()}
- className="flex items-center gap-1.5 px-3 h-9 rounded-lg bg-studio-gradient text-studio-950 font-semibold text-sm shadow-[0_0_20px_rgba(245,158,11,0.25)] hover:shadow-[0_0_28px_rgba(245,158,11,0.45)] transition-shadow"
+ title={t('newProject')}
+ className="flex items-center gap-1.5 px-3 h-9 whitespace-nowrap rounded-lg bg-studio-gradient text-studio-950 font-semibold text-sm shadow-[0_0_20px_rgba(245,158,11,0.25)] hover:shadow-[0_0_28px_rgba(245,158,11,0.45)] transition-shadow"
  >
  <Plus className="w-4 h-4" strokeWidth={2.6} />
- <span className="hidden sm:inline">{t('newProject')}</span>
+ <span className={css.nhanChinh}>{t('newProject')}</span>
  </button>
 
  {/* Series generator — the bulk sibling of "New project".
@@ -169,13 +184,13 @@ export default function StudioTopbar() {
  className="flex items-center gap-1.5 px-3 h-9 rounded-lg border border-studio-500/40 text-studio-300 hover:bg-studio-500/10 hover:border-studio-500/60 font-semibold text-sm transition-colors"
  >
  <Wand2 className="w-4 h-4" />
- <span className="hidden md:inline whitespace-nowrap">{t('seriesGen')}</span>
+ <span className={css.nhanPhu}>{t('seriesGen')}</span>
  </button>
 
  {/* Language toggle. Writes the SITE locale, not a
      studio-only flag — switching here and then navigating
      to /admin should keep the language you chose. */}
- <button
+ {doiDuocNgonNgu && <button
  type="button"
  onClick={() => setLang(lang === 'vi' ? 'en' : 'vi')}
  title={t('languageLabel')}
@@ -184,10 +199,10 @@ export default function StudioTopbar() {
  >
  <Languages className="w-3.5 h-3.5 text-studio-400" />
  <span className="uppercase tracking-wider">{lang}</span>
- </button>
+ </button>}
 
  {/* Role pill — only shows on >=md. */}
- <div className="hidden md:flex items-center gap-1.5 pl-2.5 ml-1 border-l border-darkborder text-xs text-text-secondary">
+ <div className={`${css.nguoi} items-center gap-1.5 pl-2.5 ml-1 border-l border-darkborder text-xs text-text-secondary`}>
  <Shield className="w-3.5 h-3.5 text-studio-400" />
  <span className="max-w-[120px] truncate">{user?.name ?? 'Admin'}</span>
  </div>

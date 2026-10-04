@@ -98,6 +98,7 @@ const musicLikesRoutes = (await import(path.join(__dirname, 'routes', 'music-lik
 const musicPlayCountsRoutes = (await import(path.join(__dirname, 'routes', 'music-play-counts.routes.js'))).default;
 // Cyber-music Phase 2b: synced karaoke lyrics (per-track, idempotent upsert).
 const musicLyricsRoutes = (await import(path.join(__dirname, 'routes', 'music-lyrics.routes.js'))).default;
+const musicChartsRoutes = (await import(path.join(__dirname, 'routes', 'music-charts.routes.js'))).default;
 const aiRoutesModule = await import(path.join(__dirname, 'routes', 'ai.routes.js'));
 const aiRoutes = aiRoutesModule.default;
 // Agent lập trình của app desktop — giao thức gọi tool nhiều lượt, khác hẳn
@@ -566,6 +567,8 @@ app.use('/api/v1/music/queue', musicQueueRoutes);
 // Cyber-music Phase 2a — likes + most-played.
 app.use('/api/v1/music/likes', musicLikesRoutes);
 app.use('/api/v1/music/play-counts', musicPlayCountsRoutes);
+// Bảng xếp hạng: Top 100 VN (Apple RSS) + Thịnh hành YouTube, cập nhật mỗi sáng.
+app.use('/api/v1/music/charts', musicChartsRoutes);
 // Cyber-music Phase 2b — synced karaoke lyrics (/tracks/:id/lyrics).
 app.use('/api/v1/music', musicLyricsRoutes);
 app.use('/api/v1/ai', aiRoutes);

@@ -16,7 +16,7 @@
 // unreachable and has been removed rather than translated.)
 
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -34,6 +34,7 @@ import {
  Save,
  Sparkles,
  Trash2,
+ Wand2,
 } from 'lucide-react';
 import {
  useContentProject,
@@ -51,6 +52,7 @@ import ShotlistTab from './ShotlistTab';
 import PlatformsTab from './PlatformsTab';
 import ChecklistTab from './ChecklistTab';
 import PerformanceTab from './PerformanceTab';
+import AiTab from './AiTab';
 import { CONTENT_STATUS_META, STATUS_ORDER } from '@/lib/studio-meta';
 import { pick, useStudioT, type StudioKey, type StudioLang } from '@/lib/studio-i18n';
 import type {
@@ -73,6 +75,7 @@ interface TabDef {
 
 const TABS: TabDef[] = [
  { id: 'overview', labelKey: 'tabOverview', icon: LayoutDashboard },
+ { id: 'ai', labelKey: 'tabAi', icon: Wand2 },
  { id: 'storyboard', labelKey: 'tabStoryboard', icon: Film },
  { id: 'teleprompter', labelKey: 'tabTeleprompter', icon: Mic },
  { id: 'script', labelKey: 'tabScript', icon: Pencil },
@@ -96,7 +99,12 @@ export default function ProjectEditorShell({ projectId }: ProjectEditorShellProp
  // the user can edit fields and see the diff before the
  // debounce fires.
  const [form, setForm] = useState<ContentProject | null>(null);
- const [activeTab, setActiveTab] = useState<string>('overview');
+ // `?tab=teleprompter` (từ "Quay khoá học" → nút Teleprompter) mở thẳng tab đó.
+ const searchParams = useSearchParams();
+ const [activeTab, setActiveTab] = useState<string>(() => {
+ const q = searchParams?.get('tab');
+ return q && TABS.some((tab) => tab.id === q) ? q : 'overview';
+ });
 
  // When the server data arrives, populate the form.
  // We also update the form when the autosave returns a
@@ -118,7 +126,10 @@ export default function ProjectEditorShell({ projectId }: ProjectEditorShellProp
 
  const isDirty = useMemo(() => {
  if (!form || !lastSavedRef.current) return false;
- return JSON.stringify(form) !== JSON.stringify(lastSavedRef.current);
+ // So theo PAYLOAD (thứ thật sự gửi đi), không theo JSON thô: máy chủ ghi
+ // lại mọi dòng con ở mỗi lần PUT nên `updatedAt` của chúng luôn đổi — so
+ // JSON thô thì sau lần lưu đầu tiên trang báo "Chưa lưu" mãi mãi.
+ return vanTayForm(form) !== vanTayForm(lastSavedRef.current);
  }, [form]);
 
  const { status, lastSavedAt, scheduleSave, flushNow } = useProjectAutosave({
@@ -134,7 +145,13 @@ export default function ProjectEditorShell({ projectId }: ProjectEditorShellProp
  // only ~30 fields) and bullet-proof.
  setForm((prev) => {
  if (!prev) return saved;
- if (JSON.stringify(prev) === JSON.stringify({ ...prev, ...saved })) {
+ // ⚠️ So bằng PAYLOAD, không bằng JSON thô (sửa 04/10/2026). Mỗi PUT
+ // máy chủ cập nhật lại mọi dòng con (ngày quay, cảnh, bài đăng, việc cần
+ // làm, hiệu quả) ⇒ `updatedAt` của chúng đổi ⇒ JSON thô luôn khác ⇒
+ // setForm ⇒ hẹn lưu lại ⇒ PUT mỗi 1,2 giây VÔ TẬN với mọi dự án có dòng
+ // con (đo: log máy chủ một PUT/giây khi chỉ mở trang). Payload chỉ chứa
+ // thứ người dùng sửa được (+ id mới cấp), nên bằng nhau là thật sự xong.
+ if (vanTayForm(prev) === vanTayForm({ ...prev, ...saved })) {
  return prev; // no change — bail out
  }
  return { ...prev, ...saved };
@@ -203,7 +220,7 @@ export default function ProjectEditorShell({ projectId }: ProjectEditorShellProp
  const derivedStatus: SaveStatus = status === 'idle' && isDirty ? 'dirty' : status;
 
  return (
- <div className="px-4 sm:px-6 lg:px-8 py-6 max-w-7xl mx-auto">
+ <div className="px-[clamp(14px,2.4vw,36px)] py-6 w-full max-w-[2400px] mx-auto">
  {/* Topbar: back link + title + pills + save indicator + delete */}
  <div className="flex items-center gap-3 mb-4">
  <Link
@@ -292,6 +309,15 @@ export default function ProjectEditorShell({ projectId }: ProjectEditorShellProp
  </nav>
  </div>
 
+ {/* Trợ lý AI luôn được giữ trong cây (chỉ ẩn khi sang tab khác): một lượt
+     AI soạn gói quay chạy 1–4 phút, tháo component là mất kết quả đang chờ. */}
+ <div className={activeTab === 'ai' ? '' : 'hidden'}>
+ <AiTab
+ project={form}
+ onPatch={(patch) => setForm((prev) => (prev ? { ...prev, ...patch } : prev))}
+ />
+ </div>
+
  {/* Tab content */}
  <AnimatePresence mode="wait">
  <motion.div
@@ -361,6 +387,15 @@ export default function ProjectEditorShell({ projectId }: ProjectEditorShellProp
 }
 
 // ─── Helpers ─────────────────────────────────────────────────────
+
+/** Vân tay của những gì người dùng sửa được — payload, bỏ dấu thời gian của
+ *  dòng `performance` (máy chủ đóng dấu lại mỗi lần lưu). Xem chú thích ở onSaved. */
+function vanTayForm(form: ContentProject): string {
+ const p = buildPayload(form);
+ const perf = p.performance as (Record<string, unknown> | null);
+ const { createdAt: _c, updatedAt: _u, ...perfGon } = perf ?? {};
+ return JSON.stringify({ ...p, performance: perf ? perfGon : null });
+}
 
 /**
  * Build the PUT payload from the current form. The
@@ -515,7 +550,7 @@ function StatusQuickPicker({
  animate={{ opacity: 1, y: 0, scale: 1 }}
  exit={{ opacity: 0, y: -2, scale: 0.97 }}
  transition={{ duration: 0.15 }}
- className="absolute left-0 top-full mt-1.5 z-30 min-w-[180px] py-1 rounded-xl border border-studio-500/20 bg-[#0d0f18]/95 backdrop-blur-2xl shadow-[0_12px_32px_rgba(0,0,0,0.5)]"
+ className="absolute left-0 top-full mt-1.5 z-30 min-w-[180px] py-1 rounded-xl border border-studio-500/20 bg-[#0d0f18] shadow-[0_12px_32px_rgba(0,0,0,0.5)]"
  role="listbox"
  >
  {STATUS_ORDER.map((s) => {

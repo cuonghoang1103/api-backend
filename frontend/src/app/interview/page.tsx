@@ -177,7 +177,11 @@ export default function InterviewSetupPage() {
   const nextStep = () => ++step;
 
   return (
-    <div className="relative min-h-screen bg-darkbg text-slate-100 pt-16 overflow-hidden">
+    // `overflow-clip`, KHÔNG `overflow-hidden`: hidden biến khối này thành khung
+    // cuộn riêng (dù nó không cuộn), và thanh "Bắt đầu" `sticky` bên dưới sẽ
+    // dính vào khối KHÔNG cuộn đó — tức là không bao giờ dính. clip vẫn cắt nền
+    // hạt tràn ra ngoài nhưng không tạo khung cuộn.
+    <div className="relative min-h-screen bg-darkbg text-slate-100 pt-16 overflow-clip">
       <ParticleBackground density="medium" />
       <div className="relative z-10 max-w-3xl mx-auto px-4 py-10">
         {/* Header */}
@@ -519,8 +523,25 @@ export default function InterviewSetupPage() {
               </Section>
             )}
 
-            {/* Start */}
-            <div className="pt-2">
+            {/* Start — thanh DÍNH ĐÁY (04/10/2026). Trang cài đặt dài 8 mục; nút
+                bắt đầu nằm cuối cùng nên phải cuộn hết mới thấy, và không có chỗ
+                nào tóm tắt mình đã chọn gì. Thanh này luôn hiện cả hai.
+                Không làm mờ nền (backdrop-blur giật khi cuộn) — nền đặc. */}
+            <div className="sticky bottom-0 z-20 -mx-4 px-4 py-3 border-t border-white/10 bg-darkbg flex flex-wrap items-center gap-x-4 gap-y-2" data-pv-bat-dau>
+              <div className="min-w-0 flex-1 text-xs text-slate-400 leading-relaxed">
+                <span className="text-slate-200 font-medium">
+                  {projectReady
+                    ? (projectName || t('pastedByHand'))
+                    : tracks.length
+                      ? tracks.map((tr) => dn(tr)).join(' + ')
+                      : (uiLang === 'VI' ? 'Chưa chọn vị trí' : 'No role picked yet')}
+                </span>
+                {' · '}{LEVEL_LABEL[level]}
+                {' · '}{numQuestions} {uiLang === 'VI' ? 'câu' : 'questions'}
+                {' · '}{language}
+                {topicIds.length > 0 && <>{' · '}{topicIds.length} {uiLang === 'VI' ? 'chủ đề' : 'topics'}</>}
+                {company && <>{' · '}{company.name}</>}
+              </div>
               <button
                 onClick={start}
                 disabled={(!tracks.length && !projectReady) || starting}

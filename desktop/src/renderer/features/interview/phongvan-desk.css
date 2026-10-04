@@ -1,0 +1,33 @@
+/*
+ * Phỏng vấn trong app desktop (04/10/2026) — co giãn theo VÙNG NỘI DUNG.
+ *
+ * Năm màn web (`/interview`, `drill`, `history`, `session/:id`, `report/:id`) chốt
+ * cứng `max-w-2xl/3xl/4xl` giữa màn hình: cửa sổ 1920px bỏ trống hai mảng lớn
+ * hai bên trong khi lưới vị trí vẫn bó 2 cột. Ở đây nới theo khung (container
+ * query — thanh bên app ăn 60–218px nên không đo theo cửa sổ được) và thêm cột
+ * khi đủ chỗ. Phạm vi `.ct-pv-khung`, không đụng web.
+ */
+.ct-pv-khung {
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  container: ctphongvan / inline-size;
+}
+
+@container ctphongvan (min-width: 1180px) {
+  .ct-pv-khung .max-w-3xl.mx-auto { max-width: 960px; }
+  .ct-pv-khung .max-w-4xl.mx-auto { max-width: 1080px; }
+  .ct-pv-khung .max-w-2xl.mx-auto { max-width: 820px; }
+}
+@container ctphongvan (min-width: 1500px) {
+  .ct-pv-khung .max-w-3xl.mx-auto { max-width: 1140px; }
+  .ct-pv-khung .max-w-4xl.mx-auto { max-width: 1240px; }
+  .ct-pv-khung .max-w-2xl.mx-auto { max-width: 900px; }
+  /* Màn cài đặt (nhận ra nhờ thanh "Bắt đầu" dính đáy): lưới vị trí/chủ đề 3 cột. */
+  .ct-pv-khung :has(> [data-pv-bat-dau]) .grid.sm\:grid-cols-2 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@container ctphongvan (min-width: 1800px) {
+  .ct-pv-khung .max-w-3xl.mx-auto { max-width: 1320px; }
+  .ct-pv-khung .max-w-4xl.mx-auto { max-width: 1400px; }
+  .ct-pv-khung :has(> [data-pv-bat-dau]) .grid.sm\:grid-cols-2 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}

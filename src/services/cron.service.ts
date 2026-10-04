@@ -124,6 +124,18 @@ export function startCronJobs(): void {
     }
   });
 
+  // ─── Bảng xếp hạng nhạc — 06:05 giờ VN (23:05 UTC) ───
+  // Apple RSS + YouTube chart (1 đơn vị), rồi ghép video cho tối đa 20 bài MỚI
+  // vào bảng (100 đơn vị/bài). Không dùng AI. Xem music-charts.service.ts.
+  cron.schedule('5 23 * * *', async () => {
+    try {
+      const { capNhatBangXepHang } = await import('./music-charts.service.js');
+      await capNhatBangXepHang();
+    } catch (err) {
+      logger.warn('[music-charts] cron cập nhật lỗi', { error: (err as Error).message });
+    }
+  }, { timezone: 'UTC' });
+
   cron.schedule('0 1 * * *', async () => {
     try {
       const { sendMorningReminders } = await import('./work/myWork.service.js');

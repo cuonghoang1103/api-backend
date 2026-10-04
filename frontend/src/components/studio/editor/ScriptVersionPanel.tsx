@@ -40,6 +40,7 @@ const ORIGIN_STYLE: Record<ScriptVersionOrigin, string> = {
  TEMPLATE: 'bg-blue-500/15 text-blue-300 ring-blue-500/30',
  RESTORE: 'bg-purple-500/15 text-purple-300 ring-purple-500/30',
  AUTO: 'bg-slate-500/15 text-slate-300 ring-slate-500/30',
+ AI: 'bg-emerald-500/15 text-emerald-300 ring-emerald-500/30',
 };
 
 interface ScriptVersionPanelProps {

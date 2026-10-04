@@ -60,7 +60,7 @@ import {
 } from 'lucide-react';
 import { nativePageFor } from './page-registry';
 
-export type RouteGroup = 'chinh' | 'ai' | 'hoc' | 'lam' | 'khac';
+export type RouteGroup = 'chinh' | 'ai' | 'hoc' | 'lam' | 'tien' | 'khac';
 
 export interface RouteDef {
   /** Đường dẫn, trùng với đường dẫn trên web để mở ngoài là ra đúng trang. */
@@ -147,8 +147,8 @@ export const ROUTES: readonly RouteDef[] = [
     keywords: ['courses', 'khoa hoc', 'khoá học'] },
   { path: '/code-lab', label: 'Code Lab', icon: Braces, group: 'hoc',
     keywords: ['code', 'lab', 'bài tập', 'thuc hanh'] },
-  { path: '/exam', label: 'Phòng thi', icon: ClipboardList, group: 'hoc',
-    keywords: ['exam', 'thi', 'de thi', 'kiem tra', 'phong thi'] },
+  { path: '/exam', label: 'Exam Room', icon: ClipboardList, group: 'hoc',
+    keywords: ['exam', 'exam room', 'phòng thi', 'thi', 'de thi', 'kiem tra', 'phong thi'] },
   { path: '/ielts', label: 'IELTS', icon: Award, group: 'hoc',
     keywords: ['ielts', 'luyen thi', 'band', 'listening', 'reading', 'writing', 'speaking', 'phat am', 'phong thi'] },
   { path: '/language', label: 'Ngoại ngữ', icon: Languages, group: 'hoc',
@@ -165,14 +165,14 @@ export const ROUTES: readonly RouteDef[] = [
      (`tax.aiAllowed` trong `app/interview/page.tsx`). Một nhãn "Cần tài khoản
      Pro" ở thanh bên làm người dùng free bỏ qua thứ họ dùng được đầy đủ.
      Bản thân trang đã nói đúng chuyện này: nó khoá riêng từng chế độ AI. */
-  { path: '/interview', label: 'Phỏng vấn', icon: MessageSquareCode, group: 'hoc',
-    keywords: ['interview', 'luyện phỏng vấn', 'phong van', 'mock interview', 'luyen phong van'] },
+  { path: '/interview', label: 'Interview', icon: MessageSquareCode, group: 'hoc',
+    keywords: ['interview', 'phỏng vấn', 'luyện phỏng vấn', 'phong van', 'mock interview', 'luyen phong van'] },
 
   // ── Làm & sáng tạo ───────────────────────────────────────
   { path: '/maker-lab', label: 'IoT Odin', icon: Cpu, group: 'lam',
     keywords: ['iot', 'odin', 'maker lab', 'maker', 'robot', 'odin', 'esp32', 'phan cung'] },
-  { path: '/creator', label: 'Xưởng nội dung', icon: Sparkles, group: 'lam',
-    keywords: ['creator', 'studio', 'kich ban', 'video', 'xuong'] },
+  { path: '/creator', label: 'Content Creator', icon: Sparkles, group: 'lam',
+    keywords: ['creator', 'content creator', 'xưởng nội dung', 'xuong noi dung', 'quay video', 'kich ban', 'vlog', 'studio', 'kich ban', 'video', 'xuong'] },
   { path: '/xuong-remix', label: 'Xưởng Remix', icon: AudioWaveform, group: 'lam',
     keywords: ['remix', 'dj', 'tach stem', 'vocal', 'bpm', 'vinahouse', 'nhac'] },
   /* CT Work — công cụ quản lý dự án kiểu Jira của web (`/work`), dùng lại
@@ -180,8 +180,8 @@ export const ROUTES: readonly RouteDef[] = [
   { path: '/work', label: 'CT Work', icon: KanbanSquare, group: 'lam',
     keywords: ['work', 'jira', 'kanban', 'board', 'sprint', 'backlog', 'issue',
                'quan ly du an', 'quản lý dự án', 'cong viec', 'công việc', 'task'] },
-  { path: '/projects', label: 'Dự án', icon: Briefcase, group: 'lam',
-    keywords: ['projects', 'du an'] },
+  { path: '/projects', label: 'Projects', icon: Briefcase, group: 'lam',
+    keywords: ['projects', 'du an', 'dự án', 'portfolio'] },
   { path: '/repos', label: 'Kho mã', icon: Library, group: 'lam',
     keywords: ['repos', 'github', 'kho ma'] },
   { path: '/exp-hub', label: 'Exp Hub', icon: BookOpen, group: 'lam',
@@ -192,12 +192,12 @@ export const ROUTES: readonly RouteDef[] = [
   // ── Khác ─────────────────────────────────────────────────
   { path: '/tech-trends', label: 'Tech Trends', icon: Newspaper, group: 'khac',
     keywords: ['tin công nghệ', 'blog', 'bài viết', 'tech'] },
-  { path: '/music', label: 'Nhạc', icon: Music, group: 'khac',
-    keywords: ['music', 'nghe nhạc', 'remix', 'nhac'] },
+  { path: '/music', label: 'Music', icon: Music, group: 'tien',
+    keywords: ['music', 'nghe nhạc', 'remix', 'nhac', 'thư giãn'] },
   { path: '/games', label: 'Trò chơi', icon: Gamepad2, group: 'khac',
     keywords: ['games', 'tro choi'] },
-  { path: '/finance', label: 'Tài chính', icon: Wallet, group: 'khac',
-    keywords: ['finance', 'tai chinh', 'moneyflow', 'chi tieu'] },
+  { path: '/finance', label: 'MoneyFlow', icon: Wallet, group: 'tien',
+    keywords: ['finance', 'tài chính', 'tai chinh', 'moneyflow', 'chi tieu'] },
   { path: '/forum', label: 'Diễn đàn', icon: Users, group: 'khac',
     keywords: ['forum', 'thảo luận', 'dien dan'] },
   { path: '/saved', label: 'Đã lưu', icon: Bookmark, group: 'khac',
@@ -206,7 +206,7 @@ export const ROUTES: readonly RouteDef[] = [
     keywords: ['profile', 'ca nhan', 'trang ca nhan'] },
   { path: '/pro', label: 'Pro', icon: Sparkles, group: 'khac',
     keywords: ['pro', 'nâng cấp', 'gói', 'nang cap'] },
-  { path: '/toc-do-mang', label: 'Mạng nhà', icon: Wifi, group: 'khac',
+  { path: '/toc-do-mang', label: 'Đo mạng', icon: Wifi, group: 'tien',
     keywords: ['mang', 'wifi', 'toc do', 'speedtest', 'thiet bi', 'quet mang', 'internet'] },
 ];
 
@@ -215,10 +215,11 @@ export const GROUP_LABELS: Record<RouteGroup, string> = {
   ai: 'AI',
   hoc: 'Học tập',
   lam: 'Làm & sáng tạo',
+  tien: 'Tiện ích',
   khac: 'Khác',
 };
 
-export const GROUP_ORDER: readonly RouteGroup[] = ['chinh', 'ai', 'hoc', 'lam', 'khac'];
+export const GROUP_ORDER: readonly RouteGroup[] = ['chinh', 'ai', 'hoc', 'lam', 'tien', 'khac'];
 
 /**
  * THANH BÊN GỌN — đúng danh sách người dùng chốt ngày 04/10/2026:
@@ -237,8 +238,11 @@ export const GROUP_ORDER: readonly RouteGroup[] = ['chinh', 'ai', 'hoc', 'lam', 
 export const THANH_BEN: Readonly<Partial<Record<RouteGroup, readonly string[]>>> = {
   chinh: ['/dashboard', '/messages', '/notes', '/friends'],
   ai: ['/chat', '/ai-templates'],
-  hoc: ['/ielts', '/academy', '/courses', '/language', '/algorithms', '/simulation', '/roadmap'],
-  lam: ['/maker-lab', '/work'],
+  hoc: ['/ielts', '/academy', '/courses', '/code-lab', '/exam', '/interview', '/language', '/algorithms', '/simulation', '/roadmap'],
+  lam: ['/creator', '/maker-lab', '/projects', '/work'],
+  /* Đợt 2 (04/10/2026): người dùng thêm lại Music, Projects, Interview, Code Lab,
+     Exam Room và mở nhóm "Tiện ích" (Đo mạng, MoneyFlow). */
+  tien: ['/music', '/toc-do-mang', '/finance'],
 };
 
 /** Route nội bộ của app — không có trên web, nên không mở ngoài được. */

@@ -51,6 +51,26 @@ export function laBaiYouTube(track: Track): boolean {
 
 export type RepeatMode = 'off' | 'all' | 'one';
 
+/**
+ * Bộ chỉnh âm — năm kiểu dựng sẵn, không cho kéo từng dải.
+ * Người nghe nhạc để thư giãn không muốn làm kỹ sư âm thanh; họ muốn chọn
+ * "dịu tai" và xong. Ba con số là dB cho trầm · giữa · bổng (xem `nhipNhac.ts`).
+ */
+export type MaEq = 'phang' | 'tram' | 'giong' | 'dem' | 'sang';
+export const EQ_SAN: Record<MaEq, readonly [number, number, number]> = {
+  phang: [0, 0, 0],
+  tram: [6, 0, -1],
+  giong: [-2, 4, 1.5],
+  dem: [3, -1, -7],
+  sang: [-1, 1, 5],
+};
+const EQ_KEY = 'ct-music-eq';
+
+/** Hẹn giờ tắt: mốc thời gian (ms) hoặc "hết bài này". */
+export type HenGio = number | 'het-bai' | null;
+/** Nhỏ dần trong bấy nhiêu giây cuối rồi mới dừng — tắt phụt là giật mình tỉnh. */
+export const GIAY_NHO_DAN = 8;
+
 const VOLUME_KEY = 'ct-music-volume';
 
 /** Backend có thể trả mảng trần hoặc bọc trong `{ tracks }` / `{ items }` / `{ data }`. */
@@ -171,6 +191,29 @@ interface MusicPlayerValue {
   setShuffle: (value: boolean | ((previous: boolean) => boolean)) => void;
   repeat: RepeatMode;
   setRepeat: (value: RepeatMode | ((previous: RepeatMode) => RepeatMode)) => void;
+  // Hàng chờ
+  /** Các bài SẮP phát, theo đúng thứ tự (đã tính trộn bài). */
+  tiepTheo: Track[];
+  /** Chèn ngay sau bài đang phát. */
+  phatTiep: (track: Track) => void;
+  /** Thêm vào cuối hàng chờ. */
+  themVaoHang: (track: Track) => void;
+  boKhoiHang: (trackId: number) => void;
+  // Thích
+  daThich: Set<number>;
+  doiThich: (track: Track) => Promise<void>;
+  /** Tăng mỗi lần ghi lịch sử nghe — để trang biết nạp lại "Nghe gần đây". */
+  nhipLichSu: number;
+  // Bộ chỉnh âm
+  eq: MaEq;
+  datEq: (ma: MaEq) => void;
+  /** `false` khi nguồn thiếu CORS buộc bỏ Web Audio — EQ không áp được. */
+  eqDuoc: boolean;
+  // Hẹn giờ tắt
+  henGio: HenGio;
+  /** Số giây còn lại (0 khi không hẹn hoặc hẹn "hết bài"). */
+  henGioConLai: number;
+  datHenGio: (phut: number | 'het-bai' | null) => void;
 }
 
 const Ctx = createContext<MusicPlayerValue | null>(null);
@@ -193,6 +236,8 @@ export function MusicPlayerProvider({ children }: { children: ReactNode }) {
   const [usage, setUsage] = useState({ count: 0, totalBytes: 0 });
 
   const [currentId, setCurrentId] = useState<number | null>(null);
+  const currentIdRef = useRef<number | null>(null);
+  currentIdRef.current = currentId;
   const [playing, setPlaying] = useState(false);
   const [position, setPosition] = useState(0);
   const [length, setLength] = useState(0);
@@ -205,6 +250,17 @@ export function MusicPlayerProvider({ children }: { children: ReactNode }) {
   const [muted, setMuted] = useState(false);
   const [shuffle, setShuffle] = useState(false);
   const [repeat, setRepeat] = useState<RepeatMode>('off');
+  const [daThich, setDaThich] = useState<Set<number>>(new Set());
+  const [nhipLichSu, setNhipLichSu] = useState(0);
+  const [eq, setEqState] = useState<MaEq>(() => {
+    try {
+      const v = localStorage.getItem(EQ_KEY);
+      return v && v in EQ_SAN ? (v as MaEq) : 'phang';
+    } catch { return 'phang'; }
+  });
+  const [eqDuoc, setEqDuoc] = useState(true);
+  const [henGio, setHenGioState] = useState<HenGio>(null);
+  const [henGioConLai, setHenGioConLai] = useState(0);
 
   /* MỘT thẻ audio cho cả vòng đời app.
    *
@@ -232,6 +288,8 @@ export function MusicPlayerProvider({ children }: { children: ReactNode }) {
   const nhipRef = useRef<DoNhip | null>(null);
   const nhipHong = useRef(false);
   const mucNhip = useCallback(() => nhipRef.current?.muc() ?? 0, []);
+  const eqRef = useRef<MaEq>(eq);
+  eqRef.current = eq;
   /** Hàng phát: chốt lúc bấm phát, KHÔNG bám theo ô tìm kiếm. */
   const [queue, setQueue] = useState<Track[]>([]);
   const shuffleOrder = useRef<number[]>([]);
@@ -304,6 +362,7 @@ export function MusicPlayerProvider({ children }: { children: ReactNode }) {
       nhipHong.current = true;
       nhipRef.current?.dong();
       nhipRef.current = null;
+      setEqDuoc(false);
 
       const moi = new Audio();          // KHÔNG đặt crossOrigin
       const mocDangDo = el.currentTime;
@@ -354,7 +413,8 @@ export function MusicPlayerProvider({ children }: { children: ReactNode }) {
     setError(null);
     if (danhSach && danhSach.length > 0) {
       setQueue(danhSach);
-      shuffleOrder.current = shuffled(danhSach.map((t) => t.id));
+      // Bài vừa bấm đứng ĐẦU thứ tự trộn — để "Tiếp theo" là phần còn lại.
+      shuffleOrder.current = [track.id, ...shuffled(danhSach.map((t) => t.id).filter((id) => id !== track.id))];
     }
     element.src = src;
     element.volume = muted ? 0 : volume;
@@ -365,7 +425,8 @@ export function MusicPlayerProvider({ children }: { children: ReactNode }) {
        trước cú bấm đầu tiên sẽ ở trạng thái `suspended` và im lặng mãi. */
     if (!nhipRef.current && !nhipHong.current) {
       nhipRef.current = doNhip(element);
-      if (!nhipRef.current) nhipHong.current = true;
+      if (!nhipRef.current) { nhipHong.current = true; setEqDuoc(false); }
+      else { const [t, g, b] = EQ_SAN[eqRef.current]; nhipRef.current.datEq(t, g, b); }
     }
 
     void element.play().then(
@@ -373,7 +434,7 @@ export function MusicPlayerProvider({ children }: { children: ReactNode }) {
       () => { setError(`Không phát được "${track.title}".`); setPlaying(false); },
     );
     void window.cuongthai?.robot.baoNhac(`${track.title}${track.artist ? ` — ${track.artist}` : ''}`);
-  }, [playableSrc, muted, volume]);
+  }, [playableSrc, muted, volume, online]);
 
   const toggle = useCallback(() => {
     const element = audioRef.current;
@@ -395,11 +456,19 @@ export function MusicPlayerProvider({ children }: { children: ReactNode }) {
     const order = ids.filter((id) => hang.some((t) => t.id === id));
     const list = order.length === hang.length ? order : hang.map((t) => t.id);
     const at = currentId === null ? -1 : list.indexOf(currentId);
-    // Chưa phát gì thì "bài sau" là bài đầu tiên, không phải bài thứ hai.
-    const nextIndex = at === -1 ? 0 : (at + delta + list.length) % list.length;
-    const track = hang.find((t) => t.id === list[nextIndex]);
-    if (track) playTrack(track);
-  }, [queue, tracks, shuffle, currentId, playTrack]);
+    /* BỎ QUA bài không phát được (YouTube chưa rút âm thanh, hoặc chưa tải khi
+       mất mạng). Không bỏ qua thì "bài sau" dừng chết ở dòng đó với một câu
+       báo lỗi, giữa lúc người ta đang nghe liền mạch. */
+    const huong = delta < 0 ? -1 : 1;
+    for (let buoc = 0; buoc < list.length; buoc++) {
+      // Chưa phát gì thì "bài sau" là bài đầu tiên, không phải bài thứ hai.
+      const nextIndex = at === -1
+        ? (buoc % list.length)
+        : (((at + delta + huong * buoc) % list.length) + list.length) % list.length;
+      const track = hang.find((t) => t.id === list[nextIndex]);
+      if (track && playableSrc(track)) { playTrack(track); return; }
+    }
+  }, [queue, tracks, shuffle, currentId, playTrack, playableSrc]);
 
   /*
    * PHÍM MEDIA của bàn phím (kể cả khi app không ở trước) — main gửi xuống qua
@@ -418,9 +487,28 @@ export function MusicPlayerProvider({ children }: { children: ReactNode }) {
   }, [toggle, step]);
 
   // Dựng lại thứ tự xáo trộn mỗi khi BẬT xáo trộn.
+  /* Chỉ khi BẬT trộn (hoặc thư viện đổi cỡ), KHÔNG mỗi lần `queue` đổi: chèn
+     "phát tiếp theo" cũng đổi `queue`, và trộn lại lúc đó là vứt đi đúng chỗ
+     người dùng vừa chèn. Bài đang phát được đưa lên đầu thứ tự mới, để "bài
+     sau" là bài trộn đầu tiên chứ không phải nhảy lung tung về trước. */
+  const hangDai = (queue.length > 0 ? queue : tracks).length;
+  const [phienTron, setPhienTron] = useState(0);
+  const tronTruoc = useRef(false);
   useEffect(() => {
-    if (shuffle) shuffleOrder.current = shuffled((queue.length > 0 ? queue : tracks).map((t) => t.id));
-  }, [shuffle, queue, tracks]);
+    const vuaBat = shuffle && !tronTruoc.current;
+    tronTruoc.current = shuffle;
+    if (!shuffle) return;
+    const hang = queue.length > 0 ? queue : tracks;
+    /* Thứ tự hiện có đã khớp đúng hàng (vừa bấm phát / vừa chèn bài) thì GIỮ —
+       chỉ trộn mới khi người dùng vừa bật trộn hoặc hàng đổi mà thứ tự lệch. */
+    const ids = new Set(hang.map((t) => t.id));
+    const khop = shuffleOrder.current.length === ids.size && shuffleOrder.current.every((id) => ids.has(id));
+    if (!vuaBat && khop) { setPhienTron((n) => n + 1); return; }
+    const tron = shuffled(hang.map((t) => t.id).filter((id) => id !== currentIdRef.current));
+    shuffleOrder.current = currentIdRef.current !== null ? [currentIdRef.current, ...tron] : tron;
+    setPhienTron((n) => n + 1); // để "Tiếp theo" đọc lại thứ tự vừa trộn
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [shuffle, hangDai]);
 
   // ─── Nối sự kiện của thẻ audio ──────────────────────────
   useEffect(() => {
@@ -432,6 +520,8 @@ export function MusicPlayerProvider({ children }: { children: ReactNode }) {
     const onPlay = () => setPlaying(true);
     const onPause = () => setPlaying(false);
     const onEnded = () => {
+      // Hẹn "hết bài này" ⇒ dừng đúng ở đây, không sang bài kế.
+      if (henGioRef.current === 'het-bai') { setPlaying(false); setHenGioState(null); return; }
       if (repeat === 'one') { element.currentTime = 0; void element.play(); return; }
       // Hết danh sách mà không lặp thì DỪNG, không quay về đầu. Tự phát lại từ
       // đầu là thứ người dùng không yêu cầu và rất khó hiểu khi đang làm việc khác.
@@ -462,7 +552,7 @@ export function MusicPlayerProvider({ children }: { children: ReactNode }) {
   // Âm lượng: nhớ lại giữa các lần mở app.
   useEffect(() => {
     const element = audioRef.current;
-    if (element) element.volume = muted ? 0 : volume;
+    if (element) element.volume = (muted ? 0 : volume) * heSoNhoDan.current;
     localStorage.setItem(VOLUME_KEY, String(volume));
   }, [volume, muted]);
 
@@ -485,6 +575,131 @@ export function MusicPlayerProvider({ children }: { children: ReactNode }) {
     set('previoustrack', () => step(-1));
     set('nexttrack', () => step(1));
   }, [current, playing, toggle, step]);
+
+  // ─── Thích ──────────────────────────────────────────────
+  useEffect(() => {
+    if (!api || userId === null || !online) return;
+    let con = true;
+    void api.request<unknown>('/api/v1/music/likes/ids')
+      .then((ids) => { if (con && Array.isArray(ids)) setDaThich(new Set(ids.map(Number))); })
+      .catch(() => { /* chưa đọc được thì trái tim để trống — không chặn việc nghe */ });
+    return () => { con = false; };
+  }, [api, userId, online]);
+
+  const doiThich = useCallback(async (track: Track) => {
+    if (!api) return;
+    const dangThich = daThich.has(track.id);
+    // Lạc quan: đổi ngay trên màn hình, hỏng thì trả lại và báo.
+    setDaThich((cu) => { const m = new Set(cu); if (dangThich) m.delete(track.id); else m.add(track.id); return m; });
+    try {
+      await api.request(`/api/v1/music/likes/${track.id}`, { method: dangThich ? 'DELETE' : 'POST' });
+    } catch (e) {
+      setDaThich((cu) => { const m = new Set(cu); if (dangThich) m.add(track.id); else m.delete(track.id); return m; });
+      setError(`Không lưu được lượt thích: ${e instanceof Error ? e.message : String(e)}`);
+    }
+  }, [api, daThich]);
+
+  /*
+   * LỊCH SỬ NGHE — ghi khi bài đã chạy thật 10 giây, không ghi lúc bấm.
+   * Bấm lướt qua năm bài để tìm bài mình muốn mà cả năm vào "Nghe gần đây" (và
+   * cộng lượt nghe) là làm hỏng chính danh sách ấy. Mỗi lần phát một bài chỉ
+   * ghi MỘT lần — `daGhi` gỡ khi đổi bài.
+   */
+  const daGhi = useRef<number | null>(null);
+  useEffect(() => { daGhi.current = null; }, [currentId]);
+  useEffect(() => {
+    if (!api || !online || currentId === null || position < 10 || daGhi.current === currentId) return;
+    daGhi.current = currentId;
+    void api.request('/api/v1/music/history', { method: 'POST', body: { trackId: currentId } })
+      .then(() => setNhipLichSu((n) => n + 1))
+      .catch(() => { /* ghi hỏng không đáng làm phiền người đang nghe */ });
+  }, [api, online, currentId, position]);
+
+  // ─── Bộ chỉnh âm ────────────────────────────────────────
+  const datEq = useCallback((ma: MaEq) => {
+    setEqState(ma);
+    try { localStorage.setItem(EQ_KEY, ma); } catch { /* thôi */ }
+    const [t, g, b] = EQ_SAN[ma];
+    nhipRef.current?.datEq(t, g, b);
+  }, []);
+
+  // ─── Hẹn giờ tắt ────────────────────────────────────────
+  /*
+   * Sống ở PROVIDER, không ở trang Nhạc. Bản trước nằm trong trang: hẹn 30
+   * phút rồi chuyển sang Ghi chú là React tháo bộ đếm, nhạc phát mãi — đúng
+   * lúc người ta tin là nó sẽ tự tắt khi mình ngủ.
+   *
+   * Nhỏ dần bằng một HỆ SỐ nhân vào âm lượng, không ghi đè `volume`: người
+   * dùng huỷ giữa chừng thì âm lượng về đúng chỗ cũ, và mức đã lưu không bị
+   * kéo về 0 cho lần mở app sau.
+   */
+  const heSoNhoDan = useRef(1);
+  const henGioRef = useRef<HenGio>(null);
+  henGioRef.current = henGio;
+  const apAmLuong = useCallback(() => {
+    const el = audioRef.current;
+    if (el) el.volume = (muted ? 0 : volume) * heSoNhoDan.current;
+  }, [muted, volume]);
+
+  const datHenGio = useCallback((phut: number | 'het-bai' | null) => {
+    heSoNhoDan.current = 1;
+    apAmLuong();
+    setHenGioConLai(0);
+    setHenGioState(phut === null ? null : phut === 'het-bai' ? 'het-bai' : Date.now() + phut * 60_000);
+  }, [apAmLuong]);
+
+  useEffect(() => {
+    if (typeof henGio !== 'number') return;
+    const nhip = setInterval(() => {
+      const con = Math.max(0, Math.round((henGio - Date.now()) / 1000));
+      setHenGioConLai(con);
+      if (con <= GIAY_NHO_DAN) {
+        heSoNhoDan.current = Math.max(0, con / GIAY_NHO_DAN);
+        apAmLuong();
+      }
+      if (con <= 0) {
+        audioRef.current?.pause();
+        setPlaying(false);
+        heSoNhoDan.current = 1;
+        apAmLuong();
+        setHenGioState(null);
+      }
+    }, 1000);
+    return () => clearInterval(nhip);
+  }, [henGio, apAmLuong]);
+
+  // ─── Hàng chờ ───────────────────────────────────────────
+  const tiepTheo = useMemo(() => {
+    const hang = queue.length > 0 ? queue : tracks;
+    const ids = shuffle && shuffleOrder.current.length === hang.length ? shuffleOrder.current : hang.map((t) => t.id);
+    const at = currentId === null ? -1 : ids.indexOf(currentId);
+    const sau = ids.slice(at + 1);
+    if (repeat === 'all') sau.push(...ids.slice(0, Math.max(0, at)));
+    const theoId = new Map(hang.map((t) => [t.id, t]));
+    return sau.map((id) => theoId.get(id)).filter((t): t is Track => Boolean(t));
+    // shuffleOrder là ref — `phienTron` tăng mỗi lần nó được trộn lại.
+  }, [queue, tracks, shuffle, currentId, repeat, phienTron]);
+
+  /** Chèn `track` vào hàng (bỏ bản cũ nếu đã có) ngay sau bài đang phát hoặc ở cuối. */
+  const chenVaoHang = useCallback((track: Track, ngaySau: boolean) => {
+    const goc = (queue.length > 0 ? queue : tracks).filter((t) => t.id !== track.id);
+    const at = currentId === null ? -1 : goc.findIndex((t) => t.id === currentId);
+    const moi = [...goc];
+    moi.splice(ngaySau ? at + 1 : moi.length, 0, track);
+    const thuTu = shuffleOrder.current.filter((id) => id !== track.id);
+    const atTron = currentId === null ? -1 : thuTu.indexOf(currentId);
+    thuTu.splice(ngaySau ? atTron + 1 : thuTu.length, 0, track.id);
+    shuffleOrder.current = thuTu;
+    setQueue(moi);
+  }, [queue, tracks, currentId]);
+
+  const phatTiep = useCallback((track: Track) => chenVaoHang(track, true), [chenVaoHang]);
+  const themVaoHang = useCallback((track: Track) => chenVaoHang(track, false), [chenVaoHang]);
+  const boKhoiHang = useCallback((trackId: number) => {
+    if (trackId === currentId) return;
+    shuffleOrder.current = shuffleOrder.current.filter((id) => id !== trackId);
+    setQueue((cu) => (cu.length > 0 ? cu : tracks).filter((t) => t.id !== trackId));
+  }, [currentId, tracks]);
 
   // ─── Tua ────────────────────────────────────────────────
   const batDauTua = useCallback((giay: number) => {
@@ -579,7 +794,13 @@ export function MusicPlayerProvider({ children }: { children: ReactNode }) {
     playTrack, toggle, step, batDauTua, chotTua, tuaToi,
     volume, setVolume, muted, setMuted, shuffle, setShuffle, repeat, setRepeat,
     mucNhip,
+    tiepTheo, phatTiep, themVaoHang, boKhoiHang,
+    daThich, doiThich, nhipLichSu,
+    eq, datEq, eqDuoc,
+    henGio, henGioConLai, datHenGio,
   }), [
+    tiepTheo, phatTiep, themVaoHang, boKhoiHang, daThich, doiThich, nhipLichSu,
+    eq, datEq, eqDuoc, henGio, henGioConLai, datHenGio,
     tracks, loading, error, loadTracks, downloaded, downloading, usage, download, remove, clearAll,
     current, currentId, playing, position, length, seeking,
     playTrack, toggle, step, batDauTua, chotTua, tuaToi, volume, muted, shuffle, repeat,

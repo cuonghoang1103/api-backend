@@ -1,9 +1,17 @@
 /**
  * Trang Nhạc — chỉ là phần NHÌN.
  *
- * Mọi thứ liên quan tới phát nhạc (thẻ <audio>, hàng phát, âm lượng, phím media)
- * nằm ở `player.tsx`, gắn một lần ở gốc app. Trang này rời màn hình lúc nào cũng
- * được mà bài đang nghe không hề hấn — xem đầu `player.tsx` để biết vì sao.
+ * Mọi thứ liên quan tới phát nhạc (thẻ <audio>, hàng phát, âm lượng, phím media,
+ * thích, lịch sử, chỉnh âm, hẹn giờ) nằm ở `player.tsx`, gắn một lần ở gốc app.
+ * Âm thanh nền nằm ở `khongGian.ts`. Trang này rời màn hình lúc nào cũng được mà
+ * bài đang nghe, tiếng mưa hay hẹn giờ không hề hấn.
+ *
+ * ─── Bố cục (04/10/2026) ───
+ *   [ cột trái: Dành cho bạn · Thư viện · Đã thích · Gần đây · Đã tải · Remix · playlist ]
+ *   [ giữa: nội dung theo mục, ô tìm luôn ở trên ]
+ *   [ cột phải: đang phát + Tiếp theo · Lời · Không gian ]
+ * Ba cột tự cuộn riêng, như mọi app nghe nhạc trên máy tính — cuộn thư viện 70
+ * bài không đẩy mất hàng chờ.
  *
  * ─── Hai nguồn phát, chọn theo thứ tự ───
  *  1. Đã tải  → `app://cuongthai/media/<id>` (đọc từ đĩa, tua được, không tốn mạng)
@@ -12,22 +20,30 @@
  * ⚠️ TÊN TRƯỜNG. Máy chủ trả thẳng hình dạng model Prisma: `coverImage`,
  * `durationSeconds` — KHÔNG phải `coverUrl`/`duration`.
  */
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { HenGio } from './HenGio';
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import {
-  CheckCircle2, CloudOff, Disc3, Download, HardDrive, ListMusic, Loader2, Maximize2,
-  Music2, Pause, Play, Plus, RefreshCw, Search, Shuffle, Youtube,
-  Trash2,
-  X,
+  Clock3, CloudOff, Disc3, HardDrive, Headphones, Heart, Home, Keyboard, Library,
+  ListMusic, Loader2, Maximize2, Moon, PanelRightClose, PanelRightOpen, Play, Plus, RefreshCw, Search,
+  Shuffle, Sunset, Trash2, Trophy, X, Youtube, Zap,
 } from 'lucide-react';
 import { useAppState } from '../../app-state';
 import { useSession } from '../../auth/session';
+import { useDich } from '../../i18n';
+import { BangBai, type HanhDongBai } from './BangBai';
+import { BangXepHang } from './BangXepHang';
+import { BenPhai, type TheBenPhai } from './BenPhai';
+import { AnhBia, BiaGhep, doDaiDanhSach, RaNgoai } from './dungChung';
+import { datMucKhongGian, tatKhongGian } from './khongGian';
+import { layBaiDaThich, layLichSu, layNgheNhieu, xoaLichSu, type BaiNgheNhieu } from './musicApi';
 import { NowPlaying } from './NowPlaying';
-import { PlaylistBar } from './PlaylistBar';
+import { clock, fold, formatBytes, laBaiYouTube, shuffled, useMusicPlayer, type Track } from './player';
+import {
+  boBaiKhoiPlaylist, layDanhSachPlaylist, layPlaylist, taoPlaylist, themBaiVaoPlaylist,
+  xoaPlaylist, type Playlist,
+} from './playlists';
 import { RemixDeck } from './RemixDeck';
 import { TaiNhacLen } from './TaiNhacLen';
-import { clock, fold, formatBytes, laBaiYouTube, shuffled, useMusicPlayer, type Track } from './player';
-import { useDich } from '../../i18n';
+import './music2.css';
 
 /** Một kết quả tìm trên YouTube — hình dạng của `GET /music/youtube-search`. */
 interface KetQuaYouTube {
@@ -40,8 +56,13 @@ interface KetQuaYouTube {
   durationSeconds?: number;
 }
 
+type Muc = 'chu' | 'bxh' | 'thu-vien' | 'thich' | 'gan-day' | 'da-tai' | 'remix' | `pl:${number}`;
+type SapXep = 'macdinh' | 'ten' | 'nghesi' | 'dai';
+
+const KHOA_BEN = 'ct-music-ben-an';
+
 export function MusicPage() {
-  const { dich } = useDich();
+  const { dich, dichP } = useDich();
   const { online } = useAppState();
   const { api, user } = useSession();
 
@@ -50,90 +71,95 @@ export function MusicPage() {
    * (`requireRole('ADMIN')` ở `DELETE /music/tracks/:id`). Hiện nút cho mọi
    * người rồi để máy chủ từ chối là bày ra một nút luôn báo lỗi.
    */
+  const laAdmin = (user?.roles ?? []).some((r) => r.replace(/^ROLE_/, '').toUpperCase() === 'ADMIN');
 
-  const laAdmin = (user?.roles ?? []).some(
-    (r) => r.replace(/^ROLE_/, '').toUpperCase() === 'ADMIN',
-  );
-
+  const player = useMusicPlayer();
   const {
-    tracks, loading, error, setError, loadTracks,
-    downloaded, downloading, usage, download, remove, clearAll,
-    current, currentId, playing, playTrack, toggle, tuaToi, volume, mucNhip,
-    setVolume, setShuffle, position,
-  } = useMusicPlayer();
+    tracks, loading, error, setError, loadTracks, downloaded, usage, clearAll,
+    current, playing, playTrack, toggle, tuaToi, position, setVolume, setMuted,
+    setShuffle, setRepeat, step, daThich, doiThich, nhipLichSu, datEq, datHenGio,
+  } = player;
 
-  /*
-   * Cảnh đêm NHẢY THEO NHẠC.
-   *
-   * Ghi thẳng vào biến CSS qua `style.setProperty` chứ không qua state React:
-   * đây là 60 lần cập nhật mỗi giây, và một `setState` mỗi khung hình sẽ dựng
-   * lại cả trang nhạc — danh sách 68 bài, trình phát, mọi thứ.
-   *
-   * `requestAnimationFrame` tự dừng khi cửa sổ bị ẩn, nên không tốn pin lúc
-   * app chạy nền.
-   */
-  const canhRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    if (!playing) {
-      canhRef.current?.style.setProperty('--nhip', '0');
-      return;
-    }
-    let id = 0;
-    const chay = (): void => {
-      canhRef.current?.style.setProperty('--nhip', String(mucNhip().toFixed(3)));
-      id = requestAnimationFrame(chay);
-    };
-    id = requestAnimationFrame(chay);
-    return () => cancelAnimationFrame(id);
-  }, [playing, mucNhip]);
-
-  /**
-   * Xoá HẲN một bài khỏi thư viện dùng chung.
-   *
-   * Hỏi xác nhận vì từ app không hoàn tác được — máy chủ xoá mềm (`active=false`)
-   * nên vẫn khôi phục được trong CSDL, nhưng người dùng không có đường nào làm
-   * việc đó từ đây, và nói "xoá được rồi khôi phục sau" là hứa một thứ giao
-   * diện không có.
-   */
-  const xoaHan = useCallback(async (track: { id: number; title: string }) => {
-    if (!api) return;
-    if (!window.confirm(`Xoá "${track.title}" khỏi thư viện nhạc của cả hệ thống?`)) return;
-    try {
-      await api.request(`/api/v1/music/tracks/${track.id}`, { method: 'DELETE' });
-      await loadTracks(true); // bỏ đệm: không thì bài vừa xoá vẫn nằm nguyên trên màn hình
-    } catch (e) {
-      window.alert(`Không xoá được: ${e instanceof Error ? e.message : String(e)}`);
-    }
-  }, [api, loadTracks]);
-
+  const [muc, setMuc] = useState<Muc>('chu');
   const [query, setQuery] = useState('');
-  /** 'thuong' = thư viện thường · 'remix' = bàn DJ. Giống hai thẻ trên web. */
-  const [khu, setKhu] = useState<'thuong' | 'remix'>('thuong');
-  const [moToanManh, setMoToanManh] = useState(false);
-  /** Tăng lên là buộc dãy playlist nạp lại (vừa thêm bài vào một playlist). */
-  const [nhipPlaylist, setNhipPlaylist] = useState(0);
+  const [sapXep, setSapXep] = useState<SapXep>('macdinh');
+  const [benThe, setBenThe] = useState<TheBenPhai>('hang');
+  const [benAn, setBenAn] = useState(() => { try { return localStorage.getItem(KHOA_BEN) === '1'; } catch { return false; } });
+  const [thuGian, setThuGian] = useState(false);
+  const [phimTat, setPhimTat] = useState(false);
+  const oTim = useRef<HTMLInputElement>(null);
+
+  const [playlists, setPlaylists] = useState<Playlist[]>([]);
+  const [plMo, setPlMo] = useState<Playlist | null>(null);
+  const [plDangTai, setPlDangTai] = useState(false);
+  const [taoPl, setTaoPl] = useState(false);
+  const [tenPl, setTenPl] = useState('');
+  const [thongBao, setThongBao] = useState<string | null>(null);
+
+  const [baiThich, setBaiThich] = useState<Track[] | null>(null);
+  const [lichSu, setLichSu] = useState<Track[] | null>(null);
+  const [ngheNhieu, setNgheNhieu] = useState<BaiNgheNhieu[]>([]);
   const [baiRemix, setBaiRemix] = useState<Track[]>([]);
 
   // ─── Tìm trực tuyến (YouTube) ────────────────────────────────
   const [ketQuaYT, setKetQuaYT] = useState<KetQuaYouTube[]>([]);
   const [dangTimYT, setDangTimYT] = useState(false);
-  /** videoId đang được đưa vào thư viện — để hiện vòng quay đúng dòng đó. */
+  /** id (bài) hoặc videoId đang được rút/thêm — để hiện vòng quay đúng dòng đó. */
   const [dangThem, setDangThem] = useState<string | null>(null);
   const [tienTrinhThem, setTienTrinhThem] = useState<string | null>(null);
 
-  const visible = useMemo(() => {
-    const needle = fold(query.trim());
-    if (!needle) return tracks;
-    return tracks.filter((t) => fold(`${t.title} ${t.artist ?? ''}`).includes(needle));
-  }, [tracks, query]);
+  const bao = useCallback((chu: string) => {
+    setThongBao(chu);
+    window.setTimeout(() => setThongBao((cu) => (cu === chu ? null : cu)), 2600);
+  }, []);
+
+  // ─── Nạp dữ liệu ────────────────────────────────────────────
+  const napPlaylists = useCallback(async () => {
+    if (!api) return;
+    try { setPlaylists(await layDanhSachPlaylist(api)); } catch { /* không có playlist cũng không sao */ }
+  }, [api]);
+  useEffect(() => { void napPlaylists(); }, [napPlaylists]);
+
+  const plId = muc.startsWith('pl:') ? Number(muc.slice(3)) : null;
+  const napPlMo = useCallback(async (id: number) => {
+    if (!api) return;
+    setPlDangTai(true);
+    try { setPlMo(await layPlaylist(api, id)); }
+    catch (e) { setError(e instanceof Error ? e.message : String(e)); }
+    finally { setPlDangTai(false); }
+  }, [api, setError]);
+  useEffect(() => { if (plId !== null) void napPlMo(plId); else setPlMo(null); }, [plId, napPlMo]);
+
+  useEffect(() => {
+    if (!api || !online || (muc !== 'thich' && muc !== 'chu')) return;
+    let con = true;
+    void layBaiDaThich(api).then((r) => { if (con) setBaiThich(r); }).catch(() => { if (con) setBaiThich([]); });
+    return () => { con = false; };
+    // Nạp lại khi số bài thích đổi — bấm tim ở đâu thì danh sách cũng đúng.
+  }, [api, online, muc, daThich.size]);
+
+  useEffect(() => {
+    if (!api || !online || (muc !== 'gan-day' && muc !== 'chu')) return;
+    let con = true;
+    void layLichSu(api).then((r) => { if (con) setLichSu(r); }).catch(() => { if (con) setLichSu([]); });
+    if (muc === 'chu') void layNgheNhieu(api).then((r) => { if (con) setNgheNhieu(r); }).catch(() => undefined);
+    return () => { con = false; };
+  }, [api, online, muc, nhipLichSu]);
+
+  /* Bài REMIX là một KHO KHÁC, không phải bộ lọc của thư viện thường:
+     `GET /music/tracks` mặc định trả `category=NORMAL`, phải hỏi riêng
+     `category=REMIX`. Chỉ hỏi khi người dùng mở mục đó. */
+  const napRemix = useCallback(async () => {
+    if (!api) return;
+    try {
+      const ket = await api.request<unknown>('/api/v1/music/tracks?page=1&size=100&category=REMIX');
+      setBaiRemix(Array.isArray(ket) ? (ket as Track[]) : []);
+    } catch { setBaiRemix([]); }
+  }, [api]);
+  useEffect(() => { if (muc === 'remix') void napRemix(); }, [muc, napRemix]);
 
   /* Gõ vào ô tìm là tìm LUÔN trên YouTube, song song với lọc thư viện.
-   *
-   * Trước đây ô này chỉ lọc mấy bài đã có sẵn, nên gõ tên một bài chưa có là ra
-   * màn hình trống — trông y như hỏng, dù chẳng có lỗi nào.
-   *
-   * Hoãn 350 ms: gõ "sơn tùng" là tám lần đổi chữ, gọi thẳng thì thành tám lần
-   * hỏi YouTube cho một lần tìm. */
+     Hoãn 350 ms: gõ "sơn tùng" là tám lần đổi chữ. */
   useEffect(() => {
     const tuKhoa = query.trim();
     if (!api || !online || tuKhoa.length < 2) { setKetQuaYT([]); setDangTimYT(false); return; }
@@ -144,7 +170,7 @@ export function MusicPage() {
         const ket = await api.request<unknown>(`/api/v1/music/youtube-search?q=${encodeURIComponent(tuKhoa)}`);
         if (conSong) setKetQuaYT(Array.isArray(ket) ? (ket as KetQuaYouTube[]) : []);
       } catch {
-        if (conSong) setKetQuaYT([]);   // tìm hỏng thì im lặng, thư viện vẫn dùng được
+        if (conSong) setKetQuaYT([]);
       } finally {
         if (conSong) setDangTimYT(false);
       }
@@ -152,45 +178,27 @@ export function MusicPage() {
     return () => { conSong = false; clearTimeout(bo); };
   }, [query, api, online]);
 
-  /* Bài REMIX là một KHO KHÁC, không phải bộ lọc của thư viện thường:
-     `GET /music/tracks` mặc định trả `category=NORMAL`, phải hỏi riêng
-     `category=REMIX`. Chỉ hỏi khi người dùng mở thẻ đó. */
-  const napRemix = useCallback(async () => {
+  // ─── Thao tác ───────────────────────────────────────────────
+  /** Xoá HẲN một bài khỏi thư viện dùng chung (máy chủ xoá mềm). */
+  const xoaHan = useCallback(async (track: Track) => {
     if (!api) return;
+    if (!window.confirm(dichP('Xoá "{ten}" khỏi thư viện nhạc của cả hệ thống?', { ten: track.title }))) return;
     try {
-      const ket = await api.request<unknown>('/api/v1/music/tracks?page=1&size=100&category=REMIX');
-      setBaiRemix(Array.isArray(ket) ? (ket as Track[]) : []);
-    } catch { setBaiRemix([]); }
-  }, [api]);
-  useEffect(() => { if (khu === 'remix') void napRemix(); }, [khu, napRemix]);
-
-  // Phím tắt — CHỈ ở trang này. Đưa lên cấp app thì bấm dấu cách trong Ghi chú
-  // sẽ dừng nhạc thay vì gõ khoảng trắng.
-  useEffect(() => {
-    const onKey = (event: KeyboardEvent) => {
-      const target = event.target as HTMLElement | null;
-      if (target && /^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName)) return;
-      if (target?.isContentEditable) return;
-      if (event.code === 'Space') { event.preventDefault(); toggle(); }
-      else if (event.code === 'ArrowRight') tuaToi(position + 5);
-      else if (event.code === 'ArrowLeft') tuaToi(position - 5);
-      else if (event.code === 'ArrowUp') { event.preventDefault(); setVolume((v) => Math.min(1, v + 0.05)); }
-      else if (event.code === 'ArrowDown') { event.preventDefault(); setVolume((v) => Math.max(0, v - 0.05)); }
-    };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, [toggle, tuaToi, position, setVolume]);
+      await api.request(`/api/v1/music/tracks/${track.id}`, { method: 'DELETE' });
+      await loadTracks(true);
+    } catch (e) {
+      window.alert(`${dich('Không xoá được')}: ${e instanceof Error ? e.message : String(e)}`);
+    }
+  }, [api, loadTracks, dich, dichP]);
 
   /**
    * Bảo máy chủ rút âm thanh của một dòng YouTube về R2.
-   *
-   * Gọi bằng `fetch` trần chứ không `api.request`: `request()` chặn cứng 30
-   * giây, mà yt-dlp + ffmpeg trên máy chủ mất 10-60 giây — hết giờ ở phía app
-   * trong khi máy chủ vẫn đang làm là kiểu hỏng khó hiểu nhất.
+   * `fetch` trần chứ không `api.request`: `request()` chặn cứng 30 giây, mà
+   * yt-dlp + ffmpeg trên máy chủ mất 10-60 giây.
    */
   const rutAmThanh = async (trackId: number) => {
     if (!api) return;
-    setTienTrinhThem('Đang rút âm thanh về máy chủ… (10-60 giây)');
+    setTienTrinhThem(dich('Đang rút âm thanh về máy chủ… (10-60 giây)'));
     const phanHoi = await fetch(
       `${api.baseUrlForForms()}/api/v1/music/tracks/${trackId}/download-audio`,
       { method: 'POST', headers: { ...api.authHeaders(), 'Content-Type': 'application/json' }, body: '{}' },
@@ -199,21 +207,20 @@ export function MusicPage() {
       const chiTiet = await phanHoi.json().catch(() => null) as { message?: string } | null;
       throw new Error(
         phanHoi.status === 403
-          ? 'Chỉ tài khoản quản trị mới rút được âm thanh về máy chủ.'
-          : chiTiet?.message ?? `Máy chủ trả về ${phanHoi.status}`,
+          ? dich('Chỉ tài khoản quản trị mới rút được âm thanh về máy chủ.')
+          : chiTiet?.message ?? `HTTP ${phanHoi.status}`,
       );
     }
   };
 
-  /** Dòng cũ trong thư viện còn trỏ vào YouTube — rút âm thanh rồi phát. */
   const rutRoiPhat = async (track: Track) => {
     if (!api || dangThem) return;
     setDangThem(String(track.id));
     setError(null);
     try {
       await rutAmThanh(track.id);
-      setTienTrinhThem('Đang làm mới danh sách…');
-      await loadTracks(true); // bỏ đệm: không thì bài vẫn hiện là "chưa rút âm thanh"
+      setTienTrinhThem(dich('Đang làm mới danh sách…'));
+      await loadTracks(true);
       playTrack({ ...track, audioUrl: null });
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : String(caught));
@@ -224,22 +231,16 @@ export function MusicPage() {
   };
 
   /**
-   * Đưa một bài từ YouTube vào thư viện rồi phát. HAI bước:
-   *  1. `POST /music/tracks/remote` — tạo dòng trong CSDL. `audioUrl` là **bắt
-   *     buộc**, và `download-audio` sau đó đọc đúng trường này làm địa chỉ
-   *     YouTube, nên phải gửi link `watch?v=…`.
-   *  2. `rutAmThanh` — máy chủ rút âm thanh về R2.
-   *
-   * ⚠️ Bước 2 bắt buộc VỚI APP, không bắt buộc với web. Web phát bài YouTube
-   * bằng khung nhúng nên một dòng trỏ vào `youtube.com` là đủ dùng; app phát
-   * bằng thẻ <audio>, mà `GET /stream/:id` của dòng như vậy trả **400**.
+   * Đưa một bài từ YouTube vào thư viện rồi phát. HAI bước: tạo dòng
+   * (`POST /tracks/remote`, `audioUrl` là link watch?v=…), rồi rút âm thanh —
+   * app phát bằng <audio>, mà `/stream/:id` của dòng còn trỏ YouTube trả 400.
    */
   const themTuYouTube = async (r: KetQuaYouTube) => {
     if (!api || dangThem) return;
     setDangThem(r.videoId);
     setError(null);
     try {
-      setTienTrinhThem('Đang thêm vào thư viện…');
+      setTienTrinhThem(dich('Đang thêm vào thư viện…'));
       const tao = await api.request<{ id: number }>('/api/v1/music/tracks/remote', {
         method: 'POST',
         body: {
@@ -252,21 +253,11 @@ export function MusicPage() {
           videoId: r.videoId,
         },
       });
-
       await rutAmThanh(tao.id);
-
-      setTienTrinhThem('Đang làm mới danh sách…');
-      await loadTracks(true); // bỏ đệm: không thì bài vừa thêm không xuất hiện
+      setTienTrinhThem(dich('Đang làm mới danh sách…'));
+      await loadTracks(true);
       setQuery('');
-      // Phát theo dữ liệu vừa nhận, không đi tìm trong `tracks` của lần render
-      // này — nó vẫn là bản cũ, danh sách mới chỉ có ở lần render sau.
-      playTrack({
-        id: tao.id,
-        title: r.title,
-        artist: r.artist,
-        coverImage: r.thumbnail,
-        durationSeconds: r.durationSeconds ?? null,
-      });
+      playTrack({ id: tao.id, title: r.title, artist: r.artist, coverImage: r.thumbnail, durationSeconds: r.durationSeconds ?? null });
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : String(caught));
     } finally {
@@ -275,471 +266,606 @@ export function MusicPage() {
     }
   };
 
-  // ─── Số liệu cho tấm bìa thư viện (lúc chưa phát gì) ─────
-  const tongGiay = useMemo(
-    () => tracks.reduce((tong, t) => tong + (t.durationSeconds ?? 0), 0),
-    [tracks],
-  );
-  const anhBia = useMemo(
-    () => tracks.map((t) => t.coverImage).filter((u): u is string => Boolean(u)).slice(0, 4),
-    [tracks],
-  );
-  /** "1 giờ 23 phút" — dễ đọc hơn "83 phút" khi thư viện đã lớn. */
-  const doDaiThuVien = (() => {
-    const phut = Math.round(tongGiay / 60);
-    if (phut < 60) return `${phut} phút`;
-    return `${Math.floor(phut / 60)} giờ ${phut % 60} phút`;
-  })();
-  const phatTatCa = () => { const dau = visible[0]; if (dau) playTrack(dau, visible); };
-  const tronVaPhat = () => {
-    if (visible.length === 0) return;
-    setShuffle(true);
-    const tron = shuffled(visible);
-    const dau = tron[0];
-    if (dau) playTrack(dau, tron);
+  const themVaoPl = useCallback(async (p: Playlist, t: Track) => {
+    if (!api) return;
+    try {
+      await themBaiVaoPlaylist(api, p.id, t.id);
+      bao(dichP('Đã thêm vào “{ten}”.', { ten: p.name }));
+      void napPlaylists();
+      if (plId === p.id) void napPlMo(p.id);
+    } catch (e) { setError(e instanceof Error ? e.message : String(e)); }
+  }, [api, bao, dichP, napPlaylists, plId, napPlMo, setError]);
+
+  const taoPlMoi = async () => {
+    if (!api || !tenPl.trim()) return;
+    try {
+      const p = await taoPlaylist(api, tenPl.trim());
+      setTenPl('');
+      setTaoPl(false);
+      await napPlaylists();
+      if (p?.id) setMuc(`pl:${p.id}`);
+    } catch (e) { setError(e instanceof Error ? e.message : String(e)); }
   };
 
+  const xoaPlMo = async () => {
+    if (!api || !plMo) return;
+    if (!window.confirm(dichP('Xoá playlist “{ten}”? Các bài hát vẫn còn trong thư viện.', { ten: plMo.name }))) return;
+    try {
+      await xoaPlaylist(api, plMo.id);
+      setMuc('chu');
+      await napPlaylists();
+    } catch (e) { setError(e instanceof Error ? e.message : String(e)); }
+  };
+
+  // ─── Danh sách theo mục ─────────────────────────────────────
+  const thuVien = useMemo(() => {
+    const ds = [...tracks];
+    const so = (a: string, b: string) => a.localeCompare(b, 'vi', { sensitivity: 'base' });
+    if (sapXep === 'ten') ds.sort((a, b) => so(a.title, b.title));
+    else if (sapXep === 'nghesi') ds.sort((a, b) => so(a.artist ?? '', b.artist ?? ''));
+    else if (sapXep === 'dai') ds.sort((a, b) => (b.durationSeconds ?? 0) - (a.durationSeconds ?? 0));
+    return ds;
+  }, [tracks, sapXep]);
+
+  const ketQuaTim = useMemo(() => {
+    const needle = fold(query.trim());
+    if (!needle) return [];
+    return tracks.filter((t) => fold(`${t.title} ${t.artist ?? ''}`).includes(needle));
+  }, [tracks, query]);
+
+  const daTaiDs = useMemo(() => tracks.filter((t) => downloaded.has(t.id)), [tracks, downloaded]);
+
+  /** Danh sách đang hiện ở vùng giữa — cũng là hàng phát khi bấm một bài. */
+  const dsDangXem: Track[] = query.trim()
+    ? ketQuaTim
+    : muc === 'thu-vien' ? thuVien
+      : muc === 'thich' ? (baiThich ?? [])
+        : muc === 'gan-day' ? (lichSu ?? [])
+          : muc === 'da-tai' ? daTaiDs
+            : plId !== null ? (plMo?.tracks ?? [])
+              : thuVien;
+
+  /** Bài phát được NGAY: đã tải, hoặc có mạng và không phải dòng YouTube chưa rút. */
+  const phatDuoc = useCallback(
+    (t: Track) => downloaded.has(t.id) || (online && !laBaiYouTube(t)),
+    [downloaded, online],
+  );
+
+  const phatDs = useCallback((tatCa: Track[], tron = false) => {
+    /* Lọc trước: "Phát tất cả" mà bài đầu là dòng YouTube chưa rút thì bấm xong
+       chỉ ra một câu lỗi — đo thật 04/10 với thư viện 70 bài. */
+    const ds = tatCa.filter(phatDuoc);
+    if (ds.length === 0) {
+      if (tatCa.length > 0) setError(online ? dich('Chưa có bài nào trong danh sách này phát được ngay — các bài YouTube cần rút âm thanh trước.') : dich('Không có bài nào đã tải về máy để nghe khi mất mạng.'));
+      return;
+    }
+    const hang = tron ? shuffled(ds) : ds;
+    setShuffle(tron);
+    playTrack(hang[0]!, hang);
+  }, [playTrack, setShuffle, phatDuoc, online, setError, dich]);
+
+  const hanhDong: HanhDongBai = {
+    onPhat: (t) => playTrack(t, dsDangXem),
+    onRut: (t) => void rutRoiPhat(t),
+    dangRut: dangThem !== null ? Number(dangThem) : null,
+    playlists,
+    onThemVaoPlaylist: (p, t) => void themVaoPl(p, t),
+    onBoKhoiPlaylist: plMo && api
+      ? (t) => {
+        void boBaiKhoiPlaylist(api, plMo.id, t.id)
+          .then(() => { void napPlMo(plMo.id); void napPlaylists(); })
+          .catch((e: unknown) => setError(e instanceof Error ? e.message : String(e)));
+      }
+      : undefined,
+    onXoaHan: laAdmin ? (t) => void xoaHan(t) : undefined,
+  };
+
+  /** Ba "tâm trạng" — mỗi cái chỉ là tổ hợp của những tính năng THẬT ở trên. */
+  const batTamTrang = (kieu: 'thu-gian' | 'tap-trung' | 'ngu') => {
+    const nguon = (baiThich?.filter(phatDuoc).length ?? 0) >= 5 ? baiThich! : tracks;
+    tatKhongGian();
+    if (kieu === 'thu-gian') { datEq('dem'); datMucKhongGian('mua', 0.3); }
+    if (kieu === 'tap-trung') { datEq('phang'); datMucKhongGian('nau', 0.3); }
+    if (kieu === 'ngu') { datEq('dem'); datMucKhongGian('song', 0.35); datHenGio(30); }
+    phatDs(nguon, true);
+    setBenThe('kg');
+    setBenAn(false);
+  };
+
+  // ─── Phím tắt — CHỈ ở trang này (đưa lên cấp app thì dấu cách trong Ghi chú dừng nhạc) ───
+  useEffect(() => {
+    const onKey = (event: KeyboardEvent) => {
+      const target = event.target as HTMLElement | null;
+      if (event.metaKey || event.ctrlKey || event.altKey) return;
+      if (target && /^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName)) {
+        if (event.key === 'Escape' && target === oTim.current) { setQuery(''); oTim.current?.blur(); }
+        return;
+      }
+      if (target?.isContentEditable) return;
+      const k = event.key.toLowerCase();
+      if (event.code === 'Space') { event.preventDefault(); toggle(); }
+      else if (event.code === 'ArrowRight') tuaToi(position + 5);
+      else if (event.code === 'ArrowLeft') tuaToi(position - 5);
+      else if (event.code === 'ArrowUp') { event.preventDefault(); setVolume((v) => Math.min(1, v + 0.05)); }
+      else if (event.code === 'ArrowDown') { event.preventDefault(); setVolume((v) => Math.max(0, v - 0.05)); }
+      else if (k === 'n') step(1);
+      else if (k === 'p') step(-1);
+      else if (k === 's') setShuffle((s) => !s);
+      else if (k === 'r') setRepeat((r) => (r === 'off' ? 'all' : r === 'all' ? 'one' : 'off'));
+      else if (k === 'm') setMuted((m) => !m);
+      else if (k === 'l' && current) void doiThich(current);
+      else if (k === 'f' && current) setThuGian((v) => !v);
+      else if (k === '/') { event.preventDefault(); oTim.current?.focus(); }
+      else if (event.key === '?') setPhimTat((v) => !v);
+      else if (event.key === 'Escape') { setThuGian(false); setPhimTat(false); }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [toggle, tuaToi, position, setVolume, step, setShuffle, setRepeat, setMuted, current, doiThich]);
+
+  useEffect(() => { try { localStorage.setItem(KHOA_BEN, benAn ? '1' : '0'); } catch { /* thôi */ } }, [benAn]);
+
   const offlineCount = downloaded.size;
+  const gio = new Date().getHours();
+  const loiChao = gio < 11 ? dich('Chào buổi sáng') : gio < 14 ? dich('Buổi trưa thong thả') : gio < 18 ? dich('Chào buổi chiều') : dich('Chào buổi tối');
+
+  const MUC_CHINH: [Muc, string, JSX.Element, number | null][] = [
+    ['chu', dich('Dành cho bạn'), <Home size={16} aria-hidden key="i" />, null],
+    ['bxh', dich('Bảng xếp hạng'), <Trophy size={16} aria-hidden key="i" />, null],
+    ['thu-vien', dich('Thư viện'), <Library size={16} aria-hidden key="i" />, tracks.length],
+    ['thich', dich('Đã thích'), <Heart size={16} aria-hidden key="i" />, daThich.size],
+    ['gan-day', dich('Nghe gần đây'), <Clock3 size={16} aria-hidden key="i" />, null],
+    ['da-tai', dich('Đã tải về máy'), <HardDrive size={16} aria-hidden key="i" />, offlineCount],
+    ['remix', dich('Bàn DJ · Remix'), <Disc3 size={16} aria-hidden key="i" />, null],
+  ];
+
+  const tim = query.trim();
 
   return (
-    <div className="ct-music" data-dangphat={playing}>
-      {/*
-        CẢNH ĐÊM NGOÀI CỬA SỔ — nền động cho trang Nhạc.
-        Toàn bộ bằng CSS, không ảnh, không canvas: trang này đã nặng vì danh
-        sách bài và trình phát, thêm một vòng lặp vẽ mỗi khung hình là tốn pin
-        cho một thứ trang trí.
-
-        ⚠️ Nó theo TRẠNG THÁI ĐANG PHÁT, không theo nhịp nhạc. Đọc nhịp thật cần
-        `AnalyserNode`, mà thẻ <audio> ở đây không đặt `crossOrigin` — bật lên
-        thì nguồn nào thiếu CORS sẽ hỏng HẲN việc phát, tức đánh đổi một thứ
-        đang chạy lấy một hiệu ứng trang trí.
-      */}
-      <div className="ct-canh" ref={canhRef} aria-hidden>
-        <div className="ct-canh-troi" />
-        <div className="ct-canh-sao" />
-        <div className="ct-canh-trang" />
-        <div className="ct-canh-may" />
-        <div className="ct-canh-pho" />
-        <div className="ct-canh-khung" />
-      </div>
-      <div className="ct-page-head" style={{ marginBottom: 14 }}>
-        <div>
-          <h1 style={{ margin: 0, fontSize: 19 }}>{dich('Nhạc')}</h1>
-          <p className="ct-muted" style={{ margin: 0 }}>
-            Nghe trực tuyến, tìm thêm trên YouTube, hoặc tải về máy để nghe khi mất mạng.
-          </p>
-        </div>
-        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-          <div className="ct-segmented" role="tablist" aria-label={dich('Khu vực nhạc')}>
-            <button
-              type="button" role="tab" aria-selected={khu === 'thuong'}
-              data-active={khu === 'thuong'}
-              onClick={() => setKhu('thuong')}
-            >
-              {dich('NHẠC THƯỜNG')}
-            </button>
-            <button
-              type="button" role="tab" aria-selected={khu === 'remix'}
-              data-active={khu === 'remix'}
-              onClick={() => setKhu('remix')}
-            >
-              <Disc3 size={13} aria-hidden /> REMIX
-            </button>
+    /* `.mz-boc` là CONTAINER: bố cục co theo bề rộng THẬT của vùng nội dung
+       (cửa sổ trừ thanh bên), không theo bề rộng cửa sổ — thu thanh bên lại
+       là trang tự nới ra, không cần đoán. */
+    <div className="mz-boc">
+    <div className="mz" data-ben={benAn ? 'an' : 'hien'} data-phat={playing}>
+      {/* ─── Cột trái ─── */}
+      <nav className="mz-nav" aria-label={dich('Mục nhạc')}>
+        <div className="mz-nav-dau">
+          <span className="mz-logo"><Headphones size={17} aria-hidden /></span>
+          <div>
+            <strong>{dich('Nhạc')}</strong>
+            <small>{dichP('{n} bài · {d}', { n: tracks.length, d: doDaiDanhSach(tracks) })}</small>
           </div>
-          {/* Tải lên đúng KHO đang mở: ở thẻ Remix thì vào kho Remix, ở thẻ
-              Nhạc thường thì vào thư viện. Một nút, không phải hỏi thêm. */}
-          <TaiNhacLen
-            category={khu === 'remix' ? 'REMIX' : 'NORMAL'}
-            onXong={() => { void loadTracks(); void napRemix(); }}
-          />
-          <button type="button" className="ct-btn ct-btn-ghost" onClick={() => void loadTracks()} disabled={!online}>
-            <RefreshCw size={14} aria-hidden />
-            {dich('Làm mới')}
+        </div>
+        {MUC_CHINH.map(([ma, nhan, icon, dem]) => (
+          <button key={ma} type="button" className="mz-nav-muc" data-on={muc === ma && !tim} onClick={() => { setMuc(ma); setQuery(''); }}>
+            {icon}<span>{nhan}</span>{dem ? <em>{dem}</em> : null}
+          </button>
+        ))}
+
+        <div className="mz-nav-nhom">
+          <span>Playlist</span>
+          <button type="button" className="mz-nut-nho" onClick={() => setTaoPl((v) => !v)} aria-label={dich('Tạo playlist')} title={dich('Tạo playlist')}>
+            <Plus size={14} aria-hidden />
           </button>
         </div>
-      </div>
-
-      {/* ─── Bàn DJ ─── */}
-      {khu === 'remix' && (
-        <>
-          {/* Đưa CẢ HAI kho vào bàn DJ. Kho Remix của web toàn là link YouTube
-              (chưa có file nhạc), nên nếu chỉ đưa mỗi nó thì mở bàn DJ ra là
-              không có gì phát được ngay. */}
-          <RemixDeck baiRemix={baiRemix} baiThuong={tracks} />
-        </>
-      )}
-
-      {/* ─── Playlist ─── */}
-      {khu === 'thuong' && (
-        <PlaylistBar
-          onPhat={(bai, danhSach) => playTrack(bai, danhSach)}
-          baiDangPhat={currentId}
-          moiThem={nhipPlaylist}
-        />
-      )}
-
-      {/* ─── Đang phát ─── */}
-      {khu === 'thuong' && current && (
-        <section className="ct-np" aria-label={dich('Đang phát')}>
-          {/* Nền mờ lấy chính ảnh bìa: mỗi bài một sắc riêng mà không cần bảng
-              màu gõ tay cho từng bài. */}
-          {current.coverImage && (
-            <div className="ct-np-wash" style={{ backgroundImage: `url(${current.coverImage})` }} aria-hidden />
-          )}
-          <div className="ct-np-body">
-            <div className={`ct-vinyl${playing ? ' is-spinning' : ''}`} aria-hidden>
-              <div className="ct-vinyl-disc">
-                {current.coverImage
-                  ? <img src={current.coverImage} alt="" className="ct-vinyl-art" />
-                  : <div className="ct-vinyl-art ct-vinyl-art-blank"><Music2 size={26} /></div>}
-                <span className="ct-vinyl-hole" />
-              </div>
-            </div>
-
-            <div className="ct-np-meta">
-              <p className="ct-np-eyebrow">{dich('Đang phát')}</p>
-              <h2 className="ct-np-title" title={current.title}>{current.title}</h2>
-              <p className="ct-np-artist">{current.artist || 'Không rõ nghệ sĩ'}</p>
-              <button type="button" className="ct-btn ct-btn-ghost ct-np-mo" onClick={() => setMoToanManh(true)}>
-                <Maximize2 size={13} aria-hidden /> Xem toàn màn hình
-              </button>
-
-              {/* Dải nhịp trang trí, KHÔNG phải phổ tần thật. Phân tích phổ thật
-                  cần đưa audio qua Web Audio, mà luồng nhạc là khác nguồn gốc
-                  với `app://` — làm vậy có thể khiến cả bài phát ra IM LẶNG.
-                  Không đáng đánh đổi để lấy mấy cái cột nhấp nháy. */}
-              <div className={`ct-eq${playing ? ' is-live' : ''}`} aria-hidden>
-                {Array.from({ length: 28 }, (_, i) => (
-                  <span key={i} style={{ animationDelay: `${(i % 7) * 90}ms` }} />
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* ─── Tấm bìa thư viện — thay chỗ trống lúc chưa nghe gì ─── */}
-      {khu === 'thuong' && !current && tracks.length > 0 && (
-        <section className="ct-lib" aria-label={dich('Thư viện')}>
-          <div className="ct-lib-collage" aria-hidden>
-            {anhBia.length > 0
-              ? anhBia.map((u, i) => <img key={i} src={u} alt="" loading="lazy" />)
-              : <span className="ct-lib-collage-blank"><ListMusic size={30} /></span>}
-          </div>
-          <div className="ct-lib-meta">
-            <p className="ct-np-eyebrow">{dich('Thư viện của bạn')}</p>
-            <h2 className="ct-lib-title">{tracks.length} bài hát</h2>
-            <p className="ct-np-artist">
-              {doDaiThuVien}
-              {offlineCount > 0 && ` · ${offlineCount} bài nghe được khi mất mạng`}
-            </p>
-            <div className="ct-lib-actions">
-              <button type="button" className="ct-btn" onClick={phatTatCa}>
-                <Play size={15} aria-hidden /> Phát tất cả
-              </button>
-              <button type="button" className="ct-btn ct-btn-ghost" onClick={tronVaPhat}>
-                <Shuffle size={15} aria-hidden /> Trộn bài
-              </button>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* ─── Thanh công cụ danh sách ─── */}
-      {khu === 'thuong' && (<>
-      <div className="ct-music-toolbar">
-        {/* Hẹn giờ đứng TRƯỚC ô tìm — nó là thứ người ta bật một lần rồi quên,
-            còn ô tìm thì gõ liên tục; để nó sau ô tìm là nó bị đẩy ra rìa. */}
-        <HenGio
-          playing={playing}
-          volume={volume}
-          setVolume={setVolume}
-          onDung={() => { if (playing) toggle(); }}
-        />
-        <label className="ct-music-search">
-          <Search size={14} aria-hidden />
-          <input
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            placeholder={dich('Tìm trong thư viện hoặc trên YouTube…')}
-            aria-label={dich('Tìm bài hát')}
-          />
-          {dangTimYT && <Loader2 size={14} className="ct-spin" aria-hidden />}
-        </label>
-        {offlineCount > 0 && (
-          <span className="ct-music-usage">
-            <HardDrive size={13} aria-hidden />
-            {usage.count} bài · {formatBytes(usage.totalBytes)}
-            <button
-              type="button"
-              className="ct-linklike"
-              onClick={() => {
-                if (window.confirm(`Xoá toàn bộ ${usage.count} bài đã tải? Tải lại được khi có mạng.`)) {
-                  void clearAll();
-                }
-              }}
-            >
-              {dich('Xoá hết')}
-            </button>
-          </span>
+        {taoPl && (
+          <form className="mz-nav-tao" onSubmit={(e) => { e.preventDefault(); void taoPlMoi(); }}>
+            <input autoFocus value={tenPl} onChange={(e) => setTenPl(e.target.value)} placeholder={dich('Tên playlist…')} maxLength={80} />
+            <button type="submit" className="mz-nut mz-nut-chinh" disabled={!tenPl.trim()}>{dich('Tạo')}</button>
+          </form>
         )}
-      </div>
-
-      {!online && (
-        <div className="ct-notice" data-tone="warn">
-          <CloudOff size={15} aria-hidden />
-          <span>Đang ngoại tuyến — chỉ nghe được {offlineCount} bài đã tải về máy.</span>
-        </div>
-      )}
-
-      {tienTrinhThem && (
-        <div className="ct-notice" data-tone="info">
-          <Loader2 size={15} className="ct-spin" aria-hidden />
-          <span>{tienTrinhThem}</span>
-        </div>
-      )}
-
-      {error && (
-        <div className="ct-notice" data-tone="err" role="alert">
-          <span>{error}</span>
-          <button type="button" className="ct-linklike" onClick={() => setError(null)}>{dich('Đóng')}</button>
-        </div>
-      )}
-
-      {loading && tracks.length === 0 && <p>{dich('Đang tải…')}</p>}
-
-      {visible.length > 0 && (
-        <ol className="ct-tracks">
-          {visible.map((track, index) => (
-            <DongBai
-              key={track.id}
-              track={track}
-              index={index}
-              isCurrent={currentId === track.id}
-              playing={playing}
-              isDownloaded={downloaded.has(track.id)}
-              isDownloading={downloading.has(track.id)}
-              /* CHỈ hỏi "bài này đã có trên máy chủ chưa" — KHÔNG trộn với
-                 "đã tải về máy này chưa". Bản cũ `&& !downloaded.has(...)`
-                 làm nút rút-lên-máy-chủ BIẾN MẤT ngay khi người dùng tải bài
-                 về máy, dù trên máy chủ vẫn chưa có gì: tải về máy là bản
-                 riêng của một máy, rút lên R2 là cho mọi thiết bị và cho phát
-                 nền. Người dùng báo đúng chuyện này 09/09/2026. */
-              chuaRutAmThanh={laBaiYouTube(track)}
-              dangRut={dangThem === String(track.id)}
-              online={online}
-              onPlay={() => (currentId === track.id ? toggle() : playTrack(track, visible))}
-              onExtract={() => void rutRoiPhat(track)}
-              onDownload={() => void download(track)}
-              onRemove={() => void remove(track.id)}
-              onXoaHan={laAdmin ? () => void xoaHan(track) : undefined}
-            />
+        <div className="mz-nav-pl">
+          {playlists.length === 0 && !taoPl && <p className="mz-nav-trong">{dich('Chưa có playlist. Bấm + để tạo.')}</p>}
+          {playlists.map((p) => (
+            <button key={p.id} type="button" className="mz-nav-muc mz-nav-plmuc" data-on={muc === `pl:${p.id}` && !tim} onClick={() => { setMuc(`pl:${p.id}`); setQuery(''); }}>
+              <AnhBia src={p.coverUrl} co={26} />
+              <span>{p.name}</span>
+              {p.trackCount ? <em>{p.trackCount}</em> : null}
+            </button>
           ))}
-        </ol>
-      )}
-
-      {/* ─── Kết quả YouTube ─── */}
-      {ketQuaYT.length > 0 && (
-        <section className="ct-yt" aria-label={dich('Kết quả trên YouTube')}>
-          <h3 className="ct-yt-head">
-            <Youtube size={15} aria-hidden />
-            {dich('Trên YouTube')}
-            <span className="ct-muted" style={{ fontWeight: 400, fontSize: 12 }}>
-              {dich('— thêm vào thư viện là nghe được như mọi bài khác')}
-            </span>
-          </h3>
-          <ol className="ct-tracks">
-            {ketQuaYT.map((r) => {
-              const dangLam = dangThem === r.videoId;
-              return (
-                <li key={r.videoId} className="ct-trk ct-trk-yt">
-                  <span className="ct-trk-index"><Youtube size={14} aria-hidden /></span>
-                  <span className="ct-trk-art">
-                    {r.thumbnail
-                      ? <img src={r.thumbnail} alt="" loading="lazy" />
-                      : <span className="ct-trk-art-blank"><Music2 size={15} aria-hidden /></span>}
-                  </span>
-                  <span className="ct-trk-main">
-                    <span className="ct-trk-title" title={r.title}>{r.title}</span>
-                    <span className="ct-trk-artist">{r.artist}</span>
-                  </span>
-                  <span />
-                  <span className="ct-trk-time">{r.duration ?? clock(r.durationSeconds)}</span>
-                  <button
-                    type="button"
-                    className="ct-trk-action"
-                    onClick={() => void themTuYouTube(r)}
-                    disabled={dangThem !== null || !online}
-                    aria-label={`Thêm ${r.title} vào thư viện`}
-                    title={dich('Thêm vào thư viện và phát')}
-                  >
-                    {dangLam ? <Loader2 size={14} className="ct-spin" aria-hidden /> : <Plus size={15} aria-hidden />}
-                  </button>
-                </li>
-              );
-            })}
-          </ol>
-        </section>
-      )}
-
-      {!loading && tracks.length > 0 && visible.length === 0 && ketQuaYT.length === 0 && !dangTimYT && (
-        <div className="ct-empty">
-          <Search size={26} aria-hidden className="ct-empty-icon" />
-          <p>Không có bài nào khớp “{query}”{online ? ', kể cả trên YouTube.' : '.'}</p>
         </div>
-      )}
+      </nav>
 
-      {!loading && tracks.length === 0 && !error && (
-        <div className="ct-empty">
-          <Music2 size={28} aria-hidden className="ct-empty-icon" />
-          <p>{dich('Chưa có bài hát nào. Gõ tên bài vào ô tìm để lấy từ YouTube.')}</p>
+      {/* ─── Giữa ─── */}
+      <main className="mz-giua">
+        <div className="mz-thanh">
+          <label className="mz-tim-o">
+            <Search size={15} aria-hidden />
+            <input
+              ref={oTim}
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder={dich('Tìm trong thư viện hoặc trên YouTube…')}
+              aria-label={dich('Tìm bài hát')}
+            />
+            {dangTimYT ? <Loader2 size={14} className="ct-spin" aria-hidden />
+              : query ? <button type="button" className="mz-nut-nho" onClick={() => setQuery('')} aria-label={dich('Xoá tìm kiếm')}><X size={13} aria-hidden /></button>
+                : <kbd>/</kbd>}
+          </label>
+          <TaiNhacLen category={muc === 'remix' ? 'REMIX' : 'NORMAL'} onXong={() => { void loadTracks(true); void napRemix(); }} />
+          <button type="button" className="mz-nut mz-nut-trong" onClick={() => void loadTracks(true)} disabled={!online} title={dich('Làm mới')} aria-label={dich('Làm mới')}>
+            <RefreshCw size={14} aria-hidden />
+          </button>
+          {current && (
+            <button type="button" className="mz-nut mz-nut-trong" onClick={() => setThuGian(true)} title={dich('Chế độ thư giãn')} aria-label={dich('Chế độ thư giãn')}>
+              <Maximize2 size={14} aria-hidden />
+            </button>
+          )}
+          <button type="button" className="mz-nut mz-nut-trong" onClick={() => setPhimTat(true)} title={dich('Phím tắt')} aria-label={dich('Phím tắt')}>
+            <Keyboard size={14} aria-hidden />
+          </button>
+          <button type="button" className="mz-nut mz-nut-trong mz-nut-ben" onClick={() => setBenAn((v) => !v)} title={benAn ? dich('Hiện cột đang phát') : dich('Ẩn cột đang phát')} aria-label={benAn ? dich('Hiện cột đang phát') : dich('Ẩn cột đang phát')}>
+            {benAn ? <PanelRightOpen size={15} aria-hidden /> : <PanelRightClose size={15} aria-hidden />}
+          </button>
         </div>
-      )}
 
-      {/* Thanh phát KHÔNG nằm ở đây nữa — nó ở `App.tsx`, sống qua mọi lần
-          chuyển trang. Xem `PlayerBar.tsx`. Chừa chỗ để dòng cuối không bị nó
-          che khi đang nghe. */}
-      </>)}
+        {!online && (
+          <div className="ct-notice" data-tone="warn">
+            <CloudOff size={15} aria-hidden />
+            <span>{dichP('Đang ngoại tuyến — chỉ nghe được {n} bài đã tải về máy.', { n: offlineCount })}</span>
+          </div>
+        )}
+        {tienTrinhThem && (
+          <div className="ct-notice" data-tone="info"><Loader2 size={15} className="ct-spin" aria-hidden /><span>{tienTrinhThem}</span></div>
+        )}
+        {error && (
+          <div className="ct-notice" data-tone="err" role="alert">
+            <span>{error}</span>
+            <button type="button" className="ct-linklike" onClick={() => setError(null)}>{dich('Đóng')}</button>
+          </div>
+        )}
+        {thongBao && <div className="mz-bao" role="status">{thongBao}</div>}
 
-      {current && <div style={{ height: 8 }} aria-hidden />}
+        {/* ─── Kết quả tìm ─── */}
+        {tim && (
+          <section className="mz-khoi">
+            <h2 className="mz-h2">{dichP('Kết quả cho “{q}”', { q: tim })}</h2>
+            {ketQuaTim.length > 0
+              ? <BangBai tracks={ketQuaTim} hanhDong={hanhDong} />
+              : !dangTimYT && <p className="mz-trong-nho">{dich('Không có bài nào trong thư viện khớp.')}</p>}
+            {ketQuaYT.length > 0 && (
+              <>
+                <h3 className="mz-h3"><Youtube size={15} aria-hidden /> {dich('Trên YouTube')} <small>{dich('— thêm vào thư viện là nghe được như mọi bài khác')}</small></h3>
+                <div className="mz-bang">
+                  {ketQuaYT.map((r) => (
+                    <div key={r.videoId} className="mz-dong mz-dong-yt">
+                      <span className="mz-dong-so"><Youtube size={14} aria-hidden /></span>
+                      <span className="mz-dong-chinh">
+                        <AnhBia src={r.thumbnail} co={40} />
+                        <span className="mz-dong-chu">
+                          <span className="mz-dong-ten" title={r.title}>{r.title}</span>
+                          <span className="mz-dong-nghesi">{r.artist}</span>
+                        </span>
+                      </span>
+                      <span />
+                      <span className="mz-dong-tg">{r.duration ?? clock(r.durationSeconds)}</span>
+                      <span className="mz-dong-nut">
+                        <button
+                          type="button"
+                          className="mz-nut mz-nut-chinh mz-nut-gon"
+                          onClick={() => void themTuYouTube(r)}
+                          disabled={dangThem !== null || !online}
+                          title={dich('Thêm vào thư viện và phát')}
+                        >
+                          {dangThem === r.videoId ? <Loader2 size={13} className="ct-spin" aria-hidden /> : <Plus size={13} aria-hidden />}
+                          {dich('Thêm & phát')}
+                        </button>
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
+          </section>
+        )}
 
-      {/* ─── Màn ĐANG PHÁT toàn cảnh ─── */}
-      {moToanManh && current && (
-        <NowPlaying
-          onDong={() => setMoToanManh(false)}
-          onDaThemVaoPlaylist={() => setNhipPlaylist((n) => n + 1)}
-        />
-      )}
+        {/* ─── Dành cho bạn ─── */}
+        {!tim && muc === 'chu' && (
+          <>
+            <section className="mz-chao">
+              <div className="mz-chao-nen" aria-hidden><i /><i /><i /></div>
+              <p className="mz-eyebrow">{loiChao}</p>
+              <h1>{dich('Một ngày dài rồi — để nhạc lo phần còn lại.')}</h1>
+              <p className="mz-chao-phu">
+                {dichP('{n} bài trong thư viện', { n: tracks.length })}
+                {daThich.size > 0 && ` · ${dichP('{n} bài đã thích', { n: daThich.size })}`}
+                {offlineCount > 0 && ` · ${dichP('{n} bài nghe được khi mất mạng', { n: offlineCount })}`}
+              </p>
+              <div className="mz-chao-nut">
+                <button type="button" className="mz-nut mz-nut-chinh mz-nut-to" onClick={() => phatDs(thuVien)} disabled={tracks.length === 0}>
+                  <Play size={16} aria-hidden /> {dich('Phát tất cả')}
+                </button>
+                <button type="button" className="mz-nut mz-nut-to" onClick={() => phatDs(thuVien, true)} disabled={tracks.length === 0}>
+                  <Shuffle size={16} aria-hidden /> {dich('Trộn bài')}
+                </button>
+                <button type="button" className="mz-nut mz-nut-to mz-nut-vang" onClick={() => setMuc('bxh')}>
+                  <Trophy size={16} aria-hidden /> {dich('Top 100 hôm nay')}
+                </button>
+              </div>
+            </section>
+
+            <section className="mz-khoi">
+              <h2 className="mz-h2">{dich('Bạn muốn nghe thế nào?')}</h2>
+              <div className="mz-tam">
+                <button type="button" className="mz-tam-the" data-mau="tim" onClick={() => batTamTrang('thu-gian')}>
+                  <Sunset size={22} aria-hidden />
+                  <strong>{dich('Thư giãn sau giờ làm')}</strong>
+                  <span>{dich('Trộn bài bạn thích · tiếng mưa nhẹ · chỉnh âm dịu tai')}</span>
+                </button>
+                <button type="button" className="mz-tam-the" data-mau="xanh" onClick={() => batTamTrang('tap-trung')}>
+                  <Zap size={22} aria-hidden />
+                  <strong>{dich('Tập trung sâu')}</strong>
+                  <span>{dich('Trộn cả thư viện · ồn nâu che tiếng ồn · âm nguyên bản')}</span>
+                </button>
+                <button type="button" className="mz-tam-the" data-mau="dem" onClick={() => batTamTrang('ngu')}>
+                  <Moon size={22} aria-hidden />
+                  <strong>{dich('Ngủ ngon')}</strong>
+                  <span>{dich('Sóng biển · dịu tai · tự nhỏ dần và tắt sau 30 phút')}</span>
+                </button>
+              </div>
+            </section>
+
+            {lichSu && lichSu.length > 0 && (
+              <HangThe tieuDe={dich('Nghe gần đây')} ds={lichSu.slice(0, 12)} onTatCa={() => setMuc('gan-day')} onPhat={(t) => playTrack(t, lichSu)} />
+            )}
+            {ngheNhieu.length > 0 && (
+              <HangThe tieuDe={dich('Bạn hay nghe')} ds={ngheNhieu.slice(0, 12)} phu={(t) => dichP('{n} lần', { n: (t as BaiNgheNhieu).soLan })} onPhat={(t) => playTrack(t, ngheNhieu)} />
+            )}
+            {playlists.length > 0 && (
+              <section className="mz-khoi">
+                <h2 className="mz-h2">{dich('Playlist của bạn')}</h2>
+                <div className="mz-luoi">
+                  {playlists.map((p) => (
+                    <button key={p.id} type="button" className="mz-the" onClick={() => setMuc(`pl:${p.id}`)}>
+                      <span className="mz-the-bia"><AnhBia src={p.coverUrl} co={150} /><ListMusic size={18} className="mz-the-dau" aria-hidden /></span>
+                      <strong>{p.name}</strong>
+                      <small>{dichP('{n} bài', { n: p.trackCount ?? 0 })}</small>
+                    </button>
+                  ))}
+                </div>
+              </section>
+            )}
+            {tracks.length > 0 && (
+              <HangThe tieuDe={dich('Mới thêm vào thư viện')} ds={tracks.slice(0, 12)} onTatCa={() => setMuc('thu-vien')} onPhat={(t) => playTrack(t, tracks)} />
+            )}
+            {loading && tracks.length === 0 && <p className="mz-trong-nho">{dich('Đang tải…')}</p>}
+            {!loading && tracks.length === 0 && !error && (
+              <p className="mz-trong-nho">{dich('Chưa có bài hát nào. Gõ tên bài vào ô tìm để lấy từ YouTube.')}</p>
+            )}
+          </>
+        )}
+
+        {/* ─── Thư viện ─── */}
+        {!tim && muc === 'thu-vien' && (
+          <>
+            <DauMuc
+              bia={<BiaGhep tracks={tracks} />}
+              nhan={dich('Thư viện của bạn')}
+              ten={dichP('{n} bài hát', { n: tracks.length })}
+              phu={doDaiDanhSach(tracks)}
+              onPhat={() => phatDs(thuVien)}
+              onTron={() => phatDs(thuVien, true)}
+              coBai={tracks.length > 0}
+            >
+              <label className="mz-chon">
+                {dich('Sắp xếp')}
+                <select value={sapXep} onChange={(e) => setSapXep(e.target.value as SapXep)}>
+                  <option value="macdinh">{dich('Mới thêm')}</option>
+                  <option value="ten">{dich('Tên A → Z')}</option>
+                  <option value="nghesi">{dich('Nghệ sĩ')}</option>
+                  <option value="dai">{dich('Dài nhất')}</option>
+                </select>
+              </label>
+            </DauMuc>
+            {loading && tracks.length === 0 ? <p className="mz-trong-nho">{dich('Đang tải…')}</p> : <BangBai tracks={thuVien} hanhDong={hanhDong} />}
+          </>
+        )}
+
+        {/* ─── Đã thích ─── */}
+        {!tim && muc === 'thich' && (
+          <>
+            <DauMuc
+              bia={<span className="mz-bia-mau" data-mau="tim"><Heart size={52} fill="currentColor" aria-hidden /></span>}
+              nhan={dich('Danh sách tự động')}
+              ten={dich('Bài bạn đã thích')}
+              phu={baiThich ? `${dichP('{n} bài', { n: baiThich.length })} · ${doDaiDanhSach(baiThich)}` : dich('Đang tải…')}
+              onPhat={() => phatDs(baiThich ?? [])}
+              onTron={() => phatDs(baiThich ?? [], true)}
+              coBai={(baiThich?.length ?? 0) > 0}
+            />
+            {baiThich && baiThich.length === 0
+              ? <p className="mz-trong-nho">{dich('Chưa thích bài nào. Bấm hình trái tim cạnh một bài (hoặc phím L khi đang nghe) để lưu nó vào đây.')}</p>
+              : <BangBai tracks={baiThich ?? []} hanhDong={hanhDong} />}
+          </>
+        )}
+
+        {/* ─── Nghe gần đây ─── */}
+        {!tim && muc === 'gan-day' && (
+          <>
+            <DauMuc
+              bia={<span className="mz-bia-mau" data-mau="xanh"><Clock3 size={52} aria-hidden /></span>}
+              nhan={dich('Lịch sử nghe')}
+              ten={dich('Nghe gần đây')}
+              phu={dich('Bài được ghi sau khi đã nghe 10 giây — bấm lướt không tính.')}
+              onPhat={() => phatDs(lichSu ?? [])}
+              onTron={() => phatDs(lichSu ?? [], true)}
+              coBai={(lichSu?.length ?? 0) > 0}
+            >
+              {(lichSu?.length ?? 0) > 0 && api && (
+                <button
+                  type="button"
+                  className="mz-nut mz-nut-trong"
+                  onClick={() => {
+                    if (!window.confirm(dich('Xoá toàn bộ lịch sử nghe?'))) return;
+                    void xoaLichSu(api).then(() => setLichSu([])).catch((e: unknown) => setError(e instanceof Error ? e.message : String(e)));
+                  }}
+                >
+                  <Trash2 size={14} aria-hidden /> {dich('Xoá lịch sử')}
+                </button>
+              )}
+            </DauMuc>
+            {lichSu && lichSu.length === 0
+              ? <p className="mz-trong-nho">{dich('Chưa có gì. Nghe một bài quá 10 giây là nó vào đây.')}</p>
+              : <BangBai tracks={lichSu ?? []} hanhDong={hanhDong} />}
+          </>
+        )}
+
+        {/* ─── Đã tải ─── */}
+        {!tim && muc === 'da-tai' && (
+          <>
+            <DauMuc
+              bia={<span className="mz-bia-mau" data-mau="la"><HardDrive size={52} aria-hidden /></span>}
+              nhan={dich('Nghe khi mất mạng')}
+              ten={dich('Đã tải về máy')}
+              phu={dichP('{n} bài · {b} trên ổ đĩa', { n: usage.count, b: formatBytes(usage.totalBytes) })}
+              onPhat={() => phatDs(daTaiDs)}
+              onTron={() => phatDs(daTaiDs, true)}
+              coBai={daTaiDs.length > 0}
+            >
+              {usage.count > 0 && (
+                <button
+                  type="button"
+                  className="mz-nut mz-nut-trong"
+                  onClick={() => { if (window.confirm(dichP('Xoá toàn bộ {n} bài đã tải? Tải lại được khi có mạng.', { n: usage.count }))) void clearAll(); }}
+                >
+                  <Trash2 size={14} aria-hidden /> {dich('Xoá hết')}
+                </button>
+              )}
+            </DauMuc>
+            {daTaiDs.length === 0
+              ? <p className="mz-trong-nho">{dich('Chưa tải bài nào. Bấm nút tải cạnh một bài để nghe được cả khi mất mạng.')}</p>
+              : <BangBai tracks={daTaiDs} hanhDong={hanhDong} />}
+          </>
+        )}
+
+        {/* ─── Playlist ─── */}
+        {!tim && plId !== null && (
+          plMo && plMo.id === plId ? (
+            <>
+              <DauMuc
+                bia={plMo.coverUrl ? <AnhBia src={plMo.coverUrl} co={132} /> : <BiaGhep tracks={plMo.tracks ?? []} />}
+                nhan="Playlist"
+                ten={plMo.name}
+                phu={`${dichP('{n} bài', { n: plMo.tracks?.length ?? 0 })} · ${doDaiDanhSach(plMo.tracks ?? [])}${plMo.description ? ` · ${plMo.description}` : ''}`}
+                onPhat={() => phatDs(plMo.tracks ?? [])}
+                onTron={() => phatDs(plMo.tracks ?? [], true)}
+                coBai={(plMo.tracks?.length ?? 0) > 0}
+              >
+                <button type="button" className="mz-nut mz-nut-trong" onClick={() => void xoaPlMo()}>
+                  <Trash2 size={14} aria-hidden /> {dich('Xoá playlist')}
+                </button>
+              </DauMuc>
+              {(plMo.tracks?.length ?? 0) === 0
+                ? <p className="mz-trong-nho">{dich('Playlist trống. Bấm “⋯” cạnh một bài → Thêm vào playlist.')}</p>
+                : <BangBai tracks={plMo.tracks ?? []} hanhDong={hanhDong} />}
+            </>
+          ) : plDangTai ? <p className="mz-trong-nho">{dich('Đang tải…')}</p> : null
+        )}
+
+        {/* ─── Bảng xếp hạng ─── */}
+        {!tim && muc === 'bxh' && <BangXepHang />}
+
+        {/* ─── Remix ─── */}
+        {!tim && muc === 'remix' && (
+          <section className="mz-khoi">
+            <h2 className="mz-h2"><Disc3 size={17} aria-hidden /> {dich('Bàn DJ · Remix')}</h2>
+            <RemixDeck baiRemix={baiRemix} baiThuong={tracks} />
+          </section>
+        )}
+      </main>
+
+      {/* ─── Cột phải ─── */}
+      {!benAn && <BenPhai the={benThe} setThe={setBenThe} onMoThuGian={() => setThuGian(true)} />}
+
+      {thuGian && current && <RaNgoai><NowPlaying onDong={() => setThuGian(false)} /></RaNgoai>}
+      {phimTat && <RaNgoai><BangPhimTat onDong={() => setPhimTat(false)} /></RaNgoai>}
+    </div>
     </div>
   );
 }
 
-/** Một dòng trong danh sách thư viện. Tách riêng cho dễ đọc, không có trạng thái. */
-function DongBai({
-  track, index, isCurrent, playing, isDownloaded, isDownloading, chuaRutAmThanh, dangRut, online,
-  onPlay, onExtract, onDownload, onRemove, onXoaHan,
-}: {
-  track: Track;
-  index: number;
-  isCurrent: boolean;
-  playing: boolean;
-  isDownloaded: boolean;
-  isDownloading: boolean;
-  /** Dòng còn trỏ vào YouTube: app chưa phát được cho tới khi rút âm thanh. */
-  chuaRutAmThanh: boolean;
-  dangRut: boolean;
-  online: boolean;
-  onPlay: () => void;
-  onExtract: () => void;
-  onDownload: () => void;
-  onRemove: () => void;
-  /** Xoá HẲN khỏi thư viện. Chỉ admin có — nhạc là thư viện dùng chung. */
-  onXoaHan?: (() => void) | undefined;
+/** Đầu một mục: bìa lớn, tên, số liệu, Phát / Trộn + chỗ cho nút riêng. */
+function DauMuc({ bia, nhan, ten, phu, onPhat, onTron, coBai, children }: {
+  bia: JSX.Element; nhan: string; ten: string; phu: string;
+  onPhat: () => void; onTron: () => void; coBai: boolean; children?: ReactNode;
 }) {
   const { dich } = useDich();
-  const playable = isDownloaded || (online && !chuaRutAmThanh);
-  // Bấm phát một dòng YouTube = rút âm thanh rồi phát, chứ không phải báo lỗi.
-  const bam = chuaRutAmThanh && online ? onExtract : onPlay;
-  const bamDuoc = playable || (chuaRutAmThanh && online);
   return (
-    <li className="ct-trk" data-current={isCurrent} onDoubleClick={() => bamDuoc && bam()}>
-      <span className="ct-trk-index">
-        {isCurrent && playing
-          ? <span className="ct-trk-bars" aria-label={dich('đang phát')}><i /><i /><i /></span>
-          : index + 1}
-      </span>
+    <header className="mz-dau">
+      <div className="mz-dau-bia">{bia}</div>
+      <div className="mz-dau-chu">
+        <p className="mz-eyebrow">{nhan}</p>
+        <h1>{ten}</h1>
+        <p className="mz-dau-phu">{phu}</p>
+        <div className="mz-dau-nut">
+          <button type="button" className="mz-nut mz-nut-chinh mz-nut-to" onClick={onPhat} disabled={!coBai}>
+            <Play size={16} aria-hidden /> {dich('Phát')}
+          </button>
+          <button type="button" className="mz-nut mz-nut-to" onClick={onTron} disabled={!coBai}>
+            <Shuffle size={16} aria-hidden /> {dich('Trộn bài')}
+          </button>
+          {children}
+        </div>
+      </div>
+    </header>
+  );
+}
 
-      <button
-        type="button"
-        className="ct-trk-art"
-        onClick={bam}
-        disabled={!bamDuoc || dangRut}
-        aria-label={isCurrent && playing ? `Tạm dừng ${track.title}` : `Phát ${track.title}`}
-        title={
-          chuaRutAmThanh
-            ? 'Bài lấy từ YouTube — bấm để rút âm thanh về máy chủ rồi phát (10-60 giây)'
-            : !playable ? 'Chưa tải về máy — cần mạng để nghe' : undefined
-        }
-      >
-        {track.coverImage
-          ? <img src={track.coverImage} alt="" loading="lazy" />
-          : <span className="ct-trk-art-blank"><Music2 size={15} aria-hidden /></span>}
-        <span className="ct-trk-art-veil">
-          {isCurrent && playing ? <Pause size={15} aria-hidden /> : <Play size={15} aria-hidden />}
-        </span>
-      </button>
+/** Một hàng thẻ bài cuộn ngang — cho trang Dành cho bạn. */
+function HangThe({ tieuDe, ds, onPhat, onTatCa, phu }: {
+  tieuDe: string; ds: Track[]; onPhat: (t: Track) => void; onTatCa?: () => void; phu?: (t: Track) => string;
+}) {
+  const { dich } = useDich();
+  const { currentId, playing } = useMusicPlayer();
+  return (
+    <section className="mz-khoi">
+      <div className="mz-khoi-dau">
+        <h2 className="mz-h2">{tieuDe}</h2>
+        {onTatCa && <button type="button" className="mz-linklike" onClick={onTatCa}>{dich('Xem tất cả')}</button>}
+      </div>
+      <div className="mz-luoi">
+        {ds.map((t) => (
+          <button key={t.id} type="button" className="mz-the" data-dang={currentId === t.id && playing} onClick={() => onPhat(t)} title={t.title}>
+            <span className="mz-the-bia">
+              <AnhBia src={t.coverImage} co={150} />
+              <span className="mz-the-phat"><Play size={18} fill="currentColor" aria-hidden /></span>
+            </span>
+            <strong>{t.title}</strong>
+            <small>{phu ? phu(t) : (t.artist || dich('Không rõ nghệ sĩ'))}</small>
+          </button>
+        ))}
+      </div>
+    </section>
+  );
+}
 
-      <span className="ct-trk-main">
-        <span className="ct-trk-title" title={track.title}>{track.title}</span>
-        <span className="ct-trk-artist">{track.artist || 'Không rõ nghệ sĩ'}</span>
-      </span>
-
-      {isDownloaded
-        ? <span className="ct-offline-tag" title={dich('Đã có trên máy')}><CheckCircle2 size={11} aria-hidden /> {dich('đã tải')}</span>
-        : <span />}
-
-      <span className="ct-trk-time">{clock(track.durationSeconds)}</span>
-
-      {/* HAI nút trong MỘT ô lưới. `.ct-trk` khai 6 cột; để nút xoá-hẳn thành
-          con thứ 7 thì lưới đẩy nó xuống DÒNG MỚI ở cột 1 — nó hiện ra dưới
-          bên trái mỗi bài và độn thêm cả một hàng chiều cao, làm danh sách
-          trông thưa thếch. */}
-      <span className="ct-trk-nut">
-      {/* Rút lên MÁY CHỦ (R2) — đứng RIÊNG, không thay thế nút tải về máy.
-          Hai việc khác nhau: tải về máy là bản riêng của máy này, rút lên R2
-          là cho mọi thiết bị và cho phát nền. Bản cũ để chúng loại trừ nhau
-          nên tải về máy xong là mất luôn đường đưa bài lên máy chủ. */}
-      {chuaRutAmThanh && (
-        <button
-          type="button"
-          className="ct-trk-action"
-          onClick={onExtract}
-          disabled={!online || dangRut}
-          aria-label={`Rút âm thanh cho ${track.title}`}
-          title={dich('Bài lấy từ YouTube — rút âm thanh về máy chủ để nghe được trong app')}
-        >
-          {dangRut ? <Loader2 size={14} className="ct-spin" aria-hidden /> : <Youtube size={15} aria-hidden />}
-        </button>
-      )}
-
-      {isDownloaded ? (
-        <button
-          type="button"
-          className="ct-trk-action"
-          onClick={onRemove}
-          aria-label={`Xoá bản tải về của ${track.title}`}
-          title={dich('Xoá bản đã tải')}
-        >
-          <Trash2 size={14} aria-hidden />
-        </button>
-      ) : (
-        <button
-          type="button"
-          className="ct-trk-action"
-          onClick={onDownload}
-          disabled={!online || isDownloading}
-          aria-label={`Tải ${track.title} về máy`}
-          title={online ? 'Tải về nghe offline' : 'Cần mạng để tải'}
-        >
-          {isDownloading ? <Loader2 size={14} className="ct-spin" aria-hidden /> : <Download size={14} aria-hidden />}
-        </button>
-      )}
-
-      {/* XOÁ HẲN — chỉ admin. Tách khỏi nút "xoá bản tải về" ở trên vì hai việc
-          khác hẳn nhau: cái kia chỉ xoá file trên máy này, cái này bỏ bài khỏi
-          thư viện của MỌI người. Hỏi xác nhận vì không hoàn tác được từ app. */}
-      {onXoaHan && (
-        <button
-          type="button"
-          className="ct-trk-action ct-trk-xoahan"
-          onClick={onXoaHan}
-          aria-label={`Xoá "${track.title}" khỏi thư viện`}
-          title={dich('Xoá hẳn khỏi thư viện (chỉ admin)')}
-        >
-          <X size={15} aria-hidden />
-        </button>
-      )}
-      </span>
-    </li>
+function BangPhimTat({ onDong }: { onDong: () => void }) {
+  const { dich } = useDich();
+  const DS: [string, string][] = [
+    ['Space', dich('Phát / tạm dừng')],
+    ['← →', dich('Tua 5 giây')],
+    ['↑ ↓', dich('Âm lượng')],
+    ['N / P', dich('Bài sau / bài trước')],
+    ['S', dich('Trộn bài')],
+    ['R', dich('Lặp: tắt → danh sách → một bài')],
+    ['M', dich('Tắt / bật tiếng')],
+    ['L', dich('Thích bài đang phát')],
+    ['F', dich('Chế độ thư giãn')],
+    ['/', dich('Tìm bài')],
+    ['?', dich('Bảng phím tắt này')],
+  ];
+  return (
+    <div className="mz-phu" role="dialog" aria-label={dich('Phím tắt')} onClick={onDong}>
+      <div className="mz-phu-hop" onClick={(e) => e.stopPropagation()}>
+        <div className="mz-phu-dau">
+          <h3><Keyboard size={16} aria-hidden /> {dich('Phím tắt trang Nhạc')}</h3>
+          <button type="button" className="mz-nut-nho" onClick={onDong} aria-label={dich('Đóng')}><X size={15} aria-hidden /></button>
+        </div>
+        <dl className="mz-phim">
+          {DS.map(([k, v]) => (<div key={k}><dt><kbd>{k}</kbd></dt><dd>{v}</dd></div>))}
+        </dl>
+        <p className="mz-kg-giai">{dich('Phím phát/dừng, bài sau, bài trước trên bàn phím và tai nghe chạy ở mọi trang, kể cả khi app đang ẩn.')}</p>
+      </div>
+    </div>
   );
 }

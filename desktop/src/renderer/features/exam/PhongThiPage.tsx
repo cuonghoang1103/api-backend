@@ -1,300 +1,94 @@
 /**
- * Phòng thi — 190 đề của chương trình FPTU (đo thật 20/08/2026).
+ * Phòng thi — bản DESKTOP viết mới (04/10/2026).
  *
- * Đối chiếu API: `GET /api/v1/exams` trả trọn danh sách kèm môn và kỳ.
- * Phân bố đo được: **135 đề FE** (trắc nghiệm) · **55 đề PE** (thực hành),
- * trải trên 8 mã môn + 38 đề chưa gắn môn.
+ * Người dùng: "Exam Room rất quan trọng… làm UI và tính năng full như web nhưng
+ * là một bản desktop hoàn toàn mới, nâng cấp trải nghiệm."
  *
- * ─── LÀM BÀI NGAY TRONG APP, cả bốn đường nộp ───
- * MCQ · CODE (.zip) · WRITE · SPEAK (ghi âm trong app). Xem `LamBai.tsx`.
+ * ─── Vì sao viết mới chứ không dựng lại cây web ───
+ * Trang web là bố cục một cột 5xl giữa màn hình, thiết kế cho trình duyệt. Trong
+ * cửa sổ app rộng nó để trống hai bên và bắt cuộn rất xa. Bản này dựng lại BỐ CỤC
+ * theo kiểu ứng dụng (cột lọc · danh sách · khung chi tiết; phòng thi toàn khung
+ * có bảng câu hỏi, phím tắt, màn soát bài trước khi nộp) nhưng GIỮ nguyên mọi
+ * đường gọi máy chủ của web: dùng thẳng `examApi` (axios của web, cầu nối
+ * `useCauNoiWeb`) và ba thành phần web không nên chép lại —
+ *   • `ExamRichContent` (KaTeX, mermaid, đề song ngữ, bảng);
+ *   • `ExamQuestionComments` (bình luận theo câu);
+ *   • `CuongMiniPanel` (AI đồng hành — Pro).
+ * Dùng chung payload nghĩa là web đổi API thì `tsc` của app đỏ ngay, không trôi.
  *
- * ⚠️ Trước 20/08/2026 phần này mở sang web, và chú thích ở đây từng khai đó là
- * ranh giới có chủ ý. Nay đã làm trọn — nếu bạn đọc thấy một chú thích nói app
- * không làm bài được thì nó là chú thích cũ, không phải mã.
- *
- * Ba chốt giữ cho nó an toàn nằm trong `LamBai.tsx`: bài làm ghi xuống đĩa sau
- * mỗi thao tác · đồng hồ tính từ `expiresAt` của máy chủ · KHÔNG tự nộp khi
- * hết giờ. Bấm "Vào thi" lần nữa thì NỐI LẠI lượt đang dở, không đốt lượt mới.
+ * ─── Ba màn, ba đường dẫn của app ───
+ *   /exam                → Sảnh: Đề thi · Lịch sử · Sổ tay
+ *   /exam/:id            → Giới thiệu đề → đang thi (toàn khung)
+ *   /exam/attempt/:id    → Kết quả + chữa bài
+ * Dùng đường dẫn thật (không phải state cục bộ) để nút lùi/tiến, ⌘K và liên kết
+ * từ nơi khác (Học viện, Sổ tay) mở thẳng đúng màn.
  */
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import {
-  ClipboardList, CloudOff, ExternalLink, FileCode2, ListChecks,
-  RefreshCw, Search, Timer, Trophy, X,
-} from 'lucide-react';
+import '@/app/exam/exam.css';
+import './exam-desk.css';
+import { useMemo } from 'react';
+import { Loader2 } from 'lucide-react';
 import { useAppState } from '../../app-state';
-import { useSession } from '../../auth/session';
-import { OfflineUnavailableError, swr } from '../../offline/cache';
-import { chuVi, fold, moNgoai, WEB } from '../chu';
+import { useCauNoiWeb, VoWeb } from '../web/TrangWeb';
+import { useNoi } from './chung';
+import { Sanh } from './Sanh';
 import { LamBai } from './LamBai';
-import { useDich } from '../../i18n';
+import { KetQua } from './KetQua';
 
-interface De {
-  id: number;
-  code?: string | null;
-  title: string;
-  description?: string | null;
-  kind?: string | null;          // FE = trắc nghiệm · PE = thực hành
-  peType?: string | null;
-  durationMinutes?: number | null;
-  totalPoints?: number | null;
-  passMark?: number | null;
-  questionCount?: number | null;
-  courseId?: number | null;
-  course?: { title?: string; slug?: string; courseCode?: string | null } | null;
-  semester?: { name?: string; ordinal?: number; code?: string } | null;
-}
+type Man =
+  | { loai: 'sanh' }
+  | { loai: 'de'; id: number }
+  | { loai: 'ketqua'; id: number }
+  | { loai: 'sai' };
 
-const NHAN_DANG: Record<string, string> = { FE: 'Trắc nghiệm', PE: 'Thực hành' };
-
-function docDs(p: unknown): De[] {
-  if (Array.isArray(p)) return p as De[];
-  const w = p as { exams?: unknown; items?: unknown; data?: unknown };
-  for (const x of [w?.exams, w?.items, w?.data]) if (Array.isArray(x)) return x as De[];
-  return [];
+export function docMan(route: string): Man {
+  const doan = route.split('?')[0]!.split('/').filter(Boolean);
+  if (doan[0] !== 'exam') return { loai: 'sai' };
+  if (doan.length === 1) return { loai: 'sanh' };
+  if (doan.length === 2 && /^\d+$/.test(doan[1]!)) return { loai: 'de', id: Number(doan[1]) };
+  if (doan.length === 3 && doan[1] === 'attempt' && /^\d+$/.test(doan[2]!)) return { loai: 'ketqua', id: Number(doan[2]) };
+  return { loai: 'sai' };
 }
 
 export function PhongThiPage() {
-  const { dich } = useDich();
-  const { online } = useAppState();
-  const { api, userId } = useSession();
+  const { route, navigate } = useAppState();
+  const san = useCauNoiWeb();
+  const { t } = useNoi();
+  const man = useMemo(() => docMan(route), [route]);
 
-  const [ds, setDs] = useState<De[]>([]);
-  const [tim, setTim] = useState('');
-  const [dang, setDang] = useState<string | null>(null);
-  const [mon, setMon] = useState<string | null>(null);
-  const [dangTai, setDangTai] = useState(true);
-  const [cu, setCu] = useState(false);
-  const [loi, setLoi] = useState<string | null>(null);
-  const [moId, setMoId] = useState<number | null>(null);
-
-  const nap = useCallback(async () => {
-    if (userId === null || !api) return;
-    setDangTai(true);
-    setLoi(null);
-    try {
-      const kq = await swr<unknown>({
-        userId,
-        key: 'phongthi:ds',
-        fetcher: () => api.request('/api/v1/exams'),
-        online,
-        ttlMs: 30 * 60 * 1000,
-        onRefreshed: (moi) => { setDs(docDs(moi)); setCu(false); },
-      });
-      setDs(docDs(kq.value));
-      setCu(kq.isStale);
-    } catch (e) {
-      setLoi(
-        e instanceof OfflineUnavailableError
-          ? 'Chưa từng tải danh sách đề về máy nên không xem được khi ngoại tuyến.'
-          : e instanceof Error ? e.message : String(e),
-      );
-    } finally {
-      setDangTai(false);
-    }
-  }, [api, userId, online]);
-
-  useEffect(() => { void nap(); }, [nap]);
-
-  /* Mã môn để lọc — lấy TỪ DỮ LIỆU, không gõ cứng.
-     Gõ cứng thì thêm một môn trên web là bộ lọc ở đây thiếu một mục, im lặng. */
-  const dsMon = useMemo(() => {
-    const dem = new Map<string, number>();
-    for (const d of ds) {
-      const m = d.course?.courseCode;
-      if (m) dem.set(m, (dem.get(m) ?? 0) + 1);
-    }
-    return [...dem.entries()].sort((a, b) => b[1] - a[1]);
-  }, [ds]);
-
-  const ketQua = useMemo(() => {
-    const q = fold(tim.trim());
-    return ds.filter((d) => {
-      if (dang && d.kind !== dang) return false;
-      if (mon && d.course?.courseCode !== mon) return false;
-      if (!q) return true;
-      return fold(
-        `${chuVi(d.title)} ${d.code ?? ''} ${d.course?.courseCode ?? ''} ${d.course?.title ?? ''} ${d.semester?.name ?? ''}`,
-      ).includes(q);
-    });
-  }, [ds, tim, dang, mon]);
-
-  const deMo = moId != null ? ds.find((d) => d.id === moId) ?? null : null;
-  if (deMo) return <ChiTietDe de={deMo} onQuayLai={() => setMoId(null)} />;
-
-  const soFE = ds.filter((d) => d.kind === 'FE').length;
-  const soPE = ds.filter((d) => d.kind === 'PE').length;
-
-  return (
-    <div className="ct-page ct-pt">
-      <header className="ct-hv-dau">
-        <div>
-          <h1><ClipboardList size={20} aria-hidden /> {dich('Phòng thi')}</h1>
-          <p className="ct-muted">
-            {ds.length > 0
-              ? `${ds.length} đề · ${soFE} trắc nghiệm · ${soPE} thực hành`
-              : 'Đề thi FE và PE theo môn'}
-          </p>
+  if (!san) {
+    return (
+      <div className="ct-boot">
+        <div className="ct-empty">
+          <Loader2 size={22} className="ct-spin" aria-hidden />
+          <p style={{ marginTop: 10 }}>{t('Đang mở Phòng thi…', 'Opening Exam Room…')}</p>
         </div>
-        <div className="ct-hv-dau-nut">
-          {cu && <span className="ct-gn-cu"><CloudOff size={13} aria-hidden /> {dich('bản đã lưu')}</span>}
-          <button type="button" className="ct-btn ct-btn-ghost" onClick={() => void nap()}>
-            <RefreshCw size={14} aria-hidden /> Tải lại
-          </button>
-          <button type="button" className="ct-btn ct-btn-ghost" onClick={() => moNgoai(`${WEB}/exam`)}>
-            <ExternalLink size={14} aria-hidden /> Mở trên web
-          </button>
-        </div>
-      </header>
-
-      <div className="ct-gn-loc">
-        <label className="ct-music-search ct-hv-tim">
-          <Search size={14} aria-hidden />
-          <input
-            value={tim}
-            onChange={(e) => setTim(e.target.value)}
-            placeholder={dich('Tìm theo mã môn (PRO192), tên đề hoặc kỳ…')}
-            aria-label={dich('Tìm đề thi')}
-          />
-          {tim && (
-            <button type="button" className="ct-linklike" onClick={() => setTim('')} aria-label={dich('Xoá tìm kiếm')}>
-              <X size={13} aria-hidden />
-            </button>
-          )}
-        </label>
-
-        <div className="ct-gn-chip" role="group" aria-label={dich('Lọc theo dạng đề')}>
-          <button type="button" data-active={dang === null} onClick={() => setDang(null)}>{dich('Tất cả')}</button>
-          {(['FE', 'PE'] as const).map((k) => (
-            <button key={k} type="button" data-active={dang === k} onClick={() => setDang(dang === k ? null : k)}>
-              {NHAN_DANG[k]}
-              <span className="ct-mau-dem">{k === 'FE' ? soFE : soPE}</span>
-            </button>
-          ))}
-        </div>
-
-        {dsMon.length > 0 && (
-          <div className="ct-gn-chip" role="group" aria-label={dich('Lọc theo môn')}>
-            {dsMon.map(([ma, so]) => (
-              <button key={ma} type="button" data-active={mon === ma} onClick={() => setMon(mon === ma ? null : ma)}>
-                {ma}
-                <span className="ct-mau-dem">{so}</span>
-              </button>
-            ))}
-          </div>
-        )}
       </div>
-
-      {loi ? (
-        <div className="ct-empty">
-          <CloudOff size={26} aria-hidden className="ct-empty-icon" />
-          <p>{loi}</p>
-          <button type="button" className="ct-btn ct-btn-ghost" onClick={() => void nap()}>{dich('Thử lại')}</button>
-        </div>
-      ) : dangTai && ds.length === 0 ? (
-        <p className="ct-muted">{dich('Đang tải…')}</p>
-      ) : ketQua.length === 0 ? (
-        <div className="ct-empty">
-          <Search size={26} aria-hidden className="ct-empty-icon" />
-          <p>{dich('Không đề nào khớp bộ lọc đang chọn.')}</p>
-          <button
-            type="button"
-            className="ct-btn ct-btn-ghost"
-            onClick={() => { setTim(''); setDang(null); setMon(null); }}
-          >
-            {dich('Bỏ hết bộ lọc')}
-          </button>
-        </div>
-      ) : (
-        <>
-          <p className="ct-hv-sokq">{ketQua.length} đề</p>
-          <div className="ct-pt-luoi">
-            {ketQua.map((d) => <TheDe key={d.id} de={d} onMo={() => setMoId(d.id)} />)}
-          </div>
-        </>
-      )}
-    </div>
-  );
-}
-
-function TheDe({ de, onMo }: { de: De; onMo: () => void }) {
-  return (
-    <button type="button" className="ct-pt-the" onClick={onMo} data-dang={de.kind ?? 'FE'}>
-      <span className="ct-pt-the-dau">
-        {de.kind === 'PE' ? <FileCode2 size={13} aria-hidden /> : <ListChecks size={13} aria-hidden />}
-        <span className="ct-mau-tag">{NHAN_DANG[de.kind ?? ''] ?? de.kind}</span>
-        {de.course?.courseCode && <span className="ct-hv-ma">{de.course.courseCode}</span>}
-        {de.code && <span className="ct-muted">{de.code}</span>}
-      </span>
-      <span className="ct-pt-the-ten">{chuVi(de.title)}</span>
-      <span className="ct-pt-the-so">
-        {!!de.questionCount && <span>{de.questionCount} câu</span>}
-        {!!de.durationMinutes && <span><Timer size={11} aria-hidden /> {de.durationMinutes}′</span>}
-        {de.passMark != null && de.totalPoints != null && (
-          <span><Trophy size={11} aria-hidden /> qua {de.passMark}/{de.totalPoints}</span>
-        )}
-        {de.semester?.name && <span className="ct-muted">{de.semester.name}</span>}
-      </span>
-    </button>
-  );
-}
-
-function ChiTietDe({ de, onQuayLai }: { de: De; onQuayLai: () => void }) {
-  const { dich, dichP } = useDich();
-  const [dangThi, datDangThi] = useState(false);
-  if (dangThi) {
-    return <LamBai examId={de.id} tenDe={de.title} onThoat={() => datDangThi(false)} />;
+    );
   }
+
+  /* `.ctx-khung` mang container query: bố cục co giãn theo VÙNG NỘI DUNG (thanh
+     bên app ăn 60–218px), không theo cửa sổ. Nằm NGOÀI `.ct-web-host` (khung
+     cuộn) để lớp phủ fixed (màn soát bài, CuongMini) neo vào vùng nội dung. */
   return (
-    <div className="ct-page ct-pt ct-hv-ct">
-      <button type="button" className="ct-btn ct-btn-ghost ct-gn-lui" onClick={onQuayLai}>
-        <ClipboardList size={14} aria-hidden /> Phòng thi
-      </button>
-
-      <p className="ct-hv-hero-nhan">
-        <span className="ct-mau-tag">{NHAN_DANG[de.kind ?? ''] ?? de.kind}</span>
-        {de.peType && <span className="ct-mau-tag">{de.peType}</span>}
-        {de.course?.courseCode && <span className="ct-hv-ma">{de.course.courseCode}</span>}
-        {de.semester?.name && <span className="ct-muted">{de.semester.name}</span>}
-      </p>
-      <h1 className="ct-hv-bai-tieude">{chuVi(de.title)}</h1>
-      {de.course?.title && <p className="ct-hv-hero-mo">{chuVi(de.course.title)}</p>}
-      {de.description && <p className="ct-hv-hero-mo">{chuVi(de.description)}</p>}
-
-      <dl className="ct-mau-tin ct-pt-tin">
-        {!!de.questionCount && <><dt>{dich('Số câu')}</dt><dd>{de.questionCount}</dd></>}
-        {!!de.durationMinutes && <><dt>{dich('Thời gian')}</dt><dd>{de.durationMinutes} phút</dd></>}
-        {de.totalPoints != null && <><dt>{dich('Thang điểm')}</dt><dd>{de.totalPoints}</dd></>}
-        {de.passMark != null && <><dt>{dich('Điểm qua')}</dt><dd>{de.passMark}</dd></>}
-        {de.code && <><dt>{dich('Mã đề')}</dt><dd>{de.code}</dd></>}
-      </dl>
-
-      <div className="ct-hv-bai-nut">
-        <button type="button" className="ct-btn" onClick={() => datDangThi(true)}>
-          <ClipboardList size={15} aria-hidden /> Vào thi
-        </button>
-        <button type="button" className="ct-btn ct-btn-ghost" onClick={() => moNgoai(`${WEB}/exam/${de.id}`)}>
-          <ExternalLink size={14} aria-hidden /> Mở trên web
-        </button>
-        {de.course?.slug && (
-          <button type="button" className="ct-btn ct-btn-ghost" onClick={() => moNgoai(`${WEB}/courses/${de.course!.slug}`)}>
-            <ExternalLink size={14} aria-hidden /> Xem môn
-          </button>
-        )}
-      </div>
-
-      {/* Nói rõ luật chơi TRƯỚC khi họ bấm — mất 60 phút vì không biết là lỗi
-          của màn hình này, không phải của người dùng. */}
-      <p className="ct-muted ct-pt-luuy">
-        {/* Số phút là CHỖ THAY, không phải mẩu ghép — tiếng Anh đặt nó ở vị
-            trí khác trong câu. */}
-        {de.durationMinutes
-          ? dichP('Bấm “Vào thi” là bắt đầu tính giờ ({n} phút).', { n: de.durationMinutes })
-          : dich('Bấm “Vào thi” là bắt đầu tính giờ.')}
-        {' '}
-        {dich('Bài làm được lưu xuống máy sau mỗi thao tác, nên đóng app rồi mở lại vẫn còn — và bấm “Vào thi” lần nữa sẽ NỐI LẠI lượt đang dở chứ không đốt lượt mới.')}
-        {de.kind === 'PE' && de.peType === 'CODE' && ' Đề này nộp bằng file .zip.'}
-        {de.kind === 'PE' && de.peType === 'SPEAK' && ' Đề này ghi âm trực tiếp trong app.'}
-      </p>
+    <div className="ctx-khung">
+    <VoWeb>
+      {man.loai === 'sanh' && <Sanh />}
+      {/* `key` theo id: chuyển thẳng từ đề này sang đề khác (Thi lại từ trang kết
+          quả của đề khác) phải dựng lại sạch — không mang đồng hồ của đề cũ. */}
+      {man.loai === 'de' && <LamBai key={man.id} examId={man.id} />}
+      {man.loai === 'ketqua' && <KetQua key={man.id} attemptId={man.id} />}
+      {man.loai === 'sai' && (
+        <div className="ct-page">
+          <div className="ct-empty">
+            <h1>{t('Không tìm thấy', 'Not found')}</h1>
+            <p>{t('Đường dẫn phòng thi không hợp lệ.', 'This Exam Room link is not valid.')}</p>
+            <button type="button" className="ct-btn ct-btn-ghost" onClick={() => navigate('/exam')}>
+              {t('Về Phòng thi', 'Back to Exam Room')}
+            </button>
+          </div>
+        </div>
+      )}
+    </VoWeb>
     </div>
   );
 }

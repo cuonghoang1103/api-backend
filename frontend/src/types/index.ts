@@ -938,7 +938,7 @@ export type ScriptLang = 'VI' | 'EN';
 
 /** How a script snapshot came to exist. See
  *  src/services/content.script.service.ts. */
-export type ScriptVersionOrigin = 'MANUAL' | 'TEMPLATE' | 'RESTORE' | 'AUTO';
+export type ScriptVersionOrigin = 'MANUAL' | 'TEMPLATE' | 'RESTORE' | 'AUTO' | 'AI';
 
 /** History row. `script` is absent from list responses (the
  *  sidebar only needs metadata) and present when a single version

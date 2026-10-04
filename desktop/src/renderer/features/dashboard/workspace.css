@@ -25,6 +25,7 @@
 .ct-sidebar .ct-nav-group[data-group='hoc'] { --nav-ink: #359cb1; }
 .ct-sidebar .ct-nav-group[data-group='lam'] { --nav-ink: #bd8740; }
 .ct-sidebar .ct-nav-group[data-group='khac'] { --nav-ink: #4b9b80; }
+.ct-sidebar .ct-nav-group[data-group='tien'] { --nav-ink: #4b9b80; }
 .ct-sidebar .ct-nav-group-label { font-size: 10px; font-weight: 700; letter-spacing: .09em; margin-bottom: 7px; color: var(--ct-text-muted); }
 .ct-sidebar .ct-nav-item { min-height: 35px; padding: 7px 11px; margin-bottom: 2px; gap: 11px; border-radius: 9px; font-size: 13px; transition: background 150ms, color 150ms; }
 .ct-sidebar .ct-nav-icon { color: var(--nav-ink, var(--ct-text-muted)); flex-shrink: 0; }

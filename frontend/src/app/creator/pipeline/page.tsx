@@ -16,7 +16,7 @@ function PipelineContent() {
  const search = useSearchParams();
  const focus = search.get('status');
  return (
- <div className="px-4 sm:px-6 lg:px-8 py-6 max-w-[100rem] mx-auto">
+ <div className="px-[clamp(14px,2.4vw,36px)] py-6 w-full max-w-[2400px] mx-auto">
  {/* Page header — collapses on mobile */}
  <div className="flex items-center justify-between mb-4">
  <div className="flex items-center gap-2.5">
@@ -29,8 +29,8 @@ function PipelineContent() {
  </h1>
  <p className="text-xs text-text-muted">
  {focus
- ? `Focusing on ${focus.toLowerCase()} — drag cards across to update status.`
- : 'Drag a card across the columns to update its status.'}
+ ? t('pipelineFocusHint', { status: focus.toLowerCase() })
+ : t('pipelineDragHint')}
  </p>
  </div>
  </div>
@@ -48,7 +48,7 @@ export default function PipelinePage() {
  // rendering). The fallback just shows the same shell.
  return (
  <Suspense fallback={
- <div className="px-4 sm:px-6 lg:px-8 py-6 max-w-[100rem] mx-auto">
+ <div className="px-[clamp(14px,2.4vw,36px)] py-6 w-full max-w-[2400px] mx-auto">
  <div className="flex items-center gap-2.5 mb-4">
  <div className="w-9 h-9 rounded-xl bg-studio-500/15 ring-1 ring-studio-500/30 flex items-center justify-center">
  <KanbanSquare className="w-5 h-5 text-studio-400" />

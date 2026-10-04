@@ -380,6 +380,7 @@ function InlineNote({
  onSave: (v: string | null) => void;
  placeholder?: string;
 }) {
+ const { t } = useStudioT();
  const [editing, setEditing] = useState(false);
  const [draft, setDraft] = useState(value ?? '');
 
@@ -422,7 +423,7 @@ function InlineNote({
  className="w-full text-left text-[12px] text-text-secondary hover:text-text-primary min-h-[1.5em]"
  >
  {value ?? (
- <span className="text-text-muted italic">{placeholder ?? 'Click to add…'}</span>
+ <span className="text-text-muted italic">{placeholder ?? t('slClickToAdd')}</span>
  )}
  </button>
  )}

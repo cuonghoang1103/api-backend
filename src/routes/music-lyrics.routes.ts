@@ -11,13 +11,13 @@
  *   DELETE /tracks/:id/lyrics   Remove lyrics (auth)
  *
  * Read is public (optionalAuth) so anyone viewing the now-playing
- * screen gets the karaoke scroll. Write requires a logged-in user —
- * matching the existing PUT /tracks/:id policy (tracks have no owner,
- * so any authenticated user can curate metadata/lyrics).
+ * screen gets the karaoke scroll. Write/delete are ADMIN-only (04/10/2026):
+ * lyrics are shown publicly, so only the site owner — who confirms holding
+ * the rights in the editor — may add them.
  */
 
 import { Router, type Response, type NextFunction } from 'express';
-import { optionalAuth, authenticate } from '../middleware/auth.js';
+import { optionalAuth, authenticate, requireRole } from '../middleware/auth.js';
 import { musicLyricsService } from '../services/music-lyrics.service.js';
 import { logger } from '../utils/logger.js';
 import type { ApiResponse } from '../types/index.js';
@@ -57,6 +57,10 @@ router.get(
 router.put(
   '/tracks/:id/lyrics',
   authenticate,
+  // 04/10/2026: CHỈ admin ghi/xoá lời. Lời đọc công khai cho mọi người, nên để
+  // bất kỳ tài khoản nào dán lời vào bài nào cũng được là mở cửa cho nội dung
+  // không có quyền xuất hiện công khai trên site.
+  requireRole('ROLE_ADMIN'),
   async (req: any, res: Response<ApiResponse>, next: NextFunction) => {
     try {
       const trackId = parseTrackId(req.params.id);
@@ -92,6 +96,10 @@ router.put(
 router.delete(
   '/tracks/:id/lyrics',
   authenticate,
+  // 04/10/2026: CHỈ admin ghi/xoá lời. Lời đọc công khai cho mọi người, nên để
+  // bất kỳ tài khoản nào dán lời vào bài nào cũng được là mở cửa cho nội dung
+  // không có quyền xuất hiện công khai trên site.
+  requireRole('ROLE_ADMIN'),
   async (req: any, res: Response<ApiResponse>, next: NextFunction) => {
     try {
       const trackId = parseTrackId(req.params.id);

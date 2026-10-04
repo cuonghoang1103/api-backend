@@ -450,7 +450,7 @@ export default function CalendarPage() {
 
  if (projectsQ.isLoading) {
  return (
- <div className="px-4 sm:px-6 lg:px-8 py-6 sm:py-8 max-w-6xl mx-auto">
+ <div className="px-[clamp(14px,2.4vw,36px)] py-6 sm:py-8 w-full max-w-[2400px] mx-auto">
  <h1 className="font-heading text-2xl sm:text-3xl font-bold text-text-primary mb-4">
  {t('calendarTitle')}
  </h1>
@@ -467,7 +467,7 @@ export default function CalendarPage() {
  }
 
  return (
- <div className="px-4 sm:px-6 lg:px-8 py-6 sm:py-8 max-w-6xl mx-auto space-y-6">
+ <div className="px-[clamp(14px,2.4vw,36px)] py-6 sm:py-8 w-full max-w-[2400px] mx-auto space-y-6">
  {/* Header */}
  <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
  <div>

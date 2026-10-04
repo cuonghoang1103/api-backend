@@ -530,7 +530,7 @@ export default function IdeasPage() {
  const isFiltered = statusFilter !== 'ALL' || debouncedSearch.length > 0;
 
  return (
- <div className="px-4 sm:px-6 lg:px-8 py-6 sm:py-8 max-w-6xl mx-auto space-y-6">
+ <div className="px-[clamp(14px,2.4vw,36px)] py-6 sm:py-8 w-full max-w-[2400px] mx-auto space-y-6">
  {/* Header */}
  <div className="flex items-end justify-between gap-4">
  <div>

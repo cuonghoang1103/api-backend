@@ -1,248 +1,167 @@
 /**
- * Màn hình ĐANG PHÁT toàn cảnh — bản của app, lấy ý từ trang now-playing của web.
+ * CHẾ ĐỘ THƯ GIÃN — màn đang phát toàn cảnh.
  *
- * Bốn thẻ: NGHE · LỜI · THÔNG TIN · CHIA SẺ. Nó KHÔNG dựng trình phát riêng —
- * vẫn là thẻ <audio> duy nhất ở `player.tsx`, nên mở/đóng màn này không làm
- * nhạc ngắt một nhịp, và tua ở đây với tua ở thanh dưới là cùng một chỗ.
+ * Phủ kín vùng nội dung (vẫn chừa thanh tiêu đề, thanh trạng thái và thanh
+ * phát), nền là chính ảnh bìa làm mờ + quầng sáng thở theo nhịp nhạc. Bên phải
+ * là lời chạy theo bài, hoặc bảng âm thanh nền nếu bài chưa có lời.
  *
- * Dải nhịp là TRANG TRÍ, cố ý không phải phổ tần thật: muốn phổ thật phải đưa
- * audio qua Web Audio, mà luồng nhạc khác nguồn gốc với `app://` — làm vậy có
- * thể khiến cả bài phát ra IM LẶNG. (Bàn DJ ở tab Remix thì có phổ THẬT, vì nó
- * nạp nhạc theo đường khác hẳn — xem `RemixDeck.tsx`.)
+ * Nó KHÔNG dựng trình phát riêng — vẫn là thẻ <audio> duy nhất ở `player.tsx`,
+ * nên mở/đóng màn này không làm nhạc ngắt một nhịp.
+ *
+ * Quầng sáng đọc `mucNhip()` mỗi khung hình và ghi thẳng vào biến CSS, KHÔNG
+ * qua state React: 60 lần setState mỗi giây sẽ dựng lại cả màn này. Khi nguồn
+ * không có CORS thì `mucNhip()` trả 0 và quầng sáng chỉ thở đều — không giả nhịp.
  */
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
-  ArrowLeft, Check, Copy, Download, ExternalLink, FileText, Info, ListPlus,
-  Music2, Pause, Play, Radio, Repeat, Repeat1, Share2, Shuffle, SkipBack, SkipForward,
+  ArrowLeft, CloudRain, FileText, Flame, Heart, Moon, Pause, Play, Repeat, Repeat1, Shuffle,
+  SkipBack, SkipForward, Sparkles, Waves, Wind,
 } from 'lucide-react';
-import { useSession } from '../../auth/session';
-import { clock, laBaiYouTube, useMusicPlayer } from './player';
-import { layDanhSachPlaylist, themBaiVaoPlaylist, type Playlist } from './playlists';
 import { useDich } from '../../i18n';
+import { AnhBia, useKhongGian } from './dungChung';
+import { doiKhongGian, type MaKhongGian } from './khongGian';
+import { KhongGianPanel } from './KhongGianPanel';
+import { LoiBaiHat } from './LoiBaiHat';
+import { clock, useMusicPlayer } from './player';
 
-type The = 'nghe' | 'loi' | 'tin' | 'chia-se';
-
-const WEB = 'https://cuongthai.com/music';
-
-export function NowPlaying({ onDong, onDaThemVaoPlaylist }: { onDong: () => void; onDaThemVaoPlaylist: () => void }) {
+export function NowPlaying({ onDong }: { onDong: () => void }) {
   const { dich } = useDich();
-  const { api } = useSession();
   const {
-    current, playing, length, shownPosition, position,
-    toggle, step, batDauTua, downloaded,
-    shuffle, setShuffle, repeat, setRepeat, tracks,
+    current, playing, length, shownPosition, position, toggle, step, batDauTua,
+    shuffle, setShuffle, repeat, setRepeat, daThich, doiThich, mucNhip, henGio, henGioConLai,
   } = useMusicPlayer();
-
-  const [the, setThe] = useState<The>('nghe');
-  const [loi, setLoi] = useState<string | null>(null);
-  const [dangTaiLoi, setDangTaiLoi] = useState(false);
-  const [danhSachPl, setDanhSachPl] = useState<Playlist[]>([]);
-  const [daChep, setDaChep] = useState(false);
-  const [thongBao, setThongBao] = useState<string | null>(null);
-
-  const trackId = current?.id ?? null;
-
-  // Lời bài hát: chỉ hỏi khi người dùng thật sự mở thẻ LỜI. Nạp sẵn cho mọi bài
-  // là hàng chục lời gọi mà gần như không ai đọc.
-  useEffect(() => {
-    if (the !== 'loi' || !api || trackId === null) return;
-    let con = true;
-    setDangTaiLoi(true);
-    setLoi(null);
-    void api.request<unknown>(`/api/v1/music/tracks/${trackId}/lyrics`)
-      .then((ket) => {
-        if (!con) return;
-        const o = ket as { content?: string; lyrics?: string; text?: string } | null;
-        setLoi(o?.content ?? o?.lyrics ?? o?.text ?? null);
-      })
-      .catch(() => { if (con) setLoi(null); })
-      .finally(() => { if (con) setDangTaiLoi(false); });
-    return () => { con = false; };
-  }, [the, api, trackId]);
+  const muc = useKhongGian();
+  const [ben, setBen] = useState<'loi' | 'kg'>('loi');
+  const [gio, setGio] = useState(() => new Date());
+  const goc = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (the !== 'chia-se' || !api) return;
-    void layDanhSachPlaylist(api).then(setDanhSachPl).catch(() => setDanhSachPl([]));
-  }, [the, api]);
+    const t = setInterval(() => setGio(new Date()), 15_000);
+    return () => clearInterval(t);
+  }, []);
+
+  useEffect(() => {
+    if (!playing) { goc.current?.style.setProperty('--nhip', '0'); return; }
+    let id = 0;
+    const chay = () => {
+      goc.current?.style.setProperty('--nhip', mucNhip().toFixed(3));
+      id = requestAnimationFrame(chay);
+    };
+    id = requestAnimationFrame(chay);
+    return () => cancelAnimationFrame(id);
+  }, [playing, mucNhip]);
 
   if (!current) return null;
-
-  const chiSo = tracks.findIndex((t) => t.id === current.id);
   const progress = length > 0 ? Math.min(100, (shownPosition / length) * 100) : 0;
-  const daTai = downloaded.has(current.id);
-
-  const chep = (chu: string) => {
-    void navigator.clipboard.writeText(chu).then(() => {
-      setDaChep(true);
-      setTimeout(() => setDaChep(false), 2000);
-    });
-  };
-
-  const themVao = async (p: Playlist) => {
-    if (!api) return;
-    try {
-      await themBaiVaoPlaylist(api, p.id, current.id);
-      setThongBao(`Đã thêm vào “${p.name}”.`);
-      onDaThemVaoPlaylist();
-      setTimeout(() => setThongBao(null), 2600);
-    } catch (e) {
-      setThongBao(e instanceof Error ? e.message : String(e));
-    }
-  };
+  const thich = daThich.has(current.id);
+  const AM: [MaKhongGian, JSX.Element, string][] = [
+    ['mua', <CloudRain size={15} aria-hidden key="i" />, dich('Mưa nhẹ')],
+    ['song', <Waves size={15} aria-hidden key="i" />, dich('Sóng biển')],
+    ['nau', <Wind size={15} aria-hidden key="i" />, dich('Ồn nâu (tập trung)')],
+    ['lua', <Flame size={15} aria-hidden key="i" />, dich('Lửa trại')],
+  ];
 
   return (
-    <div className="ct-nowfull">
-      {current.coverImage && (
-        <div className="ct-nowfull-wash" style={{ backgroundImage: `url(${current.coverImage})` }} aria-hidden />
-      )}
+    <div className="mz-tg" ref={goc} data-phat={playing} role="dialog" aria-label={dich('Chế độ thư giãn')}>
+      {current.coverImage && <div className="mz-tg-loang" style={{ backgroundImage: `url(${current.coverImage})` }} aria-hidden />}
+      <div className="mz-tg-quang" aria-hidden />
 
-      <header className="ct-nowfull-top">
-        <button type="button" className="ct-nowfull-back" onClick={onDong}>
-          <ArrowLeft size={14} aria-hidden /> QUAY LẠI
+      <header className="mz-tg-dau">
+        <button type="button" className="mz-nut mz-nut-trong" onClick={onDong}>
+          <ArrowLeft size={14} aria-hidden /> {dich('Quay lại')} <kbd>Esc</kbd>
         </button>
-        <span className="ct-nowfull-eyebrow">{dich('ĐANG PHÁT')}</span>
-        <nav className="ct-nowfull-tabs">
-          {([
-            ['nghe', 'NGHE', <Radio size={13} aria-hidden key="i" />],
-            ['loi', 'LỜI', <FileText size={13} aria-hidden key="i" />],
-            ['tin', 'THÔNG TIN', <Info size={13} aria-hidden key="i" />],
-            ['chia-se', 'CHIA SẺ', <Share2 size={13} aria-hidden key="i" />],
-          ] as [The, string, JSX.Element][]).map(([ma, nhan, icon]) => (
-            <button
-              key={ma}
-              type="button"
-              className={`ct-nowfull-tab${the === ma ? ' is-on' : ''}`}
-              onClick={() => setThe(ma)}
-            >
-              {icon}{nhan}
+        <span className="mz-tg-gio">
+          {gio.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+          {henGio !== null && (
+            <span className="mz-tg-hen" title={dich('Hẹn giờ tắt nhạc')}>
+              <Moon size={12} aria-hidden />
+              {henGio === 'het-bai' ? dich('Hết bài này') : clock(henGioConLai)}
+            </span>
+          )}
+        </span>
+        <span className="mz-tg-am">
+          {AM.map(([ma, icon, ten]) => (
+            <button key={ma} type="button" data-on={muc[ma] > 0} onClick={() => doiKhongGian(ma)} title={ten} aria-label={ten} aria-pressed={muc[ma] > 0}>
+              {icon}
             </button>
           ))}
-        </nav>
+        </span>
       </header>
 
-      <div className="ct-nowfull-body">
-        <div className="ct-nowfull-art-wrap">
-          {current.coverImage
-            ? <img src={current.coverImage} alt="" className="ct-nowfull-art" />
-            : <div className="ct-nowfull-art ct-pl-blank"><Music2 size={54} /></div>}
-        </div>
-
-        <h1 className="ct-nowfull-title">{current.title}</h1>
-        <p className="ct-nowfull-artist">{current.artist || 'Không rõ nghệ sĩ'}</p>
-        <p className="ct-nowfull-meta">
-          [{chiSo >= 0 ? chiSo + 1 : '—'} / {tracks.length}] · {clock(length || current.durationSeconds)}
-        </p>
-
-        {/* ─── Nội dung theo thẻ ─── */}
-        {the === 'nghe' && (
-          <div className={`ct-nowfull-eq${playing ? ' is-live' : ''}`} aria-hidden>
-            {Array.from({ length: 56 }, (_, i) => (
-              <span key={i} style={{ animationDelay: `${(i % 11) * 70}ms` }} />
-            ))}
+      <div className="mz-tg-than">
+        <div className="mz-tg-trai">
+          <div className="mz-tg-bia">
+            <AnhBia src={current.coverImage} co={340} />
           </div>
-        )}
-
-        {the === 'loi' && (
-          <div className="ct-nowfull-panel">
-            {dangTaiLoi && <p className="ct-muted">{dich('Đang tải lời…')}</p>}
-            {!dangTaiLoi && loi && <pre className="ct-nowfull-loi">{loi}</pre>}
-            {!dangTaiLoi && !loi && (
-              <p className="ct-muted">
-                Bài này chưa có lời. Thêm lời trên web (trang Nhạc → bài hát → Lời) thì app hiện luôn.
-              </p>
-            )}
-          </div>
-        )}
-
-        {the === 'tin' && (
-          <div className="ct-nowfull-panel">
-            <dl className="ct-nowfull-tin">
-              <dt>{dich('Tên bài')}</dt><dd>{current.title}</dd>
-              <dt>{dich('Nghệ sĩ')}</dt><dd>{current.artist || 'Không rõ'}</dd>
-              <dt>{dich('Thời lượng')}</dt><dd>{clock(length || current.durationSeconds)}</dd>
-              <dt>{dich('Mã bài')}</dt><dd>#{current.id}</dd>
-              <dt>{dich('Nguồn')}</dt>
-              <dd>{laBaiYouTube(current) ? 'YouTube (chưa rút âm thanh)' : 'Máy chủ CuongThai (R2)'}</dd>
-              <dt>{dich('Ngoại tuyến')}</dt>
-              <dd>{daTai ? <><Download size={12} aria-hidden /> {dich('đã tải về máy này')}</> : dich('chưa tải')}</dd>
-            </dl>
-          </div>
-        )}
-
-        {the === 'chia-se' && (
-          <div className="ct-nowfull-panel">
-            <div className="ct-nowfull-chiase">
-              <button type="button" className="ct-btn ct-btn-ghost" onClick={() => chep(`${current.title} — ${current.artist ?? ''}`.trim())}>
-                {daChep ? <Check size={14} aria-hidden /> : <Copy size={14} aria-hidden />}
-                {daChep ? 'Đã chép' : 'Chép tên bài'}
-              </button>
-              <button type="button" className="ct-btn ct-btn-ghost" onClick={() => void window.cuongthai?.app.openExternal(WEB)}>
-                <ExternalLink size={14} aria-hidden /> Mở trang Nhạc trên web
-              </button>
+          <div className="mz-tg-ten-hang">
+            <div>
+              <h1 className="mz-tg-ten">{current.title}</h1>
+              <p className="mz-tg-nghesi">{current.artist || dich('Không rõ nghệ sĩ')}</p>
             </div>
-
-            <p className="ct-nowfull-tieude">
-              <ListPlus size={14} aria-hidden /> Thêm bài này vào playlist
-            </p>
-            {danhSachPl.length === 0 ? (
-              <p className="ct-muted">{dich('Chưa có playlist nào. Tạo một cái ở trang Nhạc.')}</p>
-            ) : (
-              <div className="ct-nowfull-chiase">
-                {danhSachPl.map((p) => (
-                  <button key={p.id} type="button" className="ct-btn ct-btn-ghost" onClick={() => void themVao(p)}>
-                    {p.name}
-                  </button>
-                ))}
-              </div>
-            )}
-            {thongBao && <p className="ct-muted" style={{ marginTop: 10 }}>{thongBao}</p>}
+            <button
+              type="button"
+              className="mz-tim mz-tim-lon"
+              data-on={thich}
+              onClick={() => void doiThich(current)}
+              aria-pressed={thich}
+              aria-label={thich ? dich('Bỏ thích') : dich('Thích')}
+            >
+              <Heart size={20} aria-hidden fill={thich ? 'currentColor' : 'none'} />
+            </button>
           </div>
-        )}
 
-        {/* ─── Tua + điều khiển ─── */}
-        <div className="ct-nowfull-seek">
-          <input
-            type="range"
-            className="ct-seek-bar"
-            min={0}
-            max={Math.max(1, Math.floor(length))}
-            value={Math.floor(shownPosition)}
-            style={{ ['--ct-progress' as string]: `${progress}%` }}
-            onChange={(e) => batDauTua(Number(e.target.value))}
-            aria-label={dich('Tua bài hát')}
-          />
-          <div className="ct-nowfull-time">
-            <span>{clock(position)}</span>
-            <span>{clock(length)}</span>
+          <div className="mz-tg-tua">
+            <input
+              type="range"
+              className="mz-truot mz-truot-tua"
+              min={0}
+              max={Math.max(1, Math.floor(length))}
+              value={Math.floor(shownPosition)}
+              style={{ ['--p' as string]: `${progress}%` }}
+              onChange={(e) => batDauTua(Number(e.target.value))}
+              aria-label={dich('Tua bài hát')}
+            />
+            <div className="mz-tg-thoigian"><span>{clock(position)}</span><span>{clock(length)}</span></div>
+          </div>
+
+          <div className="mz-tg-nut">
+            <button type="button" className="mz-pbtn" data-on={shuffle} onClick={() => setShuffle((s) => !s)} aria-label={dich('Phát ngẫu nhiên')} title={dich('Phát ngẫu nhiên')}>
+              <Shuffle size={18} aria-hidden />
+            </button>
+            <button type="button" className="mz-pbtn" onClick={() => step(-1)} aria-label={dich('Bài trước')} title={dich('Bài trước')}>
+              <SkipBack size={22} aria-hidden />
+            </button>
+            <button type="button" className="mz-pbtn mz-pbtn-to" onClick={toggle} aria-label={playing ? dich('Tạm dừng') : dich('Phát')}>
+              {playing ? <Pause size={28} aria-hidden /> : <Play size={28} aria-hidden />}
+            </button>
+            <button type="button" className="mz-pbtn" onClick={() => step(1)} aria-label={dich('Bài sau')} title={dich('Bài sau')}>
+              <SkipForward size={22} aria-hidden />
+            </button>
+            <button
+              type="button"
+              className="mz-pbtn"
+              data-on={repeat !== 'off'}
+              onClick={() => setRepeat((r) => (r === 'off' ? 'all' : r === 'all' ? 'one' : 'off'))}
+              aria-label={dich('Lặp')}
+              title={repeat === 'one' ? dich('Lặp một bài') : repeat === 'all' ? dich('Lặp danh sách') : dich('Không lặp')}
+            >
+              {repeat === 'one' ? <Repeat1 size={18} aria-hidden /> : <Repeat size={18} aria-hidden />}
+            </button>
           </div>
         </div>
 
-        <div className="ct-nowfull-nut">
-          <button
-            type="button"
-            className={`ct-pbtn${shuffle ? ' is-on' : ''}`}
-            onClick={() => setShuffle((s) => !s)}
-            aria-label={dich('Phát ngẫu nhiên')}
-          >
-            <Shuffle size={18} aria-hidden />
-          </button>
-          <button type="button" className="ct-pbtn" onClick={() => step(-1)} aria-label={dich('Bài trước')}>
-            <SkipBack size={22} aria-hidden />
-          </button>
-          <button type="button" className="ct-pbtn ct-pbtn-to" onClick={toggle} aria-label={playing ? 'Tạm dừng' : 'Phát'}>
-            {playing ? <Pause size={26} aria-hidden /> : <Play size={26} aria-hidden />}
-          </button>
-          <button type="button" className="ct-pbtn" onClick={() => step(1)} aria-label={dich('Bài sau')}>
-            <SkipForward size={22} aria-hidden />
-          </button>
-          <button
-            type="button"
-            className={`ct-pbtn${repeat !== 'off' ? ' is-on' : ''}`}
-            onClick={() => setRepeat((r) => (r === 'off' ? 'all' : r === 'all' ? 'one' : 'off'))}
-            aria-label={dich('Lặp')}
-          >
-            {repeat === 'one' ? <Repeat1 size={18} aria-hidden /> : <Repeat size={18} aria-hidden />}
-          </button>
+        <div className="mz-tg-phai">
+          <div className="mz-ben-the mz-tg-the" role="tablist">
+            <button type="button" role="tab" data-on={ben === 'loi'} aria-selected={ben === 'loi'} onClick={() => setBen('loi')}>
+              <FileText size={13} aria-hidden /> {dich('Lời')}
+            </button>
+            <button type="button" role="tab" data-on={ben === 'kg'} aria-selected={ben === 'kg'} onClick={() => setBen('kg')}>
+              <Sparkles size={13} aria-hidden /> {dich('Không gian')}
+            </button>
+          </div>
+          <div className="mz-tg-noi">
+            {ben === 'loi' ? <LoiBaiHat lon /> : <KhongGianPanel />}
+          </div>
         </div>
       </div>
     </div>

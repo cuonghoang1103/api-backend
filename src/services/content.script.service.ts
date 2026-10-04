@@ -27,7 +27,8 @@ import { prisma } from '../config/database.js';
 import { AppError } from '../middleware/errorHandler.js';
 
 /** Origins accepted from callers. See the block comment above. */
-export const SCRIPT_VERSION_ORIGINS = ['MANUAL', 'TEMPLATE', 'RESTORE', 'AUTO'] as const;
+// 'AI' (04/10/2026): bản kịch bản do AI của Content Creator soạn — xem creatorAi.service.ts.
+export const SCRIPT_VERSION_ORIGINS = ['MANUAL', 'TEMPLATE', 'RESTORE', 'AUTO', 'AI'] as const;
 export type ScriptVersionOrigin = (typeof SCRIPT_VERSION_ORIGINS)[number];
 
 /**

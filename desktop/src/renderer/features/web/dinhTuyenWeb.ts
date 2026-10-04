@@ -90,6 +90,23 @@ export const TUYEN_WEB: readonly TuyenWeb[] = [
   { mau: '/interview/session/:id', nap: () => import('@/app/interview/session/[id]/page') },
   { mau: '/interview/report/:id', nap: () => import('@/app/interview/report/[id]/page') },
 
+  /* ── Code Lab (04/10/2026) ──
+     Thay màn native cũ (`features/codelab/CodeLabPage` bản 630 dòng, chỉ đọc
+     đề + lời giải) bằng nguyên cây web: sổ bài nhiều tệp có lưu tiến độ, AI
+     giảng bài, huấn luyện viên (vấn đáp, soát yêu cầu, chấm zip), Phòng Lab.
+     Đối chiếu bằng `find frontend/src/app/code-lab -name page.tsx` ⇒ 6 trang.
+
+     ⚠️ TĨNH TRƯỚC ĐỘNG, HAI chỗ: `search`/`phong-lab` cùng hình dạng với
+     `/code-lab/:trackSlug`, và `phong-lab/:id` cùng hình dạng với
+     `/code-lab/:trackSlug/:exerciseSlug`. Đảo thứ tự là "phong-lab" bị đọc
+     thành slug track — trang mở ra rồi báo "không tìm thấy track", hỏng CÂM. */
+  { mau: '/code-lab', nap: () => import('@/app/code-lab/page') },
+  { mau: '/code-lab/search', nap: () => import('@/app/code-lab/search/page') },
+  { mau: '/code-lab/phong-lab', nap: () => import('@/app/code-lab/phong-lab/page') },
+  { mau: '/code-lab/phong-lab/:id', nap: () => import('@/app/code-lab/phong-lab/[id]/page') },
+  { mau: '/code-lab/:trackSlug', nap: () => import('@/app/code-lab/[trackSlug]/page') },
+  { mau: '/code-lab/:trackSlug/:exerciseSlug', nap: () => import('@/app/code-lab/[trackSlug]/[exerciseSlug]/page') },
+
   /* ── CV Builder ──
      Đo 22/08/2026: 12 tệp, 3.048 dòng, dính Next.js 16 chỗ (9 `next/link`,
      14 `useRouter`, 2 `useParams`) — shim đã đủ, không phải viết thêm.
@@ -151,8 +168,11 @@ export const TUYEN_WEB: readonly TuyenWeb[] = [
   { mau: '/maker-lab', nap: () => import('@/app/maker-lab/page') },
   { mau: '/maker-lab/:slug', nap: () => import('@/app/maker-lab/[slug]/page') },
 
-  /* ── Xưởng nội dung ── */
+  /* ── Content Creator (tên cũ: Xưởng nội dung) ── */
   { mau: '/creator', nap: () => import('@/app/creator/page') },
+  /* 04/10/2026 — hai màn AI: Quay khoá học + Ý tưởng AI. */
+  { mau: '/creator/quay-khoa-hoc', nap: () => import('@/app/creator/quay-khoa-hoc/page') },
+  { mau: '/creator/y-tuong-ai', nap: () => import('@/app/creator/y-tuong-ai/page') },
   { mau: '/creator/calendar', nap: () => import('@/app/creator/calendar/page') },
   { mau: '/creator/ideas', nap: () => import('@/app/creator/ideas/page') },
   { mau: '/creator/list', nap: () => import('@/app/creator/list/page') },
@@ -320,6 +340,8 @@ export function khopTuyenWeb(duong: string): KhopTuyen | null {
 /** Gốc của những cây route mà trang web sở hữu — dùng cho router của app. */
 export const GOC_WEB: readonly string[] = [
   '/language', '/ielts', '/roadmap', '/interview', '/cv',
+  /* Code Lab — cả cây (04/10/2026); `/code-lab` chính nó cũng là trang web. */
+  '/code-lab',
   '/maker-lab', '/creator', '/projects', '/exp-hub',
   '/finance', '/forum', '/saved', '/profile',
   '/tech-trends',

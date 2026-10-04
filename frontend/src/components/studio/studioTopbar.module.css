@@ -1,0 +1,33 @@
+/*
+ * Thanh công cụ Content Creator — co giãn theo BỀ RỘNG CỦA CHÍNH NÓ (container
+ * query), không theo cửa sổ: trong app desktop vùng nội dung hẹp hơn cửa sổ
+ * ~240px (thanh bên của app), nên `md:`/`lg:` bật nhãn ra khi chỗ chưa đủ —
+ * đo 04/10/2026 ở 1440px: nút "Dự án mới" bị bẻ hai dòng, ba mục điều hướng
+ * cuối bị đẩy khuất.
+ */
+.bar {
+  container-type: inline-size;
+}
+.nhanNav,
+.nhanPhu,
+.thuongHieu,
+.nguoi {
+  display: none;
+}
+.nhanChinh {
+  display: none;
+  white-space: nowrap;
+}
+@container (min-width: 620px) {
+  .nhanChinh { display: inline; }
+}
+@container (min-width: 1120px) {
+  .nhanNav { display: inline; white-space: nowrap; }
+}
+@container (min-width: 1440px) {
+  .nhanPhu { display: inline; white-space: nowrap; }
+  .nguoi { display: flex; }
+}
+@container (min-width: 1640px) {
+  .thuongHieu { display: flex; }
+}

@@ -418,7 +418,7 @@ function SortableItem({
  <button
  type="button"
  onClick={() => onUpdate({ done: !item.done })}
- aria-label={item.done ? 'Mark not done' : 'Mark done'}
+ aria-label={item.done ? t('clMarkNotDone') : t('clMarkDone')}
  className="shrink-0"
  >
  {item.done ? (

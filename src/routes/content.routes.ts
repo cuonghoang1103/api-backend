@@ -73,11 +73,15 @@ import {
  getProjectOutline,
 } from '../services/content.series.service.js';
 import type { ApiResponse } from '../types/index.js';
+import contentAiRoutes from './content.ai.routes.js';
 
 const router = Router();
 
 // All content routes are admin-only.
 router.use(authenticate, requireAdmin('ROLE_ADMIN'));
+
+// AI soạn gói quay / ý tưởng / hook / Shorts — xem content.ai.routes.ts.
+router.use('/ai', contentAiRoutes);
 
 // ─── helpers ────────────────────────────────────────────────────────────────
 

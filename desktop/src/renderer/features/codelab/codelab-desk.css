@@ -1,0 +1,74 @@
+/*
+ * Code Lab trong app desktop (04/10/2026) — chỉnh riêng cho cây web `/code-lab`
+ * khi nằm trong vỏ app. Phạm vi `.ct-cl-khung`, KHÔNG đụng trang web.
+ *
+ * Co giãn theo BỀ RỘNG VÙNG NỘI DUNG (container query), không theo cửa sổ: thanh
+ * bên của app ăn 60–218px nên cùng một cửa sổ cho ra vùng nội dung khác nhau.
+ * Trang web gốc chốt cứng `max-w-3xl/4xl/6xl` ⇒ cửa sổ 1920px bỏ trống hai mảng
+ * lớn hai bên; ở đây nới ra theo khung, kèm thêm cột khi đủ chỗ.
+ */
+
+/* Khung KHÔNG cuộn, mang container ⇒ lớp phủ `fixed` bên trong (thanh Phòng Lab,
+   ngăn huấn luyện viên, hộp thoại) neo vào VÙNG NỘI DUNG của app thay vì cả cửa
+   sổ, nên không đè lên thanh bên. Phần cuộn là `.ct-web-host` bên trong. */
+.ct-cl-khung {
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  container: ctcodelab / inline-size;
+}
+
+/* Lề hai bên đều nhau ở mọi bề rộng; nội dung không dính mép. */
+.ct-cl-khung .cl-root { padding-left: 24px; padding-right: 24px; }
+
+/* ── Trang chủ: lưới track ── */
+@container ctcodelab (min-width: 1240px) {
+  .ct-cl-khung .cl-root.max-w-6xl { max-width: min(100%, 1560px); }
+}
+@container ctcodelab (min-width: 1480px) {
+  .ct-cl-khung .cl-root.max-w-6xl .lg\:grid-cols-3 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+@container ctcodelab (min-width: 1880px) {
+  .ct-cl-khung .cl-root.max-w-6xl { max-width: min(100%, 1880px); }
+  .ct-cl-khung .cl-root.max-w-6xl .lg\:grid-cols-3 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+}
+/* Vùng nội dung hẹp (cửa sổ ~860–1000px): `lg:grid-cols-3` của web đo theo CỬA SỔ
+   nên vẫn bật 3 cột trong một khung chỉ ~640–780px ⇒ thẻ track bị bóp. */
+@container ctcodelab (max-width: 900px) {
+  .ct-cl-khung .cl-root .lg\:grid-cols-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* ── Trang track (roadmap module) và các trang một cột ── */
+@container ctcodelab (min-width: 1240px) {
+  .ct-cl-khung .cl-root.max-w-4xl { max-width: min(100%, 1120px); }
+  .ct-cl-khung .cl-root.max-w-3xl:not(.cl-ex) { max-width: min(100%, 980px); }
+}
+@container ctcodelab (min-width: 1700px) {
+  .ct-cl-khung .cl-root.max-w-4xl { max-width: min(100%, 1280px); }
+  .ct-cl-khung .cl-root.max-w-3xl:not(.cl-ex) { max-width: min(100%, 1080px); }
+}
+
+/* ── Bài tập: ĐỀ BÀI trái · SỔ BÀI phải (dính) ──
+   Web xếp chồng: đọc đề ở trên, gõ ở dưới ⇒ cuộn lên xuống liên tục. Đủ rộng
+   thì tách đôi; sổ bài dính màn hình và tự cuộn bên trong nếu dài hơn khung. */
+@container ctcodelab (min-width: 1180px) {
+  .ct-cl-khung .cl-root.cl-ex { max-width: min(100%, 1800px); }
+  .ct-cl-khung .cl-ex-luoi {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr);
+    gap: 28px;
+    align-items: start;
+  }
+  .ct-cl-khung .cl-ex-phai {
+    position: sticky;
+    top: 12px;
+    max-height: calc(100vh - var(--ct-titlebar-h, 44px) - var(--ct-statusbar-h, 30px) - 24px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 16px 16px 4px;
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-card);
+  }
+  .ct-cl-khung .cl-ex-phai > section { margin-bottom: 12px; }
+}

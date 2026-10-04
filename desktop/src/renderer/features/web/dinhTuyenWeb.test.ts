@@ -136,6 +136,8 @@ describe('khopTuyenWeb', () => {
                  '/finance', '/forum', '/saved', '/profile'];
     for (const g of goc) expect(khopTuyenWeb(g)?.tuyen.mau, g).toBe(g);
     expect(khopTuyenWeb('/creator/projects/7')?.thamSo).toEqual({ id: '7' });
+    expect(khopTuyenWeb('/creator/quay-khoa-hoc')?.tuyen.mau).toBe('/creator/quay-khoa-hoc');
+    expect(khopTuyenWeb('/creator/y-tuong-ai')?.tuyen.mau).toBe('/creator/y-tuong-ai');
     expect(khopTuyenWeb('/profile/9/v2')?.thamSo).toEqual({ id: '9' });
     expect(khopTuyenWeb('/finance/wallets/3')?.thamSo).toEqual({ id: '3' });
   });
@@ -201,6 +203,20 @@ describe('khopTuyenWeb', () => {
   /* Cây CT Work đang lớn nhanh (nhiều phiên cùng thêm trang). Trang mới trên
      web mà quên thêm vào bảng thì trong app bấm vào là "Không tìm thấy" — nên
      đối chiếu THẲNG với thư mục, không với một con số chép tay. */
+  it('Code Lab: mọi page.tsx đều có tuyến; tĩnh thắng động ở hai chỗ', () => {
+    const tuThuMuc = mauTuCayWeb('/code-lab');
+    const trongBang = TUYEN_WEB.map((t) => t.mau).filter((m) => m === '/code-lab' || m.startsWith('/code-lab/')).sort();
+    expect(trongBang).toEqual(tuThuMuc);
+    expect(khopTuyenWeb('/code-lab/search')?.tuyen.mau).toBe('/code-lab/search');
+    expect(khopTuyenWeb('/code-lab/phong-lab')?.tuyen.mau).toBe('/code-lab/phong-lab');
+    expect(khopTuyenWeb('/code-lab/phong-lab/5')?.thamSo).toEqual({ id: '5' });
+    const b = khopTuyenWeb('/code-lab/lab211/p0071');
+    expect(b?.tuyen.mau).toBe('/code-lab/:trackSlug/:exerciseSlug');
+    expect(b?.thamSo).toEqual({ trackSlug: 'lab211', exerciseSlug: 'p0071' });
+    expect(thuocCayWeb('/code-lab/lab211')).toBe(true);
+    expect(thuocCayWeb('/code-labs')).toBe(false);
+  });
+
   it('CT Work: mọi page.tsx dưới frontend/src/app/work đều có tuyến, và ngược lại', () => {
     const tuThuMuc = mauTuCayWeb('/work');
     expect(tuThuMuc.length, 'không đọc được cây /work — bộ kiểm hỏng').toBeGreaterThan(10);
@@ -243,8 +259,10 @@ describe('khopTuyenWeb', () => {
     // 03/10/2026: +5 IELTS — Phòng thi & Kho luyện dưới /language/:code/ielts, và
     // mục riêng /ielts, /ielts/phong-thi, /ielts/luyen-them (code cố định 'en').
     // 04/10/2026: +4 CT Work lớp studio S1 (teams, teams/:teamId, stages, approvals).
+    // 04/10/2026: +6 Code Lab (cả cây web thay màn native).
     // 04/10/2026: +2 CT Work Đợt S2a — tài liệu dự án (docs, docs/:num).
-    expect(thay.size).toBe(110);
+    // 04/10/2026: +2 Content Creator AI (/creator/quay-khoa-hoc, /creator/y-tuong-ai).
+    expect(thay.size).toBe(118);
   });
 });
 

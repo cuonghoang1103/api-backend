@@ -27,6 +27,7 @@ import { DifficultyBadge } from '@/components/code-lab/shared';
 import { ExerciseResources } from '@/components/code-lab/ExerciseResources';
 import { AiExplain } from '@/components/code-lab/AiExplain';
 import { CoachPanel } from '@/components/code-lab/CoachPanel';
+import { chayJs } from '@/components/code-lab/chayJs';
 
 /**
  * A name for the learner's first file when the exercise ships no starter.
@@ -200,19 +201,11 @@ export default function ExerciseDetailPage() {
     [files],
   );
   const canRun = !!jsFile;
-  const runJs = () => {
-    const logs: string[] = [];
-    const orig = console.log;
-    try {
-      (console as any).log = (...a: unknown[]) => logs.push(a.map((x) => typeof x === 'object' ? JSON.stringify(x) : String(x)).join(' '));
-      // eslint-disable-next-line no-new-func
-      const fn = new Function((jsFile?.code ?? '').replace(/\bexport\b/g, ''));
-      const ret = fn();
-      if (ret !== undefined) logs.push(String(ret));
-      setRunOut(logs.join('\n') || '(no output)');
-    } catch (e: any) {
-      setRunOut('Error: ' + (e?.message || String(e)));
-    } finally { (console as any).log = orig; }
+  // Chạy trong worker có hạn giờ (components/code-lab/chayJs.ts): vòng lặp vô
+  // hạn không treo tab nữa, và chạy được trong app desktop (CSP cấm eval trên trang).
+  const runJs = async () => {
+    setRunOut('Running…');
+    setRunOut(await chayJs(jsFile?.code ?? ''));
   };
 
   if (loading) return <div className="flex justify-center py-24"><Loader2 className="animate-spin" style={{ color: 'var(--text-muted)' }} /></div>;
@@ -231,7 +224,7 @@ export default function ExerciseDetailPage() {
   const trackAccent = ex.track?.color || 'var(--accent-color)';
 
   return (
-    <div className="cl-root mx-auto max-w-3xl px-4 pb-10 pt-20" style={{ color: 'var(--text-primary)', ['--cl-accent' as string]: trackAccent } as React.CSSProperties}>
+    <div className="cl-root cl-ex mx-auto max-w-3xl px-4 pb-10 pt-20" style={{ color: 'var(--text-primary)', ['--cl-accent' as string]: trackAccent } as React.CSSProperties}>
       <CourseBackLink />
       <Link href={`/code-lab/${params.trackSlug}${refQS}`} className="mb-4 ml-2 inline-flex items-center gap-1.5 text-sm transition-colors hover:opacity-80" style={{ color: 'var(--text-muted)' }}>
         <ArrowLeft size={15} /> {ex.track?.name || 'Roadmap'}
@@ -260,6 +253,13 @@ export default function ExerciseDetailPage() {
         </div>
       </div>
 
+      {/* Hai cột `cl-ex-trai` / `cl-ex-phai` (04/10/2026): trên web chúng là hai
+          khối xếp chồng — y hệt bố cục cũ. App desktop (cửa sổ rộng) dựng chúng
+          thành ĐỀ BÀI bên trái · SỔ BÀI bên phải dính màn hình
+          (desktop/src/renderer/features/codelab/codelab-desk.css), để vừa đọc
+          đề vừa gõ mà không phải cuộn lên xuống. */}
+      <div className="cl-ex-luoi">
+      <div className="cl-ex-trai">
       <ExerciseResources youtubeUrl={ex.youtubeUrl} githubUrl={ex.githubUrl} sourceUrl={ex.sourceUrl} />
 
       {/* Problem statement */}
@@ -444,7 +444,10 @@ export default function ExerciseDetailPage() {
         </Section>
       )}
 
+      </div>
+
       {/* Your code */}
+      <div className="cl-ex-phai">
       <Section icon={<Play size={14} />} title="Your solution">
         <Workspace
           files={files}
@@ -472,6 +475,8 @@ export default function ExerciseDetailPage() {
         )}
         {!isAuthed && <p className="mt-1 text-xs" style={{ color: 'var(--text-muted)' }}>Sign in to save your attempts and track progress.</p>}
       </Section>
+      </div>
+      </div>
 
       {/* Official solution */}
       {(solution.length > 0 || ex.solutionExplanationHtml) && (

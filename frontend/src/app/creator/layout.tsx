@@ -14,16 +14,8 @@ import { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { Clapperboard } from 'lucide-react';
 import StudioShell from '@/components/studio/StudioShell';
-import CreateProjectModal from '@/components/studio/CreateProjectModal';
-import SeriesGeneratorModal from '@/components/studio/SeriesGeneratorModal';
+import { CreatorModals } from '@/components/studio/CreatorFrame';
 import { useStudioT } from '@/lib/studio-i18n';
-import { useStudioStore } from '@/store/studioStore';
-
-function SeriesGeneratorGlobal() {
- const open = useStudioStore((s) => s.isSeriesModalOpen);
- const close = useStudioStore((s) => s.closeSeriesModal);
- return <SeriesGeneratorModal open={open} onClose={close} />;
-}
 
 export default function CreatorLayout({ children }: { children: React.ReactNode }) {
  const { t } = useStudioT();
@@ -86,11 +78,9 @@ export default function CreatorLayout({ children }: { children: React.ReactNode 
  controlled by `useStudioStore`. It lives in the layout
  (not a page) so the topbar CTA can open it from any
  /creator/* route, including the per-project editor. */}
- <CreateProjectModal />
- {/* Second global dialog, same reasoning as the create modal:
-     it lives in the layout so the topbar button can open it
-     from any /creator/* route, including the editor. */}
- <SeriesGeneratorGlobal />
+ {/* Second global dialog (series generator) rides along in
+     `CreatorModals`, shared with the desktop app's frame. */}
+ <CreatorModals />
  </StudioShell>
  );
 }

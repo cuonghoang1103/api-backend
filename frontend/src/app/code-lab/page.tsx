@@ -9,6 +9,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Search, X, Loader2, Sparkles, ArrowRight, Layers, BookOpen, Target } from 'lucide-react';
 import { codeLabApi } from '@/lib/code-lab-api';
+import { docTruyVan, ghiTruyVan } from '@/components/sach-hoc/moiTruong';
 import type { CodeGroup, CodeStats } from '@/types/code-lab';
 import { GroupGlyph, TrackCard, DifficultyBadge } from '@/components/code-lab/shared';
 
@@ -69,7 +70,8 @@ export default function CodeLabHubPage() {
         setStats(s.data.data || null);
         // Pre-select a group from ?group=<slug> so "back" from a track lands on
         // that section's tracks (not "All").
-        const slug = new URLSearchParams(window.location.search).get('group');
+        // docTruyVan: trong app desktop `window.location` là app://…/index.html.
+        const slug = docTruyVan().get('group');
         if (slug) {
           const found = gl.find((x) => x.slug === slug);
           if (found) setActiveGroup(found.id);
@@ -83,7 +85,10 @@ export default function CodeLabHubPage() {
   const selectGroup = (id: number | 'all') => {
     setActiveGroup(id);
     const slug = id === 'all' ? null : groups.find((x) => x.id === id)?.slug;
-    window.history.replaceState(null, '', slug ? `/code-lab?group=${slug}` : '/code-lab');
+    // ghiTruyVan thay vì history.replaceState('/code-lab?…'): trong app desktop
+    // replaceState đổi URL thật của renderer thành app://cuongthai/code-lab —
+    // tải lại cửa sổ là trắng trang. Trên web hai cách cho cùng kết quả.
+    ghiTruyVan((sp) => { if (slug) sp.set('group', slug); else sp.delete('group'); });
   };
 
   // debounced autocomplete

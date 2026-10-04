@@ -1,0 +1,155 @@
+/*
+ * Bố cục co giãn cho các màn AI của Content Creator (04/10/2026).
+ *
+ * Dùng CONTAINER QUERY chứ không dùng breakpoint của cửa sổ: trong app desktop,
+ * cửa sổ rộng 1440px nhưng vùng nội dung chỉ ~1200px (thanh bên của app), nên
+ * `lg:`/`xl:` của Tailwind bẻ cột sai chỗ. Ở đây mỗi khối tự đo bề rộng CỦA NÓ.
+ * Kiểm ở 860 · 1000 · 1180 · 1440 · 1920 · 2200px: không tràn ngang, không chừa
+ * mảng trống lớn, không bóp méo cột.
+ */
+
+/* ── Khung trang: dùng hết bề rộng, lề co theo khung ── */
+.trang {
+  container-type: inline-size;
+  width: 100%;
+  margin-inline: auto;
+  padding: 24px clamp(14px, 2.4vw, 36px) 40px;
+  max-width: 2400px;
+  box-sizing: border-box;
+}
+
+/* ── Quay khoá học: mục lục | vùng làm việc ── */
+.haiCot {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+@container (min-width: 880px) {
+  .haiCot {
+    grid-template-columns: clamp(300px, 30cqi, 440px) minmax(0, 1fr);
+  }
+  .dinh {
+    position: sticky;
+    /* Dưới thanh công cụ studio (cao 56px, cũng sticky). */
+    top: 72px;
+    max-height: calc(100vh - 150px);
+  }
+}
+
+/* ── Ý tưởng AI: biểu mẫu | kết quả ── */
+.haiCotYTuong {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+@container (min-width: 980px) {
+  .haiCotYTuong {
+    grid-template-columns: clamp(340px, 32cqi, 500px) minmax(0, 1fr);
+  }
+  .dinhYTuong {
+    position: sticky;
+    top: 72px;
+  }
+}
+
+/* Lưới thẻ: tự lấp đầy, không bao giờ để một mảng trống lớn bên phải. */
+.luoiThe {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
+  gap: 12px;
+}
+.luoiTheRong {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 360px), 1fr));
+  gap: 12px;
+}
+
+/* ── Gói quay: dòng thời gian cảnh | bàn đạo diễn ── */
+.goi {
+  container-type: inline-size;
+}
+.goiLuoi {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+.banDaoDien {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+  gap: 12px;
+}
+@container (min-width: 1080px) {
+  .goiLuoi {
+    grid-template-columns: minmax(0, 1fr) clamp(300px, 28cqi, 400px);
+  }
+  .banDaoDien {
+    grid-template-columns: minmax(0, 1fr);
+    position: sticky;
+    top: 72px;
+  }
+}
+
+/* Một cảnh: lời thoại | chỉ dẫn quay — tự đo bề rộng thẻ cảnh. */
+.canh {
+  container-type: inline-size;
+}
+.canhLuoi {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+.canhMeta {
+  border-top: 1px solid var(--studio-vien, rgba(255, 255, 255, 0.08));
+}
+@container (min-width: 640px) {
+  .canhLuoi {
+    grid-template-columns: minmax(0, 1.6fr) minmax(220px, 1fr);
+  }
+  .canhMeta {
+    border-top: 0;
+    border-left: 1px solid var(--studio-vien, rgba(255, 255, 255, 0.08));
+  }
+}
+
+/* ── Trợ lý AI trong dự án: danh mục việc | nội dung ── */
+.troLy {
+  container-type: inline-size;
+}
+.troLyLuoi {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+.troLyNav {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 190px), 1fr));
+  gap: 4px;
+}
+@container (min-width: 820px) {
+  .troLyLuoi {
+    grid-template-columns: 230px minmax(0, 1fr);
+  }
+  .troLyNav {
+    grid-template-columns: minmax(0, 1fr);
+    position: sticky;
+    top: 72px;
+  }
+}
+
+/* Cài đặt soạn: hai cột khi đủ chỗ. */
+.caiDat {
+  container-type: inline-size;
+}
+.caiDatLuoi {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+}
+@container (min-width: 720px) {
+  .caiDatLuoi {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+  }
+}

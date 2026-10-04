@@ -93,7 +93,7 @@ export default function StoryboardTab({ days, onChange }: StoryboardTabProps) {
  <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-studio-500/15 mb-3">
  <Film className="w-6 h-6 text-studio-400" />
  </div>
- <p className="text-sm text-text-primary font-medium">No filming days yet</p>
+ <p className="text-sm text-text-primary font-medium">{t('sbNoDays')}</p>
  <p className="text-xs text-text-muted mt-1 max-w-md mx-auto">
  {t('sbEmptyHint')}
  </p>

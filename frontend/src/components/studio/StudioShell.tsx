@@ -14,14 +14,31 @@
 // client-only — `app/creator/layout.tsx` can stay
 // server-rendered for the auth check.
 
-import { ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
+
+/**
+ * Studio luôn là "phòng quay tối" (nền `bg-darkbg` cố định). Nhưng chữ đọc biến
+ * chủ đề của site (`--text-primary`…): khi site đang ở theme SÁNG, chữ thành màu
+ * tối trên nền tối — gần như không đọc được. Ghim bộ biến tối ngay trên khung
+ * studio (04/10/2026) để /creator đúng màu ở cả hai theme.
+ */
+const BIEN_TOI = {
+ '--bg-primary': '#18191a',
+ '--bg-card': '#242526',
+ '--bg-surface': '#303031',
+ '--border-color': '#3e4042',
+ '--text-primary': '#e4e6eb',
+ '--text-secondary': '#b0b3b8',
+ '--text-muted': '#8a8d91',
+ colorScheme: 'dark',
+} as CSSProperties;
 import StudioBackground from './StudioBackground';
 import StudioAmbient from './StudioAmbient';
 import StudioTopbar from './StudioTopbar';
 
 export default function StudioShell({ children }: { children: ReactNode }) {
  return (
- <div className="relative min-h-[100dvh] text-text-primary">
+ <div className="relative min-h-[100dvh] text-text-primary" style={BIEN_TOI}>
  {/* z=0 — background grid + amber key light + vignette */}
  <StudioBackground />
  {/* z=1 — film grain + drifting practical-light bokeh */}
@@ -35,7 +52,7 @@ export default function StudioShell({ children }: { children: ReactNode }) {
  <StudioTopbar />
  {/* z=10 — main content. Sits below the topbar so the
  topbar can stick on top while the page scrolls under it. */}
- <main className="relative pt-14" style={{ zIndex: 10 }}>
+ <main className="relative" style={{ zIndex: 10 }}>
  {children}
  </main>
  </div>

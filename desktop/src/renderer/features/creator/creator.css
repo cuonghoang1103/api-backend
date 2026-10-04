@@ -1,0 +1,62 @@
+/*
+ * Content Creator trong app desktop (04/10/2026).
+ *
+ * Cây /creator của web vẽ bằng màu tối CỐ ĐỊNH (`bg-darkcard` #242526,
+ * `border-darkborder` #3e4042, `bg-[#0d0f18]` cho hộp thoại) — xám trung tính,
+ * lệch tông với vỏ app tối (#16161d / #20202a, ngả lam). Ở đây ghim cả cây về
+ * đúng bảng màu tối của app, ở MỌI chủ đề: studio là "phòng quay tối", và chữ
+ * của nó đọc biến `--text-*` — để chủ đề sáng của app chảy vào là chữ tối trên
+ * nền tối.
+ *
+ * Không `backdrop-filter` trên thẻ (giật khi cuộn). Hộp thoại `fixed` vẫn phủ
+ * cả cửa sổ như mọi hộp thoại khác của app.
+ */
+.ct-creator-host {
+  --bg-primary: #16161d;
+  --bg-card: #20202a;
+  --bg-surface: #2a2a36;
+  --border-color: #383846;
+  --text-primary: #ececf3;
+  --text-secondary: #b6b6c6;
+  --text-muted: #8c8ca0;
+  --studio-vien: #383846;
+  color-scheme: dark;
+  color: var(--text-primary);
+  background: #16161d;
+  min-height: 100%;
+}
+
+.ct-creator-host [class*='bg-darkcard'],
+.ct-creator-host [class*='bg-[#0d0f18]'] {
+  background-color: #20202a;
+}
+.ct-creator-host [class*='bg-darkbg'] {
+  background-color: #16161d;
+}
+.ct-creator-host [class*='bg-darksurface'] {
+  background-color: #2a2a36;
+}
+.ct-creator-host [class*='border-darkborder'],
+.ct-creator-host [class*='divide-darkborder'] > * + * {
+  border-color: #383846;
+}
+.ct-creator-host [class*='backdrop-blur'] {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+/* Ô nhập / chọn: nền tối thật (Chromium vẽ <option> theo color-scheme). */
+.ct-creator-host select,
+.ct-creator-host input,
+.ct-creator-host textarea {
+  color: var(--text-primary);
+}
+.ct-creator-host select option {
+  background: #20202a;
+  color: #ececf3;
+}
+
+/* Thanh công cụ studio dính đỉnh vùng nội dung của app. */
+.ct-creator-host > header {
+  top: 0;
+}

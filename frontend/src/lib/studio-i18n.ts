@@ -1,4 +1,5 @@
-// studio-i18n.ts — bilingual strings for the Content Studio (/creator).
+// studio-i18n.ts — bilingual strings for Content Creator (/creator).
+// (Tên cũ "Xưởng nội dung" / "Content Studio" đổi thành "Content Creator" 04/10/2026.)
 //
 // Why a module-local dictionary instead of messages/{vi,en}.json
 // ──────────────────────────────────────────────────────────────
@@ -22,7 +23,7 @@
 // Vietnamese has no plural inflection, so VI entries never need
 // the pipe and are used as written.
 
-import { useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from '@/context/LocaleContext';
 
 export type StudioLang = 'vi' | 'en';
@@ -72,12 +73,15 @@ const S = {
   },
 
   // ─── Shell / topbar / nav ───────────────────────────────────
-  studioName: { vi: 'Xưởng nội dung', en: 'Content Studio' },
+  studioName: { vi: 'Content Creator', en: 'Content Creator' },
   checkingAccess: { vi: 'Đang kiểm tra quyền…', en: 'Checking access…' },
   navDashboard: { vi: 'Tổng quan', en: 'Dashboard' },
   navIdeas: { vi: 'Kho ý tưởng', en: 'Idea Bank' },
   navPipeline: { vi: 'Dây chuyền', en: 'Pipeline' },
   navCalendar: { vi: 'Lịch', en: 'Calendar' },
+  navFilmCourse: { vi: 'Quay khoá học', en: 'Film a course' },
+  navAiIdeas: { vi: 'Ý tưởng AI', en: 'AI ideas' },
+  tabAi: { vi: 'Trợ lý AI', en: 'AI assistant' },
   navList: { vi: 'Danh sách', en: 'List' },
   newProject: { vi: 'Dự án mới', en: 'New project' },
   backToAdmin: { vi: 'Quản trị', en: 'Admin' },
@@ -110,8 +114,8 @@ const S = {
   statLiveSub: { vi: '{a} chờ đăng · {b} đã đăng', en: '{a} queued · {b} out' },
   emptyNoProjects: { vi: 'Chưa có dự án nào', en: 'No projects yet' },
   emptyNoProjectsHint: {
-    vi: 'Ghi lại tia sáng đầu tiên. Xưởng sẽ biến nó thành một dự án có ngày quay, phân cảnh, kịch bản và kế hoạch đăng.',
-    en: 'Capture your first spark. The Studio turns it into a project with days, scenes, scripts and a publish plan.',
+    vi: 'Ghi lại tia sáng đầu tiên. Content Creator sẽ biến nó thành một dự án có ngày quay, phân cảnh, kịch bản và kế hoạch đăng.',
+    en: 'Capture your first spark. Content Creator turns it into a project with days, scenes, scripts and a publish plan.',
   },
   createFirstProject: { vi: 'Tạo dự án đầu tiên', en: 'Create your first project' },
   next14Days: { vi: '14 ngày tới', en: 'Next 14 days' },
@@ -287,6 +291,7 @@ const S = {
   originTEMPLATE: { vi: 'Trước khi áp mẫu', en: 'Before template' },
   originRESTORE: { vi: 'Trước khi khôi phục', en: 'Before restore' },
   originAUTO: { vi: 'Tự động', en: 'Auto' },
+  originAI: { vi: 'AI soạn', en: 'AI' },
   confirmRestoreVersion: {
     vi: 'Khôi phục v{n}? Kịch bản hiện tại sẽ được lưu thành một phiên bản mới trước.',
     en: 'Restore v{n}? The current script is saved as a new version first.',
@@ -424,6 +429,8 @@ const S = {
 
   // ─── Pipeline ───────────────────────────────────────────────
   pipelineTitle: { vi: 'Dây chuyền sản xuất', en: 'Production pipeline' },
+  pipelineDragHint: { vi: 'Kéo thẻ sang cột khác để đổi trạng thái.', en: 'Drag a card across the columns to update its status.' },
+  pipelineFocusHint: { vi: 'Đang xem cột {status} — kéo thẻ sang cột khác để đổi trạng thái.', en: 'Focusing on {status} — drag cards across to update status.' },
   dropHere: { vi: 'Thả vào đây', en: 'Drop here' },
 
   // ─── Calendar ───────────────────────────────────────────────
@@ -647,6 +654,17 @@ const S = {
   calNoEventsWindow: { vi: 'Không có mốc nào trong khoảng này', en: 'No events in this window' },
   pfLessonsHint: { vi: 'cái gì hiệu quả, cái gì không', en: 'what worked, what did not' },
 
+  // ─── Chuỗi còn cứng tiếng Anh, dịch 04/10/2026 ─────────────
+  ovMainHookLabel: { vi: 'Câu hook chính (1 câu người xem thấy đầu tiên)', en: 'Main hook (1 sentence viewers see first)' },
+  ovNoTags: { vi: 'Chưa có thẻ', en: 'No tags yet' },
+  ovTitleLabel: { vi: 'Tiêu đề', en: 'Title' },
+  ovConceptLabel: { vi: 'Khái niệm (mô tả đầy đủ)', en: 'Concept (full brief)' },
+  ovNoLinks: { vi: 'Chưa có liên kết', en: 'No links yet' },
+  sbNoDays: { vi: 'Chưa có ngày quay nào', en: 'No filming days yet' },
+  clMarkDone: { vi: 'Đánh dấu xong', en: 'Mark done' },
+  clMarkNotDone: { vi: 'Bỏ đánh dấu xong', en: 'Mark not done' },
+  slClickToAdd: { vi: 'Bấm để thêm…', en: 'Click to add…' },
+
   // ─── Save indicator ─────────────────────────────────────────
   saveReady: { vi: 'Sẵn sàng', en: 'Ready' },
 
@@ -709,19 +727,40 @@ export type StudioTFn = (key: StudioKey, vars?: Record<string, string | number>)
  * language here and then navigates to /admin expects it to have
  * stuck.
  */
+/**
+ * Ngôn ngữ do APP DESKTOP áp (04/10/2026). App không có `LocaleProvider` của web
+ * nên `useTranslation()` rơi về bản dự phòng: luôn 'en' và `setLocale` không làm
+ * gì — cả studio hiện tiếng Anh và nút đổi ngôn ngữ bấm vô tác dụng. Vỏ app
+ * (`features/creator/XuongNoiDungPage.tsx`) gắn ngôn ngữ của app vào đây và bắn
+ * sự kiện `ct-ngon-ngu` mỗi khi đổi; trên web biến này không tồn tại.
+ */
+function ngonNguApp(): StudioLang | null {
+  const v = (globalThis as { __CT_NGON_NGU_STUDIO__?: unknown }).__CT_NGON_NGU_STUDIO__;
+  return v === 'vi' || v === 'en' ? v : null;
+}
+
 export function useStudioT(): {
   t: StudioTFn;
   lang: StudioLang;
   setLang: (lang: StudioLang) => void;
   isVi: boolean;
+  /** false trong app desktop — ngôn ngữ theo Cài đặt của app. */
+  doiDuocNgonNgu: boolean;
 } {
   const { locale, setLocale } = useTranslation();
-  const lang: StudioLang = locale === 'vi' ? 'vi' : 'en';
+  const [langApp, setLangApp] = useState<StudioLang | null>(ngonNguApp);
+  useEffect(() => {
+    const f = () => setLangApp(ngonNguApp());
+    f();
+    window.addEventListener('ct-ngon-ngu', f);
+    return () => window.removeEventListener('ct-ngon-ngu', f);
+  }, []);
+  const lang: StudioLang = langApp ?? (locale === 'vi' ? 'vi' : 'en');
 
   const t = useCallback<StudioTFn>(
     (key, vars) => studioT(lang, key, vars),
     [lang],
   );
 
-  return { t, lang, setLang: setLocale, isVi: lang === 'vi' };
+  return { t, lang, setLang: setLocale, isVi: lang === 'vi', doiDuocNgonNgu: langApp == null };
 }

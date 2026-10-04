@@ -49,7 +49,7 @@ export const ADMIN_NAV: AdminNavGroup[] = [
     items: [
       { label: 'Dashboard', vi: 'Tổng quan', href: '/admin', icon: LayoutDashboard, keywords: 'tổng quan overview home' },
       { label: 'Inbox', vi: 'Hộp thư', href: '/admin/thong-bao', icon: Inbox, keywords: 'thông báo việc chờ notifications tasks' },
-      { label: 'Content Studio', vi: 'Xưởng nội dung', href: '/creator', icon: Clapperboard, external: true, matchPrefix: '/creator', keywords: 'studio creator video kịch bản' },
+      { label: 'Content Creator', vi: 'Content Creator', href: '/creator', icon: Clapperboard, external: true, matchPrefix: '/creator', keywords: 'studio creator video kịch bản' },
     ],
   },
   {

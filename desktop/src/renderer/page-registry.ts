@@ -107,6 +107,7 @@ const CHU_CAY: ReadonlyArray<readonly [string, ComponentType]> = [
   ['/ielts', IeltsPage],
   ['/roadmap', LoTrinhPage],
   ['/interview', PhongVanPage],
+  ['/code-lab', CodeLabPage],
   ['/cv', CvWebPage],
   ['/maker-lab', MakerLabPage],
   ['/creator', XuongNoiDungPage],
@@ -133,6 +134,10 @@ const CHU_CAY: ReadonlyArray<readonly [string, ComponentType]> = [
 export function nativePageFor(path: string): ComponentType | undefined {
   const dung = NATIVE_PAGES[path];
   if (dung) return dung;
+  /* Phòng thi là màn NATIVE (không thuộc cây web) nhưng có trang con:
+     `/exam/:id` (đề / đang thi) và `/exam/attempt/:id` (kết quả) — 04/10/2026.
+     `PhongThiPage` tự rẽ theo `route`. */
+  if (path.startsWith('/exam/')) return PhongThiPage;
   // Trang con của một cây web (`/language/ja/vocab`…). Chính trang chủ cây đọc
   // `route` rồi tự chọn màn hình con — xem `TrangWebTheoTuyen`.
   if (!thuocCayWeb(path)) return undefined;

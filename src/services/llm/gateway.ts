@@ -342,7 +342,8 @@ export type LlmPurpose =
   | 'mach_dien'           // Vở iPad — "⚡ Mạch điện": mô tả nối dây → CẤU TRÚC JSON (module, chân, dây, màu); app tự dàn kiểu bậc thang
   | 'study_plan'          // /hoc-tap — soạn việc học theo môn/tuần từ mục lục Academy (JSON)
   | 'study_verify'        // /hoc-tap — chấm BẰNG CHỨNG người học nộp (chữ + ẢNH) → đạt/điểm/lỗi (JSON)
-  | 'study_coach';        // /hoc-tap — diễn đạt lời cảnh báo từ tỷ lệ trượt MÃ đã tính
+  | 'study_coach'         // /hoc-tap — diễn đạt lời cảnh báo từ tỷ lệ trượt MÃ đã tính
+  | 'creator_script';     // Content Creator (/creator) — gói quay bài giảng/vlog: kịch bản, cảnh, lời thoại, hook, Shorts
 
 const PURPOSE_MODEL: Record<LlmPurpose, string> = {
   /**
@@ -501,6 +502,15 @@ const PURPOSE_MODEL: Record<LlmPurpose, string> = {
   study_plan: 'gpt-6-sol',
   study_verify: 'gpt-6-sol',
   study_coach: 'gpt-6-sol',
+  /**
+   * Content Creator (04/10/2026): viết DÀI bằng tiếng Việt (gói quay 10–20
+   * phút ≈ 1.500–3.000 từ lời thoại + chỉ dẫn từng cảnh), bám sát nội dung bài
+   * học thật. Cùng lựa chọn với `cv_writing`/`study_*`: `gpt-6-sol` trên
+   * modelapi — viết tiếng Việt tốt, rẻ hơn opus nhiều lần trên cổng này. Nằm
+   * trong `VIEC_CHI_OPENAI` để không bao giờ đi rambo (đang sập 04/10).
+   * Vặn: `LLM_MODEL_CREATOR_SCRIPT=…` (không cần deploy).
+   */
+  creator_script: 'gpt-6-sol',
 
   cv_critique: 'gpt-6-sol',
   cv_writing: 'gpt-6-sol',
@@ -830,7 +840,7 @@ function batDauDo(): void {
 // `ve_net` có mặt vì lý do KHÁC: nó gọi qua `llmComplete` (hiểu cả hai giao
 // thức), nhưng chất lượng nét vẽ đo được chỉ tốt trên `gpt-6-sol` — đi rambo là
 // ra model Claude vẽ kém hơn hẳn.
-const VIEC_CHI_OPENAI = new Set<LlmPurpose>(['cv_parse', 'cv_critique', 'cv_writing', 'doc_ocr', 've_net', 'vo_viet_lai', 'study_plan', 'study_verify', 'study_coach']);
+const VIEC_CHI_OPENAI = new Set<LlmPurpose>(['cv_parse', 'cv_critique', 'cv_writing', 'doc_ocr', 've_net', 'vo_viet_lai', 'study_plan', 'study_verify', 'study_coach', 'creator_script']);
 
 export function endpointFor(purpose: LlmPurpose): LlmEndpoint {
   // Đặt TRƯỚC nhánh máy nhà: `agent_code` nằm trong `TOOL_PURPOSES` nên nó

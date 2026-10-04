@@ -24,6 +24,15 @@ export interface DoNhip {
   muc: () => number;
   /** Gỡ bỏ, trả `<audio>` về trạng thái ban đầu. */
   dong: () => void;
+  /**
+   * Đặt bộ chỉnh âm ba dải (dB): trầm 110 Hz · giữa 1,2 kHz · bổng 7 kHz.
+   *
+   * Nằm CHUNG đồ thị với bộ đọc nhịp vì `createMediaElementSource` chỉ gọi được
+   * MỘT lần cho mỗi thẻ <audio> — dựng đồ thị thứ hai cho EQ là ném lỗi. Hệ quả
+   * thật: khi chốt canh câm phải bỏ Web Audio (nguồn thiếu CORS) thì EQ cũng mất
+   * theo, và giao diện phải nói điều đó chứ không giả vờ vẫn chỉnh được.
+   */
+  datEq: (tram: number, giua: number, bong: number) => void;
 }
 
 /** Làm mượt: nhảy lên nhanh, tụt xuống chậm — mắt thấy nhịp rõ hơn giá trị thô. */
@@ -34,6 +43,9 @@ export function doNhip(el: HTMLAudioElement): DoNhip | null {
   let ctx: AudioContext;
   let phanTich: AnalyserNode;
   let nguon: MediaElementAudioSourceNode;
+  let tram: BiquadFilterNode;
+  let giua: BiquadFilterNode;
+  let bong: BiquadFilterNode;
   try {
     ctx = new AudioContext();
     nguon = ctx.createMediaElementSource(el);
@@ -46,7 +58,20 @@ export function doNhip(el: HTMLAudioElement): DoNhip | null {
      * `destination` là nhạc TẮT HẲN mà thanh tiến độ vẫn chạy — trông y hệt
      * một bài bị lỗi âm.
      */
-    nguon.connect(phanTich);
+    tram = ctx.createBiquadFilter();
+    tram.type = 'lowshelf';
+    tram.frequency.value = 110;
+    giua = ctx.createBiquadFilter();
+    giua.type = 'peaking';
+    giua.frequency.value = 1200;
+    giua.Q.value = 0.9;
+    bong = ctx.createBiquadFilter();
+    bong.type = 'highshelf';
+    bong.frequency.value = 7000;
+    nguon.connect(tram);
+    tram.connect(giua);
+    giua.connect(bong);
+    bong.connect(phanTich);
     phanTich.connect(ctx.destination);
   } catch {
     return null; // trình duyệt chặn, hoặc phần tử đã bị nối trước đó
@@ -69,8 +94,19 @@ export function doNhip(el: HTMLAudioElement): DoNhip | null {
       muot += (tho - muot) * (tho > muot ? LEN : XUONG);
       return Math.min(1, Math.max(0, muot));
     },
+    datEq: (t, g, b) => {
+      /* `setTargetAtTime` thay vì gán thẳng: đổi đột ngột vài dB giữa bài nghe
+         ra một tiếng "bụp" nhỏ. 80ms là đủ êm mà vẫn thấy đổi ngay. */
+      const luc = ctx.currentTime;
+      tram.gain.setTargetAtTime(t, luc, 0.08);
+      giua.gain.setTargetAtTime(g, luc, 0.08);
+      bong.gain.setTargetAtTime(b, luc, 0.08);
+    },
     dong: () => {
       try {
+        tram.disconnect();
+        giua.disconnect();
+        bong.disconnect();
         nguon.disconnect();
         phanTich.disconnect();
         void ctx.close();

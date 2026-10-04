@@ -30,7 +30,7 @@ const NHOM: { ten: string; the: The[] }[] = [
     { ten: 'Video', mo: 'Danh mục video', duong: '/admin/video-categories', icon: <Video size={18} />, mau: '#e879f9' },
   ] },
   { ten: 'Giải trí', the: [
-    { ten: 'Trò chơi', mo: 'Game, danh mục, sắp xếp', duong: '/admin/games', icon: <Gamepad2 size={18} />, mau: '#a78bfa' },
+    { ten: 'Sửa game chi tiết', mo: 'Mô tả, ảnh bìa, danh mục', duong: '/admin/games', icon: <Gamepad2 size={18} />, mau: '#a78bfa' },
     { ten: 'Nhạc', mo: 'Bài hát, quyền nghe', duong: '/admin/music', icon: <Music size={18} />, mau: '#f472b6' },
     { ten: 'Voice Hub', mo: 'Series giọng đọc', duong: '/admin/voice', icon: <Mic size={18} />, mau: '#2dd4bf' },
   ] },

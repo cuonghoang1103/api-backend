@@ -11,7 +11,7 @@
  */
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import {
-  LayoutDashboard, Users, Flag, UserX, BellRing, Grid3x3, ShieldCheck, ShieldAlert, ExternalLink, Lock,
+  LayoutDashboard, Users, Flag, UserX, BellRing, Grid3x3, ShieldCheck, ShieldAlert, ExternalLink, Lock, Gamepad2,
 } from 'lucide-react';
 import { useSession } from '../../auth/session';
 import { useAppState } from '../../app-state';
@@ -22,6 +22,7 @@ import { BaoCao } from './muc/BaoCao';
 import { HopThu } from './muc/HopThu';
 import { XoaTaiKhoan } from './muc/XoaTaiKhoan';
 import { MucKhac } from './muc/MucKhac';
+import { TroChoiQT } from './muc/TroChoiQT';
 import './quanTri.css';
 
 type Muc = { k: string; ten: string; icon: ReactNode; nhom: string };
@@ -31,7 +32,8 @@ const MUC: Muc[] = [
   { k: 'bao-cao', ten: 'Báo cáo vi phạm', icon: <Flag size={17} />, nhom: 'Người dùng & an toàn' },
   { k: 'yeu-cau-xoa', ten: 'Yêu cầu xoá', icon: <UserX size={17} />, nhom: 'Người dùng & an toàn' },
   { k: 'hop-thu', ten: 'Hộp thư admin', icon: <BellRing size={17} />, nhom: 'Vận hành' },
-  { k: 'muc-khac', ten: 'Các mục khác', icon: <Grid3x3 size={17} />, nhom: 'Vận hành' },
+  { k: 'tro-choi', ten: 'Trò chơi', icon: <Gamepad2 size={17} />, nhom: 'Nội dung' },
+  { k: 'muc-khac', ten: 'Các mục khác', icon: <Grid3x3 size={17} />, nhom: 'Khác' },
 ];
 
 /** Đọc `mfaAt` (giây) trong JWT đang dùng — chỉ để HIỂN THỊ chip, không dùng để quyết quyền. */
@@ -97,6 +99,7 @@ export function QuanTriPage() {
           : muc === 'bao-cao' ? <BaoCao />
             : muc === 'yeu-cau-xoa' ? <XoaTaiKhoan />
               : muc === 'hop-thu' ? <HopThu />
+                : muc === 'tro-choi' ? <TroChoiQT />
                 : muc === 'muc-khac' ? <MucKhac />
                   : <TongQuan diToi={diToi} />}
       </main>

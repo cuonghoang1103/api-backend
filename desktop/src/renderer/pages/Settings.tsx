@@ -33,6 +33,7 @@ import { OdinPanel } from '../features/odin/OdinPanel';
 import { AiNgoaiTuyen } from '../features/settings/AiNgoaiTuyen';
 import { MucDung } from '../features/settings/MucDung';
 import { datBatAm, keuThu } from '../features/dashboard/amThanh';
+import { DS_TIENG, NHAN_TIENG, docCaiDat, ghiCaiDat, phat, type CaiDatAmThanh } from '@/lib/amThanhUi';
 import { INTERNAL_ROUTES } from '../routes';
 import type { AppInfo, ThemeSetting } from '../../shared/ipc';
 import { useDich, type NgonNgu } from '../i18n';
@@ -83,6 +84,7 @@ export function Settings() {
     { nhom: 'giao-dien', neo: 'ngon-ngu', ten: dich('Ngôn ngữ'), moTa: dich('Tiếng Việt hoặc tiếng Anh'), tuKhoa: 'language english tieng anh viet' },
     { nhom: 'giao-dien', neo: 'thanh-ben', ten: dich('Thanh bên'), moTa: dich('Đầy đủ, chỉ biểu tượng hoặc ẩn'), tuKhoa: 'sidebar menu thu gon an' },
     { nhom: 'giao-dien', neo: 'co-chu', ten: dich('Cỡ hiển thị'), moTa: dich('Phóng to/thu nhỏ toàn bộ app'), tuKhoa: 'zoom co chu phong to thu nho font' },
+    { nhom: 'thong-bao', neo: 'am-thanh-ui', ten: dich('Âm thanh giao diện'), moTa: dich('Tiếng bấm nút, bật tắt, thông báo, lỗi…'), tuKhoa: 'am thanh sound click nut hieu ung tieng bam am luong volume' },
     { nhom: 'thong-bao', neo: 'am-thanh', ten: dich('Tiếng chuông khi xong việc'), moTa: dich('Kêu “ting” khi tick xong một việc'), tuKhoa: 'am thanh sound chuong tieng' },
     { nhom: 'thong-bao', neo: 'nhac-lich', ten: dich('Robot nhắc lịch học & việc sắp tới'), moTa: dich('Nhắc trước buổi học và việc trong kế hoạch'), tuKhoa: 'nhac nho lich hoc reminder thong bao' },
     { nhom: 'thong-bao', neo: 'thanh-phat', ten: dich('Thanh phát nhạc thu gọn'), moTa: dich('Thanh phát ở đáy app chỉ còn một dải mỏng'), tuKhoa: 'nhac music player thanh phat' },
@@ -332,6 +334,7 @@ function NhomThongBao({ sang: s }: { sang: (n: string) => string | undefined }) 
   const thuGon = settings.playerThuGon === true;
   return (
     <>
+      <AmThanhUi sang={s('am-thanh-ui')} />
       <The id="am-thanh" sang={s('am-thanh')} ten={dich('Tiếng chuông khi xong việc')} moTa={dich('Một tiếng “ting” ngắn khi bạn tick xong một việc ở Tổng quan. Bật lên là kêu thử ngay.')}>
         <CongTac
           bat={coTieng}
@@ -350,6 +353,45 @@ function NhomThongBao({ sang: s }: { sang: (n: string) => string | undefined }) 
         <CongTac bat={thuGon} nhan={dich('Thanh phát nhạc thu gọn')} onDoi={(v) => setSetting('playerThuGon', v)} />
       </The>
     </>
+  );
+}
+
+/**
+ * Âm thanh giao diện (04/10/2026) — bộ phát dùng chung với web
+ * (`frontend/src/lib/amThanhUi.ts`), tiếng Kenney CC0. Cài đặt lưu ở máy
+ * (localStorage) như trên web. Nút "Nghe" gắn `data-im` để không kêu kèm tiếng bấm.
+ */
+function AmThanhUi({ sang }: { sang: string | undefined }) {
+  const { dich } = useDich();
+  const [cd, datCd] = useState<CaiDatAmThanh>(() => docCaiDat());
+  const doi = (moi: Partial<CaiDatAmThanh>) => datCd(ghiCaiDat(moi));
+  return (
+    <The id="am-thanh-ui" sang={sang} boc ten={dich('Âm thanh giao diện')}
+      moTa={dich('Tiếng nhỏ khi bấm nút, bật tắt, mở hộp thoại, lưu xong hay gặp lỗi — trong toàn bộ app.')}>
+      <div className="st-am">
+        <div className="st-am-hang">
+          <span>{dich('Bật âm thanh giao diện')}</span>
+          <CongTac bat={cd.bat} nhan={dich('Bật âm thanh giao diện')} onDoi={(v) => { doi({ bat: v }); if (v) phat('bat', { boQuaTat: true }); }} />
+        </div>
+        <div className="st-am-hang">
+          <span>{dich('Tiếng mỗi lần bấm nút')}</span>
+          <CongTac bat={cd.bamNut} nhan={dich('Tiếng mỗi lần bấm nút')} onDoi={(v) => doi({ bamNut: v })} />
+        </div>
+        <label className="st-am-hang">
+          <span>{dich('Âm lượng')} · {Math.round(cd.amLuong * 100)}%</span>
+          <input type="range" min={0} max={100} step={5} value={Math.round(cd.amLuong * 100)} data-im
+            onChange={(e) => doi({ amLuong: Number(e.target.value) / 100 })}
+            onPointerUp={() => phat('xong', { boQuaTat: true })} aria-label={dich('Âm lượng')} />
+        </label>
+        <div className="st-am-luoi">
+          {DS_TIENG.map((t) => (
+            <button key={t} type="button" className="st-am-thu" data-im onClick={() => phat(t, { boQuaTat: true })}>
+              ▶ {dich(NHAN_TIENG[t])}
+            </button>
+          ))}
+        </div>
+      </div>
+    </The>
   );
 }
 

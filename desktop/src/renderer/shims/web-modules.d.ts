@@ -270,6 +270,22 @@ declare module '@/app/projects/[slug]/ProjectPageClient' {
   export default TrangChiTietDuAn;
 }
 
+/* Âm thanh giao diện dùng chung web + app (`lib/amThanhUi.ts`). */
+declare module '@/lib/amThanhUi' {
+  export type TiengUi =
+    | 'click' | 'bat' | 'tat' | 'xong' | 'luu' | 'loi' | 'gui' | 'tin-den'
+    | 'thong-bao' | 'thich' | 'xoa' | 'mo' | 'dong' | 'len-cap';
+  export interface CaiDatAmThanh { bat: boolean; amLuong: number; bamNut: boolean }
+  export const DS_TIENG: readonly TiengUi[];
+  export const NHAN_TIENG: Record<TiengUi, string>;
+  export function docCaiDat(): CaiDatAmThanh;
+  export function ghiCaiDat(moi: Partial<CaiDatAmThanh>): CaiDatAmThanh;
+  export function napBo(): Promise<void>;
+  export function moKhoa(): void;
+  export function phat(t: TiengUi, opt?: { boQuaTat?: boolean }): boolean;
+  export function ganTuDong(): () => void;
+}
+
 declare module '@/app/*/page' {
   import type { ComponentType } from 'react';
   const Trang: ComponentType;

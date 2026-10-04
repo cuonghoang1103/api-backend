@@ -84,6 +84,12 @@ const SoundInitializer = dynamic(
   { ssr: false }
 )
 
+// Âm thanh giao diện (bấm nút, công tắc, hộp thoại, toast) — lib/amThanhUi.ts.
+const AmThanhUiHost = dynamic(
+  () => import('@/components/providers/AmThanhUiHost'),
+  { ssr: false }
+)
+
 const ProExpiryReminder = dynamic(
   () => import('@/components/pro/ProExpiryReminder'),
   { ssr: false }
@@ -411,6 +417,7 @@ export default function RootLayout({
               <LangReviewReminder />
               <QuickCaptureHost />
               <SoundInitializer />
+              <AmThanhUiHost />
               <PWAInstallPrompt />
               <PostCommentModal />
               <AnnouncementBotPopup />

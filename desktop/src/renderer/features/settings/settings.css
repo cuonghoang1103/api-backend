@@ -193,3 +193,12 @@
   .st-nhom-chu strong { font-size: 12.5px; }
   .st-chude { flex-wrap: wrap; }
 }
+
+/* ── Âm thanh giao diện (04/10/2026) ── */
+.st-am { display: flex; flex-direction: column; gap: 12px; }
+.st-am-hang { display: flex; align-items: center; justify-content: space-between; gap: 16px; font-size: 13.5px; }
+.st-am-hang input[type='range'] { flex: 0 1 260px; accent-color: var(--ct-accent); }
+.st-am-luoi { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; margin-top: 4px; }
+.st-am-thu { height: 34px; padding: 0 12px; border: 1px solid var(--ct-border); border-radius: 9px; background: var(--ct-surface-2); color: var(--ct-text); font-size: 12.5px; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.st-am-thu:hover { border-color: color-mix(in srgb, var(--ct-accent) 50%, var(--ct-border)); background: var(--ct-hover); }
+.st-am-thu:active { transform: scale(0.98); }

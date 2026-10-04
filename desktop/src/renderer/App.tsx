@@ -7,6 +7,7 @@ import { batDauNhacLichRobot, phatCauNhac } from './features/dashboard/nhacLichR
 import { batDauNhacKeHoach } from './features/dashboard/nhacKeHoach';
 import { useCauNoiWeb } from './features/web/TrangWeb';
 import { datBatAm } from './features/dashboard/amThanh';
+import { ganTuDong } from '@/lib/amThanhUi';
 import { CommandPalette } from './components/CommandPalette';
 import { MusicPlayerProvider } from './features/music/player';
 import { PlayerBar } from './features/music/PlayerBar';
@@ -247,6 +248,11 @@ function Gate() {
    * — người ta đặt nhắc CHÍNH VÌ họ sẽ không nhìn vào đó. Đặt ở `Gate` nghĩa là
    * nó sống suốt phiên đăng nhập, bất kể đang xem trang nào.
    */
+  /* Âm thanh giao diện dùng chung với web (frontend/src/lib/amThanhUi.ts): nút,
+     công tắc, hộp thoại, toast. Gắn cả khi CHƯA đăng nhập — màn đăng nhập cũng có
+     nút. Tệp âm thanh đóng gói trong public/sounds/ui (không đi mạng). */
+  useEffect(() => ganTuDong(), []);
+
   useEffect(() => {
     if (phase !== 'da-dang-nhap' || !api) return;
     void window.cuongthai?.settings.getAll().then((t) => {

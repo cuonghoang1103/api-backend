@@ -31,6 +31,7 @@ import {
 } from '@/store/preferencesStore';
 import { saveSound, getSound, deleteSound, type SoundRecord } from '@/lib/soundStorage';
 import { testSound, invalidateCustomSoundCache, DEFAULT_SOUND_FILES } from '@/lib/sound';
+import { DS_TIENG, NHAN_TIENG, docCaiDat, ghiCaiDat, phat, type CaiDatAmThanh } from '@/lib/amThanhUi';
 import {
   SettingsPage, SettingsCard, SettingsRow, Toggle, Button, SyncBadge, SettingsDivider,
 } from '@/components/settings/primitives';
@@ -215,6 +216,46 @@ function SoundRow({ kind }: { kind: SoundKind }) {
 
 /* ─── Page ───────────────────────────────────────────────────────── */
 
+/**
+ * Âm thanh giao diện (04/10/2026) — `lib/amThanhUi.ts`: tiếng bấm nút, bật tắt,
+ * hộp thoại, lưu/lỗi. Lưu ở trình duyệt này (localStorage), tách khỏi âm thanh
+ * thông báo theo tài khoản ở trên. Nút "Nghe" gắn `data-im` để không kêu chồng.
+ */
+function AmThanhGiaoDien() {
+  const [cd, datCd] = useState<CaiDatAmThanh | null>(null);
+  useEffect(() => { datCd(docCaiDat()); }, []);
+  if (!cd) return null;
+  const doi = (moi: Partial<CaiDatAmThanh>) => datCd(ghiCaiDat(moi));
+  return (
+    <SettingsCard
+      title="Âm thanh giao diện"
+      description="Tiếng nhỏ khi bấm nút, bật tắt, mở hộp thoại, lưu xong hay gặp lỗi — trên toàn trang. Lưu trên trình duyệt này."
+      icon={<Volume2 className="h-4 w-4" />}
+    >
+      <div className="divide-y" style={{ borderColor: 'var(--border-color)' }}>
+        <SettingsRow label="Bật âm thanh giao diện"
+          control={<Toggle checked={cd.bat} onChange={(v) => { doi({ bat: v }); if (v) phat('bat', { boQuaTat: true }); }} size="sm" label="Bật âm thanh giao diện" />} />
+        <SettingsRow label="Tiếng mỗi lần bấm nút"
+          control={<Toggle checked={cd.bamNut} onChange={(v) => doi({ bamNut: v })} size="sm" label="Tiếng mỗi lần bấm nút" />} />
+        <SettingsRow label={`Âm lượng · ${Math.round(cd.amLuong * 100)}%`}
+          control={<input type="range" min={0} max={100} step={5} value={Math.round(cd.amLuong * 100)} data-im
+            className="w-40 accent-[var(--accent-color)]"
+            onChange={(e) => doi({ amLuong: Number(e.target.value) / 100 })}
+            onPointerUp={() => phat('xong', { boQuaTat: true })} aria-label="Âm lượng" />} />
+      </div>
+      <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3">
+        {DS_TIENG.map((t) => (
+          <button key={t} type="button" data-im onClick={() => phat(t, { boQuaTat: true })}
+            className="truncate rounded-lg border px-3 py-2 text-left text-xs transition-colors hover:bg-[var(--bg-surface-hover)]"
+            style={{ borderColor: 'var(--border-color)', color: 'var(--text-primary)' }}>
+            ▶ {NHAN_TIENG[t]}
+          </button>
+        ))}
+      </div>
+    </SettingsCard>
+  );
+}
+
 export default function NotificationSettingsPage() {
   const masterEnabled = usePreferencesStore((s) => s.masterEnabled);
   const setMasterEnabled = usePreferencesStore((s) => s.setMasterEnabled);
@@ -295,6 +336,8 @@ export default function NotificationSettingsPage() {
           })}
         </div>
       </SettingsCard>
+
+      <AmThanhGiaoDien />
 
       {/* ── OS notifications ────────────────────────────────── */}
       <SettingsCard title="Thông báo trên màn hình" icon={<Monitor className="h-4 w-4" />}>

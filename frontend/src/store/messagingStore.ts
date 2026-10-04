@@ -951,6 +951,8 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
         [threadId]: [...(s.messagesByThread[threadId] ?? []), optimistic],
       },
     }));
+    // Tiếng "gửi" ĐÚNG lúc tin hiện lên khung (04/10/2026) — không chờ máy chủ.
+    void import('@/lib/amThanhUi').then((m) => m.phat('gui')).catch(() => {});
 
     try {
       const res = await messagingApi.sendMessage(threadId, {

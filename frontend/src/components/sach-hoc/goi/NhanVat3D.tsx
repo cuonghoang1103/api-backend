@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * Khung React cho nhân vật 3D "Bông" (sanKhau3D.ts). three.js (~600 KB) chỉ được tải
+ * Khung React cho nhân vật 3D "CuongMini" (sanKhau3D.ts). three.js (~600 KB) chỉ được tải
  * khi cửa sổ Gọi gia sư mở — `import()` trong effect, không nằm trong gói của trang.
  * Máy không có WebGL (hoặc tải hỏng) ⇒ lùi về con robot SVG quen thuộc, cuộc gọi vẫn chạy.
  */

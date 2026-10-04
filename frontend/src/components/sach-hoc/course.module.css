@@ -1445,7 +1445,7 @@
 }
 
 /* ── 📞 Luyện phát âm cùng gia sư (GoiGiaSu.tsx) ─────────────────────── */
-/* Bản 2 (04/10/2026): sân khấu toàn khung với nhân vật 3D "Bông" (goi/sanKhau3D.ts).
+/* Bản 2 (04/10/2026): sân khấu toàn khung với nhân vật 3D "CuongMini" (goi/sanKhau3D.ts).
    Nền ĐẶC (không backdrop-filter): bản cũ làm mờ cả trang phía sau và vẽ lại lớp mờ đó
    mỗi lần âm lượng micro đổi ⇒ nhấp nháy. Bố cục cố định — chữ dài/ngắn, có/không câu
    mẫu đều không làm khung nhảy. Bảng màu riêng (trời đêm tím) dùng cho cả hai giao diện:

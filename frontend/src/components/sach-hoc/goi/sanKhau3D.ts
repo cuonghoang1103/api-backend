@@ -1,5 +1,5 @@
 /**
- * 🤖 Sân khấu 3D của "Bông" — bạn luyện nói trong Gọi gia sư (04/10/2026).
+ * 🤖 Sân khấu 3D của "CuongMini" — bạn luyện nói trong Gọi gia sư (04/10/2026).
  *
  * Dựng hoàn toàn bằng mã, không tải mô hình: mọi khối là mặt cong trơn (cầu, quả
  * trứng tiện bằng LatheGeometry, viên nang) — không có hộp bo góc nào. Một tệp

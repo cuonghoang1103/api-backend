@@ -66,7 +66,7 @@ export default function GoiGiaSu({ danhSach, chuDe, onClose }: { danhSach: CauMa
     onXong: (blob) => { void guiLuot(blob); },
     onMuc: (m) => { mucRef.current = m; vongRef.current?.style.setProperty('--muc', m.toFixed(3)); },
   });
-  /** Phản ứng tức thời của Bông (chào, mừng điểm cao, động viên) — giữ ~2,4 giây rồi về theo pha. */
+  /** Phản ứng tức thời của CuongMini (chào, mừng điểm cao, động viên) — giữ ~2,4 giây rồi về theo pha. */
   const [phanUng, setPhanUng] = useState<CamXuc | null>(null);
   const henPU = useRef<ReturnType<typeof setTimeout>>();
   const phanUngNgan = useCallback((c: CamXuc, ms = 2400) => {
@@ -185,11 +185,11 @@ export default function GoiGiaSu({ danhSach, chuDe, onClose }: { danhSach: CauMa
 
   const NHAN: Record<Pha, string> = {
     cho: luot.length ? 'Bấm 🎙 để đọc' : 'Bấm để bắt đầu',
-    mo: 'Đang gọi Bông…',
-    giasu: 'Bông đang nói — chạm để ngắt lời và đọc ngay',
+    mo: 'Đang gọi CuongMini…',
+    giasu: 'CuongMini đang nói — chạm để ngắt lời và đọc ngay',
     nghe: 'Đang nghe — đọc to câu mẫu, nói xong máy tự chấm',
     cham: 'Đang chấm…',
-    nghi: 'Bông đang suy nghĩ…',
+    nghi: 'CuongMini đang suy nghĩ…',
     loi: 'Tạm dừng',
   };
 
@@ -198,7 +198,7 @@ export default function GoiGiaSu({ danhSach, chuDe, onClose }: { danhSach: CauMa
   const loiCuoi = [...luot].reverse().find((l) => l.ai)?.text ?? '';
   const iCham = luot.map((l, i) => (l.cham ? i : -1)).filter((i) => i >= 0).pop() ?? -1;
   const chamCuoi = iCham >= 0 ? luot[iCham].cham! : null;
-  const NHAN_NGAN: Record<Pha, string> = { cho: 'Sẵn sàng', mo: 'Đang kết nối', giasu: 'Bông đang nói', nghe: 'Đang nghe bạn', cham: 'Đang chấm', nghi: 'Bông đang nghĩ', loi: 'Tạm dừng' };
+  const NHAN_NGAN: Record<Pha, string> = { cho: 'Sẵn sàng', mo: 'Đang kết nối', giasu: 'CuongMini đang nói', nghe: 'Đang nghe bạn', cham: 'Đang chấm', nghi: 'CuongMini đang nghĩ', loi: 'Tạm dừng' };
 
   return (
     <div className={s.goiSan} role="dialog" aria-modal="true" aria-label="Luyện phát âm cùng gia sư">
@@ -208,7 +208,7 @@ export default function GoiGiaSu({ danhSach, chuDe, onClose }: { danhSach: CauMa
         <div className={s.goiDanhTinh}>
           <span className={s.goiCham0} data-pha={pha} />
           <div>
-            <div className={s.goiTen}>Luyện nói cùng Bông</div>
+            <div className={s.goiTen}>Luyện nói cùng CuongMini</div>
             <div className={s.goiPhu}>{NHAN_NGAN[pha]} · {chuDe}</div>
           </div>
         </div>
@@ -220,7 +220,7 @@ export default function GoiGiaSu({ danhSach, chuDe, onClose }: { danhSach: CauMa
           <NhanVat3D camXuc={camXuc} mucRef={mucRef} />
           <div className={s.goiBongNoi} aria-live="polite">
             {loiCuoi ? <LoiNoi text={loiCuoi} /> : (
-              <span>Chào bạn! Mình là <b>Bông</b>. Mình đọc mẫu, bạn đọc theo, mình chấm từng âm. Muốn hỏi gì cứ nói tiếng Việt nhé.</span>
+              <span>Chào bạn! Mình là <b>CuongMini</b>. Mình đọc mẫu, bạn đọc theo, mình chấm từng âm. Muốn hỏi gì cứ nói tiếng Việt nhé.</span>
             )}
           </div>
           {chamCuoi && (
@@ -238,13 +238,13 @@ export default function GoiGiaSu({ danhSach, chuDe, onClose }: { danhSach: CauMa
                 <div className={s.goiMauChu}>{mau.text}</div>
                 {mau.ipa && <div className={s.goiIpa}>/{mau.ipa}/</div>}
               </>
-            ) : <div className={s.goiMauTrong}>Bấm nút micro để Bông bắt đầu buổi luyện.</div>}
+            ) : <div className={s.goiMauTrong}>Bấm nút micro để CuongMini bắt đầu buổi luyện.</div>}
           </div>
 
           <div className={s.goiLog} ref={cuon}>
             {!luot.length && (
               <div className={s.goiGoiY}>
-                🎧 Đeo tai nghe sẽ rõ hơn và micro không thu lại tiếng Bông.<br />
+                🎧 Đeo tai nghe sẽ rõ hơn và micro không thu lại tiếng CuongMini.<br />
                 Mỗi lượt: nghe câu mẫu → đọc theo → nghe nhận xét. Nói xong im 1,5 giây là máy tự chấm.
               </div>
             )}

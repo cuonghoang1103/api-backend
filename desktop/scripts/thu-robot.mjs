@@ -158,7 +158,7 @@ if (tt.co) {
   // ⚠️ THU GỌN khung chat trước. Robot CỐ Ý không tự ẩn khi khung chat mini
   // đang mở (người dùng gõ dở mà nó biến mất giữa câu là tệ hơn nhiều), nên
   // kiểm lúc còn mở là kiểm sai trạng thái.
-  await trang.locator('.rb-chat-nut button:has-text("✕")').click().catch(() => {});
+  await trang.locator('.rb-chat-dong').click().catch(() => {});   // nút thu gọn (biểu tượng −, không còn chữ ✕)
   await new Promise((r) => setTimeout(r, 600));
 
   // `focus()` không phải lúc nào cũng cấp được tiêu điểm THẬT ở môi trường

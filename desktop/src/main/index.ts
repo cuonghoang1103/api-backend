@@ -110,6 +110,10 @@ async function bootstrap(): Promise<void> {
     console.warn('[path] không nạp được PATH của shell:', (e as Error)?.message);
   }
 
+  /* "Bạn không cần tôi nữa ư?" — đăng ký TRƯỚC mọi `before-quit` khác. */
+  const { dangKyHoiThoat } = await import('./hoiThoat');
+  dangKyHoiThoat();
+
   applySessionPolicies();
   registerAppProtocol(path.join(__dirname, '../renderer'));
   await registerIpcHandlers();

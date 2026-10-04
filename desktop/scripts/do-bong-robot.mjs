@@ -33,7 +33,8 @@ import path from 'node:path';
 
 const GOC = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const doc = (p) => readFileSync(path.join(GOC, p), 'utf8');
-const CSS = doc('src/renderer/robot.css') + doc('src/renderer/features/odin/odin.css');
+/* Token + bong bóng nằm ở `robot/robotChung.css` từ 04/10/2026 (dùng chung với con trong app). */
+const CSS = doc('src/renderer/robot.css') + doc('src/renderer/robot/robotChung.css') + doc('src/renderer/features/odin/odin.css');
 
 /* ── Phải khớp `src/main/robotNoi.ts` ── */
 const GON = { w: 150, h: 190 };
@@ -41,8 +42,8 @@ const HE_SO = [1, 0.82, 0.66, 0.52];
 const DEM = 16, KHE = 8, RONG_TD = 300, CAO_TD = 240;
 /* ── Phải khớp `src/renderer/robot.tsx` ── */
 const CO_ROBOT = 104, TI_LE_ROBOT = 0.98;
-/* ── Phải khớp `font-size` khai trong `.rb-bong` (robot.css) ── */
-const CO_CHU = '12px';
+/* ── Phải khớp `font-size` khai trong `.rb-bong` (robot/robotChung.css) ── */
+const CO_CHU = '12.5px';
 
 const TIN = [
   ['nhạc ngắn', 'nhac', '♪ SƠN TÙNG M-TP | SKY'],

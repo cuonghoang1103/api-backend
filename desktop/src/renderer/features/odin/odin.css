@@ -48,52 +48,9 @@
   --odin-outline: #3d4aa8;
 }
 
-/* ── Mở khoá để kéo (ấn ba lần) ──
-   Phải NHÌN RA được là đang mở khoá, nếu không người dùng ấn ba lần rồi
-   không biết đã ăn hay chưa, ấn thêm ba lần nữa là khoá lại. Vòng nét đứt
-   nhấp nháy nhẹ + con trỏ bàn tay là đủ, không cần thêm chữ. */
-.odin-dock[data-keo='true'] {
-  cursor: grab;
-  /* Mở khoá ⇒ CẢ vùng bao thành chỗ nắm, không chỉ mấy pixel trên con robot.
-     Lúc khoá thì `.odin-dock` là `pointer-events: none` (xem dưới) để phần
-     rỗng không nuốt cú bấm vào nội dung — nhưng lúc kéo thì ngược lại: vùng
-     nắm càng rộng càng dễ trúng. Nó cũng là thứ giữ `setPointerCapture` chạy
-     được, vì bắt con trỏ trên một phần tử `pointer-events: none` là đặt cược
-     vào chi tiết cài đặt của trình duyệt. */
-  pointer-events: auto;
-  /* Bàn di chính xác của Windows gửi cử chỉ cuộn dưới dạng sự kiện con trỏ;
-     thiếu dòng này thì trình duyệt cướp chuỗi `pointermove` để cuộn, và cú
-     kéo đứt giữa chừng. Đo trong app: `touch-action` đang là `auto`. */
-  touch-action: none;
-  border-radius: 999px;
-  outline: 2px dashed var(--ct-accent);
-  outline-offset: 6px;
-  animation: odin-mokhoa 1.6s ease-in-out infinite;
-}
-.odin-dock[data-dang-keo='true'] { cursor: grabbing; animation: none; }
-
-/* Hàng nút cỡ, chỉ hiện lúc mở khoá. */
-.odin-co {
-  display: flex; align-items: center; gap: 3px;
-  padding: 2px 5px;
-  border-radius: 999px;
-  background: var(--ct-surface);
-  border: 1px solid var(--ct-border);
-  box-shadow: var(--ct-shadow-sm);
-}
-.odin-co button {
-  width: 19px; height: 19px;
-  border: none; border-radius: 50%;
-  background: none; color: var(--ct-text);
-  font-size: 14px; line-height: 1; cursor: pointer;
-}
-.odin-co button:hover:not(:disabled) { background: var(--ct-hover); }
-.odin-co button:disabled { opacity: 0.3; cursor: default; }
-.odin-co span { font-size: 10px; color: var(--ct-text-faint); min-width: 28px; text-align: center; }
-@keyframes odin-mokhoa {
-  0%, 100% { outline-color: color-mix(in srgb, var(--ct-accent) 45%, transparent); }
-  50%      { outline-color: var(--ct-accent); }
-}
+/* Chế độ chỉnh, bố cục và khung của con robot TRONG APP nay nằm ở
+   `robot/robotChung.css` (khối `.rb-app`) — dùng chung với con nổi. Hai nút
+   −/+ nhỏ `.odin-co` cũ đã thay bằng `BangChinh` của con nổi. */
 
  /* ══════════════════════════════════════════════════════════
     ⚠️ `.odin-canh` vs `.odin-dock` — ĐỌC TRƯỚC KHI SỬA
@@ -111,24 +68,9 @@
     đều đeo nó cùng `data-mood`. `.odin-dock` chỉ còn lo vị trí/bố cục.
     Thêm biểu cảm mới thì viết `.odin-canh[data-mood=…]`, đừng viết
     `.odin-dock[…]` — viết thế là con nổi lại câm như cũ. */
-.odin-dock {
-  position: fixed;
-  right: 22px;
-  /* Nằm trên thanh trạng thái, không đè lên nó. */
-  bottom: calc(var(--ct-statusbar-h) + 16px);
-  z-index: 60;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  /* Vùng bao trong suốt không được chặn chuột ở phần rỗng — nếu không, một
-     hình chữ nhật vô hình sẽ nuốt cú bấm vào nội dung phía sau. */
-  pointer-events: none;
-}
-
-.odin-dock > * {
-  pointer-events: auto;
-}
+/* `.odin-dock` vẫn là tên lớp của con robot trong app (`styles.css` chừa
+   chỗ đáy theo `:has(.odin-dock)`, CT Work dời nó khi mở ngăn AI) — nhưng
+   bố cục nay do `.rb-app` trong `robot/robotChung.css` lo. */
 
 /* ══════════════════════════════════════════════════════════
    ⚠️ transform-box: fill-box — BẮT BUỘC cho mọi phần tử SVG

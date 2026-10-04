@@ -108,6 +108,24 @@ export function OdinPanel() {
         </div>
 
         <div className="ct-row">
+          <dt>{dich('Hỏi trước khi thoát')}</dt>
+          <dd>
+            <label className="ct-congtac">
+              <input
+                type="checkbox"
+                data-khoa="robotHoiThoat"
+                checked={settings.robotHoiThoat !== false}
+                onChange={(e) => setSetting('robotHoiThoat', e.target.checked)}
+              />
+              <span>{settings.robotHoiThoat !== false ? dich('Bật') : dich('Tắt')}</span>
+            </label>
+            <p className="ct-ghichu">
+              <Chu cau='Khi bạn thoát app, Odin hỏi "Bạn không cần tôi nữa ư?" — **Có** thì ở lại, **Không** thì thoát. Không hỏi khi cài bản cập nhật hay khi máy tắt.' />
+            </p>
+          </dd>
+        </div>
+
+        <div className="ct-row">
           <dt>{dich('Ngắt lời bằng giọng')}</dt>
           <dd>
             <label className="ct-congtac">

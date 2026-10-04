@@ -210,6 +210,8 @@ export const settingKeySchema = z.enum([
   'robotBamMep',
   /** Cỡ robot theo %, 20–100 bước 5. Thay nấc `odinCo` cũ (vẫn đọc làm dự phòng). */
   'robotCo',
+  /** Thoát app thì robot hỏi "Bạn không cần tôi nữa ư?" trước. MẶC ĐỊNH BẬT (chỉ `false` mới tắt). */
+  'robotHoiThoat',
   /**
    * Vị trí robot nổi, JSON `ViTriLuu` (màn hình + toạ độ tuyệt đối + tương
    * đối). CHỈ main ghi. Xem `robotViTri.ts`.
@@ -1932,6 +1934,8 @@ export const INVOKE_CHANNELS = {
    * thấy robot quay về).
    */
   'robot:batTat': z.object({ bat: z.boolean().optional() }).optional(),
+  /** Robot nhận câu hỏi thoát (`daNhan`) hoặc người dùng đã trả lời (`giuLai`). Xem `main/hoiThoat.ts`. */
+  'robot:traLoiThoat': z.object({ id: z.number().int(), daNhan: z.boolean().optional(), giuLai: z.boolean().optional() }),
   /** Phím tắt toàn cục ĐANG giữ được, đã định dạng để hiện trong Cài đặt. */
   'robot:phimTat': z.object({}).optional(),
   'agent:datMucNoLuc': agentMucNoLucSchema,
@@ -2154,6 +2158,8 @@ export const EVENT_CHANNELS = [
   'robot:thietDat',
   /** Mở bảng chỉnh vị trí & cỡ (từ menu chuột phải). */
   'robot:cheDoChinh',
+  /** Người dùng vừa thoát app ⇒ robot hỏi "Bạn không cần tôi nữa ư?". `{ id }` */
+  'robot:hoiThoat',
   /** Đăng nhập OAuth qua trình duyệt đã xong — mang token về cho app. */
   'oauth:xong',
   /** Phím media của bàn phím (Play/Pause · Next · Prev), kể cả khi app không ở trước. */
@@ -2834,6 +2840,8 @@ export interface DesktopBridge {
     hutMep(): Promise<void>;
     /** Lật công tắc robot (cả nổi lẫn trong app). Bỏ trống = đảo. Trả trạng thái MỚI. */
     batTat(bat?: boolean): Promise<boolean>;
+    /** Trả lời câu hỏi thoát: `daNhan` = đã hiện câu hỏi; `giuLai` = người dùng chọn ở lại (true) hay thoát (false). */
+    traLoiThoat(p: { id: number; daNhan?: boolean; giuLai?: boolean }): Promise<void>;
     /** Phím tắt toàn cục đang giữ được, đã định dạng cho người đọc, hoặc `null`. */
     phimTat(): Promise<string | null>;
     /** Hỏi nhanh một câu, trả về câu trả lời đã hoàn chỉnh (không chảy chữ). */

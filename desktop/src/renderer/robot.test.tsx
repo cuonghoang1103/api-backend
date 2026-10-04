@@ -232,3 +232,34 @@ describe('⭐ 03/10/2026 — bảng chỉnh 20–100% và kéo "thả đâu đ�
     expect(goi.keoBatDau).not.toHaveBeenCalled();
   });
 });
+
+describe('⭐ 04/10/2026 — ↑/↓ đổi cỡ 5%, Esc thoát, zzz khi ngủ', () => {
+  const vo = () => document.querySelector('.rb')!;
+  async function phim(key: string): Promise<void> {
+    await act(async () => {
+      (document.activeElement ?? document.body).dispatchEvent(new KeyboardEvent('keydown', { key, bubbles: true }));
+    });
+  }
+
+  it('trong chế độ chỉnh: ↓ −5%, ↑ +5%, kẹp ở 20%; Esc thoát', async () => {
+    if (vo().getAttribute('data-keo') !== 'true') { await bamNhieu(3); await quaNhipHoan(); }
+    expect(vo().getAttribute('data-keo')).toBe('true');
+    const so = () => Number(document.querySelector('.rb-bang-so')?.textContent?.replace('%', ''));
+    const dau = so();
+    await phim('ArrowDown');
+    expect(so()).toBe(Math.max(20, dau - 5));
+    expect(document.querySelector('.rb-co-nhanh')?.textContent).toBe(`${so()}%`);
+    await phim('ArrowUp');
+    expect(so()).toBe(dau);
+    for (let i = 0; i < 20; i++) await phim('ArrowDown');
+    expect(so()).toBe(20);
+    expect(goi.datPhanTram).toHaveBeenLastCalledWith(20);
+    await phim('Escape');
+    expect(vo().getAttribute('data-keo')).toBe('false');
+  });
+
+  it('NGOÀI chế độ chỉnh, mũi tên không đụng tới cỡ', async () => {
+    await phim('ArrowUp');
+    expect(goi.datPhanTram).not.toHaveBeenCalled();
+  });
+});

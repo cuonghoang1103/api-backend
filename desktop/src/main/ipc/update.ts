@@ -291,6 +291,9 @@ export function registerUpdateHandlers(): void {
       throw new Error('Bản chạy từ mã nguồn không cài cập nhật được.');
     }
     const autoUpdater = await getUpdater();
+    /* Cài bản mới KHÔNG được bị robot chặn hỏi (`hoiThoat.ts`). */
+    const { choPhepThoatThang } = await import('../hoiThoat');
+    choPhepThoatThang();
     autoUpdater.quitAndInstall(false, true);
   });
 

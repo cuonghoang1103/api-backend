@@ -1,24 +1,36 @@
 /**
- * Odin nổi ở góc phải dưới.
+ * Odin TRONG APP — cùng MỘT con robot với cửa sổ nổi (`robot.tsx`).
  *
- * Ba việc nó làm, đúng theo yêu cầu:
- *   1. Bấm vào → mở AI Chat.
- *   2. Đeo huy hiệu số thông báo chưa đọc (số THẬT từ máy chủ).
- *   3. Nhấn giữ nút micro → nói → thả → chữ được đưa sang AI Chat.
+ * ─── MỘT CON ROBOT, HAI CHỖ ĐỨNG (04/10/2026) ───
+ * Người dùng: *"robot icon trong app CuongThai và robot icon khi ẩn app ra
+ * ngoài là MỘT con robot (đừng tách), phải chạy mượt như nhau"*. Trước bản
+ * này đây là một bản dựng RIÊNG — luật bấm riêng, nút cỡ riêng, bong bóng
+ * riêng — và nó lệch con nổi ở đúng những chỗ người dùng chạm vào:
  *
- * Nó KHÔNG che nội dung: nằm ở góc, kích thước nhỏ, và có thể tắt hẳn trong
- * Cài đặt. Một trợ lý mà không tắt được thì là một thứ chắn đường.
+ *   • Ấn 3 lần KHÔNG vào được chế độ chỉnh: cú bấm đầu đã hẹn nhảy sang
+ *     /chat sau 260ms, và khi chế độ chỉnh có bật thì `setPointerCapture`
+ *     trên CẢ dock nuốt mọi `click` — nút −/+ và ba cú để thoát đều chết.
+ *   • `transform: scale()` lên cả dock ⇒ khung chat/bong bóng co theo robot.
+ *
+ * Nay hai con dùng chung: `useCuChi` (1/2/3/4 cú bấm), `usePhimChinh`
+ * (↑/↓ ±5%, Esc), `ThanRobot` (thân + zzz + biểu cảm, CHỈ thân co giãn),
+ * `NutNoi`, `BangChinh` (bảng chỉnh), `KhungChat` (khung "Trợ lý") và
+ * `robot/robotChung.css`. Chỗ khác nhau là chỗ ĐỨNG: con nổi là cửa sổ riêng
+ * do main đặt; con này là một lớp `position: fixed` trong cửa sổ app, dời
+ * bằng `odinPhai`/`odinDuoi`, mở khung NGAY TRONG app.
+ *
+ * Việc riêng của con trong app vẫn giữ: huy hiệu số chưa đọc, giữ phím ` để
+ * nói, báo bản cập nhật, nhắc lịch, khung GIA SƯ khi đang học bài.
  */
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { Mic, X } from 'lucide-react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { X } from 'lucide-react';
 import { useAppState } from '../../app-state';
 import { useUpdateStatus } from '../../components/UpdateBanner';
 import { docThanhTieng, ngungNoi, phatTieng, datTocDoDoc } from './giongNoi';
 import { hoiOdin, phienNoiHienTai } from './hoiOdin';
 import { useSession } from '../../auth/session';
-import { OdinRobot } from './OdinRobot';
 import { kepDock, ngoaiKhung, type KhungKep } from './viTriDock';
-import { useOdin } from './useOdin';
+import { useOdin, type OdinMood } from './useOdin';
 import { SU_KIEN_NHAC } from '../dashboard/nhacLichRobot';
 /*
  * KHUNG GIA SƯ — DÙNG LẠI nguyên của web, không chép giao diện.
@@ -32,12 +44,23 @@ import { SU_KIEN_NHAC } from '../dashboard/nhacLichRobot';
  */
 import GiaSuTrongRobot from '@/components/chat/GiaSuTrongRobot';
 import { useGiaSuBaiStore } from '@/store/giaSuBaiStore';
+import { ThanRobot, NutNoi, coHopPx } from '../../robot/ThanRobot';
+import { useCuChi, usePhimChinh, NGUONG_KEO_PX } from '../../robot/useRobotChung';
+import { BangChinh } from '../../robot/BangChinh';
+import { KhungChat } from '../../robot/KhungChat';
+import { boCucNoiDungApp, CAO_CAN } from '../../robot/boCucTrongApp';
+import { useHoiThoat, TheHoiThoat } from '../../robot/HoiThoat';
 import './odin.css';
+import '../../robot/robotChung.css';
 import { useDich } from '../../i18n';
-import { BUOC_CO, CO_TOI_DA, CO_TOI_THIEU, chuanPhanTram, phanTramTuThietDat } from '../../../shared/coRobot';
+import { chuanPhanTram, phanTramTuThietDat } from '../../../shared/coRobot';
+
+/** Chỗ mặc định: cách mép phải / mép trên thanh trạng thái. */
+const PHAI_MAC_DINH = 22;
+const DUOI_MAC_DINH = 16;
 
 export function OdinDock() {
-  const { dich } = useDich();
+  const { dich, dichP } = useDich();
   const { navigate, settings, setSetting, online, route } = useAppState();
   const { api } = useSession();
   /** Ngôn ngữ Odin nói. Mặc định tiếng Việt — đây là app tiếng Việt. */
@@ -252,344 +275,359 @@ export function OdinDock() {
     );
   }, [enabled, update, odin]);
 
-  /*
-   * ẤN BA LẦN ĐỂ MỞ KHOÁ, ẤN BA LẦN NỮA ĐỂ CỐ ĐỊNH.
-   *
-   * Người dùng muốn tự đặt chỗ cho robot. Ba lần bấm chứ không phải kéo
-   * thẳng: bấm MỘT lần đã có nghĩa (mở AI Chat), nên nếu kéo được mọi lúc thì
-   * mỗi cú bấm hơi lệch tay sẽ thành một cú kéo, và robot trôi lung tung.
-   *
-   * Toạ độ lưu theo khoảng cách tới mép PHẢI/DƯỚI — đổi cỡ cửa sổ thì nó giữ
-   * nguyên góc. Lưu x/y tuyệt đối là mở app ở màn hình nhỏ hơn thì robot nằm
-   * ngoài vùng nhìn thấy và không có cách nào lôi lại.
-   */
-  const keoDuoc = settings.odinKeoDuoc === true;
-  /* Cùng khoá `odinCo` với con robot nổi — hai khoá riêng thì người dùng
-     chỉnh một con, con kia đứng nguyên, và họ phải nhớ đang chỉnh cái nào. */
-  /* Cỡ %, 20–100 bước 5 — cùng khoá `robotCo` với con nổi (khoá nấc `odinCo`
-     cũ vẫn đọc làm dự phòng). */
+  /* ══ CHỖ ĐỨNG + CỠ ══════════════════════════════════════════════════════
+     Cỡ %, 20–100 bước 5 — CÙNG khoá `robotCo` với con nổi. Đổi ở đây ⇒
+     `settings:set` bên main cũng đổi cỡ con nổi (`main/ipc/settings.ts`);
+     đổi ở con nổi ⇒ main bắn `robot:coDoi` về đây. */
   const phanTram = phanTramTuThietDat(settings);
-  const heSo = phanTram / 100;
-  const phai = typeof settings.odinPhai === 'number' ? settings.odinPhai : 22;
-  const duoi = typeof settings.odinDuoi === 'number' ? settings.odinDuoi : 16;
+  const phai = typeof settings.odinPhai === 'number' ? settings.odinPhai : PHAI_MAC_DINH;
+  const duoi = typeof settings.odinDuoi === 'number' ? settings.odinDuoi : DUOI_MAC_DINH;
+  const co = coHopPx(phanTram);
+  const settingsRef = useRef(settings);
+  settingsRef.current = settings;
+  const pokeRef = useRef(odin.poke);
+  pokeRef.current = odin.poke;
 
-  const demBam = useRef(0);
-  const henBam = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const keo = useRef<{ x: number; y: number; phai: number; duoi: number } | null>(null);
-  const [dangKeo, datDangKeo] = useState(false);
-  const oRef = useRef<HTMLDivElement>(null);
-
-  /**
-   * Vị trí ĐANG KÉO — giữ ở state cục bộ, KHÔNG ghi vào thiết đặt từng khung.
-   *
-   * ⚠️ Đây là nguyên nhân "kéo không mượt", và nó đo được chứ không phải cảm
-   * giác. Mã cũ gọi `setSetting` HAI lần cho MỖI `pointermove`:
-   *   • `setSetting` cập nhật `settings` trong AppState, mà `settings` nằm
-   *     trong danh sách phụ thuộc của `useMemo` dựng giá trị context — nên
-   *     **35 component** đang gọi `useAppState()` dựng lại. Hai lần mỗi khung.
-   *     Chuột 120Hz ⇒ ~240 lượt dựng lại toàn app mỗi giây.
-   *   • Nó còn gửi hai lời gọi IPC xuống main, và main `writeFileSync` +
-   *     `renameSync` NGUYÊN tệp cấu hình một cách ĐỒNG BỘ cho mỗi lời gọi.
-   *
-   * Nay: kéo chỉ đụng state của riêng component này; ghi xuống đĩa MỘT lần
-   * lúc thả tay.
-   */
-  const [keoTam, datKeoTam] = useState<{ phai: number; duoi: number } | null>(null);
+  const doiCo = useCallback((pt: number) => {
+    setSetting('robotCo', chuanPhanTram(pt));
+  }, [setSetting]);
 
   /* Menu chuột phải đổi cỡ ở MAIN. AppState chỉ nạp thiết đặt một lần lúc mở
      app, nên không nghe tin này thì con robot trong app giữ nguyên cỡ cũ và
      người dùng thấy hai con robot lệch cỡ nhau. */
   useEffect(() => window.cuongthai?.on('robot:coDoi', (p) => {
     const o = p as { nac?: number; phanTram?: number };
-    if (typeof o.phanTram === 'number') setSetting('robotCo', chuanPhanTram(o.phanTram));
-    else if (typeof o.nac === 'number') setSetting('odinCo', o.nac);
+    if (typeof o.phanTram === 'number') {
+      const moi = chuanPhanTram(o.phanTram);
+      if (moi !== phanTramTuThietDat(settingsRef.current)) setSetting('robotCo', moi);
+    } else if (typeof o.nac === 'number') setSetting('odinCo', o.nac);
   }), [setSetting]);
-  /* Công tắc robot nghe ở AppState (`robot:congTac`) — một chỗ cho cả con
-     robot trong app lẫn ô tick trong trang Cài đặt. Xem chú thích ở đó. */
-  /** Cú kéo vừa rồi có đi đủ xa để tính là KÉO, không phải BẤM. */
-  const daDi = useRef(false);
 
-  /** Đo khung để kẹp. `getBoundingClientRect` trả hộp SAU `scale`, nên không
-      phải nhân `heSo` bằng tay — và nó tự đúng cả khi bong bóng làm dock cao
-      lên. */
-  const khung = useCallback((): KhungKep | null => {
-    const el = oRef.current;
-    if (!el) return null;
-    const r = el.getBoundingClientRect();
+  /* ══ TRẠNG THÁI GIỐNG CON NỔI ══════════════════════════════════════════ */
+  /** Khung "Trợ lý" đang mở. */
+  const [rong, datRong] = useState(false);
+  /** Đã mở ít nhất một lần ⇒ giữ sống (thu gọn chỉ ẩn — xem `KhungChat`). */
+  const [daMoChat, datDaMoChat] = useState(false);
+  const [chatCho, datChatCho] = useState(false);
+  /** Chế độ CHỈNH (ấn 3 lần). Trạng thái phiên, KHÔNG ghi đĩa — giống con nổi. */
+  const [keoDuoc, datKeoDuoc] = useState(false);
+  const [dangKeo, datDangKeo] = useState(false);
+  const [keoTam, datKeoTam] = useState<{ phai: number; duoi: number } | null>(null);
+  const keoTamRef = useRef<{ phai: number; duoi: number } | null>(null);
+  const keoRef = useRef<{ x: number; y: number; phai: number; duoi: number; daDi: boolean } | null>(null);
+  /** Vừa kéo xong ⇒ nuốt cú `click` đi kèm cú thả tay. */
+  const vuaKeoRef = useRef(false);
+  const gocRef = useRef<HTMLDivElement>(null);
+
+  const doiRong = useCallback((v: boolean) => {
+    if (v) { datDaMoChat(true); datKeoDuoc(false); datMoGiaSu(false); }
+    datRong(v);
+  }, []);
+
+  /** Đo khung để kẹp. Cỡ hộp là số TÍNH, không đo — hộp không còn `scale`. */
+  const khung = useCallback((pt: number): KhungKep => {
     const sb = parseFloat(
       getComputedStyle(document.documentElement).getPropertyValue('--ct-statusbar-h'),
     ) || 0;
+    const c = coHopPx(pt);
     return {
-      rong: r.width, cao: r.height,
+      rong: c.rong, cao: c.cao,
       cuaRong: window.innerWidth, cuaCao: window.innerHeight,
       thanhTrangThai: sb,
     };
   }, []);
 
-  /** Đếm cú bấm; đủ ba trong 600ms thì lật khoá. Trả `true` nếu vừa lật. */
-  const demVaLat = (): boolean => {
-    demBam.current += 1;
-    if (henBam.current) clearTimeout(henBam.current);
-    if (demBam.current >= 3) {
-      demBam.current = 0;
-      setSetting('odinKeoDuoc', !keoDuoc);
-      return true;
-    }
-    henBam.current = setTimeout(() => { demBam.current = 0; }, 600);
-    return false;
+  /* ── KÉO — giữ ở state cục bộ, ghi đĩa MỘT lần lúc thả tay ──
+     (Ghi mỗi `pointermove` từng làm 35 component dựng lại hai lần mỗi khung
+     và ghi đồng bộ cả tệp cấu hình — đo được, xem lịch sử tệp này.) */
+  const batDauKeo = (e: React.PointerEvent<HTMLElement>): void => {
+    if (!keoDuoc || e.button !== 0) return;
+    /* Bắt con trỏ trên CHÍNH THÂN robot, không phải cả lớp: bắt trên tổ tiên
+       là mọi `click` sau đó rơi vào tổ tiên — đúng lỗi "ấn 3 lần không chỉnh
+       được" của bản cũ. */
+    try { e.currentTarget.setPointerCapture(e.pointerId); } catch { /* jsdom */ }
+    keoRef.current = { x: e.clientX, y: e.clientY, phai, duoi, daDi: false };
   };
 
   useEffect(() => {
-    if (!dangKeo) return;
     const di = (e: PointerEvent): void => {
-      const b = keo.current;
-      const k = khung();
-      if (!b || !k) return;
-      /* Kẹp theo CỠ THẬT của dock, không theo hằng `80` của bản cũ. Đo trong
-         Chromium: dock 104×136, và luật cũ cho mép TRÊN = -86px khi kéo hết
-         lên — 63% con robot nằm ngoài cửa sổ, kể cả phần bấm được, nên không
-         còn cách nào lôi nó xuống. Xem `viTriDock.ts`. */
-      // Ngưỡng 4px: tay ai cũng rung một hai pixel lúc bấm, và coi đó là kéo
-      // thì mỗi cú bấm hơi lệch sẽ nuốt mất hành động của cú bấm ấy.
-      if (Math.abs(e.clientX - b.x) > 4 || Math.abs(e.clientY - b.y) > 4) daDi.current = true;
-      datKeoTam(kepDock(b.phai - (e.clientX - b.x), b.duoi - (e.clientY - b.y), k));
+      const k = keoRef.current;
+      if (!k) return;
+      if (!k.daDi && (Math.abs(e.clientX - k.x) > NGUONG_KEO_PX || Math.abs(e.clientY - k.y) > NGUONG_KEO_PX)) {
+        k.daDi = true;
+        datDangKeo(true);
+      }
+      if (!k.daDi) return;
+      const moi = kepDock(k.phai - (e.clientX - k.x), k.duoi - (e.clientY - k.y), khung(phanTramTuThietDat(settingsRef.current)));
+      keoTamRef.current = moi;
+      datKeoTam(moi);
     };
     const tha = (): void => {
+      const k = keoRef.current;
+      keoRef.current = null;
+      if (!k || !k.daDi) return;
+      vuaKeoRef.current = true;
+      setTimeout(() => { vuaKeoRef.current = false; }, 50);
       datDangKeo(false);
-      keo.current = null;
-      // GHI MỘT LẦN, lúc thả tay. Xem chú thích ở `keoTam`.
-      datKeoTam((cuoi) => {
-        if (cuoi) { setSetting('odinPhai', cuoi.phai); setSetting('odinDuoi', cuoi.duoi); }
-        return null;
-      });
+      const cuoi = keoTamRef.current;
+      keoTamRef.current = null;
+      datKeoTam(null);
+      if (cuoi) { setSetting('odinPhai', cuoi.phai); setSetting('odinDuoi', cuoi.duoi); }
+      pokeRef.current();
     };
     window.addEventListener('pointermove', di);
-    window.addEventListener('pointerup', tha, { once: true });
-    window.addEventListener('pointercancel', tha, { once: true });
+    window.addEventListener('pointerup', tha);
+    window.addEventListener('pointercancel', tha);
+    window.addEventListener('blur', tha);
     return () => {
       window.removeEventListener('pointermove', di);
       window.removeEventListener('pointerup', tha);
       window.removeEventListener('pointercancel', tha);
+      window.removeEventListener('blur', tha);
     };
-  }, [dangKeo, setSetting, khung]);
+  }, [khung, setSetting]);
 
   /**
-   * Đổi cỡ cửa sổ ⇒ KẸP LẠI.
+   * Đổi cỡ cửa sổ HOẶC cỡ robot ⇒ KẸP LẠI.
    *
-   * Không có nhánh này thì thu cửa sổ nhỏ đi là robot ra ngoài vùng nhìn thấy
-   * VĨNH VIỄN: cử chỉ mở khoá kéo nằm trên chính con robot, nên không còn thứ
-   * gì bấm được để lôi nó về. Chỉ ghi khi thật sự lệch — mỗi lần kéo mép cửa
-   * sổ mà ghi một lần là hàng trăm lượt ghi đĩa.
+   * Không có nhánh này thì thu cửa sổ nhỏ đi (hay phóng robot to lên) là robot
+   * ra ngoài vùng nhìn thấy VĨNH VIỄN: cử chỉ mở khoá kéo nằm trên chính con
+   * robot. Chỉ ghi khi thật sự lệch.
    */
   useEffect(() => {
     if (!enabled) return;
     const doi = (): void => {
-      const k = khung();
-      if (!k || !ngoaiKhung(phai, duoi, k)) return;
+      const k = khung(phanTram);
+      if (!ngoaiKhung(phai, duoi, k)) return;
       const o = kepDock(phai, duoi, k);
       setSetting('odinPhai', o.phai);
       setSetting('odinDuoi', o.duoi);
     };
+    doi();
     window.addEventListener('resize', doi);
     return () => window.removeEventListener('resize', doi);
-  }, [enabled, phai, duoi, khung, setSetting]);
+  }, [enabled, phai, duoi, phanTram, khung, setSetting]);
+
+  /* Cỡ khung app để đặt khung chat/bong bóng quanh robot. */
+  const [cuaSo, datCuaSo] = useState(() => ({ rong: window.innerWidth, cao: window.innerHeight }));
+  useEffect(() => {
+    const doi = (): void => datCuaSo({ rong: window.innerWidth, cao: window.innerHeight });
+    window.addEventListener('resize', doi);
+    return () => window.removeEventListener('resize', doi);
+  }, []);
+
+  /* ══ BỐN CỬ CHỈ — cùng hook với con nổi ═══════════════════════════════
+   *  1 lần → mở/đóng khung "Trợ lý" (đang học bài: khung GIA SƯ của bài)
+   *  2 lần → trang AI Chat (đúng cuộc nói gần nhất nếu có)
+   *  3 lần → chế độ chỉnh: kéo + cỡ 20–100% (↑/↓ ±5%, Esc xong)
+   *  4 lần → ẩn robot (cả hai con — một công tắc)
+   *
+   * ⚠️ Đang học bài thì MỘT cú bấm KHÔNG được rời trang (người dùng
+   * 17/09/2026): nó mở khung gia sư ngay tại chỗ.
+   */
+  const { bam } = useCuChi({
+    mot: () => {
+      odin.poke();
+      if (baiDangHoc) {
+        datRong(false);
+        datKeoDuoc(false);
+        datMoGiaSu((v) => !v);
+        return;
+      }
+      doiRong(!rong);
+    },
+    hai: () => {
+      datRong(false);
+      datMoGiaSu(false);
+      const id = phienNoiHienTai();
+      navigate('/chat', id ? `phien=${encodeURIComponent(id)}` : undefined);
+    },
+    ba: () => {
+      datRong(false);
+      datMoGiaSu(false);
+      datKeoDuoc((v) => !v);
+    },
+    bon: () => {
+      datRong(false);
+      const tat = window.cuongthai?.robot?.batTat;
+      if (tat) void tat(false).catch(() => {});
+      else setSetting('robotEnabled', false);
+    },
+  }, { vuaKeoRef });
+
+  const hienSo = usePhimChinh({
+    bat: keoDuoc, phanTram, doiCo, thoat: () => datKeoDuoc(false), gocRef,
+  });
+
+  /* Đổi trang ⇒ thoát chế độ chỉnh (như con nổi thu khung khi đi chỗ khác). */
+  useEffect(() => { datKeoDuoc(false); }, [route]);
+
+  /* "Bạn không cần tôi nữa ư?" — câu hỏi lúc thoát app (`main/hoiThoat.ts`). */
+  const hoiThoat = useHoiThoat();
+  useEffect(() => {
+    if (hoiThoat.id === null) return;
+    datRong(false);
+    datKeoDuoc(false);
+    datMoGiaSu(false);
+  }, [hoiThoat.id]);
+
+  const moodHienTai: OdinMood = hoiThoat.id !== null ? 'lo' : dangKeo ? 'vui' : chatCho ? 'nghi' : odin.mood;
+
+  /* ══ VÙNG NỘI DUNG — cố định cỡ, đặt quanh robot ══════════════════════ */
+  const loaiNd: keyof typeof CAO_CAN | null = hoiThoat.id !== null ? 'hoi'
+    : rong ? 'chat'
+    : keoDuoc ? 'bang'
+      : baiDangHoc && moGiaSu ? 'giaSu'
+        : odin.say ? 'bong'
+          : null;
+  const hopPhai = keoTam?.phai ?? phai;
+  const hopDuoi = keoTam?.duoi ?? duoi;
+  const sb = typeof document === 'undefined' ? 0 : (parseFloat(
+    getComputedStyle(document.documentElement).getPropertyValue('--ct-statusbar-h'),
+  ) || 0);
+  const bc = useMemo(() => boCucNoiDungApp(
+    { phai: hopPhai, duoi: hopDuoi, rong: co.rong, cao: co.cao },
+    { rong: cuaSo.rong, cao: cuaSo.cao - sb },
+    CAO_CAN[loaiNd ?? 'chat'],
+  ), [hopPhai, hopDuoi, co.rong, co.cao, cuaSo, sb, loaiNd]);
 
   if (!enabled) return null;
   /* Sổ tay có nút "✨ Hỏi ghi chú" riêng ở ĐÚNG góc dưới-phải này, và robot đè
      kín nó (đo 26/09/2026, ảnh chụp app 1440×900). Web đã ẩn robot nổi trên
      /notes vì cùng lý do — theo đúng quyết định đó. Chỉ ẩn phần VẼ; mọi effect
      ở trên vẫn chạy nên quay ra trang khác là robot có mặt ngay, đúng trạng thái. */
-  if (route === '/notes' || route.startsWith('/notes/')) return null;
+  if ((route === '/notes' || route.startsWith('/notes/')) && hoiThoat.id === null) return null;
+
+  const coPhien = !!phienNoiHienTai();
 
   return (
     <div
-      ref={oRef}
-      className="odin-dock odin-canh"
-      style={{
-        right: keoTam?.phai ?? phai,
-        bottom: `calc(var(--ct-statusbar-h) + ${keoTam?.duoi ?? duoi}px)`,
-        /* Thu nhỏ từ GÓC DƯỚI-PHẢI: neo mặc định ở đó, nên co từ tâm sẽ làm
-           robot nhảy vào giữa màn hình mỗi lần đổi nấc. */
-        transform: heSo === 1 ? undefined : `scale(${heSo})`,
-        transformOrigin: 'bottom right',
-      }}
+      ref={gocRef}
+      className="rb rb-app odin-dock odin-canh"
+      data-rong={rong}
       data-keo={keoDuoc}
       data-dang-keo={dangKeo}
-      onPointerDown={(e) => {
-        if (!keoDuoc || e.button !== 0) return;
-        /* GIỮ CON TRỎ: kéo nhanh thì chuột vượt ra khỏi con robot, và nếu thả
-           tay ở ngoài cửa sổ thì `pointerup` không bao giờ tới — cờ `dangKeo`
-           kẹt bật và robot bám dính con trỏ cho tới cú bấm sau. */
-        (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
-        daDi.current = false;
-        keo.current = { x: e.clientX, y: e.clientY, phai, duoi };
-        datDangKeo(true);
-      }}
-      data-mood={odin.mood}
+      data-mood={moodHienTai}
       data-listening={odin.listening}
       data-hover={hovering}
-      onContextMenu={(e) => { e.preventDefault(); void window.cuongthai?.robot.menu(true); }}
     >
-      {/*
-        KHUNG GIA SƯ, mở ngay tại chỗ khi đang học.
-        Đặt TRƯỚC con robot trong cột flex nên nó nở lên trên, không đẩy robot
-        ra khỏi góc — robot là thứ người dùng đang nhắm tay vào.
-      */}
-      {baiDangHoc && moGiaSu && (
-        <div className="odin-giasu" data-mo="true">
-          <button
-            type="button"
-            className="odin-giasu-dong"
-            aria-label={dich('Đóng khung gia sư')}
-            title={dich('Đóng')}
-            onClick={(e) => { e.stopPropagation(); datMoGiaSu(false); }}
-          >
-            <X size={13} aria-hidden />
-          </button>
-          <GiaSuTrongRobot bai={baiDangHoc} rong={false} />
+      {!dangKeo && loaiNd && loaiNd !== 'chat' && (
+        <div className="rb-nd" data-phia={bc.phia} data-ngang={bc.ngang} style={bc.kieu}>
+          {loaiNd === 'hoi' ? (
+            <TheHoiThoat onTra={hoiThoat.tra} />
+          ) : loaiNd === 'bang' ? (
+            <BangChinh
+              phanTram={phanTram}
+              onDoiCo={doiCo}
+              onVeMacDinh={() => { setSetting('odinPhai', PHAI_MAC_DINH); setSetting('odinDuoi', DUOI_MAC_DINH); }}
+              onXong={() => datKeoDuoc(false)}
+              nenTang={null}
+            />
+          ) : loaiNd === 'giaSu' && baiDangHoc ? (
+            /* KHUNG GIA SƯ, mở ngay tại chỗ khi đang học. */
+            <div className="odin-giasu" data-mo="true">
+              <button
+                type="button"
+                className="odin-giasu-dong"
+                aria-label={dich('Đóng khung gia sư')}
+                title={dich('Đóng')}
+                onClick={(e) => { e.stopPropagation(); datMoGiaSu(false); }}
+              >
+                <X size={13} aria-hidden />
+              </button>
+              <GiaSuTrongRobot bai={baiDangHoc} rong={false} />
+            </div>
+          ) : odin.say ? (
+            /*
+             * BẤM VÀO BONG BÓNG ⇒ MỞ ĐÚNG CUỘC TRÒ CHUYỆN ĐÓ TRONG /chat.
+             * Chỉ bấm được khi CÓ phiên: những câu như "Mình không dùng được
+             * micro" không thuộc cuộc nào, và mở một trang trống còn tệ hơn.
+             */
+            <div className="rb-bong-boc" role="status">
+              {coPhien ? (
+                <button
+                  type="button"
+                  className="rb-bong"
+                  data-loai="tra-loi"
+                  data-co-x="true"
+                  title={dich('Bấm để đọc đầy đủ trong AI Chat')}
+                  onClick={() => {
+                    const id = phienNoiHienTai();
+                    odin.dismissSay();
+                    navigate('/chat', id ? `phien=${encodeURIComponent(id)}` : undefined);
+                  }}
+                >
+                  {odin.say}
+                  <span className="rb-bong-goi-y">{dich('Bấm để đọc đầy đủ →')}</span>
+                </button>
+              ) : (
+                <div className="rb-bong" data-loai="thong-bao" data-co-x="true">{odin.say}</div>
+              )}
+              <button
+                type="button"
+                className="rb-bong-x"
+                aria-label={dich('Ẩn thông báo')}
+                title={dich('Ẩn thông báo')}
+                onClick={(e) => { e.stopPropagation(); odin.dismissSay(); }}
+              >
+                ×
+              </button>
+            </div>
+          ) : null}
         </div>
       )}
 
-      {/* Nút cỡ chỉ hiện lúc mở khoá — bày thường trực thì hai nút nhỏ đè lên
-          robot suốt ngày và người dùng bấm nhầm khi định mở AI Chat. */}
-      {keoDuoc && (
-        <div className="odin-co">
-          <button type="button" onClick={() => setSetting('robotCo', chuanPhanTram(phanTram - BUOC_CO))}
-            disabled={phanTram <= CO_TOI_THIEU} title={dich('Nhỏ hơn')}>−</button>
-          <span>{phanTram}%</span>
-          <button type="button" onClick={() => setSetting('robotCo', chuanPhanTram(phanTram + BUOC_CO))}
-            disabled={phanTram >= CO_TOI_DA} title={dich('To hơn')}>+</button>
-        </div>
-      )}
-
-      {odin.say && (
-        /*
-         * BẤM VÀO BONG BÓNG ⇒ MỞ ĐÚNG CUỘC TRÒ CHUYỆN ĐÓ TRONG /chat.
-         *
-         * Bong bóng cắt ở 220 ký tự vì nó nổi trên mọi cửa sổ — nhưng "đọc
-         * tiếp ở đâu" thì trước 19/08/2026 không có câu trả lời: khung chữ
-         * là một `div` trơ, và lượt hỏi bằng giọng còn chưa được lưu. Người
-         * dùng bấm vào rồi báo lại. Nay nó là nút, và đích đến là cuộc trò
-         * chuyện thật.
-         *
-         * Chỉ bấm được khi CÓ phiên: những câu như "Mình không dùng được
-         * micro" không thuộc cuộc nào, và mở một trang trống còn tệ hơn là
-         * không cho bấm.
-         */
+      {/* Khung chat SỐNG suốt từ lần mở đầu — thu gọn chỉ ẩn nó đi. Cỡ CỐ ĐỊNH
+          (400×520, co lại chỉ khi cửa sổ app nhỏ hơn) ở mọi cỡ robot. */}
+      {daMoChat && (
         <div
-          className="odin-bubble"
-          role="status"
-          data-mo-duoc={phienNoiHienTai() ? 'true' : 'false'}
+          className="rb-nd rb-nd-chat"
+          data-phia={bc.phia}
+          data-ngang={bc.ngang}
+          style={bc.kieu}
+          hidden={!rong || dangKeo}
         >
-          {phienNoiHienTai() ? (
-            <button
-              type="button"
-              className="odin-bubble-mo"
-              title={dich('Bấm để đọc đầy đủ trong AI Chat')}
-              onClick={() => {
-                const id = phienNoiHienTai();
-                odin.dismissSay();
-                navigate('/chat', id ? `phien=${encodeURIComponent(id)}` : undefined);
-              }}
-            >
-              <span>{odin.say}</span>
-              <span className="odin-bubble-goi-y">{dich('Bấm để đọc đầy đủ →')}</span>
-            </button>
-          ) : (
-            <span>{odin.say}</span>
-          )}
-          {/* `stopPropagation` để bấm × không kéo theo cả việc mở trang. */}
-          <button
-            type="button"
-            className="odin-bubble-dong"
-            onClick={(e) => { e.stopPropagation(); odin.dismissSay(); }}
-            aria-label={dich('Đóng')}
-          >
-            <X size={12} aria-hidden />
-          </button>
+          <KhungChat
+            an={!rong}
+            onDong={() => doiRong(false)}
+            onKeoKhung={() => {}}
+            onDangCho={datChatCho}
+            onXong={({ ok, chu }) => {
+              if (!ok) return;
+              if (!rong) odin.announce(`${dich('Xong rồi nè!')} ${chu.slice(0, 90)}`);
+            }}
+          />
         </div>
       )}
 
-      <button
-        type="button"
-        className="odin-figure"
-        aria-label={
-          odin.unread > 0
-            ? `Odin — mở AI Chat, có ${odin.unread} thông báo chưa đọc`
-            : 'Odin — mở AI Chat'
-        }
-        onPointerEnter={() => setHovering(true)}
-        onPointerLeave={() => setHovering(false)}
-        onFocus={() => setHovering(true)}
-        onBlur={() => setHovering(false)}
-        /**
-         * ⚠️⚠️ ĐANG HỌC BÀI thì MỘT cú bấm KHÔNG được rời trang.
-         *
-         * Người dùng 17/09/2026: *"vào academy ấn vào bài học, ấn 1 lần vào
-         * icon robot nó lại nhảy sang AI chat vậy? Tôi nhớ ấn 2 lần nó mới
-         * nhảy sang AI chat cơ mà"*.
-         *
-         * Họ nhớ đúng — nhưng nhớ con robot NỔI (cửa sổ riêng), nơi một cú bấm
-         * mở khung chat nhỏ còn hai cú mới nhảy trang. Con robot TRONG APP thì
-         * từ đầu vẫn nhảy ngay ở cú đầu tiên. Hai con robot, hai luật bấm.
-         *
-         * Và trên trang bài học thì đó là hành vi TỆ NHẤT có thể: người ta bấm
-         * robot vì đang có câu hỏi về bài, và thứ họ nhận được là bị kéo ra
-         * khỏi bài. Web không làm thế — bấm trợ lý ở đó MỞ KHUNG (`setIsOpen`),
-         * không điều hướng bao giờ.
-         *
-         * Nay: đang học ⇒ một cú bấm mở khung GIA SƯ ngay tại chỗ, hai cú mới
-         * sang AI Chat. Không học ⇒ giữ nguyên như cũ (một cú sang AI Chat),
-         * vì cửa sổ chính chưa có khung chat nhỏ nào để mở.
-         */
-        onClick={() => {
-          /* Vừa KÉO xong thì đây không phải một cú bấm. Không chặn thì mỗi lần
-             dời robot lại cộng một nhịp vào bộ đếm ba-cú-bấm, và ba lần dời
-             liên tiếp sẽ tự khoá robot lại giữa lúc người dùng đang sắp chỗ. */
-          if (daDi.current) { daDi.current = false; return; }
-          // Cú bấm thứ ba lật khoá — KHÔNG chuyển trang, nếu không mỗi lần
-          // mở/khoá lại nhảy sang AI Chat.
-          if (demVaLat()) return;
-          if (keoDuoc) return;   // đang mở khoá ⇒ bấm là để kéo, không điều hướng
-          odin.poke();
-          if (baiDangHoc) {
-            /* Cú THỨ HAI khi khung gia sư đang mở ⇒ mới sang AI Chat. Đóng
-               khung rồi mới đi, không thì quay lại bài vẫn thấy nó mở. */
-            if (moGiaSu) { datMoGiaSu(false); setTimeout(() => navigate('/chat'), 260); return; }
-            datMoGiaSu(true);
-            return;
-          }
-          // Đợi hết cú nhảy rồi mới chuyển trang — chuyển ngay thì người dùng
-          // không kịp thấy phản hồi, và cảm giác là "bấm nhầm cái gì đó".
-          setTimeout(() => navigate('/chat'), 260);
-        }}
-      >
-        <OdinRobot mood={odin.mood} blinking={odin.blinking} hovering={hovering} />
-        {odin.unread > 0 && (
-          <span className="odin-badge" aria-hidden>
+      <ThanRobot
+        phanTram={phanTram}
+        style={{ right: hopPhai, bottom: hopDuoi }}
+        mood={moodHienTai}
+        nhay={odin.blinking}
+        hover={hovering}
+        datHover={setHovering}
+        keoDuoc={keoDuoc}
+        hienSo={hienSo}
+        nhan={odin.unread > 0
+          ? dichP('Odin — mở khung chat, {n} thông báo chưa đọc', { n: odin.unread })
+          : dich('Odin — mở khung chat')}
+        phuHieu={odin.unread > 0 ? (
+          <span className="odin-badge rb-phu-hieu" aria-hidden>
             {odin.unread > 99 ? '99+' : odin.unread}
           </span>
+        ) : null}
+        onPointerDown={batDauKeo}
+        onBam={bam}
+        onContextMenu={(e) => { e.preventDefault(); void window.cuongthai?.robot.menu(true); }}
+        nutNoi={(
+          <NutNoi
+            tt={odin.listening ? 'nghe' : odin.mood === 'nghi' ? 'nghi' : 'im'}
+            onBatDau={() => void odin.startListening()}
+            onTha={odin.stopListening}
+          />
         )}
-      </button>
-
-      <button
-        type="button"
-        className="odin-mic"
-        data-active={odin.listening}
-        aria-label={dich('Giữ để nói với Odin')}
-        title={dich('Giữ để nói (hoặc giữ phím ` )')}
-        onPointerDown={() => void odin.startListening()}
-        onPointerUp={odin.stopListening}
-        onPointerLeave={odin.stopListening}
-      >
-        {odin.listening ? (
-          <span className="odin-wave" aria-hidden>
-            <i /><i /><i /><i />
-          </span>
-        ) : (
-          <Mic size={14} aria-hidden />
-        )}
-      </button>
+      />
     </div>
   );
 }

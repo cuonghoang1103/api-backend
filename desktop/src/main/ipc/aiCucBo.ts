@@ -185,7 +185,10 @@ export function dangKyAiCucBo(): void {
      `window-all-closed`: trên macOS đóng hết cửa sổ KHÔNG phải là thoát app,
      và tắt AI ở đó sẽ làm con robot mất trí nhớ mỗi lần người dùng đóng cửa
      sổ chính. */
-  app.on('before-quit', () => {
+  /* `will-quit`, KHÔNG `before-quit`: lần thoát có thể bị huỷ (robot hỏi
+     "Bạn không cần tôi nữa ư?" — `hoiThoat.ts`), và tắt AI rồi mới bị huỷ
+     là để lại app không còn AI trên máy. */
+  app.on('will-quit', () => {
     dangCai?.abort();
     void tatModel();
   });

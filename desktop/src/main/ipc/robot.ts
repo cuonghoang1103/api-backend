@@ -9,6 +9,7 @@ import {
   thongTinNenTang, batTuDinhMep,
 } from '../robotNoi';
 import { phimDeDoc, phimRobotHienTai } from '../phimRobot';
+import { traLoiThoat } from '../hoiThoat';
 import { Menu, BrowserWindow } from 'electron';
 
 import { bangMenuRobot } from '../robotMenu';
@@ -125,6 +126,9 @@ export function registerRobotHandlers(): void {
    * ẩn được mà không hiện lại được là một cái bẫy, không phải một tính năng.
    */
   handle('robot:batTat', (p) => batTatRobot(p?.bat));
+
+  /* Trả lời câu "Bạn không cần tôi nữa ư?" — xem `hoiThoat.ts`. */
+  handle('robot:traLoiThoat', (p) => { traLoiThoat(p); });
 
   handle('robot:phimTat', () => {
     const ma = phimRobotHienTai();

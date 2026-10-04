@@ -19,8 +19,6 @@
  */
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { OdinRobot } from './features/odin/OdinRobot';
-import { taoBoDem } from './features/odin/demCuBam';
 /* ⚠️ Cửa sổ robot là một ENTRY RIÊNG — không qua `AppStateProvider`, nên tự
    gọi `datNgonNgu`, tự nghe đổi ngôn ngữ / chủ đề. */
 import { datNgonNgu, dich } from './i18n';
@@ -29,14 +27,16 @@ import { batDauThu, ngungPhat, phatBase64, type BoThu } from './features/odin/ng
 import { KhungChat } from './robot/KhungChat';
 import { BangChinh, CO_BANG, type NenTangRobot } from './robot/BangChinh';
 import { useBoCuc, type NoiDungMuon } from './robot/useBoCuc';
+import { ThanRobot, NutNoi } from './robot/ThanRobot';
+import { useHoiThoat, TheHoiThoat, CO_HOI_THOAT } from './robot/HoiThoat';
+import { useCuChi, usePhimChinh, NGUONG_KEO_PX, NGU_SAU_MS } from './robot/useRobotChung';
 import { phanTramTuThietDat } from '../shared/coRobot';
 import './features/odin/odin.css';
+import './robot/robotChung.css';
 import './robot.css';
 
 /** Ô đo và bong bóng thật phải dùng CHUNG chuỗi này — lệch là đo sai. */
 const CHU_CHO = 'Chờ tớ suy nghĩ xíu nhé…';
-
-const TRE_NHAP_DUP_MS = 260;
 
 /**
  * Bong bóng thông báo sống bao lâu. Người dùng 16/09/2026: "chỉ hiện 3s thôi".
@@ -46,21 +46,8 @@ const GIAY_HIEN_TIN_MS = 3000;
 /** Bong bóng "trả lời xong" sống lâu hơn — nó là thứ người dùng ĐANG chờ. */
 const GIAY_HIEN_TRA_LOI_MS = 9000;
 
-/** Gộp các cú bấm liên tiếp khi TỰ ĐẾM (e.detail một mình không đủ — xem `bam`). */
-const CUA_SO_DEM_MS = 600;
-const LECH_CHO_PHEP_PX = 12;
-
-/** Bấm xuống rồi đi quá ngần này mới tính là KÉO (tay ai cũng rung 1–2px). */
-const NGUONG_KEO_PX = 4;
-
-/** Không ai đụng tới bao lâu thì robot ngủ gật. */
-const NGU_SAU_MS = 3 * 60_000;
-
 /** Khung chat ở 100%: khớp `KHUNG_CHAT` bên main. */
 const CO_CHAT = { rong: 400, cao: 520 };
-
-/** Dưới cỡ này nút mic nhỏ quá không bấm trúng ⇒ ẩn (vẫn còn chat gõ). */
-const CO_AN_MIC = 45;
 
 interface ThongBao {
   loai: 'tin-nhan' | 'thong-bao' | 'nhac' | 'agent' | 'tra-loi' | 'mang';
@@ -92,7 +79,6 @@ function Robot() {
   const [viec, datViec] = useState<string | null>(null);
   const [hover, datHover] = useState(false);
   const [ghim, datGhim] = useState(false);
-  const henRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [tt, datTt] = useState<TrangThaiNoi>('im');
   const thuRef = useRef<BoThu | null>(null);
   const conSongRef = useRef(true);
@@ -337,12 +323,22 @@ function Robot() {
 
   /* ── Bố cục cửa sổ quanh neo ── */
   const ghiChuBang = !!(nenTang?.waylandThuan || nenTang?.xWayland);
+  /* "Bạn không cần tôi nữa ư?" — câu hỏi lúc thoát app (`main/hoiThoat.ts`).
+     Hỏi thì thu khung chat và thoát chế độ chỉnh: câu hỏi là thứ DUY NHẤT
+     đáng nhìn lúc đó. */
+  const hoiThoat = useHoiThoat();
+  useEffect(() => {
+    if (hoiThoat.id === null) return;
+    datRong(false);
+    datKeoDuoc(false);
+  }, [hoiThoat.id]);
   const ndMuon: NoiDungMuon | null = useMemo(() => {
+    if (hoiThoat.id !== null) return { loai: 'bang', rong: CO_HOI_THOAT.rong, cao: CO_HOI_THOAT.cao };
     if (rong) return { loai: 'chat', rong: CO_CHAT.rong, cao: CO_CHAT.cao };
     if (keoDuoc) return { loai: 'bang', rong: CO_BANG.rong, cao: CO_BANG.cao + (ghiChuBang ? CO_BANG.caoThemGhiChu : 0) };
     if (chuBong && doBong) return { loai: 'bong', rong: Math.min(doBong.w, 300) + 16, cao: Math.min(doBong.h, 240) + 10 };
     return null;
-  }, [rong, keoDuoc, chuBong, doBong, ghiChuBang]);
+  }, [rong, keoDuoc, chuBong, doBong, ghiChuBang, hoiThoat.id]);
   const bc = useBoCuc(ndMuon, lamLai, dangKeoHop);
 
   /* ── Nói (giữ để nói) ── */
@@ -425,51 +421,39 @@ function Robot() {
     };
   }, [thaTayNoi]);
 
-  /* ── Đếm cú bấm ── */
-  const demRef = useRef(taoBoDem(CUA_SO_DEM_MS, LECH_CHO_PHEP_PX));
-
-  const huyHen = useCallback(() => {
-    if (henRef.current) { clearTimeout(henRef.current); henRef.current = null; }
-  }, []);
-
+  /* ── Bốn cử chỉ — CÙNG hook với con robot trong app (`useCuChi`) ── */
   /** Mở trang AI Chat. Dùng cho cử chỉ hai-cú-bấm lẫn cú bấm vào bong bóng. */
+  const huyHenRef = useRef<() => void>(() => {});
   const bamDup = useCallback(() => {
-    huyHen();
+    huyHenRef.current();
     datTin(null);
     void window.cuongthai?.robot.moChinh('/chat');
-  }, [huyHen]);
+  }, []);
 
   /**
    * ⚠️ `e.detail` MỘT MÌNH KHÔNG ĐỦ: lúc đang ở chế độ kéo, cửa sổ trượt dưới
    * con trỏ và Chromium tụt `detail` về 1 — ba cú để TẮT không bao giờ tới
-   * (Windows, 16/09/2026). Đếm thêm bằng tay theo toạ độ MÀN HÌNH rồi lấy số
-   * lớn hơn. MỌI cử chỉ hoãn `TRE_NHAP_DUP_MS` trừ cú thứ tư.
+   * (Windows, 16/09/2026). `useCuChi` đếm thêm bằng tay theo toạ độ MÀN HÌNH
+   * rồi lấy số lớn hơn. MỌI cử chỉ hoãn `TRE_NHAP_DUP_MS` trừ cú thứ tư.
    */
-  const bam = useCallback((e: { detail: number; screenX: number; screenY: number }) => {
-    if (vuaKeoRef.current) return;
-    const n = demRef.current.dem(e);
-    huyHen();
-    thuc();
-
-    if (n >= 4) {
-      demRef.current.khepLai();
+  const { bam, huyHen } = useCuChi({
+    mot: () => { thoang('vui', 700); doiRong(!rong); datTin(null); },
+    hai: () => bamDup(),
+    ba: () => { datKeoDuoc((v) => !v); datRong(false); },
+    bon: () => {
       datTin(null);
       /* `.catch`: main ĐÓNG chính cửa sổ này nên kênh IPC đứt trước khi lời
          hứa kịp giải. */
       window.cuongthai?.robot.batTat(false).catch(() => {});
-      return;
-    }
+    },
+  }, { vuaKeoRef, khiBam: thuc });
+  huyHenRef.current = huyHen;
 
-    henRef.current = setTimeout(() => {
-      henRef.current = null;
-      demRef.current.khepLai();
-      if (n === 3) { datKeoDuoc((v) => !v); datRong(false); return; }
-      if (n === 2) { bamDup(); return; }
-      thoang('vui', 700);
-      doiRong(!rong);
-      datTin(null);
-    }, TRE_NHAP_DUP_MS);
-  }, [rong, doiRong, huyHen, bamDup, thuc, thoang]);
+  /* ↑/↓ đổi cỡ 5%, Esc xong — chỉ trong chế độ chỉnh. */
+  const gocRef = useRef<HTMLDivElement>(null);
+  const hienSo = usePhimChinh({
+    bat: keoDuoc, phanTram, doiCo, thoat: () => datKeoDuoc(false), gocRef,
+  });
 
   /* Có lỗi/xong từ khung chat ⇒ biểu cảm + báo nếu khung đang thu gọn. */
   const khiXong = useCallback(({ ok, chu }: { ok: boolean; chu: string }) => {
@@ -489,7 +473,8 @@ function Robot() {
    * `OdinRobot` (đôi mắt). Thứ tự là thứ tự ưu tiên.
    */
   const moodHienTai: OdinMood =
-    dangKeoHop ? 'vui'
+    hoiThoat.id !== null ? 'lo'
+    : dangKeoHop ? 'vui'
       : !online ? 'matMang'
         : tt === 'nghe' ? 'nghe'
           : tt === 'doc' ? 'noi'
@@ -522,6 +507,7 @@ function Robot() {
 
   return (
     <div
+      ref={gocRef}
       className="rb odin-canh"
       data-rong={rong}
       data-keo={keoDuoc}
@@ -547,7 +533,9 @@ function Robot() {
 
       {hienNd && !rong && (
         <div className="rb-nd" data-phia={phiaNd} data-ngang={ngangNd} style={kieuNd}>
-          {keoDuoc ? (
+          {hoiThoat.id !== null ? (
+            <TheHoiThoat onTra={hoiThoat.tra} />
+          ) : keoDuoc ? (
             <BangChinh
               phanTram={phanTram}
               onDoiCo={doiCo}
@@ -615,82 +603,30 @@ function Robot() {
         </div>
       )}
 
-      <div
-        className="rb-hop"
-        style={{ ...kieuHop, width: bc?.coHop.width ?? Math.round(150 * phanTram / 100), height: hopCao }}
-        data-nho={phanTram < CO_AN_MIC}
-      >
-        <div className="rb-hop-trong" style={{ zoom: phanTram / 100 }}>
-          <div
-            className="rb-than"
-            onPointerDown={(e) => { if (keoDuoc) batDauKeo(e, 'hop'); }}
-            onClick={bam}
-            onContextMenu={(e) => { e.preventDefault(); void window.cuongthai?.robot.menu(false); }}
-            onMouseEnter={() => datHover(true)}
-            onMouseLeave={() => datHover(false)}
-            title={keoDuoc
-              ? dich('Kéo để dời robot · bấm 3 lần để xong')
-              : dich('Bấm 1 lần: mở khung chat nhanh')
-                + '\n' + dich('Bấm 2 lần: mở trang AI Chat')
-                + '\n' + dich('Bấm 3 lần: bật/tắt chế độ kéo và đổi cỡ')
-                + '\n' + dich('Bấm 4 lần: ẩn robot')
-                + '\n' + dich('Chuột phải: menu đầy đủ')}
-          >
-            {tt === 'doc' && !rong && (
-              <span className="rb-nghi-icon" aria-hidden><i /><i /><i /></span>
-            )}
-            {moodHienTai === 'ngu' && <span className="rb-zzz" aria-hidden>z<i>z</i><b>z</b></span>}
-            {moodHienTai === 'boiRoi' && <span className="rb-hoi" aria-hidden>?</span>}
-            {moodHienTai === 'matMang' && (
-              <span className="rb-mat-mang" aria-hidden>
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round">
-                  <path d="M2 8.5a15 15 0 0 1 20 0M5.5 12a10 10 0 0 1 13 0M9 15.5a5 5 0 0 1 6 0" opacity="0.45" />
-                  <path d="M4 4l16 16" />
-                </svg>
-              </span>
-            )}
-            {(moodHienTai === 'vui' || moodHienTai === 'mung') && <span className="rb-lap-lanh" aria-hidden><i /><i /><i /></span>}
-            <OdinRobot mood={moodHienTai} blinking={nhay} hovering={hover} size={104} />
-            {tin && !rong && <span className="rb-cham" data-loai={tin.loai} />}
-          </div>
-
-          {/* Nút nói nằm NGOÀI `.rb-than` — thân đã nhận 1/2/3/4 cú bấm + kéo. */}
-          <div className="rb-noi">
-            {tt === 'doc' ? (
-              <button
-                type="button"
-                className="odin-mic rb-dung"
-                onClick={() => { ngungPhat(); datTt('im'); }}
-                title={dich('Đang đọc — bấm để dừng')}
-                aria-label={dich('Dừng đọc')}
-              >
-                <span className="odin-wave" aria-hidden><i /><i /><i /><i /></span>
-              </button>
-            ) : (
-              <button
-                type="button"
-                className="odin-mic"
-                data-tt={tt}
-                disabled={tt === 'nghi'}
-                onPointerDown={() => void batDauNoi()}
-                onPointerUp={thaTayNoi}
-                onPointerLeave={thaTayNoi}
-                title={tt === 'nghi' ? dich('Đang nghĩ…') : dich('Giữ để nói')}
-                aria-label={dich('Giữ để nói')}
-              >
-                {tt === 'nghi'
-                  ? <span className="rb-xoay" />
-                  : (
-                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                      <rect x="9" y="3" width="6" height="11" rx="3" />
-                      <path d="M5 11a7 7 0 0 0 14 0M12 18v3" />
-                    </svg>
-                  )}
-              </button>
-            )}
-          </div>
-        </div>
-      </div>
+      <ThanRobot
+        phanTram={phanTram}
+        coHop={bc?.coHop}
+        style={kieuHop}
+        mood={moodHienTai}
+        nhay={nhay}
+        hover={hover}
+        datHover={datHover}
+        keoDuoc={keoDuoc}
+        hienSo={hienSo}
+        dangDoc={tt === 'doc' && !rong}
+        cham={tin && !rong ? tin.loai : null}
+        onPointerDown={(e) => { if (keoDuoc) batDauKeo(e, 'hop'); }}
+        onBam={bam}
+        onContextMenu={(e) => { e.preventDefault(); void window.cuongthai?.robot.menu(false); }}
+        nutNoi={(
+          <NutNoi
+            tt={tt}
+            onBatDau={() => void batDauNoi()}
+            onTha={thaTayNoi}
+            onDung={() => { ngungPhat(); datTt('im'); }}
+          />
+        )}
+      />
     </div>
   );
 }

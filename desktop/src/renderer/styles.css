@@ -8882,7 +8882,27 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
    một ô bé giữa màn hình — thứ người ta ngồi xem hàng giờ.
    Dòng CHỮ vẫn được giữ ngắn để đọc được (quy tắc ngay dưới); còn video, ảnh,
    khối mã và bảng thì tràn hết — chúng càng rộng càng dễ nhìn. */
-.ct-hv-bai-doc { max-width: 100%; }
+/* 04/10/2026: "slide và bài giảng không nằm giữa — lệch một bên, bên kia trống"
+   (ảnh người dùng, màn ~2200px). `100%` + slide ảnh gốc 1280px ⇒ mọi thứ dồn mép
+   trái. Nay cả trang là MỘT cột 1400px căn giữa (như mọi `.ct-page`), slide tràn
+   hết cột, chữ vẫn trong 92ch (quy tắc ngay dưới). */
+.ct-hv-bai-doc { max-width: min(var(--ct-page-w), 100%); }
+.ct-hv-noidung .anh-slide {
+  margin: 1.25rem 0;
+  border: 1px solid var(--ct-border);
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--ct-surface-2);
+}
+.ct-hv-noidung .anh-slide img { display: block; width: 100%; max-width: none; height: auto; margin: 0; border-radius: 0; }
+.ct-hv-noidung .anh-slide figcaption,
+.ct-hv-noidung .anh-slide .chu-thich {
+  margin: 0;
+  padding: 8px 12px;
+  font-size: 12.5px;
+  color: var(--ct-text-muted);
+  border-top: 1px solid var(--ct-border);
+}
 
 /* Chữ chạy dài hết 1400px thì mắt lạc dòng. 92ch ≈ 1.000px ở cỡ chữ hiện tại:
    rộng gấp rưỡi bản cũ mà vẫn trong ngưỡng đọc thoải mái. */
@@ -8973,7 +8993,7 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   border-radius: var(--ct-radius);
   overflow: hidden;
   background: #000;
-  margin: 0 0 18px;
+  margin: 0 auto 18px;   /* căn giữa cột bài (04/10/2026) */
   /* GHIM ở đầu vùng cuộn. Video do main vẽ đè bằng một lớp native, mà lớp đó
      không cuộn cùng trang — để khung trôi theo chữ là lớp phủ lệch khỏi ô giữ
      chỗ ngay khung hình đầu tiên. Ghim rồi thì toạ độ đứng yên, và người học

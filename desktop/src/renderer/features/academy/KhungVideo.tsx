@@ -60,6 +60,9 @@ export function KhungVideo({
   const { dich } = useDich();
   const oRef = useRef<HTMLDivElement>(null);
   const daMoRef = useRef(false);
+  /** Vùng đã báo lần cuối — trùng thì khỏi gửi IPC (xem `doLai`). */
+  const vungCuoiRef = useRef('');
+  const henRef = useRef(0);
 
   /**
  * Gốc site để dựng đường tới `/nhung-video`.
@@ -82,6 +85,12 @@ function gocSite(): string {
        làm main thu khung về không rồi phải phóng lại, và video nháy một cái. */
     if (r.width < 2 || r.height < 2) return;
     const vung = { x: r.left, y: r.top, width: r.width, height: r.height };
+    /* Vùng KHÔNG đổi ⇒ đừng gửi gì. Khung đã ghim (`sticky`) thì cuộn tiếp toạ độ
+       đứng yên — trước đây vẫn bắn một IPC + `setBounds` lớp native cho MỖI sự kiện
+       cuộn, và đó là cái "đơ, lag" người dùng thấy khi kéo bài xuống (04/10/2026). */
+    const khoa = `${Math.round(r.left)},${Math.round(r.top)},${Math.round(r.width)},${Math.round(r.height)}`;
+    if (!moLuon && khoa === vungCuoiRef.current) return;
+    vungCuoiRef.current = khoa;
     if (moLuon && !daMoRef.current) {
       daMoRef.current = true;
       const ma = maYouTube(url);
@@ -129,7 +138,12 @@ function gocSite(): string {
   useEffect(() => {
     const el = oRef.current;
     if (!el) return;
-    const doLai = () => doVaBao(false);
+    /* Gộp về TỐI ĐA một lần mỗi khung hình: lăn chuột bắn hàng chục `scroll` mỗi
+       khung, mỗi cái là một IPC sang main + `setBounds` của lớp video native. */
+    const doLai = () => {
+      if (henRef.current) return;
+      henRef.current = requestAnimationFrame(() => { henRef.current = 0; doVaBao(false); });
+    };
 
     const ro = new ResizeObserver(doLai);
     ro.observe(el);
@@ -148,6 +162,7 @@ function gocSite(): string {
 
     return () => {
       ro.disconnect();
+      if (henRef.current) { cancelAnimationFrame(henRef.current); henRef.current = 0; }
       window.removeEventListener('resize', doLai);
       for (const n of cuon) n.removeEventListener('scroll', doLai);
     };

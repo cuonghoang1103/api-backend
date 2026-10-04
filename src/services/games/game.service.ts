@@ -21,6 +21,12 @@ const SCORE_CAPS: Record<string, number> = {
   'math-blitz': 5_000,
   projectile: 20_000,
   'tic-tac-toe': 100,
+  // Luyện trí não (05/10/2026) — trần tính từ điểm tối đa thực tế của ~20 màn.
+  'day-sang': 15_000,
+  'n-back': 10_000, // 3 khối × N tối đa ~8 × 300
+  schulte: 12_000, // 3 vòng, mỗi vòng ô×600/giây — nhanh phi thực tế vẫn dưới trần
+  stroop: 6_000, // 60 giây, ~1,5 câu/giây × 40 điểm
+  'ma-tran-iq': 4_000, // 12 câu × (100 + 40×5 + 60)
 };
 const DEFAULT_SCORE_CAP = 50_000;
 

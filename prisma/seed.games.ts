@@ -30,6 +30,11 @@ const CATEGORIES: CategorySeed[] = [
   { slug: 'skill-training', name: 'Skill Training', nameVi: 'Luyện kỹ năng', icon: 'target', color: '#F97066', sortOrder: 4 },
   { slug: 'arcade', name: 'Arcade', nameVi: 'Arcade', icon: 'gamepad-2', color: '#A78BFA', sortOrder: 5 },
   { slug: 'strategy', name: 'Strategy', nameVi: 'Chiến thuật', icon: 'swords', color: '#EC4899', sortOrder: 6 },
+  // 05/10/2026 — mục Game của app: luyện trí não sau giờ học.
+  { slug: 'memory', name: 'Memory', nameVi: 'Trí nhớ', icon: 'brain', color: '#22D3EE', sortOrder: 0 },
+  { slug: 'focus', name: 'Focus', nameVi: 'Tập trung', icon: 'target', color: '#FBBF24', sortOrder: 7 },
+  { slug: 'relax', name: 'Relax', nameVi: 'Thư giãn', icon: 'sprout', color: '#34D399', sortOrder: 8 },
+  { slug: 'action', name: 'Action', nameVi: 'Hành động', icon: 'zap', color: '#F472B6', sortOrder: 9 },
 ];
 
 interface GameSeed {
@@ -227,6 +232,29 @@ const GAMES: GameSeed[] = [
     techStack: ['React', 'TypeScript'],
     tags: ['Logic', 'Numbers'],
     coverImage: 'https://images.unsplash.com/photo-1564865878688-9a244444042a?w=1200&q=80',
+  },
+  /* ── Luyện trí não (05/10/2026) — ảnh bìa vẽ riêng ở public/games/covers/ ── */
+  {
+    slug: 'day-sang',
+    title: 'Glow Sequence',
+    titleVi: 'Dãy sáng',
+    description: 'Watch the tiles light up, then repeat the order. Trains spatial working memory.',
+    descriptionVi: 'Các ô lần lượt sáng — bấm lại đúng thứ tự. Luyện trí nhớ không gian.',
+    longDescription:
+      'Based on the Corsi block task from cognitive psychology. Sequences grow by one tile every level, the grid grows from 3x3 to 5x5, and every fourth level must be repeated in reverse — the variant that trains working memory rather than passive recall. Your memory span (longest sequence recalled) is shown at the end.',
+    controls: 'Click or tap tiles in order. On the 3x3 grid, number keys 1-9 also work.',
+    controlsVi: 'Bấm/chạm các ô theo đúng thứ tự. Lưới 3×3 dùng được phím số 1–9.',
+    categorySlug: 'memory',
+    difficulty: 'MEDIUM',
+    status: 'PUBLISHED',
+    kind: 'REACT',
+    componentKey: 'day-sang',
+    featured: true,
+    sortOrder: 1,
+    estimatedTime: '3-8 min',
+    techStack: ['React', 'Web Audio'],
+    tags: ['Trí nhớ', 'Corsi', 'Luyện não'],
+    coverImage: 'https://cuongthai.com/games/covers/day-sang.svg', // tuyệt đối: app desktop chạy ở app:// nên đường tương đối hỏng
   },
 ];
 

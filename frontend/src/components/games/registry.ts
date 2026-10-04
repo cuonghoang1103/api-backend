@@ -75,6 +75,37 @@ export const GAME_REGISTRY: Record<string, GameRegistryEntry> = {
     scoreCap: 20_000,
     scored: true,
   },
+  /* ── Luyện trí não (05/10/2026) ── */
+  'day-sang': {
+    name: 'Dãy sáng (trí nhớ không gian)',
+    load: () => loader(() => import('./DaySangGame')),
+    scoreCap: 15_000,
+    scored: true,
+  },
+  'n-back': {
+    name: 'N-back kép (trí nhớ làm việc)',
+    load: () => loader(() => import('./NBackGame')),
+    scoreCap: 10_000,
+    scored: true,
+  },
+  schulte: {
+    name: 'Bảng Schulte (tập trung)',
+    load: () => loader(() => import('./SchulteGame')),
+    scoreCap: 12_000,
+    scored: true,
+  },
+  stroop: {
+    name: 'Màu chữ — Stroop (kiểm soát phản xạ)',
+    load: () => loader(() => import('./StroopGame')),
+    scoreCap: 6_000,
+    scored: true,
+  },
+  'ma-tran-iq': {
+    name: 'Ma trận IQ (suy luận quy luật)',
+    load: () => loader(() => import('./MaTranIqGame')),
+    scoreCap: 4_000,
+    scored: true,
+  },
 };
 
 /** Keys for the admin select (free-text entry is still allowed alongside). */

@@ -9,6 +9,8 @@
  *                làm phê duyệt "lệch").
  *   STAGE_GATE — tên giai đoạn + danh sách thẻ của giai đoạn kèm đã xong chưa
  *                (một thẻ mở lại sau khi duyệt cổng ⇒ lệch).
+ *   DOC        — (đợt S2a) tiêu đề + chữ trơn của trang tài liệu. KHÔNG có trạng
+ *                thái/chủ sở hữu/vị trí trong cây (đổi chúng không làm lệch chữ ký).
  */
 
 import type { Prisma } from '@prisma/client';
@@ -46,8 +48,21 @@ export async function stageContent(db: Db, stageId: number) {
   return { n: s.n, slug: s.slug, name: s.name, issues: s.issues.map((i) => ({ number: i.number, title: i.title, done: !!i.resolvedAt })) };
 }
 
+export async function pageContent(db: Db, pageId: number) {
+  const p = await db.workPage.findFirst({
+    where: { id: pageId, deletedAt: null },
+    select: { number: true, title: true, contentText: true },
+  });
+  if (!p) return null;
+  return { doc: p.number, title: p.title, text: p.contentText ?? '' };
+}
+
 /** Băm hiện tại của đối tượng (null = đối tượng đã mất / loại chưa hỗ trợ). */
-export async function currentTargetHash(db: Db, t: { targetType: string; issueId: number | null; stageId: number | null }): Promise<string | null> {
+export async function currentTargetHash(db: Db, t: { targetType: string; issueId: number | null; stageId: number | null; pageId?: number | null }): Promise<string | null> {
+  if (t.targetType === 'DOC' && t.pageId) {
+    const c = await pageContent(db, t.pageId);
+    return c ? contentHash(c) : null;
+  }
   if (t.targetType === 'ISSUE' && t.issueId) {
     const c = await issueContent(db, t.issueId);
     return c ? contentHash(c) : null;

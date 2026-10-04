@@ -104,6 +104,10 @@ export interface ProjectPermissions {
   manageApprovals?: boolean;
   createHandoffs?: boolean;
   manageHandoffs?: boolean;
+  // Tài liệu (S2a) — khách (CLIENT/GUEST) chỉ đọc trang Client, không sửa. Mô-đun tắt ⇒ API 403.
+  viewAllDocs?: boolean;
+  editDocs?: boolean;
+  manageDocs?: boolean;
 }
 
 export interface ProjectConfig {
@@ -324,7 +328,9 @@ export type WorkEvent =
   // Lớp studio (S1)
   | { type: 'stage.updated'; projectId: number; stageId: number; status: StageStatus | 'DELETED'; actor: { kind: string; userId: number | null } }
   | { type: 'approval.updated'; projectId: number; approvalId: number; status: ApprovalStatus; targetType: ApprovalTarget; targetIssueId: number | null; stageId: number | null; actor: { kind: string; userId: number | null } }
-  | { type: 'handoff.updated'; projectId: number; handoffId: number; issueId: number; status: HandoffStatus; actor: { kind: string; userId: number | null } };
+  | { type: 'handoff.updated'; projectId: number; handoffId: number; issueId: number; status: HandoffStatus; actor: { kind: string; userId: number | null } }
+  // Tài liệu dự án (S2a) — chỉ id/số trang, không tiêu đề (phòng dự án có cả khách).
+  | { type: 'page.updated'; projectId: number; pageId: number; number: number; action: 'created' | 'updated' | 'status' | 'moved' | 'deleted' | 'restored' | 'comment' | 'links'; actor: { kind: string; userId: number | null } };
 
 
 // ─── Đợt 2: sprint, backlog, báo cáo ─────────────────────────────
@@ -1246,6 +1252,9 @@ export interface WorkApproval {
   createdBy: WorkUser | null;
   issue: { id: number; number: number; title: string } | null;
   stage: { id: number; n: number; slug: string; name: string; status: StageStatus } | null;
+  /** Trang tài liệu (targetType DOC, S2a). */
+  pageId?: number | null;
+  page?: { id: number; number: number; title: string; status: PageStatus; visibility: PageVisibility } | null;
   steps: ApprovalStep[];
   issueKey: string | null;
   currentHash: string | null;
@@ -1351,11 +1360,14 @@ export const workStudioApi = {
 
   // Phê duyệt
   myApprovals: () => d<MyApproval[]>(api.get(`${B}/me/approvals`)),
-  approvals: (pid: number, q: { status?: ApprovalStatus; targetType?: ApprovalTarget; issue?: number; stage?: number; limit?: number } = {}) =>
+  approvals: (pid: number, q: { status?: ApprovalStatus; targetType?: ApprovalTarget; issue?: number; stage?: number; page?: number; limit?: number } = {}) =>
     d<WorkApproval[]>(api.get(`${B}/projects/${pid}/approvals${params(q)}`)),
   approval: (pid: number, aid: number) => d<WorkApproval>(api.get(`${B}/projects/${pid}/approvals/${aid}`)),
   createApproval: (pid: number, body: { issueNumber: number; approverIds: number[]; mode?: ApprovalMode; title?: string; description?: string | null; dueAt?: string | null }) =>
     d<WorkApproval>(api.post(`${B}/projects/${pid}/approvals`, { targetType: 'ISSUE', ...body })),
+  /** Duyệt một trang tài liệu (S2a): trang ⇒ IN_REVIEW; duyệt xong ⇒ APPROVED. Người duyệt phải đọc được trang. */
+  createDocApproval: (pid: number, body: { pageNumber: number; approverIds: number[]; mode?: ApprovalMode; title?: string; description?: string | null; dueAt?: string | null }) =>
+    d<WorkApproval>(api.post(`${B}/projects/${pid}/approvals`, { targetType: 'DOC', ...body })),
   /** REJECT bắt buộc comment. 409 WORK_APPROVAL_NOT_YOUR_TURN khi tuần tự chưa tới lượt. */
   decideApproval: (pid: number, aid: number, body: { decision: 'APPROVE' | 'REJECT'; comment?: string | null }) =>
     d<WorkApproval>(api.post(`${B}/projects/${pid}/approvals/${aid}/decide`, body)),
@@ -1387,4 +1399,138 @@ export const workStudioKeys = {
   handoffs: (pid: number) => ['work', 'handoffs', pid] as const,
   issueHandoffs: (pid: number, num: number) => ['work', 'handoffs', pid, num] as const,
   myHandoffs: ['work', 'my-handoffs'] as const,
+};
+
+// ─── Tài liệu dự án (đợt S2a, mô-đun docs) ───────────────────────
+
+export type PageStatus = 'DRAFT' | 'IN_REVIEW' | 'APPROVED' | 'ARCHIVED';
+export type PageVisibility = 'INTERNAL' | 'CLIENT';
+
+export interface WorkPageItem {
+  id: number;
+  number: number;
+  /** Khách thấy trang Client dưới trang nội bộ ⇒ server trả parentId của tổ tiên thấy được (hoặc null). */
+  parentId: number | null;
+  title: string;
+  status: PageStatus;
+  visibility: PageVisibility;
+  stageId: number | null;
+  position: number;
+  ownerId: number | null;
+  templateKey: string | null;
+  createdAt: string;
+  updatedAt: string;
+  owner?: WorkUser | null;
+}
+export interface WorkPageList { pages: WorkPageItem[]; canEdit: boolean; canManage: boolean; approvalsOn: boolean; stagesOn: boolean }
+
+export interface PageIssueLink {
+  linkId: number;
+  linkedAt: string;
+  id: number;
+  number: number;
+  key: string;
+  title: string;
+  resolvedAt: string | null;
+  status: { name: string; category: StatusCategory };
+  type: { key: string; name: string; icon: string; color: string };
+}
+
+export interface WorkPageDetail extends WorkPageItem {
+  contentJson: TiptapDoc | null;
+  contentText: string | null;
+  /** Số lần lưu — gửi lại khi PATCH; lệch ⇒ 409 WORK_PAGE_CONFLICT. */
+  version: number;
+  lastEditedById: number | null;
+  owner: WorkUser | null;
+  lastEditedBy: WorkUser | null;
+  stage: { id: number; n: number; slug: string; name: string; status: StageStatus } | null;
+  projectKey: string;
+  currentVersion: number;
+  versionCount: number;
+  issues: PageIssueLink[];
+  ancestors: Array<{ id: number; number: number; title: string }>;
+  children: Array<{ id: number; number: number; title: string; status: PageStatus; visibility: PageVisibility }>;
+  approval: { id: number; status: ApprovalStatus; decidedAt: string | null; createdAt: string; contentChanged: boolean; changedSinceRequest: boolean } | null;
+  approvalsOn: boolean;
+  canEdit: boolean;
+  canManage: boolean;
+  canComment: boolean;
+  canRequestApproval: boolean;
+}
+
+export interface PageVersion {
+  id: number;
+  n: number;
+  kind: 'CREATE' | 'EDIT' | 'RESTORE' | 'MANUAL';
+  title: string;
+  note: string | null;
+  createdAt: string;
+  updatedAt: string;
+  author: WorkUser | null;
+  chars: number;
+}
+export interface PageVersionFull extends Omit<PageVersion, 'chars'> { contentJson: TiptapDoc | null; contentText: string | null }
+export interface PageDiff {
+  from: { n: number; title: string; createdAt: string };
+  to: { n: number | null; title: string; createdAt: string | null; current: boolean };
+  lines: Array<{ op: 'eq' | 'add' | 'del'; text: string }>;
+  added: number;
+  removed: number;
+}
+export interface PageComment {
+  id: number;
+  bodyJson: TiptapDoc;
+  bodyText: string;
+  createdAt: string;
+  editedAt: string | null;
+  authorId: number | null;
+  author: WorkUser | null;
+  canDelete: boolean;
+}
+export interface DocTemplateInfo {
+  key: string;
+  title: string;
+  titleVi: string;
+  stages: Array<{ n: number; slug: string; title: string; titleEn: string }>;
+  sections: number;
+  summary: string;
+}
+export interface DocSearchHit { id: number; number: number; title: string; status: PageStatus; updatedAt: string; snippet: string; project?: { id: number; key: string; name: string; workspaceSlug: string } }
+
+export const workDocsKeys = {
+  all: (pid: number) => ['work', 'pages', pid] as const,
+  list: (pid: number) => ['work', 'pages', pid, 'list'] as const,
+  page: (pid: number, num: number) => ['work', 'pages', pid, 'page', num] as const,
+  versions: (pid: number, num: number) => ['work', 'pages', pid, 'versions', num] as const,
+  comments: (pid: number, num: number) => ['work', 'pages', pid, 'comments', num] as const,
+  issuePages: (pid: number, issueNum: number) => ['work', 'pages', pid, 'issue', issueNum] as const,
+  templates: (pid: number) => ['work', 'doc-templates', pid] as const,
+};
+
+export const workDocsApi = {
+  list: (pid: number, stage?: number) => d<WorkPageList>(api.get(`${B}/projects/${pid}/pages${params({ stage })}`)),
+  get: (pid: number, num: number) => d<WorkPageDetail>(api.get(`${B}/projects/${pid}/pages/${num}`)),
+  create: (pid: number, body: { title?: string; parentNumber?: number | null; templateKey?: string | null; stageId?: number | null; contentJson?: TiptapDoc; visibility?: PageVisibility }) =>
+    d<WorkPageDetail>(api.post(`${B}/projects/${pid}/pages`, body)),
+  /** 409 WORK_PAGE_CONFLICT khi `version` lệch (người khác vừa lưu). */
+  update: (pid: number, num: number, body: { title?: string; contentJson?: TiptapDoc; status?: PageStatus; visibility?: PageVisibility; ownerId?: number; stageId?: number | null; version?: number; versionNote?: string | null }) =>
+    d<WorkPageDetail>(api.patch(`${B}/projects/${pid}/pages/${num}`, body)),
+  move: (pid: number, num: number, parentNumber: number | null, index: number) => d<WorkPageList>(api.post(`${B}/projects/${pid}/pages/${num}/move`, { parentNumber, index })),
+  remove: (pid: number, num: number) => d<{ deleted: number }>(api.delete(`${B}/projects/${pid}/pages/${num}`)),
+  markdown: (pid: number, num: number) => d<{ filename: string; markdown: string }>(api.get(`${B}/projects/${pid}/pages/${num}/markdown`)),
+  versions: (pid: number, num: number) => d<PageVersion[]>(api.get(`${B}/projects/${pid}/pages/${num}/versions`)),
+  version: (pid: number, num: number, n: number) => d<PageVersionFull>(api.get(`${B}/projects/${pid}/pages/${num}/versions/${n}`)),
+  compare: (pid: number, num: number, from: number, to: number | 'current' = 'current') => d<PageDiff>(api.get(`${B}/projects/${pid}/pages/${num}/versions/compare${params({ from, to })}`)),
+  restore: (pid: number, num: number, n: number) => d<WorkPageDetail>(api.post(`${B}/projects/${pid}/pages/${num}/versions/${n}/restore`)),
+  linkIssue: (pid: number, num: number, issueNumber: number) => d<PageIssueLink[]>(api.post(`${B}/projects/${pid}/pages/${num}/issues`, { issueNumber })),
+  unlinkIssue: (pid: number, num: number, issueNumber: number) => d<PageIssueLink[]>(api.delete(`${B}/projects/${pid}/pages/${num}/issues/${issueNumber}`)),
+  issuePages: (pid: number, issueNum: number) => d<{ pages: Array<{ linkId: number; id: number; number: number; title: string; status: PageStatus; visibility: PageVisibility; updatedAt: string }>; canEdit: boolean }>(api.get(`${B}/projects/${pid}/issues/${issueNum}/pages`)),
+  comments: (pid: number, num: number) => d<PageComment[]>(api.get(`${B}/projects/${pid}/pages/${num}/comments`)),
+  addComment: (pid: number, num: number, bodyJson: TiptapDoc) => d<PageComment>(api.post(`${B}/projects/${pid}/pages/${num}/comments`, { bodyJson })),
+  deleteComment: (pid: number, num: number, cid: number) => d(api.delete(`${B}/projects/${pid}/pages/${num}/comments/${cid}`)),
+  search: (pid: number, q: string) => d<DocSearchHit[]>(api.get(`${B}/projects/${pid}/pages/search${params({ q })}`)),
+  searchAll: (q: string) => d<DocSearchHit[]>(api.get(`${B}/search/docs${params({ q })}`)),
+  templates: (pid: number) => d<DocTemplateInfo[]>(api.get(`${B}/projects/${pid}/doc-templates`)),
+  template: (pid: number, key: string) => d<DocTemplateInfo & { contentJson: TiptapDoc }>(api.get(`${B}/projects/${pid}/doc-templates/${key}`)),
 };

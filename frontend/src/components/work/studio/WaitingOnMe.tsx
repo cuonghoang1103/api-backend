@@ -9,7 +9,7 @@
 
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { BadgeCheck, Flag } from 'lucide-react';
+import { BadgeCheck, FileText, Flag } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { workStudioApi, workStudioKeys, type MyApproval } from '@/lib/work-api';
 import { formatDate, relativeTime } from '../ui';
@@ -39,7 +39,7 @@ export default function WaitingOnMe() {
                 <li key={x.id} className="border-b border-[var(--w-border)] last:border-b-0">
                   <button type="button" onClick={() => setOpen(x)} className="flex w-full min-w-0 items-center gap-3 px-4 py-2.5 text-left hover:bg-[var(--w-hover)]">
                     <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-[7px] bg-[var(--w-accent-soft)] text-[var(--w-accent-text)]">
-                      {x.targetType === 'STAGE_GATE' ? <Flag size={14} /> : <BadgeCheck size={14} />}
+                      {x.targetType === 'STAGE_GATE' ? <Flag size={14} /> : x.targetType === 'DOC' ? <FileText size={14} /> : <BadgeCheck size={14} />}
                     </span>
                     <span className="min-w-0 flex-1">
                       <span className="flex min-w-0 items-center gap-2">

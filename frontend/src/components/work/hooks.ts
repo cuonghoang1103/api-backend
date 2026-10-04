@@ -159,6 +159,12 @@ export function useProjectRealtime(pid: number | undefined, onEvent?: (e: WorkEv
     const handler = (e: WorkEvent) => {
       if (e.projectId !== pid) return;
       onEventRef.current?.(e);
+      // Tài liệu (S2a): chỉ làm tươi tài liệu (+ phê duyệt của nó) — không đụng board/thẻ.
+      if (e.type === 'page.updated') {
+        queue(['work', 'pages', pid]);
+        if (e.action === 'status') queue(['work', 'approvals', pid]);
+        return;
+      }
       if (e.type === 'project.updated') {
         // Service kiểm thử báo thay đổi bằng project.updated (không có kiểu sự kiện riêng).
         queue(wk.project(pid));
@@ -179,6 +185,7 @@ export function useProjectRealtime(pid: number | undefined, onEvent?: (e: WorkEv
         queue(['work', 'my-approvals']);
         queue(['work', 'my-handoffs']);
         queue(['work', 'team-queue']);
+        if (e.type === 'approval.updated' && e.targetType === 'DOC') queue(['work', 'pages', pid]);
       }
       if (e.type === 'sprint.updated') {
         queue(wk.sprints(pid));

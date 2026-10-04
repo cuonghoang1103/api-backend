@@ -166,6 +166,8 @@ export async function moveIssueToProject(
         }
       }
       await tx.workCustomValue.deleteMany({ where: { issueId: r.id } });
+      // Liên kết tài liệu (S2a) thuộc dự án CŨ — trang không đi theo thẻ ⇒ gỡ.
+      await tx.workPageIssueLink.deleteMany({ where: { issueId: r.id } });
       if (values.length) await tx.workCustomValue.createMany({ data: values.map((x) => ({ issueId: r.id, ...x })) });
 
       // Mã cũ ⇒ thẻ (link cũ vẫn tìm ra). Mã cũ chưa từng là bí danh của thẻ khác vì số chỉ tăng.

@@ -129,3 +129,10 @@
   .card, .tiep, .action { transition: none; }
   .card:hover, .tiep:hover { transform: none; }
 }
+
+/* App desktop, cửa sổ rộng (04/10/2026): 64rem thành một cột nhỏ giữa hai mảng
+   trống ở 2200px. Chỉ nới trong app (`.ct-web-host`), web giữ nguyên. */
+@media (min-width: 1800px) {
+  :global(.ct-web-host) .wrap { width: min(100%, 86rem); }
+  :global(.ct-web-host) .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}

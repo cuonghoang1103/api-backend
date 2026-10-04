@@ -380,6 +380,40 @@ html.theme-dark .work-root input[type='date'], html.theme-dark .work-root input[
   content: attr(data-placeholder); color: var(--w-text-3); float: left; height: 0; pointer-events: none;
 }
 
+/* Bảng (chỉ trang TÀI LIỆU — RichEditor docs). Khung bọc tự cuộn ngang: bảng 6 cột
+   của SRS/RTM không làm trang tràn ngang ở 390px. */
+.w-prose .w-table-wrap { max-width: 100%; overflow-x: auto; margin: 4px 0 12px; border: 1px solid var(--w-border); border-radius: var(--w-radius); }
+.w-prose table { border-collapse: collapse; width: 100%; min-width: 420px; table-layout: auto; font-size: 13px; line-height: 1.45; }
+.w-prose th, .w-prose td { border-bottom: 1px solid var(--w-border); border-right: 1px solid var(--w-border); padding: 6px 9px; vertical-align: top; text-align: left; min-width: 72px; }
+.w-prose tr > :last-child { border-right: 0; }
+.w-prose tr:last-child > td { border-bottom: 0; }
+.w-prose th { background: var(--w-sunken); font-weight: 600; color: var(--w-text); }
+.w-prose th p, .w-prose td p { margin: 0; }
+.w-prose .selectedCell { background: var(--w-accent-soft); }
+
+/* Trang tài liệu (Docs, S2a): đề mục kiểu tài liệu — h3 là tiêu đề thường, không phải
+   nhãn IN HOA của mô tả thẻ; thêm h4. Đọc rộng tối đa ~78 ký tự cho dễ đọc. */
+.w-doc.w-prose, .w-doc .w-prose { font-size: 14.5px; line-height: 1.7; }
+.w-doc .w-prose h1 { font-size: 22px; letter-spacing: -0.01em; margin: 26px 0 10px; }
+.w-doc .w-prose h2 { font-size: 18px; letter-spacing: -0.01em; margin: 26px 0 10px; }
+.w-doc .w-prose h3 {
+  font-size: 15px; font-weight: 650; letter-spacing: 0; text-transform: none; color: var(--w-text);
+  border-left: 0; padding-left: 0; margin: 20px 0 6px;
+}
+.w-doc .w-prose h4 { font-size: 13.5px; font-weight: 650; color: var(--w-text-2); margin: 16px 0 6px; }
+.w-doc .w-prose blockquote { background: var(--w-sunken); border-left-color: var(--w-accent-border); border-radius: 0 6px 6px 0; padding: 8px 12px; }
+.w-doc .w-prose blockquote p { margin-bottom: 4px; }
+
+/* So sánh phiên bản: dòng thêm / bớt. */
+.w-diff { font-family: var(--w-font-mono); font-size: 12.5px; line-height: 1.55; }
+.w-diff > div { padding: 1px 10px 1px 26px; position: relative; white-space: pre-wrap; overflow-wrap: anywhere; min-height: 1.55em; }
+.w-diff > div::before { position: absolute; left: 9px; color: var(--w-text-3); }
+.w-diff .w-diff-add { background: color-mix(in srgb, var(--w-green) 13%, transparent); }
+.w-diff .w-diff-add::before { content: '+'; color: var(--w-green); }
+.w-diff .w-diff-del { background: color-mix(in srgb, var(--w-red) 11%, transparent); text-decoration: line-through; text-decoration-color: color-mix(in srgb, var(--w-red) 45%, transparent); }
+.w-diff .w-diff-del::before { content: '−'; color: var(--w-red); }
+.w-diff .w-diff-eq { color: var(--w-text-2); }
+
 /* ─── Điện thoại + màn cảm ứng ────────────────────────────────────────── */
 
 /* iOS phóng to trang khi chạm ô nhập < 16px — ép 16px trên điện thoại. */

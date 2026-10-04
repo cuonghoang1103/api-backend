@@ -52,6 +52,9 @@ describe('bảng quyền dự án', () => {
     'approval.manage':   [true,  false, false, false, false],
     'handoff.create':    [true,  true,  false, false, false],
     'handoff.manage':    [true,  false, false, false, false],
+    // Tài liệu dự án (đợt S2a) — CLIENT/GUEST còn bị siết thêm ở docAccess (pages.test.ts)
+    'page.edit':         [true,  true,  false, false, false],
+    'page.manage':       [true,  false, false, false, false],
   };
   for (const [action, row] of Object.entries(expected) as Array<[ProjectAction, boolean[]]>) {
     it(action, () => {

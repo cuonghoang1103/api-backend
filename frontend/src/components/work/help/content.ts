@@ -1617,6 +1617,65 @@ export const HELP_ARTICLES: HelpArticle[] = [
   },
 
   {
+    id: 'project-docs',
+    category: 'studio',
+    title: { en: 'Project docs', vi: 'Tài liệu dự án (Docs)' },
+    summary: {
+      en: 'Confluence-style pages inside the project: a page tree, 36 process templates, autosave with version history, approvals, comments and links to issues.',
+      vi: 'Trang tài liệu kiểu Confluence ngay trong dự án: cây trang, 36 mẫu quy trình, tự lưu kèm lịch sử phiên bản, phê duyệt, bình luận và liên kết thẻ.',
+    },
+    keywords: ['docs', 'documents', 'confluence', 'page', 'wiki', 'template', 'srs', 'sow', 'version', 'history', 'restore', 'export', 'markdown', 'tai lieu', 'mau', 'phien ban', 'khoi phuc'],
+    pages: [page('project', 'docs', 'Docs', 'Tài liệu')],
+    blocks: [
+      p('**Docs** is a module: client projects have it on by default; for other projects a project admin turns it on in Project settings → **Project type & modules**. Projects created before it existed keep it off.', '**Docs** là một mô-đun: dự án khách bật sẵn; dự án khác do admin dự án bật ở Project settings → **Project type & modules**. Dự án tạo trước khi có tính năng này giữ nguyên trạng thái tắt.'),
+      h('Write a page', 'Viết một trang'),
+      steps(
+        ['Open **Docs** in the sidebar → **New page**. Start blank or pick one of 36 templates (SRS, SOW, NDA, test plan, runbook…), grouped by the stage that uses them.', 'Mở **Docs** ở thanh bên → **New page**. Bắt đầu trang trắng hoặc chọn một trong 36 mẫu (SRS, SOW, NDA, kế hoạch kiểm thử, runbook…), nhóm theo giai đoạn dùng mẫu đó.'],
+        ['Type — the page **saves itself** about a second after you stop. The badge next to the title says **Saved**, **Saving…** or **Not saved — retry**.', 'Cứ gõ — trang **tự lưu** khoảng một giây sau khi bạn dừng. Nhãn cạnh tiêu đề báo **Saved**, **Saving…** hoặc **Not saved — retry**.'],
+        ['Use the toolbar for headings, lists, checklists, code and **tables**. **@mention** people in comments to notify them.', 'Dùng thanh công cụ cho tiêu đề, danh sách, checklist, code và **bảng**. **@nhắc tên** trong bình luận để báo người đó.'],
+        ['Drag pages in the tree to reorder them, or drop one onto another to nest it. On a phone use the **⋯** menu: **Move up**, **Move down**, **Move out one level**.', 'Kéo trang trong cây để đổi thứ tự, hoặc thả lên trang khác để lồng vào. Trên điện thoại dùng menu **⋯**: **Move up**, **Move down**, **Move out one level**.'],
+      ),
+      h('Versions', 'Phiên bản'),
+      list(
+        ['Every save that changes the text is kept. Saves by the same person within 10 minutes are merged into one version, so the history stays readable.', 'Mọi lần lưu có đổi chữ đều được giữ. Các lần lưu của cùng một người trong 10 phút gộp thành một phiên bản để lịch sử dễ đọc.'],
+        ['**History** compares any version with the current text or with the version before it (added lines green, removed lines red) and can show the full content.', '**History** so sánh một phiên bản bất kỳ với bản hiện tại hoặc với bản ngay trước (dòng thêm màu xanh, dòng bỏ màu đỏ) và xem được nguyên văn.'],
+        ['**Restore** creates a new version with the old text — nothing is lost. Only the page owner or a project admin can restore or delete a page.', '**Restore** tạo một phiên bản mới mang nội dung cũ — không mất gì. Chỉ chủ trang hoặc admin dự án được khôi phục hay xoá trang.'],
+        ['**⋯ → Save as a named version** keeps a labelled snapshot (e.g. “Sent to client”) that later edits never merge into.', '**⋯ → Save as a named version** giữ một bản chụp có tên (vd “Sent to client”) mà các lần sửa sau không gộp vào.'],
+        ['If someone else saves while you type you see **Someone else saved this page** — copy your text or load theirs; nothing is overwritten silently.', 'Nếu người khác lưu trong lúc bạn gõ sẽ thấy **Someone else saved this page** — chép chữ của bạn hoặc nạp bản của họ; không có gì bị ghi đè âm thầm.'],
+      ),
+      h('Status & approval', 'Trạng thái & phê duyệt'),
+      table(
+        [['Status', 'Trạng thái'], ['How it gets there', 'Đạt được bằng cách']],
+        [
+          ['Draft', ['New pages; also after a rejected or cancelled approval', 'Trang mới; hoặc sau khi phê duyệt bị từ chối / huỷ']],
+          ['In review', ['**Request approval** on the page (needs the Approvals module)', 'Bấm **Request approval** trên trang (cần mô-đun Approvals)']],
+          ['Approved', ['Every approver signed', 'Mọi người duyệt đã ký']],
+          ['Archived', ['Set by hand in **Details → Status** — the page becomes read-only', 'Đặt tay ở **Details → Status** — trang thành chỉ đọc']],
+        ],
+      ),
+      warn('Editing an approved page does not undo the approval — the page shows **Content changed since approval**, exactly like an issue. Request a new approval if the change matters.', 'Sửa một trang đã duyệt không huỷ phê duyệt — trang hiện **Content changed since approval**, giống hệt thẻ. Hãy xin duyệt lại nếu thay đổi quan trọng.'),
+      h('Who sees what', 'Ai thấy gì'),
+      table(
+        [['Role', 'Vai'], ['Read', 'Đọc'], ['Edit', 'Sửa'], ['Delete / restore / visibility', 'Xoá / khôi phục / hiển thị']],
+        [
+          ['Admin', YES, YES, YES],
+          ['Member', YES, YES, ['Own pages', 'Trang của mình']],
+          [['Viewer, Teacher', 'Viewer, Teacher'], YES, NO, NO],
+          [['Client / workspace guest', 'Khách / khách không gian'], ['Pages marked **Team and client** only', 'Chỉ trang đặt **Team and client**'], NO, NO],
+        ],
+      ),
+      tip('Pages are **Internal** by default. Set **Details → Visible to → Team and client** when a document is ready for the client; only then can the client be an approver.', 'Trang mặc định là **Internal**. Đặt **Details → Visible to → Team and client** khi tài liệu sẵn sàng cho khách; khi đó khách mới làm người duyệt được.'),
+      h('Links, stages & export', 'Liên kết, giai đoạn & xuất'),
+      list(
+        ['**Linked issues** on a page ⇄ **Linked docs** on the issue — link the requirements an issue implements.', '**Linked issues** trên trang ⇄ **Linked docs** trên thẻ — liên kết yêu cầu mà thẻ hiện thực.'],
+        ['With Stages on, a page can belong to a stage; the **Stages** page lists each stage’s documents. Client projects created from a request start with a **Project documents** tree: one page per stage with that stage’s templates.', 'Khi bật Stages, trang có thể thuộc một giai đoạn; trang **Stages** liệt kê tài liệu của từng giai đoạn. Dự án khách dựng từ phiếu yêu cầu có sẵn cây **Project documents**: mỗi giai đoạn một trang kèm mẫu của giai đoạn đó.'],
+        ['**⋯ → Export as Markdown** downloads the page as a .md file. **Search inside documents** on the Docs page finds text in every page you can read.', '**⋯ → Export as Markdown** tải trang thành tệp .md. **Search inside documents** ở trang Docs tìm chữ trong mọi trang bạn đọc được.'],
+      ),
+    ],
+    related: ['approvals', 'stages-gates', 'project-types'],
+  },
+
+  {
     id: 'move-issue',
     category: 'studio',
     title: { en: 'Move an issue to another project', vi: 'Chuyển thẻ sang dự án khác' },

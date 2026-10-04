@@ -40,6 +40,7 @@ import { TimeTrackingBlock } from './TimeTracking';
 import DevelopmentPanel from './DevelopmentPanel';
 import { IssueApprovals, IssueHandoffs, MoveIssueDialog, StagePicker, TeamPicker } from './studio/IssueStudio';
 import { studioOn } from './studio/shared';
+import { LinkedDocs } from './docs/LinkedDocs';
 import RichEditor, { isDocEmpty, RichView } from './RichEditor';
 import {
   formatBytes, formatDate, IssueTypeIcon, Popover, PriorityIcon, ProjectMark, relativeTime, Spinner, StatusBadge, UserAvatar, useToggle,
@@ -641,6 +642,7 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
             <Links issue={issue} pid={pid} lk={lk} editable={editable} onOpenKey={openKey} />
             {studioOn(config, 'approvals') && <IssueApprovals config={config} issue={issue} issueKey={lk.issueKey(issue.number)} />}
             {studioOn(config, 'handoffs') && <IssueHandoffs config={config} issue={issue} issueKey={lk.issueKey(issue.number)} />}
+            {studioOn(config, 'docs') && <LinkedDocs config={config} issueNumber={issue.number} />}
             <Attachments issue={issue} pid={pid} config={config} />
             <IssueActivity pid={pid} num={num} config={config} lk={lk} />
           </div>

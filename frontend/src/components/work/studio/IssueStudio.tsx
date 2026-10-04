@@ -86,19 +86,30 @@ export function StagePicker({ config, value, onChange, disabled }: { config: Pro
 /** Ai được đứng tên duyệt: vai có quyền approval.decide (viewer thì không). */
 const APPROVER_ROLES = new Set(['ADMIN', 'MEMBER', 'TEACHER', 'CLIENT']);
 
-function RequestApprovalDialog({ open, onClose, config, issue, issueKey }: { open: boolean; onClose: () => void; config: ProjectConfig; issue: IssueDetail; issueKey: string }) {
+export interface ApprovalRequestBody { approverIds: number[]; mode: ApprovalMode; description: string | null; dueAt: string | null }
+
+/**
+ * Hộp "Request approval" dùng chung: thẻ (S1) và trang tài liệu (S2a). Bên gọi
+ * truyền `send` (gọi API nào) + tiêu đề; `excludeClients` bỏ khách khỏi danh sách
+ * người duyệt (trang tài liệu nội bộ — khách không đọc được thì không ký được).
+ */
+export function RequestApprovalDialog({ open, onClose, config, title, send, successMessage, excludeClients, hint }: {
+  open: boolean; onClose: () => void; config: ProjectConfig; title: string;
+  send: (body: ApprovalRequestBody) => Promise<unknown>;
+  successMessage: string;
+  excludeClients?: boolean;
+  hint?: string;
+}) {
   const invalidate = useStudioInvalidate();
   const [ids, setIds] = useState<number[]>([]);
   const [mode, setMode] = useState<ApprovalMode>('SEQUENTIAL');
   const [due, setDue] = useState('');
   const [note, setNote] = useState('');
   const pick = usePick();
-  const candidates = config.members.filter((m) => APPROVER_ROLES.has(m.role));
+  const candidates = config.members.filter((m) => APPROVER_ROLES.has(m.role) && !(excludeClients && m.role === 'CLIENT'));
   const create = useMutation({
-    mutationFn: () => workStudioApi.createApproval(config.id, {
-      issueNumber: issue.number, approverIds: ids, mode, description: note.trim() || null, dueAt: due ? new Date(`${due}T23:59:00`).toISOString() : null,
-    }),
-    onSuccess: () => { toast.success(`Approval requested for ${issueKey}`); invalidate(); onClose(); setIds([]); setNote(''); setDue(''); },
+    mutationFn: () => send({ approverIds: ids, mode, description: note.trim() || null, dueAt: due ? new Date(`${due}T23:59:00`).toISOString() : null }),
+    onSuccess: () => { toast.success(successMessage); invalidate(); onClose(); setIds([]); setNote(''); setDue(''); },
     onError: (err) => toast.error(workError(err, 'Could not request approval')),
   });
   const move = (i: number, d: -1 | 1) => setIds((a) => { const n = [...a]; const j = i + d; if (j < 0 || j >= n.length) return a; [n[i], n[j]] = [n[j], n[i]]; return n; });
@@ -106,7 +117,7 @@ function RequestApprovalDialog({ open, onClose, config, issue, issueKey }: { ope
     <Dialog
       open={open}
       onClose={onClose}
-      title={`Request approval · ${issueKey}`}
+      title={title}
       width={520}
       footer={
         <>
@@ -161,6 +172,7 @@ function RequestApprovalDialog({ open, onClose, config, issue, issueKey }: { ope
         <Field label="Due (optional)"><input type="date" className="w-input" value={due} onChange={(e) => setDue(e.target.value)} /></Field>
         <Field label="Note (optional)"><input className="w-input" value={note} maxLength={5000} onChange={(e) => setNote(e.target.value)} placeholder="What should they check?" /></Field>
       </div>
+      {hint && <p className="mb-2 text-[12px] text-[var(--w-text-2)]">{hint}</p>}
       <p className="text-[12px] text-[var(--w-text-3)]">Nobody can approve on someone else’s behalf — not even an admin. One rejection rejects the whole request.</p>
     </Dialog>
   );
@@ -204,7 +216,14 @@ export function IssueApprovals({ config, issue, issueKey }: { config: ProjectCon
       ) : (
         <p className="text-[12px] text-[var(--w-text-3)]">No approvals yet. Ask the client, your lead or QA to sign off on this issue.</p>
       )}
-      <RequestApprovalDialog open={asking} onClose={() => setAsking(false)} config={config} issue={issue} issueKey={issueKey} />
+      <RequestApprovalDialog
+        open={asking}
+        onClose={() => setAsking(false)}
+        config={config}
+        title={`Request approval · ${issueKey}`}
+        successMessage={`Approval requested for ${issueKey}`}
+        send={(b) => workStudioApi.createApproval(config.id, { issueNumber: issue.number, ...b })}
+      />
       <ApprovalDialog pid={config.id} approvalId={open} config={config} onClose={() => setOpen(null)} />
     </section>
   );

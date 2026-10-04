@@ -395,8 +395,48 @@ work_issues, 7 bảng); mọi FK trên/vào `work_issues` + FK SET NULL của b�
   (3 lượt liền) + `studio.test.ts` (luật thuần) trong `npm test`; chạy thật backend :3101 — phiếu → dự án
   CLIENT → duyệt cổng GĐ0 → kích hoạt GĐ1 → bàn giao BA→DEV nhận + trả lại → dự án SCHOOL cũ ⇒ MODULE_DISABLED.
 - [ ] Giao diện cho S1 (phiên làm lại giao diện /work) · L
-- [ ] Đợt S2: tài liệu kiểu Confluence + cổng khách duyệt · Đợt S3: CR + RAID, họp, portfolio · Đợt S4: tài chính,
-      báo cáo khách tự động
+- [x] Đợt S2a: tài liệu kiểu Confluence (xem mục dưới) · [ ] Đợt S2b: cổng khách duyệt · Đợt S3: CR + RAID, họp,
+      portfolio · Đợt S4: tài chính, báo cáo khách tự động
+
+### Đợt S2a — tài liệu dự án kiểu Confluence (04/10/2026, mô-đun `docs`)
+
+Luật giữ dự án cũ: mọi route tài liệu gọi `assertModule(access, 'docs')`. Dự án tạo trước đợt này không có
+`settings.modules.docs` ⇒ 403 `MODULE_DISABLED`, không đọc/ghi gì (test giữ: dự án cũ + School). `docs` bật mặc định
+CHỈ cho dự án TẠO MỚI kèm `kind: CLIENT` (`defaultModulesFor`). Migration `20261004160000_work_docs_s2a` chỉ THÊM
+(1 cột nullable `work_approvals.page_id` + 4 bảng), mọi FK mới DEFERRABLE INITIALLY DEFERRED.
+
+- [x] S2a.A Mô hình: `work_pages` (cây parentId + position, số theo dự án, TipTap + chữ trơn, status
+      DRAFT/IN_REVIEW/APPROVED/ARCHIVED, visibility INTERNAL/CLIENT, owner, templateKey, stageId, `version` chống đè,
+      xoá mềm), `work_page_versions` (CREATE/EDIT/RESTORE/MANUAL; lưu liên tiếp của cùng người trong 10 phút gộp vào
+      bản EDIT cuối; giữ 100 bản), `work_page_issue_links` (hai chiều), `work_page_comments` (@nhắc ⇒ WORK_MENTION) · M
+- [x] S2a.B API `/projects/:pid/pages…`: cây (khách thấy trang CLIENT dưới trang nội bộ ⇒ nổi lên gốc), CRUD, kéo thả
+      (`/move`, chặn vòng, sâu tối đa 10), phiên bản (liệt kê/xem/so sánh dòng Markdown phía server/khôi phục),
+      liên kết thẻ (+ `/issues/:num/pages`), bình luận, tìm trong dự án + `/work/search/docs` (mọi dự án bật docs),
+      `/markdown` (xuất .md), thư viện mẫu `/doc-templates`. Realtime `page.updated` (chỉ id/số, không tiêu đề);
+      audit `page.create|update|delete|restore` (không ghi mỗi lần tự lưu) · L
+- [x] S2a.C Quyền (permissions.ts `docAccess` / `canViewPage` / `canManagePage`): xem = thành viên; vai CLIENT và
+      GUEST (trừ TEACHER) chỉ trang CLIENT, trang khác 404; sửa = MEMBER+; xoá/khôi phục/đổi hiển thị = chủ trang hoặc
+      ADMIN; VIEWER/TEACHER chỉ xem · M
+- [x] S2a.D Phê duyệt tài liệu: `approvals.service` targetType `DOC` (`pageId`), hash = tiêu đề + chữ trơn
+      (`approvalContent.pageContent`); gửi ⇒ IN_REVIEW, duyệt ⇒ APPROVED, từ chối/huỷ ⇒ DRAFT; sửa sau duyệt ⇒
+      `contentChanged` (cảnh báo, không đổi trạng thái); người duyệt phải ĐỌC được trang (khách chỉ duyệt trang CLIENT) · M
+- [x] S2a.E 36 mẫu Markdown ⇒ TipTap (remark-parse + remark-gfm có sẵn; bảng GFM ⇒ bảng TipTap, `#####` ⇒ mức 4).
+      Ảnh Docker backend KHÔNG có `frontend/public` ⇒ bản sao ở `content/quy-trinh/mau/*.md` + `catalog.json`
+      (tên EN/VI khớp DOCS của data.ts); `docs.test.ts` bắt lệch hai nơi. Ánh xạ mẫu ↔ giai đoạn đọc từ link
+      `/quy-trinh/mau/<key>.md` trong `client-project-template.json` (không chép tay) · M
+- [x] S2a.F Phiếu khách → dự án CLIENT có sẵn cây tài liệu: "Project documents" → 21 trang giai đoạn (gắn `stageId`)
+      → mẫu của giai đoạn (mẫu dùng ở nhiều giai đoạn chỉ tạo MỘT trang, giai đoạn sau trỏ link tới) = 57 trang · S
+- [x] S2a.G Giao diện: mục "Docs" ở thanh bên (chỉ khi mô-đun bật), `/docs` (cây kéo thả + menu ⋯ cho điện thoại/bàn
+      phím, tổng quan + tìm toàn văn), `/docs/[num]` (RichEditor chế độ `docs` có bảng, tự lưu + "Saved", xung đột 409
+      không đè, trạng thái/hiển thị/chủ/giai đoạn, phê duyệt dùng lại hộp S1, lịch sử so sánh + khôi phục, bình luận,
+      xuất .md), thư viện mẫu, "Linked docs" trong chi tiết thẻ, tài liệu theo giai đoạn ở trang Stages, dải "Docs" ở
+      /work/search, bài trợ giúp "Project docs" (song ngữ), tuyến app desktop `docs`, `docs/:num` · L
+- **Nghiệm thu 04/10/2026:** `docs.test.ts` (55 phép: 36 mẫu thật hợp lệ với schema TipTap của editor, đồng bộ
+  nguồn mẫu, quyền theo vai, so sánh dòng) trong `npm test`; `work.docs.db.test.ts` 11 test DB; 151/151 test DB CT Work;
+  E2E Playwright (backend :3131 + Next :3130): phiếu → dự án Client có cây theo giai đoạn → mở SRS → sửa ⇒ phiên bản
+  mới → so sánh → khôi phục → xin duyệt → duyệt → sửa ⇒ cảnh báo lệch → liên kết thẻ → dự án School không có Docs;
+  0 lỗi JS, 0 tràn ngang 390px; ảnh `~/Desktop/ct-work-ui/s2a/`. Bắt được nhờ E2E: `setEditable()` của TipTap bắn
+  'update' lúc mở ⇒ mở trang là tự lưu (đã chặn ở RichEditor + server bỏ qua lưu y nguyên).
 
 ## 10. Rủi ro
 

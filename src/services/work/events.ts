@@ -41,7 +41,13 @@ export type WorkEvent =
   // listener cũ (chatHooks…) nhận diện sự kiện thẻ bằng `'issueId' in e`.
   | { type: 'stage.updated'; projectId: number; stageId: number; status: string; actor: WorkActor }
   | { type: 'approval.updated'; projectId: number; approvalId: number; status: string; targetType: string; targetIssueId: number | null; stageId: number | null; actor: WorkActor }
-  | { type: 'handoff.updated'; projectId: number; handoffId: number; issueId: number; status: string; actor: WorkActor };
+  | { type: 'handoff.updated'; projectId: number; handoffId: number; issueId: number; status: string; actor: WorkActor }
+  // Tài liệu dự án (đợt S2a). Chỉ mang id/số trang — KHÔNG tiêu đề/nội dung: phòng
+  // dự án có cả khách, mà khách không được thấy trang INTERNAL. Client tự tải lại
+  // qua API (API lọc theo quyền). Không có `issueId` (xem ghi chú ở trên).
+  | { type: 'page.updated'; projectId: number; pageId: number; number: number; action: PageEventAction; actor: WorkActor };
+
+export type PageEventAction = 'created' | 'updated' | 'status' | 'moved' | 'deleted' | 'restored' | 'comment' | 'links';
 
 type Listener = (event: WorkEvent) => void | Promise<void>;
 const listeners = new Set<Listener>();

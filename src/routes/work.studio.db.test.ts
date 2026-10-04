@@ -98,7 +98,8 @@ describe('CT Work — lớp studio S1 (HTTP + DB thật)', { skip: !RUN }, () =>
     const c = await call(owner, 'POST', `/workspaces/${wsId}/projects`, { key: 'CL', name: 'Client app', template: 'COMPANY', kind: 'CLIENT' });
     assert.equal(c.status, 201, JSON.stringify(c.raw));
     clPid = c.data.id;
-    assert.deepEqual([c.data.modules.teams, c.data.modules.stages, c.data.modules.approvals, c.data.modules.handoffs, c.data.modules.docs], [true, true, true, true, false]);
+    // docs bật mặc định cho CLIENT từ đợt S2a (04/10/2026).
+    assert.deepEqual([c.data.modules.teams, c.data.modules.stages, c.data.modules.approvals, c.data.modules.handoffs, c.data.modules.docs], [true, true, true, true, true]);
     const o = await call(owner, 'POST', `/workspaces/${wsId}/projects`, { key: 'OT', name: 'Other', template: 'BLANK', kind: 'SOFTWARE' });
     otPid = o.data.id;
     await call(owner, 'POST', `/workspaces/${wsId}/invites`, { emails: [client.email], role: 'GUEST', projectId: clPid, projectRole: 'CLIENT' });

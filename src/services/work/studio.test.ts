@@ -39,10 +39,10 @@ describe('mô-đun', () => {
       assert.equal(moduleOn({ settings }, 'teams'), false);
     }
   });
-  it('mặc định theo loại: CLIENT bật 4 mô-đun đợt S1; các khoá đợt sau vẫn tắt', () => {
+  it('mặc định theo loại: CLIENT bật 4 mô-đun đợt S1 + docs (S2a); các khoá đợt sau vẫn tắt', () => {
     const c = defaultModulesFor('CLIENT');
-    assert.deepEqual([c.teams, c.stages, c.approvals, c.handoffs], [true, true, true, true]);
-    assert.deepEqual([c.docs, c.clientPortal, c.changeRequests, c.raid, c.meetings, c.finance], [false, false, false, false, false, false]);
+    assert.deepEqual([c.teams, c.stages, c.approvals, c.handoffs, c.docs], [true, true, true, true, true]);
+    assert.deepEqual([c.clientPortal, c.changeRequests, c.raid, c.meetings, c.finance], [false, false, false, false, false]);
     for (const k of ['SCHOOL', 'SOFTWARE', 'PERSONAL'] as const) {
       assert.ok(Object.values(defaultModulesFor(k)).every((v) => v === false), k);
     }

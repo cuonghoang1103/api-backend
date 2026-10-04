@@ -10,13 +10,13 @@
  *   - `kind` NULL (dự án cũ) ⇒ SUY RA từ mẫu lúc đọc, không ghi ngược DB, và
  *     KHÔNG kéo theo mô-đun (mô-đun chỉ theo settings.modules).
  *   - Dự án mới: tạo KÈM `kind` ⇒ mô-đun mặc định theo loại (CLIENT bật 4 mô-đun
- *     đợt S1). Tạo KHÔNG kèm `kind` (client cũ) ⇒ mô-đun tắt hết như trước.
+ *     đợt S1 + `docs` từ đợt S2a). Tạo KHÔNG kèm `kind` (client cũ) ⇒ mô-đun tắt hết như trước.
  */
 
 import crypto from 'node:crypto';
 import { AppError } from '../../middleware/errorHandler.js';
 import {
-  PROJECT_KINDS, STUDIO_MODULES, STUDIO_MODULES_S1,
+  PROJECT_KINDS, STUDIO_MODULES, STUDIO_MODULES_S1, STUDIO_MODULES_S2A,
   type ProjectKind, type StudioModule,
 } from './constants.js';
 
@@ -49,10 +49,14 @@ export function noModules(): ModuleMap {
   return Object.fromEntries(STUDIO_MODULES.map((m) => [m, false])) as ModuleMap;
 }
 
-/** Mô-đun mặc định khi TẠO dự án mới theo loại. Khoá đợt sau luôn tắt tới khi có tính năng. */
+/**
+ * Mô-đun mặc định khi TẠO dự án mới theo loại. Khoá đợt sau luôn tắt tới khi có tính năng.
+ * CLIENT: 4 mô-đun S1 + tài liệu (S2a). Dự án tạo TRƯỚC S2a giữ nguyên settings.modules
+ * của nó (docs không có/false ⇒ tắt) — không ai ghi ngược.
+ */
 export function defaultModulesFor(kind: ProjectKind): ModuleMap {
   const m = noModules();
-  if (kind === 'CLIENT') for (const k of STUDIO_MODULES_S1) m[k] = true;
+  if (kind === 'CLIENT') for (const k of [...STUDIO_MODULES_S1, ...STUDIO_MODULES_S2A]) m[k] = true;
   return m;
 }
 

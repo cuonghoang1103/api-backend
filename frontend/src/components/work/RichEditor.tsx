@@ -18,8 +18,14 @@ import Link from '@tiptap/extension-link';
 import TaskList from '@tiptap/extension-task-list';
 import TaskItem from '@tiptap/extension-task-item';
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
+import Table from '@tiptap/extension-table';
+import TableRow from '@tiptap/extension-table-row';
+import TableHeader from '@tiptap/extension-table-header';
+import TableCell from '@tiptap/extension-table-cell';
 import { common, createLowlight } from 'lowlight';
-import { Bold, Code, Italic, List, ListChecks, ListOrdered, Link2, Quote, SquareCode } from 'lucide-react';
+import {
+  Bold, Code, Heading2, Heading3, Italic, List, ListChecks, ListOrdered, Link2, Quote, SquareCode, Table2, Rows3, Columns3, Trash2,
+} from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { userName, type TiptapDoc, type WorkUser } from '@/lib/work-api';
 import { UserAvatar, WorkPortal, khungFixed } from './ui';
@@ -45,6 +51,18 @@ const Mention = Node.create({
   },
   renderText: ({ node }) => `@${node.attrs.label}`,
 });
+
+/**
+ * Bảng cho trang TÀI LIỆU (S2a). Bọc <table> trong một div cuộn ngang riêng — bảng
+ * rộng (SRS, RTM…) cuộn trong khung của nó, trang không bị tràn ngang ở 390px.
+ * Không bật resizable: nút kéo cột cần CSS riêng và đổi toDOM thành nodeView.
+ */
+const DocTable = Table.extend({
+  renderHTML(props) {
+    const spec = this.parent?.(props);
+    return ['div', { class: 'w-table-wrap' }, spec] as unknown as ReturnType<NonNullable<typeof this.parent>>;
+  },
+}).configure({ resizable: false, HTMLAttributes: { class: 'w-table' } });
 
 interface MentionState { query: string; from: number; to: number; left: number; top: number }
 
@@ -75,11 +93,17 @@ export interface RichEditorProps {
   toolbar?: boolean;
   className?: string;
   editorRef?: (e: Editor | null) => void;
+  /**
+   * Chế độ TÀI LIỆU (trang Docs, S2a): thêm bảng + tiêu đề mức 4 + nút H2/H3/bảng.
+   * Nội dung tài liệu (kể cả 36 mẫu) dùng các nút này — mở trang tài liệu bằng
+   * editor thường sẽ RƠI bảng. Chốt lúc tạo editor (không đổi giữa chừng).
+   */
+  docs?: boolean;
 }
 
 export default function RichEditor({
   value, onChange, editable = true, placeholder = 'Write something…', members = [], autoFocus, onSubmit, onEscape,
-  minHeight = 80, toolbar = true, className, editorRef,
+  minHeight = 80, toolbar = true, className, editorRef, docs = false,
 }: RichEditorProps) {
   const [mention, setMention] = useState<MentionState | null>(null);
   const [hi, setHi] = useState(0);
@@ -123,13 +147,14 @@ export default function RichEditor({
     extensions: [
       // Khối code tô màu cú pháp (decoration của ProseMirror ⇒ đúng cả lúc xem lẫn lúc sửa).
       // Không khai ngôn ngữ thì lowlight tự đoán.
-      StarterKit.configure({ heading: { levels: [1, 2, 3] }, codeBlock: false }),
+      StarterKit.configure({ heading: { levels: docs ? [1, 2, 3, 4] : [1, 2, 3] }, codeBlock: false }),
       CodeBlockLowlight.configure({ lowlight: LOWLIGHT, HTMLAttributes: { class: 'w-code' } }),
       Placeholder.configure({ placeholder }),
       Link.configure({ openOnClick: !editable, autolink: true, HTMLAttributes: { rel: 'noopener noreferrer nofollow', target: '_blank' } }),
       TaskList,
       TaskItem.configure({ nested: true }),
       Mention,
+      ...(docs ? [DocTable, TableRow, TableHeader, TableCell] : []),
     ],
     editorProps: {
       attributes: { class: cn('w-prose', editable && 'px-3 py-2.5') },
@@ -181,8 +206,11 @@ export default function RichEditor({
     if (cur !== next) editor.commands.setContent((value as object) ?? '', false);
   }, [editor, value]);
 
+  // emitUpdate = false: setEditable() của TipTap mặc định BẮN 'update' ⇒ onChange chạy
+  // ngay lúc mở dù không ai gõ gì (trang tài liệu tự lưu sinh phiên bản rỗng — bắt được
+  // bằng E2E S2a). Chỉ gọi khi thật sự đổi.
   useEffect(() => {
-    editor?.setEditable(editable);
+    if (editor && editor.isEditable !== editable) editor.setEditable(editable, false);
   }, [editor, editable]);
 
   const btn = (active: boolean, onClick: () => void, Icon: typeof Bold, title: string) => (
@@ -200,6 +228,13 @@ export default function RichEditor({
     <div className={cn(editable && 'rounded-[6px] border border-[var(--w-border-strong)] bg-[var(--w-panel)] focus-within:border-[var(--w-accent-border)] focus-within:shadow-[0_0_0_3px_var(--w-accent-soft)]', className)}>
       {editable && toolbar && editor && (
         <div className="flex flex-wrap items-center gap-0.5 border-b border-[var(--w-border)] px-1.5 py-1">
+          {docs && (
+            <>
+              {btn(editor.isActive('heading', { level: 2 }), () => editor.chain().focus().toggleHeading({ level: 2 }).run(), Heading2, 'Heading')}
+              {btn(editor.isActive('heading', { level: 3 }), () => editor.chain().focus().toggleHeading({ level: 3 }).run(), Heading3, 'Subheading')}
+              <span className="mx-1 h-4 w-px bg-[var(--w-border)]" />
+            </>
+          )}
           {btn(editor.isActive('bold'), () => editor.chain().focus().toggleBold().run(), Bold, 'Bold (⌘B)')}
           {btn(editor.isActive('italic'), () => editor.chain().focus().toggleItalic().run(), Italic, 'Italic (⌘I)')}
           {btn(editor.isActive('code'), () => editor.chain().focus().toggleCode().run(), Code, 'Inline code')}
@@ -213,8 +248,22 @@ export default function RichEditor({
           {btn(editor.isActive('link'), () => {
             if (editor.isActive('link')) { editor.chain().focus().unsetLink().run(); return; }
             const url = window.prompt('Link URL');
-            if (url && /^https?:\/\//i.test(url)) editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
+            if (url && (/^https?:\/\//i.test(url) || (docs && url.startsWith('/')))) editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
           }, Link2, 'Link')}
+          {docs && (
+            <>
+              <span className="mx-1 h-4 w-px bg-[var(--w-border)]" />
+              {btn(false, () => editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run(), Table2, 'Insert table')}
+              {editor.isActive('table') && (
+                <>
+                  {btn(false, () => editor.chain().focus().addRowAfter().run(), Rows3, 'Add row below')}
+                  {btn(false, () => editor.chain().focus().addColumnAfter().run(), Columns3, 'Add column right')}
+                  {btn(false, () => editor.chain().focus().deleteRow().run(), Trash2, 'Delete row')}
+                  <button type="button" className="ml-0.5 h-6 rounded-[4px] px-1.5 text-[11px] text-[var(--w-text-3)] hover:bg-[var(--w-hover)] hover:text-[var(--w-red)]" onMouseDown={(e) => { e.preventDefault(); editor.chain().focus().deleteTable().run(); }}>Delete table</button>
+                </>
+              )}
+            </>
+          )}
         </div>
       )}
       <div style={editable ? { minHeight } : undefined}>
@@ -251,8 +300,8 @@ export default function RichEditor({
 }
 
 /** Chỉ đọc — hiển thị mô tả/bình luận đã lưu. */
-export function RichView({ value, className }: { value: TiptapDoc | null | undefined; className?: string }) {
-  return <RichEditor value={value} editable={false} toolbar={false} className={className} />;
+export function RichView({ value, className, docs }: { value: TiptapDoc | null | undefined; className?: string; docs?: boolean }) {
+  return <RichEditor value={value} editable={false} toolbar={false} className={className} docs={docs} />;
 }
 
 export function isDocEmpty(doc: TiptapDoc | null | undefined): boolean {

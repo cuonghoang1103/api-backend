@@ -40,7 +40,10 @@ export type ProjectAction =
   | 'approval.decide'       // ĐƯỢC ĐỨNG TÊN người duyệt (vẫn chỉ quyết bước của CHÍNH mình)
   | 'approval.manage'       // huỷ yêu cầu của người khác
   | 'handoff.create'        // bàn giao thẻ cho bộ phận/người khác
-  | 'handoff.manage';       // nhận/trả lại/huỷ bàn giao THAY người nhận
+  | 'handoff.manage'        // nhận/trả lại/huỷ bàn giao THAY người nhận
+  // ── Tài liệu dự án (đợt S2a, mô-đun docs) ──
+  | 'page.edit'             // tạo/sửa/di chuyển trang, liên kết thẻ (chỉ người thấy MỌI trang — xem docAccess)
+  | 'page.manage';          // xoá / khôi phục phiên bản / đổi chế độ hiển thị của trang NGƯỜI KHÁC
 
 export type WorkspaceAction =
   | 'workspace.view'
@@ -84,6 +87,8 @@ const PROJECT_MATRIX: Record<ProjectAction, readonly ProjectRole[]> = {
   'approval.manage': ['ADMIN'],
   'handoff.create': ['ADMIN', 'MEMBER'],
   'handoff.manage': ['ADMIN'],
+  'page.edit': ['ADMIN', 'MEMBER'],
+  'page.manage': ['ADMIN'],
 };
 
 const WORKSPACE_MATRIX: Record<WorkspaceAction, readonly WorkspaceRole[]> = {
@@ -222,6 +227,44 @@ export function canCancelHandoff(role: ProjectRole | null, userId: number, creat
 export function canAssignTeamIssue(role: ProjectRole | null, isTeamLead: boolean): boolean {
   if (can(role, 'issue.edit')) return true;
   return isTeamLead && (role === 'VIEWER' || role === 'MEMBER' || role === 'ADMIN');
+}
+
+// ─── Tài liệu dự án (đợt S2a): luật theo NGƯỜI + chế độ hiển thị ──
+
+/**
+ * Quyền trên tài liệu của một người trong dự án.
+ *   - Khách (vai CLIENT) và khách của không gian (GUEST, dù được vai gì trong
+ *     dự án — trừ TEACHER) chỉ thấy trang `visibility = CLIENT` và KHÔNG sửa được
+ *     gì — cổng khách là đợt S2b; ở S2a backend chặn đúng là đủ.
+ *   - VIEWER / TEACHER thấy mọi trang, chỉ xem.
+ *   - MEMBER / ADMIN sửa được; xoá/khôi phục/đổi hiển thị trang người khác cần ADMIN.
+ */
+export function docAccess(role: ProjectRole | null, workspaceRole: WorkspaceRole | null): { view: 'ALL' | 'CLIENT' | null; edit: boolean; manage: boolean } {
+  if (!role) return { view: null, edit: false, manage: false };
+  // Giảng viên (TEACHER, thường là GUEST của không gian) đọc MỌI trang — chấm đồ án cần đọc tài liệu nội bộ của nhóm.
+  const restricted = role === 'CLIENT' || (workspaceRole === 'GUEST' && role !== 'TEACHER');
+  return {
+    view: restricted ? 'CLIENT' : 'ALL',
+    edit: !restricted && can(role, 'page.edit'),
+    manage: !restricted && can(role, 'page.manage'),
+  };
+}
+
+/** Người này đọc được trang có chế độ hiển thị `visibility` không. */
+export function canViewPage(role: ProjectRole | null, workspaceRole: WorkspaceRole | null, visibility: string): boolean {
+  const a = docAccess(role, workspaceRole);
+  if (a.view === 'ALL') return true;
+  return a.view === 'CLIENT' && visibility === 'CLIENT';
+}
+
+/**
+ * Xoá trang, khôi phục một phiên bản, đổi chế độ hiển thị: người SỞ HỮU trang
+ * (khi còn quyền sửa) hoặc ADMIN dự án.
+ */
+export function canManagePage(role: ProjectRole | null, workspaceRole: WorkspaceRole | null, userId: number, ownerId: number | null): boolean {
+  const a = docAccess(role, workspaceRole);
+  if (a.manage) return true;
+  return a.edit && ownerId !== null && ownerId === userId;
 }
 
 // ─── Tầng đọc DB ──────────────────────────────────────────────────

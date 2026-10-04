@@ -33,6 +33,8 @@ import { createIssueAs } from './work/issues.service.js';
 import { createLink } from './work/share.service.js';
 import { ensureTeams } from './work/teams.service.js';
 import { frontendUrl } from './work/common.js';
+import { createClientDocsTree, type ClientStageRef } from './work/pages.service.js';
+import { modulesOf } from './work/studio.js';
 
 // ─── Hằng ───────────────────────────────────────────────────────
 
@@ -310,7 +312,7 @@ export interface CreatedWorkProject {
   shareUrl: string | null;
   /** null = dự án đã có từ trước, lượt này không dựng gì. */
   templateSource: 'file' | 'minimal' | null;
-  counts: { epics: number; tasks: number; gates: number; labels: number; teams?: number; teamsCreated?: number; stages?: number };
+  counts: { epics: number; tasks: number; gates: number; labels: number; teams?: number; teamsCreated?: number; stages?: number; docs?: number };
 }
 
 /**
@@ -423,7 +425,8 @@ export async function createWorkProjectFromRequest(adminId: number, requestId: n
   }
 
   const pid = project.id;
-  const counts = { epics: 0, tasks: 0, gates: 0, labels: 0, teams: 0, teamsCreated: 0, stages: 0 };
+  const counts = { epics: 0, tasks: 0, gates: 0, labels: 0, teams: 0, teamsCreated: 0, stages: 0, docs: 0 };
+  const createdStages: ClientStageRef[] = [];
   try {
     // Bộ phận cấp không gian theo vai của mẫu (đã có thì dùng lại). Bộ phận MỚI
     // nhận admin làm trưởng để luôn có người giao việc từ hàng đợi.
@@ -473,6 +476,7 @@ export async function createWorkProjectFromRequest(adminId: number, requestId: n
         select: { id: true },
       });
       counts.stages++;
+      createdStages.push({ id: stage.id, n: s.n, slug: s.slug, name: (s.titleEn || s.title).slice(0, 160) });
       const epic = await createIssueAs(adminId, pid, {
         typeId: typeId.EPIC,
         title: `${s.n}. ${s.epic.summary}`.slice(0, 255),
@@ -510,6 +514,13 @@ export async function createWorkProjectFromRequest(adminId: number, requestId: n
           await prisma.workStage.update({ where: { id: stage.id }, data: { gateIssueId: task.id } });
         }
       }
+    }
+
+    // Tài liệu dự án (đợt S2a): trang gốc + một trang mỗi giai đoạn + mẫu của giai đoạn đó.
+    // Chỉ khi mô-đun docs bật (CLIENT bật mặc định) — tắt bằng tay thì không dựng.
+    const settings = await prisma.workProject.findUniqueOrThrow({ where: { id: pid }, select: { settings: true } });
+    if (modulesOf(settings.settings).docs) {
+      counts.docs = await createClientDocsTree(adminId, pid, createdStages, `/work/${ws.slug}/${project.key}/docs`);
     }
 
     // Link chia sẻ chỉ đọc cho khách (board/backlog/báo cáo; KHÔNG mô tả thẻ —

@@ -16,7 +16,7 @@ import { authenticate } from '../middleware/auth.js';
 import { asyncHandler, BadRequestError, UnauthorizedError, NotFoundError } from '../middleware/errorHandler.js';
 import { prisma } from '../config/database.js';
 import {
-  APPROVAL_MODES, APPROVAL_STATUSES, APPROVAL_TARGETS, HANDOFF_STATUSES, LINK_TYPES, PRIORITY_MAX, PRIORITY_MIN,
+  APPROVAL_MODES, APPROVAL_STATUSES, APPROVAL_TARGETS, HANDOFF_STATUSES, LINK_TYPES, PAGE_STATUSES, PAGE_VISIBILITY, PRIORITY_MAX, PRIORITY_MIN,
   PROJECT_KINDS, PROJECT_ROLES, PROJECT_TEMPLATES, PROJECT_TYPES, PROJECT_VISIBILITY, STUDIO_MODULES, TEAM_ROLES, WORKSPACE_ROLES,
 } from '../services/work/constants.js';
 import * as issues from '../services/work/issues.service.js';
@@ -51,6 +51,7 @@ import * as teams from '../services/work/teams.service.js';
 import * as stages from '../services/work/stages.service.js';
 import * as approvals from '../services/work/approvals.service.js';
 import * as handoffs from '../services/work/handoffs.service.js';
+import * as pages from '../services/work/pages.service.js';
 import { moveIssueToProject } from '../services/work/issueMove.service.js';
 
 registerWorkNotifications();
@@ -1455,14 +1456,16 @@ router.get('/me/approvals', asyncHandler(async (req, res) => {
 router.get('/projects/:pid/approvals', asyncHandler(async (req, res) => {
   const q = parse(z.object({
     status: z.enum(APPROVAL_STATUSES).optional(), targetType: z.enum(APPROVAL_TARGETS).optional(),
-    issue: id.optional(), stage: id.optional(), limit: z.coerce.number().int().min(1).max(200).optional(),
+    issue: id.optional(), stage: id.optional(), page: id.optional(), limit: z.coerce.number().int().min(1).max(200).optional(),
   }), req.query);
-  ok(res, await approvals.listApprovals(callerId(req), idParam(req, 'pid'), { status: q.status, targetType: q.targetType, issueNumber: q.issue, stageId: q.stage, limit: q.limit }));
+  ok(res, await approvals.listApprovals(callerId(req), idParam(req, 'pid'), { status: q.status, targetType: q.targetType, issueNumber: q.issue, stageId: q.stage, pageNumber: q.page, limit: q.limit }));
 }));
 router.post('/projects/:pid/approvals', asyncHandler(async (req, res) => {
   const body = parse(z.object({
-    targetType: z.literal('ISSUE').default('ISSUE'),
-    issueNumber: id,
+    // DOC (đợt S2a): duyệt một trang tài liệu — cần pageNumber thay vì issueNumber.
+    targetType: z.enum(['ISSUE', 'DOC']).default('ISSUE'),
+    issueNumber: id.optional(),
+    pageNumber: id.optional(),
     title: z.string().min(1).max(200).optional(),
     description: z.string().max(5000).nullable().optional(),
     mode: z.enum(APPROVAL_MODES).optional(),
@@ -1521,6 +1524,106 @@ router.post('/projects/:pid/handoffs/:hid/cancel', asyncHandler(async (req, res)
 router.post('/projects/:pid/issues/:num/move-project', asyncHandler(async (req, res) => {
   const body = parse(z.object({ targetProjectId: id, version: z.number().int().min(0).optional() }), req.body);
   ok(res, await moveIssueToProject(callerId(req), idParam(req, 'pid'), idParam(req, 'num'), body));
+}));
+
+// ═══ TÀI LIỆU DỰ ÁN đợt S2a (04/10/2026, mô-đun `docs`) ══════════════
+// Quyền + mô-đun kiểm trong pages.service (docAccess — khách chỉ đọc trang CLIENT).
+
+/** TipTap của trang tài liệu: trần 2MB (mẫu SRS/SDD có bảng lớn hơn mô tả thẻ nhiều). */
+const pageDoc = z
+  .object({ type: z.literal('doc') })
+  .passthrough()
+  .refine((v) => JSON.stringify(v).length <= 2_000_000, 'Document is too large')
+  .transform((v) => v as Prisma.InputJsonValue);
+
+router.get('/search/docs', asyncHandler(async (req, res) => {
+  const q = parse(z.object({ q: z.string().max(200).default(''), limit: z.coerce.number().int().min(1).max(50).optional() }), req.query);
+  ok(res, await pages.searchDocsGlobal(callerId(req), q.q, q.limit));
+}));
+router.get('/projects/:pid/doc-templates', asyncHandler(async (req, res) => {
+  ok(res, await pages.templateLibrary(callerId(req), idParam(req, 'pid')));
+}));
+router.get('/projects/:pid/doc-templates/:key', asyncHandler(async (req, res) => {
+  const key = parse(z.string().regex(/^[a-z0-9-]{1,64}$/), req.params.key);
+  ok(res, await pages.templatePreview(callerId(req), idParam(req, 'pid'), key));
+}));
+router.get('/projects/:pid/pages', asyncHandler(async (req, res) => {
+  const q = parse(z.object({ stage: id.optional() }), req.query);
+  ok(res, await pages.listPages(callerId(req), idParam(req, 'pid'), { stageId: q.stage }));
+}));
+router.post('/projects/:pid/pages', asyncHandler(async (req, res) => {
+  const body = parse(z.object({
+    title: z.string().max(255).optional(),
+    parentNumber: id.nullable().optional(),
+    templateKey: z.string().regex(/^[a-z0-9-]{1,64}$/).nullable().optional(),
+    stageId: id.nullable().optional(),
+    contentJson: pageDoc.optional(),
+    visibility: z.enum(PAGE_VISIBILITY).optional(),
+  }), req.body ?? {});
+  ok(res, await pages.createPage(callerId(req), idParam(req, 'pid'), body), 201);
+}));
+router.get('/projects/:pid/pages/search', asyncHandler(async (req, res) => {
+  const q = parse(z.object({ q: z.string().max(200).default(''), limit: z.coerce.number().int().min(1).max(50).optional() }), req.query);
+  ok(res, await pages.searchPages(callerId(req), idParam(req, 'pid'), q.q, q.limit));
+}));
+router.get('/projects/:pid/pages/:num', asyncHandler(async (req, res) => {
+  ok(res, await pages.getPage(callerId(req), idParam(req, 'pid'), idParam(req, 'num')));
+}));
+router.patch('/projects/:pid/pages/:num', asyncHandler(async (req, res) => {
+  const body = parse(z.object({
+    title: z.string().max(255).optional(),
+    contentJson: pageDoc.optional(),
+    status: z.enum(PAGE_STATUSES).optional(),
+    visibility: z.enum(PAGE_VISIBILITY).optional(),
+    ownerId: id.optional(),
+    stageId: id.nullable().optional(),
+    version: z.number().int().min(0).optional(),
+    versionNote: z.string().max(500).nullable().optional(),
+  }), req.body);
+  ok(res, await pages.updatePage(callerId(req), idParam(req, 'pid'), idParam(req, 'num'), body));
+}));
+router.post('/projects/:pid/pages/:num/move', asyncHandler(async (req, res) => {
+  const body = parse(z.object({ parentNumber: id.nullable(), index: z.number().int().min(0).max(10_000) }), req.body);
+  ok(res, await pages.movePage(callerId(req), idParam(req, 'pid'), idParam(req, 'num'), body));
+}));
+router.delete('/projects/:pid/pages/:num', asyncHandler(async (req, res) => {
+  ok(res, await pages.deletePage(callerId(req), idParam(req, 'pid'), idParam(req, 'num')));
+}));
+router.get('/projects/:pid/pages/:num/markdown', asyncHandler(async (req, res) => {
+  ok(res, await pages.exportMarkdown(callerId(req), idParam(req, 'pid'), idParam(req, 'num')));
+}));
+router.get('/projects/:pid/pages/:num/versions', asyncHandler(async (req, res) => {
+  ok(res, await pages.listVersions(callerId(req), idParam(req, 'pid'), idParam(req, 'num')));
+}));
+router.get('/projects/:pid/pages/:num/versions/compare', asyncHandler(async (req, res) => {
+  const q = parse(z.object({ from: id, to: z.union([z.literal('current'), id]).default('current') }), req.query);
+  ok(res, await pages.compareVersions(callerId(req), idParam(req, 'pid'), idParam(req, 'num'), q.from, q.to));
+}));
+router.get('/projects/:pid/pages/:num/versions/:n', asyncHandler(async (req, res) => {
+  ok(res, await pages.getVersion(callerId(req), idParam(req, 'pid'), idParam(req, 'num'), idParam(req, 'n')));
+}));
+router.post('/projects/:pid/pages/:num/versions/:n/restore', asyncHandler(async (req, res) => {
+  ok(res, await pages.restoreVersion(callerId(req), idParam(req, 'pid'), idParam(req, 'num'), idParam(req, 'n')));
+}));
+router.post('/projects/:pid/pages/:num/issues', asyncHandler(async (req, res) => {
+  const { issueNumber } = parse(z.object({ issueNumber: id }), req.body);
+  ok(res, await pages.linkIssue(callerId(req), idParam(req, 'pid'), idParam(req, 'num'), issueNumber), 201);
+}));
+router.delete('/projects/:pid/pages/:num/issues/:issueNum', asyncHandler(async (req, res) => {
+  ok(res, await pages.unlinkIssue(callerId(req), idParam(req, 'pid'), idParam(req, 'num'), idParam(req, 'issueNum')));
+}));
+router.get('/projects/:pid/issues/:num/pages', asyncHandler(async (req, res) => {
+  ok(res, await pages.issuePages(callerId(req), idParam(req, 'pid'), idParam(req, 'num')));
+}));
+router.get('/projects/:pid/pages/:num/comments', asyncHandler(async (req, res) => {
+  ok(res, await pages.listComments(callerId(req), idParam(req, 'pid'), idParam(req, 'num')));
+}));
+router.post('/projects/:pid/pages/:num/comments', asyncHandler(async (req, res) => {
+  const { bodyJson } = parse(z.object({ bodyJson: tiptapDoc }), req.body);
+  ok(res, await pages.addComment(callerId(req), idParam(req, 'pid'), idParam(req, 'num'), bodyJson), 201);
+}));
+router.delete('/projects/:pid/pages/:num/comments/:cid', asyncHandler(async (req, res) => {
+  ok(res, await pages.deleteComment(callerId(req), idParam(req, 'pid'), idParam(req, 'num'), idParam(req, 'cid')));
 }));
 
 export default router;

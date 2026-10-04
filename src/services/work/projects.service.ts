@@ -7,13 +7,13 @@ import { prisma } from '../../config/database.js';
 import { BadRequestError, ConflictError, ForbiddenError, NotFoundError } from '../../middleware/errorHandler.js';
 import { PUBLIC_USER } from './common.js';
 import {
-  PROJECT_KEY_RE, type ProjectKind, type ProjectRole, type ProjectTemplate, type ProjectType, type ProjectVisibility,
+  PROJECT_KEY_RE, type ProjectKind, type ProjectRole, type ProjectTemplate, type ProjectType, type ProjectVisibility, type WorkspaceRole,
 } from './constants.js';
 import { defaultModulesFor, kindFromTemplate, mergeModules, modulesOf, noModules, projectKindOf, type ModuleMap } from './studio.js';
 import { auditProject } from './audit.js';
 import { emitWorkEvent, evictFromProject } from './events.js';
 import {
-  can, effectiveProjectRole, loadProjectAccess, requireProject, requireWorkspace, type ProjectOptions,
+  can, docAccess, effectiveProjectRole, loadProjectAccess, requireProject, requireWorkspace, type ProjectOptions,
 } from './permissions.js';
 import { seedProjectConfig } from './templates.js';
 
@@ -158,7 +158,7 @@ export async function getProjectConfig(userId: number, projectId: number) {
     modules: access.modules,
     role: access.role,
     workspaceRole: access.workspaceRole,
-    permissions: permissionFlags(access.role, access.options),
+    permissions: { ...permissionFlags(access.role, access.options), ...docFlags(access) },
     boardColumns: boardColumns(project.workflows, project.settings),
     members,
   };
@@ -187,6 +187,12 @@ export function permissionFlags(role: ProjectRole, opts: ProjectOptions = {}) {
     createHandoffs: can(role, 'handoff.create'),
     manageHandoffs: can(role, 'handoff.manage'),
   };
+}
+
+/** Cờ tài liệu (đợt S2a) — phụ thuộc cả vai không gian (khách GUEST chỉ đọc trang CLIENT). */
+function docFlags(access: { role: ProjectRole; workspaceRole: WorkspaceRole }) {
+  const d = docAccess(access.role, access.workspaceRole);
+  return { viewAllDocs: d.view === 'ALL', editDocs: d.edit, manageDocs: d.manage };
 }
 
 /** Mọi người vào được dự án kèm vai trò hiệu lực — dùng cho ô chọn người, @nhắc tên. */

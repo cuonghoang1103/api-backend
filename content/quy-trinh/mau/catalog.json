@@ -1,0 +1,185 @@
+{
+  "_note": "Danh mục mẫu tài liệu CT Work (đợt S2a). Bản .md trong thư mục này là BẢN SAO của frontend/public/quy-trinh/mau (ảnh Docker backend không có frontend/public). Tên/tiêu đề khớp DOCS trong frontend/src/app/about/quy-trinh/data.ts. Kiểm đồng bộ: src/services/work/docTemplates.test.ts. Đổi mẫu ⇒ sửa ở frontend/public rồi chạy: cp frontend/public/quy-trinh/mau/*.md content/quy-trinh/mau/",
+  "templates": [
+    {
+      "key": "phieu-tiep-nhan-yeu-cau",
+      "titleVi": "Phiếu tiếp nhận yêu cầu",
+      "titleEn": "Project intake form"
+    },
+    {
+      "key": "checklist-danh-gia-phu-hop",
+      "titleVi": "Bảng đánh giá phù hợp & go/no-go",
+      "titleEn": "Qualification scorecard & go/no-go"
+    },
+    {
+      "key": "tai-lieu-phan-tich-nghiep-vu",
+      "titleVi": "Tài liệu phân tích nghiệp vụ (BA)",
+      "titleEn": "Business analysis document"
+    },
+    {
+      "key": "de-xuat-giai-phap",
+      "titleVi": "Đề xuất giải pháp & ước lượng",
+      "titleEn": "Solution proposal & estimate"
+    },
+    {
+      "key": "hop-dong-khung",
+      "titleVi": "Hợp đồng khung (MSA) — mẫu tham khảo",
+      "titleEn": "Master services agreement — reference"
+    },
+    {
+      "key": "sow",
+      "titleVi": "Phạm vi công việc (SOW)",
+      "titleEn": "Statement of work (SOW)"
+    },
+    {
+      "key": "bien-ban-kick-off",
+      "titleVi": "Biên bản họp kick-off",
+      "titleEn": "Kick-off meeting minutes"
+    },
+    {
+      "key": "srs",
+      "titleVi": "Đặc tả yêu cầu phần mềm (SRS)",
+      "titleEn": "Software requirements specification (SRS)"
+    },
+    {
+      "key": "kiem-thu-kha-dung",
+      "titleVi": "Kế hoạch & kết quả kiểm thử khả dụng",
+      "titleEn": "Usability test plan & findings"
+    },
+    {
+      "key": "sdd",
+      "titleVi": "Tài liệu thiết kế phần mềm (SDD)",
+      "titleEn": "Software design description (SDD)"
+    },
+    {
+      "key": "adr",
+      "titleVi": "Ghi quyết định kiến trúc (ADR)",
+      "titleEn": "Architecture decision record (ADR)"
+    },
+    {
+      "key": "ke-hoach-du-an",
+      "titleVi": "Kế hoạch quản lý dự án",
+      "titleEn": "Project management plan"
+    },
+    {
+      "key": "so-dang-ky-rui-ro",
+      "titleVi": "Sổ đăng ký rủi ro",
+      "titleEn": "Risk register"
+    },
+    {
+      "key": "bao-cao-tuan",
+      "titleVi": "Báo cáo tiến độ tuần",
+      "titleEn": "Weekly status report"
+    },
+    {
+      "key": "phieu-yeu-cau-thay-doi",
+      "titleVi": "Phiếu yêu cầu thay đổi (CR)",
+      "titleEn": "Change request form"
+    },
+    {
+      "key": "ke-hoach-chuyen-du-lieu",
+      "titleVi": "Kế hoạch chuyển dữ liệu & đối soát",
+      "titleEn": "Data migration & reconciliation plan"
+    },
+    {
+      "key": "ke-hoach-kiem-thu",
+      "titleVi": "Kế hoạch kiểm thử",
+      "titleEn": "Test plan"
+    },
+    {
+      "key": "test-case",
+      "titleVi": "Bộ test case",
+      "titleEn": "Test cases"
+    },
+    {
+      "key": "bao-cao-kiem-thu",
+      "titleVi": "Báo cáo kiểm thử",
+      "titleEn": "Test summary report"
+    },
+    {
+      "key": "checklist-bao-mat",
+      "titleVi": "Checklist bảo mật trước phát hành",
+      "titleEn": "Pre-release security checklist"
+    },
+    {
+      "key": "runbook-trien-khai",
+      "titleVi": "Runbook triển khai & quay lui",
+      "titleEn": "Deployment & rollback runbook"
+    },
+    {
+      "key": "release-notes",
+      "titleVi": "Ghi chú phát hành (release notes)",
+      "titleEn": "Release notes"
+    },
+    {
+      "key": "bien-ban-nghiem-thu-uat",
+      "titleVi": "Kế hoạch UAT & biên bản nghiệm thu",
+      "titleEn": "UAT plan & acceptance certificate"
+    },
+    {
+      "key": "bien-ban-ban-giao",
+      "titleVi": "Biên bản bàn giao",
+      "titleEn": "Handover record"
+    },
+    {
+      "key": "retrospective",
+      "titleVi": "Retrospective & bài học kinh nghiệm",
+      "titleEn": "Retrospective & lessons learned"
+    },
+    {
+      "key": "bien-ban-dong-du-an",
+      "titleVi": "Biên bản đóng dự án",
+      "titleEn": "Project closure record"
+    },
+    {
+      "key": "sla-bao-tri",
+      "titleVi": "Thoả thuận mức dịch vụ (SLA) bảo trì",
+      "titleEn": "Maintenance SLA"
+    },
+    {
+      "key": "bao-cao-su-co-postmortem",
+      "titleVi": "Báo cáo sự cố (postmortem)",
+      "titleEn": "Incident postmortem"
+    },
+    {
+      "key": "ke-hoach-ngung-he-thong",
+      "titleVi": "Kế hoạch ngừng hệ thống & biên bản xoá dữ liệu",
+      "titleEn": "Decommissioning plan & data deletion record"
+    },
+    {
+      "key": "nda",
+      "titleVi": "Thoả thuận bảo mật thông tin hai chiều (NDA) — mẫu tham khảo",
+      "titleEn": "Mutual non-disclosure agreement (NDA) — reference"
+    },
+    {
+      "key": "dpa",
+      "titleVi": "Thoả thuận xử lý dữ liệu cá nhân (DPA) — mẫu tham khảo",
+      "titleEn": "Data processing agreement (DPA) — reference"
+    },
+    {
+      "key": "bao-gia",
+      "titleVi": "Báo giá — mẫu tham khảo",
+      "titleEn": "Quotation — reference"
+    },
+    {
+      "key": "chinh-sach-bao-hanh",
+      "titleVi": "Chính sách bảo hành sau bàn giao",
+      "titleEn": "Post-delivery warranty policy"
+    },
+    {
+      "key": "bien-ban-thanh-ly-hop-dong",
+      "titleVi": "Biên bản thanh lý hợp đồng — mẫu tham khảo",
+      "titleEn": "Contract liquidation record — reference"
+    },
+    {
+      "key": "ke-hoach-giao-tiep",
+      "titleVi": "Kế hoạch giao tiếp & leo thang",
+      "titleEn": "Communication & escalation plan"
+    },
+    {
+      "key": "tra-loi-danh-gia-nha-cung-cap",
+      "titleVi": "Bảng trả lời đánh giá nhà cung cấp",
+      "titleEn": "Vendor security questionnaire — answers"
+    }
+  ]
+}

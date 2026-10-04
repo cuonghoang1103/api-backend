@@ -10,7 +10,7 @@
 import { Suspense, useCallback } from 'react';
 import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
-import { BadgeCheck, Flag } from 'lucide-react';
+import { BadgeCheck, FileText, Flag } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
   userName, workError, workStudioApi, workStudioKeys, type ApprovalStatus, type ProjectConfig, type WorkApproval,
@@ -31,12 +31,13 @@ function Row({ a, onOpen }: { a: WorkApproval; onOpen: () => void }) {
     <li className="border-b border-[var(--w-border)] last:border-b-0">
       <button type="button" onClick={onOpen} className="flex w-full min-w-0 items-start gap-3 px-4 py-3 text-left transition-colors hover:bg-[var(--w-hover)] md:items-center">
         <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-[7px] bg-[var(--w-sunken)] text-[var(--w-text-3)] md:mt-0">
-          {a.targetType === 'STAGE_GATE' ? <Flag size={14} /> : <BadgeCheck size={14} />}
+          {a.targetType === 'STAGE_GATE' ? <Flag size={14} /> : a.targetType === 'DOC' ? <FileText size={14} /> : <BadgeCheck size={14} />}
         </span>
         <span className="min-w-0 flex-1 md:flex md:items-center md:gap-3">
           <span className="flex min-w-0 items-center gap-2 md:flex-1">
             {a.issueKey && <span className="shrink-0 font-mono text-[12px] text-[var(--w-accent-text)]">{a.issueKey}</span>}
             {a.targetType === 'STAGE_GATE' && <span className="shrink-0 text-[12px] text-[var(--w-text-3)]">Gate</span>}
+            {a.targetType === 'DOC' && <span className="shrink-0 text-[12px] text-[var(--w-text-3)]">Doc</span>}
             <span className="truncate text-[14px] font-medium">{a.title}</span>
           </span>
           <span className="mt-1 flex min-w-0 flex-wrap items-center gap-x-2.5 gap-y-1 text-[12px] text-[var(--w-text-3)] md:mt-0 md:shrink-0 md:flex-nowrap">

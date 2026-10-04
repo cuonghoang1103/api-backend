@@ -437,6 +437,12 @@ model User {
   workHandoffsFrom       WorkHandoff[]         @relation("WorkHandoffFromUser")
   workHandoffsTo         WorkHandoff[]         @relation("WorkHandoffToUser")
   workHandoffsCreated    WorkHandoff[]         @relation("WorkHandoffCreator")
+  // Tài liệu dự án (đợt S2a, 04/10/2026)
+  workPagesOwned         WorkPage[]            @relation("WorkPageOwner")
+  workPagesEdited        WorkPage[]            @relation("WorkPageEditor")
+  workPageVersions       WorkPageVersion[]     @relation("WorkPageVersionAuthor")
+  workPageComments       WorkPageComment[]     @relation("WorkPageCommentAuthor")
+  workPageIssueLinks     WorkPageIssueLink[]   @relation("WorkPageIssueLinkCreator")
 
   @@index([email], name: "idx_users_email")
   @@map("users")
@@ -10046,6 +10052,8 @@ model WorkProject {
   approvals     WorkApproval[]
   handoffs      WorkHandoff[]
   issueAliases  WorkIssueAlias[]
+  /// Tài liệu dự án kiểu Confluence (đợt S2a, mô-đun `docs`).
+  pages         WorkPage[]
   /// Phiếu yêu cầu của khách đã sinh ra dự án này (tối đa một).
   clientRequest ProjectRequest?
 
@@ -10216,6 +10224,7 @@ model WorkIssue {
   approvals    WorkApproval[]
   handoffs     WorkHandoff[]
   aliases      WorkIssueAlias[]
+  pageLinks    WorkPageIssueLink[]
   assignee     User?                @relation("WorkIssueAssignee", fields: [assigneeId], references: [id], onDelete: SetNull)
   reporter     User?                @relation("WorkIssueReporter", fields: [reporterId], references: [id], onDelete: SetNull)
   linksOut     WorkIssueLink[]      @relation("WorkIssueLinkFrom")
@@ -11087,6 +11096,7 @@ model WorkStage {
   gateIssue WorkIssue?     @relation("WorkStageGateIssue", fields: [gateIssueId], references: [id], onDelete: SetNull)
   issues    WorkIssue[]    @relation("WorkIssueStage")
   approvals WorkApproval[]
+  pages     WorkPage[]
 
   @@unique([projectId, n], name: "uk_work_stage_n", map: "uk_work_stage_n")
   @@unique([projectId, slug], name: "uk_work_stage_slug", map: "uk_work_stage_slug")
@@ -11104,6 +11114,8 @@ model WorkApproval {
   targetType  String    @map("target_type") @db.VarChar(16)
   issueId     Int?      @map("issue_id")
   stageId     Int?      @map("stage_id")
+  /// Trang tài liệu được duyệt (targetType DOC, đợt S2a).
+  pageId      Int?      @map("page_id")
   title       String    @db.VarChar(200)
   description String?   @db.Text
   mode        String    @default("SEQUENTIAL") @db.VarChar(16)
@@ -11118,12 +11130,14 @@ model WorkApproval {
   project   WorkProject        @relation(fields: [projectId], references: [id], onDelete: Cascade)
   issue     WorkIssue?         @relation(fields: [issueId], references: [id], onDelete: Cascade)
   stage     WorkStage?         @relation(fields: [stageId], references: [id], onDelete: Cascade)
+  page      WorkPage?          @relation(fields: [pageId], references: [id], onDelete: Cascade)
   createdBy User?              @relation("WorkApprovalCreator", fields: [createdById], references: [id], onDelete: SetNull)
   steps     WorkApprovalStep[]
 
   @@index([projectId, status], name: "idx_work_approval_project")
   @@index([issueId], name: "idx_work_approval_issue")
   @@index([stageId], name: "idx_work_approval_stage")
+  @@index([pageId], name: "idx_work_approval_page")
   @@map("work_approvals")
 }
 
@@ -11196,6 +11210,112 @@ model WorkIssueAlias {
   @@unique([projectId, number], name: "uk_work_issue_alias", map: "uk_work_issue_alias")
   @@index([issueId], name: "idx_work_issue_alias_issue")
   @@map("work_issue_aliases")
+}
+
+// ─── CT Work — TÀI LIỆU DỰ ÁN kiểu Confluence (đợt S2a, 04/10/2026) ──────────
+// Mô-đun `docs` (settings.modules.docs). Xem src/services/work/pages.service.ts.
+
+/// Một trang tài liệu của dự án. Cây qua parentId; thứ tự anh em theo position.
+/// status: DRAFT | IN_REVIEW | APPROVED | ARCHIVED.
+/// visibility: INTERNAL (chỉ đội) | CLIENT (khách/GUEST đọc được — cổng khách đợt S2b).
+/// `number` cấp theo dự án (DOC-1, DOC-2…) — URL /work/<ws>/<KEY>/docs/<number>.
+/// `version` tăng mỗi lần lưu: client gửi kèm số đang cầm, lệch ⇒ 409 (không đè).
+model WorkPage {
+  id             Int       @id @default(autoincrement())
+  projectId      Int       @map("project_id")
+  number         Int
+  parentId       Int?      @map("parent_id")
+  title          String    @db.VarChar(255)
+  /// JSON của TipTap (cùng định dạng với mô tả thẻ, thêm bảng).
+  contentJson    Json?     @map("content_json")
+  /// Chữ trơn rút từ contentJson — cho tìm kiếm, xuất, so sánh phiên bản.
+  contentText    String?   @map("content_text") @db.Text
+  status         String    @default("DRAFT") @db.VarChar(16)
+  visibility     String    @default("INTERNAL") @db.VarChar(16)
+  ownerId        Int?      @map("owner_id")
+  lastEditedById Int?      @map("last_edited_by_id")
+  /// Mẫu đã dùng lúc tạo (tên file trong content/quy-trinh/mau, không đuôi .md).
+  templateKey    String?   @map("template_key") @db.VarChar(64)
+  /// Giai đoạn của dự án (mô-đun stages) mà trang thuộc về.
+  stageId        Int?      @map("stage_id")
+  position       Int       @default(0)
+  version        Int       @default(0)
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+  deletedAt      DateTime? @map("deleted_at")
+
+  project      WorkProject         @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  parent       WorkPage?           @relation("WorkPageTree", fields: [parentId], references: [id], onDelete: SetNull)
+  children     WorkPage[]          @relation("WorkPageTree")
+  owner        User?               @relation("WorkPageOwner", fields: [ownerId], references: [id], onDelete: SetNull)
+  lastEditedBy User?               @relation("WorkPageEditor", fields: [lastEditedById], references: [id], onDelete: SetNull)
+  stage        WorkStage?          @relation(fields: [stageId], references: [id], onDelete: SetNull)
+  versions     WorkPageVersion[]
+  issueLinks   WorkPageIssueLink[]
+  comments     WorkPageComment[]
+  approvals    WorkApproval[]
+
+  @@unique([projectId, number], name: "uk_work_page_number", map: "uk_work_page_number")
+  @@index([projectId, parentId, position], name: "idx_work_page_tree")
+  @@index([stageId], name: "idx_work_page_stage")
+  @@map("work_pages")
+}
+
+/// Bản chụp một trang. kind: CREATE | EDIT | RESTORE | MANUAL. Lưu liên tiếp của
+/// CÙNG người trong vài phút gộp vào bản EDIT cuối (không sinh hàng trăm bản).
+model WorkPageVersion {
+  id          Int      @id @default(autoincrement())
+  pageId      Int      @map("page_id")
+  n           Int
+  kind        String   @default("EDIT") @db.VarChar(16)
+  title       String   @db.VarChar(255)
+  contentJson Json?    @map("content_json")
+  contentText String?  @map("content_text") @db.Text
+  authorId    Int?     @map("author_id")
+  note        String?  @db.VarChar(500)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  page   WorkPage @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  author User?    @relation("WorkPageVersionAuthor", fields: [authorId], references: [id], onDelete: SetNull)
+
+  @@unique([pageId, n], name: "uk_work_page_version", map: "uk_work_page_version")
+  @@map("work_page_versions")
+}
+
+/// Trang ↔ thẻ (hai chiều: trang thấy thẻ, thẻ thấy "Linked docs").
+model WorkPageIssueLink {
+  id          Int      @id @default(autoincrement())
+  pageId      Int      @map("page_id")
+  issueId     Int      @map("issue_id")
+  createdById Int?     @map("created_by_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  page      WorkPage  @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  issue     WorkIssue @relation(fields: [issueId], references: [id], onDelete: Cascade)
+  createdBy User?     @relation("WorkPageIssueLinkCreator", fields: [createdById], references: [id], onDelete: SetNull)
+
+  @@unique([pageId, issueId], name: "uk_work_page_issue", map: "uk_work_page_issue")
+  @@index([issueId], name: "idx_work_page_issue_issue")
+  @@map("work_page_issue_links")
+}
+
+/// Bình luận trên trang (@nhắc tên ⇒ WORK_MENTION như bình luận thẻ).
+model WorkPageComment {
+  id        Int       @id @default(autoincrement())
+  pageId    Int       @map("page_id")
+  authorId  Int?      @map("author_id")
+  bodyJson  Json      @map("body_json")
+  bodyText  String    @map("body_text") @db.Text
+  createdAt DateTime  @default(now()) @map("created_at")
+  editedAt  DateTime? @map("edited_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  page   WorkPage @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  author User?    @relation("WorkPageCommentAuthor", fields: [authorId], references: [id], onDelete: SetNull)
+
+  @@index([pageId, createdAt], name: "idx_work_page_comment_page")
+  @@map("work_page_comments")
 }
 
 /// KEY GIA HẠN hạn mức AI Code (02/10/2026) — mỗi hàng là MỘT lần người dùng

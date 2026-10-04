@@ -59,6 +59,8 @@ export const STUDIO_MODULES = ['teams', 'stages', 'approvals', 'handoffs', 'docs
 export type StudioModule = (typeof STUDIO_MODULES)[number];
 /** Mô-đun đã có tính năng thật (đợt S1). */
 export const STUDIO_MODULES_S1: readonly StudioModule[] = ['teams', 'stages', 'approvals', 'handoffs'];
+/** Mô-đun có tính năng thật từ đợt S2a (04/10/2026): tài liệu dự án kiểu Confluence. */
+export const STUDIO_MODULES_S2A: readonly StudioModule[] = ['docs'];
 
 export const TEAM_ROLES = ['LEAD', 'MEMBER'] as const;
 export type TeamRole = (typeof TEAM_ROLES)[number];
@@ -80,3 +82,11 @@ export type HandoffStatus = (typeof HANDOFF_STATUSES)[number];
 
 /** Mã bộ phận: 2–16 ký tự, bắt đầu bằng chữ, chữ in hoa/số/gạch dưới (BA, DEV, QA_AUTO). */
 export const TEAM_KEY_RE = /^[A-Z][A-Z0-9_]{1,15}$/;
+
+// ─── Tài liệu dự án (đợt S2a, 04/10/2026, mô-đun `docs`) ─────────
+
+export const PAGE_STATUSES = ['DRAFT', 'IN_REVIEW', 'APPROVED', 'ARCHIVED'] as const;
+export type PageStatus = (typeof PAGE_STATUSES)[number];
+/** INTERNAL: chỉ đội làm. CLIENT: khách (vai CLIENT / khách GUEST) đọc được — cổng khách đợt S2b. */
+export const PAGE_VISIBILITY = ['INTERNAL', 'CLIENT'] as const;
+export type PageVisibility = (typeof PAGE_VISIBILITY)[number];

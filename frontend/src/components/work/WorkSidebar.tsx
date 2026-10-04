@@ -23,7 +23,7 @@ import { useEffect, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import {
   ArrowLeft, CalendarRange, CircleHelp, KeyRound, FlaskConical, Rocket, BarChart3, ChevronDown, Columns3, Inbox, LayoutDashboard,
-  List, ListOrdered, Plus, Search, Settings, Users, LayoutGrid, Check, Sparkles, PanelLeftClose, PanelLeftOpen, Milestone, BadgeCheck, Network,
+  List, ListOrdered, Plus, Search, Settings, Users, LayoutGrid, Check, Sparkles, PanelLeftClose, PanelLeftOpen, Milestone, BadgeCheck, Network, FileText,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { workApi, type StudioModule } from '@/lib/work-api';
@@ -108,6 +108,7 @@ const PROJECT_NAV: { group: string; items: NavDef[] }[] = [
       { path: 'list', label: 'Issues', icon: List, match: (v) => v === 'list' || v === 'issue' },
       { path: 'stages', label: 'Stages', icon: Milestone, match: (v) => v === 'stages', module: 'stages' },
       { path: 'approvals', label: 'Approvals', icon: BadgeCheck, match: (v) => v === 'approvals', module: 'approvals' },
+      { path: 'docs', label: 'Docs', icon: FileText, match: (v) => v === 'docs', module: 'docs' },
       { path: 'tests', label: 'Tests', icon: FlaskConical, match: (v) => v === 'tests' },
     ],
   },

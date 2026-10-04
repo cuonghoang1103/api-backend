@@ -25,17 +25,17 @@ export function studioOn(config: Pick<ProjectConfig, 'modules'> | undefined | nu
   return config?.modules?.[m] === true;
 }
 
-/** Bốn mô-đun có tính năng thật ở đợt S1 (thứ tự hiển thị). */
+/** Mô-đun có tính năng thật: bốn mô-đun đợt S1 + Docs (đợt S2a) — thứ tự hiển thị. */
 export const S1_MODULES: Array<{ key: StudioModule; label: string; body: string }> = [
   { key: 'teams', label: 'Teams', body: 'Departments shared across projects (BA, DEV, QA…). Issues get a Team field, each team has a work queue its lead assigns from.' },
   { key: 'stages', label: 'Stages & gates', body: 'Run the project as numbered stages. A stage can only start when the previous one passed its gate review.' },
   { key: 'approvals', label: 'Approvals', body: 'Formal sign-off on issues and stage gates — sequential or parallel approvers, each decision signed with a content fingerprint.' },
   { key: 'handoffs', label: 'Handoffs', body: 'Pass an issue to another team or person with a checklist they must tick before accepting, or return with a reason.' },
+  { key: 'docs', label: 'Docs', body: 'Confluence-style project documents: a page tree, 36 process templates (SRS, SOW, test plan…), version history, approvals and links to issues.' },
 ];
 
 /** Khoá chừa cho đợt sau — hiện mờ "Coming later" để người dùng biết hướng đi. */
 export const LATER_MODULES: Array<{ key: StudioModule; label: string }> = [
-  { key: 'docs', label: 'Docs' },
   { key: 'clientPortal', label: 'Client portal' },
   { key: 'changeRequests', label: 'Change requests' },
   { key: 'raid', label: 'RAID log' },
@@ -47,7 +47,7 @@ export const KIND_INFO: Record<ProjectKind, { label: string; short: string; body
   PERSONAL: { label: 'Personal', short: 'Personal', body: 'Your own tasks and side projects. Just a board — nothing to set up.', modules: [] },
   SCHOOL: { label: 'School / coursework', short: 'School', body: 'Group assignments and capstones (SWP391, SWR302, SWT301). Sprints, tests and reports for your lecturer.', modules: [] },
   SOFTWARE: { label: 'Software team', short: 'Software', body: 'A product team shipping software: sprints, code review, releases and GitHub.', modules: [] },
-  CLIENT: { label: 'Client project (studio)', short: 'Client', body: 'Work delivered for a client through departments: stages with gate reviews, approvals and handoffs.', modules: ['teams', 'stages', 'approvals', 'handoffs'] },
+  CLIENT: { label: 'Client project (studio)', short: 'Client', body: 'Work delivered for a client through departments: stages with gate reviews, approvals and handoffs.', modules: ['teams', 'stages', 'approvals', 'handoffs', 'docs'] },
 };
 export const KINDS: ProjectKind[] = ['PERSONAL', 'SCHOOL', 'SOFTWARE', 'CLIENT'];
 

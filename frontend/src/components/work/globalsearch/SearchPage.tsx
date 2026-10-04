@@ -11,9 +11,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
-import { Code2, Layers, ListFilter, Rows3, Wand2 } from 'lucide-react';
+import Link from 'next/link';
+import { Code2, FileText, Layers, ListFilter, Rows3, Wand2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { workError, workSearchApi, workSearchKeys, type GlobalIssueHit } from '@/lib/work-api';
+import { workDocsApi, workError, workSearchApi, workSearchKeys, type GlobalIssueHit } from '@/lib/work-api';
 import { PageHeader } from '../settings/shared';
 import { EmptyState, Spinner, isTyping } from '../ui';
 import { JqlInput, type JqlInputHandle } from '../search/JqlInput';
@@ -27,6 +28,37 @@ import {
 } from './query';
 
 const PAGE = 50;
+
+/**
+ * Tài liệu khớp chữ đang tìm (S2a) — một dải gọn trên danh sách thẻ. JQL chỉ áp
+ * cho thẻ nên tài liệu đi API riêng (/work/search/docs, lọc quyền như trang Docs).
+ */
+function MatchingDocs({ text }: { text: string }) {
+  const t = text.trim();
+  const q = useQuery({ queryKey: ['work', 'search-docs', t], queryFn: () => workDocsApi.searchAll(t), enabled: t.length >= 2, staleTime: 15_000 });
+  const hits = q.data ?? [];
+  if (t.length < 2 || !hits.length) return null;
+  return (
+    <div className="shrink-0 border-b border-[var(--w-border)] px-3 py-2 md:px-4" aria-label="Matching documents">
+      <div className="mb-1 text-[12px] font-medium text-[var(--w-text-3)]">Docs · {hits.length} matching page{hits.length === 1 ? '' : 's'}</div>
+      <ul className="flex min-w-0 flex-wrap gap-1.5">
+        {hits.slice(0, 6).map((h) => (
+          <li key={h.id} className="min-w-0 max-w-full">
+            <Link
+              href={`/work/${h.project!.workspaceSlug}/${h.project!.key}/docs/${h.number}`}
+              title={h.snippet}
+              className="flex h-7 min-w-0 max-w-[320px] items-center gap-1.5 rounded-[6px] border border-[var(--w-border)] px-2 text-[12.5px] hover:bg-[var(--w-hover)]"
+            >
+              <FileText size={12} className="shrink-0 text-[var(--w-text-3)]" />
+              <span className="shrink-0 font-mono text-[11px] text-[var(--w-text-3)]">{h.project!.key}</span>
+              <span className="min-w-0 truncate">{h.title}</span>
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
 
 function Segmented<T extends string>({ value, options, onChange, label }: {
   value: T;
@@ -296,6 +328,8 @@ export default function GlobalSearchPage() {
           You can see more than 200 projects — only the 200 most recently active were searched. Add <span className="font-mono">project = KEY</span> to narrow it down.
         </div>
       )}
+
+      {mode === 'basic' && <MatchingDocs text={basic.text} />}
 
       {/* Kết quả */}
       <div className="min-h-0 flex-1 overflow-y-auto">

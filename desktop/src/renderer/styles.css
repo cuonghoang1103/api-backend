@@ -14375,7 +14375,8 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
    Mạng nhà — thiết kế lại (features/mang/MangNhaPage.tsx)
    ═══════════════════════════════════════════════════════════════ */
 .ct-mang-page {
-  max-width: 860px;
+  /* Trước 860px cố định ⇒ ở cửa sổ rộng là một dải hẹp giữa màn (04/10/2026). */
+  max-width: min(var(--ct-page-w), 100%);
   margin: 0 auto;
   padding: 24px 20px calc(28px + var(--ct-player-h) + var(--ct-robot-h));
 }
@@ -15440,3 +15441,25 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
 
 /* Robot Odin né ngăn AI của CT Work (rộng 440px, dính mép phải) — xem CtWorkPage. */
 .ct-work-ai-mo .odin-dock { translate: -440px 0; transition: translate 220ms var(--ct-ease); }
+
+/*
+ * CỬA SỔ RỘNG (04/10/2026). Người dùng: "khi thu to phóng nhỏ app thì trang cũng
+ * phải cân đối, hiện full như AI Chat". Đo ở 2200px: Ngoại ngữ, IoT Odin, Lộ trình…
+ * dùng trần bề rộng của WEB (`max-w-5xl` 1024px, `max-w-6xl` 1152px) — hợp tab trình
+ * duyệt, nhưng trong cửa sổ app rộng thì thành một cột nhỏ giữa hai mảng trống.
+ * Nới các trần đó (chỉ khung trang căn giữa `.mx-auto`) và bề rộng chuẩn của trang
+ * app theo bậc cửa sổ. Cửa sổ hẹp giữ nguyên — ở đó mọi trang đã co đúng (đo 1000px).
+ */
+@media (min-width: 1800px) {
+  :root { --ct-page-w: 1560px; }
+  .ct-web-host .mx-auto.max-w-4xl { max-width: min(100%, 1120px); }
+  .ct-web-host .mx-auto.max-w-5xl { max-width: min(100%, 1320px); }
+  .ct-web-host .mx-auto.max-w-6xl { max-width: min(100%, 1440px); }
+  .ct-web-host .mx-auto.max-w-7xl { max-width: min(100%, 1560px); }
+}
+@media (min-width: 2200px) {
+  :root { --ct-page-w: 1760px; }
+  .ct-web-host .mx-auto.max-w-5xl { max-width: min(100%, 1480px); }
+  .ct-web-host .mx-auto.max-w-6xl { max-width: min(100%, 1640px); }
+  .ct-web-host .mx-auto.max-w-7xl { max-width: min(100%, 1760px); }
+}

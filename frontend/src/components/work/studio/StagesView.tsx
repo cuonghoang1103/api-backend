@@ -11,14 +11,15 @@
  */
 
 import Link from 'next/link';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { Check, CircleDashed, Flag, Lock, MoreHorizontal, Pencil, Play, Plus, Send, Trash2 } from 'lucide-react';
+import { Check, CircleDashed, FileText, Flag, Lock, MoreHorizontal, Pencil, Play, Plus, Send, Trash2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
-  workError, workStudioApi, workStudioKeys, type ProjectConfig, type StageSummary,
+  workError, workStudioApi, workStudioKeys, type ProjectConfig, type StageSummary, type WorkPageItem,
 } from '@/lib/work-api';
+import { StatusDot, useDocsList } from '../docs/shared';
 import { Dialog, EmptyState, Field, PageLoading, Popover, Spinner, formatDate, useToggle } from '../ui';
 import { ConfirmDialog } from '../settings/shared';
 import { ApprovalDialog } from './ApprovalDetail';
@@ -74,8 +75,10 @@ function StageRail({ stages, onJump }: { stages: StageSummary[]; onJump: (id: nu
 
 // ─── Một giai đoạn ───────────────────────────────────────────────
 
-function StageRow({ s, config, base, blocked, onBlocked, onOpenApproval, onEdit, onDelete }: {
+function StageRow({ s, config, base, blocked, onBlocked, onOpenApproval, onEdit, onDelete, docs }: {
   s: StageSummary; config: ProjectConfig; base: string;
+  /** Tài liệu gắn giai đoạn này (S2a, chỉ khi mô-đun docs bật). */
+  docs?: WorkPageItem[];
   blocked: Blocked['blocker'] | null; onBlocked: (b: Blocked['blocker'] | null) => void;
   onOpenApproval: (id: number) => void; onEdit: () => void; onDelete: () => void;
 }) {
@@ -146,6 +149,24 @@ function StageRow({ s, config, base, blocked, onBlocked, onOpenApproval, onEdit,
             {s.startedAt && <span>Started {formatDate(s.startedAt)}</span>}
             {s.completedAt && <span>Done {formatDate(s.completedAt)}</span>}
           </div>
+
+          {docs && docs.length > 0 && (
+            <div className="mt-2.5 flex min-w-0 flex-wrap items-center gap-1.5" aria-label={`Documents for stage ${s.n}`}>
+              {docs.slice(0, 6).map((d) => (
+                <Link
+                  key={d.id}
+                  href={`${base}/docs/${d.number}`}
+                  className="inline-flex h-6 max-w-[240px] items-center gap-1.5 rounded-[6px] border border-[var(--w-border)] bg-[var(--w-panel)] px-2 text-[12px] text-[var(--w-text-2)] hover:border-[var(--w-border-strong)] hover:text-[var(--w-text)]"
+                  title={d.title}
+                >
+                  <FileText size={11} className="shrink-0 text-[var(--w-text-3)]" />
+                  <span className="truncate">{d.title}</span>
+                  <StatusDot status={d.status} />
+                </Link>
+              ))}
+              {docs.length > 6 && <Link href={`${base}/docs`} className="text-[12px] text-[var(--w-text-3)] hover:text-[var(--w-text)]">+{docs.length - 6} more</Link>}
+            </div>
+          )}
 
           {/* Hành động theo trạng thái */}
           <div className="mt-3 flex flex-wrap items-center gap-2">
@@ -267,6 +288,20 @@ export default function StagesView({ config }: { config: ProjectConfig }) {
   const invalidate = useStudioInvalidate();
   const base = `/work/${config.workspace.slug}/${config.key}`;
   const q = useQuery({ queryKey: workStudioKeys.stages(config.id), queryFn: () => workStudioApi.stages(config.id) });
+  // Tài liệu theo giai đoạn (S2a): một lần tải cho cả trang, nhóm theo stageId.
+  const docsList = useDocsList(config.id, studioOn(config, 'docs'));
+  const docsByStage = useMemo(() => {
+    const m = new Map<number, WorkPageItem[]>();
+    for (const p of docsList.data?.pages ?? []) {
+      if (p.stageId === null) continue;
+      const arr = m.get(p.stageId) ?? [];
+      arr.push(p);
+      m.set(p.stageId, arr);
+    }
+    // Trang mẫu (có templateKey) trước, trang "giai đoạn" (vỏ) sau.
+    for (const arr of m.values()) arr.sort((a, b) => Number(!a.templateKey) - Number(!b.templateKey) || a.position - b.position);
+    return m;
+  }, [docsList.data]);
   const [blocked, setBlocked] = useState<Blocked | null>(null);
   const [approvalId, setApprovalId] = useState<number | null>(null);
   const [editing, setEditing] = useState<StageSummary | null | 'new'>(null);
@@ -307,6 +342,7 @@ export default function StagesView({ config }: { config: ProjectConfig }) {
                   onOpenApproval={setApprovalId}
                   onEdit={() => setEditing(s)}
                   onDelete={() => setDeleting(s)}
+                  docs={docsByStage.get(s.id)}
                 />
               ))}
             </ol>

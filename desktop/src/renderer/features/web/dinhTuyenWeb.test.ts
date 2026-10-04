@@ -177,6 +177,11 @@ describe('khopTuyenWeb', () => {
       expect(k?.thamSo, v).toEqual({ ws: 'acme', key: 'WEB' });
     }
 
+    const dd = khopTuyenWeb('/work/acme/WEB/docs/12');
+    expect(dd?.tuyen.mau).toBe('/work/:ws/:key/docs/:num');
+    expect(dd?.thamSo).toEqual({ ws: 'acme', key: 'WEB', num: '12' });
+    expect(khopTuyenWeb('/work/acme/WEB/docs')?.tuyen.mau).toBe('/work/:ws/:key/docs');
+
     const i = khopTuyenWeb('/work/acme/WEB/issue/42');
     expect(i?.tuyen.mau).toBe('/work/:ws/:key/issue/:num');
     expect(i?.thamSo).toEqual({ ws: 'acme', key: 'WEB', num: '42' });
@@ -238,7 +243,8 @@ describe('khopTuyenWeb', () => {
     // 03/10/2026: +5 IELTS — Phòng thi & Kho luyện dưới /language/:code/ielts, và
     // mục riêng /ielts, /ielts/phong-thi, /ielts/luyen-them (code cố định 'en').
     // 04/10/2026: +4 CT Work lớp studio S1 (teams, teams/:teamId, stages, approvals).
-    expect(thay.size).toBe(108);
+    // 04/10/2026: +2 CT Work Đợt S2a — tài liệu dự án (docs, docs/:num).
+    expect(thay.size).toBe(110);
   });
 });
 

@@ -181,6 +181,12 @@ export function stopAudio() {
   f?.();
 }
 
+/** Có tiếng đang phát ngay lúc này không — nhân vật gia sư mấp máy môi theo cái này (đọc mỗi khung hình). */
+export function dangPhatTieng(): boolean {
+  if (audio && !audio.paused && !audio.ended) return true;
+  try { return !!window.speechSynthesis?.speaking; } catch { return false; }
+}
+
 /* Rời trang, ẩn tab trình duyệt: dừng — không để tiếng chạy khi người học đã đi chỗ khác. */
 if (typeof window !== 'undefined') {
   window.addEventListener('pagehide', () => stopAudio());

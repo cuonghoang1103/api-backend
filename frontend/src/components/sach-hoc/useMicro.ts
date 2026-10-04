@@ -25,6 +25,9 @@ export function useMicro(o: {
   toiDaMs: number;
   /** Tự dừng sau khoảng im lặng này (ms) khi đã có tiếng nói; bỏ trống = chỉ dừng bằng tay. */
   tuDung?: { imMs: number };
+  /** Nhận mức âm lượng (0–1) MỖI khung hình, không qua state — cho hình động (nhân vật, vòng sóng)
+   *  khỏi vẽ lại cả cây React. Có cái này thì `muc` trả về luôn là 0. */
+  onMuc?: (m: number) => void;
 }) {
   const [trangThai, setTrangThai] = useState<TrangThaiMicro>('nghi');
   const [muc, setMuc] = useState(0);
@@ -41,6 +44,7 @@ export function useMicro(o: {
     x.stream?.getTracks().forEach((t) => t.stop());
     void x.ac?.close().catch(() => {});
     r.current = { mr: x.mr };
+    opt.current.onMuc?.(0);
     setMuc(0);
   }, []);
 
@@ -83,7 +87,9 @@ export function useMicro(o: {
         for (let i = 0; i < buf.length; i++) s += buf[i] * buf[i];
         const rms = Math.sqrt(s / buf.length);
         const m = Math.min(1, rms * 8);
-        if (Math.abs(m - mucCu) > 0.05) { mucCu = m; setMuc(m); } // khỏi vẽ lại 60 lần/giây
+        const cb = opt.current.onMuc;
+        if (cb) cb(m);
+        else if (Math.abs(m - mucCu) > 0.05) { mucCu = m; setMuc(m); } // khỏi vẽ lại 60 lần/giây
         const td = opt.current.tuDung;
         if (td) {
           const now = performance.now();

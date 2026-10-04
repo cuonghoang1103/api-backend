@@ -13,9 +13,9 @@
  *  - Đóng cửa sổ ⇒ dừng tiếng + tắt micro (useMicro tự dọn khi unmount).
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Mic, Square, PhoneOff, RotateCcw, SkipForward, Volume2 } from 'lucide-react';
+import { Mic, PhoneOff, RotateCcw, SkipForward, Volume2, Sparkles } from 'lucide-react';
 import api from '@/lib/api';
-import RobotAI from '@/components/academy/RobotAI';
+import NhanVat3D, { type CamXuc } from './goi/NhanVat3D';
 import { play, stopAudio, AI_TIMEOUT, type Clip } from './audio';
 import { blobToWav16k } from './wav';
 import { useMicro } from './useMicro';
@@ -56,11 +56,25 @@ export default function GoiGiaSu({ danhSach, chuDe, onClose }: { danhSach: CauMa
 
   const trangThai = () => JSON.stringify({ danhSach, viTri: st.current.viTri, lanThu: st.current.lanThu, chuDe });
 
+  /* Mức micro đi thẳng vào nhân vật + vòng sóng của nút, KHÔNG qua state: trước 04/10
+     mỗi lần âm lượng đổi là vẽ lại cả hộp thoại (đè lên nền kính mờ) ⇒ màn hình nhấp nháy. */
+  const mucRef = useRef(0);
+  const vongRef = useRef<HTMLDivElement>(null);
   const mic = useMicro({
     toiDaMs: GHI_TOI_DA,
     tuDung: { imMs: 1500 },
     onXong: (blob) => { void guiLuot(blob); },
+    onMuc: (m) => { mucRef.current = m; vongRef.current?.style.setProperty('--muc', m.toFixed(3)); },
   });
+  /** Phản ứng tức thời của Bông (chào, mừng điểm cao, động viên) — giữ ~2,4 giây rồi về theo pha. */
+  const [phanUng, setPhanUng] = useState<CamXuc | null>(null);
+  const henPU = useRef<ReturnType<typeof setTimeout>>();
+  const phanUngNgan = useCallback((c: CamXuc, ms = 2400) => {
+    setPhanUng(c);
+    clearTimeout(henPU.current);
+    henPU.current = setTimeout(() => setPhanUng(null), ms);
+  }, []);
+  useEffect(() => () => clearTimeout(henPU.current), []);
   const ngheTu = useRef(0);
   const batNghe = useCallback(() => {
     if (st.current.dong) return;
@@ -101,6 +115,7 @@ export default function GoiGiaSu({ danhSach, chuDe, onClose }: { danhSach: CauMa
       if (!d || st.current.dong) return;
       const ngheDuoc = (d.nghe ?? '').trim();
       if (ngheDuoc || d.cham) setLuot((x) => [...x, { ai: false, text: ngheDuoc || mauDaDoc?.text || '…', cham: d.cham ?? null }]);
+      if (d.cham) phanUngNgan(d.cham.tong >= 85 ? 'vui' : d.cham.tong >= 60 ? 'kha' : 'buon', 2600);
       if (d.loai === 'hoi') {
         // Đang hỏi: nói câu đệm ngay, gọi AI (~10 giây) song song.
         st.current.imLien = 0;
@@ -140,6 +155,7 @@ export default function GoiGiaSu({ danhSach, chuDe, onClose }: { danhSach: CauMa
       const d = nhan(r.data?.data ?? {});
       if (!d || st.current.dong) return;
       setLuot([{ ai: true, text: d.noi ?? '' }]);
+      phanUngNgan('chao', 2600);
       giaSuNoi(d.audioUrl, d.noi ?? '', d.mau ?? null, true);
     } catch (e) {
       const m = (e as { response?: { status?: number } })?.response;
@@ -169,74 +185,110 @@ export default function GoiGiaSu({ danhSach, chuDe, onClose }: { danhSach: CauMa
 
   const NHAN: Record<Pha, string> = {
     cho: luot.length ? 'Bấm 🎙 để đọc' : 'Bấm để bắt đầu',
-    mo: 'Đang kết nối gia sư…',
-    giasu: 'Gia sư đang nói — chạm để ngắt và đọc ngay',
+    mo: 'Đang gọi Bông…',
+    giasu: 'Bông đang nói — chạm để ngắt lời và đọc ngay',
     nghe: 'Đang nghe — đọc to câu mẫu, nói xong máy tự chấm',
     cham: 'Đang chấm…',
-    nghi: 'Gia sư đang suy nghĩ…',
+    nghi: 'Bông đang suy nghĩ…',
     loi: 'Tạm dừng',
   };
 
-  return (
-    <div className={s.goiNen} role="dialog" aria-modal="true" aria-label="Luyện phát âm cùng gia sư">
-      <div className={s.goiHop}>
-        <div className={s.goiDau}>
-          <div>
-            <div className={s.goiTen}>📞 Luyện phát âm cùng gia sư</div>
-            <div className={s.quizSub}>Gia sư nói tiếng Việt, chấm từng âm bạn đọc. Muốn hỏi thì cứ nói bằng tiếng Việt.</div>
-          </div>
-          <button type="button" className={s.goiKetThuc} onClick={onClose}><PhoneOff size={16} /> Kết thúc</button>
-        </div>
+  const THEO_PHA: Record<Pha, CamXuc> = { cho: 'cho', mo: 'nghi', giasu: 'noi', nghe: 'nghe', cham: 'nghi', nghi: 'nghi', loi: 'loi' };
+  const camXuc = phanUng ?? THEO_PHA[pha];
+  const loiCuoi = [...luot].reverse().find((l) => l.ai)?.text ?? '';
+  const iCham = luot.map((l, i) => (l.cham ? i : -1)).filter((i) => i >= 0).pop() ?? -1;
+  const chamCuoi = iCham >= 0 ? luot[iCham].cham! : null;
+  const NHAN_NGAN: Record<Pha, string> = { cho: 'Sẵn sàng', mo: 'Đang kết nối', giasu: 'Bông đang nói', nghe: 'Đang nghe bạn', cham: 'Đang chấm', nghi: 'Bông đang nghĩ', loi: 'Tạm dừng' };
 
-        <div className={s.goiLog} ref={cuon}>
-          {!luot.length && (
-            <div className={s.quizSub} style={{ textAlign: 'center', padding: '24px 8px' }}>
-              Đeo tai nghe sẽ rõ hơn và micro không thu lại tiếng gia sư. Mỗi lượt: nghe câu mẫu → đọc theo → nghe nhận xét.
-              <br />Máy chấm khá dễ với lỗi nhỏ — đọc sai rõ thì bắt được, sai tinh tế có thể vẫn được điểm cao.
+  return (
+    <div className={s.goiSan} role="dialog" aria-modal="true" aria-label="Luyện phát âm cùng gia sư">
+      <div className={s.goiTroi} aria-hidden="true"><i /><i /><i /></div>
+
+      <header className={s.goiThanh} data-goi-thanh="">
+        <div className={s.goiDanhTinh}>
+          <span className={s.goiCham0} data-pha={pha} />
+          <div>
+            <div className={s.goiTen}>Luyện nói cùng Bông</div>
+            <div className={s.goiPhu}>{NHAN_NGAN[pha]} · {chuDe}</div>
+          </div>
+        </div>
+        <button type="button" className={s.goiKetThuc} onClick={onClose}><PhoneOff size={16} /> Kết thúc</button>
+      </header>
+
+      <div className={s.goiKhung}>
+        <section className={s.goiSanKhau}>
+          <NhanVat3D camXuc={camXuc} mucRef={mucRef} />
+          <div className={s.goiBongNoi} aria-live="polite">
+            {loiCuoi ? <LoiNoi text={loiCuoi} /> : (
+              <span>Chào bạn! Mình là <b>Bông</b>. Mình đọc mẫu, bạn đọc theo, mình chấm từng âm. Muốn hỏi gì cứ nói tiếng Việt nhé.</span>
+            )}
+          </div>
+          {chamCuoi && (
+            <div key={iCham} className={`${s.goiDiem} ${chamCuoi.tong >= 85 ? s.goiDiemTot : chamCuoi.tong >= 60 ? s.goiDiemKha : s.goiDiemYeu}`}>
+              {chamCuoi.tong >= 85 && <Sparkles size={16} />}<b>{chamCuoi.tong}</b><span>điểm</span>
             </div>
           )}
-          {luot.map((l, i) => (
-            <div key={i} className={l.ai ? s.goiAi : s.goiBan}>
-              {l.ai ? <LoiNoi text={l.text} /> : <>“{l.text}”</>}
-              {l.cham && (
-                <div className={s.goiCham}>
-                  <b className={l.cham.tong >= 85 ? s.paGood : l.cham.tong >= 60 ? s.paWarn : s.paBad}>{l.cham.tong} điểm</b>
-                  {l.cham.tu.map((w, j) => (
-                    <span key={j} className={w.loi === 'Omission' ? s.paOmit : w.diem >= 85 ? s.paGood : w.diem >= 60 ? s.paWarn : s.paBad}>{w.tu}</span>
-                  ))}
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
+        </section>
 
-        {mau && (
+        <aside className={s.goiBen}>
           <div className={s.goiMau}>
-            <div className={s.quizSub}>Câu mẫu — đọc theo:</div>
-            <div className={s.goiMauChu}>{mau.text}</div>
-            {mau.ipa && <div className={s.quizSub}>/{mau.ipa}/</div>}
-            <div className={s.paBtns} style={{ marginTop: 8, justifyContent: 'center' }}>
-              <button type="button" className={s.btnGhost} onClick={ngheMau}><Volume2 size={14} /> Nghe mẫu</button>
-              {danhSach.length > 1 && <button type="button" className={s.btnGhost} onClick={cauKhac}><SkipForward size={14} /> Câu khác</button>}
-            </div>
+            <div className={s.goiNhanMuc}>Câu mẫu — đọc theo</div>
+            {mau ? (
+              <>
+                <div className={s.goiMauChu}>{mau.text}</div>
+                {mau.ipa && <div className={s.goiIpa}>/{mau.ipa}/</div>}
+              </>
+            ) : <div className={s.goiMauTrong}>Bấm nút micro để Bông bắt đầu buổi luyện.</div>}
           </div>
-        )}
 
-        <div className={s.goiDieuKhien}>
-          <button
-            type="button"
-            className={`${s.goiNut} ${pha === 'nghe' ? s.goiNutNghe : pha === 'giasu' ? s.goiNutNoi : ''}`}
-            onClick={nutLon}
-            disabled={pha === 'mo' || pha === 'cham' || pha === 'nghi'}
-            aria-label={NHAN[pha]}
-            style={pha === 'nghe' ? { boxShadow: `0 0 0 ${4 + Math.round(mic.muc * 18)}px rgba(225, 29, 72, 0.25)` } : undefined}
-          >
-            {pha === 'nghe' ? <Square size={26} /> : pha === 'giasu' ? <RobotAI size={44} /> : pha === 'cho' && luot.length ? <Mic size={30} /> : pha === 'loi' ? <RotateCcw size={26} /> : <RobotAI size={44} />}
-          </button>
-          <div className={s.goiNhan}>{NHAN[pha]}</div>
-          {(loi || mic.loi) && <div className={`${s.feedback} ${s.bad}`}>{loi || mic.loi}</div>}
-        </div>
+          <div className={s.goiLog} ref={cuon}>
+            {!luot.length && (
+              <div className={s.goiGoiY}>
+                🎧 Đeo tai nghe sẽ rõ hơn và micro không thu lại tiếng Bông.<br />
+                Mỗi lượt: nghe câu mẫu → đọc theo → nghe nhận xét. Nói xong im 1,5 giây là máy tự chấm.
+              </div>
+            )}
+            {luot.map((l, i) => (
+              <div key={i} className={l.ai ? s.goiAi : s.goiBan}>
+                {l.ai ? <LoiNoi text={l.text} /> : <>“{l.text}”</>}
+                {l.cham && (
+                  <div className={s.goiCham}>
+                    <b className={l.cham.tong >= 85 ? s.paGood : l.cham.tong >= 60 ? s.paWarn : s.paBad}>{l.cham.tong} điểm</b>
+                    {l.cham.tu.map((w, j) => (
+                      <span key={j} className={w.loi === 'Omission' ? s.paOmit : w.diem >= 85 ? s.paGood : w.diem >= 60 ? s.paWarn : s.paBad}>{w.tu}</span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </aside>
       </div>
+
+      <footer className={s.goiDay}>
+        <button type="button" className={s.goiPhuNut} onClick={ngheMau} disabled={!mau || pha === 'nghe' || pha === 'cham'}>
+          <Volume2 size={18} /><span>Nghe mẫu</span>
+        </button>
+        <div className={s.goiGiua}>
+          <div ref={vongRef} className={s.goiVong} data-pha={pha}>
+            <button
+              type="button"
+              className={s.goiNut}
+              data-pha={pha}
+              onClick={nutLon}
+              disabled={pha === 'mo' || pha === 'cham' || pha === 'nghi'}
+              aria-label={NHAN[pha]}
+            >
+              {pha === 'nghe' ? <span className={s.goiSong}><i /><i /><i /><i /></span> : pha === 'loi' ? <RotateCcw size={28} /> : <Mic size={30} />}
+            </button>
+          </div>
+          <div className={s.goiNhan}>{NHAN[pha]}</div>
+        </div>
+        <button type="button" className={s.goiPhuNut} onClick={cauKhac} disabled={danhSach.length < 2 || pha === 'nghe' || pha === 'cham'}>
+          <SkipForward size={18} /><span>Câu khác</span>
+        </button>
+        {(loi || mic.loi) && <div className={s.goiLoi}>{loi || mic.loi}</div>}
+      </footer>
     </div>
   );
 }

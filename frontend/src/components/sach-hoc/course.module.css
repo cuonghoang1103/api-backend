@@ -1445,35 +1445,141 @@
 }
 
 /* ── 📞 Luyện phát âm cùng gia sư (GoiGiaSu.tsx) ─────────────────────── */
-.goiNen { position: fixed; inset: 0; z-index: 80; display: flex; align-items: center; justify-content: center; padding: 16px; background: rgba(10, 12, 18, 0.55); backdrop-filter: blur(4px); }
-.goiHop {
-  display: flex; flex-direction: column; width: min(560px, 100%); max-height: calc(100dvh - 32px);
-  border-radius: 20px; background: var(--lh-surface); color: var(--lh-ink); border: 1px solid var(--lh-line);
-  box-shadow: 0 30px 80px -30px rgba(0, 0, 0, 0.6); overflow: hidden;
+/* Bản 2 (04/10/2026): sân khấu toàn khung với nhân vật 3D "Bông" (goi/sanKhau3D.ts).
+   Nền ĐẶC (không backdrop-filter): bản cũ làm mờ cả trang phía sau và vẽ lại lớp mờ đó
+   mỗi lần âm lượng micro đổi ⇒ nhấp nháy. Bố cục cố định — chữ dài/ngắn, có/không câu
+   mẫu đều không làm khung nhảy. Bảng màu riêng (trời đêm tím) dùng cho cả hai giao diện:
+   ánh sáng của nhân vật được chỉnh theo nền này. */
+.goiSan {
+  position: fixed; inset: 0; z-index: 80; display: grid; grid-template-rows: auto minmax(0, 1fr) auto;
+  color: #f5f3ff; overflow: hidden; container: goisan / size;
+  background:
+    radial-gradient(60% 50% at 28% 38%, rgba(167, 139, 250, 0.35), transparent 70%),
+    radial-gradient(45% 40% at 80% 15%, rgba(244, 114, 182, 0.22), transparent 70%),
+    radial-gradient(50% 45% at 70% 95%, rgba(34, 211, 238, 0.16), transparent 70%),
+    linear-gradient(165deg, #1a1446 0%, #241a5c 45%, #12183f 100%);
+  animation: goiVao 0.28s ease-out;
 }
-.goiDau { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 16px 18px; border-bottom: 1px solid var(--lh-line); }
-.goiTen { font-size: 17px; font-weight: 750; }
-.goiKetThuc { display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0; padding: 8px 12px; border-radius: 999px; background: #e11d48; color: #fff; font-size: 14px; font-weight: 650; }
-.goiLog { flex: 1; min-height: 140px; overflow-y: auto; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; }
-.goiAi, .goiBan { max-width: 88%; padding: 10px 14px; border-radius: 16px; font-size: 15px; line-height: 1.55; }
-.goiAi { align-self: flex-start; background: var(--lh-surface-2); border-bottom-left-radius: 4px; }
-.goiBan { align-self: flex-end; background: var(--lh-accent-soft); border-bottom-right-radius: 4px; }
-.goiEn { color: var(--lh-accent); font-weight: 700; }
+@keyframes goiVao { from { opacity: 0; transform: scale(0.985); } }
+/* Sao lấp lánh: ba lớp chấm nhỏ dựng bằng gradient, chỉ đổi opacity (rẻ, không vẽ lại bố cục). */
+.goiTroi { position: absolute; inset: 0; pointer-events: none; }
+.goiTroi i {
+  position: absolute; inset: 0; opacity: 0.5; animation: goiLap 4s ease-in-out infinite;
+  background-image: radial-gradient(1.5px 1.5px at 12% 22%, #fff, transparent), radial-gradient(1px 1px at 33% 68%, #fff, transparent),
+    radial-gradient(1.5px 1.5px at 58% 12%, #fff, transparent), radial-gradient(1px 1px at 84% 44%, #fff, transparent),
+    radial-gradient(1.2px 1.2px at 91% 82%, #fff, transparent), radial-gradient(1px 1px at 6% 88%, #fff, transparent);
+}
+.goiTroi i:nth-child(2) { transform: translate(7%, 11%) scale(1.1); animation-delay: -1.3s; }
+.goiTroi i:nth-child(3) { transform: translate(-9%, 5%) scale(0.9); animation-delay: -2.6s; }
+@keyframes goiLap { 50% { opacity: 0.15; } }
+
+.goiThanh { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 20px; }
+.goiDanhTinh { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.goiDanhTinh > div { min-width: 0; }
+.goiCham0 { width: 10px; height: 10px; flex-shrink: 0; border-radius: 999px; background: #a3e635; box-shadow: 0 0 0 4px rgba(163, 230, 53, 0.18); transition: background-color 0.3s; }
+.goiCham0[data-pha='nghe'] { background: #fb7185; box-shadow: 0 0 0 4px rgba(251, 113, 133, 0.22); }
+.goiCham0[data-pha='giasu'] { background: #67e8f9; box-shadow: 0 0 0 4px rgba(103, 232, 249, 0.2); }
+.goiCham0:is([data-pha='cham'], [data-pha='nghi'], [data-pha='mo']) { background: #fbbf24; box-shadow: 0 0 0 4px rgba(251, 191, 36, 0.2); }
+.goiTen { font-size: 17px; font-weight: 750; letter-spacing: -0.01em; }
+.goiPhu { font-size: 13px; color: rgba(237, 233, 254, 0.7); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.goiKetThuc { display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0; padding: 9px 14px; border-radius: 999px; background: #e11d48; color: #fff; font-size: 14px; font-weight: 650; box-shadow: 0 8px 24px -10px rgba(225, 29, 72, 0.8); }
+.goiKetThuc:hover { background: #f43f5e; }
+
+.goiKhung { position: relative; display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(300px, 0.9fr); gap: 20px; min-height: 0; padding: 0 20px; }
+.goiSanKhau { position: relative; min-height: 0; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; }
+.goiNhanVat { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 0.5s ease; }
+.goiNhanVatSan { opacity: 1; }
+.goiNhanVatLui { position: absolute; inset: 0; display: grid; place-items: center; }
+/* Bong bóng lời: neo ở trên đầu nhân vật, cao tối đa 3 dòng — chữ dài thì cuộn trong bóng chứ không đẩy khung. */
+.goiBongNoi {
+  position: absolute; top: 8px; left: 50%; transform: translateX(-50%); width: min(520px, 92%);
+  max-height: 7.6em; overflow-y: auto; padding: 12px 16px; border-radius: 18px; font-size: 15.5px; line-height: 1.55;
+  background: rgba(255, 255, 255, 0.95); color: #1e1b4b; box-shadow: 0 16px 40px -18px rgba(10, 6, 40, 0.9);
+}
+.goiBongNoi::after { content: ''; position: absolute; left: 50%; bottom: -8px; width: 16px; height: 16px; background: inherit; transform: translateX(-50%) rotate(45deg); border-radius: 3px; }
+.goiBongNoi .goiEn { color: #7c3aed; }
+.goiDiem {
+  position: absolute; right: 8%; top: 38%; display: inline-flex; align-items: baseline; gap: 5px; padding: 10px 16px; border-radius: 999px;
+  font-size: 14px; font-weight: 700; color: #fff; animation: goiNay 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.goiDiem b { font-size: 28px; line-height: 1; }
+.goiDiem svg { align-self: center; }
+.goiDiemTot { background: linear-gradient(135deg, #22c55e, #10b981); box-shadow: 0 10px 30px -10px #22c55e; }
+.goiDiemKha { background: linear-gradient(135deg, #f59e0b, #f97316); box-shadow: 0 10px 30px -10px #f59e0b; }
+.goiDiemYeu { background: linear-gradient(135deg, #6366f1, #8b5cf6); box-shadow: 0 10px 30px -10px #6366f1; }
+@keyframes goiNay { from { opacity: 0; transform: scale(0.4) translateY(20px); } }
+
+.goiBen {
+  display: flex; flex-direction: column; min-height: 0; margin-bottom: 4px; border-radius: 22px; overflow: hidden;
+  background: rgba(255, 255, 255, 0.07); border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+.goiMau { flex-shrink: 0; min-height: 132px; padding: 16px 18px; text-align: center; border-bottom: 1px solid rgba(255, 255, 255, 0.1); background: linear-gradient(180deg, rgba(167, 139, 250, 0.16), transparent); }
+.goiNhanMuc { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #c4b5fd; }
+.goiMauChu { margin-top: 6px; font-size: 24px; font-weight: 750; line-height: 1.3; color: #fff; }
+.goiIpa { margin-top: 4px; font-size: 15px; color: #a5f3fc; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+.goiMauTrong { margin-top: 18px; font-size: 14.5px; color: rgba(237, 233, 254, 0.65); }
+.goiLog { flex: 1; min-height: 0; overflow-y: auto; padding: 14px 14px 16px; display: flex; flex-direction: column; gap: 10px; overscroll-behavior: contain; }
+.goiGoiY { margin: auto 0; padding: 12px; text-align: center; font-size: 14px; line-height: 1.6; color: rgba(237, 233, 254, 0.7); }
+.goiAi, .goiBan { max-width: 90%; padding: 9px 13px; border-radius: 16px; font-size: 14.5px; line-height: 1.55; }
+.goiAi { align-self: flex-start; background: rgba(255, 255, 255, 0.1); border-bottom-left-radius: 4px; }
+.goiBan { align-self: flex-end; background: rgba(167, 139, 250, 0.3); border-bottom-right-radius: 4px; }
+.goiEn { color: #c4b5fd; font-weight: 700; }
 .goiCham { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; font-size: 13px; }
 .goiCham span { font-weight: 650; }
-.goiMau { padding: 12px 16px; border-top: 1px solid var(--lh-line); text-align: center; background: color-mix(in srgb, var(--lh-accent) 6%, var(--lh-surface)); }
-.goiMauChu { margin-top: 2px; font-size: 22px; font-weight: 750; line-height: 1.3; }
-.goiDieuKhien { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 16px; border-top: 1px solid var(--lh-line); }
-.goiNut {
-  display: inline-flex; width: 76px; height: 76px; align-items: center; justify-content: center; border-radius: 999px;
-  background: linear-gradient(135deg, #6366f1, #0ea5e9); color: #fff; transition: box-shadow 80ms linear, transform 0.15s ease;
+
+.goiDay { position: relative; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 16px; padding: 14px 20px 18px; }
+.goiDay > .goiPhuNut:first-child { justify-self: end; }
+.goiDay > .goiPhuNut:nth-child(3) { justify-self: start; }
+.goiPhuNut {
+  display: inline-flex; align-items: center; gap: 8px; padding: 11px 16px; border-radius: 999px; font-size: 14px; font-weight: 650;
+  color: #ede9fe; background: rgba(255, 255, 255, 0.09); border: 1px solid rgba(255, 255, 255, 0.14); transition: background-color 0.2s, opacity 0.2s;
 }
-.goiNut:disabled { opacity: 0.6; cursor: progress; }
-.goiNutNghe { background: #e11d48; }
-.goiNutNoi { animation: goiThoi 1.4s ease-in-out infinite; }
-@keyframes goiThoi { 50% { transform: scale(1.06); } }
-@media (prefers-reduced-motion: reduce) { .goiNutNoi { animation: none; } }
-.goiNhan { font-size: 14px; color: var(--lh-ink-2); text-align: center; }
+.goiPhuNut:hover:not(:disabled) { background: rgba(255, 255, 255, 0.16); }
+.goiPhuNut:disabled { opacity: 0.4; cursor: default; }
+.goiGiua { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+/* Vòng sóng quanh nút: kích thước theo --muc (0–1) do useMicro ghi thẳng vào style. */
+.goiVong { --muc: 0; position: relative; display: grid; place-items: center; }
+.goiVong::before, .goiVong::after {
+  content: ''; position: absolute; inset: -10px; border-radius: 999px; pointer-events: none; opacity: 0;
+  transition: opacity 0.3s;
+}
+.goiVong[data-pha='nghe']::before { opacity: 1; background: rgba(251, 113, 133, 0.22); transform: scale(calc(1 + var(--muc) * 0.45)); transition: opacity 0.3s, transform 70ms linear; }
+.goiVong[data-pha='nghe']::after { opacity: 1; border: 2px solid rgba(251, 113, 133, 0.5); animation: goiLan 1.6s ease-out infinite; }
+.goiVong[data-pha='giasu']::after { opacity: 1; border: 2px solid rgba(103, 232, 249, 0.45); animation: goiLan 2s ease-out infinite; }
+@keyframes goiLan { from { transform: scale(0.9); opacity: 0.9; } to { transform: scale(1.5); opacity: 0; } }
+.goiNut {
+  position: relative; display: inline-flex; width: 84px; height: 84px; align-items: center; justify-content: center; border-radius: 999px; color: #fff;
+  background: linear-gradient(140deg, #8b5cf6, #6366f1 55%, #0ea5e9); box-shadow: 0 14px 34px -12px rgba(124, 58, 237, 0.9), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transition: transform 0.15s ease, filter 0.3s ease;
+}
+.goiNut:hover:not(:disabled) { transform: scale(1.05); }
+.goiNut:active:not(:disabled) { transform: scale(0.96); }
+.goiNut[data-pha='nghe'] { background: linear-gradient(140deg, #fb7185, #e11d48); box-shadow: 0 14px 34px -12px rgba(225, 29, 72, 0.9), inset 0 1px 0 rgba(255, 255, 255, 0.3); }
+.goiNut:disabled { filter: saturate(0.5) brightness(0.85); cursor: progress; }
+.goiSong { display: inline-flex; align-items: center; gap: 4px; height: 30px; }
+.goiSong i { width: 5px; height: 100%; border-radius: 3px; background: #fff; animation: goiSongNhay 0.9s ease-in-out infinite; }
+.goiSong i:nth-child(2) { animation-delay: -0.2s; }
+.goiSong i:nth-child(3) { animation-delay: -0.45s; }
+.goiSong i:nth-child(4) { animation-delay: -0.65s; }
+@keyframes goiSongNhay { 0%, 100% { transform: scaleY(0.35); } 50% { transform: scaleY(1); } }
+.goiNhan { min-height: 2.6em; max-width: 300px; font-size: 13.5px; line-height: 1.3; color: rgba(237, 233, 254, 0.78); text-align: center; }
+.goiLoi { grid-column: 1 / -1; justify-self: center; margin-top: -6px; padding: 6px 12px; border-radius: 10px; font-size: 13.5px; background: rgba(244, 63, 94, 0.18); color: #fecdd3; }
+
+/* Khung hẹp (điện thoại, cửa sổ app thu nhỏ): xếp dọc — nhân vật trên, câu mẫu + nhật ký dưới. */
+@container goisan (max-width: 820px) {
+  .goiKhung { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1.15fr) minmax(0, 1fr); gap: 12px; padding: 0 12px; }
+  .goiThanh { padding: 12px; }
+  .goiDay { gap: 10px; padding: 10px 12px 14px; }
+  .goiPhuNut span { display: none; }
+  .goiPhuNut { padding: 12px; }
+  .goiMau { min-height: 0; padding: 12px; }
+  .goiMauChu { font-size: 20px; }
+  .goiDiem { right: 4%; top: 46%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .goiSan, .goiDiem, .goiTroi i, .goiVong::after, .goiSong i { animation: none; }
+}
 .goiMoNut { display: inline-flex; align-items: center; gap: 4px; flex-shrink: 0; padding: 5px 10px; border-radius: 999px; font-size: 13px; font-weight: 650; background: color-mix(in srgb, #10b981 18%, transparent); color: var(--lh-ink); border: 1px solid color-mix(in srgb, #10b981 45%, transparent); }
 .goiMoNut:hover { background: color-mix(in srgb, #10b981 28%, transparent); }
 .vidNgoai { position: absolute; left: 8px; top: 8px; padding: 2px 8px; border-radius: 6px; background: rgba(0, 0, 0, 0.78); color: #fff; font-size: 12px; font-weight: 600; }
@@ -1506,6 +1612,10 @@
 
 /* App desktop: không có thanh điều hướng của web ở trên ⇒ bỏ khoảng chừa 4rem. */
 :global(.ct-web-host) .root { padding-top: 0; min-height: 100%; }
+/* App: cột gia sư cao theo VÙNG NỘI DUNG (container ctnoidung khai `size`), không theo
+   cửa sổ — `100vh` dư ra đúng phần thanh tiêu đề + thanh nhạc, đẩy ô hỏi AI khuất dưới
+   mép (đo 04/10: ô ở 989–1030px, vùng nhìn thấy hết ở 970px). */
+:global(.ct-web-host) .tutorCol { top: 76px; height: calc(100cqh - 100px); }
 .demDoc {
   display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px;
   margin-top: 10px; padding: 10px 14px; border-radius: 12px; font-size: 14.5px;

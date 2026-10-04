@@ -15323,6 +15323,12 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
 .ct-agent .ct-noluc { flex-wrap: wrap; }
 .ct-agent .ct-chat-thanh { flex-wrap: wrap; min-width: 0; }
 
+/* Gọi gia sư (04/10/2026): sân khấu phủ CẢ cửa sổ cho cảm giác cuộc gọi — thanh đầu của nó
+   nằm đúng chỗ ba nút đèn giao thông macOS (trafficLightPosition 16,18) ⇒ chừa lề trái, và
+   cho kéo cửa sổ bằng thanh đó như thanh tiêu đề thường. */
+.ct-web-host [data-goi-thanh] { padding-left: 92px; -webkit-app-region: drag; }
+.ct-web-host [data-goi-thanh] button { -webkit-app-region: no-drag; }
+
 /* IELTS (03/10/2026) — khung đo bề rộng cho @container ctnoidung của khoá học.
    container-type kéo theo layout containment ⇒ lớp phủ fixed bên trong neo vào
    khung này (vùng nội dung, chừa thanh bên của app) — khung KHÔNG cuộn nên chúng
@@ -15331,7 +15337,9 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   height: 100%;
   min-width: 0;
   min-height: 0;
-  container: ctnoidung / inline-size;
+  /* `size` (không chỉ inline-size) để cột gia sư đo được CHIỀU CAO vùng nội dung
+     bằng `cqh` — `100vh` là cả cửa sổ, nên ô chat bị đẩy xuống dưới mép (04/10). */
+  container: ctnoidung / size;
 }
 
 /*

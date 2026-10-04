@@ -22,6 +22,8 @@ import { wk, type Lookups } from '../hooks';
 import { IssueTypeIcon, PRIORITIES, Spinner, StatusBadge, UserAvatar, formatDate } from '../ui';
 import { axisTick, fmtDay, fmtValue, Legend, unitLabel, useAllSprints, useReportableSprints } from '../reports/shared';
 import { jqlErrorOf, jqlListUrl } from '../search/jql';
+import { govApi, govKeys } from '@/lib/work-s3b-api';
+import { ScoreBadge } from '../governance/shared';
 
 // ─── Danh mục widget ─────────────────────────────────────────────
 
@@ -35,9 +37,10 @@ export const WIDGET_META: Record<WidgetKind, { label: string; description: strin
   my_issues: { label: 'My open issues', description: 'Open issues assigned to the viewer', defaultTitle: 'My open issues', usesQuery: false },
   health: { label: 'Project health', description: 'Overdue, due soon, stuck and unassigned work', defaultTitle: 'Project health', usesQuery: false },
   text: { label: 'Text', description: 'Notes, links or instructions for the team', defaultTitle: 'Notes', usesQuery: false },
+  top_risks: { label: 'Top risks', description: 'Open risks from the RAID log with the highest probability × impact', defaultTitle: 'Top risks', usesQuery: false },
 };
 
-export const WIDGET_KINDS: WidgetKind[] = ['filter', 'counter', 'pie', 'bar', 'created_resolved', 'burndown', 'my_issues', 'health', 'text'];
+export const WIDGET_KINDS: WidgetKind[] = ['filter', 'counter', 'pie', 'bar', 'created_resolved', 'burndown', 'my_issues', 'health', 'top_risks', 'text'];
 
 export const GROUP_BY_OPTIONS: Array<{ value: GroupBy; label: string }> = [
   { value: 'status', label: 'Status' },
@@ -453,6 +456,31 @@ export function WidgetBody({ w, pid, config, lk, onOpenIssue }: {
     case 'burndown': return <BurndownWidget pid={pid} sprintId={w.sprintId} />;
     case 'health': return <HealthWidget pid={pid} onOpenIssue={onOpenIssue} />;
     case 'text': return <TextWidget text={w.text} />;
+    case 'top_risks': return <TopRisksWidget pid={pid} config={config} />;
     default: return <Empty>Unknown widget.</Empty>;
   }
+}
+
+// ─── Top risks (đợt S3b — sổ RAID) ───────────────────────────────
+
+function TopRisksWidget({ pid, config }: { pid: number; config: ProjectConfig }) {
+  const q = useQuery({ queryKey: govKeys.topRisks(pid), queryFn: () => govApi.topRisks(pid, 5), staleTime: 30_000 });
+  if (q.isLoading) return <div className="flex h-24 items-center justify-center"><Spinner /></div>;
+  if (!q.data?.enabled) return <Empty>Turn on the RAID log module to see top risks here.</Empty>;
+  if (!q.data.items.length) return <Empty>No open, scored risks. Nice.</Empty>;
+  const base = `/work/${config.workspace.slug}/${config.key}/raid`;
+  return (
+    <ul className="divide-y divide-[var(--w-border)]" data-testid="widget-top-risks">
+      {q.data.items.map((r) => (
+        <li key={r.id}>
+          <Link href={`${base}?item=${r.number}`} className="flex min-w-0 items-center gap-2 py-2 text-[13px] hover:bg-[var(--w-hover)]">
+            <ScoreBadge score={r.score} />
+            <span className="shrink-0 font-mono text-[12px] text-[var(--w-accent-text)]">{r.key}</span>
+            <span className="min-w-0 flex-1 truncate">{r.title}</span>
+            {r.owner && <UserAvatar user={r.owner} size={18} />}
+          </Link>
+        </li>
+      ))}
+    </ul>
+  );
 }

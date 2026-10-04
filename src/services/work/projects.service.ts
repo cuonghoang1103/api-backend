@@ -13,7 +13,7 @@ import { defaultModulesFor, kindFromTemplate, mergeModules, modulesOf, noModules
 import { auditProject } from './audit.js';
 import { emitWorkEvent, evictFromProject } from './events.js';
 import {
-  can, docAccess, effectiveProjectRole, effectiveWorkspaceRole, isClientScoped, loadProjectAccess, portalOnlyUserIds, requireProject, requireWorkspace,
+  can, docAccess, effectiveProjectRole, effectiveWorkspaceRole, governanceAccess, isClientScoped, loadProjectAccess, portalOnlyUserIds, requireProject, requireWorkspace,
   type ProjectOptions,
 } from './permissions.js';
 import { clientPeopleIds, filterPeople } from './clientPeople.js';
@@ -172,7 +172,7 @@ export async function getProjectConfig(userId: number, projectId: number) {
     modules: access.modules,
     role: access.role,
     workspaceRole: access.workspaceRole,
-    permissions: { ...permissionFlags(access.role, access.options), ...docFlags(access) },
+    permissions: { ...permissionFlags(access.role, access.options), ...docFlags(access), ...govFlags(access) },
     boardColumns: boardColumns(project.workflows, project.settings),
     members,
   };
@@ -207,6 +207,12 @@ export function permissionFlags(role: ProjectRole, opts: ProjectOptions = {}) {
 function docFlags(access: { role: ProjectRole; workspaceRole: WorkspaceRole }) {
   const d = docAccess(access.role, access.workspaceRole);
   return { viewAllDocs: d.view === 'ALL', editDocs: d.edit, manageDocs: d.manage };
+}
+
+/** Cờ CR / RAID / họp (đợt S3b) — khách và GUEST (trừ giảng viên) không thấy phần nội bộ. */
+function govFlags(access: { role: ProjectRole; workspaceRole: WorkspaceRole }) {
+  const g = governanceAccess(access.role, access.workspaceRole);
+  return { viewGovernance: g.view, editGovernance: g.edit };
 }
 
 /** Mọi người vào được dự án kèm vai trò hiệu lực — dùng cho ô chọn người, @nhắc tên. */

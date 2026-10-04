@@ -45,7 +45,11 @@ export type WorkEvent =
   // Tài liệu dự án (đợt S2a). Chỉ mang id/số trang — KHÔNG tiêu đề/nội dung: phòng
   // dự án có cả khách, mà khách không được thấy trang INTERNAL. Client tự tải lại
   // qua API (API lọc theo quyền). Không có `issueId` (xem ghi chú ở trên).
-  | { type: 'page.updated'; projectId: number; pageId: number; number: number; action: PageEventAction; actor: WorkActor };
+  | { type: 'page.updated'; projectId: number; pageId: number; number: number; action: PageEventAction; actor: WorkActor }
+  // Quản trị dự án (đợt S3b): CR / dòng RAID / cuộc họp đổi. Chỉ số + loại — client tải lại
+  // qua API (lọc quyền). KHÔNG vào phòng khách (visibleToClient trả false): khách không thấy
+  // CR/RAID nội bộ; cổng khách tự tải lại khi mở.
+  | { type: 'governance.updated'; projectId: number; entity: 'cr' | 'raid' | 'meeting'; number: number; action: string; actor: WorkActor };
 
 export type PageEventAction = 'created' | 'updated' | 'status' | 'moved' | 'deleted' | 'restored' | 'comment' | 'links';
 

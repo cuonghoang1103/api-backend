@@ -1727,6 +1727,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
         ['Approvals', ['Requests they are named on: stage gates, client documents, UAT sign-offs', 'Yêu cầu có tên họ: cổng giai đoạn, tài liệu cho khách, nghiệm thu UAT']],
         ['Documents', ['Pages set to Team and client, and shared files', 'Trang đặt Team and client, và tệp đã chia sẻ']],
         ['Deliverables', ['Files marked Deliver, and released versions (shared items only)', 'Tệp đánh dấu Deliver, và bản phát hành (chỉ hạng mục đã chia sẻ)']],
+        ['Meetings', ['Meetings they are invited to, with notes once the team shares them (Meetings module)', 'Cuộc họp mời họ, kèm biên bản khi đội chia sẻ (mô-đun Meetings)']],
         ['Activity', ['Only public events: sharing, status changes, replies to client, decisions, deliveries', 'Chỉ sự kiện công khai: chia sẻ, đổi trạng thái, trả lời khách, quyết định, bàn giao']],
       ]),
       warn('Clients never see unshared issues, internal notes, worklogs, estimates, reports, sprints, other projects, or other clients — the server blocks those, not just the screen. A request from the client becomes an issue labelled **from-client**, already shared, in the matching team queue (bug → QA, change → BA, otherwise PM).', 'Khách không bao giờ thấy thẻ chưa chia sẻ, ghi chú nội bộ, giờ làm, ước lượng, báo cáo, sprint, dự án khác hay khách khác — server chặn, không chỉ ẩn trên màn hình. Yêu cầu của khách thành thẻ nhãn **from-client**, đã chia sẻ, vào hàng đợi bộ phận phù hợp (lỗi → QA, thay đổi → BA, còn lại → PM).'),
@@ -1790,6 +1791,93 @@ export const HELP_ARTICLES: HelpArticle[] = [
   },
 
   // Đợt S3a (04/10/2026) — đọc từ portfolioRules.ts / portfolio.service.ts. Đổi ngưỡng ở mã thì sửa bài này.
+  // ═══ Đợt S3b: CR · RAID · họp ═══
+  {
+    id: 'change-requests',
+    category: 'studio',
+    title: { en: 'Change requests', vi: 'Yêu cầu thay đổi (Change requests)' },
+    summary: {
+      en: 'Anything outside the signed scope goes through a change request: impact analysis (scope, schedule, cost, risks, alternatives), a signed approval — by your client too — and implementation issues.',
+      vi: 'Mọi thứ ngoài phạm vi đã ký đi qua một yêu cầu thay đổi: phân tích ảnh hưởng (phạm vi, lịch, chi phí, rủi ro, phương án khác), phê duyệt có chữ ký — kể cả của khách — và thẻ thực hiện.',
+    },
+    keywords: ['change request', 'cr', 'change control', 'scope change', 'impact analysis', 'pmbok', 'prince2', 'yeu cau thay doi', 'thay doi pham vi', 'phan tich anh huong'],
+    pages: [page('project', 'changes', 'Change requests', 'Yêu cầu thay đổi')],
+    blocks: [
+      p('New **Client** projects have the **Change requests** module on (Project settings → Studio → Modules). Older projects are unchanged until you turn it on. Change requests are internal to the team — clients see one only when it is shared with them and they are asked to approve it.', 'Dự án loại **Client** mới bật sẵn mô-đun **Change requests** (Project settings → Studio → Modules). Dự án cũ giữ nguyên cho tới khi bạn bật. Yêu cầu thay đổi là việc nội bộ của đội — khách chỉ thấy khi nó được chia sẻ và họ được mời duyệt.'),
+      steps(
+        ['**Changes** in the sidebar → **New change request** (or **Raise change request** on an issue). The description starts from the change request form template.', 'Mục **Changes** ở thanh bên → **New change request** (hoặc **Raise change request** trên một thẻ). Mô tả bắt đầu từ mẫu phiếu yêu cầu thay đổi.'],
+        ['Fill the **Impact analysis**: scope, schedule in calendar days (+5 or −2), cost as an amount with a free-text unit (USD, VND, man-days — nothing is priced or converted), new risks and alternatives. Link the affected issues, stages and versions.', 'Điền **Impact analysis**: phạm vi, lịch theo ngày (+5 hay −2), chi phí là số kèm đơn vị ghi tự do (USD, VND, người-ngày — không tính giá, không quy đổi), rủi ro mới và phương án khác. Liên kết thẻ, giai đoạn, version bị ảnh hưởng.'],
+        ['**Send for approval** — it becomes **Under review**. To ask the client, press **Share with client** first. Every approver signs the analysis as it is when they decide.', '**Send for approval** — nó thành **Under review**. Muốn hỏi khách thì bấm **Share with client** trước. Mỗi người duyệt ký đúng bản phân tích lúc họ quyết.'],
+        ['Approved ⇒ the **Implementation** block suggests issues (one main issue plus one update per affected issue). Edit or untick them, then **Create issues**. When the work is done, **Mark implemented**.', 'Được duyệt ⇒ khối **Implementation** gợi ý thẻ (một thẻ chính + một thẻ cập nhật cho mỗi thẻ bị ảnh hưởng). Sửa hoặc bỏ chọn rồi **Create issues**. Làm xong thì **Mark implemented**.'],
+      ),
+      table([['Status', 'Trạng thái'], ['Meaning', 'Ý nghĩa']], [
+        ['Draft', ['Being written', 'Đang soạn']],
+        ['Submitted', ['Ready for a decision, not yet sent for approval', 'Sẵn sàng để quyết, chưa gửi duyệt']],
+        ['Under review', ['An approval request is open', 'Đang có yêu cầu phê duyệt']],
+        ['Approved / Rejected', ['Set only by the approval — nobody can flip it by hand', 'Chỉ phê duyệt đặt được — không ai đổi tay']],
+        ['Implemented', ['The change is delivered; the record becomes read-only', 'Đã làm xong; phiếu thành chỉ đọc']],
+      ]),
+      warn('Editing the analysis after someone signed shows **Content changed since approval** on the approval — the decision is not cancelled, but you should ask again if the change matters. Adding implementation issues does not count as a change.', 'Sửa phân tích sau khi đã có người ký sẽ hiện **Content changed since approval** trên phê duyệt — quyết định không bị huỷ, nhưng nên xin duyệt lại nếu thay đổi đáng kể. Thêm thẻ thực hiện không tính là thay đổi.'),
+      tip('The change log on **Changes** totals the approved schedule impact and cost per unit. A change request waiting for a decision more than 5 days turns the project amber on **Portfolio**.', 'Sổ CR ở **Changes** cộng tổng ảnh hưởng lịch và chi phí đã duyệt theo từng đơn vị. CR chờ quyết định quá 5 ngày làm dự án chuyển vàng trên **Portfolio**.'),
+    ],
+    related: ['approvals', 'client-portal', 'raid-log', 'portfolio-workload'],
+  },
+  {
+    id: 'raid-log',
+    category: 'studio',
+    title: { en: 'RAID log', vi: 'Sổ RAID (rủi ro · giả định · vấn đề · phụ thuộc)' },
+    summary: {
+      en: 'Track Risks, Assumptions, Issues and Dependencies with an owner, probability × impact score, response, mitigation plan and review date — with a 5×5 matrix and review reminders.',
+      vi: 'Theo dõi Rủi ro, Giả định, Vấn đề và Phụ thuộc với người phụ trách, điểm xác suất × ảnh hưởng, cách phản ứng, kế hoạch giảm thiểu và ngày xem lại — có ma trận 5×5 và lời nhắc xem lại.',
+    },
+    keywords: ['raid', 'risk', 'risk register', 'assumption', 'dependency', 'issue log', 'matrix', 'mitigation', 'rui ro', 'gia dinh', 'phu thuoc', 'ma tran rui ro'],
+    pages: [page('project', 'raid', 'RAID log', 'Sổ RAID')],
+    blocks: [
+      p('**RAID** in the sidebar (module **RAID log**, on for new Client projects). Members add and edit, viewers and teachers read, clients never see it — not even in the client portal.', 'Mục **RAID** ở thanh bên (mô-đun **RAID log**, bật sẵn cho dự án Client mới). Thành viên thêm và sửa, người xem và giảng viên chỉ đọc, khách không bao giờ thấy — kể cả trong cổng khách.'),
+      table([['Type', 'Loại'], ['Write it as', 'Viết thế nào'], ['Statuses', 'Trạng thái']], [
+        [['Risk', 'Rủi ro'], ['If … then … (may happen)', 'Nếu … thì … (có thể xảy ra)'], 'Open · Monitoring · Mitigated · Closed'],
+        [['Assumption', 'Giả định'], ['We assume that … (validate it)', 'Ta giả định rằng … (cần kiểm chứng)'], 'Unvalidated · Validated · Invalid'],
+        [['Issue', 'Vấn đề'], ['What is wrong now', 'Điều đang sai ngay bây giờ'], 'Open · Monitoring · Mitigated · Closed'],
+        [['Dependency', 'Phụ thuộc'], ['We depend on … (team, vendor, client)', 'Ta phụ thuộc vào … (đội khác, nhà cung cấp, khách)'], 'Open · Monitoring · Mitigated · Closed'],
+      ]),
+      list(
+        ['Score = probability (1–5) × impact (1–5): **15+ high**, 8–14 medium, 7 or less low — the same scale as the risk register template.', 'Điểm = xác suất (1–5) × ảnh hưởng (1–5): **từ 15 là cao**, 8–14 trung bình, từ 7 trở xuống thấp — cùng thang với mẫu sổ đăng ký rủi ro.'],
+        ['Click a cell of the **5×5 matrix** to list the open risks in it. **Starter risks** adds the example risks of the template, unscored.', 'Bấm một ô của **ma trận 5×5** để xem các rủi ro đang mở trong ô đó. **Starter risks** thêm các rủi ro mẫu của template, chưa chấm điểm.'],
+        ['Response: **Avoid**, **Mitigate**, **Transfer** or **Accept**. Every change is kept in the item’s history.', 'Phản ứng: **Avoid** (tránh), **Mitigate** (giảm), **Transfer** (chuyển giao) hoặc **Accept** (chấp nhận). Mọi thay đổi được ghi vào lịch sử của dòng.'],
+        ['Set **Review by**: on that day the owner gets one reminder (bell + email), and the item shows **Review due** until it is reviewed or closed. Change the date to be reminded again.', 'Đặt **Review by**: tới ngày đó người phụ trách nhận một lời nhắc (chuông + email), và dòng hiện **Review due** cho tới khi xem lại hoặc đóng. Đổi ngày thì được nhắc lại.'],
+        ['Link items to issues, stages and change requests. Linked risks appear on the issue page; **Top risks** is a dashboard widget.', 'Liên kết dòng với thẻ, giai đoạn và yêu cầu thay đổi. Rủi ro liên kết hiện trong trang thẻ; **Top risks** là một widget của dashboard.'],
+      ),
+      warn('On **Portfolio**, an open risk scored 20 or more turns the project red, 15–19 amber.', 'Trên **Portfolio**, một rủi ro đang mở có điểm từ 20 làm dự án đỏ, 15–19 làm vàng.'),
+    ],
+    related: ['change-requests', 'portfolio-workload', 'meetings'],
+  },
+  {
+    id: 'meetings',
+    category: 'studio',
+    title: { en: 'Meetings', vi: 'Cuộc họp' },
+    summary: {
+      en: 'Schedule kick-offs, weekly syncs, demos and steering meetings with agenda, minutes, decisions and action items that become issues — plus calendar invitations (.ics) and notes shared with your client.',
+      vi: 'Lên lịch họp khởi động, họp tuần, demo, họp chỉ đạo với chương trình, biên bản, quyết định và việc cần làm biến thành thẻ — kèm lời mời lịch (.ics) và biên bản chia sẻ cho khách.',
+    },
+    keywords: ['meeting', 'minutes', 'agenda', 'action items', 'kick-off', 'ics', 'calendar invite', 'google meet', 'zoom', 'teams', 'hop', 'bien ban', 'lich hop', 'viec can lam'],
+    pages: [page('project', 'meetings', 'Meetings', 'Cuộc họp')],
+    blocks: [
+      steps(
+        ['**Meetings** → **Schedule meeting**: type, start, length, time zone, place and an optional **Meet / Zoom / Teams link** (only stored — CT Work does not create the call). Invite team members, and clients when the client portal is on.', '**Meetings** → **Schedule meeting**: loại, giờ bắt đầu, độ dài, múi giờ, địa điểm và **link Meet / Zoom / Teams** (chỉ lưu — CT Work không tự tạo cuộc gọi). Mời thành viên, và khách khi cổng khách bật.'],
+        ['Invitations are emailed with a calendar file (**.ics**) attached; **.ics** on the meeting downloads it again. Meetings you are invited to also appear in your personal calendar feed (My work → Calendar).', 'Lời mời được gửi qua email kèm tệp lịch (**.ics**); nút **.ics** trên cuộc họp tải lại tệp. Cuộc họp bạn được mời cũng hiện trong lịch đăng ký cá nhân (My work → Calendar).'],
+        ['A **Kick-off** meeting starts with the agenda and minutes of the kick-off minutes template. Write the **Agenda**, **Minutes** and **Decisions**.', 'Cuộc họp **Kick-off** bắt đầu sẵn với chương trình và khung biên bản của mẫu biên bản kick-off. Viết **Agenda**, **Minutes** và **Decisions**.'],
+        ['Add **Action items** (text, owner, due date), save, then **Create issues** — one task per item, assigned and dated. Items that already have an issue are skipped.', 'Thêm **Action items** (nội dung, người phụ trách, hạn), lưu, rồi **Create issues** — mỗi việc thành một thẻ, có người làm và hạn. Việc đã có thẻ được bỏ qua.'],
+      ),
+      list(
+        ['**Suggest from minutes** asks AI to read the minutes and propose action items. Nothing is saved until you tick them and press **Add to action items**.', '**Suggest from minutes** nhờ AI đọc biên bản và đề xuất việc cần làm. Không có gì được lưu cho tới khi bạn chọn và bấm **Add to action items**.'],
+        ['**Duplicate next week** copies the meeting (same time, same people, same agenda) one week later — an easy weekly series.', '**Duplicate next week** nhân bản cuộc họp (cùng giờ, cùng người, cùng chương trình) sang tuần sau — chuỗi họp hằng tuần đơn giản.'],
+        ['**Share notes with client**: invited clients see the agenda, minutes, decisions and action items (without internal issue keys) in the client portal → **Meetings**. Before that they only see the time, place and link.', '**Share notes with client**: khách được mời thấy chương trình, biên bản, quyết định và việc cần làm (không có mã thẻ nội bộ) ở cổng khách → **Meetings**. Trước đó họ chỉ thấy giờ, địa điểm và link.'],
+      ),
+      tip('Changing the time, place, link or status bumps the calendar sequence, so calendar apps update the event when the .ics is opened again.', 'Đổi giờ, địa điểm, link hay trạng thái sẽ tăng số thứ tự của sự kiện lịch, nên ứng dụng lịch cập nhật khi mở lại tệp .ics.'),
+    ],
+    related: ['client-portal', 'raid-log', 'change-requests'],
+  },
+
   {
     id: 'portfolio-workload',
     category: 'track',
@@ -1814,8 +1902,8 @@ export const HELP_ARTICLES: HelpArticle[] = [
       table(
         [['Colour', 'Màu'], ['When', 'Khi nào']],
         [
-          [['Off track (red)', 'Off track (đỏ)'], ['A milestone (unreleased version) is past its release date · the sprint ended with work left · the sprint needs ≥ 2× its recent pace · 10+ overdue issues, or 3+ that are ≥ 25% of open issues', 'Mốc (version chưa phát hành) đã quá ngày · sprint hết hạn còn việc · sprint cần ≥ 2× tốc độ gần đây · từ 10 thẻ quá hạn, hoặc từ 3 thẻ và ≥ 25% số thẻ mở']],
-          [['At risk (amber)', 'At risk (vàng)'], ['The sprint is at risk (needs > 1.3× its pace) · any overdue issue · a milestone due within 7 days with < 80% done · an issue blocked by unfinished work in another project · an approval waiting > 3 days', 'Sprint có rủi ro (cần > 1,3× tốc độ) · có thẻ quá hạn · mốc tới hạn trong 7 ngày mà xong < 80% · thẻ bị chặn bởi việc chưa xong ở dự án khác · phê duyệt chờ > 3 ngày']],
+          [['Off track (red)', 'Off track (đỏ)'], ['A milestone (unreleased version) is past its release date · the sprint ended with work left · the sprint needs ≥ 2× its recent pace · 10+ overdue issues, or 3+ that are ≥ 25% of open issues · an open risk in the RAID log scores 20+', 'Mốc (version chưa phát hành) đã quá ngày · sprint hết hạn còn việc · sprint cần ≥ 2× tốc độ gần đây · từ 10 thẻ quá hạn, hoặc từ 3 thẻ và ≥ 25% số thẻ mở · rủi ro đang mở trong sổ RAID có điểm từ 20']],
+          [['At risk (amber)', 'At risk (vàng)'], ['The sprint is at risk (needs > 1.3× its pace) · any overdue issue · a milestone due within 7 days with < 80% done · an issue blocked by unfinished work in another project · an approval waiting > 3 days · an open risk scores 15+ · a change request waiting for a decision > 5 days', 'Sprint có rủi ro (cần > 1,3× tốc độ) · có thẻ quá hạn · mốc tới hạn trong 7 ngày mà xong < 80% · thẻ bị chặn bởi việc chưa xong ở dự án khác · phê duyệt chờ > 3 ngày · rủi ro đang mở có điểm từ 15 · yêu cầu thay đổi chờ quyết định quá 5 ngày']],
           [['On track (green)', 'On track (xanh)'], ['None of the above', 'Không dính luật nào ở trên']],
         ],
       ),
@@ -2138,7 +2226,10 @@ export function helpArticleForPath(pathname: string, search = ''): string {
     case 'tests': return 'testing';
     case 'stages': return 'stages-gates';
     case 'approvals': return 'approvals';
-    case 'portal': return parts[4] === 'uat' || tab === 'approvals' ? 'uat-signoff' : 'client-portal';
+    case 'portal': return parts[4] === 'uat' || tab === 'approvals' ? 'uat-signoff' : tab === 'meetings' ? 'meetings' : 'client-portal';
+    case 'changes': return 'change-requests';
+    case 'raid': return 'raid-log';
+    case 'meetings': return 'meetings';
     case 'dashboards': return 'filters-dashboards';
     case 'reports': return tab === 'time' || tab === 'capacity' ? 'time-capacity' : 'reports';
     case 'settings': return SETTINGS_TAB_ARTICLE[tab] ?? 'workflow';

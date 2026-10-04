@@ -267,6 +267,31 @@ export function canManagePage(role: ProjectRole | null, workspaceRole: Workspace
   return a.edit && ownerId !== null && ownerId === userId;
 }
 
+// ─── Quản trị dự án (đợt S3b): CR · RAID · họp ────────────────────
+
+/**
+ * Quyền trên phần NỘI BỘ của CR / sổ RAID / cuộc họp (hàm thuần — permissions.test.ts):
+ *   - Khách (vai CLIENT, dù dự án có bật cổng khách hay không) và khách của không gian
+ *     (GUEST, trừ giảng viên TEACHER) KHÔNG thấy gì — rủi ro, chi phí CR, biên bản nội bộ
+ *     là chuyện của đội. Khách chỉ thấy cuộc họp CÓ MỜI họ + biên bản đã chia sẻ, qua
+ *     /portal/meetings (meetings.service portal*), và CR đã chia sẻ qua phê duyệt của họ.
+ *   - VIEWER / TEACHER chỉ xem; MEMBER / ADMIN tạo + sửa.
+ *   - Xoá: người tạo (khi còn quyền sửa) hoặc ADMIN — xem `canDeleteGovernance`.
+ */
+export function governanceAccess(role: ProjectRole | null, workspaceRole: WorkspaceRole | null): { view: boolean; edit: boolean; manage: boolean } {
+  if (!role) return { view: false, edit: false, manage: false };
+  const restricted = role === 'CLIENT' || (workspaceRole === 'GUEST' && role !== 'TEACHER');
+  if (restricted) return { view: false, edit: false, manage: false };
+  return { view: true, edit: can(role, 'issue.edit'), manage: role === 'ADMIN' };
+}
+
+/** Xoá CR / dòng RAID / cuộc họp: ADMIN, hoặc người tạo còn quyền sửa. */
+export function canDeleteGovernance(role: ProjectRole | null, workspaceRole: WorkspaceRole | null, userId: number, createdById: number | null): boolean {
+  const g = governanceAccess(role, workspaceRole);
+  if (g.manage) return true;
+  return g.edit && createdById !== null && createdById === userId;
+}
+
 // ─── Tầng đọc DB ──────────────────────────────────────────────────
 
 export interface ProjectAccess {

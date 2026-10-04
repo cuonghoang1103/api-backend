@@ -26,6 +26,7 @@ import {
   List, ListOrdered, Plus, Search, Settings, Users, LayoutGrid, Check, Sparkles, PanelLeftClose, PanelLeftOpen, Milestone, BadgeCheck, Network, FileText,
   BriefcaseBusiness, Gauge,
   Handshake, PackageCheck, Activity,
+  CalendarClock, GitPullRequestArrow, ShieldAlert,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { workApi, type StudioModule } from '@/lib/work-api';
@@ -112,6 +113,10 @@ const PROJECT_NAV: { group: string; items: NavDef[] }[] = [
       { path: 'approvals', label: 'Approvals', icon: BadgeCheck, match: (v) => v === 'approvals', module: 'approvals' },
       { path: 'docs', label: 'Docs', icon: FileText, match: (v) => v === 'docs', module: 'docs' },
       { path: 'portal', label: 'Client portal', icon: Handshake, match: (v) => v === 'portal', module: 'clientPortal' },
+      // Đợt S3b: họp · yêu cầu thay đổi · sổ RAID (mỗi mục chỉ khi mô-đun của nó bật).
+      { path: 'meetings', label: 'Meetings', icon: CalendarClock, match: (v) => v === 'meetings', module: 'meetings' },
+      { path: 'changes', label: 'Changes', icon: GitPullRequestArrow, match: (v) => v === 'changes', module: 'changeRequests' },
+      { path: 'raid', label: 'RAID', icon: ShieldAlert, match: (v) => v === 'raid', module: 'raid' },
       { path: 'tests', label: 'Tests', icon: FlaskConical, match: (v) => v === 'tests' },
     ],
   },
@@ -132,12 +137,13 @@ const PROJECT_NAV: { group: string; items: NavDef[] }[] = [
  * Cổng khách (S2b): khách bị cách ly KHÔNG thấy điều hướng nội bộ — chỉ các thẻ
  * của cổng (đường dẫn /portal?tab=…). Dữ liệu, như PROJECT_NAV.
  */
-const PORTAL_NAV: { tab: string; label: string; icon: LucideIcon }[] = [
+const PORTAL_NAV: { tab: string; label: string; icon: LucideIcon; module?: StudioModule }[] = [
   { tab: 'overview', label: 'Overview', icon: LayoutDashboard },
   { tab: 'requests', label: 'Requests', icon: Inbox },
   { tab: 'approvals', label: 'Approvals', icon: BadgeCheck },
   { tab: 'documents', label: 'Documents', icon: FileText },
   { tab: 'deliverables', label: 'Deliverables', icon: PackageCheck },
+  { tab: 'meetings', label: 'Meetings', icon: CalendarClock, module: 'meetings' },
   { tab: 'activity', label: 'Activity', icon: Activity },
 ];
 
@@ -331,7 +337,7 @@ export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void })
                     {open && isPortalClient(p) && (
                       <div className="w-subnav mb-2 ml-[18px] mt-0.5 border-l border-[var(--w-border)] pl-1.5">
                         <div className="w-eyebrow w-rail-hide px-2 pb-0.5 pt-2">Client portal</div>
-                        {PORTAL_NAV.map((n) => {
+                        {PORTAL_NAV.filter((n) => !n.module || p.modules?.[n.module]).map((n) => {
                           const cur = view === 'portal' && (search?.get('tab') ?? 'overview') === n.tab;
                           return <NavItem key={n.tab} href={`${base}/portal${n.tab === 'overview' ? '' : `?tab=${n.tab}`}`} icon={n.icon} label={n.label} active={cur} indent />;
                         })}

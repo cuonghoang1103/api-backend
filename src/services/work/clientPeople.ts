@@ -10,7 +10,8 @@
  *   3. "lead" dự án (người đứng tên chịu trách nhiệm với khách);
  *   4. người CÓ tương tác công khai với khách: tác giả trả lời PUBLIC trên thẻ đã
  *      chia sẻ · assignee của thẻ đã chia sẻ · người duyệt + người gửi của phê duyệt
- *      có khách đứng tên.
+ *      có khách đứng tên · (đợt S3b) người tổ chức + người được mời của cuộc họp CÓ
+ *      MỜI khách (khách đã thấy nhau trong lời mời họp).
  * Ai khác (kể cả khi dự án mở cho cả không gian) ⇒ không bao giờ xuất hiện; chỗ nào
  * cần hiện "một người" thì hiện `TEAM_USER` ("Project team", id 0). Không bao giờ email
  * (mọi select dùng PUBLIC_USER — không có cột email).
@@ -32,7 +33,7 @@ export const TEAM_NAME = 'The team';
 export async function clientPeopleIds(projectId: number, viewerId: number | null): Promise<Set<number>> {
   const sharedIssue = { projectId, deletedAt: null, clientVisible: true };
   const clients = await clientMemberIds(projectId);
-  const [project, authors, assignees, approvals] = await Promise.all([
+  const [project, authors, assignees, approvals, meetings] = await Promise.all([
     prisma.workProject.findUnique({ where: { id: projectId }, select: { leadId: true } }),
     prisma.workComment.findMany({ where: { deletedAt: null, visibility: 'PUBLIC', isAi: false, issue: sharedIssue }, distinct: ['authorId'], select: { authorId: true } }),
     prisma.workIssue.findMany({ where: { ...sharedIssue, assigneeId: { not: null } }, distinct: ['assigneeId'], select: { assigneeId: true } }),
@@ -41,6 +42,14 @@ export async function clientPeopleIds(projectId: number, viewerId: number | null
       ? prisma.workApproval.findMany({
         where: { projectId, steps: { some: { approverId: { in: clients } } } },
         select: { createdById: true, steps: { select: { approverId: true } } },
+      })
+      : Promise.resolve([]),
+    // Cuộc họp có mời khách (đợt S3b, meetings.service portalMeetings cùng luật).
+    clients.length
+      ? prisma.workMeeting.findMany({
+        where: { projectId, deletedAt: null, attendees: { some: { userId: { in: clients } } } },
+        select: { organizerId: true, attendees: { select: { userId: true } } },
+        take: 500,
       })
       : Promise.resolve([]),
   ]);
@@ -52,6 +61,10 @@ export async function clientPeopleIds(projectId: number, viewerId: number | null
   for (const a of approvals) {
     if (a.createdById) out.add(a.createdById);
     for (const s of a.steps) out.add(s.approverId);
+  }
+  for (const m of meetings) {
+    if (m.organizerId) out.add(m.organizerId);
+    for (const at of m.attendees) out.add(at.userId);
   }
   return out;
 }

@@ -22,7 +22,7 @@ import { BadRequestError, ForbiddenError } from '../../middleware/errorHandler.j
 import { PUBLIC_USER } from './common.js';
 import type { ProjectRole, ProjectVisibility } from './constants.js';
 import { visibleProjectIds } from './myWork.service.js';
-import { clientScopedProjectIds, effectiveProjectRole, portalOnlyUserIds, requireWorkspace } from './permissions.js';
+import { clientScopedProjectIds, effectiveProjectRole, governanceAccess, portalOnlyUserIds, requireWorkspace } from './permissions.js';
 import {
   RAG_RULES, RAG_RULE_TEXT, WORKLOAD_RULES, addDays, daysBetween, issueHours, loadTone, mondayOf, personWeeks, ragOf, weeksOf,
   type HoursSource,
@@ -137,6 +137,26 @@ export async function portfolio(userId: number, workspaceId: number, opts: { inc
     : [];
   const count = (g: Array<{ projectId: number; _count: { _all: number } }>, pid: number) => g.find((x) => x.projectId === pid)?._count._all ?? 0;
 
+  // Đợt S3b: rủi ro OPEN đã chấm điểm + CR chờ quyết định — chỉ dự án bật mô-đun tương ứng.
+  const raidIds = projects.filter((p) => modulesOf(p.settings).raid).map((p) => p.id);
+  const crIds = projects.filter((p) => modulesOf(p.settings).changeRequests).map((p) => p.id);
+  const [openRiskRows, pendingCrRows] = await Promise.all([
+    raidIds.length
+      ? prisma.workRaidItem.findMany({
+        where: { projectId: { in: raidIds }, deletedAt: null, type: 'RISK', status: 'OPEN', probability: { not: null }, impact: { not: null } },
+        select: { projectId: true, number: true, title: true, probability: true, impact: true },
+        take: 5000,
+      })
+      : Promise.resolve([]),
+    crIds.length
+      ? prisma.workChangeRequest.findMany({
+        where: { projectId: { in: crIds }, deletedAt: null, status: { in: ['SUBMITTED', 'UNDER_REVIEW'] } },
+        select: { projectId: true, number: true, submittedAt: true, createdAt: true },
+        take: 5000,
+      })
+      : Promise.resolve([]),
+  ]);
+
   // Phụ thuộc liên dự án — ẩn mã/tiêu đề phía dự án người xem không thấy.
   const side = (i: (typeof links)[number]['fromIssue']) => (visibleIds.has(i.projectId)
     ? { hidden: false as const, projectId: i.projectId, key: `${i.project.key}-${i.number}`, projectKey: i.project.key, projectName: i.project.name, number: i.number, title: i.title, dueDate: dayOf(i.dueDate) }
@@ -186,8 +206,14 @@ export async function portfolio(userId: number, workspaceId: number, opts: { inc
     const blockingIssues = new Set(cross.filter((l) => l.fromIssue.projectId === p.id).map((l) => l.fromIssue.id));
     const open = count(openG, p.id);
     const overdue = count(overdueG, p.id);
+    // Người không đọc được sổ RAID/CR của dự án (khách GUEST không phải giảng viên) ⇒ không tính luật S3b.
+    const govView = governanceAccess(p.role, wsRole).view;
+    const openRisks = openRiskRows.filter((r) => govView && r.projectId === p.id).map((r) => ({ key: `R-${r.number}`, title: r.title, score: r.probability! * r.impact! }));
+    const pendingChangeRequests = pendingCrRows.filter((c) => govView && c.projectId === p.id)
+      .map((c) => ({ key: `CR-${c.number}`, waitingDays: Math.floor((now.getTime() - (c.submittedAt ?? c.createdAt).getTime()) / DAY) }));
     const health = ragOf({
       open, overdue, sprint, milestones, blockedBy: blockedIssues.size, pendingApprovals, oldestPendingApprovalDays,
+      openRisks, pendingChangeRequests,
     });
 
     rows.push({

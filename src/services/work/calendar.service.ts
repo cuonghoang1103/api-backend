@@ -18,6 +18,8 @@ import { NotFoundError } from '../../middleware/errorHandler.js';
 import { frontendUrl } from './common.js';
 import { visibleProjectIds } from './myWork.service.js';
 import { vnDay } from './sprints.service.js';
+import { icsEscape, icsFold, icsStamp, meetingEventLines } from './ics.js';
+import { config } from '../../config/env.js';
 
 const sha256 = (s: string) => crypto.createHash('sha256').update(s).digest('hex');
 const SCOPE = 'calendar';
@@ -53,22 +55,9 @@ export async function revokeCalendarLink(userId: number) {
 
 // ─── iCalendar ───────────────────────────────────────────────────
 
-const esc = (s: string) => s.replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/\r?\n/g, '\\n');
-
-/** Gập dòng dài theo RFC 5545 (≤ 75 byte/dòng, dòng tiếp bắt đầu bằng một dấu cách) — không cắt giữa ký tự UTF-8. */
-function fold(line: string): string {
-  const out: string[] = [];
-  let cur = '';
-  let bytes = 0;
-  for (const ch of line) {
-    const b = Buffer.byteLength(ch);
-    if (bytes + b > (out.length ? 74 : 75)) { out.push(cur); cur = ''; bytes = 0; }
-    cur += ch;
-    bytes += b;
-  }
-  out.push(cur);
-  return out.join('\r\n ');
-}
+// Escape + gập dòng RFC 5545 dùng chung với lời mời họp (đợt S3b) — ics.ts.
+const esc = icsEscape;
+const fold = icsFold;
 
 // Ngày theo giờ VIỆT NAM: sprint lưu mốc 0h VN (= 17:00Z hôm trước), hạn thẻ lưu 00:00Z — đổi thẳng
 // toISOString() thì sprint lệch sớm một ngày (Sprint 1 hiện 04/10 thay vì thứ Hai 05/10).
@@ -79,7 +68,7 @@ const ymdNext = (d: Date) => {
   t.setUTCDate(t.getUTCDate() + 1);
   return t.toISOString().slice(0, 10).replace(/-/g, '');
 };
-const stamp = (d: Date) => d.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}Z$/, 'Z');
+const stamp = icsStamp;
 
 function allDayEvent(e: { uid: string; start: Date; end?: Date; summary: string; description?: string; url?: string; categories?: string }, now: Date) {
   return [
@@ -175,6 +164,10 @@ export async function renderCalendar(token: string): Promise<string> {
     }
   }
 
+  // Đợt S3b: cuộc họp có MỜI người này (hoặc họ tổ chức) — kể cả dự án họ là khách cổng
+  // (khách chỉ thấy họp mời họ). Mô-đun meetings tắt ⇒ không có. ATTENDEE chỉ ghi chính họ.
+  lines.push(...(await meetingFeedLines(row.userId, projectIds, from, to, now)));
+
   return [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
@@ -188,4 +181,47 @@ export async function renderCalendar(token: string): Promise<string> {
     ...lines,
     'END:VCALENDAR',
   ].map(fold).join('\r\n') + '\r\n';
+}
+
+/** Sự kiện họp trong lịch cá nhân (đợt S3b). */
+async function meetingFeedLines(userId: number, visible: number[], from: Date, to: Date, now: Date): Promise<string[]> {
+  const { clientScopedProjectIds } = await import('./permissions.js');
+  const { modulesOf } = await import('./studio.js');
+  const clientProjects = [...(await clientScopedProjectIds(userId))];
+  const pids = [...new Set([...visible, ...clientProjects])];
+  if (!pids.length) return [];
+  const rows = await prisma.workMeeting.findMany({
+    where: {
+      projectId: { in: pids }, deletedAt: null, startsAt: { gte: from, lte: to },
+      OR: [{ attendees: { some: { userId } } }, { organizerId: userId, projectId: { notIn: clientProjects.length ? clientProjects : [-1] } }],
+    },
+    orderBy: { startsAt: 'asc' },
+    take: 500,
+    select: {
+      id: true, number: true, title: true, status: true, startsAt: true, endsAt: true, timezone: true, location: true, meetingUrl: true, sequence: true, updatedAt: true,
+      organizer: { select: { username: true, displayName: true, fullName: true } },
+      project: { select: { id: true, key: true, name: true, settings: true, workspace: { select: { slug: true } } } },
+      attendees: { where: { userId }, select: { user: { select: { id: true, username: true, displayName: true, fullName: true, email: true } } } },
+    },
+  });
+  const sender = /<([^>]+)>/.exec(config.resendFromEmail ?? '')?.[1] ?? config.resendFromEmail ?? 'no-reply@cuongthai.com';
+  const out: string[] = [];
+  for (const m of rows) {
+    if (!modulesOf(m.project.settings).meetings) continue;
+    const isClient = clientProjects.includes(m.project.id);
+    const path = isClient
+      ? `/work/${m.project.workspace.slug}/${m.project.key}/portal?tab=meetings&meeting=${m.number}`
+      : `/work/${m.project.workspace.slug}/${m.project.key}/meetings/${m.number}`;
+    const url = frontendUrl(path);
+    const org = m.organizer ? (m.organizer.displayName || m.organizer.fullName || m.organizer.username) : m.project.name;
+    out.push(...meetingEventLines({
+      uid: `ctwork-meeting-${m.id}@cuongthai.com`, sequence: m.sequence, title: `${m.project.key} · ${m.title}`, status: m.status,
+      startsAt: m.startsAt, endsAt: m.endsAt, timezone: m.timezone, location: m.location, meetingUrl: m.meetingUrl,
+      description: `${m.project.name}${m.meetingUrl ? `\nJoin: ${m.meetingUrl}` : ''}\n${url}`, url, categories: m.project.key,
+      organizer: { name: org, email: sender },
+      attendees: m.attendees.map((a) => ({ id: a.user.id, name: a.user.displayName || a.user.fullName || a.user.username, email: a.user.email })),
+      updatedAt: m.updatedAt,
+    }, now));
+  }
+  return out;
 }

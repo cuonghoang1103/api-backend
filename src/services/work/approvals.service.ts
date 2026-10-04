@@ -19,6 +19,11 @@
  * Phê duyệt TÀI LIỆU (DOC, đợt S2a — cần cả mô-đun docs lẫn approvals): gửi duyệt
  * ⇒ trang IN_REVIEW; duyệt xong ⇒ APPROVED; từ chối / huỷ ⇒ về DRAFT. Sửa trang
  * sau khi duyệt KHÔNG đổi trạng thái — chỉ cờ lệch chữ ký (`contentChanged`).
+ *
+ * Phê duyệt YÊU CẦU THAY ĐỔI (CR, đợt S3b — cần mô-đun changeRequests + approvals):
+ * gửi duyệt ⇒ CR UNDER_REVIEW; duyệt xong ⇒ APPROVED; từ chối ⇒ REJECTED; huỷ ⇒ về
+ * SUBMITTED. Hash = phân tích ảnh hưởng (approvalContent.crContent). Khách chỉ đứng tên
+ * duyệt CR ĐÃ chia sẻ (`clientVisible`).
  */
 
 import type { Prisma } from '@prisma/client';
@@ -32,22 +37,24 @@ import { currentTargetHash, signedHash } from './approvalContent.js';
 import { emitWorkEvent } from './events.js';
 import { notifyWork } from './notify.js';
 import {
-  actionableSteps, can, canCancelApproval, canDecideApprovalStep, canViewPage, docAccess, isClientScoped, loadProjectAccess, requireProject, type ProjectAccess,
+  actionableSteps, can, canCancelApproval, canDecideApprovalStep, canViewPage, docAccess, governanceAccess, isClientScoped, loadProjectAccess, requireProject, type ProjectAccess,
 } from './permissions.js';
 import { clientMemberIds } from './portalNotify.js';
 import { approvalOutcome, assertModule, modulesOf } from './studio.js';
+import { crCanRequestApproval, crStatusAfterApproval } from './governance.js';
 
 type Tx = Prisma.TransactionClient;
 
 const MAX_APPROVERS = 10;
 
 export const APPROVAL_SELECT = {
-  id: true, projectId: true, targetType: true, issueId: true, stageId: true, pageId: true, title: true, description: true,
+  id: true, projectId: true, targetType: true, issueId: true, stageId: true, pageId: true, changeRequestId: true, title: true, description: true,
   mode: true, status: true, dueAt: true, contentHash: true, decidedAt: true, createdAt: true, updatedAt: true,
   createdBy: { select: PUBLIC_USER },
   issue: { select: { id: true, number: true, title: true, clientVisible: true } },
   stage: { select: { id: true, n: true, slug: true, name: true, status: true } },
   page: { select: { id: true, number: true, title: true, status: true, visibility: true } },
+  changeRequest: { select: { id: true, number: true, title: true, status: true, clientVisible: true } },
   steps: {
     orderBy: [{ position: 'asc' }, { id: 'asc' }],
     select: { id: true, approverId: true, position: true, decision: true, comment: true, decidedAt: true, contentHash: true, approver: { select: PUBLIC_USER } },
@@ -91,15 +98,19 @@ async function projectRef(projectId: number) {
   return {
     key: p.key,
     // Phê duyệt tài liệu mở thẳng trang tài liệu (khung phê duyệt nằm trong trang).
-    url: (approvalId: number, pageNumber?: number | null) => (pageNumber
+    url: (approvalId: number, pageNumber?: number | null, crNumber?: number | null) => (pageNumber
       ? `/work/${p.workspace.slug}/${p.key}/docs/${pageNumber}?approval=${approvalId}`
-      : `/work/${p.workspace.slug}/${p.key}/approvals?id=${approvalId}`),
+      : crNumber
+        // Phê duyệt CR mở thẳng trang CR (khung phê duyệt nằm trong trang). Khách: routeForClient viết lại vào cổng.
+        ? `/work/${p.workspace.slug}/${p.key}/changes/${crNumber}?approval=${approvalId}`
+        : `/work/${p.workspace.slug}/${p.key}/approvals?id=${approvalId}`),
   };
 }
 
 /** Nhãn ngắn của đối tượng cho thông báo: "CL-12" · "CL · Gate 3" · "CL · Doc: SRS". */
-function targetLabel(ref: { key: string }, a: { issue?: { number: number } | null; stage?: { name: string } | null; page?: { title: string } | null }) {
+function targetLabel(ref: { key: string }, a: { issue?: { number: number } | null; stage?: { name: string } | null; page?: { title: string } | null; changeRequest?: { number: number } | null }) {
   if (a.issue) return `${ref.key}-${a.issue.number}`;
+  if (a.changeRequest) return `${ref.key} · CR-${a.changeRequest.number}`;
   if (a.page) return `${ref.key} · Doc: ${a.page.title}`.slice(0, 120);
   return `${ref.key} · ${a.stage?.name ?? 'Approval'}`;
 }
@@ -113,9 +124,10 @@ export const UNSHARED_TITLE = 'Item no longer shared';
  * trang phải visibility CLIENT. Cổng giai đoạn / UAT luôn được (khách thấy tên giai
  * đoạn; UAT tự lọc hạng mục).
  */
-export function approvalTargetSharedWithClient(a: { targetType: string; issue?: { clientVisible?: boolean } | null; page?: { visibility?: string } | null }): boolean {
+export function approvalTargetSharedWithClient(a: { targetType: string; issue?: { clientVisible?: boolean } | null; page?: { visibility?: string } | null; changeRequest?: { clientVisible?: boolean } | null }): boolean {
   if (a.targetType === 'ISSUE') return a.issue?.clientVisible === true;
   if (a.targetType === 'DOC') return a.page?.visibility === 'CLIENT';
+  if (a.targetType === 'CR') return a.changeRequest?.clientVisible === true;
   return true;
 }
 
@@ -129,9 +141,11 @@ export function approvalForClient<T extends {
   issue: { number: number; title: string; clientVisible?: boolean } | null;
   page: { number: number; title: string; visibility?: string } | null;
   stage: { n: number; name: string } | null;
+  changeRequestId?: number | null;
+  changeRequest?: { number: number; title: string; clientVisible?: boolean } | null;
 }>(a: T): T {
   if (!approvalTargetSharedWithClient(a)) {
-    return { ...a, title: UNSHARED_TITLE, description: null, issueId: null, pageId: null, issue: null, page: null };
+    return { ...a, title: UNSHARED_TITLE, description: null, issueId: null, pageId: null, issue: null, page: null, ...('changeRequest' in a ? { changeRequestId: null, changeRequest: null } : {}) };
   }
   if (a.targetType === 'STAGE_GATE' && a.stage) {
     return { ...a, title: `Stage gate: ${a.stage.n}. ${a.stage.name}`.slice(0, 200), description: null };
@@ -146,8 +160,8 @@ export function approvalForClient<T extends {
  * CLIENT — không thì 400 WORK_APPROVER_NOT_CLIENT_VISIBLE (tiêu đề phê duyệt + thông
  * báo sẽ lộ đối tượng nội bộ cho khách).
  */
-async function assertApprovers(projectId: number, ids: number[], target: { pageVisibility?: string; issueShared?: boolean } = {}) {
-  const { pageVisibility, issueShared } = target;
+async function assertApprovers(projectId: number, ids: number[], target: { pageVisibility?: string; issueShared?: boolean; crShared?: boolean } = {}) {
+  const { pageVisibility, issueShared, crShared } = target;
   if (!ids.length) throw new BadRequestError('Add at least one approver', 'WORK_NO_APPROVERS');
   if (ids.length > MAX_APPROVERS) throw new BadRequestError(`At most ${MAX_APPROVERS} approvers`, 'WORK_LIMIT');
   for (const uid of ids) {
@@ -155,13 +169,19 @@ async function assertApprovers(projectId: number, ids: number[], target: { pageV
     if (!a || !can(a.role, 'approval.decide')) {
       throw new BadRequestError('Every approver must be a project member who can approve (viewers cannot)', 'WORK_BAD_APPROVER');
     }
-    if (isClientScoped(a) && (issueShared === false || (pageVisibility !== undefined && pageVisibility !== 'CLIENT'))) {
+    if (isClientScoped(a) && (issueShared === false || crShared === false || (pageVisibility !== undefined && pageVisibility !== 'CLIENT'))) {
       throw new BadRequestError(
         issueShared === false
           ? 'A client can only approve issues shared with them — share this issue with the client first, or pick a team member'
-          : 'A client can only approve documents shared with them — set the document visibility to Client first, or pick a team member',
+          : crShared === false
+            ? 'A client can only approve change requests shared with them — share this change request with the client first, or pick a team member'
+            : 'A client can only approve documents shared with them — set the document visibility to Client first, or pick a team member',
         'WORK_APPROVER_NOT_CLIENT_VISIBLE',
       );
+    }
+    // CR (đợt S3b): khách ở dự án KHÔNG bật cổng khách thì không đọc được CR ⇒ không đứng tên được.
+    if (crShared !== undefined && !isClientScoped(a) && !governanceAccess(a.role, a.workspaceRole).view) {
+      throw new BadRequestError('Every approver must be able to read this change request — pick a team member, or turn on the client portal and share it', 'WORK_BAD_APPROVER');
     }
     if (pageVisibility && !canViewPage(a.role, a.workspaceRole, pageVisibility)) {
       throw new BadRequestError('Every approver must be able to read this document — share it with the client first (visibility: Client) or pick a team member', 'WORK_BAD_APPROVER');
@@ -177,7 +197,7 @@ async function notifyApprovers(approvalId: number, senderId: number) {
     for (const s of actionableSteps(a.mode, a.steps)) {
       await notifyWork({
         receiverId: s.approverId, senderId, type: 'WORK_ALERT', entityId: a.issueId ?? a.id,
-        payload: { issueKey: targetLabel(ref, a), title: a.title, message: `Your approval is requested: ${a.title}`, url: ref.url(a.id, a.page?.number), approvalId: a.id },
+        payload: { issueKey: targetLabel(ref, a), title: a.title, message: `Your approval is requested: ${a.title}`, url: ref.url(a.id, a.page?.number, a.changeRequest?.number), approvalId: a.id },
       });
     }
   } catch (err) {
@@ -187,12 +207,12 @@ async function notifyApprovers(approvalId: number, senderId: number) {
 
 async function notifyCreator(approvalId: number, senderId: number, message: string) {
   try {
-    const a = await prisma.workApproval.findUnique({ where: { id: approvalId }, select: { id: true, projectId: true, title: true, createdById: true, stage: { select: { name: true } }, issue: { select: { number: true } }, page: { select: { number: true, title: true } }, issueId: true } });
+    const a = await prisma.workApproval.findUnique({ where: { id: approvalId }, select: { id: true, projectId: true, title: true, createdById: true, stage: { select: { name: true } }, issue: { select: { number: true } }, page: { select: { number: true, title: true } }, changeRequest: { select: { number: true } }, issueId: true } });
     if (!a?.createdById) return;
     const ref = await projectRef(a.projectId);
     await notifyWork({
       receiverId: a.createdById, senderId, type: 'WORK_ALERT', entityId: a.issueId ?? a.id,
-      payload: { issueKey: targetLabel(ref, a), title: a.title, message, url: ref.url(a.id, a.page?.number), approvalId: a.id },
+      payload: { issueKey: targetLabel(ref, a), title: a.title, message, url: ref.url(a.id, a.page?.number, a.changeRequest?.number), approvalId: a.id },
     });
   } catch (err) {
     logger.warn('[work] báo người tạo phê duyệt lỗi', { approvalId, err: (err as Error).message });
@@ -222,12 +242,13 @@ export async function createApprovalTx(
   tx: Tx,
   projectId: number,
   creatorId: number,
-  input: { targetType: 'ISSUE' | 'STAGE_GATE' | 'DOC' | 'UAT'; issueId?: number | null; stageId?: number | null; pageId?: number | null; title: string; description?: string | null; mode: ApprovalMode; approverIds: number[]; dueAt?: Date | null },
+  input: { targetType: 'ISSUE' | 'STAGE_GATE' | 'DOC' | 'UAT' | 'CR'; issueId?: number | null; stageId?: number | null; pageId?: number | null; changeRequestId?: number | null; title: string; description?: string | null; mode: ApprovalMode; approverIds: number[]; dueAt?: Date | null },
 ): Promise<number> {
-  const hash = await currentTargetHash(tx, { targetType: input.targetType, issueId: input.issueId ?? null, stageId: input.stageId ?? null, pageId: input.pageId ?? null });
+  const hash = await currentTargetHash(tx, { targetType: input.targetType, issueId: input.issueId ?? null, stageId: input.stageId ?? null, pageId: input.pageId ?? null, changeRequestId: input.changeRequestId ?? null });
   const a = await tx.workApproval.create({
     data: {
       projectId, targetType: input.targetType, issueId: input.issueId ?? null, stageId: input.stageId ?? null, pageId: input.pageId ?? null,
+      changeRequestId: input.changeRequestId ?? null,
       title: input.title.slice(0, 200), description: input.description?.trim() || null, mode: input.mode,
       createdById: creatorId, dueAt: input.dueAt ?? null, contentHash: hash,
       steps: { create: input.approverIds.map((approverId, position) => ({ approverId, position })) },
@@ -292,6 +313,41 @@ async function createDocApproval(userId: number, projectId: number, access: Proj
   return getApproval(userId, projectId, id);
 }
 
+/**
+ * Gửi duyệt một YÊU CẦU THAY ĐỔI (đợt S3b): cần mô-đun changeRequests + approvals, người gửi
+ * sửa được CR (MEMBER+), CR đang DRAFT/SUBMITTED, mỗi CR một yêu cầu đang chờ. CR chuyển
+ * UNDER_REVIEW trong cùng transaction (DRAFT ⇒ ghi luôn submittedAt).
+ */
+export async function createCrApproval(
+  userId: number, projectId: number, crNumber: number,
+  input: { title?: string; description?: string | null; mode?: ApprovalMode; approverIds: number[]; dueAt?: Date | null },
+) {
+  const access = await requireProject(userId, projectId, 'approval.create');
+  assertModule(access, 'changeRequests');
+  assertModule(access, 'approvals');
+  if (!governanceAccess(access.role, access.workspaceRole).edit) throw new ForbiddenError('You cannot send change requests for approval in this project');
+  const cr = await prisma.workChangeRequest.findFirst({ where: { projectId, number: crNumber, deletedAt: null }, select: { id: true, number: true, title: true, status: true, clientVisible: true } });
+  if (!cr) throw new NotFoundError('Change request not found');
+  if (!crCanRequestApproval(cr.status)) throw new ConflictError(`This change request is ${cr.status.toLowerCase().replace('_', ' ')} and cannot be sent for approval`);
+  const approverIds = [...new Set(input.approverIds)];
+  await assertApprovers(projectId, approverIds, { crShared: cr.clientVisible });
+  const id = await prisma.$transaction(async (tx) => {
+    await tx.$queryRaw`SELECT id FROM work_change_requests WHERE id = ${cr.id} FOR UPDATE`;
+    const open = await tx.workApproval.count({ where: { changeRequestId: cr.id, status: 'PENDING' } });
+    if (open) throw new ConflictError('This change request already has a pending approval request');
+    const aid = await createApprovalTx(tx, projectId, userId, {
+      targetType: 'CR', changeRequestId: cr.id, title: input.title?.trim() || `Approve change request CR-${cr.number}: ${cr.title}`,
+      description: input.description, mode: input.mode ?? 'SEQUENTIAL', approverIds, dueAt: input.dueAt,
+    });
+    const now = new Date();
+    await tx.workChangeRequest.update({ where: { id: cr.id }, data: { status: 'UNDER_REVIEW', ...(cr.status === 'DRAFT' ? { submittedAt: now } : {}) } });
+    return aid;
+  });
+  emitWorkEvent({ type: 'governance.updated', projectId, entity: 'cr', number: cr.number, action: 'status', actor: { kind: 'USER', userId } });
+  await afterCreate(id, projectId, userId);
+  return getApproval(userId, projectId, id);
+}
+
 export async function afterCreate(approvalId: number, projectId: number, userId: number) {
   const a = await prisma.workApproval.findUniqueOrThrow({ where: { id: approvalId }, select: { status: true, targetType: true, issueId: true, stageId: true, title: true } });
   emitWorkEvent({ type: 'approval.updated', projectId, approvalId, status: a.status, targetType: a.targetType, targetIssueId: a.issueId, stageId: a.stageId, actor: { kind: 'USER', userId } });
@@ -312,6 +368,8 @@ export async function getApproval(userId: number, projectId: number, approvalId:
     select: APPROVAL_SELECT,
   });
   if (!a || (a.page && !canViewPage(access.role, access.workspaceRole, a.page.visibility))) throw new NotFoundError('Approval request not found');
+  // CR nội bộ (đợt S3b): người không đọc được sổ CR chỉ thấy phê duyệt của CR đã chia sẻ.
+  if (a.changeRequest && !governanceAccess(access.role, access.workspaceRole).view && !a.changeRequest.clientVisible) throw new NotFoundError('Approval request not found');
   return present(a, { userId, role: access.role, clientView, clientIds }, access.key);
 }
 
@@ -348,6 +406,8 @@ export async function listApprovals(
       ...(q.stageId ? { stageId: q.stageId } : {}),
       ...(pageId ? { pageId } : {}),
       ...(restricted ? { OR: [{ pageId: null }, { page: { visibility: 'CLIENT' } }] } : {}),
+      // CR nội bộ (S3b) — cùng luật với getApproval.
+      ...(!governanceAccess(access.role, access.workspaceRole).view ? { AND: [{ OR: [{ changeRequestId: null }, { changeRequest: { clientVisible: true } }] }] } : {}),
     },
     orderBy: { id: 'desc' },
     take: Math.min(Math.max(q.limit ?? 50, 1), 200),
@@ -399,6 +459,16 @@ async function applyPageEffect(tx: Tx, pageId: number | null, status: 'APPROVED'
   else await tx.workPage.updateMany({ where: { id: pageId, status: 'IN_REVIEW' }, data: { status: 'DRAFT' } });
 }
 
+/** Hiệu ứng lên CR khi yêu cầu CR kết thúc (đợt S3b). Chạy TRONG transaction quyết định. */
+async function applyCrEffect(tx: Tx, crId: number | null, status: 'APPROVED' | 'REJECTED' | 'CANCELLED') {
+  if (!crId) return;
+  const next = crStatusAfterApproval(status);
+  await tx.workChangeRequest.updateMany({
+    where: { id: crId, status: 'UNDER_REVIEW' },
+    data: { status: next, decidedAt: status === 'CANCELLED' ? null : new Date() },
+  });
+}
+
 /** Hiệu ứng lên giai đoạn khi yêu cầu cổng kết thúc. Chạy TRONG transaction quyết định. */
 async function applyStageEffect(tx: Tx, stageId: number | null, status: 'APPROVED' | 'REJECTED' | 'CANCELLED') {
   if (!stageId) return;
@@ -425,8 +495,9 @@ export async function decideApproval(
     const a = await tx.workApproval.findFirst({
       where: { id: approvalId, projectId },
       select: {
-        id: true, status: true, mode: true, targetType: true, issueId: true, stageId: true, pageId: true,
+        id: true, status: true, mode: true, targetType: true, issueId: true, stageId: true, pageId: true, changeRequestId: true,
         issue: { select: { clientVisible: true } }, page: { select: { number: true, visibility: true } },
+        changeRequest: { select: { number: true, clientVisible: true } },
         steps: { select: { id: true, approverId: true, position: true, decision: true } },
       },
     });
@@ -460,8 +531,9 @@ export async function decideApproval(
       await tx.workApproval.update({ where: { id: approvalId }, data: { status: outcome, decidedAt: new Date() } });
       if (a.targetType === 'STAGE_GATE') await applyStageEffect(tx, a.stageId, outcome);
       if (a.targetType === 'DOC') await applyPageEffect(tx, a.pageId, outcome);
+      if (a.targetType === 'CR') await applyCrEffect(tx, a.changeRequestId, outcome);
     }
-    return { outcome, decision, targetType: a.targetType, issueId: a.issueId, stageId: a.stageId, pageId: a.pageId, pageNumber: a.page?.number ?? null };
+    return { outcome, decision, targetType: a.targetType, issueId: a.issueId, stageId: a.stageId, pageId: a.pageId, pageNumber: a.page?.number ?? null, crNumber: a.changeRequest?.number ?? null };
   });
 
   emitWorkEvent({ type: 'approval.updated', projectId, approvalId, status: result.outcome, targetType: result.targetType, targetIssueId: result.issueId, stageId: result.stageId, actor: { kind: 'USER', userId } });
@@ -470,6 +542,9 @@ export async function decideApproval(
   }
   if (result.pageId && result.pageNumber && result.outcome !== 'PENDING') {
     emitWorkEvent({ type: 'page.updated', projectId, pageId: result.pageId, number: result.pageNumber, action: 'status', actor: { kind: 'USER', userId } });
+  }
+  if (result.crNumber && result.outcome !== 'PENDING') {
+    emitWorkEvent({ type: 'governance.updated', projectId, entity: 'cr', number: result.crNumber, action: 'status', actor: { kind: 'USER', userId } });
   }
   await auditProject(projectId, {
     actorId: userId, action: input.decision === 'APPROVE' ? 'approval.approve' : 'approval.reject', targetType: 'approval', targetId: approvalId,
@@ -486,7 +561,7 @@ export async function cancelApproval(userId: number, projectId: number, approval
   assertModule(access, 'approvals');
   const r = await prisma.$transaction(async (tx) => {
     await tx.$queryRaw`SELECT id FROM work_approvals WHERE id = ${approvalId} FOR UPDATE`;
-    const a = await tx.workApproval.findFirst({ where: { id: approvalId, projectId }, select: { id: true, status: true, createdById: true, targetType: true, issueId: true, stageId: true, pageId: true, page: { select: { number: true } }, title: true } });
+    const a = await tx.workApproval.findFirst({ where: { id: approvalId, projectId }, select: { id: true, status: true, createdById: true, targetType: true, issueId: true, stageId: true, pageId: true, changeRequestId: true, page: { select: { number: true } }, changeRequest: { select: { number: true } }, title: true } });
     if (!a) throw new NotFoundError('Approval request not found');
     if (!canCancelApproval(access.role, userId, a.createdById)) throw new ForbiddenError('Only the requester or a project admin can cancel this request');
     if (a.status !== 'PENDING') throw new ConflictError(`This request is already ${a.status.toLowerCase()}`);
@@ -494,8 +569,10 @@ export async function cancelApproval(userId: number, projectId: number, approval
     await tx.workApproval.update({ where: { id: approvalId }, data: { status: 'CANCELLED', decidedAt: new Date() } });
     if (a.targetType === 'STAGE_GATE') await applyStageEffect(tx, a.stageId, 'CANCELLED');
     if (a.targetType === 'DOC') await applyPageEffect(tx, a.pageId, 'CANCELLED');
+    if (a.targetType === 'CR') await applyCrEffect(tx, a.changeRequestId, 'CANCELLED');
     return a;
   });
+  if (r.changeRequest) emitWorkEvent({ type: 'governance.updated', projectId, entity: 'cr', number: r.changeRequest.number, action: 'status', actor: { kind: 'USER', userId } });
   if (r.pageId && r.page) emitWorkEvent({ type: 'page.updated', projectId, pageId: r.pageId, number: r.page.number, action: 'status', actor: { kind: 'USER', userId } });
   emitWorkEvent({ type: 'approval.updated', projectId, approvalId, status: 'CANCELLED', targetType: r.targetType, targetIssueId: r.issueId, stageId: r.stageId, actor: { kind: 'USER', userId } });
   if (r.stageId) emitWorkEvent({ type: 'stage.updated', projectId, stageId: r.stageId, status: 'ACTIVE', actor: { kind: 'USER', userId } });

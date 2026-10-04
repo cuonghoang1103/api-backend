@@ -25,7 +25,7 @@ export function studioOn(config: Pick<ProjectConfig, 'modules'> | undefined | nu
   return config?.modules?.[m] === true;
 }
 
-/** Mô-đun có tính năng thật: bốn mô-đun đợt S1 + Docs (đợt S2a) — thứ tự hiển thị. */
+/** Mô-đun có tính năng thật: bốn mô-đun đợt S1 + Docs (S2a) + cổng khách (S2b) + CR/RAID/họp (S3b) — thứ tự hiển thị. */
 export const S1_MODULES: Array<{ key: StudioModule; label: string; body: string }> = [
   { key: 'teams', label: 'Teams', body: 'Departments shared across projects (BA, DEV, QA…). Issues get a Team field, each team has a work queue its lead assigns from.' },
   { key: 'stages', label: 'Stages & gates', body: 'Run the project as numbered stages. A stage can only start when the previous one passed its gate review.' },
@@ -33,13 +33,14 @@ export const S1_MODULES: Array<{ key: StudioModule; label: string; body: string 
   { key: 'handoffs', label: 'Handoffs', body: 'Pass an issue to another team or person with a checklist they must tick before accepting, or return with a reason.' },
   { key: 'docs', label: 'Docs', body: 'Confluence-style project documents: a page tree, 36 process templates (SRS, SOW, test plan…), version history, approvals and links to issues.' },
   { key: 'clientPortal', label: 'Client portal', body: 'A separate portal for your client: only issues, documents and files you share, replies (internal notes stay internal), requests, approvals and UAT sign-off.' },
+  // Đợt S3b.
+  { key: 'changeRequests', label: 'Change requests', body: 'A change log with impact analysis (scope, schedule, cost, risks, alternatives), signed approval — by your client too — and implementation issues.' },
+  { key: 'raid', label: 'RAID log', body: 'Risks, assumptions, issues and dependencies with owners, probability × impact scoring, a 5×5 matrix and review reminders. Internal to the team.' },
+  { key: 'meetings', label: 'Meetings', body: 'Kick-offs, weekly syncs and steering meetings: agenda, minutes, decisions, action items that become issues, and calendar invitations (.ics).' },
 ];
 
 /** Khoá chừa cho đợt sau — hiện mờ "Coming later" để người dùng biết hướng đi. */
 export const LATER_MODULES: Array<{ key: StudioModule; label: string }> = [
-  { key: 'changeRequests', label: 'Change requests' },
-  { key: 'raid', label: 'RAID log' },
-  { key: 'meetings', label: 'Meetings' },
   { key: 'finance', label: 'Finance' },
 ];
 
@@ -47,7 +48,7 @@ export const KIND_INFO: Record<ProjectKind, { label: string; short: string; body
   PERSONAL: { label: 'Personal', short: 'Personal', body: 'Your own tasks and side projects. Just a board — nothing to set up.', modules: [] },
   SCHOOL: { label: 'School / coursework', short: 'School', body: 'Group assignments and capstones (SWP391, SWR302, SWT301). Sprints, tests and reports for your lecturer.', modules: [] },
   SOFTWARE: { label: 'Software team', short: 'Software', body: 'A product team shipping software: sprints, code review, releases and GitHub.', modules: [] },
-  CLIENT: { label: 'Client project (studio)', short: 'Client', body: 'Work delivered for a client through departments: stages with gate reviews, approvals and handoffs.', modules: ['teams', 'stages', 'approvals', 'handoffs', 'docs', 'clientPortal'] },
+  CLIENT: { label: 'Client project (studio)', short: 'Client', body: 'Work delivered for a client through departments: stages with gate reviews, approvals and handoffs.', modules: ['teams', 'stages', 'approvals', 'handoffs', 'docs', 'clientPortal', 'changeRequests', 'raid', 'meetings'] },
 };
 export const KINDS: ProjectKind[] = ['PERSONAL', 'SCHOOL', 'SOFTWARE', 'CLIENT'];
 

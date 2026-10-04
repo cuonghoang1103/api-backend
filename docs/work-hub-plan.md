@@ -395,8 +395,8 @@ work_issues, 7 bảng); mọi FK trên/vào `work_issues` + FK SET NULL của b�
   (3 lượt liền) + `studio.test.ts` (luật thuần) trong `npm test`; chạy thật backend :3101 — phiếu → dự án
   CLIENT → duyệt cổng GĐ0 → kích hoạt GĐ1 → bàn giao BA→DEV nhận + trả lại → dự án SCHOOL cũ ⇒ MODULE_DISABLED.
 - [ ] Giao diện cho S1 (phiên làm lại giao diện /work) · L
-- [x] Đợt S2a: tài liệu kiểu Confluence (xem mục dưới) · [x] Đợt S2b: cổng khách duyệt (xem mục dưới) · Đợt S3: CR + RAID, họp,
-      portfolio · Đợt S4: tài chính, báo cáo khách tự động
+- [x] Đợt S2a: tài liệu kiểu Confluence (xem mục dưới) · [x] Đợt S2b: cổng khách duyệt (xem mục dưới) · [x] Đợt S3a: portfolio + workload · [x] Đợt S3b: CR + RAID,
+      họp (xem mục dưới) · Đợt S4: tài chính, báo cáo khách tự động
 
 ### Đợt S2a — tài liệu dự án kiểu Confluence (04/10/2026, mô-đun `docs`)
 
@@ -517,6 +517,51 @@ Không bảng mới, không migration, không ghi gì. Luật thuần ở `src/s
   khách cổng rỗng, người ngoài 404, quá tải/năng lực/bộ phận, thành viên chỉ thấy mình + lọc bộ phận 403, lead thấy bộ phận);
   168/168 test DB CT Work; E2E Playwright (backend :3151 + Next :3150, 5 dự án mẫu đỏ/vàng/xanh): 28 kiểm, 0 lỗi JS, 0 tràn
   ngang 390px; ảnh `~/Desktop/ct-work-ui/s3a/`.
+
+### Đợt S3b — yêu cầu thay đổi (CR) · sổ RAID · cuộc họp (04/10/2026, mô-đun `changeRequests`, `raid`, `meetings`)
+
+Chuẩn tham chiếu: PMBOK 7 (Perform Integrated Change Control, miền Uncertainty — risk register), PRINCE2 (Issue/Risk
+Register, change authority), sổ RAID. Bật mặc định cho dự án CLIENT MỚI (`STUDIO_MODULES_S3B` trong `defaultModulesFor`);
+dự án cũ (không có khoá) ⇒ 403 `MODULE_DISABLED`, không đổi gì. Migration `20261004200000_work_s3b` chỉ THÊM (1 cột nullable
+`work_approvals.change_request_id` + 8 bảng), mọi FK mới DEFERRABLE INITIALLY DEFERRED. Tuyến ở `src/routes/work.governance.routes.ts`
+(một dòng `router.use` cuối work.routes.ts — đi qua chốt cổng khách). Quyền MỘT hàm: `permissions.governanceAccess` (khách
+CLIENT/GUEST trừ TEACHER không thấy; VIEWER/TEACHER xem; MEMBER+ sửa) + `governanceDb.govCtx` (403 `WORK_INTERNAL_ONLY`).
+
+- [x] S3b.A CR = ĐỐI TƯỢNG RIÊNG `work_change_requests` (không phải loại thẻ/cờ trên thẻ: loại thẻ là dữ liệu từng dự án,
+      đụng JQL/board/xuất Jira, và CR sẽ lộ chi phí lên board/cổng khách). Phân tích ảnh hưởng có cấu trúc (phạm vi, +ngày,
+      chi phí số + đơn vị tự do — không tính giá/không quy đổi, rủi ro, phương án thay thế, lý do, mức khẩn), liên kết
+      `work_change_request_links` AFFECTED (thẻ/giai đoạn/version) | IMPLEMENTS (thẻ thực hiện), `sourceIssueId`. Luồng
+      Draft → Submitted → Under review → Approved/Rejected → Implemented; trạng thái duyệt CHỈ do phê duyệt đặt
+      (`approvals.createCrApproval`, targetType CR, hash = `approvalContent.crContent` — IMPLEMENTS không vào hash; huỷ ⇒ Submitted).
+      Khách duyệt được khi CR `clientVisible` + cổng bật (cổng hiện phân tích qua `crForClient`). Duyệt xong ⇒ đề xuất thẻ tất
+      định (thẻ chính + thẻ cập nhật mỗi thẻ bị ảnh hưởng) → sửa/bỏ chọn → "Create issues". Sổ CR: lọc trạng thái, tổng +ngày,
+      chi phí theo đơn vị. Mô tả khung từ `phieu-yeu-cau-thay-doi.md` (phần 1–2) · L
+- [x] S3b.B RAID `work_raid_items` (+ `work_raid_links` thẻ/giai đoạn/CR, `work_raid_history` từng trường): Risk/Assumption/Issue/
+      Dependency, chủ sở hữu, trạng thái theo loại (Assumption: Unvalidated/Validated/Invalid), L × I (1–5) ⇒ điểm khi đọc
+      (≥15 cao · 8–14 TB · ≤7 thấp — theo `so-dang-ky-rui-ro.md`), phản ứng Avoid/Mitigate/Transfer/Accept, kế hoạch, trigger,
+      nhóm, ngày xem lại. "Starter risks" đọc bảng R01… của mẫu. Nhắc "review due": cron 08:10 VN (`runRaidReviewReminders`,
+      không LLM) — mỗi ngày xem lại nhắc ĐÚNG MỘT lần (`reviewNotifiedFor`), người gửi chuông ≠ người nhận (lead/ADMIN), dự án
+      một người ⇒ chỉ email · M
+- [x] S3b.C Họp `work_meetings` (+ `work_meeting_attendees`, `work_meeting_actions`): 8 loại, giờ UTC + múi giờ IANA, địa điểm,
+      link Meet/Zoom/Teams (chỉ lưu), agenda + biên bản TipTap (chế độ docs), quyết định, việc cần làm (người + hạn) ⇒ "Create
+      issues" (bỏ qua việc đã có thẻ), gợi ý AI tái dùng `meeting_notes` chỉ trả ĐỀ XUẤT, trạng thái Scheduled/Done/Cancelled,
+      "Duplicate next week", kick-off ⇒ agenda + khung biên bản từ `bien-ban-kick-off.md`. `.ics` RFC 5545 (`ics.ts` dùng chung
+      với lịch cá nhân): email mời kèm tệp + nút tải; lịch đăng ký cá nhân thêm họp có mời mình. ATTENDEE chỉ mang email của
+      CHÍNH người nhận (người khác `urn:ctwork:user:<id>`), ORGANIZER = địa chỉ gửi của hệ thống. "Share notes with client" ⇒
+      khách được mời thấy agenda/biên bản/quyết định/việc (không mã thẻ) qua `/portal/meetings/**` — đã nằm trong danh sách trắng
+      `/portal/**`, KHÔNG thêm mẫu tuyến khách. `clientPeople` thêm người tổ chức + người được mời của họp có khách · L
+- [x] S3b.D Giao diện: sidebar "Meetings", "Changes", "RAID" (theo mô-đun); `/meetings` (+`[num]`), `/changes` (+`[num]`), `/raid`
+      (thẻ theo loại, ma trận 5×5 bấm ô ⇒ lọc, review due, hộp chi tiết + lịch sử); khu "Change requests" + "Risks & RAID" trong
+      chi tiết thẻ; widget dashboard "Top risks"; thẻ "Meetings" ở cổng khách; help "Change requests", "RAID log", "Meetings"
+      (song ngữ); module bật/tắt trong Project settings; tuyến app desktop (+5) · L
+- [x] S3b.E Portfolio (`portfolioRules.ragOf`): rủi ro OPEN điểm ≥ 20 ⇒ ĐỎ (`RISK_CRITICAL`), ≥ 15 ⇒ VÀNG (`RISK_HIGH`), CR chờ
+      quyết định > 5 ngày ⇒ VÀNG (`CR_WAITING`); chỉ khi mô-đun bật và người xem đọc được sổ · S
+- **Nghiệm thu 04/10/2026:** `governance.test.ts` 27 phép (vòng đời CR, tổng, điểm/mức/ma trận, mẫu, .ics: escape `,` `;`
+  `\n`, gập ≤ 75 octet không cắt UTF-8, DTSTART/DTEND/UID/ORGANIZER/ATTENDEE, quyền, danh sách trắng, RAG mới) trong `npm test`;
+  `work.s3b.db.test.ts` 12 test DB (dự án cũ MODULE_DISABLED, khách CLIENT_PORTAL_ONLY / WORK_INTERNAL_ONLY, CR duyệt + lệch
+  hash + khách duyệt qua cổng, thẻ thực hiện, RAID + portfolio đỏ/vàng, nhắc một lần, họp + email .ics + biên bản chia sẻ +
+  lịch cá nhân, nhân bản); 187/187 test DB CT Work; E2E Playwright (backend :3161 + Next :3160): 30 kiểm, 0 lỗi JS, 0 tràn
+  ngang 390px; ảnh `~/Desktop/ct-work-ui/s3b/`.
 
 ## 10. Rủi ro
 

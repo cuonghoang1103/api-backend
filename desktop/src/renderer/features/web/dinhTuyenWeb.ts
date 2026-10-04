@@ -270,7 +270,7 @@ export const TUYEN_WEB: readonly TuyenWeb[] = [
   { mau: '/profile/:id/v2', nap: () => import('@/app/profile/[id]/v2/page') },
 
   /* ── CT Work (kiểu Jira) — 23/09/2026 ──
-     Đối chiếu bằng `find frontend/src/app/work -name page.tsx` ⇒ 26 trang (04/10/2026, sau S2a Docs).
+     Đối chiếu bằng `find frontend/src/app/work -name page.tsx` ⇒ 35 trang (04/10/2026, sau S3b: meetings, changes, raid).
      Khung chung (`app/work/layout.tsx`: thanh bên, bảng lệnh ⌘K, AI, `#work-portal`,
      `work.css`) do `CtWorkPage` dựng — xem tệp đó.
 
@@ -315,6 +315,12 @@ export const TUYEN_WEB: readonly TuyenWeb[] = [
   // Đợt S2b: cổng khách (mô-đun clientPortal) + biên bản nghiệm thu in được.
   { mau: '/work/:ws/:key/portal', nap: () => import('@/app/work/[ws]/[key]/portal/page') },
   { mau: '/work/:ws/:key/portal/uat/:aid', nap: () => import('@/app/work/[ws]/[key]/portal/uat/[aid]/page') },
+  // Đợt S3b (04/10/2026): họp · yêu cầu thay đổi · sổ RAID.
+  { mau: '/work/:ws/:key/meetings', nap: () => import('@/app/work/[ws]/[key]/meetings/page') },
+  { mau: '/work/:ws/:key/meetings/:num', nap: () => import('@/app/work/[ws]/[key]/meetings/[num]/page') },
+  { mau: '/work/:ws/:key/changes', nap: () => import('@/app/work/[ws]/[key]/changes/page') },
+  { mau: '/work/:ws/:key/changes/:num', nap: () => import('@/app/work/[ws]/[key]/changes/[num]/page') },
+  { mau: '/work/:ws/:key/raid', nap: () => import('@/app/work/[ws]/[key]/raid/page') },
   { mau: '/work/:ws/:key/tests/:num', nap: () => import('@/app/work/[ws]/[key]/tests/[num]/page') },
   { mau: '/work/:ws/:key/issue/:num', nap: () => import('@/app/work/[ws]/[key]/issue/[num]/page') },
   { mau: '/work/:ws/:key/tests/cycles/:cycleId', nap: () => import('@/app/work/[ws]/[key]/tests/cycles/[cycleId]/page') },

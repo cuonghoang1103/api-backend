@@ -108,6 +108,9 @@ export interface ProjectPermissions {
   viewAllDocs?: boolean;
   editDocs?: boolean;
   manageDocs?: boolean;
+  // CR · RAID · họp (S3b) — khách/GUEST (trừ giảng viên) không thấy phần nội bộ.
+  viewGovernance?: boolean;
+  editGovernance?: boolean;
 }
 
 export interface ProjectConfig {
@@ -552,7 +555,7 @@ export type GroupBy = 'status' | 'statusCategory' | 'assignee' | 'type' | 'prior
 export interface StatsGroup { key: string; label: string; count: number; points: number; color?: string }
 export interface StatsData { unit: EstimationUnit; total: number; groups: StatsGroup[] }
 export interface SavedFilter { id: number; name: string; query: string; shared: boolean; ownerId: number; updatedAt: string; owner: { username: string } }
-export type WidgetKind = 'filter' | 'pie' | 'bar' | 'counter' | 'created_resolved' | 'burndown' | 'my_issues' | 'text' | 'health';
+export type WidgetKind = 'filter' | 'pie' | 'bar' | 'counter' | 'created_resolved' | 'burndown' | 'my_issues' | 'text' | 'health' | 'top_risks';
 export interface DashboardWidget {
   id: string; kind: WidgetKind; title: string; query?: string; groupBy?: GroupBy; sprintId?: number | null; days?: number; text?: string; size?: 'half' | 'full';
 }
@@ -1268,6 +1271,9 @@ export interface WorkApproval {
   /** Trang tài liệu (targetType DOC, S2a). */
   pageId?: number | null;
   page?: { id: number; number: number; title: string; status: PageStatus; visibility: PageVisibility } | null;
+  /** Yêu cầu thay đổi (targetType CR, đợt S3b). */
+  changeRequestId?: number | null;
+  changeRequest?: { id: number; number: number; title: string; status: string; clientVisible: boolean } | null;
   steps: ApprovalStep[];
   issueKey: string | null;
   currentHash: string | null;
@@ -1552,7 +1558,7 @@ export const workDocsApi = {
 // Backend: src/services/work/portal.service.ts. `asClient` = "Preview as client"
 // (nhân viên xem đúng như khách, chỉ đọc).
 
-export type PortalTab = 'overview' | 'requests' | 'approvals' | 'documents' | 'deliverables' | 'activity';
+export type PortalTab = 'overview' | 'requests' | 'approvals' | 'documents' | 'deliverables' | 'activity' | 'meetings';
 export type PortalRequestKind = 'BUG' | 'CHANGE' | 'QUESTION' | 'FEEDBACK';
 
 export interface PortalViewer {
@@ -1604,6 +1610,8 @@ export interface PortalApproval {
   steps: Array<{ id: number; position: number; decision: string; decidedAt: string | null; approver: WorkUser; isClient: boolean; comment: string | null; signature: string | null }>;
   waitingOnClient: boolean; canDecide: boolean; contentChanged: boolean; signedHash: string | null;
   uat: PortalUat | null;
+  /** Phân tích ảnh hưởng của CR đã chia sẻ (targetType CR, đợt S3b). */
+  changeRequest?: import('./work-s3b-api').CrForClient | null;
 }
 export interface PortalDocuments {
   viewer: PortalViewer;

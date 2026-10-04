@@ -106,3 +106,35 @@ export type PortalRequestKind = (typeof PORTAL_REQUEST_KINDS)[number];
 
 /** Nhãn gắn mọi thẻ khách gửi qua cổng. */
 export const FROM_CLIENT_LABEL = 'from-client';
+
+// ─── Quản trị dự án (đợt S3b, 04/10/2026): CR · RAID · họp ───────
+
+/** Mô-đun có tính năng thật từ đợt S3b: yêu cầu thay đổi, sổ RAID, cuộc họp. */
+export const STUDIO_MODULES_S3B: readonly StudioModule[] = ['changeRequests', 'raid', 'meetings'];
+
+/**
+ * Vòng đời CR (PMBOK 7 change control): Draft → Submitted → Under review → Approved/Rejected → Implemented.
+ * UNDER_REVIEW / APPROVED / REJECTED chỉ đặt qua phê duyệt (approvals.service, targetType CR).
+ */
+export const CR_STATUSES = ['DRAFT', 'SUBMITTED', 'UNDER_REVIEW', 'APPROVED', 'REJECTED', 'IMPLEMENTED'] as const;
+export type CrStatus = (typeof CR_STATUSES)[number];
+export const CR_URGENCY = ['LOW', 'MEDIUM', 'HIGH'] as const;
+export type CrUrgency = (typeof CR_URGENCY)[number];
+/** AFFECTED: thẻ/giai đoạn/version bị ảnh hưởng · IMPLEMENTS: thẻ thực hiện CR. */
+export const CR_LINK_ROLES = ['AFFECTED', 'IMPLEMENTS'] as const;
+export type CrLinkRole = (typeof CR_LINK_ROLES)[number];
+
+/** Sổ RAID: Risk · Assumption · Issue · Dependency. */
+export const RAID_TYPES = ['RISK', 'ASSUMPTION', 'ISSUE', 'DEPENDENCY'] as const;
+export type RaidType = (typeof RAID_TYPES)[number];
+export const RAID_STATUSES = ['OPEN', 'MONITORING', 'MITIGATED', 'CLOSED'] as const;
+export const ASSUMPTION_STATUSES = ['UNVALIDATED', 'VALIDATED', 'INVALID'] as const;
+export type RaidStatus = (typeof RAID_STATUSES)[number] | (typeof ASSUMPTION_STATUSES)[number];
+/** Phản ứng với rủi ro (PMBOK / ISO 31000): tránh · giảm · chuyển giao · chấp nhận. */
+export const RAID_RESPONSES = ['AVOID', 'MITIGATE', 'TRANSFER', 'ACCEPT'] as const;
+export type RaidResponse = (typeof RAID_RESPONSES)[number];
+
+export const MEETING_TYPES = ['KICKOFF', 'DAILY', 'WEEKLY', 'DEMO', 'RETRO', 'STEERING', 'CLIENT', 'OTHER'] as const;
+export type MeetingType = (typeof MEETING_TYPES)[number];
+export const MEETING_STATUSES = ['SCHEDULED', 'DONE', 'CANCELLED'] as const;
+export type MeetingStatus = (typeof MEETING_STATUSES)[number];

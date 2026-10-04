@@ -31,6 +31,7 @@ const KIND_ICON: Record<ProjectKind, LucideIcon> = { PERSONAL: User, SCHOOL: Gra
 const NEEDS: Partial<Record<StudioModule, { on: StudioModule; text: string }>> = {
   stages: { on: 'approvals', text: 'Gate reviews need Approvals — without it stages can open but never close.' },
   handoffs: { on: 'teams', text: 'Turn on Teams to hand off to a department; without it you can hand off to a person.' },
+  changeRequests: { on: 'approvals', text: 'Signed decisions on change requests need Approvals — without it they can be written but not approved.' },
 };
 
 export default function ProjectStudio({ config, slug }: { config: ProjectConfig; slug: string }) {

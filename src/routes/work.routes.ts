@@ -57,6 +57,7 @@ import * as pages from '../services/work/pages.service.js';
 import * as portal from '../services/work/portal.service.js';
 import { moveIssueToProject } from '../services/work/issueMove.service.js';
 import portfolioRoutes from './work.portfolio.routes.js';
+import governanceRoutes from './work.governance.routes.js';
 
 registerWorkNotifications();
 tests.registerTestingHooks();
@@ -1757,5 +1758,7 @@ router.get('/projects/:pid/portal/uat/:aid/certificate', asyncHandler(async (req
 
 // Đợt S3a: Portfolio + Workload (cấp không gian, chỉ đọc) — tuyến ở work.portfolio.routes.ts.
 router.use(portfolioRoutes);
+// Đợt S3b: CR · sổ RAID · cuộc họp — tuyến ở work.governance.routes.ts (qua chốt cổng khách ở trên).
+router.use(governanceRoutes);
 
 export default router;

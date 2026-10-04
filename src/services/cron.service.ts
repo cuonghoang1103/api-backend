@@ -163,6 +163,14 @@ export function startCronJobs(): void {
     } catch (err) {
       logger.warn('[work] daily AI briefs failed', { error: (err as Error).message });
     }
+    // CT Work đợt S3b: nhắc người phụ trách dòng RAID tới hạn xem lại (không dùng LLM).
+    try {
+      const { runRaidReviewReminders } = await import('./work/raid.service.js');
+      const n = await runRaidReviewReminders();
+      if (n) logger.info('[work] RAID review reminders', { sent: n });
+    } catch (err) {
+      logger.warn('[work] RAID review reminders failed', { error: (err as Error).message });
+    }
     try {
       const { sendDigests } = await import('./work/notify.js');
       const n = await sendDigests();

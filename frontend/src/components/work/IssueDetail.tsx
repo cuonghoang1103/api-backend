@@ -41,6 +41,7 @@ import DevelopmentPanel from './DevelopmentPanel';
 import { IssueApprovals, IssueHandoffs, MoveIssueDialog, StagePicker, TeamPicker } from './studio/IssueStudio';
 import { studioOn } from './studio/shared';
 import { LinkedDocs } from './docs/LinkedDocs';
+import { IssueGovernance } from './governance/IssueGovernance';
 import { AttachmentClientControls, IssueClientShare } from './portal/ClientShare';
 import RichEditor, { isDocEmpty, RichView } from './RichEditor';
 import {
@@ -651,6 +652,8 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
             {studioOn(config, 'approvals') && <IssueApprovals config={config} issue={issue} issueKey={lk.issueKey(issue.number)} />}
             {studioOn(config, 'handoffs') && <IssueHandoffs config={config} issue={issue} issueKey={lk.issueKey(issue.number)} />}
             {studioOn(config, 'docs') && <LinkedDocs config={config} issueNumber={issue.number} />}
+            {/* Đợt S3b: CR liên quan + rủi ro liên quan (tự ẩn khi mô-đun tắt / khách). */}
+            <IssueGovernance config={config} issueNumber={issue.number} />
             <Attachments issue={issue} pid={pid} config={config} />
             <IssueActivity pid={pid} num={num} config={config} lk={lk} clientShared={!!issue.clientVisible} />
           </div>

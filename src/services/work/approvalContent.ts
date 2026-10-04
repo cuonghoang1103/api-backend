@@ -14,6 +14,10 @@
  *   UAT        — (đợt S2b) mốc/version/giai đoạn + từng hạng mục (tiêu đề, mô tả,
  *                xong chưa) + tài liệu (tiêu đề + chữ) + tệp (tên, cỡ). Một hạng mục
  *                mở lại hay tài liệu sửa sau khi khách ký ⇒ lệch.
+ *   CR         — (đợt S3b) tiêu đề, mô tả, lý do, mức khẩn + PHÂN TÍCH ẢNH HƯỞNG (phạm vi,
+ *                +ngày, chi phí + đơn vị, rủi ro, phương án thay thế) + thẻ/giai đoạn/version
+ *                BỊ ẢNH HƯỞNG. KHÔNG có trạng thái, người phụ trách, thẻ thực hiện (IMPLEMENTS
+ *                thêm sau khi duyệt không được làm lệch chữ ký).
  */
 
 import type { Prisma } from '@prisma/client';
@@ -86,8 +90,36 @@ export async function uatContent(db: Db, approvalId: number) {
   };
 }
 
+export async function crContent(db: Db, crId: number) {
+  const c = await db.workChangeRequest.findFirst({
+    where: { id: crId, deletedAt: null },
+    select: {
+      number: true, title: true, descriptionText: true, reason: true, urgency: true, impactScope: true, scheduleDays: true,
+      costAmount: true, costCurrency: true, impactRisk: true, alternatives: true,
+      links: {
+        where: { role: 'AFFECTED' },
+        select: { issue: { select: { number: true } }, stage: { select: { n: true } }, version: { select: { name: true } } },
+      },
+    },
+  });
+  if (!c) return null;
+  const affected = c.links
+    .map((l) => (l.issue ? `issue:${l.issue.number}` : l.stage ? `stage:${l.stage.n}` : l.version ? `version:${l.version.name}` : null))
+    .filter((x): x is string => !!x)
+    .sort();
+  return {
+    cr: c.number, title: c.title, description: c.descriptionText ?? '', reason: c.reason ?? '', urgency: c.urgency,
+    scope: c.impactScope ?? '', scheduleDays: c.scheduleDays, cost: c.costAmount, currency: (c.costCurrency ?? '').trim().toUpperCase(),
+    risk: c.impactRisk ?? '', alternatives: c.alternatives ?? '', affected,
+  };
+}
+
 /** Băm hiện tại của đối tượng (null = đối tượng đã mất / loại chưa hỗ trợ). */
-export async function currentTargetHash(db: Db, t: { id?: number; targetType: string; issueId: number | null; stageId: number | null; pageId?: number | null }): Promise<string | null> {
+export async function currentTargetHash(db: Db, t: { id?: number; targetType: string; issueId: number | null; stageId: number | null; pageId?: number | null; changeRequestId?: number | null }): Promise<string | null> {
+  if (t.targetType === 'CR' && t.changeRequestId) {
+    const c = await crContent(db, t.changeRequestId);
+    return c ? contentHash(c) : null;
+  }
   if (t.targetType === 'UAT' && t.id) {
     const c = await uatContent(db, t.id);
     return c ? contentHash(c) : null;

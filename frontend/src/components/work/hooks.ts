@@ -176,6 +176,12 @@ export function useProjectRealtime(pid: number | undefined, onEvent?: (e: WorkEv
         if (e.action === 'status') queue(['work', 'approvals', pid]);
         return;
       }
+      // Đợt S3b: CR / RAID / họp đổi ⇒ chỉ làm tươi dữ liệu S3b (+ khu "liên quan" trong thẻ).
+      if ((e as { type: string }).type === 'governance.updated') {
+        queue(['work', 'gov', pid]);
+        if ((e as { entity?: string }).entity === 'cr') queue(['work', 'approvals', pid]);
+        return;
+      }
       if (e.type === 'project.updated') {
         // Service kiểm thử báo thay đổi bằng project.updated (không có kiểu sự kiện riêng).
         queue(wk.project(pid));
@@ -197,6 +203,7 @@ export function useProjectRealtime(pid: number | undefined, onEvent?: (e: WorkEv
         queue(['work', 'my-handoffs']);
         queue(['work', 'team-queue']);
         if (e.type === 'approval.updated' && e.targetType === 'DOC') queue(['work', 'pages', pid]);
+        if (e.type === 'approval.updated' && e.targetType === 'CR') queue(['work', 'gov', pid]);
       }
       if (e.type === 'sprint.updated') {
         queue(wk.sprints(pid));

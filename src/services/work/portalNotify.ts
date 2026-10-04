@@ -21,8 +21,8 @@ import { onWorkEvent } from './events.js';
 import { isClientScoped, loadProjectAccess } from './permissions.js';
 import { modulesOf } from './studio.js';
 
-export type PortalSection = 'overview' | 'requests' | 'approvals' | 'documents' | 'deliverables' | 'activity';
-export type PortalKind = 'reply' | 'approval' | 'stage' | 'deliverable' | 'uat' | 'request';
+export type PortalSection = 'overview' | 'requests' | 'approvals' | 'documents' | 'deliverables' | 'activity' | 'meetings';
+export type PortalKind = 'reply' | 'approval' | 'stage' | 'deliverable' | 'uat' | 'request' | 'meeting';
 
 export interface WorkNotifyLike {
   receiverId: number;
@@ -160,6 +160,8 @@ export function clientEmailContent(payload: Record<string, unknown>): { subject:
       return { subject: `UAT sign-off requested: ${title}`, heading: 'Your acceptance sign-off is requested', lines: [title, 'Please check the listed items and approve (optionally with conditions) or reject with the points you found.'], cta: 'Open UAT sign-off' };
     case 'stage':
       return { subject: `Milestone completed: ${title}`, heading: 'A project milestone was completed', lines: [`“${title}” is complete.`, typeof payload.message === 'string' ? payload.message : ''], cta: 'View project progress' };
+    case 'meeting':
+      return { subject: `Meeting: ${title}`, heading: typeof payload.message === 'string' && payload.message ? payload.message : 'You are invited to a meeting', lines: [title, excerpt], cta: 'Open meeting' };
     case 'deliverable':
       return { subject: `New deliverable: ${title}`, heading: 'A new deliverable is ready', lines: [`“${title}” has been delivered and is ready to download.`], cta: 'Open deliverables' };
     case 'request':

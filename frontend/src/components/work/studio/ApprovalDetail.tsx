@@ -79,6 +79,9 @@ export function ApprovalBody({ approval: a, config, base: baseProp }: { approval
           {a.targetType === 'DOC' && a.page && (
             base ? <Link href={`${base}/docs/${a.page.number}`} className="text-[var(--w-accent-text)] hover:underline">Document · {a.page.title}</Link> : <span>Document · {a.page.title}</span>
           )}
+          {a.targetType === 'CR' && a.changeRequest && (
+            base ? <Link href={`${base}/changes/${a.changeRequest.number}`} className="text-[var(--w-accent-text)] hover:underline">Change request · CR-{a.changeRequest.number}</Link> : <span>Change request · CR-{a.changeRequest.number}</span>
+          )}
           {a.targetType === 'STAGE_GATE' && a.stage && (
             base ? <Link href={`${base}/stages`} className="text-[var(--w-accent-text)] hover:underline">Stage gate · {a.stage.n}. {a.stage.name}</Link> : <span>Stage gate · {a.stage.n}. {a.stage.name}</span>
           )}
@@ -95,7 +98,7 @@ export function ApprovalBody({ approval: a, config, base: baseProp }: { approval
           <div>
             <div className="font-semibold">Content changed since approval</div>
             <p className="mt-0.5 text-[12px] leading-relaxed text-[var(--w-text-2)]">
-              The {a.targetType === 'STAGE_GATE' ? 'stage' : a.targetType === 'DOC' ? 'document' : 'issue'} was edited after someone signed. Their decision still stands — review what changed, and request a new approval if it matters.
+              The {a.targetType === 'STAGE_GATE' ? 'stage' : a.targetType === 'DOC' ? 'document' : a.targetType === 'CR' ? 'change request' : 'issue'} was edited after someone signed. Their decision still stands — review what changed, and request a new approval if it matters.
             </p>
           </div>
         </div>

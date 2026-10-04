@@ -38,6 +38,7 @@ function Row({ a, onOpen }: { a: WorkApproval; onOpen: () => void }) {
             {a.issueKey && <span className="shrink-0 font-mono text-[12px] text-[var(--w-accent-text)]">{a.issueKey}</span>}
             {a.targetType === 'STAGE_GATE' && <span className="shrink-0 text-[12px] text-[var(--w-text-3)]">Gate</span>}
             {a.targetType === 'DOC' && <span className="shrink-0 text-[12px] text-[var(--w-text-3)]">Doc</span>}
+            {a.targetType === 'CR' && <span className="shrink-0 font-mono text-[12px] text-[var(--w-accent-text)]">CR-{a.changeRequest?.number}</span>}
             <span className="truncate text-[14px] font-medium">{a.title}</span>
           </span>
           <span className="mt-1 flex min-w-0 flex-wrap items-center gap-x-2.5 gap-y-1 text-[12px] text-[var(--w-text-3)] md:mt-0 md:shrink-0 md:flex-nowrap">

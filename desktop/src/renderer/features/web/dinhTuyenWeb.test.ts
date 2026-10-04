@@ -184,6 +184,10 @@ describe('khopTuyenWeb', () => {
 
     expect(khopTuyenWeb('/work/acme/WEB/portal')?.tuyen.mau).toBe('/work/:ws/:key/portal');
     expect(khopTuyenWeb('/work/acme/WEB/portal/uat/5')?.thamSo).toEqual({ ws: 'acme', key: 'WEB', aid: '5' });
+    // Đợt S3b.
+    expect(khopTuyenWeb('/work/acme/WEB/meetings/3')?.thamSo).toEqual({ ws: 'acme', key: 'WEB', num: '3' });
+    expect(khopTuyenWeb('/work/acme/WEB/changes/7')?.tuyen.mau).toBe('/work/:ws/:key/changes/:num');
+    expect(khopTuyenWeb('/work/acme/WEB/raid')?.tuyen.mau).toBe('/work/:ws/:key/raid');
     const dd = khopTuyenWeb('/work/acme/WEB/docs/12');
     expect(dd?.tuyen.mau).toBe('/work/:ws/:key/docs/:num');
     expect(dd?.thamSo).toEqual({ ws: 'acme', key: 'WEB', num: '12' });
@@ -270,7 +274,8 @@ describe('khopTuyenWeb', () => {
     // 04/10/2026: +2 CT Work Đợt S3a (/work/:ws/portfolio, /work/:ws/workload).
     // 04/10/2026: +2 CT Work Đợt S2b — cổng khách (/work/:ws/:key/portal, /work/:ws/:key/portal/uat/:aid).
     // 04/10/2026: +1 chi tiết dự án (/projects/:slug → ProjectPageClient).
-    expect(thay.size).toBe(123);
+    // 04/10/2026: +5 CT Work Đợt S3b (meetings, meetings/:num, changes, changes/:num, raid).
+    expect(thay.size).toBe(128);
   });
 });
 

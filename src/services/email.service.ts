@@ -9,6 +9,8 @@ export interface EmailPayload {
   subject: string;
   html: string;
   text?: string;
+  /** Tệp đính kèm (CT Work S3b: lời mời họp .ics). `content` là base64. */
+  attachments?: Array<{ filename: string; content: string; contentType?: string }>;
 }
 
 export class EmailService {
@@ -33,6 +35,7 @@ export class EmailService {
         subject: payload.subject,
         html: payload.html,
         text: payload.text,
+        ...(payload.attachments?.length ? { attachments: payload.attachments.map((a) => ({ filename: a.filename, content: a.content, ...(a.contentType ? { contentType: a.contentType } : {}) })) } : {}),
       });
 
       if (result.error) {

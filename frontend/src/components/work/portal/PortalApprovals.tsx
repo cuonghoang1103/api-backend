@@ -150,6 +150,26 @@ export function PortalApprovalDialog({ pid, id, asClient, config, onClose }: { p
           </div>
           {a.description && <p className="whitespace-pre-line text-[13.5px]">{a.description}</p>}
           {a.contentChanged && <p className="rounded-[8px] border border-[var(--w-border)] bg-[var(--w-sunken)] px-3 py-2 text-[12.5px]">The content changed after it was signed. The team may ask for a new sign-off.</p>}
+          {a.changeRequest && (
+            <section data-testid="portal-cr-analysis">
+              <h3 className="w-section-title mb-2">Change request {a.changeRequest.key} — impact analysis</h3>
+              <dl className="grid grid-cols-1 gap-x-4 gap-y-3 rounded-[8px] border border-[var(--w-border)] p-3 text-[13px] sm:grid-cols-2">
+                {[
+                  ['Why', a.changeRequest.reason],
+                  ['Scope', a.changeRequest.impactScope],
+                  ['Schedule', a.changeRequest.scheduleDays === null ? null : `${a.changeRequest.scheduleDays > 0 ? '+' : ''}${a.changeRequest.scheduleDays} day${Math.abs(a.changeRequest.scheduleDays) === 1 ? '' : 's'}`],
+                  ['Cost', a.changeRequest.costAmount === null ? null : `${a.changeRequest.costAmount.toLocaleString('en-US')} ${(a.changeRequest.costCurrency ?? '').toUpperCase()}`.trim()],
+                  ['Risks', a.changeRequest.impactRisk],
+                  ['Alternatives', a.changeRequest.alternatives],
+                ].map(([k, v]) => (
+                  <div key={k as string} className="min-w-0">
+                    <dt className="text-[12px] font-medium text-[var(--w-text-3)]">{k}</dt>
+                    <dd className="mt-0.5 whitespace-pre-line [overflow-wrap:anywhere]">{v || '—'}</dd>
+                  </div>
+                ))}
+              </dl>
+            </section>
+          )}
           {a.uat && (
             <section>
               <h3 className="w-section-title mb-2">What you are accepting {a.uat.version ? `— ${a.uat.version.name}` : a.uat.stage ? `— ${a.uat.stage.n}. ${a.uat.stage.name}` : ''}</h3>

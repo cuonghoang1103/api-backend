@@ -60,6 +60,8 @@ export async function sendWorkEmail(opts: {
   brand?: string;
   /** Dòng chân thư (mặc định nói về hoạt động trong CT Work). */
   footer?: string;
+  /** Tệp đính kèm, `content` base64 (lời mời họp .ics — đợt S3b). */
+  attachments?: Array<{ filename: string; content: string; contentType?: string }>;
 }): Promise<void> {
   const body = opts.lines.map((l) => `<p>${escapeHtml(l)}</p>`).join('\n');
   const cta = opts.cta
@@ -78,7 +80,7 @@ export async function sendWorkEmail(opts: {
 </body></html>`;
   const text = [opts.heading, '', ...opts.lines, ...(opts.cta ? ['', `${opts.cta.label}: ${opts.cta.url}`] : [])].join('\n');
   try {
-    await emailService.send({ to: opts.to, subject: opts.subject, html, text });
+    await emailService.send({ to: opts.to, subject: opts.subject, html, text, ...(opts.attachments?.length ? { attachments: opts.attachments } : {}) });
   } catch (err) {
     logger.warn('[work] gửi email thất bại', { err });
   }

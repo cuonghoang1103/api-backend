@@ -406,43 +406,55 @@ model User {
 
   // ─── CT Work — quản lý dự án kiểu Jira (23/09/2026) ─────────────
   // Xem mục "CT WORK" cuối file và docs/work-hub-plan.md.
-  workSpacesOwned        WorkSpace[]           @relation("WorkSpaceOwner")
-  workMemberships        WorkMember[]          @relation("WorkMemberUser")
-  workInvitesSent        WorkInvite[]          @relation("WorkInviteSender")
-  workProjectMemberships WorkProjectMember[]   @relation("WorkProjectMemberUser")
-  workProjectsLed        WorkProject[]         @relation("WorkProjectLead")
-  workIssuesAssigned     WorkIssue[]           @relation("WorkIssueAssignee")
-  workIssuesReported     WorkIssue[]           @relation("WorkIssueReporter")
-  workComments           WorkComment[]         @relation("WorkCommentAuthor")
-  workCommentReactions   WorkCommentReaction[] @relation("WorkCommentReactionUser")
-  workAttachments        WorkAttachment[]      @relation("WorkAttachmentUploader")
-  workHistory            WorkHistory[]         @relation("WorkHistoryActor")
-  workWatching           WorkWatcher[]         @relation("WorkWatcherUser")
-  workTestRunsAssigned   WorkTestRun[]         @relation("WorkTestRunAssignee")
-  workTestRunsExecuted   WorkTestRun[]         @relation("WorkTestRunExecutor")
-  workSavedFilters       WorkSavedFilter[]     @relation("WorkSavedFilterOwner")
-  workDashboards         WorkDashboard[]       @relation("WorkDashboardOwner")
-  workTimeOff            WorkTimeOff[]         @relation("WorkTimeOffUser")
-  workWorklogs           WorkWorklog[]         @relation("WorkWorklogUser")
-  workNotifySetting      WorkNotifySetting?    @relation("WorkNotifySettingUser")
-  workEmailQueue         WorkEmailQueue[]      @relation("WorkEmailQueueUser")
-  workApiTokens          WorkApiToken[]        @relation("WorkApiTokenUser")
-  workAiThreads          WorkAiThread[]        @relation("WorkAiThreadCreator")
-  workAiMessages         WorkAiMessage[]       @relation("WorkAiMessageAuthor")
+  workSpacesOwned        WorkSpace[]             @relation("WorkSpaceOwner")
+  workMemberships        WorkMember[]            @relation("WorkMemberUser")
+  workInvitesSent        WorkInvite[]            @relation("WorkInviteSender")
+  workProjectMemberships WorkProjectMember[]     @relation("WorkProjectMemberUser")
+  workProjectsLed        WorkProject[]           @relation("WorkProjectLead")
+  workIssuesAssigned     WorkIssue[]             @relation("WorkIssueAssignee")
+  workIssuesReported     WorkIssue[]             @relation("WorkIssueReporter")
+  workComments           WorkComment[]           @relation("WorkCommentAuthor")
+  workCommentReactions   WorkCommentReaction[]   @relation("WorkCommentReactionUser")
+  workAttachments        WorkAttachment[]        @relation("WorkAttachmentUploader")
+  workHistory            WorkHistory[]           @relation("WorkHistoryActor")
+  workWatching           WorkWatcher[]           @relation("WorkWatcherUser")
+  workTestRunsAssigned   WorkTestRun[]           @relation("WorkTestRunAssignee")
+  workTestRunsExecuted   WorkTestRun[]           @relation("WorkTestRunExecutor")
+  workSavedFilters       WorkSavedFilter[]       @relation("WorkSavedFilterOwner")
+  workDashboards         WorkDashboard[]         @relation("WorkDashboardOwner")
+  workTimeOff            WorkTimeOff[]           @relation("WorkTimeOffUser")
+  workWorklogs           WorkWorklog[]           @relation("WorkWorklogUser")
+  workNotifySetting      WorkNotifySetting?      @relation("WorkNotifySettingUser")
+  workEmailQueue         WorkEmailQueue[]        @relation("WorkEmailQueueUser")
+  workApiTokens          WorkApiToken[]          @relation("WorkApiTokenUser")
+  workAiThreads          WorkAiThread[]          @relation("WorkAiThreadCreator")
+  workAiMessages         WorkAiMessage[]         @relation("WorkAiMessageAuthor")
   workEditLocks          WorkEditLock[]
   // Lớp studio (04/10/2026): bộ phận, phê duyệt, bàn giao.
-  workTeamMemberships    WorkTeamMember[]      @relation("WorkTeamMemberUser")
-  workApprovalsCreated   WorkApproval[]        @relation("WorkApprovalCreator")
-  workApprovalSteps      WorkApprovalStep[]    @relation("WorkApprovalStepApprover")
-  workHandoffsFrom       WorkHandoff[]         @relation("WorkHandoffFromUser")
-  workHandoffsTo         WorkHandoff[]         @relation("WorkHandoffToUser")
-  workHandoffsCreated    WorkHandoff[]         @relation("WorkHandoffCreator")
+  workTeamMemberships    WorkTeamMember[]        @relation("WorkTeamMemberUser")
+  workApprovalsCreated   WorkApproval[]          @relation("WorkApprovalCreator")
+  workApprovalSteps      WorkApprovalStep[]      @relation("WorkApprovalStepApprover")
+  workHandoffsFrom       WorkHandoff[]           @relation("WorkHandoffFromUser")
+  workHandoffsTo         WorkHandoff[]           @relation("WorkHandoffToUser")
+  workHandoffsCreated    WorkHandoff[]           @relation("WorkHandoffCreator")
   // Tài liệu dự án (đợt S2a, 04/10/2026)
-  workPagesOwned         WorkPage[]            @relation("WorkPageOwner")
-  workPagesEdited        WorkPage[]            @relation("WorkPageEditor")
-  workPageVersions       WorkPageVersion[]     @relation("WorkPageVersionAuthor")
-  workPageComments       WorkPageComment[]     @relation("WorkPageCommentAuthor")
-  workPageIssueLinks     WorkPageIssueLink[]   @relation("WorkPageIssueLinkCreator")
+  workPagesOwned         WorkPage[]              @relation("WorkPageOwner")
+  workPagesEdited        WorkPage[]              @relation("WorkPageEditor")
+  workPageVersions       WorkPageVersion[]       @relation("WorkPageVersionAuthor")
+  workPageComments       WorkPageComment[]       @relation("WorkPageCommentAuthor")
+  workPageIssueLinks     WorkPageIssueLink[]     @relation("WorkPageIssueLinkCreator")
+  // Quản trị dự án (đợt S3b, 04/10/2026): CR · RAID · họp
+  workCrRequested        WorkChangeRequest[]     @relation("WorkCrRequester")
+  workCrOwned            WorkChangeRequest[]     @relation("WorkCrOwner")
+  workCrCreated          WorkChangeRequest[]     @relation("WorkCrCreator")
+  workCrLinksCreated     WorkChangeRequestLink[] @relation("WorkCrLinkCreator")
+  workRaidOwned          WorkRaidItem[]          @relation("WorkRaidOwner")
+  workRaidCreated        WorkRaidItem[]          @relation("WorkRaidCreator")
+  workRaidLinksCreated   WorkRaidLink[]          @relation("WorkRaidLinkCreator")
+  workRaidHistory        WorkRaidHistory[]       @relation("WorkRaidHistoryActor")
+  workMeetingsOrganized  WorkMeeting[]           @relation("WorkMeetingOrganizer")
+  workMeetingInvites     WorkMeetingAttendee[]   @relation("WorkMeetingAttendeeUser")
+  workMeetingActions     WorkMeetingAction[]     @relation("WorkMeetingActionAssignee")
 
   @@index([email], name: "idx_users_email")
   @@map("users")
@@ -10024,40 +10036,44 @@ model WorkProject {
   updatedAt    DateTime  @updatedAt @map("updated_at")
   deletedAt    DateTime? @map("deleted_at")
 
-  workspace     WorkSpace             @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-  lead          User?                 @relation("WorkProjectLead", fields: [leadId], references: [id], onDelete: SetNull)
-  members       WorkProjectMember[]
-  invites       WorkInvite[]
-  workflows     WorkWorkflow[]
-  issueTypes    WorkIssueType[]
-  issues        WorkIssue[]
-  labels        WorkLabel[]
-  components    WorkComponent[]
-  sprints       WorkSprint[]
-  testPlans     WorkTestPlan[]
-  testCycles    WorkTestCycle[]
-  customFields  WorkCustomField[]
-  savedFilters  WorkSavedFilter[]
-  dashboards    WorkDashboard[]
-  versions      WorkVersion[]
-  automations   WorkAutomationRule[]
-  github        WorkGithubConnection?
-  devActivity   WorkDevActivity[]
-  publicLinks   WorkPublicLink[]
-  aiThreads     WorkAiThread[]
-  chatHooks     WorkChatHook[]
-  gitlab        WorkGitlabConnection?
-  editLocks     WorkEditLock[]
-  stages        WorkStage[]
-  approvals     WorkApproval[]
-  handoffs      WorkHandoff[]
-  issueAliases  WorkIssueAlias[]
+  workspace      WorkSpace             @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  lead           User?                 @relation("WorkProjectLead", fields: [leadId], references: [id], onDelete: SetNull)
+  members        WorkProjectMember[]
+  invites        WorkInvite[]
+  workflows      WorkWorkflow[]
+  issueTypes     WorkIssueType[]
+  issues         WorkIssue[]
+  labels         WorkLabel[]
+  components     WorkComponent[]
+  sprints        WorkSprint[]
+  testPlans      WorkTestPlan[]
+  testCycles     WorkTestCycle[]
+  customFields   WorkCustomField[]
+  savedFilters   WorkSavedFilter[]
+  dashboards     WorkDashboard[]
+  versions       WorkVersion[]
+  automations    WorkAutomationRule[]
+  github         WorkGithubConnection?
+  devActivity    WorkDevActivity[]
+  publicLinks    WorkPublicLink[]
+  aiThreads      WorkAiThread[]
+  chatHooks      WorkChatHook[]
+  gitlab         WorkGitlabConnection?
+  editLocks      WorkEditLock[]
+  stages         WorkStage[]
+  approvals      WorkApproval[]
+  handoffs       WorkHandoff[]
+  issueAliases   WorkIssueAlias[]
   /// Tài liệu dự án kiểu Confluence (đợt S2a, mô-đun `docs`).
-  pages         WorkPage[]
+  pages          WorkPage[]
   /// Nghiệm thu UAT (đợt S2b, mô-đun `clientPortal`).
-  uatRequests   WorkUatRequest[]
+  uatRequests    WorkUatRequest[]
+  /// Đợt S3b: yêu cầu thay đổi (CR), sổ RAID, cuộc họp.
+  changeRequests WorkChangeRequest[]
+  raidItems      WorkRaidItem[]
+  meetings       WorkMeeting[]
   /// Phiếu yêu cầu của khách đã sinh ra dự án này (tối đa một).
-  clientRequest ProjectRequest?
+  clientRequest  ProjectRequest?
 
   @@unique([workspaceId, key], name: "uk_work_project_key", map: "uk_work_project_key")
   @@map("work_projects")
@@ -10213,39 +10229,44 @@ model WorkIssue {
   updatedAt            DateTime  @updatedAt @map("updated_at")
   deletedAt            DateTime? @map("deleted_at")
 
-  project      WorkProject          @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  project        WorkProject             @relation(fields: [projectId], references: [id], onDelete: Cascade)
   // NoAction chứ KHÔNG Restrict: Postgres kiểm RESTRICT ngay lập tức, nên xoá
   // dự án (cascade xuống loại thẻ, trạng thái VÀ thẻ) bị chặn khi loại thẻ bị
   // xoá trước thẻ. NO ACTION kiểm ở cuối câu lệnh — xoá dây chuyền chạy được,
   // còn xoá riêng một trạng thái đang có thẻ vẫn bị chặn. Bắt được bằng test DB.
-  type         WorkIssueType        @relation(fields: [typeId], references: [id], onDelete: NoAction)
-  status       WorkStatus           @relation(fields: [statusId], references: [id], onDelete: NoAction)
-  parent       WorkIssue?           @relation("WorkIssueParent", fields: [parentId], references: [id], onDelete: SetNull)
-  children     WorkIssue[]          @relation("WorkIssueParent")
-  sprint       WorkSprint?          @relation(fields: [sprintId], references: [id], onDelete: SetNull)
-  fixVersion   WorkVersion?         @relation(fields: [fixVersionId], references: [id], onDelete: SetNull)
-  team         WorkTeam?            @relation(fields: [teamId], references: [id], onDelete: SetNull)
-  stage        WorkStage?           @relation("WorkIssueStage", fields: [stageId], references: [id], onDelete: SetNull)
-  gateOf       WorkStage[]          @relation("WorkStageGateIssue")
-  approvals    WorkApproval[]
-  handoffs     WorkHandoff[]
-  aliases      WorkIssueAlias[]
-  pageLinks    WorkPageIssueLink[]
-  assignee     User?                @relation("WorkIssueAssignee", fields: [assigneeId], references: [id], onDelete: SetNull)
-  reporter     User?                @relation("WorkIssueReporter", fields: [reporterId], references: [id], onDelete: SetNull)
-  linksOut     WorkIssueLink[]      @relation("WorkIssueLinkFrom")
-  linksIn      WorkIssueLink[]      @relation("WorkIssueLinkTo")
-  labels       WorkIssueLabel[]
-  components   WorkIssueComponent[]
-  comments     WorkComment[]
-  attachments  WorkAttachment[]
-  history      WorkHistory[]
-  watchers     WorkWatcher[]
-  testCase     WorkTestCase?
-  defectOf     WorkTestRunDefect[]
-  customValues WorkCustomValue[]
-  worklogs     WorkWorklog[]
-  devActivity  WorkDevActivity[]
+  type           WorkIssueType           @relation(fields: [typeId], references: [id], onDelete: NoAction)
+  status         WorkStatus              @relation(fields: [statusId], references: [id], onDelete: NoAction)
+  parent         WorkIssue?              @relation("WorkIssueParent", fields: [parentId], references: [id], onDelete: SetNull)
+  children       WorkIssue[]             @relation("WorkIssueParent")
+  sprint         WorkSprint?             @relation(fields: [sprintId], references: [id], onDelete: SetNull)
+  fixVersion     WorkVersion?            @relation(fields: [fixVersionId], references: [id], onDelete: SetNull)
+  team           WorkTeam?               @relation(fields: [teamId], references: [id], onDelete: SetNull)
+  stage          WorkStage?              @relation("WorkIssueStage", fields: [stageId], references: [id], onDelete: SetNull)
+  gateOf         WorkStage[]             @relation("WorkStageGateIssue")
+  approvals      WorkApproval[]
+  handoffs       WorkHandoff[]
+  aliases        WorkIssueAlias[]
+  pageLinks      WorkPageIssueLink[]
+  /// Đợt S3b: CR sinh từ thẻ này · liên kết CR/RAID · việc từ biên bản họp.
+  crSourceOf     WorkChangeRequest[]     @relation("WorkCrSourceIssue")
+  crLinks        WorkChangeRequestLink[]
+  raidLinks      WorkRaidLink[]
+  meetingActions WorkMeetingAction[]
+  assignee       User?                   @relation("WorkIssueAssignee", fields: [assigneeId], references: [id], onDelete: SetNull)
+  reporter       User?                   @relation("WorkIssueReporter", fields: [reporterId], references: [id], onDelete: SetNull)
+  linksOut       WorkIssueLink[]         @relation("WorkIssueLinkFrom")
+  linksIn        WorkIssueLink[]         @relation("WorkIssueLinkTo")
+  labels         WorkIssueLabel[]
+  components     WorkIssueComponent[]
+  comments       WorkComment[]
+  attachments    WorkAttachment[]
+  history        WorkHistory[]
+  watchers       WorkWatcher[]
+  testCase       WorkTestCase?
+  defectOf       WorkTestRunDefect[]
+  customValues   WorkCustomValue[]
+  worklogs       WorkWorklog[]
+  devActivity    WorkDevActivity[]
 
   @@unique([projectId, number], name: "uk_work_issue_number", map: "uk_work_issue_number")
   @@index([projectId, statusId, rank], name: "idx_work_issue_board")
@@ -10737,9 +10758,10 @@ model WorkVersion {
   position     Int       @default(0)
   createdAt    DateTime  @default(now()) @map("created_at")
 
-  project     WorkProject      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  project     WorkProject             @relation(fields: [projectId], references: [id], onDelete: Cascade)
   issues      WorkIssue[]
   uatRequests WorkUatRequest[]
+  crLinks     WorkChangeRequestLink[]
 
   @@unique([projectId, name], name: "uk_work_version", map: "uk_work_version")
   @@map("work_versions")
@@ -11109,12 +11131,14 @@ model WorkStage {
   createdAt   DateTime  @default(now()) @map("created_at")
   updatedAt   DateTime  @updatedAt @map("updated_at")
 
-  project     WorkProject      @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  gateIssue   WorkIssue?       @relation("WorkStageGateIssue", fields: [gateIssueId], references: [id], onDelete: SetNull)
-  issues      WorkIssue[]      @relation("WorkIssueStage")
+  project     WorkProject             @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  gateIssue   WorkIssue?              @relation("WorkStageGateIssue", fields: [gateIssueId], references: [id], onDelete: SetNull)
+  issues      WorkIssue[]             @relation("WorkIssueStage")
   approvals   WorkApproval[]
   pages       WorkPage[]
   uatRequests WorkUatRequest[]
+  crLinks     WorkChangeRequestLink[]
+  raidLinks   WorkRaidLink[]
 
   @@unique([projectId, n], name: "uk_work_stage_n", map: "uk_work_stage_n")
   @@unique([projectId, slug], name: "uk_work_stage_slug", map: "uk_work_stage_slug")
@@ -11127,37 +11151,41 @@ model WorkStage {
 /// `contentHash` = SHA-256 của nội dung đối tượng LÚC TẠO; mỗi bước lưu hash lúc
 /// QUYẾT ĐỊNH (chữ ký). Đối tượng đổi sau khi duyệt ⇒ đọc ra cờ lệch, không tự huỷ.
 model WorkApproval {
-  id          Int       @id @default(autoincrement())
-  projectId   Int       @map("project_id")
-  targetType  String    @map("target_type") @db.VarChar(16)
-  issueId     Int?      @map("issue_id")
-  stageId     Int?      @map("stage_id")
+  id              Int       @id @default(autoincrement())
+  projectId       Int       @map("project_id")
+  targetType      String    @map("target_type") @db.VarChar(16)
+  issueId         Int?      @map("issue_id")
+  stageId         Int?      @map("stage_id")
   /// Trang tài liệu được duyệt (targetType DOC, đợt S2a).
-  pageId      Int?      @map("page_id")
-  title       String    @db.VarChar(200)
-  description String?   @db.Text
-  mode        String    @default("SEQUENTIAL") @db.VarChar(16)
-  status      String    @default("PENDING") @db.VarChar(16)
-  createdById Int?      @map("created_by_id")
-  dueAt       DateTime? @map("due_at")
-  contentHash String?   @map("content_hash") @db.VarChar(64)
-  decidedAt   DateTime? @map("decided_at")
-  createdAt   DateTime  @default(now()) @map("created_at")
-  updatedAt   DateTime  @updatedAt @map("updated_at")
+  pageId          Int?      @map("page_id")
+  /// Yêu cầu thay đổi được duyệt (targetType CR, đợt S3b).
+  changeRequestId Int?      @map("change_request_id")
+  title           String    @db.VarChar(200)
+  description     String?   @db.Text
+  mode            String    @default("SEQUENTIAL") @db.VarChar(16)
+  status          String    @default("PENDING") @db.VarChar(16)
+  createdById     Int?      @map("created_by_id")
+  dueAt           DateTime? @map("due_at")
+  contentHash     String?   @map("content_hash") @db.VarChar(64)
+  decidedAt       DateTime? @map("decided_at")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
 
-  project   WorkProject        @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  issue     WorkIssue?         @relation(fields: [issueId], references: [id], onDelete: Cascade)
-  stage     WorkStage?         @relation(fields: [stageId], references: [id], onDelete: Cascade)
-  page      WorkPage?          @relation(fields: [pageId], references: [id], onDelete: Cascade)
-  createdBy User?              @relation("WorkApprovalCreator", fields: [createdById], references: [id], onDelete: SetNull)
-  steps     WorkApprovalStep[]
+  project       WorkProject        @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  issue         WorkIssue?         @relation(fields: [issueId], references: [id], onDelete: Cascade)
+  stage         WorkStage?         @relation(fields: [stageId], references: [id], onDelete: Cascade)
+  page          WorkPage?          @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  changeRequest WorkChangeRequest? @relation(fields: [changeRequestId], references: [id], onDelete: Cascade)
+  createdBy     User?              @relation("WorkApprovalCreator", fields: [createdById], references: [id], onDelete: SetNull)
+  steps         WorkApprovalStep[]
   /// targetType UAT (đợt S2b): chi tiết nghiệm thu (hạng mục, tài liệu, điều kiện, thẻ sinh ra).
-  uat       WorkUatRequest?
+  uat           WorkUatRequest?
 
   @@index([projectId, status], name: "idx_work_approval_project")
   @@index([issueId], name: "idx_work_approval_issue")
   @@index([stageId], name: "idx_work_approval_stage")
   @@index([pageId], name: "idx_work_approval_page")
+  @@index([changeRequestId], name: "idx_work_approval_cr")
   @@map("work_approvals")
 }
 
@@ -11374,6 +11402,250 @@ model WorkUatRequest {
 
   @@index([projectId], name: "idx_work_uat_project")
   @@map("work_uat_requests")
+}
+
+// ─── CT Work — QUẢN TRỊ DỰ ÁN đợt S3b (04/10/2026) ──────────────────────────
+// Ba mô-đun: `changeRequests` (CR — PMBOK change control / PRINCE2 change authority),
+// `raid` (sổ Risk · Assumption · Issue · Dependency), `meetings` (họp + biên bản +
+// việc cần làm + lời mời .ics). Xem src/services/work/{changeRequests,raid,meetings}.service.ts.
+
+/// Yêu cầu thay đổi (CR). Đối tượng RIÊNG — không phải loại thẻ (loại thẻ/JQL/board
+/// giữ nguyên). status: DRAFT | SUBMITTED | UNDER_REVIEW | APPROVED | REJECTED | IMPLEMENTED.
+/// Phân tích ảnh hưởng có cấu trúc (phạm vi, +ngày, chi phí số + đơn vị tự do, rủi ro,
+/// phương án thay thế) là NỘI DUNG được băm khi duyệt (approvalContent.crContent).
+/// `clientVisible` = đã chia sẻ cho khách (khách mới được đứng tên duyệt).
+model WorkChangeRequest {
+  id              Int       @id @default(autoincrement())
+  projectId       Int       @map("project_id")
+  number          Int
+  title           String    @db.VarChar(255)
+  status          String    @default("DRAFT") @db.VarChar(16)
+  /// Mô tả (TipTap) — khung từ mẫu phieu-yeu-cau-thay-doi.md.
+  descriptionJson Json?     @map("description_json")
+  descriptionText String?   @map("description_text") @db.Text
+  /// Lý do / giá trị kinh doanh.
+  reason          String?   @db.Text
+  /// LOW | MEDIUM | HIGH
+  urgency         String    @default("MEDIUM") @db.VarChar(8)
+  impactScope     String?   @map("impact_scope") @db.Text
+  /// Số ngày lịch thêm (âm = sớm hơn). Null = chưa đánh giá.
+  scheduleDays    Int?      @map("schedule_days")
+  /// Chi phí — chỉ ghi lại, KHÔNG tính giá. Đơn vị tiền ghi tự do (VND, USD, man-day…).
+  costAmount      Float?    @map("cost_amount")
+  costCurrency    String?   @map("cost_currency") @db.VarChar(16)
+  impactRisk      String?   @map("impact_risk") @db.Text
+  alternatives    String?   @db.Text
+  clientVisible   Boolean   @default(false) @map("client_visible")
+  clientSharedAt  DateTime? @map("client_shared_at")
+  requesterId     Int?      @map("requester_id")
+  ownerId         Int?      @map("owner_id")
+  createdById     Int?      @map("created_by_id")
+  /// Thẻ gốc (vd yêu cầu CHANGE khách gửi qua cổng).
+  sourceIssueId   Int?      @map("source_issue_id")
+  submittedAt     DateTime? @map("submitted_at")
+  decidedAt       DateTime? @map("decided_at")
+  implementedAt   DateTime? @map("implemented_at")
+  version         Int       @default(0)
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+  deletedAt       DateTime? @map("deleted_at")
+
+  project     WorkProject             @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  requester   User?                   @relation("WorkCrRequester", fields: [requesterId], references: [id], onDelete: SetNull)
+  owner       User?                   @relation("WorkCrOwner", fields: [ownerId], references: [id], onDelete: SetNull)
+  createdBy   User?                   @relation("WorkCrCreator", fields: [createdById], references: [id], onDelete: SetNull)
+  sourceIssue WorkIssue?              @relation("WorkCrSourceIssue", fields: [sourceIssueId], references: [id], onDelete: SetNull)
+  links       WorkChangeRequestLink[]
+  approvals   WorkApproval[]
+  raidLinks   WorkRaidLink[]
+
+  @@unique([projectId, number], name: "uk_work_cr_number", map: "uk_work_cr_number")
+  @@index([projectId, status], name: "idx_work_cr_project")
+  @@map("work_change_requests")
+}
+
+/// CR ↔ thẻ / giai đoạn / version. role: AFFECTED (bị ảnh hưởng) | IMPLEMENTS (thẻ thực hiện CR).
+/// Đúng MỘT trong ba cột đích khác null (kiểm trong service).
+model WorkChangeRequestLink {
+  id              Int      @id @default(autoincrement())
+  changeRequestId Int      @map("change_request_id")
+  role            String   @default("AFFECTED") @db.VarChar(16)
+  issueId         Int?     @map("issue_id")
+  stageId         Int?     @map("stage_id")
+  versionId       Int?     @map("version_id")
+  createdById     Int?     @map("created_by_id")
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  changeRequest WorkChangeRequest @relation(fields: [changeRequestId], references: [id], onDelete: Cascade)
+  issue         WorkIssue?        @relation(fields: [issueId], references: [id], onDelete: Cascade)
+  stage         WorkStage?        @relation(fields: [stageId], references: [id], onDelete: Cascade)
+  version       WorkVersion?      @relation(fields: [versionId], references: [id], onDelete: Cascade)
+  createdBy     User?             @relation("WorkCrLinkCreator", fields: [createdById], references: [id], onDelete: SetNull)
+
+  @@index([changeRequestId], name: "idx_work_cr_link_cr")
+  @@index([issueId], name: "idx_work_cr_link_issue")
+  @@map("work_change_request_links")
+}
+
+/// Một dòng sổ RAID. type: RISK | ASSUMPTION | ISSUE | DEPENDENCY.
+/// status: OPEN | MONITORING | MITIGATED | CLOSED (Assumption: UNVALIDATED | VALIDATED | INVALID).
+/// Điểm = probability (1–5) × impact (1–5) — tính khi đọc, không lưu.
+/// response: AVOID | MITIGATE | TRANSFER | ACCEPT. `reviewNotifiedFor` = ngày xem lại đã nhắc (chống nhắc lặp).
+model WorkRaidItem {
+  id                Int       @id @default(autoincrement())
+  projectId         Int       @map("project_id")
+  number            Int
+  type              String    @db.VarChar(16)
+  title             String    @db.VarChar(255)
+  description       String?   @db.Text
+  /// Nhóm (Phạm vi · Lịch · Nguồn lực · Kỹ thuật… — theo so-dang-ky-rui-ro.md), chữ tự do.
+  category          String?   @db.VarChar(60)
+  ownerId           Int?      @map("owner_id")
+  status            String    @db.VarChar(16)
+  probability       Int?
+  impact            Int?
+  response          String?   @db.VarChar(16)
+  mitigation        String?   @db.Text
+  /// Dấu hiệu sớm (trigger).
+  trigger           String?   @db.Text
+  reviewDate        DateTime? @map("review_date") @db.Date
+  reviewNotifiedFor DateTime? @map("review_notified_for") @db.Date
+  createdById       Int?      @map("created_by_id")
+  closedAt          DateTime? @map("closed_at")
+  version           Int       @default(0)
+  createdAt         DateTime  @default(now()) @map("created_at")
+  updatedAt         DateTime  @updatedAt @map("updated_at")
+  deletedAt         DateTime? @map("deleted_at")
+
+  project   WorkProject       @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  owner     User?             @relation("WorkRaidOwner", fields: [ownerId], references: [id], onDelete: SetNull)
+  createdBy User?             @relation("WorkRaidCreator", fields: [createdById], references: [id], onDelete: SetNull)
+  links     WorkRaidLink[]
+  history   WorkRaidHistory[]
+
+  @@unique([projectId, number], name: "uk_work_raid_number", map: "uk_work_raid_number")
+  @@index([projectId, type, status], name: "idx_work_raid_project")
+  @@index([reviewDate], name: "idx_work_raid_review")
+  @@map("work_raid_items")
+}
+
+/// Dòng RAID ↔ thẻ / giai đoạn / CR (đúng một đích).
+model WorkRaidLink {
+  id              Int      @id @default(autoincrement())
+  raidId          Int      @map("raid_id")
+  issueId         Int?     @map("issue_id")
+  stageId         Int?     @map("stage_id")
+  changeRequestId Int?     @map("change_request_id")
+  createdById     Int?     @map("created_by_id")
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  raid          WorkRaidItem       @relation(fields: [raidId], references: [id], onDelete: Cascade)
+  issue         WorkIssue?         @relation(fields: [issueId], references: [id], onDelete: Cascade)
+  stage         WorkStage?         @relation(fields: [stageId], references: [id], onDelete: Cascade)
+  changeRequest WorkChangeRequest? @relation(fields: [changeRequestId], references: [id], onDelete: Cascade)
+  createdBy     User?              @relation("WorkRaidLinkCreator", fields: [createdById], references: [id], onDelete: SetNull)
+
+  @@index([raidId], name: "idx_work_raid_link_raid")
+  @@index([issueId], name: "idx_work_raid_link_issue")
+  @@map("work_raid_links")
+}
+
+/// Lịch sử thay đổi một dòng RAID (trường · từ · thành).
+model WorkRaidHistory {
+  id        Int      @id @default(autoincrement())
+  raidId    Int      @map("raid_id")
+  actorId   Int?     @map("actor_id")
+  field     String   @db.VarChar(40)
+  fromValue String?  @map("from_value") @db.Text
+  toValue   String?  @map("to_value") @db.Text
+  createdAt DateTime @default(now()) @map("created_at")
+
+  raid  WorkRaidItem @relation(fields: [raidId], references: [id], onDelete: Cascade)
+  actor User?        @relation("WorkRaidHistoryActor", fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@index([raidId, createdAt], name: "idx_work_raid_history")
+  @@map("work_raid_history")
+}
+
+/// Một cuộc họp. type: KICKOFF | DAILY | WEEKLY | DEMO | RETRO | STEERING | CLIENT | OTHER.
+/// status: SCHEDULED | DONE | CANCELLED. Giờ lưu UTC + múi giờ IANA để hiển thị.
+/// Chỉ LƯU link Meet/Zoom/Teams — không tự dựng gọi video. `sequence` tăng mỗi lần đổi
+/// giờ/địa điểm (SEQUENCE của iCalendar). Khách thấy cuộc họp CÓ MỜI họ; biên bản chỉ khi
+/// `minutesShared` (cổng khách).
+model WorkMeeting {
+  id              Int       @id @default(autoincrement())
+  projectId       Int       @map("project_id")
+  number          Int
+  title           String    @db.VarChar(255)
+  type            String    @default("OTHER") @db.VarChar(16)
+  status          String    @default("SCHEDULED") @db.VarChar(16)
+  startsAt        DateTime  @map("starts_at")
+  endsAt          DateTime  @map("ends_at")
+  timezone        String    @default("Asia/Ho_Chi_Minh") @db.VarChar(64)
+  location        String?   @db.VarChar(255)
+  meetingUrl      String?   @map("meeting_url") @db.VarChar(500)
+  agendaJson      Json?     @map("agenda_json")
+  agendaText      String?   @map("agenda_text") @db.Text
+  minutesJson     Json?     @map("minutes_json")
+  minutesText     String?   @map("minutes_text") @db.Text
+  /// string[] — quyết định đã chốt.
+  decisions       Json      @default("[]")
+  minutesShared   Boolean   @default(false) @map("minutes_shared")
+  minutesSharedAt DateTime? @map("minutes_shared_at")
+  organizerId     Int?      @map("organizer_id")
+  /// Cuộc họp trước trong chuỗi "Duplicate next week".
+  previousId      Int?      @map("previous_id")
+  sequence        Int       @default(0)
+  version         Int       @default(0)
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+  deletedAt       DateTime? @map("deleted_at")
+
+  project   WorkProject           @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  organizer User?                 @relation("WorkMeetingOrganizer", fields: [organizerId], references: [id], onDelete: SetNull)
+  previous  WorkMeeting?          @relation("WorkMeetingSeries", fields: [previousId], references: [id], onDelete: SetNull)
+  next      WorkMeeting[]         @relation("WorkMeetingSeries")
+  attendees WorkMeetingAttendee[]
+  actions   WorkMeetingAction[]
+
+  @@unique([projectId, number], name: "uk_work_meeting_number", map: "uk_work_meeting_number")
+  @@index([projectId, startsAt], name: "idx_work_meeting_project")
+  @@map("work_meetings")
+}
+
+model WorkMeetingAttendee {
+  id        Int      @id @default(autoincrement())
+  meetingId Int      @map("meeting_id")
+  userId    Int      @map("user_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  meeting WorkMeeting @relation(fields: [meetingId], references: [id], onDelete: Cascade)
+  user    User        @relation("WorkMeetingAttendeeUser", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([meetingId, userId], name: "uk_work_meeting_attendee", map: "uk_work_meeting_attendee")
+  @@index([userId], name: "idx_work_meeting_attendee_user")
+  @@map("work_meeting_attendees")
+}
+
+/// Việc cần làm từ biên bản. `issueId` = thẻ đã tạo từ việc này (nút "Create issues").
+model WorkMeetingAction {
+  id         Int       @id @default(autoincrement())
+  meetingId  Int       @map("meeting_id")
+  position   Int       @default(0)
+  text       String    @db.VarChar(500)
+  assigneeId Int?      @map("assignee_id")
+  dueDate    DateTime? @map("due_date") @db.Date
+  issueId    Int?      @map("issue_id")
+  createdAt  DateTime  @default(now()) @map("created_at")
+  updatedAt  DateTime  @updatedAt @map("updated_at")
+
+  meeting  WorkMeeting @relation(fields: [meetingId], references: [id], onDelete: Cascade)
+  assignee User?       @relation("WorkMeetingActionAssignee", fields: [assigneeId], references: [id], onDelete: SetNull)
+  issue    WorkIssue?  @relation(fields: [issueId], references: [id], onDelete: SetNull)
+
+  @@index([meetingId, position], name: "idx_work_meeting_action")
+  @@index([issueId], name: "idx_work_meeting_action_issue")
+  @@map("work_meeting_actions")
 }
 
 /// KEY GIA HẠN hạn mức AI Code (02/10/2026) — mỗi hàng là MỘT lần người dùng

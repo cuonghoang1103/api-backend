@@ -208,7 +208,8 @@ export async function createdVsResolved(userId: number, projectId: number, days:
 
 // ─── Dashboard ───────────────────────────────────────────────────
 
-export const WIDGET_KINDS = ['filter', 'pie', 'bar', 'counter', 'created_resolved', 'burndown', 'my_issues', 'text', 'health'] as const;
+// 'top_risks' (đợt S3b): rủi ro mở điểm cao nhất của sổ RAID — số liệu ở GET /projects/:pid/raid/top (rỗng khi mô-đun tắt).
+export const WIDGET_KINDS = ['filter', 'pie', 'bar', 'counter', 'created_resolved', 'burndown', 'my_issues', 'text', 'health', 'top_risks'] as const;
 export interface Widget {
   id: string;
   kind: (typeof WIDGET_KINDS)[number];

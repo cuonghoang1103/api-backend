@@ -104,6 +104,7 @@ export async function overview(userId: number, projectId: number, opts: { asClie
       select: {
         id: true, title: true, description: true, targetType: true, issueId: true, pageId: true, dueAt: true, mode: true, createdAt: true,
         issue: { select: { number: true, title: true, clientVisible: true } }, page: { select: { number: true, title: true, visibility: true } }, stage: { select: { n: true, name: true } },
+        changeRequestId: true, changeRequest: { select: { number: true, title: true, clientVisible: true } },
         steps: { select: { id: true, approverId: true, position: true, decision: true } },
       },
     }),
@@ -326,6 +327,9 @@ const PORTAL_APPROVAL_SELECT = {
   issue: { select: { number: true, title: true, clientVisible: true } },
   stage: { select: { n: true, name: true, status: true } },
   page: { select: { number: true, title: true, visibility: true } },
+  // CR (đợt S3b): khách chỉ thấy CR đã chia sẻ (approvalForClient che phần còn lại).
+  changeRequestId: true,
+  changeRequest: { select: { id: true, number: true, title: true, clientVisible: true } },
   steps: { orderBy: [{ position: 'asc' as const }, { id: 'asc' as const }], select: { id: true, approverId: true, position: true, decision: true, comment: true, decidedAt: true, contentHash: true, approver: { select: PUBLIC_USER } } },
   uat: { select: { id: true, round: true, environment: true, build: true, conditions: true, itemIssueIds: true, pageNumbers: true, attachmentIds: true, createdIssueIds: true, version: { select: { id: true, name: true, releaseDate: true } }, stage: { select: { id: true, n: true, name: true } } } },
 } satisfies Prisma.WorkApprovalSelect;
@@ -359,8 +363,14 @@ async function presentApproval(ctx: PortalCtx, row: PortalApprovalRow, detail = 
     contentChanged: anyDecided && now !== null && signed !== null && now !== signed,
     signedHash: signed,
     uat: null as null | Awaited<ReturnType<typeof uatDetail>>,
+    /** Phân tích ảnh hưởng của CR — chỉ khi CR đã chia sẻ (crForClient tự lọc clientVisible). */
+    changeRequest: null as null | Awaited<ReturnType<typeof import('./changeRequests.service.js')['crForClient']>>,
   };
   if (a.uat) out.uat = await uatDetail(ctx, a.uat, detail);
+  if (a.targetType === 'CR' && a.changeRequestId && shared) {
+    const { crForClient } = await import('./changeRequests.service.js');
+    out.changeRequest = await crForClient(a.changeRequestId);
+  }
   return out;
 }
 
@@ -492,6 +502,7 @@ export async function activity(userId: number, projectId: number, opts: { asClie
           select: {
             id: true, title: true, description: true, targetType: true, issueId: true, pageId: true,
             issue: { select: { number: true, title: true, clientVisible: true } }, page: { select: { number: true, title: true, visibility: true } }, stage: { select: { n: true, name: true } },
+            changeRequestId: true, changeRequest: { select: { number: true, title: true, clientVisible: true } },
           },
         },
       },

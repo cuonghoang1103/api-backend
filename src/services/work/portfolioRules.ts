@@ -29,6 +29,12 @@ export const RAG_RULES = {
   AMBER_MILESTONE_DONE: 0.8,
   /** Vàng: có phê duyệt chờ lâu hơn N ngày. */
   AMBER_APPROVAL_DAYS: 3,
+  /** Đợt S3b — sổ RAID: rủi ro OPEN có điểm (L × I) ≥ ngưỡng này ⇒ ĐỎ… */
+  RED_RISK_SCORE: 20,
+  /** …≥ ngưỡng này ⇒ VÀNG (theo so-dang-ky-rui-ro.md: ≥ 15 là mức cao). */
+  AMBER_RISK_SCORE: 15,
+  /** Đợt S3b — CR chờ quyết định (Submitted / Under review) lâu hơn N ngày ⇒ VÀNG. */
+  AMBER_CR_DAYS: 5,
 } as const;
 
 /** Bản chữ của luật — trả kèm API để giao diện hiện "How is health computed?". */
@@ -37,11 +43,14 @@ export const RAG_RULE_TEXT: Array<{ level: Exclude<Rag, 'GREEN'>; text: string }
   { level: 'RED', text: 'The active sprint ended with work remaining.' },
   { level: 'RED', text: `The active sprint is at risk and needs ≥ ${RAG_RULES.RED_PACE_RATIO}× its recent pace (or nothing was burned yet).` },
   { level: 'RED', text: `${RAG_RULES.RED_OVERDUE_ABS}+ overdue issues, or ${RAG_RULES.RED_OVERDUE_MIN}+ overdue issues that are ≥ ${Math.round(RAG_RULES.RED_OVERDUE_SHARE * 100)}% of open issues.` },
+  { level: 'RED', text: `An open risk in the RAID log scores ${RAG_RULES.RED_RISK_SCORE} or more (probability × impact).` },
   { level: 'AMBER', text: 'The active sprint is at risk (needs > 1.3× its recent pace).' },
   { level: 'AMBER', text: 'At least one overdue issue.' },
   { level: 'AMBER', text: `A milestone is due within ${RAG_RULES.AMBER_MILESTONE_DAYS} days with < ${Math.round(RAG_RULES.AMBER_MILESTONE_DONE * 100)}% of its issues done.` },
   { level: 'AMBER', text: 'An open issue is blocked by an unfinished issue in another project.' },
   { level: 'AMBER', text: `An approval has been waiting more than ${RAG_RULES.AMBER_APPROVAL_DAYS} days.` },
+  { level: 'AMBER', text: `An open risk in the RAID log scores ${RAG_RULES.AMBER_RISK_SCORE} or more.` },
+  { level: 'AMBER', text: `A change request has been waiting for a decision more than ${RAG_RULES.AMBER_CR_DAYS} days.` },
 ];
 
 export interface RagReason {
@@ -50,6 +59,7 @@ export interface RagReason {
   code:
     | 'MILESTONE_LATE' | 'SPRINT_ENDED' | 'SPRINT_PACE_SEVERE' | 'OVERDUE_MANY'
     | 'SPRINT_AT_RISK' | 'OVERDUE_SOME' | 'MILESTONE_SOON' | 'BLOCKED_CROSS' | 'APPROVAL_WAITING'
+    | 'RISK_CRITICAL' | 'RISK_HIGH' | 'CR_WAITING'
     | 'ALL_CLEAR';
   text: string;
 }
@@ -72,6 +82,13 @@ export interface RagInput {
   pendingApprovals: number;
   /** Tuổi (ngày) của phê duyệt chờ lâu nhất; null = không có. */
   oldestPendingApprovalDays: number | null;
+  /**
+   * Đợt S3b — sổ RAID (chỉ khi mô-đun raid bật): rủi ro trạng thái OPEN đã chấm điểm, mỗi
+   * dòng một điểm L × I. Không truyền / rỗng ⇒ không luật nào chạy.
+   */
+  openRisks?: Array<{ key: string; title: string; score: number }>;
+  /** Đợt S3b — CR đang chờ quyết định (chỉ khi mô-đun changeRequests bật): tuổi theo ngày từ lúc gửi. */
+  pendingChangeRequests?: Array<{ key: string; waitingDays: number }>;
 }
 
 const plural = (n: number, w: string) => `${n} ${w}${n === 1 ? '' : 's'}`;
@@ -106,7 +123,31 @@ export function ragOf(i: RagInput): { rag: Rag; reasons: RagReason[] } {
     reasons.push({ level: 'RED', code: 'OVERDUE_MANY', text: `${plural(i.overdue, 'issue')} overdue out of ${i.open} open (${Math.round((i.overdue / Math.max(1, i.open)) * 100)}%).` });
   }
 
+  const risks = [...(i.openRisks ?? [])].sort((a, b) => b.score - a.score);
+  const critical = risks.filter((r) => r.score >= RAG_RULES.RED_RISK_SCORE);
+  if (critical.length) {
+    const top = critical[0];
+    reasons.push({
+      level: 'RED', code: 'RISK_CRITICAL',
+      text: `${plural(critical.length, 'open risk')} with score ≥ ${RAG_RULES.RED_RISK_SCORE} — top: ${top.key} "${top.title}" (${top.score}).`,
+    });
+  }
+
   // ── VÀNG ──
+  const high = risks.filter((r) => r.score >= RAG_RULES.AMBER_RISK_SCORE && r.score < RAG_RULES.RED_RISK_SCORE);
+  if (high.length) {
+    reasons.push({
+      level: 'AMBER', code: 'RISK_HIGH',
+      text: `${plural(high.length, 'open risk')} with score ${RAG_RULES.AMBER_RISK_SCORE}–${RAG_RULES.RED_RISK_SCORE - 1} — top: ${high[0].key} "${high[0].title}" (${high[0].score}).`,
+    });
+  }
+  const crLate = (i.pendingChangeRequests ?? []).filter((c) => c.waitingDays > RAG_RULES.AMBER_CR_DAYS).sort((a, b) => b.waitingDays - a.waitingDays);
+  if (crLate.length) {
+    reasons.push({
+      level: 'AMBER', code: 'CR_WAITING',
+      text: `${plural(crLate.length, 'change request')} waiting for a decision more than ${RAG_RULES.AMBER_CR_DAYS} days; the oldest (${crLate[0].key}) has waited ${plural(crLate[0].waitingDays, 'day')}.`,
+    });
+  }
   if (i.sprint && i.sprint.status === 'AT_RISK' && !sprintCounted) {
     const s = i.sprint;
     reasons.push({ level: 'AMBER', code: 'SPRINT_AT_RISK', text: `Sprint "${s.name}" needs ${s.neededPerDay} ${u}/day vs recent ${s.recentPerDay} ${u}/day, ${plural(s.daysLeft, 'day')} left.` });

@@ -17,7 +17,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import {
-  Activity, ArrowLeft, BadgeCheck, CheckCircle2, Circle, CircleDot, Download, Eye, FileText, Flag, Inbox, LayoutDashboard, MessageSquare,
+  Activity, ArrowLeft, BadgeCheck, CalendarClock, CheckCircle2, Circle, CircleDot, Download, Eye, FileText, Flag, Inbox, LayoutDashboard, MessageSquare,
   PackageCheck, Paperclip, Plus, Rocket, Send,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -32,6 +32,7 @@ import { Pill, STAGE_STATUS } from '../studio/shared';
 import { ClientPill } from './ClientShare';
 import { ApprovalsTab, PortalApprovalDialog } from './PortalApprovals';
 import { StaffPanel } from './PortalStaff';
+import { MeetingsTab, PortalMeetingDialog } from './PortalMeetings';
 
 export const PORTAL_TABS: Array<{ id: PortalTab; label: string; icon: typeof Inbox }> = [
   { id: 'overview', label: 'Overview', icon: LayoutDashboard },
@@ -39,6 +40,8 @@ export const PORTAL_TABS: Array<{ id: PortalTab; label: string; icon: typeof Inb
   { id: 'approvals', label: 'Approvals', icon: BadgeCheck },
   { id: 'documents', label: 'Documents', icon: FileText },
   { id: 'deliverables', label: 'Deliverables', icon: PackageCheck },
+  // Đợt S3b — chỉ khi mô-đun meetings bật (lọc trong PortalView).
+  { id: 'meetings', label: 'Meetings', icon: CalendarClock },
   { id: 'activity', label: 'Activity', icon: Activity },
 ];
 
@@ -59,6 +62,7 @@ export function usePortalParams() {
     issue: Number(sp?.get('issue')) || null,
     approval: Number(sp?.get('approval')) || null,
     doc: Number(sp?.get('doc')) || null,
+    meeting: Number(sp?.get('meeting')) || null,
     set,
   };
 }
@@ -491,7 +495,8 @@ export default function PortalView({ config, pid }: { config: ProjectConfig; pid
   const asClient = !isClient && p.preview;
   const overview = useQuery({ queryKey: workPortalKeys.tab(pid, 'overview', asClient), queryFn: () => workPortalApi.overview(pid, asClient) });
   const viewer = overview.data?.viewer;
-  const tabs = useMemo(() => PORTAL_TABS, []);
+  const meetingsOn = !!config.modules?.meetings;
+  const tabs = useMemo(() => PORTAL_TABS.filter((t) => t.id !== 'meetings' || meetingsOn), [meetingsOn]);
   const waiting = overview.data?.waitingOnClient.length ?? 0;
 
   return (
@@ -518,7 +523,7 @@ export default function PortalView({ config, pid }: { config: ProjectConfig; pid
                 type="button"
                 role="tab"
                 aria-selected={p.tab === t.id}
-                onClick={() => p.set({ tab: t.id === 'overview' ? null : t.id, issue: null, approval: null, doc: null })}
+                onClick={() => p.set({ tab: t.id === 'overview' ? null : t.id, issue: null, approval: null, doc: null, meeting: null })}
                 className={cn('-mb-px flex h-9 items-center gap-1.5 whitespace-nowrap border-b-2 px-2.5 text-[13px] font-medium', p.tab === t.id ? 'border-[var(--w-accent)] text-[var(--w-text)]' : 'border-transparent text-[var(--w-text-3)] hover:text-[var(--w-text-2)]')}
                 data-testid={`portal-tab-${t.id}`}
               >
@@ -533,6 +538,7 @@ export default function PortalView({ config, pid }: { config: ProjectConfig; pid
         {p.tab === 'approvals' && <ApprovalsTab pid={pid} asClient={asClient} config={config} openApproval={(id) => p.set({ approval: String(id) })} />}
         {p.tab === 'documents' && <DocumentsTab pid={pid} asClient={asClient} openDoc={(n) => p.set({ doc: String(n) })} />}
         {p.tab === 'deliverables' && <DeliverablesTab pid={pid} asClient={asClient} />}
+        {p.tab === 'meetings' && meetingsOn && <MeetingsTab pid={pid} asClient={asClient} openMeeting={(n) => p.set({ meeting: String(n) })} />}
         {p.tab === 'activity' && <ActivityTab pid={pid} asClient={asClient} go={p.set} />}
         {!isClient && !asClient && (
           <p className="mt-6 text-[12px] text-[var(--w-text-3)]">
@@ -544,6 +550,7 @@ export default function PortalView({ config, pid }: { config: ProjectConfig; pid
       <RequestDialog pid={pid} num={p.issue} asClient={asClient} onClose={() => p.set({ issue: null })} />
       <PortalApprovalDialog pid={pid} id={p.approval} asClient={asClient} config={config} onClose={() => p.set({ approval: null })} />
       <DocumentDialog pid={pid} num={p.doc} asClient={asClient} onClose={() => p.set({ doc: null })} />
+      {meetingsOn && <PortalMeetingDialog pid={pid} num={p.meeting} asClient={asClient} onClose={() => p.set({ meeting: null })} />}
     </div>
   );
 }

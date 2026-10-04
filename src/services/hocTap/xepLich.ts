@@ -18,7 +18,7 @@ const VN = 7 * 3_600_000;
 const NGAY = 86_400_000;
 
 export interface KhungLop { thu: number; batDau: string; ketThuc: string; maMon: string } // thu 1=T2…7=CN
-export interface ViecXep { id: number; maMon: string; tieuDe: string; hanChot: Date; thoiLuongPhut: number; trongSo: number }
+export interface ViecXep { id: number; maMon: string; tieuDe: string; hanChot: Date; thoiLuongPhut: number; trongSo: number; /** Ưu tiên môn (MonHocKy.thuTu, nhỏ = trước). */ uuTienMon?: number }
 export interface CauHinhXep {
   /** Giờ bắt đầu/kết thúc học mỗi ngày (phút trong ngày, giờ VN). Mặc định 07:00–23:45 (ngủ 24h–5h, chừa sáng). */
   tuPhut?: number; denPhut?: number;
@@ -69,7 +69,19 @@ export function xepLichThuan(
   // trong cùng ngày: đo 02/10 trên prod, trọng số đẩy "JS" lên trước "HTML", "Component" lên
   // trước "JSX" — sai trình tự học. Kế hoạch đã soạn theo đúng thứ tự, giữ nguyên nó.
   const ngayHan = (v: ViecXep) => dauNgayVN(v.hanChot.getTime());
-  const ds = [...viec].sort((a, b) => ngayHan(a) - ngayHan(b) || a.id - b.id);
+  // Cùng ngày hạn: XEN KẼ các môn (việc thứ 1 của mỗi môn, rồi việc thứ 2…), môn ưu tiên đi trước.
+  // Đo 04/10: xếp thuần theo id thì cả tối là FER202 (soạn đầu tiên), LAB211/JPD123 — hai môn
+  // người dùng sợ trượt nhất — bị đẩy sang hôm sau.
+  const hang = new Map<number, number>();
+  const nhom = new Map<string, ViecXep[]>();
+  for (const v of [...viec].sort((a, b) => a.id - b.id)) {
+    const k = `${ngayHan(v)}|${v.maMon}`;
+    const ds0 = nhom.get(k) ?? [];
+    hang.set(v.id, ds0.length);
+    ds0.push(v); nhom.set(k, ds0);
+  }
+  const ds = [...viec].sort((a, b) => ngayHan(a) - ngayHan(b) || hang.get(a.id)! - hang.get(b.id)!
+    || (a.uuTienMon ?? 99) - (b.uuTienMon ?? 99) || a.id - b.id);
 
   // 1) Việc lên lớp: đúng slot lớp của môn trong ngày hạn (không tính vào trần tự học).
   for (const v of ds.filter((x) => laLenLop(x.tieuDe))) {
@@ -86,7 +98,11 @@ export function xepLichThuan(
   //    Việc hạn ngày D không kịp trước 23:45 ⇒ "BÙ ĐÊM" 23:45–05:00 (người dùng 02/10:
   //    "không hoàn thành thì vào giờ ngủ 24h–5h sáng bù") — bỏ qua trần ngày cho phần bù.
   const timKhung = (d: number, thu: number, dai: number, i: number, denNgay: number): number | null => {
-    const ban = [...banTrongNgay(thu, lop), ...(daChiem.get(d) ?? [])].sort((a, b) => a[0] - b[0]);
+    // Khối bù đêm nằm sau 00:00 nên được lưu dưới NGÀY HÔM SAU — phải kéo chúng về (+1440')
+    // khi tìm khung đêm của ngày d, không thì mọi việc bù đêm chồng lên nhau (đo thật 04/10:
+    // 10 việc cùng 00:50).
+    const demSau = (daChiem.get(d + NGAY) ?? []).filter(([a]) => a < 5 * 60).map(([a, b]) => [a + 1440, b + 1440] as [number, number]);
+    const ban = [...banTrongNgay(thu, lop), ...(daChiem.get(d) ?? []), ...demSau].sort((a, b) => a[0] - b[0]);
     let t = i === 0 ? Math.max(tu, Math.ceil((nowMs - d) / 60_000 / 5) * 5) : tu;
     for (const [a, b] of ban) {
       if (t + dai <= a) break;
@@ -129,7 +145,7 @@ export async function xepLich(userId: number, opts: { chiViecChuaCoGio?: boolean
   const now = opts.now ?? new Date();
   const viec = await prisma.nhiemVuHoc.findMany({
     where: { userId, trangThai: { in: ['CHUA_LAM', 'CHUA_DAT'] }, batDauLuc: null, mon: { hocKy: { dangHoc: true } } },
-    select: { id: true, tieuDe: true, hanChot: true, thoiLuongPhut: true, trongSo: true, gioBatDau: true, mon: { select: { maMon: true } } },
+    select: { id: true, tieuDe: true, hanChot: true, thoiLuongPhut: true, trongSo: true, gioBatDau: true, mon: { select: { maMon: true, thuTu: true } } },
   });
   if (!viec.length) return 0;
   // Việc đã có giờ ở TƯƠNG LAI và không yêu cầu xếp hết ⇒ giữ nguyên, nhưng vẫn chiếm chỗ.
@@ -142,7 +158,7 @@ export async function xepLich(userId: number, opts: { chiViecChuaCoGio?: boolean
   // `tu`: "Lùi lịch" — xếp lại bắt đầu từ giờ người học hẹn quay lại (không sớm hơn bây giờ).
   const mocXep = opts.tu && opts.tu > now ? opts.tu : now;
   const kq = xepLichThuan(
-    canXep.map((v) => ({ id: v.id, maMon: v.mon.maMon, tieuDe: v.tieuDe, hanChot: v.hanChot, thoiLuongPhut: v.thoiLuongPhut, trongSo: v.trongSo })),
+    canXep.map((v) => ({ id: v.id, maMon: v.mon.maMon, tieuDe: v.tieuDe, hanChot: v.hanChot, thoiLuongPhut: v.thoiLuongPhut, trongSo: v.trongSo, uuTienMon: v.mon.thuTu })),
     lop, mocXep, {}, giu.map((v) => ({ bd: v.gioBatDau!, phut: v.thoiLuongPhut })),
   );
   const ghi = canXep.filter((v) => kq.has(v.id)).map((v) =>

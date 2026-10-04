@@ -518,9 +518,8 @@ export async function nhacGioHoc(now = new Date()) {
     }
     nguoi.add(v.userId);
   }
-  for (const u of nguoi) {
-    await prisma.nhiemVuHoc.updateMany({ where: { userId: u, trangThai: { in: ['CHUA_LAM', 'CHUA_DAT'] }, batDauLuc: null, gioBatDau: { lt: new Date(now.getTime() - 15 * 60_000) } }, data: { gioBatDau: null } });
-    await xepLich(u, { chiViecChuaCoGio: true, now }).catch(() => 0);
-  }
+  // Có việc bị bỏ lỡ ⇒ XẾP LẠI CẢ LỊCH của người đó (không chỉ chèn việc trễ vào chỗ trống):
+  // chèn lẻ làm lệch thứ tự — đo 04/10: K4 đứng trước K1a vì K1a bị dời còn K4 giữ chỗ cũ.
+  for (const u of nguoi) await xepLich(u, { now }).catch(() => 0);
   return { nhac: sapToi.length, tre: tre.length };
 }

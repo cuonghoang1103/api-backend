@@ -51,3 +51,21 @@ test('hạn hôm nay mà không kịp trước 23:45 ⇒ bù đêm 00:00–05:00
   // 23:05 + 60' = 00:05 vượt 23:45 ⇒ vẫn làm tiếp trong khung bù đêm, không dời sang 07:00 hôm sau
   assert.equal(vn(kq.get(1)!), '2026-10-02 23:05');
 });
+
+test('nhiều việc bù đêm không chồng lên nhau', () => {
+  const muon = new Date('2026-10-02T16:00:00Z'); // 23:00 VN
+  const kq = xepLichThuan([v(1, '2026-10-02T16:59:59Z', 60), v(2, '2026-10-02T16:59:59Z', 60), v(3, '2026-10-02T16:59:59Z', 60)], lop, muon);
+  assert.equal(vn(kq.get(1)!), '2026-10-02 23:05');
+  assert.equal(vn(kq.get(2)!), '2026-10-03 00:15');
+  assert.equal(vn(kq.get(3)!), '2026-10-03 01:25');
+});
+
+test('cùng ngày: xen kẽ môn theo ưu tiên, trong môn giữ thứ tự', () => {
+  const han = '2026-10-02T16:59:59Z';
+  const kq = xepLichThuan([
+    v(1, han, 30, { maMon: 'FER202', uuTienMon: 2 }), v(2, han, 30, { maMon: 'FER202', uuTienMon: 2 }),
+    v(3, han, 30, { maMon: 'LAB211', uuTienMon: 0 }), v(4, han, 30, { maMon: 'LAB211', uuTienMon: 0 }),
+  ], lop, NOW);
+  const thuTu = [...kq.entries()].sort((a, b) => a[1].getTime() - b[1].getTime()).map(([id]) => id);
+  assert.deepEqual(thuTu, [3, 1, 4, 2]);
+});

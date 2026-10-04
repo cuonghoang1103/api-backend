@@ -324,7 +324,9 @@ export async function docGiaSuTheoGiong(noi: string, giong: GiongGoi): Promise<{
         if (!u) throw new Error('Azure Sonia hỏng');
         return u;
       }
-      return docDoanNha(d.t, GIONG_NHA[giong], hanMs);
+      // F5 đọc chữ Latin không dấu theo kiểu đoán: "CuongMini" ra "cuồng mini" / "Cung Ngô Mini"
+      // (đo bằng Whisper 05/10) ⇒ viết lại theo cách ĐỌC trước khi đưa cho máy nhà.
+      return docDoanNha(d.t.replace(/CuongMini/g, 'Cường Mi-ni'), GIONG_NHA[giong], hanMs);
     }));
     logger.info('[ielts/goi] giọng máy nhà', { giong, ms: Date.now() - t0, kyTu: tongViet });
     return { audioUrl: urls[0] ?? null, audioUrls: urls, giongThat: giong };
